@@ -16,7 +16,7 @@
 *.ind
 *.bcf
 *.run.xml
-.md
+# *.md
 # LaTeX temporary files
 *.nav
 *.snm
