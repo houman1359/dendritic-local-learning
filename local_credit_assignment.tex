@@ -95,6 +95,7 @@ Immediate from \eqref{eq:voltage}–\eqref{eq:conductance} since all conductance
 \subsection{Local Sensitivities}
 
 \begin{proposition}[Synaptic Gradient]
+\label{prop:grad_gsyn}
 \begin{equation}
 \frac{\partial V_n}{\partial g_i^{\mathrm{syn}}} = x_i R_n^{\mathrm{tot}} (E_i - V_n)
 \label{eq:grad_gsyn}
@@ -109,6 +110,7 @@ Apply quotient rule to \eqref{eq:voltage}:
 \end{proof}
 
 \begin{proposition}[Child Voltage Gradient]
+\label{prop:grad_V}
 \begin{equation}
 \frac{\partial V_n}{\partial V_i} = g_i^{\mathrm{den}} R_n^{\mathrm{tot}}
 \label{eq:grad_V}
@@ -116,6 +118,7 @@ Apply quotient rule to \eqref{eq:voltage}:
 \end{proposition}
 
 \begin{proposition}[Dendritic Gradient]
+\label{prop:grad_gden}
 \begin{equation}
 \frac{\partial V_n}{\partial g_i^{\mathrm{den}}} = R_n^{\mathrm{tot}} (V_i - V_n)
 \label{eq:grad_gden}
@@ -132,6 +135,10 @@ Apply quotient rule to \eqref{eq:voltage}:
 \frac{\partial V_n}{\partial g^{\mathrm{leak}}} = - V_n R_n^{\mathrm{tot}}.
 \]
 \end{proposition}
+
+\begin{remark}
+The sensitivity $\partial V_n/\partial g^{\mathrm{leak}} = - V_n R_n^{\mathrm{tot}}$ applies if $g^{\mathrm{leak}}$ is a trainable parameter. In all reported experiments, we fix $g^{\mathrm{leak}}{=}1$ (normalized units).
+\end{remark}
 
 \subsection{Shunting Inhibition and Divisive Gain Control}
 \label{sec:shunting}
@@ -162,9 +169,11 @@ With 4F/5F, multiply by $\rho$ and $\phi$ (Def.~\ref{def:phi_fixed}). Note that 
 
 \subsection{Loss Propagation}
 
-Let $V_0$ denote the output voltage (post-decoder), and $L$ the task loss. Define the error gradient at the output:
+Let $V_0$ denote the somatic/output compartment. The decoder produces $\hat y = W_{\mathrm{dec}} V_0$ (linear case), and $L$ is the task loss. Define the error gradients:
 \begin{equation}
-\delta_0 = \frac{\partial L}{\partial V_0}
+\delta^y := \frac{\partial L}{\partial \hat y}, \qquad
+\delta_0 := \frac{\partial L}{\partial V_0} = \left(\frac{\partial \hat y}{\partial V_0}\right)^\top \delta^y
+= W_{\mathrm{dec}}^\top \delta^y.
 \end{equation}
 
 \begin{theorem}[Backpropagation on a Dendritic Tree]
@@ -187,7 +196,7 @@ Unrolling the recursion yields a sum over all directed paths $\mathcal{P}: n \le
 \end{equation}
 \end{theorem}
 \begin{proof}
-Apply the multivariate chain rule on the directed acyclic computation graph defined by the tree; use Proposition~\ref{eq:grad_V}. Each path contributes a product of edge sensitivities. Summing over parents produces \eqref{eq:tree_recursion}; unrolling yields \eqref{eq:path_sum}.
+Apply the multivariate chain rule on the directed acyclic computation graph defined by the tree; use Proposition~\ref{prop:grad_V}. Each path contributes a product of edge sensitivities. Summing over parents produces \eqref{eq:tree_recursion}; unrolling yields \eqref{eq:path_sum}.
 \end{proof}
 
 \begin{corollary}[Chain Case]
@@ -316,19 +325,24 @@ Let $L$ be a smooth loss. Under the assumption that layer $n$ contributes to the
 Thus $\rho_n$ weights updates by the layer's relevance to the task.
 \end{theorem}
 
-\paragraph{Estimators.}
-For minibatch size $B \geq 2$, $\rho_n$ is estimated directly from \eqref{eq:rho} with exponential moving average (EMA). For $B = 1$ (online learning), use Welford's numerically stable algorithm \cite{welford1962note}:
+\paragraph{Estimators (EMA / online).}
+For minibatches $B\ge 2$, estimate $\rho_n$ from \eqref{eq:rho} with an EMA over batches.
+For $B=1$ (online), maintain means $\mu_x,\mu_y$, variances $\sigma_x^2,\sigma_y^2$, and covariance $C_{xy}$ for
+$x_t=\bar V_0^{(t)}$ and $y_t=\bar V_n^{(t)}$ using Welford's numerically stable algorithm \cite{welford1962note}:
 \begin{align}
-\mu_y^{(t)} &= (1 - \alpha) \mu_y^{(t-1)} + \alpha \bar{V}_n^{(t)} \\
-\delta_y &= \bar{V}_n^{(t)} - \mu_y^{(t-1)} \\
-\sigma_y^{2(t)} &= (1 - \alpha) \sigma_y^{2(t-1)} + \alpha \delta_y^2 \\
-\Cov_{yn}^{(t)} &= (1 - \alpha) \Cov_{yn}^{(t-1)} + \alpha \delta_y \delta_x
+\mu_x^{(t)} &= (1-\alpha)\mu_x^{(t-1)} + \alpha x_t, &
+\mu_y^{(t)} &= (1-\alpha)\mu_y^{(t-1)} + \alpha y_t,\nonumber\\
+\delta_x &= x_t - \mu_x^{(t-1)}, &
+\delta_y &= y_t - \mu_y^{(t-1)},\nonumber\\
+\sigma_x^{2(t)} &= (1-\alpha)\sigma_x^{2(t-1)} + \alpha\, \delta_x^2, &
+\sigma_y^{2(t)} &= (1-\alpha)\sigma_y^{2(t-1)} + \alpha\, \delta_y^2,\nonumber\\
+C_{xy}^{(t)} &= (1-\alpha)C_{xy}^{(t-1)} + \alpha\, \delta_x \delta_y.
 \end{align}
-where $\alpha$ is the EMA rate (\texttt{ema\_alpha}).
+Then $\rho_n^{(t)} = \frac{C_{xy}^{(t)}}{\sqrt{\sigma_x^{2(t)}\sigma_y^{2(t)}}+\varepsilon}$, where $\alpha$ is the EMA rate (\texttt{ema\_alpha}).
 
 \subsection{Five-Factor Rule (5F): Conditional Information}
 
-\begin{definition}[Unique-Variance Information Factor]
+\begin{definition}[Conditional Predictability Factor]
 \label{def:phi_fixed}
 Let $P_n$ be parent compartment voltage. Define the conditional variance via ridge regression:
 \begin{align}
@@ -374,28 +388,37 @@ Define recursively:
 where $\bar{g}_{n-1}^{\mathrm{den}}$ is the mean dendritic conductance from layer $n-1$ to $n$.
 \end{definition}
 
-\begin{theorem}[Path-Sum Approximation Bias]
-\label{thm:path_bias}
-Let $\pi_n$ be defined by \eqref{eq:path_factor}. The path factor approximates the sum over all paths in \eqref{eq:path_sum}. If (i) $R_i^{\mathrm{tot}}$ and outgoing $g^{\mathrm{den}}$ at each depth have coefficient of variation $\le \kappa<1$, and (ii) the number of paths from $n$ to $0$ is $P_n$, then for a chain (single path):
+\begin{proposition}[Exact for Chains]
+\label{prop:path_exact_chain}
+For a chain morphology (single path), the path factor \eqref{eq:path_factor} satisfies
 \begin{equation}
-\pi_n = \prod_{i=0}^{n-1} R_i^{\mathrm{tot}} g_i^{\mathrm{den}}.
+\pi_n = \prod_{i=0}^{n-1} R_i^{\mathrm{tot}} g_i^{\mathrm{den}}
 \end{equation}
-For general trees, $\pi_n$ approximates the dominant path contribution when per-depth conductances are relatively homogeneous. Modulating the error by $\pi_n$ yields:
-\begin{equation}
-e_n^{\mathrm{path}} = e_n \cdot \pi_n
-\end{equation}
-which better approximates exact backpropagation.
-\end{theorem}
-\begin{proof}[Sketch]
-For chains, the recursion exactly recovers the single-path product. For trees, $\pi_n$ uses layer-averaged conductances, providing an approximation to the sum-over-paths when path conductances are similar. Apply concentration bounds on products per depth.
-\end{proof}
+and thus exactly matches \eqref{eq:path_sum}.
+\end{proposition}
+
+\begin{remark}[Sandwich bounds for trees]
+\label{rem:path_tree_bounds}
+For a tree, let $\mathcal{P}$ be the set of directed paths from $n$ to $0$ and define, at each depth $d$,
+$m_d := \min_{\mathcal{P}} a_{d,\mathcal{P}}$ and $M_d := \max_{\mathcal{P}} a_{d,\mathcal{P}}$, where
+$a_{d,\mathcal{P}}$ is the edge factor $R_k^{\mathrm{tot}} g_{i\to k}^{\mathrm{den}}$ at depth $d$ along path $\mathcal{P}$.
+Then
+\[
+|\mathcal{P}| \prod_{d} m_d
+\ \le\ 
+\sum_{\mathcal{P}} \prod_{d} a_{d,\mathcal{P}}
+\ \le\
+|\mathcal{P}| \prod_{d} M_d.
+\]
+If per-depth factors are narrowly concentrated ($m_d\!\approx\!M_d$), replacing the sum by a product of per-depth means (our $\pi_n$) is accurate. Modulating the error by $\pi_n$ yields $e_n^{\mathrm{path}} = e_n \cdot \pi_n$, which better approximates exact backpropagation.
+\end{remark}
 
 \begin{corollary}[Depth Attenuation]
 From Lemma~\ref{lem:convex}, $R_k^{\mathrm{tot}} g^{\mathrm{den}}_{i\to k} < 1$. Therefore any product $\prod Rg$ in \eqref{eq:path_sum} decays exponentially with depth, motivating path-based error attenuation.
 \end{corollary}
 
 \begin{remark}[Implementation]
-Computed via \texttt{\_compute\_path\_propagation\_factor()} and implemented as a \emph{per-sample scalar} path factor $\pi_n(b) \in \mathbb{R}$ (broadcast to all compartments in layer $n$). This stabilizes shapes across layers and matches the code behavior when applying $e_n \leftarrow e_n \cdot \pi_n$.
+Computed via \texttt{\_compute\_path\_propagation\_factor()} and implemented as a \emph{per-sample scalar} path factor $\pi_n(b) \in \mathbb{R}$ (broadcast to all compartments in layer $n$). The factor $\bar{g}_{n-1}^{\mathrm{den}}$ is the \emph{arithmetic mean} over outgoing dendritic connections at depth $n-1$. This stabilizes shapes across layers and matches the code behavior when applying $e_n \leftarrow e_n \cdot \pi_n$.
 \end{remark}
 
 \paragraph{Theoretical effect.}
@@ -507,7 +530,26 @@ For $\mathbf{K}_Z = \mathbf{Z}\mathbf{Z}^\top$:
 
 Gradients are added to synaptic eligibility traces via chain rule through $\mathbf{Z} = f(\mathbf{g}^{\mathrm{syn}})$.
 
+\begin{remark}
+The expression for $\partial \mathcal{L}_{\mathrm{HSIC}}^{\mathrm{target}}/\partial \mathbf{Z}$ assumes $\mathbf{K}_Y$ is symmetric (true for standard kernels).
+\end{remark}
+
 \section{Implementation Details}
+
+\subsection{Units and Normalization}
+
+\begin{table}[h]\centering
+\begin{tabular}{@{}lll@{}}\toprule
+Quantity & Symbol & Typical units (scaled)\\\midrule
+Voltage & $V$ & mV (normalized to $[-1,1]$)\\
+Synaptic conductance & $g^{\mathrm{syn}}$ & nS (nonnegative)\\
+Dendritic conductance & $g^{\mathrm{den}}$ & nS (nonnegative)\\
+Leak conductance & $g^{\mathrm{leak}}$ & nS (set to $1$ in normalized units)\\
+Input resistance & $R^{\mathrm{tot}}$ & $\mathrm{nS}^{-1}$ (normalized $\le 1$)\\\bottomrule
+\end{tabular}
+\caption{Units and normalization conventions.}
+\label{tab:units}
+\end{table}
 
 \subsection{Positive Weight Parameterization}
 
@@ -550,7 +592,8 @@ Let $W_{\mathrm{dec}}$ map $V_L \to y \in \mathbb{R}^{d_{\mathrm{out}}}$. Three 
 \begin{algorithmic}[1]
 \STATE \textbf{Input:} Model, minibatch $(x, y)$, config $\mathcal{C}$
 \STATE Forward pass: $\hat{y} = f(x; \mathbf{g}^{\mathrm{syn}}, \mathbf{g}^{\mathrm{den}})$
-\STATE Compute loss $L$ and output error $\delta_0 = \frac{\partial L}{\partial \hat{y}}$
+\STATE Compute loss $L$ and output error $\delta^{y} = \frac{\partial L}{\partial \hat{y}}$
+\STATE Compute somatic error $\delta_0 = W_{\mathrm{dec}}^\top \delta^{y}$
 \FOR{each layer $n$ (reverse order)}
     \STATE Broadcast error: $e_n = \text{broadcast}(\delta_0, \mathcal{C})$
     \IF{path propagation enabled}
@@ -623,12 +666,12 @@ HSIC (\texttt{hsic}) & \texttt{enabled}, \texttt{weight}, \texttt{self\_weight},
 \toprule
 \textbf{Component} & \textbf{Biological Analog} & \textbf{Key Result} \\
 \midrule
-Conductance scaling $R_n^{\mathrm{tot}}$ & Input resistance & Lemma~\ref{lem:convex}: $0 < R_n \le 1$ \\
-Driving force $(E_j - V_n)$ & Synaptic current & Prop.~\ref{eq:grad_gsyn}: Local sensitivity \\
+Conductance scaling $R_n^{\mathrm{tot}}$ & Input resistance & Lemma~\ref{lem:convex}: $0 < R_n^{\mathrm{tot}} \le 1$ \\
+Driving force $(E_j - V_n)$ & Synaptic current & Prop.~\ref{prop:grad_gsyn}: Local sensitivity \\
 Shunting inhibition & Divisive normalization & Sec.~\ref{sec:shunting}: $\partial V/\partial g_{\text{inh}} \propto -V$ \\
-Path factor $\pi_n$ & Cable attenuation & Thm.~\ref{thm:path_bias}: Depth decay \\
+Path factor $\pi_n$ & Cable attenuation & Prop.~\ref{prop:path_exact_chain}: Depth decay \\
 Morphology factor $\rho_n$ & Layer correlation & Eq.~\eqref{eq:rho}: Task relevance \\
-Information factor $\phi_n$ & Conditional SNR & Eq.~\eqref{eq:phi}: $1/(1-R^2)$ \\
+Information factor $\phi_n$ & Conditional predictability & Eq.~\eqref{eq:phi}: $1/(1-R^2)$ \\
 Dendritic normalization & Homeostatic scaling & Sec.~4.3: Variance stabilization \\
 Branch-type scaling & Apical vs.\ basal & Sec.~4.4: Compartment specialization \\
 Broadcast alignment & Feedback alignment & Thm.~\ref{thm:fa_alignment}: $\mathbb{E}[\cos \angle] > 0$ \\
@@ -728,7 +771,7 @@ For linear decoders and quadratic loss, the scalar broadcast (mode A) yields an 
 
 \section{Related Work}
 
-Our rules connect to dendritic credit-assignment via apical errors \cite{guerguiev2017segregated,sacramento2018dendritic} and predictive coding or equilibrium propagation as local-gradient mechanisms \cite{whittington2019theories,scellier2016ep}. Broadcast-error variants relate to feedback alignment and direct feedback alignment (DFA) \cite{lillicrap2016random,nokland2016dfa}. Our HSIC-based auxiliary losses follow kernel independence measures \cite{gretton2005hsic,gretton2007hsic}. Shunting inhibition connects to divisive normalization \cite{carandini2012normalization} and the nuanced rate-level consequences of shunts \cite{holt1997shunting}. The compartmental specialization between apical and basal branches relates to empirical findings on layer-specific plasticity rules \cite{larkum2013apical}. The dendritic normalization mechanism parallels homeostatic synaptic scaling \cite{turrigiano2008homeostatic}.
+Our rules connect to dendritic credit-assignment via apical errors \cite{guerguiev2017segregated,sacramento2018dendritic} and predictive coding or equilibrium propagation as local-gradient mechanisms \cite{whittington2019theories,scellier2017equilibrium}. Broadcast-error variants relate to feedback alignment and direct feedback alignment (DFA) \cite{lillicrap2016random,nokland2016dfa}. Our HSIC-based auxiliary losses follow kernel independence measures \cite{gretton2005hsic,gretton2007hsic}. Shunting inhibition connects to divisive normalization \cite{carandini2012normalization} and the nuanced rate-level consequences of shunts \cite{holt1997shunting}. The compartmental specialization between apical and basal branches relates to empirical findings on layer-specific plasticity rules \cite{larkum2013apical}. The dendritic normalization mechanism parallels homeostatic synaptic scaling \cite{turrigiano2008homeostatic}.
 
 \section{Conclusion}
 
@@ -817,6 +860,16 @@ local_ca:
 
 \begin{thebibliography}{99}
 
+\bibitem{koch1999biophysics}
+Koch, C. (1999).
+\emph{Biophysics of Computation: Information Processing in Single Neurons}.
+Oxford University Press.
+
+\bibitem{dayan2001theoretical}
+Dayan, P., \& Abbott, L. F. (2001).
+\emph{Theoretical Neuroscience}.
+MIT Press.
+
 \bibitem{carandini2012normalization}
 Carandini, M., \& Heeger, D. J. (2012).
 Normalization as a canonical neural computation.
@@ -852,7 +905,7 @@ Whittington, J. C., \& Bogacz, R. (2019).
 Theories of error back-propagation in the brain.
 \emph{Trends in Cognitive Sciences}, 23(3), 235--250.
 
-\bibitem{scellier2016ep}
+\bibitem{scellier2017equilibrium}
 Scellier, B., \& Bengio, Y. (2017).
 Equilibrium propagation: Bridging the gap between energy-based models and backpropagation.
 \emph{Frontiers in Computational Neuroscience}, 11, 24.
