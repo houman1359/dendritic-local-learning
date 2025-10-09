@@ -1,0 +1,597 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{bm}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{amsthm}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{booktabs}
+
+\geometry{margin=1in}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}{Proposition}
+\newtheorem{lemma}{Lemma}
+\newtheorem{definition}{Definition}
+\newtheorem{remark}{Remark}
+
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\Cov}{Cov}
+\DeclareMathOperator{\tr}{tr}
+
+\title{Local Credit Assignment in Compartmental Dendritic Networks}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We present a mathematical framework for local credit assignment in compartmental dendritic networks. Starting from the passive cable equation, we derive exact backpropagation gradients and introduce local approximations that use only signals available at each synapse. We formulate three classes of learning rules—3-factor, 4-factor, and 5-factor—and extend them with morphology-aware mechanisms that explicitly incorporate dendritic tree topology. Theoretical analysis reveals how each component modulates credit assignment, and we prove consistency with the implemented algorithms.
+\end{abstract}
+
+\section{Compartmental Voltage Model}
+
+\subsection{Voltage Equation}
+
+Consider compartment $n$ receiving synaptic inputs indexed by $j$ and dendritic inputs from child compartments. Let:
+\begin{itemize}
+\item $x_j \in \mathbb{R}_+$: presynaptic activity at synapse $j$
+\item $E_j \in \mathbb{R}$: reversal potential of synapse $j$ (excitatory: $E_j > 0$; inhibitory: $E_j \leq 0$)
+\item $g_j^{\mathrm{syn}} \geq 0$: synaptic conductance (learned parameter)
+\item $V_j \in \mathbb{R}$: voltage of child compartment $j$
+\item $g_j^{\mathrm{den}} \geq 0$: dendritic conductance from child $j$ (learned parameter)
+\end{itemize}
+
+\paragraph{Currents.}
+Synaptic current:
+\begin{equation}
+I_{\mathrm{syn}} = \sum_j (E_j - V_n) x_j g_j^{\mathrm{syn}}
+\end{equation}
+Dendritic current:
+\begin{equation}
+I_{\mathrm{den}} = \sum_j (V_j - V_n) g_j^{\mathrm{den}}
+\end{equation}
+
+\paragraph{Steady-state voltage.}
+With unit leak conductance to reversal potential $0$:
+\begin{equation}
+V_n = \frac{\sum_j E_j x_j g_j^{\mathrm{syn}} + \sum_j V_j g_j^{\mathrm{den}}}{\sum_j x_j g_j^{\mathrm{syn}} + \sum_j g_j^{\mathrm{den}} + 1}
+\label{eq:voltage}
+\end{equation}
+
+\paragraph{Total conductance and resistance.}
+\begin{equation}
+g_n^{\mathrm{tot}} = \sum_j x_j g_j^{\mathrm{syn}} + \sum_j g_j^{\mathrm{den}} + 1, \qquad R_n^{\mathrm{tot}} = \frac{1}{g_n^{\mathrm{tot}}}
+\label{eq:conductance}
+\end{equation}
+
+\subsection{Local Sensitivities}
+
+\begin{proposition}[Synaptic Gradient]
+\begin{equation}
+\frac{\partial V_n}{\partial g_i^{\mathrm{syn}}} = x_i R_n^{\mathrm{tot}} (E_i - V_n)
+\label{eq:grad_gsyn}
+\end{equation}
+\end{proposition}
+\begin{proof}
+Apply quotient rule to \eqref{eq:voltage}:
+\begin{align*}
+\frac{\partial V_n}{\partial g_i^{\mathrm{syn}}} &= \frac{E_i x_i \cdot g_n^{\mathrm{tot}} - \left(\sum_j E_j x_j g_j^{\mathrm{syn}} + \sum_j V_j g_j^{\mathrm{den}}\right) \cdot x_i}{(g_n^{\mathrm{tot}})^2} \\
+&= \frac{E_i x_i}{g_n^{\mathrm{tot}}} - \frac{V_n x_i}{g_n^{\mathrm{tot}}} = x_i R_n^{\mathrm{tot}} (E_i - V_n). \qedhere
+\end{align*}
+\end{proof}
+
+\begin{proposition}[Child Voltage Gradient]
+\begin{equation}
+\frac{\partial V_n}{\partial V_i} = g_i^{\mathrm{den}} R_n^{\mathrm{tot}}
+\label{eq:grad_V}
+\end{equation}
+\end{proposition}
+
+\begin{proposition}[Dendritic Gradient]
+\begin{equation}
+\frac{\partial V_n}{\partial g_i^{\mathrm{den}}} = R_n^{\mathrm{tot}} (V_i - V_n)
+\label{eq:grad_gden}
+\end{equation}
+\end{proposition}
+
+\subsection{Loss Propagation}
+
+Let $V_0$ denote the output voltage (post-decoder), and $L$ the task loss. Define the error gradient at the output:
+\begin{equation}
+\delta_0 = \frac{\partial L}{\partial V_0}
+\end{equation}
+
+\begin{theorem}[Exact Backpropagation]
+For a chain $V_0 \leftarrow V_1 \leftarrow \cdots \leftarrow V_n$, the gradient at compartment $n$ is:
+\begin{equation}
+\frac{\partial L}{\partial V_n} = \frac{\partial L}{\partial V_0} \prod_{i=1}^n \frac{\partial V_{i-1}}{\partial V_i} = \frac{\partial L}{\partial V_0} \prod_{i=1}^n R_{i-1}^{\mathrm{tot}} g_i^{\mathrm{den}}
+\label{eq:exact_backprop}
+\end{equation}
+Defining $g_0^{\mathrm{den}} = 1$ and reindexing:
+\begin{equation}
+\frac{\partial L}{\partial V_n} = \frac{\partial L}{\partial V_0} \prod_{i=0}^n R_i^{\mathrm{tot}} g_i^{\mathrm{den}}
+\label{eq:exact_backprop_reindex}
+\end{equation}
+\end{theorem}
+
+\begin{corollary}[Synaptic Parameter Gradient]
+\begin{equation}
+\frac{\partial L}{\partial g_j^{\mathrm{syn}}} = \frac{\partial L}{\partial V_0} \left(\prod_{i=0}^n R_i^{\mathrm{tot}} g_i^{\mathrm{den}}\right) x_j (E_j - V_n)
+\label{eq:exact_gsyn}
+\end{equation}
+\end{corollary}
+
+\begin{corollary}[Dendritic Parameter Gradient]
+\begin{equation}
+\frac{\partial L}{\partial g_j^{\mathrm{den}}} = \frac{\partial L}{\partial V_0} \left(\prod_{i=0}^n R_i^{\mathrm{tot}} g_i^{\mathrm{den}}\right) (V_j - V_n)
+\label{eq:exact_gden}
+\end{equation}
+\end{corollary}
+
+\section{Local Learning Approximations}
+
+\subsection{Broadcast Error Approximation}
+
+\begin{definition}[Local Approximation]
+Replace the exact gradient $\frac{\partial L}{\partial V_n}$ with a broadcast error signal $e_n$ derived from the output error $\delta_0 = \frac{\partial L}{\partial V_0}$:
+\begin{equation}
+\frac{\partial L}{\partial V_n} \approx e_n, \qquad \prod_{i=0}^n R_i^{\mathrm{tot}} g_i^{\mathrm{den}} \approx 1
+\label{eq:local_approx}
+\end{equation}
+\end{definition}
+
+Three broadcast modes are implemented (config: \texttt{error\_broadcast\_mode}):
+
+\paragraph{(A) Scalar broadcast.}
+For minibatch index $b$:
+\begin{equation}
+\bar{\delta}(b) = \frac{1}{d_{\mathrm{out}}} \sum_{k=1}^{d_{\mathrm{out}}} \delta_k(b), \qquad e_n(b) = \bar{\delta}(b) \mathbf{1}_{d_n}
+\end{equation}
+
+\paragraph{(B) Per-compartment mapping.}
+If $d_n = d_{\mathrm{out}}$: $e_n(b) = \delta(b)$. Otherwise, \emph{fallback to scalar broadcast}. (A learned mapping matrix is not used in the current implementation.)
+
+\paragraph{(C) Local mismatch modulation.}
+Let $P_n(b)$ be parent compartment drive (e.g., blocklinear output). Define centered mismatch:
+\begin{equation}
+\varepsilon_n(b) = \left(P_n(b) - V_n(b)\right) - \frac{1}{B} \sum_{t=1}^B \left(P_n(t) - V_n(t)\right)
+\end{equation}
+Then:
+\begin{equation}
+e_n(b) = \bar{\delta}(b) \varepsilon_n(b)
+\end{equation}
+
+\subsection{Three-Factor Rule (3F)}
+
+\begin{definition}[3F Learning Rule]
+For synaptic conductances:
+\begin{equation}
+\Delta g_j^{\mathrm{syn}} = \eta \left\langle x_j R_n^{\mathrm{tot}} (E_j - V_n) e_n \right\rangle_B
+\label{eq:3f_syn}
+\end{equation}
+For dendritic conductances:
+\begin{equation}
+\Delta g_j^{\mathrm{den}} = \eta \left\langle R_n^{\mathrm{tot}} (V_j - V_n) e_n \right\rangle_B
+\label{eq:3f_den}
+\end{equation}
+where $\langle \cdot \rangle_B$ denotes batch average.
+\end{definition}
+
+\begin{remark}
+The three factors are: (1) presynaptic activity $x_j$ or voltage difference $(V_j - V_n)$, (2) postsynaptic modulation $(E_j - V_n)$ or $R_n^{\mathrm{tot}}$, (3) broadcast error $e_n$.
+\\[2pt]
+\textbf{Symmetry note.} In implementation, the same multiplicative factors (conductance scaling $R_n^{\mathrm{tot}}$, morphology $\rho$, information $\phi$, and branch scaling $s_j$) are applied consistently to both excitatory and inhibitory synapses; inhibitory only differs in the driving force sign (shunting) via $-(V_n)$ when using driving-force mode.
+\end{remark}
+
+\subsection{Four-Factor Rule (4F): Morphology Correlation}
+
+\begin{definition}[Morphology Factor]
+Let $\bar{V}_n = \frac{1}{d_n} \sum_{j=1}^{d_n} V_{n,j}$ be the mean voltage over compartments in layer $n$. Define the correlation with output:
+\begin{equation}
+\rho_n = \frac{\Cov(\bar{V}_n, \bar{V}_0)}{\sqrt{\Var(\bar{V}_n) \Var(\bar{V}_0)} + \varepsilon}
+\label{eq:rho}
+\end{equation}
+\end{definition}
+
+\begin{proposition}[4F Update Rule]
+Multiply 3F updates by $\rho_n$:
+\begin{align}
+\Delta g_j^{\mathrm{syn}} &= \eta \rho_n \left\langle x_j R_n^{\mathrm{tot}} (E_j - V_n) e_n \right\rangle_B \label{eq:4f_syn} \\
+\Delta g_j^{\mathrm{den}} &= \eta \rho_n \left\langle R_n^{\mathrm{tot}} (V_j - V_n) e_n \right\rangle_B \label{eq:4f_den}
+\end{align}
+\end{proposition}
+
+\begin{theorem}[Theoretical Justification]
+Let $L$ be a smooth loss. Under the assumption that layer $n$ contributes to the output primarily through its mean activity, the correlation $\rho_n$ approximates the alignment between local voltage fluctuations and output gradients:
+\begin{equation}
+\mathbb{E}\left[\frac{\partial L}{\partial \bar{V}_n} \cdot \bar{V}_n\right] \propto \rho_n \cdot \Var(\bar{V}_n)
+\end{equation}
+Thus $\rho_n$ weights updates by the layer's relevance to the task.
+\end{theorem}
+
+\paragraph{Estimators.}
+For minibatch size $B \geq 2$, $\rho_n$ is estimated directly from \eqref{eq:rho} with exponential moving average (EMA). For $B = 1$ (online learning), use Welford's algorithm:
+\begin{align}
+\mu_y^{(t)} &= (1 - \alpha) \mu_y^{(t-1)} + \alpha \bar{V}_n^{(t)} \\
+\delta_y &= \bar{V}_n^{(t)} - \mu_y^{(t-1)} \\
+\sigma_y^{2(t)} &= (1 - \alpha) \sigma_y^{2(t-1)} + \alpha \delta_y^2 \\
+\Cov_{yn}^{(t)} &= (1 - \alpha) \Cov_{yn}^{(t-1)} + \alpha \delta_y \delta_x
+\end{align}
+where $\alpha$ is the EMA rate (\texttt{ema\_alpha}).
+
+\subsection{Five-Factor Rule (5F): Conditional Information}
+
+\begin{definition}[Conditional Information Proxy]
+Let $P_n$ be parent compartment voltage. Define the conditional variance via ridge regression:
+\begin{align}
+\beta_n &= \frac{\Cov(V_n, P_n)}{\Var(P_n) + \lambda} \label{eq:beta} \\
+\sigma_{\mathrm{res}}^2 &= \Var(V_n) - \beta_n \Cov(V_n, P_n) \label{eq:residual_var}
+\end{align}
+The information proxy is:
+\begin{equation}
+\phi_n = \frac{\Var(V_n)}{\sigma_{\mathrm{res}}^2 + \varepsilon}
+\label{eq:phi}
+\end{equation}
+\end{definition}
+
+\begin{theorem}[Information-Theoretic Interpretation]
+Under Gaussian assumptions, $\phi_n \approx 1 + \frac{I(S; V_n \mid P_n)}{H(V_n \mid P_n)}$ where $S$ is the stimulus. Thus $\phi_n > 1$ indicates that $V_n$ provides unique information beyond the parent.
+\end{theorem}
+
+\begin{proposition}[5F Update Rule]
+\begin{align}
+\Delta g_j^{\mathrm{syn}} &= \eta \rho_n \phi_n \left\langle x_j R_n^{\mathrm{tot}} (E_j - V_n) e_n \right\rangle_B \label{eq:5f_syn} \\
+\Delta g_j^{\mathrm{den}} &= \eta \rho_n \phi_n \left\langle R_n^{\mathrm{tot}} (V_j - V_n) e_n \right\rangle_B \label{eq:5f_den}
+\end{align}
+\end{proposition}
+
+\section{Morphology-Aware Extensions}
+
+Standard 4F/5F rules use layer-wise factors $\rho_n$, $\phi_n$ that ignore branch-specific topology. We introduce four extensions that explicitly incorporate dendritic tree structure.
+
+\subsection{Path-Integrated Propagation}
+
+\begin{definition}[Path Factor]
+Define recursively:
+\begin{equation}
+\pi_n = \begin{cases}
+1 & n = 0 \\
+\pi_{n-1} \cdot R_{n-1}^{\mathrm{tot}} \cdot \bar{g}_{n-1}^{\mathrm{den}} & n \geq 1
+\end{cases}
+\label{eq:path_factor}
+\end{equation}
+where $\bar{g}_{n-1}^{\mathrm{den}}$ is the mean dendritic conductance from layer $n-1$ to $n$.
+\end{definition}
+
+\begin{theorem}[Path Approximation]
+The path factor approximates the exact product in \eqref{eq:exact_backprop_reindex}:
+\begin{equation}
+\pi_n \approx \prod_{i=0}^{n-1} R_i^{\mathrm{tot}} g_i^{\mathrm{den}}
+\end{equation}
+Modulating the error by $\pi_n$ yields:
+\begin{equation}
+e_n^{\mathrm{path}} = e_n \cdot \pi_n
+\end{equation}
+which better approximates exact backpropagation.
+\end{theorem}
+
+\begin{remark}[Implementation]
+Computed via \texttt{\_compute\_path\_propagation\_factor()} and implemented as a \emph{per-sample scalar} path factor $\pi_n(b) \in \mathbb{R}$ (broadcast to all compartments in layer $n$). This stabilizes shapes across layers and matches the code behavior when applying $e_n \leftarrow e_n \cdot \pi_n$.
+\end{remark}
+
+\paragraph{Theoretical effect.}
+Path propagation introduces depth-dependent attenuation: deeper compartments receive exponentially smaller error signals $e_n \sim \prod R_i g_i$. This encourages specialization: shallow layers learn direct input-output mappings, while deep layers integrate over longer paths. In practice, we use a \emph{per-sample scalar} path factor $\pi_n(b)$ for stability and consistent broadcasting across layers with different widths.
+
+\subsection{Branch-Specific Depth Modulation}
+
+\begin{definition}[Depth-Modulated Morphology Factor]
+Let $d_j$ be the graph distance (number of edges) from the soma to branch $j$. Define per-branch morphology:
+\begin{equation}
+\rho_j = \frac{\rho_{\mathrm{base}}}{d_j + \alpha}
+\label{eq:rho_depth}
+\end{equation}
+where $\alpha > 0$ (\texttt{morphology\_depth\_offset}) prevents singularity.
+\end{definition}
+
+\begin{proposition}[Depth-Modulated Updates]
+Replace scalar $\rho_n$ with tensor $\bm{\rho}_n \in \mathbb{R}^{d_n}$ in updates:
+\begin{equation}
+\Delta g_j^{\mathrm{syn}} = \eta \rho_j \phi_n \left\langle x_j R_n^{\mathrm{tot}} (E_j - V_n) e_n \right\rangle_B
+\end{equation}
+\end{proposition}
+
+\begin{theorem}[Biological Motivation]
+In real dendrites, distal synapses (large $d_j$) contribute less to somatic depolarization due to cable attenuation. The scaling $\rho_j \propto 1/d_j$ mirrors this: deeper branches receive smaller plasticity updates.
+\end{theorem}
+
+\paragraph{Theoretical effect.}
+Depth modulation biases learning toward proximal synapses. For fixed error $e_n$, the gradient magnitude is:
+\begin{equation}
+\left\|\Delta g_j^{\mathrm{syn}}\right\| \propto \frac{1}{d_j + \alpha}
+\end{equation}
+Tuning $\alpha$ controls the depth penalty: small $\alpha$ → strong penalty, large $\alpha$ → mild penalty.
+
+\subsection{Dendritic Normalization}
+
+\begin{definition}[Conductance Normalization]
+For dendritic updates, normalize by total branch conductance:
+\begin{equation}
+\Delta g_j^{\mathrm{den}} \leftarrow \frac{\Delta g_j^{\mathrm{den}}}{\sum_{k=1}^{K_n} g_k^{\mathrm{den}} + \varepsilon}
+\label{eq:dendritic_norm}
+\end{equation}
+where $K_n$ is the number of dendritic inputs to compartment $n$.
+\end{definition}
+
+\begin{theorem}[Variance Stabilization]
+Let $G_n = \sum_k g_k^{\mathrm{den}}$ and assume $\Delta g_k \sim \mathcal{N}(0, \sigma^2)$. Without normalization:
+\begin{equation}
+\Var\left(\sum_k \Delta g_k\right) = K_n \sigma^2
+\end{equation}
+With normalization:
+\begin{equation}
+\Var\left(\sum_k \frac{\Delta g_k}{G_n}\right) = \frac{K_n \sigma^2}{G_n^2}
+\end{equation}
+Thus normalization reduces variance when $G_n$ is large, preventing dominant branches from accumulating unbounded updates.
+\end{theorem}
+
+\paragraph{Theoretical effect.}
+Analogous to batch normalization, dendritic normalization balances contributions across branches. In sparse connectivity (e.g., TopK synapses), some branches may have much higher $G_n$ than others. Normalization equalizes their influence on the compartment voltage.
+
+\subsection{Apical vs Basal Branch Differentiation}
+
+\begin{definition}[Branch Type Scaling]
+Assign each branch $j$ a type flag $t_j \in \{0, 1\}$ (0 = basal, 1 = apical). Define type-specific scales:
+\begin{equation}
+s_j = s_{\mathrm{basal}} + t_j (s_{\mathrm{apical}} - s_{\mathrm{basal}})
+\label{eq:branch_scale}
+\end{equation}
+Apply to all update factors:
+\begin{equation}
+\Delta g_j^{\mathrm{syn}} = \eta s_j \rho_j \phi_n \left\langle x_j R_n^{\mathrm{tot}} (E_j - V_n) e_n \right\rangle_B
+\end{equation}
+\end{definition}
+
+\begin{theorem}[Compartmental Specialization]
+Pyramidal neurons exhibit distinct plasticity rules in apical (layer 1, feedback) vs basal (layer 5, feedforward) dendrites. Setting $s_{\mathrm{apical}} > s_{\mathrm{basal}}$ amplifies top-down learning, while $s_{\mathrm{apical}} < s_{\mathrm{basal}}$ emphasizes bottom-up processing.
+\end{theorem}
+
+\paragraph{Theoretical effect.}
+For hierarchical tasks, apical amplification ($s_{\mathrm{apical}} = 1.5$, $s_{\mathrm{basal}} = 1.0$) allows the network to prioritize contextual modulation. The gradient ratio is:
+\begin{equation}
+\frac{\|\Delta g_{\mathrm{apical}}\|}{\|\Delta g_{\mathrm{basal}}\|} = \frac{s_{\mathrm{apical}}}{s_{\mathrm{basal}}}
+\end{equation}
+
+\section{Auxiliary Objectives: HSIC}
+
+\subsection{Hilbert-Schmidt Independence Criterion}
+
+For layer activations $\mathbf{Z} \in \mathbb{R}^{B \times d_n}$, define kernel matrix $\mathbf{K}_Z$ (linear, RBF, or polynomial) and centering matrix $\mathbf{H} = \mathbf{I} - \frac{1}{B}\mathbf{1}\mathbf{1}^\top$.
+
+\begin{definition}[HSIC Loss]
+Self-decorrelation (maximize independence within layer):
+\begin{equation}
+\mathcal{L}_{\mathrm{HSIC}}^{\mathrm{self}} = \frac{1}{B^2} \tr(\mathbf{K}_Z \mathbf{H} \mathbf{K}_Z \mathbf{H})
+\end{equation}
+Target-correlation (align with labels $\mathbf{Y}$):
+\begin{equation}
+\mathcal{L}_{\mathrm{HSIC}}^{\mathrm{target}} = -\frac{1}{B^2} \tr(\mathbf{K}_Z \mathbf{H} \mathbf{K}_Y \mathbf{H})
+\end{equation}
+\end{definition}
+
+\begin{proposition}[Linear Kernel Gradients]
+For $\mathbf{K}_Z = \mathbf{Z}\mathbf{Z}^\top$:
+\begin{align}
+\frac{\partial \mathcal{L}_{\mathrm{HSIC}}^{\mathrm{self}}}{\partial \mathbf{Z}} &= \frac{4}{B^2} \mathbf{H} \mathbf{K}_Z \mathbf{H} \mathbf{Z} \\
+\frac{\partial \mathcal{L}_{\mathrm{HSIC}}^{\mathrm{target}}}{\partial \mathbf{Z}} &= -\frac{4}{B^2} \mathbf{H} \mathbf{K}_Y \mathbf{H} \mathbf{Z}
+\end{align}
+\end{proposition}
+
+Gradients are added to synaptic eligibility traces via chain rule through $\mathbf{Z} = f(\mathbf{g}^{\mathrm{syn}})$.
+
+\section{Implementation Details}
+
+\subsection{Positive Weight Parameterization}
+
+To enforce $g \geq 0$, use exponential:
+\begin{equation}
+g = \exp(\theta), \quad \theta \in \mathbb{R}
+\end{equation}
+Chain rule for gradients:
+\begin{equation}
+\frac{\partial L}{\partial \theta} = \frac{\partial L}{\partial g} \cdot g
+\end{equation}
+
+\subsection{Decoder Update Modes}
+
+Let $W_{\mathrm{dec}}$ map $V_L \to y \in \mathbb{R}^{d_{\mathrm{out}}}$. Three modes:
+\begin{enumerate}
+\item \textbf{Backprop}: $\nabla_{W_{\mathrm{dec}}} L$ via autograd.
+\item \textbf{Local}: $\Delta W_{\mathrm{dec}} = \eta \langle \delta_0 V_L^\top \rangle_B$ (3-factor).
+\item \textbf{Frozen}: $\Delta W_{\mathrm{dec}} = 0$.
+\end{enumerate}
+
+\subsection{Algorithm Summary}
+
+\begin{algorithm}[H]
+\caption{Local Credit Assignment with Morphology-Aware Extensions}
+\begin{algorithmic}[1]
+\STATE \textbf{Input:} Model, minibatch $(x, y)$, config $\mathcal{C}$
+\STATE Forward pass: $\hat{y} = f(x; \mathbf{g}^{\mathrm{syn}}, \mathbf{g}^{\mathrm{den}})$
+\STATE Compute loss $L$ and output error $\delta_0 = \frac{\partial L}{\partial \hat{y}}$
+\FOR{each layer $n$ (reverse order)}
+    \STATE Broadcast error: $e_n = \text{broadcast}(\delta_0, \mathcal{C})$
+    \IF{path propagation enabled}
+        \STATE Compute $\pi_n$ via \eqref{eq:path_factor}; $e_n \leftarrow e_n \cdot \pi_n$
+    \ENDIF
+    \STATE Compute $\rho_n$ via \eqref{eq:rho}
+    \IF{depth modulation enabled}
+        \STATE $\rho_n \leftarrow [\rho_1, \ldots, \rho_{d_n}]$ via \eqref{eq:rho_depth}
+    \ENDIF
+    \STATE Compute $\phi_n$ via \eqref{eq:phi}
+    \STATE Compute branch scales $s_j$ via \eqref{eq:branch_scale}
+    \STATE Synaptic updates: $\Delta g_j^{\mathrm{syn}} = \eta s_j \rho_j \phi_n \langle x_j R_n^{\mathrm{tot}} (E_j - V_n) e_n \rangle_B$
+    \STATE Dendritic updates: $\Delta g_j^{\mathrm{den}} = \eta s_j \rho_j \phi_n \langle R_n^{\mathrm{tot}} (V_j - V_n) e_n \rangle_B$
+    \IF{dendritic normalization enabled}
+        \STATE $\Delta g_j^{\mathrm{den}} \leftarrow \Delta g_j^{\mathrm{den}} / (G_n + \varepsilon)$ via \eqref{eq:dendritic_norm}
+    \ENDIF
+    \IF{HSIC enabled}
+        \STATE Add HSIC gradients to $\Delta g_j^{\mathrm{syn}}$
+    \ENDIF
+\ENDFOR
+\STATE Clip gradients; optimizer step
+\end{algorithmic}
+\end{algorithm}
+
+\section{Configuration Reference}
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{@{}ll@{}}
+\toprule
+\textbf{Section} & \textbf{Key Parameters} \\
+\midrule
+Core & \texttt{rule\_variant}, \texttt{error\_mode}, \texttt{error\_broadcast\_mode} \\
+3F (\texttt{three\_factor}) & \texttt{use\_conductance\_scaling}, \texttt{use\_driving\_force}, $\theta$, $E^{\mathrm{rev}}$ \\
+4F (\texttt{four\_factor}) & \texttt{rho\_mode}, \texttt{rho\_estimator}, \texttt{ema\_alpha}, \texttt{layer\_wise\_rho\_scale} \\
+5F (\texttt{five\_factor}) & \texttt{phi\_mode}, \texttt{phi\_estimator}, \texttt{phi\_ridge\_lambda}, \texttt{layer\_wise\_phi\_scale} \\
+Morphology-aware & \texttt{use\_path\_propagation}, \texttt{morphology\_modulator\_mode}, \texttt{morphology\_depth\_offset}, \texttt{use\_dendritic\_normalization}, \texttt{use\_branch\_type\_rules} \\
+HSIC (\texttt{hsic}) & \texttt{enabled}, \texttt{weight}, \texttt{self\_weight}, \texttt{target\_weight}, \texttt{kernel}, \texttt{sigma} \\
+\bottomrule
+\end{tabular}
+\caption{Configuration grouped by learning rule sections (see \texttt{LocalRuleConfig}).}
+\end{table}
+
+\section{Theoretical Comparison}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{@{}llcc@{}}
+\toprule
+\textbf{Method} & \textbf{Factors} & \textbf{Topology} & \textbf{Complexity} \\
+\midrule
+3F & $x, (E-V), e$ & Layer-wise & $\mathcal{O}(1)$ \\
+4F & 3F $+ \rho$ & Layer-wise & $\mathcal{O}(1)$ \\
+5F & 4F $+ \phi$ & Layer-wise & $\mathcal{O}(d_n)$ \\
+\midrule
+5F + Path & 5F $+ \pi$ & Path-aware & $\mathcal{O}(L)$ \\
+5F + Depth & 5F, $\rho \to \rho_j$ & Branch-aware & $\mathcal{O}(d_n)$ \\
+5F + Norm & 5F + normalization & Branch-aware & $\mathcal{O}(d_n)$ \\
+5F + Types & 5F $\times s_j$ & Compartment-aware & $\mathcal{O}(1)$ \\
+\bottomrule
+\end{tabular}
+\caption{Computational complexity per update ($L$ = depth, $d_n$ = compartments).}
+\end{table}
+
+\section{Experimental Validation}
+
+\paragraph{Metrics.}
+\begin{itemize}
+\item \textbf{Performance}: Test accuracy, convergence rate
+\item \textbf{Gradient fidelity}: $\|\nabla_{\mathrm{local}} - \nabla_{\mathrm{exact}}\|_2$
+\item \textbf{Factor magnitudes}: $\rho_n$, $\phi_n$, $\pi_n$ across layers/epochs
+\item \textbf{Morphology alignment}: Correlation between learned $\mathbf{g}^{\mathrm{den}}$ and anatomical connectivity
+\end{itemize}
+
+\paragraph{Ablation protocol.}
+\begin{enumerate}
+\item Baseline: Standard 5F
+\item +Path: Enable \texttt{use\_path\_propagation}
+\item +Depth: Enable \texttt{morphology\_modulator\_mode = "depth"}
+\item +Norm: Enable \texttt{use\_dendritic\_normalization}
+\item +Types: Enable \texttt{use\_branch\_type\_rules}
+\item Full: All enabled
+\end{enumerate}
+
+\section{Conclusion}
+
+We have presented a rigorous mathematical framework for local credit assignment in compartmental dendritic networks. Starting from the exact backpropagation gradients \eqref{eq:exact_backprop}, we derived three classes of local approximations (3F/4F/5F) and extended them with four morphology-aware mechanisms that explicitly exploit dendritic tree topology. Theoretical analysis reveals that each component—path propagation, depth modulation, dendritic normalization, and branch type differentiation—addresses specific limitations of layer-wise approximations. All methods are implemented in \texttt{local\_learning.py} with full configurability and consistency with the mathematical derivations presented here.
+
+\appendix
+
+\section{Codebase Mapping}
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{@{}ll@{}}
+\toprule
+\textbf{Equation/Concept} & \textbf{Implementation} \\
+\midrule
+\eqref{eq:voltage} & \texttt{DendriticBranchLayer.forward()} \\
+\eqref{eq:grad_gsyn}, \eqref{eq:grad_gden} & Lines 488--639 (eligibility traces) \\
+\eqref{eq:3f_syn}, \eqref{eq:3f_den} & Lines 535--584 (3F updates) \\
+\eqref{eq:rho} & \texttt{\_compute\_layer\_rho()} (lines 857--1018) \\
+\eqref{eq:phi} & \texttt{\_compute\_layer\_phi\_conditional()} (lines 1039--1146) \\
+\eqref{eq:path_factor} & \texttt{\_compute\_path\_propagation\_factor()} (lines 1153--1209) \\
+\eqref{eq:rho_depth} & \texttt{\_compute\_branch\_depth\_modulator()} (lines 1211--1236) \\
+\eqref{eq:dendritic_norm} & \texttt{\_compute\_dendritic\_normalization()} (lines 1238--1266) \\
+\eqref{eq:branch_scale} & \texttt{\_get\_branch\_type\_scale()} (lines 1268--1290) \\
+HSIC & Lines 723--854 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Synapse Count Optima from Current Optima}
+
+We summarize how to translate an optimal current ratio $r^* = (I_E/I_I)^*$ into an optimal synapse count ratio $(N_e/N_i)^*$ under two commonly used biological/engineering constraints.
+
+\paragraph{(A) Fixed weight ratio $\gamma = w_e/w_i$.}
+Current balance constraint $N_e w_e = r^* N_i w_i$ yields
+\begin{equation}
+\boxed{\left( \frac{N_e}{N_i} \right)^* = \frac{r^*}{\gamma}}.
+\end{equation}
+Examples: balance ($r^*=1$) $\Rightarrow (N_e/N_i)^*{=}1/\gamma$; Fisher-optimal ($r^*{=}(\sigma_I/\sigma_E)^2$) $\Rightarrow (N_e/N_i)^*{=} (\sigma_I/\sigma_E)^2/\gamma$.
+
+\paragraph{(B) Mean-field scaling $w \propto 1/\sqrt{N}$ with equal constants.}
+With $w_e = c/\sqrt{N_e}$ and $w_i = c/\sqrt{N_i}$ (to maintain $O(1)$ variances), currents are $I_E = c\sqrt{N_e}\bar{\mu}$ and $I_I = c\sqrt{N_i}\bar{\mu}$. Enforcing $I_E/I_I = r^*$ gives
+\begin{equation}
+\boxed{\left( \frac{N_e}{N_i} \right)^* = (r^*)^2}.
+\end{equation}
+Example: Fisher-optimal $r^*{=}(\sigma_I/\sigma_E)^2 \Rightarrow (N_e/N_i)^*{=} (\sigma_I/\sigma_E)^4$.
+
+These formulas apply uniformly to all cases discussed (balance, noise asymmetry, signal asymmetry, correlation corrections), by substituting the corresponding $r^*$.
+
+\section{Example Configuration}
+
+\begin{verbatim}
+local_ca:
+  rule_variant: "5f"
+  error_broadcast_mode: "scalar"
+  
+  # Morphology factor
+  rho_mode: "pearson"
+  rho_estimator: "ema"
+  ema_alpha: 0.05
+  
+  # Information factor
+  phi_mode: "conditional"
+  phi_estimator: "conditional_ema"
+  phi_ridge_lambda: 0.001
+  
+  # Morphology-aware extensions
+  use_path_propagation: true
+  morphology_modulator_mode: "depth"
+  morphology_depth_offset: 2.0
+  use_dendritic_normalization: true
+  use_branch_type_rules: true
+  apical_branch_scale: 1.5
+  basal_branch_scale: 1.0
+  
+  # Compartmental
+  use_conductance_scaling: true
+  use_driving_force: true
+  e_rev_exc: 1.0
+  
+  # Optimization
+  clip_grad_value: 5.0
+  normalize_by_batch: true
+\end{verbatim}
+
+\end{document}
