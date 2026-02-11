@@ -1,0 +1,185 @@
+output_dir: "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/sweep_runs"
+
+slurm_config:
+  account: ""
+  partition: ""
+  time: "02:00:00"
+  nodes: 1
+  ntasks_per_node: 1
+  gpus_per_node: 1
+  cpus_per_task: 4
+  mem: 32GB
+  max_concurrent_jobs: 8
+  modules_to_load: []
+  conda_env_path: ""
+  training_script: "src/dendritic_modeling/scripts/training/train_experiments.py"
+
+experiment_settings:
+  seeds_per_condition: 1
+  base_seed: 42
+
+sweep_config:
+  training.main.learning_strategy_config.rule_variant: ["3f", "4f", "5f"]
+
+base_config:
+  experiment:
+    seed: 42
+    train_valid_split: 0.1
+    enable_amp: false
+    enable_profiling: false
+    enable_hooks: true
+  data:
+    dataset_name: "mnist"
+    base_dir: ""
+    processing:
+      flatten: true
+      normalize: false
+  model:
+    task: "classification"
+    encoder:
+      type: "identity"
+      params:
+        input_dim: null
+    core:
+      type: "dendritic_shunting"
+      architecture:
+        excitatory_layer_sizes: [20]
+        inhibitory_layer_sizes: []
+        excitatory_branch_factors: [3, 3]
+        inhibitory_branch_factors: [1]
+      connectivity:
+        ee_synapses_per_branch_per_layer: [40]
+        ei_synapses_per_branch_per_layer: [0]
+        ie_synapses_per_branch_per_layer: [10]
+        ii_synapses_per_branch_per_layer: [0]
+      transfer:
+        input_mode: 1
+        independent_pathways: false
+        output_activation: null
+      morphology:
+        somatic_synapses: false
+        weight_transform: "softplus"
+      reactivation:
+        enabled: true
+        type: "param_tanh"
+        init_m: 1.5
+        init_b: 0.5
+    decoder:
+      type: "MLP"
+      params:
+        hidden_dims: []
+        activation: "relu"
+        output_dim: 10
+  training:
+    main:
+      strategy: "local_ca"
+      common:
+        epochs: 15
+        batch_size: 256
+        shuffle: true
+        loss_function: "cat_nll"
+        early_stopping: false
+        load_best_state_dict: false
+        plot_losses: false
+        suppress_prints: false
+        print_every: 1
+        use_amp: false
+        enable_nan_checking: false
+        enable_adaptive_clipping: false
+        weight_decay_rate: 0.0
+        weight_boosting: false
+        param_groups:
+          lr: 0.002
+          split_params: true
+          topk_lr: 0.002
+          blocklinear_lr: 0.001
+          reactivation_lr: 0.001
+          decoder_lr: 0.002
+      learning_strategy_config:
+        rule_variant: "5f"
+        error_mode: "auto"
+        error_broadcast_mode: "scalar"
+        decoder_update_mode: "backprop"
+        update_reactivation: true
+        update_inactive_weights: false
+        normalize_by_batch: true
+        clip_grad_value: 5.0
+        three_factor:
+          use_conductance_scaling: true
+          use_driving_force: true
+          theta: 0.0
+          e_rev_exc: 1.0
+          e_rev_inh: 0.0
+        four_factor:
+          rho_mode: "dot"
+          rho_estimator: "ema"
+          ema_alpha: 0.1
+          layer_wise_rho_scale: 0.0
+          augment_k: 8
+          augment_noise_sigma: 0.01
+        five_factor:
+          phi_mode: "conditional"
+          phi_estimator: "conditional_ema"
+          phi_ridge_lambda: 0.001
+          layer_wise_phi_scale: 0.0
+          rls_forgetting: 0.99
+        morphology_aware:
+          use_path_propagation: false
+          morphology_modulator_mode: "none"
+          morphology_depth_offset: 1.0
+          morphology_centrality_metric: "betweenness"
+          use_dendritic_normalization: false
+          use_branch_type_rules: false
+          apical_branch_scale: 1.0
+          basal_branch_scale: 1.0
+          use_branch_length_modulation: false
+        hsic:
+          enabled: false
+  analysis:
+    performance_analysis:
+      enabled: true
+      training: true
+      params:
+        accuracy: true
+        auc: false
+        categorical_loglikelihood: true
+        mse: false
+        cosine_similarity: false
+    information_analysis:
+      enabled: false
+      training: false
+    correlation_analysis:
+      enabled: false
+      training: false
+    ablation_analysis:
+      enabled: false
+      training: false
+    synapse_turnover_analysis:
+      enabled: false
+      training: false
+    noise_perturbation_analysis:
+      enabled: false
+      training: false
+    weight_analysis:
+      enabled: false
+      training: false
+    single_layer_contribution:
+      enabled: false
+      training: false
+    synaptic_activation_analysis:
+      enabled: false
+      training: false
+    branch_activation_analysis:
+      enabled: false
+      training: false
+    compartment_statistics_analysis:
+      enabled: false
+      training: false
+    compartment_snr_analysis:
+      enabled: false
+      training: false
+  wandb:
+    use_wandb: false
+  outputs:
+    run_name: "sweep_localca_rule_variant_pilot"
+    results_dir: "outputs"

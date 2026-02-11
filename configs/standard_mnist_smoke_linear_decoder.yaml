@@ -1,0 +1,127 @@
+experiment:
+  seed: 42
+  train_valid_split: 0.02
+  enable_amp: false
+  enable_profiling: false
+  enable_hooks: true
+
+data:
+  dataset_name: "mnist"
+  base_dir: ""
+  processing:
+    flatten: true
+    normalize: false
+
+model:
+  task: "classification"
+  encoder:
+    type: "identity"
+    params:
+      input_dim: null
+  core:
+    type: "dendritic_shunting"
+    architecture:
+      excitatory_layer_sizes: [20]
+      inhibitory_layer_sizes: []
+      excitatory_branch_factors: [3, 3]
+      inhibitory_branch_factors: [1]
+    connectivity:
+      ee_synapses_per_branch_per_layer: [40]
+      ei_synapses_per_branch_per_layer: [0]
+      ie_synapses_per_branch_per_layer: [10]
+      ii_synapses_per_branch_per_layer: [0]
+    transfer:
+      input_mode: 1
+      independent_pathways: false
+      output_activation: null
+    morphology:
+      somatic_synapses: false
+      weight_transform: "softplus"
+    reactivation:
+      enabled: true
+      type: "param_tanh"
+      init_m: 1.5
+      init_b: 0.5
+  decoder:
+    type: "MLP"
+    params:
+      hidden_dims: []
+      activation: "relu"
+      output_dim: 10
+
+training:
+  main:
+    strategy: "standard"
+    common:
+      epochs: 3
+      batch_size: 256
+      shuffle: true
+      loss_function: "cat_nll"
+      early_stopping: false
+      load_best_state_dict: false
+      plot_losses: false
+      suppress_prints: false
+      print_every: 1
+      use_amp: false
+      enable_nan_checking: false
+      enable_adaptive_clipping: false
+      weight_decay_rate: 0.0
+      weight_boosting: false
+      param_groups:
+        lr: 0.001
+        split_params: true
+        topk_lr: 0.001
+        blocklinear_lr: 0.0001
+        reactivation_lr: 0.0001
+        decoder_lr: 0.001
+
+analysis:
+  performance_analysis:
+    enabled: true
+    training: true
+    params:
+      accuracy: true
+      auc: false
+      categorical_loglikelihood: true
+      mse: false
+      cosine_similarity: false
+  information_analysis:
+    enabled: false
+    training: false
+  correlation_analysis:
+    enabled: false
+    training: false
+  ablation_analysis:
+    enabled: false
+    training: false
+  synapse_turnover_analysis:
+    enabled: false
+    training: false
+  noise_perturbation_analysis:
+    enabled: false
+    training: false
+  weight_analysis:
+    enabled: false
+    training: false
+  single_layer_contribution:
+    enabled: false
+    training: false
+  synaptic_activation_analysis:
+    enabled: false
+    training: false
+  branch_activation_analysis:
+    enabled: false
+    training: false
+  compartment_statistics_analysis:
+    enabled: false
+    training: false
+  compartment_snr_analysis:
+    enabled: false
+    training: false
+
+wandb:
+  use_wandb: false
+
+outputs:
+  run_name: "standard_mnist_smoke_linear"
+  results_dir: "outputs"

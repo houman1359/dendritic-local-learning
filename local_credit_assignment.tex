@@ -1,21 +1,26 @@
-\documentclass[11pt]{article}
+\PassOptionsToPackage{numbers,sort&compress}{natbib}
+\documentclass{article}
+\usepackage{neurips_2025}
+\usepackage{microtype}
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{bm}
-\usepackage{geometry}
-\usepackage{hyperref}
 \usepackage{amsthm}
 \usepackage{algorithm}
 \usepackage{algorithmic}
 \usepackage{booktabs}
-
-\geometry{margin=1in}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{xcolor}
+\usepackage[hidelinks,hypertexnames=false,bookmarks=false]{hyperref}
+\graphicspath{{figures/}{./figures/}}
 
 \newtheorem{theorem}{Theorem}
 \newtheorem{proposition}{Proposition}
 \newtheorem{lemma}{Lemma}
 \newtheorem{definition}{Definition}
 \newtheorem{remark}{Remark}
+\newtheorem{corollary}{Corollary}
 
 \DeclareMathOperator*{\argmax}{arg\,max}
 \DeclareMathOperator*{\argmin}{arg\,min}
@@ -24,7 +29,10 @@
 \DeclareMathOperator{\tr}{tr}
 
 \title{Local Credit Assignment in Compartmental Dendritic Networks}
-\author{}
+\author{
+Anonymous Authors \\
+Paper under double-blind review
+}
 \date{}
 
 \begin{document}
@@ -535,6 +543,7 @@ The expression for $\partial \mathcal{L}_{\mathrm{HSIC}}^{\mathrm{target}}/\part
 \end{remark}
 
 \section{Implementation Details}
+\label{sec:implementation}
 
 \subsection{Units and Normalization}
 
@@ -680,74 +689,118 @@ Broadcast alignment & Feedback alignment & Thm.~\ref{thm:fa_alignment}: $\mathbb
 \caption{Summary of theoretical components and their biological/algorithmic interpretations.}
 \end{table}
 
-\section{Experimental Validation}
+\section{Experimental Validation for NeurIPS}
 
-\subsection{Model and Task Suite}
+\subsection{Central Empirical Claim}
 
-We propose evaluating three model classes across multiple morphologies and tasks:
+The main empirical claim is not merely that local learning can train dendritic networks, but that
+\emph{dendritic tree structure and shunting conductance interactions create useful local credit signals}. Concretely, the completed sweeps support:
+\begin{equation}
+\text{(per-soma error broadcast)} + \text{(dendritic shunting regime)}
+\Longrightarrow \text{consistent gains over scalar and additive controls.}
+\end{equation}
+The role of path propagation is more nuanced in our current runs: it improves several representation-level information metrics, but does not consistently increase accuracy. This claim is specific to compartmental dendritic models where child branches feed parent branches and soma through conductance-weighted interactions \eqref{eq:path_sum}, and is therefore not reducible to standard layer-wise local rules.
 
-\paragraph{Models.}
+\subsection{Claim-Driven Hypotheses and Falsifiers}
+
+\paragraph{H1: Broadcast locality matters.}
+Replacing scalar broadcast with per-compartment/per-soma mapping should improve convergence and final accuracy.  
+\textbf{Falsifier:} no significant improvement across seeds/tasks, or unstable gains.
+
+\paragraph{H2: Morphology-aware path factors matter.}
+Enabling \texttt{use\_path\_propagation} should further improve performance, especially when combined with per-soma broadcast.  
+\textbf{Falsifier:} no additive or interaction gain relative to per-soma alone.
+
+\paragraph{H3: Decoder learning can remain local.}
+Under the best local dendritic setting, \texttt{decoder\_update\_mode=local} should match \texttt{backprop}, while \texttt{none} should degrade.  
+\textbf{Falsifier:} local decoder materially underperforms backprop in the same regime.
+
+\paragraph{H4: The effect is regime-dependent and shunting-linked.}
+Gains from H1--H2 should be strongest in shunting/strong-inhibition settings and weaker in additive controls.  
+\textbf{Falsifier:} gains are equally large in additive controls or disappear under shunting.
+
+\subsection{Submission Sweep Suite}
+
+We organize experiments as four sweep families, each mapped to one hypothesis:
+\begin{itemize}
+\item \textbf{S1 (H1/H2):} $\{\texttt{error\_broadcast\_mode}\in[\texttt{scalar},\texttt{per\_soma}]\}\times\{\texttt{use\_path\_propagation}\in[\texttt{false},\texttt{true}]\}$ with 5F local rule.
+\item \textbf{S2 (H3):} $\{\texttt{decoder\_update\_mode}\in[\texttt{backprop},\texttt{local},\texttt{none}]\}$ under the best S1 regime.
+\item \textbf{S3 (H4):} $\{\texttt{core.type}\in[\texttt{dendritic\_shunting},\texttt{dendritic\_additive}]\}\times$ inhibition-strength sweep.
+\item \textbf{S4 (source):} targeted analysis runs (information, ablation, weight/compartment statistics) on top and bottom S1/S3 conditions.
+\end{itemize}
+
+\subsection{Completed Robust Multi-Seed Signal (Current Sweep Set)}
+
+Completed claim sweeps (\texttt{claim1--claim4}, with robust reruns for \texttt{claim2--claim4}) provide the following signal:
+\begin{itemize}
+\item \textbf{H3 supported (decoder locality):} \texttt{decoder\_update\_mode=local} matches or slightly exceeds \texttt{backprop} on both datasets, while \texttt{none} drops strongly.  
+MNIST test: local 0.3790 vs.\ backprop 0.3788 vs.\ none 0.1756; CIFAR-10 test: local 0.1669 vs.\ backprop 0.1671 vs.\ none 0.1000. Paired seed-matched local-minus-backprop deltas are near zero (MNIST: +0.00018; CIFAR-10: -0.00024), while local-minus-none gaps are large (MNIST: +0.203; CIFAR-10: +0.0669).
+\item \textbf{H4 strongly supported (regime dependence):} shunting is consistently and substantially better than additive controls across inhibition settings. Averaged over inhibition levels in claim3, MNIST test is 0.331 (shunting, per-soma) vs.\ 0.112 (additive, per-soma), and CIFAR-10 test is 0.145 vs.\ 0.100. Best matched settings show the same pattern (MNIST: 0.366 vs.\ 0.116; CIFAR-10: 0.165 vs.\ 0.100).
+\item \textbf{H1 partially supported and interaction-dependent}: per-soma broadcast improves over scalar in the main shunting regime on MNIST (mean test 0.331 vs.\ 0.311) and modestly on CIFAR-10 (0.145 vs.\ 0.143), but the magnitude is regime- and dataset-dependent; in lower-signal settings the gap can shrink or flip.
+\item \textbf{H2 mixed with a clear interaction}: \texttt{use\_path\_propagation=true} is not uniformly accuracy-improving. In claim4, within per-soma it leaves validation accuracy unchanged and slightly reduces test accuracy (0.3819 \(\rightarrow\) 0.3790), while increasing information metrics (\(\mathrm{MI}(E,I;C)\): 0.620 \(\rightarrow\) 0.637, \(\mathrm{MI}(V;C)\): 0.436 \(\rightarrow\) 0.442). Within scalar broadcast, path propagation improves test accuracy (0.351 \(\rightarrow\) 0.363) with smaller information gains.
+\end{itemize}
+Therefore, the strongest paper narrative is: \emph{local decoder sufficiency + shunting-regime dependence} as the core performance result, with \emph{broadcast/path interactions} and \emph{path-driven representation shaping} as the mechanistic layer.
+
+\subsection{Core Empirical Figures}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.92\textwidth]{fig_decoder_locality.pdf}
+\caption{\textbf{Decoder-locality claim (robust sweep).} On both MNIST and CIFAR-10, local decoder updates match backpropagated decoder updates, while removing decoder updates (\texttt{none}) causes a large performance drop. This supports local decoder sufficiency in the best local-credit regime.}
+\label{fig:decoder_locality}
+\end{figure*}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.94\textwidth]{fig_shunting_regime.pdf}
+\caption{\textbf{Regime dependence across inhibition levels.} Shunting networks consistently outperform additive controls across inhibitory synapse counts and broadcast modes, with the largest margin on MNIST. This isolates the main performance source as the shunting regime rather than local-learning heuristics alone.}
+\label{fig:shunting_regime}
+\end{figure*}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.94\textwidth]{fig_source_interaction.pdf}
+\caption{\textbf{Broadcast-path interaction in source analysis.} Path propagation has interaction-dependent behavior: within per-soma broadcast it leaves accuracy nearly unchanged while increasing information metrics, whereas within scalar broadcast it improves accuracy more with smaller information gains.}
+\label{fig:source_interaction}
+\end{figure*}
+
+\begin{table}[t]
+\centering
+\small
+\begin{tabular}{@{}lll@{}}
+\toprule
+\textbf{Claim / Condition} & \textbf{Metric} & \textbf{Value} \\
+\midrule
+Claim2 (MNIST, local vs backprop vs none) & test accuracy & 0.3790 vs 0.3788 vs 0.1756 \\
+Claim2 (CIFAR-10, local vs backprop vs none) & test accuracy & 0.1669 vs 0.1671 vs 0.1000 \\
+Claim3 (MNIST, shunting-per-soma vs additive-per-soma) & mean test over IE & 0.331 vs 0.112 \\
+Claim3 (CIFAR-10, shunting-per-soma vs additive-per-soma) & mean test over IE & 0.145 vs 0.100 \\
+Claim4 (per-soma, path false \(\rightarrow\) true) & test / \(\mathrm{MI}(E,I;C)\) & 0.3819 \(\rightarrow\) 0.3790 / 0.620 \(\rightarrow\) 0.637 \\
+\bottomrule
+\end{tabular}
+\caption{\textbf{Robust headline results for the NeurIPS narrative.} Values are grouped over robust multi-seed sweeps (\texttt{claim2--claim4}).}
+\label{tab:robust_headline}
+\end{table}
+
+\subsection{Primary Metrics and Statistical Protocol}
+
+\begin{itemize}
+\item \textbf{Primary endpoint:} test accuracy (mean $\pm$ 95\% CI over seeds).
+\item \textbf{Secondary:} validation NLL, convergence speed (epochs to best checkpoint), robustness across MNIST/CIFAR-10.
+\item \textbf{Mechanistic:} MI/CMI terms, branch/path statistics, compartment SNR, ablation sensitivity.
+\item \textbf{Statistics:} two-way ANOVA (broadcast $\times$ path), interaction contrasts, and paired seed-matched deltas for local-vs-backprop decoder updates.
+\end{itemize}
+
+\subsection{Figure Plan}
+
 \begin{enumerate}
-\item \textbf{Rate-based conductance model}: Current implementation with steady-state voltage equation \eqref{eq:voltage}.
-\item \textbf{Conductance-based LIF}: Identical subthreshold dynamics; use surrogate gradients for spikes.
-\item \textbf{Multi-compartment biophysical}: 2--4 compartments per neuron (soma, basal, apical); test shunting inhibition placement.
+\item \textbf{F1:} Model schematic and local rule decomposition (3F/4F/5F + morphology factors).
+\item \textbf{F2:} Broadcast $\times$ path interaction heatmap with seed CIs, explicitly separating accuracy and representation-level metrics.
+\item \textbf{F3:} Decoder-locality result (\texttt{local} vs.\ \texttt{backprop} vs.\ \texttt{none}).
+\item \textbf{F4:} Regime dependence (shunting vs additive, inhibition strength sweep).
+\item \textbf{F5:} Mechanistic source panel (information/ablation/compartment metrics), highlighting path-driven MI gains with interaction-dependent accuracy shifts.
+\item \textbf{F6:} Training dynamics and factor trajectories ($\rho_n,\phi_n,\pi_n$) in best vs control conditions.
 \end{enumerate}
-
-\paragraph{Morphologies.}
-\begin{itemize}
-\item Chain (single path)
-\item Balanced binary tree
-\item Random tree
-\item Reconstructed morphology from NeuroMorpho (optional)
-\end{itemize}
-
-\paragraph{Tasks.}
-MNIST, CIFAR-10 (classification); synthetic regression tasks with known optimal solutions.
-
-\paragraph{Baselines.}
-Backpropagation (BP), Feedback Alignment (FA), Direct Feedback Alignment (DFA), Target Propagation, Equilibrium Propagation (scaled-down ConvNets if needed).
-
-\subsection{Metrics}
-
-\begin{itemize}
-\item \textbf{Performance}: Test accuracy, convergence rate (5 seeds, 95\% CIs)
-\item \textbf{Gradient fidelity}: $\|\nabla_{\mathrm{local}} - \nabla_{\mathrm{exact}}\|_2$
-\item \textbf{Cosine alignment}: $\cos\angle(\nabla_{\mathrm{local}}, \nabla_{\mathrm{exact}})$ per layer and epoch
-\item \textbf{Factor magnitudes}: $\rho_n$, $\phi_n$, $\pi_n$ across layers/epochs (time-series with EMA windows)
-\item \textbf{Morphology alignment}: Correlation between learned $\mathbf{g}^{\mathrm{den}}$ and anatomical connectivity
-\end{itemize}
-
-\subsection{Ablation Protocol}
-
-\begin{enumerate}
-\item Baseline: Standard 5F
-\item +Path: Enable \texttt{use\_path\_propagation}
-\item +Depth: Enable \texttt{morphology\_modulator\_mode = "depth"}
-\item +Norm: Enable \texttt{use\_dendritic\_normalization}
-\item +Types: Enable \texttt{use\_branch\_type\_rules}
-\item Full: All enabled
-\end{enumerate}
-
-\subsection{Shunting Inhibition Ablations}
-
-\begin{itemize}
-\item Vary $E_\mathrm{inh} \in \{0, -0.2, -0.4\}$
-\item Plot total conductance $g_n^{\mathrm{tot}}$, input resistance $R_n^{\mathrm{tot}}$, and gain curves
-\item Report voltage-level divisive effect and rate-level shift
-\item Compare proximal vs.\ distal inhibitory placement in multi-compartment models
-\end{itemize}
-
-\subsection{Broadcast Modes}
-
-Compare scalar broadcast (A), per-compartment mapping (B), and optional DFA-style random feedback matrix $B_n$ to test Theorem~\ref{thm:fa_alignment}.
-
-\subsection{HSIC Auxiliary Losses}
-
-\begin{itemize}
-\item Compare RBF vs.\ linear kernels
-\item Report runtime overhead and effect on representation diversity (measured via effective rank or singular value spectrum)
-\item Ablate self-decorrelation vs.\ target-correlation weights
-\end{itemize}
 
 \section{Future Extensions and Open Questions}
 

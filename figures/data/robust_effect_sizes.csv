@@ -1,0 +1,11 @@
+effect,value
+cifar10: local - backprop,-0.00023999512195587713
+cifar10: local - none,0.06690000295639037
+mnist: local - backprop,0.00018000006675719104
+mnist: local - none,0.20333999395370483
+cifar10: shunting - additive (avg matched),0.04395937756635247
+mnist: shunting - additive (avg matched),0.2103187397588045
+per_soma: path(true-false) test,-0.002960002422332797
+"per_soma: path(true-false) MI(E,I;C)",0.017317706953558942
+scalar: path(true-false) test,0.01199999451637268
+"scalar: path(true-false) MI(E,I;C)",0.004153951967796887

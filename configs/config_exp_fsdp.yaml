@@ -1,0 +1,372 @@
+analysis:
+  ablation_analysis:
+    enabled: false
+    params:
+      selection:
+        levels: ["layer"]              # Levels: "layer", "compartment" (compartment is lesion-only)
+        targets: ["excitation", "inhibition"]  # Targets: "all_synapses", "excitation", "inhibition", "upstream"
+        metrics: ["accuracy", "auc", "categorical_loglikelihood"]  # Metrics: "accuracy", "auc", "categorical_loglikelihood", "mse", "cosine_similarity", "pred_label_mi_bits"
+
+      methods:
+        ablation_methods: ["lesion"]  # Methods: "lesion", "shuffle", "mean_clamp"
+        shuffle_seed: 0               # Shuffle seed (int)
+        clamp_statistic: "mean"       # mean_clamp statistic: "mean"
+    training: false
+  branch_activation_analysis:
+    enabled: false
+    params:
+      branch_activations: true
+      branch_summary: true
+      downsample: true
+      layer_summary: true
+      logspace: false
+      network_summary: true
+      raw_summary: true
+      samples: 5
+      synapse_activations: true
+    training: false
+  correlation_analysis:
+    enabled: false
+    params:
+      selection:
+        components: ["total", "noise", "signal", "tuning"]  # Components: "total", "noise", "signal", "tuning"
+        pairs: ["EE", "II", "EI", "E_output", "I_output", "output_output"]  # Pairs: "EE", "II", "EI", "E_output", "I_output", "output_output"
+        scopes: ["layer", "einet"]  # Scopes: "layer", "einet", "neuron"
+
+      compute:
+        computation_level: "layer_branch"  # Level: "synaptic", "single_branch", "layer_branch", "all_branch"
+        max_samples: 5000                 # Max samples (null = all)
+        batch_process: true               # Batch processing: true|false
+        per_layer_analysis: true          # Extra breakdown/plots: per-layer (overridden by selection.scopes if non-empty)
+        per_einet_analysis: true          # Extra breakdown/plots: per-E/I-net (overridden by selection.scopes if non-empty)
+        per_neuron_analysis: false        # Extra breakdown/plots: per-neuron (expensive; overridden by selection.scopes if non-empty)
+
+      sampling:
+        n_synapse_pairs: 10000             # Synaptic-only: number of synapse pairs (int >= 1)
+        sampling_strategy: "stratified"    # Sampling: "random", "stratified", "importance"
+        stratified_categories: ["within_branch", "within_layer", "across_layer"]  # Stratified categories: "within_branch", "within_layer", "across_layer"
+        max_pairs_per_category: 1000       # Stratified-only: max pairs per category (int >= 1)
+    training: false
+  information_analysis:
+    enabled: false
+    params:
+      selection:
+        components: ["basic", "pairwise", "conditional", "ablation_aligned", "layer_proxies"]  # Components: "basic", "pairwise", "conditional", "gaussian_fisher", "pid", "ablation_aligned", "layer_proxies", "upstream_unique_cmi"
+        scopes: []                        # Scopes: "layer", "einet", "neuron" (alias: views)
+        signal_variants: ["network", "lda"]  # Variants: "network", "lda", "random" (random requires baselines.random_weights.n_shuffles > 0)
+
+      compute:
+        max_samples: null                 # Max samples (null = all)
+        include_vinf: true                # Include soma activation: true|false
+        normalize_mi: false               # Normalize by entropy: true|false
+        verbose: false                    # Verbose: true|false
+        computation_level: layer_branch   # Level: "single_branch", "layer_branch", "all_branch"
+        branch_aggregation: multivariate  # Aggregation: "mean", "multivariate", "sample"
+        per_layer_analysis: false         # Extra breakdown/plots: per-layer (overridden by selection.scopes if non-empty)
+        per_einet_analysis: false         # Extra breakdown/plots: per-E/I-net (overridden by selection.scopes if non-empty)
+        per_neuron_analysis: false        # Extra breakdown/plots: per-neuron (expensive; overridden by selection.scopes if non-empty)
+        layer_total_topk: 10              # K for *_topK_sum proxies (int >= 1)
+        gaussian_fisher:
+          aggregation: "sum"  # Aggregate per-feature F: "sum"|"mean"|"max"
+          mi_transform: "half_log1p"  # Transform F→MI proxy: "half_log1p"|"log1p"|"none"
+          eps: 1.0e-8  # Denominator stabilizer (alias: ridge) (float > 0)
+
+      pid:
+        binarize: true  # Binarize continuous vars: true|false
+        binarize_method: median  # Binarization: "median"|"mean"|"quantile"
+        binarize_threshold: 0.5  # Used only if binarize_method="quantile": q∈[0,1]
+
+      estimator:
+        method: kraskov                   # MI estimation: "kraskov", "decoder", "binned", "sklearn", "copula", "auto"
+        kraskov:
+          n_neighbors: 10                 # Kraskov k-NN (int >= 1)
+        binned:
+          n_bins: 20                      # Binned/sklearn histogram bins (int >= 2)
+          binning_strategy: "quantile"    # binned: "quantile" or "uniform"
+          bias_correction: "none"         # binned: "none" or "miller_madow"
+        decoder:
+          cv_folds: 5                     # decoder: CV folds (int >= 2)
+          C: 1.0                          # decoder: LogisticRegression C (float > 0)
+          standardize: true               # decoder: standardize X (true|false)
+          seed: 0                         # decoder: CV shuffle seed (int)
+          continuous:
+            strategy: "none"              # decoder continuous: "none", "binned", "gaussian"
+            max_total_dim: 2              # decoder continuous: max total dim (x+y [+z]); used only if strategy != "none"
+            gaussian_ridge: 1e-6          # decoder continuous: gaussian ridge (float > 0)
+        copula:
+          type: gaussian                  # Copula: "gaussian", "kernel", "dvc"
+        sklearn:
+          n_bins: 20                      # sklearn histogram bins (int >= 2)
+          bandwidth: null                 # sklearn KDE bandwidth (null = auto)
+
+      baselines:
+        random_weights:
+          n_shuffles: 0                   # Random-weight baseline shuffles (int >= 0; produces *_sh metrics)
+          seed: 42                        # Random-weight seed (int)
+        label_shuffle_null:
+          n_shuffles: 0                   # Null (label-shuffle) baseline shuffles (int >= 0; produces *_null metrics)
+          seed: 0                         # Null baseline seed (int)
+          components: ["basic"]           # Null components: "basic", "conditional", "ablation_aligned", "upstream_unique_cmi", "all"
+          conditional_shuffle: "auto"     # Conditional null shuffle: "auto", "global", "bins"
+          conditional_bins: 10            # If using bins: number of Z-bins (int >= 2)
+    training: false
+  noise_perturbation_analysis:
+    enabled: false
+    params:
+      accuracy: true
+      auc: true
+      categorical_loglikelihood: true
+      cosine_similarity: false
+      gaussian_noise: true
+      gaussian_sdevs:
+      - 0.1
+      - 0.2
+      mse: false
+      n_samples: 10
+      uniform_magnitudes:
+      - 0.1
+      - 0.2
+      uniform_noise: true
+    training: false
+  performance_analysis:
+    enabled: true
+    params:
+      accuracy: true
+      auc: true
+      categorical_loglikelihood: true
+      cosine_similarity: false
+      mse: false
+    training: true
+  single_layer_contribution:
+    enabled: false
+    params:
+      accuracy: true
+      auc: true
+      both_contribution: true
+      categorical_loglikelihood: true
+      cosine_similarity: false
+      excitation_contribution: true
+      inhibition_contribution: true
+      mse: false
+    training: false
+  synapse_turnover_analysis:
+    enabled: false
+    training: false
+    params:
+      snapshot_interval: 10
+      synaptic_analysis: false
+      save_synaptic_report: false
+  synaptic_activation_analysis:
+    enabled: false
+    params:
+      branch_summary: true
+      downsample: true
+      layer_summary: true
+      logspace: false
+      network_summary: true
+      raw_summary: true
+      samples: 5
+    training: false
+  weight_analysis:
+    enabled: false
+    params:
+      analyze_branch_output: false
+      analyze_excitatory: true
+      analyze_inhibitory: true
+      branch_aggregation: mean
+      branch_weights: true
+      computation_level: single_branch
+      compute_dendritic_strength: true
+      compute_mean: true
+      compute_min_max: true
+      compute_percentiles: false
+      compute_variance: true
+      per_einet_analysis: true
+      per_layer_analysis: true
+      per_neuron_analysis: false
+      synapse_weights: true
+      weight_threshold: 1e-6
+    training: false
+  compartment_statistics_analysis:
+    enabled: true
+    training: false
+    params:
+      synapse_weights: true
+      branch_weights: true
+      inputs: true
+      activations: true
+      global_analysis: true
+      layer_analysis: true
+      branch_analysis: true
+      compute_mean: true
+      compute_variance: true
+      compute_percentiles: true
+      compute_min_max: true
+      compute_entropy: true
+      per_class_analysis: false
+      n_samples: 1000
+data:
+  base_dir: ''
+  dataset_name: cifar10
+  dataset_params:
+    mnist_modulo10:
+      shuffle_iterations: 2
+    multixor:
+      n_bits: 8
+    orientation_bars:
+      n_orient_classes: 8
+    orthonet:
+      input_dim: 784
+      n_layers: 5
+      noise_std: 0.1
+      nonlinearity: sigmoid
+      repeat_layers: false
+    poisson_generator:
+      base_dataset: mnist
+      rate_multiplier: 1.0
+    random_flip_mnist:
+      flip_probability: 0.5
+  processing:
+    flatten: true
+    normalize: false
+experiment:
+  checkpointing:
+    checkpoint_dir: results/checkpoints/
+    enabled: false
+    save_every_n_epochs: 10
+  enable_amp: false
+  enable_hooks: true
+  enable_profiling: false
+  profiling_output_dir: results/profiling/
+  seed: 42
+  train_valid_split: 0.8
+fsdp:
+  backward_prefetch: BACKWARD_POST
+  cpu_offload: false
+  forward_prefetch: true
+  gradient_checkpointing: false
+  limit_all_gathers: true
+  min_num_params: 10000
+  mixed_precision: false
+  reduce_communication_overhead: true
+  sharding_strategy: FULL_SHARD
+  sync_module_states: false
+  use_fsdp: true
+  use_orig_params: true
+model:
+  core:
+    architecture:
+      excitatory_branch_factors:
+      - 3
+      - 3
+      - 3
+      - 3
+      excitatory_layer_sizes:
+      - 20
+      inhibitory_branch_factors:
+      - 1
+      inhibitory_layer_sizes: []
+
+      # Inhibitory network configuration
+      inhibitory_network_type: "dendritic"  # Options: "dendritic", "mlp"
+      mlp_inhibitory_network_params:     # Parameters for MLP inhibitory network (used when type="mlp")
+        hidden_dims: [200]               # Hidden layer dimensions for MLP inhibitory network
+        activation: "relu"               # Activation function for MLP inhibitory network
+    blocklinear:
+      efficient: false
+      gradient_scaling: none
+    connectivity:
+      ee_synapses_per_branch_per_layer:
+      - 40
+      ei_synapses_per_branch_per_layer:
+      - 0
+      ie_synapses_per_branch_per_layer:
+      - 10
+      ii_synapses_per_branch_per_layer:
+      - 0
+    implementation:
+      adaptive_initialization: false
+      print_hooks: false
+    morphology:
+      dbl_init_method: analytical_expectation  # Options: analytical_expectation, default, ei_equivalence, naive
+      somatic_synapses: false
+      use_shunting: true
+      weight_transform: softplus
+    reactivation:
+      enabled: true
+      init_b: 0.5
+      init_m: 1.5
+      gradient_scaling: none
+      type: param_tanh
+    sparsity:
+      deepst:
+        excitatory_target_density: 0.1
+        freeze_excitatory_connectivity: false
+        freeze_inhibitory_connectivity: false
+        inhibitory_target_density: 0.1
+        init_method: xavier_normal
+        rewire_frequency: 1
+        rewiring_mode: global
+        sigma: 0.05
+        synapses_per_branch: null
+        use_noise: true
+        weight_threshold: 1.0e-06
+      init_method: xavier_normal
+      noise_level: 0.0
+      gradient_scaling: none
+      temperature: 0.0
+      type: standard
+    transfer:
+      excitatory_dim: null
+      independent_pathways: false
+      inhibitory_dim: null
+      input_mode: 1
+      output_activation: null
+    type: EINet
+  decoder:
+    params: {}
+    type: MLP
+  encoder:
+    load_save_root: ./.trained_encoder_networks/
+    params: {}
+    type: identity
+  task: classification
+outputs:
+  results_dir: results
+  run_name: fsdp_large_exp
+training:
+  encoder:
+    common:
+      lr: 0.001
+    strategy: standard
+  main:
+    common:
+      param_groups: {}
+      weight_decay_rate: 0.0
+    pruning: {}
+    regularization: {}
+    strategies:
+      freeze_branch_kl: {}
+      freeze_branches: {}
+      freeze_layers: {}
+      homeostatic_control: {}
+      local_ca: {}
+      multi_stage: {}
+      standard: {}
+      voltage_stabilization: {}
+    strategy: standard
+wandb:
+  enabled: true
+  entity: null
+  group: large-scale-ei
+  log_activations: false
+  log_freq: 100
+  log_gradients: false
+  log_parameters: false
+  project: dendritic-fsdp-experiments
+  tags:
+  - fsdp
+  - large-model
+  - ei-network
+  - pruning
+  use_wandb: false
