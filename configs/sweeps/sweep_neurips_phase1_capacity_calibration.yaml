@@ -1,0 +1,150 @@
+output_dir: "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/sweep_runs"
+
+slurm_config:
+  account: "kempner_dev"
+  partition: "kempner_eng"
+  time: "06:00:00"
+  nodes: 1
+  ntasks_per_node: 1
+  gpus_per_node: 1
+  cpus_per_task: 8
+  mem: 48GB
+  max_concurrent_jobs: 12
+  modules_to_load: []
+  conda_env_path: ""
+  training_script: "src/dendritic_modeling/scripts/training/train_experiments.py"
+
+experiment_settings:
+  seeds_per_condition: 2
+  base_seed: 42
+
+sweep_config:
+  data.dataset_name: ["mnist", "context_gating", "info_shunting"]
+  model.core.type: ["point_mlp", "dendritic_mlp", "dendritic_additive", "dendritic_shunting"]
+  model.core.architecture.excitatory_layer_sizes: [[128], [256, 256]]
+  model.core.architecture.excitatory_branch_factors: [[2, 2], [3, 3]]
+  model.core.connectivity.ie_synapses_per_branch_per_layer: [[0], [10], [20]]
+
+base_config:
+  experiment:
+    seed: 42
+    train_valid_split: 0.8
+    enable_amp: false
+    enable_profiling: false
+    enable_hooks: true
+  data:
+    dataset_name: "mnist"
+    base_dir: ""
+    processing:
+      flatten: true
+      normalize: false
+  model:
+    task: "classification"
+    encoder:
+      type: "identity"
+      params:
+        input_dim: null
+    core:
+      type: "dendritic_shunting"
+      architecture:
+        excitatory_layer_sizes: [128]
+        inhibitory_layer_sizes: []
+        excitatory_branch_factors: [3, 3]
+        inhibitory_branch_factors: [1]
+      connectivity:
+        ee_synapses_per_branch_per_layer: [40]
+        ei_synapses_per_branch_per_layer: [0]
+        ie_synapses_per_branch_per_layer: [10]
+        ii_synapses_per_branch_per_layer: [0]
+      transfer:
+        input_mode: 1
+        independent_pathways: false
+        output_activation: null
+      morphology:
+        somatic_synapses: false
+        weight_transform: "softplus"
+      reactivation:
+        enabled: true
+        type: "param_tanh"
+        init_m: 1.5
+        init_b: 0.5
+    decoder:
+      type: "MLP"
+      params:
+        hidden_dims: []
+        activation: "relu"
+        output_dim: 10
+  training:
+    main:
+      strategy: "standard"
+      common:
+        epochs: 80
+        batch_size: 256
+        shuffle: true
+        loss_function: "cat_nll"
+        early_stopping: true
+        patience: 20
+        load_best_state_dict: true
+        plot_losses: false
+        suppress_prints: false
+        print_every: 1
+        use_amp: false
+        enable_nan_checking: false
+        enable_adaptive_clipping: false
+        weight_decay_rate: 0.0
+        weight_boosting: false
+        param_groups:
+          lr: 0.001
+          split_params: true
+          topk_lr: 0.001
+          blocklinear_lr: 0.0005
+          reactivation_lr: 0.0005
+          decoder_lr: 0.001
+  analysis:
+    performance_analysis:
+      enabled: true
+      training: true
+      params:
+        accuracy: true
+        auc: false
+        categorical_loglikelihood: true
+        mse: false
+        cosine_similarity: false
+    information_analysis:
+      enabled: false
+      training: false
+    correlation_analysis:
+      enabled: false
+      training: false
+    ablation_analysis:
+      enabled: false
+      training: false
+    synapse_turnover_analysis:
+      enabled: false
+      training: false
+    noise_perturbation_analysis:
+      enabled: false
+      training: false
+    weight_analysis:
+      enabled: false
+      training: false
+    single_layer_contribution:
+      enabled: false
+      training: false
+    synaptic_activation_analysis:
+      enabled: false
+      training: false
+    branch_activation_analysis:
+      enabled: false
+      training: false
+    compartment_statistics_analysis:
+      enabled: false
+      training: false
+    compartment_snr_analysis:
+      enabled: false
+      training: false
+  wandb:
+    use_wandb: false
+  outputs:
+    run_name: "sweep_neurips_phase1_capacity_calibration"
+    results_dir: "outputs"

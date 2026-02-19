@@ -1,0 +1,6 @@
+drafts/dendritic-local-learning/figures/fig_phase1_capacity_best_core.pdf
+drafts/dendritic-local-learning/figures/fig_phase2b_gap_closing_hsic_weight.pdf
+drafts/dendritic-local-learning/figures/fig_phase3_claimA_shunting_heatmap.pdf
+drafts/dendritic-local-learning/figures/fig_phase3_claimB_morphology_scaling.pdf
+drafts/dendritic-local-learning/figures/fig_phase3_claimC_error_shaping.pdf
+drafts/dendritic-local-learning/figures/fig_phase_information_panel.pdf
