@@ -1,0 +1,27 @@
+Statistical Comparison Summary
+============================================================
+
+Per-condition summaries:
+  local_ca/dendritic_additive/3f: mean=0.0972 [0.0882, 0.1062] (n=10)
+  local_ca/dendritic_additive/4f: mean=0.0950 [0.0884, 0.1016] (n=10)
+  local_ca/dendritic_additive/5f: mean=0.0929 [0.0846, 0.1011] (n=10)
+  local_ca/dendritic_shunting/3f: mean=0.3363 [0.3033, 0.3692] (n=10)
+  local_ca/dendritic_shunting/4f: mean=0.3474 [0.3214, 0.3734] (n=10)
+  local_ca/dendritic_shunting/5f: mean=0.3469 [0.3187, 0.3751] (n=10)
+
+Pairwise comparisons:
+  local_ca/dendritic_additive/3f vs local_ca/dendritic_additive/4f: diff=+0.0022, t=0.441, p=0.6650 (corrected=0.7125 ns), d=0.197
+  local_ca/dendritic_additive/3f vs local_ca/dendritic_additive/5f: diff=+0.0043, t=0.796, p=0.4362 (corrected=0.6543 ns), d=0.356
+  local_ca/dendritic_additive/3f vs local_ca/dendritic_shunting/3f: diff=-0.2391, t=-15.835, p=0.0000 (corrected=0.0000 ***), d=-7.081
+  local_ca/dendritic_additive/3f vs local_ca/dendritic_shunting/4f: diff=-0.2502, t=-20.582, p=0.0000 (corrected=0.0000 ***), d=-9.205
+  local_ca/dendritic_additive/3f vs local_ca/dendritic_shunting/5f: diff=-0.2497, t=-19.099, p=0.0000 (corrected=0.0000 ***), d=-8.541
+  local_ca/dendritic_additive/4f vs local_ca/dendritic_additive/5f: diff=+0.0021, t=0.456, p=0.6539 (corrected=0.7125 ns), d=0.204
+  local_ca/dendritic_additive/4f vs local_ca/dendritic_shunting/3f: diff=-0.2413, t=-16.242, p=0.0000 (corrected=0.0000 ***), d=-7.264
+  local_ca/dendritic_additive/4f vs local_ca/dendritic_shunting/4f: diff=-0.2524, t=-21.297, p=0.0000 (corrected=0.0000 ***), d=-9.524
+  local_ca/dendritic_additive/4f vs local_ca/dendritic_shunting/5f: diff=-0.2519, t=-19.693, p=0.0000 (corrected=0.0000 ***), d=-8.807
+  local_ca/dendritic_additive/5f vs local_ca/dendritic_shunting/3f: diff=-0.2434, t=-16.206, p=0.0000 (corrected=0.0000 ***), d=-7.247
+  local_ca/dendritic_additive/5f vs local_ca/dendritic_shunting/4f: diff=-0.2545, t=-21.109, p=0.0000 (corrected=0.0000 ***), d=-9.440
+  local_ca/dendritic_additive/5f vs local_ca/dendritic_shunting/5f: diff=-0.2540, t=-19.567, p=0.0000 (corrected=0.0000 ***), d=-8.751
+  local_ca/dendritic_shunting/3f vs local_ca/dendritic_shunting/4f: diff=-0.0111, t=-0.599, p=0.5571 (corrected=0.7125 ns), d=-0.268
+  local_ca/dendritic_shunting/3f vs local_ca/dendritic_shunting/5f: diff=-0.0106, t=-0.555, p=0.5858 (corrected=0.7125 ns), d=-0.248
+  local_ca/dendritic_shunting/4f vs local_ca/dendritic_shunting/5f: diff=+0.0005, t=0.028, p=0.9782 (corrected=0.9782 ns), d=0.012

@@ -109,11 +109,25 @@ def _plot_phase1_capacity(phase1_best: pd.DataFrame, output_dir: Path) -> Path |
         )
 
     ax.set_xticks(x_base)
-    ax.set_xticklabels([dataset.replace("_", " ").title() for dataset in datasets])
-    ax.set_ylabel("Best Test Accuracy")
-    ax.set_title("Phase 1 Capacity Calibration: Best Standard Backprop per Core")
-    ax.legend(ncol=2, frameon=False, loc="best")
+    ax.set_xticklabels([dataset.replace("_", " ").title() for dataset in datasets], fontsize=10)
+    ax.set_ylabel("Best Test Accuracy", fontsize=10)
+    ax.set_title("Backprop Capacity Ceiling per Architecture", fontsize=11)
+    # Clean up legend labels
+    label_map = {
+        "point_mlp": "MLP (matched)",
+        "dendritic_mlp": "Dendritic MLP",
+        "dendritic_additive": "DendriNet (additive)",
+        "dendritic_shunting": "DendriNet (shunting)",
+    }
+    handles, labels = ax.get_legend_handles_labels()
+    ax.legend(
+        handles,
+        [label_map.get(l, l) for l in labels],
+        ncol=2, frameon=False, loc="best", fontsize=9,
+    )
     ax.set_ylim(bottom=0.0)
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
 
     fig.tight_layout()
     out_base = output_dir / "fig_phase1_capacity_best_core"
@@ -158,7 +172,7 @@ def _plot_claimA_shunting(claimA: pd.DataFrame, output_dir: Path) -> Path | None
     fig, axes = plt.subplots(
         nrows,
         ncols,
-        figsize=(3.2 * ncols, 2.3 * nrows),
+        figsize=(3.6 * ncols + 0.8, 2.3 * nrows),
         squeeze=False,
     )
 
@@ -203,10 +217,12 @@ def _plot_claimA_shunting(claimA: pd.DataFrame, output_dir: Path) -> Path | None
                     color="black",
                 )
 
-    fig.suptitle("Claim A: Shunting Advantage (Shunting - Additive)", y=1.02)
-    cbar = fig.colorbar(heat, ax=axes.ravel().tolist(), shrink=0.82)
-    cbar.set_label("Delta test accuracy")
+    fig.suptitle("Shunting Advantage (Shunting $-$ Additive)", y=1.02, fontsize=11)
     fig.tight_layout()
+    fig.subplots_adjust(right=0.88)
+    cbar_ax = fig.add_axes([0.90, 0.15, 0.02, 0.7])
+    cbar = fig.colorbar(heat, cax=cbar_ax)
+    cbar.set_label("$\\Delta$ test accuracy", fontsize=9)
 
     out_base = output_dir / "fig_phase3_claimA_shunting_heatmap"
     _save_dual(fig, out_base)
@@ -316,10 +332,11 @@ def _plot_phase2b_gap_closing(phase2b: pd.DataFrame, output_dir: Path) -> Path |
 
     handles, labels = axes[0][0].get_legend_handles_labels()
     if handles:
-        fig.legend(handles, labels, loc="upper center", ncol=min(3, len(labels)), frameon=False)
-    fig.suptitle("Phase 2b Gap Closing: HSIC Weight x Error Broadcast Mode", y=1.10)
+        fig.legend(handles, labels, loc="upper center", ncol=min(3, len(labels)),
+                   frameon=False, fontsize=9, bbox_to_anchor=(0.5, 1.02))
+    fig.suptitle("HSIC Weight × Broadcast Mode", y=1.08, fontsize=11)
 
-    fig.tight_layout()
+    fig.tight_layout(rect=[0, 0, 1, 0.95])
     out_base = output_dir / "fig_phase2b_gap_closing_hsic_weight"
     _save_dual(fig, out_base)
     plt.close(fig)
@@ -566,10 +583,24 @@ def _plot_info_panel(info_panel: pd.DataFrame, output_dir: Path) -> Path | None:
             linewidth=0.5,
         )
 
-    ax.set_xlabel("MI(E,I;C) mean")
-    ax.set_ylabel("Test accuracy mean")
-    ax.set_title("Information Panel: Accuracy vs MI(E,I;C)")
+    ax.set_xlabel("MI(E,I;C) mean", fontsize=10)
+    ax.set_ylabel("Test accuracy mean", fontsize=10)
+    ax.set_title("Information Panel: Accuracy vs MI(E,I;C)", fontsize=11)
     ax.grid(alpha=0.25)
+
+    # Add legend for network type (color) and path propagation (marker)
+    import matplotlib.lines as mlines
+    legend_items = [
+        mlines.Line2D([], [], color="#1D4E89", marker="o", linestyle="None",
+                       markersize=8, label="Additive"),
+        mlines.Line2D([], [], color="#0B6E4F", marker="o", linestyle="None",
+                       markersize=8, label="Shunting"),
+        mlines.Line2D([], [], color="gray", marker="o", linestyle="None",
+                       markersize=8, label="Path prop: off"),
+        mlines.Line2D([], [], color="gray", marker="D", linestyle="None",
+                       markersize=8, label="Path prop: on"),
+    ]
+    ax.legend(handles=legend_items, loc="best", fontsize=8, framealpha=0.9)
 
     fig.tight_layout()
     out_base = output_dir / "fig_phase_information_panel"

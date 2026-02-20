@@ -1,0 +1,142 @@
+Statistical Comparison Summary
+============================================================
+
+Per-condition summaries:
+  dfa/dendritic_additive: mean=0.1390 [0.0950, 0.1831] (n=5)
+  dfa/dendritic_shunting: mean=0.3404 [0.2596, 0.4212] (n=5)
+  dfa/point_mlp: mean=0.4652 [0.4322, 0.4983] (n=10)
+  fa/point_mlp: mean=0.4652 [0.4322, 0.4983] (n=10)
+  local_ca/dendritic_additive/3f: mean=0.1008 [0.0941, 0.1075] (n=15)
+  local_ca/dendritic_additive/4f: mean=0.0950 [0.0884, 0.1016] (n=10)
+  local_ca/dendritic_additive/5f: mean=0.3109 [0.2935, 0.3283] (n=343)
+  local_ca/dendritic_shunting/3f: mean=0.2999 [0.2686, 0.3311] (n=123)
+  local_ca/dendritic_shunting/4f: mean=0.2983 [0.2659, 0.3307] (n=118)
+  local_ca/dendritic_shunting/5f: mean=0.3336 [0.3209, 0.3463] (n=1413)
+  local_ca/point_mlp/3f: mean=0.4652 [0.4044, 0.5260] (n=5)
+  local_ca/point_mlp/5f: mean=0.4652 [0.4044, 0.5260] (n=5)
+  standard/dendritic_additive: mean=0.5563 [0.5056, 0.6071] (n=114)
+  standard/dendritic_mlp: mean=0.6901 [0.6486, 0.7317] (n=96)
+  standard/dendritic_shunting: mean=0.7834 [0.7478, 0.8189] (n=114)
+  standard/point_mlp: mean=0.7563 [0.7155, 0.7970] (n=111)
+
+Pairwise comparisons:
+  dfa/dendritic_additive vs dfa/dendritic_shunting: diff=-0.2014, t=-6.073, p=0.0008 (corrected=0.0012 **), d=-3.841
+  dfa/dendritic_additive vs dfa/point_mlp: diff=-0.3262, t=-15.127, p=0.0000 (corrected=0.0000 ***), d=-7.556
+  dfa/dendritic_additive vs fa/point_mlp: diff=-0.3262, t=-15.127, p=0.0000 (corrected=0.0000 ***), d=-7.556
+  dfa/dendritic_additive vs local_ca/dendritic_additive/3f: diff=+0.0382, t=2.362, p=0.0728 (corrected=0.0832 ns), d=1.925
+  dfa/dendritic_additive vs local_ca/dendritic_additive/4f: diff=+0.0440, t=2.729, p=0.0489 (corrected=0.0570 ns), d=2.085
+  dfa/dendritic_additive vs local_ca/dendritic_additive/5f: diff=-0.1719, t=-9.464, p=0.0000 (corrected=0.0001 ***), d=-1.057
+  dfa/dendritic_additive vs local_ca/dendritic_shunting/3f: diff=-0.1608, t=-7.190, p=0.0000 (corrected=0.0000 ***), d=-0.934
+  dfa/dendritic_additive vs local_ca/dendritic_shunting/4f: diff=-0.1593, t=-6.991, p=0.0000 (corrected=0.0000 ***), d=-0.912
+  dfa/dendritic_additive vs local_ca/dendritic_shunting/5f: diff=-0.1946, t=-11.357, p=0.0001 (corrected=0.0001 ***), d=-0.803
+  dfa/dendritic_additive vs local_ca/point_mlp/3f: diff=-0.3262, t=-12.060, p=0.0000 (corrected=0.0000 ***), d=-7.628
+  dfa/dendritic_additive vs local_ca/point_mlp/5f: diff=-0.3262, t=-12.060, p=0.0000 (corrected=0.0000 ***), d=-7.628
+  dfa/dendritic_additive vs standard/dendritic_additive: diff=-0.4173, t=-13.854, p=0.0000 (corrected=0.0000 ***), d=-1.553
+  dfa/dendritic_additive vs standard/dendritic_mlp: diff=-0.5511, t=-20.999, p=0.0000 (corrected=0.0000 ***), d=-2.745
+  dfa/dendritic_additive vs standard/dendritic_shunting: diff=-0.6443, t=-26.906, p=0.0000 (corrected=0.0000 ***), d=-3.422
+  dfa/dendritic_additive vs standard/point_mlp: diff=-0.6173, t=-23.774, p=0.0000 (corrected=0.0000 ***), d=-2.901
+  dfa/dendritic_shunting vs dfa/point_mlp: diff=-0.1248, t=-3.833, p=0.0084 (corrected=0.0106 *), d=-2.368
+  dfa/dendritic_shunting vs fa/point_mlp: diff=-0.1248, t=-3.833, p=0.0084 (corrected=0.0106 *), d=-2.368
+  dfa/dendritic_shunting vs local_ca/dendritic_additive/3f: diff=+0.2396, t=8.182, p=0.0011 (corrected=0.0015 **), d=7.373
+  dfa/dendritic_shunting vs local_ca/dendritic_additive/4f: diff=+0.2454, t=8.387, p=0.0010 (corrected=0.0014 **), d=6.648
+  dfa/dendritic_shunting vs local_ca/dendritic_additive/5f: diff=+0.0295, t=0.969, p=0.3790 (corrected=0.4135 ns), d=0.181
+  dfa/dendritic_shunting vs local_ca/dendritic_shunting/3f: diff=+0.0405, t=1.224, p=0.2624 (corrected=0.2915 ns), d=0.235
+  dfa/dendritic_shunting vs local_ca/dendritic_shunting/4f: diff=+0.0421, t=1.260, p=0.2485 (corrected=0.2787 ns), d=0.240
+  dfa/dendritic_shunting vs local_ca/dendritic_shunting/5f: diff=+0.0068, t=0.228, p=0.8299 (corrected=0.8814 ns), d=0.028
+  dfa/dendritic_shunting vs local_ca/point_mlp/3f: diff=-0.1248, t=-3.427, p=0.0101 (corrected=0.0125 *), d=-2.167
+  dfa/dendritic_shunting vs local_ca/point_mlp/5f: diff=-0.1248, t=-3.427, p=0.0101 (corrected=0.0125 *), d=-2.167
+  dfa/dendritic_shunting vs standard/dendritic_additive: diff=-0.2160, t=-5.570, p=0.0001 (corrected=0.0002 ***), d=-0.803
+  dfa/dendritic_shunting vs standard/dendritic_mlp: diff=-0.3498, t=-9.759, p=0.0000 (corrected=0.0000 ***), d=-1.739
+  dfa/dendritic_shunting vs standard/dendritic_shunting: diff=-0.4430, t=-12.955, p=0.0000 (corrected=0.0000 ***), d=-2.349
+  dfa/dendritic_shunting vs standard/point_mlp: diff=-0.4159, t=-11.671, p=0.0000 (corrected=0.0000 ***), d=-1.952
+  dfa/point_mlp vs fa/point_mlp: diff=+0.0000, t=0.000, p=1.0000 (corrected=1.0000 ns), d=0.000
+  dfa/point_mlp vs local_ca/dendritic_additive/3f: diff=+0.3644, t=24.402, p=0.0000 (corrected=0.0000 ***), d=11.990
+  dfa/point_mlp vs local_ca/dendritic_additive/4f: diff=+0.3702, t=24.866, p=0.0000 (corrected=0.0000 ***), d=11.121
+  dfa/point_mlp vs local_ca/dendritic_additive/5f: diff=+0.1543, t=9.043, p=0.0000 (corrected=0.0000 ***), d=0.955
+  dfa/point_mlp vs local_ca/dendritic_shunting/3f: diff=+0.1654, t=7.695, p=0.0000 (corrected=0.0000 ***), d=0.977
+  dfa/point_mlp vs local_ca/dendritic_shunting/4f: diff=+0.1669, t=7.615, p=0.0000 (corrected=0.0000 ***), d=0.973
+  dfa/point_mlp vs local_ca/dendritic_shunting/5f: diff=+0.1316, t=8.244, p=0.0000 (corrected=0.0000 ***), d=0.544
+  dfa/point_mlp vs local_ca/point_mlp/3f: diff=+0.0000, t=0.000, p=1.0000 (corrected=1.0000 ns), d=0.000
+  dfa/point_mlp vs local_ca/point_mlp/5f: diff=+0.0000, t=0.000, p=1.0000 (corrected=1.0000 ns), d=0.000
+  dfa/point_mlp vs standard/dendritic_additive: diff=-0.0911, t=-3.091, p=0.0027 (corrected=0.0035 **), d=-0.346
+  dfa/point_mlp vs standard/dendritic_mlp: diff=-0.2249, t=-8.821, p=0.0000 (corrected=0.0000 ***), d=-1.146
+  dfa/point_mlp vs standard/dendritic_shunting: diff=-0.3181, t=-13.755, p=0.0000 (corrected=0.0000 ***), d=-1.722
+  dfa/point_mlp vs standard/point_mlp: diff=-0.2911, t=-11.545, p=0.0000 (corrected=0.0000 ***), d=-1.396
+  fa/point_mlp vs local_ca/dendritic_additive/3f: diff=+0.3644, t=24.402, p=0.0000 (corrected=0.0000 ***), d=11.990
+  fa/point_mlp vs local_ca/dendritic_additive/4f: diff=+0.3702, t=24.866, p=0.0000 (corrected=0.0000 ***), d=11.121
+  fa/point_mlp vs local_ca/dendritic_additive/5f: diff=+0.1543, t=9.043, p=0.0000 (corrected=0.0000 ***), d=0.955
+  fa/point_mlp vs local_ca/dendritic_shunting/3f: diff=+0.1654, t=7.695, p=0.0000 (corrected=0.0000 ***), d=0.977
+  fa/point_mlp vs local_ca/dendritic_shunting/4f: diff=+0.1669, t=7.615, p=0.0000 (corrected=0.0000 ***), d=0.973
+  fa/point_mlp vs local_ca/dendritic_shunting/5f: diff=+0.1316, t=8.244, p=0.0000 (corrected=0.0000 ***), d=0.544
+  fa/point_mlp vs local_ca/point_mlp/3f: diff=+0.0000, t=0.000, p=1.0000 (corrected=1.0000 ns), d=0.000
+  fa/point_mlp vs local_ca/point_mlp/5f: diff=+0.0000, t=0.000, p=1.0000 (corrected=1.0000 ns), d=0.000
+  fa/point_mlp vs standard/dendritic_additive: diff=-0.0911, t=-3.091, p=0.0027 (corrected=0.0035 **), d=-0.346
+  fa/point_mlp vs standard/dendritic_mlp: diff=-0.2249, t=-8.821, p=0.0000 (corrected=0.0000 ***), d=-1.146
+  fa/point_mlp vs standard/dendritic_shunting: diff=-0.3181, t=-13.755, p=0.0000 (corrected=0.0000 ***), d=-1.722
+  fa/point_mlp vs standard/point_mlp: diff=-0.2911, t=-11.545, p=0.0000 (corrected=0.0000 ***), d=-1.396
+  local_ca/dendritic_additive/3f vs local_ca/dendritic_additive/4f: diff=+0.0058, t=1.366, p=0.1855 (corrected=0.2100 ns), d=0.527
+  local_ca/dendritic_additive/3f vs local_ca/dendritic_additive/5f: diff=-0.2101, t=-22.421, p=0.0000 (corrected=0.0000 ***), d=-1.310
+  local_ca/dendritic_additive/3f vs local_ca/dendritic_shunting/3f: diff=-0.1990, t=-12.381, p=0.0000 (corrected=0.0000 ***), d=-1.201
+  local_ca/dendritic_additive/3f vs local_ca/dendritic_shunting/4f: diff=-0.1975, t=-11.865, p=0.0000 (corrected=0.0000 ***), d=-1.176
+  local_ca/dendritic_additive/3f vs local_ca/dendritic_shunting/5f: diff=-0.2328, t=-32.443, p=0.0000 (corrected=0.0000 ***), d=-0.964
+  local_ca/dendritic_additive/3f vs local_ca/point_mlp/3f: diff=-0.3644, t=-16.469, p=0.0001 (corrected=0.0001 ***), d=-14.325
+  local_ca/dendritic_additive/3f vs local_ca/point_mlp/5f: diff=-0.3644, t=-16.469, p=0.0001 (corrected=0.0001 ***), d=-14.325
+  local_ca/dendritic_additive/3f vs standard/dendritic_additive: diff=-0.4555, t=-17.659, p=0.0000 (corrected=0.0000 ***), d=-1.766
+  local_ca/dendritic_additive/3f vs standard/dendritic_mlp: diff=-0.5893, t=-27.880, p=0.0000 (corrected=0.0000 ***), d=-3.081
+  local_ca/dendritic_additive/3f vs standard/dendritic_shunting: diff=-0.6825, t=-37.488, p=0.0000 (corrected=0.0000 ***), d=-3.777
+  local_ca/dendritic_additive/3f vs standard/point_mlp: diff=-0.6554, t=-31.533, p=0.0000 (corrected=0.0000 ***), d=-3.214
+  local_ca/dendritic_additive/4f vs local_ca/dendritic_additive/5f: diff=-0.2159, t=-23.220, p=0.0000 (corrected=0.0000 ***), d=-1.337
+  local_ca/dendritic_additive/4f vs local_ca/dendritic_shunting/3f: diff=-0.2049, t=-12.777, p=0.0000 (corrected=0.0000 ***), d=-1.214
+  local_ca/dendritic_additive/4f vs local_ca/dendritic_shunting/4f: diff=-0.2033, t=-12.245, p=0.0000 (corrected=0.0000 ***), d=-1.188
+  local_ca/dendritic_additive/4f vs local_ca/dendritic_shunting/5f: diff=-0.2386, t=-33.697, p=0.0000 (corrected=0.0000 ***), d=-0.986
+  local_ca/dendritic_additive/4f vs local_ca/point_mlp/3f: diff=-0.3702, t=-16.756, p=0.0001 (corrected=0.0001 ***), d=-13.118
+  local_ca/dendritic_additive/4f vs local_ca/point_mlp/5f: diff=-0.3702, t=-16.756, p=0.0001 (corrected=0.0001 ***), d=-13.118
+  local_ca/dendritic_additive/4f vs standard/dendritic_additive: diff=-0.4613, t=-17.903, p=0.0000 (corrected=0.0000 ***), d=-1.753
+  local_ca/dendritic_additive/4f vs standard/dendritic_mlp: diff=-0.5951, t=-28.198, p=0.0000 (corrected=0.0000 ***), d=-3.040
+  local_ca/dendritic_additive/4f vs standard/dendritic_shunting: diff=-0.6884, t=-37.885, p=0.0000 (corrected=0.0000 ***), d=-3.735
+  local_ca/dendritic_additive/4f vs standard/point_mlp: diff=-0.6613, t=-31.862, p=0.0000 (corrected=0.0000 ***), d=-3.177
+  local_ca/dendritic_additive/5f vs local_ca/dendritic_shunting/3f: diff=+0.0110, t=0.611, p=0.5419 (corrected=0.5806 ns), d=0.066
+  local_ca/dendritic_additive/5f vs local_ca/dendritic_shunting/4f: diff=+0.0126, t=0.678, p=0.4986 (corrected=0.5391 ns), d=0.075
+  local_ca/dendritic_additive/5f vs local_ca/dendritic_shunting/5f: diff=-0.0227, t=-2.074, p=0.0385 (corrected=0.0457 *), d=-0.099
+  local_ca/dendritic_additive/5f vs local_ca/point_mlp/3f: diff=-0.1543, t=-6.534, p=0.0009 (corrected=0.0013 **), d=-0.948
+  local_ca/dendritic_additive/5f vs local_ca/point_mlp/5f: diff=-0.1543, t=-6.534, p=0.0009 (corrected=0.0013 **), d=-0.948
+  local_ca/dendritic_additive/5f vs standard/dendritic_additive: diff=-0.2454, t=-9.062, p=0.0000 (corrected=0.0000 ***), d=-1.248
+  local_ca/dendritic_additive/5f vs standard/dendritic_mlp: diff=-0.3793, t=-16.711, p=0.0000 (corrected=0.0000 ***), d=-2.187
+  local_ca/dendritic_additive/5f vs standard/dendritic_shunting: diff=-0.4725, t=-23.631, p=0.0000 (corrected=0.0000 ***), d=-2.764
+  local_ca/dendritic_additive/5f vs standard/point_mlp: diff=-0.4454, t=-19.912, p=0.0000 (corrected=0.0000 ***), d=-2.503
+  local_ca/dendritic_shunting/3f vs local_ca/dendritic_shunting/4f: diff=+0.0016, t=0.068, p=0.9455 (corrected=0.9953 ns), d=0.009
+  local_ca/dendritic_shunting/3f vs local_ca/dendritic_shunting/5f: diff=-0.0337, t=-1.980, p=0.0494 (corrected=0.0570 ns), d=-0.142
+  local_ca/dendritic_shunting/3f vs local_ca/point_mlp/3f: diff=-0.1654, t=-6.127, p=0.0002 (corrected=0.0002 ***), d=-0.960
+  local_ca/dendritic_shunting/3f vs local_ca/point_mlp/5f: diff=-0.1654, t=-6.127, p=0.0002 (corrected=0.0002 ***), d=-0.960
+  local_ca/dendritic_shunting/3f vs standard/dendritic_additive: diff=-0.2565, t=-8.529, p=0.0000 (corrected=0.0000 ***), d=-1.127
+  local_ca/dendritic_shunting/3f vs standard/dendritic_mlp: diff=-0.3903, t=-14.905, p=0.0000 (corrected=0.0000 ***), d=-2.070
+  local_ca/dendritic_shunting/3f vs standard/dendritic_shunting: diff=-0.4835, t=-20.246, p=0.0000 (corrected=0.0000 ***), d=-2.641
+  local_ca/dendritic_shunting/3f vs standard/point_mlp: diff=-0.4564, t=-17.621, p=0.0000 (corrected=0.0000 ***), d=-2.332
+  local_ca/dendritic_shunting/4f vs local_ca/dendritic_shunting/5f: diff=-0.0353, t=-2.008, p=0.0464 (corrected=0.0546 ns), d=-0.148
+  local_ca/dendritic_shunting/4f vs local_ca/point_mlp/3f: diff=-0.1669, t=-6.107, p=0.0001 (corrected=0.0002 ***), d=-0.955
+  local_ca/dendritic_shunting/4f vs local_ca/point_mlp/5f: diff=-0.1669, t=-6.107, p=0.0001 (corrected=0.0002 ***), d=-0.955
+  local_ca/dendritic_shunting/4f vs standard/dendritic_additive: diff=-0.2580, t=-8.494, p=0.0000 (corrected=0.0000 ***), d=-1.123
+  local_ca/dendritic_shunting/4f vs standard/dendritic_mlp: diff=-0.3918, t=-14.765, p=0.0000 (corrected=0.0000 ***), d=-2.059
+  local_ca/dendritic_shunting/4f vs standard/dendritic_shunting: diff=-0.4851, t=-19.987, p=0.0000 (corrected=0.0000 ***), d=-2.628
+  local_ca/dendritic_shunting/4f vs standard/point_mlp: diff=-0.4580, t=-17.441, p=0.0000 (corrected=0.0000 ***), d=-2.320
+  local_ca/dendritic_shunting/5f vs local_ca/point_mlp/3f: diff=-0.1316, t=-5.764, p=0.0027 (corrected=0.0035 **), d=-0.543
+  local_ca/dendritic_shunting/5f vs local_ca/point_mlp/5f: diff=-0.1316, t=-5.764, p=0.0027 (corrected=0.0035 **), d=-0.543
+  local_ca/dendritic_shunting/5f vs standard/dendritic_additive: diff=-0.2228, t=-8.435, p=0.0000 (corrected=0.0000 ***), d=-0.909
+  local_ca/dendritic_shunting/5f vs standard/dendritic_mlp: diff=-0.3566, t=-16.296, p=0.0000 (corrected=0.0000 ***), d=-1.482
+  local_ca/dendritic_shunting/5f vs standard/dendritic_shunting: diff=-0.4498, t=-23.594, p=0.0000 (corrected=0.0000 ***), d=-1.879
+  local_ca/dendritic_shunting/5f vs standard/point_mlp: diff=-0.4227, t=-19.623, p=0.0000 (corrected=0.0000 ***), d=-1.754
+  local_ca/point_mlp/3f vs local_ca/point_mlp/5f: diff=+0.0000, t=0.000, p=1.0000 (corrected=1.0000 ns), d=0.000
+  local_ca/point_mlp/3f vs standard/dendritic_additive: diff=-0.0911, t=-2.704, p=0.0133 (corrected=0.0161 *), d=-0.339
+  local_ca/point_mlp/3f vs standard/dendritic_mlp: diff=-0.2249, t=-7.429, p=0.0000 (corrected=0.0000 ***), d=-1.120
+  local_ca/point_mlp/3f vs standard/dendritic_shunting: diff=-0.3181, t=-11.237, p=0.0000 (corrected=0.0000 ***), d=-1.688
+  local_ca/point_mlp/3f vs standard/point_mlp: diff=-0.2911, t=-9.691, p=0.0000 (corrected=0.0000 ***), d=-1.367
+  local_ca/point_mlp/5f vs standard/dendritic_additive: diff=-0.0911, t=-2.704, p=0.0133 (corrected=0.0161 *), d=-0.339
+  local_ca/point_mlp/5f vs standard/dendritic_mlp: diff=-0.2249, t=-7.429, p=0.0000 (corrected=0.0000 ***), d=-1.120
+  local_ca/point_mlp/5f vs standard/dendritic_shunting: diff=-0.3181, t=-11.237, p=0.0000 (corrected=0.0000 ***), d=-1.688
+  local_ca/point_mlp/5f vs standard/point_mlp: diff=-0.2911, t=-9.691, p=0.0000 (corrected=0.0000 ***), d=-1.367
+  standard/dendritic_additive vs standard/dendritic_mlp: diff=-0.1338, t=-4.048, p=0.0001 (corrected=0.0001 ***), d=-0.547
+  standard/dendritic_additive vs standard/dendritic_shunting: diff=-0.2270, t=-7.262, p=0.0000 (corrected=0.0000 ***), d=-0.962
+  standard/dendritic_additive vs standard/point_mlp: diff=-0.1999, t=-6.090, p=0.0000 (corrected=0.0000 ***), d=-0.810
+  standard/dendritic_mlp vs standard/dendritic_shunting: diff=-0.0932, t=-3.384, p=0.0009 (corrected=0.0012 **), d=-0.471
+  standard/dendritic_mlp vs standard/point_mlp: diff=-0.0661, t=-2.256, p=0.0252 (corrected=0.0302 *), d=-0.313
+  standard/dendritic_shunting vs standard/point_mlp: diff=+0.0271, t=0.993, p=0.3219 (corrected=0.3544 ns), d=0.133

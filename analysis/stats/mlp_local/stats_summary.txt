@@ -1,0 +1,27 @@
+Statistical Comparison Summary
+============================================================
+
+Per-condition summaries:
+  local_ca/dendritic_additive/3f: mean=0.1081 [0.0987, 0.1176] (n=5)
+  local_ca/dendritic_additive/5f: mean=0.1081 [0.0987, 0.1176] (n=5)
+  local_ca/dendritic_shunting/3f: mean=0.3841 [0.3420, 0.4262] (n=5)
+  local_ca/dendritic_shunting/5f: mean=0.3819 [0.3363, 0.4275] (n=5)
+  local_ca/point_mlp/3f: mean=0.4652 [0.4044, 0.5260] (n=5)
+  local_ca/point_mlp/5f: mean=0.4652 [0.4044, 0.5260] (n=5)
+
+Pairwise comparisons:
+  local_ca/dendritic_additive/3f vs local_ca/dendritic_additive/5f: diff=+0.0000, t=0.000, p=1.0000 (corrected=1.0000 ns), d=0.000
+  local_ca/dendritic_additive/3f vs local_ca/dendritic_shunting/3f: diff=-0.2760, t=-17.748, p=0.0000 (corrected=0.0001 ***), d=-11.225
+  local_ca/dendritic_additive/3f vs local_ca/dendritic_shunting/5f: diff=-0.2738, t=-16.317, p=0.0000 (corrected=0.0001 ***), d=-10.320
+  local_ca/dendritic_additive/3f vs local_ca/point_mlp/3f: diff=-0.3571, t=-16.110, p=0.0001 (corrected=0.0001 ***), d=-10.189
+  local_ca/dendritic_additive/3f vs local_ca/point_mlp/5f: diff=-0.3571, t=-16.110, p=0.0001 (corrected=0.0001 ***), d=-10.189
+  local_ca/dendritic_additive/5f vs local_ca/dendritic_shunting/3f: diff=-0.2760, t=-17.748, p=0.0000 (corrected=0.0001 ***), d=-11.225
+  local_ca/dendritic_additive/5f vs local_ca/dendritic_shunting/5f: diff=-0.2738, t=-16.317, p=0.0000 (corrected=0.0001 ***), d=-10.320
+  local_ca/dendritic_additive/5f vs local_ca/point_mlp/3f: diff=-0.3571, t=-16.110, p=0.0001 (corrected=0.0001 ***), d=-10.189
+  local_ca/dendritic_additive/5f vs local_ca/point_mlp/5f: diff=-0.3571, t=-16.110, p=0.0001 (corrected=0.0001 ***), d=-10.189
+  local_ca/dendritic_shunting/3f vs local_ca/dendritic_shunting/5f: diff=+0.0022, t=0.097, p=0.9248 (corrected=1.0000 ns), d=0.062
+  local_ca/dendritic_shunting/3f vs local_ca/point_mlp/3f: diff=-0.0811, t=-3.044, p=0.0183 (corrected=0.0229 *), d=-1.925
+  local_ca/dendritic_shunting/3f vs local_ca/point_mlp/5f: diff=-0.0811, t=-3.044, p=0.0183 (corrected=0.0229 *), d=-1.925
+  local_ca/dendritic_shunting/5f vs local_ca/point_mlp/3f: diff=-0.0833, t=-3.042, p=0.0175 (corrected=0.0229 *), d=-1.924
+  local_ca/dendritic_shunting/5f vs local_ca/point_mlp/5f: diff=-0.0833, t=-3.042, p=0.0175 (corrected=0.0229 *), d=-1.924
+  local_ca/point_mlp/3f vs local_ca/point_mlp/5f: diff=+0.0000, t=0.000, p=1.0000 (corrected=1.0000 ns), d=0.000
