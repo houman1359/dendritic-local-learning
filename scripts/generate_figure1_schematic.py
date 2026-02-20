@@ -138,20 +138,7 @@ def panel_a(ax):
             draw_arrow(ax, sx, sy - 0.055, bx, by + 0.25,
                        color=INH_COLOR, lw=0.7)
 
-    # ── Input lines from the left (showing external E and I feeding all branches) ──
-    # E input lines
-    for bx, by in all_branches:
-        sx = bx - 0.55
-        ax.plot([-0.55, sx - 0.06], [3.2, by + 0.12], color=EXC_COLOR,
-                lw=0.4, ls=":", alpha=0.5, zorder=1)
-        ax.plot([-0.55, sx - 0.06], [3.2, by - 0.12], color=EXC_COLOR,
-                lw=0.4, ls=":", alpha=0.5, zorder=1)
-
-    # I input lines
-    for bx, by in all_branches:
-        sx = bx
-        ax.plot([-0.55, sx - 0.055], [-0.15, by + 0.435], color=INH_COLOR,
-                lw=0.4, ls=":", alpha=0.5, zorder=1)
+    # (input wiring lines omitted for clarity; labels indicate shared input)
 
     # ── Annotation: shunting mechanism ──
     # Small annotation near proximal branch
