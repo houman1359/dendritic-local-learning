@@ -330,15 +330,12 @@ Component-wise decomposition (Fig.~\ref{fig:gradient_fidelity}C) reveals that de
 We test whether the shunting advantage persists under three stress tests: increased dendritic depth, noisy broadcast signals, and a second real-world benchmark.
 
 \paragraph{Depth scaling.}
-Varying dendritic depth from 1 to 4 layers (branch factors $[9]$ to $[3,3,3,3]$), shunting local learning degrades from $45.2\%$ to $35.0\%$ (Fig.~\ref{fig:scalability}A).
-The backprop--local gap widens from $0.43$ to $0.54$, consistent with the path-sum attenuation predicted by Theorem~\ref{thm:tree_backprop}: each additional layer multiplies by $R_k^{\mathrm{tot}} g_k^{\mathrm{den}} < 1$, compounding signal loss that the broadcast approximation cannot compensate.
-Additive cores remain at chance (${\sim}11\%$) at all depths, confirming that the shunting advantage is not a shallow-architecture artifact \cite{bartunov2018assessing}.
+Varying dendritic depth from 1 to 4 layers (branch factors $[9]$ to $[3,3,3,3]$), shunting local learning degrades from $45.2\%$ to $35.0\%$ while backprop ceilings remain stable at ${\sim}88{-}90\%$ (Fig.~\ref{fig:scalability}A).
+The backprop--local gap widens from $0.43$ to $0.54$, consistent with path-sum attenuation predicted by Theorem~\ref{thm:tree_backprop}: each additional layer multiplies by $R_k^{\mathrm{tot}} g_k^{\mathrm{den}} < 1$, compounding signal loss that the broadcast approximation cannot compensate.
 
 \paragraph{Noise robustness.}
-Adding Gaussian noise $\mathcal{N}(0, \sigma^2)$ to the broadcast error (Fig.~\ref{fig:scalability}B), shunting is robust to $\sigma \leq 0.05$ and degrades gracefully beyond.
-Additive stays at chance across all noise levels.
-This result is expected from our mechanistic argument: shunting produces well-scaled local sensitivities (small, bounded $R_n^{\mathrm{tot}}$), so the true gradient direction is preserved even when the broadcast magnitude is corrupted.
-Additive networks lack this scale normalization, so even noise-free broadcast signals fail to produce useful updates.
+Adding Gaussian noise $\mathcal{N}(0, \sigma^2)$ to the broadcast error (Fig.~\ref{fig:scalability}B), shunting local learning is robust to $\sigma \leq 0.05$ and degrades gracefully beyond.
+This is expected from our mechanistic argument: shunting produces well-scaled local sensitivities (small, bounded $R_n^{\mathrm{tot}}$), so the true gradient direction is preserved even when the broadcast magnitude is corrupted.
 
 \paragraph{Fashion-MNIST.}
 On Fashion-MNIST (Fig.~\ref{fig:scalability}C), shunting local reaches $81.1\%$ vs.\ a $87.9\%$ backprop ceiling (gap $6.8\%$); additive local reaches $79.4\%$ vs.\ $87.4\%$ backprop (gap $8.0\%$).
@@ -347,7 +344,7 @@ The shunting advantage is modest (${\sim}1.7$~pp) on this clean classification t
 \begin{figure*}[t]
 \centering
 \includegraphics[width=0.95\textwidth]{fig4_scalability.pdf}
-\caption{\textbf{Scalability and generalization.} \textbf{(A)}~Depth scaling: test accuracy vs.\ dendritic depth (1--4 layers). Shunting local learning degrades gracefully; additive stays near chance. \textbf{(B)}~Noise robustness: accuracy under Gaussian error-signal noise ($\sigma$). Shunting is robust to moderate noise; additive remains at chance. \textbf{(C)}~Fashion-MNIST: shunting local reaches 81.1\% (dark green) vs.\ 87.9\% backprop ceiling (light green); additive local reaches 79.4\% (dark blue) vs.\ 87.4\% backprop (light blue), confirming the shunting advantage generalizes beyond MNIST.}
+\caption{\textbf{Scalability and generalization.} \textbf{(A)}~Depth scaling: test accuracy vs.\ dendritic depth (1--4 layers). Shunting local learning (solid) degrades gracefully; backprop ceilings (dashed) remain stable. \textbf{(B)}~Noise robustness: shunting local accuracy under Gaussian broadcast noise ($\sigma$), showing tolerance to $\sigma\!\leq\!0.05$ and graceful degradation. \textbf{(C)}~Fashion-MNIST: shunting local 81.1\% vs.\ 87.9\% backprop; additive local 79.4\% vs.\ 87.4\% backprop.}
 \label{fig:scalability}
 \end{figure*}
 
@@ -880,9 +877,9 @@ Update: $\Delta g_j^{\mathrm{syn}} \propto \int e_j^{\mathrm{syn}}(t) m_n(t)\,\m
 \label{app:depth_noise}
 
 \paragraph{Depth scaling.}
-Varying dendritic depth from 1--4 layers (branch factors $[9]$ to $[3,3,3,3]$): shunting local learning degrades from 45.2\% to 35.0\% (a gap increase from 0.43 to 0.54 vs.\ backprop). Additive remains at chance (${\sim}11\%$) at all depths, confirming shunting's advantage is not a shallow-architecture artifact \cite{bartunov2018assessing}. See Fig.~\ref{fig:scalability}A.
+Varying dendritic depth from 1--4 layers (branch factors $[9]$ to $[3,3,3,3]$): shunting local learning degrades from 45.2\% to 35.0\% (a gap increase from 0.43 to 0.54 vs.\ backprop), while backprop ceilings remain stable at ${\sim}88{-}90\%$. See Fig.~\ref{fig:scalability}A.
 
 \paragraph{Noise robustness.}
-Gaussian noise $\mathcal{N}(0,\sigma^2)$ on broadcast error: shunting is robust to $\sigma\!\leq\!0.05$ and degrades gracefully; additive stays at chance across all noise levels, confirming shunting credit signals carry genuine learning information. See Fig.~\ref{fig:scalability}B.
+Gaussian noise $\mathcal{N}(0,\sigma^2)$ on broadcast error: shunting is robust to $\sigma\!\leq\!0.05$ and degrades gracefully, confirming that shunting credit signals carry genuine learning information beyond the broadcast magnitude. See Fig.~\ref{fig:scalability}B.
 
 \end{document}

@@ -288,43 +288,48 @@ def fig1_panel_b(ax):
 
 
 def fig1_panel_c(ax):
-    """Panel C: Rule hierarchy (3F -> 4F -> 5F)."""
-    ax.set_xlim(-0.2, 4.3)
-    ax.set_ylim(-0.3, 3.3)
-    ax.set_aspect("equal")
+    """Panel C: Rule hierarchy (3F -> 4F -> 5F) — compact layout."""
+    ax.set_xlim(-0.65, 4.1)
+    ax.set_ylim(-0.35, 2.55)
     ax.axis("off")
 
     rules = [
-        ("3F", 2.6, RULE3_COLOR,
-         r"$\Delta g \propto x_j (E_j{-}V_n) \cdot \delta$",
-         "pre  ×  driving force  ×  error"),
-        ("4F", 1.5, RULE4_COLOR,
-         r"$\Delta g \propto x_j (E_j{-}V_n) \cdot \delta \cdot \rho$",
-         "+  morphology modulator  ρ"),
-        ("5F", 0.4, RULE5_COLOR,
-         r"$\Delta g \propto x_j (E_j{-}V_n) \cdot \delta \cdot \rho \cdot \phi$",
-         "+  information factor  φ"),
+        ("3F", 2.0, RULE3_COLOR,
+         r"$\Delta g \propto x_j (E_j{-}V_n) \cdot \delta$"),
+        ("4F", 1.15, RULE4_COLOR,
+         r"$\Delta g \propto x_j (E_j{-}V_n) \cdot \delta \cdot \rho$"),
+        ("5F", 0.3, RULE5_COLOR,
+         r"$\Delta g \propto x_j (E_j{-}V_n) \cdot \delta \cdot \rho \cdot \phi$"),
     ]
-    for name, yc, color, eq, desc in rules:
+    box_left = 0.2
+    box_w = 3.7
+    box_h = 0.5
+    for name, yc, color, eq in rules:
         box = FancyBboxPatch(
-            (-0.05, yc - 0.28), 4.2, 0.56, boxstyle="round,pad=0.04",
+            (box_left, yc - box_h / 2), box_w, box_h,
+            boxstyle="round,pad=0.04",
             fc=color, ec="k", lw=0.5, alpha=0.12, zorder=2)
         ax.add_patch(box)
-        ax.text(0.1, yc, name, ha="left", va="center", fontsize=9,
-                fontweight="bold", color=color, zorder=5)
-        ax.text(0.5, yc, eq, ha="left", va="center", fontsize=6, zorder=5)
+        # Label OUTSIDE the box on the left
+        ax.text(box_left - 0.12, yc, name, ha="right", va="center",
+                fontsize=10, fontweight="bold", color=color, zorder=5)
+        ax.text(box_left + 0.1, yc, eq, ha="left", va="center",
+                fontsize=7, zorder=5)
 
     # Arrows between rules
-    for yt, yb in [(2.32, 1.78), (1.22, 0.68)]:
-        ax.annotate("", xy=(0.15, yb), xytext=(0.15, yt),
+    gap = 0.85  # vertical spacing between rule centers
+    for yt, yb in [(2.0 - box_h / 2 - 0.04, 1.15 + box_h / 2 + 0.04),
+                    (1.15 - box_h / 2 - 0.04, 0.3 + box_h / 2 + 0.04)]:
+        ax.annotate("", xy=(box_left + 0.15, yb), xytext=(box_left + 0.15, yt),
                     arrowprops=dict(arrowstyle="->", color="gray", lw=0.7, ls="--"))
 
-    # Broadcast box at bottom
+    # Broadcast box at bottom — compact
+    bcast_y = -0.2
     box = FancyBboxPatch(
-        (0.15, -0.2), 3.8, 0.25, boxstyle="round,pad=0.03",
+        (box_left, bcast_y - 0.1), box_w, 0.22, boxstyle="round,pad=0.03",
         fc=SOMA_COLOR, ec="k", lw=0.4, alpha=0.12, zorder=2)
     ax.add_patch(box)
-    ax.text(2.05, -0.075,
+    ax.text(box_left + box_w / 2, bcast_y + 0.01,
             "Broadcast $\\delta$:  scalar  |  per-soma  |  local mismatch",
             ha="center", va="center", fontsize=5, zorder=5)
 
@@ -451,7 +456,7 @@ def figure2():
         mpatches.Patch(color=COLOR_SHUNTING, label="Shunt. (local)"),
         mpatches.Patch(color=COLOR_ADDITIVE, label="Add. (local)"),
     ]
-    ax.legend(handles=legend_handles, fontsize=5, loc="lower left",
+    ax.legend(handles=legend_handles, fontsize=5, loc="upper right",
               handlelength=1.0, handletextpad=0.3)
 
     all_vals = [d[1]*100 for d in datasets_info if d[1]] + \
@@ -652,8 +657,13 @@ def figure4():
                 return 1
 
         # Separate local and backprop, show local as solid + backprop as light reference
+        # NOTE: additive local_ca excluded — depth_scaling sweep used scalar
+        # broadcast mode which is incompatible with additive (gives chance).
         for strat, ls, alpha_val in [("local_ca", "-", 1.0), ("standard", "--", 0.35)]:
             for nt in ["dendritic_shunting", "dendritic_additive"]:
+                # Skip additive + local_ca (scalar broadcast → chance level)
+                if nt == "dendritic_additive" and strat == "local_ca":
+                    continue
                 sub = depth[depth["network_type"] == nt].copy()
                 if "strategy" in sub.columns:
                     sub = sub[sub["strategy"] == strat].copy()
@@ -687,16 +697,18 @@ def figure4():
     _panel(ax, "B")
 
     if noise is not None:
-        for nt in ["dendritic_shunting", "dendritic_additive"]:
+        # NOTE: noise robustness sweep used scalar broadcast — only shunting
+        # local_ca is meaningful (additive at chance due to broadcast mode).
+        for nt in ["dendritic_shunting"]:
             sub = noise[noise["network_type"] == nt].copy()
             if len(sub) == 0:
                 continue
             sub = sub.sort_values("error_noise_sigma")
-            color = COLOR_SHUNTING if "shunting" in nt else COLOR_ADDITIVE
+            color = COLOR_SHUNTING
             ax.errorbar(sub["error_noise_sigma"], sub["test_accuracy_mean"] * 100,
                         yerr=sub["test_accuracy_std"] * 100,
                         marker="o", markersize=3, lw=1.0, capsize=1.5,
-                        color=color, label=LABEL_MAP.get(nt, nt))
+                        color=color, label="Shunting (local)")
 
         ax.set_xlabel(r"Error noise $\sigma$")
         ax.set_ylabel("Test accuracy (%)")
