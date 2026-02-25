@@ -1,0 +1,65 @@
+analysis:
+  performance_analysis: true
+data:
+  base_dir: ''
+  dataset_name: mnist
+  processing: flatten
+experiment:
+  seed: 44
+  use_amp: false
+model:
+  core:
+    architecture:
+      excitatory_branch_factors:
+      - 2
+      - 2
+      - 2
+      - 2
+      excitatory_layer_sizes:
+      - 15
+      inhibitory_branch_factors:
+      - 1
+      inhibitory_layer_sizes: []
+    connectivity:
+      ee_synapses_per_branch_per_layer:
+      - 25
+      ei_synapses_per_branch_per_layer:
+      - 0
+      ie_synapses_per_branch_per_layer:
+      - 6
+      ii_synapses_per_branch_per_layer:
+      - 0
+    morphology:
+      somatic_synapses: false
+      weight_transform: softplus
+    reactivation:
+      enabled: true
+      init_b: 0.5
+      init_m: 1.5
+      type: param_tanh
+    transfer:
+      independent_pathways: false
+      input_mode: 1
+      output_activation: null
+    type: dendritic_shunting
+  encoder:
+    type: identity
+  task: classification
+training:
+  main:
+    common:
+      batch_size: 256
+      checkpoint_interval: 5
+      checkpointing: true
+      early_stopping: false
+      epochs: 50
+      loss_function: cat_nll
+      param_groups:
+        blocklinear_lr: 0.001
+        decoder_lr: 0.002
+        lr: 0.002
+        reactivation_lr: 0.001
+        split_params: true
+        topk_lr: 0.002
+      shuffle: true
+    strategy: standard

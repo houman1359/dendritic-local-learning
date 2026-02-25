@@ -118,6 +118,9 @@ base_config:
         normalize_by_batch: true
         clip_grad_value: 5.0
         three_factor:
+          # Fair additive/shunting comparison:
+          # auto selects additive-consistent derivatives for additive cores.
+          dynamics_mode: "auto"
           use_conductance_scaling: true
           use_driving_force: true
           theta: 0.0
@@ -208,4 +211,3 @@ base_config:
   outputs:
     run_name: "sweep_neurips_phase2b_gap_closing_pilot"
     results_dir: "outputs"
-

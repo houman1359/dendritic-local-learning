@@ -42,6 +42,13 @@ SWEEP_PREFIXES = {
     "claimB_morphology": "sweep_neurips_phase3_claimB_morphology_scaling",
     "claimC_error": "sweep_neurips_phase3_claimC_error_shaping",
     "info_panel": "sweep_neurips_phase3_information_panel",
+    "claimA_ei_grid_noise": "sweep_neurips_claimA_ei_grid_pilot",
+    "claimA_ei_grid_info": "sweep_neurips_claimA_ei_grid_info_shunting_pilot",
+    "claimB_morphology_ei": "sweep_neurips_claimB_morphology_ei_pilot",
+    "depth_scaling": "sweep_neurips_depth_scaling",
+    "noise_robustness": "sweep_neurips_noise_robustness",
+    "additive_fairness_audit": "sweep_neurips_additive_dynamics_fairness_audit",
+    "core_fair_tuning": "sweep_neurips_localca_core_fair_tuning",
 }
 
 
@@ -177,7 +184,9 @@ def _extract_run_record(sweep_dir: Path, run_dir: Path) -> dict[str, Any] | None
         "seed": _dig(config_blob, ["experiment", "seed"], None),
         "rule_variant": local_cfg.get("rule_variant") if isinstance(local_cfg, dict) else None,
         "error_broadcast_mode": local_cfg.get("error_broadcast_mode") if isinstance(local_cfg, dict) else None,
+        "error_noise_sigma": local_cfg.get("error_noise_sigma") if isinstance(local_cfg, dict) else None,
         "decoder_update_mode": local_cfg.get("decoder_update_mode") if isinstance(local_cfg, dict) else None,
+        "dynamics_mode": three_factor.get("dynamics_mode") if isinstance(three_factor, dict) else None,
         "rho_mode": four_factor.get("rho_mode") if isinstance(four_factor, dict) else None,
         "use_path_propagation": morphology_cfg.get("use_path_propagation") if isinstance(morphology_cfg, dict) else None,
         "morphology_modulator_mode": morphology_cfg.get("morphology_modulator_mode") if isinstance(morphology_cfg, dict) else None,
@@ -195,6 +204,12 @@ def _extract_run_record(sweep_dir: Path, run_dir: Path) -> dict[str, Any] | None
         "test_categorical_loglikelihood": cat_ll.get("test"),
         "nparams": nparams,
         "run_dir": str(run_dir),
+        "lr": _dig(config_blob, ["training", "main", "common", "param_groups", "lr"], None),
+        "decoder_lr": _dig(
+            config_blob,
+            ["training", "main", "common", "param_groups", "decoder_lr"],
+            None,
+        ),
     }
 
     record.update(_extract_mi_metrics(info_blob or {}))
@@ -394,6 +409,7 @@ def main() -> int:
             "rule_variant",
             "error_broadcast_mode",
             "decoder_update_mode",
+            "dynamics_mode",
             "hsic_enabled",
             "hsic_weight",
         ],
@@ -401,15 +417,31 @@ def main() -> int:
     )
     phase2b_grouped.to_csv(output_dir / "phase2b_gap_closing.csv", index=False)
 
-    claimA = runs[runs["sweep_name"] == "claimA_shunting"].copy()
+    claimA = runs[
+        runs["sweep_name"].isin(
+            [
+                "claimA_shunting",
+                "claimA_ei_grid_noise",
+                "claimA_ei_grid_info",
+            ]
+        )
+    ].copy()
     claimA_grouped = _group_mean_std(
         claimA,
-        ["dataset", "network_type", "error_broadcast_mode", "ie_value"],
+        [
+            "dataset",
+            "network_type",
+            "error_broadcast_mode",
+            "dynamics_mode",
+            "ie_value",
+        ],
         metrics,
     )
     claimA_grouped.to_csv(output_dir / "claimA_shunting_regime.csv", index=False)
 
-    claimB = runs[runs["sweep_name"] == "claimB_morphology"].copy()
+    claimB = runs[
+        runs["sweep_name"].isin(["claimB_morphology", "claimB_morphology_ei"])
+    ].copy()
     claimB_grouped = _group_mean_std(
         claimB,
         [
@@ -436,6 +468,60 @@ def main() -> int:
     )
     claimC_grouped.to_csv(output_dir / "claimC_error_shaping.csv", index=False)
 
+    depth_scaling = runs[runs["sweep_name"] == "depth_scaling"].copy()
+    depth_scaling_grouped = _group_mean_std(
+        depth_scaling,
+        [
+            "dataset",
+            "strategy",
+            "network_type",
+            "dynamics_mode",
+            "branch_factors",
+            "layer_sizes",
+        ],
+        metrics,
+    )
+    depth_scaling_grouped.to_csv(output_dir / "depth_scaling.csv", index=False)
+
+    noise_robustness = runs[runs["sweep_name"] == "noise_robustness"].copy()
+    noise_robustness_grouped = _group_mean_std(
+        noise_robustness,
+        [
+            "dataset",
+            "strategy",
+            "network_type",
+            "dynamics_mode",
+            "error_noise_sigma",
+        ],
+        metrics,
+    )
+    noise_robustness_grouped.to_csv(output_dir / "noise_robustness.csv", index=False)
+
+    fairness = runs[runs["sweep_name"] == "additive_fairness_audit"].copy()
+    fairness_grouped = _group_mean_std(
+        fairness,
+        ["dataset", "network_type", "dynamics_mode"],
+        metrics,
+    )
+    fairness_grouped.to_csv(output_dir / "additive_fairness_audit.csv", index=False)
+
+    core_tuning = runs[runs["sweep_name"] == "core_fair_tuning"].copy()
+    core_tuning_grouped = _group_mean_std(
+        core_tuning,
+        [
+            "dataset",
+            "network_type",
+            "rule_variant",
+            "error_broadcast_mode",
+            "decoder_update_mode",
+            "dynamics_mode",
+            "lr",
+            "decoder_lr",
+        ],
+        metrics,
+    )
+    core_tuning_grouped.to_csv(output_dir / "core_fair_tuning.csv", index=False)
+
     info_panel = runs[runs["sweep_name"] == "info_panel"].copy()
     info_metrics = [
         "valid_accuracy",
@@ -453,6 +539,17 @@ def main() -> int:
         info_metrics,
     )
     info_grouped.to_csv(output_dir / "info_panel_metrics.csv", index=False)
+
+    # Dynamics-mode coverage for fairness auditing.
+    dynamics_coverage = (
+        runs[runs["strategy"] == "local_ca"]
+        .assign(dynamics_mode=lambda frame: frame["dynamics_mode"].fillna("missing"))
+        .groupby(["sweep_name", "network_type", "dynamics_mode"], dropna=False)
+        .size()
+        .reset_index(name="num_runs")
+        .sort_values(["sweep_name", "network_type", "dynamics_mode"])
+    )
+    dynamics_coverage.to_csv(output_dir / "dynamics_mode_coverage.csv", index=False)
 
     # Effect sizes for quick diagnostics
     effects: list[dict[str, Any]] = []
@@ -513,11 +610,26 @@ def main() -> int:
         handle.write("## Claim C: local error shaping\n\n")
         handle.write(_to_md(claimC_grouped.head(60)))
         handle.write("\n\n")
+        handle.write("## Depth scaling\n\n")
+        handle.write(_to_md(depth_scaling_grouped.head(80)))
+        handle.write("\n\n")
+        handle.write("## Noise robustness\n\n")
+        handle.write(_to_md(noise_robustness_grouped.head(80)))
+        handle.write("\n\n")
+        handle.write("## Additive fairness audit\n\n")
+        handle.write(_to_md(fairness_grouped.head(80)))
+        handle.write("\n\n")
+        handle.write("## Core fair tuning\n\n")
+        handle.write(_to_md(core_tuning_grouped.head(120)))
+        handle.write("\n\n")
         handle.write("## Information panel\n\n")
         handle.write(_to_md(info_grouped.head(40)))
         handle.write("\n\n")
         handle.write("## Effect sizes\n\n")
         handle.write(_to_md(effects_df.head(80)))
+        handle.write("\n\n")
+        handle.write("## Dynamics mode coverage (local_ca)\n\n")
+        handle.write(_to_md(dynamics_coverage.head(120)))
         handle.write("\n")
 
     print(f"Wrote phase summary to: {output_dir}")

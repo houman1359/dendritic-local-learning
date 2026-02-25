@@ -1,0 +1,85 @@
+analysis:
+  performance_analysis: true
+data:
+  base_dir: ''
+  dataset_name: mnist
+  processing: flatten
+experiment:
+  seed: 43
+  use_amp: false
+model:
+  core:
+    architecture:
+      excitatory_branch_factors:
+      - 3
+      - 3
+      excitatory_layer_sizes:
+      - 20
+      inhibitory_branch_factors:
+      - 1
+      inhibitory_layer_sizes: []
+    connectivity:
+      ee_synapses_per_branch_per_layer:
+      - 40
+      ei_synapses_per_branch_per_layer:
+      - 0
+      ie_synapses_per_branch_per_layer:
+      - 10
+      ii_synapses_per_branch_per_layer:
+      - 0
+    morphology:
+      somatic_synapses: false
+      weight_transform: softplus
+    reactivation:
+      enabled: true
+      init_b: 0.5
+      init_m: 1.5
+      type: param_tanh
+    transfer:
+      independent_pathways: false
+      input_mode: 1
+      output_activation: null
+    type: dendritic_additive
+  encoder:
+    type: identity
+  task: classification
+training:
+  main:
+    common:
+      batch_size: 256
+      checkpointing: false
+      early_stopping: false
+      epochs: 50
+      loss_function: cat_nll
+      param_groups:
+        blocklinear_lr: 0.001
+        decoder_lr: 0.002
+        lr: 0.002
+        reactivation_lr: 0.001
+        split_params: true
+        topk_lr: 0.002
+      shuffle: true
+    learning_strategy_config:
+      decoder_update_mode: backprop
+      error_broadcast_mode: per_soma
+      error_mode: auto
+      error_noise_sigma: 0.05
+      five_factor:
+        phi_clamp_max: 4.0
+        phi_clamp_min: 0.25
+        phi_estimator: ridge
+        phi_mode: conditional_variance
+        phi_ridge_lambda: 0.01
+      four_factor:
+        ema_alpha: 0.1
+        rho_mode: correlation
+      hsic:
+        enabled: false
+      morphology_aware:
+        use_path_propagation: false
+      rule_variant: 5f
+      three_factor:
+        theta: 0.0
+        use_conductance_scaling: true
+        use_driving_force: true
+    strategy: local_ca

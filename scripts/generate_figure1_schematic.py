@@ -75,7 +75,7 @@ def panel_a(ax):
     ax.set_ylim(-0.5, 3.7)
     ax.set_aspect("equal")
     ax.axis("off")
-    ax.set_title("(A) Compartmental dendritic neuron", fontsize=10,
+    ax.set_title("(A) Compartmental dendritic neuron", fontsize=11,
                  fontweight="bold", pad=8)
 
     # ── Soma ──
@@ -154,12 +154,12 @@ def panel_a(ax):
         r"$V_n = \frac{\sum_j E_j x_j g_j^{\mathrm{syn}} + \sum_j V_j g_j^{\mathrm{den}}}"
         r"{\sum_j x_j g_j^{\mathrm{syn}} + \sum_j g_j^{\mathrm{den}} + 1}$"
     )
-    ax.text(2.0, -0.35, eq_text, ha="center", va="top", fontsize=8,
+    ax.text(2.0, -0.35, eq_text, ha="center", va="top", fontsize=9,
             bbox=dict(boxstyle="round,pad=0.3", fc="white", ec="gray",
                       alpha=0.9))
     # Note: sums include both E (E_j>0) and I (E_j=0) synapses
     ax.text(2.0, -0.75, "(sums include both E and I synapses per branch)",
-            ha="center", va="top", fontsize=5.5, color="gray",
+            ha="center", va="top", fontsize=6.0, color="gray",
             style="italic")
 
     # ── Output arrow ──
@@ -176,7 +176,7 @@ def panel_a(ax):
                        alpha=0.7),
         mpatches.Patch(fc=SOMA_COLOR, ec="k", label="Soma", alpha=0.5),
     ]
-    ax.legend(handles=legend_items, loc="upper right", fontsize=5.5,
+    ax.legend(handles=legend_items, loc="upper right", fontsize=6.2,
               framealpha=0.9)
 
 
@@ -186,7 +186,7 @@ def panel_b(ax):
     ax.set_ylim(-0.3, 3.5)
     ax.set_aspect("equal")
     ax.axis("off")
-    ax.set_title("(B) Local learning rule hierarchy", fontsize=10,
+    ax.set_title("(B) Local learning rule hierarchy", fontsize=11,
                  fontweight="bold", pad=8)
 
     rules = [
@@ -239,7 +239,7 @@ def main():
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
     fig, (ax_a, ax_b) = plt.subplots(
-        1, 2, figsize=(12, 4.5),
+        1, 2, figsize=(13.4, 5.0),
         gridspec_kw={"width_ratios": [1.1, 1]},
     )
 
