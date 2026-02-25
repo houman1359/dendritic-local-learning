@@ -45,6 +45,9 @@ Thumbs.db
 *.backup
 *-blx.bib
 
+# Archived old drafts
+archive/
+
 # PDF files (optional - uncomment if you want to track PDFs in git)
 # *.pdf
 
