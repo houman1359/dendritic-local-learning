@@ -214,8 +214,6 @@ def fig1_panel_a(ax):
     ax.text(2.3, -0.45, eq, ha="center", va="top", fontsize=7.5,
             bbox=dict(boxstyle="round,pad=0.15", fc="white", ec="gray",
                       lw=0.5, alpha=0.95))
-    ax.text(2.3, -0.82, r"$g_n^{\mathrm{tot}} = \sum_j x_j g_j + \sum_j g_j^{\mathrm{den}} + 1$",
-            ha="center", va="top", fontsize=5.5, color="#555")
 
     # Legend (compact, upper right)
     items = [
@@ -287,13 +285,6 @@ def fig1_panel_b(ax):
             fontsize=7, ha="center", va="top",
             bbox=dict(boxstyle="round,pad=0.15", fc="#FFF9E6", ec="gray",
                       lw=0.5, alpha=0.95))
-    # Underline labels
-    ax.annotate("", xy=(0.8, -0.62), xytext=(3.0, -0.62),
-                arrowprops=dict(arrowstyle="-", color="gray", lw=0.4))
-    ax.text(1.3, -0.68, "local", fontsize=5, ha="center", va="top",
-            color="gray", style="italic")
-    ax.text(3.35, -0.68, "broadcast", fontsize=5, ha="center", va="top",
-            color="gray", style="italic")
 
 
 def fig1_panel_c(ax):
@@ -319,11 +310,9 @@ def fig1_panel_c(ax):
             (-0.05, yc - 0.28), 4.2, 0.56, boxstyle="round,pad=0.04",
             fc=color, ec="k", lw=0.5, alpha=0.12, zorder=2)
         ax.add_patch(box)
-        ax.text(0.1, yc + 0.02, name, ha="left", va="center", fontsize=9,
+        ax.text(0.1, yc, name, ha="left", va="center", fontsize=9,
                 fontweight="bold", color=color, zorder=5)
-        ax.text(0.5, yc + 0.05, eq, ha="left", va="center", fontsize=6, zorder=5)
-        ax.text(0.5, yc - 0.18, desc, ha="left", va="center", fontsize=4.5,
-                color="gray", style="italic", zorder=5)
+        ax.text(0.5, yc, eq, ha="left", va="center", fontsize=6, zorder=5)
 
     # Arrows between rules
     for yt, yb in [(2.32, 1.78), (1.22, 0.68)]:
