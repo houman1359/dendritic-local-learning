@@ -277,13 +277,13 @@ Within the local-rule family, 5F consistently outperforms 4F and 3F (Appendix Ta
 \begin{figure*}[t]
 \centering
 \includegraphics[width=0.95\textwidth]{fig2_competence_regime.pdf}
-\caption{\textbf{Local competence and regime dependence.} \textbf{(A)}~Backprop ceiling (gray) vs.\ best local rule (5F per-soma) for shunting (green) and additive (blue) cores on MNIST, Fashion-MNIST, and context gating. Shunting local learning consistently closes most of the backprop gap across all benchmarks. \textbf{(B)}~IE dose-response: test accuracy vs.\ inhibitory synapses per branch for shunting and additive cores on MNIST (solid) and noise resilience (dashed). Shunting requires $\geq\!5$ IE synapses to unlock high performance; additive learning fails on noise resilience regardless of IE count. \textbf{(C)}~Shunting advantage ($\Delta$, in percentage points) vs.\ IE count. The advantage is regime-dependent: modest on MNIST (${\sim}2$~pp) but dramatic on noise resilience ($+50$~pp at IE$=$10), consistent with divisive gain control stabilizing credit signals.}
+\caption{\textbf{Local competence and regime dependence.} \textbf{(A)}~Backprop ceiling (gray) vs.\ best local rule (5F per-soma) for shunting (green) and additive (blue) cores on MNIST, Fashion-MNIST, and context gating. Shunting local learning consistently closes most of the backprop gap across all benchmarks. \textbf{(B)}~$N_I$ dose-response: test accuracy vs.\ inhibitory synapses per branch ($N_I$) for shunting and additive cores on MNIST (solid) and noise resilience (dashed). Shunting requires $N_I\!\geq\!5$ to unlock high performance; additive learning fails on noise resilience regardless of $N_I$. \textbf{(C)}~Shunting advantage ($\Delta$, in percentage points) vs.\ $N_I$. The advantage is regime-dependent: modest on MNIST (${\sim}2$~pp) but dramatic on noise resilience ($+50$~pp at $N_I{=}10$), consistent with divisive gain control stabilizing credit signals.}
 \label{fig:competence_regime}
 \end{figure*}
 
 The shunting advantage is not uniform.
 On MNIST with matched per-soma broadcast, shunting outperforms additive by ${\sim}2$~percentage points; a similar pattern holds on Fashion-MNIST (81.1\% vs.\ 79.4\%).
-But on tasks requiring noise-robust credit signals, the gap is dramatic: $+50.3$~pp on noise resilience (with 10 inhibitory-to-excitatory [IE] synapses per branch) and $+24.8$~pp on info shunting (IE$=$0).
+But on tasks requiring noise-robust credit signals, the gap is dramatic: $+50.3$~pp on noise resilience (with $N_I{=}10$ inhibitory synapses per branch) and $+24.8$~pp on info shunting ($N_I{=}0$).
 Figure~\ref{fig:competence_regime}B--C shows that this advantage grows with inhibitory conductance strength, consistent with divisive gain control stabilizing intermediate signal scales.
 
 Additive cores are not uniformly broken---under fair tuning they reach ${\sim}89\%$ on MNIST---but they fail in regimes where inhibition-mediated normalization is essential for gradient propagation.
@@ -330,11 +330,12 @@ Component-wise decomposition (Fig.~\ref{fig:gradient_fidelity}C) reveals that de
 We test whether the shunting advantage persists under three stress tests: increased dendritic depth, noisy broadcast signals, and a second real-world benchmark.
 
 \paragraph{Depth scaling.}
-Varying dendritic depth from 1 to 4 layers (branch factors $[9]$ to $[3,3,3,3]$), shunting local learning degrades from $45.2\%$ to $35.0\%$ while backprop ceilings remain stable at ${\sim}88{-}90\%$ (Fig.~\ref{fig:scalability}A).
-The backprop--local gap widens from $0.43$ to $0.54$, consistent with path-sum attenuation predicted by Theorem~\ref{thm:tree_backprop}: each additional layer multiplies by $R_k^{\mathrm{tot}} g_k^{\mathrm{den}} < 1$, compounding signal loss that the broadcast approximation cannot compensate.
+Varying dendritic depth from 1 to 4 layers (branch factors $[9]$ to $[3,3,3,3]$), shunting local learning degrades from $63.5\%$ to $57.4\%$ while additive local degrades more steeply from $54.9\%$ to $29.7\%$ (Fig.~\ref{fig:scalability}A).
+Backprop ceilings remain stable at ${\sim}90{-}92\%$ for both architectures.
+The shunting advantage grows with depth ($+8.5$~pp at depth~1 to $+27.7$~pp at depth~4), consistent with path-sum attenuation predicted by Theorem~\ref{thm:tree_backprop}: each additional layer multiplies by $R_k^{\mathrm{tot}} g_k^{\mathrm{den}} < 1$, and shunting's smaller $R_n^{\mathrm{tot}}$ attenuates less per layer.
 
 \paragraph{Noise robustness.}
-Adding Gaussian noise $\mathcal{N}(0, \sigma^2)$ to the broadcast error (Fig.~\ref{fig:scalability}B), shunting local learning is robust to $\sigma \leq 0.05$ and degrades gracefully beyond.
+Adding Gaussian noise $\mathcal{N}(0, \sigma^2)$ to the broadcast error (Fig.~\ref{fig:scalability}B), shunting local learning is robust to $\sigma \leq 0.1$ (${\sim}62\%$) and degrades gracefully beyond, while additive drops from $46.5\%$ to chance at $\sigma{=}1.0$.
 This is expected from our mechanistic argument: shunting produces well-scaled local sensitivities (small, bounded $R_n^{\mathrm{tot}}$), so the true gradient direction is preserved even when the broadcast magnitude is corrupted.
 
 \paragraph{Fashion-MNIST.}
@@ -344,7 +345,7 @@ The shunting advantage is modest (${\sim}1.7$~pp) on this clean classification t
 \begin{figure*}[t]
 \centering
 \includegraphics[width=0.95\textwidth]{fig4_scalability.pdf}
-\caption{\textbf{Scalability and generalization.} \textbf{(A)}~Depth scaling: test accuracy vs.\ dendritic depth (1--4 layers). Shunting local learning (solid) degrades gracefully; backprop ceilings (dashed) remain stable. \textbf{(B)}~Noise robustness: shunting local accuracy under Gaussian broadcast noise ($\sigma$), showing tolerance to $\sigma\!\leq\!0.05$ and graceful degradation. \textbf{(C)}~Fashion-MNIST: shunting local 81.1\% vs.\ 87.9\% backprop; additive local 79.4\% vs.\ 87.4\% backprop.}
+\caption{\textbf{Scalability and generalization.} \textbf{(A)}~Depth scaling: shunting local (green) degrades gracefully from 63.5\% to 57.4\%; additive local (blue) drops from 54.9\% to 29.7\%. Backprop ceilings (dashed) remain stable. \textbf{(B)}~Noise robustness: shunting is robust to $\sigma\!\leq\!0.1$; additive degrades rapidly and reaches chance at $\sigma\!=\!1$. \textbf{(C)}~Fashion-MNIST: shunting local 81.1\% vs.\ 87.9\% backprop; additive local 79.4\% vs.\ 87.4\% backprop.}
 \label{fig:scalability}
 \end{figure*}
 
@@ -369,7 +370,7 @@ DFA baselines (Appendix Fig.~\ref{fig:s5_fa_dfa}) show shunting achieves $66.1\%
 \begin{figure*}[t]
 \centering
 \includegraphics[width=0.95\textwidth]{fig5_mechanistic_evidence.pdf}
-\caption{\textbf{Mechanistic evidence.} \textbf{(A)}~Input resistance $R_n^{\mathrm{tot}}$ vs.\ IE synapse count. Shunting reduces $R_n^{\mathrm{tot}}$ by ${\sim}4\times$ (green); additive remains at $1.0$ (blue). Lower, less variable $R_n^{\mathrm{tot}}$ directly explains the gradient-fidelity improvement. \textbf{(B)}~Broadcast bandwidth: 4-bit quantization preserves full accuracy; only sign-only and sparse modes degrade substantially. \textbf{(C)}~Voltage normalization partially recovers additive local learning ($+9.5$~pp) but does not close the gap to shunting (dashed line), indicating shunting provides benefits beyond normalization alone.}
+\caption{\textbf{Mechanistic evidence.} \textbf{(A)}~Input resistance $R_n^{\mathrm{tot}}$ vs.\ $N_I$ (inhibitory synapses per branch). Shunting reduces $R_n^{\mathrm{tot}}$ by ${\sim}4\times$ (green); additive remains at $1.0$ (blue). Lower, less variable $R_n^{\mathrm{tot}}$ directly explains the gradient-fidelity improvement. \textbf{(B)}~Broadcast bandwidth: 4-bit quantization preserves full accuracy; only sign-only and sparse modes degrade substantially. \textbf{(C)}~Voltage normalization partially recovers additive local learning ($+9.5$~pp) but does not close the gap to shunting (dashed line), indicating shunting provides benefits beyond normalization alone.}
 \label{fig:mechanistic}
 \end{figure*}
 
@@ -718,12 +719,12 @@ Per-soma, path on vs off & test / MI(E,I;C) & $-0.003$ / $+0.017$ \\
 \label{tab:robust_headline}
 \end{table}
 
-\subsection*{Extended Gradient Analysis and IE Sweep Detail}
+\subsection*{Extended Gradient Analysis and $N_I$ Sweep Detail}
 
 \begin{figure*}[t]
 \centering
 \includegraphics[width=0.95\textwidth]{fig_s2_gradient_extended.pdf}
-\caption{\textbf{Extended gradient and IE analysis (supplementary).} \textbf{(A)}~Scale mismatch bars: shunting achieves near-ideal scale ($0.117$); additive exhibits order-of-magnitude distortion ($>1.0$). \textbf{(B)}~Noise resilience IE dose-response with error bands ($\pm$1 s.d.). \textbf{(C)}~MNIST IE dose-response detail with error bands. \textbf{(D)}~Fashion-MNIST individual seeds for all conditions, showing consistency across runs.}
+\caption{\textbf{Extended gradient and $N_I$ analysis (supplementary).} \textbf{(A)}~Scale mismatch bars: shunting achieves near-ideal scale ($0.117$); additive exhibits order-of-magnitude distortion ($>1.0$). \textbf{(B)}~Noise resilience $N_I$ dose-response with error bands ($\pm$1 s.d.). \textbf{(C)}~MNIST $N_I$ dose-response detail with error bands. \textbf{(D)}~Fashion-MNIST individual seeds for all conditions, showing consistency across runs.}
 \label{fig:s2_gradient_extended}
 \end{figure*}
 
@@ -877,9 +878,9 @@ Update: $\Delta g_j^{\mathrm{syn}} \propto \int e_j^{\mathrm{syn}}(t) m_n(t)\,\m
 \label{app:depth_noise}
 
 \paragraph{Depth scaling.}
-Varying dendritic depth from 1--4 layers (branch factors $[9]$ to $[3,3,3,3]$): shunting local learning degrades from 45.2\% to 35.0\% (a gap increase from 0.43 to 0.54 vs.\ backprop), while backprop ceilings remain stable at ${\sim}88{-}90\%$. See Fig.~\ref{fig:scalability}A.
+Varying dendritic depth from 1--4 layers (branch factors $[9]$ to $[3,3,3,3]$): shunting local degrades from 63.5\% to 57.4\%; additive local degrades more steeply from 54.9\% to 29.7\%. The shunting advantage grows with depth ($+8.5 \to +27.7$~pp). Backprop ceilings remain stable at ${\sim}90{-}92\%$. See Fig.~\ref{fig:scalability}A.
 
 \paragraph{Noise robustness.}
-Gaussian noise $\mathcal{N}(0,\sigma^2)$ on broadcast error: shunting is robust to $\sigma\!\leq\!0.05$ and degrades gracefully, confirming that shunting credit signals carry genuine learning information beyond the broadcast magnitude. See Fig.~\ref{fig:scalability}B.
+Gaussian noise $\mathcal{N}(0,\sigma^2)$ on broadcast error: shunting is robust to $\sigma\!\leq\!0.1$ (${\sim}62\%$) while additive drops from 46.5\% to chance at $\sigma{=}1.0$, confirming that shunting credit signals carry genuine learning information beyond the broadcast magnitude. See Fig.~\ref{fig:scalability}B.
 
 \end{document}

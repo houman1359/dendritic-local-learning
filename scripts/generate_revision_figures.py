@@ -132,7 +132,7 @@ def figure5():
                         marker="o", markersize=3, lw=1.2, capsize=2,
                         color=color, label=label, capthick=0.5)
 
-        ax.set_xlabel("IE synapses per branch")
+        ax.set_xlabel("$N_I$ (inhib. syn. per branch)")
         ax.set_ylabel(r"$R_{\mathrm{tot}}$ (input resistance)")
         ax.set_title(r"$R_{\mathrm{tot}}$ vs. inhibition")
         ax.legend(fontsize=5.5, loc="upper right")

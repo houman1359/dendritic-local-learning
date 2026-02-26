@@ -488,9 +488,9 @@ def figure2():
                         color=color, linestyle=ls, label=f"{short} {ds_short}",
                         capthick=0.4)
 
-    ax.set_xlabel("IE synapses per branch")
+    ax.set_xlabel("$N_I$ (inhib. syn. per branch)")
     ax.set_ylabel("Test accuracy (%)")
-    ax.set_title("IE dose-response")
+    ax.set_title("$N_I$ dose-response")
     ax.legend(fontsize=4.5, loc="center right", handlelength=1.5,
               handletextpad=0.3, borderpad=0.3)
     ax.set_ylim(25, 100)
@@ -519,7 +519,7 @@ def figure2():
                     color=color, label=lbl)
 
     ax.axhline(0, color="black", lw=0.4, ls="--")
-    ax.set_xlabel("IE synapses per branch")
+    ax.set_xlabel("$N_I$ (inhib. syn. per branch)")
     ax.set_ylabel("Shunting adv. (pp)")
     ax.set_title("Regime dependence")
     ax.legend(fontsize=5.5, loc="center right")
@@ -657,13 +657,8 @@ def figure4():
                 return 1
 
         # Separate local and backprop, show local as solid + backprop as light reference
-        # NOTE: additive local_ca excluded — depth_scaling sweep used scalar
-        # broadcast mode which is incompatible with additive (gives chance).
         for strat, ls, alpha_val in [("local_ca", "-", 1.0), ("standard", "--", 0.35)]:
             for nt in ["dendritic_shunting", "dendritic_additive"]:
-                # Skip additive + local_ca (scalar broadcast → chance level)
-                if nt == "dendritic_additive" and strat == "local_ca":
-                    continue
                 sub = depth[depth["network_type"] == nt].copy()
                 if "strategy" in sub.columns:
                     sub = sub[sub["strategy"] == strat].copy()
@@ -697,18 +692,16 @@ def figure4():
     _panel(ax, "B")
 
     if noise is not None:
-        # NOTE: noise robustness sweep used scalar broadcast — only shunting
-        # local_ca is meaningful (additive at chance due to broadcast mode).
-        for nt in ["dendritic_shunting"]:
+        for nt in ["dendritic_shunting", "dendritic_additive"]:
             sub = noise[noise["network_type"] == nt].copy()
             if len(sub) == 0:
                 continue
             sub = sub.sort_values("error_noise_sigma")
-            color = COLOR_SHUNTING
+            color = COLOR_SHUNTING if "shunting" in nt else COLOR_ADDITIVE
             ax.errorbar(sub["error_noise_sigma"], sub["test_accuracy_mean"] * 100,
                         yerr=sub["test_accuracy_std"] * 100,
                         marker="o", markersize=3, lw=1.0, capsize=1.5,
-                        color=color, label="Shunting (local)")
+                        color=color, label=LABEL_MAP.get(nt, nt))
 
         ax.set_xlabel(r"Error noise $\sigma$")
         ax.set_ylabel("Test accuracy (%)")
@@ -958,12 +951,12 @@ def figure_s2():
                 ax.plot(sub["ie_synapses"], sub["test_acc_mean"] * 100,
                         marker=marker, markersize=3, lw=1.0, color=color,
                         label=LABEL_MAP.get(ct, ct))
-        ax.set_xlabel("IE synapses")
+        ax.set_xlabel("$N_I$")
         ax.set_ylabel("Test accuracy (%)")
-        ax.set_title("Noise resilience (IE detail)")
+        ax.set_title("Noise resilience ($N_I$ detail)")
         ax.legend(fontsize=5)
 
-    # Panel C: MNIST IE detail with error bands
+    # Panel C: MNIST N_I detail with error bands
     ax = axes[1, 0]
     _panel(ax, "C")
 
@@ -981,9 +974,9 @@ def figure_s2():
                 ax.plot(sub["ie_synapses"], sub["test_acc_mean"] * 100,
                         marker=marker, markersize=3, lw=1.0, color=color,
                         label=LABEL_MAP.get(ct, ct))
-        ax.set_xlabel("IE synapses")
+        ax.set_xlabel("$N_I$")
         ax.set_ylabel("Test accuracy (%)")
-        ax.set_title("MNIST IE sweep (detail)")
+        ax.set_title("MNIST $N_I$ sweep (detail)")
         ax.legend(fontsize=5)
 
     # Panel D: Fashion-MNIST all seeds
