@@ -208,6 +208,13 @@ where $\langle\cdot\rangle_B$ denotes the batch average.
 The three factors are: (1)~presynaptic activity $x_j$ (or voltage difference), (2)~postsynaptic modulation via driving force and input resistance, and (3)~broadcast error $e_n$.
 The same rule applies to excitatory and inhibitory synapses; the sign difference arises solely from the driving force $(E_j - V_n)$.
 
+\paragraph{Additive control.}
+Rule~\eqref{eq:3f} is the local gradient of the \emph{shunting} voltage $V_n = \sum E_j g_j x_j / g_n^{\mathrm{tot}}$.
+For the additive control ($V_n = \sum g_j x_j$, no divisive normalization), the correct local gradient is simpler:
+$\Delta g_j^{\mathrm{syn}} = \eta \langle x_j\, e_n \rangle_B$,
+with no driving-force or $R_n^{\mathrm{tot}}$ terms ($R_n^{\mathrm{tot}} \equiv 1$ by definition since there is no denominator).
+Throughout, each architecture receives the learning rule derived from its own forward-pass dynamics---the comparison tests the \emph{architecture}, not the rule.
+
 \subsection{Higher-Order Rules: 4F and 5F}
 
 \textbf{4F (morphology correlation).}
