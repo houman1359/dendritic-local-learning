@@ -3,7 +3,7 @@
 
 Produces 4 main figures + 4 appendix figures:
   Main:
-    fig1_model_and_credit.pdf      (3 panels: forward, credit flow, rule hierarchy)
+    fig1_model_and_credit.pdf      (3 panels: architecture, rule hierarchy, learning curves)
     fig2_competence_regime.pdf     (3 panels: multi-benchmark bars, IE dose-response, shunting advantage)
     fig3_gradient_fidelity.pdf     (3 panels: cosine bars, per-layer dynamics, component bars)
     fig4_scalability.pdf           (3 panels: depth, noise, Fashion-MNIST)
@@ -141,150 +141,106 @@ def _csv(filename, bundle=False):
 # Figure 1 — Model & Credit Assignment
 # ===================================================================
 
-def _draw_synapse(ax, x, y, color, size=0.06):
-    ax.add_patch(plt.Circle((x, y), size, fc=color, ec="k", lw=0.4, zorder=5))
-
-
-def _draw_comp(ax, x, y, w, h, label, color, fs=7):
-    box = FancyBboxPatch(
-        (x - w/2, y - h/2), w, h, boxstyle="round,pad=0.02",
-        fc=color, ec="k", lw=0.7, alpha=0.3, zorder=3)
-    ax.add_patch(box)
-    ax.text(x, y, label, ha="center", va="center", fontsize=fs,
-            fontweight="bold", zorder=6)
-
-
 def _draw_arrow(ax, x1, y1, x2, y2, color="k", lw=1.0, style="-|>"):
     ax.annotate("", xy=(x2, y2), xytext=(x1, y1),
                 arrowprops=dict(arrowstyle=style, color=color, lw=lw), zorder=4)
 
 
 def fig1_panel_a(ax):
-    """Panel A: Forward pass — dendritic neuron architecture."""
-    ax.set_xlim(-0.3, 4.8)
-    ax.set_ylim(-1.0, 3.5)
+    """Panel A: Dendritic architecture — forward + backward on single diagram."""
+    ax.set_xlim(-0.8, 5.6)
+    ax.set_ylim(-0.3, 3.6)
     ax.set_aspect("equal")
     ax.axis("off")
 
-    # Soma
-    soma_x, soma_y = 3.7, 1.5
-    ax.add_patch(plt.Circle((soma_x, soma_y), 0.25, fc=SOMA_COLOR, ec="k",
-                             lw=1.0, alpha=0.5, zorder=5))
-    ax.text(soma_x, soma_y, "$V_{\\mathrm{soma}}$", ha="center", va="center",
+    # ── Compartment positions ──
+    soma_x, soma_y = 4.2, 1.5
+    px, py = 2.5, 1.5           # proximal branch
+    d_pos = [(0.8, 2.7), (0.8, 0.3)]  # distal branches
+
+    # ── Soma ──
+    ax.add_patch(plt.Circle((soma_x, soma_y), 0.30, fc=SOMA_COLOR, ec="k",
+                             lw=1.2, alpha=0.45, zorder=5))
+    ax.text(soma_x, soma_y, "soma", ha="center", va="center",
             fontsize=6, fontweight="bold", zorder=6)
 
-    # Proximal branch
-    px, py = 2.4, 1.5
-    _draw_comp(ax, px, py, 0.55, 0.42, "$V_{b_2}$", DEN_COLOR, fs=6.5)
+    # ── Compartment boxes (rounded rectangles) ──
+    comp_w, comp_h = 0.70, 0.50
+    for cx, cy, lbl in [(px, py, "proximal"),
+                         (d_pos[0][0], d_pos[0][1], "distal"),
+                         (d_pos[1][0], d_pos[1][1], "distal")]:
+        box = FancyBboxPatch((cx - comp_w/2, cy - comp_h/2), comp_w, comp_h,
+                              boxstyle="round,pad=0.04", fc=DEN_COLOR, ec="k",
+                              lw=0.8, alpha=0.25, zorder=3)
+        ax.add_patch(box)
+        ax.text(cx, cy, lbl, ha="center", va="center", fontsize=5.5,
+                fontweight="bold", color="#2E7D32", zorder=6)
 
-    # Distal branches
-    d_pos = [(0.8, 2.5), (0.8, 0.5)]
-    for i, (dx, dy) in enumerate(d_pos):
-        _draw_comp(ax, dx, dy, 0.55, 0.42, f"$V_{{b_1}}^{{({i+1})}}$",
-                   DEN_COLOR, fs=6.5)
-
-    # Dendritic conductance arrows
-    _draw_arrow(ax, px + 0.3, py, soma_x - 0.25, soma_y, color=DEN_COLOR, lw=1.2)
-    ax.text(3.05, 1.72, "$g^{\\mathrm{den}}$", fontsize=5, color=DEN_COLOR)
+    # ── Dendritic conductance arrows (green, forward flow) ──
+    _draw_arrow(ax, px + comp_w/2 + 0.02, py, soma_x - 0.30, soma_y,
+                color=DEN_COLOR, lw=1.4)
     for dx, dy in d_pos:
-        off = 0.12 if dy > 1.5 else -0.12
-        _draw_arrow(ax, dx + 0.3, dy, px - 0.3, py + off, color=DEN_COLOR, lw=1.0)
+        off = 0.10 if dy > 1.5 else -0.10
+        _draw_arrow(ax, dx + comp_w/2 + 0.02, dy,
+                    px - comp_w/2 - 0.02, py + off, color=DEN_COLOR, lw=1.2)
 
-    # Synapses on each branch
+    # ── Excitatory synapses (triangles, blue) ──
+    tri_size = 0.10
     for bx, by in d_pos + [(px, py)]:
-        for eo in [(-0.45, 0.08), (-0.45, -0.08)]:
-            sx, sy = bx + eo[0], by + eo[1]
-            _draw_synapse(ax, sx, sy, EXC_COLOR, 0.045)
-            _draw_arrow(ax, sx + 0.045, sy, bx - 0.27, by + eo[1]*0.3,
-                        color=EXC_COLOR, lw=0.5)
-        sx, sy = bx, by + 0.3
-        _draw_synapse(ax, sx, sy, INH_COLOR, 0.04)
-        _draw_arrow(ax, sx, sy - 0.04, bx, by + 0.2, color=INH_COLOR, lw=0.5)
+        for yo in [0.12, -0.12]:
+            sx = bx - comp_w/2 - 0.30
+            sy = by + yo
+            tri = plt.Polygon(
+                [(sx - tri_size, sy - tri_size*0.7),
+                 (sx + tri_size, sy),
+                 (sx - tri_size, sy + tri_size*0.7)],
+                fc=EXC_COLOR, ec="k", lw=0.5, alpha=0.8, zorder=5)
+            ax.add_patch(tri)
+            _draw_arrow(ax, sx + tri_size + 0.01, sy,
+                        bx - comp_w/2 - 0.02, by + yo * 0.4,
+                        color=EXC_COLOR, lw=0.7)
 
-    # Input labels
-    ax.text(-0.15, 2.9, "$x_j^E$", fontsize=7, color=EXC_COLOR, fontweight="bold")
-    ax.text(-0.15, 0.1, "$x_j^I$", fontsize=7, color=INH_COLOR, fontweight="bold")
+    # ── Inhibitory synapses (circles, red) — one per branch, on top ──
+    for bx, by in d_pos + [(px, py)]:
+        sx, sy = bx - 0.05, by + comp_h/2 + 0.20
+        ax.add_patch(plt.Circle((sx, sy), 0.08, fc=INH_COLOR, ec="k",
+                                 lw=0.5, alpha=0.8, zorder=5))
+        _draw_arrow(ax, sx, sy - 0.08, bx - 0.05, by + comp_h/2 + 0.02,
+                    color=INH_COLOR, lw=0.7)
 
-    # Output
-    _draw_arrow(ax, soma_x + 0.25, soma_y, 4.5, soma_y, color="k", lw=1.2)
-    ax.text(4.55, soma_y, "$\\hat{y}$", fontsize=7, va="center")
+    # ── Input labels ──
+    ax.text(-0.6, 2.1, "$x^E$", fontsize=8, color=EXC_COLOR,
+            fontweight="bold", ha="center")
+    ax.text(-0.05, 3.25, "$x^I$", fontsize=8, color=INH_COLOR,
+            fontweight="bold", ha="center")
 
-    # Voltage equation box (clean, below the tree)
-    eq = r"$V_n = \frac{\sum_j E_j x_j g_j + \sum_j V_j g_j^{\mathrm{den}}}{g_n^{\mathrm{tot}}}$"
-    ax.text(2.3, -0.45, eq, ha="center", va="top", fontsize=7.5,
-            bbox=dict(boxstyle="round,pad=0.15", fc="white", ec="gray",
-                      lw=0.5, alpha=0.95))
+    # ── Output ──
+    _draw_arrow(ax, soma_x + 0.30, soma_y, 5.2, soma_y, color="k", lw=1.4)
+    ax.text(5.3, soma_y, "$\\hat{y}$", fontsize=8, va="center")
 
-    # Legend (compact, upper right)
-    items = [
-        mpatches.Patch(fc=EXC_COLOR, ec="k", label="E syn ($E_j>0$)", alpha=0.7),
-        mpatches.Patch(fc=INH_COLOR, ec="k", label="I syn ($E_j{=}0$): shunting", alpha=0.7),
-        mpatches.Patch(fc=DEN_COLOR, ec="k", label="Dendritic cond.", alpha=0.7),
-    ]
-    ax.legend(handles=items, loc="upper right", fontsize=4.5, framealpha=0.9,
-              handlelength=1.0, handletextpad=0.3, borderpad=0.3)
-
-
-def fig1_panel_b(ax):
-    """Panel B: Backward pass — credit assignment flow."""
-    ax.set_xlim(-0.3, 4.8)
-    ax.set_ylim(-1.0, 3.5)
-    ax.set_aspect("equal")
-    ax.axis("off")
-
-    # Same tree topology (simpler rendering)
-    soma_x, soma_y = 3.7, 1.5
-    ax.add_patch(plt.Circle((soma_x, soma_y), 0.25, fc=SOMA_COLOR, ec="k",
-                             lw=1.0, alpha=0.5, zorder=5))
-    ax.text(soma_x, soma_y, "$\\delta_0$", ha="center", va="center",
-            fontsize=8, fontweight="bold", color=INH_COLOR, zorder=6)
-
-    px, py = 2.4, 1.5
-    _draw_comp(ax, px, py, 0.55, 0.42, "$n$", "#DDDDDD", fs=7)
-
-    d_pos = [(0.8, 2.5), (0.8, 0.5)]
-    for i, (dx, dy) in enumerate(d_pos):
-        _draw_comp(ax, dx, dy, 0.55, 0.42, "$n'$", "#DDDDDD", fs=7)
-
-    # Broadcast error arrows (dashed red, from soma to all branches)
+    # ── Broadcast error (dashed red arrows, backward) ──
     for bx, by in [(px, py)] + d_pos:
-        ax.annotate("", xy=(bx + 0.3, by), xytext=(soma_x - 0.25, soma_y),
+        ax.annotate("", xy=(bx + comp_w/2 + 0.05, by + 0.05),
+                    xytext=(soma_x - 0.30, soma_y + 0.08),
                     arrowprops=dict(arrowstyle="->", color=INH_COLOR,
-                                    lw=1.2, ls="--"), zorder=4)
+                                    lw=1.0, ls=(0, (4, 3))), zorder=2)
+    ax.text(soma_x - 0.05, soma_y + 0.55, "broadcast $e_n$",
+            fontsize=5.5, color=INH_COLOR, ha="center", style="italic")
 
-    ax.text(3.2, 2.4, "broadcast\nerror $e_n$", fontsize=5.5, color=INH_COLOR,
-            ha="center", style="italic")
-
-    # Local factors annotations — positioned clearly around top-left branch
-    bx, by = 0.8, 2.5
-    # Pre-synaptic factor (left)
-    ax.text(bx - 0.7, by + 0.15, "$x_j$", fontsize=7, color=EXC_COLOR,
-            fontweight="bold", ha="center", va="center",
-            bbox=dict(boxstyle="round,pad=0.1", fc="white", ec=EXC_COLOR,
-                      alpha=0.8, lw=0.5))
-    # Driving force (bottom-left)
-    ax.text(bx - 0.7, by - 0.25, "$(E_j{-}V_n)$", fontsize=6, color="#D35400",
-            fontweight="bold", ha="center", va="center",
-            bbox=dict(boxstyle="round,pad=0.1", fc="white", ec="#D35400",
-                      alpha=0.8, lw=0.5))
-    # Input resistance (right)
-    ax.text(bx + 0.7, by + 0.15, "$R_n^{\\mathrm{tot}}$", fontsize=7,
-            color=DEN_COLOR, fontweight="bold", ha="center", va="center",
-            bbox=dict(boxstyle="round,pad=0.1", fc="white", ec=DEN_COLOR,
-                      alpha=0.8, lw=0.5))
-
-    # Annotation: "Only delta_0 is non-local"
-    ax.text(2.3, 0.0, "Only $\\delta_0$ is non-local",
-            fontsize=6, ha="center", va="top", color=INH_COLOR,
-            style="italic", fontweight="bold")
-
-    # Key equation box
-    ax.text(2.3, -0.45,
-            r"$\Delta g_j \propto x_j \cdot R_n^{\mathrm{tot}} "
-            r"\cdot (E_j - V_n) \cdot e_n$",
-            fontsize=7, ha="center", va="top",
-            bbox=dict(boxstyle="round,pad=0.15", fc="#FFF9E6", ec="gray",
-                      lw=0.5, alpha=0.95))
+    # ── Legend (compact) ──
+    from matplotlib.lines import Line2D
+    handles = [
+        plt.Polygon([(0, 0), (1, 0.5), (0, 1)], fc=EXC_COLOR, ec="k",
+                     lw=0.4, alpha=0.8),
+        plt.Circle((0, 0), 0.1, fc=INH_COLOR, ec="k", lw=0.4, alpha=0.8),
+        mpatches.Patch(fc=DEN_COLOR, ec="k", lw=0.4, alpha=0.25),
+        Line2D([0], [0], color=INH_COLOR, lw=1.0, ls="--"),
+    ]
+    labels = ["Excitatory syn.", "Inhibitory syn. (shunting)",
+              "Dendritic compartment", "Error broadcast"]
+    ax.legend(handles, labels, loc="lower right", fontsize=4.5,
+              framealpha=0.9, handlelength=1.2, handletextpad=0.3,
+              borderpad=0.3, labelspacing=0.3)
 
 
 def fig1_panel_c(ax):
@@ -334,11 +290,51 @@ def fig1_panel_c(ax):
             ha="center", va="center", fontsize=5, zorder=5)
 
 
+def fig1_panel_learning_curves(ax):
+    """Panel C: Learning curves — BP vs local for shunting & additive on MNIST."""
+    csv_path = os.path.join(DATA_DIR, "learning_curves_fig1.csv")
+    if not os.path.isfile(csv_path):
+        warnings.warn(f"Learning curves CSV not found: {csv_path}")
+        ax.text(0.5, 0.5, "No data", ha="center", va="center", transform=ax.transAxes)
+        return
+
+    df = pd.read_csv(csv_path)
+    df = df[df["dataset"] == "mnist"]
+
+    conditions = [
+        ("standard",  "dendritic_shunting",  COLOR_SHUNTING, "-",  "Shunting BP"),
+        ("local_ca",  "dendritic_shunting",  COLOR_SHUNTING, "--", "Shunting local"),
+        ("standard",  "dendritic_additive",  COLOR_ADDITIVE, "-",  "Additive BP"),
+        ("local_ca",  "dendritic_additive",  COLOR_ADDITIVE, "--", "Additive local"),
+    ]
+
+    for strategy, core, color, ls, label in conditions:
+        sub = df[(df["strategy"] == strategy) & (df["core_type"] == core)]
+        if sub.empty:
+            continue
+        grouped = sub.groupby("epoch")["test_acc"]
+        mean = grouped.mean()
+        sem = grouped.std() / np.sqrt(grouped.count())
+        epochs = mean.index.values
+        ax.plot(epochs, mean.values * 100, color=color, ls=ls, lw=1.2, label=label)
+        ax.fill_between(epochs, (mean - sem).values * 100, (mean + sem).values * 100,
+                         color=color, alpha=0.10)
+
+    ax.set_xlabel("Epoch")
+    ax.set_ylabel("Test accuracy (%)")
+    ax.set_title("Learning dynamics (MNIST)", fontsize=7)
+    ax.legend(loc="upper center", fontsize=4.5, ncol=2, handlelength=1.5,
+              columnspacing=0.8, bbox_to_anchor=(0.5, 1.0))
+    ax.set_ylim(5, 100)
+    ax.set_xlim(0, 200)
+    ax.axhline(10, color="gray", ls=":", lw=0.5, zorder=0)  # chance level
+
+
 def figure1():
     print("\n--- Figure 1: Model & Credit Assignment ---")
-    fig = plt.figure(figsize=(W, 3.5))
-    gs = fig.add_gridspec(1, 3, width_ratios=[1.0, 1.0, 0.82],
-                          wspace=0.08, left=0.02, right=0.98,
+    fig = plt.figure(figsize=(W, 2.8))
+    gs = fig.add_gridspec(1, 3, width_ratios=[1.1, 0.65, 0.75],
+                          wspace=0.08, left=0.01, right=0.99,
                           top=0.92, bottom=0.02)
 
     ax_a = fig.add_subplot(gs[0])
@@ -346,12 +342,12 @@ def figure1():
     ax_c = fig.add_subplot(gs[2])
 
     fig1_panel_a(ax_a)
-    fig1_panel_b(ax_b)
-    fig1_panel_c(ax_c)
+    fig1_panel_c(ax_b)  # rule hierarchy
+    fig1_panel_learning_curves(ax_c)
 
     _panel(ax_a, "A", x=-0.02, y=1.02)
     _panel(ax_b, "B", x=-0.02, y=1.02)
-    _panel(ax_c, "C", x=-0.02, y=1.02)
+    _panel(ax_c, "C", x=-0.18, y=1.12)
 
     _save(fig, "fig1_model_and_credit")
     plt.close(fig)
