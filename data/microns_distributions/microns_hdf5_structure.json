@@ -1,0 +1,755 @@
+{
+  "connectivity": {
+    "type": "group",
+    "keys": [
+      "condensed",
+      "full"
+    ]
+  },
+  "connectivity/condensed": {
+    "type": "group",
+    "keys": [
+      "edge_indices",
+      "edges",
+      "vertex_properties"
+    ]
+  },
+  "connectivity/condensed/edge_indices": {
+    "type": "group",
+    "keys": [
+      "axis0",
+      "axis1",
+      "block0_items",
+      "block0_values"
+    ]
+  },
+  "connectivity/condensed/edge_indices/axis0": {
+    "shape": [
+      2
+    ],
+    "dtype": "|S3",
+    "first_5": [
+      "b'row'",
+      "b'col'"
+    ]
+  },
+  "connectivity/condensed/edge_indices/axis1": {
+    "shape": [
+      9005438
+    ],
+    "dtype": "int64",
+    "first_5": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ]
+  },
+  "connectivity/condensed/edge_indices/block0_items": {
+    "shape": [
+      2
+    ],
+    "dtype": "|S3",
+    "first_5": [
+      "b'row'",
+      "b'col'"
+    ]
+  },
+  "connectivity/condensed/edge_indices/block0_values": {
+    "shape": [
+      9005438,
+      2
+    ],
+    "dtype": "int64",
+    "first_5": [
+      [
+        0,
+        5
+      ],
+      [
+        0,
+        16
+      ],
+      [
+        0,
+        45
+      ],
+      [
+        0,
+        65
+      ],
+      [
+        0,
+        78
+      ]
+    ]
+  },
+  "connectivity/condensed/edges": {
+    "type": "group",
+    "keys": [
+      "axis0",
+      "axis1",
+      "block0_items",
+      "block0_values",
+      "block1_items",
+      "block1_values"
+    ]
+  },
+  "connectivity/condensed/edges/axis0": {
+    "shape": [
+      3
+    ],
+    "dtype": "|S10",
+    "first_5": [
+      "b'count'",
+      "b'total_size'",
+      "b'mean_size'"
+    ]
+  },
+  "connectivity/condensed/edges/axis1": {
+    "shape": [
+      9005438
+    ],
+    "dtype": "int64",
+    "first_5": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ]
+  },
+  "connectivity/condensed/edges/block0_items": {
+    "shape": [
+      2
+    ],
+    "dtype": "|S10",
+    "first_5": [
+      "b'count'",
+      "b'total_size'"
+    ]
+  },
+  "connectivity/condensed/edges/block0_values": {
+    "shape": [
+      9005438,
+      2
+    ],
+    "dtype": "int64",
+    "first_5": [
+      [
+        1,
+        2860
+      ],
+      [
+        2,
+        2816
+      ],
+      [
+        1,
+        28076
+      ],
+      [
+        1,
+        252
+      ],
+      [
+        1,
+        1204
+      ]
+    ]
+  },
+  "connectivity/condensed/edges/block1_items": {
+    "shape": [
+      1
+    ],
+    "dtype": "|S9",
+    "first_5": [
+      "b'mean_size'"
+    ]
+  },
+  "connectivity/condensed/edges/block1_values": {
+    "shape": [
+      9005438,
+      1
+    ],
+    "dtype": "float64",
+    "first_5": [
+      [
+        2860.0
+      ],
+      [
+        1408.0
+      ],
+      [
+        28076.0
+      ],
+      [
+        252.0
+      ],
+      [
+        1204.0
+      ]
+    ]
+  },
+  "connectivity/condensed/vertex_properties": {
+    "type": "group",
+    "keys": [
+      "_i_table",
+      "table"
+    ]
+  },
+  "connectivity/condensed/vertex_properties/_i_table": {
+    "type": "group",
+    "keys": [
+      "index"
+    ]
+  },
+  "connectivity/condensed/vertex_properties/_i_table/index": {
+    "type": "group",
+    "keys": [
+      "abounds",
+      "bounds",
+      "indices",
+      "indicesLR",
+      "mbounds",
+      "mranges",
+      "ranges",
+      "sorted",
+      "sortedLR",
+      "zbounds"
+    ]
+  },
+  "connectivity/condensed/vertex_properties/_i_table/index/abounds": {
+    "shape": [
+      0
+    ],
+    "dtype": "int64",
+    "first_5": null
+  },
+  "connectivity/condensed/vertex_properties/_i_table/index/bounds": {
+    "shape": [
+      0,
+      127
+    ],
+    "dtype": "int64",
+    "first_5": null
+  },
+  "connectivity/condensed/vertex_properties/_i_table/index/indices": {
+    "shape": [
+      0,
+      131072
+    ],
+    "dtype": "uint32",
+    "first_5": null
+  },
+  "connectivity/condensed/vertex_properties/_i_table/index/indicesLR": {
+    "shape": [
+      131072
+    ],
+    "dtype": "uint32",
+    "first_5": [
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "connectivity/condensed/vertex_properties/_i_table/index/mbounds": {
+    "shape": [
+      0
+    ],
+    "dtype": "int64",
+    "first_5": null
+  },
+  "connectivity/condensed/vertex_properties/_i_table/index/mranges": {
+    "shape": [
+      0
+    ],
+    "dtype": "int64",
+    "first_5": null
+  },
+  "connectivity/condensed/vertex_properties/_i_table/index/ranges": {
+    "shape": [
+      0,
+      2
+    ],
+    "dtype": "int64",
+    "first_5": null
+  },
+  "connectivity/condensed/vertex_properties/_i_table/index/sorted": {
+    "shape": [
+      0,
+      131072
+    ],
+    "dtype": "int64",
+    "first_5": null
+  },
+  "connectivity/condensed/vertex_properties/_i_table/index/sortedLR": {
+    "shape": [
+      131201
+    ],
+    "dtype": "int64",
+    "first_5": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ]
+  },
+  "connectivity/condensed/vertex_properties/_i_table/index/zbounds": {
+    "shape": [
+      0
+    ],
+    "dtype": "int64",
+    "first_5": null
+  },
+  "connectivity/condensed/vertex_properties/table": {
+    "shape": [
+      71981
+    ],
+    "dtype": "[('index', '<i8'), ('values_block_0', '<i8', (7,)), ('values_block_1', '<f8', (1,)), ('values_block_2', 'S23', (7,))]",
+    "first_5": [
+      [
+        0,
+        "[864691135942396020 104717762642854576              48076\n             488490            1162112             514240\n             696600]",
+        "[266.31094272]",
+        "[b't' b'excitatory_neuron' b'L3a' b'empty' b'empty' b'empty' b'empty']"
+      ],
+      [
+        1,
+        "[864691135491877727 104647600057561646              48075\n             488489            1161280             520576\n             711880]",
+        "[322.12779008]",
+        "[b't' b'excitatory_neuron' b'L3a' b'empty' b'empty' b'empty' b'empty']"
+      ],
+      [
+        2,
+        "[864691135616757865 105211512016700017              48082\n             488503            1175808             548416\n             695920]",
+        "[207.27365632]",
+        "[b't' b'excitatory_neuron' b'L3b' b'empty' b'empty' b'empty' b'empty']"
+      ],
+      [
+        3,
+        "[864691135938484021 104647325246366698              48074\n             488488            1159552             510848\n             718000]",
+        "[300.7307776]",
+        "[b't' b'excitatory_neuron' b'L3a' b'empty' b'empty' b'empty' b'empty']"
+      ],
+      [
+        4,
+        "[864691136089803319 104860355557677472              48077\n             488493            1167232             568448\n             716400]",
+        "[213.87493376]",
+        "[b't' b'excitatory_neuron' b'L4b' b'empty' b'empty' b'empty' b'empty']"
+      ]
+    ]
+  },
+  "connectivity/full": {
+    "type": "group",
+    "keys": [
+      "edge_indices",
+      "edges",
+      "vertex_properties"
+    ]
+  },
+  "connectivity/full/edge_indices": {
+    "type": "group",
+    "keys": [
+      "axis0",
+      "axis1",
+      "block0_items",
+      "block0_values"
+    ]
+  },
+  "connectivity/full/edge_indices/axis0": {
+    "shape": [
+      2
+    ],
+    "dtype": "|S3",
+    "first_5": [
+      "b'row'",
+      "b'col'"
+    ]
+  },
+  "connectivity/full/edge_indices/axis1": {
+    "shape": [
+      13500999
+    ],
+    "dtype": "int64",
+    "first_5": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ]
+  },
+  "connectivity/full/edge_indices/block0_items": {
+    "shape": [
+      2
+    ],
+    "dtype": "|S3",
+    "first_5": [
+      "b'row'",
+      "b'col'"
+    ]
+  },
+  "connectivity/full/edge_indices/block0_values": {
+    "shape": [
+      13500999,
+      2
+    ],
+    "dtype": "int64",
+    "first_5": [
+      [
+        10397,
+        127
+      ],
+      [
+        13780,
+        172
+      ],
+      [
+        6228,
+        65
+      ],
+      [
+        15440,
+        74
+      ],
+      [
+        15404,
+        0
+      ]
+    ]
+  },
+  "connectivity/full/edges": {
+    "type": "group",
+    "keys": [
+      "axis0",
+      "axis1",
+      "block0_items",
+      "block0_values",
+      "block1_items",
+      "block1_values",
+      "block2_items",
+      "block2_values"
+    ]
+  },
+  "connectivity/full/edges/axis0": {
+    "shape": [
+      10
+    ],
+    "dtype": "|S14",
+    "first_5": [
+      "b'size'",
+      "b'id'",
+      "b'x_nm'",
+      "b'y_nm'",
+      "b'z_nm'"
+    ]
+  },
+  "connectivity/full/edges/axis1": {
+    "shape": [
+      13500999
+    ],
+    "dtype": "int64",
+    "first_5": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ]
+  },
+  "connectivity/full/edges/block0_items": {
+    "shape": [
+      8
+    ],
+    "dtype": "|S10",
+    "first_5": [
+      "b'size'",
+      "b'id'",
+      "b'x_nm'",
+      "b'y_nm'",
+      "b'z_nm'"
+    ]
+  },
+  "connectivity/full/edges/block0_values": {
+    "shape": [
+      13500999,
+      8
+    ],
+    "dtype": "int64",
+    "first_5": [
+      [
+        2532,
+        318394680,
+        1093664,
+        581360,
+        680120,
+        -22048,
+        25968,
+        -77160
+      ],
+      [
+        2984,
+        362499219,
+        1204952,
+        482600,
+        1079760,
+        33560,
+        1320,
+        38760
+      ],
+      [
+        1564,
+        358449247,
+        1181456,
+        592264,
+        724600,
+        30928,
+        49928,
+        -40200
+      ],
+      [
+        9572,
+        318394914,
+        1094768,
+        571240,
+        682360,
+        -47056,
+        -1432,
+        -72640
+      ],
+      [
+        2528,
+        305500688,
+        1053536,
+        523640,
+        669360,
+        -108576,
+        9400,
+        -27240
+      ]
+    ]
+  },
+  "connectivity/full/edges/block1_items": {
+    "shape": [
+      1
+    ],
+    "dtype": "|S14",
+    "first_5": [
+      "b'soma_offset_um'"
+    ]
+  },
+  "connectivity/full/edges/block1_values": {
+    "shape": [
+      13500999,
+      1
+    ],
+    "dtype": "float64",
+    "first_5": [
+      [
+        84.34522468996096
+      ],
+      [
+        51.28697300484792
+      ],
+      [
+        71.17152779026175
+      ],
+      [
+        86.56146579165582
+      ],
+      [
+        112.33488049577478
+      ]
+    ]
+  },
+  "connectivity/full/edges/block2_items": {
+    "shape": [
+      1
+    ],
+    "dtype": "|S4",
+    "first_5": [
+      "b'data'"
+    ]
+  },
+  "connectivity/full/edges/block2_values": {
+    "shape": [
+      13500999,
+      1
+    ],
+    "dtype": "uint8",
+    "first_5": [
+      [
+        1
+      ],
+      [
+        1
+      ],
+      [
+        1
+      ],
+      [
+        1
+      ],
+      [
+        1
+      ]
+    ]
+  },
+  "connectivity/full/vertex_properties": {
+    "type": "group",
+    "keys": [
+      "_i_table",
+      "table"
+    ]
+  },
+  "connectivity/full/vertex_properties/_i_table": {
+    "type": "group",
+    "keys": [
+      "index"
+    ]
+  },
+  "connectivity/full/vertex_properties/_i_table/index": {
+    "type": "group",
+    "keys": [
+      "abounds",
+      "bounds",
+      "indices",
+      "indicesLR",
+      "mbounds",
+      "mranges",
+      "ranges",
+      "sorted",
+      "sortedLR",
+      "zbounds"
+    ]
+  },
+  "connectivity/full/vertex_properties/_i_table/index/abounds": {
+    "shape": [
+      0
+    ],
+    "dtype": "int64",
+    "first_5": null
+  },
+  "connectivity/full/vertex_properties/_i_table/index/bounds": {
+    "shape": [
+      0,
+      127
+    ],
+    "dtype": "int64",
+    "first_5": null
+  },
+  "connectivity/full/vertex_properties/_i_table/index/indices": {
+    "shape": [
+      0,
+      131072
+    ],
+    "dtype": "uint32",
+    "first_5": null
+  },
+  "connectivity/full/vertex_properties/_i_table/index/indicesLR": {
+    "shape": [
+      131072
+    ],
+    "dtype": "uint32",
+    "first_5": [
+      0,
+      0,
+      0,
+      0,
+      0
+    ]
+  },
+  "connectivity/full/vertex_properties/_i_table/index/mbounds": {
+    "shape": [
+      0
+    ],
+    "dtype": "int64",
+    "first_5": null
+  },
+  "connectivity/full/vertex_properties/_i_table/index/mranges": {
+    "shape": [
+      0
+    ],
+    "dtype": "int64",
+    "first_5": null
+  },
+  "connectivity/full/vertex_properties/_i_table/index/ranges": {
+    "shape": [
+      0,
+      2
+    ],
+    "dtype": "int64",
+    "first_5": null
+  },
+  "connectivity/full/vertex_properties/_i_table/index/sorted": {
+    "shape": [
+      0,
+      131072
+    ],
+    "dtype": "int64",
+    "first_5": null
+  },
+  "connectivity/full/vertex_properties/_i_table/index/sortedLR": {
+    "shape": [
+      131201
+    ],
+    "dtype": "int64",
+    "first_5": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ]
+  },
+  "connectivity/full/vertex_properties/_i_table/index/zbounds": {
+    "shape": [
+      0
+    ],
+    "dtype": "int64",
+    "first_5": null
+  },
+  "connectivity/full/vertex_properties/table": {
+    "shape": [
+      71981
+    ],
+    "dtype": "[('index', '<i8'), ('values_block_0', '<i8', (7,)), ('values_block_1', '<f8', (1,)), ('values_block_2', 'S23', (7,))]",
+    "first_5": [
+      [
+        0,
+        "[864691135942396020 104717762642854576              48076\n             488490            1162112             514240\n             696600]",
+        "[266.31094272]",
+        "[b't' b'excitatory_neuron' b'L3a' b'empty' b'empty' b'empty' b'empty']"
+      ],
+      [
+        1,
+        "[864691135491877727 104647600057561646              48075\n             488489            1161280             520576\n             711880]",
+        "[322.12779008]",
+        "[b't' b'excitatory_neuron' b'L3a' b'empty' b'empty' b'empty' b'empty']"
+      ],
+      [
+        2,
+        "[864691135616757865 105211512016700017              48082\n             488503            1175808             548416\n             695920]",
+        "[207.27365632]",
+        "[b't' b'excitatory_neuron' b'L3b' b'empty' b'empty' b'empty' b'empty']"
+      ],
+      [
+        3,
+        "[864691135938484021 104647325246366698              48074\n             488488            1159552             510848\n             718000]",
+        "[300.7307776]",
+        "[b't' b'excitatory_neuron' b'L3a' b'empty' b'empty' b'empty' b'empty']"
+      ],
+      [
+        4,
+        "[864691136089803319 104860355557677472              48077\n             488493            1167232             568448\n             716400]",
+        "[213.87493376]",
+        "[b't' b'excitatory_neuron' b'L4b' b'empty' b'empty' b'empty' b'empty']"
+      ]
+    ]
+  }
+}

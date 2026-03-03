@@ -1,0 +1,1476 @@
+{
+  "sweep_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/sweep_runs/sweep_neurips_depth_scaling_v2_20260225184411",
+  "description": "Lognormal sigma (std of log(w)) for layer-0 weights after softplus + top-K masking, from depth_scaling_v2 sweep",
+  "branch_factor_options": [
+    [
+      9
+    ],
+    [
+      3,
+      3
+    ],
+    [
+      3,
+      3,
+      3
+    ],
+    [
+      3,
+      3,
+      3,
+      3
+    ]
+  ],
+  "strategy_options": [
+    "standard",
+    "local_ca"
+  ],
+  "core_type_options": [
+    "dendritic_shunting",
+    "dendritic_additive"
+  ],
+  "conditions": {
+    "standard_dendritic_shunting_[9]": {
+      "strategy": "standard",
+      "core_type": "dendritic_shunting",
+      "branch_factors": [
+        9
+      ],
+      "sigma_exc_mean": 1.0552823543548584,
+      "sigma_exc_std": 0.008993438532924029,
+      "sigma_exc_values": [
+        1.0614323616027832,
+        1.0452332496643066,
+        1.0439802408218384,
+        1.0662240982055664,
+        1.0595418214797974
+      ],
+      "n_seeds": 5,
+      "sigma_inh_mean": 0.6565190196037293,
+      "sigma_inh_std": 0.006520377426728713,
+      "sigma_inh_values": [
+        0.6552926301956177,
+        0.661467969417572,
+        0.6528651118278503,
+        0.6657913327217102,
+        0.647178053855896
+      ]
+    },
+    "standard_dendritic_additive_[9]": {
+      "strategy": "standard",
+      "core_type": "dendritic_additive",
+      "branch_factors": [
+        9
+      ],
+      "sigma_exc_mean": 1.3844134330749511,
+      "sigma_exc_std": 0.00902917432050219,
+      "sigma_exc_values": [
+        1.3852486610412598,
+        1.3702725172042847,
+        1.3802205324172974,
+        1.397422194480896,
+        1.388903260231018
+      ],
+      "n_seeds": 5,
+      "sigma_inh_mean": 0.7848107218742371,
+      "sigma_inh_std": 0.009062888646823246,
+      "sigma_inh_values": [
+        0.7739046216011047,
+        0.7881172299385071,
+        0.8005485534667969,
+        0.7808083891868591,
+        0.7806748151779175
+      ]
+    },
+    "local_ca_dendritic_shunting_[9]": {
+      "strategy": "local_ca",
+      "core_type": "dendritic_shunting",
+      "branch_factors": [
+        9
+      ],
+      "sigma_exc_mean": 1.1828507423400878,
+      "sigma_exc_std": 0.05086572368184177,
+      "sigma_exc_values": [
+        1.1908035278320312,
+        1.1218489408493042,
+        1.2301232814788818,
+        1.126999020576477,
+        1.2444789409637451
+      ],
+      "n_seeds": 5,
+      "sigma_inh_mean": 0.8308560848236084,
+      "sigma_inh_std": 0.028389026632414594,
+      "sigma_inh_values": [
+        0.8731298446655273,
+        0.8455037474632263,
+        0.8370158672332764,
+        0.7988168597221375,
+        0.7998141050338745
+      ]
+    },
+    "local_ca_dendritic_additive_[9]": {
+      "strategy": "local_ca",
+      "core_type": "dendritic_additive",
+      "branch_factors": [
+        9
+      ],
+      "sigma_exc_mean": 2.0083166360855103,
+      "sigma_exc_std": 0.21689051772354917,
+      "sigma_exc_values": [
+        2.0986061096191406,
+        2.3136682510375977,
+        2.0649852752685547,
+        1.6631821393966675,
+        1.9011414051055908
+      ],
+      "n_seeds": 5,
+      "sigma_inh_mean": 1.198554801940918,
+      "sigma_inh_std": 0.1009316478697218,
+      "sigma_inh_values": [
+        1.0324510335922241,
+        1.3347011804580688,
+        1.1709784269332886,
+        1.1927227973937988,
+        1.2619205713272095
+      ]
+    },
+    "standard_dendritic_shunting_[3, 3]": {
+      "strategy": "standard",
+      "core_type": "dendritic_shunting",
+      "branch_factors": [
+        3,
+        3
+      ],
+      "sigma_exc_mean": 0.9696074724197388,
+      "sigma_exc_std": 0.011182726184413742,
+      "sigma_exc_values": [
+        0.9852182865142822,
+        0.9785951972007751,
+        0.9534327387809753,
+        0.9667534828186035,
+        0.9640376567840576
+      ],
+      "n_seeds": 5,
+      "sigma_inh_mean": 0.6370537281036377,
+      "sigma_inh_std": 0.01386956638060243,
+      "sigma_inh_values": [
+        0.655107319355011,
+        0.6445517539978027,
+        0.6130254864692688,
+        0.6370519995689392,
+        0.6355320811271667
+      ]
+    },
+    "standard_dendritic_additive_[3, 3]": {
+      "strategy": "standard",
+      "core_type": "dendritic_additive",
+      "branch_factors": [
+        3,
+        3
+      ],
+      "sigma_exc_mean": 1.3009522914886475,
+      "sigma_exc_std": 0.012993946376907678,
+      "sigma_exc_values": [
+        1.3186824321746826,
+        1.3009010553359985,
+        1.3115708827972412,
+        1.2839118242263794,
+        1.2896952629089355
+      ],
+      "n_seeds": 5,
+      "sigma_inh_mean": 0.759986412525177,
+      "sigma_inh_std": 0.009451413586351968,
+      "sigma_inh_values": [
+        0.7604454755783081,
+        0.7726026177406311,
+        0.7433001399040222,
+        0.7628678679466248,
+        0.7607159614562988
+      ]
+    },
+    "local_ca_dendritic_shunting_[3, 3]": {
+      "strategy": "local_ca",
+      "core_type": "dendritic_shunting",
+      "branch_factors": [
+        3,
+        3
+      ],
+      "sigma_exc_mean": 1.2423710823059082,
+      "sigma_exc_std": 0.09253175459111544,
+      "sigma_exc_values": [
+        1.254564881324768,
+        1.1764848232269287,
+        1.185075283050537,
+        1.1777008771896362,
+        1.418029546737671
+      ],
+      "n_seeds": 5,
+      "sigma_inh_mean": 0.8495475292205811,
+      "sigma_inh_std": 0.022652511175394442,
+      "sigma_inh_values": [
+        0.8092755079269409,
+        0.8432117104530334,
+        0.8541550040245056,
+        0.8710266947746277,
+        0.8700687289237976
+      ]
+    },
+    "local_ca_dendritic_additive_[3, 3]": {
+      "strategy": "local_ca",
+      "core_type": "dendritic_additive",
+      "branch_factors": [
+        3,
+        3
+      ],
+      "sigma_exc_mean": 1.7954713344573974,
+      "sigma_exc_std": 0.24720900733291842,
+      "sigma_exc_values": [
+        1.7675505876541138,
+        1.3493667840957642,
+        1.8998613357543945,
+        1.8650496006011963,
+        2.0955283641815186
+      ],
+      "n_seeds": 5,
+      "sigma_inh_mean": 0.9821537971496582,
+      "sigma_inh_std": 0.09400626528390069,
+      "sigma_inh_values": [
+        1.0671600103378296,
+        0.8065767288208008,
+        0.9648422002792358,
+        1.0386953353881836,
+        1.0334947109222412
+      ]
+    },
+    "standard_dendritic_shunting_[3, 3, 3]": {
+      "strategy": "standard",
+      "core_type": "dendritic_shunting",
+      "branch_factors": [
+        3,
+        3,
+        3
+      ],
+      "sigma_exc_mean": 0.9590706706047059,
+      "sigma_exc_std": 0.009886525965376002,
+      "sigma_exc_values": [
+        0.9518258571624756,
+        0.9576510787010193,
+        0.9589418768882751,
+        0.977530300617218,
+        0.949404239654541
+      ],
+      "n_seeds": 5,
+      "sigma_inh_mean": 0.7175718903541565,
+      "sigma_inh_std": 0.017860016686792525,
+      "sigma_inh_values": [
+        0.7448011636734009,
+        0.7064837217330933,
+        0.7174910306930542,
+        0.6921989321708679,
+        0.7268846035003662
+      ]
+    },
+    "standard_dendritic_additive_[3, 3, 3]": {
+      "strategy": "standard",
+      "core_type": "dendritic_additive",
+      "branch_factors": [
+        3,
+        3,
+        3
+      ],
+      "sigma_exc_mean": 1.1125155210494995,
+      "sigma_exc_std": 0.008043528196280712,
+      "sigma_exc_values": [
+        1.100786805152893,
+        1.1069872379302979,
+        1.1217013597488403,
+        1.1209337711334229,
+        1.1121684312820435
+      ],
+      "n_seeds": 5,
+      "sigma_inh_mean": 0.8252975225448609,
+      "sigma_inh_std": 0.005421706323017912,
+      "sigma_inh_values": [
+        0.8296453356742859,
+        0.8242439031600952,
+        0.8174428343772888,
+        0.8223401308059692,
+        0.832815408706665
+      ]
+    },
+    "local_ca_dendritic_shunting_[3, 3, 3]": {
+      "strategy": "local_ca",
+      "core_type": "dendritic_shunting",
+      "branch_factors": [
+        3,
+        3,
+        3
+      ],
+      "sigma_exc_mean": 1.2898146867752076,
+      "sigma_exc_std": 0.11266588515254827,
+      "sigma_exc_values": [
+        1.4811335802078247,
+        1.2812490463256836,
+        1.1765130758285522,
+        1.3310582637786865,
+        1.1791194677352905
+      ],
+      "n_seeds": 5,
+      "sigma_inh_mean": 1.0383572578430176,
+      "sigma_inh_std": 0.04453280056314393,
+      "sigma_inh_values": [
+        1.0693141222000122,
+        1.039965271949768,
+        0.9527287483215332,
+        1.0752530097961426,
+        1.0545251369476318
+      ]
+    },
+    "local_ca_dendritic_additive_[3, 3, 3]": {
+      "strategy": "local_ca",
+      "core_type": "dendritic_additive",
+      "branch_factors": [
+        3,
+        3,
+        3
+      ],
+      "sigma_exc_mean": 2.0656313419342043,
+      "sigma_exc_std": 0.2589715511882662,
+      "sigma_exc_values": [
+        2.399618148803711,
+        1.620855450630188,
+        2.1556262969970703,
+        1.9821048974990845,
+        2.169951915740967
+      ],
+      "n_seeds": 5,
+      "sigma_inh_mean": 1.1296724319458007,
+      "sigma_inh_std": 0.08806111569994393,
+      "sigma_inh_values": [
+        1.1158097982406616,
+        0.9998008012771606,
+        1.2727569341659546,
+        1.1050814390182495,
+        1.1549131870269775
+      ]
+    },
+    "standard_dendritic_shunting_[3, 3, 3, 3]": {
+      "strategy": "standard",
+      "core_type": "dendritic_shunting",
+      "branch_factors": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "sigma_exc_mean": 0.9041477918624878,
+      "sigma_exc_std": 0.010743359560247918,
+      "sigma_exc_values": [
+        0.8887089490890503,
+        0.9061209559440613,
+        0.9143126606941223,
+        0.9164301156997681,
+        0.895166277885437
+      ],
+      "n_seeds": 5,
+      "sigma_inh_mean": 0.7887380361557007,
+      "sigma_inh_std": 0.010219995058732835,
+      "sigma_inh_values": [
+        0.8056929111480713,
+        0.7818756103515625,
+        0.7790511846542358,
+        0.7953822612762451,
+        0.7816882133483887
+      ]
+    },
+    "standard_dendritic_additive_[3, 3, 3, 3]": {
+      "strategy": "standard",
+      "core_type": "dendritic_additive",
+      "branch_factors": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "sigma_exc_mean": 0.7949355483055115,
+      "sigma_exc_std": 0.01727397477415883,
+      "sigma_exc_values": [
+        0.7706893086433411,
+        0.7779146432876587,
+        0.8071849346160889,
+        0.8047916293144226,
+        0.8140972256660461
+      ],
+      "n_seeds": 5,
+      "sigma_inh_mean": 0.7555951118469239,
+      "sigma_inh_std": 0.010505878813911861,
+      "sigma_inh_values": [
+        0.7618464231491089,
+        0.7351865768432617,
+        0.7624541521072388,
+        0.7626059055328369,
+        0.7558825016021729
+      ]
+    },
+    "local_ca_dendritic_shunting_[3, 3, 3, 3]": {
+      "strategy": "local_ca",
+      "core_type": "dendritic_shunting",
+      "branch_factors": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "sigma_exc_mean": 1.330592727661133,
+      "sigma_exc_std": 0.20022170411773157,
+      "sigma_exc_values": [
+        1.2290756702423096,
+        1.4800478219985962,
+        1.6045974493026733,
+        1.3126230239868164,
+        1.0266196727752686
+      ],
+      "n_seeds": 5,
+      "sigma_inh_mean": 1.183675503730774,
+      "sigma_inh_std": 0.0700151794989975,
+      "sigma_inh_values": [
+        1.0674570798873901,
+        1.2498472929000854,
+        1.2427784204483032,
+        1.1398342847824097,
+        1.2184604406356812
+      ]
+    },
+    "local_ca_dendritic_additive_[3, 3, 3, 3]": {
+      "strategy": "local_ca",
+      "core_type": "dendritic_additive",
+      "branch_factors": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "sigma_exc_mean": 2.4405752182006837,
+      "sigma_exc_std": 0.13243098512299722,
+      "sigma_exc_values": [
+        2.2608747482299805,
+        2.5889711380004883,
+        2.594564437866211,
+        2.34653902053833,
+        2.411926746368408
+      ],
+      "n_seeds": 5,
+      "sigma_inh_mean": 1.4224066972732543,
+      "sigma_inh_std": 0.13096028673980717,
+      "sigma_inh_values": [
+        1.5351332426071167,
+        1.5490559339523315,
+        1.4734851121902466,
+        1.3553296327590942,
+        1.199029564857483
+      ]
+    }
+  },
+  "per_model_results": [
+    {
+      "config_idx": 0,
+      "strategy": "standard",
+      "core_type": "dendritic_shunting",
+      "branch_factors": [
+        9
+      ],
+      "seed": 42,
+      "sigma_exc": 1.0614323616027832,
+      "sigma_inh": 0.6552926301956177
+    },
+    {
+      "config_idx": 1,
+      "strategy": "standard",
+      "core_type": "dendritic_shunting",
+      "branch_factors": [
+        9
+      ],
+      "seed": 43,
+      "sigma_exc": 1.0452332496643066,
+      "sigma_inh": 0.661467969417572
+    },
+    {
+      "config_idx": 2,
+      "strategy": "standard",
+      "core_type": "dendritic_shunting",
+      "branch_factors": [
+        9
+      ],
+      "seed": 44,
+      "sigma_exc": 1.0439802408218384,
+      "sigma_inh": 0.6528651118278503
+    },
+    {
+      "config_idx": 3,
+      "strategy": "standard",
+      "core_type": "dendritic_shunting",
+      "branch_factors": [
+        9
+      ],
+      "seed": 45,
+      "sigma_exc": 1.0662240982055664,
+      "sigma_inh": 0.6657913327217102
+    },
+    {
+      "config_idx": 4,
+      "strategy": "standard",
+      "core_type": "dendritic_shunting",
+      "branch_factors": [
+        9
+      ],
+      "seed": 46,
+      "sigma_exc": 1.0595418214797974,
+      "sigma_inh": 0.647178053855896
+    },
+    {
+      "config_idx": 5,
+      "strategy": "standard",
+      "core_type": "dendritic_shunting",
+      "branch_factors": [
+        3,
+        3
+      ],
+      "seed": 42,
+      "sigma_exc": 0.9852182865142822,
+      "sigma_inh": 0.655107319355011
+    },
+    {
+      "config_idx": 6,
+      "strategy": "standard",
+      "core_type": "dendritic_shunting",
+      "branch_factors": [
+        3,
+        3
+      ],
+      "seed": 43,
+      "sigma_exc": 0.9785951972007751,
+      "sigma_inh": 0.6445517539978027
+    },
+    {
+      "config_idx": 7,
+      "strategy": "standard",
+      "core_type": "dendritic_shunting",
+      "branch_factors": [
+        3,
+        3
+      ],
+      "seed": 44,
+      "sigma_exc": 0.9534327387809753,
+      "sigma_inh": 0.6130254864692688
+    },
+    {
+      "config_idx": 8,
+      "strategy": "standard",
+      "core_type": "dendritic_shunting",
+      "branch_factors": [
+        3,
+        3
+      ],
+      "seed": 45,
+      "sigma_exc": 0.9667534828186035,
+      "sigma_inh": 0.6370519995689392
+    },
+    {
+      "config_idx": 9,
+      "strategy": "standard",
+      "core_type": "dendritic_shunting",
+      "branch_factors": [
+        3,
+        3
+      ],
+      "seed": 46,
+      "sigma_exc": 0.9640376567840576,
+      "sigma_inh": 0.6355320811271667
+    },
+    {
+      "config_idx": 10,
+      "strategy": "standard",
+      "core_type": "dendritic_shunting",
+      "branch_factors": [
+        3,
+        3,
+        3
+      ],
+      "seed": 42,
+      "sigma_exc": 0.9518258571624756,
+      "sigma_inh": 0.7448011636734009
+    },
+    {
+      "config_idx": 11,
+      "strategy": "standard",
+      "core_type": "dendritic_shunting",
+      "branch_factors": [
+        3,
+        3,
+        3
+      ],
+      "seed": 43,
+      "sigma_exc": 0.9576510787010193,
+      "sigma_inh": 0.7064837217330933
+    },
+    {
+      "config_idx": 12,
+      "strategy": "standard",
+      "core_type": "dendritic_shunting",
+      "branch_factors": [
+        3,
+        3,
+        3
+      ],
+      "seed": 44,
+      "sigma_exc": 0.9589418768882751,
+      "sigma_inh": 0.7174910306930542
+    },
+    {
+      "config_idx": 13,
+      "strategy": "standard",
+      "core_type": "dendritic_shunting",
+      "branch_factors": [
+        3,
+        3,
+        3
+      ],
+      "seed": 45,
+      "sigma_exc": 0.977530300617218,
+      "sigma_inh": 0.6921989321708679
+    },
+    {
+      "config_idx": 14,
+      "strategy": "standard",
+      "core_type": "dendritic_shunting",
+      "branch_factors": [
+        3,
+        3,
+        3
+      ],
+      "seed": 46,
+      "sigma_exc": 0.949404239654541,
+      "sigma_inh": 0.7268846035003662
+    },
+    {
+      "config_idx": 15,
+      "strategy": "standard",
+      "core_type": "dendritic_shunting",
+      "branch_factors": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "seed": 42,
+      "sigma_exc": 0.8887089490890503,
+      "sigma_inh": 0.8056929111480713
+    },
+    {
+      "config_idx": 16,
+      "strategy": "standard",
+      "core_type": "dendritic_shunting",
+      "branch_factors": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "seed": 43,
+      "sigma_exc": 0.9061209559440613,
+      "sigma_inh": 0.7818756103515625
+    },
+    {
+      "config_idx": 17,
+      "strategy": "standard",
+      "core_type": "dendritic_shunting",
+      "branch_factors": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "seed": 44,
+      "sigma_exc": 0.9143126606941223,
+      "sigma_inh": 0.7790511846542358
+    },
+    {
+      "config_idx": 18,
+      "strategy": "standard",
+      "core_type": "dendritic_shunting",
+      "branch_factors": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "seed": 45,
+      "sigma_exc": 0.9164301156997681,
+      "sigma_inh": 0.7953822612762451
+    },
+    {
+      "config_idx": 19,
+      "strategy": "standard",
+      "core_type": "dendritic_shunting",
+      "branch_factors": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "seed": 46,
+      "sigma_exc": 0.895166277885437,
+      "sigma_inh": 0.7816882133483887
+    },
+    {
+      "config_idx": 20,
+      "strategy": "local_ca",
+      "core_type": "dendritic_shunting",
+      "branch_factors": [
+        9
+      ],
+      "seed": 42,
+      "sigma_exc": 1.1908035278320312,
+      "sigma_inh": 0.8731298446655273
+    },
+    {
+      "config_idx": 21,
+      "strategy": "local_ca",
+      "core_type": "dendritic_shunting",
+      "branch_factors": [
+        9
+      ],
+      "seed": 43,
+      "sigma_exc": 1.1218489408493042,
+      "sigma_inh": 0.8455037474632263
+    },
+    {
+      "config_idx": 22,
+      "strategy": "local_ca",
+      "core_type": "dendritic_shunting",
+      "branch_factors": [
+        9
+      ],
+      "seed": 44,
+      "sigma_exc": 1.2301232814788818,
+      "sigma_inh": 0.8370158672332764
+    },
+    {
+      "config_idx": 23,
+      "strategy": "local_ca",
+      "core_type": "dendritic_shunting",
+      "branch_factors": [
+        9
+      ],
+      "seed": 45,
+      "sigma_exc": 1.126999020576477,
+      "sigma_inh": 0.7988168597221375
+    },
+    {
+      "config_idx": 24,
+      "strategy": "local_ca",
+      "core_type": "dendritic_shunting",
+      "branch_factors": [
+        9
+      ],
+      "seed": 46,
+      "sigma_exc": 1.2444789409637451,
+      "sigma_inh": 0.7998141050338745
+    },
+    {
+      "config_idx": 25,
+      "strategy": "local_ca",
+      "core_type": "dendritic_shunting",
+      "branch_factors": [
+        3,
+        3
+      ],
+      "seed": 42,
+      "sigma_exc": 1.254564881324768,
+      "sigma_inh": 0.8092755079269409
+    },
+    {
+      "config_idx": 26,
+      "strategy": "local_ca",
+      "core_type": "dendritic_shunting",
+      "branch_factors": [
+        3,
+        3
+      ],
+      "seed": 43,
+      "sigma_exc": 1.1764848232269287,
+      "sigma_inh": 0.8432117104530334
+    },
+    {
+      "config_idx": 27,
+      "strategy": "local_ca",
+      "core_type": "dendritic_shunting",
+      "branch_factors": [
+        3,
+        3
+      ],
+      "seed": 44,
+      "sigma_exc": 1.185075283050537,
+      "sigma_inh": 0.8541550040245056
+    },
+    {
+      "config_idx": 28,
+      "strategy": "local_ca",
+      "core_type": "dendritic_shunting",
+      "branch_factors": [
+        3,
+        3
+      ],
+      "seed": 45,
+      "sigma_exc": 1.1777008771896362,
+      "sigma_inh": 0.8710266947746277
+    },
+    {
+      "config_idx": 29,
+      "strategy": "local_ca",
+      "core_type": "dendritic_shunting",
+      "branch_factors": [
+        3,
+        3
+      ],
+      "seed": 46,
+      "sigma_exc": 1.418029546737671,
+      "sigma_inh": 0.8700687289237976
+    },
+    {
+      "config_idx": 30,
+      "strategy": "local_ca",
+      "core_type": "dendritic_shunting",
+      "branch_factors": [
+        3,
+        3,
+        3
+      ],
+      "seed": 42,
+      "sigma_exc": 1.4811335802078247,
+      "sigma_inh": 1.0693141222000122
+    },
+    {
+      "config_idx": 31,
+      "strategy": "local_ca",
+      "core_type": "dendritic_shunting",
+      "branch_factors": [
+        3,
+        3,
+        3
+      ],
+      "seed": 43,
+      "sigma_exc": 1.2812490463256836,
+      "sigma_inh": 1.039965271949768
+    },
+    {
+      "config_idx": 32,
+      "strategy": "local_ca",
+      "core_type": "dendritic_shunting",
+      "branch_factors": [
+        3,
+        3,
+        3
+      ],
+      "seed": 44,
+      "sigma_exc": 1.1765130758285522,
+      "sigma_inh": 0.9527287483215332
+    },
+    {
+      "config_idx": 33,
+      "strategy": "local_ca",
+      "core_type": "dendritic_shunting",
+      "branch_factors": [
+        3,
+        3,
+        3
+      ],
+      "seed": 45,
+      "sigma_exc": 1.3310582637786865,
+      "sigma_inh": 1.0752530097961426
+    },
+    {
+      "config_idx": 34,
+      "strategy": "local_ca",
+      "core_type": "dendritic_shunting",
+      "branch_factors": [
+        3,
+        3,
+        3
+      ],
+      "seed": 46,
+      "sigma_exc": 1.1791194677352905,
+      "sigma_inh": 1.0545251369476318
+    },
+    {
+      "config_idx": 35,
+      "strategy": "local_ca",
+      "core_type": "dendritic_shunting",
+      "branch_factors": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "seed": 42,
+      "sigma_exc": 1.2290756702423096,
+      "sigma_inh": 1.0674570798873901
+    },
+    {
+      "config_idx": 36,
+      "strategy": "local_ca",
+      "core_type": "dendritic_shunting",
+      "branch_factors": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "seed": 43,
+      "sigma_exc": 1.4800478219985962,
+      "sigma_inh": 1.2498472929000854
+    },
+    {
+      "config_idx": 37,
+      "strategy": "local_ca",
+      "core_type": "dendritic_shunting",
+      "branch_factors": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "seed": 44,
+      "sigma_exc": 1.6045974493026733,
+      "sigma_inh": 1.2427784204483032
+    },
+    {
+      "config_idx": 38,
+      "strategy": "local_ca",
+      "core_type": "dendritic_shunting",
+      "branch_factors": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "seed": 45,
+      "sigma_exc": 1.3126230239868164,
+      "sigma_inh": 1.1398342847824097
+    },
+    {
+      "config_idx": 39,
+      "strategy": "local_ca",
+      "core_type": "dendritic_shunting",
+      "branch_factors": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "seed": 46,
+      "sigma_exc": 1.0266196727752686,
+      "sigma_inh": 1.2184604406356812
+    },
+    {
+      "config_idx": 40,
+      "strategy": "standard",
+      "core_type": "dendritic_additive",
+      "branch_factors": [
+        9
+      ],
+      "seed": 42,
+      "sigma_exc": 1.3852486610412598,
+      "sigma_inh": 0.7739046216011047
+    },
+    {
+      "config_idx": 41,
+      "strategy": "standard",
+      "core_type": "dendritic_additive",
+      "branch_factors": [
+        9
+      ],
+      "seed": 43,
+      "sigma_exc": 1.3702725172042847,
+      "sigma_inh": 0.7881172299385071
+    },
+    {
+      "config_idx": 42,
+      "strategy": "standard",
+      "core_type": "dendritic_additive",
+      "branch_factors": [
+        9
+      ],
+      "seed": 44,
+      "sigma_exc": 1.3802205324172974,
+      "sigma_inh": 0.8005485534667969
+    },
+    {
+      "config_idx": 43,
+      "strategy": "standard",
+      "core_type": "dendritic_additive",
+      "branch_factors": [
+        9
+      ],
+      "seed": 45,
+      "sigma_exc": 1.397422194480896,
+      "sigma_inh": 0.7808083891868591
+    },
+    {
+      "config_idx": 44,
+      "strategy": "standard",
+      "core_type": "dendritic_additive",
+      "branch_factors": [
+        9
+      ],
+      "seed": 46,
+      "sigma_exc": 1.388903260231018,
+      "sigma_inh": 0.7806748151779175
+    },
+    {
+      "config_idx": 45,
+      "strategy": "standard",
+      "core_type": "dendritic_additive",
+      "branch_factors": [
+        3,
+        3
+      ],
+      "seed": 42,
+      "sigma_exc": 1.3186824321746826,
+      "sigma_inh": 0.7604454755783081
+    },
+    {
+      "config_idx": 46,
+      "strategy": "standard",
+      "core_type": "dendritic_additive",
+      "branch_factors": [
+        3,
+        3
+      ],
+      "seed": 43,
+      "sigma_exc": 1.3009010553359985,
+      "sigma_inh": 0.7726026177406311
+    },
+    {
+      "config_idx": 47,
+      "strategy": "standard",
+      "core_type": "dendritic_additive",
+      "branch_factors": [
+        3,
+        3
+      ],
+      "seed": 44,
+      "sigma_exc": 1.3115708827972412,
+      "sigma_inh": 0.7433001399040222
+    },
+    {
+      "config_idx": 48,
+      "strategy": "standard",
+      "core_type": "dendritic_additive",
+      "branch_factors": [
+        3,
+        3
+      ],
+      "seed": 45,
+      "sigma_exc": 1.2839118242263794,
+      "sigma_inh": 0.7628678679466248
+    },
+    {
+      "config_idx": 49,
+      "strategy": "standard",
+      "core_type": "dendritic_additive",
+      "branch_factors": [
+        3,
+        3
+      ],
+      "seed": 46,
+      "sigma_exc": 1.2896952629089355,
+      "sigma_inh": 0.7607159614562988
+    },
+    {
+      "config_idx": 50,
+      "strategy": "standard",
+      "core_type": "dendritic_additive",
+      "branch_factors": [
+        3,
+        3,
+        3
+      ],
+      "seed": 42,
+      "sigma_exc": 1.100786805152893,
+      "sigma_inh": 0.8296453356742859
+    },
+    {
+      "config_idx": 51,
+      "strategy": "standard",
+      "core_type": "dendritic_additive",
+      "branch_factors": [
+        3,
+        3,
+        3
+      ],
+      "seed": 43,
+      "sigma_exc": 1.1069872379302979,
+      "sigma_inh": 0.8242439031600952
+    },
+    {
+      "config_idx": 52,
+      "strategy": "standard",
+      "core_type": "dendritic_additive",
+      "branch_factors": [
+        3,
+        3,
+        3
+      ],
+      "seed": 44,
+      "sigma_exc": 1.1217013597488403,
+      "sigma_inh": 0.8174428343772888
+    },
+    {
+      "config_idx": 53,
+      "strategy": "standard",
+      "core_type": "dendritic_additive",
+      "branch_factors": [
+        3,
+        3,
+        3
+      ],
+      "seed": 45,
+      "sigma_exc": 1.1209337711334229,
+      "sigma_inh": 0.8223401308059692
+    },
+    {
+      "config_idx": 54,
+      "strategy": "standard",
+      "core_type": "dendritic_additive",
+      "branch_factors": [
+        3,
+        3,
+        3
+      ],
+      "seed": 46,
+      "sigma_exc": 1.1121684312820435,
+      "sigma_inh": 0.832815408706665
+    },
+    {
+      "config_idx": 55,
+      "strategy": "standard",
+      "core_type": "dendritic_additive",
+      "branch_factors": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "seed": 42,
+      "sigma_exc": 0.7706893086433411,
+      "sigma_inh": 0.7618464231491089
+    },
+    {
+      "config_idx": 56,
+      "strategy": "standard",
+      "core_type": "dendritic_additive",
+      "branch_factors": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "seed": 43,
+      "sigma_exc": 0.7779146432876587,
+      "sigma_inh": 0.7351865768432617
+    },
+    {
+      "config_idx": 57,
+      "strategy": "standard",
+      "core_type": "dendritic_additive",
+      "branch_factors": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "seed": 44,
+      "sigma_exc": 0.8071849346160889,
+      "sigma_inh": 0.7624541521072388
+    },
+    {
+      "config_idx": 58,
+      "strategy": "standard",
+      "core_type": "dendritic_additive",
+      "branch_factors": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "seed": 45,
+      "sigma_exc": 0.8047916293144226,
+      "sigma_inh": 0.7626059055328369
+    },
+    {
+      "config_idx": 59,
+      "strategy": "standard",
+      "core_type": "dendritic_additive",
+      "branch_factors": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "seed": 46,
+      "sigma_exc": 0.8140972256660461,
+      "sigma_inh": 0.7558825016021729
+    },
+    {
+      "config_idx": 60,
+      "strategy": "local_ca",
+      "core_type": "dendritic_additive",
+      "branch_factors": [
+        9
+      ],
+      "seed": 42,
+      "sigma_exc": 2.0986061096191406,
+      "sigma_inh": 1.0324510335922241
+    },
+    {
+      "config_idx": 61,
+      "strategy": "local_ca",
+      "core_type": "dendritic_additive",
+      "branch_factors": [
+        9
+      ],
+      "seed": 43,
+      "sigma_exc": 2.3136682510375977,
+      "sigma_inh": 1.3347011804580688
+    },
+    {
+      "config_idx": 62,
+      "strategy": "local_ca",
+      "core_type": "dendritic_additive",
+      "branch_factors": [
+        9
+      ],
+      "seed": 44,
+      "sigma_exc": 2.0649852752685547,
+      "sigma_inh": 1.1709784269332886
+    },
+    {
+      "config_idx": 63,
+      "strategy": "local_ca",
+      "core_type": "dendritic_additive",
+      "branch_factors": [
+        9
+      ],
+      "seed": 45,
+      "sigma_exc": 1.6631821393966675,
+      "sigma_inh": 1.1927227973937988
+    },
+    {
+      "config_idx": 64,
+      "strategy": "local_ca",
+      "core_type": "dendritic_additive",
+      "branch_factors": [
+        9
+      ],
+      "seed": 46,
+      "sigma_exc": 1.9011414051055908,
+      "sigma_inh": 1.2619205713272095
+    },
+    {
+      "config_idx": 65,
+      "strategy": "local_ca",
+      "core_type": "dendritic_additive",
+      "branch_factors": [
+        3,
+        3
+      ],
+      "seed": 42,
+      "sigma_exc": 1.7675505876541138,
+      "sigma_inh": 1.0671600103378296
+    },
+    {
+      "config_idx": 66,
+      "strategy": "local_ca",
+      "core_type": "dendritic_additive",
+      "branch_factors": [
+        3,
+        3
+      ],
+      "seed": 43,
+      "sigma_exc": 1.3493667840957642,
+      "sigma_inh": 0.8065767288208008
+    },
+    {
+      "config_idx": 67,
+      "strategy": "local_ca",
+      "core_type": "dendritic_additive",
+      "branch_factors": [
+        3,
+        3
+      ],
+      "seed": 44,
+      "sigma_exc": 1.8998613357543945,
+      "sigma_inh": 0.9648422002792358
+    },
+    {
+      "config_idx": 68,
+      "strategy": "local_ca",
+      "core_type": "dendritic_additive",
+      "branch_factors": [
+        3,
+        3
+      ],
+      "seed": 45,
+      "sigma_exc": 1.8650496006011963,
+      "sigma_inh": 1.0386953353881836
+    },
+    {
+      "config_idx": 69,
+      "strategy": "local_ca",
+      "core_type": "dendritic_additive",
+      "branch_factors": [
+        3,
+        3
+      ],
+      "seed": 46,
+      "sigma_exc": 2.0955283641815186,
+      "sigma_inh": 1.0334947109222412
+    },
+    {
+      "config_idx": 70,
+      "strategy": "local_ca",
+      "core_type": "dendritic_additive",
+      "branch_factors": [
+        3,
+        3,
+        3
+      ],
+      "seed": 42,
+      "sigma_exc": 2.399618148803711,
+      "sigma_inh": 1.1158097982406616
+    },
+    {
+      "config_idx": 71,
+      "strategy": "local_ca",
+      "core_type": "dendritic_additive",
+      "branch_factors": [
+        3,
+        3,
+        3
+      ],
+      "seed": 43,
+      "sigma_exc": 1.620855450630188,
+      "sigma_inh": 0.9998008012771606
+    },
+    {
+      "config_idx": 72,
+      "strategy": "local_ca",
+      "core_type": "dendritic_additive",
+      "branch_factors": [
+        3,
+        3,
+        3
+      ],
+      "seed": 44,
+      "sigma_exc": 2.1556262969970703,
+      "sigma_inh": 1.2727569341659546
+    },
+    {
+      "config_idx": 73,
+      "strategy": "local_ca",
+      "core_type": "dendritic_additive",
+      "branch_factors": [
+        3,
+        3,
+        3
+      ],
+      "seed": 45,
+      "sigma_exc": 1.9821048974990845,
+      "sigma_inh": 1.1050814390182495
+    },
+    {
+      "config_idx": 74,
+      "strategy": "local_ca",
+      "core_type": "dendritic_additive",
+      "branch_factors": [
+        3,
+        3,
+        3
+      ],
+      "seed": 46,
+      "sigma_exc": 2.169951915740967,
+      "sigma_inh": 1.1549131870269775
+    },
+    {
+      "config_idx": 75,
+      "strategy": "local_ca",
+      "core_type": "dendritic_additive",
+      "branch_factors": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "seed": 42,
+      "sigma_exc": 2.2608747482299805,
+      "sigma_inh": 1.5351332426071167
+    },
+    {
+      "config_idx": 76,
+      "strategy": "local_ca",
+      "core_type": "dendritic_additive",
+      "branch_factors": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "seed": 43,
+      "sigma_exc": 2.5889711380004883,
+      "sigma_inh": 1.5490559339523315
+    },
+    {
+      "config_idx": 77,
+      "strategy": "local_ca",
+      "core_type": "dendritic_additive",
+      "branch_factors": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "seed": 44,
+      "sigma_exc": 2.594564437866211,
+      "sigma_inh": 1.4734851121902466
+    },
+    {
+      "config_idx": 78,
+      "strategy": "local_ca",
+      "core_type": "dendritic_additive",
+      "branch_factors": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "seed": 45,
+      "sigma_exc": 2.34653902053833,
+      "sigma_inh": 1.3553296327590942
+    },
+    {
+      "config_idx": 79,
+      "strategy": "local_ca",
+      "core_type": "dendritic_additive",
+      "branch_factors": [
+        3,
+        3,
+        3,
+        3
+      ],
+      "seed": 46,
+      "sigma_exc": 2.411926746368408,
+      "sigma_inh": 1.199029564857483
+    }
+  ]
+}
