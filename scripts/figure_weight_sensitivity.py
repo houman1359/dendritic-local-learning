@@ -80,9 +80,9 @@ def main():
     ei_data = load_ei_synapse_data()
     microns = load_microns_data()
 
-    fig = plt.figure(figsize=(18, 14))
-    gs = gridspec.GridSpec(2, 2, hspace=0.45, wspace=0.30,
-                           left=0.07, right=0.96, top=0.94, bottom=0.08)
+    fig = plt.figure(figsize=(18, 15))
+    gs = gridspec.GridSpec(2, 2, hspace=0.55, wspace=0.30,
+                           left=0.07, right=0.96, top=0.95, bottom=0.07)
 
     # ── Panel A: σ vs depth ──
     ax_a = fig.add_subplot(gs[0, 0])
