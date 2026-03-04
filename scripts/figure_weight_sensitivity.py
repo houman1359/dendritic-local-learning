@@ -80,9 +80,9 @@ def main():
     ei_data = load_ei_synapse_data()
     microns = load_microns_data()
 
-    fig = plt.figure(figsize=(18, 12))
-    gs = gridspec.GridSpec(2, 2, hspace=0.35, wspace=0.30,
-                           left=0.07, right=0.96, top=0.93, bottom=0.08)
+    fig = plt.figure(figsize=(18, 14))
+    gs = gridspec.GridSpec(2, 2, hspace=0.45, wspace=0.30,
+                           left=0.07, right=0.96, top=0.94, bottom=0.08)
 
     # ── Panel A: σ vs depth ──
     ax_a = fig.add_subplot(gs[0, 0])
@@ -146,18 +146,23 @@ def main():
         ax_b.errorbar(ie_values, means, yerr=stds, marker="s", color=color,
                       label=f"{label} (ee=40)", capsize=3, linewidth=2, markersize=6)
 
-    # Also plot ee=20 and ee=80 as lighter lines
-    for ee, alpha in [(20, 0.4), (80, 0.4)]:
-        for core_type in ["dendritic_shunting", "dendritic_additive"]:
-            means = []
-            for ie in ie_values:
-                key = f"{core_type}_ee{ee}_ie{ie}"
-                entry = ei_data["excitatory_sigma"].get(key, {})
-                means.append(entry["mean"] if entry else np.nan)
-            color = COLORS.get(core_type, "gray")
-            label_ct = LABELS.get(core_type, core_type)
-            ax_b.plot(ie_values, means, marker=".", color=color, alpha=alpha,
-                      linewidth=1, markersize=4, label=f"{label_ct} (ee={ee})")
+    # Also plot ee=20 and ee=80 as lighter shaded bands
+    for core_type in ["dendritic_shunting", "dendritic_additive"]:
+        lo_means, hi_means = [], []
+        for ie in ie_values:
+            lo_entry = ei_data["excitatory_sigma"].get(f"{core_type}_ee20_ie{ie}", {})
+            hi_entry = ei_data["excitatory_sigma"].get(f"{core_type}_ee80_ie{ie}", {})
+            lo_means.append(lo_entry["mean"] if lo_entry else np.nan)
+            hi_means.append(hi_entry["mean"] if hi_entry else np.nan)
+        color = COLORS.get(core_type, "gray")
+        lo_arr = np.array(lo_means)
+        hi_arr = np.array(hi_means)
+        valid = ~(np.isnan(lo_arr) | np.isnan(hi_arr))
+        ie_arr = np.array(ie_values)
+        ax_b.fill_between(ie_arr[valid],
+                          np.minimum(lo_arr[valid], hi_arr[valid]),
+                          np.maximum(lo_arr[valid], hi_arr[valid]),
+                          color=color, alpha=0.12)
 
     ax_b.axhline(MICRONS_EE_SIGMA, color="gray", ls="--", lw=1.5, alpha=0.7,
                  label=f"MICrONS E→E (σ={MICRONS_EE_SIGMA:.2f})")
@@ -167,8 +172,10 @@ def main():
     ax_b.set_xlabel("IE synapses per branch ($N_I$)", fontsize=11)
     ax_b.set_ylabel("Log-normal σ (excitatory)", fontsize=11)
     ax_b.set_title("B. Weight σ vs inhibitory synapse count", fontsize=12, fontweight="bold")
-    ax_b.legend(fontsize=6.5, loc="upper right", ncol=2)
+    ax_b.legend(fontsize=8, loc="upper right")
     ax_b.set_ylim(0.5, 3.0)
+    ax_b.annotate("Shaded: $N_E$=20–80 range", xy=(0.02, 0.02),
+                  xycoords="axes fraction", fontsize=7.5, color="gray")
 
     # ── Panel C: Main bar chart (clean 2×2 + biology) ──
     ax_c = fig.add_subplot(gs[1, 0])
@@ -224,11 +231,11 @@ def main():
 
     cond_labels = [LABELS[c] for c in cond_order]
     ax_c.set_xticks(x_c)
-    ax_c.set_xticklabels(cond_labels, rotation=25, ha="right", fontsize=9)
+    ax_c.set_xticklabels(cond_labels, rotation=35, ha="right", fontsize=9)
     ax_c.set_ylabel("Log-normal σ (excitatory)", fontsize=11)
     ax_c.set_title("C. Weight σ: model vs biology", fontsize=12, fontweight="bold")
-    ax_c.legend(fontsize=7.5, loc="upper left")
-    ax_c.set_ylim(0, 2.0)
+    ax_c.legend(fontsize=8, loc="upper left")
+    ax_c.set_ylim(0, 2.1)
 
     # ── Panel D: E vs I comparison ──
     ax_d = fig.add_subplot(gs[1, 1])
@@ -263,11 +270,11 @@ def main():
                  label=f"MICrONS I→E ({MICRONS_IE_SIGMA:.2f})")
 
     ax_d.set_xticks(x_d)
-    ax_d.set_xticklabels(cond_labels, rotation=25, ha="right", fontsize=9)
+    ax_d.set_xticklabels(cond_labels, rotation=35, ha="right", fontsize=9)
     ax_d.set_ylabel("Log-normal σ", fontsize=11)
     ax_d.set_title("D. Excitatory vs inhibitory weight σ", fontsize=12, fontweight="bold")
-    ax_d.legend(fontsize=7.5, loc="upper left")
-    ax_d.set_ylim(0, 2.0)
+    ax_d.legend(fontsize=8, loc="upper left")
+    ax_d.set_ylim(0, 2.1)
 
     fig.suptitle(
         "Synaptic Weight Distribution Analysis: Sensitivity to Architecture",
