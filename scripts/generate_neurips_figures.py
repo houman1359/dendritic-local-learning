@@ -148,47 +148,56 @@ def _draw_arrow(ax, x1, y1, x2, y2, color="k", lw=1.0, style="-|>"):
 
 def fig1_panel_a(ax):
     """Panel A: Dendritic architecture — forward + backward on single diagram."""
-    ax.set_xlim(-0.8, 5.6)
-    ax.set_ylim(-0.3, 3.6)
+    ax.set_xlim(-1.0, 6.4)
+    ax.set_ylim(-1.2, 4.2)
     ax.set_aspect("equal")
     ax.axis("off")
 
-    # ── Compartment positions ──
-    soma_x, soma_y = 4.2, 1.5
-    px, py = 2.5, 1.5           # proximal branch
-    d_pos = [(0.8, 2.7), (0.8, 0.3)]  # distal branches
+    # ── Compartment positions (spread out vertically) ──
+    soma_x, soma_y = 4.8, 1.7
+    px, py = 2.6, 1.7           # proximal branch
+    d_pos = [(0.8, 3.2), (0.8, 0.2)]  # distal branches — well separated
 
-    # ── Soma ──
-    ax.add_patch(plt.Circle((soma_x, soma_y), 0.30, fc=SOMA_COLOR, ec="k",
+    # ── Soma (larger) ──
+    soma_r = 0.57
+    ax.add_patch(plt.Circle((soma_x, soma_y), soma_r, fc=SOMA_COLOR, ec="k",
                              lw=1.2, alpha=0.45, zorder=5))
     ax.text(soma_x, soma_y, "soma", ha="center", va="center",
-            fontsize=6, fontweight="bold", zorder=6)
+            fontsize=5, fontweight="bold", zorder=6)
 
-    # ── Compartment boxes (rounded rectangles) ──
-    comp_w, comp_h = 0.70, 0.50
+    # ── Compartment boxes (rounded rectangles — proximal larger) ──
+    comp_w, comp_h = 0.85, 0.55
+    prox_w, prox_h = 1.60, 0.80
+    # Draw each compartment with appropriate size
     for cx, cy, lbl in [(px, py, "proximal"),
                          (d_pos[0][0], d_pos[0][1], "distal"),
                          (d_pos[1][0], d_pos[1][1], "distal")]:
-        box = FancyBboxPatch((cx - comp_w/2, cy - comp_h/2), comp_w, comp_h,
-                              boxstyle="round,pad=0.04", fc=DEN_COLOR, ec="k",
+        bw = prox_w if lbl == "proximal" else comp_w
+        bh = prox_h if lbl == "proximal" else comp_h
+        box = FancyBboxPatch((cx - bw/2, cy - bh/2), bw, bh,
+                              boxstyle="round,pad=0.05", fc=DEN_COLOR, ec="k",
                               lw=0.8, alpha=0.25, zorder=3)
         ax.add_patch(box)
-        ax.text(cx, cy, lbl, ha="center", va="center", fontsize=5.5,
+        fs = 5
+        ax.text(cx, cy, lbl, ha="center", va="center", fontsize=fs,
                 fontweight="bold", color="#2E7D32", zorder=6)
 
     # ── Dendritic conductance arrows (green, forward flow) ──
-    _draw_arrow(ax, px + comp_w/2 + 0.02, py, soma_x - 0.30, soma_y,
+    _draw_arrow(ax, px + prox_w/2 + 0.06, py, soma_x - soma_r - 0.02, soma_y,
                 color=DEN_COLOR, lw=1.4)
     for dx, dy in d_pos:
-        off = 0.10 if dy > 1.5 else -0.10
-        _draw_arrow(ax, dx + comp_w/2 + 0.02, dy,
-                    px - comp_w/2 - 0.02, py + off, color=DEN_COLOR, lw=1.2)
+        off = 0.14 if dy > py else -0.14
+        _draw_arrow(ax, dx + comp_w/2 + 0.06, dy,
+                    px - prox_w/2 - 0.06, py + off, color=DEN_COLOR, lw=1.2)
 
     # ── Excitatory synapses (triangles, blue) ──
     tri_size = 0.10
-    for bx, by in d_pos + [(px, py)]:
-        for yo in [0.12, -0.12]:
-            sx = bx - comp_w/2 - 0.30
+    for bx, by, is_prox in [(d_pos[0][0], d_pos[0][1], False),
+                              (d_pos[1][0], d_pos[1][1], False),
+                              (px, py, True)]:
+        bw = prox_w if is_prox else comp_w
+        for yo in [0.14, -0.14]:
+            sx = bx - bw/2 - 0.38
             sy = by + yo
             tri = plt.Polygon(
                 [(sx - tri_size, sy - tri_size*0.7),
@@ -196,57 +205,56 @@ def fig1_panel_a(ax):
                  (sx - tri_size, sy + tri_size*0.7)],
                 fc=EXC_COLOR, ec="k", lw=0.5, alpha=0.8, zorder=5)
             ax.add_patch(tri)
-            _draw_arrow(ax, sx + tri_size + 0.01, sy,
-                        bx - comp_w/2 - 0.02, by + yo * 0.4,
+            _draw_arrow(ax, sx + tri_size + 0.02, sy,
+                        bx - bw/2 - 0.06, by + yo * 0.3,
                         color=EXC_COLOR, lw=0.7)
 
     # ── Inhibitory synapses (circles, red) — one per branch, on top ──
-    for bx, by in d_pos + [(px, py)]:
-        sx, sy = bx - 0.05, by + comp_h/2 + 0.20
-        ax.add_patch(plt.Circle((sx, sy), 0.08, fc=INH_COLOR, ec="k",
+    for bx, by, is_prox in [(d_pos[0][0], d_pos[0][1], False),
+                              (d_pos[1][0], d_pos[1][1], False),
+                              (px, py, True)]:
+        bh = prox_h if is_prox else comp_h
+        sx, sy = bx + 0.15, by + bh/2 + 0.28
+        ax.add_patch(plt.Circle((sx, sy), 0.09, fc=INH_COLOR, ec="k",
                                  lw=0.5, alpha=0.8, zorder=5))
-        _draw_arrow(ax, sx, sy - 0.08, bx - 0.05, by + comp_h/2 + 0.02,
+        _draw_arrow(ax, sx, sy - 0.09, bx + 0.15, by + bh/2 + 0.03,
                     color=INH_COLOR, lw=0.7)
 
-    # ── Input labels ──
-    ax.text(-0.6, 2.1, "$x^E$", fontsize=8, color=EXC_COLOR,
-            fontweight="bold", ha="center")
-    ax.text(-0.05, 3.25, "$x^I$", fontsize=8, color=INH_COLOR,
-            fontweight="bold", ha="center")
-
     # ── Output ──
-    _draw_arrow(ax, soma_x + 0.30, soma_y, 5.2, soma_y, color="k", lw=1.4)
-    ax.text(5.3, soma_y, "$\\hat{y}$", fontsize=8, va="center")
+    _draw_arrow(ax, soma_x + soma_r + 0.02, soma_y, 5.8, soma_y, color="k", lw=1.4)
+    ax.text(5.95, soma_y, "$\\hat{y}$", fontsize=9, va="center")
 
     # ── Broadcast error (dashed red arrows, backward) ──
-    for bx, by in [(px, py)] + d_pos:
-        ax.annotate("", xy=(bx + comp_w/2 + 0.05, by + 0.05),
-                    xytext=(soma_x - 0.30, soma_y + 0.08),
+    for bx, by, is_prox in [(px, py, True)] + \
+                             [(d_pos[0][0], d_pos[0][1], False),
+                              (d_pos[1][0], d_pos[1][1], False)]:
+        bw = prox_w if is_prox else comp_w
+        ax.annotate("", xy=(bx + bw/2 + 0.08, by + 0.05),
+                    xytext=(soma_x - soma_r - 0.02, soma_y + 0.12),
                     arrowprops=dict(arrowstyle="->", color=INH_COLOR,
                                     lw=1.0, ls=(0, (4, 3))), zorder=2)
-    ax.text(soma_x - 0.05, soma_y + 0.55, "broadcast $e_n$",
-            fontsize=5.5, color=INH_COLOR, ha="center", style="italic")
 
-    # ── Legend (compact) ──
+    # ── Legend (with x^I and x^E as entries, moved lower) ──
     from matplotlib.lines import Line2D
     handles = [
-        plt.Polygon([(0, 0), (1, 0.5), (0, 1)], fc=EXC_COLOR, ec="k",
-                     lw=0.4, alpha=0.8),
-        plt.Circle((0, 0), 0.1, fc=INH_COLOR, ec="k", lw=0.4, alpha=0.8),
+        Line2D([0], [0], marker=">", color=EXC_COLOR, markerfacecolor=EXC_COLOR,
+               markersize=5, lw=0.7, label="$x^E$ (excitatory input)"),
+        Line2D([0], [0], marker="o", color=INH_COLOR, markerfacecolor=INH_COLOR,
+               markersize=4, lw=0.7, label="$x^I$ (inhibitory input)"),
         mpatches.Patch(fc=DEN_COLOR, ec="k", lw=0.4, alpha=0.25),
         Line2D([0], [0], color=INH_COLOR, lw=1.0, ls="--"),
     ]
-    labels = ["Excitatory syn.", "Inhibitory syn. (shunting)",
+    labels = ["$x^E$: excitatory input", "$x^I$: inhibitory input",
               "Dendritic compartment", "Error broadcast"]
-    ax.legend(handles, labels, loc="lower right", fontsize=4.5,
-              framealpha=0.9, handlelength=1.2, handletextpad=0.3,
-              borderpad=0.3, labelspacing=0.3)
+    ax.legend(handles, labels, loc="lower left", fontsize=4.5,
+              framealpha=0.95, handlelength=1.2, handletextpad=0.3,
+              borderpad=0.3, labelspacing=0.3, bbox_to_anchor=(0.02, -0.18))
 
 
 def fig1_panel_c(ax):
-    """Panel C: Rule hierarchy (3F -> 4F -> 5F) — compact layout."""
-    ax.set_xlim(-0.65, 4.1)
-    ax.set_ylim(-0.35, 2.55)
+    """Panel B: Rule hierarchy (3F -> 4F -> 5F) — compact layout."""
+    ax.set_xlim(-0.75, 4.3)
+    ax.set_ylim(-0.1, 2.55)
     ax.axis("off")
 
     rules = [
@@ -257,9 +265,9 @@ def fig1_panel_c(ax):
         ("5F", 0.3, RULE5_COLOR,
          r"$\Delta g \propto x_j (E_j{-}V_n) \cdot \delta \cdot \rho \cdot \phi$"),
     ]
-    box_left = 0.2
-    box_w = 3.7
-    box_h = 0.5
+    box_left = -0.20
+    box_w = 4.2
+    box_h = 0.65
     for name, yc, color, eq in rules:
         box = FancyBboxPatch(
             (box_left, yc - box_h / 2), box_w, box_h,
@@ -268,26 +276,16 @@ def fig1_panel_c(ax):
         ax.add_patch(box)
         # Label OUTSIDE the box on the left
         ax.text(box_left - 0.12, yc, name, ha="right", va="center",
-                fontsize=10, fontweight="bold", color=color, zorder=5)
-        ax.text(box_left + 0.1, yc, eq, ha="left", va="center",
-                fontsize=7, zorder=5)
+                fontsize=9, fontweight="bold", color=color, zorder=5)
+        ax.text(box_left + 0.12, yc, eq, ha="left", va="center",
+                fontsize=6.5, zorder=5)
 
-    # Arrows between rules
-    gap = 0.85  # vertical spacing between rule centers
+    # Arrows between rules (centered in box)
+    arrow_x = box_left + box_w / 2
     for yt, yb in [(2.0 - box_h / 2 - 0.04, 1.15 + box_h / 2 + 0.04),
                     (1.15 - box_h / 2 - 0.04, 0.3 + box_h / 2 + 0.04)]:
-        ax.annotate("", xy=(box_left + 0.15, yb), xytext=(box_left + 0.15, yt),
+        ax.annotate("", xy=(arrow_x, yb), xytext=(arrow_x, yt),
                     arrowprops=dict(arrowstyle="->", color="gray", lw=0.7, ls="--"))
-
-    # Broadcast box at bottom — compact
-    bcast_y = -0.2
-    box = FancyBboxPatch(
-        (box_left, bcast_y - 0.1), box_w, 0.22, boxstyle="round,pad=0.03",
-        fc=SOMA_COLOR, ec="k", lw=0.4, alpha=0.12, zorder=2)
-    ax.add_patch(box)
-    ax.text(box_left + box_w / 2, bcast_y + 0.01,
-            "Broadcast $\\delta$:  scalar  |  per-soma  |  local mismatch",
-            ha="center", va="center", fontsize=5, zorder=5)
 
 
 def fig1_panel_learning_curves(ax):
@@ -321,8 +319,8 @@ def fig1_panel_learning_curves(ax):
                          color=color, alpha=0.10)
 
     ax.set_xlabel("Epoch")
-    ax.set_ylabel("Test accuracy (%)")
-    ax.set_title("Learning dynamics (MNIST)", fontsize=7)
+    ax.set_ylabel("Accuracy (%)", fontsize=6, labelpad=1)
+    ax.tick_params(axis='y', labelsize=5.5, pad=1)
     ax.legend(loc="upper center", fontsize=4.5, ncol=2, handlelength=1.5,
               columnspacing=0.8, bbox_to_anchor=(0.5, 1.0))
     ax.set_ylim(5, 100)
@@ -332,10 +330,10 @@ def fig1_panel_learning_curves(ax):
 
 def figure1():
     print("\n--- Figure 1: Model & Credit Assignment ---")
-    fig = plt.figure(figsize=(W, 2.8))
-    gs = fig.add_gridspec(1, 3, width_ratios=[1.1, 0.65, 0.75],
-                          wspace=0.08, left=0.01, right=0.99,
-                          top=0.92, bottom=0.02)
+    fig = plt.figure(figsize=(W, 3.2))
+    gs = fig.add_gridspec(1, 3, width_ratios=[0.95, 0.70, 0.85],
+                          wspace=0.25, left=0.01, right=0.99,
+                          top=0.88, bottom=0.02)
 
     ax_a = fig.add_subplot(gs[0])
     ax_b = fig.add_subplot(gs[1])
@@ -345,9 +343,26 @@ def figure1():
     fig1_panel_c(ax_b)  # rule hierarchy
     fig1_panel_learning_curves(ax_c)
 
-    _panel(ax_a, "A", x=-0.02, y=1.02)
-    _panel(ax_b, "B", x=-0.02, y=1.02)
-    _panel(ax_c, "C", x=-0.18, y=1.12)
+    # Place all panel labels at the same figure-level y position
+    fig_top = 0.97
+    for ax_i, lbl, xoff in [(ax_a, "A", -0.06), (ax_b, "B", -0.08),
+                              (ax_c, "C", -0.05)]:
+        # Convert axes-fraction x to figure coords
+        bbox = ax_i.get_position()
+        fig_x = bbox.x0 + xoff * bbox.width
+        fig.text(fig_x, fig_top, lbl, fontsize=11, fontweight="bold",
+                 va="top", ha="left")
+
+    # Panel titles — all at the same figure y, derived from Panel C axes top
+    fig.canvas.draw()  # force layout so positions are computed
+    bbox_c = ax_c.get_position()
+    title_y = bbox_c.y1 + 0.005  # just above Panel C axes top
+    for ax_i, title in [(ax_a, "Dendritic network"),
+                          (ax_b, "Local learning rules"),
+                          (ax_c, "Learning dynamics (MNIST)")]:
+        bbox = ax_i.get_position()
+        fig_x = bbox.x0 + bbox.width / 2
+        fig.text(fig_x, title_y, title, fontsize=7, ha="center", va="bottom")
 
     _save(fig, "fig1_model_and_credit")
     plt.close(fig)
