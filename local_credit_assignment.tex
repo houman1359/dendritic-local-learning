@@ -48,7 +48,7 @@ Starting from conductance-based voltage equations, we derive exact loss gradient
 This factorization leads to a hierarchy of local learning rules (3F, 4F, and 5F) that use only synapse-local variables plus a per-neuron error broadcast.
 In our experiments, shunting improves the match between local and backprop gradients. Compared to an additive control, we observe about $30\times$ higher directional alignment and about $10\times$ lower scale distortion. These gradient-fidelity improvements are also associated with better task performance across settings.
 The advantage depends on the regime: it increases with inhibitory conductance strength and is largest on tasks where credit signals must be robust to noise.
-Additionally, the self-normalizing dynamics of shunting produce log-normal weight distributions whose dispersion matches connectomic data (MICrONS, $\Delta\sigma < 0.08$), providing a structural signature of biologically plausible learning.
+Additionally, shunting self-normalization produces log-normal weight distributions whose dispersion matches connectomic data (MICrONS, $\Delta\sigma < 0.08$).
 Overall, our results connect divisive normalization to local credit quality and introduce a gradient-fidelity diagnostic that links dendritic architecture to the quality of local credit signals.
 \end{abstract}
 
@@ -390,7 +390,7 @@ DFA baselines (Appendix Fig.~\ref{fig:s5_fa_dfa}) show shunting achieves $66.1\%
 \label{sec:weight_distributions}
 
 The conductance-based voltage equation implies multiplicative weight dynamics: synaptic updates scale with input resistance $R_n^{\mathrm{tot}} = 1/g_n^{\mathrm{tot}}$, creating a regime analogous to exponentiated gradient descent \cite{saxena2024lognormal}.
-Such multiplicative dynamics predict log-normal weight distributions in trained networks, matching a well-documented feature of biological synapses \cite{song2005lognormal,buzsaki2014logdynamic}.
+Such multiplicative dynamics predict log-normal weight distributions in trained networks, consistent with the log-normal synaptic weight distributions observed in cortex \cite{song2005lognormal,buzsaki2014logdynamic}.
 We test this prediction by comparing weight distributions from our four model conditions against two biological references: electrophysiological data from Song et al.\ \cite{song2005lognormal} (rat V1 L5 pyramidal, $\sigma = 0.94$) and the MICrONS mm$^3$ connectome \cite{microns2021functional} (mouse V1, $9\times 10^6$ connections).
 
 \paragraph{Model weight distributions are log-normal.}
@@ -418,7 +418,7 @@ MICrONS E$\to$E & \multicolumn{4}{c}{$\sigma = 1.14$ (mouse V1, synapse size, $n
 MICrONS I$\to$E & \multicolumn{4}{c}{$\sigma = 0.92$ (mouse V1, synapse size, $n{=}3.5\text{M}$)} \\
 \bottomrule
 \end{tabular}
-\caption{\textbf{Weight distribution width.} Log-normal $\sigma$ of excitatory and inhibitory synaptic weights (mean$\pm$std across 5 seeds). Biological references: Song et al.\ (electrophysiology, EPSP amplitudes) and MICrONS (electron microscopy, synapse sizes). BP+Shunting matches Song et al.\ ($\Delta\sigma = 0.008$); Local+Shunting matches MICrONS E$\to$E ($\Delta\sigma = 0.007$ on F-MNIST). With biologically constrained E/I ratios ($4{:}1$), shunting self-normalization produces biologically realistic weight heterogeneity.}
+\caption{\textbf{Weight distribution width.} Log-normal $\sigma$ of excitatory and inhibitory synaptic weights (mean$\pm$std across 5 seeds). Biological references: Song et al.\ (electrophysiology, EPSP amplitudes) and MICrONS (electron microscopy, synapse sizes). BP+Shunting matches Song et al.\ ($\Delta\sigma = 0.008$); Local+Shunting matches MICrONS E$\to$E ($\Delta\sigma = 0.007$ on F-MNIST). With biologically constrained E/I ratios ($4{:}1$), shunting self-normalization produces weight heterogeneity in the biological range.}
 \label{tab:weight_sigma}
 \end{table}
 
@@ -504,7 +504,7 @@ For neuroscience, we connect divisive normalization to local credit fidelity, ex
 For machine learning, conductance-based inductive biases shape gradient geometry in ways that benefit local learning. For neuromorphic engineering, the strictly local rules map naturally onto parallel substrates.
 
 \paragraph{Testable predictions.}
-Our framework predicts that (1)~stronger perisomatic inhibition yields more precise synaptic plasticity; (2)~GABA\textsubscript{A} blockade selectively impairs multi-layer credit tasks; (3)~the dendritic--somatic voltage correlation ($\rho_n$) increases during learning; (4)~learned excitatory weight distributions follow log-normal statistics with dispersion matching connectomic data (Finding~6), providing a testable structural signature of the conductance-based learning rule.
+Our framework predicts that (1)~stronger perisomatic inhibition yields more precise synaptic plasticity; (2)~GABA\textsubscript{A} blockade selectively impairs multi-layer credit tasks; (3)~the dendritic--somatic voltage correlation ($\rho_n$) increases during learning; (4)~learned excitatory weight distributions follow log-normal statistics with dispersion matching connectomic data (Finding~6).
 These predictions can help distinguish our account from models where dendrites mainly serve as computational substrates.
 
 %=============================================================================
@@ -996,9 +996,9 @@ The morphology-aware modulators (path propagation, depth/centrality weighting) h
 \paragraph{Mechanistic interpretation.}
 The shunting conductance $g_n^{\mathrm{tot}} = g_n^{\mathrm{leak}} + \sum g^{\mathrm{exc}} + \sum g^{\mathrm{inh}}$ appears in the update factor $R_n^{\mathrm{tot}} = 1/g_n^{\mathrm{tot}}$.
 As inhibitory conductance increases, $g_n^{\mathrm{tot}}$ grows and $R_n^{\mathrm{tot}}$ shrinks, compressing the multiplicative scale of weight updates.
-This is analogous to a learning rate that self-adjusts via the total conductance: strong synapses contribute more to $g_n^{\mathrm{tot}}$, reducing their own future update magnitude---a natural form of weight-dependent regularization.
+This is analogous to a learning rate that self-adjusts via the total conductance: strong synapses contribute more to $g_n^{\mathrm{tot}}$, reducing their own future update magnitude. This acts as a natural form of weight-dependent regularization.
 The resulting equilibrium distribution is log-normal, consistent with Loewenstein et al.\ \cite{loewenstein2011multiplicative} (multiplicative spine dynamics) and Saxena et al.\ \cite{saxena2024lognormal} (exponentiated gradient).
-Additive integration lacks this self-normalizing mechanism, producing broader and less biologically realistic distributions.
+Additive integration lacks this self-normalizing mechanism, producing broader distributions that fall outside the biological range.
 
 \section{Depth Scaling and Noise Robustness}
 \label{app:depth_noise}
@@ -1007,6 +1007,6 @@ Additive integration lacks this self-normalizing mechanism, producing broader an
 Varying dendritic depth from 1--4 layers (branch factors $[9]$ to $[3,3,3,3]$): shunting local degrades from 63.5\% to 57.4\%; additive local degrades more steeply from 54.9\% to 29.7\%. The shunting advantage grows with depth ($+8.5 \to +27.7$~pp). Backprop ceilings remain stable at about $90$--$92\%$. See Fig.~\ref{fig:scalability}A.
 
 \paragraph{Noise robustness.}
-Gaussian noise $\mathcal{N}(0,\sigma^2)$ on broadcast error: shunting is robust to $\sigma\!\leq\!0.1$ (about $62\%$) while additive drops from 46.5\% to chance at $\sigma{=}1.0$, confirming that shunting credit signals carry genuine learning information beyond the broadcast magnitude. See Fig.~\ref{fig:scalability}B.
+Gaussian noise $\mathcal{N}(0,\sigma^2)$ on broadcast error: shunting is robust to $\sigma\!\leq\!0.1$ (about $62\%$) while additive drops from 46.5\% to chance at $\sigma{=}1.0$, confirming that shunting credit signals carry useful learning information beyond the broadcast magnitude. See Fig.~\ref{fig:scalability}B.
 
 \end{document}
