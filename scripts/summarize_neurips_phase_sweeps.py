@@ -21,6 +21,7 @@ from pathlib import Path
 from typing import Any
 
 import pandas as pd
+import torch
 
 
 DEFAULT_SWEEP_ROOT = Path(
@@ -49,6 +50,8 @@ SWEEP_PREFIXES = {
     "noise_robustness": "sweep_neurips_noise_robustness",
     "additive_fairness_audit": "sweep_neurips_additive_dynamics_fairness_audit",
     "core_fair_tuning": "sweep_neurips_localca_core_fair_tuning",
+    "cue_routed_standard": "sweep_neurips_cue_integration_routed_standard_pilot",
+    "cue_routed_localca": "sweep_neurips_cue_integration_routed_localca_pilot",
 }
 
 
@@ -116,6 +119,69 @@ def _extract_mi_metrics(info_blob: dict[str, Any]) -> dict[str, float]:
     return out
 
 
+def _extract_router_metrics(
+    run_dir: Path, config_blob: dict[str, Any]
+) -> dict[str, float]:
+    final_model_path = run_dir / "final_model.pt"
+    if not final_model_path.exists():
+        return {}
+
+    try:
+        state_dict = torch.load(final_model_path, map_location="cpu")
+    except Exception:
+        return {}
+
+    logits_key = next(
+        (key for key in state_dict.keys() if key.endswith("assignment_logits")),
+        None,
+    )
+    if logits_key is None:
+        return {}
+
+    logits = state_dict[logits_key].float()
+    if logits.ndim != 2 or logits.numel() == 0:
+        return {}
+
+    temperature = float(
+        _dig(
+            config_blob,
+            ["model", "encoder", "params", "learned_router_temperature"],
+            1.0,
+        )
+        or 1.0
+    )
+    probs = torch.softmax(logits / max(temperature, 1e-6), dim=-1)
+    entropy = -(probs.clamp_min(1e-8) * probs.clamp_min(1e-8).log()).sum(dim=-1)
+
+    metrics: dict[str, float] = {
+        "router_mean_max_assignment": float(probs.max(dim=-1).values.mean().item()),
+        "router_assignment_entropy": float(entropy.mean().item()),
+        "router_num_routed_features": float(logits.size(0)),
+    }
+
+    pathway_groups = _dig(config_blob, ["model", "encoder", "params", "pathway_groups"], [])
+    if isinstance(pathway_groups, list) and pathway_groups:
+        target_by_feature: dict[int, int] = {}
+        for pathway_idx, group in enumerate(pathway_groups):
+            if not isinstance(group, list):
+                continue
+            for feature_idx in group:
+                try:
+                    target_by_feature[int(feature_idx)] = pathway_idx
+                except Exception:
+                    continue
+        routed_indices = sorted(target_by_feature.keys())
+        if len(routed_indices) == logits.size(0):
+            target = torch.tensor(
+                [target_by_feature[idx] for idx in routed_indices], dtype=torch.long
+            )
+            metrics["router_target_alignment"] = float(
+                probs.gather(1, target.unsqueeze(1)).mean().item()
+            )
+
+    return metrics
+
+
 def _extract_run_record(sweep_dir: Path, run_dir: Path) -> dict[str, Any] | None:
     config_blob = _safe_load_json(run_dir / "config.json")
     perf_blob = _safe_load_json(run_dir / "performance" / "final.json")
@@ -169,12 +235,19 @@ def _extract_run_record(sweep_dir: Path, run_dir: Path) -> dict[str, Any] | None
     three_factor = local_cfg.get("three_factor", {}) if isinstance(local_cfg, dict) else {}
     four_factor = local_cfg.get("four_factor", {}) if isinstance(local_cfg, dict) else {}
     hsic = local_cfg.get("hsic", {}) if isinstance(local_cfg, dict) else {}
+    encoder_cfg = _dig(config_blob, ["model", "encoder"], {})
+    encoder_params = (
+        encoder_cfg.get("params", {}) if isinstance(encoder_cfg, dict) else {}
+    )
 
     record: dict[str, Any] = {
         "sweep_dir": str(sweep_dir),
         "sweep_name": _infer_sweep_key(sweep_dir),
         "config_id": run_dir.name,
         "dataset": _dig(config_blob, ["data", "dataset_name"], ""),
+        "encoder_type": encoder_cfg.get("type") if isinstance(encoder_cfg, dict) else None,
+        "router_mode": encoder_params.get("router_mode") if isinstance(encoder_params, dict) else None,
+        "pathway_dim": encoder_params.get("pathway_dim") if isinstance(encoder_params, dict) else None,
         "network_type": _dig(config_blob, ["model", "core", "type"], ""),
         "strategy": _dig(config_blob, ["training", "main", "strategy"], ""),
         "layer_sizes": _to_compact_string(layer_sizes),
@@ -185,6 +258,7 @@ def _extract_run_record(sweep_dir: Path, run_dir: Path) -> dict[str, Any] | None
         "rule_variant": local_cfg.get("rule_variant") if isinstance(local_cfg, dict) else None,
         "error_broadcast_mode": local_cfg.get("error_broadcast_mode") if isinstance(local_cfg, dict) else None,
         "error_noise_sigma": local_cfg.get("error_noise_sigma") if isinstance(local_cfg, dict) else None,
+        "encoder_update_mode": local_cfg.get("encoder_update_mode") if isinstance(local_cfg, dict) else None,
         "decoder_update_mode": local_cfg.get("decoder_update_mode") if isinstance(local_cfg, dict) else None,
         "dynamics_mode": three_factor.get("dynamics_mode") if isinstance(three_factor, dict) else None,
         "rho_mode": four_factor.get("rho_mode") if isinstance(four_factor, dict) else None,
@@ -213,6 +287,7 @@ def _extract_run_record(sweep_dir: Path, run_dir: Path) -> dict[str, Any] | None
     }
 
     record.update(_extract_mi_metrics(info_blob or {}))
+    record.update(_extract_router_metrics(run_dir, config_blob))
     return record
 
 
@@ -540,6 +615,31 @@ def main() -> int:
     )
     info_grouped.to_csv(output_dir / "info_panel_metrics.csv", index=False)
 
+    cue_routing = runs[
+        runs["sweep_name"].isin(["cue_routed_standard", "cue_routed_localca"])
+    ].copy()
+    cue_metrics = [
+        "valid_accuracy",
+        "test_accuracy",
+        "router_mean_max_assignment",
+        "router_target_alignment",
+        "router_assignment_entropy",
+    ]
+    cue_metrics = [column for column in cue_metrics if column in cue_routing.columns]
+    cue_grouped = _group_mean_std(
+        cue_routing,
+        [
+            "dataset",
+            "strategy",
+            "network_type",
+            "router_mode",
+            "error_broadcast_mode",
+            "encoder_update_mode",
+        ],
+        cue_metrics,
+    )
+    cue_grouped.to_csv(output_dir / "cue_routing.csv", index=False)
+
     # Dynamics-mode coverage for fairness auditing.
     dynamics_coverage = (
         runs[runs["strategy"] == "local_ca"]
@@ -624,6 +724,9 @@ def main() -> int:
         handle.write("\n\n")
         handle.write("## Information panel\n\n")
         handle.write(_to_md(info_grouped.head(40)))
+        handle.write("\n\n")
+        handle.write("## Cue routing\n\n")
+        handle.write(_to_md(cue_grouped.head(80)))
         handle.write("\n\n")
         handle.write("## Effect sizes\n\n")
         handle.write(_to_md(effects_df.head(80)))

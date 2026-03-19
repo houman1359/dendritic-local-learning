@@ -1,0 +1,31 @@
+output_dir: "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/sweep_runs"
+
+outputs:
+  run_name: "sweep_fig1_mnist_fixed100"
+
+slurm_config:
+  account: "kempner_dev"
+  partition: "kempner_h100_priority3"
+  time: "02:00:00"
+  nodes: 1
+  ntasks_per_node: 1
+  gpus_per_node: 1
+  cpus_per_task: 8
+  mem: 24GB
+  max_concurrent_jobs: 3
+  modules_to_load: []
+  conda_env_path: ""
+  training_script: "src/dendritic_modeling/scripts/training/train_experiments.py"
+
+experiment_settings:
+  seeds_per_condition: 1
+  base_seed: 43
+  use_array_jobs: true
+
+configs:
+  - name: "fig1_mnist_shunting_bp_fixed100"
+    path: "drafts/dendritic-local-learning/configs/fig1_mnist_shunting_bp_fixed100.yaml"
+  - name: "fig1_mnist_shunting_localca_fixed100"
+    path: "drafts/dendritic-local-learning/configs/fig1_mnist_shunting_localca_fixed100.yaml"
+  - name: "fig1_mnist_additive_localca_fixed100"
+    path: "drafts/dendritic-local-learning/configs/fig1_mnist_additive_localca_fixed100.yaml"

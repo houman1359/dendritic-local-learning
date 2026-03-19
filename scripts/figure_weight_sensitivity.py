@@ -1,186 +1,204 @@
-"""
-Generate supplementary figure: sensitivity of weight distribution σ to architecture.
+#!/usr/bin/env python3
+"""Generate a publication-style appendix figure for weight-distribution sensitivity."""
 
-Panels:
-  (A) σ vs depth (branch_factors) for 4 conditions
-  (B) σ vs ie_synapses for shunting vs additive (ee=40)
-  (C) σ bar chart: main 4 conditions + MICrONS + Song 2005 (clean 2×2 sweep)
-  (D) E vs I weight σ comparison with MICrONS
-
-Data sources:
-  - sigma_vs_depth.json (depth_scaling_v2 sweep, 80 models)
-  - sigma_vs_ei_synapses.json (ei_grid_pilot sweep, 168 models)
-  - microns_ei_distributions.json (MICrONS connectome)
-  - Clean 2×2 sweep results
-"""
+from __future__ import annotations
 
 import json
-import os
+from pathlib import Path
 
 import matplotlib
+
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
-import matplotlib.gridspec as gridspec
 import numpy as np
 
-# Biological references
+
+SCRIPT_DIR = Path(__file__).resolve().parent
+DRAFT_DIR = SCRIPT_DIR.parent
+DATA_DIR = DRAFT_DIR / "data" / "weight_distributions"
+FIGURES_DIR = DRAFT_DIR / "figures"
+
 SONG_2005_SIGMA = 0.9355
 MICRONS_EE_SIGMA = 1.140
 MICRONS_IE_SIGMA = 0.917
-MICRONS_EI_SIGMA = 0.825
-MICRONS_II_SIGMA = 0.847
 
-# Style
 COLORS = {
-    "standard_dendritic_shunting": "#4477AA",
-    "standard_dendritic_additive": "#66CCEE",
-    "local_ca_dendritic_shunting": "#EE6677",
-    "local_ca_dendritic_additive": "#CCBB44",
-    "dendritic_shunting": "#228833",
-    "dendritic_additive": "#AA3377",
+    "standard_dendritic_shunting": "#18864B",
+    "standard_dendritic_additive": "#2D5DA8",
+    "local_ca_dendritic_shunting": "#65B57D",
+    "local_ca_dendritic_additive": "#82A4DA",
+    "dendritic_shunting": "#18864B",
+    "dendritic_additive": "#2D5DA8",
 }
 LABELS = {
-    "standard_dendritic_shunting": "BP + Shunting",
-    "standard_dendritic_additive": "BP + Additive",
-    "local_ca_dendritic_shunting": "Local + Shunting",
-    "local_ca_dendritic_additive": "Local + Additive",
+    "standard_dendritic_shunting": "BP + shunting",
+    "standard_dendritic_additive": "BP + additive",
+    "local_ca_dendritic_shunting": "Local + shunting",
+    "local_ca_dendritic_additive": "Local + additive",
     "dendritic_shunting": "Shunting",
     "dendritic_additive": "Additive",
 }
-
-BASE_DIR = os.path.join(
-    os.path.dirname(__file__), "..",
-    "data", "weight_distributions"
-)
+DPI = 300
 
 
-def load_depth_data():
-    path = os.path.join(BASE_DIR, "sigma_vs_depth.json")
-    with open(path) as f:
-        return json.load(f)
+def _setup_style() -> None:
+    plt.rcParams.update(
+        {
+            "font.family": "sans-serif",
+            "font.size": 7.0,
+            "axes.labelsize": 8,
+            "axes.titlesize": 8,
+            "axes.titlepad": 6,
+            "xtick.labelsize": 6.5,
+            "ytick.labelsize": 6.5,
+            "legend.fontsize": 6,
+            "figure.dpi": DPI,
+            "savefig.dpi": DPI,
+            "savefig.bbox": "tight",
+            "savefig.pad_inches": 0.05,
+            "pdf.fonttype": 42,
+            "ps.fonttype": 42,
+            "axes.spines.top": False,
+            "axes.spines.right": False,
+            "legend.frameon": False,
+            "axes.linewidth": 0.6,
+            "xtick.major.width": 0.5,
+            "ytick.major.width": 0.5,
+        }
+    )
 
 
-def load_ei_synapse_data():
-    path = os.path.join(BASE_DIR, "sigma_vs_ei_synapses.json")
-    with open(path) as f:
-        return json.load(f)
+def _panel(ax: plt.Axes, label: str, x: float = -0.18, y: float = 1.10) -> None:
+    ax.text(
+        x,
+        y,
+        label,
+        transform=ax.transAxes,
+        fontsize=11,
+        fontweight="bold",
+        va="top",
+        ha="left",
+    )
 
 
-def load_microns_data():
-    path = os.path.join(BASE_DIR, "..", "..", "data", "microns_distributions",
-                        "microns_ei_distributions.json")
-    if not os.path.isfile(path):
-        return {}
-    with open(path) as f:
-        return json.load(f)
+def _load_json(path: Path) -> dict:
+    with path.open("r", encoding="utf-8") as handle:
+        return json.load(handle)
 
 
-def main():
-    depth_data = load_depth_data()
-    ei_data = load_ei_synapse_data()
-    microns = load_microns_data()
+def _save(fig: plt.Figure, stem: str) -> None:
+    FIGURES_DIR.mkdir(parents=True, exist_ok=True)
+    for ext in ("png", "pdf"):
+        fig.savefig(FIGURES_DIR / f"{stem}.{ext}", dpi=DPI)
+    print(f"Saved {stem}.{{png,pdf}}")
 
-    fig = plt.figure(figsize=(18, 15))
-    gs = gridspec.GridSpec(2, 2, hspace=0.55, wspace=0.30,
-                           left=0.07, right=0.96, top=0.95, bottom=0.07)
 
-    # ── Panel A: σ vs depth ──
-    ax_a = fig.add_subplot(gs[0, 0])
-    depth_labels = ["[9]", "[3,3]", "[3,3,3]", "[3,3,3,3]"]
-    x_depth = np.arange(len(depth_labels))
+def build_figure() -> plt.Figure:
+    _setup_style()
+    depth_data = _load_json(DATA_DIR / "sigma_vs_depth.json")
+    ei_data = _load_json(DATA_DIR / "sigma_vs_ei_synapses.json")
 
-    conditions = depth_data["conditions"]
-    for cond_prefix in [
+    fig, axes = plt.subplots(2, 2, figsize=(11.0, 7.2), gridspec_kw={"wspace": 0.32, "hspace": 0.42})
+
+    cond_order = [
         "standard_dendritic_shunting",
         "standard_dendritic_additive",
         "local_ca_dendritic_shunting",
         "local_ca_dendritic_additive",
-    ]:
+    ]
+
+    # Panel A: sigma vs depth
+    ax = axes[0, 0]
+    _panel(ax, "A")
+    depth_labels = ["[9]", "[3,3]", "[3,3,3]", "[3,3,3,3]"]
+    x_depth = np.arange(len(depth_labels))
+    conditions = depth_data["conditions"]
+    markers = {
+        "standard_dendritic_shunting": "s",
+        "standard_dendritic_additive": "s",
+        "local_ca_dendritic_shunting": "o",
+        "local_ca_dendritic_additive": "o",
+    }
+    for cond in cond_order:
         means, stds = [], []
         for bf_str in ["[9]", "[3, 3]", "[3, 3, 3]", "[3, 3, 3, 3]"]:
-            key = f"{cond_prefix}_{bf_str}"
-            if key in conditions:
-                means.append(conditions[key]["sigma_exc_mean"])
-                stds.append(conditions[key]["sigma_exc_std"])
-            else:
-                means.append(np.nan)
-                stds.append(0)
+            entry = conditions.get(f"{cond}_{bf_str}", {})
+            means.append(entry.get("sigma_exc_mean", np.nan))
+            stds.append(entry.get("sigma_exc_std", 0.0))
+        ax.errorbar(
+            x_depth,
+            means,
+            yerr=stds,
+            marker=markers[cond],
+            markersize=4.5,
+            capsize=2,
+            linewidth=1.3,
+            color=COLORS[cond],
+            label=LABELS[cond],
+        )
+    ax.axhline(MICRONS_EE_SIGMA, color="#777777", linestyle="--", linewidth=1.0, alpha=0.85)
+    ax.axhline(SONG_2005_SIGMA, color="#333333", linestyle=":", linewidth=1.0, alpha=0.9)
+    ax.text(3.05, MICRONS_EE_SIGMA + 0.03, "MICrONS E→E", fontsize=5.8, color="#666666")
+    ax.text(3.05, SONG_2005_SIGMA + 0.03, "Song 2005", fontsize=5.8, color="#333333")
+    ax.set_xticks(x_depth)
+    ax.set_xticklabels(depth_labels)
+    ax.set_ylabel(r"Excitatory log-normal width $\sigma$")
+    ax.set_xlabel("Branch factors (depth)")
+    ax.set_title("Shunting stays closer to biological-width references across depth")
+    ax.set_ylim(0.65, 2.65)
+    ax.grid(axis="y", alpha=0.2, linewidth=0.4)
+    ax.legend(loc="upper left", ncol=2, fontsize=5.7, columnspacing=0.9, handletextpad=0.4)
 
-        color = COLORS.get(cond_prefix, "gray")
-        label = LABELS.get(cond_prefix, cond_prefix)
-        ax_a.errorbar(x_depth, means, yerr=stds, marker="o", color=color,
-                      label=label, capsize=3, linewidth=2, markersize=6)
-
-    # Biological references
-    ax_a.axhline(MICRONS_EE_SIGMA, color="gray", ls="--", lw=1.5, alpha=0.7,
-                 label=f"MICrONS E→E (σ={MICRONS_EE_SIGMA:.2f})")
-    ax_a.axhline(SONG_2005_SIGMA, color="black", ls=":", lw=1.5, alpha=0.7,
-                 label=f"Song 2005 (σ={SONG_2005_SIGMA:.2f})")
-
-    ax_a.set_xticks(x_depth)
-    ax_a.set_xticklabels(depth_labels, fontsize=10)
-    ax_a.set_xlabel("Branch factors (depth)", fontsize=11)
-    ax_a.set_ylabel("Log-normal σ (excitatory)", fontsize=11)
-    ax_a.set_title("A. Weight σ vs dendritic depth", fontsize=12, fontweight="bold")
-    ax_a.legend(fontsize=7, loc="upper left")
-    ax_a.set_ylim(0.5, 2.8)
-
-    # ── Panel B: σ vs ie_synapses (ee=40, from ei_grid) ──
-    ax_b = fig.add_subplot(gs[0, 1])
-    ie_values = ei_data["dimensions"]["ie_synapses"]
-
+    # Panel B: sigma vs inhibitory synapses
+    ax = axes[0, 1]
+    _panel(ax, "B")
+    ie_values = np.array(ei_data["dimensions"]["ie_synapses"], dtype=float)
     for core_type in ["dendritic_shunting", "dendritic_additive"]:
-        means, stds = [], []
+        means, stds, lo_band, hi_band = [], [], [], []
         for ie in ie_values:
-            key = f"{core_type}_ee40_ie{ie}"
-            entry = ei_data["excitatory_sigma"].get(key, {})
-            if entry:
-                means.append(entry["mean"])
-                stds.append(entry["std"])
-            else:
-                means.append(np.nan)
-                stds.append(0)
+            entry = ei_data["excitatory_sigma"].get(f"{core_type}_ee40_ie{int(ie)}", {})
+            means.append(entry.get("mean", np.nan))
+            stds.append(entry.get("std", 0.0))
+            lo_entry = ei_data["excitatory_sigma"].get(f"{core_type}_ee20_ie{int(ie)}", {})
+            hi_entry = ei_data["excitatory_sigma"].get(f"{core_type}_ee80_ie{int(ie)}", {})
+            lo_band.append(lo_entry.get("mean", np.nan))
+            hi_band.append(hi_entry.get("mean", np.nan))
+        means = np.array(means, dtype=float)
+        stds = np.array(stds, dtype=float)
+        lo_band = np.array(lo_band, dtype=float)
+        hi_band = np.array(hi_band, dtype=float)
+        color = COLORS[core_type]
+        ax.fill_between(
+            ie_values,
+            np.nanmin(np.vstack([lo_band, hi_band]), axis=0),
+            np.nanmax(np.vstack([lo_band, hi_band]), axis=0),
+            color=color,
+            alpha=0.10,
+        )
+        ax.errorbar(
+            ie_values,
+            means,
+            yerr=stds,
+            marker="o",
+            markersize=4.0,
+            capsize=2,
+            linewidth=1.4,
+            color=color,
+            label=LABELS[core_type],
+        )
+    ax.axhline(MICRONS_EE_SIGMA, color="#777777", linestyle="--", linewidth=1.0, alpha=0.85)
+    ax.axhline(SONG_2005_SIGMA, color="#333333", linestyle=":", linewidth=1.0, alpha=0.9)
+    ax.text(0.02, 0.05, "shaded band: $N_E=20$ to $80$", transform=ax.transAxes, fontsize=5.8, color="#666666")
+    ax.set_xlabel(r"Inhibitory synapses per branch $N_I$")
+    ax.set_ylabel(r"Excitatory log-normal width $\sigma$")
+    ax.set_title("Inhibitory conductance is the dominant width-control knob")
+    ax.set_ylim(0.65, 2.95)
+    ax.grid(axis="y", alpha=0.2, linewidth=0.4)
+    ax.legend(loc="upper right")
 
-        color = COLORS.get(core_type, "gray")
-        label = LABELS.get(core_type, core_type)
-        ax_b.errorbar(ie_values, means, yerr=stds, marker="s", color=color,
-                      label=f"{label} (ee=40)", capsize=3, linewidth=2, markersize=6)
-
-    # Also plot ee=20 and ee=80 as lighter shaded bands
-    for core_type in ["dendritic_shunting", "dendritic_additive"]:
-        lo_means, hi_means = [], []
-        for ie in ie_values:
-            lo_entry = ei_data["excitatory_sigma"].get(f"{core_type}_ee20_ie{ie}", {})
-            hi_entry = ei_data["excitatory_sigma"].get(f"{core_type}_ee80_ie{ie}", {})
-            lo_means.append(lo_entry["mean"] if lo_entry else np.nan)
-            hi_means.append(hi_entry["mean"] if hi_entry else np.nan)
-        color = COLORS.get(core_type, "gray")
-        lo_arr = np.array(lo_means)
-        hi_arr = np.array(hi_means)
-        valid = ~(np.isnan(lo_arr) | np.isnan(hi_arr))
-        ie_arr = np.array(ie_values)
-        ax_b.fill_between(ie_arr[valid],
-                          np.minimum(lo_arr[valid], hi_arr[valid]),
-                          np.maximum(lo_arr[valid], hi_arr[valid]),
-                          color=color, alpha=0.12)
-
-    ax_b.axhline(MICRONS_EE_SIGMA, color="gray", ls="--", lw=1.5, alpha=0.7,
-                 label=f"MICrONS E→E (σ={MICRONS_EE_SIGMA:.2f})")
-    ax_b.axhline(SONG_2005_SIGMA, color="black", ls=":", lw=1.5, alpha=0.7,
-                 label=f"Song 2005 (σ={SONG_2005_SIGMA:.2f})")
-
-    ax_b.set_xlabel("IE synapses per branch ($N_I$)", fontsize=11)
-    ax_b.set_ylabel("Log-normal σ (excitatory)", fontsize=11)
-    ax_b.set_title("B. Weight σ vs inhibitory synapse count", fontsize=12, fontweight="bold")
-    ax_b.legend(fontsize=8, loc="upper right")
-    ax_b.set_ylim(0.5, 3.0)
-    ax_b.annotate("Shaded: $N_E$=20–80 range", xy=(0.02, 0.02),
-                  xycoords="axes fraction", fontsize=7.5, color="gray")
-
-    # ── Panel C: Main bar chart (clean 2×2 + biology) ──
-    ax_c = fig.add_subplot(gs[1, 0])
-
-    # Clean sweep data (from agent results)
+    # Panel C: main summary across datasets
+    ax = axes[1, 0]
+    _panel(ax, "C")
     clean_mnist = {
         "standard_dendritic_shunting": (0.943, 0.007),
         "standard_dendritic_additive": (1.304, 0.005),
@@ -193,107 +211,71 @@ def main():
         "local_ca_dendritic_shunting": (1.133, 0.061),
         "local_ca_dendritic_additive": (1.430, 0.155),
     }
-
-    cond_order = [
-        "standard_dendritic_shunting",
-        "standard_dendritic_additive",
-        "local_ca_dendritic_shunting",
-        "local_ca_dendritic_additive",
-    ]
-
-    n_c = len(cond_order)
-    x_c = np.arange(n_c)
-    width = 0.35
-
-    # MNIST bars
-    mnist_means = [clean_mnist[c][0] for c in cond_order]
+    x = np.arange(len(cond_order))
+    width = 0.28
+    mnist_vals = [clean_mnist[c][0] for c in cond_order]
     mnist_errs = [clean_mnist[c][1] for c in cond_order]
-    mnist_colors = [COLORS[c] for c in cond_order]
-
-    bars1 = ax_c.bar(x_c - width/2, mnist_means, width, yerr=mnist_errs,
-                     color=mnist_colors, alpha=0.9, capsize=3,
-                     edgecolor="black", linewidth=0.5, label="MNIST")
-
-    # Fashion-MNIST bars
-    fmnist_means = [clean_fmnist[c][0] for c in cond_order]
+    fmnist_vals = [clean_fmnist[c][0] for c in cond_order]
     fmnist_errs = [clean_fmnist[c][1] for c in cond_order]
+    for xpos, cond, m, s in zip(x - width / 2, cond_order, mnist_vals, mnist_errs):
+        ax.bar(xpos, m, width, color=COLORS[cond], edgecolor="white", linewidth=0.4, alpha=0.95)
+        ax.errorbar(xpos, m, yerr=s, fmt="none", ecolor="#333333", elinewidth=0.6, capsize=2)
+    for xpos, cond, m, s in zip(x + width / 2, cond_order, fmnist_vals, fmnist_errs):
+        ax.bar(xpos, m, width, color=COLORS[cond], edgecolor="white", linewidth=0.4, alpha=0.45)
+        ax.errorbar(xpos, m, yerr=s, fmt="none", ecolor="#333333", elinewidth=0.6, capsize=2)
+    ax.axhline(MICRONS_EE_SIGMA, color="#777777", linestyle="--", linewidth=1.0, alpha=0.85)
+    ax.axhline(SONG_2005_SIGMA, color="#333333", linestyle=":", linewidth=1.0, alpha=0.9)
+    ax.set_xticks(x)
+    ax.set_xticklabels([LABELS[c] for c in cond_order], rotation=25, ha="right")
+    ax.set_ylabel(r"Excitatory log-normal width $\sigma$")
+    ax.set_title("The shunting ordering is consistent across MNIST and Fashion-MNIST")
+    ax.set_ylim(0.65, 2.05)
+    ax.grid(axis="y", alpha=0.2, linewidth=0.4)
+    legend_handles = [
+        plt.Line2D([0], [0], color="#555555", linewidth=6, alpha=0.95, label="MNIST"),
+        plt.Line2D([0], [0], color="#555555", linewidth=6, alpha=0.45, label="Fashion-MNIST"),
+    ]
+    ax.legend(handles=legend_handles, loc="upper left")
 
-    bars2 = ax_c.bar(x_c + width/2, fmnist_means, width, yerr=fmnist_errs,
-                     color=mnist_colors, alpha=0.5, capsize=3,
-                     edgecolor="black", linewidth=0.5, hatch="//",
-                     label="Fashion-MNIST")
-
-    # Biology reference lines
-    ax_c.axhline(MICRONS_EE_SIGMA, color="gray", ls="--", lw=2, alpha=0.7,
-                 label=f"MICrONS E→E (σ={MICRONS_EE_SIGMA:.2f})")
-    ax_c.axhline(SONG_2005_SIGMA, color="black", ls=":", lw=2, alpha=0.7,
-                 label=f"Song 2005 (σ={SONG_2005_SIGMA:.2f})")
-
-    cond_labels = [LABELS[c] for c in cond_order]
-    ax_c.set_xticks(x_c)
-    ax_c.set_xticklabels(cond_labels, rotation=35, ha="right", fontsize=9)
-    ax_c.set_ylabel("Log-normal σ (excitatory)", fontsize=11)
-    ax_c.set_title("C. Weight σ: model vs biology", fontsize=12, fontweight="bold")
-    ax_c.legend(fontsize=8, loc="upper left")
-    ax_c.set_ylim(0, 2.1)
-
-    # ── Panel D: E vs I comparison ──
-    ax_d = fig.add_subplot(gs[1, 1])
-
-    # Clean sweep E and I sigma (MNIST)
+    # Panel D: excitatory vs inhibitory
+    ax = axes[1, 1]
+    _panel(ax, "D")
     clean_mnist_inh = {
         "standard_dendritic_shunting": (0.874, 0.014),
         "standard_dendritic_additive": (1.215, 0.006),
         "local_ca_dendritic_shunting": (1.708, 0.020),
         "local_ca_dendritic_additive": (1.572, 0.065),
     }
-
-    x_d = np.arange(n_c)
-    width_d = 0.35
-
-    exc_means = [clean_mnist[c][0] for c in cond_order]
+    exc_vals = [clean_mnist[c][0] for c in cond_order]
     exc_errs = [clean_mnist[c][1] for c in cond_order]
-    inh_means = [clean_mnist_inh[c][0] for c in cond_order]
+    inh_vals = [clean_mnist_inh[c][0] for c in cond_order]
     inh_errs = [clean_mnist_inh[c][1] for c in cond_order]
+    x = np.arange(len(cond_order))
+    width = 0.34
+    ax.bar(x - width / 2, exc_vals, width, color="#D47D6A", edgecolor="white", linewidth=0.4, label="Excitatory")
+    ax.bar(x + width / 2, inh_vals, width, color="#4C78A8", edgecolor="white", linewidth=0.4, label="Inhibitory")
+    ax.errorbar(x - width / 2, exc_vals, yerr=exc_errs, fmt="none", ecolor="#333333", elinewidth=0.6, capsize=2)
+    ax.errorbar(x + width / 2, inh_vals, yerr=inh_errs, fmt="none", ecolor="#333333", elinewidth=0.6, capsize=2)
+    ax.axhline(MICRONS_EE_SIGMA, color="#D47D6A", linestyle="--", linewidth=1.0, alpha=0.7)
+    ax.axhline(MICRONS_IE_SIGMA, color="#4C78A8", linestyle="--", linewidth=1.0, alpha=0.7)
+    ax.set_xticks(x)
+    ax.set_xticklabels([LABELS[c] for c in cond_order], rotation=25, ha="right")
+    ax.set_ylabel(r"Log-normal width $\sigma$")
+    ax.set_title("Shunting narrows excitatory weights more consistently than inhibitory")
+    ax.set_ylim(0.65, 2.05)
+    ax.grid(axis="y", alpha=0.2, linewidth=0.4)
+    ax.legend(loc="upper left")
 
-    ax_d.bar(x_d - width_d/2, exc_means, width_d, yerr=exc_errs,
-             color="#EE6677", alpha=0.7, capsize=3, edgecolor="black",
-             linewidth=0.5, label="Excitatory")
-    ax_d.bar(x_d + width_d/2, inh_means, width_d, yerr=inh_errs,
-             color="#4477AA", alpha=0.7, capsize=3, edgecolor="black",
-             linewidth=0.5, label="Inhibitory")
+    fig.subplots_adjust(left=0.08, right=0.98, bottom=0.10, top=0.95)
+    return fig
 
-    # MICrONS references
-    ax_d.axhline(MICRONS_EE_SIGMA, color="#EE6677", ls="--", lw=1.5, alpha=0.6,
-                 label=f"MICrONS E→E ({MICRONS_EE_SIGMA:.2f})")
-    ax_d.axhline(MICRONS_IE_SIGMA, color="#4477AA", ls="--", lw=1.5, alpha=0.6,
-                 label=f"MICrONS I→E ({MICRONS_IE_SIGMA:.2f})")
 
-    ax_d.set_xticks(x_d)
-    ax_d.set_xticklabels(cond_labels, rotation=35, ha="right", fontsize=9)
-    ax_d.set_ylabel("Log-normal σ", fontsize=11)
-    ax_d.set_title("D. Excitatory vs inhibitory weight σ", fontsize=12, fontweight="bold")
-    ax_d.legend(fontsize=8, loc="upper left")
-    ax_d.set_ylim(0, 2.1)
-
-    fig.suptitle(
-        "Synaptic Weight Distribution Analysis: Sensitivity to Architecture",
-        fontsize=14, fontweight="bold",
-    )
-
-    out_dir = os.path.join(BASE_DIR, "..", "figures")
-    os.makedirs(out_dir, exist_ok=True)
-    out_path = os.path.join(out_dir, "fig_weight_distributions.png")
-    plt.savefig(out_path, dpi=300, bbox_inches="tight")
-    print(f"Saved figure to {out_path}")
-
-    # Also save to data dir for easy access
-    out_path2 = os.path.join(BASE_DIR, "fig_weight_sensitivity.png")
-    plt.savefig(out_path2, dpi=200, bbox_inches="tight")
-    print(f"Saved figure to {out_path2}")
-
-    plt.close()
+def main() -> int:
+    fig = build_figure()
+    _save(fig, "fig_weight_distributions")
+    plt.close(fig)
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

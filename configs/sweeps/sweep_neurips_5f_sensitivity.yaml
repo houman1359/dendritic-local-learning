@@ -1,0 +1,64 @@
+output_dir: "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/sweep_runs"
+
+slurm_config:
+  account: "kempner_dev"
+  partition: "kempner_h100_priority3"
+  time: "03:00:00"
+  nodes: 1
+  ntasks_per_node: 1
+  gpus_per_node: 1
+  cpus_per_task: 4
+  mem: 32GB
+  max_concurrent_jobs: 16
+  modules_to_load: []
+  conda_env_path: ""
+  training_script: "src/dendritic_modeling/scripts/training/train_experiments.py"
+
+experiment_settings:
+  seeds_per_condition: 3
+  base_seed: 42
+  use_array_jobs: true
+
+run_name: "sweep_neurips_5f_sensitivity"
+
+configs:
+  - name: "baseline"
+    path: "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/sweep_runs/sweep_neurips_phase2b_gap_closing_pilot_20260218161300/results/config_74/config.json"
+
+  - name: "clamp_tight"
+    path: "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/sweep_runs/sweep_neurips_phase2b_gap_closing_pilot_20260218161300/results/config_74/config.json"
+    overrides:
+      training:
+        main:
+          learning_strategy_config:
+            five_factor:
+              phi_clamp_min: 0.5
+              phi_clamp_max: 2.0
+
+  - name: "clamp_wide"
+    path: "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/sweep_runs/sweep_neurips_phase2b_gap_closing_pilot_20260218161300/results/config_74/config.json"
+    overrides:
+      training:
+        main:
+          learning_strategy_config:
+            five_factor:
+              phi_clamp_min: 0.1
+              phi_clamp_max: 8.0
+
+  - name: "ema_alpha_005"
+    path: "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/sweep_runs/sweep_neurips_phase2b_gap_closing_pilot_20260218161300/results/config_74/config.json"
+    overrides:
+      training:
+        main:
+          learning_strategy_config:
+            four_factor:
+              ema_alpha: 0.05
+
+  - name: "ema_alpha_020"
+    path: "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/sweep_runs/sweep_neurips_phase2b_gap_closing_pilot_20260218161300/results/config_74/config.json"
+    overrides:
+      training:
+        main:
+          learning_strategy_config:
+            four_factor:
+              ema_alpha: 0.2

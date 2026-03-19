@@ -28,6 +28,11 @@
 build/
 output/
 _minted-*/
+outputs/
+
+# Python cache
+__pycache__/
+*.py[cod]
 
 # OS files
 .DS_Store
@@ -55,3 +60,9 @@ archive/
 *.gz(busy)
 *.nav(busy)
 *.snm(busy)
+
+# Generated analysis and data artifacts
+analysis/**/*.csv
+analysis/**/*.json
+data/**/*.csv
+data/**/*.json

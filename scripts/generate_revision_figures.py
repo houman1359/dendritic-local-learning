@@ -3,7 +3,8 @@
 
 Produces:
   Main:
-    fig5_mechanistic_evidence.pdf  (3 panels: R_tot, low-bandwidth, additive+norm)
+    fig5_mechanistic_evidence.pdf  (4 panels: path gains, exact-error fidelity, oracle learning, low-bandwidth)
+    fig6_cue_routing.pdf          (3 panels: hard cue-routing diagnosis)
   Supplement:
     fig_s5_fa_dfa.pdf              (FA/DFA baseline comparison)
     fig_s6_cifar10.pdf             (CIFAR-10 results)
@@ -23,6 +24,17 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import numpy as np
 import pandas as pd
+
+from generate_cue_routing_figures import SUMMARY_CSV as CUE_SUMMARY_CSV
+from generate_cue_routing_figures import build_figure as build_cue_routing_figure
+from generate_5f_sensitivity_figure import (
+    SUMMARY_CSV as FIVE_FACTOR_SUMMARY_CSV,
+    build_figure as build_five_factor_sensitivity_figure,
+)
+from generate_theory_diagnostics_figures import (
+    build_figure as build_theory_diagnostics_figure,
+)
+from summarize_cue_routing_results import summarize_runs as summarize_cue_routing_runs
 
 # ---------------------------------------------------------------------------
 # Paths
@@ -96,197 +108,9 @@ def _csv(filename):
 # Figure 5 — Mechanistic Evidence (NEW main figure)
 # ===================================================================
 def figure5():
-    """Three panels: (A) R_tot distributions, (B) low-bandwidth degradation,
-    (C) additive + normalization control."""
+    """Mechanistic figure built from exact-error diagnostics and bandwidth sweep."""
     print("\n--- Figure 5: Mechanistic Evidence ---")
-
-    rtot = _csv("rtot_distributions.csv")
-    lbw = _csv("low_bandwidth_results.csv")
-    anorm = _csv("additive_norm_results.csv")
-
-    fig, axes = plt.subplots(1, 3, figsize=(W, 2.6),
-                             gridspec_kw={"wspace": 0.55})
-
-    # ---- Panel A: R_tot distributions ----
-    ax = axes[0]
-    _panel(ax, "A")
-
-    if rtot is not None:
-        # Use only the first branch layer (outermost = receives external input)
-        bl0 = rtot[rtot["layer_name"].str.contains("branch_layers.0")]
-        for model_type, color, label in [
-            ("dendritic_shunting", COLOR_SHUNTING, "Shunting"),
-            ("dendritic_additive", COLOR_ADDITIVE, "Additive"),
-        ]:
-            sub = bl0[bl0["model_type"] == model_type]
-            if len(sub) == 0:
-                continue
-            ie_vals = sorted(sub["ie_synapses"].unique())
-            means = []
-            stds = []
-            for ie in ie_vals:
-                s = sub[sub["ie_synapses"] == ie]
-                means.append(s["R_tot_mean"].mean())
-                stds.append(s["R_tot_mean"].std())
-            ax.errorbar(ie_vals, means, yerr=stds,
-                        marker="o", markersize=3, lw=1.2, capsize=2,
-                        color=color, label=label, capthick=0.5)
-
-        ax.set_xlabel("$N_I$ (inhib. syn. per branch)")
-        ax.set_ylabel(r"$R_{\mathrm{tot}}$ (input resistance)")
-        ax.set_title(r"$R_{\mathrm{tot}}$ vs. inhibition")
-        ax.legend(fontsize=5.5, loc="upper right")
-        ax.set_ylim(0, 1.15)
-
-        # Add annotation for mechanism
-        ax.annotate("Shunting\nreduces $R_{\\mathrm{tot}}$\n4x",
-                     xy=(10, 0.25), fontsize=5, color=COLOR_SHUNTING,
-                     ha="center", style="italic")
-    else:
-        ax.text(0.5, 0.5, "R_tot data\nnot found", transform=ax.transAxes,
-                ha="center", va="center")
-
-    # ---- Panel B: Low-bandwidth degradation curve ----
-    ax = axes[1]
-    _panel(ax, "B")
-
-    if lbw is not None:
-        # Create a bandwidth label for ordering
-        def bw_label(row):
-            bw = row["broadcast_bandwidth"]
-            bits = row.get("broadcast_bits", 8)
-            if bw == "full":
-                return "Full"
-            elif bw == "quantized":
-                return f"Q{int(bits)}b"
-            elif bw == "sign_only":
-                return "Sign"
-            elif bw == "sparse_topk":
-                return "Top-30%"
-            return bw
-
-        def bw_bits_equiv(row):
-            """Map bandwidth modes to effective bits for x-axis ordering."""
-            bw = row["broadcast_bandwidth"]
-            bits = row.get("broadcast_bits", 8)
-            if bw == "full":
-                return 32
-            elif bw == "quantized":
-                return int(bits)
-            elif bw == "sign_only":
-                return 1
-            elif bw == "sparse_topk":
-                return 0.3  # separate category
-            return 16
-
-        lbw["bw_label"] = lbw.apply(bw_label, axis=1)
-        lbw["bw_bits"] = lbw.apply(bw_bits_equiv, axis=1)
-
-        # Group and compute stats (exclude sparse for line plot)
-        quant_modes = lbw[lbw["broadcast_bandwidth"].isin(["full", "quantized", "sign_only"])]
-        grp = quant_modes.groupby(["bw_label", "bw_bits"]).agg(
-            mean=("test_accuracy", "mean"),
-            std=("test_accuracy", "std"),
-            n=("test_accuracy", "count"),
-        ).reset_index().sort_values("bw_bits")
-
-        # Plot line: bits vs accuracy
-        ax.errorbar(grp["bw_bits"], grp["mean"] * 100, yerr=grp["std"] * 100,
-                     marker="o", markersize=4, lw=1.5, capsize=2,
-                     color=COLOR_SHUNTING, capthick=0.5, zorder=5)
-
-        # Label each point
-        for _, row in grp.iterrows():
-            offset = 2.5 if row["bw_bits"] < 16 else -2.5
-            va = "bottom" if row["bw_bits"] < 16 else "top"
-            ax.annotate(row["bw_label"],
-                        xy=(row["bw_bits"], row["mean"] * 100),
-                        xytext=(0, offset), textcoords="offset points",
-                        fontsize=5, ha="center", va=va, color=COLOR_SHUNTING)
-
-        # Add sparse top-k as separate point
-        sparse = lbw[lbw["broadcast_bandwidth"] == "sparse_topk"]
-        if len(sparse):
-            sp_mean = sparse["test_accuracy"].mean() * 100
-            sp_std = sparse["test_accuracy"].std() * 100
-            ax.errorbar([0.5], [sp_mean], yerr=[sp_std],
-                        marker="^", markersize=5, color="#E67E22",
-                        capsize=2, capthick=0.5, zorder=5)
-            ax.annotate("Top-30%", xy=(0.5, sp_mean),
-                        xytext=(8, -5), textcoords="offset points",
-                        fontsize=5, color="#E67E22")
-
-        ax.set_xlabel("Effective bits per neuron")
-        ax.set_ylabel("Test accuracy (%)")
-        ax.set_title("Broadcast bandwidth")
-        ax.set_xscale("symlog", linthresh=1)
-        ax.set_xticks([1, 2, 4, 8, 32])
-        ax.set_xticklabels(["1", "2", "4", "8", "32"])
-        ax.set_ylim(25, 72)
-
-        # Add horizontal reference line for full
-        full_mean = lbw[lbw["broadcast_bandwidth"] == "full"]["test_accuracy"].mean() * 100
-        ax.axhline(full_mean, color=COLOR_SHUNTING, lw=0.5, ls=":", alpha=0.5)
-    else:
-        ax.text(0.5, 0.5, "Low-BW data\nnot found", transform=ax.transAxes,
-                ha="center", va="center")
-
-    # ---- Panel C: Additive + normalization control ----
-    ax = axes[2]
-    _panel(ax, "C")
-
-    if anorm is not None:
-        # Bar chart: 4 conditions
-        conditions = []
-        for (norm, strat), g in anorm.groupby(["use_additive_normalization", "strategy"]):
-            m = g["test_accuracy"].mean() * 100
-            s = g["test_accuracy"].std() * 100
-            if strat == "local_ca":
-                label = "Add.+norm\nlocal" if norm else "Add.\nlocal"
-                conditions.append((label, m, s, COLOR_ADDITIVE if not norm else "#5B8AC4", strat, norm))
-
-        # Sort: additive first, then additive+norm
-        conditions.sort(key=lambda x: (x[5], x[4]))
-
-        # Also add shunting reference from low-bandwidth full baseline
-        shunting_local_ref = None
-        if lbw is not None:
-            full = lbw[lbw["broadcast_bandwidth"] == "full"]
-            if len(full):
-                shunting_local_ref = (full["test_accuracy"].mean() * 100,
-                                      full["test_accuracy"].std() * 100)
-
-        x_pos = np.arange(len(conditions))
-        bars = ax.bar(x_pos, [c[1] for c in conditions],
-                      yerr=[c[2] for c in conditions],
-                      color=[c[3] for c in conditions],
-                      edgecolor="white", lw=0.4, width=0.55,
-                      capsize=2, error_kw={"lw": 0.5})
-
-        # Value labels
-        for i, (label, m, s, color, strat, norm) in enumerate(conditions):
-            ax.text(i, m + s + 1.5, f"{m:.1f}%", ha="center", va="bottom",
-                    fontsize=5, color="black")
-
-        # Shunting reference line
-        if shunting_local_ref:
-            ax.axhline(shunting_local_ref[0], color=COLOR_SHUNTING, lw=1.0, ls="--",
-                       alpha=0.7, zorder=0)
-            ax.text(len(conditions) - 0.5, shunting_local_ref[0] + 1,
-                    f"Shunting\n{shunting_local_ref[0]:.1f}%",
-                    fontsize=5, color=COLOR_SHUNTING, ha="center", va="bottom")
-
-        ax.set_xticks(x_pos)
-        ax.set_xticklabels([c[0] for c in conditions], fontsize=5.5)
-        ax.set_ylabel("Test accuracy (%)")
-        ax.set_title("Normalization control")
-        ax.set_ylim(30, 75)
-    else:
-        ax.text(0.5, 0.5, "Additive norm\ndata not found", transform=ax.transAxes,
-                ha="center", va="center")
-
-    fig.subplots_adjust(left=0.10, right=0.97, bottom=0.18, top=0.86,
-                        wspace=0.55)
+    fig = build_theory_diagnostics_figure()
     _save(fig, "fig5_mechanistic_evidence")
     plt.close(fig)
 
@@ -378,6 +202,19 @@ def figure_s5():
     fig.subplots_adjust(left=0.12, right=0.97, bottom=0.15, top=0.88,
                         wspace=0.50)
     _save(fig, "fig_s5_fa_dfa")
+    plt.close(fig)
+
+
+# ===================================================================
+# Figure S3 — 5F Sensitivity
+# ===================================================================
+def figure_s3():
+    print("\n--- Figure S3: 5F Sensitivity ---")
+    if not os.path.isfile(FIVE_FACTOR_SUMMARY_CSV):
+        print("  SKIPPED: five_factor_sensitivity_summary.csv not found")
+        return
+    fig = build_five_factor_sensitivity_figure(FIVE_FACTOR_SUMMARY_CSV)
+    _save(fig, "fig_s3_5f_sensitivity")
     plt.close(fig)
 
 
@@ -524,6 +361,9 @@ def main():
     os.makedirs(FIGURES_DIR, exist_ok=True)
 
     figure5()
+    summarize_cue_routing_runs([])
+    build_cue_routing_figure(CUE_SUMMARY_CSV)
+    figure_s3()
     figure_s5()
     figure_s6()
     figure_s7()
