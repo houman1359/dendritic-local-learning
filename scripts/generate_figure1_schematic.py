@@ -1,15 +1,13 @@
 #!/usr/bin/env python3
-"""Generate Figure 1: model, rules, and representative MNIST learning curves.
+"""Generate Figure 1: model, rules, and rule-family MNIST summary.
 
 Creates:
   - fig_model_schematic.{pdf,png}: legacy two-panel schematic
   - fig1_model_and_credit.{pdf,png}: four-panel publication figure
 
-The publication figure replaces the stale sandbox learning curve with
-representative current MNIST runs:
-  - standard shunting backprop ceiling
-  - shunting LocalCA (5F, per-soma)
-  - additive LocalCA (5F, per-soma)
+The publication figure includes a compact MNIST rule-family panel:
+  - 3F, 4F, and 5F summary values from the rule-ranking table
+  - a backprop ceiling reference line
 """
 
 from __future__ import annotations
@@ -57,11 +55,12 @@ CURVE_COLORS = {
     "local_shunting": "#4DAF4A",
     "local_additive": "#2166AC",
 }
-CURVE_LABELS = {
-    "bp_shunting": "Shunting BP",
-    "local_shunting": "Shunting 5F-per-soma",
-    "local_additive": "Additive 5F-per-soma",
+RULE_FAMILY_TEST = {
+    "3F": 62.2,
+    "4F": 62.8,
+    "5F": 91.6,
 }
+MNIST_BP_CEILING = 96.5
 
 
 def resolve_runs() -> dict[str, Path]:
@@ -154,7 +153,7 @@ def panel_a(ax):
         denominator (shunting / divisive normalization)
       - Dendritic conductances (BlockLinear) connect branches to parent
     """
-    ax.set_xlim(-0.8, 4.7)
+    ax.set_xlim(-0.15, 4.7)
     ax.set_ylim(-0.5, 3.7)
     ax.set_aspect("equal")
     ax.axis("off")
@@ -193,9 +192,9 @@ def panel_a(ax):
                    color=DEN_COLOR, lw=1.2)
 
     # ── External input labels ──
-    ax.text(-0.58, 2.0, "Excitatory\ninputs $x_j^E$", ha="center",
+    ax.text(0.05, 2.0, "Excitatory\ninputs $x_j^E$", ha="center",
             va="center", fontsize=7, color=EXC_COLOR, fontweight="bold")
-    ax.text(-0.58, 1.0, "Inhibitory\ninputs $x_j^I$", ha="center",
+    ax.text(0.05, 1.0, "Inhibitory\ninputs $x_j^I$", ha="center",
             va="center", fontsize=7, color=INH_COLOR, fontweight="bold")
 
     # ── Draw E and I synapses on EVERY branch ──
@@ -380,64 +379,83 @@ def panel_c_broadcast(ax):
                     "", xy=leaves[2], xytext=channel_pts[1],
                     arrowprops=dict(arrowstyle="-|>", color=colors[1], lw=1.0),
                 )
-        ax.text(0.05, y + 0.09, title, ha="left", va="center",
-                fontsize=6.9, fontweight="bold")
-        ax.text(0.05, y - 0.10, subtitle, ha="left", va="center",
-                fontsize=5.8, color="gray")
+        ax.text(0.03, y + 0.12, title, ha="left", va="center",
+                fontsize=6.8, fontweight="bold")
+        ax.text(0.03, y - 0.12, subtitle, ha="left", va="center",
+                fontsize=5.6, color="gray")
 
     draw_mode(2.35, "scalar", "scalar", "one shared field")
     draw_mode(1.50, "per_soma", "per-soma", "vector from soma to all branches")
     draw_mode(0.65, "structured", "structured pathways", "separate channels for distinct branches")
 
 
-def panel_d(ax, histories: dict[str, pd.DataFrame]):
-    """Panel D: representative MNIST accuracy curves."""
-    ax.set_title("(D) Representative MNIST accuracy", fontsize=11, fontweight="bold", pad=8)
+def panel_d(ax):
+    """Panel D: compact MNIST rule-family summary."""
+    ax.set_title("(D) Rule-family progression on MNIST", fontsize=11,
+                 fontweight="bold", pad=8)
 
-    for key in ["bp_shunting", "local_shunting", "local_additive"]:
-        df = histories[key]
-        style = "--" if key == "bp_shunting" else "-"
-        lw = 2.0 if key != "bp_shunting" else 1.8
-        ax.plot(
-            df["epoch"],
-            100.0 * df["test_accuracy"],
-            style,
-            lw=lw,
-            color=CURVE_COLORS[key],
-            label=CURVE_LABELS[key],
+    labels = list(RULE_FAMILY_TEST.keys())
+    values = [RULE_FAMILY_TEST[label] for label in labels]
+    colors = [RULE3_COLOR, RULE4_COLOR, RULE5_COLOR]
+    x = np.arange(len(labels))
+
+    bars = ax.bar(
+        x,
+        values,
+        width=0.62,
+        color=colors,
+        edgecolor="black",
+        linewidth=0.7,
+        alpha=0.75,
+        zorder=3,
+    )
+
+    ax.axhline(
+        MNIST_BP_CEILING,
+        color=CURVE_COLORS["bp_shunting"],
+        linestyle="--",
+        linewidth=1.8,
+        zorder=2,
+        label="BP ceiling",
+    )
+
+    for bar, value in zip(bars, values):
+        ax.text(
+            bar.get_x() + bar.get_width() / 2,
+            value + 1.5,
+            f"{value:.1f}",
+            ha="center",
+            va="bottom",
+            fontsize=7.2,
         )
 
-    ax.set_xlabel("Epoch")
+    ax.text(
+        2.55,
+        MNIST_BP_CEILING + 0.8,
+        "BP 96.5",
+        color=CURVE_COLORS["bp_shunting"],
+        fontsize=7.0,
+        ha="right",
+        va="bottom",
+    )
+
+    ax.set_xticks(x, labels)
     ax.set_ylabel("Test accuracy (%)")
     ax.set_ylim(0, 100)
-    ax.set_xlim(1, max(int(histories[key]["epoch"].max()) for key in histories))
-    ax.grid(alpha=0.18, linewidth=0.5)
-    ax.legend(loc="lower right", fontsize=6.3, handlelength=2.2)
-
-
-def panel_e(ax, histories: dict[str, pd.DataFrame]):
-    """Panel E: representative MNIST loss curves."""
-    ax.set_title("(E) Representative MNIST loss", fontsize=11, fontweight="bold", pad=8)
-
-    for key in ["bp_shunting", "local_shunting", "local_additive"]:
-        df = histories[key]
-        style = "--" if key == "bp_shunting" else "-"
-        lw = 2.0 if key != "bp_shunting" else 1.8
-        ax.plot(
-            df["epoch"],
-            df["test_loss"],
-            style,
-            lw=lw,
-            color=CURVE_COLORS[key],
-            label=CURVE_LABELS[key],
-        )
-
-    ax.set_xlabel("Epoch")
-    ax.set_ylabel("Test NLL")
-    ax.set_ylim(bottom=0.0)
-    ax.set_xlim(1, max(int(histories[key]["epoch"].max()) for key in histories))
-    ax.grid(alpha=0.18, linewidth=0.5)
-    ax.legend(loc="upper right", fontsize=6.3, handlelength=2.2)
+    ax.set_xlim(-0.55, 2.65)
+    ax.grid(axis="y", alpha=0.18, linewidth=0.5, zorder=0)
+    ax.tick_params(axis="x", labelsize=8.5)
+    ax.tick_params(axis="y", labelsize=8)
+    ax.text(
+        0.02,
+        0.03,
+        "Top-10 mean over completed\nMNIST local sweeps",
+        transform=ax.transAxes,
+        fontsize=6.1,
+        color="gray",
+        ha="left",
+        va="bottom",
+    )
 
 
 def main():
@@ -461,23 +479,19 @@ def main():
     plt.close(fig)
 
     # Publication figure used in the paper.
-    runs = resolve_runs()
-    histories = {name: load_epoch_history(path) for name, path in runs.items()}
-    fig = plt.figure(figsize=(13.4, 8.8))
-    gs = fig.add_gridspec(2, 12, height_ratios=[1.0, 0.9], hspace=0.34, wspace=0.14)
+    fig = plt.figure(figsize=(15.2, 4.3))
+    gs = fig.add_gridspec(1, 16, wspace=0.22)
     ax_a = fig.add_subplot(gs[0, 0:6])
     ax_b = fig.add_subplot(gs[0, 6:9])
     ax_c = fig.add_subplot(gs[0, 9:12])
-    ax_d = fig.add_subplot(gs[1, 0:6])
-    ax_e = fig.add_subplot(gs[1, 6:12])
+    ax_d = fig.add_subplot(gs[0, 12:16])
 
     panel_a(ax_a)
     panel_b(ax_b)
     panel_c_broadcast(ax_c)
-    panel_d(ax_d, histories)
-    panel_e(ax_e, histories)
+    panel_d(ax_d)
 
-    fig.subplots_adjust(left=0.04, right=0.985, top=0.965, bottom=0.07)
+    fig.subplots_adjust(left=0.03, right=0.99, top=0.90, bottom=0.15)
     out_path = OUTPUT_DIR / "fig1_model_and_credit"
     fig.savefig(out_path.with_suffix(".png"), dpi=300, bbox_inches="tight")
     fig.savefig(out_path.with_suffix(".pdf"), bbox_inches="tight")

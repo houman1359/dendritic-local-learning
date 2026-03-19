@@ -88,15 +88,14 @@ In matched architectures, shunting improves gradient fidelity and local learning
 We use a component-wise local-vs-backprop diagnostic to link dendritic architecture and broadcast design to the quality of local credit signals.
 \end{enumerate}
 
-\begin{figure*}[t]
+\begin{figure*}[!t]
 \centering
 \includegraphics[width=0.95\textwidth]{fig1_model_and_credit.pdf}
 \caption{\textbf{Model and credit assignment.}
 \textbf{(A)}~A compartmental dendritic neuron with excitatory (blue triangles) and inhibitory (red circles; shunting) synapses. Voltages propagate to the soma through learned dendritic conductances (green arrows). A somatic broadcast error $e_n$ (dashed red) reaches all compartments; each synapse combines $e_n$ with local quantities (presynaptic drive $x_j$, input resistance $R_n^{\mathrm{tot}}$, and driving force $E_j{-}V_n$).
 \textbf{(B)}~Compact LocalCA hierarchy: 3F uses local eligibility and a broadcast field; 4F adds the morphology-aware factor $\rho$; 5F further adds the confidence-like factor $\phi$.
 \textbf{(C)}~Broadcast-mode schematic. Scalar broadcast sends one shared field to all branches; per-soma broadcast sends a vector-valued somatic error to each branch; structured pathway feedback uses separate channels to preserve pathway identity when different branches should receive different teaching signals.
-\textbf{(D)}~Representative MNIST accuracy curves from the current paper configurations, all trained for 100 epochs without early stopping: a shunting backprop reference run reaches $97.1\%$, shunting 5F-per-soma LocalCA reaches $91.1\%$, and a matched additive 5F-per-soma LocalCA control reaches $87.1\%$.
-\textbf{(E)}~The corresponding test negative log-likelihood curves. The revised panels use the current headline configurations rather than the older sandbox trace, and the color scheme matches the rest of the paper: dark green for shunting backprop, green for shunting LocalCA, and blue for additive LocalCA.}
+\textbf{(D)}~MNIST rule-family summary for shunting LocalCA. Bars show the rule progression from 3F to 4F to 5F using the same summary values reported in Appendix Table~\ref{tab:variant_ranking}; the dashed green line marks the MNIST backprop ceiling ($96.5\%$). This panel makes clear that the method is a family, not only its best-performing 5F member.}
 \label{fig:model_schematic}
 \end{figure*}
 
@@ -324,7 +323,7 @@ Context gating & Additive & $-0.007$ & 2.154 \\
 \label{tab:gradient_alignment_summary}
 \end{table}
 
-\begin{figure*}[t]
+\begin{figure*}[!t]
 \centering
 \includegraphics[width=0.95\textwidth]{fig3_gradient_fidelity.pdf}
 \caption{\textbf{Gradient-fidelity mechanism.} \textbf{(A)}~Weighted cosine similarity between local and backprop gradients: shunting (green) shows about $30\times$ better directional alignment than additive (blue) on both MNIST and context gating. \textbf{(B)}~Per-layer cosine similarity over training epochs. Shunting proximal layers approach $1.0$; additive layers remain near zero. \textbf{(C)}~Component-wise alignment: E-synapses and dendritic conductances carry the strongest alignment signal in shunting networks.}
@@ -378,7 +377,7 @@ Explicitly normalizing additive voltages improves local learning but does not cl
 DFA baselines (Appendix Fig.~\ref{fig:s5_fa_dfa}) likewise improve over point-MLP random-feedback baselines without matching the shunting conductance model.
 These controls support the same conclusion as panel~B: useful local learning requires more than a broadcast signal with the right overall scale.
 
-\begin{figure*}[t]
+\begin{figure*}[!t]
 \centering
 \includegraphics[width=0.95\textwidth]{fig5_mechanistic_evidence.pdf}
 \caption{\textbf{Mechanistic evidence.}
@@ -423,7 +422,7 @@ In a focused MNIST sensitivity sweep, however, those heuristics are not especial
 
 \subsection{Regime dependence of the shunting advantage}
 
-\begin{figure*}[t]
+\begin{figure*}[!t]
 \centering
 \includegraphics[width=0.95\textwidth]{fig2_competence_regime.pdf}
 \caption{\textbf{Local competence and regime dependence.} \textbf{(A)}~Backprop ceiling (gray) vs.\ best local rule (5F per-soma) for shunting (green) and additive (blue) cores on MNIST, Fashion-MNIST, and context gating. \textbf{(B)}~$N_I$ dose-response: test accuracy vs.\ inhibitory synapses per branch ($N_I$) for shunting and additive cores on MNIST (solid) and noise resilience (dashed). Shunting needs $N_I\!\geq\!5$ to reach high accuracy; additive learning fails on noise resilience regardless of $N_I$. \textbf{(C)}~Shunting advantage ($\Delta$, in percentage points) vs.\ $N_I$. The shunting advantage grows with inhibitory synapses per branch and is larger on the noise-resilience task than on MNIST.}
@@ -452,7 +451,7 @@ This pattern is consistent with the proposed mechanism: shunting produces better
 On Fashion-MNIST (Fig.~\ref{fig:scalability}C), shunting local reaches $81.1\%$ vs.\ a $87.9\%$ backprop ceiling (gap $6.8\%$); additive local reaches $79.4\%$ vs.\ $87.4\%$ backprop (gap $8.0\%$).
 The shunting advantage is modest (about $1.7$~pp) on this clean classification task, consistent with the regime-dependent pattern above: the benefit is largest on tasks that require robust credit signals under noise.
 
-\begin{figure*}[t]
+\begin{figure*}[!t]
 \centering
 \includegraphics[width=0.95\textwidth]{fig4_scalability.pdf}
 \caption{\textbf{Scalability and generalization.} \textbf{(A)}~Depth scaling: shunting local (green) degrades gracefully from 63.5\% to 57.4\%; additive local (blue) drops from 54.9\% to 29.7\%. Backprop ceilings (dashed) remain stable. \textbf{(B)}~Noise robustness: shunting is robust to $\sigma\!\leq\!0.1$; additive degrades rapidly and reaches chance at $\sigma\!=\!1$. \textbf{(C)}~Fashion-MNIST: shunting local 81.1\% vs.\ 87.9\% backprop; additive local 79.4\% vs.\ 87.4\% backprop.}
@@ -482,7 +481,7 @@ The untuned 90-epoch version already improves to $94.0 \pm 11.0\%$, and the tune
 The failure is therefore not caused by pathway discovery itself; it arises because scalar broadcast does not preserve pathway identity once different cue branches must be credited differently.
 When the feedback preserves that structure, learned-routing shunting local learning becomes reliable.
 
-\begin{figure*}[t]
+\begin{figure*}[!t]
 \centering
 \includegraphics[width=0.95\textwidth]{fig6_cue_routing.pdf}
 \caption{\textbf{Structured feedback for pathway discovery on cue integration.}
@@ -964,6 +963,23 @@ Recent dendritic extensions & path propagation; router-derived branch roles; pat
 \end{tabular}
 \caption{Implemented model families and LocalCA operating modes. Only a subset is used for the main claims; the remaining modes serve as controls, ablations, or structured extensions.}
 \label{tab:model_mode_inventory}
+\end{table}
+
+\subsection*{LocalCA Extension Compatibility}
+\begin{table}[t]\centering\small
+\begin{tabular}{@{}p{0.18\linewidth}p{0.34\linewidth}p{0.15\linewidth}p{0.25\linewidth}@{}}\toprule
+\textbf{Extension} & \textbf{Meaning} & \textbf{Compatible with} & \textbf{Typical use here} \\\midrule
+Per-soma broadcast & Somatic error vector shared across compartments & 3F, 4F, 5F & Default main-text LocalCA setting \\
+Low-rank broadcast & Small number of broadcast channels instead of a scalar or full field & 3F, 4F, 5F & Intermediate control when rank-1 is too restrictive \\
+Path transport & Recursive tree-transported error using path gains & 3F, 4F, 5F & Oracle upper-bound broadcast \\
+Path propagation & Approximate path-gain attenuation applied to broadcast & 3F, 4F, 5F & Morphology-aware modifier for deeper trees \\
+Pathway vector & Structured branch/pathway-specific broadcast field & 3F, 4F, 5F & Used mainly in PV-LocalCA on routed tasks \\
+Branch-role rules & Scales updates by router- or pathway-derived branch specialization & 3F, 4F, 5F & Structured pathway extension \\
+Inhibitory homeostasis & Auxiliary local inhibitory balancing term & 3F, 4F, 5F & Stabilizer for routed/shunting settings \\
+\bottomrule
+\end{tabular}
+\caption{Compatibility of the newer LocalCA extensions with the base 3F/4F/5F family. These extensions mostly modify the error field or branch scaling rather than defining a new ``6F'' or ``7F'' rule.}
+\label{tab:localca_extension_compatibility}
 \end{table}
 
 \subsection*{Compute Resources}
