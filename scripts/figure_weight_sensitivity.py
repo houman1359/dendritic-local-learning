@@ -45,13 +45,13 @@ def _setup_style() -> None:
     plt.rcParams.update(
         {
             "font.family": "sans-serif",
-            "font.size": 7.0,
-            "axes.labelsize": 8,
-            "axes.titlesize": 8,
-            "axes.titlepad": 6,
-            "xtick.labelsize": 6.5,
-            "ytick.labelsize": 6.5,
-            "legend.fontsize": 6,
+            "font.size": 8.0,
+            "axes.labelsize": 9,
+            "axes.titlesize": 9,
+            "axes.titlepad": 7,
+            "xtick.labelsize": 7.5,
+            "ytick.labelsize": 7.5,
+            "legend.fontsize": 7,
             "figure.dpi": DPI,
             "savefig.dpi": DPI,
             "savefig.bbox": "tight",
@@ -98,7 +98,7 @@ def build_figure() -> plt.Figure:
     depth_data = _load_json(DATA_DIR / "sigma_vs_depth.json")
     ei_data = _load_json(DATA_DIR / "sigma_vs_ei_synapses.json")
 
-    fig, axes = plt.subplots(2, 2, figsize=(11.0, 7.2), gridspec_kw={"wspace": 0.32, "hspace": 0.42})
+    fig, axes = plt.subplots(2, 2, figsize=(11.0, 7.8), gridspec_kw={"wspace": 0.38, "hspace": 0.52})
 
     cond_order = [
         "standard_dendritic_shunting",
@@ -144,7 +144,7 @@ def build_figure() -> plt.Figure:
     ax.set_xticklabels(depth_labels)
     ax.set_ylabel(r"Excitatory log-normal width $\sigma$")
     ax.set_xlabel("Branch factors (depth)")
-    ax.set_title("Shunting stays closer to biological-width references across depth")
+    ax.set_title(r"$\sigma$ vs.\ dendritic depth")
     ax.set_ylim(0.65, 2.65)
     ax.grid(axis="y", alpha=0.2, linewidth=0.4)
     ax.legend(loc="upper left", ncol=2, fontsize=5.7, columnspacing=0.9, handletextpad=0.4)
@@ -191,7 +191,7 @@ def build_figure() -> plt.Figure:
     ax.text(0.02, 0.05, "shaded band: $N_E=20$ to $80$", transform=ax.transAxes, fontsize=5.8, color="#666666")
     ax.set_xlabel(r"Inhibitory synapses per branch $N_I$")
     ax.set_ylabel(r"Excitatory log-normal width $\sigma$")
-    ax.set_title("Inhibitory conductance is the dominant width-control knob")
+    ax.set_title(r"$\sigma$ vs.\ inhibitory synapse count")
     ax.set_ylim(0.65, 2.95)
     ax.grid(axis="y", alpha=0.2, linewidth=0.4)
     ax.legend(loc="upper right")
@@ -228,7 +228,7 @@ def build_figure() -> plt.Figure:
     ax.set_xticks(x)
     ax.set_xticklabels([LABELS[c] for c in cond_order], rotation=25, ha="right")
     ax.set_ylabel(r"Excitatory log-normal width $\sigma$")
-    ax.set_title("The shunting ordering is consistent across MNIST and Fashion-MNIST")
+    ax.set_title("Summary across datasets")
     ax.set_ylim(0.65, 2.05)
     ax.grid(axis="y", alpha=0.2, linewidth=0.4)
     legend_handles = [
@@ -261,7 +261,7 @@ def build_figure() -> plt.Figure:
     ax.set_xticks(x)
     ax.set_xticklabels([LABELS[c] for c in cond_order], rotation=25, ha="right")
     ax.set_ylabel(r"Log-normal width $\sigma$")
-    ax.set_title("Shunting narrows excitatory weights more consistently than inhibitory")
+    ax.set_title(r"Excitatory vs inhibitory $\sigma$")
     ax.set_ylim(0.65, 2.05)
     ax.grid(axis="y", alpha=0.2, linewidth=0.4)
     ax.legend(loc="upper left")

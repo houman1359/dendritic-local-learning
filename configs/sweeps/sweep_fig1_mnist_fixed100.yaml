@@ -25,6 +25,10 @@ experiment_settings:
 configs:
   - name: "fig1_mnist_shunting_bp_fixed100"
     path: "drafts/dendritic-local-learning/configs/fig1_mnist_shunting_bp_fixed100.yaml"
+  - name: "fig1_mnist_shunting_3f_fixed100"
+    path: "drafts/dendritic-local-learning/configs/fig1_mnist_shunting_3f_fixed100.yaml"
+  - name: "fig1_mnist_shunting_4f_fixed100"
+    path: "drafts/dendritic-local-learning/configs/fig1_mnist_shunting_4f_fixed100.yaml"
   - name: "fig1_mnist_shunting_localca_fixed100"
     path: "drafts/dendritic-local-learning/configs/fig1_mnist_shunting_localca_fixed100.yaml"
   - name: "fig1_mnist_additive_localca_fixed100"

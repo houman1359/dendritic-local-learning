@@ -1,13 +1,16 @@
 #!/usr/bin/env python3
-"""Generate Figure 1: model, rules, and rule-family MNIST summary.
+"""Generate Figure 1: model, rules, and representative MNIST rule curves.
 
 Creates:
   - fig_model_schematic.{pdf,png}: legacy two-panel schematic
   - fig1_model_and_credit.{pdf,png}: four-panel publication figure
 
-The publication figure includes a compact MNIST rule-family panel:
-  - 3F, 4F, and 5F summary values from the rule-ranking table
-  - a backprop ceiling reference line
+The publication figure includes a representative MNIST rule-family panel:
+  - shunting BP
+  - shunting 3F
+  - shunting 4F
+  - shunting 5F
+all shown as test-accuracy-vs-epoch curves from the fixed-100 Figure 1 sweep.
 """
 
 from __future__ import annotations
@@ -47,20 +50,16 @@ FALLBACK_RUNS = {
 FIG1_FIXED100_PREFIX = "sweep_fig1_mnist_fixed100_"
 FIG1_RUN_NAMES = {
     "bp_shunting": "fig1_mnist_shunting_bp_fixed100_s43",
-    "local_shunting": "fig1_mnist_shunting_localca_fixed100_s43",
-    "local_additive": "fig1_mnist_additive_localca_fixed100_s43",
+    "rule_3f": "fig1_mnist_shunting_3f_fixed100_s43",
+    "rule_4f": "fig1_mnist_shunting_4f_fixed100_s43",
+    "rule_5f": "fig1_mnist_shunting_localca_fixed100_s43",
 }
 CURVE_COLORS = {
     "bp_shunting": "#1B7837",
-    "local_shunting": "#4DAF4A",
-    "local_additive": "#2166AC",
+    "rule_3f": RULE3_COLOR,
+    "rule_4f": RULE4_COLOR,
+    "rule_5f": RULE5_COLOR,
 }
-RULE_FAMILY_TEST = {
-    "3F": 62.2,
-    "4F": 62.8,
-    "5F": 91.6,
-}
-MNIST_BP_CEILING = 96.5
 
 
 def resolve_runs() -> dict[str, Path]:
@@ -157,7 +156,7 @@ def panel_a(ax):
     ax.set_ylim(-0.5, 3.7)
     ax.set_aspect("equal")
     ax.axis("off")
-    ax.set_title("(A) Compartmental dendritic neuron", fontsize=11,
+    ax.set_title("Compartmental dendritic neuron", fontsize=11,
                  fontweight="bold", pad=8)
 
     # ── Soma ──
@@ -230,15 +229,6 @@ def panel_a(ax):
         arrowprops=dict(arrowstyle="->", color=INH_COLOR, lw=0.6),
     )
 
-    # ── Voltage equation ──
-    eq_text = (
-        r"$V_n = \frac{\sum_j E_j x_j g_j^{\mathrm{syn}} + \sum_j V_j g_j^{\mathrm{den}}}"
-        r"{\sum_j x_j g_j^{\mathrm{syn}} + \sum_j g_j^{\mathrm{den}} + 1}$"
-    )
-    ax.text(2.0, -0.35, eq_text, ha="center", va="top", fontsize=9,
-            bbox=dict(boxstyle="round,pad=0.3", fc="white", ec="gray",
-                      alpha=0.9))
-
     # ── Output arrow ──
     draw_arrow(ax, soma_x + 0.28, soma_y, 4.5, soma_y, color="k", lw=1.5)
     ax.text(4.55, soma_y, "output", fontsize=7, va="center")
@@ -262,7 +252,7 @@ def panel_b(ax):
     ax.set_xlim(0.0, 2.7)
     ax.set_ylim(0.0, 3.15)
     ax.axis("off")
-    ax.set_title("(B) Local learning rule hierarchy", fontsize=11,
+    ax.set_title("Local learning rule hierarchy", fontsize=11,
                  fontweight="bold", pad=8)
 
     rules = [
@@ -313,7 +303,7 @@ def panel_c_broadcast(ax):
     ax.set_ylim(0.0, 3.0)
     ax.set_aspect("equal")
     ax.axis("off")
-    ax.set_title("(C) Broadcast modes", fontsize=11, fontweight="bold", pad=8)
+    ax.set_title("Broadcast modes", fontsize=11, fontweight="bold", pad=8)
 
     def draw_mini_tree(x, y, scale=1.0):
         soma = (x + 0.44 * scale, y)
@@ -390,68 +380,44 @@ def panel_c_broadcast(ax):
 
 
 def panel_d(ax):
-    """Panel D: compact MNIST rule-family summary."""
-    ax.set_title("(D) Rule-family progression on MNIST", fontsize=11,
+    """Panel D: representative MNIST rule-family accuracy curves."""
+    ax.set_title("Representative MNIST learning dynamics", fontsize=11,
                  fontweight="bold", pad=8)
 
-    labels = list(RULE_FAMILY_TEST.keys())
-    values = [RULE_FAMILY_TEST[label] for label in labels]
-    colors = [RULE3_COLOR, RULE4_COLOR, RULE5_COLOR]
-    x = np.arange(len(labels))
+    runs = resolve_runs()
+    curve_order = [
+        ("bp_shunting", "BP"),
+        ("rule_3f", "3F"),
+        ("rule_4f", "4F"),
+        ("rule_5f", "5F"),
+    ]
 
-    bars = ax.bar(
-        x,
-        values,
-        width=0.62,
-        color=colors,
-        edgecolor="black",
-        linewidth=0.7,
-        alpha=0.75,
-        zorder=3,
-    )
-
-    ax.axhline(
-        MNIST_BP_CEILING,
-        color=CURVE_COLORS["bp_shunting"],
-        linestyle="--",
-        linewidth=1.8,
-        zorder=2,
-        label="BP ceiling",
-    )
-
-    for bar, value in zip(bars, values):
-        ax.text(
-            bar.get_x() + bar.get_width() / 2,
-            value + 1.5,
-            f"{value:.1f}",
-            ha="center",
-            va="bottom",
-            fontsize=7.2,
+    for key, label in curve_order:
+        history = load_epoch_history(runs[key])
+        linestyle = "--" if key == "bp_shunting" else "-"
+        linewidth = 2.0 if key == "bp_shunting" else 1.8
+        ax.plot(
+            history["epoch"],
+            history["test_accuracy"] * 100.0,
+            color=CURVE_COLORS[key],
+            linestyle=linestyle,
+            linewidth=linewidth,
+            label=label,
         )
 
-    ax.text(
-        2.55,
-        MNIST_BP_CEILING + 0.8,
-        "BP 96.5",
-        color=CURVE_COLORS["bp_shunting"],
-        fontsize=7.0,
-        ha="right",
-        va="bottom",
-    )
-
-    ax.set_xticks(x, labels)
+    ax.set_xlabel("Epoch")
     ax.set_ylabel("Test accuracy (%)")
-    ax.set_ylim(0, 100)
-    ax.set_xlim(-0.55, 2.65)
-    ax.grid(axis="y", alpha=0.18, linewidth=0.5, zorder=0)
-    ax.tick_params(axis="x", labelsize=8.5)
-    ax.tick_params(axis="y", labelsize=8)
+    ax.set_xlim(1, 100)
+    ax.set_ylim(50, 100)
+    ax.grid(alpha=0.20, linewidth=0.5)
+    ax.tick_params(axis="both", labelsize=8)
+    ax.legend(loc="lower right", fontsize=7.4, frameon=False, ncol=2)
     ax.text(
         0.02,
         0.03,
-        "Top-10 mean over completed\nMNIST local sweeps",
+        "Fixed-100-epoch representative runs",
         transform=ax.transAxes,
-        fontsize=6.1,
+        fontsize=7.0,
         color="gray",
         ha="left",
         va="bottom",
@@ -478,13 +444,17 @@ def main():
     print(f"Saved: {out_path}.{{png,pdf}}")
     plt.close(fig)
 
-    # Publication figure used in the paper.
-    fig = plt.figure(figsize=(15.2, 4.3))
-    gs = fig.add_gridspec(1, 16, wspace=0.22)
-    ax_a = fig.add_subplot(gs[0, 0:6])
-    ax_b = fig.add_subplot(gs[0, 6:9])
-    ax_c = fig.add_subplot(gs[0, 9:12])
-    ax_d = fig.add_subplot(gs[0, 12:16])
+    # Publication figure used in the paper (single-row, four-panel layout).
+    fig = plt.figure(figsize=(16.8, 4.5))
+    gs = fig.add_gridspec(
+        1, 4,
+        width_ratios=[1.75, 0.92, 1.10, 1.25],
+        wspace=0.26,
+    )
+    ax_a = fig.add_subplot(gs[0, 0])
+    ax_b = fig.add_subplot(gs[0, 1])
+    ax_c = fig.add_subplot(gs[0, 2])
+    ax_d = fig.add_subplot(gs[0, 3])
 
     panel_a(ax_a)
     panel_b(ax_b)

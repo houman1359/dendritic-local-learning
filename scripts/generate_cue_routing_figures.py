@@ -38,13 +38,13 @@ def _setup_style() -> None:
     plt.rcParams.update(
         {
             "font.family": "sans-serif",
-            "font.size": 7.2,
-            "axes.labelsize": 8,
-            "axes.titlesize": 8.5,
-            "axes.titlepad": 6,
-            "xtick.labelsize": 6.8,
-            "ytick.labelsize": 6.8,
-            "legend.fontsize": 6.2,
+            "font.size": 8.5,
+            "axes.labelsize": 9,
+            "axes.titlesize": 9.5,
+            "axes.titlepad": 7,
+            "xtick.labelsize": 8.0,
+            "ytick.labelsize": 8.0,
+            "legend.fontsize": 7.5,
             "figure.dpi": DPI,
             "savefig.dpi": DPI,
             "savefig.bbox": "tight",
@@ -258,11 +258,11 @@ def _plot_task_schematic(ax: plt.Axes) -> None:
         0.04,
         0.06,
         "Scalar feedback collapses branch identity.\nPV-LocalCA preserves pathway-specific credit when context switches cue reliability.",
-        fontsize=6.3,
+        fontsize=7.2,
         ha="left",
         va="bottom",
     )
-    ax.set_title("Cue integration requires pathway-specific credit")
+    ax.set_title("Cue integration requires pathway-specific credit", fontsize=9.5)
 
 
 def _plot_accuracy_panel(ax: plt.Axes, records: list[dict[str, Any]]) -> None:
@@ -280,7 +280,7 @@ def _plot_accuracy_panel(ax: plt.Axes, records: list[dict[str, Any]]) -> None:
             color=color,
             edgecolor=edge,
             linewidth=0.7,
-            height=0.66,
+            height=0.72,
             alpha=0.96,
             zorder=3,
         )
@@ -302,7 +302,7 @@ def _plot_accuracy_panel(ax: plt.Axes, records: list[dict[str, Any]]) -> None:
             f"{value:.1f}",
             va="center",
             ha="left",
-            fontsize=6.0,
+            fontsize=7.5,
         )
 
     ax.set_yticks(y)
@@ -313,7 +313,7 @@ def _plot_accuracy_panel(ax: plt.Axes, records: list[dict[str, Any]]) -> None:
     ax.set_title("Scalar broadcast fails; structured feedback rescues")
     ax.grid(axis="x", alpha=0.22, linewidth=0.4, zorder=0)
     ax.axvline(95, color="#999999", linewidth=0.6, linestyle=":")
-    ax.text(95.2, -0.75, "high-accuracy regime", fontsize=5.6, color="#666666")
+    ax.text(95.2, -0.75, "high-accuracy regime", fontsize=7.0, color="#666666")
 
 
 def _plot_specialization_panel(ax: plt.Axes, df: pd.DataFrame) -> None:
@@ -383,9 +383,9 @@ def _plot_specialization_panel(ax: plt.Axes, df: pd.DataFrame) -> None:
         ax.annotate(
             annotations[str(row["variant"])],
             xy=(float(row["router_mean_max_assignment"]), 100.0 * float(row["test_accuracy"])),
-            xytext=(-20 if is_pathway else 6, 8 if is_pathway else -8),
+            xytext=(-22 if is_pathway else 7, 10 if is_pathway else -10),
             textcoords="offset points",
-            fontsize=5.8,
+            fontsize=7.0,
             color="#333333",
         )
 
@@ -396,7 +396,7 @@ def _plot_specialization_panel(ax: plt.Axes, df: pd.DataFrame) -> None:
         transform=ax.transAxes,
         ha="left",
         va="top",
-        fontsize=5.8,
+        fontsize=7.0,
         bbox={"boxstyle": "round,pad=0.2", "facecolor": "white", "edgecolor": "#CCCCCC", "linewidth": 0.5},
     )
     ax.set_xlabel("Mean max router assignment")
@@ -439,9 +439,9 @@ def _plot_assignment_panel(ax: plt.Axes, summary_row: dict[str, Any]) -> None:
         ha="left",
         va="top",
     )
-    cbar = plt.colorbar(image, ax=ax, fraction=0.06, pad=0.04)
-    cbar.set_label("Assignment prob.")
-    cbar.ax.tick_params(labelsize=6)
+    cbar = plt.colorbar(image, ax=ax, fraction=0.09, pad=0.05)
+    cbar.set_label("Assignment prob.", fontsize=8)
+    cbar.ax.tick_params(labelsize=7.5)
 
 
 def build_figure(summary_csv: Path) -> None:
@@ -450,14 +450,14 @@ def build_figure(summary_csv: Path) -> None:
     records = _summary_records(summary)
     pv_row = _find_record(summary, "local_ca", "dendritic_shunting", "learned", "pathway_vector_tuned")
 
-    fig = plt.figure(figsize=(DOUBLE_COL_W, 5.6))
+    fig = plt.figure(figsize=(DOUBLE_COL_W, 7.8))
     gs = fig.add_gridspec(
         2,
         2,
-        width_ratios=[1.15, 1.35],
-        height_ratios=[1.0, 1.0],
-        wspace=0.45,
-        hspace=0.50,
+        width_ratios=[1.0, 1.5],
+        height_ratios=[1.1, 1.0],
+        wspace=0.40,
+        hspace=0.52,
     )
     ax_a = fig.add_subplot(gs[0, 0])
     ax_b = fig.add_subplot(gs[0, 1])
@@ -469,7 +469,7 @@ def build_figure(summary_csv: Path) -> None:
     _plot_specialization_panel(ax_c, summary)
     _plot_assignment_panel(ax_d, pv_row)
 
-    fig.subplots_adjust(left=0.08, right=0.985, bottom=0.09, top=0.93)
+    fig.subplots_adjust(left=0.10, right=0.97, bottom=0.07, top=0.95)
     _save(fig, "fig6_cue_routing")
     _save(fig, "fig_cue_routing_hard_diagnosis")
     plt.close(fig)

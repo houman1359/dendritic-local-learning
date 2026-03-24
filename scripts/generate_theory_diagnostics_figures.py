@@ -38,13 +38,13 @@ def _setup_style() -> None:
     plt.rcParams.update(
         {
             "font.family": "sans-serif",
-            "font.size": 7,
-            "axes.labelsize": 8,
-            "axes.titlesize": 8,
-            "axes.titlepad": 6,
-            "xtick.labelsize": 6.5,
-            "ytick.labelsize": 6.5,
-            "legend.fontsize": 6,
+            "font.size": 8.5,
+            "axes.labelsize": 9,
+            "axes.titlesize": 9.5,
+            "axes.titlepad": 7,
+            "xtick.labelsize": 8.0,
+            "ytick.labelsize": 8.0,
+            "legend.fontsize": 7.5,
             "figure.dpi": DPI,
             "savefig.dpi": DPI,
             "savefig.bbox": "tight",
@@ -103,7 +103,7 @@ def _plot_path_gain_dispersion(ax: plt.Axes, summary: pd.DataFrame) -> None:
 
     ax.set_xlabel("$N_I$ (inhibitory synapses / branch)")
     ax.set_ylabel("Path-gain CV")
-    ax.set_title("Shunting compresses path-gain dispersion")
+    ax.set_title("Shunting narrows the path-gain distribution")
     ax.set_xticks([0, 5, 10, 20, 40])
     ax.set_ylim(bottom=0.0)
     ax.legend(loc="upper left")
@@ -152,10 +152,11 @@ def _plot_compartment_error_fidelity(ax: plt.Axes, summary: pd.DataFrame) -> Non
 
     ax.set_xlabel("$N_I$ (inhibitory synapses / branch)")
     ax.set_ylabel(r"Cosine$(e_n,\partial L/\partial V_n)$")
-    ax.set_title("Exact compartment-error fidelity")
+    ax.set_title("Per-soma broadcast tracks compartment error")
     ax.set_xticks([0, 5, 10, 20, 40])
     ax.set_ylim(-0.35, 1.05)
-    ax.legend(loc="lower right", ncol=1)
+    ax.legend(loc="upper left", ncol=1, handlelength=1.2, handletextpad=0.4,
+              columnspacing=0.8)
 
 
 def _plot_low_bandwidth(ax: plt.Axes, low_bw: pd.DataFrame) -> None:
@@ -222,7 +223,7 @@ def _plot_low_bandwidth(ax: plt.Axes, low_bw: pd.DataFrame) -> None:
             xy=(row["bw_bits"], y_pt),
             xytext=(0, offset),
             textcoords="offset points",
-            fontsize=5,
+            fontsize=7,
             ha="center",
             va=va,
             color=COLOR_SHUNTING,
@@ -246,15 +247,15 @@ def _plot_low_bandwidth(ax: plt.Axes, low_bw: pd.DataFrame) -> None:
         ax.annotate(
             "Top-30%",
             xy=(0.5, sp_mean),
-            xytext=(8, -5),
+            xytext=(12, -6),
             textcoords="offset points",
-            fontsize=5,
+            fontsize=7,
             color=COLOR_TRANSPORT,
         )
 
     ax.set_xlabel("Effective bits per neuron")
     ax.set_ylabel("Test accuracy (%)")
-    ax.set_title("Low-bandwidth broadcast remains useful")
+    ax.set_title("Coarse broadcast remains useful when sensitivities are stable")
     ax.set_xscale("symlog", linthresh=1)
     ax.set_xticks([1, 2, 4, 8, 32])
     ax.set_xticklabels(["1", "2", "4", "8", "32"])
@@ -307,10 +308,11 @@ def _plot_oracle_learning(
 
     ax.set_xlabel("$N_I$ (inhibitory synapses / branch)")
     ax.set_ylabel("Test accuracy (%)")
-    ax.set_title("Transported oracle lifts learning")
+    ax.set_title("Better transport closes the local-learning gap")
     ax.set_xticks([0, 5, 10, 20, 40])
     ax.set_ylim(20, 101)
-    ax.legend(loc="lower right", ncol=1)
+    ax.legend(loc="upper left", ncol=1, handlelength=1.2, handletextpad=0.4,
+              columnspacing=0.8)
 
 
 def build_figure(
@@ -326,8 +328,8 @@ def build_figure(
     fig, axes = plt.subplots(
         2,
         2,
-        figsize=(DOUBLE_COL_W, 5.2),
-        gridspec_kw={"wspace": 0.28, "hspace": 0.42},
+        figsize=(DOUBLE_COL_W, 7.0),
+        gridspec_kw={"wspace": 0.38, "hspace": 0.52},
     )
 
     _plot_path_gain_dispersion(axes[0, 0], summary)

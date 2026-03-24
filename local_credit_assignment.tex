@@ -1,6 +1,9 @@
 \PassOptionsToPackage{numbers,sort&compress}{natbib}
 \documentclass{article}
 \usepackage{neurips_2026}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{url}
 \usepackage{microtype}
 \usepackage{amsmath}
 \usepackage{amssymb}
@@ -8,6 +11,7 @@
 \usepackage{amsthm}
 \usepackage{algorithm}
 \usepackage{algorithmic}
+\usepackage{array}
 \usepackage{booktabs}
 \usepackage{graphicx}
 \usepackage{subcaption}
@@ -28,6 +32,8 @@
 \DeclareMathOperator{\Cov}{Cov}
 \DeclareMathOperator{\tr}{tr}
 
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+
 \title{Shunting Inhibition Improves Local Credit Assignment\\in Dendritic Networks}
 \author{
 Anonymous Authors \\
@@ -39,13 +45,13 @@ Paper under double-blind review
 \maketitle
 
 \begin{abstract}
-Conductance-based shunting inhibition, long studied as a gain-control mechanism, also creates favorable conditions for local credit assignment in dendritic networks.
-Starting from steady-state conductance equations, we derive exact gradients for compartmental dendritic trees and show that each synaptic gradient factorizes into a synapse-local eligibility term and a single non-local compartment error.
-This factorization motivates a family of local learning rules (3F/4F/5F) that combine synapse-local variables with a somatic error broadcast.
-On matched MNIST architectures, shunting raises the local-vs-backprop cosine from $0.006$ to $0.202$ and lowers scale mismatch from $1.053$ to $0.117$, corresponding to about $30\times$ relative improvement in direction and about $10\times$ lower scale distortion.
-The advantage is regime-dependent, growing with inhibitory conductance and becoming largest on tasks that require robust credit signals under noise.
-On a hard cue-integration benchmark where the model must discover separate dendritic pathways, per-soma broadcast remains unstable under shunting local learning, but a hierarchical pathway-vector teaching signal with router-derived branch-role plasticity stabilizes performance at $99.1 \pm 0.3\%$ test accuracy over 5 seeds.
-Together, these results identify divisive normalization as a useful mechanism for improving local credit assignment in conductance-based dendritic networks.
+Exact gradients for conductance-based dendritic trees factorize into a synapse-local eligibility term and a single non-local compartment error; this factorization is the foundation for local credit assignment in these networks.
+How well a somatic broadcast can substitute for the true compartment error depends on how concentrated the path gains are across the tree.
+An oracle experiment---replacing the broadcast with the exact transported compartment errors---raises additive local learning from $33\%$ to $98.5\%$ on noise resilience, nearly matching shunting ($98.7\%$), strongly supporting path-gain fidelity as the dominant bottleneck rather than other architectural differences.
+Simple per-soma broadcast already improves gradient fidelity substantially: cosine alignment rises from $0.006$ to $0.202$ and noise\_resilience accuracy from $0.33$ to $0.90$ under shunting relative to additive integration.
+The advantage is regime-dependent, growing with inhibitory conductance and largest under noisy inputs.
+A structured pathway-vector extension (PV-LocalCA) further stabilizes learned-routing performance on a hard cue-integration benchmark, reaching $99.1\%$ test accuracy.
+Together, these results identify path-gain concentration via shunting inhibition as the key biophysical mechanism that determines when low-bandwidth local credit assignment works in conductance-based dendritic networks.
 \end{abstract}
 
 %=============================================================================
@@ -63,12 +69,12 @@ Starting from conductance-based dendritic voltage equations \cite{koch1999biophy
 Approximating that compartment error with a broadcast signal yields a family of local learning rules (3F, 4F, and 5F) that use only branch-local variables together with the broadcast.
 For tasks where different branches must be credited differently, we further introduce a structured pathway-vector signal that preserves latent pathway identity during credit assignment.
 
-The central empirical finding is that these local rules work much better with \emph{shunting inhibition} than with an additive control.
-In the conductance model, synaptic sensitivity depends on both driving force and compartment input resistance $R_n^{\mathrm{tot}}$.
-When inhibitory reversal is near rest, shunting increases total conductance and reduces both the magnitude and variability of $R_n^{\mathrm{tot}}$ across compartments.
-In our experiments, this improves both the directional alignment and the scale stability of local credit signals relative to additive controls.
-The gains are largest in regimes that stress credit assignment, particularly under strong inhibition and noisy inputs.
-These results suggest a mechanistic link between divisive normalization \cite{carandini2012normalization} and the quality of local credit signals.
+The central mechanistic finding is that shunting improves broadcast fidelity by concentrating path gains.
+Path-gain CV stays at $0.21$--$0.27$ under shunting versus $0.53$--$1.08$ under additive integration on MNIST, meaning that one shared broadcast is a far better proxy for compartment-specific errors under shunting.
+Correspondingly, per-soma broadcast achieves cosine alignment of $0.20$--$0.32$ under shunting on the noise-resilience sweep, compared to near-zero or negative alignment under additive integration.
+Our question is not whether local learning can match backpropagation on standard benchmarks, but what biophysical mechanism determines when low-bandwidth local credit assignment works in conductance-based dendritic networks.
+An oracle experiment that supplies the exact transported compartment errors strongly supports path-gain fidelity as the dominant bottleneck: additive local learning rises to $98.5\%$ on noise resilience under the oracle, nearly matching shunting ($98.7\%$).
+The advantage is regime-dependent, growing with inhibitory conductance and largest under noisy inputs.
 
 We quantify these effects using a gradient-fidelity diagnostic based on directional alignment (cosine similarity) and scale mismatch between local and backprop gradients (Table~\ref{tab:gradient_alignment_summary}, Fig.~\ref{fig:gradient_fidelity}).
 The absolute cosine values remain modest, but they are consistently more positive under shunting and predict which local-learning regimes ultimately succeed.
@@ -95,7 +101,7 @@ We use a component-wise local-vs-backprop diagnostic to link dendritic architect
 \textbf{(A)}~A compartmental dendritic neuron with excitatory (blue triangles) and inhibitory (red circles; shunting) synapses. Voltages propagate to the soma through learned dendritic conductances (green arrows). A somatic broadcast error $e_n$ (dashed red) reaches all compartments; each synapse combines $e_n$ with local quantities (presynaptic drive $x_j$, input resistance $R_n^{\mathrm{tot}}$, and driving force $E_j{-}V_n$).
 \textbf{(B)}~Compact LocalCA hierarchy: 3F uses local eligibility and a broadcast field; 4F adds the morphology-aware factor $\rho$; 5F further adds the confidence-like factor $\phi$.
 \textbf{(C)}~Broadcast-mode schematic. Scalar broadcast sends one shared field to all branches; per-soma broadcast sends a vector-valued somatic error to each branch; structured pathway feedback uses separate channels to preserve pathway identity when different branches should receive different teaching signals.
-\textbf{(D)}~MNIST rule-family summary for shunting LocalCA. Bars show the rule progression from 3F to 4F to 5F using the same summary values reported in Appendix Table~\ref{tab:variant_ranking}; the dashed green line marks the MNIST backprop ceiling ($96.5\%$). This panel makes clear that the method is a family, not only its best-performing 5F member.}
+\textbf{(D)}~Representative fixed-100-epoch MNIST learning curves for shunting BP, 3F, 4F, and 5F. All three local variants learn substantially above chance, while BP remains the strongest reference. In this representative run, 4F slightly exceeds 5F, underscoring that Fig.~\ref{fig:model_schematic} is meant to illustrate the rule-family progression rather than replace the sweep-aggregated ranking in Appendix Table~\ref{tab:variant_ranking}.}
 \label{fig:model_schematic}
 \end{figure*}
 
@@ -246,6 +252,8 @@ The large empirical gap between 4F and 5F in our sweeps indicates that this conf
 When $\sigma_{\mathrm{res}}^2$ is very small, $\phi_n$ would otherwise become degenerate, so we clamp it to a finite interval and interpret saturated values simply as ``high-confidence'' branches rather than as precise estimates of information content.
 Clamped to $[0.25, 4.0]$ for stability.
 
+It is important to note that $\phi_n$ is an empirical heuristic modulator, not a derived consequence of the conductance-tree gradient factorization in Theorem~\ref{thm:tree_backprop}. The paper's core mechanistic claim rests on the path-gain concentration result and the oracle experiment; the performance improvement from $\phi_n$ should be interpreted as engineering value rather than theoretical necessity.
+
 \begin{proposition}[5F Update]
 \begin{equation}
 \Delta g_j^{\mathrm{syn}} = \eta\, \rho_n \phi_n \langle x_j R_n^{\mathrm{tot}} (E_j - V_n)\, e_n \rangle_B.
@@ -260,6 +268,7 @@ The constant $c_n$ depends on the correlation between local factors and the exac
 \subsection{Structured pathway feedback and branch-role plasticity}
 
 For tasks with latent pathway structure, scalar broadcast can erase the distinction between different dendritic branches that should be credited differently.
+Recent experimental evidence supports the existence of vectorized instructive signals in cortical dendrites \cite{nature2026vectorized}, motivating the structured feedback variant we introduce here.
 We therefore augment the local rule with a structured feedback variant used only on the cue-routing benchmark.
 We refer to this structured cue-routing rule as \emph{PV-LocalCA} (pathway-vector LocalCA).
 
@@ -267,6 +276,7 @@ We refer to this structured cue-routing rule as \emph{PV-LocalCA} (pathway-vecto
 The encoder/router defines a low-dimensional role basis over latent pathways (for example, one role per cue stream together with shared context).
 Instead of collapsing $\delta_0$ to a scalar or per-soma vector, we project it into this role basis, gate each role by the local pathway activity on the target branch, and propagate the resulting vector through the proximal-to-distal block tree.
 Earlier dendritic layers therefore receive a pathway-specific teaching signal that remains aligned with their downstream descendants.
+The role coefficients $c_k = \langle r_k, \delta_0\rangle$ project the somatic error into the $k$-th router-inferred pathway role $r_k$, and the local branch weights $q_{n,k}$ are given by the softmax-normalized router assignment of branch $n$ to pathway $k$, estimated from incoming block weights.
 Writing the low-rank role coefficients as $c_k$ and the local branch role weights as $q_{n,k}$, the structured broadcast takes the form
 \[
 e_n^{\mathrm{PV}} = \sum_{k=1}^K q_{n,k} c_k,
@@ -287,7 +297,7 @@ This biases learning toward pathway-consistent afferents without imposing a heur
 \subsection{Setup}
 
 We evaluate the model in two experimental settings: a \emph{capacity-calibrated} regime, where the same architectures achieve strong performance under backpropagation, and a set of \emph{controlled sweeps} that isolate the effects of inhibition strength, broadcast mode, and architecture on credit-signal quality.
-Our main datasets are MNIST, Fashion-MNIST \cite{xiao2017fashionmnist}, and four synthetic tasks: \emph{context gating} (context-dependent category boundaries), \emph{noise resilience} (learning under structured input noise), \emph{info shunting} (a task designed to require inhibition-mediated processing), and \emph{cue integration} (two competing sensory cues plus context indicating which cue is reliable).
+Our main datasets are MNIST, Fashion-MNIST \cite{xiao2017fashionmnist}, and four synthetic tasks: \emph{context gating} (context-dependent category boundaries), \emph{noise resilience} (learning under structured input noise), \emph{info shunting} (a task requiring inhibition-mediated gating), and \emph{cue integration} (two competing sensory cues plus context indicating which cue is reliable); formal task definitions are in Appendix~\ref{app:synthetic_tasks}.
 The cue-integration benchmark is specifically designed to test whether dendritic pathway structure can support context-dependent reliability weighting rather than simple averaging: a fixed-pathway control duplicates context into each cue pathway, while a learned router must discover that separation from data.
 Architectures include point MLP baselines and dendritic cores with either additive integration or shunting (conductance-based) inhibition.
 Our primary credit-assignment comparisons are architecture-matched additive vs.\ shunting cores and local vs.\ backprop training; DFA is included as a supplementary feedback baseline where the layer geometry permits it.
@@ -297,9 +307,9 @@ For the inhibition sweeps, we additionally evaluate a transported-error oracle t
 Because context gating benefits from a small HSIC auxiliary objective (about $3$ percentage points in Appendix Fig.~\ref{fig:s4_verification}C), we treat it as a supporting structured benchmark rather than as the cleanest test of the base LocalCA rule.
 We report means $\pm$ s.d.\ across 3--5 seeds for all headline results.
 We will release code and configuration files after the review process.
-The experiments are organized in three stages: we first evaluate how well different broadcasts track exact gradients, then test whether those fidelity differences translate into learning, and finally study a structured-feedback extension for settings where scalar broadcast fails.
+The experiments are organized around one mechanistic chain: we first verify how closely different broadcasts track the exact gradients implied by Theorem~\ref{thm:tree_backprop}, then test whether those fidelity differences translate into learning, and finally study a structured-feedback extension for settings where scalar or per-soma broadcast fails.
 
-\subsection{Shunting improves gradient fidelity}
+\subsection{From Exact Factorization to Credit-Signal Fidelity}
 \label{sec:grad_fidelity}
 
 To test whether these performance differences correspond to better credit signals, we compare local and backprop gradients on the same batch at the same parameter values.
@@ -319,14 +329,14 @@ Context gating & Shunting & \textbf{0.108} & \textbf{0.036} \\
 Context gating & Additive & $-0.007$ & 2.154 \\
 \bottomrule
 \end{tabular}
-\caption{\textbf{Gradient fidelity (5F + per-soma).} Local vs.\ backprop gradients on matched weights. Shunting shows higher directional alignment and lower scale mismatch (about $30\times$ and $10\times$ relative to additive in this setting).}
+\caption{\textbf{Gradient fidelity (5F + per-soma).} Local vs.\ backprop gradients on matched weights. Shunting shows substantially higher directional alignment and lower scale mismatch than the additive control; the relative gains are large even though the absolute cosines remain modest.}
 \label{tab:gradient_alignment_summary}
 \end{table}
 
 \begin{figure*}[!t]
 \centering
 \includegraphics[width=0.95\textwidth]{fig3_gradient_fidelity.pdf}
-\caption{\textbf{Gradient-fidelity mechanism.} \textbf{(A)}~Weighted cosine similarity between local and backprop gradients: shunting (green) shows about $30\times$ better directional alignment than additive (blue) on both MNIST and context gating. \textbf{(B)}~Per-layer cosine similarity over training epochs. Shunting proximal layers approach $1.0$; additive layers remain near zero. \textbf{(C)}~Component-wise alignment: E-synapses and dendritic conductances carry the strongest alignment signal in shunting networks.}
+\caption{\textbf{Gradient-fidelity mechanism.} \textbf{(A)}~Weighted cosine similarity between local and backprop gradients: shunting (green) is consistently more aligned than additive (blue) on both MNIST and context gating. \textbf{(B)}~Per-layer cosine similarity over training epochs. Shunting proximal layers approach high positive alignment; additive layers remain near zero. \textbf{(C)}~Component-wise alignment: E-synapses and dendritic conductances carry the strongest alignment signal in shunting networks.}
 \label{fig:gradient_fidelity}
 \end{figure*}
 
@@ -342,10 +352,10 @@ Using the exact compartment errors $\partial L/\partial V_n$ extracted by autogr
 Across the full 100-run inhibition sweep used for the mechanistic analysis, the reconstructed gradients match autograd to numerical precision (weighted cosine $1.000001 \pm 0.000001$, weighted scale mismatch $< 4\times 10^{-8}$).
 This confirms that the theory is operational in code: the only approximation made by LocalCA is in the broadcast substitute for $\partial L/\partial V_n$, not in the local eligibility factors.
 
-\subsection{Mechanistic evidence for the shunting advantage}
+\subsection{Mechanistic Chain: Path Gains, Broadcast Fidelity, and Oracle Transport}
 \label{sec:mechanistic}
 
-We provide evidence for why shunting improves gradient fidelity and test broadcast robustness (Fig.~\ref{fig:mechanistic}).
+Figure~\ref{fig:mechanistic} provides the paper's central empirical chain: shunting concentrates path gains, which improves direct compartment-error fidelity, which in turn makes low-bandwidth local learning effective; the transported-error oracle then isolates how much of the remaining gap is due to broadcast quality rather than other architectural differences.
 
 \paragraph{Path-gain concentration.}
 For a tree, the exact compartment error is the somatic error multiplied by a unique path gain $\alpha_n = \prod_{k\in \mathrm{path}(n\to 0)} R_k^{\mathrm{tot}} g_k^{\mathrm{den}}$.
@@ -365,7 +375,8 @@ Panel~C trains the same local rule using the transported-error oracle as its tea
 On noise resilience, additive learning rises from $33$--$47\%$ under per-soma broadcast to $75.6\%$ at $N_I{=}0$ and $98.5\%$ at $N_I{=}40$ under transported broadcast.
 Shunting improves from $71.7$--$90.3\%$ under per-soma to $98.5$--$99.3\%$ under transported broadcast across the same sweep.
 On MNIST, transported broadcast reaches $94.6\%$ for additive and $96.8\%$ for shunting.
-These oracle results show that broadcast fidelity is a major bottleneck for LocalCA, while the remaining additive--shunting gap under matched transported broadcast points to an additional role for conductance-shaped local sensitivities.
+These oracle results strongly support path-gain fidelity as the dominant bottleneck for LocalCA performance.
+The remaining additive--shunting gap under matched transported broadcast ($94.6\%$ vs.\ $96.8\%$ on MNIST) is smaller but still present, suggesting conductance-shaped local sensitivities contribute an additional benefit beyond broadcast fidelity alone.
 
 \paragraph{Low-bandwidth broadcast suffices.}
 Testing degraded broadcast modes (Fig.~\ref{fig:mechanistic}D), 4-bit quantization preserves full performance ($61.6\%$ vs.\ $61.7\%$; $p > 0.9$), while sign-only ($37.5\%$) and sparse top-30\% ($38.2\%$) degrade sharply.
@@ -393,9 +404,9 @@ Four-bit quantization preserves full performance; only sign-only and sparse mode
 \label{fig:mechanistic}
 \end{figure*}
 
-\subsection{Local learning under capacity-calibrated settings}
+\subsection{Capacity-Calibrated Competence}
 
-Having established that shunting improves gradient fidelity, we next test whether the same conditions improve end-task learning.
+Having established the mechanism, we next ask whether the same conditions improve end-task learning in architectures that are already competent under backpropagation.
 In the capacity-calibrated regime, shunting dendritic cores reach $0.965$ on MNIST and $0.864$ on context gating under backpropagation.
 Within the same architectures, the best local configuration (5F, per-soma broadcast, local decoder) reaches the accuracies reported in Table~\ref{tab:gap_closing}.
 
@@ -419,8 +430,9 @@ Within the local-rule family, 5F consistently outperforms 4F and 3F (Appendix Ta
 The large 4F$\to$5F jump is important: in our current implementation, most of that gain comes from confidence-weighting updates by $\phi_n$, which suppresses noisy branch fluctuations that would otherwise receive the same broadcast-driven update as reliable branches.
 We therefore interpret 5F as the strongest practical rule in this paper, but not as a uniquely derived optimum; its clamp bounds and residual estimator are still heuristic design choices.
 In a focused MNIST sensitivity sweep, however, those heuristics are not especially fragile: tightening the clamp from $[0.25, 4.0]$ to $[0.5, 2.0]$ changes mean test accuracy by only $+0.4$~pp, widening it to $[0.1, 8.0]$ is effectively neutral, and varying the 4F/5F EMA rate from $0.05$ to $0.20$ shifts accuracy by less than $0.2$~pp (Appendix Fig.~\ref{fig:s3_5f_sensitivity}).
+Appendix Table~\ref{tab:component_carry} summarizes the empirical division of labor across architecture, rule, and broadcast choices.
 
-\subsection{Regime dependence of the shunting advantage}
+\subsection{Regime Dependence of the Shunting Advantage}
 
 \begin{figure*}[!t]
 \centering
@@ -434,7 +446,7 @@ On MNIST with matched per-soma broadcast, shunting outperforms additive by about
 On tasks that require credit signals robust to noise, the gap is much larger: $+50.3$~pp on noise resilience (with $N_I{=}10$ inhibitory synapses per branch) and $+24.8$~pp on info shunting ($N_I{=}0$).
 Figure~\ref{fig:competence_regime}B--C shows that the advantage grows with inhibitory conductance strength. Additive cores can still perform reasonably on easier settings, reaching about $89\%$ on MNIST after tuning. However, they fail in regimes where inhibition-mediated normalization matters for gradient propagation.
 
-\subsection{Scalability and generalization}
+\subsection{Additional Stress Tests}
 
 We test whether the shunting advantage persists under three stress tests: increased dendritic depth, noisy broadcast signals, and a second real-world benchmark.
 
@@ -454,11 +466,11 @@ The shunting advantage is modest (about $1.7$~pp) on this clean classification t
 \begin{figure*}[!t]
 \centering
 \includegraphics[width=0.95\textwidth]{fig4_scalability.pdf}
-\caption{\textbf{Scalability and generalization.} \textbf{(A)}~Depth scaling: shunting local (green) degrades gracefully from 63.5\% to 57.4\%; additive local (blue) drops from 54.9\% to 29.7\%. Backprop ceilings (dashed) remain stable. \textbf{(B)}~Noise robustness: shunting is robust to $\sigma\!\leq\!0.1$; additive degrades rapidly and reaches chance at $\sigma\!=\!1$. \textbf{(C)}~Fashion-MNIST: shunting local 81.1\% vs.\ 87.9\% backprop; additive local 79.4\% vs.\ 87.4\% backprop.}
+\caption{\textbf{Additional stress tests.} \textbf{(A)}~Depth scaling: shunting local (green) degrades more gracefully from 63.5\% to 57.4\%; additive local (blue) drops from 54.9\% to 29.7\%. Backprop ceilings (dashed) remain stable. \textbf{(B)}~Broadcast-noise robustness: shunting remains stable for $\sigma\!\leq\!0.1$; additive degrades rapidly and reaches chance at $\sigma\!=\!1$. \textbf{(C)}~Fashion-MNIST: the shunting gain is modest on this cleaner benchmark (81.1\% local vs.\ 87.9\% backprop), consistent with the regime-dependent story in the main text.}
 \label{fig:scalability}
 \end{figure*}
 
-\subsection{Extension: structured feedback when scalar broadcast fails}
+\subsection{Extension: Structured Feedback When Per-Soma Broadcast Fails}
 \label{sec:cue_routing}
 
 The main paper focuses on low-bandwidth scalar or per-soma broadcast.
@@ -469,7 +481,8 @@ In the learned-pathway setting, the router must instead discover that separation
 
 Figure~\ref{fig:cue_routing} summarizes five-seed runs for the hard benchmark together with a focused tuning sweep.
 Fixed-pathway additive local learning remains near ceiling ($99.1 \pm 0.3\%$), fixed-pathway shunting local learning is strong but more variable ($92.8 \pm 6.1\%$), learned-routing additive local learning also succeeds ($98.1 \pm 2.4\%$), and standard learned-router training stays near $99.2 \pm 0.4\%$ for both additive and shunting cores.
-Taken together, these controls show that the benchmark and router are learnable, while also indicating that shunting LocalCA is already somewhat stressed on this task even before learned routing is introduced.
+The lower accuracy and higher variance for fixed-pathway shunting relative to fixed-pathway additive ($92.8$ vs.\ $99.1\%$) suggests that shunting local learning is already somewhat stressed by pathway duplication: when context is copied into both cue branches, the conductance-dependent sensitivities may introduce ambiguity that scalar broadcast cannot fully resolve.
+Taken together, these controls show that the benchmark and router are learnable while flagging that shunting LocalCA requires structured feedback even in easier routing conditions.
 
 The specific failure appears when shunting local learning uses the default per-soma broadcast.
 At the original 90-epoch setting, learned-routing accuracy is only $82.6 \pm 14.2\%$.
@@ -497,28 +510,29 @@ When the feedback preserves that structure, learned-routing shunting local learn
 \label{sec:related}
 %=============================================================================
 
-\paragraph{Dendritic models of credit assignment.}
-Dendritic trees support nonlinear computation \cite{koch1983nonlinear,poiarazi2003pyramidal,london2005dendritic} and have inspired biologically plausible learning schemes: segregated dendrites \cite{guerguiev2017segregated}, dendritic prediction errors \cite{sacramento2018dendritic,urbanczik2014dendritic} (reported about $98\%$ on MNIST in an abstract-compartment setting), burst-dependent plasticity \cite{payeur2021burst,greedy2022burstccn}, latent equilibrium \cite{haider2021latent} ($98.9\%$ MNIST with abstract compartments), and dendritic localized learning \cite{lv2025dll}.
-We differ in deriving rules from conductance-based equations rather than abstract compartment surrogates and in using gradient-fidelity diagnostics to ask when a low-bandwidth somatic broadcast is accurate enough to support learning.
+\paragraph{High-performance local learning.}
+Several recent methods have substantially raised the benchmark-performance bar for local learning on standard architectures.
+Auxiliary-network approaches such as AugLocal scale greedy local learning to deep CNNs, including ImageNet-sized models \cite{ma2024auglocal}.
+CCL uses a dual forward/backward network pair to avoid weight transport while maintaining strong CNN and MLP performance \cite{kao2024ccl}.
+DLL derives local rules from abstract apical/basal compartment structure and reports strong MLP/CNN/RNN results under explicit plausibility criteria \cite{lv2025dll}.
+Our aim is therefore not to claim the strongest benchmark accuracy among all local-learning methods, but to identify the biophysical mechanism that determines when low-bandwidth credit signals become useful in conductance-based dendritic networks.
 
-\paragraph{Feedback alignment and local learning.}
-Random feedback \cite{lillicrap2016random}, DFA \cite{nokland2016dfa}, forward-forward \cite{hinton2022forward}, PEPITA \cite{dellaferrera2022pepita}, and PAL \cite{pal2024local} established strong local-learning baselines on standard MLP benchmarks.
-Recent supervised local-learning systems have also raised the empirical bar in deeper settings: AugLocal scales auxiliary-network local learning to deep CNNs including ImageNet-sized models \cite{ma2024auglocal}, DLL reports strong MLP/CNN/RNN performance under explicit plausibility criteria \cite{lv2025dll}, CCL introduces a biologically plausible dual-network training framework \cite{kao2024ccl}, and EBD provides a complementary theory of direct error broadcast through decorrelation \cite{erdogan2025ebd}.
-Our aim is therefore not to claim the strongest benchmark accuracy among all local-learning methods, but to identify a biophysical mechanism that explains when low-bandwidth credit signals become useful in conductance-based dendritic networks.
-Our broadcast modes generalize FA/DFA to dendrites while additionally exploiting conductance-based signals unavailable to standard architectures.
-Standard FA fails entirely on dendritic layers, while DFA is compatible and shunting yields a smaller backprop--DFA gap (24.9~pp) than point MLPs (39.5~pp; Appendix Fig.~\ref{fig:s5_fa_dfa}).
+\paragraph{Local credit-assignment dynamics.}
+Random feedback \cite{lillicrap2016random}, DFA \cite{nokland2016dfa}, forward-forward \cite{hinton2022forward}, PEPITA \cite{dellaferrera2022pepita}, PAL \cite{pal2024local}, DTP \cite{lee2015dtp}, DFC \cite{meulemans2021dfc}, prospective configuration \cite{song2024prospective}, equilibrium propagation \cite{scellier2017equilibrium}, and predictive coding \cite{whittington2019theories,millidge2022predictive} solve locality through diverse feedback or inference dynamics.
+EBD \cite{erdogan2025ebd} is especially close in spirit to our work because it asks when direct error broadcast can be made useful by shaping the broadcast field.
+Our contribution is complementary: rather than changing the inference dynamics, we identify a conductance-based inductive bias---path-gain concentration under shunting---that makes a low-bandwidth broadcast more faithful to the exact compartment error.
+We do not benchmark these methods directly here because their iterative controllers or inference loops are not architecture-matched to the steady-state conductance cores studied in this paper.
 
-\paragraph{Target propagation and energy-based methods.}
-DTP \cite{lee2015dtp}, DFC \cite{meulemans2021dfc}, equilibrium propagation \cite{scellier2017equilibrium}, and predictive coding \cite{whittington2019theories,millidge2022predictive} solve weight transport through diverse mechanisms.
-Our contribution is orthogonal: conductance-based biophysics provides an additional route to local credit.
-We do not benchmark these methods directly here because their iterative inference or controller dynamics are not architecture-matched to the steady-state conductance cores studied in this paper.
-We therefore treat them as complementary solutions to locality rather than as drop-in baselines for the same model family.
+\paragraph{Dendrites for robustness and context.}
+Dendritic trees support nonlinear computation \cite{koch1983nonlinear,poiarazi2003pyramidal,london2005dendritic} and have inspired biologically plausible learning schemes including segregated dendrites \cite{guerguiev2017segregated}, dendritic prediction errors \cite{sacramento2018dendritic,urbanczik2014dendritic}, burst-dependent plasticity \cite{payeur2021burst,greedy2022burstccn}, and latent equilibrium \cite{haider2021latent}.
+Outside supervised iid classification, active-dendrite architectures can also improve robustness in dynamic multi-task settings where point-MLP baselines suffer interference \cite{iyer2022activedendrites}.
+Our cue-routing extension speaks to the same broader question---when dendritic structure helps preserve pathway-specific computation---but uses conductance-based normalization and structured credit signals rather than sparse kWTA gating.
 
-\paragraph{Divisive normalization.}
-Shunting implements divisive normalization \cite{carandini2012normalization}, though its effect on rates can be subtractive \cite{holt1997shunting}.
-Silver \cite{silver2010neuronal} showed that inhibitory conductance modulates gain and SNR.
-Beniaguev et al.\ \cite{beniaguev2021single} showed single neurons are computationally equivalent to 5--8 layer DNNs.
-To our knowledge, prior work has not directly examined gradient alignment between local updates and backpropagation in the context of shunting inhibition.
+\paragraph{Neuroscience grounding.}
+Shunting implements divisive normalization \cite{carandini2012normalization}, though its rate effects can be subtractive in some regimes \cite{holt1997shunting}; inhibitory conductance also modulates gain and signal-to-noise \cite{silver2010neuronal}.
+Beniaguev et al.\ \cite{beniaguev2021single} showed that single cortical neurons can support deep-like computations, motivating dendrites as learning substrates rather than mere architectural decoration.
+Recent experimental evidence for vectorized instructive signals in cortical dendrites \cite{nature2026vectorized} further supports our structured-feedback extension: when different branches should be credited differently, biology may already provide more than a single scalar somatic teaching signal.
+To our knowledge, prior work has not directly tied gradient-fidelity diagnostics, exact path gains, and shunting inhibition into one causal account of when local dendritic learning works.
 
 %=============================================================================
 \section{Discussion}
@@ -535,12 +549,13 @@ Our best accuracy (91.4\% MNIST, 81.1\% Fashion-MNIST) is below several recent l
 This reflects the constraints of operating in conductance-based voltage space: bounded voltages, positive conductances, and a denominator-heavy computation graph.
 In the conservative flattened-CIFAR-10 sweep shown in Appendix Fig.~\ref{fig:s6_cifar10}, shunting local learning reaches 21.2\% vs.\ 40.1\% backprop, indicating that the gradient-fidelity mechanism alone is insufficient for harder tasks without architectural advances (e.g., convolutional encoders).
 That trade-off reflects our emphasis on mechanism rather than absolute benchmark performance: the gradient-fidelity analysis helps explain why some architectures support local learning better than others.
-Second, naive local broadcasts remain much weaker than per-soma on MNIST, and the hard cue-routing benchmark requires an even more structured pathway-vector signal (Sec.~\ref{sec:cue_routing}).
+Second, naive local broadcasts remain much weaker than per-soma on MNIST, and the hard cue-routing benchmark requires an even more structured pathway-vector signal (Sec.~\ref{sec:cue_routing}); recent experimental findings on vectorized instructive signals in cortical dendrites \cite{nature2026vectorized} support the biological plausibility of such structured feedback.
 Our claims are therefore specific to the broadcast family studied here rather than arbitrary local mismatch heuristics.
 Per-soma broadcast should be understood as low-bandwidth but still neuron-global: it assumes access to the full somatic error vector and therefore sets the current locality boundary of the method.
 Third, scaling to deeper architectures degrades local learning more than backprop (Fig.~\ref{fig:scalability}A; Appendix~\ref{app:depth_noise}), indicating that depth-dependent credit attenuation remains challenging.
 At depth $4$, shunting local learning is still roughly $33$ percentage points below backprop, so the present rules improve deep credit assignment but do not solve it.
-Fourth, standard FA is incompatible with dendritic layer geometry (Appendix Fig.~\ref{fig:s5_fa_dfa}), limiting the space of applicable feedback methods.
+Fourth, shunting networks are \emph{not} gain-invariant in practice: exploratory gain-shift pilots show that point MLPs (scale-equivariant via ReLU) generalize nearly perfectly to large global input gains, while shunting networks degrade sharply because the leak conductance breaks exact gain invariance. We therefore treat gain robustness as distinct from the credit-assignment mechanism emphasized in the main paper.
+Fifth, standard FA is incompatible with dendritic layer geometry (Appendix Fig.~\ref{fig:s5_fa_dfa}), limiting the space of applicable feedback methods.
 We also do not directly compare against iterative target-propagation or equilibrium-style methods, because a clean comparison would require re-implementing their inference dynamics inside the same conductance-based dendritic architecture rather than benchmarking against separate abstract models.
 Finally, the weight-statistics analysis is secondary to the main credit-assignment claim and is reported in Appendix~\ref{app:weight_distributions}; it should be read as descriptive consistency rather than as core evidence for the learning mechanism.
 
@@ -639,6 +654,11 @@ Dendritic solutions to the credit assignment problem.
 Scellier, B., \& Bengio, Y. (2017).
 Equilibrium propagation.
 \emph{Frontiers in Computational Neuroscience}, 11, 24.
+
+\bibitem{song2024prospective}
+Song, Y., et al. (2024).
+Inferring neural activity before plasticity as a foundation for learning beyond backpropagation.
+\emph{Nature Neuroscience}, 27, 348--358.
 
 \bibitem{gretton2005hsic}
 Gretton, A., et al. (2005).
@@ -785,6 +805,16 @@ Meg{\'i}as, M., et al. (2001).
 Total number and distribution of inhibitory and excitatory synapses on hippocampal CA1 pyramidal cells.
 \emph{Neuroscience}, 102(3), 527--540.
 
+\bibitem{nature2026vectorized}
+Francioni, V., Tang, V. D., Toloza, E. H. S., Ding, Z., Brown, N. J., \& Harnett, M. T. (2026).
+Vectorized instructive signals in cortical dendrites.
+\emph{Nature}. https://doi.org/10.1038/s41586-026-10190-7
+
+\bibitem{iyer2022activedendrites}
+Iyer, A., Grewal, K., Velu, A., Souza, L. O., Forest, J., \& Ahmad, S. (2022).
+Avoiding catastrophe: Active dendrites enable multi-task learning in dynamic environments.
+\emph{Frontiers in Neurorobotics}, 16, 846219.
+
 \end{thebibliography}
 
 %=============================================================================
@@ -818,6 +848,32 @@ Context gating & 5F & \textbf{0.807} & \textbf{0.789} \\
 \end{tabular}
 \caption{\textbf{Rule-family ranking.} Top-10 mean across completed local-competence sweeps.}
 \label{tab:variant_ranking}
+\end{table}
+
+\subsection*{Which Components Carry?}
+
+\begin{table}[t]
+\centering
+\small
+\begin{tabular}{@{}L{2.4cm}L{3.3cm}L{3.8cm}@{}}
+\toprule
+\textbf{Component} & \textbf{Representative effect} & \textbf{Interpretation} \\
+\midrule
+Shunting architecture & Path-gain CV stays at about $0.21$--$0.27$ under shunting vs.\ $0.53$--$1.08$ under additive; on noise resilience, per-soma local learning rises from roughly $0.33$--$0.47$ (additive) to $0.72$--$0.90$ (shunting). & This is the main architectural effect in the paper: shunting concentrates path gains and yields a more faithful low-bandwidth credit signal. \\
+\addlinespace[2pt]
+Broadcast quality & On MNIST (5F), shunting per-soma reaches $0.912 \pm 0.005$, while local-mismatch remains at $0.146 \pm 0.046$. & Correctly matching the broadcast field to the somatic error matters far more than arbitrary local mismatch heuristics. \\
+\addlinespace[2pt]
+Transported oracle & On noise resilience, additive local learning rises from $33$--$47\%$ under per-soma to $75.6$--$98.5\%$ under transported broadcast; shunting rises from $71.7$--$90.3\%$ to $98.5$--$99.3\%$. & The oracle is the strongest causal evidence that broadcast fidelity, not just architecture, is the dominant bottleneck. \\
+\addlinespace[2pt]
+Rule hierarchy & In the competence sweeps, MNIST improves from $0.622$ (3F) and $0.628$ (4F) to $0.916$ (5F); context gating improves from $0.396/0.411$ to $0.789$. & 5F is the strongest practical rule in this paper, though its extra factor remains heuristic rather than theorem-derived. \\
+\addlinespace[2pt]
+5F stability & Tightening the $\phi$ clamp to $[0.5,2.0]$ changes MNIST by only about $+0.4$~pp; varying EMA from $0.05$ to $0.20$ changes it by less than $0.2$~pp. & The practical gain from 5F is not especially brittle to its main tuning knobs. \\
+\addlinespace[2pt]
+Structured feedback & On learned cue routing, tuned shunting per-soma reaches $88.2 \pm 13.9\%$, while tuned pathway-vector feedback reaches $99.1 \pm 0.3\%$. & Structured feedback matters when different branches must be credited differently; it is not a generic replacement for per-soma broadcast on ordinary tasks. \\
+\bottomrule
+\end{tabular}
+\caption{\textbf{Which components carry the observed gains?} A compact summary of the empirical division of labor across architecture, broadcast design, and LocalCA rule variants.}
+\label{tab:component_carry}
 \end{table}
 
 \subsection*{Broadcast Mode Comparison and Local-Mismatch Recheck}
@@ -862,12 +918,12 @@ Additive & local-mismatch & backprop & $0.348 \pm 0.095$ \\
 \toprule
 \textbf{Condition} & \textbf{Metric} & \textbf{Value} \\
 \midrule
-Decoder: local vs backprop vs frozen (MNIST) & test acc & 0.379 vs 0.379 vs 0.176 \\
-Shunting vs additive, matched (MNIST) & $\Delta$ test & $+0.210$ \\
-Per-soma, path on vs off & test / MI(E,I;C) & $-0.003$ / $+0.017$ \\
+Decoder: local vs backprop vs frozen (MNIST, sandbox) & test acc & 0.379 vs 0.379 vs 0.176 \\
+Shunting vs additive, matched (MNIST, sandbox) & $\Delta$ test & $+0.210$ \\
+Per-soma, path on vs off (synthetic task, sandbox) & test / MI(E,I;C) & $-0.003$ / $+0.017$ \\
 \bottomrule
 \end{tabular}
-\caption{\textbf{Mechanistic ablations} in controlled small-network architectures.}
+\caption{\textbf{Mechanistic ablations.} Results from controlled small-network sandbox experiments using minimal architectures to isolate individual factors. Sandbox runs use a small 2-layer dendritic network (branch factor $[9]$) trained for 30 epochs; they are not directly comparable to the headline capacity-calibrated results.}
 \label{tab:robust_headline}
 \end{table}
 
@@ -953,7 +1009,7 @@ $W_{\mathrm{dec}}$ maps $V_L \to \hat{y}$. Modes: \textbf{backprop} ($\nabla_{W}
 
 \subsection*{Model and Mode Inventory}
 \begin{table}[t]\centering\small
-\begin{tabular}{@{}p{0.18\linewidth}p{0.35\linewidth}p{0.39\linewidth}@{}}\toprule
+\begin{tabular}{@{}L{0.18\linewidth}L{0.35\linewidth}L{0.39\linewidth}@{}}\toprule
 \textbf{Category} & \textbf{Implemented modes} & \textbf{Role in this paper} \\\midrule
 Core models & point MLP; dendritic MLP; dendritic additive; dendritic shunting; pathway-routed dendritic cores & Main comparisons use dendritic additive vs.\ dendritic shunting; routed cores are used for cue integration. \\
 Training strategies & standard backprop; LocalCA; DFA; FA; transported-broadcast oracle & Main text uses standard and LocalCA; DFA/FA remain appendix baselines; path transport is an oracle upper bound. \\
@@ -967,15 +1023,15 @@ Recent dendritic extensions & path propagation; router-derived branch roles; pat
 
 \subsection*{LocalCA Extension Compatibility}
 \begin{table}[t]\centering\small
-\begin{tabular}{@{}p{0.18\linewidth}p{0.34\linewidth}p{0.15\linewidth}p{0.25\linewidth}@{}}\toprule
+\begin{tabular}{@{}L{0.16\linewidth}L{0.31\linewidth}L{0.13\linewidth}L{0.30\linewidth}@{}}\toprule
 \textbf{Extension} & \textbf{Meaning} & \textbf{Compatible with} & \textbf{Typical use here} \\\midrule
 Per-soma broadcast & Somatic error vector shared across compartments & 3F, 4F, 5F & Default main-text LocalCA setting \\
 Low-rank broadcast & Small number of broadcast channels instead of a scalar or full field & 3F, 4F, 5F & Intermediate control when rank-1 is too restrictive \\
 Path transport & Recursive tree-transported error using path gains & 3F, 4F, 5F & Oracle upper-bound broadcast \\
 Path propagation & Approximate path-gain attenuation applied to broadcast & 3F, 4F, 5F & Morphology-aware modifier for deeper trees \\
 Pathway vector & Structured branch/pathway-specific broadcast field & 3F, 4F, 5F & Used mainly in PV-LocalCA on routed tasks \\
-Branch-role rules & Scales updates by router- or pathway-derived branch specialization & 3F, 4F, 5F & Structured pathway extension \\
-Inhibitory homeostasis & Auxiliary local inhibitory balancing term & 3F, 4F, 5F & Stabilizer for routed/shunting settings \\
+Branch-role rules & Scales updates by router- or pathway-derived branch specialization & 3F, 4F, 5F & Used in the structured pathway extension \\
+Inhibitory homeostasis & Auxiliary local inhibitory balancing term & 3F, 4F, 5F & Optional stabilizer in routed or shunting settings \\
 \bottomrule
 \end{tabular}
 \caption{Compatibility of the newer LocalCA extensions with the base 3F/4F/5F family. These extensions mostly modify the error field or branch scaling rather than defining a new ``6F'' or ``7F'' rule.}
@@ -1014,10 +1070,11 @@ MNIST, Fashion-MNIST, CIFAR-10, and MICrONS are public datasets or public benchm
 3F & $x, (E\!-\!V), e$ & $\mathcal{O}(1)$ & Baseline \\
 4F & 3F $+ \rho$ & $\mathcal{O}(1)$ & Improved conditioning \\
 5F & 4F $+ \phi$ & $\mathcal{O}(d_n)$ & Strongest overall \\
+5F+VH & 5F $+$ local voltage homeostasis & $\mathcal{O}(d_n)$ & Stabilized LocalCA / warm-up \\
 PV-LocalCA & 3F $+$ structured $e_n$ $+$ role alignment & $\mathcal{O}(r_n)$ & Pathway discovery \\
 \bottomrule
 \end{tabular}
-\caption{Variant taxonomy.}
+\caption{Variant taxonomy. `5F+VH` denotes the same base 5F rule with an additional strictly local voltage-centering auxiliary that can also be scheduled through multi-stage LocalCA warm-up; the codebase also supports this as a shorthand `5f\_vh` alias in configuration files.}
 \label{tab:taxonomy}
 \end{table}
 
@@ -1127,7 +1184,7 @@ The weight distribution shape is also robust to dendritic depth (branch factors 
 
 \begin{figure*}[t]
 \centering
-\includegraphics[width=0.95\textwidth]{fig_weight_distributions.png}
+\includegraphics[width=0.95\textwidth]{fig_weight_distributions.pdf}
 \caption{\textbf{Synaptic weight distribution sensitivity to architecture.}
 \textbf{(A)}~Log-normal $\sigma$ vs.\ dendritic depth (branch factors $[9]$ to $[3{,}3{,}3{,}3]$). Both backprop and local shunting remain closer to the biological-width references than their additive counterparts across depth.
 \textbf{(B)}~$\sigma$ vs.\ inhibitory synapses per branch ($N_I$). Without inhibition ($N_I{=}0$), all conditions are overly broad; with biologically constrained $N_I{=}10$--$20$, shunting enters the biological range. Shaded bands show the sweep over $N_E{=}20$ to $80$.
@@ -1158,6 +1215,36 @@ This is analogous to a learning rate that self-adjusts via the total conductance
 The resulting equilibrium distribution is log-normal, consistent with Loewenstein et al.\ \cite{loewenstein2011multiplicative} (multiplicative spine dynamics) and Saxena et al.\ \cite{saxena2024lognormal} (exponentiated gradient).
 Additive integration lacks this self-normalizing mechanism, producing broader distributions that fall outside the biological range.
 
+\section{Synthetic Benchmark Descriptions}
+\label{app:synthetic_tasks}
+
+Each synthetic task is generated procedurally from a fixed random seed and uses fixed train/val/test splits for reproducibility.
+All tasks use 500-dimensional flattened inputs and 10-class outputs unless otherwise noted.
+
+\paragraph{Context gating.}
+Inputs are Gaussian mixtures over 10 classes, but the class-conditional means are linearly transformed by one of $C=4$ context configurations.
+A one-hot context vector (appended to the input) indicates which configuration is active.
+Without the context, classes are ambiguous; with it, the optimal boundary shifts.
+This task tests whether credit assignment can exploit the context gating structure to modulate branch-specific representations appropriately.
+The HSIC auxiliary objective (weight $0.01$) is used to decorrelate layer representations, adding roughly $3$~pp under local learning.
+
+\paragraph{Noise resilience.}
+Inputs are MNIST features corrupted by structured channel noise: a random $50\times50$ projection matrix adds correlated noise drawn from $\mathcal{N}(0, \sigma_{\mathrm{task}}^2 I)$ with $\sigma_{\mathrm{task}} = 1.5$.
+The noise projection is fixed across training; the network must filter structured interference to recover the underlying class signal.
+Credit assignment must remain coherent under the corrupted signal, making this task particularly sensitive to path-gain dispersion.
+
+\paragraph{Info shunting.}
+Inputs contain two additive streams: a low-frequency signal and a high-frequency distractor drawn with equal energy.
+A second context input (separate channel) indicates whether the relevant signal is low- or high-frequency on each trial.
+Correct classification requires the network to gate the distractor stream, a computation that naturally invites inhibitory modulation.
+Performance at $N_I{=}0$ is notably below shunting performance ($+24.8$~pp), reflecting the task's dependence on divisive normalization.
+
+\paragraph{Cue integration.}
+Two noisy cue streams ($A$ and $B$) are presented simultaneously, each carrying partial information about one of 10 classes.
+A binary context signal indicates which cue is reliable on each trial (cue $A$ or cue $B$).
+The fixed-pathway variant duplicates the context into both cue branches; the learned-routing variant requires the router to discover the cue separation from data.
+This task is used in Sec.~\ref{sec:cue_routing} to test structured pathway-vector broadcast.
+
 \section{Depth Scaling and Noise Robustness}
 \label{app:depth_noise}
 
@@ -1169,49 +1256,223 @@ Gaussian noise $\mathcal{N}(0,\sigma^2)$ on broadcast error: shunting is robust 
 
 \section*{NeurIPS Paper Checklist}
 
-\paragraph{1. Claims}
-\answerYes{} The abstract and introduction state the paper's main claims, and the discussion explicitly narrows their scope to the conductance-based setting studied here; see Secs.~\ref{sec:intro} and \ref{sec:discussion}.
+\begin{enumerate}
 
-\paragraph{2. Limitations}
-\answerYes{} The paper includes an explicit limitations paragraph discussing benchmark performance, broadcast assumptions, depth scaling, and the absence of iterative target-propagation-style baselines; see Sec.~\ref{sec:discussion}.
+\item {\bf Claims}
+    \item[] Question: Do the main claims made in the abstract and introduction accurately reflect the paper's contributions and scope?
+    \item[] Answer: \answerYes{}
+    \item[] Justification: The abstract and introduction state the paper's main mechanistic claim, the scope of the conductance-based setting, and the regime-dependent nature of the empirical results; see Sec.~\ref{sec:intro} and Sec.~\ref{sec:discussion}.
+    \item[] Guidelines:
+    \begin{itemize}
+        \item The answer \answerNA{} means that the abstract and introduction do not include the claims made in the paper.
+        \item The abstract and/or introduction should clearly state the claims made, including the contributions made in the paper and important assumptions and limitations. A \answerNo{} or \answerNA{} answer to this question will not be perceived well by the reviewers.
+        \item The claims made should match theoretical and experimental results, and reflect how much the results can be expected to generalize to other settings.
+        \item It is fine to include aspirational goals as motivation as long as it is clear that these goals are not attained by the paper.
+    \end{itemize}
 
-\paragraph{3. Theory, Assumptions and Proofs}
-\answerYes{} The theoretical assumptions are stated with the voltage model and gradient theorem in Sec.~\ref{sec:model}, and complete proofs or proof sketches are provided in the appendix where needed; see also Appendix~\ref{app:theory}.
+\item {\bf Limitations}
+    \item[] Question: Does the paper discuss the limitations of the work performed by the authors?
+    \item[] Answer: \answerYes{}
+    \item[] Justification: The discussion explicitly narrows the scope of the claims and discusses limitations involving benchmark strength, broadcast assumptions, depth scaling, and the exploratory stress tests; see Sec.~\ref{sec:discussion}.
+    \item[] Guidelines:
+    \begin{itemize}
+        \item The answer \answerNA{} means that the paper has no limitation while the answer \answerNo{} means that the paper has limitations, but those are not discussed in the paper.
+        \item The authors are encouraged to create a separate ``Limitations'' section in their paper.
+        \item The paper should point out any strong assumptions and how robust the results are to violations of these assumptions (e.g., independence assumptions, noiseless settings, model well-specification, asymptotic approximations only holding locally). The authors should reflect on how these assumptions might be violated in practice and what the implications would be.
+        \item The authors should reflect on the scope of the claims made, e.g., if the approach was only tested on a few datasets or with a few runs. In general, empirical results often depend on implicit assumptions, which should be articulated.
+        \item The authors should reflect on the factors that influence the performance of the approach. For example, a facial recognition algorithm may perform poorly when image resolution is low or images are taken in low lighting. Or a speech-to-text system might not be used reliably to provide closed captions for online lectures because it fails to handle technical jargon.
+        \item The authors should discuss the computational efficiency of the proposed algorithms and how they scale with dataset size.
+        \item If applicable, the authors should discuss possible limitations of their approach to address problems of privacy and fairness.
+        \item While the authors might fear that complete honesty about limitations might be used by reviewers as grounds for rejection, a worse outcome might be that reviewers discover limitations that aren't acknowledged in the paper. The authors should use their best judgment and recognize that individual actions in favor of transparency play an important role in developing norms that preserve the integrity of the community. Reviewers will be specifically instructed to not penalize honesty concerning limitations.
+    \end{itemize}
 
-\paragraph{4. Experimental Result Reproducibility}
-\answerYes{} The model family, update rules, benchmark settings, and representative hyperparameters are described in the main text and appendices, with exact configurations summarized in Appendix~\ref{app:implementation}.
+\item {\bf Theory assumptions and proofs}
+    \item[] Question: For each theoretical result, does the paper provide the full set of assumptions and a complete (and correct) proof?
+    \item[] Answer: \answerYes{}
+    \item[] Justification: The voltage model, assumptions, theorem statements, and proof details are given in Sec.~\ref{sec:model} and Appendix~\ref{app:theory}; proof sketches and the exact factorization sanity check are cross-referenced in the main text.
+    \item[] Guidelines:
+    \begin{itemize}
+        \item The answer \answerNA{} means that the paper does not include theoretical results.
+        \item All the theorems, formulas, and proofs in the paper should be numbered and cross-referenced.
+        \item All assumptions should be clearly stated or referenced in the statement of any theorems.
+        \item The proofs can either appear in the main paper or the supplemental material, but if they appear in the supplemental material, the authors are encouraged to provide a short proof sketch to provide intuition.
+        \item Inversely, any informal proof provided in the core of the paper should be complemented by formal proofs provided in appendix or supplemental material.
+        \item Theorems and Lemmas that the proof relies upon should be properly referenced.
+    \end{itemize}
 
-\paragraph{5. Open Access to Data and Code}
-\answerNo{} The anonymous submission does not include a public code release or anonymized repository URL. Public datasets are cited, and we plan to release code and configuration files after review; see Appendix~\ref{app:implementation}.
+\item {\bf Experimental result reproducibility}
+    \item[] Question: Does the paper fully disclose all the information needed to reproduce the main experimental results of the paper to the extent that it affects the main claims and/or conclusions of the paper (regardless of whether the code and data are provided or not)?
+    \item[] Answer: \answerYes{}
+    \item[] Justification: The main paper and appendices specify the datasets, architectures, local-rule family, broadcast modes, representative hyperparameters, and compute regime needed to reproduce the headline results; see Sec.~\ref{sec:experiments} and Appendix~\ref{app:implementation}.
+    \item[] Guidelines:
+    \begin{itemize}
+        \item The answer \answerNA{} means that the paper does not include experiments.
+        \item If the paper includes experiments, a \answerNo{} answer to this question will not be perceived well by the reviewers: Making the paper reproducible is important, regardless of whether the code and data are provided or not.
+        \item If the contribution is a dataset and\slash or model, the authors should describe the steps taken to make their results reproducible or verifiable.
+        \item Depending on the contribution, reproducibility can be accomplished in various ways. For example, if the contribution is a novel architecture, describing the architecture fully might suffice, or if the contribution is a specific model and empirical evaluation, it may be necessary to either make it possible for others to replicate the model with the same dataset, or provide access to the model. In general, releasing code and data is often one good way to accomplish this, but reproducibility can also be provided via detailed instructions for how to replicate the results, access to a hosted model (e.g., in the case of a large language model), releasing of a model checkpoint, or other means that are appropriate to the research performed.
+        \item While NeurIPS does not require releasing code, the conference does require all submissions to provide some reasonable avenue for reproducibility, which may depend on the nature of the contribution. For example
+        \begin{enumerate}
+            \item If the contribution is primarily a new algorithm, the paper should make it clear how to reproduce that algorithm.
+            \item If the contribution is primarily a new model architecture, the paper should describe the architecture clearly and fully.
+            \item If the contribution is a new model (e.g., a large language model), then there should either be a way to access this model for reproducing the results or a way to reproduce the model (e.g., with an open-source dataset or instructions for how to construct the dataset).
+            \item We recognize that reproducibility may be tricky in some cases, in which case authors are welcome to describe the particular way they provide for reproducibility. In the case of closed-source models, it may be that access to the model is limited in some way (e.g., to registered users), but it should be possible for other researchers to have some path to reproducing or verifying the results.
+        \end{enumerate}
+    \end{itemize}
 
-\paragraph{6. Experimental Setting / Details}
-\answerYes{} The paper specifies the datasets, architectural families, learning modes, broadcast modes, and seed averaging protocol in Sec.~\ref{sec:experiments} and Appendix~\ref{app:implementation}.
+\item {\bf Open access to data and code}
+    \item[] Question: Does the paper provide open access to the data and code, with sufficient instructions to faithfully reproduce the main experimental results, as described in supplemental material?
+    \item[] Answer: \answerNo{}
+    \item[] Justification: To preserve double-blind review, the anonymous submission does not include a public repository or anonymized code bundle. The paper instead provides architectural, algorithmic, and configuration details and states that code and configs will be released after review; see Appendix~\ref{app:implementation}.
+    \item[] Guidelines:
+    \begin{itemize}
+        \item The answer \answerNA{} means that paper does not include experiments requiring code.
+        \item Please see the NeurIPS code and data submission guidelines (\url{https://neurips.cc/public/guides/CodeSubmissionPolicy}) for more details.
+        \item While we encourage the release of code and data, we understand that this might not be possible, so \answerNo{} is an acceptable answer. Papers cannot be rejected simply for not including code, unless this is central to the contribution (e.g., for a new open-source benchmark).
+        \item The instructions should contain the exact command and environment needed to run to reproduce the results. See the NeurIPS code and data submission guidelines (\url{https://neurips.cc/public/guides/CodeSubmissionPolicy}) for more details.
+        \item The authors should provide instructions on data access and preparation, including how to access the raw data, preprocessed data, intermediate data, and generated data, etc.
+        \item The authors should provide scripts to reproduce all experimental results for the new proposed method and baselines. If only a subset of experiments are reproducible, they should state which ones are omitted from the script and why.
+        \item At submission time, to preserve anonymity, the authors should release anonymized versions (if applicable).
+        \item Providing as much information as possible in supplemental material (appended to the paper) is recommended, but including URLs to data and code is permitted.
+    \end{itemize}
 
-\paragraph{7. Experiment Statistical Significance}
-\answerYes{} Headline experimental results report means and standard deviations across 3--5 seeds, and figures/tables indicate when error bars or seed variability are shown; see Sec.~\ref{sec:experiments} and Appendix~\ref{app:extra_results}.
+\item {\bf Experimental setting/details}
+    \item[] Question: Does the paper specify all the training and test details (e.g., data splits, hyperparameters, how they were chosen, type of optimizer) necessary to understand the results?
+    \item[] Answer: \answerYes{}
+    \item[] Justification: The main text states the benchmark families, seed protocol, representative local-rule settings, and major training choices, while the appendices provide implementation details and operating-mode inventories; see Sec.~\ref{sec:experiments} and Appendix~\ref{app:implementation}.
+    \item[] Guidelines:
+    \begin{itemize}
+        \item The answer \answerNA{} means that the paper does not include experiments.
+        \item The experimental setting should be presented in the core of the paper to a level of detail that is necessary to appreciate the results and make sense of them.
+        \item The full details can be provided either with the code, in appendix, or as supplemental material.
+    \end{itemize}
 
-\paragraph{8. Experiments Compute Resource}
-\answerYes{} Appendix~\ref{app:implementation} reports the compute setting at the level of single-GPU cluster runs, worker type, and rough runtime scale for the experiments.
+\item {\bf Experiment statistical significance}
+    \item[] Question: Does the paper report error bars suitably and correctly defined or other appropriate information about the statistical significance of the experiments?
+    \item[] Answer: \answerYes{}
+    \item[] Justification: The paper reports means and standard deviations across 3--5 seeds for headline results, states this explicitly in the text, and shows error bars or seed variability in the relevant tables and figures; see Sec.~\ref{sec:experiments} and Appendix~\ref{app:extra_results}.
+    \item[] Guidelines:
+    \begin{itemize}
+        \item The answer \answerNA{} means that the paper does not include experiments.
+        \item The authors should answer \answerYes{} if the results are accompanied by error bars, confidence intervals, or statistical significance tests, at least for the experiments that support the main claims of the paper.
+        \item The factors of variability that the error bars are capturing should be clearly stated (for example, train/test split, initialization, random drawing of some parameter, or overall run with given experimental conditions).
+        \item The method for calculating the error bars should be explained (closed form formula, call to a library function, bootstrap, etc.)
+        \item The assumptions made should be given (e.g., Normally distributed errors).
+        \item It should be clear whether the error bar is the standard deviation or the standard error of the mean.
+        \item It is OK to report 1-sigma error bars, but one should state it. The authors should preferably report a 2-sigma error bar than state that they have a 96\% CI, if the hypothesis of Normality of errors is not verified.
+        \item For asymmetric distributions, the authors should be careful not to show in tables or figures symmetric error bars that would yield results that are out of range (e.g., negative error rates).
+        \item If error bars are reported in tables or plots, the authors should explain in the text how they were calculated and reference the corresponding figures or tables in the text.
+    \end{itemize}
 
-\paragraph{9. Code of Ethics}
-\answerYes{} We have read the NeurIPS Code of Ethics and are not aware of any aspect of the work that violates it. The paper uses standard public benchmarks and does not involve prohibited applications.
+\item {\bf Experiments compute resources}
+    \item[] Question: For each experiment, does the paper provide sufficient information on the computer resources (type of compute workers, memory, time of execution) needed to reproduce the experiments?
+    \item[] Answer: \answerYes{}
+    \item[] Justification: Appendix~\ref{app:implementation} describes the internal GPU cluster setting, the use of single A100/H100-class GPUs, rough per-run runtime scales, and the fact that broader exploratory sweeps required additional compute beyond the final reported runs.
+    \item[] Guidelines:
+    \begin{itemize}
+        \item The answer \answerNA{} means that the paper does not include experiments.
+        \item The paper should indicate the type of compute workers CPU or GPU, internal cluster, or cloud provider, including relevant memory and storage.
+        \item The paper should provide the amount of compute required for each of the individual experimental runs as well as estimate the total compute.
+        \item The paper should disclose whether the full research project required more compute than the experiments reported in the paper (e.g., preliminary or failed experiments that didn't make it into the paper).
+    \end{itemize}
 
-\paragraph{10. Broader Impacts}
-\answerYes{} Sec.~\ref{sec:discussion} discusses broader relevance and a short potential-harms paragraph tailored to this work's most plausible downstream misuse modes.
+\item {\bf Code of ethics}
+    \item[] Question: Does the research conducted in the paper conform, in every respect, with the NeurIPS Code of Ethics \url{https://neurips.cc/public/EthicsGuidelines}?
+    \item[] Answer: \answerYes{}
+    \item[] Justification: The work uses standard public benchmarks and mechanistic simulations, does not involve human-subjects experimentation or restricted data collection, and we are not aware of any aspect that violates the NeurIPS Code of Ethics.
+    \item[] Guidelines:
+    \begin{itemize}
+        \item The answer \answerNA{} means that the authors have not reviewed the NeurIPS Code of Ethics.
+        \item If the authors answer \answerNo, they should explain the special circumstances that require a deviation from the Code of Ethics.
+        \item The authors should make sure to preserve anonymity (e.g., if there is a special consideration due to laws or regulations in their jurisdiction).
+    \end{itemize}
 
-\paragraph{11. Safeguards}
-\answerNA{} The paper does not release a high-risk generative model, foundation model, or other asset that requires access control or misuse safeguards.
+\item {\bf Broader impacts}
+    \item[] Question: Does the paper discuss both potential positive societal impacts and negative societal impacts of the work performed?
+    \item[] Answer: \answerYes{}
+    \item[] Justification: The discussion includes a broader-relevance and potential-harms paragraph that distinguishes mechanistic neuroscience relevance from possible misuse through overclaiming biological plausibility or overstating robustness; see Sec.~\ref{sec:discussion}.
+    \item[] Guidelines:
+    \begin{itemize}
+        \item The answer \answerNA{} means that there is no societal impact of the work performed.
+        \item If the authors answer \answerNA{} or \answerNo, they should explain why their work has no societal impact or why the paper does not address societal impact.
+        \item Examples of negative societal impacts include potential malicious or unintended uses (e.g., disinformation, generating fake profiles, surveillance), fairness considerations (e.g., deployment of technologies that could make decisions that unfairly impact specific groups), privacy considerations, and security considerations.
+        \item The conference expects that many papers will be foundational research and not tied to particular applications, let alone deployments. However, if there is a direct path to any negative applications, the authors should point it out. For example, it is legitimate to point out that an improvement in the quality of generative models could be used to generate Deepfakes for disinformation. On the other hand, it is not needed to point out that a generic algorithm for optimizing neural networks could enable people to train models that generate Deepfakes faster.
+        \item The authors should consider possible harms that could arise when the technology is being used as intended and functioning correctly, harms that could arise when the technology is being used as intended but gives incorrect results, and harms following from (intentional or unintentional) misuse of the technology.
+        \item If there are negative societal impacts, the authors could also discuss possible mitigation strategies (e.g., gated release of models, providing defenses in addition to attacks, mechanisms for monitoring misuse, mechanisms to monitor how a system learns from feedback over time, improving the efficiency and accessibility of ML).
+    \end{itemize}
 
-\paragraph{12. Licenses}
-\answerYes{} The paper cites the public benchmark and connectomic assets it uses, and Appendix~\ref{app:implementation} states the asset-usage and release posture for this submission.
+\item {\bf Safeguards}
+    \item[] Question: Does the paper describe safeguards that have been put in place for responsible release of data or models that have a high risk for misuse (e.g., pre-trained language models, image generators, or scraped datasets)?
+    \item[] Answer: \answerNA{}
+    \item[] Justification: The submission does not release a high-risk generative model, foundation model, or scraped dataset, so the safeguard question is not applicable here.
+    \item[] Guidelines:
+    \begin{itemize}
+        \item The answer \answerNA{} means that the paper poses no such risks.
+        \item Released models that have a high risk for misuse or dual-use should be released with necessary safeguards to allow for controlled use of the model, for example by requiring that users adhere to usage guidelines or restrictions to access the model or implementing safety filters.
+        \item Datasets that have been scraped from the Internet could pose safety risks. The authors should describe how they avoided releasing unsafe images.
+        \item We recognize that providing effective safeguards is challenging, and many papers do not require this, but we encourage authors to take this into account and make a best faith effort.
+    \end{itemize}
 
-\paragraph{13. Assets}
-\answerNA{} The submission does not release a new dataset, benchmark, or pretrained model asset.
+\item {\bf Licenses for existing assets}
+    \item[] Question: Are the creators or original owners of assets (e.g., code, data, models), used in the paper, properly credited and are the license and terms of use explicitly mentioned and properly respected?
+    \item[] Answer: \answerNo{}
+    \item[] Justification: The paper credits all benchmark and connectomic assets and states that they are used under their published access conditions, but it does not enumerate license names or terms of use explicitly for each asset in the anonymous submission; see Appendix~\ref{app:implementation}.
+    \item[] Guidelines:
+    \begin{itemize}
+        \item The answer \answerNA{} means that the paper does not use existing assets.
+        \item The authors should cite the original paper that produced the code package or dataset.
+        \item The authors should state which version of the asset is used and, if possible, include a URL.
+        \item The name of the license (e.g., CC-BY 4.0) should be included for each asset.
+        \item For scraped data from a particular source (e.g., website), the copyright and terms of service of that source should be provided.
+        \item If assets are released, the license, copyright information, and terms of use in the package should be provided. For popular datasets, \url{paperswithcode.com/datasets} has curated licenses for some datasets. Their licensing guide can help determine the license of a dataset.
+        \item For existing datasets that are re-packaged, both the original license and the license of the derived asset (if it has changed) should be provided.
+        \item If this information is not available online, the authors are encouraged to reach out to the asset's creators.
+    \end{itemize}
 
-\paragraph{14. Crowdsourcing and Research with Human Subjects}
-\answerNA{} The work does not use crowdsourcing or direct research with human subjects.
+\item {\bf New assets}
+    \item[] Question: Are new assets introduced in the paper well documented and is the documentation provided alongside the assets?
+    \item[] Answer: \answerNA{}
+    \item[] Justification: The paper does not release a new dataset, benchmark, or pretrained model asset in this anonymous submission.
+    \item[] Guidelines:
+    \begin{itemize}
+        \item The answer \answerNA{} means that the paper does not release new assets.
+        \item Researchers should communicate the details of the dataset\slash code\slash model as part of their submissions via structured templates. This includes details about training, license, limitations, etc.
+        \item The paper should discuss whether and how consent was obtained from people whose asset is used.
+        \item At submission time, remember to anonymize your assets (if applicable). You can either create an anonymized URL or include an anonymized zip file.
+    \end{itemize}
 
-\paragraph{15. IRB Approvals}
-\answerNA{} The work does not involve human-subjects research requiring IRB approval.
+\item {\bf Crowdsourcing and research with human subjects}
+    \item[] Question: For crowdsourcing experiments and research with human subjects, does the paper include the full text of instructions given to participants and screenshots, if applicable, as well as details about compensation (if any)?
+    \item[] Answer: \answerNA{}
+    \item[] Justification: The work does not involve crowdsourcing or direct research with human subjects.
+    \item[] Guidelines:
+    \begin{itemize}
+        \item The answer \answerNA{} means that the paper does not involve crowdsourcing nor research with human subjects.
+        \item Including this information in the supplemental material is fine, but if the main contribution of the paper involves human subjects, then as much detail as possible should be included in the main paper.
+        \item According to the NeurIPS Code of Ethics, workers involved in data collection, curation, or other labor should be paid at least the minimum wage in the country of the data collector.
+    \end{itemize}
+
+\item {\bf Institutional review board (IRB) approvals or equivalent for research with human subjects}
+    \item[] Question: Does the paper describe potential risks incurred by study participants, whether such risks were disclosed to the subjects, and whether Institutional Review Board (IRB) approvals (or an equivalent approval/review based on the requirements of your country or institution) were obtained?
+    \item[] Answer: \answerNA{}
+    \item[] Justification: The work does not involve crowdsourcing or human-subjects research requiring IRB review.
+    \item[] Guidelines:
+    \begin{itemize}
+        \item The answer \answerNA{} means that the paper does not involve crowdsourcing nor research with human subjects.
+        \item Depending on the country in which research is conducted, IRB approval (or equivalent) may be required for any human subjects research. If you obtained IRB approval, you should clearly state this in the paper.
+        \item We recognize that the procedures for this may vary significantly between institutions and locations, and we expect authors to adhere to the NeurIPS Code of Ethics and the guidelines for their institution.
+        \item For initial submissions, do not include any information that would break anonymity (if applicable), such as the institution conducting the review.
+    \end{itemize}
+
+\item {\bf Declaration of LLM usage}
+    \item[] Question: Does the paper describe the usage of LLMs if it is an important, original, or non-standard component of the core methods in this research? Note that if the LLM is used only for writing, editing, or formatting purposes and does \emph{not} impact the core methodology, scientific rigor, or originality of the research, declaration is not required.
+    \item[] Answer: \answerNA{}
+    \item[] Justification: LLMs are not part of the proposed method, theorem, experiments, or analysis pipeline, so no declaration is required for the core scientific contribution.
+    \item[] Guidelines:
+    \begin{itemize}
+        \item The answer \answerNA{} means that the core method development in this research does not involve LLMs as any important, original, or non-standard components.
+        \item Please refer to our LLM policy in the NeurIPS handbook for what should or should not be described.
+    \end{itemize}
+
+\end{enumerate}
 
 \end{document}

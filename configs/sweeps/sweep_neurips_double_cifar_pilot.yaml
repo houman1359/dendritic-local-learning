@@ -1,7 +1,7 @@
 output_dir: "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/sweep_runs"
 
 outputs:
-  run_name: "sweep_neurips_double_cifar_pilot"
+  run_name: "sweep_neurips_double_mnist_pilot"
 
 slurm_config:
   account: "kempner_dev"
@@ -23,13 +23,13 @@ experiment_settings:
   use_array_jobs: true
 
 configs:
-  - name: "cifar10_modulo10_flat_shunting_standard"
-    path: "drafts/dendritic-local-learning/configs/cifar10_modulo10_flat_shunting_standard.yaml"
-  - name: "cifar10_modulo10_flat_shunting_localca"
-    path: "drafts/dendritic-local-learning/configs/cifar10_modulo10_flat_shunting_localca.yaml"
-  - name: "double_cifar10_contextual_routed_shunting_standard"
-    path: "drafts/dendritic-local-learning/configs/double_cifar10_contextual_routed_shunting_standard.yaml"
-  - name: "double_cifar10_contextual_routed_shunting_localca"
-    path: "drafts/dendritic-local-learning/configs/double_cifar10_contextual_routed_shunting_localca.yaml"
-  - name: "double_cifar10_contextual_routed_shunting_localca_pathway_vector"
-    path: "drafts/dendritic-local-learning/configs/double_cifar10_contextual_routed_shunting_localca_pathway_vector.yaml"
+  - name: "mnist_modulo10_flat_shunting_standard"
+    path: "drafts/dendritic-local-learning/configs/mnist_modulo10_flat_shunting_standard.yaml"
+  - name: "mnist_modulo10_flat_shunting_localca"
+    path: "drafts/dendritic-local-learning/configs/mnist_modulo10_flat_shunting_localca.yaml"
+  - name: "double_mnist_contextual_routed_shunting_standard"
+    path: "drafts/dendritic-local-learning/configs/double_mnist_contextual_routed_shunting_standard.yaml"
+  - name: "double_mnist_contextual_routed_shunting_localca"
+    path: "drafts/dendritic-local-learning/configs/double_mnist_contextual_routed_shunting_localca.yaml"
+  - name: "double_mnist_contextual_routed_shunting_localca_pathway_vector"
+    path: "drafts/dendritic-local-learning/configs/double_mnist_contextual_routed_shunting_localca_pathway_vector.yaml"

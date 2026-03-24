@@ -29,6 +29,7 @@ build/
 output/
 _minted-*/
 outputs/
+local_sweep_runs/
 
 # Python cache
 __pycache__/

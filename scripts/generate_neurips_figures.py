@@ -72,13 +72,13 @@ DPI = 300
 def _setup_style():
     plt.rcParams.update({
         "font.family": "sans-serif",
-        "font.size": 7,
-        "axes.labelsize": 8,
-        "axes.titlesize": 8,
-        "axes.titlepad": 6,
-        "xtick.labelsize": 6.5,
-        "ytick.labelsize": 6.5,
-        "legend.fontsize": 6,
+        "font.size": 8.5,
+        "axes.labelsize": 9,
+        "axes.titlesize": 9.5,
+        "axes.titlepad": 7,
+        "xtick.labelsize": 8.0,
+        "ytick.labelsize": 8.0,
+        "legend.fontsize": 7.5,
         "figure.dpi": DPI,
         "savefig.dpi": DPI,
         "savefig.bbox": "tight",
@@ -246,7 +246,7 @@ def fig1_panel_a(ax):
     ]
     labels = ["$x^E$: excitatory input", "$x^I$: inhibitory input",
               "Dendritic compartment", "Error broadcast"]
-    ax.legend(handles, labels, loc="lower left", fontsize=4.5,
+    ax.legend(handles, labels, loc="lower left", fontsize=6.5,
               framealpha=0.95, handlelength=1.2, handletextpad=0.3,
               borderpad=0.3, labelspacing=0.3, bbox_to_anchor=(0.02, -0.18))
 
@@ -319,9 +319,8 @@ def fig1_panel_learning_curves(ax):
                          color=color, alpha=0.10)
 
     ax.set_xlabel("Epoch")
-    ax.set_ylabel("Accuracy (%)", fontsize=6, labelpad=1)
-    ax.tick_params(axis='y', labelsize=5.5, pad=1)
-    ax.legend(loc="upper center", fontsize=4.5, ncol=2, handlelength=1.5,
+    ax.set_ylabel("Accuracy (%)", labelpad=1)
+    ax.legend(loc="upper center", fontsize=6.5, ncol=2, handlelength=1.5,
               columnspacing=0.8, bbox_to_anchor=(0.5, 1.0))
     ax.set_ylim(5, 100)
     ax.set_xlim(0, 200)
@@ -380,8 +379,8 @@ def figure2():
     fmnist = _csv("fashion_mnist_competence_summary.csv")
     ie_data = _csv("gradient_fidelity_vs_ie_corrected_summary.csv")
 
-    fig, axes = plt.subplots(1, 3, figsize=(W, 2.8),
-                             gridspec_kw={"wspace": 0.45})
+    fig, axes = plt.subplots(1, 3, figsize=(W * 1.9, 3.6),
+                             gridspec_kw={"wspace": 0.48})
 
     # ---- Panel A: Multi-benchmark bars ----
     ax = axes[0]
@@ -459,7 +458,7 @@ def figure2():
     ax.set_xticks(x_base)
     ax.set_xticklabels([d[0] for d in datasets_info])
     ax.set_ylabel("Test accuracy (%)")
-    ax.set_title("BP ceiling vs. local (5F)")
+    ax.set_title("Local rules approach calibrated ceilings")
 
     # Legend
     legend_handles = [
@@ -467,7 +466,7 @@ def figure2():
         mpatches.Patch(color=COLOR_SHUNTING, label="Shunt. (local)"),
         mpatches.Patch(color=COLOR_ADDITIVE, label="Add. (local)"),
     ]
-    ax.legend(handles=legend_handles, fontsize=5, loc="upper right",
+    ax.legend(handles=legend_handles, fontsize=7, loc="lower right",
               handlelength=1.0, handletextpad=0.3)
 
     all_vals = [d[1]*100 for d in datasets_info if d[1]] + \
@@ -501,8 +500,8 @@ def figure2():
 
     ax.set_xlabel("$N_I$ (inhib. syn. per branch)")
     ax.set_ylabel("Test accuracy (%)")
-    ax.set_title("$N_I$ dose-response")
-    ax.legend(fontsize=4.5, loc="center right", handlelength=1.5,
+    ax.set_title("Inhibition helps most in noisy regimes")
+    ax.legend(fontsize=7, loc="lower right", handlelength=1.5,
               handletextpad=0.3, borderpad=0.3)
     ax.set_ylim(25, 100)
 
@@ -532,11 +531,11 @@ def figure2():
     ax.axhline(0, color="black", lw=0.4, ls="--")
     ax.set_xlabel("$N_I$ (inhib. syn. per branch)")
     ax.set_ylabel("Shunting adv. (pp)")
-    ax.set_title("Regime dependence")
-    ax.legend(fontsize=5.5, loc="center right")
+    ax.set_title("Shunting advantage grows with inhibition")
+    ax.legend(fontsize=7, loc="upper right")
 
-    fig.subplots_adjust(left=0.10, right=0.97, bottom=0.18, top=0.88,
-                        wspace=0.50)
+    fig.subplots_adjust(left=0.08, right=0.97, bottom=0.15, top=0.90,
+                        wspace=0.52)
     _save(fig, "fig2_competence_regime")
     plt.close(fig)
 
@@ -546,8 +545,8 @@ def figure2():
 # ===================================================================
 def figure3():
     print("\n--- Figure 3: Gradient Fidelity ---")
-    fig, axes = plt.subplots(1, 3, figsize=(W, 2.8),
-                             gridspec_kw={"wspace": 0.50})
+    fig, axes = plt.subplots(1, 3, figsize=(W * 1.9, 3.6),
+                             gridspec_kw={"wspace": 0.52})
 
     # ---- Panel A: Cosine similarity bars ----
     ax = axes[0]
@@ -564,16 +563,17 @@ def figure3():
                   color=[c[2] for c in conditions],
                   edgecolor="white", lw=0.4, width=0.55)
     ax.set_xticks(x_pos)
-    ax.set_xticklabels([c[0] for c in conditions], fontsize=5.5)
+    ax.set_xticklabels([c[0] for c in conditions], fontsize=7.5)
     ax.set_ylabel("Cosine similarity\n(local vs. BP grad.)")
-    ax.set_title("Gradient alignment")
+    ax.set_title("Shunting makes local gradients track backprop")
+    ax.set_ylim(-0.06, 0.25)
     ax.axhline(0, color="black", lw=0.4, ls="--")
 
     for bar_rect, (_, val, _) in zip(bars, conditions):
-        yo = 0.004 if val >= 0 else -0.012
+        yo = 0.005 if val >= 0 else -0.014
         va = "bottom" if val >= 0 else "top"
         ax.text(bar_rect.get_x() + bar_rect.get_width()/2, val + yo,
-                f"{val:.3f}", ha="center", va=va, fontsize=5)
+                f"{val:.3f}", ha="center", va=va, fontsize=6.5)
 
     # ---- Panel B: Per-layer alignment dynamics ----
     ax = axes[1]
@@ -591,8 +591,8 @@ def figure3():
                     label=col.replace("_", " "), alpha=0.8)
         ax.set_xlabel("Epoch")
         ax.set_ylabel("Cosine similarity")
-        ax.set_title("Per-layer alignment")
-        ax.legend(fontsize=4, ncol=2)
+        ax.set_title("Alignment improves over training")
+        ax.legend(fontsize=6, ncol=2)
     else:
         # Stylized illustration based on paper description
         np.random.seed(42)
@@ -611,8 +611,8 @@ def figure3():
         ax.axhline(0, color="black", lw=0.3, ls=":")
         ax.set_xlabel("Epoch")
         ax.set_ylabel("Cosine similarity")
-        ax.set_title("Per-layer alignment")
-        ax.legend(fontsize=5, loc="center right", handlelength=1.5,
+        ax.set_title("Alignment improves over training")
+        ax.legend(fontsize=7, loc="center right", handlelength=1.5,
                   handletextpad=0.3)
         ax.set_ylim(-0.1, 1.05)
 
@@ -631,13 +631,13 @@ def figure3():
     ax.bar(x + bw/2, add_vals, bw, color=COLOR_ADDITIVE, edgecolor="white",
            lw=0.3, label="Additive")
     ax.set_xticks(x)
-    ax.set_xticklabels(components, fontsize=6)
+    ax.set_xticklabels(components, fontsize=7.5)
     ax.set_ylabel("Cosine similarity")
-    ax.set_title("Component alignment")
+    ax.set_title("Conductance terms carry the strongest alignment")
     ax.axhline(0, color="black", lw=0.3, ls="--")
-    ax.legend(fontsize=5.5, handlelength=1.0)
+    ax.legend(fontsize=7, handlelength=1.0)
 
-    fig.subplots_adjust(left=0.10, right=0.97, bottom=0.18, top=0.88,
+    fig.subplots_adjust(left=0.08, right=0.97, bottom=0.15, top=0.90,
                         wspace=0.55)
     _save(fig, "fig3_gradient_fidelity")
     plt.close(fig)
@@ -653,8 +653,8 @@ def figure4():
     noise = _csv("noise_robustness.csv", bundle=True)
     fmnist = _csv("fashion_mnist_competence_summary.csv")
 
-    fig, axes = plt.subplots(1, 3, figsize=(W, 2.8),
-                             gridspec_kw={"wspace": 0.50})
+    fig, axes = plt.subplots(1, 3, figsize=(W * 1.9, 3.6),
+                             gridspec_kw={"wspace": 0.52})
 
     # ---- Panel A: Depth scaling (LOCAL only — cleaner) ----
     ax = axes[0]
@@ -693,8 +693,8 @@ def figure4():
 
         ax.set_xlabel("Network depth")
         ax.set_ylabel("Test accuracy (%)")
-        ax.set_title("Depth scaling")
-        ax.legend(fontsize=4.5, loc="best", handlelength=1.5,
+        ax.set_title("Shunting degrades more gracefully with depth")
+        ax.legend(fontsize=7, loc="best", handlelength=1.5,
                   handletextpad=0.3, ncol=1)
         ax.xaxis.set_major_locator(ticker.MaxNLocator(integer=True))
 
@@ -716,8 +716,8 @@ def figure4():
 
         ax.set_xlabel(r"Error noise $\sigma$")
         ax.set_ylabel("Test accuracy (%)")
-        ax.set_title("Noise robustness")
-        ax.legend(fontsize=5.5, handlelength=1.0)
+        ax.set_title("Shunting tolerates noisy broadcasts")
+        ax.legend(fontsize=7, handlelength=1.0)
 
     # ---- Panel C: Fashion-MNIST ----
     ax = axes[2]
@@ -745,18 +745,18 @@ def figure4():
                    edgecolor="white", lw=0.3, width=0.55,
                    capsize=1.5, error_kw={"lw": 0.5})
         ax.set_xticks(x)
-        ax.set_xticklabels([c[0] for c in conditions], fontsize=5.5)
+        ax.set_xticklabels([c[0] for c in conditions], fontsize=7.5)
         ax.set_ylabel("Test accuracy (%)")
-        ax.set_title("Fashion-MNIST")
+        ax.set_title("The gain is modest on cleaner vision tasks")
 
         all_v = [c[1] for c in conditions]
         ax.set_ylim(max(0, min(all_v) - 4), max(all_v) + 3)
 
         for i, c in enumerate(conditions):
             ax.text(i, c[1] + c[2] + 0.4,
-                    f"{c[1]:.1f}", ha="center", va="bottom", fontsize=5.5)
+                    f"{c[1]:.1f}", ha="center", va="bottom", fontsize=7)
 
-    fig.subplots_adjust(left=0.10, right=0.97, bottom=0.18, top=0.88,
+    fig.subplots_adjust(left=0.08, right=0.97, bottom=0.15, top=0.90,
                         wspace=0.55)
     _save(fig, "fig4_scalability")
     plt.close(fig)
@@ -773,7 +773,8 @@ def figure_s1():
     mismatch_path = LOCAL_MISMATCH_CSV
     mismatch = pd.read_csv(mismatch_path) if os.path.isfile(mismatch_path) else None
 
-    fig, axes = plt.subplots(2, 2, figsize=(W, 4.5))
+    fig, axes = plt.subplots(2, 2, figsize=(W * 1.9, 7.0),
+                             gridspec_kw={"wspace": 0.45, "hspace": 0.52})
 
     # ---- Panel A: Phase 1 capacity ceilings ----
     ax = axes[0, 0]
@@ -799,10 +800,10 @@ def figure_s1():
             ax.bar(xb + off, vals, bw * 0.9, label=LABEL_MAP.get(arch, arch),
                    color=arch_colors.get(arch, "#999"), edgecolor="white", lw=0.2)
         ax.set_xticks(xb)
-        ax.set_xticklabels([DATASET_LABEL.get(d, d) for d in ds_order], fontsize=5.5)
+        ax.set_xticklabels([DATASET_LABEL.get(d, d) for d in ds_order], fontsize=7.5)
         ax.set_ylabel("Test accuracy (%)")
         ax.set_title("Backprop ceilings")
-        ax.legend(fontsize=4.5, ncol=2, loc="lower left",
+        ax.legend(fontsize=7, ncol=2, loc="lower left",
                   handlelength=1.0, handletextpad=0.3)
 
     # ---- Panel B: Rule family ranking ----
@@ -834,7 +835,7 @@ def figure_s1():
         ax.set_xticklabels([r.upper() for r in rules])
         ax.set_ylabel("Test accuracy (%)")
         ax.set_title("Rule ranking (MNIST)")
-        ax.legend(fontsize=5)
+        ax.legend(fontsize=7)
         av = sub["test_accuracy_mean"].dropna() * 100
         if len(av):
             ax.set_ylim(max(0, av.min() - 6), av.max() + 3)
@@ -868,7 +869,7 @@ def figure_s1():
         ax.set_xticklabels(["Local", "Backprop"])
         ax.set_ylabel("Test accuracy (%)")
         ax.set_title("Decoder mode (5F, MNIST)")
-        ax.legend(fontsize=5)
+        ax.legend(fontsize=7)
         av = sub["test_accuracy_mean"].dropna() * 100
         if len(av):
             ax.set_ylim(max(0, av.min() - 4), av.max() + 2)
@@ -901,12 +902,11 @@ def figure_s1():
                color=[c[3] for c in conds], edgecolor="white", lw=0.2,
                capsize=1.5, width=0.55, error_kw={"lw": 0.5})
         ax.set_xticks(x)
-        ax.set_xticklabels([c[0] for c in conds], fontsize=5.5)
+        ax.set_xticklabels([c[0] for c in conds], fontsize=7.5)
         ax.set_ylabel("Test accuracy (%)")
         ax.set_title("Broadcast mode (MNIST)")
 
-    fig.subplots_adjust(left=0.10, right=0.97, bottom=0.08, top=0.92,
-                        hspace=0.45, wspace=0.45)
+    fig.subplots_adjust(left=0.08, right=0.97, bottom=0.06, top=0.94)
     _save(fig, "fig_s1_calibration")
     plt.close(fig)
 
@@ -916,7 +916,8 @@ def figure_s1():
 # ===================================================================
 def figure_s2():
     print("\n--- Figure S2: Extended Gradient & IE Detail ---")
-    fig, axes = plt.subplots(2, 2, figsize=(W, 4.5))
+    fig, axes = plt.subplots(2, 2, figsize=(W * 1.9, 7.0),
+                             gridspec_kw={"wspace": 0.45, "hspace": 0.52})
 
     # Panel A: Scale mismatch bars (from Table 2)
     ax = axes[0, 0]
@@ -932,16 +933,16 @@ def figure_s2():
     bars = ax.bar(x, [c[1] for c in conditions], color=[c[2] for c in conditions],
                   edgecolor="white", lw=0.4, width=0.55)
     ax.set_xticks(x)
-    ax.set_xticklabels([c[0] for c in conditions], fontsize=5.5)
+    ax.set_xticklabels([c[0] for c in conditions], fontsize=7.5)
     ax.set_ylabel("Scale mismatch\n(||local|| / ||BP||)")
     ax.set_title("Scale mismatch")
     ax.set_yscale("log")
     ax.axhline(1.0, color="black", lw=0.4, ls="--", label="Ideal (1.0)")
-    ax.legend(fontsize=5)
+    ax.legend(fontsize=7)
 
     for bar_rect, c in zip(bars, conditions):
         ax.text(bar_rect.get_x() + bar_rect.get_width()/2, c[1] * 1.3,
-                f"{c[1]:.3f}", ha="center", va="bottom", fontsize=5)
+                f"{c[1]:.3f}", ha="center", va="bottom", fontsize=7)
 
     # Panel B: Noise resilience IE detail with error bands
     ax = axes[0, 1]
@@ -965,7 +966,7 @@ def figure_s2():
         ax.set_xlabel("$N_I$")
         ax.set_ylabel("Test accuracy (%)")
         ax.set_title("Noise resilience ($N_I$ detail)")
-        ax.legend(fontsize=5)
+        ax.legend(fontsize=7)
 
     # Panel C: MNIST N_I detail with error bands
     ax = axes[1, 0]
@@ -988,7 +989,7 @@ def figure_s2():
         ax.set_xlabel("$N_I$")
         ax.set_ylabel("Test accuracy (%)")
         ax.set_title("MNIST $N_I$ sweep (detail)")
-        ax.legend(fontsize=5)
+        ax.legend(fontsize=7)
 
     # Panel D: Fashion-MNIST all seeds
     ax = axes[1, 1]
@@ -1011,11 +1012,10 @@ def figure_s2():
         ax.set_ylabel("Test accuracy (%)")
         ax.set_xlabel("Seed")
         ax.set_title("F-MNIST (all seeds)")
-        ax.legend(fontsize=4.5, ncol=2, loc="lower right",
+        ax.legend(fontsize=7, ncol=2, loc="lower right",
                   handlelength=1.0, handletextpad=0.3)
 
-    fig.subplots_adjust(left=0.10, right=0.97, bottom=0.08, top=0.92,
-                        hspace=0.45, wspace=0.45)
+    fig.subplots_adjust(left=0.08, right=0.97, bottom=0.06, top=0.94)
     _save(fig, "fig_s2_gradient_extended")
     plt.close(fig)
 
@@ -1053,8 +1053,8 @@ def figure_s4():
     verif = _csv("verification_seeds_summary.csv")
     p2b = _csv("phase2b_gap_closing.csv", bundle=True)
 
-    fig, axes = plt.subplots(1, 3, figsize=(W, 2.5),
-                             gridspec_kw={"wspace": 0.50})
+    fig, axes = plt.subplots(1, 3, figsize=(W * 1.9, 3.6),
+                             gridspec_kw={"wspace": 0.52})
 
     # ---- Panel A: MNIST verification ----
     ax = axes[0]
@@ -1075,14 +1075,14 @@ def figure_s4():
         ax.bar(i, b[1], yerr=b[2], color=b[3], alpha=b[4],
                edgecolor="white", lw=0.3, width=0.5, capsize=2, error_kw={"lw": 0.6})
     ax.set_xticks(x)
-    ax.set_xticklabels([b[0] for b in bars_data], fontsize=6)
+    ax.set_xticklabels([b[0] for b in bars_data], fontsize=7.5)
     ax.set_ylabel("Test accuracy (%)")
     ax.set_title("MNIST verification")
     ax.set_ylim(85, 95)
 
     for i, b in enumerate(bars_data):
         ax.text(i, b[1] + b[2] + 0.3, f"{b[1]:.1f}$\\pm${b[2]:.1f}",
-                ha="center", va="bottom", fontsize=5.5)
+                ha="center", va="bottom", fontsize=7)
 
     # ---- Panel B: Context gating verification ----
     ax = axes[1]
@@ -1103,14 +1103,14 @@ def figure_s4():
         ax.bar(i, b[1], yerr=b[2], color=b[3], alpha=b[4],
                edgecolor="white", lw=0.3, width=0.5, capsize=2, error_kw={"lw": 0.6})
     ax.set_xticks(x)
-    ax.set_xticklabels([b[0] for b in bars_data], fontsize=5.5)
+    ax.set_xticklabels([b[0] for b in bars_data], fontsize=7.5)
     ax.set_ylabel("Test accuracy (%)")
     ax.set_title("Context gating verif.")
     ax.set_ylim(60, 90)
 
     for i, b in enumerate(bars_data):
         ax.text(i, b[1] + b[2] + 0.5, f"{b[1]:.1f}$\\pm${b[2]:.1f}",
-                ha="center", va="bottom", fontsize=5.5)
+                ha="center", va="bottom", fontsize=7)
 
     # ---- Panel C: HSIC weight ablation ----
     ax = axes[2]
@@ -1130,7 +1130,7 @@ def figure_s4():
             ax.set_title("CG: HSIC ablation")
             ax.set_xscale("symlog", linthresh=0.005)
 
-    fig.subplots_adjust(left=0.10, right=0.97, bottom=0.20, top=0.88,
+    fig.subplots_adjust(left=0.08, right=0.97, bottom=0.15, top=0.90,
                         wspace=0.55)
     _save(fig, "fig_s4_verification")
     plt.close(fig)

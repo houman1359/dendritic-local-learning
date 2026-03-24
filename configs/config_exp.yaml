@@ -347,7 +347,7 @@ training:
 
       local_ca:                         # Local credit assignment configuration
         # Core configuration
-        rule_variant: "5f"              # Rule variant: "3f", "4f", "5f"
+        rule_variant: "5f"              # Rule variant: "3f", "4f", "5f", "3f_vh", "4f_vh", "5f_vh"
         error_mode: "auto"              # Error mode: "auto", "mse", "ce", "bce"
         error_broadcast_mode: "scalar"  # Error broadcast: "scalar", "per_soma", "local_mismatch"
 
@@ -403,6 +403,16 @@ training:
           warmup_epochs: 5              # HSIC warmup epochs
           apply_last_layer_only: false  # Apply only to last layer
 
+        # Strictly local voltage-centering auxiliary.
+        # This is the local counterpart to the separate top-level
+        # voltage_stabilization trainer below.
+        voltage_homeostasis:
+          enabled: false
+          weight: 0.0
+          target_voltage: 0.5
+          # Writing rule_variant: "5f_vh" will auto-enable this block
+          # with conservative defaults unless you set values here explicitly.
+
         # Parameter update control
         update_inactive_weights: false  # Update masked weights (true/false)
         update_reactivation: true       # Update reactivation parameters
@@ -423,6 +433,8 @@ training:
         freeze_reactivation: true
         target_voltage: 0.5
         loss_metric: "mse"
+        # NOTE: this trainer is autograd-based and distinct from the strictly
+        # local voltage_homeostasis modifier inside LocalCA.
 
       homeostatic_control:
         pretrain_epochs: 50
