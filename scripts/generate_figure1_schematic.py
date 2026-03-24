@@ -18,6 +18,11 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import sys, os
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from neurips_style import apply_neurips_style, COLORS, panel_label
+apply_neurips_style()
+
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt

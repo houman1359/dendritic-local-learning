@@ -45,47 +45,24 @@ DATA_DIR = os.path.join(DRAFT_DIR, "data")
 FIGURES_DIR = os.path.join(DRAFT_DIR, "figures")
 
 # ---------------------------------------------------------------------------
-# Style (matches generate_neurips_figures.py)
+# Style (unified NeurIPS style)
 # ---------------------------------------------------------------------------
-COLOR_SHUNTING = "#18864B"
-COLOR_ADDITIVE = "#2D5DA8"
-COLOR_BACKPROP = "#666666"
-COLOR_POINT_MLP = "#999999"
+import sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from neurips_style import apply_neurips_style, COLORS, panel_label
+apply_neurips_style()
+
+COLOR_SHUNTING = COLORS["shunting"]
+COLOR_ADDITIVE = COLORS["additive"]
+COLOR_BACKPROP = COLORS["bp"]
+COLOR_POINT_MLP = COLORS["point_mlp"]
 
 W = 5.5  # NeurIPS single-column width
 DPI = 300
 
 
-def _setup_style():
-    plt.rcParams.update({
-        "font.family": "sans-serif",
-        "font.size": 7,
-        "axes.labelsize": 8,
-        "axes.titlesize": 8,
-        "axes.titlepad": 6,
-        "xtick.labelsize": 6.5,
-        "ytick.labelsize": 6.5,
-        "legend.fontsize": 6,
-        "figure.dpi": DPI,
-        "savefig.dpi": DPI,
-        "savefig.bbox": "tight",
-        "savefig.pad_inches": 0.05,
-        "pdf.fonttype": 42,
-        "ps.fonttype": 42,
-        "axes.spines.top": False,
-        "axes.spines.right": False,
-        "legend.frameon": False,
-        "axes.linewidth": 0.6,
-        "xtick.major.width": 0.5,
-        "ytick.major.width": 0.5,
-        "xtick.major.pad": 2,
-        "ytick.major.pad": 2,
-    })
-
-
 def _panel(ax, label, x=-0.18, y=1.12):
-    ax.text(x, y, label, transform=ax.transAxes, fontsize=11,
-            fontweight="bold", va="top", ha="left")
+    panel_label(ax, label, x=x, y=y)
 
 
 def _save(fig, name):
@@ -357,7 +334,6 @@ def figure_s7():
 # Main
 # ===================================================================
 def main():
-    _setup_style()
     os.makedirs(FIGURES_DIR, exist_ok=True)
 
     figure5()

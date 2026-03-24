@@ -69,31 +69,9 @@ W = 5.5  # NeurIPS single-column width
 DPI = 300
 
 
-def _setup_style():
-    plt.rcParams.update({
-        "font.family": "sans-serif",
-        "font.size": 8.5,
-        "axes.labelsize": 9,
-        "axes.titlesize": 9.5,
-        "axes.titlepad": 7,
-        "xtick.labelsize": 8.0,
-        "ytick.labelsize": 8.0,
-        "legend.fontsize": 7.5,
-        "figure.dpi": DPI,
-        "savefig.dpi": DPI,
-        "savefig.bbox": "tight",
-        "savefig.pad_inches": 0.05,
-        "pdf.fonttype": 42,
-        "ps.fonttype": 42,
-        "axes.spines.top": False,
-        "axes.spines.right": False,
-        "legend.frameon": False,
-        "axes.linewidth": 0.6,
-        "xtick.major.width": 0.5,
-        "ytick.major.width": 0.5,
-        "xtick.major.pad": 2,
-        "ytick.major.pad": 2,
-    })
+import sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from neurips_style import apply_neurips_style, COLORS, panel_label
 
 
 LABEL_MAP = {
@@ -1140,7 +1118,7 @@ def figure_s4():
 # Main
 # ===================================================================
 def main():
-    _setup_style()
+    apply_neurips_style()
     print(f"Data dir: {DATA_DIR}")
     print(f"Figures dir: {FIGURES_DIR}")
     print(f"Bundle: {BUNDLE}")

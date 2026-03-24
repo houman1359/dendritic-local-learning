@@ -904,7 +904,7 @@ Additive & local-mismatch & backprop & $0.348 \pm 0.095$ \\
 
 \begin{figure*}[t]
 \centering
-\includegraphics[width=0.94\textwidth]{fig_s1_calibration.pdf}
+\includegraphics[width=0.95\textwidth]{fig_s1_calibration.pdf}
 \caption{\textbf{Capacity calibration (supplementary).} \textbf{(A)}~Phase 1 backprop ceilings across all architectures and datasets. \textbf{(B)}~Rule-family ranking: 5F consistently outperforms 4F and 3F. \textbf{(C)}~Decoder mode comparison (local vs.\ backprop decoder, 5F MNIST). \textbf{(D)}~Broadcast mode comparison: per-soma is required for strong performance; local-mismatch fails.}
 \label{fig:s1_calibration}
 \end{figure*}
@@ -972,12 +972,13 @@ Per-soma, path on vs off (synthetic task, sandbox) & test / MI(E,I;C) & $-0.003$
 \label{fig:s6_cifar10}
 \end{figure}
 
+\clearpage
 \subsection*{Additive Normalization Control}
 
 \begin{figure*}[t]
 \centering
 \includegraphics[width=0.95\textwidth]{fig_s7_additive_norm.pdf}
-\caption{\textbf{Additive + normalization control (MNIST).} \textbf{(A)}~Standard backprop: normalization provides a small boost (89.7\% $\to$ 90.9\%). \textbf{(B)}~Local learning: normalization improves additive from 46.5\% to 56.0\% ($+9.5$~pp), partially closing the gap to shunting (61.7\%, dashed green). The remaining gap ($-5.7$~pp) indicates shunting provides benefits beyond simple voltage normalization, including bounded activations, conductance-dependent input weighting, and biophysically constrained sensitivity structure.}
+\caption{\textbf{Additive + normalization control (MNIST).} \textbf{(A)}~Standard backprop: normalization provides a small boost (89.7\% $\to$ 90.9\%). \textbf{(B)}~Local learning: normalization improves additive from 46.5\% to 56.0\% ($+9.5$~pp), partially closing the gap to shunting (61.7\%, dashed green). The remaining gap ($-5.7$~pp) indicates that shunting provides benefits beyond simple voltage normalization.}
 \label{fig:s7_additive_norm}
 \end{figure*}
 

@@ -8,6 +8,11 @@ import json
 from pathlib import Path
 from typing import Any
 
+import sys, os
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from neurips_style import apply_neurips_style, COLORS as NEURIPS_COLORS, panel_label
+apply_neurips_style()
+
 import matplotlib
 
 matplotlib.use("Agg")
@@ -35,43 +40,12 @@ DPI = 300
 
 
 def _setup_style() -> None:
-    plt.rcParams.update(
-        {
-            "font.family": "sans-serif",
-            "font.size": 8.5,
-            "axes.labelsize": 9,
-            "axes.titlesize": 9.5,
-            "axes.titlepad": 7,
-            "xtick.labelsize": 8.0,
-            "ytick.labelsize": 8.0,
-            "legend.fontsize": 7.5,
-            "figure.dpi": DPI,
-            "savefig.dpi": DPI,
-            "savefig.bbox": "tight",
-            "savefig.pad_inches": 0.05,
-            "pdf.fonttype": 42,
-            "ps.fonttype": 42,
-            "axes.spines.top": False,
-            "axes.spines.right": False,
-            "legend.frameon": False,
-            "axes.linewidth": 0.6,
-            "xtick.major.width": 0.5,
-            "ytick.major.width": 0.5,
-        }
-    )
+    # Unified style already applied at import time; this is a no-op kept for call-site compat.
+    pass
 
 
 def _panel(ax: plt.Axes, label: str, x: float = -0.16, y: float = 1.08) -> None:
-    ax.text(
-        x,
-        y,
-        label,
-        transform=ax.transAxes,
-        fontsize=11,
-        fontweight="bold",
-        va="top",
-        ha="left",
-    )
+    panel_label(ax, label, x=x, y=y)
 
 
 def _save(fig: plt.Figure, name: str) -> None:
