@@ -1,16 +1,15 @@
 #!/usr/bin/env python3
-"""Generate Figure 1: model, rules, and representative MNIST rule curves.
+"""Generate Figure 1: model, rules, and exact-factorization sanity check.
 
 Creates:
   - fig_model_schematic.{pdf,png}: legacy two-panel schematic
   - fig1_model_and_credit.{pdf,png}: four-panel publication figure
 
-The publication figure includes a representative MNIST rule-family panel:
-  - shunting BP
-  - shunting 3F
-  - shunting 4F
-  - shunting 5F
-all shown as test-accuracy-vs-epoch curves from the fixed-100 Figure 1 sweep.
+The publication figure centers the mechanistic story:
+  - compartmental dendritic neuron
+  - 3F/4F/5F rule hierarchy
+  - broadcast modes
+  - exact-factorization sanity check
 """
 
 from __future__ import annotations
@@ -41,6 +40,12 @@ RULE4_COLOR = "#FC8D62"    # Salmon - 4F
 RULE5_COLOR = "#8DA0CB"    # Lavender - 5F
 
 OUTPUT_DIR = Path(__file__).resolve().parent.parent / "figures"
+THEORY_SUMMARY_CSV = (
+    Path(__file__).resolve().parent.parent
+    / "analysis"
+    / "theory_diag_gradient_fidelity_vs_ie_summary"
+    / "theory_diag_by_condition.csv"
+)
 SWEEP_ROOT = Path(
     "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/sweep_runs"
 )
@@ -385,47 +390,86 @@ def panel_c_broadcast(ax):
 
 
 def panel_d(ax):
-    """Panel D: representative MNIST rule-family accuracy curves."""
-    ax.set_title("Representative MNIST learning dynamics", fontsize=11,
+    """Panel D: headline exact-factorization summary."""
+    ax.set_title("Exact factorization summary", fontsize=11,
                  fontweight="bold", pad=8)
+    ax.axis("off")
 
-    runs = resolve_runs()
-    curve_order = [
-        ("bp_shunting", "BP"),
-        ("rule_3f", "3F"),
-        ("rule_4f", "4F"),
-        ("rule_5f", "5F"),
-    ]
+    df = pd.read_csv(THEORY_SUMMARY_CSV)
+    cosine = df["factorization_weighted_cosine_mean"].to_numpy(dtype=float)
+    scale_mismatch = df["factorization_weighted_scale_mismatch_mean"].to_numpy(dtype=float)
 
-    for key, label in curve_order:
-        history = load_epoch_history(runs[key])
-        linestyle = "--" if key == "bp_shunting" else "-"
-        linewidth = 2.0 if key == "bp_shunting" else 1.8
-        ax.plot(
-            history["epoch"],
-            history["test_accuracy"] * 100.0,
-            color=CURVE_COLORS[key],
-            linestyle=linestyle,
-            linewidth=linewidth,
-            label=label,
-        )
+    cosine_mean = float(np.mean(cosine))
+    cosine_std = float(np.std(cosine))
+    scale_max = float(np.max(scale_mismatch))
 
-    ax.set_xlabel("Epoch")
-    ax.set_ylabel("Test accuracy (%)")
-    ax.set_xlim(1, 100)
-    ax.set_ylim(50, 100)
-    ax.grid(alpha=0.20, linewidth=0.5)
-    ax.tick_params(axis="both", labelsize=8)
-    ax.legend(loc="lower right", fontsize=7.4, frameon=False, ncol=2)
+    eq_box = FancyBboxPatch(
+        (0.06, 0.62), 0.88, 0.22,
+        boxstyle="round,pad=0.03", fc="#F6F8FB", ec="#C9D3E0",
+        linewidth=1.0, transform=ax.transAxes
+    )
+    ax.add_patch(eq_box)
     ax.text(
-        0.02,
-        0.03,
-        "Fixed-100-epoch representative runs",
+        0.50, 0.73,
+        r"$\dfrac{\partial L}{\partial g_i^{\mathrm{syn}}}"
+        r"="
+        r"\left[x_i R_n^{\mathrm{tot}}(E_i - V_n)\right]"
+        r"\cdot"
+        r"\left[\dfrac{\partial L}{\partial V_n}\right]$",
         transform=ax.transAxes,
-        fontsize=7.0,
-        color="gray",
-        ha="left",
-        va="bottom",
+        ha="center",
+        va="center",
+        fontsize=11,
+    )
+    ax.text(
+        0.50, 0.64,
+        "exact gradient = local eligibility × compartment error",
+        transform=ax.transAxes,
+        ha="center",
+        va="center",
+        fontsize=7.4,
+        color="dimgray",
+    )
+
+    left_box = FancyBboxPatch(
+        (0.08, 0.20), 0.36, 0.26,
+        boxstyle="round,pad=0.03", fc="white", ec="#D0D0D0",
+        linewidth=0.9, transform=ax.transAxes
+    )
+    right_box = FancyBboxPatch(
+        (0.56, 0.20), 0.30, 0.26,
+        boxstyle="round,pad=0.03", fc="white", ec="#D0D0D0",
+        linewidth=0.9, transform=ax.transAxes
+    )
+    ax.add_patch(left_box)
+    ax.add_patch(right_box)
+
+    ax.text(0.26, 0.41, "Weighted cosine", transform=ax.transAxes,
+            ha="center", va="center", fontsize=7.6, color="dimgray")
+    ax.text(0.26, 0.30, f"{cosine_mean:.6f}", transform=ax.transAxes,
+            ha="center", va="center", fontsize=16, color=RULE5_COLOR,
+            fontweight="bold")
+    ax.text(0.26, 0.22, rf"$\pm\,{cosine_std:.6f}$ across conditions",
+            transform=ax.transAxes, ha="center", va="center",
+            fontsize=6.8, color="dimgray")
+
+    ax.text(0.71, 0.41, "Max scale mismatch", transform=ax.transAxes,
+            ha="center", va="center", fontsize=7.6, color="dimgray")
+    ax.text(0.71, 0.30, rf"${scale_max:.1e}$", transform=ax.transAxes,
+            ha="center", va="center", fontsize=15, color=RULE3_COLOR,
+            fontweight="bold")
+    ax.text(0.71, 0.22, "all theory-diagnostic conditions",
+            transform=ax.transAxes, ha="center", va="center",
+            fontsize=6.8, color="dimgray")
+
+    ax.text(
+        0.50, 0.08,
+        r"Only approximation in LocalCA: $e_n \approx \partial L/\partial V_n$",
+        transform=ax.transAxes,
+        ha="center",
+        va="center",
+        fontsize=8.0,
+        color="black",
     )
 
 

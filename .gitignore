@@ -62,8 +62,18 @@ archive/
 *.nav(busy)
 *.snm(busy)
 
-# Generated analysis and data artifacts
-analysis/**/*.csv
+# Generated analysis artifacts — ignore all PDFs/PNGs/intermediates,
+# but keep the small CSVs that figure scripts read directly.
+analysis/**/*.pdf
+analysis/**/*.png
 analysis/**/*.json
+analysis/**/*.md
+analysis/**/*.pkl
+analysis/**/cue_routed_sweeps/
+analysis/**/tmp_*/
+analysis/**/morphology_ie_diag_subset/
+analysis/**/learning_curves/
+analysis/**/five_factor_sensitivity/
+analysis/**/stats/
 data/**/*.csv
 data/**/*.json
