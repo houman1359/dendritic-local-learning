@@ -3,7 +3,7 @@
 
 Produces:
   Main:
-    fig5_mechanistic_evidence.pdf  (4 panels: path gains, exact-error fidelity, oracle learning, low-bandwidth)
+    fig5_mechanistic_evidence.pdf  (4 panels: conductance-stage path gains, exact-error fidelity, oracle learning, low-bandwidth)
     fig6_cue_routing.pdf          (3 panels: hard cue-routing diagnosis)
   Supplement:
     fig_s5_fa_dfa.pdf              (FA/DFA baseline comparison)

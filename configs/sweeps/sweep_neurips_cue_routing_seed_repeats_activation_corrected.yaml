@@ -1,0 +1,44 @@
+output_dir: "/n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/dendritic-local-learning/local_sweep_runs"
+
+outputs:
+  run_name: "cue_routing_seed_repeats_activation_corrected"
+
+slurm_config:
+  account: "kempner_dev"
+  partition: "kempner_h100_priority3"
+  time: "06:00:00"
+  nodes: 1
+  ntasks_per_node: 1
+  gpus_per_node: 1
+  cpus_per_task: 8
+  mem: 32GB
+  max_concurrent_jobs: 64
+  modules_to_load: []
+  conda_env_path: ""
+  training_script: "src/dendritic_modeling/scripts/training/train_experiments.py"
+
+experiment_settings:
+  seeds_per_condition: 5
+  base_seed: 42
+  use_array_jobs: true
+
+configs:
+  - name: "cue_hard_fixed_additive_localca"
+    path: "drafts/dendritic-local-learning/configs/cue_routed_hard_fixed_additive_localca_pilot.yaml"
+  - name: "cue_hard_fixed_shunting_localca"
+    path: "drafts/dendritic-local-learning/configs/cue_routed_hard_fixed_shunting_localca_pilot.yaml"
+  - name: "cue_hard_learned_additive_localca"
+    path: "drafts/dendritic-local-learning/configs/cue_routed_hard_learned_additive_localca_pilot.yaml"
+  - name: "cue_hard_learned_shunting_localca"
+    path: "drafts/dendritic-local-learning/configs/cue_routed_hard_learned_shunting_localca_pilot.yaml"
+  - name: "cue_hard_learned_shunting_localca_temp03"
+    path: "drafts/dendritic-local-learning/configs/cue_routed_hard_learned_shunting_localca_temp03_pilot.yaml"
+  - name: "cue_hard_learned_shunting_localca_freeze20"
+    path: "drafts/dendritic-local-learning/configs/cue_routed_hard_learned_shunting_localca_freeze20_pilot.yaml"
+  - name: "cue_hard_learned_shunting_localca_pathway_vector"
+    path: "drafts/dendritic-local-learning/configs/cue_routed_hard_learned_shunting_localca_pathway_vector_pilot.yaml"
+  - name: "cue_hard_learned_additive_standard"
+    path: "drafts/dendritic-local-learning/configs/cue_routed_hard_learned_additive_standard_pilot.yaml"
+  - name: "cue_hard_learned_shunting_standard"
+    path: "drafts/dendritic-local-learning/configs/cue_routed_hard_learned_shunting_standard_pilot.yaml"
+

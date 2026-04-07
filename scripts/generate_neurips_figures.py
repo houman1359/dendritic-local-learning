@@ -365,8 +365,9 @@ def figure2():
     fmnist = _csv("fashion_mnist_competence_summary.csv")
     ie_data = _csv("gradient_fidelity_vs_ie_corrected_summary.csv")
 
-    fig, axes = plt.subplots(1, 3, figsize=(W * 1.9, 3.6),
-                             gridspec_kw={"wspace": 0.48})
+    fig, axes = plt.subplots(1, 4, figsize=(W * 1.9, 3.2),
+                             gridspec_kw={"wspace": 0.55,
+                                          "width_ratios": [1.0, 1.1, 0.9, 1.0]})
 
     # ---- Panel A: Multi-benchmark bars ----
     ax = axes[0]
@@ -520,8 +521,47 @@ def figure2():
     ax.set_title("Shunting advantage grows with inhibition")
     ax.legend(fontsize=7, loc="upper right")
 
-    fig.subplots_adjust(left=0.08, right=0.97, bottom=0.15, top=0.90,
-                        wspace=0.52)
+    # ---- Panel D: Fashion-MNIST comparison ----
+    ax = axes[3]
+    _panel(ax, "D")
+
+    fmnist_data = []
+    if fmnist is not None:
+        for ct, label, color in [
+            ("dendritic_shunting", "Shunt.", COLOR_SHUNTING),
+            ("dendritic_additive", "Add.", COLOR_ADDITIVE),
+        ]:
+            for strat, hatch, suffix in [
+                ("standard", None, " BP"),
+                ("local_ca", "//", " local"),
+            ]:
+                sub = fmnist[(fmnist["core_type"] == ct) & (fmnist["strategy"] == strat)]
+                if len(sub):
+                    fmnist_data.append((
+                        label + suffix,
+                        sub.iloc[0]["test_acc_mean"] * 100,
+                        sub.iloc[0]["test_acc_std"] * 100,
+                        color, hatch,
+                    ))
+
+    if fmnist_data:
+        x_pos = np.arange(len(fmnist_data))
+        for i, (lbl, val, err, color, hatch) in enumerate(fmnist_data):
+            alpha = 1.0 if hatch is None else 0.55
+            ax.bar(i, val, 0.65, yerr=err, color=color, alpha=alpha,
+                   edgecolor="white", lw=0.3, hatch=hatch,
+                   capsize=2, error_kw={"lw": 0.6})
+            ax.text(i, val + err + 0.5, f"{val:.1f}", ha="center", va="bottom",
+                    fontsize=6.2)
+        ax.set_xticks(x_pos)
+        ax.set_xticklabels([d[0] for d in fmnist_data], fontsize=6.5, rotation=25,
+                           ha="right")
+        ax.set_ylabel("Test accuracy (%)")
+        ax.set_title("Fashion-MNIST")
+        ax.set_ylim(70, 92)
+
+    fig.subplots_adjust(left=0.06, right=0.98, bottom=0.18, top=0.90,
+                        wspace=0.55)
     _save(fig, "fig2_competence_regime")
     plt.close(fig)
 

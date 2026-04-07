@@ -103,7 +103,7 @@ def _plot_path_gain_dispersion(ax: plt.Axes, summary: pd.DataFrame) -> None:
 
     ax.set_xlabel("$N_I$ (inhibitory synapses / branch)")
     ax.set_ylabel("Path-gain CV")
-    ax.set_title("Shunting narrows the path-gain distribution")
+    ax.set_title("Shunting narrows the conductance-stage path-gain distribution")
     ax.set_xticks([0, 5, 10, 20, 40])
     ax.set_ylim(bottom=0.0)
     ax.legend(loc="upper left")

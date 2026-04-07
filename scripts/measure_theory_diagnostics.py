@@ -441,7 +441,14 @@ def _error_rows(
     delta_local: torch.Tensor,
 ) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
     delta_scalar = helper._reduce_error_to_scalar(delta_local)
-    path_factors = helper._precompute_path_propagation_factors(layer_records)
+    conductance_path_factors = helper._precompute_path_propagation_factors(
+        layer_records,
+        include_parent_activation_derivative=False,
+    )
+    effective_path_factors = helper._precompute_path_propagation_factors(
+        layer_records,
+        include_parent_activation_derivative=True,
+    )
     transported = helper._precompute_path_transport_errors(
         layer_records=layer_records,
         delta=delta_local,
@@ -458,27 +465,47 @@ def _error_rows(
             per_soma = delta_local
         else:
             per_soma = scalar
-        path_factor = path_factors[layer_idx]
-        if isinstance(path_factor, torch.Tensor):
-            path_scaled_scalar = scalar * path_factor.to(device=scalar.device, dtype=scalar.dtype)
-            pf = path_factor.detach().reshape(-1)
+
+        activation_derivative = helper._get_layer_activation_derivative(
+            rec,
+            v_n=rec.get("v_n"),
+            v_out=rec.get("v_out"),
+        )
+        if not isinstance(activation_derivative, torch.Tensor):
+            activation_derivative = torch.ones_like(exact_error)
+        activation_derivative = activation_derivative.to(
+            device=exact_error.device, dtype=exact_error.dtype
+        )
+
+        conductance_path_factor = conductance_path_factors[layer_idx]
+        effective_path_factor = effective_path_factors[layer_idx]
+        if isinstance(effective_path_factor, torch.Tensor):
+            path_scaled_scalar = (
+                scalar
+                * effective_path_factor.to(device=scalar.device, dtype=scalar.dtype)
+            )
+        else:
+            path_scaled_scalar = scalar
+
+        if isinstance(conductance_path_factor, torch.Tensor):
+            pf = conductance_path_factor.detach().reshape(-1)
             mean_pf = float(pf.mean().item())
             std_pf = float(pf.std(unbiased=False).item())
             cv_pf = float(std_pf / max(mean_pf, 1e-12))
         else:
-            path_scaled_scalar = scalar
-            mean_pf = float(path_factor)
+            mean_pf = float(conductance_path_factor)
             std_pf = 0.0
             cv_pf = 0.0
+
         path_transport = transported[layer_idx]
         if not isinstance(path_transport, torch.Tensor):
             path_transport = scalar
 
         for mode, approx in [
-            ("scalar", scalar),
-            ("per_soma", per_soma),
-            ("path_factor_scalar", path_scaled_scalar),
-            ("path_transport", path_transport),
+            ("scalar", scalar * activation_derivative),
+            ("per_soma", per_soma * activation_derivative),
+            ("path_factor_scalar", path_scaled_scalar * activation_derivative),
+            ("path_transport", path_transport * activation_derivative),
         ]:
             rows.append(
                 {

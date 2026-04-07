@@ -23,7 +23,8 @@
 *.vrb
 *.dvi
 *.ps
-
+analysis/
+data/
 # Build directories
 build/
 output/

@@ -72,6 +72,13 @@ def _metadata_from_run(run_dir: Path) -> dict[str, Any]:
         "learning_strategy_config",
         default={},
     )
+    reactivation_cfg = _get_nested(
+        config,
+        "model",
+        "core",
+        "reactivation",
+        default={},
+    )
 
     accuracy = final.get("accuracy", {}) if isinstance(final, dict) else {}
     return {
@@ -80,6 +87,7 @@ def _metadata_from_run(run_dir: Path) -> dict[str, Any]:
         "network_type": str(core_type).lower(),
         "ie_value": ie_value,
         "ee_value": ee_value,
+        "reactivation_type": reactivation_cfg.get("type", "none"),
         "seed": _get_nested(config, "experiment", "seed", default=None),
         "rule_variant": local_cfg.get("rule_variant"),
         "error_broadcast_mode": local_cfg.get("error_broadcast_mode"),
@@ -115,6 +123,21 @@ def _aggregate(frame: pd.DataFrame, metric_cols: list[str], group_cols: list[str
         for col, stat in out.columns
     ]
     return out.reset_index()
+
+
+def _select_group_cols(frame: pd.DataFrame) -> list[str]:
+    base_cols = ["dataset", "network_type", "ie_value"]
+    optional_cols = ["ee_value", "reactivation_type", "rule_variant", "error_broadcast_mode"]
+    group_cols = list(base_cols)
+    for col in optional_cols:
+        if col not in frame.columns:
+            continue
+        non_null = frame[col].dropna()
+        if non_null.empty:
+            continue
+        if non_null.nunique() > 1:
+            group_cols.append(col)
+    return group_cols
 
 
 def main() -> None:
@@ -158,7 +181,7 @@ def main() -> None:
         "valid_accuracy",
         "train_accuracy",
     ]
-    group_cols = ["dataset", "network_type", "ie_value"]
+    group_cols = _select_group_cols(merged)
     by_condition = _aggregate(merged, metric_cols, group_cols)
 
     corr_rows: list[dict[str, float | str]] = []

@@ -473,6 +473,40 @@ def panel_d(ax):
     )
 
 
+def panel_d_scatter(ax):
+    """Panel D: factorization sanity check as a clean strip chart."""
+    df = pd.read_csv(THEORY_SUMMARY_CSV)
+    cosine_error = np.abs(1.0 - df["factorization_weighted_cosine_mean"].to_numpy(dtype=float))
+    scale_mismatch = df["factorization_weighted_scale_mismatch_mean"].to_numpy(dtype=float)
+
+    rng = np.random.default_rng(7)
+    metrics = [
+        (cosine_error, RULE3_COLOR, r"|1 − cos|"),
+        (scale_mismatch, RULE5_COLOR, "scale mismatch"),
+    ]
+    for i, (vals, color, label) in enumerate(metrics):
+        jitter = rng.uniform(-0.12, 0.12, size=len(vals))
+        ax.scatter(
+            np.full_like(vals, i, dtype=float) + jitter, vals,
+            s=24, color=color, alpha=0.72, edgecolor="white", linewidth=0.4, zorder=3,
+        )
+        ax.hlines(np.median(vals), i - 0.20, i + 0.20, color="black", lw=1.4, zorder=4)
+
+    ax.set_xticks([0, 1])
+    ax.set_xticklabels([m[2] for m in metrics], fontsize=8)
+    ax.set_ylabel("Numerical error")
+    ax.set_yscale("log")
+    ax.set_ylim(1e-9, 1e-4)
+    ax.set_title("Factorization sanity check", fontsize=10, fontweight="bold", pad=6)
+    ax.grid(axis="y", alpha=0.20, linewidth=0.5)
+    ax.text(
+        0.97, 0.05,
+        r"max |1−cos| < 4×10$^{-6}$" "\n" r"max mismatch < 3×10$^{-8}$",
+        transform=ax.transAxes, fontsize=6.5, ha="right", va="bottom",
+        bbox=dict(boxstyle="round,pad=0.25", fc="white", ec="0.85", alpha=0.95),
+    )
+
+
 def main():
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -481,36 +515,39 @@ def main():
         1, 2, figsize=(13.4, 5.0),
         gridspec_kw={"width_ratios": [1.1, 1]},
     )
-
     panel_a(ax_a)
     panel_b(ax_b)
-
     fig.tight_layout(pad=1.5)
-
     out_path = OUTPUT_DIR / "fig_model_schematic"
     fig.savefig(out_path.with_suffix(".png"), dpi=300, bbox_inches="tight")
     fig.savefig(out_path.with_suffix(".pdf"), bbox_inches="tight")
     print(f"Saved: {out_path}.{{png,pdf}}")
     plt.close(fig)
 
-    # Publication figure used in the paper (single-row, four-panel layout).
-    fig = plt.figure(figsize=(16.8, 4.5))
+    # ── Publication figure: 2×2 layout ──
+    fig = plt.figure(figsize=(11.0, 8.0))
     gs = fig.add_gridspec(
-        1, 4,
-        width_ratios=[1.75, 0.92, 1.10, 1.25],
-        wspace=0.26,
+        2, 2,
+        width_ratios=[1.3, 1.0],
+        height_ratios=[1.0, 1.0],
+        wspace=0.28, hspace=0.38,
     )
     ax_a = fig.add_subplot(gs[0, 0])
     ax_b = fig.add_subplot(gs[0, 1])
-    ax_c = fig.add_subplot(gs[0, 2])
-    ax_d = fig.add_subplot(gs[0, 3])
+    ax_c = fig.add_subplot(gs[1, 0])
+    ax_d = fig.add_subplot(gs[1, 1])
 
     panel_a(ax_a)
     panel_b(ax_b)
     panel_c_broadcast(ax_c)
-    panel_d(ax_d)
+    panel_d_scatter(ax_d)
 
-    fig.subplots_adjust(left=0.03, right=0.99, top=0.90, bottom=0.15)
+    # Add panel labels
+    for ax_obj, label in [(ax_a, "A"), (ax_b, "B"), (ax_c, "C"), (ax_d, "D")]:
+        ax_obj.text(-0.08, 1.05, label, transform=ax_obj.transAxes,
+                    fontsize=14, fontweight="bold", va="top", ha="left")
+
+    fig.subplots_adjust(left=0.05, right=0.97, top=0.94, bottom=0.06)
     out_path = OUTPUT_DIR / "fig1_model_and_credit"
     fig.savefig(out_path.with_suffix(".png"), dpi=300, bbox_inches="tight")
     fig.savefig(out_path.with_suffix(".pdf"), bbox_inches="tight")

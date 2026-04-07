@@ -46,12 +46,12 @@ Paper under double-blind review
 
 \begin{abstract}
 Exact gradients for conductance-based dendritic trees factorize into a synapse-local eligibility term and a single non-local compartment error; this factorization is the foundation for local credit assignment in these networks.
-How well a somatic broadcast can substitute for the true compartment error depends on how concentrated the path gains are across the tree.
-An oracle experiment---replacing the broadcast with the exact transported compartment errors---raises additive local learning from $33\%$ to $98.5\%$ on noise resilience, nearly matching shunting ($98.7\%$), strongly supporting path-gain fidelity as the dominant bottleneck rather than other architectural differences.
+How well a somatic broadcast can substitute for the true compartment error depends on how concentrated the conductance-stage path gains are across the tree.
+An oracle experiment---replacing the broadcast with the exact conductance-stage transported compartment errors---raises additive local learning from $33\%$ to $98.5\%$ on noise resilience, nearly matching shunting ($98.7\%$), strongly supporting path-gain fidelity as the dominant bottleneck rather than other architectural differences.
 Under simple per-soma broadcast, shunting improves both gradient fidelity and end-task learning relative to additive integration: cosine alignment rises from $0.006$ to $0.202$, and noise-resilience accuracy rises from $0.33$ to $0.90$.
 The advantage is regime-dependent, growing with inhibitory conductance and largest under noisy inputs.
 A structured pathway-vector extension (PV-LocalCA) further stabilizes learned-routing performance on a hard cue-integration benchmark, reaching $99.1\%$ test accuracy.
-Together, these results identify path-gain concentration via shunting inhibition as the key biophysical mechanism that determines when low-bandwidth local credit assignment works in conductance-based dendritic networks.
+Together, these results identify conductance-stage path-gain concentration via shunting inhibition as the key biophysical mechanism that determines when low-bandwidth local credit assignment works in conductance-based dendritic networks.
 \end{abstract}
 
 %=============================================================================
@@ -67,15 +67,15 @@ The question here is when such local information is sufficient for useful learni
 Starting from conductance-based dendritic voltage equations \cite{koch1999biophysics}, we derive exact gradients for dendritic trees (Theorem~\ref{thm:tree_backprop}) and show that each synaptic gradient factorizes into purely local eligibility terms and a single non-local compartment error.
 Approximating that compartment error with a broadcast signal yields a theorem-facing local rule (3F), together with practical heuristic wrappers (4F/5F), and a structured pathway-vector extension for tasks where different branches must be credited differently.
 
-The central finding is mechanistic: shunting improves broadcast fidelity by concentrating path gains.
-On MNIST, path-gain CV stays at $0.21$--$0.27$ under shunting versus $0.53$--$1.08$ under additive integration, so one shared broadcast is a much better proxy for compartment-specific errors under shunting.
+The central finding is mechanistic: shunting improves broadcast fidelity by concentrating conductance-stage path gains.
+On MNIST, conductance-stage path-gain CV stays at $0.21$--$0.27$ under shunting versus $0.53$--$1.08$ under additive integration, so one shared broadcast is a much better proxy for compartment-specific errors under shunting.
 On the noise-resilience sweep, per-soma broadcast achieves cosine alignment of about $0.20$--$0.32$ under shunting, but stays near zero or negative under additive integration.
 Our question is therefore not whether local learning can match backpropagation on standard benchmarks, but what biophysical mechanism determines when low-bandwidth local credit assignment works in conductance-based dendritic networks.
-An oracle experiment that supplies the exact transported compartment errors strongly supports path-gain fidelity as the dominant bottleneck: additive local learning rises to $98.5\%$ on noise resilience under the oracle, nearly matching shunting ($98.7\%$).
+An oracle experiment that supplies the exact conductance-stage transported compartment errors strongly supports path-gain fidelity as the dominant bottleneck: additive local learning rises to $98.5\%$ on noise resilience under the oracle, nearly matching shunting ($98.7\%$).
 
 We quantify these effects with a gradient-fidelity diagnostic based on directional alignment and scale mismatch between local and backprop gradients (Fig.~\ref{fig:gradient_fidelity}).
 The absolute cosines remain modest, but they are consistently more positive under shunting and predict which local-learning regimes ultimately succeed.
-The paper's contributions are: exact factorization for conductance-based dendritic trees, a mechanistic account of shunting as path-gain concentration, direct fidelity and oracle experiments that isolate the broadcast bottleneck, and a structured rank-$K$ extension for settings where rank-1 broadcast fails.
+The paper's contributions are: exact factorization for conductance-based dendritic trees, a mechanistic account of shunting as conductance-stage path-gain concentration, direct fidelity and oracle experiments that isolate the broadcast bottleneck, and a structured rank-$K$ extension for settings where rank-1 broadcast fails.
 
 \begin{figure*}[!t]
 \centering
@@ -134,9 +134,9 @@ Inhibitory plasticity can balance excitation dynamically \cite{vogels2011inhibit
 
 Let $V_0$ be the somatic output, $\hat{y} = W_{\mathrm{dec}} V_0$ the decoder, and $\delta_0 = W_{\mathrm{dec}}^\top (\partial L / \partial \hat{y})$ the somatic error.
 
-\begin{theorem}[Backpropagation on a Dendritic Tree]
+\begin{theorem}[Conductance-Stage Backpropagation on a Dendritic Tree]
 \label{thm:tree_backprop}
-For a rooted dendritic tree with soma at node $0$ and unique parent $p(n)$ for each non-somatic compartment, the loss gradient satisfies
+For a rooted dendritic tree with soma at node $0$ and unique parent $p(n)$ for each non-somatic compartment, if each branch passes its pre-reactivation voltage directly to its parent, then the loss gradient satisfies
 \begin{equation}
 \frac{\partial L}{\partial V_n}
 = \frac{\partial L}{\partial V_{p(n)}}\, R_{p(n)}^{\mathrm{tot}}\, g_{n\to p(n)}^{\mathrm{den}},
@@ -169,8 +169,9 @@ The exact synaptic gradient at compartment $n$ factorizes as:
 where the eligibility term depends only on quantities available at synapse $i$ (presynaptic activity $x_i$, input resistance $R_n^{\mathrm{tot}}$, driving force $E_i - V_n$), and the compartment error $\partial L / \partial V_n$ is the sole non-local quantity.
 \end{corollary}
 \vspace{-2pt}
-This factorization isolates the only non-local quantity: $\partial L / \partial V_n = \alpha_n \delta_0$. Any practical local rule therefore depends entirely on how well a broadcast signal approximates that exact compartment error, which we evaluate in Sec.~\ref{sec:grad_fidelity}.
+Under identity upward transfer, this factorization isolates the only non-local quantity as $\partial L / \partial V_n = \alpha_n \delta_0$. With a post-voltage activation $a_n = f_n(V_n)$ transmitted to the parent, the exact recursion becomes $\partial L/\partial V_n = f_n'(V_n)\,(\partial L/\partial V_{p(n)})\,R_{p(n)}^{\mathrm{tot}} g_{n\to p(n)}^{\mathrm{den}}$, so the compartment error remains the sole non-local term but the effective path gain acquires local activation-derivative factors. Any practical local rule therefore depends entirely on how well a broadcast signal approximates that exact compartment error, which we evaluate in Sec.~\ref{sec:grad_fidelity}.
 In the models studied here, shunting improves this approximation by reducing and stabilizing $R_n^{\mathrm{tot}}$, which narrows the spread of local sensitivities across the tree.
+The theorem is stated for the pre-reactivation compartment voltage $V_n$ produced by the conductance stage itself. In the empirical networks, each dendritic branch layer may optionally apply a post-voltage reactivation $f(V_n)$ before passing activity to the next stage; unless otherwise noted, the manuscript sweeps use a learnable bounded \texttt{param\_tanh} reactivation. Our exact-error diagnostics are computed on the hooked pre-reactivation voltage, so the factorization check and compartment-error analyses target the conductance-stage quantity defined above rather than the post-reactivation activity.
 
 %=============================================================================
 \section{Local Learning Rules}
@@ -216,7 +217,7 @@ Throughout, each architecture uses the learning rule derived from its own forwar
 \subsection{Practical Heuristic Wrappers: 4F and 5F}
 
 \textbf{4F (heuristic attenuation proxy).}
-In the exact gradient~\eqref{eq:path_sum}, the path gain $\alpha_n$ attenuates the somatic error differently at each compartment.
+In the conductance-stage recursion~\eqref{eq:path_sum}, the path gain $\alpha_n$ attenuates the somatic error differently at each compartment.
 To compensate without explicitly computing that gain, 4F uses an online correlation proxy
 \[
 \rho_n = \Cov(\bar{V}_n, \bar{V}_0) / (\sqrt{\Var(\bar{V}_n)\Var(\bar{V}_0)} + \varepsilon).
@@ -272,6 +273,7 @@ Our main datasets are MNIST, Fashion-MNIST \cite{xiao2017fashionmnist}, and four
 Architectures include point MLP baselines and dendritic cores with either additive integration or shunting.
 Main comparisons are architecture-matched additive vs.\ shunting cores and local vs.\ backprop training; DFA appears only as a supplementary baseline.
 Most headline MNIST, Fashion-MNIST, and context-gating results use 5F with per-soma broadcast.
+Unless otherwise stated, dendritic layers also use the learnable post-voltage reactivation \texttt{param\_tanh}; Appendix Tables~\ref{tab:activation_audit_empirical}--\ref{tab:activation_audit_theory} then audit activation shape in a more controlled setting by comparing identity (\texttt{none}) against a frozen \texttt{param\_tanh} under matched additive/shunting initialization.
 The cue-routing benchmark instead uses PV-LocalCA, and the inhibition sweeps additionally use a transported-error oracle derived from Theorem~\ref{thm:tree_backprop} as an upper bound rather than as the proposed biological rule.
 Headline mechanistic and routed results use 3--5 seeds; 1--2 seed screens are treated as exploratory and are either omitted from the main claims or explicitly labeled as such in the appendix.
 The experiments follow one chain: first verify how closely different broadcasts track the exact gradients implied by the theorem, then test whether those fidelity differences translate into learning, and finally study a structured-feedback extension for settings where rank-1 broadcast fails.
@@ -297,13 +299,13 @@ The only approximation made by LocalCA is therefore the broadcast substitute for
 \subsection{Mechanistic Chain: Path Gains, Broadcast Fidelity, and Oracle Transport}
 \label{sec:mechanistic}
 
-Figure~\ref{fig:mechanistic} provides the paper's central empirical chain: shunting concentrates path gains, which improves direct compartment-error fidelity, which in turn makes low-bandwidth local learning effective; the transported-error oracle then isolates how much of the remaining gap is due to broadcast quality rather than other architectural differences.
+Figure~\ref{fig:mechanistic} provides the paper's central empirical chain: shunting concentrates conductance-stage path gains, which improves direct compartment-error fidelity, which in turn makes low-bandwidth local learning effective; the transported-error oracle then isolates how much of the remaining gap is due to broadcast quality rather than other architectural differences.
 
-Panel~A measures the coefficient of variation of the exact path gains $\alpha_n$ across compartments.
+Panel~A measures the coefficient of variation of the exact conductance-stage path gains $\alpha_n$ across compartments.
 On MNIST, shunting keeps this distribution tightly concentrated across inhibition levels (CV about $0.21$--$0.27$), whereas the additive control remains much broader (CV about $0.53$--$1.08$).
 Panel~B then measures the sole non-local term from Corollary~\ref{cor:factorization}, $\partial L/\partial V_n$, directly.
 On the noise-resilience sweep, per-soma broadcast tracks the exact compartment error much better under shunting than under additive integration, rising from about $0.20$ at $N_I{=}0$ to about $0.32$ near the best-performing inhibition range, while additive stays near zero or negative.
-The transported-error oracle obtained by recursively applying exact path gains improves fidelity further in both architectures, showing that the theorem defines an operational upper bound on low-bandwidth broadcast.
+The transported-error oracle obtained by recursively applying those conductance-stage path gains improves fidelity further in both architectures, showing that the theorem defines an operational upper bound on low-bandwidth broadcast.
 
 Panel~C trains the same local rule using that oracle signal.
 On noise resilience, additive learning rises from $33$--$47\%$ under per-soma broadcast to $75.6\%$ at $N_I{=}0$ and $98.5\%$ at $N_I{=}40$ under transported broadcast.
@@ -318,10 +320,10 @@ Normalization-only additive controls and DFA baselines (Appendix Figs.~\ref{fig:
 \centering
 \includegraphics[width=0.95\textwidth]{fig5_mechanistic_evidence.pdf}
 \caption{\textbf{Mechanistic evidence.}
-\textbf{(A)}~Path-gain dispersion on MNIST, measured as the coefficient of variation of the exact tree attenuation $\alpha_n$ across compartments.
-Shunting keeps path gains much more concentrated than the additive control as inhibition increases.
+\textbf{(A)}~Conductance-stage path-gain dispersion on MNIST, measured as the coefficient of variation of the exact tree attenuation $\alpha_n$ across compartments.
+Shunting keeps these conductance-stage path gains much more concentrated than the additive control as inhibition increases.
 \textbf{(B)}~Direct compartment-error fidelity on noise resilience.
-Solid lines compare the per-soma broadcast $e_n$ to the exact compartment error $\partial L/\partial V_n$; dashed lines show the transported-error oracle obtained by recursively applying exact path gains.
+Solid lines compare the per-soma broadcast $e_n$ to the exact compartment error $\partial L/\partial V_n$; dashed lines show the transported-error oracle obtained by recursively applying conductance-stage path gains.
 Shunting substantially improves the fidelity of the simple per-soma broadcast, while the transported oracle defines the remaining approximation gap.
 \textbf{(C)}~Learning with the transported-error oracle on noise resilience.
 Improving the broadcast field is enough to recover near-ceiling local learning, especially in the additive architecture where per-soma broadcast fails most severely.
@@ -393,7 +395,7 @@ Our aim is therefore not to claim the strongest benchmark accuracy among local-l
 \paragraph{Local credit-assignment dynamics.}
 Random feedback, DFA, DTP, DFC, equilibrium-style methods, and predictive-coding approaches solve locality through different feedback or inference dynamics \cite{lillicrap2016random,nokland2016dfa,lee2015dtp,meulemans2021dfc,scellier2017equilibrium,whittington2019theories,millidge2022predictive,song2024prospective,hinton2022forward,dellaferrera2022pepita,pal2024local}.
 EBD \cite{erdogan2025ebd} is especially close in spirit because it studies when direct error broadcast can be made useful by shaping the broadcast field itself.
-Our contribution is complementary: rather than changing the broadcast objective or inference dynamics, we identify a conductance-based inductive bias---path-gain concentration under shunting---that makes even a simple low-bandwidth broadcast more faithful to the exact compartment error.
+Our contribution is complementary: rather than changing the broadcast objective or inference dynamics, we identify a conductance-based inductive bias---conductance-stage path-gain concentration under shunting---that makes even a simple low-bandwidth broadcast more faithful to the exact compartment error.
 
 \paragraph{Dendrites for robustness and context.}
 Dendritic trees support nonlinear computation \cite{koch1983nonlinear,poiarazi2003pyramidal,london2005dendritic} and have inspired learning schemes based on segregated dendrites, dendritic prediction errors, burst-dependent plasticity, and latent equilibrium \cite{guerguiev2017segregated,sacramento2018dendritic,urbanczik2014dendritic,payeur2021burst,greedy2022burstccn,haider2021latent}.
@@ -403,7 +405,7 @@ Our cue-routing extension asks a related question---when dendritic structure hel
 \paragraph{Neuroscience grounding.}
 Shunting implements divisive normalization \cite{carandini2012normalization}, though its rate effects can be subtractive in some regimes \cite{holt1997shunting}; inhibitory conductance also modulates gain and signal-to-noise \cite{silver2010neuronal}.
 Recent evidence for vectorized instructive signals in cortical dendrites \cite{nature2026vectorized} further supports the structured-feedback extension studied here.
-To our knowledge, prior work has not tied exact path gains, direct gradient-fidelity diagnostics, and shunting inhibition into one causal account of when local dendritic learning works.
+To our knowledge, prior work has not tied exact conductance-stage path gains, direct gradient-fidelity diagnostics, and shunting inhibition into one causal account of when local dendritic learning works.
 
 %=============================================================================
 \section{Discussion}
@@ -416,6 +418,7 @@ Shunting changes the conductance denominator, stabilizes effective local sensiti
 An exploratory morphology$\times$inhibition sweep (Appendix Fig.~\ref{fig:s8_morphology_ie_regime}) suggests that tree shape shifts this operating regime: shallow trees peak at lower inhibition, while deeper trees retain their largest shunting advantage at modest inhibition.
 Explicit normalization recovers part of this benefit but not all of it, suggesting that shunting changes more than overall scale alone.
 This is therefore a mechanism paper, not a benchmark paper: the main contribution is to explain when simple broadcast-based local learning works in conductance dendritic networks.
+The appendix activation audit further shows that this mechanism should be interpreted in the bounded \texttt{param\_tanh} operating regime used throughout the main experiments: even when that activation is frozen rather than learned, changing the post-voltage nonlinearity can materially alter both learning and credit-signal fidelity.
 
 \paragraph{Limitations.}
 Our best accuracy (91.4\% MNIST, 81.1\% Fashion-MNIST) remains below several recent local-learning methods that operate in abstract compartments or standard activation spaces \cite{ma2024auglocal,lv2025dll,kao2024ccl,erdogan2025ebd}.
@@ -478,13 +481,13 @@ Shunting inhibition does not have a divisive effect on firing rates.
 \emph{Neural Computation}, 9(5), 1001--1013.
 
 \bibitem{vogels2011inhibitory}
-Vogels, T. P., et al. (2011).
-Inhibitory plasticity balances excitation and inhibition.
+Vogels, T. P., Sprekeler, H., Zenke, F., Clopath, C., \& Gerstner, W. (2011).
+Inhibitory plasticity balances excitation and inhibition in sensory pathways and memory networks.
 \emph{Science}, 334(6062), 1569--1573.
 
 \bibitem{lillicrap2016random}
-Lillicrap, T. P., et al. (2016).
-Random synaptic feedback weights support error backpropagation.
+Lillicrap, T. P., Cownden, D., Tweed, D. B., \& Akerman, C. J. (2016).
+Random synaptic feedback weights support error backpropagation for deep learning.
 \emph{Nature Communications}, 7, 13276.
 
 \bibitem{nokland2016dfa}
@@ -500,11 +503,6 @@ Towards deep learning with segregated dendrites.
 \bibitem{sacramento2018dendritic}
 Sacramento, J., et al. (2018).
 Dendritic cortical microcircuits approximate the backpropagation algorithm.
-\emph{NeurIPS}, 31.
-
-\bibitem{bartunov2018assessing}
-Bartunov, S., et al. (2018).
-Assessing the scalability of biologically-motivated deep learning algorithms and architectures.
 \emph{NeurIPS}, 31.
 
 \bibitem{whittington2019theories}
@@ -542,11 +540,6 @@ Bellec, G., et al. (2020).
 A solution to the learning dilemma for recurrent networks of spiking neurons.
 \emph{Nature Communications}, 11, 3625.
 
-\bibitem{larkum2013apical}
-Larkum, M. (2013).
-A cellular mechanism for cortical associations.
-\emph{Trends in Neurosciences}, 36(3), 141--151.
-
 \bibitem{welford1962note}
 Welford, B. P. (1962).
 Note on a method for calculating corrected sums of squares and products.
@@ -578,9 +571,9 @@ The forward-forward algorithm.
 \emph{arXiv:2212.13345}.
 
 \bibitem{dellaferrera2022pepita}
-Dellaferrera, G., \& Bhatt, D. (2022).
+Dellaferrera, G., \& Kreiman, G. (2022).
 Error-driven input modulation: Solving the credit assignment problem without a backward pass.
-\emph{ICML}, 4937--4955.
+\emph{Proceedings of the 39th International Conference on Machine Learning}, \emph{Proceedings of Machine Learning Research}, 162, 4937--4955.
 
 \bibitem{lee2015dtp}
 Lee, D.-H., et al. (2015).
@@ -593,7 +586,7 @@ Credit assignment in neural networks through deep feedback control.
 \emph{NeurIPS}, 34.
 
 \bibitem{millidge2022predictive}
-Millidge, B., Seth, A., \& Buckley, C. L. (2022).
+Millidge, B., Seth, A. K., \& Buckley, C. L. (2021).
 Predictive coding: A theoretical and experimental review.
 \emph{arXiv:2107.12979}.
 
@@ -607,35 +600,30 @@ Silver, R. A. (2010).
 Neuronal arithmetic.
 \emph{Nature Reviews Neuroscience}, 11(7), 474--489.
 
-\bibitem{beniaguev2021single}
-Beniaguev, D., Segev, I., \& London, M. (2021).
-Single cortical neurons as deep artificial neural networks.
-\emph{Neuron}, 109(17), 2727--2739.
-
 \bibitem{pal2024local}
-Bhatt, D., et al. (2024).
-Parallel local learning with alignment.
-\emph{Nature Machine Intelligence}, 6, 1--12.
+Max, K., Kriener, L., Pineda Garc{\'\i}a, G., Nowotny, T., Jaras, I., Senn, W., \& Petrovici, M. A. (2024).
+Learning efficient backprojections across cortical hierarchies in real time.
+\emph{Nature Machine Intelligence}, 6(6), 619--630.
 
 \bibitem{ma2024auglocal}
 Ma, C., Wu, J., Si, C., \& Tan, K. C. (2024).
 Scaling supervised local learning with augmented auxiliary networks.
-\emph{ICLR}.
+\emph{International Conference on Learning Representations}.
 
 \bibitem{lv2025dll}
-Lv, C., Xu, J., Lu, Y., Wang, X., Wang, Z., Xu, Z., Yu, D., \& Du, X. (2025).
+Lv, C., Xu, J., Lu, Y., Wang, X., Wang, Z., Xu, Z., Yu, D., Du, X., Zheng, X., \& Huang, X. (2025).
 Dendritic Localized Learning: Toward Biologically Plausible Algorithm.
-\emph{Proceedings of Machine Learning Research}, 267.
+\emph{Proceedings of the 42nd International Conference on Machine Learning}, \emph{Proceedings of Machine Learning Research}, 267, 41682--41700.
 
 \bibitem{erdogan2025ebd}
-Erdogan, M., Pehlevan, C., \& Erdogan, A. (2025).
+Erdogan, M., Pehlevan, C., \& Erdogan, A. T. (2025).
 Error broadcast and decorrelation as a potential artificial and natural learning mechanism.
-\emph{NeurIPS}.
+\emph{NeurIPS 2025 Spotlight}, OpenReview.
 
 \bibitem{kao2024ccl}
 Kao, C.-H., \& Hariharan, B. (2024).
 Counter-Current Learning: A biologically plausible dual network approach for deep learning.
-\emph{NeurIPS}.
+\emph{Advances in Neural Information Processing Systems}, 37.
 
 \bibitem{xiao2017fashionmnist}
 Xiao, H., Rasul, K., \& Vollgraf, R. (2017).
@@ -643,8 +631,8 @@ Fashion-MNIST: A novel image dataset for benchmarking machine learning algorithm
 \emph{arXiv:1708.07747}.
 
 \bibitem{song2005lognormal}
-Song, S., Sj{\"o}str{\"o}m, P. J., Reigl, M., Nelson, S., \& Bhatt, D. B. (2005).
-Highly nonrandom features of synaptic connectivity in local cortical circuits.
+Song, S., Sj{\"o}str{\"o}m, P. J., Reigl, M., Nelson, S., \& Chklovskii, D. B. (2005).
+Highly Nonrandom Features of Synaptic Connectivity in Local Cortical Circuits.
 \emph{PLoS Biology}, 3(3), e68.
 
 \bibitem{buzsaki2014logdynamic}
@@ -652,19 +640,14 @@ Buzs{\'a}ki, G., \& Mizuseki, K. (2014).
 The log-dynamic brain: How skewed distributions affect network operations.
 \emph{Nature Reviews Neuroscience}, 15(4), 264--278.
 
-\bibitem{saxena2024lognormal}
-Saxena, S., et al. (2024).
-Lognormal recurrent networks for biological plausibility.
-\emph{ICLR}.
-
 \bibitem{microns2021functional}
-MICrONS Consortium (2021).
+The MICrONS Consortium et al. (2025).
 Functional connectomics spanning multiple areas of mouse visual cortex.
-\emph{bioRxiv}, 2021.07.28.454025.
+\emph{Nature}, 640(8058), 435--447.
 
 \bibitem{loewenstein2011multiplicative}
-Loewenstein, Y., Kuras, A., \& Bhatt, D. (2011).
-Multiplicative dynamics underlie the emergence of the log-normal distribution of spine sizes in the neocortex in vivo.
+Loewenstein, Y., Kuras, A., \& Rumpel, S. (2011).
+Multiplicative Dynamics Underlie the Emergence of the Log-Normal Distribution of Spine Sizes in the Neocortex In Vivo.
 \emph{Journal of Neuroscience}, 31(26), 9481--9488.
 
 \bibitem{megias2001total}
@@ -726,7 +709,7 @@ Context gating & 5F & \textbf{0.807} & \textbf{0.789} \\
 \toprule
 \textbf{Component} & \textbf{Representative effect} & \textbf{Interpretation} \\
 \midrule
-Shunting architecture & Path-gain CV stays at about $0.21$--$0.27$ under shunting vs.\ $0.53$--$1.08$ under additive; on noise resilience, per-soma local learning rises from roughly $0.33$--$0.47$ (additive) to $0.72$--$0.90$ (shunting). & This is the main architectural effect in the paper: shunting concentrates path gains and yields a more faithful low-bandwidth credit signal. \\
+Shunting architecture & Conductance-stage path-gain CV stays at about $0.21$--$0.27$ under shunting vs.\ $0.53$--$1.08$ under additive; on noise resilience, per-soma local learning rises from roughly $0.33$--$0.47$ (additive) to $0.72$--$0.90$ (shunting). & This is the main architectural effect in the paper: shunting concentrates conductance-stage path gains and yields a more faithful low-bandwidth credit signal. \\
 \addlinespace[2pt]
 Broadcast quality & On MNIST (5F), shunting per-soma reaches $0.912 \pm 0.005$, while local-mismatch remains at $0.146 \pm 0.046$. & Correctly matching the broadcast field to the somatic error matters far more than arbitrary local mismatch heuristics. \\
 \addlinespace[2pt]
@@ -741,6 +724,8 @@ Structured feedback & On learned cue routing, tuned shunting per-soma reaches $8
 Random low-rank channels & On noise resilience, random low-rank broadcast improves from $0.456$ at $K{=}1$ to $0.606$ at $K{=}4$, but remains far below the stronger per-soma and transported-broadcast baselines; on cue routing, raising random rank from $K{=}1$ to $K{=}2$ does not match PV-LocalCA. & Dimensionality alone is not enough: pathway structure matters, not just additional random broadcast channels. \\
 \addlinespace[2pt]
 Morphology regime & In the exploratory noise-resilience regime map (Appendix Fig.~\ref{fig:s8_morphology_ie_regime}), depth-2 trees show their largest shunting gains near $N_I=0$, whereas depth-3 trees retain their strongest gains around $N_I=5$. & Morphology appears to shift the inhibitory operating regime in which shunting is most useful, suggesting that conductance normalization and tree geometry interact rather than contributing independently. \\
+\addlinespace[2pt]
+Activation choice & In the five-seed frozen activation audit, identity favors additive LocalCA on noise resilience ($0.662/0.647$ at $N_I{=}0/10$), whereas frozen \texttt{param\_tanh} favors shunting ($0.657/0.679$). The same audit shows that frozen \texttt{param\_tanh} improves shunting per-soma compartment-error cosine from $0.124$ to $0.329$ at $N_I{=}0$. & The post-voltage firing-rate transform is a real modeling variable, not just an implementation detail. Even a fixed saturating nonlinearity changes the operating point substantially, so the main paper's mechanistic claims should be read in the bounded \texttt{param\_tanh} regime used throughout the headline experiments. \\
 \bottomrule
 \end{tabular}
 \caption{\textbf{Which components carry the observed gains?} A compact summary of the empirical division of labor across architecture, broadcast design, and LocalCA rule variants.}
@@ -921,6 +906,65 @@ We treat this figure as exploratory support for the claim that morphology change
 \label{tab:low_rank_broadcast}
 \end{table}
 
+\subsection*{Frozen Activation-Choice Audit}
+
+\begin{table*}[t]
+\centering
+\small
+\begin{tabular}{@{}llccc@{}}
+\toprule
+\textbf{Dataset / strategy} & \textbf{Core} & \textbf{$N_I$} & \textbf{Identity (\texttt{none})} & \textbf{Frozen \texttt{param\_tanh}} \\
+\midrule
+MNIST / LocalCA & additive & 0  & $0.780 \pm 0.014$ & $0.184 \pm 0.049$ \\
+MNIST / LocalCA & additive & 10 & $0.907 \pm 0.003$ & $0.841 \pm 0.011$ \\
+MNIST / LocalCA & shunting & 0  & $0.841 \pm 0.007$ & $0.774 \pm 0.023$ \\
+MNIST / LocalCA & shunting & 10 & $0.905 \pm 0.009$ & $0.846 \pm 0.015$ \\
+\addlinespace[2pt]
+Noise resilience / LocalCA & additive & 0  & $0.662 \pm 0.015$ & $0.608 \pm 0.022$ \\
+Noise resilience / LocalCA & additive & 10 & $0.647 \pm 0.010$ & $0.466 \pm 0.034$ \\
+Noise resilience / LocalCA & shunting & 0  & $0.369 \pm 0.011$ & $0.657 \pm 0.018$ \\
+Noise resilience / LocalCA & shunting & 10 & $0.368 \pm 0.015$ & $0.679 \pm 0.020$ \\
+\addlinespace[2pt]
+MNIST / backprop & additive & 0  & $0.925 \pm 0.001$ & $0.942 \pm 0.001$ \\
+MNIST / backprop & additive & 10 & $0.921 \pm 0.001$ & $0.950 \pm 0.001$ \\
+MNIST / backprop & shunting & 0  & $0.963 \pm 0.0004$ & $0.950 \pm 0.001$ \\
+MNIST / backprop & shunting & 10 & $0.967 \pm 0.001$ & $0.946 \pm 0.001$ \\
+\addlinespace[2pt]
+Noise resilience / backprop & additive & 0  & $0.649 \pm 0.015$ & $0.995 \pm 0.002$ \\
+Noise resilience / backprop & additive & 10 & $0.646 \pm 0.003$ & $0.991 \pm 0.005$ \\
+Noise resilience / backprop & shunting & 0  & $0.361 \pm 0.015$ & $0.494 \pm 0.015$ \\
+Noise resilience / backprop & shunting & 10 & $0.386 \pm 0.024$ & $0.885 \pm 0.006$ \\
+\bottomrule
+\end{tabular}
+\caption{\textbf{Frozen activation-shape audit on matched dendritic architectures (5 seeds per condition).} Identity (\texttt{none}) and a frozen bounded post-voltage reactivation \texttt{param\_tanh} can lead to qualitatively different operating regimes. On the main synthetic mechanism task, identity favors additive LocalCA, whereas frozen \texttt{param\_tanh} strongly favors shunting. Under standard backpropagation, the same frozen nonlinearity markedly improves additive and helps shunting most clearly at higher inhibition. These runs match additive reactivation initialization to the shunting setting and hold the activation parameters fixed, isolating activation shape from both the earlier additive/shunting initialization asymmetry in code and from activation learning itself.}
+\label{tab:activation_audit_empirical}
+\end{table*}
+
+\begin{table*}[t]
+\centering
+\small
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{@{}llccccccc@{}}
+\toprule
+\textbf{Dataset} & \textbf{Core} & \textbf{$N_I$} & \textbf{Path-gain CV} & \textbf{Path-gain CV} & \textbf{Per-soma cosine} & \textbf{Per-soma cosine} & \textbf{Path-transport cosine} & \textbf{Path-transport cosine} \\
+ &  &  & \textbf{none} & \textbf{Frozen \texttt{param\_tanh}} & \textbf{none} & \textbf{Frozen \texttt{param\_tanh}} & \textbf{none} & \textbf{Frozen \texttt{param\_tanh}} \\
+\midrule
+MNIST & additive & 0  & $0.281$ & $0.330$ & $0.229$ & $0.006$ & $0.996$ & $0.670$ \\
+MNIST & additive & 10 & $0.310$ & $0.863$ & $0.210$ & $0.074$ & $0.963$ & $0.222$ \\
+MNIST & shunting & 0  & $0.383$ & $0.793$ & $0.167$ & $0.111$ & $1.000$ & $0.964$ \\
+MNIST & shunting & 10 & $0.386$ & $1.246$ & $0.235$ & $0.097$ & $1.000$ & $0.966$ \\
+\addlinespace[2pt]
+Noise resilience & additive & 0  & $0.146$ & $0.229$ & $0.478$ & $-0.250$ & $0.987$ & $0.780$ \\
+Noise resilience & additive & 10 & $0.239$ & $0.285$ & $0.780$ & $0.009$ & $0.974$ & $0.347$ \\
+Noise resilience & shunting & 0  & $0.299$ & $0.316$ & $0.124$ & $0.329$ & $0.315$ & $0.678$ \\
+Noise resilience & shunting & 10 & $0.041$ & $0.160$ & $0.352$ & $0.386$ & $0.999$ & $0.889$ \\
+\bottomrule
+\end{tabular}
+}
+\caption{\textbf{Pre-reactivation theory diagnostics for the frozen activation audit (LocalCA, 5 seeds per condition).} These diagnostics are computed on the hooked pre-reactivation compartment voltage $V_n$, so they track how the fixed post-voltage activation changes the operating point seen by the conductance-stage theory. The strongest qualitative pattern appears on the main synthetic mechanism task: frozen \texttt{param\_tanh} improves shunting per-soma compartment-error fidelity but reduces it sharply in additive cores. We present these results as an operating-point audit rather than as a second theorem claim; the exact factorization statement in the main text remains the conductance-stage result verified in Fig.~\ref{fig:gradient_fidelity}D.}
+\label{tab:activation_audit_theory}
+\end{table*}
+
 \section{Implementation Details}
 \label{app:implementation}
 
@@ -932,7 +976,10 @@ The only non-local quantity is the broadcast error $e_n$, which requires a top-d
 We assume per-neuron resolution (one error per output neuron) for the per-soma broadcast mode.
 
 \subsection*{Dendritic Structure in Code}
-We use the morphology notation $[b_1,b_2,\dots,b_D]$ for rooted dendritic trees, where each factor gives the fan-in from one dendritic stage to the next on the path to the soma. For example, $[3,3]$ means that each soma aggregates $3$ proximal branches and each proximal branch aggregates $3$ distal branches, for $9$ distal leaves per soma; $[3,3,3]$ adds a third dendritic stage with $27$ leaves per soma. In code, each excitatory unit is instantiated as a \texttt{DendriNet}, which is a stack of \texttt{DendriticBranchLayer}s. Each branch layer contains an excitatory synapse bank, an optional inhibitory synapse bank, and a branch-to-parent aggregation map. In the main feedforward models studied here, \texttt{somatic\_synapses=false}, so synaptic inputs terminate on dendritic branches rather than directly on the soma. Likewise, \texttt{input\_mode=1} together with nonzero \texttt{ie\_synapses\_per\_branch\_per\_layer} means that inhibition enters each dendritic branch through explicit inhibitory synapses even when we do not instantiate a separate inhibitory neuron population (\texttt{inhibitory\_layer\_sizes=[]}). The additive and shunting cores are therefore architecture-matched at the tree level; they differ in the branch-level voltage integration rule rather than in whether a dendritic tree exists.
+We use the morphology notation $[b_1,b_2,\dots,b_D]$ for rooted dendritic trees, where each factor gives the fan-in from one dendritic stage to the next on the path to the soma. For example, $[3,3]$ means that each soma aggregates $3$ proximal branches and each proximal branch aggregates $3$ distal branches, for $9$ distal leaves per soma; $[3,3,3]$ adds a third dendritic stage with $27$ leaves per soma. In code, each excitatory unit is instantiated as a \texttt{DendriNet}, which is a stack of \texttt{DendriticBranchLayer}s. Each branch layer contains an excitatory synapse bank, an optional inhibitory synapse bank, a branch-to-parent aggregation map, and an optional post-voltage reactivation. In the main feedforward models studied here, \texttt{somatic\_synapses=false}, so synaptic inputs terminate on dendritic branches rather than directly on the soma. Likewise, \texttt{input\_mode=1} together with nonzero \texttt{ie\_synapses\_per\_branch\_per\_layer} means that inhibition enters each dendritic branch through explicit inhibitory synapses even when we do not instantiate a separate inhibitory neuron population (\texttt{inhibitory\_layer\_sizes=[]}). The additive and shunting cores are therefore architecture-matched at the tree level; they differ in the branch-level voltage integration rule rather than in whether a dendritic tree exists.
+
+\subsection*{Post-Voltage Reactivation}
+The conductance stage produces a pre-reactivation compartment voltage $V_n$, after which each branch layer may apply a monotone scalar nonlinearity. The codebase supports identity (\texttt{none}), fixed \texttt{tanh}/\texttt{sigmoid}/\texttt{relu}, and several parametric families including \texttt{param\_tanh}, \texttt{param\_tanh\_only\_m}, and piecewise linear--saturating variants. The main manuscript sweeps use \texttt{param\_tanh}, a learnable bounded firing-rate transform of the form $(\tanh(m(V-b))+1)/2$, with identity transfer input activation and a linear decoder. Unless explicitly overridden, additive and shunting cores can start from different reactivation initializations in code; activation-fairness ablations therefore match additive initialization to the shunting setting when comparing alternative reactivation choices directly. The appendix activation audit additionally fixes \texttt{param\_tanh} after initialization to isolate activation shape from activation plasticity.
 
 \subsection*{Units and Parameterization}
 \begin{table}[t]\centering\small
@@ -965,18 +1012,19 @@ Recent dendritic extensions & path propagation; router-derived branch roles; pat
 \end{table}
 
 \subsection*{Representative Manuscript Architectures}
-\begin{table}[t]\centering\small
-\begin{tabular}{@{}L{0.21\linewidth}L{0.11\linewidth}L{0.11\linewidth}L{0.11\linewidth}L{0.16\linewidth}L{0.08\linewidth}L{0.16\linewidth}@{}}
+\begin{table}[t]\centering\footnotesize
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{@{}L{0.18\linewidth}L{0.08\linewidth}L{0.08\linewidth}L{0.10\linewidth}L{0.16\linewidth}L{0.06\linewidth}L{0.20\linewidth}@{}}
 \toprule
 \textbf{Setting} & \textbf{Encoder} & \textbf{E layers} & \textbf{Tree} & \textbf{Synapses / branch} & \textbf{Seeds} & \textbf{Notes} \\
 \midrule
-Gradient fidelity / path-gain / noise-resilience mechanism & identity & $[128]$ & $[3,3]$ & $N_E{=}40$, $N_I \in \{0,5,10,20,40\}$ & $5$ fidelity, $3$ oracle & Main mechanistic sweeps in Figs.~\ref{fig:gradient_fidelity} and \ref{fig:mechanistic}. \\
-MNIST / context-gating local competence & identity & $[128]$ & $[3,3]$ & $N_E{=}40$, $N_I{=}20$ & $5$ & Best local 5F per-soma runs used in Table~\ref{tab:gap_closing}. \\
-Fashion-MNIST competence & identity & $[128]$ & $[3,3]$ & $N_E{=}40$, $N_I{=}20$ & $5$ & Dedicated five-seed standard-vs-local competence sweep. \\
-Cue-routing PV-LocalCA & pathway router & $[64]$ & $[2]$ & $N_E{=}10$, $N_I{=}4$ & $5$ & Learned router with two pathway groups and rank-$2$ structured feedback. \\
-Morphology$\times$inhibition appendix map & identity & $[128,128]$ & $[2,2]$, $[3,3]$, $[4,4]$, $[2,2,2]$, $[3,3,3]$ & $N_E{=}40$, $N_I \in \{0,5,10,20,40\}$ & $3$ & Exploratory appendix sweep only. \\
+Gradient fidelity / path-gain / noise-resilience mechanism & identity & $[128]$ & $[3,3]$ & $N_E{=}40$, $N_I \in \{0,5,10,20,40\}$ & $5$ fidelity, $3$ oracle & Main mechanistic sweeps in Figs.~\ref{fig:gradient_fidelity} and \ref{fig:mechanistic}; dendritic reactivation is \texttt{param\_tanh}. \\
+MNIST / context-gating local competence & identity & $[128]$ & $[3,3]$ & $N_E{=}40$, $N_I{=}20$ & $5$ & Best local 5F per-soma runs used in Table~\ref{tab:gap_closing}; dendritic reactivation is \texttt{param\_tanh}. \\
+Fashion-MNIST competence & identity & $[128]$ & $[3,3]$ & $N_E{=}40$, $N_I{=}20$ & $5$ & Dedicated five-seed standard-vs-local competence sweep; dendritic reactivation is \texttt{param\_tanh}. \\
+Cue-routing PV-LocalCA & pathway router & $[64]$ & $[2]$ & $N_E{=}10$, $N_I{=}4$ & $5$ & Learned router with two pathway groups and rank-$2$ structured feedback; dendritic reactivation is \texttt{param\_tanh}. \\
+Morphology$\times$inhibition appendix map & identity & $[128,128]$ & $[2,2]$, $[3,3]$, $[4,4]$, $[2,2,2]$, $[3,3,3]$ & $N_E{=}40$, $N_I \in \{0,5,10,20,40\}$ & $3$ & Exploratory appendix sweep only; dendritic reactivation is \texttt{param\_tanh}. \\
 \bottomrule
-\end{tabular}
+\end{tabular}}
 \caption{\textbf{Representative architectures used in the manuscript.} All dendritic rows use explicit branch-level excitatory and inhibitory synapse banks with \texttt{somatic\_synapses=false} and nonnegative conductances. The tree column gives the dendritic morphology per excitatory neuron, while the synapse counts report excitatory and inhibitory synapses per branch.}
 \label{tab:representative_architectures}
 \end{table}
@@ -987,7 +1035,7 @@ Morphology$\times$inhibition appendix map & identity & $[128,128]$ & $[2,2]$, $[
 \textbf{Extension} & \textbf{Meaning} & \textbf{Compatible with} & \textbf{Typical use here} \\\midrule
 Per-soma broadcast & Somatic error vector shared across compartments & 3F, 4F, 5F & Default main-text LocalCA setting \\
 Low-rank broadcast & Small number of broadcast channels instead of a scalar or full field & 3F, 4F, 5F & Intermediate control when rank-1 is too restrictive \\
-Path transport & Recursive tree-transported error using path gains & 3F, 4F, 5F & Oracle upper-bound broadcast \\
+Path transport & Recursive tree-transported error using conductance-stage path gains & 3F, 4F, 5F & Oracle upper-bound broadcast \\
 Path propagation & Approximate path-gain attenuation applied to broadcast & 3F, 4F, 5F & Morphology-aware modifier for deeper trees \\
 Pathway vector & Structured branch/pathway-specific broadcast field & 3F, 4F, 5F & Used mainly in PV-LocalCA on routed tasks \\
 Branch-role rules & Scales updates by router- or pathway-derived branch specialization & 3F, 4F, 5F & Used in the structured pathway extension \\
@@ -999,7 +1047,7 @@ Inhibitory homeostasis & Auxiliary local inhibitory balancing term & 3F, 4F, 5F 
 \end{table}
 
 \subsection*{Seed Protocol and Claim Status}
-The seed depth is not uniform across every sweep, and we therefore separate headline evidence from exploratory screening. The main mechanistic gradient-fidelity sweep uses $5$ seeds per condition, the cue-routing seed-repeat and tuning sweeps use $5$ seeds per condition, the dedicated Fashion-MNIST competence sweep uses $5$ seeds per condition, the path-transport oracle sweep uses $3$ seeds per condition, and the 5F sensitivity sweep uses $3$ seeds per condition. By contrast, early architecture-selection or stress-test screens with only $1$--$2$ seeds are treated as exploratory and are either omitted from the main claims or explicitly framed as appendix-only pilots. For transparency, the BP ceilings in Table~\ref{tab:gap_closing} for MNIST and context gating come from a matched-capacity phase-1 calibration sweep with $2$ seeds, whereas the corresponding local runs use $5$ seeds and the Fashion-MNIST standard/local comparison uses a dedicated $5$-seed sweep. This asymmetry affects the confidence we should place in the ceiling estimates, not the mechanistic sweeps that anchor the paper's main claims.
+The seed depth is not uniform across every sweep, and we therefore separate headline evidence from exploratory screening. The main mechanistic gradient-fidelity sweep uses $5$ seeds per condition, the cue-routing seed-repeat and tuning sweeps use $5$ seeds per condition, the dedicated Fashion-MNIST competence sweep uses $5$ seeds per condition, the path-transport oracle sweep uses $3$ seeds per condition, the 5F sensitivity sweep uses $3$ seeds per condition, and the frozen activation audit in Tables~\ref{tab:activation_audit_empirical}--\ref{tab:activation_audit_theory} uses $5$ seeds per condition. By contrast, early architecture-selection or stress-test screens with only $1$--$2$ seeds are treated as exploratory and are either omitted from the main claims or explicitly framed as appendix-only pilots. For transparency, the BP ceilings in Table~\ref{tab:gap_closing} for MNIST and context gating come from a matched-capacity phase-1 calibration sweep with $2$ seeds, whereas the corresponding local runs use $5$ seeds and the Fashion-MNIST standard/local comparison uses a dedicated $5$-seed sweep. This asymmetry affects the confidence we should place in the ceiling estimates, not the mechanistic sweeps that anchor the paper's main claims.
 
 \subsection*{Compute Resources}
 All experiments were run on an internal GPU cluster. Most MNIST, Fashion-MNIST, and synthetic-task runs used a single NVIDIA A100 or H100 GPU and finished in minutes to tens of minutes per seed; the flattened CIFAR-10 runs required longer single-GPU jobs but still did not use distributed or multi-GPU training. Reported headline metrics are aggregated over 3--5 seeds as stated in the text; the broader exploratory sweeps used to tune and diagnose the method required additional compute beyond the final reported runs.
@@ -1046,11 +1094,11 @@ PV-LocalCA & 3F $+$ structured $e_n$ $+$ role alignment & $\mathcal{O}(r_n)$ & P
 \begin{proposition}[Supportive random-broadcast alignment]
 Let the broadcast matrix $B_n$ have i.i.d.\ zero-mean entries with $\mathbb{E}[B_n^\top B_n]=\alpha I$.
 Then the expected cosine between the resulting local gradient and the exact gradient is positive, $\mathbb{E}[\cos\angle(g^{\mathrm{local}}, g^{\mathrm{exact}})] \geq c_n > 0$, by an argument analogous to feedback alignment \cite{lillicrap2016random}.
-The constant $c_n$ depends on how strongly local eligibility factors correlate with the exact path gain in Eq.~\eqref{eq:path_sum}; shunting improves this correlation by narrowing the spread of intermediate sensitivities.
+The constant $c_n$ depends on how strongly local eligibility factors correlate with the conductance-stage path gain in Eq.~\eqref{eq:path_sum}; shunting improves this correlation by narrowing the spread of intermediate sensitivities.
 \end{proposition}
 
 We treat this argument as supportive rather than central.
-The main theoretical object in the paper is still the exact compartment error $\partial L/\partial V_n = \alpha_n \delta_0$, and the main empirical question is how faithfully different broadcast fields approximate that quantity.
+The main theoretical object in the paper is still the exact pre-reactivation compartment error $\partial L/\partial V_n$; under identity upward transfer this reduces to $\alpha_n \delta_0$, while with post-voltage activation the corresponding effective path gain additionally includes local $f_n'(V_n)$ factors. The main empirical question is how faithfully different broadcast fields approximate that quantity.
 
 \subsection*{Biological Analogs}
 \begin{table}[t]\centering\small
@@ -1108,7 +1156,7 @@ Update: $\Delta g_j^{\mathrm{syn}} \propto \int e_j^{\mathrm{syn}}(t) m_n(t)\,\m
 \label{app:weight_distributions}
 
 As a secondary analysis, we examine whether the conductance-based update naturally induces characteristic weight statistics.
-Because synaptic updates scale with input resistance $R_n^{\mathrm{tot}} = 1/g_n^{\mathrm{tot}}$, the voltage equation implies multiplicative weight dynamics, creating a regime analogous to exponentiated gradient descent \cite{saxena2024lognormal}.
+Because synaptic updates scale with input resistance $R_n^{\mathrm{tot}} = 1/g_n^{\mathrm{tot}}$, the voltage equation implies multiplicative weight dynamics, creating a regime analogous to exponentiated-gradient updates.
 Such multiplicative dynamics suggest log-normal weight distributions in trained networks \cite{song2005lognormal,buzsaki2014logdynamic}.
 We compare the resulting distributions against two biological references: electrophysiological data from Song et al.\ \cite{song2005lognormal} (rat V1 L5 pyramidal, $\sigma = 0.94$) and the MICrONS mm$^3$ connectome \cite{microns2021functional} (mouse V1 synapse sizes).
 
@@ -1186,7 +1234,7 @@ The morphology-aware modulators (path propagation, depth/centrality weighting) h
 The shunting conductance $g_n^{\mathrm{tot}} = g_n^{\mathrm{leak}} + \sum g^{\mathrm{exc}} + \sum g^{\mathrm{inh}}$ appears in the update factor $R_n^{\mathrm{tot}} = 1/g_n^{\mathrm{tot}}$.
 As inhibitory conductance increases, $g_n^{\mathrm{tot}}$ grows and $R_n^{\mathrm{tot}}$ shrinks, compressing the multiplicative scale of weight updates.
 This is analogous to a learning rate that self-adjusts via the total conductance: strong synapses contribute more to $g_n^{\mathrm{tot}}$, reducing their own future update magnitude. This acts as a natural form of weight-dependent regularization.
-The resulting equilibrium distribution is log-normal, consistent with Loewenstein et al.\ \cite{loewenstein2011multiplicative} (multiplicative spine dynamics) and Saxena et al.\ \cite{saxena2024lognormal} (exponentiated gradient).
+The resulting equilibrium distribution is log-normal, consistent with Loewenstein et al.\ \cite{loewenstein2011multiplicative} and related multiplicative spine-dynamics analyses.
 Additive integration lacks this self-normalizing mechanism, producing broader distributions that fall outside the biological range.
 
 \section{Synthetic Benchmark Descriptions}
