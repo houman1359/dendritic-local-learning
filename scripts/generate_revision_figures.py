@@ -288,7 +288,7 @@ def figure_s6():
     ax.set_xticks(x)
     ax.set_xticklabels(categories)
     ax.set_ylabel("Test accuracy (%)")
-    ax.set_title("Corrected CIFAR-10 ladder")
+    ax.set_title("CIFAR-10 mechanism ladder", fontsize=9.8)
     ax.set_ylim(0, 58)
     ax.legend(
         loc="upper left",
@@ -299,6 +299,7 @@ def figure_s6():
         columnspacing=0.8,
         handletextpad=0.4,
         borderaxespad=0.0,
+        fontsize=7.2,
     )
 
     # Panel B: shunting rank bridge in the strong family
@@ -332,7 +333,7 @@ def figure_s6():
             color=COLOR_BACKPROP, fontsize=5.8, ha="right", va="bottom")
     ax.set_xticks(x2)
     ax.set_xticklabels([label for label, *_ in ladder])
-    ax.set_title("Shunting feedback bridge")
+    ax.set_title("Shunting rank bridge", fontsize=9.8)
     ax.set_ylim(0, 55)
 
     fig.subplots_adjust(left=0.10, right=0.98, bottom=0.18, top=0.90, wspace=0.42)

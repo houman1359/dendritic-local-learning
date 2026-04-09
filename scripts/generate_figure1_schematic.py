@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
-"""Generate Figure 1: model, rules, and exact-factorization sanity check.
+"""Generate Figure 1: model, rules, broadcast modes, and learning dynamics.
 
 Creates:
   - fig_model_schematic.{pdf,png}: legacy two-panel schematic
   - fig1_model_and_credit.{pdf,png}: four-panel publication figure
 
-The publication figure centers the mechanistic story:
+The publication figure serves as the paper's orientation figure:
   - compartmental dendritic neuron
   - 3F/4F/5F rule hierarchy
   - broadcast modes
-  - exact-factorization sanity check
+  - representative learning dynamics
 """
 
 from __future__ import annotations
@@ -410,87 +410,71 @@ def panel_c_broadcast(ax):
 
 
 def panel_d(ax):
-    """Panel D: headline exact-factorization summary."""
-    ax.set_title("Exact factorization summary", fontsize=11,
+    """Panel D: representative learning dynamics on MNIST."""
+    ax.set_title("Representative MNIST learning dynamics", fontsize=11,
                  fontweight="bold", pad=8)
-    ax.axis("off")
 
-    df = pd.read_csv(THEORY_SUMMARY_CSV)
-    cosine = df["factorization_weighted_cosine_mean"].to_numpy(dtype=float)
-    scale_mismatch = df["factorization_weighted_scale_mismatch_mean"].to_numpy(dtype=float)
+    runs = resolve_runs()
+    curve_specs = [
+        ("bp_shunting", CURVE_COLORS["bp_shunting"], "-", "Shunt. BP"),
+        ("rule_5f", CURVE_COLORS["rule_5f"], "-", "Shunt. 5F"),
+        ("rule_4f", CURVE_COLORS["rule_4f"], "--", "Shunt. 4F"),
+        ("rule_3f", CURVE_COLORS["rule_3f"], ":", "Shunt. 3F"),
+        ("local_additive", "#4C78A8", "-.", "Add. 5F"),
+    ]
 
-    cosine_mean = float(np.mean(cosine))
-    cosine_std = float(np.std(cosine))
-    scale_max = float(np.max(scale_mismatch))
+    plotted = []
+    for key, color, ls, label in curve_specs:
+        run_dir = runs.get(key) if key in runs else FALLBACK_RUNS.get("local_additive")
+        if run_dir is None or not run_dir.exists():
+            continue
+        try:
+            history = load_epoch_history(run_dir)
+        except Exception:
+            continue
+        if history.empty:
+            continue
+        ax.plot(
+            history["epoch"],
+            history["test_accuracy"] * 100,
+            color=color,
+            ls=ls,
+            lw=1.35,
+            label=label,
+            alpha=0.95,
+        )
+        plotted.append((label, float(history["test_accuracy"].iloc[-1] * 100), color))
 
-    eq_box = FancyBboxPatch(
-        (0.06, 0.62), 0.88, 0.22,
-        boxstyle="round,pad=0.03", fc="#F6F8FB", ec="#C9D3E0",
-        linewidth=1.0, transform=ax.transAxes
+    ax.axhline(10, color="gray", ls=":", lw=0.6, zorder=0, alpha=0.7)
+    ax.text(99, 11.4, "chance", color="gray", fontsize=6.0, ha="right")
+    ax.set_xlim(0, 100)
+    ax.set_ylim(5, 100)
+    ax.set_xlabel("Epoch")
+    ax.set_ylabel("Test accuracy (%)")
+    ax.grid(axis="y", alpha=0.20, linewidth=0.5)
+
+    ax.legend(
+        loc="lower right",
+        fontsize=6.2,
+        ncol=2,
+        frameon=False,
+        handlelength=1.4,
+        columnspacing=0.8,
+        handletextpad=0.4,
     )
-    ax.add_patch(eq_box)
-    ax.text(
-        0.50, 0.73,
-        r"$\dfrac{\partial L}{\partial g_i^{\mathrm{syn}}}"
-        r"="
-        r"\left[x_i R_n^{\mathrm{tot}}(E_i - V_n)\right]"
-        r"\cdot"
-        r"\left[\dfrac{\partial L}{\partial V_n}\right]$",
-        transform=ax.transAxes,
-        ha="center",
-        va="center",
-        fontsize=11,
-    )
-    ax.text(
-        0.50, 0.64,
-        "exact gradient = local eligibility × compartment error",
-        transform=ax.transAxes,
-        ha="center",
-        va="center",
-        fontsize=7.4,
-        color="dimgray",
-    )
 
-    left_box = FancyBboxPatch(
-        (0.08, 0.20), 0.36, 0.26,
-        boxstyle="round,pad=0.03", fc="white", ec="#D0D0D0",
-        linewidth=0.9, transform=ax.transAxes
-    )
-    right_box = FancyBboxPatch(
-        (0.56, 0.20), 0.30, 0.26,
-        boxstyle="round,pad=0.03", fc="white", ec="#D0D0D0",
-        linewidth=0.9, transform=ax.transAxes
-    )
-    ax.add_patch(left_box)
-    ax.add_patch(right_box)
-
-    ax.text(0.26, 0.41, "Weighted cosine", transform=ax.transAxes,
-            ha="center", va="center", fontsize=7.6, color="dimgray")
-    ax.text(0.26, 0.30, f"{cosine_mean:.6f}", transform=ax.transAxes,
-            ha="center", va="center", fontsize=16, color=RULE5_COLOR,
-            fontweight="bold")
-    ax.text(0.26, 0.22, rf"$\pm\,{cosine_std:.6f}$ across conditions",
-            transform=ax.transAxes, ha="center", va="center",
-            fontsize=6.8, color="dimgray")
-
-    ax.text(0.71, 0.41, "Max scale mismatch", transform=ax.transAxes,
-            ha="center", va="center", fontsize=7.6, color="dimgray")
-    ax.text(0.71, 0.30, rf"${scale_max:.1e}$", transform=ax.transAxes,
-            ha="center", va="center", fontsize=15, color=RULE3_COLOR,
-            fontweight="bold")
-    ax.text(0.71, 0.22, "all theory-diagnostic conditions",
-            transform=ax.transAxes, ha="center", va="center",
-            fontsize=6.8, color="dimgray")
-
-    ax.text(
-        0.50, 0.08,
-        r"Only approximation in LocalCA: $e_n \approx \partial L/\partial V_n$",
-        transform=ax.transAxes,
-        ha="center",
-        va="center",
-        fontsize=8.0,
-        color="black",
-    )
+    if plotted:
+        summary_lines = [f"{label}: {val:.0f}%" for label, val, _ in plotted[:3]]
+        ax.text(
+            0.03, 0.97,
+            "\n".join(summary_lines),
+            transform=ax.transAxes,
+            ha="left",
+            va="top",
+            fontsize=6.1,
+            color="#444444",
+            bbox=dict(boxstyle="round,pad=0.22", fc="white", ec="#DDDDDD", alpha=0.85),
+        )
 
 
 def panel_d_scatter(ax):
@@ -544,18 +528,14 @@ def main():
     print(f"Saved: {out_path}.{{png,pdf}}")
     plt.close(fig)
 
-    # ── Publication figure: 2×2 layout ──
-    fig = plt.figure(figsize=(11.0, 8.0))
-    gs = fig.add_gridspec(
-        2, 2,
-        width_ratios=[1.3, 1.0],
-        height_ratios=[1.0, 1.0],
-        wspace=0.28, hspace=0.38,
+    # ── Publication figure: horizontal 1×4 layout ──
+    fig, axes = plt.subplots(
+        1,
+        4,
+        figsize=(16.0, 3.7),
+        gridspec_kw={"width_ratios": [1.35, 1.0, 1.15, 1.15], "wspace": 0.32},
     )
-    ax_a = fig.add_subplot(gs[0, 0])
-    ax_b = fig.add_subplot(gs[0, 1])
-    ax_c = fig.add_subplot(gs[1, 0])
-    ax_d = fig.add_subplot(gs[1, 1])
+    ax_a, ax_b, ax_c, ax_d = axes
 
     panel_a(ax_a)
     panel_b(ax_b)
@@ -564,10 +544,10 @@ def main():
 
     # Add panel labels
     for ax_obj, label in [(ax_a, "A"), (ax_b, "B"), (ax_c, "C"), (ax_d, "D")]:
-        ax_obj.text(-0.08, 1.05, label, transform=ax_obj.transAxes,
+        ax_obj.text(-0.12, 1.06, label, transform=ax_obj.transAxes,
                     fontsize=14, fontweight="bold", va="top", ha="left")
 
-    fig.subplots_adjust(left=0.05, right=0.97, top=0.94, bottom=0.06)
+    fig.subplots_adjust(left=0.03, right=0.985, top=0.92, bottom=0.12)
     out_path = OUTPUT_DIR / "fig1_model_and_credit"
     fig.savefig(out_path.with_suffix(".png"), dpi=300, bbox_inches="tight")
     fig.savefig(out_path.with_suffix(".pdf"), bbox_inches="tight")

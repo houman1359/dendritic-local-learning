@@ -238,7 +238,7 @@ def _plot_task_schematic(ax: plt.Axes) -> None:
         va="bottom",
         color="#333333",
     )
-    ax.set_title("Cue integration stresses the rank of the feedback field", fontsize=9.5)
+    ax.set_title("Cue-routing task", fontsize=9.2)
 
 
 def _plot_accuracy_panel(ax: plt.Axes, records: list[dict[str, Any]]) -> None:
@@ -287,7 +287,7 @@ def _plot_accuracy_panel(ax: plt.Axes, records: list[dict[str, Any]]) -> None:
     ax.invert_yaxis()
     ax.set_xlim(70, 100.2)
     ax.set_xlabel("Test accuracy (%)")
-    ax.set_title("Rank-1 broadcast fails; higher-rank feedback helps")
+    ax.set_title("Higher-rank feedback helps", fontsize=9.2)
     ax.axvline(95, color="#999999", linewidth=0.6, linestyle=":")
     ax.text(95.2, -0.75, "high-accuracy regime", fontsize=7.0, color="#666666")
 
@@ -382,7 +382,7 @@ def _plot_specialization_panel(ax: plt.Axes, df: pd.DataFrame) -> None:
     )
     ax.set_xlabel("Mean max router assignment")
     ax.set_ylabel("Test accuracy (%)")
-    ax.set_title("Specialization alone does not determine success")
+    ax.set_title("Specialization is not enough", fontsize=9.2)
     ax.set_xlim(0.955, 1.0015)
     ax.set_ylim(78, 100.5)
 
@@ -400,7 +400,7 @@ def _plot_assignment_panel(ax: plt.Axes, summary_row: dict[str, Any]) -> None:
     ax.set_yticklabels(row_labels)
     ax.set_xlabel("Latent pathway")
     ax.set_ylabel("Cue feature")
-    ax.set_title("Recovered pathway assignments")
+    ax.set_title("Recovered pathway map", fontsize=9.2)
     if n_features % 2 == 0:
         midpoint = n_features // 2 - 0.5
         ax.axhline(midpoint, color="white", linewidth=1.0, alpha=0.9)
@@ -430,26 +430,20 @@ def build_figure(summary_csv: Path) -> None:
     records = _summary_records(summary)
     pv_row = _find_record(summary, "local_ca", "dendritic_shunting", "learned", "pathway_vector_tuned")
 
-    fig = plt.figure(figsize=(DOUBLE_COL_W, 7.8))
-    gs = fig.add_gridspec(
-        2,
-        2,
-        width_ratios=[1.0, 1.5],
-        height_ratios=[1.1, 1.0],
-        wspace=0.40,
-        hspace=0.52,
+    fig, axes = plt.subplots(
+        1,
+        4,
+        figsize=(15.8, 3.7),
+        gridspec_kw={"wspace": 0.50, "width_ratios": [1.35, 1.0, 0.92, 1.10]},
     )
-    ax_a = fig.add_subplot(gs[0, 0])
-    ax_b = fig.add_subplot(gs[0, 1])
-    ax_c = fig.add_subplot(gs[1, 0])
-    ax_d = fig.add_subplot(gs[1, 1])
+    ax_a, ax_b, ax_c, ax_d = axes
 
     _plot_task_schematic(ax_a)
     _plot_accuracy_panel(ax_b, records)
     _plot_specialization_panel(ax_c, summary)
     _plot_assignment_panel(ax_d, pv_row)
 
-    fig.subplots_adjust(left=0.10, right=0.97, bottom=0.07, top=0.95)
+    fig.subplots_adjust(left=0.04, right=0.985, bottom=0.14, top=0.90)
     _save(fig, "fig6_cue_routing")
     _save(fig, "fig_cue_routing_appendix")
     _save(fig, "fig_cue_routing_hard_diagnosis")

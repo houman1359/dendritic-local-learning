@@ -129,15 +129,18 @@ def build_figure(sweep_dir: Path = DEFAULT_SWEEP_DIR) -> tuple[plt.Figure, pd.Da
     )
 
     fig, axes = plt.subplots(
-        2, 2, figsize=(7.0, 5.9), constrained_layout=True,
-        gridspec_kw={"height_ratios": [1.0, 0.9]}
+        1,
+        4,
+        figsize=(14.0, 3.4),
+        constrained_layout=True,
+        gridspec_kw={"width_ratios": [1.0, 1.0, 1.0, 1.05]},
     )
 
-    _heatmap(axes[0, 0], additive, "Additive accuracy", "Blues")
-    _heatmap(axes[0, 1], shunting, "Shunting accuracy", "Greens")
-    _heatmap(axes[1, 0], gap, "Shunting minus additive", "vlag", center=0.0)
+    _heatmap(axes[0], additive, "Additive", "Blues")
+    _heatmap(axes[1], shunting, "Shunting", "Greens")
+    _heatmap(axes[2], gap, "Gap (shunt. - add.)", "vlag", center=0.0)
 
-    ax = axes[1, 1]
+    ax = axes[3]
     style_axis(ax, grid="y")
     depth_palette = {2: "#7B5EA7", 3: "#D95F02"}
     for depth, sub in depth_gap.groupby("depth"):
@@ -151,7 +154,7 @@ def build_figure(sweep_dir: Path = DEFAULT_SWEEP_DIR) -> tuple[plt.Figure, pd.Da
             label=f"depth {depth}",
         )
     ax.axhline(0.0, color="black", linewidth=1.0, linestyle="--", alpha=0.6)
-    ax.set_title("Average shunting gain by depth", fontsize=11, pad=8)
+    ax.set_title("Average gain by depth", fontsize=11, pad=8)
     ax.set_xlabel(r"$N_I$ per branch", fontsize=10)
     ax.set_ylabel("Shunting - additive accuracy", fontsize=10)
     ax.set_xticks(ie_order)

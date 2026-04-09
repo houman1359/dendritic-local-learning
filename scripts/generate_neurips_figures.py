@@ -471,7 +471,7 @@ def figure2():
     ax.set_xticks(x_base)
     ax.set_xticklabels([d[0] for d in datasets_info])
     ax.set_ylabel("Test accuracy (%)")
-    ax.set_title("Local rules approach calibrated ceilings")
+    ax.set_title("Competence vs. matched ceiling", fontsize=9.5)
 
     # Legend
     legend_handles = [
@@ -513,7 +513,7 @@ def figure2():
 
     ax.set_xlabel("$N_I$ (inhib. syn. per branch)")
     ax.set_ylabel("Test accuracy (%)")
-    ax.set_title("Inhibition helps most in noisy regimes")
+    ax.set_title("Dose-response to inhibition", fontsize=9.5)
     ax.legend(fontsize=7, loc="lower right", handlelength=1.5,
               handletextpad=0.3, borderpad=0.3)
     ax.set_ylim(25, 100)
@@ -544,7 +544,7 @@ def figure2():
     ax.axhline(0, color="black", lw=0.4, ls="--")
     ax.set_xlabel("$N_I$ (inhib. syn. per branch)")
     ax.set_ylabel("Shunting adv. (pp)")
-    ax.set_title("Shunting advantage grows with inhibition")
+    ax.set_title("Shunting advantage", fontsize=9.5)
     ax.legend(fontsize=7, loc="upper right")
 
     # ---- Panel D: Fashion-MNIST comparison ----
@@ -583,7 +583,7 @@ def figure2():
         ax.set_xticklabels([d[0] for d in fmnist_data], fontsize=6.5, rotation=25,
                            ha="right")
         ax.set_ylabel("Test accuracy (%)")
-        ax.set_title("Fashion-MNIST")
+        ax.set_title("Fashion-MNIST gap", fontsize=9.5)
         ax.set_ylim(70, 92)
 
     fig.subplots_adjust(left=0.06, right=0.98, bottom=0.18, top=0.90,
@@ -598,11 +598,15 @@ def figure2():
 # ===================================================================
 def figure3():
     print("\n--- Figure 3: Gradient Fidelity ---")
-    fig, axes = plt.subplots(2, 2, figsize=(W * 1.9, 5.9),
-                             gridspec_kw={"wspace": 0.34, "hspace": 0.48})
+    fig, axes = plt.subplots(
+        1,
+        4,
+        figsize=(W * 2.05, 3.35),
+        gridspec_kw={"wspace": 0.46, "width_ratios": [0.92, 0.96, 1.12, 0.95]},
+    )
 
     # ---- Panel A: Cosine similarity bars ----
-    ax = axes[0, 0]
+    ax = axes[0]
     _panel(ax, "A")
     style_axis(ax, grid="y")
 
@@ -640,7 +644,7 @@ def figure3():
         )
 
     # ---- Panel B: Scale mismatch bars ----
-    ax = axes[0, 1]
+    ax = axes[1]
     _panel(ax, "B")
     style_axis(ax, grid="y")
 
@@ -676,7 +680,7 @@ def figure3():
         )
 
     # ---- Panel C: Per-layer alignment dynamics (from real data) ----
-    ax = axes[1, 0]
+    ax = axes[2]
     _panel(ax, "C")
     style_axis(ax, grid="y")
 
@@ -772,7 +776,7 @@ def figure3():
         )
 
     # ---- Panel D: Exact factorization sanity ----
-    ax = axes[1, 1]
+    ax = axes[3]
     _panel(ax, "D")
     style_axis(ax, grid="y")
 
@@ -816,8 +820,7 @@ def figure3():
         bbox=dict(boxstyle="round,pad=0.25", fc="white", ec="0.85", alpha=0.95),
     )
 
-    fig.subplots_adjust(left=0.08, right=0.98, bottom=0.11, top=0.92,
-                        wspace=0.34, hspace=0.48)
+    fig.subplots_adjust(left=0.055, right=0.985, bottom=0.19, top=0.90, wspace=0.46)
     _save(fig, "fig3_gradient_fidelity")
     plt.close(fig)
 

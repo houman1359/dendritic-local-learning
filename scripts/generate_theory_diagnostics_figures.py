@@ -383,19 +383,19 @@ def build_figure(
     oracle_summary = _safe_csv(oracle_summary_csv)
 
     fig, axes = plt.subplots(
-        2,
-        2,
-        figsize=(DOUBLE_COL_W, 5.6),
-        gridspec_kw={"wspace": 0.34, "hspace": 0.44},
+        1,
+        4,
+        figsize=(15.6, 3.6),
+        gridspec_kw={"wspace": 0.42, "width_ratios": [1.0, 1.0, 1.12, 0.92]},
     )
 
-    _plot_path_gain_dispersion(axes[0, 0], summary)
-    _plot_compartment_error_fidelity(axes[0, 1], summary)
-    _plot_oracle_learning(axes[1, 0], summary, oracle_summary)
-    _plot_low_bandwidth(axes[1, 1], low_bw)
+    _plot_path_gain_dispersion(axes[0], summary)
+    _plot_compartment_error_fidelity(axes[1], summary)
+    _plot_oracle_learning(axes[2], summary, oracle_summary)
+    _plot_low_bandwidth(axes[3], low_bw)
     fig.text(
         0.5,
-        0.99,
+        0.97,
         "A \u2192 B \u2192 C",
         ha="center",
         va="top",
