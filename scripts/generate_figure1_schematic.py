@@ -361,6 +361,25 @@ def panel_c_broadcast(ax):
                 )
             ax.text(2.02, y, r"$\delta$", ha="center", va="center",
                     fontsize=7.2, color=INH_COLOR, fontweight="bold")
+        elif mode == "low_rank":
+            channel_pts = [(2.01, y + 0.13), (2.01, y - 0.13)]
+            labels = [r"$c_1$", r"$c_2$"]
+            box = FancyBboxPatch(
+                (1.90, y - 0.22), 0.22, 0.44,
+                boxstyle="round,pad=0.02", fc="#F8EBDD", ec="k",
+                linewidth=0.4, alpha=0.35, zorder=3,
+            )
+            ax.add_patch(box)
+            for (cx, cy), label in zip(channel_pts, labels):
+                ax.add_patch(plt.Circle((cx, cy), 0.030, fc="#C65D1E", ec="k",
+                                        linewidth=0.4, alpha=0.85, zorder=4))
+                ax.text(cx, cy, label, ha="center", va="center",
+                        fontsize=6.0, color="white", fontweight="bold", zorder=5)
+            for start, leaf in zip(channel_pts * 2, leaves):
+                ax.annotate(
+                    "", xy=leaf, xytext=start,
+                    arrowprops=dict(arrowstyle="-|>", color="#C65D1E", lw=0.9),
+                )
         elif mode == "structured":
             colors = ["#7B3294", "#C51B7D"]
             channel_pts = [(2.02, y + 0.14), (2.02, y - 0.14)]
@@ -384,9 +403,10 @@ def panel_c_broadcast(ax):
         ax.text(0.03, y - 0.12, subtitle, ha="left", va="center",
                 fontsize=5.6, color="gray")
 
-    draw_mode(2.35, "scalar", "scalar", "one shared field")
-    draw_mode(1.50, "per_soma", "per-soma", "vector from soma to all branches")
-    draw_mode(0.65, "structured", "structured pathways", "separate channels for distinct branches")
+    draw_mode(2.45, "scalar", "scalar", "one shared field")
+    draw_mode(1.75, "per_soma", "per-soma", "vector if widths match; else scalar")
+    draw_mode(1.05, "low_rank", "random low-rank", "few unstructured broadcast channels")
+    draw_mode(0.35, "structured", "structured pathways", "separate channels for distinct branches")
 
 
 def panel_d(ax):
@@ -540,7 +560,7 @@ def main():
     panel_a(ax_a)
     panel_b(ax_b)
     panel_c_broadcast(ax_c)
-    panel_d_scatter(ax_d)
+    panel_d(ax_d)
 
     # Add panel labels
     for ax_obj, label in [(ax_a, "A"), (ax_b, "B"), (ax_c, "C"), (ax_d, "D")]:

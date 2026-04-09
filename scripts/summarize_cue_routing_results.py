@@ -21,12 +21,19 @@ ANALYSIS_DIR = DRAFT_DIR / "analysis"
 
 DEFAULT_SWEEP_DIRS = [
     Path(
-        "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/"
-        "sweep_runs/sweep_neurips_cue_routing_seed_repeats_20260306232402/results"
+        "/n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/"
+        "dendritic-local-learning/local_sweep_runs/"
+        "cue_routing_seed_repeats_activation_corrected_20260402131004/results"
     ),
     Path(
-        "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/"
-        "sweep_runs/sweep_neurips_cue_routing_tuning_20260307000918/results"
+        "/n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/"
+        "dendritic-local-learning/local_sweep_runs/"
+        "cue_routing_tuning_activation_corrected_20260402131004/results"
+    ),
+    Path(
+        "/n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/"
+        "dendritic-local-learning/local_sweep_runs/"
+        "cue_routing_rank_structure_activation_corrected_20260407132811/results"
     ),
 ]
 
@@ -76,13 +83,6 @@ CONDITION_INFO: dict[str, dict[str, Any]] = {
         "variant": "freeze20",
         "display_label": "Learned\nShunting\nfreeze-20",
     },
-    "cue_hard_learned_shunting_localca_pathway_vector": {
-        "strategy": "local_ca",
-        "network_type": "dendritic_shunting",
-        "router_mode": "learned",
-        "variant": "pathway_vector_hierarchical",
-        "display_label": "Learned\nShunting\npathway-vector",
-    },
     "cue_hard_learned_additive_standard": {
         "strategy": "standard",
         "network_type": "dendritic_additive",
@@ -104,33 +104,40 @@ CONDITION_INFO: dict[str, dict[str, Any]] = {
         "variant": "baseline_e140",
         "display_label": "Learned\nShunting\nper-soma\n140 ep",
     },
-    "cue_hard_learned_shunting_localca_lr10_e140": {
+    "cue_hard_learned_shunting_per_soma_tuned": {
         "strategy": "local_ca",
         "network_type": "dendritic_shunting",
         "router_mode": "learned",
         "variant": "baseline_tuned",
-        "display_label": "Learned\nShunting\nper-soma\n+ tune",
+        "display_label": "Learned\nShunting\nper-soma\n+tune",
     },
-    "cue_hard_learned_shunting_localca_pathway_vector_e140": {
+    "cue_hard_learned_shunting_low_rank_k1_tuned": {
         "strategy": "local_ca",
         "network_type": "dendritic_shunting",
         "router_mode": "learned",
-        "variant": "pathway_vector_e140",
-        "display_label": "Learned\nShunting\npathway-vector\n140 ep",
+        "variant": "low_rank_k1",
+        "display_label": "Learned\nShunting\nlow-rank $K{=}1$",
     },
-    "cue_hard_learned_shunting_localca_pathway_vector_lr10_e140": {
+    "cue_hard_learned_shunting_low_rank_k2_tuned": {
+        "strategy": "local_ca",
+        "network_type": "dendritic_shunting",
+        "router_mode": "learned",
+        "variant": "low_rank_k2",
+        "display_label": "Learned\nShunting\nlow-rank $K{=}2$",
+    },
+    "cue_hard_learned_shunting_low_rank_k4_tuned": {
+        "strategy": "local_ca",
+        "network_type": "dendritic_shunting",
+        "router_mode": "learned",
+        "variant": "low_rank_k4",
+        "display_label": "Learned\nShunting\nlow-rank $K{=}4$",
+    },
+    "cue_hard_learned_shunting_pathway_vector_tuned": {
         "strategy": "local_ca",
         "network_type": "dendritic_shunting",
         "router_mode": "learned",
         "variant": "pathway_vector_tuned",
-        "display_label": "Learned\nShunting\npathway-vector\n+ tune",
-    },
-    "cue_hard_learned_shunting_localca_pathway_vector_lr8_e140": {
-        "strategy": "local_ca",
-        "network_type": "dendritic_shunting",
-        "router_mode": "learned",
-        "variant": "pathway_vector_tuned_lr8",
-        "display_label": "Learned\nShunting\npathway-vector\nlr 8e-4",
+        "display_label": "Learned\nShunting\npathway-vector",
     },
 }
 

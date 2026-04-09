@@ -7,7 +7,7 @@ Produces:
     fig6_cue_routing.pdf          (3 panels: hard cue-routing diagnosis)
   Supplement:
     fig_s5_fa_dfa.pdf              (FA/DFA baseline comparison)
-    fig_s6_cifar10.pdf             (CIFAR-10 results)
+    fig_s6_cifar10.pdf             (corrected strong-family CIFAR-10 mechanism extension)
     fig_s7_additive_norm.pdf       (Additive + normalization control)
 
 Usage:
@@ -49,16 +49,28 @@ FIGURES_DIR = os.path.join(DRAFT_DIR, "figures")
 # ---------------------------------------------------------------------------
 import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from neurips_style import apply_neurips_style, COLORS, panel_label
+from neurips_style import apply_neurips_style, COLORS, panel_label, style_axis
 apply_neurips_style()
 
 COLOR_SHUNTING = COLORS["shunting"]
 COLOR_ADDITIVE = COLORS["additive"]
 COLOR_BACKPROP = COLORS["bp"]
 COLOR_POINT_MLP = COLORS["point_mlp"]
+COLOR_LOW_RANK = COLORS["low_rank"]
+COLOR_ORACLE = COLORS["oracle"]
 
 W = 5.5  # NeurIPS single-column width
 DPI = 300
+
+CIFAR10_BP_SUMMARY_CSV = os.path.join(
+    DRAFT_DIR, "analysis", "cifar10_compactei_depth4", "cifar10_compactei_depth4_grouped_summary.csv"
+)
+CIFAR10_LOCALCA_SUMMARY_CSV = os.path.join(
+    DRAFT_DIR,
+    "analysis",
+    "cifar10_compactei_depth4_decoderfix_mechanism_5seed",
+    "cifar10_compactei_depth4_decoderfix_mechanism_summary.csv",
+)
 
 
 def _panel(ax, label, x=-0.18, y=1.12):
@@ -75,6 +87,13 @@ def _save(fig, name):
 
 def _csv(filename):
     path = os.path.join(DATA_DIR, filename)
+    if not os.path.isfile(path):
+        warnings.warn(f"CSV not found: {path}")
+        return None
+    return pd.read_csv(path)
+
+
+def _csv_path(path):
     if not os.path.isfile(path):
         warnings.warn(f"CSV not found: {path}")
         return None
@@ -199,48 +218,126 @@ def figure_s3():
 # Figure S6 — CIFAR-10 Results
 # ===================================================================
 def figure_s6():
-    print("\n--- Figure S6: CIFAR-10 Results ---")
+    print("\n--- Figure S6: CIFAR-10 Mechanism Extension ---")
 
-    cifar = _csv("cifar10_results.csv")
-    if cifar is None:
-        print("  SKIPPED: cifar10_results.csv not found")
+    bp = _csv_path(CIFAR10_BP_SUMMARY_CSV)
+    localca = _csv_path(CIFAR10_LOCALCA_SUMMARY_CSV)
+    if bp is None or localca is None:
+        print("  SKIPPED: corrected CIFAR summary CSVs not found")
         return
 
-    fig, ax = plt.subplots(1, 1, figsize=(W * 0.55, 2.8))
-    _panel(ax, "A", x=-0.15)
+    fig, axes = plt.subplots(1, 2, figsize=(W, 2.55), gridspec_kw={"wspace": 0.42})
 
-    conditions = [
-        ("Shunt.\nBP", "dendritic_shunting", "standard", COLOR_SHUNTING),
-        ("Add.\nBP", "dendritic_additive", "standard", COLOR_ADDITIVE),
-        ("Shunt.\nlocal", "dendritic_shunting", "local_ca", COLOR_SHUNTING),
-        ("Add.\nlocal", "dendritic_additive", "local_ca", COLOR_ADDITIVE),
+    def get_bp(model):
+        sub = bp[(bp["strategy"] == "standard") & (bp["model_type"] == model)]
+        row = sub.iloc[0]
+        return row["mean_test_accuracy"] * 100, row["std_test_accuracy"] * 100
+
+    def get_local(condition):
+        sub = localca[localca["condition"] == condition]
+        row = sub.iloc[0]
+        return row["acc_test_mean"] * 100, row["acc_test_std"] * 100
+
+    # Panel A: matched additive vs shunting ladder
+    ax = axes[0]
+    _panel(ax, "A")
+    style_axis(ax, grid="y")
+
+    categories = ["Standard", "Per-soma", "Path transport"]
+    additive_vals = [
+        get_bp("dendritic_additive"),
+        get_local("cifar10_additive_5f_per_soma_bpdec_wd0"),
+        get_local("cifar10_additive_5f_path_transport_bpdec_wd0"),
+    ]
+    shunting_vals = [
+        get_bp("dendritic_shunting"),
+        get_local("cifar10_shunting_5f_per_soma_bpdec_wd0"),
+        get_local("cifar10_shunting_5f_path_transport_bpdec_wd0"),
     ]
 
-    x_pos = np.arange(len(conditions))
-    for i, (label, model, strat, color) in enumerate(conditions):
-        sub = cifar[(cifar["model"] == model) & (cifar["strategy"] == strat)]
-        if len(sub):
-            m = sub["test_accuracy"].mean() * 100
-            s = sub["test_accuracy"].std() * 100
-            alpha = 1.0 if strat == "local_ca" else 0.6
-            ax.bar(i, m, yerr=s, color=color, alpha=alpha,
-                   edgecolor="white", lw=0.3, width=0.55,
-                   capsize=2, error_kw={"lw": 0.5})
-            ax.text(i, m + s + 0.8, f"{m:.1f}%", ha="center", va="bottom",
-                    fontsize=5.5)
-
-    ax.set_xticks(x_pos)
-    ax.set_xticklabels([c[0] for c in conditions], fontsize=6)
+    x = np.arange(len(categories))
+    bw = 0.34
+    ax.bar(
+        x - bw / 2,
+        [m for m, _ in additive_vals],
+        yerr=[s for _, s in additive_vals],
+        width=bw,
+        color=COLOR_ADDITIVE,
+        edgecolor="white",
+        lw=0.4,
+        capsize=2,
+        error_kw={"lw": 0.6},
+        label="Additive",
+    )
+    ax.bar(
+        x + bw / 2,
+        [m for m, _ in shunting_vals],
+        yerr=[s for _, s in shunting_vals],
+        width=bw,
+        color=COLOR_SHUNTING,
+        edgecolor="white",
+        lw=0.4,
+        capsize=2,
+        error_kw={"lw": 0.6},
+        label="Shunting",
+    )
+    for xi, (m, s) in zip(x - bw / 2, additive_vals):
+        ax.text(xi, m + s + 0.9, f"{m:.1f}", ha="center", va="bottom", fontsize=5.6)
+    for xi, (m, s) in zip(x + bw / 2, shunting_vals):
+        ax.text(xi, m + s + 0.9, f"{m:.1f}", ha="center", va="bottom", fontsize=5.6)
+    ax.set_xticks(x)
+    ax.set_xticklabels(categories)
     ax.set_ylabel("Test accuracy (%)")
-    ax.set_title("CIFAR-10 (flattened)")
-    ax.set_ylim(0, 50)
+    ax.set_title("Corrected CIFAR-10 ladder")
+    ax.set_ylim(0, 58)
+    ax.legend(
+        loc="upper left",
+        bbox_to_anchor=(0.00, 1.04),
+        ncol=1,
+        frameon=False,
+        handlelength=1.0,
+        columnspacing=0.8,
+        handletextpad=0.4,
+        borderaxespad=0.0,
+    )
 
-    # Add chance level
-    ax.axhline(10, color="gray", lw=0.5, ls=":", alpha=0.5)
-    ax.text(3.3, 10.5, "chance", fontsize=5, color="gray", va="bottom")
+    # Panel B: shunting rank bridge in the strong family
+    ax = axes[1]
+    _panel(ax, "B")
+    style_axis(ax, grid="y")
 
-    fig.subplots_adjust(left=0.18, right=0.92, bottom=0.15, top=0.88)
+    shunt_standard_mean, _ = get_bp("dendritic_shunting")
+    ladder = [
+        ("Per-soma",) + get_local("cifar10_shunting_5f_per_soma_bpdec_wd0") + (COLOR_SHUNTING,),
+        ("Low-rank\n$K=4$",) + get_local("cifar10_shunting_5f_low_rank4_bpdec_wd0") + (COLOR_LOW_RANK,),
+        ("Path\ntransport",) + get_local("cifar10_shunting_5f_path_transport_bpdec_wd0") + (COLOR_ORACLE,),
+    ]
+    x2 = np.arange(len(ladder))
+    bars = ax.bar(
+        x2,
+        [m for _, m, _, _ in ladder],
+        yerr=[s for _, _, s, _ in ladder],
+        color=[c for _, _, _, c in ladder],
+        edgecolor="white",
+        lw=0.4,
+        width=0.62,
+        capsize=2,
+        error_kw={"lw": 0.6},
+    )
+    for rect, (_, m, s, _) in zip(bars, ladder):
+        ax.text(rect.get_x() + rect.get_width()/2, m + s + 0.9, f"{m:.1f}",
+                ha="center", va="bottom", fontsize=5.8)
+    ax.axhline(shunt_standard_mean, color=COLOR_BACKPROP, lw=1.0, ls=(0, (4, 2)))
+    ax.text(2.38, shunt_standard_mean + 0.8, f"Shunt. BP {shunt_standard_mean:.1f}",
+            color=COLOR_BACKPROP, fontsize=5.8, ha="right", va="bottom")
+    ax.set_xticks(x2)
+    ax.set_xticklabels([label for label, *_ in ladder])
+    ax.set_title("Shunting feedback bridge")
+    ax.set_ylim(0, 55)
+
+    fig.subplots_adjust(left=0.10, right=0.98, bottom=0.18, top=0.90, wspace=0.42)
     _save(fig, "fig_s6_cifar10")
+    _save(fig, "fig_cifar10_mechanism_extension")
     plt.close(fig)
 
 
@@ -327,6 +424,7 @@ def figure_s7():
     fig.subplots_adjust(left=0.12, right=0.97, bottom=0.15, top=0.88,
                         wspace=0.50)
     _save(fig, "fig_s7_additive_norm")
+    _save(fig, "fig_additive_norm_control")
     plt.close(fig)
 
 

@@ -15,6 +15,8 @@ import pandas as pd
 import seaborn as sns
 import yaml
 
+from neurips_style import apply_neurips_style, COLORS, panel_label, style_axis
+
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 DRAFT_DIR = SCRIPT_DIR.parent
@@ -26,8 +28,8 @@ DEFAULT_SWEEP_DIR = (
     / "noise_resilience_morphology_ie_regime_20260402004716"
 )
 
-COLOR_SHUNTING = "#18864B"
-COLOR_ADDITIVE = "#2D5DA8"
+COLOR_SHUNTING = COLORS["shunting"]
+COLOR_ADDITIVE = COLORS["additive"]
 
 
 def _load_results(sweep_dir: Path) -> pd.DataFrame:
@@ -81,6 +83,8 @@ def _heatmap(ax, frame: pd.DataFrame, title: str, cmap: str, center: float | Non
         square=False,
         annot_kws={"fontsize": 8},
     )
+    ax.collections[0].colorbar.outline.set_linewidth(0.4)
+    ax.collections[0].colorbar.ax.tick_params(labelsize=8, width=0.4, length=2)
     ax.set_title(title, fontsize=11, pad=8)
     ax.set_xlabel(r"$N_I$ per branch", fontsize=10)
     ax.set_ylabel("Morphology", fontsize=10)
@@ -88,6 +92,8 @@ def _heatmap(ax, frame: pd.DataFrame, title: str, cmap: str, center: float | Non
 
 
 def build_figure(sweep_dir: Path = DEFAULT_SWEEP_DIR) -> tuple[plt.Figure, pd.DataFrame]:
+    apply_neurips_style()
+    sns.set_style("white")
     df = _load_results(sweep_dir)
     ANALYSIS_DIR.mkdir(parents=True, exist_ok=True)
     FIGURES_DIR.mkdir(parents=True, exist_ok=True)
@@ -123,15 +129,16 @@ def build_figure(sweep_dir: Path = DEFAULT_SWEEP_DIR) -> tuple[plt.Figure, pd.Da
     )
 
     fig, axes = plt.subplots(
-        2, 2, figsize=(10.8, 7.6), constrained_layout=True,
+        2, 2, figsize=(7.0, 5.9), constrained_layout=True,
         gridspec_kw={"height_ratios": [1.0, 0.9]}
     )
 
-    _heatmap(axes[0, 0], additive, "Additive LocalCA accuracy", "Blues")
-    _heatmap(axes[0, 1], shunting, "Shunting LocalCA accuracy", "Greens")
-    _heatmap(axes[1, 0], gap, "Shunting minus additive gap", "coolwarm", center=0.0)
+    _heatmap(axes[0, 0], additive, "Additive accuracy", "Blues")
+    _heatmap(axes[0, 1], shunting, "Shunting accuracy", "Greens")
+    _heatmap(axes[1, 0], gap, "Shunting minus additive", "vlag", center=0.0)
 
     ax = axes[1, 1]
+    style_axis(ax, grid="y")
     depth_palette = {2: "#7B5EA7", 3: "#D95F02"}
     for depth, sub in depth_gap.groupby("depth"):
         ax.plot(
@@ -149,18 +156,10 @@ def build_figure(sweep_dir: Path = DEFAULT_SWEEP_DIR) -> tuple[plt.Figure, pd.Da
     ax.set_ylabel("Shunting - additive accuracy", fontsize=10)
     ax.set_xticks(ie_order)
     ax.tick_params(labelsize=9)
-    ax.legend(frameon=False, fontsize=9, loc="best")
+    ax.legend(fontsize=8, loc="best")
 
     for label, ax in zip(["A", "B", "C", "D"], axes.flat):
-        ax.text(
-            -0.16,
-            1.05,
-            label,
-            transform=ax.transAxes,
-            fontsize=13,
-            fontweight="bold",
-            va="top",
-        )
+        panel_label(ax, label, x=-0.16, y=1.05, fontsize=11)
 
     grouped.to_csv(ANALYSIS_DIR / "morphology_ie_regime_grouped.csv", index=False)
     df.to_csv(ANALYSIS_DIR / "morphology_ie_regime_runs.csv", index=False)

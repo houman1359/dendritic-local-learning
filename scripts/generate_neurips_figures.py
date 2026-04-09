@@ -39,6 +39,7 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 DRAFT_DIR = os.path.dirname(SCRIPT_DIR)
 DATA_DIR = os.path.join(DRAFT_DIR, "data")
 FIGURES_DIR = os.path.join(DRAFT_DIR, "figures")
+ANALYSIS_DIR = os.path.join(DRAFT_DIR, "analysis")
 
 BUNDLE = (
     "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING"
@@ -48,6 +49,22 @@ LOCAL_MISMATCH_CSV = (
     "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING"
     "/analysis/local_mismatch_recheck_20260224_summary.csv"
 )
+FMNIST_SUMMARY_CSV = os.path.join(
+    ANALYSIS_DIR, "fashion_mnist_competence_activation_corrected", "fashion_mnist_competence_summary.csv"
+)
+FMNIST_RUNS_CSV = os.path.join(
+    ANALYSIS_DIR, "fashion_mnist_competence_activation_corrected", "fashion_mnist_competence_runs.csv"
+)
+STANDARD_CEILING_SUMMARY_CSV = os.path.join(
+    ANALYSIS_DIR, "standard_ceiling_refresh_5seed", "standard_ceiling_refresh_summary.csv"
+)
+CORRECTED_IE_SUMMARY_CSV = os.path.join(
+    ANALYSIS_DIR,
+    "theory_diag_gradient_fidelity_vs_ie_activation_corrected_summary",
+    "theory_diag_by_condition.csv",
+)
+CORE_FAIR_TUNING_CSV = os.path.join(ANALYSIS_DIR, "core_fair_tuning.csv")
+PHASE2B_GAP_CLOSING_CSV = os.path.join(ANALYSIS_DIR, "phase2b_gap_closing.csv")
 
 # ---------------------------------------------------------------------------
 # Style
@@ -73,7 +90,7 @@ DPI = 300
 
 import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from neurips_style import apply_neurips_style, COLORS, panel_label
+from neurips_style import apply_neurips_style, COLORS, panel_label, style_axis
 
 
 LABEL_MAP = {
@@ -111,6 +128,13 @@ def _csv(filename, bundle=False):
         path = os.path.join(BUNDLE, filename)
     else:
         path = os.path.join(DATA_DIR, filename)
+    if not os.path.isfile(path):
+        warnings.warn(f"CSV not found: {path}")
+        return None
+    return pd.read_csv(path)
+
+
+def _csv_path(path):
     if not os.path.isfile(path):
         warnings.warn(f"CSV not found: {path}")
         return None
@@ -359,11 +383,11 @@ def figure1_legacy():
 def figure2():
     print("\n--- Figure 2: Competence & Regime Dependence ---")
 
-    phase1 = _csv("phase1_best_standard.csv", bundle=True)
-    core = _csv("core_fair_tuning.csv", bundle=True)
-    p2b = _csv("phase2b_gap_closing.csv", bundle=True)
-    fmnist = _csv("fashion_mnist_competence_summary.csv")
-    ie_data = _csv("gradient_fidelity_vs_ie_corrected_summary.csv")
+    ceilings = _csv_path(STANDARD_CEILING_SUMMARY_CSV)
+    core = _csv_path(CORE_FAIR_TUNING_CSV)
+    p2b = _csv_path(PHASE2B_GAP_CLOSING_CSV)
+    fmnist = _csv_path(FMNIST_SUMMARY_CSV)
+    ie_data = _csv_path(CORRECTED_IE_SUMMARY_CSV)
 
     fig, axes = plt.subplots(1, 4, figsize=(W * 1.9, 3.2),
                              gridspec_kw={"wspace": 0.55,
@@ -377,9 +401,10 @@ def figure2():
 
     # MNIST
     bp_mnist = None
-    if phase1 is not None:
-        r = phase1[(phase1["dataset"] == "mnist") & (phase1["network_type"] == "dendritic_shunting")]
-        if len(r): bp_mnist = r.iloc[0]["test_accuracy"]
+    if ceilings is not None:
+        r = ceilings[(ceilings["dataset"] == "mnist") & (ceilings["network_type"] == "dendritic_shunting")]
+        if len(r):
+            bp_mnist = r.iloc[0]["test_accuracy_mean"]
     local_shunt_mnist, local_shunt_mnist_e = None, 0
     local_add_mnist, local_add_mnist_e = None, 0
     if core is not None:
@@ -401,20 +426,21 @@ def figure2():
 
     # Fashion-MNIST
     if fmnist is not None:
-        bp_s = fmnist[(fmnist["core_type"] == "dendritic_shunting") & (fmnist["strategy"] == "standard")]
-        loc_s = fmnist[(fmnist["core_type"] == "dendritic_shunting") & (fmnist["strategy"] == "local_ca")]
-        loc_a = fmnist[(fmnist["core_type"] == "dendritic_additive") & (fmnist["strategy"] == "local_ca")]
+        bp_s = fmnist[(fmnist["network_type"] == "dendritic_shunting") & (fmnist["strategy"] == "standard")]
+        loc_s = fmnist[(fmnist["network_type"] == "dendritic_shunting") & (fmnist["strategy"] == "local_ca")]
+        loc_a = fmnist[(fmnist["network_type"] == "dendritic_additive") & (fmnist["strategy"] == "local_ca")]
         if len(bp_s) and len(loc_s) and len(loc_a):
             datasets_info.append(("F-MNIST",
-                                  bp_s.iloc[0]["test_acc_mean"],
-                                  loc_s.iloc[0]["test_acc_mean"], loc_s.iloc[0]["test_acc_std"],
-                                  loc_a.iloc[0]["test_acc_mean"], loc_a.iloc[0]["test_acc_std"]))
+                                  bp_s.iloc[0]["test_accuracy_mean"],
+                                  loc_s.iloc[0]["test_accuracy_mean"], loc_s.iloc[0]["test_accuracy_std"],
+                                  loc_a.iloc[0]["test_accuracy_mean"], loc_a.iloc[0]["test_accuracy_std"]))
 
     # Context gating
     bp_cg = None
-    if phase1 is not None:
-        r = phase1[(phase1["dataset"] == "context_gating") & (phase1["network_type"] == "dendritic_shunting")]
-        if len(r): bp_cg = r.iloc[0]["test_accuracy"]
+    if ceilings is not None:
+        r = ceilings[(ceilings["dataset"] == "context_gating") & (ceilings["network_type"] == "dendritic_shunting")]
+        if len(r):
+            bp_cg = r.iloc[0]["test_accuracy_mean"]
     local_shunt_cg, local_shunt_cg_e = None, 0
     if p2b is not None:
         sub = p2b[(p2b["dataset"] == "context_gating") & (p2b["hsic_enabled"] == True) &
@@ -473,14 +499,14 @@ def figure2():
             ("dendritic_shunting", "noise_resilience", COLOR_SHUNTING, "--", "^", 3),
             ("dendritic_additive", "noise_resilience", COLOR_ADDITIVE, "--", "v", 3),
         ]:
-            sub = ie_data[(ie_data["core_type"] == ct) & (ie_data["dataset_name"] == ds)].copy()
-            sub = sub.sort_values("ie_synapses")
+            sub = ie_data[(ie_data["network_type"] == ct) & (ie_data["dataset"] == ds)].copy()
+            sub = sub.sort_values("ie_value")
             if len(sub) == 0:
                 continue
             short = "Shunt" if "shunting" in ct else "Add"
             ds_short = "MNIST" if ds == "mnist" else "Noise"
-            ax.errorbar(sub["ie_synapses"], sub["test_acc_mean"] * 100,
-                        yerr=sub["test_acc_std"] * 100,
+            ax.errorbar(sub["ie_value"], sub["test_accuracy_mean"] * 100,
+                        yerr=sub["test_accuracy_std"] * 100,
                         marker=marker, markersize=ms, linewidth=1.0, capsize=1.5,
                         color=color, linestyle=ls, label=f"{short} {ds_short}",
                         capthick=0.4)
@@ -501,17 +527,17 @@ def figure2():
             ("mnist", COLOR_SHUNTING, "o", "MNIST"),
             ("noise_resilience", COLOR_NOISE, "^", "Noise resil."),
         ]:
-            shunt = ie_data[(ie_data["core_type"] == "dendritic_shunting") &
-                            (ie_data["dataset_name"] == ds)].copy()
-            add = ie_data[(ie_data["core_type"] == "dendritic_additive") &
-                          (ie_data["dataset_name"] == ds)].copy()
+            shunt = ie_data[(ie_data["network_type"] == "dendritic_shunting") &
+                            (ie_data["dataset"] == ds)].copy()
+            add = ie_data[(ie_data["network_type"] == "dendritic_additive") &
+                          (ie_data["dataset"] == ds)].copy()
             if len(shunt) == 0 or len(add) == 0:
                 continue
-            merged = pd.merge(shunt, add, on=["dataset_name", "ie_synapses"],
+            merged = pd.merge(shunt, add, on=["dataset", "ie_value"],
                               suffixes=("_s", "_a"))
-            merged["delta"] = (merged["test_acc_mean_s"] - merged["test_acc_mean_a"]) * 100
-            merged = merged.sort_values("ie_synapses")
-            ax.plot(merged["ie_synapses"], merged["delta"],
+            merged["delta"] = (merged["test_accuracy_mean_s"] - merged["test_accuracy_mean_a"]) * 100
+            merged = merged.sort_values("ie_value")
+            ax.plot(merged["ie_value"], merged["delta"],
                     marker=marker, markersize=4, linewidth=1.2,
                     color=color, label=lbl)
 
@@ -535,12 +561,12 @@ def figure2():
                 ("standard", None, " BP"),
                 ("local_ca", "//", " local"),
             ]:
-                sub = fmnist[(fmnist["core_type"] == ct) & (fmnist["strategy"] == strat)]
+                sub = fmnist[(fmnist["network_type"] == ct) & (fmnist["strategy"] == strat)]
                 if len(sub):
                     fmnist_data.append((
                         label + suffix,
-                        sub.iloc[0]["test_acc_mean"] * 100,
-                        sub.iloc[0]["test_acc_std"] * 100,
+                        sub.iloc[0]["test_accuracy_mean"] * 100,
+                        sub.iloc[0]["test_accuracy_std"] * 100,
                         color, hatch,
                     ))
 
@@ -563,6 +589,7 @@ def figure2():
     fig.subplots_adjust(left=0.06, right=0.98, bottom=0.18, top=0.90,
                         wspace=0.55)
     _save(fig, "fig2_competence_regime")
+    _save(fig, "fig_competence_regime_appendix")
     plt.close(fig)
 
 
@@ -577,6 +604,7 @@ def figure3():
     # ---- Panel A: Cosine similarity bars ----
     ax = axes[0, 0]
     _panel(ax, "A")
+    style_axis(ax, grid="y")
 
     conditions = [
         ("MNIST\nShunt.", 0.202, COLOR_SHUNTING),
@@ -596,7 +624,7 @@ def figure3():
     ax.set_xticks(x_pos)
     ax.set_xticklabels([c[0] for c in conditions], fontsize=7.5)
     ax.set_ylabel("Cosine similarity")
-    ax.set_title("Directional alignment")
+    ax.set_title("Directional alignment to backprop")
     ax.set_ylim(-0.06, 0.25)
     ax.axhline(0, color="black", lw=0.4, ls="--")
     for bar_rect, (_, val, _) in zip(bars, conditions):
@@ -614,6 +642,7 @@ def figure3():
     # ---- Panel B: Scale mismatch bars ----
     ax = axes[0, 1]
     _panel(ax, "B")
+    style_axis(ax, grid="y")
 
     mismatch_conditions = [
         ("MNIST\nShunt.", 0.117, COLOR_SHUNTING),
@@ -633,7 +662,7 @@ def figure3():
     ax.set_xticks(x_pos)
     ax.set_xticklabels([c[0] for c in mismatch_conditions], fontsize=7.5)
     ax.set_ylabel(r"$|\log_{10}(\|g_{\mathrm{local}}\|/\|g_{\mathrm{bp}}\|)|$")
-    ax.set_title("Gradient scale mismatch")
+    ax.set_title("Norm distortion relative to backprop")
     ax.set_yscale("log")
     ax.axhline(1e-1, color="gray", lw=0.4, ls=":", alpha=0.8)
     for bar_rect, (_, val, _) in zip(bars, mismatch_conditions):
@@ -649,6 +678,7 @@ def figure3():
     # ---- Panel C: Per-layer alignment dynamics (from real data) ----
     ax = axes[1, 0]
     _panel(ax, "C")
+    style_axis(ax, grid="y")
 
     # Load real gradient-fidelity trajectory data
     gf_dir = os.path.join(DRAFT_DIR, "analysis", "gradient_fidelity")
@@ -692,7 +722,8 @@ def figure3():
             shunt_cfgs = set(configs[:mid])
             add_cfgs = set(configs[mid:])
 
-            if len(layer_values) == 1:
+            single_layer = len(layer_values) == 1
+            if single_layer:
                 plotted_layers = [(layer_values[0], "")]
             else:
                 plotted_layers = [
@@ -728,17 +759,24 @@ def figure3():
     ax.legend(fontsize=6.5, loc="upper left", ncol=2, handlelength=1.5,
               handletextpad=0.3)
     ax.set_ylim(-0.15, 0.55)
+    if _loaded_real_data and 'single_layer' in locals() and single_layer:
+        ax.text(
+            0.98,
+            0.04,
+            "single dendritic layer in this audit",
+            transform=ax.transAxes,
+            ha="right",
+            va="bottom",
+            fontsize=6.4,
+            color="#666666",
+        )
 
     # ---- Panel D: Exact factorization sanity ----
     ax = axes[1, 1]
     _panel(ax, "D")
+    style_axis(ax, grid="y")
 
-    theory_csv = os.path.join(
-        DRAFT_DIR,
-        "analysis",
-        "theory_diag_gradient_fidelity_vs_ie_summary",
-        "theory_diag_by_condition.csv",
-    )
+    theory_csv = CORRECTED_IE_SUMMARY_CSV
     theory = pd.read_csv(theory_csv)
     cosine_error = np.abs(1.0 - theory["factorization_weighted_cosine_mean"].to_numpy(dtype=float))
     scale_error = theory["factorization_weighted_scale_mismatch_mean"].to_numpy(dtype=float)
@@ -764,13 +802,13 @@ def figure3():
     ax.set_ylabel("Numerical error")
     ax.set_yscale("log")
     ax.set_ylim(1e-9, 1e-4)
-    ax.set_title("Exact factorization matches autograd")
+    ax.set_title("Exact factorization sanity check")
     ax.grid(axis="y", alpha=0.20, linewidth=0.5)
     ax.text(
         0.03,
         0.08,
-        r"max $|1-\cos| < 4\times10^{-6}$" "\n"
-        r"max mismatch $< 3\times10^{-8}$",
+        r"$\max |1-\cos| < 4\times10^{-6}$" "\n"
+        r"$\max$ mismatch $< 3\times10^{-8}$",
         transform=ax.transAxes,
         fontsize=6.8,
         ha="left",
@@ -792,7 +830,7 @@ def figure4():
 
     depth = _csv("depth_scaling.csv", bundle=True)
     noise = _csv("noise_robustness.csv", bundle=True)
-    fmnist = _csv("fashion_mnist_competence_summary.csv")
+    fmnist = _csv_path(FMNIST_SUMMARY_CSV)
 
     fig, axes = plt.subplots(1, 3, figsize=(W * 1.9, 3.6),
                              gridspec_kw={"wspace": 0.52})
@@ -868,7 +906,7 @@ def figure4():
         conditions = []
         for ct in ["dendritic_shunting", "dendritic_additive"]:
             for strat in ["local_ca", "standard"]:
-                sub = fmnist[(fmnist["core_type"] == ct) & (fmnist["strategy"] == strat)]
+                sub = fmnist[(fmnist["network_type"] == ct) & (fmnist["strategy"] == strat)]
                 if len(sub):
                     r = sub.iloc[0]
                     short_ct = "Shunt." if "shunting" in ct else "Add."
@@ -876,8 +914,8 @@ def figure4():
                     color = COLOR_SHUNTING if "shunting" in ct else COLOR_ADDITIVE
                     alpha = 1.0 if strat == "local_ca" else 0.40
                     conditions.append((f"{short_ct}\n{short_st}",
-                                       r["test_acc_mean"] * 100,
-                                       r["test_acc_std"] * 100,
+                                       r["test_accuracy_mean"] * 100,
+                                       r["test_accuracy_std"] * 100,
                                        color, alpha))
 
         x = np.arange(len(conditions))
@@ -900,6 +938,7 @@ def figure4():
     fig.subplots_adjust(left=0.08, right=0.97, bottom=0.15, top=0.90,
                         wspace=0.55)
     _save(fig, "fig4_scalability")
+    _save(fig, "fig_additional_stress_tests")
     plt.close(fig)
 
 
@@ -1089,19 +1128,19 @@ def figure_s2():
     ax = axes[0, 1]
     _panel(ax, "B")
 
-    ie_data = _csv("gradient_fidelity_vs_ie_corrected_summary.csv")
+    ie_data = _csv_path(CORRECTED_IE_SUMMARY_CSV)
     if ie_data is not None:
         for ct, color, marker in [("dendritic_shunting", COLOR_SHUNTING, "o"),
                                    ("dendritic_additive", COLOR_ADDITIVE, "s")]:
-            sub = ie_data[(ie_data["core_type"] == ct) &
-                          (ie_data["dataset_name"] == "noise_resilience")].copy()
-            sub = sub.sort_values("ie_synapses")
+            sub = ie_data[(ie_data["network_type"] == ct) &
+                          (ie_data["dataset"] == "noise_resilience")].copy()
+            sub = sub.sort_values("ie_value")
             if len(sub):
-                ax.fill_between(sub["ie_synapses"],
-                                (sub["test_acc_mean"] - sub["test_acc_std"]) * 100,
-                                (sub["test_acc_mean"] + sub["test_acc_std"]) * 100,
+                ax.fill_between(sub["ie_value"],
+                                (sub["test_accuracy_mean"] - sub["test_accuracy_std"]) * 100,
+                                (sub["test_accuracy_mean"] + sub["test_accuracy_std"]) * 100,
                                 alpha=0.15, color=color)
-                ax.plot(sub["ie_synapses"], sub["test_acc_mean"] * 100,
+                ax.plot(sub["ie_value"], sub["test_accuracy_mean"] * 100,
                         marker=marker, markersize=3, lw=1.0, color=color,
                         label=LABEL_MAP.get(ct, ct))
         ax.set_xlabel("$N_I$")
@@ -1116,15 +1155,15 @@ def figure_s2():
     if ie_data is not None:
         for ct, color, marker in [("dendritic_shunting", COLOR_SHUNTING, "o"),
                                    ("dendritic_additive", COLOR_ADDITIVE, "s")]:
-            sub = ie_data[(ie_data["core_type"] == ct) &
-                          (ie_data["dataset_name"] == "mnist")].copy()
-            sub = sub.sort_values("ie_synapses")
+            sub = ie_data[(ie_data["network_type"] == ct) &
+                          (ie_data["dataset"] == "mnist")].copy()
+            sub = sub.sort_values("ie_value")
             if len(sub):
-                ax.fill_between(sub["ie_synapses"],
-                                (sub["test_acc_mean"] - sub["test_acc_std"]) * 100,
-                                (sub["test_acc_mean"] + sub["test_acc_std"]) * 100,
+                ax.fill_between(sub["ie_value"],
+                                (sub["test_accuracy_mean"] - sub["test_accuracy_std"]) * 100,
+                                (sub["test_accuracy_mean"] + sub["test_accuracy_std"]) * 100,
                                 alpha=0.15, color=color)
-                ax.plot(sub["ie_synapses"], sub["test_acc_mean"] * 100,
+                ax.plot(sub["ie_value"], sub["test_accuracy_mean"] * 100,
                         marker=marker, markersize=3, lw=1.0, color=color,
                         label=LABEL_MAP.get(ct, ct))
         ax.set_xlabel("$N_I$")
@@ -1136,12 +1175,12 @@ def figure_s2():
     ax = axes[1, 1]
     _panel(ax, "D")
 
-    fmnist_raw = _csv("fashion_mnist_competence.csv")
+    fmnist_raw = _csv_path(FMNIST_RUNS_CSV)
     if fmnist_raw is not None:
         for ct, color in [("dendritic_shunting", COLOR_SHUNTING),
                            ("dendritic_additive", COLOR_ADDITIVE)]:
             for strat, marker in [("local_ca", "o"), ("standard", "s")]:
-                sub = fmnist_raw[(fmnist_raw["core_type"] == ct) &
+                sub = fmnist_raw[(fmnist_raw["network_type"] == ct) &
                                  (fmnist_raw["strategy"] == strat)]
                 short_ct = "Shunt." if "shunting" in ct else "Add."
                 short_st = "Local" if strat == "local_ca" else "BP"

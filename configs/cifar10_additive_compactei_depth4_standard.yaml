@@ -1,0 +1,104 @@
+experiment:
+  seed: 42
+  train_valid_split: 0.9
+  enable_amp: false
+  enable_profiling: false
+  enable_hooks: true
+
+data:
+  dataset_name: "cifar10"
+  base_dir: "/n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/data"
+  processing:
+    flatten: true
+    normalize: false
+
+model:
+  task: classification
+  encoder:
+    type: identity
+    params:
+      input_dim: null
+  core:
+    type: dendritic_additive
+    architecture:
+      excitatory_layer_sizes: [20]
+      inhibitory_layer_sizes: [20]
+      excitatory_branch_factors: [3, 3, 3, 3]
+      inhibitory_branch_factors: [1]
+      inhibitory_network_type: dendritic
+    connectivity:
+      ee_synapses_per_branch_per_layer: [25]
+      ei_synapses_per_branch_per_layer: [25]
+      ie_synapses_per_branch_per_layer: [25]
+      ii_synapses_per_branch_per_layer: [0]
+    transfer:
+      input_mode: 1
+      independent_pathways: false
+      output_activation: null
+      inhibitory_mode: first
+    morphology:
+      somatic_synapses: false
+      weight_transform: softplus
+    reactivation:
+      enabled: true
+      type: param_tanh
+      init_m: 1.5
+      init_b: 0.5
+  decoder:
+    type: MLP
+    params:
+      hidden_dims: [32, 16]
+      activation: relu
+      output_dim: 10
+
+training:
+  main:
+    strategy: standard
+    common:
+      epochs: 200
+      batch_size: 256
+      shuffle: true
+      grad_clip_value: 5.0
+      loss_function: cat_nll
+      early_stopping: true
+      patience: 40
+      load_best_state_dict: true
+      plot_losses: false
+      suppress_prints: false
+      print_every: 5
+      use_amp: false
+      enable_nan_checking: false
+      enable_adaptive_clipping: false
+      weight_decay_rate: 0.01
+      weight_boosting: false
+      checkpointing: true
+      checkpoint_interval: 25
+      param_groups:
+        lr: 0.001
+        split_params: false
+        topk_lr: 0.001
+        blocklinear_lr: 0.0001
+        reactivation_lr: 0.0001
+        decoder_lr: 0.001
+
+analysis:
+  performance_analysis:
+    enabled: true
+    training: true
+    params:
+      accuracy: true
+      auc: false
+      categorical_loglikelihood: true
+      mse: false
+      cosine_similarity: false
+  information_analysis:
+    enabled: false
+  correlation_analysis:
+    enabled: false
+
+wandb:
+  use_wandb: false
+
+outputs:
+  run_name: "cifar10_additive_compactei_depth4_standard"
+  results_dir: "/tmp/cifar10_additive_compactei_depth4_standard"

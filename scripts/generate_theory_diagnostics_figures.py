@@ -13,65 +13,61 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
+from neurips_style import apply_neurips_style, COLORS, panel_label, style_axis
+
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 DRAFT_DIR = SCRIPT_DIR.parent
 FIGURES_DIR = DRAFT_DIR / "figures"
 DATA_DIR = DRAFT_DIR / "data"
 ANALYSIS_DIR = DRAFT_DIR / "analysis"
-SUMMARY_DIR = ANALYSIS_DIR / "theory_diag_gradient_fidelity_vs_ie_summary"
+SUMMARY_DIR = ANALYSIS_DIR / "theory_diag_gradient_fidelity_vs_ie_activation_corrected_summary"
 SUMMARY_CSV = SUMMARY_DIR / "theory_diag_by_condition.csv"
 MERGED_CSV = SUMMARY_DIR / "theory_diag_merged_runs.csv"
 ORACLE_SUMMARY_CSV = (
-    ANALYSIS_DIR / "path_transport_upper_bound" / "path_transport_upper_bound_summary.csv"
+    ANALYSIS_DIR
+    / "path_transport_upper_bound_activation_corrected"
+    / "path_transport_upper_bound_summary.csv"
 )
 LOW_BW_CSV = DATA_DIR / "low_bandwidth_results.csv"
+CIFAR10_BP_SUMMARY_CSV = (
+    ANALYSIS_DIR / "cifar10_compactei_depth4" / "cifar10_compactei_depth4_grouped_summary.csv"
+)
+CIFAR10_LOCALCA_SUMMARY_CSV = (
+    ANALYSIS_DIR
+    / "cifar10_compactei_depth4_decoderfix_mechanism_5seed"
+    / "cifar10_compactei_depth4_decoderfix_mechanism_summary.csv"
+)
 
-COLOR_SHUNTING = "#18864B"
-COLOR_ADDITIVE = "#2D5DA8"
-COLOR_TRANSPORT = "#9A4D1E"
-DOUBLE_COL_W = 11.0
+COLOR_SHUNTING = COLORS["shunting"]
+COLOR_ADDITIVE = COLORS["additive"]
+COLOR_TRANSPORT = COLORS["oracle"]
+COLOR_LOW_BW = COLORS["local"]
+DOUBLE_COL_W = 7.0
 DPI = 300
 
 
 def _setup_style() -> None:
+    apply_neurips_style()
     plt.rcParams.update(
         {
-            "font.family": "sans-serif",
-            "font.size": 8.5,
-            "axes.labelsize": 9,
-            "axes.titlesize": 9.5,
-            "axes.titlepad": 7,
-            "xtick.labelsize": 8.0,
-            "ytick.labelsize": 8.0,
-            "legend.fontsize": 7.5,
+            "font.size": 8.2,
+            "axes.labelsize": 8.8,
+            "axes.titlesize": 9.0,
+            "xtick.labelsize": 7.4,
+            "ytick.labelsize": 7.4,
+            "legend.fontsize": 6.8,
+            "legend.frameon": True,
+            "legend.framealpha": 0.96,
+            "legend.edgecolor": "#D0D5DD",
             "figure.dpi": DPI,
             "savefig.dpi": DPI,
-            "savefig.bbox": "tight",
-            "savefig.pad_inches": 0.05,
-            "pdf.fonttype": 42,
-            "ps.fonttype": 42,
-            "axes.spines.top": False,
-            "axes.spines.right": False,
-            "legend.frameon": False,
-            "axes.linewidth": 0.6,
-            "xtick.major.width": 0.5,
-            "ytick.major.width": 0.5,
         }
     )
 
 
 def _panel(ax: plt.Axes, label: str, x: float = -0.18, y: float = 1.12) -> None:
-    ax.text(
-        x,
-        y,
-        label,
-        transform=ax.transAxes,
-        fontsize=11,
-        fontweight="bold",
-        va="top",
-        ha="left",
-    )
+    panel_label(ax, label, x=x, y=y)
 
 
 def _save(fig: plt.Figure, name: str) -> None:
@@ -89,6 +85,7 @@ def _safe_csv(path: Path) -> pd.DataFrame:
 
 def _plot_path_gain_dispersion(ax: plt.Axes, summary: pd.DataFrame) -> None:
     _panel(ax, "A")
+    style_axis(ax, grid="y")
     mnist = summary[summary["dataset"] == "mnist"].copy()
     for network_type, color, label in [
         ("dendritic_shunting", COLOR_SHUNTING, "Shunting"),
@@ -103,7 +100,7 @@ def _plot_path_gain_dispersion(ax: plt.Axes, summary: pd.DataFrame) -> None:
 
     ax.set_xlabel("$N_I$ (inhibitory synapses / branch)")
     ax.set_ylabel("Path-gain CV")
-    ax.set_title("Shunting narrows the conductance-stage path-gain distribution")
+    ax.set_title("Path-gain concentration")
     ax.set_xticks([0, 5, 10, 20, 40])
     ax.set_ylim(bottom=0.0)
     ax.legend(loc="upper left")
@@ -111,6 +108,7 @@ def _plot_path_gain_dispersion(ax: plt.Axes, summary: pd.DataFrame) -> None:
 
 def _plot_compartment_error_fidelity(ax: plt.Axes, summary: pd.DataFrame) -> None:
     _panel(ax, "B")
+    style_axis(ax, grid="y")
     noise = summary[summary["dataset"] == "noise_resilience"].copy()
     style_map = {
         ("dendritic_shunting", "per_soma"): (COLOR_SHUNTING, "-", "Shunting, per-soma"),
@@ -152,7 +150,7 @@ def _plot_compartment_error_fidelity(ax: plt.Axes, summary: pd.DataFrame) -> Non
 
     ax.set_xlabel("$N_I$ (inhibitory synapses / branch)")
     ax.set_ylabel(r"Cosine$(e_n,\partial L/\partial V_n)$")
-    ax.set_title("Per-soma broadcast tracks compartment error")
+    ax.set_title("Compartment-error fidelity")
     ax.set_xticks([0, 5, 10, 20, 40])
     ax.set_ylim(-0.35, 1.05)
     ax.legend(loc="upper left", ncol=1, handlelength=1.2, handletextpad=0.4,
@@ -161,6 +159,7 @@ def _plot_compartment_error_fidelity(ax: plt.Axes, summary: pd.DataFrame) -> Non
 
 def _plot_low_bandwidth(ax: plt.Axes, low_bw: pd.DataFrame) -> None:
     _panel(ax, "D")
+    style_axis(ax, grid="y")
 
     def bw_label(row: pd.Series) -> str:
         bw = row["broadcast_bandwidth"]
@@ -210,7 +209,7 @@ def _plot_low_bandwidth(ax: plt.Axes, low_bw: pd.DataFrame) -> None:
         markersize=4,
         lw=1.4,
         capsize=2,
-        color=COLOR_SHUNTING,
+        color=COLOR_LOW_BW,
         capthick=0.5,
         zorder=5,
     )
@@ -226,7 +225,7 @@ def _plot_low_bandwidth(ax: plt.Axes, low_bw: pd.DataFrame) -> None:
             fontsize=7,
             ha="center",
             va=va,
-            color=COLOR_SHUNTING,
+            color=COLOR_LOW_BW,
         )
 
     sparse = df[df["broadcast_bandwidth"] == "sparse_topk"]
@@ -255,7 +254,7 @@ def _plot_low_bandwidth(ax: plt.Axes, low_bw: pd.DataFrame) -> None:
 
     ax.set_xlabel("Effective bits per neuron")
     ax.set_ylabel("Test accuracy (%)")
-    ax.set_title("Coarse broadcast remains useful when sensitivities are stable")
+    ax.set_title("Coarse shared broadcast still works")
     ax.set_xscale("symlog", linthresh=1)
     ax.set_xticks([1, 2, 4, 8, 32])
     ax.set_xticklabels(["1", "2", "4", "8", "32"])
@@ -268,6 +267,7 @@ def _plot_oracle_learning(
     oracle_summary: pd.DataFrame,
 ) -> None:
     _panel(ax, "C")
+    style_axis(ax, grid="y")
     baseline = summary[summary["dataset"] == "noise_resilience"].copy()
     oracle = oracle_summary[oracle_summary["dataset"] == "noise_resilience"].copy()
     for network_type, color, label in [
@@ -308,11 +308,68 @@ def _plot_oracle_learning(
 
     ax.set_xlabel("$N_I$ (inhibitory synapses / branch)")
     ax.set_ylabel("Test accuracy (%)")
-    ax.set_title("Better transport closes the local-learning gap")
+    ax.set_title("Transported error improves learning")
     ax.set_xticks([0, 5, 10, 20, 40])
     ax.set_ylim(20, 101)
     ax.legend(loc="upper left", ncol=1, handlelength=1.2, handletextpad=0.4,
               columnspacing=0.8)
+
+    # Harder-data inset: corrected CIFAR-10 strong family (shunting only).
+    try:
+        cifar_bp = _safe_csv(CIFAR10_BP_SUMMARY_CSV)
+        cifar_local = _safe_csv(CIFAR10_LOCALCA_SUMMARY_CSV)
+        bp_row = cifar_bp[
+            (cifar_bp["strategy"] == "standard")
+            & (cifar_bp["model_type"] == "dendritic_shunting")
+        ].iloc[0]
+        ps_row = cifar_local[
+            cifar_local["condition"] == "cifar10_shunting_5f_per_soma_bpdec_wd0"
+        ].iloc[0]
+        pt_row = cifar_local[
+            cifar_local["condition"] == "cifar10_shunting_5f_path_transport_bpdec_wd0"
+        ].iloc[0]
+
+        inset = ax.inset_axes([0.56, 0.08, 0.39, 0.34])
+        style_axis(inset, grid="y")
+        vals = np.array([
+            100.0 * float(bp_row["mean_test_accuracy"]),
+            100.0 * float(ps_row["acc_test_mean"]),
+            100.0 * float(pt_row["acc_test_mean"]),
+        ])
+        errs = np.array([
+            100.0 * float(bp_row["std_test_accuracy"]),
+            100.0 * float(ps_row["acc_test_std"]),
+            100.0 * float(pt_row["acc_test_std"]),
+        ])
+        colors = [COLOR_BACKPROP, COLOR_SHUNTING, COLOR_TRANSPORT]
+        bars = inset.bar(
+            np.arange(3),
+            vals,
+            yerr=errs,
+            color=colors,
+            edgecolor="white",
+            lw=0.3,
+            width=0.55,
+            capsize=1.5,
+            error_kw={"lw": 0.5},
+            zorder=3,
+        )
+        for rect, v in zip(bars, vals):
+            inset.text(
+                rect.get_x() + rect.get_width() / 2,
+                v + 0.9,
+                f"{v:.1f}",
+                ha="center",
+                va="bottom",
+                fontsize=5.2,
+            )
+        inset.set_xticks(np.arange(3))
+        inset.set_xticklabels(["BP", "Per", "Trans"], fontsize=5.6)
+        inset.set_ylim(20, 55)
+        inset.set_title("CIFAR-10 shunt.", fontsize=6.0, pad=1.5)
+        inset.tick_params(axis="y", labelsize=5.4)
+    except Exception:
+        pass
 
 
 def build_figure(
@@ -328,14 +385,23 @@ def build_figure(
     fig, axes = plt.subplots(
         2,
         2,
-        figsize=(DOUBLE_COL_W, 7.0),
-        gridspec_kw={"wspace": 0.38, "hspace": 0.52},
+        figsize=(DOUBLE_COL_W, 5.6),
+        gridspec_kw={"wspace": 0.34, "hspace": 0.44},
     )
 
     _plot_path_gain_dispersion(axes[0, 0], summary)
     _plot_compartment_error_fidelity(axes[0, 1], summary)
     _plot_oracle_learning(axes[1, 0], summary, oracle_summary)
     _plot_low_bandwidth(axes[1, 1], low_bw)
+    fig.text(
+        0.5,
+        0.99,
+        "A \u2192 B \u2192 C",
+        ha="center",
+        va="top",
+        fontsize=6.6,
+        color="#555555",
+    )
     return fig
 
 

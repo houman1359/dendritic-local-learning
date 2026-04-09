@@ -10,7 +10,7 @@ from typing import Any
 
 import sys, os
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from neurips_style import apply_neurips_style, COLORS as NEURIPS_COLORS, panel_label
+from neurips_style import apply_neurips_style, COLORS as NEURIPS_COLORS, panel_label, style_axis
 apply_neurips_style()
 
 import matplotlib
@@ -29,10 +29,10 @@ FIGURES_DIR = DRAFT_DIR / "figures"
 ANALYSIS_DIR = DRAFT_DIR / "analysis"
 SUMMARY_CSV = ANALYSIS_DIR / "cue_routing_summary.csv"
 
-COLOR_SHUNTING = "#18864B"
-COLOR_ADDITIVE = "#2D5DA8"
-COLOR_PATHWAY = "#7A3E9D"
-COLOR_CONTROL = "#C65D1E"
+COLOR_SHUNTING = NEURIPS_COLORS["shunting"]
+COLOR_ADDITIVE = NEURIPS_COLORS["additive"]
+COLOR_PATHWAY = NEURIPS_COLORS["pathway"]
+COLOR_CONTROL = NEURIPS_COLORS["low_rank"]
 COLOR_BP = "#4A4A4A"
 COLOR_LIGHT = "#F5F2EA"
 DOUBLE_COL_W = 11.0
@@ -104,10 +104,10 @@ def _summary_records(df: pd.DataFrame) -> list[dict[str, Any]]:
     entries = [
         ("local_ca", "dendritic_additive", "fixed", "baseline", "Fixed pathways\nLocalCA additive"),
         ("local_ca", "dendritic_additive", "learned", "baseline", "Learned router\nLocalCA additive"),
-        ("local_ca", "dendritic_shunting", "learned", "baseline", "Learned router\nLocalCA shunting\nper-soma"),
-        ("local_ca", "dendritic_shunting", "learned", "temp03", "Shunting per-soma\nlow-temp"),
-        ("local_ca", "dendritic_shunting", "learned", "freeze20", "Shunting per-soma\nfreeze-20"),
-        ("local_ca", "dendritic_shunting", "learned", "baseline_tuned", "Shunting per-soma\n+ tune"),
+        ("local_ca", "dendritic_shunting", "learned", "baseline", "Learned router\nLocalCA shunting\nrank-1 per-soma"),
+        ("local_ca", "dendritic_shunting", "learned", "baseline_tuned", "Shunting rank-1\nper-soma + tune"),
+        ("local_ca", "dendritic_shunting", "learned", "low_rank_k1", "Random low-rank\n$K{=}1$"),
+        ("local_ca", "dendritic_shunting", "learned", "low_rank_k2", "Random low-rank\n$K{=}2$"),
         ("local_ca", "dendritic_shunting", "learned", "pathway_vector_tuned", "PV-LocalCA\n(pathway-vector)"),
         ("standard", "dendritic_shunting", "learned", "baseline", "Backprop shunting\nlearned router"),
     ]
@@ -126,6 +126,8 @@ def _bar_style(record: dict[str, Any]) -> tuple[str, str]:
     network_type = str(record["network_type"])
     if "pathway_vector" in variant:
         return COLOR_PATHWAY, "#40204F"
+    if "low_rank" in variant:
+        return COLOR_CONTROL, "#7A3D10"
     if strategy == "standard":
         return COLOR_BP, "#2D2D2D"
     if network_type == "dendritic_additive":
@@ -199,48 +201,49 @@ def _plot_task_schematic(ax: plt.Axes) -> None:
     ax.set_xlim(0, 1)
     ax.set_ylim(0, 1)
 
-    _draw_box(ax, (0.04, 0.73), (0.18, 0.14), "Context\nselects reliable cue", "#F3E7C8")
-    _draw_box(ax, (0.06, 0.47), (0.14, 0.11), "Cue A\nlow noise", "#DCE7F8")
-    _draw_box(ax, (0.06, 0.23), (0.14, 0.11), "Cue B\nsometimes adversarial", "#DCE7F8")
+    ax.text(0.13, 0.90, "Inputs", fontsize=6.9, fontweight="bold", ha="center", color="#555555")
+    ax.text(0.33, 0.90, "Latent pathways", fontsize=6.9, fontweight="bold", ha="center", color="#555555")
+    ax.text(0.57, 0.90, "Prediction", fontsize=6.9, fontweight="bold", ha="center", color="#555555")
+    ax.text(0.79, 0.90, "Feedback field", fontsize=6.9, fontweight="bold", ha="center", color="#555555")
 
-    ax.text(0.28, 0.84, "Latent pathways", fontsize=6.8, fontweight="bold", ha="center")
+    _draw_box(ax, (0.04, 0.73), (0.18, 0.13), "Context\nreliability cue", "#F3E7C8")
+    _draw_box(ax, (0.06, 0.49), (0.14, 0.10), "Cue A\nreliable", "#DCE7F8")
+    _draw_box(ax, (0.06, 0.25), (0.14, 0.10), "Cue B\ncan conflict", "#DCE7F8")
+
     _draw_box(ax, (0.26, 0.52), (0.14, 0.12), "Path 1", "#EAF4EC", edgecolor=COLOR_SHUNTING)
     _draw_box(ax, (0.26, 0.27), (0.14, 0.12), "Path 2", "#EAF4EC", edgecolor=COLOR_SHUNTING)
     _draw_box(ax, (0.50, 0.41), (0.14, 0.12), "Soma /\ndecoder", COLOR_LIGHT)
 
-    _draw_arrow(ax, (0.20, 0.525), (0.26, 0.58), COLOR_ADDITIVE)
-    _draw_arrow(ax, (0.20, 0.285), (0.26, 0.33), COLOR_ADDITIVE)
-    _draw_arrow(ax, (0.40, 0.58), (0.50, 0.47), COLOR_SHUNTING)
-    _draw_arrow(ax, (0.40, 0.33), (0.50, 0.47), COLOR_SHUNTING)
-    _draw_arrow(ax, (0.22, 0.80), (0.33, 0.64), "#A07015", text="route / reweight", text_xy=(0.31, 0.74))
-    _draw_arrow(ax, (0.22, 0.79), (0.33, 0.39), "#A07015")
+    _draw_arrow(ax, (0.20, 0.54), (0.26, 0.58), COLOR_ADDITIVE, linewidth=1.0)
+    _draw_arrow(ax, (0.20, 0.30), (0.26, 0.33), COLOR_ADDITIVE, linewidth=1.0)
+    _draw_arrow(ax, (0.40, 0.58), (0.50, 0.47), COLOR_SHUNTING, linewidth=1.0)
+    _draw_arrow(ax, (0.40, 0.33), (0.50, 0.47), COLOR_SHUNTING, linewidth=1.0)
+    _draw_arrow(ax, (0.22, 0.79), (0.33, 0.64), "#A07015", text="route", text_xy=(0.30, 0.72), linewidth=1.0)
+    _draw_arrow(ax, (0.22, 0.79), (0.33, 0.39), "#A07015", linewidth=1.0)
 
-    ax.text(
-        0.72,
-        0.83,
-        "Broadcast choices",
-        fontsize=6.8,
-        fontweight="bold",
-        ha="center",
-    )
-    _draw_box(ax, (0.68, 0.58), (0.22, 0.10), "Scalar / per-soma $e$", "#F4F4F4")
-    _draw_box(ax, (0.68, 0.30), (0.22, 0.12), "PV-LocalCA\n$e_n = \\sum_k q_{n,k} c_k$", "#EFE4F8", edgecolor=COLOR_PATHWAY)
-    _draw_arrow(ax, (0.64, 0.47), (0.68, 0.63), "#777777", linestyle="--", text="same signal to both paths", text_xy=(0.79, 0.71))
-    _draw_arrow(ax, (0.64, 0.47), (0.68, 0.36), COLOR_PATHWAY, text="pathway-specific channels", text_xy=(0.80, 0.24))
+    _draw_box(ax, (0.68, 0.66), (0.22, 0.085), "Rank-1 / scalar fallback", "#F4F4F4")
+    _draw_box(ax, (0.68, 0.47), (0.22, 0.095), "Random low-rank\n$e_n = \\Gamma_K(\\delta_0)$", "#F8EBDD", edgecolor=COLOR_CONTROL)
+    _draw_box(ax, (0.68, 0.25), (0.22, 0.115), "Structured pathways\n$e_n = \\sum_k q_{n,k} c_k$", "#EFE4F8", edgecolor=COLOR_PATHWAY)
+    _draw_arrow(ax, (0.64, 0.47), (0.68, 0.70), "#777777", linestyle="--", text="shared signal", text_xy=(0.80, 0.79), linewidth=1.0)
+    _draw_arrow(ax, (0.64, 0.47), (0.68, 0.515), COLOR_CONTROL, text="$K$ unstructured channels", text_xy=(0.81, 0.60), linewidth=1.0)
+    _draw_arrow(ax, (0.64, 0.47), (0.68, 0.305), COLOR_PATHWAY, text="pathway-aware channels", text_xy=(0.81, 0.18), linewidth=1.0)
 
     ax.text(
         0.04,
         0.06,
-        "Scalar feedback collapses branch identity.\nPV-LocalCA preserves pathway-specific credit when context switches cue reliability.",
-        fontsize=7.2,
+        "Rank-1 feedback collapses branch identity. Higher-rank feedback helps,\n"
+        "but the best structured repair remains open under the corrected rule.",
+        fontsize=7.0,
         ha="left",
         va="bottom",
+        color="#333333",
     )
-    ax.set_title("Cue integration requires pathway-specific credit", fontsize=9.5)
+    ax.set_title("Cue integration stresses the rank of the feedback field", fontsize=9.5)
 
 
 def _plot_accuracy_panel(ax: plt.Axes, records: list[dict[str, Any]]) -> None:
     _panel(ax, "B", x=-0.13)
+    style_axis(ax, grid="x")
     labels = [str(record["short_label"]) for record in records]
     values = [100.0 * float(record["test_accuracy"]) for record in records]
     errors = [100.0 * float(record.get("test_accuracy_std", 0.0) or 0.0) for record in records]
@@ -282,16 +285,16 @@ def _plot_accuracy_panel(ax: plt.Axes, records: list[dict[str, Any]]) -> None:
     ax.set_yticks(y)
     ax.set_yticklabels(labels)
     ax.invert_yaxis()
-    ax.set_xlim(75, 100.2)
+    ax.set_xlim(70, 100.2)
     ax.set_xlabel("Test accuracy (%)")
-    ax.set_title("Scalar broadcast fails; structured feedback rescues")
-    ax.grid(axis="x", alpha=0.22, linewidth=0.4, zorder=0)
+    ax.set_title("Rank-1 broadcast fails; higher-rank feedback helps")
     ax.axvline(95, color="#999999", linewidth=0.6, linestyle=":")
     ax.text(95.2, -0.75, "high-accuracy regime", fontsize=7.0, color="#666666")
 
 
 def _plot_specialization_panel(ax: plt.Axes, df: pd.DataFrame) -> None:
     _panel(ax, "C")
+    style_axis(ax, grid="both")
     learned = df[df["router_mode"] == "learned"].copy()
     learned = learned.dropna(subset=["router_mean_max_assignment", "test_accuracy"]).reset_index(drop=True)
     if learned.empty:
@@ -307,6 +310,11 @@ def _plot_specialization_panel(ax: plt.Axes, df: pd.DataFrame) -> None:
             marker = "*"
             size = 140
             edge = "#40204F"
+        elif "low_rank" in variant:
+            color = COLOR_CONTROL
+            marker = "D"
+            size = 62
+            edge = "#7A3D10"
         elif strategy == "standard":
             color = COLOR_BP
             marker = "s"
@@ -343,8 +351,7 @@ def _plot_specialization_panel(ax: plt.Axes, df: pd.DataFrame) -> None:
     annotations = {
         "baseline": "per-soma",
         "baseline_tuned": "per-soma+tune",
-        "temp03": "low-temp",
-        "freeze20": "freeze-20",
+        "low_rank_k2": "low-rank $K{=}2$",
         "pathway_vector_tuned": "PV-LocalCA",
     }
     targets = learned[
@@ -366,7 +373,7 @@ def _plot_specialization_panel(ax: plt.Axes, df: pd.DataFrame) -> None:
     ax.text(
         0.03,
         0.96,
-        "circles: LocalCA\nsquares: backprop\nstars: pathway-vector",
+        "circles: LocalCA\nsquares: backprop\ndiamonds: low-rank\nstars: pathway-vector",
         transform=ax.transAxes,
         ha="left",
         va="top",
@@ -375,10 +382,9 @@ def _plot_specialization_panel(ax: plt.Axes, df: pd.DataFrame) -> None:
     )
     ax.set_xlabel("Mean max router assignment")
     ax.set_ylabel("Test accuracy (%)")
-    ax.set_title("Specialization alone does not fix scalar broadcast")
+    ax.set_title("Specialization alone does not determine success")
     ax.set_xlim(0.955, 1.0015)
     ax.set_ylim(78, 100.5)
-    ax.grid(alpha=0.20, linewidth=0.4)
 
 
 def _plot_assignment_panel(ax: plt.Axes, summary_row: dict[str, Any]) -> None:
@@ -445,6 +451,7 @@ def build_figure(summary_csv: Path) -> None:
 
     fig.subplots_adjust(left=0.10, right=0.97, bottom=0.07, top=0.95)
     _save(fig, "fig6_cue_routing")
+    _save(fig, "fig_cue_routing_appendix")
     _save(fig, "fig_cue_routing_hard_diagnosis")
     plt.close(fig)
 
