@@ -33,10 +33,19 @@ base_config:
     enable_hooks: true
   data:
     dataset_name: "noise_resilience"
-    base_dir: ""
+    base_dir: "/n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/data"
     processing:
       flatten: true
       normalize: false
+    dataset_params:
+      noise_resilience:
+        sigma_task: 1.5
+        noise_latent_dim: 50
+        projection_seed: 0
+        train_noise_seed: 1
+        valid_noise_seed: 2
+        test_noise_seed: 3
+        clamp_inputs: true
   model:
     task: "classification"
     encoder:
@@ -58,7 +67,7 @@ base_config:
       transfer:
         input_mode: 1
         independent_pathways: false
-        output_activation: null
+        output_activation: relu
       morphology:
         somatic_synapses: false
         weight_transform: "softplus"
@@ -186,6 +195,5 @@ base_config:
   wandb:
     use_wandb: false
   outputs:
-    run_name: "activation_audit_frozen_localca_activation_corrected"
+    run_name: "activation_audit_frozen_localca_nonnegativeinput_fix"
     results_dir: "outputs"
-

@@ -58,10 +58,20 @@ FMNIST_RUNS_CSV = os.path.join(
 STANDARD_CEILING_SUMMARY_CSV = os.path.join(
     ANALYSIS_DIR, "standard_ceiling_refresh_5seed", "standard_ceiling_refresh_summary.csv"
 )
-CORRECTED_IE_SUMMARY_CSV = os.path.join(
+IE_PERF_SUMMARY_CSV = os.path.join(
     ANALYSIS_DIR,
-    "theory_diag_gradient_fidelity_vs_ie_activation_corrected_summary",
+    "gradient_fidelity_vs_ie_nonnegativeinput_fix",
+    "gradient_fidelity_summary.csv",
+)
+THEORY_IE_SUMMARY_CSV = os.path.join(
+    ANALYSIS_DIR,
+    "theory_diag_gradient_fidelity_vs_ie_nonnegativeinput_fix_summary",
     "theory_diag_by_condition.csv",
+)
+THEORY_IE_RUNS_CSV = os.path.join(
+    ANALYSIS_DIR,
+    "theory_diag_gradient_fidelity_vs_ie_nonnegativeinput_fix",
+    "run_summary.csv",
 )
 CORE_FAIR_TUNING_CSV = os.path.join(ANALYSIS_DIR, "core_fair_tuning.csv")
 PHASE2B_GAP_CLOSING_CSV = os.path.join(ANALYSIS_DIR, "phase2b_gap_closing.csv")
@@ -387,7 +397,7 @@ def figure2():
     core = _csv_path(CORE_FAIR_TUNING_CSV)
     p2b = _csv_path(PHASE2B_GAP_CLOSING_CSV)
     fmnist = _csv_path(FMNIST_SUMMARY_CSV)
-    ie_data = _csv_path(CORRECTED_IE_SUMMARY_CSV)
+    ie_data = _csv_path(IE_PERF_SUMMARY_CSV)
 
     fig, axes = plt.subplots(1, 4, figsize=(W * 1.9, 3.2),
                              gridspec_kw={"wspace": 0.55,
@@ -780,13 +790,12 @@ def figure3():
     _panel(ax, "D")
     style_axis(ax, grid="y")
 
-    theory_csv = CORRECTED_IE_SUMMARY_CSV
-    theory = pd.read_csv(theory_csv)
-    cosine_error = np.abs(1.0 - theory["factorization_weighted_cosine_mean"].to_numpy(dtype=float))
-    scale_error = theory["factorization_weighted_scale_mismatch_mean"].to_numpy(dtype=float)
+    theory_runs = pd.read_csv(THEORY_IE_RUNS_CSV)
+    rel_error = theory_runs["factorization_weighted_relative_l2"].to_numpy(dtype=float)
+    scale_error = theory_runs["factorization_weighted_scale_mismatch"].to_numpy(dtype=float)
     rng = np.random.default_rng(7)
     for i, (vals, color, label) in enumerate([
-        (cosine_error, RULE3_COLOR, r"$|1-\cos|$"),
+        (rel_error, RULE3_COLOR, "relative $L_2$"),
         (scale_error, RULE5_COLOR, "scale mismatch"),
     ]):
         jitter = rng.uniform(-0.08, 0.08, size=len(vals))
@@ -802,17 +811,19 @@ def figure3():
         )
         ax.hlines(np.median(vals), i - 0.18, i + 0.18, color="black", lw=1.2, zorder=4)
     ax.set_xticks([0, 1])
-    ax.set_xticklabels([r"$|1-\cos|$", "scale mismatch"], fontsize=7.5)
+    ax.set_xticklabels(["relative $L_2$", "scale mismatch"], fontsize=7.5)
     ax.set_ylabel("Numerical error")
     ax.set_yscale("log")
-    ax.set_ylim(1e-9, 1e-4)
+    ax.set_ylim(1e-10, 1e-4)
     ax.set_title("Exact factorization sanity check")
     ax.grid(axis="y", alpha=0.20, linewidth=0.5)
+    max_rel = float(np.nanmax(rel_error))
+    max_scale = float(np.nanmax(scale_error))
     ax.text(
         0.03,
         0.08,
-        r"$\max |1-\cos| < 4\times10^{-6}$" "\n"
-        r"$\max$ mismatch $< 3\times10^{-8}$",
+        rf"$\max$ rel. $L_2 < {max_rel:.1e}$" "\n"
+        rf"$\max$ mismatch $< {max_scale:.1e}$",
         transform=ax.transAxes,
         fontsize=6.8,
         ha="left",
@@ -1131,7 +1142,7 @@ def figure_s2():
     ax = axes[0, 1]
     _panel(ax, "B")
 
-    ie_data = _csv_path(CORRECTED_IE_SUMMARY_CSV)
+    ie_data = _csv_path(IE_PERF_SUMMARY_CSV)
     if ie_data is not None:
         for ct, color, marker in [("dendritic_shunting", COLOR_SHUNTING, "o"),
                                    ("dendritic_additive", COLOR_ADDITIVE, "s")]:

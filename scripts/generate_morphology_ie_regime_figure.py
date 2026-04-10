@@ -25,7 +25,7 @@ ANALYSIS_DIR = DRAFT_DIR / "analysis" / "morphology_ie_regime"
 DEFAULT_SWEEP_DIR = (
     DRAFT_DIR
     / "local_sweep_runs"
-    / "noise_resilience_morphology_ie_regime_20260402004716"
+    / "noise_resilience_morphology_ie_regime_nonnegativeinput_fix_20260409164042"
 )
 
 COLOR_SHUNTING = COLORS["shunting"]

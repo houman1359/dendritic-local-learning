@@ -267,12 +267,13 @@ Plasticity is then gated by branch selectivity and by a synapse-specific role-al
 \subsection{Setup}
 
 We evaluate two settings: a \emph{capacity-calibrated} regime, where matched architectures achieve strong backprop performance, and \emph{controlled sweeps} that isolate inhibition strength, broadcast mode, and architecture.
-Our main datasets are MNIST, Fashion-MNIST \cite{xiao2017fashionmnist}, and four synthetic tasks: \emph{context gating}, \emph{noise resilience}, \emph{info shunting}, and \emph{cue integration}; formal definitions are in Appendix~\ref{app:synthetic_tasks}.
+Our main datasets are MNIST, Fashion-MNIST \cite{xiao2017fashionmnist}, and three synthetic tasks: \emph{context gating}, \emph{noise resilience}, and \emph{cue integration}; formal definitions are in Appendix~\ref{app:synthetic_tasks}. An older \emph{info shunting} benchmark remains in the codebase as a signed-input exploratory stress test, but it is no longer part of the headline corrected result set because it violates the nonnegative-drive assumption of the conductance model.
 Architectures include point MLP baselines and dendritic cores with either additive integration or shunting.
 Main comparisons are architecture-matched additive vs.\ shunting cores and local vs.\ backprop training; DFA appears only as a supplementary baseline.
 Most headline MNIST, Fashion-MNIST, and context-gating results use 5F with per-soma broadcast.
 Because the hidden widths in these feedforward settings exceed the decoder output dimension, that default per-soma implementation reduces to a shared scalar/rank-$1$ broadcast in the main mechanism and competence sweeps; the higher-rank controls then use explicit low-rank, path-propagation, path-transport, or pathway-vector variants.
-Unless otherwise stated, dendritic layers also use the learnable post-voltage reactivation \texttt{param\_tanh}; Appendix Tables~\ref{tab:activation_audit_empirical}--\ref{tab:activation_audit_theory} then audit activation shape in a more controlled setting by comparing identity (\texttt{none}) against a frozen \texttt{param\_tanh} under matched additive/shunting initialization.
+Unless otherwise stated, dendritic layers also use the learnable post-voltage reactivation \texttt{param\_tanh}; Appendix Tables~\ref{tab:activation_audit_empirical} and \ref{tab:activation_audit_theory} then audit activation shape in a more controlled setting by comparing identity (\texttt{none}) against a frozen \texttt{param\_tanh} under matched additive/shunting initialization.
+All headline dendritic runs keep synaptic and dendritic conductances nonnegative via positive parameter transforms and enforce a nonnegative first-layer synaptic drive. Concretely, image-based inputs are used in $[0,1]$, the corrected noise-resilience benchmark clips projected Gaussian corruption back to $[0,1]$, context gating uses a nonnegative contextual figure-ground MNIST construction, and cue integration uses one-hot context plus cue values clipped to $[0,1]$.
 The cue-routing benchmark is used to compare rank-1, random low-rank, and pathway-structured feedback in a routed setting, and the inhibition sweeps additionally use a transported-error oracle derived from Theorem~\ref{thm:tree_backprop} as an upper bound rather than as the proposed biological rule.
 Headline mechanistic, oracle, competence, activation-audit, corrected routed, and CIFAR mechanism-extension results use $5$ seeds per condition; a smaller set of appendix-only support sweeps still use $3$ seeds, while $1$--$2$ seed screens are treated as exploratory and are either omitted from the main claims or explicitly labeled as such in the appendix.
 
@@ -285,14 +286,13 @@ For each parameter tensor $p$, we compute directional alignment (cosine similari
 \begin{figure*}[!t]
 \centering
 \includegraphics[width=0.95\textwidth]{fig3_gradient_fidelity.pdf}
-\caption{\textbf{Gradient-fidelity diagnostic.} \textbf{(A)}~Weighted cosine similarity between local and backprop gradients: shunting (green) is consistently more aligned than additive (blue) on both MNIST and context gating. \textbf{(B)}~Gradient scale mismatch on the same matched-weight comparisons. Shunting is not only better aligned, but also substantially closer in norm. \textbf{(C)}~Per-layer cosine similarity over training epochs. Shunting proximal layers approach high positive alignment; additive layers remain near zero. \textbf{(D)}~Exact-factorization sanity check across all theory-diagnostic conditions. Reconstructed gradients match autograd to numerical precision, showing that LocalCA’s only approximation is in the broadcast substitute for the compartment error.}
+\caption{\textbf{Gradient-fidelity diagnostic.} \textbf{(A)}~Weighted cosine similarity between local and backprop gradients: shunting (green) is consistently more aligned than additive (blue) on both MNIST and context gating. \textbf{(B)}~Gradient scale mismatch on the same matched-weight comparisons. Shunting is not only better aligned, but also substantially closer in norm. \textbf{(C)}~Per-layer cosine similarity over training epochs. Shunting proximal layers approach high positive alignment; additive layers remain near zero. \textbf{(D)}~Exact-factorization sanity check across all corrected theory-diagnostic conditions, reported with relative $L_2$ reconstruction error and scale mismatch. Reconstructed gradients match autograd to numerical precision, showing that LocalCA’s only approximation is in the broadcast substitute for the compartment error.}
 \label{fig:gradient_fidelity}
 \end{figure*}
 
 Across matched-weight comparisons, shunting is consistently more aligned with backprop and substantially closer in norm than the additive control: on MNIST, weighted cosine rises from $0.006$ to $0.202$ and scale mismatch falls from $1.053$ to $0.117$; on context gating, cosine rises from $-0.007$ to $0.108$ and scale mismatch falls from $2.154$ to $0.036$.
 Figure~\ref{fig:gradient_fidelity}C shows that this advantage appears throughout training, especially in proximal layers and dendritic conductances.
-Figure~\ref{fig:gradient_fidelity}D confirms that the theory is operational in code: reconstructing gradients from Corollary~\ref{cor:factorization} using exact compartment errors matches autograd to numerical precision (weighted cosine $1.000001 \pm 0.000001$, weighted scale mismatch $< 4\times 10^{-8}$).
-The only approximation made by LocalCA is therefore the broadcast substitute for $\partial L/\partial V_n$.
+Figure~\ref{fig:gradient_fidelity}D confirms that the theory is operational in code under the corrected positive-input setup: reconstructing gradients from Corollary~\ref{cor:factorization} using exact compartment errors yields weighted relative reconstruction error below $2\times 10^{-7}$ and weighted scale mismatch below $4\times 10^{-8}$ across runs. In a few low-norm parameter blocks, cosine becomes numerically unstable even though the reconstruction itself is essentially exact, so we report the norm-based diagnostics in the figure. The only approximation made by LocalCA is therefore the broadcast substitute for $\partial L/\partial V_n$.
 
 \subsection{Mechanistic Chain: Path Gains, Broadcast Fidelity, and Oracle Transport}
 \label{sec:mechanistic}
@@ -300,24 +300,24 @@ The only approximation made by LocalCA is therefore the broadcast substitute for
 Figure~\ref{fig:mechanistic} provides the paper's central empirical chain: shunting concentrates conductance-stage path gains, which improves direct compartment-error fidelity, which in turn makes low-bandwidth local learning effective; the transported-error oracle then isolates how much of the remaining gap is due to broadcast quality rather than other architectural differences.
 
 Panel~A measures the coefficient of variation of the exact conductance-stage path gains $\alpha_n$ across compartments.
-On MNIST, shunting keeps this distribution tightly concentrated across inhibition levels (CV about $0.21$--$0.27$), whereas the additive control remains much broader (CV about $0.53$--$1.08$).
+On MNIST, shunting keeps this distribution tightly concentrated across inhibition levels (CV about $0.21$--$0.43$), whereas the additive control remains much broader (CV about $0.90$--$1.16$).
 Panel~B then measures the sole non-local term from Corollary~\ref{cor:factorization}, $\partial L/\partial V_n$, directly.
-On the noise-resilience sweep, per-soma broadcast tracks the exact compartment error much better under shunting than under additive integration once inhibition is present: shunting stays around $0.40$--$0.47$ across the inhibited settings, while additive becomes near-zero or negative even though it remains comparatively well aligned at $N_I{=}0$.
-The transported-error oracle obtained by recursively applying those conductance-stage path gains improves fidelity further in both architectures, showing that the theorem defines an operational upper bound on low-bandwidth broadcast.
+On the corrected noise-resilience sweep, per-soma broadcast tracks the exact compartment error somewhat better under shunting than under additive integration once inhibition is present: additive remains positively aligned throughout (about $0.14$--$0.19$ across the sweep), while shunting rises to about $0.20$--$0.24$ in the inhibited regimes after starting from a comparable low-inhibition baseline.
+The transported-error oracle obtained by recursively applying those conductance-stage path gains improves fidelity sharply in both architectures, reaching about $0.95$--$0.99$ for additive and essentially $1.0$ for shunting once inhibition is present, showing that the theorem defines an operational upper bound on low-bandwidth broadcast.
 
 Panel~C trains the same local rule using that oracle signal.
-On noise resilience, additive learning is strongly regime-dependent under per-soma broadcast: it reaches $98.5\%$ at $N_I{=}0$ but only about $38$--$43\%$ once inhibition is added. Under transported broadcast, those inhibited additive regimes rise to $99$--$100\%$.
-Shunting improves from about $70$--$87\%$ under per-soma to $98$--$99\%$ across the same inhibited sweep.
-On MNIST, transported broadcast reaches about $95.4$--$96.7\%$ for additive and $96.5$--$97.3\%$ for shunting.
+On noise resilience, additive learning rises from $66.8\%$ at $N_I{=}0$ to about $81$--$84\%$ across the inhibited regimes under per-soma broadcast, and transported broadcast lifts those same conditions to about $92$--$94\%$.
+Shunting rises from $54.3\%$ at $N_I{=}0$ to about $81$--$86\%$ under per-soma and to about $94.3$--$95.2\%$ under transported broadcast.
+On MNIST, transported broadcast reaches about $95.4$--$96.6\%$ for additive and $96.5$--$97.3\%$ for shunting.
 The CIFAR-10 inset shows the same harder-data pattern in the corrected compact E/I family: shunting rises from $28.8\%$ under per-soma broadcast to $47.4\%$ under transported error, nearly matching its $49.5\%$ backprop ceiling.
 These oracle results strongly support path-gain fidelity as the dominant bottleneck for LocalCA performance, while the smaller remaining additive--shunting gap under matched transported broadcast suggests an additional contribution from conductance-shaped local sensitivities.
 
 Panel~D shows that coarse broadcast can still be enough once local sensitivities are well scaled: 4-bit quantization preserves full performance ($61.6\%$ vs.\ $61.7\%$; $p > 0.9$), while sign-only ($37.5\%$) and sparse top-30\% ($38.2\%$) degrade sharply.
 The corrected rank-bridge sweep in Appendix Table~\ref{tab:low_rank_broadcast} adds one constructive intermediate control.
-On the same shunting noise-resilience regime, per-soma reaches only $0.333 \pm 0.022$, the current path-propagation proxy remains similar at $0.327 \pm 0.018$, random low-rank broadcast improves to $0.536 \pm 0.105$ at $K{=}4$, and exact path transport reaches $0.675 \pm 0.019$.
-So higher-rank unstructured feedback helps partially, whereas the current morphology-aware propagation proxy does not yet recover much of the transported-oracle gain.
+On the same shunting noise-resilience regime, per-soma reaches $0.662 \pm 0.016$, the current path-propagation proxy rises to $0.762 \pm 0.047$, random low-rank broadcast reaches $0.764 \pm 0.025$ at $K{=}4$, and exact path transport reaches $0.847 \pm 0.018$.
+So both morphology-aware propagation and higher-rank unstructured feedback now close a substantial fraction of the transported-oracle gap, although exact transported error remains clearly better.
 Normalization-only additive controls and DFA baselines (Appendix Figs.~\ref{fig:additive_norm_control}, \ref{fig:fa_dfa_appendix}) improve over weaker baselines without matching the shunting conductance model.
-Appendix Tables~\ref{tab:activation_audit_empirical}--\ref{tab:activation_audit_theory} show that this mechanism should be interpreted in the bounded \texttt{param\_tanh} operating regime used in the main sweeps rather than as an activation-agnostic claim.
+Appendix Table~\ref{tab:activation_audit_empirical} shows that this mechanism should still be interpreted in a specific activation operating regime rather than as an activation-agnostic claim.
 
 \begin{figure*}[!t]
 \centering
@@ -327,7 +327,7 @@ Appendix Tables~\ref{tab:activation_audit_empirical}--\ref{tab:activation_audit_
 Shunting keeps these conductance-stage path gains much more concentrated than the additive control as inhibition increases.
 \textbf{(B)}~Direct compartment-error fidelity on noise resilience.
 Solid lines compare the per-soma broadcast $e_n$ to the exact compartment error $\partial L/\partial V_n$; dashed lines show the transported-error oracle obtained by recursively applying conductance-stage path gains.
-Shunting substantially improves the fidelity of the simple per-soma broadcast, while the transported oracle defines the remaining approximation gap.
+Under the corrected positive-input setup, shunting still improves the simple per-soma broadcast in the inhibited regimes, while the transported oracle defines the remaining approximation gap and becomes nearly exact once inhibition is present.
 \textbf{(C)}~Learning with the transported-error oracle on noise resilience.
 Improving the broadcast field is enough to recover near-ceiling local learning, especially in the additive architecture where per-soma broadcast fails most severely; the CIFAR-10 inset shows the same harder-data ladder for shunting in the corrected compact E/I family.
 \textbf{(D)}~Broadcast bandwidth.
@@ -343,14 +343,14 @@ Within the local-rule family, 5F is the strongest practical wrapper, but it rema
 
 \subsection{Regime Dependence of the Shunting Advantage}
 
-The benefit of shunting varies across tasks. On MNIST with matched per-soma broadcast, shunting outperforms additive by about $2$~percentage points; on tasks that require credit signals robust to noise, the gap is much larger: $+50.3$~pp on noise resilience (with $N_I{=}10$ inhibitory synapses per branch) and $+24.8$~pp on info shunting ($N_I{=}0$). Figure~\ref{fig:competence_regime} shows the full dose-response: the shunting advantage grows with inhibitory conductance strength on the inhibition-sensitive tasks, whereas additive cores remain more fragile in those regimes.
+The benefit of shunting varies across tasks. On MNIST with matched per-soma broadcast, shunting outperforms additive by about $2$~percentage points; on the corrected nonnegative-input noise-resilience benchmark, the gap is much larger, reaching about $+50.3$~pp at $N_I{=}10$ inhibitory synapses per branch. Figure~\ref{fig:competence_regime} shows the full dose-response: the shunting advantage grows with inhibitory conductance strength on that inhibition-sensitive task, whereas additive cores remain more fragile in the same regime.
 
 \begin{figure*}[!t]
 \centering
 \includegraphics[width=0.98\textwidth]{fig2_competence_regime.pdf}
 \caption{\textbf{Capacity-calibrated competence and regime dependence.}
 \textbf{(A)}~Backprop ceiling (gray) vs.\ best local rule (5F per-soma) for shunting (green) and additive (blue) cores on MNIST, Fashion-MNIST, and context gating, using the refreshed $5$-seed ceilings.
-\textbf{(B)}~$N_I$ dose-response: test accuracy vs.\ inhibitory synapses per branch ($N_I$) for shunting and additive cores on MNIST (solid) and noise resilience (dashed), updated from the activation-corrected sweep.
+\textbf{(B)}~$N_I$ dose-response: test accuracy vs.\ inhibitory synapses per branch ($N_I$) for shunting and additive cores on MNIST (solid) and noise resilience (dashed), updated from the corrected nonnegative-input sweep.
 \textbf{(C)}~Shunting advantage ($\Delta$, in percentage points) vs.\ $N_I$.
 \textbf{(D)}~Fashion-MNIST standard-vs-local comparison from the corrected five-seed sweep, showing a smaller but still consistent shunting advantage on the cleaner vision benchmark.}
 \label{fig:competence_regime}
@@ -435,10 +435,10 @@ To our knowledge, prior work has not tied exact conductance-stage path gains, di
 \label{sec:discussion}
 %=============================================================================
 
-We started from exact gradients for a conductance-based dendritic tree and asked when a somatic broadcast can serve as a useful proxy for compartment-specific errors. In the models studied here, the answer depends strongly on the inhibitory regime: shunting changes the conductance denominator, stabilizes effective local sensitivities, improves agreement between local and backprop gradients, and yields better local learning than an additive control, especially in noisy or inhibition-dependent settings. The morphology$\times$inhibition map in Fig.~\ref{fig:morphology_ie_regime} suggests that tree shape shifts this operating regime, and explicit normalization recovers only part of the benefit. This is therefore a mechanism paper, not a benchmark paper. The activation audit in the appendix shows that the mechanism lives in the bounded \texttt{param\_tanh} regime used throughout the main experiments, and the oracle/rank-bridge controls sharpen the remaining open problem: finding a strictly local morphology-aware approximation that closes more of the transported-error gap. The corrected flattened-CIFAR-10 extension in Fig.~\ref{fig:cifar10_mechanism_extension} supports the same diagnosis in a stronger compact E/I family: once the local rule maps decoder error back to decoder-input/soma space, transported error again acts as a meaningful upper bound and shunting remains competitive on harder data.
+We started from exact gradients for a conductance-based dendritic tree and asked when a somatic broadcast can serve as a useful proxy for compartment-specific errors. In the models studied here, the answer depends strongly on the inhibitory regime: shunting changes the conductance denominator, stabilizes effective local sensitivities, improves agreement between local and backprop gradients, and yields better local learning than an additive control, especially in noisy or inhibition-dependent settings. The morphology$\times$inhibition map in Fig.~\ref{fig:morphology_ie_regime} suggests that tree shape shifts this operating regime, and explicit normalization recovers only part of the benefit. This is therefore a mechanism paper, not a benchmark paper. The activation audit in the appendix shows that the mechanism lives in the bounded \texttt{param\_tanh} regime used throughout the main experiments, and the paired empirical/theory activation tables show why: freezing that activation often broadens path-gain dispersion and weakens per-soma fidelity in the corrected positive-input setting. The oracle/rank-bridge controls then sharpen the remaining open problem: finding a strictly local morphology-aware approximation that closes more of the transported-error gap. All headline experiments reported here now also respect the basic conductance assumptions directly: synaptic and dendritic weights remain nonnegative throughout training, and the first synaptic drive is kept nonnegative by the transfer stage and by dataset preprocessing. The corrected flattened-CIFAR-10 extension in Fig.~\ref{fig:cifar10_mechanism_extension} supports the same diagnosis in a stronger compact E/I family: once the local rule maps decoder error back to decoder-input/soma space, transported error again acts as a meaningful upper bound and shunting remains competitive on harder data.
 
 \paragraph{Limitations.}
-Our best accuracy (91.4\% MNIST, 83.8\% Fashion-MNIST) remains below several recent local-learning methods that operate in abstract compartments or standard activation spaces \cite{ma2024auglocal,lv2025dll,kao2024ccl,erdogan2025ebd}. This reflects the constraints of conductance-based voltage space: bounded voltages, positive conductances, and a denominator-heavy computation graph. The corrected flattened-CIFAR-10 extension in Fig.~\ref{fig:cifar10_mechanism_extension} and Table~\ref{tab:cifar10_mechanism_extension} is a harder stress test rather than a claim of benchmark leadership. There shunting is competitive or better than additive under standard training and under transported-error LocalCA, but naive rank-$1$ per-soma broadcast still leaves a substantial gap, indicating that harder visual tasks demand better broadcast quality and likely richer front ends than flattened inputs alone. More broadly, naive local broadcasts remain much weaker than per-soma on MNIST, structured routed settings remain open, per-soma broadcast is still neuron-global, depth remains challenging, shunting is not gain-invariant in practice, and the FA and weight-statistics appendices are supportive rather than central evidence.
+Our best accuracy (91.4\% MNIST, 83.8\% Fashion-MNIST) remains below several recent local-learning methods that operate in abstract compartments or standard activation spaces \cite{ma2024auglocal,lv2025dll,kao2024ccl,erdogan2025ebd}. This reflects the constraints of conductance-based voltage space: bounded voltages, nonnegative conductances, nonnegative presynaptic drive, and a denominator-heavy computation graph. The corrected flattened-CIFAR-10 extension in Fig.~\ref{fig:cifar10_mechanism_extension} and Table~\ref{tab:cifar10_mechanism_extension} is a harder stress test rather than a claim of benchmark leadership. There shunting is competitive or better than additive under standard training and under transported-error LocalCA, but naive rank-$1$ per-soma broadcast still leaves a substantial gap, indicating that harder visual tasks demand better broadcast quality and likely richer front ends than flattened inputs alone. More broadly, naive local broadcasts remain much weaker than per-soma on MNIST, structured routed settings remain open, per-soma broadcast is still neuron-global, depth remains challenging, shunting is not gain-invariant in practice, and the FA and weight-statistics appendices are supportive rather than central evidence. We also do not claim the same empirical story under externally signed inputs; those legacy stress tests remain outside the corrected headline result set.
 
 \paragraph{Broader relevance.}
 The results are relevant to neuroscience, machine learning, and neuromorphic hardware.
@@ -723,11 +723,11 @@ Context gating & 5F & \textbf{0.807} & \textbf{0.789} \\
 \toprule
 \textbf{Component} & \textbf{Representative effect} & \textbf{Interpretation} \\
 \midrule
-Shunting architecture & Conductance-stage path-gain CV stays at about $0.21$--$0.27$ under shunting vs.\ $0.53$--$1.08$ under additive; on inhibited noise-resilience regimes, per-soma local learning rises from roughly $0.38$--$0.43$ (additive) to $0.70$--$0.87$ (shunting). & This is the main architectural effect in the paper: shunting concentrates conductance-stage path gains and yields a more faithful low-bandwidth credit signal, especially once inhibition is present. \\
+Shunting architecture & In the corrected noise-resilience sweep, additive performs better at $N_I{=}0$ ($0.668$ vs.\ $0.543$), but shunting overtakes it once inhibition is present ($0.837$ vs.\ $0.818$ at $N_I{=}10$, $0.861$ vs.\ $0.830$ at $N_I{=}40$). & The shunting gain is operating-regime dependent rather than uniform: it appears once inhibition shapes conductance scaling strongly enough to help the shared broadcast. \\
 \addlinespace[2pt]
 Broadcast quality & On MNIST (5F), shunting per-soma reaches $0.912 \pm 0.005$, while local-mismatch remains at $0.146 \pm 0.046$. & Correctly matching the broadcast field to the somatic error matters far more than arbitrary local mismatch heuristics. \\
 \addlinespace[2pt]
-Transported oracle & Across inhibited noise-resilience regimes, additive local learning rises from roughly $38$--$43\%$ under per-soma to $99$--$100\%$ under transported broadcast; shunting rises from about $70$--$87\%$ to $98$--$99\%$. & The oracle is the strongest causal evidence that broadcast fidelity, not just architecture, is the dominant bottleneck. \\
+Transported oracle & Across inhibited noise-resilience regimes, additive local learning rises from roughly $81$--$84\%$ under per-soma to $92$--$94\%$ under transported broadcast; shunting rises from roughly $81$--$86\%$ to $95$--$95.2\%$. & The oracle remains the strongest causal evidence that broadcast fidelity, not just architecture, is the dominant bottleneck. \\
 \addlinespace[2pt]
 Rule hierarchy & In the competence sweeps, MNIST improves from $0.622$ (3F) and $0.628$ (4F) to $0.916$ (5F); context gating improves from $0.396/0.411$ to $0.789$. & 5F is the strongest practical rule in this paper, though its extra factor remains heuristic rather than theorem-derived. \\
 \addlinespace[2pt]
@@ -735,13 +735,13 @@ Rule hierarchy & In the competence sweeps, MNIST improves from $0.622$ (3F) and 
 \addlinespace[2pt]
 Structured feedback & In the corrected cue-routing reruns, learned-routing additive local learning remains near ceiling while learned-routing shunting rises from $0.742$ at random rank-$1$ to $0.846$ at random rank-$2$; the current tuned pathway-vector variant reaches $0.815$. & Routed tasks remain the main failure mode of rank-1 feedback, but under the corrected rule the main robust conclusion is that higher rank helps; the best structured fix is not yet settled enough to anchor a headline claim. \\
 \addlinespace[2pt]
-Random low-rank channels & On the corrected shunting noise-resilience bridge, random low-rank broadcast improves from $0.423$ at $K{=}1$ to $0.536$ at $K{=}4$, while exact path transport reaches $0.675$; on cue routing, the best corrected unstructured low-rank setting is $K{=}2$ at $0.846$. & Higher-rank unstructured broadcast can close part of the rank-1 gap, but it does not recover the transported-oracle ceiling and does not by itself establish a structure-specific advantage. \\
+Random low-rank channels & On the corrected shunting noise-resilience bridge, random low-rank broadcast improves from $0.453$ at $K{=}1$ to $0.764$ at $K{=}4$ and $0.795$ at $K{=}8$, while exact path transport reaches $0.847$; on cue routing, the best corrected unstructured low-rank setting is $K{=}2$ at $0.846$. & Higher-rank unstructured broadcast now closes a large fraction of the rank-$1$ gap, but it still does not recover the transported-oracle ceiling and does not by itself establish a structure-specific advantage. \\
 \addlinespace[2pt]
-Path propagation proxy & In the corrected shunting noise-resilience bridge, the current morphology-aware path-propagation proxy reaches only $0.327 \pm 0.018$, essentially matching per-soma ($0.333 \pm 0.022$) and staying far below exact path transport ($0.675 \pm 0.019$). & The present recursive attenuation proxy is too crude to recover much of the oracle gain; a strictly local approximation to transported error remains open. \\
+Path propagation proxy & In the corrected shunting noise-resilience bridge, the current morphology-aware path-propagation proxy reaches $0.762 \pm 0.047$, well above per-soma ($0.662 \pm 0.016$) and close to random low-rank $K{=}4$ ($0.764 \pm 0.025$), though still below exact path transport ($0.847 \pm 0.018$). & The present recursive attenuation proxy is now a meaningful constructive baseline: it closes much of the oracle gap, though a stronger strictly local approximation to transported error remains open. \\
 \addlinespace[2pt]
 Morphology regime & In the exploratory noise-resilience regime map (Fig.~\ref{fig:morphology_ie_regime}), depth-2 trees show their largest shunting gains near $N_I=0$, whereas depth-3 trees retain their strongest gains around $N_I=5$. & Morphology appears to shift the inhibitory operating regime in which shunting is most useful, suggesting that conductance normalization and tree geometry interact rather than contributing independently. \\
 \addlinespace[2pt]
-Activation choice & In the five-seed frozen activation audit, identity favors additive LocalCA on noise resilience ($0.662/0.647$ at $N_I{=}0/10$), whereas frozen \texttt{param\_tanh} favors shunting ($0.657/0.679$). The same audit shows that frozen \texttt{param\_tanh} improves shunting per-soma compartment-error cosine from $0.124$ to $0.329$ at $N_I{=}0$. & The post-voltage firing-rate transform is a real modeling variable, not just an implementation detail. Even a fixed saturating nonlinearity changes the operating point substantially, so the main paper's mechanistic claims should be read in the bounded \texttt{param\_tanh} regime used throughout the headline experiments. \\
+Activation choice & In the corrected five-seed frozen activation audit, identity outperforms frozen \texttt{param\_tanh} for LocalCA on noise resilience in both architectures ($0.590/0.859$ vs.\ $0.109/0.772$ for additive at $N_I{=}0/10$; $0.411/0.769$ vs.\ $0.331/0.701$ for shunting), while the backprop effect remains strongly regime-dependent. & The post-voltage firing-rate transform is a real modeling variable, not just an implementation detail. Even a fixed saturating nonlinearity changes the operating point substantially, so the main paper's mechanistic claims should be read in the learned bounded \texttt{param\_tanh} regime used throughout the headline experiments. \\
 \bottomrule
 \end{tabular}
 \renewcommand{\arraystretch}{1.0}
@@ -921,13 +921,13 @@ The main-text morphology figure shows the exploratory regime map, while the appe
 \textbf{Setting} & \textbf{Broadcast} & \textbf{Test accuracy} \\
 \midrule
 \multicolumn{3}{@{}l}{\emph{Noise resilience, shunting, corrected rank bridge}} \\
-per-soma & rank-1 per-soma & $0.333 \pm 0.022$ \\
-path propagation & recursive attenuation proxy & $0.327 \pm 0.018$ \\
-low-rank & $K{=}1$ & $0.423 \pm 0.130$ \\
-low-rank & $K{=}2$ & $0.501 \pm 0.112$ \\
-low-rank & $K{=}4$ & $0.536 \pm 0.105$ \\
-low-rank & $K{=}8$ & $0.529 \pm 0.102$ \\
-path transport & exact conductance-stage transport & $\mathbf{0.675 \pm 0.019}$ \\
+per-soma & rank-1 per-soma & $0.662 \pm 0.016$ \\
+path propagation & recursive attenuation proxy & $0.762 \pm 0.047$ \\
+low-rank & $K{=}1$ & $0.453 \pm 0.126$ \\
+low-rank & $K{=}2$ & $0.630 \pm 0.042$ \\
+low-rank & $K{=}4$ & $0.764 \pm 0.025$ \\
+low-rank & $K{=}8$ & $0.795 \pm 0.019$ \\
+path transport & exact conductance-stage transport & $\mathbf{0.847 \pm 0.018}$ \\
 \addlinespace[2pt]
 \multicolumn{3}{@{}l}{\emph{Cue routing, learned shunting router, corrected rank/structure sweep}} \\
 per-soma & tuned rank-1 & $0.803 \pm 0.125$ \\
@@ -938,7 +938,7 @@ pathway-vector & tuned structured rank-$2$ & $0.815 \pm 0.126$ \\
 \bottomrule
 \end{tabular}
 \renewcommand{\arraystretch}{1.0}
-\caption{\textbf{Corrected rank bridge and rank-structure comparison.} On shunting noise resilience, random low-rank broadcast closes part of the gap between rank-1 per-soma and exact path transport, while the current path-propagation proxy does not. On cue routing, the corrected learned-router sweep shows that moving beyond rank-$1$ helps, but the best current unstructured low-rank setting ($K{=}2$) is slightly better than the tuned structured pathway-vector variant. We therefore interpret routed credit assignment as an open higher-rank problem rather than as a solved pathway-vector rescue.}
+\caption{\textbf{Corrected rank bridge and rank-structure comparison.} On shunting noise resilience, both the current path-propagation proxy and higher-rank random low-rank broadcast close a substantial fraction of the gap between rank-$1$ per-soma and exact path transport, with low-rank continuing to improve up to $K{=}8$. On cue routing, the corrected learned-router sweep shows that moving beyond rank-$1$ helps, but the best current unstructured low-rank setting ($K{=}2$) is still slightly better than the tuned structured pathway-vector variant. We therefore interpret routed credit assignment as an open higher-rank problem rather than as a solved pathway-vector rescue.}
 \label{tab:low_rank_broadcast}
 \end{table}
 
@@ -954,29 +954,29 @@ pathway-vector & tuned structured rank-$2$ & $0.815 \pm 0.126$ \\
 \toprule
 \textbf{Dataset / strategy} & \textbf{Core} & \textbf{$N_I$} & \textbf{Identity (\texttt{none})} & \textbf{Frozen \texttt{param\_tanh}} \\
 \midrule
-MNIST / LocalCA & additive & 0  & $0.780 \pm 0.014$ & $0.184 \pm 0.049$ \\
-MNIST / LocalCA & additive & 10 & $0.907 \pm 0.003$ & $0.841 \pm 0.011$ \\
-MNIST / LocalCA & shunting & 0  & $0.841 \pm 0.007$ & $0.774 \pm 0.023$ \\
-MNIST / LocalCA & shunting & 10 & $0.905 \pm 0.009$ & $0.846 \pm 0.015$ \\
+MNIST / LocalCA & additive & 0  & $0.780 \pm 0.014$ & $0.709 \pm 0.037$ \\
+MNIST / LocalCA & additive & 10 & $0.907 \pm 0.003$ & $0.881 \pm 0.005$ \\
+MNIST / LocalCA & shunting & 0  & $0.841 \pm 0.007$ & $0.778 \pm 0.020$ \\
+MNIST / LocalCA & shunting & 10 & $0.905 \pm 0.009$ & $0.840 \pm 0.016$ \\
 \addlinespace[2pt]
-Noise resilience / LocalCA & additive & 0  & $0.662 \pm 0.015$ & $0.608 \pm 0.022$ \\
-Noise resilience / LocalCA & additive & 10 & $0.647 \pm 0.010$ & $0.466 \pm 0.034$ \\
-Noise resilience / LocalCA & shunting & 0  & $0.369 \pm 0.011$ & $0.657 \pm 0.018$ \\
-Noise resilience / LocalCA & shunting & 10 & $0.368 \pm 0.015$ & $0.679 \pm 0.020$ \\
+Noise resilience / LocalCA & additive & 0  & $0.590 \pm 0.162$ & $0.109 \pm 0.006$ \\
+Noise resilience / LocalCA & additive & 10 & $0.859 \pm 0.001$ & $0.772 \pm 0.009$ \\
+Noise resilience / LocalCA & shunting & 0  & $0.411 \pm 0.028$ & $0.331 \pm 0.020$ \\
+Noise resilience / LocalCA & shunting & 10 & $0.769 \pm 0.004$ & $0.701 \pm 0.006$ \\
 \addlinespace[2pt]
 MNIST / backprop & additive & 0  & $0.925 \pm 0.001$ & $0.942 \pm 0.001$ \\
 MNIST / backprop & additive & 10 & $0.921 \pm 0.001$ & $0.950 \pm 0.001$ \\
 MNIST / backprop & shunting & 0  & $0.963 \pm 0.0004$ & $0.950 \pm 0.001$ \\
 MNIST / backprop & shunting & 10 & $0.967 \pm 0.001$ & $0.946 \pm 0.001$ \\
 \addlinespace[2pt]
-Noise resilience / backprop & additive & 0  & $0.649 \pm 0.015$ & $0.995 \pm 0.002$ \\
-Noise resilience / backprop & additive & 10 & $0.646 \pm 0.003$ & $0.991 \pm 0.005$ \\
-Noise resilience / backprop & shunting & 0  & $0.361 \pm 0.015$ & $0.494 \pm 0.015$ \\
-Noise resilience / backprop & shunting & 10 & $0.386 \pm 0.024$ & $0.885 \pm 0.006$ \\
+Noise resilience / backprop & additive & 0  & $0.896 \pm 0.003$ & $0.106 \pm 0.007$ \\
+Noise resilience / backprop & additive & 10 & $0.893 \pm 0.002$ & $0.927 \pm 0.002$ \\
+Noise resilience / backprop & shunting & 0  & $0.898 \pm 0.001$ & $0.869 \pm 0.002$ \\
+Noise resilience / backprop & shunting & 10 & $0.926 \pm 0.001$ & $0.912 \pm 0.001$ \\
 \bottomrule
 \end{tabular}
 \renewcommand{\arraystretch}{1.0}
-\caption{\textbf{Frozen activation-shape audit on matched dendritic architectures (5 seeds per condition).} Identity (\texttt{none}) and a frozen bounded post-voltage reactivation \texttt{param\_tanh} can lead to qualitatively different operating regimes. On the main synthetic mechanism task, identity favors additive LocalCA, whereas frozen \texttt{param\_tanh} strongly favors shunting. Under standard backpropagation, the same frozen nonlinearity markedly improves additive and helps shunting most clearly at higher inhibition. These runs match additive reactivation initialization to the shunting setting and hold the activation parameters fixed, isolating activation shape from both the earlier additive/shunting initialization asymmetry in code and from activation learning itself.}
+\caption{\textbf{Frozen activation-shape audit on matched dendritic architectures (5 seeds per condition).} Identity (\texttt{none}) and a frozen bounded post-voltage reactivation \texttt{param\_tanh} lead to markedly different operating regimes even after correcting the task and enforcing nonnegative first-layer synaptic drive. In this corrected audit, identity is the safer LocalCA choice on both MNIST and the noise-resilience task, while the backprop effect is strongly regime-dependent: frozen \texttt{param\_tanh} helps additive most clearly in the inhibited noise-resilience setting ($N_I{=}10$) but collapses it at $N_I{=}0$. These runs match additive reactivation initialization to the shunting setting and hold the activation parameters fixed, isolating activation shape from both the earlier additive/shunting initialization asymmetry in code and from activation learning itself.}
 \label{tab:activation_audit_empirical}
 \end{table*}
 
@@ -984,26 +984,24 @@ Noise resilience / backprop & shunting & 10 & $0.386 \pm 0.024$ & $0.885 \pm 0.0
 \centering
 \small
 \renewcommand{\arraystretch}{1.08}
-\resizebox{\textwidth}{!}{%
-\begin{tabular}{@{}llccccccc@{}}
+\setlength{\tabcolsep}{4.5pt}
+\begin{tabular}{@{}llcll@{}}
 \toprule
-\textbf{Dataset} & \textbf{Core} & \textbf{$N_I$} & \textbf{Path-gain CV} & \textbf{Path-gain CV} & \textbf{Per-soma cosine} & \textbf{Per-soma cosine} & \textbf{Path-transport cosine} & \textbf{Path-transport cosine} \\
- &  &  & \textbf{none} & \textbf{Frozen \texttt{param\_tanh}} & \textbf{none} & \textbf{Frozen \texttt{param\_tanh}} & \textbf{none} & \textbf{Frozen \texttt{param\_tanh}} \\
+\textbf{Dataset} & \textbf{Core} & \textbf{$N_I$} & \textbf{Identity (\texttt{none})} & \textbf{Frozen \texttt{param\_tanh}} \\
 \midrule
-MNIST & additive & 0  & $0.281$ & $0.330$ & $0.229$ & $0.006$ & $0.996$ & $0.670$ \\
-MNIST & additive & 10 & $0.310$ & $0.863$ & $0.210$ & $0.074$ & $0.963$ & $0.222$ \\
-MNIST & shunting & 0  & $0.383$ & $0.793$ & $0.167$ & $0.111$ & $1.000$ & $0.964$ \\
-MNIST & shunting & 10 & $0.386$ & $1.246$ & $0.235$ & $0.097$ & $1.000$ & $0.966$ \\
+MNIST & additive & 0  & CV $0.280$, cosine $0.220$ & CV $1.122$, cosine $0.074$ \\
+MNIST & additive & 10 & CV $0.310$, cosine $0.212$ & CV $1.079$, cosine $0.094$ \\
+MNIST & shunting & 0  & CV $0.393$, cosine $0.170$ & CV $0.770$, cosine $0.114$ \\
+MNIST & shunting & 10 & CV $0.385$, cosine $0.281$ & CV $1.177$, cosine $0.106$ \\
 \addlinespace[2pt]
-Noise resilience & additive & 0  & $0.146$ & $0.229$ & $0.478$ & $-0.250$ & $0.987$ & $0.780$ \\
-Noise resilience & additive & 10 & $0.239$ & $0.285$ & $0.780$ & $0.009$ & $0.974$ & $0.347$ \\
-Noise resilience & shunting & 0  & $0.299$ & $0.316$ & $0.124$ & $0.329$ & $0.315$ & $0.678$ \\
-Noise resilience & shunting & 10 & $0.041$ & $0.160$ & $0.352$ & $0.386$ & $0.999$ & $0.889$ \\
+Noise resilience & additive & 0  & CV $0.124$, cosine $0.079$ & CV $0.114$, cosine $0.052$ \\
+Noise resilience & additive & 10 & CV $0.414$, cosine $0.206$ & CV $0.840$, cosine $0.094$ \\
+Noise resilience & shunting & 0  & CV $0.255$, cosine $0.324$ & CV $0.344$, cosine $0.341$ \\
+Noise resilience & shunting & 10 & CV $0.762$, cosine $0.140$ & CV $2.497$, cosine $0.079$ \\
 \bottomrule
 \end{tabular}
-}
 \renewcommand{\arraystretch}{1.0}
-\caption{\textbf{Pre-reactivation theory diagnostics for the frozen activation audit (LocalCA, 5 seeds per condition).} These diagnostics are computed on the hooked pre-reactivation compartment voltage $V_n$, so they track how the fixed post-voltage activation changes the operating point seen by the conductance-stage theory. The strongest qualitative pattern appears on the main synthetic mechanism task: frozen \texttt{param\_tanh} improves shunting per-soma compartment-error fidelity but reduces it sharply in additive cores. We present these results as an operating-point audit rather than as a second theorem claim; the exact factorization statement in the main text remains the conductance-stage result verified in Fig.~\ref{fig:gradient_fidelity}D.}
+\caption{\textbf{Frozen activation-shape theory audit on matched LocalCA runs (5 seeds per condition).} Each entry reports conductance-stage path-gain dispersion (CV) and direct per-soma compartment-error fidelity (cosine between the per-soma broadcast and the exact pre-reactivation compartment error). The corrected positive-input theory audit largely agrees with the empirical one: freezing \texttt{param\_tanh} usually broadens path-gain dispersion and weakens per-soma fidelity, especially in the inhibited settings where the main mechanistic story lives. The one mild exception is low-inhibition shunting on noise resilience, where frozen \texttt{param\_tanh} leaves fidelity roughly unchanged while still hurting final accuracy, suggesting that activation choice affects optimization and representation as well as direct credit fidelity.}
 \label{tab:activation_audit_theory}
 \end{table*}
 
@@ -1018,10 +1016,10 @@ The only non-local quantity is the broadcast error $e_n$, which requires a top-d
 We assume per-neuron resolution (one error per output neuron) for the per-soma broadcast mode.
 
 \subsection*{Dendritic Structure in Code}
-We use the morphology notation $[b_1,b_2,\dots,b_D]$ for rooted dendritic trees, where each factor gives the fan-in from one dendritic stage to the next on the path to the soma. For example, $[3,3]$ means that each soma aggregates $3$ proximal branches and each proximal branch aggregates $3$ distal branches, for $9$ distal leaves per soma; $[3,3,3]$ adds a third dendritic stage with $27$ leaves per soma. In code, each excitatory unit is instantiated as a \texttt{DendriNet}, which is a stack of \texttt{DendriticBranchLayer}s. Each branch layer contains an excitatory synapse bank, an optional inhibitory synapse bank, a branch-to-parent aggregation map, and an optional post-voltage reactivation. In the main feedforward models studied here, \texttt{somatic\_synapses=false}, so synaptic inputs terminate on dendritic branches rather than directly on the soma. Likewise, \texttt{input\_mode=1} together with nonzero \texttt{ie\_synapses\_per\_branch\_per\_layer} means that inhibition enters each dendritic branch through explicit inhibitory synapses even when we do not instantiate a separate inhibitory neuron population (\texttt{inhibitory\_layer\_sizes=[]}). The additive and shunting cores are therefore architecture-matched at the tree level; they differ in the branch-level voltage integration rule rather than in whether a dendritic tree exists.
+We use the morphology notation $[b_1,b_2,\dots,b_D]$ for rooted dendritic trees, where each factor gives the fan-in from one dendritic stage to the next on the path to the soma. For example, $[3,3]$ means that each soma aggregates $3$ proximal branches and each proximal branch aggregates $3$ distal branches, for $9$ distal leaves per soma; $[3,3,3]$ adds a third dendritic stage with $27$ leaves per soma. In code, each excitatory unit is instantiated as a \texttt{DendriNet}, which is a stack of \texttt{DendriticBranchLayer}s. Each branch layer contains an excitatory synapse bank, an optional inhibitory synapse bank, a branch-to-parent aggregation map, and an optional post-voltage reactivation. In the main feedforward models studied here, \texttt{somatic\_synapses=false}, so synaptic inputs terminate on dendritic branches rather than directly on the soma. Likewise, \texttt{input\_mode=1} together with nonzero \texttt{ie\_synapses\_per\_branch\_per\_layer} means that inhibition enters each dendritic branch through explicit inhibitory synapses even when we do not instantiate a separate inhibitory neuron population (\texttt{inhibitory\_layer\_sizes=[]}). The additive and shunting cores are therefore architecture-matched at the tree level; they differ in the branch-level voltage integration rule rather than in whether a dendritic tree exists. In all reported dendritic runs, synaptic and dendritic conductance parameters are pushed through positive transforms (\texttt{softplus} in the main paper runs), so the conductances themselves remain nonnegative at every optimization step; unconstrained decoder weights are separate readout parameters and are not interpreted as conductances.
 
 \subsection*{Post-Voltage Reactivation}
-The conductance stage produces a pre-reactivation compartment voltage $V_n$, after which each branch layer may apply a monotone scalar nonlinearity. The codebase supports identity (\texttt{none}), fixed \texttt{tanh}/\texttt{sigmoid}/\texttt{relu}, and several parametric families including \texttt{param\_tanh}, \texttt{param\_tanh\_only\_m}, and piecewise linear--saturating variants. The main manuscript sweeps use \texttt{param\_tanh}, a learnable bounded firing-rate transform of the form $(\tanh(m(V-b))+1)/2$, typically with identity transfer input activation; most headline feedforward sweeps use a linear decoder, while the appendix CIFAR extension uses a nonlinear decoder and therefore maps output error back to decoder-input/soma space through the decoder Jacobian before applying LocalCA. Unless explicitly overridden, additive and shunting cores can start from different reactivation initializations in code; activation-fairness ablations therefore match additive initialization to the shunting setting when comparing alternative reactivation choices directly. The appendix activation audit additionally fixes \texttt{param\_tanh} after initialization to isolate activation shape from activation plasticity.
+The conductance stage produces a pre-reactivation compartment voltage $V_n$, after which each branch layer may apply a monotone scalar nonlinearity. The codebase supports identity (\texttt{none}), fixed \texttt{tanh}/\texttt{sigmoid}/\texttt{relu}, and several parametric families including \texttt{param\_tanh}, \texttt{param\_tanh\_only\_m}, and piecewise linear--saturating variants. The main manuscript sweeps use \texttt{param\_tanh}, a learnable bounded firing-rate transform of the form $(\tanh(m(V-b))+1)/2$, together with an explicitly configured nonnegative transfer stage (ReLU in the corrected positive-conductance runs) so that the first synaptic drive remains nonnegative even after input corruption or structured task noise. Most headline feedforward sweeps use a linear decoder, while the CIFAR extension uses a nonlinear decoder and therefore maps output error back to decoder-input/soma space through the decoder Jacobian before applying LocalCA. Unless explicitly overridden, additive and shunting cores can start from different reactivation initializations in code; activation-fairness ablations therefore match additive initialization to the shunting setting when comparing alternative reactivation choices directly. The appendix activation audit additionally fixes \texttt{param\_tanh} after initialization to isolate activation shape from activation plasticity.
 
 \subsection*{Units and Parameterization}
 \begin{table}[t]\centering\small
@@ -1063,16 +1061,16 @@ Recent dendritic extensions & path propagation; router-derived branch roles; pat
 \toprule
 \textbf{Setting} & \textbf{Encoder} & \textbf{E layers} & \textbf{Tree} & \textbf{Synapses / branch} & \textbf{Seeds} & \textbf{Notes} \\
 \midrule
-Gradient fidelity / path-gain / noise-resilience mechanism & identity & $[128,128]$ & $[3,3]$ & $N_E{=}40$, $N_I \in \{0,5,10,20,40\}$ & $5$ fidelity, $5$ oracle & Main mechanistic sweeps in Figs.~\ref{fig:gradient_fidelity} and \ref{fig:mechanistic}; dendritic reactivation is \texttt{param\_tanh}. \\
-MNIST / context-gating local competence & identity & $[128]$ & $[3,3]$ & $N_E{=}40$, $N_I{=}20$ & $5$ & Best local 5F per-soma runs used in Table~\ref{tab:gap_closing}; dendritic reactivation is \texttt{param\_tanh}. \\
-Fashion-MNIST competence & identity & $[128]$ & $[3,3]$ & $N_E{=}40$, $N_I{=}20$ & $5$ & Dedicated five-seed standard-vs-local competence sweep; dendritic reactivation is \texttt{param\_tanh}. \\
-Cue-routing PV-LocalCA & pathway router & $[64]$ & $[2]$ & $N_E{=}10$, $N_I{=}4$ & $5$ & Learned router with two pathway groups and rank-$2$ structured feedback; dendritic reactivation is \texttt{param\_tanh}. \\
-CIFAR-10 compact E/I mechanism extension & identity & $[20]$ E, $[20]$ I & $[3,3,3,3]$ & $N_E{=}25$, $N_{EI}{=}25$, $N_{IE}{=}25$ & $5$ & Appendix-only harder-data extension with explicit inhibitory population, decoder $[32,16]$, and decoder-aware soma-error mapping for LocalCA. \\
-Morphology$\times$inhibition appendix map & identity & $[128,128]$ & $[2,2]$, $[3,3]$, $[4,4]$, $[2,2,2]$, $[3,3,3]$ & $N_E{=}40$, $N_I \in \{0,5,10,20,40\}$ & $3$ & Exploratory appendix sweep only; dendritic reactivation is \texttt{param\_tanh}. \\
+Gradient fidelity / path-gain / noise-resilience mechanism & id.+ReLU & $[128,128]$ & $[3,3]$ & $N_E{=}40$, $N_I \in \{0,5,10,20,40\}$ & $5$ fidelity, $5$ oracle & Main mechanistic sweeps in Figs.~\ref{fig:gradient_fidelity} and \ref{fig:mechanistic}; dendritic reactivation is \texttt{param\_tanh}. \\
+MNIST / context-gating local competence & id.+ReLU & $[128]$ & $[3,3]$ & $N_E{=}40$, $N_I{=}20$ & $5$ & Best local 5F per-soma runs used in Table~\ref{tab:gap_closing}; dendritic reactivation is \texttt{param\_tanh}. \\
+Fashion-MNIST competence & id.+ReLU & $[128]$ & $[3,3]$ & $N_E{=}40$, $N_I{=}20$ & $5$ & Dedicated five-seed standard-vs-local competence sweep; dendritic reactivation is \texttt{param\_tanh}. \\
+Cue-routing PV-LocalCA & router+ReLU & $[64]$ & $[2]$ & $N_E{=}10$, $N_I{=}4$ & $5$ & Learned router with two pathway groups and rank-$2$ structured feedback; dendritic reactivation is \texttt{param\_tanh}. \\
+CIFAR-10 compact E/I mechanism extension & id.+ReLU & $[20]$ E, $[20]$ I & $[3,3,3,3]$ & $N_E{=}25$, $N_{EI}{=}25$, $N_{IE}{=}25$ & $5$ & Harder-data extension with explicit inhibitory population, decoder $[32,16]$, and decoder-aware soma-error mapping for LocalCA. \\
+Morphology$\times$inhibition appendix map & id.+ReLU & $[128,128]$ & $[2,2]$, $[3,3]$, $[4,4]$, $[2,2,2]$, $[3,3,3]$ & $N_E{=}40$, $N_I \in \{0,5,10,20,40\}$ & $3$ & Exploratory support sweep; dendritic reactivation is \texttt{param\_tanh}. \\
 \bottomrule
 \end{tabular}}
 \renewcommand{\arraystretch}{1.0}
-\caption{\textbf{Representative architectures used in the manuscript.} All dendritic rows use explicit branch-level excitatory and inhibitory synapse banks with \texttt{somatic\_synapses=false} and nonnegative conductances. The tree column gives the dendritic morphology per excitatory neuron, while the synapse counts report excitatory and inhibitory synapses per branch.}
+\caption{\textbf{Representative architectures used in the manuscript.} All dendritic rows use explicit branch-level excitatory and inhibitory synapse banks with \texttt{somatic\_synapses=false}, nonnegative conductances, and a nonnegative first-layer drive (implemented by an explicit ReLU transfer stage in the corrected positive-conductance runs). The tree column gives the dendritic morphology per excitatory neuron, while the synapse counts report excitatory and inhibitory synapses per branch.}
 \label{tab:representative_architectures}
 \end{table}
 
@@ -1115,7 +1113,7 @@ Inhibitory homeostasis & Auxiliary local inhibitory balancing term & 3F, 4F, 5F 
 \end{table}
 
 \subsection*{Seed Protocol and Claim Status}
-The seed depth is not uniform across every sweep, and we therefore separate headline evidence from exploratory screening. The main mechanistic gradient-fidelity sweep uses $5$ seeds per condition, the corrected path-transport oracle sweep uses $5$ seeds per condition, the cue-routing seed-repeat and tuning sweeps use $5$ seeds per condition, the dedicated Fashion-MNIST competence sweep uses $5$ seeds per condition, the corrected flattened-CIFAR-10 mechanism extension in Table~\ref{tab:cifar10_mechanism_extension} also uses $5$ seeds per condition, and the frozen activation audit in Tables~\ref{tab:activation_audit_empirical}--\ref{tab:activation_audit_theory} uses $5$ seeds per condition. A smaller set of support sweeps, including the 5F sensitivity and morphology$\times$inhibition map, use $3$ seeds per condition and are described as exploratory where appropriate. By contrast, early architecture-selection or stress-test screens with only $1$--$2$ seeds are treated as exploratory and are either omitted from the main claims or explicitly framed as pilots. For transparency, the BP ceilings in Table~\ref{tab:gap_closing} for MNIST and context gating now come from dedicated matched-capacity $5$-seed standard-training refreshes rather than the earlier $2$-seed calibration pass.
+The seed depth is not uniform across every sweep, and we therefore separate headline evidence from exploratory screening. The main mechanistic gradient-fidelity sweep uses $5$ seeds per condition, the corrected path-transport oracle sweep uses $5$ seeds per condition, the cue-routing seed-repeat and tuning sweeps use $5$ seeds per condition, the dedicated Fashion-MNIST competence sweep uses $5$ seeds per condition, the corrected flattened-CIFAR-10 mechanism extension in Table~\ref{tab:cifar10_mechanism_extension} also uses $5$ seeds per condition, and the frozen activation audit in Table~\ref{tab:activation_audit_empirical} uses $5$ seeds per condition. A smaller set of support sweeps, including the 5F sensitivity and morphology$\times$inhibition map, use $3$ seeds per condition and are described as exploratory where appropriate. By contrast, early architecture-selection or stress-test screens with only $1$--$2$ seeds are treated as exploratory and are either omitted from the main claims or explicitly framed as pilots. For transparency, the BP ceilings in Table~\ref{tab:gap_closing} for MNIST and context gating now come from dedicated matched-capacity $5$-seed standard-training refreshes rather than the earlier $2$-seed calibration pass.
 
 \subsection*{Compute Resources}
 All experiments were run on an internal GPU cluster. Most MNIST, Fashion-MNIST, and synthetic-task runs used a single NVIDIA A100 or H100 GPU and finished in minutes to tens of minutes per seed; the flattened CIFAR-10 runs required longer single-GPU jobs but still did not use distributed or multi-GPU training. Reported headline metrics are aggregated over $5$ seeds unless noted otherwise; this now includes the corrected flattened-CIFAR-10 mechanism extension. The remaining $3$-seed results are confined to selected exploratory support sweeps, and the broader exploratory screens used to tune and diagnose the method required additional compute beyond the final reported runs.
@@ -1309,31 +1307,24 @@ Additive integration lacks this self-normalizing mechanism, producing broader di
 \label{app:synthetic_tasks}
 
 Each synthetic task is generated procedurally from a fixed random seed and uses fixed train/val/test splits for reproducibility.
-All tasks use 500-dimensional flattened inputs and 10-class outputs unless otherwise noted.
+The MNIST-derived synthetic tasks use flattened $28\times 28$ inputs; cue integration instead uses a small vector input with two output classes. Output dimensionality therefore varies by task and is stated in the task description when it differs from 10-way digit classification.
 
 \paragraph{Context gating.}
-Inputs are Gaussian mixtures over 10 classes, but the class-conditional means are linearly transformed by one of $C=4$ context configurations.
-A one-hot context vector (appended to the input) indicates which configuration is active.
-Without the context, classes are ambiguous; with it, the optimal boundary shifts.
-This task tests whether credit assignment can exploit the context gating structure to modulate branch-specific representations appropriately.
-The HSIC auxiliary objective (weight $0.01$) is used to decorrelate layer representations, adding roughly $3$~pp under local learning.
+Inputs are contextual figure-ground MNIST examples. The right half of the image carries the original MNIST digit, while the left half is replaced by low-amplitude uniform noise; all pixels therefore remain nonnegative. This task tests whether credit assignment can exploit a simple context-dependent spatial structure without leaving the nonnegative-drive regime of the conductance model. The HSIC auxiliary objective (weight $0.01$) is used to decorrelate layer representations, adding roughly $3$~pp under local learning.
 
 \paragraph{Noise resilience.}
-Inputs are MNIST features corrupted by structured channel noise: a random $50\times50$ projection matrix adds correlated noise drawn from $\mathcal{N}(0, \sigma_{\mathrm{task}}^2 I)$ with $\sigma_{\mathrm{task}} = 1.5$.
-The noise projection is fixed across training; the network must filter structured interference to recover the underlying class signal.
+Inputs are flattened MNIST images corrupted by structured channel noise: a fixed 50-dimensional latent Gaussian perturbation is projected into input space and added to each example, with $\sigma_{\mathrm{task}} = 1.5$, then clipped to $[0,1]$.
+The projection is fixed across training, so the network must filter correlated interference to recover the underlying class signal.
 Credit assignment must remain coherent under the corrupted signal, making this task particularly sensitive to path-gain dispersion.
 
 \paragraph{Info shunting.}
-Inputs contain two additive streams: a low-frequency signal and a high-frequency distractor drawn with equal energy.
-A second context input (separate channel) indicates whether the relevant signal is low- or high-frequency on each trial.
-Correct classification requires the network to gate the distractor stream, a computation that naturally invites inhibitory modulation.
-Performance at $N_I{=}0$ is notably below shunting performance ($+24.8$~pp), reflecting the task's dependence on divisive normalization.
+Inputs contain two additive streams: a low-frequency signal and a high-frequency distractor drawn with equal energy, together with a separate context channel indicating which stream is relevant on each trial. In the current code this benchmark uses signed synthetic inputs, so it violates the nonnegative presynaptic-drive assumption enforced in the corrected headline experiments. We therefore retain it only as a legacy exploratory task and exclude it from the corrected main-text claims.
 
 \paragraph{Cue integration.}
-Two noisy cue streams ($A$ and $B$) are presented simultaneously, each carrying partial information about one of 10 classes.
-A binary context signal indicates which cue is reliable on each trial (cue $A$ or cue $B$).
+Two noisy cue streams ($A$ and $B$) are presented simultaneously, each carrying partial information about one of 2 classes.
+A binary one-hot context signal indicates which cue is reliable on each trial (cue $A$ or cue $B$), and each cue vector is clipped to $[0,1]$ after noise is added.
 The fixed-pathway variant duplicates the context into both cue branches; the learned-routing variant requires the router to discover the cue separation from data.
-This task is used in Sec.~\ref{sec:cue_routing} to test structured pathway-vector broadcast.
+This task is used in Sec.~\ref{sec:cue_routing} to test structured pathway-vector broadcast while staying inside the nonnegative-input regime.
 
 \section{Depth Scaling and Noise Robustness}
 \label{app:depth_noise}

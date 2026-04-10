@@ -579,9 +579,11 @@ def analyze_run(
     helper.loss_function = type("Loss", (), {"_loss_name": str(loss_name)})()
     helper._decoder_cache = decoder_cache
     delta_out = helper._compute_soma_error(y_hat.detach(), y_batch.detach())
+    # Keep y_hat attached here so decoder-aware soma mapping can use the
+    # decoder Jacobian when the decoder is nonlinear.
     _, delta_local = helper._resolve_local_soma_signals(
         model=model,
-        y_hat=y_hat.detach(),
+        y_hat=y_hat,
         delta_out=delta_out.detach(),
     )
 

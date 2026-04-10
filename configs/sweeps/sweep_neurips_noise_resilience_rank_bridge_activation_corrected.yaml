@@ -1,7 +1,7 @@
 output_dir: "/n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/dendritic-local-learning/local_sweep_runs"
 
 outputs:
-  run_name: "noise_resilience_rank_bridge_activation_corrected"
+  run_name: "noise_resilience_rank_bridge_nonnegativeinput_fix"
 
 slurm_config:
   account: "kempner_dev"

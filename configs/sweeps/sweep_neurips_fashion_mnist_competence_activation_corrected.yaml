@@ -57,7 +57,7 @@ base_config:
       transfer:
         input_mode: 1
         independent_pathways: false
-        output_activation: null
+        output_activation: relu
       morphology:
         somatic_synapses: false
         weight_transform: "softplus"

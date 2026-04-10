@@ -321,7 +321,7 @@ model:
       independent_pathways: false
       inhibitory_dim: null
       input_mode: 1
-      output_activation: null
+      output_activation: relu
     type: EINet
   decoder:
     params: {}

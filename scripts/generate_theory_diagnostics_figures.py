@@ -21,12 +21,12 @@ DRAFT_DIR = SCRIPT_DIR.parent
 FIGURES_DIR = DRAFT_DIR / "figures"
 DATA_DIR = DRAFT_DIR / "data"
 ANALYSIS_DIR = DRAFT_DIR / "analysis"
-SUMMARY_DIR = ANALYSIS_DIR / "theory_diag_gradient_fidelity_vs_ie_activation_corrected_summary"
+SUMMARY_DIR = ANALYSIS_DIR / "theory_diag_gradient_fidelity_vs_ie_nonnegativeinput_fix_summary"
 SUMMARY_CSV = SUMMARY_DIR / "theory_diag_by_condition.csv"
 MERGED_CSV = SUMMARY_DIR / "theory_diag_merged_runs.csv"
 ORACLE_SUMMARY_CSV = (
     ANALYSIS_DIR
-    / "path_transport_upper_bound_activation_corrected"
+    / "path_transport_upper_bound_nonnegativeinput_fix_5seed"
     / "path_transport_upper_bound_summary.csv"
 )
 LOW_BW_CSV = DATA_DIR / "low_bandwidth_results.csv"
