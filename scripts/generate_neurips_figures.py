@@ -399,9 +399,11 @@ def figure2():
     fmnist = _csv_path(FMNIST_SUMMARY_CSV)
     ie_data = _csv_path(IE_PERF_SUMMARY_CSV)
 
-    fig, axes = plt.subplots(1, 4, figsize=(W * 1.9, 3.2),
-                             gridspec_kw={"wspace": 0.55,
-                                          "width_ratios": [1.0, 1.1, 0.9, 1.0]})
+    fig, axes2d = plt.subplots(2, 2, figsize=(11.0, 7.6),
+                               gridspec_kw={"wspace": 0.32, "hspace": 0.42,
+                                            "width_ratios": [1.0, 1.0],
+                                            "height_ratios": [1.0, 1.0]})
+    axes = axes2d.flatten()
 
     # ---- Panel A: Multi-benchmark bars ----
     ax = axes[0]
@@ -596,8 +598,8 @@ def figure2():
         ax.set_title("Fashion-MNIST gap", fontsize=9.5)
         ax.set_ylim(70, 92)
 
-    fig.subplots_adjust(left=0.06, right=0.98, bottom=0.18, top=0.90,
-                        wspace=0.55)
+    fig.subplots_adjust(left=0.08, right=0.985, bottom=0.08, top=0.94,
+                        wspace=0.32, hspace=0.42)
     _save(fig, "fig2_competence_regime")
     _save(fig, "fig_competence_regime_appendix")
     plt.close(fig)
@@ -608,12 +610,17 @@ def figure2():
 # ===================================================================
 def figure3():
     print("\n--- Figure 3: Gradient Fidelity ---")
-    fig, axes = plt.subplots(
-        1,
-        4,
-        figsize=(W * 2.05, 3.35),
-        gridspec_kw={"wspace": 0.46, "width_ratios": [0.92, 0.96, 1.12, 0.95]},
+    fig, axes2d = plt.subplots(
+        2,
+        2,
+        figsize=(11.0, 7.6),
+        gridspec_kw={
+            "wspace": 0.32, "hspace": 0.42,
+            "width_ratios": [1.0, 1.0],
+            "height_ratios": [1.0, 1.0],
+        },
     )
+    axes = axes2d.flatten()
 
     # ---- Panel A: Cosine similarity bars ----
     ax = axes[0]
@@ -773,17 +780,8 @@ def figure3():
     ax.legend(fontsize=6.5, loc="upper left", ncol=2, handlelength=1.5,
               handletextpad=0.3)
     ax.set_ylim(-0.15, 0.55)
-    if _loaded_real_data and 'single_layer' in locals() and single_layer:
-        ax.text(
-            0.98,
-            0.04,
-            "single dendritic layer in this audit",
-            transform=ax.transAxes,
-            ha="right",
-            va="bottom",
-            fontsize=6.4,
-            color="#666666",
-        )
+    # (removed inline "single dendritic layer" caption; detail lives in the
+    # figure caption in the manuscript.)
 
     # ---- Panel D: Exact factorization sanity ----
     ax = axes[3]
@@ -831,7 +829,8 @@ def figure3():
         bbox=dict(boxstyle="round,pad=0.25", fc="white", ec="0.85", alpha=0.95),
     )
 
-    fig.subplots_adjust(left=0.055, right=0.985, bottom=0.19, top=0.90, wspace=0.46)
+    fig.subplots_adjust(left=0.08, right=0.985, bottom=0.08, top=0.94,
+                        wspace=0.32, hspace=0.42)
     _save(fig, "fig3_gradient_fidelity")
     plt.close(fig)
 
@@ -1514,8 +1513,9 @@ def figure_s_soma_extension():
         ax.set_ylabel(ylabel)
         ax.set_title(ptitle, fontsize=8.5, loc="left", pad=6)
         ax.set_ylim(0, 108)
-        ax.legend(fontsize=7, handlelength=1.2, handletextpad=0.4,
-                  loc="upper right", framealpha=0.9)
+        if ax_idx == 0:
+            ax.legend(fontsize=7, handlelength=1.2, handletextpad=0.4,
+                      loc="upper right", framealpha=0.9)
         style_axis(ax)
 
     fig.subplots_adjust(left=0.09, right=0.97, bottom=0.22, top=0.94)
@@ -1841,8 +1841,8 @@ def figure_s_cue_routing_soma():
     ax.set_xticks(x)
     ax.set_xticklabels(labels, fontsize=7.5)
     ax.set_ylabel("Cue-routing test accuracy (%)")
-    ax.set_title("Adding somatic inputs rescues cue-routing LocalCA",
-                 fontsize=9, loc="left", pad=6)
+    ax.set_title("Somatic inputs rescue cue-routing LocalCA",
+                 fontsize=8.7, loc="left", pad=6)
     ax.set_ylim(60, 108)
     style_axis(ax)
 
@@ -2027,8 +2027,9 @@ def figure_s_weight_dist_soma_comparison():
         ax.set_xticklabels([cell_labels[c] for c in cells], fontsize=7.5)
         ax.set_ylabel(ylabel)
         ax.set_title(ptitle, fontsize=8.8, loc="left", pad=6)
-        ax.legend(fontsize=7, handlelength=1.2, handletextpad=0.4,
-                  loc="upper right", framealpha=0.9)
+        if ax_idx == 0:
+            ax.legend(fontsize=7, handlelength=1.2, handletextpad=0.4,
+                      loc="upper left", framealpha=0.88)
         style_axis(ax)
 
     fig.subplots_adjust(left=0.08, right=0.98, bottom=0.16, top=0.93)

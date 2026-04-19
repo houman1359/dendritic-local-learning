@@ -33,10 +33,11 @@ We quantify these effects with a gradient-fidelity diagnostic based on direction
 \centering
 \includegraphics[width=0.95\textwidth]{fig1_model_and_credit.pdf}
 \caption{\textbf{Model and credit assignment.}
-\textbf{(A)}~A compartmental dendritic neuron with excitatory (blue triangles) and inhibitory (red circles) synapses. Voltages propagate to the soma through learned dendritic conductances (green arrows). A somatic broadcast error $e_n$ (dashed red) reaches all compartments, and each synapse combines it with local quantities such as presynaptic drive $x_j$, input resistance $R_n^{\mathrm{tot}}$, and driving force $E_j{-}V_n$.
-\textbf{(B)}~LocalCA rule hierarchy. 3F is the theorem-facing rule, 4F adds the heuristic morphology-aware factor $\rho$, and 5F adds the heuristic confidence-like factor $\phi$.
-\textbf{(C)}~Broadcast modes. Scalar sends one shared field, per-soma sends an output-space vector when dimensions match and otherwise falls back to scalar, random low-rank adds a few unstructured channels, and structured pathway feedback preserves pathway identity when branches should receive different teaching signals.
-\textbf{(D)}~Representative MNIST learning dynamics from the fixed-epoch Figure 1 sweep. Shunting with the stronger local wrappers tracks backprop much more closely than the additive control, giving a concrete preview before the paper turns to the sharper gradient-fidelity diagnostics in Fig.~\ref{fig:gradient_fidelity}.}
+\textbf{(A)}~A compartmental dendritic neuron with excitatory (blue circles) and inhibitory (red triangles) synapses arranged on a rooted tree. Voltages propagate to the soma through learned dendritic conductances (green arrows), which is the operating regime studied in the main feedforward experiments.
+\textbf{(B)}~Shunting voltage integration. The branch voltage is set by a conductance equation in which inhibition enters the denominator; the paired histograms illustrate the visual intuition behind the paper, namely that shunting narrows the conductance-stage path-gain distribution while additive integration leaves it broad.
+\textbf{(C)}~LocalCA rule hierarchy. 3F is the theorem-facing rule, 4F adds the heuristic morphology-aware factor $\rho$, and 5F adds the heuristic confidence-like factor $\phi$.
+\textbf{(D)}~Broadcast modes. Scalar sends one shared field, per-soma sends an output-space vector when dimensions match and otherwise falls back to scalar, random low-rank adds a few unstructured channels, and structured pathway feedback preserves pathway identity when branches should receive different teaching signals.
+\textbf{(E)}~Representative MNIST learning dynamics from the fixed-epoch Figure 1 sweep. Shunting with the stronger local wrappers tracks backprop much more closely than the additive control, giving a concrete preview before the paper turns to the sharper gradient-fidelity diagnostics in Fig.~\ref{fig:gradient_fidelity}.}
 \label{fig:model_schematic}
 \end{figure*}
 
@@ -48,6 +49,7 @@ We quantify these effects with a gradient-fidelity diagnostic based on direction
 We use a steady-state conductance model derived from discretized passive cable dynamics \cite{koch1999biophysics,dayan2001theoretical}.
 In normalized units, leak and inhibitory reversal are set to $0$, the excitatory reversal is set to $1$, and leak conductance is fixed at $1$.
 Each compartment voltage is therefore a conductance-weighted average. Two properties of this form matter for what follows: local sensitivities depend on both driving force $(E{-}V)$ and input resistance $R^{\mathrm{tot}}$, and shunting inhibition corresponds to adding conductance when $E_{\mathrm{inh}}\!\approx\!0$.
+Throughout the paper we write dendritic morphologies as rooted trees $[b_1,b_2,\dots,b_D]$, where each factor gives the fan-in from one dendritic stage to the next on the path to the soma. Thus $[3,3]$ means that each soma aggregates $3$ proximal branches and each proximal branch aggregates $3$ distal branches, for $9$ distal leaves per soma. In code, each excitatory unit is a stack of branch layers, each branch layer carries explicit excitatory and optional inhibitory synapse banks plus a branch-to-parent aggregation map, and the headline feedforward regime keeps \texttt{somatic\_synapses=false} so inputs terminate on dendritic branches rather than directly on the soma. The additive and shunting cores are therefore architecture-matched at the tree level; they differ only in the branch-level voltage integration rule.
 
 \subsection{Voltage Equation and Local Sensitivities}
 
@@ -285,7 +287,7 @@ Appendix Table~\ref{tab:activation_audit_empirical} shows that this mechanism sh
 \begin{figure*}[!t]
 \centering
 \includegraphics[width=0.98\textwidth]{fig5_mechanistic_evidence.pdf}
-\caption{\textbf{Mechanistic evidence: $A \to B \to C \to D$.}
+\caption{\textbf{Mechanistic chain from path gains to learning.}
 \textbf{(A)}~Conductance-stage path-gain dispersion on MNIST, measured as the coefficient of variation of the exact tree attenuation $\alpha_n$ across compartments. Shunting keeps these conductance-stage path gains much more concentrated than the additive control as inhibition increases.
 \textbf{(B)}~Direct compartment-error fidelity on noise resilience. Solid lines compare the per-soma broadcast $e_n$ to the exact compartment error $\partial L/\partial V_n$; dashed lines show the transported-error oracle obtained by recursively applying conductance-stage path gains. Under the corrected positive-input setup, shunting still improves the simple per-soma broadcast in the inhibited regimes, while the transported oracle defines the remaining approximation gap and becomes nearly exact once inhibition is present.
 \textbf{(C)}~Learning with the transported-error oracle on noise resilience. Improving the broadcast field is enough to recover near-ceiling local learning, especially in the additive architecture where per-soma broadcast fails most severely; the CIFAR-10 inset shows the same harder-data ladder for shunting in the corrected compact E/I family.
@@ -297,7 +299,7 @@ Appendix Table~\ref{tab:activation_audit_empirical} shows that this mechanism sh
 
 Having established the mechanism, we next ask whether the same conditions improve end-task learning in architectures that are already competent under backpropagation.
 In the capacity-calibrated regime, shunting dendritic cores remain reasonably competitive under local learning: on MNIST, Fashion-MNIST, and context gating, the best local configuration (5F, per-soma broadcast, local decoder) stays within about $5$--$6$ percentage points of the matched backprop ceiling (Table~\ref{tab:gap_closing}; Fig.~\ref{fig:competence_regime}).
-Within the local-rule family, 5F is the strongest practical wrapper, but it remains heuristic rather than theorem-derived; Appendix Tables~\ref{tab:variant_ranking}, \ref{tab:local_mismatch_recheck}, and \ref{tab:component_carry} summarize that division of labor across rules and broadcast choices.
+Within the local-rule family, 5F is the strongest practical wrapper, but it remains heuristic rather than theorem-derived; Appendix Tables~\ref{tab:variant_ranking}, \ref{tab:local_mismatch_recheck}, and \ref{tab:component_carry} summarize that division of labor across rules and broadcast choices. Classical random-feedback baselines remain much weaker on the same task family: in the matched MNIST appendix comparison, DFA reaches $66.1\%$ on shunting and $62.2\%$ on additive, well below the $91.4\%$ best shunting LocalCA result, while FA is not directly compatible with the block-structured dendritic layers (Appendix Fig.~\ref{fig:fa_dfa_appendix}). This helps separate the contribution of the conductance architecture from the contribution of the LocalCA rule itself.
 
 \subsection{Regime Dependence of the Shunting Advantage}
 
@@ -831,7 +833,7 @@ Per-soma, path on vs off (synthetic task, sandbox) & test / MI(E,I;C) & $-0.003$
 \begin{figure*}[t]
 \centering
 \includegraphics[width=0.95\textwidth]{fig_s5_fa_dfa.pdf}
-\caption{\textbf{Feedback alignment baselines (MNIST).} \textbf{(A)}~Grouped comparison: standard backprop (gray), DFA (orange), and FA (purple). Red X marks indicate FA failure on dendritic architectures (dimensional incompatibility between random feedback matrices and block-structured dendritic layers). DFA achieves 66.1\% on shunting vs.\ 62.2\% additive vs.\ 51.8\% point MLP. \textbf{(B)}~Backprop$-$DFA gap: dendritic architectures (24.9--27.6~pp) show smaller gaps than point MLPs (39.5~pp), suggesting conductance-based architecture is partially compatible with random feedback.}
+\caption{\textbf{Feedback alignment baselines (MNIST).} \textbf{(A)}~Grouped comparison: standard backprop (neutral gray), DFA (orange), and FA (purple). Hatched N/A markers indicate that FA is not implemented for the block-structured dendritic architectures because the random feedback matrices are not dimensionally compatible with the tree-structured branch updates. DFA achieves 66.1\% on shunting vs.\ 62.2\% additive vs.\ 51.8\% point MLP. \textbf{(B)}~Backprop$-$DFA gap: dendritic architectures (24.9--27.6~pp) show smaller gaps than point MLPs (39.5~pp), suggesting conductance-based architecture is partially compatible with random feedback.}
 \label{fig:fa_dfa_appendix}
 \end{figure*}
 
@@ -1022,12 +1024,12 @@ We assume per-neuron resolution (one error per output neuron) for the per-soma b
 \subsection*{Dendritic Structure in Code}
 We use the morphology notation $[b_1,b_2,\dots,b_D]$ for rooted dendritic trees, where each factor gives the fan-in from one dendritic stage to the next on the path to the soma. For example, $[3,3]$ means that each soma aggregates $3$ proximal branches and each proximal branch aggregates $3$ distal branches, for $9$ distal leaves per soma; $[3,3,3]$ adds a third dendritic stage with $27$ leaves per soma. In code, each excitatory unit is instantiated as a \texttt{DendriNet}, which is a stack of \texttt{DendriticBranchLayer}s. Each branch layer contains an excitatory synapse bank, an optional inhibitory synapse bank, a branch-to-parent aggregation map, and an optional post-voltage reactivation. In the main feedforward models studied here, \texttt{somatic\_synapses=false}, so synaptic inputs terminate on dendritic branches rather than directly on the soma. Likewise, \texttt{input\_mode=1} together with nonzero \texttt{ie\_synapses\_per\_branch\_per\_layer} means that inhibition enters each dendritic branch through explicit inhibitory synapses even when we do not instantiate a separate inhibitory neuron population (\texttt{inhibitory\_layer\_sizes=[]}). The additive and shunting cores are therefore architecture-matched at the tree level; they differ in the branch-level voltage integration rule rather than in whether a dendritic tree exists. In all reported dendritic runs, synaptic and dendritic conductance parameters are pushed through positive transforms (\texttt{softplus} in the main paper runs), so the conductances themselves remain nonnegative at every optimization step; unconstrained decoder weights are separate readout parameters and are not interpreted as conductances.
 
-Completed soma-on LocalCA reruns suggest that direct somatic input is a meaningful extension rather than a minor implementation detail. Relative to the matched safeguarded non-somatic reruns, enabling \texttt{somatic\_synapses=true} raises the mean test accuracy in all four finished paper-facing families: phase-1 capacity from $0.8784$ to $0.8999$, claim A from $0.5641$ to $0.6715$, claim B from $0.3578$ to $0.7070$, and claim C from $0.2798$ to $0.3906$. Because the main mechanistic analysis in this paper was developed in the dendrite-only feedforward regime, we keep the main text anchored to \texttt{somatic\_synapses=false} and treat the soma-on results as a strong supportive extension rather than silently replacing the original operating regime. Figure~\ref{fig:soma_extension} summarizes both mean and best accuracy comparisons across all four families.
+Completed soma-on LocalCA reruns suggest that direct somatic input is a meaningful extension rather than a minor implementation detail. Relative to the matched safeguarded non-somatic reruns, enabling \texttt{somatic\_synapses=true} raises the mean test accuracy in all four finished paper-facing families: phase-1 capacity from $0.8784$ to $0.8999$, claim A from $0.5641$ to $0.6715$, claim B from $0.3578$ to $0.7070$, and claim C from $0.2798$ to $0.3906$. Because the main mechanistic analysis in this paper was developed in the dendrite-only feedforward regime, we keep the main text anchored to \texttt{somatic\_synapses=false} and treat soma-on as a supportive extension rather than silently replacing the original operating regime. Figure~\ref{fig:soma_extension} summarizes the mean and best-accuracy comparisons across the four families.
 
 \begin{figure}[t]
 \centering
 \includegraphics[width=0.95\textwidth]{fig_s_soma_extension.pdf}
-\caption{\textbf{Soma-on extension for LocalCA.} Enabling direct somatic input (\texttt{somatic\_synapses=true}) improves mean test accuracy across all four paper-facing LocalCA families. The largest gain appears in morphology scaling, where the mean rises from $35.8\%$ to $70.7\%$ and the best run rises from $57.0\%$ to $76.4\%$. Gains in the shunting-regime and error-shaping families are smaller but still substantial. Delta labels show the soma-on improvement relative to soma-off. Because the main mechanistic analysis was developed in the dendrite-only feedforward regime, we keep the main text anchored to \texttt{somatic\_synapses=false} and report soma-on as a supportive extension.}
+\caption{\textbf{Soma-on extension for LocalCA.} Enabling direct somatic input (\texttt{somatic\_synapses=true}) improves mean test accuracy across all four paper-facing LocalCA families. The largest gain appears in morphology scaling, where the mean rises from $35.8\%$ to $70.7\%$ and the best run rises from $57.0\%$ to $76.4\%$. Gains in the shunting-regime and error-shaping families are smaller but still substantial. Delta labels show soma-on minus soma-off. Because the main mechanistic analysis was developed in the dendrite-only feedforward regime, we report soma-on as a supportive extension rather than replacing the main operating regime.}
 \label{fig:soma_extension}
 \end{figure}
 
@@ -1160,7 +1162,7 @@ $(b,m)$ policy comparison (MNIST / CIFAR-10) & Adam & $10^{-3}$ / $10^{-4}$ & 25
 \bottomrule
 \end{tabular}
 \renewcommand{\arraystretch}{1.0}
-\caption{\textbf{Training hyperparameters by experiment.} All runs use Adam with default $\beta_1{=}0.9$, $\beta_2{=}0.999$, $\varepsilon{=}10^{-8}$. Reactivation and block-linear parameter groups use a slower LR to keep the conductance-level dynamics numerically stable. Full configs for each entry are available under \texttt{drafts/dendritic-local-learning/configs/}.}
+\caption{\textbf{Training hyperparameters by experiment.} All runs use Adam with default $\beta_1{=}0.9$, $\beta_2{=}0.999$, $\varepsilon{=}10^{-8}$. Reactivation and block-linear parameter groups use a slower LR to keep conductance-level dynamics stable. Full configs are provided under \texttt{drafts/dendritic-local-learning/configs/}.}
 \label{tab:hyperparameters}
 \end{table}
 
@@ -1324,8 +1326,8 @@ Per-branch scaling $\rho_j = \rho_{\mathrm{base}} / (d_j + \alpha)$, mirroring c
 \paragraph{Dendritic normalization.}
 $\Delta g_j^{\mathrm{den}} \leftarrow \Delta g_j^{\mathrm{den}} / (\sum_k g_k^{\mathrm{den}} + \varepsilon)$, analogous to homeostatic scaling \cite{turrigiano2008homeostatic}.
 
-\paragraph{Pathway-vector broadcast.}
-For tasks with latent pathway structure, the broadcast becomes a low-dimensional vector over router-inferred pathway roles. Local pathway activity gates this vector. Block-structured transport then carries it upward so earlier branches receive feedback aligned with their downstream descendants.
+\paragraph{Pathway-vector feedback.}
+For tasks with latent pathway structure, the broadcast becomes a low-dimensional role vector inferred from the router. Local pathway activity gates that vector, and block-structured transport carries it upward so earlier branches receive feedback aligned with their downstream descendants.
 
 \paragraph{Router-derived branch roles.}
 Each branch receives a role profile inferred from router assignments and incoming block weights rather than from a hand-coded apical/basal label.

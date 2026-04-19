@@ -146,7 +146,7 @@ def figure_s5():
     model_labels = ["Shunting", "Additive", "Point MLP"]
     strategies = ["standard", "dfa", "fa"]
     strat_labels = ["Backprop", "DFA", "FA"]
-    strat_colors = [COLOR_BACKPROP, "#E67E22", "#8E44AD"]
+    strat_colors = [COLOR_POINT_MLP, "#E67E22", "#8E44AD"]
 
     x = np.arange(len(models))
     bw = 0.22
@@ -170,9 +170,14 @@ def figure_s5():
                        yerr=errs[i], color=scolor, edgecolor="white", lw=0.3,
                        capsize=1.5, error_kw={"lw": 0.5})
             else:
-                # Mark as failed with X
-                ax.text(x[i] + (j - 1) * bw, 5, "X", ha="center", va="bottom",
-                        fontsize=8, color="red", fontweight="bold")
+                ax.bar(
+                    x[i] + (j - 1) * bw, 7.5, bw * 0.88,
+                    color="#F0F0F0", edgecolor="#999999", lw=0.5, hatch="///"
+                )
+                ax.text(
+                    x[i] + (j - 1) * bw, 3.6, "N/A", ha="center", va="center",
+                    fontsize=6.3, color="#666666", fontweight="bold"
+                )
 
     ax.set_xticks(x)
     ax.set_xticklabels(model_labels)
@@ -183,6 +188,9 @@ def figure_s5():
     # Legend
     handles = [mpatches.Patch(color=c, label=l)
                for c, l in zip(strat_colors, strat_labels)]
+    handles.append(
+        mpatches.Patch(facecolor="#F0F0F0", edgecolor="#999999", hatch="///", label="FA unsupported")
+    )
     ax.legend(handles=handles, fontsize=5.5, loc="upper left",
               handlelength=1.0, handletextpad=0.3)
 

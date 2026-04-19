@@ -389,6 +389,7 @@ def _plot_oracle_learning(
             cifar_local["condition"] == "cifar10_shunting_5f_path_transport_bpdec_wd0"
         ].iloc[0]
 
+        # Only create the inset AFTER data validation succeeds.
         inset = ax.inset_axes([0.56, 0.08, 0.39, 0.34])
         style_axis(inset, grid="y")
         vals = np.array([
@@ -401,7 +402,7 @@ def _plot_oracle_learning(
             100.0 * float(ps_row["acc_test_std"]),
             100.0 * float(pt_row["acc_test_std"]),
         ])
-        colors = [COLOR_BACKPROP, COLOR_SHUNTING, COLOR_TRANSPORT]
+        colors = [COLORS["bp"], COLOR_SHUNTING, COLOR_TRANSPORT]
         bars = inset.bar(
             np.arange(3),
             vals,
@@ -428,8 +429,14 @@ def _plot_oracle_learning(
         inset.set_ylim(20, 55)
         inset.set_title("CIFAR-10 shunt.", fontsize=6.0, pad=1.5)
         inset.tick_params(axis="y", labelsize=5.4)
-    except Exception:
-        pass
+    except Exception as exc:
+        # Surface silent failures instead of leaving an empty inset behind.
+        print(f"  [warn] CIFAR inset skipped: {type(exc).__name__}: {exc}")
+        # Remove any empty inset so it doesn't leave a ghost subplot.
+        try:
+            inset.remove()
+        except Exception:
+            pass
 
 
 def build_figure(
@@ -445,25 +452,20 @@ def build_figure(
     oracle_summary = _safe_csv(oracle_summary_csv)
 
     fig, axes = plt.subplots(
-        1,
-        4,
-        figsize=(15.6, 3.6),
-        gridspec_kw={"wspace": 0.42, "width_ratios": [1.0, 1.0, 1.12, 1.05]},
+        2,
+        2,
+        figsize=(11.5, 8.2),
+        gridspec_kw={"wspace": 0.28, "hspace": 0.38,
+                     "width_ratios": [1.0, 1.0],
+                     "height_ratios": [1.0, 1.05]},
     )
+    axes = axes.flatten()
 
     _plot_path_gain_dispersion(axes[0], summary)
     _plot_compartment_error_fidelity(axes[1], summary)
     _plot_oracle_learning(axes[2], summary, oracle_summary)
     _plot_mechanism_summary(axes[3], summary)
-    fig.text(
-        0.5,
-        0.97,
-        "A \u2192 B \u2192 C \u2192 D",
-        ha="center",
-        va="top",
-        fontsize=6.6,
-        color="#555555",
-    )
+    fig.subplots_adjust(left=0.07, right=0.985, top=0.94, bottom=0.07)
     return fig
 
 

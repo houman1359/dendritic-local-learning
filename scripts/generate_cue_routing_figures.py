@@ -430,20 +430,22 @@ def build_figure(summary_csv: Path) -> None:
     records = _summary_records(summary)
     pv_row = _find_record(summary, "local_ca", "dendritic_shunting", "learned", "pathway_vector_tuned")
 
-    fig, axes = plt.subplots(
-        1,
-        4,
-        figsize=(15.8, 3.7),
-        gridspec_kw={"wspace": 0.50, "width_ratios": [1.35, 1.0, 0.92, 1.10]},
+    fig, axes2d = plt.subplots(
+        2, 2, figsize=(11.5, 8.2),
+        gridspec_kw={"wspace": 0.30, "hspace": 0.42,
+                     "width_ratios": [1.2, 1.0],
+                     "height_ratios": [1.0, 1.0]},
     )
-    ax_a, ax_b, ax_c, ax_d = axes
+    ax_a, ax_b = axes2d[0]
+    ax_c, ax_d = axes2d[1]
 
     _plot_task_schematic(ax_a)
     _plot_accuracy_panel(ax_b, records)
     _plot_specialization_panel(ax_c, summary)
     _plot_assignment_panel(ax_d, pv_row)
 
-    fig.subplots_adjust(left=0.04, right=0.985, bottom=0.14, top=0.90)
+    fig.subplots_adjust(left=0.07, right=0.985, bottom=0.06, top=0.94,
+                        wspace=0.30, hspace=0.42)
     _save(fig, "fig6_cue_routing")
     _save(fig, "fig_cue_routing_appendix")
     _save(fig, "fig_cue_routing_hard_diagnosis")
