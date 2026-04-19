@@ -1,0 +1,1878 @@
+output_dir: /n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/sweep_runs
+outputs:
+  run_name: sweep_bm_quantile_refresh_ablation_mnist_classification
+slurm_config:
+  account: kempner_dev
+  partition: kempner_eng
+  time: 08:00:00
+  nodes: 1
+  ntasks_per_node: 1
+  gpus_per_node: 1
+  cpus_per_task: 8
+  mem: 48GB
+  max_concurrent_jobs: 8
+  modules_to_load: []
+  conda_env_path: ''
+  training_script: src/dendritic_modeling/scripts/training/train_experiments.py
+experiment_settings:
+  seeds_per_condition: 1
+  base_seed: 42
+  use_array_jobs: true
+configs:
+- name: mnist_additive_standard_quantilebm_previnit_bf22_e1_nb8_hard
+  path: drafts/dendritic-local-learning/configs/fig1_mnist_shunting_bp_fixed100.yaml
+  run_name: mnist_additive_standard_quantilebm_previnit_bf22_e1_nb8_hard
+  overrides:
+    data: &id001
+      dataset_name: mnist
+      base_dir: /n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/data
+      processing:
+        flatten: true
+        normalize: false
+    model:
+      task: classification
+      encoder: &id002
+        type: identity
+        params:
+          input_dim: null
+      core:
+        architecture:
+          excitatory_layer_sizes: &id003
+          - 128
+          inhibitory_layer_sizes: &id004 []
+          inhibitory_branch_factors: &id005
+          - 1
+          excitatory_branch_factors: &id006
+          - 2
+          - 2
+        connectivity: &id007
+          ee_synapses_per_branch_per_layer:
+          - 40
+          ei_synapses_per_branch_per_layer:
+          - 0
+          ie_synapses_per_branch_per_layer:
+          - 20
+          ii_synapses_per_branch_per_layer:
+          - 0
+        transfer: &id008
+          input_mode: 1
+          independent_pathways: false
+          output_activation: relu
+        morphology: &id009
+          somatic_synapses: false
+          weight_transform: softplus
+        reactivation:
+          enabled: true
+          type: param_tanh
+          init_m: 1.5
+          init_b: 0.5
+          init_policy: analytical
+        type: dendritic_additive
+      decoder: &id010
+        type: MLP
+        params:
+          hidden_dims: []
+          activation: relu
+          output_dim: 10
+    training:
+      main:
+        strategy: standard
+        common:
+          reactivation_update_mode: quantile
+          recalibrate_reactivation_every: 1
+          reactivation_recalibration_mode: occupancy_quantile
+          reactivation_recalibration_start_epoch: 2
+          reactivation_recalibration_num_batches: 8
+          reactivation_recalibration_ema_alpha: 1.0
+    outputs:
+      run_name: mnist_additive_standard_quantilebm_previnit_bf22_e1_nb8_hard
+- name: mnist_additive_standard_quantilebm_previnit_bf22_e1_nb8_ema050
+  path: drafts/dendritic-local-learning/configs/fig1_mnist_shunting_bp_fixed100.yaml
+  run_name: mnist_additive_standard_quantilebm_previnit_bf22_e1_nb8_ema050
+  overrides:
+    data: *id001
+    model:
+      task: classification
+      encoder: *id002
+      core:
+        architecture:
+          excitatory_layer_sizes: *id003
+          inhibitory_layer_sizes: *id004
+          inhibitory_branch_factors: *id005
+          excitatory_branch_factors: *id006
+        connectivity: *id007
+        transfer: *id008
+        morphology: *id009
+        reactivation:
+          enabled: true
+          type: param_tanh
+          init_m: 1.5
+          init_b: 0.5
+          init_policy: analytical
+        type: dendritic_additive
+      decoder: *id010
+    training:
+      main:
+        strategy: standard
+        common:
+          reactivation_update_mode: quantile
+          recalibrate_reactivation_every: 1
+          reactivation_recalibration_mode: occupancy_quantile
+          reactivation_recalibration_start_epoch: 2
+          reactivation_recalibration_num_batches: 8
+          reactivation_recalibration_ema_alpha: 0.5
+    outputs:
+      run_name: mnist_additive_standard_quantilebm_previnit_bf22_e1_nb8_ema050
+- name: mnist_additive_standard_quantilebm_previnit_bf22_e1_nb8_ema025
+  path: drafts/dendritic-local-learning/configs/fig1_mnist_shunting_bp_fixed100.yaml
+  run_name: mnist_additive_standard_quantilebm_previnit_bf22_e1_nb8_ema025
+  overrides:
+    data: *id001
+    model:
+      task: classification
+      encoder: *id002
+      core:
+        architecture:
+          excitatory_layer_sizes: *id003
+          inhibitory_layer_sizes: *id004
+          inhibitory_branch_factors: *id005
+          excitatory_branch_factors: *id006
+        connectivity: *id007
+        transfer: *id008
+        morphology: *id009
+        reactivation:
+          enabled: true
+          type: param_tanh
+          init_m: 1.5
+          init_b: 0.5
+          init_policy: analytical
+        type: dendritic_additive
+      decoder: *id010
+    training:
+      main:
+        strategy: standard
+        common:
+          reactivation_update_mode: quantile
+          recalibrate_reactivation_every: 1
+          reactivation_recalibration_mode: occupancy_quantile
+          reactivation_recalibration_start_epoch: 2
+          reactivation_recalibration_num_batches: 8
+          reactivation_recalibration_ema_alpha: 0.25
+    outputs:
+      run_name: mnist_additive_standard_quantilebm_previnit_bf22_e1_nb8_ema025
+- name: mnist_additive_standard_quantilebm_quantinit_bf22_e1_nb8_hard
+  path: drafts/dendritic-local-learning/configs/fig1_mnist_shunting_bp_fixed100.yaml
+  run_name: mnist_additive_standard_quantilebm_quantinit_bf22_e1_nb8_hard
+  overrides:
+    data: *id001
+    model:
+      task: classification
+      encoder: *id002
+      core:
+        architecture:
+          excitatory_layer_sizes: *id003
+          inhibitory_layer_sizes: *id004
+          inhibitory_branch_factors: *id005
+          excitatory_branch_factors: *id006
+        connectivity: *id007
+        transfer: *id008
+        morphology: *id009
+        reactivation:
+          enabled: true
+          type: param_tanh
+          init_m: 1.5
+          init_b: 0.5
+          init_policy: quantile
+        type: dendritic_additive
+      decoder: *id010
+    training:
+      main:
+        strategy: standard
+        common:
+          reactivation_update_mode: quantile
+          recalibrate_reactivation_every: 1
+          reactivation_recalibration_mode: occupancy_quantile
+          reactivation_recalibration_start_epoch: 2
+          reactivation_recalibration_num_batches: 8
+          reactivation_recalibration_ema_alpha: 1.0
+    outputs:
+      run_name: mnist_additive_standard_quantilebm_quantinit_bf22_e1_nb8_hard
+- name: mnist_additive_standard_quantilebm_quantinit_bf22_e1_nb8_ema050
+  path: drafts/dendritic-local-learning/configs/fig1_mnist_shunting_bp_fixed100.yaml
+  run_name: mnist_additive_standard_quantilebm_quantinit_bf22_e1_nb8_ema050
+  overrides:
+    data: *id001
+    model:
+      task: classification
+      encoder: *id002
+      core:
+        architecture:
+          excitatory_layer_sizes: *id003
+          inhibitory_layer_sizes: *id004
+          inhibitory_branch_factors: *id005
+          excitatory_branch_factors: *id006
+        connectivity: *id007
+        transfer: *id008
+        morphology: *id009
+        reactivation:
+          enabled: true
+          type: param_tanh
+          init_m: 1.5
+          init_b: 0.5
+          init_policy: quantile
+        type: dendritic_additive
+      decoder: *id010
+    training:
+      main:
+        strategy: standard
+        common:
+          reactivation_update_mode: quantile
+          recalibrate_reactivation_every: 1
+          reactivation_recalibration_mode: occupancy_quantile
+          reactivation_recalibration_start_epoch: 2
+          reactivation_recalibration_num_batches: 8
+          reactivation_recalibration_ema_alpha: 0.5
+    outputs:
+      run_name: mnist_additive_standard_quantilebm_quantinit_bf22_e1_nb8_ema050
+- name: mnist_additive_standard_quantilebm_quantinit_bf22_e1_nb8_ema025
+  path: drafts/dendritic-local-learning/configs/fig1_mnist_shunting_bp_fixed100.yaml
+  run_name: mnist_additive_standard_quantilebm_quantinit_bf22_e1_nb8_ema025
+  overrides:
+    data: *id001
+    model:
+      task: classification
+      encoder: *id002
+      core:
+        architecture:
+          excitatory_layer_sizes: *id003
+          inhibitory_layer_sizes: *id004
+          inhibitory_branch_factors: *id005
+          excitatory_branch_factors: *id006
+        connectivity: *id007
+        transfer: *id008
+        morphology: *id009
+        reactivation:
+          enabled: true
+          type: param_tanh
+          init_m: 1.5
+          init_b: 0.5
+          init_policy: quantile
+        type: dendritic_additive
+      decoder: *id010
+    training:
+      main:
+        strategy: standard
+        common:
+          reactivation_update_mode: quantile
+          recalibrate_reactivation_every: 1
+          reactivation_recalibration_mode: occupancy_quantile
+          reactivation_recalibration_start_epoch: 2
+          reactivation_recalibration_num_batches: 8
+          reactivation_recalibration_ema_alpha: 0.25
+    outputs:
+      run_name: mnist_additive_standard_quantilebm_quantinit_bf22_e1_nb8_ema025
+- name: mnist_additive_standard_quantilebm_previnit_bf333_e1_nb8_hard
+  path: drafts/dendritic-local-learning/configs/fig1_mnist_shunting_bp_fixed100.yaml
+  run_name: mnist_additive_standard_quantilebm_previnit_bf333_e1_nb8_hard
+  overrides:
+    data: *id001
+    model:
+      task: classification
+      encoder: *id002
+      core:
+        architecture:
+          excitatory_layer_sizes: *id003
+          inhibitory_layer_sizes: *id004
+          inhibitory_branch_factors: *id005
+          excitatory_branch_factors: &id011
+          - 3
+          - 3
+          - 3
+        connectivity: *id007
+        transfer: *id008
+        morphology: *id009
+        reactivation:
+          enabled: true
+          type: param_tanh
+          init_m: 1.5
+          init_b: 0.5
+          init_policy: analytical
+        type: dendritic_additive
+      decoder: *id010
+    training:
+      main:
+        strategy: standard
+        common:
+          reactivation_update_mode: quantile
+          recalibrate_reactivation_every: 1
+          reactivation_recalibration_mode: occupancy_quantile
+          reactivation_recalibration_start_epoch: 2
+          reactivation_recalibration_num_batches: 8
+          reactivation_recalibration_ema_alpha: 1.0
+    outputs:
+      run_name: mnist_additive_standard_quantilebm_previnit_bf333_e1_nb8_hard
+- name: mnist_additive_standard_quantilebm_previnit_bf333_e1_nb8_ema050
+  path: drafts/dendritic-local-learning/configs/fig1_mnist_shunting_bp_fixed100.yaml
+  run_name: mnist_additive_standard_quantilebm_previnit_bf333_e1_nb8_ema050
+  overrides:
+    data: *id001
+    model:
+      task: classification
+      encoder: *id002
+      core:
+        architecture:
+          excitatory_layer_sizes: *id003
+          inhibitory_layer_sizes: *id004
+          inhibitory_branch_factors: *id005
+          excitatory_branch_factors: *id011
+        connectivity: *id007
+        transfer: *id008
+        morphology: *id009
+        reactivation:
+          enabled: true
+          type: param_tanh
+          init_m: 1.5
+          init_b: 0.5
+          init_policy: analytical
+        type: dendritic_additive
+      decoder: *id010
+    training:
+      main:
+        strategy: standard
+        common:
+          reactivation_update_mode: quantile
+          recalibrate_reactivation_every: 1
+          reactivation_recalibration_mode: occupancy_quantile
+          reactivation_recalibration_start_epoch: 2
+          reactivation_recalibration_num_batches: 8
+          reactivation_recalibration_ema_alpha: 0.5
+    outputs:
+      run_name: mnist_additive_standard_quantilebm_previnit_bf333_e1_nb8_ema050
+- name: mnist_additive_standard_quantilebm_previnit_bf333_e1_nb8_ema025
+  path: drafts/dendritic-local-learning/configs/fig1_mnist_shunting_bp_fixed100.yaml
+  run_name: mnist_additive_standard_quantilebm_previnit_bf333_e1_nb8_ema025
+  overrides:
+    data: *id001
+    model:
+      task: classification
+      encoder: *id002
+      core:
+        architecture:
+          excitatory_layer_sizes: *id003
+          inhibitory_layer_sizes: *id004
+          inhibitory_branch_factors: *id005
+          excitatory_branch_factors: *id011
+        connectivity: *id007
+        transfer: *id008
+        morphology: *id009
+        reactivation:
+          enabled: true
+          type: param_tanh
+          init_m: 1.5
+          init_b: 0.5
+          init_policy: analytical
+        type: dendritic_additive
+      decoder: *id010
+    training:
+      main:
+        strategy: standard
+        common:
+          reactivation_update_mode: quantile
+          recalibrate_reactivation_every: 1
+          reactivation_recalibration_mode: occupancy_quantile
+          reactivation_recalibration_start_epoch: 2
+          reactivation_recalibration_num_batches: 8
+          reactivation_recalibration_ema_alpha: 0.25
+    outputs:
+      run_name: mnist_additive_standard_quantilebm_previnit_bf333_e1_nb8_ema025
+- name: mnist_additive_standard_quantilebm_quantinit_bf333_e1_nb8_hard
+  path: drafts/dendritic-local-learning/configs/fig1_mnist_shunting_bp_fixed100.yaml
+  run_name: mnist_additive_standard_quantilebm_quantinit_bf333_e1_nb8_hard
+  overrides:
+    data: *id001
+    model:
+      task: classification
+      encoder: *id002
+      core:
+        architecture:
+          excitatory_layer_sizes: *id003
+          inhibitory_layer_sizes: *id004
+          inhibitory_branch_factors: *id005
+          excitatory_branch_factors: *id011
+        connectivity: *id007
+        transfer: *id008
+        morphology: *id009
+        reactivation:
+          enabled: true
+          type: param_tanh
+          init_m: 1.5
+          init_b: 0.5
+          init_policy: quantile
+        type: dendritic_additive
+      decoder: *id010
+    training:
+      main:
+        strategy: standard
+        common:
+          reactivation_update_mode: quantile
+          recalibrate_reactivation_every: 1
+          reactivation_recalibration_mode: occupancy_quantile
+          reactivation_recalibration_start_epoch: 2
+          reactivation_recalibration_num_batches: 8
+          reactivation_recalibration_ema_alpha: 1.0
+    outputs:
+      run_name: mnist_additive_standard_quantilebm_quantinit_bf333_e1_nb8_hard
+- name: mnist_additive_standard_quantilebm_quantinit_bf333_e1_nb8_ema050
+  path: drafts/dendritic-local-learning/configs/fig1_mnist_shunting_bp_fixed100.yaml
+  run_name: mnist_additive_standard_quantilebm_quantinit_bf333_e1_nb8_ema050
+  overrides:
+    data: *id001
+    model:
+      task: classification
+      encoder: *id002
+      core:
+        architecture:
+          excitatory_layer_sizes: *id003
+          inhibitory_layer_sizes: *id004
+          inhibitory_branch_factors: *id005
+          excitatory_branch_factors: *id011
+        connectivity: *id007
+        transfer: *id008
+        morphology: *id009
+        reactivation:
+          enabled: true
+          type: param_tanh
+          init_m: 1.5
+          init_b: 0.5
+          init_policy: quantile
+        type: dendritic_additive
+      decoder: *id010
+    training:
+      main:
+        strategy: standard
+        common:
+          reactivation_update_mode: quantile
+          recalibrate_reactivation_every: 1
+          reactivation_recalibration_mode: occupancy_quantile
+          reactivation_recalibration_start_epoch: 2
+          reactivation_recalibration_num_batches: 8
+          reactivation_recalibration_ema_alpha: 0.5
+    outputs:
+      run_name: mnist_additive_standard_quantilebm_quantinit_bf333_e1_nb8_ema050
+- name: mnist_additive_standard_quantilebm_quantinit_bf333_e1_nb8_ema025
+  path: drafts/dendritic-local-learning/configs/fig1_mnist_shunting_bp_fixed100.yaml
+  run_name: mnist_additive_standard_quantilebm_quantinit_bf333_e1_nb8_ema025
+  overrides:
+    data: *id001
+    model:
+      task: classification
+      encoder: *id002
+      core:
+        architecture:
+          excitatory_layer_sizes: *id003
+          inhibitory_layer_sizes: *id004
+          inhibitory_branch_factors: *id005
+          excitatory_branch_factors: *id011
+        connectivity: *id007
+        transfer: *id008
+        morphology: *id009
+        reactivation:
+          enabled: true
+          type: param_tanh
+          init_m: 1.5
+          init_b: 0.5
+          init_policy: quantile
+        type: dendritic_additive
+      decoder: *id010
+    training:
+      main:
+        strategy: standard
+        common:
+          reactivation_update_mode: quantile
+          recalibrate_reactivation_every: 1
+          reactivation_recalibration_mode: occupancy_quantile
+          reactivation_recalibration_start_epoch: 2
+          reactivation_recalibration_num_batches: 8
+          reactivation_recalibration_ema_alpha: 0.25
+    outputs:
+      run_name: mnist_additive_standard_quantilebm_quantinit_bf333_e1_nb8_ema025
+- name: mnist_shunting_standard_quantilebm_previnit_bf22_e1_nb8_hard
+  path: drafts/dendritic-local-learning/configs/fig1_mnist_shunting_bp_fixed100.yaml
+  run_name: mnist_shunting_standard_quantilebm_previnit_bf22_e1_nb8_hard
+  overrides:
+    data: *id001
+    model:
+      task: classification
+      encoder: *id002
+      core:
+        architecture:
+          excitatory_layer_sizes: *id003
+          inhibitory_layer_sizes: *id004
+          inhibitory_branch_factors: *id005
+          excitatory_branch_factors: *id006
+        connectivity: *id007
+        transfer: *id008
+        morphology: *id009
+        reactivation:
+          enabled: true
+          type: param_tanh
+          init_m: 1.5
+          init_b: 0.5
+          init_policy: analytical
+        type: dendritic_shunting
+      decoder: *id010
+    training:
+      main:
+        strategy: standard
+        common:
+          reactivation_update_mode: quantile
+          recalibrate_reactivation_every: 1
+          reactivation_recalibration_mode: occupancy_quantile
+          reactivation_recalibration_start_epoch: 2
+          reactivation_recalibration_num_batches: 8
+          reactivation_recalibration_ema_alpha: 1.0
+    outputs:
+      run_name: mnist_shunting_standard_quantilebm_previnit_bf22_e1_nb8_hard
+- name: mnist_shunting_standard_quantilebm_previnit_bf22_e1_nb8_ema050
+  path: drafts/dendritic-local-learning/configs/fig1_mnist_shunting_bp_fixed100.yaml
+  run_name: mnist_shunting_standard_quantilebm_previnit_bf22_e1_nb8_ema050
+  overrides:
+    data: *id001
+    model:
+      task: classification
+      encoder: *id002
+      core:
+        architecture:
+          excitatory_layer_sizes: *id003
+          inhibitory_layer_sizes: *id004
+          inhibitory_branch_factors: *id005
+          excitatory_branch_factors: *id006
+        connectivity: *id007
+        transfer: *id008
+        morphology: *id009
+        reactivation:
+          enabled: true
+          type: param_tanh
+          init_m: 1.5
+          init_b: 0.5
+          init_policy: analytical
+        type: dendritic_shunting
+      decoder: *id010
+    training:
+      main:
+        strategy: standard
+        common:
+          reactivation_update_mode: quantile
+          recalibrate_reactivation_every: 1
+          reactivation_recalibration_mode: occupancy_quantile
+          reactivation_recalibration_start_epoch: 2
+          reactivation_recalibration_num_batches: 8
+          reactivation_recalibration_ema_alpha: 0.5
+    outputs:
+      run_name: mnist_shunting_standard_quantilebm_previnit_bf22_e1_nb8_ema050
+- name: mnist_shunting_standard_quantilebm_previnit_bf22_e1_nb8_ema025
+  path: drafts/dendritic-local-learning/configs/fig1_mnist_shunting_bp_fixed100.yaml
+  run_name: mnist_shunting_standard_quantilebm_previnit_bf22_e1_nb8_ema025
+  overrides:
+    data: *id001
+    model:
+      task: classification
+      encoder: *id002
+      core:
+        architecture:
+          excitatory_layer_sizes: *id003
+          inhibitory_layer_sizes: *id004
+          inhibitory_branch_factors: *id005
+          excitatory_branch_factors: *id006
+        connectivity: *id007
+        transfer: *id008
+        morphology: *id009
+        reactivation:
+          enabled: true
+          type: param_tanh
+          init_m: 1.5
+          init_b: 0.5
+          init_policy: analytical
+        type: dendritic_shunting
+      decoder: *id010
+    training:
+      main:
+        strategy: standard
+        common:
+          reactivation_update_mode: quantile
+          recalibrate_reactivation_every: 1
+          reactivation_recalibration_mode: occupancy_quantile
+          reactivation_recalibration_start_epoch: 2
+          reactivation_recalibration_num_batches: 8
+          reactivation_recalibration_ema_alpha: 0.25
+    outputs:
+      run_name: mnist_shunting_standard_quantilebm_previnit_bf22_e1_nb8_ema025
+- name: mnist_shunting_standard_quantilebm_quantinit_bf22_e1_nb8_hard
+  path: drafts/dendritic-local-learning/configs/fig1_mnist_shunting_bp_fixed100.yaml
+  run_name: mnist_shunting_standard_quantilebm_quantinit_bf22_e1_nb8_hard
+  overrides:
+    data: *id001
+    model:
+      task: classification
+      encoder: *id002
+      core:
+        architecture:
+          excitatory_layer_sizes: *id003
+          inhibitory_layer_sizes: *id004
+          inhibitory_branch_factors: *id005
+          excitatory_branch_factors: *id006
+        connectivity: *id007
+        transfer: *id008
+        morphology: *id009
+        reactivation:
+          enabled: true
+          type: param_tanh
+          init_m: 1.5
+          init_b: 0.5
+          init_policy: quantile
+        type: dendritic_shunting
+      decoder: *id010
+    training:
+      main:
+        strategy: standard
+        common:
+          reactivation_update_mode: quantile
+          recalibrate_reactivation_every: 1
+          reactivation_recalibration_mode: occupancy_quantile
+          reactivation_recalibration_start_epoch: 2
+          reactivation_recalibration_num_batches: 8
+          reactivation_recalibration_ema_alpha: 1.0
+    outputs:
+      run_name: mnist_shunting_standard_quantilebm_quantinit_bf22_e1_nb8_hard
+- name: mnist_shunting_standard_quantilebm_quantinit_bf22_e1_nb8_ema050
+  path: drafts/dendritic-local-learning/configs/fig1_mnist_shunting_bp_fixed100.yaml
+  run_name: mnist_shunting_standard_quantilebm_quantinit_bf22_e1_nb8_ema050
+  overrides:
+    data: *id001
+    model:
+      task: classification
+      encoder: *id002
+      core:
+        architecture:
+          excitatory_layer_sizes: *id003
+          inhibitory_layer_sizes: *id004
+          inhibitory_branch_factors: *id005
+          excitatory_branch_factors: *id006
+        connectivity: *id007
+        transfer: *id008
+        morphology: *id009
+        reactivation:
+          enabled: true
+          type: param_tanh
+          init_m: 1.5
+          init_b: 0.5
+          init_policy: quantile
+        type: dendritic_shunting
+      decoder: *id010
+    training:
+      main:
+        strategy: standard
+        common:
+          reactivation_update_mode: quantile
+          recalibrate_reactivation_every: 1
+          reactivation_recalibration_mode: occupancy_quantile
+          reactivation_recalibration_start_epoch: 2
+          reactivation_recalibration_num_batches: 8
+          reactivation_recalibration_ema_alpha: 0.5
+    outputs:
+      run_name: mnist_shunting_standard_quantilebm_quantinit_bf22_e1_nb8_ema050
+- name: mnist_shunting_standard_quantilebm_quantinit_bf22_e1_nb8_ema025
+  path: drafts/dendritic-local-learning/configs/fig1_mnist_shunting_bp_fixed100.yaml
+  run_name: mnist_shunting_standard_quantilebm_quantinit_bf22_e1_nb8_ema025
+  overrides:
+    data: *id001
+    model:
+      task: classification
+      encoder: *id002
+      core:
+        architecture:
+          excitatory_layer_sizes: *id003
+          inhibitory_layer_sizes: *id004
+          inhibitory_branch_factors: *id005
+          excitatory_branch_factors: *id006
+        connectivity: *id007
+        transfer: *id008
+        morphology: *id009
+        reactivation:
+          enabled: true
+          type: param_tanh
+          init_m: 1.5
+          init_b: 0.5
+          init_policy: quantile
+        type: dendritic_shunting
+      decoder: *id010
+    training:
+      main:
+        strategy: standard
+        common:
+          reactivation_update_mode: quantile
+          recalibrate_reactivation_every: 1
+          reactivation_recalibration_mode: occupancy_quantile
+          reactivation_recalibration_start_epoch: 2
+          reactivation_recalibration_num_batches: 8
+          reactivation_recalibration_ema_alpha: 0.25
+    outputs:
+      run_name: mnist_shunting_standard_quantilebm_quantinit_bf22_e1_nb8_ema025
+- name: mnist_shunting_standard_quantilebm_previnit_bf333_e1_nb8_hard
+  path: drafts/dendritic-local-learning/configs/fig1_mnist_shunting_bp_fixed100.yaml
+  run_name: mnist_shunting_standard_quantilebm_previnit_bf333_e1_nb8_hard
+  overrides:
+    data: *id001
+    model:
+      task: classification
+      encoder: *id002
+      core:
+        architecture:
+          excitatory_layer_sizes: *id003
+          inhibitory_layer_sizes: *id004
+          inhibitory_branch_factors: *id005
+          excitatory_branch_factors: *id011
+        connectivity: *id007
+        transfer: *id008
+        morphology: *id009
+        reactivation:
+          enabled: true
+          type: param_tanh
+          init_m: 1.5
+          init_b: 0.5
+          init_policy: analytical
+        type: dendritic_shunting
+      decoder: *id010
+    training:
+      main:
+        strategy: standard
+        common:
+          reactivation_update_mode: quantile
+          recalibrate_reactivation_every: 1
+          reactivation_recalibration_mode: occupancy_quantile
+          reactivation_recalibration_start_epoch: 2
+          reactivation_recalibration_num_batches: 8
+          reactivation_recalibration_ema_alpha: 1.0
+    outputs:
+      run_name: mnist_shunting_standard_quantilebm_previnit_bf333_e1_nb8_hard
+- name: mnist_shunting_standard_quantilebm_previnit_bf333_e1_nb8_ema050
+  path: drafts/dendritic-local-learning/configs/fig1_mnist_shunting_bp_fixed100.yaml
+  run_name: mnist_shunting_standard_quantilebm_previnit_bf333_e1_nb8_ema050
+  overrides:
+    data: *id001
+    model:
+      task: classification
+      encoder: *id002
+      core:
+        architecture:
+          excitatory_layer_sizes: *id003
+          inhibitory_layer_sizes: *id004
+          inhibitory_branch_factors: *id005
+          excitatory_branch_factors: *id011
+        connectivity: *id007
+        transfer: *id008
+        morphology: *id009
+        reactivation:
+          enabled: true
+          type: param_tanh
+          init_m: 1.5
+          init_b: 0.5
+          init_policy: analytical
+        type: dendritic_shunting
+      decoder: *id010
+    training:
+      main:
+        strategy: standard
+        common:
+          reactivation_update_mode: quantile
+          recalibrate_reactivation_every: 1
+          reactivation_recalibration_mode: occupancy_quantile
+          reactivation_recalibration_start_epoch: 2
+          reactivation_recalibration_num_batches: 8
+          reactivation_recalibration_ema_alpha: 0.5
+    outputs:
+      run_name: mnist_shunting_standard_quantilebm_previnit_bf333_e1_nb8_ema050
+- name: mnist_shunting_standard_quantilebm_previnit_bf333_e1_nb8_ema025
+  path: drafts/dendritic-local-learning/configs/fig1_mnist_shunting_bp_fixed100.yaml
+  run_name: mnist_shunting_standard_quantilebm_previnit_bf333_e1_nb8_ema025
+  overrides:
+    data: *id001
+    model:
+      task: classification
+      encoder: *id002
+      core:
+        architecture:
+          excitatory_layer_sizes: *id003
+          inhibitory_layer_sizes: *id004
+          inhibitory_branch_factors: *id005
+          excitatory_branch_factors: *id011
+        connectivity: *id007
+        transfer: *id008
+        morphology: *id009
+        reactivation:
+          enabled: true
+          type: param_tanh
+          init_m: 1.5
+          init_b: 0.5
+          init_policy: analytical
+        type: dendritic_shunting
+      decoder: *id010
+    training:
+      main:
+        strategy: standard
+        common:
+          reactivation_update_mode: quantile
+          recalibrate_reactivation_every: 1
+          reactivation_recalibration_mode: occupancy_quantile
+          reactivation_recalibration_start_epoch: 2
+          reactivation_recalibration_num_batches: 8
+          reactivation_recalibration_ema_alpha: 0.25
+    outputs:
+      run_name: mnist_shunting_standard_quantilebm_previnit_bf333_e1_nb8_ema025
+- name: mnist_shunting_standard_quantilebm_quantinit_bf333_e1_nb8_hard
+  path: drafts/dendritic-local-learning/configs/fig1_mnist_shunting_bp_fixed100.yaml
+  run_name: mnist_shunting_standard_quantilebm_quantinit_bf333_e1_nb8_hard
+  overrides:
+    data: *id001
+    model:
+      task: classification
+      encoder: *id002
+      core:
+        architecture:
+          excitatory_layer_sizes: *id003
+          inhibitory_layer_sizes: *id004
+          inhibitory_branch_factors: *id005
+          excitatory_branch_factors: *id011
+        connectivity: *id007
+        transfer: *id008
+        morphology: *id009
+        reactivation:
+          enabled: true
+          type: param_tanh
+          init_m: 1.5
+          init_b: 0.5
+          init_policy: quantile
+        type: dendritic_shunting
+      decoder: *id010
+    training:
+      main:
+        strategy: standard
+        common:
+          reactivation_update_mode: quantile
+          recalibrate_reactivation_every: 1
+          reactivation_recalibration_mode: occupancy_quantile
+          reactivation_recalibration_start_epoch: 2
+          reactivation_recalibration_num_batches: 8
+          reactivation_recalibration_ema_alpha: 1.0
+    outputs:
+      run_name: mnist_shunting_standard_quantilebm_quantinit_bf333_e1_nb8_hard
+- name: mnist_shunting_standard_quantilebm_quantinit_bf333_e1_nb8_ema050
+  path: drafts/dendritic-local-learning/configs/fig1_mnist_shunting_bp_fixed100.yaml
+  run_name: mnist_shunting_standard_quantilebm_quantinit_bf333_e1_nb8_ema050
+  overrides:
+    data: *id001
+    model:
+      task: classification
+      encoder: *id002
+      core:
+        architecture:
+          excitatory_layer_sizes: *id003
+          inhibitory_layer_sizes: *id004
+          inhibitory_branch_factors: *id005
+          excitatory_branch_factors: *id011
+        connectivity: *id007
+        transfer: *id008
+        morphology: *id009
+        reactivation:
+          enabled: true
+          type: param_tanh
+          init_m: 1.5
+          init_b: 0.5
+          init_policy: quantile
+        type: dendritic_shunting
+      decoder: *id010
+    training:
+      main:
+        strategy: standard
+        common:
+          reactivation_update_mode: quantile
+          recalibrate_reactivation_every: 1
+          reactivation_recalibration_mode: occupancy_quantile
+          reactivation_recalibration_start_epoch: 2
+          reactivation_recalibration_num_batches: 8
+          reactivation_recalibration_ema_alpha: 0.5
+    outputs:
+      run_name: mnist_shunting_standard_quantilebm_quantinit_bf333_e1_nb8_ema050
+- name: mnist_shunting_standard_quantilebm_quantinit_bf333_e1_nb8_ema025
+  path: drafts/dendritic-local-learning/configs/fig1_mnist_shunting_bp_fixed100.yaml
+  run_name: mnist_shunting_standard_quantilebm_quantinit_bf333_e1_nb8_ema025
+  overrides:
+    data: *id001
+    model:
+      task: classification
+      encoder: *id002
+      core:
+        architecture:
+          excitatory_layer_sizes: *id003
+          inhibitory_layer_sizes: *id004
+          inhibitory_branch_factors: *id005
+          excitatory_branch_factors: *id011
+        connectivity: *id007
+        transfer: *id008
+        morphology: *id009
+        reactivation:
+          enabled: true
+          type: param_tanh
+          init_m: 1.5
+          init_b: 0.5
+          init_policy: quantile
+        type: dendritic_shunting
+      decoder: *id010
+    training:
+      main:
+        strategy: standard
+        common:
+          reactivation_update_mode: quantile
+          recalibrate_reactivation_every: 1
+          reactivation_recalibration_mode: occupancy_quantile
+          reactivation_recalibration_start_epoch: 2
+          reactivation_recalibration_num_batches: 8
+          reactivation_recalibration_ema_alpha: 0.25
+    outputs:
+      run_name: mnist_shunting_standard_quantilebm_quantinit_bf333_e1_nb8_ema025
+- name: mnist_additive_local_ca_quantilebm_previnit_bf22_e1_nb8_hard
+  path: drafts/dendritic-local-learning/configs/fig1_mnist_additive_localca_fixed100.yaml
+  run_name: mnist_additive_local_ca_quantilebm_previnit_bf22_e1_nb8_hard
+  overrides:
+    data: *id001
+    model:
+      task: classification
+      encoder: *id002
+      core:
+        architecture:
+          excitatory_layer_sizes: *id003
+          inhibitory_layer_sizes: *id004
+          inhibitory_branch_factors: *id005
+          excitatory_branch_factors: *id006
+        connectivity: *id007
+        transfer: *id008
+        morphology: *id009
+        reactivation:
+          enabled: true
+          type: param_tanh
+          init_m: 1.5
+          init_b: 0.5
+          init_policy: analytical
+        type: dendritic_additive
+      decoder: *id010
+    training:
+      main:
+        strategy: local_ca
+        common:
+          reactivation_update_mode: quantile
+          recalibrate_reactivation_every: 1
+          reactivation_recalibration_mode: occupancy_quantile
+          reactivation_recalibration_start_epoch: 2
+          reactivation_recalibration_num_batches: 8
+          reactivation_recalibration_ema_alpha: 1.0
+        learning_strategy_config:
+          update_reactivation: false
+    outputs:
+      run_name: mnist_additive_local_ca_quantilebm_previnit_bf22_e1_nb8_hard
+- name: mnist_additive_local_ca_quantilebm_previnit_bf22_e1_nb8_ema050
+  path: drafts/dendritic-local-learning/configs/fig1_mnist_additive_localca_fixed100.yaml
+  run_name: mnist_additive_local_ca_quantilebm_previnit_bf22_e1_nb8_ema050
+  overrides:
+    data: *id001
+    model:
+      task: classification
+      encoder: *id002
+      core:
+        architecture:
+          excitatory_layer_sizes: *id003
+          inhibitory_layer_sizes: *id004
+          inhibitory_branch_factors: *id005
+          excitatory_branch_factors: *id006
+        connectivity: *id007
+        transfer: *id008
+        morphology: *id009
+        reactivation:
+          enabled: true
+          type: param_tanh
+          init_m: 1.5
+          init_b: 0.5
+          init_policy: analytical
+        type: dendritic_additive
+      decoder: *id010
+    training:
+      main:
+        strategy: local_ca
+        common:
+          reactivation_update_mode: quantile
+          recalibrate_reactivation_every: 1
+          reactivation_recalibration_mode: occupancy_quantile
+          reactivation_recalibration_start_epoch: 2
+          reactivation_recalibration_num_batches: 8
+          reactivation_recalibration_ema_alpha: 0.5
+        learning_strategy_config:
+          update_reactivation: false
+    outputs:
+      run_name: mnist_additive_local_ca_quantilebm_previnit_bf22_e1_nb8_ema050
+- name: mnist_additive_local_ca_quantilebm_previnit_bf22_e1_nb8_ema025
+  path: drafts/dendritic-local-learning/configs/fig1_mnist_additive_localca_fixed100.yaml
+  run_name: mnist_additive_local_ca_quantilebm_previnit_bf22_e1_nb8_ema025
+  overrides:
+    data: *id001
+    model:
+      task: classification
+      encoder: *id002
+      core:
+        architecture:
+          excitatory_layer_sizes: *id003
+          inhibitory_layer_sizes: *id004
+          inhibitory_branch_factors: *id005
+          excitatory_branch_factors: *id006
+        connectivity: *id007
+        transfer: *id008
+        morphology: *id009
+        reactivation:
+          enabled: true
+          type: param_tanh
+          init_m: 1.5
+          init_b: 0.5
+          init_policy: analytical
+        type: dendritic_additive
+      decoder: *id010
+    training:
+      main:
+        strategy: local_ca
+        common:
+          reactivation_update_mode: quantile
+          recalibrate_reactivation_every: 1
+          reactivation_recalibration_mode: occupancy_quantile
+          reactivation_recalibration_start_epoch: 2
+          reactivation_recalibration_num_batches: 8
+          reactivation_recalibration_ema_alpha: 0.25
+        learning_strategy_config:
+          update_reactivation: false
+    outputs:
+      run_name: mnist_additive_local_ca_quantilebm_previnit_bf22_e1_nb8_ema025
+- name: mnist_additive_local_ca_quantilebm_quantinit_bf22_e1_nb8_hard
+  path: drafts/dendritic-local-learning/configs/fig1_mnist_additive_localca_fixed100.yaml
+  run_name: mnist_additive_local_ca_quantilebm_quantinit_bf22_e1_nb8_hard
+  overrides:
+    data: *id001
+    model:
+      task: classification
+      encoder: *id002
+      core:
+        architecture:
+          excitatory_layer_sizes: *id003
+          inhibitory_layer_sizes: *id004
+          inhibitory_branch_factors: *id005
+          excitatory_branch_factors: *id006
+        connectivity: *id007
+        transfer: *id008
+        morphology: *id009
+        reactivation:
+          enabled: true
+          type: param_tanh
+          init_m: 1.5
+          init_b: 0.5
+          init_policy: quantile
+        type: dendritic_additive
+      decoder: *id010
+    training:
+      main:
+        strategy: local_ca
+        common:
+          reactivation_update_mode: quantile
+          recalibrate_reactivation_every: 1
+          reactivation_recalibration_mode: occupancy_quantile
+          reactivation_recalibration_start_epoch: 2
+          reactivation_recalibration_num_batches: 8
+          reactivation_recalibration_ema_alpha: 1.0
+        learning_strategy_config:
+          update_reactivation: false
+    outputs:
+      run_name: mnist_additive_local_ca_quantilebm_quantinit_bf22_e1_nb8_hard
+- name: mnist_additive_local_ca_quantilebm_quantinit_bf22_e1_nb8_ema050
+  path: drafts/dendritic-local-learning/configs/fig1_mnist_additive_localca_fixed100.yaml
+  run_name: mnist_additive_local_ca_quantilebm_quantinit_bf22_e1_nb8_ema050
+  overrides:
+    data: *id001
+    model:
+      task: classification
+      encoder: *id002
+      core:
+        architecture:
+          excitatory_layer_sizes: *id003
+          inhibitory_layer_sizes: *id004
+          inhibitory_branch_factors: *id005
+          excitatory_branch_factors: *id006
+        connectivity: *id007
+        transfer: *id008
+        morphology: *id009
+        reactivation:
+          enabled: true
+          type: param_tanh
+          init_m: 1.5
+          init_b: 0.5
+          init_policy: quantile
+        type: dendritic_additive
+      decoder: *id010
+    training:
+      main:
+        strategy: local_ca
+        common:
+          reactivation_update_mode: quantile
+          recalibrate_reactivation_every: 1
+          reactivation_recalibration_mode: occupancy_quantile
+          reactivation_recalibration_start_epoch: 2
+          reactivation_recalibration_num_batches: 8
+          reactivation_recalibration_ema_alpha: 0.5
+        learning_strategy_config:
+          update_reactivation: false
+    outputs:
+      run_name: mnist_additive_local_ca_quantilebm_quantinit_bf22_e1_nb8_ema050
+- name: mnist_additive_local_ca_quantilebm_quantinit_bf22_e1_nb8_ema025
+  path: drafts/dendritic-local-learning/configs/fig1_mnist_additive_localca_fixed100.yaml
+  run_name: mnist_additive_local_ca_quantilebm_quantinit_bf22_e1_nb8_ema025
+  overrides:
+    data: *id001
+    model:
+      task: classification
+      encoder: *id002
+      core:
+        architecture:
+          excitatory_layer_sizes: *id003
+          inhibitory_layer_sizes: *id004
+          inhibitory_branch_factors: *id005
+          excitatory_branch_factors: *id006
+        connectivity: *id007
+        transfer: *id008
+        morphology: *id009
+        reactivation:
+          enabled: true
+          type: param_tanh
+          init_m: 1.5
+          init_b: 0.5
+          init_policy: quantile
+        type: dendritic_additive
+      decoder: *id010
+    training:
+      main:
+        strategy: local_ca
+        common:
+          reactivation_update_mode: quantile
+          recalibrate_reactivation_every: 1
+          reactivation_recalibration_mode: occupancy_quantile
+          reactivation_recalibration_start_epoch: 2
+          reactivation_recalibration_num_batches: 8
+          reactivation_recalibration_ema_alpha: 0.25
+        learning_strategy_config:
+          update_reactivation: false
+    outputs:
+      run_name: mnist_additive_local_ca_quantilebm_quantinit_bf22_e1_nb8_ema025
+- name: mnist_additive_local_ca_quantilebm_previnit_bf333_e1_nb8_hard
+  path: drafts/dendritic-local-learning/configs/fig1_mnist_additive_localca_fixed100.yaml
+  run_name: mnist_additive_local_ca_quantilebm_previnit_bf333_e1_nb8_hard
+  overrides:
+    data: *id001
+    model:
+      task: classification
+      encoder: *id002
+      core:
+        architecture:
+          excitatory_layer_sizes: *id003
+          inhibitory_layer_sizes: *id004
+          inhibitory_branch_factors: *id005
+          excitatory_branch_factors: *id011
+        connectivity: *id007
+        transfer: *id008
+        morphology: *id009
+        reactivation:
+          enabled: true
+          type: param_tanh
+          init_m: 1.5
+          init_b: 0.5
+          init_policy: analytical
+        type: dendritic_additive
+      decoder: *id010
+    training:
+      main:
+        strategy: local_ca
+        common:
+          reactivation_update_mode: quantile
+          recalibrate_reactivation_every: 1
+          reactivation_recalibration_mode: occupancy_quantile
+          reactivation_recalibration_start_epoch: 2
+          reactivation_recalibration_num_batches: 8
+          reactivation_recalibration_ema_alpha: 1.0
+        learning_strategy_config:
+          update_reactivation: false
+    outputs:
+      run_name: mnist_additive_local_ca_quantilebm_previnit_bf333_e1_nb8_hard
+- name: mnist_additive_local_ca_quantilebm_previnit_bf333_e1_nb8_ema050
+  path: drafts/dendritic-local-learning/configs/fig1_mnist_additive_localca_fixed100.yaml
+  run_name: mnist_additive_local_ca_quantilebm_previnit_bf333_e1_nb8_ema050
+  overrides:
+    data: *id001
+    model:
+      task: classification
+      encoder: *id002
+      core:
+        architecture:
+          excitatory_layer_sizes: *id003
+          inhibitory_layer_sizes: *id004
+          inhibitory_branch_factors: *id005
+          excitatory_branch_factors: *id011
+        connectivity: *id007
+        transfer: *id008
+        morphology: *id009
+        reactivation:
+          enabled: true
+          type: param_tanh
+          init_m: 1.5
+          init_b: 0.5
+          init_policy: analytical
+        type: dendritic_additive
+      decoder: *id010
+    training:
+      main:
+        strategy: local_ca
+        common:
+          reactivation_update_mode: quantile
+          recalibrate_reactivation_every: 1
+          reactivation_recalibration_mode: occupancy_quantile
+          reactivation_recalibration_start_epoch: 2
+          reactivation_recalibration_num_batches: 8
+          reactivation_recalibration_ema_alpha: 0.5
+        learning_strategy_config:
+          update_reactivation: false
+    outputs:
+      run_name: mnist_additive_local_ca_quantilebm_previnit_bf333_e1_nb8_ema050
+- name: mnist_additive_local_ca_quantilebm_previnit_bf333_e1_nb8_ema025
+  path: drafts/dendritic-local-learning/configs/fig1_mnist_additive_localca_fixed100.yaml
+  run_name: mnist_additive_local_ca_quantilebm_previnit_bf333_e1_nb8_ema025
+  overrides:
+    data: *id001
+    model:
+      task: classification
+      encoder: *id002
+      core:
+        architecture:
+          excitatory_layer_sizes: *id003
+          inhibitory_layer_sizes: *id004
+          inhibitory_branch_factors: *id005
+          excitatory_branch_factors: *id011
+        connectivity: *id007
+        transfer: *id008
+        morphology: *id009
+        reactivation:
+          enabled: true
+          type: param_tanh
+          init_m: 1.5
+          init_b: 0.5
+          init_policy: analytical
+        type: dendritic_additive
+      decoder: *id010
+    training:
+      main:
+        strategy: local_ca
+        common:
+          reactivation_update_mode: quantile
+          recalibrate_reactivation_every: 1
+          reactivation_recalibration_mode: occupancy_quantile
+          reactivation_recalibration_start_epoch: 2
+          reactivation_recalibration_num_batches: 8
+          reactivation_recalibration_ema_alpha: 0.25
+        learning_strategy_config:
+          update_reactivation: false
+    outputs:
+      run_name: mnist_additive_local_ca_quantilebm_previnit_bf333_e1_nb8_ema025
+- name: mnist_additive_local_ca_quantilebm_quantinit_bf333_e1_nb8_hard
+  path: drafts/dendritic-local-learning/configs/fig1_mnist_additive_localca_fixed100.yaml
+  run_name: mnist_additive_local_ca_quantilebm_quantinit_bf333_e1_nb8_hard
+  overrides:
+    data: *id001
+    model:
+      task: classification
+      encoder: *id002
+      core:
+        architecture:
+          excitatory_layer_sizes: *id003
+          inhibitory_layer_sizes: *id004
+          inhibitory_branch_factors: *id005
+          excitatory_branch_factors: *id011
+        connectivity: *id007
+        transfer: *id008
+        morphology: *id009
+        reactivation:
+          enabled: true
+          type: param_tanh
+          init_m: 1.5
+          init_b: 0.5
+          init_policy: quantile
+        type: dendritic_additive
+      decoder: *id010
+    training:
+      main:
+        strategy: local_ca
+        common:
+          reactivation_update_mode: quantile
+          recalibrate_reactivation_every: 1
+          reactivation_recalibration_mode: occupancy_quantile
+          reactivation_recalibration_start_epoch: 2
+          reactivation_recalibration_num_batches: 8
+          reactivation_recalibration_ema_alpha: 1.0
+        learning_strategy_config:
+          update_reactivation: false
+    outputs:
+      run_name: mnist_additive_local_ca_quantilebm_quantinit_bf333_e1_nb8_hard
+- name: mnist_additive_local_ca_quantilebm_quantinit_bf333_e1_nb8_ema050
+  path: drafts/dendritic-local-learning/configs/fig1_mnist_additive_localca_fixed100.yaml
+  run_name: mnist_additive_local_ca_quantilebm_quantinit_bf333_e1_nb8_ema050
+  overrides:
+    data: *id001
+    model:
+      task: classification
+      encoder: *id002
+      core:
+        architecture:
+          excitatory_layer_sizes: *id003
+          inhibitory_layer_sizes: *id004
+          inhibitory_branch_factors: *id005
+          excitatory_branch_factors: *id011
+        connectivity: *id007
+        transfer: *id008
+        morphology: *id009
+        reactivation:
+          enabled: true
+          type: param_tanh
+          init_m: 1.5
+          init_b: 0.5
+          init_policy: quantile
+        type: dendritic_additive
+      decoder: *id010
+    training:
+      main:
+        strategy: local_ca
+        common:
+          reactivation_update_mode: quantile
+          recalibrate_reactivation_every: 1
+          reactivation_recalibration_mode: occupancy_quantile
+          reactivation_recalibration_start_epoch: 2
+          reactivation_recalibration_num_batches: 8
+          reactivation_recalibration_ema_alpha: 0.5
+        learning_strategy_config:
+          update_reactivation: false
+    outputs:
+      run_name: mnist_additive_local_ca_quantilebm_quantinit_bf333_e1_nb8_ema050
+- name: mnist_additive_local_ca_quantilebm_quantinit_bf333_e1_nb8_ema025
+  path: drafts/dendritic-local-learning/configs/fig1_mnist_additive_localca_fixed100.yaml
+  run_name: mnist_additive_local_ca_quantilebm_quantinit_bf333_e1_nb8_ema025
+  overrides:
+    data: *id001
+    model:
+      task: classification
+      encoder: *id002
+      core:
+        architecture:
+          excitatory_layer_sizes: *id003
+          inhibitory_layer_sizes: *id004
+          inhibitory_branch_factors: *id005
+          excitatory_branch_factors: *id011
+        connectivity: *id007
+        transfer: *id008
+        morphology: *id009
+        reactivation:
+          enabled: true
+          type: param_tanh
+          init_m: 1.5
+          init_b: 0.5
+          init_policy: quantile
+        type: dendritic_additive
+      decoder: *id010
+    training:
+      main:
+        strategy: local_ca
+        common:
+          reactivation_update_mode: quantile
+          recalibrate_reactivation_every: 1
+          reactivation_recalibration_mode: occupancy_quantile
+          reactivation_recalibration_start_epoch: 2
+          reactivation_recalibration_num_batches: 8
+          reactivation_recalibration_ema_alpha: 0.25
+        learning_strategy_config:
+          update_reactivation: false
+    outputs:
+      run_name: mnist_additive_local_ca_quantilebm_quantinit_bf333_e1_nb8_ema025
+- name: mnist_shunting_local_ca_quantilebm_previnit_bf22_e1_nb8_hard
+  path: drafts/dendritic-local-learning/configs/fig1_mnist_shunting_localca_fixed100.yaml
+  run_name: mnist_shunting_local_ca_quantilebm_previnit_bf22_e1_nb8_hard
+  overrides:
+    data: *id001
+    model:
+      task: classification
+      encoder: *id002
+      core:
+        architecture:
+          excitatory_layer_sizes: *id003
+          inhibitory_layer_sizes: *id004
+          inhibitory_branch_factors: *id005
+          excitatory_branch_factors: *id006
+        connectivity: *id007
+        transfer: *id008
+        morphology: *id009
+        reactivation:
+          enabled: true
+          type: param_tanh
+          init_m: 1.5
+          init_b: 0.5
+          init_policy: analytical
+        type: dendritic_shunting
+      decoder: *id010
+    training:
+      main:
+        strategy: local_ca
+        common:
+          reactivation_update_mode: quantile
+          recalibrate_reactivation_every: 1
+          reactivation_recalibration_mode: occupancy_quantile
+          reactivation_recalibration_start_epoch: 2
+          reactivation_recalibration_num_batches: 8
+          reactivation_recalibration_ema_alpha: 1.0
+        learning_strategy_config:
+          update_reactivation: false
+    outputs:
+      run_name: mnist_shunting_local_ca_quantilebm_previnit_bf22_e1_nb8_hard
+- name: mnist_shunting_local_ca_quantilebm_previnit_bf22_e1_nb8_ema050
+  path: drafts/dendritic-local-learning/configs/fig1_mnist_shunting_localca_fixed100.yaml
+  run_name: mnist_shunting_local_ca_quantilebm_previnit_bf22_e1_nb8_ema050
+  overrides:
+    data: *id001
+    model:
+      task: classification
+      encoder: *id002
+      core:
+        architecture:
+          excitatory_layer_sizes: *id003
+          inhibitory_layer_sizes: *id004
+          inhibitory_branch_factors: *id005
+          excitatory_branch_factors: *id006
+        connectivity: *id007
+        transfer: *id008
+        morphology: *id009
+        reactivation:
+          enabled: true
+          type: param_tanh
+          init_m: 1.5
+          init_b: 0.5
+          init_policy: analytical
+        type: dendritic_shunting
+      decoder: *id010
+    training:
+      main:
+        strategy: local_ca
+        common:
+          reactivation_update_mode: quantile
+          recalibrate_reactivation_every: 1
+          reactivation_recalibration_mode: occupancy_quantile
+          reactivation_recalibration_start_epoch: 2
+          reactivation_recalibration_num_batches: 8
+          reactivation_recalibration_ema_alpha: 0.5
+        learning_strategy_config:
+          update_reactivation: false
+    outputs:
+      run_name: mnist_shunting_local_ca_quantilebm_previnit_bf22_e1_nb8_ema050
+- name: mnist_shunting_local_ca_quantilebm_previnit_bf22_e1_nb8_ema025
+  path: drafts/dendritic-local-learning/configs/fig1_mnist_shunting_localca_fixed100.yaml
+  run_name: mnist_shunting_local_ca_quantilebm_previnit_bf22_e1_nb8_ema025
+  overrides:
+    data: *id001
+    model:
+      task: classification
+      encoder: *id002
+      core:
+        architecture:
+          excitatory_layer_sizes: *id003
+          inhibitory_layer_sizes: *id004
+          inhibitory_branch_factors: *id005
+          excitatory_branch_factors: *id006
+        connectivity: *id007
+        transfer: *id008
+        morphology: *id009
+        reactivation:
+          enabled: true
+          type: param_tanh
+          init_m: 1.5
+          init_b: 0.5
+          init_policy: analytical
+        type: dendritic_shunting
+      decoder: *id010
+    training:
+      main:
+        strategy: local_ca
+        common:
+          reactivation_update_mode: quantile
+          recalibrate_reactivation_every: 1
+          reactivation_recalibration_mode: occupancy_quantile
+          reactivation_recalibration_start_epoch: 2
+          reactivation_recalibration_num_batches: 8
+          reactivation_recalibration_ema_alpha: 0.25
+        learning_strategy_config:
+          update_reactivation: false
+    outputs:
+      run_name: mnist_shunting_local_ca_quantilebm_previnit_bf22_e1_nb8_ema025
+- name: mnist_shunting_local_ca_quantilebm_quantinit_bf22_e1_nb8_hard
+  path: drafts/dendritic-local-learning/configs/fig1_mnist_shunting_localca_fixed100.yaml
+  run_name: mnist_shunting_local_ca_quantilebm_quantinit_bf22_e1_nb8_hard
+  overrides:
+    data: *id001
+    model:
+      task: classification
+      encoder: *id002
+      core:
+        architecture:
+          excitatory_layer_sizes: *id003
+          inhibitory_layer_sizes: *id004
+          inhibitory_branch_factors: *id005
+          excitatory_branch_factors: *id006
+        connectivity: *id007
+        transfer: *id008
+        morphology: *id009
+        reactivation:
+          enabled: true
+          type: param_tanh
+          init_m: 1.5
+          init_b: 0.5
+          init_policy: quantile
+        type: dendritic_shunting
+      decoder: *id010
+    training:
+      main:
+        strategy: local_ca
+        common:
+          reactivation_update_mode: quantile
+          recalibrate_reactivation_every: 1
+          reactivation_recalibration_mode: occupancy_quantile
+          reactivation_recalibration_start_epoch: 2
+          reactivation_recalibration_num_batches: 8
+          reactivation_recalibration_ema_alpha: 1.0
+        learning_strategy_config:
+          update_reactivation: false
+    outputs:
+      run_name: mnist_shunting_local_ca_quantilebm_quantinit_bf22_e1_nb8_hard
+- name: mnist_shunting_local_ca_quantilebm_quantinit_bf22_e1_nb8_ema050
+  path: drafts/dendritic-local-learning/configs/fig1_mnist_shunting_localca_fixed100.yaml
+  run_name: mnist_shunting_local_ca_quantilebm_quantinit_bf22_e1_nb8_ema050
+  overrides:
+    data: *id001
+    model:
+      task: classification
+      encoder: *id002
+      core:
+        architecture:
+          excitatory_layer_sizes: *id003
+          inhibitory_layer_sizes: *id004
+          inhibitory_branch_factors: *id005
+          excitatory_branch_factors: *id006
+        connectivity: *id007
+        transfer: *id008
+        morphology: *id009
+        reactivation:
+          enabled: true
+          type: param_tanh
+          init_m: 1.5
+          init_b: 0.5
+          init_policy: quantile
+        type: dendritic_shunting
+      decoder: *id010
+    training:
+      main:
+        strategy: local_ca
+        common:
+          reactivation_update_mode: quantile
+          recalibrate_reactivation_every: 1
+          reactivation_recalibration_mode: occupancy_quantile
+          reactivation_recalibration_start_epoch: 2
+          reactivation_recalibration_num_batches: 8
+          reactivation_recalibration_ema_alpha: 0.5
+        learning_strategy_config:
+          update_reactivation: false
+    outputs:
+      run_name: mnist_shunting_local_ca_quantilebm_quantinit_bf22_e1_nb8_ema050
+- name: mnist_shunting_local_ca_quantilebm_quantinit_bf22_e1_nb8_ema025
+  path: drafts/dendritic-local-learning/configs/fig1_mnist_shunting_localca_fixed100.yaml
+  run_name: mnist_shunting_local_ca_quantilebm_quantinit_bf22_e1_nb8_ema025
+  overrides:
+    data: *id001
+    model:
+      task: classification
+      encoder: *id002
+      core:
+        architecture:
+          excitatory_layer_sizes: *id003
+          inhibitory_layer_sizes: *id004
+          inhibitory_branch_factors: *id005
+          excitatory_branch_factors: *id006
+        connectivity: *id007
+        transfer: *id008
+        morphology: *id009
+        reactivation:
+          enabled: true
+          type: param_tanh
+          init_m: 1.5
+          init_b: 0.5
+          init_policy: quantile
+        type: dendritic_shunting
+      decoder: *id010
+    training:
+      main:
+        strategy: local_ca
+        common:
+          reactivation_update_mode: quantile
+          recalibrate_reactivation_every: 1
+          reactivation_recalibration_mode: occupancy_quantile
+          reactivation_recalibration_start_epoch: 2
+          reactivation_recalibration_num_batches: 8
+          reactivation_recalibration_ema_alpha: 0.25
+        learning_strategy_config:
+          update_reactivation: false
+    outputs:
+      run_name: mnist_shunting_local_ca_quantilebm_quantinit_bf22_e1_nb8_ema025
+- name: mnist_shunting_local_ca_quantilebm_previnit_bf333_e1_nb8_hard
+  path: drafts/dendritic-local-learning/configs/fig1_mnist_shunting_localca_fixed100.yaml
+  run_name: mnist_shunting_local_ca_quantilebm_previnit_bf333_e1_nb8_hard
+  overrides:
+    data: *id001
+    model:
+      task: classification
+      encoder: *id002
+      core:
+        architecture:
+          excitatory_layer_sizes: *id003
+          inhibitory_layer_sizes: *id004
+          inhibitory_branch_factors: *id005
+          excitatory_branch_factors: *id011
+        connectivity: *id007
+        transfer: *id008
+        morphology: *id009
+        reactivation:
+          enabled: true
+          type: param_tanh
+          init_m: 1.5
+          init_b: 0.5
+          init_policy: analytical
+        type: dendritic_shunting
+      decoder: *id010
+    training:
+      main:
+        strategy: local_ca
+        common:
+          reactivation_update_mode: quantile
+          recalibrate_reactivation_every: 1
+          reactivation_recalibration_mode: occupancy_quantile
+          reactivation_recalibration_start_epoch: 2
+          reactivation_recalibration_num_batches: 8
+          reactivation_recalibration_ema_alpha: 1.0
+        learning_strategy_config:
+          update_reactivation: false
+    outputs:
+      run_name: mnist_shunting_local_ca_quantilebm_previnit_bf333_e1_nb8_hard
+- name: mnist_shunting_local_ca_quantilebm_previnit_bf333_e1_nb8_ema050
+  path: drafts/dendritic-local-learning/configs/fig1_mnist_shunting_localca_fixed100.yaml
+  run_name: mnist_shunting_local_ca_quantilebm_previnit_bf333_e1_nb8_ema050
+  overrides:
+    data: *id001
+    model:
+      task: classification
+      encoder: *id002
+      core:
+        architecture:
+          excitatory_layer_sizes: *id003
+          inhibitory_layer_sizes: *id004
+          inhibitory_branch_factors: *id005
+          excitatory_branch_factors: *id011
+        connectivity: *id007
+        transfer: *id008
+        morphology: *id009
+        reactivation:
+          enabled: true
+          type: param_tanh
+          init_m: 1.5
+          init_b: 0.5
+          init_policy: analytical
+        type: dendritic_shunting
+      decoder: *id010
+    training:
+      main:
+        strategy: local_ca
+        common:
+          reactivation_update_mode: quantile
+          recalibrate_reactivation_every: 1
+          reactivation_recalibration_mode: occupancy_quantile
+          reactivation_recalibration_start_epoch: 2
+          reactivation_recalibration_num_batches: 8
+          reactivation_recalibration_ema_alpha: 0.5
+        learning_strategy_config:
+          update_reactivation: false
+    outputs:
+      run_name: mnist_shunting_local_ca_quantilebm_previnit_bf333_e1_nb8_ema050
+- name: mnist_shunting_local_ca_quantilebm_previnit_bf333_e1_nb8_ema025
+  path: drafts/dendritic-local-learning/configs/fig1_mnist_shunting_localca_fixed100.yaml
+  run_name: mnist_shunting_local_ca_quantilebm_previnit_bf333_e1_nb8_ema025
+  overrides:
+    data: *id001
+    model:
+      task: classification
+      encoder: *id002
+      core:
+        architecture:
+          excitatory_layer_sizes: *id003
+          inhibitory_layer_sizes: *id004
+          inhibitory_branch_factors: *id005
+          excitatory_branch_factors: *id011
+        connectivity: *id007
+        transfer: *id008
+        morphology: *id009
+        reactivation:
+          enabled: true
+          type: param_tanh
+          init_m: 1.5
+          init_b: 0.5
+          init_policy: analytical
+        type: dendritic_shunting
+      decoder: *id010
+    training:
+      main:
+        strategy: local_ca
+        common:
+          reactivation_update_mode: quantile
+          recalibrate_reactivation_every: 1
+          reactivation_recalibration_mode: occupancy_quantile
+          reactivation_recalibration_start_epoch: 2
+          reactivation_recalibration_num_batches: 8
+          reactivation_recalibration_ema_alpha: 0.25
+        learning_strategy_config:
+          update_reactivation: false
+    outputs:
+      run_name: mnist_shunting_local_ca_quantilebm_previnit_bf333_e1_nb8_ema025
+- name: mnist_shunting_local_ca_quantilebm_quantinit_bf333_e1_nb8_hard
+  path: drafts/dendritic-local-learning/configs/fig1_mnist_shunting_localca_fixed100.yaml
+  run_name: mnist_shunting_local_ca_quantilebm_quantinit_bf333_e1_nb8_hard
+  overrides:
+    data: *id001
+    model:
+      task: classification
+      encoder: *id002
+      core:
+        architecture:
+          excitatory_layer_sizes: *id003
+          inhibitory_layer_sizes: *id004
+          inhibitory_branch_factors: *id005
+          excitatory_branch_factors: *id011
+        connectivity: *id007
+        transfer: *id008
+        morphology: *id009
+        reactivation:
+          enabled: true
+          type: param_tanh
+          init_m: 1.5
+          init_b: 0.5
+          init_policy: quantile
+        type: dendritic_shunting
+      decoder: *id010
+    training:
+      main:
+        strategy: local_ca
+        common:
+          reactivation_update_mode: quantile
+          recalibrate_reactivation_every: 1
+          reactivation_recalibration_mode: occupancy_quantile
+          reactivation_recalibration_start_epoch: 2
+          reactivation_recalibration_num_batches: 8
+          reactivation_recalibration_ema_alpha: 1.0
+        learning_strategy_config:
+          update_reactivation: false
+    outputs:
+      run_name: mnist_shunting_local_ca_quantilebm_quantinit_bf333_e1_nb8_hard
+- name: mnist_shunting_local_ca_quantilebm_quantinit_bf333_e1_nb8_ema050
+  path: drafts/dendritic-local-learning/configs/fig1_mnist_shunting_localca_fixed100.yaml
+  run_name: mnist_shunting_local_ca_quantilebm_quantinit_bf333_e1_nb8_ema050
+  overrides:
+    data: *id001
+    model:
+      task: classification
+      encoder: *id002
+      core:
+        architecture:
+          excitatory_layer_sizes: *id003
+          inhibitory_layer_sizes: *id004
+          inhibitory_branch_factors: *id005
+          excitatory_branch_factors: *id011
+        connectivity: *id007
+        transfer: *id008
+        morphology: *id009
+        reactivation:
+          enabled: true
+          type: param_tanh
+          init_m: 1.5
+          init_b: 0.5
+          init_policy: quantile
+        type: dendritic_shunting
+      decoder: *id010
+    training:
+      main:
+        strategy: local_ca
+        common:
+          reactivation_update_mode: quantile
+          recalibrate_reactivation_every: 1
+          reactivation_recalibration_mode: occupancy_quantile
+          reactivation_recalibration_start_epoch: 2
+          reactivation_recalibration_num_batches: 8
+          reactivation_recalibration_ema_alpha: 0.5
+        learning_strategy_config:
+          update_reactivation: false
+    outputs:
+      run_name: mnist_shunting_local_ca_quantilebm_quantinit_bf333_e1_nb8_ema050
+- name: mnist_shunting_local_ca_quantilebm_quantinit_bf333_e1_nb8_ema025
+  path: drafts/dendritic-local-learning/configs/fig1_mnist_shunting_localca_fixed100.yaml
+  run_name: mnist_shunting_local_ca_quantilebm_quantinit_bf333_e1_nb8_ema025
+  overrides:
+    data: *id001
+    model:
+      task: classification
+      encoder: *id002
+      core:
+        architecture:
+          excitatory_layer_sizes: *id003
+          inhibitory_layer_sizes: *id004
+          inhibitory_branch_factors: *id005
+          excitatory_branch_factors: *id011
+        connectivity: *id007
+        transfer: *id008
+        morphology: *id009
+        reactivation:
+          enabled: true
+          type: param_tanh
+          init_m: 1.5
+          init_b: 0.5
+          init_policy: quantile
+        type: dendritic_shunting
+      decoder: *id010
+    training:
+      main:
+        strategy: local_ca
+        common:
+          reactivation_update_mode: quantile
+          recalibrate_reactivation_every: 1
+          reactivation_recalibration_mode: occupancy_quantile
+          reactivation_recalibration_start_epoch: 2
+          reactivation_recalibration_num_batches: 8
+          reactivation_recalibration_ema_alpha: 0.25
+        learning_strategy_config:
+          update_reactivation: false
+    outputs:
+      run_name: mnist_shunting_local_ca_quantilebm_quantinit_bf333_e1_nb8_ema025

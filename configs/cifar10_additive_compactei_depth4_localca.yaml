@@ -44,7 +44,6 @@ model:
       type: param_tanh
       init_m: 1.5
       init_b: 0.5
-      match_additive_init_to_shunting: true
   decoder:
     type: MLP
     params:

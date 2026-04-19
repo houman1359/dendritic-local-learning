@@ -157,8 +157,68 @@ def _plot_compartment_error_fidelity(ax: plt.Axes, summary: pd.DataFrame) -> Non
               columnspacing=0.8)
 
 
-def _plot_low_bandwidth(ax: plt.Axes, low_bw: pd.DataFrame) -> None:
+def _plot_mechanism_summary(ax: plt.Axes, summary: pd.DataFrame) -> None:
+    """Panel D: scatter showing the mechanistic chain at a glance.
+
+    x-axis: per-soma cosine alignment to the exact compartment error
+    y-axis: test accuracy
+    color: dataset (MNIST vs. noise resilience)
+    marker: core (additive vs. shunting)
+    Points are (core, ie, dataset) cells, 5 seeds each.
+    """
     _panel(ax, "D")
+    style_axis(ax, grid="y")
+
+    ds_colors = {"mnist": "#4A7CB5", "noise_resilience": "#E67E22"}
+    ds_titles = {"mnist": "MNIST", "noise_resilience": "Noise resil."}
+    core_marker = {"dendritic_additive": "o", "dendritic_shunting": "s"}
+    core_label = {"dendritic_additive": "Add.", "dendritic_shunting": "Shunt."}
+
+    for ds, ds_df in summary.groupby("dataset"):
+        if ds not in ds_colors:
+            continue
+        for core, sub in ds_df.groupby("network_type"):
+            if core not in core_marker:
+                continue
+            x = sub["per_soma_weighted_cosine_mean"].to_numpy(dtype=float)
+            y = 100.0 * sub["test_accuracy_mean"].to_numpy(dtype=float)
+            xerr = sub["per_soma_weighted_cosine_std"].fillna(0.0).to_numpy(dtype=float)
+            yerr = 100.0 * sub["test_accuracy_std"].fillna(0.0).to_numpy(dtype=float)
+            ax.errorbar(
+                x,
+                y,
+                xerr=xerr,
+                yerr=yerr,
+                fmt=core_marker[core],
+                color=ds_colors[ds],
+                markersize=5.4,
+                alpha=0.85,
+                capsize=2,
+                lw=0.7,
+                elinewidth=0.7,
+                markeredgecolor="white",
+                markeredgewidth=0.5,
+                label=f"{ds_titles[ds]} {core_label[core]}",
+            )
+
+    ax.set_xlabel("Per-soma cosine alignment")
+    ax.set_ylabel("Test accuracy (%)")
+    ax.set_title("Mechanism summary (alignment $\\to$ accuracy)")
+    ax.legend(
+        fontsize=6.2,
+        handlelength=1.0,
+        handletextpad=0.3,
+        loc="lower right",
+        framealpha=0.9,
+        ncol=2,
+    )
+
+
+def _plot_low_bandwidth(ax: plt.Axes, low_bw: pd.DataFrame, panel_letter: str | None = None) -> None:
+    """Broadcast-bandwidth sweep. When used standalone (appendix figure),
+    pass panel_letter=None to suppress the panel label."""
+    if panel_letter is not None:
+        _panel(ax, panel_letter)
     style_axis(ax, grid="y")
 
     def bw_label(row: pd.Series) -> str:
@@ -374,34 +434,52 @@ def _plot_oracle_learning(
 
 def build_figure(
     summary_csv: Path = SUMMARY_CSV,
-    low_bw_csv: Path = LOW_BW_CSV,
+    low_bw_csv: Path = LOW_BW_CSV,  # retained for backward compatibility; not used
     oracle_summary_csv: Path = ORACLE_SUMMARY_CSV,
 ) -> plt.Figure:
+    """Main mechanistic figure. Panel D is the global mechanism-summary scatter
+    (was previously the low-bandwidth quantization; that panel is now exported
+    as a standalone appendix figure via build_low_bandwidth_figure)."""
     _setup_style()
     summary = _safe_csv(summary_csv)
-    low_bw = _safe_csv(low_bw_csv)
     oracle_summary = _safe_csv(oracle_summary_csv)
 
     fig, axes = plt.subplots(
         1,
         4,
         figsize=(15.6, 3.6),
-        gridspec_kw={"wspace": 0.42, "width_ratios": [1.0, 1.0, 1.12, 0.92]},
+        gridspec_kw={"wspace": 0.42, "width_ratios": [1.0, 1.0, 1.12, 1.05]},
     )
 
     _plot_path_gain_dispersion(axes[0], summary)
     _plot_compartment_error_fidelity(axes[1], summary)
     _plot_oracle_learning(axes[2], summary, oracle_summary)
-    _plot_low_bandwidth(axes[3], low_bw)
+    _plot_mechanism_summary(axes[3], summary)
     fig.text(
         0.5,
         0.97,
-        "A \u2192 B \u2192 C",
+        "A \u2192 B \u2192 C \u2192 D",
         ha="center",
         va="top",
         fontsize=6.6,
         color="#555555",
     )
+    return fig
+
+
+def build_low_bandwidth_figure(
+    low_bw_csv: Path = LOW_BW_CSV,
+) -> plt.Figure:
+    """Standalone appendix figure: broadcast-bandwidth (quantization) sweep.
+
+    This was previously panel D of the main mechanistic figure; it was moved
+    to the appendix so the main figure can carry the full causal chain
+    (path-gain CV -> alignment -> oracle -> global summary scatter).
+    """
+    _setup_style()
+    low_bw = _safe_csv(low_bw_csv)
+    fig, ax = plt.subplots(1, 1, figsize=(5.0, 3.5))
+    _plot_low_bandwidth(ax, low_bw, panel_letter=None)
     return fig
 
 

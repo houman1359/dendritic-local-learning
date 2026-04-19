@@ -1331,6 +1331,841 @@ def figure_s4():
 
 
 # ===================================================================
+# Analysis selection helpers
+# ===================================================================
+# Pin the analysis-summary directory date used for the submission. If you rerun
+# a sweep and want the new result, update this constant (or set it to None to
+# fall back to latest-matching).
+ANALYSIS_DATE = "20260417"
+
+
+def _latest_analysis_dir(prefix: str):
+    """Find the pinned or most recent analysis subdir matching <prefix>_*.
+
+    If ANALYSIS_DATE is set, prefer the exact `<prefix>_<ANALYSIS_DATE>` dir;
+    otherwise fall back to the most recent match. This makes figure data
+    provenance explicit and reproducible across reruns.
+    """
+    import glob
+    if ANALYSIS_DATE is not None:
+        pinned = os.path.join(ANALYSIS_DIR, f"{prefix}_{ANALYSIS_DATE}")
+        if os.path.isdir(pinned):
+            return pinned
+    matches = sorted(glob.glob(os.path.join(ANALYSIS_DIR, f"{prefix}_*")))
+    return matches[-1] if matches else None
+
+
+def _analysis_csv(prefix: str, filename: str):
+    ana_dir = _latest_analysis_dir(prefix)
+    if ana_dir is None:
+        return None
+    path = os.path.join(ana_dir, filename)
+    return path if os.path.isfile(path) else None
+
+
+def _read_markdown_table(md_path: str, section_header: str) -> pd.DataFrame:
+    """Parse a simple markdown table from a named section in a report note."""
+    with open(md_path, "r", encoding="utf-8") as handle:
+        lines = handle.readlines()
+
+    in_section = False
+    table_lines = []
+    for line in lines:
+        stripped = line.strip()
+        if stripped == section_header:
+            in_section = True
+            continue
+        if in_section and stripped.startswith("## "):
+            break
+        if in_section and stripped.startswith("|"):
+            table_lines.append(stripped)
+
+    if len(table_lines) < 3:
+        raise ValueError(f"No markdown table found under section {section_header!r} in {md_path}")
+
+    def parse_row(raw: str):
+        return [cell.strip() for cell in raw.strip("|").split("|")]
+
+    header = parse_row(table_lines[0])
+    rows = []
+    for raw in table_lines[2:]:
+        cells = parse_row(raw)
+        if len(cells) == len(header):
+            rows.append(cells)
+    return pd.DataFrame(rows, columns=header)
+
+
+# ===================================================================
+# Appendix Figure — Soma-On Extension
+# ===================================================================
+SOMA_EXTENSION_REPORT = os.path.join(
+    ANALYSIS_DIR,
+    "localca_finished_reruns_and_bm_comparison_20260415.md",
+)
+
+
+def figure_s_soma_extension():
+    """Bar chart: soma-off vs soma-on across 4 paper-facing LocalCA claim families.
+
+    Data source (by preference):
+      1. Structured CSV at analysis/soma_extension_summary_<DATE>/soma_extension_summary.csv
+         emitted by summarize_soma_extension() in summarize_neurips_new_sweeps.py.
+      2. Fallback: the dated comparison markdown note that originally
+         carried these numbers.
+    """
+    print("\n--- Supplementary: Soma Extension ---")
+
+    csv_family_order = [
+        "phase1_capacity", "claimA_shunting_regime",
+        "claimB_morphology", "claimC_error_shaping",
+    ]
+    md_family_order = [
+        "phase1_capacity_calibration", "phase3_claimA_shunting_regime_strong",
+        "phase3_claimB_morphology_scaling", "phase3_claimC_error_shaping",
+    ]
+    family_labels_csv = {
+        "phase1_capacity":        "Phase 1\n(Capacity)",
+        "claimA_shunting_regime": "Claim A\n(Shunting\nRegime)",
+        "claimB_morphology":      "Claim B\n(Morphology\nScaling)",
+        "claimC_error_shaping":   "Claim C\n(Error\nShaping)",
+    }
+    family_labels_md = {
+        "phase1_capacity_calibration":           "Phase 1\n(Capacity)",
+        "phase3_claimA_shunting_regime_strong":  "Claim A\n(Shunting\nRegime)",
+        "phase3_claimB_morphology_scaling":      "Claim B\n(Morphology\nScaling)",
+        "phase3_claimC_error_shaping":           "Claim C\n(Error\nShaping)",
+    }
+
+    families = mean_no_soma = mean_soma = best_no_soma = best_soma = None
+
+    # --- Preferred: structured CSV from summarize_soma_extension()
+    ana_dir = _latest_analysis_dir("soma_extension_summary")
+    if ana_dir is not None:
+        csv_path = os.path.join(ana_dir, "soma_extension_summary.csv")
+        if os.path.isfile(csv_path):
+            print(f"  source: {csv_path}")
+            df = pd.read_csv(csv_path)
+            families = []
+            mean_no_soma, mean_soma, best_no_soma, best_soma = [], [], [], []
+            for fam in csv_family_order:
+                sub = df[df["family"] == fam]
+                off = sub[sub["soma"] == "off"]
+                on  = sub[sub["soma"] == "on"]
+                if len(off) and len(on):
+                    families.append(family_labels_csv[fam])
+                    mean_no_soma.append(float(off.iloc[0]["mean_test_accuracy"]))
+                    mean_soma.append(float(on.iloc[0]["mean_test_accuracy"]))
+                    best_no_soma.append(float(off.iloc[0]["best_test_accuracy"]))
+                    best_soma.append(float(on.iloc[0]["best_test_accuracy"]))
+            if not families:
+                print("  WARNING: CSV present but no complete soma-off/soma-on pairs; falling back to markdown.")
+                families = None
+
+    # --- Fallback: original markdown comparison note
+    if families is None:
+        if not os.path.isfile(SOMA_EXTENSION_REPORT):
+            print(f"  WARNING: neither CSV nor {SOMA_EXTENSION_REPORT} found; skipping figure.")
+            return
+        print(f"  source (fallback): {SOMA_EXTENSION_REPORT}")
+        soma_df = _read_markdown_table(SOMA_EXTENSION_REPORT, "## 2. Soma-on extension")
+        soma_df = soma_df.set_index("Family")
+        families = [family_labels_md[key] for key in md_family_order]
+        mean_no_soma = [float(soma_df.loc[key, "Safe non-soma mean"]) for key in md_family_order]
+        mean_soma    = [float(soma_df.loc[key, "Safe soma mean"])     for key in md_family_order]
+        best_no_soma = [float(soma_df.loc[key, "Safe best"])          for key in md_family_order]
+        best_soma    = [float(soma_df.loc[key, "Soma best"])          for key in md_family_order]
+
+    fig, axes = plt.subplots(1, 2, figsize=(W * 1.9, 4.0),
+                             gridspec_kw={"wspace": 0.48})
+
+    x = np.arange(len(families))
+    bw = 0.38
+    col_off = "#4A7CB5"   # steel blue — soma-off
+    col_on  = "#1C8A57"   # deep green — soma-on
+
+    panel_titles = [
+        "(A)  Mean accuracy: soma off vs. soma on",
+        "(B)  Best accuracy: soma off vs. soma on",
+    ]
+
+    for ax_idx, (ax, vals_off, vals_on, ylabel, ptitle) in enumerate(zip(
+        axes,
+        [mean_no_soma, best_no_soma],
+        [mean_soma,    best_soma],
+        ["Mean test accuracy (%)", "Best test accuracy (%)"],
+        panel_titles,
+    )):
+        ax.bar(x - bw / 2, [v * 100 for v in vals_off], bw,
+               color=col_off, alpha=0.92, edgecolor="white", lw=0.3,
+               label="Soma off (baseline)")
+        ax.bar(x + bw / 2, [v * 100 for v in vals_on],  bw,
+               color=col_on,  alpha=0.92, edgecolor="white", lw=0.3,
+               label="Soma on (extension)")
+
+        # Annotate delta on top of soma-on bars
+        for xi, (vo, vs) in enumerate(zip(vals_off, vals_on)):
+            delta = (vs - vo) * 100
+            bar_top = vs * 100 + 0.8
+            ax.text(xi + bw / 2, bar_top, f"+{delta:.1f}" if delta >= 0 else f"{delta:.1f}",
+                    ha="center", va="bottom", fontsize=6.5, color="#333333")
+
+        ax.set_xticks(x)
+        ax.set_xticklabels(families, fontsize=7.5)
+        ax.set_ylabel(ylabel)
+        ax.set_title(ptitle, fontsize=8.5, loc="left", pad=6)
+        ax.set_ylim(0, 108)
+        ax.legend(fontsize=7, handlelength=1.2, handletextpad=0.4,
+                  loc="upper right", framealpha=0.9)
+        style_axis(ax)
+
+    fig.subplots_adjust(left=0.09, right=0.97, bottom=0.22, top=0.94)
+    _save(fig, "fig_s_soma_extension")
+    plt.close(fig)
+
+
+# ===================================================================
+# Appendix Figure — b,m Update Policy Comparison
+# ===================================================================
+def figure_s_bm_policy():
+    """Grouped bar chart: learned-local vs quantile-maintained b,m on MNIST + CIFAR."""
+    print("\n--- Supplementary: b,m Policy Comparison ---")
+
+    bm_csv = _analysis_csv("bm_classification_summary", "bm_classification_grouped_summary.csv")
+    bm_df = _csv_path(bm_csv)
+    if bm_df is None:
+        print("  WARNING: BM grouped CSV not found; skipping figure.")
+        return
+
+    fig, axes = plt.subplots(1, 2, figsize=(W * 1.9, 3.8),
+                             gridspec_kw={"wspace": 0.50})
+
+    datasets = ["mnist", "cifar10"]
+    ds_titles = {"mnist": "MNIST", "cifar10": "CIFAR-10"}
+
+    # We want: for each dataset, show additive vs shunting, and for each core
+    # show learned_local_bm vs quantile_bm (LocalCA rows), plus standard/backprop_bm ref
+    col_learned = {"additive": "#2D5DA8", "shunting": "#18864B"}   # solid
+    col_quantile = {"additive": "#7DAAD6", "shunting": "#6FC98D"}   # lighter version
+    col_bp_ref   = "#999999"
+
+    for ax_idx, (ax, ds) in enumerate(zip(axes, datasets)):
+        _panel(ax, "AB"[ax_idx])
+
+        sub = bm_df[bm_df["dataset"] == ds].copy()
+        # Columns: dataset, training_strategy, core, morphology, bm_update_scheme,
+        #          init_policy, completed_count, mean_train_accuracy, mean_valid_accuracy,
+        #          mean_test_accuracy, best_config_name, best_test_accuracy
+
+        # Aggregate across morphology and init_policy variants within (strategy, core, bm_scheme)
+        agg = (
+            sub.groupby(["training_strategy", "core", "bm_update_scheme"])["mean_test_accuracy"]
+            .mean()
+            .reset_index()
+        )
+
+        # Build bar groups: x = [add_learned, add_quantile, shunt_learned, shunt_quantile]
+        # Plus a light horizontal reference line for standard backprop_bm
+        group_labels = [
+            "Add.\nLearned",
+            "Add.\nQuantile",
+            "Shunt.\nLearned",
+            "Shunt.\nQuantile",
+        ]
+        group_vals = []
+        group_cols = []
+
+        ref_add_bp = agg[(agg["training_strategy"] == "standard") &
+                         (agg["core"] == "additive") &
+                         (agg["bm_update_scheme"] == "backprop_bm")]["mean_test_accuracy"]
+        ref_shu_bp = agg[(agg["training_strategy"] == "standard") &
+                         (agg["core"] == "shunting") &
+                         (agg["bm_update_scheme"] == "backprop_bm")]["mean_test_accuracy"]
+
+        for strategy, core, bm_key, color in [
+            ("local_ca", "additive",  "learned_local_bm",  col_learned["additive"]),
+            ("local_ca", "additive",  "quantile_bm",        col_quantile["additive"]),
+            ("local_ca", "shunting",  "learned_local_bm",  col_learned["shunting"]),
+            ("local_ca", "shunting",  "quantile_bm",        col_quantile["shunting"]),
+        ]:
+            row = agg[(agg["training_strategy"] == strategy) &
+                      (agg["core"] == core) &
+                      (agg["bm_update_scheme"] == bm_key)]
+            group_vals.append(row.iloc[0]["mean_test_accuracy"] * 100 if len(row) else 0)
+            group_cols.append(color)
+
+        x = np.arange(len(group_labels))
+        bars = ax.bar(x, group_vals, 0.55,
+                      color=group_cols, alpha=0.92,
+                      edgecolor="white", lw=0.3)
+
+        # Value annotations
+        for xi, v in enumerate(group_vals):
+            ax.text(xi, v + 0.3, f"{v:.1f}", ha="center", va="bottom", fontsize=6.5)
+
+        # Reference lines for standard backprop
+        if len(ref_add_bp):
+            ax.axhline(ref_add_bp.iloc[0] * 100, xmin=0.0, xmax=0.5,
+                       color=col_bp_ref, lw=1.1, ls="--", label="BP ceiling (add.)")
+        if len(ref_shu_bp):
+            ax.axhline(ref_shu_bp.iloc[0] * 100, xmin=0.5, xmax=1.0,
+                       color=col_bp_ref, lw=1.1, ls=":", label="BP ceiling (shunt.)")
+
+        ax.set_xticks(x)
+        ax.set_xticklabels(group_labels, fontsize=7.5)
+        ax.set_ylabel("Mean test accuracy (%)")
+        panel_letter = "AB"[ax_idx]
+        ax.set_title(f"({panel_letter})  {ds_titles[ds]}: LocalCA b,m update policy",
+                     fontsize=8.5, loc="left", pad=6)
+        style_axis(ax)
+
+        # y-range: include BP ceilings if they're higher
+        all_vals = list(group_vals)
+        if len(ref_add_bp):
+            all_vals.append(ref_add_bp.iloc[0] * 100)
+        if len(ref_shu_bp):
+            all_vals.append(ref_shu_bp.iloc[0] * 100)
+        ymin = max(0, min(all_vals) - 4)
+        ymax = max(all_vals) + 4
+        ax.set_ylim(ymin, ymax)
+
+        # Compact per-axis legend (only show BP ceiling lines)
+        ax.legend(fontsize=6.5, handlelength=1.2, loc="lower right",
+                  framealpha=0.9, handletextpad=0.4)
+
+    # Bottom legend for bar colors
+    from matplotlib.patches import Patch
+    legend_handles = [
+        Patch(color=col_learned["additive"], alpha=0.92, label="Learned local b,m (add.)"),
+        Patch(color=col_quantile["additive"], alpha=0.92, label="Quantile-maintained b,m (add.)"),
+        Patch(color=col_learned["shunting"], alpha=0.92, label="Learned local b,m (shunt.)"),
+        Patch(color=col_quantile["shunting"], alpha=0.92, label="Quantile-maintained b,m (shunt.)"),
+    ]
+    fig.legend(handles=legend_handles, ncol=2, fontsize=7, loc="lower center",
+               bbox_to_anchor=(0.5, -0.03), handlelength=1.1, framealpha=0.9)
+
+    fig.subplots_adjust(left=0.09, right=0.97, bottom=0.22, top=0.94)
+    _save(fig, "fig_s_bm_policy")
+    plt.close(fig)
+
+
+# ===================================================================
+# Appendix Figure — Component Ablation
+# ===================================================================
+def figure_s_ablation():
+    """Bar chart: per-component ablation for shunting and additive on MNIST LocalCA."""
+    print("\n--- Supplementary: Component Ablation ---")
+
+    ana_dir = _latest_analysis_dir("component_ablation_summary")
+    if ana_dir is None:
+        print("  WARNING: No component_ablation_summary dir found. Run summarize_neurips_new_sweeps.py first.")
+        return
+    csv_path = os.path.join(ana_dir, "ablation_grouped_summary.csv")
+    if not os.path.isfile(csv_path):
+        print(f"  WARNING: {csv_path} not found")
+        return
+
+    df = pd.read_csv(csv_path)
+
+    # Plot order: full → no_quantile_init → no_learned_bm → no_reactivation
+    #             → relu_reactivation → with_soma → bp_reference
+    ordered_conditions = [
+        ("full_config",          "Full\n(default)"),
+        ("no_quantile_init",     "−Quantile\ninit"),
+        ("no_learned_bm",        "−Learned\n(b,m)"),
+        ("no_reactivation",      "−Reactiv.\n(identity)"),
+        ("with_soma",            "+Soma\n(extension)"),
+        ("bp_reference",         "Backprop\nref."),
+    ]
+
+    fig, axes = plt.subplots(1, 2, figsize=(W * 1.95, 4.0),
+                             gridspec_kw={"wspace": 0.42})
+
+    cores = ["shunting", "additive"]
+    core_titles = {"shunting": "Shunting (MNIST)", "additive": "Additive (MNIST)"}
+    core_color = {"shunting": COLOR_SHUNTING, "additive": COLOR_ADDITIVE}
+
+    panel_letters = ["A", "B"]
+    for i, (ax, core) in enumerate(zip(axes, cores)):
+        sub = df[df["core"] == core].set_index("condition")
+        labels = []
+        means = []
+        stds = []
+        bar_colors = []
+        for cond_key, label in ordered_conditions:
+            if cond_key not in sub.index:
+                continue
+            row = sub.loc[cond_key]
+            labels.append(label)
+            means.append(row["test_acc_mean"] * 100)
+            stds.append((row.get("test_acc_std") or 0.0) * 100)
+            if cond_key == "full_config":
+                bar_colors.append(core_color[core])
+            elif cond_key == "with_soma":
+                bar_colors.append("#1C8A57")
+            elif cond_key == "bp_reference":
+                bar_colors.append(COLOR_POINT_MLP)
+            else:
+                bar_colors.append("#A3A3A3")
+
+        x = np.arange(len(labels))
+        bars = ax.bar(x, means, 0.62, yerr=stds, capsize=2.5,
+                      color=bar_colors, alpha=0.92, edgecolor="white", lw=0.4,
+                      error_kw={"lw": 0.6})
+        # Reference line at full_config value
+        if "full_config" in sub.index:
+            full_val = sub.loc["full_config", "test_acc_mean"] * 100
+            ax.axhline(full_val, color=core_color[core], lw=0.7, ls=":", alpha=0.7)
+
+        # Value annotations
+        for xi, (m_, s_) in enumerate(zip(means, stds)):
+            ax.text(xi, m_ + s_ + 0.4, f"{m_:.1f}",
+                    ha="center", va="bottom", fontsize=6.5)
+
+        ax.set_xticks(x)
+        ax.set_xticklabels(labels, rotation=0, ha="center", fontsize=7)
+        ax.set_ylabel("MNIST test accuracy (%)")
+        ax.set_title(f"({panel_letters[i]})  {core_titles[core]}",
+                     fontsize=8.5, loc="left", pad=6)
+        if means:
+            ax.set_ylim(max(0, min(means) - 3), max(means) + 3)
+        style_axis(ax)
+
+    fig.subplots_adjust(left=0.07, right=0.98, bottom=0.22, top=0.93)
+    _save(fig, "fig_s_ablation")
+    plt.close(fig)
+
+
+# ===================================================================
+# Appendix Figure — Cue Routing + Soma extension
+# ===================================================================
+def figure_s_cue_routing_soma():
+    """Bar chart: cue routing before vs. after soma extension.
+
+    Soma-off baselines come from the corrected cue-routing summaries.
+    Soma-on results come from the dedicated cue_routing_soma summary.
+    """
+    print("\n--- Supplementary: Cue Routing Soma ---")
+
+    ana_dir = _latest_analysis_dir("cue_routing_soma_summary")
+    if ana_dir is None:
+        print("  WARNING: No cue_routing_soma_summary dir found. Run summarize_neurips_new_sweeps.py first.")
+        return
+    csv_path = os.path.join(ana_dir, "cue_routing_soma_grouped.csv")
+    if not os.path.isfile(csv_path):
+        print(f"  WARNING: {csv_path} not found")
+        return
+
+    df = pd.read_csv(csv_path).set_index("base_name")
+
+    rank_csv = os.path.join(
+        ANALYSIS_DIR,
+        "rank_bridge_activation_corrected",
+        "cue_routing_rank_structure_summary.csv",
+    )
+    if rank_csv is None:
+        print("  WARNING: cue-routing rank summary not found; skipping figure.")
+        return
+    rank_df = pd.read_csv(rank_csv)
+    per_soma_row = rank_df[(rank_df["broadcast_mode"] == "per_soma")]
+    low_rank_row = rank_df[
+        (rank_df["broadcast_mode"] == "low_rank") & (rank_df["broadcast_rank"] == 2)
+    ]
+    pathway_row = rank_df[(rank_df["broadcast_mode"] == "pathway_vector")]
+    if per_soma_row.empty or low_rank_row.empty or pathway_row.empty:
+        print("  WARNING: cue-routing rank summary missing expected rows; skipping figure.")
+        return
+
+    histo = {
+        "shunting\nrank-1 LocalCA": (
+            float(per_soma_row.iloc[0]["test_accuracy_mean"]),
+            float(per_soma_row.iloc[0]["test_accuracy_std"]),
+        ),
+        "shunting\nlow-rank K=2": (
+            float(low_rank_row.iloc[0]["test_accuracy_mean"]),
+            float(low_rank_row.iloc[0]["test_accuracy_std"]),
+        ),
+        "shunting\npathway-vec.": (
+            float(pathway_row.iloc[0]["test_accuracy_mean"]),
+            float(pathway_row.iloc[0]["test_accuracy_std"]),
+        ),
+    }
+
+    # New soma-on numbers
+    soma_entries = [
+        ("shunting fixed\nLocalCA + soma",
+         df.loc["cue_hard_fixed_shunting_localca_soma"]
+         if "cue_hard_fixed_shunting_localca_soma" in df.index else None),
+        ("additive learned\nLocalCA + soma",
+         df.loc["cue_hard_learned_additive_localca_soma"]
+         if "cue_hard_learned_additive_localca_soma" in df.index else None),
+        ("additive learned\nBP + soma",
+         df.loc["cue_hard_learned_additive_standard_soma"]
+         if "cue_hard_learned_additive_standard_soma" in df.index else None),
+    ]
+
+    fig, ax = plt.subplots(figsize=(W * 1.4, 4.0))
+
+    labels = []
+    means = []
+    errs = []
+    colors = []
+    for lbl, (m, s) in histo.items():
+        labels.append(lbl)
+        means.append(m * 100)
+        errs.append(s * 100)
+        colors.append("#C2916E")  # soma-off baseline: muted orange-brown
+    for lbl, row in soma_entries:
+        if row is None:
+            continue
+        labels.append(lbl)
+        means.append(row["test_acc_mean"] * 100)
+        errs.append((row.get("test_acc_std") or 0.0) * 100)
+        colors.append("#1C8A57")  # soma-on: deep green
+
+    x = np.arange(len(labels))
+    ax.bar(x, means, 0.6, yerr=errs, capsize=2.5, color=colors,
+           alpha=0.92, edgecolor="white", lw=0.4,
+           error_kw={"lw": 0.6})
+
+    # Separator between soma-off and soma-on groups
+    ax.axvline(len(histo) - 0.5, color="#777", lw=0.6, ls=":", alpha=0.6)
+    ax.text(1, 104, "Prior (soma off)",
+            ha="center", va="bottom", fontsize=7.5, color="#7B5C42", style="italic")
+    ax.text(len(histo) + (len(soma_entries) - 1) / 2, 104, "Soma-on extension",
+            ha="center", va="bottom", fontsize=7.5, color="#135C3A", style="italic")
+
+    for xi, (m, e) in enumerate(zip(means, errs)):
+        ax.text(xi, m + e + 0.7, f"{m:.1f}",
+                ha="center", va="bottom", fontsize=7)
+
+    ax.set_xticks(x)
+    ax.set_xticklabels(labels, fontsize=7.5)
+    ax.set_ylabel("Cue-routing test accuracy (%)")
+    ax.set_title("Adding somatic inputs rescues cue-routing LocalCA",
+                 fontsize=9, loc="left", pad=6)
+    ax.set_ylim(60, 108)
+    style_axis(ax)
+
+    fig.subplots_adjust(left=0.10, right=0.98, bottom=0.18, top=0.90)
+    _save(fig, "fig_s_cue_routing_soma")
+    plt.close(fig)
+
+
+# ===================================================================
+# Main Figure — Mechanism Summary scatter
+# ===================================================================
+def figure_mechanism_summary():
+    """Two-panel scatter showing the causal chain:
+        (A) path-gain CV -> per-soma cosine alignment
+        (B) per-soma cosine alignment -> test accuracy
+    across all conditions (additive/shunting x 5 IE values).
+
+    This is the one-glance mechanism summary requested by the review.
+    """
+    print("\n--- Main: Mechanism Summary ---")
+
+    if not os.path.isfile(THEORY_IE_SUMMARY_CSV):
+        print(f"  WARNING: {THEORY_IE_SUMMARY_CSV} not found; skipping.")
+        return
+    df = pd.read_csv(THEORY_IE_SUMMARY_CSV)
+
+    # Keep only the MNIST rows used for the theory-diag panel in Fig. 5, and the
+    # noise-resilience rows, to show the chain holds across both datasets.
+    ds_colors = {"mnist": "#4A7CB5", "noise_resilience": "#E67E22"}
+    ds_titles = {"mnist": "MNIST", "noise_resilience": "Noise resil."}
+    core_marker = {"dendritic_additive": "o", "dendritic_shunting": "s"}
+    core_label  = {"dendritic_additive": "Additive", "dendritic_shunting": "Shunting"}
+
+    fig, axes = plt.subplots(1, 2, figsize=(W * 1.9, 3.4),
+                             gridspec_kw={"wspace": 0.32})
+
+    # --- Panel A: path-gain CV vs per-soma cosine alignment
+    axA = axes[0]
+    for ds, ds_df in df.groupby("dataset"):
+        if ds not in ds_colors:
+            continue
+        for core, sub in ds_df.groupby("network_type"):
+            if core not in core_marker:
+                continue
+            axA.errorbar(
+                sub["path_gain_cv_mean_mean"],
+                sub["per_soma_weighted_cosine_mean"],
+                xerr=sub["path_gain_cv_mean_std"],
+                yerr=sub["per_soma_weighted_cosine_std"],
+                fmt=core_marker[core],
+                color=ds_colors[ds],
+                markersize=6, alpha=0.85,
+                capsize=2.5, lw=0.8, elinewidth=0.8,
+                markeredgecolor="white", markeredgewidth=0.6,
+                label=f"{ds_titles[ds]} {core_label[core]}",
+            )
+    axA.set_xlabel("Path-gain CV")
+    axA.set_ylabel("Per-soma cosine alignment")
+    axA.set_title("(A)  Concentrated path gains $\\to$ higher alignment",
+                  fontsize=9, loc="left", pad=6)
+    axA.legend(fontsize=6.5, handlelength=1.1, handletextpad=0.4,
+               loc="upper right", framealpha=0.9, ncol=2)
+    style_axis(axA)
+
+    # --- Panel B: per-soma cosine alignment vs test accuracy
+    axB = axes[1]
+    for ds, ds_df in df.groupby("dataset"):
+        if ds not in ds_colors:
+            continue
+        for core, sub in ds_df.groupby("network_type"):
+            if core not in core_marker:
+                continue
+            axB.errorbar(
+                sub["per_soma_weighted_cosine_mean"],
+                sub["test_accuracy_mean"] * 100,
+                xerr=sub["per_soma_weighted_cosine_std"],
+                yerr=sub["test_accuracy_std"] * 100,
+                fmt=core_marker[core],
+                color=ds_colors[ds],
+                markersize=6, alpha=0.85,
+                capsize=2.5, lw=0.8, elinewidth=0.8,
+                markeredgecolor="white", markeredgewidth=0.6,
+                label=f"{ds_titles[ds]} {core_label[core]}",
+            )
+    axB.set_xlabel("Per-soma cosine alignment")
+    axB.set_ylabel("Test accuracy (%)")
+    axB.set_title("(B)  Higher alignment $\\to$ better learning",
+                  fontsize=9, loc="left", pad=6)
+    axB.legend(fontsize=6.5, handlelength=1.1, handletextpad=0.4,
+               loc="lower right", framealpha=0.9, ncol=2)
+    style_axis(axB)
+
+    fig.subplots_adjust(left=0.07, right=0.98, bottom=0.18, top=0.90)
+    _save(fig, "fig_mechanism_summary")
+    plt.close(fig)
+
+
+# ===================================================================
+# Appendix Figure — Weight distributions under soma-on
+# ===================================================================
+def figure_s_weight_dist_soma_comparison():
+    """Bar chart comparing soma-off vs. soma-on excitatory-weight CV and mean
+    across the 4 (core, strategy) cells on MNIST at depth [3,3].
+
+    soma-off source: analysis/weight_dist_by_depth_summary_<DATE>/weight_dist_grouped_summary.csv
+                     filtered to rows with depth == 'd33'
+    soma-on  source: analysis/weight_dist_soma_summary_<DATE>/weight_dist_soma_grouped_summary.csv
+    """
+    print("\n--- Supplementary: Weight Distributions under Soma-On ---")
+
+    off_dir = _latest_analysis_dir("weight_dist_by_depth_summary")
+    on_dir = _latest_analysis_dir("weight_dist_soma_summary")
+    if off_dir is None or on_dir is None:
+        print("  WARNING: could not find both soma-off and soma-on weight-dist summaries; skipping.")
+        return
+
+    off_csv = os.path.join(off_dir, "weight_dist_grouped_summary.csv")
+    on_csv = os.path.join(on_dir, "weight_dist_soma_grouped_summary.csv")
+    if not (os.path.isfile(off_csv) and os.path.isfile(on_csv)):
+        print(f"  WARNING: missing CSV ({off_csv}, {on_csv})")
+        return
+
+    off_df = pd.read_csv(off_csv)
+    off_df = off_df[off_df["depth"] == "d33"].copy()
+    on_df = pd.read_csv(on_csv).copy()
+
+    cells = [
+        ("shunting", "bp"), ("shunting", "localca"),
+        ("additive", "bp"), ("additive", "localca"),
+    ]
+    cell_labels = {
+        ("shunting", "bp"):      "Shunting\nBP",
+        ("shunting", "localca"): "Shunting\nLocalCA",
+        ("additive", "bp"):      "Additive\nBP",
+        ("additive", "localca"): "Additive\nLocalCA",
+    }
+
+    def _cv(row) -> float:
+        m = float(row["excitatory_weights_mean"])
+        s = float(row["excitatory_weights_std"])
+        return s / m if m > 0 else float("nan")
+
+    def _acc(row) -> float:
+        return 100.0 * float(row["test_accuracy"])
+
+    off_cv, on_cv = [], []
+    off_acc, on_acc = [], []
+    for core, strat in cells:
+        off_r = off_df[(off_df["core"] == core) & (off_df["strategy"] == strat)]
+        on_r = on_df[(on_df["core"] == core) & (on_df["strategy"] == strat)]
+        off_cv.append(_cv(off_r.iloc[0]) if len(off_r) else float("nan"))
+        on_cv.append(_cv(on_r.iloc[0]) if len(on_r) else float("nan"))
+        off_acc.append(_acc(off_r.iloc[0]) if len(off_r) else float("nan"))
+        on_acc.append(_acc(on_r.iloc[0]) if len(on_r) else float("nan"))
+
+    fig, axes = plt.subplots(1, 2, figsize=(W * 1.9, 3.6),
+                             gridspec_kw={"wspace": 0.42})
+
+    x = np.arange(len(cells))
+    bw = 0.38
+    col_off = "#4A7CB5"
+    col_on = "#1C8A57"
+
+    for ax_idx, (ax, yvals_off, yvals_on, ylabel, ptitle) in enumerate(zip(
+        axes,
+        [off_cv, off_acc],
+        [on_cv, on_acc],
+        ["Excitatory weight CV (std/mean)", "Test accuracy (%)"],
+        ["(A)  CV under soma off vs. soma on",
+         "(B)  Test accuracy under soma off vs. soma on"],
+    )):
+        ax.bar(x - bw / 2, yvals_off, bw, color=col_off, alpha=0.92,
+               edgecolor="white", lw=0.3, label="Soma off")
+        ax.bar(x + bw / 2, yvals_on, bw, color=col_on, alpha=0.92,
+               edgecolor="white", lw=0.3, label="Soma on")
+        for xi, (vo, vn) in enumerate(zip(yvals_off, yvals_on)):
+            if np.isfinite(vn):
+                ax.text(xi + bw / 2, vn + 0.01 * max(abs(vo or 0), abs(vn)),
+                        f"{vn:.2f}" if ax_idx == 0 else f"{vn:.1f}",
+                        ha="center", va="bottom", fontsize=6.5)
+        ax.set_xticks(x)
+        ax.set_xticklabels([cell_labels[c] for c in cells], fontsize=7.5)
+        ax.set_ylabel(ylabel)
+        ax.set_title(ptitle, fontsize=8.8, loc="left", pad=6)
+        ax.legend(fontsize=7, handlelength=1.2, handletextpad=0.4,
+                  loc="upper right", framealpha=0.9)
+        style_axis(ax)
+
+    fig.subplots_adjust(left=0.08, right=0.98, bottom=0.16, top=0.93)
+    _save(fig, "fig_s_weight_dist_soma_comparison")
+    plt.close(fig)
+
+
+# ===================================================================
+# Appendix Figure — Weight Distributions × Depth × Strategy
+# ===================================================================
+def figure_s_weight_distributions():
+    """Weight distribution comparison: BP vs LocalCA × additive vs shunting × 3 depths.
+
+    Two panels:
+      A) Excitatory weight mean ± std across conditions, grouped by depth.
+      B) Coefficient of variation (std/mean) of excitatory weights vs depth.
+    """
+    print("\n--- Supplementary: Weight Distributions vs Depth ---")
+
+    ana_dir = _latest_analysis_dir("weight_dist_by_depth_summary")
+    if ana_dir is None:
+        print("  WARNING: No weight_dist_by_depth_summary dir found. Run summarize_neurips_new_sweeps.py first.")
+        return
+    csv_path = os.path.join(ana_dir, "weight_dist_grouped_summary.csv")
+    if not os.path.isfile(csv_path):
+        print(f"  WARNING: {csv_path} not found")
+        return
+
+    df = pd.read_csv(csv_path)
+
+    depths = ["d22", "d33", "d333"]
+    depth_labels = {"d22": "[2,2]", "d33": "[3,3]", "d333": "[3,3,3]"}
+    cores = ["shunting", "additive"]
+    strategies = ["bp", "localca"]
+
+    color_map = {
+        ("shunting", "bp"):     COLOR_SHUNTING,
+        ("shunting", "localca"): "#7BCFA0",
+        ("additive", "bp"):     COLOR_ADDITIVE,
+        ("additive", "localca"): "#88B0DC",
+    }
+
+    fig, axes = plt.subplots(1, 3, figsize=(W * 2.0, 3.6),
+                             gridspec_kw={"wspace": 0.42})
+
+    # Panel A: excitatory weight mean by depth, grouped bars
+    ax = axes[0]
+    n_groups = len(cores) * len(strategies)
+    bw = 0.8 / n_groups
+    x = np.arange(len(depths))
+    for j, (core, strat) in enumerate([(c, s) for c in cores for s in strategies]):
+        means = []
+        stds = []
+        for depth in depths:
+            row = df[(df["core"] == core) & (df["strategy"] == strat) &
+                     (df["depth"] == depth)]
+            if len(row) == 0:
+                means.append(np.nan); stds.append(0)
+            else:
+                means.append(row.iloc[0].get("excitatory_weights_mean", np.nan))
+                stds.append(row.iloc[0].get("excitatory_weights_std", 0))
+        off = (j - (n_groups - 1) / 2) * bw
+        core_l = "Sh." if core == "shunting" else "Ad."
+        strat_l = "BP" if strat == "bp" else "Loc."
+        ax.bar(x + off, means, bw * 0.92,
+               yerr=stds, capsize=1.5, error_kw={"lw": 0.4},
+               color=color_map[(core, strat)], edgecolor="white", lw=0.3,
+               label=f"{core_l} {strat_l}")
+    ax.set_xticks(x)
+    ax.set_xticklabels([depth_labels[d] for d in depths])
+    ax.set_xlabel("Branch factors (depth)")
+    ax.set_ylabel("Excitatory weight mean")
+    ax.set_title("(A)  Excitatory weight mean vs depth", fontsize=8.5, loc="left", pad=6)
+    ax.legend(fontsize=6.5, ncol=2, handlelength=1.0, handletextpad=0.3,
+              loc="upper right", framealpha=0.9)
+    style_axis(ax)
+
+    # Panel B: coefficient of variation (std/mean) of excitatory weights
+    ax = axes[1]
+    for j, (core, strat) in enumerate([(c, s) for c in cores for s in strategies]):
+        cvs = []
+        for depth in depths:
+            row = df[(df["core"] == core) & (df["strategy"] == strat) &
+                     (df["depth"] == depth)]
+            if len(row) == 0:
+                cvs.append(np.nan)
+            else:
+                m = row.iloc[0].get("excitatory_weights_mean", np.nan)
+                s = row.iloc[0].get("excitatory_weights_std", np.nan)
+                cvs.append(s / m if (m and not np.isnan(m) and m > 0) else np.nan)
+        off = (j - (n_groups - 1) / 2) * bw
+        core_l = "Sh." if core == "shunting" else "Ad."
+        strat_l = "BP" if strat == "bp" else "Loc."
+        ax.bar(x + off, cvs, bw * 0.92,
+               color=color_map[(core, strat)], edgecolor="white", lw=0.3,
+               label=f"{core_l} {strat_l}")
+    ax.set_xticks(x)
+    ax.set_xticklabels([depth_labels[d] for d in depths])
+    ax.set_xlabel("Branch factors (depth)")
+    ax.set_ylabel("CV (std/mean)")
+    ax.set_title("(B)  Excitatory weight CV vs depth", fontsize=8.5, loc="left", pad=6)
+    ax.legend(fontsize=6.5, ncol=2, handlelength=1.0, handletextpad=0.3,
+              loc="upper right", framealpha=0.9)
+    style_axis(ax)
+
+    # Panel C: test accuracy vs depth (sanity check that depth scaling holds)
+    ax = axes[2]
+    for j, (core, strat) in enumerate([(c, s) for c in cores for s in strategies]):
+        accs = []
+        for depth in depths:
+            row = df[(df["core"] == core) & (df["strategy"] == strat) &
+                     (df["depth"] == depth)]
+            if len(row) == 0:
+                accs.append(np.nan)
+            else:
+                accs.append(row.iloc[0].get("test_accuracy", np.nan) * 100)
+        off = (j - (n_groups - 1) / 2) * bw
+        core_l = "Sh." if core == "shunting" else "Ad."
+        strat_l = "BP" if strat == "bp" else "Loc."
+        ax.bar(x + off, accs, bw * 0.92,
+               color=color_map[(core, strat)], edgecolor="white", lw=0.3,
+               label=f"{core_l} {strat_l}")
+    ax.set_xticks(x)
+    ax.set_xticklabels([depth_labels[d] for d in depths])
+    ax.set_xlabel("Branch factors (depth)")
+    ax.set_ylabel("Test accuracy (%)")
+    ax.set_title("(C)  Test accuracy vs depth", fontsize=8.5, loc="left", pad=6)
+    ax.legend(fontsize=6.5, ncol=2, handlelength=1.0, handletextpad=0.3,
+              loc="lower left", framealpha=0.9)
+    style_axis(ax)
+
+    fig.subplots_adjust(left=0.06, right=0.98, bottom=0.18, top=0.92)
+    _save(fig, "fig_s_weight_dist_by_depth")
+    plt.close(fig)
+
+
+# ===================================================================
 # Main
 # ===================================================================
 def main():
@@ -1347,6 +2182,14 @@ def main():
     figure_s2()
     figure_s3()
     figure_s4()
+    # figure_mechanism_summary() is now panel D of fig5_mechanistic_evidence,
+    # produced by generate_revision_figures.py (via generate_theory_diagnostics_figures).
+    figure_s_soma_extension()
+    figure_s_bm_policy()
+    figure_s_ablation()
+    figure_s_cue_routing_soma()
+    figure_s_weight_distributions()
+    figure_s_weight_dist_soma_comparison()
 
     print("\n" + "="*50)
     print("All figures generated successfully.")

@@ -33,6 +33,7 @@ from generate_5f_sensitivity_figure import (
 )
 from generate_theory_diagnostics_figures import (
     build_figure as build_theory_diagnostics_figure,
+    build_low_bandwidth_figure,
 )
 from summarize_cue_routing_results import summarize_runs as summarize_cue_routing_runs
 
@@ -102,12 +103,24 @@ def _csv_path(path):
 
 # ===================================================================
 # Figure 5 — Mechanistic Evidence (NEW main figure)
+# Panel D is now the global mechanism-summary scatter (alignment -> accuracy);
+# the previous low-bandwidth / quantization panel is exported as the standalone
+# appendix figure fig_s_low_bandwidth.
 # ===================================================================
 def figure5():
-    """Mechanistic figure built from exact-error diagnostics and bandwidth sweep."""
+    """Mechanistic figure built from exact-error diagnostics (A-C) and the
+    global mechanism-summary scatter (D)."""
     print("\n--- Figure 5: Mechanistic Evidence ---")
     fig = build_theory_diagnostics_figure()
     _save(fig, "fig5_mechanistic_evidence")
+    plt.close(fig)
+
+
+def figure_s_low_bandwidth():
+    """Standalone appendix figure: broadcast-bandwidth quantization sweep."""
+    print("\n--- Supplementary: Broadcast Bandwidth ---")
+    fig = build_low_bandwidth_figure()
+    _save(fig, "fig_s_low_bandwidth")
     plt.close(fig)
 
 
@@ -436,6 +449,7 @@ def main():
     os.makedirs(FIGURES_DIR, exist_ok=True)
 
     figure5()
+    figure_s_low_bandwidth()
     summarize_cue_routing_runs([])
     build_cue_routing_figure(CUE_SUMMARY_CSV)
     figure_s3()
