@@ -299,11 +299,11 @@ def panel_A(ax):
     ax.set_xlim(0, 1)
     ax.set_ylim(0, 1)
     ax.set_title(
-        "Network, exact compartment errors, and LocalCA broadcast",
-        fontsize=11.0,
-        pad=6,
+        "Model, exact credit, and LocalCA broadcast",
+        fontsize=10.4,
+        pad=4,
         loc="left",
-        x=0.03,
+        x=0.045,
     )
 
     # light panel strips
@@ -336,8 +336,16 @@ def panel_A(ax):
     ax.text(0.59, 0.57, "output", fontsize=7.8, color=MUTE, va="bottom")
 
     # exact top-down compartment-specific errors
-    ax.text(0.73, 0.86, "exact backprop:\ncompartment-specific $\\partial L/\\partial V_n$",
-            ha="center", va="center", fontsize=8.0, color=EXACT, fontweight="bold")
+    ax.text(
+        0.73,
+        0.86,
+        "exact backprop:\ncompartment-specific $\\partial L/\\partial V_n$",
+        ha="center",
+        va="center",
+        fontsize=7.6,
+        color=EXACT,
+        fontweight="bold",
+    )
     hub_exact = (0.72, 0.78)
     draw_arrow(ax, 0.81, 0.60, hub_exact[0], hub_exact[1], color=EXACT, lw=1.0,
                mutation_scale=9, linestyle="--", alpha=0.95)
@@ -347,8 +355,16 @@ def panel_A(ax):
                    connectionstyle="arc3,rad=0.10")
 
     # localca broadcast from soma to tree
-    ax.text(0.73, 0.18, "LocalCA:\nshared low-bandwidth broadcast $e_n$",
-            ha="center", va="center", fontsize=8.0, color=APPROX, fontweight="bold")
+    ax.text(
+        0.73,
+        0.18,
+        "LocalCA:\nshared low-bandwidth broadcast $e_n$",
+        ha="center",
+        va="center",
+        fontsize=7.6,
+        color=APPROX,
+        fontweight="bold",
+    )
     hub_local = (0.69, 0.26)
     draw_arrow(ax, soma_xy[0] + 0.01, soma_xy[1] - 0.045, hub_local[0], hub_local[1],
                color=APPROX, lw=1.1, mutation_scale=9, alpha=0.95)
@@ -358,22 +374,65 @@ def panel_A(ax):
                    connectionstyle="arc3,rad=-0.10")
 
     # local update callout
-    rounded_box(ax, 0.83, 0.38, 0.24, 0.18, fc="white", ec="#D7DCE2", lw=0.8, radius=0.025)
-    ax.text(0.83, 0.445, "local synapse update", ha="center", va="center",
-            fontsize=8.0, color=INK, fontweight="bold")
-    ax.text(0.83, 0.385, r"$\Delta g_j \propto x_j\,R_n^{\mathrm{tot}}\,(E_j-V_n)\,e_n$",
-            ha="center", va="center", fontsize=10.0, color=INK)
-    ax.text(0.72, 0.315, "local:", fontsize=7.2, color=MUTE, fontweight="bold")
-    ax.text(0.77, 0.315, r"$x_j,\;V_n,\;E_j,\;R_n^{\mathrm{tot}}$", fontsize=7.0, color=MUTE)
-    ax.text(0.72, 0.275, "non-local:", fontsize=7.2, color=MUTE, fontweight="bold")
-    ax.text(0.81, 0.275, r"$\partial L/\partial V_n$ or $e_n$", fontsize=7.0, color=MUTE)
+    rounded_box(
+        ax, 0.83, 0.37, 0.255, 0.205, fc="white", ec="#D7DCE2", lw=0.8, radius=0.025
+    )
+    ax.text(
+        0.83,
+        0.445,
+        "local synapse update",
+        ha="center",
+        va="center",
+        fontsize=8.0,
+        color=INK,
+        fontweight="bold",
+    )
+    ax.text(
+        0.83,
+        0.39,
+        r"$\Delta g_j \propto x_j\,R_n^{\mathrm{tot}}\,(E_j-V_n)\,e_n$",
+        ha="center",
+        va="center",
+        fontsize=9.6,
+        color=INK,
+    )
+    ax.text(0.715, 0.322, "local:", fontsize=7.0, color=MUTE, fontweight="bold")
+    ax.text(0.768, 0.322, r"$x_j,\;V_n,\;E_j,\;R_n^{\mathrm{tot}}$", fontsize=6.8, color=MUTE)
+    ax.text(0.715, 0.286, "non-local:", fontsize=7.0, color=MUTE, fontweight="bold")
+    ax.text(0.807, 0.286, r"$\partial L/\partial V_n$ or $e_n$", fontsize=6.8, color=MUTE)
 
     # morphology labels
-    ax.text(x_leaf, 0.072, "distal\ncompartments", ha="center", va="top", fontsize=7.2, color=MUTE, style="italic")
-    ax.text(x_branch, 0.072, "proximal\nbranches", ha="center", va="top", fontsize=7.2, color=MUTE, style="italic")
-    ax.text(soma_xy[0], 0.072, "soma", ha="center", va="top", fontsize=7.2, color=MUTE, style="italic")
-    ax.text(0.24, 0.008, r"example morphology: $[3,3]$", ha="center", va="bottom",
-            fontsize=7.4, color=MUTE)
+    ax.text(
+        x_leaf,
+        0.082,
+        "distal\ncompartments",
+        ha="center",
+        va="top",
+        fontsize=7.0,
+        color=MUTE,
+        style="italic",
+    )
+    ax.text(
+        x_branch,
+        0.082,
+        "proximal\nbranches",
+        ha="center",
+        va="top",
+        fontsize=7.0,
+        color=MUTE,
+        style="italic",
+    )
+    ax.text(
+        soma_xy[0],
+        0.082,
+        "soma",
+        ha="center",
+        va="top",
+        fontsize=7.0,
+        color=MUTE,
+        style="italic",
+    )
+    ax.text(0.27, 0.022, r"tree $[3,3]$", ha="center", va="bottom", fontsize=6.8, color=MUTE)
 
 
 def _draw_hist(ax, x0, y0, w, h, color, spread, title):
@@ -387,7 +446,16 @@ def _draw_hist(ax, x0, y0, w, h, color, spread, title):
         bw = w / len(counts) * 0.78
         bx = x0 + i * (w / len(counts)) + 0.01 * w
         ax.add_patch(plt.Rectangle((bx, y0), bw, c * h, fc=color, ec=color, alpha=0.86, lw=0.25))
-    ax.text(x0 + w / 2, y0 + h + 0.02, title, ha="center", va="bottom", fontsize=6.7, color=color, fontweight="bold")
+    ax.text(
+        x0 + w / 2,
+        y0 + h + 0.018,
+        title,
+        ha="center",
+        va="bottom",
+        fontsize=6.4,
+        color=color,
+        fontweight="bold",
+    )
     ax.text(x0 + w / 2, y0 - 0.04, "path gain", ha="center", va="top", fontsize=6.2, color=MUTE, style="italic")
 
 
@@ -396,7 +464,7 @@ def panel_B(ax):
     ax.set_aspect("auto")
     ax.set_xlim(0, 1)
     ax.set_ylim(0, 1)
-    ax.set_title("Single-compartment conductance computation", fontsize=10.0, pad=4, loc="left", x=0.00)
+    ax.set_title("Compartment computation", fontsize=8.9, pad=3, loc="left", x=0.13)
 
     rounded_box(ax, 0.51, 0.68, 0.20, 0.12, fc="#F8FBF9", ec=DEND, lw=0.8)
     ax.text(0.51, 0.68, r"compartment $n$", ha="center", va="center", fontsize=8.6, fontweight="bold")
@@ -423,11 +491,19 @@ def panel_B(ax):
     ax.text(0.50, 0.18, r"$g_n^{\mathrm{tot}} \;=\; g^{\mathrm{leak}} + \sum_{j\in E} g_j x_j + \sum_{j\in I} g_j x_j + \sum_j g_j^{\mathrm{den}}$",
             ha="center", va="center", fontsize=8.5, color=INK)
 
-    ax.text(0.50, 0.105, "inhibition raises the denominator and concentrates path gains",
-            ha="center", va="center", fontsize=7.0, color=INH, fontweight="bold")
+    ax.text(
+        0.50,
+        0.112,
+        "path-gain distributions",
+        ha="center",
+        va="center",
+        fontsize=6.1,
+        color=MUTE,
+        style="italic",
+    )
 
-    _draw_hist(ax, 0.08, 0.01, 0.34, 0.07, COLORS["shunting"], 0.10, "shunting\nconcentrated")
-    _draw_hist(ax, 0.58, 0.01, 0.34, 0.07, COLORS["additive"], 0.26, "additive\nbroad")
+    _draw_hist(ax, 0.08, 0.01, 0.34, 0.075, COLORS["shunting"], 0.10, "shunting")
+    _draw_hist(ax, 0.58, 0.01, 0.34, 0.075, COLORS["additive"], 0.26, "additive")
 
 
 def panel_C(ax):
@@ -435,7 +511,7 @@ def panel_C(ax):
     ax.set_aspect("auto")
     ax.set_xlim(0, 1)
     ax.set_ylim(0, 1)
-    ax.set_title("Local rule family", fontsize=10.0, pad=4, loc="left", x=0.00)
+    ax.set_title("Rule family", fontsize=8.9, pad=3, loc="left", x=0.13)
 
     cards = [
         ("3F", COLORS["rule_3f"], "theorem-facing", "exact", r"$\Delta g_j \propto x_j\,R_n^{\mathrm{tot}}(E_j-V_n)\,e_n$",
@@ -456,9 +532,9 @@ def panel_C(ax):
         rounded_box(ax, 0.80, y + 0.06, 0.13, 0.055, fc=badge_fc, ec=badge_ec, lw=0.7, radius=0.02)
         ax.text(0.80, y + 0.06, badge, ha="center", va="center", fontsize=6.5, color=badge_ec, fontweight="bold")
 
-        ax.text(0.26, y + 0.062, sub, ha="left", va="center", fontsize=6.9, color=MUTE, fontweight="bold")
-        ax.text(0.26, y + 0.03, eq, ha="left", va="center", fontsize=8.9, color=INK)
-        ax.text(0.26, y - 0.055, expl, ha="left", va="center", fontsize=7.0, color=MUTE, style="italic")
+        ax.text(0.26, y + 0.062, sub, ha="left", va="center", fontsize=6.7, color=MUTE, fontweight="bold")
+        ax.text(0.26, y + 0.03, eq, ha="left", va="center", fontsize=8.6, color=INK)
+        ax.text(0.26, y - 0.055, expl, ha="left", va="center", fontsize=6.8, color=MUTE, style="italic")
 
 
 def _broadcast_row(ax, y, label, sub, color, mode):
@@ -508,7 +584,7 @@ def panel_D(ax):
     ax.set_aspect("auto")
     ax.set_xlim(0, 1)
     ax.set_ylim(0, 1)
-    ax.set_title("Broadcast approximations", fontsize=10.0, pad=4, loc="left", x=0.00)
+    ax.set_title("Broadcast modes", fontsize=8.9, pad=3, loc="left", x=0.13)
 
     rows = [
         ("scalar", "one shared field", COLORS["scalar"], "scalar"),
@@ -552,7 +628,7 @@ def panel_E(ax):
     ax.set_ylim(5, 100)
     ax.set_xlabel("epoch")
     ax.set_ylabel("MNIST test accuracy (%)")
-    ax.set_title("Representative MNIST learning dynamics", fontsize=10.0, pad=4, loc="left", x=0.00)
+    ax.set_title("MNIST dynamics", fontsize=8.9, pad=3, loc="left", x=0.13)
     style_axis(ax, grid="y")
     ax.legend(
         loc="lower right",
@@ -572,13 +648,13 @@ def panel_E(ax):
 def main():
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
-    fig = plt.figure(figsize=(13.2, 7.6))
+    fig = plt.figure(figsize=(13.2, 8.25))
     gs = fig.add_gridspec(
         2,
         4,
-        height_ratios=[1.18, 1.0],
+        height_ratios=[1.03, 1.17],
         width_ratios=[1.02, 1.02, 1.08, 1.18],
-        hspace=0.33,
+        hspace=0.28,
         wspace=0.26,
         left=0.04,
         right=0.985,
@@ -598,11 +674,11 @@ def main():
     panel_D(ax_D)
     panel_E(ax_E)
 
-    panel_label(ax_A, "A", x=-0.025, y=1.08, fontsize=13)
-    panel_label(ax_B, "B", x=-0.10, y=1.08, fontsize=13)
-    panel_label(ax_C, "C", x=-0.09, y=1.08, fontsize=13)
-    panel_label(ax_D, "D", x=-0.09, y=1.08, fontsize=13)
-    panel_label(ax_E, "E", x=-0.10, y=1.08, fontsize=13)
+    panel_label(ax_A, "A", x=-0.015, y=1.055, fontsize=12.5)
+    panel_label(ax_B, "B", x=-0.075, y=1.06, fontsize=12.5)
+    panel_label(ax_C, "C", x=-0.075, y=1.06, fontsize=12.5)
+    panel_label(ax_D, "D", x=-0.070, y=1.06, fontsize=12.5)
+    panel_label(ax_E, "E", x=-0.080, y=1.06, fontsize=12.5)
 
     out_path = OUTPUT_DIR / "fig1_model_and_credit"
     fig.savefig(out_path.with_suffix(".pdf"))
