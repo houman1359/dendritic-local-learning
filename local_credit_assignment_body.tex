@@ -865,7 +865,14 @@ shunting low-rank & $K{=}4$ & $34.7 \pm 1.1$ \\
 Table~\ref{tab:cifar10_mechanism_extension} provides the exact values for the main-text CIFAR-10 figure. In this stronger compact E/I family, shunting performs well under standard training ($49.5\%$ vs.\ $46.6\%$ for additive), so the harder-data stress test no longer unfairly penalizes the shunting architecture. The broadcast-fidelity ladder also survives once decoder-aware soma mapping is used: additive LocalCA rises from $32.6\%$ under rank-$1$ per-soma broadcast to $42.3\%$ under transported error, while shunting rises from $28.8\%$ under per-soma to $34.7\%$ with random low-rank $K{=}4$ and $47.4\%$ with transported error, nearly matching the $49.5\%$ shunting backprop ceiling.
 
 \paragraph{CIFAR-10 soma-on extension.}
-We also tested the soma-on extension on the same compact E/I depth-$4$ family with quantile init (Table~\ref{tab:cifar10_depth4_soma_extension}; 3 seeds). With \texttt{somatic\_synapses=true}, path-transported LocalCA stays strong in both cores: additive reaches $45.5 \pm 0.6\%$ and shunting reaches $46.6 \pm 1.0\%$. Relative to the soma-off results, the additive path-transport condition improves from $42.3\%$ to $45.5\%$, while shunting remains within $1$~pp of its soma-off path-transport ceiling ($47.4\%$) and within $3$~pp of the matched shunting backprop ceiling ($49.5\%$). Per-soma rank-$1$ broadcast also becomes much more competitive for additive ($41.6 \pm 0.6\%$) than for shunting ($35.9 \pm 1.2\%$), while low-rank $K{=}4$ remains weak in both cores. On this harder dataset, the soma channel clearly helps, but it still does not eliminate the importance of broadcast quality.
+We also tested the soma-on extension on the same compact E/I depth-$4$ family with quantile init (Fig.~\ref{fig:cifar10_soma_extension}; Table~\ref{tab:cifar10_depth4_soma_extension}; 3 seeds). With \texttt{somatic\_synapses=true}, path-transported LocalCA stays strong in both cores: additive reaches $45.5 \pm 0.6\%$ and shunting reaches $46.6 \pm 1.0\%$. Relative to the soma-off results, the additive path-transport condition improves from $42.3\%$ to $45.5\%$, while shunting remains within $1$~pp of its soma-off path-transport ceiling ($47.4\%$) and within $3$~pp of the matched shunting backprop ceiling ($49.5\%$). Per-soma rank-$1$ broadcast also becomes much more competitive for additive ($41.6 \pm 0.6\%$) than for shunting ($35.9 \pm 1.2\%$), while low-rank $K{=}4$ remains weak in both cores. Figure~\ref{fig:cifar10_soma_extension} makes the two useful views explicit: the absolute soma-on ordering still favors path transport strongly, and the matched soma-off to soma-on gain is largest for additive per-soma while shunting transported error is already near its soma-off ceiling. On this harder dataset, the soma channel clearly helps, but it still does not eliminate the importance of broadcast quality.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.95\textwidth]{fig_s_cifar10_soma_extension.pdf}
+\caption{\textbf{CIFAR-10 compact E/I depth-4 with \texttt{somatic\_synapses=true}.} \textbf{(A)}~Absolute soma-on ladder on the compact explicit-E/I depth-$4$ family. Path transport stays strongest in both cores and remains near the matched backprop ceilings (dashed lines), while low-rank $K{=}4$ remains weak. \textbf{(B)}~Matched shift from soma-off to soma-on for the conditions with a clean paired baseline. Soma helps additive strongly under per-soma and path transport, improves shunting per-soma, leaves shunting transported error close to its soma-off value, and worsens shunting low-rank $K{=}4$. Additive low-rank $K{=}4$ is omitted from panel~B because the corrected soma-off strong-family mechanism package did not include that exact matched rerun.}
+\label{fig:cifar10_soma_extension}
+\end{figure}
 
 \begin{table}[t]
 \centering
@@ -1024,12 +1031,12 @@ We assume per-neuron resolution (one error per output neuron) for the per-soma b
 \subsection*{Dendritic Structure in Code}
 We use the morphology notation $[b_1,b_2,\dots,b_D]$ for rooted dendritic trees, where each factor gives the fan-in from one dendritic stage to the next on the path to the soma. For example, $[3,3]$ means that each soma aggregates $3$ proximal branches and each proximal branch aggregates $3$ distal branches, for $9$ distal leaves per soma; $[3,3,3]$ adds a third dendritic stage with $27$ leaves per soma. In code, each excitatory unit is instantiated as a \texttt{DendriNet}, which is a stack of \texttt{DendriticBranchLayer}s. Each branch layer contains an excitatory synapse bank, an optional inhibitory synapse bank, a branch-to-parent aggregation map, and an optional post-voltage reactivation. In the main feedforward models studied here, \texttt{somatic\_synapses=false}, so synaptic inputs terminate on dendritic branches rather than directly on the soma. Likewise, \texttt{input\_mode=1} together with nonzero \texttt{ie\_synapses\_per\_branch\_per\_layer} means that inhibition enters each dendritic branch through explicit inhibitory synapses even when we do not instantiate a separate inhibitory neuron population (\texttt{inhibitory\_layer\_sizes=[]}). The additive and shunting cores are therefore architecture-matched at the tree level; they differ in the branch-level voltage integration rule rather than in whether a dendritic tree exists. In all reported dendritic runs, synaptic and dendritic conductance parameters are pushed through positive transforms (\texttt{softplus} in the main paper runs), so the conductances themselves remain nonnegative at every optimization step; unconstrained decoder weights are separate readout parameters and are not interpreted as conductances.
 
-Completed soma-on LocalCA reruns suggest that direct somatic input is a meaningful extension rather than a minor implementation detail. Relative to the matched safeguarded non-somatic reruns, enabling \texttt{somatic\_synapses=true} raises the mean test accuracy in all four finished paper-facing families: phase-1 capacity from $0.8784$ to $0.8999$, claim A from $0.5641$ to $0.6715$, claim B from $0.3578$ to $0.7070$, and claim C from $0.2798$ to $0.3906$. Because the main mechanistic analysis in this paper was developed in the dendrite-only feedforward regime, we keep the main text anchored to \texttt{somatic\_synapses=false} and treat soma-on as a supportive extension rather than silently replacing the original operating regime. Figure~\ref{fig:soma_extension} summarizes the mean and best-accuracy comparisons across the four families.
+Completed soma-on LocalCA reruns suggest that direct somatic input is a meaningful extension rather than a minor implementation detail. Relative to the matched safeguarded non-somatic reruns, enabling \texttt{somatic\_synapses=true} raises the mean test accuracy in all four finished paper-facing families: phase-1 capacity from $0.8784$ to $0.8999$, claim A from $0.5641$ to $0.6715$, claim B from $0.3578$ to $0.7070$, and claim C from $0.2798$ to $0.3906$. These numbers are family-level aggregates over the completed configs in each matched soma-off and soma-on rerun sweep, rather than a single 5-seed cell. Because the main mechanistic analysis in this paper was developed in the dendrite-only feedforward regime, we keep the main text anchored to \texttt{somatic\_synapses=false} and treat soma-on as a supportive extension rather than silently replacing the original operating regime. Figure~\ref{fig:soma_extension} summarizes the mean and best-accuracy comparisons across the four families.
 
 \begin{figure}[t]
 \centering
 \includegraphics[width=0.95\textwidth]{fig_s_soma_extension.pdf}
-\caption{\textbf{Soma-on extension for LocalCA.} Enabling direct somatic input (\texttt{somatic\_synapses=true}) improves mean test accuracy across all four paper-facing LocalCA families. The largest gain appears in morphology scaling, where the mean rises from $35.8\%$ to $70.7\%$ and the best run rises from $57.0\%$ to $76.4\%$. Gains in the shunting-regime and error-shaping families are smaller but still substantial. Delta labels show soma-on minus soma-off. Because the main mechanistic analysis was developed in the dendrite-only feedforward regime, we report soma-on as a supportive extension rather than replacing the main operating regime.}
+\caption{\textbf{Soma-on extension for LocalCA.} Enabling direct somatic input (\texttt{somatic\_synapses=true}) improves aggregate mean test accuracy across all four paper-facing LocalCA families. Each family is summarized over the completed configs in its matched safeguarded soma-off and soma-on rerun sweeps. The largest gain appears in morphology scaling, where the family mean rises from $35.8\%$ to $70.7\%$ and the best run rises from $57.0\%$ to $76.4\%$. Gains in the shunting-regime and error-shaping families are smaller but still substantial. Delta labels show soma-on minus soma-off. Because the main mechanistic analysis was developed in the dendrite-only feedforward regime, we report soma-on as a supportive extension rather than replacing the main operating regime.}
 \label{fig:soma_extension}
 \end{figure}
 
@@ -1047,7 +1054,7 @@ Claim B: morphology scaling & 0.3578 & 0.7070 & +0.3492 & +0.1940 \\
 Claim C: error shaping & 0.2798 & 0.3906 & +0.1109 & +0.1210 \\
 \bottomrule
 \end{tabular}
-\caption{\textbf{Representative paired soma-on deltas across the four paper-facing LocalCA phase families.} Values compare matched safeguarded reruns with and without \texttt{somatic\_synapses} and report both the change in mean test accuracy and the change in best-seed test accuracy. Cue-routing soma and CIFAR-10 depth-4 soma are reported separately in Fig.~\ref{fig:cue_routing_soma} and Table~\ref{tab:cifar10_depth4_soma_extension} because those extensions are summarized on a different stable subset or task family.}
+\caption{\textbf{Representative soma-on deltas across the four paper-facing LocalCA phase families.} Values compare matched safeguarded rerun families with and without \texttt{somatic\_synapses} and report both the change in family-mean test accuracy and the change in best-run test accuracy. Cue-routing soma and CIFAR-10 depth-4 soma are reported separately in Fig.~\ref{fig:cue_routing_soma}, Fig.~\ref{fig:cifar10_soma_extension}, and Table~\ref{tab:cifar10_depth4_soma_extension} because those extensions are summarized on a different stable subset or task family.}
 \label{tab:soma_delta_summary}
 \end{table}
 
@@ -1065,12 +1072,12 @@ The conductance stage produces a pre-reactivation compartment voltage $V_n$, aft
 
 The finalized LocalCA reruns now use occupancy-quantile initialization together with a safeguarded calibration pass that floors tiny quantile widths, clamps extreme fitted slopes, and reverts invalid per-layer fits rather than allowing pathological intermediate values to propagate. In the non-somatic feedforward publication families, this safeguard leaves the paper-facing results essentially unchanged relative to the earlier occupancy-quantile reruns: phase-1 capacity changes from $0.8786$ to $0.8784$ mean test accuracy, claim A from $0.5617$ to $0.5641$, claim B from $0.3600$ to $0.3578$, and claim C from $0.2860$ to $0.2798$. The calibration fix therefore improves numerical safety without changing the qualitative LocalCA story.
 
-We also compared two post-initialization policies for the reactivation parameters under quantile initialization: \emph{learned local $(b,m)$}, where LocalCA updates the gate parameters through the local rule, and \emph{quantile-maintained $(b,m)$}, where $(b,m)$ are periodically refreshed from the current voltage distribution instead of being updated by the local rule. This comparison matters because quantile-maintained gates substantially simplify nonlinear reactivation learning: the rest of the network still uses LocalCA, but the gate parameters themselves are set by a local distributional rule rather than a learned plasticity rule. On MNIST classification sweeps, learned local $(b,m)$ remains clearly better (additive $0.9247$ vs.\ $0.9061$ mean test accuracy; shunting $0.9104$ vs.\ $0.8766$). On CIFAR-10, the picture is mixed in a useful way: additive is essentially tied on mean ($0.4223$ learned-local vs.\ $0.4215$ quantile-maintained) while shunting improves under quantile-maintained gates ($0.4028$ to $0.4356$ mean test accuracy). We therefore treat quantile-maintained $(b,m)$ as a helpful simplification rather than a universal replacement: it is most attractive in the harder shunting/CIFAR regime, but learned local $(b,m)$ remains the strongest single default across the full sweep. Accordingly, the main manuscript continues to use occupancy-quantile initialization followed by LocalCA updates of $(b,m)$ as the default local-learning setting, while quantile-maintained $(b,m)$ is reported as a supplementary alternative. Figure~\ref{fig:bm_policy} shows the full MNIST and CIFAR-10 comparison.
+We also compared two post-initialization policies for the reactivation parameters under quantile initialization: \emph{learned local $(b,m)$}, where LocalCA updates the gate parameters through the local rule, and \emph{quantile-maintained $(b,m)$}, where $(b,m)$ are periodically refreshed from the current voltage distribution instead of being updated by the local rule. This comparison matters because quantile-maintained gates substantially simplify nonlinear reactivation learning: the rest of the network still uses LocalCA, but the gate parameters themselves are set by a local distributional rule rather than a learned plasticity rule. On MNIST classification sweeps, learned local $(b,m)$ remains clearly better (additive $0.9247$ vs.\ $0.9061$ mean test accuracy; shunting $0.9104$ vs.\ $0.8766$). On CIFAR-10, the picture is mixed in a useful way: additive is essentially tied on mean ($0.4223$ learned-local vs.\ $0.4215$ quantile-maintained) while shunting improves under quantile-maintained gates ($0.4028$ to $0.4356$ mean test accuracy). These bars aggregate over a matched morphology/init grid rather than a dedicated 5-seed rerun, so we treat them as a supportive policy comparison rather than a headline result. Accordingly, the main manuscript continues to use occupancy-quantile initialization followed by LocalCA updates of $(b,m)$ as the default local-learning setting, while quantile-maintained $(b,m)$ is reported as a supplementary alternative. Figure~\ref{fig:bm_policy} shows the full MNIST and CIFAR-10 comparison.
 
 \begin{figure}[t]
 \centering
 \includegraphics[width=0.95\textwidth]{fig_s_bm_policy.pdf}
-\caption{\textbf{$(b,m)$ update policy under quantile initialization.} Each cluster of bars compares the mean test accuracy of learned local $(b,m)$ and quantile-maintained $(b,m)$ under LocalCA for additive and shunting cores, averaged across morphology ($[2,2]$ and $[3,3,3]$) and initialization variants. Dashed and dotted horizontal lines mark the matched standard backpropagation ceiling for additive and shunting respectively. \textbf{Left (MNIST):} Learned local $(b,m)$ is consistently better; quantile-maintained lags by $1.9$~pp (additive) and $3.4$~pp (shunting) on mean accuracy. \textbf{Right (CIFAR-10):} The gap reverses for shunting: quantile-maintained reaches $43.6\%$ mean vs.\ $40.3\%$ for learned local, while additive is essentially tied. The pattern suggests that quantile-maintained $(b,m)$ prevents over-fitting the reactivation gate on harder inputs, making it a useful alternative in harder visual regimes.}
+\caption{\textbf{$(b,m)$ update policy under quantile initialization.} Each cluster of bars compares the mean test accuracy of learned local $(b,m)$ and quantile-maintained $(b,m)$ under LocalCA for additive and shunting cores, averaged across a matched morphology/init grid ($[2,2]$ and $[3,3,3]$; analytical and quantile init variants). Dashed and dotted horizontal lines mark the matched standard backpropagation ceiling for additive and shunting respectively. \textbf{Left (MNIST):} Learned local $(b,m)$ is consistently better; quantile-maintained lags by $1.9$~pp (additive) and $3.4$~pp (shunting) on mean accuracy. \textbf{Right (CIFAR-10):} The gap reverses for shunting: quantile-maintained reaches $43.6\%$ mean vs.\ $40.3\%$ for learned local, while additive is essentially tied. The pattern suggests that quantile-maintained $(b,m)$ prevents over-fitting the reactivation gate on harder inputs, making it a useful alternative in harder visual regimes.}
 \label{fig:bm_policy}
 \end{figure}
 
@@ -1210,39 +1217,39 @@ The seed depth is not uniform across every sweep, and we therefore separate head
 \begin{table}[t]
 \centering\small
 \renewcommand{\arraystretch}{1.06}
-\begin{tabular}{@{}L{0.24\linewidth}L{0.30\linewidth}L{0.12\linewidth}L{0.22\linewidth}@{}}
+\begin{tabular}{@{}L{0.24\linewidth}L{0.30\linewidth}L{0.16\linewidth}L{0.18\linewidth}@{}}
 \toprule
-\textbf{Figure / Table} & \textbf{Sweep} & \textbf{Seeds} & \textbf{Tier} \\
+\textbf{Figure / Table} & \textbf{Sweep} & \textbf{Replication} & \textbf{Tier} \\
 \midrule
-Fig.~\ref{fig:model_schematic}D       & Fig.~1 MNIST learning dynamics       & 5 & Headline \\
-Fig.~\ref{fig:gradient_fidelity}      & Gradient-fidelity diagnostic         & 5 & Headline \\
-Fig.~\ref{fig:mechanistic}            & Mechanistic chain + oracle + summary & 5 & Headline \\
-Fig.~\ref{fig:competence_regime}      & Competence / regime dose-response    & 5 & Headline \\
-Fig.~\ref{fig:cifar10_mechanism_extension} / Table~\ref{tab:cifar10_mechanism_extension} & CIFAR-10 compact E/I mechanism extension & 5 & Headline \\
-Fig.~\ref{fig:cue_routing}            & Cue-routing (soma off)               & 5 & Supportive \\
-Table~\ref{tab:gap_closing}           & Competence gaps (BP ceiling vs.\ 5F) & 5 & Headline \\
+Fig.~\ref{fig:model_schematic}D       & Fig.~1 MNIST learning dynamics       & 5 seeds & Headline \\
+Fig.~\ref{fig:gradient_fidelity}      & Gradient-fidelity diagnostic         & 5 seeds & Headline \\
+Fig.~\ref{fig:mechanistic}            & Mechanistic chain + oracle + summary & 5 seeds & Headline \\
+Fig.~\ref{fig:competence_regime}      & Competence / regime dose-response    & 5 seeds & Headline \\
+Fig.~\ref{fig:cifar10_mechanism_extension} / Table~\ref{tab:cifar10_mechanism_extension} & CIFAR-10 compact E/I mechanism extension & 5 seeds & Headline \\
+Fig.~\ref{fig:cue_routing}            & Cue-routing (soma off)               & 5 seeds & Supportive \\
+Table~\ref{tab:gap_closing}           & Competence gaps (BP ceiling vs.\ 5F) & 5 seeds & Headline \\
 \midrule
-Fig.~\ref{fig:soma_extension}         & Soma-on extension across phase families & 5 & Supportive \\
-Table~\ref{tab:soma_delta_summary}   & Paired soma-on delta summary         & 5 & Supportive \\
-Fig.~\ref{fig:bm_policy}              & $(b,m)$ update-policy comparison     & 4 & Supportive \\
-Fig.~\ref{fig:ablation}               & Component ablation (MNIST)           & 5 & Supportive \\
-Fig.~\ref{fig:cue_routing_soma}       & Cue-routing soma-on (stable subset)  & 5 & Supportive \\
-Fig.~\ref{fig:weight_sensitivity}     & Weight-distribution sensitivity      & 5 & Supportive \\
-Fig.~\ref{fig:weight_dist_by_depth}   & Weight-distribution vs.\ depth       & 5 & Supportive \\
-Fig.~\ref{fig:weight_dist_soma_comparison} & Weight-distribution soma-off vs.\ soma-on & 5 & Supportive \\
-Table~\ref{tab:cifar10_depth4_soma_extension} & CIFAR-10 depth-4 soma extension & 3 & Supportive \\
-Fig.~\ref{fig:fa_dfa_appendix}        & FA/DFA baseline comparison           & 5 & Supportive \\
-Fig.~\ref{fig:low_bandwidth_appendix} & Broadcast-bandwidth / quantization   & 5 & Supportive \\
-Fig.~\ref{fig:additive_norm_control}  & Additive + normalization control     & 5 & Supportive \\
-Fig.~\ref{fig:additional_stress_tests} / \ref{fig:verification_appendix} & Stress tests; verification & 5 & Supportive \\
-Fig.~\ref{fig:five_factor_sensitivity}& 5F sensitivity                       & 3 & Supportive \\
-Table~\ref{tab:low_rank_broadcast}    & Rank-bridge                          & 5 & Supportive \\
+Fig.~\ref{fig:soma_extension}         & Soma-on extension across phase families & Family aggregates (144--420 cfgs) & Supportive \\
+Table~\ref{tab:soma_delta_summary}   & Soma-on delta summary across phase families & Family aggregates & Supportive \\
+Fig.~\ref{fig:bm_policy}              & $(b,m)$ update-policy comparison     & Matched 4-cell grid / bar & Supportive \\
+Fig.~\ref{fig:ablation}               & Component ablation (MNIST)           & 5 seeds & Supportive \\
+Fig.~\ref{fig:cue_routing_soma}       & Cue-routing soma-on (stable subset)  & 5 seeds & Supportive \\
+Fig.~\ref{fig:weight_sensitivity}     & Weight-distribution sensitivity      & 5 seeds & Supportive \\
+Fig.~\ref{fig:weight_dist_by_depth}   & Weight-distribution vs.\ depth       & 5 seeds & Supportive \\
+Fig.~\ref{fig:weight_dist_soma_comparison} & Weight-distribution soma-off vs.\ soma-on & 5 seeds & Supportive \\
+Fig.~\ref{fig:cifar10_soma_extension} / Table~\ref{tab:cifar10_depth4_soma_extension} & CIFAR-10 depth-4 soma extension & 3 seeds & Supportive \\
+Fig.~\ref{fig:fa_dfa_appendix}        & FA/DFA baseline comparison           & 5 seeds & Supportive \\
+Fig.~\ref{fig:low_bandwidth_appendix} & Broadcast-bandwidth / quantization   & 5 seeds & Supportive \\
+Fig.~\ref{fig:additive_norm_control}  & Additive + normalization control     & 5 seeds & Supportive \\
+Fig.~\ref{fig:additional_stress_tests} / \ref{fig:verification_appendix} & Stress tests; verification & 5 seeds & Supportive \\
+Fig.~\ref{fig:five_factor_sensitivity}& 5F sensitivity                       & 3 seeds & Supportive \\
+Table~\ref{tab:low_rank_broadcast}    & Rank-bridge                          & 5 seeds & Supportive \\
 \midrule
-Fig.~\ref{fig:morphology_ie_regime}   & Morphology $\times$ inhibition map   & 3 & Supportive \\
-(legacy) info-shunting                & Signed-input stress test             & 1--3 & Exploratory \\
+Fig.~\ref{fig:morphology_ie_regime}   & Morphology $\times$ inhibition map   & 3 seeds & Supportive \\
+(legacy) info-shunting                & Signed-input stress test             & 1--3 seeds & Exploratory \\
 \bottomrule
 \end{tabular}
-\caption{\textbf{Seed-to-claim map.} Each main-paper and appendix figure or table is pinned to its sweep, seed count, and claim tier (Sec.~\ref{sec:claim_tiers}). The BP ceilings in Table~\ref{tab:gap_closing} come from dedicated matched-capacity $5$-seed standard-training refreshes.}
+\caption{\textbf{Claim-to-evidence map.} Each main-paper and appendix figure or table is pinned to its sweep and replication type (Sec.~\ref{sec:claim_tiers}). Most headline claims come from dedicated $5$-seed reruns; the supportive soma-extension and $(b,m)$ policy appendices instead summarize matched sweep families or matched config grids, and are labeled accordingly. The BP ceilings in Table~\ref{tab:gap_closing} come from dedicated matched-capacity $5$-seed standard-training refreshes.}
 \label{tab:seed_claim_map}
 \end{table}
 
@@ -1327,7 +1334,7 @@ Per-branch scaling $\rho_j = \rho_{\mathrm{base}} / (d_j + \alpha)$, mirroring c
 $\Delta g_j^{\mathrm{den}} \leftarrow \Delta g_j^{\mathrm{den}} / (\sum_k g_k^{\mathrm{den}} + \varepsilon)$, analogous to homeostatic scaling \cite{turrigiano2008homeostatic}.
 
 \paragraph{Pathway-vector feedback.}
-For tasks with latent pathway structure, the broadcast becomes a low-dimensional role vector inferred from the router. Local pathway activity gates that vector, and block-structured transport carries it upward so earlier branches receive feedback aligned with their downstream descendants.
+For tasks with latent pathway structure, the broadcast becomes a role vector inferred from the router. Local pathway activity gates this vector. Upward block transport then passes it to earlier branches, aligning their feedback with downstream descendants.
 
 \paragraph{Router-derived branch roles.}
 Each branch receives a role profile inferred from router assignments and incoming block weights rather than from a hand-coded apical/basal label.

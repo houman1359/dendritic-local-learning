@@ -4,15 +4,18 @@
 This script intentionally does NOT generate Figure 1.
 The authoritative Figure 1 is produced by `generate_figure1_schematic.py`.
 
-Produces 3 main figures + 4 appendix figures:
+Produces the current manuscript figures used by the submission draft.
+
+This script still contains a few legacy helper panels, but by default it writes
+only the figures that are referenced by `local_credit_assignment_body.tex`.
+
   Main:
     fig2_competence_regime.pdf     (3 panels: multi-benchmark bars, IE dose-response, shunting advantage)
     fig3_gradient_fidelity.pdf     (4 panels: cosine, scale mismatch, alignment dynamics, factorization)
-    fig4_scalability.pdf           (3 panels: depth, noise, Fashion-MNIST)
+    fig_additional_stress_tests.pdf
   Appendix:
     fig_s1_calibration.pdf         (2x2: capacity, rule ranking, decoder, broadcast)
     fig_s2_gradient_extended.pdf   (2x2: scale mismatch, noise IE detail, MNIST IE detail, FMNIST seeds)
-    fig_s3_sandbox.pdf             (copy of existing neurips_combined)
     fig_s4_verification.pdf        (1x3: MNIST seeds, CG seeds, HSIC ablation)
 
 Usage:
@@ -40,6 +43,17 @@ DRAFT_DIR = os.path.dirname(SCRIPT_DIR)
 DATA_DIR = os.path.join(DRAFT_DIR, "data")
 FIGURES_DIR = os.path.join(DRAFT_DIR, "figures")
 ANALYSIS_DIR = os.path.join(DRAFT_DIR, "analysis")
+COMPETENCE_SUMMARY_CSV = os.path.join(
+    FIGURES_DIR, "data", "competence_summary_20260422.csv"
+)
+CIFAR10_BP_SUMMARY_CSV = os.path.join(
+    ANALYSIS_DIR, "cifar10_compactei_depth4", "cifar10_compactei_depth4_grouped_summary.csv"
+)
+CIFAR10_LOCALCA_MECH_SUMMARY_CSV = os.path.join(
+    ANALYSIS_DIR,
+    "cifar10_compactei_depth4_decoderfix_mechanism_5seed",
+    "cifar10_compactei_depth4_decoderfix_mechanism_summary.csv",
+)
 
 BUNDLE = (
     "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING"
@@ -393,6 +407,7 @@ def figure1_legacy():
 def figure2():
     print("\n--- Figure 2: Competence & Regime Dependence ---")
 
+    competence = _csv_path(COMPETENCE_SUMMARY_CSV)
     ceilings = _csv_path(STANDARD_CEILING_SUMMARY_CSV)
     core = _csv_path(CORE_FAIR_TUNING_CSV)
     p2b = _csv_path(PHASE2B_GAP_CLOSING_CSV)
@@ -411,57 +426,87 @@ def figure2():
 
     datasets_info = []
 
-    # MNIST
-    bp_mnist = None
-    if ceilings is not None:
-        r = ceilings[(ceilings["dataset"] == "mnist") & (ceilings["network_type"] == "dendritic_shunting")]
-        if len(r):
-            bp_mnist = r.iloc[0]["test_accuracy_mean"]
-    local_shunt_mnist, local_shunt_mnist_e = None, 0
-    local_add_mnist, local_add_mnist_e = None, 0
-    if core is not None:
-        for nt, store in [("dendritic_shunting", "shunt"), ("dendritic_additive", "add")]:
-            sub = core[(core["dataset"] == "mnist") & (core["network_type"] == nt) &
-                       (core["rule_variant"] == "5f") & (core["error_broadcast_mode"] == "per_soma") &
-                       (core["decoder_update_mode"] == "local")]
+    if competence is not None:
+        def _pick_competence(dataset, network_type, strategy):
+            sub = competence[
+                (competence["dataset"] == dataset)
+                & (competence["network_type"] == network_type)
+                & (competence["strategy"] == strategy)
+            ]
+            return None if len(sub) == 0 else sub.iloc[0]
+
+        for dataset, label in [
+            ("mnist", "MNIST"),
+            ("fashion_mnist", "F-MNIST"),
+            ("context_gating", "CG"),
+        ]:
+            bp = _pick_competence(dataset, "dendritic_shunting", "standard")
+            shunt = _pick_competence(dataset, "dendritic_shunting", "local_ca")
+            add = _pick_competence(dataset, "dendritic_additive", "local_ca")
+            if bp is None or shunt is None:
+                continue
+            datasets_info.append(
+                (
+                    label,
+                    float(bp["test_accuracy_mean"]),
+                    float(shunt["test_accuracy_mean"]),
+                    float(shunt["test_accuracy_std"]),
+                    None if add is None else float(add["test_accuracy_mean"]),
+                    0 if add is None else float(add["test_accuracy_std"]),
+                )
+            )
+    else:
+        # MNIST
+        bp_mnist = None
+        if ceilings is not None:
+            r = ceilings[(ceilings["dataset"] == "mnist") & (ceilings["network_type"] == "dendritic_shunting")]
+            if len(r):
+                bp_mnist = r.iloc[0]["test_accuracy_mean"]
+        local_shunt_mnist, local_shunt_mnist_e = None, 0
+        local_add_mnist, local_add_mnist_e = None, 0
+        if core is not None:
+            for nt, store in [("dendritic_shunting", "shunt"), ("dendritic_additive", "add")]:
+                sub = core[(core["dataset"] == "mnist") & (core["network_type"] == nt) &
+                           (core["rule_variant"] == "5f") & (core["error_broadcast_mode"] == "per_soma") &
+                           (core["decoder_update_mode"] == "local")]
+                if len(sub):
+                    r = sub.iloc[0]
+                    if store == "shunt":
+                        local_shunt_mnist = r["test_accuracy_mean"]
+                        local_shunt_mnist_e = r["test_accuracy_std"]
+                    else:
+                        local_add_mnist = r["test_accuracy_mean"]
+                        local_add_mnist_e = r["test_accuracy_std"]
+        if bp_mnist:
+            datasets_info.append(("MNIST", bp_mnist, local_shunt_mnist, local_shunt_mnist_e,
+                                  local_add_mnist, local_add_mnist_e))
+
+        # Fashion-MNIST
+        if fmnist is not None:
+            bp_s = fmnist[(fmnist["network_type"] == "dendritic_shunting") & (fmnist["strategy"] == "standard")]
+            loc_s = fmnist[(fmnist["network_type"] == "dendritic_shunting") & (fmnist["strategy"] == "local_ca")]
+            loc_a = fmnist[(fmnist["network_type"] == "dendritic_additive") & (fmnist["strategy"] == "local_ca")]
+            if len(bp_s) and len(loc_s) and len(loc_a):
+                datasets_info.append(("F-MNIST",
+                                      bp_s.iloc[0]["test_accuracy_mean"],
+                                      loc_s.iloc[0]["test_accuracy_mean"], loc_s.iloc[0]["test_accuracy_std"],
+                                      loc_a.iloc[0]["test_accuracy_mean"], loc_a.iloc[0]["test_accuracy_std"]))
+
+        # Context gating
+        bp_cg = None
+        if ceilings is not None:
+            r = ceilings[(ceilings["dataset"] == "context_gating") & (ceilings["network_type"] == "dendritic_shunting")]
+            if len(r):
+                bp_cg = r.iloc[0]["test_accuracy_mean"]
+        local_shunt_cg, local_shunt_cg_e = None, 0
+        if p2b is not None:
+            sub = p2b[(p2b["dataset"] == "context_gating") & (p2b["hsic_enabled"] == True) &
+                      (p2b["hsic_weight"] == 0.01) & (p2b["error_broadcast_mode"] == "per_soma")]
             if len(sub):
-                r = sub.iloc[0]
-                if store == "shunt":
-                    local_shunt_mnist = r["test_accuracy_mean"]
-                    local_shunt_mnist_e = r["test_accuracy_std"]
-                else:
-                    local_add_mnist = r["test_accuracy_mean"]
-                    local_add_mnist_e = r["test_accuracy_std"]
-    if bp_mnist:
-        datasets_info.append(("MNIST", bp_mnist, local_shunt_mnist, local_shunt_mnist_e,
-                              local_add_mnist, local_add_mnist_e))
-
-    # Fashion-MNIST
-    if fmnist is not None:
-        bp_s = fmnist[(fmnist["network_type"] == "dendritic_shunting") & (fmnist["strategy"] == "standard")]
-        loc_s = fmnist[(fmnist["network_type"] == "dendritic_shunting") & (fmnist["strategy"] == "local_ca")]
-        loc_a = fmnist[(fmnist["network_type"] == "dendritic_additive") & (fmnist["strategy"] == "local_ca")]
-        if len(bp_s) and len(loc_s) and len(loc_a):
-            datasets_info.append(("F-MNIST",
-                                  bp_s.iloc[0]["test_accuracy_mean"],
-                                  loc_s.iloc[0]["test_accuracy_mean"], loc_s.iloc[0]["test_accuracy_std"],
-                                  loc_a.iloc[0]["test_accuracy_mean"], loc_a.iloc[0]["test_accuracy_std"]))
-
-    # Context gating
-    bp_cg = None
-    if ceilings is not None:
-        r = ceilings[(ceilings["dataset"] == "context_gating") & (ceilings["network_type"] == "dendritic_shunting")]
-        if len(r):
-            bp_cg = r.iloc[0]["test_accuracy_mean"]
-    local_shunt_cg, local_shunt_cg_e = None, 0
-    if p2b is not None:
-        sub = p2b[(p2b["dataset"] == "context_gating") & (p2b["hsic_enabled"] == True) &
-                  (p2b["hsic_weight"] == 0.01) & (p2b["error_broadcast_mode"] == "per_soma")]
-        if len(sub):
-            local_shunt_cg = sub.iloc[0]["test_accuracy_mean"]
-            local_shunt_cg_e = sub.iloc[0]["test_accuracy_std"]
-    if bp_cg and local_shunt_cg:
-        datasets_info.append(("CG", bp_cg, local_shunt_cg, local_shunt_cg_e, None, 0))
+                local_shunt_cg = sub.iloc[0]["test_accuracy_mean"]
+                local_shunt_cg_e = sub.iloc[0]["test_accuracy_std"]
+        if bp_cg and local_shunt_cg:
+            datasets_info.append(("CG", bp_cg, local_shunt_cg, local_shunt_cg_e, None, 0))
 
     # Plot grouped bars
     n_ds = len(datasets_info)
@@ -564,7 +609,28 @@ def figure2():
     _panel(ax, "D")
 
     fmnist_data = []
-    if fmnist is not None:
+    if competence is not None:
+        for ct, label, color in [
+            ("dendritic_shunting", "Shunt.", COLOR_SHUNTING),
+            ("dendritic_additive", "Add.", COLOR_ADDITIVE),
+        ]:
+            for strat, hatch, suffix in [
+                ("standard", None, " BP"),
+                ("local_ca", "//", " local"),
+            ]:
+                sub = competence[
+                    (competence["dataset"] == "fashion_mnist")
+                    & (competence["network_type"] == ct)
+                    & (competence["strategy"] == strat)
+                ]
+                if len(sub):
+                    fmnist_data.append((
+                        label + suffix,
+                        float(sub.iloc[0]["test_accuracy_mean"]) * 100,
+                        float(sub.iloc[0]["test_accuracy_std"]) * 100,
+                        color, hatch,
+                    ))
+    elif fmnist is not None:
         for ct, label, color in [
             ("dendritic_shunting", "Shunt.", COLOR_SHUNTING),
             ("dendritic_additive", "Add.", COLOR_ADDITIVE),
@@ -601,7 +667,6 @@ def figure2():
     fig.subplots_adjust(left=0.08, right=0.985, bottom=0.08, top=0.94,
                         wspace=0.32, hspace=0.42)
     _save(fig, "fig2_competence_regime")
-    _save(fig, "fig_competence_regime_appendix")
     plt.close(fig)
 
 
@@ -950,7 +1015,6 @@ def figure4():
 
     fig.subplots_adjust(left=0.08, right=0.97, bottom=0.15, top=0.90,
                         wspace=0.55)
-    _save(fig, "fig4_scalability")
     _save(fig, "fig_additional_stress_tests")
     plt.close(fig)
 
@@ -1852,6 +1916,176 @@ def figure_s_cue_routing_soma():
 
 
 # ===================================================================
+# Appendix Figure — CIFAR-10 soma-on extension
+# ===================================================================
+def figure_s_cifar10_soma_extension():
+    """Two-panel appendix figure for the CIFAR-10 soma-on extension."""
+    print("\n--- Supplementary: CIFAR-10 Soma Extension ---")
+
+    on_csv = _analysis_csv("cifar10_depth4_soma_summary", "cifar10_depth4_soma_grouped.csv")
+    on_df = _csv_path(on_csv)
+    off_df = _csv_path(CIFAR10_LOCALCA_MECH_SUMMARY_CSV)
+    bp_df = _csv_path(CIFAR10_BP_SUMMARY_CSV)
+    if on_df is None or off_df is None or bp_df is None:
+        print("  WARNING: CIFAR soma extension CSVs not found; skipping figure.")
+        return
+
+    def _on_value(core: str, mode: str):
+        sub = on_df[
+            on_df["base_name"].str.contains(core)
+            & on_df["base_name"].str.contains(mode)
+        ]
+        if len(sub) == 0:
+            return None
+        row = sub.iloc[0]
+        return float(row["test_acc_mean"]), float(row["test_acc_std"])
+
+    def _off_value(core: str, mode: str):
+        sub = off_df[off_df["model_type"] == f"dendritic_{core}"]
+        if mode == "per_soma":
+            sub = sub[sub["broadcast_mode"] == "per_soma"]
+        elif mode == "path_transport":
+            sub = sub[sub["broadcast_mode"] == "path_transport"]
+        elif mode == "low_rank_k4":
+            sub = sub[(sub["broadcast_mode"] == "low_rank") & (sub["rank_k"] == 4)]
+        if len(sub) == 0:
+            return None
+        row = sub.iloc[0]
+        return float(row["acc_test_mean"]), float(row["acc_test_std"])
+
+    def _bp_value(core: str):
+        sub = bp_df[
+            (bp_df["family"] == "standard")
+            & (bp_df["model_type"] == f"dendritic_{core}")
+        ]
+        if len(sub) == 0:
+            return None
+        row = sub.iloc[0]
+        return float(row["mean_test_accuracy"]), float(row["std_test_accuracy"])
+
+    fig, axes = plt.subplots(1, 2, figsize=(W * 1.95, 4.0),
+                             gridspec_kw={"wspace": 0.42})
+
+    # Panel A: absolute soma-on ladder
+    ax = axes[0]
+    _panel(ax, "A")
+
+    modes = [
+        ("per_soma", "Per-soma"),
+        ("low_rank_k4", "Low-rank\n$K=4$"),
+        ("path_transport", "Path\ntransport"),
+    ]
+    x = np.arange(len(modes))
+    bw = 0.32
+    add_vals = [_on_value("additive", mode) for mode, _ in modes]
+    shunt_vals = [_on_value("shunting", mode) for mode, _ in modes]
+
+    ax.bar(
+        x - bw / 2,
+        [v[0] * 100 for v in add_vals],
+        bw,
+        yerr=[v[1] * 100 for v in add_vals],
+        color=COLOR_ADDITIVE,
+        edgecolor="white",
+        lw=0.3,
+        capsize=1.8,
+        error_kw={"lw": 0.6},
+        label="Additive + soma",
+    )
+    ax.bar(
+        x + bw / 2,
+        [v[0] * 100 for v in shunt_vals],
+        bw,
+        yerr=[v[1] * 100 for v in shunt_vals],
+        color=COLOR_SHUNTING,
+        edgecolor="white",
+        lw=0.3,
+        capsize=1.8,
+        error_kw={"lw": 0.6},
+        label="Shunting + soma",
+    )
+
+    bp_add = _bp_value("additive")
+    bp_shunt = _bp_value("shunting")
+    if bp_add is not None:
+        ax.axhline(bp_add[0] * 100, color=COLOR_ADDITIVE, lw=1.0, ls="--", alpha=0.75)
+    if bp_shunt is not None:
+        ax.axhline(bp_shunt[0] * 100, color=COLOR_SHUNTING, lw=1.0, ls="--", alpha=0.75)
+
+    ax.set_xticks(x)
+    ax.set_xticklabels([label for _, label in modes], fontsize=7.5)
+    ax.set_ylabel("Test accuracy (%)")
+    ax.set_title("CIFAR-10 soma-on ladder", fontsize=8.8, loc="left", pad=6)
+    ax.set_ylim(20, 53)
+    ax.legend(fontsize=6.8, loc="upper center", bbox_to_anchor=(0.5, -0.10),
+              ncol=2, framealpha=0.92, handlelength=1.1, handletextpad=0.4)
+    style_axis(ax, grid="y")
+
+    for xpos, val in zip(x - bw / 2, add_vals):
+        ax.text(xpos, val[0] * 100 + val[1] * 100 + 0.7,
+                f"{val[0] * 100:.1f}", ha="center", va="bottom", fontsize=6.2)
+    for xpos, val in zip(x + bw / 2, shunt_vals):
+        ax.text(xpos, val[0] * 100 + val[1] * 100 + 0.7,
+                f"{val[0] * 100:.1f}", ha="center", va="bottom", fontsize=6.2)
+
+    # Panel B: matched soma-off -> soma-on deltas
+    ax = axes[1]
+    _panel(ax, "B")
+
+    paired = [
+        ("Add.\nPer-soma", COLOR_ADDITIVE,
+         _on_value("additive", "per_soma"), _off_value("additive", "per_soma")),
+        ("Add.\nPath trans.", COLOR_ADDITIVE,
+         _on_value("additive", "path_transport"), _off_value("additive", "path_transport")),
+        ("Shunt.\nPer-soma", COLOR_SHUNTING,
+         _on_value("shunting", "per_soma"), _off_value("shunting", "per_soma")),
+        ("Shunt.\nLow-rank\n$K=4$", COLOR_SHUNTING,
+         _on_value("shunting", "low_rank_k4"), _off_value("shunting", "low_rank_k4")),
+        ("Shunt.\nPath trans.", COLOR_SHUNTING,
+         _on_value("shunting", "path_transport"), _off_value("shunting", "path_transport")),
+    ]
+    labels, deltas, colors = [], [], []
+    for label, color, on_val, off_val in paired:
+        if on_val is None or off_val is None:
+            continue
+        labels.append(label)
+        deltas.append((on_val[0] - off_val[0]) * 100)
+        colors.append(color)
+
+    xpos = np.arange(len(labels))
+    bars = ax.bar(
+        xpos,
+        deltas,
+        color=colors,
+        edgecolor="white",
+        lw=0.3,
+        width=0.62,
+    )
+    ax.axhline(0, color="black", lw=0.5, ls="--")
+    ax.set_xticks(xpos)
+    ax.set_xticklabels(labels, fontsize=7.2)
+    ax.set_ylabel(r"$\Delta$ test accuracy (pp)")
+    ax.set_title("Matched shift from soma-off", fontsize=8.8, loc="left", pad=6)
+    style_axis(ax, grid="y")
+    ax.set_ylim(min(deltas) - 2.0, max(deltas) + 2.0)
+    for rect, delta in zip(bars, deltas):
+        yo = 0.35 if delta >= 0 else -0.45
+        va = "bottom" if delta >= 0 else "top"
+        ax.text(
+            rect.get_x() + rect.get_width() / 2,
+            delta + yo,
+            f"{delta:+.1f}",
+            ha="center",
+            va=va,
+            fontsize=6.3,
+        )
+
+    fig.subplots_adjust(left=0.08, right=0.98, bottom=0.27, top=0.92, wspace=0.42)
+    _save(fig, "fig_s_cifar10_soma_extension")
+    plt.close(fig)
+
+
+# ===================================================================
 # Main Figure — Mechanism Summary scatter
 # ===================================================================
 def figure_mechanism_summary():
@@ -2181,7 +2415,6 @@ def main():
     figure4()
     figure_s1()
     figure_s2()
-    figure_s3()
     figure_s4()
     # figure_mechanism_summary() is now panel D of fig5_mechanistic_evidence,
     # produced by generate_revision_figures.py (via generate_theory_diagnostics_figures).
@@ -2189,6 +2422,7 @@ def main():
     figure_s_bm_policy()
     figure_s_ablation()
     figure_s_cue_routing_soma()
+    figure_s_cifar10_soma_extension()
     figure_s_weight_distributions()
     figure_s_weight_dist_soma_comparison()
 

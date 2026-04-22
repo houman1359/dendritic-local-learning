@@ -17,6 +17,8 @@
 *.bcf
 *.run.xml
 *.md
+!README.md
+!PAPER_REVIEW_20260416.md
 # LaTeX temporary files
 *.nav
 *.snm
@@ -25,6 +27,8 @@
 *.ps
 analysis/
 data/
+!figures/data/
+!figures/data/*.csv
 # Build directories
 build/
 output/
