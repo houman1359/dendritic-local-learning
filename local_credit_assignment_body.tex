@@ -33,11 +33,11 @@ We quantify these effects with a gradient-fidelity diagnostic based on direction
 \centering
 \includegraphics[width=0.95\textwidth]{fig1_model_and_credit.pdf}
 \caption{\textbf{Model and credit assignment.}
-\textbf{(A)}~A compartmental dendritic neuron with excitatory (blue circles) and inhibitory (red triangles) synapses arranged on a rooted tree. Voltages propagate to the soma through learned dendritic conductances (green arrows), which is the operating regime studied in the main feedforward experiments.
-\textbf{(B)}~Shunting voltage integration. The branch voltage is set by a conductance equation in which inhibition enters the denominator; the paired histograms illustrate the visual intuition behind the paper, namely that shunting narrows the conductance-stage path-gain distribution while additive integration leaves it broad.
-\textbf{(C)}~LocalCA rule hierarchy. 3F is the theorem-facing rule, 4F adds the heuristic morphology-aware factor $\rho$, and 5F adds the heuristic confidence-like factor $\phi$.
-\textbf{(D)}~Broadcast modes. Scalar sends one shared field, per-soma sends an output-space vector when dimensions match and otherwise falls back to scalar, random low-rank adds a few unstructured channels, and structured pathway feedback preserves pathway identity when branches should receive different teaching signals.
-\textbf{(E)}~Representative MNIST learning dynamics from the fixed-epoch Figure 1 sweep. Shunting with the stronger local wrappers tracks backprop much more closely than the additive control, giving a concrete preview before the paper turns to the sharper gradient-fidelity diagnostics in Fig.~\ref{fig:gradient_fidelity}.}
+\textbf{(A)}~Orientation to the full learning problem. Inputs drive a rooted dendritic tree whose distal compartments feed proximal branches and then the soma. Exact backpropagation supplies compartment-specific errors $\partial L/\partial V_n$, while LocalCA replaces them with one shared low-bandwidth broadcast $e_n$; the synapse update then combines that non-local signal with local quantities available at the compartment.
+\textbf{(B)}~Single-compartment conductance computation. Excitatory synapses, inhibitory synapses, and child branches all contribute to the compartment voltage, while inhibition also enters the total conductance in the denominator. The mini-histograms summarize the visual intuition used throughout the paper: shunting concentrates path gains, whereas additive integration leaves them broad.
+\textbf{(C)}~Local rule family. 3F is the theorem-facing rule; 4F adds the heuristic morphology-aware factor $\rho_n$; 5F adds the heuristic confidence-like factor $\phi_n$.
+\textbf{(D)}~Broadcast approximations. Scalar uses one shared field, per-soma uses a vector when widths match and otherwise falls back to scalar, random low-rank adds a few unstructured channels, and pathway feedback preserves branch identity when different pathways should receive different teaching signals.
+\textbf{(E)}~Representative MNIST learning dynamics from the fixed-epoch Figure 1 sweep. Shunting with the stronger local wrappers tracks backprop much more closely than the additive control, previewing the more quantitative fidelity analyses in Fig.~\ref{fig:gradient_fidelity}.}
 \label{fig:model_schematic}
 \end{figure*}
 
