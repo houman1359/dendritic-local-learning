@@ -444,190 +444,265 @@ def _mini_tree(ax, cx, cy, scale=0.06, color_soma=SOMA):
 def panel_D(ax, W=1.20):
     setup_panel(ax, W=W, H=1.0, title="Broadcast channels for $e$")
 
-    # Header strip indicating the structure (pushed up so rows don't collide)
+    # Header strip indicating the structure
     hdr_y = 0.965
-    ax.text(W * 0.08, hdr_y, "source",     fontsize=7.0, color=MUTE,
+    ax.text(W * 0.085, hdr_y, "source",       fontsize=7.0, color=MUTE,
             ha="center", va="center", fontweight="bold")
-    ax.text(W * 0.36, hdr_y, "channels",   fontsize=7.0, color=MUTE,
+    ax.text(W * 0.40,  hdr_y, "channels",     fontsize=7.0, color=MUTE,
             ha="center", va="center", fontweight="bold")
-    ax.text(W * 0.75, hdr_y, "target somas", fontsize=7.0, color=MUTE,
+    ax.text(W * 0.82,  hdr_y, "target neurons", fontsize=7.0, color=MUTE,
             ha="center", va="center", fontweight="bold")
 
     rows = [
-        dict(label="scalar",   sub="1 shared field",         color=COLORS["scalar"],   y=0.78, kind="scalar"),
-        dict(label="per-soma", sub="one $e_n$ per soma",     color=COLORS["per_soma"], y=0.55, kind="per_soma"),
-        dict(label="low-rank", sub="$K{=}2$ mixed channels", color=COLORS["low_rank"], y=0.32, kind="low_rank"),
-        dict(label="pathway",  sub="branch-specific $e^{(p)}$", color=COLORS["pathway"], y=0.09, kind="pathway"),
+        dict(label="scalar",   sub="1 shared field",            color=COLORS["scalar"],   y=0.80, kind="scalar"),
+        dict(label="per-soma", sub="one $e_n$ per soma",         color=COLORS["per_soma"], y=0.58, kind="per_soma"),
+        dict(label="low-rank", sub="$K{=}2$ mixed channels",     color=COLORS["low_rank"], y=0.36, kind="low_rank"),
+        dict(label="pathway",  sub="branch-specific $e^{(p)}$",  color=COLORS["pathway"],  y=0.14, kind="pathway"),
     ]
 
-    SOURCE_X = W * 0.08
-    CHAN_X   = W * 0.36
-    SOMA_X1  = W * 0.72
-    SOMA_X2  = W * 0.92
+    SOURCE_X = W * 0.085
+    CHAN_X   = W * 0.40
+    SOMA_X   = W * 0.82            # single x — two somas STACKED vertically here
+    # Vertical offset of the two somas within each row
+    SOMA_DY  = 0.045
 
     for r in rows:
         y = r["y"]
-        # Label bundle on far-left (below header row, offset so nothing overlaps)
-        ax.text(0.005, y + 0.035, r["label"], ha="left", va="center",
+        # Row label on far-left, vertically centred on the row
+        ax.text(0.005, y + 0.020, r["label"], ha="left", va="center",
                 fontsize=8.2, color=r["color"], fontweight="bold")
-        ax.text(0.005, y - 0.040, r["sub"], ha="left", va="center",
-                fontsize=6.4, color=MUTE, style="italic")
+        ax.text(0.005, y - 0.035, r["sub"], ha="left", va="center",
+                fontsize=6.3, color=MUTE, style="italic")
 
-        # Two target somas (with mini trees) per row
-        t1 = _mini_tree(ax, SOMA_X1, y, scale=0.035)
-        t2 = _mini_tree(ax, SOMA_X2, y, scale=0.035)
+        # Two target somas stacked VERTICALLY at the same x
+        t_top = _mini_tree(ax, SOMA_X, y + SOMA_DY, scale=0.022)
+        t_bot = _mini_tree(ax, SOMA_X, y - SOMA_DY, scale=0.022)
 
-        # Arrow-target = soma left edge
-        tgt1 = (t1["soma"][0] - 0.014, t1["soma"][1])
-        tgt2 = (t2["soma"][0] - 0.014, t2["soma"][1])
+        tgt_top = (t_top["soma"][0] - 0.011, t_top["soma"][1])
+        tgt_bot = (t_bot["soma"][0] - 0.011, t_bot["soma"][1])
 
         if r["kind"] == "scalar":
-            ax.add_patch(Circle((SOURCE_X, y), 0.016,
+            ax.add_patch(Circle((SOURCE_X, y), 0.015,
                                 fc=r["color"], ec="white", linewidth=0.4, zorder=7))
-            for tx, ty in [tgt1, tgt2]:
-                draw_arrow(ax, SOURCE_X + 0.016, y, tx, ty,
-                           color=r["color"], lw=0.95, mutation_scale=7,
-                           alpha=0.85,
+            ax.text(SOURCE_X, y, r"$e$", ha="center", va="center",
+                    fontsize=6.2, color="white", fontweight="bold", zorder=8)
+            # Source → both somas
+            for tx, ty in [tgt_top, tgt_bot]:
+                draw_arrow(ax, SOURCE_X + 0.015, y, tx, ty,
+                           color=r["color"], lw=0.95, mutation_scale=6,
+                           alpha=0.88,
                            connectionstyle=f"arc3,rad={0.08 if ty > y else -0.08}")
 
         elif r["kind"] == "per_soma":
-            # Two separate sources, one per target soma
-            for (sx_off, (tx, ty)) in zip([+0.025, -0.025], [tgt1, tgt2]):
-                src = (SOURCE_X, ty + sx_off * 0.2)
-                ax.add_patch(Circle(src, 0.012, fc=r["color"], ec="white",
+            # Two separate sources stacked vertically, each → its soma
+            for (ty, (tx, _ty)) in zip([y + SOMA_DY, y - SOMA_DY], [tgt_top, tgt_bot]):
+                ax.add_patch(Circle((SOURCE_X, ty), 0.012,
+                                    fc=r["color"], ec="white",
                                     linewidth=0.4, zorder=7))
-                draw_arrow(ax, src[0] + 0.012, src[1], tx, ty,
+                draw_arrow(ax, SOURCE_X + 0.012, ty, tx, ty,
                            color=r["color"], lw=0.9, mutation_scale=6,
-                           alpha=0.9,
-                           connectionstyle="arc3,rad=0.04")
+                           alpha=0.9)
+            ax.text(SOURCE_X, y + SOMA_DY + 0.035, r"$e_1$",
+                    ha="center", fontsize=6.0, color=r["color"], fontweight="bold")
+            ax.text(SOURCE_X, y - SOMA_DY - 0.035, r"$e_2$",
+                    ha="center", fontsize=6.0, color=r["color"], fontweight="bold")
 
         elif r["kind"] == "low_rank":
-            # single source → K=2 channels → all-to-all to somas
+            # single source → K=2 stacked channels → all-to-all to stacked somas
             ax.add_patch(Circle((SOURCE_X, y), 0.014, fc=r["color"],
                                 ec="white", linewidth=0.4, zorder=7))
-            channels = [(CHAN_X, y + 0.040), (CHAN_X, y - 0.040)]
-            for (cx, cy) in channels:
-                ax.add_patch(Circle((cx, cy), 0.012, fc=r["color"],
+            channels = [(CHAN_X, y + 0.035), (CHAN_X, y - 0.035)]
+            for i, (cx, cy) in enumerate(channels):
+                ax.add_patch(Circle((cx, cy), 0.011, fc=r["color"],
                                     ec="white", linewidth=0.4, zorder=7))
-                draw_arrow(ax, SOURCE_X + 0.014, y, cx - 0.012, cy,
-                           color=r["color"], lw=0.8, mutation_scale=6,
-                           alpha=0.85)
-                for (tx, ty) in [tgt1, tgt2]:
-                    draw_arrow(ax, cx + 0.012, cy, tx, ty,
+                draw_arrow(ax, SOURCE_X + 0.014, y, cx - 0.011, cy,
+                           color=r["color"], lw=0.8, mutation_scale=5, alpha=0.85)
+                for (tx, ty) in [tgt_top, tgt_bot]:
+                    rad = 0.10 if ty > cy else (-0.10 if ty < cy else 0)
+                    draw_arrow(ax, cx + 0.011, cy, tx, ty,
                                color=r["color"], lw=0.7, mutation_scale=5,
                                alpha=0.65,
-                               connectionstyle=f"arc3,rad={0.08 if ty > cy else -0.08}")
-            ax.text(CHAN_X, y + 0.090, "$c_1, c_2$",
-                    ha="center", va="bottom", fontsize=6.2,
-                    color=r["color"], fontweight="bold")
+                               connectionstyle=f"arc3,rad={rad}")
+            # Channel labels to the LEFT of the channel dots (less overlap)
+            ax.text(CHAN_X - 0.030, channels[0][1], r"$c_1$",
+                    ha="right", va="center",
+                    fontsize=6.2, color=r["color"], fontweight="bold")
+            ax.text(CHAN_X - 0.030, channels[1][1], r"$c_2$",
+                    ha="right", va="center",
+                    fontsize=6.2, color=r["color"], fontweight="bold")
 
         else:  # pathway
-            # Each soma's dendritic branches each get their own channel
-            # We connect channels directly into the distal leaves of each mini-tree
+            # 4 stacked channels — each → a specific distal compartment across the 2 trees
             channel_colors = ["#7C5AA6", "#C15A8A", "#D08C2F", "#4EAE91"]
             ax.add_patch(Circle((SOURCE_X, y), 0.014,
                                 fc=r["color"], ec="white",
                                 linewidth=0.4, zorder=7))
-            leaves_all = t1["leaves"] + t2["leaves"]
-            # Place channels at CHAN_X
-            ch_ys = np.linspace(y + 0.055, y - 0.055, 4)
-            for i, ((cy_), col) in enumerate(zip(ch_ys, channel_colors)):
-                ax.add_patch(Circle((CHAN_X, cy_), 0.009, fc=col, ec="white",
+            # Order leaves top-to-bottom across the two stacked trees
+            leaves_ordered = [
+                t_top["leaves"][0],   # top tree, upper leaf
+                t_top["leaves"][1],   # top tree, lower leaf
+                t_bot["leaves"][0],   # bottom tree, upper leaf
+                t_bot["leaves"][1],   # bottom tree, lower leaf
+            ]
+            ch_ys = np.linspace(y + 0.070, y - 0.070, 4)
+            for i, (cy_, col) in enumerate(zip(ch_ys, channel_colors)):
+                ax.add_patch(Circle((CHAN_X, cy_), 0.008, fc=col, ec="white",
                                     linewidth=0.3, zorder=7))
-                # source → channel
-                draw_arrow(ax, SOURCE_X + 0.014, y, CHAN_X - 0.010, cy_,
-                           color=col, lw=0.65, mutation_scale=5, alpha=0.78)
-                # channel → specific leaf
-                (lx, ly) = leaves_all[i]
-                draw_arrow(ax, CHAN_X + 0.010, cy_, lx - 0.004, ly,
-                           color=col, lw=0.85, mutation_scale=5, alpha=0.88,
-                           connectionstyle="arc3,rad=0.05")
-            ax.text(CHAN_X, y + 0.095, r"$e^{(p)}$ per branch",
+                draw_arrow(ax, SOURCE_X + 0.014, y, CHAN_X - 0.008, cy_,
+                           color=col, lw=0.65, mutation_scale=4, alpha=0.78)
+                (lx, ly) = leaves_ordered[i]
+                draw_arrow(ax, CHAN_X + 0.008, cy_, lx - 0.004, ly,
+                           color=col, lw=0.85, mutation_scale=4, alpha=0.9,
+                           connectionstyle="arc3,rad=0.08")
+            ax.text(CHAN_X, y + 0.110, r"$e^{(p)}$ per branch",
                     ha="center", va="bottom", fontsize=6.0,
                     color=r["color"], fontweight="bold")
 
-    # Key below the panel (circle legend)
-    key_y = -0.02
-    ax.add_patch(Circle((0.05, key_y + 0.03), 0.011, fc=SOMA, ec=EDGE,
+    # Key below the panel (circle legend) — add a third entry for the source blob
+    key_y = 0.005
+    ax.add_patch(Circle((0.04, key_y), 0.011, fc=SOMA, ec=EDGE,
                         linewidth=0.4, zorder=3))
-    ax.text(0.075, key_y + 0.03, "= soma", fontsize=6.2, va="center",
-            color=INK)
-    ax.add_patch(Circle((0.24, key_y + 0.03), 0.011, fc=DEND, ec=EDGE,
+    ax.text(0.06, key_y, "= soma", fontsize=6.2, va="center", color=INK)
+    ax.add_patch(Circle((0.22, key_y), 0.011, fc=DEND, ec=EDGE,
                         linewidth=0.4, zorder=3))
-    ax.text(0.265, key_y + 0.03, "= dendritic compartment",
+    ax.text(0.24, key_y, "= dendritic compartment",
             fontsize=6.2, va="center", color=INK)
 
 
-# ── Panel E: CIFAR-10 mechanism bars ─────────────────────────────────────
-def panel_E(ax):
-    """Swap MNIST curves for CIFAR-10 bars that expose the broadcast-mode
-    separation. 5-seed means ± std (from the decoderfix mechanism sweep).
+# ── Panel E: CIFAR-10 per-epoch test-accuracy curves ────────────────────
+CIFAR_SWEEP_ROOT = Path(
+    "/n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/"
+    "dendritic-local-learning/local_sweep_runs"
+)
+CIFAR_LOCAL_SWEEP = (
+    CIFAR_SWEEP_ROOT
+    / "cifar10_compactei_depth4_decoderfix_mechanism_5seed_20260409110234"
+    / "results"
+)
+CIFAR_BP_SWEEP = (
+    CIFAR_SWEEP_ROOT
+    / "cifar10_compactei_depth4_standard_ceiling_5seed_20260408131458"
+    / "results"
+)
+# The BP sweep sits under the "Lab" mirror in the CIFAR sweep_runs; if the local
+# path doesn't exist, fall back to the shared scratch mirror.
+_BP_SWEEP_ALT = Path(
+    "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/"
+    "sweep_runs/cifar10_compactei_depth4_standard_ceiling_5seed_20260408131458/"
+    "results"
+)
+
+
+def _cifar_run_dirs_by_prefix(sweep_root: Path, prefix: str) -> list[Path]:
+    """Return config dirs whose run_name starts with `prefix`."""
+    import json as _json
+    out: list[Path] = []
+    if not sweep_root.exists():
+        return out
+    for cfg in sorted(sweep_root.glob("config_*")):
+        cj = cfg / "config.json"
+        if not cj.exists():
+            continue
+        try:
+            with open(cj) as fh:
+                payload = _json.load(fh)
+        except Exception:
+            continue
+        rn = payload.get("outputs", {}).get("run_name", "")
+        if rn.startswith(prefix):
+            out.append(cfg)
+    return out
+
+
+def _cifar_average_curve(run_dirs: list[Path]) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """Load per-epoch test-accuracy curves from a list of run dirs, align on
+    epoch, and return (epochs, mean_acc%, std_acc%).
     """
-    # Load data
-    try:
-        dfx = pd.read_csv(CIFAR_DFX_CSV)
-        bp = pd.read_csv(CIFAR_BP_CSV)
-    except Exception as exc:
-        ax.text(0.5, 0.5, f"Data missing:\n{exc}", transform=ax.transAxes,
-                ha="center", va="center", fontsize=7, color="red")
-        return
+    import json as _json
+    per_run: list[pd.DataFrame] = []
+    for run in run_dirs:
+        ep_dir = run / "performance" / "epochs"
+        if not ep_dir.exists():
+            continue
+        rows = []
+        for ep_file in sorted(ep_dir.glob("epoch*.json"),
+                              key=lambda p: int(p.stem.replace("epoch", ""))):
+            try:
+                with open(ep_file) as fh:
+                    payload = _json.load(fh)
+                ep_num = int(ep_file.stem.replace("epoch", ""))
+                acc = float(payload["accuracy"]["test"])
+                rows.append((ep_num, acc))
+            except Exception:
+                continue
+        if rows:
+            per_run.append(pd.DataFrame(rows, columns=["epoch", "test_acc"]).sort_values("epoch"))
+    if not per_run:
+        return np.array([]), np.array([]), np.array([])
+    min_n = min(len(df) for df in per_run)
+    stacked = np.stack([df.iloc[:min_n]["test_acc"].to_numpy() for df in per_run])
+    epochs = per_run[0].iloc[:min_n]["epoch"].to_numpy()
+    return epochs, 100.0 * stacked.mean(axis=0), 100.0 * stacked.std(axis=0)
 
-    def _local(cond):
-        row = dfx[dfx["condition"] == cond].iloc[0]
-        return float(row["acc_test_mean"]) * 100.0, float(row["acc_test_std"]) * 100.0
 
-    def _bp(model_type):
-        row = bp[(bp["strategy"] == "standard") &
-                 (bp["model_type"] == model_type)].iloc[0]
-        return float(row["mean_test_accuracy"]) * 100.0, float(row["std_test_accuracy"]) * 100.0
+def panel_E(ax):
+    """CIFAR-10 per-epoch test-accuracy curves across broadcast modes (5 seeds)."""
+    # Resolve BP sweep (prefer local path, fall back to shared mirror).
+    bp_sweep = CIFAR_BP_SWEEP if CIFAR_BP_SWEEP.exists() else _BP_SWEEP_ALT
 
-    # Rows: (label, (mean, std), color, group)
-    bars = [
-        ("Shunt.\nBP",        _bp("dendritic_shunting"),                         "#185A33",            "shunt"),
-        ("Shunt.\npath-trans.",_local("cifar10_shunting_5f_path_transport_bpdec_wd0"), COLORS["pathway"],  "shunt"),
-        ("Shunt.\nlow-rank 4", _local("cifar10_shunting_5f_low_rank4_bpdec_wd0"),      COLORS["low_rank"], "shunt"),
-        ("Shunt.\nper-soma",   _local("cifar10_shunting_5f_per_soma_bpdec_wd0"),       COLORS["per_soma"], "shunt"),
-        ("Add.\nBP",          _bp("dendritic_additive"),                         "#9A503B",            "add"),
-        ("Add.\npath-trans.",  _local("cifar10_additive_5f_path_transport_bpdec_wd0"), COLORS["pathway"],  "add"),
-        ("Add.\nper-soma",     _local("cifar10_additive_5f_per_soma_bpdec_wd0"),       COLORS["per_soma"], "add"),
+    # Build series specs: (label, prefix, sweep_root, color, linestyle)
+    series = [
+        ("Shunt. BP (ceiling)",
+         "cifar10_shunting_standard",      bp_sweep, "#185A33",              "-"),
+        ("Shunt. 5F path-trans.",
+         "cifar10_shunting_5f_path_transport_bpdec_wd0", CIFAR_LOCAL_SWEEP,
+         COLORS["pathway"],  "-"),
+        ("Shunt. 5F low-rank 4",
+         "cifar10_shunting_5f_low_rank4_bpdec_wd0",     CIFAR_LOCAL_SWEEP,
+         COLORS["low_rank"], "--"),
+        ("Shunt. 5F per-soma",
+         "cifar10_shunting_5f_per_soma_bpdec_wd0",      CIFAR_LOCAL_SWEEP,
+         COLORS["per_soma"], ":"),
+        ("Add. BP (ceiling)",
+         "cifar10_additive_standard",      bp_sweep, "#9A503B",              "-"),
+        ("Add. 5F path-trans.",
+         "cifar10_additive_5f_path_transport_bpdec_wd0", CIFAR_LOCAL_SWEEP,
+         COLORS["additive"], "-."),
     ]
 
-    xs = np.arange(len(bars))
-    means = np.array([b[1][0] for b in bars])
-    stds  = np.array([b[1][1] for b in bars])
-    colors = [b[2] for b in bars]
-    labels = [b[0] for b in bars]
+    for label, prefix, sweep_root, color, ls in series:
+        run_dirs = _cifar_run_dirs_by_prefix(sweep_root, prefix)
+        if not run_dirs:
+            continue
+        epochs, mean, std = _cifar_average_curve(run_dirs)
+        if epochs.size == 0:
+            continue
+        ax.plot(epochs, mean, color=color, lw=1.4, ls=ls,
+                label=label, alpha=0.95, zorder=4)
+        ax.fill_between(epochs, mean - std, mean + std,
+                        color=color, alpha=0.12, linewidth=0, zorder=2)
 
-    # BP bars hatched; local bars solid
-    for x, m, s, c, lbl in zip(xs, means, stds, colors, labels):
-        if "BP" in lbl:
-            ax.bar(x, m, 0.78, yerr=s, color=c, alpha=0.95, edgecolor="white",
-                   lw=0.4, capsize=1.8, error_kw={"lw": 0.6}, hatch="//")
-        else:
-            ax.bar(x, m, 0.78, yerr=s, color=c, alpha=0.92, edgecolor="white",
-                   lw=0.4, capsize=1.8, error_kw={"lw": 0.6})
-        ax.text(x, m + s + 0.9, f"{m:.1f}",
-                ha="center", va="bottom", fontsize=6.6, color=INK)
+    ax.axhline(10, color=MUTE, ls=":", lw=0.7, alpha=0.55, zorder=0)
+    ax.text(ax.get_xlim()[1] * 0.98 if ax.has_data() else 100, 11.5,
+            "chance", color=MUTE, fontsize=6.6, ha="right", va="bottom")
 
-    ax.set_xticks(xs)
-    ax.set_xticklabels(labels, fontsize=6.4)
+    ax.set_xlabel("epoch")
     ax.set_ylabel("CIFAR-10 test accuracy (%)")
+    ax.set_title("CIFAR-10 dynamics (5 seeds, 5F rule)",
+                 fontsize=9.5, pad=6, loc="left", x=0.02)
     ax.set_ylim(0, 58)
-    ax.set_title("CIFAR-10 mechanism ($5$ seeds)", fontsize=9.5, pad=6,
-                 loc="left", x=0.02)
     style_axis(ax, grid="y")
+    ax.legend(loc="lower right", fontsize=6.3, ncol=1,
+              handlelength=1.8, handletextpad=0.5, labelspacing=0.22,
+              borderaxespad=0.5, frameon=True, framealpha=0.92,
+              facecolor="white", edgecolor="#DDDDDD")
 
-    # Vertical divider between shunting and additive groups
-    ax.axvline(3.5, color="#C0C0C0", ls=":", lw=0.7)
-    ax.text(1.5, 54.5, "shunting", ha="center", va="center",
-            fontsize=7.0, color=COLORS["shunting"], fontweight="bold")
-    ax.text(5.5, 54.5, "additive", ha="center", va="center",
-            fontsize=7.0, color=COLORS["additive"], fontweight="bold")
-
-    # Chance line
-    ax.axhline(10, color=MUTE, ls=":", lw=0.7, alpha=0.6, zorder=0)
-    ax.text(6.45, 10.6, "chance", color=MUTE, fontsize=6.4,
-            ha="right", va="bottom")
+    # Small footer note — 3F/4F/5F comparison is elsewhere (MNIST appendix);
+    # CIFAR only has 5F runs at non-chance accuracy in our sweeps.
+    ax.text(0.015, 0.02,
+            "3F/4F/5F comparison: see MNIST appendix (CIFAR has only 5F at $>$ chance)",
+            transform=ax.transAxes, fontsize=5.8, color=MUTE, style="italic",
+            ha="left", va="bottom")
 
 
 # ── Main ────────────────────────────────────────────────────────────────
