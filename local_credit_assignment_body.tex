@@ -1474,6 +1474,14 @@ Additive integration lacks this self-normalizing mechanism, producing broader di
 
 Each synthetic task is generated procedurally from a fixed random seed and uses fixed train/val/test splits for reproducibility.
 The MNIST-derived synthetic tasks use flattened $28\times 28$ inputs; cue integration instead uses a small vector input with two output classes. Output dimensionality therefore varies by task and is stated in the task description when it differs from 10-way digit classification.
+Figure~\ref{fig:task_schematics} gives a visual summary of each benchmark.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.98\textwidth]{fig_s_task_schematics.pdf}
+\caption{\textbf{Synthetic benchmark schematics.} \textbf{(A)}~Context gating: the right half carries the MNIST digit; the left half is filled with low-amplitude uniform noise. \textbf{(B)}~Noise resilience: MNIST image corrupted by structured channel noise (fixed 50-D latent projection, $\sigma_{\mathrm{task}}=1.5$, clipped to $[0,1]$). \textbf{(C)}~Cue integration: a context cue selects which of two noisy cue streams is reliable; dendritic integration routes the reliable cue to the binary readout. \textbf{(D)}~Fashion-MNIST: 10-class apparel classification sharing the MNIST input shape.}
+\label{fig:task_schematics}
+\end{figure*}
 
 \paragraph{Context gating.}
 Inputs are contextual figure-ground MNIST examples. The right half of the image carries the original MNIST digit, while the left half is replaced by low-amplitude uniform noise; all pixels therefore remain nonnegative. This task tests whether credit assignment can exploit a simple context-dependent spatial structure without leaving the nonnegative-drive regime of the conductance model. The HSIC auxiliary objective (weight $0.01$) is used to decorrelate layer representations, adding roughly $3$~pp under local learning.

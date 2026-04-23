@@ -118,10 +118,11 @@ def build_figure() -> plt.Figure:
     ax.set_xticklabels(depth_labels)
     ax.set_ylabel(r"Excitatory log-normal width $\sigma$")
     ax.set_xlabel("Branch factors (depth)")
-    ax.set_title(r"$\sigma$ vs.\ dendritic depth")
-    ax.set_ylim(0.65, 2.65)
+    ax.set_title(r"$\sigma$ vs. dendritic depth")
+    ax.set_ylim(0.65, 2.85)
     ax.grid(axis="y", alpha=0.2, linewidth=0.4)
-    ax.legend(loc="upper left", ncol=2, fontsize=5.7, columnspacing=0.9, handletextpad=0.4)
+    ax.legend(loc="upper left", ncol=1, fontsize=6.8,
+              handletextpad=0.4, labelspacing=0.2, frameon=False)
 
     # Panel B: sigma vs inhibitory synapses
     ax = axes[0, 1]
@@ -165,7 +166,7 @@ def build_figure() -> plt.Figure:
     ax.text(0.02, 0.05, "shaded band: $N_E=20$ to $80$", transform=ax.transAxes, fontsize=5.8, color="#666666")
     ax.set_xlabel(r"Inhibitory synapses per branch $N_I$")
     ax.set_ylabel(r"Excitatory log-normal width $\sigma$")
-    ax.set_title(r"$\sigma$ vs.\ inhibitory synapse count")
+    ax.set_title(r"$\sigma$ vs. inhibitory synapse count")
     ax.set_ylim(0.65, 2.95)
     ax.grid(axis="y", alpha=0.2, linewidth=0.4)
     ax.legend(loc="upper right")
