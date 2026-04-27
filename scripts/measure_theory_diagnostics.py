@@ -20,7 +20,7 @@ import sys
 import tempfile
 from dataclasses import fields, is_dataclass
 from pathlib import Path
-from typing import Any, Iterable, Optional, get_args, get_origin
+from typing import Any, get_args, get_origin
 
 import pandas as pd
 import torch
@@ -33,16 +33,18 @@ from torch.utils.data import DataLoader
 REPO_ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(REPO_ROOT / "src"))
 
-from dendritic_modeling.config import load_config
-from dendritic_modeling.config.config import Config
-from dendritic_modeling.datasets import get_unified_datasets
+from dendritic_modeling.config import load_config  # noqa: E402
+from dendritic_modeling.config.config import Config  # noqa: E402
+from dendritic_modeling.datasets import get_unified_datasets  # noqa: E402
 from dendritic_modeling.networks.architectures.excitation_inhibition.dendritic.branch_layer import (  # noqa: E402
     DendriticBranchLayer,
 )
 from dendritic_modeling.networks.architectures.excitation_inhibition.synapse.topk import (  # noqa: E402
     TopKLinear,
 )
-from dendritic_modeling.scripts.script_utils.setup_utils import initialize_model  # noqa: E402
+from dendritic_modeling.scripts.script_utils.setup_utils import (  # noqa: E402
+    initialize_model,
+)
 from dendritic_modeling.training.strategies.local_learning import (  # noqa: E402
     LocalCreditAssignment,
 )
@@ -122,7 +124,11 @@ def _sanitize_with_schema(data: Any, schema_type: Any) -> Any:
                 item_dc = _resolve_dataclass_type(args[0])
                 if item_dc is not None:
                     sanitized[field.name] = [
-                        _sanitize_with_schema(item, item_dc) if isinstance(item, dict) else item
+                        (
+                            _sanitize_with_schema(item, item_dc)
+                            if isinstance(item, dict)
+                            else item
+                        )
                         for item in value
                     ]
                     continue
@@ -164,9 +170,9 @@ def _get_batch(config, *, split: str, batch_size: int):
         (),
         {
             "dataset": config.data.dataset_name,
-            "data_path": os.path.join(base_dir, config.data.dataset_name)
-            if base_dir
-            else None,
+            "data_path": (
+                os.path.join(base_dir, config.data.dataset_name) if base_dir else None
+            ),
             "train_valid_split": config.experiment.train_valid_split,
             "parameters": {
                 **_to_plain_dict(config.data.processing),
@@ -259,8 +265,12 @@ def _hook_branch_layers(model: nn.Module) -> tuple[list[dict[str, Any]], list[An
     return records, handles
 
 
-def _capture_decoder_input(model: nn.Module, cache: dict[str, Any]) -> Optional[Any]:
-    linears = [module for module in model.decoder_network.modules() if isinstance(module, nn.Linear)]
+def _capture_decoder_input(model: nn.Module, cache: dict[str, Any]) -> Any | None:
+    linears = [
+        module
+        for module in model.decoder_network.modules()
+        if isinstance(module, nn.Linear)
+    ]
     if len(linears) != 1:
         return None
     linear = linears[0]
@@ -284,7 +294,9 @@ def _vec_metrics(approx: torch.Tensor, exact: torch.Tensor) -> dict[str, float]:
     cosine = float("nan")
     if approx_norm > 0 and exact_norm > 0:
         cosine = float(F.cosine_similarity(flat_approx, flat_exact, dim=0).item())
-    sign_agreement = float((torch.sign(approx) == torch.sign(exact)).float().mean().item())
+    sign_agreement = float(
+        (torch.sign(approx) == torch.sign(exact)).float().mean().item()
+    )
     rel_l2 = float((flat_approx - flat_exact).norm().item() / denom)
     norm_ratio = float(approx_norm / denom)
     best_scale = float("nan")
@@ -292,9 +304,14 @@ def _vec_metrics(approx: torch.Tensor, exact: torch.Tensor) -> dict[str, float]:
     scale_mismatch = float("nan")
     if approx_norm > 0:
         best_scale = float(
-            (torch.dot(flat_approx, flat_exact) / (torch.dot(flat_approx, flat_approx) + 1e-12)).item()
+            (
+                torch.dot(flat_approx, flat_exact)
+                / (torch.dot(flat_approx, flat_approx) + 1e-12)
+            ).item()
         )
-        scaled_rel_l2 = float(((best_scale * flat_approx - flat_exact).norm().item()) / denom)
+        scaled_rel_l2 = float(
+            ((best_scale * flat_approx - flat_exact).norm().item()) / denom
+        )
         scale_mismatch = float(abs(math.log10(max(norm_ratio, 1e-12))))
     var_exact = float(flat_exact.var(unbiased=False).item())
     if var_exact > 1e-12:
@@ -315,13 +332,200 @@ def _vec_metrics(approx: torch.Tensor, exact: torch.Tensor) -> dict[str, float]:
     }
 
 
-def _weighted_mean(frame: pd.DataFrame, value_col: str, weight_col: str = "numel") -> float:
+def _weighted_mean(
+    frame: pd.DataFrame, value_col: str, weight_col: str = "numel"
+) -> float:
     valid = frame[[value_col, weight_col]].dropna()
     if valid.empty:
         return float("nan")
     weights = valid[weight_col].to_numpy(dtype=float)
     values = valid[value_col].to_numpy(dtype=float)
     return float((weights * values).sum() / max(weights.sum(), 1e-12))
+
+
+def _compute_layer_total_conductance_no_inhibition(
+    rec: dict[str, Any],
+    v_n: torch.Tensor,
+) -> torch.Tensor:
+    """Counterfactual total conductance with the inhibitory synapse bank removed."""
+    g_tot = torch.ones_like(v_n)
+
+    exc_out = rec.get("exc_out")
+    if exc_out is not None:
+        g_tot = g_tot + F.relu(exc_out)
+
+    blk_module = rec.get("blk_module")
+    if blk_module is not None and hasattr(blk_module, "sum_conductances"):
+        g_blk = blk_module.sum_conductances().detach()[None, :].expand_as(v_n)
+        g_tot = g_tot + F.relu(g_blk)
+
+    return g_tot
+
+
+def _precompute_path_propagation_factors_counterfactual(
+    helper: LocalCreditAssignment,
+    layer_records: list[dict[str, Any]],
+    *,
+    no_inhibition: bool,
+    include_parent_activation_derivative: bool = False,
+) -> list[torch.Tensor | float]:
+    """Mirror LocalCA path factors while optionally dropping inhibitory conductance."""
+    if not layer_records:
+        return []
+
+    mode = str(
+        getattr(helper.local_cfg.morphology_aware, "path_factor_mode", "per_branch")
+    ).lower()
+    path_factors: list[torch.Tensor | float] = [1.0] * len(layer_records)
+
+    soma_v = layer_records[-1].get("v_n")
+    if isinstance(soma_v, torch.Tensor):
+        if mode == "scalar_mean":
+            path_factors[-1] = torch.ones(
+                soma_v.size(0), 1, device=soma_v.device, dtype=soma_v.dtype
+            )
+        else:
+            path_factors[-1] = torch.ones_like(soma_v)
+
+    for layer_idx in range(len(layer_records) - 2, -1, -1):
+        child_rec = layer_records[layer_idx]
+        parent_rec = layer_records[layer_idx + 1]
+
+        child_v = child_rec.get("v_n")
+        parent_v = parent_rec.get("v_n")
+        blk_module = parent_rec.get("blk_module")
+        if not (
+            isinstance(child_v, torch.Tensor)
+            and isinstance(parent_v, torch.Tensor)
+            and blk_module is not None
+            and hasattr(blk_module, "weight")
+        ):
+            if isinstance(child_v, torch.Tensor) and mode == "scalar_mean":
+                path_factors[layer_idx] = torch.ones(
+                    child_v.size(0), 1, device=child_v.device, dtype=child_v.dtype
+                )
+            elif isinstance(child_v, torch.Tensor):
+                path_factors[layer_idx] = torch.ones_like(child_v)
+            else:
+                path_factors[layer_idx] = 1.0
+            continue
+
+        parent_path = path_factors[layer_idx + 1]
+        if not isinstance(parent_path, torch.Tensor):
+            parent_path = torch.ones_like(parent_v)
+        elif parent_path.size(1) == 1 and parent_v.size(1) > 1:
+            parent_path = parent_path.expand(-1, parent_v.size(1))
+
+        parent_act_deriv = torch.ones_like(parent_v)
+        if include_parent_activation_derivative:
+            parent_act_deriv_candidate = helper._get_layer_activation_derivative(
+                parent_rec,
+                parent_v,
+            )
+            if isinstance(parent_act_deriv_candidate, torch.Tensor):
+                parent_act_deriv = parent_act_deriv_candidate.to(
+                    device=parent_v.device,
+                    dtype=parent_v.dtype,
+                )
+
+        if no_inhibition:
+            parent_g_tot = _compute_layer_total_conductance_no_inhibition(
+                parent_rec,
+                parent_v,
+            )
+        else:
+            parent_g_tot = helper._compute_layer_total_conductance(parent_rec, parent_v)
+        parent_r_tot = 1.0 / (parent_g_tot + 1e-8)
+
+        block_size = int(getattr(blk_module, "block_size", 1))
+        edge_weights = (
+            blk_module.weight().detach().to(device=child_v.device, dtype=child_v.dtype)
+        )
+        expected_child_out = edge_weights.numel()
+        if child_v.size(1) != expected_child_out:
+            scalar_factor = (parent_path * parent_act_deriv * parent_r_tot).mean(
+                dim=1,
+                keepdim=True,
+            ) * edge_weights.mean()
+            path_factors[layer_idx] = scalar_factor
+            continue
+
+        expanded_parent_path = helper._expand_parent_signal_to_children(
+            parent_path,
+            block_size,
+            child_v.size(1),
+        )
+        expanded_parent_act = helper._expand_parent_signal_to_children(
+            parent_act_deriv,
+            block_size,
+            child_v.size(1),
+        )
+        expanded_parent_r_tot = helper._expand_parent_signal_to_children(
+            parent_r_tot,
+            block_size,
+            child_v.size(1),
+        )
+        edge_gain = edge_weights.reshape(1, -1)
+        branch_factor = (
+            expanded_parent_path
+            * expanded_parent_act
+            * expanded_parent_r_tot
+            * edge_gain
+        )
+        if mode == "scalar_mean":
+            branch_factor = branch_factor.mean(dim=1, keepdim=True)
+        path_factors[layer_idx] = branch_factor
+
+    return path_factors
+
+
+def _factor_stats(
+    factor: torch.Tensor | float, reference: torch.Tensor
+) -> tuple[float, float, float]:
+    if isinstance(factor, torch.Tensor):
+        values = (
+            factor.detach()
+            .to(device=reference.device, dtype=reference.dtype)
+            .reshape(-1)
+        )
+    else:
+        values = torch.full(
+            (reference.numel(),),
+            float(factor),
+            device=reference.device,
+            dtype=reference.dtype,
+        )
+    mean = float(values.mean().item())
+    std = float(values.std(unbiased=False).item())
+    cv = float(std / max(abs(mean), 1e-12))
+    return mean, std, cv
+
+
+def _factor_tensor(
+    factor: torch.Tensor | float, reference: torch.Tensor
+) -> torch.Tensor:
+    if isinstance(factor, torch.Tensor):
+        values = factor.detach().to(device=reference.device, dtype=reference.dtype)
+        if values.shape == reference.shape:
+            return values
+        if values.dim() == 2 and values.size(1) == 1:
+            return values.expand_as(reference)
+        return values.reshape_as(reference)
+    return torch.full_like(reference, float(factor))
+
+
+def _inhibitory_conductance_stats(
+    helper: LocalCreditAssignment,
+    rec: dict[str, Any],
+    v_n: torch.Tensor,
+) -> tuple[float, float]:
+    inh_out = rec.get("inh_out")
+    if not isinstance(inh_out, torch.Tensor):
+        return 0.0, 0.0
+    inh_g = F.relu(inh_out.detach()).to(device=v_n.device, dtype=v_n.dtype)
+    total_g = helper._compute_layer_total_conductance(rec, v_n.detach())
+    fraction = inh_g / (total_g.detach() + 1e-8)
+    return float(inh_g.mean().item()), float(fraction.mean().item())
 
 
 def _discover_run_dirs(root: Path) -> list[Path]:
@@ -331,7 +535,9 @@ def _discover_run_dirs(root: Path) -> list[Path]:
     if not results_dir.exists():
         raise FileNotFoundError(f"No run/config layout found under {root}")
     run_dirs = sorted(
-        path for path in results_dir.iterdir() if path.is_dir() and path.name.startswith("config_")
+        path
+        for path in results_dir.iterdir()
+        if path.is_dir() and path.name.startswith("config_")
     )
     if not run_dirs:
         raise FileNotFoundError(f"No result runs found under {results_dir}")
@@ -348,13 +554,19 @@ def _factorization_rows(
     v_n = rec["v_n"]
     exact_error = v_n.grad.detach()
     if layer.use_shunting:
-        R_tot = 1.0 / (helper._compute_layer_total_conductance(rec, v_n.detach()) + 1e-8)
+        R_tot = 1.0 / (
+            helper._compute_layer_total_conductance(rec, v_n.detach()) + 1e-8
+        )
     else:
         R_tot = torch.ones_like(v_n.detach())
 
     exc_layer = rec.get("exc_module")
     x_exc = rec.get("x_exc")
-    if exc_layer is not None and isinstance(x_exc, torch.Tensor) and exc_layer.pre_w.grad is not None:
+    if (
+        exc_layer is not None
+        and isinstance(x_exc, torch.Tensor)
+        and exc_layer.pre_w.grad is not None
+    ):
         mask = rec.get("exc_mask")
         if not isinstance(mask, torch.Tensor):
             mask = exc_layer.weight_mask().detach()
@@ -368,8 +580,12 @@ def _factorization_rows(
         else:
             factor = exact_error
         recon = torch.einsum("bo,bi->oi", factor, x_exc.detach())
-        recon = recon * mask.to(recon.dtype) * helper._weight_transform_derivative(
-            exc_layer.pre_w.detach(), exc_layer.weight_transform
+        recon = (
+            recon
+            * mask.to(recon.dtype)
+            * helper._weight_transform_derivative(
+                exc_layer.pre_w.detach(), exc_layer.weight_transform
+            )
         )
         rows.append(
             {
@@ -382,7 +598,11 @@ def _factorization_rows(
 
     inh_layer = rec.get("inh_module")
     x_inh = rec.get("x_inh")
-    if inh_layer is not None and isinstance(x_inh, torch.Tensor) and inh_layer.pre_w.grad is not None:
+    if (
+        inh_layer is not None
+        and isinstance(x_inh, torch.Tensor)
+        and inh_layer.pre_w.grad is not None
+    ):
         mask = rec.get("inh_mask")
         if not isinstance(mask, torch.Tensor):
             mask = inh_layer.weight_mask().detach()
@@ -396,8 +616,12 @@ def _factorization_rows(
         else:
             factor = -exact_error
         recon = torch.einsum("bo,bi->oi", factor, x_inh.detach())
-        recon = recon * mask.to(recon.dtype) * helper._weight_transform_derivative(
-            inh_layer.pre_w.detach(), inh_layer.weight_transform
+        recon = (
+            recon
+            * mask.to(recon.dtype)
+            * helper._weight_transform_derivative(
+                inh_layer.pre_w.detach(), inh_layer.weight_transform
+            )
         )
         rows.append(
             {
@@ -410,8 +634,14 @@ def _factorization_rows(
 
     blk = rec.get("blk_module")
     x_blk_raw = rec.get("x_blk_raw")
-    if blk is not None and isinstance(x_blk_raw, torch.Tensor) and blk.log_weight.grad is not None:
-        x_blk = x_blk_raw.detach().view(x_blk_raw.size(0), blk.out_features, blk.block_size)
+    if (
+        blk is not None
+        and isinstance(x_blk_raw, torch.Tensor)
+        and blk.log_weight.grad is not None
+    ):
+        x_blk = x_blk_raw.detach().view(
+            x_blk_raw.size(0), blk.out_features, blk.block_size
+        )
         if layer.use_shunting:
             recon = (
                 exact_error.unsqueeze(-1)
@@ -445,9 +675,25 @@ def _error_rows(
         layer_records,
         include_parent_activation_derivative=False,
     )
+    conductance_path_factors_no_inhibition = (
+        _precompute_path_propagation_factors_counterfactual(
+            helper,
+            layer_records,
+            no_inhibition=True,
+            include_parent_activation_derivative=False,
+        )
+    )
     effective_path_factors = helper._precompute_path_propagation_factors(
         layer_records,
         include_parent_activation_derivative=True,
+    )
+    effective_path_factors_no_inhibition = (
+        _precompute_path_propagation_factors_counterfactual(
+            helper,
+            layer_records,
+            no_inhibition=True,
+            include_parent_activation_derivative=True,
+        )
     )
     transported = helper._precompute_path_transport_errors(
         layer_records=layer_records,
@@ -478,24 +724,46 @@ def _error_rows(
         )
 
         conductance_path_factor = conductance_path_factors[layer_idx]
+        conductance_path_factor_no_inhibition = conductance_path_factors_no_inhibition[
+            layer_idx
+        ]
         effective_path_factor = effective_path_factors[layer_idx]
+        effective_path_factor_no_inhibition = effective_path_factors_no_inhibition[
+            layer_idx
+        ]
         if isinstance(effective_path_factor, torch.Tensor):
-            path_scaled_scalar = (
-                scalar
-                * effective_path_factor.to(device=scalar.device, dtype=scalar.dtype)
+            path_scaled_scalar = scalar * effective_path_factor.to(
+                device=scalar.device, dtype=scalar.dtype
             )
         else:
             path_scaled_scalar = scalar
 
-        if isinstance(conductance_path_factor, torch.Tensor):
-            pf = conductance_path_factor.detach().reshape(-1)
-            mean_pf = float(pf.mean().item())
-            std_pf = float(pf.std(unbiased=False).item())
-            cv_pf = float(std_pf / max(mean_pf, 1e-12))
+        if isinstance(effective_path_factor_no_inhibition, torch.Tensor):
+            path_scaled_scalar_no_inhibition = (
+                scalar
+                * effective_path_factor_no_inhibition.to(
+                    device=scalar.device,
+                    dtype=scalar.dtype,
+                )
+            )
         else:
-            mean_pf = float(conductance_path_factor)
-            std_pf = 0.0
-            cv_pf = 0.0
+            path_scaled_scalar_no_inhibition = scalar
+
+        mean_pf, std_pf, cv_pf = _factor_stats(conductance_path_factor, exact_error)
+        mean_pf_no_i, std_pf_no_i, cv_pf_no_i = _factor_stats(
+            conductance_path_factor_no_inhibition,
+            exact_error,
+        )
+        pf = _factor_tensor(conductance_path_factor, exact_error).clamp_min(1e-12)
+        pf_no_i = _factor_tensor(
+            conductance_path_factor_no_inhibition,
+            exact_error,
+        ).clamp_min(1e-12)
+        path_gain_suppression = pf / pf_no_i
+        path_gain_log_suppression = torch.log(pf_no_i) - torch.log(pf)
+        inhibitory_conductance_mean, inhibitory_conductance_fraction = (
+            _inhibitory_conductance_stats(helper, rec, exact_error)
+        )
 
         path_transport = transported[layer_idx]
         if not isinstance(path_transport, torch.Tensor):
@@ -505,6 +773,10 @@ def _error_rows(
             ("scalar", scalar * activation_derivative),
             ("per_soma", per_soma * activation_derivative),
             ("path_factor_scalar", path_scaled_scalar * activation_derivative),
+            (
+                "path_factor_scalar_no_inhibition",
+                path_scaled_scalar_no_inhibition * activation_derivative,
+            ),
             ("path_transport", path_transport * activation_derivative),
         ]:
             rows.append(
@@ -522,6 +794,17 @@ def _error_rows(
                 "path_gain_mean": mean_pf,
                 "path_gain_std": std_pf,
                 "path_gain_cv": cv_pf,
+                "path_gain_no_inhibition_mean": mean_pf_no_i,
+                "path_gain_no_inhibition_std": std_pf_no_i,
+                "path_gain_no_inhibition_cv": cv_pf_no_i,
+                "path_gain_suppression_mean": float(
+                    path_gain_suppression.mean().item()
+                ),
+                "path_gain_log_suppression_mean": float(
+                    path_gain_log_suppression.mean().item()
+                ),
+                "inhibitory_conductance_mean": inhibitory_conductance_mean,
+                "inhibitory_conductance_fraction": inhibitory_conductance_fraction,
                 "numel": int(exact_error.numel()),
             }
         )
@@ -547,10 +830,12 @@ def analyze_run(
     elif isinstance(encoder_params, dict):
         encoder_params["input_dim"] = input_dim
     else:
-        setattr(encoder_params, "input_dim", input_dim)
+        encoder_params.input_dim = input_dim
 
     model, _ = initialize_model(config.model)
-    model.load_state_dict(torch.load(_locate_model_path(run_dir), map_location=device, weights_only=False))
+    model.load_state_dict(
+        torch.load(_locate_model_path(run_dir), map_location=device, weights_only=False)
+    )
     model = model.to(device)
     model.eval()
 
@@ -558,7 +843,9 @@ def analyze_run(
     decoder_cache: dict[str, Any] = {}
     dec_handle = _capture_decoder_input(model, decoder_cache)
     layer_records, layer_handles = _hook_branch_layers(model)
-    topk_modules = [module for module in model.modules() if isinstance(module, TopKLinear)]
+    topk_modules = [
+        module for module in model.modules() if isinstance(module, TopKLinear)
+    ]
     for module in topk_modules:
         module.cache_mask = True
 
@@ -610,8 +897,37 @@ def analyze_run(
             _get_value(_get_value(config.training, "main"), "learning_strategy_config"),
             "error_broadcast_mode",
         ),
+        "input_mode": (
+            _get_value(config.model.core.transfer, "input_mode")
+            if hasattr(config.model.core, "transfer")
+            else None
+        ),
+        "inhibitory_layer_sizes": (
+            json.dumps(
+                _get_value(
+                    config.model.core.architecture,
+                    "inhibitory_layer_sizes",
+                    [],
+                )
+            )
+            if hasattr(config.model.core, "architecture")
+            else "[]"
+        ),
+        "ei_value": (
+            _get_value(
+                config.model.core.connectivity,
+                "ei_synapses_per_branch_per_layer",
+                [None],
+            )[0]
+            if hasattr(config.model.core, "connectivity")
+            else None
+        ),
         "ie_value": (
-            _get_value(config.model.core.connectivity, "ie_synapses_per_branch_per_layer", [None])[0]
+            _get_value(
+                config.model.core.connectivity,
+                "ie_synapses_per_branch_per_layer",
+                [None],
+            )[0]
             if hasattr(config.model.core, "connectivity")
             else None
         ),
@@ -625,13 +941,21 @@ def analyze_run(
     return factor_df, error_df, path_df
 
 
-def summarize_run(factor_df: pd.DataFrame, error_df: pd.DataFrame, path_df: pd.DataFrame) -> dict[str, Any]:
+def summarize_run(
+    factor_df: pd.DataFrame, error_df: pd.DataFrame, path_df: pd.DataFrame
+) -> dict[str, Any]:
     summary: dict[str, Any] = {
-        "run_dir": factor_df["run_dir"].iloc[0] if not factor_df.empty else error_df["run_dir"].iloc[0],
+        "run_dir": (
+            factor_df["run_dir"].iloc[0]
+            if not factor_df.empty
+            else error_df["run_dir"].iloc[0]
+        ),
     }
     if not factor_df.empty:
         summary["factorization_weighted_cosine"] = _weighted_mean(factor_df, "cosine")
-        summary["factorization_weighted_relative_l2"] = _weighted_mean(factor_df, "relative_l2")
+        summary["factorization_weighted_relative_l2"] = _weighted_mean(
+            factor_df, "relative_l2"
+        )
         summary["factorization_weighted_scaled_relative_l2"] = _weighted_mean(
             factor_df, "scaled_relative_l2"
         )
@@ -642,7 +966,9 @@ def summarize_run(factor_df: pd.DataFrame, error_df: pd.DataFrame, path_df: pd.D
     if not error_df.empty:
         for mode, group in error_df.groupby("broadcast_mode"):
             summary[f"{mode}_weighted_cosine"] = _weighted_mean(group, "cosine")
-            summary[f"{mode}_weighted_relative_l2"] = _weighted_mean(group, "relative_l2")
+            summary[f"{mode}_weighted_relative_l2"] = _weighted_mean(
+                group, "relative_l2"
+            )
             summary[f"{mode}_weighted_scaled_relative_l2"] = _weighted_mean(
                 group, "scaled_relative_l2"
             )
@@ -653,14 +979,44 @@ def summarize_run(factor_df: pd.DataFrame, error_df: pd.DataFrame, path_df: pd.D
     if not path_df.empty:
         summary["path_gain_cv_mean"] = _weighted_mean(path_df, "path_gain_cv")
         summary["path_gain_mean"] = _weighted_mean(path_df, "path_gain_mean")
+        summary["path_gain_no_inhibition_cv_mean"] = _weighted_mean(
+            path_df,
+            "path_gain_no_inhibition_cv",
+        )
+        summary["path_gain_no_inhibition_mean"] = _weighted_mean(
+            path_df,
+            "path_gain_no_inhibition_mean",
+        )
+        summary["path_gain_suppression_mean"] = _weighted_mean(
+            path_df,
+            "path_gain_suppression_mean",
+        )
+        summary["path_gain_log_suppression_mean"] = _weighted_mean(
+            path_df,
+            "path_gain_log_suppression_mean",
+        )
+        summary["inhibitory_conductance_mean"] = _weighted_mean(
+            path_df,
+            "inhibitory_conductance_mean",
+        )
+        summary["inhibitory_conductance_fraction"] = _weighted_mean(
+            path_df,
+            "inhibitory_conductance_fraction",
+        )
     return summary
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--run-dir", type=Path, help="Single run directory with config/checkpoint")
-    parser.add_argument("--sweep-dir", type=Path, help="Sweep directory with results/config_* subdirs")
-    parser.add_argument("--output-dir", type=Path, required=True, help="Where CSV summaries are written")
+    parser.add_argument(
+        "--run-dir", type=Path, help="Single run directory with config/checkpoint"
+    )
+    parser.add_argument(
+        "--sweep-dir", type=Path, help="Sweep directory with results/config_* subdirs"
+    )
+    parser.add_argument(
+        "--output-dir", type=Path, required=True, help="Where CSV summaries are written"
+    )
     parser.add_argument("--batch-size", type=int, default=256)
     parser.add_argument("--split", choices=["train", "valid", "test"], default="train")
     parser.add_argument("--max-runs", type=int, default=None)
@@ -671,7 +1027,9 @@ def main() -> None:
         raise ValueError("Specify exactly one of --run-dir or --sweep-dir.")
 
     device = torch.device(
-        "cuda" if args.device == "auto" and torch.cuda.is_available() else args.device if args.device != "auto" else "cpu"
+        "cuda"
+        if args.device == "auto" and torch.cuda.is_available()
+        else args.device if args.device != "auto" else "cpu"
     )
 
     root = args.run_dir or args.sweep_dir
@@ -699,9 +1057,15 @@ def main() -> None:
         path_frames.append(path_df)
         summaries.append(summarize_run(factor_df, error_df, path_df))
 
-    factor_all = pd.concat(factor_frames, ignore_index=True) if factor_frames else pd.DataFrame()
-    error_all = pd.concat(error_frames, ignore_index=True) if error_frames else pd.DataFrame()
-    path_all = pd.concat(path_frames, ignore_index=True) if path_frames else pd.DataFrame()
+    factor_all = (
+        pd.concat(factor_frames, ignore_index=True) if factor_frames else pd.DataFrame()
+    )
+    error_all = (
+        pd.concat(error_frames, ignore_index=True) if error_frames else pd.DataFrame()
+    )
+    path_all = (
+        pd.concat(path_frames, ignore_index=True) if path_frames else pd.DataFrame()
+    )
     summary_all = pd.DataFrame(summaries)
 
     factor_all.to_csv(args.output_dir / "factorization_details.csv", index=False)

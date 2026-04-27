@@ -166,6 +166,9 @@ def build_figure(sweep_dir: Path = DEFAULT_SWEEP_DIR) -> tuple[plt.Figure, pd.Da
 
     grouped.to_csv(ANALYSIS_DIR / "morphology_ie_regime_grouped.csv", index=False)
     df.to_csv(ANALYSIS_DIR / "morphology_ie_regime_runs.csv", index=False)
+    fig.savefig(FIGURES_DIR / "fig_morphology_ie_regime.pdf", bbox_inches="tight")
+    fig.savefig(FIGURES_DIR / "fig_morphology_ie_regime.png", dpi=300, bbox_inches="tight")
+    # Legacy aliases are kept so older drafts and slides do not break.
     fig.savefig(FIGURES_DIR / "fig_s8_morphology_ie_regime.pdf", bbox_inches="tight")
     fig.savefig(FIGURES_DIR / "fig_s8_morphology_ie_regime.png", dpi=300, bbox_inches="tight")
     return fig, grouped

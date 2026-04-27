@@ -13,13 +13,25 @@ The draft is now organized around one shared manuscript body plus two thin venue
 
 ### Main figures used by the paper
 
+Current scientific order:
+
 - `figures/fig1_model_and_credit.pdf`
 - `figures/fig3_gradient_fidelity.pdf`
 - `figures/fig5_mechanistic_evidence.pdf`
 - `figures/fig2_competence_regime.pdf`
-- `figures/fig_s8_morphology_ie_regime.pdf`
 - `figures/fig_cifar10_mechanism_extension.pdf`
+- `figures/fig_morphology_ie_regime.pdf`
 - `figures/fig6_cue_routing.pdf`
+
+Narrative arc:
+
+- model and rule family
+- exact factorization and gradient fidelity
+- mechanism chain from path gains to broadcast fidelity to learning
+- competence on standard supervised tasks
+- harder-data CIFAR-10 check
+- morphology and inhibitory operating regime
+- structured feedback when rank-1 broadcast fails
 
 ### Appendix figures used by the paper
 
