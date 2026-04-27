@@ -55,7 +55,7 @@ def setup_panel(ax, width: float = 1.0, title: str | None = None) -> None:
     for spine in ax.spines.values():
         spine.set_visible(False)
     if title:
-        ax.set_title(title, loc="left", fontsize=9.5, pad=5, fontweight="bold")
+        ax.set_title(title, loc="left", x=0.10, fontsize=8.4, pad=5, fontweight="bold")
 
 
 def box(ax, xy, w, h, fc="white", ec="#D8DEE8", lw=0.8, radius=0.02, z=2):
@@ -199,7 +199,7 @@ def draw_tree(
 
 def panel_a(ax):
     width = 1.32
-    setup_panel(ax, width, "Conductance dendritic tree")
+    setup_panel(ax, width, "Conductance tree")
     draw_tree(
         ax,
         width=width,
@@ -209,8 +209,8 @@ def panel_a(ax):
         branch_ys=(0.72, 0.52, 0.32),
     )
 
-    arrow(ax, (1.02, 0.50), (1.23, 0.50), lw=1.2, ms=9)
-    ax.text(1.25, 0.50, "readout", ha="left", va="center", fontsize=7.2, color=INK, fontweight="bold")
+    arrow(ax, (1.02, 0.50), (1.18, 0.50), lw=1.2, ms=9)
+    ax.text(1.20, 0.50, "out", ha="left", va="center", fontsize=6.8, color=INK, fontweight="bold")
 
     draw_synapse(ax, 0.050, 0.93, "E", 1.0)
     ax.text(0.075, 0.93, "E: positive drive", fontsize=6.8, color=EXC, va="center", fontweight="bold")
@@ -218,8 +218,8 @@ def panel_a(ax):
     ax.text(0.075, 0.865, "I: conductance load", fontsize=6.8, color=INH, va="center", fontweight="bold")
 
     box(ax, (0.055, 0.035), 1.12, 0.18, fc="#FBFCFE")
-    ax.text(0.615, 0.153, r"$V_n=\dfrac{N_n}{G_n^{\rm tot}},\qquad R_n^{\rm tot}=1/G_n^{\rm tot}$", ha="center", va="center", fontsize=10.2, color=INK)
-    ax.text(0.615, 0.066, r"inhibition raises $G_n^{\rm tot}$ and lowers $R_n^{\rm tot}$", ha="center", va="center", fontsize=6.2, color=INH, fontweight="bold")
+    ax.text(0.615, 0.153, r"$V_n=\dfrac{N_n}{G_n^{\rm tot}},\quad R_n^{\rm tot}=1/G_n^{\rm tot}$", ha="center", va="center", fontsize=8.8, color=INK)
+    ax.text(0.615, 0.055, r"inhibition $\uparrow G_n^{\rm tot}$, $\downarrow R_n^{\rm tot}$", ha="center", va="center", fontsize=5.5, color=INH, fontweight="bold")
 
 
 def panel_b(ax):
@@ -251,9 +251,83 @@ def panel_b(ax):
     )
 
 
+def panel_rules(ax):
+    width = 1.25
+    setup_panel(ax, width, "LocalCA rule family")
+    cards = [
+        ("3F", COLORS["rule_3f"], r"$x_iR_n^{\rm tot}(E_i-V_n)e_n$", "exact eligibility"),
+        ("4F", COLORS["rule_4f"], r"$\mathrm{3F}\cdot \rho_n$", "morphology scale"),
+        ("5F", COLORS["rule_5f"], r"$\mathrm{4F}\cdot \phi_n$", "confidence scale"),
+    ]
+    yvals = [0.74, 0.50, 0.26]
+    for (name, color, eq, note), y in zip(cards, yvals):
+        box(ax, (0.06, y - 0.085), 1.08, 0.17, fc="white", ec="#D8DEE8", lw=0.7)
+        ax.add_patch(Circle((0.17, y), 0.052, fc=color, ec="white", linewidth=0.5, zorder=7))
+        ax.text(0.17, y, name, ha="center", va="center", fontsize=8.2, color="white", fontweight="bold", zorder=8)
+        ax.text(0.27, y + 0.030, eq, ha="left", va="center", fontsize=7.2, color=INK)
+        ax.text(0.27, y - 0.038, note, ha="left", va="center", fontsize=5.8, color=MUTE, style="italic")
+    ax.text(
+        0.60,
+        0.065,
+        r"$e_n$ is the only non-local signal; all other factors are local.",
+        ha="center",
+        va="center",
+        fontsize=5.9,
+        color=MUTE,
+        style="italic",
+    )
+
+
+def panel_design(ax):
+    width = 2.05
+    setup_panel(ax, width, "Rules and feedback")
+
+    ax.text(0.08, 0.87, "Local update", fontsize=6.8, color=MUTE, fontweight="bold")
+    cards = [
+        ("3F", COLORS["rule_3f"], r"$x_iR_n^{\rm tot}(E_i-V_n)e_n$", "exact eligibility"),
+        ("4F", COLORS["rule_4f"], r"$\mathrm{3F}\cdot\rho_n$", "morphology scale"),
+        ("5F", COLORS["rule_5f"], r"$\mathrm{4F}\cdot\phi_n$", "confidence scale"),
+    ]
+    yvals = [0.72, 0.52, 0.32]
+    for (name, color, eq, note), y in zip(cards, yvals):
+        box(ax, (0.08, y - 0.060), 0.82, 0.12, fc="white", ec="#D8DEE8", lw=0.65)
+        ax.add_patch(Circle((0.16, y), 0.038, fc=color, ec="white", linewidth=0.45, zorder=7))
+        ax.text(0.16, y, name, ha="center", va="center", fontsize=6.8, color="white", fontweight="bold", zorder=8)
+        ax.text(0.24, y + 0.022, eq, ha="left", va="center", fontsize=6.4, color=INK)
+        ax.text(0.24, y - 0.032, note, ha="left", va="center", fontsize=5.3, color=MUTE, style="italic")
+
+    ax.text(1.08, 0.87, "Error broadcast $e_n$", fontsize=6.8, color=MUTE, fontweight="bold")
+    modes = [
+        ("Rank-1", "1 shared field", COLORS["scalar"]),
+        ("Neuron-wise", "soma-aligned", COLORS["per_soma"]),
+        ("Rank-K", "few random channels", LOW_RANK),
+        ("Path", "branch roles", PATHWAY),
+        ("Oracle", r"$\alpha_n\delta_0$", ORACLE),
+    ]
+    yvals = [0.76, 0.62, 0.48, 0.34, 0.20]
+    for (name, note, color), y in zip(modes, yvals):
+        box(ax, (1.08, y - 0.048), 0.82, 0.096, fc="white", ec="#D8DEE8", lw=0.6)
+        ax.plot([1.12, 1.26], [y, y], color=color, lw=1.9, solid_capstyle="round")
+        ax.add_patch(Circle((1.12, y), 0.017, fc=color, ec="white", linewidth=0.3, zorder=8))
+        ax.text(1.31, y + 0.018, name, ha="left", va="center", fontsize=6.1, color=color, fontweight="bold")
+        ax.text(1.31, y - 0.024, note, ha="left", va="center", fontsize=5.1, color=MUTE, style="italic")
+
+    arrow(ax, (0.94, 0.52), (1.03, 0.52), color=MUTE, lw=0.8, ms=6)
+    ax.text(
+        1.01,
+        0.075,
+        r"3F gives the exact local eligibility; 5F is the practical stabilizer used in headline runs.",
+        ha="center",
+        va="center",
+        fontsize=5.4,
+        color=MUTE,
+        style="italic",
+    )
+
+
 def panel_c(ax):
     width = 1.38
-    setup_panel(ax, width, "Path-gain field")
+    setup_panel(ax, width, "Path gains")
     colors = ["#D95F4B", "#58A66E", "#4F79B8"]
     tree = draw_tree(
         ax,
@@ -282,7 +356,7 @@ def panel_c(ax):
 
     box(ax, (0.08, 0.02), 0.96, 0.13, fc="#FBFCFE")
     ax.text(0.56, 0.105, r"$\alpha_n=\Pi_{\rm path}\, R^{\rm tot}g^{\rm den}$", ha="center", va="center", fontsize=7.4, color=INK)
-    ax.text(0.56, 0.045, "compressible path gains make rank-1 broadcast useful", ha="center", va="center", fontsize=5.7, color=MUTE, style="italic")
+    ax.text(0.56, 0.045, "rank-1 works when gains are compressible", ha="center", va="center", fontsize=5.7, color=MUTE, style="italic")
 
 
 def draw_tiny_tree(ax, x, y, scale=0.10, branch_colors=None):
@@ -355,31 +429,27 @@ def panel_d(ax):
 
 def main() -> None:
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    fig = plt.figure(figsize=(7.0, 4.25))
+    fig = plt.figure(figsize=(7.0, 2.45))
     gs = fig.add_gridspec(
-        2,
-        2,
-        width_ratios=[1.32, 1.58],
-        height_ratios=[1.0, 1.0],
-        left=0.055,
-        right=0.985,
-        top=0.93,
-        bottom=0.075,
+        1,
+        3,
+        width_ratios=[1.32, 1.38, 2.05],
+        left=0.040,
+        right=0.988,
+        top=0.82,
+        bottom=0.11,
         wspace=0.18,
-        hspace=0.18,
     )
     axes = [
         fig.add_subplot(gs[0, 0]),
         fig.add_subplot(gs[0, 1]),
-        fig.add_subplot(gs[1, 0]),
-        fig.add_subplot(gs[1, 1]),
+        fig.add_subplot(gs[0, 2]),
     ]
     panel_a(axes[0])
-    panel_b(axes[1])
-    panel_c(axes[2])
-    panel_d(axes[3])
-    for ax, label in zip(axes, "ABCD"):
-        panel_label(ax, label, x=-0.095, y=1.10, fontsize=11)
+    panel_c(axes[1])
+    panel_design(axes[2])
+    for ax, label in zip(axes, "ABC"):
+        panel_label(ax, label, x=-0.08, y=1.13, fontsize=10.5)
 
     out = OUTPUT_DIR / "fig1_model_and_credit"
     fig.savefig(out.with_suffix(".pdf"))

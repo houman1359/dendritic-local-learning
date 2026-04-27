@@ -31,10 +31,9 @@ The empirical story follows this sequence. Figure~\ref{fig:model_schematic} defi
 \centering
 \includegraphics[width=0.98\textwidth]{fig1_model_and_credit.pdf}
 \caption{\textbf{Model and credit assignment.}
-\textbf{(A)}~Conductance-based dendritic neuron. Nonnegative excitatory and inhibitory inputs drive distal compartments, which feed proximal branches and then the soma. In the shunting model, inhibitory conductance enters the total conductance in the denominator, so it changes the input resistance and the gain of upstream paths.
-\textbf{(B)}~Exact credit versus LocalCA. Backpropagation supplies compartment-specific errors $\partial L/\partial V_n$ at every dendritic level. LocalCA keeps the synapse-local eligibility term but replaces the exact compartment error with a low-bandwidth broadcast $e_n$ that is routed down the tree.
-\textbf{(C)}~Path gain through the tree. Exact backprop supplies a path-specific compartment error; rank-1 LocalCA replaces that field with one shared broadcast.
-\textbf{(D)}~Broadcast approximations. Rank-1 shared broadcast, neuron-wise broadcast, rank-$K$ random broadcast, path-structured broadcast, and transported oracle form a ladder from low-bandwidth local learning to an exact non-local upper bound.}
+\textbf{(A)}~Conductance-based dendritic tree. Nonnegative excitatory and inhibitory inputs drive distal compartments, which feed proximal branches and then the soma; shunting inhibition enters the conductance denominator and lowers input resistance.
+\textbf{(B)}~Path gains through the tree. Exact backprop supplies path-specific compartment errors, while rank-1 LocalCA replaces that field with one shared broadcast.
+\textbf{(C)}~Local rule and feedback choices. The 3F rule contains the exact local eligibility from the theorem; 4F/5F add stabilizing local factors, and the feedback ladder ranges from rank-1 broadcast to transported oracle.}
 \label{fig:model_schematic}
 \end{figure*}
 
@@ -303,12 +302,13 @@ For each parameter tensor $p$, we compute directional alignment (cosine similari
 \begin{figure*}[!t]
 \centering
 \includegraphics[width=0.98\textwidth]{fig3_gradient_fidelity.pdf}
-\caption{\textbf{Gradient-fidelity diagnostic.} \textbf{(A)}~Weighted cosine similarity between local and backprop gradients: shunting (green) is consistently more aligned than additive (blue) on both MNIST and context gating. \textbf{(B)}~Gradient scale mismatch on the same matched-weight comparisons. Shunting is not only better aligned, but also substantially closer in norm. \textbf{(C)}~Per-layer cosine similarity over training epochs. Shunting proximal layers approach high positive alignment; additive layers remain near zero. \textbf{(D)}~Exact-factorization sanity check across all theory-diagnostic conditions, reported with relative $L_2$ reconstruction error and scale mismatch. Reconstructed gradients match autograd to numerical precision, showing that LocalCA's only approximation is in the broadcast substitute for the compartment error.}
+\caption{\textbf{Gradient-fidelity diagnostic.} \textbf{(A)}~Weighted cosine similarity between local and backprop gradients: shunting (green) is consistently more aligned than additive (blue) on both MNIST and context gating. \textbf{(B)}~Full-vector local and backprop gradient norms over training. Additive gradients remain finite, so the near-zero additive cosine in panel~A reflects a directional mismatch rather than vanishing gradients. \textbf{(C)}~5F alignment dynamics over training. Shunting remains more positively aligned, whereas additive stays near zero. \textbf{(D)}~Exact-factorization sanity check across all theory-diagnostic conditions, reported with relative $L_2$ reconstruction error and scale mismatch. Reconstructed gradients match autograd to numerical precision, showing that LocalCA's only approximation is in the broadcast substitute for the compartment error.}
 \label{fig:gradient_fidelity}
 \end{figure*}
 
 Across matched-weight comparisons, shunting is consistently more aligned with backprop and substantially closer in norm than the additive control: on MNIST, weighted cosine rises from $0.006$ to $0.202$ and scale mismatch falls from $1.053$ to $0.117$; on context gating, cosine rises from $-0.007$ to $0.108$ and scale mismatch falls from $2.154$ to $0.036$.
-Figure~\ref{fig:gradient_fidelity}C shows that this advantage appears throughout training, especially in proximal layers and dendritic conductances.
+Figure~\ref{fig:gradient_fidelity}B rules out a trivial zero-gradient explanation: in the 5F trajectory diagnostic, additive local and backprop gradient norms remain finite throughout training, including at the final checkpoint.
+Figure~\ref{fig:gradient_fidelity}C shows that the directional advantage appears throughout training.
 Figure~\ref{fig:gradient_fidelity}D confirms that the theory is operational in code under the nonnegative-input setup: reconstructing gradients from Corollary~\ref{cor:factorization} using exact compartment errors yields weighted relative reconstruction error below $2\times 10^{-7}$ and weighted scale mismatch below $4\times 10^{-8}$ across runs. In a few low-norm parameter blocks, cosine becomes numerically unstable even though the reconstruction itself is essentially exact, so we report the norm-based diagnostics in the figure. The only approximation made by LocalCA is therefore the broadcast substitute for $\partial L/\partial V_n$.
 
 \subsection{Mechanistic Chain: Path Gains, Broadcast Fidelity, and Oracle Transport}

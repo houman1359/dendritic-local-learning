@@ -11,7 +11,7 @@ only the figures that are referenced by `local_credit_assignment_body.tex`.
 
   Main:
     fig2_competence_regime.pdf     (3 panels: multi-benchmark bars, IE dose-response, shunting advantage)
-    fig3_gradient_fidelity.pdf     (4 panels: cosine, scale mismatch, alignment dynamics, factorization)
+    fig3_gradient_fidelity.pdf     (4 panels: cosine, gradient norms, alignment dynamics, factorization)
     fig_additional_stress_tests.pdf
   Appendix:
     fig_s1_calibration.pdf         (2x2: capacity, rule ranking, decoder, broadcast)
@@ -698,6 +698,57 @@ def figure3():
         gridspec_kw={"wspace": 0.42, "width_ratios": [1.0, 1.0, 1.12, 0.94]},
     )
 
+    def _load_gradient_trajectory(rule_variant="5f"):
+        """Load trajectory diagnostics and keep one rule variant.
+
+        The trajectory files store one row per parameter tensor, epoch, and
+        rule. Aggregated full-gradient norms are therefore computed as the
+        Euclidean norm over tensor-wise norms: sqrt(sum_i ||g_i||^2).
+        """
+        gf_dir = os.path.join(DRAFT_DIR, "analysis", "gradient_fidelity")
+        if not os.path.isdir(gf_dir):
+            return None
+
+        all_traj = []
+        for cfg_name in sorted(os.listdir(gf_dir)):
+            csv_path = os.path.join(gf_dir, cfg_name, "gradient_fidelity_trajectory.csv")
+            if not os.path.isfile(csv_path):
+                continue
+            tdf = pd.read_csv(csv_path)
+            if "rule_variant" in tdf.columns:
+                tdf = tdf[tdf["rule_variant"] == rule_variant].copy()
+            if tdf.empty:
+                continue
+            tdf["config"] = cfg_name
+
+            def _layer_idx(pname):
+                parts = pname.split(".")
+                for i, p in enumerate(parts):
+                    if p == "layers" and i + 1 < len(parts):
+                        try:
+                            return int(parts[i + 1])
+                        except ValueError:
+                            pass
+                return -1
+
+            tdf["layer_idx"] = tdf["parameter_name"].apply(_layer_idx)
+            all_traj.append(tdf)
+
+        if not all_traj:
+            return None
+
+        traj = pd.concat(all_traj, ignore_index=True)
+        configs = sorted(traj["config"].unique())
+        mid = len(configs) // 2
+        core_map = {
+            cfg: ("shunting" if i < mid else "additive")
+            for i, cfg in enumerate(configs)
+        }
+        traj["core_type"] = traj["config"].map(core_map)
+        return traj
+
+    traj_5f = _load_gradient_trajectory("5f")
+
     # ---- Panel A: Cosine similarity bars ----
     ax = axes[0]
     _panel(ax, "A")
@@ -736,73 +787,89 @@ def figure3():
             fontsize=6.5,
         )
 
-    # ---- Panel B: Scale mismatch bars ----
+    # ---- Panel B: Gradient norm trajectories ----
     ax = axes[1]
     _panel(ax, "B")
     style_axis(ax, grid="y")
+    if traj_5f is not None:
+        norm_rows = []
+        for (cfg, core, epoch), sub in traj_5f.groupby(["config", "core_type", "epoch"]):
+            local_norm = float(np.sqrt(np.square(sub["local_grad_norm"]).sum()))
+            bp_norm = float(np.sqrt(np.square(sub["backprop_grad_norm"]).sum()))
+            wcos = float((sub["cosine_similarity"] * sub["numel"]).sum() / sub["numel"].sum())
+            norm_rows.append({
+                "config": cfg,
+                "core_type": core,
+                "epoch": epoch,
+                "local_grad_norm": local_norm,
+                "backprop_grad_norm": bp_norm,
+                "weighted_cosine": wcos,
+            })
+        norm_df = pd.DataFrame(norm_rows)
+        norm_out = os.path.join(ANALYSIS_DIR, "gradient_fidelity", "gradient_norm_dynamics_summary.csv")
+        norm_df.to_csv(norm_out, index=False)
 
-    mismatch_conditions = [
-        ("MNIST\nShunt.", 0.117, COLOR_SHUNTING),
-        ("MNIST\nAdd.", 1.053, COLOR_ADDITIVE),
-        ("CG\nShunt.", 0.036, COLOR_SHUNTING),
-        ("CG\nAdd.", 2.154, COLOR_ADDITIVE),
-    ]
-    x_pos = np.arange(len(mismatch_conditions))
-    bars = ax.bar(
-        x_pos,
-        [c[1] for c in mismatch_conditions],
-        color=[c[2] for c in mismatch_conditions],
-        edgecolor="white",
-        lw=0.4,
-        width=0.58,
-    )
-    ax.set_xticks(x_pos)
-    ax.set_xticklabels([c[0] for c in mismatch_conditions], fontsize=7.5)
-    ax.set_ylabel("Log norm-ratio error")
-    ax.set_title("Norm distortion relative to backprop")
-    ax.set_yscale("log")
-    ax.axhline(1e-1, color="gray", lw=0.4, ls=":", alpha=0.8)
-    for bar_rect, (_, val, _) in zip(bars, mismatch_conditions):
-        ax.text(
-            bar_rect.get_x() + bar_rect.get_width() / 2,
-            val * 1.10,
-            f"{val:.3f}",
-            ha="center",
-            va="bottom",
-            fontsize=6.3,
+        line_specs = [
+            ("shunting", "local_grad_norm", COLOR_SHUNTING, "-", "Shunt. LocalCA"),
+            ("shunting", "backprop_grad_norm", COLOR_SHUNTING, "--", "Shunt. BP"),
+            ("additive", "local_grad_norm", COLOR_ADDITIVE, "-", "Add. LocalCA"),
+            ("additive", "backprop_grad_norm", COLOR_ADDITIVE, "--", "Add. BP"),
+        ]
+        for core, col, color, ls, label in line_specs:
+            sub = norm_df[norm_df["core_type"] == core]
+            if sub.empty:
+                continue
+            agg = sub.groupby("epoch")[col].agg(["mean", "std"]).reset_index()
+            ax.plot(agg["epoch"], agg["mean"], color=color, ls=ls, lw=1.2,
+                    label=label, alpha=0.92)
+            ax.fill_between(
+                agg["epoch"],
+                np.maximum(agg["mean"] - agg["std"], 1e-12),
+                agg["mean"] + agg["std"],
+                color=color,
+                alpha=0.08,
+                linewidth=0,
+            )
+        ax.set_yscale("log")
+        ax.set_xlabel("Epoch")
+        ax.set_ylabel("Gradient norm")
+        ax.set_title("Non-zero gradients over training")
+        ax.legend(
+            fontsize=5.7,
+            loc="lower right",
+            ncol=1,
+            handlelength=1.3,
+            handletextpad=0.3,
+            borderpad=0.25,
+            frameon=True,
+            framealpha=0.92,
         )
+        final = norm_df[norm_df["epoch"] == norm_df["epoch"].max()]
+        add_final = final[final["core_type"] == "additive"]
+        if not add_final.empty:
+            ax.text(
+                0.03,
+                0.07,
+                "Additive BP/local\nnorms stay finite",
+                transform=ax.transAxes,
+                fontsize=6.2,
+                color=COLOR_ADDITIVE,
+                ha="left",
+                va="bottom",
+                bbox=dict(boxstyle="round,pad=0.22", fc="white", ec="0.85", alpha=0.90),
+            )
+    else:
+        ax.text(0.5, 0.5, "No trajectory data found", transform=ax.transAxes,
+                ha="center", va="center", fontsize=8, color="red")
 
     # ---- Panel C: Per-layer alignment dynamics (from real data) ----
     ax = axes[2]
     _panel(ax, "C")
     style_axis(ax, grid="y")
 
-    # Load real gradient-fidelity trajectory data
-    gf_dir = os.path.join(DRAFT_DIR, "analysis", "gradient_fidelity")
     _loaded_real_data = False
-    if os.path.isdir(gf_dir):
-        all_traj = []
-        for cfg_name in sorted(os.listdir(gf_dir)):
-            csv_path = os.path.join(gf_dir, cfg_name, "gradient_fidelity_trajectory.csv")
-            if not os.path.isfile(csv_path):
-                continue
-            tdf = pd.read_csv(csv_path)
-            tdf["config"] = cfg_name
-            # Infer layer index from parameter name
-            def _layer_idx(pname):
-                parts = pname.split(".")
-                for i, p in enumerate(parts):
-                    if p == "layers" and i + 1 < len(parts):
-                        try:
-                            return int(parts[i + 1])
-                        except ValueError:
-                            pass
-                return -1
-            tdf["layer_idx"] = tdf["parameter_name"].apply(_layer_idx)
-            all_traj.append(tdf)
-        if all_traj:
-            traj = pd.concat(all_traj, ignore_index=True)
-            traj = traj[traj["layer_idx"] >= 0]
+    if traj_5f is not None:
+            traj = traj_5f[traj_5f["layer_idx"] >= 0].copy()
             traj["weighted_cos"] = traj["cosine_similarity"] * traj["numel"]
             # Aggregate: weighted cosine per (config, epoch, layer)
             grp = (
@@ -811,13 +878,10 @@ def figure3():
                 .reset_index()
             )
             grp["w_cosine"] = grp["wcos"] / grp["n"]
+            grp["core_type"] = grp["config"].map(
+                traj.drop_duplicates("config").set_index("config")["core_type"]
+            )
             layer_values = sorted(grp["layer_idx"].unique())
-            # Separate shunting (config_0..2) vs additive (config_3..5)
-            # Use first half as shunting, second half as additive (standard convention)
-            configs = sorted(grp["config"].unique())
-            mid = len(configs) // 2
-            shunt_cfgs = set(configs[:mid])
-            add_cfgs = set(configs[mid:])
 
             single_layer = len(layer_values) == 1
             if single_layer:
@@ -829,11 +893,11 @@ def figure3():
                 ]
 
             for layer_idx, layer_suffix in plotted_layers:
-                for cfgs, color, base_label in [
-                    (shunt_cfgs, COLOR_SHUNTING, "Shunt."),
-                    (add_cfgs, COLOR_ADDITIVE, "Add."),
+                for core, color, base_label in [
+                    ("shunting", COLOR_SHUNTING, "Shunt."),
+                    ("additive", COLOR_ADDITIVE, "Add."),
                 ]:
-                    sub = grp[(grp["config"].isin(cfgs)) & (grp["layer_idx"] == layer_idx)]
+                    sub = grp[(grp["core_type"] == core) & (grp["layer_idx"] == layer_idx)]
                     if sub.empty:
                         continue
                     agg = sub.groupby("epoch")["w_cosine"].agg(["mean", "std"]).reset_index()
