@@ -35,13 +35,12 @@ The empirical story follows a single chain. Figure~\ref{fig:model_schematic} def
 
 \begin{figure*}[!t]
 \centering
-\includegraphics[width=0.95\textwidth]{fig1_model_and_credit.pdf}
+\includegraphics[width=0.98\textwidth]{fig1_model_and_credit.pdf}
 \caption{\textbf{Model and credit assignment.}
-\textbf{(A)}~Orientation to the full learning problem. Inputs drive a rooted dendritic tree whose distal compartments feed proximal branches and then the soma. Exact backpropagation supplies compartment-specific errors $\partial L/\partial V_n$, while LocalCA replaces them with one shared low-bandwidth broadcast $e_n$; the synapse update then combines that non-local signal with local quantities available at the compartment.
-\textbf{(B)}~Single-compartment conductance computation. Excitatory synapses, inhibitory synapses, and child branches all contribute to the compartment voltage, while inhibition also enters the total conductance in the denominator. The mini-histograms summarize the visual intuition used throughout the paper: shunting concentrates path gains, whereas additive integration leaves them broad.
+\textbf{(A)}~Conductance-based dendritic neuron. Nonnegative excitatory and inhibitory inputs drive distal compartments, which feed proximal branches and then the soma. In the shunting model, inhibitory conductance enters the total conductance in the denominator, so it changes the input resistance and the gain of upstream paths.
+\textbf{(B)}~Exact credit versus LocalCA. Backpropagation supplies compartment-specific errors $\partial L/\partial V_n$ at every dendritic level. LocalCA keeps the synapse-local eligibility term but replaces the exact compartment error with a low-bandwidth broadcast $e_n$ that is routed down the tree.
 \textbf{(C)}~Local rule family. 3F is the theorem-facing rule; 4F adds the heuristic morphology-aware factor $\rho_n$; 5F adds the heuristic confidence-like factor $\phi_n$.
-\textbf{(D)}~Broadcast approximations. Scalar uses one shared field, per-soma uses a vector when widths match and otherwise falls back to scalar, random low-rank adds a few unstructured channels, and pathway feedback preserves branch identity when different pathways should receive different teaching signals.
-\textbf{(E)}~Representative MNIST learning dynamics from the fixed-epoch Figure 1 sweep. Shunting with the stronger local wrappers tracks backprop much more closely than the additive control, previewing the more quantitative fidelity analyses in Fig.~\ref{fig:gradient_fidelity}.}
+\textbf{(D)}~Broadcast approximations. Scalar uses one shared field, per-soma uses a vector when widths match and otherwise falls back to scalar, random low-rank adds a few unstructured channels, and pathway feedback preserves branch identity when different pathways should receive different teaching signals.}
 \label{fig:model_schematic}
 \end{figure*}
 
@@ -290,7 +289,7 @@ For each parameter tensor $p$, we compute directional alignment (cosine similari
 
 \begin{figure*}[!t]
 \centering
-\includegraphics[width=0.95\textwidth]{fig3_gradient_fidelity.pdf}
+\includegraphics[width=0.98\textwidth]{fig3_gradient_fidelity.pdf}
 \caption{\textbf{Gradient-fidelity diagnostic.} \textbf{(A)}~Weighted cosine similarity between local and backprop gradients: shunting (green) is consistently more aligned than additive (blue) on both MNIST and context gating. \textbf{(B)}~Gradient scale mismatch on the same matched-weight comparisons. Shunting is not only better aligned, but also substantially closer in norm. \textbf{(C)}~Per-layer cosine similarity over training epochs. Shunting proximal layers approach high positive alignment; additive layers remain near zero. \textbf{(D)}~Exact-factorization sanity check across all corrected theory-diagnostic conditions, reported with relative $L_2$ reconstruction error and scale mismatch. Reconstructed gradients match autograd to numerical precision, showing that LocalCA’s only approximation is in the broadcast substitute for the compartment error.}
 \label{fig:gradient_fidelity}
 \end{figure*}
@@ -314,7 +313,7 @@ Panel~C trains the same local rule using that oracle signal.
 On noise resilience, additive learning rises from $66.8\%$ at $N_I{=}0$ to about $81$--$84\%$ across the inhibited regimes under per-soma broadcast, and transported broadcast lifts those same conditions to about $92$--$94\%$.
 Shunting rises from $54.3\%$ at $N_I{=}0$ to about $81$--$86\%$ under per-soma and to about $94.3$--$95.2\%$ under transported broadcast.
 On MNIST, transported broadcast reaches about $95.4$--$96.6\%$ for additive and $96.5$--$97.3\%$ for shunting.
-The CIFAR-10 inset shows the same harder-data pattern in the corrected compact direct-I-stream family: shunting rises from $28.8\%$ under per-soma broadcast to $47.4\%$ under transported error, nearly matching its $49.5\%$ backprop ceiling.
+The same harder-data pattern is shown separately on CIFAR-10 in Fig.~\ref{fig:cifar10_mechanism_extension}: shunting rises from $28.8\%$ under per-soma broadcast to $47.4\%$ under transported error, nearly matching its $49.5\%$ backprop ceiling.
 These oracle results strongly support path-gain fidelity as the dominant bottleneck for LocalCA performance, while the smaller remaining additive--shunting gap under matched transported broadcast suggests an additional contribution from conductance-shaped local sensitivities.
 
 Panel~D collapses the three-link chain across all conditions into a single scatter of per-soma cosine alignment against test accuracy. Shunting cells (squares) cluster at high alignment and high accuracy; additive cells (circles) cluster at the opposite end, and the same monotonic relationship holds on both MNIST and noise resilience. This is a compact confirmation that the (path-gain concentration $\to$ compartment-error fidelity $\to$ test accuracy) chain is not a dataset-specific artifact. A complementary broadcast-bandwidth control in Appendix Fig.~\ref{fig:low_bandwidth_appendix} shows that even once local sensitivities are well scaled, coarse broadcasts still work: $4$-bit quantization preserves full performance ($61.6\%$ vs.\ $61.7\%$; $p > 0.9$), while sign-only ($37.5\%$) and sparse top-30\% ($38.2\%$) degrade sharply.
@@ -332,7 +331,7 @@ A complementary fitted-network diagnostic on the successful direct-I cue-routing
 \caption{\textbf{Mechanistic chain from path gains to learning.}
 \textbf{(A)}~Conductance-stage path-gain dispersion on MNIST, measured as the coefficient of variation of the exact tree attenuation $\alpha_n$ across compartments. Shunting keeps these conductance-stage path gains much more concentrated than the additive control as inhibition increases.
 \textbf{(B)}~Direct compartment-error fidelity on noise resilience. Solid lines compare the per-soma broadcast $e_n$ to the exact compartment error $\partial L/\partial V_n$; dashed lines show the transported-error oracle obtained by recursively applying conductance-stage path gains. Under the corrected positive-input setup, shunting still improves the simple per-soma broadcast in the inhibited regimes, while the transported oracle defines the remaining approximation gap and becomes nearly exact once inhibition is present.
-\textbf{(C)}~Learning with the transported-error oracle on noise resilience. Improving the broadcast field is enough to recover near-ceiling local learning, especially in the additive architecture where per-soma broadcast fails most severely; the CIFAR-10 inset shows the same harder-data ladder for shunting in the corrected compact direct-I-stream family.
+\textbf{(C)}~Learning with the transported-error oracle on noise resilience. Improving the broadcast field is enough to recover near-ceiling local learning, especially in the additive architecture where per-soma broadcast fails most severely.
 \textbf{(D)}~Global mechanism summary. Per-soma cosine alignment (x-axis) vs.\ test accuracy (y-axis) across all conditions (additive/shunting $\times$ five inhibition levels $\times$ two datasets, $5$ seeds each). Shunting cells (squares) cluster at high alignment and high accuracy; additive cells (circles) cluster at low alignment and low accuracy. The same monotonic chain from~(A) through~(C) collapses cleanly into the (alignment $\to$ accuracy) relationship shown here, and it holds on both MNIST and noise resilience, confirming that the mechanistic chain is not a dataset-specific artifact. The broadcast-bandwidth / quantization control previously shown as panel D is now reported separately as Appendix Fig.~\ref{fig:low_bandwidth_appendix}.}
 \label{fig:mechanistic}
 \end{figure*}
@@ -364,7 +363,7 @@ To make sure the mechanism is not an artifact of near-saturated MNIST-style regi
 
 \begin{figure*}[!t]
 \centering
-\includegraphics[width=0.78\textwidth]{fig_cifar10_mechanism_extension.pdf}
+\includegraphics[width=0.95\textwidth]{fig_cifar10_mechanism_extension.pdf}
 \caption{\textbf{Corrected CIFAR-10 mechanism extension in the stronger compact direct-I-stream family.}
 \textbf{(A)}~Matched additive vs.\ shunting ladder with a nonlinear decoder and decoder-aware soma-error mapping. In this stronger family, shunting is competitive under standard training ($49.5 \pm 0.7$\%) and transported-error LocalCA nearly recovers that ceiling ($47.4 \pm 0.6$\%), while naive rank-$1$ per-soma remains much weaker.
 \textbf{(B)}~Shunting rank bridge on the same family. Random low-rank feedback improves over per-soma, but exact transported error remains the strongest signal.}
@@ -377,7 +376,7 @@ The inhibitory regime in which shunting helps most is not fixed across dendritic
 
 \begin{figure*}[!t]
 \centering
-\includegraphics[width=0.95\textwidth]{fig_morphology_ie_regime.pdf}
+\includegraphics[width=0.98\textwidth]{fig_morphology_ie_regime.pdf}
 \caption{\textbf{Morphology shifts the inhibitory regime where shunting helps most.}
 \textbf{(A)}~Additive LocalCA remains comparatively flat across morphologies and inhibitory synapse counts, with only isolated high-variance pockets.
 \textbf{(B)}~Shunting LocalCA shows a clear morphology-dependent regime: the strongest performance appears at low or moderate inhibition, and the best $N_I$ shifts with tree shape.
@@ -1320,7 +1319,7 @@ The seed depth is not uniform across every sweep, and we therefore separate head
 \toprule
 \textbf{Figure / Table} & \textbf{Sweep} & \textbf{Replication} & \textbf{Tier} \\
 \midrule
-Fig.~\ref{fig:model_schematic}D       & Fig.~1 MNIST learning dynamics       & 5 seeds & Headline \\
+Fig.~\ref{fig:model_schematic}        & Model, rule, and broadcast definitions & N/A & Definitions \\
 Fig.~\ref{fig:gradient_fidelity}      & Gradient-fidelity diagnostic         & 5 seeds & Headline \\
 Fig.~\ref{fig:mechanistic}            & Mechanistic chain + oracle + summary & 5 seeds & Headline \\
 Fig.~\ref{fig:competence_regime}      & Competence / regime dose-response    & 5 seeds & Headline \\

@@ -414,11 +414,12 @@ def figure2():
     fmnist = _csv_path(FMNIST_SUMMARY_CSV)
     ie_data = _csv_path(IE_PERF_SUMMARY_CSV)
 
-    fig, axes2d = plt.subplots(2, 2, figsize=(11.0, 7.6),
-                               gridspec_kw={"wspace": 0.32, "hspace": 0.42,
-                                            "width_ratios": [1.0, 1.0],
-                                            "height_ratios": [1.0, 1.0]})
-    axes = axes2d.flatten()
+    fig, axes = plt.subplots(
+        1,
+        4,
+        figsize=(14.4, 3.25),
+        gridspec_kw={"wspace": 0.42, "width_ratios": [1.10, 1.12, 1.0, 0.98]},
+    )
 
     # ---- Panel A: Multi-benchmark bars ----
     ax = axes[0]
@@ -536,8 +537,17 @@ def figure2():
         mpatches.Patch(color=COLOR_SHUNTING, label="Shunt. (local)"),
         mpatches.Patch(color=COLOR_ADDITIVE, label="Add. (local)"),
     ]
-    ax.legend(handles=legend_handles, fontsize=7, loc="lower right",
-              handlelength=1.0, handletextpad=0.3)
+    ax.legend(
+        handles=legend_handles,
+        fontsize=6.4,
+        loc="upper center",
+        bbox_to_anchor=(0.50, 1.02),
+        ncol=3,
+        handlelength=0.9,
+        handletextpad=0.25,
+        columnspacing=0.55,
+        borderaxespad=0.0,
+    )
 
     all_vals = [d[1]*100 for d in datasets_info if d[1]] + \
                [d[2]*100 for d in datasets_info if d[2]] + \
@@ -571,8 +581,15 @@ def figure2():
     ax.set_xlabel("$N_I$ (inhib. syn. per branch)")
     ax.set_ylabel("Test accuracy (%)")
     ax.set_title("Dose-response to inhibition", fontsize=9.5)
-    ax.legend(fontsize=7, loc="lower right", handlelength=1.5,
-              handletextpad=0.3, borderpad=0.3)
+    ax.legend(
+        fontsize=6.1,
+        loc="lower right",
+        ncol=2,
+        handlelength=1.2,
+        handletextpad=0.25,
+        columnspacing=0.55,
+        borderpad=0.25,
+    )
     ax.set_ylim(25, 100)
 
     # ---- Panel C: Shunting advantage ----
@@ -602,7 +619,7 @@ def figure2():
     ax.set_xlabel("$N_I$ (inhib. syn. per branch)")
     ax.set_ylabel("Shunting adv. (pp)")
     ax.set_title("Shunting advantage", fontsize=9.5)
-    ax.legend(fontsize=7, loc="upper right")
+    ax.legend(fontsize=6.4, loc="upper right", handlelength=1.2)
 
     # ---- Panel D: Fashion-MNIST comparison ----
     ax = axes[3]
@@ -664,8 +681,7 @@ def figure2():
         ax.set_title("Fashion-MNIST gap", fontsize=9.5)
         ax.set_ylim(70, 92)
 
-    fig.subplots_adjust(left=0.08, right=0.985, bottom=0.08, top=0.94,
-                        wspace=0.32, hspace=0.42)
+    fig.subplots_adjust(left=0.052, right=0.992, bottom=0.24, top=0.86, wspace=0.42)
     _save(fig, "fig2_competence_regime")
     plt.close(fig)
 
@@ -675,17 +691,12 @@ def figure2():
 # ===================================================================
 def figure3():
     print("\n--- Figure 3: Gradient Fidelity ---")
-    fig, axes2d = plt.subplots(
-        2,
-        2,
-        figsize=(11.0, 7.6),
-        gridspec_kw={
-            "wspace": 0.32, "hspace": 0.42,
-            "width_ratios": [1.0, 1.0],
-            "height_ratios": [1.0, 1.0],
-        },
+    fig, axes = plt.subplots(
+        1,
+        4,
+        figsize=(14.4, 3.25),
+        gridspec_kw={"wspace": 0.42, "width_ratios": [1.0, 1.0, 1.12, 0.94]},
     )
-    axes = axes2d.flatten()
 
     # ---- Panel A: Cosine similarity bars ----
     ax = axes[0]
@@ -747,7 +758,7 @@ def figure3():
     )
     ax.set_xticks(x_pos)
     ax.set_xticklabels([c[0] for c in mismatch_conditions], fontsize=7.5)
-    ax.set_ylabel(r"$|\log_{10}(\|g_{\mathrm{local}}\|/\|g_{\mathrm{bp}}\|)|$")
+    ax.set_ylabel("Log norm-ratio error")
     ax.set_title("Norm distortion relative to backprop")
     ax.set_yscale("log")
     ax.axhline(1e-1, color="gray", lw=0.4, ls=":", alpha=0.8)
@@ -842,8 +853,15 @@ def figure3():
     ax.set_xlabel("Epoch")
     ax.set_ylabel("Weighted cosine")
     ax.set_title("Alignment dynamics over training")
-    ax.legend(fontsize=6.5, loc="upper left", ncol=2, handlelength=1.5,
-              handletextpad=0.3)
+    ax.legend(
+        fontsize=5.9,
+        loc="upper left",
+        ncol=2,
+        handlelength=1.2,
+        handletextpad=0.25,
+        columnspacing=0.55,
+        borderpad=0.2,
+    )
     ax.set_ylim(-0.15, 0.55)
     # (removed inline "single dendritic layer" caption; detail lives in the
     # figure caption in the manuscript.)
@@ -874,7 +892,7 @@ def figure3():
         )
         ax.hlines(np.median(vals), i - 0.18, i + 0.18, color="black", lw=1.2, zorder=4)
     ax.set_xticks([0, 1])
-    ax.set_xticklabels(["relative $L_2$", "scale mismatch"], fontsize=7.5)
+    ax.set_xticklabels(["rel. $L_2$", "scale"], fontsize=7.5)
     ax.set_ylabel("Numerical error")
     ax.set_yscale("log")
     ax.set_ylim(1e-10, 1e-4)
@@ -894,8 +912,7 @@ def figure3():
         bbox=dict(boxstyle="round,pad=0.25", fc="white", ec="0.85", alpha=0.95),
     )
 
-    fig.subplots_adjust(left=0.08, right=0.985, bottom=0.08, top=0.94,
-                        wspace=0.32, hspace=0.42)
+    fig.subplots_adjust(left=0.052, right=0.992, bottom=0.24, top=0.86, wspace=0.42)
     _save(fig, "fig3_gradient_fidelity")
     plt.close(fig)
 
@@ -1677,8 +1694,7 @@ def figure_s_bm_policy():
         ax.set_xticks(x)
         ax.set_xticklabels(group_labels, fontsize=7.5)
         ax.set_ylabel("Mean test accuracy (%)")
-        panel_letter = "AB"[ax_idx]
-        ax.set_title(f"({panel_letter})  {ds_titles[ds]}: LocalCA b,m update policy",
+        ax.set_title(f"{ds_titles[ds]}: LocalCA b,m update policy",
                      fontsize=8.5, loc="left", pad=6)
         style_axis(ax)
 
@@ -2245,8 +2261,8 @@ def figure_s_weight_dist_soma_comparison():
         [off_cv, off_acc],
         [on_cv, on_acc],
         ["Excitatory weight CV (std/mean)", "Test accuracy (%)"],
-        ["(A)  CV under soma off vs. soma on",
-         "(B)  Test accuracy under soma off vs. soma on"],
+        ["CV under soma off vs. soma on",
+         "Test accuracy under soma off vs. soma on"],
     )):
         ax.bar(x - bw / 2, yvals_off, bw, color=col_off, alpha=0.92,
                edgecolor="white", lw=0.3, label="Soma off")

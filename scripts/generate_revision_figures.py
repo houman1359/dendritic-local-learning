@@ -3,8 +3,8 @@
 
 Produces:
   Main:
-    fig5_mechanistic_evidence.pdf  (4 panels: conductance-stage path gains, exact-error fidelity, oracle learning, low-bandwidth)
-    fig6_cue_routing.pdf          (3 panels: hard cue-routing diagnosis)
+    fig5_mechanistic_evidence.pdf  (4-panel row: path gains, error fidelity, transported learning, mechanism summary)
+    fig6_cue_routing.pdf          (4-panel row: task, accuracy, specialization, pathway map)
   Supplement:
     fig_s5_fa_dfa.pdf              (FA/DFA baseline comparison)
     fig_s6_cifar10.pdf             (corrected strong-family CIFAR-10 mechanism extension)
@@ -358,7 +358,6 @@ def figure_s6():
     ax.set_ylim(0, 55)
 
     fig.subplots_adjust(left=0.10, right=0.98, bottom=0.18, top=0.90, wspace=0.42)
-    _save(fig, "fig_s6_cifar10")
     _save(fig, "fig_cifar10_mechanism_extension")
     plt.close(fig)
 
@@ -445,7 +444,6 @@ def figure_s7():
 
     fig.subplots_adjust(left=0.12, right=0.97, bottom=0.15, top=0.88,
                         wspace=0.50)
-    _save(fig, "fig_s7_additive_norm")
     _save(fig, "fig_additive_norm_control")
     plt.close(fig)
 

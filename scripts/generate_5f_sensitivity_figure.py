@@ -89,7 +89,7 @@ def build_figure(summary_csv: Path = SUMMARY_CSV) -> plt.Figure:
     ema["ema_label"] = ema["ema_alpha"].map(lambda v: f"{float(v):.2f}")
     ema = ema.sort_values("ema_alpha")
 
-    fig, axes = plt.subplots(1, 2, figsize=(W, 2.7), gridspec_kw={"wspace": 0.45})
+    fig, axes = plt.subplots(1, 2, figsize=(6.8, 2.7), gridspec_kw={"wspace": 0.40})
 
     ax = axes[0]
     _panel(ax, "A")
@@ -104,7 +104,7 @@ def build_figure(summary_csv: Path = SUMMARY_CSV) -> plt.Figure:
     ax.set_xticks(x)
     ax.set_xticklabels(clamp["display_label"])
     ax.set_ylabel("Test accuracy (%)")
-    ax.set_title("5F is not overly sensitive to clamp bounds")
+    ax.set_title("Clamp-bound sensitivity")
     ax.set_ylim(max(85, vals.min() - 2.5), min(94, vals.max() + 1.8))
     ax.grid(axis="y", alpha=0.22, linewidth=0.4, zorder=0)
 
@@ -125,7 +125,7 @@ def build_figure(summary_csv: Path = SUMMARY_CSV) -> plt.Figure:
     ax.set_xticklabels([f"{v:.2f}" for v in x])
     ax.set_xlabel(r"4F/5F EMA smoothing $\alpha$")
     ax.set_ylabel("Test accuracy (%)")
-    ax.set_title("5F is moderately robust to EMA rate")
+    ax.set_title("EMA-rate sensitivity")
     ax.set_ylim(max(85, vals.min() - 2.5), min(94, vals.max() + 1.8))
     ax.grid(alpha=0.22, linewidth=0.4)
 

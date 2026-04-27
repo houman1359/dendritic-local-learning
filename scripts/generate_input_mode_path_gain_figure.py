@@ -114,7 +114,7 @@ def _panel_title(ax: plt.Axes, title: str, subtitle: str | None = None) -> None:
         transform=ax.transAxes,
         ha="left",
         va="bottom",
-        fontsize=10.0,
+        fontsize=8.9,
         fontweight="bold",
         color=COLORS["ink"],
     )
@@ -126,7 +126,7 @@ def _panel_title(ax: plt.Axes, title: str, subtitle: str | None = None) -> None:
             transform=ax.transAxes,
             ha="left",
             va="top",
-            fontsize=7.2,
+            fontsize=6.4,
             color=COLOR_MUTED,
         )
 
@@ -137,7 +137,7 @@ def _draw_path_gain_panel(ax: plt.Axes) -> None:
     ax.set_ylim(0, 1)
     _panel_title(
         ax,
-        "Path gain is conductance-gated",
+        "Inhibition gates path gain",
         r"$G_I(x)$ lowers $R^{tot}$ and attenuates all upstream paths",
     )
 
@@ -194,7 +194,7 @@ def _draw_input_modes_panel(ax: plt.Axes) -> None:
     ax.set_ylim(0, 1)
     _panel_title(
         ax,
-        "Two sources, same branch conductance",
+        "Two inhibitory input modes",
         "Both routes end as nonnegative I-to-E conductance on the dendrite",
     )
 
@@ -231,8 +231,8 @@ def _draw_clean_probe_panel(ax: plt.Axes) -> None:
     ax.set_ylim(0, 1)
     _panel_title(
         ax,
-        "Clean probe: dendritic depth, not network depth",
-        "The path-gain question needs a branched tree, not two feedforward layers",
+        "One dendritic layer probe",
+        "Path gain needs a branched tree, not two feedforward layers",
     )
 
     # Clean one-layer probe.
@@ -366,7 +366,7 @@ def _draw_results_panel(ax: plt.Axes, df: pd.DataFrame) -> None:
     )
     for xi, val in zip(x, values):
         ax.text(xi, val + 0.55, f"{val:.1f}", ha="center", va="bottom", fontsize=7.0, color=COLORS["ink"])
-    ax.set_title("One-layer probe result", fontsize=10.0, fontweight="bold")
+    ax.set_title("Probe result", fontsize=9.2, fontweight="bold")
 
 
 def build_figure(summary_csv: Path = SUMMARY_CSV) -> plt.Figure:
@@ -374,14 +374,12 @@ def build_figure(summary_csv: Path = SUMMARY_CSV) -> plt.Figure:
     df = _load_grouped(summary_csv)
     FIGURES_DIR.mkdir(parents=True, exist_ok=True)
 
-    fig = plt.figure(figsize=(12.2, 6.6), constrained_layout=True)
-    gs = fig.add_gridspec(2, 2, width_ratios=[1.02, 1.0], height_ratios=[1.02, 0.98])
-    axes = [
-        fig.add_subplot(gs[0, 0]),
-        fig.add_subplot(gs[0, 1]),
-        fig.add_subplot(gs[1, 0]),
-        fig.add_subplot(gs[1, 1]),
-    ]
+    fig, axes = plt.subplots(
+        1,
+        4,
+        figsize=(14.4, 3.25),
+        gridspec_kw={"wspace": 0.42, "width_ratios": [1.20, 1.18, 1.05, 1.0]},
+    )
 
     _draw_path_gain_panel(axes[0])
     _draw_input_modes_panel(axes[1])
@@ -389,7 +387,9 @@ def build_figure(summary_csv: Path = SUMMARY_CSV) -> plt.Figure:
     _draw_results_panel(axes[3], df)
 
     for label, ax in zip(["A", "B", "C", "D"], axes):
-        panel_label(ax, label, x=-0.08, y=1.08, fontsize=12)
+        panel_label(ax, label, x=-0.12, y=1.08, fontsize=11.5)
+
+    fig.subplots_adjust(left=0.035, right=0.992, bottom=0.22, top=0.86, wspace=0.42)
 
     out = FIGURES_DIR / "fig_s_input_mode_path_gain"
     fig.savefig(out.with_suffix(".pdf"))

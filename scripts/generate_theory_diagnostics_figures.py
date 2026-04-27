@@ -10,7 +10,6 @@ import matplotlib
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
-import numpy as np
 import pandas as pd
 
 from neurips_style import apply_neurips_style, COLORS, panel_label, style_axis
@@ -166,7 +165,7 @@ def _plot_mechanism_summary(ax: plt.Axes, summary: pd.DataFrame) -> None:
     marker: core (additive vs. shunting)
     Points are (core, ie, dataset) cells, 5 seeds each.
     """
-    _panel(ax, "D")
+    _panel(ax, "D", x=-0.24)
     style_axis(ax, grid="y")
 
     ds_colors = {"mnist": "#4A7CB5", "noise_resilience": "#E67E22"}
@@ -203,7 +202,7 @@ def _plot_mechanism_summary(ax: plt.Axes, summary: pd.DataFrame) -> None:
 
     ax.set_xlabel("Per-soma cosine alignment")
     ax.set_ylabel("Test accuracy (%)")
-    ax.set_title("Mechanism summary (alignment $\\to$ accuracy)")
+    ax.set_title("Alignment predicts accuracy")
     ax.legend(
         fontsize=6.2,
         handlelength=1.0,
@@ -371,72 +370,15 @@ def _plot_oracle_learning(
     ax.set_title("Transported error improves learning")
     ax.set_xticks([0, 5, 10, 20, 40])
     ax.set_ylim(20, 101)
-    ax.legend(loc="upper left", ncol=1, handlelength=1.2, handletextpad=0.4,
-              columnspacing=0.8)
-
-    # Harder-data inset: corrected CIFAR-10 strong family (shunting only).
-    try:
-        cifar_bp = _safe_csv(CIFAR10_BP_SUMMARY_CSV)
-        cifar_local = _safe_csv(CIFAR10_LOCALCA_SUMMARY_CSV)
-        bp_row = cifar_bp[
-            (cifar_bp["strategy"] == "standard")
-            & (cifar_bp["model_type"] == "dendritic_shunting")
-        ].iloc[0]
-        ps_row = cifar_local[
-            cifar_local["condition"] == "cifar10_shunting_5f_per_soma_bpdec_wd0"
-        ].iloc[0]
-        pt_row = cifar_local[
-            cifar_local["condition"] == "cifar10_shunting_5f_path_transport_bpdec_wd0"
-        ].iloc[0]
-
-        # Only create the inset AFTER data validation succeeds.
-        inset = ax.inset_axes([0.56, 0.08, 0.39, 0.34])
-        style_axis(inset, grid="y")
-        vals = np.array([
-            100.0 * float(bp_row["mean_test_accuracy"]),
-            100.0 * float(ps_row["acc_test_mean"]),
-            100.0 * float(pt_row["acc_test_mean"]),
-        ])
-        errs = np.array([
-            100.0 * float(bp_row["std_test_accuracy"]),
-            100.0 * float(ps_row["acc_test_std"]),
-            100.0 * float(pt_row["acc_test_std"]),
-        ])
-        colors = [COLORS["bp"], COLOR_SHUNTING, COLOR_TRANSPORT]
-        bars = inset.bar(
-            np.arange(3),
-            vals,
-            yerr=errs,
-            color=colors,
-            edgecolor="white",
-            lw=0.3,
-            width=0.55,
-            capsize=1.5,
-            error_kw={"lw": 0.5},
-            zorder=3,
-        )
-        for rect, v in zip(bars, vals):
-            inset.text(
-                rect.get_x() + rect.get_width() / 2,
-                v + 0.9,
-                f"{v:.1f}",
-                ha="center",
-                va="bottom",
-                fontsize=5.2,
-            )
-        inset.set_xticks(np.arange(3))
-        inset.set_xticklabels(["BP", "Per", "Trans"], fontsize=5.6)
-        inset.set_ylim(20, 55)
-        inset.set_title("CIFAR-10 shunt.", fontsize=6.0, pad=1.5)
-        inset.tick_params(axis="y", labelsize=5.4)
-    except Exception as exc:
-        # Surface silent failures instead of leaving an empty inset behind.
-        print(f"  [warn] CIFAR inset skipped: {type(exc).__name__}: {exc}")
-        # Remove any empty inset so it doesn't leave a ghost subplot.
-        try:
-            inset.remove()
-        except Exception:
-            pass
+    ax.legend(
+        loc="upper left",
+        ncol=1,
+        fontsize=5.9,
+        handlelength=1.1,
+        handletextpad=0.25,
+        borderpad=0.22,
+        labelspacing=0.22,
+    )
 
 
 def build_figure(
@@ -452,20 +394,17 @@ def build_figure(
     oracle_summary = _safe_csv(oracle_summary_csv)
 
     fig, axes = plt.subplots(
-        2,
-        2,
-        figsize=(11.5, 8.2),
-        gridspec_kw={"wspace": 0.28, "hspace": 0.38,
-                     "width_ratios": [1.0, 1.0],
-                     "height_ratios": [1.0, 1.05]},
+        1,
+        4,
+        figsize=(14.4, 3.25),
+        gridspec_kw={"wspace": 0.42, "width_ratios": [1.0, 1.05, 1.12, 1.02]},
     )
-    axes = axes.flatten()
 
     _plot_path_gain_dispersion(axes[0], summary)
     _plot_compartment_error_fidelity(axes[1], summary)
     _plot_oracle_learning(axes[2], summary, oracle_summary)
     _plot_mechanism_summary(axes[3], summary)
-    fig.subplots_adjust(left=0.07, right=0.985, top=0.94, bottom=0.07)
+    fig.subplots_adjust(left=0.052, right=0.992, top=0.86, bottom=0.24, wspace=0.42)
     return fig
 
 

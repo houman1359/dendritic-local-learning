@@ -102,14 +102,14 @@ def _find_record(
 
 def _summary_records(df: pd.DataFrame) -> list[dict[str, Any]]:
     entries = [
-        ("local_ca", "dendritic_additive", "fixed", "baseline", "Fixed pathways\nLocalCA additive"),
-        ("local_ca", "dendritic_additive", "learned", "baseline", "Learned router\nLocalCA additive"),
-        ("local_ca", "dendritic_shunting", "learned", "baseline", "Learned router\nLocalCA shunting\nrank-1 per-soma"),
-        ("local_ca", "dendritic_shunting", "learned", "baseline_tuned", "Shunting rank-1\nper-soma + tune"),
-        ("local_ca", "dendritic_shunting", "learned", "low_rank_k1", "Random low-rank\n$K{=}1$"),
-        ("local_ca", "dendritic_shunting", "learned", "low_rank_k2", "Random low-rank\n$K{=}2$"),
-        ("local_ca", "dendritic_shunting", "learned", "pathway_vector_tuned", "PV-LocalCA\n(pathway-vector)"),
-        ("standard", "dendritic_shunting", "learned", "baseline", "Backprop shunting\nlearned router"),
+        ("local_ca", "dendritic_additive", "fixed", "baseline", "Add. fixed\nLocalCA"),
+        ("local_ca", "dendritic_additive", "learned", "baseline", "Add. learned\nLocalCA"),
+        ("local_ca", "dendritic_shunting", "learned", "baseline", "Shunt.\nrank-1"),
+        ("local_ca", "dendritic_shunting", "learned", "baseline_tuned", "Shunt.\nrank-1 tuned"),
+        ("local_ca", "dendritic_shunting", "learned", "low_rank_k1", "Random\n$K{=}1$"),
+        ("local_ca", "dendritic_shunting", "learned", "low_rank_k2", "Random\n$K{=}2$"),
+        ("local_ca", "dendritic_shunting", "learned", "pathway_vector_tuned", "PV-LocalCA"),
+        ("standard", "dendritic_shunting", "learned", "baseline", "Shunt. BP\nlearned"),
     ]
 
     records: list[dict[str, Any]] = []
@@ -201,11 +201,6 @@ def _plot_task_schematic(ax: plt.Axes) -> None:
     ax.set_xlim(0, 1)
     ax.set_ylim(0, 1)
 
-    ax.text(0.13, 0.90, "Inputs", fontsize=6.9, fontweight="bold", ha="center", color="#555555")
-    ax.text(0.33, 0.90, "Latent pathways", fontsize=6.9, fontweight="bold", ha="center", color="#555555")
-    ax.text(0.57, 0.90, "Prediction", fontsize=6.9, fontweight="bold", ha="center", color="#555555")
-    ax.text(0.79, 0.90, "Feedback field", fontsize=6.9, fontweight="bold", ha="center", color="#555555")
-
     _draw_box(ax, (0.04, 0.73), (0.18, 0.13), "Context\nreliability cue", "#F3E7C8")
     _draw_box(ax, (0.06, 0.49), (0.14, 0.10), "Cue A\nreliable", "#DCE7F8")
     _draw_box(ax, (0.06, 0.25), (0.14, 0.10), "Cue B\ncan conflict", "#DCE7F8")
@@ -231,8 +226,7 @@ def _plot_task_schematic(ax: plt.Axes) -> None:
     ax.text(
         0.04,
         0.06,
-        "Rank-1 feedback collapses branch identity. Higher-rank feedback helps,\n"
-        "but the best structured repair remains open under the corrected rule.",
+        "Branch identity matters: scalar feedback collapses routed credit.",
         fontsize=7.0,
         ha="left",
         va="bottom",
@@ -349,10 +343,9 @@ def _plot_specialization_panel(ax: plt.Axes, df: pd.DataFrame) -> None:
         )
 
     annotations = {
-        "baseline": "per-soma",
-        "baseline_tuned": "per-soma+tune",
-        "low_rank_k2": "low-rank $K{=}2$",
-        "pathway_vector_tuned": "PV-LocalCA",
+        "baseline": "rank-1",
+        "low_rank_k2": "$K{=}2$",
+        "pathway_vector_tuned": "PV",
     }
     targets = learned[
         (learned["strategy"] == "local_ca")
@@ -364,21 +357,21 @@ def _plot_specialization_panel(ax: plt.Axes, df: pd.DataFrame) -> None:
         ax.annotate(
             annotations[str(row["variant"])],
             xy=(float(row["router_mean_max_assignment"]), 100.0 * float(row["test_accuracy"])),
-            xytext=(-22 if is_pathway else 7, 10 if is_pathway else -10),
+            xytext=(-18 if is_pathway else 8, 12 if is_pathway else -16),
             textcoords="offset points",
-            fontsize=7.0,
+            fontsize=6.4,
             color="#333333",
         )
 
     ax.text(
         0.03,
-        0.96,
-        "circles: LocalCA\nsquares: backprop\ndiamonds: low-rank\nstars: pathway-vector",
+        0.05,
+        "o LocalCA | square BP | diamond low-rank | star pathway",
         transform=ax.transAxes,
         ha="left",
-        va="top",
-        fontsize=7.0,
-        bbox={"boxstyle": "round,pad=0.2", "facecolor": "white", "edgecolor": "#CCCCCC", "linewidth": 0.5},
+        va="bottom",
+        fontsize=5.9,
+        bbox={"boxstyle": "round,pad=0.18", "facecolor": "white", "edgecolor": "#CCCCCC", "linewidth": 0.5},
     )
     ax.set_xlabel("Mean max router assignment")
     ax.set_ylabel("Test accuracy (%)")
@@ -430,25 +423,24 @@ def build_figure(summary_csv: Path) -> None:
     records = _summary_records(summary)
     pv_row = _find_record(summary, "local_ca", "dendritic_shunting", "learned", "pathway_vector_tuned")
 
-    fig, axes2d = plt.subplots(
-        2, 2, figsize=(11.5, 8.2),
-        gridspec_kw={"wspace": 0.30, "hspace": 0.42,
-                     "width_ratios": [1.2, 1.0],
-                     "height_ratios": [1.0, 1.0]},
+    fig, axes = plt.subplots(
+        1,
+        4,
+        figsize=(14.8, 3.35),
+        gridspec_kw={
+            "wspace": 0.42,
+            "width_ratios": [1.25, 1.55, 1.10, 0.95],
+        },
     )
-    ax_a, ax_b = axes2d[0]
-    ax_c, ax_d = axes2d[1]
+    ax_a, ax_b, ax_c, ax_d = axes
 
     _plot_task_schematic(ax_a)
     _plot_accuracy_panel(ax_b, records)
     _plot_specialization_panel(ax_c, summary)
     _plot_assignment_panel(ax_d, pv_row)
 
-    fig.subplots_adjust(left=0.07, right=0.985, bottom=0.06, top=0.94,
-                        wspace=0.30, hspace=0.42)
+    fig.subplots_adjust(left=0.045, right=0.992, bottom=0.23, top=0.86, wspace=0.42)
     _save(fig, "fig6_cue_routing")
-    _save(fig, "fig_cue_routing_appendix")
-    _save(fig, "fig_cue_routing_hard_diagnosis")
     plt.close(fig)
 
 

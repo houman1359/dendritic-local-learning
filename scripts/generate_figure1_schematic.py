@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Generate Figure 1: dendritic neuron, exact credit vs LocalCA broadcast,
-local-rule family, broadcast channels, and CIFAR-10 mechanism evidence.
+local-rule family, and feedback-channel structure.
 
 Outputs:
   - figures/fig1_model_and_credit.{pdf,png}
@@ -12,8 +12,8 @@ Design principles:
   - Show error feedback reaching BOTH proximal and distal compartments.
   - Panel D uses somas (orange) as broadcast targets, each with a
     small dendritic tree, so channel structure is unambiguous.
-  - Panel E shows CIFAR-10 bars (harder task separates broadcast modes
-    more cleanly than MNIST, which all variants solve).
+  - Keep Fig. 1 conceptual. Quantitative evidence is handled by the
+    main result figures, where axes and legends can be large enough.
 """
 
 from __future__ import annotations
@@ -129,7 +129,7 @@ def setup_panel(ax, W=1.0, H=1.0, title=None, title_x=0.02):
     ax.set_ylim(0, H)
     ax.set_aspect("equal")
     if title is not None:
-        ax.set_title(title, fontsize=10.0, pad=6, loc="left", x=title_x)
+        ax.set_title(title, fontsize=9.4, pad=5, loc="left", x=title_x)
 
 
 # ── Tree drawing helper ─────────────────────────────────────────────────
@@ -203,7 +203,7 @@ def draw_tree(ax, *, x_leaf, x_branch, x_soma, branch_ys=None, leaf_offsets=None
 # ── Panel A: dendritic neuron (anatomy + shunting) ──────────────────────
 def panel_A(ax, W=1.20):
     setup_panel(ax, W=W, H=1.0,
-                title="Dendritic neuron with shunting E/I integration")
+                title="Shunting dendritic neuron")
 
     # Tree: use generous horizontal spacing
     tree = draw_tree(
@@ -258,7 +258,7 @@ def panel_A(ax, W=1.20):
 # ── Panel B: credit-assignment contrast (BP vs LocalCA) ─────────────────
 def panel_B(ax, W=2.60):
     setup_panel(ax, W=W, H=1.0,
-                title="Credit assignment: backprop vs. LocalCA",
+                title="Exact credit vs. LocalCA",
                 title_x=0.01)
 
     # Left subpanel (BP) — centred around x = W*0.25
@@ -442,7 +442,7 @@ def _mini_tree(ax, cx, cy, scale=0.06, color_soma=SOMA):
 
 
 def panel_D(ax, W=1.20):
-    setup_panel(ax, W=W, H=1.0, title="Broadcast channels for $e$")
+    setup_panel(ax, W=W, H=1.0, title="Feedback channels for $e$")
 
     # Header strip indicating the structure
     hdr_y = 0.965
@@ -709,36 +709,33 @@ def panel_E(ax):
 def main():
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
-    # Wider figure to give Panel B (spans 2 cols) enough horizontal room.
-    fig = plt.figure(figsize=(14.4, 8.2))
+    # Four conceptual panels in a single row. This is easier to scan in the
+    # main text and avoids mixing schematic definitions with headline results.
+    fig = plt.figure(figsize=(15.2, 3.55))
     gs = fig.add_gridspec(
-        2, 3,
-        height_ratios=[1.0, 1.02],
-        width_ratios=[1.0, 1.0, 1.0],
-        hspace=0.32, wspace=0.16,
-        left=0.035, right=0.985, top=0.935, bottom=0.06,
+        1, 4,
+        width_ratios=[1.18, 2.35, 1.24, 1.35],
+        wspace=0.13,
+        left=0.025, right=0.992, top=0.84, bottom=0.12,
     )
 
     ax_A = fig.add_subplot(gs[0, 0])
-    ax_B = fig.add_subplot(gs[0, 1:])
-    ax_C = fig.add_subplot(gs[1, 0])
-    ax_D = fig.add_subplot(gs[1, 1])
-    ax_E = fig.add_subplot(gs[1, 2])
+    ax_B = fig.add_subplot(gs[0, 1])
+    ax_C = fig.add_subplot(gs[0, 2])
+    ax_D = fig.add_subplot(gs[0, 3])
 
     panel_A(ax_A, W=1.20)
-    panel_B(ax_B, W=2.60)
+    panel_B(ax_B, W=2.55)
     panel_C(ax_C, W=1.20)
     panel_D(ax_D, W=1.20)
-    panel_E(ax_E)
 
     for ax, lbl, x_off in [
-        (ax_A, "A", -0.04),
-        (ax_B, "B", -0.02),
-        (ax_C, "C", -0.05),
-        (ax_D, "D", -0.05),
-        (ax_E, "E", -0.16),
+        (ax_A, "A", -0.10),
+        (ax_B, "B", -0.075),
+        (ax_C, "C", -0.10),
+        (ax_D, "D", -0.10),
     ]:
-        panel_label(ax, lbl, x=x_off, y=1.12, fontsize=13)
+        panel_label(ax, lbl, x=x_off, y=1.10, fontsize=12)
 
     out = OUTPUT_DIR / "fig1_model_and_credit"
     fig.savefig(out.with_suffix(".pdf"))
