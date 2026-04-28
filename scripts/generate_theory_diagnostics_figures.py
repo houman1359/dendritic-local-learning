@@ -210,18 +210,6 @@ def _plot_path_gain_map(ax: plt.Axes, summary: pd.DataFrame) -> None:
         norm=norm,
         cmap=cmap,
     )
-    ax.text(
-        0.50,
-        0.08,
-        r"Path colors show $\log_{10}\alpha_n$ at matched $N_I{=}5$",
-        ha="center",
-        va="center",
-        fontsize=7.4,
-        color=COLORS["mute"],
-    )
-    sm = plt.cm.ScalarMappable(norm=norm, cmap=cmap)
-    cbar = plt.colorbar(sm, ax=ax, fraction=0.040, pad=0.01)
-    cbar.set_ticks([])
     ax.set_title("Path-gain field")
 
 
@@ -652,17 +640,6 @@ def _plot_inhibitory_path_probe(ax: plt.Axes, input_mode: pd.DataFrame) -> None:
     ax.set_ylim(-0.55, 2.72)
     ax.spines["left"].set_visible(False)
     ax.tick_params(axis="y", length=0)
-    ax.text(
-        0.03,
-        0.97,
-        r"$G_I(x)\!\uparrow \Rightarrow R^{tot}\!\downarrow \Rightarrow \alpha_n$ gated",
-        transform=ax.transAxes,
-        ha="left",
-        va="top",
-        fontsize=7.6,
-        color=COLORS["inh"],
-        bbox={"boxstyle": "round,pad=0.22", "fc": "white", "ec": "#E6C7CB", "alpha": 0.96},
-    )
 
 
 def build_figure(
@@ -679,30 +656,19 @@ def build_figure(
     rank_summary = _safe_csv(ERROR_RANK_SUMMARY_CSV)
     input_mode = _safe_csv(INPUT_MODE_SUMMARY_CSV)
 
-    fig = plt.figure(figsize=(7.2, 5.05))
-    gs = fig.add_gridspec(
-        2,
-        6,
-        left=0.080,
-        right=0.985,
-        top=0.925,
-        bottom=0.115,
-        wspace=0.72,
-        hspace=0.72,
+    fig, axes = plt.subplots(
+        1,
+        5,
+        figsize=(13.8, 3.35),
+        gridspec_kw={"wspace": 0.56, "width_ratios": [1.00, 0.84, 1.00, 1.03, 1.20]},
     )
-    axes = [
-        fig.add_subplot(gs[0, 0:2]),
-        fig.add_subplot(gs[0, 2:4]),
-        fig.add_subplot(gs[0, 4:6]),
-        fig.add_subplot(gs[1, 0:3]),
-        fig.add_subplot(gs[1, 3:6]),
-    ]
 
     _plot_path_gain_map(axes[0], summary)
     _plot_error_compressibility(axes[1], rank_summary)
     _plot_compartment_error_fidelity(axes[2], summary)
     _plot_oracle_learning(axes[3], summary, oracle_summary)
     _plot_inhibitory_path_probe(axes[4], input_mode)
+    fig.subplots_adjust(left=0.050, right=0.992, top=0.82, bottom=0.25, wspace=0.56)
     return fig
 
 

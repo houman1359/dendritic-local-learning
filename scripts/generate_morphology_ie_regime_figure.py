@@ -83,7 +83,7 @@ def _heatmap(ax, frame: pd.DataFrame, title: str, cmap: str, center: float | Non
         linewidths=0.65,
         linecolor="white",
         square=False,
-        annot_kws={"fontsize": 8.8},
+        annot_kws={"fontsize": 8.2},
     )
     ax.collections[0].colorbar.outline.set_linewidth(0.65)
     ax.collections[0].colorbar.ax.tick_params(labelsize=8.3, width=0.4, length=2)
@@ -91,6 +91,8 @@ def _heatmap(ax, frame: pd.DataFrame, title: str, cmap: str, center: float | Non
     ax.set_xlabel(r"$N_I$ per branch", fontsize=10.5)
     ax.set_ylabel("Tree", fontsize=10.5, labelpad=12)
     ax.tick_params(labelsize=8.6)
+    ax.set_xticklabels(ax.get_xticklabels(), rotation=0)
+    ax.set_yticklabels(ax.get_yticklabels(), rotation=0)
 
 
 def _load_selected_diagnostics() -> pd.DataFrame | None:
@@ -172,11 +174,11 @@ def build_figure(sweep_dir: Path = DEFAULT_SWEEP_DIR) -> tuple[plt.Figure, pd.Da
     diag = _load_selected_diagnostics()
 
     fig, axes = plt.subplots(
-        2,
-        2,
-        figsize=(7.2, 5.05),
+        1,
+        4,
+        figsize=(13.0, 3.65),
         constrained_layout=False,
-        gridspec_kw={"wspace": 0.42, "hspace": 0.60},
+        gridspec_kw={"width_ratios": [1.10, 0.86, 1.10, 1.02], "wspace": 0.58},
     )
     axes = axes.ravel()
 
@@ -225,17 +227,17 @@ def build_figure(sweep_dir: Path = DEFAULT_SWEEP_DIR) -> tuple[plt.Figure, pd.Da
         ].copy()
         tag_groups = [
             (
-                "[4, 4]\n$N_I$ 0",
+                "[4,4]\n0",
                 "best_depth2_lowI_additive",
                 "best_depth2_lowI_shunting",
             ),
             (
-                "[3, 3, 3]\n$N_I$ 5",
+                "[3,3,3]\n5",
                 "best_depth3_midI_additive",
                 "best_depth3_midI_shunting",
             ),
             (
-                "[3, 3, 3]\n$N_I$ 20",
+                "[3,3,3]\n20",
                 "highI_match_additive",
                 "highI_collapse_shunting",
             ),
@@ -272,8 +274,8 @@ def build_figure(sweep_dir: Path = DEFAULT_SWEEP_DIR) -> tuple[plt.Figure, pd.Da
             label="Shunting",
         )
         ax.set_xticks(x)
-        ax.set_xticklabels(group_labels, fontsize=9.0)
-        ax.set_xlabel(r"Morphology / $N_I$")
+        ax.set_xticklabels(group_labels, fontsize=8.2)
+        ax.set_xlabel(r"Tree / $N_I$")
         ax.set_ylabel("Path-gain CV")
         ax.set_title("Credit geometry", fontsize=11.4, pad=8)
         ax.legend(loc="upper right", fontsize=8.4, frameon=False)
@@ -332,7 +334,7 @@ def build_figure(sweep_dir: Path = DEFAULT_SWEEP_DIR) -> tuple[plt.Figure, pd.Da
 
     grouped.to_csv(ANALYSIS_DIR / "morphology_ie_regime_grouped.csv", index=False)
     df.to_csv(ANALYSIS_DIR / "morphology_ie_regime_runs.csv", index=False)
-    fig.subplots_adjust(left=0.090, right=0.975, bottom=0.115, top=0.920, wspace=0.42, hspace=0.60)
+    fig.subplots_adjust(left=0.055, right=0.988, bottom=0.31, top=0.80, wspace=0.58)
     fig.savefig(FIGURES_DIR / "fig_morphology_ie_regime.pdf", bbox_inches="tight")
     fig.savefig(FIGURES_DIR / "fig_morphology_ie_regime.png", dpi=300, bbox_inches="tight")
     # Legacy aliases are kept so older drafts and slides do not break.

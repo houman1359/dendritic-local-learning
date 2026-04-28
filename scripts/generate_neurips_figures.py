@@ -426,10 +426,10 @@ def figure2():
     ie_data = _csv_path(IE_PERF_SUMMARY_CSV)
 
     fig, axes = plt.subplots(
-        2,
-        2,
-        figsize=(7.2, 5.0),
-        gridspec_kw={"wspace": 0.36, "hspace": 0.58},
+        1,
+        4,
+        figsize=(12.8, 3.45),
+        gridspec_kw={"wspace": 0.56, "width_ratios": [1.18, 1.12, 1.02, 1.02]},
     )
     axes = axes.ravel()
 
@@ -544,7 +544,7 @@ def figure2():
     ax.set_xticks(x_base)
     ax.set_xticklabels([d[0] for d in datasets_info])
     ax.set_ylabel("Test accuracy (%)")
-    ax.set_title("Accuracy vs matched ceiling", fontsize=11.5, pad=8)
+    ax.set_title("Competence", fontsize=11.5, pad=8)
 
     # Legend
     legend_handles = [
@@ -595,7 +595,7 @@ def figure2():
 
     ax.set_xlabel("$N_I$ (inhib. syn. per branch)")
     ax.set_ylabel("Test accuracy (%)")
-    ax.set_title("Inhibition dose response", fontsize=11.5, pad=8)
+    ax.set_title("Inhibition sweep", fontsize=11.5, pad=8)
     ax.legend(
         fontsize=7.8,
         loc="lower right",
@@ -649,7 +649,7 @@ def figure2():
     ax.axhline(0, color="black", lw=0.7, ls="--")
     ax.set_xlabel("$N_I$ (inhib. syn. per branch)")
     ax.set_ylabel("Shunting adv. (pp)")
-    ax.set_title("Shunting advantage", fontsize=11.5, pad=8)
+    ax.set_title("Shunting gain", fontsize=11.5, pad=8)
     ax.legend(fontsize=8.0, loc="upper right", handlelength=1.2)
 
     # ---- Panel D: Fashion-MNIST comparison ----
@@ -709,10 +709,10 @@ def figure2():
         ax.set_xticklabels([d[0] for d in fmnist_data], fontsize=8.2, rotation=25,
                            ha="right")
         ax.set_ylabel("Test accuracy (%)")
-        ax.set_title("Fashion-MNIST gap", fontsize=11.5, pad=8)
+        ax.set_title("F-MNIST gap", fontsize=11.5, pad=8)
         ax.set_ylim(70, 92)
 
-    fig.subplots_adjust(left=0.085, right=0.985, bottom=0.12, top=0.86, wspace=0.36, hspace=0.58)
+    fig.subplots_adjust(left=0.060, right=0.992, bottom=0.27, top=0.78, wspace=0.56)
     _save(fig, "fig2_competence_regime")
     plt.close(fig)
 
@@ -723,10 +723,10 @@ def figure2():
 def figure3():
     print("\n--- Figure 3: Gradient Fidelity ---")
     fig, axes = plt.subplots(
-        2,
-        2,
-        figsize=(7.2, 5.0),
-        gridspec_kw={"wspace": 0.40, "hspace": 0.58},
+        1,
+        4,
+        figsize=(11.7, 3.25),
+        gridspec_kw={"wspace": 0.54, "width_ratios": [1.00, 1.00, 1.05, 1.12]},
     )
     axes = axes.ravel()
 
@@ -862,18 +862,8 @@ def figure3():
     ax.set_ylabel("Reconstruction error")
     ax.set_yscale("log")
     ax.set_ylim(1e-10, 1e-4)
-    ax.set_title("Factorization check")
+    ax.set_title("Factorization")
     ax.grid(axis="y", alpha=0.24, linewidth=0.65)
-    ax.text(
-        0.04,
-        0.08,
-        "Autograd is\nreconstructed",
-        transform=ax.transAxes,
-        fontsize=8.2,
-        ha="left",
-        va="bottom",
-        bbox={"boxstyle": "round,pad=0.24", "fc": "white", "ec": "0.85", "alpha": 0.95},
-    )
 
     # ---- Panel B: Cosine similarity bars ----
     ax = axes[1]
@@ -912,7 +902,7 @@ def figure3():
         ax.set_xticklabels(core_labels, fontsize=9.0)
         ax.set_ylabel("Cosine similarity")
         n_label = min(ns) if ns else 0
-        ax.set_title(f"Final alignment (n={n_label})")
+        ax.set_title(f"Alignment (n={n_label})")
         ax.set_ylim(-0.06, max(0.18, np.nanmax(np.asarray(means) + np.asarray(errs)) + 0.05))
         ax.axhline(0, color="black", lw=0.4, ls="--")
         for bar_rect, val in zip(bars, means):
@@ -963,7 +953,7 @@ def figure3():
         ax.set_xticklabels(core_labels, fontsize=9.0)
         ax.set_ylabel(r"$|\log_{10}\|g_{\rm loc}\|/\|g_{\rm BP}\||$")
         n_label = min(ns) if ns else 0
-        ax.set_title(f"Scale mismatch (n={n_label})")
+        ax.set_title(f"Scale (n={n_label})")
         ax.set_ylim(0, max(0.65, np.nanmax(np.asarray(means) + np.asarray(errs)) + 0.08))
         for bar_rect, val in zip(bars, means):
             ax.text(
@@ -1030,7 +1020,7 @@ def figure3():
         ax.text(0.5, 0.5, "No trajectory data found", transform=ax.transAxes,
                 ha="center", va="center", fontsize=8, color="red")
 
-    fig.subplots_adjust(left=0.085, right=0.985, bottom=0.12, top=0.92, wspace=0.40, hspace=0.58)
+    fig.subplots_adjust(left=0.060, right=0.992, bottom=0.26, top=0.83, wspace=0.54)
     _save(fig, "fig3_gradient_fidelity")
     plt.close(fig)
 
