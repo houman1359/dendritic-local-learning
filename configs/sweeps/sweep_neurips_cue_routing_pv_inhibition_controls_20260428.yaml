@@ -1,0 +1,216 @@
+output_dir: "/n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/dendritic-local-learning/local_sweep_runs"
+
+outputs:
+  run_name: "cue_routing_pv_inhibition_controls_20260428"
+
+slurm_config:
+  account: "kempner_dev"
+  partition: "kempner_priority"
+  time: "08:00:00"
+  nodes: 1
+  ntasks_per_node: 1
+  gpus_per_node: 1
+  cpus_per_task: 8
+  mem: 32GB
+  max_concurrent_jobs: 64
+  modules_to_load: []
+  conda_env_path: ""
+  training_script: "src/dendritic_modeling/scripts/training/train_experiments.py"
+
+experiment_settings:
+  seeds_per_condition: 5
+  base_seed: 42
+  use_array_jobs: true
+
+configs:
+  - name: "cue_positive_shunting_standard_learned_i"
+    path: "drafts/dendritic-local-learning/configs/cue_routed_hard_learned_shunting_standard_pilot.yaml"
+    overrides:
+      model:
+        encoder:
+          params:
+            router_activation: "relu"
+        core:
+          transfer:
+            output_activation: "relu"
+
+  - name: "cue_positive_shunting_standard_no_i"
+    path: "drafts/dendritic-local-learning/configs/cue_routed_hard_learned_shunting_standard_pilot.yaml"
+    overrides:
+      model:
+        encoder:
+          params:
+            router_activation: "relu"
+        core:
+          connectivity:
+            ie_synapses_per_branch_per_layer: [0]
+          transfer:
+            output_activation: "relu"
+
+  - name: "cue_positive_shunting_rank1_learned_i"
+    path: "drafts/dendritic-local-learning/configs/cue_routed_hard_learned_shunting_localca_pilot.yaml"
+    overrides:
+      model:
+        encoder:
+          params:
+            router_activation: "relu"
+        core:
+          transfer:
+            output_activation: "relu"
+      training:
+        main:
+          common:
+            epochs: 140
+            patience: 35
+          learning_strategy_config:
+            error_broadcast_mode: "per_soma"
+            decoder_update_mode: "backprop"
+
+  - name: "cue_positive_shunting_rank1_no_i"
+    path: "drafts/dendritic-local-learning/configs/cue_routed_hard_learned_shunting_localca_pilot.yaml"
+    overrides:
+      model:
+        encoder:
+          params:
+            router_activation: "relu"
+        core:
+          connectivity:
+            ie_synapses_per_branch_per_layer: [0]
+          transfer:
+            output_activation: "relu"
+      training:
+        main:
+          common:
+            epochs: 140
+            patience: 35
+          learning_strategy_config:
+            error_broadcast_mode: "per_soma"
+            decoder_update_mode: "backprop"
+            inhibitory_homeostasis:
+              enabled: false
+
+  - name: "cue_positive_shunting_low_rank2_learned_i"
+    path: "drafts/dendritic-local-learning/configs/cue_routed_hard_learned_shunting_localca_pilot.yaml"
+    overrides:
+      model:
+        encoder:
+          params:
+            router_activation: "relu"
+        core:
+          transfer:
+            output_activation: "relu"
+      training:
+        main:
+          common:
+            epochs: 140
+            patience: 35
+          learning_strategy_config:
+            error_broadcast_mode: "low_rank"
+            broadcast_rank: 2
+            decoder_update_mode: "backprop"
+
+  - name: "cue_positive_shunting_low_rank2_no_i"
+    path: "drafts/dendritic-local-learning/configs/cue_routed_hard_learned_shunting_localca_pilot.yaml"
+    overrides:
+      model:
+        encoder:
+          params:
+            router_activation: "relu"
+        core:
+          connectivity:
+            ie_synapses_per_branch_per_layer: [0]
+          transfer:
+            output_activation: "relu"
+      training:
+        main:
+          common:
+            epochs: 140
+            patience: 35
+          learning_strategy_config:
+            error_broadcast_mode: "low_rank"
+            broadcast_rank: 2
+            decoder_update_mode: "backprop"
+            inhibitory_homeostasis:
+              enabled: false
+
+  - name: "cue_positive_shunting_pathway_vector_learned_i"
+    path: "drafts/dendritic-local-learning/configs/cue_routed_hard_learned_shunting_localca_pathway_vector_pilot.yaml"
+    overrides:
+      model:
+        encoder:
+          params:
+            router_activation: "relu"
+        core:
+          transfer:
+            output_activation: "relu"
+      training:
+        main:
+          common:
+            epochs: 140
+            patience: 35
+          learning_strategy_config:
+            decoder_update_mode: "backprop"
+
+  - name: "cue_positive_shunting_pathway_vector_no_i"
+    path: "drafts/dendritic-local-learning/configs/cue_routed_hard_learned_shunting_localca_pathway_vector_pilot.yaml"
+    overrides:
+      model:
+        encoder:
+          params:
+            router_activation: "relu"
+        core:
+          connectivity:
+            ie_synapses_per_branch_per_layer: [0]
+          transfer:
+            output_activation: "relu"
+      training:
+        main:
+          common:
+            epochs: 140
+            patience: 35
+          learning_strategy_config:
+            decoder_update_mode: "backprop"
+            inhibitory_homeostasis:
+              enabled: false
+
+  - name: "cue_positive_shunting_path_transport_learned_i"
+    path: "drafts/dendritic-local-learning/configs/cue_routed_hard_learned_shunting_localca_pilot.yaml"
+    overrides:
+      model:
+        encoder:
+          params:
+            router_activation: "relu"
+        core:
+          transfer:
+            output_activation: "relu"
+      training:
+        main:
+          common:
+            epochs: 140
+            patience: 35
+          learning_strategy_config:
+            error_broadcast_mode: "path_transport"
+            decoder_update_mode: "backprop"
+
+  - name: "cue_positive_shunting_path_transport_no_i"
+    path: "drafts/dendritic-local-learning/configs/cue_routed_hard_learned_shunting_localca_pilot.yaml"
+    overrides:
+      model:
+        encoder:
+          params:
+            router_activation: "relu"
+        core:
+          connectivity:
+            ie_synapses_per_branch_per_layer: [0]
+          transfer:
+            output_activation: "relu"
+      training:
+        main:
+          common:
+            epochs: 140
+            patience: 35
+          learning_strategy_config:
+            error_broadcast_mode: "path_transport"
+            decoder_update_mode: "backprop"
+            inhibitory_homeostasis:
+              enabled: false

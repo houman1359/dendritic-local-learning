@@ -83,14 +83,14 @@ def _heatmap(ax, frame: pd.DataFrame, title: str, cmap: str, center: float | Non
         linewidths=0.5,
         linecolor="white",
         square=False,
-        annot_kws={"fontsize": 8},
+        annot_kws={"fontsize": 8.6},
     )
     ax.collections[0].colorbar.outline.set_linewidth(0.4)
-    ax.collections[0].colorbar.ax.tick_params(labelsize=8, width=0.4, length=2)
-    ax.set_title(title, fontsize=11, pad=8)
-    ax.set_xlabel(r"$N_I$ per branch", fontsize=10)
-    ax.set_ylabel("Morphology", fontsize=10)
-    ax.tick_params(labelsize=9)
+    ax.collections[0].colorbar.ax.tick_params(labelsize=8.6, width=0.4, length=2)
+    ax.set_title(title, fontsize=11.5, pad=8)
+    ax.set_xlabel(r"$N_I$ per branch", fontsize=10.5)
+    ax.set_ylabel("Morphology", fontsize=10.5)
+    ax.tick_params(labelsize=9.4)
 
 
 def _load_selected_diagnostics() -> pd.DataFrame | None:
@@ -166,13 +166,13 @@ def build_figure(sweep_dir: Path = DEFAULT_SWEEP_DIR) -> tuple[plt.Figure, pd.Da
     fig, axes = plt.subplots(
         1,
         4,
-        figsize=(14.0, 3.4),
+        figsize=(9.4, 3.25),
         constrained_layout=True,
         gridspec_kw={"width_ratios": [1.12, 0.92, 1.0, 1.05]},
     )
 
     _heatmap(axes[0], gap, "Shunting advantage", "vlag", center=0.0)
-    axes[0].set_title("Gap: shunting - additive", fontsize=11, pad=8)
+    axes[0].set_title("Gap: shunting - additive", fontsize=11.5, pad=8)
 
     ax = axes[1]
     style_axis(ax, grid="x")
@@ -181,10 +181,10 @@ def build_figure(sweep_dir: Path = DEFAULT_SWEEP_DIR) -> tuple[plt.Figure, pd.Da
     colors = [COLORS["shunting"] if v > 0 else COLORS["additive"] for v in best_ie["gap"]]
     ax.barh(y, best_ie["ie"], color=colors, edgecolor="white", linewidth=0.5, height=0.56)
     ax.set_yticks(y)
-    ax.set_yticklabels(best_ie["branch_factors"], fontsize=8)
+    ax.set_yticklabels(best_ie["branch_factors"], fontsize=9)
     ax.invert_yaxis()
     ax.set_xlabel(r"Best $N_I$")
-    ax.set_title("Best inhibition by tree", fontsize=11, pad=8)
+    ax.set_title("Best inhibition by tree", fontsize=11.5, pad=8)
     for yi, (_, row) in enumerate(best_ie.iterrows()):
         ax.text(
             row["ie"] + 0.7,
@@ -192,7 +192,7 @@ def build_figure(sweep_dir: Path = DEFAULT_SWEEP_DIR) -> tuple[plt.Figure, pd.Da
             f"{100 * row['gap']:+.1f} pp",
             va="center",
             ha="left",
-            fontsize=7,
+            fontsize=8,
             color=COLORS["ink"],
         )
     ax.set_xlim(0, max(ie_order) + 11)
@@ -235,14 +235,14 @@ def build_figure(sweep_dir: Path = DEFAULT_SWEEP_DIR) -> tuple[plt.Figure, pd.Da
         x = np.arange(len(vals))
         ax.bar(x, vals, color=colors, edgecolor="white", linewidth=0.45, width=0.70)
         ax.set_xticks(x)
-        ax.set_xticklabels(labels, fontsize=6.8)
+        ax.set_xticklabels(labels, fontsize=7.6)
         ax.set_ylabel("Path-gain CV")
-        ax.set_title("Representative credit geometry", fontsize=11, pad=8)
+        ax.set_title("Representative credit geometry", fontsize=11.5, pad=8)
         handles = [
             plt.Line2D([0], [0], color=COLOR_ADDITIVE, lw=5, label="Additive"),
             plt.Line2D([0], [0], color=COLOR_SHUNTING, lw=5, label="Shunting"),
         ]
-        ax.legend(handles=handles, loc="upper right", fontsize=6.8, frameon=False)
+        ax.legend(handles=handles, loc="upper right", fontsize=7.6, frameon=False)
     else:
         ax.text(
             0.5,
@@ -251,12 +251,12 @@ def build_figure(sweep_dir: Path = DEFAULT_SWEEP_DIR) -> tuple[plt.Figure, pd.Da
             ha="center",
             va="center",
             transform=ax.transAxes,
-            fontsize=8.2,
+            fontsize=9.0,
             color=COLORS["mute"],
         )
         ax.set_xticks([])
         ax.set_yticks([])
-        ax.set_title("Representative credit geometry", fontsize=11, pad=8)
+        ax.set_title("Representative credit geometry", fontsize=11.5, pad=8)
 
     ax = axes[3]
     style_axis(ax, grid="y")
@@ -272,12 +272,12 @@ def build_figure(sweep_dir: Path = DEFAULT_SWEEP_DIR) -> tuple[plt.Figure, pd.Da
             label=f"depth {depth}",
         )
     ax.axhline(0.0, color="black", linewidth=1.0, linestyle="--", alpha=0.6)
-    ax.set_title("Average gain by depth", fontsize=11, pad=8)
-    ax.set_xlabel(r"$N_I$ per branch", fontsize=10)
-    ax.set_ylabel("Shunting - additive accuracy", fontsize=10)
+    ax.set_title("Average gain by depth", fontsize=11.5, pad=8)
+    ax.set_xlabel(r"$N_I$ per branch", fontsize=10.5)
+    ax.set_ylabel("Shunting - additive accuracy", fontsize=10.5)
     ax.set_xticks(ie_order)
-    ax.tick_params(labelsize=9)
-    ax.legend(fontsize=8, loc="best")
+    ax.tick_params(labelsize=9.4)
+    ax.legend(fontsize=8.8, loc="best")
     for _, row in depth_peak.iterrows():
         ax.scatter(
             [row["ie"]],
@@ -290,7 +290,7 @@ def build_figure(sweep_dir: Path = DEFAULT_SWEEP_DIR) -> tuple[plt.Figure, pd.Da
         )
 
     for label, ax in zip(["A", "B", "C", "D"], axes.flat):
-        panel_label(ax, label, x=-0.16, y=1.05, fontsize=11)
+        panel_label(ax, label, x=-0.16, y=1.05, fontsize=13)
 
     grouped.to_csv(ANALYSIS_DIR / "morphology_ie_regime_grouped.csv", index=False)
     df.to_csv(ANALYSIS_DIR / "morphology_ie_regime_runs.csv", index=False)

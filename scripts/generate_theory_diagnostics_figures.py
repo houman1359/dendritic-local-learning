@@ -56,12 +56,12 @@ def _setup_style() -> None:
     apply_neurips_style()
     plt.rcParams.update(
         {
-            "font.size": 8.2,
-            "axes.labelsize": 8.8,
-            "axes.titlesize": 9.0,
-            "xtick.labelsize": 7.4,
-            "ytick.labelsize": 7.4,
-            "legend.fontsize": 6.8,
+            "font.size": 10.2,
+            "axes.labelsize": 10.6,
+            "axes.titlesize": 10.8,
+            "xtick.labelsize": 9.0,
+            "ytick.labelsize": 9.0,
+            "legend.fontsize": 8.4,
             "legend.frameon": True,
             "legend.framealpha": 0.96,
             "legend.edgecolor": "#D0D5DD",
@@ -71,7 +71,7 @@ def _setup_style() -> None:
     )
 
 
-def _panel(ax: plt.Axes, label: str, x: float = -0.18, y: float = 1.12) -> None:
+def _panel(ax: plt.Axes, label: str, x: float = -0.13, y: float = 1.20) -> None:
     panel_label(ax, label, x=x, y=y)
 
 
@@ -132,7 +132,7 @@ def _draw_gain_tree(
             rf"$\alpha_{idx + 1}$",
             ha="right",
             va="center",
-            fontsize=6.5,
+            fontsize=7.4,
             color=COLORS["ink"],
         )
     ax.add_patch(
@@ -145,14 +145,14 @@ def _draw_gain_tree(
             zorder=5,
         )
     )
-    ax.text(soma[0], soma[1], r"$\delta_0$", ha="center", va="center", fontsize=6.0)
+    ax.text(soma[0], soma[1], r"$\delta_0$", ha="center", va="center", fontsize=7.0)
     ax.text(
         x0 + 0.20,
         0.94,
         title,
         ha="center",
         va="center",
-        fontsize=7.5,
+        fontsize=8.5,
         color=color,
         fontweight="bold",
     )
@@ -211,14 +211,14 @@ def _plot_path_gain_map(ax: plt.Axes, summary: pd.DataFrame) -> None:
         r"Path colors show $\log_{10}\alpha_n$ at matched $N_I{=}5$",
         ha="center",
         va="center",
-        fontsize=6.3,
+        fontsize=7.4,
         color=COLORS["mute"],
     )
     sm = plt.cm.ScalarMappable(norm=norm, cmap=cmap)
     cbar = plt.colorbar(sm, ax=ax, fraction=0.040, pad=0.01)
-    cbar.set_label(r"$\log_{10}\alpha_n$", fontsize=6.5)
-    cbar.ax.tick_params(labelsize=6, width=0.4, length=2)
-    ax.set_title("Dendritic path-gain field")
+    cbar.set_label(r"$\log_{10}\alpha_n$", fontsize=7.5)
+    cbar.ax.tick_params(labelsize=7.0, width=0.4, length=2)
+    ax.set_title("Path-gain field")
 
 
 def _plot_error_compressibility(ax: plt.Axes, rank_summary: pd.DataFrame) -> None:
@@ -260,7 +260,7 @@ def _plot_error_compressibility(ax: plt.Axes, rank_summary: pd.DataFrame) -> Non
     ax.set_xticklabels(labels)
     ax.set_ylabel("Rank-1 residual")
     ax.set_ylim(0, 1.02)
-    ax.set_title("Exact-error compressibility")
+    ax.set_title("Error compressibility")
     for rect, mean, prank, prank_std in zip(bars, means, pranks, prank_stds):
         ax.text(
             rect.get_x() + rect.get_width() / 2,
@@ -268,7 +268,7 @@ def _plot_error_compressibility(ax: plt.Axes, rank_summary: pd.DataFrame) -> Non
             f"{mean:.2f}",
             ha="center",
             va="bottom",
-            fontsize=6.8,
+            fontsize=7.8,
         )
         ax.text(
             rect.get_x() + rect.get_width() / 2,
@@ -276,7 +276,7 @@ def _plot_error_compressibility(ax: plt.Axes, rank_summary: pd.DataFrame) -> Non
             f"rank\n{prank:.1f}$\\pm${prank_std:.1f}",
             ha="center",
             va="bottom",
-            fontsize=6.2,
+            fontsize=7.2,
             color="white",
             fontweight="bold",
         )
@@ -324,7 +324,7 @@ def _plot_compartment_error_fidelity(ax: plt.Axes, summary: pd.DataFrame) -> Non
         )
         ax.fill_between(x, y - err, y + err, color=color, alpha=0.10, linewidth=0)
 
-    ax.set_xlabel("$N_I$ (inhibitory synapses / branch)")
+    ax.set_xlabel(r"$N_I$ per branch")
     ax.set_ylabel(r"Cosine$(e_n,\partial L/\partial V_n)$")
     ax.set_title("Broadcast fidelity")
     ax.set_xticks([0, 5, 10, 20, 40])
@@ -332,7 +332,7 @@ def _plot_compartment_error_fidelity(ax: plt.Axes, summary: pd.DataFrame) -> Non
     ax.legend(
         loc="lower right",
         ncol=1,
-        fontsize=5.8,
+        fontsize=7.0,
         handlelength=1.1,
         handletextpad=0.3,
         columnspacing=0.6,
@@ -549,15 +549,15 @@ def _plot_oracle_learning(
         )
         ax.fill_between(x2, y2 - err2, y2 + err2, color=color, alpha=0.08, linewidth=0)
 
-    ax.set_xlabel("$N_I$ (inhibitory synapses / branch)")
+    ax.set_xlabel(r"$N_I$ per branch")
     ax.set_ylabel("Test accuracy (%)")
-    ax.set_title("Transported error improves learning")
+    ax.set_title("Transported learning")
     ax.set_xticks([0, 5, 10, 20, 40])
     ax.set_ylim(20, 101)
     ax.legend(
         loc="lower right",
         ncol=1,
-        fontsize=5.9,
+        fontsize=7.0,
         handlelength=1.1,
         handletextpad=0.25,
         borderpad=0.22,
@@ -582,15 +582,15 @@ def build_figure(
     fig, axes = plt.subplots(
         1,
         4,
-        figsize=(14.4, 3.25),
-        gridspec_kw={"wspace": 0.46, "width_ratios": [1.08, 0.86, 1.05, 1.12]},
+        figsize=(10.2, 3.15),
+        gridspec_kw={"wspace": 0.56, "width_ratios": [1.08, 0.86, 1.05, 1.12]},
     )
 
     _plot_path_gain_map(axes[0], summary)
     _plot_error_compressibility(axes[1], rank_summary)
     _plot_compartment_error_fidelity(axes[2], summary)
     _plot_oracle_learning(axes[3], summary, oracle_summary)
-    fig.subplots_adjust(left=0.052, right=0.992, top=0.86, bottom=0.24, wspace=0.46)
+    fig.subplots_adjust(left=0.060, right=0.992, top=0.84, bottom=0.25, wspace=0.56)
     return fig
 
 

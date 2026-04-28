@@ -61,14 +61,14 @@ def apply_neurips_style():
             "DejaVu Sans", "Bitstream Vera Sans",
         ],
         "mathtext.fontset": "dejavusans",
-        "font.size": 8.5,
-        "axes.labelsize": 9.0,
-        "axes.titlesize": 9.5,
+        "font.size": 10.3,
+        "axes.labelsize": 10.8,
+        "axes.titlesize": 10.9,
         "axes.titleweight": "bold",
-        "xtick.labelsize": 7.8,
-        "ytick.labelsize": 7.8,
-        "legend.fontsize": 7.5,
-        "legend.title_fontsize": 8.0,
+        "xtick.labelsize": 9.2,
+        "ytick.labelsize": 9.2,
+        "legend.fontsize": 8.6,
+        "legend.title_fontsize": 8.9,
 
         # Lines / markers
         "lines.linewidth": 1.6,
@@ -141,7 +141,7 @@ def panel_label(ax, label, x=-0.11, y=1.05, **kwargs):
 
     Default position is outside upper-left, suitable for most axes.
     """
-    fontsize = kwargs.pop("fontsize", 12)
+    fontsize = kwargs.pop("fontsize", 14.0)
     color = kwargs.pop("color", COLORS["ink"])
     ax.text(
         x, y, label,

@@ -168,7 +168,7 @@ def generate_cifar_figure(summary_dir: Path) -> bool:
         return False
 
     apply_neurips_style()
-    fig, axes = plt.subplots(1, 3, figsize=(13.4, 3.25))
+    fig, axes = plt.subplots(1, 3, figsize=(9.2, 3.15))
 
     _dot_interval_panel(
         axes[0],
@@ -211,9 +211,9 @@ def generate_cifar_figure(summary_dir: Path) -> bool:
     )
 
     for label, ax in zip("ABC", axes):
-        panel_label(ax, label, x=-0.14, y=1.08)
+        panel_label(ax, label, x=-0.14, y=1.08, fontsize=13)
 
-    fig.subplots_adjust(left=0.06, right=0.995, top=0.78, bottom=0.30, wspace=0.34)
+    fig.subplots_adjust(left=0.07, right=0.995, top=0.80, bottom=0.33, wspace=0.36)
     _save(fig, "fig_s_cifar10_control_ladder_20260427")
     plt.close(fig)
     return True
@@ -226,7 +226,7 @@ def generate_double_cifar_figure(summary_dir: Path) -> bool:
         return False
 
     apply_neurips_style()
-    fig, axes = plt.subplots(1, 3, figsize=(13.4, 3.25))
+    fig, axes = plt.subplots(1, 3, figsize=(9.2, 3.15))
 
     _dot_interval_panel(
         axes[0],
@@ -262,9 +262,9 @@ def generate_double_cifar_figure(summary_dir: Path) -> bool:
     )
 
     for label, ax in zip("ABC", axes):
-        panel_label(ax, label, x=-0.14, y=1.08)
+        panel_label(ax, label, x=-0.14, y=1.08, fontsize=13)
 
-    fig.subplots_adjust(left=0.06, right=0.995, top=0.78, bottom=0.30, wspace=0.34)
+    fig.subplots_adjust(left=0.07, right=0.995, top=0.80, bottom=0.33, wspace=0.36)
     _save(fig, "fig_s_double_cifar_routed_screen_20260427")
     plt.close(fig)
     return True

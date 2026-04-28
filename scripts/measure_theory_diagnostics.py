@@ -514,6 +514,50 @@ def _factor_tensor(
     return torch.full_like(reference, float(factor))
 
 
+def _log_gain_compression_stats(
+    path_gain: torch.Tensor,
+    path_gain_no_inhibition: torch.Tensor,
+) -> dict[str, float]:
+    """Direct diagnostic for Prop. 3.
+
+    Prop. 3 writes the inhibited log path gain as z' = z - beta and predicts
+    compression when Cov(z, beta) - 0.5 Var(beta) is positive.
+    """
+    eps = 1e-12
+    z = torch.log(path_gain_no_inhibition.clamp_min(eps)).reshape(-1)
+    z_prime = torch.log(path_gain.clamp_min(eps)).reshape(-1)
+    beta = (z - z_prime).reshape(-1)
+    valid = torch.isfinite(z) & torch.isfinite(z_prime) & torch.isfinite(beta)
+    if int(valid.sum().item()) < 2:
+        return {
+            "log_path_gain_var_no_inhibition": float("nan"),
+            "log_path_gain_var": float("nan"),
+            "log_inhibitory_attenuation_var": float("nan"),
+            "log_gain_attenuation_cov": float("nan"),
+            "log_gain_compression_margin": float("nan"),
+            "log_path_gain_var_reduction": float("nan"),
+        }
+
+    z = z[valid]
+    z_prime = z_prime[valid]
+    beta = beta[valid]
+    z_centered = z - z.mean()
+    beta_centered = beta - beta.mean()
+    var_z = float((z_centered.square()).mean().item())
+    var_z_prime = float(((z_prime - z_prime.mean()).square()).mean().item())
+    var_beta = float((beta_centered.square()).mean().item())
+    cov_z_beta = float((z_centered * beta_centered).mean().item())
+    margin = cov_z_beta - 0.5 * var_beta
+    return {
+        "log_path_gain_var_no_inhibition": var_z,
+        "log_path_gain_var": var_z_prime,
+        "log_inhibitory_attenuation_var": var_beta,
+        "log_gain_attenuation_cov": cov_z_beta,
+        "log_gain_compression_margin": margin,
+        "log_path_gain_var_reduction": var_z - var_z_prime,
+    }
+
+
 def _inhibitory_conductance_stats(
     helper: LocalCreditAssignment,
     rec: dict[str, Any],
@@ -761,6 +805,7 @@ def _error_rows(
         ).clamp_min(1e-12)
         path_gain_suppression = pf / pf_no_i
         path_gain_log_suppression = torch.log(pf_no_i) - torch.log(pf)
+        log_gain_stats = _log_gain_compression_stats(pf, pf_no_i)
         inhibitory_conductance_mean, inhibitory_conductance_fraction = (
             _inhibitory_conductance_stats(helper, rec, exact_error)
         )
@@ -803,6 +848,7 @@ def _error_rows(
                 "path_gain_log_suppression_mean": float(
                     path_gain_log_suppression.mean().item()
                 ),
+                **log_gain_stats,
                 "inhibitory_conductance_mean": inhibitory_conductance_mean,
                 "inhibitory_conductance_fraction": inhibitory_conductance_fraction,
                 "numel": int(exact_error.numel()),
@@ -995,6 +1041,15 @@ def summarize_run(
             path_df,
             "path_gain_log_suppression_mean",
         )
+        for col in [
+            "log_path_gain_var_no_inhibition",
+            "log_path_gain_var",
+            "log_inhibitory_attenuation_var",
+            "log_gain_attenuation_cov",
+            "log_gain_compression_margin",
+            "log_path_gain_var_reduction",
+        ]:
+            summary[col] = _weighted_mean(path_df, col)
         summary["inhibitory_conductance_mean"] = _weighted_mean(
             path_df,
             "inhibitory_conductance_mean",

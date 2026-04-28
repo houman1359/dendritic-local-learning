@@ -149,6 +149,21 @@ def _pathway_spec(config) -> RoutedPathwaySpec:
     )
 
 
+def _context_indices(config, input_dim: int) -> list[int]:
+    params = config.model.encoder.params
+    shared_indices = list(getattr(params, "shared_indices", []) or [])
+    if len(shared_indices) == 2:
+        return [int(idx) for idx in shared_indices]
+    if input_dim >= 2:
+        return [0, 1]
+    raise ValueError("Cannot infer two-dimensional context cue from the input.")
+
+
+def _context_selects_single_path(config) -> bool:
+    dataset_name = str(config.data.dataset_name)
+    return dataset_name in {"cue_integration", "contextual_stream_gain_shift"}
+
+
 def _first_inhibitory_branch_pair(model) -> tuple[str, DendriticBranchLayer, str, DendriticBranchLayer | None]:
     layers = [
         (name, module)
@@ -269,7 +284,9 @@ def analyze_run(run_dir: Path, out_dir: Path, max_samples: int) -> dict[str, Any
         else None
     )
 
-    contexts = raw_x[:, :2].argmax(dim=1)
+    context_indices = _context_indices(config, input_dim=raw_x.size(1))
+    contexts = raw_x[:, context_indices].argmax(dim=1)
+    context_selects_single_path = _context_selects_single_path(config)
     branch_factor = 2
     if inh_conductance.size(1) % branch_factor != 0:
         raise ValueError(
@@ -288,8 +305,18 @@ def analyze_run(run_dir: Path, out_dir: Path, max_samples: int) -> dict[str, Any
     path0_signal = act_by_branch[:, spec.path0_signal].sum(dim=1).mean(dim=(1, 2))
     path1_signal = act_by_branch[:, spec.path1_signal].sum(dim=1).mean(dim=(1, 2))
 
-    relevant = torch.where(contexts == 0, path0_total, path1_total)
-    irrelevant = torch.where(contexts == 0, path1_total, path0_total)
+    if context_selects_single_path:
+        relevant = torch.where(contexts == 0, path0_total, path1_total)
+        irrelevant = torch.where(contexts == 0, path1_total, path0_total)
+        irrelevant_over_relevant = _safe_float(
+            irrelevant.mean() / relevant.mean().clamp_min(1e-12)
+        )
+        irrelevant_inhibition_mean = _safe_float(irrelevant.mean())
+        relevant_inhibition_mean = _safe_float(relevant.mean())
+    else:
+        irrelevant_over_relevant = float("nan")
+        irrelevant_inhibition_mean = float("nan")
+        relevant_inhibition_mean = float("nan")
     context_pred = (path0_total > path1_total).long()
     context_from_inhibition_acc = (context_pred == contexts).float().mean()
     context_from_inhibition_best = torch.maximum(
@@ -380,16 +407,17 @@ def analyze_run(run_dir: Path, out_dir: Path, max_samples: int) -> dict[str, Any
         "distal_layer": distal_name,
         "soma_layer": soma_name,
         "n_samples": int(raw_x.size(0)),
+        "dataset": str(config.data.dataset_name),
+        "context_indices": context_indices,
+        "context_selects_single_path": context_selects_single_path,
         "context_counts": torch.bincount(contexts, minlength=2).tolist(),
         "path0_total_mean": _safe_float(path0_total.mean()),
         "path1_total_mean": _safe_float(path1_total.mean()),
         "path0_signal_mean": _safe_float(path0_signal.mean()),
         "path1_signal_mean": _safe_float(path1_signal.mean()),
-        "irrelevant_inhibition_mean": _safe_float(irrelevant.mean()),
-        "relevant_inhibition_mean": _safe_float(relevant.mean()),
-        "irrelevant_over_relevant": _safe_float(
-            irrelevant.mean() / relevant.mean().clamp_min(1e-12)
-        ),
+        "irrelevant_inhibition_mean": irrelevant_inhibition_mean,
+        "relevant_inhibition_mean": relevant_inhibition_mean,
+        "irrelevant_over_relevant": irrelevant_over_relevant,
         "context_from_inhibition_accuracy": _safe_float(context_from_inhibition_acc),
         "context_from_inhibition_best_polarity_accuracy": _safe_float(
             context_from_inhibition_best
@@ -411,8 +439,13 @@ def analyze_run(run_dir: Path, out_dir: Path, max_samples: int) -> dict[str, Any
                 f"- Distal layer: `{distal_name}`",
                 f"- Samples: {diagnostics['n_samples']}",
                 f"- Context counts: {diagnostics['context_counts']}",
+                f"- Context selects a single relevant path: "
+                f"{diagnostics['context_selects_single_path']}",
                 f"- Irrelevant/relevant inhibitory activation: "
-                f"{diagnostics['irrelevant_over_relevant']:.3f}",
+                f"{diagnostics['irrelevant_over_relevant']:.3f}"
+                if diagnostics["context_selects_single_path"]
+                else "- Irrelevant/relevant inhibitory activation: n/a "
+                "(both routed streams are task-relevant)",
                 f"- Context decoded from pathway-inhibition balance: "
                 f"{diagnostics['context_from_inhibition_accuracy']:.3f}",
                 f"- Context decoded from pathway-inhibition balance, best polarity: "

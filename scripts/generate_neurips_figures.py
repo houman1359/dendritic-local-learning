@@ -135,7 +135,7 @@ DATASET_LABEL = {
 
 def _panel(ax, label, x=-0.18, y=1.12):
     """Place bold panel label (A, B, C, ...) well above the axes to avoid title overlap."""
-    ax.text(x, y, label, transform=ax.transAxes, fontsize=11,
+    ax.text(x, y, label, transform=ax.transAxes, fontsize=13,
             fontweight="bold", va="top", ha="left")
 
 
@@ -428,7 +428,7 @@ def figure2():
     fig, axes = plt.subplots(
         1,
         4,
-        figsize=(14.4, 3.25),
+        figsize=(9.2, 3.15),
         gridspec_kw={"wspace": 0.42, "width_ratios": [1.10, 1.12, 1.0, 0.98]},
     )
 
@@ -550,7 +550,7 @@ def figure2():
     ]
     ax.legend(
         handles=legend_handles,
-        fontsize=6.4,
+        fontsize=7.5,
         loc="upper center",
         bbox_to_anchor=(0.50, 1.02),
         ncol=3,
@@ -593,7 +593,7 @@ def figure2():
     ax.set_ylabel("Test accuracy (%)")
     ax.set_title("Dose-response to inhibition", fontsize=9.5)
     ax.legend(
-        fontsize=6.1,
+        fontsize=7.2,
         loc="lower right",
         ncol=2,
         handlelength=1.2,
@@ -630,7 +630,7 @@ def figure2():
     ax.set_xlabel("$N_I$ (inhib. syn. per branch)")
     ax.set_ylabel("Shunting adv. (pp)")
     ax.set_title("Shunting advantage", fontsize=9.5)
-    ax.legend(fontsize=6.4, loc="upper right", handlelength=1.2)
+    ax.legend(fontsize=7.4, loc="upper right", handlelength=1.2)
 
     # ---- Panel D: Fashion-MNIST comparison ----
     ax = axes[3]
@@ -684,15 +684,15 @@ def figure2():
                    edgecolor="white", lw=0.3, hatch=hatch,
                    capsize=2, error_kw={"lw": 0.6})
             ax.text(i, val + err + 0.5, f"{val:.1f}", ha="center", va="bottom",
-                    fontsize=6.2)
+                    fontsize=7.2)
         ax.set_xticks(x_pos)
-        ax.set_xticklabels([d[0] for d in fmnist_data], fontsize=6.5, rotation=25,
+        ax.set_xticklabels([d[0] for d in fmnist_data], fontsize=7.5, rotation=25,
                            ha="right")
         ax.set_ylabel("Test accuracy (%)")
         ax.set_title("Fashion-MNIST gap", fontsize=9.5)
         ax.set_ylim(70, 92)
 
-    fig.subplots_adjust(left=0.052, right=0.992, bottom=0.24, top=0.86, wspace=0.42)
+    fig.subplots_adjust(left=0.065, right=0.992, bottom=0.25, top=0.84, wspace=0.44)
     _save(fig, "fig2_competence_regime")
     plt.close(fig)
 
@@ -705,8 +705,8 @@ def figure3():
     fig, axes = plt.subplots(
         1,
         4,
-        figsize=(14.4, 3.25),
-        gridspec_kw={"wspace": 0.42, "width_ratios": [0.95, 1.02, 1.02, 1.05]},
+        figsize=(10.2, 3.15),
+        gridspec_kw={"wspace": 0.50, "width_ratios": [0.95, 1.02, 1.02, 1.05]},
     )
 
     def _load_gradient_trajectory(rule_variant="5f"):
@@ -812,14 +812,14 @@ def figure3():
     ax.set_ylabel("Reconstruction error")
     ax.set_yscale("log")
     ax.set_ylim(1e-10, 1e-4)
-    ax.set_title("Exact factorization")
+    ax.set_title("Factorization check")
     ax.grid(axis="y", alpha=0.20, linewidth=0.5)
     ax.text(
         0.04,
         0.08,
         "Autograd is\nreconstructed",
         transform=ax.transAxes,
-        fontsize=6.8,
+        fontsize=7.7,
         ha="left",
         va="bottom",
         bbox={"boxstyle": "round,pad=0.24", "fc": "white", "ec": "0.85", "alpha": 0.95},
@@ -846,9 +846,9 @@ def figure3():
         width=0.58,
     )
     ax.set_xticks(x_pos)
-    ax.set_xticklabels([c[0] for c in conditions], fontsize=7.5)
+    ax.set_xticklabels([c[0] for c in conditions], fontsize=8.2)
     ax.set_ylabel("Cosine similarity")
-    ax.set_title("Directional alignment to backprop")
+    ax.set_title("Alignment")
     ax.set_ylim(-0.06, 0.25)
     ax.axhline(0, color="black", lw=0.4, ls="--")
     for bar_rect, (_, val, _) in zip(bars, conditions):
@@ -860,7 +860,7 @@ def figure3():
             f"{val:.3f}",
             ha="center",
             va=va,
-            fontsize=6.5,
+            fontsize=7.4,
         )
 
     # ---- Panel C: Scale mismatch ----
@@ -883,9 +883,9 @@ def figure3():
         width=0.58,
     )
     ax.set_xticks(x_pos)
-    ax.set_xticklabels([c[0] for c in scale_conditions], fontsize=7.5)
+    ax.set_xticklabels([c[0] for c in scale_conditions], fontsize=8.2)
     ax.set_ylabel(r"$|\log_{10}\|g_{\rm loc}\|/\|g_{\rm BP}\||$")
-    ax.set_title("Gradient scale mismatch")
+    ax.set_title("Scale mismatch")
     ax.set_ylim(0, 2.45)
     for bar_rect, (_, val, _) in zip(bars, scale_conditions):
         ax.text(
@@ -894,7 +894,7 @@ def figure3():
             f"{val:.3f}" if val < 0.2 else f"{val:.2f}",
             ha="center",
             va="bottom",
-            fontsize=6.5,
+            fontsize=7.4,
         )
 
     # ---- Panel D: Nonzero-gradient norm dynamics ----
@@ -943,13 +943,13 @@ def figure3():
         ax.set_yscale("log")
         ax.set_xlabel("Epoch")
         ax.set_ylabel("Full gradient norm")
-        ax.set_title("Gradient norms over learning")
-        ax.legend(loc="upper left", fontsize=5.8, frameon=False, ncol=1)
+        ax.set_title("Gradient norms")
+        ax.legend(loc="upper left", fontsize=6.8, frameon=False, ncol=1)
     else:
         ax.text(0.5, 0.5, "No trajectory data found", transform=ax.transAxes,
                 ha="center", va="center", fontsize=8, color="red")
 
-    fig.subplots_adjust(left=0.052, right=0.992, bottom=0.24, top=0.86, wspace=0.42)
+    fig.subplots_adjust(left=0.060, right=0.992, bottom=0.25, top=0.84, wspace=0.50)
     _save(fig, "fig3_gradient_fidelity")
     plt.close(fig)
 
