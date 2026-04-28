@@ -10,7 +10,7 @@ This script still contains a few legacy helper panels, but by default it writes
 only the figures that are referenced by `local_credit_assignment_body.tex`.
 
   Main:
-    fig2_competence_regime.pdf     (3 panels: multi-benchmark bars, IE dose-response, shunting advantage)
+    fig2_competence_regime.pdf     (4 panels: competence, IE dose-response, shunting advantage, F-MNIST)
     fig3_gradient_fidelity.pdf     (4 panels: cosine, gradient norms, alignment dynamics, factorization)
     fig_additional_stress_tests.pdf
   Appendix:
@@ -552,16 +552,20 @@ def figure2():
         mpatches.Patch(color=COLOR_SHUNTING, label="Shunt. (local)"),
         mpatches.Patch(color=COLOR_ADDITIVE, label="Add. (local)"),
     ]
-    fig.legend(
+    ax.legend(
         handles=legend_handles,
-        fontsize=9.2,
-        loc="upper center",
-        bbox_to_anchor=(0.50, 0.992),
-        ncol=3,
-        frameon=False,
+        fontsize=7.6,
+        loc="lower left",
+        bbox_to_anchor=(0.02, 0.03),
+        ncol=1,
+        frameon=True,
+        framealpha=0.86,
+        facecolor="white",
+        edgecolor="0.85",
         handlelength=1.0,
         handletextpad=0.35,
-        columnspacing=0.9,
+        borderpad=0.25,
+        labelspacing=0.25,
     )
 
     all_vals = [d[1]*100 for d in datasets_info if d[1]] + \
@@ -656,15 +660,15 @@ def figure2():
     ax = axes[3]
     _panel(ax, "D")
 
-    fmnist_data = []
+    fmnist_data = {}
     if competence is not None:
         for ct, label, color in [
             ("dendritic_shunting", "Shunt.", COLOR_SHUNTING),
             ("dendritic_additive", "Add.", COLOR_ADDITIVE),
         ]:
             for strat, hatch, suffix in [
-                ("standard", None, " BP"),
-                ("local_ca", "//", " local"),
+                ("standard", None, "BP"),
+                ("local_ca", "//", "Local"),
             ]:
                 sub = competence[
                     (competence["dataset"] == "fashion_mnist")
@@ -672,47 +676,68 @@ def figure2():
                     & (competence["strategy"] == strat)
                 ]
                 if len(sub):
-                    fmnist_data.append((
-                        label + suffix,
+                    fmnist_data[(label, suffix)] = (
                         float(sub.iloc[0]["test_accuracy_mean"]) * 100,
                         float(sub.iloc[0]["test_accuracy_std"]) * 100,
                         color, hatch,
-                    ))
+                    )
     elif fmnist is not None:
         for ct, label, color in [
             ("dendritic_shunting", "Shunt.", COLOR_SHUNTING),
             ("dendritic_additive", "Add.", COLOR_ADDITIVE),
         ]:
             for strat, hatch, suffix in [
-                ("standard", None, " BP"),
-                ("local_ca", "//", " local"),
+                ("standard", None, "BP"),
+                ("local_ca", "//", "Local"),
             ]:
                 sub = fmnist[(fmnist["network_type"] == ct) & (fmnist["strategy"] == strat)]
                 if len(sub):
-                    fmnist_data.append((
-                        label + suffix,
+                    fmnist_data[(label, suffix)] = (
                         sub.iloc[0]["test_accuracy_mean"] * 100,
                         sub.iloc[0]["test_accuracy_std"] * 100,
                         color, hatch,
-                    ))
+                    )
 
     if fmnist_data:
-        x_pos = np.arange(len(fmnist_data))
-        for i, (_lbl, val, err, color, hatch) in enumerate(fmnist_data):
-            alpha = 1.0 if hatch is None else 0.55
-            ax.bar(i, val, 0.65, yerr=err, color=color, alpha=alpha,
-                   edgecolor="white", lw=0.45, hatch=hatch,
-                   capsize=2.2, error_kw={"lw": 0.85})
-            ax.text(i, val + err + 0.5, f"{val:.1f}", ha="center", va="bottom",
-                    fontsize=8.0)
-        ax.set_xticks(x_pos)
-        ax.set_xticklabels([d[0] for d in fmnist_data], fontsize=8.2, rotation=25,
-                           ha="right")
+        group_centers = np.array([0.0, 1.0])
+        bar_offsets = {"BP": -0.17, "Local": 0.17}
+        for gi, core_label in enumerate(["Shunt.", "Add."]):
+            for strat_label in ["BP", "Local"]:
+                entry = fmnist_data.get((core_label, strat_label))
+                if entry is None:
+                    continue
+                val, err, color, hatch = entry
+                xpos = group_centers[gi] + bar_offsets[strat_label]
+                alpha = 1.0 if hatch is None else 0.55
+                ax.bar(xpos, val, 0.30, yerr=err, color=color, alpha=alpha,
+                       edgecolor="white", lw=0.45, hatch=hatch,
+                       capsize=2.2, error_kw={"lw": 0.85})
+                ax.text(xpos, val + err + 0.5, f"{val:.1f}", ha="center", va="bottom",
+                        fontsize=8.0)
+        ax.set_xticks(group_centers)
+        ax.set_xticklabels(["Shunt.", "Add."], fontsize=8.4)
         ax.set_ylabel("Test accuracy (%)")
         ax.set_title("F-MNIST gap", fontsize=11.5, pad=8)
+        ax.legend(
+            handles=[
+                mpatches.Patch(facecolor="0.65", edgecolor="white", label="BP"),
+                mpatches.Patch(facecolor="0.65", edgecolor="white", hatch="//",
+                               alpha=0.55, label="LocalCA"),
+            ],
+            fontsize=7.4,
+            loc="upper left",
+            frameon=True,
+            framealpha=0.86,
+            facecolor="white",
+            edgecolor="0.85",
+            borderpad=0.25,
+            handlelength=1.0,
+            handletextpad=0.35,
+            labelspacing=0.25,
+        )
         ax.set_ylim(70, 92)
 
-    fig.subplots_adjust(left=0.060, right=0.992, bottom=0.27, top=0.78, wspace=0.56)
+    fig.subplots_adjust(left=0.060, right=0.992, bottom=0.24, top=0.84, wspace=0.56)
     _save(fig, "fig2_competence_regime")
     plt.close(fig)
 
