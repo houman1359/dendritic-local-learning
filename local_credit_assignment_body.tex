@@ -18,7 +18,7 @@ Approximating that compartment error with a broadcast signal yields a theorem-fa
 The central finding is mechanistic: shunting can make low-bandwidth broadcast useful by improving the compressibility of the conductance-stage path-gain field.
 Dendritic branching creates multiple error paths from distal synapses to the soma. Excitatory and inhibitory synapse banks set the conductance state of each compartment. Shunting makes inhibitory conductance enter the denominator, so inhibition changes input resistance and therefore the gain of every upstream path that passes through that compartment. This does not mean inhibition always helps. It helps rank-1 broadcast when it attenuates high-gain paths more than low-gain paths, narrowing or low-rank compressing the exact error field that the broadcast must approximate.
 
-We quantify this chain with three diagnostics. First, exact-gradient reconstruction verifies that the mathematical factorization matches autograd to numerical precision. Second, gradient-fidelity measurements compare local and backprop gradients at matched parameters. Third, transported-error oracle experiments replace the broadcast with the exact path-gain-transported compartment error, isolating broadcast fidelity from other architectural factors. Across matched networks, shunting improves local-backprop alignment on MNIST (cosine $0.202$ vs.\ $0.006$) and greatly reduces scale mismatch ($0.117$ vs.\ $1.053$). On noise resilience, transported error raises additive local learning from $66.8\%$ under rank-1 broadcast to $92.4$--$94.0\%$, nearly matching shunting at $94.3$--$95.2\%$.
+We quantify this chain with three diagnostics. First, exact-gradient reconstruction verifies that the mathematical factorization matches autograd to numerical precision. Second, gradient-fidelity measurements compare local and backprop gradients at matched parameters. Third, transported-error oracle experiments replace the broadcast with the exact path-gain-transported compartment error, isolating broadcast fidelity from other architectural factors. In a checkpointed MNIST gradient-dynamics diagnostic, shunting improves final local-backprop alignment (cosine $0.100\pm0.033$ vs.\ $0.005\pm0.026$) and reduces scale mismatch ($0.26\pm0.05$ vs.\ $0.50\pm0.05$). On noise resilience, transported error raises additive local learning from $66.8\%$ under rank-1 broadcast to $92.4$--$94.0\%$, nearly matching shunting at $94.3$--$95.2\%$.
 
 \paragraph{Contributions.} We make three claims:
 (i)~exact conductance-tree credit factorizes into synapse-local eligibility and a path-specific compartment error (Theorem~\ref{thm:tree_backprop}, Corollary~\ref{cor:factorization});
@@ -295,11 +295,11 @@ For each parameter tensor $p$, we compute directional alignment (cosine similari
 \begin{figure*}[!t]
 \centering
 \includegraphics[width=0.98\textwidth]{fig3_gradient_fidelity.pdf}
-\caption{\textbf{Gradient-fidelity diagnostic.} \textbf{(A)}~Exact-factorization sanity check across all theory-diagnostic conditions, reported as relative $L_2$ reconstruction error and scale mismatch. Reconstructed gradients match autograd to numerical precision. \textbf{(B)}~Weighted cosine similarity between local and backprop gradients. Shunting is more directionally aligned than additive on both MNIST and context gating. \textbf{(C)}~Scale mismatch, defined as $|\log_{10}(\|g^{\mathrm{local}}\|/\|g^{\mathrm{bp}}\|)|$. Shunting gives a closer gradient scale. \textbf{(D)}~Full-gradient norms over learning. Additive local and backprop gradients remain finite, so near-zero additive cosine reflects directional mismatch rather than vanishing gradients.}
+\caption{\textbf{Gradient-fidelity diagnostic.} \textbf{(A)}~Exact-factorization sanity check across all theory-diagnostic conditions, reported as relative $L_2$ reconstruction error and scale mismatch. Reconstructed gradients match autograd to numerical precision. \textbf{(B)}~Seeded final-checkpoint weighted cosine similarity between local and backprop gradients. \textbf{(C)}~Seeded final-checkpoint scale mismatch, defined as $|\log_{10}(\|g^{\mathrm{local}}\|/\|g^{\mathrm{bp}}\|)|$. Error bars denote $\pm$1 s.d.\ across 3 checkpointed seeds. \textbf{(D)}~Full-gradient norms over learning. Additive local and backprop gradients remain finite, so near-zero additive cosine reflects directional mismatch rather than vanishing gradients.}
 \label{fig:gradient_fidelity}
 \end{figure*}
 
-Across matched-weight comparisons, shunting is consistently more aligned with backprop and substantially closer in norm than the additive control: on MNIST, weighted cosine rises from $0.006$ to $0.202$ and scale mismatch falls from $1.053$ to $0.117$; on context gating, cosine rises from $-0.007$ to $0.108$ and scale mismatch falls from $2.154$ to $0.036$.
+Across the checkpointed MNIST gradient-dynamics diagnostic, shunting is more aligned with backprop and closer in norm than the additive control at the final checkpoint: weighted cosine rises from $0.005\pm0.026$ to $0.100\pm0.033$, and scale mismatch falls from $0.50\pm0.05$ to $0.26\pm0.05$.
 Figure~\ref{fig:gradient_fidelity}A confirms that the theory is operational in code under the nonnegative-input setup: reconstructing gradients from Corollary~\ref{cor:factorization} using exact compartment errors yields weighted relative reconstruction error below $2\times 10^{-7}$ and weighted scale mismatch below $4\times 10^{-8}$ across runs.
 In a few low-norm parameter blocks, cosine becomes numerically unstable even though the reconstruction itself is essentially exact, so we report the norm-based diagnostics in the figure.
 Figure~\ref{fig:gradient_fidelity}D rules out a trivial zero-gradient explanation: in the 5F trajectory diagnostic, additive local and backprop gradient norms remain finite throughout learning.
@@ -324,7 +324,9 @@ Appendix Fig.~\ref{fig:cifar10_mechanism_extension} reports the same ladder on f
 The same sweep shows that learned inhibitory conductance is not a cosmetic addition: removing I-to-E conductance lowers shunting backprop from $49.5\%$ to $43.9\%$ and transported LocalCA from $47.2\%$ to $38.6\%$.
 We use CIFAR-10 diagnostically rather than as a hard-vision benchmark claim.
 
-Appendix controls fill in the boundaries: coarse quantized broadcasts preserve performance until sign-only or sparse broadcasts remove too much information (Fig.~\ref{fig:low_bandwidth_appendix}); rank-$K$ and path-propagation feedback close part of the transported-oracle gap (Table~\ref{tab:low_rank_broadcast}); additive normalization and DFA help but do not match the shunting conductance model (Figs.~\ref{fig:additive_norm_control}, \ref{fig:fa_dfa_appendix}); explicit inhibitory cells can generate useful path-gain structure in a one-layer input-mode probe (Fig.~\ref{fig:input_mode_path_gain}, Table~\ref{tab:input_mode_probe}); and post-training inhibitory-conductance interventions plus exact-error SVD diagnostics show that learned inhibition is causally task-structured and makes the exact compartment-error field more compressible (Fig.~\ref{fig:inhibition_causality_error_rank}).
+Panel~E keeps the inhibitory-path interpretation in the main figure. In a one-dendritic-layer noise-resilience probe, direct input-driven inhibition reaches only $85.2\pm0.7\%$ under rank-$1$ broadcast, but exact path transport reaches $95.2\pm0.0\%$. Replacing the direct inhibitory stream with explicit inhibitory dendritic cells trained by the same local rule remains near that ceiling ($94.2\pm0.2\%$). This does not make the explicit-I probe a headline benchmark, but it shows that an inhibitory population can implement the path-gain gating mechanism when the architecture isolates the dendritic-path question.
+
+Appendix controls fill in the boundaries: coarse quantized broadcasts preserve performance until sign-only or sparse broadcasts remove too much information (Fig.~\ref{fig:low_bandwidth_appendix}); rank-$K$ and path-propagation feedback close part of the transported-oracle gap (Table~\ref{tab:low_rank_broadcast}); additive normalization and DFA help but do not match the shunting conductance model (Figs.~\ref{fig:additive_norm_control}, \ref{fig:fa_dfa_appendix}); the full input-mode probe is reported in Fig.~\ref{fig:input_mode_path_gain} and Table~\ref{tab:input_mode_probe}; and post-training inhibitory-conductance interventions plus exact-error SVD diagnostics show that learned inhibition is causally task-structured and makes the exact compartment-error field more compressible (Fig.~\ref{fig:inhibition_causality_error_rank}).
 
 \begin{figure*}[!t]
 \centering
@@ -333,7 +335,8 @@ Appendix controls fill in the boundaries: coarse quantized broadcasts preserve p
 \textbf{(A)}~Example dendritic path-gain field at matched inhibition, with measured MNIST CV annotated for additive and shunting networks.
 \textbf{(B)}~Exact-error compressibility on MNIST: lower rank-$1$ residual and lower participation rank mean that a scalar broadcast is a better approximation.
 \textbf{(C)}~Direct compartment-error fidelity on noise resilience. Solid lines compare rank-$1$ broadcast to the exact compartment error; dashed lines show the transported-error oracle.
-\textbf{(D)}~Learning with the transported-error oracle. Improving the broadcast field recovers near-ceiling local learning, especially where rank-$1$ broadcast fails.}
+\textbf{(D)}~Learning with the transported-error oracle. Improving the broadcast field recovers near-ceiling local learning, especially where rank-$1$ broadcast fails.
+\textbf{(E)}~Compact inhibitory-path probe. In a one-layer noise-resilience test, exact path transport closes the rank-$1$ gap, and explicit inhibitory cells trained by the same local rule remain near the explicit-I backprop ceiling. Error bars denote $\pm$1 s.d.\ across seeds.}
 \label{fig:mechanistic}
 \end{figure*}
 
@@ -345,13 +348,13 @@ Within the local-rule family, 5F is the strongest practical wrapper, but it rema
 
 \subsection{Regime Dependence of the Shunting Advantage}
 
-The benefit of shunting varies across tasks. With matched rank-$1$ broadcast, shunting is modestly better on MNIST and Fashion-MNIST, and the gap grows on the inhibition-sensitive noise-resilience benchmark once inhibitory conductance is present (Fig.~\ref{fig:competence_regime}). This is the expected regime dependence: shunting helps most when input resistance is part of the useful credit geometry rather than merely an added conductance load.
+The benefit of shunting varies across tasks. With matched rank-$1$ broadcast, shunting is modestly better on MNIST, Fashion-MNIST, and context gating; the matched additive context-gating run reaches $0.787\pm0.007$ versus $0.803\pm0.006$ for shunting. The gap grows on the inhibition-sensitive noise-resilience benchmark once inhibitory conductance is present (Fig.~\ref{fig:competence_regime}). This is the expected regime dependence: shunting helps most when input resistance is part of the useful credit geometry rather than merely an added conductance load.
 
 \begin{figure*}[!t]
 \centering
 \includegraphics[width=0.98\textwidth]{fig2_competence_regime.pdf}
 \caption{\textbf{Capacity-calibrated competence and regime dependence.}
-\textbf{(A)}~Matched backprop ceilings vs.\ the best rank-$1$ 5F LocalCA rule on MNIST, Fashion-MNIST, and context gating.
+\textbf{(A)}~Matched backprop ceilings vs.\ rank-$1$ 5F LocalCA on MNIST, Fashion-MNIST, and context gating, including the matched additive context-gating rerun.
 \textbf{(B,C)}~Inhibitory dose-response and shunting advantage on MNIST and noise resilience.
 \textbf{(D)}~Fashion-MNIST confirms a smaller but consistent shunting advantage. Error bars denote $\pm$1 s.d.\ across seeds.}
 \label{fig:competence_regime}
@@ -722,16 +725,16 @@ Additive & local-mismatch & backprop & $0.348 \pm 0.095$ \\
 \begin{table}[t]
 \centering
 \small
-\begin{tabular}{@{}lccc@{}}
+\begin{tabular}{@{}lcccc@{}}
 \toprule
-\textbf{Dataset} & \textbf{BP ceiling} & \textbf{Best local (5F)} & \textbf{Gap} \\
+\textbf{Dataset} & \textbf{BP ceiling} & \textbf{Shunting local} & \textbf{Additive local} & \textbf{BP gap} \\
 \midrule
-MNIST & 0.971 & $0.914\pm0.003$ & 5.7\% \\
-Fashion-MNIST & 0.889 & $0.838\pm0.003$ & 5.1\% \\
-Context gating & 0.861 & $0.803\pm0.006$ & 5.8\% \\
+MNIST & 0.971 & $0.912\pm0.005$ & $0.894\pm0.007$ & 5.9\% \\
+Fashion-MNIST & 0.889 & $0.838\pm0.003$ & $0.831\pm0.004$ & 5.1\% \\
+Context gating & 0.861 & $0.803\pm0.006$ & $0.787\pm0.007$ & 5.8\% \\
 \bottomrule
 \end{tabular}
-\caption{\textbf{Local competence.} Backprop ceilings are matched-capacity shunting references from dedicated $5$-seed standard-training refreshes for MNIST and context gating and from the dedicated $5$-seed Fashion-MNIST competence sweep. Local values are 5F with per-soma broadcast on shunting dendritic cores. Context gating additionally uses an HSIC auxiliary objective (weight $0.01$; Appendix~\ref{app:hsic}). Error bars on local values: $\pm$1 s.d.\ across 5 seeds.}
+\caption{\textbf{Local competence.} Backprop ceilings are matched-capacity shunting references from dedicated $5$-seed standard-training refreshes for MNIST and context gating and from the dedicated $5$-seed Fashion-MNIST competence sweep. Local values are 5F with rank-$1$ broadcast and local decoder updates. Context gating additionally uses an HSIC auxiliary objective (weight $0.01$; Appendix~\ref{app:hsic}). Error bars on local values: $\pm$1 s.d.\ across 5 seeds.}
 \label{tab:gap_closing}
 \end{table}
 

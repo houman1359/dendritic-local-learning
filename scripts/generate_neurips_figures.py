@@ -133,9 +133,9 @@ DATASET_LABEL = {
 }
 
 
-def _panel(ax, label, x=-0.18, y=1.12):
+def _panel(ax, label, x=-0.16, y=1.16):
     """Place bold panel label (A, B, C, ...) well above the axes to avoid title overlap."""
-    ax.text(x, y, label, transform=ax.transAxes, fontsize=13,
+    ax.text(x, y, label, transform=ax.transAxes, fontsize=14,
             fontweight="bold", va="top", ha="left")
 
 
@@ -428,8 +428,8 @@ def figure2():
     fig, axes = plt.subplots(
         1,
         4,
-        figsize=(9.2, 3.15),
-        gridspec_kw={"wspace": 0.42, "width_ratios": [1.10, 1.12, 1.0, 0.98]},
+        figsize=(12.4, 3.55),
+        gridspec_kw={"wspace": 0.56, "width_ratios": [1.18, 1.12, 1.02, 1.02]},
     )
 
     # ---- Panel A: Multi-benchmark bars ----
@@ -461,6 +461,7 @@ def figure2():
                 (
                     label,
                     float(bp["test_accuracy_mean"]),
+                    float(bp["test_accuracy_std"]),
                     float(shunt["test_accuracy_mean"]),
                     float(shunt["test_accuracy_std"]),
                     None if add is None else float(add["test_accuracy_mean"]),
@@ -490,8 +491,8 @@ def figure2():
                         local_add_mnist = r["test_accuracy_mean"]
                         local_add_mnist_e = r["test_accuracy_std"]
         if bp_mnist:
-            datasets_info.append(("MNIST", bp_mnist, local_shunt_mnist, local_shunt_mnist_e,
-                                  local_add_mnist, local_add_mnist_e))
+            datasets_info.append(("MNIST", bp_mnist, 0, local_shunt_mnist,
+                                  local_shunt_mnist_e, local_add_mnist, local_add_mnist_e))
 
         # Fashion-MNIST
         if fmnist is not None:
@@ -501,6 +502,7 @@ def figure2():
             if len(bp_s) and len(loc_s) and len(loc_a):
                 datasets_info.append(("F-MNIST",
                                       bp_s.iloc[0]["test_accuracy_mean"],
+                                      bp_s.iloc[0]["test_accuracy_std"],
                                       loc_s.iloc[0]["test_accuracy_mean"], loc_s.iloc[0]["test_accuracy_std"],
                                       loc_a.iloc[0]["test_accuracy_mean"], loc_a.iloc[0]["test_accuracy_std"]))
 
@@ -518,16 +520,17 @@ def figure2():
                 local_shunt_cg = sub.iloc[0]["test_accuracy_mean"]
                 local_shunt_cg_e = sub.iloc[0]["test_accuracy_std"]
         if bp_cg and local_shunt_cg:
-            datasets_info.append(("CG", bp_cg, local_shunt_cg, local_shunt_cg_e, None, 0))
+            datasets_info.append(("CG", bp_cg, 0, local_shunt_cg, local_shunt_cg_e, None, 0))
 
     # Plot grouped bars
     n_ds = len(datasets_info)
     x_base = np.arange(n_ds)
     bar_w = 0.22
 
-    for i, (_ds_name, bp_val, shunt_val, shunt_err, add_val, add_err) in enumerate(datasets_info):
-        ax.bar(i - bar_w, bp_val * 100, bar_w * 0.88, color=COLOR_BACKPROP,
-               edgecolor="white", lw=0.3)
+    for i, (_ds_name, bp_val, bp_err, shunt_val, shunt_err, add_val, add_err) in enumerate(datasets_info):
+        ax.bar(i - bar_w, bp_val * 100, bar_w * 0.88, yerr=bp_err * 100,
+               color=COLOR_BACKPROP, edgecolor="white", lw=0.3,
+               capsize=1.5, error_kw={"lw": 0.5})
         if shunt_val is not None:
             ax.bar(i, shunt_val * 100, bar_w * 0.88, yerr=shunt_err * 100,
                    color=COLOR_SHUNTING, edgecolor="white", lw=0.3,
@@ -540,7 +543,7 @@ def figure2():
     ax.set_xticks(x_base)
     ax.set_xticklabels([d[0] for d in datasets_info])
     ax.set_ylabel("Test accuracy (%)")
-    ax.set_title("Competence vs. matched ceiling", fontsize=9.5)
+    ax.set_title("Accuracy vs matched ceiling", fontsize=10.6, pad=7)
 
     # Legend
     legend_handles = [
@@ -548,21 +551,21 @@ def figure2():
         mpatches.Patch(color=COLOR_SHUNTING, label="Shunt. (local)"),
         mpatches.Patch(color=COLOR_ADDITIVE, label="Add. (local)"),
     ]
-    ax.legend(
+    fig.legend(
         handles=legend_handles,
-        fontsize=7.5,
+        fontsize=8.8,
         loc="upper center",
-        bbox_to_anchor=(0.50, 1.02),
+        bbox_to_anchor=(0.50, 0.992),
         ncol=3,
-        handlelength=0.9,
-        handletextpad=0.25,
-        columnspacing=0.55,
-        borderaxespad=0.0,
+        frameon=False,
+        handlelength=1.0,
+        handletextpad=0.35,
+        columnspacing=0.9,
     )
 
     all_vals = [d[1]*100 for d in datasets_info if d[1]] + \
-               [d[2]*100 for d in datasets_info if d[2]] + \
-               [d[4]*100 for d in datasets_info if d[4]]
+               [d[3]*100 for d in datasets_info if d[3]] + \
+               [d[5]*100 for d in datasets_info if d[5]]
     if all_vals:
         ax.set_ylim(max(0, min(all_vals) - 6), max(all_vals) + 2)
 
@@ -591,7 +594,7 @@ def figure2():
 
     ax.set_xlabel("$N_I$ (inhib. syn. per branch)")
     ax.set_ylabel("Test accuracy (%)")
-    ax.set_title("Dose-response to inhibition", fontsize=9.5)
+    ax.set_title("Inhibition dose response", fontsize=10.6, pad=7)
     ax.legend(
         fontsize=7.2,
         loc="lower right",
@@ -621,15 +624,31 @@ def figure2():
             merged = pd.merge(shunt, add, on=["dataset", "ie_value"],
                               suffixes=("_s", "_a"))
             merged["delta"] = (merged["test_accuracy_mean_s"] - merged["test_accuracy_mean_a"]) * 100
+            merged["delta_err"] = (
+                np.sqrt(
+                    merged["test_accuracy_std_s"].fillna(0) ** 2
+                    + merged["test_accuracy_std_a"].fillna(0) ** 2
+                )
+                * 100
+            )
             merged = merged.sort_values("ie_value")
-            ax.plot(merged["ie_value"], merged["delta"],
-                    marker=marker, markersize=4, linewidth=1.2,
-                    color=color, label=lbl)
+            ax.errorbar(
+                merged["ie_value"],
+                merged["delta"],
+                yerr=merged["delta_err"],
+                marker=marker,
+                markersize=4.8,
+                linewidth=1.4,
+                color=color,
+                label=lbl,
+                capsize=2,
+                capthick=0.5,
+            )
 
     ax.axhline(0, color="black", lw=0.4, ls="--")
     ax.set_xlabel("$N_I$ (inhib. syn. per branch)")
     ax.set_ylabel("Shunting adv. (pp)")
-    ax.set_title("Shunting advantage", fontsize=9.5)
+    ax.set_title("Shunting advantage", fontsize=10.6, pad=7)
     ax.legend(fontsize=7.4, loc="upper right", handlelength=1.2)
 
     # ---- Panel D: Fashion-MNIST comparison ----
@@ -689,10 +708,10 @@ def figure2():
         ax.set_xticklabels([d[0] for d in fmnist_data], fontsize=7.5, rotation=25,
                            ha="right")
         ax.set_ylabel("Test accuracy (%)")
-        ax.set_title("Fashion-MNIST gap", fontsize=9.5)
+        ax.set_title("Fashion-MNIST gap", fontsize=10.6, pad=7)
         ax.set_ylim(70, 92)
 
-    fig.subplots_adjust(left=0.065, right=0.992, bottom=0.25, top=0.84, wspace=0.44)
+    fig.subplots_adjust(left=0.060, right=0.992, bottom=0.27, top=0.78, wspace=0.56)
     _save(fig, "fig2_competence_regime")
     plt.close(fig)
 
@@ -782,6 +801,35 @@ def figure3():
         norm_out = os.path.join(ANALYSIS_DIR, "gradient_fidelity", "gradient_norm_dynamics_summary.csv")
         norm_df.to_csv(norm_out, index=False)
 
+    def _final_gradient_stats() -> pd.DataFrame:
+        if norm_df.empty:
+            return pd.DataFrame()
+        final_rows = []
+        for _cfg, sub in norm_df.groupby("config"):
+            final_rows.append(sub.sort_values("epoch").iloc[-1])
+        final = pd.DataFrame(final_rows)
+        if final.empty:
+            return pd.DataFrame()
+        final["scale_mismatch"] = np.abs(
+            np.log10(
+                np.maximum(final["local_grad_norm"].to_numpy(dtype=float), 1e-12)
+                / np.maximum(final["backprop_grad_norm"].to_numpy(dtype=float), 1e-12)
+            )
+        )
+        return (
+            final.groupby("core_type")
+            .agg(
+                n=("weighted_cosine", "count"),
+                cosine_mean=("weighted_cosine", "mean"),
+                cosine_std=("weighted_cosine", "std"),
+                scale_mean=("scale_mismatch", "mean"),
+                scale_std=("scale_mismatch", "std"),
+            )
+            .reset_index()
+        )
+
+    final_stats = _final_gradient_stats()
+
     # ---- Panel A: Exact factorization sanity ----
     ax = axes[0]
     _panel(ax, "A")
@@ -830,72 +878,103 @@ def figure3():
     _panel(ax, "B")
     style_axis(ax, grid="y")
 
-    conditions = [
-        ("MNIST\nShunt.", 0.202, COLOR_SHUNTING),
-        ("MNIST\nAdd.", 0.006, COLOR_ADDITIVE),
-        ("CG\nShunt.", 0.108, COLOR_SHUNTING),
-        ("CG\nAdd.", -0.007, COLOR_ADDITIVE),
-    ]
-    x_pos = np.arange(len(conditions))
-    bars = ax.bar(
-        x_pos,
-        [c[1] for c in conditions],
-        color=[c[2] for c in conditions],
-        edgecolor="white",
-        lw=0.4,
-        width=0.58,
-    )
-    ax.set_xticks(x_pos)
-    ax.set_xticklabels([c[0] for c in conditions], fontsize=8.2)
-    ax.set_ylabel("Cosine similarity")
-    ax.set_title("Alignment")
-    ax.set_ylim(-0.06, 0.25)
-    ax.axhline(0, color="black", lw=0.4, ls="--")
-    for bar_rect, (_, val, _) in zip(bars, conditions):
-        yo = 0.005 if val >= 0 else -0.014
-        va = "bottom" if val >= 0 else "top"
-        ax.text(
-            bar_rect.get_x() + bar_rect.get_width() / 2,
-            val + yo,
-            f"{val:.3f}",
-            ha="center",
-            va=va,
-            fontsize=7.4,
+    core_order = ["shunting", "additive"]
+    core_labels = ["Shunt.", "Add."]
+    core_colors = [COLOR_SHUNTING, COLOR_ADDITIVE]
+    if not final_stats.empty:
+        means, errs, ns = [], [], []
+        for core in core_order:
+            row = final_stats[final_stats["core_type"] == core]
+            if row.empty:
+                means.append(np.nan)
+                errs.append(0.0)
+                ns.append(0)
+            else:
+                r = row.iloc[0]
+                means.append(float(r["cosine_mean"]))
+                errs.append(0.0 if pd.isna(r["cosine_std"]) else float(r["cosine_std"]))
+                ns.append(int(r["n"]))
+        x_pos = np.arange(len(core_order))
+        bars = ax.bar(
+            x_pos,
+            means,
+            yerr=errs,
+            color=core_colors,
+            edgecolor="white",
+            lw=0.4,
+            width=0.58,
+            capsize=2.2,
+            error_kw={"lw": 0.7},
         )
+        ax.set_xticks(x_pos)
+        ax.set_xticklabels(core_labels, fontsize=8.2)
+        ax.set_ylabel("Cosine similarity")
+        n_label = min(ns) if ns else 0
+        ax.set_title(f"Final alignment (n={n_label})")
+        ax.set_ylim(-0.06, max(0.18, np.nanmax(np.asarray(means) + np.asarray(errs)) + 0.05))
+        ax.axhline(0, color="black", lw=0.4, ls="--")
+        for bar_rect, val in zip(bars, means):
+            yo = 0.006 if val >= 0 else -0.014
+            va = "bottom" if val >= 0 else "top"
+            ax.text(
+                bar_rect.get_x() + bar_rect.get_width() / 2,
+                val + yo,
+                f"{val:.3f}",
+                ha="center",
+                va=va,
+                fontsize=7.4,
+            )
+    else:
+        ax.text(0.5, 0.5, "No seeded alignment data", transform=ax.transAxes,
+                ha="center", va="center", fontsize=8, color="red")
 
     # ---- Panel C: Scale mismatch ----
     ax = axes[2]
     _panel(ax, "C")
     style_axis(ax, grid="y")
-    scale_conditions = [
-        ("MNIST\nShunt.", 0.117, COLOR_SHUNTING),
-        ("MNIST\nAdd.", 1.053, COLOR_ADDITIVE),
-        ("CG\nShunt.", 0.036, COLOR_SHUNTING),
-        ("CG\nAdd.", 2.154, COLOR_ADDITIVE),
-    ]
-    x_pos = np.arange(len(scale_conditions))
-    bars = ax.bar(
-        x_pos,
-        [c[1] for c in scale_conditions],
-        color=[c[2] for c in scale_conditions],
-        edgecolor="white",
-        lw=0.4,
-        width=0.58,
-    )
-    ax.set_xticks(x_pos)
-    ax.set_xticklabels([c[0] for c in scale_conditions], fontsize=8.2)
-    ax.set_ylabel(r"$|\log_{10}\|g_{\rm loc}\|/\|g_{\rm BP}\||$")
-    ax.set_title("Scale mismatch")
-    ax.set_ylim(0, 2.45)
-    for bar_rect, (_, val, _) in zip(bars, scale_conditions):
-        ax.text(
-            bar_rect.get_x() + bar_rect.get_width() / 2,
-            val + 0.045,
-            f"{val:.3f}" if val < 0.2 else f"{val:.2f}",
-            ha="center",
-            va="bottom",
-            fontsize=7.4,
+    if not final_stats.empty:
+        means, errs, ns = [], [], []
+        for core in core_order:
+            row = final_stats[final_stats["core_type"] == core]
+            if row.empty:
+                means.append(np.nan)
+                errs.append(0.0)
+                ns.append(0)
+            else:
+                r = row.iloc[0]
+                means.append(float(r["scale_mean"]))
+                errs.append(0.0 if pd.isna(r["scale_std"]) else float(r["scale_std"]))
+                ns.append(int(r["n"]))
+        x_pos = np.arange(len(core_order))
+        bars = ax.bar(
+            x_pos,
+            means,
+            yerr=errs,
+            color=core_colors,
+            edgecolor="white",
+            lw=0.4,
+            width=0.58,
+            capsize=2.2,
+            error_kw={"lw": 0.7},
         )
+        ax.set_xticks(x_pos)
+        ax.set_xticklabels(core_labels, fontsize=8.2)
+        ax.set_ylabel(r"$|\log_{10}\|g_{\rm loc}\|/\|g_{\rm BP}\||$")
+        n_label = min(ns) if ns else 0
+        ax.set_title(f"Scale mismatch (n={n_label})")
+        ax.set_ylim(0, max(0.65, np.nanmax(np.asarray(means) + np.asarray(errs)) + 0.08))
+        for bar_rect, val in zip(bars, means):
+            ax.text(
+                bar_rect.get_x() + bar_rect.get_width() / 2,
+                val + 0.025,
+                f"{val:.3f}" if val < 0.2 else f"{val:.2f}",
+                ha="center",
+                va="bottom",
+                fontsize=7.4,
+            )
+    else:
+        ax.text(0.5, 0.5, "No seeded scale data", transform=ax.transAxes,
+                ha="center", va="center", fontsize=8, color="red")
 
     # ---- Panel D: Nonzero-gradient norm dynamics ----
     ax = axes[3]

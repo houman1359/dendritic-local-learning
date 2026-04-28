@@ -34,6 +34,11 @@ ORACLE_SUMMARY_CSV = (
 ERROR_RANK_SUMMARY_CSV = (
     ANALYSIS_DIR / "error_rank_selected_20260427" / "error_rank_summary.csv"
 )
+INPUT_MODE_SUMMARY_CSV = (
+    ANALYSIS_DIR
+    / "input_mode_onelayer_probe_summary_20260425"
+    / "input_mode_onelayer_grouped.csv"
+)
 LOW_BW_CSV = DATA_DIR / "low_bandwidth_results.csv"
 CIFAR10_BP_SUMMARY_CSV = (
     ANALYSIS_DIR / "cifar10_compactei_depth4" / "cifar10_compactei_depth4_grouped_summary.csv"
@@ -566,6 +571,152 @@ def _plot_oracle_learning(
     )
 
 
+def _plot_inhibitory_path_probe(ax: plt.Axes, input_mode: pd.DataFrame) -> None:
+    _panel(ax, "E")
+    ax.set_xticks([])
+    ax.set_yticks([])
+    for spine in ax.spines.values():
+        spine.set_visible(False)
+    ax.set_xlim(0, 1)
+    ax.set_ylim(0, 1)
+    ax.set_title("I gates paths", pad=8)
+
+    # Compact schematic: inhibition on a branch lowers local resistance and
+    # gates all upstream credit paths.
+    soma = (0.18, 0.72)
+    branches = [(0.10, 0.50), (0.27, 0.50)]
+    leaves = [(0.06, 0.30), (0.13, 0.28), (0.23, 0.28), (0.31, 0.30)]
+    ax.add_patch(
+        mpatches.Circle(
+            soma, 0.034, facecolor=COLORS["soma"], edgecolor=COLORS["edge"], linewidth=0.6
+        )
+    )
+    for branch in branches:
+        ax.plot(
+            [soma[0], branch[0]],
+            [soma[1] - 0.03, branch[1]],
+            color=COLORS["dend"],
+            linewidth=2.7,
+            solid_capstyle="round",
+        )
+    for branch, leaf_pair in zip(branches, [leaves[:2], leaves[2:]]):
+        for leaf in leaf_pair:
+            ax.plot(
+                [branch[0], leaf[0]],
+                [branch[1], leaf[1]],
+                color=COLORS["dend"],
+                linewidth=2.1,
+                solid_capstyle="round",
+            )
+            ax.add_patch(
+                mpatches.Circle(
+                    leaf,
+                    0.012,
+                    facecolor=COLORS["exc"],
+                    edgecolor="white",
+                    linewidth=0.3,
+                    zorder=3,
+                )
+            )
+    ax.plot(
+        [leaves[0][0], branches[0][0], soma[0]],
+        [leaves[0][1], branches[0][1], soma[1]],
+        color=COLOR_TRANSPORT,
+        linewidth=1.3,
+        alpha=0.85,
+        zorder=4,
+    )
+    ax.add_patch(
+        mpatches.Circle(
+            (0.095, 0.42),
+            0.022,
+            facecolor="#F7E6E8",
+            edgecolor=COLORS["inh"],
+            linewidth=1.0,
+            zorder=5,
+        )
+    )
+    ax.text(
+        0.095,
+        0.42,
+        "I",
+        ha="center",
+        va="center",
+        fontsize=7.2,
+        color=COLORS["inh"],
+        fontweight="bold",
+        zorder=6,
+    )
+    ax.annotate(
+        "",
+        xy=(0.090, 0.42),
+        xytext=(0.005, 0.43),
+        arrowprops={"arrowstyle": "-|>", "lw": 1.0, "color": COLORS["inh"]},
+    )
+    ax.text(0.02, 0.47, r"$G_I(x)$", fontsize=7.0, color=COLORS["inh"], ha="left")
+    ax.text(
+        0.18,
+        0.08,
+        r"$G_I \uparrow \Rightarrow R^{tot}\downarrow$"
+        "\n"
+        r"$\alpha_n$ attenuates",
+        ha="center",
+        va="center",
+        fontsize=6.1,
+        color=COLORS["mute"],
+    )
+
+    def _row(condition: str) -> pd.Series:
+        rows = input_mode[input_mode["condition"] == condition]
+        if rows.empty:
+            raise KeyError(condition)
+        return rows.iloc[0]
+
+    direct_rank1 = _row("direct_i_stream__localca_per_soma")
+    direct_path = _row("direct_i_stream__localca_path_transport")
+    explicit_path = _row("explicit_i_cells__localca_path_transport__i_updates_True")
+    explicit_bp = _row("explicit_i_cells__standard_bp")
+    bar_rows = [
+        ("rank-1", direct_rank1, COLORS["per_soma"], ""),
+        ("transport", direct_path, COLOR_TRANSPORT, ""),
+        ("I-cell", explicit_path, COLORS["shunting"], "//"),
+    ]
+    x_min, x_max = 0.50, 0.96
+    y_min, y_max = 0.80, 0.965
+    bp_x = x_min + (x_max - x_min) * (
+        (float(explicit_bp["test_accuracy_mean"]) - y_min) / (y_max - y_min)
+    )
+    ax.vlines(
+        bp_x,
+        0.14,
+        0.53,
+        colors=COLORS["bp"],
+        linestyles="--",
+        linewidth=0.9,
+        alpha=0.8,
+    )
+    ax.text(bp_x + 0.006, 0.535, "BP", ha="left", va="bottom", fontsize=6.3, color=COLORS["bp"])
+    for y, (label, row, color, hatch) in zip([0.42, 0.30, 0.18], bar_rows):
+        mean = float(row["test_accuracy_mean"])
+        std = float(row["test_accuracy_std"])
+        x1 = x_min + (x_max - x_min) * ((mean - y_min) / (y_max - y_min))
+        rect = mpatches.Rectangle(
+            (x_min, y - 0.027),
+            x1 - x_min,
+            0.054,
+            facecolor=color,
+            edgecolor="white",
+            linewidth=0.4,
+            hatch=hatch,
+        )
+        ax.add_patch(rect)
+        err = (x_max - x_min) * (std / (y_max - y_min))
+        ax.hlines(y, x1 - err, x1 + err, color=COLORS["ink"], linewidth=0.6)
+        ax.vlines([x1 - err, x1 + err], y - 0.010, y + 0.010, color=COLORS["ink"], linewidth=0.6)
+        ax.text(x_min - 0.020, y, label, ha="right", va="center", fontsize=6.0)
+        ax.text(min(x1 + 0.012, 0.985), y, f"{100 * mean:.1f}", ha="left", va="center", fontsize=6.3)
+
+
 def build_figure(
     summary_csv: Path = SUMMARY_CSV,
     low_bw_csv: Path = LOW_BW_CSV,  # retained for backward compatibility; not used
@@ -578,19 +729,21 @@ def build_figure(
     summary = _safe_csv(summary_csv)
     oracle_summary = _safe_csv(oracle_summary_csv)
     rank_summary = _safe_csv(ERROR_RANK_SUMMARY_CSV)
+    input_mode = _safe_csv(INPUT_MODE_SUMMARY_CSV)
 
     fig, axes = plt.subplots(
         1,
-        4,
-        figsize=(10.2, 3.15),
-        gridspec_kw={"wspace": 0.56, "width_ratios": [1.08, 0.86, 1.05, 1.12]},
+        5,
+        figsize=(12.4, 3.2),
+        gridspec_kw={"wspace": 0.58, "width_ratios": [1.02, 0.78, 0.98, 1.04, 0.86]},
     )
 
     _plot_path_gain_map(axes[0], summary)
     _plot_error_compressibility(axes[1], rank_summary)
     _plot_compartment_error_fidelity(axes[2], summary)
     _plot_oracle_learning(axes[3], summary, oracle_summary)
-    fig.subplots_adjust(left=0.060, right=0.992, top=0.84, bottom=0.25, wspace=0.56)
+    _plot_inhibitory_path_probe(axes[4], input_mode)
+    fig.subplots_adjust(left=0.052, right=0.992, top=0.83, bottom=0.25, wspace=0.58)
     return fig
 
 
