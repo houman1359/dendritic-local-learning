@@ -25,7 +25,7 @@ from matplotlib.patheffects import withStroke
 import numpy as np
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from neurips_style import COLORS, apply_neurips_style, panel_label  # noqa: E402
+from neurips_style import COLORS, apply_neurips_style, panel_label
 
 apply_neurips_style()
 
@@ -175,7 +175,7 @@ def draw_tree(
             zorder=2,
         )
 
-    for x, y, bi in leaves:
+    for x, y, _bi in leaves:
         ax.add_patch(
             Circle((x, y), 0.020, fc=leaf_color, ec=EDGE, linewidth=0.55, zorder=4)
         )

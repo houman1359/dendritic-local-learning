@@ -9,7 +9,6 @@ Usage:
 from __future__ import annotations
 
 import matplotlib as mpl
-import matplotlib.pyplot as plt
 
 # ── Color palette (colorblind-safe, publication-oriented) ─────────────────
 COLORS = {
@@ -46,7 +45,7 @@ COLORS = {
 # ── Figure sizing (NeurIPS text width ≈ 5.5 in; full width ≈ 7 in) ──────
 SINGLE_COL = 5.5   # inches
 DOUBLE_COL = 7.0   # inches
-# Wider headline figures (will occupy full textwidth 0.98× in LaTeX)
+# Wider headline figures (will occupy full textwidth 0.98x in LaTeX)
 WIDE_FIG   = 13.0
 
 
@@ -61,23 +60,23 @@ def apply_neurips_style():
             "DejaVu Sans", "Bitstream Vera Sans",
         ],
         "mathtext.fontset": "dejavusans",
-        "font.size": 10.3,
-        "axes.labelsize": 10.8,
-        "axes.titlesize": 10.9,
+        "font.size": 11.2,
+        "axes.labelsize": 11.7,
+        "axes.titlesize": 11.8,
         "axes.titleweight": "bold",
-        "xtick.labelsize": 9.2,
-        "ytick.labelsize": 9.2,
-        "legend.fontsize": 8.6,
-        "legend.title_fontsize": 8.9,
+        "xtick.labelsize": 10.0,
+        "ytick.labelsize": 10.0,
+        "legend.fontsize": 9.3,
+        "legend.title_fontsize": 9.5,
 
         # Lines / markers
-        "lines.linewidth": 1.6,
-        "lines.markersize": 4.5,
+        "lines.linewidth": 2.0,
+        "lines.markersize": 5.2,
         "lines.solid_capstyle": "round",
         "lines.solid_joinstyle": "round",
 
         # Axes
-        "axes.linewidth": 0.75,
+        "axes.linewidth": 0.9,
         "axes.spines.top": False,
         "axes.spines.right": False,
         "axes.grid": False,
@@ -93,10 +92,10 @@ def apply_neurips_style():
         ),
 
         # Ticks
-        "xtick.major.width": 0.6,
-        "ytick.major.width": 0.6,
-        "xtick.major.size": 3.0,
-        "ytick.major.size": 3.0,
+        "xtick.major.width": 0.75,
+        "ytick.major.width": 0.75,
+        "xtick.major.size": 3.5,
+        "ytick.major.size": 3.5,
         "xtick.direction": "out",
         "ytick.direction": "out",
         "xtick.major.pad": 2,
@@ -105,8 +104,8 @@ def apply_neurips_style():
         "ytick.color": "#2A2A2A",
 
         # Grid
-        "grid.linewidth": 0.5,
-        "grid.alpha": 0.30,
+        "grid.linewidth": 0.65,
+        "grid.alpha": 0.34,
         "grid.color": COLORS["grid"],
 
         # Legend
@@ -132,7 +131,7 @@ def apply_neurips_style():
         "pdf.compression": 9,
 
         # Hatch
-        "hatch.linewidth": 0.4,
+        "hatch.linewidth": 0.55,
     })
 
 
@@ -155,11 +154,11 @@ def panel_label(ax, label, x=-0.11, y=1.05, **kwargs):
 def style_axis(ax, grid="none", spine_color=None):
     """Apply standard panel polish to an axes."""
     if grid in {"x", "y", "both"}:
-        ax.grid(True, axis=grid, zorder=0, linewidth=0.5, alpha=0.3,
+        ax.grid(True, axis=grid, zorder=0, linewidth=0.65, alpha=0.34,
                 color=COLORS["grid"])
     else:
         ax.grid(False)
-    ax.tick_params(direction="out", length=3, width=0.6)
+    ax.tick_params(direction="out", length=3.5, width=0.75)
     ax.set_axisbelow(True)
     if spine_color is not None:
         for spine in ("left", "bottom"):
@@ -168,10 +167,14 @@ def style_axis(ax, grid="none", spine_color=None):
 
 def despine(ax, top=True, right=True, left=False, bottom=False):
     """Hide specific spines on an axes."""
-    if top:    ax.spines["top"].set_visible(False)
-    if right:  ax.spines["right"].set_visible(False)
-    if left:   ax.spines["left"].set_visible(False)
-    if bottom: ax.spines["bottom"].set_visible(False)
+    if top:
+        ax.spines["top"].set_visible(False)
+    if right:
+        ax.spines["right"].set_visible(False)
+    if left:
+        ax.spines["left"].set_visible(False)
+    if bottom:
+        ax.spines["bottom"].set_visible(False)
 
 
 def clean_schematic_axis(ax):
@@ -184,10 +187,6 @@ def clean_schematic_axis(ax):
 
 
 def add_panel_background(ax, color=None, alpha=0.0, radius=0.02):
-    """Add a subtle rounded-rect background behind an axes (for schematics)."""
-    from matplotlib.patches import FancyBboxPatch
-    if color is None:
-        color = COLORS["panel_bg"]
-    bbox = ax.get_position()
-    # Skip for now — hooks left for future use if we want rounded panel panels
-    pass
+    """Reserved hook for rounded panel backgrounds."""
+    del ax, color, alpha, radius
+    return None

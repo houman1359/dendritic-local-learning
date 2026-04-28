@@ -23,6 +23,18 @@
 \usepackage[hidelinks,hypertexnames=false,bookmarks=false]{hyperref}
 \graphicspath{{figures/}{./figures/}}
 
+% Keep large manuscript figures from stacking on the same page.
+\setcounter{topnumber}{1}
+\setcounter{bottomnumber}{1}
+\setcounter{totalnumber}{1}
+\setcounter{dbltopnumber}{1}
+\renewcommand{\topfraction}{0.92}
+\renewcommand{\bottomfraction}{0.75}
+\renewcommand{\textfraction}{0.08}
+\renewcommand{\floatpagefraction}{0.75}
+\renewcommand{\dbltopfraction}{0.92}
+\renewcommand{\dblfloatpagefraction}{0.75}
+
 \newtheorem{theorem}{Theorem}
 \newtheorem{proposition}{Proposition}
 \newtheorem{lemma}{Lemma}

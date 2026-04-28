@@ -135,7 +135,7 @@ DATASET_LABEL = {
 
 def _panel(ax, label, x=-0.16, y=1.16):
     """Place bold panel label (A, B, C, ...) well above the axes to avoid title overlap."""
-    ax.text(x, y, label, transform=ax.transAxes, fontsize=14,
+    ax.text(x, y, label, transform=ax.transAxes, fontsize=15,
             fontweight="bold", va="top", ha="left")
 
 
@@ -426,11 +426,12 @@ def figure2():
     ie_data = _csv_path(IE_PERF_SUMMARY_CSV)
 
     fig, axes = plt.subplots(
-        1,
-        4,
-        figsize=(12.4, 3.55),
-        gridspec_kw={"wspace": 0.56, "width_ratios": [1.18, 1.12, 1.02, 1.02]},
+        2,
+        2,
+        figsize=(7.2, 5.0),
+        gridspec_kw={"wspace": 0.36, "hspace": 0.58},
     )
+    axes = axes.ravel()
 
     # ---- Panel A: Multi-benchmark bars ----
     ax = axes[0]
@@ -529,21 +530,21 @@ def figure2():
 
     for i, (_ds_name, bp_val, bp_err, shunt_val, shunt_err, add_val, add_err) in enumerate(datasets_info):
         ax.bar(i - bar_w, bp_val * 100, bar_w * 0.88, yerr=bp_err * 100,
-               color=COLOR_BACKPROP, edgecolor="white", lw=0.3,
-               capsize=1.5, error_kw={"lw": 0.5})
+               color=COLOR_BACKPROP, edgecolor="white", lw=0.45,
+               capsize=2.2, error_kw={"lw": 0.85})
         if shunt_val is not None:
             ax.bar(i, shunt_val * 100, bar_w * 0.88, yerr=shunt_err * 100,
-                   color=COLOR_SHUNTING, edgecolor="white", lw=0.3,
-                   capsize=1.5, error_kw={"lw": 0.5})
+                   color=COLOR_SHUNTING, edgecolor="white", lw=0.45,
+                   capsize=2.2, error_kw={"lw": 0.85})
         if add_val is not None:
             ax.bar(i + bar_w, add_val * 100, bar_w * 0.88, yerr=add_err * 100,
-                   color=COLOR_ADDITIVE, edgecolor="white", lw=0.3,
-                   capsize=1.5, error_kw={"lw": 0.5})
+                   color=COLOR_ADDITIVE, edgecolor="white", lw=0.45,
+                   capsize=2.2, error_kw={"lw": 0.85})
 
     ax.set_xticks(x_base)
     ax.set_xticklabels([d[0] for d in datasets_info])
     ax.set_ylabel("Test accuracy (%)")
-    ax.set_title("Accuracy vs matched ceiling", fontsize=10.6, pad=7)
+    ax.set_title("Accuracy vs matched ceiling", fontsize=11.5, pad=8)
 
     # Legend
     legend_handles = [
@@ -553,7 +554,7 @@ def figure2():
     ]
     fig.legend(
         handles=legend_handles,
-        fontsize=8.8,
+        fontsize=9.2,
         loc="upper center",
         bbox_to_anchor=(0.50, 0.992),
         ncol=3,
@@ -588,15 +589,15 @@ def figure2():
             ds_short = "MNIST" if ds == "mnist" else "Noise"
             ax.errorbar(sub["ie_value"], sub["test_accuracy_mean"] * 100,
                         yerr=sub["test_accuracy_std"] * 100,
-                        marker=marker, markersize=ms, linewidth=1.0, capsize=1.5,
+                        marker=marker, markersize=ms + 0.8, linewidth=1.5, capsize=2.2,
                         color=color, linestyle=ls, label=f"{short} {ds_short}",
-                        capthick=0.4)
+                        capthick=0.75)
 
     ax.set_xlabel("$N_I$ (inhib. syn. per branch)")
     ax.set_ylabel("Test accuracy (%)")
-    ax.set_title("Inhibition dose response", fontsize=10.6, pad=7)
+    ax.set_title("Inhibition dose response", fontsize=11.5, pad=8)
     ax.legend(
-        fontsize=7.2,
+        fontsize=7.8,
         loc="lower right",
         ncol=2,
         handlelength=1.2,
@@ -637,19 +638,19 @@ def figure2():
                 merged["delta"],
                 yerr=merged["delta_err"],
                 marker=marker,
-                markersize=4.8,
-                linewidth=1.4,
+                markersize=5.3,
+                linewidth=1.8,
                 color=color,
                 label=lbl,
                 capsize=2,
-                capthick=0.5,
+                capthick=0.75,
             )
 
-    ax.axhline(0, color="black", lw=0.4, ls="--")
+    ax.axhline(0, color="black", lw=0.7, ls="--")
     ax.set_xlabel("$N_I$ (inhib. syn. per branch)")
     ax.set_ylabel("Shunting adv. (pp)")
-    ax.set_title("Shunting advantage", fontsize=10.6, pad=7)
-    ax.legend(fontsize=7.4, loc="upper right", handlelength=1.2)
+    ax.set_title("Shunting advantage", fontsize=11.5, pad=8)
+    ax.legend(fontsize=8.0, loc="upper right", handlelength=1.2)
 
     # ---- Panel D: Fashion-MNIST comparison ----
     ax = axes[3]
@@ -700,18 +701,18 @@ def figure2():
         for i, (_lbl, val, err, color, hatch) in enumerate(fmnist_data):
             alpha = 1.0 if hatch is None else 0.55
             ax.bar(i, val, 0.65, yerr=err, color=color, alpha=alpha,
-                   edgecolor="white", lw=0.3, hatch=hatch,
-                   capsize=2, error_kw={"lw": 0.6})
+                   edgecolor="white", lw=0.45, hatch=hatch,
+                   capsize=2.2, error_kw={"lw": 0.85})
             ax.text(i, val + err + 0.5, f"{val:.1f}", ha="center", va="bottom",
-                    fontsize=7.2)
+                    fontsize=8.0)
         ax.set_xticks(x_pos)
-        ax.set_xticklabels([d[0] for d in fmnist_data], fontsize=7.5, rotation=25,
+        ax.set_xticklabels([d[0] for d in fmnist_data], fontsize=8.2, rotation=25,
                            ha="right")
         ax.set_ylabel("Test accuracy (%)")
-        ax.set_title("Fashion-MNIST gap", fontsize=10.6, pad=7)
+        ax.set_title("Fashion-MNIST gap", fontsize=11.5, pad=8)
         ax.set_ylim(70, 92)
 
-    fig.subplots_adjust(left=0.060, right=0.992, bottom=0.27, top=0.78, wspace=0.56)
+    fig.subplots_adjust(left=0.085, right=0.985, bottom=0.12, top=0.86, wspace=0.36, hspace=0.58)
     _save(fig, "fig2_competence_regime")
     plt.close(fig)
 
@@ -722,11 +723,12 @@ def figure2():
 def figure3():
     print("\n--- Figure 3: Gradient Fidelity ---")
     fig, axes = plt.subplots(
-        1,
-        4,
-        figsize=(10.2, 3.15),
-        gridspec_kw={"wspace": 0.50, "width_ratios": [0.95, 1.02, 1.02, 1.05]},
+        2,
+        2,
+        figsize=(7.2, 5.0),
+        gridspec_kw={"wspace": 0.40, "hspace": 0.58},
     )
+    axes = axes.ravel()
 
     def _load_gradient_trajectory(rule_variant="5f"):
         """Load trajectory diagnostics and keep one rule variant.
@@ -847,27 +849,27 @@ def figure3():
         ax.scatter(
             np.full_like(vals, i, dtype=float) + jitter,
             vals,
-            s=18,
+            s=24,
             color=color,
             alpha=0.72,
             edgecolor="white",
-            linewidth=0.3,
+            linewidth=0.45,
             zorder=3,
         )
-        ax.hlines(np.median(vals), i - 0.18, i + 0.18, color="black", lw=1.2, zorder=4)
+        ax.hlines(np.median(vals), i - 0.18, i + 0.18, color="black", lw=1.4, zorder=4)
     ax.set_xticks([0, 1])
-    ax.set_xticklabels(["rel. $L_2$", "scale"], fontsize=7.5)
+    ax.set_xticklabels(["rel. $L_2$", "scale"], fontsize=8.7)
     ax.set_ylabel("Reconstruction error")
     ax.set_yscale("log")
     ax.set_ylim(1e-10, 1e-4)
     ax.set_title("Factorization check")
-    ax.grid(axis="y", alpha=0.20, linewidth=0.5)
+    ax.grid(axis="y", alpha=0.24, linewidth=0.65)
     ax.text(
         0.04,
         0.08,
         "Autograd is\nreconstructed",
         transform=ax.transAxes,
-        fontsize=7.7,
+        fontsize=8.2,
         ha="left",
         va="bottom",
         bbox={"boxstyle": "round,pad=0.24", "fc": "white", "ec": "0.85", "alpha": 0.95},
@@ -901,13 +903,13 @@ def figure3():
             yerr=errs,
             color=core_colors,
             edgecolor="white",
-            lw=0.4,
+            lw=0.5,
             width=0.58,
-            capsize=2.2,
-            error_kw={"lw": 0.7},
+            capsize=2.6,
+            error_kw={"lw": 0.9},
         )
         ax.set_xticks(x_pos)
-        ax.set_xticklabels(core_labels, fontsize=8.2)
+        ax.set_xticklabels(core_labels, fontsize=9.0)
         ax.set_ylabel("Cosine similarity")
         n_label = min(ns) if ns else 0
         ax.set_title(f"Final alignment (n={n_label})")
@@ -922,7 +924,7 @@ def figure3():
                 f"{val:.3f}",
                 ha="center",
                 va=va,
-                fontsize=7.4,
+                fontsize=8.0,
             )
     else:
         ax.text(0.5, 0.5, "No seeded alignment data", transform=ax.transAxes,
@@ -952,13 +954,13 @@ def figure3():
             yerr=errs,
             color=core_colors,
             edgecolor="white",
-            lw=0.4,
+            lw=0.5,
             width=0.58,
-            capsize=2.2,
-            error_kw={"lw": 0.7},
+            capsize=2.6,
+            error_kw={"lw": 0.9},
         )
         ax.set_xticks(x_pos)
-        ax.set_xticklabels(core_labels, fontsize=8.2)
+        ax.set_xticklabels(core_labels, fontsize=9.0)
         ax.set_ylabel(r"$|\log_{10}\|g_{\rm loc}\|/\|g_{\rm BP}\||$")
         n_label = min(ns) if ns else 0
         ax.set_title(f"Scale mismatch (n={n_label})")
@@ -970,7 +972,7 @@ def figure3():
                 f"{val:.3f}" if val < 0.2 else f"{val:.2f}",
                 ha="center",
                 va="bottom",
-                fontsize=7.4,
+                fontsize=8.0,
             )
     else:
         ax.text(0.5, 0.5, "No seeded scale data", transform=ax.transAxes,
@@ -1004,9 +1006,9 @@ def figure3():
                     y,
                     color=color,
                     linestyle=linestyle,
-                    lw=1.2,
+                    lw=1.6,
                     marker="o" if linestyle == "-" else "s",
-                    markersize=2.7,
+                    markersize=3.4,
                     label=f"{core_label} {metric_label}",
                     zorder=3,
                 )
@@ -1023,12 +1025,12 @@ def figure3():
         ax.set_xlabel("Epoch")
         ax.set_ylabel("Full gradient norm")
         ax.set_title("Gradient norms")
-        ax.legend(loc="upper left", fontsize=6.8, frameon=False, ncol=1)
+        ax.legend(loc="upper left", fontsize=7.4, frameon=False, ncol=1)
     else:
         ax.text(0.5, 0.5, "No trajectory data found", transform=ax.transAxes,
                 ha="center", va="center", fontsize=8, color="red")
 
-    fig.subplots_adjust(left=0.060, right=0.992, bottom=0.25, top=0.84, wspace=0.50)
+    fig.subplots_adjust(left=0.085, right=0.985, bottom=0.12, top=0.92, wspace=0.40, hspace=0.58)
     _save(fig, "fig3_gradient_fidelity")
     plt.close(fig)
 

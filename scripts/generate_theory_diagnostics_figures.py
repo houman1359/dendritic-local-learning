@@ -61,12 +61,12 @@ def _setup_style() -> None:
     apply_neurips_style()
     plt.rcParams.update(
         {
-            "font.size": 10.2,
-            "axes.labelsize": 10.6,
-            "axes.titlesize": 10.8,
-            "xtick.labelsize": 9.0,
-            "ytick.labelsize": 9.0,
-            "legend.fontsize": 8.4,
+            "font.size": 11.0,
+            "axes.labelsize": 11.2,
+            "axes.titlesize": 11.5,
+            "xtick.labelsize": 9.8,
+            "ytick.labelsize": 9.8,
+            "legend.fontsize": 9.0,
             "legend.frameon": True,
             "legend.framealpha": 0.96,
             "legend.edgecolor": "#D0D5DD",
@@ -221,8 +221,7 @@ def _plot_path_gain_map(ax: plt.Axes, summary: pd.DataFrame) -> None:
     )
     sm = plt.cm.ScalarMappable(norm=norm, cmap=cmap)
     cbar = plt.colorbar(sm, ax=ax, fraction=0.040, pad=0.01)
-    cbar.set_label(r"$\log_{10}\alpha_n$", fontsize=7.5)
-    cbar.ax.tick_params(labelsize=7.0, width=0.4, length=2)
+    cbar.set_ticks([])
     ax.set_title("Path-gain field")
 
 
@@ -573,98 +572,7 @@ def _plot_oracle_learning(
 
 def _plot_inhibitory_path_probe(ax: plt.Axes, input_mode: pd.DataFrame) -> None:
     _panel(ax, "E")
-    ax.set_xticks([])
-    ax.set_yticks([])
-    for spine in ax.spines.values():
-        spine.set_visible(False)
-    ax.set_xlim(0, 1)
-    ax.set_ylim(0, 1)
-    ax.set_title("I gates paths", pad=8)
-
-    # Compact schematic: inhibition on a branch lowers local resistance and
-    # gates all upstream credit paths.
-    soma = (0.18, 0.72)
-    branches = [(0.10, 0.50), (0.27, 0.50)]
-    leaves = [(0.06, 0.30), (0.13, 0.28), (0.23, 0.28), (0.31, 0.30)]
-    ax.add_patch(
-        mpatches.Circle(
-            soma, 0.034, facecolor=COLORS["soma"], edgecolor=COLORS["edge"], linewidth=0.6
-        )
-    )
-    for branch in branches:
-        ax.plot(
-            [soma[0], branch[0]],
-            [soma[1] - 0.03, branch[1]],
-            color=COLORS["dend"],
-            linewidth=2.7,
-            solid_capstyle="round",
-        )
-    for branch, leaf_pair in zip(branches, [leaves[:2], leaves[2:]]):
-        for leaf in leaf_pair:
-            ax.plot(
-                [branch[0], leaf[0]],
-                [branch[1], leaf[1]],
-                color=COLORS["dend"],
-                linewidth=2.1,
-                solid_capstyle="round",
-            )
-            ax.add_patch(
-                mpatches.Circle(
-                    leaf,
-                    0.012,
-                    facecolor=COLORS["exc"],
-                    edgecolor="white",
-                    linewidth=0.3,
-                    zorder=3,
-                )
-            )
-    ax.plot(
-        [leaves[0][0], branches[0][0], soma[0]],
-        [leaves[0][1], branches[0][1], soma[1]],
-        color=COLOR_TRANSPORT,
-        linewidth=1.3,
-        alpha=0.85,
-        zorder=4,
-    )
-    ax.add_patch(
-        mpatches.Circle(
-            (0.095, 0.42),
-            0.022,
-            facecolor="#F7E6E8",
-            edgecolor=COLORS["inh"],
-            linewidth=1.0,
-            zorder=5,
-        )
-    )
-    ax.text(
-        0.095,
-        0.42,
-        "I",
-        ha="center",
-        va="center",
-        fontsize=7.2,
-        color=COLORS["inh"],
-        fontweight="bold",
-        zorder=6,
-    )
-    ax.annotate(
-        "",
-        xy=(0.090, 0.42),
-        xytext=(0.005, 0.43),
-        arrowprops={"arrowstyle": "-|>", "lw": 1.0, "color": COLORS["inh"]},
-    )
-    ax.text(0.02, 0.47, r"$G_I(x)$", fontsize=7.0, color=COLORS["inh"], ha="left")
-    ax.text(
-        0.18,
-        0.08,
-        r"$G_I \uparrow \Rightarrow R^{tot}\downarrow$"
-        "\n"
-        r"$\alpha_n$ attenuates",
-        ha="center",
-        va="center",
-        fontsize=6.1,
-        color=COLORS["mute"],
-    )
+    style_axis(ax, grid="x")
 
     def _row(condition: str) -> pd.Series:
         rows = input_mode[input_mode["condition"] == condition]
@@ -676,45 +584,85 @@ def _plot_inhibitory_path_probe(ax: plt.Axes, input_mode: pd.DataFrame) -> None:
     direct_path = _row("direct_i_stream__localca_path_transport")
     explicit_path = _row("explicit_i_cells__localca_path_transport__i_updates_True")
     explicit_bp = _row("explicit_i_cells__standard_bp")
-    bar_rows = [
-        ("rank-1", direct_rank1, COLORS["per_soma"], ""),
-        ("transport", direct_path, COLOR_TRANSPORT, ""),
-        ("I-cell", explicit_path, COLORS["shunting"], "//"),
+    rows = [
+        ("Rank-1", direct_rank1, COLORS["per_soma"], ""),
+        ("Path transport", direct_path, COLOR_TRANSPORT, ""),
+        ("I-cell path", explicit_path, COLORS["shunting"], "//"),
     ]
-    x_min, x_max = 0.50, 0.96
-    y_min, y_max = 0.80, 0.965
-    bp_x = x_min + (x_max - x_min) * (
-        (float(explicit_bp["test_accuracy_mean"]) - y_min) / (y_max - y_min)
-    )
-    ax.vlines(
-        bp_x,
-        0.14,
-        0.53,
-        colors=COLORS["bp"],
-        linestyles="--",
-        linewidth=0.9,
-        alpha=0.8,
-    )
-    ax.text(bp_x + 0.006, 0.535, "BP", ha="left", va="bottom", fontsize=6.3, color=COLORS["bp"])
-    for y, (label, row, color, hatch) in zip([0.42, 0.30, 0.18], bar_rows):
-        mean = float(row["test_accuracy_mean"])
-        std = float(row["test_accuracy_std"])
-        x1 = x_min + (x_max - x_min) * ((mean - y_min) / (y_max - y_min))
-        rect = mpatches.Rectangle(
-            (x_min, y - 0.027),
-            x1 - x_min,
-            0.054,
-            facecolor=color,
+    bp = 100.0 * float(explicit_bp["test_accuracy_mean"])
+    y = np.arange(len(rows))[::-1]
+    means = np.asarray([100.0 * float(row["test_accuracy_mean"]) for _, row, _, _ in rows])
+    errs = np.asarray([100.0 * float(row["test_accuracy_std"]) for _, row, _, _ in rows])
+    colors = [color for _, _, color, _ in rows]
+    hatches = [hatch for _, _, _, hatch in rows]
+
+    for yi, mean, err, color, hatch in zip(y, means, errs, colors, hatches):
+        ax.barh(
+            yi,
+            mean - 80.0,
+            left=80.0,
+            height=0.48,
+            color=color,
             edgecolor="white",
-            linewidth=0.4,
+            linewidth=0.55,
             hatch=hatch,
+            alpha=0.92,
+            zorder=2,
         )
-        ax.add_patch(rect)
-        err = (x_max - x_min) * (std / (y_max - y_min))
-        ax.hlines(y, x1 - err, x1 + err, color=COLORS["ink"], linewidth=0.6)
-        ax.vlines([x1 - err, x1 + err], y - 0.010, y + 0.010, color=COLORS["ink"], linewidth=0.6)
-        ax.text(x_min - 0.020, y, label, ha="right", va="center", fontsize=6.0)
-        ax.text(min(x1 + 0.012, 0.985), y, f"{100 * mean:.1f}", ha="left", va="center", fontsize=6.3)
+        ax.errorbar(
+            mean,
+            yi,
+            xerr=err,
+            fmt="o",
+            markersize=4.2,
+            color=COLORS["ink"],
+            ecolor=COLORS["ink"],
+            elinewidth=0.85,
+            capsize=2.2,
+            capthick=0.75,
+            zorder=4,
+        )
+        ax.text(
+            mean + 0.42,
+            yi,
+            f"{mean:.1f}",
+            ha="left",
+            va="center",
+            fontsize=8.0,
+            color=COLORS["ink"],
+        )
+
+    ax.axvline(bp, color=COLORS["bp"], linestyle="--", linewidth=1.1, alpha=0.90, zorder=3)
+    ax.text(
+        bp - 0.15,
+        2.64,
+        "BP",
+        ha="right",
+        va="bottom",
+        fontsize=8.0,
+        color=COLORS["bp"],
+        fontweight="bold",
+    )
+    ax.set_yticks(y)
+    ax.set_yticklabels([label for label, _, _, _ in rows], fontsize=8.4)
+    ax.set_xlim(80.0, 98.0)
+    ax.set_xticks([80, 85, 90, 95])
+    ax.set_xlabel("Probe accuracy (%)")
+    ax.set_title("Pathway probe", pad=8)
+    ax.set_ylim(-0.55, 2.72)
+    ax.spines["left"].set_visible(False)
+    ax.tick_params(axis="y", length=0)
+    ax.text(
+        0.03,
+        0.97,
+        r"$G_I(x)\!\uparrow \Rightarrow R^{tot}\!\downarrow \Rightarrow \alpha_n$ gated",
+        transform=ax.transAxes,
+        ha="left",
+        va="top",
+        fontsize=7.6,
+        color=COLORS["inh"],
+        bbox={"boxstyle": "round,pad=0.22", "fc": "white", "ec": "#E6C7CB", "alpha": 0.96},
+    )
 
 
 def build_figure(
@@ -731,19 +679,30 @@ def build_figure(
     rank_summary = _safe_csv(ERROR_RANK_SUMMARY_CSV)
     input_mode = _safe_csv(INPUT_MODE_SUMMARY_CSV)
 
-    fig, axes = plt.subplots(
-        1,
-        5,
-        figsize=(12.4, 3.2),
-        gridspec_kw={"wspace": 0.58, "width_ratios": [1.02, 0.78, 0.98, 1.04, 0.86]},
+    fig = plt.figure(figsize=(7.2, 5.05))
+    gs = fig.add_gridspec(
+        2,
+        6,
+        left=0.080,
+        right=0.985,
+        top=0.925,
+        bottom=0.115,
+        wspace=0.72,
+        hspace=0.72,
     )
+    axes = [
+        fig.add_subplot(gs[0, 0:2]),
+        fig.add_subplot(gs[0, 2:4]),
+        fig.add_subplot(gs[0, 4:6]),
+        fig.add_subplot(gs[1, 0:3]),
+        fig.add_subplot(gs[1, 3:6]),
+    ]
 
     _plot_path_gain_map(axes[0], summary)
     _plot_error_compressibility(axes[1], rank_summary)
     _plot_compartment_error_fidelity(axes[2], summary)
     _plot_oracle_learning(axes[3], summary, oracle_summary)
     _plot_inhibitory_path_probe(axes[4], input_mode)
-    fig.subplots_adjust(left=0.052, right=0.992, top=0.83, bottom=0.25, wspace=0.58)
     return fig
 
 
