@@ -2,8 +2,8 @@
 """Generate Figure 1 for the LocalCA manuscript.
 
 The figure is deliberately conceptual: it defines the conductance tree, the
-exact local-global factorization, the path-gain object, and the feedback
-taxonomy used throughout the paper.
+path-gain object, and the feedback taxonomy used throughout the paper. Keep
+math out of this schematic; the equations are presented in the main text.
 
 Outputs:
   figures/fig1_model_and_credit.{pdf,png}
@@ -212,14 +212,47 @@ def panel_a(ax):
     arrow(ax, (1.02, 0.50), (1.18, 0.50), lw=1.2, ms=9)
     ax.text(1.20, 0.50, "out", ha="left", va="center", fontsize=6.8, color=INK, fontweight="bold")
 
-    draw_synapse(ax, 0.050, 0.93, "E", 1.0)
-    ax.text(0.075, 0.93, "E: positive drive", fontsize=6.8, color=EXC, va="center", fontweight="bold")
-    draw_synapse(ax, 0.050, 0.865, "I", 1.0)
-    ax.text(0.075, 0.865, "I: conductance load", fontsize=6.8, color=INH, va="center", fontweight="bold")
+    legend_y = 0.93
+    draw_synapse(ax, 0.052, legend_y, "E", 1.0)
+    ax.text(
+        0.080,
+        legend_y,
+        "excitatory drive",
+        fontsize=6.7,
+        color=EXC,
+        va="center",
+        fontweight="bold",
+    )
+    draw_synapse(ax, 0.052, legend_y - 0.070, "I", 1.0)
+    ax.text(
+        0.080,
+        legend_y - 0.070,
+        "shunting load",
+        fontsize=6.7,
+        color=INH,
+        va="center",
+        fontweight="bold",
+    )
 
-    box(ax, (0.055, 0.035), 1.12, 0.18, fc="#FBFCFE")
-    ax.text(0.615, 0.153, r"$V_n=\dfrac{N_n}{G_n^{\rm tot}},\quad R_n^{\rm tot}=1/G_n^{\rm tot}$", ha="center", va="center", fontsize=8.8, color=INK)
-    ax.text(0.615, 0.055, r"inhibition $\uparrow G_n^{\rm tot}$, $\downarrow R_n^{\rm tot}$", ha="center", va="center", fontsize=5.5, color=INH, fontweight="bold")
+    component_boxes = [
+        (0.08, 0.105, "E syn.", EXC),
+        (0.36, 0.105, "I syn.", INH),
+        (0.64, 0.105, "branch", DEND),
+        (0.92, 0.105, "soma", SOMA),
+    ]
+    for x, y, label, color in component_boxes:
+        box(ax, (x - 0.080, y - 0.038), 0.16, 0.076, fc="white", ec="#D8DEE8", lw=0.55)
+        ax.add_patch(Circle((x - 0.058, y), 0.014, fc=color, ec="white", linewidth=0.35, zorder=8))
+        ax.text(
+            x - 0.033,
+            y,
+            label,
+            fontsize=5.5,
+            ha="left",
+            va="center",
+            color=INK,
+            linespacing=0.9,
+        )
 
 
 def panel_b(ax):
@@ -352,11 +385,18 @@ def panel_c(ax):
     ax.add_patch(Circle((1.12, 0.17), 0.022, fc=LOCAL, ec="white", linewidth=0.5, zorder=10))
     for _, y in tree["branches"]:
         arrow(ax, (1.10, 0.17), (0.63, y - 0.02), color=LOCAL, lw=0.8, ms=6, alpha=0.55, rad=0.18)
-    ax.text(1.18, 0.17, r"rank-1 $e$", ha="left", va="center", fontsize=6.8, color=LOCAL, fontweight="bold")
+    ax.text(1.18, 0.17, "rank-1\nbroadcast", ha="left", va="center", fontsize=6.4, color=LOCAL, fontweight="bold", linespacing=0.85)
 
-    box(ax, (0.08, 0.02), 0.96, 0.13, fc="#FBFCFE")
-    ax.text(0.56, 0.105, r"$\alpha_n=\Pi_{\rm path}\, R^{\rm tot}g^{\rm den}$", ha="center", va="center", fontsize=7.4, color=INK)
-    ax.text(0.56, 0.045, "rank-1 works when gains are compressible", ha="center", va="center", fontsize=5.7, color=MUTE, style="italic")
+    ax.text(
+        0.60,
+        0.085,
+        "compressible gains make shared broadcast work",
+        ha="center",
+        va="center",
+        fontsize=5.1,
+        color=MUTE,
+        style="italic",
+    )
 
 
 def draw_tiny_tree(ax, x, y, scale=0.10, branch_colors=None):
@@ -383,7 +423,7 @@ def draw_tiny_tree(ax, x, y, scale=0.10, branch_colors=None):
 
 def panel_d(ax):
     width = 2.05
-    setup_panel(ax, width, "Broadcast approximations")
+    setup_panel(ax, width, "Error broadcast modes")
     modes = [
         ("Rank-1\nshared", COLORS["scalar"], "local"),
         ("Neuron-\nwise", COLORS["per_soma"], "local"),
@@ -419,25 +459,25 @@ def panel_d(ax):
         else:
             for leaf in leaves:
                 arrow(ax, (soma[0] + 0.02, soma[1]), (leaf[0] + 0.015, leaf[1]), color=col, lw=0.65, ms=4, alpha=0.75, ls="--", rad=0.12)
-            ax.text(x, 0.255, r"$e_n=\alpha_n\delta_0$", ha="center", va="center", fontsize=5.8, color=col, fontweight="bold")
+            ax.text(x, 0.255, "exact path\ntransport", ha="center", va="center", fontsize=5.4, color=col, fontweight="bold")
 
         if kind != "oracle":
-            ax.text(x, 0.22, "proposed\napprox.", ha="center", va="center", fontsize=5.9, color=MUTE)
+            ax.text(x, 0.22, "local\napprox.", ha="center", va="center", fontsize=5.7, color=MUTE)
         else:
             ax.text(x, 0.185, "upper bound", ha="center", va="center", fontsize=5.5, color=MUTE, style="italic")
 
 
 def main() -> None:
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    fig = plt.figure(figsize=(7.0, 2.45))
+    fig = plt.figure(figsize=(7.0, 2.58))
     gs = fig.add_gridspec(
         1,
         3,
-        width_ratios=[1.32, 1.38, 2.05],
+        width_ratios=[1.25, 1.30, 2.30],
         left=0.040,
         right=0.988,
         top=0.82,
-        bottom=0.11,
+        bottom=0.08,
         wspace=0.18,
     )
     axes = [
@@ -447,7 +487,7 @@ def main() -> None:
     ]
     panel_a(axes[0])
     panel_c(axes[1])
-    panel_design(axes[2])
+    panel_d(axes[2])
     for ax, label in zip(axes, "ABC"):
         panel_label(ax, label, x=-0.08, y=1.13, fontsize=10.5)
 

@@ -22,6 +22,8 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 DRAFT_DIR = SCRIPT_DIR.parent
 FIGURES_DIR = DRAFT_DIR / "figures"
 ANALYSIS_DIR = DRAFT_DIR / "analysis" / "morphology_ie_regime"
+DIAG_DIR = DRAFT_DIR / "analysis" / "morphology_ie_diag_subset_diagnostics_20260427"
+SELECTED_DIAG_CSV = DRAFT_DIR / "analysis" / "morphology_ie_diag_subset" / "selected_runs.csv"
 DEFAULT_SWEEP_DIR = (
     DRAFT_DIR
     / "local_sweep_runs"
@@ -91,6 +93,24 @@ def _heatmap(ax, frame: pd.DataFrame, title: str, cmap: str, center: float | Non
     ax.tick_params(labelsize=9)
 
 
+def _load_selected_diagnostics() -> pd.DataFrame | None:
+    summary_csv = DIAG_DIR / "run_summary.csv"
+    if not summary_csv.exists() or not SELECTED_DIAG_CSV.exists():
+        return None
+    diag = pd.read_csv(summary_csv)
+    selected = pd.read_csv(SELECTED_DIAG_CSV)
+    selected["run_dir_short"] = selected["run_dir"].astype(str).str.extract(r"(results/config_\d+)$")[0]
+    diag["run_dir_short"] = diag["run_dir"].astype(str).str.extract(r"(results/config_\d+)$")[0]
+    merged = selected.merge(diag, on="run_dir_short", how="inner", suffixes=("", "_diag"))
+    if not merged.empty:
+        return merged
+    if len(selected) != len(diag):
+        return None
+    selected = selected.reset_index(drop=True)
+    diag = diag.reset_index(drop=True)
+    return pd.concat([selected, diag.drop(columns=["run_dir"], errors="ignore")], axis=1)
+
+
 def build_figure(sweep_dir: Path = DEFAULT_SWEEP_DIR) -> tuple[plt.Figure, pd.DataFrame]:
     apply_neurips_style()
     sns.set_style("white")
@@ -107,15 +127,15 @@ def build_figure(sweep_dir: Path = DEFAULT_SWEEP_DIR) -> tuple[plt.Figure, pd.Da
     branch_order = _ordered_branch_factors(grouped["branch_factors"].unique().tolist())
     ie_order = sorted(grouped["ie"].unique().tolist())
 
-    additive = grouped[grouped["network_type"] == "dendritic_additive"].pivot(
+    shunting = grouped[grouped["network_type"] == "dendritic_shunting"].pivot(
         index="branch_factors", columns="ie", values="test_acc_mean"
     ).reindex(index=branch_order, columns=ie_order)
-    shunting = grouped[grouped["network_type"] == "dendritic_shunting"].pivot(
+    additive = grouped[grouped["network_type"] == "dendritic_additive"].pivot(
         index="branch_factors", columns="ie", values="test_acc_mean"
     ).reindex(index=branch_order, columns=ie_order)
     gap = shunting - additive
 
-    depth_gap = (
+    gap_long = (
         grouped.pivot_table(
             index=["branch_factors", "depth", "branch_product", "ie"],
             columns="network_type",
@@ -123,22 +143,120 @@ def build_figure(sweep_dir: Path = DEFAULT_SWEEP_DIR) -> tuple[plt.Figure, pd.Da
         )
         .reset_index()
         .assign(gap=lambda x: x["dendritic_shunting"] - x["dendritic_additive"])
-        .groupby(["depth", "ie"])["gap"]
+    )
+    best_ie = (
+        gap_long.sort_values(["branch_factors", "gap"], ascending=[True, False])
+        .groupby("branch_factors")
+        .head(1)
+        .copy()
+    )
+    depth_gap = (
+        gap_long.groupby(["depth", "ie"])["gap"]
         .mean()
         .reset_index()
     )
+    depth_peak = (
+        depth_gap.sort_values(["depth", "gap"], ascending=[True, False])
+        .groupby("depth")
+        .head(1)
+        .copy()
+    )
+    diag = _load_selected_diagnostics()
 
     fig, axes = plt.subplots(
         1,
         4,
         figsize=(14.0, 3.4),
         constrained_layout=True,
-        gridspec_kw={"width_ratios": [1.0, 1.0, 1.0, 1.05]},
+        gridspec_kw={"width_ratios": [1.12, 0.92, 1.0, 1.05]},
     )
 
-    _heatmap(axes[0], additive, "Additive", "Blues")
-    _heatmap(axes[1], shunting, "Shunting", "Greens")
-    _heatmap(axes[2], gap, "Gap (shunt. - add.)", "vlag", center=0.0)
+    _heatmap(axes[0], gap, "Shunting advantage", "vlag", center=0.0)
+    axes[0].set_title("Gap: shunting - additive", fontsize=11, pad=8)
+
+    ax = axes[1]
+    style_axis(ax, grid="x")
+    best_ie = best_ie.set_index("branch_factors").reindex(branch_order).reset_index()
+    y = np.arange(len(best_ie))
+    colors = [COLORS["shunting"] if v > 0 else COLORS["additive"] for v in best_ie["gap"]]
+    ax.barh(y, best_ie["ie"], color=colors, edgecolor="white", linewidth=0.5, height=0.56)
+    ax.set_yticks(y)
+    ax.set_yticklabels(best_ie["branch_factors"], fontsize=8)
+    ax.invert_yaxis()
+    ax.set_xlabel(r"Best $N_I$")
+    ax.set_title("Best inhibition by tree", fontsize=11, pad=8)
+    for yi, (_, row) in enumerate(best_ie.iterrows()):
+        ax.text(
+            row["ie"] + 0.7,
+            yi,
+            f"{100 * row['gap']:+.1f} pp",
+            va="center",
+            ha="left",
+            fontsize=7,
+            color=COLORS["ink"],
+        )
+    ax.set_xlim(0, max(ie_order) + 11)
+
+    ax = axes[2]
+    style_axis(ax, grid="y")
+    if diag is not None:
+        diag = diag.sort_values(["branch_factors", "ie", "network_type"])
+        diag["label"] = diag["branch_factors"] + "\n" + diag["ie"].astype(str)
+        keep = diag[
+            diag["tag"].isin(
+                [
+                    "best_depth2_lowI_shunting",
+                    "best_depth2_lowI_additive",
+                    "best_depth3_midI_shunting",
+                    "best_depth3_midI_additive",
+                    "highI_collapse_shunting",
+                    "highI_match_additive",
+                ]
+            )
+        ].copy()
+        labels = []
+        vals = []
+        colors = []
+        for tag in [
+            "best_depth2_lowI_additive",
+            "best_depth2_lowI_shunting",
+            "best_depth3_midI_additive",
+            "best_depth3_midI_shunting",
+            "highI_match_additive",
+            "highI_collapse_shunting",
+        ]:
+            row = keep[keep["tag"] == tag]
+            if row.empty:
+                continue
+            row = row.iloc[0]
+            labels.append(f"{row['branch_factors']}\n$N_I$={int(row['ie'])}")
+            vals.append(float(row["path_gain_cv_mean"]))
+            colors.append(COLOR_SHUNTING if row["network_type"] == "dendritic_shunting" else COLOR_ADDITIVE)
+        x = np.arange(len(vals))
+        ax.bar(x, vals, color=colors, edgecolor="white", linewidth=0.45, width=0.70)
+        ax.set_xticks(x)
+        ax.set_xticklabels(labels, fontsize=6.8)
+        ax.set_ylabel("Path-gain CV")
+        ax.set_title("Representative credit geometry", fontsize=11, pad=8)
+        handles = [
+            plt.Line2D([0], [0], color=COLOR_ADDITIVE, lw=5, label="Additive"),
+            plt.Line2D([0], [0], color=COLOR_SHUNTING, lw=5, label="Shunting"),
+        ]
+        ax.legend(handles=handles, loc="upper right", fontsize=6.8, frameon=False)
+    else:
+        ax.text(
+            0.5,
+            0.58,
+            "Selected morphology\npath-gain diagnostics\npending",
+            ha="center",
+            va="center",
+            transform=ax.transAxes,
+            fontsize=8.2,
+            color=COLORS["mute"],
+        )
+        ax.set_xticks([])
+        ax.set_yticks([])
+        ax.set_title("Representative credit geometry", fontsize=11, pad=8)
 
     ax = axes[3]
     style_axis(ax, grid="y")
@@ -160,6 +278,16 @@ def build_figure(sweep_dir: Path = DEFAULT_SWEEP_DIR) -> tuple[plt.Figure, pd.Da
     ax.set_xticks(ie_order)
     ax.tick_params(labelsize=9)
     ax.legend(fontsize=8, loc="best")
+    for _, row in depth_peak.iterrows():
+        ax.scatter(
+            [row["ie"]],
+            [row["gap"]],
+            s=52,
+            facecolor="white",
+            edgecolor=depth_palette.get(int(row["depth"]), "#444444"),
+            linewidth=1.5,
+            zorder=6,
+        )
 
     for label, ax in zip(["A", "B", "C", "D"], axes.flat):
         panel_label(ax, label, x=-0.16, y=1.05, fontsize=11)

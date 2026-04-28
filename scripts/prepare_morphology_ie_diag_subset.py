@@ -92,7 +92,7 @@ def main() -> None:
     manifest = {
         "source_sweep": str(sweep_dir),
         "selected_runs_csv": str(output_dir / "selected_runs.csv"),
-        "num_selected_runs": int(len(selected)),
+        "num_selected_runs": len(selected),
     }
     (output_dir / "manifest.json").write_text(json.dumps(manifest, indent=2))
     print(f"Prepared {len(selected)} runs under {subset_sweep}")

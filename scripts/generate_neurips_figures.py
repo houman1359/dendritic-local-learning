@@ -24,6 +24,7 @@ Usage:
 """
 
 import os
+import sys
 import warnings
 
 import matplotlib
@@ -112,9 +113,8 @@ W = 5.5  # NeurIPS single-column width
 DPI = 300
 
 
-import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from neurips_style import apply_neurips_style, COLORS, panel_label, style_axis
+from neurips_style import apply_neurips_style, style_axis  # noqa: E402
 
 
 LABEL_MAP = {
@@ -153,14 +153,14 @@ def _csv(filename, bundle=False):
     else:
         path = os.path.join(DATA_DIR, filename)
     if not os.path.isfile(path):
-        warnings.warn(f"CSV not found: {path}")
+        warnings.warn(f"CSV not found: {path}", stacklevel=2)
         return None
     return pd.read_csv(path)
 
 
 def _csv_path(path):
     if not os.path.isfile(path):
-        warnings.warn(f"CSV not found: {path}")
+        warnings.warn(f"CSV not found: {path}", stacklevel=2)
         return None
     return pd.read_csv(path)
 
@@ -171,7 +171,7 @@ def _csv_path(path):
 
 def _draw_arrow(ax, x1, y1, x2, y2, color="k", lw=1.0, style="-|>"):
     ax.annotate("", xy=(x2, y2), xytext=(x1, y1),
-                arrowprops=dict(arrowstyle=style, color=color, lw=lw), zorder=4)
+                arrowprops={"arrowstyle": style, "color": color, "lw": lw}, zorder=4)
 
 
 def fig1_panel_a(ax):
@@ -253,14 +253,20 @@ def fig1_panel_a(ax):
     ax.text(5.95, soma_y, "$\\hat{y}$", fontsize=9, va="center")
 
     # ── Broadcast error (dashed red arrows, backward) ──
-    for bx, by, is_prox in [(px, py, True)] + \
-                             [(d_pos[0][0], d_pos[0][1], False),
-                              (d_pos[1][0], d_pos[1][1], False)]:
+    for bx, by, is_prox in [
+        (px, py, True),
+        (d_pos[0][0], d_pos[0][1], False),
+        (d_pos[1][0], d_pos[1][1], False),
+    ]:
         bw = prox_w if is_prox else comp_w
         ax.annotate("", xy=(bx + bw/2 + 0.08, by + 0.05),
                     xytext=(soma_x - soma_r - 0.02, soma_y + 0.12),
-                    arrowprops=dict(arrowstyle="->", color=INH_COLOR,
-                                    lw=1.0, ls=(0, (4, 3))), zorder=2)
+                    arrowprops={
+                        "arrowstyle": "->",
+                        "color": INH_COLOR,
+                        "lw": 1.0,
+                        "ls": (0, (4, 3)),
+                    }, zorder=2)
 
     # ── Legend (with x^I and x^E as entries, moved lower) ──
     from matplotlib.lines import Line2D
@@ -313,14 +319,19 @@ def fig1_panel_c(ax):
     for yt, yb in [(2.0 - box_h / 2 - 0.04, 1.15 + box_h / 2 + 0.04),
                     (1.15 - box_h / 2 - 0.04, 0.3 + box_h / 2 + 0.04)]:
         ax.annotate("", xy=(arrow_x, yb), xytext=(arrow_x, yt),
-                    arrowprops=dict(arrowstyle="->", color="gray", lw=0.7, ls="--"))
+                    arrowprops={
+                        "arrowstyle": "->",
+                        "color": "gray",
+                        "lw": 0.7,
+                        "ls": "--",
+                    })
 
 
 def fig1_panel_learning_curves(ax):
     """Panel C: Learning curves — BP vs local for shunting & additive on MNIST."""
     csv_path = os.path.join(DATA_DIR, "learning_curves_fig1.csv")
     if not os.path.isfile(csv_path):
-        warnings.warn(f"Learning curves CSV not found: {csv_path}")
+        warnings.warn(f"Learning curves CSV not found: {csv_path}", stacklevel=2)
         ax.text(0.5, 0.5, "No data", ha="center", va="center", transform=ax.transAxes)
         return
 
@@ -501,7 +512,7 @@ def figure2():
                 bp_cg = r.iloc[0]["test_accuracy_mean"]
         local_shunt_cg, local_shunt_cg_e = None, 0
         if p2b is not None:
-            sub = p2b[(p2b["dataset"] == "context_gating") & (p2b["hsic_enabled"] == True) &
+            sub = p2b[(p2b["dataset"] == "context_gating") & p2b["hsic_enabled"] &
                       (p2b["hsic_weight"] == 0.01) & (p2b["error_broadcast_mode"] == "per_soma")]
             if len(sub):
                 local_shunt_cg = sub.iloc[0]["test_accuracy_mean"]
@@ -514,7 +525,7 @@ def figure2():
     x_base = np.arange(n_ds)
     bar_w = 0.22
 
-    for i, (ds_name, bp_val, shunt_val, shunt_err, add_val, add_err) in enumerate(datasets_info):
+    for i, (_ds_name, bp_val, shunt_val, shunt_err, add_val, add_err) in enumerate(datasets_info):
         ax.bar(i - bar_w, bp_val * 100, bar_w * 0.88, color=COLOR_BACKPROP,
                edgecolor="white", lw=0.3)
         if shunt_val is not None:
@@ -667,7 +678,7 @@ def figure2():
 
     if fmnist_data:
         x_pos = np.arange(len(fmnist_data))
-        for i, (lbl, val, err, color, hatch) in enumerate(fmnist_data):
+        for i, (_lbl, val, err, color, hatch) in enumerate(fmnist_data):
             alpha = 1.0 if hatch is None else 0.55
             ax.bar(i, val, 0.65, yerr=err, color=color, alpha=alpha,
                    edgecolor="white", lw=0.3, hatch=hatch,
@@ -695,7 +706,7 @@ def figure3():
         1,
         4,
         figsize=(14.4, 3.25),
-        gridspec_kw={"wspace": 0.42, "width_ratios": [1.0, 1.0, 1.12, 0.94]},
+        gridspec_kw={"wspace": 0.42, "width_ratios": [0.95, 1.02, 1.02, 1.05]},
     )
 
     def _load_gradient_trajectory(rule_variant="5f"):
@@ -747,11 +758,76 @@ def figure3():
         traj["core_type"] = traj["config"].map(core_map)
         return traj
 
-    traj_5f = _load_gradient_trajectory("5f")
+    def _full_norm_rows(traj):
+        if traj is None:
+            return pd.DataFrame()
+        rows = []
+        for (cfg, core, epoch), sub in traj.groupby(["config", "core_type", "epoch"]):
+            local_norm = float(np.sqrt(np.square(sub["local_grad_norm"]).sum()))
+            bp_norm = float(np.sqrt(np.square(sub["backprop_grad_norm"]).sum()))
+            wcos = float((sub["cosine_similarity"] * sub["numel"]).sum() / sub["numel"].sum())
+            rows.append({
+                "config": cfg,
+                "core_type": core,
+                "epoch": int(epoch),
+                "local_grad_norm": local_norm,
+                "backprop_grad_norm": bp_norm,
+                "weighted_cosine": wcos,
+            })
+        return pd.DataFrame(rows)
 
-    # ---- Panel A: Cosine similarity bars ----
+    traj_5f = _load_gradient_trajectory("5f")
+    norm_df = _full_norm_rows(traj_5f)
+    if not norm_df.empty:
+        norm_out = os.path.join(ANALYSIS_DIR, "gradient_fidelity", "gradient_norm_dynamics_summary.csv")
+        norm_df.to_csv(norm_out, index=False)
+
+    # ---- Panel A: Exact factorization sanity ----
     ax = axes[0]
     _panel(ax, "A")
+    style_axis(ax, grid="y")
+
+    theory_runs = pd.read_csv(THEORY_IE_RUNS_CSV)
+    rel_error = theory_runs["factorization_weighted_relative_l2"].to_numpy(dtype=float)
+    scale_error = theory_runs["factorization_weighted_scale_mismatch"].to_numpy(dtype=float)
+    rng = np.random.default_rng(7)
+    for i, (vals, color) in enumerate([
+        (rel_error, RULE3_COLOR),
+        (scale_error, RULE5_COLOR),
+    ]):
+        jitter = rng.uniform(-0.08, 0.08, size=len(vals))
+        ax.scatter(
+            np.full_like(vals, i, dtype=float) + jitter,
+            vals,
+            s=18,
+            color=color,
+            alpha=0.72,
+            edgecolor="white",
+            linewidth=0.3,
+            zorder=3,
+        )
+        ax.hlines(np.median(vals), i - 0.18, i + 0.18, color="black", lw=1.2, zorder=4)
+    ax.set_xticks([0, 1])
+    ax.set_xticklabels(["rel. $L_2$", "scale"], fontsize=7.5)
+    ax.set_ylabel("Reconstruction error")
+    ax.set_yscale("log")
+    ax.set_ylim(1e-10, 1e-4)
+    ax.set_title("Exact factorization")
+    ax.grid(axis="y", alpha=0.20, linewidth=0.5)
+    ax.text(
+        0.04,
+        0.08,
+        "Autograd is\nreconstructed",
+        transform=ax.transAxes,
+        fontsize=6.8,
+        ha="left",
+        va="bottom",
+        bbox={"boxstyle": "round,pad=0.24", "fc": "white", "ec": "0.85", "alpha": 0.95},
+    )
+
+    # ---- Panel B: Cosine similarity bars ----
+    ax = axes[1]
+    _panel(ax, "B")
     style_axis(ax, grid="y")
 
     conditions = [
@@ -787,194 +863,91 @@ def figure3():
             fontsize=6.5,
         )
 
-    # ---- Panel B: Gradient norm trajectories ----
-    ax = axes[1]
-    _panel(ax, "B")
-    style_axis(ax, grid="y")
-    if traj_5f is not None:
-        norm_rows = []
-        for (cfg, core, epoch), sub in traj_5f.groupby(["config", "core_type", "epoch"]):
-            local_norm = float(np.sqrt(np.square(sub["local_grad_norm"]).sum()))
-            bp_norm = float(np.sqrt(np.square(sub["backprop_grad_norm"]).sum()))
-            wcos = float((sub["cosine_similarity"] * sub["numel"]).sum() / sub["numel"].sum())
-            norm_rows.append({
-                "config": cfg,
-                "core_type": core,
-                "epoch": epoch,
-                "local_grad_norm": local_norm,
-                "backprop_grad_norm": bp_norm,
-                "weighted_cosine": wcos,
-            })
-        norm_df = pd.DataFrame(norm_rows)
-        norm_out = os.path.join(ANALYSIS_DIR, "gradient_fidelity", "gradient_norm_dynamics_summary.csv")
-        norm_df.to_csv(norm_out, index=False)
-
-        line_specs = [
-            ("shunting", "local_grad_norm", COLOR_SHUNTING, "-", "Shunt. LocalCA"),
-            ("shunting", "backprop_grad_norm", COLOR_SHUNTING, "--", "Shunt. BP"),
-            ("additive", "local_grad_norm", COLOR_ADDITIVE, "-", "Add. LocalCA"),
-            ("additive", "backprop_grad_norm", COLOR_ADDITIVE, "--", "Add. BP"),
-        ]
-        for core, col, color, ls, label in line_specs:
-            sub = norm_df[norm_df["core_type"] == core]
-            if sub.empty:
-                continue
-            agg = sub.groupby("epoch")[col].agg(["mean", "std"]).reset_index()
-            ax.plot(agg["epoch"], agg["mean"], color=color, ls=ls, lw=1.2,
-                    label=label, alpha=0.92)
-            ax.fill_between(
-                agg["epoch"],
-                np.maximum(agg["mean"] - agg["std"], 1e-12),
-                agg["mean"] + agg["std"],
-                color=color,
-                alpha=0.08,
-                linewidth=0,
-            )
-        ax.set_yscale("log")
-        ax.set_xlabel("Epoch")
-        ax.set_ylabel("Gradient norm")
-        ax.set_title("Non-zero gradients over training")
-        ax.legend(
-            fontsize=5.7,
-            loc="lower right",
-            ncol=1,
-            handlelength=1.3,
-            handletextpad=0.3,
-            borderpad=0.25,
-            frameon=True,
-            framealpha=0.92,
-        )
-        final = norm_df[norm_df["epoch"] == norm_df["epoch"].max()]
-        add_final = final[final["core_type"] == "additive"]
-        if not add_final.empty:
-            ax.text(
-                0.03,
-                0.07,
-                "Additive BP/local\nnorms stay finite",
-                transform=ax.transAxes,
-                fontsize=6.2,
-                color=COLOR_ADDITIVE,
-                ha="left",
-                va="bottom",
-                bbox=dict(boxstyle="round,pad=0.22", fc="white", ec="0.85", alpha=0.90),
-            )
-    else:
-        ax.text(0.5, 0.5, "No trajectory data found", transform=ax.transAxes,
-                ha="center", va="center", fontsize=8, color="red")
-
-    # ---- Panel C: Per-layer alignment dynamics (from real data) ----
+    # ---- Panel C: Scale mismatch ----
     ax = axes[2]
     _panel(ax, "C")
     style_axis(ax, grid="y")
-
-    _loaded_real_data = False
-    if traj_5f is not None:
-            traj = traj_5f[traj_5f["layer_idx"] >= 0].copy()
-            traj["weighted_cos"] = traj["cosine_similarity"] * traj["numel"]
-            # Aggregate: weighted cosine per (config, epoch, layer)
-            grp = (
-                traj.groupby(["config", "epoch", "layer_idx"])
-                .agg(wcos=("weighted_cos", "sum"), n=("numel", "sum"))
-                .reset_index()
-            )
-            grp["w_cosine"] = grp["wcos"] / grp["n"]
-            grp["core_type"] = grp["config"].map(
-                traj.drop_duplicates("config").set_index("config")["core_type"]
-            )
-            layer_values = sorted(grp["layer_idx"].unique())
-
-            single_layer = len(layer_values) == 1
-            if single_layer:
-                plotted_layers = [(layer_values[0], "")]
-            else:
-                plotted_layers = [
-                    (layer_values[0], "dist."),
-                    (layer_values[-1], "prox."),
-                ]
-
-            for layer_idx, layer_suffix in plotted_layers:
-                for core, color, base_label in [
-                    ("shunting", COLOR_SHUNTING, "Shunt."),
-                    ("additive", COLOR_ADDITIVE, "Add."),
-                ]:
-                    sub = grp[(grp["core_type"] == core) & (grp["layer_idx"] == layer_idx)]
-                    if sub.empty:
-                        continue
-                    agg = sub.groupby("epoch")["w_cosine"].agg(["mean", "std"]).reset_index()
-                    ls = "-" if layer_suffix in ("", "prox.") else "--"
-                    lbl = base_label if layer_suffix == "" else f"{base_label} {layer_suffix}"
-                    ax.plot(agg["epoch"], agg["mean"], color=color, ls=ls, lw=1.2,
-                            label=lbl, alpha=0.85)
-                    ax.fill_between(agg["epoch"],
-                                    agg["mean"] - agg["std"],
-                                    agg["mean"] + agg["std"],
-                                    color=color, alpha=0.10)
-            _loaded_real_data = True
-    if not _loaded_real_data:
-        ax.text(0.5, 0.5, "No trajectory data found", transform=ax.transAxes,
-                ha="center", va="center", fontsize=8, color="red")
-    ax.axhline(0, color="black", lw=0.3, ls=":")
-    ax.set_xlabel("Epoch")
-    ax.set_ylabel("Weighted cosine")
-    ax.set_title("Alignment dynamics over training")
-    ax.legend(
-        fontsize=5.9,
-        loc="upper left",
-        ncol=2,
-        handlelength=1.2,
-        handletextpad=0.25,
-        columnspacing=0.55,
-        borderpad=0.2,
+    scale_conditions = [
+        ("MNIST\nShunt.", 0.117, COLOR_SHUNTING),
+        ("MNIST\nAdd.", 1.053, COLOR_ADDITIVE),
+        ("CG\nShunt.", 0.036, COLOR_SHUNTING),
+        ("CG\nAdd.", 2.154, COLOR_ADDITIVE),
+    ]
+    x_pos = np.arange(len(scale_conditions))
+    bars = ax.bar(
+        x_pos,
+        [c[1] for c in scale_conditions],
+        color=[c[2] for c in scale_conditions],
+        edgecolor="white",
+        lw=0.4,
+        width=0.58,
     )
-    ax.set_ylim(-0.15, 0.55)
-    # (removed inline "single dendritic layer" caption; detail lives in the
-    # figure caption in the manuscript.)
+    ax.set_xticks(x_pos)
+    ax.set_xticklabels([c[0] for c in scale_conditions], fontsize=7.5)
+    ax.set_ylabel(r"$|\log_{10}\|g_{\rm loc}\|/\|g_{\rm BP}\||$")
+    ax.set_title("Gradient scale mismatch")
+    ax.set_ylim(0, 2.45)
+    for bar_rect, (_, val, _) in zip(bars, scale_conditions):
+        ax.text(
+            bar_rect.get_x() + bar_rect.get_width() / 2,
+            val + 0.045,
+            f"{val:.3f}" if val < 0.2 else f"{val:.2f}",
+            ha="center",
+            va="bottom",
+            fontsize=6.5,
+        )
 
-    # ---- Panel D: Exact factorization sanity ----
+    # ---- Panel D: Nonzero-gradient norm dynamics ----
     ax = axes[3]
     _panel(ax, "D")
     style_axis(ax, grid="y")
-
-    theory_runs = pd.read_csv(THEORY_IE_RUNS_CSV)
-    rel_error = theory_runs["factorization_weighted_relative_l2"].to_numpy(dtype=float)
-    scale_error = theory_runs["factorization_weighted_scale_mismatch"].to_numpy(dtype=float)
-    rng = np.random.default_rng(7)
-    for i, (vals, color, label) in enumerate([
-        (rel_error, RULE3_COLOR, "relative $L_2$"),
-        (scale_error, RULE5_COLOR, "scale mismatch"),
-    ]):
-        jitter = rng.uniform(-0.08, 0.08, size=len(vals))
-        ax.scatter(
-            np.full_like(vals, i, dtype=float) + jitter,
-            vals,
-            s=18,
-            color=color,
-            alpha=0.72,
-            edgecolor="white",
-            linewidth=0.3,
-            zorder=3,
-        )
-        ax.hlines(np.median(vals), i - 0.18, i + 0.18, color="black", lw=1.2, zorder=4)
-    ax.set_xticks([0, 1])
-    ax.set_xticklabels(["rel. $L_2$", "scale"], fontsize=7.5)
-    ax.set_ylabel("Numerical error")
-    ax.set_yscale("log")
-    ax.set_ylim(1e-10, 1e-4)
-    ax.set_title("Exact factorization sanity check")
-    ax.grid(axis="y", alpha=0.20, linewidth=0.5)
-    max_rel = float(np.nanmax(rel_error))
-    max_scale = float(np.nanmax(scale_error))
-    ax.text(
-        0.03,
-        0.08,
-        rf"$\max$ rel. $L_2 < {max_rel:.1e}$" "\n"
-        rf"$\max$ mismatch $< {max_scale:.1e}$",
-        transform=ax.transAxes,
-        fontsize=6.8,
-        ha="left",
-        va="bottom",
-        bbox=dict(boxstyle="round,pad=0.25", fc="white", ec="0.85", alpha=0.95),
-    )
+    if not norm_df.empty:
+        for core, core_label, color in [
+            ("shunting", "Shunt.", COLOR_SHUNTING),
+            ("additive", "Add.", COLOR_ADDITIVE),
+        ]:
+            sub = norm_df[norm_df["core_type"] == core]
+            for metric, metric_label, linestyle in [
+                ("local_grad_norm", "LocalCA", "-"),
+                ("backprop_grad_norm", "BP", "--"),
+            ]:
+                grouped = (
+                    sub.groupby("epoch")[metric]
+                    .agg(["mean", "std"])
+                    .reset_index()
+                    .sort_values("epoch")
+                )
+                x = grouped["epoch"].to_numpy(dtype=float)
+                y = grouped["mean"].to_numpy(dtype=float)
+                err = grouped["std"].fillna(0.0).to_numpy(dtype=float)
+                ax.plot(
+                    x,
+                    y,
+                    color=color,
+                    linestyle=linestyle,
+                    lw=1.2,
+                    marker="o" if linestyle == "-" else "s",
+                    markersize=2.7,
+                    label=f"{core_label} {metric_label}",
+                    zorder=3,
+                )
+                ax.fill_between(
+                    x,
+                    np.maximum(y - err, 1e-8),
+                    y + err,
+                    color=color,
+                    alpha=0.10 if linestyle == "-" else 0.06,
+                    linewidth=0,
+                    zorder=2,
+                )
+        ax.set_yscale("log")
+        ax.set_xlabel("Epoch")
+        ax.set_ylabel("Full gradient norm")
+        ax.set_title("Gradient norms over learning")
+        ax.legend(loc="upper left", fontsize=5.8, frameon=False, ncol=1)
+    else:
+        ax.text(0.5, 0.5, "No trajectory data found", transform=ax.transAxes,
+                ha="center", va="center", fontsize=8, color="red")
 
     fig.subplots_adjust(left=0.052, right=0.992, bottom=0.24, top=0.86, wspace=0.42)
     _save(fig, "fig3_gradient_fidelity")
@@ -1163,7 +1136,8 @@ def figure_s1():
                     vals.append(r.iloc[0]["test_accuracy_mean"] * 100)
                     errs.append(r.iloc[0]["test_accuracy_std"] * 100)
                 else:
-                    vals.append(0); errs.append(0)
+                    vals.append(0)
+                    errs.append(0)
             off = (j - 0.5) * bw
             color = COLOR_SHUNTING if "shunting" in nt else COLOR_ADDITIVE
             ax.bar(xb + off, vals, bw * 0.9, yerr=errs, color=color,
@@ -1197,7 +1171,8 @@ def figure_s1():
                     vals.append(r.iloc[0]["test_accuracy_mean"] * 100)
                     errs.append(r.iloc[0]["test_accuracy_std"] * 100)
                 else:
-                    vals.append(0); errs.append(0)
+                    vals.append(0)
+                    errs.append(0)
             off = (j - 0.5) * bw
             color = COLOR_SHUNTING if "shunting" in nt else COLOR_ADDITIVE
             ax.bar(xb + off, vals, bw * 0.9, yerr=errs, color=color,
@@ -1217,11 +1192,6 @@ def figure_s1():
     _panel(ax, "D")
 
     if mismatch is not None:
-        agg = mismatch.groupby(
-            ["core_type", "error_broadcast_mode", "decoder_update_mode"]
-        ).agg(test_mean=("test_acc", "mean"),
-              test_sem=("test_acc", lambda x: x.std() / np.sqrt(len(x)))
-        ).reset_index()
         # Simplify: group by core x broadcast (ignoring decoder for cleaner plot)
         agg2 = mismatch.groupby(
             ["core_type", "error_broadcast_mode"]
@@ -1509,7 +1479,7 @@ def _analysis_csv(prefix: str, filename: str):
 
 def _read_markdown_table(md_path: str, section_header: str) -> pd.DataFrame:
     """Parse a simple markdown table from a named section in a report note."""
-    with open(md_path, "r", encoding="utf-8") as handle:
+    with open(md_path, encoding="utf-8") as handle:
         lines = handle.readlines()
 
     in_section = False
@@ -1739,9 +1709,9 @@ def figure_s_bm_policy():
             group_cols.append(color)
 
         x = np.arange(len(group_labels))
-        bars = ax.bar(x, group_vals, 0.55,
-                      color=group_cols, alpha=0.92,
-                      edgecolor="white", lw=0.3)
+        ax.bar(x, group_vals, 0.55,
+               color=group_cols, alpha=0.92,
+               edgecolor="white", lw=0.3)
 
         # Value annotations
         for xi, v in enumerate(group_vals):
@@ -1814,9 +1784,9 @@ def figure_s_ablation():
     #             → relu_reactivation → with_soma → bp_reference
     ordered_conditions = [
         ("full_config",          "Full\n(default)"),
-        ("no_quantile_init",     "−Quantile\ninit"),
-        ("no_learned_bm",        "−Learned\n(b,m)"),
-        ("no_reactivation",      "−Reactiv.\n(identity)"),
+        ("no_quantile_init",     "-Quantile\ninit"),
+        ("no_learned_bm",        "-Learned\n(b,m)"),
+        ("no_reactivation",      "-Reactiv.\n(identity)"),
         ("with_soma",            "+Soma\n(extension)"),
         ("bp_reference",         "Backprop\nref."),
     ]
@@ -1852,9 +1822,9 @@ def figure_s_ablation():
                 bar_colors.append("#A3A3A3")
 
         x = np.arange(len(labels))
-        bars = ax.bar(x, means, 0.62, yerr=stds, capsize=2.5,
-                      color=bar_colors, alpha=0.92, edgecolor="white", lw=0.4,
-                      error_kw={"lw": 0.6})
+        ax.bar(x, means, 0.62, yerr=stds, capsize=2.5,
+               color=bar_colors, alpha=0.92, edgecolor="white", lw=0.4,
+               error_kw={"lw": 0.6})
         # Reference line at full_config value
         if "full_config" in sub.index:
             full_val = sub.loc["full_config", "test_acc_mean"] * 100
@@ -2352,10 +2322,10 @@ def figure_s_weight_dist_soma_comparison():
 
 
 # ===================================================================
-# Appendix Figure — Weight Distributions × Depth × Strategy
+# Appendix Figure - Weight Distributions x Depth x Strategy
 # ===================================================================
 def figure_s_weight_distributions():
-    """Weight distribution comparison: BP vs LocalCA × additive vs shunting × 3 depths.
+    """Weight distribution comparison: BP vs LocalCA x additive vs shunting x 3 depths.
 
     Two panels:
       A) Excitatory weight mean ± std across conditions, grouped by depth.
@@ -2401,7 +2371,8 @@ def figure_s_weight_distributions():
             row = df[(df["core"] == core) & (df["strategy"] == strat) &
                      (df["depth"] == depth)]
             if len(row) == 0:
-                means.append(np.nan); stds.append(0)
+                means.append(np.nan)
+                stds.append(0)
             else:
                 means.append(row.iloc[0].get("excitatory_weights_mean", np.nan))
                 stds.append(row.iloc[0].get("excitatory_weights_std", 0))

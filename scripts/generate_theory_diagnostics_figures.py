@@ -10,6 +10,9 @@ import matplotlib
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+import matplotlib.patches as mpatches
+import matplotlib.colors as mcolors
+import numpy as np
 import pandas as pd
 
 from neurips_style import apply_neurips_style, COLORS, panel_label, style_axis
@@ -27,6 +30,9 @@ ORACLE_SUMMARY_CSV = (
     ANALYSIS_DIR
     / "path_transport_upper_bound_nonnegativeinput_fix_5seed"
     / "path_transport_upper_bound_summary.csv"
+)
+ERROR_RANK_SUMMARY_CSV = (
+    ANALYSIS_DIR / "error_rank_selected_20260427" / "error_rank_summary.csv"
 )
 LOW_BW_CSV = DATA_DIR / "low_bandwidth_results.csv"
 CIFAR10_BP_SUMMARY_CSV = (
@@ -82,38 +88,209 @@ def _safe_csv(path: Path) -> pd.DataFrame:
     return pd.read_csv(path)
 
 
-def _plot_path_gain_dispersion(ax: plt.Axes, summary: pd.DataFrame) -> None:
-    _panel(ax, "A")
-    style_axis(ax, grid="y")
-    mnist = summary[summary["dataset"] == "mnist"].copy()
-    for network_type, color, label in [
-        ("dendritic_shunting", COLOR_SHUNTING, "Shunting"),
-        ("dendritic_additive", COLOR_ADDITIVE, "Additive"),
-    ]:
-        sub = mnist[mnist["network_type"] == network_type].sort_values("ie_value")
-        x = pd.to_numeric(sub["ie_value"], errors="coerce").to_numpy(dtype=float)
-        y = sub["path_gain_cv_mean_mean"].to_numpy(dtype=float)
-        err = sub["path_gain_cv_mean_std"].fillna(0.0).to_numpy(dtype=float)
-        ax.plot(x, y, marker="o", markersize=3.5, lw=1.4, color=color, label=label)
-        ax.fill_between(x, y - err, y + err, color=color, alpha=0.15, linewidth=0)
+def _draw_gain_tree(
+    ax: plt.Axes,
+    *,
+    x0: float,
+    title: str,
+    gains: list[float],
+    color: str,
+    norm: mcolors.Normalize,
+    cmap,
+) -> None:
+    """Draw a compact three-path tree colored by log path gain."""
+    soma = (x0 + 0.38, 0.52)
+    branch_x = x0 + 0.18
+    leaf_x = x0 + 0.02
+    ys = [0.78, 0.52, 0.26]
+    for idx, y in enumerate(ys):
+        leaf = (leaf_x, y)
+        branch = (branch_x, y)
+        log_gain = np.log10(max(gains[idx], 1e-5))
+        line_color = cmap(norm(log_gain))
+        ax.plot(
+            [leaf[0], branch[0], soma[0]],
+            [leaf[1], branch[1], soma[1]],
+            color=line_color,
+            linewidth=3.0,
+            solid_capstyle="round",
+            zorder=2,
+        )
+        ax.add_patch(
+            mpatches.Circle(
+                leaf,
+                0.018,
+                facecolor=line_color,
+                edgecolor="white",
+                linewidth=0.5,
+                zorder=4,
+            )
+        )
+        ax.text(
+            leaf[0] - 0.020,
+            y,
+            rf"$\alpha_{idx + 1}$",
+            ha="right",
+            va="center",
+            fontsize=6.5,
+            color=COLORS["ink"],
+        )
+    ax.add_patch(
+        mpatches.Circle(
+            soma,
+            0.035,
+            facecolor=COLORS["soma"],
+            edgecolor=COLORS["edge"],
+            linewidth=0.6,
+            zorder=5,
+        )
+    )
+    ax.text(soma[0], soma[1], r"$\delta_0$", ha="center", va="center", fontsize=6.0)
+    ax.text(
+        x0 + 0.20,
+        0.94,
+        title,
+        ha="center",
+        va="center",
+        fontsize=7.5,
+        color=color,
+        fontweight="bold",
+    )
 
-    ax.set_xlabel("$N_I$ (inhibitory synapses / branch)")
-    ax.set_ylabel("Path-gain CV")
-    ax.set_title("Path-gain concentration")
-    ax.set_xticks([0, 5, 10, 20, 40])
-    ax.set_ylim(bottom=0.0)
-    ax.legend(loc="upper left")
+
+def _plot_path_gain_map(ax: plt.Axes, summary: pd.DataFrame) -> None:
+    _panel(ax, "A")
+    ax.set_xticks([])
+    ax.set_yticks([])
+    for spine in ax.spines.values():
+        spine.set_visible(False)
+    ax.set_xlim(0, 1.0)
+    ax.set_ylim(0, 1.0)
+
+    mnist = summary[summary["dataset"] == "mnist"].copy()
+    add_cv = float(
+        mnist[
+            (mnist["network_type"] == "dendritic_additive") & (mnist["ie_value"] == 5)
+        ]["path_gain_cv_mean_mean"].iloc[0]
+    )
+    shunt_cv = float(
+        mnist[
+            (mnist["network_type"] == "dendritic_shunting") & (mnist["ie_value"] == 5)
+        ]["path_gain_cv_mean_mean"].iloc[0]
+    )
+
+    # The path colors are data-scaled summaries: larger CV produces a broader
+    # deterministic spread of representative path gains.
+    add_gains = [1.0 - add_cv / 3.0, 1.0, 1.0 + add_cv]
+    shunt_gains = [1.0 - shunt_cv / 3.0, 1.0, 1.0 + shunt_cv]
+    all_logs = np.log10(np.clip(add_gains + shunt_gains, 1e-5, None))
+    norm = mcolors.Normalize(vmin=float(all_logs.min()), vmax=float(all_logs.max()))
+    cmap = plt.get_cmap("viridis")
+
+    _draw_gain_tree(
+        ax,
+        x0=0.06,
+        title=f"Additive\nCV={add_cv:.2f}",
+        gains=add_gains,
+        color=COLOR_ADDITIVE,
+        norm=norm,
+        cmap=cmap,
+    )
+    _draw_gain_tree(
+        ax,
+        x0=0.52,
+        title=f"Shunting\nCV={shunt_cv:.2f}",
+        gains=shunt_gains,
+        color=COLOR_SHUNTING,
+        norm=norm,
+        cmap=cmap,
+    )
+    ax.text(
+        0.50,
+        0.08,
+        r"Path colors show $\log_{10}\alpha_n$ at matched $N_I{=}5$",
+        ha="center",
+        va="center",
+        fontsize=6.3,
+        color=COLORS["mute"],
+    )
+    sm = plt.cm.ScalarMappable(norm=norm, cmap=cmap)
+    cbar = plt.colorbar(sm, ax=ax, fraction=0.040, pad=0.01)
+    cbar.set_label(r"$\log_{10}\alpha_n$", fontsize=6.5)
+    cbar.ax.tick_params(labelsize=6, width=0.4, length=2)
+    ax.set_title("Dendritic path-gain field")
+
+
+def _plot_error_compressibility(ax: plt.Axes, rank_summary: pd.DataFrame) -> None:
+    _panel(ax, "B")
+    style_axis(ax, grid="y")
+    sub = rank_summary[
+        (rank_summary["dataset"] == "mnist")
+        & (rank_summary["strategy"] == "local_ca")
+        & (rank_summary["rule_variant"] == "5f")
+        & (rank_summary["error_broadcast_mode"] == "per_soma")
+        & (rank_summary["scope"] == "all_layers")
+    ].copy()
+    order = ["dendritic_additive", "dendritic_shunting"]
+    labels = ["Additive", "Shunting"]
+    colors = [COLOR_ADDITIVE, COLOR_SHUNTING]
+    x = np.arange(len(order))
+    means = []
+    stds = []
+    pranks = []
+    prank_stds = []
+    for core in order:
+        row = sub[sub["network_type"] == core].iloc[0]
+        means.append(float(row["rank1_residual_mean"]))
+        stds.append(float(row["rank1_residual_std"]))
+        pranks.append(float(row["effective_rank_participation_mean"]))
+        prank_stds.append(float(row["effective_rank_participation_std"]))
+    bars = ax.bar(
+        x,
+        means,
+        yerr=stds,
+        color=colors,
+        edgecolor="white",
+        linewidth=0.4,
+        width=0.58,
+        capsize=2,
+        error_kw={"lw": 0.7},
+    )
+    ax.set_xticks(x)
+    ax.set_xticklabels(labels)
+    ax.set_ylabel("Rank-1 residual")
+    ax.set_ylim(0, 1.02)
+    ax.set_title("Exact-error compressibility")
+    for rect, mean, prank, prank_std in zip(bars, means, pranks, prank_stds):
+        ax.text(
+            rect.get_x() + rect.get_width() / 2,
+            mean + 0.055,
+            f"{mean:.2f}",
+            ha="center",
+            va="bottom",
+            fontsize=6.8,
+        )
+        ax.text(
+            rect.get_x() + rect.get_width() / 2,
+            0.08,
+            f"rank\n{prank:.1f}$\\pm${prank_std:.1f}",
+            ha="center",
+            va="bottom",
+            fontsize=6.2,
+            color="white",
+            fontweight="bold",
+        )
 
 
 def _plot_compartment_error_fidelity(ax: plt.Axes, summary: pd.DataFrame) -> None:
-    _panel(ax, "B")
+    _panel(ax, "C")
     style_axis(ax, grid="y")
     noise = summary[summary["dataset"] == "noise_resilience"].copy()
     style_map = {
-        ("dendritic_shunting", "per_soma"): (COLOR_SHUNTING, "-", "Shunting, per-soma"),
-        ("dendritic_shunting", "path_transport"): (COLOR_SHUNTING, "--", "Shunting, transported"),
-        ("dendritic_additive", "per_soma"): (COLOR_ADDITIVE, "-", "Additive, per-soma"),
-        ("dendritic_additive", "path_transport"): (COLOR_ADDITIVE, "--", "Additive, transported"),
+        ("dendritic_shunting", "per_soma"): (COLOR_SHUNTING, "-", "Shunt. rank-1"),
+        ("dendritic_shunting", "path_transport"): (COLOR_SHUNTING, "--", "Shunt. transported"),
+        ("dendritic_additive", "per_soma"): (COLOR_ADDITIVE, "-", "Add. rank-1"),
+        ("dendritic_additive", "path_transport"): (COLOR_ADDITIVE, "--", "Add. transported"),
     }
     series = [
         ("dendritic_shunting", "per_soma_weighted_cosine_mean"),
@@ -149,11 +326,18 @@ def _plot_compartment_error_fidelity(ax: plt.Axes, summary: pd.DataFrame) -> Non
 
     ax.set_xlabel("$N_I$ (inhibitory synapses / branch)")
     ax.set_ylabel(r"Cosine$(e_n,\partial L/\partial V_n)$")
-    ax.set_title("Compartment-error fidelity")
+    ax.set_title("Broadcast fidelity")
     ax.set_xticks([0, 5, 10, 20, 40])
     ax.set_ylim(-0.35, 1.05)
-    ax.legend(loc="upper left", ncol=1, handlelength=1.2, handletextpad=0.4,
-              columnspacing=0.8)
+    ax.legend(
+        loc="lower right",
+        ncol=1,
+        fontsize=5.8,
+        handlelength=1.1,
+        handletextpad=0.3,
+        columnspacing=0.6,
+        frameon=False,
+    )
 
 
 def _plot_mechanism_summary(ax: plt.Axes, summary: pd.DataFrame) -> None:
@@ -325,7 +509,7 @@ def _plot_oracle_learning(
     summary: pd.DataFrame,
     oracle_summary: pd.DataFrame,
 ) -> None:
-    _panel(ax, "C")
+    _panel(ax, "D")
     style_axis(ax, grid="y")
     baseline = summary[summary["dataset"] == "noise_resilience"].copy()
     oracle = oracle_summary[oracle_summary["dataset"] == "noise_resilience"].copy()
@@ -345,7 +529,7 @@ def _plot_oracle_learning(
             lw=1.3,
             color=color,
             linestyle="-",
-            label=f"{label}, per-soma",
+            label=f"{label} rank-1",
         )
         ax.fill_between(x, y - err, y + err, color=color, alpha=0.10, linewidth=0)
 
@@ -361,7 +545,7 @@ def _plot_oracle_learning(
             lw=1.3,
             color=color,
             linestyle="--",
-            label=f"{label}, transported",
+            label=f"{label} transported",
         )
         ax.fill_between(x2, y2 - err2, y2 + err2, color=color, alpha=0.08, linewidth=0)
 
@@ -371,13 +555,14 @@ def _plot_oracle_learning(
     ax.set_xticks([0, 5, 10, 20, 40])
     ax.set_ylim(20, 101)
     ax.legend(
-        loc="upper left",
+        loc="lower right",
         ncol=1,
         fontsize=5.9,
         handlelength=1.1,
         handletextpad=0.25,
         borderpad=0.22,
         labelspacing=0.22,
+        frameon=False,
     )
 
 
@@ -392,19 +577,20 @@ def build_figure(
     _setup_style()
     summary = _safe_csv(summary_csv)
     oracle_summary = _safe_csv(oracle_summary_csv)
+    rank_summary = _safe_csv(ERROR_RANK_SUMMARY_CSV)
 
     fig, axes = plt.subplots(
         1,
         4,
         figsize=(14.4, 3.25),
-        gridspec_kw={"wspace": 0.42, "width_ratios": [1.0, 1.05, 1.12, 1.02]},
+        gridspec_kw={"wspace": 0.46, "width_ratios": [1.08, 0.86, 1.05, 1.12]},
     )
 
-    _plot_path_gain_dispersion(axes[0], summary)
-    _plot_compartment_error_fidelity(axes[1], summary)
-    _plot_oracle_learning(axes[2], summary, oracle_summary)
-    _plot_mechanism_summary(axes[3], summary)
-    fig.subplots_adjust(left=0.052, right=0.992, top=0.86, bottom=0.24, wspace=0.42)
+    _plot_path_gain_map(axes[0], summary)
+    _plot_error_compressibility(axes[1], rank_summary)
+    _plot_compartment_error_fidelity(axes[2], summary)
+    _plot_oracle_learning(axes[3], summary, oracle_summary)
+    fig.subplots_adjust(left=0.052, right=0.992, top=0.86, bottom=0.24, wspace=0.46)
     return fig
 
 
