@@ -25,7 +25,7 @@ We quantify this chain with three diagnostics. First, exact-gradient reconstruct
 (ii)~path-gain compressibility is a measurable mediator of when rank-1 broadcast approximates that compartment error, and shunting provides a biophysical route to such compression by changing input resistance along dendritic paths;
 and (iii)~gradient-fidelity, transported-oracle, competence, and morphology experiments validate this mechanism while identifying the failure modes that require richer feedback.
 
-The empirical story follows this sequence. Figure~\ref{fig:model_schematic} defines the conductance tree, exact credit object, and broadcast taxonomy. Figure~\ref{fig:gradient_fidelity} verifies the exact factorization and measures local-backprop fidelity. Figure~\ref{fig:mechanistic} links path-gain compressibility to broadcast fidelity, oracle transport, and learning. Figure~\ref{fig:competence_regime} shows the practical supervised regimes. Morphology, harder-data, and routed-feedback experiments are reported as appendix diagnostics rather than headline benchmark claims.
+The empirical story follows this sequence. Figure~\ref{fig:model_schematic} defines the conductance tree and broadcast taxonomy. Figure~\ref{fig:gradient_fidelity} verifies the exact factorization. Figure~\ref{fig:rule_feedback_design} separates the local eligibility rule from the broadcast and tree-propagation choices. Figure~\ref{fig:mechanistic} links path-gain compressibility to broadcast fidelity and learning, and Figure~\ref{fig:competence_regime} shows the practical supervised regimes. Morphology and harder-data experiments are appendix diagnostics rather than headline benchmark claims.
 
 \begin{figure*}[!t]
 \centering
@@ -255,22 +255,21 @@ A feedback-alignment-style random-broadcast argument is included in Appendix~\re
 
 \subsection{Structured pathway feedback and branch-role plasticity}
 
-For tasks with latent pathway structure, scalar broadcast can erase the distinction between different dendritic branches that should be credited differently.
-Recent experimental evidence supports the existence of vectorized instructive signals in cortical dendrites \cite{nature2026vectorized}, motivating the structured feedback variant we introduce here.
-We therefore augment the local rule with a structured cue-routing variant, \emph{PV-LocalCA}.
+For tasks with latent pathway structure, scalar broadcast can erase branch identity.
+Motivated by vectorized dendritic teaching signals \cite{nature2026vectorized}, PV-LocalCA projects the somatic error into a low-dimensional pathway basis and gates it by local branch roles,
+$e_n^{\mathrm{PV}}=\sum_{k=1}^K q_{n,k}c_k$.
+This is a structured rank-$K$ broadcast, not a separate learning principle; the appendix gives the router-derived role construction and branch-role plasticity details.
 
-\paragraph{Hierarchical pathway-vector broadcast.}
-The encoder/router defines a low-dimensional role basis over latent pathways.
-Instead of collapsing $\delta_0$ to a rank-1 or neuron-wise broadcast, we project it into this role basis and gate each role by local pathway activity:
-\[
-e_n^{\mathrm{PV}} = \sum_{k=1}^K q_{n,k} c_k,
-\]
-where $c_k = \langle r_k, \delta_0\rangle$ are role coefficients and $q_{n,k}$ are local branch-role weights.
-Scalar broadcast is the special case $K{=}1$, while PV-LocalCA is a structured rank-$K$ extension rather than a separate learning principle.
-
-\paragraph{Router-derived branch roles.}
-Rather than assigning hand-coded apical/basal labels, each branch $j$ receives a normalized role profile $r_j$ inferred from router assignments and incoming block weights.
-Plasticity is then gated by branch selectivity and by a synapse-specific role-alignment factor $\langle r_i, r_j\rangle$, biasing learning toward pathway-consistent afferents without imposing a fixed branch taxonomy.
+\begin{figure*}[!t]
+\centering
+\includegraphics[width=0.98\textwidth]{fig4_rule_feedback_design.pdf}
+\caption{\textbf{Local-rule and feedback-design axes.}
+\textbf{(A)}~The theorem-facing 3F update and the 4F attenuation proxy are weak practical optimizers in the completed local-competence sweeps; 5F is the strongest empirical wrapper.
+\textbf{(B)}~The broadcast definition matters: on MNIST, rank-$1$ shared somatic error is strong, while a local-mismatch error surrogate fails.
+\textbf{(C)}~On noise resilience, recursively propagating or increasing the rank of the error field closes much of the gap between rank-$1$ broadcast and exact path transport.
+\textbf{(D)}~Cue routing probes a branch-specific regime: higher rank helps, while the current pathway-vector implementation is useful but not yet better than the best unstructured low-rank control. Error bars denote $\pm$1 s.d.\ where five-seed summaries are available.}
+\label{fig:rule_feedback_design}
+\end{figure*}
 
 %=============================================================================
 \section{Experiments}
@@ -279,19 +278,13 @@ Plasticity is then gated by branch selectivity and by a synapse-specific role-al
 
 \subsection{Setup}
 
-We evaluate two settings: a \emph{capacity-calibrated} regime, where matched architectures achieve strong backprop performance, and \emph{controlled sweeps} that isolate inhibition strength, broadcast mode, morphology, and architecture.
-The main text uses MNIST, Fashion-MNIST \cite{xiao2017fashionmnist}, context gating, and noise resilience; cue integration and CIFAR-10 are reported as appendix diagnostics because they are most useful for probing failure modes rather than establishing the core mechanism.
-Formal task definitions are in Appendix~\ref{app:synthetic_tasks}.
-Architectures include point MLP baselines and dendritic cores with either additive integration or shunting.
-Main comparisons are architecture-matched additive vs.\ shunting cores and local vs.\ backprop training; DFA appears only as a supplementary baseline.
-Most MNIST, Fashion-MNIST, and context-gating results use 5F with the historical \texttt{per\_soma} broadcast implementation.
-Because the hidden widths in these feedforward settings exceed the decoder output dimension, that implementation reduces to rank-$1$ shared broadcast in the main mechanism and competence sweeps; higher-rank controls then use explicit low-rank, path-propagation, path-transport, or pathway-vector variants.
-Unless otherwise stated, dendritic layers also use the learnable post-voltage reactivation \texttt{param\_tanh}; Appendix Tables~\ref{tab:activation_audit_empirical} and \ref{tab:activation_audit_theory} then audit activation shape in a more controlled setting by comparing identity (\texttt{none}) against a frozen \texttt{param\_tanh} under matched additive/shunting initialization.
-All dendritic runs supporting the main claims keep synaptic and dendritic conductances nonnegative via positive parameter transforms and enforce a nonnegative first-layer synaptic drive. Image inputs are used in $[0,1]$, noise-resilience corruption is clipped back to $[0,1]$, and context gating uses a nonnegative contextual figure-ground MNIST construction.
-The inhibition sweeps additionally use a transported-error oracle derived from Theorem~\ref{thm:tree_backprop} as an upper bound rather than as the proposed biological rule.
-Main mechanistic, oracle, competence, morphology, and activation-audit results use $5$ seeds per condition unless otherwise noted. Appendix diagnostics state their seed counts in captions or tables.
-
-The experiments follow three questions. First, does the exact factorization explain the gradient geometry observed in code? Second, does shunting change the path-gain and exact-error fields in regimes where rank-$1$ broadcast is expected to improve, and does exact path transport rescue learning when rank-$1$ broadcast is insufficient? Third, do the same ingredients remain useful in capacity-calibrated supervised tasks and across dendritic morphologies?
+We evaluate capacity-calibrated supervised tasks and controlled sweeps that isolate inhibition strength, rule family, broadcast mode, morphology, and architecture.
+The main text uses MNIST, Fashion-MNIST \cite{xiao2017fashionmnist}, context gating, and noise resilience; CIFAR-10, morphology, and routed-feedback diagnostics are reported in the appendix.
+Main comparisons are architecture-matched additive vs.\ shunting dendritic cores and local vs.\ backprop training; DFA is a supplementary baseline.
+Unless otherwise stated, local runs use 5F with the historical \texttt{per\_soma} implementation, which reduces to rank-$1$ shared broadcast when hidden width exceeds the decoder error dimension.
+All main-claim dendritic runs use nonnegative conductance transforms and nonnegative first-layer synaptic drive; image inputs are in $[0,1]$, corrupted inputs are clipped back to $[0,1]$, and context gating uses a nonnegative contextual figure-ground MNIST construction.
+The transported-error condition is an oracle upper bound derived from Theorem~\ref{thm:tree_backprop}, not the proposed biological rule.
+Main mechanistic, oracle, and competence results use $5$ seeds per condition unless noted otherwise.
 
 \subsection{From Exact Factorization to Credit-Signal Fidelity}
 \label{sec:grad_fidelity}
@@ -364,6 +357,7 @@ The benefit of shunting varies across tasks. With matched rank-$1$ broadcast, sh
 \label{sec:discussion}
 The claim is mechanistic, not an unconstrained benchmark claim: CIFAR-10, routed feedback, morphology, and depth scaling are diagnostics of where rank-$1$ broadcast breaks, and shunting is not a universal solution for hard vision or biological learning.
 
+\clearpage
 %=============================================================================
 % REFERENCES
 %=============================================================================

@@ -17,6 +17,7 @@ Current scientific order:
 
 - `figures/fig1_model_and_credit.pdf`
 - `figures/fig3_gradient_fidelity.pdf`
+- `figures/fig4_rule_feedback_design.pdf`
 - `figures/fig5_mechanistic_evidence.pdf`
 - `figures/fig2_competence_regime.pdf`
 - `figures/fig_cifar10_mechanism_extension.pdf`
@@ -27,6 +28,7 @@ Narrative arc:
 
 - model and rule family
 - exact factorization and gradient fidelity
+- local rule family and feedback/error propagation design
 - mechanism chain from path gains to broadcast fidelity to learning
 - competence on standard supervised tasks
 - harder-data CIFAR-10 check

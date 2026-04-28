@@ -55,6 +55,16 @@ CIFAR10_LOCALCA_MECH_SUMMARY_CSV = os.path.join(
     "cifar10_compactei_depth4_decoderfix_mechanism_5seed",
     "cifar10_compactei_depth4_decoderfix_mechanism_summary.csv",
 )
+RANK_BRIDGE_NOISE_CSV = os.path.join(
+    ANALYSIS_DIR,
+    "rank_bridge_nonnegativeinput_fix",
+    "noise_resilience_rank_bridge_summary.csv",
+)
+CUE_RANK_STRUCTURE_CSV = os.path.join(
+    ANALYSIS_DIR,
+    "rank_bridge_activation_corrected",
+    "cue_routing_rank_structure_summary.csv",
+)
 
 BUNDLE = (
     "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING"
@@ -413,6 +423,168 @@ def figure1_legacy():
 
 
 # ===================================================================
+# Figure 2b — Local Rule and Broadcast Design
+# ===================================================================
+def figure_rule_feedback_design():
+    print("\n--- Figure: Local Rule & Feedback Design ---")
+    fig, axes = plt.subplots(
+        1,
+        4,
+        figsize=(12.8, 3.25),
+        gridspec_kw={"wspace": 0.58, "width_ratios": [1.10, 1.10, 1.25, 1.12]},
+    )
+    axes = axes.ravel()
+
+    # ---- Panel A: 3F/4F/5F rule family ----
+    ax = axes[0]
+    _panel(ax, "A")
+    style_axis(ax, grid="y")
+
+    rule_data = {
+        "MNIST": {"3F": 62.2, "4F": 62.8, "5F": 91.6},
+        "CG": {"3F": 39.6, "4F": 41.1, "5F": 78.9},
+    }
+    rules = ["3F", "4F", "5F"]
+    rule_colors = [RULE3_COLOR, RULE4_COLOR, RULE5_COLOR]
+    x = np.arange(len(rule_data))
+    bw = 0.22
+    for j, (rule, color) in enumerate(zip(rules, rule_colors)):
+        vals = [rule_data[ds][rule] for ds in rule_data]
+        ax.bar(
+            x + (j - 1) * bw,
+            vals,
+            bw * 0.92,
+            color=color,
+            edgecolor="white",
+            lw=0.45,
+            label=rule,
+        )
+    ax.set_xticks(x)
+    ax.set_xticklabels(list(rule_data.keys()))
+    ax.set_ylabel("Top-10 test (%)")
+    ax.set_ylim(30, 100)
+    ax.set_title("Eligibility rule")
+    ax.legend(
+        fontsize=7.5,
+        loc="upper left",
+        ncol=3,
+        frameon=False,
+        handlelength=0.9,
+        columnspacing=0.7,
+        handletextpad=0.25,
+    )
+
+    # ---- Panel B: broadcast definition on MNIST ----
+    ax = axes[1]
+    _panel(ax, "B")
+    style_axis(ax, grid="y")
+
+    broadcast_groups = ["Rank-1\nshared", "Local\nmismatch"]
+    core_entries = [
+        ("Shunt.", COLOR_SHUNTING, [91.2, 14.6], [0.5, 4.6]),
+        ("Add.", COLOR_ADDITIVE, [89.4, 34.2], [0.7, 5.8]),
+    ]
+    x = np.arange(len(broadcast_groups))
+    bw = 0.30
+    for j, (label, color, vals, errs) in enumerate(core_entries):
+        ax.bar(
+            x + (j - 0.5) * bw,
+            vals,
+            bw * 0.92,
+            yerr=errs,
+            color=color,
+            edgecolor="white",
+            lw=0.45,
+            capsize=2.0,
+            error_kw={"lw": 0.8},
+            label=label,
+        )
+    ax.set_xticks(x)
+    ax.set_xticklabels(broadcast_groups)
+    ax.set_ylabel("MNIST test (%)")
+    ax.set_ylim(0, 100)
+    ax.set_title("Error definition")
+    ax.legend(fontsize=7.6, loc="upper right", frameon=False,
+              handlelength=0.9, handletextpad=0.3)
+
+    # ---- Panel C: rank/propagation ladder on noise resilience ----
+    ax = axes[2]
+    _panel(ax, "C")
+    style_axis(ax, grid="y")
+
+    rank_noise = _csv_path(RANK_BRIDGE_NOISE_CSV)
+    if rank_noise is not None:
+        plot_rows = [
+            ("Rank-\n1", "per_soma", 4, False, COLOR_SHUNTING),
+            ("Path\nprop.", "per_soma", 4, True, "#4DAF4A"),
+            ("LR\nK=2", "low_rank", 2, False, "#F39C12"),
+            ("LR\nK=4", "low_rank", 4, False, "#E67E22"),
+            ("LR\nK=8", "low_rank", 8, False, "#D35400"),
+            ("Path\noracle", "path_transport", 4, False, "#6C3483"),
+        ]
+        vals, errs, labels, colors = [], [], [], []
+        for label, mode, rank, path_prop, color in plot_rows:
+            row = rank_noise[
+                (rank_noise["broadcast_mode"] == mode)
+                & (rank_noise["broadcast_rank"] == rank)
+                & (rank_noise["use_path_propagation"] == path_prop)
+            ]
+            if len(row) == 0:
+                continue
+            labels.append(label)
+            vals.append(float(row.iloc[0]["test_accuracy_mean"]) * 100)
+            errs.append(float(row.iloc[0]["test_accuracy_std"]) * 100)
+            colors.append(color)
+        xpos = np.arange(len(vals))
+        ax.bar(xpos, vals, 0.68, yerr=errs, color=colors, edgecolor="white",
+               lw=0.45, capsize=2.0, error_kw={"lw": 0.8})
+        ax.set_xticks(xpos)
+        ax.set_xticklabels(labels, fontsize=7.0)
+        ax.set_ylim(35, 90)
+    ax.set_ylabel("Noise test (%)")
+    ax.set_title("Error propagation")
+
+    # ---- Panel D: routed feedback rank and structure ----
+    ax = axes[3]
+    _panel(ax, "D")
+    style_axis(ax, grid="y")
+
+    cue_rank = _csv_path(CUE_RANK_STRUCTURE_CSV)
+    if cue_rank is not None:
+        cue_rows = [
+            ("Rank-\n1", "per_soma", 2, COLOR_SHUNTING),
+            ("LR\nK=1", "low_rank", 1, "#F5B041"),
+            ("LR\nK=2", "low_rank", 2, "#E67E22"),
+            ("LR\nK=4", "low_rank", 4, "#BA4A00"),
+            ("Pathway\nvec.", "pathway_vector", 2, "#1F77B4"),
+        ]
+        vals, errs, labels, colors = [], [], [], []
+        for label, mode, rank, color in cue_rows:
+            row = cue_rank[
+                (cue_rank["broadcast_mode"] == mode)
+                & (cue_rank["broadcast_rank"] == rank)
+            ]
+            if len(row) == 0:
+                continue
+            labels.append(label)
+            vals.append(float(row.iloc[0]["test_accuracy_mean"]) * 100)
+            errs.append(float(row.iloc[0]["test_accuracy_std"]) * 100)
+            colors.append(color)
+        xpos = np.arange(len(vals))
+        ax.bar(xpos, vals, 0.68, yerr=errs, color=colors, edgecolor="white",
+               lw=0.45, capsize=2.0, error_kw={"lw": 0.8})
+        ax.set_xticks(xpos)
+        ax.set_xticklabels(labels, fontsize=7.0)
+        ax.set_ylim(55, 100)
+    ax.set_ylabel("Cue-routing test (%)")
+    ax.set_title("Branch-specific task")
+
+    fig.subplots_adjust(left=0.060, right=0.992, bottom=0.28, top=0.84, wspace=0.58)
+    _save(fig, "fig4_rule_feedback_design")
+    plt.close(fig)
+
+
+# ===================================================================
 # Figure 2 — Competence & Regime Dependence
 # ===================================================================
 def figure2():
@@ -555,8 +727,8 @@ def figure2():
     ax.legend(
         handles=legend_handles,
         fontsize=7.6,
-        loc="lower left",
-        bbox_to_anchor=(0.02, 0.03),
+        loc="upper right",
+        bbox_to_anchor=(0.98, 0.98),
         ncol=1,
         frameon=True,
         framealpha=0.86,
@@ -2558,6 +2730,7 @@ def main():
 
     print("Skipping Figure 1 here; use generate_figure1_schematic.py for the submission figure.")
     figure2()
+    figure_rule_feedback_design()
     figure3()
     figure4()
     figure_s1()
