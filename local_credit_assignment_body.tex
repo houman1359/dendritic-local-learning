@@ -25,7 +25,7 @@ We quantify this chain with three diagnostics. First, exact-gradient reconstruct
 (ii)~path-gain compressibility is a measurable mediator of when rank-1 broadcast approximates that compartment error, and shunting provides a biophysical route to such compression by changing input resistance along dendritic paths;
 and (iii)~gradient-fidelity, transported-oracle, competence, and morphology experiments validate this mechanism while identifying the failure modes that require richer feedback.
 
-The empirical story follows this sequence. Figure~\ref{fig:model_schematic} defines the conductance tree, exact credit object, and broadcast taxonomy. Figure~\ref{fig:gradient_fidelity} verifies the exact factorization and measures local-backprop fidelity. Figure~\ref{fig:mechanistic} links path-gain compressibility to broadcast fidelity, oracle transport, and learning. Figures~\ref{fig:competence_regime} and \ref{fig:morphology_ie_regime} show the practical supervised regimes and the morphology-dependent inhibitory operating point. Harder-data and routed-feedback experiments are reported as appendix diagnostics rather than headline benchmark claims.
+The empirical story follows this sequence. Figure~\ref{fig:model_schematic} defines the conductance tree, exact credit object, and broadcast taxonomy. Figure~\ref{fig:gradient_fidelity} verifies the exact factorization and measures local-backprop fidelity. Figure~\ref{fig:mechanistic} links path-gain compressibility to broadcast fidelity, oracle transport, and learning. Figure~\ref{fig:competence_regime} shows the practical supervised regimes. Morphology, harder-data, and routed-feedback experiments are reported as appendix diagnostics rather than headline benchmark claims.
 
 \begin{figure*}[!t]
 \centering
@@ -35,6 +35,13 @@ The empirical story follows this sequence. Figure~\ref{fig:model_schematic} defi
 \textbf{(B)}~Path gains through the tree. Exact backprop supplies path-specific compartment errors, while rank-1 LocalCA replaces that field with one shared broadcast.
 \textbf{(C)}~Error-broadcast choices. Rank-1, neuron-wise, rank-$K$, and path-structured broadcasts are local approximations with increasing bandwidth; transported error is an analysis oracle that supplies the exact path-specific signal.}
 \label{fig:model_schematic}
+\end{figure*}
+
+\begin{figure*}[!t]
+\centering
+\includegraphics[width=0.98\textwidth]{fig3_gradient_fidelity.pdf}
+\caption{\textbf{Gradient-fidelity diagnostic.} \textbf{(A)}~Exact-factorization sanity check across all theory-diagnostic conditions, reported as relative $L_2$ reconstruction error and scale mismatch. Reconstructed gradients match autograd to numerical precision. \textbf{(B)}~Seeded final-checkpoint weighted cosine similarity between local and backprop gradients. \textbf{(C)}~Seeded final-checkpoint scale mismatch, defined as $|\log_{10}(\|g^{\mathrm{local}}\|/\|g^{\mathrm{bp}}\|)|$. Error bars denote $\pm$1 s.d.\ across 3 checkpointed seeds. \textbf{(D)}~Full-gradient norms over learning. Additive local and backprop gradients remain finite, so near-zero additive cosine reflects directional mismatch rather than vanishing gradients.}
+\label{fig:gradient_fidelity}
 \end{figure*}
 
 %=============================================================================
@@ -292,13 +299,6 @@ The experiments follow three questions. First, does the exact factorization expl
 To test whether these performance differences correspond to better credit signals, we compare local and backprop gradients on the same batch at the same parameter values.
 For each parameter tensor $p$, we compute directional alignment (cosine similarity) and scale mismatch, defined as $|\log_{10}(\|g_p^{\mathrm{local}}\|/\|g_p^{\mathrm{bp}}\|)|$, aggregated by parameter count.
 
-\begin{figure*}[!t]
-\centering
-\includegraphics[width=0.98\textwidth]{fig3_gradient_fidelity.pdf}
-\caption{\textbf{Gradient-fidelity diagnostic.} \textbf{(A)}~Exact-factorization sanity check across all theory-diagnostic conditions, reported as relative $L_2$ reconstruction error and scale mismatch. Reconstructed gradients match autograd to numerical precision. \textbf{(B)}~Seeded final-checkpoint weighted cosine similarity between local and backprop gradients. \textbf{(C)}~Seeded final-checkpoint scale mismatch, defined as $|\log_{10}(\|g^{\mathrm{local}}\|/\|g^{\mathrm{bp}}\|)|$. Error bars denote $\pm$1 s.d.\ across 3 checkpointed seeds. \textbf{(D)}~Full-gradient norms over learning. Additive local and backprop gradients remain finite, so near-zero additive cosine reflects directional mismatch rather than vanishing gradients.}
-\label{fig:gradient_fidelity}
-\end{figure*}
-
 Across the checkpointed MNIST gradient-dynamics diagnostic, shunting is more aligned with backprop and closer in norm than the additive control at the final checkpoint: weighted cosine rises from $0.005\pm0.026$ to $0.100\pm0.033$, and scale mismatch falls from $0.50\pm0.05$ to $0.26\pm0.05$.
 Figure~\ref{fig:gradient_fidelity}A confirms that the theory is operational in code under the nonnegative-input setup: reconstructing gradients from Corollary~\ref{cor:factorization} using exact compartment errors yields weighted relative reconstruction error below $2\times 10^{-7}$ and weighted scale mismatch below $4\times 10^{-8}$ across runs.
 In a few low-norm parameter blocks, cosine becomes numerically unstable even though the reconstruction itself is essentially exact, so we report the norm-based diagnostics in the figure.
@@ -307,6 +307,18 @@ The only approximation made by LocalCA is therefore the broadcast substitute for
 
 \subsection{Mechanistic Chain: Path Gains, Broadcast Fidelity, and Oracle Transport}
 \label{sec:mechanistic}
+
+\begin{figure*}[!t]
+\centering
+\includegraphics[width=0.98\textwidth]{fig5_mechanistic_evidence.pdf}
+\caption{\textbf{Mechanistic chain from path gains to learning.}
+\textbf{(A)}~Example dendritic path-gain field at matched inhibition, with measured MNIST CV annotated for additive and shunting networks.
+\textbf{(B)}~Exact-error compressibility on MNIST: lower rank-$1$ residual and lower participation rank mean that a scalar broadcast is a better approximation.
+\textbf{(C)}~Direct compartment-error fidelity on noise resilience. Solid lines compare rank-$1$ broadcast to the exact compartment error; dashed lines show the transported-error oracle.
+\textbf{(D)}~Learning with the transported-error oracle. Improving the broadcast field recovers near-ceiling local learning, especially where rank-$1$ broadcast fails.
+\textbf{(E)}~Compact inhibitory-path probe. In a one-layer noise-resilience test, exact path transport closes the rank-$1$ gap, and explicit inhibitory cells trained by the same local rule remain near the explicit-I backprop ceiling. Error bars denote $\pm$1 s.d.\ across seeds.}
+\label{fig:mechanistic}
+\end{figure*}
 
 Figure~\ref{fig:mechanistic} provides the paper's central empirical chain: shunting changes the dendritic path-gain field, makes the exact compartment-error field more compressible, improves broadcast fidelity, and then improves local learning when the transported-error bottleneck is removed.
 
@@ -328,28 +340,7 @@ Panel~E keeps the inhibitory-path interpretation in the main figure. In a one-de
 
 Appendix controls fill in the boundaries: coarse quantized broadcasts preserve performance until sign-only or sparse broadcasts remove too much information (Fig.~\ref{fig:low_bandwidth_appendix}); rank-$K$ and path-propagation feedback close part of the transported-oracle gap (Table~\ref{tab:low_rank_broadcast}); additive normalization and DFA help but do not match the shunting conductance model (Figs.~\ref{fig:additive_norm_control}, \ref{fig:fa_dfa_appendix}); the full input-mode probe is reported in Fig.~\ref{fig:input_mode_path_gain} and Table~\ref{tab:input_mode_probe}; and post-training inhibitory-conductance interventions plus exact-error SVD diagnostics show that learned inhibition is causally task-structured and makes the exact compartment-error field more compressible (Fig.~\ref{fig:inhibition_causality_error_rank}).
 
-\begin{figure*}[!t]
-\centering
-\includegraphics[width=0.98\textwidth]{fig5_mechanistic_evidence.pdf}
-\caption{\textbf{Mechanistic chain from path gains to learning.}
-\textbf{(A)}~Example dendritic path-gain field at matched inhibition, with measured MNIST CV annotated for additive and shunting networks.
-\textbf{(B)}~Exact-error compressibility on MNIST: lower rank-$1$ residual and lower participation rank mean that a scalar broadcast is a better approximation.
-\textbf{(C)}~Direct compartment-error fidelity on noise resilience. Solid lines compare rank-$1$ broadcast to the exact compartment error; dashed lines show the transported-error oracle.
-\textbf{(D)}~Learning with the transported-error oracle. Improving the broadcast field recovers near-ceiling local learning, especially where rank-$1$ broadcast fails.
-\textbf{(E)}~Compact inhibitory-path probe. In a one-layer noise-resilience test, exact path transport closes the rank-$1$ gap, and explicit inhibitory cells trained by the same local rule remain near the explicit-I backprop ceiling. Error bars denote $\pm$1 s.d.\ across seeds.}
-\label{fig:mechanistic}
-\end{figure*}
-\clearpage
-
 \subsection{Capacity-Calibrated Competence}
-
-Having established the mechanism, we next ask whether the same conditions improve end-task learning in architectures that are already competent under backpropagation.
-In the capacity-calibrated regime, shunting dendritic cores remain reasonably competitive under local learning: on MNIST, Fashion-MNIST, and context gating, the best local configuration (5F, rank-$1$ broadcast in these architectures, local decoder) stays within about $5$--$6$ percentage points of the matched backprop ceiling (Table~\ref{tab:gap_closing}; Fig.~\ref{fig:competence_regime}).
-Within the local-rule family, 5F is the strongest practical wrapper, but it remains heuristic rather than theorem-derived; Appendix Tables~\ref{tab:variant_ranking}, \ref{tab:local_mismatch_recheck}, and \ref{tab:component_carry} summarize that division of labor across rules and broadcast choices. Classical random-feedback baselines remain much weaker on the same task family: in the matched MNIST appendix comparison, DFA reaches $66.1\%$ on shunting and $62.2\%$ on additive, well below the $91.4\%$ best shunting LocalCA result, while FA is not directly compatible with the block-structured dendritic layers (Appendix Fig.~\ref{fig:fa_dfa_appendix}). This helps separate the contribution of the conductance architecture from the contribution of the LocalCA rule itself.
-
-\subsection{Regime Dependence of the Shunting Advantage}
-
-The benefit of shunting varies across tasks. With matched rank-$1$ broadcast, shunting is modestly better on MNIST, Fashion-MNIST, and context gating; the matched additive context-gating run reaches $0.787\pm0.007$ versus $0.803\pm0.006$ for shunting. The gap grows on the inhibition-sensitive noise-resilience benchmark once inhibitory conductance is present (Fig.~\ref{fig:competence_regime}). This is the expected regime dependence: shunting helps most when input resistance is part of the useful credit geometry rather than merely an added conductance load.
 
 \begin{figure*}[!t]
 \centering
@@ -361,27 +352,17 @@ The benefit of shunting varies across tasks. With matched rank-$1$ broadcast, sh
 \label{fig:competence_regime}
 \end{figure*}
 
-\subsection{Morphology Shifts the Inhibitory Operating Regime}
+Having established the mechanism, we next ask whether the same conditions improve end-task learning in architectures that are already competent under backpropagation.
+In the capacity-calibrated regime, shunting dendritic cores remain reasonably competitive under local learning: on MNIST, Fashion-MNIST, and context gating, the best local configuration (5F, rank-$1$ broadcast in these architectures, local decoder) stays within about $5$--$6$ percentage points of the matched backprop ceiling (Table~\ref{tab:gap_closing}; Fig.~\ref{fig:competence_regime}).
+Within the local-rule family, 5F is the strongest practical wrapper, but it remains heuristic rather than theorem-derived; Appendix Tables~\ref{tab:variant_ranking}, \ref{tab:local_mismatch_recheck}, and \ref{tab:component_carry} summarize that division of labor across rules and broadcast choices. Classical random-feedback baselines remain much weaker on the same task family: in the matched MNIST appendix comparison, DFA reaches $66.1\%$ on shunting and $62.2\%$ on additive, well below the $91.4\%$ best shunting LocalCA result, while FA is not directly compatible with the block-structured dendritic layers (Appendix Fig.~\ref{fig:fa_dfa_appendix}). This helps separate the contribution of the conductance architecture from the contribution of the LocalCA rule itself.
 
-The inhibitory regime in which shunting helps most is not fixed across dendritic trees.
-In the morphology and inhibition sweep (Fig.~\ref{fig:morphology_ie_regime}), the average shunting advantage peaks at higher inhibition for depth-2 trees ($N_I{=}40$ in this sweep) and at intermediate inhibition for depth-3 trees ($N_I{=}10$).
-The best individual cells are also morphology-specific, with $[2,2,2]$ peaking at $N_I{=}10$, $[3,3,3]$ at $N_I{=}20$, and the shallower $[2,2]$ tree at $N_I{=}40$.
-This supports the broader picture that tree geometry changes how inhibitory conductance shapes effective compartment sensitivities.
+\subsection{Regime Dependence of the Shunting Advantage}
 
-\begin{figure*}[!t]
-\centering
-\includegraphics[width=0.98\textwidth]{fig_morphology_ie_regime.pdf}
-\caption{\textbf{Morphology shifts the useful inhibitory regime.}
-\textbf{(A)}~Shunting-minus-additive LocalCA accuracy gap across dendritic morphologies and inhibitory synapse counts.
-\textbf{(B)}~Best inhibitory count for each morphology.
-\textbf{(C)}~Representative path-gain diagnostic for selected morphology cells, used to connect the performance map to credit geometry.
-\textbf{(D)}~Average shunting advantage by depth, with markers showing the peak inhibitory count for each depth.}
-\label{fig:morphology_ie_regime}
-\end{figure*}
+The benefit of shunting varies across tasks. With matched rank-$1$ broadcast, shunting is modestly better on MNIST, Fashion-MNIST, and context gating; the matched additive context-gating run reaches $0.787\pm0.007$ versus $0.803\pm0.006$ for shunting. The gap grows on the inhibition-sensitive noise-resilience benchmark once inhibitory conductance is present (Fig.~\ref{fig:competence_regime}). This is the expected regime dependence: shunting helps most when input resistance is part of the useful credit geometry rather than merely an added conductance load.
 
 \paragraph{Scope.}
 \label{sec:discussion}
-The claim is mechanistic, not an unconstrained benchmark claim: CIFAR-10, routed feedback, and depth scaling are diagnostics of where rank-$1$ broadcast breaks, and shunting is not a universal solution for hard vision or biological learning.
+The claim is mechanistic, not an unconstrained benchmark claim: CIFAR-10, routed feedback, morphology, and depth scaling are diagnostics of where rank-$1$ broadcast breaks, and shunting is not a universal solution for hard vision or biological learning.
 
 %=============================================================================
 % REFERENCES
@@ -917,7 +898,18 @@ standard BP (ceiling) & $48.3 \pm 1.0$ & $49.5 \pm 0.4$ \\
 
 \subsection*{Morphology $\times$ Inhibition Regime Map}
 
-The main-text morphology figure shows the supportive regime map, while the appendix keeps the summary tables and architecture details that go with it. We treat it as supportive evidence that morphology changes the inhibitory operating regime in which shunting is most useful; a fuller mechanistic account would still require matched theory diagnostics for each cell in the grid.
+This supportive regime map tests whether tree geometry changes the inhibitory operating point at which shunting helps. We treat it as evidence that morphology changes the useful inhibition regime; a fuller mechanistic account would still require matched theory diagnostics for each cell in the grid.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.98\textwidth]{fig_morphology_ie_regime.pdf}
+\caption{\textbf{Morphology shifts the useful inhibitory regime.}
+\textbf{(A)}~Shunting-minus-additive LocalCA accuracy gap across dendritic morphologies and inhibitory synapse counts.
+\textbf{(B)}~Best inhibitory count for each morphology.
+\textbf{(C)}~Representative path-gain diagnostic for selected morphology cells, used to connect the performance map to credit geometry.
+\textbf{(D)}~Average shunting advantage by depth, with markers showing the peak inhibitory count for each depth.}
+\label{fig:morphology_ie_regime}
+\end{figure*}
 
 \subsection*{Input-Mode Probe: Direct Inhibitory Stream vs.\ Explicit Inhibitory Cells}
 \label{app:input_mode_probe}
@@ -1230,7 +1222,7 @@ Recent dendritic extensions & path propagation; router-derived branch roles; pat
 \end{table}
 
 \subsection*{Representative Manuscript Architectures}
-\begin{table}[t]\centering\scriptsize
+\begin{table}[p]\centering\scriptsize
 \renewcommand{\arraystretch}{1.06}
 \resizebox{\linewidth}{!}{%
 \begin{tabular}{@{}L{0.18\linewidth}L{0.08\linewidth}L{0.08\linewidth}L{0.10\linewidth}L{0.16\linewidth}L{0.06\linewidth}L{0.20\linewidth}@{}}
