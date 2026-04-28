@@ -60,28 +60,28 @@ def apply_neurips_style():
             "DejaVu Sans", "Bitstream Vera Sans",
         ],
         "mathtext.fontset": "dejavusans",
-        "font.size": 11.2,
-        "axes.labelsize": 11.7,
-        "axes.titlesize": 11.8,
+        "font.size": 10.8,
+        "axes.labelsize": 11.3,
+        "axes.titlesize": 11.6,
         "axes.titleweight": "bold",
-        "xtick.labelsize": 10.0,
-        "ytick.labelsize": 10.0,
+        "xtick.labelsize": 9.8,
+        "ytick.labelsize": 9.8,
         "legend.fontsize": 9.3,
         "legend.title_fontsize": 9.5,
 
         # Lines / markers
         "lines.linewidth": 2.0,
-        "lines.markersize": 5.2,
+        "lines.markersize": 5.5,
         "lines.solid_capstyle": "round",
         "lines.solid_joinstyle": "round",
 
         # Axes
-        "axes.linewidth": 0.9,
+        "axes.linewidth": 1.05,
         "axes.spines.top": False,
         "axes.spines.right": False,
         "axes.grid": False,
         "axes.labelpad": 2.5,
-        "axes.titlepad": 5,
+        "axes.titlepad": 4,
         "axes.edgecolor": "#4A4A4A",
         "axes.facecolor": "white",
         "axes.prop_cycle": mpl.cycler(
@@ -92,10 +92,10 @@ def apply_neurips_style():
         ),
 
         # Ticks
-        "xtick.major.width": 0.75,
-        "ytick.major.width": 0.75,
-        "xtick.major.size": 3.5,
-        "ytick.major.size": 3.5,
+        "xtick.major.width": 0.95,
+        "ytick.major.width": 0.95,
+        "xtick.major.size": 3.9,
+        "ytick.major.size": 3.9,
         "xtick.direction": "out",
         "ytick.direction": "out",
         "xtick.major.pad": 2,
@@ -104,7 +104,7 @@ def apply_neurips_style():
         "ytick.color": "#2A2A2A",
 
         # Grid
-        "grid.linewidth": 0.65,
+        "grid.linewidth": 0.78,
         "grid.alpha": 0.34,
         "grid.color": COLORS["grid"],
 
@@ -131,7 +131,7 @@ def apply_neurips_style():
         "pdf.compression": 9,
 
         # Hatch
-        "hatch.linewidth": 0.55,
+        "hatch.linewidth": 0.72,
     })
 
 
@@ -140,7 +140,7 @@ def panel_label(ax, label, x=-0.11, y=1.05, **kwargs):
 
     Default position is outside upper-left, suitable for most axes.
     """
-    fontsize = kwargs.pop("fontsize", 14.0)
+    fontsize = kwargs.pop("fontsize", 13.0)
     color = kwargs.pop("color", COLORS["ink"])
     ax.text(
         x, y, label,
@@ -154,12 +154,14 @@ def panel_label(ax, label, x=-0.11, y=1.05, **kwargs):
 def style_axis(ax, grid="none", spine_color=None):
     """Apply standard panel polish to an axes."""
     if grid in {"x", "y", "both"}:
-        ax.grid(True, axis=grid, zorder=0, linewidth=0.65, alpha=0.34,
+        ax.grid(True, axis=grid, zorder=0, linewidth=0.78, alpha=0.34,
                 color=COLORS["grid"])
     else:
         ax.grid(False)
-    ax.tick_params(direction="out", length=3.5, width=0.75)
+    ax.tick_params(direction="out", length=3.9, width=0.95)
     ax.set_axisbelow(True)
+    for spine in ("left", "bottom"):
+        ax.spines[spine].set_linewidth(1.05)
     if spine_color is not None:
         for spine in ("left", "bottom"):
             ax.spines[spine].set_color(spine_color)

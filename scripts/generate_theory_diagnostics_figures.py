@@ -63,10 +63,10 @@ def _setup_style() -> None:
         {
             "font.size": 11.0,
             "axes.labelsize": 11.2,
-            "axes.titlesize": 11.5,
-            "xtick.labelsize": 9.8,
-            "ytick.labelsize": 9.8,
-            "legend.fontsize": 9.0,
+            "axes.titlesize": 10.7,
+            "xtick.labelsize": 10.0,
+            "ytick.labelsize": 10.0,
+            "legend.fontsize": 9.2,
             "legend.frameon": True,
             "legend.framealpha": 0.96,
             "legend.edgecolor": "#D0D5DD",
@@ -76,7 +76,7 @@ def _setup_style() -> None:
     )
 
 
-def _panel(ax: plt.Axes, label: str, x: float = -0.13, y: float = 1.20) -> None:
+def _panel(ax: plt.Axes, label: str, x: float = -0.24, y: float = 1.15) -> None:
     panel_label(ax, label, x=x, y=y)
 
 
@@ -127,7 +127,7 @@ def _draw_gain_tree(
                 0.018,
                 facecolor=line_color,
                 edgecolor="white",
-                linewidth=0.5,
+                linewidth=0.7,
                 zorder=4,
             )
         )
@@ -137,7 +137,7 @@ def _draw_gain_tree(
             rf"$\alpha_{idx + 1}$",
             ha="right",
             va="center",
-            fontsize=7.4,
+            fontsize=8.6,
             color=COLORS["ink"],
         )
     ax.add_patch(
@@ -146,18 +146,18 @@ def _draw_gain_tree(
             0.035,
             facecolor=COLORS["soma"],
             edgecolor=COLORS["edge"],
-            linewidth=0.6,
+                linewidth=0.8,
             zorder=5,
         )
     )
-    ax.text(soma[0], soma[1], r"$\delta_0$", ha="center", va="center", fontsize=7.0)
+    ax.text(soma[0], soma[1], r"$\delta_0$", ha="center", va="center", fontsize=8.2)
     ax.text(
         x0 + 0.20,
         0.94,
         title,
         ha="center",
         va="center",
-        fontsize=8.5,
+        fontsize=8.1,
         color=color,
         fontweight="bold",
     )
@@ -194,8 +194,8 @@ def _plot_path_gain_map(ax: plt.Axes, summary: pd.DataFrame) -> None:
 
     _draw_gain_tree(
         ax,
-        x0=0.06,
-        title=f"Additive\nCV={add_cv:.2f}",
+        x0=0.02,
+        title=f"Add.\nCV {add_cv:.2f}",
         gains=add_gains,
         color=COLOR_ADDITIVE,
         norm=norm,
@@ -203,14 +203,14 @@ def _plot_path_gain_map(ax: plt.Axes, summary: pd.DataFrame) -> None:
     )
     _draw_gain_tree(
         ax,
-        x0=0.52,
-        title=f"Shunting\nCV={shunt_cv:.2f}",
+        x0=0.56,
+        title=f"Shunt.\nCV {shunt_cv:.2f}",
         gains=shunt_gains,
         color=COLOR_SHUNTING,
         norm=norm,
         cmap=cmap,
     )
-    ax.set_title("Path-gain field")
+    ax.set_title("Path-gain\nfield", linespacing=0.9)
 
 
 def _plot_error_compressibility(ax: plt.Axes, rank_summary: pd.DataFrame) -> None:
@@ -224,7 +224,7 @@ def _plot_error_compressibility(ax: plt.Axes, rank_summary: pd.DataFrame) -> Non
         & (rank_summary["scope"] == "all_layers")
     ].copy()
     order = ["dendritic_additive", "dendritic_shunting"]
-    labels = ["Additive", "Shunting"]
+    labels = ["Add.", "Shunt."]
     colors = [COLOR_ADDITIVE, COLOR_SHUNTING]
     x = np.arange(len(order))
     means = []
@@ -243,32 +243,32 @@ def _plot_error_compressibility(ax: plt.Axes, rank_summary: pd.DataFrame) -> Non
         yerr=stds,
         color=colors,
         edgecolor="white",
-        linewidth=0.4,
+        linewidth=0.75,
         width=0.58,
-        capsize=2,
-        error_kw={"lw": 0.7},
+        capsize=2.4,
+        error_kw={"lw": 1.1},
     )
     ax.set_xticks(x)
     ax.set_xticklabels(labels)
-    ax.set_ylabel("Rank-1 residual")
+    ax.set_ylabel("Residual")
     ax.set_ylim(0, 1.02)
-    ax.set_title("Error compressibility")
-    for rect, mean, prank, prank_std in zip(bars, means, pranks, prank_stds):
+    ax.set_title("Rank-1\nresidual", linespacing=0.9)
+    for rect, mean, prank, _prank_std in zip(bars, means, pranks, prank_stds):
         ax.text(
             rect.get_x() + rect.get_width() / 2,
             mean + 0.055,
             f"{mean:.2f}",
             ha="center",
             va="bottom",
-            fontsize=7.8,
+            fontsize=8.4,
         )
         ax.text(
             rect.get_x() + rect.get_width() / 2,
             0.08,
-            f"rank\n{prank:.1f}$\\pm${prank_std:.1f}",
+            f"rank\n{prank:.1f}",
             ha="center",
             va="bottom",
-            fontsize=7.2,
+            fontsize=7.0,
             color="white",
             fontweight="bold",
         )
@@ -279,10 +279,10 @@ def _plot_compartment_error_fidelity(ax: plt.Axes, summary: pd.DataFrame) -> Non
     style_axis(ax, grid="y")
     noise = summary[summary["dataset"] == "noise_resilience"].copy()
     style_map = {
-        ("dendritic_shunting", "per_soma"): (COLOR_SHUNTING, "-", "Shunt. rank-1"),
-        ("dendritic_shunting", "path_transport"): (COLOR_SHUNTING, "--", "Shunt. transported"),
-        ("dendritic_additive", "per_soma"): (COLOR_ADDITIVE, "-", "Add. rank-1"),
-        ("dendritic_additive", "path_transport"): (COLOR_ADDITIVE, "--", "Add. transported"),
+        ("dendritic_shunting", "per_soma"): (COLOR_SHUNTING, "-", "Shunt. R1"),
+        ("dendritic_shunting", "path_transport"): (COLOR_SHUNTING, "--", "Shunt. oracle"),
+        ("dendritic_additive", "per_soma"): (COLOR_ADDITIVE, "-", "Add. R1"),
+        ("dendritic_additive", "path_transport"): (COLOR_ADDITIVE, "--", "Add. oracle"),
     }
     series = [
         ("dendritic_shunting", "per_soma_weighted_cosine_mean"),
@@ -308,8 +308,8 @@ def _plot_compartment_error_fidelity(ax: plt.Axes, summary: pd.DataFrame) -> Non
             x,
             y,
             marker="o" if linestyle == "-" else "s",
-            markersize=3.2,
-            lw=1.3,
+            markersize=5.0,
+            lw=2.1,
             linestyle=linestyle,
             color=color,
             label=label,
@@ -317,19 +317,13 @@ def _plot_compartment_error_fidelity(ax: plt.Axes, summary: pd.DataFrame) -> Non
         ax.fill_between(x, y - err, y + err, color=color, alpha=0.10, linewidth=0)
 
     ax.set_xlabel(r"$N_I$ per branch")
-    ax.set_ylabel(r"Cosine$(e_n,\partial L/\partial V_n)$")
-    ax.set_title("Broadcast fidelity")
+    ax.set_ylabel("Cosine")
+    ax.set_title("Broadcast\nfidelity", linespacing=0.9)
     ax.set_xticks([0, 5, 10, 20, 40])
     ax.set_ylim(-0.35, 1.05)
-    ax.legend(
-        loc="lower right",
-        ncol=1,
-        fontsize=7.0,
-        handlelength=1.1,
-        handletextpad=0.3,
-        columnspacing=0.6,
-        frameon=False,
-    )
+    ax.set_xlim(-1.5, 48.0)
+    ax.text(41.2, 0.22, "R1", color=COLORS["ink"], fontsize=8.5, fontweight="bold")
+    ax.text(41.2, 0.95, "oracle", color=COLORS["ink"], fontsize=8.5, fontweight="bold")
 
 
 def _plot_mechanism_summary(ax: plt.Axes, summary: pd.DataFrame) -> None:
@@ -366,21 +360,21 @@ def _plot_mechanism_summary(ax: plt.Axes, summary: pd.DataFrame) -> None:
                 yerr=yerr,
                 fmt=core_marker[core],
                 color=ds_colors[ds],
-                markersize=5.4,
+                markersize=6.2,
                 alpha=0.85,
                 capsize=2,
-                lw=0.7,
-                elinewidth=0.7,
+                lw=1.0,
+                elinewidth=1.0,
                 markeredgecolor="white",
                 markeredgewidth=0.5,
                 label=f"{ds_titles[ds]} {core_label[core]}",
             )
 
     ax.set_xlabel("Per-soma cosine alignment")
-    ax.set_ylabel("Test accuracy (%)")
+    ax.set_ylabel("Test (%)")
     ax.set_title("Alignment predicts accuracy")
     ax.legend(
-        fontsize=6.2,
+        fontsize=7.8,
         handlelength=1.0,
         handletextpad=0.3,
         loc="lower right",
@@ -517,11 +511,11 @@ def _plot_oracle_learning(
             x,
             y,
             marker="o",
-            markersize=3.4,
-            lw=1.3,
+        markersize=4.9,
+        lw=2.1,
             color=color,
             linestyle="-",
-            label=f"{label} rank-1",
+            label=f"{label} R1",
         )
         ax.fill_between(x, y - err, y + err, color=color, alpha=0.10, linewidth=0)
 
@@ -533,29 +527,22 @@ def _plot_oracle_learning(
             x2,
             y2,
             marker="s",
-            markersize=3.0,
-            lw=1.3,
+            markersize=4.5,
+            lw=2.1,
             color=color,
             linestyle="--",
-            label=f"{label} transported",
+            label=f"{label} oracle",
         )
         ax.fill_between(x2, y2 - err2, y2 + err2, color=color, alpha=0.08, linewidth=0)
 
     ax.set_xlabel(r"$N_I$ per branch")
     ax.set_ylabel("Test accuracy (%)")
-    ax.set_title("Transported learning")
+    ax.set_title("Oracle\nlearning", linespacing=0.9)
     ax.set_xticks([0, 5, 10, 20, 40])
     ax.set_ylim(20, 101)
-    ax.legend(
-        loc="lower right",
-        ncol=1,
-        fontsize=7.0,
-        handlelength=1.1,
-        handletextpad=0.25,
-        borderpad=0.22,
-        labelspacing=0.22,
-        frameon=False,
-    )
+    ax.set_xlim(-1.5, 48.0)
+    ax.text(41.0, 86.0, "R1", color=COLORS["ink"], fontsize=8.4, fontweight="bold")
+    ax.text(41.0, 95.2, "oracle", color=COLORS["ink"], fontsize=8.4, fontweight="bold")
 
 
 def _plot_inhibitory_path_probe(ax: plt.Axes, input_mode: pd.DataFrame) -> None:
@@ -574,7 +561,7 @@ def _plot_inhibitory_path_probe(ax: plt.Axes, input_mode: pd.DataFrame) -> None:
     explicit_bp = _row("explicit_i_cells__standard_bp")
     rows = [
         ("Rank-1", direct_rank1, COLORS["per_soma"], ""),
-        ("Path transport", direct_path, COLOR_TRANSPORT, ""),
+        ("Path transp.", direct_path, COLOR_TRANSPORT, ""),
         ("I-cell path", explicit_path, COLORS["shunting"], "//"),
     ]
     bp = 100.0 * float(explicit_bp["test_accuracy_mean"])
@@ -592,7 +579,7 @@ def _plot_inhibitory_path_probe(ax: plt.Axes, input_mode: pd.DataFrame) -> None:
             height=0.48,
             color=color,
             edgecolor="white",
-            linewidth=0.55,
+            linewidth=0.85,
             hatch=hatch,
             alpha=0.92,
             zorder=2,
@@ -602,10 +589,10 @@ def _plot_inhibitory_path_probe(ax: plt.Axes, input_mode: pd.DataFrame) -> None:
             yi,
             xerr=err,
             fmt="o",
-            markersize=4.2,
+            markersize=5.0,
             color=COLORS["ink"],
             ecolor=COLORS["ink"],
-            elinewidth=0.85,
+            elinewidth=1.1,
             capsize=2.2,
             capthick=0.75,
             zorder=4,
@@ -616,27 +603,27 @@ def _plot_inhibitory_path_probe(ax: plt.Axes, input_mode: pd.DataFrame) -> None:
             f"{mean:.1f}",
             ha="left",
             va="center",
-            fontsize=8.0,
+            fontsize=8.4,
             color=COLORS["ink"],
         )
 
-    ax.axvline(bp, color=COLORS["bp"], linestyle="--", linewidth=1.1, alpha=0.90, zorder=3)
+    ax.axvline(bp, color=COLORS["bp"], linestyle="--", linewidth=1.4, alpha=0.90, zorder=3)
     ax.text(
         bp - 0.15,
         2.64,
         "BP",
         ha="right",
         va="bottom",
-        fontsize=8.0,
+        fontsize=8.4,
         color=COLORS["bp"],
         fontweight="bold",
     )
     ax.set_yticks(y)
-    ax.set_yticklabels([label for label, _, _, _ in rows], fontsize=8.4)
+    ax.set_yticklabels([label for label, _, _, _ in rows], fontsize=8.8)
     ax.set_xlim(80.0, 98.0)
     ax.set_xticks([80, 85, 90, 95])
     ax.set_xlabel("Probe accuracy (%)")
-    ax.set_title("Pathway probe", pad=8)
+    ax.set_title("Pathway\nprobe", pad=5, linespacing=0.9)
     ax.set_ylim(-0.55, 2.72)
     ax.spines["left"].set_visible(False)
     ax.tick_params(axis="y", length=0)
@@ -659,8 +646,8 @@ def build_figure(
     fig, axes = plt.subplots(
         1,
         5,
-        figsize=(13.8, 3.35),
-        gridspec_kw={"wspace": 0.56, "width_ratios": [1.00, 0.84, 1.00, 1.03, 1.20]},
+        figsize=(7.90, 3.12),
+        gridspec_kw={"wspace": 0.54, "width_ratios": [1.00, 0.82, 1.02, 1.02, 1.25]},
     )
 
     _plot_path_gain_map(axes[0], summary)
@@ -668,7 +655,7 @@ def build_figure(
     _plot_compartment_error_fidelity(axes[2], summary)
     _plot_oracle_learning(axes[3], summary, oracle_summary)
     _plot_inhibitory_path_probe(axes[4], input_mode)
-    fig.subplots_adjust(left=0.050, right=0.992, top=0.82, bottom=0.25, wspace=0.56)
+    fig.subplots_adjust(left=0.052, right=0.992, top=0.80, bottom=0.24, wspace=0.54)
     return fig
 
 

@@ -29,7 +29,7 @@ The empirical story follows this sequence. Figure~\ref{fig:model_schematic} defi
 
 \begin{figure*}[!t]
 \centering
-\includegraphics[width=0.98\textwidth]{fig1_model_and_credit.pdf}
+\includegraphics[width=\textwidth]{fig1_model_and_credit.pdf}
 \caption{\textbf{Model and credit assignment.}
 \textbf{(A)}~Conductance-based dendritic tree. Nonnegative excitatory and inhibitory inputs drive distal compartments, which feed proximal branches and then the soma; shunting inhibition enters the conductance denominator and lowers input resistance.
 \textbf{(B)}~Path gains through the tree. Exact backprop supplies path-specific compartment errors, while rank-1 LocalCA replaces that field with one shared broadcast.
@@ -39,7 +39,7 @@ The empirical story follows this sequence. Figure~\ref{fig:model_schematic} defi
 
 \begin{figure*}[!t]
 \centering
-\includegraphics[width=0.98\textwidth]{fig3_gradient_fidelity.pdf}
+\includegraphics[width=\textwidth]{fig3_gradient_fidelity.pdf}
 \caption{\textbf{Gradient-fidelity diagnostic.} \textbf{(A)}~Exact-factorization sanity check across all theory-diagnostic conditions, reported as relative $L_2$ reconstruction error and scale mismatch. Reconstructed gradients match autograd to numerical precision. \textbf{(B)}~Seeded final-checkpoint weighted cosine similarity between local and backprop gradients. \textbf{(C)}~Seeded final-checkpoint scale mismatch, defined as $|\log_{10}(\|g^{\mathrm{local}}\|/\|g^{\mathrm{bp}}\|)|$. Error bars denote $\pm$1 s.d.\ across 3 checkpointed seeds. \textbf{(D)}~Full-gradient norms over learning. Additive local and backprop gradients remain finite, so near-zero additive cosine reflects directional mismatch rather than vanishing gradients.}
 \label{fig:gradient_fidelity}
 \end{figure*}
@@ -262,7 +262,7 @@ This is a structured rank-$K$ broadcast, not a separate learning principle; the 
 
 \begin{figure*}[!t]
 \centering
-\includegraphics[width=0.98\textwidth]{fig4_rule_feedback_design.pdf}
+\includegraphics[width=\textwidth]{fig4_rule_feedback_design.pdf}
 \caption{\textbf{Local-rule and feedback-design axes.}
 \textbf{(A)}~The theorem-facing 3F update and the 4F attenuation proxy are weak practical optimizers in the completed local-competence sweeps; 5F is the strongest empirical wrapper.
 \textbf{(B)}~The broadcast definition matters: on MNIST, rank-$1$ shared somatic error is strong, while a local-mismatch error surrogate fails.
@@ -303,7 +303,7 @@ The only approximation made by LocalCA is therefore the broadcast substitute for
 
 \begin{figure*}[!t]
 \centering
-\includegraphics[width=0.98\textwidth]{fig5_mechanistic_evidence.pdf}
+\includegraphics[width=\textwidth]{fig5_mechanistic_evidence.pdf}
 \caption{\textbf{Mechanistic chain from path gains to learning.}
 \textbf{(A)}~Example dendritic path-gain field at matched inhibition, with measured MNIST CV annotated for additive and shunting networks.
 \textbf{(B)}~Exact-error compressibility on MNIST: lower rank-$1$ residual and lower participation rank mean that a scalar broadcast is a better approximation.
@@ -337,7 +337,7 @@ Appendix controls fill in the boundaries: coarse quantized broadcasts preserve p
 
 \begin{figure*}[!t]
 \centering
-\includegraphics[width=0.98\textwidth]{fig2_competence_regime.pdf}
+\includegraphics[width=\textwidth]{fig2_competence_regime.pdf}
 \caption{\textbf{Capacity-calibrated competence and regime dependence.}
 \textbf{(A)}~Matched backprop ceilings vs.\ rank-$1$ 5F LocalCA on MNIST, Fashion-MNIST, and context gating, including the matched additive context-gating rerun.
 \textbf{(B,C)}~Inhibitory dose-response and shunting advantage on MNIST and noise resilience.

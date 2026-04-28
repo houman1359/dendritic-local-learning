@@ -55,7 +55,7 @@ def setup_panel(ax, width: float = 1.0, title: str | None = None) -> None:
     for spine in ax.spines.values():
         spine.set_visible(False)
     if title:
-        ax.set_title(title, loc="left", x=0.10, fontsize=9.6, pad=5, fontweight="bold")
+        ax.set_title(title, loc="left", x=0.10, fontsize=10.2, pad=5, fontweight="bold")
 
 
 def box(ax, xy, w, h, fc="white", ec="#D8DEE8", lw=0.8, radius=0.02, z=2):
@@ -160,7 +160,7 @@ def draw_tree(
                 [x_leaf + 0.018, x_branch - 0.025],
                 [ly, by + 0.25 * off],
                 color=branch_colors[bi],
-                linewidth=1.15,
+                linewidth=1.35,
                 alpha=0.85,
                 solid_capstyle="round",
                 zorder=2,
@@ -169,7 +169,7 @@ def draw_tree(
             [x_branch + 0.025, x_soma - 0.04],
             [by, 0.50 + 0.16 * (by - 0.50)],
             color=branch_colors[bi],
-            linewidth=1.9,
+            linewidth=2.15,
             alpha=0.90,
             solid_capstyle="round",
             zorder=2,
@@ -177,7 +177,7 @@ def draw_tree(
 
     for x, y, _bi in leaves:
         ax.add_patch(
-            Circle((x, y), 0.020, fc=leaf_color, ec=EDGE, linewidth=0.55, zorder=4)
+            Circle((x, y), 0.020, fc=leaf_color, ec=EDGE, linewidth=0.65, zorder=4)
         )
         if show_synapses:
             draw_synapse(ax, x - 0.035, y - 0.007, "E", 0.85)
@@ -186,10 +186,10 @@ def draw_tree(
 
     for bi, by in enumerate(branch_ys):
         ax.add_patch(
-            Circle((x_branch, by), 0.028, fc=branch_colors[bi], ec=EDGE, linewidth=0.6, zorder=5)
+            Circle((x_branch, by), 0.028, fc=branch_colors[bi], ec=EDGE, linewidth=0.7, zorder=5)
         )
 
-    ax.add_patch(Circle((x_soma, 0.50), 0.040, fc=SOMA, ec=EDGE, linewidth=0.75, zorder=6))
+    ax.add_patch(Circle((x_soma, 0.50), 0.040, fc=SOMA, ec=EDGE, linewidth=0.9, zorder=6))
     if labels:
         text_with_halo(ax, x_leaf, branch_ys[1], r"$V_n$", fontsize=7.3)
         text_with_halo(ax, x_branch, branch_ys[1], r"$V_p$", fontsize=7.3)
@@ -219,7 +219,7 @@ def panel_a(ax):
         0.080,
         legend_y,
         "excitatory drive",
-        fontsize=7.8,
+        fontsize=8.4,
         color=EXC,
         va="center",
         fontweight="bold",
@@ -229,15 +229,15 @@ def panel_a(ax):
         0.080,
         legend_y - 0.070,
         "shunting load",
-        fontsize=7.8,
+        fontsize=8.4,
         color=INH,
         va="center",
         fontweight="bold",
     )
 
-    ax.text(0.42, 0.235, r"$V_n$", fontsize=8.0, color=INK, ha="center", fontweight="bold")
-    ax.text(0.68, 0.235, r"$V_p$", fontsize=8.0, color=INK, ha="center", fontweight="bold")
-    ax.text(0.98, 0.405, "soma", fontsize=7.2, color=INK, ha="center", fontweight="bold")
+    ax.text(0.42, 0.235, r"$V_n$", fontsize=8.6, color=INK, ha="center", fontweight="bold")
+    ax.text(0.68, 0.235, r"$V_p$", fontsize=8.6, color=INK, ha="center", fontweight="bold")
+    ax.text(0.98, 0.405, "soma", fontsize=7.8, color=INK, ha="center", fontweight="bold")
 
     component_boxes = [
         (0.08, 0.105, "E syn.", EXC),
@@ -252,7 +252,7 @@ def panel_a(ax):
             x - 0.033,
             y,
             label,
-            fontsize=6.3,
+            fontsize=7.0,
             ha="left",
             va="center",
             color=INK,
@@ -381,16 +381,16 @@ def panel_c(ax):
     )
     labels = [r"$\alpha_1$ high", r"$\alpha_2$ mid", r"$\alpha_3$ low"]
     for (x, y), col, label in zip(tree["branches"], colors, labels):
-        ax.text(x - 0.10, y + 0.07, label, fontsize=7.2, color=col, ha="center", fontweight="bold")
-        arrow(ax, (1.12, 0.50), (x + 0.035, y), color=EXACT, lw=1.0, ms=7, alpha=0.75, ls="--", rad=0.20 if y > 0.5 else (-0.20 if y < 0.5 else 0.0))
+        ax.text(x - 0.10, y + 0.07, label, fontsize=7.8, color=col, ha="center", fontweight="bold")
+        arrow(ax, (1.12, 0.50), (x + 0.035, y), color=EXACT, lw=1.15, ms=7.5, alpha=0.75, ls="--", rad=0.20 if y > 0.5 else (-0.20 if y < 0.5 else 0.0))
 
-    ax.text(1.18, 0.59, "exact\nerrors", ha="center", va="bottom", fontsize=7.6, color=EXACT, fontweight="bold")
+    ax.text(1.18, 0.59, "exact\nerrors", ha="center", va="bottom", fontsize=8.1, color=EXACT, fontweight="bold")
     ax.add_patch(Circle((1.12, 0.50), 0.022, fc=EXACT, ec="white", linewidth=0.5, zorder=10))
 
     ax.add_patch(Circle((1.12, 0.17), 0.022, fc=LOCAL, ec="white", linewidth=0.5, zorder=10))
     for _, y in tree["branches"]:
-        arrow(ax, (1.10, 0.17), (0.63, y - 0.02), color=LOCAL, lw=0.8, ms=6, alpha=0.55, rad=0.18)
-    ax.text(1.18, 0.17, "rank-1\nbroadcast", ha="left", va="center", fontsize=7.2, color=LOCAL, fontweight="bold", linespacing=0.85)
+        arrow(ax, (1.10, 0.17), (0.63, y - 0.02), color=LOCAL, lw=0.95, ms=6.5, alpha=0.55, rad=0.18)
+    ax.text(1.18, 0.17, "rank-1\nbroadcast", ha="left", va="center", fontsize=7.7, color=LOCAL, fontweight="bold", linespacing=0.85)
 
     ax.text(
         0.60,
@@ -398,7 +398,7 @@ def panel_c(ax):
         "compressible gains make shared broadcast work",
         ha="center",
         va="center",
-        fontsize=5.9,
+        fontsize=6.5,
         color=MUTE,
         style="italic",
     )
@@ -439,7 +439,7 @@ def panel_d(ax):
     xs = np.linspace(0.18, 1.87, len(modes))
     for x, (name, col, kind) in zip(xs, modes):
         box(ax, (x - 0.17, 0.16), 0.34, 0.66, fc="white", ec="#D8DEE8", lw=0.7, radius=0.025)
-        ax.text(x, 0.76, name, ha="center", va="center", fontsize=7.4, color=col, fontweight="bold")
+        ax.text(x, 0.76, name, ha="center", va="center", fontsize=8.0, color=col, fontweight="bold")
         soma, hubs, leaves = draw_tiny_tree(ax, x - 0.02, 0.42, scale=0.18, branch_colors=[DEND, DEND])
 
         if kind == "local":
@@ -447,43 +447,43 @@ def panel_d(ax):
             for si, src in enumerate(srcs):
                 ax.add_patch(Circle(src, 0.015, fc=col, ec="white", linewidth=0.4, zorder=9))
                 target = soma if len(srcs) == 1 else (soma[0], soma[1] + (0.035 if si == 0 else -0.035))
-                arrow(ax, (src[0] + 0.015, src[1]), (target[0] - 0.025, target[1]), color=col, lw=0.8, ms=5, alpha=0.9, rad=-0.08 if si == 0 else 0.08)
+                arrow(ax, (src[0] + 0.015, src[1]), (target[0] - 0.025, target[1]), color=col, lw=0.9, ms=5.5, alpha=0.9, rad=-0.08 if si == 0 else 0.08)
         elif kind == "low-rank":
             src = (x - 0.14, 0.50)
             chans = [(x - 0.05, 0.56), (x - 0.05, 0.44)]
             ax.add_patch(Circle(src, 0.014, fc=col, ec="white", linewidth=0.4, zorder=9))
             for ch in chans:
                 ax.add_patch(Circle(ch, 0.011, fc=col, ec="white", linewidth=0.3, zorder=9))
-                arrow(ax, (src[0] + 0.014, src[1]), (ch[0] - 0.011, ch[1]), color=col, lw=0.65, ms=4, alpha=0.75)
-                arrow(ax, (ch[0] + 0.011, ch[1]), (soma[0] - 0.025, soma[1]), color=col, lw=0.65, ms=4, alpha=0.55)
+                arrow(ax, (src[0] + 0.014, src[1]), (ch[0] - 0.011, ch[1]), color=col, lw=0.78, ms=4.6, alpha=0.75)
+                arrow(ax, (ch[0] + 0.011, ch[1]), (soma[0] - 0.025, soma[1]), color=col, lw=0.78, ms=4.6, alpha=0.55)
         elif kind == "path":
             for i, hub in enumerate(hubs):
                 src = (x - 0.13, 0.56 if i == 0 else 0.34)
                 ax.add_patch(Circle(src, 0.012, fc=col, ec="white", linewidth=0.35, zorder=9))
-                arrow(ax, (src[0] + 0.012, src[1]), (hub[0] - 0.018, hub[1]), color=col, lw=0.8, ms=5, alpha=0.9, rad=-0.06 if i == 0 else 0.06)
+                arrow(ax, (src[0] + 0.012, src[1]), (hub[0] - 0.018, hub[1]), color=col, lw=0.9, ms=5.5, alpha=0.9, rad=-0.06 if i == 0 else 0.06)
         else:
             for leaf in leaves:
-                arrow(ax, (soma[0] + 0.02, soma[1]), (leaf[0] + 0.015, leaf[1]), color=col, lw=0.65, ms=4, alpha=0.75, ls="--", rad=0.12)
-            ax.text(x, 0.255, "exact path\ntransport", ha="center", va="center", fontsize=6.1, color=col, fontweight="bold")
+                arrow(ax, (soma[0] + 0.02, soma[1]), (leaf[0] + 0.015, leaf[1]), color=col, lw=0.78, ms=4.6, alpha=0.75, ls="--", rad=0.12)
+            ax.text(x, 0.255, "exact", ha="center", va="center", fontsize=6.9, color=col, fontweight="bold")
 
         if kind != "oracle":
-            ax.text(x, 0.22, "local\napprox.", ha="center", va="center", fontsize=6.2, color=MUTE)
+            ax.text(x, 0.22, "local\napprox.", ha="center", va="center", fontsize=6.8, color=MUTE)
         else:
-            ax.text(x, 0.183, "upper bound", ha="center", va="center", fontsize=5.8, color=MUTE, style="italic")
+            ax.text(x, 0.183, "upper bound", ha="center", va="center", fontsize=6.4, color=MUTE, style="italic")
 
 
 def main() -> None:
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    fig = plt.figure(figsize=(7.0, 2.72))
+    fig = plt.figure(figsize=(7.05, 2.82))
     gs = fig.add_gridspec(
         1,
         3,
         width_ratios=[1.25, 1.30, 2.30],
         left=0.040,
         right=0.988,
-        top=0.83,
+        top=0.82,
         bottom=0.075,
-        wspace=0.18,
+        wspace=0.17,
     )
     axes = [
         fig.add_subplot(gs[0, 0]),
@@ -494,7 +494,7 @@ def main() -> None:
     panel_c(axes[1])
     panel_d(axes[2])
     for ax, label in zip(axes, "ABC"):
-        panel_label(ax, label, x=-0.08, y=1.13, fontsize=12.5)
+        panel_label(ax, label, x=-0.08, y=1.13, fontsize=13.0)
 
     out = OUTPUT_DIR / "fig1_model_and_credit"
     fig.savefig(out.with_suffix(".pdf"))
