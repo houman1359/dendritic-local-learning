@@ -629,7 +629,7 @@ def _plot_causal_inhibition(ax: plt.Axes, causal: pd.DataFrame) -> None:
         )
     ax.set_ylim(0, 102)
     ax.set_ylabel("Accuracy (%)")
-    ax.set_title("Causal\ninhibition", linespacing=0.9)
+    ax.set_title("Inhibition\nintervention", linespacing=0.9)
 
 
 def _plot_inhibitory_path_probe(ax: plt.Axes, input_mode: pd.DataFrame) -> None:

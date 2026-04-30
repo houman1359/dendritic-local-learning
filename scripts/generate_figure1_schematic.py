@@ -412,7 +412,7 @@ def panel_d(ax):
     setup_panel(ax, width, "Error broadcast modes")
     modes = [
         ("Rank-1", "shared", COLORS["scalar"], "local"),
-        ("Neuron", "soma", COLORS["per_soma"], "local"),
+        ("Neuron-\nwise", "soma aligned", COLORS["per_soma"], "local"),
         ("Rank-K", "K channels", LOW_RANK, "low-rank"),
         ("Path", "branches", PATHWAY, "path"),
         ("Oracle", r"$\alpha_n\delta_0$", ORACLE, "oracle"),
@@ -420,8 +420,19 @@ def panel_d(ax):
     xs = np.linspace(0.19, 1.86, len(modes))
     for x, (name, note, col, kind) in zip(xs, modes):
         box(ax, (x - 0.168, 0.235), 0.336, 0.59, fc="white", ec="#D8DEE8", lw=0.72, radius=0.025)
-        ax.text(x, 0.765, name, ha="center", va="center", fontsize=7.7, color=col, fontweight="bold")
-        ax.text(x, 0.715, note, ha="center", va="center", fontsize=5.55, color=MUTE)
+        is_multiline = "\n" in name
+        ax.text(
+            x,
+            0.776 if is_multiline else 0.765,
+            name,
+            ha="center",
+            va="center",
+            fontsize=7.15 if is_multiline else 7.7,
+            color=col,
+            fontweight="bold",
+            linespacing=0.78,
+        )
+        ax.text(x, 0.692 if is_multiline else 0.715, note, ha="center", va="center", fontsize=5.45, color=MUTE)
         soma, hubs, leaves = draw_tiny_tree(ax, x - 0.02, 0.47, scale=0.17, branch_colors=[DEND, DEND])
 
         if kind == "local":
@@ -451,10 +462,10 @@ def panel_d(ax):
     ax.text(
         1.025,
         0.125,
-        r"$\Delta g_i \propto x_iR_n^{\rm tot}(E_i-V_n)\,e_n,\qquad e_n \approx \delta_n$",
+        r"$\partial L/\partial g_i=x_iR_n^{\rm tot}(E_i-V_n)\delta_n;\quad \Delta g_i\propto x_iR_n^{\rm tot}(E_i-V_n)e_n,\ e_n\approx\delta_n$",
         ha="center",
         va="center",
-        fontsize=7.2,
+        fontsize=6.55,
         color=INK,
     )
 

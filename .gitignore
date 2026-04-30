@@ -16,6 +16,10 @@
 *.ind
 *.bcf
 *.run.xml
+*_MR.tex
+*_Bernardo.tex
+*_MR.pdf
+*_Bernardo.pdf
 *.md
 !README.md
 !PAPER_REVIEW_20260416.md
