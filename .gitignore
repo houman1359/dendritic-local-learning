@@ -22,7 +22,6 @@
 *_Bernardo.pdf
 *.md
 !README.md
-!PAPER_REVIEW_20260416.md
 # LaTeX temporary files
 *.nav
 *.snm
