@@ -73,7 +73,7 @@ PYTHONPATH=../../src:$PYTHONPATH python scripts/summarize_neurips_new_sweeps.py
 
 ## Markdown Policy
 
-Only this `README.md` should be tracked in this folder. Dated review notes, wakeup reports, and local analysis narratives should stay untracked or be moved to `archive/`, which is ignored by git.
+Only this `README.md` should be tracked in this folder. Dated review notes, status reports, and local analysis narratives should stay untracked or be moved to `archive/`, which is ignored by git.
 
 ## Cleanup Policy
 

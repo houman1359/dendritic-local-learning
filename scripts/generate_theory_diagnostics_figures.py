@@ -730,11 +730,14 @@ def build_figure(
     rank_summary = _safe_csv(ERROR_RANK_SUMMARY_CSV)
     causal = _safe_csv(INHIBITION_CAUSALITY_CSV)
 
+    # Sized to NeurIPS \textwidth (≈7 in) so the printed figure does not
+    # need to be down-scaled from the matplotlib render — the new larger
+    # global font sizes therefore render at intended size in the PDF.
     fig, axes = plt.subplots(
         1,
         5,
-        figsize=(7.90, 3.12),
-        gridspec_kw={"wspace": 0.54, "width_ratios": [1.00, 0.82, 1.15, 1.02, 1.02]},
+        figsize=(7.0, 2.65),
+        gridspec_kw={"wspace": 0.62, "width_ratios": [1.05, 0.85, 1.10, 1.05, 1.05]},
     )
 
     _plot_path_gain_map(axes[0], summary)
@@ -742,7 +745,23 @@ def build_figure(
     _plot_causal_inhibition(axes[2], causal)
     _plot_compartment_error_fidelity(axes[3], summary)
     _plot_oracle_learning(axes[4], summary, oracle_summary)
-    fig.subplots_adjust(left=0.052, right=0.992, top=0.80, bottom=0.24, wspace=0.54)
+
+    # Trim per-panel font sizes to fit each panel's narrower width.
+    for ax in axes:
+        ax.title.set_fontsize(9.6)
+        for lab in ax.get_xticklabels() + ax.get_yticklabels():
+            lab.set_fontsize(7.6)
+        ax.xaxis.label.set_fontsize(8.4)
+        ax.yaxis.label.set_fontsize(8.4)
+        leg = ax.get_legend()
+        if leg is not None:
+            for txt in leg.get_texts():
+                txt.set_fontsize(6.6)
+        title = ax.get_title()
+        if "(n=3)" in title:
+            ax.set_title(title.replace("(n=3)", "").strip(), fontsize=9.6)
+
+    fig.subplots_adjust(left=0.055, right=0.992, top=0.85, bottom=0.20)
     return fig
 
 

@@ -25,7 +25,7 @@ The learning question connects to dendritic and cortical models in which segrega
 It also relates to feedback-alignment and direct-feedback approaches \cite{lillicrap2016random,nokland2016dfa}, target-propagation methods \cite{lee2015dtp}, equilibrium and predictive objectives \cite{scellier2017equilibrium,meulemans2021dfc,millidge2022predictive}, forward-forward or perturbation-based learning \cite{hinton2022forward,dellaferrera2022pepita}, and recent local-learning baselines \cite{pal2024local,ma2024auglocal,lv2025dll,erdogan2025ebd,kao2024ccl}.
 Our contribution is narrower than these broad frameworks: we derive the exact conductance-tree credit object and test when a rank-1 dendritic broadcast approximates it.
 
-We quantify this chain with three diagnostics. First, exact-gradient reconstruction verifies that the mathematical factorization matches autograd to numerical precision. Second, gradient-fidelity measurements compare local and backprop gradients at matched parameters. Third, transported-error oracle experiments replace the broadcast with the exact path-gain-transported compartment error, isolating broadcast fidelity from other architectural factors. In a checkpointed MNIST gradient-dynamics diagnostic, shunting improves final local-backprop alignment (cosine $0.100\pm0.033$ vs.\ $0.005\pm0.026$) and reduces scale mismatch ($0.26\pm0.05$ vs.\ $0.50\pm0.05$). On noise resilience, transported error raises additive local learning from $66.8\%$ under rank-1 broadcast to $92.4$--$94.0\%$, nearly matching shunting at $94.3$--$95.2\%$.
+We quantify this chain with three diagnostics. First, exact-gradient reconstruction verifies that the mathematical factorization matches autograd to numerical precision. Second, gradient-fidelity measurements compare local and backprop gradients at matched parameters. Third, transported-error oracle experiments replace the broadcast with the exact path-gain-transported compartment error, isolating broadcast fidelity from other architectural factors. In a checkpointed MNIST gradient-dynamics diagnostic, shunting improves final local-backprop alignment (cosine $0.100\pm0.033$ vs.\ $0.005\pm0.026$) and reduces scale mismatch ($0.26\pm0.05$ vs.\ $0.50\pm0.05$). On noise resilience under matched inhibition ($N_I \geq 5$), transported error raises additive local learning from $81$--$84\%$ under rank-1 broadcast to $92$--$94\%$, nearly matching shunting at $95$--$95.2\%$.
 
 \paragraph{Contributions.} We make three claims:
 (i)~exact conductance-tree credit factorizes into synapse-local eligibility and a path-specific compartment error (Theorem~\ref{thm:tree_backprop}, Corollary~\ref{cor:factorization});
@@ -34,15 +34,23 @@ and (iii)~gradient-fidelity, transported-oracle, competence, and morphology expe
 
 The empirical story follows this sequence. Section~\ref{sec:model} derives the conductance-tree credit object, and Section~\ref{sec:local_rules} defines the local approximations. Figure~\ref{fig:model_schematic} defines the conductance tree and broadcast taxonomy. Figure~\ref{fig:gradient_fidelity} verifies the exact factorization. Experiments in Section~\ref{sec:experiments} then test the mechanism: Figure~\ref{fig:mechanistic} links path-gain compressibility to broadcast fidelity and learning, and Figure~\ref{fig:competence_regime} shows the practical supervised regimes, including morphology dependence and the rule-family ablation. Section~\ref{sec:discussion} summarizes the boundary conditions. Harder-data experiments remain appendix diagnostics rather than headline benchmark claims.
 
-\begin{figure*}[!t]
+\begin{figure}[!t]
 \centering
-\includegraphics[width=\textwidth]{fig1_model_and_credit.pdf}
+\begin{minipage}[t]{0.46\textwidth}
+\centering
+\vspace{0pt}
+\includegraphics[width=\linewidth]{fig1_model_and_credit.pdf}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.51\textwidth}
+\vspace{0pt}
+\raggedright
 \caption{\textbf{Model and credit assignment.}
 \textbf{(A)}~Conductance-based dendritic tree. Nonnegative excitatory and inhibitory inputs drive distal compartments, which feed proximal branches and then the soma; shunting inhibition enters the conductance denominator and lowers input resistance.
 \textbf{(B)}~Path gains through the tree. Exact backprop supplies path-specific compartment errors, while rank-1 LocalCA replaces that field with one shared broadcast.
 \textbf{(C)}~Exact factorization and feedback choices. LocalCA keeps the exact synapse-local eligibility and replaces the path-specific compartment error $\delta_n$ with a broadcast $e_n$; rank-1, neuron-wise, rank-$K$, and path-structured broadcasts are local approximations with increasing bandwidth, while transported error is an analysis oracle.}
 \label{fig:model_schematic}
-\end{figure*}
+\end{minipage}
+\end{figure}
 
 \begin{figure*}[!t]
 \centering
@@ -320,7 +328,7 @@ The post-training inhibition intervention shows that the learned inhibitory fiel
 \centering
 \includegraphics[width=\textwidth]{fig2_competence_regime.pdf}
 \caption{\textbf{Capacity-calibrated competence and regime dependence.}
-\textbf{(A)}~Matched backprop ceilings vs.\ rank-$1$ 5F LocalCA on MNIST, Fashion-MNIST, and context gating, including the matched additive context-gating rerun.
+\textbf{(A)}~Matched backprop ceilings vs.\ rank-$1$ 5F LocalCA on MNIST, Fashion-MNIST, and context gating, including the matched additive context-gating control.
 \textbf{(B)}~Inhibitory dose-response on MNIST and noise resilience.
 \textbf{(C)}~Morphology-dependent shunting advantage on noise resilience from a supportive 3-seed morphology sweep.
 \textbf{(D)}~Rule-family ablation: 3F/4F are weak practical optimizers, while 5F is the empirical wrapper used for headline LocalCA. Error bars denote $\pm$1 s.d.\ across seeds where available.}
@@ -965,7 +973,7 @@ path transport & $0.816 \pm 0.153$ & $0.692 \pm 0.227$ bits & $-0.642 \pm 0.018$
 \centering
 \includegraphics[width=0.98\textwidth]{fig_s_pathway_inhibition_controls_20260428.pdf}
 \caption{\textbf{Positive routed-task pathway and inhibition controls.}
-\textbf{(A)} Strictly nonnegative cue-routing controls saturate near $99\%$ for learned-I and no-I variants, so this rerun is not a performance separation.
+\textbf{(A)} Strictly nonnegative cue-routing controls saturate near $99\%$ for learned-I and no-I variants, so this control is not a performance separation.
 \textbf{(B)} Fitted excitatory and inhibitory synapse banks retain branch-pathway structure above the $50\%$ chance level.
 \textbf{(C)} In learned-I cue models, pathway-inhibition balance carries context information and inhibitory conductance is negatively coupled to local input resistance.
 \textbf{(D)} A nonnegative Double-CIFAR contextual screen remains near chance even under matched backprop, so it is not used as evidence for the paper's local-learning claims. Error bars show s.d.\ across 5 seeds.}
@@ -1159,7 +1167,7 @@ The conductance stage produces a pre-reactivation compartment voltage $V_n$, aft
 
 LocalCA uses occupancy-quantile initialization together with a calibration pass that floors tiny quantile widths, clamps extreme fitted slopes, and reverts invalid per-layer fits rather than allowing pathological intermediate values to propagate. In the non-somatic feedforward publication families, this calibration leaves the results essentially unchanged relative to the same occupancy-quantile setup without the additional validity checks: phase-1 capacity changes from $0.8786$ to $0.8784$ mean test accuracy, shunting-regime sweeps from $0.5617$ to $0.5641$, morphology-scaling sweeps from $0.3600$ to $0.3578$, and error-shaping sweeps from $0.2860$ to $0.2798$. The calibration therefore improves numerical safety without changing the qualitative LocalCA story.
 
-We also compared two post-initialization policies for the reactivation parameters under quantile initialization: \emph{learned local $(b,m)$}, where LocalCA updates the gate parameters through the local rule, and \emph{quantile-maintained $(b,m)$}, where $(b,m)$ are periodically refreshed from the current voltage distribution instead of being updated by the local rule. This comparison matters because quantile-maintained gates substantially simplify nonlinear reactivation learning: the rest of the network still uses LocalCA, but the gate parameters themselves are set by a local distributional rule rather than a learned plasticity rule. On MNIST classification sweeps, learned local $(b,m)$ remains clearly better (additive $0.9247$ vs.\ $0.9061$ mean test accuracy; shunting $0.9104$ vs.\ $0.8766$). On CIFAR-10, the picture is mixed in a useful way: additive is essentially tied on mean ($0.4223$ learned-local vs.\ $0.4215$ quantile-maintained) while shunting improves under quantile-maintained gates ($0.4028$ to $0.4356$ mean test accuracy). These bars aggregate over a matched morphology/init grid rather than a dedicated 5-seed rerun, so we treat them as a supportive policy comparison rather than a headline result. Accordingly, the main manuscript continues to use occupancy-quantile initialization followed by LocalCA updates of $(b,m)$ as the default local-learning setting, while quantile-maintained $(b,m)$ is reported as a supplementary alternative. Figure~\ref{fig:bm_policy} shows the full MNIST and CIFAR-10 comparison.
+We also compared two post-initialization policies for the reactivation parameters under quantile initialization: \emph{learned local $(b,m)$}, where LocalCA updates the gate parameters through the local rule, and \emph{quantile-maintained $(b,m)$}, where $(b,m)$ are periodically refreshed from the current voltage distribution instead of being updated by the local rule. This comparison matters because quantile-maintained gates substantially simplify nonlinear reactivation learning: the rest of the network still uses LocalCA, but the gate parameters themselves are set by a local distributional rule rather than a learned plasticity rule. On MNIST classification sweeps, learned local $(b,m)$ remains clearly better (additive $0.9247$ vs.\ $0.9061$ mean test accuracy; shunting $0.9104$ vs.\ $0.8766$). On CIFAR-10, the picture is mixed in a useful way: additive is essentially tied on mean ($0.4223$ learned-local vs.\ $0.4215$ quantile-maintained) while shunting improves under quantile-maintained gates ($0.4028$ to $0.4356$ mean test accuracy). These bars aggregate over a matched morphology/init grid rather than a dedicated 5-seed replicate, so we treat them as a supportive policy comparison rather than a headline result. Accordingly, the main manuscript continues to use occupancy-quantile initialization followed by LocalCA updates of $(b,m)$ as the default local-learning setting, while quantile-maintained $(b,m)$ is reported as a supplementary alternative. Figure~\ref{fig:bm_policy} shows the full MNIST and CIFAR-10 comparison.
 
 \begin{figure}[t]
 \centering
@@ -1346,7 +1354,7 @@ Signed-input info-shunting            & Signed-input stress test             & 1
 \end{table}
 
 \subsection*{Compute Resources}
-All experiments were run on an internal GPU cluster. Most MNIST, Fashion-MNIST, and synthetic-task runs used a single NVIDIA A100 or H100 GPU and finished in minutes to tens of minutes per seed. The flattened CIFAR-10 runs required longer single-GPU jobs but still did not use distributed or multi-GPU training. Reported headline metrics are aggregated over $5$ seeds unless noted otherwise. The remaining $3$-seed results are confined to selected supportive sweeps, and the broader exploratory screens used to tune and diagnose the method required additional compute beyond the final reported runs.
+All experiments were run on an institutional GPU cluster. Most MNIST, Fashion-MNIST, and synthetic-task runs used a single NVIDIA A100 or H100 GPU and finished in minutes to tens of minutes per seed. The flattened CIFAR-10 runs required longer single-GPU jobs but still did not use distributed or multi-GPU training. Reported headline metrics are aggregated over $5$ seeds unless noted otherwise. The remaining $3$-seed results are confined to selected supportive sweeps, and the broader exploratory screens used to tune and diagnose the method required additional compute beyond the final reported runs.
 
 \subsection*{Code, Data, and Asset Availability}
 \label{app:code_data_assets}
