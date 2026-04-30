@@ -39,6 +39,11 @@ INPUT_MODE_SUMMARY_CSV = (
     / "input_mode_onelayer_probe_summary_20260425"
     / "input_mode_onelayer_grouped.csv"
 )
+INHIBITION_CAUSALITY_CSV = (
+    ANALYSIS_DIR
+    / "inhibition_causality_selected_20260427"
+    / "inhibition_causality_runs.csv"
+)
 LOW_BW_CSV = DATA_DIR / "low_bandwidth_results.csv"
 CIFAR10_BP_SUMMARY_CSV = (
     ANALYSIS_DIR / "cifar10_compactei_depth4" / "cifar10_compactei_depth4_grouped_summary.csv"
@@ -275,7 +280,7 @@ def _plot_error_compressibility(ax: plt.Axes, rank_summary: pd.DataFrame) -> Non
 
 
 def _plot_compartment_error_fidelity(ax: plt.Axes, summary: pd.DataFrame) -> None:
-    _panel(ax, "C")
+    _panel(ax, "D")
     style_axis(ax, grid="y")
     noise = summary[summary["dataset"] == "noise_resilience"].copy()
     style_map = {
@@ -495,7 +500,7 @@ def _plot_oracle_learning(
     summary: pd.DataFrame,
     oracle_summary: pd.DataFrame,
 ) -> None:
-    _panel(ax, "D")
+    _panel(ax, "E")
     style_axis(ax, grid="y")
     baseline = summary[summary["dataset"] == "noise_resilience"].copy()
     oracle = oracle_summary[oracle_summary["dataset"] == "noise_resilience"].copy()
@@ -543,6 +548,88 @@ def _plot_oracle_learning(
     ax.set_xlim(-1.5, 48.0)
     ax.text(41.0, 86.0, "R1", color=COLORS["ink"], fontsize=8.4, fontweight="bold")
     ax.text(41.0, 95.2, "oracle", color=COLORS["ink"], fontsize=8.4, fontweight="bold")
+
+
+def _plot_causal_inhibition(ax: plt.Axes, causal: pd.DataFrame) -> None:
+    _panel(ax, "C")
+    style_axis(ax, grid="y")
+
+    order = ["original", "zero_i", "shuffle_i", "mean_clamp_i", "uniform_matched_i"]
+    labels = {
+        "original": "L",
+        "zero_i": "0",
+        "shuffle_i": "sh",
+        "mean_clamp_i": "m",
+        "uniform_matched_i": "u",
+    }
+    colors = {
+        "original": COLOR_SHUNTING,
+        "zero_i": COLORS["mute"],
+        "shuffle_i": COLORS["low_rank"],
+        "mean_clamp_i": COLORS["per_soma"],
+        "uniform_matched_i": COLOR_TRANSPORT,
+    }
+    dataset_order = [("mnist", "MNIST"), ("noise_resilience", "Noise")]
+    group_gap = 0.75
+    width = 0.16
+    xs_all = []
+    means_all = []
+    stds_all = []
+    colors_all = []
+
+    for gi, (dataset, _label) in enumerate(dataset_order):
+        center = gi * (len(order) * width + group_gap)
+        sub = causal[causal["dataset"] == dataset].copy()
+        stats = sub.groupby("intervention")["accuracy"].agg(["mean", "std"]).reindex(order)
+        for ji, intervention in enumerate(order):
+            x = center + (ji - (len(order) - 1) / 2) * width
+            xs_all.append(x)
+            means_all.append(100.0 * float(stats.loc[intervention, "mean"]))
+            stds_all.append(100.0 * float(stats.loc[intervention, "std"]))
+            colors_all.append(colors[intervention])
+
+            vals = 100.0 * sub[sub["intervention"] == intervention]["accuracy"].to_numpy(dtype=float)
+            if vals.size:
+                jitter = np.linspace(-0.035, 0.035, vals.size)
+                ax.scatter(
+                    np.full(vals.size, x) + jitter,
+                    vals,
+                    s=9,
+                    color="white",
+                    edgecolor=COLORS["ink"],
+                    linewidth=0.35,
+                    zorder=5,
+                )
+
+    ax.bar(
+        xs_all,
+        means_all,
+        width * 0.88,
+        yerr=stds_all,
+        color=colors_all,
+        edgecolor="white",
+        linewidth=0.65,
+        capsize=1.8,
+        error_kw={"lw": 0.85},
+        zorder=3,
+    )
+    centers = [gi * (len(order) * width + group_gap) for gi, _ in enumerate(dataset_order)]
+    ax.set_xticks(centers)
+    ax.set_xticklabels([f"{label}\nL 0 sh m u" for _, label in dataset_order], fontsize=7.2)
+    for center, (_dataset, label) in zip(centers, dataset_order):
+        ax.text(
+            center,
+            98.5,
+            label,
+            ha="center",
+            va="top",
+            fontsize=8.4,
+            fontweight="bold",
+            color=COLORS["ink"],
+        )
+    ax.set_ylim(0, 102)
+    ax.set_ylabel("Accuracy (%)")
+    ax.set_title("Causal\ninhibition", linespacing=0.9)
 
 
 def _plot_inhibitory_path_probe(ax: plt.Axes, input_mode: pd.DataFrame) -> None:
@@ -641,20 +728,20 @@ def build_figure(
     summary = _safe_csv(summary_csv)
     oracle_summary = _safe_csv(oracle_summary_csv)
     rank_summary = _safe_csv(ERROR_RANK_SUMMARY_CSV)
-    input_mode = _safe_csv(INPUT_MODE_SUMMARY_CSV)
+    causal = _safe_csv(INHIBITION_CAUSALITY_CSV)
 
     fig, axes = plt.subplots(
         1,
         5,
         figsize=(7.90, 3.12),
-        gridspec_kw={"wspace": 0.54, "width_ratios": [1.00, 0.82, 1.02, 1.02, 1.25]},
+        gridspec_kw={"wspace": 0.54, "width_ratios": [1.00, 0.82, 1.15, 1.02, 1.02]},
     )
 
     _plot_path_gain_map(axes[0], summary)
     _plot_error_compressibility(axes[1], rank_summary)
-    _plot_compartment_error_fidelity(axes[2], summary)
-    _plot_oracle_learning(axes[3], summary, oracle_summary)
-    _plot_inhibitory_path_probe(axes[4], input_mode)
+    _plot_causal_inhibition(axes[2], causal)
+    _plot_compartment_error_fidelity(axes[3], summary)
+    _plot_oracle_learning(axes[4], summary, oracle_summary)
     fig.subplots_adjust(left=0.052, right=0.992, top=0.80, bottom=0.24, wspace=0.54)
     return fig
 

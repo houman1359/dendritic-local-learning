@@ -2,8 +2,8 @@
 """Generate Figure 1 for the LocalCA manuscript.
 
 The figure is deliberately conceptual: it defines the conductance tree, the
-path-gain object, and the feedback taxonomy used throughout the paper. Keep
-math out of this schematic; the equations are presented in the main text.
+path-gain object, the exact credit factorization, and the feedback taxonomy
+used throughout the paper.
 
 Outputs:
   figures/fig1_model_and_credit.{pdf,png}
@@ -117,18 +117,18 @@ def text_with_halo(ax, x, y, text, **kwargs):
 def draw_synapse(ax, x, y, kind="E", scale=1.0):
     if kind == "E":
         ax.add_patch(
-            Circle((x, y), 0.010 * scale, fc=EXC, ec="white", linewidth=0.45, zorder=9)
+            Circle((x, y), 0.012 * scale, fc=EXC, ec="white", linewidth=0.55, zorder=9)
         )
     else:
         ax.add_patch(
             mpatches.RegularPolygon(
                 (x, y),
                 numVertices=3,
-                radius=0.015 * scale,
+                radius=0.018 * scale,
                 orientation=np.pi,
                 fc=INH,
                 ec="white",
-                linewidth=0.45,
+                linewidth=0.55,
                 zorder=9,
             )
         )
@@ -180,9 +180,9 @@ def draw_tree(
             Circle((x, y), 0.020, fc=leaf_color, ec=EDGE, linewidth=0.65, zorder=4)
         )
         if show_synapses:
-            draw_synapse(ax, x - 0.035, y - 0.007, "E", 0.85)
-            draw_synapse(ax, x - 0.035, y + 0.010, "E", 0.85)
-            draw_synapse(ax, x + 0.006, y + 0.034, "I", 0.85)
+            draw_synapse(ax, x - 0.038, y - 0.008, "E", 1.08)
+            draw_synapse(ax, x - 0.038, y + 0.012, "E", 1.08)
+            draw_synapse(ax, x + 0.008, y + 0.038, "I", 1.08)
 
     for bi, by in enumerate(branch_ys):
         ax.add_patch(
@@ -203,56 +203,37 @@ def panel_a(ax):
     draw_tree(
         ax,
         width=width,
-        x_leaf=0.40,
-        x_branch=0.68,
-        x_soma=0.98,
-        branch_ys=(0.72, 0.52, 0.32),
+        x_leaf=0.43,
+        x_branch=0.71,
+        x_soma=1.03,
+        branch_ys=(0.73, 0.52, 0.31),
         labels=False,
     )
 
-    arrow(ax, (1.02, 0.50), (1.18, 0.50), lw=1.2, ms=9)
-    ax.text(1.20, 0.50, "out", ha="left", va="center", fontsize=7.6, color=INK, fontweight="bold")
+    arrow(ax, (1.07, 0.50), (1.22, 0.50), lw=1.2, ms=9)
+    ax.text(1.24, 0.50, "out", ha="left", va="center", fontsize=7.6, color=INK, fontweight="bold")
 
-    legend_y = 0.93
-    draw_synapse(ax, 0.052, legend_y, "E", 1.0)
-    ax.text(
-        0.080,
-        legend_y,
-        "excitatory drive",
-        fontsize=8.4,
-        color=EXC,
-        va="center",
-        fontweight="bold",
-    )
-    draw_synapse(ax, 0.052, legend_y - 0.070, "I", 1.0)
-    ax.text(
-        0.080,
-        legend_y - 0.070,
-        "shunting load",
-        fontsize=8.4,
-        color=INH,
-        va="center",
-        fontweight="bold",
-    )
-
-    ax.text(0.42, 0.235, r"$V_n$", fontsize=8.6, color=INK, ha="center", fontweight="bold")
-    ax.text(0.68, 0.235, r"$V_p$", fontsize=8.6, color=INK, ha="center", fontweight="bold")
-    ax.text(0.98, 0.405, "soma", fontsize=7.8, color=INK, ha="center", fontweight="bold")
+    ax.text(0.320, 0.220, r"$V_n$", fontsize=8.8, color=INK, ha="center", fontweight="bold")
+    ax.plot([0.355, 0.43], [0.245, 0.300], color=MUTE, lw=0.7)
+    ax.text(0.665, 0.205, r"$V_p$", fontsize=8.8, color=INK, ha="center", fontweight="bold")
+    ax.plot([0.685, 0.71], [0.235, 0.310], color=MUTE, lw=0.7)
+    ax.text(1.055, 0.385, "soma", fontsize=7.8, color=INK, ha="center", fontweight="bold")
+    ax.plot([1.045, 1.03], [0.412, 0.455], color=MUTE, lw=0.7)
 
     component_boxes = [
-        (0.08, 0.105, "E syn.", EXC),
-        (0.36, 0.105, "I syn.", INH),
-        (0.64, 0.105, "dend.", DEND),
-        (0.94, 0.105, "soma", SOMA),
+        (0.14, 0.100, 0.23, "E drive", EXC),
+        (0.43, 0.100, 0.23, "I shunt", INH),
+        (0.73, 0.100, 0.23, "branch", DEND),
+        (1.04, 0.100, 0.20, "soma", SOMA),
     ]
-    for x, y, label, color in component_boxes:
-        box(ax, (x - 0.080, y - 0.038), 0.16, 0.076, fc="white", ec="#D8DEE8", lw=0.55)
-        ax.add_patch(Circle((x - 0.058, y), 0.014, fc=color, ec="white", linewidth=0.35, zorder=8))
+    for x, y, w, label, color in component_boxes:
+        box(ax, (x - w / 2, y - 0.038), w, 0.076, fc="white", ec="#D8DEE8", lw=0.55)
+        ax.add_patch(Circle((x - w / 2 + 0.028, y), 0.014, fc=color, ec="white", linewidth=0.35, zorder=8))
         ax.text(
-            x - 0.033,
+            x - w / 2 + 0.055,
             y,
             label,
-            fontsize=7.0,
+            fontsize=6.6,
             ha="left",
             va="center",
             color=INK,
@@ -430,46 +411,52 @@ def panel_d(ax):
     width = 2.05
     setup_panel(ax, width, "Error broadcast modes")
     modes = [
-        ("Rank-1\nshared", COLORS["scalar"], "local"),
-        ("Neuron-\nwise", COLORS["per_soma"], "local"),
-        ("Rank-K\nrandom", LOW_RANK, "low-rank"),
-        ("Path-\nstructured", PATHWAY, "path"),
-        ("Transport\noracle", ORACLE, "oracle"),
+        ("Rank-1", "shared", COLORS["scalar"], "local"),
+        ("Neuron", "soma", COLORS["per_soma"], "local"),
+        ("Rank-K", "K channels", LOW_RANK, "low-rank"),
+        ("Path", "branches", PATHWAY, "path"),
+        ("Oracle", r"$\alpha_n\delta_0$", ORACLE, "oracle"),
     ]
-    xs = np.linspace(0.18, 1.87, len(modes))
-    for x, (name, col, kind) in zip(xs, modes):
-        box(ax, (x - 0.17, 0.16), 0.34, 0.66, fc="white", ec="#D8DEE8", lw=0.7, radius=0.025)
-        ax.text(x, 0.76, name, ha="center", va="center", fontsize=8.0, color=col, fontweight="bold")
-        soma, hubs, leaves = draw_tiny_tree(ax, x - 0.02, 0.42, scale=0.18, branch_colors=[DEND, DEND])
+    xs = np.linspace(0.19, 1.86, len(modes))
+    for x, (name, note, col, kind) in zip(xs, modes):
+        box(ax, (x - 0.168, 0.235), 0.336, 0.59, fc="white", ec="#D8DEE8", lw=0.72, radius=0.025)
+        ax.text(x, 0.765, name, ha="center", va="center", fontsize=7.7, color=col, fontweight="bold")
+        ax.text(x, 0.715, note, ha="center", va="center", fontsize=5.55, color=MUTE)
+        soma, hubs, leaves = draw_tiny_tree(ax, x - 0.02, 0.47, scale=0.17, branch_colors=[DEND, DEND])
 
         if kind == "local":
-            srcs = [(x - 0.12, 0.60)] if name.startswith("Rank") else [(x - 0.12, 0.55), (x - 0.12, 0.35)]
+            srcs = [(x - 0.13, 0.60)] if name == "Rank-1" else [(x - 0.13, 0.55), (x - 0.13, 0.39)]
             for si, src in enumerate(srcs):
-                ax.add_patch(Circle(src, 0.015, fc=col, ec="white", linewidth=0.4, zorder=9))
+                ax.add_patch(Circle(src, 0.014, fc=col, ec="white", linewidth=0.4, zorder=9))
                 target = soma if len(srcs) == 1 else (soma[0], soma[1] + (0.035 if si == 0 else -0.035))
-                arrow(ax, (src[0] + 0.015, src[1]), (target[0] - 0.025, target[1]), color=col, lw=0.9, ms=5.5, alpha=0.9, rad=-0.08 if si == 0 else 0.08)
+                arrow(ax, (src[0] + 0.014, src[1]), (target[0] - 0.024, target[1]), color=col, lw=0.82, ms=5.0, alpha=0.85, rad=-0.08 if si == 0 else 0.08)
         elif kind == "low-rank":
-            src = (x - 0.14, 0.50)
-            chans = [(x - 0.05, 0.56), (x - 0.05, 0.44)]
-            ax.add_patch(Circle(src, 0.014, fc=col, ec="white", linewidth=0.4, zorder=9))
+            src = (x - 0.135, 0.50)
+            chans = [(x - 0.055, 0.56), (x - 0.055, 0.44)]
+            ax.add_patch(Circle(src, 0.013, fc=col, ec="white", linewidth=0.4, zorder=9))
             for ch in chans:
-                ax.add_patch(Circle(ch, 0.011, fc=col, ec="white", linewidth=0.3, zorder=9))
-                arrow(ax, (src[0] + 0.014, src[1]), (ch[0] - 0.011, ch[1]), color=col, lw=0.78, ms=4.6, alpha=0.75)
-                arrow(ax, (ch[0] + 0.011, ch[1]), (soma[0] - 0.025, soma[1]), color=col, lw=0.78, ms=4.6, alpha=0.55)
+                ax.add_patch(Circle(ch, 0.010, fc=col, ec="white", linewidth=0.3, zorder=9))
+                arrow(ax, (src[0] + 0.013, src[1]), (ch[0] - 0.010, ch[1]), color=col, lw=0.72, ms=4.4, alpha=0.75)
+                arrow(ax, (ch[0] + 0.010, ch[1]), (soma[0] - 0.024, soma[1]), color=col, lw=0.72, ms=4.4, alpha=0.55)
         elif kind == "path":
             for i, hub in enumerate(hubs):
-                src = (x - 0.13, 0.56 if i == 0 else 0.34)
-                ax.add_patch(Circle(src, 0.012, fc=col, ec="white", linewidth=0.35, zorder=9))
-                arrow(ax, (src[0] + 0.012, src[1]), (hub[0] - 0.018, hub[1]), color=col, lw=0.9, ms=5.5, alpha=0.9, rad=-0.06 if i == 0 else 0.06)
+                src = (x - 0.13, 0.56 if i == 0 else 0.38)
+                ax.add_patch(Circle(src, 0.011, fc=col, ec="white", linewidth=0.35, zorder=9))
+                arrow(ax, (src[0] + 0.011, src[1]), (hub[0] - 0.017, hub[1]), color=col, lw=0.82, ms=5.0, alpha=0.85, rad=-0.06 if i == 0 else 0.06)
         else:
             for leaf in leaves:
-                arrow(ax, (soma[0] + 0.02, soma[1]), (leaf[0] + 0.015, leaf[1]), color=col, lw=0.78, ms=4.6, alpha=0.75, ls="--", rad=0.12)
-            ax.text(x, 0.255, "exact", ha="center", va="center", fontsize=6.9, color=col, fontweight="bold")
+                arrow(ax, (soma[0] + 0.020, soma[1]), (leaf[0] + 0.014, leaf[1]), color=col, lw=0.72, ms=4.4, alpha=0.72, ls="--", rad=0.12)
 
-        if kind != "oracle":
-            ax.text(x, 0.22, "local\napprox.", ha="center", va="center", fontsize=6.8, color=MUTE)
-        else:
-            ax.text(x, 0.183, "upper bound", ha="center", va="center", fontsize=6.4, color=MUTE, style="italic")
+    box(ax, (0.20, 0.065), 1.65, 0.115, fc="#F8FAFC", ec="#CBD5E1", lw=0.65)
+    ax.text(
+        1.025,
+        0.125,
+        r"$\Delta g_i \propto x_iR_n^{\rm tot}(E_i-V_n)\,e_n,\qquad e_n \approx \delta_n$",
+        ha="center",
+        va="center",
+        fontsize=7.2,
+        color=INK,
+    )
 
 
 def main() -> None:

@@ -80,6 +80,9 @@ FMNIST_SUMMARY_CSV = os.path.join(
 FMNIST_RUNS_CSV = os.path.join(
     ANALYSIS_DIR, "fashion_mnist_competence_activation_corrected", "fashion_mnist_competence_runs.csv"
 )
+MORPHOLOGY_IE_RUNS_CSV = os.path.join(
+    ANALYSIS_DIR, "morphology_ie_regime", "morphology_ie_regime_runs.csv"
+)
 STANDARD_CEILING_SUMMARY_CSV = os.path.join(
     ANALYSIS_DIR, "standard_ceiling_refresh_5seed", "standard_ceiling_refresh_summary.csv"
 )
@@ -596,6 +599,7 @@ def figure2():
     p2b = _csv_path(PHASE2B_GAP_CLOSING_CSV)
     fmnist = _csv_path(FMNIST_SUMMARY_CSV)
     ie_data = _csv_path(IE_PERF_SUMMARY_CSV)
+    morph_runs = _csv_path(MORPHOLOGY_IE_RUNS_CSV)
 
     fig, axes = plt.subplots(
         1,
@@ -789,50 +793,47 @@ def figure2():
     )
     ax.set_ylim(25, 100)
 
-    # ---- Panel C: Shunting advantage ----
+    # ---- Panel C: Morphology-dependent operating regime ----
     ax = axes[2]
     _panel(ax, "C")
+    style_axis(ax, grid="y")
 
-    if ie_data is not None:
-        for ds, color, marker, lbl in [
-            ("mnist", COLOR_SHUNTING, "o", "MNIST"),
-            ("noise_resilience", COLOR_NOISE, "^", "Noise resil."),
-        ]:
-            shunt = ie_data[(ie_data["network_type"] == "dendritic_shunting") &
-                            (ie_data["dataset"] == ds)].copy()
-            add = ie_data[(ie_data["network_type"] == "dendritic_additive") &
-                          (ie_data["dataset"] == ds)].copy()
-            if len(shunt) == 0 or len(add) == 0:
-                continue
-            merged = pd.merge(shunt, add, on=["dataset", "ie_value"],
-                              suffixes=("_s", "_a"))
-            merged["delta"] = (merged["test_accuracy_mean_s"] - merged["test_accuracy_mean_a"]) * 100
-            merged["delta_err"] = (
-                np.sqrt(
-                    merged["test_accuracy_std_s"].fillna(0) ** 2
-                    + merged["test_accuracy_std_a"].fillna(0) ** 2
-                )
-                * 100
-            )
-            merged = merged.sort_values("ie_value")
+    if morph_runs is not None:
+        shunt = morph_runs[morph_runs["network_type"] == "dendritic_shunting"].copy()
+        add = morph_runs[morph_runs["network_type"] == "dendritic_additive"].copy()
+        merged = shunt.merge(
+            add,
+            on=["branch_factors", "depth", "branch_product", "ie", "seed"],
+            suffixes=("_s", "_a"),
+        )
+        merged["gap"] = (merged["test_acc_s"] - merged["test_acc_a"]) * 100.0
+        depth_gap = (
+            merged.groupby(["depth", "ie"])["gap"]
+            .agg(mean="mean", std="std")
+            .reset_index()
+            .sort_values(["depth", "ie"])
+        )
+        palette = {2: "#7B5EA7", 3: COLOR_NOISE}
+        markers = {2: "o", 3: "^"}
+        for depth, sub in depth_gap.groupby("depth"):
             ax.errorbar(
-                merged["ie_value"],
-                merged["delta"],
-                yerr=merged["delta_err"],
-                marker=marker,
-                markersize=6.2,
-                linewidth=2.2,
-                color=color,
-                label=lbl,
-                capsize=2,
-                capthick=1.0,
+                sub["ie"],
+                sub["mean"],
+                yerr=sub["std"].fillna(0.0),
+                marker=markers.get(int(depth), "o"),
+                markersize=5.8,
+                linewidth=2.1,
+                color=palette.get(int(depth), "#1F2937"),
+                capsize=2.2,
+                capthick=0.9,
+                label=f"depth {int(depth)}",
             )
-
-    ax.axhline(0, color="black", lw=1.0, ls="--")
+        ax.axhline(0, color="black", lw=1.0, ls="--", alpha=0.75)
+        ax.set_xticks(sorted(depth_gap["ie"].unique()))
+        ax.legend(fontsize=8.4, loc="upper right", frameon=False, handlelength=1.0)
     ax.set_xlabel("$N_I$ per branch")
-    ax.set_ylabel("Shunting adv. (pp)")
-    ax.set_title("Shunting gain")
-    ax.legend(fontsize=8.4, loc="upper right", handlelength=1.0)
+    ax.set_ylabel("Shunt.-add. (pp)")
+    ax.set_title("Morphology regime")
 
     # ---- Panel D: Rule-family comparison ----
     ax = axes[3]
