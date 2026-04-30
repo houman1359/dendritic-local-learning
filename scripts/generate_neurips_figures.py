@@ -834,86 +834,44 @@ def figure2():
     ax.set_title("Shunting gain")
     ax.legend(fontsize=8.4, loc="upper right", handlelength=1.0)
 
-    # ---- Panel D: Fashion-MNIST comparison ----
+    # ---- Panel D: Rule-family comparison ----
     ax = axes[3]
     _panel(ax, "D")
+    style_axis(ax, grid="y")
 
-    fmnist_data = {}
-    if competence is not None:
-        for ct, label, color in [
-            ("dendritic_shunting", "Shunt.", COLOR_SHUNTING),
-            ("dendritic_additive", "Add.", COLOR_ADDITIVE),
-        ]:
-            for strat, hatch, suffix in [
-                ("standard", None, "BP"),
-                ("local_ca", "//", "Local"),
-            ]:
-                sub = competence[
-                    (competence["dataset"] == "fashion_mnist")
-                    & (competence["network_type"] == ct)
-                    & (competence["strategy"] == strat)
-                ]
-                if len(sub):
-                    fmnist_data[(label, suffix)] = (
-                        float(sub.iloc[0]["test_accuracy_mean"]) * 100,
-                        float(sub.iloc[0]["test_accuracy_std"]) * 100,
-                        color, hatch,
-                    )
-    elif fmnist is not None:
-        for ct, label, color in [
-            ("dendritic_shunting", "Shunt.", COLOR_SHUNTING),
-            ("dendritic_additive", "Add.", COLOR_ADDITIVE),
-        ]:
-            for strat, hatch, suffix in [
-                ("standard", None, "BP"),
-                ("local_ca", "//", "Local"),
-            ]:
-                sub = fmnist[(fmnist["network_type"] == ct) & (fmnist["strategy"] == strat)]
-                if len(sub):
-                    fmnist_data[(label, suffix)] = (
-                        sub.iloc[0]["test_accuracy_mean"] * 100,
-                        sub.iloc[0]["test_accuracy_std"] * 100,
-                        color, hatch,
-                    )
-
-    if fmnist_data:
-        group_centers = np.array([0.0, 1.0])
-        bar_offsets = {"BP": -0.17, "Local": 0.17}
-        for gi, core_label in enumerate(["Shunt.", "Add."]):
-            for strat_label in ["BP", "Local"]:
-                entry = fmnist_data.get((core_label, strat_label))
-                if entry is None:
-                    continue
-                val, err, color, hatch = entry
-                xpos = group_centers[gi] + bar_offsets[strat_label]
-                alpha = 1.0 if hatch is None else 0.55
-                ax.bar(xpos, val, 0.30, yerr=err, color=color, alpha=alpha,
-                       edgecolor="white", lw=0.75, hatch=hatch,
-                       capsize=2.6, error_kw={"lw": 1.15})
-                ax.text(xpos, val + err + 0.5, f"{val:.1f}", ha="center", va="bottom",
-                        fontsize=8.1)
-        ax.set_xticks(group_centers)
-        ax.set_xticklabels(["Shunt.", "Add."], fontsize=9.2)
-        ax.set_ylabel("Test accuracy (%)")
-        ax.set_title("F-MNIST gap")
-        ax.legend(
-            handles=[
-                mpatches.Patch(facecolor="0.65", edgecolor="white", label="BP"),
-                mpatches.Patch(facecolor="0.65", edgecolor="white", hatch="//",
-                               alpha=0.55, label="LocalCA"),
-            ],
-            fontsize=8.4,
-            loc="lower left",
-            frameon=True,
-            framealpha=0.86,
-            facecolor="white",
-            edgecolor="0.85",
-            borderpad=0.25,
-            handlelength=1.0,
-            handletextpad=0.35,
-            labelspacing=0.25,
+    rule_data = {
+        "MNIST": {"3F": 62.2, "4F": 62.8, "5F": 91.6},
+        "CG": {"3F": 39.6, "4F": 41.1, "5F": 78.9},
+    }
+    rules = ["3F", "4F", "5F"]
+    rule_colors = [RULE3_COLOR, RULE4_COLOR, RULE5_COLOR]
+    x = np.arange(len(rule_data))
+    bw = 0.23
+    for j, (rule, color) in enumerate(zip(rules, rule_colors)):
+        vals = [rule_data[ds][rule] for ds in rule_data]
+        ax.bar(
+            x + (j - 1) * bw,
+            vals,
+            bw * 0.92,
+            color=color,
+            edgecolor="white",
+            lw=0.75,
+            label=rule,
         )
-        ax.set_ylim(70, 92)
+    ax.set_xticks(x)
+    ax.set_xticklabels(list(rule_data.keys()), fontsize=9.2)
+    ax.set_ylabel("Top-10 test (%)")
+    ax.set_title("Rule family")
+    ax.set_ylim(30, 100)
+    ax.legend(
+        fontsize=8.4,
+        loc="upper left",
+        ncol=3,
+        frameon=False,
+        handlelength=0.9,
+        columnspacing=0.45,
+        handletextpad=0.22,
+    )
 
     fig.subplots_adjust(left=0.062, right=0.992, bottom=0.24, top=0.82, wspace=0.48)
     _save(fig, "fig2_competence_regime")
