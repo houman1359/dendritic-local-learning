@@ -600,6 +600,8 @@ def figure2():
     fmnist = _csv_path(FMNIST_SUMMARY_CSV)
     ie_data = _csv_path(IE_PERF_SUMMARY_CSV)
     morph_runs = _csv_path(MORPHOLOGY_IE_RUNS_CSV)
+    additive_norm = _csv("additive_norm_results.csv")
+    low_bandwidth = _csv("low_bandwidth_results.csv")
 
     fig, axes = plt.subplots(
         1,
@@ -835,44 +837,70 @@ def figure2():
     ax.set_ylabel("Shunt.-add. (pp)")
     ax.set_title("Morphology regime")
 
-    # ---- Panel D: Rule-family comparison ----
+    # ---- Panel D: Additive normalization control ----
     ax = axes[3]
     _panel(ax, "D")
     style_axis(ax, grid="y")
 
-    rule_data = {
-        "MNIST": {"3F": 62.2, "4F": 62.8, "5F": 91.6},
-        "CG": {"3F": 39.6, "4F": 41.1, "5F": 78.9},
-    }
-    rules = ["3F", "4F", "5F"]
-    rule_colors = [RULE3_COLOR, RULE4_COLOR, RULE5_COLOR]
-    x = np.arange(len(rule_data))
-    bw = 0.23
-    for j, (rule, color) in enumerate(zip(rules, rule_colors)):
-        vals = [rule_data[ds][rule] for ds in rule_data]
-        ax.bar(
-            x + (j - 1) * bw,
-            vals,
-            bw * 0.92,
-            color=color,
-            edgecolor="white",
-            lw=0.75,
-            label=rule,
-        )
-    ax.set_xticks(x)
-    ax.set_xticklabels(list(rule_data.keys()), fontsize=9.2)
-    ax.set_ylabel("Top-10 test (%)")
-    ax.set_title("Rule family")
-    ax.set_ylim(30, 100)
-    ax.legend(
-        fontsize=8.4,
-        loc="upper left",
-        ncol=3,
-        frameon=False,
-        handlelength=0.9,
-        columnspacing=0.45,
-        handletextpad=0.22,
-    )
+    if additive_norm is not None:
+        conditions = []
+        for norm in [False, True]:
+            sub = additive_norm[
+                (additive_norm["use_additive_normalization"] == norm)
+                & (additive_norm["strategy"] == "local_ca")
+            ]
+            if len(sub):
+                label = "Add."
+                color = COLOR_ADDITIVE
+                if norm:
+                    label = "Add.+\nnorm"
+                    color = "#5B8AC4"
+                conditions.append(
+                    (
+                        label,
+                        float(sub["test_accuracy"].mean()) * 100.0,
+                        float(sub["test_accuracy"].std()) * 100.0,
+                        color,
+                    )
+                )
+        xpos = np.arange(len(conditions))
+        for i, (label, mean, std, color) in enumerate(conditions):
+            ax.bar(
+                i,
+                mean,
+                0.56,
+                yerr=std,
+                color=color,
+                edgecolor="white",
+                lw=0.75,
+                capsize=2.6,
+                error_kw={"lw": 1.15},
+            )
+            ax.text(i, mean + std + 1.0, f"{mean:.1f}", ha="center",
+                    va="bottom", fontsize=8.1)
+        if low_bandwidth is not None:
+            ref = low_bandwidth[low_bandwidth["broadcast_bandwidth"] == "full"]
+            if len(ref):
+                shunt_ref = float(ref["test_accuracy"].mean()) * 100.0
+                ax.axhline(shunt_ref, color=COLOR_SHUNTING, lw=2.0, ls="--", alpha=0.85)
+                ax.text(
+                    len(conditions) - 0.15,
+                    shunt_ref + 1.5,
+                    f"Shunt. {shunt_ref:.1f}",
+                    color=COLOR_SHUNTING,
+                    fontsize=8.0,
+                    ha="right",
+                    va="bottom",
+                    fontweight="bold",
+                )
+        ax.set_xticks(xpos)
+        ax.set_xticklabels([c[0] for c in conditions], fontsize=9.2)
+        ax.set_ylim(30, 72)
+    else:
+        ax.text(0.5, 0.5, "No normalization data", transform=ax.transAxes,
+                ha="center", va="center", fontsize=8, color="red")
+    ax.set_ylabel("MNIST test (%)")
+    ax.set_title("Additive norm")
 
     fig.subplots_adjust(left=0.062, right=0.992, bottom=0.24, top=0.82, wspace=0.48)
     _save(fig, "fig2_competence_regime")
@@ -1130,70 +1158,36 @@ def figure3():
         ax.text(0.5, 0.5, "No seeded scale data", transform=ax.transAxes,
                 ha="center", va="center", fontsize=8, color="red")
 
-    # ---- Panel D: Nonzero-gradient norm dynamics ----
+    # ---- Panel D: Alignment dynamics ----
     ax = axes[3]
     _panel(ax, "D")
     style_axis(ax, grid="y")
     if not norm_df.empty:
-        final_label_rows = []
         for core, core_label, color in [
-            ("shunting", "Shunt.", COLOR_SHUNTING),
-            ("additive", "Add.", COLOR_ADDITIVE),
+            ("additive", "Additive", COLOR_ADDITIVE),
+            ("shunting", "Shunting", COLOR_SHUNTING),
         ]:
             sub = norm_df[norm_df["core_type"] == core]
-            for metric, metric_label, linestyle in [
-                ("local_grad_norm", "LocalCA", "-"),
-                ("backprop_grad_norm", "BP", "--"),
-            ]:
-                grouped = (
-                    sub.groupby("epoch")[metric]
-                    .agg(["mean", "std"])
-                    .reset_index()
-                    .sort_values("epoch")
-                )
-                x = grouped["epoch"].to_numpy(dtype=float)
-                y = grouped["mean"].to_numpy(dtype=float)
-                err = grouped["std"].fillna(0.0).to_numpy(dtype=float)
-                ax.plot(
-                    x,
-                    y,
-                    color=color,
-                    linestyle=linestyle,
-                    lw=2.2,
-                    marker="o" if linestyle == "-" else "s",
-                    markersize=4.8,
-                    label=f"{core_label} {metric_label}",
-                    zorder=3,
-                )
-                ax.fill_between(
-                    x,
-                    np.maximum(y - err, 1e-8),
-                    y + err,
-                    color=color,
-                    alpha=0.10 if linestyle == "-" else 0.06,
-                    linewidth=0,
-                    zorder=2,
-                )
-                if len(x):
-                    final_label_rows.append(
-                        (x[-1], y[-1], color, f"{core_label} {metric_label}")
-                    )
-        ax.set_yscale("log")
-        ax.set_xlabel("Epoch")
-        ax.set_ylabel("Full gradient norm")
-        ax.set_title("Gradient norms")
-        ax.set_xlim(-2, 57)
-        for x_last, y_last, color, label in final_label_rows:
-            ax.text(
-                x_last + 1.2,
-                y_last,
-                label,
-                color=color,
-                fontsize=7.5,
-                va="center",
-                ha="left",
-                fontweight="bold",
+            grouped = (
+                sub.groupby("epoch")["weighted_cosine"]
+                .agg(["mean", "std"])
+                .reset_index()
+                .sort_values("epoch")
             )
+            x = grouped["epoch"].to_numpy(dtype=float)
+            y = grouped["mean"].to_numpy(dtype=float)
+            err = grouped["std"].fillna(0.0).to_numpy(dtype=float)
+            ax.plot(x, y, color=color, lw=2.2, label=core_label, zorder=3)
+            ax.fill_between(x, y - err, y + err, color=color, alpha=0.12,
+                            linewidth=0, zorder=2)
+        ax.axhline(0, color="black", lw=0.9, ls="--", alpha=0.70)
+        ax.set_xlabel("Epoch")
+        ax.set_ylabel("Weighted cosine")
+        ax.set_title("Alignment dynamics")
+        ax.set_xlim(-2, 52)
+        ax.set_ylim(-0.18, 0.36)
+        ax.legend(fontsize=8.4, loc="upper right", frameon=False,
+                  handlelength=1.0, handletextpad=0.35)
     else:
         ax.text(0.5, 0.5, "No trajectory data found", transform=ax.transAxes,
                 ha="center", va="center", fontsize=8, color="red")

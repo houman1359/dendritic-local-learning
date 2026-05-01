@@ -32,7 +32,7 @@ We quantify this chain with three diagnostics. First, exact-gradient reconstruct
 (ii)~path-gain compressibility is a measurable mediator of when rank-1 broadcast approximates that compartment error, and shunting provides a biophysical route to such compression by changing input resistance along dendritic paths;
 and (iii)~gradient-fidelity, transported-oracle, competence, and morphology experiments validate this mechanism while identifying the failure modes that require richer feedback.
 
-The empirical story follows this sequence. Section~\ref{sec:model} derives the conductance-tree credit object, and Section~\ref{sec:local_rules} defines the local approximations. Figure~\ref{fig:model_schematic} defines the conductance tree and broadcast taxonomy. Figure~\ref{fig:gradient_fidelity} verifies the exact factorization. Experiments in Section~\ref{sec:experiments} then test the mechanism: Figure~\ref{fig:mechanistic} links path-gain compressibility to broadcast fidelity and learning, and Figure~\ref{fig:competence_regime} shows the practical supervised regimes, including morphology dependence and the rule-family ablation. Section~\ref{sec:discussion} summarizes the boundary conditions. Harder-data experiments remain appendix diagnostics rather than headline benchmark claims.
+The empirical story follows this sequence. Section~\ref{sec:model} derives the conductance-tree credit object, and Section~\ref{sec:local_rules} defines the local approximations. Figure~\ref{fig:model_schematic} defines the conductance tree and broadcast taxonomy. Figure~\ref{fig:gradient_fidelity} verifies the exact factorization. Experiments in Section~\ref{sec:experiments} then test the mechanism: Figure~\ref{fig:mechanistic} links path-gain compressibility to broadcast fidelity and learning, and Figure~\ref{fig:competence_regime} shows practical supervised regimes, morphology dependence, and the additive-normalization control. Section~\ref{sec:discussion} summarizes the boundary conditions. Harder-data experiments remain appendix diagnostics rather than headline benchmark claims.
 
 \begin{figure}[!t]
 \centering
@@ -55,7 +55,7 @@ The empirical story follows this sequence. Section~\ref{sec:model} derives the c
 \begin{figure*}[!t]
 \centering
 \includegraphics[width=\textwidth]{fig3_gradient_fidelity.pdf}
-\caption{\textbf{Gradient-fidelity diagnostic.} \textbf{(A)}~Exact-factorization sanity check across all theory-diagnostic conditions, reported as relative $L_2$ reconstruction error and scale mismatch. Reconstructed gradients match autograd to numerical precision. \textbf{(B)}~Checkpointed final-state weighted cosine similarity between local and backprop gradients. \textbf{(C)}~Checkpointed final-state scale mismatch, defined as $|\log_{10}(\|g^{\mathrm{local}}\|/\|g^{\mathrm{bp}}\|)|$. Error bars denote $\pm$1 s.d.\ across 3 checkpointed seeds; the main learning and oracle sweeps use 5 seeds unless noted otherwise. \textbf{(D)}~Full-gradient norms over learning. Additive local and backprop gradients remain finite, so near-zero additive cosine reflects directional mismatch rather than vanishing gradients.}
+\caption{\textbf{Gradient-fidelity diagnostic.} \textbf{(A)}~Exact-factorization sanity check across all theory-diagnostic conditions, reported as relative $L_2$ reconstruction error and scale mismatch. Reconstructed gradients match autograd to numerical precision. \textbf{(B)}~Checkpointed final-state weighted cosine similarity between local and backprop gradients. \textbf{(C)}~Checkpointed final-state scale mismatch, defined as $|\log_{10}(\|g^{\mathrm{local}}\|/\|g^{\mathrm{bp}}\|)|$. Error bars denote $\pm$1 s.d.\ across 3 checkpointed seeds; the main learning and oracle sweeps use 5 seeds unless noted otherwise. \textbf{(D)}~Alignment over learning for the 5F rule. Additive remains near zero by the final checkpoint, while shunting recovers positive alignment; separate norm traces in Appendix Fig.~\ref{fig:alignment_norm_dynamics} rule out a zero-gradient artifact.}
 \label{fig:gradient_fidelity}
 \end{figure*}
 
@@ -285,7 +285,7 @@ This is a structured rank-$K$ broadcast, not a separate learning principle. Curr
 \subsection{Setup}
 
 We evaluate capacity-calibrated supervised tasks and controlled sweeps that isolate inhibition strength, rule family, broadcast mode, morphology, and architecture.
-The main text uses MNIST, Fashion-MNIST \cite{xiao2017fashionmnist}, context gating, noise resilience, and a compressed morphology-regime summary; CIFAR-10 and routed-feedback diagnostics are reported in the appendix.
+The main text uses MNIST, Fashion-MNIST \cite{xiao2017fashionmnist}, context gating, noise resilience, and a compressed morphology-regime summary; task schematics, CIFAR-10, and routed-feedback diagnostics are reported in the appendix (Figs.~\ref{fig:task_schematics}, \ref{fig:cifar10_mechanism_extension}, \ref{fig:cue_routing}).
 Main comparisons are architecture-matched additive vs.\ shunting dendritic cores and local vs.\ backprop training; DFA is a supplementary baseline.
 Unless otherwise stated, local runs use 5F with the historical \texttt{per\_soma} implementation, which reduces to rank-$1$ shared broadcast when hidden width exceeds the decoder error dimension.
 All main-claim dendritic runs use nonnegative conductance transforms and nonnegative first-layer synaptic drive; image inputs are in $[0,1]$, corrupted inputs are clipped back to $[0,1]$, and context gating uses a nonnegative contextual figure-ground MNIST construction.
@@ -301,7 +301,7 @@ For each parameter tensor $p$, we compute directional alignment (cosine similari
 Across the checkpointed MNIST gradient-dynamics diagnostic, shunting is more aligned with backprop and closer in norm than the additive control at the final checkpoint: weighted cosine rises from $0.005\pm0.026$ to $0.100\pm0.033$, and scale mismatch falls from $0.50\pm0.05$ to $0.26\pm0.05$.
 Figure~\ref{fig:gradient_fidelity}A confirms that the theory is operational in code under the nonnegative-input setup: reconstructing gradients from Corollary~\ref{cor:factorization} using exact compartment errors yields weighted relative reconstruction error below $2\times 10^{-7}$ and weighted scale mismatch below $4\times 10^{-8}$ across runs.
 In a few low-norm parameter blocks, cosine becomes numerically unstable even though the reconstruction itself is essentially exact, so we report the norm-based diagnostics in the figure.
-Figure~\ref{fig:gradient_fidelity}D rules out a trivial zero-gradient explanation: in the 5F trajectory diagnostic, additive local and backprop gradient norms remain finite throughout learning.
+Figure~\ref{fig:gradient_fidelity}D shows the same gradient-alignment comparison over training: additive alignment remains near zero at the final checkpoint rather than failing only at one static snapshot. Appendix Fig.~\ref{fig:alignment_norm_dynamics} verifies that the corresponding local and backprop gradient norms remain finite throughout learning, ruling out a trivial zero-gradient explanation.
 The only approximation made by LocalCA is therefore the broadcast substitute for $\partial L/\partial V_n$.
 
 \subsection{Mechanistic Chain: Path Gains, Broadcast Fidelity, and Oracle Transport}
@@ -331,15 +331,15 @@ The post-training inhibition intervention shows that the learned inhibitory fiel
 \textbf{(A)}~Matched backprop ceilings vs.\ rank-$1$ 5F LocalCA on MNIST, Fashion-MNIST, and context gating, including the matched additive context-gating control.
 \textbf{(B)}~Inhibitory dose-response on MNIST and noise resilience.
 \textbf{(C)}~Morphology-dependent shunting advantage on noise resilience from a supportive 3-seed morphology sweep.
-\textbf{(D)}~Rule-family ablation: 3F/4F are weak practical optimizers, while 5F is the empirical wrapper used for headline LocalCA. Error bars denote $\pm$1 s.d.\ across seeds where available.}
+\textbf{(D)}~Additive normalization control: normalization partially improves additive LocalCA but does not reach the shunting reference, showing that the shunting advantage is not just ordinary voltage normalization. Error bars denote $\pm$1 s.d.\ across seeds where available.}
 \label{fig:competence_regime}
 \end{figure*}
 
-In the capacity-calibrated regime, shunting LocalCA stays within about $5$--$6$ percentage points of matched backpropagation on MNIST, Fashion-MNIST, and context gating (Table~\ref{tab:gap_closing}; Fig.~\ref{fig:competence_regime}). Figure~\ref{fig:competence_regime}D keeps the rule-family ablation in the main text: 5F is the strongest practical wrapper but remains heuristic, while 3F/4F are instructive but weak optimizers. Broader rule and feedback-design controls are summarized in Appendix Fig.~\ref{fig:rule_feedback_design}; matched DFA baselines remain much weaker than shunting LocalCA (Appendix Fig.~\ref{fig:fa_dfa_appendix}).
+In the capacity-calibrated regime, shunting LocalCA stays within about $5$--$6$ percentage points of matched backpropagation on MNIST, Fashion-MNIST, and context gating (Table~\ref{tab:gap_closing}; Fig.~\ref{fig:competence_regime}). Figure~\ref{fig:competence_regime}D addresses a direct normalization-control concern: additive normalization improves additive LocalCA but remains below the shunting reference, so the gain is not explained by generic voltage normalization alone. Broader rule and feedback-design controls are summarized in Appendix Fig.~\ref{fig:rule_feedback_design}, where 5F is the strongest practical wrapper and 3F/4F remain instructive but weak optimizers; matched DFA baselines remain much weaker than shunting LocalCA (Appendix Fig.~\ref{fig:fa_dfa_appendix}).
 
 \subsection{Regime Dependence of the Shunting Advantage}
 
-With matched rank-$1$ broadcast, shunting is modestly better on MNIST, Fashion-MNIST, and context gating, including $0.803\pm0.006$ vs.\ $0.787\pm0.007$ for additive on context gating. The gap grows on inhibition-sensitive noise resilience once inhibitory conductance is present (Fig.~\ref{fig:competence_regime}B). Morphology shifts the useful inhibitory operating regime: different tree depths and branch factors peak at different $N_I$, and the shunting advantage is not monotonic in inhibition (Fig.~\ref{fig:competence_regime}C).
+With matched rank-$1$ broadcast, shunting is modestly better on MNIST, Fashion-MNIST, and context gating, including $0.803\pm0.006$ vs.\ $0.787\pm0.007$ for additive on context gating. The gap grows on inhibition-sensitive noise resilience once inhibitory conductance is present (Fig.~\ref{fig:competence_regime}B). Morphology shifts the useful inhibitory operating regime: different tree depths and branch factors peak at different $N_I$, and the shunting advantage is not monotonic in inhibition (Fig.~\ref{fig:competence_regime}C). Appendix Fig.~\ref{fig:additional_stress_tests} extends this boundary check to depth scaling and noisy error broadcasts.
 
 \section{Discussion and Limitations}
 \label{sec:discussion}
@@ -591,7 +591,7 @@ Avoiding catastrophe: Active dendrites enable multi-task learning in dynamic env
 \suppressfloats[t]
 
 \paragraph{Appendix overview.}
-The appendix records the empirical division of labor behind the main claims. It starts with rule-family, broadcast-mode, and component summaries; then reports gradient dynamics, CIFAR-10, inhibition/pathway diagnostics, rank-bridge controls, biological plausibility assumptions, implementation and asset details, and theory extensions. Table~\ref{tab:component_carry} is the quickest map of which components carry each result.
+The appendix is organized by how directly each result supports the main mechanism. The first block collects the most useful controls for reading the paper: rule and feedback design axes, synthetic task schematics, and the component-level evidence map. The second block reports competence checks, gradient dynamics, depth/noise stress tests, and baseline comparisons. The third block contains harder-data, morphology, inhibition, and pathway-feedback diagnostics. The final blocks give implementation, theory, and secondary biological weight analyses. Table~\ref{tab:component_carry} is the quickest map of which components carry each result.
 
 \paragraph{Boundary diagnostics.}
 Several controls are intentionally negative or mixed. The log-gain covariance margin from Eq.~\eqref{eq:compression_condition} is not a positive headline result, Double-CIFAR remains near chance even under matched backpropagation, positive cue-routing controls saturate too strongly to separate mechanisms, and the current pathway-vector implementation does not beat the best unstructured low-rank cue-routing control. We include these results to delimit the claim rather than to smooth over failure modes.
@@ -607,6 +607,17 @@ Several controls are intentionally negative or mixed. The log-gain covariance ma
 \textbf{(C)}~On noise resilience, recursively propagating or increasing the rank of the error field closes much of the gap between rank-$1$ broadcast and exact path transport.
 \textbf{(D)}~Cue routing probes a branch-specific regime: higher rank helps, while the current pathway-vector implementation is useful but not yet better than the best unstructured low-rank control. Error bars denote $\pm$1 s.d.\ where five-seed summaries are available.}
 \label{fig:rule_feedback_design}
+\end{figure*}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.98\textwidth]{fig_s_task_schematics.pdf}
+\caption{\textbf{Synthetic benchmark schematics.}
+\textbf{(A)}~Context gating: the right half carries the MNIST digit; the left half is filled with low-amplitude uniform noise.
+\textbf{(B)}~Noise resilience: MNIST image corrupted by structured channel noise (fixed 50-D latent projection, $\sigma_{\mathrm{task}}=1.5$, clipped to $[0,1]$).
+\textbf{(C)}~Cue integration: a context cue selects which of two noisy cue streams is reliable; dendritic integration routes the reliable cue to the binary readout.
+\textbf{(D)}~Fashion-MNIST: 10-class apparel classification sharing the MNIST input shape.}
+\label{fig:task_schematics}
 \end{figure*}
 
 \subsection*{Rule-Family Ranking}
@@ -724,23 +735,6 @@ Context gating & 0.861 & $0.803\pm0.006$ & $0.787\pm0.007$ & 5.8\% \\
 \end{table}
 
 
-\subsection*{Ablation Results}
-
-\begin{table}[t]
-\centering
-\small
-\begin{tabular}{@{}lll@{}}
-\toprule
-\textbf{Condition} & \textbf{Metric} & \textbf{Value} \\
-\midrule
-Decoder: local vs backprop vs frozen (MNIST, toy model) & test acc & 0.379 vs 0.379 vs 0.176 \\
-Shunting vs additive, matched (MNIST, toy model) & $\Delta$ test & $+0.210$ \\
-Per-soma, path on vs off (synthetic task, toy model) & test / MI(E,I;C) & $-0.003$ / $+0.017$ \\
-\bottomrule
-\end{tabular}
-\caption{\textbf{Mechanistic ablations.} Results from controlled small-network experiments using minimal architectures to isolate individual factors. These runs use a small 2-layer dendritic network (branch factor $[9]$) trained for 30 epochs; they are not directly comparable to the headline capacity-calibrated results.}
-\end{table}
-
 \subsection*{Extended Gradient Analysis and $N_I$ Sweep Detail}
 
 \begin{figure*}[t]
@@ -792,7 +786,7 @@ To check whether low additive alignment could be caused by vanishing gradients, 
 \begin{figure}[t]
 \centering
 \includegraphics[width=0.55\textwidth]{fig_s_low_bandwidth.pdf}
-\caption{\textbf{Coarse shared broadcast still works.} Test accuracy as a function of effective broadcast bandwidth. Full-precision, $8$-bit, $4$-bit, and $2$-bit quantization of the shared error signal all reach essentially the same accuracy ($61$--$62\%$; $p > 0.9$ for $4$-bit vs.\ full), while a sign-only broadcast and a sparse top-$30\%$ broadcast degrade sharply. This shows that the shunting LocalCA signal carries most of its useful information in its direction rather than in fine-grained magnitude, consistent with the mechanism-summary picture in the main text. This panel is reported separately so the main figure can carry the full causal chain (path-gain compressibility $\to$ alignment $\to$ oracle $\to$ global summary).}
+\caption{\textbf{Coarse shared broadcast still works.} Full-precision, $8$-bit, $4$-bit, and $2$-bit quantized broadcasts reach similar accuracy ($61$--$62\%$; $p>0.9$ for $4$-bit vs.\ full), while sign-only and sparse top-$30\%$ broadcasts degrade. This supports the low-bandwidth-broadcast framing: useful information is mostly carried by coarse direction rather than fine magnitude.}
 \label{fig:low_bandwidth_appendix}
 \end{figure}
 
@@ -895,7 +889,7 @@ standard BP (ceiling) & $48.3 \pm 1.0$ & $49.5 \pm 0.4$ \\
 \label{fig:additive_norm_control}
 \end{figure*}
 
-\subsection*{Structured Feedback, Activation, and Supportive Extensions}
+\subsection*{Dendritic Morphology, Pathway Structure, and Supportive Extensions}
 
 \subsection*{Morphology $\times$ Inhibition Regime Map}
 
@@ -1440,7 +1434,7 @@ Role alignment & Pathway-selective plasticity & Branch specialization \\
 \caption{Biological analogs.}
 \end{table}
 
-\section{Morphology-Aware Extensions}
+\subsection*{Morphology-Aware Extensions}
 
 \paragraph{Path-integrated propagation.}
 Modulate broadcast error by $\pi_n = \pi_{n-1} \cdot R_{n-1}^{\mathrm{tot}} \cdot \bar{g}_{n-1}^{\mathrm{den}}$, approximating depth attenuation from Eq.~\eqref{eq:path_sum}.
@@ -1458,7 +1452,7 @@ For tasks with latent pathway structure, the broadcast becomes a role vector inf
 Each branch receives a role profile inferred from router assignments and incoming block weights rather than from a hand-coded apical/basal label.
 Plasticity is then modulated by branch selectivity and a synapse-specific role-alignment factor, emphasizing pathway-consistent updates without imposing a heuristic branch taxonomy.
 
-\section{HSIC Auxiliary Objectives}
+\subsection*{HSIC Auxiliary Objectives}
 \label{app:hsic}
 
 Following \cite{gretton2005hsic}, we use kernel-based HSIC objectives:
@@ -1470,7 +1464,7 @@ Following \cite{gretton2005hsic}, we use kernel-based HSIC objectives:
 Moderate weights ($0.01$--$0.1$) help on context gating; negligible on MNIST.
 Online statistics ($r_n^{\mathrm{4F}}$, $\phi_n$) use Welford's algorithm \cite{welford1962note}.
 
-\section{Online Variant with Eligibility Traces}
+\subsection*{Online Variant with Eligibility Traces}
 
 The continuous-time eligibility trace is
 \[
@@ -1482,7 +1476,7 @@ with update
 \]
 \cite{fremaux2016three,bellec2020eprop}.
 
-\section{Weight Statistics and Biological References}
+\section{Secondary Biological Weight Analyses}
 
 As a secondary analysis, we examine whether the conductance-based update naturally induces characteristic weight statistics.
 Because synaptic updates scale with input resistance $R_n^{\mathrm{tot}} = 1/g_n^{\mathrm{tot}}$, the voltage equation implies multiplicative weight dynamics, creating a regime analogous to exponentiated-gradient updates.
@@ -1530,7 +1524,7 @@ Without inhibition ($N_I{=}0$), all conditions produce $\sigma > 2.0$, far from 
 With biologically constrained ratios ($N_I{=}10$--$20$, corresponding to E/I ratios of $4{:}1$ to $2{:}1$; \cite{megias2001total}), shunting networks enter the biological range ($\sigma \approx 0.9$--$1.2$), while the effect of $N_I$ on additive networks is less systematic.
 The weight distribution shape is also robust to dendritic depth (branch factors $[9]$ through $[3{,}3{,}3{,}3]$; see Appendix Fig.~\ref{fig:weight_sensitivity}A): BP+Shunting converges toward Song et al.\ with increasing depth, while Local+Shunting remains near MICrONS E$\to$E across depths.
 
-\section{Weight Distribution Sensitivity Analysis}
+\subsection*{Weight Distribution Sensitivity Analysis}
 
 \begin{figure*}[t]
 \centering
@@ -1584,19 +1578,12 @@ This is analogous to a learning rate that self-adjusts via the total conductance
 The resulting equilibrium distribution is log-normal, consistent with Loewenstein et al.\ \cite{loewenstein2011multiplicative} and related multiplicative spine-dynamics analyses.
 Additive integration lacks this self-normalizing mechanism, producing broader distributions that fall outside the biological range.
 
-\section{Synthetic Benchmark Descriptions}
+\section{Task and Robustness Details}
 \label{app:synthetic_tasks}
 
 Each synthetic task is generated procedurally from a fixed random seed and uses fixed train/val/test splits for reproducibility.
 The MNIST-derived synthetic tasks use flattened $28\times 28$ inputs; cue integration instead uses a small vector input with two output classes. Output dimensionality therefore varies by task and is stated in the task description when it differs from 10-way digit classification.
 Figure~\ref{fig:task_schematics} gives a visual summary of each benchmark.
-
-\begin{figure*}[t]
-\centering
-\includegraphics[width=0.98\textwidth]{fig_s_task_schematics.pdf}
-\caption{\textbf{Synthetic benchmark schematics.} \textbf{(A)}~Context gating: the right half carries the MNIST digit; the left half is filled with low-amplitude uniform noise. \textbf{(B)}~Noise resilience: MNIST image corrupted by structured channel noise (fixed 50-D latent projection, $\sigma_{\mathrm{task}}=1.5$, clipped to $[0,1]$). \textbf{(C)}~Cue integration: a context cue selects which of two noisy cue streams is reliable; dendritic integration routes the reliable cue to the binary readout. \textbf{(D)}~Fashion-MNIST: 10-class apparel classification sharing the MNIST input shape.}
-\label{fig:task_schematics}
-\end{figure*}
 
 \paragraph{Context gating.}
 Inputs are contextual figure-ground MNIST examples. The right half of the image carries the original MNIST digit, while the left half is replaced by low-amplitude uniform noise; all pixels therefore remain nonnegative. This task tests whether credit assignment can exploit a simple context-dependent spatial structure without leaving the nonnegative-drive regime of the conductance model. The HSIC auxiliary objective (weight $0.01$) is used to decorrelate layer representations, adding roughly $3$~pp under local learning.
@@ -1615,7 +1602,7 @@ A binary one-hot context signal indicates which cue is reliable on each trial (c
 The fixed-pathway variant duplicates the context into both cue branches; the learned-routing variant requires the router to discover the cue separation from data.
 This task is used in Sec.~\ref{sec:cue_routing} to test structured pathway-vector broadcast while staying inside the nonnegative-input regime.
 
-\section{Depth Scaling and Noise Robustness}
+\subsection*{Depth Scaling and Noise Robustness}
 
 \paragraph{Depth scaling.}
 Varying dendritic depth from 1--4 layers (branch factors $[9]$ to $[3,3,3,3]$): shunting local degrades from 63.5\% to 57.4\%; additive local degrades more steeply from 54.9\% to 29.7\%. The shunting advantage grows with depth ($+8.5 \to +27.7$~pp). Backprop ceilings remain stable at about $90$--$92\%$. See Fig.~\ref{fig:additional_stress_tests}A.
