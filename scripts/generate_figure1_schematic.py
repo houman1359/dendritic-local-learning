@@ -1,16 +1,12 @@
 #!/usr/bin/env python3
-"""PROTOTYPE Figure 1 (do not overwrite live figure).
+"""Generate the submission Figure 1 schematic.
 
 Saves:
-  figures/fig1_model_and_credit_proposed.{pdf,png}        — half-textwidth
-                                                            (for side-by-side
-                                                             figure+caption layout)
+  figures/fig1_model_and_credit.{pdf,png}
 
-Goals (vs. the live live Fig. 1):
-  * Two-row layout: A and B side-by-side and CLOSE on top, C full-width
-    bottom. Panel C has its equation strip BELOW the cards (no overlap).
-  * Half-textwidth figsize so the figure pairs with a caption in a
-    minipage on its right (saves vertical space inside the 9-page limit).
+Layout:
+  * One full-width row: A conductance tree, B path gains, C feedback modes.
+  * Caption is handled in LaTeX below the figure, not as a side minipage.
 """
 
 from __future__ import annotations
@@ -258,28 +254,27 @@ def panel_c(ax):
 
 def main():
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    # Half-NeurIPS-textwidth figure (≈ 3.0 in wide). The other half of the
-    # textwidth holds the caption inside a minipage in the .tex source.
-    fig = plt.figure(figsize=(3.05, 3.65))
+    # Full-width NeurIPS row. The aspect is intentionally shallow so the
+    # caption can sit below the figure without pushing the paper over length.
+    fig = plt.figure(figsize=(6.85, 2.15))
     gs = fig.add_gridspec(
-        2, 2,
-        height_ratios=[1.0, 1.05],
-        width_ratios=[1.10, 1.20],
-        hspace=0.30, wspace=0.04,           # A and B kept very close
-        left=0.04, right=0.99, top=0.92, bottom=0.05,
+        1, 3,
+        width_ratios=[1.18, 1.28, 2.32],
+        wspace=0.24,
+        left=0.030, right=0.995, top=0.86, bottom=0.10,
     )
     ax_a = fig.add_subplot(gs[0, 0])
     ax_b = fig.add_subplot(gs[0, 1])
-    ax_c = fig.add_subplot(gs[1, :])
+    ax_c = fig.add_subplot(gs[0, 2])
     panel_a(ax_a)
     panel_b(ax_b)
     panel_c(ax_c)
-    for ax, lbl, x_off in [(ax_a, "A", -0.10), (ax_b, "B", -0.06), (ax_c, "C", -0.025)]:
-        panel_label(ax, lbl, x=x_off, y=1.10, fontsize=11.0)
+    for ax, lbl, x_off in [(ax_a, "A", -0.08), (ax_b, "B", -0.06), (ax_c, "C", -0.035)]:
+        panel_label(ax, lbl, x=x_off, y=1.08, fontsize=11.0)
 
     out = OUTPUT_DIR / "fig1_model_and_credit"
-    fig.savefig(out.with_suffix(".pdf"))
-    fig.savefig(out.with_suffix(".png"), dpi=300)
+    fig.savefig(out.with_suffix(".pdf"), bbox_inches="tight", pad_inches=0.02)
+    fig.savefig(out.with_suffix(".png"), dpi=300, bbox_inches="tight", pad_inches=0.02)
     print(f"Saved {out}.{{pdf,png}}")
     plt.close(fig)
 

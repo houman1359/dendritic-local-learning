@@ -14,20 +14,12 @@ The question here is not whether such a broadcast can match unconstrained backpr
 
 \begin{figure}[!t]
 \centering
-\begin{minipage}[t]{0.46\textwidth}
-\centering
-\vspace{0pt}
-\includegraphics[width=\linewidth]{fig1_model_and_credit.pdf}
-\end{minipage}\hfill
-\begin{minipage}[t]{0.51\textwidth}
-\vspace{0pt}
-\raggedright
+\includegraphics[width=\textwidth]{fig1_model_and_credit.pdf}
 \caption{\textbf{Model and credit assignment.}
 \textbf{(A)}~Conductance tree with nonnegative excitatory drive and inhibitory shunting load.
 \textbf{(B)}~Exact credit is path-specific, whereas rank-1 LocalCA broadcasts one shared error field.
 \textbf{(C)}~LocalCA keeps the exact synapse-local eligibility and substitutes $e_n\!\approx\!\delta_n$; rank-1, neuron-wise, rank-$K$, and path-structured broadcasts trade biological bandwidth for fidelity, while transported error is an oracle.}
 \label{fig:model_schematic}
-\end{minipage}
 \end{figure}
 
 Starting from conductance-based dendritic voltage equations \cite{koch1999biophysics}, we derive exact gradients for dendritic trees (Theorem~\ref{thm:tree_backprop}) and show that each synaptic gradient factorizes into purely local eligibility terms and a single non-local compartment error.
