@@ -23,9 +23,9 @@ The question here is not whether such a broadcast can match unconstrained backpr
 \vspace{0pt}
 \raggedright
 \caption{\textbf{Model and credit assignment.}
-\textbf{(A)}~Conductance-based dendritic tree. Nonnegative excitatory and inhibitory inputs drive distal compartments, which feed proximal branches and then the soma; shunting inhibition enters the conductance denominator and lowers input resistance.
-\textbf{(B)}~Path gains through the tree. Exact backprop supplies path-specific compartment errors, while rank-1 LocalCA replaces that field with one shared broadcast.
-\textbf{(C)}~Exact factorization and feedback choices. LocalCA keeps the exact synapse-local eligibility and replaces the path-specific compartment error $\delta_n$ with a broadcast $e_n$; rank-1, neuron-wise, rank-$K$, and path-structured broadcasts are local approximations with increasing bandwidth, while transported error is an analysis oracle.}
+\textbf{(A)}~Conductance tree with nonnegative excitatory drive and inhibitory shunting load.
+\textbf{(B)}~Exact credit is path-specific, whereas rank-1 LocalCA broadcasts one shared error field.
+\textbf{(C)}~LocalCA keeps the exact synapse-local eligibility and substitutes $e_n\!\approx\!\delta_n$; rank-1, neuron-wise, rank-$K$, and path-structured broadcasts trade biological bandwidth for fidelity, while transported error is an oracle.}
 \label{fig:model_schematic}
 \end{minipage}
 \end{figure}
@@ -40,7 +40,7 @@ Dendritic branching creates multiple error paths from distal synapses to the som
 This paper sits at the intersection of dendritic computation and credit assignment.
 The compartmental model follows classic accounts of dendritic integration, normalization, and branch-level nonlinear computation \cite{koch1983nonlinear,koch1999biophysics,poiarazi2003pyramidal,london2005dendritic,silver2010neuronal,carandini2012normalization}.
 The learning question connects to dendritic and cortical models in which segregated compartments, bursts, predictive signals, or prospective activity carry teaching information \cite{urbanczik2014dendritic,guerguiev2017segregated,sacramento2018dendritic,whittington2019theories,payeur2021burst,greedy2022burstccn,haider2021latent,song2024prospective,iyer2022activedendrites}.
-It also relates to feedback-alignment and direct-feedback approaches \cite{lillicrap2016random,nokland2016dfa}, target-propagation methods \cite{lee2015dtp}, equilibrium and predictive objectives \cite{scellier2017equilibrium,meulemans2021dfc,millidge2022predictive}, forward-forward or perturbation-based learning \cite{hinton2022forward,dellaferrera2022pepita}, and recent local-learning baselines \cite{pal2024local,ma2024auglocal,lv2025dll,erdogan2025ebd,kao2024ccl}.
+It also relates to feedback-alignment, direct-feedback, target-propagation, equilibrium, predictive, forward-forward, perturbation, and recent local-learning methods \cite{lillicrap2016random,nokland2016dfa,lee2015dtp,scellier2017equilibrium,meulemans2021dfc,millidge2022predictive,hinton2022forward,dellaferrera2022pepita,pal2024local,ma2024auglocal,lv2025dll,erdogan2025ebd,kao2024ccl}.
 Our contribution is narrower than these broad frameworks: we derive the exact conductance-tree credit object and test when a rank-1 dendritic broadcast approximates it.
 
 We quantify this chain with three diagnostics. First, exact-gradient reconstruction verifies that the mathematical factorization matches autograd to numerical precision. Second, gradient-fidelity measurements compare local and backprop gradients at matched parameters. Third, transported-error oracle experiments replace the broadcast with the exact path-gain-transported compartment error, isolating broadcast fidelity from other architectural factors. In a checkpointed MNIST gradient-dynamics diagnostic, shunting improves final local-backprop alignment (cosine $0.100\pm0.033$ vs.\ $0.005\pm0.026$) and reduces scale mismatch ($0.26\pm0.05$ vs.\ $0.50\pm0.05$). On noise resilience under matched inhibition ($N_I \geq 5$), transported error raises additive local learning from $81$--$84\%$ under rank-1 broadcast to $92$--$94\%$, nearly matching shunting at $95$--$95.2\%$.
@@ -50,12 +50,10 @@ We quantify this chain with three diagnostics. First, exact-gradient reconstruct
 (ii)~path-gain compressibility is a measurable mediator of when rank-1 broadcast approximates that compartment error, and shunting provides a biophysical route to such compression by changing input resistance along dendritic paths;
 and (iii)~gradient-fidelity, transported-oracle, competence, and morphology experiments validate this mechanism while identifying the failure modes that require richer feedback.
 
-The empirical story follows this sequence. Section~\ref{sec:model} derives the conductance-tree credit object, and Section~\ref{sec:local_rules} defines the local approximations. Figure~\ref{fig:model_schematic} defines the conductance tree and broadcast taxonomy. Figure~\ref{fig:gradient_fidelity} verifies the exact factorization. Experiments in Section~\ref{sec:experiments} then test the mechanism: Figure~\ref{fig:mechanistic} links path-gain compressibility to broadcast fidelity and learning, and Figure~\ref{fig:competence_regime} shows practical supervised regimes, morphology dependence, and the additive-normalization control. Section~\ref{sec:discussion} summarizes the boundary conditions. Harder-data experiments remain appendix diagnostics rather than headline benchmark claims.
-
 \begin{figure*}[!t]
 \centering
 \includegraphics[width=\textwidth]{fig3_gradient_fidelity.pdf}
-\caption{\textbf{Gradient-fidelity diagnostic.} \textbf{(A)}~Exact-factorization sanity check across all theory-diagnostic conditions, reported as relative $L_2$ reconstruction error and scale mismatch. Reconstructed gradients match autograd to numerical precision. \textbf{(B)}~Checkpointed final-state weighted cosine similarity between local and backprop gradients. \textbf{(C)}~Checkpointed final-state scale mismatch, defined as $|\log_{10}(\|g^{\mathrm{local}}\|/\|g^{\mathrm{bp}}\|)|$. Error bars denote $\pm$1 s.d.\ across 3 checkpointed seeds; the main learning and oracle sweeps use 5 seeds unless noted otherwise. \textbf{(D)}~Alignment over learning for the 5F rule. Additive remains near zero by the final checkpoint, while shunting recovers positive alignment; separate norm traces in Appendix Fig.~\ref{fig:alignment_norm_dynamics} rule out a zero-gradient artifact.}
+\caption{\textbf{Gradient-fidelity diagnostic.} \textbf{(A)}~Exact-factorization sanity check: reconstructed gradients match autograd to numerical precision. \textbf{(B)}~Checkpointed final-state weighted cosine similarity between local and backprop gradients. \textbf{(C)}~Final-state scale mismatch, $|\log_{10}(\|g^{\mathrm{local}}\|/\|g^{\mathrm{bp}}\|)|$. Error bars are $\pm$1 s.d.\ across 3 checkpointed seeds; main learning and oracle sweeps use 5 seeds unless noted. \textbf{(D)}~Alignment over learning; Appendix Fig.~\ref{fig:alignment_norm_dynamics} shows finite gradient norms.}
 \label{fig:gradient_fidelity}
 \end{figure*}
 
@@ -310,17 +308,17 @@ The only approximation made by LocalCA is therefore the broadcast substitute for
 \centering
 \includegraphics[width=\textwidth]{fig5_mechanistic_evidence.pdf}
 \caption{\textbf{Mechanistic chain from path gains to learning.}
-\textbf{(A)}~Example dendritic path-gain field at matched inhibition, with measured MNIST CV annotated for additive and shunting networks.
-\textbf{(B)}~Exact-error compressibility on MNIST: lower rank-$1$ residual and lower participation rank mean that a scalar broadcast is a better approximation.
-\textbf{(C)}~Post-training inhibitory-conductance interventions (L: learned; 0/sh/m/u: zero, shuffled, mean-clamped, uniform matched); removing learned structure collapses performance.
-\textbf{(D)}~Direct compartment-error fidelity on noise resilience. Solid lines compare rank-$1$ broadcast to the exact compartment error; dashed lines show the transported-error oracle.
-\textbf{(E)}~Learning with the transported-error oracle. Improving the broadcast field recovers near-ceiling local learning where rank-$1$ broadcast fails. Error bars denote $\pm$1 s.d.\ across seeds.}
+\textbf{(A)}~Dendritic path-gain fields at matched inhibition.
+\textbf{(B)}~Exact-error compressibility on MNIST: lower rank-$1$ residual and participation rank favor scalar broadcast.
+\textbf{(C)}~Post-training inhibitory-conductance interventions (L: learned; 0/sh/m/u: zero, shuffled, mean-clamped, uniform matched).
+\textbf{(D)}~Compartment-error fidelity on noise resilience; dashed lines show the transported-error oracle.
+\textbf{(E)}~Transported-error learning recovers near-ceiling local learning where rank-$1$ broadcast fails. Error bars denote $\pm$1 s.d.\ across seeds.}
 \label{fig:mechanistic}
 \end{figure*}
 
 Figure~\ref{fig:mechanistic} provides the central empirical chain. At matched inhibition ($N_I{=}5$), shunting narrows the MNIST conductance-stage path-gain field (CV $0.23$ vs.\ $1.16$ for additive) and makes the exact compartment-error matrix more compressible: the best rank-$1$ residual drops from $0.83\pm0.07$ to $0.65\pm0.18$, while participation rank drops from $8.5\pm3.3$ to $3.2\pm1.2$. This is the diagnostic matched to the paper's main claim: rank-$1$ broadcast is useful when the exact error field is closer to low rank.
 
-The post-training inhibition intervention shows that the learned inhibitory field is necessary for the trained computation and is not interchangeable with a matched conductance load: zeroing, shuffling, or clamping learned branch inhibition drops MNIST accuracy from about $90\%$ to $20$--$26\%$ and noise-resilience accuracy from about $81\%$ to $10$--$19\%$. Thus inhibition carries sample-specific pathway structure rather than merely setting global scale. The fidelity and oracle panels test the same bottleneck directly: rank-$1$ broadcast tracks the exact compartment error better under shunting once inhibition is present (about $0.20$--$0.24$ vs.\ $0.14$--$0.19$ for additive), transported error reaches about $0.95$--$1.0$ fidelity, and transported learning lifts both cores to $92$--$95\%$ on noise resilience; MNIST transported-error values in the appendix remain in the $95$--$97\%$ range. CIFAR-10 and direct-I versus explicit-I path-gain probes remain appendix diagnostics (Figs.~\ref{fig:cifar10_mechanism_extension}, \ref{fig:input_mode_path_gain}; Table~\ref{tab:input_mode_probe}).
+The inhibition intervention shows that the learned inhibitory field is necessary for the trained computation and is not interchangeable with a matched conductance load: zeroing, shuffling, or clamping learned branch inhibition drops MNIST from about $90\%$ to $20$--$26\%$ and noise resilience from about $81\%$ to $10$--$19\%$. The fidelity and oracle panels test the same bottleneck: rank-$1$ broadcast tracks the exact compartment error better under shunting once inhibition is present, transported error reaches about $0.95$--$1.0$ fidelity, and transported learning lifts both cores to $92$--$95\%$ on noise resilience. CIFAR-10 and direct-I versus explicit-I path-gain probes remain appendix diagnostics (Figs.~\ref{fig:cifar10_mechanism_extension}, \ref{fig:input_mode_path_gain}; Table~\ref{tab:input_mode_probe}).
 
 \subsection{Capacity-Calibrated Competence}
 
@@ -328,14 +326,14 @@ The post-training inhibition intervention shows that the learned inhibitory fiel
 \centering
 \includegraphics[width=\textwidth]{fig2_competence_regime.pdf}
 \caption{\textbf{Capacity-calibrated competence and regime dependence.}
-\textbf{(A)}~Matched backprop ceilings vs.\ rank-$1$ 5F LocalCA on MNIST, Fashion-MNIST, and context gating, including the matched additive context-gating control.
-\textbf{(B)}~Inhibitory dose-response on MNIST and noise resilience.
-\textbf{(C)}~Morphology-dependent shunting advantage on noise resilience from a supportive 3-seed morphology sweep.
-\textbf{(D)}~Additive normalization control: normalization partially improves additive LocalCA but does not reach the shunting reference, showing that the shunting advantage is not just ordinary voltage normalization. Error bars denote $\pm$1 s.d.\ across seeds where available.}
+\textbf{(A)}~Matched backprop ceilings vs.\ rank-$1$ 5F LocalCA on MNIST, Fashion-MNIST, and context gating.
+\textbf{(B)}~Inhibitory dose-response.
+\textbf{(C)}~Morphology-dependent shunting advantage on noise resilience from a 3-seed sweep.
+\textbf{(D)}~Additive normalization improves additive LocalCA but remains below the shunting reference. Error bars denote $\pm$1 s.d.\ where available.}
 \label{fig:competence_regime}
 \end{figure*}
 
-In the capacity-calibrated regime, shunting LocalCA stays within about $5$--$6$ percentage points of matched backpropagation on MNIST, Fashion-MNIST, and context gating (Table~\ref{tab:gap_closing}; Fig.~\ref{fig:competence_regime}). Figure~\ref{fig:competence_regime}D addresses a direct normalization-control concern: additive normalization improves additive LocalCA but remains below the shunting reference, so the gain is not explained by generic voltage normalization alone. Broader rule and feedback-design controls are summarized in Appendix Fig.~\ref{fig:rule_feedback_design}, where 5F is the strongest practical wrapper and 3F/4F remain instructive but weak optimizers; matched DFA baselines remain much weaker than shunting LocalCA (Appendix Fig.~\ref{fig:fa_dfa_appendix}).
+In the capacity-calibrated regime, shunting LocalCA stays within about $5$--$6$ percentage points of matched backpropagation on MNIST, Fashion-MNIST, and context gating (Table~\ref{tab:gap_closing}; Fig.~\ref{fig:competence_regime}). Figure~\ref{fig:competence_regime}D shows that additive normalization improves additive LocalCA but remains below the shunting reference, so the gain is not explained by generic voltage normalization alone. Appendix Fig.~\ref{fig:rule_feedback_design} summarizes rule and feedback controls: 5F is the strongest practical wrapper, while 3F/4F remain instructive but weak optimizers.
 
 \subsection{Regime Dependence of the Shunting Advantage}
 
@@ -343,11 +341,9 @@ With matched rank-$1$ broadcast, shunting is modestly better on MNIST, Fashion-M
 
 \section{Discussion and Limitations}
 \label{sec:discussion}
-The main result is a condition for faithful dendritic broadcast, not a claim that LocalCA universally replaces backpropagation. Exact conductance-tree credit separates a synapse-local eligibility term from one non-local compartment error, so local learning succeeds or fails according to how faithfully a low-dimensional broadcast approximates that exact path-specific error field.
+The main result is a condition for faithful dendritic broadcast, not a claim that LocalCA universally replaces backpropagation. Exact conductance-tree credit separates synapse-local eligibility from one non-local compartment error, so local learning succeeds only when a low-dimensional broadcast approximates that path-specific error field.
 
-The experiments support a coherent mechanism. Shunting inhibition changes the conductance denominator and thereby modulates input resistance along credit paths. In the regimes studied here, this makes the exact error field more compressible for rank-$1$ broadcast, improves local-backprop alignment, and reduces scale mismatch. Transported error closes much of the local-learning gap, while post-training inhibition interventions show that learned inhibitory conductance carries sample-specific pathway structure rather than merely adding a matched conductance load. Morphology and inhibition interact, so more inhibition is not the mechanism; different trees shift the operating regime in which shunting is useful.
-
-The boundary conditions are equally important. The practical 5F rule is an empirical stabilizer rather than a theorem-derived necessity, Eq.~\eqref{eq:compression_condition} is interpretive rather than a positive headline diagnostic, and activation-shape audits show that the mechanism depends on the learned bounded reactivation regime used in the main experiments. Rank-$1$ broadcast remains insufficient in routed and harder-data settings, where higher-rank or transported feedback is needed. The present models use input-driven shunting inhibition and a feedforward explicit inhibitory-cell probe, not recurrent lateral inhibition. More broadly, the results connect a biophysical operation, shunting control of input resistance, to a machine-learning object: the low-rank structure of the error field.
+The experiments support a coherent but bounded mechanism. Shunting inhibition modulates input resistance along credit paths, making the exact error field more compressible for rank-$1$ broadcast in the regimes studied here; transported error and inhibition interventions identify broadcast fidelity and learned inhibitory structure as key bottlenecks. At the same time, 5F is an empirical stabilizer, Eq.~\eqref{eq:compression_condition} is interpretive, activation shape matters, routed and harder-data settings require richer feedback, and the present models use input-driven shunting rather than recurrent lateral inhibition. The broader connection is between a biophysical operation, shunting control of input resistance, and a machine-learning object: the low-rank structure of the error field.
 
 %=============================================================================
 % REFERENCES
