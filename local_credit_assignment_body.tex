@@ -12,6 +12,24 @@ Dendritic compartments suggest an alternative.
 Each synapse has access to rich local state such as driving force, membrane conductance, and branch voltage, while supervisory information could arrive as a low-bandwidth broadcast from the soma \cite{richards2019dendritic}.
 The question here is not whether such a broadcast can match unconstrained backpropagation in all settings, but when it is a faithful approximation to the exact dendritic credit signal.
 
+\begin{figure}[!t]
+\centering
+\begin{minipage}[t]{0.46\textwidth}
+\centering
+\vspace{0pt}
+\includegraphics[width=\linewidth]{fig1_model_and_credit.pdf}
+\end{minipage}\hfill
+\begin{minipage}[t]{0.51\textwidth}
+\vspace{0pt}
+\raggedright
+\caption{\textbf{Model and credit assignment.}
+\textbf{(A)}~Conductance-based dendritic tree. Nonnegative excitatory and inhibitory inputs drive distal compartments, which feed proximal branches and then the soma; shunting inhibition enters the conductance denominator and lowers input resistance.
+\textbf{(B)}~Path gains through the tree. Exact backprop supplies path-specific compartment errors, while rank-1 LocalCA replaces that field with one shared broadcast.
+\textbf{(C)}~Exact factorization and feedback choices. LocalCA keeps the exact synapse-local eligibility and replaces the path-specific compartment error $\delta_n$ with a broadcast $e_n$; rank-1, neuron-wise, rank-$K$, and path-structured broadcasts are local approximations with increasing bandwidth, while transported error is an analysis oracle.}
+\label{fig:model_schematic}
+\end{minipage}
+\end{figure}
+
 Starting from conductance-based dendritic voltage equations \cite{koch1999biophysics}, we derive exact gradients for dendritic trees (Theorem~\ref{thm:tree_backprop}) and show that each synaptic gradient factorizes into purely local eligibility terms and a single non-local compartment error.
 Approximating that compartment error with a broadcast signal yields a theorem-facing local rule (3F), practical optimizer wrappers (4F/5F), and higher-rank feedback variants for tasks where different branches require different teaching signals.
 
@@ -33,24 +51,6 @@ We quantify this chain with three diagnostics. First, exact-gradient reconstruct
 and (iii)~gradient-fidelity, transported-oracle, competence, and morphology experiments validate this mechanism while identifying the failure modes that require richer feedback.
 
 The empirical story follows this sequence. Section~\ref{sec:model} derives the conductance-tree credit object, and Section~\ref{sec:local_rules} defines the local approximations. Figure~\ref{fig:model_schematic} defines the conductance tree and broadcast taxonomy. Figure~\ref{fig:gradient_fidelity} verifies the exact factorization. Experiments in Section~\ref{sec:experiments} then test the mechanism: Figure~\ref{fig:mechanistic} links path-gain compressibility to broadcast fidelity and learning, and Figure~\ref{fig:competence_regime} shows practical supervised regimes, morphology dependence, and the additive-normalization control. Section~\ref{sec:discussion} summarizes the boundary conditions. Harder-data experiments remain appendix diagnostics rather than headline benchmark claims.
-
-\begin{figure}[!t]
-\centering
-\begin{minipage}[t]{0.46\textwidth}
-\centering
-\vspace{0pt}
-\includegraphics[width=\linewidth]{fig1_model_and_credit.pdf}
-\end{minipage}\hfill
-\begin{minipage}[t]{0.51\textwidth}
-\vspace{0pt}
-\raggedright
-\caption{\textbf{Model and credit assignment.}
-\textbf{(A)}~Conductance-based dendritic tree. Nonnegative excitatory and inhibitory inputs drive distal compartments, which feed proximal branches and then the soma; shunting inhibition enters the conductance denominator and lowers input resistance.
-\textbf{(B)}~Path gains through the tree. Exact backprop supplies path-specific compartment errors, while rank-1 LocalCA replaces that field with one shared broadcast.
-\textbf{(C)}~Exact factorization and feedback choices. LocalCA keeps the exact synapse-local eligibility and replaces the path-specific compartment error $\delta_n$ with a broadcast $e_n$; rank-1, neuron-wise, rank-$K$, and path-structured broadcasts are local approximations with increasing bandwidth, while transported error is an analysis oracle.}
-\label{fig:model_schematic}
-\end{minipage}
-\end{figure}
 
 \begin{figure*}[!t]
 \centering
