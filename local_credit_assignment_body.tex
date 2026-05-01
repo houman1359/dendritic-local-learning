@@ -42,12 +42,12 @@ We quantify this chain with three diagnostics. First, exact-gradient reconstruct
 (ii)~path-gain compressibility is a measurable mediator of when rank-1 broadcast approximates that compartment error, and shunting provides a biophysical route to such compression by changing input resistance along dendritic paths;
 and (iii)~gradient-fidelity, transported-oracle, competence, and morphology experiments validate this mechanism while identifying the failure modes that require richer feedback.
 
-\begin{figure*}[!t]
+\begin{figure}[!t]
 \centering
 \includegraphics[width=\textwidth]{fig3_gradient_fidelity.pdf}
 \caption{\textbf{Gradient-fidelity diagnostic.} \textbf{(A)}~Exact-factorization sanity check: reconstructed gradients match autograd to numerical precision. \textbf{(B)}~Checkpointed final-state weighted cosine similarity between local and backprop gradients. \textbf{(C)}~Final-state scale mismatch, $|\log_{10}(\|g^{\mathrm{local}}\|/\|g^{\mathrm{bp}}\|)|$. Error bars are $\pm$1 s.d.\ across 3 checkpointed seeds; main learning and oracle sweeps use 5 seeds unless noted. \textbf{(D)}~Alignment over learning; Appendix Fig.~\ref{fig:alignment_norm_dynamics} shows finite gradient norms.}
 \label{fig:gradient_fidelity}
-\end{figure*}
+\end{figure}
 
 %=============================================================================
 \section{Compartmental Voltage Model and Gradient Derivation}
@@ -296,7 +296,7 @@ The only approximation made by LocalCA is therefore the broadcast substitute for
 
 \subsection{Mechanistic Chain: Path Gains, Broadcast Fidelity, and Oracle Transport}
 
-\begin{figure*}[!t]
+\begin{figure}[!t]
 \centering
 \includegraphics[width=\textwidth]{fig5_mechanistic_evidence.pdf}
 \caption{\textbf{Mechanistic chain from path gains to learning.}
@@ -306,7 +306,7 @@ The only approximation made by LocalCA is therefore the broadcast substitute for
 \textbf{(D)}~Compartment-error fidelity on noise resilience; dashed lines show the transported-error oracle.
 \textbf{(E)}~Transported-error learning recovers near-ceiling local learning where rank-$1$ broadcast fails. Error bars denote $\pm$1 s.d.\ across seeds.}
 \label{fig:mechanistic}
-\end{figure*}
+\end{figure}
 
 Figure~\ref{fig:mechanistic} provides the central empirical chain. At matched inhibition ($N_I{=}5$), shunting narrows the MNIST conductance-stage path-gain field (CV $0.23$ vs.\ $1.16$ for additive) and makes the exact compartment-error matrix more compressible: the best rank-$1$ residual drops from $0.83\pm0.07$ to $0.65\pm0.18$, while participation rank drops from $8.5\pm3.3$ to $3.2\pm1.2$. This is the diagnostic matched to the paper's main claim: rank-$1$ broadcast is useful when the exact error field is closer to low rank.
 
@@ -314,7 +314,7 @@ The inhibition intervention shows that the learned inhibitory field is necessary
 
 \subsection{Capacity-Calibrated Competence}
 
-\begin{figure*}[!t]
+\begin{figure}[!t]
 \centering
 \includegraphics[width=\textwidth]{fig2_competence_regime.pdf}
 \caption{\textbf{Capacity-calibrated competence and regime dependence.}
@@ -323,9 +323,9 @@ The inhibition intervention shows that the learned inhibitory field is necessary
 \textbf{(C)}~Morphology-dependent shunting advantage on noise resilience from a 3-seed sweep.
 \textbf{(D)}~Additive normalization improves additive LocalCA but remains below the shunting reference. Error bars denote $\pm$1 s.d.\ where available.}
 \label{fig:competence_regime}
-\end{figure*}
+\end{figure}
 
-In the capacity-calibrated regime, shunting LocalCA stays within about $5$--$6$ percentage points of matched backpropagation on MNIST, Fashion-MNIST, and context gating (Table~\ref{tab:gap_closing}; Fig.~\ref{fig:competence_regime}). Figure~\ref{fig:competence_regime}D shows that additive normalization improves additive LocalCA but remains below the shunting reference, so the gain is not explained by generic voltage normalization alone. Appendix Fig.~\ref{fig:rule_feedback_design} summarizes rule and feedback controls: 5F is the strongest practical wrapper, while 3F/4F remain instructive but weak optimizers.
+In the capacity-calibrated regime, shunting LocalCA stays within about $5$--$6$ percentage points of matched backpropagation on MNIST, Fashion-MNIST, and context gating (Table~\ref{tab:gap_closing}; Fig.~\ref{fig:competence_regime}). Figure~\ref{fig:competence_regime}D shows that additive normalization improves additive LocalCA but remains below the shunting reference, so the gain is not explained by generic voltage normalization alone. Figure~\ref{fig:rule_feedback_controls} summarizes the rule and feedback controls: 5F is the strongest practical wrapper, somatic rank-$1$ error is essential, and higher feedback bandwidth improves the noise-resilience diagnostic.
 
 \subsection{Regime Dependence of the Shunting Advantage}
 
@@ -336,6 +336,19 @@ With matched rank-$1$ broadcast, shunting is modestly better on MNIST, Fashion-M
 The main result is a condition for faithful dendritic broadcast, not a claim that LocalCA universally replaces backpropagation. Exact conductance-tree credit separates synapse-local eligibility from one non-local compartment error, so local learning succeeds only when a low-dimensional broadcast approximates that path-specific error field.
 
 The experiments support a coherent but bounded mechanism. Shunting inhibition modulates input resistance along credit paths, making the exact error field more compressible for rank-$1$ broadcast in the regimes studied here; transported error and inhibition interventions identify broadcast fidelity and learned inhibitory structure as key bottlenecks. At the same time, 5F is an empirical stabilizer, Eq.~\eqref{eq:compression_condition} is interpretive, activation shape matters, routed and harder-data settings require richer feedback, and the present models use input-driven shunting rather than recurrent lateral inhibition. The broader connection is between a biophysical operation, shunting control of input resistance, and a machine-learning object: the low-rank structure of the error field.
+
+\begin{nolinenumbers}
+\begin{center}
+\refstepcounter{figure}\label{fig:rule_feedback_controls}
+\centering
+\includegraphics[width=\textwidth]{fig5_rule_feedback_controls.pdf}
+\vspace{-0.8ex}
+\parbox{\textwidth}{\small\textbf{Figure~\thefigure: Rule and feedback controls.}
+\textbf{(A)}~The practical gain comes mainly from the 5F confidence wrapper; 3F/4F remain weak optimizers.
+\textbf{(B)}~Replacing the somatic rank-$1$ error with a local-mismatch heuristic collapses learning.
+\textbf{(C)}~Richer or transported feedback improves noise resilience. Detailed controls remain in Appendix Fig.~\ref{fig:rule_feedback_design}.}
+\end{center}
+\end{nolinenumbers}
 
 %=============================================================================
 % REFERENCES

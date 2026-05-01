@@ -587,6 +587,100 @@ def figure_rule_feedback_design():
     plt.close(fig)
 
 
+def figure_rule_feedback_controls_main():
+    """Compact main-text summary of rule and feedback controls."""
+    print("\n--- Figure: Compact Rule & Feedback Controls ---")
+    fig, axes = plt.subplots(
+        1,
+        3,
+        figsize=(6.85, 1.65),
+        gridspec_kw={"wspace": 0.44, "width_ratios": [1.0, 1.0, 1.35]},
+    )
+
+    ax = axes[0]
+    style_axis(ax, grid="y")
+    rule_data = {
+        "MNIST": {"3F": 62.2, "4F": 62.8, "5F": 91.6},
+        "CG": {"3F": 39.6, "4F": 41.1, "5F": 78.9},
+    }
+    rules = ["3F", "4F", "5F"]
+    rule_colors = [RULE3_COLOR, RULE4_COLOR, RULE5_COLOR]
+    x = np.arange(len(rule_data))
+    bw = 0.23
+    for j, (rule, color) in enumerate(zip(rules, rule_colors)):
+        vals = [rule_data[ds][rule] for ds in rule_data]
+        ax.bar(x + (j - 1) * bw, vals, bw * 0.90, color=color,
+               edgecolor="white", lw=0.65, label=rule)
+    ax.set_xticks(x)
+    ax.set_xticklabels(list(rule_data.keys()), fontsize=8.4)
+    ax.set_ylabel("Test (%)", fontsize=8.6)
+    ax.set_ylim(30, 100)
+    ax.set_title("A  Rule family", loc="left", fontsize=9.2, fontweight="bold")
+    ax.legend(fontsize=7.8, loc="upper left", ncol=3, frameon=False,
+              handlelength=0.8, columnspacing=0.42, handletextpad=0.22,
+              borderaxespad=0.0)
+
+    ax = axes[1]
+    style_axis(ax, grid="y")
+    groups = ["Rank-1", "Mismatch"]
+    entries = [
+        ("Shunt.", COLOR_SHUNTING, [91.2, 14.6], [0.5, 4.6]),
+        ("Add.", COLOR_ADDITIVE, [89.4, 34.2], [0.7, 5.8]),
+    ]
+    x = np.arange(len(groups))
+    bw = 0.31
+    for j, (label, color, vals, errs) in enumerate(entries):
+        ax.bar(x + (j - 0.5) * bw, vals, bw * 0.90, yerr=errs,
+               color=color, edgecolor="white", lw=0.65, capsize=2.2,
+               error_kw={"lw": 0.95}, label=label)
+    ax.set_xticks(x)
+    ax.set_xticklabels(groups, fontsize=8.4)
+    ax.set_ylabel("MNIST (%)", fontsize=8.6)
+    ax.set_ylim(0, 100)
+    ax.set_title("B  Error source", loc="left", fontsize=9.2, fontweight="bold")
+    ax.legend(fontsize=7.8, loc="upper right", frameon=False,
+              handlelength=0.8, handletextpad=0.25, borderaxespad=0.0)
+
+    ax = axes[2]
+    style_axis(ax, grid="y")
+    rank_noise = _csv_path(RANK_BRIDGE_NOISE_CSV)
+    if rank_noise is not None:
+        plot_rows = [
+            ("R1", "per_soma", 4, False, COLOR_SHUNTING),
+            ("Path", "per_soma", 4, True, "#4DAF4A"),
+            ("K2", "low_rank", 2, False, "#F39C12"),
+            ("K4", "low_rank", 4, False, "#E67E22"),
+            ("K8", "low_rank", 8, False, "#D35400"),
+            ("Or.", "path_transport", 4, False, "#6C3483"),
+        ]
+        vals, errs, labels, colors = [], [], [], []
+        for label, mode, rank, path_prop, color in plot_rows:
+            row = rank_noise[
+                (rank_noise["broadcast_mode"] == mode)
+                & (rank_noise["broadcast_rank"] == rank)
+                & (rank_noise["use_path_propagation"] == path_prop)
+            ]
+            if len(row) == 0:
+                continue
+            labels.append(label)
+            vals.append(float(row.iloc[0]["test_accuracy_mean"]) * 100)
+            errs.append(float(row.iloc[0]["test_accuracy_std"]) * 100)
+            colors.append(color)
+        xpos = np.arange(len(vals))
+        ax.bar(xpos, vals, 0.68, yerr=errs, color=colors,
+               edgecolor="white", lw=0.7, capsize=2.1,
+               error_kw={"lw": 0.95})
+        ax.set_xticks(xpos)
+        ax.set_xticklabels(labels, fontsize=8.0)
+        ax.set_ylim(35, 90)
+    ax.set_ylabel("Noise (%)", fontsize=8.6)
+    ax.set_title("C  Feedback bandwidth", loc="left", fontsize=9.2, fontweight="bold")
+
+    fig.subplots_adjust(left=0.065, right=0.992, bottom=0.27, top=0.78, wspace=0.44)
+    _save(fig, "fig5_rule_feedback_controls")
+    plt.close(fig)
+
+
 # ===================================================================
 # Figure 2 — Competence & Regime Dependence
 # ===================================================================
@@ -2706,6 +2800,7 @@ def main():
     print("Skipping Figure 1 here; use generate_figure1_schematic.py for the submission figure.")
     figure2()
     figure_rule_feedback_design()
+    figure_rule_feedback_controls_main()
     figure3()
     figure4()
     figure_s1()
