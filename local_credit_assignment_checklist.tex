@@ -47,7 +47,7 @@
 \item {\bf Experimental result reproducibility}
     \item[] Question: Does the paper fully disclose all the information needed to reproduce the main experimental results of the paper to the extent that it affects the main claims and/or conclusions of the paper (regardless of whether the code and data are provided or not)?
     \item[] Answer: \answerYes{}
-    \item[] Justification: The main paper and appendices specify the datasets, architectures, local-rule family, broadcast modes, representative hyperparameters, and compute regime needed to reproduce the headline results; see Sec.~\ref{sec:experiments} and Appendix~\ref{app:implementation}.
+    \item[] Justification: The main paper and appendices specify the datasets, architectures, local-rule family, broadcast modes, representative hyperparameters, and compute regime needed to reproduce the headline results, and the supplementary ZIP provides anonymized code, configuration files, and reproduction instructions; see Sec.~\ref{sec:experiments} and Appendix~\ref{app:implementation}.
     \item[] Guidelines:
     \begin{itemize}
         \item The answer \answerNA{} means that the paper does not include experiments.
@@ -65,8 +65,8 @@
 
 \item {\bf Open access to data and code}
     \item[] Question: Does the paper provide open access to the data and code, with sufficient instructions to faithfully reproduce the main experimental results, as described in supplemental material?
-    \item[] Answer: \answerNo{}
-    \item[] Justification: To preserve double-blind review, the anonymous submission does not include a public repository or anonymized code bundle. The paper instead provides architectural, algorithmic, and configuration details and states that code and configs will be released after review; see Appendix~\ref{app:implementation}.
+    \item[] Answer: \answerYes{}
+    \item[] Justification: The anonymous submission includes an anonymized supplementary ZIP containing the model, training, diagnostic, and figure-generation code, representative configuration files, and reproduction instructions for the main experimental families. The public benchmarks are cited and accessed through their standard public sources; see Appendix~\ref{app:code_data_assets}.
     \item[] Guidelines:
     \begin{itemize}
         \item The answer \answerNA{} means that paper does not include experiments requiring code.
@@ -82,7 +82,7 @@
 \item {\bf Experimental setting/details}
     \item[] Question: Does the paper specify all the training and test details (e.g., data splits, hyperparameters, how they were chosen, type of optimizer) necessary to understand the results?
     \item[] Answer: \answerYes{}
-    \item[] Justification: The main text states the benchmark families, seed protocol, representative local-rule settings, and major training choices, while the appendices provide implementation details and operating-mode inventories; see Sec.~\ref{sec:experiments} and Appendix~\ref{app:implementation}.
+    \item[] Justification: The main text states the benchmark families, seed protocol, representative local-rule settings, and major training choices, while the appendices and supplementary ZIP provide implementation details, configuration files, and operating-mode inventories; see Sec.~\ref{sec:experiments} and Appendix~\ref{app:implementation}.
     \item[] Guidelines:
     \begin{itemize}
         \item The answer \answerNA{} means that the paper does not include experiments.
@@ -132,8 +132,8 @@
 
 \item {\bf Broader impacts}
     \item[] Question: Does the paper discuss both potential positive societal impacts and negative societal impacts of the work performed?
-    \item[] Answer: \answerYes{}
-    \item[] Justification: The discussion includes a broader-relevance and potential-harms paragraph that distinguishes mechanistic neuroscience relevance from possible misuse through overclaiming biological plausibility or overstating robustness; see Sec.~\ref{sec:discussion}.
+    \item[] Answer: \answerNA{}
+    \item[] Justification: The paper is a mechanistic study of dendritic credit assignment using public benchmarks and synthetic diagnostics, with no deployed system, human-subject data, scraped dataset, or direct societal application. The limitations section nevertheless warns against overgeneralizing the mechanism beyond the tested regimes; see Sec.~\ref{sec:discussion}.
     \item[] Guidelines:
     \begin{itemize}
         \item The answer \answerNA{} means that there is no societal impact of the work performed.
@@ -174,8 +174,8 @@
 
 \item {\bf New assets}
     \item[] Question: Are new assets introduced in the paper well documented and is the documentation provided alongside the assets?
-    \item[] Answer: \answerNA{}
-    \item[] Justification: The paper does not release a new dataset, benchmark, or pretrained model asset in this anonymous submission.
+    \item[] Answer: \answerYes{}
+    \item[] Justification: The only new released asset is an anonymized supplementary code ZIP. It includes reproduction instructions, representative configuration files, and the model/training/diagnostic scripts needed for the main experimental families; the paper does not release a new dataset, benchmark, or pretrained model.
     \item[] Guidelines:
     \begin{itemize}
         \item The answer \answerNA{} means that the paper does not release new assets.

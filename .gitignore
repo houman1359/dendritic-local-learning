@@ -38,6 +38,7 @@ output/
 _minted-*/
 outputs/
 local_sweep_runs/
+submission/
 
 # Python cache
 __pycache__/
