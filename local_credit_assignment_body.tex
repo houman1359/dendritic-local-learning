@@ -305,11 +305,12 @@ With matched rank-$1$ broadcast, shunting is modestly better on MNIST, Fashion-M
 \clearpage
 \begin{figure}[!t]
 \centering
-\includegraphics[width=\textwidth]{fig5_rule_feedback_controls.pdf}
+\includegraphics[width=\textwidth]{fig4_rule_feedback_design.pdf}
 \caption{\textbf{Rule and feedback controls.}
 \textbf{(A)}~The practical gain comes mainly from the 5F confidence wrapper; 3F/4F remain weak optimizers.
 \textbf{(B)}~Replacing the somatic rank-$1$ error with a local-mismatch heuristic collapses learning.
-\textbf{(C)}~Richer or transported feedback improves noise resilience. Detailed controls remain in Appendix Fig.~\ref{fig:rule_feedback_design}.}
+\textbf{(C)}~Richer or transported feedback improves noise resilience.
+\textbf{(D)}~Cue routing probes a branch-specific regime: higher rank helps, while the current pathway-vector implementation does not yet beat the best unstructured low-rank control.}
 \label{fig:rule_feedback_controls}
 \end{figure}
 
@@ -568,17 +569,6 @@ The appendix is organized by how directly each result supports the main mechanis
 Several controls are intentionally negative or mixed. The log-gain covariance margin from Eq.~\eqref{eq:compression_condition} is not a positive main result, Double-CIFAR remains near chance even under matched backpropagation, positive cue-routing controls saturate too strongly to separate mechanisms, and the current pathway-vector implementation does not beat the best unstructured low-rank cue-routing control. We include these results to delimit the claim rather than to smooth over failure modes.
 
 \subsection*{Mechanistic Support and Broadcast Controls}
-
-\begin{figure*}[!htbp]
-\centering
-\includegraphics[width=\textwidth]{fig4_rule_feedback_design.pdf}
-\caption{\textbf{Local-rule and feedback-design axes.}
-\textbf{(A)}~The theoretically derived 3F update and the 4F attenuation proxy are weak practical optimizers in the completed local-competence sweeps; 5F is the strongest empirical wrapper.
-\textbf{(B)}~The broadcast definition matters: on MNIST, rank-$1$ shared somatic error is strong, while a local-mismatch error surrogate fails.
-\textbf{(C)}~On noise resilience, recursively propagating or increasing the rank of the error field closes much of the gap between rank-$1$ broadcast and exact path transport.
-\textbf{(D)}~Cue routing probes a branch-specific regime: higher rank helps, while the current pathway-vector implementation is useful but not yet better than the best unstructured low-rank control. Error bars denote $\pm$1 s.d.\ where five-seed summaries are available.}
-\label{fig:rule_feedback_design}
-\end{figure*}
 
 \subsection*{Rule-Family Ranking}
 
