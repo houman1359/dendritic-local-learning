@@ -17,7 +17,7 @@
 \item {\bf Limitations}
     \item[] Question: Does the paper discuss the limitations of the work performed by the authors?
     \item[] Answer: \answerYes{}
-    \item[] Justification: The discussion explicitly narrows the scope of the claims and discusses limitations involving benchmark strength, broadcast assumptions, depth scaling, and the exploratory stress tests; see Sec.~\ref{sec:discussion}.
+    \item[] Justification: The discussion explicitly narrows the scope of the claims and discusses limitations involving benchmark strength, broadcast assumptions, depth scaling, morphology, activation shape, and feedback rank; see Sec.~\ref{sec:discussion}.
     \item[] Guidelines:
     \begin{itemize}
         \item The answer \answerNA{} means that the paper has no limitation while the answer \answerNo{} means that the paper has limitations, but those are not discussed in the paper.
@@ -110,7 +110,7 @@
 \item {\bf Experiments compute resources}
     \item[] Question: For each experiment, does the paper provide sufficient information on the computer resources (type of compute workers, memory, time of execution) needed to reproduce the experiments?
     \item[] Answer: \answerYes{}
-    \item[] Justification: Appendix~\ref{app:implementation} describes the institutional GPU cluster setting, the use of single A100/H100-class GPUs, rough per-run runtime scales, and the fact that broader exploratory sweeps required additional compute beyond the final reported runs.
+    \item[] Justification: Appendix~\ref{app:implementation} describes the institutional GPU cluster setting, single A100/H100-class GPUs, approximate memory class, per-family runtime ranges, and approximate GPU-hours for the reported experiments.
     \item[] Guidelines:
     \begin{itemize}
         \item The answer \answerNA{} means that the paper does not include experiments.
@@ -159,7 +159,7 @@
 \item {\bf Licenses for existing assets}
     \item[] Question: Are the creators or original owners of assets (e.g., code, data, models), used in the paper, properly credited and are the license and terms of use explicitly mentioned and properly respected?
     \item[] Answer: \answerYes{}
-    \item[] Justification: The paper credits all benchmark and connectomic assets, does not redistribute third-party raw assets, and includes an asset/access table with license or access terms where available; see Appendix~\ref{app:code_data_assets}.
+    \item[] Justification: The paper credits all benchmark assets, does not redistribute third-party raw assets, and includes an asset/access table with URLs, citation requirements, and license or access terms where available; see Appendix~\ref{app:code_data_assets}.
     \item[] Guidelines:
     \begin{itemize}
         \item The answer \answerNA{} means that the paper does not use existing assets.
