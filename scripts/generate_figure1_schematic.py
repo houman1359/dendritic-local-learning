@@ -243,8 +243,8 @@ def panel_c(ax):
                 arrow(ax, (soma[0] + 0.018, soma[1]), (leaf[0] + 0.010, leaf[1]),
                       color=col, lw=0.6, ms=4.0, alpha=0.66, ls="--", rad=0.08)
 
-    # Equation strip BELOW the cards
-    rounded_box(ax, (0.10, 0.04), width - 0.20, 0.16,
+    # Equation strip BELOW the cards.
+    rounded_box(ax, (0.01, 0.04), width - 0.02, 0.16,
                 fc="#F8FAFC", ec="#CBD5E1", lw=0.6, radius=0.020)
     ax.text(width / 2, 0.12,
             r"$\partial L/\partial g_i = x_i\,R_n^{\rm tot}(E_i - V_n)\,\delta_n,\quad"
