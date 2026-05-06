@@ -16,10 +16,9 @@ Our contribution is not simply to add dendritic structure to a neural network, b
 \centering
 \includegraphics[width=\textwidth]{fig1_model_and_credit.pdf}
 \caption{\textbf{Model and credit assignment.}
-\textbf{(A)}~Network layer in which each hidden excitatory unit is a dendritic conductance tree.
-\textbf{(B)}~Single dendritic unit with nonnegative excitatory drive, inhibitory shunting load, and input-resistance-dependent gain.
-\textbf{(C)}~Exact compartment errors are path-specific transports of the somatic error, whereas rank-1 LocalCA sends one shared field from the same somatic side.
-\textbf{(D)}~LocalCA keeps the exact synapse-local eligibility and substitutes $e_n\!\approx\!\delta_n$; rank-1, neuron-wise, rank-$K$, path-structured, and transported-oracle feedback trade bandwidth for fidelity.}
+\textbf{(A)}~Conductance tree with nonnegative excitatory drive and inhibitory shunting load.
+\textbf{(B)}~Exact credit varies by dendritic path, whereas rank-1 LocalCA broadcasts one shared error field.
+\textbf{(C)}~LocalCA preserves the exact synapse-local eligibility and substitutes $e_n\!\approx\!\delta_n$; rank-1, neuron-wise, rank-$K$, and path-structured broadcasts trade biological bandwidth for fidelity, while transported error is an oracle.}
 \label{fig:model_schematic}
 \end{figure}
 
