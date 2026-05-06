@@ -16,9 +16,10 @@ Our contribution is not simply to add dendritic structure to a neural network, b
 \centering
 \includegraphics[width=\textwidth]{fig1_model_and_credit.pdf}
 \caption{\textbf{Model and credit assignment.}
-\textbf{(A)}~Conductance tree with nonnegative excitatory drive and inhibitory shunting load.
-\textbf{(B)}~Exact credit varies by dendritic path, whereas rank-1 LocalCA broadcasts one shared error field.
-\textbf{(C)}~LocalCA preserves the exact synapse-local eligibility and substitutes $e_n\!\approx\!\delta_n$; rank-1, neuron-wise, rank-$K$, and path-structured broadcasts trade biological bandwidth for fidelity, while transported error is an oracle.}
+\textbf{(A)}~Network layer in which each hidden excitatory unit is a dendritic conductance tree.
+\textbf{(B)}~Single dendritic unit with nonnegative excitatory drive, inhibitory shunting load, and input-resistance-dependent gain.
+\textbf{(C)}~Exact compartment errors are path-specific transports of the somatic error, whereas rank-1 LocalCA sends one shared field from the same somatic side.
+\textbf{(D)}~LocalCA keeps the exact synapse-local eligibility and substitutes $e_n\!\approx\!\delta_n$; rank-1, neuron-wise, rank-$K$, path-structured, and transported-oracle feedback trade bandwidth for fidelity.}
 \label{fig:model_schematic}
 \end{figure}
 
@@ -28,7 +29,7 @@ This factorization turns local credit assignment into a compressibility problem.
 
 \noindent\textbf{Related work.}
 This work builds on models of dendritic signal integration, branch-level nonlinear computation, divisive normalization, and biologically plausible teaching signals \cite{koch1983nonlinear,koch1999biophysics,poiarazi2003pyramidal,london2005dendritic,silver2010neuronal,carandini2012normalization,urbanczik2014dendritic,guerguiev2017segregated,sacramento2018dendritic,whittington2019theories,payeur2021burst,greedy2022burstccn,haider2021latent,song2024prospective,iyer2022activedendrites}.
-It also connects to machine-learning approaches that replace exact backpropagation with local, random, predictive, equilibrium, perturbation, or broadcast feedback signals \cite{rumelhart1986learning,lillicrap2016random,nokland2016dfa,lee2015dtp,scellier2017equilibrium,meulemans2021dfc,millidge2022predictive,hinton2022forward,dellaferrera2022pepita,pal2024local,ma2024auglocal,lv2025dll,erdogan2025ebd,kao2024ccl}.
+It also connects to machine-learning approaches that replace exact backpropagation with local, random, predictive, equilibrium, perturbation, or broadcast feedback signals \cite{rumelhart1986learning,lillicrap2020backprop,lillicrap2016random,nokland2016dfa,lee2015dtp,scellier2017equilibrium,meulemans2021dfc,millidge2022predictive,hinton2022forward,dellaferrera2022pepita,pal2024local,ma2024auglocal,lv2025dll,erdogan2025ebd,kao2024ccl}.
 Our contribution is complementary: we derive the exact conductance-tree credit object and test when shunting inhibition and dendritic morphology make that object broadcast-compatible.
 
 We test this chain directly. Exact-gradient reconstruction verifies the factorization numerically. Gradient-fidelity diagnostics show that shunting produces local updates that are better aligned and better scaled relative to backpropagation than matched additive controls. Exact-error compressibility and inhibition-intervention diagnostics show that learned inhibitory conductance carries sample-specific pathway structure. Transported-error oracle experiments show that supplying the exact effective path-gain-transported compartment error largely closes the local-learning gap, identifying broadcast fidelity as an important bottleneck. In an MNIST gradient-dynamics diagnostic, shunting improves final LocalCA to backprop alignment (cosine $0.100\pm0.033$ vs.\ $0.005\pm0.026$) and reduces scale mismatch ($0.26\pm0.05$ vs.\ $0.50\pm0.05$). On noise resilience under matched inhibition (at least five inhibitory synapses per branch), transported error raises additive local learning from $81$--$84\%$ under rank-1 broadcast to $92$--$94\%$, nearly matching shunting at $95$--$95.2\%$.
@@ -333,7 +334,7 @@ With matched rank-$1$ broadcast, shunting is modestly better on MNIST, Fashion-M
 \label{sec:discussion}
 We studied local credit assignment in conductance-based dendritic networks with explicit E/I conductance synapses, shunting inhibition, and tree-structured branching. Exact gradients separate synapse-local eligibility--presynaptic activity, driving force, and input resistance--from one path-specific compartment error, making LocalCA an error-approximation problem.
 
-The experiments support a coherent mechanism. Branching creates credit paths, E/I synapse banks determine the conductance state in each compartment, and shunting modulates input resistance along those paths. In the regimes studied here, this makes exact errors more rank-$1$ compressible, improves LocalCA to backprop alignment, and reduces scale mismatch. Transported-error oracles largely close the local-learning gap, while inhibition interventions show that learned inhibitory conductance carries sample-specific pathway structure rather than only global conductance scale.
+The experiments support a coherent mechanism. Branching creates credit paths, E/I synapse banks determine the conductance state in each compartment, and shunting modulates input resistance along those paths. In the regimes studied here, this makes exact errors more rank-$1$ compressible, improves LocalCA to backprop alignment, and reduces scale mismatch. Transported-error oracles largely close the local-learning gap, while inhibition interventions show that learned inhibitory conductance carries sample-specific pathway structure rather than only global conductance scale. Appendix Table~\ref{tab:experimental_predictions} states direct biological predictions of the same path-gain mechanism.
 
 The limits are important. Shunting is not universally beneficial, and more inhibition is not always better. The practical 5F rule is empirical; Eq.~\eqref{eq:compression_condition} is interpretive; activation shape, morphology, task structure, and broadcast rank all change the operating regime. We do not claim competitive CIFAR-10 performance, a recurrent inhibitory circuit model, or that scalar broadcast suffices for routed/pathway-specific tasks.
 
@@ -407,6 +408,11 @@ Inhibitory plasticity: balance, control, and codependence.
 Lillicrap, T. P., Cownden, D., Tweed, D. B., \& Akerman, C. J. (2016).
 Random synaptic feedback weights support error backpropagation for deep learning.
 \emph{Nature Communications}, 7, 13276.
+
+\bibitem{lillicrap2020backprop}
+Lillicrap, T. P., Santoro, A., Marris, L., Akerman, C. J., \& Hinton, G. (2020).
+Backpropagation and the brain.
+\emph{Nature Reviews Neuroscience}, 21(6), 335--346. https://doi.org/10.1038/s41583-020-0277-3
 
 \bibitem{rumelhart1986learning}
 Rumelhart, D. E., Hinton, G. E., \& Williams, R. J. (1986).
