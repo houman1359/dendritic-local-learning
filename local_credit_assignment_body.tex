@@ -34,7 +34,7 @@ Our contribution is complementary: we derive the exact conductance-tree credit o
 We test this chain directly. Exact-gradient reconstruction verifies the factorization numerically. Gradient-fidelity diagnostics show that shunting produces local updates that are better aligned and better scaled relative to backpropagation than matched additive controls. Exact-error compressibility and inhibition-intervention diagnostics show that learned inhibitory conductance carries sample-specific pathway structure. Transported-error oracle experiments show that supplying the exact effective path-gain-transported compartment error largely closes the local-learning gap, identifying broadcast fidelity as an important bottleneck. In an MNIST gradient-dynamics diagnostic, shunting improves final LocalCA to backprop alignment (cosine $0.100\pm0.033$ vs.\ $0.005\pm0.026$) and reduces scale mismatch ($0.26\pm0.05$ vs.\ $0.50\pm0.05$). On noise resilience under matched inhibition (at least five inhibitory synapses per branch), transported error raises additive local learning from $81$--$84\%$ under rank-1 broadcast to $92$--$94\%$, nearly matching shunting at $95$--$95.2\%$.
 
 \noindent\textbf{Contributions.}
-This paper makes three contributions: deriving the exact conductance-tree gradient and its local-eligibility/path-error factorization; identifying path-gain compressibility as the quantity mediating whether low-rank somatic broadcast can approximate that error; and showing empirically that shunting inhibition can improve this approximation while also identifying regimes where rank-1 feedback fails and richer pathway-specific feedback is needed.
+This paper makes three contributions: deriving the conductance-stage path gain, its local-eligibility/path-error factorization, and a closed-form inhibitory path-gain ratio; identifying path-gain compressibility as the quantity mediating whether low-rank somatic broadcast can approximate exact compartment errors; and showing empirically that shunting inhibition can improve this approximation while also identifying regimes where rank-1 feedback fails.
 
 \begin{figure}[!t]
 \centering
@@ -243,6 +243,7 @@ We keep 4F as a diagnostic intermediate. Empirically, this factor alone gives li
 \]
 where $\sigma_{\mathrm{res}}^2$ is the residual variance of $V_n$ after linear regression on the parent voltage.
 Operationally, $\phi_n$ is a branch-wise confidence gate, clamped to $[0.25, 4.0]$ for stability. This factor is empirical, not theorem-derived; its gain should be read as practical denoising rather than theoretical necessity.
+It is positive and bounded, and rescales locally estimated reliability from compartment and parent-voltage statistics rather than introducing a new error signal.
 
 \begin{definition}[5F Update]
 \begin{equation}
@@ -330,11 +331,11 @@ With matched rank-$1$ broadcast, shunting is modestly better on MNIST, Fashion-M
 
 \section{Discussion and Limitations}
 \label{sec:discussion}
-We studied local credit assignment in conductance-based dendritic networks with explicit E/I conductance synapses, shunting inhibition, and tree-structured branching. Exact gradients separate synapse-local eligibility--presynaptic activity, driving force, and input resistance--from one path-specific compartment error. This makes LocalCA an error-approximation problem: the local factors are available at the synapse, but the teaching signal must approximate the exact dendritic error field.
+We studied local credit assignment in conductance-based dendritic networks with explicit E/I conductance synapses, shunting inhibition, and tree-structured branching. Exact gradients separate synapse-local eligibility--presynaptic activity, driving force, and input resistance--from one path-specific compartment error, making LocalCA an error-approximation problem.
 
 The experiments support a coherent mechanism. Branching creates credit paths, E/I synapse banks determine the conductance state in each compartment, and shunting modulates input resistance along those paths. In the regimes studied here, this makes exact errors more rank-$1$ compressible, improves LocalCA to backprop alignment, and reduces scale mismatch. Transported-error oracles largely close the local-learning gap, while inhibition interventions show that learned inhibitory conductance carries sample-specific pathway structure rather than only global conductance scale.
 
-The limits are important. Shunting is not universally beneficial, and more inhibition is not always better. The practical 5F rule is an empirical stabilizer rather than a theorem-derived necessity; Eq.~\eqref{eq:compression_condition} is interpretive; activation shape, morphology, task structure, and broadcast rank all change the operating regime. We do not claim competitive CIFAR-10 performance, a recurrent inhibitory circuit model, or that scalar broadcast suffices for routed/pathway-specific tasks. The main model also uses input-driven shunting inhibition rather than recurrent lateral inhibition, so recurrent inhibitory circuits remain a future direction. The broader message is that biophysical dendrites can change not only representations, but also the geometry of credit assignment.
+The limits are important. Shunting is not universally beneficial, and more inhibition is not always better. The practical 5F rule is empirical; Eq.~\eqref{eq:compression_condition} is interpretive; activation shape, morphology, task structure, and broadcast rank all change the operating regime. We do not claim competitive CIFAR-10 performance, a recurrent inhibitory circuit model, or that scalar broadcast suffices for routed/pathway-specific tasks.
 
 %=============================================================================
 % REFERENCES
@@ -362,6 +363,21 @@ London, M., \& H{\"a}usser, M. (2005).
 Dendritic computation.
 \emph{Annual Review of Neuroscience}, 28, 503--532.
 
+\bibitem{spruston2008pyramidal}
+Spruston, N. (2008).
+Pyramidal neurons: dendritic structure and synaptic integration.
+\emph{Nature Reviews Neuroscience}, 9, 206--221. https://doi.org/10.1038/nrn2286
+
+\bibitem{branco2010single}
+Branco, T., \& H{\"a}usser, M. (2010).
+The single dendritic branch as a fundamental functional unit in the nervous system.
+\emph{Current Opinion in Neurobiology}, 20(4), 494--502. https://doi.org/10.1016/j.conb.2010.07.009
+
+\bibitem{larkum2013cellular}
+Larkum, M. (2013).
+A cellular mechanism for cortical associations: an organizing principle for the cerebral cortex.
+\emph{Trends in Neurosciences}, 36(3), 141--151. https://doi.org/10.1016/j.tins.2012.11.006
+
 \bibitem{urbanczik2014dendritic}
 Urbanczik, R., \& Senn, W. (2014).
 Learning by the dendritic prediction of somatic spiking.
@@ -381,6 +397,11 @@ Shunting inhibition does not have a divisive effect on firing rates.
 Vogels, T. P., Sprekeler, H., Zenke, F., Clopath, C., \& Gerstner, W. (2011).
 Inhibitory plasticity balances excitation and inhibition in sensory pathways and memory networks.
 \emph{Science}, 334(6062), 1569--1573.
+
+\bibitem{hennequin2017inhibitory}
+Hennequin, G., Agnes, E. J., \& Vogels, T. P. (2017).
+Inhibitory plasticity: balance, control, and codependence.
+\emph{Annual Review of Neuroscience}, 40, 557--579. https://doi.org/10.1146/annurev-neuro-072116-031005
 
 \bibitem{lillicrap2016random}
 Lillicrap, T. P., Cownden, D., Tweed, D. B., \& Akerman, C. J. (2016).
@@ -585,6 +606,18 @@ Context gating & 5F & \textbf{0.807} & \textbf{0.789} \\
 \label{tab:variant_ranking}
 \end{table}
 
+\subsection*{5F Stabilizer Sensitivity}
+Because the headline LocalCA runs use the empirical 5F stabilizer, we also tested whether performance depends sharply on the confidence clamp or the EMA rate used to estimate branch statistics. Across three-seed MNIST sensitivity checks, tightening or widening the clamp and varying the EMA rate leaves test accuracy near the default setting. This does not make 5F theorem-derived; it supports interpreting it as a bounded local reliability preconditioner rather than a brittle tuned error source.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.88\textwidth]{fig_s3_5f_sensitivity.pdf}
+\caption{\textbf{5F stabilizer sensitivity.}
+\textbf{(A)}~Changing the confidence-factor clamp from the default $[0.25,4.0]$ to tighter $[0.5,2.0]$ or wider $[0.1,8.0]$ bounds leaves MNIST test accuracy near $92\%$.
+\textbf{(B)}~Changing the 4F/5F EMA smoothing rate over $\alpha\in\{0.05,0.10,0.20\}$ gives similarly stable performance. Error bars and bands are $\pm$1 s.d.\ across 3 seeds.}
+\label{fig:five_factor_sensitivity}
+\end{figure}
+
 \subsection*{Local Competence and Regime Dependence}
 
 \begin{table}[t]
@@ -694,7 +727,7 @@ transported error, no learned inhibition & shunting & 5F path transport & no & $
 \label{tab:cifar10_mechanism_extension}
 \end{table*}
 
-Table~\ref{tab:cifar10_mechanism_extension} provides the exact values for the appendix CIFAR-10 figure. In this stronger compact direct-I-stream family, shunting performs well under standard training ($49.5\%$ vs.\ $48.3\%$ for additive), so the harder-data stress test does not unfairly penalize the shunting architecture. The broadcast-fidelity ladder also survives once decoder-aware soma mapping is used: additive LocalCA reaches $25.5\%$ under rank-$1$ per-soma broadcast and $32.4\%$ under transported error, while shunting rises from $29.7\%$ under rank-$1$ broadcast to $35.0\%$ with random low-rank $K{=}4$ and $47.2\%$ with transported error, nearly matching the $49.5\%$ shunting backprop ceiling. Removing learned I-to-E conductance lowers the shunting ceiling by $5.7$~pp and transported LocalCA by $8.6$~pp, making this a harder-data diagnostic for inhibitory conductance as part of the useful credit geometry rather than just an added architectural detail.
+Table~\ref{tab:cifar10_mechanism_extension} provides the exact values for the appendix CIFAR-10 figure. CIFAR-10 is used only as a harder-data mechanistic diagnostic: under flattened inputs, nonnegative conductance constraints, and a compact passive dendritic core, the matched backprop ceiling is the relevant reference rather than modern vision accuracy. In this stronger compact direct-I-stream family, shunting performs well under standard training ($49.5\%$ vs.\ $48.3\%$ for additive), so the harder-data stress test does not unfairly penalize the shunting architecture. The broadcast-fidelity ladder also survives once decoder-aware soma mapping is used: additive LocalCA reaches $25.5\%$ under rank-$1$ per-soma broadcast and $32.4\%$ under transported error, while shunting rises from $29.7\%$ under rank-$1$ broadcast to $35.0\%$ with random low-rank $K{=}4$ and $47.2\%$ with transported error, nearly matching the $49.5\%$ shunting backprop ceiling. Removing learned I-to-E conductance lowers the shunting ceiling by $5.7$~pp and transported LocalCA by $8.6$~pp, making this a harder-data diagnostic for inhibitory conductance as part of the useful credit geometry rather than just an added architectural detail.
 
 \subsection*{Additive Normalization Control}
 This control separates generic additive voltage normalization from shunting conductance dynamics in a lower-capacity MNIST stress regime.
@@ -757,6 +790,25 @@ We also computed the direct log-gain covariance margin in Eq.~\eqref{eq:compress
 \textbf{(A,B)} Post-training inhibitory-conductance interventions on trained shunting LocalCA checkpoints. Accuracy is measured on a $512$-example held-out subset; dots show seeds. Removing, shuffling, or clamping learned inhibition collapses performance, showing that the learned inhibitory field carries sample-specific task structure. \textbf{(C,D)} SVD diagnostics of the exact compartment-error matrix on matched MNIST $N_I{=}5$ runs. Shunting has a smaller rank-$1$ residual and lower participation rank than additive, so the exact error field is more compressible. Error bars are s.d.\ across $5$ seeds.}
 \label{fig:inhibition_causality_error_rank}
 \end{figure}
+
+\subsection*{Experimental Predictions}
+The model is not a detailed cell-type circuit model, but its path-gain identity gives falsifiable dendritic predictions. These predictions are naturally aligned with branch-level dendritic computation and compartment-targeted inhibition in pyramidal neurons \cite{spruston2008pyramidal,branco2010single,larkum2013cellular,hennequin2017inhibitory}.
+
+\begin{table}[t]
+\centering
+\small
+\begin{tabular}{@{}L{0.31\linewidth}L{0.58\linewidth}@{}}
+\toprule
+\textbf{Model implication} & \textbf{Biological prediction} \\
+\midrule
+Path-local inhibitory conductance changes $\alpha_n^{\mathrm{cond}}$ only for descendants whose credit path crosses the inhibited compartment. & Branch-local inhibitory perturbation should distort plasticity or teaching-signal efficacy for synapses below the perturbed compartment more than for sister branches. \\
+The log derivative $\partial\log\alpha_n^{\mathrm{cond}}/\partial G_k^I=-R_k^{\mathrm{tot}}$ predicts stronger credit gating in high-resistance compartments. & The same inhibitory conductance change should have larger effects on low-conductance/high-resistance branches than on already high-conductance branches. \\
+Rank-$1$ broadcast succeeds when the exact compartment-error matrix is low-rank and fails when branch identity matters. & Tasks requiring route- or context-specific branch credit should need richer dendritic teaching signals than a single scalar modulatory broadcast. \\
+\bottomrule
+\end{tabular}
+\caption{\textbf{Experimental predictions from the path-gain mechanism.} These are qualitative biological predictions, not claims tested directly in this paper.}
+\label{tab:experimental_predictions}
+\end{table}
 
 \subsection*{Cue-Routing Feedback-Rank Diagnostic}
 \label{sec:cue_routing}
@@ -830,7 +882,7 @@ The only non-local quantity is the broadcast error $e_n$, which requires a top-d
 We assume per-neuron resolution (one error per output neuron) for the per-soma broadcast mode.
 
 \subsection*{Dendritic Structure}
-We use the morphology notation $[b_1,b_2,\dots,b_D]$ for rooted dendritic trees, where each factor gives the fan-in from one dendritic stage to the next on the path to the soma. For example, $[3,3]$ means that each soma aggregates $3$ proximal branches and each proximal branch aggregates $3$ distal branches, for $9$ distal leaves per soma. In the main feedforward models, synaptic inputs terminate on dendritic branches rather than directly on the soma. The main setting uses direct input-driven inhibition: the transfer layer creates nonnegative excitatory and inhibitory streams from the same external input, and learned inhibitory conductance banks attach directly to excitatory dendritic branches. These models therefore have branch-level inhibitory conductance but no separate inhibitory neuron population. The explicit-I probe instead instantiates feedforward inhibitory cells, which transform excitatory activity before projecting inhibitory conductance back onto excitatory dendrites. In that setting the inhibitory cells are also dendritic modules and their synaptic conductances are trained by the same local rule family. The additive and shunting cores are architecture-matched at the tree level; they differ in the branch-level voltage integration rule rather than in whether a dendritic tree exists. In all reported dendritic runs, synaptic and dendritic conductance parameters are pushed through positive transforms, so conductances remain nonnegative; unconstrained decoder weights are separate readout parameters and are not interpreted as conductances.
+We use the morphology notation $[b_1,b_2,\dots,b_D]$ for rooted dendritic trees, where each factor gives the fan-in from one dendritic stage to the next on the path to the soma. For example, $[3,3]$ means that each soma aggregates $3$ proximal branches and each proximal branch aggregates $3$ distal branches, for $9$ distal leaves per soma. In the main feedforward models, synaptic inputs terminate on dendritic branches rather than directly on the soma. The main setting uses direct input-driven inhibition: the transfer layer creates nonnegative excitatory and inhibitory streams from the same external input, and learned inhibitory conductance banks attach directly to excitatory dendritic branches. These models therefore have branch-level inhibitory conductance but no separate inhibitory neuron population. The explicit-I probe instead instantiates feedforward inhibitory cells, which transform excitatory activity before projecting inhibitory conductance back onto excitatory dendrites. In that setting the inhibitory cells are also dendritic modules and their synaptic conductances are trained by the same local rule family. The additive and shunting cores are architecture-matched at the tree level; they differ in the branch-level voltage integration rule rather than in whether a dendritic tree exists. Matched comparisons use the same tree, synapse counts, nonnegative parameterization, transfer stage, optimizer protocol, and seed sets. In all reported dendritic runs, synaptic and dendritic conductance parameters are pushed through positive transforms, so conductances remain nonnegative; unconstrained decoder weights are separate readout parameters and are not interpreted as conductances.
 
 \subsection*{Post-Voltage Reactivation}
 The conductance stage produces a pre-reactivation compartment voltage $V_n$, after which each branch layer may apply a monotone scalar nonlinearity. The main sweeps use a learnable bounded firing-rate transform, $(\tanh(m(V-b))+1)/2$, together with a nonnegative transfer stage so that the first synaptic drive remains nonnegative even after input corruption or structured task noise. Path-transport oracle runs with reactivation enabled use the effective transported error: parent-to-child transport includes the parent activation derivative, and the local update multiplies by the child derivative before applying conductance-space eligibility. Most main feedforward sweeps use a linear decoder, while the CIFAR extension uses a nonlinear decoder and therefore maps output error back to decoder-input/soma space through the decoder Jacobian before applying LocalCA. Unless explicitly overridden, additive and shunting cores can start from different reactivation initializations; activation-fairness ablations therefore match additive initialization to the shunting setting when comparing alternative reactivation choices directly. The appendix activation audit additionally fixes the bounded reactivation after initialization to isolate activation shape from activation plasticity.
