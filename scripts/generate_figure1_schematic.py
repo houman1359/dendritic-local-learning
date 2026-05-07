@@ -4,9 +4,23 @@
 Saves:
   figures/fig1_model_and_credit.{pdf,png}
 
-Layout:
-  * One full-width row: A conductance tree, B path gains, C feedback modes.
-  * Caption is handled in LaTeX below the figure, not as a side minipage.
+Layout (single row, 7.0 x 2.6 inches):
+  A. Single dendritic E/I unit  (3-level branched tree, E/I synapses,
+     gold-ringed soma; nonnegative E and I input streams on the left).
+  B. Network layer  (E pool / I pool feed N=4 dendritic units; one unit
+     gold-ringed to mark it as "the unit shown in panel A"; per-unit
+     somas project to a task readout; a delta_0 callout exits the readout
+     on the right and seeds the broadcast in panel C).
+  C. Credit assignment and broadcast modes  (left: small dendritic tree
+     receives exact alpha_n delta_0 errors per branch and a rank-1 shared
+     broadcast bar; right: vertical stack of broadcast modes; bottom:
+     local/non-local color-split equation strip).
+
+Panels A and B follow the polished schematics in
+  drafts/dendritic-information-processing/.../scripts/generate_neurips_figures.py
+  (function `fig1_framework_local`, polished_panel_a branch),
+adapted to the local-CA color palette and with the input column rewired
+to nonnegative E and I streams instead of the original gain/g population.
 """
 
 from __future__ import annotations
@@ -19,9 +33,7 @@ import matplotlib
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
-import matplotlib.patches as mpatches
 from matplotlib.patches import Circle, FancyArrowPatch, FancyBboxPatch
-from matplotlib.patheffects import withStroke
 import numpy as np
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -31,237 +43,556 @@ apply_neurips_style()
 
 OUTPUT_DIR = Path(__file__).resolve().parent.parent / "figures"
 
-EXC = COLORS["exc"]
-INH = COLORS["inh"]
-DEND = COLORS["dend"]
-SOMA = COLORS["soma"]
+# Local-CA palette mapping (single source of truth used by all panels)
+EXC = COLORS["exc"]            # excitatory blue
+INH = COLORS["inh"]            # inhibitory red
+DENDRITE = "#8a7a6a"           # earthy dendrite shaft (anatomical)
+LEAF_FACE = "white"
+LEAF_EDGE = "#555"
+SOMA_FACE = "#e8e8e8"
+SOMA_EDGE = "#333"
+GOLD_FACE = "#fff3d8"
+GOLD_EDGE = "#e3a635"
 INK = COLORS["ink"]
 MUTE = COLORS["mute"]
 EDGE = COLORS["edge"]
-EXACT = COLORS["bp"]
-LOCAL = COLORS["local"]
-ORACLE = COLORS["oracle"]
-LOW_RANK = COLORS["low_rank"]
-PATHWAY = COLORS["pathway"]
+DELTA_COLOR = COLORS["bp"]     # delta_0 / exact-error red-brown
+BROADCAST_COLOR = COLORS["local"]  # rank-1 shared broadcast amber
+
+# Broadcast-mode colors (kept consistent with rest of paper)
+MODE_COLORS = {
+    "rank1":   COLORS["scalar"],
+    "rankk":   COLORS["low_rank"],
+    "path":    COLORS["pathway"],
+    "oracle":  COLORS["oracle"],
+}
 
 
-def setup_panel(ax, width=1.0, height=1.0, title=None, title_x=0.04, title_size=8.5):
-    ax.set_xlim(0, width)
-    ax.set_ylim(0, height)
-    ax.set_aspect("equal")
-    ax.set_xticks([])
-    ax.set_yticks([])
-    for spine in ax.spines.values():
-        spine.set_visible(False)
-    if title:
-        ax.set_title(title, loc="left", x=title_x, fontsize=title_size,
-                     pad=3, fontweight="bold")
+# ---------------------------------------------------------------------------
+# Panel helpers
+# ---------------------------------------------------------------------------
+
+def _draw_compartment(ax, nx, ny, nr, syn_r):
+    """White compartment circle with E (left) and I (right) synapses on top."""
+    ax.add_patch(Circle((nx, ny), nr, fc=LEAF_FACE, ec=LEAF_EDGE,
+                        lw=0.95, zorder=5))
+    ax.add_patch(Circle((nx - 0.55, ny + nr + syn_r + 0.08), syn_r,
+                        fc=EXC, ec="white", lw=0.3, zorder=8))
+    ax.add_patch(Circle((nx + 0.55, ny + nr + syn_r + 0.08), syn_r,
+                        fc=INH, ec="white", lw=0.3, zorder=8))
 
 
-def rounded_box(ax, xy, w, h, fc="white", ec="#D8DEE8", lw=0.7, radius=0.018, z=2):
-    p = FancyBboxPatch(xy, w, h,
-                       boxstyle=f"round,pad=0.010,rounding_size={radius}",
-                       facecolor=fc, edgecolor=ec, linewidth=lw, zorder=z)
-    ax.add_patch(p)
-    return p
+def _draw_mini_tree(ax, cx, cy, *, scale=1.0, highlight=False):
+    """4-leaf -> 2-mid -> 1-soma minimalist dendritic icon for panel B."""
+    s = scale
+    leaf_x = cx - 0.052 * s
+    mid_x = cx - 0.018 * s
+    soma_x = cx + 0.026 * s
+    leaf_dy = 0.030 * s
+    leaf_ys = np.array([cy + 1.5 * leaf_dy, cy + 0.5 * leaf_dy,
+                        cy - 0.5 * leaf_dy, cy - 1.5 * leaf_dy])
+    mid_ys = np.array([cy + leaf_dy, cy - leaf_dy])
+    for i, my in enumerate(mid_ys):
+        for ly in leaf_ys[i * 2: i * 2 + 2]:
+            ax.plot([leaf_x, mid_x], [ly, my],
+                    color=DENDRITE, lw=0.55,
+                    solid_capstyle="round", zorder=3, alpha=0.9)
+    for my in mid_ys:
+        ax.plot([mid_x, soma_x], [my, cy],
+                color=DENDRITE, lw=0.85,
+                solid_capstyle="round", zorder=3, alpha=0.95)
+    leaf_r = 0.0070 * s
+    for ly in leaf_ys:
+        ax.add_patch(Circle((leaf_x, ly), leaf_r,
+                            fc=LEAF_FACE, ec="#6e5d4f", lw=0.5, zorder=5))
+    for my in mid_ys:
+        ax.add_patch(Circle((mid_x, my), leaf_r,
+                            fc=LEAF_FACE, ec="#6e5d4f", lw=0.5, zorder=5))
+    soma_r = 0.0125 * s
+    if highlight:
+        ax.add_patch(Circle((soma_x, cy), soma_r + 0.005,
+                            fc=GOLD_FACE, ec=GOLD_EDGE,
+                            lw=1.0, zorder=6))
+    ax.add_patch(Circle((soma_x, cy), soma_r,
+                        fc="#efefef", ec=SOMA_EDGE, lw=0.7, zorder=7))
 
 
-def arrow(ax, xy1, xy2, color=INK, lw=1.0, ms=7, alpha=1.0,
-          ls="-", rad=0.0, z=6):
-    ax.add_patch(FancyArrowPatch(
-        xy1, xy2, arrowstyle="-|>", mutation_scale=ms,
-        linewidth=lw, color=color, alpha=alpha,
-        linestyle=ls, connectionstyle=f"arc3,rad={rad}",
-        shrinkA=0, shrinkB=0, zorder=z,
-    ))
+def _round_box(ax, xy, w, h, *, fc, ec, text=None, color="#333",
+               fontsize=6.7, lw=0.9, zorder=4, fontweight="bold"):
+    patch = FancyBboxPatch(
+        xy, w, h,
+        boxstyle="round,pad=0.018,rounding_size=0.035",
+        fc=fc, ec=ec, lw=lw, zorder=zorder,
+    )
+    ax.add_patch(patch)
+    if text is not None:
+        ax.text(xy[0] + w / 2, xy[1] + h / 2, text,
+                ha="center", va="center",
+                fontsize=fontsize, color=color,
+                fontweight=fontweight, zorder=zorder + 1)
+    return patch
 
 
-def draw_synapse(ax, x, y, kind="E"):
-    if kind == "E":
-        ax.add_patch(Circle((x, y), 0.010, fc=EXC, ec="white",
-                            linewidth=0.4, zorder=9))
-    else:
-        ax.add_patch(mpatches.RegularPolygon(
-            (x, y), numVertices=3, radius=0.014,
-            orientation=np.pi, fc=INH, ec="white",
-            linewidth=0.4, zorder=9,
-        ))
-
-
-def draw_tree(ax, *, x_leaf, x_branch, x_soma, branch_ys, leaf_offsets,
-              branch_colors=None, show_synapses=True, leaf_r=0.017,
-              branch_r=0.024, soma_r=0.034):
-    branch_ys = np.asarray(branch_ys)
-    leaf_offsets = np.asarray(leaf_offsets)
-    branch_colors = branch_colors or [DEND] * len(branch_ys)
-    leaves = []
-    for bi, by in enumerate(branch_ys):
-        for off in leaf_offsets:
-            ly = float(by + off)
-            leaves.append((x_leaf, ly, bi))
-            ax.plot([x_leaf + leaf_r, x_branch - branch_r],
-                    [ly, by + 0.25 * off],
-                    color=branch_colors[bi], linewidth=1.2, alpha=0.85,
-                    solid_capstyle="round", zorder=2)
-        ax.plot([x_branch + branch_r, x_soma - soma_r],
-                [by, 0.50 + 0.16 * (by - 0.50)],
-                color=branch_colors[bi], linewidth=1.9, alpha=0.92,
-                solid_capstyle="round", zorder=2)
-    for x, y, _ in leaves:
-        ax.add_patch(Circle((x, y), leaf_r, fc=DEND, ec=EDGE,
-                            linewidth=0.55, zorder=4))
-        if show_synapses:
-            draw_synapse(ax, x - 0.030, y - 0.005, "E")
-            draw_synapse(ax, x - 0.030, y + 0.011, "E")
-            draw_synapse(ax, x + 0.005, y + 0.030, "I")
-    for bi, by in enumerate(branch_ys):
-        ax.add_patch(Circle((x_branch, by), branch_r, fc=branch_colors[bi],
-                            ec=EDGE, linewidth=0.6, zorder=5))
-    ax.add_patch(Circle((x_soma, 0.50), soma_r, fc=SOMA, ec=EDGE,
-                        linewidth=0.7, zorder=6))
-    return {"branches": list(zip([x_branch] * len(branch_ys), branch_ys)),
-            "leaves": leaves, "soma": (x_soma, 0.50)}
-
+# ---------------------------------------------------------------------------
+# Panel A: Single dendritic E/I unit
+# ---------------------------------------------------------------------------
 
 def panel_a(ax):
-    width = 1.20
-    setup_panel(ax, width, title="Conductance tree", title_size=9.0)
-    draw_tree(ax,
-              x_leaf=0.30, x_branch=0.56, x_soma=0.82,
-              branch_ys=(0.74, 0.52, 0.30), leaf_offsets=(0.075, 0.0, -0.075))
-    arrow(ax, (0.86, 0.50), (1.02, 0.50), lw=1.1, ms=8)
-    ax.text(1.04, 0.50, "out", ha="left", va="center",
-            fontsize=7.4, color=INK, fontweight="bold")
-    ax.text(0.22, 0.22, r"$V_n$", fontsize=8.4, color=INK, fontweight="bold")
-    ax.text(0.53, 0.20, r"$V_p$", fontsize=8.4, color=INK, fontweight="bold")
-    ax.text(0.82, 0.40, "soma", fontsize=7.0, color=INK, ha="center", fontweight="bold")
-    legend = [(0.06, "E", EXC), (0.26, "I", INH),
-              (0.46, "branch", DEND), (0.82, "soma", SOMA)]
-    for x, label, color in legend:
-        ax.add_patch(Circle((x, 0.08), 0.012, fc=color, ec="white", linewidth=0.35, zorder=8))
-        ax.text(x + 0.020, 0.08, label, fontsize=6.2, ha="left", va="center", color=INK)
+    """Single dendritic E/I unit with explicit nonnegative E and I input
+    streams on the left.  Adapted from the polished schematic in
+    dendritic-information-processing/scripts/generate_neurips_figures.py.
+    """
+    ax.set_title("Single dendritic E/I unit",
+                 fontsize=9.0, pad=4.0, fontweight="bold", loc="center")
+    ax.axis("off")
+    ax.set_xlim(-2.5, 22.0)
+    ax.set_ylim(-2.5, 12.4)
+    ax.set_aspect("equal", adjustable="datalim")
 
+    syn_r = 0.22
+    nr_a = 0.40
+    sr_a = 0.60
+
+    x_d3 = 5.0
+    x_d2 = 10.0
+    x_d1 = 14.5
+    x_soma = 18.5
+    ys_d3 = np.array([10.5, 9.0, 7.0, 5.5, 4.5, 3.0, 1.0, -0.5])
+    ys_d2 = np.array([9.75, 6.25, 3.75, 0.25])
+    ys_d1 = np.array([8.0, 2.0])
+    y_soma = 5.0
+
+    # ---------------- E and I input streams (replaces the source's
+    # "gain g / input population" block) ----------------
+    # Two compact vertical stacks of small circles, each with a single
+    # arrow pointing into the distal (level-3) leaf cluster.
+    e_in_x = -0.5
+    i_in_x = -0.5
+    e_in_ys = np.linspace(7.6, 9.6, 4)
+    i_in_ys = np.linspace(0.4, 2.4, 4)
+    for ey in e_in_ys:
+        ax.add_patch(Circle((e_in_x, ey), 0.20,
+                            fc=EXC, ec="white", lw=0.25, zorder=4))
+    for iy in i_in_ys:
+        ax.add_patch(Circle((i_in_x, iy), 0.20,
+                            fc=INH, ec="white", lw=0.25, zorder=4))
+    # Arrows from each input column into the upper / lower halves of the
+    # distal tree.
+    ax.annotate("", xy=(x_d3 - nr_a - 0.4, np.mean(ys_d3[:4])),
+                xytext=(e_in_x + 0.30, np.mean(e_in_ys)),
+                arrowprops=dict(arrowstyle="-|>", color=EXC, lw=1.1,
+                                shrinkA=0, shrinkB=0))
+    ax.annotate("", xy=(x_d3 - nr_a - 0.4, np.mean(ys_d3[4:])),
+                xytext=(i_in_x + 0.30, np.mean(i_in_ys)),
+                arrowprops=dict(arrowstyle="-|>", color=INH, lw=1.1,
+                                shrinkA=0, shrinkB=0))
+    # Stream labels
+    ax.text(e_in_x, e_in_ys[-1] + 0.95, r"$x^E\!\geq\!0$",
+            ha="center", va="center", fontsize=6.6,
+            color=EXC, fontweight="bold")
+    ax.text(i_in_x, i_in_ys[0] - 0.95, r"$x^I\!\geq\!0$",
+            ha="center", va="center", fontsize=6.6,
+            color=INH, fontweight="bold")
+
+    # ---------------- Dendritic tree edges -----------------
+    for i, d2y in enumerate(ys_d2):
+        for d3y in ys_d3[i * 2: i * 2 + 2]:
+            ax.plot([x_d3 + nr_a, x_d2 - nr_a], [d3y, d2y],
+                    color=DENDRITE, lw=1.0,
+                    solid_capstyle="round", zorder=2)
+    for i, d1y in enumerate(ys_d1):
+        for d2y in ys_d2[i * 2: i * 2 + 2]:
+            ax.plot([x_d2 + nr_a, x_d1 - nr_a], [d2y, d1y],
+                    color=DENDRITE, lw=1.4,
+                    solid_capstyle="round", zorder=2)
+    for d1y in ys_d1:
+        ax.plot([x_d1 + nr_a, x_soma - sr_a], [d1y, y_soma],
+                color=DENDRITE, lw=1.8,
+                solid_capstyle="round", zorder=2)
+
+    # ---------------- Compartments + synapse markers -----------------
+    for d3y in ys_d3:
+        _draw_compartment(ax, x_d3, d3y, nr_a, syn_r)
+    for d2y in ys_d2:
+        _draw_compartment(ax, x_d2, d2y, nr_a, syn_r)
+    for d1y in ys_d1:
+        _draw_compartment(ax, x_d1, d1y, nr_a, syn_r)
+
+    # ---------------- Soma + output -----------------
+    # Gold ring matches the highlighted unit in panel B
+    ax.add_patch(Circle((x_soma, y_soma), sr_a + 0.18,
+                        fc=GOLD_FACE, ec=GOLD_EDGE,
+                        lw=1.8, zorder=9))
+    ax.add_patch(Circle((x_soma, y_soma), sr_a,
+                        fc=SOMA_FACE, ec=SOMA_EDGE, lw=1.6, zorder=10))
+    ax.text(x_soma, y_soma, r"$V_0$", ha="center", va="center",
+            fontsize=9.5, color="#111", fontweight="bold", zorder=11)
+    ax.annotate("", xy=(x_soma + sr_a + 1.5, y_soma),
+                xytext=(x_soma + sr_a + 0.1, y_soma),
+                arrowprops=dict(arrowstyle="-|>", color="#333", lw=1.5))
+    ax.text(x_soma + sr_a + 1.7, y_soma, r"$\hat{y}$",
+            ha="left", va="center", fontsize=7.4,
+            color="#333", fontweight="bold")
+
+    # Depth tags
+    for xp, lbl in [(x_d3, r"$\ell\!=\!3$"), (x_d2, r"$\ell\!=\!2$"),
+                    (x_d1, r"$\ell\!=\!1$")]:
+        ax.text(xp, -2.0, lbl, ha="center", fontsize=6.8, color="#777")
+    ax.text(x_soma, -2.0, "soma", ha="center", fontsize=6.8, color="#555")
+
+    # Compact axes-coords legend (top right): E and I synapse markers
+    ax.scatter([0.60, 0.78], [0.94, 0.94], s=22, c=[EXC, INH],
+               transform=ax.transAxes, clip_on=False, zorder=20)
+    ax.text(0.63, 0.94, "E", transform=ax.transAxes,
+            ha="left", va="center", fontsize=7.0, color=EXC,
+            fontweight="bold")
+    ax.text(0.81, 0.94, "I", transform=ax.transAxes,
+            ha="left", va="center", fontsize=7.0, color=INH,
+            fontweight="bold")
+
+
+# ---------------------------------------------------------------------------
+# Panel B: Network layer
+# ---------------------------------------------------------------------------
 
 def panel_b(ax):
-    width = 1.30
-    setup_panel(ax, width, title="Path gains", title_size=9.0)
-    cols = ["#D95F4B", "#58A66E", "#4F79B8"]
-    tree = draw_tree(ax,
-                     x_leaf=0.20, x_branch=0.46, x_soma=0.78,
-                     branch_ys=(0.78, 0.54, 0.30),
-                     leaf_offsets=(0.055, 0.0, -0.055),
-                     branch_colors=cols, show_synapses=False,
-                     leaf_r=0.014, branch_r=0.020, soma_r=0.030)
-    labels = [r"$\alpha_1$ hi", r"$\alpha_2$ mid", r"$\alpha_3$ lo"]
-    for (x, y), col, lab in zip(tree["branches"], cols, labels):
-        ax.text(x - 0.09, y + 0.060, lab,
-                fontsize=7.2, color=col, ha="center", fontweight="bold")
-    # Exact-errors source on the right (well inside the panel width)
-    ax.add_patch(Circle((0.97, 0.50), 0.020, fc=EXACT, ec="white", linewidth=0.45, zorder=10))
-    ax.text(1.00, 0.66, "exact\nerrors", ha="left", va="bottom",
-            fontsize=6.6, color=EXACT, fontweight="bold", linespacing=0.85)
-    for (x, y), col in zip(tree["branches"], cols):
-        arrow(ax, (0.95, 0.50), (x + 0.025, y),
-              color=EXACT, lw=1.0, ms=6, alpha=0.85, ls="--",
-              rad=0.18 if y > 0.5 else (-0.18 if y < 0.5 else 0))
-    # Rank-1 broadcast source on the left
-    ax.add_patch(Circle((0.05, 0.50), 0.020, fc=LOCAL, ec="white", linewidth=0.45, zorder=10))
-    ax.text(0.05, 0.30, "rank-1\nbroadcast", ha="center", va="top",
-            fontsize=6.4, color=LOCAL, fontweight="bold", linespacing=0.85)
-    for (x, y), col in zip(tree["branches"], cols):
-        arrow(ax, (0.075, 0.50), (x - 0.025, y),
-              color=LOCAL, lw=0.9, ms=6, alpha=0.62,
-              rad=-0.16 if y > 0.5 else (0.16 if y < 0.5 else 0))
-    ax.text(0.60, 0.05, "compressible gains $\\Rightarrow$ broadcast works",
-            ha="center", va="center", fontsize=6.0, color=MUTE, style="italic")
+    """E and I input pools feed N=4 dendritic units; per-unit somas project
+    to a task readout; delta_0 exits on the right as the broadcast source."""
+    ax.set_title("Network layer", fontsize=9.0, pad=4.0,
+                 fontweight="bold", loc="center")
+    ax.axis("off")
+    ax.set_xlim(0.0, 1.0)
+    ax.set_ylim(0.0, 1.0)
 
+    # E / I pools
+    _round_box(ax, (0.02, 0.62), 0.16, 0.11,
+               fc="#eef7ef", ec=EXC, text="E pool",
+               color=EXC, fontsize=6.4)
+    _round_box(ax, (0.02, 0.27), 0.16, 0.11,
+               fc="#fdecec", ec=INH, text="I pool",
+               color=INH, fontsize=6.4)
+
+    e_bus_x, i_bus_x = 0.245, 0.275
+    unit_x = 0.450
+    out_x = 0.620
+    out_bus_x = 0.730
+    readout_x0 = 0.795
+    readout_w = 0.115
+    delta_x = 0.945
+    ys = np.array([0.82, 0.62, 0.42, 0.22])
+    highlight_idx = 1  # second unit zooms into Panel A
+
+    # Pool -> bus arrows
+    ax.annotate("", xy=(e_bus_x, 0.675), xytext=(0.18, 0.675),
+                arrowprops=dict(arrowstyle="-|>", color=EXC, lw=0.95,
+                                shrinkA=1, shrinkB=1))
+    ax.annotate("", xy=(i_bus_x, 0.325), xytext=(0.18, 0.325),
+                arrowprops=dict(arrowstyle="-|>", color=INH, lw=0.95,
+                                shrinkA=1, shrinkB=1))
+    # Vertical buses
+    ax.plot([e_bus_x, e_bus_x], [0.20, 0.84],
+            color=EXC, lw=0.85, alpha=0.70, zorder=2)
+    ax.plot([i_bus_x, i_bus_x], [0.20, 0.84],
+            color=INH, lw=0.85, alpha=0.70, zorder=2)
+
+    # Per-unit fan-out and mini-tree
+    for k, y in enumerate(ys, start=1):
+        ax.annotate("", xy=(unit_x - 0.066, y + 0.018),
+                    xytext=(e_bus_x, y + 0.032),
+                    arrowprops=dict(arrowstyle="-|>", color=EXC, lw=0.75,
+                                    alpha=0.85, shrinkA=1, shrinkB=1))
+        ax.annotate("", xy=(unit_x - 0.066, y - 0.018),
+                    xytext=(i_bus_x, y - 0.032),
+                    arrowprops=dict(arrowstyle="-|>", color=INH, lw=0.75,
+                                    alpha=0.85, shrinkA=1, shrinkB=1))
+        is_highlight = (k - 1) == highlight_idx
+        _draw_mini_tree(ax, unit_x, y, scale=1.20, highlight=is_highlight)
+        # unit -> per-unit output -> readout bus
+        ax.annotate("", xy=(out_x - 0.030, y), xytext=(unit_x + 0.060, y),
+                    arrowprops=dict(arrowstyle="-|>", color=MUTE,
+                                    lw=0.8, shrinkA=1, shrinkB=1))
+        ax.add_patch(Circle((out_x, y), 0.030,
+                            fc="#f1f1f1", ec="#666", lw=0.8, zorder=6))
+        ax.text(out_x, y, rf"$y_{k}$",
+                ha="center", va="center", fontsize=5.6,
+                color="#444", zorder=7)
+        ax.plot([out_x + 0.030, out_bus_x], [y, y],
+                color=MUTE, lw=0.65, alpha=0.80, zorder=2)
+
+    ax.plot([out_bus_x, out_bus_x], [ys[-1], ys[0]],
+            color=MUTE, lw=0.75, alpha=0.85, zorder=2)
+
+    # Task readout block
+    _round_box(ax, (readout_x0, 0.38), readout_w, 0.24,
+               fc="#f6f6f6", ec="#666",
+               text="task\nreadout", color="#444",
+               fontsize=6.0, lw=0.85)
+    ax.annotate("", xy=(readout_x0, 0.50), xytext=(out_bus_x, 0.50),
+                arrowprops=dict(arrowstyle="-|>", color=MUTE,
+                                lw=0.85, alpha=0.9, shrinkA=1, shrinkB=1))
+
+    # delta_0 callout: short red arrow exits the readout, ends in a filled
+    # circle.  This is the broadcast source picked up by panel C.  The
+    # label is right-aligned at the dot so it cannot clip the panel edge.
+    ax.annotate("", xy=(delta_x - 0.014, 0.50),
+                xytext=(readout_x0 + readout_w, 0.50),
+                arrowprops=dict(arrowstyle="-|>", color=DELTA_COLOR,
+                                lw=1.1, shrinkA=1, shrinkB=1))
+    ax.add_patch(Circle((delta_x, 0.50), 0.018,
+                        fc=DELTA_COLOR, ec="white", lw=0.5, zorder=10))
+    ax.text(delta_x, 0.50 + 0.05, r"$\delta_0$",
+            ha="center", va="bottom",
+            fontsize=7.5, color=DELTA_COLOR, fontweight="bold", zorder=11)
+
+    ax.text(unit_x, 0.10, r"$N$ dendritic E/I units",
+            ha="center", va="center", fontsize=6.0, color="#555")
+
+
+# ---------------------------------------------------------------------------
+# Panel C: Credit assignment + broadcast modes
+# ---------------------------------------------------------------------------
 
 def panel_c(ax):
-    """Five broadcast modes in one row, each as a tiny labeled card.
-    The equation strip sits BELOW the cards in its own gutter."""
-    width = 2.30
-    height = 1.0
-    setup_panel(ax, width, height, title="Error broadcast modes",
-                title_x=0.02, title_size=9.0)
+    """Left half: small dendritic tree receives exact alpha_n delta_0
+    errors per branch and a uniform rank-1 broadcast bar.  Right half:
+    vertical stack of broadcast modes (Rank-1, Rank-K, Path, Oracle).
+    Bottom: local/non-local color-split equation strip."""
+    ax.set_title("Credit assignment and broadcast",
+                 fontsize=9.0, pad=4.0, fontweight="bold", loc="center")
+    ax.axis("off")
+    ax.set_xlim(0.0, 2.0)
+    ax.set_ylim(0.0, 1.0)
+
+    # =========  LEFT HALF: tree + broadcast vs. exact errors  =========
+    # Compact 3-branch tree, smaller than Panel A.  Tree elements live in
+    # y in [0.30, 0.92]; the takeaway sits at y=0.22 and the equation strip
+    # at y in [0.04, 0.16].
+    leaf_x = 0.12
+    mid_x = 0.34
+    soma_x = 0.58
+    branch_ys = np.array([0.82, 0.60, 0.38])  # 3 proximal branches
+    leaf_offsets = np.array([0.06, 0.0, -0.06])
+    leaf_r = 0.010
+    mid_r = 0.018
+    soma_r = 0.028
+    soma_y = 0.60
+
+    # Path-distinct colors for the 3 branches
+    branch_cols = ["#D95F4B", "#58A66E", "#4F79B8"]
+    path_alphas = [r"$\alpha_1$", r"$\alpha_2$", r"$\alpha_3$"]
+    path_vals = [r"$\!\approx 0.61$", r"$\!\approx 0.34$", r"$\!\approx 0.12$"]
+
+    # Tree edges (leaves -> mid -> soma)
+    for bi, by in enumerate(branch_ys):
+        for off in leaf_offsets:
+            ax.plot([leaf_x + leaf_r, mid_x - mid_r],
+                    [by + off, by + 0.25 * off],
+                    color=branch_cols[bi], lw=0.9, alpha=0.70,
+                    solid_capstyle="round", zorder=2)
+        ax.plot([mid_x + mid_r, soma_x - soma_r],
+                [by, soma_y + 0.20 * (by - soma_y)],
+                color=branch_cols[bi], lw=1.5, alpha=0.90,
+                solid_capstyle="round", zorder=2)
+
+    # Leaves and mid nodes
+    for bi, by in enumerate(branch_ys):
+        for off in leaf_offsets:
+            ax.add_patch(Circle((leaf_x, by + off), leaf_r,
+                                fc=LEAF_FACE, ec=LEAF_EDGE,
+                                lw=0.5, zorder=4))
+        ax.add_patch(Circle((mid_x, by), mid_r,
+                            fc=branch_cols[bi], ec=EDGE,
+                            lw=0.55, zorder=5))
+
+    # Soma
+    ax.add_patch(Circle((soma_x, soma_y), soma_r + 0.005,
+                        fc=GOLD_FACE, ec=GOLD_EDGE, lw=1.0, zorder=6))
+    ax.add_patch(Circle((soma_x, soma_y), soma_r,
+                        fc=SOMA_FACE, ec=SOMA_EDGE, lw=0.9, zorder=7))
+
+    # delta_0 source on the right of the tree
+    delta_x = 0.78
+    ax.add_patch(Circle((delta_x, soma_y), 0.018,
+                        fc=DELTA_COLOR, ec="white", lw=0.4, zorder=10))
+    ax.text(delta_x + 0.025, soma_y, r"$\delta_0$",
+            ha="left", va="center",
+            fontsize=7.0, color=DELTA_COLOR, fontweight="bold")
+    # Short feed-back arrow from delta_0 into the soma
+    ax.annotate("", xy=(soma_x + soma_r, soma_y),
+                xytext=(delta_x - 0.018, soma_y),
+                arrowprops=dict(arrowstyle="-|>", color=DELTA_COLOR,
+                                lw=1.0, shrinkA=0, shrinkB=0))
+
+    # alpha_n delta_0 dashed arrows from soma to each mid node, with
+    # path-distinct labels placed BEYOND the mid nodes so they don't
+    # collide near the soma.
+    for bi, by in enumerate(branch_ys):
+        rad = 0.18 if by > soma_y else (-0.18 if by < soma_y else 0)
+        arr = FancyArrowPatch(
+            (soma_x - 0.005, soma_y), (mid_x + mid_r + 0.005, by),
+            arrowstyle="-|>", mutation_scale=6.0,
+            linewidth=1.0, color=DELTA_COLOR,
+            linestyle=(0, (3.5, 2.2)), alpha=0.78,
+            shrinkA=2, shrinkB=2, zorder=5,
+            connectionstyle=f"arc3,rad={rad}",
+        )
+        ax.add_patch(arr)
+
+    # Place alpha labels above each mid node (top branch) and below (bottom
+    # branch); the middle branch label sits ABOVE the dashed arrow to clear
+    # the soma.  Coloured per-path so the eye matches the branch.
+    label_positions = [
+        (mid_x + 0.04, branch_ys[0] + 0.055),   # top branch label above
+        (mid_x - 0.05, branch_ys[1] + 0.055),   # middle branch label above-left
+        (mid_x + 0.04, branch_ys[2] - 0.055),   # bottom branch label below
+    ]
+    for bi, (lx, ly) in enumerate(label_positions):
+        ax.text(lx, ly,
+                f"{path_alphas[bi]}{path_vals[bi]}$\\,\\delta_0$",
+                ha="left", va="center",
+                fontsize=5.6, color=branch_cols[bi], fontweight="bold",
+                zorder=11)
+
+    # Uniform rank-1 broadcast: a vertical amber bar overlaid on the leaf
+    # column, semi-transparent so it reads as "shared field"
+    bar_x = leaf_x - 0.045
+    bar_top = branch_ys[0] + leaf_offsets[0] + 0.020
+    bar_bot = branch_ys[-1] - leaf_offsets[0] - 0.020
+    ax.add_patch(FancyBboxPatch(
+        (bar_x, bar_bot), 0.016, bar_top - bar_bot,
+        boxstyle="round,pad=0.0,rounding_size=0.008",
+        fc=BROADCAST_COLOR, ec="none", alpha=0.75, zorder=3,
+    ))
+    for by in branch_ys:
+        ax.annotate("", xy=(leaf_x - leaf_r - 0.003, by),
+                    xytext=(bar_x + 0.016, by),
+                    arrowprops=dict(arrowstyle="-|>",
+                                    color=BROADCAST_COLOR,
+                                    lw=0.9, alpha=0.85,
+                                    shrinkA=0, shrinkB=0))
+    ax.text(bar_x - 0.002, bar_top + 0.04,
+            "rank-1\n$e_n$ shared",
+            ha="center", va="bottom",
+            fontsize=5.6, color=BROADCAST_COLOR,
+            fontweight="bold", linespacing=0.85)
+
+    # Takeaway sentence between the tree and the equation strip
+    ax.text(0.45, 0.20,
+            r"rank-1 $\approx$ exact only when $\alpha_n$ is compressible",
+            ha="center", va="center", fontsize=5.8,
+            color=INK, style="italic")
+
+    # =========  RIGHT HALF: broadcast-modes vertical stack  =========
+    # Subtle vertical separator
+    ax.plot([1.00, 1.00], [0.20, 0.88], color="#dcdfe5", lw=0.9, zorder=1)
+    ax.text(1.45, 0.92, "Broadcast modes",
+            ha="center", va="center",
+            fontsize=7.0, color=INK, fontweight="bold")
 
     modes = [
-        ("Rank-1",     "shared",    COLORS["scalar"],   "local"),
-        ("Neuron",     "per soma",  COLORS["per_soma"], "neuron"),
-        ("Rank-K",     "$K$ chans", LOW_RANK,           "low-rank"),
-        ("Path",       "branches",  PATHWAY,            "path"),
-        ("Oracle",     r"$\alpha_n\delta_0$", ORACLE,   "oracle"),
+        ("Rank-1",   "shared scalar",          MODE_COLORS["rank1"],  "rank1"),
+        ("Rank-$K$", "$K$ random channels",    MODE_COLORS["rankk"],  "rankk"),
+        ("Path",     "branch-structured",      MODE_COLORS["path"],   "path"),
+        ("Oracle",   r"$\alpha_n\,\delta_0$",  MODE_COLORS["oracle"], "oracle"),
     ]
-    xs = np.linspace(0.25, 2.05, len(modes))
-    card_h = 0.50
-    card_w = 0.36
-    card_top = 0.86
-    for x, (name, note, col, kind) in zip(xs, modes):
-        rounded_box(ax, (x - card_w / 2, card_top - card_h),
-                    card_w, card_h,
-                    fc="white", ec="#D8DEE8", lw=0.7, radius=0.020)
-        ax.text(x, card_top - 0.05, name, ha="center", va="center",
-                fontsize=7.3, color=col, fontweight="bold")
-        ax.text(x, card_top - 0.10, note, ha="center", va="center",
-                fontsize=5.6, color=MUTE)
-        # mini-tree
-        soma = (x + 0.08, card_top - 0.30)
-        hubs = [(x - 0.05, card_top - 0.22), (x - 0.05, card_top - 0.38)]
-        leaves = [(x - 0.15, card_top - 0.18), (x - 0.15, card_top - 0.26),
-                  (x - 0.15, card_top - 0.34), (x - 0.15, card_top - 0.42)]
-        for hi, hub in enumerate(hubs):
-            ax.plot([hub[0], soma[0] - 0.03], [hub[1], soma[1]],
-                    color=DEND, lw=0.85, alpha=0.85)
-            for leaf in leaves[2 * hi:2 * hi + 2]:
-                ax.plot([leaf[0], hub[0]], [leaf[1], hub[1]],
-                        color=DEND, lw=0.65, alpha=0.78)
-        for leaf in leaves:
-            ax.add_patch(Circle(leaf, 0.010, fc=DEND, ec=EDGE, linewidth=0.3, zorder=4))
-        for hub in hubs:
-            ax.add_patch(Circle(hub, 0.012, fc=DEND, ec=EDGE, linewidth=0.3, zorder=5))
-        ax.add_patch(Circle(soma, 0.018, fc=SOMA, ec=EDGE, linewidth=0.4, zorder=6))
-        # Source(s) on the left
-        if kind == "local":
-            srcs = [(x - 0.16, card_top - 0.30)]
-        elif kind == "neuron":
-            srcs = [(x - 0.16, card_top - 0.22), (x - 0.16, card_top - 0.38)]
-        elif kind == "low-rank":
-            srcs = [(x - 0.16, card_top - 0.26), (x - 0.16, card_top - 0.34)]
+    row_x = 1.04
+    row_w = 0.92
+    row_h = 0.135
+    row_ys = np.linspace(0.80, 0.28, len(modes))
+    for (name, note, col, kind), ry in zip(modes, row_ys):
+        # Card (zorder=2 so text on top of it is visible)
+        _round_box(ax, (row_x, ry - row_h / 2), row_w, row_h,
+                   fc="white", ec="#cfd4dc", lw=0.7, fontsize=6.2,
+                   zorder=2)
+        # Color dot on the left
+        ax.add_patch(Circle((row_x + 0.05, ry), 0.022,
+                            fc=col, ec="white", lw=0.4, zorder=8))
+        # Mode name (explicit zorder above the card)
+        ax.text(row_x + 0.10, ry + 0.022, name,
+                ha="left", va="center",
+                fontsize=6.7, color=col, fontweight="bold", zorder=10)
+        ax.text(row_x + 0.10, ry - 0.030, note,
+                ha="left", va="center",
+                fontsize=5.6, color=MUTE, zorder=10)
+        # Mini channel icon on the right showing how many "channels" the
+        # broadcast carries.  All annotation arrows force zorder above the
+        # card so they are visible.
+        ic_x = row_x + row_w - 0.18
+        ic_w = 0.14
+        ap = dict(shrinkA=0, shrinkB=0)
+        if kind == "rank1":
+            ax.annotate("", xy=(ic_x + ic_w, ry), xytext=(ic_x, ry),
+                        arrowprops=dict(arrowstyle="-|>", color=col,
+                                        lw=1.2, **ap),
+                        zorder=10)
+        elif kind == "rankk":
+            for dy in (-0.030, 0.0, 0.030):
+                ax.annotate("", xy=(ic_x + ic_w, ry + dy),
+                            xytext=(ic_x, ry + dy),
+                            arrowprops=dict(arrowstyle="-|>", color=col,
+                                            lw=0.85, alpha=0.85, **ap),
+                            zorder=10)
         elif kind == "path":
-            srcs = [(x - 0.16, card_top - 0.22), (x - 0.16, card_top - 0.38)]
-        else:  # oracle
-            srcs = [(x - 0.16, card_top - 0.30)]
-        for si, src in enumerate(srcs):
-            ax.add_patch(Circle(src, 0.010, fc=col, ec="white", linewidth=0.35, zorder=9))
-            tgt = soma if kind in ("local", "oracle") else (
-                hubs[si] if kind in ("path", "neuron") else soma
-            )
-            arrow(ax, (src[0] + 0.010, src[1]), (tgt[0] - 0.018, tgt[1]),
-                  color=col, lw=0.75, ms=4.5, alpha=0.85,
-                  rad=0 if kind == "local" else (0.06 if si == 0 else -0.06))
-        if kind == "oracle":
-            for leaf in leaves:
-                arrow(ax, (soma[0] + 0.018, soma[1]), (leaf[0] + 0.010, leaf[1]),
-                      color=col, lw=0.6, ms=4.0, alpha=0.66, ls="--", rad=0.08)
+            # Branching arrow shape: one shaft splits into two heads
+            ax.plot([ic_x, ic_x + ic_w * 0.55], [ry, ry],
+                    color=col, lw=1.2, zorder=10)
+            for dy in (-0.030, 0.030):
+                ax.annotate("", xy=(ic_x + ic_w, ry + dy),
+                            xytext=(ic_x + ic_w * 0.55, ry),
+                            arrowprops=dict(arrowstyle="-|>", color=col,
+                                            lw=1.0, **ap),
+                            zorder=10)
+        else:  # oracle: dashed triple
+            for dy in (-0.030, 0.0, 0.030):
+                ax.annotate("", xy=(ic_x + ic_w, ry + dy),
+                            xytext=(ic_x, ry + dy),
+                            arrowprops=dict(arrowstyle="-|>", color=col,
+                                            lw=0.95, alpha=0.9,
+                                            linestyle="--", **ap),
+                            zorder=10)
 
-    # Equation strip BELOW the cards.
-    rounded_box(ax, (0.01, 0.04), width - 0.02, 0.16,
-                fc="#F8FAFC", ec="#CBD5E1", lw=0.6, radius=0.020)
-    ax.text(width / 2, 0.12,
-            r"$\partial L/\partial g_i = x_i\,R_n^{\rm tot}(E_i - V_n)\,\delta_n,\quad"
-            r"\Delta g_i \propto x_i\,R_n^{\rm tot}(E_i - V_n)\,e_n,\ e_n \approx \delta_n$",
-            ha="center", va="center", fontsize=6.7, color=INK)
+    # =========  BOTTOM EQUATION STRIP (full panel width)  =========
+    eq_h = 0.10
+    eq_y = 0.04
+    _round_box(ax, (0.02, eq_y), 1.96, eq_h,
+               fc="#F8FAFC", ec="#CBD5E1", lw=0.6, fontsize=6.0,
+               text=None, zorder=2)
+    # Local part (left) and broadcast/non-local part (right). We render the
+    # eligibility prefix in soma orange and the broadcast factor in BP red
+    # to color-code "local vs non-local" without using \underbrace.
+    eq_cy = eq_y + eq_h / 2
+    # Left equation: gradient factorization
+    ax.text(0.46, eq_cy, r"$\partial L/\partial g_i = $",
+            ha="right", va="center", fontsize=6.2, color=INK, zorder=10)
+    ax.text(0.46, eq_cy, r"$\,x_i\,R_n^{\mathrm{tot}}(E_i\!-\!V_n)\,$",
+            ha="left", va="center", fontsize=6.2,
+            color=COLORS["soma"], fontweight="bold", zorder=10)
+    ax.text(0.79, eq_cy, r"$\delta_n$",
+            ha="left", va="center", fontsize=6.2,
+            color=DELTA_COLOR, fontweight="bold", zorder=10)
+    # Right equation: local update with broadcast approximation
+    ax.text(1.14, eq_cy, r"$\Delta g_i \propto $",
+            ha="right", va="center", fontsize=6.2, color=INK, zorder=10)
+    ax.text(1.14, eq_cy, r"$\,x_i\,R_n^{\mathrm{tot}}(E_i\!-\!V_n)\,$",
+            ha="left", va="center", fontsize=6.2,
+            color=COLORS["soma"], fontweight="bold", zorder=10)
+    ax.text(1.49, eq_cy, r"$e_n,\ \ e_n\!\approx\!\delta_n$",
+            ha="left", va="center", fontsize=6.2,
+            color=DELTA_COLOR, fontweight="bold", zorder=10)
 
+
+# ---------------------------------------------------------------------------
+# Main
+# ---------------------------------------------------------------------------
 
 def main():
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    # Full-width NeurIPS row. The aspect is intentionally shallow so the
-    # caption can sit below the figure without pushing the paper over length.
-    fig = plt.figure(figsize=(6.85, 2.15))
+    fig = plt.figure(figsize=(7.0, 2.6))
     gs = fig.add_gridspec(
         1, 3,
-        width_ratios=[1.18, 1.28, 2.32],
-        wspace=0.24,
-        left=0.030, right=0.995, top=0.86, bottom=0.10,
+        width_ratios=[1.7, 2.3, 2.8],
+        wspace=0.18,
+        left=0.025, right=0.99, top=0.86, bottom=0.06,
     )
     ax_a = fig.add_subplot(gs[0, 0])
     ax_b = fig.add_subplot(gs[0, 1])
@@ -269,8 +600,11 @@ def main():
     panel_a(ax_a)
     panel_b(ax_b)
     panel_c(ax_c)
-    for ax, lbl, x_off in [(ax_a, "A", -0.08), (ax_b, "B", -0.06), (ax_c, "C", -0.035)]:
-        panel_label(ax, lbl, x=x_off, y=1.08, fontsize=11.0)
+
+    for ax, lbl, x_off, y_off in [(ax_a, "A", -0.06, 1.13),
+                                  (ax_b, "B", -0.04, 1.13),
+                                  (ax_c, "C", -0.03, 1.13)]:
+        panel_label(ax, lbl, x=x_off, y=y_off, fontsize=12.0)
 
     out = OUTPUT_DIR / "fig1_model_and_credit"
     fig.savefig(out.with_suffix(".pdf"), bbox_inches="tight", pad_inches=0.02)
