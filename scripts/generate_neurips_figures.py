@@ -19,7 +19,6 @@ only the figures that are referenced by `local_credit_assignment_body.tex`.
     fig_s4_verification.pdf        (1x3: MNIST seeds, CG seeds, HSIC ablation)
 
 Usage:
-    cd /n/holylabs/LABS/kempner_dev/Users/hsafaai/Code/dendritic-modeling
     PYTHONPATH=src:$PYTHONPATH python drafts/dendritic-local-learning/scripts/generate_neurips_figures.py
 """
 
@@ -66,13 +65,10 @@ CUE_RANK_STRUCTURE_CSV = os.path.join(
     "cue_routing_rank_structure_summary.csv",
 )
 
-BUNDLE = (
-    "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING"
-    "/analysis/publication_bundle_faircheck_plus_20260225"
-)
-LOCAL_MISMATCH_CSV = (
-    "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING"
-    "/analysis/local_mismatch_recheck_20260224_summary.csv"
+BUNDLE = os.environ.get("LOCALCA_LEGACY_BUNDLE", ANALYSIS_DIR)
+LOCAL_MISMATCH_CSV = os.environ.get(
+    "LOCALCA_LOCAL_MISMATCH_CSV",
+    os.path.join(ANALYSIS_DIR, "local_mismatch_recheck_20260224_summary.csv"),
 )
 FMNIST_SUMMARY_CSV = os.path.join(
     ANALYSIS_DIR, "fashion_mnist_competence_activation_corrected", "fashion_mnist_competence_summary.csv"
@@ -464,7 +460,7 @@ def figure_rule_feedback_design():
         )
     ax.set_xticks(x)
     ax.set_xticklabels(list(rule_data.keys()))
-    ax.set_ylabel("Top-10 test (%)")
+    ax.set_ylabel("Top-10 sweep test (%)")
     ax.set_ylim(30, 100)
     ax.set_title("Eligibility rule")
     ax.legend(
@@ -523,7 +519,7 @@ def figure_rule_feedback_design():
             ("K2", "low_rank", 2, False, "#F39C12"),
             ("K4", "low_rank", 4, False, "#E67E22"),
             ("K8", "low_rank", 8, False, "#D35400"),
-            ("Or.", "path_transport", 4, False, "#6C3483"),
+            ("[C]\nOracle", "path_transport", 4, False, "#6C3483"),
         ]
         vals, errs, labels, colors = [], [], [], []
         for label, mode, rank, path_prop, color in plot_rows:
@@ -542,10 +538,10 @@ def figure_rule_feedback_design():
         ax.bar(xpos, vals, 0.68, yerr=errs, color=colors, edgecolor="white",
                lw=0.75, capsize=2.5, error_kw={"lw": 1.15})
         ax.set_xticks(xpos)
-        ax.set_xticklabels(labels, fontsize=9.0)
+        ax.set_xticklabels(labels, fontsize=8.6, linespacing=0.9)
         ax.set_ylim(35, 90)
     ax.set_ylabel("Noise test (%)")
-    ax.set_title("Error propagation")
+    ax.set_title("Broadcast bandwidth")
 
     # ---- Panel D: routed feedback rank and structure ----
     ax = axes[3]
@@ -929,7 +925,7 @@ def figure2():
         ax.legend(fontsize=8.4, loc="upper right", frameon=False, handlelength=1.0)
     ax.set_xlabel("$N_I$ per branch")
     ax.set_ylabel("Shunt.-add. (pp)")
-    ax.set_title("Morphology regime")
+    ax.set_title("Morphology\nregime", linespacing=0.9)
 
     # ---- Panel D: Additive normalization control ----
     ax = axes[3]
@@ -1727,7 +1723,7 @@ def figure_s3():
             shutil.copy2(src_png, dst.replace(".pdf", ".png"))
         print(f"  Copied: {src} -> {dst}")
     else:
-        print(f"  WARNING: {src} not found, creating placeholder")
+        print(f"  WARNING: {src} not found, creating empty diagnostic panel")
         fig, ax = plt.subplots(figsize=(W, 3))
         ax.text(0.5, 0.5, "Sandbox figure - see fig_neurips_combined",
                 transform=ax.transAxes, ha="center", va="center", fontsize=12)
@@ -2842,7 +2838,10 @@ def main():
     apply_neurips_style()
     print(f"Data dir: {DATA_DIR}")
     print(f"Figures dir: {FIGURES_DIR}")
-    print(f"Bundle: {BUNDLE}")
+    if BUNDLE != ANALYSIS_DIR:
+        print(f"Legacy bundle: {BUNDLE}")
+    else:
+        print("Legacy bundle: local analysis/ fallback")
 
     print("Skipping Figure 1 here; use generate_figure1_schematic.py for the submission figure.")
     figure2()

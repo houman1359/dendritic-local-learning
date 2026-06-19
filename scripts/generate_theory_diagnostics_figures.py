@@ -328,8 +328,8 @@ def _plot_compartment_error_fidelity(ax: plt.Axes, summary: pd.DataFrame) -> Non
     ax.set_xticks([0, 5, 10, 20, 40])
     ax.set_ylim(-0.35, 1.05)
     ax.set_xlim(-1.5, 48.0)
-    ax.text(41.2, 0.22, "R1", color=COLORS["ink"], fontsize=8.5, fontweight="bold")
-    ax.text(41.2, 0.95, "oracle", color=COLORS["ink"], fontsize=8.5, fontweight="bold")
+    ax.text(39.2, 0.22, "R1", color=COLORS["ink"], fontsize=8.5, fontweight="bold")
+    ax.text(35.8, 0.95, "oracle", color=COLORS["ink"], fontsize=8.5, fontweight="bold")
 
 
 def _plot_mechanism_summary(ax: plt.Axes, summary: pd.DataFrame) -> None:
@@ -547,8 +547,8 @@ def _plot_oracle_learning(
     ax.set_xticks([0, 5, 10, 20, 40])
     ax.set_ylim(20, 101)
     ax.set_xlim(-1.5, 48.0)
-    ax.text(41.0, 86.0, "R1", color=COLORS["ink"], fontsize=8.4, fontweight="bold")
-    ax.text(41.0, 95.2, "oracle", color=COLORS["ink"], fontsize=8.4, fontweight="bold")
+    ax.text(39.0, 86.0, "R1", color=COLORS["ink"], fontsize=8.4, fontweight="bold")
+    ax.text(35.8, 95.2, "oracle", color=COLORS["ink"], fontsize=8.4, fontweight="bold")
 
 
 def _plot_causal_inhibition(ax: plt.Axes, causal: pd.DataFrame) -> None:
@@ -557,11 +557,11 @@ def _plot_causal_inhibition(ax: plt.Axes, causal: pd.DataFrame) -> None:
 
     order = ["original", "zero_i", "shuffle_i", "mean_clamp_i", "uniform_matched_i"]
     labels = {
-        "original": "L",
-        "zero_i": "0",
-        "shuffle_i": "sh",
-        "mean_clamp_i": "m",
-        "uniform_matched_i": "u",
+        "original": "Learned",
+        "zero_i": "Zero",
+        "shuffle_i": "Shuf.",
+        "mean_clamp_i": "Mean",
+        "uniform_matched_i": "Unif.",
     }
     colors = {
         "original": COLOR_SHUNTING,
@@ -615,12 +615,13 @@ def _plot_causal_inhibition(ax: plt.Axes, causal: pd.DataFrame) -> None:
         zorder=3,
     )
     centers = [gi * (len(order) * width + group_gap) for gi, _ in enumerate(dataset_order)]
-    ax.set_xticks(centers)
-    ax.set_xticklabels([f"{label}\nL 0 sh m u" for _, label in dataset_order], fontsize=7.2)
+    ax.set_xticks(xs_all)
+    ax.set_xticklabels([labels[intervention] for _dataset, _label in dataset_order for intervention in order],
+                       fontsize=5.9, rotation=32, ha="right")
     for center, (_dataset, label) in zip(centers, dataset_order):
         ax.text(
             center,
-            98.5,
+            99.0,
             label,
             ha="center",
             va="top",
@@ -628,6 +629,8 @@ def _plot_causal_inhibition(ax: plt.Axes, causal: pd.DataFrame) -> None:
             fontweight="bold",
             color=COLORS["ink"],
         )
+    if len(centers) == 2:
+        ax.axvline((centers[0] + centers[1]) / 2, color=COLORS["edge"], lw=0.7, alpha=0.85)
     ax.set_ylim(0, 102)
     ax.set_ylabel("Accuracy (%)")
     ax.set_title("Inhibition\nintervention", linespacing=0.9)
