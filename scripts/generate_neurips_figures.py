@@ -1115,10 +1115,23 @@ def figure3():
         )
 
     final_stats = _final_gradient_stats()
+    if norm_df.empty:
+        final_by_run = pd.DataFrame()
+    else:
+        final_by_run = pd.DataFrame(
+            [sub.sort_values("epoch").iloc[-1] for _cfg, sub in norm_df.groupby("config")]
+        )
+        if not final_by_run.empty:
+            final_by_run["scale_mismatch"] = np.abs(
+                np.log10(
+                    np.maximum(final_by_run["local_grad_norm"].to_numpy(dtype=float), 1e-12)
+                    / np.maximum(final_by_run["backprop_grad_norm"].to_numpy(dtype=float), 1e-12)
+                )
+            )
 
     # ---- Panel A: Exact factorization sanity ----
     ax = axes[0]
-    _panel(ax, "A")
+    _panel(ax, "A", x=-0.23, y=1.30)
     style_axis(ax, grid="y")
 
     theory_runs = pd.read_csv(THEORY_IE_RUNS_CSV)
@@ -1146,12 +1159,12 @@ def figure3():
     ax.set_ylabel("Reconstruction error")
     ax.set_yscale("log")
     ax.set_ylim(1e-10, 1e-4)
-    ax.set_title("Factorization")
+    ax.set_title("Exact\nreconstruction", fontsize=10.0)
     ax.grid(axis="y", alpha=0.24, linewidth=0.78)
 
     # ---- Panel B: Cosine similarity bars ----
     ax = axes[1]
-    _panel(ax, "B")
+    _panel(ax, "B", x=-0.23, y=1.30)
     style_axis(ax, grid="y")
 
     core_order = ["shunting", "additive"]
@@ -1200,13 +1213,30 @@ def figure3():
                 va=va,
                 fontsize=8.1,
             )
+        if not final_by_run.empty:
+            rng = np.random.default_rng(19)
+            for i, core in enumerate(core_order):
+                vals = final_by_run.loc[
+                    final_by_run["core_type"] == core, "weighted_cosine"
+                ].to_numpy(dtype=float)
+                jitter = rng.uniform(-0.055, 0.055, size=len(vals))
+                ax.scatter(
+                    np.full(len(vals), i, dtype=float) + jitter,
+                    vals,
+                    s=22,
+                    facecolor="white",
+                    edgecolor=core_colors[i],
+                    linewidth=0.85,
+                    zorder=5,
+                )
     else:
         ax.text(0.5, 0.5, "No seeded alignment data", transform=ax.transAxes,
                 ha="center", va="center", fontsize=8, color="red")
+    ax.set_title("Final cosine", fontsize=10.0)
 
     # ---- Panel C: Scale mismatch ----
     ax = axes[2]
-    _panel(ax, "C")
+    _panel(ax, "C", x=-0.23, y=1.30)
     style_axis(ax, grid="y")
     if not final_stats.empty:
         means, errs, ns = [], [], []
@@ -1248,13 +1278,30 @@ def figure3():
                 va="bottom",
                 fontsize=8.1,
             )
+        if not final_by_run.empty:
+            rng = np.random.default_rng(23)
+            for i, core in enumerate(core_order):
+                vals = final_by_run.loc[
+                    final_by_run["core_type"] == core, "scale_mismatch"
+                ].to_numpy(dtype=float)
+                jitter = rng.uniform(-0.055, 0.055, size=len(vals))
+                ax.scatter(
+                    np.full(len(vals), i, dtype=float) + jitter,
+                    vals,
+                    s=22,
+                    facecolor="white",
+                    edgecolor=core_colors[i],
+                    linewidth=0.85,
+                    zorder=5,
+                )
     else:
         ax.text(0.5, 0.5, "No seeded scale data", transform=ax.transAxes,
                 ha="center", va="center", fontsize=8, color="red")
+    ax.set_title("Scale mismatch", fontsize=10.0)
 
     # ---- Panel D: Alignment dynamics ----
     ax = axes[3]
-    _panel(ax, "D")
+    _panel(ax, "D", x=-0.23, y=1.30)
     style_axis(ax, grid="y")
     if not norm_df.empty:
         for core, core_label, color in [
@@ -1277,7 +1324,7 @@ def figure3():
         ax.axhline(0, color="black", lw=0.9, ls="--", alpha=0.70)
         ax.set_xlabel("Epoch")
         ax.set_ylabel("Weighted cosine")
-        ax.set_title("Alignment dynamics")
+        ax.set_title("Cosine trajectory", fontsize=10.0)
         ax.set_xlim(-2, 52)
         ax.set_ylim(-0.18, 0.36)
         ax.legend(fontsize=8.4, loc="upper right", frameon=False,
@@ -1286,7 +1333,7 @@ def figure3():
         ax.text(0.5, 0.5, "No trajectory data found", transform=ax.transAxes,
                 ha="center", va="center", fontsize=8, color="red")
 
-    fig.subplots_adjust(left=0.062, right=0.992, bottom=0.25, top=0.82, wspace=0.46)
+    fig.subplots_adjust(left=0.062, right=0.992, bottom=0.25, top=0.76, wspace=0.46)
     _save(fig, "fig3_gradient_fidelity")
     plt.close(fig)
 

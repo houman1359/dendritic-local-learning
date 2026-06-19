@@ -158,13 +158,14 @@ def _draw_gain_tree(
     ax.text(soma[0], soma[1], r"$\delta_0$", ha="center", va="center", fontsize=8.2)
     ax.text(
         x0 + 0.20,
-        0.94,
+        0.88,
         title,
         ha="center",
         va="center",
-        fontsize=8.1,
+        fontsize=7.2,
         color=color,
         fontweight="bold",
+        linespacing=0.86,
     )
 
 
@@ -215,7 +216,7 @@ def _plot_path_gain_map(ax: plt.Axes, summary: pd.DataFrame) -> None:
         norm=norm,
         cmap=cmap,
     )
-    ax.set_title("Path-gain\nfield", linespacing=0.9)
+    ax.set_title("Path gains", fontsize=9.2)
 
 
 def _plot_error_compressibility(ax: plt.Axes, rank_summary: pd.DataFrame) -> None:
@@ -737,7 +738,7 @@ def build_figure(
         1,
         5,
         figsize=(7.0, 2.65),
-        gridspec_kw={"wspace": 0.62, "width_ratios": [1.05, 0.85, 1.10, 1.05, 1.05]},
+        gridspec_kw={"wspace": 0.58, "width_ratios": [1.22, 0.82, 1.08, 1.00, 1.00]},
     )
 
     _plot_path_gain_map(axes[0], summary)

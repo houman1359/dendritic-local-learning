@@ -353,48 +353,38 @@ def panel_b(ax):
 # ---------------------------------------------------------------------------
 
 def panel_c(ax):
-    """Left half: small dendritic tree receives exact alpha_n delta_0
-    errors per branch and a uniform rank-1 broadcast bar.  Right half:
-    vertical stack of broadcast modes (Rank-1, Rank-K, Path, Oracle).
-    Bottom: local/non-local color-split equation strip."""
-    ax.set_title("Credit assignment and broadcast",
+    """Mechanism panel: path-specific compartment errors, low-bandwidth
+    broadcast estimators, and the exact-vs-LocalCA factorization."""
+    ax.set_title("Credit: eligibility $\\times$ error",
                  fontsize=9.0, pad=4.0, fontweight="bold", loc="center")
     ax.axis("off")
-    ax.set_xlim(0.0, 2.0)
+    ax.set_xlim(0.0, 1.0)
     ax.set_ylim(0.0, 1.0)
 
-    # =========  LEFT HALF: tree + broadcast vs. exact errors  =========
-    # Compact 3-branch tree, smaller than Panel A.  Tree elements live in
-    # y in [0.30, 0.92]; the takeaway sits at y=0.22 and the equation strip
-    # at y in [0.04, 0.16].
-    leaf_x = 0.12
-    mid_x = 0.34
-    soma_x = 0.58
-    branch_ys = np.array([0.82, 0.60, 0.38])  # 3 proximal branches
-    leaf_offsets = np.array([0.06, 0.0, -0.06])
-    leaf_r = 0.010
-    mid_r = 0.018
-    soma_r = 0.028
-    soma_y = 0.60
+    # =========  TOP LEFT: exact path errors vs. rank-1 broadcast  =========
+    leaf_x = 0.10
+    mid_x = 0.25
+    soma_x = 0.45
+    branch_ys = np.array([0.82, 0.68, 0.54])
+    leaf_offsets = np.array([0.035, -0.035])
+    leaf_r = 0.008
+    mid_r = 0.016
+    soma_r = 0.027
+    soma_y = 0.68
 
-    # Path-distinct colors for the 3 branches
     branch_cols = ["#D95F4B", "#58A66E", "#4F79B8"]
-    path_alphas = [r"$\alpha_1$", r"$\alpha_2$", r"$\alpha_3$"]
-    path_vals = [r"$\!\approx 0.61$", r"$\!\approx 0.34$", r"$\!\approx 0.12$"]
 
-    # Tree edges (leaves -> mid -> soma)
     for bi, by in enumerate(branch_ys):
         for off in leaf_offsets:
             ax.plot([leaf_x + leaf_r, mid_x - mid_r],
-                    [by + off, by + 0.25 * off],
+                    [by + off, by],
                     color=branch_cols[bi], lw=0.9, alpha=0.70,
                     solid_capstyle="round", zorder=2)
         ax.plot([mid_x + mid_r, soma_x - soma_r],
-                [by, soma_y + 0.20 * (by - soma_y)],
+                [by, soma_y + 0.15 * (by - soma_y)],
                 color=branch_cols[bi], lw=1.5, alpha=0.90,
                 solid_capstyle="round", zorder=2)
 
-    # Leaves and mid nodes
     for bi, by in enumerate(branch_ys):
         for off in leaf_offsets:
             ax.add_patch(Circle((leaf_x, by + off), leaf_r,
@@ -403,58 +393,40 @@ def panel_c(ax):
         ax.add_patch(Circle((mid_x, by), mid_r,
                             fc=branch_cols[bi], ec=EDGE,
                             lw=0.55, zorder=5))
-
-    # Soma
     ax.add_patch(Circle((soma_x, soma_y), soma_r + 0.005,
                         fc=GOLD_FACE, ec=GOLD_EDGE, lw=1.0, zorder=6))
     ax.add_patch(Circle((soma_x, soma_y), soma_r,
                         fc=SOMA_FACE, ec=SOMA_EDGE, lw=0.9, zorder=7))
 
-    # delta_0 source on the right of the tree
-    delta_x = 0.78
+    # Somatic error source.
+    delta_x = 0.55
     ax.add_patch(Circle((delta_x, soma_y), 0.018,
                         fc=DELTA_COLOR, ec="white", lw=0.4, zorder=10))
-    ax.text(delta_x + 0.025, soma_y, r"$\delta_0$",
+    ax.text(delta_x + 0.022, soma_y, r"$\delta_0$",
             ha="left", va="center",
-            fontsize=7.0, color=DELTA_COLOR, fontweight="bold")
-    # Short feed-back arrow from delta_0 into the soma
+            fontsize=6.2, color=DELTA_COLOR, fontweight="bold")
     ax.annotate("", xy=(soma_x + soma_r, soma_y),
                 xytext=(delta_x - 0.018, soma_y),
                 arrowprops=dict(arrowstyle="-|>", color=DELTA_COLOR,
                                 lw=1.0, shrinkA=0, shrinkB=0))
 
-    # alpha_n delta_0 dashed arrows from soma to each mid node, with
-    # path-distinct labels placed BEYOND the mid nodes so they don't
-    # collide near the soma.
+    # Exact compartment errors: dashed path-specific transport.
     for bi, by in enumerate(branch_ys):
         rad = 0.18 if by > soma_y else (-0.18 if by < soma_y else 0)
-        arr = FancyArrowPatch(
+        ax.add_patch(FancyArrowPatch(
             (soma_x - 0.005, soma_y), (mid_x + mid_r + 0.005, by),
             arrowstyle="-|>", mutation_scale=6.0,
             linewidth=1.0, color=DELTA_COLOR,
             linestyle=(0, (3.5, 2.2)), alpha=0.78,
             shrinkA=2, shrinkB=2, zorder=5,
             connectionstyle=f"arc3,rad={rad}",
-        )
-        ax.add_patch(arr)
+        ))
+        ax.text(mid_x + 0.032, by + (0.035 if bi == 0 else -0.038 if bi == 2 else 0.033),
+                rf"$\delta_{bi+1}=\alpha_{bi+1}\delta_0$",
+                ha="left", va="center", fontsize=4.8,
+                color=branch_cols[bi], fontweight="bold", zorder=11)
 
-    # Place alpha labels above each mid node (top branch) and below (bottom
-    # branch); the middle branch label sits ABOVE the dashed arrow to clear
-    # the soma.  Coloured per-path so the eye matches the branch.
-    label_positions = [
-        (mid_x + 0.04, branch_ys[0] + 0.055),   # top branch label above
-        (mid_x - 0.05, branch_ys[1] + 0.055),   # middle branch label above-left
-        (mid_x + 0.04, branch_ys[2] - 0.055),   # bottom branch label below
-    ]
-    for bi, (lx, ly) in enumerate(label_positions):
-        ax.text(lx, ly,
-                f"{path_alphas[bi]}{path_vals[bi]}$\\,\\delta_0$",
-                ha="left", va="center",
-                fontsize=5.6, color=branch_cols[bi], fontweight="bold",
-                zorder=11)
-
-    # Uniform rank-1 broadcast: a vertical amber bar overlaid on the leaf
-    # column, semi-transparent so it reads as "shared field"
+    # Uniform rank-1 broadcast: same field to every branch.
     bar_x = leaf_x - 0.045
     bar_top = branch_ys[0] + leaf_offsets[0] + 0.020
     bar_bot = branch_ys[-1] - leaf_offsets[0] - 0.020
@@ -470,115 +442,106 @@ def panel_c(ax):
                                     color=BROADCAST_COLOR,
                                     lw=0.9, alpha=0.85,
                                     shrinkA=0, shrinkB=0))
-    ax.text(bar_x - 0.002, bar_top + 0.04,
-            "rank-1\n$e_n$ shared",
+    ax.text(bar_x - 0.004, bar_top - 0.025,
+            "shared\n$e_n$",
             ha="center", va="bottom",
-            fontsize=5.6, color=BROADCAST_COLOR,
+            fontsize=5.2, color=BROADCAST_COLOR,
             fontweight="bold", linespacing=0.85)
 
-    # Takeaway sentence between the tree and the equation strip
-    ax.text(0.45, 0.20,
-            r"rank-1 $\approx$ exact only when $\alpha_n$ is compressible",
-            ha="center", va="center", fontsize=5.8,
-            color=INK, style="italic")
+    ax.text(0.36, 0.93, "path-specific exact errors",
+            ha="center", va="center", fontsize=5.6,
+            color=DELTA_COLOR, fontweight="bold")
+    ax.text(0.27, 0.455, "rank-1 keeps the same eligibility but compresses the error field",
+            ha="center", va="center", fontsize=5.1,
+            color=MUTE)
 
-    # =========  RIGHT HALF: broadcast-modes vertical stack  =========
-    # Subtle vertical separator
-    ax.plot([1.00, 1.00], [0.20, 0.88], color="#dcdfe5", lw=0.9, zorder=1)
-    ax.text(1.45, 0.92, "Broadcast modes",
+    # =========  TOP RIGHT: broadcast-mode cards  =========
+    ax.text(0.78, 0.93, "broadcast estimator",
             ha="center", va="center",
-            fontsize=7.0, color=INK, fontweight="bold")
+            fontsize=6.4, color=INK, fontweight="bold")
 
     modes = [
-        ("Rank-1",   "shared scalar",          MODE_COLORS["rank1"],  "rank1"),
-        ("Rank-$K$", "$K$ random channels",    MODE_COLORS["rankk"],  "rankk"),
-        ("Path",     "branch-structured",      MODE_COLORS["path"],   "path"),
-        ("Oracle",   r"$\alpha_n\,\delta_0$",  MODE_COLORS["oracle"], "oracle"),
+        ("Rank-1",   "shared scalar",       MODE_COLORS["rank1"],  "rank1"),
+        ("Rank-$K$", "$K$ channels",         MODE_COLORS["rankk"],  "rankk"),
+        ("Path",     "branch roles",         MODE_COLORS["path"],   "path"),
+        ("[C] Oracle", r"$\tilde{\alpha}_n\delta_0$", MODE_COLORS["oracle"], "oracle"),
     ]
-    row_x = 1.04
-    row_w = 0.92
-    row_h = 0.135
-    row_ys = np.linspace(0.80, 0.28, len(modes))
+    row_x = 0.62
+    row_w = 0.34
+    row_h = 0.090
+    row_ys = np.linspace(0.84, 0.54, len(modes))
     for (name, note, col, kind), ry in zip(modes, row_ys):
-        # Card (zorder=2 so text on top of it is visible)
         _round_box(ax, (row_x, ry - row_h / 2), row_w, row_h,
-                   fc="white", ec="#cfd4dc", lw=0.7, fontsize=6.2,
+                   fc="white", ec="#cfd4dc", lw=0.7, fontsize=5.6,
                    zorder=2)
-        # Color dot on the left
-        ax.add_patch(Circle((row_x + 0.05, ry), 0.022,
+        ax.add_patch(Circle((row_x + 0.030, ry), 0.014,
                             fc=col, ec="white", lw=0.4, zorder=8))
-        # Mode name (explicit zorder above the card)
-        ax.text(row_x + 0.10, ry + 0.022, name,
+        ax.text(row_x + 0.055, ry + 0.015, name,
                 ha="left", va="center",
-                fontsize=6.7, color=col, fontweight="bold", zorder=10)
-        ax.text(row_x + 0.10, ry - 0.030, note,
+                fontsize=5.6, color=col, fontweight="bold", zorder=10)
+        ax.text(row_x + 0.055, ry - 0.019, note,
                 ha="left", va="center",
-                fontsize=5.6, color=MUTE, zorder=10)
-        # Mini channel icon on the right showing how many "channels" the
-        # broadcast carries.  All annotation arrows force zorder above the
-        # card so they are visible.
-        ic_x = row_x + row_w - 0.18
-        ic_w = 0.14
+                fontsize=4.7, color=MUTE, zorder=10)
+        ic_x = row_x + row_w - 0.105
+        ic_w = 0.075
         ap = dict(shrinkA=0, shrinkB=0)
         if kind == "rank1":
             ax.annotate("", xy=(ic_x + ic_w, ry), xytext=(ic_x, ry),
                         arrowprops=dict(arrowstyle="-|>", color=col,
-                                        lw=1.2, **ap),
+                                        lw=1.0, **ap),
                         zorder=10)
         elif kind == "rankk":
-            for dy in (-0.030, 0.0, 0.030):
+            for dy in (-0.018, 0.0, 0.018):
                 ax.annotate("", xy=(ic_x + ic_w, ry + dy),
                             xytext=(ic_x, ry + dy),
                             arrowprops=dict(arrowstyle="-|>", color=col,
-                                            lw=0.85, alpha=0.85, **ap),
+                                            lw=0.75, alpha=0.85, **ap),
                             zorder=10)
         elif kind == "path":
-            # Branching arrow shape: one shaft splits into two heads
             ax.plot([ic_x, ic_x + ic_w * 0.55], [ry, ry],
-                    color=col, lw=1.2, zorder=10)
-            for dy in (-0.030, 0.030):
+                    color=col, lw=1.0, zorder=10)
+            for dy in (-0.018, 0.018):
                 ax.annotate("", xy=(ic_x + ic_w, ry + dy),
                             xytext=(ic_x + ic_w * 0.55, ry),
                             arrowprops=dict(arrowstyle="-|>", color=col,
-                                            lw=1.0, **ap),
+                                            lw=0.85, **ap),
                             zorder=10)
-        else:  # oracle: dashed triple
-            for dy in (-0.030, 0.0, 0.030):
+        else:
+            for dy in (-0.018, 0.0, 0.018):
                 ax.annotate("", xy=(ic_x + ic_w, ry + dy),
                             xytext=(ic_x, ry + dy),
                             arrowprops=dict(arrowstyle="-|>", color=col,
-                                            lw=0.95, alpha=0.9,
+                                            lw=0.75, alpha=0.9,
                                             linestyle="--", **ap),
                             zorder=10)
 
-    # =========  BOTTOM EQUATION STRIP (full panel width)  =========
-    eq_h = 0.10
-    eq_y = 0.04
-    _round_box(ax, (0.02, eq_y), 1.96, eq_h,
-               fc="#F8FAFC", ec="#CBD5E1", lw=0.6, fontsize=6.0,
-               text=None, zorder=2)
-    # Local part (left) and broadcast/non-local part (right). We render the
-    # eligibility prefix in soma orange and the broadcast factor in BP red
-    # to color-code "local vs non-local" without using \underbrace.
-    eq_cy = eq_y + eq_h / 2
-    # Left equation: gradient factorization
-    ax.text(0.46, eq_cy, r"$\partial L/\partial g_i = $",
-            ha="right", va="center", fontsize=6.2, color=INK, zorder=10)
-    ax.text(0.46, eq_cy, r"$\,x_i\,R_n^{\mathrm{tot}}(E_i\!-\!V_n)\,$",
-            ha="left", va="center", fontsize=6.2,
-            color=COLORS["soma"], fontweight="bold", zorder=10)
-    ax.text(0.79, eq_cy, r"$\delta_n$",
-            ha="left", va="center", fontsize=6.2,
-            color=DELTA_COLOR, fontweight="bold", zorder=10)
-    # Right equation: local update with broadcast approximation
-    ax.text(1.14, eq_cy, r"$\Delta g_i \propto $",
-            ha="right", va="center", fontsize=6.2, color=INK, zorder=10)
-    ax.text(1.14, eq_cy, r"$\,x_i\,R_n^{\mathrm{tot}}(E_i\!-\!V_n)\,$",
-            ha="left", va="center", fontsize=6.2,
-            color=COLORS["soma"], fontweight="bold", zorder=10)
-    ax.text(1.49, eq_cy, r"$e_n,\ \ e_n\!\approx\!\delta_n$",
-            ha="left", va="center", fontsize=6.2,
-            color=DELTA_COLOR, fontweight="bold", zorder=10)
+    # =========  BOTTOM: two-row factorization band  =========
+    def equation_row(y, label, rhs, rhs_color):
+        _round_box(ax, (0.035, y), 0.93, 0.125,
+                   fc="#F8FAFC", ec="#CBD5E1", lw=0.65,
+                   text=None, zorder=2)
+        ax.text(0.055, y + 0.062, label,
+                ha="left", va="center", fontsize=4.9,
+                color=INK, fontweight="bold", zorder=10,
+                linespacing=0.95)
+        _round_box(ax, (0.265, y + 0.025), 0.285, 0.075,
+                   fc="#FFF7ED", ec="#FDBA74", lw=0.65,
+                   text=r"$x_iR_n^{\mathrm{tot}}(E_i\!-\!V_n)$",
+                   color=COLORS["soma"], fontsize=5.1,
+                   fontweight="bold", zorder=5)
+        ax.text(0.570, y + 0.062, r"$\times$",
+                ha="center", va="center", fontsize=6.0,
+                color=INK, zorder=10)
+        _round_box(ax, (0.605, y + 0.025), 0.250, 0.075,
+                   fc="#FEF2F2" if rhs_color == DELTA_COLOR else "#FFFBEB",
+                   ec=rhs_color, lw=0.65,
+                   text=rhs, color=rhs_color, fontsize=5.1,
+                   fontweight="bold", zorder=5)
+
+    equation_row(0.235, "Exact\n$\\partial L/\\partial g_i=$",
+                 r"$\delta_n=\tilde{\alpha}_n\delta_0$", DELTA_COLOR)
+    equation_row(0.075, "LocalCA\n$\\Delta g_i\\propto$",
+                 r"$e_n\approx\delta_n$", BROADCAST_COLOR)
 
 
 # ---------------------------------------------------------------------------
@@ -590,8 +553,8 @@ def main():
     fig = plt.figure(figsize=(7.0, 2.6))
     gs = fig.add_gridspec(
         1, 3,
-        width_ratios=[1.7, 2.3, 2.8],
-        wspace=0.18,
+        width_ratios=[1.50, 2.05, 3.25],
+        wspace=0.14,
         left=0.025, right=0.99, top=0.86, bottom=0.06,
     )
     ax_a = fig.add_subplot(gs[0, 0])
