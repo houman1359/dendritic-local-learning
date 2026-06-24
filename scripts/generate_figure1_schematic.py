@@ -451,10 +451,6 @@ def panel_c(ax):
     ax.text(0.36, 0.93, "path-specific exact errors",
             ha="center", va="center", fontsize=5.6,
             color=DELTA_COLOR, fontweight="bold")
-    ax.text(0.27, 0.455, "rank-1 keeps the same eligibility but compresses the error field",
-            ha="center", va="center", fontsize=5.1,
-            color=MUTE)
-
     # =========  TOP RIGHT: broadcast-mode cards  =========
     ax.text(0.78, 0.93, "broadcast estimator",
             ha="center", va="center",
@@ -516,26 +512,36 @@ def panel_c(ax):
                             zorder=10)
 
     # =========  BOTTOM: two-row factorization band  =========
+    # Name the two factors once, above the boxes, so both rules read as
+    # gradient = local eligibility x compartment error; only the second
+    # factor (exact delta_n vs broadcast e_n) changes between the rows.
+    ax.text(0.408, 0.400, "local eligibility (shared)",
+            ha="center", va="center", fontsize=5.6,
+            color=COLORS["soma"], fontweight="bold")
+    ax.text(0.730, 0.400, "compartment error",
+            ha="center", va="center", fontsize=5.6,
+            color=INK, fontweight="bold")
+
     def equation_row(y, label, rhs, rhs_color):
         _round_box(ax, (0.035, y), 0.93, 0.125,
                    fc="#F8FAFC", ec="#CBD5E1", lw=0.65,
                    text=None, zorder=2)
         ax.text(0.055, y + 0.062, label,
-                ha="left", va="center", fontsize=4.9,
+                ha="left", va="center", fontsize=5.3,
                 color=INK, fontweight="bold", zorder=10,
                 linespacing=0.95)
         _round_box(ax, (0.265, y + 0.025), 0.285, 0.075,
                    fc="#FFF7ED", ec="#FDBA74", lw=0.65,
                    text=r"$x_iR_n^{\mathrm{tot}}(E_i\!-\!V_n)$",
-                   color=COLORS["soma"], fontsize=5.1,
+                   color=COLORS["soma"], fontsize=5.5,
                    fontweight="bold", zorder=5)
         ax.text(0.570, y + 0.062, r"$\times$",
-                ha="center", va="center", fontsize=6.0,
+                ha="center", va="center", fontsize=6.6,
                 color=INK, zorder=10)
         _round_box(ax, (0.605, y + 0.025), 0.250, 0.075,
                    fc="#FEF2F2" if rhs_color == DELTA_COLOR else "#FFFBEB",
                    ec=rhs_color, lw=0.65,
-                   text=rhs, color=rhs_color, fontsize=5.1,
+                   text=rhs, color=rhs_color, fontsize=5.5,
                    fontweight="bold", zorder=5)
 
     equation_row(0.235, "Exact\n$\\partial L/\\partial g_i=$",
