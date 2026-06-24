@@ -34,7 +34,7 @@ The current main-paper figures are:
 - `figures/fig1_model_and_credit.pdf`: model, path gains, and broadcast taxonomy.
 - `figures/fig3_gradient_fidelity.pdf`: exact factorization and gradient-fidelity diagnostics.
 - `figures/fig5_mechanistic_evidence.pdf`: path-gain/error-field compressibility, inhibition intervention, broadcast fidelity, and oracle learning.
-- `figures/fig2_competence_regime.pdf`: capacity-calibrated competence, inhibition regime, morphology summary, and 3F/4F/5F ablation.
+- `figures/fig2_competence_regime.pdf`: capacity-calibrated competence, inhibition dose-response, morphology regime, and the additive-normalization stress diagnostic.
 
 Key appendix figures include the local-rule and feedback-design controls, CIFAR-10 stress tests, morphology maps, cue-routing diagnostics, soma-on extensions, activation audits, and weight-statistics analyses.
 
