@@ -216,6 +216,19 @@ def _plot_path_gain_map(ax: plt.Axes, summary: pd.DataFrame) -> None:
         norm=norm,
         cmap=cmap,
     )
+    # Color-scale legend so the branch colors read as path-gain magnitude.
+    cbar = ax.inset_axes([0.18, 0.05, 0.64, 0.045])
+    cbar.imshow(np.linspace(0, 1, 100).reshape(1, -1), aspect="auto", cmap=cmap)
+    cbar.set_xticks([])
+    cbar.set_yticks([])
+    for s in cbar.spines.values():
+        s.set_visible(False)
+    cbar.text(-0.05, 0.5, "low", transform=cbar.transAxes, ha="right",
+              va="center", fontsize=6.0, color=COLORS["mute"])
+    cbar.text(1.05, 0.5, "high", transform=cbar.transAxes, ha="left",
+              va="center", fontsize=6.0, color=COLORS["mute"])
+    ax.text(0.5, 0.135, "path gain", ha="center", va="bottom",
+            fontsize=6.4, color=COLORS["ink"])
     ax.set_title("Path gains", fontsize=9.2)
 
 
@@ -250,7 +263,7 @@ def _plot_error_compressibility(ax: plt.Axes, rank_summary: pd.DataFrame) -> Non
         color=colors,
         edgecolor="white",
         linewidth=0.75,
-        width=0.58,
+        width=0.66,
         capsize=2.4,
         error_kw={"lw": 1.1},
     )
@@ -259,24 +272,17 @@ def _plot_error_compressibility(ax: plt.Axes, rank_summary: pd.DataFrame) -> Non
     ax.set_ylabel("Residual")
     ax.set_ylim(0, 1.02)
     ax.set_title("Rank-1\nresidual", linespacing=0.9)
-    for rect, mean, prank, _prank_std in zip(bars, means, pranks, prank_stds):
+    for rect, prank in zip(bars, pranks):
         ax.text(
             rect.get_x() + rect.get_width() / 2,
-            mean + 0.055,
-            f"{mean:.2f}",
-            ha="center",
-            va="bottom",
-            fontsize=8.4,
-        )
-        ax.text(
-            rect.get_x() + rect.get_width() / 2,
-            0.08,
+            0.06,
             f"rank\n{prank:.1f}",
             ha="center",
             va="bottom",
-            fontsize=7.0,
+            fontsize=5.8,
             color="white",
             fontweight="bold",
+            linespacing=0.9,
         )
 
 
@@ -327,9 +333,11 @@ def _plot_compartment_error_fidelity(ax: plt.Axes, summary: pd.DataFrame) -> Non
     ax.set_title("Broadcast\nfidelity", linespacing=0.9)
     ax.set_xticks([0, 5, 10, 20, 40])
     ax.set_ylim(-0.35, 1.05)
-    ax.set_xlim(-1.5, 48.0)
-    ax.text(39.2, 0.22, "R1", color=COLORS["ink"], fontsize=8.5, fontweight="bold")
-    ax.text(35.8, 0.95, "oracle", color=COLORS["ink"], fontsize=8.5, fontweight="bold")
+    ax.set_xlim(-1.5, 52.5)
+    ax.text(42.0, 0.18, "R1", color=COLORS["ink"], fontsize=7.8,
+            fontweight="bold", ha="left", va="center")
+    ax.text(42.0, 0.97, "oracle", color=COLORS["ink"], fontsize=7.8,
+            fontweight="bold", ha="left", va="center")
 
 
 def _plot_mechanism_summary(ax: plt.Axes, summary: pd.DataFrame) -> None:
@@ -546,9 +554,11 @@ def _plot_oracle_learning(
     ax.set_title("Oracle\nlearning", linespacing=0.9)
     ax.set_xticks([0, 5, 10, 20, 40])
     ax.set_ylim(20, 101)
-    ax.set_xlim(-1.5, 48.0)
-    ax.text(39.0, 86.0, "R1", color=COLORS["ink"], fontsize=8.4, fontweight="bold")
-    ax.text(35.8, 95.2, "oracle", color=COLORS["ink"], fontsize=8.4, fontweight="bold")
+    ax.set_xlim(-1.5, 52.5)
+    ax.text(42.0, 84.0, "R1", color=COLORS["ink"], fontsize=7.8,
+            fontweight="bold", ha="left", va="center")
+    ax.text(42.0, 95.0, "oracle", color=COLORS["ink"], fontsize=7.8,
+            fontweight="bold", ha="left", va="center")
 
 
 def _plot_causal_inhibition(ax: plt.Axes, causal: pd.DataFrame) -> None:
@@ -571,8 +581,8 @@ def _plot_causal_inhibition(ax: plt.Axes, causal: pd.DataFrame) -> None:
         "uniform_matched_i": COLOR_TRANSPORT,
     }
     dataset_order = [("mnist", "MNIST"), ("noise_resilience", "Noise")]
-    group_gap = 0.75
-    width = 0.16
+    group_gap = 0.70
+    width = 0.205
     xs_all = []
     means_all = []
     stds_all = []
@@ -591,14 +601,14 @@ def _plot_causal_inhibition(ax: plt.Axes, causal: pd.DataFrame) -> None:
 
             vals = 100.0 * sub[sub["intervention"] == intervention]["accuracy"].to_numpy(dtype=float)
             if vals.size:
-                jitter = np.linspace(-0.035, 0.035, vals.size)
+                jitter = np.linspace(-0.062, 0.062, vals.size)
                 ax.scatter(
                     np.full(vals.size, x) + jitter,
                     vals,
-                    s=9,
+                    s=4.5,
                     color="white",
                     edgecolor=COLORS["ink"],
-                    linewidth=0.35,
+                    linewidth=0.3,
                     zorder=5,
                 )
 
@@ -615,25 +625,26 @@ def _plot_causal_inhibition(ax: plt.Axes, causal: pd.DataFrame) -> None:
         zorder=3,
     )
     centers = [gi * (len(order) * width + group_gap) for gi, _ in enumerate(dataset_order)]
-    ax.set_xticks(xs_all)
-    ax.set_xticklabels([labels[intervention] for _dataset, _label in dataset_order for intervention in order],
-                       fontsize=5.9, rotation=32, ha="right")
-    for center, (_dataset, label) in zip(centers, dataset_order):
-        ax.text(
-            center,
-            99.0,
-            label,
-            ha="center",
-            va="top",
-            fontsize=8.4,
-            fontweight="bold",
-            color=COLORS["ink"],
-        )
+    ax.set_xticks(centers)
+    ax.set_xticklabels([label for _dataset, label in dataset_order], fontsize=8.2)
     if len(centers) == 2:
         ax.axvline((centers[0] + centers[1]) / 2, color=COLORS["edge"], lw=0.7, alpha=0.85)
-    ax.set_ylim(0, 102)
+    ax.set_ylim(0, 118)
     ax.set_ylabel("Accuracy (%)")
     ax.set_title("Inhibition\nintervention", linespacing=0.9)
+    legend_handles = [mpatches.Patch(color=colors[k], label=labels[k]) for k in order]
+    ax.legend(
+        handles=legend_handles,
+        fontsize=5.7,
+        loc="upper center",
+        ncol=3,
+        handlelength=0.85,
+        handletextpad=0.3,
+        columnspacing=0.6,
+        borderpad=0.2,
+        labelspacing=0.25,
+        frameon=False,
+    )
 
 
 def _plot_inhibitory_path_probe(ax: plt.Axes, input_mode: pd.DataFrame) -> None:
@@ -741,7 +752,7 @@ def build_figure(
         1,
         5,
         figsize=(7.0, 2.65),
-        gridspec_kw={"wspace": 0.58, "width_ratios": [1.22, 0.82, 1.08, 1.00, 1.00]},
+        gridspec_kw={"wspace": 0.62, "width_ratios": [1.18, 0.80, 1.52, 0.96, 0.96]},
     )
 
     _plot_path_gain_map(axes[0], summary)

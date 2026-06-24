@@ -276,9 +276,9 @@ def panel_b(ax):
     unit_x = 0.450
     out_x = 0.620
     out_bus_x = 0.730
-    readout_x0 = 0.770
-    readout_w = 0.150
-    delta_x = 0.955
+    readout_x0 = 0.745
+    readout_w = 0.140
+    delta_x = 0.952
     ys = np.array([0.82, 0.62, 0.42, 0.22])
     highlight_idx = 1  # second unit zooms into Panel A
 
@@ -326,7 +326,7 @@ def panel_b(ax):
     _round_box(ax, (readout_x0, 0.38), readout_w, 0.24,
                fc="#f6f6f6", ec="#666",
                text="task\nreadout", color="#444",
-               fontsize=5.2, lw=0.85)
+               fontsize=5.0, lw=0.85)
     ax.annotate("", xy=(readout_x0, 0.50), xytext=(out_bus_x, 0.50),
                 arrowprops=dict(arrowstyle="-|>", color=MUTE,
                                 lw=0.85, alpha=0.9, shrinkA=1, shrinkB=1))

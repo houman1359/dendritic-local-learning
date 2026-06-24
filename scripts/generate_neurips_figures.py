@@ -869,15 +869,23 @@ def figure2():
     ax.set_xlabel("$N_I$ per branch")
     ax.set_ylabel("Test accuracy (%)")
     ax.set_title("Inhibition sweep")
+    from matplotlib.lines import Line2D
+    leg_handles = [
+        Line2D([], [], color=COLOR_SHUNTING, lw=2.1, marker="o", markersize=4.5, label="Shunting"),
+        Line2D([], [], color=COLOR_ADDITIVE, lw=2.1, marker="s", markersize=4.5, label="Additive"),
+        Line2D([], [], color="0.45", lw=2.1, ls="-", label="MNIST"),
+        Line2D([], [], color="0.45", lw=2.1, ls="--", label="noise"),
+    ]
     ax.legend(
-        fontsize=8.4,
+        handles=leg_handles,
+        fontsize=6.8,
         loc="lower left",
         ncol=2,
-        handlelength=1.0,
-        handletextpad=0.25,
-        columnspacing=0.35,
-        borderpad=0.18,
-        labelspacing=0.22,
+        handlelength=1.7,
+        handletextpad=0.4,
+        columnspacing=0.7,
+        borderpad=0.25,
+        labelspacing=0.3,
         frameon=True,
         framealpha=0.86,
         facecolor="white",
@@ -953,12 +961,24 @@ def figure2():
                         color,
                     )
                 )
+        # Shunting reference as its own bar (was previously a dashed line).
+        if low_bandwidth is not None:
+            ref = low_bandwidth[low_bandwidth["broadcast_bandwidth"] == "full"]
+            if len(ref):
+                conditions.append(
+                    (
+                        "Shunt.",
+                        float(ref["test_accuracy"].mean()) * 100.0,
+                        float(ref["test_accuracy"].std()) * 100.0,
+                        COLOR_SHUNTING,
+                    )
+                )
         xpos = np.arange(len(conditions))
         for i, (label, mean, std, color) in enumerate(conditions):
             ax.bar(
                 i,
                 mean,
-                0.56,
+                0.62,
                 yerr=std,
                 color=color,
                 edgecolor="white",
@@ -967,24 +987,9 @@ def figure2():
                 error_kw={"lw": 1.15},
             )
             ax.text(i, mean + std + 1.0, f"{mean:.1f}", ha="center",
-                    va="bottom", fontsize=8.1)
-        if low_bandwidth is not None:
-            ref = low_bandwidth[low_bandwidth["broadcast_bandwidth"] == "full"]
-            if len(ref):
-                shunt_ref = float(ref["test_accuracy"].mean()) * 100.0
-                ax.axhline(shunt_ref, color=COLOR_SHUNTING, lw=2.0, ls="--", alpha=0.85)
-                ax.text(
-                    len(conditions) - 0.15,
-                    shunt_ref + 1.5,
-                    f"Shunt. {shunt_ref:.1f}",
-                    color=COLOR_SHUNTING,
-                    fontsize=8.0,
-                    ha="right",
-                    va="bottom",
-                    fontweight="bold",
-                )
+                    va="bottom", fontsize=7.6)
         ax.set_xticks(xpos)
-        ax.set_xticklabels([c[0] for c in conditions], fontsize=9.2)
+        ax.set_xticklabels([c[0] for c in conditions], fontsize=8.4)
         ax.set_ylim(30, 72)
     else:
         ax.text(0.5, 0.5, "No normalization data", transform=ax.transAxes,
