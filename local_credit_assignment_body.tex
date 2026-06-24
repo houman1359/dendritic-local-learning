@@ -307,6 +307,13 @@ Main mechanistic, oracle, and competence results use $5$ seeds per condition unl
 
 \noindent\emph{From exact factorization to credit-signal fidelity.}
 
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{fig5_mechanistic_evidence.pdf}
+\caption{\textbf{Mechanistic chain from path gains to learning.}
+(A) Path-gain fields at matched inhibition. (B) Exact-error compressibility on MNIST. (C) Post-training inhibitory-conductance interventions (learned, zero, shuffled, mean-clamped, or uniform matched inhibition). (D) Compartment-error fidelity on noise resilience; dashed lines show the \textbf{[C]} transported-error oracle. (E) Transported-error learning where rank-1 broadcast fails. Error bars are $\pm$1 s.d.}
+\label{fig:mechanistic}
+\end{figure}
 To test whether these performance differences correspond to better credit signals, we compare local and backprop gradients on the same batch at the same parameter values.
 For each parameter tensor $p$, we compute directional alignment (cosine similarity) and scale mismatch, defined as $|\log_{10}(\|g_p^{\mathrm{local}}\|/\|g_p^{\mathrm{bp}}\|)|$, aggregated by parameter count.
 
@@ -319,23 +326,16 @@ At the level of the 3F rule, the central non-local approximation is therefore th
 \noindent\emph{Mechanistic chain: path gains, broadcast fidelity, and oracle transport.}
 \begin{figure}[t]
 \centering
-\includegraphics[width=\textwidth]{fig5_mechanistic_evidence.pdf}
-\caption{\textbf{Mechanistic chain from path gains to learning.}
-(A) Path-gain fields at matched inhibition. (B) Exact-error compressibility on MNIST. (C) Post-training inhibitory-conductance interventions (learned, zero, shuffled, mean-clamped, or uniform matched inhibition). (D) Compartment-error fidelity on noise resilience; dashed lines show the \textbf{[C]} transported-error oracle. (E) Transported-error learning where rank-1 broadcast fails. Error bars are $\pm$1 s.d.}
-\label{fig:mechanistic}
+\includegraphics[width=\textwidth]{fig2_competence_regime.pdf}
+\caption{\textbf{Capacity-calibrated competence and regime dependence.}
+(A) Matched backprop vs.\ rank-1 5F LocalCA on MNIST, Fashion-MNIST, and context gating. (B) Inhibitory dose-response. (C) Morphology-dependent shunting advantage on noise resilience. (D) Separate stress-regime additive-normalization diagnostic. Error bars denote $\pm$1 s.d.\ where available.}
+\label{fig:competence_regime}
 \end{figure}
 Figure~\ref{fig:mechanistic} provides the central empirical chain. At matched inhibition ($N_I{=}5$), shunting narrows the MNIST conductance-stage path-gain field (CV $0.23$ vs.\ $1.16$ for additive) and makes the exact compartment-error matrix more compressible: the best rank-$1$ residual drops from $0.83\pm0.07$ to $0.65\pm0.18$, while participation rank drops from $8.5\pm3.3$ to $3.2\pm1.2$. This is the diagnostic matched to the paper's main claim: rank-$1$ broadcast is useful when the exact error field is closer to low rank.
 
 The inhibition intervention shows that the trained computation depends on the learned inhibitory field, rather than only on a matched average conductance load: zeroing, shuffling, or clamping learned branch inhibition drops MNIST from about $90\%$ to $20$--$26\%$ and noise resilience from about $81\%$ to $10$--$19\%$. The fidelity and oracle panels probe the same broadcast bottleneck: rank-$1$ broadcast tracks the exact compartment error better under shunting once inhibition is present, transported error reaches about $0.95$--$1.0$ fidelity, and transported learning lifts both the shunting and additive networks to $92$--$95\%$ on noise resilience. CIFAR-10 and direct-I versus explicit-I path-gain probes remain appendix diagnostics (Fig.~\ref{fig:cifar10_mechanism_extension}; Table~\ref{tab:input_mode_probe}).
 
 \noindent\emph{Capacity-calibrated competence.}
-\begin{figure}[t]
-\centering
-\includegraphics[width=\textwidth]{fig2_competence_regime.pdf}
-\caption{\textbf{Capacity-calibrated competence and regime dependence.}
-(A) Matched backprop vs.\ rank-1 5F LocalCA on MNIST, Fashion-MNIST, and context gating. (B) Inhibitory dose-response. (C) Morphology-dependent shunting advantage on noise resilience. (D) Separate stress-regime additive-normalization diagnostic. Error bars denote $\pm$1 s.d.\ where available.}
-\label{fig:competence_regime}
-\end{figure}
 In the capacity-calibrated regime, shunting LocalCA remains within $5$--$6$ percentage points of matched backpropagation on MNIST, Fashion-MNIST, and context gating (Table~\ref{tab:gap_closing}; Fig.~\ref{fig:competence_regime}). In a separate lower-capacity stress-regime diagnostic, Fig.~\ref{fig:competence_regime}D shows that additive normalization improves additive LocalCA but remains below the shunting reference, so the gain is not explained by generic voltage normalization alone. Appendix Fig.~\ref{fig:rule_feedback_controls} summarizes the rule and feedback controls: 5F is the strongest practical optimizer, somatic rank-$1$ error is essential, and the noise-resilience rank bridge improves as feedback bandwidth increases from low-rank $K{=}1$ to $K{=}8$, with \textbf{[C]} path transport highest.
 
 \noindent\emph{Regime dependence of the shunting advantage.}
