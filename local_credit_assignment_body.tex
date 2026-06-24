@@ -316,9 +316,8 @@ In a few low-norm parameter blocks, cosine becomes numerically unstable even tho
 Figure~\ref{fig:gradient_fidelity}D shows the same gradient-alignment comparison over training: cosine is a noisy diagnostic and can be transiently weak, while additive alignment remains near zero at the final checkpoint rather than failing only at one static snapshot. Appendix Fig.~\ref{fig:alignment_norm_dynamics} verifies that the corresponding local and backprop gradient norms remain finite throughout learning, ruling out a trivial zero-gradient explanation.
 At the level of the 3F rule, the central non-local approximation is therefore the broadcast substitute for $\partial L/\partial V_n$.
 
-\clearpage
 \noindent\emph{Mechanistic chain: path gains, broadcast fidelity, and oracle transport.}
-\begin{figure}[!t]
+\begin{figure}[t]
 \centering
 \includegraphics[width=\textwidth]{fig5_mechanistic_evidence.pdf}
 \caption{\textbf{Mechanistic chain from path gains to learning.}
@@ -329,9 +328,8 @@ Figure~\ref{fig:mechanistic} provides the central empirical chain. At matched in
 
 The inhibition intervention shows that the trained computation depends on the learned inhibitory field, rather than only on a matched average conductance load: zeroing, shuffling, or clamping learned branch inhibition drops MNIST from about $90\%$ to $20$--$26\%$ and noise resilience from about $81\%$ to $10$--$19\%$. The fidelity and oracle panels probe the same broadcast bottleneck: rank-$1$ broadcast tracks the exact compartment error better under shunting once inhibition is present, transported error reaches about $0.95$--$1.0$ fidelity, and transported learning lifts both the shunting and additive networks to $92$--$95\%$ on noise resilience. CIFAR-10 and direct-I versus explicit-I path-gain probes remain appendix diagnostics (Fig.~\ref{fig:cifar10_mechanism_extension}; Table~\ref{tab:input_mode_probe}).
 
-\clearpage
 \noindent\emph{Capacity-calibrated competence.}
-\begin{figure}[!t]
+\begin{figure}[t]
 \centering
 \includegraphics[width=\textwidth]{fig2_competence_regime.pdf}
 \caption{\textbf{Capacity-calibrated competence and regime dependence.}
