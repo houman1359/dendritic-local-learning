@@ -225,8 +225,8 @@ def panel_a(ax):
                         lw=1.8, zorder=9))
     ax.add_patch(Circle((x_soma, y_soma), sr_a,
                         fc=SOMA_FACE, ec=SOMA_EDGE, lw=1.6, zorder=10))
-    ax.text(x_soma, y_soma, r"$V_0$", ha="center", va="center",
-            fontsize=9.5, color="#111", fontweight="bold", zorder=11)
+    ax.text(x_soma, y_soma + sr_a + 1.6, r"$V_0$", ha="center", va="bottom",
+            fontsize=7.0, color="#111", fontweight="bold", zorder=11)
     ax.annotate("", xy=(x_soma + sr_a + 1.5, y_soma),
                 xytext=(x_soma + sr_a + 0.1, y_soma),
                 arrowprops=dict(arrowstyle="-|>", color="#333", lw=1.5))
@@ -237,8 +237,8 @@ def panel_a(ax):
     # Depth tags
     for xp, lbl in [(x_d3, r"$\ell\!=\!3$"), (x_d2, r"$\ell\!=\!2$"),
                     (x_d1, r"$\ell\!=\!1$")]:
-        ax.text(xp, -2.0, lbl, ha="center", fontsize=6.8, color="#777")
-    ax.text(x_soma, -2.0, "soma", ha="center", fontsize=6.8, color="#555")
+        ax.text(xp, -2.1, lbl, ha="center", fontsize=5.6, color="#777")
+    ax.text(x_soma + 0.7, -2.1, "soma", ha="center", fontsize=5.6, color="#555")
 
     # Compact axes-coords legend (top right): E and I synapse markers
     ax.scatter([0.60, 0.78], [0.94, 0.94], s=22, c=[EXC, INH],
@@ -276,9 +276,9 @@ def panel_b(ax):
     unit_x = 0.450
     out_x = 0.620
     out_bus_x = 0.730
-    readout_x0 = 0.795
-    readout_w = 0.115
-    delta_x = 0.945
+    readout_x0 = 0.770
+    readout_w = 0.150
+    delta_x = 0.955
     ys = np.array([0.82, 0.62, 0.42, 0.22])
     highlight_idx = 1  # second unit zooms into Panel A
 
@@ -326,7 +326,7 @@ def panel_b(ax):
     _round_box(ax, (readout_x0, 0.38), readout_w, 0.24,
                fc="#f6f6f6", ec="#666",
                text="task\nreadout", color="#444",
-               fontsize=6.0, lw=0.85)
+               fontsize=5.2, lw=0.85)
     ax.annotate("", xy=(readout_x0, 0.50), xytext=(out_bus_x, 0.50),
                 arrowprops=dict(arrowstyle="-|>", color=MUTE,
                                 lw=0.85, alpha=0.9, shrinkA=1, shrinkB=1))
@@ -442,11 +442,11 @@ def panel_c(ax):
                                     color=BROADCAST_COLOR,
                                     lw=0.9, alpha=0.85,
                                     shrinkA=0, shrinkB=0))
-    ax.text(bar_x - 0.004, bar_top - 0.025,
-            "shared\n$e_n$",
+    ax.text(bar_x + 0.008, bar_top + 0.016,
+            "shared $e_n$",
             ha="center", va="bottom",
-            fontsize=5.2, color=BROADCAST_COLOR,
-            fontweight="bold", linespacing=0.85)
+            fontsize=5.0, color=BROADCAST_COLOR,
+            fontweight="bold")
 
     ax.text(0.36, 0.93, "path-specific exact errors",
             ha="center", va="center", fontsize=5.6,
@@ -515,11 +515,11 @@ def panel_c(ax):
     # Name the two factors once, above the boxes, so both rules read as
     # gradient = local eligibility x compartment error; only the second
     # factor (exact delta_n vs broadcast e_n) changes between the rows.
-    ax.text(0.408, 0.400, "local eligibility (shared)",
-            ha="center", va="center", fontsize=5.6,
+    ax.text(0.3875, 0.400, "local eligibility (shared)",
+            ha="center", va="center", fontsize=5.4,
             color=COLORS["soma"], fontweight="bold")
-    ax.text(0.730, 0.400, "compartment error",
-            ha="center", va="center", fontsize=5.6,
+    ax.text(0.725, 0.400, "compartment error",
+            ha="center", va="center", fontsize=5.4,
             color=INK, fontweight="bold")
 
     def equation_row(y, label, rhs, rhs_color):
@@ -530,15 +530,15 @@ def panel_c(ax):
                 ha="left", va="center", fontsize=5.3,
                 color=INK, fontweight="bold", zorder=10,
                 linespacing=0.95)
-        _round_box(ax, (0.265, y + 0.025), 0.285, 0.075,
+        _round_box(ax, (0.245, y + 0.025), 0.285, 0.075,
                    fc="#FFF7ED", ec="#FDBA74", lw=0.65,
                    text=r"$x_iR_n^{\mathrm{tot}}(E_i\!-\!V_n)$",
                    color=COLORS["soma"], fontsize=5.5,
                    fontweight="bold", zorder=5)
-        ax.text(0.570, y + 0.062, r"$\times$",
-                ha="center", va="center", fontsize=6.6,
+        ax.text(0.565, y + 0.062, r"$\times$",
+                ha="center", va="center", fontsize=6.4,
                 color=INK, zorder=10)
-        _round_box(ax, (0.605, y + 0.025), 0.250, 0.075,
+        _round_box(ax, (0.600, y + 0.025), 0.250, 0.075,
                    fc="#FEF2F2" if rhs_color == DELTA_COLOR else "#FFFBEB",
                    ec=rhs_color, lw=0.65,
                    text=rhs, color=rhs_color, fontsize=5.5,
