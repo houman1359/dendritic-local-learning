@@ -609,9 +609,9 @@ def figure_rule_feedback_controls_main():
     print("\n--- Figure: Compact Rule & Feedback Controls ---")
     fig, axes = plt.subplots(
         1,
-        3,
-        figsize=(6.85, 1.65),
-        gridspec_kw={"wspace": 0.44, "width_ratios": [1.0, 1.0, 1.35]},
+        4,
+        figsize=(6.95, 1.72),
+        gridspec_kw={"wspace": 0.46, "width_ratios": [1.0, 0.95, 1.25, 1.0]},
     )
 
     ax = axes[0]
@@ -693,7 +693,40 @@ def figure_rule_feedback_controls_main():
     ax.set_ylabel("Noise (%)", fontsize=8.6)
     ax.set_title("C  Feedback bandwidth", loc="left", fontsize=9.2, fontweight="bold")
 
-    fig.subplots_adjust(left=0.065, right=0.992, bottom=0.27, top=0.78, wspace=0.44)
+    ax = axes[3]
+    style_axis(ax, grid="y")
+    cue_rank = _csv_path(CUE_RANK_STRUCTURE_CSV)
+    if cue_rank is not None:
+        cue_rows = [
+            ("R1", "per_soma", 2, COLOR_SHUNTING),
+            ("K1", "low_rank", 1, "#F5B041"),
+            ("K2", "low_rank", 2, "#E67E22"),
+            ("K4", "low_rank", 4, "#BA4A00"),
+            ("PV", "pathway_vector", 2, "#1F77B4"),
+        ]
+        vals, errs, labels, colors = [], [], [], []
+        for label, mode, rank, color in cue_rows:
+            row = cue_rank[
+                (cue_rank["broadcast_mode"] == mode)
+                & (cue_rank["broadcast_rank"] == rank)
+            ]
+            if len(row) == 0:
+                continue
+            labels.append(label)
+            vals.append(float(row.iloc[0]["test_accuracy_mean"]) * 100)
+            errs.append(float(row.iloc[0]["test_accuracy_std"]) * 100)
+            colors.append(color)
+        xpos = np.arange(len(vals))
+        ax.bar(xpos, vals, 0.68, yerr=errs, color=colors,
+               edgecolor="white", lw=0.7, capsize=2.1,
+               error_kw={"lw": 0.95})
+        ax.set_xticks(xpos)
+        ax.set_xticklabels(labels, fontsize=8.0)
+        ax.set_ylim(55, 100)
+    ax.set_ylabel("Cue (%)", fontsize=8.6)
+    ax.set_title("D  Routed task", loc="left", fontsize=9.2, fontweight="bold")
+
+    fig.subplots_adjust(left=0.065, right=0.992, bottom=0.27, top=0.78, wspace=0.46)
     _save(fig, "fig5_rule_feedback_controls")
     plt.close(fig)
 
