@@ -330,7 +330,7 @@ At the level of the 3F rule, the central non-local approximation is therefore th
 \centering
 \includegraphics[width=\textwidth]{fig2_competence_regime.pdf}
 \caption{\textbf{Capacity-calibrated competence and regime dependence.}
-(A) Matched backprop vs.\ per-soma 5F LocalCA on MNIST, Fashion-MNIST, and figure-ground MNIST. (B) Inhibitory dose-response. (C) Morphology-dependent shunting advantage on noise resilience. (D) Revision controls on MNIST: exact path transport reaches the matched backprop ceiling, identity upward transfer preserves LocalCA competence, and additive gain/normalization variants do not exceed the additive baseline. Error bars denote $\pm$1 s.d.\ where available.}
+(A) Matched backprop vs.\ per-soma 5F LocalCA on MNIST, Fashion-MNIST, and figure-ground MNIST. (B) Inhibitory dose-response. (C) Morphology-dependent shunting advantage on noise resilience. (D) MNIST revision controls: BP = matched shunting backprop, PT = exact path-transported-error LocalCA, tanh/id = post-voltage \texttt{param\_tanh} vs.\ identity upward transfer, and add/gain/norm = plain additive, best additive-gain, and best normalized-additive controls. Error bars denote $\pm$1 s.d.\ where available.}
 \label{fig:competence_regime}
 \end{figure}
 Figure~\ref{fig:mechanistic} provides the central empirical chain. At matched inhibition ($N_I{=}5$), shunting narrows the MNIST conductance-stage path-gain field (CV $0.23$ vs.\ $1.16$ for additive) and lowers the intrinsic rank of the exact compartment-error matrix: the unrestricted best rank-$1$ residual drops from $0.83\pm0.07$ to $0.65\pm0.18$, while participation rank drops from $8.5\pm3.3$ to $3.2\pm1.2$. This SVD result measures intrinsic geometry, not compatibility with a fixed scalar or per-soma broadcast field. We therefore pair it with the direct broadcast-fidelity and transported-oracle diagnostics in Fig.~\ref{fig:mechanistic}D,E, and the diagnostic pipeline reports shared-field and actual-broadcast residuals for the implemented feedback modes.
@@ -344,7 +344,7 @@ In the capacity-calibrated regime, shunting LocalCA remains within $5$--$6$ perc
 \centering
 \includegraphics[width=0.95\textwidth]{fig5_rule_feedback_controls.pdf}
 \caption{\textbf{Rule and feedback controls.}
-(A) Eligibility-rule ablation: 3F and 4F learn weakly, while the 5F reliability preconditioner is the practical LocalCA rule used in the competence results. (B) Error-source ablation: soma-derived feedback is essential, whereas local-mismatch feedback is not a usable substitute. (C) Feedback-bandwidth ladder on noise resilience: per-soma feedback, path-propagation, random low-rank feedback, and \textbf{[C]} exact transported error form a monotonic fidelity ladder. (D) Cue-routing feedback-rank diagnostic: richer feedback helps relative to the restricted baseline, while pathway-vector feedback remains an exploratory structured control.}
+(A) Eligibility-rule ablation: 3F and 4F learn weakly, while 5F is the practical LocalCA rule. (B) Error-source ablation: Rank-1 = soma-derived shared feedback, and Mismatch = local-mismatch heuristic. (C) Noise-resilience feedback ladder: R1 = restricted per-soma/shared baseline, Path = recursive path-propagation proxy, K2/K4/K8 = random low-rank broadcast rank, and Or. = exact transported-error oracle. (D) Cue-routing rank diagnostic: R1 = restricted baseline, K1/K2/K4 = random low-rank ranks, and PV = pathway-vector feedback.}
 \label{fig:rule_feedback_controls}
 \end{figure}
 
