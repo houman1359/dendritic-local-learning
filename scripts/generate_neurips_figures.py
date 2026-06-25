@@ -99,6 +99,27 @@ THEORY_IE_RUNS_CSV = os.path.join(
 )
 CORE_FAIR_TUNING_CSV = os.path.join(ANALYSIS_DIR, "core_fair_tuning.csv")
 PHASE2B_GAP_CLOSING_CSV = os.path.join(ANALYSIS_DIR, "phase2b_gap_closing.csv")
+REVISION_CONTROLS_DIR = os.path.join(ANALYSIS_DIR, "revision_controls_20260624")
+REVISION_EXACT_TRANSPORT_CSV = os.path.join(
+    REVISION_CONTROLS_DIR,
+    "revision_exact_transport_factorial_mnist_5seed_20260624152116",
+    "grouped_summary.csv",
+)
+REVISION_EXACT_BP_CSV = os.path.join(
+    REVISION_CONTROLS_DIR,
+    "revision_exact_transport_bp_mnist_5seed_20260624152116",
+    "grouped_summary.csv",
+)
+REVISION_ADDITIVE_CSV = os.path.join(
+    REVISION_CONTROLS_DIR,
+    "revision_additive_gain_normalization_mnist_5seed_20260624152116",
+    "grouped_summary.csv",
+)
+REVISION_REACTIVATION_CSV = os.path.join(
+    REVISION_CONTROLS_DIR,
+    "revision_reactivation_identity_mnist_5seed_20260624152116",
+    "grouped_summary.csv",
+)
 
 # ---------------------------------------------------------------------------
 # Style
@@ -135,7 +156,7 @@ LABEL_MAP = {
 DATASET_LABEL = {
     "mnist": "MNIST",
     "fashion_mnist": "F-MNIST",
-    "context_gating": "Context\nGating",
+    "context_gating": "FG-MNIST",
     "noise_resilience": "Noise\nResil.",
     "info_shunting": "Info\nShunt.",
     "cifar10": "CIFAR-10",
@@ -441,7 +462,7 @@ def figure_rule_feedback_design():
 
     rule_data = {
         "MNIST": {"3F": 62.2, "4F": 62.8, "5F": 91.6},
-        "CG": {"3F": 39.6, "4F": 41.1, "5F": 78.9},
+        "FG-MNIST": {"3F": 39.6, "4F": 41.1, "5F": 78.9},
     }
     rules = ["3F", "4F", "5F"]
     rule_colors = [RULE3_COLOR, RULE4_COLOR, RULE5_COLOR]
@@ -597,7 +618,7 @@ def figure_rule_feedback_controls_main():
     style_axis(ax, grid="y")
     rule_data = {
         "MNIST": {"3F": 62.2, "4F": 62.8, "5F": 91.6},
-        "CG": {"3F": 39.6, "4F": 41.1, "5F": 78.9},
+        "FG-MNIST": {"3F": 39.6, "4F": 41.1, "5F": 78.9},
     }
     rules = ["3F", "4F", "5F"]
     rule_colors = [RULE3_COLOR, RULE4_COLOR, RULE5_COLOR]
@@ -690,8 +711,10 @@ def figure2():
     fmnist = _csv_path(FMNIST_SUMMARY_CSV)
     ie_data = _csv_path(IE_PERF_SUMMARY_CSV)
     morph_runs = _csv_path(MORPHOLOGY_IE_RUNS_CSV)
-    additive_norm = _csv("additive_norm_results.csv")
-    low_bandwidth = _csv("low_bandwidth_results.csv")
+    revision_exact = _csv_path(REVISION_EXACT_TRANSPORT_CSV)
+    revision_bp = _csv_path(REVISION_EXACT_BP_CSV)
+    revision_additive = _csv_path(REVISION_ADDITIVE_CSV)
+    revision_reactivation = _csv_path(REVISION_REACTIVATION_CSV)
 
     fig, axes = plt.subplots(
         1,
@@ -719,7 +742,7 @@ def figure2():
         for dataset, label in [
             ("mnist", "MNIST"),
             ("fashion_mnist", "F-MNIST"),
-            ("context_gating", "CG"),
+            ("context_gating", "FG-MNIST"),
         ]:
             bp = _pick_competence(dataset, "dendritic_shunting", "standard")
             shunt = _pick_competence(dataset, "dendritic_shunting", "local_ca")
@@ -775,7 +798,7 @@ def figure2():
                                       loc_s.iloc[0]["test_accuracy_mean"], loc_s.iloc[0]["test_accuracy_std"],
                                       loc_a.iloc[0]["test_accuracy_mean"], loc_a.iloc[0]["test_accuracy_std"]))
 
-        # Context gating
+        # Figure-ground MNIST (historical dataset key: context_gating)
         bp_cg = None
         if ceilings is not None:
             r = ceilings[(ceilings["dataset"] == "context_gating") & (ceilings["network_type"] == "dendritic_shunting")]
@@ -789,7 +812,7 @@ def figure2():
                 local_shunt_cg = sub.iloc[0]["test_accuracy_mean"]
                 local_shunt_cg_e = sub.iloc[0]["test_accuracy_std"]
         if bp_cg and local_shunt_cg:
-            datasets_info.append(("CG", bp_cg, 0, local_shunt_cg, local_shunt_cg_e, None, 0))
+            datasets_info.append(("FG-MNIST", bp_cg, 0, local_shunt_cg, local_shunt_cg_e, None, 0))
 
     # Plot grouped bars
     n_ds = len(datasets_info)
@@ -810,7 +833,11 @@ def figure2():
                    capsize=2.6, error_kw={"lw": 1.15})
 
     ax.set_xticks(x_base)
-    short_dataset_labels = {"MNIST": "MN", "F-MNIST": "FMN", "CG": "CG"}
+    short_dataset_labels = {
+        "MNIST": "MN",
+        "F-MNIST": "FMN",
+        "FG-MNIST": "FG",
+    }
     ax.set_xticklabels([short_dataset_labels.get(d[0], d[0]) for d in datasets_info])
     ax.set_ylabel("Test accuracy (%)")
     ax.set_title("Competence")
@@ -935,67 +962,118 @@ def figure2():
     ax.set_ylabel("Shunt.-add. (pp)")
     ax.set_title("Morphology\nregime", linespacing=0.9)
 
-    # ---- Panel D: Additive normalization control ----
+    # ---- Panel D: Revision controls ----
     ax = axes[3]
     _panel(ax, "D")
     style_axis(ax, grid="y")
 
-    if additive_norm is not None:
-        conditions = []
-        for norm in [False, True]:
-            sub = additive_norm[
-                (additive_norm["use_additive_normalization"] == norm)
-                & (additive_norm["strategy"] == "local_ca")
-            ]
-            if len(sub):
-                label = "Add."
-                color = COLOR_ADDITIVE
-                if norm:
-                    label = "Add.+\nnorm"
-                    color = "#5B8AC4"
-                conditions.append(
-                    (
-                        label,
-                        float(sub["test_accuracy"].mean()) * 100.0,
-                        float(sub["test_accuracy"].std()) * 100.0,
-                        color,
-                    )
+    if (
+        revision_exact is not None
+        and revision_bp is not None
+        and revision_additive is not None
+        and revision_reactivation is not None
+    ):
+        def _one(df, mask):
+            sub = df[mask]
+            return None if len(sub) == 0 else sub.iloc[0]
+
+        bp = revision_bp.iloc[0]
+        transport = _one(
+            revision_exact,
+            (revision_exact["rule_variant"] == "5f")
+            & (revision_exact["decoder_update_mode"] == "local"),
+        )
+        identity = _one(
+            revision_reactivation,
+            revision_reactivation["reactivation_enabled"] == False,  # noqa: E712
+        )
+        tanh = _one(
+            revision_reactivation,
+            revision_reactivation["reactivation_enabled"] == True,  # noqa: E712
+        )
+        add_none = _one(
+            revision_additive,
+            (revision_additive["core"] == "additive")
+            & (revision_additive["additive_gain_mode"] == "none"),
+        )
+        gain = revision_additive[
+            (revision_additive["core"] == "additive")
+            & (revision_additive["additive_gain_mode"] != "none")
+        ].sort_values("test_acc_mean", ascending=False)
+        norm = revision_additive[
+            revision_additive["core"] == "normalized_additive"
+        ].sort_values("test_acc_mean", ascending=False)
+
+        grouped = [
+            (
+                2.0,
+                "Transport",
+                [
+                    ("BP", bp, COLOR_BACKPROP),
+                    ("PT", transport, "#6C3483"),
+                ],
+            ),
+            (
+                1.0,
+                "Identity",
+                [
+                    ("id", identity, "#72B795"),
+                    ("tanh", tanh, COLOR_SHUNTING),
+                ],
+            ),
+            (
+                0.0,
+                "Additive",
+                [
+                    ("add", add_none, COLOR_ADDITIVE),
+                    ("gain", None if gain.empty else gain.iloc[0], "#6F88C6"),
+                    ("norm", None if norm.empty else norm.iloc[0], "#5B8AC4"),
+                ],
+            ),
+        ]
+        height = 0.18
+        x_base = 87.0
+        for center, _group_label, entries in grouped:
+            entries = [(label, row, color) for label, row, color in entries if row is not None]
+            offsets = (np.arange(len(entries)) - (len(entries) - 1) / 2.0) * (height * 1.25)
+            for offset, (label, row, color) in zip(offsets, entries):
+                mean = float(row["test_acc_mean"]) * 100.0
+                std = float(row["test_acc_std"]) * 100.0
+                ypos = center + offset
+                ax.barh(
+                    ypos,
+                    mean - x_base,
+                    left=x_base,
+                    height=height,
+                    xerr=std,
+                    color=color,
+                    edgecolor="white",
+                    lw=0.75,
+                    capsize=2.0,
+                    error_kw={"lw": 0.95},
                 )
-        # Shunting reference as its own bar (was previously a dashed line).
-        if low_bandwidth is not None:
-            ref = low_bandwidth[low_bandwidth["broadcast_bandwidth"] == "full"]
-            if len(ref):
-                conditions.append(
-                    (
-                        "Shunt.",
-                        float(ref["test_accuracy"].mean()) * 100.0,
-                        float(ref["test_accuracy"].std()) * 100.0,
-                        COLOR_SHUNTING,
-                    )
+                text_x = x_base + 0.24
+                ax.text(
+                    text_x,
+                    ypos,
+                    label,
+                    ha="left",
+                    va="center",
+                    fontsize=6.5,
+                    color="white",
+                    fontweight="bold" if label in {"PT", "id", "add"} else "normal",
                 )
-        xpos = np.arange(len(conditions))
-        for i, (label, mean, std, color) in enumerate(conditions):
-            ax.bar(
-                i,
-                mean,
-                0.62,
-                yerr=std,
-                color=color,
-                edgecolor="white",
-                lw=0.75,
-                capsize=2.6,
-                error_kw={"lw": 1.15},
-            )
-            ax.text(i, mean + std + 1.0, f"{mean:.1f}", ha="center",
-                    va="bottom", fontsize=7.6)
-        ax.set_xticks(xpos)
-        ax.set_xticklabels([c[0] for c in conditions], fontsize=8.4)
-        ax.set_ylim(30, 72)
+        ax.set_yticks([2.0, 1.0, 0.0])
+        ax.set_yticklabels(["Transport", "Identity", "Additive"], fontsize=7.5)
+        ax.set_xlim(87.0, 98.25)
+        ax.set_xticks([88, 92, 96])
+        ax.set_ylim(-0.45, 2.45)
     else:
-        ax.text(0.5, 0.5, "No normalization data", transform=ax.transAxes,
+        ax.text(0.5, 0.5, "No revision-control data", transform=ax.transAxes,
                 ha="center", va="center", fontsize=8, color="red")
-    ax.set_ylabel("MNIST test (%)")
-    ax.set_title("Additive norm")
+    ax.set_xlabel("MNIST test (%)")
+    ax.set_ylabel("")
+    ax.set_title("Revision\ncontrols", linespacing=0.9)
 
     fig.subplots_adjust(left=0.062, right=0.992, bottom=0.24, top=0.82, wspace=0.48)
     _save(fig, "fig2_competence_regime")
@@ -1619,22 +1697,22 @@ def figure_s2():
     conditions = [
         ("MNIST\nShunt.", 0.117, COLOR_SHUNTING),
         ("MNIST\nAdd.", 1.053, COLOR_ADDITIVE),
-        ("CG\nShunt.", 0.036, COLOR_SHUNTING),
-        ("CG\nAdd.", 2.154, COLOR_ADDITIVE),
+        ("FG-MNIST\nShunt.", 0.036, COLOR_SHUNTING),
+        ("FG-MNIST\nAdd.", 2.154, COLOR_ADDITIVE),
     ]
     x = np.arange(len(conditions))
     bars = ax.bar(x, [c[1] for c in conditions], color=[c[2] for c in conditions],
                   edgecolor="white", lw=0.4, width=0.55)
     ax.set_xticks(x)
     ax.set_xticklabels([c[0] for c in conditions], fontsize=7.5)
-    ax.set_ylabel("Scale mismatch\n(||local|| / ||BP||)")
+    ax.set_ylabel("Scale mismatch\n|log10(||local|| / ||BP||)|")
     ax.set_title("Scale mismatch")
-    ax.set_yscale("log")
-    ax.axhline(1.0, color="black", lw=0.4, ls="--", label="Ideal (1.0)")
+    ax.set_ylim(0.0, max(c[1] for c in conditions) * 1.22)
+    ax.axhline(0.0, color="black", lw=0.4, ls="--", label="Ideal (0)")
     ax.legend(fontsize=7)
 
     for bar_rect, c in zip(bars, conditions):
-        ax.text(bar_rect.get_x() + bar_rect.get_width()/2, c[1] * 1.3,
+        ax.text(bar_rect.get_x() + bar_rect.get_width()/2, c[1] + 0.05,
                 f"{c[1]:.3f}", ha="center", va="bottom", fontsize=7)
 
     # Panel B: Noise resilience IE detail with error bands
@@ -1777,7 +1855,7 @@ def figure_s4():
         ax.text(i, b[1] + b[2] + 0.3, f"{b[1]:.1f}$\\pm${b[2]:.1f}",
                 ha="center", va="bottom", fontsize=7)
 
-    # ---- Panel B: Context gating verification ----
+    # ---- Panel B: figure-ground MNIST verification ----
     ax = axes[1]
     _panel(ax, "B")
 
@@ -1798,7 +1876,7 @@ def figure_s4():
     ax.set_xticks(x)
     ax.set_xticklabels([b[0] for b in bars_data], fontsize=7.5)
     ax.set_ylabel("Test accuracy (%)")
-    ax.set_title("Context gating verif.")
+    ax.set_title("Figure-ground verif.")
     ax.set_ylim(60, 90)
 
     for i, b in enumerate(bars_data):
@@ -1820,7 +1898,7 @@ def figure_s4():
                         color=COLOR_SHUNTING)
             ax.set_xlabel("HSIC weight")
             ax.set_ylabel("Test accuracy (%)")
-            ax.set_title("CG: HSIC ablation")
+            ax.set_title("FG-MNIST: HSIC ablation")
             ax.set_xscale("symlog", linthresh=0.005)
 
     fig.subplots_adjust(left=0.08, right=0.97, bottom=0.15, top=0.90,

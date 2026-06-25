@@ -65,10 +65,17 @@ def _condition_metadata(cfg: dict[str, Any], condition: str) -> dict[str, Any]:
         local_ca_cfg = _get_nested(cfg, ("training", "main", "learning_strategy_config"), {})
     broadcast_mode = _get_nested(local_ca_cfg, ("error_broadcast_mode",))
     rule_variant = _get_nested(local_ca_cfg, ("rule_variant",))
+    decoder_update_mode = _get_nested(local_ca_cfg, ("decoder_update_mode",))
+    hsic_cfg = _get_nested(local_ca_cfg, ("hsic",), {})
+    hsic_enabled = _get_nested(hsic_cfg, ("enabled",))
+    hsic_weight = _get_nested(hsic_cfg, ("weight",))
     dataset = _get_nested(cfg, ("data", "dataset_name"))
     normalize = _get_nested(cfg, ("data", "processing", "normalize"))
     use_shunting = _get_nested(cfg, ("model", "core", "use_shunting"))
     core_type = _get_nested(cfg, ("model", "core", "type"))
+    reactivation_enabled = _get_nested(
+        cfg, ("model", "core", "reactivation", "enabled")
+    )
     ie_synapses = _get_nested(
         cfg, ("model", "core", "connectivity", "ie_synapses_per_branch_per_layer"), []
     )
@@ -89,6 +96,8 @@ def _condition_metadata(cfg: dict[str, Any], condition: str) -> dict[str, Any]:
         core = "shunting"
     elif core_type == "dendritic_additive":
         core = "additive"
+    elif core_type == "dendritic_normalized_additive":
+        core = "normalized_additive"
     else:
         core = core_type
 
@@ -99,12 +108,17 @@ def _condition_metadata(cfg: dict[str, Any], condition: str) -> dict[str, Any]:
         "rule_variant": rule_variant,
         "broadcast_mode": broadcast_mode,
         "broadcast_rank": broadcast_rank,
+        "decoder_update_mode": decoder_update_mode,
+        "hsic_enabled": hsic_enabled,
+        "hsic_weight": hsic_weight,
         "core": core,
+        "core_type": core_type,
         "normalize_inputs": normalize,
         "has_i_to_e": has_i_to_e,
         "has_i_to_i": has_i_to_i,
         "additive_gain_mode": additive_gain_mode,
         "dendritic_normalization": bool(dendritic_norm),
+        "reactivation_enabled": reactivation_enabled,
     }
 
 
@@ -202,10 +216,15 @@ def summarize_sweep(sweep_root: Path, out_dir: Path) -> tuple[pd.DataFrame, pd.D
                     "rule_variant",
                     "broadcast_mode",
                     "broadcast_rank",
+                    "decoder_update_mode",
+                    "hsic_enabled",
+                    "hsic_weight",
+                    "core_type",
                     "normalize_inputs",
                     "has_i_to_e",
                     "additive_gain_mode",
                     "dendritic_normalization",
+                    "reactivation_enabled",
                 ],
                 dropna=False,
             )["test_accuracy"]
