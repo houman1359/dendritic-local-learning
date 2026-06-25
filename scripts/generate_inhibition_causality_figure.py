@@ -127,7 +127,7 @@ def main() -> None:
         axes[2],
         rank,
         "rank1_residual",
-        "Rank-1 residual",
+        "SVD residual",
         "Exact-error residual",
     )
     _rank_panel(

@@ -10,13 +10,16 @@ This script still contains a few legacy helper panels, but by default it writes
 only the figures that are referenced by `local_credit_assignment_body.tex`.
 
   Main:
-    fig2_competence_regime.pdf     (4 panels: competence, IE dose-response, shunting advantage, F-MNIST)
-    fig3_gradient_fidelity.pdf     (4 panels: cosine, gradient norms, alignment dynamics, factorization)
-    fig_additional_stress_tests.pdf
+    fig2_gradient_fidelity.pdf     (4 panels: exact reconstruction, final cosine, scale mismatch,
+                                     layer-soma factorial diagnostic)
+    fig4_competence_regime.pdf     (4 panels: competence, IE dose-response, morphology, controls)
+    fig5_rule_feedback_controls.pdf
   Appendix:
+    fig_s_rule_feedback_design.pdf (detailed rule and feedback controls)
     fig_s1_calibration.pdf         (2x2: capacity, rule ranking, decoder, broadcast)
     fig_s2_gradient_extended.pdf   (2x2: scale mismatch, noise IE detail, MNIST IE detail, FMNIST seeds)
     fig_s4_verification.pdf        (1x3: MNIST seeds, CG seeds, HSIC ablation)
+    fig_additional_stress_tests.pdf
 
 Usage:
     PYTHONPATH=src:$PYTHONPATH python drafts/dendritic-local-learning/scripts/generate_neurips_figures.py
@@ -119,6 +122,21 @@ REVISION_REACTIVATION_CSV = os.path.join(
     REVISION_CONTROLS_DIR,
     "revision_reactivation_identity_mnist_5seed_20260624152116",
     "grouped_summary.csv",
+)
+REVISION_HSIC_MAIN_CSV = os.path.join(
+    REVISION_CONTROLS_DIR,
+    "revision_figure_ground_hsic_main_5seed_20260624152116",
+    "grouped_summary.csv",
+)
+REVISION_HSIC_HELDOUT_CSV = os.path.join(
+    REVISION_CONTROLS_DIR,
+    "revision_figure_ground_hsic_heldout_3seed_20260624152116",
+    "grouped_summary.csv",
+)
+LAYER_SOMA_FACTORIAL_DETAILS_CSV = os.path.join(
+    ANALYSIS_DIR,
+    "layer_soma_factorial_input_mode1_direct_i_pathgain_3f",
+    "layer_soma_factorial_details.csv",
 )
 
 # ---------------------------------------------------------------------------
@@ -499,7 +517,7 @@ def figure_rule_feedback_design():
     _panel(ax, "B")
     style_axis(ax, grid="y")
 
-    broadcast_groups = ["Rank-1\nshared", "Local\nmismatch"]
+    broadcast_groups = ["Per-soma\nshared", "Local\nmismatch"]
     core_entries = [
         ("Shunt.", COLOR_SHUNTING, [91.2, 14.6], [0.5, 4.6]),
         ("Add.", COLOR_ADDITIVE, [89.4, 34.2], [0.7, 5.8]),
@@ -529,18 +547,18 @@ def figure_rule_feedback_design():
 
     # ---- Panel C: rank/propagation ladder on noise resilience ----
     ax = axes[2]
-    _panel(ax, "C")
+    _panel(ax, "C", x=-0.34, y=1.16)
     style_axis(ax, grid="y")
 
     rank_noise = _csv_path(RANK_BRIDGE_NOISE_CSV)
     if rank_noise is not None:
         plot_rows = [
-            ("R1", "per_soma", 4, False, COLOR_SHUNTING),
+            ("PS", "per_soma", 4, False, COLOR_SHUNTING),
             ("Path", "per_soma", 4, True, "#4DAF4A"),
             ("K2", "low_rank", 2, False, "#F39C12"),
             ("K4", "low_rank", 4, False, "#E67E22"),
             ("K8", "low_rank", 8, False, "#D35400"),
-            ("[C]\nOracle", "path_transport", 4, False, "#6C3483"),
+            ("Or.", "path_transport", 4, False, "#6C3483"),
         ]
         vals, errs, labels, colors = [], [], [], []
         for label, mode, rank, path_prop, color in plot_rows:
@@ -562,7 +580,7 @@ def figure_rule_feedback_design():
         ax.set_xticklabels(labels, fontsize=8.6, linespacing=0.9)
         ax.set_ylim(35, 90)
     ax.set_ylabel("Noise test (%)")
-    ax.set_title("Broadcast bandwidth")
+    ax.set_title("Broadcast\nbandwidth", linespacing=0.9)
 
     # ---- Panel D: routed feedback rank and structure ----
     ax = axes[3]
@@ -572,7 +590,7 @@ def figure_rule_feedback_design():
     cue_rank = _csv_path(CUE_RANK_STRUCTURE_CSV)
     if cue_rank is not None:
         cue_rows = [
-            ("R1", "per_soma", 2, COLOR_SHUNTING),
+            ("PS", "per_soma", 2, COLOR_SHUNTING),
             ("K1", "low_rank", 1, "#F5B041"),
             ("K2", "low_rank", 2, "#E67E22"),
             ("K4", "low_rank", 4, "#BA4A00"),
@@ -600,7 +618,7 @@ def figure_rule_feedback_design():
     ax.set_title("Routed task")
 
     fig.subplots_adjust(left=0.062, right=0.992, bottom=0.23, top=0.82, wspace=0.50)
-    _save(fig, "fig4_rule_feedback_design")
+    _save(fig, "fig_s_rule_feedback_design")
     plt.close(fig)
 
 
@@ -639,7 +657,7 @@ def figure_rule_feedback_controls_main():
 
     ax = axes[1]
     style_axis(ax, grid="y")
-    groups = ["Rank-1", "Mismatch"]
+    groups = ["PS", "Mismatch"]
     entries = [
         ("Shunt.", COLOR_SHUNTING, [91.2, 14.6], [0.5, 4.6]),
         ("Add.", COLOR_ADDITIVE, [89.4, 34.2], [0.7, 5.8]),
@@ -663,7 +681,7 @@ def figure_rule_feedback_controls_main():
     rank_noise = _csv_path(RANK_BRIDGE_NOISE_CSV)
     if rank_noise is not None:
         plot_rows = [
-            ("R1", "per_soma", 4, False, COLOR_SHUNTING),
+            ("PS", "per_soma", 4, False, COLOR_SHUNTING),
             ("Path", "per_soma", 4, True, "#4DAF4A"),
             ("K2", "low_rank", 2, False, "#F39C12"),
             ("K4", "low_rank", 4, False, "#E67E22"),
@@ -698,7 +716,7 @@ def figure_rule_feedback_controls_main():
     cue_rank = _csv_path(CUE_RANK_STRUCTURE_CSV)
     if cue_rank is not None:
         cue_rows = [
-            ("R1", "per_soma", 2, COLOR_SHUNTING),
+            ("PS", "per_soma", 2, COLOR_SHUNTING),
             ("K1", "low_rank", 1, "#F5B041"),
             ("K2", "low_rank", 2, "#E67E22"),
             ("K4", "low_rank", 4, "#BA4A00"),
@@ -732,10 +750,10 @@ def figure_rule_feedback_controls_main():
 
 
 # ===================================================================
-# Figure 2 — Competence & Regime Dependence
+# Figure 4 — Competence & Regime Dependence
 # ===================================================================
-def figure2():
-    print("\n--- Figure 2: Competence & Regime Dependence ---")
+def figure4_competence_regime():
+    print("\n--- Figure 4: Competence & Regime Dependence ---")
 
     competence = _csv_path(COMPETENCE_SUMMARY_CSV)
     ceilings = _csv_path(STANDARD_CEILING_SUMMARY_CSV)
@@ -995,7 +1013,7 @@ def figure2():
     ax.set_ylabel("Shunt.-add. (pp)")
     ax.set_title("Morphology\nregime", linespacing=0.9)
 
-    # ---- Panel D: Revision controls ----
+    # ---- Panel D: Mechanism controls ----
     ax = axes[3]
     _panel(ax, "D")
     style_axis(ax, grid="y")
@@ -1106,23 +1124,23 @@ def figure2():
                 ha="center", va="center", fontsize=8, color="red")
     ax.set_xlabel("MNIST test (%)")
     ax.set_ylabel("")
-    ax.set_title("Revision\ncontrols", linespacing=0.9)
+    ax.set_title("Mechanism\ncontrols", linespacing=0.9)
 
     fig.subplots_adjust(left=0.062, right=0.992, bottom=0.24, top=0.82, wspace=0.48)
-    _save(fig, "fig2_competence_regime")
+    _save(fig, "fig4_competence_regime")
     plt.close(fig)
 
 
 # ===================================================================
-# Figure 3 — Gradient Fidelity
+# Figure 2 — Gradient Fidelity
 # ===================================================================
-def figure3():
-    print("\n--- Figure 3: Gradient Fidelity ---")
+def figure2_gradient_fidelity():
+    print("\n--- Figure 2: Gradient Fidelity ---")
     fig, axes = plt.subplots(
         1,
         4,
-        figsize=(7.35, 3.0),
-        gridspec_kw={"wspace": 0.46, "width_ratios": [1.00, 0.98, 1.06, 1.16]},
+        figsize=(7.35, 3.05),
+        gridspec_kw={"wspace": 0.58, "width_ratios": [1.00, 0.98, 1.04, 1.55]},
     )
     axes = axes.ravel()
 
@@ -1224,7 +1242,70 @@ def figure3():
                 scale_std=("scale_mismatch", "std"),
             )
             .reset_index()
+            )
+
+    def _layer_soma_factorial_values():
+        if not os.path.isfile(LAYER_SOMA_FACTORIAL_DETAILS_CSV):
+            warnings.warn(
+                f"Layer-soma factorial CSV not found: {LAYER_SOMA_FACTORIAL_DETAILS_CSV}",
+                stacklevel=2,
+            )
+            return None, None
+
+        details = pd.read_csv(LAYER_SOMA_FACTORIAL_DETAILS_CSV)
+        components = {
+            "excitatory_synapse",
+            "inhibitory_synapse",
+            "dendritic_conductance",
+        }
+        details = details[details["component"].isin(components)].copy()
+        conditions = [
+            ("exact_soma_path_transport", "Exact soma\n+ path"),
+            ("exact_soma_blockwise_per_soma", "Exact soma\n+ per-soma"),
+            ("approx_direct_path_transport", "Reused core\n+ path"),
+            ("approx_direct_code_per_soma", "Practical\nper-soma"),
+        ]
+
+        labels, matrix, audit_rows = [], [], []
+        for condition, label in conditions:
+            row = []
+            for layer_idx in (0, 1):
+                sub = details[
+                    (details["condition"] == condition)
+                    & (details["core_layer_index"] == layer_idx)
+                ]
+                if sub.empty:
+                    value = np.nan
+                    total_energy = np.nan
+                    n_runs = 0
+                else:
+                    weights = sub["backprop_grad_energy"].to_numpy(dtype=float)
+                    cosines = sub["gradient_cosine"].to_numpy(dtype=float)
+                    total_energy = float(np.nansum(weights))
+                    value = (
+                        np.nan
+                        if total_energy <= 0
+                        else float(np.nansum(cosines * weights) / total_energy)
+                    )
+                    n_runs = int(sub["run_name"].nunique())
+                row.append(value)
+                audit_rows.append({
+                    "condition": condition,
+                    "panel_label": label.replace("\n", " "),
+                    "core_layer_index": layer_idx,
+                    "n_runs": n_runs,
+                    "total_backprop_grad_energy": total_energy,
+                    "energy_weighted_gradient_cosine": value,
+                })
+            labels.append(label)
+            matrix.append(row)
+
+        audit_path = os.path.join(
+            os.path.dirname(LAYER_SOMA_FACTORIAL_DETAILS_CSV),
+            "layer_soma_factorial_main_panel.csv",
         )
+        pd.DataFrame(audit_rows).to_csv(audit_path, index=False)
+        return labels, np.asarray(matrix, dtype=float)
 
     final_stats = _final_gradient_stats()
     if norm_df.empty:
@@ -1411,50 +1492,82 @@ def figure3():
                 ha="center", va="center", fontsize=8, color="red")
     ax.set_title("Scale mismatch", fontsize=10.0)
 
-    # ---- Panel D: Alignment dynamics ----
+    # ---- Panel D: Layer-soma factorial diagnostic ----
     ax = axes[3]
-    _panel(ax, "D", x=-0.23, y=1.30)
-    style_axis(ax, grid="y")
-    if not norm_df.empty:
-        for core, core_label, color in [
-            ("additive", "Additive", COLOR_ADDITIVE),
-            ("shunting", "Shunting", COLOR_SHUNTING),
-        ]:
-            sub = norm_df[norm_df["core_type"] == core]
-            grouped = (
-                sub.groupby("epoch")["weighted_cosine"]
-                .agg(["mean", "std"])
-                .reset_index()
-                .sort_values("epoch")
+    _panel(ax, "D", x=-0.31, y=1.30)
+    labels, matrix = _layer_soma_factorial_values()
+    if labels is not None and matrix is not None:
+        style_axis(ax, grid="x")
+        display = np.clip(matrix, 0.0, 1.0)
+        y = np.arange(len(labels))
+        bar_h = 0.34
+        layer_specs = [
+            ("Layer 1", "#D58A3A", -bar_h / 2),
+            ("Layer 2", COLOR_SHUNTING, bar_h / 2),
+        ]
+        for col, (layer_label, color, offset) in enumerate(layer_specs):
+            vals = display[:, col]
+            ax.barh(
+                y + offset,
+                vals,
+                height=bar_h * 0.88,
+                color=color,
+                edgecolor="white",
+                linewidth=0.65,
+                label=layer_label,
+                zorder=3,
             )
-            x = grouped["epoch"].to_numpy(dtype=float)
-            y = grouped["mean"].to_numpy(dtype=float)
-            err = grouped["std"].fillna(0.0).to_numpy(dtype=float)
-            ax.plot(x, y, color=color, lw=2.2, label=core_label, zorder=3)
-            ax.fill_between(x, y - err, y + err, color=color, alpha=0.12,
-                            linewidth=0, zorder=2)
-        ax.axhline(0, color="black", lw=0.9, ls="--", alpha=0.70)
-        ax.set_xlabel("Epoch")
-        ax.set_ylabel("Weighted cosine")
-        ax.set_title("Cosine trajectory", fontsize=10.0)
-        ax.set_xlim(-2, 52)
-        ax.set_ylim(-0.18, 0.36)
-        ax.legend(fontsize=8.4, loc="upper right", frameon=False,
-                  handlelength=1.0, handletextpad=0.35)
+            for yi, val in zip(y + offset, vals):
+                if val >= 0.62:
+                    text_x = min(val - 0.035, 0.965)
+                    ha = "right"
+                    text_color = "white"
+                else:
+                    text_x = val + 0.025
+                    ha = "left"
+                    text_color = "#1C1C1C"
+                ax.text(
+                    text_x,
+                    yi,
+                    f"{val:.3f}",
+                    ha=ha,
+                    va="center",
+                    fontsize=7.2,
+                    fontweight="bold",
+                    color=text_color,
+                    zorder=4,
+                )
+        ax.set_yticks(y)
+        ax.set_yticklabels(labels, fontsize=6.8)
+        ax.invert_yaxis()
+        ax.set_xlim(0, 1.05)
+        ax.set_xticks([0.0, 0.5, 1.0])
+        ax.set_xlabel("Gradient cosine", fontsize=8.2)
+        ax.tick_params(axis="x", labelsize=7.5, pad=1)
+        ax.tick_params(axis="y", length=0, pad=2)
+        ax.set_title("Layer-soma\nfactorial", fontsize=10.0)
+        ax.legend(
+            loc="lower right",
+            fontsize=6.6,
+            frameon=False,
+            handlelength=0.9,
+            handletextpad=0.3,
+            borderaxespad=0.0,
+        )
     else:
-        ax.text(0.5, 0.5, "No trajectory data found", transform=ax.transAxes,
+        ax.text(0.5, 0.5, "No factorial data found", transform=ax.transAxes,
                 ha="center", va="center", fontsize=8, color="red")
 
-    fig.subplots_adjust(left=0.062, right=0.992, bottom=0.25, top=0.76, wspace=0.46)
-    _save(fig, "fig3_gradient_fidelity")
+    fig.subplots_adjust(left=0.062, right=0.992, bottom=0.25, top=0.76, wspace=0.56)
+    _save(fig, "fig2_gradient_fidelity")
     plt.close(fig)
 
 
 # ===================================================================
-# Figure 4 — Scalability & Generalization
+# Appendix — Additional Stress Tests
 # ===================================================================
-def figure4():
-    print("\n--- Figure 4: Scalability & Generalization ---")
+def figure_s_additional_stress_tests():
+    print("\n--- Appendix: Additional Stress Tests ---")
 
     depth = _csv("depth_scaling.csv", bundle=True)
     noise = _csv("noise_robustness.csv", bundle=True)
@@ -1856,6 +1969,8 @@ def figure_s4():
 
     verif = _csv("verification_seeds_summary.csv")
     p2b = _csv("phase2b_gap_closing.csv", bundle=True)
+    hsic_main = _csv_path(REVISION_HSIC_MAIN_CSV)
+    hsic_heldout = _csv_path(REVISION_HSIC_HELDOUT_CSV)
 
     fig, axes = plt.subplots(1, 3, figsize=(W * 1.9, 3.6),
                              gridspec_kw={"wspace": 0.52})
@@ -1888,19 +2003,38 @@ def figure_s4():
         ax.text(i, b[1] + b[2] + 0.3, f"{b[1]:.1f}$\\pm${b[2]:.1f}",
                 ha="center", va="bottom", fontsize=7)
 
-    # ---- Panel B: figure-ground MNIST verification ----
+    # ---- Panel B: matched figure-ground MNIST HSIC control ----
     ax = axes[1]
     _panel(ax, "B")
 
     bars_data = []
-    bars_data.append(("Seeds 42-46\n(+HSIC)", 80.26, 0.61, COLOR_SHUNTING, 1.0))
-    if verif is not None:
-        v = verif[(verif["core_type"] == "dendritic_shunting") & (verif["dataset_name"] == "context_gating")]
-        if len(v):
-            bars_data.append(("Seeds 47-49\n(no HSIC)",
-                              v.iloc[0]["test_acc_mean"] * 100,
-                              v.iloc[0]["test_acc_std"] * 100,
-                              COLOR_SHUNTING, 0.55))
+    for seed_label, df, alpha in [
+        ("Main", hsic_main, 1.0),
+        ("Held-out", hsic_heldout, 0.62),
+    ]:
+        if df is None:
+            continue
+        for weight, color in [(0.0, COLOR_ADDITIVE), (0.01, COLOR_SHUNTING)]:
+            row = df[np.isclose(df["hsic_weight"].astype(float), weight)]
+            if len(row) == 0:
+                continue
+            r = row.iloc[0]
+            bars_data.append((
+                f"{seed_label}\nw={weight:g}",
+                float(r["test_acc_mean"]) * 100,
+                float(r["test_acc_std"]) * 100,
+                color,
+                alpha,
+            ))
+    if not bars_data:
+        bars_data.append(("Seeds 42-46\n(+HSIC)", 80.26, 0.61, COLOR_SHUNTING, 1.0))
+        if verif is not None:
+            v = verif[(verif["core_type"] == "dendritic_shunting") & (verif["dataset_name"] == "context_gating")]
+            if len(v):
+                bars_data.append(("Seeds 47-49\n(no HSIC)",
+                                  v.iloc[0]["test_acc_mean"] * 100,
+                                  v.iloc[0]["test_acc_std"] * 100,
+                                  COLOR_SHUNTING, 0.55))
 
     x = np.arange(len(bars_data))
     for i, b in enumerate(bars_data):
@@ -1909,8 +2043,8 @@ def figure_s4():
     ax.set_xticks(x)
     ax.set_xticklabels([b[0] for b in bars_data], fontsize=7.5)
     ax.set_ylabel("Test accuracy (%)")
-    ax.set_title("Figure-ground verif.")
-    ax.set_ylim(60, 90)
+    ax.set_title("FG-MNIST: HSIC 2x2")
+    ax.set_ylim(70, 85)
 
     for i, b in enumerate(bars_data):
         ax.text(i, b[1] + b[2] + 0.5, f"{b[1]:.1f}$\\pm${b[2]:.1f}",
@@ -2386,7 +2520,7 @@ def figure_s_cue_routing_soma():
         return
 
     histo = {
-        "shunting\nrank-1 LocalCA": (
+        "shunting\nper-soma LocalCA": (
             float(per_soma_row.iloc[0]["test_accuracy_mean"]),
             float(per_soma_row.iloc[0]["test_accuracy_std"]),
         ),
@@ -2960,15 +3094,15 @@ def main():
         print("Legacy bundle: local analysis/ fallback")
 
     print("Skipping Figure 1 here; use generate_figure1_schematic.py for the submission figure.")
-    figure2()
+    figure2_gradient_fidelity()
     figure_rule_feedback_design()
     figure_rule_feedback_controls_main()
-    figure3()
-    figure4()
+    figure4_competence_regime()
+    figure_s_additional_stress_tests()
     figure_s1()
     figure_s2()
     figure_s4()
-    # figure_mechanism_summary() is now panel D of fig5_mechanistic_evidence,
+    # figure_mechanism_summary() is now part of fig3_mechanistic_evidence,
     # produced by generate_revision_figures.py (via generate_theory_diagnostics_figures).
     figure_s_soma_extension()
     figure_s_bm_policy()

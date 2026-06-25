@@ -457,10 +457,10 @@ def panel_c(ax):
             fontsize=6.4, color=INK, fontweight="bold")
 
     modes = [
-        ("Rank-1",   "shared scalar",       MODE_COLORS["rank1"],  "rank1"),
+        ("Scalar",   "global shared",       MODE_COLORS["rank1"],  "rank1"),
         ("Rank-$K$", "$K$ channels",         MODE_COLORS["rankk"],  "rankk"),
         ("Path",     "branch roles",         MODE_COLORS["path"],   "path"),
-        ("[C] Oracle", r"$\tilde{\alpha}_n\delta_0$", MODE_COLORS["oracle"], "oracle"),
+        ("Oracle", r"$\tilde{\alpha}_n\delta_0$", MODE_COLORS["oracle"], "oracle"),
     ]
     row_x = 0.62
     row_w = 0.34

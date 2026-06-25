@@ -104,8 +104,8 @@ def _summary_records(df: pd.DataFrame) -> list[dict[str, Any]]:
     entries = [
         ("local_ca", "dendritic_additive", "fixed", "baseline", "Add. fixed\nLocalCA"),
         ("local_ca", "dendritic_additive", "learned", "baseline", "Add. learned\nLocalCA"),
-        ("local_ca", "dendritic_shunting", "learned", "baseline", "Shunt.\nrank-1"),
-        ("local_ca", "dendritic_shunting", "learned", "baseline_tuned", "Shunt.\nrank-1 tuned"),
+        ("local_ca", "dendritic_shunting", "learned", "baseline", "Shunt.\nPS"),
+        ("local_ca", "dendritic_shunting", "learned", "baseline_tuned", "Shunt.\nPS tuned"),
         ("local_ca", "dendritic_shunting", "learned", "low_rank_k1", "Random\n$K{=}1$"),
         ("local_ca", "dendritic_shunting", "learned", "low_rank_k2", "Random\n$K{=}2$"),
         ("local_ca", "dendritic_shunting", "learned", "pathway_vector_tuned", "PV-LocalCA"),
@@ -216,7 +216,7 @@ def _plot_task_schematic(ax: plt.Axes) -> None:
     _draw_arrow(ax, (0.22, 0.79), (0.33, 0.64), "#A07015", text="route", text_xy=(0.30, 0.72), linewidth=1.0)
     _draw_arrow(ax, (0.22, 0.79), (0.33, 0.39), "#A07015", linewidth=1.0)
 
-    _draw_box(ax, (0.68, 0.66), (0.22, 0.085), "Rank-1 / scalar fallback", "#F4F4F4")
+    _draw_box(ax, (0.68, 0.66), (0.22, 0.085), "PS / scalar fallback", "#F4F4F4")
     _draw_box(ax, (0.68, 0.47), (0.22, 0.095), "Random low-rank\n$e_n = \\Gamma_K(\\delta_0)$", "#F8EBDD", edgecolor=COLOR_CONTROL)
     _draw_box(ax, (0.68, 0.25), (0.22, 0.115), "Structured pathways\n$e_n = \\sum_k q_{n,k} c_k$", "#EFE4F8", edgecolor=COLOR_PATHWAY)
     _draw_arrow(ax, (0.64, 0.47), (0.68, 0.70), "#777777", linestyle="--", text="shared signal", text_xy=(0.80, 0.79), linewidth=1.0)
@@ -343,7 +343,7 @@ def _plot_specialization_panel(ax: plt.Axes, df: pd.DataFrame) -> None:
         )
 
     annotations = {
-        "baseline": "rank-1",
+        "baseline": "PS",
         "low_rank_k2": "$K{=}2$",
         "pathway_vector_tuned": "PV",
     }
@@ -440,7 +440,7 @@ def build_figure(summary_csv: Path) -> None:
     _plot_assignment_panel(ax_d, pv_row)
 
     fig.subplots_adjust(left=0.045, right=0.992, bottom=0.23, top=0.86, wspace=0.42)
-    _save(fig, "fig6_cue_routing")
+    _save(fig, "fig_s_cue_routing")
     plt.close(fig)
 
 

@@ -271,7 +271,7 @@ def _plot_error_compressibility(ax: plt.Axes, rank_summary: pd.DataFrame) -> Non
     ax.set_xticklabels(labels)
     ax.set_ylabel("Residual")
     ax.set_ylim(0, 1.02)
-    ax.set_title("Rank-1\nresidual", linespacing=0.9)
+    ax.set_title("SVD\nresidual", linespacing=0.9)
     for rect, prank in zip(bars, pranks):
         ax.text(
             rect.get_x() + rect.get_width() / 2,
@@ -291,9 +291,9 @@ def _plot_compartment_error_fidelity(ax: plt.Axes, summary: pd.DataFrame) -> Non
     style_axis(ax, grid="y")
     noise = summary[summary["dataset"] == "noise_resilience"].copy()
     style_map = {
-        ("dendritic_shunting", "per_soma"): (COLOR_SHUNTING, "-", "Shunt. R1"),
+        ("dendritic_shunting", "per_soma"): (COLOR_SHUNTING, "-", "Shunt. PS"),
         ("dendritic_shunting", "path_transport"): (COLOR_SHUNTING, "--", "Shunt. oracle"),
-        ("dendritic_additive", "per_soma"): (COLOR_ADDITIVE, "-", "Add. R1"),
+        ("dendritic_additive", "per_soma"): (COLOR_ADDITIVE, "-", "Add. PS"),
         ("dendritic_additive", "path_transport"): (COLOR_ADDITIVE, "--", "Add. oracle"),
     }
     series = [
@@ -334,7 +334,7 @@ def _plot_compartment_error_fidelity(ax: plt.Axes, summary: pd.DataFrame) -> Non
     ax.set_xticks([0, 5, 10, 20, 40])
     ax.set_ylim(-0.35, 1.05)
     ax.set_xlim(-1.5, 52.5)
-    ax.text(42.0, 0.18, "R1", color=COLORS["ink"], fontsize=7.8,
+    ax.text(42.0, 0.18, "PS", color=COLORS["ink"], fontsize=7.8,
             fontweight="bold", ha="left", va="center")
     ax.text(42.0, 0.97, "oracle", color=COLORS["ink"], fontsize=7.8,
             fontweight="bold", ha="left", va="center")
@@ -529,7 +529,7 @@ def _plot_oracle_learning(
         lw=2.1,
             color=color,
             linestyle="-",
-            label=f"{label} R1",
+            label=f"{label} PS",
         )
         ax.fill_between(x, y - err, y + err, color=color, alpha=0.10, linewidth=0)
 
@@ -555,7 +555,7 @@ def _plot_oracle_learning(
     ax.set_xticks([0, 5, 10, 20, 40])
     ax.set_ylim(20, 101)
     ax.set_xlim(-1.5, 52.5)
-    ax.text(42.0, 84.0, "R1", color=COLORS["ink"], fontsize=7.8,
+    ax.text(42.0, 84.0, "PS", color=COLORS["ink"], fontsize=7.8,
             fontweight="bold", ha="left", va="center")
     ax.text(42.0, 95.0, "oracle", color=COLORS["ink"], fontsize=7.8,
             fontweight="bold", ha="left", va="center")
@@ -662,7 +662,7 @@ def _plot_inhibitory_path_probe(ax: plt.Axes, input_mode: pd.DataFrame) -> None:
     explicit_path = _row("explicit_i_cells__localca_path_transport__i_updates_True")
     explicit_bp = _row("explicit_i_cells__standard_bp")
     rows = [
-        ("Rank-1", direct_rank1, COLORS["per_soma"], ""),
+        ("Per-soma", direct_rank1, COLORS["per_soma"], ""),
         ("Path transp.", direct_path, COLOR_TRANSPORT, ""),
         ("I-cell path", explicit_path, COLORS["shunting"], "//"),
     ]
@@ -801,7 +801,7 @@ def main() -> None:
     parser.add_argument("--summary-csv", type=Path, default=SUMMARY_CSV)
     parser.add_argument("--low-bandwidth-csv", type=Path, default=LOW_BW_CSV)
     parser.add_argument("--oracle-summary-csv", type=Path, default=ORACLE_SUMMARY_CSV)
-    parser.add_argument("--name", type=str, default="fig5_mechanistic_evidence")
+    parser.add_argument("--name", type=str, default="fig3_mechanistic_evidence")
     args = parser.parse_args()
 
     fig = build_figure(

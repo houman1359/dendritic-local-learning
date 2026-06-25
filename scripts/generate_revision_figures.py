@@ -3,9 +3,9 @@
 
 Produces:
   Main:
-    fig5_mechanistic_evidence.pdf  (4-panel row: path gains, error fidelity, transported learning, mechanism summary)
-    fig6_cue_routing.pdf          (4-panel row: task, accuracy, specialization, pathway map)
+    fig3_mechanistic_evidence.pdf  (path gains, error fidelity, inhibition intervention, transported learning)
   Supplement:
+    fig_s_cue_routing.pdf          (task, accuracy, specialization, pathway map)
     fig_s5_fa_dfa.pdf              (FA/DFA baseline comparison)
     fig_s6_cifar10.pdf             (corrected strong-family CIFAR-10 mechanism extension)
     fig_s7_additive_norm.pdf       (Additive + normalization control)
@@ -102,17 +102,17 @@ def _csv_path(path):
 
 
 # ===================================================================
-# Figure 5 — Mechanistic Evidence (NEW main figure)
+# Figure 3 — Mechanistic Evidence
 # Panel D is now the global mechanism-summary scatter (alignment -> accuracy);
 # the previous low-bandwidth / quantization panel is exported as the standalone
 # appendix figure fig_s_low_bandwidth.
 # ===================================================================
-def figure5():
+def figure3_mechanistic_evidence():
     """Mechanistic figure built from exact-error diagnostics (A-C) and the
     global mechanism-summary scatter (D)."""
-    print("\n--- Figure 5: Mechanistic Evidence ---")
+    print("\n--- Figure 3: Mechanistic Evidence ---")
     fig = build_theory_diagnostics_figure()
-    _save(fig, "fig5_mechanistic_evidence")
+    _save(fig, "fig3_mechanistic_evidence")
     plt.close(fig)
 
 
@@ -454,7 +454,7 @@ def figure_s7():
 def main():
     os.makedirs(FIGURES_DIR, exist_ok=True)
 
-    figure5()
+    figure3_mechanistic_evidence()
     figure_s_low_bandwidth()
     summarize_cue_routing_runs([])
     build_cue_routing_figure(CUE_SUMMARY_CSV)

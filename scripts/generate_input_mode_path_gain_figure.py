@@ -311,7 +311,7 @@ def _load_grouped(summary_csv: Path) -> pd.DataFrame:
 
 def _draw_results_panel(ax: plt.Axes, df: pd.DataFrame) -> None:
     order = [
-        ("direct_i_stream__localca_per_soma", "Direct-I\nrank-1"),
+        ("direct_i_stream__localca_per_soma", "Direct-I\nper-soma"),
         ("direct_i_stream__localca_path_transport", "Direct-I\npath"),
         ("explicit_i_cells__localca_path_transport__i_updates_True", "Explicit-I\npath"),
         ("explicit_i_cells__localca_path_transport__i_updates_False", "Explicit-I\npath\nI frozen"),
