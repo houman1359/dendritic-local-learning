@@ -31,17 +31,17 @@ CIFAR_LABELS = {
     "cifar10_additive_standard": "Additive\nBP",
     "cifar10_shunting_standard_learned_i": "Shunting\nBP",
     "cifar10_shunting_standard_no_i": "Shunting BP\nno I->E",
-    "cifar10_additive_5f_per_soma": "Additive\nper-soma",
-    "cifar10_shunting_5f_per_soma_learned_i": "Shunting\nper-soma",
+    "cifar10_additive_5f_per_soma": "Add.\nPS",
+    "cifar10_shunting_5f_per_soma_learned_i": "Shunt.\nPS",
     "cifar10_shunting_5f_per_soma_no_i": "Shunting per-soma\nno I->E",
-    "cifar10_additive_5f_path_transport": "Additive\ntransport",
-    "cifar10_shunting_5f_low_rank4_learned_i": "Shunting\nK4",
-    "cifar10_shunting_5f_path_transport_learned_i": "Shunting\ntransport",
+    "cifar10_additive_5f_path_transport": "Add.\nPT",
+    "cifar10_shunting_5f_low_rank4_learned_i": "Shunt.\nK4",
+    "cifar10_shunting_5f_path_transport_learned_i": "Shunt.\nPT",
     "cifar10_shunting_5f_path_transport_no_i": "Shunting transport\nno I->E",
-    "cifar10_additive_5f_per_soma_gain_input_dependent": "Input-dep.\ngain",
-    "cifar10_additive_5f_per_soma_gain_running_stats": "Running-stat\ngain",
-    "cifar10_additive_5f_per_soma_gain_learned": "Learned\ngain",
-    "cifar10_additive_5f_per_soma_dendritic_norm": "Dendritic\nnorm",
+    "cifar10_additive_5f_per_soma_gain_input_dependent": "Input\n gain",
+    "cifar10_additive_5f_per_soma_gain_running_stats": "Run-stat\n gain",
+    "cifar10_additive_5f_per_soma_gain_learned": "Learned\n gain",
+    "cifar10_additive_5f_per_soma_dendritic_norm": "Dend.\n norm",
 }
 
 DOUBLE_LABELS = {
@@ -140,7 +140,14 @@ def _dot_interval_panel(
             zorder=4,
         )
     ax.set_xticks(xs)
-    ax.set_xticklabels([labels.get(c, c.replace("_", "\n")) for c in conditions])
+    ax.set_xticklabels(
+        [labels.get(c, c.replace("_", "\n")) for c in conditions],
+        fontsize=7.2,
+        rotation=28,
+        ha="right",
+        rotation_mode="anchor",
+        linespacing=0.9,
+    )
     ax.set_title(title)
     ax.set_ylabel(ylabel)
     style_axis(ax, grid="y")
@@ -179,7 +186,7 @@ def generate_cifar_figure(summary_dir: Path) -> bool:
             "cifar10_shunting_standard_no_i",
         ],
         CIFAR_LABELS,
-        "Matched backprop ceilings",
+        "Backprop references",
     )
     _dot_interval_panel(
         axes[1],
@@ -206,14 +213,14 @@ def generate_cifar_figure(summary_dir: Path) -> bool:
             "cifar10_additive_5f_per_soma_dendritic_norm",
         ],
         CIFAR_LABELS,
-        "Additive fairness controls",
+        "Additive controls",
         ylabel="",
     )
 
     for label, ax in zip("ABC", axes):
-        panel_label(ax, label, x=-0.14, y=1.08, fontsize=13)
+        panel_label(ax, label, x=0.01, y=0.98, fontsize=10)
 
-    fig.subplots_adjust(left=0.07, right=0.995, top=0.80, bottom=0.33, wspace=0.36)
+    fig.subplots_adjust(left=0.07, right=0.995, top=0.80, bottom=0.42, wspace=0.40)
     _save(fig, "fig_s_cifar10_control_ladder_20260427")
     plt.close(fig)
     return True

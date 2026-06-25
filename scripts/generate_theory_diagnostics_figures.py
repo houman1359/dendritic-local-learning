@@ -250,12 +250,31 @@ def _plot_error_compressibility(ax: plt.Axes, rank_summary: pd.DataFrame) -> Non
     stds = []
     pranks = []
     prank_stds = []
+    ps_cosines = []
+    ps_cosine_stds = []
+    cosine_col = (
+        "actual_broadcast_cosine_mean"
+        if "actual_broadcast_cosine_mean" in sub.columns
+        else "per_soma_broadcast_cosine_mean"
+        if "per_soma_broadcast_cosine_mean" in sub.columns
+        else None
+    )
+    cosine_std_col = (
+        "actual_broadcast_cosine_std"
+        if "actual_broadcast_cosine_std" in sub.columns
+        else "per_soma_broadcast_cosine_std"
+        if "per_soma_broadcast_cosine_std" in sub.columns
+        else None
+    )
     for core in order:
         row = sub[sub["network_type"] == core].iloc[0]
         means.append(float(row["rank1_residual_mean"]))
         stds.append(float(row["rank1_residual_std"]))
         pranks.append(float(row["effective_rank_participation_mean"]))
         prank_stds.append(float(row["effective_rank_participation_std"]))
+        if cosine_col is not None:
+            ps_cosines.append(float(row[cosine_col]))
+            ps_cosine_stds.append(float(row[cosine_std_col]) if cosine_std_col else 0.0)
     bars = ax.bar(
         x,
         means,
@@ -269,9 +288,9 @@ def _plot_error_compressibility(ax: plt.Axes, rank_summary: pd.DataFrame) -> Non
     )
     ax.set_xticks(x)
     ax.set_xticklabels(labels)
-    ax.set_ylabel("Residual")
+    ax.set_ylabel("Value")
     ax.set_ylim(0, 1.02)
-    ax.set_title("SVD\nresidual", linespacing=0.9)
+    ax.set_title("Error\ngeometry", linespacing=0.9)
     for rect, prank in zip(bars, pranks):
         ax.text(
             rect.get_x() + rect.get_width() / 2,
@@ -283,6 +302,42 @@ def _plot_error_compressibility(ax: plt.Axes, rank_summary: pd.DataFrame) -> Non
             color="white",
             fontweight="bold",
             linespacing=0.9,
+        )
+    if ps_cosines:
+        ax.errorbar(
+            x,
+            ps_cosines,
+            yerr=ps_cosine_stds,
+            fmt="D",
+            color=COLORS["ink"],
+            markerfacecolor="white",
+            markeredgewidth=1.1,
+            markersize=4.8,
+            capsize=2.2,
+            lw=1.0,
+            zorder=5,
+            label="PS cosine",
+        )
+        ax.legend(
+            handles=[
+                mpatches.Patch(facecolor="#9CA3AF", edgecolor="white", label="SVD $\\rho_1$"),
+                plt.Line2D(
+                    [0],
+                    [0],
+                    marker="D",
+                    color=COLORS["ink"],
+                    markerfacecolor="white",
+                    lw=0,
+                    markersize=4.5,
+                    label="PS cos.",
+                ),
+            ],
+            loc="upper right",
+            fontsize=5.6,
+            frameon=False,
+            handlelength=1.0,
+            handletextpad=0.35,
+            borderpad=0.1,
         )
 
 

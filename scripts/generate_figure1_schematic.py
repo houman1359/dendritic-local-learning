@@ -62,6 +62,7 @@ BROADCAST_COLOR = COLORS["local"]  # rank-1 shared broadcast amber
 # Broadcast-mode colors (kept consistent with rest of paper)
 MODE_COLORS = {
     "rank1":   COLORS["scalar"],
+    "persoma": COLORS["local"],
     "rankk":   COLORS["low_rank"],
     "path":    COLORS["pathway"],
     "oracle":  COLORS["oracle"],
@@ -458,13 +459,14 @@ def panel_c(ax):
 
     modes = [
         ("Scalar",   "global shared",       MODE_COLORS["rank1"],  "rank1"),
+        ("Per-soma", "one per neuron",       MODE_COLORS["persoma"], "persoma"),
         ("Rank-$K$", "$K$ channels",         MODE_COLORS["rankk"],  "rankk"),
         ("Path",     "branch roles",         MODE_COLORS["path"],   "path"),
         ("Oracle", r"$\tilde{\alpha}_n\delta_0$", MODE_COLORS["oracle"], "oracle"),
     ]
     row_x = 0.62
     row_w = 0.34
-    row_h = 0.090
+    row_h = 0.070
     row_ys = np.linspace(0.84, 0.54, len(modes))
     for (name, note, col, kind), ry in zip(modes, row_ys):
         _round_box(ax, (row_x, ry - row_h / 2), row_w, row_h,
@@ -570,9 +572,9 @@ def main():
     panel_b(ax_b)
     panel_c(ax_c)
 
-    for ax, lbl, x_off, y_off in [(ax_a, "A", -0.06, 1.13),
-                                  (ax_b, "B", -0.04, 1.13),
-                                  (ax_c, "C", -0.03, 1.13)]:
+    for ax, lbl, x_off, y_off in [(ax_a, "A", -0.06, 1.22),
+                                  (ax_b, "B", -0.04, 1.22),
+                                  (ax_c, "C", -0.03, 1.22)]:
         panel_label(ax, lbl, x=x_off, y=y_off, fontsize=12.0)
 
     out = OUTPUT_DIR / "fig1_model_and_credit"

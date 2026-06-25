@@ -709,7 +709,7 @@ def figure_rule_feedback_controls_main():
         ax.set_xticklabels(labels, fontsize=8.0)
         ax.set_ylim(35, 90)
     ax.set_ylabel("Noise (%)", fontsize=8.6)
-    ax.set_title("C  Feedback bandwidth", loc="left", fontsize=9.2, fontweight="bold")
+    ax.set_title("C  Feedback construction", loc="left", fontsize=9.2, fontweight="bold")
 
     ax = axes[3]
     style_axis(ax, grid="y")
@@ -750,10 +750,10 @@ def figure_rule_feedback_controls_main():
 
 
 # ===================================================================
-# Figure 4 — Competence & Regime Dependence
+# Figure 4 — Matched-Capacity Performance & Regime Dependence
 # ===================================================================
 def figure4_competence_regime():
-    print("\n--- Figure 4: Competence & Regime Dependence ---")
+    print("\n--- Figure 4: Matched-Capacity Performance & Regime Dependence ---")
 
     competence = _csv_path(COMPETENCE_SUMMARY_CSV)
     ceilings = _csv_path(STANDARD_CEILING_SUMMARY_CSV)
@@ -891,7 +891,7 @@ def figure4_competence_regime():
     }
     ax.set_xticklabels([short_dataset_labels.get(d[0], d[0]) for d in datasets_info])
     ax.set_ylabel("Test accuracy (%)")
-    ax.set_title("Competence")
+    ax.set_title("Matched-capacity\nperformance")
 
     # Legend
     legend_handles = [
@@ -1613,7 +1613,7 @@ def figure_s_additional_stress_tests():
 
         ax.set_xlabel("Network depth")
         ax.set_ylabel("Test accuracy (%)")
-        ax.set_title("Shunting degrades more gracefully with depth")
+        ax.set_title("Depth stress test")
         ax.legend(fontsize=7, loc="best", handlelength=1.5,
                   handletextpad=0.3, ncol=1)
         ax.xaxis.set_major_locator(ticker.MaxNLocator(integer=True))
@@ -1636,7 +1636,7 @@ def figure_s_additional_stress_tests():
 
         ax.set_xlabel(r"Error noise $\sigma$")
         ax.set_ylabel("Test accuracy (%)")
-        ax.set_title("Shunting tolerates noisy broadcasts")
+        ax.set_title("Broadcast-noise stress test")
         ax.legend(fontsize=7, handlelength=1.0)
 
     # ---- Panel C: Fashion-MNIST ----
@@ -1667,7 +1667,7 @@ def figure_s_additional_stress_tests():
         ax.set_xticks(x)
         ax.set_xticklabels([c[0] for c in conditions], fontsize=7.5)
         ax.set_ylabel("Test accuracy (%)")
-        ax.set_title("The gain is modest on cleaner vision tasks")
+        ax.set_title("Fashion-MNIST control")
 
         all_v = [c[1] for c in conditions]
         ax.set_ylim(max(0, min(all_v) - 4), max(all_v) + 3)
@@ -2057,18 +2057,26 @@ def figure_s4():
     if p2b is not None:
         cg = p2b[(p2b["dataset"] == "context_gating") &
                  (p2b["error_broadcast_mode"] == "per_soma")].copy()
+        if "hsic_enabled" in cg.columns:
+            cg = cg[cg["hsic_enabled"].astype(bool)]
         if len(cg):
             cg = cg.sort_values("hsic_weight")
-            ax.errorbar(cg["hsic_weight"], cg["test_accuracy_mean"] * 100,
+            weights = cg["hsic_weight"].astype(float).to_numpy()
+            xpos = np.arange(len(cg))
+            labels = ["0" if np.isclose(w, 0.0) else rf"$10^{{{int(np.round(np.log10(w)))}}}$"
+                      for w in weights]
+            ax.errorbar(xpos, cg["test_accuracy_mean"] * 100,
                         yerr=cg["test_accuracy_std"] * 100,
                         marker="o", markersize=4, lw=1.0, capsize=2,
                         color=COLOR_SHUNTING)
+            ax.set_xticks(xpos)
+            ax.set_xticklabels(labels, fontsize=7.5)
+            ax.set_xlim(-0.25, len(cg) - 0.75)
             ax.set_xlabel("HSIC weight")
             ax.set_ylabel("Test accuracy (%)")
             ax.set_title("FG-MNIST: HSIC ablation")
-            ax.set_xscale("symlog", linthresh=0.005)
 
-    fig.subplots_adjust(left=0.08, right=0.97, bottom=0.15, top=0.90,
+    fig.subplots_adjust(left=0.08, right=0.97, bottom=0.18, top=0.90,
                         wspace=0.55)
     _save(fig, "fig_s4_verification")
     plt.close(fig)
@@ -2347,13 +2355,13 @@ def figure_s_bm_policy():
         for xi, v in enumerate(group_vals):
             ax.text(xi, v + 0.3, f"{v:.1f}", ha="center", va="bottom", fontsize=6.5)
 
-        # Reference lines for standard backprop
+        # Reference lines for matched standard backprop
         if len(ref_add_bp):
             ax.axhline(ref_add_bp.iloc[0] * 100, xmin=0.0, xmax=0.5,
-                       color=col_bp_ref, lw=1.1, ls="--", label="BP ceiling (add.)")
+                       color=col_bp_ref, lw=1.1, ls="--", label="BP ref. (add.)")
         if len(ref_shu_bp):
             ax.axhline(ref_shu_bp.iloc[0] * 100, xmin=0.5, xmax=1.0,
-                       color=col_bp_ref, lw=1.1, ls=":", label="BP ceiling (shunt.)")
+                       color=col_bp_ref, lw=1.1, ls=":", label="BP ref. (shunt.)")
 
         ax.set_xticks(x)
         ax.set_xticklabels(group_labels, fontsize=7.5)
@@ -2362,7 +2370,7 @@ def figure_s_bm_policy():
                      fontsize=8.5, loc="left", pad=6)
         style_axis(ax)
 
-        # y-range: include BP ceilings if they're higher
+        # y-range: include BP references if they're higher
         all_vals = list(group_vals)
         if len(ref_add_bp):
             all_vals.append(ref_add_bp.iloc[0] * 100)
@@ -2372,7 +2380,7 @@ def figure_s_bm_policy():
         ymax = max(all_vals) + 4
         ax.set_ylim(ymin, ymax)
 
-        # Compact per-axis legend (only show BP ceiling lines)
+        # Compact per-axis legend (only show BP reference lines)
         ax.legend(fontsize=6.5, handlelength=1.2, loc="lower right",
                   framealpha=0.9, handletextpad=0.4)
 

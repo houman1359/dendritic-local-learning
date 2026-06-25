@@ -102,8 +102,8 @@ def _find_record(
 
 def _summary_records(df: pd.DataFrame) -> list[dict[str, Any]]:
     entries = [
-        ("local_ca", "dendritic_additive", "fixed", "baseline", "Add. fixed\nLocalCA"),
-        ("local_ca", "dendritic_additive", "learned", "baseline", "Add. learned\nLocalCA"),
+        ("local_ca", "dendritic_additive", "fixed", "baseline", "Add.\nfixed"),
+        ("local_ca", "dendritic_additive", "learned", "baseline", "Add.\nlearned"),
         ("local_ca", "dendritic_shunting", "learned", "baseline", "Shunt.\nPS"),
         ("local_ca", "dendritic_shunting", "learned", "baseline_tuned", "Shunt.\nPS tuned"),
         ("local_ca", "dendritic_shunting", "learned", "low_rank_k1", "Random\n$K{=}1$"),
@@ -277,13 +277,22 @@ def _plot_accuracy_panel(ax: plt.Axes, records: list[dict[str, Any]]) -> None:
         )
 
     ax.set_yticks(y)
-    ax.set_yticklabels(labels)
+    ax.set_yticklabels(labels, fontsize=7.1, linespacing=0.92)
     ax.invert_yaxis()
     ax.set_xlim(70, 100.2)
     ax.set_xlabel("Test accuracy (%)")
-    ax.set_title("Higher-rank feedback helps", fontsize=9.2)
+    ax.set_title("Higher-rank feedback helps", fontsize=9.2, pad=7)
     ax.axvline(95, color="#999999", linewidth=0.6, linestyle=":")
-    ax.text(95.2, -0.75, "high-accuracy regime", fontsize=7.0, color="#666666")
+    ax.text(
+        0.73,
+        0.96,
+        "high-accuracy regime",
+        transform=ax.transAxes,
+        fontsize=6.4,
+        color="#666666",
+        ha="left",
+        va="top",
+    )
 
 
 def _plot_specialization_panel(ax: plt.Axes, df: pd.DataFrame) -> None:
@@ -402,7 +411,7 @@ def _plot_assignment_panel(ax: plt.Axes, summary_row: dict[str, Any]) -> None:
 
     ax.text(
         0.02,
-        -0.18,
+        0.02,
         (
             f"test {100.0 * float(summary_row['test_accuracy']):.1f}%"
             f" | max assignment {float(summary_row['router_mean_max_assignment']):.3f}"
@@ -410,7 +419,8 @@ def _plot_assignment_panel(ax: plt.Axes, summary_row: dict[str, Any]) -> None:
         transform=ax.transAxes,
         fontsize=5.9,
         ha="left",
-        va="top",
+        va="bottom",
+        bbox={"boxstyle": "round,pad=0.14", "facecolor": "white", "edgecolor": "none", "alpha": 0.82},
     )
     cbar = plt.colorbar(image, ax=ax, fraction=0.09, pad=0.05)
     cbar.set_label("Assignment prob.", fontsize=8)

@@ -86,7 +86,7 @@ def _bar_panel(ax, data: pd.DataFrame, dataset: str, title: str) -> None:
 def _rank_panel(ax, data: pd.DataFrame, metric: str, ylabel: str, title: str) -> None:
     sub = data[(data["dataset"] == "mnist") & (data["ie_value"] == 5) & (data["scope"] == "all_layers")]
     order = ["dendritic_additive", "dendritic_shunting"]
-    labels = ["Additive", "Shunting"]
+    labels = ["Add.", "Shunt."]
     colors = [COLORS["additive"], COLORS["shunting"]]
     xs = np.arange(len(order))
     means = []
@@ -120,7 +120,12 @@ def main() -> None:
     causal = pd.read_csv(CAUSAL_CSV)
     rank = pd.read_csv(RANK_CSV)
 
-    fig, axes = plt.subplots(1, 4, figsize=(7.0, 2.35))
+    fig, axes = plt.subplots(
+        1,
+        5,
+        figsize=(7.0, 2.35),
+        gridspec_kw={"width_ratios": [1.05, 1.05, 0.88, 0.88, 0.88]},
+    )
     _bar_panel(axes[0], causal, "mnist", "MNIST")
     _bar_panel(axes[1], causal, "noise_resilience", "Noise resilience")
     _rank_panel(
@@ -137,7 +142,15 @@ def main() -> None:
         "Participation rank",
         "Exact-error rank",
     )
-    for ax, label in zip(axes, "ABCD"):
+    _rank_panel(
+        axes[4],
+        rank,
+        "actual_broadcast_cosine",
+        "Broadcast cosine",
+        "Per-soma fidelity",
+    )
+    axes[4].set_ylim(0, 1.02)
+    for ax, label in zip(axes, "ABCDE"):
         ax.text(
             0.02,
             0.98,
