@@ -191,7 +191,7 @@ def _save(fig, name):
     os.makedirs(FIGURES_DIR, exist_ok=True)
     for ext in ("pdf", "png"):
         p = os.path.join(FIGURES_DIR, f"{name}.{ext}")
-        fig.savefig(p, dpi=DPI)
+        fig.savefig(p, dpi=DPI, bbox_inches="tight", pad_inches=0.02)
     print(f"  Saved: {name}.{{pdf,png}}")
 
 
