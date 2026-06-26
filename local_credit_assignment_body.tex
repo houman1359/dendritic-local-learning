@@ -39,13 +39,21 @@ This work builds on models of dendritic signal integration, branch-level nonline
 It also connects to machine-learning approaches that replace exact backpropagation with local, random, predictive, equilibrium, perturbation, or broadcast feedback signals \cite{rumelhart1986learning,lillicrap2020backprop,lillicrap2016random,nokland2016dfa,lee2015dtp,scellier2017equilibrium,meulemans2021dfc,millidge2021predictive,hinton2022forward,dellaferrera2022pepita,max2024backprojections,ma2024auglocal,lv2025dll,erdogan2025ebd,kao2024ccl}.
 Our contribution is complementary: we derive the exact conductance-tree credit object and test when shunting inhibition and dendritic morphology make that object broadcast-compatible.
 
-We test this chain directly. Exact-gradient reconstruction verifies the factorization numerically. Gradient-fidelity diagnostics are used as diagnostics, not as a claim of backpropagation equivalence: shunting improves directional alignment relative to an additive control, but the absolute cosine remains modest, while scale mismatch is substantially reduced. Exact-error rank and direct broadcast-fidelity diagnostics show that shunting can make the compartment-error field easier for the feedback field used by the learning rule to approximate. Transported-error oracle experiments show that supplying the exact path-transported compartment error substantially reduces the local-learning gap. Together, these results identify feedback fidelity as an important bottleneck in these experiments.
+We test this chain directly. Exact-gradient reconstruction verifies the factorization numerically (Fig.~\ref{fig:gradient_fidelity}). Gradient-fidelity diagnostics are used as diagnostics, not as a claim of backpropagation equivalence: shunting improves directional alignment relative to an additive control, but the absolute cosine remains modest, while scale mismatch is substantially reduced. Exact-error rank and direct broadcast-fidelity diagnostics show that shunting can make the compartment-error field easier for the feedback field used by the learning rule to approximate. Transported-error oracle experiments show that supplying the exact path-transported compartment error substantially reduces the local-learning gap. Together, these results identify feedback fidelity as an important bottleneck in these experiments.
 
 \noindent\textbf{Contributions.}
 This paper makes three contributions. First, it derives the conductance-stage path gain, its local-eligibility and path-error factorization, and a closed-form inhibitory path-gain ratio. Second, it identifies path-gain and broadcast-compatibility metrics that mediate whether restricted somatic feedback can approximate exact compartment errors. Third, it shows empirically that shunting inhibition can improve this approximation while also identifying regimes where scalar or low-rank feedback fails.
 
 \noindent\textbf{Scope of evidence.}
 Analytical statements concern the conductance-tree factorization, path gains, and inhibitory path-gain derivatives under the stated steady-state assumptions. Simulation controls test exact reconstruction, broadcast fidelity, transported-oracle upper bounds, and additive/shunting comparisons. Biological interpretations are restricted to branch-local inhibition and morphology-dependent credit routing; transported-error experiments are oracle diagnostics, not proposed biological learning rules.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{fig2_gradient_fidelity.pdf}
+\caption{\textbf{Exact reconstruction and gradient diagnostics.}
+(A) Exact-factorization reconstruction matches autograd. (B,C) Final LocalCA--backpropagation cosine and scale mismatch; dots show seeds. (D) Layer-soma factorial diagnostic separating exact vs.\ reused soma teaching signals and exact path transport vs.\ per-soma sharing. Metrics/protocol: Appendix~\ref{app:extra_results}. Error bars in (B,C) are $\pm$1 s.d.}
+\label{fig:gradient_fidelity}
+\end{figure}
 
 %=============================================================================
 \section{Compartmental Voltage Model and Gradient Derivation}
@@ -223,14 +231,6 @@ The factorization in Eq.~\eqref{eq:factorization} isolates the fast task-error-d
 In the models studied here, shunting improves this approximation by reducing and stabilizing $R_n^{\mathrm{tot}}$, which narrows the spread of local sensitivities across the tree.
 In the empirical networks, each dendritic branch layer may optionally apply a post-voltage reactivation $f(V_n)$ before passing activity to the next stage; unless otherwise noted, the manuscript sweeps use a learnable bounded tanh reactivation.
 
-\begin{figure}[t]
-\centering
-\includegraphics[width=\textwidth]{fig2_gradient_fidelity.pdf}
-\caption{\textbf{Exact reconstruction and gradient diagnostics.}
-(A) Exact-factorization reconstruction matches autograd. (B,C) Final LocalCA--backpropagation cosine and scale mismatch; dots show seeds. (D) Layer-soma factorial diagnostic separating exact vs.\ reused soma teaching signals and exact path transport vs.\ per-soma sharing. Metrics/protocol: Appendix~\ref{app:extra_results}. Error bars in (B,C) are $\pm$1 s.d.}
-\label{fig:gradient_fidelity}
-\end{figure}
-
 %=============================================================================
 \section{Local Learning Rules}
 \label{sec:local_rules}
@@ -319,7 +319,8 @@ Learned branch inhibition is functionally important: zeroing, shuffling, or clam
 \noindent\emph{Matched-capacity performance.}
 In the matched-capacity regime, shunting LocalCA remains within $5$--$6$ percentage points of matched backpropagation on MNIST, Fashion-MNIST, and figure-ground MNIST (Table~\ref{tab:gap_closing}; Fig.~\ref{fig:competence_regime}). Controls in Fig.~\ref{fig:competence_regime}D identify a feedback-field bottleneck: exact path transport reaches the matched shunting backprop reference, activation choice has little effect, and additive gain/normalization variants do not rescue the additive baseline. Fig.~\ref{fig:rule_feedback_controls} shows that 5F is the strongest practical LocalCA variant, soma-derived feedback is essential, and higher-rank/path feedback improves the noise-resilience bridge.
 
-\begin{figure}[t]
+\pagebreak
+\begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{fig4_competence_regime.pdf}
 \caption{\textbf{Matched-capacity performance and regime dependence.}
@@ -330,15 +331,14 @@ In the matched-capacity regime, shunting LocalCA remains within $5$--$6$ percent
 \noindent\emph{Regime dependence of the shunting advantage.}
 With matched per-soma feedback, shunting is modestly better on MNIST, Fashion-MNIST, and figure-ground MNIST, and the gap grows on inhibition-sensitive noise resilience. Morphology shifts the useful inhibitory regime, so the shunting advantage is not monotonic in $N_I$ or tree depth (Fig.~\ref{fig:competence_regime}B,C; Appendix Fig.~\ref{fig:additional_stress_tests}).
 
-\clearpage
-\begin{figure}[t]
+\pagebreak
+\begin{figure}[H]
 \centering
 \includegraphics[width=0.95\textwidth]{fig5_rule_feedback_controls.pdf}
 \caption{\textbf{Rule and feedback controls.}
 (A) Rule ablation. (B) Error-source ablation. (C) Noise-resilience feedback ladder: PS, path proxy, low-rank $K$, and transported oracle. (D) Cue-routing rank diagnostic with pathway-vector feedback (PV). Details: Appendix Fig.~\ref{fig:rule_feedback_design_appendix}; Table~\ref{tab:low_rank_broadcast}.}
 \label{fig:rule_feedback_controls}
 \end{figure}
-\clearpage
 
 \section{Discussion}
 \label{sec:discussion}
