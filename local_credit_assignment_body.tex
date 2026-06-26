@@ -296,7 +296,7 @@ A feedback-alignment-style random-broadcast argument is included in Appendix~\re
 \label{sec:experiments}
 %=============================================================================
 
-\begin{figure}[H]
+\begin{figure}[t]
 \centering
 \includegraphics[width=\textwidth]{fig3_mechanistic_evidence.pdf}
 \caption{\textbf{Mechanistic chain from path gains to learning.}
@@ -331,7 +331,7 @@ In the matched-capacity regime, shunting LocalCA remains within $5$--$6$ percent
 With matched per-soma feedback, shunting is modestly better on MNIST, Fashion-MNIST, and figure-ground MNIST, and the gap grows on inhibition-sensitive noise resilience. Morphology shifts the useful inhibitory regime, so the shunting advantage is not monotonic in $N_I$ or tree depth (Fig.~\ref{fig:competence_regime}B,C; Appendix Fig.~\ref{fig:additional_stress_tests}).
 
 \pagebreak
-\begin{figure}[H]
+\begin{figure}[t]
 \centering
 \includegraphics[width=0.95\textwidth]{fig5_rule_feedback_controls.pdf}
 \caption{\textbf{Rule and feedback controls.}
@@ -733,8 +733,7 @@ Figure-ground MNIST & 0.861 & -- & $0.803\pm0.006$ & $0.787\pm0.007$ & 5.8 \\
 \subsection*{Extended Gradient Analysis and $N_I$ Sweep Detail}
 Figure~\ref{fig:gradient_fidelity} in the main text summarizes final-state gradient diagnostics and the layer-soma factorial check. The supplementary view below separates static scale checks, inhibitory dose-response curves, and individual Fashion-MNIST seed behavior so that the aggregate claims are not driven by a single summary panel.
 
-\clearpage
-\begin{figure}[H]
+\begin{figure}[t]
 \centering
 \includegraphics[width=0.95\textwidth]{fig_s2_gradient_extended.pdf}
 \caption{\textbf{Extended gradient and $N_I$ analysis (supplementary).} \textbf{(A)}~Log-scale mismatch, $|\log_{10}(\|g^{\mathrm{local}}\|/\|g^{\mathrm{bp}}\|)|$, from a separate matched-weight static diagnostic; these values should not be compared directly to the checkpointed final-state diagnostic in Fig.~\ref{fig:gradient_fidelity}. The ideal value is $0$; shunting is near ideal ($0.117$), whereas additive shows order-of-magnitude distortion ($>1.0$). \textbf{(B)}~Noise-resilience $N_I$ dose-response with error bands ($\pm$1 s.d.). \textbf{(C)}~MNIST $N_I$ dose-response detail with error bands. \textbf{(D)}~Fashion-MNIST individual seeds for all conditions, showing consistency across runs.}
@@ -744,8 +743,7 @@ Figure~\ref{fig:gradient_fidelity} in the main text summarizes final-state gradi
 \paragraph{Alignment dynamics are not a zero-gradient artifact.}
 To check whether low additive alignment could be caused by vanishing gradients, we analyzed a separate 3-seed checkpoint trajectory with parameter-level LocalCA and backprop gradients. The additive local gradients are nonzero throughout training (weighted norm range $9.5{\times}10^{-4}$--$9.5{\times}10^{-3}$), and the corresponding backprop gradients are also nonzero ($2.3{\times}10^{-5}$--$5.7{\times}10^{-3}$). The low additive cosine therefore reflects directional and scale mismatch, not absent gradients: additive 5F cosine stays near zero from epoch $0$ to epoch $50$ ($0.018$ to $0.005$), while its local/backprop norm ratio falls from about $8.8{\times}10^2$ to $0.69$.
 
-\clearpage
-\begin{figure}[H]
+\begin{figure}[t]
 \centering
 \includegraphics[width=0.98\textwidth]{fig_s_alignment_norm_dynamics.pdf}
 \caption{\textbf{Alignment dynamics with explicit gradient-norm checks.}
@@ -757,8 +755,7 @@ To check whether low additive alignment could be caused by vanishing gradients, 
 \subsection*{Verification and Reproducibility}
 These checks compare the main seed set with held-out seeds and report the HSIC-weight sensitivity for figure-ground MNIST. The additional matched experiments use the same objective-weight comparison on both seed sets, so seed robustness and HSIC contribution can be summarized as a matched two-factor control.
 
-\clearpage
-\begin{figure}[H]
+\begin{figure}[t]
 \centering
 \includegraphics[width=0.95\textwidth]{fig_s4_verification.pdf}
 \caption{\textbf{Verification and reproducibility (supplementary).} \textbf{(A)}~MNIST verification: the current-code rerun of main seeds (42--46) yields $91.1\pm0.5$\%; held-out seeds (47--49) yield $89.8\pm0.9$\%, showing robustness across random seeds. \textbf{(B)}~Matched figure-ground MNIST HSIC control: both main seeds (42--46) and held-out seeds (47--49) compare HSIC weight $0$ against $0.01$. \textbf{(C)}~HSIC weight ablation on figure-ground MNIST: moderate weights ($0.01$--$0.1$) perform best.}
@@ -769,8 +766,7 @@ These checks compare the main seed set with held-out seeds and report the HSIC-w
 \subsection*{Additional Stress Tests}
 These stress tests probe two ways in which low-bandwidth broadcast can become unreliable: deeper dendritic paths and noisy teaching signals. They are not separate main benchmarks; they delimit where shunting remains useful and where additive local learning degrades.
 
-\clearpage
-\begin{figure}[H]
+\begin{figure}[t]
 \centering
 \includegraphics[width=0.95\textwidth]{fig_additional_stress_tests.pdf}
 \caption{\textbf{Additional stress tests.} \textbf{(A)}~Depth scaling: shunting local (green) degrades more gracefully from 63.5\% to 57.4\%; additive local (blue) drops from 54.9\% to 29.7\%. Matched backpropagation references (dashed) remain stable. \textbf{(B)}~Broadcast-noise robustness: shunting remains stable for $\sigma\!\leq\!0.1$; additive degrades rapidly and reaches chance at $\sigma\!=\!1$. \textbf{(C)}~Fashion-MNIST: the shunting gain is modest on this cleaner benchmark (83.8\% local vs.\ 88.9\% backprop), consistent with the regime-dependent interpretation in the main text.}
@@ -781,8 +777,7 @@ These stress tests probe two ways in which low-bandwidth broadcast can become un
 \subsection*{FA/DFA Baseline Comparison}
 The feedback-alignment baseline is included as an adjacent local-learning reference point. DFA can be evaluated on the dendritic cores, whereas the FA condition is marked unavailable for the block-structured dendritic updates because the required random feedback matrices are not dimensionally compatible with the branch-level parameterization.
 
-\clearpage
-\begin{figure}[H]
+\begin{figure}[t]
 \centering
 \includegraphics[width=0.95\textwidth]{fig_s5_fa_dfa.pdf}
 \caption{\textbf{Feedback alignment baselines (MNIST).} \textbf{(A)}~Grouped comparison: standard backprop (neutral gray), DFA (orange), and FA (purple). Hatched N/A markers indicate that FA is not implemented for the block-structured dendritic architectures because the random feedback matrices are not dimensionally compatible with the tree-structured branch updates. DFA achieves 66.1\% on shunting vs.\ 62.2\% additive vs.\ 51.8\% point MLP. \textbf{(B)}~Backprop$-$DFA gap: dendritic architectures (24.9--27.6~pp) show smaller gaps than point MLPs (39.5~pp), suggesting conductance-based architecture is partially compatible with random feedback.}
@@ -792,8 +787,7 @@ The feedback-alignment baseline is included as an adjacent local-learning refere
 
 \subsection*{CIFAR-10 Results}
 
-\clearpage
-\begin{figure}[H]
+\begin{figure}[t]
 \centering
 \includegraphics[width=0.98\textwidth]{fig_s_cifar10_control_ladder_20260427.pdf}
 \caption{\textbf{CIFAR-10 control ladder in the compact direct-I-stream family.}
@@ -841,8 +835,7 @@ Table~\ref{tab:cifar10_mechanism_extension} provides the exact values for the ap
 \subsection*{Additive Normalization Control}
 This control separates generic additive voltage normalization from shunting conductance dynamics in a lower-capacity MNIST stress regime.
 
-\clearpage
-\begin{figure}[H]
+\begin{figure}[t]
 \centering
 \includegraphics[width=0.95\textwidth]{fig_additive_norm_control.pdf}
 \caption{\textbf{Additive + normalization control (MNIST stress-regime diagnostic).} \textbf{(A)}~Standard backprop: normalization provides a small boost (89.7\% $\to$ 90.9\%). \textbf{(B)}~Local learning: normalization improves additive from 46.5\% to 56.0\% ($+9.5$~pp), partially closing the gap to shunting (61.7\%, dashed green). These lower local accuracies come from a separate stress-regime diagnostic, not from the matched-capacity performance setting in Table~\ref{tab:gap_closing}.}
@@ -853,8 +846,7 @@ This control separates generic additive voltage normalization from shunting cond
 
 This regime map tests whether tree geometry changes the inhibitory operating point at which shunting helps. It supports the claim that morphology changes the useful inhibition regime; a fuller mechanistic account would require matched theory diagnostics for every cell in the grid.
 
-\clearpage
-\begin{figure}[H]
+\begin{figure}[t]
 \centering
 \includegraphics[width=0.98\textwidth]{fig_morphology_ie_regime.pdf}
 \caption{\textbf{Morphology shifts the useful inhibitory regime.}
@@ -894,8 +886,7 @@ We next tested whether learned inhibitory conductance carries sample-dependent s
 
 We also computed the direct log-gain covariance margin in Eq.~\eqref{eq:compression_condition} on the selected morphology diagnostic checkpoints. The margin is zero when no inhibitory conductance is present and slightly negative in the inhibited shunting selections ($-2.5\times10^{-3}$, $-5.0\times10^{-4}$, and $-2.8\times10^{-4}$ at $N_I{=}5,20,40$). We therefore do not use this covariance condition as a positive main result. Its role is to clarify when shunting should compress gains; the empirical claim rests on the measured comparative path-gain dispersion, exact-error rank, and inhibition-intervention diagnostics.
 
-\clearpage
-\begin{figure}[H]
+\begin{figure}[t]
 \centering
 \includegraphics[width=0.98\textwidth]{fig_s_inhibition_causality_error_rank.pdf}
 \caption{\textbf{Post-training inhibition intervention and exact-error compressibility.}
@@ -926,8 +917,7 @@ Single-channel broadcast succeeds when exact compartment errors are effectively 
 
 Cue routing tests a regime where one shared teaching signal is expected to fail: context determines which noisy cue is reliable, so different pathways should receive different credit. Figure~\ref{fig:cue_routing} shows that the benchmark is learnable and that moving beyond the restricted per-soma / single-channel baselines helps, but the path-structured variant does not yet beat the best unstructured low-rank setting. We therefore interpret this result as a failure-mode and rank-requirement diagnostic, not as a solved structured-feedback method.
 
-\clearpage
-\begin{figure}[H]
+\begin{figure}[t]
 \centering
 \includegraphics[width=0.90\textwidth]{fig_s_cue_routing.pdf}
 \caption{\textbf{Structured feedback when restricted feedback fails.}
