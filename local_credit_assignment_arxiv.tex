@@ -25,15 +25,16 @@
 
 % Keep large figures orderly while still allowing text on figure pages.
 \setcounter{topnumber}{1}
-\setcounter{bottomnumber}{1}
-\setcounter{totalnumber}{3}
+\setcounter{bottomnumber}{0}
+\setcounter{totalnumber}{1}
 \setcounter{dbltopnumber}{1}
 \renewcommand{\topfraction}{0.92}
-\renewcommand{\bottomfraction}{0.75}
+\renewcommand{\bottomfraction}{0}
 \renewcommand{\textfraction}{0.08}
 \renewcommand{\floatpagefraction}{0.85}
 \renewcommand{\dbltopfraction}{0.92}
 \renewcommand{\dblfloatpagefraction}{0.85}
+\newcommand{\FloatBarrier}{\clearpage}
 
 \newtheorem{theorem}{Theorem}
 \newtheorem{proposition}{Proposition}
