@@ -296,6 +296,14 @@ A feedback-alignment-style random-broadcast argument is included in Appendix~\re
 \label{sec:experiments}
 %=============================================================================
 
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{fig3_mechanistic_evidence.pdf}
+\caption{\textbf{Mechanistic chain from path gains to learning.}
+(A) Measured path-gain field. (B) MNIST exact-error geometry: unrestricted rank-$1$ SVD residual $\rho_1$ and actual per-soma broadcast cosine. (C) Post-training inhibitory-conductance interventions. (D,E) Broadcast fidelity and transported-error learning on noise resilience. CV, $\rho_1$, and interventions: Appendix~\ref{app:extra_results}. Error bars are $\pm$1 s.d.}
+\label{fig:mechanistic}
+\end{figure}
+
 \noindent\emph{Setup.}
 The experiments test factorization, gradient fidelity, exact-error geometry, inhibition necessity, and transported-error oracles using architecture-matched additive/shunting cores and local/backprop training on MNIST \cite{lecun1998gradient}, Fashion-MNIST \cite{xiao2017fashionmnist}, figure-ground MNIST, and noise resilience; CIFAR-10 \cite{krizhevsky2009learning}, cue routing, DFA, and detailed protocols are in the appendix. Unless stated otherwise, local runs use 5F with per-soma feedback, conductance runs use nonnegative first-layer drive, and main mechanism/oracle/competence results use five seeds. Transported error is an oracle upper bound from Theorem~\ref{thm:tree_backprop}, not the proposed biological rule.
 Figure shorthand: BP backpropagation, PS per-soma feedback, PT exact path transport, PV pathway-vector feedback, Or. transported oracle, $K$ random low-rank channels, $N_I$ inhibitory synapses/branch, pp percentage points, and MN/FM/FG = MNIST/Fashion-MNIST/figure-ground MNIST. Metrics, implementation, and tasks are defined in Appendices~\ref{app:extra_results}, \ref{app:implementation}, and \ref{app:synthetic_tasks}.
@@ -304,14 +312,6 @@ Figure shorthand: BP backpropagation, PS per-soma feedback, PT exact path transp
 We compare local and backprop gradients on matched batches and parameters using parameter-count-weighted cosine and scale mismatch $|\log_{10}(\|g_p^{\mathrm{local}}\|/\|g_p^{\mathrm{bp}}\|)|$. Shunting improves the final diagnostic, though absolute directional agreement remains weak: cosine rises from $0.005\pm0.026$ to $0.100\pm0.033$, and scale mismatch falls from $0.50\pm0.05$ to $0.26\pm0.05$. Exact-gradient reconstruction matches autograd to numerical precision (Fig.~\ref{fig:gradient_fidelity}A). The layer-soma factorial diagnostic separates the two practical approximations: exact layer-soma errors plus path transport recover autograd, while per-soma compression and reused final-core coordinates mainly damage the first layer (Fig.~\ref{fig:gradient_fidelity}D). Thus the central non-local approximation is the broadcast substitute for $\partial L/\partial V_n$, not the tree recursion.
 
 \noindent\emph{Mechanistic chain: path gains, broadcast fidelity, and oracle transport.}
-\begin{figure}[t]
-\centering
-\includegraphics[width=\textwidth]{fig3_mechanistic_evidence.pdf}
-\caption{\textbf{Mechanistic chain from path gains to learning.}
-(A) Measured path-gain field. (B) MNIST exact-error geometry: unrestricted rank-$1$ SVD residual $\rho_1$ and actual per-soma broadcast cosine. (C) Post-training inhibitory-conductance interventions. (D,E) Broadcast fidelity and transported-error learning on noise resilience. CV, $\rho_1$, and interventions: Appendix~\ref{app:extra_results}. Error bars are $\pm$1 s.d.}
-\label{fig:mechanistic}
-\end{figure}
-
 Figure~\ref{fig:mechanistic} gives the central empirical chain. At matched inhibition ($N_I{=}5$), shunting narrows the MNIST conductance-stage path-gain component (CV $0.23$ vs.\ $1.16$ for additive), lowers exact-error rank (rank-$1$ residual $0.70\pm0.21$ vs.\ $0.81\pm0.11$), and improves compatibility with the implemented feedback field (actual per-soma broadcast cosine $0.74\pm0.13$ vs.\ $0.37\pm0.18$). Panel A is an architectural path-gain diagnostic rather than a direct validation of Prop.~\ref{prop:path_gain_alignment}; the SVD and broadcast-cosine panels test intrinsic geometry and implemented-feedback compatibility, respectively.
 
 Learned branch inhibition is functionally important: zeroing, shuffling, or clamping it drops MNIST from about $90\%$ to $20$--$26\%$ and noise resilience from about $81\%$ to $10$--$19\%$. Direct fidelity and oracle panels probe the same bottleneck: under shunting, per-soma feedback better tracks exact compartment errors, transported-error fidelity approaches $0.95$--$1.0$, and transported learning lifts both architectures to $92$--$95\%$ on noise resilience.
@@ -319,8 +319,7 @@ Learned branch inhibition is functionally important: zeroing, shuffling, or clam
 \noindent\emph{Matched-capacity performance.}
 In the matched-capacity regime, shunting LocalCA remains within $5$--$6$ percentage points of matched backpropagation on MNIST, Fashion-MNIST, and figure-ground MNIST (Table~\ref{tab:gap_closing}; Fig.~\ref{fig:competence_regime}). Controls in Fig.~\ref{fig:competence_regime}D identify a feedback-field bottleneck: exact path transport reaches the matched shunting backprop reference, activation choice has little effect, and additive gain/normalization variants do not rescue the additive baseline. Fig.~\ref{fig:rule_feedback_controls} shows that 5F is the strongest practical LocalCA variant, soma-derived feedback is essential, and higher-rank/path feedback improves the noise-resilience bridge.
 
-\pagebreak
-\begin{figure}[H]
+\begin{figure}[t]
 \centering
 \includegraphics[width=\textwidth]{fig4_competence_regime.pdf}
 \caption{\textbf{Matched-capacity performance and regime dependence.}
