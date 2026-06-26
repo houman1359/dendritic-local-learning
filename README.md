@@ -25,7 +25,7 @@ The current PDF layout is:
 - Page size is letter.
 - The PDF has no undefined references or citations in a two-pass compile.
 
-The appendix boundary is guarded with `\clearpage` after the bibliography and `\suppressfloats[t]` on the first appendix page so appendix figures do not float into references.
+The appendix begins directly after the bibliography so the final reference page does not carry avoidable blank space; appendix figures are kept near their source with local float placement.
 
 ## Main Figures
 
