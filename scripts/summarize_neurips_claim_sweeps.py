@@ -18,7 +18,14 @@ DEFAULT_SWEEPS = {
 
 
 def _latest_match(root: Path, pattern: str) -> Path | None:
-    matches = sorted(root.glob(pattern), key=lambda path: path.stat().st_mtime)
+    matches = sorted(
+        (
+            path
+            for path in root.glob(pattern)
+            if (path / "plots" / "locallearning_processed_data.csv").exists()
+        ),
+        key=lambda path: path.stat().st_mtime,
+    )
     return matches[-1] if matches else None
 
 

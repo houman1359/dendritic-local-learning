@@ -82,7 +82,7 @@ FMNIST_RUNS_CSV = os.path.join(
 MORPHOLOGY_IE_RUNS_CSV = os.path.join(
     ANALYSIS_DIR, "morphology_ie_regime", "morphology_ie_regime_runs.csv"
 )
-STANDARD_CEILING_SUMMARY_CSV = os.path.join(
+STANDARD_BP_REFERENCE_SUMMARY_CSV = os.path.join(
     ANALYSIS_DIR, "standard_ceiling_refresh_5seed", "standard_ceiling_refresh_summary.csv"
 )
 IE_PERF_SUMMARY_CSV = os.path.join(
@@ -756,7 +756,7 @@ def figure4_competence_regime():
     print("\n--- Figure 4: Matched-Capacity Performance & Regime Dependence ---")
 
     competence = _csv_path(COMPETENCE_SUMMARY_CSV)
-    ceilings = _csv_path(STANDARD_CEILING_SUMMARY_CSV)
+    bp_refs = _csv_path(STANDARD_BP_REFERENCE_SUMMARY_CSV)
     core = _csv_path(CORE_FAIR_TUNING_CSV)
     p2b = _csv_path(PHASE2B_GAP_CLOSING_CSV)
     fmnist = _csv_path(FMNIST_SUMMARY_CSV)
@@ -814,8 +814,8 @@ def figure4_competence_regime():
     else:
         # MNIST
         bp_mnist = None
-        if ceilings is not None:
-            r = ceilings[(ceilings["dataset"] == "mnist") & (ceilings["network_type"] == "dendritic_shunting")]
+        if bp_refs is not None:
+            r = bp_refs[(bp_refs["dataset"] == "mnist") & (bp_refs["network_type"] == "dendritic_shunting")]
             if len(r):
                 bp_mnist = r.iloc[0]["test_accuracy_mean"]
         local_shunt_mnist, local_shunt_mnist_e = None, 0
@@ -851,8 +851,8 @@ def figure4_competence_regime():
 
         # Figure-ground MNIST (historical dataset key: context_gating)
         bp_cg = None
-        if ceilings is not None:
-            r = ceilings[(ceilings["dataset"] == "context_gating") & (ceilings["network_type"] == "dendritic_shunting")]
+        if bp_refs is not None:
+            r = bp_refs[(bp_refs["dataset"] == "context_gating") & (bp_refs["network_type"] == "dendritic_shunting")]
             if len(r):
                 bp_cg = r.iloc[0]["test_accuracy_mean"]
         local_shunt_cg, local_shunt_cg_e = None, 0
@@ -1696,7 +1696,7 @@ def figure_s1():
     fig, axes = plt.subplots(2, 2, figsize=(W * 1.9, 7.0),
                              gridspec_kw={"wspace": 0.45, "hspace": 0.52})
 
-    # ---- Panel A: Phase 1 capacity ceilings ----
+    # ---- Panel A: Phase 1 matched backpropagation references ----
     ax = axes[0, 0]
     _panel(ax, "A")
 
@@ -1722,7 +1722,7 @@ def figure_s1():
         ax.set_xticks(xb)
         ax.set_xticklabels([DATASET_LABEL.get(d, d) for d in ds_order], fontsize=7.5)
         ax.set_ylabel("Test accuracy (%)")
-        ax.set_title("Backprop ceilings")
+        ax.set_title("Backprop refs")
         ax.legend(fontsize=7, ncol=2, loc="lower left",
                   handlelength=1.0, handletextpad=0.3)
 
@@ -1980,7 +1980,9 @@ def figure_s4():
     _panel(ax, "A")
 
     bars_data = []
-    bars_data.append(("Seeds\n42-46", 91.39, 0.33, COLOR_SHUNTING, 1.0))
+    # Current-code reproducibility rerun after the final refactor:
+    # local_sweep_runs/refactor_repro_check_20260625_201231.
+    bars_data.append(("Seeds\n42-46", 91.13, 0.54, COLOR_SHUNTING, 1.0))
     if verif is not None:
         v = verif[(verif["core_type"] == "dendritic_shunting") & (verif["dataset_name"] == "mnist")]
         if len(v):

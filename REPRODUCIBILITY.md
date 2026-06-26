@@ -18,10 +18,27 @@ cd drafts/dendritic-local-learning
 python scripts/generate_neurips_figures.py
 ```
 
+- Figure 1 schematic:
+
+```bash
+python scripts/generate_figure1_schematic.py
+```
+
 - Theory, path-gain, intervention, rank, and oracle diagnostic figures:
 
 ```bash
 python scripts/generate_theory_diagnostics_figures.py
+python scripts/generate_revision_figures.py
+```
+
+- Additional included appendix figures:
+
+```bash
+python scripts/generate_alignment_norm_dynamics_figure.py
+python scripts/generate_cifar_sweep_comparison_figures.py
+python scripts/generate_morphology_ie_regime_figure.py
+python scripts/generate_inhibition_causality_figure.py
+python scripts/generate_cue_routing_figures.py
 ```
 
 - Layer-soma factorial diagnostic used in Figure 2D:
@@ -43,6 +60,21 @@ python scripts/generate_theory_diagnostics_figures.py
 ```bash
 python scripts/summarize_neurips_claim_sweeps.py
 python scripts/generate_neurips_figures.py
+```
+
+Non-destructive checks can write regenerated summaries to a scratch directory,
+for example:
+
+```bash
+python scripts/summarize_path_transport_sweep.py \
+  --sweep-dir local_sweep_runs/path_transport_upper_bound_nonnegativeinput_fix_5seed_20260409164042 \
+  --output-dir .fusion_scratch/repro_audit/summary_outputs/path_transport
+python scripts/summarize_theory_diagnostics.py \
+  --diag-dir analysis/theory_diag_gradient_fidelity_vs_ie_nonnegativeinput_fix \
+  --output-dir .fusion_scratch/repro_audit/summary_outputs/theory_diag
+python scripts/summarize_cue_routing_results.py \
+  --raw-csv .fusion_scratch/repro_audit/summary_outputs/cue_routing/cue_routing_runs.csv \
+  --summary-csv .fusion_scratch/repro_audit/summary_outputs/cue_routing/cue_routing_summary.csv
 ```
 
 ## Primary Analysis Sources

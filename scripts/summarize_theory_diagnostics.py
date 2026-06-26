@@ -38,6 +38,23 @@ def _extract_first(value: Any, default: Any = None) -> Any:
     return value if value is not None else default
 
 
+def _resolve_run_dir(run_dir: Path) -> Path:
+    if run_dir.exists():
+        return run_dir
+    if run_dir.is_absolute():
+        return run_dir
+
+    candidates = [
+        Path.cwd() / run_dir,
+        REPO_ROOT / run_dir,
+        DRAFT_DIR / run_dir,
+    ]
+    for candidate in candidates:
+        if candidate.exists():
+            return candidate
+    return run_dir
+
+
 def _metadata_from_run(run_dir: Path) -> dict[str, Any]:
     config = _read_json(run_dir / "config.json")
     final = _read_json(run_dir / "performance" / "final.json")
@@ -101,8 +118,12 @@ def _collect_run_metadata(summary: pd.DataFrame) -> pd.DataFrame:
     rows: list[dict[str, Any]] = []
     for run_dir_str in summary["run_dir"].astype(str).tolist():
         run_dir = Path(run_dir_str)
+        resolved_run_dir = _resolve_run_dir(run_dir)
         try:
-            rows.append(_metadata_from_run(run_dir))
+            metadata = _metadata_from_run(resolved_run_dir)
+            metadata["run_dir"] = run_dir_str
+            metadata["resolved_run_dir"] = str(resolved_run_dir)
+            rows.append(metadata)
         except Exception as exc:
             rows.append(
                 {

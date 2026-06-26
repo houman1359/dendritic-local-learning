@@ -661,11 +661,11 @@ Detailed run sources and commands are maintained in \path{REPRODUCIBILITY.md}. T
 \toprule
 \textbf{Experiment family} & \textbf{Architecture / condition} & \textbf{Seeds and selection} & \textbf{Reproduction command} \\
 \midrule
-Exact-factorization and gradient diagnostics & Nonnegative-input E/I dendritic cores, $[128,128]$ soma layers, $[3,3]$ tree, 3F--5F local rules & Main summaries use 5 seeds; gradient-dynamics panels use 3 seeds where indicated & \path{python scripts/generate_neurips_figures.py} \\
-Layer-soma factorial diagnostic & Two-layer shunting checkpoints with exact/reused soma errors and transported/per-soma branch fields & Six fixed checkpoints; no validation selection & \path{python scripts/measure_layer_soma_factorial.py} \\
-Path-gain, exact-error rank, and inhibition intervention & Matched additive and shunting cores at fixed inhibition; post-training intervention states & Five seeds per main condition; interventions use trained checkpoints & \path{python scripts/generate_theory_diagnostics_figures.py} \\
-Transported-error oracle and feedback construction controls & Per-soma, random low-rank, path-structured, and exact transported-error feedback & Five seeds for main oracle and feedback-ladder summaries & \path{python scripts/summarize_path_transport_sweep.py} \\
-Matched-capacity performance & MNIST, Fashion-MNIST, figure-ground MNIST; per-soma 5F LocalCA and matched backprop references & Five seeds; validation-selected configurations report held-out test accuracy & \path{python scripts/summarize_neurips_claim_sweeps.py} \\
+Exact-factorization and gradient diagnostics & Nonnegative-input E/I dendritic cores, $[128,128]$ soma layers, $[3,3]$ tree, 3F--5F local rules & Main summaries use 5 seeds; gradient-dynamics panels use 3 seeds where indicated & \texttt{python} \path{scripts/generate_neurips_figures.py} \\
+Layer-soma factorial diagnostic & Two-layer shunting checkpoints with exact/reused soma errors and transported/per-soma branch fields & Six fixed checkpoints; no validation selection & \texttt{python} \path{scripts/measure_layer_soma_factorial.py} \\
+Path-gain, exact-error rank, and inhibition intervention & Matched additive and shunting cores at fixed inhibition; post-training intervention states & Five seeds per main condition; interventions use trained checkpoints & \texttt{python} \path{scripts/generate_theory_diagnostics_figures.py} \\
+Transported-error oracle and feedback construction controls & Per-soma, random low-rank, path-structured, and exact transported-error feedback & Five seeds for main oracle and feedback-ladder summaries & \texttt{python} \path{scripts/summarize_path_transport_sweep.py} \\
+Matched-capacity performance & MNIST, Fashion-MNIST, figure-ground MNIST; per-soma 5F LocalCA and matched backprop references & Five seeds; validation-selected configurations report held-out test accuracy & \texttt{python} \path{scripts/summarize_neurips_claim_sweeps.py} \\
 \bottomrule
 \end{tabular}
 \caption{\textbf{Reproducibility summary.} Commands are run from the draft directory after the corresponding training or diagnostic outputs have been generated.}
@@ -761,16 +761,16 @@ Table~\ref{tab:gap_closing} reports the matched-capacity performance numbers use
 \centering
 \scriptsize
 \setlength{\tabcolsep}{3pt}
-\begin{tabular}{@{}lcccc@{}}
+\begin{tabular}{@{}lccccc@{}}
 \toprule
-\textbf{Dataset} & \textbf{Matched BP ref.} & \textbf{Shunt. local} & \textbf{Add. local} & \textbf{Shunt. gap (pp)} \\
+\textbf{Dataset} & \textbf{Shunt. BP} & \textbf{Add. BP} & \textbf{Shunt. local} & \textbf{Add. local} & \textbf{Shunt. gap (pp)} \\
 \midrule
-MNIST & 0.971 & $0.912\pm0.005$ & $0.894\pm0.007$ & 5.9 \\
-Fashion-MNIST & 0.889 & $0.838\pm0.003$ & $0.831\pm0.004$ & 5.1 \\
-Figure-ground MNIST & 0.861 & $0.803\pm0.006$ & $0.787\pm0.007$ & 5.8 \\
+MNIST & 0.971 & $0.970\pm0.001$ & $0.911\pm0.005$ & $0.894\pm0.007$ & 6.0 \\
+Fashion-MNIST & 0.889 & $0.876\pm0.001$ & $0.838\pm0.003$ & $0.831\pm0.004$ & 5.1 \\
+Figure-ground MNIST & 0.861 & -- & $0.803\pm0.006$ & $0.787\pm0.007$ & 5.8 \\
 \bottomrule
 \end{tabular}
-\caption{\textbf{Local performance.} Matched backpropagation references are matched-capacity shunting runs from dedicated $5$-seed standard-training experiments for MNIST and figure-ground MNIST and from the dedicated $5$-seed Fashion-MNIST competence sweep. Local values are 5F with per-soma feedback and local decoder updates. Figure-ground MNIST additionally uses an HSIC auxiliary objective (weight $0.01$; see the HSIC auxiliary-objective appendix paragraph). Error bars on local values: $\pm$1 s.d.\ across 5 seeds; gaps are percentage points.}
+\caption{\textbf{Local performance.} Backpropagation references are matched-capacity standard-training runs. Additive backpropagation is reported where a matched five-seed reference is available; the figure-ground additive backpropagation reference was not part of the matched competence source table. Local values are 5F with per-soma feedback and local decoder updates. Figure-ground MNIST additionally uses an HSIC auxiliary objective (weight $0.01$; see the HSIC auxiliary-objective appendix paragraph). Error bars are $\pm$1 s.d.\ across 5 seeds where available; gaps are percentage points.}
 \label{tab:gap_closing}
 \end{table}
 
@@ -801,7 +801,7 @@ These checks compare the main seed set with held-out seeds and report the HSIC-w
 \begin{figure*}[t]
 \centering
 \includegraphics[width=0.95\textwidth]{fig_s4_verification.pdf}
-\caption{\textbf{Verification and reproducibility (supplementary).} \textbf{(A)}~MNIST verification: main seeds (42--46) yield $91.4\pm0.3$\%; held-out seeds (47--49) yield $89.8\pm0.9$\%, showing robustness across random seeds. \textbf{(B)}~Matched figure-ground MNIST HSIC control: both main seeds (42--46) and held-out seeds (47--49) compare HSIC weight $0$ against $0.01$. \textbf{(C)}~HSIC weight ablation on figure-ground MNIST: moderate weights ($0.01$--$0.1$) perform best.}
+\caption{\textbf{Verification and reproducibility (supplementary).} \textbf{(A)}~MNIST verification: the current-code rerun of main seeds (42--46) yields $91.1\pm0.5$\%; held-out seeds (47--49) yield $89.8\pm0.9$\%, showing robustness across random seeds. \textbf{(B)}~Matched figure-ground MNIST HSIC control: both main seeds (42--46) and held-out seeds (47--49) compare HSIC weight $0$ against $0.01$. \textbf{(C)}~HSIC weight ablation on figure-ground MNIST: moderate weights ($0.01$--$0.1$) perform best.}
 \label{fig:verification_appendix}
 \end{figure*}
 
@@ -831,8 +831,8 @@ The feedback-alignment baseline is included as an adjacent local-learning refere
 \centering
 \includegraphics[width=0.98\textwidth]{fig_s_cifar10_control_ladder_20260427.pdf}
 \caption{\textbf{CIFAR-10 control ladder in the compact direct-I-stream family.}
-\textbf{(A)}~Matched backprop ceilings. With nonnegative inputs and a nonlinear decoder, shunting slightly exceeds additive under standard training, and removing learned I-to-E conductance lowers the shunting ceiling.
-\textbf{(B)}~Broadcast ladder. Per-soma feedback remains weak on this harder dataset, random low-rank $K{=}4$ improves partially, and exact effective transported error nearly reaches the shunting backprop ceiling.
+\textbf{(A)}~Matched backpropagation references. With nonnegative inputs and a nonlinear decoder, shunting slightly exceeds additive under standard training, and removing learned I-to-E conductance lowers the shunting reference.
+\textbf{(B)}~Broadcast ladder. Per-soma feedback remains weak on this harder dataset, random low-rank $K{=}4$ improves partially, and exact effective transported error nearly reaches the matched shunting backpropagation reference.
 \textbf{(C)}~Additive fairness controls. Input-dependent gain, running-stat gain, learned gain, and dendritic normalization do not rescue additive per-soma feedback. This figure is a harder-dataset stress test, not a claim of competitive CIFAR-10 benchmarking.}
 \label{fig:cifar10_mechanism_extension}
 \end{figure*}
@@ -865,7 +865,7 @@ transported error, no learned inhibition & shunting & 5F path transport & no & $
 \bottomrule
 \end{tabular}
 \renewcommand{\arraystretch}{1.0}
-\caption{\textbf{Exact CIFAR-10 values for the 70-run control ladder (5 seeds per condition, validation-best epoch).} All rows use flattened CIFAR-10 in $[0,1]$, nonnegative transfer outputs, positive conductance transforms, a compact depth-$4$ dendritic core, and a nonlinear decoder. LocalCA maps output error back to decoder-input/soma coordinates through the decoder Jacobian. The useful conclusions are narrow but important: learned shunting slightly improves the matched backprop ceiling, learned I-to-E conductance is necessary for the strongest shunting results, transported error nearly closes the shunting LocalCA gap, and additive per-soma fairness controls do not explain the transported-shunting result.}
+\caption{\textbf{Exact CIFAR-10 values for the 70-run control ladder (5 seeds per condition, validation-best epoch).} All rows use flattened CIFAR-10 in $[0,1]$, nonnegative transfer outputs, positive conductance transforms, a compact depth-$4$ dendritic core, and a nonlinear decoder. LocalCA maps output error back to decoder-input/soma coordinates through the decoder Jacobian. The useful conclusions are narrow but important: learned shunting slightly improves the matched backpropagation reference, learned I-to-E conductance is necessary for the strongest shunting results, transported error nearly closes the shunting LocalCA gap, and additive per-soma fairness controls do not explain the transported-shunting result.}
 \label{tab:cifar10_mechanism_extension}
 \end{table*}
 
@@ -916,7 +916,7 @@ Explicit I cells & LocalCA, path transport, freeze I-cell dendrites & $0.938 \pm
 Explicit I cells & standard backprop & $0.951 \pm 0.003$ \\
 \bottomrule
 \end{tabular}
-\caption{\textbf{One-feedforward-layer input-mode path-gain probe on noise resilience (3 seeds).} All rows use one excitatory dendritic population with $[3,3]$ morphology and nonnegative inputs. The direct-stream rows have no explicit inhibitory neurons; the input stream drives learned branch-level inhibitory conductance banks directly. The explicit-I rows use a matched inhibitory population with $[3,3]$ morphology. Exact effective path transport closes the direct-stream per-soma gap, and explicit inhibitory cells nearly match both direct-stream path transport and the explicit-I backprop ceiling.}
+\caption{\textbf{One-feedforward-layer input-mode path-gain probe on noise resilience (3 seeds).} All rows use one excitatory dendritic population with $[3,3]$ morphology and nonnegative inputs. The direct-stream rows have no explicit inhibitory neurons; the input stream drives learned branch-level inhibitory conductance banks directly. The explicit-I rows use a matched inhibitory population with $[3,3]$ morphology. Exact effective path transport closes the direct-stream per-soma gap, and explicit inhibitory cells nearly match both direct-stream path transport and the explicit-I matched backpropagation reference.}
 \label{tab:input_mode_probe}
 \end{table}
 
@@ -1140,7 +1140,7 @@ For a nonlinear decoder, used in the CIFAR-10 compact control ladder, the implem
 \[
 \delta_0^a=J_{\mathrm{dec}}(h)^\top\delta^y.
 \]
-All LocalCA broadcast modes are defined in this soma/core activation-error coordinate system before local conversion to voltage-space errors. Decoder-update modes are: \textbf{backprop}, which uses autograd for decoder parameters; \textbf{local}, which is implemented for the cached linear readout and assigns
+All LocalCA broadcast modes are defined in this soma/core activation-error coordinate system before local conversion to voltage-space errors. Decoder-update modes are: \textbf{backprop}, which uses autograd for decoder parameters; \textbf{local}, which is implemented for the linear readout and assigns
 \[
 \widehat{\nabla}_{W_{\mathrm{dec}}}L=\left\langle \delta^y h^\top\right\rangle_B,
 \qquad
@@ -1178,7 +1178,7 @@ Gradient fidelity / path-gain / noise-resilience mechanism & id.+ReLU & $[128,12
 MNIST / figure-ground local competence & id.+ReLU & $[128]$ & $[3,3]$ & $N_E{=}40$, $N_I{=}20$ & $5$ & Best local 5F per-soma runs in Table~\ref{tab:gap_closing}; reactivation \texttt{param\_tanh}. \\
 Fashion-MNIST competence & id.+ReLU & $[128]$ & $[3,3]$ & $N_E{=}40$, $N_I{=}20$ & $5$ & Dedicated five-seed standard-vs-local competence sweep; reactivation \texttt{param\_tanh}. \\
 Cue-routing PV-LocalCA & router & $[64]$ & $[2]$ & $N_E{=}10$, $N_I{=}4$ & $5$ & Learned router with two pathway groups and rank-$2$ structured feedback; reactivation \texttt{param\_tanh}. \\
-CIFAR-10 compact direct-I-stream control ladder & id.+ReLU & $[20]$ E, no I cells & $[3,3,3,3]$ & $N_E{=}25$, $N_I{=}25$ direct I-to-E, with matched no-I controls & $5$ per condition & Harder-data extension with input-driven inhibitory conductance, decoder $[32,16]$, decoder-aware soma mapping, and additive fairness controls. \\
+CIFAR-10 compact direct-I-stream control ladder & id.+ReLU & $[20]$ E, no I cells & $[3,3,3,3]$ & $N_E{=}25$, $N_I{=}25$ direct I-to-E, with matched no-I controls & $5$ per condition & Harder-dataset stress test with input-driven inhibitory conductance, decoder $[32,16]$, decoder-aware soma mapping, and additive fairness controls. \\
 Morphology$\times$inhibition appendix map & id.+ReLU & $[128,128]$ & $[2,2]$, $[3,3]$, $[4,4]$, $[2,2,2]$, $[3,3,3]$ & $N_E{=}40$, $N_I \in \{0,5,10,20,40\}$ & $3$ & Supportive 3-seed sweep; reactivation \texttt{param\_tanh}. \\
 \bottomrule
 \end{tabular}%
@@ -1203,7 +1203,7 @@ Gradient fidelity / path-gain / noise resilience & Adam & $10^{-3}$ & 256 & 50 &
 Morphology $\times$ inhibition regime map (supportive) & Adam & $10^{-3}$ & 256 & 50 & 0 & 3 seeds \\
 Cue routing & Adam & $10^{-3}$ & 256 & 90 & 0 & early stopping with patience 30 \\
 CIFAR-10 compact direct-I-stream depth-4 LocalCA & Adam & $10^{-3}$ / $10^{-4}$ (block / react.) & 256 & 400 & 0 / 0.01 & grad-clip 5.0, early stop patience 50, nonlinear decoder \\
-CIFAR-10 compact direct-I-stream depth-4 BP & Adam & $10^{-3}$ & 256 & 200 & 0.01 & early stop patience 40, matched ceiling \\
+CIFAR-10 compact direct-I-stream depth-4 BP & Adam & $10^{-3}$ & 256 & 200 & 0.01 & early stop patience 40, matched backpropagation reference \\
 \bottomrule
 \end{tabular}
 \renewcommand{\arraystretch}{1.0}
@@ -1270,7 +1270,7 @@ CIFAR-10 & Flattened harder-dataset stress test & Public CIFAR dataset site asks
 Synthetic tasks & Figure-ground MNIST, noise resilience, cue integration & Generated procedurally from public benchmarks or random seeds described in Appendix~\ref{app:synthetic_tasks}; no new third-party asset is introduced. \\
 \bottomrule
 \end{tabular}
-\caption{\textbf{Existing assets used in the manuscript.} We credit the original sources in the bibliography, use public benchmark assets under their published access conditions, and do not redistribute third-party raw data in the anonymous submission.}
+\caption{\textbf{Existing assets used in the manuscript.} We credit the original sources in the bibliography, use public benchmark assets under their published access conditions, and do not redistribute third-party raw data in the manuscript package.}
 \end{table}
 
 \subsection*{LocalCA Broadcast and Gradient Assignment}
@@ -1428,7 +1428,7 @@ The supervised tasks below provide the matched-capacity classification setting, 
 The standard classification tasks use ten output classes and nonnegative pixel inputs. They serve as matched-capacity tests of whether per-soma 5F LocalCA can approach a matched backpropagation reference on clean supervised data. Fashion-MNIST is included as a modest distribution shift with the same input and output dimensionality as MNIST.
 
 \paragraph{CIFAR-10 harder-dataset stress test.}
-CIFAR-10 inputs are flattened RGB images in $[0,1]$. The compact CIFAR family uses a smaller dendritic core with a nonlinear decoder and decoder-aware LocalCA error mapping. We use this setting to test whether the broadcast-fidelity ladder persists on a harder data distribution: per-soma feedback is weak, higher-rank feedback helps, and exact effective path transport approaches the matched shunting backprop ceiling.
+CIFAR-10 inputs are flattened RGB images in $[0,1]$. The compact CIFAR family uses a smaller dendritic core with a nonlinear decoder and decoder-aware LocalCA error mapping. We use this setting to test whether the broadcast-fidelity ladder persists on a harder data distribution: per-soma feedback is weak, higher-rank feedback helps, and exact effective path transport approaches the matched shunting backpropagation reference.
 
 \paragraph{Figure-ground MNIST.}
 Inputs are figure-ground MNIST examples used for 10-way digit classification. For each flattened image reshaped as $28\times28$, the right half carries the original MNIST digit and the left half is replaced by independent low-amplitude uniform distractor pixels,
@@ -1459,7 +1459,7 @@ This task is used in the cue-routing feedback-rank diagnostic to test structured
 These robustness protocols are used only as stress diagnostics. They keep the same broad model family while changing dendritic depth or corrupting the broadcast signal.
 
 \paragraph{Depth scaling.}
-Varying dendritic depth from 1--4 layers (branch factors $[9]$ to $[3,3,3,3]$) tests whether local credit deteriorates with longer paths. Shunting local degrades from 63.5\% to 57.4\%; additive local degrades more steeply from 54.9\% to 29.7\%. The shunting advantage grows with depth ($+8.5 \to +27.7$~pp). Backprop ceilings remain stable at about $90$--$92\%$. See Fig.~\ref{fig:additional_stress_tests}A.
+Varying dendritic depth from 1--4 layers (branch factors $[9]$ to $[3,3,3,3]$) tests whether local credit deteriorates with longer paths. Shunting local degrades from 63.5\% to 57.4\%; additive local degrades more steeply from 54.9\% to 29.7\%. The shunting advantage grows with depth ($+8.5 \to +27.7$~pp). Matched backpropagation references remain stable at about $90$--$92\%$. See Fig.~\ref{fig:additional_stress_tests}A.
 
 \paragraph{Noise robustness.}
 Gaussian noise $\mathcal{N}(0,\sigma^2)$ is added to the broadcast error to test whether learning depends on a finely tuned scalar magnitude. Shunting is robust to $\sigma\!\leq\!0.1$ (about $62\%$) while additive drops from 46.5\% to chance at $\sigma{=}1.0$, confirming that shunting credit signals carry useful learning information beyond the broadcast magnitude. See Fig.~\ref{fig:additional_stress_tests}B.

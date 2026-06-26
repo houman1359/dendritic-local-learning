@@ -34,7 +34,7 @@ The current main-paper figures are:
 - `figures/fig1_model_and_credit.pdf`: model, path gains, and broadcast taxonomy.
 - `figures/fig2_gradient_fidelity.pdf`: exact factorization, final gradient-fidelity diagnostics, and the layer-soma factorial check.
 - `figures/fig3_mechanistic_evidence.pdf`: path-gain/error-field compressibility, inhibition intervention, broadcast fidelity, and oracle learning.
-- `figures/fig4_competence_regime.pdf`: capacity-calibrated competence, inhibition dose-response, morphology regime, and the additive-normalization stress diagnostic.
+- `figures/fig4_competence_regime.pdf`: matched-capacity performance, inhibition dose-response, morphology regime, and the additive-normalization stress diagnostic.
 
 Key appendix figures include the local-rule and feedback-design controls, CIFAR-10 stress tests, morphology maps, cue-routing diagnostics, soma-on extensions, activation audits, and weight-statistics analyses.
 
@@ -47,8 +47,11 @@ PYTHONPATH=../../src:$PYTHONPATH python scripts/generate_figure1_schematic.py
 PYTHONPATH=../../src:$PYTHONPATH python scripts/generate_theory_diagnostics_figures.py
 PYTHONPATH=../../src:$PYTHONPATH python scripts/generate_neurips_figures.py
 PYTHONPATH=../../src:$PYTHONPATH python scripts/generate_revision_figures.py
+PYTHONPATH=../../src:$PYTHONPATH python scripts/generate_alignment_norm_dynamics_figure.py
+PYTHONPATH=../../src:$PYTHONPATH python scripts/generate_cifar_sweep_comparison_figures.py
 PYTHONPATH=../../src:$PYTHONPATH python scripts/generate_cue_routing_figures.py
 PYTHONPATH=../../src:$PYTHONPATH python scripts/generate_morphology_ie_regime_figure.py
+PYTHONPATH=../../src:$PYTHONPATH python scripts/generate_inhibition_causality_figure.py
 ```
 
 Compile the NeurIPS wrapper:
