@@ -16,9 +16,7 @@ Our contribution is not simply to add dendritic structure to a neural network, b
 \centering
 \includegraphics[width=\textwidth]{fig1_model_and_credit.pdf}
 \caption{\textbf{Model and credit assignment.}
-(A)~Single dendritic E/I unit with nonnegative excitatory and inhibitory input streams, branch synapse banks, and a gold-ringed soma matching the highlighted unit in B.
-(B)~Layer of dendritic E/I units projecting to a task readout; $\boldsymbol{\delta}_0=\partial L/\partial \mathbf{V}_0$ is the layer-wide soma/core error from which feedback is constructed.
-(C)~Credit factorization: exact updates use the same local eligibility multiplied by path-specific compartment errors $\delta_{u,n}$, whereas LocalCA keeps the eligibility and replaces $\delta_{u,n}$ with a broadcast estimator $e_{u,n}$; global scalar, per-soma, Rank-$K$, Path, and Oracle broadcasts trade bandwidth for fidelity.}
+(A)~Dendritic E/I unit with branch synapse banks. (B)~Layer of such units projecting to a task readout; $\boldsymbol{\delta}_0=\partial L/\partial\mathbf{V}_0$ is the soma/core error used for feedback. (C)~Exact updates multiply local eligibility by path-specific errors $\delta_{u,n}$; LocalCA replaces them with broadcast estimates $e_{u,n}$ of increasing fidelity.}
 \label{fig:model_schematic}
 \end{figure}
 
@@ -286,32 +284,20 @@ Credit interpretation & Inhibition changes path gain and voltage sensitivity & I
 \centering
 \includegraphics[width=\textwidth]{fig2_gradient_fidelity.pdf}
 \caption{\textbf{Exact reconstruction and gradient diagnostics.}
-(A) Exact-factorization reconstruction matches autograd to numerical precision. (B) Final weighted cosine similarity between LocalCA and backpropagation gradients, reported as a diagnostic rather than the main mechanism claim; dots show seeds. (C) Final scale mismatch, $|\log_{10}(\|g^{\mathrm{local}}\|/\|g^{\mathrm{bp}}\|)|$; dots show seeds. (D) Layer-soma factorial diagnostic at fixed two-layer shunting checkpoints. Bars show energy-weighted 3F conductance/synapse gradient cosines to autograd across six checkpoints; conditions separate exact vs.\ reused final-core teaching signals and exact path transport vs.\ per-soma sharing. ``Practical per-soma'' combines the reused final-core teaching vector with the implemented per-soma feedback construction. Error bars in (B,C) are $\pm$1 s.d.\ across 3 seeds.}
+(A) Exact-factorization reconstruction matches autograd. (B,C) Final LocalCA--backpropagation cosine and scale mismatch; dots show seeds. (D) Layer-soma factorial diagnostic separating exact vs.\ reused soma teaching signals and exact path transport vs.\ per-soma sharing. Error bars in (B,C) are $\pm$1 s.d.}
 \label{fig:gradient_fidelity}
 \end{figure}
 
 \noindent\emph{Practical heuristic wrappers: 4F and 5F.}
-\textbf{4F (branch-soma relevance proxy).}
-In the conductance-stage recursion~\eqref{eq:path_sum}, the path gain $\alpha_n^{\mathrm{cond}}$ attenuates the somatic error differently at each compartment.
-To compensate without explicitly computing that gain, 4F uses an online branch-soma covariance proxy
+The 4F and 5F variants add slow branch-level preconditioners to the same fast eligibility and broadcast error; they are empirical stabilizers, not additional task-error channels. 4F uses a branch-soma covariance proxy and 5F adds a bounded predictability factor,
 \[
-r_n^{\mathrm{4F}} =
+r_n^{\mathrm{4F}}=
 \frac{\Cov_B(\bar V_{n,b},\bar V_{0,b})}
-{\sqrt{\Var_B(\bar V_{n,b})\Var_B(\bar V_{0,b})}+\varepsilon}.
+{\sqrt{\Var_B(\bar V_{n,b})\Var_B(\bar V_{0,b})}+\varepsilon},
+\qquad
+\phi_n=\frac{\Var(V_n)}{\sigma_{\mathrm{res}}^2+\varepsilon},
 \]
-Here $\bar V_{n,b}$ is the mean voltage of branch layer $n$ for batch item $b$ after averaging over neuron, branch, and spatial coordinates recorded in that layer; $\bar V_{0,b}$ is the corresponding per-example mean soma/core activity. The covariance and variance are estimated over mini-batch examples, then smoothed with an EMA initialized from the first observed value. These statistics are detached from autograd and are updated from the same mini-batch forward activations used for the local gradient.
-Positive $r_n^{\mathrm{4F}}$ up-weights branch layers whose voltages covary with the soma; weak or sign-opposed covariance reduces the reliability of the shared broadcast for that branch layer.
-In the implementation used for these experiments the online estimate is clamped to the positive stability range $[0.1,2.0]$, so sign-opposed covariance reduces the multiplier rather than reversing the update direction. Because the numerator and denominator are smoothed separately and may also use single-sample EMA fallbacks, the clamped quantity is a branch-level preconditioner rather than a literal Pearson correlation bounded by one.
-We keep 4F as a diagnostic intermediate rather than a theorem-derived path-gain estimate. Empirically, this factor alone gives little improvement over 3F; the practical jump comes from the 5F preconditioner below.
-
-\textbf{5F (bounded branch-level preconditioner).}
-5F adds a second heuristic factor
-\[
-\phi_n = \Var(V_n) / (\sigma_{\mathrm{res}}^2 + \varepsilon),
-\]
-where $\sigma_{\mathrm{res}}^2$ is the online residual variance of the branch-layer voltage after a scalar ridge regression on the recorded parent proxy. In the batch estimator, $V_n$ and the parent proxy are centered over examples and flattened over the remaining layer coordinates before the smoothed variance and covariance moments are updated. The same detached mini-batch activations are used for statistics and gradients.
-Operationally, $\phi_n$ is clamped to $[0.25, 4.0]$ for stability. This factor is empirical, not theorem-derived; its gain should be read as practical denoising rather than theoretical necessity.
-With ordinary least squares fit and evaluated on the same observations, the residual variance would not exceed $\Var(V_n)$. Here the numerator, parent covariance, residual estimate, and ridge term are updated online and clamped separately, so the ratio can fall below one or rise above one transiently. The lower clamp prevents noisy residual estimates from nearly zeroing a branch-layer update, and the upper clamp prevents a predictable branch from dominating optimization. The ablations in Fig.~\ref{fig:rule_feedback_controls} and the sensitivity check in Appendix Fig.~\ref{fig:five_factor_sensitivity} are therefore essential parts of the evidence.
+with implementation clamps $r_n^{\mathrm{4F}}\in[0.1,2.0]$ and $\phi_n\in[0.25,4.0]$. The appendix specifies the averaging axes, EMA initialization, detaching, and clamp rationale. Empirically, 4F alone gives little improvement over 3F; the practical rule is the 5F update below.
 
 \begin{definition}[5F Update]
 \begin{equation}
@@ -333,56 +319,41 @@ A feedback-alignment-style random-broadcast argument is included in Appendix~\re
 \centering
 \includegraphics[width=\textwidth]{fig3_mechanistic_evidence.pdf}
 \caption{\textbf{Mechanistic chain from path gains to learning.}
-(A) Representative measured conductance-stage path-gain field at matched inhibition. (B) MNIST exact-error geometry: bars show unrestricted rank-$1$ SVD residual and diamonds show cosine between the actual per-soma broadcast field and the exact compartment-error field. (C) Post-training inhibitory-conductance interventions (learned, zero, shuffled, mean-clamped, or uniform matched inhibition). (D) Compartment-error fidelity on noise resilience; dashed lines show the transported-error oracle. (E) Transported-error learning where per-soma broadcast leaves a gap. Error bars are $\pm$1 s.d.}
+(A) Measured path-gain field. (B) MNIST exact-error geometry: rank-$1$ residual and actual per-soma broadcast cosine. (C) Post-training inhibitory-conductance interventions. (D,E) Broadcast fidelity and transported-error learning on noise resilience. Error bars are $\pm$1 s.d.}
 \label{fig:mechanistic}
 \end{figure}
 
 \noindent\emph{Setup.}
-The experiments test five linked predictions: exact factorization should reconstruct autograd gradients; shunting should improve the scale and structure of LocalCA credit signals even when directional cosine is weak; exact compartment errors should have lower intrinsic rank and better alignment with the feedback field used by the learning rule under shunting than under matched additive controls; learned inhibition should be functionally important and sample-dependent rather than merely adding a matched average conductance load; and replacing the broadcast with effective transported error should substantially reduce the local-learning gap.
-We evaluate matched-capacity supervised tasks and controlled sweeps that isolate inhibition strength, rule family, broadcast mode, morphology, and architecture.
-The main text uses MNIST \cite{lecun1998gradient}, Fashion-MNIST \cite{xiao2017fashionmnist}, figure-ground MNIST, noise resilience, and a compressed morphology-regime summary; CIFAR-10 \cite{krizhevsky2009learning} and routed-feedback diagnostics are reported in the appendix (Figs.~\ref{fig:cifar10_mechanism_extension}, \ref{fig:cue_routing}).
-Noise resilience is a nonnegative MNIST corruption task with fresh Gaussian latent draws passed through a fixed projection and clipped to $[0,1]$. Figure-ground MNIST places digit signal and distractor pixels in different halves of the input while preserving nonnegative drive; cue-routing in the appendix is the stronger context-dependent branch-credit task.
-Main comparisons are architecture-matched additive vs.\ shunting dendritic cores and local vs.\ backprop training; DFA is a supplementary baseline.
-Unless otherwise stated, local runs use 5F with per-soma feedback: each soma coordinate supplies the shared teaching signal for that neuron's compartments. Global scalar, random low-rank, pathway-structured, and transported-error controls are labeled separately.
-All main-claim dendritic runs use nonnegative conductance transforms and nonnegative first-layer synaptic drive; image inputs are in $[0,1]$, corrupted inputs are clipped back to $[0,1]$, and figure-ground MNIST uses a nonnegative distractor-half construction. For figure-ground MNIST, the main LocalCA competence runs use an HSIC auxiliary term with weight $0.01$; the appendix reports the HSIC ablation.
-The transported-error condition is an oracle upper bound derived from Theorem~\ref{thm:tree_backprop}, not the proposed biological rule.
-Main mechanistic, oracle, and competence results use $5$ seeds per condition unless noted otherwise; Appendix~\ref{app:extra_results} defines the weighted gradient, path-gain CV, and exact-error SVD metrics.
+The experiments test the factorization, gradient fidelity, exact-error geometry, inhibition necessity, and transported-error oracle predictions. Main comparisons are architecture-matched additive vs.\ shunting dendritic cores and local vs.\ backprop training on MNIST \cite{lecun1998gradient}, Fashion-MNIST \cite{xiao2017fashionmnist}, figure-ground MNIST, and noise resilience; CIFAR-10 \cite{krizhevsky2009learning}, cue routing, DFA, and detailed task protocols are in the appendix. Unless stated otherwise, local runs use 5F with per-soma feedback, all conductance runs use nonnegative first-layer drive, and main mechanistic/oracle/competence results use five seeds per condition. Transported error is an oracle upper bound from Theorem~\ref{thm:tree_backprop}, not the proposed biological rule.
 
 \noindent\emph{From exact factorization to credit-signal fidelity.}
-To test whether these performance differences correspond to better credit signals, we compare local and backprop gradients on the same batch at the same parameter values.
-For each parameter tensor $p$, we compute directional alignment (cosine similarity) and scale mismatch, defined as $|\log_{10}(\|g_p^{\mathrm{local}}\|/\|g_p^{\mathrm{bp}}\|)|$, aggregated by parameter count.
-
-Across the MNIST gradient-dynamics diagnostic, shunting is closer to backprop than the additive control at the final checkpoint, but the directional agreement is still weak in absolute terms: weighted cosine rises from $0.005\pm0.026$ to $0.100\pm0.033$, and scale mismatch falls from $0.50\pm0.05$ to $0.26\pm0.05$.
-Figure~\ref{fig:gradient_fidelity}A confirms that the implementation matches the theory under the nonnegative-input setup: reconstructing gradients from Corollary~\ref{cor:factorization} using exact compartment errors yields weighted relative reconstruction error below $2\times 10^{-7}$ and weighted scale mismatch below $4\times 10^{-8}$ across runs.
-In a few low-norm parameter blocks, cosine becomes numerically unstable even though the reconstruction itself is essentially exact, so we report the norm-based diagnostics in the figure.
-Figure~\ref{fig:gradient_fidelity}D then isolates the two approximations that enter practical multi-layer LocalCA. With exact layer-soma errors and analytic path transport, 3F local conductance/synapse gradients recover autograd in both layers (energy-weighted cosine $1.000$). Compressing the exact layer-soma error into a per-soma shared field mainly damages the first layer ($0.159$ vs.\ $0.846$), and reusing the final-core teaching vector still leaves the first layer weak even with exact within-tree transport ($0.346$). The implemented per-soma/reused condition is therefore the practical endpoint of two distinct approximations, not a failure of the exact tree recursion. Appendix Fig.~\ref{fig:alignment_norm_dynamics} verifies that the corresponding trajectory gradients remain finite, ruling out a trivial zero-gradient explanation for weak cosine diagnostics.
-At the level of the 3F rule, the central non-local approximation is therefore the broadcast substitute for $\partial L/\partial V_n$.
+We compare local and backprop gradients on matched batches and parameter values using parameter-count-weighted cosine and scale mismatch $|\log_{10}(\|g_p^{\mathrm{local}}\|/\|g_p^{\mathrm{bp}}\|)|$. Shunting improves the final diagnostic relative to additive, though absolute directional agreement remains weak: cosine rises from $0.005\pm0.026$ to $0.100\pm0.033$, and scale mismatch falls from $0.50\pm0.05$ to $0.26\pm0.05$. Exact-gradient reconstruction from Corollary~\ref{cor:factorization} matches autograd to numerical precision (Fig.~\ref{fig:gradient_fidelity}A). The layer-soma factorial diagnostic further separates the two practical approximations: exact layer-soma errors plus path transport recover autograd, while per-soma compression and reused final-core coordinates mainly damage the first layer (Fig.~\ref{fig:gradient_fidelity}D). Thus the central non-local approximation is the broadcast substitute for $\partial L/\partial V_n$, not the tree recursion itself.
 
 \noindent\emph{Mechanistic chain: path gains, broadcast fidelity, and oracle transport.}
 \begin{figure}[t]
 \centering
 \includegraphics[width=\textwidth]{fig4_competence_regime.pdf}
 \caption{\textbf{Matched-capacity performance and regime dependence.}
-(A) Matched backprop vs.\ per-soma 5F LocalCA on MNIST, Fashion-MNIST, and figure-ground MNIST. (B) Inhibitory dose-response. (C) Morphology-dependent shunting advantage on noise resilience. (D) MNIST mechanism controls: BP = matched shunting backprop reference, PT = exact path-transported-error LocalCA, tanh/id = learnable bounded tanh vs.\ identity upward transfer, and add/gain/norm = plain additive, best additive-gain, and best normalized-additive controls. Error bars denote $\pm$1 s.d.\ where available.}
+(A) Matched backprop vs.\ per-soma 5F LocalCA. (B) Inhibitory dose-response. (C) Morphology-dependent shunting advantage. (D) MNIST controls: BP, exact path transport (PT), activation choice, and additive gain/normalization variants. Error bars denote $\pm$1 s.d.}
 \label{fig:competence_regime}
 \end{figure}
-Figure~\ref{fig:mechanistic} provides the central empirical chain. At matched inhibition ($N_I{=}5$), shunting narrows the MNIST conductance-stage path-gain component (CV $0.23$ vs.\ $1.16$ for additive; the exact effective gain additionally includes reactivation derivatives) and lowers the intrinsic rank of the exact compartment-error matrix: the unrestricted best rank-$1$ residual drops from $0.81\pm0.11$ to $0.70\pm0.21$, while participation rank drops from $8.0\pm3.7$ to $5.7\pm4.0$. More importantly for the implemented learning rule, the actual per-soma broadcast cosine rises from $0.37\pm0.18$ to $0.74\pm0.13$. Panel A is an architectural path-gain diagnostic rather than a direct validation of Prop.~\ref{prop:path_gain_alignment}, whose exact expression uses an eligibility-weighted effective-gain dispersion for single-example gradient contributions. The SVD result measures intrinsic geometry; the per-soma broadcast cosine measures compatibility with the fixed feedback field used by the rule. We therefore pair these with the direct broadcast-fidelity and transported-oracle diagnostics in Fig.~\ref{fig:mechanistic}D,E, and we additionally report shared-field and actual-broadcast residuals for the feedback modes used in the learning rule.
+Figure~\ref{fig:mechanistic} provides the central empirical chain. At matched inhibition ($N_I{=}5$), shunting narrows the MNIST conductance-stage path-gain component (CV $0.23$ vs.\ $1.16$ for additive), lowers the rank of the exact compartment-error field (rank-$1$ residual $0.70\pm0.21$ vs.\ $0.81\pm0.11$), and improves compatibility with the implemented feedback field (actual per-soma broadcast cosine $0.74\pm0.13$ vs.\ $0.37\pm0.18$). Panel A is an architectural path-gain diagnostic rather than a direct validation of Prop.~\ref{prop:path_gain_alignment}; the SVD and broadcast-cosine panels test intrinsic geometry and implemented-feedback compatibility, respectively.
 
-The inhibition intervention shows that the trained computation depends on the learned inhibitory field, rather than only on a matched average conductance load: zeroing, shuffling, or clamping learned branch inhibition drops MNIST from about $90\%$ to $20$--$26\%$ and noise resilience from about $81\%$ to $10$--$19\%$. The fidelity and oracle panels probe the same broadcast bottleneck: per-soma feedback tracks the exact compartment error better under shunting once inhibition is present, transported error reaches about $0.95$--$1.0$ fidelity, and transported learning lifts both the shunting and additive networks to $92$--$95\%$ on noise resilience. CIFAR-10 and direct-I versus explicit-I path-gain probes remain appendix diagnostics (Fig.~\ref{fig:cifar10_mechanism_extension}; Table~\ref{tab:input_mode_probe}).
+The inhibition intervention shows that learned branch inhibition is functionally important: zeroing, shuffling, or clamping it drops MNIST from about $90\%$ to $20$--$26\%$ and noise resilience from about $81\%$ to $10$--$19\%$. Direct fidelity and oracle panels probe the same bottleneck: under shunting, per-soma feedback better tracks the exact compartment error once inhibition is present, transported-error fidelity approaches $0.95$--$1.0$, and transported learning lifts both architectures to $92$--$95\%$ on noise resilience.
 
 \noindent\emph{Matched-capacity performance.}
-In the matched-capacity regime, shunting LocalCA remains within $5$--$6$ percentage points of matched backpropagation on MNIST, Fashion-MNIST, and figure-ground MNIST (Table~\ref{tab:gap_closing}; Fig.~\ref{fig:competence_regime}). The mechanism controls in Fig.~\ref{fig:competence_regime}D sharpen this interpretation: exact path transport reaches the matched shunting backprop reference on MNIST across 3F/5F and decoder-update choices, the identity-transfer version of the shunting core matches the learnable bounded tanh version, and additive gain/normalization variants do not outperform the additive 5F per-soma baseline. These results indicate that feedback-field fidelity is a major bottleneck in this setting, not a generic additive gain or voltage-normalization effect. Fig.~\ref{fig:rule_feedback_controls} summarizes the broader rule and feedback controls: 5F is the strongest practical LocalCA variant, soma-derived feedback is essential, and the noise-resilience rank bridge improves as feedback construction changes from low-rank $K{=}1$ to $K{=}8$, with path transport highest.
+In the matched-capacity regime, shunting LocalCA remains within $5$--$6$ percentage points of matched backpropagation on MNIST, Fashion-MNIST, and figure-ground MNIST (Table~\ref{tab:gap_closing}; Fig.~\ref{fig:competence_regime}). The controls in Fig.~\ref{fig:competence_regime}D indicate that this gap is primarily a feedback-field bottleneck: exact path transport reaches the matched shunting backprop reference, identity and learnable tanh transfer perform similarly, and additive gain/normalization variants do not rescue the additive baseline. Fig.~\ref{fig:rule_feedback_controls} further shows that 5F is the strongest practical LocalCA variant, soma-derived feedback is essential, and higher-rank/path feedback improves the noise-resilience bridge.
 
 \begin{figure}[!t]
 \centering
 \includegraphics[width=0.95\textwidth]{fig5_rule_feedback_controls.pdf}
 \caption{\textbf{Rule and feedback controls.}
-(A) Eligibility-rule ablation: 3F and 4F learn weakly, while 5F is the practical LocalCA rule. (B) Error-source ablation: PS = soma-derived per-soma/shared feedback, and Mismatch = local-mismatch heuristic. (C) Noise-resilience feedback-construction ladder: PS = per-soma/shared baseline, Path = recursive path-propagation proxy, K2/K4/K8 = random low-rank broadcast rank, and Or. = exact transported-error oracle. (D) Cue-routing rank diagnostic: PS = per-soma/shared baseline, K1/K2/K4 = random low-rank ranks, and PV = pathway-vector feedback.}
+(A) Rule ablation. (B) Error-source ablation. (C) Noise-resilience feedback ladder: PS, path proxy, low-rank $K$, and transported oracle. (D) Cue-routing rank diagnostic with pathway-vector feedback (PV).}
 \label{fig:rule_feedback_controls}
 \end{figure}
 
 \noindent\emph{Regime dependence of the shunting advantage.}
-With matched per-soma feedback, shunting is modestly better on MNIST, Fashion-MNIST, and figure-ground MNIST, including $0.803\pm0.006$ vs.\ $0.787\pm0.007$ for additive on figure-ground MNIST. The gap grows on inhibition-sensitive noise resilience once inhibitory conductance is present (Fig.~\ref{fig:competence_regime}B). Morphology shifts the useful inhibitory operating regime: different tree depths and branch factors peak at different $N_I$, and the shunting advantage is not monotonic in inhibition (Fig.~\ref{fig:competence_regime}C). Appendix Fig.~\ref{fig:additional_stress_tests} extends this boundary check to depth scaling and noisy error broadcasts.
+With matched per-soma feedback, shunting is modestly better on MNIST, Fashion-MNIST, and figure-ground MNIST, and the gap grows on inhibition-sensitive noise resilience once inhibitory conductance is present. Morphology shifts the useful inhibitory operating regime, so the shunting advantage is not monotonic in $N_I$ or tree depth (Fig.~\ref{fig:competence_regime}B,C; Appendix Fig.~\ref{fig:additional_stress_tests}).
 
 \section{Discussion}
 \label{sec:discussion}
@@ -1164,6 +1135,7 @@ Input resistance & $R^{\mathrm{tot}}$ & $\leq 1$\\\bottomrule
 \label{tab:units_parameterization}
 \end{table}
 
+\clearpage
 \subsection*{Representative Manuscript Architectures}
 \begin{table}[H]\centering\scriptsize
 \renewcommand{\arraystretch}{1.06}
