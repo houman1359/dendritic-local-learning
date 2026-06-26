@@ -135,8 +135,8 @@ def figure_s5():
         print("  SKIPPED: fa_dfa_results.csv not found")
         return
 
-    fig, axes = plt.subplots(1, 2, figsize=(W, 2.8),
-                             gridspec_kw={"wspace": 0.45})
+    fig, axes = plt.subplots(2, 1, figsize=(W * 0.95, 5.0),
+                             gridspec_kw={"hspace": 0.58})
 
     # ---- Panel A: Grouped bars by model ----
     ax = axes[0]
@@ -216,8 +216,7 @@ def figure_s5():
     ax.set_title("DFA performance gap")
     ax.axvline(0, color="black", lw=0.4)
 
-    fig.subplots_adjust(left=0.12, right=0.97, bottom=0.15, top=0.88,
-                        wspace=0.50)
+    fig.subplots_adjust(left=0.12, right=0.97, bottom=0.10, top=0.93)
     _save(fig, "fig_s5_fa_dfa")
     plt.close(fig)
 
@@ -374,8 +373,8 @@ def figure_s7():
         print("  SKIPPED: additive_norm_results.csv not found")
         return
 
-    fig, axes = plt.subplots(1, 2, figsize=(W, 2.8),
-                             gridspec_kw={"wspace": 0.45})
+    fig, axes = plt.subplots(2, 1, figsize=(W * 0.95, 5.0),
+                             gridspec_kw={"hspace": 0.58})
 
     # ---- Panel A: Standard training ----
     ax = axes[0]
@@ -442,8 +441,7 @@ def figure_s7():
     ax.set_title("Local learning (MNIST)")
     ax.set_ylim(30, 72)
 
-    fig.subplots_adjust(left=0.12, right=0.97, bottom=0.15, top=0.88,
-                        wspace=0.50)
+    fig.subplots_adjust(left=0.12, right=0.97, bottom=0.10, top=0.93)
     _save(fig, "fig_additive_norm_control")
     plt.close(fig)
 

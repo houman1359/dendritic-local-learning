@@ -1573,8 +1573,13 @@ def figure_s_additional_stress_tests():
     noise = _csv("noise_robustness.csv", bundle=True)
     fmnist = _csv_path(FMNIST_SUMMARY_CSV)
 
-    fig, axes = plt.subplots(1, 3, figsize=(W * 1.9, 3.6),
-                             gridspec_kw={"wspace": 0.52})
+    fig = plt.figure(figsize=(W * 1.15, 5.45))
+    gs = fig.add_gridspec(2, 2, wspace=0.42, hspace=0.56)
+    axes = [
+        fig.add_subplot(gs[0, 0]),
+        fig.add_subplot(gs[0, 1]),
+        fig.add_subplot(gs[1, :]),
+    ]
 
     # ---- Panel A: Depth scaling (LOCAL only — cleaner) ----
     ax = axes[0]
@@ -1676,8 +1681,7 @@ def figure_s_additional_stress_tests():
             ax.text(i, c[1] + c[2] + 0.4,
                     f"{c[1]:.1f}", ha="center", va="bottom", fontsize=7)
 
-    fig.subplots_adjust(left=0.08, right=0.97, bottom=0.15, top=0.90,
-                        wspace=0.55)
+    fig.subplots_adjust(left=0.10, right=0.98, bottom=0.10, top=0.92)
     _save(fig, "fig_additional_stress_tests")
     plt.close(fig)
 
@@ -1972,8 +1976,13 @@ def figure_s4():
     hsic_main = _csv_path(REVISION_HSIC_MAIN_CSV)
     hsic_heldout = _csv_path(REVISION_HSIC_HELDOUT_CSV)
 
-    fig, axes = plt.subplots(1, 3, figsize=(W * 1.9, 3.6),
-                             gridspec_kw={"wspace": 0.52})
+    fig = plt.figure(figsize=(W * 1.15, 5.45))
+    gs = fig.add_gridspec(2, 2, wspace=0.42, hspace=0.56)
+    axes = [
+        fig.add_subplot(gs[0, 0]),
+        fig.add_subplot(gs[0, 1]),
+        fig.add_subplot(gs[1, :]),
+    ]
 
     # ---- Panel A: MNIST verification ----
     ax = axes[0]
@@ -2078,8 +2087,7 @@ def figure_s4():
             ax.set_ylabel("Test accuracy (%)")
             ax.set_title("FG-MNIST: HSIC ablation")
 
-    fig.subplots_adjust(left=0.08, right=0.97, bottom=0.18, top=0.90,
-                        wspace=0.55)
+    fig.subplots_adjust(left=0.10, right=0.98, bottom=0.10, top=0.92)
     _save(fig, "fig_s4_verification")
     plt.close(fig)
 

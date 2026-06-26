@@ -82,7 +82,13 @@ def _line_panel(ax, data: pd.DataFrame, metric: str, ylabel: str, title: str, *,
 
 def main() -> None:
     data = _weighted_trajectory(_load())
-    fig, axes = plt.subplots(1, 4, figsize=(7.1, 2.25))
+    fig, axes_grid = plt.subplots(
+        2,
+        2,
+        figsize=(5.8, 4.8),
+        gridspec_kw={"wspace": 0.48, "hspace": 0.58},
+    )
+    axes = axes_grid.ravel()
 
     _line_panel(axes[0], data, "weighted_cosine", "Weighted cosine", "Alignment")
     axes[0].axhline(0.0, color=COLORS["edge"], linewidth=0.7, linestyle=":")
@@ -106,7 +112,7 @@ def main() -> None:
             bbox={"facecolor": "white", "edgecolor": "none", "alpha": 0.85, "pad": 0.4},
         )
 
-    fig.subplots_adjust(left=0.07, right=0.995, top=0.79, bottom=0.25, wspace=0.58)
+    fig.subplots_adjust(left=0.12, right=0.985, top=0.92, bottom=0.12)
     FIG_DIR.mkdir(parents=True, exist_ok=True)
     out = FIG_DIR / "fig_s_alignment_norm_dynamics"
     fig.savefig(out.with_suffix(".pdf"))
