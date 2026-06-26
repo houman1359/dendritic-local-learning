@@ -275,63 +275,50 @@ def _plot_error_compressibility(ax: plt.Axes, rank_summary: pd.DataFrame) -> Non
         if cosine_col is not None:
             ps_cosines.append(float(row[cosine_col]))
             ps_cosine_stds.append(float(row[cosine_std_col]) if cosine_std_col else 0.0)
+    bar_w = 0.34 if ps_cosines else 0.66
+    svd_x = x - bar_w / 2 if ps_cosines else x
+    ps_x = x + bar_w / 2
     bars = ax.bar(
-        x,
+        svd_x,
         means,
         yerr=stds,
         color=colors,
         edgecolor="white",
         linewidth=0.75,
-        width=0.66,
+        width=bar_w,
         capsize=2.4,
         error_kw={"lw": 1.1},
+        label="SVD $\\rho_1$",
     )
+    if ps_cosines:
+        ax.bar(
+            ps_x,
+            ps_cosines,
+            yerr=ps_cosine_stds,
+            color=["#BFD7FF", "#B9E3C6"],
+            edgecolor=colors,
+            linewidth=0.85,
+            width=bar_w,
+            capsize=2.4,
+            error_kw={"lw": 1.1},
+            label="PS cos.",
+        )
     ax.set_xticks(x)
     ax.set_xticklabels(labels)
     ax.set_ylabel("Value")
     ax.set_ylim(0, 1.02)
     ax.set_title("Error\ngeometry", linespacing=0.9)
-    for rect, prank in zip(bars, pranks):
-        ax.text(
-            rect.get_x() + rect.get_width() / 2,
-            0.06,
-            f"rank\n{prank:.1f}",
-            ha="center",
-            va="bottom",
-            fontsize=5.8,
-            color="white",
-            fontweight="bold",
-            linespacing=0.9,
-        )
     if ps_cosines:
-        ax.errorbar(
-            x,
-            ps_cosines,
-            yerr=ps_cosine_stds,
-            fmt="D",
-            color=COLORS["ink"],
-            markerfacecolor="white",
-            markeredgewidth=1.1,
-            markersize=4.8,
-            capsize=2.2,
-            lw=1.0,
-            zorder=5,
-            label="PS cosine",
-        )
         ax.legend(
-            handles=[
-                mpatches.Patch(facecolor="#9CA3AF", edgecolor="white", label="SVD $\\rho_1$"),
-                plt.Line2D(
-                    [0],
-                    [0],
-                    marker="D",
-                    color=COLORS["ink"],
-                    markerfacecolor="white",
-                    lw=0,
-                    markersize=4.5,
-                    label="PS cos.",
-                ),
-            ],
+            loc="upper right",
+            fontsize=5.6,
+            frameon=False,
+            handlelength=1.0,
+            handletextpad=0.35,
+            borderpad=0.1,
+        )
+    else:
+        ax.legend(
             loc="upper right",
             fontsize=5.6,
             frameon=False,

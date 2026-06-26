@@ -1,106 +1,66 @@
 # Reproducibility Notes
 
-This file records the analysis sources and commands behind the manuscript figures.
-It is intentionally separate from the paper so the PDF can stay focused on the
-scientific claims.
+These notes give a compact map from the manuscript to the repository contents.
+They are intentionally protocol-level for the current preprint. A final public
+release will add a pinned environment, immutable tag, end-to-end launch scripts,
+and expected summary hashes.
 
-Run commands from this directory:
+Run commands from the repository root:
 
 ```bash
 cd drafts/dendritic-local-learning
 ```
 
-## Figure Generation
+## What Is Included
 
-- Main figures and most summary tables:
+- Core dendritic model and LocalCA implementation.
+- Training and diagnostic scripts for the reported experiment families.
+- Representative configuration files for the main architectures and controls.
+- Figure-generation scripts for the main and supplementary figures.
+- Tests covering key dataset and implementation utilities.
 
-```bash
-python scripts/generate_neurips_figures.py
-```
+## Main Experiment Families
 
-- Figure 1 schematic:
+- Exact-gradient reconstruction and gradient-fidelity diagnostics.
+- Layer-soma factorial diagnostic separating soma-error reuse from within-tree
+  path transport.
+- Path-gain, exact-error rank, and implemented-feedback fidelity diagnostics.
+- Post-training inhibitory-conductance interventions.
+- Transported-error oracle and feedback-construction controls.
+- Matched-capacity MNIST, Fashion-MNIST, and figure-ground MNIST performance.
+- Supplementary stress tests: morphology, feedback noise, CIFAR-10 compact
+  controls, FA/DFA, cue routing, and low-rank feedback.
 
-```bash
-python scripts/generate_figure1_schematic.py
-```
+## Figure Regeneration
 
-- Theory, path-gain, intervention, rank, and oracle diagnostic figures:
-
-```bash
-python scripts/generate_theory_diagnostics_figures.py
-python scripts/generate_revision_figures.py
-```
-
-- Additional included appendix figures:
-
-```bash
-python scripts/generate_alignment_norm_dynamics_figure.py
-python scripts/generate_cifar_sweep_comparison_figures.py
-python scripts/generate_morphology_ie_regime_figure.py
-python scripts/generate_inhibition_causality_figure.py
-python scripts/generate_cue_routing_figures.py
-```
-
-- Layer-soma factorial diagnostic used in Figure 2D:
+The following commands regenerate the manuscript figures from the summaries
+currently present in the repository:
 
 ```bash
-python scripts/measure_layer_soma_factorial.py
-python scripts/generate_neurips_figures.py
+PYTHONPATH=../../src:$PYTHONPATH python scripts/generate_figure1_schematic.py
+PYTHONPATH=../../src:$PYTHONPATH python scripts/generate_theory_diagnostics_figures.py
+PYTHONPATH=../../src:$PYTHONPATH python scripts/generate_neurips_figures.py
+PYTHONPATH=../../src:$PYTHONPATH python scripts/generate_alignment_norm_dynamics_figure.py
+PYTHONPATH=../../src:$PYTHONPATH python scripts/generate_cifar_sweep_comparison_figures.py
+PYTHONPATH=../../src:$PYTHONPATH python scripts/generate_morphology_ie_regime_figure.py
+PYTHONPATH=../../src:$PYTHONPATH python scripts/generate_inhibition_causality_figure.py
+PYTHONPATH=../../src:$PYTHONPATH python scripts/generate_cue_routing_figures.py
 ```
 
-- Path-transport oracle summaries:
+These are figure/summarization entry points, not yet a frozen from-scratch
+reproduction artifact. The final release will provide a single-script path from
+raw training launches to checked summaries.
 
-```bash
-python scripts/summarize_path_transport_sweep.py
-python scripts/generate_theory_diagnostics_figures.py
-```
+## Environment
 
-- Matched-capacity performance summary:
+The repository currently includes dependency specifications at:
 
-```bash
-python scripts/summarize_neurips_claim_sweeps.py
-python scripts/generate_neurips_figures.py
-```
+- `requirements.txt`
+- `pyproject.toml`
+- `setup/environment.yml`
 
-Non-destructive checks can write regenerated summaries to a scratch directory,
-for example:
-
-```bash
-python scripts/summarize_path_transport_sweep.py \
-  --sweep-dir local_sweep_runs/path_transport_upper_bound_nonnegativeinput_fix_5seed_20260409164042 \
-  --output-dir .fusion_scratch/repro_audit/summary_outputs/path_transport
-python scripts/summarize_theory_diagnostics.py \
-  --diag-dir analysis/theory_diag_gradient_fidelity_vs_ie_nonnegativeinput_fix \
-  --output-dir .fusion_scratch/repro_audit/summary_outputs/theory_diag
-python scripts/summarize_cue_routing_results.py \
-  --raw-csv .fusion_scratch/repro_audit/summary_outputs/cue_routing/cue_routing_runs.csv \
-  --summary-csv .fusion_scratch/repro_audit/summary_outputs/cue_routing/cue_routing_summary.csv
-```
-
-## Primary Analysis Sources
-
-The manuscript uses the following source families for current figures and tables:
-
-- Gradient and inhibition-dose diagnostics:
-  `analysis/gradient_fidelity_vs_ie_nonnegativeinput_fix/`
-- Theory diagnostics:
-  `analysis/theory_diag_gradient_fidelity_vs_ie_nonnegativeinput_fix_summary/`
-- Layer-soma factorial diagnostic:
-  `analysis/layer_soma_factorial_input_mode1_direct_i_pathgain_3f/`
-- Exact-error rank diagnostics:
-  `analysis/error_rank_selected_20260427/`
-- Inhibitory-conductance interventions:
-  `analysis/inhibition_causality_selected_20260427/`
-- Path-transport oracle:
-  `analysis/path_transport_upper_bound_nonnegativeinput_fix_5seed/`
-- Noise-resilience feedback construction:
-  `analysis/rank_bridge_nonnegativeinput_fix/`
-- Matched-capacity performance:
-  `figures/data/competence_summary_20260422.csv`
-
-Older summaries can remain in the repository for comparison, but they should not
-be mixed into the current figures unless the corresponding selection rule,
-input regime, and seed set are explicitly rechecked.
+The accepted-version release will identify the exact environment file and commit
+used for the public artifact.
 
 ## Build Commands
 

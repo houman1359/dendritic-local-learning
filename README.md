@@ -19,7 +19,7 @@ The NeurIPS wrapper intentionally uses the current style file without `final` or
 The current PDF layout is:
 
 - Main content ends before references.
-- References start on page 10, so the paper uses the allowed nine content pages.
+- References currently start on page 10; final page-limit trimming is intentionally deferred.
 - Supplementary Results start after references.
 - The NeurIPS checklist follows the appendix in the same PDF.
 - Page size is letter.
@@ -35,8 +35,9 @@ The current main-paper figures are:
 - `figures/fig2_gradient_fidelity.pdf`: exact factorization, final gradient-fidelity diagnostics, and the layer-soma factorial check.
 - `figures/fig3_mechanistic_evidence.pdf`: path-gain/error-field compressibility, inhibition intervention, broadcast fidelity, and oracle learning.
 - `figures/fig4_competence_regime.pdf`: matched-capacity performance, inhibition dose-response, morphology regime, and the additive-normalization stress diagnostic.
+- `figures/fig5_rule_feedback_controls.pdf`: local-rule, feedback-source, feedback-construction, and cue-routing controls.
 
-Key appendix figures include the local-rule and feedback-design controls, CIFAR-10 stress tests, morphology maps, cue-routing diagnostics, soma-on extensions, activation audits, and weight-statistics analyses.
+Key appendix figures include the detailed rule/feedback controls, verification and seed checks, extended gradient diagnostics, CIFAR-10 mechanism stress tests, morphology maps, feedback-alignment baselines, input-mode probes, and cue-routing diagnostics.
 
 ## Rebuild Commands
 
@@ -46,7 +47,6 @@ From this folder:
 PYTHONPATH=../../src:$PYTHONPATH python scripts/generate_figure1_schematic.py
 PYTHONPATH=../../src:$PYTHONPATH python scripts/generate_theory_diagnostics_figures.py
 PYTHONPATH=../../src:$PYTHONPATH python scripts/generate_neurips_figures.py
-PYTHONPATH=../../src:$PYTHONPATH python scripts/generate_revision_figures.py
 PYTHONPATH=../../src:$PYTHONPATH python scripts/generate_alignment_norm_dynamics_figure.py
 PYTHONPATH=../../src:$PYTHONPATH python scripts/generate_cifar_sweep_comparison_figures.py
 PYTHONPATH=../../src:$PYTHONPATH python scripts/generate_cue_routing_figures.py
@@ -68,7 +68,7 @@ pdflatex -interaction=nonstopmode -halt-on-error local_credit_assignment_arxiv.t
 pdflatex -interaction=nonstopmode -halt-on-error local_credit_assignment_arxiv.tex
 ```
 
-Refresh newer appendix summaries from completed local runs:
+Refresh appendix summaries from completed local runs:
 
 ```bash
 PYTHONPATH=../../src:$PYTHONPATH python scripts/summarize_neurips_new_sweeps.py
