@@ -23,7 +23,19 @@ DRAFT_DIR = SCRIPT_DIR.parent
 FIGURES_DIR = DRAFT_DIR / "figures"
 ANALYSIS_DIR = DRAFT_DIR / "analysis" / "morphology_ie_regime"
 DIAG_DIR = DRAFT_DIR / "analysis" / "morphology_ie_diag_subset_diagnostics_20260427"
-SELECTED_DIAG_CSV = DRAFT_DIR / "analysis" / "morphology_ie_diag_subset" / "selected_runs.csv"
+_FDATA = FIGURES_DIR / "data"
+
+
+def _tracked(name: str, fallback: Path) -> Path:
+    """Prefer the git-tracked figures/data/ copy; fall back to local analysis/."""
+    t = _FDATA / name
+    return t if t.exists() else fallback
+
+
+SELECTED_DIAG_CSV = _tracked(
+    "morphology_ie_selected_runs.csv",
+    DRAFT_DIR / "analysis" / "morphology_ie_diag_subset" / "selected_runs.csv",
+)
 DEFAULT_SWEEP_DIR = (
     DRAFT_DIR
     / "local_sweep_runs"
@@ -96,7 +108,7 @@ def _heatmap(ax, frame: pd.DataFrame, title: str, cmap: str, center: float | Non
 
 
 def _load_selected_diagnostics() -> pd.DataFrame | None:
-    summary_csv = DIAG_DIR / "run_summary.csv"
+    summary_csv = _tracked("morphology_ie_run_summary.csv", DIAG_DIR / "run_summary.csv")
     if not summary_csv.exists() or not SELECTED_DIAG_CSV.exists():
         return None
     diag = pd.read_csv(summary_csv)
@@ -116,7 +128,8 @@ def _load_selected_diagnostics() -> pd.DataFrame | None:
 def build_figure(sweep_dir: Path = DEFAULT_SWEEP_DIR) -> tuple[plt.Figure, pd.DataFrame]:
     apply_neurips_style()
     sns.set_style("white")
-    df = _load_results(sweep_dir)
+    _runs_csv = _FDATA / "morphology_ie_regime_runs.csv"
+    df = pd.read_csv(_runs_csv) if _runs_csv.exists() else _load_results(sweep_dir)
     ANALYSIS_DIR.mkdir(parents=True, exist_ok=True)
     FIGURES_DIR.mkdir(parents=True, exist_ok=True)
 

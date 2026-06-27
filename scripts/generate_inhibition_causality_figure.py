@@ -18,8 +18,22 @@ apply_neurips_style()
 
 ROOT = Path(__file__).resolve().parent.parent
 FIG_DIR = ROOT / "figures"
-CAUSAL_CSV = ROOT / "analysis" / "inhibition_causality_selected_20260427" / "inhibition_causality_runs.csv"
-RANK_CSV = ROOT / "analysis" / "error_rank_selected_20260427" / "error_rank_diagnostics.csv"
+
+
+def _tracked(name: str, fallback: Path) -> Path:
+    """Prefer the git-tracked figures/data/ copy; fall back to local analysis/."""
+    t = ROOT / "figures" / "data" / name
+    return t if t.exists() else fallback
+
+
+CAUSAL_CSV = _tracked(
+    "inhibition_causality_runs.csv",
+    ROOT / "analysis" / "inhibition_causality_selected_20260427" / "inhibition_causality_runs.csv",
+)
+RANK_CSV = _tracked(
+    "error_rank_diagnostics.csv",
+    ROOT / "analysis" / "error_rank_selected_20260427" / "error_rank_diagnostics.csv",
+)
 
 
 INTERVENTION_ORDER = [

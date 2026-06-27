@@ -16,7 +16,6 @@ only the figures that are referenced by `local_credit_assignment_body.tex`.
     fig5_rule_feedback_controls.pdf
   Appendix:
     fig_s_rule_feedback_design.pdf (detailed rule and feedback controls)
-    fig_s1_calibration.pdf         (2x2: capacity, rule ranking, decoder, broadcast)
     fig_s2_gradient_extended.pdf   (2x2: scale mismatch, noise IE detail, MNIST IE detail, FMNIST seeds)
     fig_s4_verification.pdf        (1x3: MNIST seeds, CG seeds, HSIC ablation)
     fig_additional_stress_tests.pdf
@@ -46,6 +45,14 @@ DRAFT_DIR = os.path.dirname(SCRIPT_DIR)
 DATA_DIR = os.path.join(DRAFT_DIR, "data")
 FIGURES_DIR = os.path.join(DRAFT_DIR, "figures")
 ANALYSIS_DIR = os.path.join(DRAFT_DIR, "analysis")
+
+
+def _tracked_csv(tracked_name, *analysis_parts):
+    """Prefer the git-tracked figures/data/ copy; fall back to local analysis/."""
+    tracked = os.path.join(FIGURES_DIR, "data", tracked_name)
+    return tracked if os.path.isfile(tracked) else os.path.join(ANALYSIS_DIR, *analysis_parts)
+
+
 COMPETENCE_SUMMARY_CSV = os.path.join(
     FIGURES_DIR, "data", "competence_summary_20260422.csv"
 )
@@ -57,15 +64,13 @@ CIFAR10_LOCALCA_MECH_SUMMARY_CSV = os.path.join(
     "cifar10_compactei_depth4_decoderfix_mechanism_5seed",
     "cifar10_compactei_depth4_decoderfix_mechanism_summary.csv",
 )
-RANK_BRIDGE_NOISE_CSV = os.path.join(
-    ANALYSIS_DIR,
-    "rank_bridge_nonnegativeinput_fix",
+RANK_BRIDGE_NOISE_CSV = _tracked_csv(
     "noise_resilience_rank_bridge_summary.csv",
+    "rank_bridge_nonnegativeinput_fix", "noise_resilience_rank_bridge_summary.csv",
 )
-CUE_RANK_STRUCTURE_CSV = os.path.join(
-    ANALYSIS_DIR,
-    "rank_bridge_activation_corrected",
+CUE_RANK_STRUCTURE_CSV = _tracked_csv(
     "cue_routing_rank_structure_summary.csv",
+    "rank_bridge_activation_corrected", "cue_routing_rank_structure_summary.csv",
 )
 
 BUNDLE = os.environ.get("LOCALCA_LEGACY_BUNDLE", ANALYSIS_DIR)
@@ -73,22 +78,24 @@ LOCAL_MISMATCH_CSV = os.environ.get(
     "LOCALCA_LOCAL_MISMATCH_CSV",
     os.path.join(ANALYSIS_DIR, "local_mismatch_recheck_20260224_summary.csv"),
 )
-FMNIST_SUMMARY_CSV = os.path.join(
-    ANALYSIS_DIR, "fashion_mnist_competence_activation_corrected", "fashion_mnist_competence_summary.csv"
+FMNIST_SUMMARY_CSV = _tracked_csv(
+    "fashion_mnist_competence_summary.csv",
+    "fashion_mnist_competence_activation_corrected", "fashion_mnist_competence_summary.csv",
 )
-FMNIST_RUNS_CSV = os.path.join(
-    ANALYSIS_DIR, "fashion_mnist_competence_activation_corrected", "fashion_mnist_competence_runs.csv"
+FMNIST_RUNS_CSV = _tracked_csv(
+    "fashion_mnist_competence_runs.csv",
+    "fashion_mnist_competence_activation_corrected", "fashion_mnist_competence_runs.csv",
 )
-MORPHOLOGY_IE_RUNS_CSV = os.path.join(
-    ANALYSIS_DIR, "morphology_ie_regime", "morphology_ie_regime_runs.csv"
+MORPHOLOGY_IE_RUNS_CSV = _tracked_csv(
+    "morphology_ie_regime_runs.csv",
+    "morphology_ie_regime", "morphology_ie_regime_runs.csv",
 )
 STANDARD_BP_REFERENCE_SUMMARY_CSV = os.path.join(
     ANALYSIS_DIR, "standard_ceiling_refresh_5seed", "standard_ceiling_refresh_summary.csv"
 )
-IE_PERF_SUMMARY_CSV = os.path.join(
-    ANALYSIS_DIR,
-    "gradient_fidelity_vs_ie_nonnegativeinput_fix",
-    "gradient_fidelity_summary.csv",
+IE_PERF_SUMMARY_CSV = _tracked_csv(
+    "gradient_fidelity_vs_ie_summary.csv",
+    "gradient_fidelity_vs_ie_nonnegativeinput_fix", "gradient_fidelity_summary.csv",
 )
 THEORY_IE_SUMMARY_CSV = os.path.join(
     ANALYSIS_DIR,
@@ -108,30 +115,25 @@ REVISION_EXACT_TRANSPORT_CSV = os.path.join(
     "revision_exact_transport_factorial_mnist_5seed_20260624152116",
     "grouped_summary.csv",
 )
-REVISION_EXACT_BP_CSV = os.path.join(
-    REVISION_CONTROLS_DIR,
-    "revision_exact_transport_bp_mnist_5seed_20260624152116",
-    "grouped_summary.csv",
+REVISION_EXACT_BP_CSV = _tracked_csv(
+    "revision_exact_transport_bp_grouped.csv",
+    "revision_controls_20260624", "revision_exact_transport_bp_mnist_5seed_20260624152116", "grouped_summary.csv",
 )
-REVISION_ADDITIVE_CSV = os.path.join(
-    REVISION_CONTROLS_DIR,
-    "revision_additive_gain_normalization_mnist_5seed_20260624152116",
-    "grouped_summary.csv",
+REVISION_ADDITIVE_CSV = _tracked_csv(
+    "revision_additive_gain_norm_grouped.csv",
+    "revision_controls_20260624", "revision_additive_gain_normalization_mnist_5seed_20260624152116", "grouped_summary.csv",
 )
-REVISION_REACTIVATION_CSV = os.path.join(
-    REVISION_CONTROLS_DIR,
-    "revision_reactivation_identity_mnist_5seed_20260624152116",
-    "grouped_summary.csv",
+REVISION_REACTIVATION_CSV = _tracked_csv(
+    "revision_reactivation_identity_grouped.csv",
+    "revision_controls_20260624", "revision_reactivation_identity_mnist_5seed_20260624152116", "grouped_summary.csv",
 )
-REVISION_HSIC_MAIN_CSV = os.path.join(
-    REVISION_CONTROLS_DIR,
-    "revision_figure_ground_hsic_main_5seed_20260624152116",
-    "grouped_summary.csv",
+REVISION_HSIC_MAIN_CSV = _tracked_csv(
+    "revision_hsic_main_grouped.csv",
+    "revision_controls_20260624", "revision_figure_ground_hsic_main_5seed_20260624152116", "grouped_summary.csv",
 )
-REVISION_HSIC_HELDOUT_CSV = os.path.join(
-    REVISION_CONTROLS_DIR,
-    "revision_figure_ground_hsic_heldout_3seed_20260624152116",
-    "grouped_summary.csv",
+REVISION_HSIC_HELDOUT_CSV = _tracked_csv(
+    "revision_hsic_heldout_grouped.csv",
+    "revision_controls_20260624", "revision_figure_ground_hsic_heldout_3seed_20260624152116", "grouped_summary.csv",
 )
 LAYER_SOMA_FACTORIAL_DETAILS_CSV = os.path.join(
     ANALYSIS_DIR,
@@ -3117,21 +3119,13 @@ def main():
     figure_rule_feedback_controls_main()
     figure4_competence_regime()
     figure_s_additional_stress_tests()
-    figure_s1()
     figure_s2()
     figure_s4()
     # figure_mechanism_summary() is now part of fig3_mechanistic_evidence,
     # produced by generate_revision_figures.py (via generate_theory_diagnostics_figures).
-    figure_s_soma_extension()
-    figure_s_bm_policy()
-    figure_s_ablation()
-    figure_s_cue_routing_soma()
-    figure_s_cifar10_soma_extension()
-    figure_s_weight_distributions()
-    figure_s_weight_dist_soma_comparison()
 
     print("\n" + "="*50)
-    print("All figures generated successfully.")
+    print("All current manuscript figures generated successfully.")
 
 
 if __name__ == "__main__":

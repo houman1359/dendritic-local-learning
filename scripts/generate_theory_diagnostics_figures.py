@@ -23,26 +23,38 @@ DRAFT_DIR = SCRIPT_DIR.parent
 FIGURES_DIR = DRAFT_DIR / "figures"
 DATA_DIR = DRAFT_DIR / "data"
 ANALYSIS_DIR = DRAFT_DIR / "analysis"
+FIGURE_DATA_DIR = FIGURES_DIR / "data"
+
+
+def _tracked_csv(tracked_name: str, fallback: Path) -> Path:
+    """Prefer the git-tracked figures/data/ copy; fall back to local analysis/."""
+    tracked = FIGURE_DATA_DIR / tracked_name
+    return tracked if tracked.exists() else fallback
+
+
 SUMMARY_DIR = ANALYSIS_DIR / "theory_diag_gradient_fidelity_vs_ie_nonnegativeinput_fix_summary"
-SUMMARY_CSV = SUMMARY_DIR / "theory_diag_by_condition.csv"
+SUMMARY_CSV = _tracked_csv("theory_diag_by_condition.csv", SUMMARY_DIR / "theory_diag_by_condition.csv")
 MERGED_CSV = SUMMARY_DIR / "theory_diag_merged_runs.csv"
-ORACLE_SUMMARY_CSV = (
+ORACLE_SUMMARY_CSV = _tracked_csv(
+    "path_transport_upper_bound_summary.csv",
     ANALYSIS_DIR
     / "path_transport_upper_bound_nonnegativeinput_fix_5seed"
-    / "path_transport_upper_bound_summary.csv"
+    / "path_transport_upper_bound_summary.csv",
 )
-ERROR_RANK_SUMMARY_CSV = (
-    ANALYSIS_DIR / "error_rank_selected_20260427" / "error_rank_summary.csv"
+ERROR_RANK_SUMMARY_CSV = _tracked_csv(
+    "error_rank_summary.csv",
+    ANALYSIS_DIR / "error_rank_selected_20260427" / "error_rank_summary.csv",
 )
 INPUT_MODE_SUMMARY_CSV = (
     ANALYSIS_DIR
     / "input_mode_onelayer_probe_summary_20260425"
     / "input_mode_onelayer_grouped.csv"
 )
-INHIBITION_CAUSALITY_CSV = (
+INHIBITION_CAUSALITY_CSV = _tracked_csv(
+    "inhibition_causality_runs.csv",
     ANALYSIS_DIR
     / "inhibition_causality_selected_20260427"
-    / "inhibition_causality_runs.csv"
+    / "inhibition_causality_runs.csv",
 )
 LOW_BW_CSV = DATA_DIR / "low_bandwidth_results.csv"
 CIFAR10_BP_SUMMARY_CSV = (

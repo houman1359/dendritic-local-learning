@@ -16,8 +16,17 @@ import pandas as pd
 
 DRAFT_DIR = Path(__file__).resolve().parents[1]
 FIGURES_DIR = DRAFT_DIR / "figures"
-SUMMARY_CSV = (
-    DRAFT_DIR / "analysis" / "five_factor_sensitivity" / "five_factor_sensitivity_summary.csv"
+
+
+def _tracked_or_analysis(tracked_name: str, *analysis_parts: str) -> Path:
+    """Prefer the git-tracked figures/data/ copy; fall back to local analysis/."""
+    tracked = DRAFT_DIR / "figures" / "data" / tracked_name
+    return tracked if tracked.exists() else DRAFT_DIR.joinpath("analysis", *analysis_parts)
+
+
+SUMMARY_CSV = _tracked_or_analysis(
+    "five_factor_sensitivity_summary.csv",
+    "five_factor_sensitivity", "five_factor_sensitivity_summary.csv",
 )
 COLOR_BASE = "#18864B"
 COLOR_ALT = "#7A3E9D"

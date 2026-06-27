@@ -3,7 +3,7 @@
 
 These figures are intentionally endpoint-focused: seed dots plus mean/SD
 intervals, not epoch traces. They are meant to support paper decisions about
-which CIFAR and routed-task results deserve main-text emphasis.
+which CIFAR results deserve manuscript emphasis.
 """
 
 from __future__ import annotations
@@ -64,8 +64,10 @@ def _latest_summary(prefix: str) -> Path:
     return matches[-1]
 
 
-def _load_detailed(summary_dir: Path) -> pd.DataFrame:
-    path = summary_dir / "detailed_results.csv"
+def _load_detailed(summary_dir: Path, tracked_name: str | None = None) -> pd.DataFrame:
+    # Prefer the git-tracked copy in figures/data/; fall back to the analysis/ summary dir.
+    tracked = (FIGURES / "data" / tracked_name) if tracked_name else None
+    path = tracked if (tracked and tracked.exists()) else summary_dir / "detailed_results.csv"
     if not path.exists():
         raise FileNotFoundError(path)
     df = pd.read_csv(path)
@@ -169,7 +171,7 @@ def _dot_interval_panel(
 
 
 def generate_cifar_figure(summary_dir: Path) -> bool:
-    df = _load_detailed(summary_dir)
+    df = _load_detailed(summary_dir, tracked_name="cifar10_control_ladder_detailed_results.csv")
     if df.empty:
         print(f"No completed CIFAR rows in {summary_dir}; skipping figure.")
         return False
@@ -280,13 +282,18 @@ def generate_double_cifar_figure(summary_dir: Path) -> bool:
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--cifar-summary", type=Path, default=None)
-    parser.add_argument("--double-cifar-summary", type=Path, default=None)
+    parser.add_argument(
+        "--double-cifar-summary",
+        type=Path,
+        default=None,
+        help="Optional legacy routed-CIFAR summary; generated only when explicitly provided.",
+    )
     args = parser.parse_args()
 
     cifar_summary = args.cifar_summary or _latest_summary("cifar10_control_ladder_20260427")
-    double_summary = args.double_cifar_summary or _latest_summary("double_cifar_routed_screen_20260427")
     generate_cifar_figure(cifar_summary)
-    generate_double_cifar_figure(double_summary)
+    if args.double_cifar_summary is not None:
+        generate_double_cifar_figure(args.double_cifar_summary)
 
 
 if __name__ == "__main__":
