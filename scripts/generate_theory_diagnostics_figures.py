@@ -239,9 +239,9 @@ def _plot_path_gain_map(ax: plt.Axes, summary: pd.DataFrame) -> None:
               va="center", fontsize=6.0, color=COLORS["mute"])
     cbar.text(1.05, 0.5, "high", transform=cbar.transAxes, ha="left",
               va="center", fontsize=6.0, color=COLORS["mute"])
-    ax.text(0.5, 0.135, "path gain", ha="center", va="bottom",
+    ax.text(0.5, 0.135, "cond. path gain", ha="center", va="bottom",
             fontsize=6.4, color=COLORS["ink"])
-    ax.set_title("Path gains", fontsize=9.2)
+    ax.set_title("Conductance-stage\npath gains", fontsize=8.4, linespacing=0.9)
 
 
 def _plot_error_compressibility(ax: plt.Axes, rank_summary: pd.DataFrame) -> None:
@@ -317,9 +317,19 @@ def _plot_error_compressibility(ax: plt.Axes, rank_summary: pd.DataFrame) -> Non
         )
     ax.set_xticks(x)
     ax.set_xticklabels(labels)
-    ax.set_ylabel("Value")
+    ax.set_ylabel("Metric value")
     ax.set_ylim(0, 1.02)
-    ax.set_title("Error\ngeometry", linespacing=0.9)
+    ax.set_title("Geometry &\nfeedback", linespacing=0.9)
+    ax.text(
+        0.03,
+        0.96,
+        r"$\rho_1\downarrow$, PS cos.$\uparrow$",
+        transform=ax.transAxes,
+        ha="left",
+        va="top",
+        fontsize=5.4,
+        color=COLORS["mute"],
+    )
     if ps_cosines:
         ax.legend(
             loc="upper right",

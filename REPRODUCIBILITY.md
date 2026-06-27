@@ -1,9 +1,9 @@
 # Reproducibility Notes
 
 These notes give a compact map from the manuscript to the repository contents.
-They are intentionally protocol-level for the current preprint. A final public
-release will add a pinned environment, immutable tag, end-to-end launch scripts,
-and expected summary hashes.
+They are intentionally protocol-level for the current preprint. The public
+arXiv release will identify an immutable tag, the pinned environment, end-to-end
+launch scripts, and expected summary hashes.
 
 Run commands from the repository root:
 
@@ -48,8 +48,8 @@ PYTHONPATH=../../src:$PYTHONPATH python scripts/generate_cue_routing_figures.py
 ```
 
 These are figure/summarization entry points, not yet a frozen from-scratch
-reproduction artifact. The final release will provide a single-script path from
-raw training launches to checked summaries.
+reproduction artifact. The public arXiv release will provide a single-script
+path from raw training launches to checked summaries.
 
 ## Environment
 
@@ -59,8 +59,8 @@ The repository currently includes dependency specifications at:
 - `pyproject.toml`
 - `setup/environment.yml`
 
-The accepted-version release will identify the exact environment file and commit
-used for the public artifact.
+The public release will identify the exact environment file and commit used for
+the public artifact.
 
 ## Build Commands
 

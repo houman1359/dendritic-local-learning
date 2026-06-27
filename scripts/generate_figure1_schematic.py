@@ -462,7 +462,7 @@ def panel_c(ax):
         ("Per-soma", "one per neuron",       MODE_COLORS["persoma"], "persoma"),
         ("Rank-$K$", "$K$ channels",         MODE_COLORS["rankk"],  "rankk"),
         ("Path",     "branch roles",         MODE_COLORS["path"],   "path"),
-        ("Oracle", r"$\tilde{\alpha}_n\delta_0$", MODE_COLORS["oracle"], "oracle"),
+        ("Exact transport", r"$\tilde{\alpha}_n\delta_0$", MODE_COLORS["oracle"], "oracle"),
     ]
     row_x = 0.62
     row_w = 0.34
@@ -474,9 +474,10 @@ def panel_c(ax):
                    zorder=2)
         ax.add_patch(Circle((row_x + 0.030, ry), 0.014,
                             fc=col, ec="white", lw=0.4, zorder=8))
+        name_fs = 5.1 if len(name) > 10 else 5.6
         ax.text(row_x + 0.055, ry + 0.015, name,
                 ha="left", va="center",
-                fontsize=5.6, color=col, fontweight="bold", zorder=10)
+                fontsize=name_fs, color=col, fontweight="bold", zorder=10)
         ax.text(row_x + 0.055, ry - 0.019, note,
                 ha="left", va="center",
                 fontsize=4.7, color=MUTE, zorder=10)

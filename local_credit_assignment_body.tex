@@ -300,12 +300,12 @@ A feedback-alignment-style random-broadcast argument is included in Appendix~\re
 \centering
 \includegraphics[width=\textwidth]{fig3_mechanistic_evidence.pdf}
 \caption{\textbf{Mechanistic chain from path gains to learning.}
-(A) Conductance-stage path-gain field $\alpha^{\mathrm{cond}}$. (B) MNIST exact-error geometry and implemented-feedback compatibility: unrestricted rank-$1$ SVD residual $\rho_1$ and actual per-soma broadcast cosine. (C) Post-training inhibitory-conductance interventions. (D,E) Broadcast fidelity and transported-error learning on noise resilience. CV, $\rho_1$, per-soma cosine, and interventions: Appendix~\ref{app:extra_results}. Error bars are $\pm$1 s.d.}
+(A) Conductance-stage path-gain field $\alpha^{\mathrm{cond}}$. (B) MNIST exact-error geometry and implemented-feedback compatibility: unrestricted rank-$1$ SVD residual $\rho_1$ (lower is better) and actual per-soma broadcast cosine (higher is better). (C) Post-training inhibitory-conductance interventions. (D,E) Broadcast fidelity and transported-error learning on noise resilience. CV, $\rho_1$, per-soma cosine, and interventions: Appendix~\ref{app:extra_results}. Error bars are $\pm$1 s.d.}
 \label{fig:mechanistic}
 \end{figure}
 
 \noindent\emph{Setup.}
-The experiments test factorization, gradient fidelity, exact-error geometry, inhibition necessity, and transported-error oracles using architecture-matched additive/shunting cores and local/backprop training on MNIST \cite{lecun1998gradient}, Fashion-MNIST \cite{xiao2017fashionmnist}, figure-ground MNIST, and noise resilience; CIFAR-10 \cite{krizhevsky2009learning}, cue routing, DFA, and detailed protocols are in the appendix. Unless stated otherwise, local runs use 5F with per-soma feedback, conductance runs use nonnegative first-layer drive, and main mechanism/oracle/performance results use five seeds. Transported error is an oracle upper bound from Theorem~\ref{thm:tree_backprop}, not the proposed biological rule.
+The experiments test factorization, gradient fidelity, exact-error geometry, functional dependence on learned inhibition, and transported-error oracles using architecture-matched additive/shunting cores and local/backprop training on MNIST \cite{lecun1998gradient}, Fashion-MNIST \cite{xiao2017fashionmnist}, figure-ground MNIST, and noise resilience; CIFAR-10 \cite{krizhevsky2009learning}, cue routing, DFA, and detailed protocols are in the appendix. Unless stated otherwise, local runs use 5F with per-soma feedback, conductance runs use nonnegative first-layer drive, and main mechanism/oracle/performance results use five seeds. Transported error is an oracle upper bound from Theorem~\ref{thm:tree_backprop}, not the proposed biological rule.
 Figure shorthand: BP backpropagation, PS per-soma feedback, PT exact path transport, PV pathway-vector feedback, Or. transported oracle, $K$ random low-rank channels, $N_I$ inhibitory synapses/branch, pp percentage points, and MN/FM/FG = MNIST/Fashion-MNIST/figure-ground MNIST. Metrics, implementation, and tasks are defined in Appendices~\ref{app:extra_results}, \ref{app:implementation}, and \ref{app:synthetic_tasks}.
 
 \noindent\emph{From exact factorization to credit-signal fidelity.}
@@ -364,6 +364,7 @@ MIT Press.
 Poirazi, P., Brannon, T., \& Mel, B. W. (2003).
 Pyramidal neuron as two-layer neural network.
 \emph{Neuron}, 37(6), 989--999.
+https://doi.org/10.1016/S0896-6273(03)00149-1
 
 \bibitem{london2005dendritic}
 London, M., \& H{\"a}usser, M. (2005).
@@ -599,7 +600,7 @@ Several controls are intentionally negative or mixed. The log-gain covariance ma
 
 \subsection{Reproducibility Statement}
 
-For this version, reproducibility is documented at a protocol level. The accompanying source archive contains the core model and training code, diagnostic utilities, representative configuration files, tests, and analysis scripts used for the manuscript. Table~\ref{tab:reproducibility_summary} summarizes the experiment families, seed protocols, and checkpoint-selection rules. A final public release will add an immutable repository tag, pinned environment file, end-to-end launch scripts, and expected summary checks after acceptance.
+Reproducibility is documented at a protocol level in this manuscript. The accompanying source package contains the core model and training code, diagnostic utilities, representative configuration files, tests, figure-source summaries, and analysis scripts used for the manuscript. Table~\ref{tab:reproducibility_summary} summarizes the experiment families, seed protocols, and checkpoint-selection rules. Code will be released publicly at the time of arXiv posting with an immutable repository tag, pinned environment file, end-to-end launch scripts, and expected summary checks.
 
 \begin{table}[H]
 \centering
@@ -617,7 +618,7 @@ Transported-error oracle and feedback-construction controls & Per-soma, random l
 Matched-capacity performance & MNIST, Fashion-MNIST, figure-ground MNIST; per-soma 5F LocalCA and matched backpropagation references & Five seeds & Validation-selected configurations; held-out test accuracy \\
 \bottomrule
 \end{tabular}
-\caption{\textbf{Protocol-level reproducibility summary.} The table records the experiment families, model settings, seed counts, and selection rules used in the manuscript. Exact end-to-end commands, environment pins, and summary hashes will be provided in the accepted-version repository release.}
+\caption{\textbf{Protocol-level reproducibility summary.} The table records the experiment families, model settings, seed counts, and selection rules used in the manuscript. Dependency specifications are provided through \texttt{requirements.txt}, \texttt{pyproject.toml}, and \texttt{setup/environment.yml}; exact end-to-end commands and summary hashes will be provided with the public repository tag.}
 \label{tab:reproducibility_summary}
 \end{table}
 
@@ -693,7 +694,7 @@ Figure-ground MNIST & 5F & \textbf{0.807} & \textbf{0.789} \\
 \end{table}
 
 \subsection{5F Stabilizer Sensitivity}
-Because the main LocalCA runs use the empirical 5F stabilizer, we also tested whether performance depends sharply on the preconditioner clamp or the EMA rate used to estimate branch statistics. Across three-seed MNIST sensitivity checks, tightening or widening the clamp and varying the EMA rate leaves test accuracy near the default setting. This does not make 5F theorem-derived; it supports interpreting it as a bounded branch-level reliability preconditioner rather than a brittle tuned error source.
+Because the main LocalCA runs use the empirical 5F stabilizer, we also tested whether performance depends sharply on the preconditioner clamp or the EMA rate used to estimate branch statistics. Across three-seed MNIST sensitivity checks, tightening or widening the clamp and varying the EMA rate leaves test accuracy near the default setting. This does not make 5F part of the exact factorization; it supports interpreting it as a bounded branch-level reliability preconditioner rather than a brittle tuned error source.
 
 \begin{figure}[H]
 \centering
@@ -721,7 +722,7 @@ Fashion-MNIST & 0.889 & $0.876\pm0.001$ & $0.838\pm0.003$ & $0.831\pm0.004$ & 5.
 Figure-ground MNIST & 0.861 & -- & $0.803\pm0.006$ & $0.787\pm0.007$ & 5.8 \\
 \bottomrule
 \end{tabular}
-\caption{\textbf{Local performance.} Backpropagation references are matched-capacity standard-training runs. Additive backpropagation is reported where a matched five-seed reference is available; the figure-ground additive backpropagation reference was not available in the matched five-seed performance outputs. Local values are 5F with per-soma feedback and local decoder updates. Figure-ground MNIST additionally uses an HSIC auxiliary objective (weight $0.01$; see the HSIC auxiliary-objective appendix paragraph). Error bars are $\pm$1 s.d.\ across 5 seeds where available; gaps are percentage points.}
+\caption{\textbf{Local performance.} Backpropagation references are matched-capacity standard-training runs. Additive backpropagation is reported where a matched five-seed reference is available; the figure-ground additive backpropagation reference was not available in the matched five-seed performance outputs. Local values are 5F with per-soma feedback and local decoder updates. The figure-ground LocalCA rows use the HSIC auxiliary objective (weight $0.01$); the shunting BP reference is the standard cross-entropy matched-capacity reference. Error bars are $\pm$1 s.d.\ across 5 seeds where available; gaps are percentage points.}
 \label{tab:gap_closing}
 \end{table}
 
@@ -997,6 +998,9 @@ Experiment knobs & --- & \path{LocalRuleConfig} YAML (\path{rule_variant}, \path
 \label{tab:eq_code_map}
 \end{table}
 
+\paragraph{Implementation-specific update paths.}
+Top-$k$ synapse-bank scores are learned selection parameters; the selected masks gate active presynaptic drives and the corresponding local gradients, while inactive weights receive no LocalCA update unless an explicit inactive-update control is enabled. The discrete selection itself is treated as an implementation-level sparsity mechanism rather than as a conductance variable in the theorem. Reactivation slope and bias parameters use the configured optimizer schedule; the conductance update still uses the local derivative $f_n'(V_n)$ for voltage-error conversion. Router/pathway parameters in the cue-routing controls are trained through their configured router/pathway objective and are not included in the conductance-factorization theorem. HSIC gradients are applied to selected representation tensors through the configured local-learning representation pathway; they do not replace the LocalCA conductance eligibility and are reported as an auxiliary objective.
+
 \subsection{Morphology and Synapse Banks}
 
 The morphology notation $[b_1,b_2,\dots,b_D]$ specifies a rooted dendritic tree. The factor $b_d$ is the fan-in from dendritic stage $d$ to the next more proximal stage. Thus $[3,3]$ gives $3$ proximal branches per soma and $3$ distal branches per proximal branch, for $9$ distal leaves per soma. In the main feedforward models, synaptic inputs terminate on dendritic branches rather than directly on the soma. Unless a control explicitly changes this, each branch has $N_E$ excitatory synapses and $N_I$ inhibitory synapses. The branch input is sparse through a learned top-$k$ or banked synapse selection module; inactive synapses are masked out in the local update unless the corresponding control enables inactive-weight updates.
@@ -1214,7 +1218,7 @@ Figure generation and CPU-side summaries & -- & $<5$ h total & $<5$ \\
 
 \subsection{Code, Data, and Asset Availability}
 \label{app:code_data_assets}
-MNIST, Fashion-MNIST, and CIFAR-10 are public datasets or public benchmark assets cited in the paper; we use them under their standard published access conditions and cite their original sources in the bibliography. For the arXiv preprint, code and data availability are stated at a high level: the accompanying source contains the core model, training code, diagnostic utilities, representative configuration files, tests, and analysis entry points, and a cleaned public release with an immutable tag will be provided after acceptance. The paper does not release a new dataset or a stand-alone pretrained model asset.
+MNIST, Fashion-MNIST, and CIFAR-10 are public datasets or public benchmark assets cited in the paper; we use them under their standard published access conditions and cite their original sources in the bibliography. The accompanying source package contains the core model, training code, diagnostic utilities, representative configuration files, tests, figure-source summaries, and analysis entry points. Code will be released publicly at the time of arXiv posting with an immutable tag. The paper does not release a new dataset or a stand-alone pretrained model asset.
 Dataset access pages are the original MNIST site / UCI entry (\url{https://archive.ics.uci.edu/dataset/683/mnist+database+of+handwritten+digits}), the Fashion-MNIST repository (\url{https://github.com/zalandoresearch/fashion-mnist}), and the CIFAR page (\url{https://www.cs.toronto.edu/~kriz/cifar.html}).
 
 \begin{table}[H]
@@ -1300,7 +1304,7 @@ r_n^{\mathrm{4F}}=
 \frac{\mathrm{Cov}_B(\bar{V}_{n,b},\bar{V}_{0,b})}
 {\sqrt{\mathrm{Var}_B(\bar{V}_{n,b})\mathrm{Var}_B(\bar{V}_{0,b})}+\varepsilon}.
 \]
-The EMA is initialized from the first observed batch statistic; the recorded tensors are detached from autograd, and the same mini-batch supplies both the statistics and the gradient update. This proxy is clamped to the positive stability range $[0.1,2.0]$ before it multiplies the local gradient; sign-opposed covariance therefore reduces the multiplier rather than reversing update direction. Because the smoothed numerator and denominator can be updated separately, and because single-sample fallbacks use online covariance moments, the clamped value can exceed one and should be read as a preconditioner rather than a literal Pearson correlation.
+The EMA is initialized from the first observed batch statistic; the recorded tensors are detached from autograd, and the same mini-batch supplies both the statistics and the gradient update. This proxy is clamped to the positive stability range $[0.1,2.0]$ before it multiplies the local gradient; sign-opposed covariance therefore reduces the multiplier rather than reversing update direction. Because the smoothed numerator and denominator can be updated separately, and because single-sample fallbacks use online covariance moments, the clamped value can exceed one and should be read as a preconditioner rather than a literal Pearson correlation. Single-sample online fallbacks for these statistics use Welford's algorithm \cite{welford1962note}.
 The 5F factor adds a bounded branch-level preconditioner based on how much branch voltage variance remains predictable from parent or soma-level activity:
 \[
 \phi_n=
@@ -1370,7 +1374,6 @@ Following \cite{gretton2005hsic}, the figure-ground MNIST LocalCA runs optionall
 \mathcal{L}^{\mathrm{target}} = -B^{-2}\tr(\mathbf{K}_Z\mathbf{H}\mathbf{K}_Y\mathbf{H}).
 \]
 Here $B$ is batch size, $\mathbf{H}$ is the centering matrix, $\mathbf{K}_Z$ uses the configured representation kernel, and $\mathbf{K}_Y$ uses one-hot class labels when \path{target_source=labels}. The reported figure-ground runs use an RBF kernel with fixed bandwidth $\sigma=1.0$, HSIC weight $0.01$, self and target weights $0.3$, five-epoch warmup, and gradient clipping at $0.1$; the code applies the resulting auxiliary gradient through the configured local-learning representation pathway rather than through the conductance-factorization theorem. Moderate weights ($0.01$--$0.1$) help on figure-ground MNIST; negligible on MNIST.
-Online statistics ($r_n^{\mathrm{4F}}$, $\phi_n$) use Welford's algorithm \cite{welford1962note}.
 
 \section{Task Construction and Robustness Protocols}
 \label{app:synthetic_tasks}
@@ -1389,7 +1392,7 @@ These ten-class tasks use nonnegative pixel inputs. MNIST tests whether per-soma
 CIFAR-10 inputs are flattened RGB images in $[0,1]$. The compact CIFAR family uses a smaller dendritic core, nonlinear decoder, and decoder-aware LocalCA mapping to test whether the broadcast-fidelity ladder persists on harder data: per-soma feedback is weak, higher-rank feedback helps, and exact effective path transport approaches the matched shunting backpropagation reference.
 
 \paragraph{Figure-ground MNIST.}
-For each reshaped $28\times28$ MNIST image, the right half carries the digit and the left half is replaced by independent distractors $u_{r,c}\sim\mathrm{Uniform}(0,0.25)$, clipped to $[0,1]$ when needed. The task tests whether local credit assignment exploits spatial signal/distractor structure without leaving the nonnegative-drive regime. The main LocalCA performance runs use the HSIC auxiliary objective with weight $0.01$, which adds roughly $3$~pp in the ablation.
+For each reshaped $28\times28$ MNIST image, the right half carries the digit and the left half is replaced by independent distractors $u_{r,c}\sim\mathrm{Uniform}(0,0.25)$, clipped to $[0,1]$ when needed. The task tests whether local credit assignment exploits spatial signal/distractor structure without leaving the nonnegative-drive regime. The main LocalCA performance rows use the HSIC auxiliary objective with weight $0.01$, which adds roughly $3$~pp in the ablation; the matched shunting BP reference in Table~\ref{tab:gap_closing} is the standard cross-entropy reference.
 
 \paragraph{Noise resilience.}
 Flattened MNIST images are corrupted as $\tilde{x}=\mathrm{clip}(x+\sigma_{\mathrm{task}}Az,0,1)$ with $\sigma_{\mathrm{task}}=1.5$, a fixed task-seeded projection $A\in\mathbb{R}^{784\times50}$, and fresh $z\sim\mathcal{N}(0,I_{50})$ for each corrupted example. The fixed projection creates correlated interference without reducing the task to memorizing one corruption pattern.
