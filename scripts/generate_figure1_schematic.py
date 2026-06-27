@@ -458,16 +458,16 @@ def panel_c(ax):
             fontsize=6.4, color=INK, fontweight="bold")
 
     modes = [
-        ("Scalar",   "global shared",       MODE_COLORS["rank1"],  "rank1"),
-        ("Per-soma", "one per neuron",       MODE_COLORS["persoma"], "persoma"),
-        ("Rank-$K$", "$K$ channels",         MODE_COLORS["rankk"],  "rankk"),
-        ("Path",     "branch roles",         MODE_COLORS["path"],   "path"),
-        ("Exact transport", r"$\tilde{\alpha}_n\delta_0$", MODE_COLORS["oracle"], "oracle"),
+        ("Scalar",   "global",   MODE_COLORS["rank1"],  "rank1"),
+        ("Per-soma", "per cell", MODE_COLORS["persoma"], "persoma"),
+        ("Rank-$K$", "$K$ chans", MODE_COLORS["rankk"],  "rankk"),
+        ("Path",     "by role",  MODE_COLORS["path"],   "path"),
+        ("Transport", r"$\tilde{\alpha}_n\delta_0$", MODE_COLORS["oracle"], "oracle"),
     ]
     row_x = 0.62
     row_w = 0.34
-    row_h = 0.070
-    row_ys = np.linspace(0.84, 0.54, len(modes))
+    row_h = 0.062
+    row_ys = np.linspace(0.86, 0.48, len(modes))
     for (name, note, col, kind), ry in zip(modes, row_ys):
         _round_box(ax, (row_x, ry - row_h / 2), row_w, row_h,
                    fc="white", ec="#cfd4dc", lw=0.7, fontsize=5.6,
@@ -478,17 +478,24 @@ def panel_c(ax):
         ax.text(row_x + 0.055, ry + 0.015, name,
                 ha="left", va="center",
                 fontsize=name_fs, color=col, fontweight="bold", zorder=10)
-        ax.text(row_x + 0.055, ry - 0.019, note,
+        ax.text(row_x + 0.055, ry - 0.018, note,
                 ha="left", va="center",
-                fontsize=4.7, color=MUTE, zorder=10)
-        ic_x = row_x + row_w - 0.105
-        ic_w = 0.075
+                fontsize=4.5, color=MUTE, zorder=10)
+        ic_x = row_x + row_w - 0.086
+        ic_w = 0.056
         ap = dict(shrinkA=0, shrinkB=0)
         if kind == "rank1":
             ax.annotate("", xy=(ic_x + ic_w, ry), xytext=(ic_x, ry),
                         arrowprops=dict(arrowstyle="-|>", color=col,
                                         lw=1.0, **ap),
                         zorder=10)
+        elif kind == "persoma":
+            for dy in (-0.013, 0.013):
+                ax.annotate("", xy=(ic_x + ic_w, ry + dy),
+                            xytext=(ic_x, ry + dy),
+                            arrowprops=dict(arrowstyle="-|>", color=col,
+                                            lw=0.9, **ap),
+                            zorder=10)
         elif kind == "rankk":
             for dy in (-0.018, 0.0, 0.018):
                 ax.annotate("", xy=(ic_x + ic_w, ry + dy),
