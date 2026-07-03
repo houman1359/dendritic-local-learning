@@ -343,7 +343,7 @@
     \label{sec:discussion}
     We studied local credit assignment in conductance-based dendritic networks with explicit E/I conductance synapses, shunting inhibition, and tree-structured branching. Exact gradients separate synapse-local eligibility--presynaptic activity, driving force, and input resistance--from one path-specific compartment error, making LocalCA an error-approximation problem. The experiments support a coherent mechanism: branching creates credit paths, E/I synapse banks set the conductance state, and shunting modulates input resistance along those paths. In the regimes studied here this lowers exact-error rank, improves feedback-fidelity diagnostics, reduces gradient-scale mismatch, and lets transported-error oracles substantially reduce the local-learning gap. Post-training interventions further show that learned inhibitory conductance is sample-dependent and functionally important to the trained forward computation.
     
-    The operating regime matters. Shunting is not universally beneficial, more inhibition is not always better, and the practical 5F rule is an empirical bounded preconditioner. Exact decoder-to-soma feedback requires the decoder Jacobian or linear readout to supply the correct soma/core coordinate; practical multi-layer LocalCA also approximates layer-soma errors by reusing coordinates at earlier matched-width layers. The core theorem covers conductance-stage branch parameters under steady-state, non-spiking dynamics; reactivation, decoder, router, top-$k$, 4F/5F batch-time statistics, and HSIC terms are implementation-specific updates. Learned synapse selection may also reshape the eligibility basis so a fixed or low-rank feedback field aligns better with active synaptic drive, analogous in spirit to DFA alignment, but we treat this as a hypothesis for future diagnostics rather than a demonstrated mechanism here. Eq.~\eqref{eq:compression_condition} is interpretive, and activation shape, morphology, task structure, and feedback rank can change broadcast compatibility. The inhibition studied here is input-driven rather than recurrent lateral inhibition, and post-training interventions establish forward necessity rather than isolating credit-assignment causality. We therefore claim a credit-geometry mechanism supported by exact reconstruction, fidelity diagnostics, controls, and oracle transport, not competitive CIFAR-10 performance or sufficiency of a single global scalar broadcast for routed/pathway-specific tasks.
+    The operating regime matters. Shunting is not universally beneficial, more inhibition is not always better, and the practical 5F rule is an empirical bounded preconditioner. Exact decoder-to-soma feedback requires the decoder Jacobian or linear readout to supply the correct soma/core coordinate; practical multi-layer LocalCA also approximates layer-soma errors by reusing coordinates at earlier matched-width layers. The core theorem covers conductance-stage branch parameters under steady-state, non-spiking dynamics; reactivation, decoder, router, top-$k$, 4F/5F batch-time statistics, and HSIC terms are implementation-specific updates. Learned synapse selection may also reshape the eligibility basis so fixed or low-rank feedback aligns better with active synaptic drive, analogous in spirit to DFA alignment; we leave this possibility for future work. Eq.~\eqref{eq:compression_condition} is interpretive, and activation shape, morphology, task structure, and feedback rank can change broadcast compatibility. The inhibition studied here is input-driven rather than recurrent lateral inhibition, and post-training interventions establish forward necessity rather than isolating credit-assignment causality. We therefore claim a credit-geometry mechanism supported by exact reconstruction, fidelity diagnostics, controls, and oracle transport, not competitive CIFAR-10 performance or sufficiency of a single global scalar broadcast for routed/pathway-specific tasks.
     
     %=============================================================================
     % REFERENCES
@@ -594,7 +594,7 @@
     
     \section{Supplementary Empirical Results}
     \label{app:extra_results}
-    This appendix records the supporting diagnostics, implementation details, and task protocols needed to interpret the paper's main claims. It is organized as a reading path rather than as a chronological log: this section contains empirical diagnostics and boundary cases; Appendix~\ref{app:implementation} gives the implemented model and optimizer details; Appendix~\ref{app:theory} collects theory-adjacent extensions; and Appendix~\ref{app:synthetic_tasks} defines benchmark and synthetic-task protocols.
+    This appendix records the supporting diagnostics, implementation details, and task protocols needed to interpret the paper's main claims. It is organized by function: empirical diagnostics and boundary cases; implemented model and optimizer details; theory-adjacent extensions; and benchmark and synthetic-task protocols.
     
     \paragraph{Scope notes.}
     Several controls are intentionally negative or mixed. The log-gain covariance margin from Eq.~\eqref{eq:compression_condition} is not used as a positive main result, and the pathway-vector feedback variant does not beat the best unstructured low-rank cue-routing control. These diagnostics delimit the claim rather than smoothing over failure modes.
@@ -627,7 +627,7 @@
     
     \subsection{Reproducibility Statement}
     
-    Reproducibility is documented at a protocol level in this manuscript. The accompanying source package contains the core model and training code, diagnostic utilities, representative configuration files, tests, figure-source summaries, and analysis scripts used for the manuscript. Table~\ref{tab:reproducibility_summary} summarizes the experiment families, seed protocols, and checkpoint-selection rules. Code will be released publicly at the time of arXiv posting with an immutable repository tag, pinned environment file, end-to-end launch scripts, and expected summary checks.
+    The accompanying source package contains the model code, training scripts, diagnostic scripts, figure-generation scripts, representative configuration files, tests, and precomputed summary files used to generate the manuscript figures and tables. Table~\ref{tab:reproducibility_summary} summarizes the experiment families, seed protocols, and checkpoint-selection rules. Code and reproduction scripts will be released publicly after publication with an immutable repository tag, pinned environment file, end-to-end launch scripts, and expected summary hashes.
     
     \begin{table}[H]
     \centering
@@ -645,7 +645,7 @@
     Matched-capacity performance & MNIST, Fashion-MNIST, figure-ground MNIST; per-soma 5F LocalCA and matched backpropagation references & Five seeds & Validation-selected configurations; held-out test accuracy \\
     \bottomrule
     \end{tabular}
-    \caption{\textbf{Protocol-level reproducibility summary.} The table records the experiment families, model settings, seed counts, and selection rules used in the manuscript. Dependency specifications are provided through \texttt{requirements.txt}, \texttt{pyproject.toml}, and \texttt{setup/environment.yml}; exact end-to-end commands and summary hashes will be provided with the public repository tag.}
+    \caption{\textbf{Reproducibility summary.} The table records the experiment families, model settings, seed counts, and selection rules used in the manuscript. Dependency specifications are provided through \texttt{requirements.txt}, \texttt{pyproject.toml}, and \texttt{setup/environment.yml}; exact end-to-end commands and summary hashes will be provided with the post-publication repository tag.}
     \label{tab:reproducibility_summary}
     \end{table}
     
@@ -1164,12 +1164,12 @@
     \toprule
     \textbf{Setting} & \textbf{Encoder} & \textbf{E layers} & \textbf{Tree} & \textbf{Synapses / branch} & \textbf{Seeds} & \textbf{Notes} \\
     \midrule
-    Gradient fidelity / path-gain / noise-resilience mechanism & id.+ReLU & $[128,128]$ & $[3,3]$ & $N_E{=}40$, $N_I \in \{0,5,10,20,40\}$ & $5$ fidelity, $5$ oracle & Main mechanism sweeps in Figs.~\ref{fig:gradient_fidelity} and \ref{fig:mechanistic}; reactivation \texttt{param\_tanh}. \\
-    MNIST / figure-ground local performance & id.+ReLU & $[128]$ & $[3,3]$ & $N_E{=}40$, $N_I{=}20$ & $5$ & Best local 5F per-soma runs in Table~\ref{tab:gap_closing}; reactivation \texttt{param\_tanh}. \\
-    Fashion-MNIST performance & id.+ReLU & $[128]$ & $[3,3]$ & $N_E{=}40$, $N_I{=}20$ & $5$ & Dedicated five-seed standard-vs-local performance sweep; reactivation \texttt{param\_tanh}. \\
-    Cue-routing PV-LocalCA & router & $[64]$ & $[2]$ & $N_E{=}10$, $N_I{=}4$ & $5$ & Learned router with two pathway groups and rank-$2$ structured feedback; reactivation \texttt{param\_tanh}. \\
+    Gradient fidelity / path-gain / noise-resilience mechanism & id.+ReLU & $[128,128]$ & $[3,3]$ & $N_E{=}40$, $N_I \in \{0,5,10,20,40\}$ & $5$ fidelity, $5$ oracle & Main mechanism sweeps in Figs.~\ref{fig:gradient_fidelity} and \ref{fig:mechanistic}; learned bounded tanh reactivation. \\
+    MNIST / figure-ground local performance & id.+ReLU & $[128]$ & $[3,3]$ & $N_E{=}40$, $N_I{=}20$ & $5$ & Best local 5F per-soma runs in Table~\ref{tab:gap_closing}; learned bounded tanh reactivation. \\
+    Fashion-MNIST performance & id.+ReLU & $[128]$ & $[3,3]$ & $N_E{=}40$, $N_I{=}20$ & $5$ & Dedicated five-seed standard-vs-local performance sweep; learned bounded tanh reactivation. \\
+    Cue-routing PV-LocalCA & router & $[64]$ & $[2]$ & $N_E{=}10$, $N_I{=}4$ & $5$ & Learned router with two pathway groups and rank-$2$ structured feedback; learned bounded tanh reactivation. \\
     CIFAR-10 compact direct-I-stream control ladder & id.+ReLU & $[20]$ E, no I cells & $[3,3,3,3]$ & $N_E{=}25$, $N_I{=}25$ direct I-to-E, with matched no-I controls & $5$ per condition & Harder-dataset stress test with input-driven inhibitory conductance, decoder $[32,16]$, decoder-aware soma mapping, and additive fairness controls. \\
-    Morphology$\times$inhibition appendix map & id.+ReLU & $[128,128]$ & $[2,2]$, $[3,3]$, $[4,4]$, $[2,2,2]$, $[3,3,3]$ & $N_E{=}40$, $N_I \in \{0,5,10,20,40\}$ & $3$ & Supportive 3-seed sweep; reactivation \texttt{param\_tanh}. \\
+    Morphology$\times$inhibition appendix map & id.+ReLU & $[128,128]$ & $[2,2]$, $[3,3]$, $[4,4]$, $[2,2,2]$, $[3,3,3]$ & $N_E{=}40$, $N_I \in \{0,5,10,20,40\}$ & $3$ & Supportive 3-seed sweep; learned bounded tanh reactivation. \\
     \bottomrule
     \end{tabular}%
     }
@@ -1187,7 +1187,7 @@
     \toprule
     \textbf{Setting} & \textbf{Opt.} & \textbf{LR} & \textbf{Batch} & \textbf{Epochs} & \textbf{Weight decay} & \textbf{Notes} \\
     \midrule
-    MNIST / Fashion-MNIST / figure-ground MNIST (5F per-soma LocalCA) & Adam & $10^{-3}$ / $5\cdot10^{-4}$ (block / react.) & 256 & 100 & 0 & fixed-epoch, no early stopping; \texttt{param\_tanh} reactivation \\
+    MNIST / Fashion-MNIST / figure-ground MNIST (5F per-soma LocalCA) & Adam & $10^{-3}$ / $5\cdot10^{-4}$ (block / react.) & 256 & 100 & 0 & fixed-epoch, no early stopping; learned bounded tanh reactivation \\
     MNIST / Fashion-MNIST / figure-ground MNIST (matched backprop reference) & Adam & $10^{-3}$ / $5\cdot10^{-4}$ & 256 & 100 & 0 & matched to LocalCA setup \\
     Gradient fidelity / path-gain / noise resilience & Adam & $10^{-3}$ & 256 & 50 & 0 & 5 seeds, hooks enabled for diagnostic capture \\
     Morphology $\times$ inhibition regime map (supportive) & Adam & $10^{-3}$ & 256 & 50 & 0 & 3 seeds \\
@@ -1218,7 +1218,7 @@
     \bottomrule
     \end{tabular}
     \renewcommand{\arraystretch}{1.0}
-    \caption{\textbf{Effective dimensionality of the main feedback in the reported architectures.} Output loss gradients are first mapped into decoder-input/soma coordinates. The main performance and mechanism runs use the implemented \texttt{per\_soma} mode when the soma/core dimension matches layer width; scalar, low-rank, pathway-vector, and transported-error conditions are labeled separately as controls or oracles.}
+    \caption{\textbf{Effective dimensionality of the main feedback in the reported architectures.} Output loss gradients are first mapped into decoder-input/soma coordinates. The main performance and mechanism runs use the implemented per-soma feedback mode when the soma/core dimension matches layer width; scalar, low-rank, pathway-vector, and transported-error conditions are labeled separately as controls or oracles.}
     \label{tab:effective_broadcast_dimensionality}
     \end{table}
     
@@ -1245,7 +1245,7 @@
     
     \subsection{Code, Data, and Asset Availability}
     \label{app:code_data_assets}
-    MNIST, Fashion-MNIST, and CIFAR-10 are public datasets or public benchmark assets cited in the paper; we use them under their standard published access conditions and cite their original sources in the bibliography. The accompanying source package contains the core model, training code, diagnostic utilities, representative configuration files, tests, figure-source summaries, and analysis entry points. Code will be released publicly at the time of arXiv posting with an immutable tag. The paper does not release a new dataset or a stand-alone pretrained model asset.
+    MNIST, Fashion-MNIST, and CIFAR-10 are public datasets or public benchmark assets cited in the paper; we use them under their standard published access conditions and cite their original sources in the bibliography. The accompanying source package contains the model code, training scripts, diagnostic scripts, figure-generation scripts, representative configuration files, tests, precomputed summary files, and analysis entry points used for the manuscript. Code and reproduction scripts will be released publicly after publication with an immutable repository tag. The paper does not release a new dataset or a stand-alone pretrained model asset.
     Dataset access pages are the original MNIST site / UCI entry (\url{https://archive.ics.uci.edu/dataset/683/mnist+database+of+handwritten+digits}), the Fashion-MNIST repository (\url{https://github.com/zalandoresearch/fashion-mnist}), and the CIFAR page (\url{https://www.cs.toronto.edu/~kriz/cifar.html}).
     
     \begin{table}[H]
@@ -1267,7 +1267,7 @@
     
     \subsection{LocalCA Broadcast and Gradient Assignment}
     
-    LocalCA first maps the output loss derivative to the soma/core activation-space error $\delta_0^a$ and then constructs a branch voltage-error field. In the final dendritic layer this is the decoder-input error; in earlier matched-width layers the practical implementation reuses the same coordinate by neuron index as an approximate layer-soma teaching signal. This is an inter-layer feedback approximation, separate from the within-tree path-transport approximation studied by the main theory. In the main reported \texttt{per\_soma} mode, if the layer width matches the soma/core error dimension, each soma-specific error component is broadcast to the corresponding dendritic compartments:
+    LocalCA first maps the output loss derivative to the soma/core activation-space error $\delta_0^a$ and then constructs a branch voltage-error field. In the final dendritic layer this is the decoder-input error; in earlier matched-width layers the practical implementation reuses the same coordinate by neuron index as an approximate layer-soma teaching signal. This is an inter-layer feedback approximation, separate from the within-tree path-transport approximation studied by the main theory. In the main reported per-soma feedback mode, if the layer width matches the soma/core error dimension, each soma-specific error component is broadcast to the corresponding dendritic compartments:
     \[
     e_{n,b}^{a}=\delta_{0,b}^{a}\in\mathbb{R}^{d_0}.
     \]

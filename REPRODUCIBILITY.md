@@ -2,8 +2,8 @@
 
 These notes give a compact map from the manuscript to the repository contents.
 They are intentionally protocol-level for the current preprint. The public
-arXiv release will identify an immutable tag, the pinned environment, end-to-end
-launch scripts, and expected summary hashes.
+release after publication will identify an immutable tag, the pinned
+environment, end-to-end launch scripts, and expected summary hashes.
 
 Run commands from the repository root:
 
@@ -48,8 +48,8 @@ PYTHONPATH=../../src:$PYTHONPATH python scripts/generate_cue_routing_figures.py
 ```
 
 These are figure/summarization entry points, not yet a frozen from-scratch
-reproduction artifact. The public arXiv release will provide a single-script
-path from raw training launches to checked summaries.
+reproduction artifact. The public release after publication will provide a
+single-script path from raw training launches to checked summaries.
 
 ## Environment
 

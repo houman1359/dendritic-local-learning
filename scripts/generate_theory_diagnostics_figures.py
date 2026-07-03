@@ -300,7 +300,7 @@ def _plot_error_compressibility(ax: plt.Axes, rank_summary: pd.DataFrame) -> Non
         width=bar_w,
         capsize=2.4,
         error_kw={"lw": 1.1},
-        label="SVD $\\rho_1$",
+        label="SVD $\\downarrow$ better",
     )
     if ps_cosines:
         ax.bar(
@@ -313,23 +313,13 @@ def _plot_error_compressibility(ax: plt.Axes, rank_summary: pd.DataFrame) -> Non
             width=bar_w,
             capsize=2.4,
             error_kw={"lw": 1.1},
-            label="PS cos.",
+            label="PS cos. $\\uparrow$ better",
         )
     ax.set_xticks(x)
     ax.set_xticklabels(labels)
     ax.set_ylabel("Metric value")
     ax.set_ylim(0, 1.02)
     ax.set_title("Geometry &\nfeedback", linespacing=0.9)
-    ax.text(
-        0.03,
-        0.96,
-        r"$\rho_1\downarrow$, PS cos.$\uparrow$",
-        transform=ax.transAxes,
-        ha="left",
-        va="top",
-        fontsize=5.4,
-        color=COLORS["mute"],
-    )
     if ps_cosines:
         ax.legend(
             loc="upper right",
@@ -834,8 +824,9 @@ def build_figure(
         ax.yaxis.label.set_fontsize(8.4)
         leg = ax.get_legend()
         if leg is not None:
+            legend_fontsize = 5.2 if "Geometry" in ax.get_title() else 6.6
             for txt in leg.get_texts():
-                txt.set_fontsize(6.6)
+                txt.set_fontsize(legend_fontsize)
         title = ax.get_title()
         if "(n=3)" in title:
             ax.set_title(title.replace("(n=3)", "").strip(), fontsize=9.6)
