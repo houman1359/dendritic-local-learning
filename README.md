@@ -34,10 +34,9 @@ The current main-paper figures are:
 - `figures/fig1_model_and_credit.pdf`: model, path gains, and broadcast taxonomy.
 - `figures/fig2_gradient_fidelity.pdf`: exact factorization, final gradient-fidelity diagnostics, and the layer-soma factorial check.
 - `figures/fig3_mechanistic_evidence.pdf`: path-gain/error-field compressibility, inhibition intervention, broadcast fidelity, and oracle learning.
-- `figures/fig4_competence_regime.pdf`: matched-capacity performance, inhibition dose-response, morphology regime, and the additive-normalization stress diagnostic.
-- `figures/fig5_rule_feedback_controls.pdf`: local-rule, feedback-source, feedback-construction, and cue-routing controls.
+- `figures/fig4_competence_regime.pdf`: matched-capacity performance, inhibition dose-response, morphology regime, mechanism controls, and the fifteen-seed neuron-wise-feedback intervention.
 
-Key appendix figures include the detailed rule/feedback controls, verification and seed checks, extended gradient diagnostics, CIFAR-10 mechanism stress tests, morphology maps, feedback-alignment baselines, input-mode probes, and cue-routing diagnostics.
+Key appendix figures include the corrected rule/feedback controls, exact-error factorial, verification and seed checks, extended gradient diagnostics, CIFAR-10 mechanism stress tests, morphology maps, feedback-alignment baselines, input-mode probes, and cue-routing diagnostics.
 
 ## Rebuild Commands
 

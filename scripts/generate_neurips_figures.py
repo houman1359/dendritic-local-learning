@@ -12,8 +12,8 @@ only the figures that are referenced by `local_credit_assignment_body.tex`.
   Main:
     fig2_gradient_fidelity.pdf     (4 panels: exact reconstruction, final cosine, scale mismatch,
                                      layer-soma factorial diagnostic)
-    fig4_competence_regime.pdf     (4 panels: competence, IE dose-response, morphology, controls)
-    fig5_rule_feedback_controls.pdf
+    fig4_competence_regime.pdf     (5 panels: competence, IE dose-response, morphology,
+                                     controls, neuron-wise feedback)
   Appendix:
     fig_s_rule_feedback_design.pdf (detailed rule and feedback controls)
     fig_s2_gradient_extended.pdf   (2x2: scale mismatch, noise IE detail, MNIST IE detail, FMNIST seeds)
@@ -110,8 +110,9 @@ THEORY_IE_RUNS_CSV = os.path.join(
 CORE_FAIR_TUNING_CSV = os.path.join(ANALYSIS_DIR, "core_fair_tuning.csv")
 PHASE2B_GAP_CLOSING_CSV = os.path.join(ANALYSIS_DIR, "phase2b_gap_closing.csv")
 REVISION_CONTROLS_DIR = os.path.join(ANALYSIS_DIR, "revision_controls_20260624")
-REVISION_EXACT_TRANSPORT_CSV = os.path.join(
-    REVISION_CONTROLS_DIR,
+REVISION_EXACT_TRANSPORT_CSV = _tracked_csv(
+    "revision_exact_transport_factorial_grouped.csv",
+    "revision_controls_20260624",
     "revision_exact_transport_factorial_mnist_5seed_20260624152116",
     "grouped_summary.csv",
 )
@@ -596,37 +597,58 @@ def figure_rule_feedback_design():
         handletextpad=0.25,
     )
 
-    # ---- Panel B: broadcast definition on MNIST ----
+    # ---- Panel B: exact-error rule/decoder factorial ----
     ax = axes[1]
     style_axis(ax, grid="y")
-
-    broadcast_groups = ["MW/scalar\nfallback", "Local\nmismatch"]
-    core_entries = [
-        ("Shunt.", COLOR_SHUNTING, [91.2, 14.6], [0.5, 4.6]),
-        ("Add.", COLOR_ADDITIVE, [89.4, 34.2], [0.7, 5.8]),
+    exact = pd.read_csv(REVISION_EXACT_TRANSPORT_CSV)
+    bp = pd.read_csv(REVISION_EXACT_BP_CSV).iloc[0]
+    x = np.arange(2, dtype=float)
+    bw = 0.28
+    decoder_specs = [
+        ("backprop", "BP decoder", "#7B5EA7"),
+        ("local", "Local decoder", "#B08CC6"),
     ]
-    x = np.arange(len(broadcast_groups))
-    bw = 0.30
-    for j, (label, color, vals, errs) in enumerate(core_entries):
+    for j, (decoder_mode, label, color) in enumerate(decoder_specs):
+        means, stds = [], []
+        for rule in ("3f", "5f"):
+            row = exact[
+                (exact["rule_variant"] == rule)
+                & (exact["decoder_update_mode"] == decoder_mode)
+            ].iloc[0]
+            means.append(100.0 * float(row["test_acc_mean"]))
+            stds.append(100.0 * float(row["test_acc_std"]))
         ax.bar(
             x + (j - 0.5) * bw,
-            vals,
+            means,
             bw * 0.92,
-            yerr=errs,
+            yerr=stds,
             color=color,
             edgecolor="white",
             lw=0.65,
-            capsize=2.5,
-            error_kw={"lw": 1.0},
+            capsize=2.2,
+            error_kw={"lw": 0.9},
             label=label,
         )
+    ax.axhline(
+        100.0 * float(bp["test_acc_mean"]),
+        color=COLOR_BACKPROP,
+        lw=0.9,
+        ls="--",
+        label="Matched BP",
+    )
     ax.set_xticks(x)
-    ax.set_xticklabels(broadcast_groups)
+    ax.set_xticklabels(["3F", "5F"])
     ax.set_ylabel("MNIST test (%)")
-    ax.set_ylim(0, 100)
-    ax.set_title("B  Error definition", loc="left", fontweight="bold")
-    ax.legend(fontsize=9.2, loc="upper right", frameon=False,
-              handlelength=0.9, handletextpad=0.3)
+    ax.set_ylim(96.7, 97.65)
+    ax.set_title("B  Exact error", loc="left", fontweight="bold")
+    ax.legend(
+        fontsize=6.6,
+        loc="upper right",
+        frameon=False,
+        handlelength=0.9,
+        handletextpad=0.3,
+        labelspacing=0.25,
+    )
 
     # ---- Panel C: rank/propagation ladder on noise resilience ----
     ax = axes[2]
@@ -994,18 +1016,21 @@ def figure4_competence_regime():
     revision_bp = _csv_path(REVISION_EXACT_BP_CSV)
     revision_additive = _csv_path(REVISION_ADDITIVE_CSV)
     revision_reactivation = _csv_path(REVISION_REACTIVATION_CSV)
+    feedback_definition = _csv_path(FEEDBACK_DEFINITION_CSV)
 
     fig, axes = plt.subplots(
         1,
-        4,
-        figsize=(MAIN_W, 3.0),
-        gridspec_kw={"wspace": 0.48, "width_ratios": [1.0, 1.0, 1.0, 1.0]},
+        5,
+        figsize=(MAIN_W, 3.05),
+        gridspec_kw={
+            "wspace": 0.62,
+            "width_ratios": [1.02, 1.05, 1.0, 1.12, 1.02],
+        },
     )
     axes = axes.ravel()
 
     # ---- Panel A: Multi-benchmark bars ----
     ax = axes[0]
-    _panel(ax, "A")
 
     datasets_info = []
 
@@ -1119,17 +1144,17 @@ def figure4_competence_regime():
     }
     ax.set_xticklabels([short_dataset_labels.get(d[0], d[0]) for d in datasets_info])
     ax.set_ylabel("Test accuracy (%)")
-    ax.set_title("Matched-capacity\nperformance")
+    ax.set_title("A  Tasks", loc="left", fontweight="bold")
 
     # Legend
     legend_handles = [
-        mpatches.Patch(color=COLOR_BACKPROP, label="Backprop"),
-        mpatches.Patch(color=COLOR_SHUNTING, label="Shunt. (local)"),
-        mpatches.Patch(color=COLOR_ADDITIVE, label="Add. (local)"),
+        mpatches.Patch(color=COLOR_BACKPROP, label="BP"),
+        mpatches.Patch(color=COLOR_SHUNTING, label="Shunt."),
+        mpatches.Patch(color=COLOR_ADDITIVE, label="Add."),
     ]
     ax.legend(
         handles=legend_handles,
-        fontsize=7.0,
+        fontsize=5.8,
         loc="upper center",
         bbox_to_anchor=(0.5, 1.005),
         ncol=3,
@@ -1138,7 +1163,7 @@ def figure4_competence_regime():
         handletextpad=0.3,
         borderpad=0.2,
         labelspacing=0.25,
-        columnspacing=0.7,
+        columnspacing=0.45,
     )
 
     all_vals = [d[1]*100 for d in datasets_info if d[1]] + \
@@ -1151,7 +1176,6 @@ def figure4_competence_regime():
 
     # ---- Panel B: IE dose-response ----
     ax = axes[1]
-    _panel(ax, "B")
 
     if ie_data is not None:
         for ct, ds, color, ls, marker, ms in [
@@ -1174,7 +1198,7 @@ def figure4_competence_regime():
 
     ax.set_xlabel("$N_I$ per branch")
     ax.set_ylabel("Test accuracy (%)")
-    ax.set_title("Inhibition sweep")
+    ax.set_title("B  Inhibition", loc="left", fontweight="bold")
     from matplotlib.lines import Line2D
     leg_handles = [
         Line2D([], [], color=COLOR_SHUNTING, lw=2.1, marker="o", markersize=4.5, label="Shunting"),
@@ -1184,7 +1208,7 @@ def figure4_competence_regime():
     ]
     ax.legend(
         handles=leg_handles,
-        fontsize=6.8,
+        fontsize=5.6,
         loc="lower left",
         ncol=2,
         handlelength=1.7,
@@ -1201,7 +1225,6 @@ def figure4_competence_regime():
 
     # ---- Panel C: Morphology-dependent operating regime ----
     ax = axes[2]
-    _panel(ax, "C")
     style_axis(ax, grid="y")
 
     if morph_runs is not None:
@@ -1237,14 +1260,13 @@ def figure4_competence_regime():
         ax.axhline(0, color="black", lw=1.0, ls="--", alpha=0.75)
         # Label 0/20/40 only: 0-5-10 collide at this panel width.
         ax.set_xticks([0, 20, 40])
-        ax.legend(fontsize=8.4, loc="upper right", frameon=False, handlelength=1.0)
+        ax.legend(fontsize=6.0, loc="upper right", frameon=False, handlelength=1.0)
     ax.set_xlabel("$N_I$ per branch")
     ax.set_ylabel("Shunt.-add. (pp)")
-    ax.set_title("Morphology\nregime", linespacing=0.9)
+    ax.set_title("C  Morphology", loc="left", fontweight="bold")
 
     # ---- Panel D: Mechanism controls ----
     ax = axes[3]
-    _panel(ax, "D")
     style_axis(ax, grid="y")
 
     if (
@@ -1344,7 +1366,7 @@ def figure4_competence_regime():
                     fontweight="bold" if label in {"PT", "id", "add"} else "normal",
                 )
         ax.set_yticks([2.0, 1.0, 0.0])
-        ax.set_yticklabels(["Transport", "Identity", "Additive"], fontsize=7.5)
+        ax.set_yticklabels(["Transport", "Activation", "Additive"], fontsize=5.8)
         ax.set_xlim(87.0, 98.25)
         ax.set_xticks([88, 92, 96])
         ax.set_ylim(-0.45, 2.45)
@@ -1353,9 +1375,108 @@ def figure4_competence_regime():
                 ha="center", va="center", fontsize=8, color="red")
     ax.set_xlabel("MNIST test (%)")
     ax.set_ylabel("")
-    ax.set_title("Mechanism\ncontrols", linespacing=0.9)
+    ax.set_title("D  Controls", loc="left", fontweight="bold")
 
-    fig.subplots_adjust(left=0.062, right=0.992, bottom=0.24, top=0.82, wspace=0.48)
+    # ---- Panel E: corrected neuron-wise feedback ----
+    ax = axes[4]
+    style_axis(ax, grid="y")
+
+    if feedback_definition is not None:
+        feedback_order = ["scalar_fallback", "ancestry_shared"]
+        x = np.arange(len(feedback_order), dtype=float)
+        core_specs = [
+            ("dendritic_shunting", "Shunt.", COLOR_SHUNTING, -0.035),
+            ("dendritic_additive", "Add.", COLOR_ADDITIVE, 0.035),
+        ]
+        for network_type, label, color, offset in core_specs:
+            core_rows = feedback_definition[
+                feedback_definition["network_type"] == network_type
+            ]
+            pivot = core_rows.pivot(
+                index="seed",
+                columns="feedback",
+                values="test_accuracy",
+            ).dropna()
+            paired = 100.0 * pivot[feedback_order].to_numpy(dtype=float)
+            for row in paired:
+                ax.plot(
+                    x + offset,
+                    row,
+                    color=color,
+                    alpha=0.10,
+                    lw=0.45,
+                    zorder=1,
+                )
+            means = paired.mean(axis=0)
+            stds = paired.std(axis=0, ddof=1)
+            ax.errorbar(
+                x + offset,
+                means,
+                yerr=stds,
+                color=color,
+                marker="o",
+                markersize=4.0,
+                markerfacecolor="white",
+                markeredgewidth=0.9,
+                lw=1.35,
+                capsize=2.0,
+                label=label,
+                zorder=4,
+            )
+            gain = means[1] - means[0]
+            ax.text(
+                0.48 + offset,
+                0.5 * (means[0] + means[1]),
+                f"+{gain:.2f}",
+                color=color,
+                fontsize=6.0,
+                ha="center",
+                va="center",
+                bbox={"facecolor": "white", "edgecolor": "none", "pad": 0.4, "alpha": 0.82},
+            )
+
+        bp_value = 100.0 * float(revision_bp.iloc[0]["test_acc_mean"])
+        exact_row = revision_exact[
+            (revision_exact["rule_variant"] == "3f")
+            & (revision_exact["decoder_update_mode"] == "local")
+        ].iloc[0]
+        exact_value = 100.0 * float(exact_row["test_acc_mean"])
+        ax.axhline(bp_value, color=COLOR_BACKPROP, lw=0.8, ls="--")
+        ax.axhline(exact_value, color="#6C3483", lw=0.8, ls=":")
+        ax.text(
+            0.02,
+            0.98,
+            "15/15 pairs",
+            transform=ax.transAxes,
+            ha="left",
+            va="top",
+            fontsize=6.2,
+            color="0.25",
+        )
+        ax.set_xticks(x)
+        ax.set_xticklabels(["MW", "Neuron"])
+        ax.set_xlim(-0.20, 1.20)
+        ax.set_ylim(88.5, 98.2)
+        ax.set_yticks([90, 94, 98])
+        ax.legend(
+            fontsize=6.2,
+            loc="lower right",
+            frameon=False,
+            handlelength=1.0,
+            handletextpad=0.3,
+            labelspacing=0.25,
+        )
+    ax.set_ylabel("3F test (%)")
+    ax.set_title("E  Feedback", loc="left", fontweight="bold")
+
+    for panel_ax in axes:
+        panel_ax.title.set_fontsize(8.0)
+        panel_ax.xaxis.label.set_size(7.0)
+        panel_ax.yaxis.label.set_size(7.0)
+        panel_ax.tick_params(axis="both", labelsize=6.5)
+    axes[3].tick_params(axis="y", labelsize=5.8)
+
+    fig.subplots_adjust(left=0.052, right=0.995, bottom=0.24, top=0.86, wspace=0.66)
     _save(fig, "fig4_competence_regime")
     plt.close(fig)
 
@@ -3017,8 +3138,8 @@ def figure_mechanism_summary():
         return
     df = pd.read_csv(THEORY_IE_SUMMARY_CSV)
 
-    # Keep only the MNIST rows used for the theory-diag panel in Fig. 5, and the
-    # noise-resilience rows, to show the chain holds across both datasets.
+    # Keep the MNIST theory-diagnostic rows and the noise-resilience rows to
+    # compare the chain across both datasets.
     ds_colors = {"mnist": "#4A7CB5", "noise_resilience": "#E67E22"}
     ds_titles = {"mnist": "MNIST", "noise_resilience": "Noise resil."}
     core_marker = {"dendritic_additive": "o", "dendritic_shunting": "s"}
@@ -3330,7 +3451,6 @@ def main():
     print("Skipping Figure 1 here; use generate_figure1_schematic.py for the submission figure.")
     figure2_gradient_fidelity()
     figure_rule_feedback_design()
-    figure_rule_feedback_controls_main()
     figure4_competence_regime()
     figure_s_additional_stress_tests()
     figure_s2()

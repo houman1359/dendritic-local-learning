@@ -152,6 +152,11 @@ The extended identity-transfer and feedback-definition sweeps use
 `configs/sweeps/sweep_rebuttal_feedback_definition_3f_mnist_extra10seed.yaml`.
 The matched initialization-policy factorial uses
 `configs/sweeps/sweep_rebuttal_3f_init_policy_factorial_mnist_15seed.yaml`.
+The source-backed figure summaries include
+`figures/data/revision_exact_transport_factorial_grouped.csv` for the
+five-seed 3F/5F exact-error panel and
+`figures/data/feedback_definition_replication/feedback_definition_details.csv`
+for the fifteen-seed neuron-wise-feedback intervention.
 After training, the tracked summaries are produced with:
 
 ```bash
