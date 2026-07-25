@@ -1,0 +1,6 @@
+seed,shunting_test_accuracy,additive_test_accuracy,shunting_branch_numel_weighted_cosine,additive_branch_numel_weighted_cosine,shunting_branch_macro_cosine,additive_branch_macro_cosine,shunting_branch_concatenated_cosine,additive_branch_concatenated_cosine,shunting_branch_local_exact_norm_ratio,additive_branch_local_exact_norm_ratio,shunting_soma_exact_energy_fraction,additive_soma_exact_energy_fraction
+42,0.8988,0.9093,0.125973,0.126759,0.101368,0.125889,0.125074,0.126569,1.443388,0.089466,0.011050,0.161545
+43,0.9056,0.9072,0.216668,0.144554,0.216702,0.139289,0.162932,0.141014,1.551156,0.101252,0.011070,0.149901
+44,0.8997,0.9127,0.184129,0.140771,0.180583,0.143446,0.140819,0.145290,1.423296,0.092089,0.011002,0.143682
+45,0.9002,0.9077,0.211422,0.113226,0.205655,0.109825,0.187707,0.111165,1.747879,0.076408,0.010685,0.149516
+46,0.9005,0.9075,0.201527,0.092858,0.210356,0.089135,0.168525,0.091276,1.531599,0.062014,0.012444,0.138787

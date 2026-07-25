@@ -1,0 +1,48 @@
+Thank you for emphasizing that an interesting NeuroAI question is not useful if the reader cannot follow the theory-to-experiment chain. We agree that the submission placed too much terminology and too many assumptions before the central idea was made intuitive.
+
+**Bottom line.** The exact factorization is the central contribution; the experiments test how well restricted feedback approximates its path-specific error. We have reorganized the presentation around that chain and narrowed the shunting claim where the controls do not support it.
+
+The paper can be summarized without its implementation vocabulary:
+
+1. A synaptic gradient in the modeled dendritic tree is exactly a local sensitivity multiplied by a compartment-specific error.
+2. The local sensitivity uses presynaptic activity, synaptic driving force, and local input resistance.
+3. The compartment error is a somatic error transported through the branches between that synapse and the soma.
+4. Shunting inhibition changes local input resistance and therefore can regulate the gain of selected credit paths; the experiments ask when restricted feedback remains faithful enough for learning.
+
+This is the intended link between the derivation and the experiments. Exact-gradient reconstruction tests statements 1–3. Path-gain, inhibition-intervention, morphology, feedback-fidelity, and transported-error experiments test statement 4. Task accuracy is then a competence and boundary test, not the derivation's proof.
+
+**Presentation and organization**
+
+We have prepared a substantially reorganized working revision, while recognizing that the original submission remains the basis for review. It introduces the voltage equations and a plain-language tree schematic before implementation conventions; defines “local eligibility,” “compartment error,” and each feedback mode once; removes unresolved abbreviations and phrases such as “identity upward transfer,” “synapse banks,” and “pathway-broadcast mixing weight” from the opening; and rebuilds the figures with non-overlapping elements and standalone captions. The exact factorization and inhibitory path derivative remain in the main argument, while the covariance and path-gain/cosine proofs move to the supplement.
+
+The results are reorganized into: exact factorization; feedback approximation and gradient fidelity; mechanistic evidence; task competence and operating regimes; and rule/feedback controls. Every diagnostic now specifies its axes. The 4F proxy first averages each recorded layer and soma tensor over non-batch coordinates, then estimates covariance over examples; path-gain CV is over compartments within an example and then summarized over examples/seeds; SVD uses an examples-by-compartments matrix; gradient cosine and norm metrics compare matched parameter vectors. We now call the 5F quantity a bounded predictability factor and the SVD residual an unexplained-energy fraction.
+
+There is an important substantive correction behind this clearer organization. The submitted mode preserves the soma/core vector only at a width-matched stage and falls back to one scalar at wider branch stages. It is neither global scalar everywhere nor one soma coordinate repeated over descendants. The manuscript's “rank-1” and “per-soma” labels were both inaccurate. A stage-resolved audit further showed that our reported compatibility metrics pooled the exact-by-construction somatic stage and unequal cross-architecture error energy. We withdraw the claim that the shunting error field is more compatible with restricted feedback; on dendritic compartments there is no reliable ordering. The working revision distinguishes all feedback modes explicitly and treats SVD only as intrinsic geometry.
+
+The corrected distinction also produces a clearer control of the learning rule. In a fifteen-seed comparison paired within each architecture, replacing scalar fallback by intended neuron-wise feedback---one soma coordinate repeated over that modeled neuron's compartments---raises 3F MNIST from 90.75% to 97.15% in shunting and from 91.58% to 97.14% in additive networks. The gains occur in all 15 pairs (signed-rank p=6.1e-5) and approach exact transport and matched backpropagation. At corrected-feedback checkpoints, changing only the feedback field raises branch-gradient cosine from 0.007 to 0.667 and from 0.024 to 0.599, again in every pair. This regular-tree control, not a reconstructed-morphology result, shows that the weak submitted 3F result arose largely from collapsing neuron identity.
+
+**Significance and biological predictions**
+
+The significance is not that a passive tree already reproduces a complete biological learner. It is that morphology and conductance enter the exact credit equation in a measurable way. The model predicts that a focal increase in inhibitory conductance should attenuate learning signals preferentially at synapses whose paths traverse that compartment; the magnitude should scale with local input resistance; distal/proximal placement and branch depth should change the effect; and the same intervention need not help if it suppresses task-relevant paths. These predictions connect branch-level voltage, inhibition, and plasticity measurements rather than only classification accuracy. We agree that a compact version belongs in the main text, alongside the limitations.
+
+The codebase also makes the framework useful for hypothesis-driven NeuroAI investigation. It provides matched conductance/additive dendritic cores, E/I and morphology controls, several local-rule and feedback families, causal model interventions, exact-gradient diagnostics, and reproducible task sweeps. The aim is to establish the basic computational properties of neuroscience-derived components before choosing applications where those properties justify scaling.
+
+**Passive equilibrium versus temporal dynamics**
+
+The current theorem is a steady-state equilibrium result, not a claim that time has only a second-order effect. Membrane capacitance, channel kinetics, spikes, and recurrent feedback introduce new state variables and can change both the magnitude and timing of credit substantially. A temporal extension would write the compartment dynamics explicitly and replace the static path product by a time-dependent adjoint or eligibility trace. The static factorization is the zero-frequency/equilibrium limit and a controlled starting point, not a complete neuronal model.
+
+Differentiable local voltage nonlinearities already enter the effective path gain through their derivatives. A five-seed control replacing the parametric tanh branch transfer by identity gives 90.81+/-0.33% versus 90.88+/-0.77%; the near-equal descriptive values show that the reported competence is not created by this selected nonlinearity. Active calcium or sodium conductances are richer: they may amplify, attenuate, or gate credit depending on operating point, and multi-state channels produce local Jacobians rather than a single scalar gain.
+
+Calcium and neuromodulatory processes can be incorporated as slower local state variables. Calcium could create branch-specific eligibility traces or plateau-gated plasticity; neuromodulation could scale, sign, or consolidate those traces. The learning update would then combine a fast transported error with slower local eligibility/reliability state. This is a natural extension of the factorization, but it is not tested here and should be presented as such.
+
+**Relevance to real morphology**
+
+The rooted-tree derivation does not require equal branch factors or symmetry: arbitrary depths, branch-specific conductances, and asymmetric parent-child structure can be inserted directly. Minute geometric changes can matter because the path gain is a product of local gains; their importance depends on whether they appreciably change resistance or the path traversed by task-relevant synapses. Thus the framework is suitable for comparing reconstructed cells by computing their path-gain and feedback-compatibility fields.
+
+However, the submitted experiments use controlled factorized trees, not detailed reconstructions with fitted channel densities. A coupling audit confirms that all nominal stages remain active in the depth sweep, so its depth dependence is not caused by stage pruning. The morphology-by-inhibition grid is less controlled because analytical initialization places some shunting couplings at a near-zero floor; we therefore treat that grid as descriptive and do not use it for a causal morphology claim. Applying the same diagnostics to reconstructed morphologies with measured or fitted conductances is an important next test.
+
+**Limitations moved to the main argument**
+
+The working revision now states in the main discussion that the model assumes steady-state non-spiking dynamics, a rooted feedforward tree, nonnegative conductances, input-driven rather than recurrent lateral inhibition, and access to a soma teaching signal. It also distinguishes exact theorem terms from implementation-specific reactivation, decoder, top-k selection, 4F/5F statistics, and auxiliary losses. Finally, it states that inhibitory interventions establish forward necessity but do not alone isolate a causal credit-assignment mechanism.
+
+We appreciate this review because these changes do not merely shorten the paper; they make the supported claim more precise: conductance and morphology shape the exact geometry of dendritic credit, and shunting can regulate that geometry in selected regimes, but the current passive model is a foundation for temporal and reconstructed-neuron studies rather than their replacement.

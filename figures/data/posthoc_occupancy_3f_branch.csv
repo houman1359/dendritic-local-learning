@@ -1,0 +1,7 @@
+network_type,seed,branch_numel_weighted_cosine,branch_macro_cosine,branch_local_exact_norm_ratio,calibration_iterations
+dendritic_additive,42,0.1551625123,0.1522501835,0.2512553376,4
+dendritic_additive,43,0.1164450387,0.1369027468,0.2163568126,4
+dendritic_additive,44,0.1514778905,0.1659842152,0.3747947270,4
+dendritic_shunting,42,0.3336506726,0.3053431448,1.0333122483,4
+dendritic_shunting,43,0.3859422800,0.3686273764,1.1487090806,4
+dendritic_shunting,44,0.2537708647,0.2524272599,0.8340020770,4

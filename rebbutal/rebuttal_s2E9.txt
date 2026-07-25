@@ -1,0 +1,56 @@
+Thank you for recognizing the conceptual shift from proposing another replacement for backpropagation to asking whether neuronal biophysics can make exact credit easier to approximate. We agree that the paper's goal and evaluation scope should have been stated much more clearly.
+
+**Bottom line.** This is a mechanistic NeuroAI study, not a competitive vision benchmark. Its contribution is the exact conductance-tree credit factorization and a controlled account of when restricted feedback succeeds or fails; the new controls narrow rather than universalize the shunting claim.
+
+**Goal and novelty**
+
+This is a mechanistic NeuroAI paper. Its primary contribution is not state-of-the-art classification accuracy, but a testable bridge between a biophysical component and a learning computation:
+
+1. derive the exact gradient of a conductance-based dendritic tree;
+2. separate it into synapse-local eligibility and a path-transported compartment error;
+3. ask how E/I conductance, shunting, and morphology alter the compatibility of that error with restricted feedback;
+4. expose when that mechanism helps, fails, or requires higher-bandwidth feedback.
+
+This differs from FF, PEPITA, SPELA, Trifecta, NoProp, and LLS. Those works primarily construct scalable layer-local or forward-only training algorithms: FF uses positive/negative data and layer-local goodness; PEPITA uses an output-error perturbation and a second forward pass; SPELA embeds class vectors as local targets; Trifecta combines techniques that improve deeper Forward-Forward networks; NoProp trains blocks using local denoising targets; and LLS uses activity-synchronization-inspired local errors. Our work instead derives the exact credit object of a conductance tree and tests whether biophysics changes its approximability. These are complementary goals. The working revision adds a comparison table separating feedback source, within-neuron biophysics, relation to exact credit, and primary objective.
+
+The anonymous codebase is a research instrument supporting matched conductance/additive cores, E/I inputs and interventions, rooted morphologies, 3F/4F/5F rules, six feedback families, decoder controls, exact-gradient and path-gain diagnostics, and controlled task sweeps. Its purpose is hypothesis-driven testing before deciding where these components justify scaling.
+
+**Path gain is not learned**
+
+In Eq. (4), alpha_n is the instantaneous derivative dV_soma/dV_n determined by forward conductances and branch-to-parent couplings. On a tree it is the product of local gains along the unique path. Backpropagation and the transported-error oracle compute it from current state; it is not learned separately. Practical LocalCA does not estimate alpha_n: it replaces alpha_n delta_soma by a restricted field. This is the measured bottleneck.
+
+**What is theoretically justified about shunting**
+
+The theorem does not say inhibition always helps or minimizes rank. It gives a causal local derivative: increasing inhibitory conductance at compartment k reduces every descendant conductance-stage path gain according to d log(alpha_n)/dG_k^I = -R_k. Whether this improves feedback compatibility depends on where inhibition is placed relative to high-gain and task-relevant paths. The dose-response is non-monotonic; we now treat the morphology grid as descriptive because its analytical initialization places some shunting couplings at a near-zero floor. Shunting provides a mechanism for regulating path gain, not a guarantee of better learning.
+
+Our audit also clarified an important mismatch between the feedback description and operation. The submitted mode preserves the soma/core vector only at a width-matched stage and falls back to one scalar at wider branch stages. It is neither global scalar everywhere nor one soma coordinate shared over all descendants. A stage-resolved audit showed that the reported compatibility contrast pooled an exact-by-construction somatic stage with unequal error energy across architectures. We withdraw the claim that shunting makes the error field more compatible with restricted feedback; on dendritic compartments there is no reliable ordering. The working revision distinguishes all modes explicitly and attributes the neuron-wise improvement below to feedback construction.
+
+A current-code fifteen-seed architecture-by-initialization factorial further narrows the empirical claim. With analytical initialization, 3F shunting and additive accuracy are identical (90.92% each); occupancy calibration improves additive but not shunting, producing 90.99% vs. 91.66% (shunting/additive) and a supported interaction. Thus shunting regulates path gain but has no general 3F MNIST learning advantage.
+
+**Scale and benchmark interpretation**
+
+We agree that the experiments do not establish ImageNet-scale competitiveness. CIFAR-10 is a harder-data mechanism ladder under a compact passive core: matched shunting backprop reaches 49.5%, submitted restricted LocalCA 29.7%, random low-rank K=4 35.0%, and exact transported error 47.2%. Recovery toward this architecture's own backprop ceiling is the relevant result; the low ceiling makes clear that it is not competitive with current vision systems.
+
+Comparing raw accuracy with large CNNs would conflate the credit mechanism with architecture, augmentation, and optimization. The working revision states this limitation rather than implying SOTA scope. A convincing scale-up would insert the same unit into a competitive backbone and compare feedback modes at matched forward architecture and compute; that is future work.
+
+**Compute, memory, and energy**
+
+The submitted runs use one GPU per seed and require no distributed training. To answer the resource question directly, we profiled matched 180-epoch MNIST runs with the same shunting model, batch size, hooks, and final evaluation. LocalCA took 190 s versus 125 s for backpropagation, while process-wide peak CUDA allocation was 1.70 GiB for both (2.03 vs. 1.97 GiB reserved). Thus our current research code shows no speed or memory advantage; LocalCA is about 1.5x slower. We have not measured hardware energy and make no energy-efficiency claim. Typical compact CIFAR-10 runs take 0.8–2.5 hours per seed.
+
+**Generality beyond one rooted pyramidal tree**
+
+The model captures a generic conductance-based rooted dendritic tree rather than a full pyramidal-cell circuit. The unique-parent assumption gives a single closed-form path product. In a directed acyclic morphology with multiple parents, the local eligibility-times-node-error factorization remains, but the error is a sum over all parent paths. Recurrent morphologies require an adjoint or implicit gradient; Hodgkin-Huxley channels and spikes require temporal state and eligibility traces. These are meaningful extensions, not second-order details.
+
+Biologically, shunting inhibition in the model represents input-driven inhibitory conductance changing local input resistance and therefore both forward voltage sensitivity and backward path gain. The classification labels do not represent neurotransmitters; the task is a controlled probe of the resulting learning geometry. A complete circuit model would also need a biologically generated teaching signal and interneuron dynamics. The main text now states these assumptions.
+
+**CNN and transformer extension**
+
+The within-unit theorem is compatible with weight sharing. In a CNN, a dendritic unit can replace a channel-mixing affine operation: presynaptic patches provide local eligibility, shared synaptic parameters sum eligibility over spatial positions, and feedback must be defined in output-channel/soma coordinates. In a transformer, dendritic units could replace feed-forward projections or value/output projections; the same local eligibility applies within each unit, while credit between blocks remains a separate feedback problem. We have not demonstrated these extensions and label them as a concrete design route rather than a result.
+
+**Three-factor versus practical five-factor learning**
+
+A new five-seed factorial helps locate the implementation issue. With exact path-transported errors, theorem-derived 3F reaches 97.21+/-0.14% with a backprop decoder and 97.18+/-0.12% with a local decoder, compared with matched backprop at 97.03+/-0.08%. 5F gives 97.20+/-0.16% and 97.12+/-0.14%. Thus 5F is not required for exact-gradient learning; it is empirical preconditioning for approximate feedback.
+
+A complementary fifteen-seed control shows that exact compartment-wise errors are not necessary on MNIST. Replacing scalar fallback by intended neuron-wise feedback---one soma-error coordinate repeated over that modeled neuron's compartments---raises 3F accuracy from 90.75% to 97.15% in shunting and from 91.58% to 97.14% in additive networks. The paired gains are 6.40 and 5.56 points, occur in all 15 pairs, and have signed-rank p=6.1e-5. This locates the submitted performance gap in feedback construction rather than theorem-derived eligibility. It controls the first paper's regular-tree implementation, not reconstructed morphology, and narrows the shunting claim because the corrected cross-architecture difference is negligible and not activation-matched.
+
+Finally, we have reorganized a working revision so that the main paper, rather than the appendix, contains the central factorization, the feedback distinction, exact reconstruction, mechanism chain, competence boundary, simplified biological predictions, and limitations. The appendix is reserved for derivations, full configurations, and supporting controls. We believe this presentation better reflects the paper's actual contribution and its deliberately mechanistic scope.

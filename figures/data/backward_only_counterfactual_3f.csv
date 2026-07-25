@@ -1,0 +1,4 @@
+seed,submitted_actual_cosine,submitted_no_inhibition_cosine,submitted_actual_norm_ratio,submitted_no_inhibition_norm_ratio,neuronwise_actual_cosine,neuronwise_no_inhibition_cosine,neuronwise_actual_norm_ratio,neuronwise_no_inhibition_norm_ratio
+42,0.200798,0.199480,0.219046,0.212958,0.548111,0.548733,1.716442,1.668859
+43,0.177391,0.177493,0.282853,0.271038,0.475696,0.473934,1.556198,1.491128
+44,0.129560,0.129659,0.204798,0.193308,0.452490,0.452061,1.837389,1.734217

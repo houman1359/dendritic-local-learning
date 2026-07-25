@@ -6,9 +6,9 @@ Saves:
 
 Layout (single row, 7.0 x 2.6 inches):
   A. Single dendritic E/I unit  (3-level branched tree, E/I synapses,
-     gold-ringed soma; nonnegative E and I input streams on the left).
+     highlighted soma; nonnegative E and I input streams on the left).
   B. Network layer  (E pool / I pool feed N=4 dendritic units; one unit
-     gold-ringed to mark it as "the unit shown in panel A"; per-unit
+     highlighted to mark it as "the unit shown in panel A"; per-unit
      somas project to a task readout; a delta_0 callout exits the readout
      on the right and seeds the broadcast in panel C).
   C. Credit assignment and broadcast modes  (left: small dendritic tree
@@ -37,7 +37,7 @@ from matplotlib.patches import Circle, FancyArrowPatch, FancyBboxPatch
 import numpy as np
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from neurips_style import COLORS, apply_neurips_style, panel_label
+from neurips_style import COLORS, MAIN_W, apply_neurips_style, panel_label
 
 apply_neurips_style()
 
@@ -61,6 +61,7 @@ BROADCAST_COLOR = COLORS["local"]  # rank-1 shared broadcast amber
 
 # Broadcast-mode colors (kept consistent with rest of paper)
 MODE_COLORS = {
+    "hybrid":  "#A85F16",
     "rank1":   COLORS["scalar"],
     "persoma": COLORS["local"],
     "rankk":   COLORS["low_rank"],
@@ -146,8 +147,8 @@ def panel_a(ax):
     ax.set_title("Single dendritic E/I unit",
                  fontsize=9.0, pad=4.0, fontweight="bold", loc="center")
     ax.axis("off")
-    ax.set_xlim(-2.5, 22.0)
-    ax.set_ylim(-2.5, 12.4)
+    ax.set_xlim(-1.8, 19.9)
+    ax.set_ylim(-2.0, 12.0)
     ax.set_aspect("equal", adjustable="datalim")
 
     syn_r = 0.22
@@ -458,15 +459,16 @@ def panel_c(ax):
             fontsize=6.4, color=INK, fontweight="bold")
 
     modes = [
+        ("Submitted", "MW / scalar", MODE_COLORS["hybrid"], "hybrid"),
         ("Scalar",   "global",   MODE_COLORS["rank1"],  "rank1"),
-        ("Per-soma", "per cell", MODE_COLORS["persoma"], "persoma"),
+        ("Neuron-wise", "per cell", MODE_COLORS["persoma"], "persoma"),
         ("Rank-$K$", "$K$ chans", MODE_COLORS["rankk"],  "rankk"),
         ("Path",     "by role",  MODE_COLORS["path"],   "path"),
         ("Transport", r"$\tilde{\alpha}_n\delta_0$", MODE_COLORS["oracle"], "oracle"),
     ]
     row_x = 0.62
     row_w = 0.34
-    row_h = 0.062
+    row_h = 0.052
     row_ys = np.linspace(0.86, 0.48, len(modes))
     for (name, note, col, kind), ry in zip(modes, row_ys):
         _round_box(ax, (row_x, ry - row_h / 2), row_w, row_h,
@@ -484,7 +486,22 @@ def panel_c(ax):
         ic_x = row_x + row_w - 0.086
         ic_w = 0.056
         ap = dict(shrinkA=0, shrinkB=0)
-        if kind == "rank1":
+        if kind == "hybrid":
+            for dy in (0.012, -0.012):
+                ax.annotate(
+                    "",
+                    xy=(ic_x + ic_w, ry + dy),
+                    xytext=(ic_x, ry + dy),
+                    arrowprops=dict(
+                        arrowstyle="-|>",
+                        color=col,
+                        lw=0.78 if dy > 0 else 1.05,
+                        linestyle="-" if dy > 0 else "--",
+                        **ap,
+                    ),
+                    zorder=10,
+                )
+        elif kind == "rank1":
             ax.annotate("", xy=(ic_x + ic_w, ry), xytext=(ic_x, ry),
                         arrowprops=dict(arrowstyle="-|>", color=col,
                                         lw=1.0, **ap),
@@ -525,11 +542,13 @@ def panel_c(ax):
     # Name the two factors once, above the boxes, so both rules read as
     # gradient = local eligibility x compartment error; only the second
     # factor (exact delta_n vs broadcast e_n) changes between the rows.
-    ax.text(0.3875, 0.400, "local eligibility (shared)",
-            ha="center", va="center", fontsize=5.4,
+    # Wrapped: on one line "local eligibility (shared)" is wider than the box it
+    # heads (0.245-0.530) and ran into "compartment error" (starts ~0.60).
+    ax.text(0.3875, 0.400, "local eligibility\n(shared)",
+            ha="center", va="center", fontsize=5.4, linespacing=0.95,
             color=COLORS["soma"], fontweight="bold")
-    ax.text(0.725, 0.400, "compartment error",
-            ha="center", va="center", fontsize=5.4,
+    ax.text(0.725, 0.400, "compartment\nerror",
+            ha="center", va="center", fontsize=5.4, linespacing=0.95,
             color=INK, fontweight="bold")
 
     def equation_row(y, label, rhs, rhs_color):
@@ -566,10 +585,10 @@ def panel_c(ax):
 
 def main():
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    fig = plt.figure(figsize=(7.0, 2.6))
+    fig = plt.figure(figsize=(MAIN_W, 2.7))
     gs = fig.add_gridspec(
         1, 3,
-        width_ratios=[1.50, 2.05, 3.25],
+        width_ratios=[2.20, 1.95, 3.05],
         wspace=0.14,
         left=0.025, right=0.99, top=0.86, bottom=0.06,
     )

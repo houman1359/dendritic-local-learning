@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import argparse
 import json
 import math
 from pathlib import Path
@@ -107,12 +108,17 @@ def _heatmap(ax, frame: pd.DataFrame, title: str, cmap: str, center: float | Non
     ax.set_yticklabels(ax.get_yticklabels(), rotation=0)
 
 
-def _load_selected_diagnostics() -> pd.DataFrame | None:
+def _load_selected_diagnostics(sweep_dir: Path) -> pd.DataFrame | None:
     summary_csv = _tracked("morphology_ie_run_summary.csv", DIAG_DIR / "run_summary.csv")
     if not summary_csv.exists() or not SELECTED_DIAG_CSV.exists():
         return None
     diag = pd.read_csv(summary_csv)
     selected = pd.read_csv(SELECTED_DIAG_CSV)
+    expected_root = str((sweep_dir / "results").resolve())
+    if not selected["run_dir"].astype(str).map(
+        lambda value: str(Path(value).resolve()).startswith(expected_root)
+    ).all():
+        return None
     selected["run_dir_short"] = selected["run_dir"].astype(str).str.extract(r"(results/config_\d+)$")[0]
     diag["run_dir_short"] = diag["run_dir"].astype(str).str.extract(r"(results/config_\d+)$")[0]
     merged = selected.merge(diag, on="run_dir_short", how="inner", suffixes=("", "_diag"))
@@ -184,7 +190,7 @@ def build_figure(sweep_dir: Path = DEFAULT_SWEEP_DIR) -> tuple[plt.Figure, pd.Da
         .head(1)
         .copy()
     )
-    diag = _load_selected_diagnostics()
+    diag = _load_selected_diagnostics(sweep_dir)
 
     fig, axes = plt.subplots(
         1,
@@ -294,19 +300,33 @@ def build_figure(sweep_dir: Path = DEFAULT_SWEEP_DIR) -> tuple[plt.Figure, pd.Da
         ax.legend(loc="upper right", fontsize=8.4, frameon=False)
         ax.margins(x=0.08)
     else:
-        ax.text(
-            0.5,
-            0.58,
-            "Selected morphology\npath-gain diagnostics\npending",
-            ha="center",
-            va="center",
-            transform=ax.transAxes,
-            fontsize=9.5,
-            color=COLORS["mute"],
+        architecture_summary = (
+            df.groupby(["network_type", "ie"])["test_acc"]
+            .agg(["mean", "std"])
+            .reset_index()
         )
-        ax.set_xticks([])
-        ax.set_yticks([])
-        ax.set_title("Credit geometry", fontsize=11.4, pad=8)
+        for network_type, color, label, marker in (
+            ("dendritic_additive", COLOR_ADDITIVE, "Additive", "s"),
+            ("dendritic_shunting", COLOR_SHUNTING, "Shunting", "o"),
+        ):
+            subset = architecture_summary[
+                architecture_summary["network_type"] == network_type
+            ].sort_values("ie")
+            ax.errorbar(
+                subset["ie"],
+                subset["mean"],
+                yerr=subset["std"],
+                color=color,
+                marker=marker,
+                linewidth=2.2,
+                markersize=5.5,
+                capsize=2.2,
+                label=label,
+            )
+        ax.set_xlabel(r"$N_I$ per branch")
+        ax.set_ylabel("Test accuracy")
+        ax.set_title("Mean performance", fontsize=11.4, pad=8)
+        ax.legend(fontsize=8.4, frameon=False, loc="best")
 
     ax = axes[3]
     style_axis(ax, grid="y")
@@ -350,11 +370,20 @@ def build_figure(sweep_dir: Path = DEFAULT_SWEEP_DIR) -> tuple[plt.Figure, pd.Da
     fig.subplots_adjust(left=0.055, right=0.988, bottom=0.31, top=0.80, wspace=0.58)
     fig.savefig(FIGURES_DIR / "fig_morphology_ie_regime.pdf", bbox_inches="tight")
     fig.savefig(FIGURES_DIR / "fig_morphology_ie_regime.png", dpi=300, bbox_inches="tight")
-    # Legacy aliases are kept so older drafts and slides do not break.
-    fig.savefig(FIGURES_DIR / "fig_s8_morphology_ie_regime.pdf", bbox_inches="tight")
-    fig.savefig(FIGURES_DIR / "fig_s8_morphology_ie_regime.png", dpi=300, bbox_inches="tight")
     return fig, grouped
 
 
 if __name__ == "__main__":
-    build_figure()
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--sweep-dir", type=Path, default=DEFAULT_SWEEP_DIR)
+    parser.add_argument(
+        "--refresh-tracked-data",
+        action="store_true",
+        help="Rebuild figures/data/morphology_ie_regime_runs.csv from the sweep.",
+    )
+    args = parser.parse_args()
+    if args.refresh_tracked_data:
+        refreshed = _load_results(args.sweep_dir)
+        _FDATA.mkdir(parents=True, exist_ok=True)
+        refreshed.to_csv(_FDATA / "morphology_ie_regime_runs.csv", index=False)
+    build_figure(args.sweep_dir)

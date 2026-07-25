@@ -48,6 +48,22 @@ DOUBLE_COL = 7.0   # inches
 # Wider headline figures (will occupy full textwidth 0.98x in LaTeX)
 WIDE_FIG   = 13.0
 
+# Canonical authored width for every MAIN figure.
+#
+# Every main figure is included with \includegraphics[width=\textwidth]; NeurIPS
+# \textwidth is 5.5 in = 397 pt.  A figure authored at MAIN_W is therefore
+# rescaled by 397/(72*MAIN_W).  Authoring the main figures at *different* widths
+# (previously 5.5 / 6.95 / 7.0 / 7.35) made the same nominal font render at a
+# different printed size in every figure.  Author every main figure at MAIN_W so
+# they all take the identical scale factor and the type is consistent.
+MAIN_W = 7.2                        # inches
+MAIN_SCALE = 397.0 / (72.0 * MAIN_W)  # ≈ 0.766 → printed pt = nominal * MAIN_SCALE
+
+
+def printed_pt(nominal_pt: float) -> float:
+    """Printed size (pt) of a MAIN_W-authored element after LaTeX rescaling."""
+    return float(nominal_pt) * MAIN_SCALE
+
 
 def apply_neurips_style():
     """Set matplotlib rcParams for a consistent, crisp NeurIPS look."""
@@ -81,7 +97,10 @@ def apply_neurips_style():
         "axes.spines.right": False,
         "axes.grid": False,
         "axes.labelpad": 2.5,
-        "axes.titlepad": 4,
+        # Room for the title to clear the panel letter.  With titlepad=4 the
+        # title sat in the same band as a panel letter placed just above the
+        # axes, which collided whenever a title wrapped to two lines.
+        "axes.titlepad": 7,
         "axes.edgecolor": "#4A4A4A",
         "axes.facecolor": "white",
         "axes.prop_cycle": mpl.cycler(
@@ -135,18 +154,36 @@ def apply_neurips_style():
     })
 
 
-def panel_label(ax, label, x=-0.11, y=1.05, **kwargs):
-    """Add a bold panel label (A, B, C, …) to an axes.
+def panel_label(ax, label, x=None, y=None, *, dx=-26.0, dy=4.0, **kwargs):
+    """Add a bold panel label (A, B, C, …) at the axes' upper-left.
 
-    Default position is outside upper-left, suitable for most axes.
+    The label is anchored to the axes' top-left corner and offset in *points*
+    (``dx``/``dy``), not axes fractions.  This matters: an axes-fraction offset
+    scales with panel size, so the same nominal offset drifted into the title on
+    narrow panels and floated away on wide ones.  A points offset is identical
+    on every panel regardless of its width.
+
+    The label sits to the LEFT of the axes (clearing the tick labels) and only
+    slightly above it, so a centred title — which grows *upward* when it wraps —
+    never occupies the same space.  Legacy ``x``/``y`` (axes-fraction) args are
+    still honoured if a call site passes them explicitly.
     """
-    fontsize = kwargs.pop("fontsize", 13.0)
+    fontsize = kwargs.pop("fontsize", 12.0)
     color = kwargs.pop("color", COLORS["ink"])
-    ax.text(
-        x, y, label,
-        transform=ax.transAxes,
+    if x is not None or y is not None:  # legacy axes-fraction placement
+        ax.text(
+            -0.11 if x is None else x, 1.05 if y is None else y, label,
+            transform=ax.transAxes, fontsize=fontsize, fontweight="bold",
+            va="top", ha="left", color=color, **kwargs,
+        )
+        return
+    ax.annotate(
+        label,
+        xy=(0.0, 1.0), xycoords="axes fraction",
+        xytext=(dx, dy), textcoords="offset points",
         fontsize=fontsize, fontweight="bold",
-        va="top", ha="left", color=color,
+        va="bottom", ha="left", color=color,
+        annotation_clip=False,
         **kwargs,
     )
 

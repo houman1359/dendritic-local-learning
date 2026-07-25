@@ -34,6 +34,10 @@ RANK_CSV = _tracked(
     "error_rank_diagnostics.csv",
     ROOT / "analysis" / "error_rank_selected_20260427" / "error_rank_diagnostics.csv",
 )
+RANK_SUMMARY_CSV = _tracked(
+    "error_rank_summary.csv",
+    ROOT / "analysis" / "error_rank_selected_20260427" / "error_rank_summary.csv",
+)
 
 
 INTERVENTION_ORDER = [
@@ -130,9 +134,59 @@ def _rank_panel(ax, data: pd.DataFrame, metric: str, ylabel: str, title: str) ->
     style_axis(ax, grid="y")
 
 
+def _dendritic_fidelity_panel(ax, data: pd.DataFrame) -> None:
+    """Stage-resolved fidelity, excluding the exact-by-construction soma."""
+    sub = data[
+        (data["dataset"] == "mnist")
+        & (data["scope"].isin(["layer_0", "layer_1"]))
+    ].copy()
+    stages = ["layer_0", "layer_1"]
+    stage_labels = ["Distal", "Prox."]
+    cores = [
+        ("dendritic_additive", "Add.", COLORS["additive"]),
+        ("dendritic_shunting", "Shunt.", COLORS["shunting"]),
+    ]
+    xs = np.arange(len(stages))
+    width = 0.34
+    for offset, (net, label, color) in zip([-width / 2, width / 2], cores):
+        means = []
+        stds = []
+        for stage in stages:
+            row = sub[
+                (sub["network_type"] == net) & (sub["scope"] == stage)
+            ].iloc[0]
+            means.append(float(row["actual_broadcast_cosine_mean"]))
+            stds.append(float(row["actual_broadcast_cosine_std"]))
+        ax.bar(
+            xs + offset,
+            means,
+            width,
+            yerr=stds,
+            color=color,
+            edgecolor="white",
+            linewidth=0.6,
+            capsize=2.5,
+            label=label,
+        )
+    ax.set_xticks(xs)
+    ax.set_xticklabels(stage_labels, rotation=20, ha="right", fontsize=6.7)
+    ax.set_ylim(0, 0.30)
+    ax.set_ylabel("Broadcast cosine", fontsize=8.2)
+    ax.set_title("Dendritic fidelity", fontsize=8.8, pad=7)
+    ax.legend(
+        fontsize=6.2,
+        frameon=False,
+        loc="upper left",
+        handlelength=0.9,
+        handletextpad=0.25,
+    )
+    style_axis(ax, grid="y")
+
+
 def main() -> None:
     causal = pd.read_csv(CAUSAL_CSV)
     rank = pd.read_csv(RANK_CSV)
+    rank_summary = pd.read_csv(RANK_SUMMARY_CSV)
 
     fig, axes = plt.subplots(
         1,
@@ -156,14 +210,7 @@ def main() -> None:
         "Participation rank",
         "Exact-error rank",
     )
-    _rank_panel(
-        axes[4],
-        rank,
-        "actual_broadcast_cosine",
-        "Broadcast cosine",
-        "Per-soma fidelity",
-    )
-    axes[4].set_ylim(0, 1.02)
+    _dendritic_fidelity_panel(axes[4], rank_summary)
     for ax, label in zip(axes, "ABCDE"):
         ax.text(
             0.02,

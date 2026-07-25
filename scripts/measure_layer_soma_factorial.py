@@ -6,10 +6,13 @@ This diagnostic answers the reviewer-facing question:
 1. exact layer-soma error + per-soma shared branch feedback;
 2. approximate/direct layer error + exact within-tree path transport;
 3. exact layer-soma error + exact path transport;
-4. practical direct layer error + current code per-soma feedback.
+4. practical direct layer error + submitted matched-width/scalar-fallback feedback.
 
 It operates on saved run directories and reports gradient alignment against
-autograd separately for each equal-width core layer and parameter family.
+autograd separately for each equal-width core layer and parameter family. For
+shunting checkpoints it also constructs a backward-only counterfactual that
+removes inhibitory conductance from path transport while retaining the recorded
+forward state and local eligibility.
 """
 
 from __future__ import annotations
@@ -26,6 +29,7 @@ from typing import Any
 import numpy as np
 import pandas as pd
 import torch
+from scipy.stats import ttest_rel, wilcoxon
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
 SCRIPT_DIR = Path(__file__).resolve().parent
@@ -39,12 +43,17 @@ from measure_theory_diagnostics import (  # noqa: E402
     _get_value,
     _load_config_from_run,
     _locate_model_path,
+    _compute_layer_total_conductance_no_inhibition,
+    _precompute_path_propagation_factors_counterfactual,
     _to_plain_dict,
     _vec_metrics,
 )
 
 from dendritic_modeling.networks.architectures.excitation_inhibition.dendritic.branch_layer import (  # noqa: E402
     DendriticBranchLayer,
+)
+from dendritic_modeling.networks.architectures.excitation_inhibition.dendritic.initialize_reactivation import (  # noqa: E402
+    calibrate_reactivation_from_data,
 )
 from dendritic_modeling.networks.architectures.excitation_inhibition.synapse.topk import (  # noqa: E402
     TopKLinear,
@@ -237,6 +246,42 @@ def _load_model(config: Any, run_dir: Path, device: torch.device) -> torch.nn.Mo
     return model
 
 
+def _posthoc_calibrate_reactivation(
+    model: torch.nn.Module,
+    x_calibration: torch.Tensor,
+    *,
+    device: torch.device,
+    mode: str,
+    max_iterations: int = 50,
+    tolerance: float = 1e-3,
+) -> tuple[dict[str, dict[str, float]], int, float]:
+    """Calibrate gates to a common occupancy rule until the layer chain settles."""
+    previous: dict[str, tuple[float, float]] | None = None
+    diagnostic: dict[str, dict[str, float]] = {}
+    max_change = float("inf")
+    for iteration in range(1, max_iterations + 1):
+        diagnostic = calibrate_reactivation_from_data(
+            model,
+            [x_calibration],
+            device=device,
+            mode=mode,
+            quantile_aggregation="global",
+        )
+        current = {
+            name: (float(values["m"]), float(values["b"]))
+            for name, values in diagnostic.items()
+        }
+        if previous is not None and set(previous) == set(current):
+            max_change = max(
+                max(abs(current[name][0] - previous[name][0]), abs(current[name][1] - previous[name][1]))
+                for name in current
+            )
+            if max_change < tolerance:
+                return diagnostic, iteration, max_change
+        previous = current
+    return diagnostic, max_iterations, max_change
+
+
 def _capture_forward_backward(
     model: torch.nn.Module,
     x_batch: torch.Tensor,
@@ -370,6 +415,78 @@ def _path_transport_tree(
     return out
 
 
+def _path_transport_tree_no_inhibition(
+    helper: LocalCreditAssignment,
+    group: list[dict[str, Any]],
+    seed: torch.Tensor,
+) -> list[torch.Tensor]:
+    """Remove inhibition from backward path gains while holding forward state fixed.
+
+    The soma seed, recorded voltages, activation derivatives, dendritic coupling,
+    and all local eligibility variables are unchanged. Only inhibitory
+    conductance is omitted from the parent resistance factors used to transport
+    the error toward distal compartments. The resulting field is an explicitly
+    non-physical backward-only counterfactual, useful for isolating whether the
+    learned shunting attenuation makes restricted feedback more compatible with
+    the exact gradient at the observed forward state.
+    """
+    shared = _expand_soma_to_tree(helper, group, seed)
+    factors = _precompute_path_propagation_factors_counterfactual(
+        helper,
+        group,
+        no_inhibition=True,
+        include_parent_activation_derivative=True,
+    )
+    out: list[torch.Tensor] = []
+    for rec, shared_error, factor in zip(group, shared, factors):
+        v_n = rec["v_n"]
+        if isinstance(factor, torch.Tensor):
+            factor_tensor = factor.to(device=v_n.device, dtype=v_n.dtype)
+            if factor_tensor.dim() == 2 and factor_tensor.size(1) == 1:
+                factor_tensor = factor_tensor.expand(-1, v_n.size(1))
+            elif factor_tensor.shape != v_n.shape:
+                factor_tensor = factor_tensor.reshape_as(v_n)
+        else:
+            factor_tensor = torch.full_like(v_n, float(factor))
+        out.append(
+            shared_error.to(device=v_n.device, dtype=v_n.dtype) * factor_tensor
+        )
+    return out
+
+
+def _path_transport_tree_counterfactual(
+    helper: LocalCreditAssignment,
+    group: list[dict[str, Any]],
+    seed: torch.Tensor,
+    *,
+    no_inhibition: bool,
+    include_parent_activation_derivative: bool,
+) -> list[torch.Tensor]:
+    """Transport an ancestry-aligned soma seed through selected recorded factors."""
+    shared = _expand_soma_to_tree(helper, group, seed)
+    factors = _precompute_path_propagation_factors_counterfactual(
+        helper,
+        group,
+        no_inhibition=no_inhibition,
+        include_parent_activation_derivative=include_parent_activation_derivative,
+    )
+    out: list[torch.Tensor] = []
+    for rec, shared_error, factor in zip(group, shared, factors):
+        v_n = rec["v_n"]
+        if isinstance(factor, torch.Tensor):
+            factor_tensor = factor.to(device=v_n.device, dtype=v_n.dtype)
+            if factor_tensor.dim() == 2 and factor_tensor.size(1) == 1:
+                factor_tensor = factor_tensor.expand(-1, v_n.size(1))
+            elif factor_tensor.shape != v_n.shape:
+                factor_tensor = factor_tensor.reshape_as(v_n)
+        else:
+            factor_tensor = torch.full_like(v_n, float(factor))
+        out.append(
+            shared_error.to(device=v_n.device, dtype=v_n.dtype) * factor_tensor
+        )
+    return out
+
+
 def _code_per_soma_tree(
     helper: LocalCreditAssignment,
     group: list[dict[str, Any]],
@@ -398,6 +515,9 @@ def _condition_errors(
         "exact_soma_path_transport": {},
         "approx_direct_code_per_soma": {},
         "approx_direct_blockwise_per_soma": {},
+        "exact_soma_path_transport_no_inhibition": {},
+        "exact_soma_path_transport_no_parent_activation": {},
+        "exact_soma_path_transport_no_inhibition_no_parent_activation": {},
     }
     for core_idx, group in grouped.items():
         exact_seed = exact_seeds[core_idx]
@@ -415,10 +535,36 @@ def _condition_errors(
             "approx_direct_code_per_soma": _code_per_soma_tree(helper, group, approx_seed),
             "approx_direct_blockwise_per_soma": _expand_soma_to_tree(helper, group, approx_seed),
         }
+        if bool(getattr(group[0].get("layer"), "use_shunting", False)):
+            per_condition["exact_soma_path_transport_no_inhibition"] = (
+                _path_transport_tree_no_inhibition(
+                    helper,
+                    group,
+                    exact_seed,
+                )
+            )
+            per_condition["exact_soma_path_transport_no_parent_activation"] = (
+                _path_transport_tree_counterfactual(
+                    helper,
+                    group,
+                    exact_seed,
+                    no_inhibition=False,
+                    include_parent_activation_derivative=False,
+                )
+            )
+            per_condition[
+                "exact_soma_path_transport_no_inhibition_no_parent_activation"
+            ] = _path_transport_tree_counterfactual(
+                helper,
+                group,
+                exact_seed,
+                no_inhibition=True,
+                include_parent_activation_derivative=False,
+            )
         for condition, values in per_condition.items():
             for rec, e_n in zip(group, values):
                 conditions[condition][rec["layer_name"]] = e_n.detach()
-    return conditions
+    return {condition: values for condition, values in conditions.items() if values}
 
 
 def _apply_local_grads_from_errors(
@@ -428,7 +574,17 @@ def _apply_local_grads_from_errors(
     e_by_layer_name: dict[str, torch.Tensor],
     *,
     v0: torch.Tensor,
+    input_resistance_mode: str = "actual",
+    driving_force_mode: str = "actual",
 ) -> dict[str, torch.Tensor]:
+    if input_resistance_mode not in {"actual", "no_inhibition", "one"}:
+        raise ValueError(
+            "input_resistance_mode must be actual, no_inhibition, or one"
+        )
+    if driving_force_mode not in {"actual", "voltage_proxy"}:
+        raise ValueError(
+            "driving_force_mode must be actual or voltage_proxy"
+        )
     model.zero_grad(set_to_none=True)
     helper._layer_stats = {}
     helper._additive_gain_cache = {}
@@ -437,53 +593,75 @@ def _apply_local_grads_from_errors(
     batch_size = int(v0.size(0))
     num_layers = len(records)
     broadcast_state = _BroadcastState(mode="custom", transported_errors=[], feedback_seeds=[])
+    original_use_driving_force = bool(
+        helper.local_cfg.three_factor.use_driving_force
+    )
+    helper.local_cfg.three_factor.use_driving_force = (
+        driving_force_mode == "actual"
+    )
 
-    for layer_idx, rec in enumerate(records):
-        v_n = rec.get("v_n")
-        if not isinstance(v_n, torch.Tensor):
-            continue
-        e_n = e_by_layer_name[rec["layer_name"]].to(device=v_n.device, dtype=v_n.dtype)
-        e_n, stdp_error_signal = _resolve_stdp_error_signals(helper.local_cfg, e_n)
-        layer_dynamics_mode = helper._resolve_layer_dynamics_mode(rec)
-        r_tot = helper._compute_local_input_resistance(
-            rec=rec,
-            v_n=v_n,
-            layer_dynamics_mode=layer_dynamics_mode,
-        )
-        e_n = _apply_path_propagation_factor(
-            helper.local_cfg,
-            broadcast_state,
-            rec,
-            e_n,
-        )
-        modulators = helper._compute_local_layer_modulators(
-            rec=rec,
-            v0=v0,
-            layer_depth=layer_idx + 1,
-        )
-        post_factors = helper._compute_local_post_factors(
-            rec=rec,
-            e_n=e_n,
-            v_n=v_n,
-            r_tot=r_tot,
-            layer_dynamics_mode=layer_dynamics_mode,
-            layer_idx=layer_idx,
-            modulators=modulators,
-        )
-        helper._apply_layer_local_gradients(
-            rec=rec,
-            layer_idx=layer_idx,
-            num_layers=num_layers,
-            y_target=None,
-            batch_size=batch_size,
-            e_n=e_n,
-            stdp_error_signal=stdp_error_signal,
-            v_n=v_n,
-            r_tot=r_tot,
-            layer_dynamics_mode=layer_dynamics_mode,
-            modulators=modulators,
-            post_factors=post_factors,
-            update_reactivation=False,
+    try:
+        for layer_idx, rec in enumerate(records):
+            v_n = rec.get("v_n")
+            if not isinstance(v_n, torch.Tensor):
+                continue
+            e_n = e_by_layer_name[rec["layer_name"]].to(device=v_n.device, dtype=v_n.dtype)
+            e_n, stdp_error_signal = _resolve_stdp_error_signals(helper.local_cfg, e_n)
+            layer_dynamics_mode = helper._resolve_layer_dynamics_mode(rec)
+            if input_resistance_mode == "actual":
+                r_tot = helper._compute_local_input_resistance(
+                    rec=rec,
+                    v_n=v_n,
+                    layer_dynamics_mode=layer_dynamics_mode,
+                )
+            elif (
+                input_resistance_mode == "no_inhibition"
+                and layer_dynamics_mode == "conductance"
+            ):
+                r_tot = 1.0 / (
+                    _compute_layer_total_conductance_no_inhibition(rec, v_n)
+                    + 1e-8
+                )
+            else:
+                r_tot = 1.0
+            e_n = _apply_path_propagation_factor(
+                helper.local_cfg,
+                broadcast_state,
+                rec,
+                e_n,
+            )
+            modulators = helper._compute_local_layer_modulators(
+                rec=rec,
+                v0=v0,
+                layer_depth=layer_idx + 1,
+            )
+            post_factors = helper._compute_local_post_factors(
+                rec=rec,
+                e_n=e_n,
+                v_n=v_n,
+                r_tot=r_tot,
+                layer_dynamics_mode=layer_dynamics_mode,
+                layer_idx=layer_idx,
+                modulators=modulators,
+            )
+            helper._apply_layer_local_gradients(
+                rec=rec,
+                layer_idx=layer_idx,
+                num_layers=num_layers,
+                y_target=None,
+                batch_size=batch_size,
+                e_n=e_n,
+                stdp_error_signal=stdp_error_signal,
+                v_n=v_n,
+                r_tot=r_tot,
+                layer_dynamics_mode=layer_dynamics_mode,
+                modulators=modulators,
+                post_factors=post_factors,
+                update_reactivation=False,
+            )
+    finally:
+        helper.local_cfg.three_factor.use_driving_force = (
+            original_use_driving_force
         )
 
     return {
@@ -499,6 +677,7 @@ def _alignment_rows(
     *,
     meta: dict[str, Any],
     condition: str,
+    activation_stats: dict[tuple[int, int], dict[str, float]] | None = None,
 ) -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
     for name in sorted(set(local_grads) & set(bp_grads)):
@@ -506,6 +685,8 @@ def _alignment_rows(
         if component in {"decoder", "other", "reactivation"}:
             continue
         metrics = _vec_metrics(local_grads[name].float(), bp_grads[name].float())
+        layer_key = (_core_layer_index(name), _branch_layer_index(name))
+        layer_activation = (activation_stats or {}).get(layer_key, {})
         rows.append(
             {
                 **meta,
@@ -519,12 +700,58 @@ def _alignment_rows(
                 "backprop_grad_energy": float(
                     bp_grads[name].float().square().sum().item()
                 ),
+                **layer_activation,
                 **{
                     f"gradient_{key}" if key not in {"numel"} else key: value
                     for key, value in metrics.items()
                 },
             }
         )
+    return rows
+
+
+def _activation_stats(
+    helper: LocalCreditAssignment,
+    records: list[dict[str, Any]],
+) -> dict[tuple[int, int], dict[str, float]]:
+    """Summarize the forward operating point for each dendritic stage."""
+    rows: dict[tuple[int, int], dict[str, float]] = {}
+    for rec in records:
+        v_n = rec.get("v_n")
+        v_out = rec.get("v_out")
+        if not isinstance(v_n, torch.Tensor):
+            continue
+        derivative = helper._get_layer_activation_derivative(
+            rec,
+            v_n=v_n,
+            v_out=v_out,
+        )
+        if not isinstance(derivative, torch.Tensor):
+            derivative = torch.ones_like(v_n)
+        derivative = derivative.detach().float()
+        v_n_float = v_n.detach().float()
+        v_out_float = (
+            v_out.detach().float()
+            if isinstance(v_out, torch.Tensor)
+            else v_n_float
+        )
+        key = (
+            int(rec.get("core_layer_index", -1)),
+            int(rec.get("branch_layer_index", -1)),
+        )
+        rows[key] = {
+            "preactivation_mean": float(v_n_float.mean().item()),
+            "preactivation_std": float(v_n_float.std(unbiased=False).item()),
+            "postactivation_mean": float(v_out_float.mean().item()),
+            "postactivation_std": float(v_out_float.std(unbiased=False).item()),
+            "activation_derivative_mean": float(derivative.mean().item()),
+            "activation_derivative_std": float(
+                derivative.std(unbiased=False).item()
+            ),
+            "activation_derivative_low_fraction": float(
+                (derivative.abs() < 0.1).float().mean().item()
+            ),
+        }
     return rows
 
 
@@ -592,6 +819,117 @@ def _summarize(rows: pd.DataFrame) -> pd.DataFrame:
     return pd.DataFrame(summary_rows).sort_values(group_cols)
 
 
+def _branch_level_summary(rows: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
+    """Aggregate without allowing an exactly aligned soma block to dominate."""
+    if rows.empty:
+        return pd.DataFrame(), pd.DataFrame()
+
+    checkpoint_rows: list[dict[str, Any]] = []
+    group_cols = [
+        "run_dir",
+        "run_name",
+        "seed",
+        "condition",
+        "network_type",
+        "trained_broadcast_mode",
+        "diagnostic_rule_variant",
+    ]
+    for keys, frame in rows.groupby(group_cols, dropna=False):
+        max_stage = frame.groupby("core_layer_index")["branch_layer_index"].transform(
+            "max"
+        )
+        soma_mask = (
+            (frame["branch_layer_index"] == max_stage)
+            & (frame["component"] == "dendritic_conductance")
+        )
+        branch = frame.loc[~soma_mask].copy()
+        if branch.empty:
+            continue
+
+        local_norm = branch["local_grad_norm"].to_numpy(dtype=float)
+        exact_norm = branch["backprop_grad_norm"].to_numpy(dtype=float)
+        cosine = branch["gradient_cosine"].to_numpy(dtype=float)
+        numel = branch["numel"].to_numpy(dtype=float)
+        dot = float(np.nansum(cosine * local_norm * exact_norm))
+        local_total = float(np.sqrt(np.nansum(np.square(local_norm))))
+        exact_total = float(np.sqrt(np.nansum(np.square(exact_norm))))
+        denom = local_total * exact_total
+        total_energy = float(frame["backprop_grad_energy"].sum())
+        soma_energy = float(frame.loc[soma_mask, "backprop_grad_energy"].sum())
+        checkpoint_rows.append(
+            {
+                **dict(zip(group_cols, keys)),
+                "branch_numel_weighted_cosine": float(
+                    np.average(cosine, weights=numel)
+                ),
+                "branch_macro_cosine": float(np.nanmean(cosine)),
+                "branch_concatenated_cosine": (
+                    dot / denom if denom > 0.0 else float("nan")
+                ),
+                "branch_local_exact_norm_ratio": (
+                    local_total / exact_total
+                    if exact_total > 0.0
+                    else float("nan")
+                ),
+                "soma_exact_energy_fraction": (
+                    soma_energy / total_energy
+                    if total_energy > 0.0
+                    else float("nan")
+                ),
+            }
+        )
+
+    checkpoint = pd.DataFrame(checkpoint_rows)
+    if checkpoint.empty:
+        return checkpoint, pd.DataFrame()
+
+    metrics = [
+        "branch_numel_weighted_cosine",
+        "branch_macro_cosine",
+        "branch_concatenated_cosine",
+        "branch_local_exact_norm_ratio",
+        "soma_exact_energy_fraction",
+    ]
+    paired_rows: list[dict[str, Any]] = []
+    for condition, condition_frame in checkpoint.groupby("condition"):
+        for metric in metrics:
+            pivot = condition_frame.pivot_table(
+                index="seed",
+                columns="network_type",
+                values=metric,
+                aggfunc="mean",
+            ).dropna()
+            required = {"dendritic_shunting", "dendritic_additive"}
+            if not required.issubset(pivot.columns) or pivot.empty:
+                continue
+            shunting = pivot["dendritic_shunting"].to_numpy(dtype=float)
+            additive = pivot["dendritic_additive"].to_numpy(dtype=float)
+            paired_t = ttest_rel(shunting, additive)
+            try:
+                signed_rank_p = float(wilcoxon(shunting, additive).pvalue)
+            except ValueError:
+                signed_rank_p = float("nan")
+            paired_rows.append(
+                {
+                    "condition": condition,
+                    "metric": metric,
+                    "n_pairs": int(len(pivot)),
+                    "shunting_mean": float(np.mean(shunting)),
+                    "shunting_std": float(np.std(shunting, ddof=1))
+                    if len(shunting) > 1
+                    else float("nan"),
+                    "additive_mean": float(np.mean(additive)),
+                    "additive_std": float(np.std(additive, ddof=1))
+                    if len(additive) > 1
+                    else float("nan"),
+                    "paired_difference_mean": float(np.mean(shunting - additive)),
+                    "paired_t_pvalue": float(paired_t.pvalue),
+                    "wilcoxon_pvalue": signed_rank_p,
+                }
+            )
+    return checkpoint, pd.DataFrame(paired_rows)
+
+
 def analyze_run(
     run_dir: Path,
     *,
@@ -599,6 +937,7 @@ def analyze_run(
     split: str,
     device: torch.device,
     rule_variant: str,
+    posthoc_reactivation_calibration: str,
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
     config = _load_config_from_run(run_dir)
     x_batch, y_batch = _get_batch(config, split=split, batch_size=batch_size)
@@ -613,6 +952,22 @@ def analyze_run(
 
     helper = _make_helper(config, rule_variant=rule_variant, loss_name=loss_name)
     model = _load_model(config, run_dir, device)
+    calibration_iterations = 0
+    calibration_max_change = float("nan")
+    if posthoc_reactivation_calibration != "none":
+        x_calibration, _ = _get_batch(
+            config,
+            split="train",
+            batch_size=batch_size,
+        )
+        _, calibration_iterations, calibration_max_change = (
+            _posthoc_calibrate_reactivation(
+                model,
+                x_calibration.to(device),
+                device=device,
+                mode=posthoc_reactivation_calibration,
+            )
+        )
     records, bp_grads, v0_direct, delta_direct, loss_value = _capture_forward_backward(
         model,
         x_batch,
@@ -623,20 +978,26 @@ def analyze_run(
     exact_seeds = _exact_soma_seeds(records, batch_size=int(x_batch.size(0)))
     grouped = _group_records_by_core_layer(records)
     conditions = _condition_errors(helper, grouped, exact_seeds, delta_direct)
+    activation_stats = _activation_stats(helper, records)
 
     meta = {
         "run_dir": str(run_dir),
         "run_name": run_dir.name,
+        "seed": int(_get_value(_get_value(config, "experiment", {}), "seed", -1)),
         "dataset": config.data.dataset_name,
         "network_type": config.model.core.type,
         "trained_rule_variant": train_local_cfg.get("rule_variant"),
         "trained_broadcast_mode": train_local_cfg.get("error_broadcast_mode"),
         "diagnostic_rule_variant": rule_variant,
+        "posthoc_reactivation_calibration": posthoc_reactivation_calibration,
+        "calibration_iterations": calibration_iterations,
+        "calibration_max_change": calibration_max_change,
         "loss_name": loss_name,
         "loss_value": loss_value,
     }
 
     all_rows: list[dict[str, Any]] = []
+    grads_by_condition: dict[str, dict[str, torch.Tensor]] = {}
     for condition, e_by_layer_name in conditions.items():
         local_grads = _apply_local_grads_from_errors(
             model,
@@ -645,14 +1006,39 @@ def analyze_run(
             e_by_layer_name,
             v0=v0_direct,
         )
+        grads_by_condition[condition] = local_grads
         all_rows.extend(
             _alignment_rows(
                 local_grads,
                 bp_grads,
                 meta=meta,
                 condition=condition,
+                activation_stats=activation_stats,
             )
         )
+
+    counterfactual_target = grads_by_condition.get(
+        "exact_soma_path_transport_no_inhibition"
+    )
+    if counterfactual_target is not None:
+        for source_condition in (
+            "approx_direct_code_per_soma",
+            "exact_soma_blockwise_per_soma",
+        ):
+            source_grads = grads_by_condition.get(source_condition)
+            if source_grads is None:
+                continue
+            all_rows.extend(
+                _alignment_rows(
+                    source_grads,
+                    counterfactual_target,
+                    meta=meta,
+                    condition=(
+                        f"{source_condition}_vs_backward_no_inhibition"
+                    ),
+                    activation_stats=activation_stats,
+                )
+            )
 
     details = pd.DataFrame(all_rows)
     return details, _summarize(details)
@@ -668,6 +1054,15 @@ def main() -> None:
     parser.add_argument("--max-runs", type=int, default=None)
     parser.add_argument("--device", default="auto")
     parser.add_argument("--rule-variant", default="3f")
+    parser.add_argument(
+        "--posthoc-reactivation-calibration",
+        choices=["none", "occupancy_quantile", "median_mad", "mean_std"],
+        default="none",
+        help=(
+            "Optional fixed-checkpoint gate intervention applied on one training "
+            "batch before gradient measurement."
+        ),
+    )
     args = parser.parse_args()
 
     if bool(args.run_dir) == bool(args.sweep_dir):
@@ -694,6 +1089,7 @@ def main() -> None:
             split=args.split,
             device=device,
             rule_variant=args.rule_variant,
+            posthoc_reactivation_calibration=args.posthoc_reactivation_calibration,
         )
         detail_frames.append(details)
         summary_frames.append(summary)
@@ -702,6 +1098,15 @@ def main() -> None:
     summary_all = pd.concat(summary_frames, ignore_index=True) if summary_frames else pd.DataFrame()
     details_all.to_csv(args.output_dir / "layer_soma_factorial_details.csv", index=False)
     summary_all.to_csv(args.output_dir / "layer_soma_factorial_summary.csv", index=False)
+    branch_summary, branch_tests = _branch_level_summary(details_all)
+    branch_summary.to_csv(
+        args.output_dir / "branch_gradient_checkpoint_summary.csv",
+        index=False,
+    )
+    branch_tests.to_csv(
+        args.output_dir / "branch_gradient_paired_tests.csv",
+        index=False,
+    )
 
     grouped_cols = [
         "condition",
@@ -758,6 +1163,7 @@ def main() -> None:
         "split": args.split,
         "device": str(device),
         "diagnostic_rule_variant": args.rule_variant,
+        "posthoc_reactivation_calibration": args.posthoc_reactivation_calibration,
     }
     (args.output_dir / "manifest.json").write_text(json.dumps(manifest, indent=2))
     print(f"Saved layer-soma factorial diagnostics to {args.output_dir}")

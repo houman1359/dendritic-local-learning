@@ -15,7 +15,13 @@ import matplotlib.colors as mcolors
 import numpy as np
 import pandas as pd
 
-from neurips_style import apply_neurips_style, COLORS, panel_label, style_axis
+from neurips_style import (
+    apply_neurips_style,
+    COLORS,
+    MAIN_W,
+    panel_label,
+    style_axis,
+)
 
 
 SCRIPT_DIR = Path(__file__).resolve().parent
@@ -35,6 +41,10 @@ def _tracked_csv(tracked_name: str, fallback: Path) -> Path:
 SUMMARY_DIR = ANALYSIS_DIR / "theory_diag_gradient_fidelity_vs_ie_nonnegativeinput_fix_summary"
 SUMMARY_CSV = _tracked_csv("theory_diag_by_condition.csv", SUMMARY_DIR / "theory_diag_by_condition.csv")
 MERGED_CSV = SUMMARY_DIR / "theory_diag_merged_runs.csv"
+PATH_GAIN_SEED_CSV = _tracked_csv(
+    "path_gain_cv_mnist_ni5_seed.csv",
+    MERGED_CSV,
+)
 ORACLE_SUMMARY_CSV = _tracked_csv(
     "path_transport_upper_bound_summary.csv",
     ANALYSIS_DIR
@@ -75,26 +85,27 @@ DPI = 300
 
 
 def _setup_style() -> None:
+    """Apply the shared paper style.
+
+    This module previously re-declared font sizes and legend framing on top of
+    apply_neurips_style(), which silently diverged this figure from every other
+    one (most visibly: framed legends here, frameless everywhere else).  Only
+    output resolution is overridden now; typography comes from the single
+    shared source of truth.
+    """
     apply_neurips_style()
     plt.rcParams.update(
         {
-            "font.size": 11.0,
-            "axes.labelsize": 11.2,
-            "axes.titlesize": 10.7,
-            "xtick.labelsize": 10.0,
-            "ytick.labelsize": 10.0,
-            "legend.fontsize": 9.2,
-            "legend.frameon": True,
-            "legend.framealpha": 0.96,
-            "legend.edgecolor": "#D0D5DD",
             "figure.dpi": DPI,
             "savefig.dpi": DPI,
         }
     )
 
 
-def _panel(ax: plt.Axes, label: str, x: float = -0.24, y: float = 1.15) -> None:
-    panel_label(ax, label, x=x, y=y)
+def _panel(ax: plt.Axes, label: str) -> None:
+    # Points-offset placement (see neurips_style.panel_label): identical on
+    # every panel regardless of width, and cannot collide with a wrapped title.
+    panel_label(ax, label)
 
 
 def _save(fig: plt.Figure, name: str) -> None:
@@ -181,7 +192,11 @@ def _draw_gain_tree(
     )
 
 
-def _plot_path_gain_map(ax: plt.Axes, summary: pd.DataFrame) -> None:
+def _plot_path_gain_map(
+    ax: plt.Axes,
+    summary: pd.DataFrame,
+    path_gain_seed: pd.DataFrame,
+) -> None:
     _panel(ax, "A")
     ax.set_xticks([])
     ax.set_yticks([])
@@ -228,23 +243,62 @@ def _plot_path_gain_map(ax: plt.Axes, summary: pd.DataFrame) -> None:
         norm=norm,
         cmap=cmap,
     )
-    # Color-scale legend so the branch colors read as path-gain magnitude.
-    cbar = ax.inset_axes([0.18, 0.05, 0.64, 0.045])
-    cbar.imshow(np.linspace(0, 1, 100).reshape(1, -1), aspect="auto", cmap=cmap)
-    cbar.set_xticks([])
-    cbar.set_yticks([])
-    for s in cbar.spines.values():
-        s.set_visible(False)
-    cbar.text(-0.05, 0.5, "low", transform=cbar.transAxes, ha="right",
-              va="center", fontsize=6.0, color=COLORS["mute"])
-    cbar.text(1.05, 0.5, "high", transform=cbar.transAxes, ha="left",
-              va="center", fontsize=6.0, color=COLORS["mute"])
-    ax.text(0.5, 0.135, "cond. path gain", ha="center", va="bottom",
-            fontsize=6.4, color=COLORS["ink"])
+    # Show the actual paired seed-level result, rather than only the two
+    # aggregate CV labels above the schematic.
+    paired = path_gain_seed.copy()
+    if "dataset" in paired:
+        paired = paired[paired["dataset"] == "mnist"]
+    if "ie_value" in paired:
+        paired = paired[paired["ie_value"] == 5]
+    pivot = paired.pivot_table(
+        index="seed",
+        columns="network_type",
+        values="path_gain_cv_mean",
+        aggfunc="mean",
+    ).dropna()
+    inset = ax.inset_axes([0.20, 0.002, 0.62, 0.165])
+    x_offsets = np.linspace(-0.06, 0.06, max(len(pivot), 1))
+    for x_offset, (_, row) in zip(x_offsets, pivot.iterrows()):
+        values = [
+            float(row["dendritic_additive"]),
+            float(row["dendritic_shunting"]),
+        ]
+        x_values = [0 + x_offset, 1 + x_offset]
+        inset.plot(x_values, values, color=COLORS["mute"], alpha=0.60, lw=0.65, zorder=1)
+        inset.scatter(
+            x_values,
+            values,
+            s=8,
+            facecolors="white",
+            edgecolors=[COLOR_ADDITIVE, COLOR_SHUNTING],
+            linewidths=0.55,
+            zorder=2,
+        )
+    inset.set_xlim(-0.22, 1.22)
+    inset.set_ylim(0.0, 1.36)
+    inset.set_xticks([0, 1])
+    inset.set_xticklabels(["Add.", "Shunt."], fontsize=4.8)
+    inset.set_yticks([0, 1])
+    inset.set_yticklabels(["0", "1"], fontsize=4.6)
+    inset.tick_params(length=1.8, width=0.55, pad=0.6)
+    inset.spines["left"].set_linewidth(0.55)
+    inset.spines["bottom"].set_linewidth(0.55)
+    inset.set_title("paired CV: 5/5", fontsize=5.0, pad=0.8, fontweight="normal")
     ax.set_title("Conductance-stage\npath gains", fontsize=8.4, linespacing=0.9)
 
 
-def _plot_error_compressibility(ax: plt.Axes, rank_summary: pd.DataFrame) -> None:
+def _plot_dendritic_feedback_fidelity(
+    ax: plt.Axes,
+    rank_summary: pd.DataFrame,
+) -> None:
+    """Plot submitted-field fidelity only where feedback is actually restricted.
+
+    The former panel pooled distal, proximal, and width-matched somatic stages.
+    At the somatic stage the submitted mode reuses the soma vector verbatim,
+    giving cosine one by construction. Unequal somatic error energy therefore
+    made the pooled cross-core contrast an energy-allocation diagnostic rather
+    than a dendritic-feedback comparison.
+    """
     _panel(ax, "B")
     style_axis(ax, grid="y")
     sub = rank_summary[
@@ -252,18 +306,8 @@ def _plot_error_compressibility(ax: plt.Axes, rank_summary: pd.DataFrame) -> Non
         & (rank_summary["strategy"] == "local_ca")
         & (rank_summary["rule_variant"] == "5f")
         & (rank_summary["error_broadcast_mode"] == "per_soma")
-        & (rank_summary["scope"] == "all_layers")
+        & (rank_summary["scope"].isin(["layer_0", "layer_1"]))
     ].copy()
-    order = ["dendritic_additive", "dendritic_shunting"]
-    labels = ["Add.", "Shunt."]
-    colors = [COLOR_ADDITIVE, COLOR_SHUNTING]
-    x = np.arange(len(order))
-    means = []
-    stds = []
-    pranks = []
-    prank_stds = []
-    ps_cosines = []
-    ps_cosine_stds = []
     cosine_col = (
         "actual_broadcast_cosine_mean"
         if "actual_broadcast_cosine_mean" in sub.columns
@@ -278,66 +322,51 @@ def _plot_error_compressibility(ax: plt.Axes, rank_summary: pd.DataFrame) -> Non
         if "per_soma_broadcast_cosine_std" in sub.columns
         else None
     )
-    for core in order:
-        row = sub[sub["network_type"] == core].iloc[0]
-        means.append(float(row["rank1_residual_mean"]))
-        stds.append(float(row["rank1_residual_std"]))
-        pranks.append(float(row["effective_rank_participation_mean"]))
-        prank_stds.append(float(row["effective_rank_participation_std"]))
-        if cosine_col is not None:
-            ps_cosines.append(float(row[cosine_col]))
-            ps_cosine_stds.append(float(row[cosine_std_col]) if cosine_std_col else 0.0)
-    bar_w = 0.34 if ps_cosines else 0.66
-    svd_x = x - bar_w / 2 if ps_cosines else x
-    ps_x = x + bar_w / 2
-    bars = ax.bar(
-        svd_x,
-        means,
-        yerr=stds,
-        color=colors,
-        edgecolor="white",
-        linewidth=0.75,
-        width=bar_w,
-        capsize=2.4,
-        error_kw={"lw": 1.1},
-        label="SVD $\\downarrow$ better",
-    )
-    if ps_cosines:
+    if cosine_col is None:
+        raise KeyError("Stage-resolved submitted-field cosine is unavailable")
+
+    stages = ["layer_0", "layer_1"]
+    stage_labels = ["Distal", "Proximal"]
+    cores = [
+        ("dendritic_additive", "Add.", COLOR_ADDITIVE),
+        ("dendritic_shunting", "Shunt.", COLOR_SHUNTING),
+    ]
+    x = np.arange(len(stages))
+    width = 0.34
+    for offset, (core, label, color) in zip([-width / 2, width / 2], cores):
+        means = []
+        stds = []
+        for stage in stages:
+            row = sub[
+                (sub["network_type"] == core) & (sub["scope"] == stage)
+            ].iloc[0]
+            means.append(float(row[cosine_col]))
+            stds.append(float(row[cosine_std_col]) if cosine_std_col else 0.0)
         ax.bar(
-            ps_x,
-            ps_cosines,
-            yerr=ps_cosine_stds,
-            color=["#BFD7FF", "#B9E3C6"],
-            edgecolor=colors,
-            linewidth=0.85,
-            width=bar_w,
+            x + offset,
+            means,
+            yerr=stds,
+            color=color,
+            edgecolor="white",
+            linewidth=0.75,
+            width=width,
             capsize=2.4,
             error_kw={"lw": 1.1},
-            label="PS cos. $\\uparrow$ better",
+            label=label,
         )
     ax.set_xticks(x)
-    ax.set_xticklabels(labels)
-    ax.set_ylabel("Metric value")
-    ax.set_ylim(0, 1.02)
-    ax.set_title("Geometry &\nfeedback", linespacing=0.9)
-    if ps_cosines:
-        ax.legend(
-            loc="upper right",
-            fontsize=5.6,
-            frameon=False,
-            handlelength=1.0,
-            handletextpad=0.35,
-            borderpad=0.1,
-        )
-    else:
-        ax.legend(
-            loc="upper right",
-            fontsize=5.6,
-            frameon=False,
-            handlelength=1.0,
-            handletextpad=0.35,
-            borderpad=0.1,
-        )
+    ax.set_xticklabels(stage_labels, rotation=18, ha="right")
+    ax.set_ylabel("MW-field cosine")
+    ax.set_ylim(0, 0.30)
+    ax.set_title("Restricted dendritic\nfeedback", linespacing=0.9)
+    ax.legend(
+        loc="upper center",
+        ncol=1,
+        frameon=False,
+        handlelength=1.0,
+        handletextpad=0.35,
+        borderpad=0.1,
+    )
 
 
 def _plot_compartment_error_fidelity(ax: plt.Axes, summary: pd.DataFrame) -> None:
@@ -345,9 +374,9 @@ def _plot_compartment_error_fidelity(ax: plt.Axes, summary: pd.DataFrame) -> Non
     style_axis(ax, grid="y")
     noise = summary[summary["dataset"] == "noise_resilience"].copy()
     style_map = {
-        ("dendritic_shunting", "per_soma"): (COLOR_SHUNTING, "-", "Shunt. PS"),
+        ("dendritic_shunting", "per_soma"): (COLOR_SHUNTING, "-", "Shunt. MW"),
         ("dendritic_shunting", "path_transport"): (COLOR_SHUNTING, "--", "Shunt. oracle"),
-        ("dendritic_additive", "per_soma"): (COLOR_ADDITIVE, "-", "Add. PS"),
+        ("dendritic_additive", "per_soma"): (COLOR_ADDITIVE, "-", "Add. MW"),
         ("dendritic_additive", "path_transport"): (COLOR_ADDITIVE, "--", "Add. oracle"),
     }
     series = [
@@ -385,10 +414,14 @@ def _plot_compartment_error_fidelity(ax: plt.Axes, summary: pd.DataFrame) -> Non
     ax.set_xlabel(r"$N_I$ per branch")
     ax.set_ylabel("Cosine")
     ax.set_title("Broadcast\nfidelity", linespacing=0.9)
-    ax.set_xticks([0, 5, 10, 20, 40])
+    # Label 0/10/20/40 only: the axis is linear in N_I, so 0-5-10 fall within
+    # the first ~18% of the span and their labels collided. The N_I=5 point is
+    # still plotted; dropping only its tick label keeps the axis honestly linear
+    # (an equal-spaced categorical axis would misrepresent the sweep spacing).
+    ax.set_xticks([0, 20, 40])
     ax.set_ylim(-0.35, 1.05)
     ax.set_xlim(-1.5, 52.5)
-    ax.text(42.0, 0.18, "PS", color=COLORS["ink"], fontsize=7.8,
+    ax.text(42.0, 0.18, "MW", color=COLORS["ink"], fontsize=7.8,
             fontweight="bold", ha="left", va="center")
     ax.text(42.0, 0.97, "oracle", color=COLORS["ink"], fontsize=7.8,
             fontweight="bold", ha="left", va="center")
@@ -397,7 +430,7 @@ def _plot_compartment_error_fidelity(ax: plt.Axes, summary: pd.DataFrame) -> Non
 def _plot_mechanism_summary(ax: plt.Axes, summary: pd.DataFrame) -> None:
     """Panel D: scatter showing the mechanistic chain at a glance.
 
-    x-axis: per-soma cosine alignment to the exact compartment error
+    x-axis: submitted matched-width/scalar-fallback cosine alignment
     y-axis: test accuracy
     color: dataset (MNIST vs. noise resilience)
     marker: core (additive vs. shunting)
@@ -438,7 +471,7 @@ def _plot_mechanism_summary(ax: plt.Axes, summary: pd.DataFrame) -> None:
                 label=f"{ds_titles[ds]} {core_label[core]}",
             )
 
-    ax.set_xlabel("Per-soma cosine alignment")
+    ax.set_xlabel("Submitted-field cosine")
     ax.set_ylabel("Test (%)")
     ax.set_title("Alignment predicts accuracy")
     ax.legend(
@@ -583,7 +616,7 @@ def _plot_oracle_learning(
         lw=2.1,
             color=color,
             linestyle="-",
-            label=f"{label} PS",
+            label=f"{label} MW",
         )
         ax.fill_between(x, y - err, y + err, color=color, alpha=0.10, linewidth=0)
 
@@ -606,10 +639,14 @@ def _plot_oracle_learning(
     ax.set_xlabel(r"$N_I$ per branch")
     ax.set_ylabel("Test accuracy (%)")
     ax.set_title("Oracle\nlearning", linespacing=0.9)
-    ax.set_xticks([0, 5, 10, 20, 40])
+    # Label 0/10/20/40 only: the axis is linear in N_I, so 0-5-10 fall within
+    # the first ~18% of the span and their labels collided. The N_I=5 point is
+    # still plotted; dropping only its tick label keeps the axis honestly linear
+    # (an equal-spaced categorical axis would misrepresent the sweep spacing).
+    ax.set_xticks([0, 20, 40])
     ax.set_ylim(20, 101)
     ax.set_xlim(-1.5, 52.5)
-    ax.text(42.0, 84.0, "PS", color=COLORS["ink"], fontsize=7.8,
+    ax.text(42.0, 84.0, "MW", color=COLORS["ink"], fontsize=7.8,
             fontweight="bold", ha="left", va="center")
     ax.text(42.0, 95.0, "oracle", color=COLORS["ink"], fontsize=7.8,
             fontweight="bold", ha="left", va="center")
@@ -716,7 +753,7 @@ def _plot_inhibitory_path_probe(ax: plt.Axes, input_mode: pd.DataFrame) -> None:
     explicit_path = _row("explicit_i_cells__localca_path_transport__i_updates_True")
     explicit_bp = _row("explicit_i_cells__standard_bp")
     rows = [
-        ("Per-soma", direct_rank1, COLORS["per_soma"], ""),
+        ("MW/scalar", direct_rank1, COLORS["per_soma"], ""),
         ("Path transp.", direct_path, COLOR_TRANSPORT, ""),
         ("I-cell path", explicit_path, COLORS["shunting"], "//"),
     ]
@@ -795,6 +832,7 @@ def build_figure(
     as a standalone appendix figure via build_low_bandwidth_figure)."""
     _setup_style()
     summary = _safe_csv(summary_csv)
+    path_gain_seed = _safe_csv(PATH_GAIN_SEED_CSV)
     oracle_summary = _safe_csv(oracle_summary_csv)
     rank_summary = _safe_csv(ERROR_RANK_SUMMARY_CSV)
     causal = _safe_csv(INHIBITION_CAUSALITY_CSV)
@@ -802,36 +840,35 @@ def build_figure(
     # Sized to NeurIPS \textwidth (≈7 in) so the printed figure does not
     # need to be down-scaled from the matplotlib render — the new larger
     # global font sizes therefore render at intended size in the PDF.
+    # Authored at MAIN_W so this figure takes the same LaTeX rescaling as every
+    # other main figure (previously 7.0 in here vs 7.35 / 6.95 / 5.5 elsewhere,
+    # which made identical nominal type print at a different size per figure).
+    # Equal width_ratios: the panels carry comparable content, and the old
+    # [1.18, 0.80, 1.52, 0.96, 0.96] both looked ragged and squeezed panel B so
+    # hard that its legend had to be shrunk to 5.2 pt (~4 pt printed) to fit.
     fig, axes = plt.subplots(
         1,
         5,
-        figsize=(7.0, 2.65),
-        gridspec_kw={"wspace": 0.62, "width_ratios": [1.18, 0.80, 1.52, 0.96, 0.96]},
+        figsize=(MAIN_W, 3.05),
+        gridspec_kw={"wspace": 0.58, "width_ratios": [1.0, 1.0, 1.0, 1.0, 1.0]},
     )
 
-    _plot_path_gain_map(axes[0], summary)
-    _plot_error_compressibility(axes[1], rank_summary)
+    _plot_path_gain_map(axes[0], summary, path_gain_seed)
+    _plot_dendritic_feedback_fidelity(axes[1], rank_summary)
     _plot_causal_inhibition(axes[2], causal)
     _plot_compartment_error_fidelity(axes[3], summary)
     _plot_oracle_learning(axes[4], summary, oracle_summary)
 
-    # Trim per-panel font sizes to fit each panel's narrower width.
+    # Typography comes from the shared style; only the "(n=3)" annotation is
+    # stripped from titles. The former per-panel font shrinking (titles 9.6,
+    # ticks 7.6, legends 5.2/6.6) is gone: it defeated the global style and drove
+    # legend text below legibility once LaTeX rescaled the figure.
     for ax in axes:
-        ax.title.set_fontsize(9.6)
-        for lab in ax.get_xticklabels() + ax.get_yticklabels():
-            lab.set_fontsize(7.6)
-        ax.xaxis.label.set_fontsize(8.4)
-        ax.yaxis.label.set_fontsize(8.4)
-        leg = ax.get_legend()
-        if leg is not None:
-            legend_fontsize = 5.2 if "Geometry" in ax.get_title() else 6.6
-            for txt in leg.get_texts():
-                txt.set_fontsize(legend_fontsize)
         title = ax.get_title()
         if "(n=3)" in title:
-            ax.set_title(title.replace("(n=3)", "").strip(), fontsize=9.6)
+            ax.set_title(title.replace("(n=3)", "").strip())
 
-    fig.subplots_adjust(left=0.055, right=0.992, top=0.85, bottom=0.20)
+    fig.subplots_adjust(left=0.055, right=0.992, top=0.84, bottom=0.20)
     return fig
 
 

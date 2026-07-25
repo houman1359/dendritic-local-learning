@@ -91,6 +91,180 @@ def _shared_field_metrics(matrix: torch.Tensor) -> dict[str, float]:
     }
 
 
+def _per_soma_shared_field_metrics(
+    matrix: torch.Tensor,
+    *,
+    n_soma: int | None,
+    segment_widths: list[int] | None = None,
+) -> dict[str, float]:
+    """Metrics for the best field shared within each soma's compartments.
+
+    The practical ``per_soma`` mode supplies one coefficient per example and
+    soma, repeated over that soma's dendritic compartments. This projection
+    fixes exactly that blockwise spatial form and chooses its least-squares
+    coefficient independently for every example and soma.
+    """
+    matrix = matrix.detach().float()
+    finite = torch.isfinite(matrix).all(dim=1)
+    matrix = matrix[finite]
+    if (
+        matrix.numel() == 0
+        or matrix.dim() != 2
+        or n_soma is None
+        or n_soma <= 0
+    ):
+        return {
+            "per_soma_shared_residual": float("nan"),
+            "per_soma_shared_cosine": float("nan"),
+        }
+
+    grouped = _group_segments_by_soma(
+        matrix,
+        n_soma=n_soma,
+        segment_widths=segment_widths,
+    )
+    if grouped is None:
+        return {
+            "per_soma_shared_residual": float("nan"),
+            "per_soma_shared_cosine": float("nan"),
+        }
+    blocks, widths = grouped
+    projected_blocks = blocks.mean(dim=2, keepdim=True).expand_as(blocks)
+    projected = _ungroup_soma_segments(
+        projected_blocks,
+        segment_compartments_per_soma=widths,
+    )
+    return {
+        "per_soma_shared_residual": _residual_to_exact(projected, matrix),
+        "per_soma_shared_cosine": _cosine_to_exact(projected, matrix),
+    }
+
+
+def _group_segments_by_soma(
+    matrix: torch.Tensor,
+    *,
+    n_soma: int,
+    segment_widths: list[int] | None,
+) -> tuple[torch.Tensor, list[int]] | None:
+    """Regroup layer-major flattened fields into [sample, soma, compartment]."""
+    widths = segment_widths or [matrix.size(1)]
+    if sum(widths) != matrix.size(1) or any(
+        width <= 0 or width % n_soma != 0 for width in widths
+    ):
+        return None
+    start = 0
+    grouped_segments = []
+    compartments_per_soma = []
+    for width in widths:
+        segment = matrix[:, start : start + width]
+        per_soma = width // n_soma
+        grouped_segments.append(segment.reshape(matrix.size(0), n_soma, per_soma))
+        compartments_per_soma.append(per_soma)
+        start += width
+    return torch.cat(grouped_segments, dim=2), compartments_per_soma
+
+
+def _ungroup_soma_segments(
+    grouped: torch.Tensor,
+    *,
+    segment_compartments_per_soma: list[int],
+) -> torch.Tensor:
+    """Restore layer-major flattening after a soma-grouped projection."""
+    segments = []
+    start = 0
+    for per_soma in segment_compartments_per_soma:
+        segment = grouped[:, :, start : start + per_soma]
+        segments.append(segment.reshape(grouped.size(0), -1))
+        start += per_soma
+    return torch.cat(segments, dim=1)
+
+
+def _template_projection_metrics(
+    matrix: torch.Tensor,
+    *,
+    template: torch.Tensor | None,
+    n_soma: int | None,
+    segment_widths: list[int] | None,
+) -> dict[str, float]:
+    """Constrained residuals for scalar and per-soma template coefficients.
+
+    ``template`` is the local voltage-conversion pattern available to the rule
+    (the post-voltage activation derivative; all ones under identity transfer).
+    The scalar projection permits one coefficient per example. The per-soma
+    projection permits one coefficient per example and soma, shared across all
+    of that soma's dendritic layers and compartments.
+    """
+    keys = {
+        "scalar_template_residual": float("nan"),
+        "scalar_template_cosine": float("nan"),
+        "per_soma_template_residual": float("nan"),
+        "per_soma_template_cosine": float("nan"),
+    }
+    if template is None or template.shape != matrix.shape:
+        return keys
+    exact = matrix.detach().float()
+    basis = template.detach().float().to(device=exact.device, dtype=exact.dtype)
+
+    scalar_den = basis.square().sum(dim=1, keepdim=True).clamp_min(1e-30)
+    scalar_coeff = (exact * basis).sum(dim=1, keepdim=True) / scalar_den
+    scalar_projection = scalar_coeff * basis
+    keys["scalar_template_residual"] = _residual_to_exact(scalar_projection, exact)
+    keys["scalar_template_cosine"] = _cosine_to_exact(scalar_projection, exact)
+
+    if n_soma is None or n_soma <= 0:
+        return keys
+    grouped_exact = _group_segments_by_soma(
+        exact,
+        n_soma=n_soma,
+        segment_widths=segment_widths,
+    )
+    grouped_basis = _group_segments_by_soma(
+        basis,
+        n_soma=n_soma,
+        segment_widths=segment_widths,
+    )
+    if grouped_exact is None or grouped_basis is None:
+        return keys
+    exact_blocks, widths = grouped_exact
+    basis_blocks, _ = grouped_basis
+    block_den = basis_blocks.square().sum(dim=2, keepdim=True).clamp_min(1e-30)
+    block_coeff = (exact_blocks * basis_blocks).sum(dim=2, keepdim=True) / block_den
+    projected_blocks = block_coeff * basis_blocks
+    per_soma_projection = _ungroup_soma_segments(
+        projected_blocks,
+        segment_compartments_per_soma=widths,
+    )
+    keys["per_soma_template_residual"] = _residual_to_exact(
+        per_soma_projection,
+        exact,
+    )
+    keys["per_soma_template_cosine"] = _cosine_to_exact(
+        per_soma_projection,
+        exact,
+    )
+    return keys
+
+
+def _globally_rescaled_metrics(
+    approx: torch.Tensor,
+    exact: torch.Tensor,
+) -> dict[str, float]:
+    """Residual and scale after the best single scalar rescaling of a field."""
+    approx = approx.detach().float().to(device=exact.device, dtype=exact.dtype)
+    exact = exact.detach().float()
+    denom = approx.square().sum()
+    if denom <= 0 or not torch.isfinite(denom):
+        return {
+            "rescaled_residual": float("nan"),
+            "optimal_scale": float("nan"),
+        }
+    scale = (approx * exact).sum() / denom
+    return {
+        "rescaled_residual": _residual_to_exact(scale * approx, exact),
+        "optimal_scale": float(scale.item()),
+    }
+
+
 def _expand_soma_error_to_matrix(
     delta: torch.Tensor,
     matrix: torch.Tensor,
@@ -113,6 +287,27 @@ def _expand_soma_error_to_matrix(
     return None
 
 
+def _legacy_per_soma_error_to_matrix(
+    delta: torch.Tensor,
+    delta_scalar: torch.Tensor,
+    matrix: torch.Tensor,
+) -> torch.Tensor:
+    """Reproduce the submitted ``per_soma`` implementation exactly.
+
+    The legacy mode preserves the soma vector only when its width exactly
+    matches the current compartment layer. Wider dendritic layers fall back to
+    the global scalar. This differs from an ancestry-preserving per-soma field,
+    which repeats each soma coordinate over all descendant compartments.
+    """
+    if delta.dim() == 1:
+        delta = delta.unsqueeze(-1)
+    elif delta.dim() != 2:
+        delta = delta.reshape(delta.size(0), -1)
+    if delta.size(0) == matrix.size(0) and delta.size(1) == matrix.size(1):
+        return delta.to(dtype=matrix.dtype, device=matrix.device)
+    return delta_scalar.to(dtype=matrix.dtype, device=matrix.device).expand_as(matrix)
+
+
 def _broadcast_conditioned_metrics(
     matrix: torch.Tensor,
     *,
@@ -130,9 +325,14 @@ def _broadcast_conditioned_metrics(
         if approx is None:
             metrics[f"{name}_residual"] = float("nan")
             metrics[f"{name}_cosine"] = float("nan")
+            metrics[f"{name}_rescaled_residual"] = float("nan")
+            metrics[f"{name}_optimal_scale"] = float("nan")
             continue
         metrics[f"{name}_residual"] = _residual_to_exact(approx, matrix)
         metrics[f"{name}_cosine"] = _cosine_to_exact(approx, matrix)
+        rescaled = _globally_rescaled_metrics(approx, matrix)
+        metrics[f"{name}_rescaled_residual"] = rescaled["rescaled_residual"]
+        metrics[f"{name}_optimal_scale"] = rescaled["optimal_scale"]
     return metrics
 
 
@@ -197,7 +397,7 @@ def _collect_exact_error_matrices(
 ) -> tuple[
     dict[str, Any],
     dict[str, torch.Tensor],
-    dict[str, dict[str, torch.Tensor | None]],
+    dict[str, dict[str, Any]],
 ]:
     config = _load_config_from_run(run_dir)
     if hasattr(config.model.core, "implementation"):
@@ -258,7 +458,7 @@ def _collect_exact_error_matrices(
     loss.backward()
 
     matrices: dict[str, torch.Tensor] = {}
-    broadcasts: dict[str, dict[str, torch.Tensor | None]] = {}
+    broadcasts: dict[str, dict[str, Any]] = {}
     all_layers = []
     all_scalar_broadcasts = []
     all_per_soma_broadcasts = []
@@ -298,15 +498,28 @@ def _collect_exact_error_matrices(
             per_soma * activation_derivative if isinstance(per_soma, torch.Tensor) else None
         )
         if str(actual_mode).lower() == "per_soma":
+            actual_broadcast = (
+                _legacy_per_soma_error_to_matrix(
+                    delta_local.detach().cpu().float(),
+                    delta_scalar.detach().cpu().float(),
+                    layer_matrix,
+                )
+                * activation_derivative
+            )
+        elif str(actual_mode).lower() in {"per_soma_shared", "per_soma_tree"}:
             actual_broadcast = per_soma_broadcast
         elif str(actual_mode).lower() in {"scalar", "rank1", "rank_1"}:
             actual_broadcast = scalar_broadcast
         else:
             actual_broadcast = None
         broadcasts[f"layer_{layer_idx}"] = {
+            "layer_name": str(rec.get("layer_name", f"layer_{layer_idx}")),
             "scalar_broadcast": scalar_broadcast,
             "per_soma_broadcast": per_soma_broadcast,
             "actual_broadcast": actual_broadcast,
+            "template": activation_derivative,
+            "n_soma": int(delta_local.size(1)) if delta_local.dim() == 2 else None,
+            "segment_widths": [int(layer_matrix.size(1))],
         }
         all_layers.append(matrices[f"layer_{layer_idx}"])
         all_scalar_broadcasts.append(scalar_broadcast)
@@ -321,6 +534,14 @@ def _collect_exact_error_matrices(
             else None
         )
         if str(actual_mode).lower() == "per_soma":
+            all_actual = torch.cat(
+                [
+                    broadcasts[f"layer_{idx}"]["actual_broadcast"]
+                    for idx in range(len(layer_records))
+                ],
+                dim=1,
+            )
+        elif str(actual_mode).lower() in {"per_soma_shared", "per_soma_tree"}:
             all_actual = all_per_soma
         elif str(actual_mode).lower() in {"scalar", "rank1", "rank_1"}:
             all_actual = all_scalar
@@ -330,6 +551,15 @@ def _collect_exact_error_matrices(
             "scalar_broadcast": all_scalar,
             "per_soma_broadcast": all_per_soma,
             "actual_broadcast": all_actual,
+            "template": torch.cat(
+                [
+                    broadcasts[f"layer_{idx}"]["template"]
+                    for idx in range(len(layer_records))
+                ],
+                dim=1,
+            ),
+            "n_soma": int(delta_local.size(1)) if delta_local.dim() == 2 else None,
+            "segment_widths": [int(layer.size(1)) for layer in all_layers],
         }
 
     connectivity = getattr(config.model.core, "connectivity", None)
@@ -338,6 +568,7 @@ def _collect_exact_error_matrices(
     meta = {
         "run_dir": str(run_dir),
         "run_name": run_dir.name,
+        "seed": _get_value(config.experiment, "seed"),
         "dataset": config.data.dataset_name,
         "network_type": config.model.core.type,
         "ie_value": ie_value,
@@ -377,7 +608,33 @@ def analyze_run(run_dir: Path, batch_size: int, split: str, device: torch.device
             per_soma_broadcast=broadcast.get("per_soma_broadcast"),
             actual_broadcast=broadcast.get("actual_broadcast"),
         )
-        row = {**meta, "scope": scope, **uncentered, **broadcast_metrics}
+        constrained_metrics = _per_soma_shared_field_metrics(
+            matrix,
+            n_soma=(
+                int(broadcast["n_soma"])
+                if isinstance(broadcast.get("n_soma"), int)
+                else None
+            ),
+            segment_widths=broadcast.get("segment_widths"),
+        )
+        template_metrics = _template_projection_metrics(
+            matrix,
+            template=broadcast.get("template"),
+            n_soma=(
+                int(broadcast["n_soma"])
+                if isinstance(broadcast.get("n_soma"), int)
+                else None
+            ),
+            segment_widths=broadcast.get("segment_widths"),
+        )
+        row = {
+            **meta,
+            "scope": scope,
+            **uncentered,
+            **constrained_metrics,
+            **template_metrics,
+            **broadcast_metrics,
+        }
         for key, value in centered.items():
             if key.startswith("n_"):
                 continue
