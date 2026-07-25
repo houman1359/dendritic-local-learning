@@ -77,7 +77,7 @@ PANEL_GAP_W = 0.95      # horizontal gap between panel boxes
 PANEL_GAP_H = 0.58      # vertical gap between panel rows
 MARGIN_L = 0.62         # left margin (room for y label + ticks)
 MARGIN_R = 0.46         # room for right-edge value labels
-MARGIN_T = 0.34         # room for panel title
+MARGIN_T = 0.50         # room for panel title + panel letter above it
 MARGIN_B = 0.62         # room for x label + ticks
 
 # ── Canonical type scale ──────────────────────────────────────────────────
@@ -109,9 +109,12 @@ ERR_CAPSIZE = 2.6
 REF_LW = LW_REF
 SEED_MS = 3.4           # per-seed scatter marker size
 SEED_ALPHA = 0.85
-PANEL_LABEL_PT = 12.0   # panel letter when drawn standalone (schematics only)
-PANEL_TITLE_PT = PT_TITLE
-PANEL_TITLE_PAD = 5.0   # header -> axes gap, points
+# Panel letter is the dominant element of the header and is set larger than the
+# panel title; the title is demoted a step so the letter reads first.
+PANEL_LABEL_PT = 12.0   # panel letter
+PANEL_TITLE_PT = 9.6    # panel title (deliberately smaller than the letter)
+PANEL_TITLE_PAD = 5.0   # title -> axes gap, points
+PANEL_LETTER_RISE = 3.0 # letter baseline above the title top, points
 
 
 def snap_pt(value: float) -> float:
@@ -135,21 +138,89 @@ def snap_lw(value: float) -> float:
 
 
 def panel_title(ax, letter, title="", *, loc="left", pad=None, fontsize=None):
-    """Uniform panel header: a bold letter followed by the panel title.
+    """Uniform panel header: a large bold letter plus a smaller panel title.
 
-    Every panel in every figure uses this one call, so the letter has the same
-    size, weight, alignment and baseline everywhere.  Left-aligning the letter
-    with the title (rather than floating a letter outside the axes and centring
-    the title) is what keeps narrow multi-panel rows free of collisions: the
-    header grows to the right into free space instead of upward into the row
-    above.
+    The letter is a separate artist, not a prefix on the title string, so it can
+    be (a) set larger than the title and (b) aligned with the *y-axis label*
+    rather than the axes spine.  Aligning to the spine left the letter floating
+    inside the panel's own tick/label gutter and made the column of letters look
+    ragged when panels had different y-label widths.  Final placement happens at
+    save time in ``_finalize_panel_letters`` once the y label and tick labels
+    have their real extents.
     """
-    text = f"{letter}  {title}".rstrip() if title else str(letter)
-    ax.set_title(
-        text, loc=loc, fontweight="bold",
-        fontsize=PANEL_TITLE_PT if fontsize is None else fontsize,
-        pad=PANEL_TITLE_PAD if pad is None else pad,
+    if title:
+        ax.set_title(
+            title, loc=loc, fontweight="bold",
+            fontsize=PANEL_TITLE_PT if fontsize is None else fontsize,
+            pad=PANEL_TITLE_PAD if pad is None else pad,
+        )
+    else:
+        ax.set_title("")
+    if not str(letter):
+        return None
+    art = ax.annotate(
+        str(letter),
+        xy=(0.0, 1.0), xycoords="axes fraction",
+        xytext=(-30.0, 8.0), textcoords="offset points",
+        fontsize=PANEL_LABEL_PT, fontweight="bold",
+        va="bottom", ha="left", color=COLORS["ink"],
+        annotation_clip=False, zorder=100,
     )
+    ax._neurips_panel_letter = art
+    return art
+
+
+def _title_artists(ax):
+    """All three title slots: with loc="left" matplotlib uses ax._left_title,
+    not ax.title, so code that reads only ax.title silently sees an empty
+    centre title."""
+    out = []
+    for name in ("title", "_left_title", "_right_title"):
+        art = getattr(ax, name, None)
+        if art is not None and art.get_text().strip():
+            out.append(art)
+    return out
+
+
+def _finalize_panel_letters(fig):
+    """Align each panel letter to its y-axis label and lift it above the title."""
+    try:
+        r = fig.canvas.get_renderer()
+    except Exception:
+        return
+    dpi = fig.dpi
+    for ax in fig.axes:
+        art = getattr(ax, "_neurips_panel_letter", None)
+        if art is None or not art.get_visible():
+            continue
+        try:
+            ab = ax.get_window_extent(renderer=r)
+        except Exception:
+            continue
+        left, top = ab.x0, ab.y1
+        # extend left over the y label and the y tick labels
+        ylab = ax.yaxis.label
+        if ylab is not None and ylab.get_text().strip():
+            try:
+                left = min(left, ylab.get_window_extent(renderer=r).x0)
+            except Exception:
+                pass
+        if getattr(ax, "axison", True):
+            lo, hi = ax.get_ylim()
+            for pos, lb in zip(ax.get_yticks(), ax.get_yticklabels()):
+                if min(lo, hi) <= pos <= max(lo, hi) and lb.get_text().strip():
+                    try:
+                        left = min(left, lb.get_window_extent(renderer=r).x0)
+                    except Exception:
+                        pass
+        # sit above the panel title (which lives in _left_title for loc="left")
+        for t in _title_artists(ax):
+            try:
+                top = max(top, t.get_window_extent(renderer=r).y1)
+            except Exception:
+                pass
+        art.xyann = (((left - ab.x0) / dpi) * 72.0,
+                     ((top - ab.y1) / dpi) * 72.0 + PANEL_LETTER_RISE)
 
 
 def printed_pt(nominal_pt: float) -> float:
@@ -356,8 +427,32 @@ def paired_lines(ax, x0, x1, y0, y1, *, color=None, lw=0.55, alpha=0.42,
                 zorder=zorder, solid_capstyle="round")
 
 
+_SAVEFIG_PATCHED = False
+
+
+def _patch_savefig_once():
+    """Make every savefig align panel letters just before rendering."""
+    global _SAVEFIG_PATCHED
+    if _SAVEFIG_PATCHED:
+        return
+    from matplotlib.figure import Figure
+    original = Figure.savefig
+
+    def savefig(self, *args, **kwargs):
+        try:
+            self.canvas.draw()
+            _finalize_panel_letters(self)
+        except Exception:
+            pass
+        return original(self, *args, **kwargs)
+
+    Figure.savefig = savefig
+    _SAVEFIG_PATCHED = True
+
+
 def apply_neurips_style():
     """Set matplotlib rcParams for a consistent, crisp NeurIPS look."""
+    _patch_savefig_once()
     mpl.rcParams.update({
         # Font — sans-serif for crisp figure text at small sizes
         "text.usetex": False,
@@ -543,7 +638,7 @@ def audit_layout(fig, name=""):
 
     for ax in axes:
         own = boxes[ax]
-        artists = [ax.title, ax.xaxis.label, ax.yaxis.label]
+        artists = _title_artists(ax) + [ax.xaxis.label, ax.yaxis.label]
         artists += list(ax.texts)
         # Axes with axis("off") still carry tick-label artists at stale
         # positions; they are never drawn, so auditing them is pure noise.

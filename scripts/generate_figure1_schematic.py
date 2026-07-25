@@ -585,12 +585,12 @@ def panel_c(ax):
 
 def main():
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    fig = plt.figure(figsize=(MAIN_W, 2.7))
+    fig = plt.figure(figsize=(MAIN_W, 2.85))
     gs = fig.add_gridspec(
         1, 3,
         width_ratios=[2.20, 1.95, 3.05],
         wspace=0.14,
-        left=0.025, right=0.99, top=0.86, bottom=0.06,
+        left=0.025, right=0.99, top=0.80, bottom=0.06,
     )
     ax_a = fig.add_subplot(gs[0, 0])
     ax_b = fig.add_subplot(gs[0, 1])

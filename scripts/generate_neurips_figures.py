@@ -524,9 +524,9 @@ def _submitted_matched_rule_values():
     The archived sweep nominally varied the base ``param_groups.lr``, but all
     effective parameter-group rates were fixed and the exported results are
     identical across that inert axis. We verify this before collapsing the
-    duplicates. The additive contrast is excluded because its sign changes at
-    another tested learning rate; cross-core conclusions use the explicit
-    initialization-policy factorial instead.
+    duplicates. The additive contrast is excluded because the archived cohort
+    predates the current gate-calibration machinery; cross-core conclusions
+    use the explicit initialization-policy factorial instead.
     """
     df = pd.read_csv(CORE_FAIR_TUNING_CSV)
     sub = df[
@@ -584,7 +584,7 @@ def figure_rule_feedback_design():
 
     # Submitted-code within-shunting, feedback-, decoder-, optimizer-, and
     # effective parameter-group-rate-matched comparison. Do not use either the
-    # heterogeneous top-10 summary or the LR-sensitive additive contrast here.
+    # heterogeneous top-10 summary or the unmatched archived cross-core cohort here.
     rule_data, rule_err = _submitted_matched_rule_values()
     rules = ["3F", "4F", "5F"]
     rule_colors = [RULE3_COLOR, RULE4_COLOR, RULE5_COLOR]
@@ -737,7 +737,7 @@ def figure_rule_feedback_design():
         ax.bar(xpos, vals, 0.68, yerr=errs, color=colors, edgecolor="white",
                lw=LW_EDGE, capsize=2.5, error_kw={"lw": 1.15})
         ax.set_xticks(xpos)
-        ax.set_xticklabels(labels, fontsize=PT_TICK)
+        ax.set_xticklabels(labels, fontsize=PT_TICK, rotation=25, ha="right")
         ax.set_ylim(35, 90)
     ax.set_ylabel("Noise (%)")
     panel_title(ax, "D", "Feedback")
@@ -1458,7 +1458,7 @@ def figure4_competence_regime():
         ax.axhline(bp_value, color=COLOR_BACKPROP, lw=REF_LW, ls="--")
         ax.axhline(exact_value, color="#6C3483", lw=REF_LW, ls=":")
         ax.text(1.22, bp_value, "BP", color=COLOR_BACKPROP, fontsize=PT_SMALL,
-                ha="left", va="center", fontweight="bold")
+                ha="left", va="top", fontweight="bold")
         ax.text(1.22, exact_value, "PT", color="#6C3483", fontsize=PT_SMALL,
                 ha="left", va="bottom", fontweight="bold")
         ax.text(
@@ -1929,7 +1929,7 @@ def figure_s_additional_stress_tests():
     noise = _csv("noise_robustness.csv", bundle=True)
     fmnist = _csv_path(FMNIST_SUMMARY_CSV)
 
-    fig, axes = grid_figure(3)
+    fig, axes = grid_figure(3, margin_l=0.78)
     axes = list(axes)
 
     # ---- Panel A: Depth scaling (LOCAL only — cleaner) ----
@@ -2359,8 +2359,9 @@ def figure_s4():
             if len(row) == 0:
                 continue
             r = row.iloc[0]
+            display_seed = "Held" if seed_label == "Held-out" else seed_label
             bars_data.append((
-                f"{seed_label}\nw={weight:g}",
+                f"{display_seed}\nw={weight:g}",
                 float(r["test_acc_mean"]) * 100,
                 float(r["test_acc_std"]) * 100,
                 color,

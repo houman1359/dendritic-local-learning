@@ -207,7 +207,7 @@ def _dendritic_fidelity_panel(ax, data: pd.DataFrame) -> None:
     ax.set_xticks(xs)
     ax.set_xticklabels(stage_labels, rotation=20, ha="right", fontsize=PT_SMALL)
     ax.set_ylim(0, 0.30)
-    ax.set_ylabel("Broadcast cosine", fontsize=PT_LEGEND)
+    ax.set_ylabel("MW-field cosine", fontsize=PT_LEGEND)
     panel_title(ax, "E", "Dendritic fidelity")
     clean_legend(ax, fontsize=PT_SMALL,
         frameon=False,

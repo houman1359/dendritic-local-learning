@@ -1,49 +1,35 @@
-====================
-REVIEWER s2E9 REVIEW
-====================
+================ ORIGINAL REVIEW ================
 
+Official Review of Submission29735 by Reviewer s2E9
+Official Reviewby Reviewer s2E925 Jun 2026, 05:58 (modified: 23 Jul 2026, 12:43)Program Chairs, Senior Area Chairs, Area Chairs, Reviewers Submitted, Authors, Reviewer s2E9Revisions
 Summary:
 The paper tries to solve the fundamental credit assignment problem. In standard backprop, we say that the delta w is proportional to the error and the activation. While the authors say that, in the case of pyramidal neurons, no distinct credit is assigned to each neuron, unlike in standard backpropagation. The paper claims that there is a low-bandwidth global signal rather than local signals, i.e., a credit for each neuron. Authors evaluate whether three components such as tree-structured dendrites, excitatory/inhibitory conductance synapses, and shunting inhibition can reshape the geometry of error propagation. In here, the shunting Inhibition acts as a control mechanism for error transmission in dendritic paths.
 
 Contribution Type: General: Most submissions will fall into this type.
-
 Strengths And Weaknesses:
-
 Strengths
 
 The shift from developing a new local learning rule to replace backprop to the analysis if a neuron's biophysics can make the backprop easier to approximate is novel.
-
 The derivation of the exact gradients for dendritic trees and proving that synaptic gradients factorise into a local eligibility term and a non-local compartment error provides a rigorous mathematical framework for local learning.
-
 The theoretical claims are supported by the right set of experiments, such as gradient reconstruction, alignments, error compressibility, interventions by inhibition and oracle.
-
 Weakness
 
 The scalability of the method isn't shown in the paper due to its limited evaluation on Fashion MNIST, CIFAR-10, and synthetic tasks. Evaluation should be shown on larger datasets, such as CIF100, TinyImagenet, Imagenet-A, or R.
-
-From equation (4) we understand that the path gain is described as a compartment error, but the theory isn't clear on how the path gain can be learned or estimated.
-
+From equation (4) we understand that the 
+ is described as a compartment error, but the theory isn't clear on how the path gain 
+ can be learned or estimated.
 The advantages of shunting inhibition aren't theoretically justified. Rather, it's empirically shown in the paper.
-
 The change of neuron from pyramidal or even if just the structure changes from a single parent, leading to a non-unique path, changing the equations. Generalizability is not shown with respect to different networks or across datasets.
-
 Quality: 3: good
 Clarity: 3: good
 Significance: 3: good
 Originality: 3: good
-
 Questions:
-
 What is the goal of the paper - to bridge the gap between neuroscience and deep learning? In that case, it would be great to understand the biophysical underpinnings of this work, for instance, how inhibitory neurotransmitters mediate shunting inhibition in the classification task? Given that computations in the brain are more precisely represented by Hodgkin-Huxley-like models, and neuronal spikes also are shown to play a role.
-
 If the goal is to improve deep learning inspired by neuroscience, then please extend your evaluation to STOA datasets like ImageNet and ImageNet-R. A comparison with STOA performance is also necessary.
-
 A significant amount of such learning algorithm variants exists in the literature, such as FF, PEPITA, SPELA, Trifecta, NoProp, LLS to name a few. Please thoroughly compare your work with similar works.
-
 It's not clear why we should go for shunting inhibition from the present manuscript contents. Please compare and report the memory, wall-clock time, and energy estimates for your work with STOA models, in addition to classification accuracy.
-
 How would you extend this design to CNNs or transformers?
-
 Limitations:
 Yes
 
@@ -58,9 +44,7 @@ None
 Code Of Conduct Acknowledgement: Yes
 Responsible Reviewing Acknowledgement: Yes
 
-======================
-AUTHORS' RESPONSE
-======================
+================ AUTHOR RESPONSE ================
 
 Thank you for recognizing the conceptual shift from proposing another replacement for backpropagation to asking whether neuronal biophysics can make exact credit easier to approximate. We agree that the paper's goal and evaluation scope should have been stated much more clearly.
 
@@ -76,6 +60,8 @@ The primary contribution is a testable bridge between a biophysical component an
 4. expose when that mechanism helps, fails, or requires higher-bandwidth feedback.
 
 This differs from FF, PEPITA, SPELA, Trifecta, NoProp, and LLS. Those works primarily construct scalable layer-local or forward-only training algorithms: FF uses layer-local goodness; PEPITA uses an output-error perturbation and second forward pass; SPELA embeds class vectors as local targets; Trifecta improves deeper Forward-Forward networks; NoProp uses local denoising targets; and LLS uses activity-synchronization-inspired errors. Our work instead derives the exact credit object of a conductance tree and tests whether biophysics changes its approximability. A comparison table now separates feedback source, within-neuron biophysics, relation to exact credit, and objective.
+
+We also added directly implementable feedback-alignment controls on matched MNIST models. DFA reaches 66.1% in shunting, 62.2% in additive, and 51.8% in point-MLP models, with backpropagation gaps of 24.9--27.6 versus 39.5 points. FA is not dimensionally defined for the block-structured tree updates without changing the method. These are mechanism controls, not a comprehensive benchmark against every cited algorithm.
 
 This bridge has two applications. In neuroscience, it predicts that focal shunting should alter plasticity signals preferentially at descendant synapses, with strength set by local resistance and path geometry; the diagnostics can compare reconstructed cells with fitted conductances. In AI, it identifies neuron-indexed or path-aware feedback as the component to preserve when dendritic units are scaled. The codebase supports matched cores, E/I and morphology interventions, six feedback families, and exact-gradient diagnostics. This mechanism-first route—derivation, causal tests, then scale—develops neuroscience-derived ideas without attributing effects to an uninterpreted large architecture.
 

@@ -1,3 +1,21 @@
+================ ORIGINAL REVIEW ================
+
+Meta Review of Submission29735 by Area Chair UroA
+Meta Reviewby Area Chair UroA21 Jul 2026, 17:29 (modified: 23 Jul 2026, 14:28)Senior Area Chairs, Area Chairs, Authors, Reviewers Submitted, Program Chairs, Area Chair UroARevisions
+Metareview:
+This paper studies local credit assignment in dendritic branches in conductance-based neuron models. It derives that the gradient factorizes into a local eligibility term and a non-local compartment error scaled by a path gain. Eventually, the authors claim the path gain can be modulated via shunting inhibition, an observation in dendrites. The study tests its models on MNIST and CIFAR-10. Reviewers acknowledge the conceptual contribution of this paper, including reformulating the local credit assignment as an approximation problem and the usage of shunting inhibition to facilitate backpropagation.
+
+Nevertheless, there are some serious concerns raised by reviewers, which need to be thoroughly addressed during the rebuttal and discussion period.
+
+Technical concerns:
+Optimal rank-1 approximation is not equivalent to the uniform spatial broadcast used by the algorithm.
+
+The theoretically derived three-factor rule performs much worse than the 5F modifier, making the reviewer doubt the main claim of the paper about whether the shunting and a scalar broadcast are sufficient for local learning.
+
+Writing clarity
+
+================ AUTHOR RESPONSE ================
+
 Thank you for identifying the two issues most consequential for evaluating the paper. Our additional controls change the interpretation in a useful way.
 
 **Summary.** (i) The submitted feedback was described inaccurately: it preserves the soma vector only at a width-matched stage and otherwise falls back to one scalar. (ii) A global scalar is inadequate, but corrected neuron-wise feedback and exact path transport allow the theorem-derived 3F rule to reach the matched-backpropagation ceiling. (iii) Shunting changes path gain exactly, but does not confer a general directional or learning advantage across operating points. (iv) The resulting contribution is a clearer mechanistic bridge between dendritic biophysics and credit assignment, with testable consequences for neuroscience and concrete design principles for NeuroAI.

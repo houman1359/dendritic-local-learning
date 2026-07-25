@@ -1,31 +1,22 @@
-====================
-REVIEWER QgDY REVIEW
-====================
+================ ORIGINAL REVIEW ================
 
+Official Review of Submission29735 by Reviewer QgDY
+Official Reviewby Reviewer QgDY24 Jun 2026, 20:00 (modified: 23 Jul 2026, 12:43)Program Chairs, Senior Area Chairs, Area Chairs, Reviewers Submitted, Authors, Reviewer QgDYRevisions
 Summary:
 The paper approximates single neurons as conductance-based dendritic networks to tackle the problem of how neurons could implement credit assignment without backprop. In this conductance-based network, they derive the 'conductance-stage path gain'. They factorize the synaptic gradient in terms of presynaptic activity, driving force, and input resistance, and one non-local compartment error. They then perform a series of experiments with MNIST, Fashion-MNIST data to highlight the regimes where shunting modulated input resistance can make localCA better.
 
 Contribution Type: General: Most submissions will fall into this type.
-
 Strengths And Weaknesses:
-
 Strengths
-
 The topic is interesting and important for neuroAI.
-
 There is not much work in my knowledge that incorporates the role of morphology in credit assignment and plasticity, and novel theoretical frameworks might be needed with new datasets that are able to image local dendritic activity and plasticity.
-
 Weaknesses
-
 Paper is very hard to follow. Specific comments below:
-
 The abstract, introduction and model derivation introduce a lot of jargon and unclear terminology. e.g. ‘identity upward transfer’, ‘localCA’ in the abstract, ‘E/I synapse banks’, ‘pathway-broadcast mixing weight’, ‘depth-dependent modulation in morphology extensions’. It took me a couple of reads for context to understand what they mean. I see that a lot of these terms are properly elaborated in the appendix - so either the authors provide an intuitive, abbreviated understanding of these in the main text or link to the relevant section in the appendix.
-
 The simplifying assumptions are not elaborated on, or explained well.
-
 Figure captions are inadequate, and the figures are hard to interpret.
-
 Paper organization and structuring is not great. I could not follow the link between the theoretical derivations, the implications to local learning rules (subsequent section) and then the experiments section. The flow needs to be improved quite a bit in order for the paper to be intelligible. Perhaps the authors could move some details of derivations to the appendix, and elaborate on the background, study rationale etc instead? I see that a lot of those might have been relegated to the appendix. But I feel like readers should be able to follow the paper without reading the appendix in detail.
+
 
 Perhaps due to the structure and writing of the paper, the significance of the study and future applications are not very clear to me. I see that there is an appendix table S5 listed in the Discussions and Limitations section that points to biological predictions; I’d have appreciated a simplified version of that somewhere in the main text.
 
@@ -35,9 +26,7 @@ Quality: 2: not good
 Clarity: 1: poor
 Significance: 3: good
 Originality: 2: not good
-
 Questions:
-
 How would the authors propose that the limitations around their framework that uses passive cable equations rather than temporal membrane dynamics, be addressed? Do they expect these to have second-order effects?
 
 Related to the question above, Are the dynamic effects in this conductance-based models, that boil down to changes in local conductances, decidedly first order? Can there be other non-linear effects that operate on longer timescales, such as calcium and neuromodulatory dynamics, that can be build onto this work? How might those be taken into consideration?
@@ -45,7 +34,6 @@ Related to the question above, Are the dynamic effects in this conductance-based
 To what extent is this framework relevant to real neuronal morphologies? Is this work supposed to give a general idea of how branching morphology features into local credit-assignment, and so minute differences in branching patterns won’t cause significant differences across neurons of the same cell type or across cell types? Suppose I wanted to study the differences in local credit assignment across morphologies, would this framework be relevant?
 
 Limitations:
-
 Limitations were somewhat addressed but not entirely; key limitations were relegated to the appendix. See comment 3 under ‘Weaknesses’
 
 Rating: 2: Reject: For instance, a paper with technical flaws, weak evaluation, inadequate reproducibility and incompletely addressed ethical considerations.
@@ -57,9 +45,7 @@ Did not notice anything.
 Code Of Conduct Acknowledgement: Yes
 Responsible Reviewing Acknowledgement: Yes
 
-======================
-AUTHORS' RESPONSE
-======================
+================ AUTHOR RESPONSE ================
 
 Thank you for emphasizing that an interesting NeuroAI question is not useful if the reader cannot follow the theory-to-experiment chain. We agree that the submission placed too much terminology and too many assumptions before the central idea was made intuitive.
 

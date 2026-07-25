@@ -237,7 +237,7 @@ def generate_cifar_figure(summary_dir: Path) -> bool:
         ylabel="",
     )
 
-    fig.subplots_adjust(left=0.09, right=0.995, top=0.86, bottom=0.40, wspace=0.42)
+    fig.subplots_adjust(left=0.09, right=0.995, top=0.80, bottom=0.40, wspace=0.42)
     _save(fig, "fig_s_cifar10_control_ladder_20260427")
     plt.close(fig)
     return True
@@ -288,7 +288,7 @@ def generate_double_cifar_figure(summary_dir: Path) -> bool:
     for label, ax in zip("ABC", axes):
         panel_label(ax, label, x=-0.14, y=1.08, fontsize=PT_TITLE)
 
-    fig.subplots_adjust(left=0.07, right=0.995, top=0.80, bottom=0.33, wspace=0.36)
+    fig.subplots_adjust(left=0.07, right=0.995, top=0.76, bottom=0.33, wspace=0.36)
     _save(fig, "fig_s_double_cifar_routed_screen_20260427")
     plt.close(fig)
     return True

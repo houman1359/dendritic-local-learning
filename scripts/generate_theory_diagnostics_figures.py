@@ -149,10 +149,11 @@ def _draw_gain_tree(
     color: str,
     norm: mcolors.Normalize,
     cmap,
+    label_soma: bool = True,
 ) -> None:
     """Draw a compact three-path tree colored by log path gain."""
-    soma = (x0 + 0.38, 0.52)
-    branch_x = x0 + 0.18
+    soma = (x0 + 0.32, 0.52)
+    branch_x = x0 + 0.15
     leaf_x = x0 + 0.02
     ys = [0.78, 0.52, 0.26]
     for idx, y in enumerate(ys):
@@ -200,10 +201,13 @@ def _draw_gain_tree(
             zorder=5,
         )
     )
-    ax.text(soma[0], soma[1], r"$\delta_0$", ha="center", va="center",
-            fontsize=PT_LEGEND, zorder=6, bbox={"facecolor": "white", "edgecolor": "none", "pad": 0.5, "alpha": 0.85})
+    if label_soma:
+        ax.text(soma[0], soma[1], r"$\delta_0$", ha="center", va="center",
+                fontsize=PT_LEGEND, zorder=6,
+                bbox={"facecolor": "white", "edgecolor": "none",
+                      "pad": 0.5, "alpha": 0.85})
     ax.text(
-        x0 + 0.20,
+        x0 + 0.17,
         0.88,
         title,
         ha="center",
@@ -250,16 +254,17 @@ def _plot_path_gain_map(
     _draw_gain_tree(
         ax,
         x0=0.02,
-        title=f"Add.\nCV {add_cv:.2f}",
+        title=f"Add.\n{add_cv:.2f}",
         gains=add_gains,
         color=COLOR_ADDITIVE,
         norm=norm,
         cmap=cmap,
+        label_soma=False,
     )
     _draw_gain_tree(
         ax,
-        x0=0.56,
-        title=f"Shunt.\nCV {shunt_cv:.2f}",
+        x0=0.62,
+        title=f"Shunt.\n{shunt_cv:.2f}",
         gains=shunt_gains,
         color=COLOR_SHUNTING,
         norm=norm,
@@ -446,10 +451,10 @@ def _plot_compartment_error_fidelity(ax: plt.Axes, summary: pd.DataFrame) -> Non
     ax.set_xticks([0, 20, 40])
     ax.set_ylim(-0.35, 1.05)
     ax.set_xlim(-1.5, 52.5)
-    ax.text(42.0, 0.18, "MW", color=COLORS["ink"], fontsize=PT_ANNOT,
-            fontweight="bold", ha="left", va="center")
-    ax.text(42.0, 0.97, "oracle", color=COLORS["ink"], fontsize=PT_ANNOT,
-            fontweight="bold", ha="left", va="center")
+    ax.text(24.0, 0.34, "MW", color=COLORS["ink"], fontsize=PT_ANNOT,
+            fontweight="bold", ha="center", va="bottom", bbox={"facecolor": "white", "edgecolor": "none", "pad": 0.5, "alpha": 0.9})
+    ax.text(24.0, 0.84, "oracle", color=COLORS["ink"], fontsize=PT_ANNOT,
+            fontweight="bold", ha="center", va="top", bbox={"facecolor": "white", "edgecolor": "none", "pad": 0.5, "alpha": 0.9})
 
 
 def _plot_mechanism_summary(ax: plt.Axes, summary: pd.DataFrame) -> None:
@@ -672,10 +677,10 @@ def _plot_oracle_learning(
     ax.set_xticks([0, 20, 40])
     ax.set_ylim(20, 101)
     ax.set_xlim(-1.5, 52.5)
-    ax.text(42.0, 84.0, "MW", color=COLORS["ink"], fontsize=PT_ANNOT,
-            fontweight="bold", ha="left", va="center")
-    ax.text(42.0, 95.0, "oracle", color=COLORS["ink"], fontsize=PT_ANNOT,
-            fontweight="bold", ha="left", va="center")
+    ax.text(24.0, 77.0, "MW", color=COLORS["ink"], fontsize=PT_ANNOT,
+            fontweight="bold", ha="center", va="top", bbox={"facecolor": "white", "edgecolor": "none", "pad": 0.5, "alpha": 0.9})
+    ax.text(24.0, 96.5, "oracle", color=COLORS["ink"], fontsize=PT_ANNOT,
+            fontweight="bold", ha="center", va="bottom", bbox={"facecolor": "white", "edgecolor": "none", "pad": 0.5, "alpha": 0.9})
 
 
 def _plot_causal_inhibition(ax: plt.Axes, causal: pd.DataFrame) -> None:

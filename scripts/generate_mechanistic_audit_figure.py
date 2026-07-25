@@ -130,7 +130,7 @@ def _plot_fixed_state(ax: plt.Axes, frame: pd.DataFrame) -> None:
     ax.set_xlim(0.0, 1.05)
     ax.set_xticks([0.0, 0.5, 1.0])
     ax.set_xlabel("Cosine to exact gradient", fontsize=PT_LABEL)
-    ax.set_title("Fixed-state factor audit", fontsize=PT_TITLE)
+    ax.set_title("Fixed-state factors", fontsize=PT_TITLE, loc="left")
     style_axis(ax, grid="x")
     panel_label(ax, "A", dx=-26, dy=5)
 

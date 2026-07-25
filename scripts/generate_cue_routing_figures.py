@@ -244,7 +244,7 @@ def _plot_task_schematic(ax: plt.Axes) -> None:
     ax.text(
         0.04,
         0.06,
-        "Branch identity matters: scalar feedback collapses routed credit.",
+        "Scalar feedback loses\nbranch identity.",
         fontsize=PT_SMALL,
         ha="left",
         va="bottom",
@@ -382,11 +382,17 @@ def _plot_specialization_panel(ax: plt.Axes, df: pd.DataFrame) -> None:
         & (learned["variant"].isin(annotations))
     ]
     for _, row in targets.iterrows():
-        is_pathway = "pathway_vector" in str(row["variant"])
+        variant = str(row["variant"])
+        if "pathway_vector" in variant:
+            offset = (-18, 12)
+        elif variant == "baseline":
+            offset = (7, 10)
+        else:
+            offset = (8, -10)
         ax.annotate(
-            annotations[str(row["variant"])],
+            annotations[variant],
             xy=(float(row["router_mean_max_assignment"]), 100.0 * float(row["test_accuracy"])),
-            xytext=(-18 if is_pathway else 8, 12 if is_pathway else -16),
+            xytext=offset,
             textcoords="offset points",
             fontsize=PT_SMALL,
             color="#333333",
