@@ -11,8 +11,16 @@ from typing import Any
 import sys, os
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from neurips_style import (  # noqa: E402
+    # noqa: E402,
     COLORS as NEURIPS_COLORS,
     FIG_W,
+    LW_EDGE,
+    LW_ERR,
+    LW_HAIR,
+    PT_ANNOT,
+    PT_LABEL,
+    PT_LEGEND,
+    PT_SMALL,
     REF_LW,
     apply_neurips_style,
     clean_legend,
@@ -163,7 +171,7 @@ def _draw_box(
         w,
         h,
         boxstyle="round,pad=0.02,rounding_size=0.02",
-        linewidth=0.8,
+        linewidth=LW_EDGE,
         facecolor=facecolor,
         edgecolor=edgecolor,
     )
@@ -199,7 +207,7 @@ def _draw_arrow(
             text_xy[1],
             text,
             color=color,
-            fontsize=6.2,
+            fontsize=PT_SMALL,
             ha="center",
             va="center",
         )
@@ -219,30 +227,30 @@ def _plot_task_schematic(ax: plt.Axes) -> None:
     _draw_box(ax, (0.26, 0.27), (0.14, 0.12), "Path 2", "#EAF4EC", edgecolor=COLOR_SHUNTING)
     _draw_box(ax, (0.50, 0.41), (0.14, 0.12), "Soma /\ndecoder", COLOR_LIGHT)
 
-    _draw_arrow(ax, (0.20, 0.54), (0.26, 0.58), COLOR_ADDITIVE, linewidth=1.0)
-    _draw_arrow(ax, (0.20, 0.30), (0.26, 0.33), COLOR_ADDITIVE, linewidth=1.0)
-    _draw_arrow(ax, (0.40, 0.58), (0.50, 0.47), COLOR_SHUNTING, linewidth=1.0)
-    _draw_arrow(ax, (0.40, 0.33), (0.50, 0.47), COLOR_SHUNTING, linewidth=1.0)
-    _draw_arrow(ax, (0.22, 0.79), (0.33, 0.64), "#A07015", text="route", text_xy=(0.30, 0.72), linewidth=1.0)
-    _draw_arrow(ax, (0.22, 0.79), (0.33, 0.39), "#A07015", linewidth=1.0)
+    _draw_arrow(ax, (0.20, 0.54), (0.26, 0.58), COLOR_ADDITIVE, linewidth=LW_ERR)
+    _draw_arrow(ax, (0.20, 0.30), (0.26, 0.33), COLOR_ADDITIVE, linewidth=LW_ERR)
+    _draw_arrow(ax, (0.40, 0.58), (0.50, 0.47), COLOR_SHUNTING, linewidth=LW_ERR)
+    _draw_arrow(ax, (0.40, 0.33), (0.50, 0.47), COLOR_SHUNTING, linewidth=LW_ERR)
+    _draw_arrow(ax, (0.22, 0.79), (0.33, 0.64), "#A07015", text="route", text_xy=(0.30, 0.72), linewidth=LW_ERR)
+    _draw_arrow(ax, (0.22, 0.79), (0.33, 0.39), "#A07015", linewidth=LW_ERR)
 
     _draw_box(ax, (0.68, 0.66), (0.22, 0.085), "MW / scalar fallback", "#F4F4F4")
     _draw_box(ax, (0.68, 0.47), (0.22, 0.095), "Random low-rank\n$e_n = \\Gamma_K(\\delta_0)$", "#F8EBDD", edgecolor=COLOR_CONTROL)
     _draw_box(ax, (0.68, 0.25), (0.22, 0.115), "Structured pathways\n$e_n = \\sum_k q_{n,k} c_k$", "#EFE4F8", edgecolor=COLOR_PATHWAY)
-    _draw_arrow(ax, (0.64, 0.47), (0.68, 0.70), "#777777", linestyle="--", text="shared signal", text_xy=(0.80, 0.79), linewidth=1.0)
-    _draw_arrow(ax, (0.64, 0.47), (0.68, 0.515), COLOR_CONTROL, text="$K$ unstructured channels", text_xy=(0.81, 0.60), linewidth=1.0)
-    _draw_arrow(ax, (0.64, 0.47), (0.68, 0.305), COLOR_PATHWAY, text="pathway-aware channels", text_xy=(0.81, 0.18), linewidth=1.0)
+    _draw_arrow(ax, (0.64, 0.47), (0.68, 0.70), "#777777", linestyle="--", text="shared signal", text_xy=(0.80, 0.79), linewidth=LW_ERR)
+    _draw_arrow(ax, (0.64, 0.47), (0.68, 0.515), COLOR_CONTROL, text="$K$ unstructured channels", text_xy=(0.81, 0.60), linewidth=LW_ERR)
+    _draw_arrow(ax, (0.64, 0.47), (0.68, 0.305), COLOR_PATHWAY, text="pathway-aware channels", text_xy=(0.81, 0.18), linewidth=LW_ERR)
 
     ax.text(
         0.04,
         0.06,
         "Branch identity matters: scalar feedback collapses routed credit.",
-        fontsize=7.0,
+        fontsize=PT_SMALL,
         ha="left",
         va="bottom",
         color="#333333",
     )
-    ax.set_title("Cue-routing task", fontsize=9.2)
+    ax.set_title("Cue-routing task", fontsize=PT_LABEL)
 
 
 def _plot_accuracy_panel(ax: plt.Axes, records: list[dict[str, Any]]) -> None:
@@ -260,7 +268,7 @@ def _plot_accuracy_panel(ax: plt.Axes, records: list[dict[str, Any]]) -> None:
             value,
             color=color,
             edgecolor=edge,
-            linewidth=0.7,
+            linewidth=LW_HAIR,
             height=0.72,
             alpha=0.96,
             zorder=3,
@@ -283,22 +291,22 @@ def _plot_accuracy_panel(ax: plt.Axes, records: list[dict[str, Any]]) -> None:
             f"{value:.1f}",
             va="center",
             ha="left",
-            fontsize=7.5,
+            fontsize=PT_ANNOT,
         )
 
     ax.set_yticks(y)
-    ax.set_yticklabels(labels, fontsize=7.1, linespacing=0.92)
+    ax.set_yticklabels(labels, fontsize=PT_SMALL, linespacing=0.92)
     ax.invert_yaxis()
     ax.set_xlim(70, 100.2)
     ax.set_xlabel("Test accuracy (%)")
-    ax.set_title("Higher-rank feedback helps", fontsize=9.2, pad=7)
-    ax.axvline(95, color="#999999", linewidth=0.6, linestyle=":")
+    ax.set_title("Higher-rank feedback helps", fontsize=PT_LABEL, pad=7)
+    ax.axvline(95, color="#999999", linewidth=LW_HAIR, linestyle=":")
     ax.text(
         0.73,
         0.96,
         "high-accuracy regime",
         transform=ax.transAxes,
-        fontsize=6.4,
+        fontsize=PT_SMALL,
         color="#666666",
         ha="left",
         va="top",
@@ -378,7 +386,7 @@ def _plot_specialization_panel(ax: plt.Axes, df: pd.DataFrame) -> None:
             xy=(float(row["router_mean_max_assignment"]), 100.0 * float(row["test_accuracy"])),
             xytext=(-18 if is_pathway else 8, 12 if is_pathway else -16),
             textcoords="offset points",
-            fontsize=6.4,
+            fontsize=PT_SMALL,
             color="#333333",
         )
 
@@ -389,12 +397,12 @@ def _plot_specialization_panel(ax: plt.Axes, df: pd.DataFrame) -> None:
         transform=ax.transAxes,
         ha="left",
         va="bottom",
-        fontsize=5.9,
+        fontsize=PT_SMALL,
         bbox={"boxstyle": "round,pad=0.18", "facecolor": "white", "edgecolor": "#CCCCCC", "linewidth": 0.5},
     )
     ax.set_xlabel("Mean max router assignment")
     ax.set_ylabel("Test accuracy (%)")
-    ax.set_title("Specialization is not enough", fontsize=9.2)
+    ax.set_title("Specialization is not enough", fontsize=PT_LABEL)
     ax.set_xlim(0.955, 1.0015)
     ax.set_ylim(78, 100.5)
 
@@ -412,12 +420,12 @@ def _plot_assignment_panel(ax: plt.Axes, summary_row: dict[str, Any]) -> None:
     ax.set_yticklabels(row_labels)
     ax.set_xlabel("Latent pathway")
     ax.set_ylabel("Cue feature")
-    ax.set_title("Recovered pathway map", fontsize=9.2)
+    ax.set_title("Recovered pathway map", fontsize=PT_LABEL)
     if n_features % 2 == 0:
         midpoint = n_features // 2 - 0.5
-        ax.axhline(midpoint, color="white", linewidth=1.0, alpha=0.9)
-        ax.text(-0.95, midpoint / 2.0, "Cue A", fontsize=6.0, rotation=90, va="center")
-        ax.text(-0.95, midpoint + 1 + midpoint / 2.0, "Cue B", fontsize=6.0, rotation=90, va="center")
+        ax.axhline(midpoint, color="white", linewidth=LW_ERR, alpha=0.9)
+        ax.text(-0.95, midpoint / 2.0, "Cue A", fontsize=PT_SMALL, rotation=90, va="center")
+        ax.text(-0.95, midpoint + 1 + midpoint / 2.0, "Cue B", fontsize=PT_SMALL, rotation=90, va="center")
 
     ax.text(
         0.02,
@@ -427,13 +435,13 @@ def _plot_assignment_panel(ax: plt.Axes, summary_row: dict[str, Any]) -> None:
             f" | max assignment {float(summary_row['router_mean_max_assignment']):.3f}"
         ),
         transform=ax.transAxes,
-        fontsize=5.9,
+        fontsize=PT_SMALL,
         ha="left",
         va="bottom",
         bbox={"boxstyle": "round,pad=0.14", "facecolor": "white", "edgecolor": "none", "alpha": 0.82},
     )
     cbar = plt.colorbar(image, ax=ax, fraction=0.09, pad=0.05)
-    cbar.set_label("Assignment prob.", fontsize=8)
+    cbar.set_label("Assignment prob.", fontsize=PT_LEGEND)
     cbar.ax.tick_params(labelsize=7.5)
 
 

@@ -51,8 +51,13 @@ FIGURES_DIR = os.path.join(DRAFT_DIR, "figures")
 import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from neurips_style import (  # noqa: E402
+    # noqa: E402,
     COLORS,
     FIG_W,
+    LW_ERR,
+    LW_HAIR,
+    PT_LABEL,
+    PT_SMALL,
     REF_LW,
     apply_neurips_style,
     clean_legend,
@@ -176,16 +181,16 @@ def figure_s5():
         for i in range(len(models)):
             if valid[i]:
                 ax.bar(x[i] + (j - 1) * bw, means[i], bw * 0.88,
-                       yerr=errs[i], color=scolor, edgecolor="white", lw=0.3,
+                       yerr=errs[i], color=scolor, edgecolor="white", lw=LW_HAIR,
                        capsize=1.5, error_kw={"lw": 0.5})
             else:
                 ax.bar(
                     x[i] + (j - 1) * bw, 7.5, bw * 0.88,
-                    color="#F0F0F0", edgecolor="#999999", lw=0.5, hatch="///"
+                    color="#F0F0F0", edgecolor="#999999", lw=LW_HAIR, hatch="///"
                 )
                 ax.text(
                     x[i] + (j - 1) * bw, 3.6, "N/A", ha="center", va="center",
-                    fontsize=6.3, color="#666666", fontweight="bold"
+                    fontsize=PT_SMALL, color="#666666", fontweight="bold"
                 )
 
     ax.set_xticks(x)
@@ -200,7 +205,7 @@ def figure_s5():
     handles.append(
         mpatches.Patch(facecolor="#F0F0F0", edgecolor="#999999", hatch="///", label="FA unsupported")
     )
-    ax.legend(handles=handles, fontsize=5.5, loc="upper left",
+    ax.legend(handles=handles, fontsize=PT_SMALL, loc="upper left",
               handlelength=1.0, handletextpad=0.3)
 
     # ---- Panel B: DFA advantage for shunting vs additive ----
@@ -218,12 +223,12 @@ def figure_s5():
             std_mean = std["test_accuracy"].mean() * 100
             dfa_mean = dfa["test_accuracy"].mean() * 100
             gap = std_mean - dfa_mean
-            ax.barh(label, gap, color=color, edgecolor="white", lw=0.3, height=0.5)
-            ax.text(gap + 0.5, label, f"{gap:.1f}pp", va="center", fontsize=5.5)
+            ax.barh(label, gap, color=color, edgecolor="white", lw=LW_HAIR, height=0.5)
+            ax.text(gap + 0.5, label, f"{gap:.1f}pp", va="center", fontsize=PT_SMALL)
 
     ax.set_xlabel("Backprop - DFA gap (pp)")
     ax.set_title("DFA performance gap")
-    ax.axvline(0, color="black", lw=0.4)
+    ax.axvline(0, color="black", lw=LW_HAIR)
     _save(fig, "fig_s5_fa_dfa")
     plt.close(fig)
 
@@ -291,7 +296,7 @@ def figure_s6():
         width=bw,
         color=COLOR_ADDITIVE,
         edgecolor="white",
-        lw=0.4,
+        lw=LW_HAIR,
         capsize=2,
         error_kw={"lw": 0.6},
         label="Additive",
@@ -303,19 +308,19 @@ def figure_s6():
         width=bw,
         color=COLOR_SHUNTING,
         edgecolor="white",
-        lw=0.4,
+        lw=LW_HAIR,
         capsize=2,
         error_kw={"lw": 0.6},
         label="Shunting",
     )
     for xi, (m, s) in zip(x - bw / 2, additive_vals):
-        ax.text(xi, m + s + 0.9, f"{m:.1f}", ha="center", va="bottom", fontsize=5.6)
+        ax.text(xi, m + s + 0.9, f"{m:.1f}", ha="center", va="bottom", fontsize=PT_SMALL)
     for xi, (m, s) in zip(x + bw / 2, shunting_vals):
-        ax.text(xi, m + s + 0.9, f"{m:.1f}", ha="center", va="bottom", fontsize=5.6)
+        ax.text(xi, m + s + 0.9, f"{m:.1f}", ha="center", va="bottom", fontsize=PT_SMALL)
     ax.set_xticks(x)
     ax.set_xticklabels(categories)
     ax.set_ylabel("Test accuracy (%)")
-    ax.set_title("CIFAR-10 mechanism ladder", fontsize=9.8)
+    ax.set_title("CIFAR-10 mechanism ladder", fontsize=PT_LABEL)
     ax.set_ylim(0, 58)
     ax.legend(
         loc="upper left",
@@ -326,7 +331,7 @@ def figure_s6():
         columnspacing=0.8,
         handletextpad=0.4,
         borderaxespad=0.0,
-        fontsize=7.2,
+        fontsize=PT_SMALL,
     )
 
     # Panel B: shunting rank bridge in the strong family
@@ -347,20 +352,20 @@ def figure_s6():
         yerr=[s for _, _, s, _ in ladder],
         color=[c for _, _, _, c in ladder],
         edgecolor="white",
-        lw=0.4,
+        lw=LW_HAIR,
         width=0.62,
         capsize=2,
         error_kw={"lw": 0.6},
     )
     for rect, (_, m, s, _) in zip(bars, ladder):
         ax.text(rect.get_x() + rect.get_width()/2, m + s + 0.9, f"{m:.1f}",
-                ha="center", va="bottom", fontsize=5.8)
-    ax.axhline(shunt_standard_mean, color=COLOR_BACKPROP, lw=1.0, ls=(0, (4, 2)))
+                ha="center", va="bottom", fontsize=PT_SMALL)
+    ax.axhline(shunt_standard_mean, color=COLOR_BACKPROP, lw=LW_ERR, ls=(0, (4, 2)))
     ax.text(2.38, shunt_standard_mean + 0.8, f"Shunt. BP {shunt_standard_mean:.1f}",
-            color=COLOR_BACKPROP, fontsize=5.8, ha="right", va="bottom")
+            color=COLOR_BACKPROP, fontsize=PT_SMALL, ha="right", va="bottom")
     ax.set_xticks(x2)
     ax.set_xticklabels([label for label, *_ in ladder])
-    ax.set_title("Shunting rank bridge", fontsize=9.8)
+    ax.set_title("Shunting rank bridge", fontsize=PT_LABEL)
     ax.set_ylim(0, 55)
     _save(fig, "fig_cifar10_mechanism_extension")
     plt.close(fig)
@@ -397,10 +402,10 @@ def figure_s7():
 
     x_pos = np.arange(len(conditions))
     for i, (label, m, s, color) in enumerate(conditions):
-        ax.bar(i, m, yerr=s, color=color, edgecolor="white", lw=0.3,
+        ax.bar(i, m, yerr=s, color=color, edgecolor="white", lw=LW_HAIR,
                width=0.55, capsize=2, error_kw={"lw": 0.5})
         ax.text(i, m + s + 0.3, f"{m:.1f}%", ha="center", va="bottom",
-                fontsize=5.5)
+                fontsize=PT_SMALL)
 
     ax.set_xticks(x_pos)
     ax.set_xticklabels([c[0] for c in conditions])
@@ -425,19 +430,19 @@ def figure_s7():
 
     x_pos = np.arange(len(conditions))
     for i, (label, m, s, color) in enumerate(conditions):
-        ax.bar(i, m, yerr=s, color=color, edgecolor="white", lw=0.3,
+        ax.bar(i, m, yerr=s, color=color, edgecolor="white", lw=LW_HAIR,
                width=0.55, capsize=2, error_kw={"lw": 0.5})
         ax.text(i, m + s + 1.5, f"{m:.1f}%", ha="center", va="bottom",
-                fontsize=5.5)
+                fontsize=PT_SMALL)
 
     # Shunting reference
     if lbw is not None:
         full = lbw[lbw["broadcast_bandwidth"] == "full"]
         if len(full):
             ref = full["test_accuracy"].mean() * 100
-            ax.axhline(ref, color=COLOR_SHUNTING, lw=1.0, ls="--", alpha=0.7)
+            ax.axhline(ref, color=COLOR_SHUNTING, lw=LW_ERR, ls="--", alpha=0.7)
             ax.text(1.4, ref + 0.8, f"Shunting\n{ref:.1f}%",
-                    fontsize=5, color=COLOR_SHUNTING, ha="center")
+                    fontsize=PT_SMALL, color=COLOR_SHUNTING, ha="center")
 
     ax.set_xticks(x_pos)
     ax.set_xticklabels([c[0] for c in conditions])

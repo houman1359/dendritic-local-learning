@@ -17,9 +17,14 @@ import pandas as pd
 import sys
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from neurips_style import (  # noqa: E402
-    apply_neurips_style,
+    # noqa: E402,
     COLORS,
     FIG_W,
+    LW_HAIR,
+    LW_REF,
+    PT_SMALL,
+    PT_TITLE,
+    apply_neurips_style,
     grid_figure,
     panel_title,
 )
@@ -55,7 +60,7 @@ def _panel(ax: plt.Axes, label: str, x: float = -0.18, y: float = 1.10) -> None:
         y,
         label,
         transform=ax.transAxes,
-        fontsize=11,
+        fontsize=PT_TITLE,
         fontweight="bold",
         va="top",
         ha="left",
@@ -93,37 +98,37 @@ def build_figure(summary_csv: Path = SUMMARY_CSV) -> plt.Figure:
     vals = 100.0 * clamp["test_accuracy_mean"].to_numpy()
     errs = 100.0 * clamp["test_accuracy_std"].fillna(0.0).to_numpy()
     colors = [COLOR_BASE if g == "baseline" else COLOR_ALT for g in clamp["group"]]
-    ax.bar(x, vals, color=colors, edgecolor="white", linewidth=0.4, width=0.62, zorder=3)
+    ax.bar(x, vals, color=colors, edgecolor="white", linewidth=LW_HAIR, width=0.62, zorder=3)
     ax.errorbar(x, vals, yerr=errs, fmt="none", ecolor="#333333", elinewidth=0.6, capsize=2, zorder=5)
     for xpos, val in zip(x, vals):
-        ax.text(xpos, val + 0.35, f"{val:.1f}", ha="center", va="bottom", fontsize=5.7)
+        ax.text(xpos, val + 0.35, f"{val:.1f}", ha="center", va="bottom", fontsize=PT_SMALL)
     ax.set_xticks(x)
     ax.set_xticklabels(clamp["display_label"])
     ax.set_ylabel("Test accuracy (%)")
     ax.set_title("Clamp-bound sensitivity")
     ax.set_ylim(max(85, vals.min() - 2.5), min(94, vals.max() + 1.8))
-    ax.grid(axis="y", alpha=0.22, linewidth=0.4, zorder=0)
+    ax.grid(axis="y", alpha=0.22, linewidth=LW_HAIR, zorder=0)
 
     ax = axes[1]
     _panel(ax, "B")
     x = ema["ema_alpha"].to_numpy(dtype=float)
     vals = 100.0 * ema["test_accuracy_mean"].to_numpy()
     errs = 100.0 * ema["test_accuracy_std"].fillna(0.0).to_numpy()
-    ax.plot(x, vals, color=COLOR_ACCENT, marker="o", markersize=4.5, linewidth=1.4, zorder=3)
+    ax.plot(x, vals, color=COLOR_ACCENT, marker="o", markersize=4.5, linewidth=LW_REF, zorder=3)
     ax.fill_between(x, vals - errs, vals + errs, color=COLOR_ACCENT, alpha=0.16, zorder=2)
     baseline = ema[ema["group"] == "baseline"]
     if not baseline.empty:
         base_x = float(baseline["ema_alpha"].iloc[0])
         base_y = 100.0 * float(baseline["test_accuracy_mean"].iloc[0])
-        ax.scatter([base_x], [base_y], s=34, color=COLOR_BASE, edgecolor="white", linewidth=0.5, zorder=4)
-        ax.annotate("default", xy=(base_x, base_y), xytext=(6, 8), textcoords="offset points", fontsize=5.8)
+        ax.scatter([base_x], [base_y], s=34, color=COLOR_BASE, edgecolor="white", linewidth=LW_HAIR, zorder=4)
+        ax.annotate("default", xy=(base_x, base_y), xytext=(6, 8), textcoords="offset points", fontsize=PT_SMALL)
     ax.set_xticks(x)
     ax.set_xticklabels([f"{v:.2f}" for v in x])
     ax.set_xlabel(r"4F/5F EMA smoothing $\alpha$")
     ax.set_ylabel("Test accuracy (%)")
     ax.set_title("EMA-rate sensitivity")
     ax.set_ylim(max(85, vals.min() - 2.5), min(94, vals.max() + 1.8))
-    ax.grid(alpha=0.22, linewidth=0.4)
+    ax.grid(alpha=0.22, linewidth=LW_HAIR)
 
     fig.subplots_adjust(left=0.11, right=0.98, bottom=0.22, top=0.88, wspace=0.45)
     return fig

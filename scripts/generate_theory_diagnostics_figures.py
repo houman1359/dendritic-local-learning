@@ -16,16 +16,28 @@ import numpy as np
 import pandas as pd
 
 from neurips_style import (  # noqa: E402
+    # noqa: E402,
     COLORS,
     FIG_W,
+    LW_DATA,
+    LW_EDGE,
+    LW_ERR,
+    LW_HAIR,
+    LW_REF,
     MAIN_W,
+    PT_ANNOT,
+    PT_LEGEND,
+    PT_SMALL,
+    PT_TICK,
     REF_LW,
+    add_headroom,
     apply_neurips_style,
     clean_legend,
     grid_figure,
     panel_label,
     panel_title,
     style_axis,
+    tidy_ticks,
 )
 
 
@@ -152,7 +164,7 @@ def _draw_gain_tree(
             [leaf[0], branch[0], soma[0]],
             [leaf[1], branch[1], soma[1]],
             color=line_color,
-            linewidth=3.0,
+            linewidth=LW_DATA,
             solid_capstyle="round",
             zorder=2,
         )
@@ -162,7 +174,7 @@ def _draw_gain_tree(
                 0.018,
                 facecolor=line_color,
                 edgecolor="white",
-                linewidth=0.7,
+                linewidth=LW_HAIR,
                 zorder=4,
             )
         )
@@ -172,7 +184,7 @@ def _draw_gain_tree(
             rf"$\alpha_{idx + 1}$",
             ha="right",
             va="center",
-            fontsize=8.6,
+            fontsize=PT_TICK,
             color=COLORS["ink"],
         )
     ax.add_patch(
@@ -181,18 +193,18 @@ def _draw_gain_tree(
             0.035,
             facecolor=COLORS["soma"],
             edgecolor=COLORS["edge"],
-                linewidth=0.8,
+                linewidth=LW_EDGE,
             zorder=5,
         )
     )
-    ax.text(soma[0], soma[1], r"$\delta_0$", ha="center", va="center", fontsize=8.2)
+    ax.text(soma[0], soma[1], r"$\delta_0$", ha="center", va="center", fontsize=PT_LEGEND)
     ax.text(
         x0 + 0.20,
         0.88,
         title,
         ha="center",
         va="center",
-        fontsize=7.2,
+        fontsize=PT_SMALL,
         color=color,
         fontweight="bold",
         linespacing=0.86,
@@ -270,7 +282,7 @@ def _plot_path_gain_map(
             float(row["dendritic_shunting"]),
         ]
         x_values = [0 + x_offset, 1 + x_offset]
-        inset.plot(x_values, values, color=COLORS["mute"], alpha=0.60, lw=0.65, zorder=1)
+        inset.plot(x_values, values, color=COLORS["mute"], alpha=0.60, lw=LW_HAIR, zorder=1)
         inset.scatter(
             x_values,
             values,
@@ -283,13 +295,13 @@ def _plot_path_gain_map(
     inset.set_xlim(-0.22, 1.22)
     inset.set_ylim(0.0, 1.36)
     inset.set_xticks([0, 1])
-    inset.set_xticklabels(["Add.", "Shunt."], fontsize=4.8)
+    inset.set_xticklabels(["Add.", "Shunt."], fontsize=PT_SMALL)
     inset.set_yticks([0, 1])
-    inset.set_yticklabels(["0", "1"], fontsize=4.6)
+    inset.set_yticklabels(["0", "1"], fontsize=PT_SMALL)
     inset.tick_params(length=1.8, width=0.55, pad=0.6)
     inset.spines["left"].set_linewidth(0.55)
     inset.spines["bottom"].set_linewidth(0.55)
-    inset.set_title("paired CV: 5/5", fontsize=5.0, pad=0.8, fontweight="normal")
+    inset.set_title("paired CV: 5/5", fontsize=PT_SMALL, pad=0.8, fontweight="normal")
     panel_title(ax, "A", "Path gains")
 
 
@@ -357,7 +369,7 @@ def _plot_dendritic_feedback_fidelity(
             yerr=stds,
             color=color,
             edgecolor="white",
-            linewidth=0.75,
+            linewidth=LW_EDGE,
             width=width,
             capsize=2.4,
             error_kw={"lw": 1.1},
@@ -367,6 +379,7 @@ def _plot_dendritic_feedback_fidelity(
     ax.set_xticklabels(stage_labels, rotation=18, ha="right")
     ax.set_ylabel("MW-field cosine")
     ax.set_ylim(0, 0.30)
+    tidy_ticks(ax, ny=4)
     panel_title(ax, "B", "Field cosine")
     ax.legend(
         loc="upper center",
@@ -412,7 +425,7 @@ def _plot_compartment_error_fidelity(ax: plt.Axes, summary: pd.DataFrame) -> Non
             y,
             marker="o" if linestyle == "-" else "s",
             markersize=5.0,
-            lw=2.1,
+            lw=LW_DATA,
             linestyle=linestyle,
             color=color,
             label=label,
@@ -421,6 +434,7 @@ def _plot_compartment_error_fidelity(ax: plt.Axes, summary: pd.DataFrame) -> Non
 
     ax.set_xlabel(r"$N_I$ per branch")
     ax.set_ylabel("Cosine")
+    tidy_ticks(ax, ny=4)
     panel_title(ax, "D", "Fidelity")
     # Label 0/10/20/40 only: the axis is linear in N_I, so 0-5-10 fall within
     # the first ~18% of the span and their labels collided. The N_I=5 point is
@@ -429,9 +443,9 @@ def _plot_compartment_error_fidelity(ax: plt.Axes, summary: pd.DataFrame) -> Non
     ax.set_xticks([0, 20, 40])
     ax.set_ylim(-0.35, 1.05)
     ax.set_xlim(-1.5, 52.5)
-    ax.text(42.0, 0.18, "MW", color=COLORS["ink"], fontsize=7.8,
+    ax.text(42.0, 0.18, "MW", color=COLORS["ink"], fontsize=PT_ANNOT,
             fontweight="bold", ha="left", va="center")
-    ax.text(42.0, 0.97, "oracle", color=COLORS["ink"], fontsize=7.8,
+    ax.text(42.0, 0.97, "oracle", color=COLORS["ink"], fontsize=PT_ANNOT,
             fontweight="bold", ha="left", va="center")
 
 
@@ -472,7 +486,7 @@ def _plot_mechanism_summary(ax: plt.Axes, summary: pd.DataFrame) -> None:
                 markersize=6.2,
                 alpha=0.85,
                 capsize=2,
-                lw=1.0,
+                lw=LW_ERR,
                 elinewidth=1.0,
                 markeredgecolor="white",
                 markeredgewidth=0.5,
@@ -483,7 +497,7 @@ def _plot_mechanism_summary(ax: plt.Axes, summary: pd.DataFrame) -> None:
     ax.set_ylabel("Test (%)")
     ax.set_title("Alignment predicts accuracy")
     ax.legend(
-        fontsize=7.8,
+        fontsize=PT_ANNOT,
         handlelength=1.0,
         handletextpad=0.3,
         loc="lower right",
@@ -545,7 +559,7 @@ def _plot_low_bandwidth(ax: plt.Axes, low_bw: pd.DataFrame, panel_letter: str | 
         yerr=err,
         marker="o",
         markersize=4,
-        lw=1.4,
+        lw=LW_REF,
         capsize=2,
         color=COLOR_LOW_BW,
         capthick=0.5,
@@ -560,7 +574,7 @@ def _plot_low_bandwidth(ax: plt.Axes, low_bw: pd.DataFrame, panel_letter: str | 
             xy=(row["bw_bits"], y_pt),
             xytext=(0, offset),
             textcoords="offset points",
-            fontsize=7,
+            fontsize=PT_SMALL,
             ha="center",
             va=va,
             color=COLOR_LOW_BW,
@@ -586,7 +600,7 @@ def _plot_low_bandwidth(ax: plt.Axes, low_bw: pd.DataFrame, panel_letter: str | 
             xy=(0.5, sp_mean),
             xytext=(12, -6),
             textcoords="offset points",
-            fontsize=7,
+            fontsize=PT_SMALL,
             color=COLOR_TRANSPORT,
         )
 
@@ -620,7 +634,7 @@ def _plot_oracle_learning(
             y,
             marker="o",
         markersize=4.9,
-        lw=2.1,
+        lw=LW_DATA,
             color=color,
             linestyle="-",
             label=f"{label} MW",
@@ -636,7 +650,7 @@ def _plot_oracle_learning(
             y2,
             marker="s",
             markersize=4.5,
-            lw=2.1,
+            lw=LW_DATA,
             color=color,
             linestyle="--",
             label=f"{label} oracle",
@@ -645,6 +659,7 @@ def _plot_oracle_learning(
 
     ax.set_xlabel(r"$N_I$ per branch")
     ax.set_ylabel("Test accuracy (%)")
+    tidy_ticks(ax, ny=4)
     panel_title(ax, "E", "Learning")
     # Label 0/10/20/40 only: the axis is linear in N_I, so 0-5-10 fall within
     # the first ~18% of the span and their labels collided. The N_I=5 point is
@@ -653,9 +668,9 @@ def _plot_oracle_learning(
     ax.set_xticks([0, 20, 40])
     ax.set_ylim(20, 101)
     ax.set_xlim(-1.5, 52.5)
-    ax.text(42.0, 84.0, "MW", color=COLORS["ink"], fontsize=7.8,
+    ax.text(42.0, 84.0, "MW", color=COLORS["ink"], fontsize=PT_ANNOT,
             fontweight="bold", ha="left", va="center")
-    ax.text(42.0, 95.0, "oracle", color=COLORS["ink"], fontsize=7.8,
+    ax.text(42.0, 95.0, "oracle", color=COLORS["ink"], fontsize=PT_ANNOT,
             fontweight="bold", ha="left", va="center")
 
 
@@ -705,7 +720,7 @@ def _plot_causal_inhibition(ax: plt.Axes, causal: pd.DataFrame) -> None:
                     s=4.5,
                     color="white",
                     edgecolor=COLORS["ink"],
-                    linewidth=0.3,
+                    linewidth=LW_HAIR,
                     zorder=5,
                 )
 
@@ -716,23 +731,25 @@ def _plot_causal_inhibition(ax: plt.Axes, causal: pd.DataFrame) -> None:
         yerr=stds_all,
         color=colors_all,
         edgecolor="white",
-        linewidth=0.65,
+        linewidth=LW_HAIR,
         capsize=1.8,
         error_kw={"lw": 0.85},
         zorder=3,
     )
     centers = [gi * (len(order) * width + group_gap) for gi, _ in enumerate(dataset_order)]
     ax.set_xticks(centers)
-    ax.set_xticklabels([label for _dataset, label in dataset_order], fontsize=8.2)
+    ax.set_xticklabels([label for _dataset, label in dataset_order], fontsize=PT_LEGEND)
     if len(centers) == 2:
-        ax.axvline((centers[0] + centers[1]) / 2, color=COLORS["edge"], lw=0.7, alpha=0.85)
+        ax.axvline((centers[0] + centers[1]) / 2, color=COLORS["edge"], lw=LW_HAIR, alpha=0.85)
     ax.set_ylim(0, 118)
     ax.set_ylabel("Accuracy (%)")
+    add_headroom(ax, 0.34)
+    tidy_ticks(ax, ny=4)
     panel_title(ax, "C", "Inhibition")
     legend_handles = [mpatches.Patch(color=colors[k], label=labels[k]) for k in order]
     ax.legend(
         handles=legend_handles,
-        fontsize=5.7,
+        fontsize=PT_SMALL,
         loc="upper center",
         ncol=3,
         handlelength=0.85,
@@ -778,7 +795,7 @@ def _plot_inhibitory_path_probe(ax: plt.Axes, input_mode: pd.DataFrame) -> None:
             height=0.48,
             color=color,
             edgecolor="white",
-            linewidth=0.85,
+            linewidth=LW_EDGE,
             hatch=hatch,
             alpha=0.92,
             zorder=2,
@@ -802,23 +819,23 @@ def _plot_inhibitory_path_probe(ax: plt.Axes, input_mode: pd.DataFrame) -> None:
             f"{mean:.1f}",
             ha="left",
             va="center",
-            fontsize=8.4,
+            fontsize=PT_TICK,
             color=COLORS["ink"],
         )
 
-    ax.axvline(bp, color=COLORS["bp"], linestyle="--", linewidth=1.4, alpha=0.90, zorder=3)
+    ax.axvline(bp, color=COLORS["bp"], linestyle="--", linewidth=LW_REF, alpha=0.90, zorder=3)
     ax.text(
         bp - 0.15,
         2.64,
         "BP",
         ha="right",
         va="bottom",
-        fontsize=8.4,
+        fontsize=PT_TICK,
         color=COLORS["bp"],
         fontweight="bold",
     )
     ax.set_yticks(y)
-    ax.set_yticklabels([label for label, _, _, _ in rows], fontsize=8.8)
+    ax.set_yticklabels([label for label, _, _, _ in rows], fontsize=PT_TICK)
     ax.set_xlim(80.0, 98.0)
     ax.set_xticks([80, 85, 90, 95])
     ax.set_xlabel("Probe accuracy (%)")

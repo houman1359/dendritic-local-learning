@@ -17,8 +17,16 @@ import seaborn as sns
 import yaml
 
 from neurips_style import (  # noqa: E402
+    # noqa: E402,
     COLORS,
     FIG_W,
+    LW_DATA,
+    LW_ERR,
+    LW_HAIR,
+    PT_LABEL,
+    PT_LEGEND,
+    PT_TICK,
+    PT_TITLE,
     REF_LW,
     apply_neurips_style,
     clean_legend,
@@ -110,8 +118,8 @@ def _heatmap(ax, frame: pd.DataFrame, title: str, cmap: str, center: float | Non
     )
     ax.collections[0].colorbar.outline.set_linewidth(0.65)
     ax.collections[0].colorbar.ax.tick_params(labelsize=8.3, width=0.4, length=2)
-    ax.set_xlabel(r"$N_I$ per branch", fontsize=10.5)
-    ax.set_ylabel("Tree", fontsize=10.5, labelpad=12)
+    ax.set_xlabel(r"$N_I$ per branch", fontsize=PT_TITLE)
+    ax.set_ylabel("Tree", fontsize=PT_TITLE, labelpad=12)
     ax.tick_params(labelsize=8.6)
     ax.set_xticklabels(ax.get_xticklabels(), rotation=0)
     ax.set_yticklabels(ax.get_yticklabels(), rotation=0)
@@ -212,9 +220,9 @@ def build_figure(sweep_dir: Path = DEFAULT_SWEEP_DIR) -> tuple[plt.Figure, pd.Da
     y = np.arange(len(best_ie))
     colors = [COLORS["shunting"] if v > 0 else COLORS["additive"] for v in best_ie["gap"]]
     ax.barh(y, 100 * best_ie["gap"], color=colors, edgecolor="white",
-            linewidth=0.65, height=0.56)
+            linewidth=LW_HAIR, height=0.56)
     ax.set_yticks(y)
-    ax.set_yticklabels(best_ie["branch_factors"], fontsize=9.5)
+    ax.set_yticklabels(best_ie["branch_factors"], fontsize=PT_LABEL)
     ax.invert_yaxis()
     ax.set_xlabel("Peak gap (pp)")
     panel_title(ax, "B", "Peak gap")
@@ -225,7 +233,7 @@ def build_figure(sweep_dir: Path = DEFAULT_SWEEP_DIR) -> tuple[plt.Figure, pd.Da
             f"$N_I$={int(row['ie'])}",
             va="center",
             ha="left",
-            fontsize=8.6,
+            fontsize=PT_TICK,
             color=COLORS["ink"],
         )
     ax.set_xlim(0, 100 * best_ie["gap"].max() + 9)
@@ -283,7 +291,7 @@ def build_figure(sweep_dir: Path = DEFAULT_SWEEP_DIR) -> tuple[plt.Figure, pd.Da
             width,
             color=COLOR_ADDITIVE,
             edgecolor="white",
-            linewidth=0.65,
+            linewidth=LW_HAIR,
             label="Additive",
         )
         ax.bar(
@@ -292,15 +300,15 @@ def build_figure(sweep_dir: Path = DEFAULT_SWEEP_DIR) -> tuple[plt.Figure, pd.Da
             width,
             color=COLOR_SHUNTING,
             edgecolor="white",
-            linewidth=0.65,
+            linewidth=LW_HAIR,
             label="Shunting",
         )
         ax.set_xticks(x)
-        ax.set_xticklabels(group_labels, fontsize=8.2)
+        ax.set_xticklabels(group_labels, fontsize=PT_LEGEND)
         ax.set_xlabel(r"Tree / $N_I$")
         ax.set_ylabel("Path-gain CV")
         panel_title(ax, "C", "Credit geometry")
-        ax.legend(loc="upper right", fontsize=8.4, frameon=False)
+        ax.legend(loc="upper right", fontsize=PT_TICK, frameon=False)
         ax.margins(x=0.08)
     else:
         architecture_summary = (
@@ -321,7 +329,7 @@ def build_figure(sweep_dir: Path = DEFAULT_SWEEP_DIR) -> tuple[plt.Figure, pd.Da
                 yerr=subset["std"],
                 color=color,
                 marker=marker,
-                linewidth=2.2,
+                linewidth=LW_DATA,
                 markersize=5.5,
                 capsize=2.2,
                 label=label,
@@ -329,7 +337,7 @@ def build_figure(sweep_dir: Path = DEFAULT_SWEEP_DIR) -> tuple[plt.Figure, pd.Da
         ax.set_xlabel(r"$N_I$ per branch")
         ax.set_ylabel("Test accuracy")
         panel_title(ax, "C", "Mean perf.")
-        ax.legend(fontsize=8.4, frameon=False, loc="best")
+        ax.legend(fontsize=PT_TICK, frameon=False, loc="best")
 
     ax = axes[3]
     style_axis(ax, grid="y")
@@ -340,20 +348,20 @@ def build_figure(sweep_dir: Path = DEFAULT_SWEEP_DIR) -> tuple[plt.Figure, pd.Da
             sub["gap"],
             yerr=sub["gap_std"].fillna(0),
             marker="o",
-            linewidth=2.4,
+            linewidth=LW_DATA,
             markersize=6.5,
             color=depth_palette.get(depth, "#444444"),
             label=f"depth {depth}",
             capsize=2.4,
             capthick=0.8,
         )
-    ax.axhline(0.0, color="black", linewidth=1.1, linestyle="--", alpha=0.6)
+    ax.axhline(0.0, color="black", linewidth=LW_ERR, linestyle="--", alpha=0.6)
     panel_title(ax, "D", "Depth summary")
-    ax.set_xlabel(r"$N_I$ per branch", fontsize=10.5)
-    ax.set_ylabel("Accuracy gap", fontsize=10.5)
+    ax.set_xlabel(r"$N_I$ per branch", fontsize=PT_TITLE)
+    ax.set_ylabel("Accuracy gap", fontsize=PT_TITLE)
     ax.set_xticks(ie_order)
     ax.tick_params(labelsize=9.4)
-    ax.legend(fontsize=9.2, loc="best")
+    ax.legend(fontsize=PT_LABEL, loc="best")
     for _, row in depth_peak.iterrows():
         ax.scatter(
             [row["ie"]],
@@ -361,7 +369,7 @@ def build_figure(sweep_dir: Path = DEFAULT_SWEEP_DIR) -> tuple[plt.Figure, pd.Da
             s=52,
             facecolor="white",
             edgecolor=depth_palette.get(int(row["depth"]), "#444444"),
-            linewidth=1.7,
+            linewidth=LW_DATA,
             zorder=6,
         )
 

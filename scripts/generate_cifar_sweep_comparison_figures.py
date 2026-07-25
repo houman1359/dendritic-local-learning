@@ -19,8 +19,12 @@ import numpy as np
 import pandas as pd
 
 from neurips_style import (  # noqa: E402
+    # noqa: E402,
     COLORS,
     FIG_W,
+    LW_HAIR,
+    PT_SMALL,
+    PT_TITLE,
     REF_LW,
     apply_neurips_style,
     clean_legend,
@@ -134,7 +138,7 @@ def _dot_interval_panel(
             s=14,
             color=color,
             edgecolor="white",
-            linewidth=0.4,
+            linewidth=LW_HAIR,
             alpha=0.8,
             zorder=3,
         )
@@ -155,7 +159,7 @@ def _dot_interval_panel(
     ax.set_xticks(xs)
     ax.set_xticklabels(
         [labels.get(c, c.replace("_", "\n")) for c in conditions],
-        fontsize=7.2,
+        fontsize=PT_SMALL,
         rotation=28,
         ha="right",
         rotation_mode="anchor",
@@ -176,7 +180,7 @@ def _dot_interval_panel(
                 ha="center",
                 va="center",
                 rotation=90,
-                fontsize=6,
+                fontsize=PT_SMALL,
                 color=COLORS["mute"],
             )
 
@@ -282,7 +286,7 @@ def generate_double_cifar_figure(summary_dir: Path) -> bool:
     )
 
     for label, ax in zip("ABC", axes):
-        panel_label(ax, label, x=-0.14, y=1.08, fontsize=13)
+        panel_label(ax, label, x=-0.14, y=1.08, fontsize=PT_TITLE)
 
     fig.subplots_adjust(left=0.07, right=0.995, top=0.80, bottom=0.33, wspace=0.36)
     _save(fig, "fig_s_double_cifar_routed_screen_20260427")

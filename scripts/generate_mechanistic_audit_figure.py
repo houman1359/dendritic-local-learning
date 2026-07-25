@@ -13,9 +13,17 @@ import numpy as np
 import pandas as pd
 
 from neurips_style import (  # noqa: E402
+    # noqa: E402,
     COLORS,
     FIG_W,
+    LW_EDGE,
+    LW_HAIR,
     MAIN_W,
+    PT_ANNOT,
+    PT_LABEL,
+    PT_LEGEND,
+    PT_TICK,
+    PT_TITLE,
     REF_LW,
     apply_neurips_style,
     clean_legend,
@@ -100,7 +108,7 @@ def _plot_fixed_state(ax: plt.Axes, frame: pd.DataFrame) -> None:
             s=11,
             facecolor="white",
             edgecolor=color,
-            linewidth=0.65,
+            linewidth=LW_HAIR,
             zorder=4,
         )
     ax.barh(
@@ -110,19 +118,19 @@ def _plot_fixed_state(ax: plt.Axes, frame: pd.DataFrame) -> None:
         height=0.57,
         color=colors,
         edgecolor="white",
-        linewidth=0.7,
+        linewidth=LW_HAIR,
         capsize=2.0,
         error_kw={"lw": 0.85},
         zorder=2,
     )
-    ax.axvline(1.0, color=COLORS["mute"], lw=0.8, ls="--", alpha=0.7)
+    ax.axvline(1.0, color=COLORS["mute"], lw=LW_EDGE, ls="--", alpha=0.7)
     ax.set_yticks(y)
-    ax.set_yticklabels(labels, fontsize=8.7)
+    ax.set_yticklabels(labels, fontsize=PT_TICK)
     ax.invert_yaxis()
     ax.set_xlim(0.0, 1.05)
     ax.set_xticks([0.0, 0.5, 1.0])
-    ax.set_xlabel("Cosine to exact gradient", fontsize=9.4)
-    ax.set_title("Fixed-state factor audit", fontsize=10.2)
+    ax.set_xlabel("Cosine to exact gradient", fontsize=PT_LABEL)
+    ax.set_title("Fixed-state factor audit", fontsize=PT_TITLE)
     style_axis(ax, grid="x")
     panel_label(ax, "A", dx=-26, dy=5)
 
@@ -145,14 +153,14 @@ def _plot_identity_axis(
     additive = pivot["dendritic_additive"].to_numpy(dtype=float) * scale
     shunting = pivot["dendritic_shunting"].to_numpy(dtype=float) * scale
     for left, right in zip(additive, shunting):
-        ax.plot([0, 1], [left, right], color=COLORS["mute"], lw=0.55, alpha=0.50)
+        ax.plot([0, 1], [left, right], color=COLORS["mute"], lw=LW_HAIR, alpha=0.50)
     ax.scatter(
         np.zeros_like(additive),
         additive,
         s=12,
         facecolor="white",
         edgecolor=COLOR_ADDITIVE,
-        linewidth=0.65,
+        linewidth=LW_HAIR,
         zorder=3,
     )
     ax.scatter(
@@ -161,7 +169,7 @@ def _plot_identity_axis(
         s=12,
         facecolor="white",
         edgecolor=COLOR_SHUNTING,
-        linewidth=0.65,
+        linewidth=LW_HAIR,
         zorder=3,
     )
     ax.scatter(
@@ -171,7 +179,7 @@ def _plot_identity_axis(
         marker="s",
         color=[COLOR_ADDITIVE, COLOR_SHUNTING],
         edgecolor="white",
-        linewidth=0.7,
+        linewidth=LW_HAIR,
         zorder=4,
     )
     delta = float(np.mean(shunting - additive))
@@ -183,18 +191,18 @@ def _plot_identity_axis(
         transform=ax.transAxes,
         ha="center",
         va="bottom",
-        fontsize=8.0,
+        fontsize=PT_LEGEND,
         color=COLORS["ink"],
     )
     ax.set_xlim(-0.28, 1.28)
     ax.set_xticks([0, 1])
     if show_xlabels:
-        ax.set_xticklabels(["Add.", "Shunt."], fontsize=8.7)
+        ax.set_xticklabels(["Add.", "Shunt."], fontsize=PT_TICK)
     else:
         ax.set_xticklabels([])
-    ax.set_ylabel(ylabel, fontsize=8.2, labelpad=1.5)
+    ax.set_ylabel(ylabel, fontsize=PT_LEGEND, labelpad=1.5)
     if title:
-        ax.set_title(title, fontsize=10.0, linespacing=0.92)
+        ax.set_title(title, fontsize=PT_LABEL, linespacing=0.92)
     style_axis(ax, grid="y")
 
 
@@ -246,25 +254,25 @@ def _plot_feedback_relevance(
             width=width,
             color=color,
             edgecolor="white",
-            linewidth=0.6,
+            linewidth=LW_HAIR,
             capsize=1.8,
             label=label,
             zorder=2,
         )
-    ax.axhline(0.0, color=COLORS["mute"], lw=0.7, ls="-")
-    ax.axhline(1.0, color=COLORS["mute"], lw=0.8, ls="--", alpha=0.7)
+    ax.axhline(0.0, color=COLORS["mute"], lw=LW_HAIR, ls="-")
+    ax.axhline(1.0, color=COLORS["mute"], lw=LW_EDGE, ls="--", alpha=0.7)
     ax.set_xticks(x)
     ax.set_xticklabels(
         [family_label for _family, family_label in families],
-        fontsize=8.2,
+        fontsize=PT_LEGEND,
     )
     ax.set_ylim(-0.03, 1.10)
-    ax.set_ylabel("Fraction of exact", fontsize=9.1)
-    ax.set_title("Feedback-to-step audit", fontsize=10.0)
+    ax.set_ylabel("Fraction of exact", fontsize=PT_TICK)
+    ax.set_title("Feedback-to-step audit", fontsize=PT_LABEL)
     ax.legend(
         loc="upper left",
         ncol=1,
-        fontsize=7.8,
+        fontsize=PT_ANNOT,
         handlelength=1.0,
         borderaxespad=0.3,
     )

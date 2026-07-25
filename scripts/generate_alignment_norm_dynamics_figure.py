@@ -13,8 +13,13 @@ import pandas as pd
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from neurips_style import (  # noqa: E402
+    # noqa: E402,
     COLORS,
     FIG_W,
+    LW_DATA,
+    LW_HAIR,
+    PT_LEGEND,
+    PT_TICK,
     REF_LW,
     apply_neurips_style,
     clean_legend,
@@ -79,12 +84,12 @@ def _line_panel(ax, data: pd.DataFrame, metric: str, ylabel: str, title: str, *,
         x = sub["epoch"].to_numpy(dtype=float)
         y = sub["mean"].to_numpy(dtype=float)
         sd = sub["std"].fillna(0.0).to_numpy(dtype=float)
-        ax.plot(x, y, label=label, color=color, linewidth=1.5)
+        ax.plot(x, y, label=label, color=color, linewidth=LW_DATA)
         ax.fill_between(x, y - sd, y + sd, color=color, alpha=0.16, linewidth=0)
     if log_y:
         ax.set_yscale("log")
     ax.set_xlabel("Epoch")
-    ax.set_ylabel(ylabel, fontsize=8.2)
+    ax.set_ylabel(ylabel, fontsize=PT_LEGEND)
     panel_title(ax, letter, title)
     style_axis(ax, grid="y")
 
@@ -95,13 +100,13 @@ def main() -> None:
     axes = axes_grid.ravel()
 
     _line_panel(axes[0], data, "weighted_cosine", "Weighted cosine", "Alignment", letter="A")
-    axes[0].axhline(0.0, color=COLORS["edge"], linewidth=0.7, linestyle=":")
+    axes[0].axhline(0.0, color=COLORS["edge"], linewidth=LW_HAIR, linestyle=":")
     axes[0].set_ylim(-0.18, 0.36)
     _line_panel(axes[1], data, "local_grad_norm", "Local grad norm", "Local updates", letter="B", log_y=True)
     _line_panel(axes[2], data, "backprop_grad_norm", "BP grad norm", "Backprop signal", letter="C", log_y=True)
     _line_panel(axes[3], data, "norm_ratio", "Local / BP norm", "Scale mismatch", letter="D", log_y=True)
 
-    clean_legend(axes[0], loc="upper right", fontsize=8.4)
+    clean_legend(axes[0], loc="upper right", fontsize=PT_TICK)
     FIG_DIR.mkdir(parents=True, exist_ok=True)
     out = FIG_DIR / "fig_s_alignment_norm_dynamics"
     fig.savefig(out.with_suffix(".pdf"))

@@ -1,3 +1,67 @@
+====================
+REVIEWER s2E9 REVIEW
+====================
+
+Summary:
+The paper tries to solve the fundamental credit assignment problem. In standard backprop, we say that the delta w is proportional to the error and the activation. While the authors say that, in the case of pyramidal neurons, no distinct credit is assigned to each neuron, unlike in standard backpropagation. The paper claims that there is a low-bandwidth global signal rather than local signals, i.e., a credit for each neuron. Authors evaluate whether three components such as tree-structured dendrites, excitatory/inhibitory conductance synapses, and shunting inhibition can reshape the geometry of error propagation. In here, the shunting Inhibition acts as a control mechanism for error transmission in dendritic paths.
+
+Contribution Type: General: Most submissions will fall into this type.
+
+Strengths And Weaknesses:
+
+Strengths
+
+The shift from developing a new local learning rule to replace backprop to the analysis if a neuron's biophysics can make the backprop easier to approximate is novel.
+
+The derivation of the exact gradients for dendritic trees and proving that synaptic gradients factorise into a local eligibility term and a non-local compartment error provides a rigorous mathematical framework for local learning.
+
+The theoretical claims are supported by the right set of experiments, such as gradient reconstruction, alignments, error compressibility, interventions by inhibition and oracle.
+
+Weakness
+
+The scalability of the method isn't shown in the paper due to its limited evaluation on Fashion MNIST, CIFAR-10, and synthetic tasks. Evaluation should be shown on larger datasets, such as CIF100, TinyImagenet, Imagenet-A, or R.
+
+From equation (4) we understand that the path gain is described as a compartment error, but the theory isn't clear on how the path gain can be learned or estimated.
+
+The advantages of shunting inhibition aren't theoretically justified. Rather, it's empirically shown in the paper.
+
+The change of neuron from pyramidal or even if just the structure changes from a single parent, leading to a non-unique path, changing the equations. Generalizability is not shown with respect to different networks or across datasets.
+
+Quality: 3: good
+Clarity: 3: good
+Significance: 3: good
+Originality: 3: good
+
+Questions:
+
+What is the goal of the paper - to bridge the gap between neuroscience and deep learning? In that case, it would be great to understand the biophysical underpinnings of this work, for instance, how inhibitory neurotransmitters mediate shunting inhibition in the classification task? Given that computations in the brain are more precisely represented by Hodgkin-Huxley-like models, and neuronal spikes also are shown to play a role.
+
+If the goal is to improve deep learning inspired by neuroscience, then please extend your evaluation to STOA datasets like ImageNet and ImageNet-R. A comparison with STOA performance is also necessary.
+
+A significant amount of such learning algorithm variants exists in the literature, such as FF, PEPITA, SPELA, Trifecta, NoProp, LLS to name a few. Please thoroughly compare your work with similar works.
+
+It's not clear why we should go for shunting inhibition from the present manuscript contents. Please compare and report the memory, wall-clock time, and energy estimates for your work with STOA models, in addition to classification accuracy.
+
+How would you extend this design to CNNs or transformers?
+
+Limitations:
+Yes
+
+Rating: 3: Borderline reject: Technically solid paper where reasons to reject, e.g., limited evaluation, outweigh reasons to accept, e.g., good evaluation. Please use sparingly.
+Confidence: 4: You are confident in your assessment, but not absolutely certain. It is unlikely, but not impossible, that you did not understand some parts of the submission or that you are unfamiliar with some pieces of related work.
+Ethical Concerns: NO or VERY MINOR ethics concerns only
+Paper Formatting Concerns:
+None
+
+[Minor] I would prefer to read the experimental results in the main paper rather than in the appendix.
+
+Code Of Conduct Acknowledgement: Yes
+Responsible Reviewing Acknowledgement: Yes
+
+======================
+AUTHORS' RESPONSE
+======================
+
 Thank you for recognizing the conceptual shift from proposing another replacement for backpropagation to asking whether neuronal biophysics can make exact credit easier to approximate. We agree that the paper's goal and evaluation scope should have been stated much more clearly.
 
 **Bottom line.** This is a mechanistic NeuroAI contribution: it derives the exact credit equation of a conductance tree and uses controlled learning experiments to identify when restricted feedback succeeds or fails. Large-scale benchmarking is an important next stage, but it answers a different question from the mechanism isolated here.

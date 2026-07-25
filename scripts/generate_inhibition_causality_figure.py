@@ -13,8 +13,12 @@ import pandas as pd
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from neurips_style import (  # noqa: E402
+    # noqa: E402,
     COLORS,
     FIG_W,
+    LW_HAIR,
+    PT_LEGEND,
+    PT_SMALL,
     REF_LW,
     apply_neurips_style,
     clean_legend,
@@ -86,7 +90,7 @@ def _bar_panel(ax, data: pd.DataFrame, dataset: str, title: str, letter="") -> N
     means = [stats.loc[k, "mean"] if k in stats.index else np.nan for k in INTERVENTION_ORDER]
     stds = [stats.loc[k, "std"] if k in stats.index else 0.0 for k in INTERVENTION_ORDER]
     colors = [INTERVENTION_COLORS[k] for k in INTERVENTION_ORDER]
-    ax.bar(xs, means, yerr=stds, color=colors, edgecolor="white", linewidth=0.6, capsize=2.5)
+    ax.bar(xs, means, yerr=stds, color=colors, edgecolor="white", linewidth=LW_HAIR, capsize=2.5)
     for x, key in zip(xs, INTERVENTION_ORDER):
         vals = sub[sub["intervention"] == key]["accuracy"].to_numpy(dtype=float)
         if vals.size:
@@ -97,7 +101,7 @@ def _bar_panel(ax, data: pd.DataFrame, dataset: str, title: str, letter="") -> N
                 s=8,
                 color="white",
                 edgecolor="#333333",
-                linewidth=0.35,
+                linewidth=LW_HAIR,
                 zorder=5,
             )
     ax.set_xticks(xs)
@@ -105,10 +109,10 @@ def _bar_panel(ax, data: pd.DataFrame, dataset: str, title: str, letter="") -> N
         [INTERVENTION_LABELS[k] for k in INTERVENTION_ORDER],
         rotation=35,
         ha="right",
-        fontsize=6.7,
+        fontsize=PT_SMALL,
     )
     ax.set_ylim(0, 1.02)
-    ax.set_ylabel("Test accuracy", fontsize=8.2)
+    ax.set_ylabel("Test accuracy", fontsize=PT_LEGEND)
     panel_title(ax, letter, title)
     style_axis(ax, grid="y")
 
@@ -125,7 +129,7 @@ def _rank_panel(ax, data: pd.DataFrame, metric: str, ylabel: str, title: str, le
         vals = sub[sub["network_type"] == net][metric].to_numpy(dtype=float)
         means.append(float(np.nanmean(vals)))
         stds.append(float(np.nanstd(vals, ddof=1)) if vals.size > 1 else 0.0)
-    ax.bar(xs, means, yerr=stds, color=colors, edgecolor="white", linewidth=0.6, capsize=2.5)
+    ax.bar(xs, means, yerr=stds, color=colors, edgecolor="white", linewidth=LW_HAIR, capsize=2.5)
     for x, net in zip(xs, order):
         vals = sub[sub["network_type"] == net][metric].to_numpy(dtype=float)
         if vals.size:
@@ -136,12 +140,12 @@ def _rank_panel(ax, data: pd.DataFrame, metric: str, ylabel: str, title: str, le
                 s=10,
                 color="white",
                 edgecolor="#333333",
-                linewidth=0.35,
+                linewidth=LW_HAIR,
                 zorder=5,
             )
     ax.set_xticks(xs)
     ax.set_xticklabels(labels)
-    ax.set_ylabel(ylabel, fontsize=8.2)
+    ax.set_ylabel(ylabel, fontsize=PT_LEGEND)
     panel_title(ax, letter, title)
     style_axis(ax, grid="y")
 
@@ -196,17 +200,17 @@ def _dendritic_fidelity_panel(ax, data: pd.DataFrame) -> None:
             yerr=stds,
             color=color,
             edgecolor="white",
-            linewidth=0.6,
+            linewidth=LW_HAIR,
             capsize=2.5,
             label=label,
         )
     ax.set_xticks(xs)
-    ax.set_xticklabels(stage_labels, rotation=20, ha="right", fontsize=6.7)
+    ax.set_xticklabels(stage_labels, rotation=20, ha="right", fontsize=PT_SMALL)
     ax.set_ylim(0, 0.30)
-    ax.set_ylabel("Broadcast cosine", fontsize=8.2)
+    ax.set_ylabel("Broadcast cosine", fontsize=PT_LEGEND)
     panel_title(ax, "E", "Dendritic fidelity")
     ax.legend(
-        fontsize=6.2,
+        fontsize=PT_SMALL,
         frameon=False,
         loc="upper left",
         handlelength=0.9,

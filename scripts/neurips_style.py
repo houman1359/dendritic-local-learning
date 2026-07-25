@@ -73,23 +73,65 @@ FIG_W = MAIN_W
 # in a 5-panel figure is exactly as tall as a panel box in a 2-panel figure and
 # axis line weights, tick lengths and fonts all render at one scale.
 PANEL_H = 1.62          # height of one panel box
-PANEL_GAP_W = 0.72      # horizontal gap between panel boxes
+PANEL_GAP_W = 0.95      # horizontal gap between panel boxes
 PANEL_GAP_H = 0.58      # vertical gap between panel rows
 MARGIN_L = 0.62         # left margin (room for y label + ticks)
 MARGIN_R = 0.30         # room for right-edge value labels
 MARGIN_T = 0.34         # room for panel title
 MARGIN_B = 0.52         # room for x label + ticks
 
-# Uniform element sizing, referenced by every generator.
-BAR_LW = 0.9            # bar / patch edge width
-ERR_LW = 1.15           # error-bar line width
+# ── Canonical type scale ──────────────────────────────────────────────────
+#
+# Every figure is authored at FIG_W and printed at MAIN_SCALE (~0.766), so one
+# nominal size means one printed size everywhere.  Call sites must use these
+# tokens rather than literals: the previous 30 distinct hardcoded `fontsize=`
+# values were tuned when figures were authored at 5.0-14.8 in and are now just
+# noise.  PT_SMALL is the floor -- 7.0 nominal prints at 5.4 pt, and anything
+# below that is unreadable at NeurIPS column width.
+PT_TITLE = 10.4         # panel header
+PT_LABEL = 9.6          # axis label
+PT_TICK = 8.6           # tick label
+PT_LEGEND = 8.2         # legend entry
+PT_ANNOT = 7.8          # in-panel value label / callout
+PT_SMALL = 7.0          # dense schematic text (floor)
+
+# ── Canonical line weights ────────────────────────────────────────────────
+LW_DATA = 1.6           # primary data line
+LW_REF = 1.25           # reference / threshold line
+LW_ERR = 1.15           # error bar
+LW_EDGE = 0.8           # bar / patch edge
+LW_HAIR = 0.6           # pairing line, seed connector, schematic rule
+
+# Legacy aliases kept so existing call sites keep working.
+BAR_LW = LW_EDGE
+ERR_LW = LW_ERR
 ERR_CAPSIZE = 2.6
-REF_LW = 1.25           # reference / threshold line width
+REF_LW = LW_REF
 SEED_MS = 3.4           # per-seed scatter marker size
 SEED_ALPHA = 0.85
-PANEL_LABEL_PT = 12.0   # panel letter size (single value, every figure)
-PANEL_TITLE_PT = 10.4   # panel header size
+PANEL_LABEL_PT = 12.0   # panel letter when drawn standalone (schematics only)
+PANEL_TITLE_PT = PT_TITLE
 PANEL_TITLE_PAD = 5.0   # header -> axes gap, points
+
+
+def snap_pt(value: float) -> float:
+    """Snap an arbitrary font size to the nearest canonical token."""
+    scale = (PT_SMALL, PT_ANNOT, PT_LEGEND, PT_TICK, PT_LABEL, PT_TITLE)
+    v = float(value)
+    if v >= PT_TITLE:
+        return PT_TITLE
+    return min(scale, key=lambda s: abs(s - v))
+
+
+def snap_lw(value: float) -> float:
+    """Snap an arbitrary line width to the nearest canonical weight."""
+    scale = (LW_HAIR, LW_EDGE, LW_ERR, LW_REF, LW_DATA)
+    v = float(value)
+    if v <= 0:
+        return v
+    if v >= LW_DATA:
+        return LW_DATA
+    return min(scale, key=lambda s: abs(s - v))
 
 
 def panel_title(ax, letter, title="", *, loc="left", pad=None, fontsize=None):
@@ -178,6 +220,27 @@ def label_panels(axes, labels=None, **kwargs):
         panel_label(ax, lab, **kwargs)
 
 
+def add_headroom(ax, frac=0.24, *, bottom=False):
+    """Expand the y range so an in-panel legend never sits on the data."""
+    lo, hi = ax.get_ylim()
+    if ax.get_yscale() == "log":
+        return
+    span = hi - lo
+    if bottom:
+        ax.set_ylim(lo - frac * span, hi)
+    else:
+        ax.set_ylim(lo, hi + frac * span)
+
+
+def tidy_ticks(ax, *, nx=None, ny=None):
+    """Cap tick counts so extreme labels stay inside the panel box."""
+    from matplotlib.ticker import MaxNLocator
+    if nx:
+        ax.xaxis.set_major_locator(MaxNLocator(nbins=nx, prune=None))
+    if ny:
+        ax.yaxis.set_major_locator(MaxNLocator(nbins=ny, prune="both"))
+
+
 def clean_legend(ax, *, loc="best", ncol=1, **kwargs):
     """Standard legend: no frame, tight spacing, consistent type size."""
     kwargs.setdefault("frameon", False)
@@ -220,17 +283,20 @@ def apply_neurips_style():
             "DejaVu Sans", "Bitstream Vera Sans",
         ],
         "mathtext.fontset": "dejavusans",
-        "font.size": 10.8,
-        "axes.labelsize": 11.3,
-        "axes.titlesize": 11.6,
+        # rcParams follow the same canonical scale as the call sites; leaving
+        # them at the old 10.8/11.3/11.6 made axis labels render larger than
+        # every explicitly sized element and pushed them into the next panel.
+        "font.size": PT_TICK,
+        "axes.labelsize": PT_LABEL,
+        "axes.titlesize": PT_TITLE,
         "axes.titleweight": "bold",
-        "xtick.labelsize": 9.8,
-        "ytick.labelsize": 9.8,
-        "legend.fontsize": 9.3,
-        "legend.title_fontsize": 9.5,
+        "xtick.labelsize": PT_TICK,
+        "ytick.labelsize": PT_TICK,
+        "legend.fontsize": PT_LEGEND,
+        "legend.title_fontsize": PT_LEGEND,
 
         # Lines / markers
-        "lines.linewidth": 2.0,
+        "lines.linewidth": LW_DATA,
         "lines.markersize": 5.5,
         "lines.solid_capstyle": "round",
         "lines.solid_joinstyle": "round",

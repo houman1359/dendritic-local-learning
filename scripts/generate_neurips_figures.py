@@ -163,19 +163,33 @@ FEEDBACK_DEFINITION_CSV = os.path.join(
 # ---------------------------------------------------------------------------
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from neurips_style import (  # noqa: E402
-    apply_neurips_style,
-    axis_break_note,
-    clean_legend,
+    add_headroom,
+    tidy_ticks,
+    # noqa: E402,
     COLORS,
     ERR_CAPSIZE,
     ERR_LW,
     FIG_W,
-    grid_figure,
+    LW_DATA,
+    LW_EDGE,
+    LW_ERR,
+    LW_HAIR,
+    LW_REF,
     MAIN_W,
     PANEL_H,
+    PT_ANNOT,
+    PT_LABEL,
+    PT_LEGEND,
+    PT_SMALL,
+    PT_TICK,
+    PT_TITLE,
+    REF_LW,
+    apply_neurips_style,
+    axis_break_note,
+    clean_legend,
+    grid_figure,
     panel_label,
     panel_title,
-    REF_LW,
     style_axis,
 )
 
@@ -258,7 +272,7 @@ def _csv_path(path):
 # Legacy Figure 1 generator
 # ===================================================================
 
-def _draw_arrow(ax, x1, y1, x2, y2, color="k", lw=1.0, style="-|>"):
+def _draw_arrow(ax, x1, y1, x2, y2, color="k", lw=LW_ERR, style="-|>"):
     ax.annotate("", xy=(x2, y2), xytext=(x1, y1),
                 arrowprops={"arrowstyle": style, "color": color, "lw": lw}, zorder=4)
 
@@ -278,9 +292,9 @@ def fig1_panel_a(ax):
     # ── Soma (larger) ──
     soma_r = 0.57
     ax.add_patch(plt.Circle((soma_x, soma_y), soma_r, fc=SOMA_COLOR, ec="k",
-                             lw=1.2, alpha=0.45, zorder=5))
+                             lw=LW_ERR, alpha=0.45, zorder=5))
     ax.text(soma_x, soma_y, "soma", ha="center", va="center",
-            fontsize=5, fontweight="bold", zorder=6)
+            fontsize=PT_SMALL, fontweight="bold", zorder=6)
 
     # ── Compartment boxes (rounded rectangles — proximal larger) ──
     comp_w, comp_h = 0.85, 0.55
@@ -293,7 +307,7 @@ def fig1_panel_a(ax):
         bh = prox_h if lbl == "proximal" else comp_h
         box = FancyBboxPatch((cx - bw/2, cy - bh/2), bw, bh,
                               boxstyle="round,pad=0.05", fc=DEN_COLOR, ec="k",
-                              lw=0.8, alpha=0.25, zorder=3)
+                              lw=LW_EDGE, alpha=0.25, zorder=3)
         ax.add_patch(box)
         fs = 5
         ax.text(cx, cy, lbl, ha="center", va="center", fontsize=fs,
@@ -301,11 +315,11 @@ def fig1_panel_a(ax):
 
     # ── Dendritic conductance arrows (green, forward flow) ──
     _draw_arrow(ax, px + prox_w/2 + 0.06, py, soma_x - soma_r - 0.02, soma_y,
-                color=DEN_COLOR, lw=1.4)
+                color=DEN_COLOR, lw=LW_REF)
     for dx, dy in d_pos:
         off = 0.14 if dy > py else -0.14
         _draw_arrow(ax, dx + comp_w/2 + 0.06, dy,
-                    px - prox_w/2 - 0.06, py + off, color=DEN_COLOR, lw=1.2)
+                    px - prox_w/2 - 0.06, py + off, color=DEN_COLOR, lw=LW_ERR)
 
     # ── Excitatory synapses (triangles, blue) ──
     tri_size = 0.10
@@ -320,11 +334,11 @@ def fig1_panel_a(ax):
                 [(sx - tri_size, sy - tri_size*0.7),
                  (sx + tri_size, sy),
                  (sx - tri_size, sy + tri_size*0.7)],
-                fc=EXC_COLOR, ec="k", lw=0.5, alpha=0.8, zorder=5)
+                fc=EXC_COLOR, ec="k", lw=LW_HAIR, alpha=0.8, zorder=5)
             ax.add_patch(tri)
             _draw_arrow(ax, sx + tri_size + 0.02, sy,
                         bx - bw/2 - 0.06, by + yo * 0.3,
-                        color=EXC_COLOR, lw=0.7)
+                        color=EXC_COLOR, lw=LW_HAIR)
 
     # ── Inhibitory synapses (circles, red) — one per branch, on top ──
     for bx, by, is_prox in [(d_pos[0][0], d_pos[0][1], False),
@@ -333,13 +347,13 @@ def fig1_panel_a(ax):
         bh = prox_h if is_prox else comp_h
         sx, sy = bx + 0.15, by + bh/2 + 0.28
         ax.add_patch(plt.Circle((sx, sy), 0.09, fc=INH_COLOR, ec="k",
-                                 lw=0.5, alpha=0.8, zorder=5))
+                                 lw=LW_HAIR, alpha=0.8, zorder=5))
         _draw_arrow(ax, sx, sy - 0.09, bx + 0.15, by + bh/2 + 0.03,
-                    color=INH_COLOR, lw=0.7)
+                    color=INH_COLOR, lw=LW_HAIR)
 
     # ── Output ──
-    _draw_arrow(ax, soma_x + soma_r + 0.02, soma_y, 5.8, soma_y, color="k", lw=1.4)
-    ax.text(5.95, soma_y, "$\\hat{y}$", fontsize=9, va="center")
+    _draw_arrow(ax, soma_x + soma_r + 0.02, soma_y, 5.8, soma_y, color="k", lw=LW_REF)
+    ax.text(5.95, soma_y, "$\\hat{y}$", fontsize=PT_TICK, va="center")
 
     # ── Broadcast error (dashed red arrows, backward) ──
     for bx, by, is_prox in [
@@ -361,15 +375,15 @@ def fig1_panel_a(ax):
     from matplotlib.lines import Line2D
     handles = [
         Line2D([0], [0], marker=">", color=EXC_COLOR, markerfacecolor=EXC_COLOR,
-               markersize=5, lw=0.7, label="$x^E$ (excitatory input)"),
+               markersize=5, lw=LW_HAIR, label="$x^E$ (excitatory input)"),
         Line2D([0], [0], marker="o", color=INH_COLOR, markerfacecolor=INH_COLOR,
-               markersize=4, lw=0.7, label="$x^I$ (inhibitory input)"),
-        mpatches.Patch(fc=DEN_COLOR, ec="k", lw=0.4, alpha=0.25),
-        Line2D([0], [0], color=INH_COLOR, lw=1.0, ls="--"),
+               markersize=4, lw=LW_HAIR, label="$x^I$ (inhibitory input)"),
+        mpatches.Patch(fc=DEN_COLOR, ec="k", lw=LW_HAIR, alpha=0.25),
+        Line2D([0], [0], color=INH_COLOR, lw=LW_ERR, ls="--"),
     ]
     labels = ["$x^E$: excitatory input", "$x^I$: inhibitory input",
               "Dendritic compartment", "Error broadcast"]
-    ax.legend(handles, labels, loc="lower left", fontsize=6.5,
+    ax.legend(handles, labels, loc="lower left", fontsize=PT_SMALL,
               framealpha=0.95, handlelength=1.2, handletextpad=0.3,
               borderpad=0.3, labelspacing=0.3, bbox_to_anchor=(0.02, -0.18))
 
@@ -395,13 +409,13 @@ def fig1_panel_c(ax):
         box = FancyBboxPatch(
             (box_left, yc - box_h / 2), box_w, box_h,
             boxstyle="round,pad=0.04",
-            fc=color, ec="k", lw=0.5, alpha=0.12, zorder=2)
+            fc=color, ec="k", lw=LW_HAIR, alpha=0.12, zorder=2)
         ax.add_patch(box)
         # Label OUTSIDE the box on the left
         ax.text(box_left - 0.12, yc, name, ha="right", va="center",
-                fontsize=9, fontweight="bold", color=color, zorder=5)
+                fontsize=PT_TICK, fontweight="bold", color=color, zorder=5)
         ax.text(box_left + 0.12, yc, eq, ha="left", va="center",
-                fontsize=6.5, zorder=5)
+                fontsize=PT_SMALL, zorder=5)
 
     # Arrows between rules (centered in box)
     arrow_x = box_left + box_w / 2
@@ -442,17 +456,17 @@ def fig1_panel_learning_curves(ax):
         mean = grouped.mean()
         sem = grouped.std() / np.sqrt(grouped.count())
         epochs = mean.index.values
-        ax.plot(epochs, mean.values * 100, color=color, ls=ls, lw=1.2, label=label)
+        ax.plot(epochs, mean.values * 100, color=color, ls=ls, lw=LW_ERR, label=label)
         ax.fill_between(epochs, (mean - sem).values * 100, (mean + sem).values * 100,
                          color=color, alpha=0.10)
 
     ax.set_xlabel("Epoch")
     ax.set_ylabel("Accuracy (%)", labelpad=1)
-    ax.legend(loc="upper center", fontsize=6.5, ncol=2, handlelength=1.5,
+    ax.legend(loc="upper center", fontsize=PT_SMALL, ncol=2, handlelength=1.5,
               columnspacing=0.8, bbox_to_anchor=(0.5, 1.0))
     ax.set_ylim(5, 100)
     ax.set_xlim(0, 200)
-    ax.axhline(10, color="gray", ls=":", lw=0.5, zorder=0)  # chance level
+    ax.axhline(10, color="gray", ls=":", lw=LW_HAIR, zorder=0)  # chance level
 
 
 def figure1_legacy():
@@ -483,7 +497,7 @@ def figure1_legacy():
         # Convert axes-fraction x to figure coords
         bbox = ax_i.get_position()
         fig_x = bbox.x0 + xoff * bbox.width
-        fig.text(fig_x, fig_top, lbl, fontsize=11, fontweight="bold",
+        fig.text(fig_x, fig_top, lbl, fontsize=PT_TITLE, fontweight="bold",
                  va="top", ha="left")
 
     # Panel titles — all at the same figure y, derived from Panel C axes top
@@ -495,7 +509,7 @@ def figure1_legacy():
                           (ax_c, "Learning dynamics (MNIST)")]:
         bbox = ax_i.get_position()
         fig_x = bbox.x0 + bbox.width / 2
-        fig.text(fig_x, title_y, title, fontsize=7, ha="center", va="bottom")
+        fig.text(fig_x, title_y, title, fontsize=PT_SMALL, ha="center", va="bottom")
 
     _save(fig, "fig1_model_and_credit")
     plt.close(fig)
@@ -586,7 +600,7 @@ def figure_rule_feedback_design():
             yerr=errs,
             color=color,
             edgecolor="white",
-            lw=0.65,
+            lw=LW_HAIR,
             capsize=2.2,
             error_kw={"lw": 0.9},
             label=rule,
@@ -596,7 +610,7 @@ def figure_rule_feedback_design():
     ax.set_ylabel("MNIST (%)")
     ax.set_ylim(84, 94)
     panel_title(ax, "A", "Rule family")
-    clean_legend(ax, loc="upper left", ncol=3, fontsize=8.6,
+    clean_legend(ax, loc="upper left", ncol=3, fontsize=PT_TICK,
                  handlelength=0.85, columnspacing=0.5, handletextpad=0.25)
 
     # ---- Panel B: source-backed error-source negative control ----
@@ -632,7 +646,7 @@ def figure_rule_feedback_design():
             yerr=stds,
             color=color,
             edgecolor="white",
-            lw=0.65,
+            lw=LW_HAIR,
             capsize=2.2,
             error_kw={"lw": 0.9},
             label=label,
@@ -642,7 +656,7 @@ def figure_rule_feedback_design():
     ax.set_ylabel("MNIST (%)")
     ax.set_ylim(0, 100)
     panel_title(ax, "B", "Error source")
-    clean_legend(ax, loc="upper right", fontsize=8.6, handlelength=0.85,
+    clean_legend(ax, loc="upper right", fontsize=PT_TICK, handlelength=0.85,
                  handletextpad=0.3)
 
     # ---- Panel C: exact-error rule/decoder factorial ----
@@ -672,7 +686,7 @@ def figure_rule_feedback_design():
             yerr=stds,
             color=color,
             edgecolor="white",
-            lw=0.65,
+            lw=LW_HAIR,
             capsize=2.2,
             error_kw={"lw": 0.9},
             label=label,
@@ -689,7 +703,7 @@ def figure_rule_feedback_design():
     ax.set_ylabel("MNIST (%)")
     ax.set_ylim(96.7, 97.65)
     panel_title(ax, "C", "Exact error")
-    clean_legend(ax, loc="upper right", fontsize=7.4, handlelength=0.85,
+    clean_legend(ax, loc="upper right", fontsize=PT_ANNOT, handlelength=0.85,
                  handletextpad=0.3, labelspacing=0.22)
 
     # ---- Panel D: rank/propagation ladder on noise resilience ----
@@ -721,9 +735,9 @@ def figure_rule_feedback_design():
             colors.append(color)
         xpos = np.arange(len(vals))
         ax.bar(xpos, vals, 0.68, yerr=errs, color=colors, edgecolor="white",
-               lw=0.75, capsize=2.5, error_kw={"lw": 1.15})
+               lw=LW_EDGE, capsize=2.5, error_kw={"lw": 1.15})
         ax.set_xticks(xpos)
-        ax.set_xticklabels(labels, fontsize=8.4)
+        ax.set_xticklabels(labels, fontsize=PT_TICK)
         ax.set_ylim(35, 90)
     ax.set_ylabel("Noise (%)")
     panel_title(ax, "D", "Feedback")
@@ -753,14 +767,14 @@ def figure_rule_feedback_controls_main_legacy():
         vals = [rule_data[ds][rule] for ds in rule_data]
         errs = [rule_err[ds][rule] for ds in rule_data]
         ax.bar(x + (j - 1) * bw, vals, bw * 0.90, yerr=errs, color=color,
-               edgecolor="white", lw=0.65, capsize=2.0,
+               edgecolor="white", lw=LW_HAIR, capsize=2.0,
                error_kw={"lw": 0.85}, label=rule)
     ax.set_xticks(x)
-    ax.set_xticklabels(list(rule_data.keys()), fontsize=8.4)
-    ax.set_ylabel("Matched MNIST (%)", fontsize=8.6)
+    ax.set_xticklabels(list(rule_data.keys()), fontsize=PT_TICK)
+    ax.set_ylabel("Matched MNIST (%)", fontsize=PT_TICK)
     ax.set_ylim(84, 94)
-    ax.set_title("A  Rule family", loc="left", fontsize=9.2, fontweight="bold")
-    ax.legend(fontsize=7.8, loc="upper left", ncol=3, frameon=False,
+    ax.set_title("A  Rule family", loc="left", fontsize=PT_LABEL, fontweight="bold")
+    ax.legend(fontsize=PT_ANNOT, loc="upper left", ncol=3, frameon=False,
               handlelength=0.8, columnspacing=0.42, handletextpad=0.22,
               borderaxespad=0.0)
 
@@ -790,7 +804,7 @@ def figure_rule_feedback_controls_main_legacy():
                 row,
                 color=color,
                 alpha=0.13,
-                lw=0.45,
+                lw=LW_HAIR,
                 zorder=1,
             )
         means = paired.mean(axis=0)
@@ -804,7 +818,7 @@ def figure_rule_feedback_controls_main_legacy():
             markersize=3.8,
             markerfacecolor="white",
             markeredgewidth=0.9,
-            lw=1.15,
+            lw=LW_ERR,
             capsize=2.0,
             label=label,
             zorder=4,
@@ -818,14 +832,14 @@ def figure_rule_feedback_controls_main_legacy():
     bp = pd.read_csv(REVISION_EXACT_BP_CSV).iloc[0]
     bp_value = 100.0 * float(bp["test_acc_mean"])
     exact_value = 100.0 * float(exact_row["test_acc_mean"])
-    ax.axhline(bp_value, color="#666666", lw=0.75, ls="--", label="BP")
-    ax.axhline(exact_value, color="#6C3483", lw=0.75, ls=":", label="PT")
+    ax.axhline(bp_value, color="#666666", lw=LW_EDGE, ls="--", label="BP")
+    ax.axhline(exact_value, color="#6C3483", lw=LW_EDGE, ls=":", label="PT")
     ax.set_xticks(x)
-    ax.set_xticklabels(["MW", "Neuron"], fontsize=8.0)
-    ax.set_ylabel("MNIST test (%)", fontsize=8.6)
+    ax.set_xticklabels(["MW", "Neuron"], fontsize=PT_LEGEND)
+    ax.set_ylabel("MNIST test (%)", fontsize=PT_TICK)
     ax.set_ylim(88.5, 98.2)
     ax.legend(
-        fontsize=5.9,
+        fontsize=PT_SMALL,
         loc="lower right",
         ncol=2,
         frameon=False,
@@ -834,7 +848,7 @@ def figure_rule_feedback_controls_main_legacy():
         handletextpad=0.25,
         borderaxespad=0.1,
     )
-    ax.set_title("B  Feedback definition", loc="left", fontsize=9.2, fontweight="bold")
+    ax.set_title("B  Feedback definition", loc="left", fontsize=PT_LABEL, fontweight="bold")
 
     ax = axes[2]
     style_axis(ax, grid="y")
@@ -863,13 +877,13 @@ def figure_rule_feedback_controls_main_legacy():
             colors.append(color)
         xpos = np.arange(len(vals))
         ax.bar(xpos, vals, 0.68, yerr=errs, color=colors,
-               edgecolor="white", lw=0.7, capsize=2.1,
+               edgecolor="white", lw=LW_HAIR, capsize=2.1,
                error_kw={"lw": 0.95})
         ax.set_xticks(xpos)
-        ax.set_xticklabels(labels, fontsize=6.9, rotation=32, ha="right")
+        ax.set_xticklabels(labels, fontsize=PT_SMALL, rotation=32, ha="right")
         ax.set_ylim(0, 95)
-    ax.set_ylabel("Noise (%)", fontsize=8.6)
-    ax.set_title("C  Feedback", loc="left", fontsize=9.2, fontweight="bold")
+    ax.set_ylabel("Noise (%)", fontsize=PT_TICK)
+    ax.set_title("C  Feedback", loc="left", fontsize=PT_LABEL, fontweight="bold")
 
     ax = axes[3]
     style_axis(ax, grid="y")
@@ -896,13 +910,13 @@ def figure_rule_feedback_controls_main_legacy():
             colors.append(color)
         xpos = np.arange(len(vals))
         ax.bar(xpos, vals, 0.68, yerr=errs, color=colors,
-               edgecolor="white", lw=0.7, capsize=2.1,
+               edgecolor="white", lw=LW_HAIR, capsize=2.1,
                error_kw={"lw": 0.95})
         ax.set_xticks(xpos)
-        ax.set_xticklabels(labels, fontsize=8.0)
+        ax.set_xticklabels(labels, fontsize=PT_LEGEND)
         ax.set_ylim(0, 100)
-    ax.set_ylabel("Cue (%)", fontsize=8.6)
-    ax.set_title("D  Routed task", loc="left", fontsize=9.2, fontweight="bold")
+    ax.set_ylabel("Cue (%)", fontsize=PT_TICK)
+    ax.set_title("D  Routed task", loc="left", fontsize=PT_LABEL, fontweight="bold")
 
     fig.subplots_adjust(left=0.065, right=0.992, bottom=0.30, top=0.78, wspace=0.46)
     _save(fig, "fig5_rule_feedback_controls_legacy")
@@ -947,14 +961,14 @@ def figure_rule_feedback_controls_main():
         ).dropna()
         paired = 100.0 * pivot[feedback_order].to_numpy(dtype=float)
         for row in paired:
-            ax.plot(x, row, color=color, alpha=0.18, lw=0.55, zorder=1)
+            ax.plot(x, row, color=color, alpha=0.18, lw=LW_HAIR, zorder=1)
             ax.scatter(
                 x,
                 row,
                 s=5.0,
                 facecolor="white",
                 edgecolor=color,
-                linewidth=0.35,
+                linewidth=LW_HAIR,
                 alpha=0.45,
                 zorder=2,
             )
@@ -969,27 +983,27 @@ def figure_rule_feedback_controls_main():
             markersize=4.4,
             markerfacecolor="white",
             markeredgewidth=1.0,
-            lw=1.35,
+            lw=LW_REF,
             capsize=2.2,
             label="Mean ± 1 s.d.",
             zorder=4,
         )
-        ax.axhline(bp_value, color="#666666", lw=0.8, ls="--", label="BP")
+        ax.axhline(bp_value, color="#666666", lw=LW_EDGE, ls="--", label="BP")
         ax.axhline(
             exact_value,
             color="#6C3483",
-            lw=0.8,
+            lw=LW_EDGE,
             ls=":",
             label="Exact transport",
         )
         ax.set_xticks(x)
-        ax.set_xticklabels(["MW/scalar\nfallback", "Neuron-wise"], fontsize=8.2)
+        ax.set_xticklabels(["MW/scalar\nfallback", "Neuron-wise"], fontsize=PT_LEGEND)
         ax.set_xlim(-0.22, 1.22)
         ax.set_ylim(88.5, 98.2)
-        ax.set_title(title, loc="left", fontsize=9.2, fontweight="bold")
-    axes[0].set_ylabel("Test accuracy (%)", fontsize=8.6)
+        ax.set_title(title, loc="left", fontsize=PT_LABEL, fontweight="bold")
+    axes[0].set_ylabel("Test accuracy (%)", fontsize=PT_TICK)
     axes[1].legend(
-        fontsize=7.0,
+        fontsize=PT_SMALL,
         loc="lower right",
         frameon=False,
         handlelength=1.2,
@@ -1119,15 +1133,15 @@ def figure4_competence_regime():
 
     for i, (_ds_name, bp_val, bp_err, shunt_val, shunt_err, add_val, add_err) in enumerate(datasets_info):
         ax.bar(i - bar_w, bp_val * 100, bar_w * 0.88, yerr=bp_err * 100,
-               color=COLOR_BACKPROP, edgecolor="white", lw=0.75,
+               color=COLOR_BACKPROP, edgecolor="white", lw=LW_EDGE,
                capsize=2.6, error_kw={"lw": 1.15})
         if shunt_val is not None:
             ax.bar(i, shunt_val * 100, bar_w * 0.88, yerr=shunt_err * 100,
-                   color=COLOR_SHUNTING, edgecolor="white", lw=0.75,
+                   color=COLOR_SHUNTING, edgecolor="white", lw=LW_EDGE,
                    capsize=2.6, error_kw={"lw": 1.15})
         if add_val is not None:
             ax.bar(i + bar_w, add_val * 100, bar_w * 0.88, yerr=add_err * 100,
-                   color=COLOR_ADDITIVE, edgecolor="white", lw=0.75,
+                   color=COLOR_ADDITIVE, edgecolor="white", lw=LW_EDGE,
                    capsize=2.6, error_kw={"lw": 1.15})
 
     ax.set_xticks(x_base)
@@ -1148,7 +1162,7 @@ def figure4_competence_regime():
     ]
     ax.legend(
         handles=legend_handles,
-        fontsize=5.8,
+        fontsize=PT_SMALL,
         loc="upper center",
         bbox_to_anchor=(0.5, 1.005),
         ncol=3,
@@ -1167,6 +1181,7 @@ def figure4_competence_regime():
         # Bars must start at zero; the extra headroom is for the legend, which
         # previously overlapped the tallest bars.
         ax.set_ylim(0, 100)
+        add_headroom(ax, 0.22)
 
     # ---- Panel B: IE dose-response ----
     ax = axes[1]
@@ -1186,7 +1201,7 @@ def figure4_competence_regime():
             ds_short = "MN" if ds == "mnist" else "noise"
             ax.errorbar(sub["ie_value"], sub["test_accuracy_mean"] * 100,
                         yerr=sub["test_accuracy_std"] * 100,
-                        marker=marker, markersize=ms + 1.5, linewidth=2.1, capsize=2.5,
+                        marker=marker, markersize=ms + 1.5, linewidth=LW_DATA, capsize=2.5,
                         color=color, linestyle=ls, label=f"{short}-{ds_short}",
                         capthick=1.0)
 
@@ -1195,14 +1210,14 @@ def figure4_competence_regime():
     panel_title(ax, "B", "Inhibition")
     from matplotlib.lines import Line2D
     leg_handles = [
-        Line2D([], [], color=COLOR_SHUNTING, lw=2.1, marker="o", markersize=4.5, label="Shunting"),
-        Line2D([], [], color=COLOR_ADDITIVE, lw=2.1, marker="s", markersize=4.5, label="Additive"),
-        Line2D([], [], color="0.45", lw=2.1, ls="-", label="MNIST"),
-        Line2D([], [], color="0.45", lw=2.1, ls="--", label="noise"),
+        Line2D([], [], color=COLOR_SHUNTING, lw=LW_DATA, marker="o", markersize=4.5, label="Shunting"),
+        Line2D([], [], color=COLOR_ADDITIVE, lw=LW_DATA, marker="s", markersize=4.5, label="Additive"),
+        Line2D([], [], color="0.45", lw=LW_DATA, ls="-", label="MNIST"),
+        Line2D([], [], color="0.45", lw=LW_DATA, ls="--", label="noise"),
     ]
     ax.legend(
         handles=leg_handles,
-        fontsize=5.6,
+        fontsize=PT_SMALL,
         loc="lower left",
         ncol=2,
         handlelength=1.7,
@@ -1216,6 +1231,7 @@ def figure4_competence_regime():
         edgecolor="0.85",
     )
     ax.set_ylim(25, 100)
+    add_headroom(ax, 0.30, bottom=True)
 
     # ---- Panel C: Morphology-dependent operating regime ----
     ax = axes[2]
@@ -1245,16 +1261,16 @@ def figure4_competence_regime():
                 yerr=sub["std"].fillna(0.0),
                 marker=markers.get(int(depth), "o"),
                 markersize=5.8,
-                linewidth=2.1,
+                linewidth=LW_DATA,
                 color=palette.get(int(depth), "#1F2937"),
                 capsize=2.2,
                 capthick=0.9,
                 label=f"depth {int(depth)}",
             )
-        ax.axhline(0, color="black", lw=1.0, ls="--", alpha=0.75)
+        ax.axhline(0, color="black", lw=LW_ERR, ls="--", alpha=0.75)
         # Label 0/20/40 only: 0-5-10 collide at this panel width.
         ax.set_xticks([0, 20, 40])
-        clean_legend(ax, loc="upper right", fontsize=7.6, handlelength=1.0)
+        clean_legend(ax, loc="upper right", fontsize=PT_ANNOT, handlelength=1.0)
     ax.set_xlabel("$N_I$ per branch")
     ax.set_ylabel("Shunt.-add. (pp)")
     panel_title(ax, "C", "Morphology")
@@ -1344,32 +1360,34 @@ def figure4_competence_regime():
                     xerr=std,
                     color=color,
                     edgecolor="white",
-                    lw=0.75,
+                    lw=LW_EDGE,
                     capsize=2.0,
                     error_kw={"lw": 0.95},
                 )
-                text_x = x_base + 0.24
+                bar_len = mean - x_base
+                inside = bar_len > 3.2
                 ax.text(
-                    text_x,
+                    x_base + 0.28 if inside else mean + std + 0.35,
                     ypos,
                     label,
                     ha="left",
                     va="center",
-                    fontsize=7.2,
-                    color="white",
+                    fontsize=PT_SMALL,
+                    color="white" if inside else COLORS["ink"],
                     fontweight="bold" if label in {"PT", "id", "add"} else "normal",
+                    zorder=6,
                 )
         ax.set_yticks([2.0, 1.0, 0.0])
         ax.set_yticklabels([])
         for ypos, gname in ((2.0, "Transport"), (1.0, "Activation"), (0.0, "Additive")):
             ax.text(0.015, ypos + 0.30, gname, transform=ax.get_yaxis_transform(),
-                    ha="left", va="bottom", fontsize=7.0, color=COLORS["mute"])
+                    ha="left", va="bottom", fontsize=PT_SMALL, color=COLORS["mute"])
         ax.set_xlim(87.0, 98.25)
         ax.set_xticks([88, 92, 96])
         ax.set_ylim(-0.55, 2.75)
     else:
         ax.text(0.5, 0.5, "No revision-control data", transform=ax.transAxes,
-                ha="center", va="center", fontsize=8, color="red")
+                ha="center", va="center", fontsize=PT_LEGEND, color="red")
     ax.set_xlabel("MNIST test (%)")
     ax.set_ylabel("")
     panel_title(ax, "D", "Controls")
@@ -1401,7 +1419,7 @@ def figure4_competence_regime():
                     row,
                     color=color,
                     alpha=0.10,
-                    lw=0.45,
+                    lw=LW_HAIR,
                     zorder=1,
                 )
             means = paired.mean(axis=0)
@@ -1415,18 +1433,18 @@ def figure4_competence_regime():
                 markersize=4.0,
                 markerfacecolor="white",
                 markeredgewidth=0.9,
-                lw=1.35,
+                lw=LW_REF,
                 capsize=2.0,
                 label=label,
                 zorder=4,
             )
             gain = means[1] - means[0]
             ax.text(
-                0.30 + offset,
-                0.5 * (means[0] + means[1]) + (1.15 if offset > 0 else -1.15),
+                -0.02,
+                0.5 * (means[0] + means[1]) + (2.1 if offset > 0 else -2.1),
                 f"+{gain:.2f}",
                 color=color,
-                fontsize=7.2,
+                fontsize=PT_SMALL,
                 ha="center",
                 va="center",
                 bbox={"facecolor": "white", "edgecolor": "none", "pad": 0.4, "alpha": 0.82},
@@ -1440,9 +1458,9 @@ def figure4_competence_regime():
         exact_value = 100.0 * float(exact_row["test_acc_mean"])
         ax.axhline(bp_value, color=COLOR_BACKPROP, lw=REF_LW, ls="--")
         ax.axhline(exact_value, color="#6C3483", lw=REF_LW, ls=":")
-        ax.text(1.22, bp_value, "BP", color=COLOR_BACKPROP, fontsize=7.0,
+        ax.text(1.22, bp_value, "BP", color=COLOR_BACKPROP, fontsize=PT_SMALL,
                 ha="left", va="center", fontweight="bold")
-        ax.text(1.22, exact_value, "PT", color="#6C3483", fontsize=7.0,
+        ax.text(1.22, exact_value, "PT", color="#6C3483", fontsize=PT_SMALL,
                 ha="left", va="bottom", fontweight="bold")
         ax.text(
             0.02,
@@ -1451,7 +1469,7 @@ def figure4_competence_regime():
             transform=ax.transAxes,
             ha="left",
             va="top",
-            fontsize=7.2,
+            fontsize=PT_SMALL,
             color="0.25",
         )
         ax.set_xticks(x)
@@ -1460,7 +1478,7 @@ def figure4_competence_regime():
         ax.set_ylim(88.5, 98.2)
         ax.set_yticks([90, 94, 98])
         ax.legend(
-            fontsize=6.2,
+            fontsize=PT_SMALL,
             loc="lower right",
             frameon=False,
             handlelength=1.0,
@@ -1696,17 +1714,17 @@ def figure2_gradient_fidelity():
             color=color,
             alpha=0.72,
             edgecolor="white",
-            linewidth=0.75,
+            linewidth=LW_EDGE,
             zorder=3,
         )
-        ax.hlines(np.median(vals), i - 0.18, i + 0.18, color="black", lw=1.8, zorder=4)
+        ax.hlines(np.median(vals), i - 0.18, i + 0.18, color="black", lw=LW_DATA, zorder=4)
     ax.set_xticks([0, 1])
-    ax.set_xticklabels(["rel. $L_2$", "rel. norm"], fontsize=9.2)
+    ax.set_xticklabels(["rel. $L_2$", "rel. norm"], fontsize=PT_LABEL)
     ax.set_ylabel("Reconstruction error")
     ax.set_yscale("log")
     ax.set_ylim(1e-10, 1e-4)
     panel_title(ax, "A", "Reconstruction")
-    ax.grid(axis="y", alpha=0.24, linewidth=0.78)
+    ax.grid(axis="y", alpha=0.24, linewidth=LW_EDGE)
 
     # ---- Panels B/C: systematic matched 3F branch diagnostics ----
     # These panels deliberately exclude the exactly aligned final soma-coupling
@@ -1741,7 +1759,7 @@ def figure2_gradient_fidelity():
                 yerr=errs,
                 color=color,
                 edgecolor="white",
-                lw=0.7,
+                lw=LW_HAIR,
                 width=width,
                 capsize=2.0,
                 error_kw={"lw": 0.95},
@@ -1759,18 +1777,18 @@ def figure2_gradient_fidelity():
                     s=16,
                     facecolor="white",
                     edgecolor=color,
-                    linewidth=0.7,
+                    linewidth=LW_HAIR,
                     zorder=5,
                 )
         ax.set_xticks(x_pos)
-        ax.set_xticklabels([label for label, _frame in cohorts], fontsize=8.2)
-        ax.set_ylabel("Branch cosine (numel wtd.)", fontsize=9.0)
+        ax.set_xticklabels([label for label, _frame in cohorts], fontsize=PT_LEGEND)
+        ax.set_ylabel("Branch cosine (numel wtd.)", fontsize=PT_TICK)
         ax.set_ylim(-0.035, 0.27)
-        ax.axhline(0, color="black", lw=0.8, ls="--")
-        ax.legend(frameon=False, fontsize=6.7, ncol=2, loc="upper center")
+        ax.axhline(0, color="black", lw=LW_EDGE, ls="--")
+        ax.legend(frameon=False, fontsize=PT_SMALL, ncol=2, loc="upper center")
     else:
         ax.text(0.5, 0.5, "No seeded alignment data", transform=ax.transAxes,
-                ha="center", va="center", fontsize=8, color="red")
+                ha="center", va="center", fontsize=PT_LEGEND, color="red")
     panel_title(ax, "B", "Branch direction")
 
     # ---- Panel C: local/exact branch-gradient norm ratio ----
@@ -1797,7 +1815,7 @@ def figure2_gradient_fidelity():
                 yerr=errs,
                 color=color,
                 edgecolor="white",
-                lw=0.7,
+                lw=LW_HAIR,
                 width=width,
                 capsize=2.0,
                 error_kw={"lw": 0.95},
@@ -1814,16 +1832,16 @@ def figure2_gradient_fidelity():
                     s=16,
                     facecolor="white",
                     edgecolor=color,
-                    linewidth=0.7,
+                    linewidth=LW_HAIR,
                     zorder=5,
                 )
         ax.set_xticks(x_pos)
-        ax.set_xticklabels([label for label, _frame in cohorts], fontsize=8.2)
+        ax.set_xticklabels([label for label, _frame in cohorts], fontsize=PT_LEGEND)
         ax.set_ylabel("Local / exact norm")
         ax.set_ylim(0, 0.43)
     else:
         ax.text(0.5, 0.5, "No seeded scale data", transform=ax.transAxes,
-                ha="center", va="center", fontsize=8, color="red")
+                ha="center", va="center", fontsize=PT_LEGEND, color="red")
     panel_title(ax, "C", "Branch scale")
 
     # ---- Panel D: Layer-soma factorial diagnostic ----
@@ -1846,7 +1864,7 @@ def figure2_gradient_fidelity():
                 height=bar_h * 0.88,
                 color=color,
                 edgecolor="white",
-                linewidth=0.65,
+                linewidth=LW_HAIR,
                 label=layer_label,
                 zorder=3,
             )
@@ -1857,7 +1875,7 @@ def figure2_gradient_fidelity():
                     f"{val:.3f}",
                     ha="left",
                     va="center",
-                    fontsize=7.2,
+                    fontsize=PT_SMALL,
                     fontweight="bold",
                     color="#1C1C1C",
                     zorder=4,
@@ -1866,20 +1884,20 @@ def figure2_gradient_fidelity():
         ax.set_yticklabels(
             [l.replace(" + ", "\n+ ").replace("scalar fallback", "scalar")
              for l in labels],
-            fontsize=7.0, linespacing=0.92,
+            fontsize=PT_SMALL, linespacing=0.92,
         )
         ax.invert_yaxis()
         # Reserve a right-hand gutter for the layer legend so it does not cover
         # the value labels on the exact-path bars.
         ax.set_xlim(0, 1.65)
         ax.set_xticks([0.0, 0.5, 1.0])
-        ax.set_xlabel("Branch cosine (energy wtd.)", fontsize=8.0)
+        ax.set_xlabel("Branch cosine (energy wtd.)", fontsize=PT_LEGEND)
         ax.tick_params(axis="x", labelsize=7.5, pad=1)
         ax.tick_params(axis="y", length=0, pad=2)
         panel_title(ax, "D", "Layer-soma factorial")
         ax.legend(
             loc="lower right",
-            fontsize=7.2,
+            fontsize=PT_SMALL,
             frameon=False,
             handlelength=0.9,
             handletextpad=0.3,
@@ -1887,7 +1905,7 @@ def figure2_gradient_fidelity():
         )
     else:
         ax.text(0.5, 0.5, "No factorial data found", transform=ax.transAxes,
-                ha="center", va="center", fontsize=8, color="red")
+                ha="center", va="center", fontsize=PT_LEGEND, color="red")
 
     _save(fig, "fig2_gradient_fidelity")
     plt.close(fig)
@@ -1936,14 +1954,14 @@ def figure_s_additional_stress_tests():
                 lbl_strat = "local" if strat == "local_ca" else "BP"
                 ax.errorbar(agg["depth"], agg["mean"] * 100,
                             yerr=agg["std"] * 100,
-                            marker="o", markersize=3, lw=1.0, capsize=1.5,
+                            marker="o", markersize=3, lw=LW_ERR, capsize=1.5,
                             color=color, linestyle=ls, alpha=alpha_val,
                             label=f"{lbl_core} {lbl_strat}")
 
         ax.set_xlabel("Dendritic layers")
         ax.set_ylabel("Test accuracy (%)")
         panel_title(ax, "A", "Depth scaling")
-        ax.legend(fontsize=7, loc="best", handlelength=1.5,
+        ax.legend(fontsize=PT_SMALL, loc="best", handlelength=1.5,
                   handletextpad=0.3, ncol=1)
         ax.xaxis.set_major_locator(ticker.MaxNLocator(integer=True))
 
@@ -1959,13 +1977,13 @@ def figure_s_additional_stress_tests():
             color = COLOR_SHUNTING if "shunting" in nt else COLOR_ADDITIVE
             ax.errorbar(sub["error_noise_sigma"], sub["test_accuracy_mean"] * 100,
                         yerr=sub["test_accuracy_std"] * 100,
-                        marker="o", markersize=3, lw=1.0, capsize=1.5,
+                        marker="o", markersize=3, lw=LW_ERR, capsize=1.5,
                         color=color, label=LABEL_MAP.get(nt, nt))
 
         ax.set_xlabel(r"Error noise $\sigma$")
         ax.set_ylabel("Test accuracy (%)")
         panel_title(ax, "B", "Broadcast noise")
-        ax.legend(fontsize=7, handlelength=1.0)
+        ax.legend(fontsize=PT_SMALL, handlelength=1.0)
 
     # ---- Panel C: Fashion-MNIST ----
     ax = axes[2]
@@ -1989,10 +2007,10 @@ def figure_s_additional_stress_tests():
         x = np.arange(len(conditions))
         for i, c in enumerate(conditions):
             ax.bar(i, c[1], yerr=c[2], color=c[3], alpha=c[4],
-                   edgecolor="white", lw=0.3, width=0.55,
+                   edgecolor="white", lw=LW_HAIR, width=0.55,
                    capsize=1.5, error_kw={"lw": 0.5})
         ax.set_xticks(x)
-        ax.set_xticklabels([c[0] for c in conditions], fontsize=7.5)
+        ax.set_xticklabels([c[0] for c in conditions], fontsize=PT_ANNOT)
         ax.set_ylabel("Test accuracy (%)")
         panel_title(ax, "C", "Fashion-MNIST")
 
@@ -2001,7 +2019,7 @@ def figure_s_additional_stress_tests():
 
         for i, c in enumerate(conditions):
             ax.text(i, c[1] + c[2] + 0.4,
-                    f"{c[1]:.1f}", ha="center", va="bottom", fontsize=7)
+                    f"{c[1]:.1f}", ha="center", va="bottom", fontsize=PT_SMALL)
 
     _save(fig, "fig_additional_stress_tests")
     plt.close(fig)
@@ -2041,12 +2059,12 @@ def figure_s1():
                 vals.append(r.iloc[0]["test_accuracy"] * 100 if len(r) else 0)
             off = (j - (n_arch - 1)/2) * bw
             ax.bar(xb + off, vals, bw * 0.9, label=LABEL_MAP.get(arch, arch),
-                   color=arch_colors.get(arch, "#999"), edgecolor="white", lw=0.2)
+                   color=arch_colors.get(arch, "#999"), edgecolor="white", lw=LW_HAIR)
         ax.set_xticks(xb)
-        ax.set_xticklabels([DATASET_LABEL.get(d, d) for d in ds_order], fontsize=7.5)
+        ax.set_xticklabels([DATASET_LABEL.get(d, d) for d in ds_order], fontsize=PT_ANNOT)
         ax.set_ylabel("Test accuracy (%)")
         panel_title(ax, "A", "Backprop refs")
-        ax.legend(fontsize=7, ncol=2, loc="lower left",
+        ax.legend(fontsize=PT_SMALL, ncol=2, loc="lower left",
                   handlelength=1.0, handletextpad=0.3)
 
     # ---- Panel B: Rule family ranking ----
@@ -2072,13 +2090,13 @@ def figure_s1():
             off = (j - 0.5) * bw
             color = COLOR_SHUNTING if "shunting" in nt else COLOR_ADDITIVE
             ax.bar(xb + off, vals, bw * 0.9, yerr=errs, color=color,
-                   edgecolor="white", lw=0.2, capsize=1.5, error_kw={"lw": 0.5},
+                   edgecolor="white", lw=LW_HAIR, capsize=1.5, error_kw={"lw": 0.5},
                    label=LABEL_MAP.get(nt, nt))
         ax.set_xticks(xb)
         ax.set_xticklabels([r.upper() for r in rules])
         ax.set_ylabel("Test accuracy (%)")
         panel_title(ax, "B", "Rule ranking (MNIST)")
-        ax.legend(fontsize=7)
+        ax.legend(fontsize=PT_SMALL)
         av = sub["test_accuracy_mean"].dropna() * 100
         if len(av):
             ax.set_ylim(max(0, av.min() - 6), av.max() + 3)
@@ -2106,13 +2124,13 @@ def figure_s1():
             off = (j - 0.5) * bw
             color = COLOR_SHUNTING if "shunting" in nt else COLOR_ADDITIVE
             ax.bar(xb + off, vals, bw * 0.9, yerr=errs, color=color,
-                   edgecolor="white", lw=0.2, capsize=1.5, error_kw={"lw": 0.5},
+                   edgecolor="white", lw=LW_HAIR, capsize=1.5, error_kw={"lw": 0.5},
                    label=LABEL_MAP.get(nt, nt))
         ax.set_xticks(xb)
         ax.set_xticklabels(["Local", "Backprop"])
         ax.set_ylabel("Test accuracy (%)")
         panel_title(ax, "C", "Decoder mode (5F, MNIST)")
-        ax.legend(fontsize=7)
+        ax.legend(fontsize=PT_SMALL)
         av = sub["test_accuracy_mean"].dropna() * 100
         if len(av):
             ax.set_ylim(max(0, av.min() - 4), av.max() + 2)
@@ -2136,10 +2154,10 @@ def figure_s1():
         conds.sort(key=lambda c: c[1], reverse=True)
         x = np.arange(len(conds))
         ax.bar(x, [c[1] for c in conds], yerr=[c[2] for c in conds],
-               color=[c[3] for c in conds], edgecolor="white", lw=0.2,
+               color=[c[3] for c in conds], edgecolor="white", lw=LW_HAIR,
                capsize=1.5, width=0.55, error_kw={"lw": 0.5})
         ax.set_xticks(x)
-        ax.set_xticklabels([c[0] for c in conds], fontsize=7.5)
+        ax.set_xticklabels([c[0] for c in conds], fontsize=PT_ANNOT)
         ax.set_ylabel("Test accuracy (%)")
         panel_title(ax, "D", "Broadcast mode (MNIST)")
 
@@ -2166,18 +2184,18 @@ def figure_s2():
     ]
     x = np.arange(len(conditions))
     bars = ax.bar(x, [c[1] for c in conditions], color=[c[2] for c in conditions],
-                  edgecolor="white", lw=0.4, width=0.55)
+                  edgecolor="white", lw=LW_HAIR, width=0.55)
     ax.set_xticks(x)
-    ax.set_xticklabels([c[0] for c in conditions], fontsize=7.5)
+    ax.set_xticklabels([c[0] for c in conditions], fontsize=PT_ANNOT)
     ax.set_ylabel("Scale mismatch\n|log10(||local|| / ||BP||)|")
     panel_title(ax, "A", "Scale mismatch")
     ax.set_ylim(0.0, max(c[1] for c in conditions) * 1.22)
-    ax.axhline(0.0, color="black", lw=0.4, ls="--", label="Ideal (0)")
-    ax.legend(fontsize=7)
+    ax.axhline(0.0, color="black", lw=LW_HAIR, ls="--", label="Ideal (0)")
+    ax.legend(fontsize=PT_SMALL)
 
     for bar_rect, c in zip(bars, conditions):
         ax.text(bar_rect.get_x() + bar_rect.get_width()/2, c[1] + 0.05,
-                f"{c[1]:.3f}", ha="center", va="bottom", fontsize=7)
+                f"{c[1]:.3f}", ha="center", va="bottom", fontsize=PT_SMALL)
 
     # Panel B: Noise resilience IE detail with error bands
     ax = axes[0, 1]
@@ -2195,12 +2213,12 @@ def figure_s2():
                                 (sub["test_accuracy_mean"] + sub["test_accuracy_std"]) * 100,
                                 alpha=0.15, color=color)
                 ax.plot(sub["ie_value"], sub["test_accuracy_mean"] * 100,
-                        marker=marker, markersize=3, lw=1.0, color=color,
+                        marker=marker, markersize=3, lw=LW_ERR, color=color,
                         label=LABEL_MAP.get(ct, ct))
         ax.set_xlabel("$N_I$")
         ax.set_ylabel("Test accuracy (%)")
         panel_title(ax, "B", "Noise resilience ($N_I$ detail)")
-        ax.legend(fontsize=7)
+        ax.legend(fontsize=PT_SMALL)
 
     # Panel C: MNIST N_I detail with error bands
     ax = axes[1, 0]
@@ -2217,12 +2235,12 @@ def figure_s2():
                                 (sub["test_accuracy_mean"] + sub["test_accuracy_std"]) * 100,
                                 alpha=0.15, color=color)
                 ax.plot(sub["ie_value"], sub["test_accuracy_mean"] * 100,
-                        marker=marker, markersize=3, lw=1.0, color=color,
+                        marker=marker, markersize=3, lw=LW_ERR, color=color,
                         label=LABEL_MAP.get(ct, ct))
         ax.set_xlabel("$N_I$")
         ax.set_ylabel("Test accuracy (%)")
         panel_title(ax, "C", "MNIST $N_I$ sweep (detail)")
-        ax.legend(fontsize=7)
+        ax.legend(fontsize=PT_SMALL)
 
     # Panel D: Fashion-MNIST all seeds
     ax = axes[1, 1]
@@ -2240,11 +2258,11 @@ def figure_s2():
                 ax.scatter(sub["seed"], sub["test_accuracy"] * 100,
                            color=color, marker=marker, alpha=alpha, s=25,
                            label=f"{short_ct} {short_st}", edgecolors="white",
-                           lw=0.3)
+                           lw=LW_HAIR)
         ax.set_ylabel("Test accuracy (%)")
         ax.set_xlabel("Seed")
         panel_title(ax, "D", "F-MNIST (all seeds)")
-        ax.legend(fontsize=7, ncol=2, loc="lower right",
+        ax.legend(fontsize=PT_SMALL, ncol=2, loc="lower right",
                   handlelength=1.0, handletextpad=0.3)
 
     _save(fig, "fig_s2_gradient_extended")
@@ -2269,7 +2287,7 @@ def figure_s3():
         print(f"  WARNING: {src} not found, creating empty diagnostic panel")
         fig, ax = plt.subplots(figsize=(W, 3))
         ax.text(0.5, 0.5, "Sandbox figure - see fig_neurips_combined",
-                transform=ax.transAxes, ha="center", va="center", fontsize=12)
+                transform=ax.transAxes, ha="center", va="center", fontsize=PT_TITLE)
         ax.axis("off")
         _save(fig, "fig_s3_sandbox")
         plt.close(fig)
@@ -2307,16 +2325,16 @@ def figure_s4():
     x = np.arange(len(bars_data))
     for i, b in enumerate(bars_data):
         ax.bar(i, b[1], yerr=b[2], color=b[3], alpha=b[4],
-               edgecolor="white", lw=0.3, width=0.5, capsize=2, error_kw={"lw": 0.6})
+               edgecolor="white", lw=LW_HAIR, width=0.5, capsize=2, error_kw={"lw": 0.6})
     ax.set_xticks(x)
-    ax.set_xticklabels([b[0] for b in bars_data], fontsize=7.5)
+    ax.set_xticklabels([b[0] for b in bars_data], fontsize=PT_ANNOT)
     ax.set_ylabel("Test accuracy (%)")
     panel_title(ax, "A", "MNIST verification")
     ax.set_ylim(85, 95)
 
     for i, b in enumerate(bars_data):
         ax.text(i, b[1] + b[2] + 0.3, f"{b[1]:.1f}$\\pm${b[2]:.1f}",
-                ha="center", va="bottom", fontsize=7)
+                ha="center", va="bottom", fontsize=PT_SMALL)
 
     # ---- Panel B: matched figure-ground MNIST HSIC control ----
     ax = axes[1]
@@ -2353,16 +2371,16 @@ def figure_s4():
     x = np.arange(len(bars_data))
     for i, b in enumerate(bars_data):
         ax.bar(i, b[1], yerr=b[2], color=b[3], alpha=b[4],
-               edgecolor="white", lw=0.3, width=0.5, capsize=2, error_kw={"lw": 0.6})
+               edgecolor="white", lw=LW_HAIR, width=0.5, capsize=2, error_kw={"lw": 0.6})
     ax.set_xticks(x)
-    ax.set_xticklabels([b[0] for b in bars_data], fontsize=7.5)
+    ax.set_xticklabels([b[0] for b in bars_data], fontsize=PT_ANNOT)
     ax.set_ylabel("Test accuracy (%)")
     panel_title(ax, "B", "FG-MNIST: HSIC 2x2")
     ax.set_ylim(70, 85)
 
     for i, b in enumerate(bars_data):
         ax.text(i, b[1] + b[2] + 0.5, f"{b[1]:.1f}$\\pm${b[2]:.1f}",
-                ha="center", va="bottom", fontsize=7)
+                ha="center", va="bottom", fontsize=PT_SMALL)
 
     # ---- Panel C: HSIC weight ablation ----
     ax = axes[2]
@@ -2380,10 +2398,10 @@ def figure_s4():
                       for w in weights]
             ax.errorbar(xpos, cg["test_accuracy_mean"] * 100,
                         yerr=cg["test_accuracy_std"] * 100,
-                        marker="o", markersize=4, lw=1.0, capsize=2,
+                        marker="o", markersize=4, lw=LW_ERR, capsize=2,
                         color=COLOR_SHUNTING)
             ax.set_xticks(xpos)
-            ax.set_xticklabels(labels, fontsize=7.5)
+            ax.set_xticklabels(labels, fontsize=PT_ANNOT)
             ax.set_xlim(-0.25, len(cg) - 0.75)
             ax.set_xlabel("HSIC weight")
             ax.set_ylabel("Test accuracy (%)")
@@ -2559,10 +2577,10 @@ def figure_s_soma_extension():
         panel_titles,
     )):
         ax.bar(x - bw / 2, [v * 100 for v in vals_off], bw,
-               color=col_off, alpha=0.92, edgecolor="white", lw=0.3,
+               color=col_off, alpha=0.92, edgecolor="white", lw=LW_HAIR,
                label="Soma off (baseline)")
         ax.bar(x + bw / 2, [v * 100 for v in vals_on],  bw,
-               color=col_on,  alpha=0.92, edgecolor="white", lw=0.3,
+               color=col_on,  alpha=0.92, edgecolor="white", lw=LW_HAIR,
                label="Soma on (extension)")
 
         # Annotate delta on top of soma-on bars
@@ -2570,15 +2588,15 @@ def figure_s_soma_extension():
             delta = (vs - vo) * 100
             bar_top = vs * 100 + 0.8
             ax.text(xi + bw / 2, bar_top, f"+{delta:.1f}" if delta >= 0 else f"{delta:.1f}",
-                    ha="center", va="bottom", fontsize=6.5, color="#333333")
+                    ha="center", va="bottom", fontsize=PT_SMALL, color="#333333")
 
         ax.set_xticks(x)
-        ax.set_xticklabels(families, fontsize=7.5)
+        ax.set_xticklabels(families, fontsize=PT_ANNOT)
         ax.set_ylabel(ylabel)
-        ax.set_title(ptitle, fontsize=8.5, loc="left", pad=6)
+        ax.set_title(ptitle, fontsize=PT_TICK, loc="left", pad=6)
         ax.set_ylim(0, 108)
         if ax_idx == 0:
-            ax.legend(fontsize=7, handlelength=1.2, handletextpad=0.4,
+            ax.legend(fontsize=PT_SMALL, handlelength=1.2, handletextpad=0.4,
                       loc="upper right", framealpha=0.9)
         style_axis(ax)
 
@@ -2660,25 +2678,25 @@ def figure_s_bm_policy():
         x = np.arange(len(group_labels))
         ax.bar(x, group_vals, 0.55,
                color=group_cols, alpha=0.92,
-               edgecolor="white", lw=0.3)
+               edgecolor="white", lw=LW_HAIR)
 
         # Value annotations
         for xi, v in enumerate(group_vals):
-            ax.text(xi, v + 0.3, f"{v:.1f}", ha="center", va="bottom", fontsize=6.5)
+            ax.text(xi, v + 0.3, f"{v:.1f}", ha="center", va="bottom", fontsize=PT_SMALL)
 
         # Reference lines for matched standard backprop
         if len(ref_add_bp):
             ax.axhline(ref_add_bp.iloc[0] * 100, xmin=0.0, xmax=0.5,
-                       color=col_bp_ref, lw=1.1, ls="--", label="BP ref. (add.)")
+                       color=col_bp_ref, lw=LW_ERR, ls="--", label="BP ref. (add.)")
         if len(ref_shu_bp):
             ax.axhline(ref_shu_bp.iloc[0] * 100, xmin=0.5, xmax=1.0,
-                       color=col_bp_ref, lw=1.1, ls=":", label="BP ref. (shunt.)")
+                       color=col_bp_ref, lw=LW_ERR, ls=":", label="BP ref. (shunt.)")
 
         ax.set_xticks(x)
-        ax.set_xticklabels(group_labels, fontsize=7.5)
+        ax.set_xticklabels(group_labels, fontsize=PT_ANNOT)
         ax.set_ylabel("Mean test accuracy (%)")
         ax.set_title(f"{ds_titles[ds]}: LocalCA b,m update policy",
-                     fontsize=8.5, loc="left", pad=6)
+                     fontsize=PT_TICK, loc="left", pad=6)
         style_axis(ax)
 
         # y-range: include BP references if they're higher
@@ -2692,7 +2710,7 @@ def figure_s_bm_policy():
         ax.set_ylim(ymin, ymax)
 
         # Compact per-axis legend (only show BP reference lines)
-        ax.legend(fontsize=6.5, handlelength=1.2, loc="lower right",
+        ax.legend(fontsize=PT_SMALL, handlelength=1.2, loc="lower right",
                   framealpha=0.9, handletextpad=0.4)
 
     # Bottom legend for bar colors
@@ -2703,7 +2721,7 @@ def figure_s_bm_policy():
         Patch(color=col_learned["shunting"], alpha=0.92, label="Learned local b,m (shunt.)"),
         Patch(color=col_quantile["shunting"], alpha=0.92, label="Quantile-maintained b,m (shunt.)"),
     ]
-    fig.legend(handles=legend_handles, ncol=2, fontsize=7, loc="lower center",
+    fig.legend(handles=legend_handles, ncol=2, fontsize=PT_SMALL, loc="lower center",
                bbox_to_anchor=(0.5, -0.03), handlelength=1.1, framealpha=0.9)
 
     fig.subplots_adjust(left=0.09, right=0.97, bottom=0.22, top=0.94)
@@ -2772,23 +2790,23 @@ def figure_s_ablation():
 
         x = np.arange(len(labels))
         ax.bar(x, means, 0.62, yerr=stds, capsize=2.5,
-               color=bar_colors, alpha=0.92, edgecolor="white", lw=0.4,
+               color=bar_colors, alpha=0.92, edgecolor="white", lw=LW_HAIR,
                error_kw={"lw": 0.6})
         # Reference line at full_config value
         if "full_config" in sub.index:
             full_val = sub.loc["full_config", "test_acc_mean"] * 100
-            ax.axhline(full_val, color=core_color[core], lw=0.7, ls=":", alpha=0.7)
+            ax.axhline(full_val, color=core_color[core], lw=LW_HAIR, ls=":", alpha=0.7)
 
         # Value annotations
         for xi, (m_, s_) in enumerate(zip(means, stds)):
             ax.text(xi, m_ + s_ + 0.4, f"{m_:.1f}",
-                    ha="center", va="bottom", fontsize=6.5)
+                    ha="center", va="bottom", fontsize=PT_SMALL)
 
         ax.set_xticks(x)
-        ax.set_xticklabels(labels, rotation=0, ha="center", fontsize=7)
+        ax.set_xticklabels(labels, rotation=0, ha="center", fontsize=PT_SMALL)
         ax.set_ylabel("MNIST test accuracy (%)")
         ax.set_title(f"({panel_letters[i]})  {core_titles[core]}",
-                     fontsize=8.5, loc="left", pad=6)
+                     fontsize=PT_TICK, loc="left", pad=6)
         if means:
             ax.set_ylim(max(0, min(means) - 3), max(means) + 3)
         style_axis(ax)
@@ -2887,25 +2905,25 @@ def figure_s_cue_routing_soma():
 
     x = np.arange(len(labels))
     ax.bar(x, means, 0.6, yerr=errs, capsize=2.5, color=colors,
-           alpha=0.92, edgecolor="white", lw=0.4,
+           alpha=0.92, edgecolor="white", lw=LW_HAIR,
            error_kw={"lw": 0.6})
 
     # Separator between soma-off and soma-on groups
-    ax.axvline(len(histo) - 0.5, color="#777", lw=0.6, ls=":", alpha=0.6)
+    ax.axvline(len(histo) - 0.5, color="#777", lw=LW_HAIR, ls=":", alpha=0.6)
     ax.text(1, 104, "Prior (soma off)",
-            ha="center", va="bottom", fontsize=7.5, color="#7B5C42", style="italic")
+            ha="center", va="bottom", fontsize=PT_ANNOT, color="#7B5C42", style="italic")
     ax.text(len(histo) + (len(soma_entries) - 1) / 2, 104, "Soma-on extension",
-            ha="center", va="bottom", fontsize=7.5, color="#135C3A", style="italic")
+            ha="center", va="bottom", fontsize=PT_ANNOT, color="#135C3A", style="italic")
 
     for xi, (m, e) in enumerate(zip(means, errs)):
         ax.text(xi, m + e + 0.7, f"{m:.1f}",
-                ha="center", va="bottom", fontsize=7)
+                ha="center", va="bottom", fontsize=PT_SMALL)
 
     ax.set_xticks(x)
-    ax.set_xticklabels(labels, fontsize=7.5)
+    ax.set_xticklabels(labels, fontsize=PT_ANNOT)
     ax.set_ylabel("Cue-routing test accuracy (%)")
     ax.set_title("Somatic inputs rescue cue-routing LocalCA",
-                 fontsize=8.7, loc="left", pad=6)
+                 fontsize=PT_TICK, loc="left", pad=6)
     ax.set_ylim(60, 108)
     style_axis(ax)
 
@@ -2985,7 +3003,7 @@ def figure_s_cifar10_soma_extension():
         yerr=[v[1] * 100 for v in add_vals],
         color=COLOR_ADDITIVE,
         edgecolor="white",
-        lw=0.3,
+        lw=LW_HAIR,
         capsize=1.8,
         error_kw={"lw": 0.6},
         label="Additive + soma",
@@ -2997,7 +3015,7 @@ def figure_s_cifar10_soma_extension():
         yerr=[v[1] * 100 for v in shunt_vals],
         color=COLOR_SHUNTING,
         edgecolor="white",
-        lw=0.3,
+        lw=LW_HAIR,
         capsize=1.8,
         error_kw={"lw": 0.6},
         label="Shunting + soma",
@@ -3006,25 +3024,25 @@ def figure_s_cifar10_soma_extension():
     bp_add = _bp_value("additive")
     bp_shunt = _bp_value("shunting")
     if bp_add is not None:
-        ax.axhline(bp_add[0] * 100, color=COLOR_ADDITIVE, lw=1.0, ls="--", alpha=0.75)
+        ax.axhline(bp_add[0] * 100, color=COLOR_ADDITIVE, lw=LW_ERR, ls="--", alpha=0.75)
     if bp_shunt is not None:
-        ax.axhline(bp_shunt[0] * 100, color=COLOR_SHUNTING, lw=1.0, ls="--", alpha=0.75)
+        ax.axhline(bp_shunt[0] * 100, color=COLOR_SHUNTING, lw=LW_ERR, ls="--", alpha=0.75)
 
     ax.set_xticks(x)
-    ax.set_xticklabels([label for _, label in modes], fontsize=7.5)
+    ax.set_xticklabels([label for _, label in modes], fontsize=PT_ANNOT)
     ax.set_ylabel("Test accuracy (%)")
-    ax.set_title("CIFAR-10 soma-on ladder", fontsize=8.8, loc="left", pad=6)
+    ax.set_title("CIFAR-10 soma-on ladder", fontsize=PT_TICK, loc="left", pad=6)
     ax.set_ylim(20, 53)
-    ax.legend(fontsize=6.8, loc="upper center", bbox_to_anchor=(0.5, -0.10),
+    ax.legend(fontsize=PT_SMALL, loc="upper center", bbox_to_anchor=(0.5, -0.10),
               ncol=2, framealpha=0.92, handlelength=1.1, handletextpad=0.4)
     style_axis(ax, grid="y")
 
     for xpos, val in zip(x - bw / 2, add_vals):
         ax.text(xpos, val[0] * 100 + val[1] * 100 + 0.7,
-                f"{val[0] * 100:.1f}", ha="center", va="bottom", fontsize=6.2)
+                f"{val[0] * 100:.1f}", ha="center", va="bottom", fontsize=PT_SMALL)
     for xpos, val in zip(x + bw / 2, shunt_vals):
         ax.text(xpos, val[0] * 100 + val[1] * 100 + 0.7,
-                f"{val[0] * 100:.1f}", ha="center", va="bottom", fontsize=6.2)
+                f"{val[0] * 100:.1f}", ha="center", va="bottom", fontsize=PT_SMALL)
 
     # Panel B: matched soma-off -> soma-on deltas
     ax = axes[1]
@@ -3055,14 +3073,14 @@ def figure_s_cifar10_soma_extension():
         deltas,
         color=colors,
         edgecolor="white",
-        lw=0.3,
+        lw=LW_HAIR,
         width=0.62,
     )
-    ax.axhline(0, color="black", lw=0.5, ls="--")
+    ax.axhline(0, color="black", lw=LW_HAIR, ls="--")
     ax.set_xticks(xpos)
-    ax.set_xticklabels(labels, fontsize=7.2)
+    ax.set_xticklabels(labels, fontsize=PT_SMALL)
     ax.set_ylabel(r"$\Delta$ test accuracy (pp)")
-    ax.set_title("Matched shift from soma-off", fontsize=8.8, loc="left", pad=6)
+    ax.set_title("Matched shift from soma-off", fontsize=PT_TICK, loc="left", pad=6)
     style_axis(ax, grid="y")
     ax.set_ylim(min(deltas) - 2.0, max(deltas) + 2.0)
     for rect, delta in zip(bars, deltas):
@@ -3074,7 +3092,7 @@ def figure_s_cifar10_soma_extension():
             f"{delta:+.1f}",
             ha="center",
             va=va,
-            fontsize=6.3,
+            fontsize=PT_SMALL,
         )
 
     fig.subplots_adjust(left=0.08, right=0.98, bottom=0.27, top=0.92, wspace=0.42)
@@ -3126,15 +3144,15 @@ def figure_mechanism_summary():
                 fmt=core_marker[core],
                 color=ds_colors[ds],
                 markersize=6, alpha=0.85,
-                capsize=2.5, lw=0.8, elinewidth=0.8,
+                capsize=2.5, lw=LW_EDGE, elinewidth=0.8,
                 markeredgecolor="white", markeredgewidth=0.6,
                 label=f"{ds_titles[ds]} {core_label[core]}",
             )
     axA.set_xlabel("Path-gain CV")
     axA.set_ylabel("Submitted-field cosine")
     axA.set_title("(A)  Path-gain dispersion vs. field alignment",
-                  fontsize=9, loc="left", pad=6)
-    axA.legend(fontsize=6.5, handlelength=1.1, handletextpad=0.4,
+                  fontsize=PT_TICK, loc="left", pad=6)
+    axA.legend(fontsize=PT_SMALL, handlelength=1.1, handletextpad=0.4,
                loc="upper right", framealpha=0.9, ncol=2)
     style_axis(axA)
 
@@ -3154,15 +3172,15 @@ def figure_mechanism_summary():
                 fmt=core_marker[core],
                 color=ds_colors[ds],
                 markersize=6, alpha=0.85,
-                capsize=2.5, lw=0.8, elinewidth=0.8,
+                capsize=2.5, lw=LW_EDGE, elinewidth=0.8,
                 markeredgecolor="white", markeredgewidth=0.6,
                 label=f"{ds_titles[ds]} {core_label[core]}",
             )
     axB.set_xlabel("Submitted-field cosine")
     axB.set_ylabel("Test accuracy (%)")
     axB.set_title("(B)  Field alignment vs. learning",
-                  fontsize=9, loc="left", pad=6)
-    axB.legend(fontsize=6.5, handlelength=1.1, handletextpad=0.4,
+                  fontsize=PT_TICK, loc="left", pad=6)
+    axB.legend(fontsize=PT_SMALL, handlelength=1.1, handletextpad=0.4,
                loc="lower right", framealpha=0.9, ncol=2)
     style_axis(axB)
 
@@ -3246,20 +3264,20 @@ def figure_s_weight_dist_soma_comparison():
          "Test accuracy under soma off vs. soma on"],
     )):
         ax.bar(x - bw / 2, yvals_off, bw, color=col_off, alpha=0.92,
-               edgecolor="white", lw=0.3, label="Soma off")
+               edgecolor="white", lw=LW_HAIR, label="Soma off")
         ax.bar(x + bw / 2, yvals_on, bw, color=col_on, alpha=0.92,
-               edgecolor="white", lw=0.3, label="Soma on")
+               edgecolor="white", lw=LW_HAIR, label="Soma on")
         for xi, (vo, vn) in enumerate(zip(yvals_off, yvals_on)):
             if np.isfinite(vn):
                 ax.text(xi + bw / 2, vn + 0.01 * max(abs(vo or 0), abs(vn)),
                         f"{vn:.2f}" if ax_idx == 0 else f"{vn:.1f}",
-                        ha="center", va="bottom", fontsize=6.5)
+                        ha="center", va="bottom", fontsize=PT_SMALL)
         ax.set_xticks(x)
-        ax.set_xticklabels([cell_labels[c] for c in cells], fontsize=7.5)
+        ax.set_xticklabels([cell_labels[c] for c in cells], fontsize=PT_ANNOT)
         ax.set_ylabel(ylabel)
-        ax.set_title(ptitle, fontsize=8.8, loc="left", pad=6)
+        ax.set_title(ptitle, fontsize=PT_TICK, loc="left", pad=6)
         if ax_idx == 0:
-            ax.legend(fontsize=7, handlelength=1.2, handletextpad=0.4,
+            ax.legend(fontsize=PT_SMALL, handlelength=1.2, handletextpad=0.4,
                       loc="upper left", framealpha=0.88)
         style_axis(ax)
 
@@ -3328,14 +3346,14 @@ def figure_s_weight_distributions():
         strat_l = "BP" if strat == "bp" else "Loc."
         ax.bar(x + off, means, bw * 0.92,
                yerr=stds, capsize=1.5, error_kw={"lw": 0.4},
-               color=color_map[(core, strat)], edgecolor="white", lw=0.3,
+               color=color_map[(core, strat)], edgecolor="white", lw=LW_HAIR,
                label=f"{core_l} {strat_l}")
     ax.set_xticks(x)
     ax.set_xticklabels([depth_labels[d] for d in depths])
     ax.set_xlabel("Branch factors (depth)")
     ax.set_ylabel("Excitatory weight mean")
-    ax.set_title("(A)  Excitatory weight mean vs depth", fontsize=8.5, loc="left", pad=6)
-    ax.legend(fontsize=6.5, ncol=2, handlelength=1.0, handletextpad=0.3,
+    ax.set_title("(A)  Excitatory weight mean vs depth", fontsize=PT_TICK, loc="left", pad=6)
+    ax.legend(fontsize=PT_SMALL, ncol=2, handlelength=1.0, handletextpad=0.3,
               loc="upper right", framealpha=0.9)
     style_axis(ax)
 
@@ -3356,14 +3374,14 @@ def figure_s_weight_distributions():
         core_l = "Sh." if core == "shunting" else "Ad."
         strat_l = "BP" if strat == "bp" else "Loc."
         ax.bar(x + off, cvs, bw * 0.92,
-               color=color_map[(core, strat)], edgecolor="white", lw=0.3,
+               color=color_map[(core, strat)], edgecolor="white", lw=LW_HAIR,
                label=f"{core_l} {strat_l}")
     ax.set_xticks(x)
     ax.set_xticklabels([depth_labels[d] for d in depths])
     ax.set_xlabel("Branch factors (depth)")
     ax.set_ylabel("CV (std/mean)")
-    ax.set_title("(B)  Excitatory weight CV vs depth", fontsize=8.5, loc="left", pad=6)
-    ax.legend(fontsize=6.5, ncol=2, handlelength=1.0, handletextpad=0.3,
+    ax.set_title("(B)  Excitatory weight CV vs depth", fontsize=PT_TICK, loc="left", pad=6)
+    ax.legend(fontsize=PT_SMALL, ncol=2, handlelength=1.0, handletextpad=0.3,
               loc="upper right", framealpha=0.9)
     style_axis(ax)
 
@@ -3382,14 +3400,14 @@ def figure_s_weight_distributions():
         core_l = "Sh." if core == "shunting" else "Ad."
         strat_l = "BP" if strat == "bp" else "Loc."
         ax.bar(x + off, accs, bw * 0.92,
-               color=color_map[(core, strat)], edgecolor="white", lw=0.3,
+               color=color_map[(core, strat)], edgecolor="white", lw=LW_HAIR,
                label=f"{core_l} {strat_l}")
     ax.set_xticks(x)
     ax.set_xticklabels([depth_labels[d] for d in depths])
     ax.set_xlabel("Branch factors (depth)")
     ax.set_ylabel("Test accuracy (%)")
-    ax.set_title("(C)  Test accuracy vs depth", fontsize=8.5, loc="left", pad=6)
-    ax.legend(fontsize=6.5, ncol=2, handlelength=1.0, handletextpad=0.3,
+    ax.set_title("(C)  Test accuracy vs depth", fontsize=PT_TICK, loc="left", pad=6)
+    ax.legend(fontsize=PT_SMALL, ncol=2, handlelength=1.0, handletextpad=0.3,
               loc="lower left", framealpha=0.9)
     style_axis(ax)
 

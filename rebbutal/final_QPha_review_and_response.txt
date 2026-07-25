@@ -1,3 +1,90 @@
+====================
+REVIEWER QPha REVIEW
+====================
+
+Summary:
+This paper studies local credit assignment (LocalCA) in a tree-structured conductance-based model. The main insight of the paper is that for the considered tree-structured graph the gradient of the loss wrt to the local synaptic conductances factorises into a term that the authors call local eligibility (product of presynaptic activity, total input resistance of compartment, and the difference between the synaptic reversal potential and current compartment voltage (the driving force)) and a non-local compartment error. This compartment error is the somatic error scaled by a "path gain" through the tree. The authors propose that shunting inhibition multiplicatively modulates these path gains, which sometimes makes the exact error field more compressible and therefore easier to approximate with a low-bandwidth broadcast.
+
+The main contribution made by this submission is the reinterpretation of local credit assignment as an approximation problem. More precisely, the authors propose that a rank-1 broadcast can replace the exact compartment-specific field. The authors report that shunting inhibition reduces path-gain dispersion, makes exact compartment errors more low-rank, improves LocalCA-to-back-propagation alignment, and improves local-learning performance relative to an additive E/I control.
+
+Significance. The main contribution of the paper is conceptual. It proposes mechanism by which dendritic biophysics could alter credit assignment. Rather than treating inhibition only as a way to suppress neural activity, the paper proposess that conductance-based inhibition changes local input resistance, therefore changes both local synaptic sensitivity and the gain with which errors from distal branches transport toward the soma. This implies that inhibition can select which dendritic compartments receive strong versus weak credit signals. This is an intresting contribution regarding the biological credit assignment problem.
+
+Contribution Type: General: Most submissions will fall into this type.
+
+Strengths And Weaknesses:
+
+Strengths
+
+I find the factorisation of the loss an intresting contribution
+
+The implemented experiments aim to distinguish the underlying mechanism by measuring gradient reconstruction, local-to-back-propagation alignment, norm mismatch, path-gain coefficient of variation, error-matrix singular values, inhibitory interventions, morphology dependence, and feedback-bandwidth dependence.
+
+Weaknesses
+
+Optimal rank-1 approximation is not equivalent to the uniform spatial broadcast used by the algorithm. The approximation assumes scalar broadcast (the rank-1 approximation to have an all one spatial vector), while the experiments test for rank-1 compressibility, which is not the same, because in a general rank-1 approximation one vector is not necessarily uniform, neither can it always be transformed into one.
+
+The result is established for a directed feedforward conductance tree.
+
+The more well performing results depend on the empirical 5F modifier, while the theorem-derived 3F rule performs much worse. Thus I would say that the paper does not show (yet) that shunting plus a scalar broadcast are sufficient for local learning. It rather shows that this combination is useful with additional empirically chosen local preconditioning.
+
+Minor
+
+There is some overlap of text and other objects/arrows in some figures of the paper.
+
+Please explain why the residual-variance factor should be considered as a confidence measure.
+
+The abstract mentions abbreviations (LocalCA, 5F etc) that are not resolved before, so the reader has no idea what these mean, without reading the full text.
+
+Figure 1 caption: "gold-ringed soma" I think with this phrase the authors refer to the schematic illustrating soma with a yellow/gold ring. However, I find the word "gold-ringed" odd, while the sentence as it is structured, does not indicate that the authors refer to the illustration.
+
+Phrase "synapse banks" sounds odd to me, not sure whether it is often used.
+
+I would start first with introducing the equation 1 and then writing the paragraph currently in lines 78 - 105 that mentions the scaling of parameters etc. Otherwise the reader encounters objects/variables without having a concrete idea yet how these relate or fit together in your model. Current version first describes how equations behave, and then reports the equations which is uncomfortable to read, because the reader has to skim through the text to find the relations you are referring to.
+
+Quality: 2: not good
+Clarity: 2: not good
+Significance: 3: good
+Originality: 3: good
+
+Questions:
+
+can the authors define over which axes the covariance, variance, path-gain CV, and error-matrix SVD are computed in every figure.
+
+What is the constrained reconstruction error of the exact compartment-error field using the exact spatial form available to the rank-1 broadcast?
+
+Would the advantage conferred by shunting inhibition persist for 3F alone after matching activation distributions, gradient norms, and learning-rate schedules between additive and shunting models?
+
+Can you provide shunting-versus-additive comparisons separately for the 3F, 4F, and 5F rules?
+
+The authors already cite previous work introducing models with detailed dendrites where different dendritic compartments receive different teaching signals. can the authors probably point out more clear in what way their proposed mechanism differs from these previous approaches?
+
+The proposed framework assumes access to the somatic error for the updates. How could this signal be generated biologically?
+
+Can you provide a theoretical justification on why inhibitory conductances minimise the effective rank of the error matrix?
+
+Would active dendritic nonlinearities amplify or diminish your path-gain mechanism? Do you have any intuition, theoretical insight or empirical result?
+
+Do the path-gain statistics depend on the symmetry/ geometry of the dendritic tree?
+
+Limitations:
+
+Largely yes.
+
+The authors should additionally mention that the low-rank SVD analysis measures whether the error field has an optimal unconstrained rank-1 approximation, while the implemented broadcast is more restricted, since it has a uniform spatial pattern across compartments. The paper should state that low-rank alone does not guarantee compatibility with this particular broadcast.
+
+Rating: 2: Reject: For instance, a paper with technical flaws, weak evaluation, inadequate reproducibility and incompletely addressed ethical considerations.
+Confidence: 3: You are fairly confident in your assessment. It is possible that you did not understand some parts of the submission or that you are unfamiliar with some pieces of related work. Math/other details were not carefully checked.
+Ethical Concerns: NO or VERY MINOR ethics concerns only
+Paper Formatting Concerns:
+no
+
+Code Of Conduct Acknowledgement: Yes
+Responsible Reviewing Acknowledgement: Yes
+
+======================
+AUTHORS' RESPONSE
+======================
+
 Thank you for the careful review. Your rank-1 objection revealed an important mismatch between our description and the submitted operation.
 
 **Summary.** The submitted feedback is a matched-width/scalar-fallback hybrid, and a strict global scalar is inadequate. Corrected neuron-wise feedback and exact path transport let the theorem-derived 3F rule reach the matched-architecture backpropagation reference, showing that feedback construction—not local eligibility—is the principal bottleneck. An architecture-by-initialization factorial finds no 3F core difference under analytical initialization and a modest additive advantage under occupancy calibration; we therefore infer no general shunting advantage. We narrow the inhibition claim to the exact, useful statement that shunting regulates path gain but does not guarantee faithful credit.
