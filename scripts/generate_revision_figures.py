@@ -51,6 +51,7 @@ FIGURES_DIR = os.path.join(DRAFT_DIR, "figures")
 import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from neurips_style import (  # noqa: E402
+    add_headroom,
     # noqa: E402,
     COLORS,
     FIG_W,
@@ -190,6 +191,7 @@ def figure_s5():
                 )
                 ax.text(
                     x[i] + (j - 1) * bw, 3.6, "N/A", ha="center", va="center",
+                    bbox={"facecolor": "white", "edgecolor": "none", "pad": 0.5, "alpha": 0.85},
                     fontsize=PT_SMALL, color="#666666", fontweight="bold"
                 )
 
@@ -205,7 +207,8 @@ def figure_s5():
     handles.append(
         mpatches.Patch(facecolor="#F0F0F0", edgecolor="#999999", hatch="///", label="FA unsupported")
     )
-    ax.legend(handles=handles, fontsize=PT_SMALL, loc="upper left",
+    add_headroom(ax, 0.30)
+    clean_legend(ax, handles=handles, fontsize=PT_SMALL, loc="upper left", auto_clear=True,
               handlelength=1.0, handletextpad=0.3)
 
     # ---- Panel B: DFA advantage for shunting vs additive ----
@@ -322,8 +325,7 @@ def figure_s6():
     ax.set_ylabel("Test accuracy (%)")
     ax.set_title("CIFAR-10 mechanism ladder", fontsize=PT_LABEL)
     ax.set_ylim(0, 58)
-    ax.legend(
-        loc="upper left",
+    clean_legend(ax, loc="upper left", auto_clear=True,
         bbox_to_anchor=(0.00, 1.04),
         ncol=1,
         frameon=False,

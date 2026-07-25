@@ -193,6 +193,7 @@ def _plot_identity_axis(
         va="bottom",
         fontsize=PT_LEGEND,
         color=COLORS["ink"],
+        bbox={"facecolor": "white", "edgecolor": "none", "pad": 0.5, "alpha": 0.85},
     )
     ax.set_xlim(-0.28, 1.28)
     ax.set_xticks([0, 1])
@@ -266,11 +267,10 @@ def _plot_feedback_relevance(
         [family_label for _family, family_label in families],
         fontsize=PT_LEGEND,
     )
-    ax.set_ylim(-0.03, 1.10)
+    ax.set_ylim(-0.03, 1.34)
     ax.set_ylabel("Fraction of exact", fontsize=PT_TICK)
     ax.set_title("Feedback-to-step audit", fontsize=PT_LABEL)
-    ax.legend(
-        loc="upper left",
+    clean_legend(ax, loc="upper left", auto_clear=True,
         ncol=1,
         fontsize=PT_ANNOT,
         handlelength=1.0,
@@ -286,13 +286,13 @@ def build_figure() -> plt.Figure:
     identity = pd.read_csv(IDENTITY_CSV)
     feedback_relevance = pd.read_csv(FEEDBACK_RELEVANCE_CSV)
 
-    fig = plt.figure(figsize=(FIG_W, 2.48))
+    fig = plt.figure(figsize=(FIG_W, 2.58))
     outer = fig.add_gridspec(
         1,
         3,
         width_ratios=[1.42, 0.92, 1.26],
         wspace=0.86,
-        left=0.135, right=0.985, top=0.845, bottom=0.185,
+        left=0.255, right=0.955, top=0.845, bottom=0.185,
     )
     ax_a = fig.add_subplot(outer[0, 0])
     middle = outer[0, 1].subgridspec(2, 1, hspace=0.52)

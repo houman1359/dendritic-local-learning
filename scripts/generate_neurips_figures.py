@@ -383,7 +383,7 @@ def fig1_panel_a(ax):
     ]
     labels = ["$x^E$: excitatory input", "$x^I$: inhibitory input",
               "Dendritic compartment", "Error broadcast"]
-    ax.legend(handles, labels, loc="lower left", fontsize=PT_SMALL,
+    clean_legend(ax, handles, labels, loc="lower left", fontsize=PT_SMALL,
               framealpha=0.95, handlelength=1.2, handletextpad=0.3,
               borderpad=0.3, labelspacing=0.3, bbox_to_anchor=(0.02, -0.18))
 
@@ -462,7 +462,7 @@ def fig1_panel_learning_curves(ax):
 
     ax.set_xlabel("Epoch")
     ax.set_ylabel("Accuracy (%)", labelpad=1)
-    ax.legend(loc="upper center", fontsize=PT_SMALL, ncol=2, handlelength=1.5,
+    clean_legend(ax, loc="upper center", fontsize=PT_SMALL, ncol=2, handlelength=1.5,
               columnspacing=0.8, bbox_to_anchor=(0.5, 1.0))
     ax.set_ylim(5, 100)
     ax.set_xlim(0, 200)
@@ -610,7 +610,7 @@ def figure_rule_feedback_design():
     ax.set_ylabel("MNIST (%)")
     ax.set_ylim(84, 94)
     panel_title(ax, "A", "Rule family")
-    clean_legend(ax, loc="upper left", ncol=3, fontsize=PT_TICK,
+    clean_legend(ax, loc="upper left", ncol=3, fontsize=PT_TICK, auto_clear=True,
                  handlelength=0.85, columnspacing=0.5, handletextpad=0.25)
 
     # ---- Panel B: source-backed error-source negative control ----
@@ -656,7 +656,7 @@ def figure_rule_feedback_design():
     ax.set_ylabel("MNIST (%)")
     ax.set_ylim(0, 100)
     panel_title(ax, "B", "Error source")
-    clean_legend(ax, loc="upper right", fontsize=PT_TICK, handlelength=0.85,
+    clean_legend(ax, loc="upper right", fontsize=PT_TICK, handlelength=0.85, auto_clear=True,
                  handletextpad=0.3)
 
     # ---- Panel C: exact-error rule/decoder factorial ----
@@ -703,7 +703,7 @@ def figure_rule_feedback_design():
     ax.set_ylabel("MNIST (%)")
     ax.set_ylim(96.7, 97.65)
     panel_title(ax, "C", "Exact error")
-    clean_legend(ax, loc="upper right", fontsize=PT_ANNOT, handlelength=0.85,
+    clean_legend(ax, loc="upper right", fontsize=PT_ANNOT, handlelength=0.85, auto_clear=True,
                  handletextpad=0.3, labelspacing=0.22)
 
     # ---- Panel D: rank/propagation ladder on noise resilience ----
@@ -774,7 +774,7 @@ def figure_rule_feedback_controls_main_legacy():
     ax.set_ylabel("Matched MNIST (%)", fontsize=PT_TICK)
     ax.set_ylim(84, 94)
     ax.set_title("A  Rule family", loc="left", fontsize=PT_LABEL, fontweight="bold")
-    ax.legend(fontsize=PT_ANNOT, loc="upper left", ncol=3, frameon=False,
+    clean_legend(ax, fontsize=PT_ANNOT, loc="upper left", ncol=3, frameon=False,
               handlelength=0.8, columnspacing=0.42, handletextpad=0.22,
               borderaxespad=0.0)
 
@@ -838,8 +838,7 @@ def figure_rule_feedback_controls_main_legacy():
     ax.set_xticklabels(["MW", "Neuron"], fontsize=PT_LEGEND)
     ax.set_ylabel("MNIST test (%)", fontsize=PT_TICK)
     ax.set_ylim(88.5, 98.2)
-    ax.legend(
-        fontsize=PT_SMALL,
+    clean_legend(ax, fontsize=PT_SMALL,
         loc="lower right",
         ncol=2,
         frameon=False,
@@ -1002,8 +1001,7 @@ def figure_rule_feedback_controls_main():
         ax.set_ylim(88.5, 98.2)
         ax.set_title(title, loc="left", fontsize=PT_LABEL, fontweight="bold")
     axes[0].set_ylabel("Test accuracy (%)", fontsize=PT_TICK)
-    axes[1].legend(
-        fontsize=PT_SMALL,
+    clean_legend(axes[1], fontsize=PT_SMALL,
         loc="lower right",
         frameon=False,
         handlelength=1.2,
@@ -1160,8 +1158,7 @@ def figure4_competence_regime():
         mpatches.Patch(color=COLOR_SHUNTING, label="Shunt."),
         mpatches.Patch(color=COLOR_ADDITIVE, label="Add."),
     ]
-    ax.legend(
-        handles=legend_handles,
+    clean_legend(ax, handles=legend_handles,
         fontsize=PT_SMALL,
         loc="upper center",
         bbox_to_anchor=(0.5, 1.005),
@@ -1182,6 +1179,7 @@ def figure4_competence_regime():
         # previously overlapped the tallest bars.
         ax.set_ylim(0, 100)
         add_headroom(ax, 0.22)
+        ax.set_yticks([0, 20, 40, 60, 80, 100])
 
     # ---- Panel B: IE dose-response ----
     ax = axes[1]
@@ -1215,8 +1213,7 @@ def figure4_competence_regime():
         Line2D([], [], color="0.45", lw=LW_DATA, ls="-", label="MNIST"),
         Line2D([], [], color="0.45", lw=LW_DATA, ls="--", label="noise"),
     ]
-    ax.legend(
-        handles=leg_handles,
+    clean_legend(ax, handles=leg_handles,
         fontsize=PT_SMALL,
         loc="lower left",
         ncol=2,
@@ -1270,6 +1267,8 @@ def figure4_competence_regime():
         ax.axhline(0, color="black", lw=LW_ERR, ls="--", alpha=0.75)
         # Label 0/20/40 only: 0-5-10 collide at this panel width.
         ax.set_xticks([0, 20, 40])
+        ax.set_ylim(-8, 29)
+        ax.set_yticks([0, 10, 20])
         clean_legend(ax, loc="upper right", fontsize=PT_ANNOT, handlelength=1.0)
     ax.set_xlabel("$N_I$ per branch")
     ax.set_ylabel("Shunt.-add. (pp)")
@@ -1440,8 +1439,8 @@ def figure4_competence_regime():
             )
             gain = means[1] - means[0]
             ax.text(
-                -0.02,
-                0.5 * (means[0] + means[1]) + (2.1 if offset > 0 else -2.1),
+                -0.045,
+                (means[0] + 1.6) if offset > 0 else (means[0] - 1.3),
                 f"+{gain:.2f}",
                 color=color,
                 fontsize=PT_SMALL,
@@ -1477,8 +1476,7 @@ def figure4_competence_regime():
         ax.set_xlim(-0.20, 1.42)
         ax.set_ylim(88.5, 98.2)
         ax.set_yticks([90, 94, 98])
-        ax.legend(
-            fontsize=PT_SMALL,
+        clean_legend(ax, fontsize=PT_SMALL,
             loc="lower right",
             frameon=False,
             handlelength=1.0,
@@ -1785,7 +1783,7 @@ def figure2_gradient_fidelity():
         ax.set_ylabel("Branch cosine (numel wtd.)", fontsize=PT_TICK)
         ax.set_ylim(-0.035, 0.27)
         ax.axhline(0, color="black", lw=LW_EDGE, ls="--")
-        ax.legend(frameon=False, fontsize=PT_SMALL, ncol=2, loc="upper center")
+        clean_legend(ax, frameon=False, fontsize=PT_SMALL, ncol=2, loc="upper center")
     else:
         ax.text(0.5, 0.5, "No seeded alignment data", transform=ax.transAxes,
                 ha="center", va="center", fontsize=PT_LEGEND, color="red")
@@ -1881,9 +1879,20 @@ def figure2_gradient_fidelity():
                     zorder=4,
                 )
         ax.set_yticks(y)
+        # Compact codes: the full condition names are spelled out in the
+        # caption, and at full length they reached into panel C.
+        _short = {
+            "Exact soma + path": "Exact\n+PT",
+            "Exact soma + neuron-wise": "Exact\n+NW",
+            "Reused core + path": "Reuse\n+PT",
+            "Reused core + scalar fallback": "Reuse\n+scalar",
+        }
+        def _compact(lab):
+            key = " ".join(str(lab).replace("\n", " ").split())
+            return _short.get(key, lab)
+
         ax.set_yticklabels(
-            [l.replace(" + ", "\n+ ").replace("scalar fallback", "scalar")
-             for l in labels],
+            [_compact(l) for l in labels],
             fontsize=PT_SMALL, linespacing=0.92,
         )
         ax.invert_yaxis()
@@ -1894,9 +1903,8 @@ def figure2_gradient_fidelity():
         ax.set_xlabel("Branch cosine (energy wtd.)", fontsize=PT_LEGEND)
         ax.tick_params(axis="x", labelsize=7.5, pad=1)
         ax.tick_params(axis="y", length=0, pad=2)
-        panel_title(ax, "D", "Layer-soma factorial")
-        ax.legend(
-            loc="lower right",
+        panel_title(ax, "D", "Layer-soma")
+        clean_legend(ax, loc="lower right",
             fontsize=PT_SMALL,
             frameon=False,
             handlelength=0.9,
@@ -1961,7 +1969,7 @@ def figure_s_additional_stress_tests():
         ax.set_xlabel("Dendritic layers")
         ax.set_ylabel("Test accuracy (%)")
         panel_title(ax, "A", "Depth scaling")
-        ax.legend(fontsize=PT_SMALL, loc="best", handlelength=1.5,
+        clean_legend(ax, fontsize=PT_SMALL, loc="best", handlelength=1.5,
                   handletextpad=0.3, ncol=1)
         ax.xaxis.set_major_locator(ticker.MaxNLocator(integer=True))
 
@@ -1983,7 +1991,7 @@ def figure_s_additional_stress_tests():
         ax.set_xlabel(r"Error noise $\sigma$")
         ax.set_ylabel("Test accuracy (%)")
         panel_title(ax, "B", "Broadcast noise")
-        ax.legend(fontsize=PT_SMALL, handlelength=1.0)
+        clean_legend(ax, fontsize=PT_SMALL, handlelength=1.0)
 
     # ---- Panel C: Fashion-MNIST ----
     ax = axes[2]
@@ -2064,7 +2072,7 @@ def figure_s1():
         ax.set_xticklabels([DATASET_LABEL.get(d, d) for d in ds_order], fontsize=PT_ANNOT)
         ax.set_ylabel("Test accuracy (%)")
         panel_title(ax, "A", "Backprop refs")
-        ax.legend(fontsize=PT_SMALL, ncol=2, loc="lower left",
+        clean_legend(ax, fontsize=PT_SMALL, ncol=2, loc="lower left",
                   handlelength=1.0, handletextpad=0.3)
 
     # ---- Panel B: Rule family ranking ----
@@ -2096,7 +2104,7 @@ def figure_s1():
         ax.set_xticklabels([r.upper() for r in rules])
         ax.set_ylabel("Test accuracy (%)")
         panel_title(ax, "B", "Rule ranking (MNIST)")
-        ax.legend(fontsize=PT_SMALL)
+        clean_legend(ax, fontsize=PT_SMALL)
         av = sub["test_accuracy_mean"].dropna() * 100
         if len(av):
             ax.set_ylim(max(0, av.min() - 6), av.max() + 3)
@@ -2130,7 +2138,7 @@ def figure_s1():
         ax.set_xticklabels(["Local", "Backprop"])
         ax.set_ylabel("Test accuracy (%)")
         panel_title(ax, "C", "Decoder mode (5F, MNIST)")
-        ax.legend(fontsize=PT_SMALL)
+        clean_legend(ax, fontsize=PT_SMALL)
         av = sub["test_accuracy_mean"].dropna() * 100
         if len(av):
             ax.set_ylim(max(0, av.min() - 4), av.max() + 2)
@@ -2191,7 +2199,7 @@ def figure_s2():
     panel_title(ax, "A", "Scale mismatch")
     ax.set_ylim(0.0, max(c[1] for c in conditions) * 1.22)
     ax.axhline(0.0, color="black", lw=LW_HAIR, ls="--", label="Ideal (0)")
-    ax.legend(fontsize=PT_SMALL)
+    clean_legend(ax, fontsize=PT_SMALL)
 
     for bar_rect, c in zip(bars, conditions):
         ax.text(bar_rect.get_x() + bar_rect.get_width()/2, c[1] + 0.05,
@@ -2218,7 +2226,7 @@ def figure_s2():
         ax.set_xlabel("$N_I$")
         ax.set_ylabel("Test accuracy (%)")
         panel_title(ax, "B", "Noise resilience ($N_I$ detail)")
-        ax.legend(fontsize=PT_SMALL)
+        clean_legend(ax, fontsize=PT_SMALL)
 
     # Panel C: MNIST N_I detail with error bands
     ax = axes[1, 0]
@@ -2240,7 +2248,7 @@ def figure_s2():
         ax.set_xlabel("$N_I$")
         ax.set_ylabel("Test accuracy (%)")
         panel_title(ax, "C", "MNIST $N_I$ sweep (detail)")
-        ax.legend(fontsize=PT_SMALL)
+        clean_legend(ax, fontsize=PT_SMALL)
 
     # Panel D: Fashion-MNIST all seeds
     ax = axes[1, 1]
@@ -2262,7 +2270,7 @@ def figure_s2():
         ax.set_ylabel("Test accuracy (%)")
         ax.set_xlabel("Seed")
         panel_title(ax, "D", "F-MNIST (all seeds)")
-        ax.legend(fontsize=PT_SMALL, ncol=2, loc="lower right",
+        clean_legend(ax, fontsize=PT_SMALL, ncol=2, loc="lower right", auto_clear=True,
                   handlelength=1.0, handletextpad=0.3)
 
     _save(fig, "fig_s2_gradient_extended")
@@ -2405,7 +2413,7 @@ def figure_s4():
             ax.set_xlim(-0.25, len(cg) - 0.75)
             ax.set_xlabel("HSIC weight")
             ax.set_ylabel("Test accuracy (%)")
-            panel_title(ax, "C", "FG-MNIST: HSIC ablation")
+            panel_title(ax, "C", "HSIC ablation")
 
     _save(fig, "fig_s4_verification")
     plt.close(fig)
@@ -2596,7 +2604,7 @@ def figure_s_soma_extension():
         ax.set_title(ptitle, fontsize=PT_TICK, loc="left", pad=6)
         ax.set_ylim(0, 108)
         if ax_idx == 0:
-            ax.legend(fontsize=PT_SMALL, handlelength=1.2, handletextpad=0.4,
+            clean_legend(ax, fontsize=PT_SMALL, handlelength=1.2, handletextpad=0.4,
                       loc="upper right", framealpha=0.9)
         style_axis(ax)
 
@@ -2710,7 +2718,7 @@ def figure_s_bm_policy():
         ax.set_ylim(ymin, ymax)
 
         # Compact per-axis legend (only show BP reference lines)
-        ax.legend(fontsize=PT_SMALL, handlelength=1.2, loc="lower right",
+        clean_legend(ax, fontsize=PT_SMALL, handlelength=1.2, loc="lower right",
                   framealpha=0.9, handletextpad=0.4)
 
     # Bottom legend for bar colors
@@ -3033,7 +3041,7 @@ def figure_s_cifar10_soma_extension():
     ax.set_ylabel("Test accuracy (%)")
     ax.set_title("CIFAR-10 soma-on ladder", fontsize=PT_TICK, loc="left", pad=6)
     ax.set_ylim(20, 53)
-    ax.legend(fontsize=PT_SMALL, loc="upper center", bbox_to_anchor=(0.5, -0.10),
+    clean_legend(ax, fontsize=PT_SMALL, loc="upper center", bbox_to_anchor=(0.5, -0.10),
               ncol=2, framealpha=0.92, handlelength=1.1, handletextpad=0.4)
     style_axis(ax, grid="y")
 
@@ -3277,7 +3285,7 @@ def figure_s_weight_dist_soma_comparison():
         ax.set_ylabel(ylabel)
         ax.set_title(ptitle, fontsize=PT_TICK, loc="left", pad=6)
         if ax_idx == 0:
-            ax.legend(fontsize=PT_SMALL, handlelength=1.2, handletextpad=0.4,
+            clean_legend(ax, fontsize=PT_SMALL, handlelength=1.2, handletextpad=0.4,
                       loc="upper left", framealpha=0.88)
         style_axis(ax)
 
@@ -3353,7 +3361,7 @@ def figure_s_weight_distributions():
     ax.set_xlabel("Branch factors (depth)")
     ax.set_ylabel("Excitatory weight mean")
     ax.set_title("(A)  Excitatory weight mean vs depth", fontsize=PT_TICK, loc="left", pad=6)
-    ax.legend(fontsize=PT_SMALL, ncol=2, handlelength=1.0, handletextpad=0.3,
+    clean_legend(ax, fontsize=PT_SMALL, ncol=2, handlelength=1.0, handletextpad=0.3,
               loc="upper right", framealpha=0.9)
     style_axis(ax)
 
@@ -3381,7 +3389,7 @@ def figure_s_weight_distributions():
     ax.set_xlabel("Branch factors (depth)")
     ax.set_ylabel("CV (std/mean)")
     ax.set_title("(B)  Excitatory weight CV vs depth", fontsize=PT_TICK, loc="left", pad=6)
-    ax.legend(fontsize=PT_SMALL, ncol=2, handlelength=1.0, handletextpad=0.3,
+    clean_legend(ax, fontsize=PT_SMALL, ncol=2, handlelength=1.0, handletextpad=0.3,
               loc="upper right", framealpha=0.9)
     style_axis(ax)
 
@@ -3407,7 +3415,7 @@ def figure_s_weight_distributions():
     ax.set_xlabel("Branch factors (depth)")
     ax.set_ylabel("Test accuracy (%)")
     ax.set_title("(C)  Test accuracy vs depth", fontsize=PT_TICK, loc="left", pad=6)
-    ax.legend(fontsize=PT_SMALL, ncol=2, handlelength=1.0, handletextpad=0.3,
+    clean_legend(ax, fontsize=PT_SMALL, ncol=2, handlelength=1.0, handletextpad=0.3,
               loc="lower left", framealpha=0.9)
     style_axis(ax)
 

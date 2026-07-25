@@ -209,8 +209,7 @@ def _dendritic_fidelity_panel(ax, data: pd.DataFrame) -> None:
     ax.set_ylim(0, 0.30)
     ax.set_ylabel("Broadcast cosine", fontsize=PT_LEGEND)
     panel_title(ax, "E", "Dendritic fidelity")
-    ax.legend(
-        fontsize=PT_SMALL,
+    clean_legend(ax, fontsize=PT_SMALL,
         frameon=False,
         loc="upper left",
         handlelength=0.9,

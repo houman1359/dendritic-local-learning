@@ -186,6 +186,9 @@ def _draw_gain_tree(
             va="center",
             fontsize=PT_TICK,
             color=COLORS["ink"],
+            zorder=6,
+            bbox={"facecolor": "white", "edgecolor": "none",
+                  "pad": 0.6, "alpha": 0.88},
         )
     ax.add_patch(
         mpatches.Circle(
@@ -197,7 +200,8 @@ def _draw_gain_tree(
             zorder=5,
         )
     )
-    ax.text(soma[0], soma[1], r"$\delta_0$", ha="center", va="center", fontsize=PT_LEGEND)
+    ax.text(soma[0], soma[1], r"$\delta_0$", ha="center", va="center",
+            fontsize=PT_LEGEND, zorder=6, bbox={"facecolor": "white", "edgecolor": "none", "pad": 0.5, "alpha": 0.85})
     ax.text(
         x0 + 0.20,
         0.88,
@@ -381,8 +385,7 @@ def _plot_dendritic_feedback_fidelity(
     ax.set_ylim(0, 0.30)
     tidy_ticks(ax, ny=4)
     panel_title(ax, "B", "Field cosine")
-    ax.legend(
-        loc="upper center",
+    clean_legend(ax, loc="upper center",
         ncol=1,
         frameon=False,
         handlelength=1.0,
@@ -496,8 +499,7 @@ def _plot_mechanism_summary(ax: plt.Axes, summary: pd.DataFrame) -> None:
     ax.set_xlabel("Submitted-field cosine")
     ax.set_ylabel("Test (%)")
     ax.set_title("Alignment predicts accuracy")
-    ax.legend(
-        fontsize=PT_ANNOT,
+    clean_legend(ax, fontsize=PT_ANNOT,
         handlelength=1.0,
         handletextpad=0.3,
         loc="lower right",
@@ -578,6 +580,7 @@ def _plot_low_bandwidth(ax: plt.Axes, low_bw: pd.DataFrame, panel_letter: str | 
             ha="center",
             va=va,
             color=COLOR_LOW_BW,
+                    bbox={"facecolor": "white", "edgecolor": "none", "pad": 0.4, "alpha": 0.85},
         )
 
     sparse = df[df["broadcast_bandwidth"] == "sparse_topk"]
@@ -602,6 +605,7 @@ def _plot_low_bandwidth(ax: plt.Axes, low_bw: pd.DataFrame, panel_letter: str | 
             textcoords="offset points",
             fontsize=PT_SMALL,
             color=COLOR_TRANSPORT,
+                    bbox={"facecolor": "white", "edgecolor": "none", "pad": 0.4, "alpha": 0.85},
         )
 
     ax.set_xlabel("Effective bits per neuron")
@@ -747,8 +751,7 @@ def _plot_causal_inhibition(ax: plt.Axes, causal: pd.DataFrame) -> None:
     tidy_ticks(ax, ny=4)
     panel_title(ax, "C", "Inhibition")
     legend_handles = [mpatches.Patch(color=colors[k], label=labels[k]) for k in order]
-    ax.legend(
-        handles=legend_handles,
+    clean_legend(ax, handles=legend_handles,
         fontsize=PT_SMALL,
         loc="upper center",
         ncol=3,

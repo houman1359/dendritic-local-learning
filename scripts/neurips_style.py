@@ -76,9 +76,9 @@ PANEL_H = 1.62          # height of one panel box
 PANEL_GAP_W = 0.95      # horizontal gap between panel boxes
 PANEL_GAP_H = 0.58      # vertical gap between panel rows
 MARGIN_L = 0.62         # left margin (room for y label + ticks)
-MARGIN_R = 0.30         # room for right-edge value labels
+MARGIN_R = 0.46         # room for right-edge value labels
 MARGIN_T = 0.34         # room for panel title
-MARGIN_B = 0.52         # room for x label + ticks
+MARGIN_B = 0.62         # room for x label + ticks
 
 # ── Canonical type scale ──────────────────────────────────────────────────
 #
@@ -241,8 +241,62 @@ def tidy_ticks(ax, *, nx=None, ny=None):
         ax.yaxis.set_major_locator(MaxNLocator(nbins=ny, prune="both"))
 
 
-def clean_legend(ax, *, loc="best", ncol=1, **kwargs):
-    """Standard legend: no frame, tight spacing, consistent type size."""
+def _legend_data_hits(ax, leg):
+    """Number of plotted points falling inside a legend's box."""
+    import numpy as np
+    fig = ax.get_figure()
+    try:
+        r = fig.canvas.get_renderer()
+    except Exception:
+        fig.canvas.draw()
+        r = fig.canvas.get_renderer()
+    try:
+        bb = leg.get_window_extent(renderer=r)
+    except Exception:
+        return 0
+    pts = []
+    for ln in ax.lines:
+        xy = ln.get_xydata()
+        if xy is not None and len(xy):
+            arr = np.asarray(xy, dtype=float)
+            arr = arr[np.isfinite(arr).all(axis=1)]
+            if len(arr):
+                pts.append(ax.transData.transform(arr))
+    for coll in ax.collections:
+        try:
+            off = np.asarray(coll.get_offsets(), dtype=float)
+        except Exception:
+            continue
+        if off.ndim == 2 and len(off):
+            off = off[np.isfinite(off).all(axis=1)]
+            if len(off):
+                pts.append(coll.get_offset_transform().transform(off))
+    hits = 0
+    if pts:
+        d = np.vstack(pts)
+        hits += int((((d[:, 0] > bb.x0) & (d[:, 0] < bb.x1)
+                      & (d[:, 1] > bb.y0) & (d[:, 1] < bb.y1))).sum())
+    # Bars are patches, not lines; a legend over a bar chart must count them
+    # or the auto-placement silently believes it is clear.
+    for patch in ax.patches:
+        try:
+            ob = patch.get_window_extent(renderer=r)
+        except Exception:
+            continue
+        if (min(bb.x1, ob.x1) - max(bb.x0, ob.x0) > 2
+                and min(bb.y1, ob.y1) - max(bb.y0, ob.y0) > 2):
+            hits += 1
+    return hits
+
+
+def clean_legend(ax, *, loc="best", ncol=1, auto_clear=False, **kwargs):
+    """Standard legend: no frame, tight spacing, consistent type size.
+
+    ``auto_clear`` re-places the legend if the requested corner sits on the
+    data.  It is opt-in: relocation optimises only for data overlap and can push
+    a legend past the panel edge or into the header, so hand-tuned placements
+    are kept unless a call site asks for automatic clearing.
+    """
     kwargs.setdefault("frameon", False)
     kwargs.setdefault("handlelength", 1.4)
     kwargs.setdefault("handletextpad", 0.4)
@@ -250,7 +304,37 @@ def clean_legend(ax, *, loc="best", ncol=1, **kwargs):
     kwargs.setdefault("columnspacing", 0.8)
     kwargs.setdefault("borderaxespad", 0.25)
     leg = ax.legend(loc=loc, ncol=ncol, **kwargs)
-    return leg
+    if not auto_clear or ax.get_yscale() == "log":
+        return leg
+
+    if _legend_data_hits(ax, leg) == 0:
+        return leg
+    best, best_hits = leg, _legend_data_hits(ax, leg)
+    for cand in ("upper left", "upper right", "lower left", "lower right",
+                 "center left", "center right"):
+        if cand == loc:
+            continue
+        trial = ax.legend(loc=cand, ncol=ncol, **kwargs)
+        try:
+            r2 = ax.get_figure().canvas.get_renderer()
+            lb = trial.get_window_extent(renderer=r2)
+            ab = ax.get_window_extent(renderer=r2)
+            if (lb.x0 < ab.x0 - 1 or lb.x1 > ab.x1 + 1
+                    or lb.y0 < ab.y0 - 1 or lb.y1 > ab.y1 + 1):
+                continue
+        except Exception:
+            pass
+        h = _legend_data_hits(ax, trial)
+        if h < best_hits:
+            best, best_hits = trial, h
+        if h == 0:
+            return trial
+    # Nothing is clear: make room at the top and re-place there.
+    add_headroom(ax, 0.26)
+    trial = ax.legend(loc="upper right", ncol=ncol, **kwargs)
+    if _legend_data_hits(ax, trial) <= best_hits:
+        return trial
+    return best
 
 
 def axis_break_note(ax, text="axis truncated", *, loc="lower right"):
@@ -440,3 +524,174 @@ def add_panel_background(ax, color=None, alpha=0.0, radius=0.02):
     """Reserved hook for rounded panel backgrounds."""
     del ax, color, alpha, radius
     return None
+
+
+def audit_layout(fig, name=""):
+    """Report text that leaves the canvas or intrudes into a neighbouring panel.
+
+    Called from the figure generators just before saving.  Catches the two
+    failure modes that a fixed canvas makes silent: an artist drawn outside the
+    figure (clipped away) and an axis label or annotation whose bounding box
+    lands inside a different panel's box.
+    """
+    fig.canvas.draw()
+    r = fig.canvas.get_renderer()
+    fw, fh = fig.get_size_inches() * fig.dpi
+    axes = [a for a in fig.axes if a.get_visible()]
+    boxes = {a: a.get_window_extent(renderer=r) for a in axes}
+    problems = []
+
+    for ax in axes:
+        own = boxes[ax]
+        artists = [ax.title, ax.xaxis.label, ax.yaxis.label]
+        artists += list(ax.texts)
+        # Axes with axis("off") still carry tick-label artists at stale
+        # positions; they are never drawn, so auditing them is pure noise.
+        if getattr(ax, "axison", True):
+            # Locators emit label artists for ticks outside the view; those are
+            # positioned far off-figure and never drawn, so auditing them
+            # produces phantom "off-canvas" hits.  Keep only in-view ticks.
+            def _in_view(locs, labs, lo, hi):
+                span = abs(hi - lo)
+                pad = 1e-9 if span == 0 else 1e-6 * span
+                return [lb for pos, lb in zip(locs, labs)
+                        if min(lo, hi) - pad <= pos <= max(lo, hi) + pad]
+            artists += _in_view(ax.get_xticks(), ax.get_xticklabels(), *ax.get_xlim())
+            artists += _in_view(ax.get_yticks(), ax.get_yticklabels(), *ax.get_ylim())
+        leg = ax.get_legend()
+        if leg is not None:
+            artists.append(leg)
+        for art in artists:
+            if art is None or not art.get_visible():
+                continue
+            txt = getattr(art, "get_text", lambda: "")()
+            if isinstance(txt, str) and not txt.strip():
+                continue
+            try:
+                bb = art.get_window_extent(renderer=r)
+            except Exception:
+                continue
+            if bb.width <= 0 or bb.height <= 0:
+                continue
+            tol = 5.0
+            over = max(-bb.x0, -bb.y0, bb.x1 - fw, bb.y1 - fh)
+            if over > tol:
+                side = ("left" if -bb.x0 == over else
+                        "bottom" if -bb.y0 == over else
+                        "right" if bb.x1 - fw == over else "top")
+                problems.append(
+                    f"OFF-CANVAS {txt!r} {side} by {over/fig.dpi*72:.1f}pt")
+                continue
+            for other in axes:
+                if other is ax:
+                    continue
+                ob = boxes[other]
+                ix = max(0.0, min(bb.x1, ob.x1) - max(bb.x0, ob.x0))
+                iy = max(0.0, min(bb.y1, ob.y1) - max(bb.y0, ob.y0))
+                if ix > 2 and iy > 2:
+                    problems.append(f"INTRUDES {txt!r} -> other panel")
+                    break
+
+    if problems:
+        print(f"  [layout] {name}: " + "; ".join(sorted(set(problems))[:8]))
+    return problems
+
+
+def audit_text_over_data(fig, name=""):
+    """Report in-panel text (annotations, legends) drawn on top of data.
+
+    Complements audit_layout, which only sees text-vs-panel geometry.  Here we
+    transform each line's vertices, each bar's rectangle and each scatter offset
+    into display space and test them against the text bounding boxes in the same
+    axes.  This is the check that catches a value callout sitting on the curve
+    it labels, or a legend overlapping the series it describes.
+    """
+    import numpy as np
+
+    fig.canvas.draw()
+    r = fig.canvas.get_renderer()
+    problems = []
+
+    for ax in fig.axes:
+        if not ax.get_visible() or not getattr(ax, "axison", True):
+            continue
+
+        labels = []
+        for t in ax.texts:
+            txt = t.get_text()
+            if not (t.get_visible() and isinstance(txt, str) and txt.strip()):
+                continue
+            # A light-coloured label or one drawn on its own patch is an
+            # intentional overlay (value inside a bar, boxed callout).
+            try:
+                import matplotlib.colors as mcolors
+                rgb = mcolors.to_rgb(t.get_color())
+                if sum(rgb) / 3.0 > 0.7:
+                    continue
+            except Exception:
+                pass
+            if t.get_bbox_patch() is not None:
+                continue
+            try:
+                labels.append((txt, t.get_window_extent(renderer=r)))
+            except Exception:
+                pass
+        leg = ax.get_legend()
+        if leg is not None and leg.get_visible():
+            try:
+                labels.append(("<legend>", leg.get_window_extent(renderer=r)))
+            except Exception:
+                pass
+        if not labels:
+            continue
+
+        pts = []
+        for ln in ax.lines:
+            if not ln.get_visible():
+                continue
+            xy = ln.get_xydata()
+            if xy is None or len(xy) == 0:
+                continue
+            arr = np.asarray(xy, dtype=float)
+            arr = arr[np.isfinite(arr).all(axis=1)]
+            if len(arr):
+                pts.append(ax.transData.transform(arr))
+        for coll in ax.collections:
+            try:
+                off = coll.get_offsets()
+            except Exception:
+                continue
+            arr = np.asarray(off, dtype=float)
+            if arr.ndim == 2 and len(arr):
+                arr = arr[np.isfinite(arr).all(axis=1)]
+                if len(arr):
+                    pts.append(coll.get_offset_transform().transform(arr))
+        data_pts = np.vstack(pts) if pts else np.empty((0, 2))
+
+        bars = []
+        for patch in ax.patches:
+            try:
+                bars.append(patch.get_window_extent(renderer=r))
+            except Exception:
+                pass
+
+        for txt, bb in labels:
+            hit = False
+            if len(data_pts):
+                inside = ((data_pts[:, 0] > bb.x0) & (data_pts[:, 0] < bb.x1)
+                          & (data_pts[:, 1] > bb.y0) & (data_pts[:, 1] < bb.y1))
+                need = max(2, int(0.01 * len(data_pts))) if txt == "<legend>" else 1
+                hit = int(inside.sum()) >= need
+            if not hit:
+                for ob in bars:
+                    ix = min(bb.x1, ob.x1) - max(bb.x0, ob.x0)
+                    iy = min(bb.y1, ob.y1) - max(bb.y0, ob.y0)
+                    if ix > 2 and iy > 2:
+                        hit = True
+                        break
+            if hit:
+                problems.append(f"TEXT-ON-DATA {txt!r}")
+
+    if problems:
+        print(f"  [overlap] {name}: " + "; ".join(sorted(set(problems))[:10]))
+    return problems

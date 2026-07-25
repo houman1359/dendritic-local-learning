@@ -192,7 +192,7 @@ def generate_cifar_figure(summary_dir: Path) -> bool:
         return False
 
     apply_neurips_style()
-    fig, axes = plt.subplots(1, 3, figsize=(FIG_W, 2.48))
+    fig, axes = plt.subplots(1, 3, figsize=(FIG_W, 2.58))
 
     _dot_interval_panel(
         axes[0],
@@ -250,7 +250,7 @@ def generate_double_cifar_figure(summary_dir: Path) -> bool:
         return False
 
     apply_neurips_style()
-    fig, axes = plt.subplots(1, 3, figsize=(FIG_W, 2.48))
+    fig, axes = plt.subplots(1, 3, figsize=(FIG_W, 2.58))
 
     _dot_interval_panel(
         axes[0],

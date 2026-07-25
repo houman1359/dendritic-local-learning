@@ -292,6 +292,7 @@ def _plot_accuracy_panel(ax: plt.Axes, records: list[dict[str, Any]]) -> None:
             va="center",
             ha="left",
             fontsize=PT_ANNOT,
+            bbox={"facecolor": "white", "edgecolor": "none", "pad": 0.5, "alpha": 0.85},
         )
 
     ax.set_yticks(y)
@@ -310,6 +311,7 @@ def _plot_accuracy_panel(ax: plt.Axes, records: list[dict[str, Any]]) -> None:
         color="#666666",
         ha="left",
         va="top",
+        bbox={"facecolor": "white", "edgecolor": "none", "pad": 0.5, "alpha": 0.85},
     )
 
 
@@ -388,6 +390,7 @@ def _plot_specialization_panel(ax: plt.Axes, df: pd.DataFrame) -> None:
             textcoords="offset points",
             fontsize=PT_SMALL,
             color="#333333",
+            bbox={"facecolor": "white", "edgecolor": "none", "pad": 0.4, "alpha": 0.85},
         )
 
     ax.text(

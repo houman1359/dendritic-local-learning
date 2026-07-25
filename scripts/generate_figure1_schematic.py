@@ -37,7 +37,10 @@ from matplotlib.patches import Circle, FancyArrowPatch, FancyBboxPatch
 import numpy as np
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from neurips_style import COLORS, MAIN_W, apply_neurips_style, panel_label
+# NOTE: this schematic keeps explicit stroke weights: they encode dendrite
+# calibre (distal -> proximal -> soma), so snapping them to the canonical
+# data-line weights would erase the anatomical hierarchy the panel shows.
+from neurips_style import COLORS, MAIN_W, apply_neurips_style, panel_title
 
 apply_neurips_style()
 
@@ -144,8 +147,7 @@ def panel_a(ax):
     streams on the left.  Adapted from the polished schematic in
     dendritic-information-processing/scripts/generate_neurips_figures.py.
     """
-    ax.set_title("Single dendritic E/I unit",
-                 fontsize=9.0, pad=4.0, fontweight="bold", loc="center")
+    panel_title(ax, "A", "Dendritic E/I unit")
     ax.axis("off")
     ax.set_xlim(-1.8, 19.9)
     ax.set_ylim(-2.0, 12.0)
@@ -260,8 +262,7 @@ def panel_a(ax):
 def panel_b(ax):
     """E and I input pools feed N=4 dendritic units; per-unit somas project
     to a task readout; delta_0 exits on the right as the broadcast source."""
-    ax.set_title("Network layer", fontsize=9.0, pad=4.0,
-                 fontweight="bold", loc="center")
+    panel_title(ax, "B", "Network layer")
     ax.axis("off")
     ax.set_xlim(0.0, 1.0)
     ax.set_ylim(0.0, 1.0)
@@ -357,8 +358,7 @@ def panel_b(ax):
 def panel_c(ax):
     """Mechanism panel: path-specific compartment errors, low-bandwidth
     broadcast estimators, and the exact-vs-LocalCA factorization."""
-    ax.set_title("Credit: eligibility $\\times$ error",
-                 fontsize=9.0, pad=4.0, fontweight="bold", loc="center")
+    panel_title(ax, "C", "Credit: eligibility $\\times$ error")
     ax.axis("off")
     ax.set_xlim(0.0, 1.0)
     ax.set_ylim(0.0, 1.0)
@@ -598,11 +598,6 @@ def main():
     panel_a(ax_a)
     panel_b(ax_b)
     panel_c(ax_c)
-
-    for ax, lbl, x_off, y_off in [(ax_a, "A", -0.06, 1.22),
-                                  (ax_b, "B", -0.04, 1.22),
-                                  (ax_c, "C", -0.03, 1.22)]:
-        panel_label(ax, lbl, x=x_off, y=y_off, fontsize=12.0)
 
     out = OUTPUT_DIR / "fig1_model_and_credit"
     fig.savefig(out.with_suffix(".pdf"))

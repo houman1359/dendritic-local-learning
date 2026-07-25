@@ -119,7 +119,7 @@ def _heatmap(ax, frame: pd.DataFrame, title: str, cmap: str, center: float | Non
     ax.collections[0].colorbar.outline.set_linewidth(0.65)
     ax.collections[0].colorbar.ax.tick_params(labelsize=8.3, width=0.4, length=2)
     ax.set_xlabel(r"$N_I$ per branch", fontsize=PT_TITLE)
-    ax.set_ylabel("Tree", fontsize=PT_TITLE, labelpad=12)
+    ax.set_ylabel("")
     ax.tick_params(labelsize=8.6)
     ax.set_xticklabels(ax.get_xticklabels(), rotation=0)
     ax.set_yticklabels(ax.get_yticklabels(), rotation=0)
@@ -308,7 +308,7 @@ def build_figure(sweep_dir: Path = DEFAULT_SWEEP_DIR) -> tuple[plt.Figure, pd.Da
         ax.set_xlabel(r"Tree / $N_I$")
         ax.set_ylabel("Path-gain CV")
         panel_title(ax, "C", "Credit geometry")
-        ax.legend(loc="upper right", fontsize=PT_TICK, frameon=False)
+        clean_legend(ax, loc="upper right", fontsize=PT_TICK, frameon=False)
         ax.margins(x=0.08)
     else:
         architecture_summary = (
@@ -337,7 +337,7 @@ def build_figure(sweep_dir: Path = DEFAULT_SWEEP_DIR) -> tuple[plt.Figure, pd.Da
         ax.set_xlabel(r"$N_I$ per branch")
         ax.set_ylabel("Test accuracy")
         panel_title(ax, "C", "Mean perf.")
-        ax.legend(fontsize=PT_TICK, frameon=False, loc="best")
+        clean_legend(ax, fontsize=PT_TICK, frameon=False, loc="best")
 
     ax = axes[3]
     style_axis(ax, grid="y")
@@ -356,12 +356,12 @@ def build_figure(sweep_dir: Path = DEFAULT_SWEEP_DIR) -> tuple[plt.Figure, pd.Da
             capthick=0.8,
         )
     ax.axhline(0.0, color="black", linewidth=LW_ERR, linestyle="--", alpha=0.6)
-    panel_title(ax, "D", "Depth summary")
+    panel_title(ax, "D", "Depth")
     ax.set_xlabel(r"$N_I$ per branch", fontsize=PT_TITLE)
     ax.set_ylabel("Accuracy gap", fontsize=PT_TITLE)
     ax.set_xticks(ie_order)
     ax.tick_params(labelsize=9.4)
-    ax.legend(fontsize=PT_LABEL, loc="best")
+    clean_legend(ax, fontsize=PT_LABEL, loc="best")
     for _, row in depth_peak.iterrows():
         ax.scatter(
             [row["ie"]],
