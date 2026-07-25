@@ -50,7 +50,17 @@ FIGURES_DIR = os.path.join(DRAFT_DIR, "figures")
 # ---------------------------------------------------------------------------
 import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from neurips_style import apply_neurips_style, COLORS, panel_label, style_axis
+from neurips_style import (  # noqa: E402
+    COLORS,
+    FIG_W,
+    REF_LW,
+    apply_neurips_style,
+    clean_legend,
+    grid_figure,
+    panel_label,
+    panel_title,
+    style_axis,
+)
 apply_neurips_style()
 
 COLOR_SHUNTING = COLORS["shunting"]
@@ -135,8 +145,7 @@ def figure_s5():
         print("  SKIPPED: fa_dfa_results.csv not found")
         return
 
-    fig, axes = plt.subplots(2, 1, figsize=(W * 0.95, 5.0),
-                             gridspec_kw={"hspace": 0.58})
+    fig, axes = grid_figure(2)
 
     # ---- Panel A: Grouped bars by model ----
     ax = axes[0]
@@ -215,8 +224,6 @@ def figure_s5():
     ax.set_xlabel("Backprop - DFA gap (pp)")
     ax.set_title("DFA performance gap")
     ax.axvline(0, color="black", lw=0.4)
-
-    fig.subplots_adjust(left=0.12, right=0.97, bottom=0.10, top=0.93)
     _save(fig, "fig_s5_fa_dfa")
     plt.close(fig)
 
@@ -246,7 +253,7 @@ def figure_s6():
         print("  SKIPPED: corrected CIFAR summary CSVs not found")
         return
 
-    fig, axes = plt.subplots(1, 2, figsize=(W, 2.55), gridspec_kw={"wspace": 0.42})
+    fig, axes = grid_figure(2)
 
     def get_bp(model):
         sub = bp[(bp["strategy"] == "standard") & (bp["model_type"] == model)]
@@ -355,8 +362,6 @@ def figure_s6():
     ax.set_xticklabels([label for label, *_ in ladder])
     ax.set_title("Shunting rank bridge", fontsize=9.8)
     ax.set_ylim(0, 55)
-
-    fig.subplots_adjust(left=0.10, right=0.98, bottom=0.18, top=0.90, wspace=0.42)
     _save(fig, "fig_cifar10_mechanism_extension")
     plt.close(fig)
 
@@ -373,8 +378,7 @@ def figure_s7():
         print("  SKIPPED: additive_norm_results.csv not found")
         return
 
-    fig, axes = plt.subplots(2, 1, figsize=(W * 0.95, 5.0),
-                             gridspec_kw={"hspace": 0.58})
+    fig, axes = grid_figure(2)
 
     # ---- Panel A: Standard training ----
     ax = axes[0]
@@ -440,8 +444,6 @@ def figure_s7():
     ax.set_ylabel("Test accuracy (%)")
     ax.set_title("Local learning (MNIST)")
     ax.set_ylim(30, 72)
-
-    fig.subplots_adjust(left=0.12, right=0.97, bottom=0.10, top=0.93)
     _save(fig, "fig_additive_norm_control")
     plt.close(fig)
 

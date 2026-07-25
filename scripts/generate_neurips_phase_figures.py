@@ -48,8 +48,8 @@ def _safe_read_csv(path: Path) -> pd.DataFrame:
 
 def _save_dual(fig: plt.Figure, path_base: Path) -> None:
     path_base.parent.mkdir(parents=True, exist_ok=True)
-    fig.savefig(path_base.with_suffix(".pdf"), dpi=350, bbox_inches="tight")
-    fig.savefig(path_base.with_suffix(".png"), dpi=350, bbox_inches="tight")
+    fig.savefig(path_base.with_suffix(".pdf"), dpi=350)
+    fig.savefig(path_base.with_suffix(".png"), dpi=350)
 
 
 def _setup_style() -> None:

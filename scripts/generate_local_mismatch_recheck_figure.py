@@ -21,8 +21,8 @@ DEFAULT_OUTPUT = Path(
 
 def _save_dual(fig: plt.Figure, out_base: Path) -> None:
     out_base.parent.mkdir(parents=True, exist_ok=True)
-    fig.savefig(out_base.with_suffix(".pdf"), dpi=350, bbox_inches="tight")
-    fig.savefig(out_base.with_suffix(".png"), dpi=350, bbox_inches="tight")
+    fig.savefig(out_base.with_suffix(".pdf"), dpi=350)
+    fig.savefig(out_base.with_suffix(".png"), dpi=350)
 
 
 def _human_core(name: str) -> str:

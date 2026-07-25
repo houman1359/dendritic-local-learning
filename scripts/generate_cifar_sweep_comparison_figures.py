@@ -18,7 +18,17 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from neurips_style import COLORS, apply_neurips_style, panel_label, style_axis
+from neurips_style import (  # noqa: E402
+    COLORS,
+    FIG_W,
+    REF_LW,
+    apply_neurips_style,
+    clean_legend,
+    grid_figure,
+    panel_label,
+    panel_title,
+    style_axis,
+)
 
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
@@ -31,9 +41,9 @@ CIFAR_LABELS = {
     "cifar10_additive_standard": "Additive\nBP",
     "cifar10_shunting_standard_learned_i": "Shunting\nBP",
     "cifar10_shunting_standard_no_i": "Shunting BP\nno I->E",
-    "cifar10_additive_5f_per_soma": "Add.\nPS",
-    "cifar10_shunting_5f_per_soma_learned_i": "Shunt.\nPS",
-    "cifar10_shunting_5f_per_soma_no_i": "Shunting per-soma\nno I->E",
+    "cifar10_additive_5f_per_soma": "Add.\nMW",
+    "cifar10_shunting_5f_per_soma_learned_i": "Shunt.\nMW",
+    "cifar10_shunting_5f_per_soma_no_i": "Shunt. MW\nno I->E",
     "cifar10_additive_5f_path_transport": "Add.\nPT",
     "cifar10_shunting_5f_low_rank4_learned_i": "Shunt.\nK4",
     "cifar10_shunting_5f_path_transport_learned_i": "Shunt.\nPT",
@@ -106,6 +116,7 @@ def _dot_interval_panel(
     labels: dict[str, str],
     title: str,
     ylabel: str = "Test accuracy (%)",
+    letter: str = "",
 ) -> None:
     xs = np.arange(len(conditions))
     rng = np.random.default_rng(7)
@@ -150,7 +161,7 @@ def _dot_interval_panel(
         rotation_mode="anchor",
         linespacing=0.9,
     )
-    ax.set_title(title)
+    panel_title(ax, letter, title)
     ax.set_ylabel(ylabel)
     style_axis(ax, grid="y")
     ax.set_ylim(bottom=max(0, ax.get_ylim()[0]))
@@ -177,7 +188,7 @@ def generate_cifar_figure(summary_dir: Path) -> bool:
         return False
 
     apply_neurips_style()
-    fig, axes = plt.subplots(1, 3, figsize=(9.2, 3.15))
+    fig, axes = plt.subplots(1, 3, figsize=(FIG_W, 2.48))
 
     _dot_interval_panel(
         axes[0],
@@ -189,6 +200,7 @@ def generate_cifar_figure(summary_dir: Path) -> bool:
         ],
         CIFAR_LABELS,
         "Backprop references",
+        letter="A",
     )
     _dot_interval_panel(
         axes[1],
@@ -202,6 +214,7 @@ def generate_cifar_figure(summary_dir: Path) -> bool:
         ],
         CIFAR_LABELS,
         "Broadcast ladder",
+        letter="B",
         ylabel="",
     )
     _dot_interval_panel(
@@ -216,13 +229,11 @@ def generate_cifar_figure(summary_dir: Path) -> bool:
         ],
         CIFAR_LABELS,
         "Additive controls",
+        letter="C",
         ylabel="",
     )
 
-    for label, ax in zip("ABC", axes):
-        panel_label(ax, label, x=0.01, y=0.98, fontsize=10)
-
-    fig.subplots_adjust(left=0.07, right=0.995, top=0.80, bottom=0.42, wspace=0.40)
+    fig.subplots_adjust(left=0.09, right=0.995, top=0.86, bottom=0.40, wspace=0.42)
     _save(fig, "fig_s_cifar10_control_ladder_20260427")
     plt.close(fig)
     return True
@@ -235,7 +246,7 @@ def generate_double_cifar_figure(summary_dir: Path) -> bool:
         return False
 
     apply_neurips_style()
-    fig, axes = plt.subplots(1, 3, figsize=(9.2, 3.15))
+    fig, axes = plt.subplots(1, 3, figsize=(FIG_W, 2.48))
 
     _dot_interval_panel(
         axes[0],

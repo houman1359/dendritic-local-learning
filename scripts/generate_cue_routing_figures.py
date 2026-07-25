@@ -10,7 +10,17 @@ from typing import Any
 
 import sys, os
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from neurips_style import apply_neurips_style, COLORS as NEURIPS_COLORS, panel_label, style_axis
+from neurips_style import (  # noqa: E402
+    COLORS as NEURIPS_COLORS,
+    FIG_W,
+    REF_LW,
+    apply_neurips_style,
+    clean_legend,
+    grid_figure,
+    panel_label,
+    panel_title,
+    style_axis,
+)
 apply_neurips_style()
 
 import matplotlib
@@ -104,8 +114,8 @@ def _summary_records(df: pd.DataFrame) -> list[dict[str, Any]]:
     entries = [
         ("local_ca", "dendritic_additive", "fixed", "baseline", "Add.\nfixed"),
         ("local_ca", "dendritic_additive", "learned", "baseline", "Add.\nlearned"),
-        ("local_ca", "dendritic_shunting", "learned", "baseline", "Shunt.\nPS"),
-        ("local_ca", "dendritic_shunting", "learned", "baseline_tuned", "Shunt.\nPS tuned"),
+        ("local_ca", "dendritic_shunting", "learned", "baseline", "Shunt.\nMW"),
+        ("local_ca", "dendritic_shunting", "learned", "baseline_tuned", "Shunt.\nMW tuned"),
         ("local_ca", "dendritic_shunting", "learned", "low_rank_k1", "Random\n$K{=}1$"),
         ("local_ca", "dendritic_shunting", "learned", "low_rank_k2", "Random\n$K{=}2$"),
         ("local_ca", "dendritic_shunting", "learned", "pathway_vector_tuned", "PV-LocalCA"),
@@ -216,7 +226,7 @@ def _plot_task_schematic(ax: plt.Axes) -> None:
     _draw_arrow(ax, (0.22, 0.79), (0.33, 0.64), "#A07015", text="route", text_xy=(0.30, 0.72), linewidth=1.0)
     _draw_arrow(ax, (0.22, 0.79), (0.33, 0.39), "#A07015", linewidth=1.0)
 
-    _draw_box(ax, (0.68, 0.66), (0.22, 0.085), "PS / scalar fallback", "#F4F4F4")
+    _draw_box(ax, (0.68, 0.66), (0.22, 0.085), "MW / scalar fallback", "#F4F4F4")
     _draw_box(ax, (0.68, 0.47), (0.22, 0.095), "Random low-rank\n$e_n = \\Gamma_K(\\delta_0)$", "#F8EBDD", edgecolor=COLOR_CONTROL)
     _draw_box(ax, (0.68, 0.25), (0.22, 0.115), "Structured pathways\n$e_n = \\sum_k q_{n,k} c_k$", "#EFE4F8", edgecolor=COLOR_PATHWAY)
     _draw_arrow(ax, (0.64, 0.47), (0.68, 0.70), "#777777", linestyle="--", text="shared signal", text_xy=(0.80, 0.79), linewidth=1.0)
@@ -352,7 +362,7 @@ def _plot_specialization_panel(ax: plt.Axes, df: pd.DataFrame) -> None:
         )
 
     annotations = {
-        "baseline": "PS",
+        "baseline": "MW",
         "low_rank_k2": "$K{=}2$",
         "pathway_vector_tuned": "PV",
     }
@@ -433,23 +443,16 @@ def build_figure(summary_csv: Path) -> None:
     records = _summary_records(summary)
     pv_row = _find_record(summary, "local_ca", "dendritic_shunting", "learned", "pathway_vector_tuned")
 
-    fig, axes = plt.subplots(
-        1,
-        4,
-        figsize=(14.8, 3.35),
-        gridspec_kw={
-            "wspace": 0.42,
-            "width_ratios": [1.25, 1.55, 1.10, 0.95],
-        },
-    )
-    ax_a, ax_b, ax_c, ax_d = axes
+    fig, axes = grid_figure(2, 2, panel_h=2.15, gap_w=0.95, gap_h=0.72,
+                            margin_l=0.70, margin_b=0.55)
+    ax_a, ax_b = axes[0]
+    ax_c, ax_d = axes[1]
 
     _plot_task_schematic(ax_a)
     _plot_accuracy_panel(ax_b, records)
     _plot_specialization_panel(ax_c, summary)
     _plot_assignment_panel(ax_d, pv_row)
 
-    fig.subplots_adjust(left=0.045, right=0.992, bottom=0.23, top=0.86, wspace=0.42)
     _save(fig, "fig_s_cue_routing")
     plt.close(fig)
 

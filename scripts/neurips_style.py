@@ -59,10 +59,154 @@ WIDE_FIG   = 13.0
 MAIN_W = 7.2                        # inches
 MAIN_SCALE = 397.0 / (72.0 * MAIN_W)  # ≈ 0.766 → printed pt = nominal * MAIN_SCALE
 
+# Canonical authored width for EVERY figure in the paper, main and supplementary.
+#
+# Printed type size = nominal_pt * (latex_width_pt) / (72 * authored_width_in).
+# Authoring supplementary figures at 6.3 / 10.45 in while including them at
+# 0.62-0.98\textwidth made the same nominal 10.8 pt font print anywhere between
+# 5.6 pt and 12.4 pt across the figure set.  Author every figure at FIG_W and
+# include every figure at \textwidth: one scale factor, one printed type size.
+FIG_W = MAIN_W
+
+# Canonical panel-box geometry, in inches.  Panels are laid out on a fixed grid
+# whose margins are specified in inches (not figure fractions), so a panel box
+# in a 5-panel figure is exactly as tall as a panel box in a 2-panel figure and
+# axis line weights, tick lengths and fonts all render at one scale.
+PANEL_H = 1.62          # height of one panel box
+PANEL_GAP_W = 0.72      # horizontal gap between panel boxes
+PANEL_GAP_H = 0.58      # vertical gap between panel rows
+MARGIN_L = 0.62         # left margin (room for y label + ticks)
+MARGIN_R = 0.30         # room for right-edge value labels
+MARGIN_T = 0.34         # room for panel title
+MARGIN_B = 0.52         # room for x label + ticks
+
+# Uniform element sizing, referenced by every generator.
+BAR_LW = 0.9            # bar / patch edge width
+ERR_LW = 1.15           # error-bar line width
+ERR_CAPSIZE = 2.6
+REF_LW = 1.25           # reference / threshold line width
+SEED_MS = 3.4           # per-seed scatter marker size
+SEED_ALPHA = 0.85
+PANEL_LABEL_PT = 12.0   # panel letter size (single value, every figure)
+PANEL_TITLE_PT = 10.4   # panel header size
+PANEL_TITLE_PAD = 5.0   # header -> axes gap, points
+
+
+def panel_title(ax, letter, title="", *, loc="left", pad=None, fontsize=None):
+    """Uniform panel header: a bold letter followed by the panel title.
+
+    Every panel in every figure uses this one call, so the letter has the same
+    size, weight, alignment and baseline everywhere.  Left-aligning the letter
+    with the title (rather than floating a letter outside the axes and centring
+    the title) is what keeps narrow multi-panel rows free of collisions: the
+    header grows to the right into free space instead of upward into the row
+    above.
+    """
+    text = f"{letter}  {title}".rstrip() if title else str(letter)
+    ax.set_title(
+        text, loc=loc, fontweight="bold",
+        fontsize=PANEL_TITLE_PT if fontsize is None else fontsize,
+        pad=PANEL_TITLE_PAD if pad is None else pad,
+    )
+
 
 def printed_pt(nominal_pt: float) -> float:
-    """Printed size (pt) of a MAIN_W-authored element after LaTeX rescaling."""
+    """Printed size (pt) of a FIG_W-authored element after LaTeX rescaling."""
     return float(nominal_pt) * MAIN_SCALE
+
+
+def grid_figure(ncols, nrows=1, *, panel_h=None, width=None,
+                gap_w=None, gap_h=None, margin_l=None, margin_r=None,
+                margin_t=None, margin_b=None, width_ratios=None,
+                height_ratios=None, squeeze=True):
+    """Create a figure whose panel boxes have identical geometry everywhere.
+
+    Margins and gaps are given in *inches* and converted to figure fractions,
+    so the drawable panel box is the same physical size in every figure that
+    uses the same ``panel_h``.  This is what makes axis weights, tick lengths
+    and type render consistently across the whole figure set.
+
+    Returns ``(fig, axes)`` with ``axes`` shaped like ``plt.subplots``.
+    """
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    panel_h = PANEL_H if panel_h is None else float(panel_h)
+    width = FIG_W if width is None else float(width)
+    gap_w = PANEL_GAP_W if gap_w is None else float(gap_w)
+    gap_h = PANEL_GAP_H if gap_h is None else float(gap_h)
+    ml = MARGIN_L if margin_l is None else float(margin_l)
+    mr = MARGIN_R if margin_r is None else float(margin_r)
+    mt = MARGIN_T if margin_t is None else float(margin_t)
+    mb = MARGIN_B if margin_b is None else float(margin_b)
+
+    # Total figure height from the panel geometry.
+    height = mt + mb + nrows * panel_h + (nrows - 1) * gap_h
+    fig = plt.figure(figsize=(width, height))
+    gs = fig.add_gridspec(
+        nrows, ncols,
+        left=ml / width, right=1.0 - mr / width,
+        top=1.0 - mt / height, bottom=mb / height,
+        wspace=gap_w / ((width - ml - mr) / ncols),
+        hspace=gap_h / panel_h,
+        width_ratios=width_ratios, height_ratios=height_ratios,
+    )
+    axes = np.empty((nrows, ncols), dtype=object)
+    for r in range(nrows):
+        for c in range(ncols):
+            axes[r, c] = fig.add_subplot(gs[r, c])
+    if squeeze:
+        if nrows == 1 and ncols == 1:
+            return fig, axes[0, 0]
+        if nrows == 1:
+            return fig, axes[0]
+        if ncols == 1:
+            return fig, axes[:, 0]
+    return fig, axes
+
+
+def label_panels(axes, labels=None, **kwargs):
+    """Attach uniform panel letters to a flat or nested sequence of axes."""
+    import numpy as np
+
+    flat = list(np.asarray(axes, dtype=object).ravel())
+    if labels is None:
+        labels = [chr(ord("A") + i) for i in range(len(flat))]
+    for ax, lab in zip(flat, labels):
+        if ax is None or not lab:
+            continue
+        panel_label(ax, lab, **kwargs)
+
+
+def clean_legend(ax, *, loc="best", ncol=1, **kwargs):
+    """Standard legend: no frame, tight spacing, consistent type size."""
+    kwargs.setdefault("frameon", False)
+    kwargs.setdefault("handlelength", 1.4)
+    kwargs.setdefault("handletextpad", 0.4)
+    kwargs.setdefault("labelspacing", 0.3)
+    kwargs.setdefault("columnspacing", 0.8)
+    kwargs.setdefault("borderaxespad", 0.25)
+    leg = ax.legend(loc=loc, ncol=ncol, **kwargs)
+    return leg
+
+
+def axis_break_note(ax, text="axis truncated", *, loc="lower right"):
+    """Small italic note marking a truncated axis, placed inside the panel."""
+    xy = {"lower right": (0.98, 0.02, "right", "bottom"),
+          "lower left": (0.02, 0.02, "left", "bottom"),
+          "upper right": (0.98, 0.98, "right", "top")}[loc]
+    ax.text(xy[0], xy[1], text, transform=ax.transAxes,
+            fontsize=7.4, style="italic", color=COLORS["mute"],
+            ha=xy[2], va=xy[3])
+
+
+def paired_lines(ax, x0, x1, y0, y1, *, color=None, lw=0.55, alpha=0.42,
+                 zorder=1):
+    """Draw per-seed pairing lines between two conditions."""
+    color = COLORS["mute"] if color is None else color
+    for a, b in zip(y0, y1):
+        ax.plot([x0, x1], [a, b], color=color, lw=lw, alpha=alpha,
+                zorder=zorder, solid_capstyle="round")
 
 
 def apply_neurips_style():
@@ -139,8 +283,9 @@ def apply_neurips_style():
         "figure.dpi": 150,
         "figure.facecolor": "white",
         "savefig.dpi": 350,
-        "savefig.bbox": "tight",
-        "savefig.pad_inches": 0.04,
+        # Fixed canvas: identical printed type size in every figure.
+        "savefig.bbox": None,
+        "savefig.pad_inches": 0.0,
         "savefig.facecolor": "white",
         "savefig.transparent": False,
 
@@ -168,7 +313,7 @@ def panel_label(ax, label, x=None, y=None, *, dx=-26.0, dy=4.0, **kwargs):
     never occupies the same space.  Legacy ``x``/``y`` (axes-fraction) args are
     still honoured if a call site passes them explicitly.
     """
-    fontsize = kwargs.pop("fontsize", 12.0)
+    fontsize = kwargs.pop("fontsize", PANEL_LABEL_PT)
     color = kwargs.pop("color", COLORS["ink"])
     if x is not None or y is not None:  # legacy axes-fraction placement
         ax.text(

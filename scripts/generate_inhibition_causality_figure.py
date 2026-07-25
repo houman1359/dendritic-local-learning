@@ -12,7 +12,16 @@ import numpy as np
 import pandas as pd
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from neurips_style import COLORS, apply_neurips_style, style_axis
+from neurips_style import (  # noqa: E402
+    COLORS,
+    FIG_W,
+    REF_LW,
+    apply_neurips_style,
+    clean_legend,
+    grid_figure,
+    panel_title,
+    style_axis,
+)
 
 apply_neurips_style()
 
@@ -34,9 +43,12 @@ RANK_CSV = _tracked(
     "error_rank_diagnostics.csv",
     ROOT / "analysis" / "error_rank_selected_20260427" / "error_rank_diagnostics.csv",
 )
-RANK_SUMMARY_CSV = _tracked(
-    "error_rank_summary.csv",
-    ROOT / "analysis" / "error_rank_selected_20260427" / "error_rank_summary.csv",
+ERROR_FIELD_DECOMPOSITION_RUNS_CSV = _tracked(
+    "error_field_decomposition_runs.csv",
+    ROOT
+    / "analysis"
+    / "scope_corrected_decomposition_20260725"
+    / "error_field_decomposition_runs.csv",
 )
 
 
@@ -67,7 +79,7 @@ def _mean_std(frame: pd.DataFrame, value: str, group: str) -> pd.DataFrame:
     return frame.groupby(group, dropna=False)[value].agg(["mean", "std", "count"]).reset_index()
 
 
-def _bar_panel(ax, data: pd.DataFrame, dataset: str, title: str) -> None:
+def _bar_panel(ax, data: pd.DataFrame, dataset: str, title: str, letter="") -> None:
     sub = data[data["dataset"] == dataset].copy()
     stats = _mean_std(sub, "accuracy", "intervention").set_index("intervention")
     xs = np.arange(len(INTERVENTION_ORDER))
@@ -97,11 +109,11 @@ def _bar_panel(ax, data: pd.DataFrame, dataset: str, title: str) -> None:
     )
     ax.set_ylim(0, 1.02)
     ax.set_ylabel("Test accuracy", fontsize=8.2)
-    ax.set_title(title, fontsize=8.8, pad=7)
+    panel_title(ax, letter, title)
     style_axis(ax, grid="y")
 
 
-def _rank_panel(ax, data: pd.DataFrame, metric: str, ylabel: str, title: str) -> None:
+def _rank_panel(ax, data: pd.DataFrame, metric: str, ylabel: str, title: str, letter: str = "") -> None:
     sub = data[(data["dataset"] == "mnist") & (data["ie_value"] == 5) & (data["scope"] == "all_layers")]
     order = ["dendritic_additive", "dendritic_shunting"]
     labels = ["Add.", "Shunt."]
@@ -130,7 +142,7 @@ def _rank_panel(ax, data: pd.DataFrame, metric: str, ylabel: str, title: str) ->
     ax.set_xticks(xs)
     ax.set_xticklabels(labels)
     ax.set_ylabel(ylabel, fontsize=8.2)
-    ax.set_title(title, fontsize=8.8, pad=7)
+    panel_title(ax, letter, title)
     style_axis(ax, grid="y")
 
 
@@ -138,9 +150,24 @@ def _dendritic_fidelity_panel(ax, data: pd.DataFrame) -> None:
     """Stage-resolved fidelity, excluding the exact-by-construction soma."""
     sub = data[
         (data["dataset"] == "mnist")
-        & (data["scope"].isin(["layer_0", "layer_1"]))
+        & (data["strategy"] == "local_ca")
+        & (data["rule_variant"] == "5f")
+        & (data["error_broadcast_mode"] == "per_soma")
+        & (data["scope_type"] == "stage")
+        & (data["population"] == 0)
+        & (data["stage_role"].isin(["distal", "proximal"]))
+        & (data["family"] == "submitted_mw")
     ].copy()
-    stages = ["layer_0", "layer_1"]
+    if sub.empty:
+        raise ValueError("Scope-corrected stage-resolved submitted-field data are unavailable")
+    per_checkpoint = (
+        sub.groupby(
+            ["run_name", "seed", "network_type", "stage_role"],
+            as_index=False,
+        )["cosine"]
+        .mean()
+    )
+    stages = ["distal", "proximal"]
     stage_labels = ["Distal", "Prox."]
     cores = [
         ("dendritic_additive", "Add.", COLORS["additive"]),
@@ -152,11 +179,16 @@ def _dendritic_fidelity_panel(ax, data: pd.DataFrame) -> None:
         means = []
         stds = []
         for stage in stages:
-            row = sub[
-                (sub["network_type"] == net) & (sub["scope"] == stage)
-            ].iloc[0]
-            means.append(float(row["actual_broadcast_cosine_mean"]))
-            stds.append(float(row["actual_broadcast_cosine_std"]))
+            values = per_checkpoint[
+                (per_checkpoint["network_type"] == net)
+                & (per_checkpoint["stage_role"] == stage)
+            ]["cosine"]
+            if len(values) != 5:
+                raise ValueError(
+                    f"Expected five checkpoint values for {net}/{stage}, got {len(values)}"
+                )
+            means.append(float(values.mean()))
+            stds.append(float(values.std(ddof=1)))
         ax.bar(
             xs + offset,
             means,
@@ -172,7 +204,7 @@ def _dendritic_fidelity_panel(ax, data: pd.DataFrame) -> None:
     ax.set_xticklabels(stage_labels, rotation=20, ha="right", fontsize=6.7)
     ax.set_ylim(0, 0.30)
     ax.set_ylabel("Broadcast cosine", fontsize=8.2)
-    ax.set_title("Dendritic fidelity", fontsize=8.8, pad=7)
+    panel_title(ax, "E", "Dendritic fidelity")
     ax.legend(
         fontsize=6.2,
         frameon=False,
@@ -186,45 +218,32 @@ def _dendritic_fidelity_panel(ax, data: pd.DataFrame) -> None:
 def main() -> None:
     causal = pd.read_csv(CAUSAL_CSV)
     rank = pd.read_csv(RANK_CSV)
-    rank_summary = pd.read_csv(RANK_SUMMARY_CSV)
+    decomposition_runs = pd.read_csv(ERROR_FIELD_DECOMPOSITION_RUNS_CSV)
 
-    fig, axes = plt.subplots(
-        1,
-        5,
-        figsize=(7.0, 2.35),
-        gridspec_kw={"width_ratios": [1.05, 1.05, 0.88, 0.88, 0.88]},
-    )
-    _bar_panel(axes[0], causal, "mnist", "MNIST")
-    _bar_panel(axes[1], causal, "noise_resilience", "Noise resilience")
+    # Five panels on one row leaves ~0.9 in each, too narrow for the y labels
+    # and titles; a 3x2 grid gives every panel the standard panel box.
+    fig, axgrid = grid_figure(3, 2)
+    axes = list(axgrid.ravel())
+    axes[5].set_visible(False)
+    _bar_panel(axes[0], causal, "mnist", "MNIST", letter="A")
+    _bar_panel(axes[1], causal, "noise_resilience", "Noise", letter="B")
     _rank_panel(
         axes[2],
         rank,
         "rank1_residual",
         "SVD residual",
-        "Exact-error residual",
+        "SVD residual",
+        letter="C",
     )
     _rank_panel(
         axes[3],
         rank,
         "effective_rank_participation",
         "Participation rank",
-        "Exact-error rank",
+        "Participation rank",
+        letter="D",
     )
-    _dendritic_fidelity_panel(axes[4], rank_summary)
-    for ax, label in zip(axes, "ABCDE"):
-        ax.text(
-            0.02,
-            0.98,
-            label,
-            transform=ax.transAxes,
-            fontsize=7.8,
-            fontweight="bold",
-            va="top",
-            ha="left",
-            color=COLORS["ink"],
-            bbox={"facecolor": "white", "edgecolor": "none", "alpha": 0.85, "pad": 0.4},
-        )
-    fig.subplots_adjust(left=0.065, right=0.995, top=0.79, bottom=0.30, wspace=0.64)
+    _dendritic_fidelity_panel(axes[4], decomposition_runs)
 
     FIG_DIR.mkdir(parents=True, exist_ok=True)
     out = FIG_DIR / "fig_s_inhibition_causality_error_rank"

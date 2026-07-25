@@ -15,11 +15,16 @@ import matplotlib.colors as mcolors
 import numpy as np
 import pandas as pd
 
-from neurips_style import (
-    apply_neurips_style,
+from neurips_style import (  # noqa: E402
     COLORS,
+    FIG_W,
     MAIN_W,
+    REF_LW,
+    apply_neurips_style,
+    clean_legend,
+    grid_figure,
     panel_label,
+    panel_title,
     style_axis,
 )
 
@@ -51,9 +56,11 @@ ORACLE_SUMMARY_CSV = _tracked_csv(
     / "path_transport_upper_bound_nonnegativeinput_fix_5seed"
     / "path_transport_upper_bound_summary.csv",
 )
-ERROR_RANK_SUMMARY_CSV = _tracked_csv(
-    "error_rank_summary.csv",
-    ANALYSIS_DIR / "error_rank_selected_20260427" / "error_rank_summary.csv",
+ERROR_FIELD_DECOMPOSITION_RUNS_CSV = _tracked_csv(
+    "error_field_decomposition_runs.csv",
+    ANALYSIS_DIR
+    / "scope_corrected_decomposition_20260725"
+    / "error_field_decomposition_runs.csv",
 )
 INPUT_MODE_SUMMARY_CSV = (
     ANALYSIS_DIR
@@ -197,7 +204,6 @@ def _plot_path_gain_map(
     summary: pd.DataFrame,
     path_gain_seed: pd.DataFrame,
 ) -> None:
-    _panel(ax, "A")
     ax.set_xticks([])
     ax.set_yticks([])
     for spine in ax.spines.values():
@@ -284,12 +290,12 @@ def _plot_path_gain_map(
     inset.spines["left"].set_linewidth(0.55)
     inset.spines["bottom"].set_linewidth(0.55)
     inset.set_title("paired CV: 5/5", fontsize=5.0, pad=0.8, fontweight="normal")
-    ax.set_title("Conductance-stage\npath gains", fontsize=8.4, linespacing=0.9)
+    panel_title(ax, "A", "Path gains")
 
 
 def _plot_dendritic_feedback_fidelity(
     ax: plt.Axes,
-    rank_summary: pd.DataFrame,
+    decomposition_runs: pd.DataFrame,
 ) -> None:
     """Plot submitted-field fidelity only where feedback is actually restricted.
 
@@ -299,33 +305,31 @@ def _plot_dendritic_feedback_fidelity(
     made the pooled cross-core contrast an energy-allocation diagnostic rather
     than a dendritic-feedback comparison.
     """
-    _panel(ax, "B")
     style_axis(ax, grid="y")
-    sub = rank_summary[
-        (rank_summary["dataset"] == "mnist")
-        & (rank_summary["strategy"] == "local_ca")
-        & (rank_summary["rule_variant"] == "5f")
-        & (rank_summary["error_broadcast_mode"] == "per_soma")
-        & (rank_summary["scope"].isin(["layer_0", "layer_1"]))
+    sub = decomposition_runs[
+        (decomposition_runs["dataset"] == "mnist")
+        & (decomposition_runs["strategy"] == "local_ca")
+        & (decomposition_runs["rule_variant"] == "5f")
+        & (decomposition_runs["error_broadcast_mode"] == "per_soma")
+        & (decomposition_runs["scope_type"] == "stage")
+        & (decomposition_runs["population"] == 0)
+        & (decomposition_runs["stage_role"].isin(["distal", "proximal"]))
+        & (decomposition_runs["family"] == "submitted_mw")
     ].copy()
-    cosine_col = (
-        "actual_broadcast_cosine_mean"
-        if "actual_broadcast_cosine_mean" in sub.columns
-        else "per_soma_broadcast_cosine_mean"
-        if "per_soma_broadcast_cosine_mean" in sub.columns
-        else None
-    )
-    cosine_std_col = (
-        "actual_broadcast_cosine_std"
-        if "actual_broadcast_cosine_std" in sub.columns
-        else "per_soma_broadcast_cosine_std"
-        if "per_soma_broadcast_cosine_std" in sub.columns
-        else None
-    )
-    if cosine_col is None:
-        raise KeyError("Stage-resolved submitted-field cosine is unavailable")
+    if sub.empty:
+        raise ValueError("Scope-corrected stage-resolved submitted-field data are unavailable")
 
-    stages = ["layer_0", "layer_1"]
+    # Average train/validation/test batches within each checkpoint first, so
+    # checkpoints—not diagnostic batches—remain the independent units.
+    per_checkpoint = (
+        sub.groupby(
+            ["run_name", "seed", "network_type", "stage_role"],
+            as_index=False,
+        )["cosine"]
+        .mean()
+    )
+
+    stages = ["distal", "proximal"]
     stage_labels = ["Distal", "Proximal"]
     cores = [
         ("dendritic_additive", "Add.", COLOR_ADDITIVE),
@@ -337,11 +341,16 @@ def _plot_dendritic_feedback_fidelity(
         means = []
         stds = []
         for stage in stages:
-            row = sub[
-                (sub["network_type"] == core) & (sub["scope"] == stage)
-            ].iloc[0]
-            means.append(float(row[cosine_col]))
-            stds.append(float(row[cosine_std_col]) if cosine_std_col else 0.0)
+            values = per_checkpoint[
+                (per_checkpoint["network_type"] == core)
+                & (per_checkpoint["stage_role"] == stage)
+            ]["cosine"]
+            if len(values) != 5:
+                raise ValueError(
+                    f"Expected five checkpoint values for {core}/{stage}, got {len(values)}"
+                )
+            means.append(float(values.mean()))
+            stds.append(float(values.std(ddof=1)))
         ax.bar(
             x + offset,
             means,
@@ -358,7 +367,7 @@ def _plot_dendritic_feedback_fidelity(
     ax.set_xticklabels(stage_labels, rotation=18, ha="right")
     ax.set_ylabel("MW-field cosine")
     ax.set_ylim(0, 0.30)
-    ax.set_title("Restricted dendritic\nfeedback", linespacing=0.9)
+    panel_title(ax, "B", "Field cosine")
     ax.legend(
         loc="upper center",
         ncol=1,
@@ -370,7 +379,6 @@ def _plot_dendritic_feedback_fidelity(
 
 
 def _plot_compartment_error_fidelity(ax: plt.Axes, summary: pd.DataFrame) -> None:
-    _panel(ax, "D")
     style_axis(ax, grid="y")
     noise = summary[summary["dataset"] == "noise_resilience"].copy()
     style_map = {
@@ -413,7 +421,7 @@ def _plot_compartment_error_fidelity(ax: plt.Axes, summary: pd.DataFrame) -> Non
 
     ax.set_xlabel(r"$N_I$ per branch")
     ax.set_ylabel("Cosine")
-    ax.set_title("Broadcast\nfidelity", linespacing=0.9)
+    panel_title(ax, "D", "Fidelity")
     # Label 0/10/20/40 only: the axis is linear in N_I, so 0-5-10 fall within
     # the first ~18% of the span and their labels collided. The N_I=5 point is
     # still plotted; dropping only its tick label keeps the axis honestly linear
@@ -596,7 +604,6 @@ def _plot_oracle_learning(
     summary: pd.DataFrame,
     oracle_summary: pd.DataFrame,
 ) -> None:
-    _panel(ax, "E")
     style_axis(ax, grid="y")
     baseline = summary[summary["dataset"] == "noise_resilience"].copy()
     oracle = oracle_summary[oracle_summary["dataset"] == "noise_resilience"].copy()
@@ -638,7 +645,7 @@ def _plot_oracle_learning(
 
     ax.set_xlabel(r"$N_I$ per branch")
     ax.set_ylabel("Test accuracy (%)")
-    ax.set_title("Oracle\nlearning", linespacing=0.9)
+    panel_title(ax, "E", "Learning")
     # Label 0/10/20/40 only: the axis is linear in N_I, so 0-5-10 fall within
     # the first ~18% of the span and their labels collided. The N_I=5 point is
     # still plotted; dropping only its tick label keeps the axis honestly linear
@@ -653,7 +660,6 @@ def _plot_oracle_learning(
 
 
 def _plot_causal_inhibition(ax: plt.Axes, causal: pd.DataFrame) -> None:
-    _panel(ax, "C")
     style_axis(ax, grid="y")
 
     order = ["original", "zero_i", "shuffle_i", "mean_clamp_i", "uniform_matched_i"]
@@ -722,7 +728,7 @@ def _plot_causal_inhibition(ax: plt.Axes, causal: pd.DataFrame) -> None:
         ax.axvline((centers[0] + centers[1]) / 2, color=COLORS["edge"], lw=0.7, alpha=0.85)
     ax.set_ylim(0, 118)
     ax.set_ylabel("Accuracy (%)")
-    ax.set_title("Inhibition\nintervention", linespacing=0.9)
+    panel_title(ax, "C", "Inhibition")
     legend_handles = [mpatches.Patch(color=colors[k], label=labels[k]) for k in order]
     ax.legend(
         handles=legend_handles,
@@ -834,7 +840,7 @@ def build_figure(
     summary = _safe_csv(summary_csv)
     path_gain_seed = _safe_csv(PATH_GAIN_SEED_CSV)
     oracle_summary = _safe_csv(oracle_summary_csv)
-    rank_summary = _safe_csv(ERROR_RANK_SUMMARY_CSV)
+    decomposition_runs = _safe_csv(ERROR_FIELD_DECOMPOSITION_RUNS_CSV)
     causal = _safe_csv(INHIBITION_CAUSALITY_CSV)
 
     # Sized to NeurIPS \textwidth (≈7 in) so the printed figure does not
@@ -846,15 +852,10 @@ def build_figure(
     # Equal width_ratios: the panels carry comparable content, and the old
     # [1.18, 0.80, 1.52, 0.96, 0.96] both looked ragged and squeezed panel B so
     # hard that its legend had to be shrunk to 5.2 pt (~4 pt printed) to fit.
-    fig, axes = plt.subplots(
-        1,
-        5,
-        figsize=(MAIN_W, 3.05),
-        gridspec_kw={"wspace": 0.58, "width_ratios": [1.0, 1.0, 1.0, 1.0, 1.0]},
-    )
+    fig, axes = grid_figure(5, width_ratios=[1.0, 1.0, 1.12, 1.0, 1.0])
 
     _plot_path_gain_map(axes[0], summary, path_gain_seed)
-    _plot_dendritic_feedback_fidelity(axes[1], rank_summary)
+    _plot_dendritic_feedback_fidelity(axes[1], decomposition_runs)
     _plot_causal_inhibition(axes[2], causal)
     _plot_compartment_error_fidelity(axes[3], summary)
     _plot_oracle_learning(axes[4], summary, oracle_summary)
@@ -868,7 +869,6 @@ def build_figure(
         if "(n=3)" in title:
             ax.set_title(title.replace("(n=3)", "").strip())
 
-    fig.subplots_adjust(left=0.055, right=0.992, top=0.84, bottom=0.20)
     return fig
 
 

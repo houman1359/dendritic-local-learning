@@ -157,6 +157,10 @@ The source-backed figure summaries include
 five-seed 3F/5F exact-error panel and
 `figures/data/feedback_definition_replication/feedback_definition_details.csv`
 for the fifteen-seed neuron-wise-feedback intervention.
+Main Figure 5's recovered error-source control uses the twelve local-decoder runs in
+`figures/data/local_mismatch_recheck_runs.csv`; the figure script computes its
+means and sample standard deviations directly rather than using the hard-coded
+values in the arXiv-era plotting code.
 After training, the tracked summaries are produced with:
 
 ```bash

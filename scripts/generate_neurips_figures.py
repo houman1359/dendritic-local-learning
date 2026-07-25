@@ -14,8 +14,9 @@ only the figures that are referenced by `local_credit_assignment_body.tex`.
                                      layer-soma factorial diagnostic)
     fig4_competence_regime.pdf     (5 panels: competence, IE dose-response, morphology,
                                      controls, neuron-wise feedback)
+    fig5_rule_feedback_controls.pdf (4 panels: rule, error source, exact error,
+                                      feedback construction)
   Appendix:
-    fig_s_rule_feedback_design.pdf (detailed rule and feedback controls)
     fig_s2_gradient_extended.pdf   (2x2: scale mismatch, noise IE detail, MNIST IE detail, FMNIST seeds)
     fig_s4_verification.pdf        (1x3: MNIST seeds, CG seeds, HSIC ablation)
     fig_additional_stress_tests.pdf
@@ -77,6 +78,9 @@ BUNDLE = os.environ.get("LOCALCA_LEGACY_BUNDLE", ANALYSIS_DIR)
 LOCAL_MISMATCH_CSV = os.environ.get(
     "LOCALCA_LOCAL_MISMATCH_CSV",
     os.path.join(ANALYSIS_DIR, "local_mismatch_recheck_20260224_summary.csv"),
+)
+LOCAL_MISMATCH_RUNS_CSV = _tracked_csv(
+    "local_mismatch_recheck_runs.csv",
 )
 FMNIST_SUMMARY_CSV = _tracked_csv(
     "fashion_mnist_competence_summary.csv",
@@ -160,8 +164,18 @@ FEEDBACK_DEFINITION_CSV = os.path.join(
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from neurips_style import (  # noqa: E402
     apply_neurips_style,
+    axis_break_note,
+    clean_legend,
     COLORS,
+    ERR_CAPSIZE,
+    ERR_LW,
+    FIG_W,
+    grid_figure,
     MAIN_W,
+    PANEL_H,
+    panel_label,
+    panel_title,
+    REF_LW,
     style_axis,
 )
 
@@ -208,17 +222,17 @@ DATASET_LABEL = {
 }
 
 
-def _panel(ax, label, x=-0.24, y=1.15):
-    """Place bold panel label (A, B, C, ...) well above the axes to avoid title overlap."""
-    ax.text(x, y, label, transform=ax.transAxes, fontsize=13.2,
-            fontweight="bold", va="top", ha="left")
+def _panel(ax, label, x=None, y=None):
+    """Deprecated shim: route legacy call sites through the shared panel label."""
+    del x, y
+    panel_label(ax, label)
 
 
 def _save(fig, name):
     os.makedirs(FIGURES_DIR, exist_ok=True)
     for ext in ("pdf", "png"):
         p = os.path.join(FIGURES_DIR, f"{name}.{ext}")
-        fig.savefig(p, dpi=DPI, bbox_inches="tight", pad_inches=0.02)
+        fig.savefig(p, dpi=DPI)
     print(f"  Saved: {name}.{{pdf,png}}")
 
 
@@ -546,17 +560,12 @@ def _submitted_matched_rule_values():
 
 
 def figure_rule_feedback_design():
-    print("\n--- Figure: Local Rule & Feedback Design ---")
-    fig, axes = plt.subplots(
-        1,
-        4,
-        figsize=(7.35, 3.0),
-        gridspec_kw={"wspace": 0.50, "width_ratios": [1.04, 1.06, 1.26, 1.10]},
-    )
-    axes = axes.ravel()
+    print("\n--- Figure 5: Local Rule & Feedback Design ---")
+    fig, panel_axes = grid_figure(4, width_ratios=[0.92, 0.96, 1.00, 1.58])
+    axes = dict(zip(("A", "B", "C", "D"), panel_axes))
 
     # ---- Panel A: 3F/4F/5F rule family ----
-    ax = axes[0]
+    ax = axes["A"]
     style_axis(ax, grid="y")
 
     # Submitted-code within-shunting, feedback-, decoder-, optimizer-, and
@@ -584,21 +593,60 @@ def figure_rule_feedback_design():
         )
     ax.set_xticks(x)
     ax.set_xticklabels(list(rule_data.keys()))
-    ax.set_ylabel("Matched MNIST test (%)")
+    ax.set_ylabel("MNIST (%)")
     ax.set_ylim(84, 94)
-    ax.set_title("A  Rule family", loc="left", fontweight="bold")
-    ax.legend(
-        fontsize=9.2,
-        loc="upper left",
-        ncol=3,
-        frameon=False,
-        handlelength=0.9,
-        columnspacing=0.55,
-        handletextpad=0.25,
-    )
+    panel_title(ax, "A", "Rule family")
+    clean_legend(ax, loc="upper left", ncol=3, fontsize=8.6,
+                 handlelength=0.85, columnspacing=0.5, handletextpad=0.25)
 
-    # ---- Panel B: exact-error rule/decoder factorial ----
-    ax = axes[1]
+    # ---- Panel B: source-backed error-source negative control ----
+    ax = axes["B"]
+    style_axis(ax, grid="y")
+    mismatch = pd.read_csv(LOCAL_MISMATCH_RUNS_CSV)
+    groups = [("per_soma", "MW"), ("local_mismatch", "Mismatch")]
+    core_specs = [
+        ("dendritic_shunting", "Shunt.", COLOR_SHUNTING),
+        ("dendritic_additive", "Add.", COLOR_ADDITIVE),
+    ]
+    x = np.arange(len(groups), dtype=float)
+    bw = 0.30
+    for j, (core, label, color) in enumerate(core_specs):
+        means, stds = [], []
+        for mode, _ in groups:
+            vals = mismatch[
+                (mismatch["network_type"] == core)
+                & (mismatch["error_broadcast_mode"] == mode)
+                & (mismatch["decoder_update_mode"] == "local")
+            ]["test_accuracy"].to_numpy(dtype=float)
+            if len(vals) != 3:
+                raise ValueError(
+                    f"Expected three local-decoder runs for {core}, {mode}; "
+                    f"found {len(vals)}"
+                )
+            means.append(100.0 * float(np.mean(vals)))
+            stds.append(100.0 * float(np.std(vals, ddof=1)))
+        ax.bar(
+            x + (j - 0.5) * bw,
+            means,
+            bw * 0.92,
+            yerr=stds,
+            color=color,
+            edgecolor="white",
+            lw=0.65,
+            capsize=2.2,
+            error_kw={"lw": 0.9},
+            label=label,
+        )
+    ax.set_xticks(x)
+    ax.set_xticklabels([label for _, label in groups])
+    ax.set_ylabel("MNIST (%)")
+    ax.set_ylim(0, 100)
+    panel_title(ax, "B", "Error source")
+    clean_legend(ax, loc="upper right", fontsize=8.6, handlelength=0.85,
+                 handletextpad=0.3)
+
+    # ---- Panel C: exact-error rule/decoder factorial ----
+    ax = axes["C"]
     style_axis(ax, grid="y")
     exact = pd.read_csv(REVISION_EXACT_TRANSPORT_CSV)
     bp = pd.read_csv(REVISION_EXACT_BP_CSV).iloc[0]
@@ -632,26 +680,20 @@ def figure_rule_feedback_design():
     ax.axhline(
         100.0 * float(bp["test_acc_mean"]),
         color=COLOR_BACKPROP,
-        lw=0.9,
+        lw=REF_LW,
         ls="--",
         label="Matched BP",
     )
     ax.set_xticks(x)
     ax.set_xticklabels(["3F", "5F"])
-    ax.set_ylabel("MNIST test (%)")
+    ax.set_ylabel("MNIST (%)")
     ax.set_ylim(96.7, 97.65)
-    ax.set_title("B  Exact error", loc="left", fontweight="bold")
-    ax.legend(
-        fontsize=6.6,
-        loc="upper right",
-        frameon=False,
-        handlelength=0.9,
-        handletextpad=0.3,
-        labelspacing=0.25,
-    )
+    panel_title(ax, "C", "Exact error")
+    clean_legend(ax, loc="upper right", fontsize=7.4, handlelength=0.85,
+                 handletextpad=0.3, labelspacing=0.22)
 
-    # ---- Panel C: rank/propagation ladder on noise resilience ----
-    ax = axes[2]
+    # ---- Panel D: rank/propagation ladder on noise resilience ----
+    ax = axes["D"]
     style_axis(ax, grid="y")
 
     rank_noise = _csv_path(RANK_BRIDGE_NOISE_CSV)
@@ -681,52 +723,12 @@ def figure_rule_feedback_design():
         ax.bar(xpos, vals, 0.68, yerr=errs, color=colors, edgecolor="white",
                lw=0.75, capsize=2.5, error_kw={"lw": 1.15})
         ax.set_xticks(xpos)
-        ax.set_xticklabels(labels, fontsize=7.2, linespacing=0.9)
+        ax.set_xticklabels(labels, fontsize=8.4)
         ax.set_ylim(35, 90)
-    ax.set_ylabel("Noise test (%)")
-    ax.set_title(
-        "C  Broadcast\nbandwidth",
-        loc="left",
-        fontweight="bold",
-        linespacing=0.9,
-    )
+    ax.set_ylabel("Noise (%)")
+    panel_title(ax, "D", "Feedback")
 
-    # ---- Panel D: routed feedback rank and structure ----
-    ax = axes[3]
-    style_axis(ax, grid="y")
-
-    cue_rank = _csv_path(CUE_RANK_STRUCTURE_CSV)
-    if cue_rank is not None:
-        cue_rows = [
-            ("MW", "per_soma", 2, COLOR_SHUNTING),
-            ("K1", "low_rank", 1, "#F5B041"),
-            ("K2", "low_rank", 2, "#E67E22"),
-            ("K4", "low_rank", 4, "#BA4A00"),
-            ("PV", "pathway_vector", 2, "#1F77B4"),
-        ]
-        vals, errs, labels, colors = [], [], [], []
-        for label, mode, rank, color in cue_rows:
-            row = cue_rank[
-                (cue_rank["broadcast_mode"] == mode)
-                & (cue_rank["broadcast_rank"] == rank)
-            ]
-            if len(row) == 0:
-                continue
-            labels.append(label)
-            vals.append(float(row.iloc[0]["test_accuracy_mean"]) * 100)
-            errs.append(float(row.iloc[0]["test_accuracy_std"]) * 100)
-            colors.append(color)
-        xpos = np.arange(len(vals))
-        ax.bar(xpos, vals, 0.68, yerr=errs, color=colors, edgecolor="white",
-               lw=0.75, capsize=2.5, error_kw={"lw": 1.15})
-        ax.set_xticks(xpos)
-        ax.set_xticklabels(labels, fontsize=9.0)
-        ax.set_ylim(55, 100)
-    ax.set_ylabel("Cue-routing test (%)")
-    ax.set_title("D  Routed task", loc="left", fontweight="bold")
-
-    fig.subplots_adjust(left=0.062, right=0.992, bottom=0.23, top=0.82, wspace=0.50)
-    _save(fig, "fig_s_rule_feedback_design")
+    _save(fig, "fig5_rule_feedback_controls")
     plt.close(fig)
 
 
@@ -903,7 +905,7 @@ def figure_rule_feedback_controls_main_legacy():
     ax.set_title("D  Routed task", loc="left", fontsize=9.2, fontweight="bold")
 
     fig.subplots_adjust(left=0.065, right=0.992, bottom=0.30, top=0.78, wspace=0.46)
-    _save(fig, "fig5_rule_feedback_controls")
+    _save(fig, "fig5_rule_feedback_controls_legacy")
     plt.close(fig)
 
 
@@ -995,7 +997,7 @@ def figure_rule_feedback_controls_main():
         borderaxespad=0.2,
     )
     fig.subplots_adjust(left=0.075, right=0.99, bottom=0.30, top=0.84, wspace=0.16)
-    _save(fig, "fig5_rule_feedback_controls")
+    _save(fig, "fig5_feedback_intervention_legacy")
     plt.close(fig)
 
 
@@ -1018,15 +1020,7 @@ def figure4_competence_regime():
     revision_reactivation = _csv_path(REVISION_REACTIVATION_CSV)
     feedback_definition = _csv_path(FEEDBACK_DEFINITION_CSV)
 
-    fig, axes = plt.subplots(
-        1,
-        5,
-        figsize=(MAIN_W, 3.05),
-        gridspec_kw={
-            "wspace": 0.62,
-            "width_ratios": [1.02, 1.05, 1.0, 1.12, 1.02],
-        },
-    )
+    fig, axes = grid_figure(5, width_ratios=[1.02, 1.05, 0.98, 1.12, 1.05])
     axes = axes.ravel()
 
     # ---- Panel A: Multi-benchmark bars ----
@@ -1144,11 +1138,11 @@ def figure4_competence_regime():
     }
     ax.set_xticklabels([short_dataset_labels.get(d[0], d[0]) for d in datasets_info])
     ax.set_ylabel("Test accuracy (%)")
-    ax.set_title("A  Tasks", loc="left", fontweight="bold")
+    panel_title(ax, "A", "Tasks")
 
     # Legend
     legend_handles = [
-        mpatches.Patch(color=COLOR_BACKPROP, label="BP"),
+        mpatches.Patch(color=COLOR_BACKPROP, label="Shunt. BP"),
         mpatches.Patch(color=COLOR_SHUNTING, label="Shunt."),
         mpatches.Patch(color=COLOR_ADDITIVE, label="Add."),
     ]
@@ -1172,7 +1166,7 @@ def figure4_competence_regime():
     if all_vals:
         # Bars must start at zero; the extra headroom is for the legend, which
         # previously overlapped the tallest bars.
-        ax.set_ylim(0, max(all_vals) * 1.22)
+        ax.set_ylim(0, 100)
 
     # ---- Panel B: IE dose-response ----
     ax = axes[1]
@@ -1198,7 +1192,7 @@ def figure4_competence_regime():
 
     ax.set_xlabel("$N_I$ per branch")
     ax.set_ylabel("Test accuracy (%)")
-    ax.set_title("B  Inhibition", loc="left", fontweight="bold")
+    panel_title(ax, "B", "Inhibition")
     from matplotlib.lines import Line2D
     leg_handles = [
         Line2D([], [], color=COLOR_SHUNTING, lw=2.1, marker="o", markersize=4.5, label="Shunting"),
@@ -1260,10 +1254,10 @@ def figure4_competence_regime():
         ax.axhline(0, color="black", lw=1.0, ls="--", alpha=0.75)
         # Label 0/20/40 only: 0-5-10 collide at this panel width.
         ax.set_xticks([0, 20, 40])
-        ax.legend(fontsize=6.0, loc="upper right", frameon=False, handlelength=1.0)
+        clean_legend(ax, loc="upper right", fontsize=7.6, handlelength=1.0)
     ax.set_xlabel("$N_I$ per branch")
     ax.set_ylabel("Shunt.-add. (pp)")
-    ax.set_title("C  Morphology", loc="left", fontweight="bold")
+    panel_title(ax, "C", "Morphology")
 
     # ---- Panel D: Mechanism controls ----
     ax = axes[3]
@@ -1361,21 +1355,24 @@ def figure4_competence_regime():
                     label,
                     ha="left",
                     va="center",
-                    fontsize=6.5,
+                    fontsize=7.2,
                     color="white",
                     fontweight="bold" if label in {"PT", "id", "add"} else "normal",
                 )
         ax.set_yticks([2.0, 1.0, 0.0])
-        ax.set_yticklabels(["Transport", "Activation", "Additive"], fontsize=5.8)
+        ax.set_yticklabels([])
+        for ypos, gname in ((2.0, "Transport"), (1.0, "Activation"), (0.0, "Additive")):
+            ax.text(0.015, ypos + 0.30, gname, transform=ax.get_yaxis_transform(),
+                    ha="left", va="bottom", fontsize=7.0, color=COLORS["mute"])
         ax.set_xlim(87.0, 98.25)
         ax.set_xticks([88, 92, 96])
-        ax.set_ylim(-0.45, 2.45)
+        ax.set_ylim(-0.55, 2.75)
     else:
         ax.text(0.5, 0.5, "No revision-control data", transform=ax.transAxes,
                 ha="center", va="center", fontsize=8, color="red")
     ax.set_xlabel("MNIST test (%)")
     ax.set_ylabel("")
-    ax.set_title("D  Controls", loc="left", fontweight="bold")
+    panel_title(ax, "D", "Controls")
 
     # ---- Panel E: corrected neuron-wise feedback ----
     ax = axes[4]
@@ -1425,11 +1422,11 @@ def figure4_competence_regime():
             )
             gain = means[1] - means[0]
             ax.text(
-                0.48 + offset,
-                0.5 * (means[0] + means[1]),
+                0.30 + offset,
+                0.5 * (means[0] + means[1]) + (1.15 if offset > 0 else -1.15),
                 f"+{gain:.2f}",
                 color=color,
-                fontsize=6.0,
+                fontsize=7.2,
                 ha="center",
                 va="center",
                 bbox={"facecolor": "white", "edgecolor": "none", "pad": 0.4, "alpha": 0.82},
@@ -1441,8 +1438,12 @@ def figure4_competence_regime():
             & (revision_exact["decoder_update_mode"] == "local")
         ].iloc[0]
         exact_value = 100.0 * float(exact_row["test_acc_mean"])
-        ax.axhline(bp_value, color=COLOR_BACKPROP, lw=0.8, ls="--")
-        ax.axhline(exact_value, color="#6C3483", lw=0.8, ls=":")
+        ax.axhline(bp_value, color=COLOR_BACKPROP, lw=REF_LW, ls="--")
+        ax.axhline(exact_value, color="#6C3483", lw=REF_LW, ls=":")
+        ax.text(1.22, bp_value, "BP", color=COLOR_BACKPROP, fontsize=7.0,
+                ha="left", va="center", fontweight="bold")
+        ax.text(1.22, exact_value, "PT", color="#6C3483", fontsize=7.0,
+                ha="left", va="bottom", fontweight="bold")
         ax.text(
             0.02,
             0.98,
@@ -1450,12 +1451,12 @@ def figure4_competence_regime():
             transform=ax.transAxes,
             ha="left",
             va="top",
-            fontsize=6.2,
+            fontsize=7.2,
             color="0.25",
         )
         ax.set_xticks(x)
         ax.set_xticklabels(["MW", "Neuron"])
-        ax.set_xlim(-0.20, 1.20)
+        ax.set_xlim(-0.20, 1.42)
         ax.set_ylim(88.5, 98.2)
         ax.set_yticks([90, 94, 98])
         ax.legend(
@@ -1467,16 +1468,15 @@ def figure4_competence_regime():
             labelspacing=0.25,
         )
     ax.set_ylabel("3F test (%)")
-    ax.set_title("E  Feedback", loc="left", fontweight="bold")
+    panel_title(ax, "E", "Feedback")
 
     for panel_ax in axes:
         panel_ax.title.set_fontsize(8.0)
         panel_ax.xaxis.label.set_size(7.0)
         panel_ax.yaxis.label.set_size(7.0)
         panel_ax.tick_params(axis="both", labelsize=6.5)
-    axes[3].tick_params(axis="y", labelsize=5.8)
+    axes[3].tick_params(axis="y", labelsize=8.2)
 
-    fig.subplots_adjust(left=0.052, right=0.995, bottom=0.24, top=0.86, wspace=0.66)
     _save(fig, "fig4_competence_regime")
     plt.close(fig)
 
@@ -1486,13 +1486,7 @@ def figure4_competence_regime():
 # ===================================================================
 def figure2_gradient_fidelity():
     print("\n--- Figure 2: Gradient Fidelity ---")
-    fig, axes = plt.subplots(
-        1,
-        4,
-        figsize=(MAIN_W, 3.05),
-        gridspec_kw={"wspace": 0.58, "width_ratios": [1.0, 1.0, 1.0, 1.0]},
-    )
-    axes = axes.ravel()
+    fig, axes = grid_figure(4, width_ratios=[1.0, 1.0, 1.0, 1.18])
 
     def _load_gradient_trajectory(rule_variant="5f"):
         """Load trajectory diagnostics and keep one rule variant.
@@ -1684,7 +1678,6 @@ def figure2_gradient_fidelity():
 
     # ---- Panel A: Exact factorization sanity ----
     ax = axes[0]
-    _panel(ax, "A", x=-0.23, y=1.30)
     style_axis(ax, grid="y")
 
     theory_runs = pd.read_csv(THEORY_IE_RUNS_CSV)
@@ -1708,11 +1701,11 @@ def figure2_gradient_fidelity():
         )
         ax.hlines(np.median(vals), i - 0.18, i + 0.18, color="black", lw=1.8, zorder=4)
     ax.set_xticks([0, 1])
-    ax.set_xticklabels(["rel. $L_2$", "scale"], fontsize=9.2)
+    ax.set_xticklabels(["rel. $L_2$", "rel. norm"], fontsize=9.2)
     ax.set_ylabel("Reconstruction error")
     ax.set_yscale("log")
     ax.set_ylim(1e-10, 1e-4)
-    ax.set_title("Exact\nreconstruction", fontsize=10.0)
+    panel_title(ax, "A", "Reconstruction")
     ax.grid(axis="y", alpha=0.24, linewidth=0.78)
 
     # ---- Panels B/C: systematic matched 3F branch diagnostics ----
@@ -1720,7 +1713,6 @@ def figure2_gradient_fidelity():
     # block. Including it reverses the whole-model cosine because that block
     # carries 13.1% of additive BP energy but only 0.2% of shunting BP energy.
     ax = axes[1]
-    _panel(ax, "B", x=-0.23, y=1.30)
     style_axis(ax, grid="y")
 
     core_order = ["dendritic_shunting", "dendritic_additive"]
@@ -1772,18 +1764,17 @@ def figure2_gradient_fidelity():
                 )
         ax.set_xticks(x_pos)
         ax.set_xticklabels([label for label, _frame in cohorts], fontsize=8.2)
-        ax.set_ylabel("Branch cosine")
+        ax.set_ylabel("Branch cosine (numel wtd.)", fontsize=9.0)
         ax.set_ylim(-0.035, 0.27)
         ax.axhline(0, color="black", lw=0.8, ls="--")
         ax.legend(frameon=False, fontsize=6.7, ncol=2, loc="upper center")
     else:
         ax.text(0.5, 0.5, "No seeded alignment data", transform=ax.transAxes,
                 ha="center", va="center", fontsize=8, color="red")
-    ax.set_title("3F branch\ndirection", fontsize=10.0)
+    panel_title(ax, "B", "Branch direction")
 
     # ---- Panel C: local/exact branch-gradient norm ratio ----
     ax = axes[2]
-    _panel(ax, "C", x=-0.23, y=1.30)
     style_axis(ax, grid="y")
     if any(not frame.empty for _label, frame in cohorts):
         x_pos = np.arange(len(cohorts), dtype=float)
@@ -1833,11 +1824,10 @@ def figure2_gradient_fidelity():
     else:
         ax.text(0.5, 0.5, "No seeded scale data", transform=ax.transAxes,
                 ha="center", va="center", fontsize=8, color="red")
-    ax.set_title("3F branch\nscale", fontsize=10.0)
+    panel_title(ax, "C", "Branch scale")
 
     # ---- Panel D: Layer-soma factorial diagnostic ----
     ax = axes[3]
-    _panel(ax, "D", x=-0.31, y=1.30)
     labels, matrix = _layer_soma_factorial_values()
     if labels is not None and matrix is not None:
         style_axis(ax, grid="x")
@@ -1873,16 +1863,20 @@ def figure2_gradient_fidelity():
                     zorder=4,
                 )
         ax.set_yticks(y)
-        ax.set_yticklabels(labels, fontsize=6.8)
+        ax.set_yticklabels(
+            [l.replace(" + ", "\n+ ").replace("scalar fallback", "scalar")
+             for l in labels],
+            fontsize=7.0, linespacing=0.92,
+        )
         ax.invert_yaxis()
         # Reserve a right-hand gutter for the layer legend so it does not cover
         # the value labels on the exact-path bars.
         ax.set_xlim(0, 1.65)
         ax.set_xticks([0.0, 0.5, 1.0])
-        ax.set_xlabel("Gradient cosine", fontsize=8.2)
+        ax.set_xlabel("Branch cosine (energy wtd.)", fontsize=8.0)
         ax.tick_params(axis="x", labelsize=7.5, pad=1)
         ax.tick_params(axis="y", length=0, pad=2)
-        ax.set_title("Layer-soma\nfactorial", fontsize=10.0)
+        panel_title(ax, "D", "Layer-soma factorial")
         ax.legend(
             loc="lower right",
             fontsize=7.2,
@@ -1895,7 +1889,6 @@ def figure2_gradient_fidelity():
         ax.text(0.5, 0.5, "No factorial data found", transform=ax.transAxes,
                 ha="center", va="center", fontsize=8, color="red")
 
-    fig.subplots_adjust(left=0.062, right=0.992, bottom=0.25, top=0.76, wspace=0.56)
     _save(fig, "fig2_gradient_fidelity")
     plt.close(fig)
 
@@ -1910,17 +1903,11 @@ def figure_s_additional_stress_tests():
     noise = _csv("noise_robustness.csv", bundle=True)
     fmnist = _csv_path(FMNIST_SUMMARY_CSV)
 
-    fig = plt.figure(figsize=(W * 1.15, 5.45))
-    gs = fig.add_gridspec(2, 2, wspace=0.42, hspace=0.56)
-    axes = [
-        fig.add_subplot(gs[0, 0]),
-        fig.add_subplot(gs[0, 1]),
-        fig.add_subplot(gs[1, :]),
-    ]
+    fig, axes = grid_figure(3)
+    axes = list(axes)
 
     # ---- Panel A: Depth scaling (LOCAL only — cleaner) ----
     ax = axes[0]
-    _panel(ax, "A")
 
     if depth is not None:
         def _depth(bf_str):
@@ -1953,16 +1940,15 @@ def figure_s_additional_stress_tests():
                             color=color, linestyle=ls, alpha=alpha_val,
                             label=f"{lbl_core} {lbl_strat}")
 
-        ax.set_xlabel("Network depth")
+        ax.set_xlabel("Dendritic layers")
         ax.set_ylabel("Test accuracy (%)")
-        ax.set_title("Depth stress test")
+        panel_title(ax, "A", "Depth scaling")
         ax.legend(fontsize=7, loc="best", handlelength=1.5,
                   handletextpad=0.3, ncol=1)
         ax.xaxis.set_major_locator(ticker.MaxNLocator(integer=True))
 
     # ---- Panel B: Noise robustness ----
     ax = axes[1]
-    _panel(ax, "B")
 
     if noise is not None:
         for nt in ["dendritic_shunting", "dendritic_additive"]:
@@ -1978,12 +1964,11 @@ def figure_s_additional_stress_tests():
 
         ax.set_xlabel(r"Error noise $\sigma$")
         ax.set_ylabel("Test accuracy (%)")
-        ax.set_title("Broadcast-noise stress test")
+        panel_title(ax, "B", "Broadcast noise")
         ax.legend(fontsize=7, handlelength=1.0)
 
     # ---- Panel C: Fashion-MNIST ----
     ax = axes[2]
-    _panel(ax, "C")
 
     if fmnist is not None:
         conditions = []
@@ -2009,7 +1994,7 @@ def figure_s_additional_stress_tests():
         ax.set_xticks(x)
         ax.set_xticklabels([c[0] for c in conditions], fontsize=7.5)
         ax.set_ylabel("Test accuracy (%)")
-        ax.set_title("Fashion-MNIST control")
+        panel_title(ax, "C", "Fashion-MNIST")
 
         all_v = [c[1] for c in conditions]
         ax.set_ylim(max(0, min(all_v) - 4), max(all_v) + 3)
@@ -2018,7 +2003,6 @@ def figure_s_additional_stress_tests():
             ax.text(i, c[1] + c[2] + 0.4,
                     f"{c[1]:.1f}", ha="center", va="bottom", fontsize=7)
 
-    fig.subplots_adjust(left=0.10, right=0.98, bottom=0.10, top=0.92)
     _save(fig, "fig_additional_stress_tests")
     plt.close(fig)
 
@@ -2034,12 +2018,10 @@ def figure_s1():
     mismatch_path = LOCAL_MISMATCH_CSV
     mismatch = pd.read_csv(mismatch_path) if os.path.isfile(mismatch_path) else None
 
-    fig, axes = plt.subplots(2, 2, figsize=(W * 1.9, 7.0),
-                             gridspec_kw={"wspace": 0.45, "hspace": 0.52})
+    fig, axes = grid_figure(2, 2)
 
     # ---- Panel A: Phase 1 matched backpropagation references ----
     ax = axes[0, 0]
-    _panel(ax, "A")
 
     if phase1 is not None:
         p1 = phase1.dropna(subset=["test_accuracy"]).copy()
@@ -2063,13 +2045,12 @@ def figure_s1():
         ax.set_xticks(xb)
         ax.set_xticklabels([DATASET_LABEL.get(d, d) for d in ds_order], fontsize=7.5)
         ax.set_ylabel("Test accuracy (%)")
-        ax.set_title("Backprop refs")
+        panel_title(ax, "A", "Backprop refs")
         ax.legend(fontsize=7, ncol=2, loc="lower left",
                   handlelength=1.0, handletextpad=0.3)
 
     # ---- Panel B: Rule family ranking ----
     ax = axes[0, 1]
-    _panel(ax, "B")
 
     if core is not None:
         sub = core[(core["dataset"] == "mnist") & (core["error_broadcast_mode"] == "per_soma") &
@@ -2096,7 +2077,7 @@ def figure_s1():
         ax.set_xticks(xb)
         ax.set_xticklabels([r.upper() for r in rules])
         ax.set_ylabel("Test accuracy (%)")
-        ax.set_title("Rule ranking (MNIST)")
+        panel_title(ax, "B", "Rule ranking (MNIST)")
         ax.legend(fontsize=7)
         av = sub["test_accuracy_mean"].dropna() * 100
         if len(av):
@@ -2104,7 +2085,6 @@ def figure_s1():
 
     # ---- Panel C: Decoder locality ----
     ax = axes[1, 0]
-    _panel(ax, "C")
 
     if core is not None:
         sub = core[(core["dataset"] == "mnist") & (core["error_broadcast_mode"] == "per_soma") &
@@ -2131,7 +2111,7 @@ def figure_s1():
         ax.set_xticks(xb)
         ax.set_xticklabels(["Local", "Backprop"])
         ax.set_ylabel("Test accuracy (%)")
-        ax.set_title("Decoder mode (5F, MNIST)")
+        panel_title(ax, "C", "Decoder mode (5F, MNIST)")
         ax.legend(fontsize=7)
         av = sub["test_accuracy_mean"].dropna() * 100
         if len(av):
@@ -2139,7 +2119,6 @@ def figure_s1():
 
     # ---- Panel D: Broadcast mode comparison (fixed x-labels) ----
     ax = axes[1, 1]
-    _panel(ax, "D")
 
     if mismatch is not None:
         # Simplify: group by core x broadcast (ignoring decoder for cleaner plot)
@@ -2162,7 +2141,7 @@ def figure_s1():
         ax.set_xticks(x)
         ax.set_xticklabels([c[0] for c in conds], fontsize=7.5)
         ax.set_ylabel("Test accuracy (%)")
-        ax.set_title("Broadcast mode (MNIST)")
+        panel_title(ax, "D", "Broadcast mode (MNIST)")
 
     fig.subplots_adjust(left=0.08, right=0.97, bottom=0.06, top=0.94)
     _save(fig, "fig_s1_calibration")
@@ -2174,12 +2153,10 @@ def figure_s1():
 # ===================================================================
 def figure_s2():
     print("\n--- Figure S2: Extended Gradient & IE Detail ---")
-    fig, axes = plt.subplots(2, 2, figsize=(W * 1.9, 7.0),
-                             gridspec_kw={"wspace": 0.45, "hspace": 0.52})
+    fig, axes = grid_figure(2, 2)
 
     # Panel A: Scale mismatch bars (from Table 2)
     ax = axes[0, 0]
-    _panel(ax, "A")
 
     conditions = [
         ("MNIST\nShunt.", 0.117, COLOR_SHUNTING),
@@ -2193,7 +2170,7 @@ def figure_s2():
     ax.set_xticks(x)
     ax.set_xticklabels([c[0] for c in conditions], fontsize=7.5)
     ax.set_ylabel("Scale mismatch\n|log10(||local|| / ||BP||)|")
-    ax.set_title("Scale mismatch")
+    panel_title(ax, "A", "Scale mismatch")
     ax.set_ylim(0.0, max(c[1] for c in conditions) * 1.22)
     ax.axhline(0.0, color="black", lw=0.4, ls="--", label="Ideal (0)")
     ax.legend(fontsize=7)
@@ -2204,7 +2181,6 @@ def figure_s2():
 
     # Panel B: Noise resilience IE detail with error bands
     ax = axes[0, 1]
-    _panel(ax, "B")
 
     ie_data = _csv_path(IE_PERF_SUMMARY_CSV)
     if ie_data is not None:
@@ -2223,12 +2199,11 @@ def figure_s2():
                         label=LABEL_MAP.get(ct, ct))
         ax.set_xlabel("$N_I$")
         ax.set_ylabel("Test accuracy (%)")
-        ax.set_title("Noise resilience ($N_I$ detail)")
+        panel_title(ax, "B", "Noise resilience ($N_I$ detail)")
         ax.legend(fontsize=7)
 
     # Panel C: MNIST N_I detail with error bands
     ax = axes[1, 0]
-    _panel(ax, "C")
 
     if ie_data is not None:
         for ct, color, marker in [("dendritic_shunting", COLOR_SHUNTING, "o"),
@@ -2246,12 +2221,11 @@ def figure_s2():
                         label=LABEL_MAP.get(ct, ct))
         ax.set_xlabel("$N_I$")
         ax.set_ylabel("Test accuracy (%)")
-        ax.set_title("MNIST $N_I$ sweep (detail)")
+        panel_title(ax, "C", "MNIST $N_I$ sweep (detail)")
         ax.legend(fontsize=7)
 
     # Panel D: Fashion-MNIST all seeds
     ax = axes[1, 1]
-    _panel(ax, "D")
 
     fmnist_raw = _csv_path(FMNIST_RUNS_CSV)
     if fmnist_raw is not None:
@@ -2269,11 +2243,10 @@ def figure_s2():
                            lw=0.3)
         ax.set_ylabel("Test accuracy (%)")
         ax.set_xlabel("Seed")
-        ax.set_title("F-MNIST (all seeds)")
+        panel_title(ax, "D", "F-MNIST (all seeds)")
         ax.legend(fontsize=7, ncol=2, loc="lower right",
                   handlelength=1.0, handletextpad=0.3)
 
-    fig.subplots_adjust(left=0.08, right=0.97, bottom=0.06, top=0.94)
     _save(fig, "fig_s2_gradient_extended")
     plt.close(fig)
 
@@ -2313,17 +2286,11 @@ def figure_s4():
     hsic_main = _csv_path(REVISION_HSIC_MAIN_CSV)
     hsic_heldout = _csv_path(REVISION_HSIC_HELDOUT_CSV)
 
-    fig = plt.figure(figsize=(W * 1.15, 5.45))
-    gs = fig.add_gridspec(2, 2, wspace=0.42, hspace=0.56)
-    axes = [
-        fig.add_subplot(gs[0, 0]),
-        fig.add_subplot(gs[0, 1]),
-        fig.add_subplot(gs[1, :]),
-    ]
+    fig, axes = grid_figure(3)
+    axes = list(axes)
 
     # ---- Panel A: MNIST verification ----
     ax = axes[0]
-    _panel(ax, "A")
 
     bars_data = []
     # Current-code reproducibility rerun after the final refactor:
@@ -2344,7 +2311,7 @@ def figure_s4():
     ax.set_xticks(x)
     ax.set_xticklabels([b[0] for b in bars_data], fontsize=7.5)
     ax.set_ylabel("Test accuracy (%)")
-    ax.set_title("MNIST verification")
+    panel_title(ax, "A", "MNIST verification")
     ax.set_ylim(85, 95)
 
     for i, b in enumerate(bars_data):
@@ -2353,7 +2320,6 @@ def figure_s4():
 
     # ---- Panel B: matched figure-ground MNIST HSIC control ----
     ax = axes[1]
-    _panel(ax, "B")
 
     bars_data = []
     for seed_label, df, alpha in [
@@ -2391,7 +2357,7 @@ def figure_s4():
     ax.set_xticks(x)
     ax.set_xticklabels([b[0] for b in bars_data], fontsize=7.5)
     ax.set_ylabel("Test accuracy (%)")
-    ax.set_title("FG-MNIST: HSIC 2x2")
+    panel_title(ax, "B", "FG-MNIST: HSIC 2x2")
     ax.set_ylim(70, 85)
 
     for i, b in enumerate(bars_data):
@@ -2400,7 +2366,6 @@ def figure_s4():
 
     # ---- Panel C: HSIC weight ablation ----
     ax = axes[2]
-    _panel(ax, "C")
 
     if p2b is not None:
         cg = p2b[(p2b["dataset"] == "context_gating") &
@@ -2422,9 +2387,8 @@ def figure_s4():
             ax.set_xlim(-0.25, len(cg) - 0.75)
             ax.set_xlabel("HSIC weight")
             ax.set_ylabel("Test accuracy (%)")
-            ax.set_title("FG-MNIST: HSIC ablation")
+            panel_title(ax, "C", "FG-MNIST: HSIC ablation")
 
-    fig.subplots_adjust(left=0.10, right=0.98, bottom=0.10, top=0.92)
     _save(fig, "fig_s4_verification")
     plt.close(fig)
 
@@ -3003,7 +2967,6 @@ def figure_s_cifar10_soma_extension():
 
     # Panel A: absolute soma-on ladder
     ax = axes[0]
-    _panel(ax, "A")
 
     modes = [
         ("per_soma", "MW/scalar"),
@@ -3065,7 +3028,6 @@ def figure_s_cifar10_soma_extension():
 
     # Panel B: matched soma-off -> soma-on deltas
     ax = axes[1]
-    _panel(ax, "B")
 
     paired = [
         ("Add.\nMW/scalar", COLOR_ADDITIVE,

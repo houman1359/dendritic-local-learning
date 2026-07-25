@@ -14,6 +14,16 @@ import numpy as np
 import pandas as pd
 
 
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from neurips_style import (  # noqa: E402
+    apply_neurips_style,
+    COLORS,
+    FIG_W,
+    grid_figure,
+    panel_title,
+)
+
 DRAFT_DIR = Path(__file__).resolve().parents[1]
 FIGURES_DIR = DRAFT_DIR / "figures"
 
@@ -28,38 +38,15 @@ SUMMARY_CSV = _tracked_or_analysis(
     "five_factor_sensitivity_summary.csv",
     "five_factor_sensitivity", "five_factor_sensitivity_summary.csv",
 )
-COLOR_BASE = "#18864B"
-COLOR_ALT = "#7A3E9D"
-COLOR_ACCENT = "#C65D1E"
+COLOR_BASE = COLORS["shunting"]
+COLOR_ALT = COLORS["pathway"]
+COLOR_ACCENT = COLORS["local"]
 W = 5.5
 DPI = 300
 
 
 def _setup_style() -> None:
-    plt.rcParams.update(
-        {
-            "font.family": "sans-serif",
-            "font.size": 7,
-            "axes.labelsize": 8,
-            "axes.titlesize": 8,
-            "axes.titlepad": 6,
-            "xtick.labelsize": 6.5,
-            "ytick.labelsize": 6.5,
-            "legend.fontsize": 6,
-            "figure.dpi": DPI,
-            "savefig.dpi": DPI,
-            "savefig.bbox": "tight",
-            "savefig.pad_inches": 0.05,
-            "pdf.fonttype": 42,
-            "ps.fonttype": 42,
-            "axes.spines.top": False,
-            "axes.spines.right": False,
-            "legend.frameon": False,
-            "axes.linewidth": 0.6,
-            "xtick.major.width": 0.5,
-            "ytick.major.width": 0.5,
-        }
-    )
+    apply_neurips_style()
 
 
 def _panel(ax: plt.Axes, label: str, x: float = -0.18, y: float = 1.10) -> None:
@@ -98,7 +85,7 @@ def build_figure(summary_csv: Path = SUMMARY_CSV) -> plt.Figure:
     ema["ema_label"] = ema["ema_alpha"].map(lambda v: f"{float(v):.2f}")
     ema = ema.sort_values("ema_alpha")
 
-    fig, axes = plt.subplots(1, 2, figsize=(6.8, 2.7), gridspec_kw={"wspace": 0.40})
+    fig, axes = grid_figure(2)
 
     ax = axes[0]
     _panel(ax, "A")

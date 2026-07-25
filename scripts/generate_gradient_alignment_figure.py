@@ -13,8 +13,8 @@ import pandas as pd
 
 def _save_dual(fig: plt.Figure, out_base: Path) -> None:
     out_base.parent.mkdir(parents=True, exist_ok=True)
-    fig.savefig(out_base.with_suffix(".pdf"), dpi=300, bbox_inches="tight")
-    fig.savefig(out_base.with_suffix(".png"), dpi=300, bbox_inches="tight")
+    fig.savefig(out_base.with_suffix(".pdf"), dpi=300)
+    fig.savefig(out_base.with_suffix(".png"), dpi=300)
 
 
 def main() -> int:

@@ -37,8 +37,8 @@ def _load_processed(sweep_dir: Path) -> pd.DataFrame:
 
 def _save_dual(fig: plt.Figure, path_base: Path) -> None:
     path_base.parent.mkdir(parents=True, exist_ok=True)
-    fig.savefig(path_base.with_suffix(".pdf"), dpi=300, bbox_inches="tight")
-    fig.savefig(path_base.with_suffix(".png"), dpi=300, bbox_inches="tight")
+    fig.savefig(path_base.with_suffix(".pdf"), dpi=300)
+    fig.savefig(path_base.with_suffix(".png"), dpi=300)
 
 
 def _configure_style() -> None:

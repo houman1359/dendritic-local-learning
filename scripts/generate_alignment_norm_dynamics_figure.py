@@ -12,7 +12,16 @@ import numpy as np
 import pandas as pd
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from neurips_style import COLORS, apply_neurips_style, style_axis
+from neurips_style import (  # noqa: E402
+    COLORS,
+    FIG_W,
+    REF_LW,
+    apply_neurips_style,
+    clean_legend,
+    grid_figure,
+    panel_title,
+    style_axis,
+)
 
 apply_neurips_style()
 
@@ -60,7 +69,7 @@ def _summary(data: pd.DataFrame, metric: str) -> pd.DataFrame:
     )
 
 
-def _line_panel(ax, data: pd.DataFrame, metric: str, ylabel: str, title: str, *, log_y: bool = False) -> None:
+def _line_panel(ax, data: pd.DataFrame, metric: str, ylabel: str, title: str, *, letter: str = "", log_y: bool = False) -> None:
     summary = _summary(data, metric)
     for network_type, label, color in [
         ("additive", "Additive", COLORS["additive"]),
@@ -76,43 +85,23 @@ def _line_panel(ax, data: pd.DataFrame, metric: str, ylabel: str, title: str, *,
         ax.set_yscale("log")
     ax.set_xlabel("Epoch")
     ax.set_ylabel(ylabel, fontsize=8.2)
-    ax.set_title(title, fontsize=8.8, pad=7)
+    panel_title(ax, letter, title)
     style_axis(ax, grid="y")
 
 
 def main() -> None:
     data = _weighted_trajectory(_load())
-    fig, axes_grid = plt.subplots(
-        2,
-        2,
-        figsize=(5.8, 4.8),
-        gridspec_kw={"wspace": 0.48, "hspace": 0.58},
-    )
+    fig, axes_grid = grid_figure(2, 2)
     axes = axes_grid.ravel()
 
-    _line_panel(axes[0], data, "weighted_cosine", "Weighted cosine", "Alignment")
+    _line_panel(axes[0], data, "weighted_cosine", "Weighted cosine", "Alignment", letter="A")
     axes[0].axhline(0.0, color=COLORS["edge"], linewidth=0.7, linestyle=":")
     axes[0].set_ylim(-0.18, 0.36)
-    _line_panel(axes[1], data, "local_grad_norm", "Local grad norm", "Local updates", log_y=True)
-    _line_panel(axes[2], data, "backprop_grad_norm", "BP grad norm", "Backprop signal", log_y=True)
-    _line_panel(axes[3], data, "norm_ratio", "Local / BP norm", "Scale mismatch", log_y=True)
+    _line_panel(axes[1], data, "local_grad_norm", "Local grad norm", "Local updates", letter="B", log_y=True)
+    _line_panel(axes[2], data, "backprop_grad_norm", "BP grad norm", "Backprop signal", letter="C", log_y=True)
+    _line_panel(axes[3], data, "norm_ratio", "Local / BP norm", "Scale mismatch", letter="D", log_y=True)
 
-    axes[0].legend(loc="upper right", frameon=False, fontsize=6.8)
-    for ax, label in zip(axes, "ABCD"):
-        ax.text(
-            0.02,
-            0.98,
-            label,
-            transform=ax.transAxes,
-            fontsize=7.8,
-            fontweight="bold",
-            va="top",
-            ha="left",
-            color=COLORS["ink"],
-            bbox={"facecolor": "white", "edgecolor": "none", "alpha": 0.85, "pad": 0.4},
-        )
-
-    fig.subplots_adjust(left=0.12, right=0.985, top=0.92, bottom=0.12)
+    clean_legend(axes[0], loc="upper right", fontsize=8.4)
     FIG_DIR.mkdir(parents=True, exist_ok=True)
     out = FIG_DIR / "fig_s_alignment_norm_dynamics"
     fig.savefig(out.with_suffix(".pdf"))

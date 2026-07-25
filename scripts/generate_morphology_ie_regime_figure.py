@@ -16,7 +16,17 @@ import pandas as pd
 import seaborn as sns
 import yaml
 
-from neurips_style import apply_neurips_style, COLORS, panel_label, style_axis
+from neurips_style import (  # noqa: E402
+    COLORS,
+    FIG_W,
+    REF_LW,
+    apply_neurips_style,
+    clean_legend,
+    grid_figure,
+    panel_label,
+    panel_title,
+    style_axis,
+)
 
 
 SCRIPT_DIR = Path(__file__).resolve().parent
@@ -96,11 +106,10 @@ def _heatmap(ax, frame: pd.DataFrame, title: str, cmap: str, center: float | Non
         linewidths=0.65,
         linecolor="white",
         square=False,
-        annot_kws={"fontsize": 8.2},
+        annot_kws={"fontsize": 6.4},
     )
     ax.collections[0].colorbar.outline.set_linewidth(0.65)
     ax.collections[0].colorbar.ax.tick_params(labelsize=8.3, width=0.4, length=2)
-    ax.set_title(title, fontsize=11.4, pad=8)
     ax.set_xlabel(r"$N_I$ per branch", fontsize=10.5)
     ax.set_ylabel("Tree", fontsize=10.5, labelpad=12)
     ax.tick_params(labelsize=8.6)
@@ -192,40 +201,34 @@ def build_figure(sweep_dir: Path = DEFAULT_SWEEP_DIR) -> tuple[plt.Figure, pd.Da
     )
     diag = _load_selected_diagnostics(sweep_dir)
 
-    fig, axes = plt.subplots(
-        1,
-        4,
-        figsize=(13.0, 3.65),
-        constrained_layout=False,
-        gridspec_kw={"width_ratios": [1.10, 0.86, 1.10, 1.02], "wspace": 0.58},
-    )
-    axes = axes.ravel()
+    fig, axes = grid_figure(4, width_ratios=[1.12, 0.92, 1.02, 1.02])
 
     _heatmap(axes[0], gap, "Shunting advantage", "vlag", center=0.0)
-    axes[0].set_title("Accuracy gap", fontsize=11.4, pad=8)
+    panel_title(axes[0], "A", "Accuracy gap")
 
     ax = axes[1]
     style_axis(ax, grid="x")
     best_ie = best_ie.set_index("branch_factors").reindex(branch_order).reset_index()
     y = np.arange(len(best_ie))
     colors = [COLORS["shunting"] if v > 0 else COLORS["additive"] for v in best_ie["gap"]]
-    ax.barh(y, best_ie["ie"], color=colors, edgecolor="white", linewidth=0.65, height=0.56)
+    ax.barh(y, 100 * best_ie["gap"], color=colors, edgecolor="white",
+            linewidth=0.65, height=0.56)
     ax.set_yticks(y)
     ax.set_yticklabels(best_ie["branch_factors"], fontsize=9.5)
     ax.invert_yaxis()
-    ax.set_xlabel(r"Best $N_I$")
-    ax.set_title("Best inhibition", fontsize=11.4, pad=8)
+    ax.set_xlabel("Peak gap (pp)")
+    panel_title(ax, "B", "Peak gap")
     for yi, (_, row) in enumerate(best_ie.iterrows()):
         ax.text(
-            row["ie"] + 0.7,
+            100 * row["gap"] + 0.5,
             yi,
-            f"{100 * row['gap']:+.1f} pp",
+            f"$N_I$={int(row['ie'])}",
             va="center",
             ha="left",
             fontsize=8.6,
             color=COLORS["ink"],
         )
-    ax.set_xlim(0, max(ie_order) + 11)
+    ax.set_xlim(0, 100 * best_ie["gap"].max() + 9)
 
     ax = axes[2]
     style_axis(ax, grid="y")
@@ -296,7 +299,7 @@ def build_figure(sweep_dir: Path = DEFAULT_SWEEP_DIR) -> tuple[plt.Figure, pd.Da
         ax.set_xticklabels(group_labels, fontsize=8.2)
         ax.set_xlabel(r"Tree / $N_I$")
         ax.set_ylabel("Path-gain CV")
-        ax.set_title("Credit geometry", fontsize=11.4, pad=8)
+        panel_title(ax, "C", "Credit geometry")
         ax.legend(loc="upper right", fontsize=8.4, frameon=False)
         ax.margins(x=0.08)
     else:
@@ -325,7 +328,7 @@ def build_figure(sweep_dir: Path = DEFAULT_SWEEP_DIR) -> tuple[plt.Figure, pd.Da
             )
         ax.set_xlabel(r"$N_I$ per branch")
         ax.set_ylabel("Test accuracy")
-        ax.set_title("Mean performance", fontsize=11.4, pad=8)
+        panel_title(ax, "C", "Mean perf.")
         ax.legend(fontsize=8.4, frameon=False, loc="best")
 
     ax = axes[3]
@@ -345,7 +348,7 @@ def build_figure(sweep_dir: Path = DEFAULT_SWEEP_DIR) -> tuple[plt.Figure, pd.Da
             capthick=0.8,
         )
     ax.axhline(0.0, color="black", linewidth=1.1, linestyle="--", alpha=0.6)
-    ax.set_title("Depth summary", fontsize=11.4, pad=8)
+    panel_title(ax, "D", "Depth summary")
     ax.set_xlabel(r"$N_I$ per branch", fontsize=10.5)
     ax.set_ylabel("Accuracy gap", fontsize=10.5)
     ax.set_xticks(ie_order)
@@ -362,14 +365,11 @@ def build_figure(sweep_dir: Path = DEFAULT_SWEEP_DIR) -> tuple[plt.Figure, pd.Da
             zorder=6,
         )
 
-    for label, ax in zip(["A", "B", "C", "D"], axes.flat):
-        panel_label(ax, label, x=-0.13, y=1.14, fontsize=15)
-
     grouped.to_csv(ANALYSIS_DIR / "morphology_ie_regime_grouped.csv", index=False)
     df.to_csv(ANALYSIS_DIR / "morphology_ie_regime_runs.csv", index=False)
     fig.subplots_adjust(left=0.055, right=0.988, bottom=0.31, top=0.80, wspace=0.58)
-    fig.savefig(FIGURES_DIR / "fig_morphology_ie_regime.pdf", bbox_inches="tight")
-    fig.savefig(FIGURES_DIR / "fig_morphology_ie_regime.png", dpi=300, bbox_inches="tight")
+    fig.savefig(FIGURES_DIR / "fig_morphology_ie_regime.pdf")
+    fig.savefig(FIGURES_DIR / "fig_morphology_ie_regime.png", dpi=300)
     return fig, grouped
 
 

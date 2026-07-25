@@ -12,11 +12,16 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from neurips_style import (
-    apply_neurips_style,
+from neurips_style import (  # noqa: E402
     COLORS,
+    FIG_W,
     MAIN_W,
+    REF_LW,
+    apply_neurips_style,
+    clean_legend,
+    grid_figure,
     panel_label,
+    panel_title,
     style_axis,
 )
 
@@ -43,8 +48,6 @@ def _save(fig: plt.Figure, name: str) -> None:
         fig.savefig(
             FIGURES_DIR / f"{name}.{extension}",
             dpi=350,
-            bbox_inches="tight",
-            pad_inches=0.04,
         )
     print(f"Saved {name}.{{pdf,png}}")
 
@@ -189,7 +192,7 @@ def _plot_identity_axis(
         ax.set_xticklabels(["Add.", "Shunt."], fontsize=8.7)
     else:
         ax.set_xticklabels([])
-    ax.set_ylabel(ylabel, fontsize=8.9)
+    ax.set_ylabel(ylabel, fontsize=8.2, labelpad=1.5)
     if title:
         ax.set_title(title, fontsize=10.0, linespacing=0.92)
     style_axis(ax, grid="y")
@@ -275,12 +278,13 @@ def build_figure() -> plt.Figure:
     identity = pd.read_csv(IDENTITY_CSV)
     feedback_relevance = pd.read_csv(FEEDBACK_RELEVANCE_CSV)
 
-    fig = plt.figure(figsize=(MAIN_W, 3.15))
+    fig = plt.figure(figsize=(FIG_W, 2.48))
     outer = fig.add_gridspec(
         1,
         3,
         width_ratios=[1.42, 0.92, 1.26],
-        wspace=0.72,
+        wspace=0.86,
+        left=0.135, right=0.985, top=0.845, bottom=0.185,
     )
     ax_a = fig.add_subplot(outer[0, 0])
     middle = outer[0, 1].subgridspec(2, 1, hspace=0.52)
@@ -303,7 +307,7 @@ def build_figure() -> plt.Figure:
         ax_b_bottom,
         identity,
         metric="test_accuracy",
-        ylabel="Test accuracy (%)",
+        ylabel="Test acc. (%)",
         scale=100.0,
         show_xlabels=True,
     )

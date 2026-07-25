@@ -61,12 +61,12 @@ BROADCAST_COLOR = COLORS["local"]  # rank-1 shared broadcast amber
 
 # Broadcast-mode colors (kept consistent with rest of paper)
 MODE_COLORS = {
-    "hybrid":  "#A85F16",
+    "hybrid":  "#37474F",   # submitted MW/scalar hybrid (neutral baseline)
     "rank1":   COLORS["scalar"],
-    "persoma": COLORS["local"],
+    "persoma": "#0F8A8A",   # neuron-indexed (ancestry-shared)
     "rankk":   COLORS["low_rank"],
     "path":    COLORS["pathway"],
-    "oracle":  COLORS["oracle"],
+    "oracle":  "#4A3A5C",   # transported oracle
 }
 
 
@@ -237,8 +237,8 @@ def panel_a(ax):
             color="#333", fontweight="bold")
 
     # Depth tags
-    for xp, lbl in [(x_d3, r"$\ell\!=\!3$"), (x_d2, r"$\ell\!=\!2$"),
-                    (x_d1, r"$\ell\!=\!1$")]:
+    for xp, lbl in [(x_d3, "distal"), (x_d2, "mid"),
+                    (x_d1, "proximal")]:
         ax.text(xp, -2.1, lbl, ha="center", fontsize=5.6, color="#777")
     ax.text(x_soma + 0.7, -2.1, "soma", ha="center", fontsize=5.6, color="#555")
 
@@ -605,8 +605,8 @@ def main():
         panel_label(ax, lbl, x=x_off, y=y_off, fontsize=12.0)
 
     out = OUTPUT_DIR / "fig1_model_and_credit"
-    fig.savefig(out.with_suffix(".pdf"), bbox_inches="tight", pad_inches=0.02)
-    fig.savefig(out.with_suffix(".png"), dpi=300, bbox_inches="tight", pad_inches=0.02)
+    fig.savefig(out.with_suffix(".pdf"))
+    fig.savefig(out.with_suffix(".png"), dpi=300)
     print(f"Saved {out}.{{pdf,png}}")
     plt.close(fig)
 
