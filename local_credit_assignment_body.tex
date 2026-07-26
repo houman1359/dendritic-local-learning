@@ -284,7 +284,7 @@
     \noindent\emph{Regime dependence of the shunting advantage.}
     With matched-width/scalar-fallback feedback, shunting is modestly better on MNIST, Fashion-MNIST, and figure-ground MNIST, and the gap grows on inhibition-sensitive noise resilience. The performance gap is not monotonic in $N_I$ or nominal tree depth (Fig.~\ref{fig:competence_regime}B,C; Appendix Fig.~\ref{fig:additional_stress_tests}). We treat the morphology grid as descriptive because analytical initialization places some shunting couplings at its $10^{-6}$ floor.
 
-    \begin{figure}[H]
+    \begin{figure}[htbp]
     \centering
     \includegraphics[width=\textwidth]{fig5_rule_feedback_controls.pdf}
     \caption{\textbf{Rule and feedback controls identify the principal learning bottleneck.}
@@ -566,7 +566,7 @@
     \paragraph{Scope notes.}
     Several controls are intentionally negative or mixed. The log-gain covariance margin from Eq.~\eqref{eq:compression_condition} is not used as a positive main result, and the pathway-vector feedback variant does not beat the best unstructured low-rank cue-routing control. These diagnostics delimit the claim rather than smoothing over failure modes.
 
-    \begin{table}[H]
+    \begin{table}[htbp]
     \centering
     \scriptsize
     \setlength{\tabcolsep}{2.5pt}
@@ -588,7 +588,7 @@
     \label{tab:related_local_learning}
     \end{table}
     
-    \begin{table}[H]
+    \begin{table}[htbp]
     \centering
     \scriptsize
     \setlength{\tabcolsep}{3pt}
@@ -618,7 +618,7 @@
     
     The accompanying source package contains the model code, training scripts, diagnostic scripts, figure-generation scripts, representative configuration files, tests, and precomputed summary files used to generate the manuscript figures and tables. Table~\ref{tab:reproducibility_summary} summarizes the experiment families, seed protocols, and checkpoint-selection rules. Code and reproduction scripts will be released publicly after publication with an immutable repository tag, pinned environment file, end-to-end launch scripts, and expected summary hashes.
     
-    \begin{table}[H]
+    \begin{table}[htbp]
     \centering
     \scriptsize
     \setlength{\tabcolsep}{3pt}
@@ -687,7 +687,7 @@
     \subsection{Matched Rule Comparison}
     The theorem-derived 3F eligibility is central to the proposed mechanism, whereas the submitted practical performance experiments use the empirical 5F stabilizer. Table~\ref{tab:matched_rule_comparison} reanalyzes the submitted-code shunting cohort after matching feedback, decoder, optimizer, schedules, and effective parameter-group rates. The heterogeneous top-of-sweep summary is not retained because it did not support a rule comparison. Cross-core 3F conclusions instead use the explicit initialization-policy factorial below and the fifteen-seed feedback-definition control.
 
-    \begin{table}[H]
+    \begin{table}[htbp]
     \centering
     \small
     \begin{tabular}{@{}lc@{}}
@@ -703,7 +703,7 @@
     \label{tab:matched_rule_comparison}
     \end{table}
 
-    \begin{table}[H]
+    \begin{table}[htbp]
     \centering
     \small
     \begin{tabular}{@{}lcccc@{}}
@@ -720,7 +720,7 @@
     \label{tab:init_policy_factorial}
     \end{table}
 
-    \begin{table}[H]
+    \begin{table}[htbp]
     \centering
     \small
     \begin{tabular}{@{}lcc@{}}
@@ -739,7 +739,7 @@
     \label{tab:exact_transport_factorial}
     \end{table}
 
-    \begin{table}[H]
+    \begin{table}[htbp]
     \centering
     \small
     \begin{tabular}{@{}lcc@{}}
@@ -763,7 +763,7 @@
     \subsection{5F Stabilizer Sensitivity}
     Sensitivity checks show that 5F performance is not sharply dependent on the preconditioner clamp or the EMA rate used to estimate branch statistics. Across three-seed MNIST checks, tightening or widening the clamp and varying the EMA rate leaves test accuracy near the default setting, supporting the view that the factor acts as a bounded branch-level reliability preconditioner rather than a brittle tuned error source.
     
-    \begin{figure}[H]
+    \begin{figure}[htbp]
     \centering
     \includegraphics[width=\textwidth]{fig_s3_5f_sensitivity.pdf}
     \caption{\textbf{5F stabilizer sensitivity.}
@@ -797,7 +797,7 @@
     \subsection{Extended Gradient Analysis and $N_I$ Sweep Detail}
     Figure~\ref{fig:gradient_fidelity} in the main text summarizes final-state gradient diagnostics and the layer-soma factorial check. The supplementary view below (Fig.~\ref{fig:s2_gradient_extended}) separates static scale checks, inhibitory dose-response curves, and individual Fashion-MNIST seed behavior so that the aggregate claims are not driven by a single summary panel.
     
-    \begin{figure}[H]
+    \begin{figure}[htbp]
     \centering
     \includegraphics[width=\textwidth]{fig_s2_gradient_extended.pdf}
     \caption{\textbf{Extended gradient and $N_I$ analysis (supplementary).} \textbf{(A)}~Log-scale mismatch, $|\log_{10}(\|g^{\mathrm{local}}\|/\|g^{\mathrm{bp}}\|)|$, from a separate matched-weight static diagnostic; these values should not be compared directly to the checkpointed final-state diagnostic in Fig.~\ref{fig:gradient_fidelity}. The ideal value is $0$; at this operating point shunting is near ideal ($0.117$), whereas additive shows order-of-magnitude distortion ($>1.0$). This descriptive static contrast is not evidence for a general cross-core advantage. \textbf{(B)}~Noise-resilience $N_I$ dose-response with error bands ($\pm$1 s.d.). \textbf{(C)}~MNIST $N_I$ dose-response detail with error bands. \textbf{(D)}~Fashion-MNIST individual seeds for all conditions, showing consistency across runs.}
@@ -808,7 +808,7 @@
     \paragraph{Alignment dynamics.}
     Local and backprop gradient norms stay finite throughout training, so weak additive alignment in this trajectory reflects directional and scale mismatch rather than vanishing gradients. In a separate 3-seed submitted-code checkpoint trajectory with parameter-level LocalCA and backprop gradients, additive local gradients remain nonzero (weighted norm range $9.5{\times}10^{-4}$--$9.5{\times}10^{-3}$), and the corresponding backprop gradients are also nonzero ($2.3{\times}10^{-5}$--$5.7{\times}10^{-3}$). The additive 5F cosine stays near zero from epoch $0$ to epoch $50$ ($0.018$ to $0.005$), while its local/backprop norm ratio falls from about $8.8{\times}10^2$ to $0.69$ (Fig.~\ref{fig:alignment_norm_dynamics}). These three archived checkpoints describe that operating point; the fresh 3F and initialization-policy controls supersede them for any general cross-core directional claim.
 
-    \begin{table}[H]
+    \begin{table}[htbp]
     \centering
     \scriptsize
     \begin{tabular}{@{}L{0.46\linewidth}cc@{}}
@@ -826,7 +826,7 @@
     \label{tab:matched_3f_gradient}
     \end{table}
 
-    \begin{table}[H]
+    \begin{table}[htbp]
     \centering
     \small
     \begin{tabular}{@{}lcc@{}}
@@ -843,7 +843,7 @@
     \label{tab:fresh_3f_replication}
     \end{table}
 
-    \begin{table}[H]
+    \begin{table}[htbp]
     \centering
     \small
     \begin{tabular}{@{}lccc@{}}
@@ -863,7 +863,7 @@
     \paragraph{Eligibility-weighted gradient and activation audit.}
     A synaptic gradient weights compartment errors by sample-specific eligibility and maps them into parameter blocks. The audit also finds different forward operating points. Mean activation derivatives across the distal, proximal, and soma stages are $(0.521,0.694,2.662)$ for shunting and $(0.061,0.057,0.257)$ for additive; the fractions with derivative magnitude below $0.1$ are $(0.680,0.459,0.237)$ and $(0.834,0.825,0.271)$, respectively. Learning-rate schedules are identical and cosine is invariant to global gradient rescaling, but these activation distributions are not matched. We therefore interpret the branch-gradient result as evidence for the full conductance-dependent update, not as an intervention isolating the backward path while holding the forward representation fixed. Recalibrating every trained gate to common voltage-quantile occupancy targets is a fixed-checkpoint sensitivity check on that interpretation rather than a learning comparison (Table~\ref{tab:occupancy_matched_3f}).
 
-    \begin{table}[H]
+    \begin{table}[htbp]
     \centering
     \small
     \begin{tabular}{@{}lcc@{}}
@@ -882,7 +882,7 @@
     \paragraph{Backward-only path-gain counterfactual.}
     To separate backward transport from the forward operating point, we recomputed an exact counterfactual target after removing inhibitory conductance only from the parent-resistance factors along the backward path. Recorded voltages, activation derivatives, dendritic couplings, soma errors, and all local eligibility variables were held fixed. We then compared the same restricted or neuron-wise 3F update with the actual and counterfactual targets. Removing backward attenuation leaves direction essentially unchanged even in the higher-inhibition noise regime (Table~\ref{tab:backward_only_3f}). Together with the measured conductances, this establishes an operating-point result: inhibition changes backward gain, but at the trained states its isolated contribution is too small to move credit direction. The complete conductance-dependent eligibility, feedback field, and operating state determine the update.
 
-    \begin{table}[H]
+    \begin{table}[htbp]
     \centering
     \small
     \begin{tabular}{@{}L{0.25\linewidth}cL{0.21\linewidth}L{0.21\linewidth}@{}}
@@ -902,7 +902,7 @@
     \paragraph{Fixed-state factor decomposition.}
     We next recomputed the exact-error 3F gradient after replacing one local factor at a time while keeping the same recorded inputs, voltages, soma errors, active synapse masks, couplings, and activation derivatives unless that derivative was the factor under study. Table~\ref{tab:fixed_state_factorial} separates two effects that were conflated in the broader architecture comparison. Removing inhibitory conductance from the local or backward input-resistance factor changes scale more than direction. Replacing the reversal-potential driving force by the implementation's threshold-centered voltage proxy also leaves direction largely intact. The diagnostic is sensitive to larger path-factor interventions: setting local resistance to one gives cosine $0.948$ with a $5.56\times$ norm ratio, and removing parent-compartment transfer derivatives gives cosine $0.385$. The restricted submitted feedback remains the largest mismatch. These are diagnostic hybrids at a fixed forward state, not physical forward models.
 
-    \begin{table}[H]
+    \begin{table}[htbp]
     \centering
     \small
     \begin{tabular}{@{}L{0.50\linewidth}cc@{}}
@@ -922,7 +922,7 @@
     \label{tab:fixed_state_factorial}
     \end{table}
 
-    \begin{figure}[H]
+    \begin{figure}[htbp]
     \centering
     \includegraphics[width=\textwidth]{fig_s_mechanistic_audit.pdf}
     \caption{\textbf{Mechanistic audit separating path effects from learning consequences.}
@@ -937,7 +937,7 @@
 
     We also globally rescaled the submitted 3F branch gradient to the exact branch-gradient norm and applied one update to non-somatic parameters only. The update norm was set to a fixed fraction of the branch-parameter norm. Across the practical step range in Table~\ref{tab:norm_matched_one_step}, both architectures decrease the same held-out batch loss in every seed. The fraction of exact-gradient progress depends on step size, and no tested step gives a reliable shunting--additive difference. This confirms that update scale does not rescue the proposed general directional advantage.
 
-    \begin{table}[H]
+    \begin{table}[htbp]
     \centering
     \small
     \begin{tabular}{@{}lcc@{}}
@@ -953,7 +953,7 @@
     \label{tab:norm_matched_one_step}
     \end{table}
 
-    \begin{figure}[H]
+    \begin{figure}[htbp]
     \centering
     \includegraphics[width=\textwidth]{fig_s_alignment_norm_dynamics.pdf}
     \caption{\textbf{Alignment dynamics with explicit gradient-norm checks.}
@@ -965,7 +965,7 @@
     \subsection{Verification and Seed Robustness}
     These checks (Fig.~\ref{fig:verification_appendix}) compare the main seed set with held-out seeds and report the HSIC-weight sensitivity for figure-ground MNIST. The additional matched experiments use the same objective-weight comparison on both seed sets, so seed robustness and HSIC contribution can be summarized as a matched two-factor control.
     
-    \begin{figure}[H]
+    \begin{figure}[htbp]
     \centering
     \includegraphics[width=\textwidth]{fig_s4_verification.pdf}
     \caption{\textbf{Verification and seed robustness (supplementary).} \textbf{(A)}~MNIST verification: repeat runs on main seeds (42--46) yield $91.1\pm0.5$\%; held-out seeds (47--49) yield $89.8\pm0.9$\%, showing robustness across random seeds. \textbf{(B)}~Matched figure-ground MNIST HSIC control: both main seeds (42--46) and held-out seeds (47--49) compare HSIC weight $0$ against $0.01$. \textbf{(C)}~HSIC weight ablation on figure-ground MNIST: moderate weights ($0.01$--$0.1$) perform best.}
@@ -976,7 +976,7 @@
     \subsection{Additional Stress Tests}
     These stress tests probe two ways in which low-bandwidth broadcast can become unreliable: deeper dendritic paths and noisy teaching signals. They are not separate main benchmarks; they delimit where shunting remains useful and where additive local learning degrades.
     
-    \begin{figure}[H]
+    \begin{figure}[htbp]
     \centering
     \includegraphics[width=\textwidth]{fig_additional_stress_tests.pdf}
     \caption{\textbf{Additional stress tests.} \textbf{(A)}~Depth scaling over $1$--$4$ dendritic layers: shunting local (green) degrades more gracefully from 63.5\% to 57.4\%; additive local (blue) drops from 54.9\% to 29.7\%. Matched backpropagation references (dashed) remain stable. \textbf{(B)}~Broadcast-noise robustness: shunting remains stable for $\sigma\!\leq\!0.1$; additive degrades rapidly and reaches chance at $\sigma\!=\!1$. \textbf{(C)}~Fashion-MNIST: the shunting gain is modest on this cleaner benchmark (83.8\% local vs.\ 88.9\% backprop), consistent with the regime-dependent interpretation in the main text.}
@@ -987,7 +987,7 @@
     \subsection{FA/DFA Baseline Comparison}
     Figure~\ref{fig:fa_dfa_appendix} includes feedback alignment as an adjacent local-learning reference point. DFA can be evaluated on the dendritic cores, whereas the FA condition is marked unavailable for the block-structured dendritic updates because the required random feedback matrices are not dimensionally compatible with the branch-level parameterization.
     
-    \begin{figure}[H]
+    \begin{figure}[htbp]
     \centering
     \includegraphics[width=\textwidth]{fig_s5_fa_dfa.pdf}
     \caption{\textbf{Feedback alignment baselines (MNIST).} \textbf{(A)}~Grouped comparison: standard backprop (neutral gray), DFA (orange), and FA (purple). Hatched N/A markers indicate that FA is not implemented for the block-structured dendritic architectures because the random feedback matrices are not dimensionally compatible with the tree-structured branch updates. DFA achieves 66.1\% on shunting vs.\ 62.2\% additive vs.\ 51.8\% point MLP. \textbf{(B)}~Backprop$-$DFA gap: dendritic architectures (24.9--27.6~pp) show smaller gaps than point MLPs (39.5~pp), suggesting conductance-based architecture is partially compatible with random feedback.}
@@ -998,7 +998,7 @@
     \subsection{CIFAR-10 Results}
     Figure~\ref{fig:cifar10_mechanism_extension} and Table~\ref{tab:cifar10_mechanism_extension} report a CIFAR-10 control ladder, used as a harder-dataset mechanistic stress test rather than a competitive vision benchmark.
     
-    \begin{figure}[H]
+    \begin{figure}[htbp]
     \centering
     \includegraphics[width=\textwidth]{fig_s_cifar10_control_ladder_20260427.pdf}
     \caption{\textbf{CIFAR-10 control ladder in the compact direct-I-stream family.}
@@ -1009,7 +1009,7 @@
     \end{figure}
     \FloatBarrier
     
-    \begin{table}[H]
+    \begin{table}[htbp]
     \centering
     \scriptsize
     \renewcommand{\arraystretch}{1.06}
@@ -1044,7 +1044,7 @@
     \subsection{Additive Normalization Control}
     This control separates generic additive voltage normalization from shunting conductance dynamics in a lower-capacity MNIST stress regime.
     
-    \begin{figure}[H]
+    \begin{figure}[htbp]
     \centering
     \includegraphics[width=\textwidth]{fig_additive_norm_control.pdf}
     \caption{\textbf{Additive + normalization control (MNIST stress-regime diagnostic).} \textbf{(A)}~Standard backprop: normalization provides a small boost (89.7\% $\to$ 90.9\%). \textbf{(B)}~Local learning: normalization improves additive from 46.5\% to 56.0\% ($+9.5$~pp), partially closing the gap to shunting (61.7\%, dashed green). These lower local accuracies come from a separate stress-regime diagnostic, not from the matched-capacity performance setting in Table~\ref{tab:gap_closing}.}
@@ -1055,7 +1055,7 @@
     
     This regime map (Fig.~\ref{fig:morphology_ie_regime}) describes how performance varies jointly with tree geometry and inhibitory input. It does not isolate a causal morphology effect: under the analytical initialization used in this sweep, one dendritic population in inhibited shunting models begins with a coupling stage at the $10^{-6}$ floor, whereas additive stages remain active. The figure therefore reports the performance interaction without using it as mechanistic evidence that morphology alone selects the useful inhibitory regime.
     
-    \begin{figure}[H]
+    \begin{figure}[htbp]
     \centering
     \includegraphics[width=\textwidth]{fig_morphology_ie_regime.pdf}
     \caption{\textbf{Descriptive morphology $\times$ inhibition performance map.}
@@ -1095,7 +1095,7 @@
     
     We also computed the direct log-gain covariance margin in Eq.~\eqref{eq:compression_condition} on the selected morphology diagnostic checkpoints. The margin is zero when no inhibitory conductance is present and slightly negative in the inhibited shunting selections ($-2.5\times10^{-3}$, $-5.0\times10^{-4}$, and $-2.8\times10^{-4}$ at $N_I{=}5,20,40$). We therefore do not use this covariance condition as a positive main result. Its role is to clarify when shunting should compress gains. The measured path-gain dispersion and unrestricted exact-error rank remain descriptive, while the intervention establishes only that the learned inhibitory field is sample-dependent and necessary to the trained forward computation; none of these results establishes a general feedback-compatibility advantage.
     
-    \begin{figure}[H]
+    \begin{figure}[htbp]
     \centering
     \includegraphics[width=\textwidth]{fig_s_inhibition_causality_error_rank.pdf}
     \caption{\textbf{Post-training inhibition intervention and exact-error geometry.}
@@ -1183,7 +1183,7 @@
     
     The additive and shunting cores are architecture-matched: they use the same tree, synapse counts, nonnegative transfer stage, positive conductance parameterization, optimizer protocol, and seed sets. They differ only in how a branch combines excitatory, inhibitory, and dendritic inputs. Decoder weights are unconstrained readout parameters and are not interpreted as conductances. Table~\ref{tab:eq_code_map} maps each implementation concept to its governing equation, code location, and update scope.
     
-    \begin{table}[H]
+    \begin{table}[htbp]
     \centering
     \scriptsize
     \setlength{\tabcolsep}{3pt}
@@ -1254,7 +1254,7 @@
     \]
     with optional additive-normalization controls reported separately in Fig.~\ref{fig:additive_norm_control}. Thus additive inhibition changes the signed voltage contribution and local additive eligibility, but it does not enter the denominator and does not gate conductance-stage path gain through $R_n^{\mathrm{tot}}$; Table~\ref{tab:shunting_additive_mechanism} summarizes the matched comparison.
     
-    \begin{table}[H]
+    \begin{table}[htbp]
     \centering
     \small
     \setlength{\tabcolsep}{4pt}
@@ -1340,9 +1340,8 @@
     \label{tab:units_parameterization}
     \end{table}
     
-    \clearpage
     \subsection{Representative Manuscript Architectures}
-    \begin{table}[H]\centering\scriptsize
+    \begin{table}[htbp]\centering\scriptsize
     \renewcommand{\arraystretch}{1.06}
     \resizebox{\linewidth}{!}{%
     \begin{tabular}{@{}L{0.18\linewidth}L{0.08\linewidth}L{0.08\linewidth}L{0.10\linewidth}L{0.16\linewidth}L{0.06\linewidth}L{0.20\linewidth}@{}}
@@ -1365,7 +1364,7 @@
     \subsection{Hyperparameters}
     Table~\ref{tab:hyperparameters} collects the core training hyperparameters for each main experiment. Learning rates are applied through parameter groups (top-$k$, dendritic block-linear, reactivation, decoder) with the values given in the representative config files; where a single LR is reported, every group uses that value.
     
-    \begin{table}[H]\centering\scriptsize
+    \begin{table}[htbp]\centering\scriptsize
     \renewcommand{\arraystretch}{1.06}
     \setlength{\tabcolsep}{3pt}
     \begin{tabular}{@{}L{0.26\linewidth}L{0.07\linewidth}L{0.07\linewidth}L{0.10\linewidth}L{0.10\linewidth}L{0.07\linewidth}L{0.22\linewidth}@{}}
@@ -1389,7 +1388,7 @@
     \subsection{Effective Broadcast Dimensionality in Main Architectures}
     Table~\ref{tab:effective_broadcast_dimensionality} reports the effective feedback dimensionality of each main architecture.
     
-    \begin{table}[H]\centering\small
+    \begin{table}[htbp]\centering\small
     \renewcommand{\arraystretch}{1.06}
     \begin{tabular}{@{}L{0.29\linewidth}L{0.17\linewidth}L{0.12\linewidth}L{0.32\linewidth}@{}}
     \toprule
@@ -1412,7 +1411,7 @@
 
     In a matched one-seed current-code profile on an NVIDIA RTX PRO 6000, the same shunting model, batch size, 180-epoch schedule, hooks, and final evaluation took 190\,s with LocalCA and 125\,s with backpropagation. Process-wide peak CUDA allocation was 1.70\,GiB in both cases (2.03 vs.\ 1.97\,GiB reserved). Thus the present research implementation provides no measured speed or memory advantage; it retains diagnostic state and is not optimized for either. We did not measure hardware energy and make no energy-efficiency claim.
     
-    \begin{table}[H]
+    \begin{table}[htbp]
     \centering
     \small
     \begin{tabular}{@{}L{0.39\linewidth}L{0.18\linewidth}L{0.17\linewidth}L{0.16\linewidth}@{}}
@@ -1435,7 +1434,7 @@
     MNIST, Fashion-MNIST, and CIFAR-10 are public datasets or public benchmark assets cited in the paper; we use them under their standard published access conditions and cite their original sources in the bibliography. The accompanying source package contains the model code, training scripts, diagnostic scripts, figure-generation scripts, representative configuration files, tests, precomputed summary files, and analysis entry points used for the manuscript. Code and reproduction scripts will be released publicly after publication with an immutable repository tag. The paper does not release a new dataset or a stand-alone pretrained model asset.
     Dataset access pages are the original MNIST site / UCI entry (\url{https://archive.ics.uci.edu/dataset/683/mnist+database+of+handwritten+digits}), the Fashion-MNIST repository (\url{https://github.com/zalandoresearch/fashion-mnist}), and the CIFAR page (\url{https://www.cs.toronto.edu/~kriz/cifar.html}).
     
-    \begin{table}[H]
+    \begin{table}[htbp]
     \centering
     \small
     \setlength{\tabcolsep}{4pt}

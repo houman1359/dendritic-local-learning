@@ -34,6 +34,18 @@
 \setlength{\textfloatsep}{6pt plus 1pt minus 1pt}
 \newcommand{\FloatBarrier}{}
 
+% The NeurIPS style sets \flushbottom, which forces every page to full height by
+% stretching the glue between a float and the text under it.  On pages carrying
+% a wide figure plus a few lines of body text this produced very large interior
+% gaps.  \raggedbottom lets such pages end short instead; it changes no margin,
+% font, or spacing rule.  Float counters are also loosened so a second float can
+% share a page rather than being deferred and starving the text.
+\raggedbottom
+\setcounter{totalnumber}{3}
+\setcounter{bottomnumber}{1}
+\renewcommand{\bottomfraction}{0.45}
+
+
 \newtheorem{theorem}{Theorem}
 \newtheorem{proposition}{Proposition}
 \newtheorem{lemma}{Lemma}

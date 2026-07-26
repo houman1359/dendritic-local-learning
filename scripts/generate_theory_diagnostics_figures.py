@@ -283,34 +283,36 @@ def _plot_path_gain_map(
         values="path_gain_cv_mean",
         aggfunc="mean",
     ).dropna()
-    inset = ax.inset_axes([0.20, 0.002, 0.62, 0.165])
-    x_offsets = np.linspace(-0.06, 0.06, max(len(pivot), 1))
-    for x_offset, (_, row) in zip(x_offsets, pivot.iterrows()):
-        values = [
-            float(row["dendritic_additive"]),
-            float(row["dendritic_shunting"]),
-        ]
-        x_values = [0 + x_offset, 1 + x_offset]
-        inset.plot(x_values, values, color=COLORS["mute"], alpha=0.60, lw=LW_HAIR, zorder=1)
-        inset.scatter(
-            x_values,
-            values,
-            s=8,
-            facecolors="white",
-            edgecolors=[COLOR_ADDITIVE, COLOR_SHUNTING],
-            linewidths=0.55,
-            zorder=2,
-        )
-    inset.set_xlim(-0.22, 1.22)
+    inset = ax.inset_axes([0.12, 0.004, 0.76, 0.185])
+    add_vals = pivot["dendritic_additive"].to_numpy(dtype=float)
+    shunt_vals = pivot["dendritic_shunting"].to_numpy(dtype=float)
+    means = [float(np.mean(add_vals)), float(np.mean(shunt_vals))]
+    sds = [float(np.std(add_vals, ddof=1)) if len(add_vals) > 1 else 0.0,
+           float(np.std(shunt_vals, ddof=1)) if len(shunt_vals) > 1 else 0.0]
+    inset.bar(
+        [0, 1], means, 0.56, yerr=sds,
+        color=[COLOR_ADDITIVE, COLOR_SHUNTING],
+        edgecolor="white", linewidth=LW_HAIR,
+        error_kw={"lw": 0.7, "capthick": 0.7}, capsize=2.0, zorder=2,
+    )
+    for x, vals in ((0, add_vals), (1, shunt_vals)):
+        if len(vals):
+            jitter = np.linspace(-0.13, 0.13, len(vals))
+            inset.scatter(
+                np.full(len(vals), x) + jitter, vals,
+                s=5, facecolors="white", edgecolors=COLORS["edge"],
+                linewidths=0.4, zorder=3,
+            )
+    inset.set_xlim(-0.55, 1.55)
     inset.set_ylim(0.0, 1.36)
     inset.set_xticks([0, 1])
-    inset.set_xticklabels(["Add.", "Shunt."], fontsize=PT_SMALL)
+    inset.set_xticklabels(["Add.", "Shunt."], fontsize=PT_SMALL - 0.6)
     inset.set_yticks([0, 1])
     inset.set_yticklabels(["0", "1"], fontsize=PT_SMALL)
     inset.tick_params(length=1.8, width=0.55, pad=0.6)
     inset.spines["left"].set_linewidth(0.55)
     inset.spines["bottom"].set_linewidth(0.55)
-    inset.set_title("paired CV: 5/5", fontsize=PT_SMALL, pad=0.8, fontweight="normal")
+    inset.set_ylabel("CV", fontsize=PT_SMALL, labelpad=1.0)
     panel_title(ax, "A", "Path gains")
 
 
