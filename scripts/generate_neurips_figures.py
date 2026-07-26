@@ -1733,7 +1733,7 @@ def figure2_gradient_fidelity():
 
     core_order = ["dendritic_shunting", "dendritic_additive"]
     core_colors = [COLOR_SHUNTING, COLOR_ADDITIVE]
-    cohorts = [("Submitted\n$n=3$", matched_3f), ("Fresh\n$n=5$", fresh_3f)]
+    cohorts = [("Archive\n$n=3$", matched_3f), ("Repeat\n$n=5$", fresh_3f)]
     if any(not frame.empty for _label, frame in cohorts):
         x_pos = np.arange(len(cohorts), dtype=float)
         offsets = [-0.17, 0.17]

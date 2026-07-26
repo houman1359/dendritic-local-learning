@@ -459,7 +459,7 @@ def panel_c(ax):
             fontsize=6.4, color=INK, fontweight="bold")
 
     modes = [
-        ("Submitted", "MW / scalar", MODE_COLORS["hybrid"], "hybrid"),
+        ("Main", "MW / scalar", MODE_COLORS["hybrid"], "hybrid"),
         ("Scalar",   "global",   MODE_COLORS["rank1"],  "rank1"),
         ("Neuron-wise", "per cell", MODE_COLORS["persoma"], "persoma"),
         ("Rank-$K$", "$K$ chans", MODE_COLORS["rankk"],  "rankk"),

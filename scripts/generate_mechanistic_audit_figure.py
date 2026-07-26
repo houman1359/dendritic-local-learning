@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate the supplementary fixed-state and learning-step audit figure."""
+"""Generate the supplementary fixed-state and learning-step analysis figure."""
 
 from __future__ import annotations
 
@@ -85,7 +85,7 @@ def _plot_fixed_state(ax: plt.Axes, frame: pd.DataFrame) -> None:
         ),
         (
             "submitted_full",
-            "Submitted feedback",
+            "MW/scalar feedback",
             COLORS["scalar"],
         ),
     ]
@@ -269,7 +269,7 @@ def _plot_feedback_relevance(
     )
     ax.set_ylim(-0.03, 1.34)
     ax.set_ylabel("Fraction of exact", fontsize=PT_TICK)
-    ax.set_title("Feedback-to-step audit", fontsize=PT_LABEL)
+    ax.set_title("Feedback-to-step comparison", fontsize=PT_LABEL)
     clean_legend(ax, loc="upper left", auto_clear=True,
         ncol=1,
         fontsize=PT_ANNOT,
