@@ -1733,7 +1733,7 @@ def figure2_gradient_fidelity():
 
     core_order = ["dendritic_shunting", "dendritic_additive"]
     core_colors = [COLOR_SHUNTING, COLOR_ADDITIVE]
-    cohorts = [("Archive\n$n=3$", matched_3f), ("Repeat\n$n=5$", fresh_3f)]
+    cohorts = [("Initial\n$n=3$", matched_3f), ("Replic.\n$n=5$", fresh_3f)]
     if any(not frame.empty for _label, frame in cohorts):
         x_pos = np.arange(len(cohorts), dtype=float)
         offsets = [-0.17, 0.17]
@@ -1903,7 +1903,7 @@ def figure2_gradient_fidelity():
         ax.set_xlabel("Branch cosine (energy wtd.)", fontsize=PT_LEGEND)
         ax.tick_params(axis="x", labelsize=7.5, pad=1)
         ax.tick_params(axis="y", length=0, pad=2)
-        panel_title(ax, "D", "Layer-soma")
+        panel_title(ax, "D", "Feedback factorial")
         clean_legend(ax, loc="lower right",
             fontsize=PT_SMALL,
             frameon=False,
