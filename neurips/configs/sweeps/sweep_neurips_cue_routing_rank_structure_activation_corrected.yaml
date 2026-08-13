@@ -1,0 +1,113 @@
+output_dir: "/n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/dendritic-local-learning/neurips/local_sweep_runs"
+
+outputs:
+  run_name: "cue_routing_rank_structure_activation_corrected"
+
+slurm_config:
+  account: "kempner_dev"
+  partition: "kempner_h100_priority3"
+  time: "06:00:00"
+  nodes: 1
+  ntasks_per_node: 1
+  gpus_per_node: 1
+  cpus_per_task: 8
+  mem: 32GB
+  max_concurrent_jobs: 64
+  modules_to_load: []
+  conda_env_path: ""
+  training_script: "src/dendritic_modeling/scripts/training/train_experiments.py"
+
+experiment_settings:
+  seeds_per_condition: 5
+  base_seed: 42
+  use_array_jobs: true
+
+configs:
+  - name: "cue_hard_learned_shunting_per_soma_tuned"
+    path: "drafts/dendritic-local-learning/neurips/configs/cue_routed_hard_learned_shunting_localca_pilot.yaml"
+    overrides:
+      training:
+        main:
+          common:
+            epochs: 140
+            patience: 35
+            param_groups:
+              lr: 0.001
+              split_params: true
+              topk_lr: 0.001
+              blocklinear_lr: 0.0005
+              reactivation_lr: 0.00035
+              decoder_lr: 0.0015
+
+  - name: "cue_hard_learned_shunting_low_rank_k1_tuned"
+    path: "drafts/dendritic-local-learning/neurips/configs/cue_routed_hard_learned_shunting_localca_pilot.yaml"
+    overrides:
+      training:
+        main:
+          common:
+            epochs: 140
+            patience: 35
+            param_groups:
+              lr: 0.001
+              split_params: true
+              topk_lr: 0.001
+              blocklinear_lr: 0.0005
+              reactivation_lr: 0.00035
+              decoder_lr: 0.0015
+          learning_strategy_config:
+            error_broadcast_mode: "low_rank"
+            broadcast_rank: 1
+
+  - name: "cue_hard_learned_shunting_low_rank_k2_tuned"
+    path: "drafts/dendritic-local-learning/neurips/configs/cue_routed_hard_learned_shunting_localca_pilot.yaml"
+    overrides:
+      training:
+        main:
+          common:
+            epochs: 140
+            patience: 35
+            param_groups:
+              lr: 0.001
+              split_params: true
+              topk_lr: 0.001
+              blocklinear_lr: 0.0005
+              reactivation_lr: 0.00035
+              decoder_lr: 0.0015
+          learning_strategy_config:
+            error_broadcast_mode: "low_rank"
+            broadcast_rank: 2
+
+  - name: "cue_hard_learned_shunting_low_rank_k4_tuned"
+    path: "drafts/dendritic-local-learning/neurips/configs/cue_routed_hard_learned_shunting_localca_pilot.yaml"
+    overrides:
+      training:
+        main:
+          common:
+            epochs: 140
+            patience: 35
+            param_groups:
+              lr: 0.001
+              split_params: true
+              topk_lr: 0.001
+              blocklinear_lr: 0.0005
+              reactivation_lr: 0.00035
+              decoder_lr: 0.0015
+          learning_strategy_config:
+            error_broadcast_mode: "low_rank"
+            broadcast_rank: 4
+
+  - name: "cue_hard_learned_shunting_pathway_vector_tuned"
+    path: "drafts/dendritic-local-learning/neurips/configs/cue_routed_hard_learned_shunting_localca_pathway_vector_pilot.yaml"
+    overrides:
+      training:
+        main:
+          common:
+            epochs: 140
+            patience: 35
+            param_groups:
+              lr: 0.001
+              split_params: true
+              topk_lr: 0.001
+              blocklinear_lr: 0.0005
+              reactivation_lr: 0.00035
+              decoder_lr: 0.0015

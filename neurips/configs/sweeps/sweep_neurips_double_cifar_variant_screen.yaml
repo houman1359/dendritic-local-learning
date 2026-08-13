@@ -1,0 +1,202 @@
+output_dir: "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/sweep_runs"
+
+outputs:
+  run_name: "sweep_neurips_double_mnist_variant_screen"
+
+slurm_config:
+  account: "kempner_dev"
+  partition: "kempner_h100_priority3"
+  time: "18:00:00"
+  nodes: 1
+  ntasks_per_node: 1
+  gpus_per_node: 1
+  cpus_per_task: 8
+  mem: 64GB
+  max_concurrent_jobs: 64
+  modules_to_load: []
+  conda_env_path: ""
+  training_script: "src/dendritic_modeling/scripts/training/train_experiments.py"
+
+experiment_settings:
+  seeds_per_condition: 1
+  base_seed: 42
+  use_array_jobs: true
+
+configs:
+  - name: "mnist_modulo10_flat_shunting_standard"
+    path: "drafts/dendritic-local-learning/neurips/configs/mnist_modulo10_flat_shunting_standard.yaml"
+  - name: "mnist_modulo10_flat_additive_standard"
+    path: "drafts/dendritic-local-learning/neurips/configs/mnist_modulo10_flat_additive_standard.yaml"
+  - name: "mnist_modulo10_flat_shunting_3f_per_soma_bpdec"
+    path: "drafts/dendritic-local-learning/neurips/configs/mnist_modulo10_flat_shunting_localca.yaml"
+    overrides:
+      training:
+        main:
+          learning_strategy_config:
+            rule_variant: "3f"
+            error_broadcast_mode: "per_soma"
+            decoder_update_mode: "backprop"
+      outputs:
+        run_name: "mnist_modulo10_flat_shunting_3f_per_soma_bpdec"
+  - name: "mnist_modulo10_flat_shunting_4f_per_soma_bpdec"
+    path: "drafts/dendritic-local-learning/neurips/configs/mnist_modulo10_flat_shunting_localca.yaml"
+    overrides:
+      training:
+        main:
+          learning_strategy_config:
+            rule_variant: "4f"
+            error_broadcast_mode: "per_soma"
+            decoder_update_mode: "backprop"
+      outputs:
+        run_name: "mnist_modulo10_flat_shunting_4f_per_soma_bpdec"
+  - name: "mnist_modulo10_flat_shunting_5f_per_soma_bpdec"
+    path: "drafts/dendritic-local-learning/neurips/configs/mnist_modulo10_flat_shunting_localca.yaml"
+    overrides:
+      training:
+        main:
+          learning_strategy_config:
+            rule_variant: "5f"
+            error_broadcast_mode: "per_soma"
+            decoder_update_mode: "backprop"
+      outputs:
+        run_name: "mnist_modulo10_flat_shunting_5f_per_soma_bpdec"
+  - name: "mnist_modulo10_flat_shunting_5f_low_rank_bpdec"
+    path: "drafts/dendritic-local-learning/neurips/configs/mnist_modulo10_flat_shunting_localca.yaml"
+    overrides:
+      training:
+        main:
+          learning_strategy_config:
+            rule_variant: "5f"
+            error_broadcast_mode: "low_rank"
+            broadcast_rank: 4
+            decoder_update_mode: "backprop"
+      outputs:
+        run_name: "mnist_modulo10_flat_shunting_5f_low_rank_bpdec"
+  - name: "mnist_modulo10_flat_shunting_5f_path_transport_bpdec"
+    path: "drafts/dendritic-local-learning/neurips/configs/mnist_modulo10_flat_shunting_localca.yaml"
+    overrides:
+      training:
+        main:
+          learning_strategy_config:
+            rule_variant: "5f"
+            error_broadcast_mode: "path_transport"
+            decoder_update_mode: "backprop"
+      outputs:
+        run_name: "mnist_modulo10_flat_shunting_5f_path_transport_bpdec"
+  - name: "mnist_modulo10_flat_additive_5f_per_soma_bpdec"
+    path: "drafts/dendritic-local-learning/neurips/configs/mnist_modulo10_flat_additive_localca.yaml"
+    overrides:
+      training:
+        main:
+          learning_strategy_config:
+            rule_variant: "5f"
+            error_broadcast_mode: "per_soma"
+            decoder_update_mode: "backprop"
+      outputs:
+        run_name: "mnist_modulo10_flat_additive_5f_per_soma_bpdec"
+  - name: "mnist_modulo10_flat_additive_5f_path_transport_bpdec"
+    path: "drafts/dendritic-local-learning/neurips/configs/mnist_modulo10_flat_additive_localca.yaml"
+    overrides:
+      training:
+        main:
+          learning_strategy_config:
+            rule_variant: "5f"
+            error_broadcast_mode: "path_transport"
+            decoder_update_mode: "backprop"
+      outputs:
+        run_name: "mnist_modulo10_flat_additive_5f_path_transport_bpdec"
+
+  - name: "double_mnist_contextual_routed_shunting_standard"
+    path: "drafts/dendritic-local-learning/neurips/configs/double_mnist_contextual_routed_shunting_standard.yaml"
+  - name: "double_mnist_contextual_routed_additive_standard"
+    path: "drafts/dendritic-local-learning/neurips/configs/double_mnist_contextual_routed_additive_standard.yaml"
+  - name: "double_mnist_contextual_shunting_3f_per_soma"
+    path: "drafts/dendritic-local-learning/neurips/configs/double_mnist_contextual_routed_shunting_localca.yaml"
+    overrides:
+      training:
+        main:
+          learning_strategy_config:
+            rule_variant: "3f"
+            error_broadcast_mode: "per_soma"
+            decoder_update_mode: "backprop"
+      outputs:
+        run_name: "double_mnist_contextual_shunting_3f_per_soma"
+  - name: "double_mnist_contextual_shunting_4f_per_soma"
+    path: "drafts/dendritic-local-learning/neurips/configs/double_mnist_contextual_routed_shunting_localca.yaml"
+    overrides:
+      training:
+        main:
+          learning_strategy_config:
+            rule_variant: "4f"
+            error_broadcast_mode: "per_soma"
+            decoder_update_mode: "backprop"
+      outputs:
+        run_name: "double_mnist_contextual_shunting_4f_per_soma"
+  - name: "double_mnist_contextual_shunting_5f_per_soma"
+    path: "drafts/dendritic-local-learning/neurips/configs/double_mnist_contextual_routed_shunting_localca.yaml"
+    overrides:
+      training:
+        main:
+          learning_strategy_config:
+            rule_variant: "5f"
+            error_broadcast_mode: "per_soma"
+            decoder_update_mode: "backprop"
+      outputs:
+        run_name: "double_mnist_contextual_shunting_5f_per_soma"
+  - name: "double_mnist_contextual_shunting_5f_low_rank"
+    path: "drafts/dendritic-local-learning/neurips/configs/double_mnist_contextual_routed_shunting_localca.yaml"
+    overrides:
+      training:
+        main:
+          learning_strategy_config:
+            rule_variant: "5f"
+            error_broadcast_mode: "low_rank"
+            broadcast_rank: 2
+            decoder_update_mode: "backprop"
+      outputs:
+        run_name: "double_mnist_contextual_shunting_5f_low_rank"
+  - name: "double_mnist_contextual_shunting_3f_pathway_vector"
+    path: "drafts/dendritic-local-learning/neurips/configs/double_mnist_contextual_routed_shunting_localca_pathway_vector.yaml"
+  - name: "double_mnist_contextual_shunting_4f_pathway_vector"
+    path: "drafts/dendritic-local-learning/neurips/configs/double_mnist_contextual_routed_shunting_localca_pathway_vector.yaml"
+    overrides:
+      training:
+        main:
+          learning_strategy_config:
+            rule_variant: "4f"
+            decoder_update_mode: "backprop"
+      outputs:
+        run_name: "double_mnist_contextual_shunting_4f_pathway_vector"
+  - name: "double_mnist_contextual_shunting_5f_pathway_vector"
+    path: "drafts/dendritic-local-learning/neurips/configs/double_mnist_contextual_routed_shunting_localca_pathway_vector.yaml"
+    overrides:
+      training:
+        main:
+          learning_strategy_config:
+            rule_variant: "5f"
+            decoder_update_mode: "backprop"
+      outputs:
+        run_name: "double_mnist_contextual_shunting_5f_pathway_vector"
+  - name: "double_mnist_contextual_additive_5f_per_soma"
+    path: "drafts/dendritic-local-learning/neurips/configs/double_mnist_contextual_routed_additive_localca.yaml"
+    overrides:
+      training:
+        main:
+          learning_strategy_config:
+            rule_variant: "5f"
+            error_broadcast_mode: "per_soma"
+            decoder_update_mode: "backprop"
+      outputs:
+        run_name: "double_mnist_contextual_additive_5f_per_soma"
+  - name: "double_mnist_contextual_additive_5f_low_rank"
+    path: "drafts/dendritic-local-learning/neurips/configs/double_mnist_contextual_routed_additive_localca.yaml"
+    overrides:
+      training:
+        main:
+          learning_strategy_config:
+            rule_variant: "5f"
+            error_broadcast_mode: "low_rank"
+            broadcast_rank: 2
+            decoder_update_mode: "backprop"
+      outputs:
+        run_name: "double_mnist_contextual_additive_5f_low_rank"

@@ -1,0 +1,35 @@
+output_dir: "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/sweep_runs"
+
+outputs:
+  run_name: "sweep_neurips_double_mnist_pilot"
+
+slurm_config:
+  account: "kempner_dev"
+  partition: "kempner_h100_priority3"
+  time: "18:00:00"
+  nodes: 1
+  ntasks_per_node: 1
+  gpus_per_node: 1
+  cpus_per_task: 8
+  mem: 64GB
+  max_concurrent_jobs: 8
+  modules_to_load: []
+  conda_env_path: ""
+  training_script: "src/dendritic_modeling/scripts/training/train_experiments.py"
+
+experiment_settings:
+  seeds_per_condition: 1
+  base_seed: 42
+  use_array_jobs: true
+
+configs:
+  - name: "mnist_modulo10_flat_shunting_standard"
+    path: "drafts/dendritic-local-learning/neurips/configs/mnist_modulo10_flat_shunting_standard.yaml"
+  - name: "mnist_modulo10_flat_shunting_localca"
+    path: "drafts/dendritic-local-learning/neurips/configs/mnist_modulo10_flat_shunting_localca.yaml"
+  - name: "double_mnist_contextual_routed_shunting_standard"
+    path: "drafts/dendritic-local-learning/neurips/configs/double_mnist_contextual_routed_shunting_standard.yaml"
+  - name: "double_mnist_contextual_routed_shunting_localca"
+    path: "drafts/dendritic-local-learning/neurips/configs/double_mnist_contextual_routed_shunting_localca.yaml"
+  - name: "double_mnist_contextual_routed_shunting_localca_pathway_vector"
+    path: "drafts/dendritic-local-learning/neurips/configs/double_mnist_contextual_routed_shunting_localca_pathway_vector.yaml"

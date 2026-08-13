@@ -1,0 +1,80 @@
+Thank you for emphasizing that the theory-to-experiment chain must be understandable without requiring the reader to reconstruct it from the appendix. We took this concern seriously. We reorganized the paper around one question: what credit signal does a dendritic synapse require for task optimization, and how much of it can a biologically restricted teaching signal provide? In addition, we worked hard to improve the presentation and writing.
+
+Summary
+
+The clearer organization brings forward three strong results. First, the derived factorization reconstructs autograd with relative error below $1.9\times10^{-7}$. Second, exact path transport lets the theorem-derived $3F$ rule reach $97.18$ to $97.21\%$, matching backpropagation at $97.03\%$. Third, dense compartment-wise feedback is not required in the regular tree. One teaching coordinate shared across each modeled neuron's $13$ compartments brings $3F$ accuracy to $97.15\%$ in shunting and $97.14\%$ in additive networks. Every one of the $15$ paired seeds improves.
+
+The paper can be summarized in four statements:
+
+1. A synaptic gradient in the modeled dendritic tree is exactly a local sensitivity multiplied by a compartment-specific error.
+2. The local sensitivity is determined by presynaptic activity, synaptic driving force, and local input resistance.
+3. The compartment error begins with the somatic error and is transported through the intervening dendritic branches to the synapse's compartment.
+4. Shunting changes input resistance and regulates the gain of selected credit paths.
+
+Exact-gradient reconstruction tests statements $1$ through $3$. Path-gain, inhibition, morphology, feedback, and transported-error experiments test statement $4$. Accuracy measures the learning consequence of this chain.
+
+1. Presentation and organization
+
+The revision begins with a dendritic-tree schematic and the voltage equation. It then defines local eligibility, compartment error, path gain, and feedback. The results follow five steps: exact factorization, feedback fidelity, conductance intervention, task competence, and rule/feedback controls.
+
+The main paper now contains the study rationale, assumptions, biological predictions, principal quantitative results, and limitations. Proofs and secondary sweeps remain in the supplement.
+
+We removed unclear terms such as “synapse banks,” “identity upward transfer,” and “gold-ringed soma.” All abbreviations are defined before use. Figures were rebuilt with larger labels, non-overlapping elements, and standalone captions.
+
+Every diagnostic now states its axes. The $4F$ proxy estimates covariance over examples after reducing non-batch coordinates. Path-gain CV is calculated over compartments within examples. SVD uses an examples-by-compartments matrix. Gradient metrics compare matched parameter vectors. The $5F$ residual is defined as a bounded predictability factor.
+
+2. Feedback structure and the local learning result
+
+The revision distinguishes three feedback structures. Matched-width/scalar-fallback feedback reuses the full soma teaching vector at a same-width stage. At a wider stage, it averages the vector to one scalar per example and broadcasts that scalar. Neuron-wise feedback instead repeats the appropriate soma coordinate over the compartments descended from that soma. Exact transport supplies a separate error to every compartment.
+
+The neuron-wise result is the key constructive finding. It raises $3F$ MNIST accuracy from $90.75\%$ to $97.15\%$ in shunting networks and from $91.58\%$ to $97.14\%$ in additive networks. The gains are $6.40$ and $5.56$ percentage points. They occur in all $15$ paired seeds, with signed-rank $p=6.1\times10^{-5}$.
+
+Changing only the diagnostic feedback field raises branch-gradient cosine from $0.007$ to $0.667$ and from $0.024$ to $0.599$. Again, all pairs improve.
+
+A five-seed exact-transport factorial gives the ceiling. The $3F$ rule reaches $97.18$ to $97.21\%$, $5F$ reaches $97.12$ to $97.20\%$, and backpropagation reaches $97.03\%$. Thus one coordinate per neuron captures almost all of dense transport's benefit. The biological and computational principle is simple: preserve neuron identity and let dendritic ancestry provide the routing map.
+
+3. Significance, novelty, and shunting evidence
+
+The novelty is that conductance and morphology enter an exact credit equation. This turns dendritic biophysics into quantitative predictions about learning.
+
+For inhibitory conductance at compartment $k$,
+
+$\displaystyle \frac{\partial\log\alpha_n}{\partial G_k^I}=-R_k$
+
+for every descendant $n$ whose path traverses $k$. Unrelated branches have no corresponding path effect. A focal shunt can therefore regulate plasticity signals within a selected subtree. Its strength is set by local input resistance and route geometry.
+
+The experiments identify several useful regimes. At $N_I=5$, path-gain CV is about $80\%$ lower under shunting, with the same ordering in all five pairs. Under restricted $5F$ feedback, shunting exceeds additive on MNIST, Fashion-MNIST, figure-ground MNIST, and compact CIFAR-10. The comparisons are $91.1$ versus $89.4\%$, $83.8$ versus $83.1\%$, $80.3$ versus $78.7\%$, and $29.7$ versus $25.5\%$.
+
+Across one to four dendritic layers, shunting changes from $63.5$ to $57.4\%$. Additive changes from $54.9$ to $29.7\%$. For broadcast noise, $\sigma$ is the standard deviation of zero-mean Gaussian noise added to feedback. At $\sigma=0.1$, mean test accuracy is $61.8\%$ for shunting and $38.4\%$ for additive. At $\sigma=1.0$, it is $46.9\%$ and $11.4\%$.
+
+The main text now presents three direct biological predictions. A focal shunt should preferentially alter descendant plasticity. The effect should scale with local input resistance. Proximal and distal inhibition should affect different route families. These predictions connect dendritic voltage, inhibition, morphology, and plasticity measurements.
+
+The applications extend in both directions. Reconstructed neurons can be used to compare credit routing across cell types and morphologies. Artificial systems can use neuron-indexed or path-aware feedback to reduce the teaching bandwidth required within structured units.
+
+4. Passive equilibrium and temporal dynamics
+
+The theorem describes a steady-state starting point. Temporal membrane dynamics add state and can have first-order effects on credit. Capacitance and channel kinetics turn the static path product into a temporal adjoint or eligibility trace.
+
+Local nonlinearities enter path gain through their derivatives. Replacing parametric tanh with identity gives $90.81\pm0.33\%$ versus $90.88\pm0.77\%$ across five seeds. The selected nonlinearity is therefore not responsible for task competence. A $15$-seed identity-transfer control also separates gradient direction from final learning.
+
+Active calcium or sodium conductances can amplify or gate credit. Calcium can create branch-specific eligibility traces. Neuromodulation can scale or consolidate them over longer times. These are direct extensions of the factorization and priorities for future work.
+
+5. Relevance to real morphology
+
+The derivation permits arbitrary depth, asymmetric branching, and branch-specific conductances. Small morphological differences matter when they change local resistance, route length, or task-relevant branches. Multiple parents introduce a sum over paths. Recurrence requires an adjoint.
+
+The depth experiment already demonstrates route-length sensitivity. All $40$ checkpoints retain every nominal stage. Their minimum stage-median coupling is $0.716$, so the result reflects effective depth rather than stage loss.
+
+For a reconstructed cell, the parent-child graph and fitted conductances can be inserted directly. The model can then compute path gains, feedback fields, and the sensitivity of each subtree to focal inhibition. This makes it possible to compare credit routing across neurons, cell types, and developmental or disease-related morphologies. The code already supports arbitrary rooted trees, E/I interventions, exact-gradient checks, and six feedback families.
+
+6. Assumptions and scope in the main argument
+
+The main discussion now states the assumptions directly: steady-state non-spiking dynamics, a rooted tree, nonnegative conductances, input-driven inhibition, and access to a soma teaching signal. It also distinguishes theorem terms from reactivation, decoder choices, top-$k$ selection, $4F$/$5F$ preconditioning, and auxiliary losses.
+
+The passive model is useful because it yields an exact, testable foundation. Temporal channels, calcium, spiking, recurrence, and neuromodulation can then be added while retaining a clear reference point.
+
+Conclusion
+
+The revised paper now presents one coherent chain: exact factorization, restricted feedback, branch-selective conductance control, learning, and biological predictions. The new evidence shows that the $3F$ rule can reach the backpropagation ceiling, that one teaching coordinate per neuron recovers nearly all of dense transport's benefit, and that shunting gives a measurable way to regulate selected credit paths.
+
+These results provide a new framework for studying credit assignment in reconstructed neurons and a concrete design principle for structured feedback in AI. We hope the new quantitative controls and the extensive improvements in organization, figures, definitions, and biological interpretation make the argument and its broader significance clear.

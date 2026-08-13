@@ -1,0 +1,295 @@
+output_dir: "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/sweep_runs"
+
+# Historical naming note:
+# Some local_ca conditions below still use legacy `_bp_` strings in their
+# config/run names. In these sweeps that label should be read as
+# `learned_local_bm`, i.e. LocalCA updates (m, b) with the local rule rather
+# than backpropagating through the gates. The newer MNIST/CIFAR sweeps use the
+# explicit `learnedbm` / `quantilebm` labels instead.
+
+outputs:
+  run_name: "sweep_bm_training_strategies_cue_routed_matched_relu"
+
+slurm_config:
+  account: "kempner_dev"
+  partition: "kempner_eng"
+  time: "10:00:00"
+  nodes: 1
+  ntasks_per_node: 1
+  gpus_per_node: 1
+  cpus_per_task: 8
+  mem: 64GB
+  max_concurrent_jobs: 12
+  modules_to_load: []
+  conda_env_path: ""
+  training_script: "src/dendritic_modeling/scripts/training/train_experiments.py"
+
+experiment_settings:
+  seeds_per_condition: 3
+  base_seed: 42
+  use_array_jobs: true
+
+configs:
+  - name: "additive_standard_bp_prev_init"
+    path: "drafts/dendritic-local-learning/neurips/configs/cue_routed_hard_learned_additive_standard_pilot.yaml"
+    run_name: "cue_routed_additive_standard_bp_prev_init"
+    overrides: &add_std_bp_prev
+      model:
+        encoder:
+          params:
+            router_activation: "relu"
+        core:
+          reactivation:
+            init_policy: "analytical"
+      training:
+        main:
+          common:
+            reactivation_update_mode: "backprop"
+            recalibrate_reactivation_every: 0
+            reactivation_recalibration_mode: "from_init_policy"
+            reactivation_recalibration_start_epoch: 1
+
+  - name: "additive_standard_bp_quantile_init"
+    path: "drafts/dendritic-local-learning/neurips/configs/cue_routed_hard_learned_additive_standard_pilot.yaml"
+    run_name: "cue_routed_additive_standard_bp_quantile_init"
+    overrides:
+      <<: *add_std_bp_prev
+      model:
+        encoder:
+          params:
+            router_activation: "relu"
+        core:
+          reactivation:
+            init_policy: "quantile"
+
+  - name: "additive_standard_quantile_prev_init"
+    path: "drafts/dendritic-local-learning/neurips/configs/cue_routed_hard_learned_additive_standard_pilot.yaml"
+    run_name: "cue_routed_additive_standard_quantile_prev_init"
+    overrides: &add_std_quant_prev
+      model:
+        encoder:
+          params:
+            router_activation: "relu"
+        core:
+          reactivation:
+            init_policy: "analytical"
+      training:
+        main:
+          common:
+            reactivation_update_mode: "quantile"
+            recalibrate_reactivation_every: 5
+            reactivation_recalibration_mode: "occupancy_quantile"
+            reactivation_recalibration_start_epoch: 5
+
+  - name: "additive_standard_quantile_quantile_init"
+    path: "drafts/dendritic-local-learning/neurips/configs/cue_routed_hard_learned_additive_standard_pilot.yaml"
+    run_name: "cue_routed_additive_standard_quantile_quantile_init"
+    overrides:
+      <<: *add_std_quant_prev
+      model:
+        encoder:
+          params:
+            router_activation: "relu"
+        core:
+          reactivation:
+            init_policy: "quantile"
+
+  - name: "shunting_standard_bp_prev_init"
+    path: "drafts/dendritic-local-learning/neurips/configs/cue_routed_hard_learned_shunting_standard_pilot.yaml"
+    run_name: "cue_routed_shunting_standard_bp_prev_init"
+    overrides: &shunt_std_bp_prev
+      model:
+        encoder:
+          params:
+            router_activation: "relu"
+        core:
+          reactivation:
+            init_policy: "analytical"
+      training:
+        main:
+          common:
+            reactivation_update_mode: "backprop"
+            recalibrate_reactivation_every: 0
+            reactivation_recalibration_mode: "from_init_policy"
+            reactivation_recalibration_start_epoch: 1
+
+  - name: "shunting_standard_bp_quantile_init"
+    path: "drafts/dendritic-local-learning/neurips/configs/cue_routed_hard_learned_shunting_standard_pilot.yaml"
+    run_name: "cue_routed_shunting_standard_bp_quantile_init"
+    overrides:
+      <<: *shunt_std_bp_prev
+      model:
+        encoder:
+          params:
+            router_activation: "relu"
+        core:
+          reactivation:
+            init_policy: "quantile"
+
+  - name: "shunting_standard_quantile_prev_init"
+    path: "drafts/dendritic-local-learning/neurips/configs/cue_routed_hard_learned_shunting_standard_pilot.yaml"
+    run_name: "cue_routed_shunting_standard_quantile_prev_init"
+    overrides: &shunt_std_quant_prev
+      model:
+        encoder:
+          params:
+            router_activation: "relu"
+        core:
+          reactivation:
+            init_policy: "analytical"
+      training:
+        main:
+          common:
+            reactivation_update_mode: "quantile"
+            recalibrate_reactivation_every: 5
+            reactivation_recalibration_mode: "occupancy_quantile"
+            reactivation_recalibration_start_epoch: 5
+
+  - name: "shunting_standard_quantile_quantile_init"
+    path: "drafts/dendritic-local-learning/neurips/configs/cue_routed_hard_learned_shunting_standard_pilot.yaml"
+    run_name: "cue_routed_shunting_standard_quantile_quantile_init"
+    overrides:
+      <<: *shunt_std_quant_prev
+      model:
+        encoder:
+          params:
+            router_activation: "relu"
+        core:
+          reactivation:
+            init_policy: "quantile"
+
+  - name: "additive_localca_bp_prev_init"
+    path: "drafts/dendritic-local-learning/neurips/configs/cue_routed_hard_learned_additive_localca_pilot.yaml"
+    run_name: "cue_routed_additive_localca_bp_prev_init"
+    overrides: &add_local_bp_prev
+      model:
+        encoder:
+          params:
+            router_activation: "relu"
+        core:
+          reactivation:
+            init_policy: "analytical"
+      training:
+        main:
+          common:
+            reactivation_update_mode: "backprop"
+            recalibrate_reactivation_every: 0
+            reactivation_recalibration_mode: "from_init_policy"
+            reactivation_recalibration_start_epoch: 1
+          learning_strategy_config:
+            update_reactivation: true
+
+  - name: "additive_localca_bp_quantile_init"
+    path: "drafts/dendritic-local-learning/neurips/configs/cue_routed_hard_learned_additive_localca_pilot.yaml"
+    run_name: "cue_routed_additive_localca_bp_quantile_init"
+    overrides:
+      <<: *add_local_bp_prev
+      model:
+        encoder:
+          params:
+            router_activation: "relu"
+        core:
+          reactivation:
+            init_policy: "quantile"
+
+  - name: "additive_localca_quantile_prev_init"
+    path: "drafts/dendritic-local-learning/neurips/configs/cue_routed_hard_learned_additive_localca_pilot.yaml"
+    run_name: "cue_routed_additive_localca_quantile_prev_init"
+    overrides: &add_local_quant_prev
+      model:
+        encoder:
+          params:
+            router_activation: "relu"
+        core:
+          reactivation:
+            init_policy: "analytical"
+      training:
+        main:
+          common:
+            reactivation_update_mode: "quantile"
+            recalibrate_reactivation_every: 5
+            reactivation_recalibration_mode: "occupancy_quantile"
+            reactivation_recalibration_start_epoch: 5
+          learning_strategy_config:
+            update_reactivation: false
+
+  - name: "additive_localca_quantile_quantile_init"
+    path: "drafts/dendritic-local-learning/neurips/configs/cue_routed_hard_learned_additive_localca_pilot.yaml"
+    run_name: "cue_routed_additive_localca_quantile_quantile_init"
+    overrides:
+      <<: *add_local_quant_prev
+      model:
+        encoder:
+          params:
+            router_activation: "relu"
+        core:
+          reactivation:
+            init_policy: "quantile"
+
+  - name: "shunting_localca_bp_prev_init"
+    path: "drafts/dendritic-local-learning/neurips/configs/cue_routed_hard_learned_shunting_localca_pilot.yaml"
+    run_name: "cue_routed_shunting_localca_bp_prev_init"
+    overrides: &shunt_local_bp_prev
+      model:
+        encoder:
+          params:
+            router_activation: "relu"
+        core:
+          reactivation:
+            init_policy: "analytical"
+      training:
+        main:
+          common:
+            reactivation_update_mode: "backprop"
+            recalibrate_reactivation_every: 0
+            reactivation_recalibration_mode: "from_init_policy"
+            reactivation_recalibration_start_epoch: 1
+          learning_strategy_config:
+            update_reactivation: true
+
+  - name: "shunting_localca_bp_quantile_init"
+    path: "drafts/dendritic-local-learning/neurips/configs/cue_routed_hard_learned_shunting_localca_pilot.yaml"
+    run_name: "cue_routed_shunting_localca_bp_quantile_init"
+    overrides:
+      <<: *shunt_local_bp_prev
+      model:
+        encoder:
+          params:
+            router_activation: "relu"
+        core:
+          reactivation:
+            init_policy: "quantile"
+
+  - name: "shunting_localca_quantile_prev_init"
+    path: "drafts/dendritic-local-learning/neurips/configs/cue_routed_hard_learned_shunting_localca_pilot.yaml"
+    run_name: "cue_routed_shunting_localca_quantile_prev_init"
+    overrides: &shunt_local_quant_prev
+      model:
+        encoder:
+          params:
+            router_activation: "relu"
+        core:
+          reactivation:
+            init_policy: "analytical"
+      training:
+        main:
+          common:
+            reactivation_update_mode: "quantile"
+            recalibrate_reactivation_every: 5
+            reactivation_recalibration_mode: "occupancy_quantile"
+            reactivation_recalibration_start_epoch: 5
+          learning_strategy_config:
+            update_reactivation: false
+
+  - name: "shunting_localca_quantile_quantile_init"
+    path: "drafts/dendritic-local-learning/neurips/configs/cue_routed_hard_learned_shunting_localca_pilot.yaml"
+    run_name: "cue_routed_shunting_localca_quantile_quantile_init"
+    overrides:
+      <<: *shunt_local_quant_prev
+      model:
+        encoder:
+          params:
+            router_activation: "relu"
+        core:
+          reactivation:
+            init_policy: "quantile"

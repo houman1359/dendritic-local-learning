@@ -1,0 +1,80 @@
+Thank you for recognizing the novelty of our work, which examines whether neuronal biophysics can make exact credit easier to approximate. We agree that the goal and its practical relevance should be stated directly. We have substantially revised the paper to make both clear.
+
+Summary
+
+This is a mechanism-first NeuroAI paper. It derives the exact credit equation of a conductance-based dendritic tree and verifies it to relative error below $1.9\times10^{-7}$. With exact transported errors, the theorem-derived $3F$ rule reaches $97.18$ to $97.21\%$ on MNIST, matching backpropagation at $97.03\%$. With only one teaching coordinate shared across the $13$ compartments of each modeled neuron, $3F$ reaches $97.15\%$ in shunting and $97.14\%$ in additive networks. On compact CIFAR-10, exact transport raises shunting LocalCA from $29.7\%$ to $47.2\%$, close to the matched $49.5\%$ backpropagation ceiling.
+
+1. Goal and novelty
+
+The paper makes a direct bridge from a biophysical component to a learning computation. It:
+
+1. derives the exact gradient of a conductance-based dendritic tree;
+2. separates it into synapse-local eligibility and path-transported compartment error;
+3. measures how E/I conductance, shunting, and branching transform that error;
+4. tests which restricted feedback fields retain enough information for learning.
+
+Other approaches such as FF, PEPITA, SPELA, Trifecta, NoProp, and LLS mainly design layer-local or forward-only objectives. Our work starts from the exact conductance-tree gradient. It asks which factors are locally available and how neuronal structure changes the required teaching signal. The revision includes a comparison table covering feedback source, within-neuron biophysics, objective, and relation to exact credit.
+
+For neuroscience, the framework predicts descendant-selective changes in plasticity after focal shunting. Their magnitude is set by input resistance and route geometry. This can be tested with dendritic voltage, inhibition, and plasticity measurements, including in reconstructed cells. For AI, the results identify neuron-indexed and path-aware feedback as structures worth preserving when these units are scaled.
+
+2. Path gain and the role of shunting
+
+The path gain $\alpha_n$ is not a separately learned parameter. It is the instantaneous derivative
+
+$\displaystyle \alpha_n=\frac{\partial V_{\mathrm{soma}}}{\partial V_n}$.
+
+It is determined by the current branch-to-parent conductances, local input resistances, and transfer derivatives. On a rooted tree, it is the product of these local gains along the unique path. Backpropagation and the transported-error analysis compute it from the current state. LocalCA uses restricted feedback instead, which lets us measure the cost of not transporting the full path information.
+
+Shunting has an exact theoretical role. Increasing inhibitory conductance at compartment $k$ changes every descendant path gain according to
+
+$\displaystyle \frac{\partial\log\alpha_n}{\partial G_k^I}=-R_k$.
+
+There is no corresponding path effect on unrelated branches. Thus a focal conductance change can regulate both local synaptic sensitivity and descendant credit gain.
+
+The experiments show several positive signatures. At $N_I=5$, conductance-stage path-gain CV is about $80\%$ lower under shunting, with the same ordering in all five pairs and at every nonzero inhibitory count. Under restricted $5F$ feedback, shunting exceeds additive on MNIST, Fashion-MNIST, figure-ground MNIST, and compact CIFAR-10. The comparisons are $91.1$ versus $89.4\%$, $83.8$ versus $83.1\%$, $80.3$ versus $78.7\%$, and $29.7$ versus $25.5\%$.
+
+In the depth stress test, shunting changes from $63.5$ to $57.4\%$ across one to four dendritic layers. Additive degrades from $54.9$ to $29.7\%$. For broadcast noise, $\sigma$ is the standard deviation of zero-mean Gaussian noise added to feedback. At $\sigma=0.1$, mean test accuracy is $61.8\%$ for shunting and $38.4\%$ for additive. At $\sigma=1.0$, it is $46.9\%$ and $11.4\%$.
+
+A fixed-state intervention clarifies how this mechanism operates after training. Removing inhibitory conductance only from backward resistance increases distal path gain by $7.0\%$ on MNIST and $28.1\%$ in the higher-inhibition noise population. The cosine alignment between the restricted update and exact branch gradient changes by less than $0.002$. The learning effects therefore reflect the combined influence of inhibition on forward voltage, local eligibility, and path gain.
+
+3. Three-factor learning and feedback routing
+
+Two controls show that the theorem-derived $3F$ rule is effective when feedback preserves the required structure.
+
+First, in a five-seed exact-transport factorial, $3F$ reaches $97.21\pm0.14\%$ with a backpropagation-updated decoder and $97.18\pm0.12\%$ with a locally updated decoder. The corresponding $5F$ values are $97.20\pm0.16\%$ and $97.12\pm0.14\%$. Matched backpropagation reaches $97.03\pm0.08\%$.
+
+Second, dense compartment errors are not required in the regular tree. Repeating one soma-error coordinate over each modeled neuron's $13$ compartments raises $3F$ accuracy from $90.75\%$ to $97.15\%$ in shunting and from $91.58\%$ to $97.14\%$ in additive networks. The gains occur in all $15$ pairs, with signed-rank $p=6.1\times10^{-5}$. Branch-gradient cosine rises from $0.007$ to $0.667$ and from $0.024$ to $0.599$.
+
+This gives a constructive design principle: preserve neuron identity and use the tree as a routing map.
+
+The feedback terminology is now explicit. At a same-width stage, matched-width/scalar-fallback feedback reuses the full soma teaching vector coordinate by coordinate. At a wider stage, it averages that vector to one scalar per example and broadcasts the scalar. This is distinct from neuron-wise ancestry sharing.
+
+4. Scale, related methods, and larger architectures
+
+The current experiments are designed to isolate the mechanism before scaling it. The compact CIFAR-10 ladder already tests a harder input distribution under a matched passive architecture. Restricted shunting LocalCA reaches $29.7\pm1.3\%$. Rank-$4$ feedback reaches $35.0\pm1.0\%$. Exact transport reaches $47.2\pm0.6\%$, within $2.3$ points of matched shunting backpropagation at $49.5\pm0.4\%$. This $17.5$-point recovery isolates the value of credit quality from forward capacity.
+
+We also added a directly implementable DFA comparison on matched MNIST models. DFA reaches $66.1\%$ in shunting, $62.2\%$ in additive, and $51.8\%$ in a point MLP. Their gaps to matched backpropagation are $24.9$, $27.6$, and $39.5$ points. The comparison table places these results beside FF, PEPITA, SPELA, Trifecta, NoProp, LLS, target propagation, and feedback-control methods.
+
+The natural next step is to insert the dendritic unit into a competitive CNN or transformer. In CNNs, patches provide local eligibility and shared parameters sum over positions. In transformers, dendritic units can replace feed-forward or value/output projections. Credit transport between blocks remains a separate design choice. ImageNet-scale testing is therefore an important next stage after the within-unit mechanism has been established.
+
+5. Compute, memory, and energy
+
+With the same MNIST model, batch size, hooks, evaluation, and $180$ epochs, LocalCA takes $190$ seconds and backpropagation takes $125$ seconds. Peak allocated memory is $1.70$ GiB for both. Reserved memory is $2.03$ versus $1.97$ GiB. These measurements show that the current implementation is practical for mechanistic experiments. Hardware energy was not measured, so the paper makes no energy-efficiency claim.
+
+6. Biological scope and generality
+
+Inhibitory neurotransmission is represented by an input-driven conductance. It changes local input resistance, forward voltage sensitivity, and path gain. The class label is only the task-level teaching target. It does not represent a neurotransmitter. The classification and synthetic tasks are controlled probes of the resulting learning geometry.
+
+The current theorem is steady-state and non-spiking. Hodgkin-Huxley channels, spikes, calcium, and neuromodulation add temporal state. Their gradients require eligibility traces or an adjoint extension. These processes can amplify, gate, or consolidate the local credit identified here.
+
+The derivation applies to arbitrary rooted trees, including asymmetric branching and branch-specific conductances. With multiple parents, local eligibility still factorizes from node error, while the node error becomes a sum over parent paths. Recurrence requires an adjoint.
+
+A full biological implementation also needs a source for the neuron-indexed teaching coordinate. Apical, burst, plateau, and neuromodulatory signals are plausible candidates. The present result reduces the requirement from one distinct error per compartment to one coordinate per modeled neuron.
+
+The main results, assumptions, predictions, and limitations are now in the main paper. The supplement contains proofs and secondary controls.
+
+Conclusion
+
+The revision provides a validated local rule, an exact branch-selective role for shunting, a $15$-seed neuron-wise routing result, a controlled CIFAR-10 feedback ladder, matched compute measurements, and a direct DFA baseline. The framework creates concrete consequences for both fields: testable predictions about dendritic plasticity in neuroscience, and path-aware feedback structures for scalable AI systems.
+
+We hope this new evidence and clearer positioning address the main concerns in the review and make the value of this mechanism-first contribution easier to assess.

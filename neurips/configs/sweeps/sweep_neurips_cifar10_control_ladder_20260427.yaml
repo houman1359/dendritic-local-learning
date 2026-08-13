@@ -1,0 +1,193 @@
+output_dir: "/n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/dendritic-local-learning/neurips/local_sweep_runs"
+
+outputs:
+  run_name: "cifar10_control_ladder_20260427"
+
+slurm_config:
+  account: "kempner_dev"
+  partition: "kempner_h100"
+  time: "24:00:00"
+  nodes: 1
+  ntasks_per_node: 1
+  gpus_per_node: 1
+  cpus_per_task: 8
+  mem: 64GB
+  max_concurrent_jobs: 24
+  modules_to_load: []
+  conda_env_path: ""
+  training_script: "src/dendritic_modeling/scripts/training/train_experiments.py"
+
+experiment_settings:
+  seeds_per_condition: 5
+  base_seed: 42
+  use_array_jobs: true
+
+configs:
+  - name: "cifar10_additive_standard"
+    path: "drafts/dendritic-local-learning/neurips/configs/cifar10_additive_compactei_depth4_standard.yaml"
+
+  - name: "cifar10_shunting_standard_learned_i"
+    path: "drafts/dendritic-local-learning/neurips/configs/cifar10_shunting_compactei_depth4_standard.yaml"
+
+  - name: "cifar10_shunting_standard_no_i"
+    path: "drafts/dendritic-local-learning/neurips/configs/cifar10_shunting_compactei_depth4_standard.yaml"
+    overrides:
+      model:
+        core:
+          connectivity:
+            ie_synapses_per_branch_per_layer: [0]
+      outputs:
+        run_name: "cifar10_shunting_standard_no_i"
+
+  - name: "cifar10_additive_5f_per_soma"
+    path: "drafts/dendritic-local-learning/neurips/configs/cifar10_additive_compactei_depth4_localca.yaml"
+    overrides:
+      training:
+        main:
+          common:
+            weight_decay_rate: 0.0
+          learning_strategy_config:
+            decoder_update_mode: "backprop"
+      outputs:
+        run_name: "cifar10_additive_5f_per_soma"
+
+  - name: "cifar10_additive_5f_per_soma_gain_input_dependent"
+    path: "drafts/dendritic-local-learning/neurips/configs/cifar10_additive_compactei_depth4_localca.yaml"
+    overrides:
+      training:
+        main:
+          common:
+            weight_decay_rate: 0.0
+          learning_strategy_config:
+            decoder_update_mode: "backprop"
+            three_factor:
+              additive_gain_mode: "input_dependent"
+      outputs:
+        run_name: "cifar10_additive_5f_per_soma_gain_input_dependent"
+
+  - name: "cifar10_additive_5f_per_soma_gain_running_stats"
+    path: "drafts/dendritic-local-learning/neurips/configs/cifar10_additive_compactei_depth4_localca.yaml"
+    overrides:
+      training:
+        main:
+          common:
+            weight_decay_rate: 0.0
+          learning_strategy_config:
+            decoder_update_mode: "backprop"
+            three_factor:
+              additive_gain_mode: "running_stats"
+      outputs:
+        run_name: "cifar10_additive_5f_per_soma_gain_running_stats"
+
+  - name: "cifar10_additive_5f_per_soma_gain_learned"
+    path: "drafts/dendritic-local-learning/neurips/configs/cifar10_additive_compactei_depth4_localca.yaml"
+    overrides:
+      training:
+        main:
+          common:
+            weight_decay_rate: 0.0
+          learning_strategy_config:
+            decoder_update_mode: "backprop"
+            three_factor:
+              additive_gain_mode: "learned_gain"
+      outputs:
+        run_name: "cifar10_additive_5f_per_soma_gain_learned"
+
+  - name: "cifar10_additive_5f_per_soma_dendritic_norm"
+    path: "drafts/dendritic-local-learning/neurips/configs/cifar10_additive_compactei_depth4_localca.yaml"
+    overrides:
+      training:
+        main:
+          common:
+            weight_decay_rate: 0.0
+          learning_strategy_config:
+            decoder_update_mode: "backprop"
+            morphology_aware:
+              use_dendritic_normalization: true
+      outputs:
+        run_name: "cifar10_additive_5f_per_soma_dendritic_norm"
+
+  - name: "cifar10_additive_5f_path_transport"
+    path: "drafts/dendritic-local-learning/neurips/configs/cifar10_additive_compactei_depth4_localca.yaml"
+    overrides:
+      training:
+        main:
+          common:
+            weight_decay_rate: 0.0
+          learning_strategy_config:
+            error_broadcast_mode: "path_transport"
+            decoder_update_mode: "backprop"
+      outputs:
+        run_name: "cifar10_additive_5f_path_transport"
+
+  - name: "cifar10_shunting_5f_per_soma_learned_i"
+    path: "drafts/dendritic-local-learning/neurips/configs/cifar10_shunting_compactei_depth4_localca.yaml"
+    overrides:
+      training:
+        main:
+          common:
+            weight_decay_rate: 0.0
+          learning_strategy_config:
+            decoder_update_mode: "backprop"
+      outputs:
+        run_name: "cifar10_shunting_5f_per_soma_learned_i"
+
+  - name: "cifar10_shunting_5f_per_soma_no_i"
+    path: "drafts/dendritic-local-learning/neurips/configs/cifar10_shunting_compactei_depth4_localca.yaml"
+    overrides:
+      model:
+        core:
+          connectivity:
+            ie_synapses_per_branch_per_layer: [0]
+      training:
+        main:
+          common:
+            weight_decay_rate: 0.0
+          learning_strategy_config:
+            decoder_update_mode: "backprop"
+      outputs:
+        run_name: "cifar10_shunting_5f_per_soma_no_i"
+
+  - name: "cifar10_shunting_5f_low_rank4_learned_i"
+    path: "drafts/dendritic-local-learning/neurips/configs/cifar10_shunting_compactei_depth4_localca.yaml"
+    overrides:
+      training:
+        main:
+          common:
+            weight_decay_rate: 0.0
+          learning_strategy_config:
+            error_broadcast_mode: "low_rank"
+            broadcast_rank: 4
+            decoder_update_mode: "backprop"
+      outputs:
+        run_name: "cifar10_shunting_5f_low_rank4_learned_i"
+
+  - name: "cifar10_shunting_5f_path_transport_learned_i"
+    path: "drafts/dendritic-local-learning/neurips/configs/cifar10_shunting_compactei_depth4_localca.yaml"
+    overrides:
+      training:
+        main:
+          common:
+            weight_decay_rate: 0.0
+          learning_strategy_config:
+            error_broadcast_mode: "path_transport"
+            decoder_update_mode: "backprop"
+      outputs:
+        run_name: "cifar10_shunting_5f_path_transport_learned_i"
+
+  - name: "cifar10_shunting_5f_path_transport_no_i"
+    path: "drafts/dendritic-local-learning/neurips/configs/cifar10_shunting_compactei_depth4_localca.yaml"
+    overrides:
+      model:
+        core:
+          connectivity:
+            ie_synapses_per_branch_per_layer: [0]
+      training:
+        main:
+          common:
+            weight_decay_rate: 0.0
+          learning_strategy_config:
+            error_broadcast_mode: "path_transport"
+            decoder_update_mode: "backprop"
+      outputs:
+        run_name: "cifar10_shunting_5f_path_transport_no_i"

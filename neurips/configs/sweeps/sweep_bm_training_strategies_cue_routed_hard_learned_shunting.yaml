@@ -1,0 +1,94 @@
+output_dir: "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/sweep_runs"
+
+# Historical naming note:
+# The `bp_*` labels in this older standard-only sweep mean "optimizer/backprop
+# updates (m, b)". Later LocalCA-facing sweeps reused similar legacy strings
+# on disk, but the preferred manuscript terminology is now `bpbm`,
+# `learned_local_bm`, and `quantile_bm`.
+
+outputs:
+  run_name: "sweep_bm_training_strategies_cue_routed_hard_learned_shunting"
+
+slurm_config:
+  account: "kempner_dev"
+  partition: "kempner_eng"
+  time: "08:00:00"
+  nodes: 1
+  ntasks_per_node: 1
+  gpus_per_node: 1
+  cpus_per_task: 8
+  mem: 64GB
+  max_concurrent_jobs: 12
+  modules_to_load: []
+  conda_env_path: ""
+  training_script: "src/dendritic_modeling/scripts/training/train_experiments.py"
+
+experiment_settings:
+  seeds_per_condition: 3
+  base_seed: 42
+  use_array_jobs: true
+
+configs:
+  - name: "bp_prev_init"
+    path: "drafts/dendritic-local-learning/neurips/configs/cue_routed_hard_learned_shunting_standard_pilot.yaml"
+    run_name: "cue_routed_hard_learned_shunting_bp_prev_init"
+    overrides:
+      model:
+        core:
+          reactivation:
+            init_policy: "analytical"
+      training:
+        main:
+          common:
+            reactivation_update_mode: "backprop"
+            recalibrate_reactivation_every: 0
+            reactivation_recalibration_mode: "from_init_policy"
+            reactivation_recalibration_start_epoch: 1
+
+  - name: "bp_quantile_init"
+    path: "drafts/dendritic-local-learning/neurips/configs/cue_routed_hard_learned_shunting_standard_pilot.yaml"
+    run_name: "cue_routed_hard_learned_shunting_bp_quantile_init"
+    overrides:
+      model:
+        core:
+          reactivation:
+            init_policy: "quantile"
+      training:
+        main:
+          common:
+            reactivation_update_mode: "backprop"
+            recalibrate_reactivation_every: 0
+            reactivation_recalibration_mode: "from_init_policy"
+            reactivation_recalibration_start_epoch: 1
+
+  - name: "quantile_prev_init"
+    path: "drafts/dendritic-local-learning/neurips/configs/cue_routed_hard_learned_shunting_standard_pilot.yaml"
+    run_name: "cue_routed_hard_learned_shunting_quantile_prev_init"
+    overrides:
+      model:
+        core:
+          reactivation:
+            init_policy: "analytical"
+      training:
+        main:
+          common:
+            reactivation_update_mode: "quantile"
+            recalibrate_reactivation_every: 1
+            reactivation_recalibration_mode: "occupancy_quantile"
+            reactivation_recalibration_start_epoch: 2
+
+  - name: "quantile_quantile_init"
+    path: "drafts/dendritic-local-learning/neurips/configs/cue_routed_hard_learned_shunting_standard_pilot.yaml"
+    run_name: "cue_routed_hard_learned_shunting_quantile_quantile_init"
+    overrides:
+      model:
+        core:
+          reactivation:
+            init_policy: "quantile"
+      training:
+        main:
+          common:
+            reactivation_update_mode: "quantile"
+            recalibrate_reactivation_every: 1
+            reactivation_recalibration_mode: "occupancy_quantile"
+            reactivation_recalibration_start_epoch: 2
