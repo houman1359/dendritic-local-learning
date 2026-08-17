@@ -1,0 +1,15 @@
+{
+  "phase": "artifact_only_canary",
+  "config_sha256": "77ca21771a56467348eec42e908a78df389128a0d794078da8f87747e2c472be",
+  "script_sha256": "7f8f0388a8f4b1f1923eeecbdae2a2ba56cfee56c9cb7c46240397921cbddd1e",
+  "numerical_gates": {
+    "minimum_input_rate": 0.0,
+    "maximum_state_match_error": 2.220446049250313e-16,
+    "maximum_point_gate_update_error": 2.220446049250313e-15,
+    "maximum_additive_control_difference": 4.218847493575595e-15,
+    "maximum_relative_finite_difference_error": 1.1969941471714912e-09,
+    "maximum_physical_shunt_finite_difference_error": 2.1311211334311042e-08,
+    "passed": true
+  },
+  "outcomes_are_not_confirmatory": true
+}

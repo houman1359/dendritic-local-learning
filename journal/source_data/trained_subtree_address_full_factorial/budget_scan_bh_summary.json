@@ -1,0 +1,8 @@
+{
+  "family": "four ancestry-route budgets K=1,2,4,8",
+  "k4_bh_adjusted_p": 0.006425895466666667,
+  "k4_raw_p": 0.0048194216,
+  "k4_reject_at_fdr_0_05": true,
+  "method": "Benjamini-Hochberg",
+  "n_tests": 4
+}

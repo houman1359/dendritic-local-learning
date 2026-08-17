@@ -1,0 +1,9 @@
+{
+  "n_runs": 160,
+  "n_paired_seeds": 80,
+  "positive_pairs": 78,
+  "mean_condition_effect_range_percentage_points": [
+    0.153999924659729,
+    0.7210004329681408
+  ]
+}

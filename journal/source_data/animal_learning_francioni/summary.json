@@ -1,0 +1,95 @@
+{
+  "animal_level": {
+    "pminus_contrast": {
+      "bootstrap_95_ci": [
+        -0.20537152088210883,
+        -0.08659421561840192
+      ],
+      "exact_sign_flip_one_sided_p": 0.015625,
+      "mean": -0.14978243421917892,
+      "ordering_negative": 6,
+      "ordering_positive": 0,
+      "wilcoxon_one_sided_p": 0.015625
+    },
+    "pplus_contrast": {
+      "bootstrap_95_ci": [
+        0.029512124754862534,
+        0.12137200262853741
+      ],
+      "exact_sign_flip_one_sided_p": 0.03125,
+      "mean": 0.07533722115934399,
+      "ordering_negative": 1,
+      "ordering_positive": 5,
+      "wilcoxon_one_sided_p": 0.03125
+    },
+    "signed_separation": {
+      "bootstrap_95_ci": [
+        0.14158189040309663,
+        0.31082711724281853
+      ],
+      "exact_sign_flip_one_sided_p": 0.015625,
+      "mean": 0.22511965537852277,
+      "ordering_negative": 0,
+      "ordering_positive": 6,
+      "wilcoxon_one_sided_p": 0.015625
+    }
+  },
+  "claim_level": "external consistency test of a signed, neuron-indexed teaching signal",
+  "interpretation": "The known causal sign of the BCI mapping predicts the dominant component of the population contrast. This supports signed vectorized credit over a common scalar contrast in this dataset, but does not uniquely identify the conductance mechanism.",
+  "mode_decomposition": {
+    "aggregation": "pooled squared projections across the six animal contrast vectors",
+    "animal_bootstrap_95_ci": [
+      0.6055487657329789,
+      0.9572626171444208
+    ],
+    "animal_level_signed_energy_fractions": [
+      0.960459636058893,
+      0.637201501845337,
+      0.9712250214784103,
+      0.9508628055840354,
+      0.5873201729989724,
+      0.4576378697356568
+    ],
+    "common_energy_fraction": 0.163177995976339,
+    "leave_one_animal_out_signed_energy_fractions": [
+      0.7651438446911473,
+      0.8421545504752422,
+      0.7957407176228585,
+      0.8259650772041913,
+      0.9020518042906815,
+      0.8692180772743365
+    ],
+    "signed_energy_fraction": 0.8368220040236609,
+    "signed_to_common_energy_ratio": 5.128277247288912
+  },
+  "n_animals": 6,
+  "neuron_level_descriptive": {
+    "Pminus_error_increase": {
+      "mean": 0.048697567542140024,
+      "n_neurons": 249,
+      "sd": 0.2370519109300896
+    },
+    "Pminus_error_reduction": {
+      "mean": -0.13855437319089464,
+      "n_neurons": 240,
+      "sd": 0.378337496844726
+    },
+    "Pplus_error_increase": {
+      "mean": -0.09966115519085676,
+      "n_neurons": 267,
+      "sd": 0.37165540592566026
+    },
+    "Pplus_error_reduction": {
+      "mean": 0.004882211480897293,
+      "n_neurons": 292,
+      "sd": 0.27180372136672515
+    }
+  },
+  "source": {
+    "citation": "Francioni et al., Nature 652, 1254-1263 (2026)",
+    "doi": "10.1038/s41586-026-10190-7",
+    "sha256": "be1b87481d0f1d1bffc85d8a4cabfd37b7055d640306afab5b3622de0ced8264",
+    "source_sheet_animal": "Ext 13E",
+    "source_sheet_neuron": "5E"
+  }
+}

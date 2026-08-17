@@ -1,0 +1,44 @@
+{
+  "study": "trained_subtree_address_phase1",
+  "status": "frozen_before_canary_outcomes",
+  "frozen_date": "2026-08-10",
+  "scope": "two-sibling-subtree mechanistic primary contrast",
+  "task": {
+    "contexts": 2,
+    "labels": 2,
+    "features_per_stream": 12,
+    "selected_signal": 1.0,
+    "distractor_signal": 0.75,
+    "feature_noise_sd": 1.15,
+    "train_examples": 2048,
+    "test_examples": 2048,
+    "switch_examples": 1024
+  },
+  "training": {
+    "optimizer": "minibatch_sgd",
+    "learning_rate": 0.3,
+    "epochs": 60,
+    "batch_size": 64,
+    "switch_epochs": 12,
+    "initialization_sd": 0.03
+  },
+  "conditions": [
+    "neuron_shared_k1",
+    "depth_shared_k1",
+    "correct_subtree_k2",
+    "within_neuron_deranged_k2",
+    "random_dense_rank2",
+    "exact_transport",
+    "backpropagation",
+    "gated_point_emulation"
+  ],
+  "confirmatory_seeds": [4100, 4101, 4102, 4103, 4104, 4105, 4106, 4107, 4108, 4109],
+  "canary_seed": 4099,
+  "gates": {
+    "maximum_neuron_shared_capture": 0.9,
+    "minimum_correct_capture": 0.999,
+    "minimum_correct_test_accuracy": 0.75,
+    "maximum_exact_bp_difference": 1e-12
+  },
+  "scope_boundary": "This phase executes the decisive K=2 correct-versus-within-neuron-deranged contrast on one matched forward architecture. The full K={1,2,4,8} architecture factorial in experiment_matrix.yaml remains prospective."
+}

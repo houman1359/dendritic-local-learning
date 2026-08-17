@@ -1,0 +1,7 @@
+{
+  "analysis": "static two-task quadratic interference",
+  "evidence_level": "exact mathematical consequence and numerical verification",
+  "step_size": 0.2,
+  "maximum_absolute_verification_error": 4.163336342344337e-17,
+  "interpretation": "route overlap and off-route leakage are sufficient to produce forgetting; published animal observations are convergent but not mechanism-specific"
+}

@@ -1,0 +1,8 @@
+{
+  "ci95_high": -0.14903954433901045,
+  "ci95_low": -0.2082458514552867,
+  "contrast": "shared_gradient_cosine_d3_minus_d1",
+  "mean_difference": -0.17835234782031867,
+  "n_pairs": 10,
+  "positive_pairs": 0
+}

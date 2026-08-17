@@ -1,0 +1,5 @@
+experiment,slurm_job_id,n_tasks,requested_cpu_per_task,requested_memory_gib,observed_gpu_type,n_tasks_on_gpu,total_gpu_hours,mean_elapsed_seconds,archive_scope
+feedback_definition_extra10,34896324,40,4,48,NVIDIA A100 3g.20GB MIG,28,3.475000,446.8,seeds 47-56 only
+feedback_definition_extra10,34896324,40,4,48,NVIDIA RTX PRO 6000 Blackwell Server Edition,12,0.729722,218.9,seeds 47-56 only
+exact_transport_factorial,24477567,20,8,64,NVIDIA A100-SXM4-40GB,20,2.952500,531.5,seeds 42-46
+backprop_reference,24477609,5,8,64,NVIDIA A100-SXM4-40GB,5,0.473889,341.2,seeds 42-46

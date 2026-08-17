@@ -1,0 +1,14 @@
+{
+  "study": "trained_subtree_address_phase1",
+  "status": "complete_phase1_confirmatory",
+  "scope_boundary": "This phase executes the decisive K=2 correct-versus-within-neuron-deranged contrast on one matched forward architecture. The full K={1,2,4,8} architecture factorial in experiment_matrix.yaml remains prospective.",
+  "config_sha256": "2c8784afd177bf5b70284d6ce366a9eea824f8ab3164c0ba5694395a21888467",
+  "script_sha256": "bfbd14e40a0fd98d664934be53519f8fe9ddf3f606ffae2bba8458471cc12900",
+  "python": "3.10.13",
+  "numpy": "1.26.4",
+  "n_seeds": 10,
+  "n_conditions": 8,
+  "all_balanced": true,
+  "all_fallback_counts_zero": true,
+  "exact_bp_max_test_accuracy_difference": 0.0
+}

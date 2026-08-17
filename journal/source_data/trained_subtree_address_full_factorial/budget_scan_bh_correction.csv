@@ -1,0 +1,5 @@
+architecture,budget_k,contrast,endpoint,n_pairs,mean_difference,ci95_low,ci95_high,wins,ties,wilcoxon_p_two_sided,bh_family,bh_adjusted_p
+dendritic_tree,1,correct - best_matched_nonanatomical_oracle,heldout_accuracy,20,-0.3583251953,-0.4422851562,-0.2745849609,0,0,1.907348633e-06,four ancestry-route budgets,7.629394532e-06
+dendritic_tree,2,correct - best_matched_nonanatomical_oracle,heldout_accuracy,20,-0.1540039062,-0.2286889648,-0.07836853027,5,0,0.003380143298,four ancestry-route budgets,0.006425895467
+dendritic_tree,4,correct - best_matched_nonanatomical_oracle,heldout_accuracy,20,0.01267089844,0.005932617188,0.01965332031,15,0,0.0048194216,four ancestry-route budgets,0.006425895467
+dendritic_tree,8,correct - best_matched_nonanatomical_oracle,heldout_accuracy,20,0,0,0,0,20,1,four ancestry-route budgets,1

@@ -1,0 +1,89 @@
+{
+  "claim_level": "exploratory target-level cohort test of functional similarity versus real dendritic topology",
+  "conclusion": "No cohort-level evidence that functionally similar observed excitatory inputs occupy more shared ancestry, shorter tree paths, or the same major branch. Effects are heterogeneous across seven targets and all target-level intervals include zero.",
+  "functional_similarity": "condition-mean calcium response correlation using 136 repeated conditions per scan",
+  "limitations": [
+    "Cohorts were selected from an eight-cell morphology pilot rather than a coverage-ranked population sample.",
+    "The expanded tier uses residual-filtered automatic coregistration; manual overlap is sparse.",
+    "Observed excitatory partners cover only a small fraction of each target's inputs.",
+    "Calcium response repeat reliability is modest.",
+    "MICrONS contains one animal and no learning intervention."
+  ],
+  "n_connected_presynaptic_partners": 69,
+  "n_manual_matches_within_expanded_cohorts": 27,
+  "n_pairwise_descriptors_not_used_as_replicates": 356,
+  "n_targets": 7,
+  "replication_unit": "postsynaptic target neuron",
+  "tests": {
+    "all_condition_partial_r": {
+      "bootstrap_95_ci_mean": [
+        -0.21425796197226313,
+        0.20326922664285868
+      ],
+      "leave_one_out_mean_range": [
+        -0.07786924603072833,
+        0.05126983854966596
+      ],
+      "mean": -0.010305110823748544,
+      "median": -0.057335991271570096,
+      "positive_fraction": 0.42857142857142855,
+      "wilcoxon_two_sided_p": 1.0
+    },
+    "negative_tree_distance_r": {
+      "bootstrap_95_ci_mean": [
+        -0.12518477051525465,
+        0.10095813787337492
+      ],
+      "leave_one_out_mean_range": [
+        -0.06251815647885405,
+        0.0126009070277229
+      ],
+      "mean": -0.017761979862683793,
+      "median": -0.02448613621423579,
+      "positive_fraction": 0.42857142857142855,
+      "wilcoxon_two_sided_p": 0.8125
+    },
+    "partial_shared_path_r": {
+      "bootstrap_95_ci_mean": [
+        -0.25475592218922033,
+        0.10803746218947467
+      ],
+      "leave_one_out_mean_range": [
+        -0.13134203855426962,
+        -0.011510809205467099
+      ],
+      "mean": -0.06946144521694235,
+      "median": -0.014323984470054271,
+      "positive_fraction": 0.42857142857142855,
+      "wilcoxon_two_sided_p": 0.578125
+    },
+    "same_major_branch_delta": {
+      "bootstrap_95_ci_mean": [
+        -0.08786840205992709,
+        0.06932079319422257
+      ],
+      "leave_one_out_mean_range": [
+        -0.03256087010264166,
+        0.016726720767582453
+      ],
+      "mean": -0.008384242897287592,
+      "median": 0.03891350314149171,
+      "positive_fraction": 0.5714285714285714,
+      "wilcoxon_two_sided_p": 0.8125
+    },
+    "shared_path_r": {
+      "bootstrap_95_ci_mean": [
+        -0.23829913228736915,
+        0.1545580932836689
+      ],
+      "leave_one_out_mean_range": [
+        -0.0825305888296971,
+        0.03517860122200558
+      ],
+      "mean": -0.03469272030993834,
+      "median": 0.06998263495128221,
+      "positive_fraction": 0.5714285714285714,
+      "wilcoxon_two_sided_p": 0.6875
+    }
+  }
+}

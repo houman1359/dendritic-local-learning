@@ -1,0 +1,103 @@
+study,contrast,task,core,strategy,feedback,n_pairs,mean_difference,ci95_low,ci95_high,wins,ties,wilcoxon_p_two_sided,dose,depth,fdr_bh_within_study
+inhibition,dose 40 - dose 0,noise_resilience,dendritic_shunting,standard,backprop,10,0.0074099957942962095,0.006239992380142155,0.008490002155303888,10,0,0.001953125,,,0.002387152777777778
+inhibition,dose 40 - dose 0,noise_resilience,dendritic_shunting,local_ca,per_soma,10,0.257439985871315,0.22877823948860168,0.2873204822093248,10,0,0.001953125,,,0.002387152777777778
+inhibition,dose 40 - dose 0,noise_resilience,dendritic_shunting,local_ca,per_soma_shared,10,0.003930002450943026,0.001750004291534557,0.006000006198883079,9,0,0.009765625,,,0.010230654761904762
+inhibition,dose 40 - dose 0,noise_resilience,dendritic_shunting,local_ca,path_transport,10,0.006130003929138183,0.005260002613067638,0.00690000057220458,10,0,0.001953125,,,0.002387152777777778
+inhibition,dose 40 - dose 0,noise_resilience,dendritic_additive,standard,backprop,10,0.017550003528595016,0.015329998731613248,0.01940000057220461,10,0,0.001953125,,,0.002387152777777778
+inhibition,dose 40 - dose 0,noise_resilience,dendritic_additive,local_ca,per_soma,10,0.0363599956035614,0.02295974537730217,0.04826999306678772,9,0,0.00390625,,,0.004296875
+inhibition,dose 40 - dose 0,noise_resilience,dendritic_additive,local_ca,per_soma_shared,10,0.007179999351501409,0.005910003185272172,0.008519995212554898,10,0,0.001953125,,,0.002387152777777778
+inhibition,dose 40 - dose 0,noise_resilience,dendritic_additive,local_ca,path_transport,10,0.017100006341934204,0.014959996938705476,0.019240003824233954,10,0,0.001953125,,,0.002387152777777778
+inhibition,core by dose interaction,noise_resilience,shunting - additive,standard,backprop,10,-0.010140007734298805,-0.012240004688501347,-0.007410019636154308,1,0,0.00390625,,,0.004296875
+inhibition,core by dose interaction,noise_resilience,shunting - additive,local_ca,per_soma,10,0.2210799902677536,0.1994099999219179,0.2444007413834333,10,0,0.001953125,,,0.002387152777777778
+inhibition,core by dose interaction,noise_resilience,shunting - additive,local_ca,per_soma_shared,10,-0.003249996900558383,-0.005699992179870473,-0.000849997848272214,2,0,0.048828125,,,0.048828125
+inhibition,core by dose interaction,noise_resilience,shunting - additive,local_ca,path_transport,10,-0.01097000241279602,-0.013139999210834514,-0.008640003055334028,0,0,0.001953125,,,0.002387152777777778
+inhibition,scalar - exact,noise_resilience,dendritic_shunting,local_ca,per_soma - path_transport,10,-0.35072997510433196,-0.3811502243578434,-0.321219486668706,0,0,0.001953125,0.0,,0.002387152777777778
+inhibition,scalar - exact,noise_resilience,dendritic_shunting,local_ca,per_soma - path_transport,10,-0.1422600090503692,-0.14960000514984123,-0.13465001583099356,0,0,0.001953125,5.0,,0.002387152777777778
+inhibition,scalar - exact,noise_resilience,dendritic_shunting,local_ca,per_soma - path_transport,10,-0.1314000010490418,-0.14137998819351197,-0.1218095073103906,0,0,0.001953125,10.0,,0.002387152777777778
+inhibition,scalar - exact,noise_resilience,dendritic_shunting,local_ca,per_soma - path_transport,10,-0.11399999260902405,-0.11960999965667725,-0.10949999675154687,0,0,0.001953125,20.0,,0.002387152777777778
+inhibition,scalar - exact,noise_resilience,dendritic_shunting,local_ca,per_soma - path_transport,10,-0.09941999316215513,-0.10295999050140377,-0.0964299976825714,0,0,0.001953125,40.0,,0.002387152777777778
+inhibition,scalar - exact,noise_resilience,dendritic_additive,local_ca,per_soma - path_transport,10,-0.1415199875831604,-0.14466997981071467,-0.13835999965667728,0,0,0.001953125,0.0,,0.002387152777777778
+inhibition,scalar - exact,noise_resilience,dendritic_additive,local_ca,per_soma - path_transport,10,-0.1488200068473816,-0.15300000339746475,-0.14420975491404533,0,0,0.001953125,5.0,,0.002387152777777778
+inhibition,scalar - exact,noise_resilience,dendritic_additive,local_ca,per_soma - path_transport,10,-0.15064998865127563,-0.16039022773504255,-0.14222999811172485,0,0,0.001953125,10.0,,0.002387152777777778
+inhibition,scalar - exact,noise_resilience,dendritic_additive,local_ca,per_soma - path_transport,10,-0.13133999705314636,-0.1378299953043461,-0.12522000655531879,0,0,0.001953125,20.0,,0.002387152777777778
+inhibition,scalar - exact,noise_resilience,dendritic_additive,local_ca,per_soma - path_transport,10,-0.1222599983215332,-0.13443000316619869,-0.11097974225878718,0,0,0.001953125,40.0,,0.002387152777777778
+spatial,spatial - random,mnist,dendritic_shunting,standard,backprop,10,0.005650001764297452,0.005159997940063399,0.006159996986389127,10,0,0.001953125,,,0.0027573529411764708
+spatial,spatial - random,mnist,dendritic_shunting,local_ca,per_soma,10,0.01235000491142273,0.0070500075817108146,0.018179995119571676,10,0,0.001953125,,,0.0027573529411764708
+spatial,spatial - random,mnist,dendritic_shunting,local_ca,per_soma_shared,10,0.007069998979568459,0.006129986047744729,0.007940006256103471,10,0,0.001953125,,,0.0027573529411764708
+spatial,spatial - random,mnist,dendritic_shunting,local_ca,path_transport,10,0.00564000606536863,0.0051500082015990545,0.006150007247924827,10,0,0.001953125,,,0.0027573529411764708
+spatial,spatial - random,mnist,dendritic_additive,standard,backprop,10,0.006029975414276145,0.004839986562728915,0.007179963588714589,10,0,0.001953125,,,0.0027573529411764708
+spatial,spatial - random,mnist,dendritic_additive,local_ca,per_soma,10,0.015989995002746605,0.010369986295700084,0.021910232007503454,10,0,0.001953125,,,0.0027573529411764708
+spatial,spatial - random,mnist,dendritic_additive,local_ca,per_soma_shared,10,0.003579986095428489,0.0027699828147888295,0.004439991712570214,10,0,0.001953125,,,0.0027573529411764708
+spatial,spatial - random,mnist,dendritic_additive,local_ca,path_transport,10,0.005989980697631858,0.004780000299215265,0.0071599602699279905,10,0,0.001953125,,,0.0027573529411764708
+spatial,spatial - random,noise_resilience,dendritic_shunting,standard,backprop,10,0.006970006227493242,0.005620002746582008,0.008250010013580233,10,0,0.001953125,,,0.0027573529411764708
+spatial,spatial - random,noise_resilience,dendritic_shunting,local_ca,per_soma,10,0.03043000102043152,0.021129995584487915,0.04003000259399414,10,0,0.001953125,,,0.0027573529411764708
+spatial,spatial - random,noise_resilience,dendritic_shunting,local_ca,per_soma_shared,10,0.011509990692138683,0.010079979896545455,0.012990003824234042,10,0,0.001953125,,,0.0027573529411764708
+spatial,spatial - random,noise_resilience,dendritic_shunting,local_ca,path_transport,10,0.006950014829635564,0.005570006370544412,0.008220016956329245,10,0,0.001953125,,,0.0027573529411764708
+spatial,spatial - random,noise_resilience,dendritic_additive,standard,backprop,10,0.009969997406005893,0.008299994468688976,0.011650008112192177,10,0,0.001953125,,,0.0027573529411764708
+spatial,spatial - random,noise_resilience,dendritic_additive,local_ca,per_soma,10,0.025749999284744262,0.012010002136230468,0.03989022970199583,9,0,0.013671875,,,0.015625
+spatial,spatial - random,noise_resilience,dendritic_additive,local_ca,per_soma_shared,10,0.011700004339218095,0.009530013799667336,0.013479989916086128,10,0,0.001953125,,,0.0027573529411764708
+spatial,spatial - random,noise_resilience,dendritic_additive,local_ca,path_transport,10,0.009969997406005893,0.008289998769760176,0.011640006303787243,10,0,0.001953125,,,0.0027573529411764708
+spatial,topology by task interaction,MNIST - noise_resilience,dendritic_shunting,standard,backprop,10,-0.0013200044631957897,-0.0025899946689605276,6.99996948241971e-05,2,0,0.130859375,,,0.14275568181818182
+spatial,topology by task interaction,MNIST - noise_resilience,dendritic_shunting,local_ca,per_soma,10,-0.01807999610900879,-0.028989994674921013,-0.007760006040334735,2,0,0.013671875,,,0.015625
+spatial,topology by task interaction,MNIST - noise_resilience,dendritic_shunting,local_ca,per_soma_shared,10,-0.004439991712570224,-0.0055799961090088335,-0.003139990568161088,0,0,0.001953125,,,0.0027573529411764708
+spatial,topology by task interaction,MNIST - noise_resilience,dendritic_shunting,local_ca,path_transport,10,-0.0013100087642669346,-0.0026200115680693374,7.998347282413081e-05,2,0,0.16015625,,,0.1671195652173913
+spatial,topology by task interaction,MNIST - noise_resilience,dendritic_additive,standard,backprop,10,-0.003940021991729747,-0.005800026655197155,-0.00208001732826234,1,0,0.005859375,,,0.007401315789473684
+spatial,topology by task interaction,MNIST - noise_resilience,dendritic_additive,local_ca,per_soma,10,-0.009760004281997659,-0.022460501641035014,0.0040602266788482225,3,0,0.193359375,,,0.193359375
+spatial,topology by task interaction,MNIST - noise_resilience,dendritic_additive,local_ca,per_soma_shared,10,-0.008120018243789606,-0.010080027729272753,-0.00591003298759456,0,0,0.001953125,,,0.0027573529411764708
+spatial,topology by task interaction,MNIST - noise_resilience,dendritic_additive,local_ca,path_transport,10,-0.003980016708374034,-0.00594000220298765,-0.002100014686584483,1,0,0.005859375,,,0.007401315789473684
+routing,correct - shuffled ancestry,mnist,dendritic_shunting,local_ca,matched-bandwidth ancestry,10,0.005680006742477417,0.004279989004135088,0.006860284656286251,10,0,0.001953125,,2,0.0029296875
+routing,correct - shuffled ancestry,mnist,dendritic_shunting,local_ca,matched-bandwidth ancestry,10,0.0037999927997588888,0.0030700027942657778,0.004459983110427823,10,0,0.001953125,,4,0.0029296875
+routing,routing by depth interaction,mnist,dendritic_shunting,local_ca,matched-bandwidth ancestry,10,-0.001880013942718528,-0.0032600165903569358,-0.0005000114440917516,2,0,0.048828125,,4 - 2,0.06510416666666667
+routing,correct - shuffled ancestry,mnist,dendritic_additive,local_ca,matched-bandwidth ancestry,10,0.005069988965988115,0.0036999879777430507,0.00622000098228448,10,0,0.001953125,,2,0.0029296875
+routing,correct - shuffled ancestry,mnist,dendritic_additive,local_ca,matched-bandwidth ancestry,10,0.003850007057189886,0.003059995174407892,0.004510009288787797,10,0,0.001953125,,4,0.0029296875
+routing,routing by depth interaction,mnist,dendritic_additive,local_ca,matched-bandwidth ancestry,10,-0.001219981908798229,-0.002259993553161588,-5.99980354309837e-05,2,0,0.064453125,,4 - 2,0.07734375
+routing,correct - shuffled ancestry,noise_resilience,dendritic_shunting,local_ca,matched-bandwidth ancestry,10,0.007210004329681408,0.006229990720748879,0.008190023899078391,10,0,0.001953125,,2,0.0029296875
+routing,correct - shuffled ancestry,noise_resilience,dendritic_shunting,local_ca,matched-bandwidth ancestry,10,0.005869990587234497,0.004769980758428517,0.006959992647171033,10,0,0.001953125,,4,0.0029296875
+routing,routing by depth interaction,noise_resilience,dendritic_shunting,local_ca,matched-bandwidth ancestry,10,-0.0013400137424469105,-0.002390038967132571,-0.00015000700950618118,3,0,0.099609375,,4 - 2,0.10546875
+routing,correct - shuffled ancestry,noise_resilience,dendritic_additive,local_ca,matched-bandwidth ancestry,10,0.007000005245208785,0.0055900037288665995,0.00843001008033758,10,0,0.001953125,,2,0.0029296875
+routing,correct - shuffled ancestry,noise_resilience,dendritic_additive,local_ca,matched-bandwidth ancestry,10,0.0015399992465972901,0.0001300036907195934,0.0028200030326843485,8,0,0.10546875,,4,0.10546875
+routing,routing by depth interaction,noise_resilience,dendritic_additive,local_ca,matched-bandwidth ancestry,10,-0.005460005998611494,-0.007109993845224436,-0.0036000190675258533,0,0,0.001953125,,4 - 2,0.0029296875
+fixed_budget,depth 4 - depth 1,noise_resilience,dendritic_shunting,standard,backprop,10,-0.005460005998611439,-0.006270003467798254,-0.004600012302398704,0,0,0.001953125,,,0.002772177419354839
+fixed_budget,linear accuracy change per depth,noise_resilience,dendritic_shunting,standard,backprop,10,-0.0017520016431809005,-0.0020870255976916116,-0.001366003155708349,0,0,0.001953125,,,0.002772177419354839
+fixed_budget,depth 4 - depth 1,noise_resilience,dendritic_shunting,local_ca,per_soma,10,-0.07567999362945557,-0.08750999584794045,-0.0649597352743149,0,0,0.001953125,,,0.002772177419354839
+fixed_budget,linear accuracy change per depth,noise_resilience,dendritic_shunting,local_ca,per_soma,10,-0.025438998937606837,-0.029592998638749132,-0.02127894896268848,0,0,0.001953125,,,0.002772177419354839
+fixed_budget,depth 4 - depth 1,noise_resilience,dendritic_shunting,local_ca,per_soma_shared,10,-0.00927999019622806,-0.01087999343872075,-0.007889968156814687,0,0,0.001953125,,,0.002772177419354839
+fixed_budget,linear accuracy change per depth,noise_resilience,dendritic_shunting,local_ca,per_soma_shared,10,-0.003004997372627317,-0.003460001945495625,-0.0025959950536490264,0,0,0.001953125,,,0.002772177419354839
+fixed_budget,depth 4 - depth 1,noise_resilience,dendritic_shunting,local_ca,path_transport,10,-0.005450010299682606,-0.006260007619857733,-0.0046000063419342485,0,0,0.001953125,,,0.002772177419354839
+fixed_budget,linear accuracy change per depth,noise_resilience,dendritic_shunting,local_ca,path_transport,10,-0.001751002669334463,-0.0020760289579630745,-0.0013769771754741987,0,0,0.001953125,,,0.002772177419354839
+fixed_budget,depth 4 - depth 1,noise_resilience,dendritic_additive,standard,backprop,10,-0.013709998130798396,-0.015600257366895742,-0.011809992790222235,0,0,0.001953125,,,0.002772177419354839
+fixed_budget,linear accuracy change per depth,noise_resilience,dendritic_additive,standard,backprop,10,-0.004456998705864017,-0.005027999877929731,-0.0038999973982573395,0,0,0.001953125,,,0.002772177419354839
+fixed_budget,depth 4 - depth 1,noise_resilience,dendritic_additive,local_ca,per_soma,10,-0.07920999526977539,-0.08726998567581176,-0.06963000297546387,0,0,0.001953125,,,0.002772177419354839
+fixed_budget,linear accuracy change per depth,noise_resilience,dendritic_additive,local_ca,per_soma,10,-0.02372999727725985,-0.025577996373176592,-0.021700972437858602,0,0,0.001953125,,,0.002772177419354839
+fixed_budget,depth 4 - depth 1,noise_resilience,dendritic_additive,local_ca,per_soma_shared,10,-0.010560005903244029,-0.011850017458200508,-0.009310001134872426,0,0,0.001953125,,,0.002772177419354839
+fixed_budget,linear accuracy change per depth,noise_resilience,dendritic_additive,local_ca,per_soma_shared,10,-0.003307002186775271,-0.0037240023314953612,-0.002909007012844114,0,0,0.001953125,,,0.002772177419354839
+fixed_budget,depth 4 - depth 1,noise_resilience,dendritic_additive,local_ca,path_transport,10,-0.013709998130798396,-0.01557999253273018,-0.011799741536378937,0,0,0.001953125,,,0.002772177419354839
+fixed_budget,linear accuracy change per depth,noise_resilience,dendritic_additive,local_ca,path_transport,10,-0.004456998705864017,-0.005041027992963857,-0.003891996130347329,0,0,0.001953125,,,0.002772177419354839
+fixed_budget,depth by core interaction,noise_resilience,shunting - additive,standard,backprop,10,0.008249992132186957,0.006569714695215239,0.00993998661637316,10,0,0.001953125,,,0.002772177419354839
+fixed_budget,depth by core interaction,noise_resilience,shunting - additive,local_ca,per_soma,10,0.003530001640319824,-0.00818999409675598,0.014480256438255288,6,0,0.625,,,0.7638888888888888
+fixed_budget,depth by core interaction,noise_resilience,shunting - additive,local_ca,per_soma_shared,10,0.001280015707015969,-0.00041998624801635795,0.002880025058984799,7,1,0.193359375,,,0.2578125
+fixed_budget,depth by core interaction,noise_resilience,shunting - additive,local_ca,path_transport,10,0.008259987831115789,0.006549990177154617,0.00993998661637316,10,0,0.001953125,,,0.002772177419354839
+fixed_budget,local - backprop,noise_resilience,dendritic_shunting,local_ca - backprop,per_soma,10,-0.10536999702453613,-0.10902999654412271,-0.10203998640179639,0,0,0.001953125,,1,0.002772177419354839
+fixed_budget,local - backprop,noise_resilience,dendritic_shunting,local_ca - backprop,per_soma_shared,10,-0.006779998540878307,-0.007690006494522085,-0.005889999866485617,0,0,0.001953125,,1,0.002772177419354839
+fixed_budget,local - backprop,noise_resilience,dendritic_shunting,local_ca - backprop,path_transport,10,0.0,0.0,0.0,0,10,1.0,,1,1.0
+fixed_budget,local - backprop,noise_resilience,dendritic_shunting,local_ca - backprop,per_soma,10,-0.1428099930286407,-0.14891025379300116,-0.13735998868942262,0,0,0.001953125,,2,0.002772177419354839
+fixed_budget,local - backprop,noise_resilience,dendritic_shunting,local_ca - backprop,per_soma_shared,10,-0.0069700002670287755,-0.007919997125864007,-0.005989998579025236,0,0,0.001953125,,2,0.002772177419354839
+fixed_budget,local - backprop,noise_resilience,dendritic_shunting,local_ca - backprop,path_transport,10,0.0,0.0,0.0,0,10,1.0,,2,1.0
+fixed_budget,local - backprop,noise_resilience,dendritic_shunting,local_ca - backprop,per_soma,10,-0.16902000308036808,-0.18020051628351214,-0.15911999940872196,0,0,0.001953125,,3,0.002772177419354839
+fixed_budget,local - backprop,noise_resilience,dendritic_shunting,local_ca - backprop,per_soma_shared,10,-0.008040004968643256,-0.009759998321533271,-0.0063997341692448775,0,0,0.001953125,,3,0.002772177419354839
+fixed_budget,local - backprop,noise_resilience,dendritic_shunting,local_ca - backprop,path_transport,10,-1.9997358322143555e-05,-4.999041557313122e-05,0.0,0,8,0.5,,3,0.6470588235294118
+fixed_budget,local - backprop,noise_resilience,dendritic_shunting,local_ca - backprop,per_soma,10,-0.17558998465538028,-0.186470233798027,-0.1652197366952896,0,0,0.001953125,,4,0.002772177419354839
+fixed_budget,local - backprop,noise_resilience,dendritic_shunting,local_ca - backprop,per_soma_shared,10,-0.01059998273849493,-0.011829972416162546,-0.009329986572265669,0,0,0.001953125,,4,0.002772177419354839
+fixed_budget,local - backprop,noise_resilience,dendritic_shunting,local_ca - backprop,path_transport,10,9.995698928833007e-06,0.0,2.9987096786499025e-05,1,9,1.0,,4,1.0
+fixed_budget,local - backprop,noise_resilience,dendritic_additive,local_ca - backprop,per_soma,10,-0.09207999706268313,-0.09631025135517124,-0.08758000135421753,0,0,0.001953125,,1,0.002772177419354839
+fixed_budget,local - backprop,noise_resilience,dendritic_additive,local_ca - backprop,per_soma_shared,10,-0.002770000696182262,-0.00402999520301819,-0.0016999959945678926,0,0,0.001953125,,1,0.002772177419354839
+fixed_budget,local - backprop,noise_resilience,dendritic_additive,local_ca - backprop,path_transport,10,0.0,0.0,0.0,0,10,1.0,,1,1.0
+fixed_budget,local - backprop,noise_resilience,dendritic_additive,local_ca - backprop,per_soma,10,-0.1423799991607666,-0.14855999365448955,-0.13623002141714097,0,0,0.001953125,,2,0.002772177419354839
+fixed_budget,local - backprop,noise_resilience,dendritic_additive,local_ca - backprop,per_soma_shared,10,-0.0014000058174133522,-0.0027500092983245962,3.9988905191409564e-05,3,0,0.10546875,,2,0.14501953125
+fixed_budget,local - backprop,noise_resilience,dendritic_additive,local_ca - backprop,path_transport,10,0.0,0.0,0.0,0,10,1.0,,2,1.0
+fixed_budget,local - backprop,noise_resilience,dendritic_additive,local_ca - backprop,per_soma,10,-0.13860999345779415,-0.14769998788833613,-0.1302997416257858,0,0,0.001953125,,3,0.002772177419354839
+fixed_budget,local - backprop,noise_resilience,dendritic_additive,local_ca - backprop,per_soma_shared,10,0.0006499826908111239,-0.0006700336933136653,0.0020599842071532424,6,0,0.59765625,,3,0.7513392857142858
+fixed_budget,local - backprop,noise_resilience,dendritic_additive,local_ca - backprop,path_transport,10,0.0,0.0,0.0,0,10,1.0,,3,1.0
+fixed_budget,local - backprop,noise_resilience,dendritic_additive,local_ca - backprop,per_soma,10,-0.1575799942016601,-0.16853998303413387,-0.14576000571250916,0,0,0.001953125,,4,0.002772177419354839
+fixed_budget,local - backprop,noise_resilience,dendritic_additive,local_ca - backprop,per_soma_shared,10,0.00037999153137210364,-0.0006900073587894306,0.001499992609024081,5,0,0.6953125,,4,0.8268581081081081
+fixed_budget,local - backprop,noise_resilience,dendritic_additive,local_ca - backprop,path_transport,10,0.0,0.0,0.0,0,10,1.0,,4,1.0

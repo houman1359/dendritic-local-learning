@@ -1,0 +1,10 @@
+extends: ../prospective_learning_benefits/confirmatory_mnist_shunting_backprop.yaml
+output_dir: drafts/dendritic-local-learning/journal/analysis/clean_exact_bp/generated
+execution_results_dir: drafts/dendritic-local-learning/journal/analysis/clean_exact_bp/results/bp_mnist_shunting
+slurm_config:
+  max_concurrent_jobs: 8
+sweep_contract:
+  expected_config_count: 40
+base_config:
+  outputs:
+    run_name: clean_bp_mnist_shunting

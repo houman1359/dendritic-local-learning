@@ -1,0 +1,19 @@
+{
+  "config_sha256": "7c1332b1219080a75b74b76be1b5fbfdda310706144e177c755acf25e431e6c7",
+  "maximum_explicit_point_gate_difference": 0.0,
+  "maximum_full_rank_capture_difference": 4.440892098500626e-16,
+  "n_seeds": 50,
+  "numpy": "1.26.4",
+  "python": "3.10.13",
+  "reference_sha256": "a6b5cb9daf3d183deb30ccdf7d1cfc21893d8d2fc0af3bdcb565c3d574bba78e",
+  "row_counts": {
+    "depth": 1800,
+    "projection": 3750,
+    "reliability": 1500,
+    "spectral": 3750
+  },
+  "scope_boundary": "This experiment validates a fixed-state stochastic quadratic phase theory for hierarchical credit operators and backward reliability gates. It is not a positive-conductance forward model, a biological circuit identification, or evidence that a local rule uniformly exceeds exact full-batch backpropagation.",
+  "script_sha256": "b0d6afd50b3f442409926372c4871ba99db5af0ab0dd4cdc0d7e3b1a691fb006",
+  "status": "complete_confirmatory",
+  "study": "hierarchical_credit_signal_noise_phase_theory"
+}

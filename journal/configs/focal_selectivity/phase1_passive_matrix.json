@@ -1,0 +1,23 @@
+{
+  "study": "focal_selectivity_phase1_passive_matrix",
+  "status": "frozen_before_canary_outcomes",
+  "frozen_date": "2026-08-10",
+  "cohort": "original_eight",
+  "axial_resistivity_ohm_cm": 150.0,
+  "membrane_resistance_ohm_cm2": [300.0, 1000.0, 15000.0],
+  "background_leak_multipliers": [0.0, 1.0, 4.0],
+  "dose_schemes": {
+    "relative_local": [0.25, 1.0, 2.0],
+    "fixed_absolute_ns": [0.05, 0.5, 5.0],
+    "input_conductance_normalized": [0.25, 1.0, 4.0]
+  },
+  "e_scale": 0.35,
+  "i_scale": 0.35,
+  "excitatory_reversal": 1.0,
+  "inhibitory_reversal": -0.2,
+  "background_reversal": 0.0,
+  "seed": 20260810,
+  "max_focal_sites_per_cell": 16,
+  "minimum_descendant_and_comparison_sites": 3,
+  "scope_boundary": "Passive steady-state matrix on the original eight reconstructed cells. This phase does not execute an active-channel ensemble or an independent-animal replication."
+}

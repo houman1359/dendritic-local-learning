@@ -1,0 +1,59 @@
+{
+  "study": "step_consistent_state_matched_positive_conductance_branch_reliability",
+  "status": "frozen_before_canary_outcomes",
+  "frozen_date": "2026-08-11",
+  "supersedes_design": "confirmatory.json used eta=0.5/L with the eta=1/L reliability gain",
+  "canary_seeds": [8098, 8099],
+  "confirmatory_seeds": [
+    8100, 8101, 8102, 8103, 8104, 8105, 8106, 8107, 8108, 8109,
+    8110, 8111, 8112, 8113, 8114, 8115, 8116, 8117, 8118, 8119,
+    8120, 8121, 8122, 8123, 8124, 8125, 8126, 8127, 8128, 8129,
+    8130, 8131, 8132, 8133, 8134, 8135, 8136, 8137, 8138, 8139,
+    8140, 8141, 8142, 8143, 8144, 8145, 8146, 8147, 8148, 8149
+  ],
+  "task": {
+    "branches": 8,
+    "features_per_branch": 4,
+    "train_examples": 512,
+    "test_examples": 2048,
+    "input_baseline": 1.4,
+    "label_signal": 0.55,
+    "input_noise_sd": 0.55,
+    "leak_conductance": 1.0,
+    "excitatory_reversal": 1.0,
+    "inhibitory_reversal": 0.0,
+    "initial_excitatory_conductance": 0.10,
+    "output_gain": 8.0
+  },
+  "training": {
+    "iterations": 40,
+    "smoothness_safety_factor": 0.5,
+    "finite_difference_step": 1e-5,
+    "minimum_reliability_gain": 0.03
+  },
+  "reliability_heterogeneity": [0.0, 0.5, 1.0, 1.5, 2.0],
+  "methods": [
+    "exact_clean_bp",
+    "noisy_no_shunt",
+    "state_matched_additive",
+    "best_global_shunt",
+    "reliability_aligned_shunt",
+    "shuffled_shunt",
+    "anti_aligned_shunt",
+    "explicit_point_gate",
+    "aligned_clean_credit"
+  ],
+  "analysis": {
+    "bootstrap_draws": 20000,
+    "paired_unit": "independent simulation seed"
+  },
+  "gates": {
+    "minimum_input": 0.0,
+    "maximum_state_match_error": 1e-12,
+    "maximum_point_gate_update_error": 1e-12,
+    "maximum_additive_control_difference": 1e-12,
+    "maximum_relative_finite_difference_error": 1e-5,
+    "maximum_physical_shunt_finite_difference_error": 1e-5
+  },
+  "scope_boundary": "This corrected experiment trains a nonnegative-input positive-conductance branch model under an oracle state-matching current clamp and uses the attenuation optimum for its actual fixed step. The point and conductance updates are computed independently. It does not show autonomous shunt learning, dendrite-exclusive computation, or superiority to exact clean backpropagation."
+}

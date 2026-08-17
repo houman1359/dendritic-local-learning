@@ -1,0 +1,16 @@
+{
+  "analysis": "matched_depth_vs_best_mismatched_depth",
+  "bootstrap_draws": 20000,
+  "bootstrap_seed": 2740002,
+  "ci95_high": 0.11337590954060038,
+  "ci95_low": 0.07816312585891239,
+  "inferential_unit": "independent simulation seed",
+  "mean_difference": 0.09567505790346399,
+  "metric": "final_population_loss_reduction",
+  "n_independent_seeds": 50,
+  "n_seed_task_rows": 200,
+  "positive_seeds": 48,
+  "task_depths_averaged_within_seed": 4,
+  "ties": 0,
+  "wilcoxon_p_two_sided": 3.0020430585864233e-13
+}

@@ -1,0 +1,96 @@
+{
+  "boundaries": [
+    "The perturbation covariance is generated from the same conductance-tree model; this tests anatomical capacity, not endogenous learning in the mouse.",
+    "Random streams quantify Monte Carlo sensitivity and are not biological replicates.",
+    "Task utility requires independent task-derived credit fields and learning experiments."
+  ],
+  "evidence_scope": "real MICrONS anatomy with modeled conductance and perturbation fields",
+  "focus_channels": 8,
+  "hypothesis": "A dendritic tree is a sparse physical decoder for low-bandwidth teaching signals; learning efficiency depends on alignment between its ancestry dictionary and task credit covariance.",
+  "methods": {
+    "dense PCA oracle": {
+      "hierarchical_ci95": [
+        0.4808940957393308,
+        0.6648427403594998
+      ],
+      "mean_credit_capture": 0.5692484482919091,
+      "mean_oracle_fraction": 1.0,
+      "mean_wiring_density": 1.0
+    },
+    "depth-only bins": {
+      "hierarchical_ci95": [
+        0.15729489680483982,
+        0.29174142602482794
+      ],
+      "mean_credit_capture": 0.22249470246950614,
+      "mean_oracle_fraction": 0.3735732450605164,
+      "mean_wiring_density": 0.125
+    },
+    "morphology-aware paths": {
+      "hierarchical_ci95": [
+        0.40036841113266886,
+        0.5807611661532827
+      ],
+      "mean_credit_capture": 0.48708436410027534,
+      "mean_oracle_fraction": 0.8495285544101849,
+      "mean_wiring_density": 0.06921825509716342
+    },
+    "random paths": {
+      "hierarchical_ci95": [
+        0.19052299964105074,
+        0.39800641322065583
+      ],
+      "mean_credit_capture": 0.28466582423203624,
+      "mean_oracle_fraction": 0.4701871103671483,
+      "mean_wiring_density": 0.08125220381370232
+    },
+    "shuffled ancestry": {
+      "hierarchical_ci95": [
+        0.13159021757090775,
+        0.2721768815486751
+      ],
+      "mean_credit_capture": 0.19775992493142974,
+      "mean_oracle_fraction": 0.32681337196777727,
+      "mean_wiring_density": 0.06921825509716342
+    }
+  },
+  "morphology_comparisons": {
+    "depth-only bins": {
+      "cell_level_wilcoxon_p": 0.0078125,
+      "cells_positive": 8,
+      "control": "depth-only bins",
+      "hierarchical_ci95": [
+        0.22925697709798076,
+        0.30209530176418636
+      ],
+      "mean_capture_advantage": 0.2645896616307692,
+      "n_cells": 8
+    },
+    "random paths": {
+      "cell_level_wilcoxon_p": 0.0078125,
+      "cells_positive": 8,
+      "control": "random paths",
+      "hierarchical_ci95": [
+        0.16054323860681508,
+        0.24206055884602545
+      ],
+      "mean_capture_advantage": 0.2024185398682391,
+      "n_cells": 8
+    },
+    "shuffled ancestry": {
+      "cell_level_wilcoxon_p": 0.0078125,
+      "cells_positive": 8,
+      "control": "shuffled ancestry",
+      "hierarchical_ci95": [
+        0.2528334157612866,
+        0.3238989572629461
+      ],
+      "mean_capture_advantage": 0.2893244391688456,
+      "n_cells": 8
+    }
+  },
+  "n_cells": 8,
+  "n_monte_carlo_streams": 20,
+  "status": "complete",
+  "theory_quantity": "credit_capture = 1 - weighted_projection_residual^2; for an L-smooth loss and step 1/L, this is the ratio of projected-gradient to full-gradient one-step descent guarantees"
+}

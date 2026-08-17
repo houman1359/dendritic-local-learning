@@ -1,0 +1,98 @@
+{
+  "analysis": "task-derived credit capture and projected branch-model learning",
+  "source_project": "drafts/dendritic-credit-routing",
+  "data_join": {
+    "cave_datastack": "minnie65_public",
+    "materialization_version": 1822,
+    "automatic_coregistration_table": "coregistration_auto_phase3_fwd_apl_vess_combined_v2",
+    "match_tier": "automatic_conservative",
+    "maximum_residual": 10.0,
+    "minimum_score": 0.0,
+    "deduplicate_presynaptic_root_by": [
+      "ascending residual",
+      "descending score"
+    ],
+    "target_universe": "the eight-cell morphology pilot",
+    "target_eligibility": "DANDI scan plus directly connected, functionally imaged excitatory partners; seven of eight pilot targets qualified",
+    "operational_checks": [
+      "exactly one postsynaptic target in each extract",
+      "presynaptic-partner count equals functional-contact count",
+      "at least five mapped partners for the functional-topology screen",
+      "at least two sites after any requested task filter",
+      "at least one nonempty inhibitory ancestry route"
+    ],
+    "primary_scan_pairs": "frozen in reproducibility/task_derived_primary_targets.csv",
+    "scan_selection_boundary": "the archive does not record a deterministic rule for selecting among multiple eligible scans of the same target"
+  },
+  "dandi_extraction": {
+    "interval_families": ["Monet2", "Trippy", "Clip"],
+    "response": "mean RoiResponseSeries fluorescence from trial start_time through stop_time",
+    "start_offset_seconds": 0.0,
+    "stop_offset_seconds": 0.0,
+    "drop_nan_trials": false,
+    "http_block_size_bytes": 1048576,
+    "feature_mode": "metadata",
+    "exported_feature_branch_count": 8,
+    "note": "The task-derived branch model uses responses and condition-hash stimulus IDs; it does not use the exported stimulus-feature bank."
+  },
+  "contact_assignment": {
+    "site_per_connected_partner": 1,
+    "dominant_segment_rule": "largest summed synapse size, then largest synapse count",
+    "major_branch_rule": "first segment below the soma on the dominant segment's ancestry chain",
+    "multiple_contacts": "all mapped contacts contribute to partner-level total size and synapse count; one activity feature and one modeled site are assigned to the dominant segment"
+  },
+  "functional_topology": {
+    "functional_similarity": "Pearson correlation between partners' vectors of mean raw fluorescence over condition identities with at least two trials",
+    "repeated_condition_count_per_scan": 136,
+    "repeat_reliability": "Spearman correlation between per-condition means from alternating first and second occurrences of each repeated condition, computed separately per ROI",
+    "primary_repeat_reliability_threshold": null,
+    "sensitivity_repeat_reliability_thresholds": [0.1, 0.2],
+    "partial_rank_response": "rank(functional similarity)",
+    "partial_rank_predictor": "rank(shared path fraction)",
+    "partial_rank_controls": [
+      "rank(log1p(Euclidean distance in micrometers))",
+      "rank(log1p(absolute difference in soma path length in micrometers))"
+    ],
+    "partial_rank_residualization": "ordinary least-squares residuals from separate regressions of ranked response and predictor on an intercept and both ranked controls; reported effect is their Pearson correlation",
+    "replication_unit": "postsynaptic target cell; pairwise partner comparisons are not independent replicates"
+  },
+  "split_and_scaling": {
+    "base_seed": 20260721,
+    "replicates_per_target": 10,
+    "heldout_unique_stimulus_fraction": 0.2,
+    "grouping_key": "condition_hash-derived stimulus identity",
+    "standardization": "column-wise training mean and sample standard deviation (ddof=1), applied to train and test",
+    "nonfinite_after_standardization": "replace with zero"
+  },
+  "branch_model": {
+    "activation": "tanh",
+    "objective": "0.5 * mean((prediction-target)^2) + 0.5 * weight_decay * (sum(w^2)+sum(v^2))",
+    "input_weight_initialization_sd": "0.12/sqrt(n_sites)",
+    "branch_readout_initialization_sd": "0.25/sqrt(n_major_branches)",
+    "bias_initialization": 0.0,
+    "optimizer": "full-batch Adam",
+    "adam_beta1": 0.9,
+    "adam_beta2": 0.999,
+    "adam_epsilon": 1e-8,
+    "steps": 1200,
+    "learning_rate": 0.015,
+    "weight_decay": 0.001
+  },
+  "feedback": {
+    "requested_channels": 4,
+    "projector_svd_relative_tolerance": 1e-10,
+    "morphology_route_score": "(g_i/g_total) times descendant-site fraction",
+    "dense_oracle": "top right singular vectors of exact training-site error",
+    "random_control": "uniform sample without replacement from nonempty inhibitory ancestry routes",
+    "shuffle_control": "independent row permutation within every selected morphology column",
+    "depth_control": "quantile bins of contact path length",
+    "projection_scope": "site-error field used only for input-weight gradients",
+    "exact_updates": "branch-readout weights and bias use their exact gradients in every method"
+  },
+  "inference": {
+    "biological_unit": "postsynaptic target cell",
+    "nested_unit": "fixed split and initialization replicate",
+    "bootstrap_replicates": 20000,
+    "tests": "two-sided paired Wilcoxon across target means and target-stratified method-label permutation"
+  }
+}

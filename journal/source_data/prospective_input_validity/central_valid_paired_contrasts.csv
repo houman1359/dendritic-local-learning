@@ -1,0 +1,73 @@
+family,task,core,depth,contrast,n_pairs,mean_difference,ci95_low,ci95_high,wins,ties,wilcoxon_p_two_sided
+feedback,mnist,dendritic_additive,1,neuron-indexed - scalar,10,0.0511000037193298,0.0480400025844574,0.0544600129127502,10,0,0.001953125
+feedback,mnist,dendritic_additive,1,exact - neuron-indexed,10,0.0006400048732757,-0.0004299938678741,0.0015700042247772,8,0,0.322265625
+local_minus_bp,mnist,dendritic_additive,1,per_soma - backprop,10,-0.0506300032138824,-0.0540302509069442,-0.0473600088059902,0,0,0.001953125
+local_minus_bp,mnist,dendritic_additive,1,per_soma_shared - backprop,10,0.0004700005054473,-0.0005800008773803,0.001579999923706,6,0,0.556640625
+local_minus_bp,mnist,dendritic_additive,1,path_transport - backprop,10,0.0011100053787231,0.0002800045907497,0.0019700111448765,7,0,0.064453125
+feedback,mnist,dendritic_additive,2,neuron-indexed - scalar,10,0.0491800069808959,0.0458699882030486,0.0529602640867232,10,0,0.001953125
+feedback,mnist,dendritic_additive,2,exact - neuron-indexed,10,0.0012600123882293,0.0005500137805937,0.0020600140094756,9,0,0.009765625
+local_minus_bp,mnist,dendritic_additive,2,per_soma - backprop,10,-0.049830001592636,-0.0529399991035461,-0.0470097431540489,0,0,0.001953125
+local_minus_bp,mnist,dendritic_additive,2,per_soma_shared - backprop,10,-0.0006499946117401,-0.0017699898779392,0.0004300057888031,4,0,0.4296875
+local_minus_bp,mnist,dendritic_additive,2,path_transport - backprop,10,0.0006100177764892,-0.0004199862480164,0.0015400111675261,7,0,0.275390625
+feedback,mnist,dendritic_additive,3,neuron-indexed - scalar,10,0.0615299999713897,0.0563700079917908,0.066399997472763,10,0,0.001953125
+feedback,mnist,dendritic_additive,3,exact - neuron-indexed,10,0.0008000075817108,-6.999373435974121e-05,0.0015100121498108,8,0,0.126953125
+local_minus_bp,mnist,dendritic_additive,3,per_soma - backprop,10,-0.0624799966812134,-0.0673099935054779,-0.0573200047016144,0,0,0.001953125
+local_minus_bp,mnist,dendritic_additive,3,per_soma_shared - backprop,10,-0.0009499967098236,-0.0020299851894379,0.0001900076866149,4,0,0.16015625
+local_minus_bp,mnist,dendritic_additive,3,path_transport - backprop,10,-0.0001499891281128,-0.0009700000286102,0.0007600010931491,3,0,0.82421875
+feedback,mnist,dendritic_additive,4,neuron-indexed - scalar,10,0.0631599903106689,0.0587899981439113,0.0677499774098395,10,0,0.001953125
+feedback,mnist,dendritic_additive,4,exact - neuron-indexed,10,0.0011299908161163,2.9987096786499025e-05,0.0021699966490268,8,0,0.10546875
+local_minus_bp,mnist,dendritic_additive,4,per_soma - backprop,10,-0.0645999848842621,-0.0690999865531921,-0.0600899933278561,0,0,0.001953125
+local_minus_bp,mnist,dendritic_additive,4,per_soma_shared - backprop,10,-0.0014399945735931,-0.0023099958896637,-0.0006000041961669,1,1,0.01171875
+local_minus_bp,mnist,dendritic_additive,4,path_transport - backprop,10,-0.0003100037574768,-0.0008700013160705,0.0002899886667728,4,0,0.431640625
+feedback,mnist,dendritic_shunting,1,neuron-indexed - scalar,10,0.0698899984359741,0.0651400147378444,0.0746199905872345,10,0,0.001953125
+feedback,mnist,dendritic_shunting,1,exact - neuron-indexed,10,-0.0002399861812592,-0.0013299822807312,0.0012400209903716,3,0,0.322265625
+local_minus_bp,mnist,dendritic_shunting,1,per_soma - backprop,10,-0.0703900158405304,-0.0756000043451785,-0.0651900289952755,0,0,0.001953125
+local_minus_bp,mnist,dendritic_shunting,1,per_soma_shared - backprop,10,-0.0005000174045562,-0.002000010162592,0.0009099842607975,5,0,0.6953125
+local_minus_bp,mnist,dendritic_shunting,1,path_transport - backprop,10,-0.0007400035858154,-0.0017300130426884,0.0002499939501285,5,0,0.275390625
+feedback,mnist,dendritic_shunting,2,neuron-indexed - scalar,10,0.0681499898433685,0.062549996227026,0.0738102547824382,10,0,0.001953125
+feedback,mnist,dendritic_shunting,2,exact - neuron-indexed,10,-0.0001599967479705,-0.0012600183486938,0.0007800102233886,6,0,0.76953125
+local_minus_bp,mnist,dendritic_shunting,2,per_soma - backprop,10,-0.0682899951934814,-0.0740002566576004,-0.0629299937188625,0,0,0.001953125
+local_minus_bp,mnist,dendritic_shunting,2,per_soma_shared - backprop,10,-0.0001400053501128,-0.0010500073432922,0.00082998290658,5,0,0.67578125
+local_minus_bp,mnist,dendritic_shunting,2,path_transport - backprop,10,-0.0003000020980834,-0.0008500099182128,0.0003099977970123,2,1,0.27734375
+feedback,mnist,dendritic_shunting,3,neuron-indexed - scalar,10,0.0652800023555755,0.0608600139617919,0.0700302475690841,10,0,0.001953125
+feedback,mnist,dendritic_shunting,3,exact - neuron-indexed,10,-0.0001599967479705,-0.0010300159454345,0.0006500124931335,6,0,0.921875
+local_minus_bp,mnist,dendritic_shunting,3,per_soma - backprop,10,-0.0649100005626678,-0.0693200051784514,-0.0607300043106079,0,0,0.001953125
+local_minus_bp,mnist,dendritic_shunting,3,per_soma_shared - backprop,10,0.0003700017929076,-0.0005099952220916,0.0012100042402744,6,0,0.556640625
+local_minus_bp,mnist,dendritic_shunting,3,path_transport - backprop,10,0.0002100050449371,-0.000569999217987,0.0009600163996219,6,0,0.556640625
+feedback,mnist,dendritic_shunting,4,neuron-indexed - scalar,10,0.0698500037193298,0.0656800031661987,0.073940003067255,10,0,0.001953125
+feedback,mnist,dendritic_shunting,4,exact - neuron-indexed,10,6.999969482419654e-05,-0.0004999995231628,0.0006399929523467,5,1,0.84375
+local_minus_bp,mnist,dendritic_shunting,4,per_soma - backprop,10,-0.0697599947452545,-0.0743499994277954,-0.0653099952638149,0,0,0.001953125
+local_minus_bp,mnist,dendritic_shunting,4,per_soma_shared - backprop,10,9.000897407531738e-05,-0.0006099879741668,0.000800262838602,5,0,0.921875
+local_minus_bp,mnist,dendritic_shunting,4,path_transport - backprop,10,0.0001600086688995,-0.0004199922084808,0.0006899952888488,6,0,0.6953125
+feedback,noise_resilience,dendritic_additive,1,neuron-indexed - scalar,10,0.0975999951362609,0.0914299963414668,0.1042900085449218,10,0,0.001953125
+feedback,noise_resilience,dendritic_additive,1,exact - neuron-indexed,10,0.00310999751091,0.0020399928092956,0.0040700018405914,9,1,0.00390625
+local_minus_bp,noise_resilience,dendritic_additive,1,per_soma - backprop,10,-0.1004700005054473,-0.1073002685606479,-0.0942900002002716,0,0,0.001953125
+local_minus_bp,noise_resilience,dendritic_additive,1,per_soma_shared - backprop,10,-0.0028700053691863,-0.0042699994146824,-0.0015300035476683,2,0,0.009765625
+local_minus_bp,noise_resilience,dendritic_additive,1,path_transport - backprop,10,0.0002399921417236,-0.0009300112724303,0.0014999748766422,5,0,0.6953125
+feedback,noise_resilience,dendritic_additive,2,neuron-indexed - scalar,10,0.120440000295639,0.1120299994945526,0.1296199977397918,10,0,0.001953125
+feedback,noise_resilience,dendritic_additive,2,exact - neuron-indexed,10,0.0038700044155121,0.0024600087106227,0.0054799915850162,9,1,0.00390625
+local_minus_bp,noise_resilience,dendritic_additive,2,per_soma - backprop,10,-0.1229699969291687,-0.1312799930572509,-0.1155599951744079,0,0,0.001953125
+local_minus_bp,noise_resilience,dendritic_additive,2,per_soma_shared - backprop,10,-0.0025299966335296,-0.0041799902915954,-0.00100998878479,1,0,0.013671875
+local_minus_bp,noise_resilience,dendritic_additive,2,path_transport - backprop,10,0.0013400077819824,-0.0005599917471408,0.0030600130558014,6,1,0.1640625
+feedback,noise_resilience,dendritic_additive,3,neuron-indexed - scalar,10,0.1296000063419342,0.1235300122201442,0.1365799966454506,10,0,0.001953125
+feedback,noise_resilience,dendritic_additive,3,exact - neuron-indexed,10,0.0070299983024596,0.0056700110435484,0.0081099927425383,10,0,0.001953125
+local_minus_bp,noise_resilience,dendritic_additive,3,per_soma - backprop,10,-0.1371899962425232,-0.1439602607488632,-0.1312499938905239,0,0,0.001953125
+local_minus_bp,noise_resilience,dendritic_additive,3,per_soma_shared - backprop,10,-0.0075899899005889,-0.0084799945354461,-0.0066899955272673,0,0,0.001953125
+local_minus_bp,noise_resilience,dendritic_additive,3,path_transport - backprop,10,-0.0005599915981293,-0.0013699771463871,0.0001999974250792,3,1,0.359375
+feedback,noise_resilience,dendritic_additive,4,neuron-indexed - scalar,10,0.1416099905967712,0.130489993095398,0.1539502437412738,10,0,0.001953125
+feedback,noise_resilience,dendritic_additive,4,exact - neuron-indexed,10,0.0072200000286102,0.0057899890840053,0.00867999792099,10,0,0.001953125
+local_minus_bp,noise_resilience,dendritic_additive,4,per_soma - backprop,10,-0.1489699840545654,-0.1616802389919757,-0.1379397220909596,0,0,0.001953125
+local_minus_bp,noise_resilience,dendritic_additive,4,per_soma_shared - backprop,10,-0.0073599934577941,-0.0087299823760986,-0.0057799994945526,0,0,0.001953125
+local_minus_bp,noise_resilience,dendritic_additive,4,path_transport - backprop,10,-0.0001399934291839,-0.0014999985694885,0.0013000191748143,5,0,0.921875
+depth,mnist,dendritic_additive,4,depth 4 - depth 1 (backprop),10,0.0118000030517578,0.0108200192451477,0.0128099977970123,10,0,0.001953125
+depth,mnist,dendritic_additive,4,depth 4 - depth 1 (per_soma),10,-0.0021699786186218,-0.0066899895668029,0.0020500186085701,4,0,0.625
+depth,mnist,dendritic_additive,4,depth 4 - depth 1 (per_soma_shared),10,0.0098900079727172,0.0090700030326843,0.0107000112533568,10,0,0.001953125
+depth,mnist,dendritic_additive,4,depth 4 - depth 1 (path_transport),10,0.0103799939155578,0.0094799995422363,0.0112499892711638,10,0,0.001953125
+depth,mnist,dendritic_shunting,4,depth 4 - depth 1 (backprop),10,0.004639983177185,0.0035499870777129,0.0056799770891665,10,0,0.001953125
+depth,mnist,dendritic_shunting,4,depth 4 - depth 1 (per_soma),10,0.0052700042724609,-0.0011102549731731,0.0118800044059753,5,0,0.244140625
+depth,mnist,dendritic_shunting,4,depth 4 - depth 1 (per_soma_shared),10,0.0052300095558166,0.0042800067365168,0.0062500119209289,10,0,0.001953125
+depth,mnist,dendritic_shunting,4,depth 4 - depth 1 (path_transport),10,0.0055399954319,0.0047200082242488,0.0062299907207488,10,0,0.001953125
+depth,noise_resilience,dendritic_additive,4,depth 4 - depth 1 (backprop),10,0.007859992980957,0.0060699997842312,0.0098299802839756,10,0,0.001953125
+depth,noise_resilience,dendritic_additive,4,depth 4 - depth 1 (per_soma),10,-0.040639990568161,-0.0543802434206008,-0.0274297478795051,1,0,0.00390625
+depth,noise_resilience,dendritic_additive,4,depth 4 - depth 1 (per_soma_shared),10,0.0033700048923492,0.002180016040802,0.0046702556312083,10,0,0.001953125
+depth,noise_resilience,dendritic_additive,4,depth 4 - depth 1 (path_transport),10,0.0074800074100494,0.0064200043678283,0.0085100114345551,10,0,0.001953125

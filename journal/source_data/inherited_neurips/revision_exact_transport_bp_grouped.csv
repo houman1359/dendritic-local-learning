@@ -1,0 +1,2 @@
+condition,dataset,core,learning_rule,rule_variant,broadcast_mode,broadcast_rank,decoder_update_mode,hsic_enabled,hsic_weight,core_type,normalize_inputs,has_i_to_e,additive_gain_mode,dendritic_normalization,reactivation_enabled,test_acc_mean,test_acc_std,test_acc_min,test_acc_max,n_seeds
+revision_exact_transport_bp_mnist_5seed,mnist,shunting,standard,,,,,,,dendritic_shunting,False,True,,False,True,0.9702599763870239,0.0008294404360618732,0.9693999886512756,0.9713999629020691,5

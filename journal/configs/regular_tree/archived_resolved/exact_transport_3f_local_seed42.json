@@ -1,0 +1,1552 @@
+{
+    "experiment": {
+        "seed": 42,
+        "train_valid_split": 0.8,
+        "fast_mode": false,
+        "deterministic": true,
+        "cudnn_benchmark": false,
+        "allow_tf32": false,
+        "float32_matmul_precision": "highest",
+        "enable_profiling": false,
+        "profiling_output_dir": "results/profiling/",
+        "enable_hooks": true,
+        "checkpointing": {
+            "enabled": false,
+            "save_every_n_epochs": 10,
+            "checkpoint_dir": "results/checkpoints/"
+        }
+    },
+    "data": {
+        "dataset_name": "mnist",
+        "base_dir": "data",
+        "processing": {
+            "flatten": true,
+            "normalize": false,
+            "label_noise_rate": 0.0
+        },
+        "dataset_params": {
+            "mnist_modulo10": {
+                "shuffle_iterations": 2
+            },
+            "cifar10_modulo10": {
+                "shuffle_iterations": 1,
+                "pair_seed": 0
+            },
+            "double_mnist_contextual_mod10": {
+                "shuffle_iterations": 1,
+                "pair_seed": 0,
+                "context_seed": 123
+            },
+            "double_cifar10_contextual_mod10": {
+                "shuffle_iterations": 1,
+                "pair_seed": 0,
+                "context_seed": 123
+            },
+            "random_flip_mnist": {
+                "flip_probability": 0.5
+            },
+            "poisson_generator": {
+                "base_dataset": "mnist",
+                "multiplicative_gain": true,
+                "fixed_gain_factor": null,
+                "max_gain_factor": null,
+                "max_gain_tau_ratio": null,
+                "uniform_gain": true,
+                "gain_sampling": "log_uniform",
+                "poisson_sampling": true,
+                "stimulus_duration": 1.0
+            },
+            "multixor": {
+                "n_bits": 8
+            },
+            "orientation_bars": {
+                "n_orient_classes": 8
+            },
+            "orthonet": {
+                "input_dim": 784,
+                "n_layers": 5,
+                "nonlinearity": "sigmoid",
+                "repeat_layers": false,
+                "noise_std": 0.1
+            },
+            "contextual_stream_gain_shift": {
+                "n_samples": 4000,
+                "stream_dim": 64,
+                "n_classes": 2,
+                "signal_strength": 0.35,
+                "relevant_noise_std": 0.08,
+                "irrelevant_noise_std": 0.18,
+                "train_gain_relevant_min": 0.9,
+                "train_gain_relevant_max": 1.1,
+                "train_gain_irrelevant_min": 0.8,
+                "train_gain_irrelevant_max": 1.2,
+                "test_gain_relevant": 1.0,
+                "test_gain_irrelevant": 3.0,
+                "test_irrelevant_alignment_alpha": 1.0,
+                "ood_mode": "irrelevant",
+                "valid_split_mode": "ood",
+                "context_signal_scale": 1.0
+            },
+            "imagenet": {
+                "loader_backend": "auto",
+                "train_samples_per_class": null,
+                "val_samples_per_class": null
+            }
+        }
+    },
+    "model": {
+        "task": "classification",
+        "encoder": {
+            "type": "identity",
+            "load_save_root": "./trained_encoder_networks/",
+            "params": {
+                "input_dim": 784,
+                "input_shape": [
+                    784
+                ],
+                "encoder_hidden_dims": [
+                    128,
+                    64
+                ],
+                "encoder_kernel_sizes": [
+                    3,
+                    3
+                ],
+                "encoder_strides": [
+                    2,
+                    2
+                ],
+                "latent_dim": null,
+                "latent_shape": null,
+                "decoder_hidden_dims": [
+                    64,
+                    128
+                ],
+                "activation": "relu",
+                "router_mode": "fixed",
+                "pathway_groups": [],
+                "shared_indices": [],
+                "n_pathways": 2,
+                "pathway_dim": null,
+                "pathway_dims": [],
+                "router_activation": "none",
+                "learned_router_temperature": 1.0,
+                "learned_router_init_scale": 4.0
+            }
+        },
+        "core": {
+            "type": "dendritic_shunting",
+            "architecture": {
+                "excitatory_layer_sizes": [
+                    128
+                ],
+                "inhibitory_layer_sizes": [],
+                "excitatory_branch_factors": [
+                    3,
+                    3
+                ],
+                "inhibitory_branch_factors": [
+                    1
+                ],
+                "input_projection_dims": [],
+                "inhibitory_network_type": "dendritic",
+                "mlp_inhibitory_network_params": {
+                    "hidden_dims": [
+                        200
+                    ],
+                    "activation": "relu"
+                }
+            },
+            "connectivity": {
+                "ee_synapses_per_branch_per_layer": [
+                    40
+                ],
+                "ei_synapses_per_branch_per_layer": [
+                    0
+                ],
+                "ie_synapses_per_branch_per_layer": [
+                    20
+                ],
+                "ii_synapses_per_branch_per_layer": [
+                    0
+                ],
+                "rec_ee_synapses_per_branch": [
+                    0
+                ],
+                "rec_ie_synapses_per_branch": [
+                    0
+                ],
+                "rec_ei_synapses_per_branch": [
+                    0
+                ],
+                "rec_ii_synapses_per_branch": [
+                    0
+                ],
+                "structured": {
+                    "enabled": false,
+                    "seed": null,
+                    "method": "bernoulli",
+                    "probability": null,
+                    "indegree": null,
+                    "distance_kernel": "none",
+                    "distance_sigma": 1.0,
+                    "pathways": {}
+                }
+            },
+            "transfer": {
+                "input_mode": 1,
+                "input_transform": null,
+                "independent_pathways": false,
+                "excitatory_dim": null,
+                "inhibitory_dim": null,
+                "output_activation": "relu",
+                "inhibitory_mode": "first",
+                "allow_direct_inhibitory_stream": false,
+                "input_mode1_build_inhibitory_population": false,
+                "require_explicit_direct_inhibitory_stream": false
+            },
+            "morphology": {
+                "somatic_synapses": false,
+                "use_shunting": true,
+                "use_additive_normalization": false,
+                "allow_self_recurrence": true,
+                "weight_transform": "softplus",
+                "dbl_init_method": "analytical_expectation"
+            },
+            "sparsity": {
+                "init_method": "xavier_normal",
+                "noise_level": 0.0,
+                "type": "standard",
+                "weight_norm_order": null,
+                "gamma": 1.0,
+                "temperature": 0.0,
+                "ultrafast": true,
+                "gradient_scaling": "none",
+                "deepst": {
+                    "excitatory_target_density": 0.1,
+                    "inhibitory_target_density": 0.1,
+                    "use_noise": true,
+                    "sigma": 0.05,
+                    "rewiring_mode": "global",
+                    "rewire_frequency": 1,
+                    "synapses_per_branch": null,
+                    "freeze_excitatory_connectivity": false,
+                    "freeze_inhibitory_connectivity": false,
+                    "init_method": "xavier_normal",
+                    "weight_threshold": 1e-06
+                },
+                "indexed": {
+                    "candidate_size": null,
+                    "selection": "standard",
+                    "seed": null,
+                    "output_chunk_size": 2048,
+                    "rewire_frequency": 100,
+                    "rewire_quantile": 0.05,
+                    "rewire_until_step": null
+                },
+                "dense_to_sparse": {
+                    "initial_density": 1.0,
+                    "initial_k": null,
+                    "start_step": 0,
+                    "end_step": 1000,
+                    "update_interval": 1,
+                    "schedule": "cubic",
+                    "freeze_on_end": false,
+                    "advance_on_forward": true,
+                    "prune_metric": "weight"
+                }
+            },
+            "reactivation": {
+                "enabled": true,
+                "type": "param_tanh",
+                "dendritic_activation": null,
+                "init_policy": "analytical",
+                "init_m": 1.5,
+                "init_b": 0.5,
+                "occupancy_quantile_low": null,
+                "occupancy_quantile_high": null,
+                "occupancy_target_low": null,
+                "occupancy_target_high": null,
+                "calibration_min_quantile_width": 0.001,
+                "calibration_max_m": 50.0,
+                "calibration_revert_on_invalid": true,
+                "sigma_aware_k": 0.25,
+                "gradient_scaling": "none"
+            },
+            "blocklinear": {
+                "gradient_scaling": "none",
+                "efficient": false
+            },
+            "implementation": {
+                "adaptive_initialization": true,
+                "adaptive_initialization_policy": "preserve_shunting_center",
+                "adaptive_target_conductance": 5.0,
+                "print_hooks": false,
+                "store_routing": false,
+                "compile_forward": false
+            },
+            "spatial": {
+                "kernel_size": 3,
+                "stride": 1,
+                "padding": 0
+            },
+            "synapse_types": {},
+            "dynamics": {},
+            "dendritic_spikes": {},
+            "soma_feedback": {},
+            "recurrent": {
+                "enabled": false,
+                "cell_type": "dendritic",
+                "n_excitatory": 64,
+                "n_inhibitory": 16,
+                "num_layers": 1,
+                "branches": [
+                    {
+                        "tau": 10.0,
+                        "ff_synapses": 12,
+                        "rec_synapses": 0,
+                        "ie_synapses": 4,
+                        "rec_i_synapses": 0,
+                        "compartment": "topk",
+                        "activation": "relu",
+                        "dendrinet_branch_factors": [
+                            2
+                        ],
+                        "use_shunting": true,
+                        "reactivate": false,
+                        "reactivation_type": "param_tanh",
+                        "reactivation_init_m": 1.0,
+                        "reactivation_init_b": 0.5,
+                        "topk_init_method": "xavier_normal",
+                        "epsilon": 1e-08,
+                        "weight_transform": "exp"
+                    },
+                    {
+                        "tau": 50.0,
+                        "ff_synapses": 6,
+                        "rec_synapses": 6,
+                        "ie_synapses": 4,
+                        "rec_i_synapses": 0,
+                        "compartment": "topk",
+                        "activation": "relu",
+                        "dendrinet_branch_factors": [
+                            2
+                        ],
+                        "use_shunting": true,
+                        "reactivate": false,
+                        "reactivation_type": "param_tanh",
+                        "reactivation_init_m": 1.0,
+                        "reactivation_init_b": 0.5,
+                        "topk_init_method": "xavier_normal",
+                        "epsilon": 1e-08,
+                        "weight_transform": "exp"
+                    },
+                    {
+                        "tau": 200.0,
+                        "ff_synapses": 0,
+                        "rec_synapses": 10,
+                        "ie_synapses": 4,
+                        "rec_i_synapses": 0,
+                        "compartment": "topk",
+                        "activation": "relu",
+                        "dendrinet_branch_factors": [
+                            2
+                        ],
+                        "use_shunting": true,
+                        "reactivate": false,
+                        "reactivation_type": "param_tanh",
+                        "reactivation_init_m": 1.0,
+                        "reactivation_init_b": 0.5,
+                        "topk_init_method": "xavier_normal",
+                        "epsilon": 1e-08,
+                        "weight_transform": "exp"
+                    }
+                ],
+                "i_tau": 10.0,
+                "i_compartment": "topk",
+                "dt": 1.0,
+                "learn_taus": false,
+                "g_leak": 1.0,
+                "soma_mode": "shunting",
+                "output_mode": "last",
+                "input_projection_layers": [
+                    64
+                ],
+                "dropout": 0.0,
+                "grad_clip": 1.0,
+                "store_routing": false
+            },
+            "unified_ei": {},
+            "recurrent_ei": {},
+            "baseline_rnn": {},
+            "population_network": {}
+        },
+        "decoder": {
+            "type": "MLP",
+            "params": {
+                "input_dim": 20,
+                "hidden_dims": [],
+                "activation": "relu",
+                "output_dim": 10
+            }
+        },
+        "vision_replacement": {
+            "enabled": false,
+            "backbone": "alexnet",
+            "weights": "IMAGENET1K_V1",
+            "input_shape": [
+                3,
+                224,
+                224
+            ],
+            "replace": {
+                "start": "",
+                "end": ""
+            },
+            "target_modules": [],
+            "omit_layers": [],
+            "trainability": {
+                "encoder": {
+                    "mode": "frozen"
+                },
+                "decoder": {
+                    "mode": "trainable"
+                }
+            }
+        },
+        "pretrained_replacement": {
+            "enabled": false,
+            "backbone": "alexnet",
+            "weights": "IMAGENET1K_V1",
+            "input_shape": [
+                3,
+                224,
+                224
+            ],
+            "replace": {
+                "start": "",
+                "end": ""
+            },
+            "target_modules": [],
+            "omit_layers": [],
+            "trainability": {
+                "encoder": {
+                    "mode": "frozen"
+                },
+                "decoder": {
+                    "mode": "trainable"
+                }
+            }
+        },
+        "transformer_replacement": {
+            "enabled": false,
+            "model_name": "",
+            "layers": [],
+            "target_module": "mlp",
+            "layers_attr": null,
+            "input_transform": "signed_split",
+            "preserve_device_dtype": true,
+            "model_kwargs": {},
+            "replacement_kwargs": {}
+        }
+    },
+    "training": {
+        "encoder": {
+            "strategy": "standard",
+            "common": {
+                "epochs": 1000,
+                "batch_size": 512,
+                "shuffle": true,
+                "grad_clip_value": 2.0,
+                "loss_function": "ce",
+                "early_stopping": true,
+                "patience": 500,
+                "load_best_state_dict": true,
+                "plot_losses": true,
+                "suppress_prints": false,
+                "print_every": 10,
+                "num_workers": null,
+                "pin_memory": null,
+                "persistent_workers": null,
+                "prefetch_factor": null,
+                "in_order": null,
+                "use_amp": false,
+                "lr_schedule": "none",
+                "lr_warmup_epochs": 0,
+                "enable_nan_checking": false,
+                "enable_adaptive_clipping": false,
+                "profile_dataloader": false,
+                "weight_decay_rate": 0.01,
+                "weight_boosting": false,
+                "recalibrate_reactivation_every": 0,
+                "reactivation_update_mode": "backprop",
+                "reactivation_recalibration_mode": "from_init_policy",
+                "reactivation_recalibration_start_epoch": 1,
+                "reactivation_recalibration_num_batches": 3,
+                "reactivation_recalibration_ema_alpha": 1.0,
+                "param_groups": {
+                    "lr": 0.01,
+                    "split_params": true,
+                    "topk_lr": 0.001,
+                    "blocklinear_lr": 0.0001,
+                    "reactivation_lr": 0.0001,
+                    "decoder_lr": 0.001,
+                    "encoder_lr": null
+                }
+            },
+            "strategies": {
+                "standard": {},
+                "multi_stage": {
+                    "analyze_between_stages": true,
+                    "use_best_from_each_stage": true,
+                    "continue_on_failure": false,
+                    "stages": [
+                        {
+                            "learning_strategy": "standard",
+                            "epochs": 100,
+                            "batch_size": 512,
+                            "save_checkpoint": false,
+                            "param_groups": {
+                                "lr": 0.01,
+                                "split_params": true,
+                                "topk_lr": 0.001,
+                                "blocklinear_lr": 0.0001,
+                                "reactivation_lr": 0.0001,
+                                "decoder_lr": 0.001
+                            },
+                            "trainer_config": {
+                                "loss_function": "ce",
+                                "early_stopping": true,
+                                "patience": 500
+                            }
+                        },
+                        {
+                            "learning_strategy": "local_ca",
+                            "epochs": 100,
+                            "batch_size": 512,
+                            "reset_optimizer": false,
+                            "save_checkpoint": false,
+                            "param_groups": {
+                                "lr": 0.0001,
+                                "split_params": true,
+                                "topk_lr": 0.0001,
+                                "blocklinear_lr": 1e-05,
+                                "reactivation_lr": 1e-05,
+                                "decoder_lr": 0.001
+                            },
+                            "trainer_config": {
+                                "loss_function": "ce",
+                                "early_stopping": false
+                            }
+                        }
+                    ]
+                },
+                "recurrent": {
+                    "grad_clip": 1.0,
+                    "use_amp": false,
+                    "lr_schedule": "none",
+                    "lr_warmup_epochs": 0
+                },
+                "voltage_stabilization": {
+                    "pretrain_epochs": 100,
+                    "stabilize_mode": "vout",
+                    "freeze_reactivation": true,
+                    "target_voltage": 0.5,
+                    "target_saturation": 0.2,
+                    "loss_metric": "mse"
+                },
+                "homeostatic_control": {
+                    "pretrain_epochs": 100,
+                    "stabilize_mode": "vinf",
+                    "freeze_reactivation": false,
+                    "target_voltage": 0.5,
+                    "target_saturation": 0.2,
+                    "loss_metric": "mse"
+                },
+                "freeze_layers": {
+                    "pretrain_epochs": 10,
+                    "reverse_training": false,
+                    "epochs_per_layer": 50,
+                    "final_tune_epochs": 10
+                },
+                "freeze_branches": {
+                    "pretrain_epochs": 10,
+                    "reverse_training": false,
+                    "epochs_per_branch": 50,
+                    "final_tune_epochs": 10
+                },
+                "freeze_branch_kl": {
+                    "pretrain_epochs": 10,
+                    "reverse_training": false,
+                    "epochs_per_branch": 50,
+                    "final_tune_epochs": 10,
+                    "kl_weight": 0.1
+                }
+            },
+            "learning_strategy_config": null
+        },
+        "main": {
+            "strategy": "local_ca",
+            "common": {
+                "epochs": 200,
+                "batch_size": 256,
+                "shuffle": true,
+                "grad_clip_value": 2.0,
+                "loss_function": "cat_nll",
+                "early_stopping": false,
+                "patience": 20,
+                "load_best_state_dict": true,
+                "plot_losses": false,
+                "suppress_prints": false,
+                "print_every": 1,
+                "num_workers": null,
+                "pin_memory": null,
+                "persistent_workers": null,
+                "prefetch_factor": null,
+                "in_order": null,
+                "use_amp": false,
+                "lr_schedule": "none",
+                "lr_warmup_epochs": 0,
+                "enable_nan_checking": false,
+                "enable_adaptive_clipping": false,
+                "profile_dataloader": false,
+                "weight_decay_rate": 0.0,
+                "weight_boosting": false,
+                "recalibrate_reactivation_every": 0,
+                "reactivation_update_mode": "backprop",
+                "reactivation_recalibration_mode": "from_init_policy",
+                "reactivation_recalibration_start_epoch": 1,
+                "reactivation_recalibration_num_batches": 3,
+                "reactivation_recalibration_ema_alpha": 1.0,
+                "param_groups": {
+                    "lr": 0.0015,
+                    "split_params": true,
+                    "topk_lr": 0.0015,
+                    "blocklinear_lr": 0.0007,
+                    "reactivation_lr": 0.0005,
+                    "decoder_lr": 0.0015,
+                    "encoder_lr": null
+                }
+            },
+            "optimizer": {
+                "name": "adam",
+                "lr": 0.001,
+                "weight_decay": 0.0,
+                "momentum": 0.9,
+                "betas": [
+                    0.9,
+                    0.999
+                ],
+                "eps": 1e-08
+            },
+            "regularization": {
+                "l1_weight": 0.0,
+                "l2_weight": 0.0,
+                "selective": {
+                    "layers": [],
+                    "branches": [],
+                    "weight_types": [
+                        "all"
+                    ]
+                },
+                "split_params": false,
+                "param_group_weights": {
+                    "topk": {
+                        "l1_weight": 0.0,
+                        "l2_weight": 0.0
+                    },
+                    "blocklinear": {
+                        "l1_weight": 0.0,
+                        "l2_weight": 0.0
+                    },
+                    "reactivation": {
+                        "l1_weight": 0.0,
+                        "l2_weight": 0.0
+                    },
+                    "decoder": {
+                        "l1_weight": 0.0,
+                        "l2_weight": 0.0
+                    }
+                },
+                "enforce_ei_weight_ratio": false,
+                "target_ei_weight_ratio": 0.5,
+                "ei_ratio_loss_weight": 0.5,
+                "ei_ratio_scope": "per_branch",
+                "ei_ratio_metric": "mean"
+            },
+            "pruning": {
+                "enabled": false,
+                "threshold": 2,
+                "selective": {
+                    "layers": [],
+                    "branches": [],
+                    "weight_types": [
+                        "excitatory",
+                        "inhibitory"
+                    ]
+                },
+                "re_evaluate_after": false,
+                "dynamic_pruning": false,
+                "pruning_frequency": 10,
+                "report_non_pruned": true,
+                "save_pruning_stats": false,
+                "detailed_branch_report": true,
+                "redo_analysis_after_pruning": false
+            },
+            "strategies": {
+                "standard": {},
+                "multi_stage": {
+                    "analyze_between_stages": true,
+                    "use_best_from_each_stage": true,
+                    "continue_on_failure": false,
+                    "stages": [
+                        {
+                            "learning_strategy": "standard",
+                            "epochs": 100,
+                            "batch_size": 512,
+                            "save_checkpoint": false,
+                            "param_groups": {
+                                "lr": 0.01,
+                                "split_params": true,
+                                "topk_lr": 0.001,
+                                "blocklinear_lr": 0.0001,
+                                "reactivation_lr": 0.0001,
+                                "decoder_lr": 0.001
+                            },
+                            "trainer_config": {
+                                "loss_function": "ce",
+                                "early_stopping": true,
+                                "patience": 500
+                            }
+                        },
+                        {
+                            "learning_strategy": "local_ca",
+                            "epochs": 100,
+                            "batch_size": 512,
+                            "reset_optimizer": false,
+                            "save_checkpoint": false,
+                            "param_groups": {
+                                "lr": 0.0001,
+                                "split_params": true,
+                                "topk_lr": 0.0001,
+                                "blocklinear_lr": 1e-05,
+                                "reactivation_lr": 1e-05,
+                                "decoder_lr": 0.001
+                            },
+                            "trainer_config": {
+                                "loss_function": "ce",
+                                "early_stopping": false
+                            }
+                        }
+                    ]
+                },
+                "recurrent": {
+                    "grad_clip": 1.0,
+                    "use_amp": false,
+                    "lr_schedule": "none",
+                    "lr_warmup_epochs": 0
+                },
+                "voltage_stabilization": {
+                    "pretrain_epochs": 100,
+                    "stabilize_mode": "vout",
+                    "freeze_reactivation": true,
+                    "target_voltage": 0.5,
+                    "target_saturation": 0.2,
+                    "loss_metric": "mse"
+                },
+                "homeostatic_control": {
+                    "pretrain_epochs": 100,
+                    "stabilize_mode": "vinf",
+                    "freeze_reactivation": false,
+                    "target_voltage": 0.5,
+                    "target_saturation": 0.2,
+                    "loss_metric": "mse"
+                },
+                "freeze_layers": {
+                    "pretrain_epochs": 10,
+                    "reverse_training": false,
+                    "epochs_per_layer": 50,
+                    "final_tune_epochs": 10
+                },
+                "freeze_branches": {
+                    "pretrain_epochs": 10,
+                    "reverse_training": false,
+                    "epochs_per_branch": 50,
+                    "final_tune_epochs": 10
+                },
+                "freeze_branch_kl": {
+                    "pretrain_epochs": 10,
+                    "reverse_training": false,
+                    "epochs_per_branch": 50,
+                    "final_tune_epochs": 10,
+                    "kl_weight": 0.1
+                }
+            },
+            "learning_strategy_config": {
+                "rule_variant": "3f",
+                "error_mode": "auto",
+                "error_broadcast_mode": "path_transport",
+                "error_noise_sigma": 0.0,
+                "broadcast_rank": 4,
+                "broadcast_init_scale": 1.0,
+                "pathway_broadcast_residual": 0.25,
+                "pathway_activity_gate_strength": 1.0,
+                "broadcast_bandwidth": "full",
+                "broadcast_bits": 8,
+                "broadcast_topk_fraction": 0.3,
+                "three_factor": {
+                    "dynamics_mode": "auto",
+                    "use_conductance_scaling": true,
+                    "use_driving_force": true,
+                    "theta": 0.0,
+                    "e_rev_exc": 1.0,
+                    "e_rev_inh": 0.0,
+                    "additive_gain_mode": "none",
+                    "additive_stats_ema_alpha": 0.01
+                },
+                "four_factor": {
+                    "rho_mode": "dot",
+                    "rho_estimator": "ema",
+                    "ema_alpha": 0.1,
+                    "layer_wise_rho_scale": 0.0,
+                    "augment_k": 8,
+                    "augment_noise_sigma": 0.01
+                },
+                "five_factor": {
+                    "phi_mode": "conditional",
+                    "phi_estimator": "conditional_ema",
+                    "phi_ridge_lambda": 0.001,
+                    "layer_wise_phi_scale": 0.0,
+                    "rls_forgetting": 0.99,
+                    "phi_clamp_min": 0.25,
+                    "phi_clamp_max": 4.0
+                },
+                "morphology_aware": {
+                    "use_path_propagation": false,
+                    "path_factor_mode": "per_branch",
+                    "morphology_modulator_mode": "none",
+                    "morphology_depth_offset": 1.0,
+                    "morphology_centrality_metric": "betweenness",
+                    "use_dendritic_normalization": false,
+                    "use_branch_type_rules": false,
+                    "apical_branch_scale": 1.0,
+                    "basal_branch_scale": 1.0,
+                    "use_branch_length_modulation": false,
+                    "use_branch_role_rules": false,
+                    "branch_role_source": "router_pathways",
+                    "specialized_branch_scale": 1.0,
+                    "mixed_branch_scale": 1.0,
+                    "branch_role_power": 1.0,
+                    "branch_role_alignment_weight": 0.0
+                },
+                "hsic": {
+                    "enabled": false,
+                    "weight": 0.0,
+                    "self_weight": 0.3,
+                    "target_weight": 0.3,
+                    "target_source": "labels",
+                    "kernel": "rbf",
+                    "sigma": 1.0,
+                    "degree": 2,
+                    "coef0": 1.0,
+                    "grad_clip_value": 0.1,
+                    "warmup_epochs": 5,
+                    "apply_last_layer_only": false
+                },
+                "stdp": {
+                    "enabled": false,
+                    "apply_to": [
+                        "exc",
+                        "rec_exc"
+                    ],
+                    "activity_mode": "relu",
+                    "pre_threshold": 0.0,
+                    "post_threshold": 0.0,
+                    "tau_pre": 20.0,
+                    "tau_post": 20.0,
+                    "a_plus": 1.0,
+                    "a_minus": 0.5,
+                    "learning_rate_scale": 1.0,
+                    "inhibitory_update_sign": -1.0,
+                    "use_error_modulation": false,
+                    "error_modulation_mode": "scalar_abs",
+                    "clamp_update": 0.0,
+                    "detach_traces": true
+                },
+                "inhibitory_homeostasis": {
+                    "enabled": false,
+                    "mode": "r_tot",
+                    "weight": 0.0,
+                    "target_r_tot": 0.35,
+                    "target_voltage": 0.15
+                },
+                "voltage_homeostasis": {
+                    "enabled": false,
+                    "weight": 0.0,
+                    "target_voltage": 0.5
+                },
+                "gate_homeostasis": {
+                    "enabled": false,
+                    "center_weight": 0.0,
+                    "saturation_weight": 0.0,
+                    "target_mean": 0.5,
+                    "target_saturation": 0.2,
+                    "low_threshold": 0.1,
+                    "high_threshold": 0.9,
+                    "saturation_slope": 20.0
+                },
+                "update_inactive_weights": false,
+                "update_reactivation": true,
+                "explicit_inhibitory_update_mode": "local_ca",
+                "update_explicit_inhibitory_cells": true,
+                "encoder_update_mode": "none",
+                "decoder_update_mode": "local",
+                "freeze_encoder_epochs": 0,
+                "freeze_reactivation_epochs": 0,
+                "freeze_decoder_epochs": 0,
+                "training_schedule": null,
+                "clip_grad_value": 5.0,
+                "normalize_by_batch": true
+            }
+        },
+        "transformer_replacement": {
+            "enabled": false,
+            "mode": "layerwise_distillation",
+            "teacher_source": "synthetic_mlp",
+            "train_target": "replacement_only",
+            "layers": [],
+            "device": "auto",
+            "dtype": "float32",
+            "seed": null,
+            "data_parallel": false,
+            "data_parallel_devices": [],
+            "max_steps": 200,
+            "eval_every": 50,
+            "log_every": 25,
+            "batch_size": 32,
+            "num_workers": null,
+            "pin_memory": null,
+            "persistent_workers": null,
+            "prefetch_factor": null,
+            "in_order": null,
+            "sequence_length": 8,
+            "train_samples": 2048,
+            "valid_samples": 512,
+            "hidden_size": null,
+            "intermediate_size": null,
+            "synthetic_teacher": {
+                "kind": "gated_mlp",
+                "activation": "silu",
+                "bias": false,
+                "input_std": 1.0
+            },
+            "hidden_cache": {
+                "train_inputs": "",
+                "train_targets": "",
+                "valid_inputs": "",
+                "valid_targets": ""
+            },
+            "text": {
+                "text_path": "",
+                "dataset_name": "",
+                "dataset_config": "",
+                "split": "train",
+                "text_field": "text",
+                "max_documents": null,
+                "streaming": false,
+                "tokenizer_name": "",
+                "tokenizer_kwargs": {},
+                "max_tokens": null
+            },
+            "loss": "mse",
+            "cosine_weight": 0.0,
+            "lm_loss_weight": 1.0,
+            "kl_loss_weight": 0.0,
+            "kl_temperature": 1.0,
+            "hidden_loss_weight": 0.0,
+            "hidden_loss_layers": [],
+            "warm_start_dir": "",
+            "gradient_checkpointing": false,
+            "max_grad_norm": null,
+            "save_dir": "results/transformer_replacement_distillation",
+            "save_replacements": true,
+            "use_amp": false
+        },
+        "vision_replacement": {
+            "enabled": false,
+            "mode": "blockwise_distillation",
+            "teacher_source": "tensor_cache",
+            "train_target": "replacement_only",
+            "device": "auto",
+            "dtype": "float32",
+            "seed": null,
+            "max_steps": 200,
+            "eval_every": 50,
+            "log_every": 25,
+            "batch_size": 32,
+            "num_workers": null,
+            "pin_memory": null,
+            "persistent_workers": null,
+            "prefetch_factor": null,
+            "in_order": null,
+            "tensor_cache": {
+                "train_inputs": "",
+                "train_targets": "",
+                "valid_inputs": "",
+                "valid_targets": ""
+            },
+            "loss": "mse",
+            "cosine_weight": 0.0,
+            "max_grad_norm": null,
+            "save_dir": "results/vision_replacement_distillation",
+            "save_replacement": true,
+            "use_amp": false
+        }
+    },
+    "analysis": {
+        "runtime": {
+            "training": {
+                "mode": "materialize",
+                "batch_size": 256,
+                "num_workers": 4,
+                "pin_memory": true,
+                "persistent_workers": false,
+                "prefetch_factor": 2,
+                "in_order": null,
+                "max_batches": null,
+                "max_samples": null,
+                "materialize_threshold_mb": 1024
+            },
+            "final": {
+                "mode": "materialize",
+                "batch_size": 256,
+                "num_workers": 4,
+                "pin_memory": true,
+                "persistent_workers": false,
+                "prefetch_factor": 2,
+                "in_order": null,
+                "max_batches": null,
+                "max_samples": null,
+                "materialize_threshold_mb": 1024
+            }
+        },
+        "performance_analysis": {
+            "enabled": true,
+            "training": true,
+            "params": {
+                "accuracy": true,
+                "auc": false,
+                "categorical_loglikelihood": true,
+                "mse": false,
+                "cosine_similarity": false
+            },
+            "training_splits": [
+                "train",
+                "valid",
+                "test"
+            ],
+            "final_splits": [
+                "train",
+                "valid",
+                "test"
+            ]
+        },
+        "synapse_turnover_analysis": {
+            "enabled": false,
+            "training": false,
+            "params": {
+                "snapshot_interval": 1,
+                "synaptic_analysis": true,
+                "save_synaptic_report": true
+            }
+        },
+        "noise_perturbation_analysis": {
+            "enabled": false,
+            "training": false,
+            "params": {
+                "uniform_noise": true,
+                "uniform_magnitudes": [
+                    0.1,
+                    0.2
+                ],
+                "gaussian_noise": true,
+                "gaussian_sdevs": [
+                    0.1,
+                    0.2
+                ],
+                "n_samples": 10,
+                "clamp_range": [
+                    0.0,
+                    1.0
+                ],
+                "accuracy": true,
+                "auc": true,
+                "categorical_loglikelihood": true,
+                "mse": true,
+                "cosine_similarity": true,
+                "seed": 0
+            }
+        },
+        "single_layer_contribution": {
+            "enabled": false,
+            "training": false,
+            "params": {
+                "excitation_contribution": true,
+                "inhibition_contribution": true,
+                "both_contribution": true,
+                "accuracy": true,
+                "auc": true,
+                "categorical_loglikelihood": true,
+                "mse": true,
+                "cosine_similarity": true
+            }
+        },
+        "ablation_analysis": {
+            "enabled": false,
+            "training": false,
+            "params": {
+                "selection": {
+                    "levels": [],
+                    "targets": [],
+                    "metrics": []
+                },
+                "methods": {
+                    "ablation_methods": [
+                        "lesion"
+                    ],
+                    "shuffle_seed": 0,
+                    "clamp_statistic": "mean"
+                }
+            }
+        },
+        "weight_analysis": {
+            "enabled": false,
+            "training": false,
+            "params": {
+                "synapse_weights": true,
+                "branch_weights": true,
+                "computation_level": "single_branch",
+                "branch_aggregation": "mean",
+                "per_layer_analysis": true,
+                "per_einet_analysis": true,
+                "per_neuron_analysis": false,
+                "analyze_excitatory": true,
+                "analyze_inhibitory": true,
+                "analyze_branch_output": true,
+                "compute_mean": true,
+                "compute_variance": true,
+                "compute_percentiles": true,
+                "compute_min_max": true,
+                "compute_dendritic_strength": true,
+                "weight_threshold": 1e-06
+            }
+        },
+        "compartment_statistics_analysis": {
+            "enabled": false,
+            "training": false,
+            "params": {
+                "synapse_weights": true,
+                "branch_weights": true,
+                "inputs": true,
+                "activations": true,
+                "global_analysis": true,
+                "layer_analysis": true,
+                "branch_analysis": true,
+                "compute_mean": true,
+                "compute_variance": true,
+                "compute_percentiles": true,
+                "compute_min_max": true,
+                "compute_entropy": true,
+                "per_class_analysis": false,
+                "n_samples": null,
+                "seed": 0
+            }
+        },
+        "compartment_snr_analysis": {
+            "enabled": false,
+            "training": false,
+            "params": {
+                "input_analysis": true,
+                "input_capture_mode": "branch",
+                "global_analysis": true,
+                "layer_analysis": true,
+                "branch_analysis": true,
+                "global_aggregation": true,
+                "layer_aggregation": true,
+                "branch_aggregation": true,
+                "epsilon": 1e-06
+            }
+        },
+        "multiplicative_gain_analysis": {
+            "enabled": false,
+            "training": false,
+            "params": {
+                "uniform_gain": true,
+                "gain_min": 0.0,
+                "gain_max": 10.0,
+                "n_steps": 10,
+                "logspace": false,
+                "input_preprocess": "none",
+                "noise_model": "none",
+                "poisson_eps": 1e-06,
+                "accuracy": false,
+                "auc": false,
+                "categorical_loglikelihood": false,
+                "mse": false,
+                "cosine_similarity": false
+            }
+        },
+        "synaptic_activation_analysis": {
+            "enabled": false,
+            "training": false,
+            "params": {
+                "network_summary": true,
+                "layer_summary": true,
+                "branch_summary": true,
+                "raw_summary": true,
+                "logspace": false,
+                "downsample": true,
+                "samples": 5
+            }
+        },
+        "branch_activation_analysis": {
+            "enabled": false,
+            "training": false,
+            "params": {
+                "synapse_activations": true,
+                "branch_activations": true,
+                "network_summary": true,
+                "layer_summary": true,
+                "branch_summary": true,
+                "raw_summary": true,
+                "logspace": false,
+                "downsample": true,
+                "samples": 5
+            }
+        },
+        "local_rule_component_analysis": {
+            "enabled": false,
+            "training": false,
+            "params": {
+                "max_samples": 1024,
+                "include_dendritic": true,
+                "include_broadcast": true,
+                "broadcast_mode": "scalar",
+                "error_mode": "auto",
+                "e_rev_exc": 1.0,
+                "e_rev_inh": 0.0,
+                "save_json": true,
+                "save_csv": true,
+                "append_training_csv": true
+            }
+        },
+        "information_analysis": {
+            "enabled": false,
+            "training": false,
+            "params": {
+                "selection": {
+                    "components": [],
+                    "scopes": [],
+                    "signal_variants": [],
+                    "views": []
+                },
+                "compute": {
+                    "max_samples": null,
+                    "include_vinf": true,
+                    "normalize_mi": false,
+                    "output_units": "bits",
+                    "verbose": false,
+                    "computation_level": "single_branch",
+                    "branch_aggregation": "mean",
+                    "layer_total_topk": 10,
+                    "gaussian_fisher": {
+                        "aggregation": "sum",
+                        "mi_transform": "half_log1p",
+                        "eps": 1e-08,
+                        "ridge": null
+                    },
+                    "per_neuron_analysis": false,
+                    "per_einet_analysis": false,
+                    "per_layer_analysis": false,
+                    "compute_lda_weights": false
+                },
+                "estimator": {
+                    "method": "kraskov",
+                    "kraskov": {
+                        "n_neighbors": 10
+                    },
+                    "binned": {
+                        "n_bins": 20,
+                        "binning_strategy": "quantile",
+                        "bias_correction": "none"
+                    },
+                    "decoder": {
+                        "cv_folds": 5,
+                        "C": 1.0,
+                        "standardize": true,
+                        "seed": 0,
+                        "continuous": {
+                            "strategy": "none",
+                            "max_total_dim": 2,
+                            "gaussian_ridge": 1e-06
+                        }
+                    },
+                    "copula": {
+                        "type": "gaussian"
+                    },
+                    "sklearn": {
+                        "n_bins": 20,
+                        "bandwidth": null
+                    }
+                },
+                "baselines": {
+                    "random_weights": {
+                        "n_shuffles": 0,
+                        "seed": 0
+                    },
+                    "label_shuffle_null": {
+                        "n_shuffles": 0,
+                        "seed": 0,
+                        "components": [
+                            "basic"
+                        ]
+                    }
+                },
+                "pid": {
+                    "binarize": true,
+                    "binarize_method": "median",
+                    "binarize_threshold": 0.5
+                },
+                "method": "kraskov",
+                "max_samples": null,
+                "n_neighbors": 10,
+                "n_bins": 20,
+                "copula_type": "gaussian",
+                "decoder_cv_folds": 5,
+                "decoder_C": 1.0,
+                "decoder_standardize": true,
+                "decoder_seed": 0,
+                "decoder_continuous_strategy": "none",
+                "decoder_continuous_max_total_dim": 2,
+                "decoder_gaussian_ridge": 1e-06,
+                "binning_strategy": "quantile",
+                "binning_bias_correction": "none",
+                "mi_null_shuffles": 0,
+                "mi_null_seed": 0,
+                "compute_basic_mi": true,
+                "compute_pairwise_mi": true,
+                "compute_conditional_mi": true,
+                "components": [],
+                "compute_ablation_aligned_mi": true,
+                "compute_upstream_unique_cmi": false,
+                "compute_layer_total_proxies": true,
+                "layer_total_topk": 10,
+                "scopes": [],
+                "views": [],
+                "pid_binarize": true,
+                "pid_binarize_method": "median",
+                "pid_binarize_threshold": 0.5,
+                "include_vinf": true,
+                "normalize_mi": false,
+                "verbose": false,
+                "computation_level": "single_branch",
+                "branch_aggregation": "mean",
+                "per_neuron_analysis": false,
+                "per_einet_analysis": false,
+                "per_layer_analysis": false,
+                "compute_lda_weights": false,
+                "signal_variants": [],
+                "lda_n_shuffles": 0
+            }
+        },
+        "receptive_field_analysis": {
+            "enabled": false,
+            "training": false,
+            "params": {
+                "n_rows": 2,
+                "n_cols": 2,
+                "rf_shape": null,
+                "exc_rf_shape": null,
+                "inh_rf_shape": null,
+                "fig_save_format": "png",
+                "compute_activation_tuning": false,
+                "compute_rf_tuning": false,
+                "plot_rf_tuning": true,
+                "rf_tuning_layer_index": 0,
+                "n_class_examples": 5,
+                "save_raw_data": true,
+                "load_raw_data": false,
+                "raw_filename": null,
+                "epsilon": 1e-08
+            }
+        },
+        "reactivation_dynamics_analysis": {
+            "enabled": false,
+            "training": true,
+            "params": {
+                "max_samples": 1024
+            }
+        },
+        "correlation_analysis": {
+            "enabled": false,
+            "training": false,
+            "params": {
+                "selection": {
+                    "components": [],
+                    "pairs": [],
+                    "scopes": []
+                },
+                "compute": {
+                    "computation_level": "layer_branch",
+                    "max_samples": 5000,
+                    "batch_process": true,
+                    "per_layer_analysis": true,
+                    "per_einet_analysis": true,
+                    "per_neuron_analysis": false
+                },
+                "sampling": {
+                    "n_synapse_pairs": 10000,
+                    "sampling_strategy": "stratified",
+                    "stratified_categories": [
+                        "within_branch",
+                        "within_layer",
+                        "across_layer"
+                    ],
+                    "max_pairs_per_category": 1000
+                },
+                "computation_level": "layer_branch",
+                "components": [],
+                "pairs": [],
+                "scopes": [],
+                "compute_noise_correlations": true,
+                "compute_signal_correlations": true,
+                "compute_total_correlations": true,
+                "compute_tuning_curves": true,
+                "analyze_EE": true,
+                "analyze_II": true,
+                "analyze_EI": true,
+                "analyze_E_output": true,
+                "analyze_I_output": true,
+                "analyze_output_output": true,
+                "per_layer_analysis": true,
+                "per_einet_analysis": true,
+                "per_neuron_analysis": false,
+                "n_synapse_pairs": 10000,
+                "sampling_strategy": "stratified",
+                "stratified_categories": [
+                    "within_branch",
+                    "within_layer",
+                    "across_layer"
+                ],
+                "max_pairs_per_category": 1000,
+                "max_samples": 5000,
+                "batch_process": true
+            }
+        },
+        "routing_analysis": {
+            "enabled": false,
+            "training": false
+        },
+        "inhibitory_specialization_analysis": {
+            "enabled": false,
+            "training": false,
+            "params": {
+                "gate_threshold": 0.1,
+                "std_threshold": 0.15,
+                "save_figures": true
+            }
+        },
+        "jacobian_spectrum_analysis": {
+            "enabled": false,
+            "training": false,
+            "params": {
+                "top_k": 16,
+                "save_figures": true
+            }
+        },
+        "dendritic_timetraces_analysis": {
+            "enabled": false,
+            "training": false,
+            "params": {
+                "n_timesteps": 90,
+                "stim1_window": [
+                    5,
+                    25
+                ],
+                "stim2_window": [
+                    55,
+                    75
+                ],
+                "response_window": [
+                    75,
+                    90
+                ],
+                "stim1_amp": 0.8,
+                "stim2_amp": 0.6,
+                "noise_std": 0.05,
+                "seed": 0,
+                "save_figures": true
+            }
+        },
+        "spike_train_analysis": {
+            "enabled": false,
+            "training": false,
+            "params": {
+                "dt": 1.0,
+                "threshold": 0.5,
+                "max_samples": 512,
+                "include_raster": true,
+                "max_raster_samples": 8,
+                "include_per_timestep_rate": true
+            }
+        },
+        "adversarial_robustness_analysis": {
+            "enabled": false,
+            "training": false,
+            "params": {
+                "epsilons": [
+                    0.0,
+                    0.05,
+                    0.1,
+                    0.15,
+                    0.2,
+                    0.3
+                ],
+                "batch_size": 256
+            }
+        }
+    },
+    "wandb": {
+        "use_wandb": false,
+        "entity": "",
+        "project": "dendritic-sweeps",
+        "group": "unified_sweep",
+        "tags": [
+            "debug"
+        ]
+    },
+    "outputs": {
+        "run_name": "revision_exact_transport_factorial_mnist_5seed",
+        "results_dir": "reproduction_runs/exact_transport_factorial/results/config_5"
+    },
+    "distributed": {
+        "mode": "none",
+        "fsdp": {
+            "sharding_strategy": "FULL_SHARD",
+            "mixed_precision": true,
+            "cpu_offload": false,
+            "min_num_params": 1000000,
+            "reduce_communication_overhead": true,
+            "limit_all_gathers": true,
+            "forward_prefetch": true,
+            "sync_module_states": true,
+            "use_orig_params": true,
+            "backward_prefetch": "BACKWARD_PRE",
+            "gradient_checkpointing": false,
+            "mixed_precision_dtype": "fp16",
+            "param_dtype": null,
+            "reduce_dtype": null,
+            "buffer_dtype": null
+        }
+    }
+}
