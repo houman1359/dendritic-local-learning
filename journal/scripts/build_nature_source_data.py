@@ -1479,21 +1479,21 @@ EXTENSION_FILES = (
     ),
     SourceFile(
         "Figure 8", "e-f",
-        "analysis/reconstructed_tree_all_scans/output/cell_method_means.csv",
+        "source_data/fulltree_boundary/output/cell_method_means.csv",
         "Figure_8/Fig8e-f_full_tree_cell_method_means.csv",
         "independent-target method values", "target cell (n=7; scans and splits nested)",
         "current scan-complete full-tree analysis", "Cell-level held-out learning and common-checkpoint capture values.",
     ),
     SourceFile(
         "Figure 8", "e-f",
-        "analysis/reconstructed_tree_all_scans/output/scan_method_means.csv",
+        "source_data/fulltree_boundary/output/scan_method_means.csv",
         "Figure_8/Fig8e-f_full_tree_scan_method_means.csv",
         "scan-level nested values", "target cell; 13 scans nested within 7 targets",
         "current scan-complete full-tree analysis", "Scan means before target-level averaging.",
     ),
     SourceFile(
         "Figure 8", "e-f",
-        "analysis/reconstructed_tree_all_scans/output/summary.json",
+        "source_data/fulltree_boundary/output/summary.json",
         "Figure_8/Fig8e-f_full_tree_summary.json",
         "derived statistical summary", "target cell (n=7)",
         "current scan-complete full-tree analysis", "Completeness, finite-difference gates, effects, intervals and paired tests.",
@@ -1918,7 +1918,7 @@ def final_display_file(item: SourceFile) -> SourceFile:
     elif source.startswith("source_data/focal_selectivity_active_ensemble/"):
         figure = "Figure 7"
         panels = {"a-d": "j-m", "b-d": "k-m", "b-c": "k-l", "c": "l"}.get(panels, panels)
-    elif source.startswith("analysis/reconstructed_tree_all_scans/"):
+    elif source.startswith("source_data/fulltree_boundary/"):
         figure = "Figure 8"
         panels = {"e-f": "i-j"}.get(panels, panels)
     elif source.startswith("source_data/figure5/") or source.startswith("source_data/functional_topology_all_scans/"):
@@ -1953,7 +1953,7 @@ def final_display_file(item: SourceFile) -> SourceFile:
         destination = destination.replace("Fig2h_", "Fig2n_")
     elif source.startswith("source_data/theory/credit_capture"):
         destination = "Figure_4/Fig4a_credit_capture_bound_verification.json"
-    elif source.startswith("analysis/reconstructed_tree_all_scans/"):
+    elif source.startswith("source_data/fulltree_boundary/"):
         destination = destination.replace("Fig8e-f_", "Fig8i-j_")
     elif source.startswith("source_data/alignment_controlled/"):
         destination = destination.replace("Fig8a-d_", "Fig8k-n_")

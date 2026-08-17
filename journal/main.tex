@@ -120,7 +120,9 @@ signed neuronal coordinates; dendritic ancestry provides nested candidate
 addresses; and conductance determines route gain. The theory predicts a phase
 boundary: a restricted route helps stochastic learning only when the useful
 gradient signal it retains compensates for its representation bias,
-coefficient error and admitted noise. It also distinguishes three possible
+coefficient error and admitted noise. Here, ``phase'' means an operational
+regime in alignment--bandwidth--noise space---not a temporal training phase or
+a thermodynamic phase transition. The theory also distinguishes three possible
 roles of depth---additional address scales, nonlinear forward composition and
 the cost of transporting a signal along more variable paths.
 
@@ -389,9 +391,9 @@ such localized gain available.
 whereas the task supplies an error at the neuronal output. \textbf{B}, A
 population layer of dendritic excitatory and inhibitory units supplies a task
 readout; output error first arrives at each neuronal soma.
-\textbf{C}, Four distinct levels of spatial information: a global signal,
-neuron-to-coordinate ownership, within-tree address, and route gain. The
-following experiments test these levels in that order before asking when
+\textbf{C}, Once a neuron-level coordinate $\delta_u$ arrives, dendritic
+subtrees provide distinct addresses and path conductances scale route gain.
+The following experiments test these levels in that order before asking when
 additional route resolution is useful.
 \textbf{D}, The central factorization as a teaching cartoon: local synaptic
 eligibility is multiplied by a neuron-level error transported through a

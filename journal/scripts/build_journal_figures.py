@@ -223,60 +223,86 @@ def draw_compact_tree(ax, x0: float, y0: float, scale: float = 1.0,
 
 
 def _panel_credit_hierarchy(ax: plt.Axes) -> None:
-    """A journal-specific replacement for the overloaded inherited panel C."""
+    """Port the workshop's coordinate--address--gain tree strip to Figure 1.
+
+    The workshop CreditTree schematic is deliberately redrawn with the
+    journal's vector primitives so the paper and talk share the same visual
+    grammar without introducing a raster or external TeX build dependency.
+    """
 
     ax.set_xlim(0, 1)
     ax.set_ylim(0, 1)
     ax.axis("off")
     panel_title(ax, "C", "Coordinate → address → gain")
 
-    rows = [
-        (0.79, "1", "Global signal", "one value", "one sign or scalar", COLORS["scalar"]),
-        (0.58, "2", "Neuron ownership", r"$\delta_u$", "which neuron changes", COLORS["per_soma"]),
-        (0.37, "3", "Within-tree address", r"$\delta_{u,k}$", "which subtree changes", MORPH),
-        (0.16, "4", "Route gain", r"$\widetilde\alpha_n\delta_{u,k}$", "how strongly credit arrives", COLORS["highlight"]),
-    ]
-    for y, number, label, equation, detail, color in rows:
-        card = FancyBboxPatch(
-            (0.06, y - 0.072),
-            0.88,
-            0.144,
-            boxstyle="round,pad=0.010,rounding_size=0.025",
-            facecolor="white",
-            edgecolor=color,
-            linewidth=1.1,
-            zorder=2,
-        )
-        ax.add_patch(card)
-        ax.add_patch(Circle((0.125, y), 0.033, facecolor=color, edgecolor="none", zorder=3))
-        ax.text(0.125, y, number, ha="center", va="center", color="white",
-                fontsize=PT_SMALL, zorder=4)
-        # Label and equation share the top line; the caption has the bottom
-        # line to itself, so neither line can run into the other's text.
-        ax.text(0.19, y + 0.030, label, ha="left", va="center", color=color,
-                fontsize=PT_SMALL, zorder=4)
-        ax.text(0.19, y - 0.033, detail, ha="left", va="center", color=COLORS["mute"],
-                fontsize=PT_SMALL, zorder=4)
-        ax.text(0.905, y + 0.030, equation, ha="right", va="center", color=COLORS["ink"],
-                fontsize=PT_ANNOT, zorder=4)
+    ax.text(0.50, 0.86,
+            r"$\partial\mathcal{L}/\partial g_i=e_i\;\delta_u\;\widetilde\alpha_n$",
+            ha="center", va="center", fontsize=PT_ANNOT, color=COLORS["ink"])
 
-    for y0, y1 in [(0.703, 0.667), (0.493, 0.457), (0.283, 0.247)]:
-        ax.add_patch(
-            FancyArrowPatch(
-                (0.50, y0), (0.50, y1), arrowstyle="-|>", mutation_scale=7,
-                linewidth=0.85, color=COLORS["mute"], zorder=5,
-            )
-        )
+    x_origins = (0.00, 0.34, 0.68)
+    trees = [draw_compact_tree(ax, x, 0.50, scale=0.29,
+                               color=COLORS["grid"])
+             for x in x_origins]
 
-    ax.text(
-        0.50,
-        0.012,
-        "Exact compartment error: information ceiling",
-        ha="center",
-        va="bottom",
-        fontsize=PT_SMALL,
-        color=COLORS["mute"],
+    # Coordinate: one neuronal value reaches the soma without resolving the
+    # interior of the arbor.
+    coordinate = trees[0]
+    ax.add_patch(FancyArrowPatch((0.31, 0.50),
+                                 (coordinate["soma"][0] + 0.018, 0.50),
+                                 arrowstyle="-|>", mutation_scale=7,
+                                 linewidth=1.0, color=COLORS["exc"]))
+    ax.text(0.292, 0.60, r"$\delta_u$", ha="center", va="center",
+            fontsize=PT_ANNOT, color=COLORS["exc"])
+
+    def route(nodes, names, color, width):
+        for left, right in zip(names[:-1], names[1:]):
+            ax.plot([nodes[left][0], nodes[right][0]],
+                    [nodes[left][1], nodes[right][1]],
+                    color=color, lw=width, solid_capstyle="round", zorder=5)
+
+    # Address: independently colored descendant domains instantiate the
+    # workshop's within-tree routing variable.
+    addressed = trees[1]
+    for leaf in ("d1", "d2"):
+        route(addressed, (leaf, "m1"), MORPH, 2.4)
+    for leaf in ("d3", "d4"):
+        route(addressed, (leaf, "m2"), COLORS["oracle"], 2.4)
+    ax.text(addressed["d1"][0] - 0.008, addressed["d1"][1] + 0.075,
+            r"$\delta_{u,1}$", ha="center", va="center", fontsize=PT_SMALL,
+            color=MORPH)
+    ax.text(addressed["d4"][0] - 0.008, addressed["d4"][1] - 0.075,
+            r"$\delta_{u,2}$", ha="center", va="center", fontsize=PT_SMALL,
+            color=COLORS["oracle"])
+
+    # Gain: the address remains, while line width makes route-specific
+    # conductance gain visible at a glance.
+    gained = trees[2]
+    route(gained, ("d1", "m1", "p", "soma"), MORPH, 3.4)
+    route(gained, ("d4", "m2", "p"), COLORS["oracle"], 1.25)
+    ax.add_patch(Circle(gained["m1"], 0.030, fc="white", ec=MORPH,
+                        lw=1.2, zorder=7))
+    ax.text(gained["m1"][0] + 0.002, gained["m1"][1] + 0.078,
+            r"$\widetilde\alpha_n$", ha="center", va="center",
+            fontsize=PT_SMALL, color=MORPH)
+
+    for left, right in ((0.294, 0.337), (0.634, 0.677)):
+        ax.add_patch(FancyArrowPatch((left, 0.50), (right, 0.50),
+                                     arrowstyle="-|>", mutation_scale=7,
+                                     linewidth=0.8, color=COLORS["mute"], zorder=8))
+
+    labels = (
+        (0.145, "coordinate", "which neuron"),
+        (0.485, "address", "which subtree"),
+        (0.825, "gain", "how strongly"),
     )
+    for x, label, detail in labels:
+        ax.text(x, 0.225, label, ha="center", va="center", fontsize=PT_ANNOT,
+                color=COLORS["ink"])
+        ax.text(x, 0.155, detail, ha="center", va="center", fontsize=PT_SMALL,
+                color=COLORS["mute"])
+
+    ax.text(0.50, 0.025, "Tree contribution after neuronal credit arrives",
+            ha="center", va="bottom", fontsize=PT_SMALL, color=COLORS["mute"])
 
 
 def _panel_general_adjoint(ax: plt.Axes) -> None:

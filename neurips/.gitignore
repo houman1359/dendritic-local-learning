@@ -40,6 +40,11 @@ _minted-*/
 outputs/
 local_sweep_runs/
 submission/
+.fusion_scratch/
+.papercheck/
+logs/
+rebbutal/
+slurm_jobs/
 
 # Python cache
 __pycache__/

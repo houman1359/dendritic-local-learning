@@ -3,15 +3,15 @@ PDFLATEX ?= pdflatex
 BIBTEX ?= bibtex
 PDFUNITE ?= pdfunite
 
-.PHONY: paper supplement combined theory figures canonical-figures presentation-pdf refresh-regular-tree-source test reproducibility software-release format-audit citation-audit overlap-audit submission-bundle overleaf-bundle audit clean clean-aux
+.PHONY: paper supplement combined figures canonical-figures presentation-pdf refresh-regular-tree-source test reproducibility software-release format-audit citation-audit overlap-audit submission-bundle overleaf-bundle audit clean clean-aux
 
-paper: canonical-figures
+paper:
 	$(PDFLATEX) -interaction=nonstopmode -halt-on-error main.tex
 	$(BIBTEX) main
 	$(PDFLATEX) -interaction=nonstopmode -halt-on-error main.tex
 	$(PDFLATEX) -interaction=nonstopmode -halt-on-error main.tex
 
-supplement: canonical-figures
+supplement:
 	cd supplementary && $(PDFLATEX) -interaction=nonstopmode -halt-on-error supplementary.tex
 	cd supplementary && $(BIBTEX) supplementary
 	cd supplementary && $(PDFLATEX) -interaction=nonstopmode -halt-on-error supplementary.tex
@@ -19,12 +19,6 @@ supplement: canonical-figures
 
 combined: paper supplement
 	$(PDFUNITE) main.pdf supplementary/supplementary.pdf main_with_supplementary.pdf
-
-theory:
-	cd theory-paper && $(PDFLATEX) -interaction=nonstopmode -halt-on-error main.tex
-	cd theory-paper && $(BIBTEX) main
-	cd theory-paper && $(PDFLATEX) -interaction=nonstopmode -halt-on-error main.tex
-	cd theory-paper && $(PDFLATEX) -interaction=nonstopmode -halt-on-error main.tex
 
 presentation-pdf:
 	$(PYTHON) ../../presentation/credit_assignment/build_pdf_presentation.py
@@ -95,16 +89,14 @@ submission-bundle: combined
 overleaf-bundle: combined
 	$(PYTHON) scripts/build_overleaf_bundle.py --force
 
-audit: paper supplement theory test reproducibility format-audit citation-audit overlap-audit
+audit: paper supplement test reproducibility format-audit citation-audit overlap-audit
 	$(PYTHON) scripts/audit_figure_style_lineage.py
 	$(PYTHON) scripts/audit_submission.py --strict-pending
 
 clean-aux:
 	rm -f main.aux main.blg main.log main.out main.toc
 	rm -f supplementary/supplementary.aux supplementary/supplementary.blg supplementary/supplementary.log supplementary/supplementary.out supplementary/supplementary.toc
-	rm -f theory-paper/main.aux theory-paper/main.blg theory-paper/main.log theory-paper/main.out theory-paper/main.toc
 
 clean: clean-aux
 	rm -f main.bbl main.pdf main_with_supplementary.pdf
 	rm -f supplementary/supplementary.bbl supplementary/supplementary.pdf
-	rm -f theory-paper/main.bbl theory-paper/main.pdf

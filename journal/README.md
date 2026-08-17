@@ -104,7 +104,6 @@ make paper
 make supplement
 make combined
 make overleaf-bundle
-make theory
 make reproducibility
 make software-release
 make audit

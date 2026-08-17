@@ -101,7 +101,7 @@ def main() -> int:
         "Checked against the official Article guidance retrieved on 9 August 2026.",
         "The narrative count is mechanical and excludes figure/table environments,",
         "displayed mathematics, citations and cross-references; the portal count may differ.",
-        f"The {main_figures} numbered figures occupy {figure_environments} figure environments; ",
+        f"The {main_figures} numbered figures occupy {figure_environments} figure environments;",
         f"{continued_figures} environments are continued multi-panel displays.",
         "",
         "| Item | Current | Guidance | Status |",

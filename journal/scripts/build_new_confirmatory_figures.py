@@ -41,7 +41,7 @@ from journal_style import (
 ROOT = Path(__file__).resolve().parents[1]
 SUBTREE = ROOT / "source_data" / "trained_subtree_address_full_factorial"
 ACTIVE = ROOT / "source_data" / "focal_selectivity_active_ensemble"
-FULL_TREE = ROOT / "analysis" / "reconstructed_tree_all_scans" / "output"
+FULL_TREE = ROOT / "source_data" / "fulltree_boundary" / "output"
 FIGURES = ROOT / "figures" / "generated"
 
 # One palette slot + one marker per feedback family, shared by panels B and F

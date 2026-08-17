@@ -4,6 +4,8 @@ import importlib.util
 import sys
 from pathlib import Path
 
+import pytest
+
 
 JOURNAL = Path(__file__).resolve().parents[1]
 SCRIPT = JOURNAL / "scripts" / "export_figure2d_seed_data.py"
@@ -15,6 +17,14 @@ SPEC.loader.exec_module(EXPORT)
 
 
 def test_archived_figure2d_runs_reproduce_frozen_summaries() -> None:
+    if not (
+        EXPORT.DEFAULT_FACTORIAL_RESULTS.is_dir()
+        and EXPORT.DEFAULT_BACKPROP_RESULTS.is_dir()
+    ):
+        pytest.skip(
+            "optional machine-local NeurIPS run archive is not mounted; "
+            "tracked publication tables are validated by the source-data tests"
+        )
     rows = EXPORT.extract_rows(
         EXPORT.DEFAULT_FACTORIAL_RESULTS,
         EXPORT.DEFAULT_BACKPROP_RESULTS,
