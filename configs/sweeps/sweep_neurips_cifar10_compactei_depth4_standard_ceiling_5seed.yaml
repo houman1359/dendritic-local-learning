@@ -1,0 +1,36 @@
+output_dir: "/n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/dendritic-local-learning/local_sweep_runs"
+
+outputs:
+  run_name: "cifar10_compactei_depth4_standard_ceiling_5seed"
+
+slurm_config:
+  account: "kempner_dev"
+  partition: "kempner_h100_priority3"
+  time: "24:00:00"
+  nodes: 1
+  ntasks_per_node: 1
+  gpus_per_node: 1
+  cpus_per_task: 8
+  mem: 64GB
+  max_concurrent_jobs: 64
+  modules_to_load: []
+  conda_env_path: ""
+  training_script: "src/dendritic_modeling/scripts/training/train_experiments.py"
+
+experiment_settings:
+  seeds_per_condition: 5
+  base_seed: 42
+  use_array_jobs: true
+
+configs:
+  - name: "cifar10_additive_standard"
+    path: "drafts/dendritic-local-learning/configs/cifar10_additive_compactei_depth4_standard.yaml"
+    overrides:
+      outputs:
+        run_name: "cifar10_additive_standard"
+
+  - name: "cifar10_shunting_standard"
+    path: "drafts/dendritic-local-learning/configs/cifar10_shunting_compactei_depth4_standard.yaml"
+    overrides:
+      outputs:
+        run_name: "cifar10_shunting_standard"

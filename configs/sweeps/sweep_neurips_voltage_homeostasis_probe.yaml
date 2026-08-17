@@ -1,0 +1,166 @@
+output_dir: "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/sweep_runs"
+
+outputs:
+  run_name: "sweep_neurips_voltage_homeostasis_probe"
+
+slurm_config:
+  account: "kempner_dev"
+  partition: "kempner_h100_priority3"
+  time: "18:00:00"
+  nodes: 1
+  ntasks_per_node: 1
+  gpus_per_node: 1
+  cpus_per_task: 8
+  mem: 64GB
+  max_concurrent_jobs: 64
+  modules_to_load: []
+  conda_env_path: ""
+  training_script: "src/dendritic_modeling/scripts/training/train_experiments.py"
+
+experiment_settings:
+  seeds_per_condition: 3
+  base_seed: 42
+  use_array_jobs: true
+
+configs:
+  - name: "mnist_modulo10_shunting_localca_bpdec"
+    path: "drafts/dendritic-local-learning/configs/mnist_modulo10_flat_shunting_localca.yaml"
+    overrides:
+      training:
+        main:
+          learning_strategy_config:
+            decoder_update_mode: "backprop"
+      outputs:
+        run_name: "mnist_modulo10_shunting_localca_bpdec"
+  - name: "mnist_modulo10_shunting_localca_vhomeo_w002"
+    path: "drafts/dendritic-local-learning/configs/mnist_modulo10_flat_shunting_localca.yaml"
+    overrides:
+      training:
+        main:
+          learning_strategy_config:
+            decoder_update_mode: "backprop"
+            voltage_homeostasis:
+              enabled: true
+              weight: 0.02
+              target_voltage: 0.5
+      outputs:
+        run_name: "mnist_modulo10_shunting_localca_vhomeo_w002"
+  - name: "mnist_modulo10_shunting_localca_vhomeo_w005"
+    path: "drafts/dendritic-local-learning/configs/mnist_modulo10_flat_shunting_localca.yaml"
+    overrides:
+      training:
+        main:
+          learning_strategy_config:
+            decoder_update_mode: "backprop"
+            voltage_homeostasis:
+              enabled: true
+              weight: 0.05
+              target_voltage: 0.5
+      outputs:
+        run_name: "mnist_modulo10_shunting_localca_vhomeo_w005"
+  - name: "mnist_modulo10_additive_localca_bpdec"
+    path: "drafts/dendritic-local-learning/configs/mnist_modulo10_flat_additive_localca.yaml"
+    overrides:
+      training:
+        main:
+          learning_strategy_config:
+            decoder_update_mode: "backprop"
+      outputs:
+        run_name: "mnist_modulo10_additive_localca_bpdec"
+  - name: "mnist_modulo10_additive_localca_vhomeo_w002"
+    path: "drafts/dendritic-local-learning/configs/mnist_modulo10_flat_additive_localca.yaml"
+    overrides:
+      training:
+        main:
+          learning_strategy_config:
+            decoder_update_mode: "backprop"
+            voltage_homeostasis:
+              enabled: true
+              weight: 0.02
+              target_voltage: 0.5
+      outputs:
+        run_name: "mnist_modulo10_additive_localca_vhomeo_w002"
+  - name: "mnist_modulo10_additive_localca_vhomeo_w005"
+    path: "drafts/dendritic-local-learning/configs/mnist_modulo10_flat_additive_localca.yaml"
+    overrides:
+      training:
+        main:
+          learning_strategy_config:
+            decoder_update_mode: "backprop"
+            voltage_homeostasis:
+              enabled: true
+              weight: 0.05
+              target_voltage: 0.5
+      outputs:
+        run_name: "mnist_modulo10_additive_localca_vhomeo_w005"
+
+  - name: "cifar10_deep333_ie10_shunting_localca_bpdec"
+    path: "drafts/dendritic-local-learning/configs/cifar10_shunting_deep333_ie10_localca_strong.yaml"
+    overrides:
+      training:
+        main:
+          learning_strategy_config:
+            decoder_update_mode: "backprop"
+      outputs:
+        run_name: "cifar10_deep333_ie10_shunting_localca_bpdec"
+  - name: "cifar10_deep333_ie10_shunting_localca_vhomeo_w002"
+    path: "drafts/dendritic-local-learning/configs/cifar10_shunting_deep333_ie10_localca_strong.yaml"
+    overrides:
+      training:
+        main:
+          learning_strategy_config:
+            decoder_update_mode: "backprop"
+            voltage_homeostasis:
+              enabled: true
+              weight: 0.02
+              target_voltage: 0.5
+      outputs:
+        run_name: "cifar10_deep333_ie10_shunting_localca_vhomeo_w002"
+  - name: "cifar10_deep333_ie10_shunting_localca_vhomeo_w005"
+    path: "drafts/dendritic-local-learning/configs/cifar10_shunting_deep333_ie10_localca_strong.yaml"
+    overrides:
+      training:
+        main:
+          learning_strategy_config:
+            decoder_update_mode: "backprop"
+            voltage_homeostasis:
+              enabled: true
+              weight: 0.05
+              target_voltage: 0.5
+      outputs:
+        run_name: "cifar10_deep333_ie10_shunting_localca_vhomeo_w005"
+  - name: "cifar10_deep333_ie10_additive_localca_bpdec"
+    path: "drafts/dendritic-local-learning/configs/cifar10_additive_deep333_ie10_localca_strong.yaml"
+    overrides:
+      training:
+        main:
+          learning_strategy_config:
+            decoder_update_mode: "backprop"
+      outputs:
+        run_name: "cifar10_deep333_ie10_additive_localca_bpdec"
+  - name: "cifar10_deep333_ie10_additive_localca_vhomeo_w002"
+    path: "drafts/dendritic-local-learning/configs/cifar10_additive_deep333_ie10_localca_strong.yaml"
+    overrides:
+      training:
+        main:
+          learning_strategy_config:
+            decoder_update_mode: "backprop"
+            voltage_homeostasis:
+              enabled: true
+              weight: 0.02
+              target_voltage: 0.5
+      outputs:
+        run_name: "cifar10_deep333_ie10_additive_localca_vhomeo_w002"
+  - name: "cifar10_deep333_ie10_additive_localca_vhomeo_w005"
+    path: "drafts/dendritic-local-learning/configs/cifar10_additive_deep333_ie10_localca_strong.yaml"
+    overrides:
+      training:
+        main:
+          learning_strategy_config:
+            decoder_update_mode: "backprop"
+            voltage_homeostasis:
+              enabled: true
+              weight: 0.05
+              target_voltage: 0.5
+      outputs:
+        run_name: "cifar10_deep333_ie10_additive_localca_vhomeo_w005"
