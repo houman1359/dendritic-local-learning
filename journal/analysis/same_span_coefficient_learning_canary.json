@@ -1,0 +1,14 @@
+{
+  "phase": "artifact_only_canary",
+  "config_sha256": "60723a9100efe05e927002c59b3a396c7d3337ed3894ffc65306dfd9d484ce32",
+  "script_sha256": "537d420389e4178bf84c9b9415952c987b4b49142f9eddfe0d65c5b3be0aac9c",
+  "reference_sha256": "d0d91c1e499340db57aab09bf94e476b717310c686ba312552182736cd310ad5",
+  "numerical_gates": {
+    "maximum_projector_difference": 9.43689570931383e-16,
+    "maximum_initial_address_residual": 8.658981029965012e-31,
+    "maximum_preconditioned_trajectory_difference": 6.661338147750939e-16,
+    "maximum_haar_vanilla_vs_preconditioned_difference": 1.1102230246251565e-16,
+    "passed": true
+  },
+  "outcomes_are_not_confirmatory": true
+}

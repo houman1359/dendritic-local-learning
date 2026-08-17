@@ -1,0 +1,12 @@
+{
+  "phase": "canary",
+  "config_sha256": "04abd934f89ceaf6361ed510b61997a4eb1c7e20279993c1e8516a6ea304eb10",
+  "script_sha256": "42ee4898b0e16df304e828c5bc5280d5d62bbcf096f0fe594a2923fbcffc7481",
+  "artifact_and_numerical_gates": {
+    "rows": 6,
+    "minimum_matrix_eigenvalue": 1.9580986630715724,
+    "maximum_soma_state_residual": 0.0,
+    "passed": true
+  },
+  "outcomes_are_not_confirmatory": true
+}

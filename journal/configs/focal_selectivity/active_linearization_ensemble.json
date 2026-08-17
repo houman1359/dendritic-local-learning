@@ -1,0 +1,48 @@
+{
+  "study": "focal_selectivity_active_linearization_ensemble",
+  "status": "frozen_before_canary_outcomes",
+  "frozen_date": "2026-08-10",
+  "cohort": "original_eight",
+  "axial_resistivity_ohm_cm": 150.0,
+  "membrane_resistance_ohm_cm2": 1000.0,
+  "background_leak_multiplier": 1.0,
+  "background_reversal": 0.0,
+  "e_scale": 0.35,
+  "i_scale": 0.35,
+  "excitatory_reversal": 1.0,
+  "inhibitory_reversal": -0.2,
+  "accepted_draws_per_cell": 64,
+  "maximum_attempts_per_cell": 256,
+  "channel_global_log_sd": 0.35,
+  "channel_spatial_log_sd": 0.25,
+  "channels": {
+    "Na": {"reference": "leak", "median_scale": 0.06, "reversal": 1.70, "v_half": 0.43, "slope": 0.085, "power": 3},
+    "K": {"reference": "leak", "median_scale": 0.10, "reversal": -0.30, "v_half": 0.50, "slope": 0.14, "power": 4},
+    "Ca": {"reference": "leak", "median_scale": 0.025, "reversal": 2.40, "v_half": 0.57, "slope": 0.10, "power": 2},
+    "HCN": {"reference": "leak", "median_scale": 0.05, "reversal": 0.50, "v_half": -0.21, "slope": -0.12, "power": 1},
+    "NMDA": {"reference": "excitatory", "median_scale": 0.15, "reversal": 1.0, "v_half": 0.20, "slope": 0.16, "power": 1}
+  },
+  "dose_relative_to_local_input_conductance": [0.25, 1.0, 4.0],
+  "seed": 20260810,
+  "max_focal_sites_per_cell": 16,
+  "minimum_descendant_and_comparison_sites": 3,
+  "solver": {
+    "maximum_iterations": 100,
+    "residual_tolerance": 1e-10,
+    "minimum_jacobian_eigenvalue": 1e-8,
+    "minimum_voltage": -0.75,
+    "maximum_voltage": 1.75
+  },
+  "gates": {
+    "maximum_state_residual": 1e-8,
+    "maximum_soma_state_residual": 1e-10,
+    "minimum_acceptance_fraction": 0.25,
+    "minimum_accepted_draws_per_cell": 64
+  },
+  "analysis": {
+    "inferential_unit": "reconstructed_cell",
+    "channel_draws_are_nested_sensitivity_not_replicates": true,
+    "bootstrap_draws": 20000
+  },
+  "scope_boundary": "Active steady-state channel ensemble linearized around each accepted nonlinear equilibrium in eight reconstructed cells. Channel draws are nested sensitivity analyses, not biological replicates; the study is not a spiking or kinetic-channel simulation."
+}

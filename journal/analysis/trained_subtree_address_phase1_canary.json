@@ -1,0 +1,14 @@
+{
+  "phase": "canary",
+  "seed": 4099,
+  "config_sha256": "2c8784afd177bf5b70284d6ce366a9eea824f8ab3164c0ba5694395a21888467",
+  "script_sha256": "bfbd14e40a0fd98d664934be53519f8fe9ddf3f606ffae2bba8458471cc12900",
+  "artifact_and_nondegeneracy_gates": {
+    "neuron_shared_capture": 0.5058606757293361,
+    "correct_capture": 1.0,
+    "correct_test_accuracy": 0.81396484375,
+    "exact_bp_max_endpoint_difference": 0.0,
+    "passed": true
+  },
+  "outcomes_are_not_confirmatory": true
+}

@@ -1,0 +1,90 @@
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.run.xml
+*.synctex.gz
+*.toc
+*.nav
+*.snm
+*.vrb
+
+# Python and editor state
+__pycache__/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.DS_Store
+*.py[cod]
+*.swp
+*.swo
+*~
+
+# Environments, scheduler logs, and machine-local state
+.venv/
+venv/
+logs/
+slurm-*.out
+*.sbatch.out
+scripts/slurm_*.sh
+
+# Raw downloads, caches, and full training checkpoints. Compact, frozen
+# figure-level inputs belong in source_data/ and configs/ instead.
+external_data/
+reproduced_results/
+reproduction_runs/
+prospective_runs/
+*.pt
+*.pth
+*.ckpt
+*.h5
+*.hdf5
+*.nwb
+data/microns_expanded/
+data/microns_morphology_expanded/
+data/microns_v661_replication/
+
+# Internal audits and historical snapshots. Keep the root-level Markdown
+# evidence records, but not their generated work directories or montages.
+analysis/*/
+analysis/*.log
+analysis/*_stdout.json
+analysis/*_runtime.txt
+analysis/final_figure_montage.png
+analysis/*montage*.png
+analysis/prospective_*_audit.csv
+analysis/prospective_*_audit.md
+
+# Internal descriptive-name outputs are reproducible duplicates. Publication
+# assets with authoritative figure/panel names are tracked under figures/main,
+# figures/supplementary, and figures/components.
+figures/generated/
+figures/archive_superseded/
+
+# Raw experiment execution trees are large, machine-local records. The compact
+# analyzed tables required by the manuscript are tracked under source_data/.
+fashion_feedback_runs/
+nonlinear_physical_depth_runs/
+physical_alignment_dose_runs/
+point_dendrite_credit_runs/
+remaining_physical_experiment_runs/
+
+# Historical nested working copies are not part of the journal source tree.
+drafts/
+
+# Submission bundles are reproducible build products. Track the author-facing
+# cover letter/checklists, but not duplicate staging trees or ZIP archives.
+submission/archive_*/
+submission/archive/
+submission/nature_communications_bundle/
+submission/overleaf_project/
+submission/nature_source_data/
+submission/software_release/
+submission/bundle/
+submission/*.zip
+submission/*.zip.sha256

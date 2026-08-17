@@ -1,0 +1,57 @@
+Thank you for the careful review and for recognizing the factorization as an interesting contribution. Your two central concerns led to the most informative controls in the paper.
+
+Bottom line. Exact-gradient reconstruction verifies the factorization below 1.9e-7 relative error. With exact path transport, 3F reaches 97.18 to 97.21%, matching backpropagation at 97.03% and 5F at 97.12 to 97.20%. Exact compartment feedback is also unnecessary in the regular tree: one coordinate shared across each modeled neuron's 13 compartments raises 3F to 97.15% in shunting and 97.14% in additive networks, improving all 15 pairs. Feedback routing, not local eligibility, is the main bottleneck.
+
+1. Constrained feedback form
+
+We agree that an unconstrained rank-1 SVD is not equivalent to a uniform spatial broadcast. We have corrected both the terminology and the analysis.
+
+The implemented `per_soma` alias preserves the soma/core vector only when the dendritic-stage width matches it. Wider stages receive one scalar per example. We now call this operation matched-width/scalar-fallback feedback. It is neither a global scalar at every stage nor one soma coordinate repeated over that neuron's descendants.
+
+The requested constrained calculation confirms why this distinction matters. On dendritic compartments, after one optimal global rescaling, the implemented field captures only 2.3% of exact-error energy in shunting and 0.6% in additive checkpoints. There is no reliable cross-core ordering, so we no longer use unrestricted SVD or pooled field metrics to claim shunting-specific feedback compatibility. The SVD is retained only as a descriptive property of the exact error matrix.
+
+The constructive result is much stronger than the removed rank-1 interpretation. Repeating one soma coordinate over each modeled neuron's 13 compartments raises 3F MNIST accuracy from 90.75% to 97.15% in shunting and from 91.58% to 97.14% in additive networks. The paired gains are 6.40 and 5.56 percentage points, occur in all 15 pairs, and have two-sided signed-rank p=6.1e-5 in both architectures. At these checkpoints, substituting only the diagnostic field raises branch-gradient cosine from 0.007 to 0.667 and from 0.024 to 0.599, again in every pair. Thus a single coordinate per neuron, with ancestry supplying the spatial routing map, recovers almost all of the learning achieved by dense transported error.
+
+This directly answers the constrained-broadcast question: low rank alone is not sufficient, but a low-dimensional field with the correct neuron-indexed spatial basis is highly effective.
+
+2. Three-, four-, and five-factor rules
+
+The exact-transport factorial separates the theorem-derived rule from empirical preconditioning. Across five seeds, 3F reaches 97.21+/-0.14% with a backprop-updated decoder and 97.18+/-0.12% with a locally updated decoder, compared with matched backpropagation at 97.03+/-0.08%. The corresponding 5F values are 97.20+/-0.16% and 97.12+/-0.14%. Therefore, 5F is not required when the error factor in the theorem is supplied accurately.
+
+The neuron-wise experiment gives the biologically restricted intermediate result: 3F reaches 97.15% with one coordinate per modeled neuron rather than an independently specified error at every compartment.
+
+After matching feedback, decoder, optimizer, schedule, and effective parameter-group rates within the archived shunting cohort, 3F/4F/5F accuracy is 89.90/90.05/91.19% (three seeds, descriptive). The like-for-like 3F-to-5F difference is 1.29 points, not the apparent 30-point deficit from mixing configurations.
+
+For the requested cross-core control, a current-code 2x2 factorial crossed architecture and explicit initialization policy over 15 paired seeds. Under analytical initialization, shunting and additive 3F are identical at 90.92% (paired p=0.98). Under occupancy calibration, additive is modestly higher, 91.66% versus 90.99%, with an architecture-by-policy interaction. We therefore interpret cross-core 3F accuracy as operating-point-dependent rather than as a universal architecture ranking. We do not have a matched additive 4F/5F factorial and make no claim from an unmatched comparison.
+
+The gradient controls agree. An archived three-pair cohort has cosine 0.160 versus 0.030, while an independent five-seed cohort gives 0.155 versus 0.164. Identity transfer gives higher shunting direction but slightly higher additive accuracy. Learning-rate schedules are identical, and norm-matched one-step updates reduce held-out loss in every seed without a core ordering. Occupancy and identity controls do not fully match forward voltage distributions. Direction therefore depends on activation state, feedback identity, and transfer derivatives, so we make no universal architecture claim.
+
+The 5F residual term is a bounded predictability preconditioner, not statistical confidence. We now name and define it accordingly and separate it from 3F.
+
+3. What shunting contributes
+
+The exact theoretical result is a branch-selective credit-gain mechanism. For inhibitory conductance at compartment k,
+
+`d log(alpha_n) / d G_k^I = -R_k`
+
+for every descendant n whose route passes through k, with no such path effect on unrelated branches. Whether this compresses the field depends on where inhibition is placed; in log-gain form the sufficient condition is `2 Cov(z,beta) > Var(beta)`. We therefore do not claim that inhibition automatically minimizes rank.
+
+Positive signatures survive the stricter analysis. At N_I=5, path-gain CV is about 80% lower under shunting in all five pairs. Under restricted 5F, shunting is higher on MNIST (91.1 versus 89.4%), Fashion-MNIST (83.8 versus 83.1%), figure-ground MNIST (80.3 versus 78.7%), and compact CIFAR-10 (29.7 versus 25.5%). Exact transport raises shunting CIFAR-10 to 47.2%, close to its 49.5% backprop ceiling, while additive reaches 32.4%. Across one to four dendritic layers, shunting changes from 63.5 to 57.4%, while additive changes from 54.9 to 29.7%; under broadcast noise, shunting is stable through sigma=0.1 while additive reaches chance at sigma=1.0. These establish useful regimes, not universal dominance.
+
+The fixed-state intervention clarifies the mechanism at trained operating points. Removing inhibition only from backward resistance changes distal gain by 1.070x on MNIST and 1.281x in the higher-inhibition noise population, but changes branch cosine by less than 0.002. The diagnostic is sensitive to larger path interventions: setting local resistance to one gives cosine 0.948 with a 5.56x norm change, while omitting parent derivatives gives 0.385. Thus the observed learning effects involve inhibition's combined influence on forward voltage, local eligibility, and path gain. This is a quantitative mechanistic boundary, not evidence that conductance is irrelevant.
+
+4. Scope, geometry, and relation to prior work
+
+The exact product is derived for an arbitrary rooted feedforward tree, not only a symmetric tree. Path statistics depend on route depth and branch-specific conductances. In a directed acyclic graph the node error becomes a sum over parent paths; cycles require an adjoint or implicit gradient. All 40 depth-sweep checkpoints retain every nominal stage, with minimum stage-median coupling 0.716, excluding stage collapse as the explanation for the depth result.
+
+A differentiable active nonlinearity contributes its local derivative to the effective path gain. Identity-transfer and parametric-tanh controls show that the selected nonlinearity is not necessary for task competence, while calcium, spikes, and multi-state channels require temporal eligibility or adjoint extensions.
+
+Prior dendritic learning models posit apical teaching compartments, burst signals, or local targets. Our contribution is complementary and distinct: we derive the exact credit required by a conductance tree, identify its local and non-local factors, and measure which restricted feedback families recover it. Somatic error is assumed rather than biologically derived; apical, burst, plateau, and neuromodulatory signals are candidate carriers. The neuron-wise result sharpens the biological requirement from one error per compartment to one coordinate shared within a modeled neuron.
+
+5. Presentation
+
+The revision introduces the voltage equation before implementation conventions, defines all feedback modes, removes unresolved abbreviations, and rebuilds the figures without overlaps. Covariance is over examples after reducing non-batch coordinates; path-gain CV is over compartments within examples; SVD uses an examples-by-compartments matrix; gradient metrics compare matched parameter vectors. The main argument now follows one chain: exact factorization, feedback approximation, mechanism, learning, and biological predictions.
+
+The resulting claim is both stronger and more precise: dendritic gradients factor exactly into local eligibility and path-transported error; the 3F rule reaches backpropagation when feedback preserves the required structure; neuron-indexed routing captures most of this benefit with one coordinate per neuron; and shunting provides an exact, branch-selective mechanism for regulating credit whose learning benefit is regime-dependent.
+
+We hope these controls directly resolve the rank-1 and 3F concerns while preserving the conceptual contribution you identified.

@@ -1,0 +1,145 @@
+output_dir: "/n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/dendritic-local-learning/local_sweep_runs"
+
+slurm_config:
+  account: "kempner_dev"
+  partition: "kempner_h100_priority3"
+  time: "04:00:00"
+  nodes: 1
+  ntasks_per_node: 1
+  gpus_per_node: 1
+  cpus_per_task: 8
+  mem: 64GB
+  max_concurrent_jobs: 64
+  modules_to_load: []
+  conda_env_path: ""
+  training_script: "src/dendritic_modeling/scripts/training/train_experiments.py"
+
+experiment_settings:
+  seeds_per_condition: 1
+  base_seed: 42
+
+sweep_config:
+  model.core.type: ["point_mlp", "dendritic_additive", "dendritic_shunting"]
+  data.dataset_params.contextual_stream_gain_shift.test_gain_irrelevant: [1.0, 3.0, 10.0]
+
+base_config:
+  experiment:
+    seed: 42
+    train_valid_split: 0.8
+    enable_amp: false
+    enable_profiling: false
+    enable_hooks: true
+
+  data:
+    dataset_name: "contextual_stream_gain_shift"
+    base_dir: ""
+    processing:
+      flatten: true
+      normalize: false
+    dataset_params:
+      contextual_stream_gain_shift:
+        n_samples: 5000
+        stream_dim: 64
+        n_classes: 2
+        signal_strength: 0.35
+        relevant_noise_std: 0.08
+        irrelevant_noise_std: 0.18
+        train_gain_relevant_min: 0.9
+        train_gain_relevant_max: 1.1
+        train_gain_irrelevant_min: 0.8
+        train_gain_irrelevant_max: 1.2
+        test_gain_relevant: 1.0
+        test_gain_irrelevant: 1.0
+        ood_mode: "irrelevant"
+        context_signal_scale: 1.0
+
+  model:
+    task: "classification"
+    encoder:
+      type: "identity"
+      params:
+        input_dim: null
+    core:
+      type: "point_mlp"
+      architecture:
+        excitatory_layer_sizes: [128]
+        inhibitory_layer_sizes: []
+        excitatory_branch_factors: [2]
+        inhibitory_branch_factors: [1]
+      connectivity:
+        ee_synapses_per_branch_per_layer: [40]
+        ei_synapses_per_branch_per_layer: [0]
+        ie_synapses_per_branch_per_layer: [10]
+        ii_synapses_per_branch_per_layer: [0]
+      transfer:
+        input_mode: 1
+        independent_pathways: false
+        output_activation: null
+      morphology:
+        somatic_synapses: false
+        weight_transform: "softplus"
+      reactivation:
+        enabled: true
+        type: "param_tanh"
+        init_m: 1.5
+        init_b: 0.5
+    decoder:
+      type: "MLP"
+      params:
+        hidden_dims: []
+        activation: "relu"
+        output_dim: 2
+
+  training:
+    main:
+      strategy: "standard"
+      common:
+        epochs: 180
+        batch_size: 256
+        shuffle: true
+        loss_function: "cat_nll"
+        early_stopping: false
+        load_best_state_dict: true
+        plot_losses: false
+        suppress_prints: true
+        print_every: 10
+        use_amp: false
+        enable_nan_checking: false
+        enable_adaptive_clipping: false
+        weight_decay_rate: 0.0
+        weight_boosting: false
+        checkpointing: true
+        checkpoint_interval: 20
+        param_groups:
+          lr: 0.0015
+          split_params: true
+          topk_lr: 0.0015
+          blocklinear_lr: 0.0007
+          reactivation_lr: 0.0005
+          decoder_lr: 0.0015
+      optimizer:
+        name: "Adam"
+
+  analysis:
+    performance_analysis:
+      enabled: true
+      training: true
+      params:
+        accuracy: true
+        auc: false
+        categorical_loglikelihood: true
+        mse: false
+        cosine_similarity: false
+    information_analysis:
+      enabled: false
+      training: false
+    correlation_analysis:
+      enabled: false
+      training: false
+
+  wandb:
+    use_wandb: false
+
+  outputs:
+    run_name: "contextual_stream_gain_shift_standard_pilot"
+    results_dir: "outputs"

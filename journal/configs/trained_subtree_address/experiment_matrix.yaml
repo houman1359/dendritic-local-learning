@@ -1,0 +1,60 @@
+study: trained_subtree_address
+status: frozen_design_no_outcomes
+task:
+  family: context_dependent_credit_reversal
+  contexts: 2
+  input_streams: 2
+  assignment: sibling_subtrees
+  held_out_combinations: true
+  context_switch_evaluation: true
+  reject_if_neuron_coordinate_capture_exceeds: 0.90
+architectures:
+  - dendritic_tree
+  - point_neuron
+  - flat_compartment
+  - grouped_point_subunits
+  - degree_depth_matched_rewired_tree
+feedback_budgets: [1, 2, 4, 8]
+feedback_families:
+  - robust_scalar
+  - neuron_indexed_shared
+  - correct_ancestry_subtrees
+  - within_neuron_route_derangement
+  - depth_bins
+  - random_sparse_matched
+  - random_rank_k
+  - learned_rank_k_upper_bound
+  - exact_compartment_transport
+  - backpropagation
+matching_constraints:
+  forward_parameters: exact_or_report_residual
+  active_contacts: exact
+  input_coverage: audited
+  forward_nonlinearities: exact
+  feedback_channels: exact
+  feedback_nonzeros: exact_within_budget_family
+  decoder: identical
+  optimizer_and_schedule: identical
+  initialization: paired
+confirmatory:
+  paired_seeds: 10
+  canary_seeds: 1
+  strict_paper_mode: true
+  outcome_blind_freeze_required: true
+primary_endpoints:
+  - held_out_loss
+  - held_out_accuracy
+  - context_switch_forgetting
+  - eligibility_weighted_gradient_capture
+  - exact_gradient_cosine
+  - norm_matched_one_step_progress
+primary_contrasts:
+  - correct_ancestry_subtrees_minus_within_neuron_route_derangement
+  - correct_ancestry_subtrees_minus_best_matched_nonanatomical_control
+required_logs:
+  - mechanism_ledger
+  - scalar_replacement_rate
+  - fallback_count
+  - parameter_and_contact_budget
+  - feedback_channel_and_nonzero_budget
+  - source_and_environment_hashes

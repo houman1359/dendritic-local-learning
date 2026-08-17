@@ -1,21 +1,22 @@
 # Dendritic local-learning papers
 
-This directory keeps the conference and journal versions together while
-preserving them as separate working projects:
+This repository keeps the conference and journal versions together as
+separate working projects:
 
 - `neurips/` contains the submitted NeurIPS project and its rebuttal history.
-- `journal/` contains the active journal extension and its independent Git
-  history.
+- `journal/` contains the active journal extension, including its manuscript,
+  figure generators, canonical figures, compact source data and submission
+  checks.
 
 Work on the extension from `journal/`. Its inherited NeurIPS panels, source
 tables, generator snapshots, and shared plotting style are frozen and audited,
 so the two versions can be compared without silently redrawing the conference
 figures.
 
-The outer Git repository is the original NeurIPS repository. The journal
-directory remains an embedded, independent Git repository with its existing
-`local-learning-journal` remote. No histories were merged by this filesystem
-reorganization.
+The repository originated with the NeurIPS project. The journal directory is
+now tracked directly here so a clone contains both complete paper projects and
+their comparison/audit material. The journal's earlier independent history is
+retained in the legacy `local-learning-journal` repository.
 
 ## Common commands
 

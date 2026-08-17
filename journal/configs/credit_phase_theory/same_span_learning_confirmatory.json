@@ -1,0 +1,38 @@
+{
+  "study": "same_span_noisy_coefficient_learning",
+  "status": "frozen_before_canary_outcomes",
+  "frozen_date": "2026-08-11",
+  "canary_seeds": [9098, 9099],
+  "confirmatory_seeds": [
+    9100, 9101, 9102, 9103, 9104, 9105, 9106, 9107, 9108, 9109,
+    9110, 9111, 9112, 9113, 9114, 9115, 9116, 9117, 9118, 9119,
+    9120, 9121, 9122, 9123, 9124, 9125, 9126, 9127, 9128, 9129,
+    9130, 9131, 9132, 9133, 9134, 9135, 9136, 9137, 9138, 9139,
+    9140, 9141, 9142, 9143, 9144, 9145, 9146, 9147, 9148, 9149
+  ],
+  "n_leaves": 16,
+  "route_depth": 3,
+  "iterations": 80,
+  "checkpoints": [1, 5, 20, 80],
+  "effective_sample_sizes": [4, 16, 64, 256],
+  "observation_noise_sd": 2.0,
+  "normalized_step_fraction": 0.2,
+  "scaled_nested_log_range": 3.0,
+  "parameterizations": [
+    "tree_haar",
+    "raw_nested_indicators",
+    "static_gain_scaled_nested"
+  ],
+  "optimizers": ["vanilla_local", "gram_preconditioned_control"],
+  "analysis": {
+    "bootstrap_draws": 20000,
+    "paired_unit": "independent target-and-noise seed"
+  },
+  "gates": {
+    "maximum_projector_difference": 1e-12,
+    "maximum_initial_address_residual": 1e-12,
+    "maximum_preconditioned_trajectory_difference": 1e-11,
+    "maximum_haar_vanilla_vs_preconditioned_difference": 1e-11
+  },
+  "scope_boundary": "This rate-based experiment holds route span, target, noise, iteration count and normalized stability step fixed. It tests finite-time coefficient estimation and conditioning, not a new representational span, a biological implementation of Gram preconditioning, or nonlinear forward dendritic computation."
+}

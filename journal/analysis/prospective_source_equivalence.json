@@ -1,0 +1,124 @@
+{
+  "accepted_frozen_identity_sha256": [
+    "6aae75198e989fc9d6451e62a2375fc2e1dd8b93e9d25aa82f2f64018ae9ad2f",
+    "cf5eb4919087ba4b7e653812e1d0147ff427080edd88b1685ae471467e14ab86",
+    "e3b240823f51d92e1c7243329e03d58b1a963c9265052c302596447b7af85d81"
+  ],
+  "configuration_scope": {
+    "architecture_types": [
+      "dendritic_additive",
+      "dendritic_shunting"
+    ],
+    "config_count": 1900,
+    "indexed_K_python_types": [
+      "int"
+    ],
+    "indexed_config_count": 680,
+    "indexed_output_chunk_size_python_types": [
+      "int"
+    ],
+    "scheduler_profiles": [
+      "kempner_dev_requeue"
+    ]
+  },
+  "created_utc": "2026-08-05T02:50:18.678890+00:00",
+  "current_source_exceptions": {
+    "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/synapse/indexed_sparse.py": {
+      "current_sha256": "735ba525cffd25e1053844398103eadf96eb134b54ff92176ae90b4c14db19c6",
+      "frozen_sha256": "ca3599140e4fab2bdf947d8d777e5a213dec5afde52b3a3d53232dab54530b67",
+      "normalized_sha256": "ca3599140e4fab2bdf947d8d777e5a213dec5afde52b3a3d53232dab54530b67"
+    },
+    "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/synapse/spatial_morphology.py": {
+      "current_sha256": "183c91ca3d96f6da6e5f6ab0bdcb12f38bf7876bf01ca16be9e19bc7560cdb46",
+      "frozen_sha256": "94524bbc4fd814bc1ff4b4db6c97d880be240e45298d5cd4afc175a90a203d98",
+      "normalized_sha256": "94524bbc4fd814bc1ff4b4db6c97d880be240e45298d5cd4afc175a90a203d98"
+    },
+    "repo:src/dendritic_modeling/networks/architectures/factory.py": {
+      "current_sha256": "6b25b77d6fcb7ddd1ae7faa0880bf0a7e392ad19b90770f73db5ff746419f5f1",
+      "frozen_sha256": "1345a7096d33ec72508947ff4e5c54893e15460728a3deb38b92a8e74a4a8aab",
+      "normalized_sha256": "1345a7096d33ec72508947ff4e5c54893e15460728a3deb38b92a8e74a4a8aab"
+    },
+    "repo:src/dendritic_modeling/scripts/sweeps/control_plane.py": {
+      "current_sha256": "d20cd2a4af14df5fc95163f0b544ab591c555443ee4063f9a249a0ffa0d22f60",
+      "frozen_sha256": "1231fcc8ee8f20b7fe631c3980eebb590fa2c3093d1211e85218cf1eb3261800",
+      "normalized_sha256": "1231fcc8ee8f20b7fe631c3980eebb590fa2c3093d1211e85218cf1eb3261800"
+    }
+  },
+  "interpretation": "The factory change only registers unused Legendre-memory architectures. The indexed-sparse change only validates integer-valued K and chunk-size arguments that are already Python integers in every audited configuration. The spatial-morphology change only exports a helper used by recurrent architectures absent from the audited configurations. The control-plane change only registers an RTX scheduler profile that no frozen run selected. After removing those exact inactive changes, each file matches its frozen SHA-256 byte for byte.",
+  "run_directories": [
+    "prospective_runs/journal_canary_ancestry_routing_mnist_additive_local3f_20260802184444",
+    "prospective_runs/journal_canary_ancestry_routing_mnist_shunting_local3f_20260802184445",
+    "prospective_runs/journal_canary_ancestry_routing_noise_additive_local3f_20260802184446",
+    "prospective_runs/journal_canary_ancestry_routing_noise_shunting_local3f_20260802184448",
+    "prospective_runs/journal_canary_fixed_budget_depth_d1_16_additive_backprop_20260802190604",
+    "prospective_runs/journal_canary_fixed_budget_depth_d1_16_additive_local3f_20260802190414",
+    "prospective_runs/journal_canary_fixed_budget_depth_d1_16_shunting_backprop_20260802190605",
+    "prospective_runs/journal_canary_fixed_budget_depth_d1_16_shunting_local3f_20260802190415",
+    "prospective_runs/journal_canary_fixed_budget_depth_d2_4x4_additive_backprop_20260802190623",
+    "prospective_runs/journal_canary_fixed_budget_depth_d2_4x4_additive_local3f_20260802190416",
+    "prospective_runs/journal_canary_fixed_budget_depth_d2_4x4_shunting_backprop_20260802190624",
+    "prospective_runs/journal_canary_fixed_budget_depth_d2_4x4_shunting_local3f_20260802190417",
+    "prospective_runs/journal_canary_fixed_budget_depth_d3_2x2x4_additive_backprop_20260802190625",
+    "prospective_runs/journal_canary_fixed_budget_depth_d3_2x2x4_additive_local3f_20260802190421",
+    "prospective_runs/journal_canary_fixed_budget_depth_d3_2x2x4_shunting_backprop_20260802190627",
+    "prospective_runs/journal_canary_fixed_budget_depth_d3_2x2x4_shunting_local3f_20260802190425",
+    "prospective_runs/journal_canary_fixed_budget_depth_d4_2x2x2x2_additive_backprop_20260802190609",
+    "prospective_runs/journal_canary_fixed_budget_depth_d4_2x2x2x2_additive_local3f_20260802190426",
+    "prospective_runs/journal_canary_fixed_budget_depth_d4_2x2x2x2_shunting_backprop_20260802190612",
+    "prospective_runs/journal_canary_fixed_budget_depth_d4_2x2x2x2_shunting_local3f_20260802190428",
+    "prospective_runs/journal_canary_inhibition_dose_noise_additive_backprop_20260802184449",
+    "prospective_runs/journal_canary_inhibition_dose_noise_additive_local3f_20260802184450",
+    "prospective_runs/journal_canary_inhibition_dose_noise_shunting_backprop_20260802184451",
+    "prospective_runs/journal_canary_inhibition_dose_noise_shunting_local3f_20260802184452",
+    "prospective_runs/journal_canary_spatial_topology_mnist_additive_backprop_20260802184509",
+    "prospective_runs/journal_canary_spatial_topology_mnist_additive_local3f_20260802184453",
+    "prospective_runs/journal_canary_spatial_topology_mnist_shunting_backprop_20260802184510",
+    "prospective_runs/journal_canary_spatial_topology_mnist_shunting_local3f_20260802184454",
+    "prospective_runs/journal_canary_spatial_topology_noise_additive_backprop_20260802184512",
+    "prospective_runs/journal_canary_spatial_topology_noise_additive_local3f_20260802184455",
+    "prospective_runs/journal_canary_spatial_topology_noise_shunting_backprop_20260802184513",
+    "prospective_runs/journal_canary_spatial_topology_noise_shunting_local3f_20260802184457",
+    "prospective_runs/journal_confirmatory_ancestry_routing_mnist_additive_local3f_20260803232858",
+    "prospective_runs/journal_confirmatory_ancestry_routing_mnist_shunting_local3f_20260803232906",
+    "prospective_runs/journal_confirmatory_ancestry_routing_noise_additive_local3f_20260803232913",
+    "prospective_runs/journal_confirmatory_ancestry_routing_noise_shunting_local3f_20260803232920",
+    "prospective_runs/journal_confirmatory_fixed_budget_depth_d1_16_additive_backprop_20260803233113",
+    "prospective_runs/journal_confirmatory_fixed_budget_depth_d1_16_additive_local3f_20260803233047",
+    "prospective_runs/journal_confirmatory_fixed_budget_depth_d1_16_shunting_backprop_20260803233115",
+    "prospective_runs/journal_confirmatory_fixed_budget_depth_d1_16_shunting_local3f_20260803233052",
+    "prospective_runs/journal_confirmatory_fixed_budget_depth_d2_4x4_additive_backprop_20260803233121",
+    "prospective_runs/journal_confirmatory_fixed_budget_depth_d2_4x4_additive_local3f_20260803233057",
+    "prospective_runs/journal_confirmatory_fixed_budget_depth_d2_4x4_shunting_backprop_20260803233123",
+    "prospective_runs/journal_confirmatory_fixed_budget_depth_d2_4x4_shunting_local3f_20260803233100",
+    "prospective_runs/journal_confirmatory_fixed_budget_depth_d3_2x2x4_additive_backprop_20260803233125",
+    "prospective_runs/journal_confirmatory_fixed_budget_depth_d3_2x2x4_additive_local3f_20260803233102",
+    "prospective_runs/journal_confirmatory_fixed_budget_depth_d3_2x2x4_shunting_backprop_20260803233127",
+    "prospective_runs/journal_confirmatory_fixed_budget_depth_d3_2x2x4_shunting_local3f_20260803233105",
+    "prospective_runs/journal_confirmatory_fixed_budget_depth_d4_2x2x2x2_additive_backprop_20260803233117",
+    "prospective_runs/journal_confirmatory_fixed_budget_depth_d4_2x2x2x2_additive_local3f_20260803233108",
+    "prospective_runs/journal_confirmatory_fixed_budget_depth_d4_2x2x2x2_shunting_backprop_20260803233119",
+    "prospective_runs/journal_confirmatory_fixed_budget_depth_d4_2x2x2x2_shunting_local3f_20260803233110",
+    "prospective_runs/journal_confirmatory_inhibition_dose_noise_additive_backprop_20260803232928",
+    "prospective_runs/journal_confirmatory_inhibition_dose_noise_additive_local3f_20260803232935",
+    "prospective_runs/journal_confirmatory_inhibition_dose_noise_shunting_backprop_20260803232944",
+    "prospective_runs/journal_confirmatory_inhibition_dose_noise_shunting_local3f_20260803232949",
+    "prospective_runs/journal_confirmatory_mnist_additive_backprop_depth_feedback_20260802184258",
+    "prospective_runs/journal_confirmatory_mnist_additive_local3f_depth_feedback_20260802184303",
+    "prospective_runs/journal_confirmatory_mnist_shunting_backprop_depth_feedback_20260802184310",
+    "prospective_runs/journal_confirmatory_mnist_shunting_local3f_depth_feedback_20260802184315",
+    "prospective_runs/journal_confirmatory_noise_additive_backprop_depth_feedback_20260802184322",
+    "prospective_runs/journal_confirmatory_noise_additive_local3f_depth_feedback_20260802184326",
+    "prospective_runs/journal_confirmatory_noise_shunting_backprop_depth_feedback_20260802184332",
+    "prospective_runs/journal_confirmatory_noise_shunting_local3f_depth_feedback_20260802184337",
+    "prospective_runs/journal_confirmatory_spatial_topology_mnist_additive_backprop_20260803233032",
+    "prospective_runs/journal_confirmatory_spatial_topology_mnist_additive_local3f_20260803233001",
+    "prospective_runs/journal_confirmatory_spatial_topology_mnist_shunting_backprop_20260803233036",
+    "prospective_runs/journal_confirmatory_spatial_topology_mnist_shunting_local3f_20260803233010",
+    "prospective_runs/journal_confirmatory_spatial_topology_noise_additive_backprop_20260803233039",
+    "prospective_runs/journal_confirmatory_spatial_topology_noise_additive_local3f_20260803233018",
+    "prospective_runs/journal_confirmatory_spatial_topology_noise_shunting_backprop_20260803233043",
+    "prospective_runs/journal_confirmatory_spatial_topology_noise_shunting_local3f_20260803233025"
+  ],
+  "schema_version": 1,
+  "status": "verified"
+}

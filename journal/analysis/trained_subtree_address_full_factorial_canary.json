@@ -1,0 +1,18 @@
+{
+  "phase": "canary",
+  "config_sha256": "8684f7c30886e7aede7eaa71550033ad84605fcfb45220d32a2d91d2627f23b2",
+  "script_sha256": "c5d75b8ea9bc29d7fd24ca53c360c4bbdf825d7fa31f84727af4b7dd47e875dd",
+  "artifact_and_numerical_gates": {
+    "n_models": 135,
+    "all_finite": true,
+    "all_balanced": true,
+    "maximum_absolute_context_label_correlation": 0.0,
+    "maximum_neuron_shared_capture": 0.13018931960086041,
+    "minimum_exact_capture": 1.0,
+    "maximum_exact_bp_endpoint_difference": 0.0,
+    "maximum_implementation_equivalence_endpoint_difference": 0.0,
+    "maximum_fallback_count": 0,
+    "passed": true
+  },
+  "outcomes_are_not_confirmatory": true
+}
