@@ -1,4 +1,10 @@
-# Dendritic Local Learning Draft
+# ARCHIVED CONFERENCE SNAPSHOT — Dendritic Local Learning
+
+This directory is frozen provenance for the submitted NeurIPS manuscript. It
+is not the current paper and should not be edited to change scientific claims,
+figures or submission files. The standalone canonical article is
+`../journal/main.tex`; its complete reading copy is
+`../journal/main_with_supplementary.pdf`.
 
 This folder contains the submission-facing draft for the LocalCA dendritic local-learning paper.
 The manuscript uses one shared body and two thin wrappers:

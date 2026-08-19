@@ -1873,9 +1873,9 @@ FILES += (
         "current derived analysis", "Model-matched 14.2-fold ceiling and density-matched 2.7-fold anatomy-specific factor.",
     ),
     SourceFile(
-        "Supplementary Figure 18", "a-f",
+        "Figure 8", "k",
         "source_data/credit_phase_plane/points.csv",
-        "Supplementary_Figure_18/SuppFig18a-f_phase_plane_points.csv",
+        "Figure_8/Fig8k_phase_plane_points.csv",
         "phase-plane source values", "independent simulation or training seed block",
         "current synthesis", "Alignment-by-bandwidth coordinates and observed outcomes used in the final phase-plane synthesis.",
     ),
@@ -1894,44 +1894,81 @@ def final_display_file(item: SourceFile) -> SourceFile:
     elif source.startswith("source_data/trained_subtree_address_full_factorial/"):
         figure = "Figure 3"
     elif source.startswith("source_data/trained_subtree_address/"):
-        # Phase-1 ownership/route tests are displayed in Figure 2M--O.  The
-        # distinct full-factorial cohort is Figure 3A--F.
-        figure = "Figure 2"
-        panels = {"g,i": "m,o", "h": "n", "g-i": "m-o"}.get(panels, panels)
-    elif source.startswith("source_data/prospective_input_validity/") or source.startswith("source_data/clean_exact_bp/"):
-        figure = "Figure 2"
-        panels = {"a-c": "g-i", "d": "j", "e": "k", "f": "l"}.get(panels, panels)
+        # The two-stream route diagnostics are retained in full as S19g--i;
+        # their held-out endpoint is summarized in main Figure 2f.
+        figure = "Supplementary Figure 19"
+        panels = {"g,i": "g,i", "h": "h", "g-i": "g-i"}.get(panels, panels)
+    elif source.startswith("source_data/prospective_input_validity/"):
+        if item.figure == "Supplementary Figure 9":
+            pass
+        elif panels == "a-c":
+            figure, panels = "Figure 2", "d"
+        elif panels == "d":
+            figure, panels = "Figure 2", "e"
+        else:
+            figure = "Supplementary Figure 19"
+    elif source.startswith("source_data/clean_exact_bp/"):
+        figure, panels = "Supplementary Figure 19", "e"
     elif source.startswith("source_data/credit_phase_plane/"):
         figure = "Figure 8"
-        panels = "o"
+        panels = "k"
     elif source.startswith("source_data/credit_phase_"):
         figure = "Figure 4"
-    elif source.startswith("source_data/nonlinear_physical_depth_confirmatory/") or source.startswith("source_data/point_dendrite_credit_controls/") or source.startswith("source_data/physical_alignment_dose/") or source.startswith("source_data/remaining_physical_experiments/"):
+    elif source.startswith("source_data/physical_alignment_dose/"):
+        figure, panels = "Supplementary Figure 18", "c-e"
+    elif source.startswith("source_data/remaining_physical_experiments/"):
+        figure, panels = "Supplementary Figure 18", "f-k"
+    elif source.startswith("source_data/nonlinear_physical_depth_confirmatory/") or source.startswith("source_data/point_dendrite_credit_controls/"):
         figure = "Figure 5"
     elif source.startswith("source_data/theory/credit_capture"):
         figure = "Figure 4"
         panels = "a"
-    elif source.startswith("source_data/reciprocal_routing/") or source.startswith("source_data/figure3/"):
+    elif source.startswith("source_data/reciprocal_routing/"):
+        figure, panels = "Figure 6", "e-f"
+    elif source.startswith("source_data/figure3/typed_only"):
+        figure, panels = "Supplementary Figure 20", "h"
+    elif source.startswith("source_data/figure3/"):
         figure = "Figure 6"
-    elif source.startswith("source_data/figure4/") or source.startswith("source_data/focal_decomposition/") or source.startswith("source_data/physical_cable_sensitivity/"):
-        figure = "Figure 7"
+        panels = {"a-c": "a-b", "d-g": "c-d", "a-g": "a-d", "d-h": "c-d"}.get(panels, panels)
+    elif source.startswith("source_data/figure4/direct_typed"):
+        figure, panels = "Supplementary Figure 21", "g"
+    elif source.startswith("source_data/figure4/"):
+        if panels == "f":
+            figure, panels = "Supplementary Figure 21", "f"
+        else:
+            figure = "Figure 7"
+            panels = {"d-e": "d"}.get(panels, panels)
+    elif source.startswith("source_data/focal_decomposition/"):
+        figure, panels = "Figure 7", "e"
+    elif source.startswith("source_data/physical_cable_sensitivity/"):
+        figure, panels = "Figure 7", "f"
     elif source.startswith("source_data/focal_selectivity_active_ensemble/"):
         figure = "Figure 7"
-        panels = {"a-d": "j-m", "b-d": "k-m", "b-c": "k-l", "c": "l"}.get(panels, panels)
+        panels = {"a-d": "g-j", "b-d": "h-j", "b-c": "h-i", "c": "i"}.get(panels, panels)
     elif source.startswith("source_data/fulltree_boundary/"):
         figure = "Figure 8"
-        panels = {"e-f": "i-j"}.get(panels, panels)
-    elif source.startswith("source_data/figure5/") or source.startswith("source_data/functional_topology_all_scans/"):
-        figure = "Figure 8"
+        panels = "g-h"
+    elif source.startswith("source_data/figure5/"):
+        if any(f"ch{value}" in source for value in (1, 2, 8)):
+            figure, panels = "Supplementary Figure 22", "h"
+        else:
+            figure = "Figure 8"
+            panels = {"a-c": "a-b", "d-g": "c-d", "h": "c-d"}.get(panels, panels)
+    elif source.startswith("source_data/functional_topology_all_scans/"):
+        figure, panels = "Supplementary Figure 22", "a-h"
     elif source.startswith("source_data/alignment_controlled/"):
         figure = "Figure 8"
-        panels = {"a-d": "k-n", "b-d": "l-n", "b-c": "l-m", "d": "n"}.get(panels, panels)
+        panels = {"a-d": "e-f", "b-d": "e-f", "b-c": "e-f", "d": "f"}.get(panels, panels)
     elif source.startswith("source_data/animal_learning_francioni/"):
-        figure = "Supplementary Figure 17"
-        panels = {"f": "b", "g": "c", "h": "d", "f-h": "a-d"}.get(panels, panels)
+        if "neuron_sd_residual" in source:
+            figure, panels = "Supplementary Figure 17", "d"
+        elif "common_signed_modes" in source:
+            figure, panels = "Figure 8", "j"
+        else:
+            figure, panels = "Figure 8", "i-j"
     elif source.startswith("source_data/capture_per_wire/"):
         figure = "Figure 6"
-        panels = "k-l"
+        panels = "g-h"
 
     if figure == item.figure and panels == item.panels:
         return item
@@ -1947,32 +1984,71 @@ def final_display_file(item: SourceFile) -> SourceFile:
         number = figure.split()[-1]
         destination = re.sub(r"^(?:Fig|SuppFig)\d+", f"Fig{number}", destination.split("/", 1)[1])
         destination = new_dir + destination
-    if source.startswith("source_data/trained_subtree_address/"):
-        destination = destination.replace("Fig2g_i_", "Fig2m_o_")
-        destination = destination.replace("Fig2g-i_", "Fig2m-o_")
-        destination = destination.replace("Fig2h_", "Fig2n_")
-    elif source.startswith("source_data/theory/credit_capture"):
+    if source.startswith("source_data/theory/credit_capture"):
         destination = "Figure_4/Fig4a_credit_capture_bound_verification.json"
     elif source.startswith("source_data/fulltree_boundary/"):
-        destination = destination.replace("Fig8e-f_", "Fig8i-j_")
+        destination = re.sub(r"Fig8[^_]*_", "Fig8g-h_", destination)
     elif source.startswith("source_data/alignment_controlled/"):
-        destination = destination.replace("Fig8a-d_", "Fig8k-n_")
-        destination = destination.replace("Fig8b-d_", "Fig8l-n_")
-        destination = destination.replace("Fig8b-c_", "Fig8l-m_")
-        destination = destination.replace("Fig8d_", "Fig8n_")
+        destination = re.sub(r"Fig8[^_]*_", f"Fig8{panels}_", destination)
     elif source.startswith("source_data/animal_learning_francioni/"):
-        destination = destination.replace("SuppFig17f-h_", "SuppFig17a-d_")
-        destination = destination.replace("SuppFig17f_", "SuppFig17b_")
-        destination = destination.replace("SuppFig17g_", "SuppFig17c_")
-        destination = destination.replace("SuppFig17h_", "SuppFig17d_")
+        prefix = "SuppFig17d" if figure == "Supplementary Figure 17" else f"Fig8{panels}"
+        destination = re.sub(r"(?:Fig|SuppFig)\d+[^_]*_", f"{prefix}_", destination)
     elif source.startswith("source_data/capture_per_wire/"):
-        destination = re.sub(r"Fig6a-c_", "Fig6k-l_", destination)
+        destination = re.sub(r"(?:Fig|SuppFig)\d+[^_]*_", "Fig6g-h_", destination)
     elif source.startswith("source_data/credit_phase_plane/"):
-        destination = "Figure_8/Fig8o_phase_plane_points.csv"
+        destination = "Figure_8/Fig8k_phase_plane_points.csv"
     return replace(item, figure=figure, panels=panels, destination=destination)
 
 
 FILES = tuple(final_display_file(item) for item in FILES)
+
+
+def duplicate_for_supplement(item: SourceFile, number: int, panels: str) -> SourceFile:
+    """Reuse one numerical source for a detailed supplementary display."""
+
+    basename = Path(item.destination).name
+    suffix = basename.split("_", 1)[1] if "_" in basename else basename
+    destination = f"Supplementary_Figure_{number}/SuppFig{number}{panels}_{suffix}"
+    return replace(
+        item,
+        figure=f"Supplementary Figure {number}",
+        panels=panels,
+        destination=destination,
+    )
+
+
+# Focused main figures and full diagnostic SI figures intentionally reuse the
+# same frozen tables.  Record both display destinations explicitly.
+FILES += tuple(
+    duplicate_for_supplement(item, 20, "a-j")
+    for item in FILES
+    if item.source.startswith(("source_data/figure3/", "source_data/reciprocal_routing/"))
+    and item.figure != "Supplementary Figure 20"
+)
+FILES += tuple(
+    duplicate_for_supplement(item, 21, "a-i")
+    for item in FILES
+    if item.source.startswith(("source_data/figure4/", "source_data/focal_decomposition/", "source_data/physical_cable_sensitivity/"))
+    and item.figure != "Supplementary Figure 21"
+)
+FILES += tuple(
+    duplicate_for_supplement(item, 22, "a-h")
+    for item in FILES
+    if item.source.startswith(("source_data/figure5/", "source_data/functional_topology_all_scans/"))
+    and item.figure != "Supplementary Figure 22"
+)
+FILES += tuple(
+    duplicate_for_supplement(item, 18, "a-b")
+    for item in FILES
+    if item.source.startswith("source_data/point_dendrite_credit_controls/")
+    and item.figure != "Supplementary Figure 18"
+)
+FILES += tuple(
+    duplicate_for_supplement(item, 19, "a-d")
+    for item in FILES
+    if item.source.startswith("source_data/prospective_input_validity/")
+    and item.figure == "Figure 2"
+)
 
 # Several detailed supplementary displays reuse cohorts that also support
 # condensed main-figure panels.  Keep explicit supplementary destinations so
@@ -2043,33 +2119,6 @@ FILES += (
         "complete follow-up run outcomes", "paired independent training seed (n=10 per condition)",
         "current complete prospective cohort", "All 160 input-valid additive fixed-budget outcomes.",
     ),
-    SourceFile(
-        "Supplementary Figure 9", "a-d",
-        "source_data/prospective_input_validity/mechanism_checkpoint_rows_valid.csv",
-        "Supplementary_Figure_9/SuppFig9a-d_checkpoint_rows.csv",
-        "checkpoint-by-field-by-step diagnostic values",
-        "independent input-valid trained checkpoint (n=120)",
-        "current complete prospective diagnostic",
-        "All 2,400 validity-qualified credit-geometry rows.",
-    ),
-    SourceFile(
-        "Supplementary Figure 9", "d",
-        "source_data/prospective_input_validity/mechanism_association_summary_valid.csv",
-        "Supplementary_Figure_9/SuppFig9d_association_summary.csv",
-        "checkpoint-clustered association summaries",
-        "independent input-valid trained checkpoint (n=120)",
-        "current derived analysis",
-        "Spearman associations and checkpoint-bootstrap intervals at four relative step sizes.",
-    ),
-    SourceFile(
-        "Supplementary Figure 9", "a-c",
-        "source_data/prospective_input_validity/mechanism_feedback_summary_valid.csv",
-        "Supplementary_Figure_9/SuppFig9a-c_feedback_summary.csv",
-        "primary-step feedback summaries",
-        "independent input-valid trained checkpoint (n=120)",
-        "current derived summary",
-        "Feedback-family means and descent counts at relative step 1e-5.",
-    ),
 )
 
 
@@ -2110,7 +2159,9 @@ fixed spatial-connectivity control. Supplementary Figure 8 is the fixed-budget
 depth control, Supplementary Figure 9 is the complete checkpoint diagnostic,
 Supplementary Figure 10 is the same-mouse v661 sensitivity cohort, and
 Supplementary Figures 11--17 contain conductance, inhibitory, same-span,
-calibration, interior-optimum and external-animal analyses. Capture per wire
+calibration, interior-optimum and external-animal analyses. Supplementary
+Figures 18--22 retain the expanded physical-depth, prospective routing,
+morphology, focal-shunting and measured-response diagnostics. Capture per wire
 and the phase-plane synthesis are promoted to main Figures 6 and 8.
 
 This is the submission-facing source-data package. Figure 2 panels b and c
@@ -2197,20 +2248,20 @@ rerun; only the corrected cohort is packaged.
 
 FIGURE_5_README = """# Figure 5 source data
 
-These files support reconstructed-tree morphology and route capacity.
-Biological cells are the independent units; Monte Carlo streams are nested
-within cell. Panels i-j use an independently generated exact reciprocal-cable
-response operator. The fields are modeled and are not measurements of learning
-in the animal.
+These files support the mechanism-matched physical-depth experiment and its
+point, grouped-star, coordinate and optimizer controls. Training seed is the
+independent unit. Expanded alignment-dose and second-hierarchy controls are
+Supplementary Figure 18.
 """
 
 
 FIGURE_6_README = """# Figure 6 source data
 
-These files support the synapse-resolved inhibitory-census analysis in 20
-postsynaptic targets. Connections and contacts are nested within target cell;
-target cell is the inferential unit. The presynaptic-axon aggregate and joint
-path-distance/3D-matched tables control dependence and local geometry.
+These files support reconstructed-tree morphology, model-field and reciprocal-
+cable route capacity, and capture per unit wiring. Reconstructed cell is the
+independent unit; perturbation streams are nested within cell. All fields are
+modeled rather than measured task gradients. Full diagnostics are
+Supplementary Figure 20.
 """
 
 
@@ -2260,11 +2311,11 @@ summary, and `SuppFig10f-g_focal_cells.csv` supplies the focal panels directly.
 
 FIGURE_8_README = """# Figure 8 source data
 
-Panels a-d support the active-conductance steady-state sensitivity ensemble.
-Channel draws and focal sites are nested within eight reconstructed cells.
-Panels e-f support the complete reconstructed-tree learning analysis across 13
-eligible scans nested within seven target cells. Neither nested draws nor
-scans are treated as independent biological replicates.
+Panels a-d support the seven-target measured-response boundary, panels e-f the
+controlled alignment test, panels g-h complete-tree learning, panels i-j the
+six-animal signed-coordinate analysis, and panel k the alignment-by-bandwidth
+synthesis. Scans, splits and Monte Carlo fields are nested within target cell;
+animal is the independent unit for panels i-j.
 """
 
 

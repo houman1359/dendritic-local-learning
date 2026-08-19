@@ -9,7 +9,7 @@ Active materials:
 
 - `cover_letter.md`: Nature Communications cover letter;
 - `editorial_summary.md`: concise editor-facing scientific summary;
-- `extension_statement.md`: detailed NeurIPS-to-journal relationship;
+- `extension_statement.md`: standalone related-work and overlap disclosure;
 - `reporting_checklist.md`: internal scientific and reporting audit;
 - `AUTHOR_ACTIONS.md`: decisions and declarations requiring author approval;
 - `OFFICIAL_FORMS_REQUIRED.md`: current Nature Portfolio forms;

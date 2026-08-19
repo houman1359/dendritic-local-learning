@@ -1,6 +1,6 @@
 # Eight-reviewer revision matrix
 
-Last updated: 17 August 2026
+Last updated: 19 August 2026
 
 This is the implementation ledger for the 12 August eight-reviewer report.
 It distinguishes completed repairs, active analyses, new prospective evidence,
@@ -24,8 +24,8 @@ and author/external actions that cannot be completed from the repository.
 |---|---|---|
 | Broken/dead bibliography keys and missing load-bearing literature | Completed | The bibliography now contains 56 cited records, including all load-bearing works requested in the review. `scripts/audit_citations.py` reports zero undefined and zero unused keys. |
 | Placeholder Code Availability | External action | The local release is prepared; an author must publish it and mint the Zenodo DOI. The manuscript must then name URL, DOI and MIT license. |
-| Cover letter and NeurIPS dual-track status | Local revision completed; author action remains | The cover letter is now a one-page theory-first significance letter and the extension statement is retained. Authors must insert the final NeurIPS status, satisfy exclusivity, and approve the sibling-manuscript disclosures before submission. |
-| Length, display count and stale checklist | Partly completed | Results now follow seven scientific subsections and the full evidence is consolidated into eight numbered figures using continued multi-panel displays. The checklist records eight main figures and Supplementary Figs. S1--S17. Narrative length remains deliberately advisory during scientific revision, as requested by the authors. |
+| Cover letter and NeurIPS dual-track status | Local revision completed; author action remains | The cover letter is now a theory-first significance letter and the related-work statement treats the journal Article as the canonical standalone account. Authors must insert the final NeurIPS status, satisfy exclusivity, and approve the sibling-manuscript disclosures before submission. |
+| Length, display count and stale checklist | Figure inventory completed; length remains advisory | Results now follow eight scientific subsections and use eight single-file numbered figures without continued floats. The checklist records eight main figures and Supplementary Figs. S1--S22. Narrative length remains deliberately advisory during scientific revision, as requested by the authors. |
 
 ## Scientific and inferential repairs
 

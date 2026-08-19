@@ -83,7 +83,11 @@ def main() -> int:
             near.append((best_score, journal_sentence, best_sentence))
 
     cited = "safaai2026localcredit" in journal_text
-    extension_mentions_foundation = "reusable core" in EXTENSION.read_text(encoding="utf-8").lower()
+    disclosure_text = EXTENSION.read_text(encoding="utf-8").lower()
+    disclosure_mentions_foundation = (
+        "complete load-bearing foundation" in disclosure_text
+        and "canonical, standalone" in disclosure_text
+    )
     lines = [
         "# NeurIPS-to-journal text reuse audit",
         "",
@@ -97,7 +101,7 @@ def main() -> int:
         f"- Exact normalized sentence matches: {len(exact)}",
         f"- Near matches at similarity >= 0.82: {len(near)}",
         f"- Earlier work cited in the journal manuscript: {'yes' if cited else 'NO'}",
-        f"- Extension statement identifies the reusable foundation: {'yes' if extension_mentions_foundation else 'NO'}",
+        f"- Related-work statement identifies the integrated foundation: {'yes' if disclosure_mentions_foundation else 'NO'}",
         "",
         "## Exact matches",
         "",
@@ -134,7 +138,7 @@ def main() -> int:
     print(f"Wrote {REPORT.relative_to(ROOT)}")
     print(f"Exact matches: {len(exact)}; near matches: {len(near)}")
 
-    failed = not cited or not extension_mentions_foundation
+    failed = not cited or not disclosure_mentions_foundation
     return 1 if args.strict and failed else 0
 
 

@@ -2,7 +2,9 @@
 
 Active editorial target: **Nature Communications, Article**. The authors may
 wait for the NeurIPS decision before submission, but the journal manuscript is
-maintained as a distinct, submission-ready extension. Its central contribution
+the canonical standalone scientific account, not a sequel or a second paper.
+It includes the load-bearing conference-stage foundation and the complete
+journal evidence chain. Its central contribution
 is a conditional mechanistic hierarchy---neuronal coordinate, dendritic
 address, conductance-dependent route gain and task alignment---rather than a
 claim that branch-resolved credit transport has already been observed in vivo.
@@ -223,15 +225,16 @@ from this document.
 
 ## Nature Communications format checked 11 August 2026
 
-- Article title: no more than 15 words. The current title has 13.
+- Article title: no more than 15 words. The current title has 7.
 - Abstract: no more than 200 words. The current count is checked automatically
   by `scripts/audit_nature_communications_format.py`.
 - Main text: approximately 5,000 words excluding abstract, Methods, references
   and figure legends. The automated audit reports the current mechanical count;
   the submission portal count still requires confirmation.
 - Main display items: up to ten figures and/or tables. The working draft now
-  has eight numbered main figures; six continued multi-panel displays preserve
-  the complete evidence chain without exceeding the display count.
+  has eight numbered main figures, each represented by one canonical vector
+  PDF and one figure environment; the complete control inventory continues
+  through Supplementary Figure S22.
   Checkpoint-mechanism and cohort-sensitivity displays
   remain in Supplementary Figures S9 and S10, the passive focal-shunt matrix
   is Supplementary Figure S11, and the inhibitory census is Supplementary

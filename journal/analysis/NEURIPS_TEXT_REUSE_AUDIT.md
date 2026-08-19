@@ -5,12 +5,12 @@ theory, definitions and framing are reused where precision benefits, while the
 Nature Communications Article discloses the foundation and makes its new evidence
 chain explicit. Counts are mechanical and are not a legal similarity assessment.
 
-- Journal prose sentences checked: 838
+- Journal prose sentences checked: 850
 - NeurIPS prose sentences checked: 427
 - Exact normalized sentence matches: 0
 - Near matches at similarity >= 0.82: 1
 - Earlier work cited in the journal manuscript: yes
-- Extension statement identifies the reusable foundation: yes
+- Related-work statement identifies the integrated foundation: yes
 
 ## Exact matches
 

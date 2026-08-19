@@ -2,7 +2,7 @@
 
 ## Proposed title
 
-A signal--noise phase theory of when dendritic structure helps local credit assignment
+When dendritic structure helps local credit assignment
 
 ## Editorial summary
 
@@ -36,7 +36,7 @@ data. We do not claim that modeled gradients were measured in vivo, that
 MICRONS provides independent-animal replication, or that shunting is generally
 superior. Exact transport and fitted projections are information oracles.
 
-## Relationship to earlier work
+## Relationship to the disclosed earlier version
 
 The NeurIPS/arXiv manuscript established the conductance-tree factorization and
 regular-tree learning problem. The journal Article depends on new prospective

@@ -4,8 +4,8 @@ This document separates tasks that can be checked from the repository from decis
 
 ## Hard submission gates
 
-- [ ] **Resolve concurrent consideration.** The NeurIPS 2026 submission is currently in discussion. Before submitting this Article to *Nature Communications*, the authors must decide whether to wait for the NeurIPS decision or formally withdraw the conference submission, and must retain written confirmation of the chosen status. Update the cover letter and extension statement with the exact status on the day of journal submission. Do not leave language saying that this will be decided later.
-- [ ] **Confirm the journal's current prior-publication and exclusivity rules.** Disclose arXiv:2607.03556, the NeurIPS submission or proceedings article as applicable, and arXiv:2607.24990. If the conference paper is accepted, cite it, quantify the scientific and textual extension, and confirm that its license permits any reused material.
+- [ ] **Resolve concurrent consideration.** The NeurIPS 2026 submission is currently in discussion. Before submitting this Article to *Nature Communications*, the authors must decide whether to wait for the NeurIPS decision or formally withdraw the conference submission, and must retain written confirmation of the chosen status. Update the cover letter and related-work statement with the exact status on the day of journal submission. Do not leave language saying that this will be decided later.
+- [ ] **Confirm the journal's current prior-publication and exclusivity rules.** Disclose arXiv:2607.03556, the NeurIPS submission or proceedings article as applicable, and arXiv:2607.24990. If the conference paper is accepted, cite it, quantify the scientific and textual overlap and added evidence, and confirm that its license permits any reused material.
 - [ ] **Approve authorship.** All authors must approve the title, author order, affiliations, corresponding authors, CRediT statement, acknowledgements, funding statement, competing-interests statement, and submitted files. Maceo Richards remains an author because the integrated Article retains theory and experiments from the earlier work.
 - [x] **Finish the journal-package evidence freeze.** The clean Figure 2 cohort,
       all figures, Source Data, provenance hashes, and strict audit are complete.
@@ -43,9 +43,9 @@ This document separates tasks that can be checked from the repository from decis
       physical-depth, point--dendrite, alignment-dose, Fashion-MNIST, literal
       grouped-point, independent H2, phase-plane, wiring-efficiency and animal
       consistency data. Rebuild it after the present figure remap so its
-      manifest matches the eight-main-figure and seventeen-supplementary-figure
+      manifest matches the eight-main-figure and twenty-two-supplementary-figure
       layout.
-- [ ] Commit the current journal extension, then rebuild the reviewer software
+- [ ] Commit the current standalone journal Article, then rebuild the reviewer software
       archive from that clean Git commit. The release allowlist now includes the
       credit-phase, reliability, same-span, nonlinear physical-depth and final
       H2/grouped-point code, configurations, tests and contracts, but the

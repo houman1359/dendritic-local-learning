@@ -25,24 +25,14 @@ JOURNAL = Path(__file__).resolve().parents[1]
 SUBMISSION = JOURNAL / "submission"
 
 MAIN_FIGURES = (
-    "main/figure_01_panels_A-E.pdf",
-    "main/figure_02_panels_A-F.pdf",
-    "main/figure_02_panels_G-O.pdf",
-    "main/figure_02_panels_P-Q.pdf",
-    "main/figure_03_panels_A-F.pdf",
-    "main/figure_04_panels_A-I.pdf",
-    "main/figure_05_panels_A-F.pdf",
-    "main/figure_05_panels_G-L.pdf",
-    "main/figure_05_panels_M-O.pdf",
-    "main/figure_05_panels_P-U.pdf",
-    "main/figure_06_panels_A-J.pdf",
-    "main/figure_06_panels_K-L.pdf",
-    "main/figure_07_panels_A-I.pdf",
-    "main/figure_07_panels_J-M.pdf",
-    "main/figure_08_panels_A-H.pdf",
-    "main/figure_08_panels_I-J.pdf",
-    "main/figure_08_panels_K-N.pdf",
-    "main/figure_08_panel_O.pdf",
+    "main/figure_01.pdf",
+    "main/figure_02.pdf",
+    "main/figure_03.pdf",
+    "main/figure_04.pdf",
+    "main/figure_05.pdf",
+    "main/figure_06.pdf",
+    "main/figure_07.pdf",
+    "main/figure_08.pdf",
 )
 
 SUPPLEMENTARY_FIGURES = (
@@ -63,6 +53,11 @@ SUPPLEMENTARY_FIGURES = (
     "supplementary/figure_S15_panels_A-D.pdf",
     "supplementary/figure_S16_panels_A-D.pdf",
     "supplementary/figure_S17_panels_A-D.pdf",
+    "supplementary/figure_S18_panels_A-K.pdf",
+    "supplementary/figure_S19_panels_A-I.pdf",
+    "supplementary/figure_S20_panels_A-J.pdf",
+    "supplementary/figure_S21_panels_A-I.pdf",
+    "supplementary/figure_S22_panels_A-H.pdf",
 )
 
 FIGURES = MAIN_FIGURES + SUPPLEMENTARY_FIGURES
@@ -282,7 +277,7 @@ def write_metadata(output_dir: Path, software: Path | None) -> None:
     ).stdout.strip()
     metadata = {
         "target_journal": "Nature Communications",
-        "article_title": "A signal--noise phase theory of when dendritic structure helps local credit assignment",
+        "article_title": "When dendritic structure helps local credit assignment",
         "source_commit": repository_commit(),
         "source_worktree_clean": worktree_clean,
         "source_snapshot_method": "current explicit allowlist",
@@ -320,7 +315,7 @@ def write_readme(output_dir: Path, software: Path | None) -> None:
     )
     text = f"""# Nature Communications initial-submission bundle
 
-Article: *A signal--noise phase theory of when dendritic structure helps local credit assignment*
+Article: *When dendritic structure helps local credit assignment*
 
 This directory was assembled from an explicit allowlist by `scripts/build_submission_bundle.py`. It contains the compiled and source manuscripts, a combined main-plus-supplementary reading copy, {len(MAIN_FIGURES)} main figure assets across eight numbered figures, {len(SUPPLEMENTARY_FIGURES)} supplementary figure PDFs, references, Source Data, submission documents and provenance manifests. {software_line}
 

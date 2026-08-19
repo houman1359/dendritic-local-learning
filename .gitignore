@@ -1,0 +1,20 @@
+# LaTeX intermediates
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.synctex.gz
+*.toc
+
+# Reproducible raster previews; publication assets are vector PDFs.
+journal/figures/components/*.png
+journal/figures/generated/*.png
+journal/figures/main/*.png
+journal/figures/supplementary/*.png
+
+# Rebuilt submission archives and checksums.
+journal/submission/*.zip
+journal/submission/*.zip.sha256

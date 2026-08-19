@@ -57,9 +57,11 @@ figures:
 	$(PYTHON) scripts/analyze_remaining_physical_experiments.py
 	$(PYTHON) scripts/analyze_fashion_feedback_ladder.py
 	$(PYTHON) scripts/sync_canonical_figures.py
+	$(PYTHON) scripts/assemble_compact_main_figures.py
 
 canonical-figures:
 	$(PYTHON) scripts/sync_canonical_figures.py
+	$(PYTHON) scripts/assemble_compact_main_figures.py
 
 refresh-regular-tree-source:
 	$(PYTHON) scripts/export_regular_tree_source_data.py
@@ -92,6 +94,7 @@ overleaf-bundle: combined
 audit: paper supplement test reproducibility format-audit citation-audit overlap-audit
 	$(PYTHON) scripts/audit_figure_style_lineage.py
 	$(PYTHON) scripts/audit_submission.py --strict-pending
+	$(PYTHON) scripts/audit_submission.py --strict-pending --manuscript supplementary/supplementary.tex
 
 clean-aux:
 	rm -f main.aux main.blg main.log main.out main.toc

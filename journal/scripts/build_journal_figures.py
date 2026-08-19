@@ -1122,7 +1122,7 @@ def _figure3_detailed() -> None:
     ax_j.set_ylabel("field capture")
     panel_title(ax_j, "J", "Matched topology controls")
     style_axis(ax_j)
-    save(fig, "fig3_microns_topology")
+    save(fig, "fig3_microns_topology_detailed")
 
 
 def figure3() -> None:
@@ -1506,7 +1506,7 @@ def _figure4_detailed() -> None:
     panel_title(ax_i, "I", "Cable calibration")
     style_axis(ax_i)
     clean_legend(ax_i, loc="upper right", fontsize=PT_SMALL, auto_clear=True)
-    save(fig, "fig4_focal_shunting")
+    save(fig, "fig4_focal_shunting_detailed")
 
 
 def figure4() -> None:
@@ -1821,7 +1821,7 @@ def _figure5_detailed() -> None:
     # clear of the wide bootstrap intervals.
     add_headroom(ax_h, 0.30)
     clean_legend(ax_h, loc="upper right", ncol=2, fontsize=PT_SMALL)
-    save(fig, "fig5_alignment_boundary")
+    save(fig, "fig5_alignment_boundary_detailed")
 
 
 def figure5() -> None:
@@ -1986,17 +1986,25 @@ def main() -> None:
     parser.add_argument("--figures", nargs="*", type=int, default=[1, 2, 3, 4, 5],
                         choices=[1, 2, 3, 4, 5])
     args = parser.parse_args()
-    # The journal keeps the comprehensive, full-panel figures. Compact
-    # alternates are retained only as possible presentation assets.
+    # Publication-facing figures use the focused journal layouts. Exhaustive
+    # diagnostics remain in Source Data and Supplementary Information.
     builders = {
         1: figure1,
         2: figure2,
-        3: _figure3_detailed,
-        4: _figure4_detailed,
-        5: _figure5_detailed,
+        3: figure3,
+        4: figure4,
+        5: figure5,
     }
     for number in args.figures:
         builders[number]()
+        if number == 3:
+            # Preserve the full ten-panel morphology diagnostics in the SI;
+            # Figure 6 itself uses the focused six-panel journal layout.
+            _figure3_detailed()
+        elif number == 4:
+            _figure4_detailed()
+        elif number == 5:
+            _figure5_detailed()
 
 
 if __name__ == "__main__":

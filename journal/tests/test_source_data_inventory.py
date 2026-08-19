@@ -31,7 +31,7 @@ def test_source_data_inventory_matches_final_display_numbering() -> None:
         if (match := re.fullmatch(r"Supplementary Figure (\d+)", figure))
     }
     assert main_numbers == set(range(2, 9))  # Figure 1 is conceptual.
-    assert supplementary_numbers == set(range(1, 18))
+    assert supplementary_numbers == set(range(1, 23))
 
 
 def test_source_data_destinations_are_unique_and_sources_exist() -> None:

@@ -1,11 +1,12 @@
-# A signal--noise phase theory of when dendritic structure helps local credit assignment
+# When dendritic structure helps local credit assignment
 
-This directory is the self-contained working package for a unified journal
-article that extends the local-credit-assignment and topology-matched
-credit-routing studies. The active target is a **Nature Communications
-Article**. We may wait for the NeurIPS 2026 decision before submission; the
-conference status and overlap disclosure must be finalized on the submission
-date.
+This directory is the self-contained package for the canonical, standalone
+journal article. It integrates the load-bearing theory, simulations and
+controls developed during the conference project with the subsequent
+topology, conductance and biological-boundary experiments. It assumes no prior
+paper. The active target is a **Nature Communications Article**; any related
+conference or preprint status will be disclosed at submission but does not
+determine the article's scientific scope.
 
 The paper is organized around one conditional claim:
 
@@ -14,7 +15,7 @@ The paper is organized around one conditional claim:
 > controls which synapses can share credit, and useful learning requires the
 > resulting routes to align with task credit.
 
-The package deliberately distinguishes fifteen levels of evidence:
+The package distinguishes fifteen levels of evidence:
 
 1. exact mathematical identities for conductance trees;
 2. controlled learning experiments in regular artificial trees, including a
@@ -37,7 +38,7 @@ The package deliberately distinguishes fifteen levels of evidence:
    alignment doses, joined to the frozen endpoint cohorts;
 7. a preregistered 60-fit Fashion-MNIST replication of the scalar,
    neuron-indexed and exact-path feedback ladder;
-8. a frozen 220-fit literal grouped-point and independent-H2 extension that
+8. a frozen 220-fit literal grouped-point and independent-H2 control that
    replicates the serial-composition crossover under BP and LocalCA;
 9. a separate frozen 50-seed trained positive-conductance mechanism test with
    fixed oracle shunts and an exact state clamp;
@@ -62,7 +63,7 @@ define the boundary of the theory.
   main Article followed by all Supplementary Information.
 - `references.bib`: shared bibliography.
 - `figures/main/`: canonical assets compiled as main Figures 1--8.
-- `figures/supplementary/`: canonical assets compiled as S1--S17.
+- `figures/supplementary/`: canonical assets compiled as S1--S22.
 - `figures/generated/`: internal descriptive-name outputs from figure scripts;
   these are never referenced by LaTeX or included in the Overleaf bundle.
 - `figures/README.md`: authoritative figure, panel, and asset map.
@@ -80,7 +81,7 @@ define the boundary of the theory.
   scripts, and a portable CAVE/DANDI task-derived analysis pipeline.
 - `reproducibility/`: origin hashes, hardware accounting, seven-target and
   full eight-cell cohort manifests, archive boundaries, rerun records, and the
-  exact NeurIPS-to-journal figure-lineage map.
+  exact conference-to-journal figure-lineage map.
 - `analysis/EVIDENCE_LEDGER.md`: claim-to-evidence and provenance audit.
 - `analysis/AUGUST_2026_CONFIRMATORY_RESULTS.md`: consolidated numerical
   report for the new theory, trained-address, focal-conductance, functional
@@ -90,7 +91,7 @@ define the boundary of the theory.
   alignment result and its scope.
 - `analysis/JOURNAL_READINESS.md`: remaining submission requirements.
 - `analysis/NATURE_COMMUNICATIONS_PROGRAM.md`: target story, figure plan and
-  NeurIPS extension boundary.
+  evidence boundary.
 - `submission/`: cover letter, reporting checklists, Source Data, and the
   checksummed reviewer software release.
 
@@ -111,18 +112,16 @@ make audit
 
 The manuscript build requires a standard TeX distribution with pdfLaTeX and
 BibTeX. Figure generation requires Python 3 with NumPy, pandas, SciPy,
-Matplotlib, and seaborn. The current working manuscript contains eight numbered main
-figures. `make figures` regenerates the journal extensions and
-reconstructed-tree figures together with the completed prospective figures.
-The three literally reproduced NeurIPS figures are frozen, hash-pinned assets;
-their exact generator snapshots and source tables are retained under
+Matplotlib, and seaborn. The current working manuscript contains eight numbered
+main figures. `make figures` regenerates the publication-facing journal figures.
+Audited conference-era generator snapshots and source tables are retained under
 `scripts/inherited_neurips/` and `source_data/inherited_neurips/`. The prospective
 figure command reads the audited run and checkpoint tables already packaged in
 `source_data/prospective_learning/`; the checkpoint collector is kept separate
 because it re-evaluates the frozen models. The unified draft has eight numbered
-main figures and seventeen supplementary figures. Continued multi-panel
-displays preserve the complete evidence set with unique consecutive panel
-letters.
+main figures and twenty-two supplementary figures. Each main figure is one vector
+PDF with a single consecutive panel sequence; expanded diagnostics remain in
+Supplementary Information.
 `make overleaf-bundle` writes the current allow-listed package and ZIP under
 `submission/`; see `OVERLEAF_README.md` before uploading.
 The inherited arXiv/NeurIPS regular-tree tables are already frozen in this
@@ -183,13 +182,13 @@ routing, spatial-topology and fixed-budget conclusions enter the paper.
 
 ## Source projects and publication overlap
 
-The mathematical foundation and regular-tree experiments originate from the
-sibling `../neurips` project. Reconstructed-tree and MICrONS analyses
-originate from `../../dendritic-credit-routing`. Their arXiv or conference status
-must be disclosed in the journal cover letter. If the NeurIPS manuscript is
-published in proceedings, the journal submission must remain a substantial
-extension whose central conclusions depend on new reconstructed-anatomy,
-causal-perturbation, and topology--task-alignment results.
+The mathematical foundation and regular-tree experiments were first developed
+in the archived `../neurips` project. Reconstructed-tree and MICrONS analyses
+were first developed in `../../dendritic-credit-routing`. The present article
+is the sole scientific authority and states every load-bearing result directly;
+the source repositories establish provenance rather than a prerequisite
+reading order. Any arXiv or conference status must be disclosed in the cover
+letter.
 
 A second related preprint, arXiv:2607.24990, uses the same broader DendriNet
 framework to study forward population readout. It is cited and disclosed but

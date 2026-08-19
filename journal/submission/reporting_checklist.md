@@ -8,11 +8,10 @@ Status key: `[x]` complete in the current draft; `[~]` drafted but requires a fi
 - [x] Abstract is one paragraph and remains below the journal's 200-word
       guideline; the automated format audit records the exact current count.
 - [x] Main narrative is organized as Introduction, Results, Discussion and Methods.
-- [x] The working article contains eight numbered main figures, with ten
-      continued multi-panel displays preserving the full journal evidence.
-      The inherited and sensitivity displays are Supplementary Figures S1--S17.
+- [x] The working article contains eight numbered main figures, each compiled
+      from one vector PDF. Expanded controls are Supplementary Figures S1--S22.
 - [x] A standalone Supplementary Information manuscript compiles.
-- [x] A cover letter and substantial-extension statement are drafted.
+- [x] A cover letter and standalone related-work/overlap statement are drafted.
 - [ ] Confirm the final corresponding author, postal address, email and journal-portal metadata.
 - [ ] Confirm the final author order and CRediT contributions with all authors.
 - [ ] Update the NeurIPS status and prior-publication disclosure on the day of submission.
@@ -88,9 +87,9 @@ Status key: `[x]` complete in the current draft; `[~]` drafted but requires a fi
 
 ## Figure and source-data integrity
 
-- [x] Every quantitative panel in the eight numbered main figures and seventeen supplementary figures has machine-readable source tables with plotted values and unit identifiers; conceptual panels are programmatic. The 90-fit physical-alignment dose panels and the 220-fit grouped-point/H2 extension passed their frozen artifact and resource gates.
+- [x] Every quantitative panel in the eight numbered main figures and twenty-two supplementary figures has machine-readable source tables with plotted values and unit identifiers; conceptual panels are programmatic. The 90-fit physical-alignment dose panels and the 220-fit grouped-point/H2 extension passed their frozen artifact and resource gates.
 - [x] The panel-level provenance manifest records source path, SHA-256 hash,
-      generator and inferential unit for Figures 1--8 and Supplementary Figures S1--S17; hashes include the final alignment-dose and Fashion-MNIST panels.
+      generator and inferential unit for Figures 1--8 and Supplementary Figures S1--S22; hashes include the final alignment-dose, Fashion-MNIST and detailed morphology, focal and measured-response panels.
 - [x] Plotting scripts read the frozen source tables or write and then read the deterministic analysis outputs; numerical result labels are not maintained as an independent hand-entered source.
 - [~] Final figures use embedded Type 1 or TrueType fonts and a consistent,
       color-accessible palette; the existing renders and the alignment-dose
@@ -107,7 +106,7 @@ Status key: `[x]` complete in the current draft; `[~]` drafted but requires a fi
 - [x] Derived manifests, endpoint exclusion logs and non-restricted source data are organized locally for release.
 - [ ] Deposit the final derived-data package in a stable repository and add its DOI/accession.
 - [x] The journal-formatted Source Data package was regenerated for the final
-      eight-main-figure, seventeen-supplementary-figure layout. Its 200-file
+      eight-main-figure, twenty-two-supplementary-figure layout. Its allow-listed
       allow-listed archive includes the H3 literal grouped-point control, the
       independent H2 BP/LocalCA cohort, paired contrasts and completeness audit;
       the ZIP integrity check passes.
@@ -144,7 +143,8 @@ Status key: `[x]` complete in the current draft; `[~]` drafted but requires a fi
 ## Prior dissemination and authorship
 
 - [x] arXiv:2607.03556 and the NeurIPS 2026 submission are disclosed in the draft cover letter.
-- [x] The extension statement distinguishes retained theory from new morphology, perturbation and functional analyses.
+- [x] The related-work statement identifies the integrated conference-stage
+      foundation and the evidence added in the standalone journal Article.
 - [x] Maceo Richards is retained as an author for reused first-paper theory and experiments.
 - [ ] Update the earlier-work status after the NeurIPS decision.
 - [ ] Run a final text- and figure-overlap audit and cite the proceedings article if accepted.
