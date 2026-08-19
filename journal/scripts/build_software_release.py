@@ -35,7 +35,7 @@ from pathlib import Path, PurePosixPath
 
 
 JOURNAL_ROOT = Path(__file__).resolve().parents[1]
-REPOSITORY_ROOT = JOURNAL_ROOT.parents[2]
+REPOSITORY_ROOT = JOURNAL_ROOT.parent
 SUBMISSION_ROOT = JOURNAL_ROOT / "submission"
 STAGE_NAME = "software_release"
 ARCHIVE_NAME = "Dendritic_credit_assignment_software.zip"
@@ -152,15 +152,15 @@ JOURNAL_SCRIPTS = (
 )
 ARCHIVED_ANALYSIS_SCRIPTS = (
     (
-        Path("drafts/dendritic-local-learning/neurips/scripts/summarize_init_policy_factorial.py"),
+        Path("neurips/scripts/summarize_init_policy_factorial.py"),
         "Figure 2 architecture-by-initialization-policy factorial summarizer",
     ),
     (
-        Path("drafts/dendritic-local-learning/neurips/scripts/measure_layer_soma_factorial.py"),
+        Path("neurips/scripts/measure_layer_soma_factorial.py"),
         "Figure 2 layer/soma feedback and backward-only gradient diagnostic",
     ),
     (
-        Path("drafts/dendritic-local-learning/neurips/scripts/measure_theory_diagnostics.py"),
+        Path("neurips/scripts/measure_theory_diagnostics.py"),
         "Figure 2 exact-gradient and compartment-error diagnostic dependency",
     ),
 )
