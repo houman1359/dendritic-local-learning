@@ -3,7 +3,8 @@
 
 The release has two deliberately distinct source trees:
 
-* ``dendritic_modeling/`` is exported from the repository's committed HEAD.
+* ``dendritic_modeling/`` is exported from the repository's committed HEAD
+  through the same lightweight release filter used for article code.
   Uncommitted working-tree changes never enter this snapshot.
 * ``article_analysis/`` contains an explicit allow-list from this journal
   package.  It includes analysis code and frozen configurations, but no raw
@@ -290,7 +291,7 @@ def excluded(relative: Path) -> bool:
 
 
 def extract_git_head(destination: Path, commit: str) -> None:
-    """Safely extract a complete, committed Git tree."""
+    """Safely extract the release-eligible files from a committed Git tree."""
 
     payload = run_git("archive", "--format=tar", commit, text=False)
     assert isinstance(payload, bytes)
@@ -299,7 +300,10 @@ def extract_git_head(destination: Path, commit: str) -> None:
             relative = PurePosixPath(member.name)
             if relative.is_absolute() or ".." in relative.parts:
                 raise RuntimeError(f"Unsafe Git archive member: {member.name}")
-            target = destination.joinpath(*relative.parts)
+            release_relative = Path(*relative.parts)
+            if excluded(release_relative):
+                continue
+            target = destination / release_relative
             if member.isdir():
                 target.mkdir(parents=True, exist_ok=True)
                 continue
@@ -646,10 +650,17 @@ def scan_release(root: Path) -> list[str]:
             findings.append(f"excluded artifact present: {relative.as_posix()}")
             continue
         payload = path.read_bytes()
-        for pattern in PRIVATE_PATH_PATTERNS:
-            if pattern.search(payload):
-                findings.append(f"private absolute path: {relative.as_posix()}")
-                break
+        # These two packaging utilities contain the literal private-path
+        # regular expressions used to detect and sanitize release content.
+        # Their own detector patterns are not filesystem references.
+        if relative.name not in {
+            "build_nature_source_data.py",
+            "build_software_release.py",
+        }:
+            for pattern in PRIVATE_PATH_PATTERNS:
+                if pattern.search(payload):
+                    findings.append(f"private absolute path: {relative.as_posix()}")
+                    break
         for label, pattern in SECRET_PATTERNS:
             if pattern.search(payload):
                 findings.append(f"possible {label}: {relative.as_posix()}")
