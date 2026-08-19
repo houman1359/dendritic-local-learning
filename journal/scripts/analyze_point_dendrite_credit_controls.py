@@ -15,8 +15,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import yaml
-from matplotlib.lines import Line2D
-from matplotlib.patches import Circle, FancyBboxPatch
 
 
 SCRIPT_DIR = Path(__file__).resolve().parent
@@ -28,20 +26,22 @@ from journal_style import (  # noqa: E402
     ERR_CAPSIZE,
     FIG_W,
     LW_DATA,
-    LW_EDGE,
     LW_ERR,
     LW_HAIR,
-    MARKERS,
     MARKER_MS,
     PT_ANNOT,
+    PT_LEGEND,
     PT_SMALL,
     apply_neurips_style,
     audit_layout,
     audit_text_over_data,
+    axis_break_note,
     clean_legend,
     panel_title,
     style_axis,
 )
+from analyze_nonlinear_physical_depth_confirmatory import draw_tree  # noqa: E402
+from credit_tree_schematics import MS_JUNCTION  # noqa: E402
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -608,46 +608,40 @@ def _summary_row(summary: pd.DataFrame, **filters: Any) -> pd.Series:
 
 
 def _draw_architecture_schematic(ax: plt.Axes) -> None:
+    """Three architecture motifs in the credit-tree library vocabulary: an
+    unstructured point MLP, parallel pooled arms (grouped star), and the
+    serial dendritic tree whose junctions carry the credit path."""
     ax.set_xlim(0, 1)
     ax.set_ylim(0, 1)
     ax.axis("off")
     panel_title(ax, "G", "Architecture controls")
-    columns = [(0.17, "point\nMLP"), (0.50, "grouped\nstar"), (0.83, "serial\ntree")]
-    for x, label in columns:
-        ax.add_patch(
-            FancyBboxPatch(
-                (x - 0.125, 0.14), 0.25, 0.70,
-                boxstyle="round,pad=0.01,rounding_size=0.025",
-                facecolor=COLORS["panel_bg"], edgecolor=COLORS["grid"], lw=LW_EDGE,
+    # Point MLP: crossed dense layers, control gray.
+    for y, count in ((0.85, 3), (0.51, 4), (0.17, 3)):
+        for offset in np.linspace(-0.075, 0.075, count):
+            ax.plot(
+                [0.17 + offset], [y], marker="o", ms=MS_JUNCTION,
+                mfc=COLORS["point_mlp"], mec="none", ls="none", zorder=4,
             )
+    for y1, y2 in ((0.85, 0.51), (0.51, 0.17)):
+        ax.plot([0.095, 0.245], [y1, y2], color=COLORS["mute"], lw=LW_HAIR)
+        ax.plot([0.245, 0.095], [y1, y2], color=COLORS["mute"], lw=LW_HAIR)
+    # Grouped star: independent two-segment arms pooled at the soma.
+    draw_tree(
+        ax, [4, 1], x0=0.50, y0=0.16, radius=0.70, sector_deg=30.0,
+        color=COLORS["oracle"],
+    )
+    # Serial tree: the D3 chain-of-junctions architecture.
+    draw_tree(
+        ax, [2, 1, 2], x0=0.83, y0=0.16, radius=0.70, sector_deg=28.0,
+        color=COLORS["dend"],
+    )
+    for x, label in (
+        (0.17, "point\nMLP"), (0.50, "grouped\nstar"), (0.83, "serial\ntree")
+    ):
+        ax.text(
+            x, 0.055, label, ha="center", va="center", linespacing=1.1,
+            fontsize=PT_ANNOT, color=COLORS["ink"],
         )
-        ax.text(x, 0.095, label, ha="center", va="top", fontsize=PT_SMALL,
-                linespacing=1.0)
-    # Point MLP.
-    for y, count in ((0.69, 3), (0.49, 4), (0.29, 2)):
-        for offset in np.linspace(-0.07, 0.07, count):
-            ax.add_patch(Circle((0.17 + offset, y), 0.017, color=COLORS["point_mlp"]))
-    for y1, y2 in ((0.69, 0.49), (0.49, 0.29)):
-        ax.plot([0.10, 0.24], [y1, y2], color=COLORS["mute"], lw=LW_HAIR)
-        ax.plot([0.24, 0.10], [y1, y2], color=COLORS["mute"], lw=LW_HAIR)
-    # Independent grouped arms.
-    for x0 in (0.43, 0.50, 0.57):
-        ax.plot([x0, 0.50], [0.72, 0.30], color=COLORS["oracle"], lw=LW_DATA)
-        ax.add_patch(Circle((x0, 0.72), 0.022, color=COLORS["oracle"]))
-    ax.add_patch(Circle((0.50, 0.27), 0.033, color=COLORS["soma"]))
-    ax.text(0.50, 0.54, "parallel\npooling", ha="center", va="center", fontsize=PT_SMALL)
-    # Serial tree.
-    points = [(0.83, 0.27), (0.83, 0.45), (0.77, 0.62), (0.89, 0.62), (0.74, 0.76), (0.80, 0.76), (0.86, 0.76), (0.92, 0.76)]
-    edges = [(0, 1), (1, 2), (1, 3), (2, 4), (2, 5), (3, 6), (3, 7)]
-    for left, right in edges:
-        ax.plot(
-            [points[left][0], points[right][0]],
-            [points[left][1], points[right][1]],
-            color=COLORS["dend"], lw=LW_DATA,
-        )
-    for idx, point in enumerate(points):
-        ax.add_patch(Circle(point, 0.032 if idx == 0 else 0.015, color=COLORS["soma"] if idx == 0 else COLORS["dend"]))
-    ax.text(0.50, 0.91, "same task · paired seeds · no retuning", ha="center", va="center", fontsize=PT_SMALL, color=COLORS["mute"])
 
 
 def _line(
@@ -685,25 +679,37 @@ def render_figure(summary: pd.DataFrame, contrasts: pd.DataFrame) -> None:
         2, 3,
         figsize=(FIG_W, 5.15),
         gridspec_kw={
-            "left": 0.09,
+            "left": 0.115,
             "right": 0.985,
-            "bottom": 0.15,
-            "top": 0.91,
-            "wspace": 0.74,
-            "hspace": 0.76,
+            "bottom": 0.168,
+            "top": 0.9125,
+            "wspace": 0.62,
+            "hspace": 0.74,
         },
     )
     ax_a, ax_b, ax_c, ax_d, ax_e, ax_f = axes.ravel()
     _draw_architecture_schematic(ax_a)
 
-    _line(ax_b, summary, architecture="serial_tree", credit="full_bp", color=COLORS["dend"], label="serial tree", marker="o")
-    _line(ax_b, summary, architecture="all_active_star", credit="full_bp", color=COLORS["oracle"], label="grouped star", marker="s")
+    _line(ax_b, summary, architecture="serial_tree", credit="full_bp", color=COLORS["shunting"], label="serial tree", marker="o")
+    # grouped star is always the violet triangle, matching the P-U block.
+    _line(ax_b, summary, architecture="all_active_star", credit="full_bp", color=COLORS["oracle"], label="grouped star", marker="^")
+    ax_b.set_xlim(0.7, 3.3)
     ax_b.set_xticks([1, 2, 3])
+    ax_b.set_ylim(0.44, 1.06)
+    ax_b.set_yticks([0.5, 0.6, 0.7, 0.8, 0.9, 1.0])
     ax_b.set_xlabel(r"physical depth $D_{\mathrm{p}}$")
     ax_b.set_ylabel("test accuracy")
     panel_title(ax_b, "H", "Serial composition")
     style_axis(ax_b, grid="y")
-    clean_legend(ax_b, loc="upper left", fontsize=PT_SMALL)
+    # Two series: direct labels instead of a legend.
+    ax_b.text(
+        3.0, 0.955, "serial tree", ha="right", va="bottom",
+        fontsize=PT_LEGEND, color=COLORS["shunting"],
+    )
+    ax_b.text(
+        3.0, 0.572, "grouped star", ha="right", va="top",
+        fontsize=PT_LEGEND, color=COLORS["oracle"],
+    )
 
     indexed = contrasts.set_index("contrast")
     names = [
@@ -719,9 +725,16 @@ def render_figure(summary: pd.DataFrame, contrasts: pd.DataFrame) -> None:
     low = 100 * part.ci95_low.to_numpy(float)
     high = 100 * part.ci95_high.to_numpy(float)
     ax_c.axvline(0, color=COLORS["mute"], lw=LW_HAIR)
-    ax_c.errorbar(mean, y, xerr=np.vstack([mean - low, high - mean]), fmt="o", color=COLORS["dend"], ecolor=COLORS["dend"], elinewidth=LW_ERR, capsize=ERR_CAPSIZE, ms=MARKER_MS)
+    ax_c.errorbar(
+        mean, y, xerr=np.vstack([mean - low, high - mean]), fmt="o",
+        color=COLORS["shunting"], ecolor=COLORS["shunting"],
+        markerfacecolor=COLORS["shunting"], markeredgecolor="white",
+        markeredgewidth=0.5, elinewidth=LW_ERR, capsize=ERR_CAPSIZE,
+        ms=MARKER_MS,
+    )
+    ax_c.set_ylim(-0.6, 3.6)
     ax_c.set_yticks(y, labels)
-    ax_c.set_xlabel("serial − star (points)")
+    ax_c.set_xlabel("serial − star (pp)")
     panel_title(ax_c, "I", "Composition contrasts")
     style_axis(ax_c, grid="x")
 
@@ -734,14 +747,17 @@ def render_figure(summary: pd.DataFrame, contrasts: pd.DataFrame) -> None:
     ]
     for credit, color, label, marker, linestyle in credit_specs:
         _line(ax_d, summary, architecture="serial_tree", credit=credit, color=color, label=label, marker=marker, linestyle=linestyle)
+    ax_d.set_xlim(0.7, 3.3)
     ax_d.set_xticks([1, 2, 3])
+    ax_d.set_ylim(0.44, 1.06)
+    ax_d.set_yticks([0.5, 0.6, 0.7, 0.8, 0.9, 1.0])
     ax_d.set_xlabel(r"physical depth $D_{\mathrm{p}}$")
     ax_d.set_ylabel("test accuracy")
     panel_title(ax_d, "J", "Credit-coordinate ladder")
     style_axis(ax_d, grid="y")
     clean_legend(
-        ax_d, loc="upper center", bbox_to_anchor=(0.50, -0.25),
-        fontsize=PT_SMALL - 0.35, ncol=2,
+        ax_d, loc="upper center", bbox_to_anchor=(0.50, -0.235),
+        fontsize=PT_SMALL, ncol=2, handlelength=2.0,
     )
 
     names = [
@@ -752,11 +768,11 @@ def render_figure(summary: pd.DataFrame, contrasts: pd.DataFrame) -> None:
         "full_bp_minus_local_path__aligned__d3",
     ]
     labels = [
-        "coordinate cost",
-        "optimizer groups",
-        "eligibility residual",
-        "path specificity",
-        "BP − path LocalCA",
+        "coordinate\ncost",
+        "optimizer\ngroups",
+        "eligibility\nresidual",
+        "path\nspecificity",
+        "BP − path\nLocalCA",
     ]
     part = indexed.loc[names]
     y = np.arange(len(names))[::-1]
@@ -764,10 +780,17 @@ def render_figure(summary: pd.DataFrame, contrasts: pd.DataFrame) -> None:
     low = 100 * part.ci95_low.to_numpy(float)
     high = 100 * part.ci95_high.to_numpy(float)
     ax_e.axvline(0, color=COLORS["mute"], lw=LW_HAIR)
-    ax_e.errorbar(mean, y, xerr=np.vstack([mean - low, high - mean]), fmt="o", color=COLORS["additive"], ecolor=COLORS["additive"], elinewidth=LW_ERR, capsize=ERR_CAPSIZE, ms=MARKER_MS)
+    ax_e.errorbar(
+        mean, y, xerr=np.vstack([mean - low, high - mean]), fmt="o",
+        color=COLORS["additive"], ecolor=COLORS["additive"],
+        markerfacecolor=COLORS["additive"], markeredgecolor="white",
+        markeredgewidth=0.5, elinewidth=LW_ERR, capsize=ERR_CAPSIZE,
+        ms=MARKER_MS,
+    )
+    ax_e.set_ylim(-0.6, 4.6)
     ax_e.set_yticks(y, labels)
     ax_e.tick_params(axis="y", labelsize=PT_SMALL)
-    ax_e.set_xlabel("accuracy difference (points)")
+    ax_e.set_xlabel("paired difference (pp)")
     panel_title(ax_e, "K", "BP–local decomposition")
     style_axis(ax_e, grid="x")
 
@@ -783,22 +806,35 @@ def render_figure(summary: pd.DataFrame, contrasts: pd.DataFrame) -> None:
     point_rows = point_rows.sort_values("order")
     labels = ["active\nmatch", "total\nmatch", "serial\nD3"]
     x = np.arange(3)
-    mean = 100 * point_rows.mean_test_accuracy.to_numpy(float)
-    low = 100 * point_rows.ci95_low_test_accuracy.to_numpy(float)
-    high = 100 * point_rows.ci95_high_test_accuracy.to_numpy(float)
-    colors = [COLORS["point_mlp"], COLORS["point_mlp"], COLORS["dend"]]
-    ax_f.bar(x, mean, color=colors, width=0.62, edgecolor="white", linewidth=LW_EDGE)
-    ax_f.errorbar(x, mean, yerr=np.vstack([mean - low, high - mean]), fmt="none", ecolor=COLORS["ink"], elinewidth=LW_ERR, capsize=ERR_CAPSIZE)
+    mean = point_rows.mean_test_accuracy.to_numpy(float)
+    low = point_rows.ci95_low_test_accuracy.to_numpy(float)
+    high = point_rows.ci95_high_test_accuracy.to_numpy(float)
+    colors = [COLORS["point_mlp"], COLORS["point_mlp"], COLORS["shunting"]]
+    for xi, mi, li, hi, color in zip(x, mean, low, high, colors):
+        ax_f.errorbar(
+            [xi], [mi], yerr=np.asarray([[mi - li], [hi - mi]]), fmt="o",
+            color=color, ecolor=color, markerfacecolor=color,
+            markeredgecolor="white", markeredgewidth=0.5,
+            elinewidth=LW_ERR, capsize=ERR_CAPSIZE, ms=MARKER_MS,
+        )
+    ax_f.set_xlim(-0.7, 2.7)
     ax_f.set_xticks(x, labels)
-    ax_f.set_ylabel("test accuracy (%)")
+    ax_f.set_ylim(0.86, 1.015)
+    ax_f.set_yticks([0.90, 0.95, 1.00])
+    ax_f.set_ylabel("test accuracy")
     panel_title(ax_f, "L", "Point-network controls")
     style_axis(ax_f, grid="y")
+    axis_break_note(ax_f, "y axis truncated", loc="lower right")
 
     FIGURES.mkdir(parents=True, exist_ok=True)
-    audit_text_over_data(fig)
-    audit_layout(fig)
-    for suffix in ("pdf", "png"):
-        fig.savefig(FIGURES / f"fig_point_dendrite_credit_controls.{suffix}", dpi=420)
+    fig.canvas.draw()
+    audit_layout(fig, "fig_point_dendrite_credit_controls")
+    audit_text_over_data(fig, "fig_point_dendrite_credit_controls")
+    fig.savefig(
+        FIGURES / "fig_point_dendrite_credit_controls.pdf",
+        metadata={"CreationDate": None, "ModDate": None},
+    )
+    fig.savefig(FIGURES / "fig_point_dendrite_credit_controls.png", dpi=600)
     plt.close(fig)
 
 
@@ -874,6 +910,15 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--allow-incomplete", action="store_true")
     args = parser.parse_args()
+    if not RUNS.exists():
+        # Frozen-source render: raw run directories are not in this checkout;
+        # restyle the figure from the audited source-data summaries.
+        summary = pd.read_csv(OUTPUT / "condition_summary.csv")
+        contrasts = pd.read_csv(OUTPUT / "paired_contrasts.csv")
+        render_figure(summary, contrasts)
+        print("Rendered fig_point_dendrite_credit_controls from frozen source "
+              "data (run directories absent; collection skipped).")
+        return
     new, audit = collect_new(allow_incomplete=args.allow_incomplete)
     references = reference_rows()
     combined = pd.concat([references, new], ignore_index=True, sort=False)

@@ -13,6 +13,7 @@ import pandas as pd
 from matplotlib.colors import TwoSlopeNorm
 from matplotlib.patches import FancyArrowPatch, FancyBboxPatch
 
+from credit_tree_schematics import draw_credit_tree
 from journal_style import (
     COLORS,
     DIV_CMAP,
@@ -101,58 +102,73 @@ def heatmap_with_colorbar(
 
 
 def operator_schematic(ax: plt.Axes) -> None:
-    ax.set_xlim(0, 1)
-    ax.set_ylim(0, 1)
-    ax.axis("off")
+    """Panel A: restricted-route credit tree feeding the operator flow.
+
+    The tree is the shared credit-tree vocabulary in *address* mode -- K = 4
+    nested route-field capsules, the aspect of dendritic coding this figure
+    manipulates -- so panel A states visually that M is a restricted set of
+    subtree routes.  The task gradient enters at the soma, is carried by the
+    route capsules (the operator M), and emits per-synapse updates in the
+    canopy; the guarantee the phase panels sweep sits underneath.
+    """
     panel_title(ax, "A", "Credit-operator utility")
 
-    # Recessive card grouping the utility expression: panel_bg fill with a
-    # hairline grid-tone outline, so the math reads as one designed unit
-    # beside the flow column without competing with the stage boxes.
+    # World frame matched to the panel-box aspect so the equal-aspect draw
+    # neither letterboxes the tree nor stretches the gutters.
+    fig_w, fig_h = ax.figure.get_size_inches()
+    box = ax.get_position()
+    aspect = (box.height * fig_h) / (box.width * fig_w)
+    x_lo, x_hi, y_hi = -2.6, 5.3, 3.55
+    y_lo = y_hi - (x_hi - x_lo) * aspect
+    draw_credit_tree(ax, mode="address", K=4, labels=False, scale=0.85,
+                     xlim=(x_lo, x_hi), ylim=(y_lo, y_hi))
+
+    # Right column, top to bottom = the operator flow: updates out at the
+    # canopy, the route capsules as the operator M, task gradient in at soma.
+    ax.add_patch(
+        FancyArrowPatch(
+            (2.48, 2.42), (2.88, 2.62), arrowstyle="-|>", mutation_scale=7,
+            connectionstyle="arc3,rad=0.10", lw=LW_REF,
+            color=COLORS["shunting"], capstyle="round", zorder=4.5,
+        )
+    )
+    ax.text(4.05, 2.94, "update\n$-\\eta M(g{+}\\xi)$", ha="center",
+            va="center", fontsize=PT_SMALL, color=COLORS["shunting"],
+            linespacing=1.25)
+    ax.plot([2.98, 2.32], [1.58, 1.80], color=COLORS["mute"], lw=LW_HAIR,
+            zorder=1.6)
+    ax.text(4.05, 1.52, "routes $M$", ha="center", va="center",
+            fontsize=PT_SMALL, color=COLORS["additive"])
+    ax.add_patch(
+        FancyArrowPatch(
+            (2.95, 0.14), (0.36, 0.02), arrowstyle="-|>", mutation_scale=7,
+            connectionstyle="arc3,rad=-0.10", lw=LW_REF,
+            color=COLORS["oracle"], capstyle="round", zorder=4.5,
+        )
+    )
+    ax.text(4.05, 0.18, "task\ngradient $g$", ha="center", va="center",
+            fontsize=PT_SMALL, color=COLORS["oracle"], linespacing=1.25)
+
+    # The guarantee, grouped on a recessive card under the tree.
+    eq_x = (x_lo + x_hi) / 2.0
+    guar_y = (y_lo + 3.30, y_lo + 2.50, y_lo + 1.95, y_lo + 1.35)
     ax.add_patch(
         FancyBboxPatch(
-            (0.418, 0.35), 0.562, 0.43, boxstyle="round,pad=0.015",
+            (eq_x - 3.25, y_lo + 0.80), 6.5, 3.05, boxstyle="round,pad=0.12",
             facecolor=COLORS["panel_bg"], edgecolor=COLORS["grid"],
             lw=LW_HAIR, zorder=0.5,
         )
     )
-
-    # Left column: the three-stage flow, evenly spaced, consistent arrows.
-    box_x, box_w, box_h = 0.02, 0.34, 0.20
-    boxes = [
-        (0.76, "task\ngradient $g$", COLORS["oracle"]),
-        (0.45, "route/gain\n$M$", COLORS["additive"]),
-        (0.14, "update\n$-\\eta M(g{+}\\xi)$", COLORS["shunting"]),
-    ]
-    for y, label, color in boxes:
-        ax.add_patch(
-            FancyBboxPatch(
-                (box_x, y), box_w, box_h, boxstyle="round,pad=0.015",
-                facecolor="white", edgecolor=color, lw=LW_DATA,
-            )
-        )
-        ax.text(box_x + box_w / 2, y + box_h / 2, label, ha="center",
-                va="center", fontsize=PT_SMALL, color=color, linespacing=1.3)
-    arrow_x = box_x + box_w / 2
-    for top, bottom in ((0.743, 0.667), (0.433, 0.357)):
-        ax.add_patch(
-            FancyArrowPatch(
-                (arrow_x, top), (arrow_x, bottom), arrowstyle="-|>",
-                mutation_scale=7, lw=LW_REF, color=COLORS["mute"],
-            )
-        )
-
-    # Right column: the utility as a stacked fraction with an explicit rule.
-    eq_x = 0.70
-    ax.text(eq_x, 0.70, r"guarantee $\propto$", ha="center", va="center",
+    ax.text(eq_x, guar_y[0], r"guarantee $\propto$", ha="center", va="center",
             fontsize=PT_ANNOT, color=COLORS["ink"])
-    ax.text(eq_x, 0.565, r"$[g^{\mathrm{T}}Mg]^{2}$", ha="center", va="center",
-            fontsize=PT_ANNOT, color=COLORS["ink"])
-    ax.plot([0.44, 0.96], [0.505, 0.505], color=COLORS["ink"], lw=LW_HAIR)
-    ax.text(eq_x, 0.435,
+    ax.text(eq_x, guar_y[1], r"$[g^{\mathrm{T}}Mg]^{2}$", ha="center",
+            va="center", fontsize=PT_ANNOT, color=COLORS["ink"])
+    ax.plot([eq_x - 2.5, eq_x + 2.5], [guar_y[2], guar_y[2]],
+            color=COLORS["ink"], lw=LW_HAIR)
+    ax.text(eq_x, guar_y[3],
             r"$\|Mg\|^{2}{+}\mathrm{tr}(M\Sigma M^{\mathrm{T}})$",
             ha="center", va="center", fontsize=PT_ANNOT, color=COLORS["ink"])
-    ax.text(0.5, 0.035, "signal² / (gain + noise)",
+    ax.text(eq_x, y_lo + 0.30, "signal² / (gain + noise)",
             ha="center", va="center", fontsize=PT_SMALL, style="italic",
             color=COLORS["mute"])
 
@@ -178,7 +194,7 @@ def main() -> None:
             "bottom": 0.07,
             "top": 0.925,
             "wspace": 0.62,
-            "hspace": 0.68,
+            "hspace": 0.58,
         },
     )
     ax_a, ax_b, ax_c, ax_d, ax_e, ax_f, ax_g, ax_h, ax_i = axes.ravel()
@@ -263,13 +279,14 @@ def main() -> None:
             if task_depth in depth_marker_dx
             else np.zeros(len(xs), dtype=bool)
         )
-        ax_d.plot(xs, ys, color=color, marker=marker, ms=MARKER_MS, lw=LW_DATA,
-                  markevery=list(np.flatnonzero(~fanned)), mec="white", mew=0.4,
+        # The line vertex moves with its fanned marker so every marker stays
+        # visually attached to its own series (the CI band keeps the true x).
+        xs_line = xs.copy()
+        if task_depth in depth_marker_dx:
+            xs_line[fanned] = xs[fanned] + depth_marker_dx[task_depth]
+        ax_d.plot(xs_line, ys, color=color, marker=marker, ms=MARKER_MS,
+                  lw=LW_DATA, mec="white", mew=0.4,
                   label=f"$H={task_depth}$")
-        if fanned.any():
-            ax_d.scatter(xs[fanned] + depth_marker_dx[task_depth], ys[fanned],
-                         color=color, marker=marker, s=MARKER_MS ** 2, zorder=3,
-                         edgecolors="white", linewidths=0.4)
         ax_d.fill_between(part.model_depth, part.ci95_low_final_population_loss,
                           part.ci95_high_final_population_loss, color=color,
                           alpha=0.10, linewidth=0)
@@ -369,13 +386,6 @@ def main() -> None:
     panel_title(ax_f, "F", "Reliability gains")
     style_axis(ax_f)
     clean_legend(ax_f, fontsize=PT_LEGEND, loc="lower left")
-    # Under-axis key note (panel-C convention): inside the panel the note's
-    # baseline sat level with the legend's last entry and read as one line.
-    ax_f.text(0.5, -0.285,
-              "point gate ≡ SNR-aligned\ncoincident markers at 0 offset",
-              transform=ax_f.transAxes, ha="center", va="top",
-              fontsize=PT_SMALL, style="italic", color=COLORS["mute"],
-              linespacing=1.25)
 
     # ── G: spectral capture is identical for the three bases ──────────────
     span_styles = [
@@ -396,7 +406,11 @@ def main() -> None:
     ax_g.set_ylabel("spectral capture")
     panel_title(ax_g, "G", "Span invariance")
     style_axis(ax_g)
-    clean_legend(ax_g, fontsize=PT_LEGEND, loc="upper left")
+    # The three series are direct-labeled in panel H; a mute pointer replaces
+    # the boxed legend so the two same-span panels share one key.
+    ax_g.text(0.03, 0.97, "key as in H", transform=ax_g.transAxes,
+              ha="left", va="top", fontsize=PT_ANNOT, style="italic",
+              color=COLORS["mute"])
     ax_g.text(0.97, 0.05, "curves coincide\n(markers offset)",
               transform=ax_g.transAxes, ha="right", va="bottom",
               fontsize=PT_SMALL, style="italic", color=COLORS["mute"],
@@ -432,8 +446,8 @@ def main() -> None:
     ax_i.scatter(merged.maximum_guaranteed_decrease,
                  merged.norm_matched_one_step_progress,
                  s=7, alpha=0.30, edgecolors="none", color=COLORS["additive"])
-    # Extra headroom so the stats block clears the dense y = 1.0 data ceiling.
-    ax_i.set_ylim(-1.42, 2.08)
+    # Just enough headroom for the stats block above the y = 1.0 data ceiling.
+    ax_i.set_ylim(-1.38, 1.74)
     ax_i.set_yticks([-1.0, -0.5, 0.0, 0.5, 1.0])
     ci_low, ci_high = audit["seed_block_ci95_utility_vs_one_step_progress"]
     ax_i.text(0.02, 0.97,

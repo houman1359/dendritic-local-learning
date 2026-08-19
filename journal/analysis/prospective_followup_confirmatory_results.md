@@ -1,12 +1,5 @@
 # Prospective shunting, topology, and fixed-budget results
 
-> **Superseded publication analysis.** This file records the complete
-> historical artifact collector. The outcome-independent 10 August 2026 input-
-> validity audit excludes signed synthetic-noise shunting conditions and the
-> full inhibitory-dose family. Use
-> `source_data/prospective_input_validity/followup_publication_*` and
-> `routing_valid_paired_contrasts.csv` for the paper.
-
 This report is generated only after all 1,200 included frozen confirmatory runs pass the artifact audit. Seeds are paired and are the inferential unit. Canary runs are excluded.
 
 ## Matched-bandwidth ancestry routing

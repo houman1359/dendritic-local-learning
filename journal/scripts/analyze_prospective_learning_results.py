@@ -616,7 +616,7 @@ def _plot_legacy(frame: pd.DataFrame, summary: pd.DataFrame) -> None:
             f"{int(descent[family])}/160 descent",
             ha="center",
             va="bottom",
-            fontsize=6.1,
+            fontsize=PT_SMALL,
             color=COLORS["mute"],
         )
 
@@ -695,20 +695,21 @@ def _plot_streamlined_main() -> None:
 
     # Height grew and the top margin widened (0.31 in -> 0.46 in) so the
     # A/B/C panel letters, which rise above the panel titles, clear the canvas.
-    # The left margin holds panel G's two-line routing-condition tick labels
-    # ('route derangement' is the widest), which match the subtree
+    # The 0.112 left margin fully holds panel G's two-line routing-condition
+    # tick labels ('route derangement' is the widest, and clipped at the
+    # canvas edge under the former 0.098 margin); the names match the subtree
     # full-factorial legend verbatim.
     fig, axes = plt.subplots(
         3,
         3,
         figsize=(FIG_W, 6.45),
         gridspec_kw={
-            "left": 0.098,
+            "left": 0.112,
             "right": 0.985,
             "bottom": 0.078,
-            "top": 0.929,
+            "top": 0.933,
             "wspace": 0.55,
-            "hspace": 0.66,
+            "hspace": 0.58,
         },
     )
     ax_a, ax_b, ax_c, ax_d, ax_e, ax_f, ax_g, ax_h, ax_i = axes.ravel()
@@ -747,12 +748,30 @@ def _plot_streamlined_main() -> None:
         ax.set_ylabel("accuracy gain (pp)")
         panel_title(ax, letter, title)
         style_axis(ax)
-    # The legend is pinned inside the empty band between the y=0 reference
-    # line and the data (both curves stay above ~4.7 pp): auto-relocation is
-    # deliberately off because its data-overlap objective is blind to the
-    # dashed reference line and previously parked the legend right on it.
-    clean_legend(ax_a, fontsize=PT_LEGEND, loc="center right")
-    # Panel B carries a single series; a direct colour label replaces a legend
+    # Two series only: direct colour labels at the well-separated left
+    # endpoints replace a legend (shunting sits ~2 pp above additive at
+    # depth 1).  This panel is the figure's core-colour statement; panel J
+    # cross-references it.
+    ax_a.set_ylim(-0.5, 8.6)
+    ax_a.text(
+        1.0,
+        7.55,
+        "Shunting",
+        color=CORE_COLOR["dendritic_shunting"],
+        fontsize=PT_LEGEND,
+        ha="left",
+        va="bottom",
+    )
+    ax_a.text(
+        1.0,
+        4.4,
+        "Additive",
+        color=CORE_COLOR["dendritic_additive"],
+        fontsize=PT_LEGEND,
+        ha="left",
+        va="top",
+    )
+    # Panel H carries a single series; a direct colour label replaces a legend
     # and doubles as the in-panel colour key for the additive core.
     ax_b.text(
         1.05,
@@ -780,7 +799,7 @@ def _plot_streamlined_main() -> None:
         ("mnist", "dendritic_additive", CORE_COLOR["dendritic_additive"],
          CORE_MARKER["dendritic_additive"], "-", 0.0, "MNIST · additive"),
         ("noise_resilience", "dendritic_additive", COLORS["local"],
-         MARKERS[2], "--", 0.10, "Noise · additive"),
+         MARKERS[2], "--", 0.10, "noise · additive"),
     ]
     for task, core, color, marker, linestyle, dodge, label in exact_specs:
         part = exact[exact.task.eq(task) & exact.core.eq(core)].sort_values("depth")
@@ -818,7 +837,7 @@ def _plot_streamlined_main() -> None:
     for task_index, task in enumerate(("mnist", "noise_resilience")):
         for depth_index, depth in enumerate((2, 4)):
             base = task_index * 2 + depth_index
-            labels.append(f"{'MNIST' if task == 'mnist' else 'Noise'} d{depth}")
+            labels.append(f"{'MNIST' if task == 'mnist' else 'noise'} d{depth}")
             for core, offset in (("dendritic_shunting", -0.09), ("dendritic_additive", 0.09)):
                 selected = routing[
                     routing.task.eq(task)
@@ -847,27 +866,22 @@ def _plot_streamlined_main() -> None:
     ax_d.set_xticks(range(4))
     ax_d.set_xticklabels(wrap_ticklabels(labels, width=6))
     ax_d.tick_params(axis="x", labelsize=PT_SMALL)
-    ax_d.set_ylim(-0.12, 1.18)
+    ax_d.set_ylim(-0.12, 1.04)
     ax_d.set_yticks([0.0, 0.4, 0.8])
     ax_d.set_ylabel("correct routing gain (pp)")
     panel_title(ax_d, "J", "Matched routing")
     style_axis(ax_d)
-    # In-panel colour key so the shunting/additive coding is readable without
-    # referring back to panel A; the headroom above keeps it off the data.
-    core_key = [
-        Line2D(
-            [0], [0], ls="none", marker=CORE_MARKER[core], ms=MARKER_MS,
-            color=CORE_COLOR[core], markerfacecolor=CORE_COLOR[core],
-            markeredgecolor="none", label=CORE_LABEL[core],
-        )
-        for core in ("dendritic_shunting", "dendritic_additive")
-    ]
-    clean_legend(
-        ax_d,
-        handles=core_key,
-        fontsize=PT_LEGEND,
-        loc="upper left",
-        auto_clear=True,
+    # Panel G states the core colours/markers once (direct labels); this panel
+    # repeats both cues, so a mute cross-reference replaces a second key.
+    ax_d.text(
+        0.03,
+        0.97,
+        "colors as in G",
+        transform=ax_d.transAxes,
+        color=COLORS["mute"],
+        fontsize=PT_SMALL,
+        ha="left",
+        va="top",
     )
 
     clean_exact = clean_exact[clean_exact.depth.eq("all_depths_seed_mean")].copy()
@@ -947,17 +961,7 @@ def _plot_streamlined_main() -> None:
     )
     # The neuron-indexed, exact and BP contrasts carry 95% CIs of only
     # ±0.13-0.19 pp — narrower than the marker itself, so no whiskers can
-    # protrude.  Say so explicitly next to those points, otherwise the
-    # asymmetry against scalar's wide interval reads as an omission.
-    ax_f.text(
-        2.0,
-        -2.7,
-        "95% CIs smaller\nthan marker",
-        color=COLORS["mute"],
-        fontsize=PT_SMALL,
-        ha="center",
-        va="center",
-    )
+    # protrude.  The caption states this; an in-panel QA note would restate it.
 
     # One colour per routing condition, shared by panels G, H and I, following
     # the manuscript-wide routing taxonomy (figs 3/5/8, the subtree factorial
@@ -1092,29 +1096,9 @@ def _plot_streamlined_main() -> None:
             label=condition_short[condition],
         )
     ax_h.axhline(0, color=COLORS["mute"], ls="--", lw=LW_REF)
-    # Honest multiplicity: all ten correct-ancestry seeds land exactly on
-    # (1, 1) and all ten route-derangement seeds stack at capture 0 (progress
-    # spread < 0.02), so each cluster renders as one marker.  Annotate the
-    # hidden seeds so per-seed spread stays comparable with the visibly
-    # fanned conditions.
-    ax_h.text(
-        0.93,
-        1.0,
-        "10 seeds coincide",
-        color=COLORS["mute"],
-        fontsize=PT_SMALL,
-        ha="right",
-        va="center",
-    )
-    ax_h.text(
-        0.07,
-        -1.05,
-        "10 seeds overlap",
-        color=COLORS["mute"],
-        fontsize=PT_SMALL,
-        ha="left",
-        va="center",
-    )
+    # Seed multiplicity (all ten correct-ancestry seeds land exactly on (1, 1);
+    # all ten route-derangement seeds stack at capture 0) is stated in the
+    # caption rather than as in-panel QA notes.
     ax_h.set_xticks([0.0, 0.5, 1.0])
     ax_h.set_xlabel("exact-gradient capture")
     ax_h.set_ylabel("one-step progress")
@@ -1123,15 +1107,15 @@ def _plot_streamlined_main() -> None:
     # No in-panel key: an unframed key's sample markers were indistinguishable
     # from the data field (a sample marker reads as one more point on the
     # descending arc), and a framed four-row card cannot fit any empty band of
-    # this panel without occluding the arc or the coincidence notes.  Panel G
+    # this panel without occluding the arc.  Panel M (canonical lettering)
     # names all four conditions on its rows in exactly these hues, so a mute
     # cross-reference in the clear lower-right corner carries the key; the
-    # marker shapes are a redundant cue on top of the G hues, repeating the
+    # marker shapes are a redundant cue on top of the M hues, repeating the
     # subtree full-factorial figure's shapes for the shared conditions.
     ax_h.text(
         0.97,
         0.32,
-        "colors as in G",
+        "colors as in M",
         transform=ax_h.transAxes,
         color=COLORS["mute"],
         fontsize=PT_SMALL,
@@ -1249,7 +1233,7 @@ def _plot_three_claim_main() -> None:
     for task_index, task in enumerate(("mnist", "noise_resilience")):
         for depth_index, depth in enumerate((2, 4)):
             base = task_index * 2 + depth_index
-            labels.append(f"{'MNIST' if task == 'mnist' else 'Noise'}\nd{depth}")
+            labels.append(f"{'MNIST' if task == 'mnist' else 'noise'}\nd{depth}")
             for core, offset in (("dendritic_shunting", -0.09), ("dendritic_additive", 0.09)):
                 row = routing[
                     routing.task.eq(task)

@@ -11,6 +11,7 @@ from pathlib import Path
 import sys
 from typing import Any
 
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -27,7 +28,10 @@ from journal_style import (  # noqa: E402
     FIG_W,
     LW_DATA,
     LW_ERR,
+    LW_HAIR,
+    LW_REF,
     MARKER_MS,
+    PT_LEGEND,
     PT_SMALL,
     SEED_ALPHA,
     SEED_MS,
@@ -211,9 +215,11 @@ def summarize(frame: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame, dict[str
 
 
 def plot(frame: pd.DataFrame, summary: pd.DataFrame, contrasts: pd.DataFrame) -> None:
+    from matplotlib.ticker import MultipleLocator
+
     apply_neurips_style()
     fig, axes = plt.subplots(1, 2, figsize=(FIG_W, 2.55), gridspec_kw={
-        "left": 0.095, "right": 0.985, "bottom": 0.22, "top": 0.83, "wspace": 0.48,
+        "left": 0.09, "right": 0.985, "bottom": 0.15, "top": 0.845, "wspace": 0.30,
     })
     order = ["scalar fallback", "neuron indexed", "exact path"]
     labels = ["scalar", "neuron\nindexed", "exact\npath"]
@@ -223,22 +229,31 @@ def plot(frame: pd.DataFrame, summary: pd.DataFrame, contrasts: pd.DataFrame) ->
         wide = frame[frame.architecture.eq(architecture)].pivot(index="seed", columns="feedback", values="test_accuracy").loc[list(SEEDS), order]
         x = np.arange(3, dtype=float) + offsets[architecture]
         for values in wide.to_numpy(float):
-            axes[0].plot(x, values, color=arch_colors[architecture], alpha=0.15, lw=0.45)
+            axes[0].plot(x, values, color=arch_colors[architecture], alpha=0.15, lw=LW_HAIR)
         part = summary[summary.architecture.eq(architecture)].set_index("feedback").loc[order]
         y = part.mean_accuracy.to_numpy(float)
         axes[0].errorbar(x, y, yerr=np.vstack([y - part.ci95_low, part.ci95_high - y]),
                          color=arch_colors[architecture], marker="o" if architecture == "shunting" else "s",
-                         ms=MARKER_MS, lw=LW_DATA, elinewidth=LW_ERR, capsize=ERR_CAPSIZE,
-                         label=architecture)
+                         ms=MARKER_MS, lw=LW_DATA, elinewidth=LW_ERR, capsize=ERR_CAPSIZE)
     axes[0].set_xticks(range(3), labels)
+    axes[0].yaxis.set_major_locator(MultipleLocator(0.02))
+    # Percent ticks match the MNIST accuracy panels (fig. 2 B/D/F): one
+    # unit format for the same quantity across the multi-part figure.
+    axes[0].yaxis.set_major_formatter(mpl.ticker.PercentFormatter(1.0, decimals=0))
     axes[0].set_ylabel("Fashion-MNIST test accuracy")
     panel_title(axes[0], "P", "Second-dataset ladder")
-    style_axis(axes[0], grid="y")
-    axes[0].legend(frameon=False, fontsize=PT_SMALL, loc="lower right")
+    style_axis(axes[0])
+    # Two series only: stacked direct colour labels in the empty lower-right
+    # corner replace the boxed legend (this is the figure's colour key; panel Q
+    # cross-references it).
+    axes[0].text(0.97, 0.16, "shunting", transform=axes[0].transAxes,
+                 color=arch_colors["shunting"], fontsize=PT_LEGEND,
+                 ha="right", va="bottom")
+    axes[0].text(0.97, 0.05, "additive", transform=axes[0].transAxes,
+                 color=arch_colors["additive"], fontsize=PT_LEGEND,
+                 ha="right", va="bottom")
 
     contrast_order = ["neuron indexed - scalar fallback", "exact path - neuron indexed"]
-    positions = np.arange(4, dtype=float)
-    ticklabels: list[str] = []
     cursor = 0
     for contrast in contrast_order:
         for architecture in ("shunting", "additive"):
@@ -251,17 +266,23 @@ def plot(frame: pd.DataFrame, summary: pd.DataFrame, contrasts: pd.DataFrame) ->
             axes[1].errorbar(cursor, 100 * row.mean_difference,
                              yerr=[[100 * (row.mean_difference - row.ci95_low)], [100 * (row.ci95_high - row.mean_difference)]],
                              color=arch_colors[architecture], marker="D", markerfacecolor="white",
-                             ms=MARKER_MS + 0.8, lw=LW_ERR, capsize=ERR_CAPSIZE)
-            ticklabels.append(architecture)
+                             ms=MARKER_MS + 1.2, lw=LW_ERR, capsize=ERR_CAPSIZE)
             cursor += 1
-    axes[1].axhline(0, color=COLORS["mute"], ls="--", lw=0.7)
-    axes[1].axvline(1.5, color=COLORS["grid"], lw=0.7)
-    axes[1].set_xticks(positions, ticklabels, rotation=18, ha="right")
+    axes[1].axhline(0, color=COLORS["mute"], ls="--", lw=LW_REF)
+    axes[1].axvline(1.5, color=COLORS["grid"], lw=LW_HAIR)
+    # Architecture is already carried by the colour key in P, so the x axis
+    # names only the two paired contrasts (group centres, tick marks hidden).
+    axes[1].set_xlim(-0.5, 3.5)
+    axes[1].set_xticks([0.5, 2.5], ["identity", "within-tree\ntransport"])
+    axes[1].set_yticks([0, 2, 4, 6])
     axes[1].set_ylabel("paired accuracy gain (pp)")
-    axes[1].text(0.5, -0.28, "identity", transform=axes[1].get_xaxis_transform(), ha="center", fontsize=PT_SMALL, color=COLORS["mute"])
-    axes[1].text(2.5, -0.28, "within-tree transport", transform=axes[1].get_xaxis_transform(), ha="center", fontsize=PT_SMALL, color=COLORS["mute"])
+    axes[1].text(0.97, 0.97, "colors as in P", transform=axes[1].transAxes,
+                 color=COLORS["mute"], fontsize=PT_SMALL, ha="right", va="top")
     panel_title(axes[1], "Q", "Replicated bottleneck")
-    style_axis(axes[1], grid="y")
+    style_axis(axes[1])
+    # After style_axis (which resets tick geometry): group labels sit at the
+    # cluster centres, so their tick marks would point at empty space.
+    axes[1].tick_params(axis="x", length=0)
 
     fig.canvas.draw()
     audit_layout(fig, "fig_fashion_feedback_ladder")
@@ -272,12 +293,32 @@ def plot(frame: pd.DataFrame, summary: pd.DataFrame, contrasts: pd.DataFrame) ->
     plt.close(fig)
 
 
+def replot_from_source_data() -> None:
+    """Regenerate the figure from the frozen source-data tables.
+
+    Used when the raw run directories have been archived off the checkout:
+    the audited seed/summary/contrast CSVs under ``source_data`` are the
+    quantitative record, so restyling passes re-read them verbatim instead of
+    re-collecting (and never rewrite them).
+    """
+    frame = pd.read_csv(OUTPUT / "seed_outcomes.csv")
+    summary = pd.read_csv(OUTPUT / "condition_summary.csv")
+    contrasts = pd.read_csv(OUTPUT / "paired_contrasts.csv")
+    if len(frame) != 60:
+        raise RuntimeError("frozen seed_outcomes.csv is incomplete; refusing to plot")
+    plot(frame, summary, contrasts)
+    print(json.dumps({"status": "replotted_from_frozen_source_data", "n_seed_rows": len(frame)}, indent=2))
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--run", type=Path, action="append", default=[])
     parser.add_argument("--allow-incomplete", action="store_true")
     args = parser.parse_args()
     run_dirs = args.run or sorted(RUN_ROOT.glob("journal_fashion_feedback_ladder_*"))
+    if not run_dirs and (OUTPUT / "seed_outcomes.csv").is_file():
+        replot_from_source_data()
+        return
     frame, audit = collect(run_dirs, args.allow_incomplete)
     OUTPUT.mkdir(parents=True, exist_ok=True)
     frame.to_csv(OUTPUT / "seed_outcomes.csv", index=False)

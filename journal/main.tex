@@ -476,7 +476,10 @@ general accuracy advantage.
 \caption{\textbf{Feedback identity rather than the local eligibility limits
 learning in regular trees.} \textbf{A}, Relative error between the analytic
 factorization and automatic differentiation in 100 diagnostic runs, shown as
-relative $L_2$ error and relative gradient-norm error; lines mark medians.
+relative $L_2$ error and relative gradient-norm error; open diamonds show
+means with 95\% intervals (intervals narrower than the marker where not
+visible), and runs with exactly zero error are drawn at the $10^{-12}$ floor
+marked by the dashed rule.
 \textbf{B}, Three-factor MNIST accuracy under scalar-fallback
 and neuron-indexed feedback for 15 paired seeds in each architecture.
 \textbf{C}, Dendritic-gradient cosine when the two feedback fields are evaluated
@@ -488,7 +491,7 @@ coefficient of variation in five paired shunting and additive checkpoints.
 This is an unweighted operating-point statistic, not a gradient-direction
 metric. \textbf{F}, Accuracy in the $2\times2$ architecture-by-branch-output-
 initialization factorial ($n=15$ seeds per condition). Lines in
-\textbf{B,C,F} connect identical seeds. Large points and intervals in
+\textbf{B,C,F} connect identical seeds. Open diamonds and intervals in
 \textbf{B--D,F} show means and 95\% bootstrap intervals; smaller points are
 individual seeds. Panels \textbf{D,F} reuse cohorts of the original
 regular-tree study \citep{safaai2026localcredit}; panels \textbf{B,C} report
@@ -627,10 +630,14 @@ depth-averaged exact-minus-backpropagation accuracy in the independent clean-
 source audit; synthetic shunting uses a non-negative transfer and every
 interval includes zero. \textbf{L},
 Additive-model depth-four-minus-depth-one accuracy after matching terminal
-branches and input contacts. \textbf{M}, Held-out two-stream credit-reversal
-accuracy; correct subtree, exact transport and gated-point values coincide.
+branches and input contacts; the neuron-indexed, exact and BP contrasts have
+95\% intervals of only $\pm0.13$--$0.19$~pp, narrower than the plotted
+marker. \textbf{M}, Held-out two-stream credit-reversal
+accuracy; correct ancestry, exact transport and gated-point values coincide.
 \textbf{N}, Exact-gradient capture versus norm-matched one-step loss reduction;
-colors identify the first four fields in \textbf{M}.
+colors identify the first four fields in \textbf{M}. All ten correct-ancestry
+seeds land exactly at $(1,1)$ and all ten route-derangement seeds stack at
+zero capture, so each cluster renders as a single marker.
 \textbf{O}, Context-0 forgetting after context-1-only adaptation. Small points
 are paired seeds; larger symbols and bars are means and 95\% seed-bootstrap
 intervals ($n=10$). Panels \textbf{M--O} test within-neuron support at $K=2$
@@ -886,7 +893,7 @@ slightly offset. $D_{\mathrm{r}}=4$ is full rank and equals stochastic
 backpropagation. \textbf{E}, Expected one-step loss of backpropagation plus the
 route projection minus unprojected stochastic backpropagation. Negative values
 favor projection; the dashed line is the analytical $n=r$ crossover.
-\textbf{F}, Simulated one-step loss decrease for reliability-aligned, best
+\textbf{F}, Simulated one-step loss decrease for SNR-aligned, best
 global, shuffled and anti-aligned gains (means and 95\% intervals over 50
 seeds). The explicit point gate is identical to the aligned condition, with
 coincident markers offset at zero heterogeneity.
@@ -1071,10 +1078,11 @@ nonsomatic branch units, with identical contact, candidate-slot, parameter and
 state budgets. \textbf{B}, A distal positive-rate signal is multiplied by
 fine, coarse and global gains; independent sensors, trial-shuffled sensors and
 reversed physical placement are matched controls. \textbf{C}, Test accuracy
-under shunting backpropagation. Lines are ten-seed means and error bars are
-the 95\% seed-bootstrap interval; coincident flat-control markers are offset. \textbf{D}, Prespecified paired D3-minus-D1
+under shunting backpropagation. Lines in \textbf{C,E,F} are ten-seed means
+and error bars 95\% seed-bootstrap intervals; coincident flat-control markers
+are offset. \textbf{D}, Prespecified paired D3-minus-D1
 effect and aligned-minus-control interactions; bars are 95\% paired-seed
-bootstrap intervals. \textbf{E}, Aligned and reversed-placement local credit
+bootstrap intervals, all excluding zero. \textbf{E}, Aligned and reversed-placement local credit
 assignment (LocalCA) with
 one shared-soma coordinate or exact path transport; the coincident reversed
 curves are drawn with offset markers. \textbf{F}, Aligned
@@ -1089,7 +1097,8 @@ shunting and raw-additive BP. All inferential runs use fresh seeds
 \centering
 \includegraphics[width=\textwidth]{main/figure_05_panels_G-L.pdf}
 \caption{\textbf{Point--dendrite and BP--local-credit controls.} \textbf{G},
-Same-task architecture ladder.
+Same-task architecture ladder; all controls share the task and paired seeds
+without retuning.
 \textbf{H}, Serial tree and exact-resource grouped-star accuracy across
 physical depth. \textbf{I}, Paired serial-minus-star contrasts and the D3
 alignment interaction. \textbf{J}, Full BP, soma-broadcast autograd under the
@@ -1098,7 +1107,8 @@ BP or LocalCA optimizer, and shared- or path-transport LocalCA.
 contrast use soma-broadcast autograd; the eligibility residual compares
 optimizer-matched broadcast with shared LocalCA; path specificity compares the
 two LocalCA transports. \textbf{L}, Point MLPs matched to active or total
-parameters versus the serial D3 tree. Means and paired contrasts use the same
+parameters versus the serial D3 tree; points show mean accuracy with 95\%
+intervals on a truncated y axis. Means and paired contrasts use the same
 ten seeds 10200--10209; error bars are 95\% seed-bootstrap intervals. The
 optimizer-matched amendment is post-outcome and diagnostic.}
 \label{fig:physicaldepthcontrols}
@@ -1517,7 +1527,9 @@ prediction but is not a kinetic-channel or spiking simulation.
 \includegraphics[width=\textwidth]{main/figure_07_panels_A-I.pdf}
 \caption{\textbf{Focal shunting produces a descendant-enriched modeled-credit
 signature in defined electrotonic regimes.} \textbf{A}, Focal intervention
-with state-matching somatic current. \textbf{B}, Absolute log-gradient change across
+with state-matching somatic current, shown as a shunt-off/shunt-on tree pair;
+the faded descendant subtree marks where the shunt attenuates transported
+credit. \textbf{B}, Absolute log-gradient change across
 descendants, sisters, ancestors, depth-matched unrelated sites and all
 unrelated sites at unit dose. \textbf{C}, Cell-level localization for the
 first-order-current-matched additive perturbation, relation reassignment and
@@ -1689,9 +1701,9 @@ cannot test fine within-branch credit.}
 alignment boundary.} \textbf{I}, Normalized held-out MSE for exact compartment
 error and three equal-rank four-channel rules on complete reconstructed trees.
 Thirteen eligible scans and ten fixed splits per scan were averaged within
-seven target cells before inference. \textbf{J}, Per-cell topology advantage
-in learning (control MSE minus topology MSE) and common-checkpoint update
-capture (topology minus control). Positive values favor topology. Scan
+seven target cells before inference. \textbf{J}, Per-cell ancestry advantage
+in learning (control MSE minus ancestry MSE) and common-checkpoint update
+capture (ancestry minus control). Positive values favor ancestry. Scan
 observations and split replicates are nested within target cell.}
 \label{fig:boundaryfull}
 \end{figure}
@@ -1734,8 +1746,11 @@ morphology-specific benefit.
 \includegraphics[width=\textwidth]{main/figure_08_panels_K-N.pdf}
 \caption{\textbf{Imposed task alignment converts the same fixed anatomy from
 an unhelpful to a useful feedback basis.} \textbf{K}, Controlled-alignment
-design: unit-energy exact gradients are rotated into or out of the fixed
-morphology dictionary at fixed curvature. \textbf{L}, Gradient-energy capture
+design: one morphology route is highlighted on the shared credit tree, and
+unit-energy exact gradients are rotated into or out of the fixed
+morphology dictionary at fixed curvature; the angle $\theta$ between the
+target and routed credit sets the imposed alignment at matched norm (dashed
+arc). \textbf{L}, Gradient-energy capture
 across imposed alignment for morphology-selected routes and three
 eight-channel controls. \textbf{M}, Relative 20-step loss reduction for the
 same fields and dictionaries. \textbf{N}, Initial capture versus 20-step

@@ -5,13 +5,20 @@ from __future__ import annotations
 
 from pathlib import Path
 
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from matplotlib import transforms as mtransforms
 from matplotlib.lines import Line2D
-from matplotlib.patches import Circle
 
+from credit_tree_schematics import (
+    _BASE_XLIM,
+    _Tree,
+    _setup_axes,
+    draw_credit_tree,
+    mix,
+)
 from journal_style import (
     COLORS,
     ERR_CAPSIZE,
@@ -84,64 +91,55 @@ def save(fig: plt.Figure, name: str) -> None:
     plt.close(fig)
 
 
+# Shared frame for the four address mini-trees: one ylim with capsule
+# headroom above the tallest tip, so all four somas sit on one baseline.
+_ADDRESS_YLIM = (-0.55, 3.62)
+
+
+def _address_tree(ax: plt.Axes, budget_k: int) -> None:
+    """One address-mode credit tree; K = 1 adds the whole-tree capsule."""
+    if budget_k == 1:
+        # The library's address mode starts at K = 2; K = 1 is the same tree
+        # under a single shared route field covering every branch, drawn with
+        # the library's own capsule primitive (gray = shared/control slot).
+        _setup_axes(ax, _BASE_XLIM, _ADDRESS_YLIM)
+        t = _Tree(ax, 0.62, False)
+        t.capsule(mix("point_mlp", 15), 13, [
+            ((0.02, 0.34), "J1", "JL", "JLL", "T1"), ("JLL", "T2"),
+            ("JL", "JLR", "T3"), ("JLR", "T4"),
+            ("J1", "JR", "JRL", "T5"), ("JRL", "T6"),
+            ("JR", "JRR", "T7"), ("JRR", "T8"),
+        ])
+        t.tree(COLORS["dend"])
+        t.junctions()
+        t.soma(COLORS["soma"], mix("ink", 30))
+    else:
+        draw_credit_tree(ax, mode="address", K=budget_k, scale=0.62,
+                         labels=False, ylim=_ADDRESS_YLIM)
+
+
 def hierarchy_schematic(ax: plt.Axes) -> None:
-    """Binary tree over nested route-field brackets, one row per budget K."""
+    """Address bandwidth: K route-field capsules on the shared credit tree."""
     ax.set_xlim(0, 1)
     ax.set_ylim(0, 1)
     ax.axis("off")
     panel_title(ax, "A", "Address bandwidth")
-
-    # ── binary tree: soma (root) on top, 8 leaf compartments below.  The
-    # tree spans the same width as the bracket rows so leaves and route
-    # fields sit on one alignment grid.
-    leaf_x = np.linspace(0.360, 0.970, 8)
-    levels = [leaf_x, (leaf_x[::2] + leaf_x[1::2]) / 2]
-    levels.append((levels[1][::2] + levels[1][1::2]) / 2)
-    levels.append(np.array([levels[2].mean()]))
-    level_y = [0.530, 0.625, 0.720, 0.815]
-    for level in range(3):
-        for index, child_x in enumerate(levels[level]):
-            parent_x = levels[level + 1][index // 2]
-            ax.plot([child_x, parent_x], [level_y[level], level_y[level + 1]],
-                    color="#A9B1B9", lw=LW_EDGE, zorder=1,
-                    solid_capstyle="round")
-    for value in leaf_x:
-        ax.add_patch(Circle((value, level_y[0]), 0.013, facecolor=COLORS["exc"],
-                            edgecolor="white", lw=0.4, zorder=2))
-    for level in (1, 2):
-        for value in levels[level]:
-            ax.add_patch(Circle((value, level_y[level]), 0.015, facecolor=COLORS["dend"],
-                                edgecolor="white", lw=0.4, zorder=2))
-    ax.add_patch(Circle((levels[3][0], level_y[3]), 0.021, facecolor=COLORS["soma"],
-                        edgecolor="white", lw=0.4, zorder=2))
-    ax.text(levels[3][0] + 0.055, level_y[3] + 0.030, "soma", ha="left",
-            va="center", fontsize=PT_SMALL, color=COLORS["mute"])
-    ax.text(0.02, 1.00, "one somatic error\n→ nested route fields",
-            ha="left", va="top", fontsize=PT_SMALL, color=COLORS["mute"],
-            linespacing=1.35)
-
-    # ── nested route-field brackets: K groups of consecutive leaves; plain
-    # right-aligned colour-coded labels form one column in the left gutter.
-    rows = [
-        (0.440, 1, "$K{=}1$ shared", COLORS["point_mlp"]),
-        (0.330, 2, "$K{=}2$", COLORS["additive"]),
-        (0.220, 4, "$K{=}4$", COLORS["shunting"]),
-        (0.110, 8, "$K{=}8$ exact", COLORS["oracle"]),
+    cells = [
+        (1, "$K{=}1$ shared", 0.00, 0.545),
+        (2, "$K{=}2$", 0.52, 0.545),
+        (4, "$K{=}4$", 0.00, 0.055),
+        (8, "$K{=}8$ exact", 0.52, 0.055),
     ]
-    margin, tick = 0.018, 0.022
-    for y, budget, label, color in rows:
-        group = len(leaf_x) // budget
-        for g in range(budget):
-            x0 = leaf_x[g * group] - margin
-            x1 = leaf_x[(g + 1) * group - 1] + margin
-            ax.plot([x0, x0, x1, x1], [y + tick, y, y, y + tick], color=color,
-                    lw=LW_EDGE, solid_capstyle="round", zorder=2)
-        ax.text(0.295, y + tick / 2, label, ha="right", va="center",
-                fontsize=PT_SMALL, color=color)
+    for budget_k, label, x0, y0 in cells:
+        sub = ax.inset_axes([x0, y0, 0.48, 0.40])
+        _address_tree(sub, budget_k)
+        ax.text(x0 + 0.24, y0 - 0.030, label, ha="center", va="top",
+                fontsize=PT_SMALL, color=COLORS["mute"])
 
 
 def subtree_figure() -> None:
     apply_neurips_style()
+    mpl.rcParams["lines.markeredgewidth"] = LW_EDGE
     outcomes = pd.read_csv(SUBTREE / "seed_outcomes.csv")
     summary = pd.read_csv(SUBTREE / "condition_summary.csv")
     contrasts = pd.read_csv(SUBTREE / "paired_contrasts.csv")
@@ -156,7 +154,9 @@ def subtree_figure() -> None:
 
     dendritic = summary[summary.architecture.eq("dendritic_tree")]
     ax_b.set_xlim(0.45, 8.55)
-    ax_b.set_ylim(0.12, 0.86)
+    # Floor opened to 0.09 so the K=1 depth-interleaved marker clears the
+    # bottom spine.
+    ax_b.set_ylim(0.09, 0.86)
     # Families coincide exactly at K = 1 (four at 0.187) and K = 8 (five at
     # 0.810); the rank-K pair nearly coincides at K ≤ 2.  Draw the lines and
     # error bars at the true values, then fan exact pile-ups on a small ring
@@ -175,7 +175,9 @@ def subtree_figure() -> None:
     for (budget, _), families in members.items():
         if len(families) < 2:
             continue
-        radius = 2.6 + 0.3 * len(families)
+        # Tight ring: at the narrow K=1-2 spacing a wider fan would read as
+        # markers sitting at wrong K values.
+        radius = 2.0 + 0.25 * len(families)
         for index, family in enumerate(families):
             angle = np.pi / 2 + 2 * np.pi * index / len(families)
             marker_shift[(family, budget)] = (radius * np.cos(angle),
@@ -192,8 +194,8 @@ def subtree_figure() -> None:
         for (y0, fam0), (y1, fam1) in zip(stack, stack[1:]):
             if y1 - y0 < near and 0 < y1 - y0 and (fam0, budget) not in marker_shift \
                     and (fam1, budget) not in marker_shift:
-                marker_shift[(fam0, budget)] = (-3.0, 0.0)
-                marker_shift[(fam1, budget)] = (3.0, 0.0)
+                marker_shift[(fam0, budget)] = (-2.2, 0.0)
+                marker_shift[(fam1, budget)] = (2.2, 0.0)
     for family, (color, marker, _) in ROUTE_STYLE.items():
         part = rows_by_family[family]
         mean = part.mean_heldout_accuracy.to_numpy(float)
@@ -210,11 +212,11 @@ def subtree_figure() -> None:
                 [x], [y], yerr=[[y - lo], [hi - y]], color=color,
                 marker=marker, ms=3.6, lw=0, elinewidth=LW_ERR,
                 capsize=ERR_CAPSIZE, markeredgecolor="white",
-                markeredgewidth=0.35, transform=offset, zorder=3,
+                markeredgewidth=LW_EDGE, transform=offset, zorder=3,
             )
-    ax_b.text(0.97, 0.24, "overlaps fanned\n(lines meet at values)",
+    ax_b.text(0.97, 0.24, "overlaps fanned",
               transform=ax_b.transAxes, ha="right", va="bottom",
-              fontsize=PT_ANNOT, color=COLORS["mute"], linespacing=1.25)
+              fontsize=PT_ANNOT, color=COLORS["mute"])
     ax_b.set_xticks([1, 2, 4, 8])
     ax_b.set_xlabel("feedback channels $K$")
     ax_b.set_ylabel("held-out accuracy")
@@ -224,7 +226,7 @@ def subtree_figure() -> None:
     # centred row in the deliberate inter-row gutter, clear of every panel.
     handles = [
         Line2D([0], [0], color=color, marker=marker, ms=MARKER_MS - 0.6,
-               lw=LW_DATA, markeredgecolor="white", markeredgewidth=0.35,
+               lw=LW_DATA, markeredgecolor="white", markeredgewidth=LW_EDGE,
                label=label)
         for color, marker, label in ROUTE_STYLE.values()
     ]
@@ -295,10 +297,10 @@ def subtree_figure() -> None:
         ].sort_values("budget_k")
         ax_e.plot(part.budget_k, part.mean_heldout_accuracy, marker=marker,
                   color=color, ms=size, lw=0, markeredgecolor="white",
-                  markeredgewidth=0.4, zorder=3 + depth)
-    ax_e.text(0.97, 0.54, "all four coincide\n(markers nested)",
+                  markeredgewidth=LW_EDGE, zorder=3 + depth)
+    ax_e.text(0.97, 0.54, "all four coincide",
               transform=ax_e.transAxes, ha="right", va="bottom",
-              fontsize=PT_ANNOT, color=COLORS["mute"], linespacing=1.25)
+              fontsize=PT_ANNOT, color=COLORS["mute"])
     ax_e.set_xticks([1, 2, 4, 8])
     ax_e.set_xlabel("feedback channels $K$")
     ax_e.set_ylabel("held-out accuracy")
@@ -307,7 +309,7 @@ def subtree_figure() -> None:
     style_axis(ax_e)
     arch_handles = [
         Line2D([0], [0], marker=marker, color=color, lw=0, ms=MARKER_MS,
-               markeredgecolor="white", markeredgewidth=0.4, label=label)
+               markeredgecolor="white", markeredgewidth=LW_EDGE, label=label)
         for _, label, color, marker, _ in equivalent_specs
     ]
     clean_legend(ax_e, handles=arch_handles, fontsize=PT_SMALL, loc="lower right")
@@ -396,13 +398,13 @@ def subtree_figure() -> None:
                 lw=0,
                 alpha=0.9,
                 markeredgecolor="white",
-                markeredgewidth=0.35,
+                markeredgewidth=LW_EDGE,
                 transform=offset,
                 zorder=3.0 - 0.05 * float(row.budget_k),
             )
-    ax_f.text(0.97, 0.03, "marker size $\\propto$ $K$\noverlaps fanned",
+    ax_f.text(0.97, 0.03, "marker size $\\propto$ $K$",
               transform=ax_f.transAxes, ha="right", va="bottom",
-              fontsize=PT_ANNOT, color=COLORS["mute"], linespacing=1.25)
+              fontsize=PT_ANNOT, color=COLORS["mute"])
     ax_f.set_xlabel("initial gradient capture")
     ax_f.set_ylabel("held-out accuracy")
     panel_title(ax_f, "F", "Capture and learning")
@@ -411,59 +413,34 @@ def subtree_figure() -> None:
 
 
 def active_schematic(ax: plt.Axes) -> None:
-    """Mini dendrite with active-channel swatches and a focal shunt callout."""
+    """Shunt-pair credit trees: control vs focal shunt on the active tree."""
     ax.set_xlim(0, 1)
     ax.set_ylim(0, 1)
     ax.axis("off")
     panel_title(ax, "J", "Active channels")
 
-    ax.text(0.50, 0.925, "Na · K · Ca · HCN · NMDA",
-            ha="center", va="center", fontsize=PT_SMALL,
-            color=COLORS["mute"])
+    ax.text(0.50, 0.985, "Na · K · Ca · HCN · NMDA",
+            ha="center", va="top", fontsize=PT_SMALL, color=COLORS["mute"])
 
-    # ── mini dendrite: soma, tapering trunk → branches → twigs, with the
-    # channel conductances drawn as beads on the membrane they live in.
-    dend = COLORS["dend"]
-    ax.plot([0.47, 0.47], [0.325, 0.47], color=dend, lw=3.0, solid_capstyle="round")
-    ax.add_patch(Circle((0.47, 0.285), 0.036, facecolor=COLORS["soma"],
-                        edgecolor="white", lw=0.5))
-    ax.text(0.535, 0.285, "soma", ha="left", va="center", fontsize=PT_SMALL,
-            color=COLORS["mute"])
-    ax.plot([0.47, 0.25], [0.47, 0.63], color=dend, lw=2.0, solid_capstyle="round")
-    ax.plot([0.47, 0.68], [0.47, 0.615], color=dend, lw=2.0, solid_capstyle="round")
-    ax.plot([0.25, 0.13], [0.63, 0.735], color=dend, lw=1.4, solid_capstyle="round")
-    ax.plot([0.25, 0.34], [0.63, 0.755], color=dend, lw=1.4, solid_capstyle="round")
-    ax.plot([0.68, 0.59], [0.615, 0.750], color=dend, lw=1.4, solid_capstyle="round")
-    ax.plot([0.68, 0.84], [0.615, 0.700], color=dend, lw=1.4, solid_capstyle="round")
-    beads = [
-        (0.470, 0.385, COLORS["exc"]),        # Na on the trunk
-        (0.360, 0.550, COLORS["local"]),      # K on the left branch
-        (0.190, 0.682, COLORS["highlight"]),  # Ca on the left twig
-        (0.565, 0.535, COLORS["oracle"]),     # HCN on the right branch
-        (0.768, 0.662, COLORS["per_soma"]),   # NMDA on the right twig
+    # The library shunt pair: same tree twice — open inhibitory synapse at
+    # the branch point (control) vs engaged shunt with the descendant
+    # subtree thinned and faded (attenuated credit).
+    pair = [
+        (0.545, False, "control", COLORS["mute"]),
+        (0.075, True, "focal shunt", COLORS["inh"]),
     ]
-    for x, y, color in beads:
-        ax.add_patch(Circle((x, y), 0.015, facecolor=color, edgecolor="white",
-                            lw=0.4, zorder=3))
-
-    # ── focal shunt on the right branch, label in clear whitespace ──
-    ax.add_patch(Circle((0.638, 0.586), 0.024, facecolor=COLORS["inh"],
-                        edgecolor="white", lw=0.5, zorder=3))
-    ax.annotate(
-        "focal shunt",
-        xy=(0.660, 0.573), xytext=(0.97, 0.44),
-        ha="right", va="center", fontsize=PT_ANNOT, color=COLORS["inh"],
-        arrowprops={"arrowstyle": "-|>", "lw": LW_REF, "color": COLORS["inh"],
-                    "mutation_scale": 7.0, "shrinkA": 3.0, "shrinkB": 1.5},
-    )
-
-    ax.text(0.47, 0.135, "512 accepted cell–draws · exact Jacobian",
-            ha="center", va="center", fontsize=PT_SMALL, color=COLORS["mute"])
+    for y0, shunted, label, color in pair:
+        sub = ax.inset_axes([0.03, y0, 0.94, 0.36])
+        draw_credit_tree(sub, mode="shunt", shunted=shunted, scale=0.62,
+                         labels=False)
+        ax.text(0.50, y0 - 0.028, label, ha="center", va="top",
+                fontsize=PT_SMALL, color=color)
 
 
 def active_extension_figure() -> None:
     """Keep the active-channel test with the focal-shunting mechanism."""
     apply_neurips_style()
+    mpl.rcParams["lines.markeredgewidth"] = LW_EDGE
     active_summary = pd.read_csv(ACTIVE / "condition_summary.csv")
     active_contrasts = pd.read_csv(ACTIVE / "paired_contrasts.csv")
     active_cells = pd.read_csv(ACTIVE / "cell_condition_metrics.csv")
@@ -471,7 +448,9 @@ def active_extension_figure() -> None:
         1,
         4,
         figsize=(FIG_W, 2.62),
-        gridspec_kw={"left": 0.075, "right": 0.985, "bottom": 0.165,
+        # left = 0.088 matches the A-I block, so the J panel letter sits in
+        # the same gutter column when the blocks stack into figure 7.
+        gridspec_kw={"left": 0.088, "right": 0.985, "bottom": 0.165,
                      "top": 0.855, "wspace": 0.72},
     )
     ax_a, ax_b, ax_c, ax_d = axes.ravel()
@@ -480,14 +459,19 @@ def active_extension_figure() -> None:
     for perturbation, color, marker in [("focal shunt", COLORS["shunting"], "o"), ("matched additive", COLORS["additive"], "s")]:
         part = active_summary[active_summary.perturbation.eq(perturbation)].sort_values("dose_relative_to_local_input_conductance")
         x = part.dose_relative_to_local_input_conductance.to_numpy(float)
-        ax_b.plot(x, part.mean_localization_index, color=color, marker=marker, ms=MARKER_MS, lw=LW_DATA, markeredgecolor="white", markeredgewidth=0.35, label=perturbation)
+        ax_b.plot(x, part.mean_localization_index, color=color, marker=marker, ms=MARKER_MS, lw=LW_DATA, markeredgecolor="white", markeredgewidth=LW_EDGE, label=perturbation)
         ax_b.fill_between(x, part.ci95_low_localization_index, part.ci95_high_localization_index, color=color, alpha=0.10, linewidth=0)
     ax_b.set_xscale("log"); ax_b.set_xticks([0.25, 1, 4], ["0.25", "1", "4"])
     ax_b.set_xlabel("normalized shunt dose")
     ax_b.set_ylabel("descendant localization")
     panel_title(ax_b, "K", "Dose response")
     style_axis(ax_b)
-    clean_legend(ax_b, fontsize=PT_LEGEND, loc="upper left")
+    # The two-entry key is stated once in figure 7 panel B (same hues and
+    # markers); a mute pointer in the empty lower-right replaces the boxed
+    # legend, which used to sit on the rising focal-shunt curve.
+    ax_b.text(0.97, 0.04, "colors as in B", transform=ax_b.transAxes,
+              ha="right", va="bottom", fontsize=PT_ANNOT, style="italic",
+              color=COLORS["mute"])
 
     localization = active_contrasts[active_contrasts.metric.eq("localization_index")].sort_values("dose_relative_to_local_input_conductance")
     ax_c.errorbar(localization.dose_relative_to_local_input_conductance, localization.mean_shunt_minus_additive, yerr=[localization.mean_shunt_minus_additive - localization.ci95_low, localization.ci95_high - localization.mean_shunt_minus_additive], color=COLORS["shunting"], marker="D", ms=MARKER_MS, lw=LW_ERR, capsize=ERR_CAPSIZE)
@@ -529,20 +513,25 @@ def active_extension_figure() -> None:
 def fulltree_boundary_figure() -> None:
     """Place the complete-tree response task with the other alignment nulls."""
     apply_neurips_style()
+    mpl.rcParams["lines.markeredgewidth"] = LW_EDGE
     tree_cells = pd.read_csv(FULL_TREE / "cell_method_means.csv")
     fig, (ax_e, ax_f) = plt.subplots(
         1,
         2,
         figsize=(FIG_W, 2.62),
-        gridspec_kw={"left": 0.075, "right": 0.985, "bottom": 0.165,
+        # left = 0.088 matches the A-H block, so the I panel letter sits in
+        # the same gutter column when the blocks stack into figure 8.
+        gridspec_kw={"left": 0.088, "right": 0.985, "bottom": 0.165,
                      "top": 0.855, "wspace": 0.42},
     )
 
     # "exact" gets the chromatic backprop slot (bp red-brown) so it can never
     # be confused with the neutral-gray "random" control, in-panel or when
     # cross-read against panel F where gray also means "random".
+    # The green condition is the same anatomy-routed condition figure 8 calls
+    # "ancestry" elsewhere; one reader-facing name is used figure-wide.
     methods = ["exact compartment error", "topology-matched routes", "site-shuffled routes", "random anatomical routes"]
-    labels = ["exact", "topology", "shuffle", "random"]
+    labels = ["exact", "ancestry", "shuffle", "random"]
     colors = [COLORS["bp"], COLORS["shunting"], COLORS["highlight"], COLORS["mute"]]
     for index, (method, color) in enumerate(zip(methods, colors)):
         values = tree_cells[tree_cells.method.eq(method)].heldout_normalized_mse.to_numpy(float)
@@ -553,9 +542,7 @@ def fulltree_boundary_figure() -> None:
     ax_e.set_ylabel("normalized test MSE")
     panel_title(ax_e, "I", "All-scan full-tree task")
     style_axis(ax_e, grid="y")
-    add_headroom(ax_e, 0.20, bottom=True)
-    ax_e.text(0.03, 0.03, "13 scans / 7 cells", transform=ax_e.transAxes,
-              ha="left", va="bottom", fontsize=PT_ANNOT, color=COLORS["mute"])
+    add_headroom(ax_e, 0.07, bottom=True)
 
     tree_wide = tree_cells.pivot(index="target_root_id", columns="method", values=["heldout_normalized_mse", "common_checkpoint_update_capture"])
     contrasts = [
@@ -584,11 +571,11 @@ def fulltree_boundary_figure() -> None:
         ax_f.text(centre, -0.155, header, transform=group_transform,
                   ha="center", va="top", fontsize=PT_ANNOT,
                   color=COLORS["mute"])
-    ax_f.set_ylabel("topology advantage")
+    ax_f.set_ylabel("ancestry advantage")
     panel_title(ax_f, "J", "Anatomy boundary")
     style_axis(ax_f, grid="y")
     add_headroom(ax_f, 0.18)
-    ax_f.text(0.50, 0.97, "positive favors topology", transform=ax_f.transAxes,
+    ax_f.text(0.50, 0.97, "positive favors ancestry", transform=ax_f.transAxes,
               ha="center", va="top", fontsize=PT_ANNOT, color=COLORS["mute"],
               style="italic")
     save(fig, "fig_fulltree_boundary")
