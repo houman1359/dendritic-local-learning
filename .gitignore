@@ -18,3 +18,7 @@ journal/figures/supplementary/*.png
 # Rebuilt submission archives and checksums.
 journal/submission/*.zip
 journal/submission/*.zip.sha256
+
+# Talks are maintained in drafts/presentation/credit_assignment, outside this
+# manuscript repository. Ignore any local duplicate used while testing assets.
+/presentation/
