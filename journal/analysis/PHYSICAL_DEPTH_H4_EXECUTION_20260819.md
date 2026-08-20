@@ -37,10 +37,12 @@ Array `40489416` tasks 0--8 completed. Task 9 exited before training because
 the allocated GPU on `holygpu8a19102` returned
 `cudaErrorDevicesUnavailable`; model construction, data loading and the
 initial gate audit had completed, but no checkpoint or outcome was produced.
-The incomplete `results/config_9` directory was preserved under
-`failed_attempts/config_9_cuda_unavailable_40489416`. Only frozen config 9 was
-resubmitted as job `40501760`, excluding that node. This is a hardware retry,
-not a scientific rerun or configuration change.
+The incomplete `results/config_9` directory and job logs were preserved under
+`failed_attempts/`. A separate retry job, `40501760`, was canceled before it
+started; frozen array element `40489416_9` was instead requeued in place with
+that node excluded. This preserved the original array priority and released
+the remaining array throttle. It is a hardware retry, not a scientific rerun
+or configuration change.
 
 ## Invalidated submission attempt
 
