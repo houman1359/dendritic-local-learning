@@ -18,6 +18,7 @@ paired by seed.
 | Literal grouped-point H3 control | 60 new fits | The aligned serial tree exceeded the literal grouped-point/direct-to-soma model by 30.87 pp at D3 (30.48--31.31; 10/10 seeds), whereas the contrast was -0.44 pp after sensor-tier reversal. The architecture-by-placement interaction was +31.31 pp. Grouped-point D3-minus-D1 was -0.008 pp. | The H3 result requires ordered divisive composition; it is not an artifact of the earlier grouped-star implementation. The grouped star and literal grouped point differed by only +0.06 pp at aligned D3 and did not pass the frozen positive gate. | Abstract; Main Results and Figure 5P-R; Supplementary Methods and Results, "Literal grouped-point and independent H2 hierarchy tests"; Source Data `remaining_physical_experiments/`. |
 | Independent H2 hierarchy replication | 160 new fits | Serial BP gained +30.84 pp from D1 to D2 when aligned and lost -1.56 pp after reversal (interaction +32.40 pp). Grouped-point BP stayed flat (+0.023 and -0.021 pp; interaction +0.044 pp). Shared LocalCA retained +21.20 pp and path LocalCA +31.38 pp; their placement interactions were +22.93 and +33.36 pp. Every positive primary contrast was positive in 10/10 seeds and had exact sign-flip P=0.001953. | The serial crossover replicates at a second hierarchy depth and survives local credit. Path-resolved transport nearly recovers BP; a neuron-shared coordinate retains a smaller but substantial effect. This remains a replication within the same calibrated synthetic task family, not evidence of prevalence on natural tasks. | Abstract; Main Results and Figure 5S-U; Discussion; Supplementary Methods and Results; Source Data `remaining_physical_experiments/`. |
 | Fashion-MNIST feedback ladder | 60 fits | Neuron-indexed feedback exceeded scalar feedback by 4.46 pp in shunting trees and 3.78 pp in additive trees, 10/10 positive in both. Exact path transport added -0.11 and +0.13 pp beyond neuron identity, neither a reliable improvement. | The large scalar-to-neuronal-coordinate bandwidth effect generalizes beyond MNIST. Fine within-tree transport is not automatically useful on a standard image task. | Main Results, Figure 2P-Q; Supplementary artificial-tree methods; Source Data `fashion_feedback_ladder/`. |
+| Adaptive local conductance reliability | 1,050 outcomes, 50 fresh paired seeds | At maximum heterogeneity, adaptive local shunts lowered final loss by 0.01622 versus adaptive global and 0.00553 versus shuffled placement, but were worse than no shunt by 0.00425 and worse than the fixed initial oracle by 0.00345. The independent point gate matched within $4.00\times10^{-15}$. | Local noisy credit observations recover relative branch ordering, not a sustained advantage over unattenuated learning. The operation remains point-emulable and uses paired probes plus an exact state clamp. | Main credit-phase Results; Supplementary Fig. S24, methods and Table; Source Data `adaptive_conductance_reliability/`. |
 
 All 570 recent fits passed the stated finite-output, seed, checkpoint and
 resource audits. The point/dendrite programme contains 200 fits in total: 140
@@ -45,8 +46,10 @@ H3 grouped-point controls and 160 H2 hierarchy conditions.
    from the model's divisive stages, with learned rather than supplied sensor
    placement.
 3. An independent second-animal connectomic replication.
-4. Autonomous learning of route gain or inhibitory placement rather than an
-   imposed reliability- or task-aligned conductance pattern.
+4. Fully autonomous kinetic learning of route gain or inhibitory placement.
+   The adaptive local reliability experiment now removes oracle signal/noise
+   energies, but still grants paired teaching probes, the optimizer step
+   fraction and an exact state clamp.
 
 The two highest-leverage reviewer controls---the literal grouped-point H3
 emulation and a fresh H2 hierarchy with BP and LocalCA---are therefore no

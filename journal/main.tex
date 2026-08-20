@@ -777,6 +777,24 @@ under a state clamp, but the immediate benefit does not establish autonomous
 shunt learning, dendrite-exclusive computation or uniform training
 superiority.
 
+We then removed oracle access to branch signal and noise energies. At each
+state, two independent noisy local branch-gradient observations estimated
+$S_b$ from their inner product and $N_b$ from half their squared difference;
+eight observation pairs initialized an exponential running estimate, which
+set nonnegative shunts throughout training (Supplementary Fig.~S24). Fifty
+fresh paired seeds completed all 1,050 planned outcomes. At maximum
+heterogeneity, adaptive local shunting lowered final test loss relative to an
+adaptive global shunt by 0.01622 (95\% paired bootstrap interval
+0.01450--0.01791; 50/50 seeds) and relative to shuffled adaptive placement by
+0.00553 (0.00377--0.00742; 41/50). Yet adaptive local loss was 0.00425 higher
+than no shunt (0.00250--0.00598; 39/50) and 0.00345 higher than the fixed
+initial oracle (0.00258--0.00430; 43/50). The final learned gain ordering had
+mean within-seed Spearman $\rho=0.756$ with the initial oracle, while an
+independently evaluated adaptive point gate again matched to numerical
+precision. Thus local observations recovered enough reliability ordering to
+beat global or misplaced attenuation, but not enough calibration to improve
+over unattenuated noisy learning.
+
 Finally, static nonzero gain rescaling changed numerical conditioning without
 changing the route span: nested indicators, their tree-Haar basis and a
 gain-scaled version had identical capture to $1.33\times10^{-15}$, while the
@@ -1738,14 +1756,22 @@ model: aligned shunts improved the immediate credit step and final loss over a
 global shunt, but not final loss over unshunted noisy learning. The
 independently computed point-gate control agrees to numerical precision and
 proves that the operation is not mathematically exclusive
-to dendrites. This differs from the sibling gain--load study, which asks when
+to dendrites. An online extension removed direct access to $S_b$ and $N_b$ by
+estimating them from paired noisy branch-credit samples. It recovered enough
+relative reliability structure to beat global and shuffled adaptive gains, but
+its final loss remained worse than both the fixed initial-oracle shunt and
+unshunted noisy learning. Thus local conductance can implement an estimated
+route-wise ordering without yet demonstrating a net adaptive-learning benefit.
+This differs from the sibling gain--load study, which asks when
 branch-local inhibition improves forward signal robustness; here the forward
 state is matched and conductance weights backward credit
-\citep{safaai2026gainload}. Moreover, branch reliabilities and shunt placement were supplied
-by an oracle, and the compensating current removed forward state changes.
-The experiment therefore validates a conductance-based, state-dependent
-approximation to a reliability factor, not autonomous inference of that factor or a completed
-biological causal chain.
+\citep{safaai2026gainload}. Branch reliabilities and shunt placement were
+supplied by an oracle in the fixed-gain mechanism experiment, while the
+adaptive extension still required paired noisy teaching samples, a known step
+fraction and the conductance-to-shunt map. In both experiments the compensating
+current removed forward state changes. These tests therefore validate a
+conductance-based, state-dependent approximation to a reliability factor, not
+autonomous inhibitory plasticity or a completed biological causal chain.
 
 Anatomical capacity is useful only when it matches the task. Neither all 13
 eligible visual-response scans nor 520 learning fits on the complete compressed

@@ -49,6 +49,7 @@ figures:
 	$(PYTHON) scripts/analyze_credit_phase_spectral_bound.py
 	$(PYTHON) scripts/analyze_positive_conductance_reliability.py
 	$(PYTHON) scripts/build_positive_conductance_reliability_figure.py
+	$(PYTHON) scripts/build_adaptive_conductance_reliability_figure.py
 	$(PYTHON) scripts/analyze_same_span_coefficient_learning.py
 	$(PYTHON) scripts/build_same_span_coefficient_figure.py
 	PYTHONPATH=../../..:scripts $(PYTHON) scripts/diagnose_nonlinear_physical_depth.py

@@ -59,12 +59,15 @@ reliability in a fixed-state quadratic family; it is not a trained
 positive-conductance dendrite. Eighth, a separate 50-seed experiment trains
 positive excitatory conductances while fixed nonnegative shunts realize oracle
 branch-reliability factors under an exact state clamp; it does not learn the
-shunts or show a dendrite-exclusive operation. Ninth, the inhibitory census is
-a synapse-resolved structural association in one mouse. Tenth, the
-task-interference calculation is an exact static consequence. Eleventh, the
+shunts or show a dendrite-exclusive operation. Ninth, a fresh 50-seed
+extension estimates reliability from paired noisy local credit observations
+and updates nonnegative shunts; it still assumes paired samples, a known step
+fraction and exact state clamp. Tenth, the inhibitory census is a
+synapse-resolved structural association in one mouse. Eleventh, the
+task-interference calculation is an exact static consequence. Twelfth, the
 six-animal brain--computer-interface
 analysis is an external retrospective consistency test of signed neuron
-identity. Twelfth, the nonlinear physical-depth experiment trains the
+identity. Thirteenth, the nonlinear physical-depth experiment trains the
 production positive-rate population model on a selected hierarchical task
 after transparently reported accessibility pilots; it is not a full
 $D_{\mathrm r}\times H\times K\times\rho$ phase grid or an impossibility result for
@@ -1099,6 +1102,61 @@ backpropagation retained the lowest mean final loss. These results validate a
 positive-conductance approximation and ordering of fixed-step oracle reliability factors
 under a state clamp; they do not establish autonomous shunt learning,
 dendrite-exclusive computation or general superiority to unshunted learning.
+
+\subsection{Adaptive local reliability estimation}
+
+To remove oracle access to $S_b$ and $N_b$, we froze a fresh experiment before
+artifact-only canaries or confirmatory outcomes. At the current parameter
+state, branch $b$ received two conditionally independent noisy local gradient
+observations, $\widehat{\bm g}_{1b}$ and $\widehat{\bm g}_{2b}$, on the same
+examples. It formed
+\begin{equation}
+ \widehat S_b^{\mathrm{obs}}
+ =\langle\widehat{\bm g}_{1b},\widehat{\bm g}_{2b}\rangle,
+ \qquad
+ \widehat N_b^{\mathrm{obs}}
+ =\frac12\lVert\widehat{\bm g}_{1b}-\widehat{\bm g}_{2b}\rVert_2^2.
+\label{eq:s_adaptive_reliability_moments}
+\end{equation}
+For independent zero-mean credit noise, these estimate the squared clean
+branch gradient and the noise energy of one observation. Eight paired
+observations initialized the moments; exponential averages with decay 0.9
+were then updated before each of 40 training steps. Negative finite-sample
+signal estimates and moments below $10^{-12}$ were clipped only when the gain
+was constructed. The step-consistent gain followed
+Eq.~\ref{eq:s_reliability_gain}, was bounded to $[0.03,1]$, and was converted
+to a shunt using the branch's current mean total conductance.
+
+The task and state-matched positive-conductance model were unchanged. Three
+heterogeneity levels $h\in\{0,1,2\}$ crossed exact clean backpropagation,
+noisy no-shunt learning, the fixed initial-oracle shunt, adaptive local,
+adaptive global and fixed-permutation adaptive shunts, and an independently
+computed adaptive point gate. Main update noise and estimator-probe noise were
+paired across methods. Two artifact-only canary seeds passed before 50 fresh
+confirmatory seeds 8200--8249 were evaluated, producing all 1,050 planned
+seed--condition outcomes. Maximum state error was
+$2.22\times10^{-16}$, maximum physical-shunt finite-difference error was
+$4.01\times10^{-8}$, and the adaptive physical-shunt/point-gate trajectories
+agreed within $4.00\times10^{-15}$.
+
+At $h=2$, adaptive-local minus adaptive-global one-step loss decrease was
+0.001420 (95\% paired-seed bootstrap interval 0.001158--0.001684; 45/50
+positive; two-sided Wilcoxon $P=4.49\times10^{-13}$). Adaptive local reduced
+final loss relative to adaptive global by 0.016217
+(0.014501--0.017913; 50/50 seeds; $P=1.78\times10^{-15}$) and relative to
+shuffled adaptive placement by 0.005528 (0.003766--0.007418; 41/50;
+$P=7.80\times10^{-8}$). The one-step local-minus-shuffled mean was positive,
+but only 26/50 signs favored local, failing the frozen sign gate.
+
+The absolute boundary was negative. Adaptive-local final loss exceeded no
+shunt by 0.004250 (0.002499--0.005975; 39/50; $P=1.78\times10^{-5}$) and the
+fixed initial oracle by 0.003449 (0.002577--0.004305; 43/50;
+$P=4.44\times10^{-9}$). The adaptive final gain ordering had mean within-seed
+Spearman $\rho=0.756$ with the initial oracle and mean absolute gain error
+0.205. Thus locally estimated reliability recovered relative placement value,
+but not a sustained advantage over unshunted learning. Paired gradient probes,
+known optimizer step fraction and the exact state clamp remain supplied; this
+is not a kinetic or fully autonomous model of inhibitory plasticity.
 
 \subsection{Same-span noisy coefficient-learning experiment}
 
@@ -3012,6 +3070,24 @@ post-hoc diagnostic, not an independent prediction test.}
 \label{fig:supp_partition_residual}
 \end{figure}
 
+\begin{figure}[p]
+\centering
+\includegraphics[width=\textwidth]{supplementary/figure_S24_panels_A-D.pdf}
+\caption{\textbf{Locally estimated reliability recovers placement ordering but
+not an absolute shunting advantage.} \textbf{A}, Two independent noisy local
+gradient observations estimate branch signal and noise moments, which set a
+nonnegative adaptive shunt. \textbf{B}, Fixed initial-oracle and final adaptive
+attenuation profiles at maximum heterogeneity; adaptive points show mean
+$\pm$ s.d. over 50 independent seeds. \textbf{C}, Final test loss across
+heterogeneity. Curves and shading are means and 95\% seed-bootstrap intervals.
+\textbf{D}, Control minus adaptive-local final loss at maximum heterogeneity;
+positive values favor adaptive local. Small points are paired seeds and large
+symbols are means with 95\% paired-seed bootstrap intervals. Adaptive local
+beats global and shuffled attenuation, loses to no shunt and the fixed initial
+oracle, and is numerically identical to the independently computed point gate.}
+\label{fig:supp_adaptive_reliability}
+\end{figure}
+
 \section{Statistics, reproducibility and claim controls}
 \label{note:statistics}
 
@@ -3157,6 +3233,34 @@ control agreed with the unshunted noisy rule to numerical precision. Exact clean
 than every attenuated condition. Shunts were fixed from initial oracle
 reliabilities and forward voltage was clamped exactly; excitatory conductance
 parameters, not shunts, were trained.
+\end{table}
+
+\begin{table}[ht]
+\centering
+\caption{Adaptive local conductance-reliability experiment at maximum
+heterogeneity. Effects are paired across 50 fresh confirmatory seeds. Positive
+one-step values favor adaptive local; negative final-loss values mean adaptive
+local has lower loss than the named control.}
+\label{tab:adaptive_reliability}
+\small
+\begin{tabularx}{\textwidth}{p{0.34\textwidth}rrrX}
+\toprule
+Endpoint & Effect & 95\% interval & Local favored & Two-sided Wilcoxon $P$ \\
+\midrule
+Local--global, one-step loss decrease & 0.001420 & 0.001158--0.001684 & 45/50 & $4.49\times10^{-13}$ \\
+Local--global, final test loss & $-0.016217$ & $-0.017913$--$-0.014501$ & 50/50 & $1.78\times10^{-15}$ \\
+Local--shuffled, final test loss & $-0.005528$ & $-0.007418$--$-0.003766$ & 41/50 & $7.80\times10^{-8}$ \\
+Local--no shunt, final test loss & 0.004250 & 0.002499--0.005975 & 11/50 & $1.78\times10^{-5}$ \\
+Local--initial oracle, final test loss & 0.003449 & 0.002577--0.004305 & 7/50 & $4.44\times10^{-9}$ \\
+Local--adaptive point gate, final test loss & 0 & 0--0 & 0/50; 50 ties & 1 \\
+\bottomrule
+\end{tabularx}
+
+\vspace{3pt}
+\footnotesize The estimator used paired noisy local gradient observations,
+not oracle signal/noise energies. It retained paired probes, a known step
+fraction and an exact state-matching clamp. Adaptive local recovered relative
+placement value but did not beat the unshunted rule.
 \end{table}
 
 \begin{table}[ht]

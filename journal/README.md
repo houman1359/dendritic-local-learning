@@ -15,7 +15,7 @@ The paper is organized around one conditional claim:
 > controls which synapses can share credit, and useful learning requires the
 > resulting routes to align with task credit.
 
-The package distinguishes fifteen levels of evidence:
+The package distinguishes sixteen levels of evidence:
 
 1. exact mathematical identities for conductance trees;
 2. controlled learning experiments in regular artificial trees, including a
@@ -42,14 +42,16 @@ The package distinguishes fifteen levels of evidence:
    replicates the serial-composition crossover under BP and LocalCA;
 9. a separate frozen 50-seed trained positive-conductance mechanism test with
    fixed oracle shunts and an exact state clamp;
-10. model-based analyses and perturbations on eight reconstructed MICrONS trees,
+10. a fresh 50-seed adaptive-conductance test estimating branch reliability
+    from paired noisy local credit observations;
+11. model-based analyses and perturbations on eight reconstructed MICrONS trees,
    including independent reciprocal-cable and physical-unit controls;
-11. a disjoint 47-cell public-v661 sensitivity cohort from the same mouse;
-12. analyses of measured MICrONS visual responses;
-13. a synapse-resolved inhibitory census with presynaptic-axon and 3D controls;
-14. a controlled sufficiency test that rotates exact task credit into or out of
+12. a disjoint 47-cell public-v661 sensitivity cohort from the same mouse;
+13. analyses of measured MICrONS visual responses;
+14. a synapse-resolved inhibitory census with presynaptic-axon and 3D controls;
+15. a controlled sufficiency test that rotates exact task credit into or out of
    a fixed reconstructed-tree routing subspace; and
-15. a retrospective six-animal consistency test of signed neuron identity.
+16. a retrospective six-animal consistency test of signed neuron identity.
 
 Modeled gradients on reconstructed anatomy are not described as measurements
 of biological learning. Negative alignment results are retained because they
@@ -63,7 +65,7 @@ define the boundary of the theory.
   main Article followed by all Supplementary Information.
 - `references.bib`: shared bibliography.
 - `figures/main/`: canonical assets compiled as main Figures 1--8.
-- `figures/supplementary/`: canonical assets compiled as S1--S23.
+- `figures/supplementary/`: canonical assets compiled as S1--S24.
 - `figures/generated/`: internal descriptive-name outputs from figure scripts;
   these are never referenced by LaTeX or included in the Overleaf bundle.
 - `figures/README.md`: authoritative figure, panel, and asset map.
@@ -119,7 +121,7 @@ Audited conference-era generator snapshots and source tables are retained under
 figure command reads the audited run and checkpoint tables already packaged in
 `source_data/prospective_learning/`; the checkpoint collector is kept separate
 because it re-evaluates the frozen models. The unified draft has eight numbered
-main figures and twenty-three supplementary figures. Each main figure is one vector
+main figures and twenty-four supplementary figures. Each main figure is one vector
 PDF with a single consecutive panel sequence; expanded diagnostics remain in
 Supplementary Information.
 `make overleaf-bundle` writes the current allow-listed package and ZIP under

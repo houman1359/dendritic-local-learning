@@ -42,7 +42,7 @@ FIGURE_MAP: dict[str, str] = {
     "main/figure_08_panels_I-J": "fig_fulltree_boundary",
     "main/figure_08_panels_K-N": "fig8_alignment_controlled",
     "main/figure_08_panel_O": "fig_credit_phase_plane",
-    # Supplementary Information: generated source blocks S1--S23.  The
+    # Supplementary Information: generated source blocks S1--S24.  The
     # compositor adds compact S18--S19 from selected diagnostic blocks.
     "supplementary/figure_S01_panels_A-E": "fig3_mechanistic_evidence",
     "supplementary/figure_S02_panels_A-E": "fig4_competence_regime",
@@ -65,6 +65,7 @@ FIGURE_MAP: dict[str, str] = {
     "supplementary/figure_S21_panels_A-I": "fig4_focal_shunting_detailed",
     "supplementary/figure_S22_panels_A-H": "fig5_alignment_boundary_detailed",
     "supplementary/figure_S23_panels_A-C": "fig_trained_partition_residual",
+    "supplementary/figure_S24_panels_A-D": "fig_adaptive_conductance_reliability",
     # Source component retained for provenance, not compiled separately.
     "components/supplementary_animal_credit_component": "fig_francioni_signed_credit_validation",
     # Completed but currently superseded displays, retained for provenance.

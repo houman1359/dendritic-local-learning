@@ -18,6 +18,7 @@ exists.
 | Static route-gain span invariance | Supplementary proposition; same-span projector gates | Applies to fixed nonzero column gains, not state-dependent row gains or silencing. |
 | Fixed-step branch reliability theory | General $a_b^*=\min\{1,S_b/[c(S_b+N_b)]\}$ theorem and tests | Signal/noise energies remain oracle quantities. |
 | Corrected positive-conductance reliability experiment | 50 fresh seeds, 2,250 rows in `source_data/positive_conductance_reliability_step_consistent/` | Single-compartment rate reduction with fixed shunts and oracle state clamp. |
+| Adaptive local reliability estimation | 50 fresh seeds, 1,050 outcomes in `source_data/adaptive_conductance_reliability/`; global, shuffled, no-shunt, initial-oracle and point-gate controls | Recovers relative placement value but is worse than no shunt; still assumes paired probes, step fraction and exact state clamp. |
 | Independent point/additive controls and physical finite difference | Separate update paths; canary and confirmatory gates; tests | Numerical equivalence shows point emulation, not dendrite exclusivity. |
 | Same-span noisy coefficient learning | 50 seeds, 4,800 rows in `source_data/same_span_coefficient_learning/` | Rate-based linear field dynamics; Gram preconditioner is an oracle control. |
 | Exact finite-time low-data bias--variance theorem | `code/theory/coefficient_learning.py`; Eq. S finite-risk; Monte Carlo tests | Explains the observed falsification/crossover; not a general nonlinear sample-complexity theorem. |
@@ -50,13 +51,10 @@ exists.
 2. **Cable selectivity by reliability dose:** cross shunt location, dose,
    electrotonic background and branch SNR during learning, rather than only
    fixed-state sensitivity or a single-compartment clamp.
-3. **Learned reliability:** estimate branch reliability from local running
-   signal/noise statistics and compare adaptive shunts with initial-oracle,
-   adaptive global, shuffled and no-shunt controls.
-4. **Latent context and reactivation:** infer context locally from branch
+3. **Latent context and reactivation:** infer context locally from branch
    state, then test whether reactivation/NMDA-like nonlinearities preserve
    address separation under switching.
-5. **Long-horizon continual learning:** 8, 16 and 32 tasks with branch reuse,
+4. **Long-horizon continual learning:** 8, 16 and 32 tasks with branch reuse,
    interference, forgetting and recovery endpoints.
 
 ## Outside the present rate-based claim unless scope is deliberately expanded

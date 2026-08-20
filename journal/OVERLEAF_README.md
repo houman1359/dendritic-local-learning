@@ -7,7 +7,7 @@ reading copy.
 
 The Article compiles exactly eight main assets:
 `figures/main/figure_01.pdf` through `figure_08.pdf`. Supplementary assets are
-in `figures/supplementary/` (S1--S23). The exact content map is
+in `figures/supplementary/` (S1--S24). The exact content map is
 `figures/README.md`. Do not select the modular compositor inputs or files in
 `figures/generated/`.
 

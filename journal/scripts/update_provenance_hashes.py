@@ -111,6 +111,12 @@ NEW_DETAIL_ASSETS = {
         "generator": "scripts/build_trained_partition_residual_figure.py",
         "notes": "Hash-gated reconstruction by scripts/analyze_trained_partition_residual.py and seed-level capture--utility association.",
     },
+    "adaptive.reliability.asset": {
+        "figure": "figS24",
+        "path": "figures/supplementary/figure_S24_panels_A-D.pdf",
+        "generator": "scripts/build_adaptive_conductance_reliability_figure.py",
+        "notes": "Fresh 50-seed adaptive local reliability experiment with global, shuffled, no-shunt, oracle and independent point-gate controls.",
+    },
 }
 
 

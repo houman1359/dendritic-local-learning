@@ -2171,6 +2171,64 @@ FILES += (
 )
 
 
+FILES += (
+    SourceFile(
+        "Supplementary Figure 24", "b-d",
+        "source_data/adaptive_conductance_reliability/seed_outcomes.csv",
+        "Supplementary_Figure_24/SuppFig24b-d_seed_outcomes.csv",
+        "complete seed-by-condition outcomes",
+        "paired independent simulation seed (n=50)",
+        "fresh prospectively frozen adaptive-reliability experiment",
+        "All 1,050 outcomes across three heterogeneity levels and seven paired methods.",
+    ),
+    SourceFile(
+        "Supplementary Figure 24", "b",
+        "source_data/adaptive_conductance_reliability/branch_estimates.csv",
+        "Supplementary_Figure_24/SuppFig24b_branch_estimates.csv",
+        "branch-level oracle and adaptive gains",
+        "paired independent simulation seed (n=50); branches nested within seed",
+        "fresh prospectively frozen adaptive-reliability experiment",
+        "Fixed initial-oracle and final adaptive gain estimates for every branch.",
+    ),
+    SourceFile(
+        "Supplementary Figure 24", "c",
+        "source_data/adaptive_conductance_reliability/condition_summary.csv",
+        "Supplementary_Figure_24/SuppFig24c_condition_summary.csv",
+        "derived condition summaries",
+        "paired independent simulation seed (n=50)",
+        "current derived analysis",
+        "Means and seed-bootstrap intervals for one-step and final outcomes.",
+    ),
+    SourceFile(
+        "Supplementary Figure 24", "d",
+        "source_data/adaptive_conductance_reliability/paired_contrasts.csv",
+        "Supplementary_Figure_24/SuppFig24d_paired_contrasts.csv",
+        "paired high-heterogeneity contrasts",
+        "paired independent simulation seed (n=50)",
+        "frozen primary and boundary analysis",
+        "Adaptive-local comparisons with global, shuffled, no-shunt, initial-oracle and point-gate controls.",
+    ),
+    SourceFile(
+        "Supplementary Figure 24", "b",
+        "source_data/adaptive_conductance_reliability/estimator_seed_summary.csv",
+        "Supplementary_Figure_24/SuppFig24b_estimator_seed_summary.csv",
+        "seed-level estimator diagnostics",
+        "paired independent simulation seed (n=50)",
+        "secondary descriptive analysis",
+        "Within-seed gain-order correlation and mean absolute gain error.",
+    ),
+    SourceFile(
+        "Supplementary Figure 24", "a-d",
+        "source_data/adaptive_conductance_reliability/summary.json",
+        "Supplementary_Figure_24/SuppFig24_summary.json",
+        "analysis and validity summary",
+        "complete 1,050-outcome cohort",
+        "current audit",
+        "Frozen hashes, numerical gates and claim boundary.",
+    ),
+)
+
+
 README = """# Source Data
 
 This directory contains the numerical source data underlying every current
@@ -2209,9 +2267,9 @@ depth control, Supplementary Figure 9 is the complete checkpoint diagnostic,
 Supplementary Figure 10 is the same-mouse v661 sensitivity cohort, and
 Supplementary Figures 11--17 contain conductance, inhibitory, same-span,
 calibration, interior-optimum and external-animal analyses. Supplementary
-Figures 18--23 retain the expanded physical-depth, prospective routing,
+Figures 18--24 retain the expanded physical-depth, prospective routing,
 morphology, focal-shunting, measured-response and trained partition-residual
-diagnostics. Capture per wire
+diagnostics plus the adaptive conductance-reliability test. Capture per wire
 and the phase-plane synthesis are promoted to main Figures 6 and 8.
 
 This is the submission-facing source-data package. Figure 2 panels b and c
