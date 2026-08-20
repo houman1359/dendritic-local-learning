@@ -31,6 +31,17 @@
 
 Total: 360 fits, ten paired seeds 10400--10409.
 
+## Runtime events
+
+Array `40489416` tasks 0--8 completed. Task 9 exited before training because
+the allocated GPU on `holygpu8a19102` returned
+`cudaErrorDevicesUnavailable`; model construction, data loading and the
+initial gate audit had completed, but no checkpoint or outcome was produced.
+The incomplete `results/config_9` directory was preserved under
+`failed_attempts/config_9_cuda_unavailable_40489416`. Only frozen config 9 was
+resubmitted as job `40501760`, excluding that node. This is a hardware retry,
+not a scientific rerun or configuration change.
+
 ## Invalidated submission attempt
 
 Arrays `40484370`, `40484380`, `40484420`, `40484444`, `40484495`,
