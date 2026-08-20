@@ -117,6 +117,12 @@ NEW_DETAIL_ASSETS = {
         "generator": "scripts/build_adaptive_conductance_reliability_figure.py",
         "notes": "Fresh 50-seed adaptive local reliability experiment with global, shuffled, no-shunt, oracle and independent point-gate controls.",
     },
+    "irregular.wavelet.asset": {
+        "figure": "figS25",
+        "path": "figures/supplementary/figure_S25_panels_A-D.pdf",
+        "generator": "scripts/build_irregular_tree_wavelet_figure.py",
+        "notes": "Frozen 47-cell primary and eight-cell secondary irregular-tree Haar analysis with isotropic and column-permuted controls.",
+    },
 }
 
 

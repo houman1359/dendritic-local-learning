@@ -29,6 +29,10 @@ complete.
       the original eight by stable nucleus identifier. At eight channels,
       morphology-defined routes exceed random, depth-bin, and
       ancestry-shuffled controls in all 47 cells.
+- [x] A frozen irregular-tree Haar analysis resolves modeled ancestry-route
+      energy across all 47 disjoint and eight original cells. Coarse energy is
+      enriched relative to isotropic noise, whereas the anatomy-specific
+      excess over column permutation does not replicate in the 47-cell cohort.
 - [x] Focal shunting is evaluated in 45 v661 cells and 235 eligible sites;
       the topology-versus-depth-shuffle control is evaluated in 40 cells and
       230 sites. Cell, not site, is the inferential unit.
@@ -64,7 +68,7 @@ complete.
       hierarchy depth minimizes mean loss; explicit point gating matches
       reliability-aligned branch gain exactly. The companion secondary
       reanalysis covers all 20 seed blocks of the 2,700-fit factorial.
-- [x] Main Figures 1--8 and Supplementary Figures S1--S18 have
+- [x] Main Figures 1--8 and Supplementary Figures S1--S25 have
       machine-readable source tables and executable default build commands.
       Final hashes include the completed alignment-dose and Fashion-MNIST panels.
 - [x] An origin manifest, main-panel provenance manifest, original-cohort
@@ -234,7 +238,7 @@ from this document.
 - Main display items: up to ten figures and/or tables. The working draft now
   has eight numbered main figures, each represented by one canonical vector
   PDF and one figure environment; the complete control inventory continues
-  through Supplementary Figure S24.
+  through Supplementary Figure S25.
   Checkpoint-mechanism and cohort-sensitivity displays
   remain in Supplementary Figures S9 and S10, the passive focal-shunt matrix
   is Supplementary Figure S11, and the inhibitory census is Supplementary

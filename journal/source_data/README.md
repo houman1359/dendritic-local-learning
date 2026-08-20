@@ -410,3 +410,27 @@ Exact path transport adds no reliable benefit beyond neuron identity. The
 multiple manifests reflect the same source-guard event documented for the
 alignment dose response; no Fashion-MNIST configuration enabled the changed
 optional rule override.
+
+## Trained partition-residual reconstruction
+
+`trained_partition_residual/` contains the hash-gated deterministic
+reconstruction of all 2,700 trained route-factorial fits at initialization and
+training. It reports address and coefficient residuals, endpoint agreement and
+within-seed capture--accuracy associations. Rebuild with
+`python scripts/analyze_trained_partition_residual.py`.
+
+## Adaptive conductance reliability
+
+`adaptive_conductance_reliability/` contains all 1,050 outcomes from the fresh
+50-seed adaptive local reliability experiment, branch-level estimates,
+condition summaries, paired contrasts and numerical gates. Rebuild the display
+with `python scripts/build_adaptive_conductance_reliability_figure.py`.
+
+## Irregular-tree wavelet scale analysis
+
+`irregular_tree_wavelets/` contains the frozen weighted tree-Haar analysis for
+the 47-cell public-v661 cohort and original eight cells. It includes every
+mode's support and energy, cell- and cohort-level summaries, numerical audits
+and the inferential summary. Rebuild tables with
+`python scripts/analyze_irregular_tree_wavelets.py` and Supplementary Figure
+S25 with `python scripts/build_irregular_tree_wavelet_figure.py`.

@@ -50,6 +50,8 @@ figures:
 	$(PYTHON) scripts/analyze_positive_conductance_reliability.py
 	$(PYTHON) scripts/build_positive_conductance_reliability_figure.py
 	$(PYTHON) scripts/build_adaptive_conductance_reliability_figure.py
+	$(PYTHON) scripts/analyze_irregular_tree_wavelets.py
+	$(PYTHON) scripts/build_irregular_tree_wavelet_figure.py
 	$(PYTHON) scripts/analyze_same_span_coefficient_learning.py
 	$(PYTHON) scripts/build_same_span_coefficient_figure.py
 	PYTHONPATH=../../..:scripts $(PYTHON) scripts/diagnose_nonlinear_physical_depth.py

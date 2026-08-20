@@ -2229,6 +2229,55 @@ FILES += (
 )
 
 
+FILES += (
+    SourceFile(
+        "Supplementary Figure 25", "b-d",
+        "source_data/irregular_tree_wavelets/cell_scale_summary.csv",
+        "Supplementary_Figure_25/SuppFig25b-d_cell_scale_summary.csv",
+        "cell-level multiscale route-energy endpoints",
+        "reconstructed cell (n=47 primary; n=8 secondary)",
+        "prospectively frozen structural reanalysis",
+        "Actual, isotropic and column-permuted route-energy summaries at coarse, intermediate and fine scales.",
+    ),
+    SourceFile(
+        "Supplementary Figure 25", "b-c",
+        "source_data/irregular_tree_wavelets/cohort_scale_summary.csv",
+        "Supplementary_Figure_25/SuppFig25b-c_cohort_scale_summary.csv",
+        "cohort-level multiscale summaries",
+        "reconstructed cell",
+        "current derived analysis",
+        "Cell means and cell-bootstrap intervals for scale energy and enrichment.",
+    ),
+    SourceFile(
+        "Supplementary Figure 25", "a-c",
+        "source_data/irregular_tree_wavelets/mode_spectrum.csv",
+        "Supplementary_Figure_25/SuppFig25a-c_mode_spectrum.csv",
+        "complete irregular-tree wavelet spectrum",
+        "wavelet mode nested within reconstructed cell",
+        "current derived analysis",
+        "Mode support, split balance, scale assignment and route-field energy for all 55 cells.",
+    ),
+    SourceFile(
+        "Supplementary Figure 25", "a-d",
+        "source_data/irregular_tree_wavelets/numerical_audit.csv",
+        "Supplementary_Figure_25/SuppFig25_numerical_audit.csv",
+        "basis and decomposition audit",
+        "reconstructed cell (n=55)",
+        "frozen numerical audit",
+        "Full-rank, orthonormality, energy-decomposition and scale-count gates.",
+    ),
+    SourceFile(
+        "Supplementary Figure 25", "a-d",
+        "source_data/irregular_tree_wavelets/summary.json",
+        "Supplementary_Figure_25/SuppFig25_summary.json",
+        "analysis and inferential summary",
+        "reconstructed cell (n=47 primary; n=8 secondary)",
+        "current audit",
+        "Input hashes, frozen settings, numerical gates, cell-level tests and claim boundaries.",
+    ),
+)
+
+
 README = """# Source Data
 
 This directory contains the numerical source data underlying every current
@@ -2267,9 +2316,10 @@ depth control, Supplementary Figure 9 is the complete checkpoint diagnostic,
 Supplementary Figure 10 is the same-mouse v661 sensitivity cohort, and
 Supplementary Figures 11--17 contain conductance, inhibitory, same-span,
 calibration, interior-optimum and external-animal analyses. Supplementary
-Figures 18--24 retain the expanded physical-depth, prospective routing,
+Figures 18--25 retain the expanded physical-depth, prospective routing,
 morphology, focal-shunting, measured-response and trained partition-residual
-diagnostics plus the adaptive conductance-reliability test. Capture per wire
+diagnostics plus the adaptive conductance-reliability and irregular-tree
+wavelet tests. Capture per wire
 and the phase-plane synthesis are promoted to main Figures 6 and 8.
 
 This is the submission-facing source-data package. Figure 2 panels b and c

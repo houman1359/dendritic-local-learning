@@ -2084,6 +2084,62 @@ entered the analysis. It is therefore a disjoint-cell robustness analysis, not a
 independent-animal or population replication. The frozen candidate and
 endpoint-exclusion manifests accompany the source data.
 
+\subsection{Irregular-tree wavelet scale analysis}
+
+We froze a multiscale analysis before inspecting its outcomes. The public-v661
+47-cell cohort was primary and the original eight cells were secondary; no
+cells, compressed segments, excitatory weights or inhibitory routes were
+reselected. For each cell, let $w_i$ be mapped excitatory area and let
+$\Gamma$ be the conductance-weighted ancestry matrix in
+Eq.~\ref{eq:s_kernel}. A deterministic unbalanced tree-Haar construction
+recursively split each current excitatory region $R$ at the descendant subtree
+whose weight was closest to half the region weight. If the split produced
+$A\mathbin{\dot\cup}B=R$ with weights $W_A$, $W_B$ and $W_R$, its normalized
+contrast in weighted coordinates was
+\begin{equation}
+h_{R,i}=\begin{cases}
+\sqrt{w_i}\sqrt{W_B/(W_AW_R)}, & i\in A,\\
+-\sqrt{w_i}\sqrt{W_A/(W_BW_R)}, & i\in B,\\
+0, & i\notin R.
+\end{cases}
+\label{eq:s_irregular_haar}
+\end{equation}
+Together with the weighted constant
+$h_{0,i}=\sqrt{w_i/\sum_jw_j}$, the recursively nested contrasts form a full
+orthonormal basis. All 55 cell bases had full rank; maximum orthonormality error
+was $4.44\times10^{-16}$.
+
+To isolate within-cell address structure from scalar broadcast, we analyzed
+\begin{equation}
+\widetilde\Gamma=(I-h_0h_0^{\mathsf T})W^{1/2}\Gamma,
+\qquad
+p_r=\frac{\lVert h_r^{\mathsf T}\widetilde\Gamma\rVert_2^2}
+{\lVert\widetilde\Gamma\rVert_F^2}.
+\label{eq:s_irregular_wavelet_power}
+\end{equation}
+Wavelets were called coarse when their support exceeded one quarter of total
+excitatory weight, intermediate when it exceeded one sixteenth but not one
+quarter, and fine otherwise. The isotropic-noise reference for a scale with
+$m_s$ modes among $n-1$ non-scalar dimensions was $m_s/(n-1)$. A second null
+independently permuted each raw ancestry-route column across excitatory sites
+before weighting and centering; 256 stable cell-specific permutations were
+nested within each cell. Cell was the inferential unit and intervals
+bootstrapped cells.
+
+In the 47-cell cohort, coarse wavelets contained 0.4065 of non-scalar route
+energy despite comprising 0.1923 of dimensions. Mean enrichment over isotropic
+noise was 2.351 (95\% cell-bootstrap interval 1.995--2.880; 47/47 above one;
+two-sided Wilcoxon $P=1.42\times10^{-14}$). Fine-scale enrichment was 0.342
+(0/47 above one; $P=1.42\times10^{-14}$), with intermediate enrichment 1.134
+(30/47; $P=0.0160$). The anatomy-specific null was not rejected: actual minus
+permuted coarse energy was 0.0345 ($-0.0025$--0.0713; 31/47;
+$P=0.0780$), and intermediate and fine contrasts were also null. The original
+eight cells showed a coarse actual-minus-permuted excess of 0.0677
+(0.0495--0.0900; 8/8; $P=0.00781$), which therefore failed to reproduce in the
+larger disjoint cohort. The analysis supports coarse structural coordinates
+relative to an isotropic noise model, not a replicable advantage of the
+observed fine ancestry layout, measured credit alignment or learning use.
+
 To remove the direct generator--dictionary correspondence, we formed an
 independent response operator on the original eight trees. A focal shunt of
 $10^{-3}$ times local leak-plus-synaptic conductance was added at every
@@ -3086,6 +3142,25 @@ symbols are means with 95\% paired-seed bootstrap intervals. Adaptive local
 beats global and shuffled attenuation, loses to no shunt and the fixed initial
 oracle, and is numerically identical to the independently computed point gate.}
 \label{fig:supp_adaptive_reliability}
+\end{figure}
+
+\begin{figure}[p]
+\centering
+\includegraphics[width=\textwidth]{supplementary/figure_S25_panels_A-D.pdf}
+\caption{\textbf{Irregular reconstructed trees concentrate modeled route-field
+energy coarsely, but the anatomy-specific excess does not replicate.}
+\textbf{A}, Weighted unbalanced tree-Haar contrasts recursively partition each
+reconstructed arbor into coarse, intermediate and fine supports. \textbf{B},
+Non-scalar conductance-weighted ancestry-route energy in the disjoint 47-cell
+cohort, compared with column-permuted ancestry and dimension-matched isotropic
+noise. Actual-route points and intervals are cell means and 95\% cell-bootstrap
+intervals; null markers are cell means. \textbf{C}, Signal-to-isotropic-noise
+power by scale for all 47 cells; diamonds show means and 95\% cell-bootstrap
+intervals. \textbf{D}, Actual-minus-permuted coarse energy in the original and
+disjoint cohorts. The positive original-cohort contrast is not reliable in the
+47-cell cohort. Cells are the inferential units; all reconstructions derive
+from one mouse. Modeled route fields are not measured teaching signals.}
+\label{fig:supp_irregular_wavelets}
 \end{figure}
 
 \section{Statistics, reproducibility and claim controls}

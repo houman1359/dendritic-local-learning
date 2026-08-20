@@ -9,7 +9,7 @@ Status key: `[x]` complete in the current draft; `[~]` drafted but requires a fi
       guideline; the automated format audit records the exact current count.
 - [x] Main narrative is organized as Introduction, Results, Discussion and Methods.
 - [x] The working article contains eight numbered main figures, each compiled
-      from one vector PDF. Expanded controls are Supplementary Figures S1--S24.
+      from one vector PDF. Expanded controls are Supplementary Figures S1--S25.
 - [x] A standalone Supplementary Information manuscript compiles.
 - [x] A cover letter and standalone related-work/overlap statement are drafted.
 - [ ] Confirm the final corresponding author, postal address, email and journal-portal metadata.
@@ -87,9 +87,9 @@ Status key: `[x]` complete in the current draft; `[~]` drafted but requires a fi
 
 ## Figure and source-data integrity
 
-- [x] Every quantitative panel in the eight numbered main figures and twenty-four supplementary figures has machine-readable source tables with plotted values and unit identifiers; conceptual panels are programmatic. The 90-fit physical-alignment dose panels and the 220-fit grouped-point/H2 extension passed their frozen artifact and resource gates; Supplementary Figure S23 reconstructs all 2,700 route-factorial fits with archived-hash and endpoint-agreement gates, and Supplementary Figure S24 reports all 1,050 outcomes from the fresh adaptive-reliability experiment.
+- [x] Every quantitative panel in the eight numbered main figures and twenty-five supplementary figures has machine-readable source tables with plotted values and unit identifiers; conceptual panels are programmatic. The 90-fit physical-alignment dose panels and the 220-fit grouped-point/H2 extension passed their frozen artifact and resource gates; Supplementary Figure S23 reconstructs all 2,700 route-factorial fits with archived-hash and endpoint-agreement gates, Supplementary Figure S24 reports all 1,050 outcomes from the fresh adaptive-reliability experiment, and Supplementary Figure S25 reports the frozen 47-cell primary/eight-cell secondary irregular-tree wavelet analysis.
 - [x] The panel-level provenance manifest records source path, SHA-256 hash,
-      generator and inferential unit for Figures 1--8 and Supplementary Figures S1--S24; hashes include the final alignment-dose, Fashion-MNIST, detailed morphology, focal and measured-response panels, the trained partition-residual reconstruction and the adaptive-reliability test.
+      generator and inferential unit for Figures 1--8 and Supplementary Figures S1--S25; hashes include the final alignment-dose, Fashion-MNIST, detailed morphology, focal and measured-response panels, the trained partition-residual reconstruction, adaptive-reliability test and irregular-tree wavelet analysis.
 - [x] Plotting scripts read the frozen source tables or write and then read the deterministic analysis outputs; numerical result labels are not maintained as an independent hand-entered source.
 - [~] Final figures use embedded Type 1 or TrueType fonts and a consistent,
       color-accessible palette; the existing renders and the alignment-dose
@@ -106,8 +106,8 @@ Status key: `[x]` complete in the current draft; `[~]` drafted but requires a fi
 - [x] Derived manifests, endpoint exclusion logs and non-restricted source data are organized locally for release.
 - [ ] Deposit the final derived-data package in a stable repository and add its DOI/accession.
 - [x] The journal-formatted Source Data package was regenerated for the final
-      eight-main-figure, twenty-four-supplementary-figure layout. Its allow-listed
-      allow-listed archive includes the H3 literal grouped-point control, the
+      eight-main-figure, twenty-five-supplementary-figure layout. Its allow-listed
+      archive includes the H3 literal grouped-point control, the
       independent H2 BP/LocalCA cohort, paired contrasts and completeness audit;
       the ZIP integrity check passes.
 - [ ] State any access conditions for large or restricted upstream data exactly as required by the provider.

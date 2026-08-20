@@ -30,12 +30,12 @@ exists.
 | Fixed-state hierarchy-depth phase | 50 seeds in `source_data/credit_phase_theory/` | Routed linear quadratic depth, not nonlinear forward dendritic depth. |
 | Trained route-bandwidth/address factorial | 2,700 fits in `source_data/trained_subtree_address_full_factorial/` | Algebraically matched representations share implementations; supports an address-resource claim. |
 | Partition residual in the trained route factorial | Hash-gated deterministic reconstruction of all 2,700 fits at initialization and training; Supplementary Fig. S23 | Address capture explains bandwidth and ownership failures but not matched-capacity support differences; association is post hoc. |
+| Irregular-tree wavelet scale analysis | Frozen weighted tree-Haar analysis on the 47-cell disjoint cohort and original eight cells; Supplementary Fig. S25 | Coarse route energy exceeds isotropic noise, but the ancestry-specific excess over column permutation does not replicate; modeled structural fields are not measured credit. |
 
 ## Partially implemented; stronger analysis remains compatible
 
 | Review item | Current evidence | Required completion |
 |---|---|---|
-| Tree-wavelet scale analysis | Balanced-tree Haar phase and same-span experiment | Apply an irregular-tree wavelet basis to reconstructed MICRONS route/credit fields and quantify scale-specific signal/noise. |
 | Noise hierarchy | Coefficient noise, broadcast noise and several legacy ladders | One common trained design crossing input, label, feedback, branch, multiplicative and context noise. |
 | Reactivation/NMDA factors | Legacy reactivation controls and active steady-state sensitivity | A prospective rate-based state-reactivation factorial coupled to local learning. |
 | Context gating | Two-context switch and static overlap analyses | Latent-context local gating without an oracle context label. |

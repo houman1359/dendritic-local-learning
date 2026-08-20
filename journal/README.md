@@ -46,7 +46,9 @@ The package distinguishes sixteen levels of evidence:
     from paired noisy local credit observations;
 11. model-based analyses and perturbations on eight reconstructed MICrONS trees,
    including independent reciprocal-cable and physical-unit controls;
-12. a disjoint 47-cell public-v661 sensitivity cohort from the same mouse;
+12. a disjoint 47-cell public-v661 sensitivity cohort from the same mouse,
+   including a frozen irregular-tree wavelet analysis against isotropic and
+   ancestry-permuted controls;
 13. analyses of measured MICrONS visual responses;
 14. a synapse-resolved inhibitory census with presynaptic-axon and 3D controls;
 15. a controlled sufficiency test that rotates exact task credit into or out of
@@ -65,7 +67,7 @@ define the boundary of the theory.
   main Article followed by all Supplementary Information.
 - `references.bib`: shared bibliography.
 - `figures/main/`: canonical assets compiled as main Figures 1--8.
-- `figures/supplementary/`: canonical assets compiled as S1--S24.
+- `figures/supplementary/`: canonical assets compiled as S1--S25.
 - `figures/generated/`: internal descriptive-name outputs from figure scripts;
   these are never referenced by LaTeX or included in the Overleaf bundle.
 - `figures/README.md`: authoritative figure, panel, and asset map.
@@ -121,7 +123,7 @@ Audited conference-era generator snapshots and source tables are retained under
 figure command reads the audited run and checkpoint tables already packaged in
 `source_data/prospective_learning/`; the checkpoint collector is kept separate
 because it re-evaluates the frozen models. The unified draft has eight numbered
-main figures and twenty-four supplementary figures. Each main figure is one vector
+main figures and twenty-five supplementary figures. Each main figure is one vector
 PDF with a single consecutive panel sequence; expanded diagnostics remain in
 Supplementary Information.
 `make overleaf-bundle` writes the current allow-listed package and ZIP under

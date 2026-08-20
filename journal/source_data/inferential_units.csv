@@ -7,10 +7,12 @@ credit_phase_depth,matched versus mismatched routed depth,simulation seed,50,tas
 credit_phase_alignment,ancestry capture across imposed alignment,simulation seed,50,alignment and rank paired within seed,seed bootstrap and paired tests
 same_span_learning,finite-data coordinate crossover,simulation seed,50,sample sizes and dictionaries paired within seed,seed bootstrap and paired tests
 positive_conductance_reliability,reliability-aligned versus control shunts,simulation seed,50,heterogeneity and methods paired within seed,seed bootstrap and paired tests
+adaptive_conductance_reliability,locally estimated versus global shuffled and no-shunt controls,simulation seed,50,heterogeneity methods and branch estimates paired within seed,seed bootstrap and Wilcoxon signed-rank tests
 nonlinear_physical_depth,aligned D3 versus D1 and control interactions,training seed,10,depths mechanisms and alignments paired within seed,paired seed bootstrap and exact sign-flip test
 point_dendrite_credit_controls,serial versus star point MLP and credit decomposition,training seed,10,architectures depths and credit modes paired within seed,paired seed bootstrap and exact sign-flip test
 microns_primary_routing,routing capture and wiring efficiency,reconstructed cell,8,streams routes and synapses nested within cell,cell bootstrap and paired cell tests
 microns_v661_replication,routing and focal sensitivity,reconstructed cell,47,streams sites routes and synapses nested within cell,cell bootstrap and paired cell tests
+irregular_tree_wavelets,coarse route-field enrichment versus isotropic and column-permuted controls,reconstructed cell,47,256 permutations and wavelet modes nested within cell; original eight are secondary,cell bootstrap and Wilcoxon signed-rank tests
 microns_inhibitory_census,connection topology and route capacity,postsynaptic target cell,20,presynaptic axons contacts and streams nested within target,target-cell bootstrap and paired target tests
 focal_passive_perturbation,shunt minus additive localization,reconstructed cell,8,focal sites and synapses nested within cell,cell bootstrap after site averaging
 active_conductance_focal,descendant-enriched active-state attenuation,reconstructed cell,8,channel-density draws sites and equilibria nested within cell,cell-level sensitivity summary

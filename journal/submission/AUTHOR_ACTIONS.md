@@ -43,7 +43,7 @@ This document separates tasks that can be checked from the repository from decis
       physical-depth, point--dendrite, alignment-dose, Fashion-MNIST, literal
       grouped-point, independent H2, phase-plane, wiring-efficiency and animal
       consistency data. Rebuild it after the present figure remap so its
-      manifest matches the eight-main-figure and twenty-four-supplementary-figure
+      manifest matches the eight-main-figure and twenty-five-supplementary-figure
       layout.
 - [ ] Commit the current standalone journal Article, then rebuild the reviewer software
       archive from that clean Git commit. The release allowlist now includes the

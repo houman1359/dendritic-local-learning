@@ -25,7 +25,7 @@ and author/external actions that cannot be completed from the repository.
 | Broken/dead bibliography keys and missing load-bearing literature | Completed | The bibliography now contains 56 cited records, including all load-bearing works requested in the review. `scripts/audit_citations.py` reports zero undefined and zero unused keys. |
 | Placeholder Code Availability | External action | The local release is prepared; an author must publish it and mint the Zenodo DOI. The manuscript must then name URL, DOI and MIT license. |
 | Cover letter and NeurIPS dual-track status | Local revision completed; author action remains | The cover letter is now a theory-first significance letter and the related-work statement treats the journal Article as the canonical standalone account. Authors must insert the final NeurIPS status, satisfy exclusivity, and approve the sibling-manuscript disclosures before submission. |
-| Length, display count and stale checklist | Figure inventory completed; length remains advisory | Results now follow eight scientific subsections and use eight single-file numbered figures without continued floats. The checklist records eight main figures and Supplementary Figs. S1--S24. Narrative length remains deliberately advisory during scientific revision, as requested by the authors. |
+| Length, display count and stale checklist | Figure inventory completed; length remains advisory | Results now follow eight scientific subsections and use eight single-file numbered figures without continued floats. The checklist records eight main figures and Supplementary Figs. S1--S25. Narrative length remains deliberately advisory during scientific revision, as requested by the authors. |
 
 ## Scientific and inferential repairs
 
@@ -107,6 +107,17 @@ specificity for 10.96 points. All numerical and resource gates passed.
    and 8/10-sign gates; all 220 fits pass resource and artifact audits. This
    closes the reviewer's literal grouped-point control and second-hierarchy
    requests within the calibrated task family, not across an independent task.
+
+7. **Irregular-tree wavelet scale analysis (complete; 55 reconstructed
+   cells).** A frozen weighted unbalanced tree-Haar construction resolves the
+   non-scalar conductance-weighted ancestry field into anatomical scales. In
+   the disjoint 47-cell cohort, coarse modes carry 0.407 of energy using 0.192
+   of dimensions (2.351-fold isotropic enrichment; 47/47), but the
+   actual-minus-column-permuted excess is not reliable (0.0345, interval
+   $-0.0025$--0.0713; 31/47; $P=0.078$). The positive original eight-cell
+   contrast therefore does not replicate. This closes the requested
+   irregular-tree scale analysis while strengthening the paper's boundary
+   claim rather than its anatomy-specific headline.
 
 ## Claim and writing repairs
 
