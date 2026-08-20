@@ -63,6 +63,7 @@ SUPPLEMENTARY_FIGURES = (
     "supplementary/figure_S24_panels_A-D.pdf",
     "supplementary/figure_S25_panels_A-D.pdf",
     "supplementary/figure_S26_panels_A-D.pdf",
+    "supplementary/figure_S27_panels_A-D.pdf",
 )
 
 FIGURES = MAIN_FIGURES + SUPPLEMENTARY_FIGURES
