@@ -2262,6 +2262,59 @@ no fallback or nonfinite alert, the expected seeds and exact resource equality.
 Frozen manifests, run-level outcomes, every paired contrast and the
 machine-readable audit are distributed with Source Data.
 
+\subsection*{Fourth-hierarchy extension and clean-source replication}
+
+We next froze an $H=4$ extension to distinguish a hierarchy-matched depth
+prediction from the simpler possibility that the deepest offered model always
+wins. The positive-rate task, optimizer, conductance operating point,
+train--validation protocol and stopping rule were inherited without retuning
+from the $H=3$ cohort. The 64 signal features were divided into four
+16-feature tiers with inventory counts $[4,2,1,1]$. Aligned placement assigned
+the tiers in fine-to-global physical order; the reversed control assigned them
+in the opposite order. D1 $[8]$, D2 $[2,3]$, D3 $[2,1,2]$ and D4
+$[1,1,2,2]$ each contained eight nonsomatic branch units per soma
+($8$, $2+6$, $2+2+4$ and $1+1+2+4$). Each resolved preflight contained
+66,178 trainable parameters.
+
+The 360-fit factorial used ten fresh paired seeds 10400--10409. It crossed D1--D4
+for aligned and reversed serial shunting BP, aligned and reversed literal
+grouped-point shunting BP, aligned and reversed serial LocalCA with shared-soma
+or exact-path transport, and aligned serial raw-additive BP. Frozen primary
+estimands were aligned serial-BP D4-minus-D3 and D4-minus-D1 effects; their
+placement interactions; the serial-minus-grouped D4 contrast and its placement
+interaction; shared- and path-LocalCA D4-minus-D3 effects and placement
+interactions; and the shunting-minus-additive interaction in D4-minus-D3.
+Failure of D4 to exceed D3 was defined in advance as falsification of the
+simple $D_{\mathrm p}=H$ trained crossover at $H=4$. Every contrast is retained
+regardless of direction. Intervals use 50,000 paired-seed bootstrap draws;
+exact two-sided sign-flip tests enumerate all $2^{10}$ assignments, and the
+frozen primary family receives Benjamini--Hochberg correction. A positive
+directional statement additionally requires at least eight of ten paired
+differences in the predicted direction.
+
+All physical-depth extension jobs were generated and submitted from immutable modeling commit
+\texttt{a99c3a7}; each job exported that checkout explicitly and refused a
+changed commit or tracked diff. Before training, serial shunting, literal
+grouped-point, raw-additive and both LocalCA D4 configurations passed model
+construction and resource audits. For D1, serial and literal grouped-point
+models received an identical 32-example batch and produced bitwise-identical
+initial logits (maximum absolute difference zero). The source commit, config
+hashes and gate result are supplied in a machine-readable audit.
+
+Because the earlier H2/H3 arrays had been guarded by a base commit plus a
+tracked-diff hash rather than a standalone immutable commit, we also froze a
+430-fit source-concordance replication before inspecting any rerun outcome.
+It reuses the original configurations and paired seeds without changing any
+scientific design: all 220 literal-point/H2 fits and the 210 load-bearing H3
+serial shunting, LocalCA and raw-additive fits were rerun from
+\texttt{a99c3a7}. This is a same-seed implementation replication, not an
+independent biological or task replication. Each clean-source outcome is
+paired to its historical seed and semantic condition; the full distribution
+and maximum absolute held-out-accuracy change are reported. Scientific
+contrasts are recomputed at the seed level. If a load-bearing contrast changes
+sign or loses its frozen directional gate, the clean-source endpoint replaces
+the historical value rather than being selectively discarded.
+
 \subsection*{State-matched positive-conductance reliability experiment}
 
 The locked mechanism experiment used eight branches with four nonnegative rate
