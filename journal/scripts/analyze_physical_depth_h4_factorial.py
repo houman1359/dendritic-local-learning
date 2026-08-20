@@ -51,8 +51,18 @@ H23_REFERENCE = (
     / "remaining_physical_experiments"
     / "seed_outcomes_with_h3_reference.csv"
 )
+CLEAN_H23_REFERENCE = (
+    ROOT
+    / "source_data"
+    / "physical_depth_clean_source_replication"
+    / "seed_outcomes.csv"
+)
+INITIALIZATION_AUDIT = (
+    ROOT / "analysis" / "PHYSICAL_DEPTH_H4_D1_INITIALIZATION_AUDIT_20260819.json"
+)
 OUTPUT = ROOT / "source_data" / "physical_depth_h4_factorial"
 FIGURES = ROOT / "figures" / "generated"
+EXPECTED_SOURCE_COMMIT = "a99c3a777f99913e13dfe673a3f3a28bfe3566af"
 
 SEEDS = list(range(10400, 10410))
 DEPTH_FACTORS = {
@@ -128,6 +138,7 @@ def collect(
     missing: list[str] = []
     run_records: list[dict[str, Any]] = []
     contract_failures: list[str] = []
+    source_failures: list[str] = []
 
     for stem, (regime, architecture, mechanism, credit_default) in RUN_SPECS.items():
         run = latest_run(runs, stem)
@@ -137,13 +148,22 @@ def collect(
             (run / "configs").glob("unified_config_*.yaml"),
             key=lambda path: int(path.stem.rsplit("_", 1)[1]),
         )
+        manifest_path = run / "frozen_sweep_manifest.json"
+        manifest = json.loads(manifest_path.read_text())
+        source = manifest["source_identity"]["git"]
+        if source["commit"] != EXPECTED_SOURCE_COMMIT:
+            source_failures.append(f"{stem}/commit/{source['commit']}")
+        if source["tracked_worktree_dirty"]:
+            source_failures.append(f"{stem}/dirty")
         run_records.append(
             {
                 "stem": stem,
                 "run_dir": str(run),
                 "expected": expected,
                 "generated": len(configs),
-                "manifest_sha256": sha256(run / "frozen_sweep_manifest.json"),
+                "manifest_sha256": sha256(manifest_path),
+                "source_commit": source["commit"],
+                "source_dirty": bool(source["tracked_worktree_dirty"]),
             }
         )
         if len(configs) != expected:
@@ -245,6 +265,7 @@ def collect(
         "missing_count": len(missing),
         "missing_examples": missing[:40],
         "contract_failures": contract_failures[:80],
+        "source_failures": source_failures,
         "runs": run_records,
     }
     return frame, collection
@@ -459,6 +480,15 @@ def audit(frame: pd.DataFrame, collection: dict[str, Any]) -> dict[str, Any]:
     checks["resource_gate"] = not resource_failures
     checks["expected_seeds"] = checks["observed_seeds"] == SEEDS
     checks["expected_row_count_gate"] = checks["expected_row_count"] == 360
+    initialization = json.loads(INITIALIZATION_AUDIT.read_text())
+    checks["d1_initialization_audit"] = initialization
+    checks["d1_initialization_gate"] = bool(
+        initialization.get("status") == "pass"
+        and initialization.get("source_commit") == EXPECTED_SOURCE_COMMIT
+        and initialization.get("logits_bitwise_equal") is True
+        and float(initialization.get("maximum_absolute_logit_difference", np.inf))
+        == 0.0
+    )
     checks["status"] = (
         "complete_pass"
         if checks["all_metrics_finite"]
@@ -468,7 +498,9 @@ def audit(frame: pd.DataFrame, collection: dict[str, Any]) -> dict[str, Any]:
         and checks["resource_gate"]
         and checks["expected_seeds"]
         and checks["expected_row_count_gate"]
+        and checks["d1_initialization_gate"]
         and not checks["contract_failures"]
+        and not checks["source_failures"]
         else "complete_fail"
     )
     return checks
@@ -589,7 +621,10 @@ def _forest(ax: plt.Axes, contrasts: pd.DataFrame) -> None:
 
 
 def _cross_hierarchy_panel(ax: plt.Axes, h4: pd.DataFrame) -> None:
-    reference = pd.read_csv(H23_REFERENCE)
+    reference_path = (
+        CLEAN_H23_REFERENCE if CLEAN_H23_REFERENCE.is_file() else H23_REFERENCE
+    )
+    reference = pd.read_csv(reference_path)
     reference = reference[
         reference.hierarchy.isin([2, 3])
         & reference.regime.eq("aligned")
