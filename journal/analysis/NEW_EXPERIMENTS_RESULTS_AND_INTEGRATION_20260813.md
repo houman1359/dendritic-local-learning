@@ -39,24 +39,36 @@ H3 grouped-point controls and 160 H2 hierarchy conditions.
 | Active-conductance focal-shunting extension | 512 accepted steady states | Descendant-enriched attenuation persisted under exact local linearization without modeled gradient sign reversal. Used in Figure 7 and the conductance boundary argument. |
 | Complete-tree measured-response learning | 520 fits over 13 eligible scans | No reliable morphology-specific learning advantage appeared for the tested visual-response objective. Used as the closing null in Figure 8 and the abstract. |
 
-## Experiments still not run
+## Remaining experimental boundaries
 
-1. A full trained conductance-network crossover that varies both task hierarchy
-   and tree hierarchy in one factorial design.
-2. A standard or naturalistic task whose latent hierarchy is not constructed
-   from the model's divisive stages, with learned rather than supplied sensor
-   placement.
-3. An independent second-animal connectomic replication.
-4. Fully autonomous kinetic learning of route gain or inhibitory placement.
-   The adaptive local reliability experiment now removes oracle signal/noise
-   energies, but still grants paired teaching probes, the optimizer step
-   fraction and an exact state clamp.
+1. The trained conductance-network crossover is no longer unattempted: a
+   frozen 360-fit H4 factorial is running. It varies physical depth and aligned
+   versus reversed task hierarchy, with grouped-point, raw-additive and
+   local-credit controls. It remains one calibrated synthetic task family,
+   not a prevalence test on natural data.
+2. Standard image tasks already provide an informative negative boundary:
+   fixed-budget depth reduced MNIST accuracy, and exact within-tree transport
+   added no reliable benefit beyond neuron identity on Fashion-MNIST. What is
+   still absent is a naturalistic task with an independently defined latent
+   hierarchy and learned, rather than supplied, sensor placement. That would
+   require a new discrete or differentiable placement method, not a small
+   control within the current implementation.
+3. An independent second-animal connectomic replication remains unavailable
+   in the current public structural cohort. The primary 47-cell cohort is
+   disjoint from the original eight cells but belongs to the same MICRONS
+   animal; the manuscript states that limitation explicitly.
+4. Fully autonomous kinetic learning of route gain or inhibitory placement
+   remains open. The adaptive local reliability experiment removes oracle
+   signal/noise energies, but still grants paired teaching probes, the
+   optimizer step fraction and an exact state clamp. Removing those aids would
+   require specifying and validating a new biological learning mechanism.
 
 The two highest-leverage reviewer controls---the literal grouped-point H3
 emulation and a fresh H2 hierarchy with BP and LocalCA---are therefore no
-longer pending. The next simulation should be a broader $D\times H$ factorial
-or an externally specified task, rather than another isolated endpoint in the
-same calibrated family.
+longer pending. The H4 extension now supplies the broader trained $D\times H$
+test. Beyond it, the next genuinely distinct study would need an externally
+specified task and learned sensor placement rather than another isolated
+endpoint in the same calibrated family.
 
 ## Overall conclusion from the additions
 

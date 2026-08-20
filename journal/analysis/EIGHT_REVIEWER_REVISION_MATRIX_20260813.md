@@ -108,7 +108,29 @@ specificity for 10.96 points. All numerical and resource gates passed.
    closes the reviewer's literal grouped-point control and second-hierarchy
    requests within the calibrated task family, not across an independent task.
 
-7. **Irregular-tree wavelet scale analysis (complete; 55 reconstructed
+7. **Trained credit-partition residual (complete; all 2,700 factorial
+   fits).** The exact frozen route operators and trained endpoints were
+   reconstructed for every seed, representation and bandwidth. Correct
+   ancestry captures 0.162, 0.316, 0.547 and 1.000 of the teacher credit field
+   at $K=1,2,4,8$, whereas ownership derangement has zero non-scalar capture
+   for $K>1$. Within seed, capture ranks trained accuracy with mean Spearman
+   $\rho=0.825$ (0.810--0.838; 20/20 positive); the restricted $K<8$ mean is
+   0.640. This closes the suggested trained residual analysis: credit capture
+   explains the large bandwidth and ownership failures, but not by itself the
+   small support-specific $K=4$ ancestry advantage.
+
+8. **Adaptive conductance reliability (complete; 1,050 fresh outcomes).**
+   Paired local teaching probes estimate signal and noise online and set
+   positive shunts with no oracle signal/noise energies. At the intermediate
+   noise level, adaptive local placement improves final loss over a global
+   shunt by 0.0162 (50/50 seeds) and over shuffled placement by 0.00553 (41/50),
+   while its gain ordering correlates with the frozen oracle at $\rho=0.756$.
+   It remains 0.00425 worse than unshunted learning and 0.00345 worse than the
+   initial oracle. The experiment therefore recovers relative reliability
+   placement, not a generic absolute conductance benefit; a point gate is
+   operation-identical under the state clamp.
+
+9. **Irregular-tree wavelet scale analysis (complete; 55 reconstructed
    cells).** A frozen weighted unbalanced tree-Haar construction resolves the
    non-scalar conductance-weighted ancestry field into anatomical scales. In
    the disjoint 47-cell cohort, coarse modes carry 0.407 of energy using 0.192
@@ -118,6 +140,23 @@ specificity for 10.96 points. All numerical and resource gates passed.
    contrast therefore does not replicate. This closes the requested
    irregular-tree scale analysis while strengthening the paper's boundary
    claim rather than its anatomy-specific headline.
+
+10. **Fourth-hierarchy physical-depth factorial (running; 360 frozen
+    fits).** A clean immutable checkout crosses aligned/reversed serial
+    shunting BP, literal grouped-point BP, shared/path LocalCA and aligned
+    raw-additive BP across D1--D4 at ten fresh seeds. This is the requested
+    trained conductance-network crossover within the calibrated task family.
+    The decisive frozen test is whether D4 exceeds D3 for an $H=4$ task and
+    whether that increment disappears after placement reversal, in the
+    grouped-point control and under raw addition. Failure is retained as a
+    falsification; no post-outcome retuning is permitted.
+
+11. **Clean-source H2/H3 concordance replication (running; 430 frozen
+    fits).** All load-bearing physical-depth and grouped-point configurations
+    are being rerun from the same tracked-clean immutable commit used for H4.
+    Every outcome will be paired to its historical seed and semantic
+    condition. If a headline contrast changes sign or loses its frozen gate,
+    the clean-source result replaces the historical value.
 
 ## Claim and writing repairs
 
