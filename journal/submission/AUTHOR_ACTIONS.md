@@ -41,25 +41,23 @@ This document separates tasks that can be checked from the repository from decis
 
 - [x] The current `submission/Source_Data.zip` includes the prospective,
       physical-depth, point--dendrite, alignment-dose, Fashion-MNIST, literal
-      grouped-point, independent H2, phase-plane, wiring-efficiency and animal
-      consistency data. Rebuild it after the present figure remap so its
-      manifest matches the eight-main-figure and twenty-five-supplementary-figure
-      layout.
-- [ ] Commit the current standalone journal Article, then rebuild the reviewer software
-      archive from that clean Git commit. The release allowlist now includes the
-      credit-phase, reliability, same-span, nonlinear physical-depth and final
-      H2/grouped-point code, configurations, tests and contracts, but the
-      builder correctly refuses
-      to package an uncommitted worktree. The current upload bundle therefore
-      deliberately omits the older on-disk software archive. Policy scans
-      exclude credentials, private paths, caches, checkpoints, unpublished data
-      and scheduler logs.
+      grouped-point, independent H2, task-family, phase-plane,
+      wiring-efficiency and two-animal structural-capacity data. Its manifest
+      matches the nine-main-figure and twenty-seven-supplementary-figure layout.
+- [x] The standalone Article is committed, and the reviewer software archive
+      was rebuilt from clean commit `e99ef6b0d9ccd658542656b4b2e938e5dfb08c74`.
+      It includes the task-family and Pinky v185 code, portable configurations,
+      tests, contracts and execution records. Its policy scan found no private
+      paths, credentials, caches, checkpoints, unpublished data or scheduler
+      logs.
 - [x] Recorded the source commit, package versions, accelerator model, random
       seeds, run manifests, and checkpoint or output hashes for the reported
       artificial-network results.
 - [ ] Confirm that all public-source identifiers are current: MICrONS `minnie65_public`, materialization 1822, the official v661 release, the source-study DOI, DANDI Dandiset 000402 and the seven assets used here.
 - [ ] Replace the draft DANDI version with an immutable version or DOI if one becomes available; otherwise state the live status accurately and provide asset identifiers.
-- [ ] Run the repository tests, numerical checks, manuscript builds and strict submission audit from a clean checkout. Preserve the command output with the release record.
+- [x] Repository tests, numerical checks, manuscript builds and strict main/SI
+      submission audits passed against the committed scientific package; the
+      software archive records its clean source commit and checksums.
 - [x] Freeze the current technical package only after all required files and provenance hashes are final, then build it with `python scripts/build_submission_bundle.py`. Rebuild the bundle after any author-day metadata or disclosure changes.
 
 ## Declarations requiring author confirmation
