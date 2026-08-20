@@ -84,3 +84,35 @@ All arrays were pending when recorded; no rerun outcome had been inspected.
 | `40490379` | H=3 reversed grouped-point BP | 30 |
 
 Total: 430 clean-source reruns.
+
+## Scheduler provenance
+
+At 23:31 EDT on 19 August, all still-pending array elements were reassigned
+in place from account `kempner_dev` to the authorized account
+`kempner_bsabatini_lab` after remaining queued for priority. The job IDs,
+partition, commands, immutable source checkout, configuration manifests,
+seeds and output paths were unchanged. This was a scheduler-only change made
+before any replication outcome was inspected.
+
+## Completion and retained results
+
+All 430 reruns completed from immutable commit `a99c3a7` and passed source,
+completeness, finite-metric, seed, no-fallback and exact-resource gates. The
+median absolute historical-to-clean accuracy change was 0.030 pp, the mean was
+0.154 pp, and 357/430 pairs were within 0.1 pp. The maximum 15.01-pp change
+occurred in the unstable raw-additive negative-control cohort and remains in
+the concordance table.
+
+- H2 aligned serial-BP D2 minus D1: +30.84 pp (30.46 to 31.23; 10/10).
+- H2 architecture-by-placement interaction: +32.43 pp (32.13 to 32.76;
+  10/10).
+- H3 aligned serial-BP D3 minus D1: +30.86 pp (30.51 to 31.29; 10/10).
+- H3 architecture-by-placement interaction: +31.27 pp (30.73 to 31.74;
+  10/10).
+- H3 shunting-minus-additive depth interaction: +37.66 pp (35.59 to 39.51;
+  10/10).
+
+Every load-bearing H2/H3 direction and claim gate was retained. Canonical
+outputs are in `../source_data/physical_depth_clean_source_replication/` and
+Supplementary Figure S26. This is same-seed source concordance, not an
+independent scientific replication.

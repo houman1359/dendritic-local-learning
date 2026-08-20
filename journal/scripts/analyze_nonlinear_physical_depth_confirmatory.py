@@ -22,7 +22,7 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 if str(SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPT_DIR))
 
-from journal_style import (
+from journal_style import (  # noqa: E402
     COLORS,
     ERR_CAPSIZE,
     FIG_W,
@@ -45,7 +45,7 @@ from journal_style import (
     style_axis,
     wrap_ticklabels,
 )
-from credit_tree_schematics import MS_JUNCTION, mix
+from credit_tree_schematics import MS_JUNCTION, mix  # noqa: E402
 
 # Library stroke taper (credit_tree_schematics): terminal branches print at
 # 0.70 TikZ pt, thickening toward the trunk; normalized so 1.60 pt == LW_DATA.
@@ -713,7 +713,7 @@ def render_figure(summary: pd.DataFrame, contrasts: pd.DataFrame) -> None:
     style_axis(ax_c, grid="y")
     clean_legend(
         ax_c, fontsize=PT_LEGEND, loc="upper left", handles=handles_c,
-        handlelength=2.6,
+        bbox_to_anchor=(0.0, 0.93), handlelength=2.6,
     )
 
     # D — the four prespecified contrasts all sit near +31 pp, so the axis
@@ -725,7 +725,7 @@ def render_figure(summary: pd.DataFrame, contrasts: pd.DataFrame) -> None:
         "bp_depth_interaction__aligned_minus_rewired_tree",
     ]
     labels = [
-        "aligned D3−D1", "vs zero alignment",
+        r"aligned D3$-$D1", "vs zero alignment",
         "vs sensor shuffled", "vs tree reversed",
     ]
     part = contrasts.set_index("contrast").loc[forest_names]

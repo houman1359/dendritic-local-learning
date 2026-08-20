@@ -5,9 +5,9 @@ The canonical standalone Article source is `main.tex`. Use pdfLaTeX and
 `supplementary/supplementary.tex`; `main_with_supplementary.pdf` is the complete
 reading copy.
 
-The Article compiles exactly eight main assets:
-`figures/main/figure_01.pdf` through `figure_08.pdf`. Supplementary assets are
-in `figures/supplementary/` (S1--S25). The exact content map is
+The Article compiles exactly nine main assets:
+`figures/main/figure_01.pdf` through `figure_09.pdf`. Supplementary assets are
+in `figures/supplementary/` (S1--S26). The exact content map is
 `figures/README.md`. Do not select the modular compositor inputs or files in
 `figures/generated/`.
 

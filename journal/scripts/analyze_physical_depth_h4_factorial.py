@@ -63,6 +63,8 @@ INITIALIZATION_AUDIT = (
 OUTPUT = ROOT / "source_data" / "physical_depth_h4_factorial"
 FIGURES = ROOT / "figures" / "generated"
 EXPECTED_SOURCE_COMMIT = "a99c3a777f99913e13dfe673a3f3a28bfe3566af"
+REPAIR_SOURCE_COMMIT = "e90fb9896daa95df4aad4c0d92acc0cd65bcd750"
+REPAIR_TIER_GROUPS = [[0], [1], [2, 3]]
 
 SEEDS = list(range(10400, 10410))
 DEPTH_FACTORS = {
@@ -75,25 +77,46 @@ DEPTH_FACTORS = {
 # stem: (regime, architecture, mechanism, default credit)
 RUN_SPECS = {
     "journal_h4_aligned_serial_shunting_bp": (
-        "aligned", "serial_tree", "shunting", "full_bp"
+        "aligned",
+        "serial_tree",
+        "shunting",
+        "full_bp",
     ),
     "journal_h4_rewired_tree_serial_shunting_bp": (
-        "rewired_tree", "serial_tree", "shunting", "full_bp"
+        "rewired_tree",
+        "serial_tree",
+        "shunting",
+        "full_bp",
     ),
     "journal_h4_aligned_grouped_point_shunting_bp": (
-        "aligned", "grouped_point", "shunting", "full_bp"
+        "aligned",
+        "grouped_point",
+        "shunting",
+        "full_bp",
     ),
     "journal_h4_rewired_tree_grouped_point_shunting_bp": (
-        "rewired_tree", "grouped_point", "shunting", "full_bp"
+        "rewired_tree",
+        "grouped_point",
+        "shunting",
+        "full_bp",
     ),
     "journal_h4_aligned_serial_shunting_local3f": (
-        "aligned", "serial_tree", "shunting", "local_auto"
+        "aligned",
+        "serial_tree",
+        "shunting",
+        "local_auto",
     ),
     "journal_h4_rewired_tree_serial_shunting_local3f": (
-        "rewired_tree", "serial_tree", "shunting", "local_auto"
+        "rewired_tree",
+        "serial_tree",
+        "shunting",
+        "local_auto",
     ),
     "journal_h4_aligned_serial_additive_bp": (
-        "aligned", "serial_tree", "raw_additive", "full_bp"
+        "aligned",
+        "serial_tree",
+        "raw_additive",
+        "full_bp",
     ),
 }
 
@@ -132,13 +155,14 @@ def _pathway_spec(config: dict[str, Any], pathway: str) -> dict[str, Any]:
 
 
 def collect(
-    runs: Path, *, allow_incomplete: bool
+    runs: Path, *, d3_repair_runs: Path | None, allow_incomplete: bool
 ) -> tuple[pd.DataFrame, dict[str, Any]]:
     rows: list[dict[str, Any]] = []
     missing: list[str] = []
     run_records: list[dict[str, Any]] = []
     contract_failures: list[str] = []
     source_failures: list[str] = []
+    replaced_failed_configs: list[str] = []
 
     for stem, (regime, architecture, mechanism, credit_default) in RUN_SPECS.items():
         run = latest_run(runs, stem)
@@ -171,27 +195,32 @@ def collect(
 
         for config_path in configs:
             index = int(config_path.stem.rsplit("_", 1)[1])
+            config = yaml.safe_load(config_path.read_text())
+            population = config["model"]["core"]["population_network"]["layers"][0][
+                "populations"
+            ][0]
+            factors = list(population["branch_factors"])
+            depth = len(factors)
             result = run / "results" / f"config_{index}"
             final_path = result / "performance" / "final.json"
             resources_path = result / "model_resources.json"
             if not final_path.is_file() or not resources_path.is_file():
+                if depth == 3 and d3_repair_runs is not None:
+                    replaced_failed_configs.append(f"{stem}/config_{index}")
+                    continue
                 missing.append(f"{stem}/config_{index}")
                 continue
 
-            config = yaml.safe_load(config_path.read_text())
             final = json.loads(final_path.read_text())
             resources = json.loads(resources_path.read_text())
-            population = config["model"]["core"]["population_network"][
-                "layers"
-            ][0]["populations"][0]
-            factors = list(population["branch_factors"])
-            depth = len(factors)
             learning = config["training"]["main"]
             if credit_default == "local_auto":
                 broadcast = str(
                     learning["learning_strategy_config"]["error_broadcast_mode"]
                 ).lower()
-                credit = "local_path" if broadcast == "path_transport" else "local_shared"
+                credit = (
+                    "local_path" if broadcast == "path_transport" else "local_shared"
+                )
             else:
                 credit = credit_default
 
@@ -229,6 +258,8 @@ def collect(
                 "credit": credit,
                 "depth": depth,
                 "branch_factors": "x".join(map(str, factors)),
+                "result_origin": "original_factorial",
+                "repair_config_index": np.nan,
                 "total_parameters": int(resources["total_parameters"]),
                 "trainable_parameters": int(resources["trainable_parameters"]),
                 "active_synapses": int(resources.get("active_synapses", 0)),
@@ -252,6 +283,145 @@ def collect(
                     row[f"{split}_{name}"] = _metric(final, name, split)
             rows.append(row)
 
+    if d3_repair_runs is not None:
+        for stem, (
+            regime,
+            architecture,
+            mechanism,
+            credit_default,
+        ) in RUN_SPECS.items():
+            repair_stem = stem.replace("journal_h4_", "journal_h4_d3repair_", 1)
+            run = latest_run(d3_repair_runs, repair_stem)
+            original = yaml.safe_load((run / "original_config.yaml").read_text())
+            expected = int(original["sweep_contract"]["expected_config_count"])
+            configs = sorted(
+                (run / "configs").glob("unified_config_*.yaml"),
+                key=lambda path: int(path.stem.rsplit("_", 1)[1]),
+            )
+            manifest_path = run / "frozen_sweep_manifest.json"
+            manifest = json.loads(manifest_path.read_text())
+            source = manifest["source_identity"]["git"]
+            if source["commit"] != REPAIR_SOURCE_COMMIT:
+                source_failures.append(f"{repair_stem}/commit/{source['commit']}")
+            if source["tracked_worktree_dirty"]:
+                source_failures.append(f"{repair_stem}/dirty")
+            run_records.append(
+                {
+                    "stem": repair_stem,
+                    "role": "D3 construction repair",
+                    "run_dir": str(run),
+                    "expected": expected,
+                    "generated": len(configs),
+                    "manifest_sha256": sha256(manifest_path),
+                    "source_commit": source["commit"],
+                    "source_dirty": bool(source["tracked_worktree_dirty"]),
+                }
+            )
+            if len(configs) != expected:
+                missing.append(f"{repair_stem}: generated {len(configs)}/{expected}")
+
+            original_index_offset = 40 if expected == 20 else 20
+            for config_path in configs:
+                repair_index = int(config_path.stem.rsplit("_", 1)[1])
+                original_index = original_index_offset + repair_index
+                result = run / "results" / f"config_{repair_index}"
+                final_path = result / "performance" / "final.json"
+                resources_path = result / "model_resources.json"
+                if not final_path.is_file() or not resources_path.is_file():
+                    missing.append(f"{repair_stem}/config_{repair_index}")
+                    continue
+
+                config = yaml.safe_load(config_path.read_text())
+                final = json.loads(final_path.read_text())
+                resources = json.loads(resources_path.read_text())
+                population = config["model"]["core"]["population_network"]["layers"][0][
+                    "populations"
+                ][0]
+                factors = list(population["branch_factors"])
+                depth = len(factors)
+                learning = config["training"]["main"]
+                if credit_default == "local_auto":
+                    broadcast = str(
+                        learning["learning_strategy_config"]["error_broadcast_mode"]
+                    ).lower()
+                    credit = (
+                        "local_path"
+                        if broadcast == "path_transport"
+                        else "local_shared"
+                    )
+                else:
+                    credit = credit_default
+
+                expected_ranges = (
+                    [[0, 16], [16, 32], [32, 48], [48, 64]]
+                    if regime == "aligned"
+                    else [[48, 64], [32, 48], [16, 32], [0, 16]]
+                )
+                data_params = config["data"]["dataset_params"]["hierarchical_gain_load"]
+                for pathway in ("ee", "ie"):
+                    spec = _pathway_spec(config, pathway)
+                    if spec["inventory_counts"] != [4, 2, 1, 1]:
+                        contract_failures.append(
+                            f"{repair_stem}/{repair_index}/{pathway}/inventory"
+                        )
+                    if spec["feature_ranges"] != expected_ranges:
+                        contract_failures.append(
+                            f"{repair_stem}/{repair_index}/{pathway}/ranges"
+                        )
+                    if spec.get("tier_groups") != REPAIR_TIER_GROUPS:
+                        contract_failures.append(
+                            f"{repair_stem}/{repair_index}/{pathway}/tier_groups"
+                        )
+                if int(data_params["n_levels"]) != 4:
+                    contract_failures.append(f"{repair_stem}/{repair_index}/n_levels")
+                if depth != 3 or factors != [2, 1, 2]:
+                    contract_failures.append(f"{repair_stem}/{repair_index}/morphology")
+
+                log_text = "\n".join(
+                    path.read_text(errors="replace")
+                    for path in (
+                        result / "train.log",
+                        result / "dendritic_modeling.log",
+                    )
+                    if path.is_file()
+                ).lower()
+                row: dict[str, Any] = {
+                    "hierarchy": 4,
+                    "cohort": stem,
+                    "run_dir": str(run),
+                    "config_index": original_index,
+                    "seed": int(config["experiment"]["seed"]),
+                    "regime": regime,
+                    "architecture": architecture,
+                    "mechanism": mechanism,
+                    "credit": credit,
+                    "depth": depth,
+                    "branch_factors": "x".join(map(str, factors)),
+                    "result_origin": "D3_construction_repair",
+                    "repair_config_index": repair_index,
+                    "total_parameters": int(resources["total_parameters"]),
+                    "trainable_parameters": int(resources["trainable_parameters"]),
+                    "active_synapses": int(resources.get("active_synapses", 0)),
+                    "candidate_synapse_slots": int(
+                        resources.get("candidate_synapse_slots", 0)
+                    ),
+                    "persistent_state_scalars": int(
+                        resources.get("persistent_state_scalars_per_sample", 0)
+                    ),
+                    "config_sha256": sha256(config_path),
+                    "final_sha256": sha256(final_path),
+                    "fallback_mentions": int(log_text.count("fallback")),
+                    "nonfinite_alert": bool(
+                        "nan detected" in log_text
+                        or "non-finite" in log_text
+                        or "nonfinite" in log_text
+                    ),
+                }
+                for name in ("accuracy", "auc", "categorical_loglikelihood"):
+                    for split in ("train", "valid", "test"):
+                        row[f"{split}_{name}"] = _metric(final, name, split)
+                rows.append(row)
+
     if missing and not allow_incomplete:
         raise RuntimeError(
             f"Experiment matrix incomplete ({len(missing)} missing): "
@@ -260,12 +430,14 @@ def collect(
     frame = pd.DataFrame(rows)
     collection = {
         "status": "incomplete" if missing else "complete",
-        "expected_row_count": int(sum(record["expected"] for record in run_records)),
+        "expected_row_count": 360,
         "observed_rows": len(frame),
         "missing_count": len(missing),
         "missing_examples": missing[:40],
         "contract_failures": contract_failures[:80],
         "source_failures": source_failures,
+        "replaced_failed_config_count": len(replaced_failed_configs),
+        "replaced_failed_configs": replaced_failed_configs,
         "runs": run_records,
     }
     return frame, collection
@@ -311,7 +483,7 @@ def _contrast_row(
         "zero_pairs": int((values == 0).sum()),
         "exact_two_sided_sign_flip_p": exact_sign_flip_p(values.to_numpy(float)),
         "positive_claim_gate": bool(low > 0 and int((values > 0).sum()) >= 8),
-        "seed_values_pp": ";".join(f"{100*x:.8f}" for x in values.to_numpy(float)),
+        "seed_values_pp": ";".join(f"{100 * x:.8f}" for x in values.to_numpy(float)),
     }
 
 
@@ -319,7 +491,9 @@ def _bh_adjust(values: pd.Series) -> pd.Series:
     p = values.to_numpy(float)
     order = np.argsort(p)
     ranked = p[order]
-    adjusted = np.minimum.accumulate((ranked * len(p) / np.arange(1, len(p) + 1))[::-1])[::-1]
+    adjusted = np.minimum.accumulate(
+        (ranked * len(p) / np.arange(1, len(p) + 1))[::-1]
+    )[::-1]
     result = np.empty_like(adjusted)
     result[order] = np.minimum(adjusted, 1.0)
     return pd.Series(result, index=values.index)
@@ -341,15 +515,41 @@ def build_contrasts(frame: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
             )
         )
 
-    serial_bp = dict(architecture="serial_tree", mechanism="shunting", credit="full_bp")
-    grouped_bp = dict(architecture="grouped_point", mechanism="shunting", credit="full_bp")
-    additive_bp = dict(architecture="serial_tree", mechanism="raw_additive", credit="full_bp")
+    serial_bp = {
+        "architecture": "serial_tree",
+        "mechanism": "shunting",
+        "credit": "full_bp",
+    }
+    grouped_bp = {
+        "architecture": "grouped_point",
+        "mechanism": "shunting",
+        "credit": "full_bp",
+    }
+    additive_bp = {
+        "architecture": "serial_tree",
+        "mechanism": "raw_additive",
+        "credit": "full_bp",
+    }
 
     for label, base in (
         ("serial_bp", serial_bp),
         ("grouped_bp", grouped_bp),
-        ("shared_local", dict(architecture="serial_tree", mechanism="shunting", credit="local_shared")),
-        ("path_local", dict(architecture="serial_tree", mechanism="shunting", credit="local_path")),
+        (
+            "shared_local",
+            {
+                "architecture": "serial_tree",
+                "mechanism": "shunting",
+                "credit": "local_shared",
+            },
+        ),
+        (
+            "path_local",
+            {
+                "architecture": "serial_tree",
+                "mechanism": "shunting",
+                "credit": "local_path",
+            },
+        ),
     ):
         for regime in ("aligned", "rewired_tree"):
             for shallow in (3, 1):
@@ -423,7 +623,9 @@ def summarize(frame: pd.DataFrame) -> pd.DataFrame:
     rows: list[dict[str, Any]] = []
     grouping = ["hierarchy", "regime", "architecture", "mechanism", "credit", "depth"]
     for index, (key, part) in enumerate(frame.groupby(grouping, sort=True)):
-        mean, low, high = bootstrap_mean(part.test_accuracy.to_numpy(float), 15100 + index)
+        mean, low, high = bootstrap_mean(
+            part.test_accuracy.to_numpy(float), 15100 + index
+        )
         rows.append(
             dict(
                 zip(grouping, key),
@@ -440,13 +642,13 @@ def audit(frame: pd.DataFrame, collection: dict[str, Any]) -> dict[str, Any]:
     finite_columns = [
         column
         for column in frame.columns
-        if column.endswith("_accuracy")
-        or column.endswith("_auc")
-        or column.endswith("_categorical_loglikelihood")
+        if column.endswith(("_accuracy", "_auc", "_categorical_loglikelihood"))
     ]
     checks: dict[str, Any] = {
         **collection,
-        "unique_rows": int(frame[["cohort", "config_index"]].drop_duplicates().shape[0]),
+        "unique_rows": int(
+            frame[["cohort", "config_index"]].drop_duplicates().shape[0]
+        ),
         "duplicate_seed_conditions": int(
             frame.duplicated(
                 ["regime", "architecture", "mechanism", "credit", "depth", "seed"]
@@ -474,7 +676,9 @@ def audit(frame: pd.DataFrame, collection: dict[str, Any]) -> dict[str, Any]:
     ].groupby(["regime", "credit"]):
         for column in RESOURCE_COLUMNS:
             if group[column].nunique() != 1:
-                resource_failures.append(f"{regime}/{credit}/fixed-depth-budget/{column}")
+                resource_failures.append(
+                    f"{regime}/{credit}/fixed-depth-budget/{column}"
+                )
 
     checks["resource_failures"] = resource_failures
     checks["resource_gate"] = not resource_failures
@@ -516,14 +720,54 @@ def _line_panel(
     legend: bool,
 ) -> None:
     styles = [
-        ("serial_tree", "shunting", "full_bp", "serial BP", COLORS["shunting"], "o", "-"),
-        ("grouped_point", "shunting", "full_bp", "grouped point BP", COLORS["point_mlp"], "s", "--"),
-        ("serial_tree", "shunting", "local_shared", "shared LocalCA", COLORS["local"], "D", "-."),
-        ("serial_tree", "shunting", "local_path", "path LocalCA", COLORS["pathway"], "^", ":"),
+        (
+            "serial_tree",
+            "shunting",
+            "full_bp",
+            "serial BP",
+            COLORS["shunting"],
+            "o",
+            "-",
+        ),
+        (
+            "grouped_point",
+            "shunting",
+            "full_bp",
+            "grouped point BP",
+            COLORS["point_mlp"],
+            "s",
+            "--",
+        ),
+        (
+            "serial_tree",
+            "shunting",
+            "local_shared",
+            "shared LocalCA",
+            COLORS["local"],
+            "D",
+            "-.",
+        ),
+        (
+            "serial_tree",
+            "shunting",
+            "local_path",
+            "path LocalCA",
+            COLORS["pathway"],
+            "^",
+            ":",
+        ),
     ]
     if regime == "aligned":
         styles.append(
-            ("serial_tree", "raw_additive", "full_bp", "raw-additive BP", COLORS["mute"], "v", "--")
+            (
+                "serial_tree",
+                "raw_additive",
+                "full_bp",
+                "raw-additive BP",
+                COLORS["mute"],
+                "v",
+                "--",
+            )
         )
     for architecture, mechanism, credit, label, color, marker, linestyle in styles:
         part = summary[
@@ -564,7 +808,7 @@ def _line_panel(
         ax.text(
             0.03,
             0.965,
-            "key as in V",
+            "key as in A",
             transform=ax.transAxes,
             ha="left",
             va="top",
@@ -588,13 +832,18 @@ def _forest(ax: plt.Axes, contrasts: pd.DataFrame) -> None:
         "depth $\times$\nplacement",
         "serial$-$point\nat D4",
         "architecture $\times$\nplacement",
-        "shared LocalCA\nD4$-$D3",
+        "shared local\nD4$-$D3",
         "path LocalCA\nD4$-$D3",
         "shunting $\times$\ndepth",
     ]
     colors = [
-        COLORS["shunting"], COLORS["bp"], COLORS["point_mlp"], COLORS["bp"],
-        COLORS["local"], COLORS["pathway"], COLORS["mute"],
+        COLORS["shunting"],
+        COLORS["bp"],
+        COLORS["point_mlp"],
+        COLORS["bp"],
+        COLORS["local"],
+        COLORS["pathway"],
+        COLORS["mute"],
     ]
     indexed = contrasts.set_index("contrast")
     y = np.arange(len(names))[::-1]
@@ -614,7 +863,7 @@ def _forest(ax: plt.Axes, contrasts: pd.DataFrame) -> None:
             elinewidth=LW_ERR,
             capsize=ERR_CAPSIZE,
         )
-    panel_title(ax, "X", "Frozen primary contrasts")
+    panel_title(ax, "C", "Frozen primary contrasts")
     ax.set_yticks(y, labels)
     ax.set_xlabel("paired difference (pp)")
     style_axis(ax, grid="x")
@@ -649,7 +898,9 @@ def _cross_hierarchy_panel(ax: plt.Axes, h4: pd.DataFrame) -> None:
     points.sort()
     hierarchy = np.asarray([p[0] for p in points])
     optimum = np.asarray([p[1] for p in points])
-    ax.plot([1.8, 4.2], [1.8, 4.2], linestyle="--", color=COLORS["mute"], linewidth=LW_HAIR)
+    ax.plot(
+        [1.8, 4.2], [1.8, 4.2], linestyle="--", color=COLORS["mute"], linewidth=LW_HAIR
+    )
     ax.plot(
         hierarchy,
         optimum,
@@ -661,8 +912,15 @@ def _cross_hierarchy_panel(ax: plt.Axes, h4: pd.DataFrame) -> None:
         markeredgewidth=0.5,
     )
     for h, d, accuracy in points:
-        ax.annotate(f"{accuracy:.3f}", (h, d), xytext=(0, 7), textcoords="offset points", ha="center", fontsize=PT_SMALL)
-    panel_title(ax, "Y", "Does the trained optimum track task depth?")
+        ax.annotate(
+            f"{accuracy:.3f}",
+            (h, d),
+            xytext=(0, 7),
+            textcoords="offset points",
+            ha="center",
+            fontsize=PT_SMALL,
+        )
+    panel_title(ax, "D", "Trained optimum across task depth")
     ax.set_xlabel(r"task hierarchy $H$")
     ax.set_ylabel(r"best mean physical depth $D_{\mathrm{p}}^*$")
     ax.set_xticks([2, 3, 4])
@@ -672,22 +930,40 @@ def _cross_hierarchy_panel(ax: plt.Axes, h4: pd.DataFrame) -> None:
     style_axis(ax, grid="both")
 
 
-def make_figure(summary: pd.DataFrame, contrasts: pd.DataFrame, frame: pd.DataFrame) -> None:
+def make_figure(
+    summary: pd.DataFrame, contrasts: pd.DataFrame, frame: pd.DataFrame
+) -> None:
     apply_neurips_style()
-    fig = plt.figure(figsize=(FIG_W, 6.0))
+    fig = plt.figure(figsize=(FIG_W, 6.1))
     grid = fig.add_gridspec(
         2,
         2,
-        left=0.115,
+        left=0.175,
         right=0.985,
         top=0.925,
         bottom=0.105,
-        wspace=0.48,
+        wspace=0.52,
         hspace=0.62,
     )
-    axes = [fig.add_subplot(grid[row, column]) for row in range(2) for column in range(2)]
-    _line_panel(axes[0], summary, regime="aligned", letter="V", title="H=4 aligned hierarchy", legend=True)
-    _line_panel(axes[1], summary, regime="rewired_tree", letter="W", title="H=4 reversed placement", legend=False)
+    axes = [
+        fig.add_subplot(grid[row, column]) for row in range(2) for column in range(2)
+    ]
+    _line_panel(
+        axes[0],
+        summary,
+        regime="aligned",
+        letter="A",
+        title="H=4 aligned hierarchy",
+        legend=True,
+    )
+    _line_panel(
+        axes[1],
+        summary,
+        regime="rewired_tree",
+        letter="B",
+        title="H=4 reversed placement",
+        legend=False,
+    )
     _forest(axes[2], contrasts)
     _cross_hierarchy_panel(axes[3], frame)
     fig.canvas.draw()
@@ -719,25 +995,25 @@ def write_report(contrasts: pd.DataFrame, record: dict[str, Any]) -> None:
 
     report = f"""# Frozen H=4 physical-depth factorial
 
-Status: **{record['status']}** ({record['observed_rows']}/360 fits).
+Status: **{record["status"]}** ({record["observed_rows"]}/360 fits).
 
 ## Depth and placement
 
-- Aligned serial-BP D4 minus D3: {sentence('depth__serial_bp__aligned__d4_d3')}.
-- Aligned serial-BP D4 minus D1: {sentence('depth__serial_bp__aligned__d4_d1')}.
-- Serial-BP D4-minus-D3 depth-by-placement interaction: {sentence('placement_interaction__serial_bp__d4_d3')}.
+- Aligned serial-BP D4 minus D3: {sentence("depth__serial_bp__aligned__d4_d3")}.
+- Aligned serial-BP D4 minus D1: {sentence("depth__serial_bp__aligned__d4_d1")}.
+- Serial-BP D4-minus-D3 depth-by-placement interaction: {sentence("placement_interaction__serial_bp__d4_d3")}.
 
 ## Point-neuron and local-credit controls
 
-- Serial minus literal grouped point at aligned D4: {sentence('serial_minus_grouped__aligned__d4')}.
-- Architecture-by-placement interaction at D4: {sentence('architecture_placement_interaction__d4')}.
-- Shared-LocalCA aligned D4 minus D3: {sentence('depth__shared_local__aligned__d4_d3')}.
-- Path-LocalCA aligned D4 minus D3: {sentence('depth__path_local__aligned__d4_d3')}.
+- Serial minus literal grouped point at aligned D4: {sentence("serial_minus_grouped__aligned__d4")}.
+- Architecture-by-placement interaction at D4: {sentence("architecture_placement_interaction__d4")}.
+- Shared-LocalCA aligned D4 minus D3: {sentence("depth__shared_local__aligned__d4_d3")}.
+- Path-LocalCA aligned D4 minus D3: {sentence("depth__path_local__aligned__d4_d3")}.
 
 ## Mechanism specificity
 
-- Raw-additive aligned D4 minus D3: {sentence('depth__additive_bp__aligned__d4_d3')}.
-- Shunting-minus-additive interaction in D4 minus D3: {sentence('shunting_additive_depth_interaction__aligned__d4_d3')}.
+- Raw-additive aligned D4 minus D3: {sentence("depth__additive_bp__aligned__d4_d3")}.
+- Shunting-minus-additive interaction in D4 minus D3: {sentence("shunting_additive_depth_interaction__aligned__d4_d3")}.
 
 All frozen contrasts, including null or reversed outcomes, remain in the source-data tables. A positive directional statement requires an interval excluding zero and at least 8/10 paired differences in the predicted direction. Exact tests are seed-level; primary-family q values use Benjamini--Hochberg correction.
 """
@@ -747,15 +1023,26 @@ All frozen contrasts, including null or reversed outcomes, remain in the source-
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--runs-root", type=Path, default=DEFAULT_RUNS)
+    parser.add_argument("--d3-repair-runs-root", type=Path)
     parser.add_argument("--allow-incomplete", action="store_true")
     args = parser.parse_args()
 
-    frame, collection = collect(args.runs_root.resolve(), allow_incomplete=args.allow_incomplete)
+    frame, collection = collect(
+        args.runs_root.resolve(),
+        d3_repair_runs=(
+            args.d3_repair_runs_root.resolve()
+            if args.d3_repair_runs_root is not None
+            else None
+        ),
+        allow_incomplete=args.allow_incomplete,
+    )
     OUTPUT.mkdir(parents=True, exist_ok=True)
     if not frame.empty:
         frame.to_csv(OUTPUT / "seed_outcomes.csv", index=False)
     record = audit(frame, collection)
-    (OUTPUT / "audit.json").write_text(json.dumps(record, indent=2) + "\n", encoding="utf-8")
+    (OUTPUT / "audit.json").write_text(
+        json.dumps(record, indent=2) + "\n", encoding="utf-8"
+    )
     if collection["status"] != "complete":
         print(json.dumps(record, indent=2))
         return

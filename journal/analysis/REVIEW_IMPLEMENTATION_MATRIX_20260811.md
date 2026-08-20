@@ -27,6 +27,7 @@ exists.
 | Production checkpoint transport audit | 30 aligned-shunting checkpoints; exact-path LocalCA versus autograd and shared-soma gradients on identical held-out batches | Exact path transport is numerically verified; the shared-gradient depth trend is a post-training diagnostic, not a preregistered performance endpoint. |
 | Exact-resource nonlinear physical-depth bridge | 270 valid fresh-seed production-model fits; aligned, independent-sensor, shuffled-trial, reversed-placement, additive and LocalCA controls | Fixes $H=3$, one 4/2/2 sensor inventory and one calibrated operating point; it is not the full $D\times H\times K\times\rho$ factorial or a dendrite-exclusive expressivity result. |
 | Literal grouped-point and independent H2 replication | 220 frozen fits; direct-to-soma grouped-point emulation, serial BP, shared/path LocalCA, alignment reversal and exact-resource audits | Extends the calibrated synthetic task family to H2 and H3; it is not a second dataset or a full $D\times H\times K\times\rho$ factorial. |
+| H4 physical-depth saturation and immutable-source replication | 360 intended H4 outcomes plus 430 H2/H3 same-seed reruns; Figure 6A--D and Supplementary Fig. S26 | D4 remains better than D1 but falls below D3 under BP, falsifying one-to-one tracking; the point-control interaction persists. Same-seed source concordance is not independent scientific replication. |
 | Fixed-state hierarchy-depth phase | 50 seeds in `source_data/credit_phase_theory/` | Routed linear quadratic depth, not nonlinear forward dendritic depth. |
 | Trained route-bandwidth/address factorial | 2,700 fits in `source_data/trained_subtree_address_full_factorial/` | Algebraically matched representations share implementations; supports an address-resource claim. |
 | Partition residual in the trained route factorial | Hash-gated deterministic reconstruction of all 2,700 fits at initialization and training; Supplementary Fig. S23 | Address capture explains bandwidth and ownership failures but not matched-capacity support differences; association is post hoc. |
@@ -43,11 +44,12 @@ exists.
 
 ## Compatible high-priority experiments not yet complete
 
-1. **Full nonlinear physical-depth factorial:** extend the completed H2/H3
-   bridge by crossing more forward depths $D$, route budget $K$ and
-   alignment/noise $\rho$. Literal grouped-point hierarchies, exact-resource
-   reversal, raw additive BP and two LocalCA transports are now complete; a
-   BP-plus-projection arm and broader task families remain.
+1. **Broader nonlinear physical-depth factorial:** extend the completed H2--H4
+   bridge by crossing route budget $K$, alignment/noise $\rho$ and independent
+   task families rather than adding depth alone. More forward depths are low
+   priority after the H4 saturation result. Literal grouped-point hierarchies,
+   exact-resource reversal, raw additive BP and two LocalCA transports are now
+   complete; a BP-plus-projection arm and broader task families remain.
 2. **Cable selectivity by reliability dose:** cross shunt location, dose,
    electrotonic background and branch SNR during learning, rather than only
    fixed-state sensitivity or a single-compartment clamp.

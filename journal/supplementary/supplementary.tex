@@ -69,7 +69,8 @@ six-animal brain--computer-interface
 analysis is an external retrospective consistency test of signed neuron
 identity. Thirteenth, the nonlinear physical-depth experiment trains the
 production positive-rate population model on a selected hierarchical task
-after transparently reported accessibility pilots; it is not a full
+after transparently reported accessibility pilots and tests H2--H4 within one
+calibrated synthetic task family; it is not a full
 $D_{\mathrm r}\times H\times K\times\rho$ phase grid or an impossibility result for
 grouped point models. Exact transported errors and fitted projection coefficients are
 information oracles wherever they appear.
@@ -1429,6 +1430,73 @@ second hierarchy is a replication within the same synthetic mechanism-matched
 task family, not an independent dataset. Configurations, frozen manifests,
 run-level metrics, source hashes and every paired contrast are in
 \texttt{source\_data/remaining\_physical\_experiments/}.
+
+\subsection{Fourth-hierarchy saturation test and clean-source replication}
+
+The frozen H4 extension inherited the positive-rate generator, optimizer,
+conductance scale, stopping rule and calibrated signal regime without
+retuning. Four 16-feature signal/sensor tiers had fixed inventory counts
+$[4,2,1,1]$. D1 $[8]$, D2 $[2,3]$, D3 $[2,1,2]$ and D4 $[1,1,2,2]$ each
+contained eight nonsomatic branch units per soma, 66,178 trainable parameters,
+14,336 active contacts, 21,760 candidate slots and 2,944 persistent state
+scalars. The 360 intended fits crossed aligned and reversed placement for
+serial and literal grouped-point BP and for shared-soma and exact-path LocalCA;
+aligned serial raw-additive BP supplied the mechanism control. Ten fresh
+paired seeds 10400--10409 were the inferential units.
+
+The primary family was frozen before execution: aligned serial-BP D4--D3 and
+D4--D1, their placement interactions, the D4 architecture-by-placement
+interaction, shared- and path-LocalCA D4--D3 effects and interactions, and the
+shunting-minus-additive D4--D3 interaction. Failure of D4 to exceed D3 was
+defined prospectively as falsification of the simple $D_{\mathrm p}=H$
+trained crossover. Intervals used 50,000 paired-seed bootstrap draws, exact
+two-sided sign-flip tests enumerated all $2^{10}$ assignments, and the primary
+family was Benjamini--Hochberg corrected. A directional positive statement
+also required at least eight of ten paired differences in the predicted
+direction.
+
+The first submitted D3 configurations failed before model construction because
+the automatic tier partition grouped the H4 inventory as $[4],[2+1],[1]$
+rather than the intended D3 row counts $[4,2,2]$. No H4 outcome was inspected
+before this failure was diagnosed. An optional explicit grouping was added and
+frozen after 33 targeted tests; the repaired D3 grouping was
+$[4],[2],[1+1]$. Legacy automatic grouping was unchanged. Only the 90
+construction-failed D3 configurations were rerun, using the original seeds and
+scientific settings. The merged audit records the source commit and result
+origin for each row. All 360 intended seed--condition outcomes were then
+finite, stage complete and resource matched, with no fallback warning.
+
+Aligned serial-BP means were 0.5963, 0.7112, 0.8671 and 0.8525 at D1--D4.
+D4 minus D3 was $-1.46$ percentage points (95\% paired-seed bootstrap interval
+$-1.74$ to $-1.16$; 0/10 positive; exact $P=0.001953$; BH $q=0.003906$),
+whereas D4 minus D1 was 25.63 points (24.71--26.40; 10/10 positive;
+$q=0.003906$). The D4--D3 placement interaction was $-0.36$ points
+($-0.70$ to 0.04), but the D4--D1 placement interaction was 25.94 points
+(25.06--26.66; 10/10 positive). Thus aligned serial depth remained useful
+relative to D1 but saturated at D3, falsifying one-to-one tracking at H4.
+
+Grouped-point BP stayed near 0.596 across depths. Serial minus grouped point at
+aligned D4 was 25.60 points (24.69--26.37; 10/10 positive), and the
+architecture-by-placement interaction was 25.91 points (25.06--26.62).
+Shared-soma LocalCA gained 5.27 points from D3 to D4 (4.84--5.72; 10/10), but
+exact-path LocalCA gained 0.60 points (0.04--1.25; 7/10; $P=0.0859$) and did
+not pass the positive gate. The aligned raw-additive D4--D3 effect was
+$-0.55$ points ($-2.24$ to 1.12), and its interaction with shunting was
+$-0.90$ points ($-2.65$ to 0.95). All null and reversed contrasts are retained
+in \texttt{source\_data/physical\_depth\_h4\_factorial/}.
+
+We separately repeated all 220 H2/literal-point fits and 210 load-bearing H3
+fits from immutable source commit \texttt{a99c3a7}, using the original
+configurations and paired seeds. All 430 reruns passed source, completeness,
+finite-metric, seed and resource gates. Median absolute held-out-accuracy
+change from the historical outcome was 0.030 percentage points, mean change
+was 0.154 points, and 357/430 pairs were within 0.1 points. The maximum change
+was 15.01 points in the raw-additive negative-control cohort. Clean-source H2
+and H3 aligned serial-BP depth effects were 30.84 and 30.86 points; the
+architecture-by-placement interactions were 32.43 and 31.27 points. Every
+load-bearing shunting or local-credit direction and claim gate was retained.
+This is source concordance on the same seeds, not independent task or
+biological replication (Supplementary Fig.~\ref{fig:supp_clean_source}).
 
 \section{Artificial-tree experiments}
 \label{note:artificial}
@@ -3163,6 +3231,23 @@ from one mouse. Modeled route fields are not measured teaching signals.}
 \label{fig:supp_irregular_wavelets}
 \end{figure}
 
+\begin{figure}[p]
+\centering
+\includegraphics[width=\textwidth]{supplementary/figure_S26_panels_A-D.pdf}
+\caption{\textbf{Immutable-source replication preserves the H2/H3 physical-depth
+conclusions.} \textbf{A}, Held-out accuracy from each of 430 clean-source
+reruns versus its historical same-seed outcome. The dashed line is identity.
+\textbf{B}, Distribution of paired clean-minus-historical differences; all
+outliers are retained. \textbf{C,D}, Clean-source aligned H2 and H3 accuracy
+for serial BP, literal grouped-point BP, shared-soma LocalCA, exact-path
+LocalCA and the H3 raw-additive control. Lines and intervals are paired-seed
+means and 95\% seed-bootstrap intervals ($n=10$). The H2/H3 depth,
+placement, point-control and local-credit claim gates were unchanged. These
+same-seed reruns test source concordance, not independent scientific
+replication.}
+\label{fig:supp_clean_source}
+\end{figure}
+
 \section{Statistics, reproducibility and claim controls}
 \label{note:statistics}
 
@@ -4057,7 +4142,7 @@ Exact factorization & Conductance-tree gradients separate local eligibility from
 Regular-tree feedback & Preserving neuron identity closes most of the scalar-feedback gap in both tested architectures; exact transport makes 3F sufficient; feedback quality orders norm-matched one-step progress. & Universal advantage of shunting, or superior accuracy, memory or latency relative to backpropagation. \\
 Subtree-address factorial & Task-aligned nested ancestry has a small advantage over matched non-anatomical routes at intermediate bandwidth and over a rewired tree at intermediate budgets. & A uniquely dendritic advantage; matched gated point and flat implementations reproduce the same result, and unrestricted low-rank routes win at the smallest budgets. \\
 Credit-operator phase & Retained signal, admitted noise and task hierarchy predict when a restricted route or additional address depth improves a stochastic update. & Superiority to exact full-batch backpropagation, a positive-conductance forward mechanism or learned branch reliability. \\
-Physical-depth controls & Across $H=2$ and $H=3$ variants of one mechanism-matched task family, serial divisive composition beats resource-identical star and literal grouped-point controls only when task factors match physical order; shared and path LocalCA retain the aligned H2 effect. Flexible parameter-matched point MLPs beat the serial tree, and soma-broadcast controls localize the BP--local separation. & A dendrite-exclusive expressivity advantage, natural-task prevalence, biological availability of exact path transport or optimizer-independent equivalence of BP and LocalCA. \\
+Physical-depth controls & Across H2--H4 variants of one mechanism-matched task family, serial divisive composition beats resource-identical star and literal grouped-point controls only when task factors match physical order; shared and path LocalCA retain aligned effects. H4 saturates at D3 under BP, falsifying one-to-one depth tracking. Flexible parameter-matched point MLPs beat the serial tree, and soma-broadcast controls localize the BP--local separation. & A dendrite-exclusive expressivity advantage, natural-task prevalence, biological availability of exact path transport or optimizer-independent equivalence of BP and LocalCA. \\
 State-matched reliability conductance & Fixed positive shunts approximate the step-consistent oracle reliability ordering and outperform global, shuffled and anti-aligned shunts under heterogeneous branch noise. & Exact block-scalar attenuation, autonomous shunt learning, a dendrite-exclusive operation or sustained final-loss superiority over unshunted noisy learning. \\
 Same-span coefficient learning & Coordinate conditioning creates the finite-data bias--variance crossover predicted by exact linear risk, despite identical route capacity. & A biological Gram preconditioner, unconditional benefit of orthogonal or ill-conditioned coordinates, or new address span. \\
 Prospective input-validity audit & Identity, ownership, spatial and fixed-budget conclusions persist in the 1,000 retained artificial-tree runs; the inhibitory-dose family is excluded. & Any claim derived from signed synthetic inputs driving positive-conductance shunting cells. \\

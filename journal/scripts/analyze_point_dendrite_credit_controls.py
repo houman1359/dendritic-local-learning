@@ -718,7 +718,7 @@ def render_figure(summary: pd.DataFrame, contrasts: pd.DataFrame) -> None:
         "serial_minus_star__aligned__d3",
         "serial_star_alignment_interaction__d3",
     ]
-    labels = ["D1", "D2", "D3", "D3 × align."]
+    labels = ["D1", "D2", "D3", r"D3 $\times$ align."]
     part = indexed.loc[names]
     y = np.arange(len(names))[::-1]
     mean = 100 * part.mean_difference.to_numpy(float)
@@ -734,7 +734,7 @@ def render_figure(summary: pd.DataFrame, contrasts: pd.DataFrame) -> None:
     )
     ax_c.set_ylim(-0.6, 3.6)
     ax_c.set_yticks(y, labels)
-    ax_c.set_xlabel("serial − star (pp)")
+    ax_c.set_xlabel(r"serial $-$ star (pp)")
     panel_title(ax_c, "I", "Composition contrasts")
     style_axis(ax_c, grid="x")
 
@@ -757,7 +757,8 @@ def render_figure(summary: pd.DataFrame, contrasts: pd.DataFrame) -> None:
     style_axis(ax_d, grid="y")
     clean_legend(
         ax_d, loc="upper center", bbox_to_anchor=(0.50, -0.235),
-        fontsize=PT_SMALL, ncol=2, handlelength=2.0,
+        fontsize=5.2, ncol=2, handlelength=1.5, columnspacing=0.8,
+        handletextpad=0.35,
     )
 
     names = [
@@ -772,7 +773,7 @@ def render_figure(summary: pd.DataFrame, contrasts: pd.DataFrame) -> None:
         "optimizer\ngroups",
         "eligibility\nresidual",
         "path\nspecificity",
-        "BP − path\nLocalCA",
+        "BP $-$ path\nLocalCA",
     ]
     part = indexed.loc[names]
     y = np.arange(len(names))[::-1]
@@ -787,11 +788,14 @@ def render_figure(summary: pd.DataFrame, contrasts: pd.DataFrame) -> None:
         markeredgewidth=0.5, elinewidth=LW_ERR, capsize=ERR_CAPSIZE,
         ms=MARKER_MS,
     )
-    ax_e.set_ylim(-0.6, 4.6)
+    # Leave a heading-safe band above the first forest row. The compact
+    # publication compositor replaces the source title without covering the
+    # two-line "coordinate cost" label.
+    ax_e.set_ylim(-0.6, 5.3)
     ax_e.set_yticks(y, labels)
     ax_e.tick_params(axis="y", labelsize=PT_SMALL)
     ax_e.set_xlabel("paired difference (pp)")
-    panel_title(ax_e, "K", "BP–local decomposition")
+    panel_title(ax_e, "K", "BP--local decomposition")
     style_axis(ax_e, grid="x")
 
     point_rows = summary[

@@ -68,7 +68,7 @@ complete.
       hierarchy depth minimizes mean loss; explicit point gating matches
       reliability-aligned branch gain exactly. The companion secondary
       reanalysis covers all 20 seed blocks of the 2,700-fit factorial.
-- [x] Main Figures 1--8 and Supplementary Figures S1--S25 have
+- [x] Main Figures 1--8 and Supplementary Figures S1--S26 have
       machine-readable source tables and executable default build commands.
       Final hashes include the completed alignment-dose and Fashion-MNIST panels.
 - [x] An origin manifest, main-panel provenance manifest, original-cohort
@@ -160,6 +160,13 @@ complete.
       LocalCA retained +21.20 and +31.38 points, with +22.93 and +33.36
       placement interactions. All fits passed finite-metric, no-fallback,
       seed, manifest and exact-resource gates.
+- [x] The frozen 360-fit H4 factorial completed. D4 remained +25.63 points
+      above D1 but fell 1.46 points below D3 under BP, falsifying one-to-one
+      physical-depth tracking. The D4 architecture-by-placement interaction
+      was +25.91 points, while grouped-point BP remained flat. All 430
+      immutable-source H2/H3 reruns also completed; every load-bearing gate
+      was retained. Figure 6A--D and Supplementary Figure S26 report the full
+      positive, null and falsified outcomes.
 - [x] The focal-selectivity canary passed positive-definiteness and exact
       somatic-state restoration gates. The unchanged passive matrix then ran
       all eight cells and supplies Supplementary Figure S11 plus complete
@@ -176,8 +183,8 @@ complete.
       removed. The paper, supplement, and theory note build without undefined
       references, undefined citations, or overfull boxes; remaining notices are
       harmless underfull lines or compact table cells. The strict audit resolves
-      panel-provenance entries, all fourteen main-figure graphics across eight
-      numbered displays, and all eighteen supplementary
+      panel-provenance entries, all main-figure components across nine
+      numbered displays, and all supplementary
       graphics with no errors or warnings.
 - [x] The 320-run clean exact-transport/backpropagation source audit completed
       from detached commit `74792ca`: all artifacts and finite stage-complete
@@ -236,9 +243,9 @@ from this document.
   and figure legends. The automated audit reports the current mechanical count;
   the submission portal count still requires confirmation.
 - Main display items: up to ten figures and/or tables. The working draft now
-  has eight numbered main figures, each represented by one canonical vector
+  has nine numbered main figures, each represented by one canonical vector
   PDF and one figure environment; the complete control inventory continues
-  through Supplementary Figure S25.
+  through Supplementary Figure S26.
   Checkpoint-mechanism and cohort-sensitivity displays
   remain in Supplementary Figures S9 and S10, the passive focal-shunt matrix
   is Supplementary Figure S11, and the inhibitory census is Supplementary

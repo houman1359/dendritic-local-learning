@@ -56,46 +56,98 @@ SOURCE_COMMIT = "a99c3a777f99913e13dfe673a3f3a28bfe3566af"
 # stem: (hierarchy, regime, architecture, mechanism, default credit)
 REMAINING_SPECS = {
     "journal_remaining_h3_aligned_grouped_point_bp": (
-        3, "aligned", "grouped_point", "shunting", "full_bp"
+        3,
+        "aligned",
+        "grouped_point",
+        "shunting",
+        "full_bp",
     ),
     "journal_remaining_h3_rewired_tree_grouped_point_bp": (
-        3, "rewired_tree", "grouped_point", "shunting", "full_bp"
+        3,
+        "rewired_tree",
+        "grouped_point",
+        "shunting",
+        "full_bp",
     ),
     "journal_remaining_h2_aligned_serial_bp": (
-        2, "aligned", "serial_tree", "shunting", "full_bp"
+        2,
+        "aligned",
+        "serial_tree",
+        "shunting",
+        "full_bp",
     ),
     "journal_remaining_h2_rewired_tree_serial_bp": (
-        2, "rewired_tree", "serial_tree", "shunting", "full_bp"
+        2,
+        "rewired_tree",
+        "serial_tree",
+        "shunting",
+        "full_bp",
     ),
     "journal_remaining_h2_aligned_grouped_point_bp": (
-        2, "aligned", "grouped_point", "shunting", "full_bp"
+        2,
+        "aligned",
+        "grouped_point",
+        "shunting",
+        "full_bp",
     ),
     "journal_remaining_h2_rewired_tree_grouped_point_bp": (
-        2, "rewired_tree", "grouped_point", "shunting", "full_bp"
+        2,
+        "rewired_tree",
+        "grouped_point",
+        "shunting",
+        "full_bp",
     ),
     "journal_remaining_h2_aligned_serial_local3f": (
-        2, "aligned", "serial_tree", "shunting", "local_auto"
+        2,
+        "aligned",
+        "serial_tree",
+        "shunting",
+        "local_auto",
     ),
     "journal_remaining_h2_rewired_tree_serial_local3f": (
-        2, "rewired_tree", "serial_tree", "shunting", "local_auto"
+        2,
+        "rewired_tree",
+        "serial_tree",
+        "shunting",
+        "local_auto",
     ),
 }
 
 CONFIRMATORY_SPECS = {
     "journal_confirmatory_physical_depth_aligned_additive_bp": (
-        3, "aligned", "serial_tree", "raw_additive", "full_bp"
+        3,
+        "aligned",
+        "serial_tree",
+        "raw_additive",
+        "full_bp",
     ),
     "journal_confirmatory_physical_depth_aligned_shunting_bp": (
-        3, "aligned", "serial_tree", "shunting", "full_bp"
+        3,
+        "aligned",
+        "serial_tree",
+        "shunting",
+        "full_bp",
     ),
     "journal_confirmatory_physical_depth_aligned_shunting_local3f": (
-        3, "aligned", "serial_tree", "shunting", "local_auto"
+        3,
+        "aligned",
+        "serial_tree",
+        "shunting",
+        "local_auto",
     ),
     "journal_confirmatory_physical_depth_rewired_tree_shunting_bp": (
-        3, "rewired_tree", "serial_tree", "shunting", "full_bp"
+        3,
+        "rewired_tree",
+        "serial_tree",
+        "shunting",
+        "full_bp",
     ),
     "journal_confirmatory_physical_depth_rewired_tree_shunting_local3f": (
-        3, "rewired_tree", "serial_tree", "shunting", "local_auto"
+        3,
+        "rewired_tree",
+        "serial_tree",
+        "shunting",
+        "local_auto",
     ),
 }
 
@@ -146,7 +198,13 @@ def collect_family(
     run_records: list[dict[str, Any]] = []
     missing: list[str] = []
     source_failures: list[str] = []
-    for stem, (hierarchy, regime, architecture, mechanism, default_credit) in specs.items():
+    for stem, (
+        hierarchy,
+        regime,
+        architecture,
+        mechanism,
+        default_credit,
+    ) in specs.items():
         run = latest_run(runs_root, stem)
         original = yaml.safe_load((run / "original_config.yaml").read_text())
         expected = int(original["sweep_contract"]["expected_config_count"])
@@ -195,7 +253,9 @@ def collect_family(
                         "error_broadcast_mode"
                     ]
                 ).lower()
-                credit = "local_path" if broadcast == "path_transport" else "local_shared"
+                credit = (
+                    "local_path" if broadcast == "path_transport" else "local_shared"
+                )
             else:
                 credit = default_credit
             log_text = "\n".join(
@@ -302,9 +362,7 @@ def concordance(clean: pd.DataFrame, historical: pd.DataFrame) -> pd.DataFrame:
         paired[f"{metric}_difference"] = (
             paired[f"{metric}_clean"] - paired[f"{metric}_historical"]
         )
-        paired[f"{metric}_absolute_difference"] = paired[
-            f"{metric}_difference"
-        ].abs()
+        paired[f"{metric}_absolute_difference"] = paired[f"{metric}_difference"].abs()
     return paired
 
 
@@ -326,7 +384,9 @@ def difference(
     return first - second
 
 
-def contrast_row(name: str, values: pd.Series, detail: str, seed: int) -> dict[str, Any]:
+def contrast_row(
+    name: str, values: pd.Series, detail: str, seed: int
+) -> dict[str, Any]:
     mean, low, high = bootstrap_mean(values.to_numpy(float), seed)
     return {
         "contrast": name,
@@ -363,22 +423,22 @@ def build_contrasts(frame: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
                     f"h{hierarchy}_depth__{method}__{regime}",
                     difference(
                         frame,
-                        dict(
-                            hierarchy=hierarchy,
-                            regime=regime,
-                            architecture=architecture,
-                            mechanism="shunting",
-                            credit=credit,
-                            depth=deep,
-                        ),
-                        dict(
-                            hierarchy=hierarchy,
-                            regime=regime,
-                            architecture=architecture,
-                            mechanism="shunting",
-                            credit=credit,
-                            depth=1,
-                        ),
+                        {
+                            "hierarchy": hierarchy,
+                            "regime": regime,
+                            "architecture": architecture,
+                            "mechanism": "shunting",
+                            "credit": credit,
+                            "depth": deep,
+                        },
+                        {
+                            "hierarchy": hierarchy,
+                            "regime": regime,
+                            "architecture": architecture,
+                            "mechanism": "shunting",
+                            "credit": credit,
+                            "depth": 1,
+                        },
                     ),
                     f"H={hierarchy} {regime}: D{deep} minus D1 for {method}",
                 )
@@ -393,22 +453,22 @@ def build_contrasts(frame: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
                 f"h{hierarchy}_serial_minus_grouped__{regime}__d{deep}",
                 difference(
                     frame,
-                    dict(
-                        hierarchy=hierarchy,
-                        regime=regime,
-                        architecture="serial_tree",
-                        mechanism="shunting",
-                        credit="full_bp",
-                        depth=deep,
-                    ),
-                    dict(
-                        hierarchy=hierarchy,
-                        regime=regime,
-                        architecture="grouped_point",
-                        mechanism="shunting",
-                        credit="full_bp",
-                        depth=deep,
-                    ),
+                    {
+                        "hierarchy": hierarchy,
+                        "regime": regime,
+                        "architecture": "serial_tree",
+                        "mechanism": "shunting",
+                        "credit": "full_bp",
+                        "depth": deep,
+                    },
+                    {
+                        "hierarchy": hierarchy,
+                        "regime": regime,
+                        "architecture": "grouped_point",
+                        "mechanism": "shunting",
+                        "credit": "full_bp",
+                        "depth": deep,
+                    },
                 ),
                 f"H={hierarchy} {regime}: serial minus grouped point at D{deep}",
             )
@@ -425,22 +485,22 @@ def build_contrasts(frame: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
         "h3_additive_depth__aligned",
         difference(
             frame,
-            dict(
-                hierarchy=3,
-                regime="aligned",
-                architecture="serial_tree",
-                mechanism="raw_additive",
-                credit="full_bp",
-                depth=3,
-            ),
-            dict(
-                hierarchy=3,
-                regime="aligned",
-                architecture="serial_tree",
-                mechanism="raw_additive",
-                credit="full_bp",
-                depth=1,
-            ),
+            {
+                "hierarchy": 3,
+                "regime": "aligned",
+                "architecture": "serial_tree",
+                "mechanism": "raw_additive",
+                "credit": "full_bp",
+                "depth": 3,
+            },
+            {
+                "hierarchy": 3,
+                "regime": "aligned",
+                "architecture": "serial_tree",
+                "mechanism": "raw_additive",
+                "credit": "full_bp",
+                "depth": 1,
+            },
         ),
         "H=3 aligned raw-additive BP: D3 minus D1",
     )
@@ -460,7 +520,9 @@ def summarize(frame: pd.DataFrame) -> pd.DataFrame:
     rows: list[dict[str, Any]] = []
     grouping = ["hierarchy", "regime", "architecture", "mechanism", "credit", "depth"]
     for index, (key, part) in enumerate(frame.groupby(grouping, sort=True)):
-        mean, low, high = bootstrap_mean(part.test_accuracy.to_numpy(float), 18100 + index)
+        mean, low, high = bootstrap_mean(
+            part.test_accuracy.to_numpy(float), 18100 + index
+        )
         rows.append(
             dict(
                 zip(grouping, key),
@@ -483,14 +545,12 @@ def audit(
     finite_columns = [
         column
         for column in frame.columns
-        if column.endswith("_accuracy")
-        or column.endswith("_auc")
-        or column.endswith("_categorical_loglikelihood")
+        if column.endswith(("_accuracy", "_auc", "_categorical_loglikelihood"))
     ]
     resource_failures: list[str] = []
-    for (hierarchy, regime, depth), group in frame[
-        frame.credit.eq("full_bp")
-    ].groupby(["hierarchy", "regime", "depth"]):
+    for (hierarchy, regime, depth), group in frame[frame.credit.eq("full_bp")].groupby(
+        ["hierarchy", "regime", "depth"]
+    ):
         for column in RESOURCE_COLUMNS:
             if group[column].nunique() != 1:
                 resource_failures.append(f"H{hierarchy}/{regime}/D{depth}/{column}")
@@ -544,14 +604,54 @@ def _line_panel(
     ax: plt.Axes, summary: pd.DataFrame, hierarchy: int, regime: str, letter: str
 ) -> None:
     styles = [
-        ("serial_tree", "shunting", "full_bp", "serial BP", COLORS["shunting"], "o", "-"),
-        ("grouped_point", "shunting", "full_bp", "grouped point BP", COLORS["point_mlp"], "s", "--"),
-        ("serial_tree", "shunting", "local_shared", "shared LocalCA", COLORS["local"], "D", "-."),
-        ("serial_tree", "shunting", "local_path", "path LocalCA", COLORS["pathway"], "^", ":"),
+        (
+            "serial_tree",
+            "shunting",
+            "full_bp",
+            "serial BP",
+            COLORS["shunting"],
+            "o",
+            "-",
+        ),
+        (
+            "grouped_point",
+            "shunting",
+            "full_bp",
+            "grouped point BP",
+            COLORS["point_mlp"],
+            "s",
+            "--",
+        ),
+        (
+            "serial_tree",
+            "shunting",
+            "local_shared",
+            "shared LocalCA",
+            COLORS["local"],
+            "D",
+            "-.",
+        ),
+        (
+            "serial_tree",
+            "shunting",
+            "local_path",
+            "path LocalCA",
+            COLORS["pathway"],
+            "^",
+            ":",
+        ),
     ]
     if hierarchy == 3 and regime == "aligned":
         styles.append(
-            ("serial_tree", "raw_additive", "full_bp", "raw-additive BP", COLORS["mute"], "v", "--")
+            (
+                "serial_tree",
+                "raw_additive",
+                "full_bp",
+                "raw-additive BP",
+                COLORS["mute"],
+                "v",
+                "--",
+            )
         )
     for architecture, mechanism, credit, label, color, marker, linestyle in styles:
         part = summary[
@@ -589,9 +689,7 @@ def _line_panel(
     clean_legend(ax, loc="best", fontsize=PT_LEGEND, handlelength=2.0)
 
 
-def make_figure(
-    summary: pd.DataFrame, paired: pd.DataFrame
-) -> None:
+def make_figure(summary: pd.DataFrame, paired: pd.DataFrame) -> None:
     apply_neurips_style()
     fig, axes = plt.subplots(
         2,
@@ -625,7 +723,7 @@ def make_figure(
     ax_a.set_ylim(limits)
     ax_a.set_xlabel("historical test accuracy")
     ax_a.set_ylabel("clean-source test accuracy")
-    panel_title(ax_a, "Z1", "Outcome concordance")
+    panel_title(ax_a, "A", "Outcome concordance")
     style_axis(ax_a, grid="both")
 
     delta_pp = 100 * both.test_accuracy_difference.to_numpy(float)
@@ -633,11 +731,11 @@ def make_figure(
     ax_b.axvline(0, color=COLORS["mute"], linewidth=LW_HAIR)
     ax_b.set_xlabel("clean minus historical (pp)")
     ax_b.set_ylabel("seed--condition pairs")
-    panel_title(ax_b, "Z2", "Paired source sensitivity")
+    panel_title(ax_b, "B", "Paired source sensitivity")
     style_axis(ax_b, grid="y")
 
-    _line_panel(ax_c, summary, 2, "aligned", "Z3")
-    _line_panel(ax_d, summary, 3, "aligned", "Z4")
+    _line_panel(ax_c, summary, 2, "aligned", "C")
+    _line_panel(ax_d, summary, 3, "aligned", "D")
     fig.canvas.draw()
     audit_layout(fig, "fig_physical_depth_clean_source_replication")
     audit_text_over_data(fig, "fig_physical_depth_clean_source_replication")
@@ -646,9 +744,7 @@ def make_figure(
         FIGURES / "fig_physical_depth_clean_source_replication.pdf",
         metadata={"CreationDate": None, "ModDate": None},
     )
-    fig.savefig(
-        FIGURES / "fig_physical_depth_clean_source_replication.png", dpi=600
-    )
+    fig.savefig(FIGURES / "fig_physical_depth_clean_source_replication.png", dpi=600)
     plt.close(fig)
 
 
@@ -667,29 +763,29 @@ def write_report(contrasts: pd.DataFrame, record: dict[str, Any]) -> None:
 
     report = f"""# Physical-depth clean-source replication
 
-Status: **{'complete_pass' if record['all_validity_gates_pass'] else record['status']}** ({record['observed_rows']}/430 reruns).
+Status: **{"complete_pass" if record["all_validity_gates_pass"] else record["status"]}** ({record["observed_rows"]}/430 reruns).
 
 ## Historical concordance
 
-- Mean absolute test-accuracy change: {100 * record['mean_absolute_test_accuracy_difference']:.4f} pp.
-- Median absolute change: {100 * record['median_absolute_test_accuracy_difference']:.4f} pp.
-- Maximum absolute change: {100 * record['maximum_absolute_test_accuracy_difference']:.4f} pp.
-- Pairs within 0.1 pp: {record['pairs_within_0_1pp']}/430.
+- Mean absolute test-accuracy change: {100 * record["mean_absolute_test_accuracy_difference"]:.4f} pp.
+- Median absolute change: {100 * record["median_absolute_test_accuracy_difference"]:.4f} pp.
+- Maximum absolute change: {100 * record["maximum_absolute_test_accuracy_difference"]:.4f} pp.
+- Pairs within 0.1 pp: {record["pairs_within_0_1pp"]}/430.
 
 ## H=2
 
-- Aligned serial-BP D2 minus D1: {sentence('h2_depth__serial_bp__aligned')}.
-- Serial-BP depth-by-placement interaction: {sentence('h2_placement_interaction__serial_bp')}.
-- Serial minus grouped point at aligned D2: {sentence('h2_serial_minus_grouped__aligned__d2')}.
-- Architecture-by-placement interaction: {sentence('h2_architecture_placement_interaction__d2')}.
+- Aligned serial-BP D2 minus D1: {sentence("h2_depth__serial_bp__aligned")}.
+- Serial-BP depth-by-placement interaction: {sentence("h2_placement_interaction__serial_bp")}.
+- Serial minus grouped point at aligned D2: {sentence("h2_serial_minus_grouped__aligned__d2")}.
+- Architecture-by-placement interaction: {sentence("h2_architecture_placement_interaction__d2")}.
 
 ## H=3
 
-- Aligned serial-BP D3 minus D1: {sentence('h3_depth__serial_bp__aligned')}.
-- Serial-BP depth-by-placement interaction: {sentence('h3_placement_interaction__serial_bp')}.
-- Serial minus grouped point at aligned D3: {sentence('h3_serial_minus_grouped__aligned__d3')}.
-- Architecture-by-placement interaction: {sentence('h3_architecture_placement_interaction__d3')}.
-- Shunting-minus-additive depth interaction: {sentence('h3_shunting_additive_depth_interaction__aligned')}.
+- Aligned serial-BP D3 minus D1: {sentence("h3_depth__serial_bp__aligned")}.
+- Serial-BP depth-by-placement interaction: {sentence("h3_placement_interaction__serial_bp")}.
+- Serial minus grouped point at aligned D3: {sentence("h3_serial_minus_grouped__aligned__d3")}.
+- Architecture-by-placement interaction: {sentence("h3_architecture_placement_interaction__d3")}.
+- Shunting-minus-additive depth interaction: {sentence("h3_shunting_additive_depth_interaction__aligned")}.
 """
     (OUTPUT / "RESULTS.md").write_text(report, encoding="utf-8")
 

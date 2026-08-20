@@ -32,14 +32,14 @@ CANONICAL_ASSETS = {
     "pointcredit.asset": "figures/main/figure_05.pdf",
     "alignmentdose.asset": "figures/supplementary/figure_S18_panels_A-K.pdf",
     "remainingphysical.asset": "figures/supplementary/figure_S18_panels_A-K.pdf",
-    "fig3.asset": "figures/main/figure_06.pdf",
-    "capturewire.asset": "figures/main/figure_06.pdf",
-    "fig4.asset": "figures/main/figure_07.pdf",
-    "extensions.asset": "figures/main/figure_07.pdf",
-    "extensions.fulltree.asset": "figures/main/figure_08.pdf",
-    "fig6.asset": "figures/main/figure_08.pdf",
-    "fig8.asset": "figures/main/figure_08.pdf",
-    "phaseplane.asset": "figures/main/figure_08.pdf",
+    "fig3.asset": "figures/main/figure_07.pdf",
+    "capturewire.asset": "figures/main/figure_07.pdf",
+    "fig4.asset": "figures/main/figure_08.pdf",
+    "extensions.asset": "figures/main/figure_08.pdf",
+    "extensions.fulltree.asset": "figures/main/figure_09.pdf",
+    "fig6.asset": "figures/main/figure_09.pdf",
+    "fig8.asset": "figures/main/figure_09.pdf",
+    "phaseplane.asset": "figures/main/figure_09.pdf",
     "inherited.s1.asset": "figures/supplementary/figure_S01_panels_A-E.pdf",
     "inherited.s2.asset": "figures/supplementary/figure_S02_panels_A-E.pdf",
     "inherited.s3.asset": "figures/supplementary/figure_S03_panels_A-D.pdf",
@@ -68,19 +68,25 @@ CANONICAL_ASSIGNMENTS = {
     "creditphase.asset": ("fig4", "all"),
     "physical.asset": ("fig5", "a-f"),
     "pointcredit.asset": ("fig5", "g-j"),
-    "fig3.asset": ("fig6", "a-f"),
-    "capturewire.asset": ("fig6", "g-h"),
-    "fig4.asset": ("fig7", "a-f"),
-    "extensions.asset": ("fig7", "g-j"),
-    "fig6.asset": ("fig8", "a-f"),
-    "extensions.fulltree.asset": ("fig8", "g-h"),
-    "fig8.asset": ("fig8", "i-j"),
-    "phaseplane.asset": ("fig8", "k"),
+    "fig3.asset": ("fig7", "a-f"),
+    "capturewire.asset": ("fig7", "g-h"),
+    "fig4.asset": ("fig8", "a-f"),
+    "extensions.asset": ("fig8", "g-j"),
+    "fig6.asset": ("fig9", "a-f"),
+    "extensions.fulltree.asset": ("fig9", "g-h"),
+    "fig8.asset": ("fig9", "i-j"),
+    "phaseplane.asset": ("fig9", "k"),
     "alignmentdose.asset": ("figS18", "c-e"),
     "remainingphysical.asset": ("figS18", "f-k"),
 }
 
 NEW_DETAIL_ASSETS = {
+    "physical.h4.asset": {
+        "figure": "fig6",
+        "path": "figures/main/figure_06.pdf",
+        "generator": "scripts/analyze_physical_depth_h4_factorial.py",
+        "notes": "H4 depth-saturation test: exact backpropagation, point emulation, local credit, and mechanism controls.",
+    },
     "prospective.detail.asset": {
         "figure": "figS19",
         "path": "figures/supplementary/figure_S19_panels_A-I.pdf",
@@ -91,19 +97,19 @@ NEW_DETAIL_ASSETS = {
         "figure": "figS20",
         "path": "figures/supplementary/figure_S20_panels_A-J.pdf",
         "generator": "scripts/build_journal_figures.py",
-        "notes": "Detailed morphology-route capacity and topology controls underlying focused Fig. 6.",
+        "notes": "Detailed morphology-route capacity and topology controls underlying focused Fig. 7.",
     },
     "focal.detail.asset": {
         "figure": "figS21",
         "path": "figures/supplementary/figure_S21_panels_A-I.pdf",
         "generator": "scripts/build_journal_figures.py",
-        "notes": "Detailed focal-shunting controls and electrotonic calibration underlying focused Fig. 7.",
+        "notes": "Detailed focal-shunting controls and electrotonic calibration underlying focused Fig. 8.",
     },
     "measured.detail.asset": {
         "figure": "figS22",
         "path": "figures/supplementary/figure_S22_panels_A-H.pdf",
         "generator": "scripts/build_journal_figures.py",
-        "notes": "Detailed measured-response topology and learning boundary underlying focused Fig. 8.",
+        "notes": "Detailed measured-response topology and learning boundary underlying focused Fig. 9.",
     },
     "partition.residual.asset": {
         "figure": "figS23",
@@ -123,6 +129,12 @@ NEW_DETAIL_ASSETS = {
         "generator": "scripts/build_irregular_tree_wavelet_figure.py",
         "notes": "Frozen 47-cell primary and eight-cell secondary irregular-tree Haar analysis with isotropic and column-permuted controls.",
     },
+    "clean.physical.depth.asset": {
+        "figure": "figS26",
+        "path": "figures/supplementary/figure_S26_panels_A-D.pdf",
+        "generator": "scripts/analyze_physical_depth_clean_source_replication.py",
+        "notes": "Immutable-source same-seed replication of all 430 load-bearing H2/H3 physical-depth fits.",
+    },
 }
 
 
@@ -136,15 +148,16 @@ def resolve_project_path(raw_path: str) -> Path:
         relative = path
     return PROJECT_ROOT / relative
 
+
 # Correct stale prose left by an earlier numbering-only remap.  These notes
 # are descriptive metadata, not independent scientific content.
 CANONICAL_NOTES = {
-    "fig3.e": "Direct-presynaptic-type-only sensitivity analysis shown in Fig. 6H.",
-    "fig4.b": "Cell-level additive, depth-shuffled, and focal-shunt localization shown in Fig. 7C.",
-    "fig4.c": "Dose response and focal-depth localization values shown in Fig. 7D--E.",
-    "fig4.effects": "Descendant, sister, ancestor, and unrelated category effects shown in Fig. 7B.",
-    "fig4.e.cell": "Cell-level exact factor-freeze values underlying the same-voltage driving-force and full-shunt contrast in Fig. 7H.",
-    "fig4.e.site": "Site-level factor substitutions supporting the Fig. 7H cell summary and supplementary Shapley analysis.",
+    "fig3.e": "Direct-presynaptic-type-only sensitivity analysis shown in Fig. 7H.",
+    "fig4.b": "Cell-level additive, depth-shuffled, and focal-shunt localization shown in Fig. 8C.",
+    "fig4.c": "Dose response and focal-depth localization values shown in Fig. 8D--E.",
+    "fig4.effects": "Descendant, sister, ancestor, and unrelated category effects shown in Fig. 8B.",
+    "fig4.e.cell": "Cell-level exact factor-freeze values underlying the same-voltage driving-force and full-shunt contrast in Fig. 8H.",
+    "fig4.e.site": "Site-level factor substitutions supporting the Fig. 8H cell summary and supplementary Shapley analysis.",
 }
 
 
@@ -240,10 +253,15 @@ def main() -> None:
 
     missing_entries = sorted(set(CANONICAL_ASSETS) - seen_assets)
     if missing_entries:
-        raise ValueError("canonical figure assets absent from manifest: " + ", ".join(missing_entries))
+        raise ValueError(
+            "canonical figure assets absent from manifest: "
+            + ", ".join(missing_entries)
+        )
 
     with MANIFEST.open("w", newline="", encoding="utf-8") as handle:
-        writer = csv.DictWriter(handle, fieldnames=fieldnames, delimiter="\t", lineterminator="\n")
+        writer = csv.DictWriter(
+            handle, fieldnames=fieldnames, delimiter="\t", lineterminator="\n"
+        )
         writer.writeheader()
         writer.writerows(rows)
     print(f"updated {updated} provenance fields")

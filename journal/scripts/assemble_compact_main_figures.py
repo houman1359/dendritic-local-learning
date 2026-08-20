@@ -3,7 +3,7 @@
 
 The analysis scripts intentionally emit modular panel blocks.  This compositor
 selects the load-bearing blocks, preserves their vector content, renumbers the
-panels and writes the eight publication-facing PDFs.  Omitted audits remain in
+panels and writes the nine publication-facing PDFs.  Omitted audits remain in
 Supplementary Information or in the modular provenance assets.
 """
 
@@ -50,11 +50,11 @@ SOURCE_START = {
     "figure_05_panels_G-L.pdf": "G",
     "figure_05_panels_M-O.pdf": "M",
     "figure_05_panels_P-U.pdf": "P",
-    "figure_06_panels_K-L.pdf": "K",
-    "figure_07_panels_J-M.pdf": "J",
-    "figure_08_panels_I-J.pdf": "I",
-    "figure_08_panels_K-N.pdf": "K",
-    "figure_08_panel_O.pdf": "O",
+    "figure_07_panels_K-L.pdf": "K",
+    "figure_08_panels_J-M.pdf": "J",
+    "figure_09_panels_I-J.pdf": "I",
+    "figure_09_panels_K-N.pdf": "K",
+    "figure_09_panel_O.pdf": "O",
 }
 
 
@@ -83,7 +83,9 @@ def _source_rect(page: fitz.Page, spec: Panel) -> fitz.Rect:
     )
 
 
-def _slot_rect(slot: Slot, rows: int, cols: int, width: float, height: float) -> fitz.Rect:
+def _slot_rect(
+    slot: Slot, rows: int, cols: int, width: float, height: float
+) -> fitz.Rect:
     margin = 4.0
     gutter = 3.0
     cell_w = (width - 2 * margin - (cols - 1) * gutter) / cols
@@ -114,7 +116,9 @@ def compose(
     opened: dict[str, fitz.Document] = {}
     out = fitz.open()
     page_out = out.new_page(width=width, height=height)
-    for index, (spec, slot, title) in enumerate(zip(panels, slots, titles, strict=True)):
+    for index, (spec, slot, title) in enumerate(
+        zip(panels, slots, titles, strict=True)
+    ):
         source = opened.setdefault(spec.filename, fitz.open(MAIN / spec.filename))
         source_page = source[0]
         target = _slot_rect(slot, rows, cols, width, height)
@@ -139,9 +143,7 @@ def compose(
         source_heading_box = fitz.Rect(
             shown_x, shown_y, shown_x + shown_width, shown_y + 28
         )
-        page_out.draw_rect(
-            source_heading_box, color=None, fill=(1, 1, 1), overlay=True
-        )
+        page_out.draw_rect(source_heading_box, color=None, fill=(1, 1, 1), overlay=True)
         heading_box = fitz.Rect(target.x0, target.y0, target.x1, target.y0 + 28)
         page_out.draw_rect(heading_box, color=None, fill=(1, 1, 1), overlay=True)
         page_out.insert_text(
@@ -174,7 +176,7 @@ def compose(
         prior_bottom = margin + row * cell_height + (row - 1) * gutter
         next_top = prior_bottom + gutter
         page_out.draw_rect(
-            fitz.Rect(0, prior_bottom - 2, width, next_top + 2),
+            fitz.Rect(0, prior_bottom - 10, width, next_top + 2),
             color=None,
             fill=(1, 1, 1),
             overlay=True,
@@ -209,9 +211,14 @@ def main() -> None:
             panel("figure_02_panels_P-Q.pdf", "Q", 1, 2),
         ],
         [
-            "Neuron-indexed feedback", "Gradient alignment", "Exact error transport",
-            "MNIST identity gain", "Matched routing", "Within-neuron routing",
-            "Second-dataset ladder", "Replicated bottleneck",
+            "Neuron-indexed feedback",
+            "Gradient alignment",
+            "Exact error transport",
+            "MNIST identity gain",
+            "Matched routing",
+            "Within-neuron routing",
+            "Second-dataset ladder",
+            "Replicated bottleneck",
         ],
         rows=3,
         cols=3,
@@ -228,30 +235,40 @@ def main() -> None:
             panel("figure_05_panels_G-L.pdf", "K", 2, 3),
         ],
         [
-            "Matched-resource depth", "Nested divisive task", "Backprop depth test",
-            "Prespecified contrasts", "Local credit transport", "Divisive control",
-            "Architecture controls", "Serial composition", "Credit-coordinate ladder",
+            "Matched-resource depth",
+            "Nested divisive task",
+            "Backprop depth test",
+            "Prespecified contrasts",
+            "Local credit transport",
+            "Divisive control",
+            "Architecture controls",
+            "Serial composition",
+            "Credit-coordinate ladder",
             "BP--local decomposition",
         ],
         rows=3,
         cols=4,
-        height=430,
+        height=458,
     )
 
+    copy_page("figure_06_panels_A-D.pdf", "figure_06.pdf")
+
     compose(
-        MAIN / "figure_06.pdf",
-        [
-            panel("figure_06_panels_A-J.pdf", letter, 2, 3)
-            for letter in "ABCDEF"
-        ]
+        MAIN / "figure_07.pdf",
+        [panel("figure_07_panels_A-J.pdf", letter, 2, 3) for letter in "ABCDEF"]
         + [
-            panel("figure_06_panels_K-L.pdf", "K", 1, 2),
-            panel("figure_06_panels_K-L.pdf", "L", 1, 2),
+            panel("figure_07_panels_K-L.pdf", "K", 1, 2),
+            panel("figure_07_panels_K-L.pdf", "L", 1, 2),
         ],
         [
-            "Reconstructed tree", "Ancestry addresses", "Sparse route capacity",
-            "Model-field controls", "Reciprocal cable field", "Topology controls",
-            "Wire efficiency at eight channels", "Wiring-normalized capture",
+            "Reconstructed tree",
+            "Ancestry addresses",
+            "Sparse route capacity",
+            "Model-field controls",
+            "Reciprocal cable field",
+            "Topology controls",
+            "Wire efficiency at eight channels",
+            "Wiring-normalized capture",
         ],
         rows=3,
         cols=3,
@@ -259,49 +276,65 @@ def main() -> None:
     )
 
     compose(
-        MAIN / "figure_07.pdf",
+        MAIN / "figure_08.pdf",
+        [panel("figure_08_panels_A-I.pdf", letter, 2, 3) for letter in "ABCDEF"]
+        + [panel("figure_08_panels_J-M.pdf", letter, 1, 4) for letter in "JKLM"],
         [
-            panel("figure_07_panels_A-I.pdf", letter, 2, 3)
-            for letter in "ABCDEF"
-        ]
-        + [
-            panel("figure_07_panels_J-M.pdf", letter, 1, 4)
-            for letter in "JKLM"
-        ],
-        [
-            "Matched focal shunt", "Tree-relation selectivity", "Within-cell controls",
-            "Dose response", "Adjoint transport", "Electrotonic limit",
-            "Active channels", "Dose response", "Cellwise contrast", "Signed outcome",
+            "Matched focal shunt",
+            "Tree-relation selectivity",
+            "Within-cell controls",
+            "Dose response",
+            "Adjoint transport",
+            "Electrotonic limit",
+            "Active channels",
+            "Dose response",
+            "Cellwise contrast",
+            "Signed outcome",
         ],
         rows=3,
         cols=4,
         height=430,
     )
 
-    # Figure 8 ends with the unifying phase plane, which spans two columns.
+    # Figure 9 ends with the unifying phase plane, which spans two columns.
     compose(
-        MAIN / "figure_08.pdf",
+        MAIN / "figure_09.pdf",
         [
-            *[panel("figure_08_panels_A-H.pdf", letter, 2, 3) for letter in "ABCDEF"],
-            panel("figure_08_panels_I-J.pdf", "I", 1, 2),
-            panel("figure_08_panels_I-J.pdf", "J", 1, 2),
+            *[panel("figure_09_panels_A-H.pdf", letter, 2, 3) for letter in "ABCDEF"],
+            panel("figure_09_panels_I-J.pdf", "I", 1, 2),
+            panel("figure_09_panels_I-J.pdf", "J", 1, 2),
             panel("../supplementary/figure_S17_panels_A-D.pdf", "B", 1, 4),
             panel("../supplementary/figure_S17_panels_A-D.pdf", "C", 1, 4),
-            panel("figure_08_panel_O.pdf", "O", 1, 1),
+            panel("figure_09_panel_O.pdf", "O", 1, 1),
         ],
         [
-            "Measured cohort", "Structure--function boundary", "Task-field capture",
-            "Held-out learning", "Controlled alignment", "Capture vs progress",
-            "Full-tree task", "Anatomy boundary", "Signed neuron pairs", "Signed mode",
+            "Measured cohort",
+            "Structure--function boundary",
+            "Task-field capture",
+            "Held-out learning",
+            "Controlled alignment",
+            "Capture vs progress",
+            "Full-tree task",
+            "Anatomy boundary",
+            "Signed neuron pairs",
+            "Signed mode",
             "Alignment x bandwidth",
         ],
         rows=3,
         cols=4,
         height=458,
         slots=[
-            Slot(0, 0), Slot(0, 1), Slot(0, 2), Slot(0, 3),
-            Slot(1, 0), Slot(1, 1), Slot(1, 2), Slot(1, 3),
-            Slot(2, 0), Slot(2, 1), Slot(2, 2, colspan=2),
+            Slot(0, 0),
+            Slot(0, 1),
+            Slot(0, 2),
+            Slot(0, 3),
+            Slot(1, 0),
+            Slot(1, 1),
+            Slot(1, 2),
+            Slot(1, 3),
+            Slot(2, 0),
+            Slot(2, 1),
+            Slot(2, 2, colspan=2),
         ],
     )
 
@@ -317,9 +350,17 @@ def main() -> None:
             *[panel("figure_05_panels_P-U.pdf", letter, 2, 3) for letter in "PQRSTU"],
         ],
         [
-            "Serial vs grouped star", "Flexible point controls", "Alignment dose",
-            "Depth benefit", "Dose contrasts", "H3 models", "H3 outcomes",
-            "H3 interaction", "H2 hierarchy", "H2 local learning", "H2 contrasts",
+            "Serial vs grouped star",
+            "Flexible point controls",
+            "Alignment dose",
+            "Depth benefit",
+            "Dose contrasts",
+            "H3 models",
+            "H3 outcomes",
+            "H3 interaction",
+            "H2 hierarchy",
+            "H2 local learning",
+            "H2 contrasts",
         ],
         rows=3,
         cols=4,
@@ -330,16 +371,22 @@ def main() -> None:
         SUPP / "figure_S19_panels_A-I.pdf",
         [panel("figure_02_panels_G-O.pdf", letter, 3, 3) for letter in "GHIJKLMNO"],
         [
-            "MNIST identity", "Noise-task identity", "Exact vs BP", "Ownership",
-            "Clean exact vs BP", "Fixed-budget depth", "Two-stream learning",
-            "Capture vs progress", "Context forgetting",
+            "MNIST identity",
+            "Noise-task identity",
+            "Exact vs BP",
+            "Ownership",
+            "Clean exact vs BP",
+            "Fixed-budget depth",
+            "Two-stream learning",
+            "Capture vs progress",
+            "Context forgetting",
         ],
         rows=3,
         cols=3,
         height=458,
     )
 
-    print("Assembled eight compact main figures and Supplementary Figures S18--S19.")
+    print("Assembled nine compact main figures and Supplementary Figures S18--S19.")
 
 
 if __name__ == "__main__":

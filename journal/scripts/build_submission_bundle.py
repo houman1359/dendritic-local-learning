@@ -33,6 +33,7 @@ MAIN_FIGURES = (
     "main/figure_06.pdf",
     "main/figure_07.pdf",
     "main/figure_08.pdf",
+    "main/figure_09.pdf",
 )
 
 SUPPLEMENTARY_FIGURES = (
@@ -61,6 +62,7 @@ SUPPLEMENTARY_FIGURES = (
     "supplementary/figure_S23_panels_A-C.pdf",
     "supplementary/figure_S24_panels_A-D.pdf",
     "supplementary/figure_S25_panels_A-D.pdf",
+    "supplementary/figure_S26_panels_A-D.pdf",
 )
 
 FIGURES = MAIN_FIGURES + SUPPLEMENTARY_FIGURES
@@ -73,19 +75,37 @@ REQUIRED_FILES = {
     JOURNAL / "OVERLEAF_README.md": Path("OVERLEAF_README.md"),
     JOURNAL / "figures" / "README.md": Path("figures/README.md"),
     JOURNAL / "references.bib": Path("references.bib"),
-    JOURNAL / "supplementary" / "supplementary.tex": Path("supplementary/supplementary.tex"),
-    JOURNAL / "supplementary" / "supplementary.pdf": Path("supplementary/supplementary.pdf"),
-    JOURNAL / "supplementary" / "supplementary.bbl": Path("supplementary/supplementary.bbl"),
+    JOURNAL / "supplementary" / "supplementary.tex": Path(
+        "supplementary/supplementary.tex"
+    ),
+    JOURNAL / "supplementary" / "supplementary.pdf": Path(
+        "supplementary/supplementary.pdf"
+    ),
+    JOURNAL / "supplementary" / "supplementary.bbl": Path(
+        "supplementary/supplementary.bbl"
+    ),
     SUBMISSION / "Source_Data.zip": Path("Source_Data.zip"),
     SUBMISSION / "cover_letter.md": Path("submission_materials/cover_letter.md"),
-    SUBMISSION / "editorial_summary.md": Path("submission_materials/editorial_summary.md"),
+    SUBMISSION / "editorial_summary.md": Path(
+        "submission_materials/editorial_summary.md"
+    ),
     SUBMISSION / "README.md": Path("submission_materials/README.md"),
-    SUBMISSION / "extension_statement.md": Path("submission_materials/extension_statement.md"),
-    SUBMISSION / "reporting_checklist.md": Path("submission_materials/reporting_checklist.md"),
+    SUBMISSION / "extension_statement.md": Path(
+        "submission_materials/extension_statement.md"
+    ),
+    SUBMISSION / "reporting_checklist.md": Path(
+        "submission_materials/reporting_checklist.md"
+    ),
     SUBMISSION / "AUTHOR_ACTIONS.md": Path("submission_materials/AUTHOR_ACTIONS.md"),
-    SUBMISSION / "OFFICIAL_FORMS_REQUIRED.md": Path("submission_materials/OFFICIAL_FORMS_REQUIRED.md"),
-    JOURNAL / "source_data" / "provenance_manifest.tsv": Path("manifests/source_data_provenance_manifest.tsv"),
-    JOURNAL / "reproducibility" / "origin_manifest.tsv": Path("manifests/reproducibility_origin_manifest.tsv"),
+    SUBMISSION / "OFFICIAL_FORMS_REQUIRED.md": Path(
+        "submission_materials/OFFICIAL_FORMS_REQUIRED.md"
+    ),
+    JOURNAL / "source_data" / "provenance_manifest.tsv": Path(
+        "manifests/source_data_provenance_manifest.tsv"
+    ),
+    JOURNAL / "reproducibility" / "origin_manifest.tsv": Path(
+        "manifests/reproducibility_origin_manifest.tsv"
+    ),
 }
 
 SOFTWARE_CANDIDATES = (
@@ -167,7 +187,9 @@ def verify_figure_allowlist() -> None:
             details.append("missing from allowlist: " + ", ".join(missing))
         if stale:
             details.append("not referenced by either manuscript: " + ", ".join(stale))
-        raise RuntimeError("Figure allowlist is out of sync (" + "; ".join(details) + ")")
+        raise RuntimeError(
+            "Figure allowlist is out of sync (" + "; ".join(details) + ")"
+        )
 
 
 def verify_archive(path: Path) -> None:
@@ -181,7 +203,7 @@ def verify_archive(path: Path) -> None:
             bad = archive.testzip()
         if bad is not None:
             raise RuntimeError(f"Corrupt member {bad!r} in {path}")
-    elif lower.endswith(".tar.gz") or lower.endswith(".tgz"):
+    elif lower.endswith((".tar.gz", ".tgz")):
         with tarfile.open(path, "r:gz") as archive:
             for member in archive.getmembers():
                 name = Path(member.name)
@@ -192,7 +214,11 @@ def verify_archive(path: Path) -> None:
 
 
 def private_path_labels(data: bytes) -> list[str]:
-    return [pattern.pattern.decode("ascii") for pattern in PRIVATE_PATH_PATTERNS if pattern.search(data)]
+    return [
+        pattern.pattern.decode("ascii")
+        for pattern in PRIVATE_PATH_PATTERNS
+        if pattern.search(data)
+    ]
 
 
 def scan_archive_private_paths(path: Path) -> None:
@@ -201,17 +227,24 @@ def scan_archive_private_paths(path: Path) -> None:
     lower = path.name.lower()
     if lower.endswith(".zip"):
         with zipfile.ZipFile(path) as archive:
-            members = ((name, archive.read(name)) for name in archive.namelist() if not name.endswith("/"))
+            members = (
+                (name, archive.read(name))
+                for name in archive.namelist()
+                if not name.endswith("/")
+            )
             for name, data in members:
                 if Path(name).suffix.lower() not in TEXT_SUFFIXES:
                     continue
                 labels = private_path_labels(data)
                 if labels:
                     failures.append(f"{name}: {', '.join(labels)}")
-    elif lower.endswith(".tar.gz") or lower.endswith(".tgz"):
+    elif lower.endswith((".tar.gz", ".tgz")):
         with tarfile.open(path, "r:gz") as archive:
             for member in archive.getmembers():
-                if not member.isfile() or Path(member.name).suffix.lower() not in TEXT_SUFFIXES:
+                if (
+                    not member.isfile()
+                    or Path(member.name).suffix.lower() not in TEXT_SUFFIXES
+                ):
                     continue
                 handle = archive.extractfile(member)
                 data = b"" if handle is None else handle.read()
@@ -220,7 +253,8 @@ def scan_archive_private_paths(path: Path) -> None:
                     failures.append(f"{member.name}: {', '.join(labels)}")
     if failures:
         raise RuntimeError(
-            f"Private absolute path scan failed inside {path}:\n- " + "\n- ".join(failures)
+            f"Private absolute path scan failed inside {path}:\n- "
+            + "\n- ".join(failures)
         )
 
 
@@ -231,7 +265,9 @@ def choose_software_archive(explicit: Path | None) -> Path | None:
     try:
         path.relative_to(JOURNAL)
     except ValueError as exc:
-        raise RuntimeError("The software archive must be inside the journal project") from exc
+        raise RuntimeError(
+            "The software archive must be inside the journal project"
+        ) from exc
     if not path.is_file():
         raise FileNotFoundError(path)
     return path
@@ -242,15 +278,23 @@ def copy_allowlist(output_dir: Path, software: Path | None) -> list[tuple[Path, 
     for name in FIGURES:
         sources[JOURNAL / "figures" / name] = Path("figures") / name
     if software is not None:
-        destination_name = "Software.zip" if software.name.lower().endswith(".zip") else "Software.tar.gz"
+        destination_name = (
+            "Software.zip"
+            if software.name.lower().endswith(".zip")
+            else "Software.tar.gz"
+        )
         sources[software] = Path(destination_name)
 
     missing = [str(path.relative_to(JOURNAL)) for path in sources if not path.is_file()]
     if missing:
-        raise FileNotFoundError("Required bundle inputs are missing:\n- " + "\n- ".join(missing))
+        raise FileNotFoundError(
+            "Required bundle inputs are missing:\n- " + "\n- ".join(missing)
+        )
 
     copied: list[tuple[Path, Path]] = []
-    for source, relative_destination in sorted(sources.items(), key=lambda item: str(item[1])):
+    for source, relative_destination in sorted(
+        sources.items(), key=lambda item: str(item[1])
+    ):
         destination = output_dir / relative_destination
         destination.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(source, destination)
@@ -268,7 +312,9 @@ def scan_private_paths(output_dir: Path, relative_paths: list[Path]) -> None:
         if labels:
             failures.append(f"{relative}: {', '.join(labels)}")
     if failures:
-        raise RuntimeError("Private absolute path scan failed:\n- " + "\n- ".join(failures))
+        raise RuntimeError(
+            "Private absolute path scan failed:\n- " + "\n- ".join(failures)
+        )
 
 
 def write_metadata(output_dir: Path, software: Path | None) -> None:
@@ -289,25 +335,38 @@ def write_metadata(output_dir: Path, software: Path | None) -> None:
         "supplementary_figure_count": len(SUPPLEMENTARY_FIGURES),
         "source_data_archive": "Source_Data.zip",
         "combined_reading_copy": "main_with_supplementary.pdf",
-        "software_archive": None if software is None else ("Software.zip" if software.name.lower().endswith(".zip") else "Software.tar.gz"),
+        "software_archive": None
+        if software is None
+        else (
+            "Software.zip"
+            if software.name.lower().endswith(".zip")
+            else "Software.tar.gz"
+        ),
         "build_policy": "explicit allowlist; no overwrite; deterministic ZIP metadata",
     }
     destination = output_dir / "manifests" / "bundle_metadata.json"
     destination.parent.mkdir(parents=True, exist_ok=True)
-    destination.write_text(json.dumps(metadata, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    destination.write_text(
+        json.dumps(metadata, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
 
 
 def write_manifest(output_dir: Path) -> None:
     manifest = output_dir / "manifests" / "bundle_manifest.tsv"
     payload = sorted(
-        path for path in output_dir.rglob("*")
-        if path.is_file() and path != manifest
+        path for path in output_dir.rglob("*") if path.is_file() and path != manifest
     )
     with manifest.open("w", encoding="utf-8", newline="") as handle:
         writer = csv.writer(handle, delimiter="\t", lineterminator="\n")
         writer.writerow(["bundle_path", "bytes", "sha256"])
         for path in payload:
-            writer.writerow([path.relative_to(output_dir).as_posix(), path.stat().st_size, sha256(path)])
+            writer.writerow(
+                [
+                    path.relative_to(output_dir).as_posix(),
+                    path.stat().st_size,
+                    sha256(path),
+                ]
+            )
 
 
 def write_readme(output_dir: Path, software: Path | None) -> None:
@@ -320,7 +379,7 @@ def write_readme(output_dir: Path, software: Path | None) -> None:
 
 Article: *When dendritic structure helps local credit assignment*
 
-This directory was assembled from an explicit allowlist by `scripts/build_submission_bundle.py`. It contains the compiled and source manuscripts, a combined main-plus-supplementary reading copy, {len(MAIN_FIGURES)} main figure assets across eight numbered figures, {len(SUPPLEMENTARY_FIGURES)} supplementary figure PDFs, references, Source Data, submission documents and provenance manifests. {software_line}
+This directory was assembled from an explicit allowlist by `scripts/build_submission_bundle.py`. It contains the compiled and source manuscripts, a combined main-plus-supplementary reading copy, {len(MAIN_FIGURES)} main figure assets across nine numbered figures, {len(SUPPLEMENTARY_FIGURES)} supplementary figure PDFs, references, Source Data, submission documents and provenance manifests. {software_line}
 
 `main_with_supplementary.pdf` contains the complete Article followed by the Supplementary Information. The separate `main.pdf` and `supplementary/supplementary.pdf` files are retained because the journal portal may request separate uploads.
 
@@ -334,13 +393,20 @@ The bundle builder excludes auxiliary LaTeX files, logs, scheduler scripts, loca
 
 
 def deterministic_zip(source_dir: Path, destination: Path) -> None:
-    with zipfile.ZipFile(destination, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=9) as archive:
+    with zipfile.ZipFile(
+        destination, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=9
+    ) as archive:
         for path in sorted(p for p in source_dir.rglob("*") if p.is_file()):
             relative = Path(source_dir.name) / path.relative_to(source_dir)
             info = zipfile.ZipInfo(relative.as_posix(), date_time=(1980, 1, 1, 0, 0, 0))
             info.compress_type = zipfile.ZIP_DEFLATED
             info.external_attr = 0o100644 << 16
-            archive.writestr(info, path.read_bytes(), compress_type=zipfile.ZIP_DEFLATED, compresslevel=9)
+            archive.writestr(
+                info,
+                path.read_bytes(),
+                compress_type=zipfile.ZIP_DEFLATED,
+                compresslevel=9,
+            )
     verify_archive(destination)
 
 
@@ -384,7 +450,9 @@ def main() -> int:
     digest_file = archive.with_suffix(archive.suffix + ".sha256")
     if args.force:
         default_dir = (SUBMISSION / "nature_communications_bundle").resolve()
-        default_archive = (SUBMISSION / "Nature_Communications_Submission.zip").resolve()
+        default_archive = (
+            SUBMISSION / "Nature_Communications_Submission.zip"
+        ).resolve()
         if output_dir != default_dir or archive != default_archive:
             raise RuntimeError("--force is restricted to the default generated outputs")
         if output_dir.exists():
@@ -397,12 +465,18 @@ def main() -> int:
                     raise RuntimeError(f"Expected generated file at {path}")
                 path.unlink()
     if output_dir.exists():
-        raise FileExistsError(f"Refusing to overwrite existing output directory: {output_dir}")
+        raise FileExistsError(
+            f"Refusing to overwrite existing output directory: {output_dir}"
+        )
     if archive.exists():
         raise FileExistsError(f"Refusing to overwrite existing archive: {archive}")
     if digest_file.exists():
         raise FileExistsError(f"Refusing to overwrite existing digest: {digest_file}")
-    if output_dir == JOURNAL or JOURNAL in output_dir.parents and output_dir.name in {"figures", "source_data", "submission"}:
+    if (
+        output_dir == JOURNAL
+        or (JOURNAL in output_dir.parents
+        and output_dir.name in {"figures", "source_data", "submission"})
+    ):
         raise RuntimeError(f"Unsafe output directory: {output_dir}")
 
     provenance = JOURNAL / "source_data" / "provenance_manifest.tsv"
@@ -421,7 +495,9 @@ def main() -> int:
         write_metadata(output_dir, software)
         write_readme(output_dir, software)
         relative_paths = [relative for _, relative in copied]
-        relative_paths.extend([Path("README.md"), Path("manifests/bundle_metadata.json")])
+        relative_paths.extend(
+            [Path("README.md"), Path("manifests/bundle_metadata.json")]
+        )
         scan_private_paths(output_dir, relative_paths)
         write_manifest(output_dir)
         deterministic_zip(output_dir, archive)
