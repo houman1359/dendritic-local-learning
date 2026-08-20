@@ -220,7 +220,7 @@ EXCLUDED_FILE_NAMES = {
 }
 
 PRIVATE_PATH_PATTERNS = (
-    re.compile(rb"/n/(?:home[^/]*|holylabs|holylfs06)/"),
+    re.compile(rb"/n/(?:home[^/]*|holylabs)/"),
     re.compile(rb"/home/[A-Za-z0-9._-]+/"),
     re.compile(rb"/Users/[A-Za-z0-9._-]+/"),
 )
