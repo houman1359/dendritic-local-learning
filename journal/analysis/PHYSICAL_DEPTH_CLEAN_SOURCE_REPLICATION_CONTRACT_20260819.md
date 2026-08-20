@@ -62,3 +62,25 @@ outcomes remain boundary controls.
   load-bearing contrast changes sign or loses its directional gate, the paper
   must report that failure and use the clean-source result as the canonical
   endpoint.
+
+## Submitted arrays
+
+All arrays were pending when recorded; no rerun outcome had been inspected.
+
+| Slurm array | Frozen arm | Fits |
+|---|---|---:|
+| `40490346` | H=3 aligned raw-additive BP | 30 |
+| `40490349` | H=3 aligned shunting BP | 30 |
+| `40490351` | H=3 aligned shunting LocalCA, shared and path | 60 |
+| `40490354` | H=3 reversed shunting BP | 30 |
+| `40490356` | H=3 reversed shunting LocalCA, shared and path | 60 |
+| `40490358` | H=2 aligned grouped-point BP | 20 |
+| `40490360` | H=2 aligned serial BP | 20 |
+| `40490362` | H=2 aligned serial LocalCA, shared and path | 40 |
+| `40490365` | H=2 reversed grouped-point BP | 20 |
+| `40490371` | H=2 reversed serial BP | 20 |
+| `40490374` | H=2 reversed serial LocalCA, shared and path | 40 |
+| `40490377` | H=3 aligned grouped-point BP | 30 |
+| `40490379` | H=3 reversed grouped-point BP | 30 |
+
+Total: 430 clean-source reruns.
