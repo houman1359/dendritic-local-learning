@@ -2122,6 +2122,55 @@ FILES += (
 )
 
 
+FILES += (
+    SourceFile(
+        "Supplementary Figure 23", "a-c",
+        "source_data/trained_partition_residual/seed_state_residuals.csv",
+        "Supplementary_Figure_23/SuppFig23a-c_seed_state_residuals.csv",
+        "complete seed-by-condition residuals at initialization and training",
+        "paired independent training seed (n=20)",
+        "post-hoc deterministic reconstruction with frozen-script hash and endpoint gates",
+        "All 2,700 trained route-factorial fits reconstructed at two states; includes address, coefficient and total residuals.",
+    ),
+    SourceFile(
+        "Supplementary Figure 23", "a-c",
+        "source_data/trained_partition_residual/condition_summary.csv",
+        "Supplementary_Figure_23/SuppFig23a-c_condition_summary.csv",
+        "derived condition summaries",
+        "paired independent training seed (n=20)",
+        "current derived analysis",
+        "Condition means and seed-bootstrap intervals for partition capture and residual components.",
+    ),
+    SourceFile(
+        "Supplementary Figure 23", "c",
+        "source_data/trained_partition_residual/seed_level_associations.csv",
+        "Supplementary_Figure_23/SuppFig23c_seed_level_associations.csv",
+        "within-seed capture--accuracy associations",
+        "paired independent training seed (n=20)",
+        "current derived analysis",
+        "Spearman correlations are computed within seed for all conditions and the K<8 restricted set.",
+    ),
+    SourceFile(
+        "Supplementary Figure 23", "a-c",
+        "source_data/trained_partition_residual/reconstruction_audit.csv",
+        "Supplementary_Figure_23/SuppFig23_reconstruction_audit.csv",
+        "archived-versus-reconstructed endpoint audit",
+        "complete 2,700-fit cohort",
+        "hash-gated numerical audit",
+        "Reconstructed losses and accuracies paired to every archived seed--condition endpoint.",
+    ),
+    SourceFile(
+        "Supplementary Figure 23", "a-c",
+        "source_data/trained_partition_residual/summary.json",
+        "Supplementary_Figure_23/SuppFig23_summary.json",
+        "analysis and validity summary",
+        "complete 2,700-fit cohort and n=20 independent seeds",
+        "current audit",
+        "Frozen hashes, endpoint agreement, Pythagorean closure and seed-level associations.",
+    ),
+)
+
+
 README = """# Source Data
 
 This directory contains the numerical source data underlying every current
@@ -2160,8 +2209,9 @@ depth control, Supplementary Figure 9 is the complete checkpoint diagnostic,
 Supplementary Figure 10 is the same-mouse v661 sensitivity cohort, and
 Supplementary Figures 11--17 contain conductance, inhibitory, same-span,
 calibration, interior-optimum and external-animal analyses. Supplementary
-Figures 18--22 retain the expanded physical-depth, prospective routing,
-morphology, focal-shunting and measured-response diagnostics. Capture per wire
+Figures 18--23 retain the expanded physical-depth, prospective routing,
+morphology, focal-shunting, measured-response and trained partition-residual
+diagnostics. Capture per wire
 and the phase-plane synthesis are promoted to main Figures 6 and 8.
 
 This is the submission-facing source-data package. Figure 2 panels b and c

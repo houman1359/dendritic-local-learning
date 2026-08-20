@@ -105,6 +105,12 @@ NEW_DETAIL_ASSETS = {
         "generator": "scripts/build_journal_figures.py",
         "notes": "Detailed measured-response topology and learning boundary underlying focused Fig. 8.",
     },
+    "partition.residual.asset": {
+        "figure": "figS23",
+        "path": "figures/supplementary/figure_S23_panels_A-C.pdf",
+        "generator": "scripts/build_trained_partition_residual_figure.py",
+        "notes": "Hash-gated reconstruction by scripts/analyze_trained_partition_residual.py and seed-level capture--utility association.",
+    },
 }
 
 
@@ -184,6 +190,20 @@ def main() -> None:
     existing_ids = {row.get("entry_id", "") for row in rows}
     for entry_id, detail in NEW_DETAIL_ASSETS.items():
         if entry_id in existing_ids:
+            row = next(item for item in rows if item.get("entry_id") == entry_id)
+            expected = {
+                "figure": detail["figure"],
+                "panel": "all",
+                "status": "ready",
+                "source_path": PROJECT_PREFIX + detail["path"],
+                "generator_path": PROJECT_PREFIX + detail["generator"],
+                "replication_unit": "not applicable",
+                "notes": detail["notes"],
+            }
+            for field, value in expected.items():
+                if row.get(field) != value:
+                    row[field] = value
+                    updated += 1
             continue
         relative_path = detail["path"]
         source_path = PROJECT_PREFIX + relative_path

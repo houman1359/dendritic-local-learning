@@ -1759,6 +1759,50 @@ seeds. The four matched representations were exactly equal in every condition
 an intermediate-bandwidth advantage for a task-aligned nested address, while
 showing that an explicitly routed point implementation can reproduce it.
 
+\subsection{Trained partition-residual reconstruction}
+
+We quantified irreducible address error in the complete factorial as a
+post-hoc mechanism diagnostic. The unchanged simulation script and frozen
+configuration matched their archived SHA256 hashes. For every example $b$ and
+leaf coordinate $i$, we defined the exact coefficient field
+$c_{bi}=\delta_b e_{c_b,i}$, coordinate weight
+$w_{bi}=\lVert\bm x_{bi}\rVert_2^2$, and active route field $\phi_{bi}$.
+Allowing the best single coefficient for that route on each example gives
+\begin{equation}
+ z_b^*=\frac{\sum_i w_{bi}\phi_{bi}c_{bi}}
+ {\sum_iw_{bi}\phi_{bi}^2},\qquad
+ \mathcal C_{\mathrm{part}}=1-
+ \frac{\sum_{b,i}w_{bi}(c_{bi}-z_b^*\phi_{bi})^2}
+ {\sum_{b,i}w_{bi}c_{bi}^2}.
+\label{eq:s_trained_partition_capture}
+\end{equation}
+This is the normalized complement of the shared-coefficient residual in
+Eq.~\ref{eq:s_partition_variance}. It grants an optimal route coefficient and
+therefore isolates address/support error from the coefficient scale actually
+used during training.
+
+All 20 seeds and 135 conditions per seed were reconstructed at initialization
+and after 80 training epochs. Reconstructed archived losses agreed within
+$4.97\times10^{-9}$ and accuracies within $5.01\times10^{-11}$, the precision
+of the archived decimal tables; the address-plus-coefficient Pythagorean
+decomposition closed within $7.28\times10^{-12}$. On the dendritic-tree
+representation, trained correct-ancestry capture was 0.162, 0.315, 0.547 and
+1.000 at $K=1,2,4,8$. Fixed ownership derangement had the common scalar value
+at $K=1$ and zero capture at $K=2,4,8$, because its active support excluded the
+target leaf (Supplementary Fig.~\ref{fig:supp_partition_residual}a).
+
+For each seed we averaged implementation-equivalent representations within
+feedback family and budget, then correlated trained capture with held-out
+accuracy across conditions. The mean within-seed Spearman correlation was
+0.824 (95\% seed-bootstrap interval 0.810--0.838; 20/20 positive; two-sided
+Wilcoxon $P=1.91\times10^{-6}$). Restricting the analysis to the six route
+families and $K<8$ removed the exact full-rank boundary and gave 0.639
+(0.610--0.665; 20/20 positive; $P=1.91\times10^{-6}$; Supplementary
+Fig.~\ref{fig:supp_partition_residual}b,c). This association is descriptive
+and post hoc. In particular, ancestry, depth-interleaved and random sparse
+partitions had similar address capture at matched $K$, so the residual does
+not explain the small trained ancestry advantage at $K=4$.
+
 \subsection{Inherited regular-tree figures and expanded regime archive}
 
 The three figures below are reproduced without redrawing from the final
@@ -2946,6 +2990,26 @@ Capture--utility association after accounting for target identity.
 \textbf{H}, Morphology-minus-shuffle contrasts across feedback bandwidth.
 Stimulus splits and scans are nested within seven target cells.}
 \label{fig:supp_measured_detail}
+\end{figure}
+
+\begin{figure}[p]
+\centering
+\includegraphics[width=\textwidth]{supplementary/figure_S23_panels_A-C.pdf}
+\caption{\textbf{The trained partition residual explains bandwidth and
+ownership failures but not fine support-specific differences.} \textbf{A},
+Capture of the exact per-example coefficient field by the best coefficient on
+each available route after training. Curves and intervals are means and 95\%
+seed-bootstrap intervals over 20 independent seeds. Ownership derangement
+excludes the target leaf and has zero capture for $K>1$; three partitions that
+retain the target have similar capacity at matched $K$. \textbf{B}, Trained
+address capture versus held-out accuracy for the six restricted route families
+at $K<8$. Small grey points are seed--condition means across the four
+implementation-equivalent representations; large symbols are condition means.
+\textbf{C}, Spearman correlations computed separately within each independent
+seed for all route conditions and after excluding $K=8$; lines pair the same
+seed and horizontal bars show means. This deterministic reconstruction is a
+post-hoc diagnostic, not an independent prediction test.}
+\label{fig:supp_partition_residual}
 \end{figure}
 
 \section{Statistics, reproducibility and claim controls}

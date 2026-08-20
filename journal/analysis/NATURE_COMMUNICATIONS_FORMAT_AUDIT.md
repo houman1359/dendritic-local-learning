@@ -10,7 +10,7 @@ The 8 numbered figures occupy 8 figure environments;
 |---|---:|---:|---|
 | Title | 7 words | 15 | PASS |
 | Abstract | 172 words | 200 | PASS |
-| Introduction + Results + Discussion | 12343 approximate words | 5000 | ADVISORY |
+| Introduction + Results + Discussion | 12490 approximate words | 5000 | ADVISORY |
 | Main display items | 8 figures | 10 | PASS |
 | References | 56 entries (general guide) | 70 | PASS |
 

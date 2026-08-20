@@ -30,6 +30,8 @@ figures:
 	$(PYTHON) scripts/analyze_spatial_topology_audit.py
 	$(PYTHON) scripts/analyze_prospective_learning_results.py --audit-csv source_data/prospective_learning/seed_outcomes.csv
 	$(PYTHON) scripts/build_trained_subtree_address_figure.py
+	$(PYTHON) scripts/analyze_trained_partition_residual.py
+	$(PYTHON) scripts/build_trained_partition_residual_figure.py
 	$(PYTHON) scripts/build_focal_selectivity_figure.py
 	$(PYTHON) scripts/analyze_focal_gradient_shapley.py
 	$(PYTHON) scripts/run_alignment_controlled_learning.py

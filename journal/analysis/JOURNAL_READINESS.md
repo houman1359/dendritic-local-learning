@@ -234,7 +234,7 @@ from this document.
 - Main display items: up to ten figures and/or tables. The working draft now
   has eight numbered main figures, each represented by one canonical vector
   PDF and one figure environment; the complete control inventory continues
-  through Supplementary Figure S22.
+  through Supplementary Figure S23.
   Checkpoint-mechanism and cohort-sensitivity displays
   remain in Supplementary Figures S9 and S10, the passive focal-shunt matrix
   is Supplementary Figure S11, and the inhibitory census is Supplementary

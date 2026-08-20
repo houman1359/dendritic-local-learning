@@ -26,8 +26,8 @@ The package distinguishes fifteen levels of evidence:
    boundary control, and a 160-run retained fixed-contact depth control;
 3. a frozen 50-seed stochastic quadratic phase experiment testing spectral
    alignment, hierarchy-depth matching, projection denoising and branch
-   reliability, plus an operator reanalysis of the completed 2,700-fit
-   factorial;
+   reliability, plus operator and trained partition-residual reanalyses of the
+   completed 2,700-fit factorial;
 4. a fresh 270-fit exact-resource positive-rate physical-depth experiment with
    backpropagation, LocalCA, alignment, shuffled-sensor, reversed-placement and
    raw-additive controls;
@@ -63,7 +63,7 @@ define the boundary of the theory.
   main Article followed by all Supplementary Information.
 - `references.bib`: shared bibliography.
 - `figures/main/`: canonical assets compiled as main Figures 1--8.
-- `figures/supplementary/`: canonical assets compiled as S1--S22.
+- `figures/supplementary/`: canonical assets compiled as S1--S23.
 - `figures/generated/`: internal descriptive-name outputs from figure scripts;
   these are never referenced by LaTeX or included in the Overleaf bundle.
 - `figures/README.md`: authoritative figure, panel, and asset map.
@@ -119,7 +119,7 @@ Audited conference-era generator snapshots and source tables are retained under
 figure command reads the audited run and checkpoint tables already packaged in
 `source_data/prospective_learning/`; the checkpoint collector is kept separate
 because it re-evaluates the frozen models. The unified draft has eight numbered
-main figures and twenty-two supplementary figures. Each main figure is one vector
+main figures and twenty-three supplementary figures. Each main figure is one vector
 PDF with a single consecutive panel sequence; expanded diagnostics remain in
 Supplementary Information.
 `make overleaf-bundle` writes the current allow-listed package and ZIP under

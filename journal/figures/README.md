@@ -6,7 +6,7 @@ The manuscript has one unambiguous publication-facing figure set.
   as main Figures 1--8. Each number has one PDF and one continuous panel
   sequence.
 - `supplementary/figure_S01_*.pdf` through
-  `supplementary/figure_S22_*.pdf` are the Supplementary Figures.
+  `supplementary/figure_S23_*.pdf` are the Supplementary Figures.
 - `generated/` contains reproducible internal outputs whose descriptive names
   are not manuscript figure numbers.
 - Older modular blocks in `main/` are compositor inputs retained for provenance;
@@ -30,7 +30,8 @@ are local build products and are not canonical assets.
 | 7 | `figure_07.pdf` | Focal shunting, electrotonic boundary and active-conductance sensitivity |
 | 8 | `figure_08.pdf` | Measured-response nulls, imposed-alignment rescue, animal test and phase-plane synthesis |
 
-Supplementary Figures S18--S22 retain the expanded physical-depth controls,
+Supplementary Figures S18--S23 retain the expanded physical-depth controls,
 prospective identity/ownership diagnostics, full morphology diagnostics,
-focal-shunting controls and measured-response diagnostics, respectively. No
+focal-shunting controls, measured-response diagnostics and the trained
+partition-residual reconstruction, respectively. No
 evidence-bearing panel removed from the main narrative is discarded.

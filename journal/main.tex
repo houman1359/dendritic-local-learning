@@ -635,6 +635,20 @@ condition (maximum accuracy difference 0; Fig.~\ref{fig:subtreefactorial}e).
 Initial exact-gradient capture alone did not determine final accuracy across
 route families: fields with similar capture but different route signs and
 task alignment learned differently (Fig.~\ref{fig:subtreefactorial}f).
+We made that boundary explicit by deterministically reconstructing all 2,700
+fits and evaluating the shared-coefficient partition residual at initialization
+and at the trained checkpoint (Supplementary Fig.~S23). For the matched tree,
+trained ancestry routes captured 0.162, 0.315, 0.547 and 1.000 of the weighted
+exact coefficient field at $K=1,2,4,8$, whereas ownership derangement captured
+zero for $K>1$. Across the broad route ladder, capture and held-out accuracy
+were positively associated within every seed (mean within-seed Spearman
+$\rho=0.824$, 95\% seed-bootstrap interval 0.810--0.838; 20/20 seeds). The
+association remained positive after excluding the exact $K=8$ boundary
+($\rho=0.639$, 0.610--0.665; 20/20). However, correct ancestry, depth bins and
+random sparse groups had similar capture at a given $K$ despite different
+trained outcomes. The residual therefore explains the large bandwidth and
+ownership failures, but not the smaller support-specific advantage at $K=4$;
+that distinction requires the signal--noise and trajectory analyses below.
 Thus the result establishes a structured-address resource advantage at an
 intermediate bandwidth, not an intrinsic superiority of dendritic material:
 point models reproduce it when explicitly supplied with the same parameter

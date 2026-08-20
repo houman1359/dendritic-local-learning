@@ -28,12 +28,12 @@ exists.
 | Literal grouped-point and independent H2 replication | 220 frozen fits; direct-to-soma grouped-point emulation, serial BP, shared/path LocalCA, alignment reversal and exact-resource audits | Extends the calibrated synthetic task family to H2 and H3; it is not a second dataset or a full $D\times H\times K\times\rho$ factorial. |
 | Fixed-state hierarchy-depth phase | 50 seeds in `source_data/credit_phase_theory/` | Routed linear quadratic depth, not nonlinear forward dendritic depth. |
 | Trained route-bandwidth/address factorial | 2,700 fits in `source_data/trained_subtree_address_full_factorial/` | Algebraically matched representations share implementations; supports an address-resource claim. |
+| Partition residual in the trained route factorial | Hash-gated deterministic reconstruction of all 2,700 fits at initialization and training; Supplementary Fig. S23 | Address capture explains bandwidth and ownership failures but not matched-capacity support differences; association is post hoc. |
 
 ## Partially implemented; stronger analysis remains compatible
 
 | Review item | Current evidence | Required completion |
 |---|---|---|
-| Partition residual in the 2,700-fit factorial | Initialization signal/noise utility and route diagnostics | Compute residual by partition at initialization and saved checkpoints, with seed-block uncertainty. |
 | Tree-wavelet scale analysis | Balanced-tree Haar phase and same-span experiment | Apply an irregular-tree wavelet basis to reconstructed MICRONS route/credit fields and quantify scale-specific signal/noise. |
 | Noise hierarchy | Coefficient noise, broadcast noise and several legacy ladders | One common trained design crossing input, label, feedback, branch, multiplicative and context noise. |
 | Reactivation/NMDA factors | Legacy reactivation controls and active steady-state sensitivity | A prospective rate-based state-reactivation factorial coupled to local learning. |
