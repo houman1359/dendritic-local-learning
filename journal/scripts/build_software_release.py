@@ -53,6 +53,12 @@ PORTABILITY_REPLACEMENTS: tuple[tuple[str, str, str], ...] = (
         "replace frozen project-B execution root",
     ),
     (
+        "/n/holylabs/kempner_dev/Users/hsafaai/Code/"
+        ".dendritic-modeling-journal-runtimes",
+        "${DENDRITIC_RUNS_ROOT}",
+        "replace clean-source execution root",
+    ),
+    (
         "/n/holylabs/LABS/kempner_dev/Users/hsafaai/Code/dendritic-modeling",
         "${DENDRITIC_MODELING_ROOT}",
         "replace archived figure-generator repository root",
