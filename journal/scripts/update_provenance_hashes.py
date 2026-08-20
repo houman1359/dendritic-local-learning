@@ -137,6 +137,99 @@ NEW_DETAIL_ASSETS = {
     },
 }
 
+NEW_PROVENANCE_ENTRIES = {
+    "taskfamily.asset": {
+        "record_type": "figure_asset",
+        "figure": "fig6",
+        "panel": "e-g",
+        "path": "figures/main/figure_06.pdf",
+        "generator": "scripts/assemble_compact_main_figures.py",
+        "replication_unit": "paired independent training seed (n=10)",
+        "notes": "Fixed-D3 architecture-by-task-family-by-alignment boundary under exact backpropagation and path-transport LocalCA.",
+    },
+    "taskfamily.outcomes": {
+        "record_type": "panel_source",
+        "figure": "fig6",
+        "panel": "e-g",
+        "path": "source_data/task_family_alignment/seed_outcomes.csv",
+        "generator": "scripts/analyze_task_family_alignment_factorial.py",
+        "replication_unit": "paired independent training seed (n=10)",
+        "notes": "All 360 fixed-D3 task-family, architecture, credit-rule and alignment outcomes.",
+    },
+    "taskfamily.conditions": {
+        "record_type": "panel_source",
+        "figure": "fig6",
+        "panel": "e-f",
+        "path": "source_data/task_family_alignment/condition_summary.csv",
+        "generator": "scripts/analyze_task_family_alignment_factorial.py",
+        "replication_unit": "paired independent training seed (n=10)",
+        "notes": "Condition means and paired-seed bootstrap intervals for the fixed-depth task-family boundary.",
+    },
+    "taskfamily.contrasts": {
+        "record_type": "panel_source",
+        "figure": "fig6",
+        "panel": "g",
+        "path": "source_data/task_family_alignment/paired_contrasts.csv",
+        "generator": "scripts/analyze_task_family_alignment_factorial.py",
+        "replication_unit": "paired independent training seed (n=10)",
+        "notes": "Architecture-by-alignment interactions and task-family difference-in-differences.",
+    },
+    "taskfamily.audit": {
+        "record_type": "panel_source",
+        "figure": "fig6",
+        "panel": "text",
+        "path": "source_data/task_family_alignment/audit.json",
+        "generator": "scripts/analyze_task_family_alignment_factorial.py",
+        "replication_unit": "complete 360-fit audit",
+        "notes": "Completeness, finite-metric, no-fallback, seed and exact-resource gates.",
+    },
+    "pinky.asset": {
+        "record_type": "figure_asset",
+        "figure": "figS27",
+        "panel": "all",
+        "path": "figures/supplementary/figure_S27_panels_A-D.pdf",
+        "generator": "scripts/analyze_pinky_v185_replication.py",
+        "replication_unit": "reconstructed cell (10 QC-passing of 12 selected; one second mouse)",
+        "notes": "Independent-animal structural route-capacity replication; panel C is promoted as Fig. 7I.",
+    },
+    "pinky.cohort": {
+        "record_type": "panel_source",
+        "figure": "figS27",
+        "panel": "a",
+        "path": "source_data/pinky_v185_replication/cohort_manifest.csv",
+        "generator": "scripts/freeze_pinky_v185_cohort.py",
+        "replication_unit": "outcome-independent reconstructed-cell selection (n=12)",
+        "notes": "Twelve equal-count y strata with cells nearest the global x/z medians in the MICrONS Pinky v185 volume.",
+    },
+    "pinky.curves": {
+        "record_type": "panel_source",
+        "figure": "fig7/figS27",
+        "panel": "i/b-d",
+        "path": "source_data/pinky_v185_replication/routing/feedback_compression_curves.csv",
+        "generator": "scripts/analyze_pinky_v185_replication.py",
+        "replication_unit": "QC-passing reconstructed cell (n=10; one second mouse)",
+        "notes": "Cell-level capture curves for ancestry, random, depth-only, shuffled and dense routes.",
+    },
+    "pinky.contrasts": {
+        "record_type": "panel_source",
+        "figure": "fig7/figS27",
+        "panel": "i/c",
+        "path": "source_data/pinky_v185_replication/routing/k4_cross_animal_contrasts.csv",
+        "generator": "scripts/analyze_pinky_v185_replication.py",
+        "replication_unit": "reconstructed cell; animal is the biological unit (two mice)",
+        "notes": "K=4 ancestry-route advantages shown separately for the original and second MICRONS animals.",
+    },
+    "pinky.summary": {
+        "record_type": "panel_source",
+        "figure": "figS27",
+        "panel": "text",
+        "path": "source_data/pinky_v185_replication/routing/summary.json",
+        "generator": "scripts/analyze_pinky_v185_replication.py",
+        "replication_unit": "12 selected cells, 10 QC-passing; one second mouse",
+        "notes": "Frozen preprocessing, QC, route-capacity and cross-animal directional-replication summary.",
+    },
+}
+
 
 def resolve_project_path(raw_path: str) -> Path:
     path = Path(raw_path)
@@ -250,6 +343,33 @@ def main() -> None:
             }
         )
         updated += 1
+
+    existing_ids = {row.get("entry_id", "") for row in rows}
+    for entry_id, detail in NEW_PROVENANCE_ENTRIES.items():
+        source_path = PROJECT_PREFIX + detail["path"]
+        source = resolve_project_path(source_path)
+        if not source.is_file():
+            raise FileNotFoundError(source)
+        expected = {
+            "record_type": detail["record_type"],
+            "figure": detail["figure"],
+            "panel": detail["panel"],
+            "status": "ready",
+            "source_path": source_path,
+            "sha256": sha256(source),
+            "generator_path": PROJECT_PREFIX + detail["generator"],
+            "replication_unit": detail["replication_unit"],
+            "notes": detail["notes"],
+        }
+        if entry_id in existing_ids:
+            row = next(item for item in rows if item.get("entry_id") == entry_id)
+            for field, value in expected.items():
+                if row.get(field) != value:
+                    row[field] = value
+                    updated += 1
+        else:
+            rows.append({"entry_id": entry_id, **expected})
+            updated += 1
 
     missing_entries = sorted(set(CANONICAL_ASSETS) - seen_assets)
     if missing_entries:

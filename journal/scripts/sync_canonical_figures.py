@@ -43,7 +43,7 @@ FIGURE_MAP: dict[str, str] = {
     "main/figure_09_panels_I-J": "fig_fulltree_boundary",
     "main/figure_09_panels_K-N": "fig8_alignment_controlled",
     "main/figure_09_panel_O": "fig_credit_phase_plane",
-    # Supplementary Information: generated source blocks S1--S26.  The
+    # Supplementary Information: generated source blocks S1--S27.  The
     # compositor adds compact S18--S19 from selected diagnostic blocks.
     "supplementary/figure_S01_panels_A-E": "fig3_mechanistic_evidence",
     "supplementary/figure_S02_panels_A-E": "fig4_competence_regime",

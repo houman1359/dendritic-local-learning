@@ -22,3 +22,7 @@ journal/submission/*.zip.sha256
 # Talks are maintained in drafts/presentation/credit_assignment, outside this
 # manuscript repository. Ignore any local duplicate used while testing assets.
 /presentation/
+
+# Public connectomics downloads are cached locally; immutable checksums,
+# selected cohorts, and analysis-ready derivatives live under source_data/.
+journal/data/

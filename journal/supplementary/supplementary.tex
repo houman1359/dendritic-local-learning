@@ -74,15 +74,22 @@ calibrated synthetic task family; it is not a full
 $D_{\mathrm r}\times H\times K\times\rho$ phase grid or an impossibility result for
 grouped point models. Exact transported errors and fitted projection coefficients are
 information oracles wherever they appear.
+Fourteenth, the fixed-D3 task-family factorial varies latent hierarchy,
+task--sensor alignment and serial versus grouped-point composition without
+adding physical depth. It tests a conditional crossover, not prevalence in
+natural tasks. Fifteenth, the Pinky v185 analysis repeats the frozen
+structural-capacity pipeline in a second mouse. It supplies an independent
+animal-level direction check, but its 12 volume-spanning cells remain a
+convenience cohort rather than a random population sample.
 
 The primary analysis unit is the independent training seed for artificial
 networks, the reconstructed cell for anatomy and perturbation analyses, the
 postsynaptic target cell for measured-response and inhibitory-census analyses,
 and the animal for the signed-credit reanalysis. Sites, channel draws, scans,
 splits, synapses, stimulus trials, epochs and Monte Carlo streams are nested
-observations. All
-reconstructed cells come from one animal and are not independent biological
-replicates at the animal level.
+observations. The main MICrONS cohorts come from one \texttt{minnie65} mouse;
+the Pinky v185 cohort comes from a second mouse. Cells within either volume
+are not independent animal-level replicates.
 
 \section{Exact gradients in a directed conductance tree}
 \label{note:derivation}
@@ -1498,6 +1505,86 @@ load-bearing shunting or local-credit direction and claim gate was retained.
 This is source concordance on the same seeds, not independent task or
 biological replication (Supplementary Fig.~\ref{fig:supp_clean_source}).
 
+\subsection{Fixed-depth task-family and alignment factorial}
+
+The task-family extension fixed the production architecture at D3
+$[2,1,2]$ and crossed three data generators, three task--sensor alignments
+$\alpha\in\{0,0.5,1\}$, serial versus literal grouped-point composition,
+and BP versus exact path-transport LocalCA. Ten paired seeds 10500--10509
+gave 360 planned fits. All architectures retained 66,178 trainable
+parameters, 14,336 active contacts, 21,760 candidate slots, 2,944 persistent
+state scalars and identical input tensors. Only child-to-parent composition
+differed between the serial and grouped-point models.
+
+For the nested-factor family, latent log-gain variables
+$z_1,z_2,z_3\stackrel{\mathrm{iid}}{\sim}\mathcal N(0,1)$ modulated the
+signal-bearing excitatory coordinate by
+\begin{equation}
+ x_E=(b_E+y\delta)\exp\!\left(\sum_{\ell=1}^{3}
+ \sigma_\ell z_\ell-\frac12\sum_{\ell=1}^{3}\sigma_\ell^2\right)+\epsilon_E,
+ \label{eq:s_task_family_nested}
+\end{equation}
+where $b_E$ is the excitatory baseline, $y\in\{0,1\}$ is the balanced class
+label, $\delta=0.80$ is the class-signal contrast,
+$\sigma_\ell=0.25$ is the level-wise log-gain standard deviation, and
+$\epsilon_E$ is zero-mean input noise with standard deviation 0.08. Sensor
+block $\ell$ observed
+\begin{equation}
+ s_\ell(\alpha)=\alpha z_\ell+\sqrt{1-\alpha^2}\,\xi_\ell,
+ \qquad \xi_\ell\stackrel{\mathrm{iid}}{\sim}\mathcal N(0,1).
+ \label{eq:s_task_family_alignment}
+\end{equation}
+This interpolation preserves unit sensor variance while changing whether a
+sensor reports the trial-specific gain that obscures the class signal.
+
+The flat-factor control preserved the factor product and the same level-wise
+marginal variances but assigned unrelated factor groups across features, so
+the serial branch nesting did not match the covariance hierarchy. The
+local-ratio control multiplied excitation and inhibition at each level by
+correlated cumulative hierarchical fields. It therefore provided local
+divisive information rather than requiring serial cancellation of separate
+factors. Every family contained 10,000 balanced examples with 64 excitatory
+and 64 inhibitory features; the class signal remained distal-only.
+
+The primary estimands were paired serial-minus-grouped differences and the
+difference of those contrasts between $\alpha=1$ and $\alpha=0$. A
+task-specific crossover was defined as the nested-family alignment
+interaction minus the corresponding interaction in each mismatch family.
+The credit-rule endpoint was the LocalCA-minus-BP difference in that
+architecture-by-alignment interaction. Intervals used 50,000 paired-seed
+bootstrap draws. A directional claim additionally required at least 8/10
+concordant seed signs. The complete $3\times3\times2\times2$ scan is retained
+regardless of direction. Configurations were frozen before execution, used no
+external experiment tracker and wrote code caches and run artifacts only to
+the \texttt{kempner\_project\_b} filesystem.
+
+All 360 fits were finite and complete, had identical resource counts and
+contained no fallback alert. Under BP, the nested-factor serial-minus-grouped
+contrast changed from $-0.09$ percentage points at $\alpha=0$ to 30.32 points
+at $\alpha=1$, giving a 30.41-point alignment interaction (95\% paired-seed
+bootstrap interval 30.05--30.79; 10/10 positive; exact sign-flip
+$P=0.001953$). The flat-factor interaction was also positive but smaller at
+22.26 points (21.81--22.69; 10/10), whereas the local-ratio interaction was
+1.30 points (1.14--1.45; 10/10) because the serial and grouped architectures
+both reached 0.99999 accuracy at $\alpha=1$. The nested-minus-flat and
+nested-minus-local-ratio interaction contrasts were 8.16 and 29.12 points,
+respectively, and were positive in every paired seed.
+
+Under path-transport LocalCA, the nested-factor serial-minus-grouped contrast
+changed from $-0.11$ points at $\alpha=0$ to 27.59 points at $\alpha=1$, an
+alignment interaction of 27.70 points (26.64--28.64; 10/10). The flat-factor
+interaction was 12.37 points (11.39--13.43; 10/10). The local-ratio result
+reversed: serial minus grouped point changed from 6.36 points at $\alpha=0$
+to $-5.32$ points at $\alpha=1$, an interaction of $-11.68$ points
+($-15.29$ to $-8.64$; 0/10 positive). Consequently, the nested interaction
+exceeded the flat and local-ratio interactions by 15.33 and 39.38 points under
+LocalCA. These outcomes support a graded task--architecture match: the
+nested hierarchy is most favorable, flat multiplicative factors retain a
+smaller serial benefit, and locally available ratios remove or reverse that
+benefit. Full condition means, all paired contrasts and the two-sided
+sign-flip results are supplied in
+\texttt{source\_data/task\_family\_alignment/}.
+
 \section{Artificial-tree experiments}
 \label{note:artificial}
 
@@ -2071,6 +2158,53 @@ does not currently have a stable public release identifier. Proxy and direct
 presynaptic labels agreed for
 73.0\% of 2,012 jointly labeled contacts. The principal capacity ordering was
 therefore repeated on the 2,077 directly typed contacts only.
+
+The independent-animal analysis used the phase-1 layer-2/3 Pinky v185 fixed
+mesh, soma-valence and dense synapse archives
+\citep{turner2022neocortex,microns_pinky_v185}. Before mesh topology or selected-cell synapse
+counts were opened, the 362 soma-table rows labelled excitatory were ordered
+along the second volume coordinate and divided into 12 equal-count strata.
+Within each stratum, the root whose first and third coordinates were nearest
+their global medians was selected, with root ID as a deterministic tie-break.
+This outcome-independent rule spans the $250\times140\times90\,\mu$m volume
+while reducing boundary truncation; it is not a random population sample.
+
+The largest face-plus-link-edge connected component was retained from each
+published HDF5 mesh, excluding detached segmentation fragments before the soma
+root was chosen. Published \texttt{link\_edges} therefore remained active in
+meshparty TEASAR skeletonization. We used a $7.5\,\mu$m soma-collapse radius
+and $12\,\mu$m invalidation distance, and estimated cable radius as half the
+opposite-surface ray distance at skeleton mesh anchors with the Embree-backed
+trimesh intersector (\texttt{embreex} 2.17.7.post7). Each cell ran in an
+isolated process so its ray index was released before the next reconstruction.
+Incoming contacts were joined
+to E/I identity only when the presynaptic root had a corresponding label in
+the archived soma-valence table. The v661 analysis settings were then frozen:
+a $5\,\mu$m synapse-mapping gate, identical branch-chain compression,
+electrical normalization, route dictionaries, route ranking, and 500 shuffle
+streams per cell. A cell passed QC with at least 20 mapped typed inputs,
+including at least three inhibitory inputs. The primary outcome was
+animal-level sign agreement with the \texttt{minnie65} K=4
+ancestry-minus-random-path, ancestry-minus-depth-bin and
+ancestry-minus-shuffled-ancestry capture contrasts. Cell-bootstrap intervals
+within Pinky describe volume-level stability and do not turn its 12 cells into
+12 independent animals.
+
+All 12 selected Pinky cells were processed without error. Ten passed the
+frozen direct-type gate; the two excluded cells had 19 and 13 mapped typed
+inputs, respectively. At $K=4$, mean ancestry-route capture was 0.902,
+compared with 0.926 for the dense PCA ceiling, 0.374 for random routes, 0.316
+for depth bins and 0.245 for shuffled ancestry. Ancestry-minus-control capture
+advantages were 0.528 versus random routes (descriptive 95\% cell-bootstrap
+interval 0.386--0.641; 9/10 cells; exhaustive descriptive sign-flip
+$P=0.0039$), 0.586 versus depth bins (0.484--0.696; 10/10;
+$P=0.0020$) and 0.657 versus shuffled ancestry (0.585--0.734; 10/10;
+$P=0.0020$). All three directions agree with the separate \texttt{minnie65}
+mouse. These cell-level intervals and tests describe stability within Pinky;
+with one volume per animal, the biological result is directional agreement
+across two animals rather than a population-level test. The endpoint remains
+capture of a model-matched field and does not demonstrate endogenous teaching
+signals or learning.
 
 \subsection{Normalized electrical proxy}
 
@@ -3248,6 +3382,25 @@ replication.}
 \label{fig:supp_clean_source}
 \end{figure}
 
+\begin{figure}[p]
+\centering
+\includegraphics[width=\textwidth]{supplementary/figure_S27_panels_A-D.pdf}
+\caption{\textbf{Independent-animal structural routing replication.}
+\textbf{A}, Outcome-independent 12-cell Pinky v185 cohort across the archived
+volume; green cells pass and gray cells fail the frozen direct-type QC gate.
+Numbers give selection order. \textbf{B}, Weighted residual across feedback
+channel budgets for the dense PCA ceiling, ancestry routes and structural
+controls in the ten included cells; lower is better. \textbf{C}, Four-channel
+ancestry-route capture advantage in the original 47-cell \texttt{minnie65}
+cohort and the independent Pinky cohort. Positive values favor ancestry
+routes. \textbf{D}, Pinky four-channel capture per 1,000 nonzero route
+coefficients. Points are cells; large symbols and bars are means and 95\%
+cell-bootstrap intervals. Cells are nested within volumes and are not
+independent animals. The target fields are model matched and do not measure
+biological teaching signals.}
+\label{fig:supp_pinky}
+\end{figure}
+
 \section{Statistics, reproducibility and claim controls}
 \label{note:statistics}
 
@@ -3264,6 +3417,14 @@ Bootstrap intervals used 20,000 draws. The four-budget primary subtree scan
 used Benjamini--Hochberg correction across $K=1,2,4,8$; other parameter
 sweeps and sensitivity analyses received no multiplicity correction, are
 labeled secondary, and are not interpreted as independent confirmation.
+For the cross-animal structural check, the mouse is the replication unit.
+Contrasts were first summarized within each volume; no cell-level test was
+used to claim an animal-level $P$ value from two mice. The 12-cell Pinky
+cohort was sized to span 12 equal-count spatial strata while keeping complete
+mesh skeletonization and 500-shuffle processing feasible. The task-family
+factorial used ten fresh paired seeds, matching the frozen confirmatory rule
+used for the physical-depth experiments; positive directional language
+requires a paired 95\% interval excluding zero and at least 8/10 seed signs.
 
 The following measures are not used to support cross-architecture conclusions:
 pooled error-field metrics that mix a somatic stage whose reconstruction is

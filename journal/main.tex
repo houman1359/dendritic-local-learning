@@ -50,10 +50,12 @@ compartment error. This factorization yields a credit-operator theory that
 predicts when a restricted route improves learning: retained task signal must
 outweigh representation error, gain mismatch and admitted noise. Controlled
 simulations show that neuron identity supplies most of the useful feedback,
-whereas subtree addresses help only at intermediate bandwidth and serial
-dendritic depth helps only under task alignment, saturating rather than
-tracking hierarchy one-for-one; depth alone is costly.
-Reconstructed arbors provide sparse, predominantly coarse addresses, while
+whereas subtree addresses help only at intermediate bandwidth. At fixed
+resources, serial dendritic composition grows with sensor alignment in
+multiplicative tasks, saturates in depth, and disappears or reverses when
+ratios are locally available; depth alone is costly.
+Across two MICrONS animals, reconstructed arbors provide sparse, predominantly
+coarse addresses, while
 focal shunting regulates their gain only in permissive electrotonic regimes;
 measured visual responses provide no evidence that these anatomical routes are
 aligned with endogenous task credit. Dendritic structure therefore does not
@@ -1048,7 +1050,33 @@ architecture-by-placement interactions were 32.43 and 31.27 points
 (Supplementary Fig.~S26). These same-seed reruns confirm implementation
 concordance, not independent task or biological replication.
 
-Together, the new same-task controls separate four explanations that the
+We then broadened the task family at fixed D3, rather than adding another
+physical-depth condition. A 360-fit factorial crossed three data generators,
+sensor alignment $\alpha\in\{0,0.5,1\}$, serial versus literal grouped-point
+composition, and BP versus path-transport LocalCA. All fits passed the frozen
+finite-value, completeness, resource and no-fallback gates. Under BP, the
+serial-minus-grouped contrast at $\alpha=1$ was 30.32 percentage points for
+nested factors (95\% paired-seed bootstrap interval 30.02--30.62), 22.20
+points for flat factors (21.73--22.64), and zero for local ratios. The
+corresponding $\alpha=1$ minus $0$ architecture interactions were 30.41,
+22.26 and 1.30 points. Thus removing nested spatial covariance reduced but did
+not abolish the serial advantage; by contrast, when excitation and inhibition
+already supplied a local ratio, both BP architectures reached ceiling and
+serial composition added nothing (Fig.~\ref{fig:physicaldepthh4}e,g).
+
+Restricted credit preserved the positive nested-factor crossover but exposed
+a sharper boundary. At $\alpha=1$, serial minus grouped point was 27.59
+points for nested factors (26.61--28.45) and 12.21 points for flat factors
+(11.19--13.34), but $-5.32$ points for local ratios ($-9.02$ to $-2.19$).
+The LocalCA alignment interactions were therefore 27.70, 12.37 and
+$-11.68$ points, respectively; every interaction had the same sign in all ten
+paired seeds. Relative to the flat-factor control, the nested-family
+interaction was larger by 8.16 points under BP and 15.33 points under LocalCA,
+both positive in 10/10 seeds. The result is not a generic advantage of serial
+dendrites: alignment controls its magnitude, and a task that makes the
+required ratio locally available removes the BP advantage and reverses it
+under the tested restricted credit rule (Fig.~\ref{fig:physicaldepthh4}f,g).
+Together, the new controls separate four explanations that the
 original depth comparison could not distinguish. The parameter-matched point
 networks reject a dendrite-exclusive expressivity claim. The
 serial-minus-star and serial-minus-literal-point interactions identify ordered
@@ -1103,8 +1131,8 @@ intervals.
 \begin{figure}[t]
 \centering
 \includegraphics[width=\textwidth]{main/figure_06.pdf}
-\caption{\textbf{Aligned serial composition remains useful at H4 but its
-trained depth optimum saturates at D3.} \textbf{A,B}, Accuracy across D1--D4
+\caption{\textbf{Depth saturation and task-family crossovers bound when serial
+dendritic composition helps.} \textbf{A,B}, Accuracy across D1--D4
 under aligned and reversed sensor placement for serial BP, literal
 grouped-point BP, shared-soma LocalCA, exact-path LocalCA and the aligned
 raw-additive control. \textbf{C}, Seed-paired frozen primary contrasts;
@@ -1113,7 +1141,12 @@ physical depth across the clean-source H2/H3 cohorts and the frozen H4 cohort.
 The diagonal is one-to-one tracking; D3, not D4, maximizes H4 exact-BP
 accuracy. All H4 conditions use paired seeds 10400--10409; lines and intervals
 are means and 95\% seed-bootstrap intervals, and primary-family $P$ values are
-BH corrected.}
+BH corrected. \textbf{E,F}, Serial-minus-literal-grouped-point accuracy across
+task--sensor alignment for nested factors, flat factors and local ratios under
+BP and path-transport LocalCA. \textbf{G}, The paired $\alpha=1$ minus $0$
+architecture interaction. Panels \textbf{E--G} use ten paired seeds
+10500--10509; points and bars are means and 95\% paired-seed bootstrap
+intervals.}
 \label{fig:physicaldepthh4}
 \end{figure}
 
@@ -1231,6 +1264,22 @@ versus 0.302--0.441 for structural controls; every within-cell contrast was
 positive (Supplementary Fig.~S10). The cohort is nucleus-disjoint but from the
 same mouse and a convenience-derived historical reconstruction.
 
+We next repeated that model-matched structural endpoint in the biologically
+independent Pinky v185 mouse using the outcome-independent 12-cell spatial
+sample fixed before mesh or synapse outcomes were opened. All cells were
+processed without error and ten passed the direct-type QC gate. At four
+channels, ancestry routes captured 0.902 of modeled field energy, close to the
+dense PCA ceiling of 0.926, compared with 0.374 for random routes, 0.316 for
+depth bins and 0.245 after ancestry shuffling. The ancestry-route capture
+advantages were 0.528 versus random routes (descriptive 95\% cell-bootstrap
+interval 0.386--0.641; 9/10 cells), 0.586 versus depth bins
+(0.484--0.696; 10/10) and 0.657 versus shuffled ancestry
+(0.585--0.734; 10/10; Fig.~\ref{fig:topology}i and Supplementary Fig.~S27).
+The direction therefore repeats across two animals. Because one volume is
+available per animal and the target fields remain model matched, this is
+cross-animal structural replication, not population inference or evidence
+that the routes conveyed task credit in vivo.
+
 We next asked whether the unbalanced reconstructed trees realize the
 coarse-to-fine coordinate hierarchy assumed by the theory. A deterministic
 weighted tree-Haar construction resolved the non-scalar ancestry-route field
@@ -1265,7 +1314,13 @@ wiring across budgets. At eight channels the model-matched efficiency is
 anatomy-specific factor is 2.7-fold. Lines summarize eight reconstructed cells
 and bands or intervals are 95\% cell-bootstrap intervals. These are modeled
 fields on measured anatomy, not observed task gradients; wiring counts
-feedback connections, not cable length or metabolic cost.}
+feedback connections, not cable length or metabolic cost. \textbf{I}, At four
+channels, ancestry-route capture advantage relative to random routes, depth
+bins and shuffled ancestry in the 47-cell \texttt{minnie65} cohort and the
+independent Pinky v185 cohort. Pinky used 12 outcome-independently selected
+cells, of which ten passed the frozen direct-type QC gate. Points are cells;
+large symbols and bars are within-volume means and descriptive 95\%
+cell-bootstrap intervals. The animal is the biological replication unit.}
 \label{fig:topology}
 \end{figure}
 \clearpage
@@ -1762,7 +1817,14 @@ remained 25.63 points above D1 but fell 1.46 points below D3 under exact BP,
 falsifying one-to-one tracking of trained physical depth with task hierarchy.
 The value of aligned serial composition therefore saturates in this task
 family, even though a restricted shared-coordinate rule continues to change
-with added depth. The new controls make the point--dendrite boundary
+with added depth. The fixed-D3 task-family factorial further shows that the
+serial advantage is graded rather than tied to one generator: it is largest
+for nested multiplicative factors, smaller after flattening their spatial
+covariance, and absent under BP when the necessary ratio is already local.
+Path-transport LocalCA retains the nested and flat advantages but reverses the
+local-ratio contrast, showing that task computation and restricted credit can
+interact adversely even at identical physical depth. The new controls make
+the point--dendrite boundary
 explicit: the serial tree beat a resource-identical nonserial star only under
 the aligned hierarchy; it also beat the stricter literal grouped-point model
 at both H2 and H3, yet ordinary parameter-matched point MLPs beat the tree by
@@ -1792,8 +1854,10 @@ Yet fine morphology does not reliably outperform controls
 matched for depth and parent degree. The synapse-resolved inhibitory census
 similarly supports coarse co-targeting and class-specific spatial scales, while
 shared-path effects do not survive axon-level aggregation and joint geometric
-matching. These one-mouse measurements establish available addresses, not
-their use for endogenous learning.
+matching. The independent Pinky result establishes cross-animal direction for
+the model-matched capacity endpoint; the inhibitory and functional
+measurements remain one-mouse analyses. Together they establish available
+addresses, not their use for endogenous learning.
 
 Shunting has a precise and bounded role within this hierarchy. Unlike models
 in which inhibitory circuits compute an error
@@ -1915,7 +1979,8 @@ measurements could distinguish credit routing from forward gain control
 The theory assumes steady-state, non-spiking trees with unique directed paths;
 the reconstructed-cell analyses are sensitivity models rather than
 cell-specific physiological fits. The primary, sensitivity and inhibitory
-cohorts come from one mouse, the functional cohort contains seven targets,
+cohorts come from one mouse; Pinky adds one independent mouse only for the
+model-matched structural-capacity endpoint; the functional cohort contains seven targets,
 projection and transport coefficients are oracles, and the external animal
 analysis is retrospective. The trained within-neuron factorial uses one
 synthetic eight-context hierarchy, analytically controlled route fields and
@@ -2445,6 +2510,56 @@ control, so it is retained in the concordance distribution rather than
 discarded. Every load-bearing H2/H3 shunting, placement, point-control and
 local-credit conclusion retained its direction and frozen claim gate.
 
+\subsection*{Fixed-depth task-family and alignment factorial}
+
+To test task specificity without adding further physical depth, we fixed every
+network at D3 $[2,1,2]$ and crossed three data-generating families, sensor
+alignment $\alpha\in\{0,0.5,1\}$, serial versus literal grouped-point
+composition, and BP versus path-transport LocalCA. The nested-factor positive
+control retained the calibrated distal signal and three multiplicative gain
+factors. If $z_{\ell}$ is the true zero-mean Gaussian log-gain factor at level
+$\ell$, its signal-bearing excitatory coordinate was proportional to
+\begin{equation*}
+ (b_E+y\delta)\exp\!\left(\sum_{\ell=1}^{3}
+ \sigma_{\ell}z_{\ell}-\frac{1}{2}\sum_{\ell=1}^{3}\sigma_{\ell}^{2}\right),
+\end{equation*}
+where $b_E$ is the excitatory baseline, $y\in\{0,1\}$ is the class label,
+$\delta$ is the class-signal contrast and $\sigma_{\ell}$ is the log-gain
+standard deviation at level $\ell$. All three levels used the common value
+$\sigma_{\ell}=0.25$. The subtraction of half the summed variance keeps the
+expected multiplicative gain equal to one. Inhibitory sensor block $\ell$
+measured
+\begin{equation*}
+ s_{\ell}(\alpha)=\alpha z_{\ell}
+ +\sqrt{1-\alpha^2}\,\xi_{\ell},
+\end{equation*}
+with an independent standard-normal nuisance factor $\xi_{\ell}$. Here
+$\alpha\in[0,1]$ is the task--sensor alignment: $\alpha=0$ makes the observed
+sensor independent of the latent gain, whereas $\alpha=1$ reveals it exactly.
+Thus $\alpha$ changed trial-wise task--sensor correspondence while preserving
+each sensor's marginal log-gain variance. The flat-factor
+control retained the factor product and level-wise marginal variances but
+replaced nested cross-feature covariance by eight unrelated groups per level.
+The local-ratio control instead multiplied excitation and inhibition at each
+level by correlated cumulative hierarchical fields, favoring local divisive
+readout rather than serial cancellation of separate factors.
+
+All families retained 10,000 balanced examples, 64 excitatory and 64
+inhibitory features, distal-only excitatory class signal, signal contrast
+0.80, gain SD 0.25, input-noise SD 0.08 and the previously selected optimizer,
+stopping and conductance settings. Serial and grouped-point models retained
+identical branch modules, contacts, candidate slots, trainable parameters and
+input tensors; only child-to-parent composition differed. Ten fresh paired
+seeds 10500--10509 gave 360 fits. Frozen estimands were the within-seed
+serial-minus-grouped contrast, its $\alpha=1$ minus $0$ interaction, the
+nested-family interaction minus each mismatch-family interaction, and the
+corresponding LocalCA-minus-BP credit interaction. Directional claims require
+a 95\% paired-seed bootstrap interval excluding zero and at least eight of ten
+seed signs. The complete family scan is reported regardless of direction.
+Configurations wrote only local artifacts on the
+\texttt{kempner\_project\_b} filesystem; external experiment tracking was
+disabled in both configuration and runtime.
+
 \subsection*{State-matched positive-conductance reliability experiment}
 
 The locked mechanism experiment used eight branches with four nonnegative rate
@@ -2600,6 +2715,36 @@ mapped to retained cables (median 212 directly typed synapses per cell). The coh
 population-random sample and contained 34 L2 IT, 2 L3 IT, 10 L4 IT, and 1 L5
 ET cell. The same structural-capacity procedure was applied without pooling
 the two cohorts.
+
+For an independent-animal replication, we used the public MICrONS phase-1
+layer-2/3 ``Pinky'' v185 release, a $250\times140\times90\,\mu$m visual-cortex
+volume from a P36 male mouse that is biologically distinct from
+\texttt{minnie65} \citep{turner2022neocortex,microns_pinky_v185}. Before opening mesh topology or
+selected-cell synapse counts, all 362 rows labelled excitatory in the archived
+soma-valence table were ordered along the second volume coordinate and split
+into 12 equal-count strata. Within each stratum we selected the cell nearest
+the global median of the first and third coordinates, with root ID as the
+tie-break. This outcome-independent rule spans the volume while reducing edge
+truncation; it is not a random population sample.
+
+For each selected HDF5 mesh we retained the largest connected component after
+adding the published \texttt{link\_edges}; this removed detached segmentation
+fragments before the soma root was chosen. The retained mesh was skeletonized
+with the meshparty TEASAR implementation using a
+$7.5\,\mu$m soma-collapse radius and $12\,\mu$m invalidation distance. Cable
+radius was estimated as half the opposite-surface ray distance at skeleton
+mesh anchors using an Embree ray index.
+Incoming synapses were taken from the archived dense v185 table and assigned
+E/I identity only when the presynaptic root had an excitatory or inhibitory
+label in the same soma-valence table. The same $5\,\mu$m mapping gate,
+branch-chain compression, electrical normalization and route dictionaries as
+the v661 analysis were then applied without retuning. The frozen QC gate was
+at least 20 mapped typed inputs, including at least three inhibitory inputs;
+all selected cells and exclusion reasons remain in the manifest. The primary
+endpoint was sign agreement with \texttt{minnie65} for K=4 ancestry-route
+capture relative to random paths, depth bins and shuffled ancestry. The mouse,
+not the 12 nested cells, is the biological replication unit; cell-bootstrap
+intervals quantify only within-volume stability.
 
 \subsection*{MICrONS inhibitory-census analysis}
 
@@ -2998,6 +3143,10 @@ the full-contact analysis came from the in-development
 \texttt{synapse\_target\_predictions\_ssa\_v2} table and are therefore
 distributed only as derived labels subject to the source-data access terms;
 all principal structural findings were repeated without those labels.
+The independent-animal replication used the MICrONS phase-1 layer-2/3 Pinky
+v185 fixed meshes, soma-valence table and dense synapse table archived at
+Zenodo DOI 10.5281/zenodo.3710459 \citep{microns_pinky_v185}; file sizes and
+Zenodo MD5 plus local SHA-256 checksums are recorded in the supplied manifest.
 Volumetric imagery is archived in BossDB under DOI
 10.60533/BOSS-2021-T0SY, and co-registered functional data are available as
 DANDI:000402; exact asset and table identifiers are recorded in the supplied

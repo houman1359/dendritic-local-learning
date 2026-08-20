@@ -106,6 +106,7 @@ def compose(
     cols: int,
     height: float,
     slots: list[Slot] | None = None,
+    gutter_clear_above: float = 10.0,
 ) -> None:
     width = 518.4
     if slots is None:
@@ -176,7 +177,7 @@ def compose(
         prior_bottom = margin + row * cell_height + (row - 1) * gutter
         next_top = prior_bottom + gutter
         page_out.draw_rect(
-            fitz.Rect(0, prior_bottom - 10, width, next_top + 2),
+            fitz.Rect(0, prior_bottom - gutter_clear_above, width, next_top + 2),
             color=None,
             fill=(1, 1, 1),
             overlay=True,
@@ -251,25 +252,54 @@ def main() -> None:
         height=458,
     )
 
-    copy_page("figure_06_panels_A-D.pdf", "figure_06.pdf")
-
     compose(
-        MAIN / "figure_07.pdf",
-        [panel("figure_07_panels_A-J.pdf", letter, 2, 3) for letter in "ABCDEF"]
+        MAIN / "figure_06.pdf",
+        [panel("figure_06_panels_A-D.pdf", letter, 2, 2) for letter in "ABCD"]
         + [
-            panel("figure_07_panels_K-L.pdf", "K", 1, 2),
-            panel("figure_07_panels_K-L.pdf", "L", 1, 2),
+            panel("../generated/fig_task_family_alignment_composite.pdf", letter, 1, 3)
+            for letter in "ABC"
         ],
         [
-            "Reconstructed tree",
-            "Ancestry addresses",
-            "Sparse route capacity",
-            "Model-field controls",
-            "Reciprocal cable field",
-            "Topology controls",
-            "Wire efficiency at eight channels",
-            "Wiring-normalized capture",
+            "H4 aligned hierarchy",
+            "H4 reversed placement",
+            "Frozen H4 contrasts",
+            "Optimum across task depth",
+            "Task-family boundary under BP",
+            "Task-family boundary under LocalCA",
+            "Architecture x alignment interaction",
         ],
+        rows=3,
+        cols=3,
+        height=450,
+        gutter_clear_above=0,
+    )
+
+    figure_07_panels = [
+        panel("figure_07_panels_A-J.pdf", letter, 2, 3) for letter in "ABCDEF"
+    ] + [
+        panel("figure_07_panels_K-L.pdf", "K", 1, 2),
+        panel("figure_07_panels_K-L.pdf", "L", 1, 2),
+    ]
+    figure_07_titles = [
+        "Reconstructed tree",
+        "Ancestry addresses",
+        "Sparse route capacity",
+        "Model-field controls",
+        "Reciprocal cable field",
+        "Topology controls",
+        "Wire efficiency at eight channels",
+        "Wiring-normalized capture",
+    ]
+    pinky_panel = MAIN / "../supplementary/figure_S27_panels_A-D.pdf"
+    if pinky_panel.is_file():
+        figure_07_panels.append(
+            panel("../supplementary/figure_S27_panels_A-D.pdf", "C", 2, 2)
+        )
+        figure_07_titles.append("Independent-animal direction")
+    compose(
+        MAIN / "figure_07.pdf",
+        figure_07_panels,
+        figure_07_titles,
         rows=3,
         cols=3,
         height=430,

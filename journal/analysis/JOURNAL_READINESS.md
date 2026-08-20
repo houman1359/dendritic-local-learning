@@ -29,6 +29,12 @@ complete.
       the original eight by stable nucleus identifier. At eight channels,
       morphology-defined routes exceed random, depth-bin, and
       ancestry-shuffled controls in all 47 cells.
+- [x] A frozen independent-animal Pinky v185 cohort selected 12 excitatory
+      cells without mesh or synapse outcomes; all processed successfully and
+      ten passed the direct-type QC gate. At four channels, ancestry-route
+      capture exceeds random routes, depth bins and shuffled ancestry in the
+      same direction as the separate `minnie65` mouse. Cell bootstraps remain
+      descriptive because the animal is the biological replication unit.
 - [x] A frozen irregular-tree Haar analysis resolves modeled ancestry-route
       energy across all 47 disjoint and eight original cells. Coarse energy is
       enriched relative to isotropic noise, whereas the anatomy-specific
@@ -68,7 +74,7 @@ complete.
       hierarchy depth minimizes mean loss; explicit point gating matches
       reliability-aligned branch gain exactly. The companion secondary
       reanalysis covers all 20 seed blocks of the 2,700-fit factorial.
-- [x] Main Figures 1--8 and Supplementary Figures S1--S26 have
+- [x] Main Figures 1--9 and Supplementary Figures S1--S27 have
       machine-readable source tables and executable default build commands.
       Final hashes include the completed alignment-dose and Fashion-MNIST panels.
 - [x] An origin manifest, main-panel provenance manifest, original-cohort
@@ -167,6 +173,13 @@ complete.
       immutable-source H2/H3 reruns also completed; every load-bearing gate
       was retained. Figure 6A--D and Supplementary Figure S26 report the full
       positive, null and falsified outcomes.
+- [x] The fixed-D3 task-family factorial completed all 360 fits with identical
+      resources and no fallback. Under BP, serial minus grouped point at full
+      alignment was +30.32 points for nested factors, +22.20 for flat factors
+      and 0 for local ratios. Path LocalCA retained +27.59 and +12.21 points
+      for the two factor tasks but reversed to -5.32 for local ratios. Figure
+      6E--G and complete Source Data report the graded positive and adverse
+      boundaries.
 - [x] The focal-selectivity canary passed positive-definiteness and exact
       somatic-state restoration gates. The unchanged passive matrix then ran
       all eight cells and supplies Supplementary Figure S11 plus complete
@@ -245,7 +258,7 @@ from this document.
 - Main display items: up to ten figures and/or tables. The working draft now
   has nine numbered main figures, each represented by one canonical vector
   PDF and one figure environment; the complete control inventory continues
-  through Supplementary Figure S26.
+  through Supplementary Figure S27.
   Checkpoint-mechanism and cohort-sensitivity displays
   remain in Supplementary Figures S9 and S10, the passive focal-shunt matrix
   is Supplementary Figure S11, and the inhibitory census is Supplementary
@@ -255,8 +268,9 @@ from this document.
   Methods. The draft follows this structure.
 - References: the working limit is 70. The current bibliography has 56 entries,
   all cited and resolved by the citation audit.
-- Editorial evidence boundary: retain the one-mouse MICRONS limitation, do not
-  imply that modeled dendritic credit was measured in vivo, and submit the full
+- Editorial evidence boundary: describe Pinky as a two-animal directional
+  replication only for model-matched structural capacity; retain the one-mouse
+  limits of the inhibitory and functional analyses, do not imply that modeled dendritic credit was measured in vivo, and submit the full
   Article rather than a presubmission enquiry.
 
 These limits and initial-submission requirements were rechecked against the

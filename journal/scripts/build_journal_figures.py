@@ -1287,9 +1287,12 @@ def figure3() -> None:
         errorbar_mean(ax_f, index, values, color, seed=1510 + index)
     ax_f.set_xticks(range(len(reciprocal_labels)))
     ax_f.set_xticklabels(
-        ["dense", "ances.", "random", "depth", "row\nshuffle", "matched\ntree"],
+        ["SVD", "ances.", "random", "depth", "row shuf.", "matched"],
+        rotation=32,
+        ha="right",
+        rotation_mode="anchor",
     )
-    ax_f.tick_params(axis="x", labelsize=PT_SMALL)
+    ax_f.tick_params(axis="x", labelsize=PT_SMALL - 0.8, pad=1)
     ax_f.set_ylabel("cable-response capture")
     panel_title(ax_f, "F", "Topology controls")
     style_axis(ax_f)

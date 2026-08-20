@@ -15,7 +15,7 @@ The paper is organized around one conditional claim:
 > controls which synapses can share credit, and useful learning requires the
 > resulting routes to align with task credit.
 
-The package distinguishes sixteen levels of evidence:
+The package distinguishes eighteen levels of evidence:
 
 1. exact mathematical identities for conductance trees;
 2. controlled learning experiments in regular artificial trees, including a
@@ -54,6 +54,12 @@ The package distinguishes sixteen levels of evidence:
 15. a controlled sufficiency test that rotates exact task credit into or out of
    a fixed reconstructed-tree routing subspace; and
 16. a retrospective six-animal consistency test of signed neuron identity.
+17. a frozen 360-fit fixed-D3 factorial crossing nested factors, flat factors
+    and local ratios with three alignment doses, matched serial/grouped-point
+    resources and BP/path-transport LocalCA; and
+18. an outcome-independent 12-cell Pinky v185 cohort from a biologically
+    independent MICrONS mouse, with ten cells passing direct-type QC and the
+    model-matched routing direction repeating across animals.
 
 Modeled gradients on reconstructed anatomy are not described as measurements
 of biological learning. Negative alignment results are retained because they
@@ -66,8 +72,8 @@ define the boundary of the theory.
 - `main_with_supplementary.pdf`: combined reading copy containing the complete
   main Article followed by all Supplementary Information.
 - `references.bib`: shared bibliography.
-- `figures/main/`: canonical assets compiled as main Figures 1--8.
-- `figures/supplementary/`: canonical assets compiled as S1--S26.
+- `figures/main/`: canonical assets compiled as main Figures 1--9.
+- `figures/supplementary/`: canonical assets compiled as S1--S27.
 - `figures/generated/`: internal descriptive-name outputs from figure scripts;
   these are never referenced by LaTeX or included in the Overleaf bundle.
 - `figures/README.md`: authoritative figure, panel, and asset map.
@@ -123,7 +129,7 @@ Audited conference-era generator snapshots and source tables are retained under
 figure command reads the audited run and checkpoint tables already packaged in
 `source_data/prospective_learning/`; the checkpoint collector is kept separate
 because it re-evaluates the frozen models. The unified draft has nine numbered
-main figures and twenty-six supplementary figures. Each main figure is one vector
+main figures and twenty-seven supplementary figures. Each main figure is one vector
 PDF with a single consecutive panel sequence; expanded diagnostics remain in
 Supplementary Information.
 `make overleaf-bundle` writes the current allow-listed package and ZIP under

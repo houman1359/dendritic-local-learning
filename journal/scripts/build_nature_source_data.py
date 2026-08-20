@@ -40,6 +40,7 @@ SANITIZED_DROP_COLUMNS = {
 SANITIZED_JSON_PATHS = {
     "source_data/physical_depth_h4_factorial/audit.json",
     "source_data/physical_depth_clean_source_replication/audit.json",
+    "source_data/task_family_alignment/audit.json",
 }
 
 
@@ -2686,6 +2687,123 @@ FILES += (
 )
 
 
+# Final fixed-depth task-family boundary and independent-animal structural
+# replication. These are explicit so the source-data release cannot lag the
+# compiled Figure 6, Figure 7 or Supplementary Figure 27.
+FILES += (
+    SourceFile(
+        "Figure 6",
+        "e-g",
+        "source_data/task_family_alignment/seed_outcomes.csv",
+        "Figure_6/Fig6e-g_task_family_seed_outcomes.csv",
+        "complete run-level outcomes",
+        "paired independent training seed (n=10 per condition)",
+        "fresh fixed-D3 factorial",
+        "All 360 fits across three task families, two architectures, two credit rules and three alignment levels.",
+    ),
+    SourceFile(
+        "Figure 6",
+        "e-f",
+        "source_data/task_family_alignment/condition_summary.csv",
+        "Figure_6/Fig6e-f_task_family_condition_summary.csv",
+        "derived condition summaries",
+        "paired independent training seed (n=10)",
+        "current derived analysis",
+        "Architecture effects with paired-seed bootstrap intervals.",
+    ),
+    SourceFile(
+        "Figure 6",
+        "g",
+        "source_data/task_family_alignment/paired_contrasts.csv",
+        "Figure_6/Fig6g_task_family_paired_contrasts.csv",
+        "paired seed contrasts",
+        "paired independent training seed (n=10)",
+        "current derived analysis",
+        "Architecture-by-alignment interactions and task-family difference-in-differences.",
+    ),
+    SourceFile(
+        "Figure 6",
+        "e-g",
+        "source_data/task_family_alignment/audit.json",
+        "Figure_6/Fig6e-g_task_family_audit.json",
+        "artifact and claim audit",
+        "complete 360-fit cohort",
+        "current audit",
+        "Completeness, finite-metric, no-fallback, seed and exact-resource gates.",
+    ),
+    SourceFile(
+        "Figure 7",
+        "i",
+        "source_data/pinky_v185_replication/routing/k4_cross_animal_contrasts.csv",
+        "Figure_7/Fig7i_independent_animal_K4_contrasts.csv",
+        "cell-level cross-animal contrasts",
+        "reconstructed cell; animal is the biological replication unit (two mice)",
+        "independent-animal directional replication",
+        "K=4 ancestry-route advantages shown separately for the original and Pinky v185 MICRONS animals.",
+    ),
+    SourceFile(
+        "Supplementary Figure 27",
+        "a",
+        "source_data/pinky_v185_replication/cohort_manifest.csv",
+        "Supplementary_Figure_27/SuppFig27a_cohort_manifest.csv",
+        "outcome-independent cohort selection",
+        "selected reconstructed cell (n=12; one second mouse)",
+        "frozen before route-capacity analysis",
+        "Equal-count y strata with selection nearest the global x/z medians.",
+    ),
+    SourceFile(
+        "Supplementary Figure 27",
+        "a-b,d",
+        "source_data/pinky_v185_replication/routing/cell_metrics.csv",
+        "Supplementary_Figure_27/SuppFig27a-b_d_cell_metrics.csv",
+        "cell-level morphology, QC and route summaries",
+        "QC-passing reconstructed cell (n=10; one second mouse)",
+        "current independent-animal analysis",
+        "Cell-level QC, wiring and four-channel capture values.",
+    ),
+    SourceFile(
+        "Supplementary Figure 27",
+        "b,d",
+        "source_data/pinky_v185_replication/routing/feedback_compression_curves.csv",
+        "Supplementary_Figure_27/SuppFig27b_d_feedback_compression_curves.csv",
+        "cell-level route-capacity curves",
+        "QC-passing reconstructed cell (n=10; one second mouse)",
+        "current independent-animal analysis",
+        "Capture and weighted residual across channel budgets for ancestry routes and controls.",
+    ),
+    SourceFile(
+        "Supplementary Figure 27",
+        "c",
+        "source_data/pinky_v185_replication/routing/k4_cross_animal_contrasts.csv",
+        "Supplementary_Figure_27/SuppFig27c_cross_animal_K4_contrasts.csv",
+        "cell-level cross-animal contrasts",
+        "reconstructed cell; animal is the biological replication unit (two mice)",
+        "independent-animal directional replication",
+        "K=4 ancestry-route advantages shown separately by animal; within-volume intervals are descriptive.",
+    ),
+    SourceFile(
+        "Supplementary Figure 27",
+        "a-d",
+        "source_data/pinky_v185_replication/preparation_manifest.json",
+        "Supplementary_Figure_27/SuppFig27_preparation_manifest.json",
+        "preprocessing and archive audit",
+        "12 outcome-independently selected cells",
+        "current audit",
+        "Archive checksums, component selection, skeletonization, radius estimation and direct-type QC provenance.",
+    ),
+    SourceFile(
+        "Supplementary Figure 27",
+        "a-d",
+        "source_data/pinky_v185_replication/routing/summary.json",
+        "Supplementary_Figure_27/SuppFig27_summary.json",
+        "analysis and validity summary",
+        "12 selected cells, 10 QC-passing; one second mouse",
+        "current audit",
+        "Frozen route settings, QC results, within-volume summaries and cross-animal direction checks.",
+    ),
+)
+
+
 README = """# Source Data
 
 This directory contains the numerical source data underlying every current
@@ -2699,10 +2817,12 @@ Figure 1 is a programmatic conceptual schematic and has no numerical source
 data. Its directory contains a short scope note.
 
 The independent unit is a training seed for the artificial-tree learning
-experiments, a reconstructed cell for the anatomical and focal analyses, and
-a postsynaptic target cell for the measured-response analyses. All
-reconstructed cells come from one animal and are units of analysis rather
-than independent biological replicates at the animal level.
+experiments, a reconstructed cell for within-volume anatomical and focal
+analyses, and a postsynaptic target cell for the measured-response analyses.
+The primary MICRONS analyses use one mouse; Supplementary Figure 27 adds a
+second mouse for structural route capacity. Cells nested within a volume are
+not independent biological replicates at the animal level, and two animals do
+not support population-level animal inference.
 Focal sites, channel draws, scans, stimulus splits, and Monte Carlo streams are
 nested observations; they are not counted as independent biological
 replicates.
@@ -2712,9 +2832,11 @@ Fashion-MNIST ladders. Figure 3 contains the 2,700-fit subtree-address
 factorial and its two-stream anchor. Figure 4 contains the stochastic
 credit-operator phase tests. Figure 5 contains the H2--H3 physical-depth,
 point--dendrite and BP--local-credit controls, and Figure 6 contains the H4
-depth-saturation extension. Figures 7--9 contain reconstructed-anatomy
-capacity, focal conductance, measured-response, controlled-alignment and
-six-animal boundary tests.
+depth-saturation and fixed-D3 task-family-by-alignment extensions. Figures
+7--9 contain reconstructed-anatomy capacity, focal conductance,
+measured-response, controlled-alignment and six-animal boundary tests; Figure
+7 also shows the independent-animal directional replication of structural
+route capacity.
 Supplementary Figures 1--3 reproduce the three unchanged regular-tree figures
 from the final NeurIPS/arXiv revision, and Supplementary Figure 4 is the
 expanded regular-tree regime archive. Supplementary Figure 5 is a constructed
@@ -2725,10 +2847,11 @@ depth control, Supplementary Figure 9 is the complete checkpoint diagnostic,
 Supplementary Figure 10 is the same-mouse v661 sensitivity cohort, and
 Supplementary Figures 11--17 contain conductance, inhibitory, same-span,
 calibration, interior-optimum and external-animal analyses. Supplementary
-Figures 18--25 retain the expanded physical-depth, prospective routing,
+Figures 18--27 retain the expanded physical-depth, prospective routing,
 morphology, focal-shunting, measured-response and trained partition-residual
 diagnostics plus the adaptive conductance-reliability and irregular-tree
-wavelet tests. Capture per wire
+wavelet tests, clean-source physical-depth replication and independent-animal
+structural replication. Capture per wire
 and the phase-plane synthesis are promoted to main Figures 7 and 9.
 
 This is the submission-facing source-data package. Figure 2 panels b and c
@@ -2990,7 +3113,7 @@ def copy_source_file(item: SourceFile, source: Path, destination: Path) -> None:
             if isinstance(value, list):
                 return [redact(entry) for entry in value]
             if isinstance(value, str) and value.startswith(
-                ("/n/holylabs/", "/n/home13/")
+                ("/n/holylabs/", "/n/holylfs06/", "/n/home13/")
             ):
                 return f"$RUNTIME_ARCHIVE/{Path(value).name}"
             return value
@@ -3062,7 +3185,7 @@ def write_display_readmes(stage: Path, rows: list[dict[str, str]]) -> None:
 def audit_no_machine_local_paths(stage: Path) -> None:
     """Reject release text that exposes nonportable machine-local paths."""
 
-    forbidden = ("/n/holylabs/", "/n/home13/")
+    forbidden = ("/n/holylabs/", "/n/holylfs06/", "/n/home13/")
     findings: list[str] = []
     for path in stage.rglob("*"):
         if not path.is_file() or path.suffix.lower() not in {

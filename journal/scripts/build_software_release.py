@@ -47,6 +47,12 @@ ARCHIVE_NAME = "Dendritic_credit_assignment_software.zip"
 # reviewer cannot mistake them for working paths.
 PORTABILITY_REPLACEMENTS: tuple[tuple[str, str, str], ...] = (
     (
+        "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/"
+        "journal_extension_20260820",
+        "${DENDRITIC_RUNS_ROOT}",
+        "replace frozen project-B execution root",
+    ),
+    (
         "/n/holylabs/LABS/kempner_dev/Users/hsafaai/Code/dendritic-modeling",
         "${DENDRITIC_MODELING_ROOT}",
         "replace archived figure-generator repository root",
@@ -84,9 +90,13 @@ JOURNAL_ANALYSIS_RECORDS = (
     "NEURIPS_FIGURE_LINEAGE_AUDIT_20260804.md",
     "NONLINEAR_PHYSICAL_DEPTH_CODE_THEORY_AUDIT_20260812.md",
     "NONLINEAR_PHYSICAL_DEPTH_CONFIRMATORY_CONTRACT_20260812.md",
+    "PINKY_V185_SECOND_ANIMAL_CONTRACT_20260820.md",
+    "PINKY_V185_SECOND_ANIMAL_EXECUTION_20260820.md",
     "POSITIVE_CONDUCTANCE_STEP_CONSISTENT_CONTRACT_20260811.md",
     "REVIEW_IMPLEMENTATION_MATRIX_20260811.md",
     "SAME_SPAN_COEFFICIENT_LEARNING_CONTRACT_20260811.md",
+    "TASK_FAMILY_ALIGNMENT_CONTRACT_20260820.md",
+    "TASK_FAMILY_ALIGNMENT_EXECUTION_20260820.md",
     "TRAINED_SUBTREE_ADDRESS_EXPERIMENT_CONTRACT.md",
 )
 JOURNAL_SCRIPTS = (
@@ -100,6 +110,7 @@ JOURNAL_SCRIPTS = (
     "analyze_francioni_signed_credit.py",
     "analyze_microns_inhibitory_routes.py",
     "analyze_nonlinear_physical_depth_confirmatory.py",
+    "analyze_pinky_v185_replication.py",
     "analyze_remaining_physical_experiments.py",
     "analyze_physical_cable_sensitivity.py",
     "analyze_prospective_followup_results.py",
@@ -108,6 +119,7 @@ JOURNAL_SCRIPTS = (
     "analyze_reciprocal_routing_controls.py",
     "analyze_spatial_topology_audit.py",
     "analyze_same_span_coefficient_learning.py",
+    "analyze_task_family_alignment_factorial.py",
     "audit_prospective_learning_runs.py",
     "audit_figure_style_lineage.py",
     "audit_nature_communications_format.py",
@@ -132,12 +144,15 @@ JOURNAL_SCRIPTS = (
     "export_regular_tree_source_data.py",
     "fetch_expanded_microns_cohort.py",
     "figure1_neurips_components.py",
+    "freeze_pinky_v185_cohort.py",
     "diagnose_nonlinear_physical_depth.py",
     "generate_nonlinear_physical_depth_confirmatory.py",
     "generate_nonlinear_physical_depth_sweeps.py",
     "generate_remaining_physical_experiments.py",
+    "generate_task_family_alignment_factorial.py",
     "journal_style.py",
     "neurips_style.py",
+    "prepare_pinky_v185_replication.py",
     "run_alignment_controlled_learning.py",
     "render_nonlinear_physical_depth_calibration.py",
     "run_credit_phase_theory_experiment.py",
@@ -205,7 +220,7 @@ EXCLUDED_FILE_NAMES = {
 }
 
 PRIVATE_PATH_PATTERNS = (
-    re.compile(rb"/n/(?:home[^/]*|holylabs)/"),
+    re.compile(rb"/n/(?:home[^/]*|holylabs|holylfs06)/"),
     re.compile(rb"/home/[A-Za-z0-9._-]+/"),
     re.compile(rb"/Users/[A-Za-z0-9._-]+/"),
 )
