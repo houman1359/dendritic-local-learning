@@ -1,0 +1,394 @@
+output_dir: /n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/dendritic-local-learning/local_sweep_runs
+outputs:
+  run_name: sweep_neurips_component_ablation
+slurm_config:
+  account: kempner_dev
+  partition: kempner_h100
+  time: 04:00:00
+  nodes: 1
+  ntasks_per_node: 1
+  gpus_per_node: 1
+  cpus_per_task: 8
+  mem: 32GB
+  max_concurrent_jobs: 32
+  modules_to_load: []
+  conda_env_path: ''
+  training_script: src/dendritic_modeling/scripts/training/train_experiments.py
+experiment_settings:
+  seeds_per_condition: 5
+  base_seed: 42
+  use_array_jobs: true
+configs:
+- name: ablation_shunting_full_config
+  path: drafts/dendritic-local-learning/configs/fig1_mnist_shunting_bp_fixed100.yaml
+  overrides:
+    model:
+      core:
+        reactivation:
+          init_policy: quantile
+    training:
+      main:
+        strategy: local_ca
+        learning_strategy_config:
+          rule_variant: 5f
+          error_broadcast_mode: per_soma
+          decoder_update_mode: local
+          update_reactivation: true
+          update_inactive_weights: false
+          normalize_by_batch: true
+          three_factor:
+            use_conductance_scaling: true
+            use_driving_force: true
+            theta: 0.0
+            e_rev_exc: 1.0
+            e_rev_inh: 0.0
+          four_factor:
+            rho_mode: dot
+            rho_estimator: ema
+    outputs:
+      run_name: ablation_shunting_full_config
+- name: ablation_shunting_no_quantile_init
+  path: drafts/dendritic-local-learning/configs/fig1_mnist_shunting_bp_fixed100.yaml
+  overrides:
+    model:
+      core:
+        reactivation:
+          init_policy: analytical
+    training:
+      main:
+        strategy: local_ca
+        learning_strategy_config:
+          rule_variant: 5f
+          error_broadcast_mode: per_soma
+          decoder_update_mode: local
+          update_reactivation: true
+          update_inactive_weights: false
+          normalize_by_batch: true
+          three_factor:
+            use_conductance_scaling: true
+            use_driving_force: true
+            theta: 0.0
+            e_rev_exc: 1.0
+            e_rev_inh: 0.0
+          four_factor:
+            rho_mode: dot
+            rho_estimator: ema
+    outputs:
+      run_name: ablation_shunting_no_quantile_init
+- name: ablation_shunting_no_learned_bm
+  path: drafts/dendritic-local-learning/configs/fig1_mnist_shunting_bp_fixed100.yaml
+  overrides:
+    model:
+      core:
+        reactivation:
+          init_policy: quantile
+    training:
+      main:
+        strategy: local_ca
+        learning_strategy_config:
+          rule_variant: 5f
+          error_broadcast_mode: per_soma
+          decoder_update_mode: local
+          update_reactivation: false
+          update_inactive_weights: false
+          normalize_by_batch: true
+          three_factor:
+            use_conductance_scaling: true
+            use_driving_force: true
+            theta: 0.0
+            e_rev_exc: 1.0
+            e_rev_inh: 0.0
+          four_factor:
+            rho_mode: dot
+            rho_estimator: ema
+    outputs:
+      run_name: ablation_shunting_no_learned_bm
+- name: ablation_shunting_with_soma
+  path: drafts/dendritic-local-learning/configs/fig1_mnist_shunting_bp_fixed100.yaml
+  overrides:
+    model:
+      core:
+        morphology:
+          somatic_synapses: true
+        reactivation:
+          init_policy: quantile
+    training:
+      main:
+        strategy: local_ca
+        learning_strategy_config:
+          rule_variant: 5f
+          error_broadcast_mode: per_soma
+          decoder_update_mode: local
+          update_reactivation: true
+          update_inactive_weights: false
+          normalize_by_batch: true
+          three_factor:
+            use_conductance_scaling: true
+            use_driving_force: true
+            theta: 0.0
+            e_rev_exc: 1.0
+            e_rev_inh: 0.0
+          four_factor:
+            rho_mode: dot
+            rho_estimator: ema
+    outputs:
+      run_name: ablation_shunting_with_soma
+- name: ablation_shunting_no_reactivation
+  path: drafts/dendritic-local-learning/configs/fig1_mnist_shunting_bp_fixed100.yaml
+  overrides:
+    model:
+      core:
+        reactivation:
+          enabled: false
+          type: none
+          init_policy: quantile
+    training:
+      main:
+        strategy: local_ca
+        learning_strategy_config:
+          rule_variant: 5f
+          error_broadcast_mode: per_soma
+          decoder_update_mode: local
+          update_reactivation: false
+          update_inactive_weights: false
+          normalize_by_batch: true
+          three_factor:
+            use_conductance_scaling: true
+            use_driving_force: true
+            theta: 0.0
+            e_rev_exc: 1.0
+            e_rev_inh: 0.0
+          four_factor:
+            rho_mode: dot
+            rho_estimator: ema
+    outputs:
+      run_name: ablation_shunting_no_reactivation
+- name: ablation_shunting_relu_reactivation
+  path: drafts/dendritic-local-learning/configs/fig1_mnist_shunting_bp_fixed100.yaml
+  overrides:
+    model:
+      core:
+        reactivation:
+          enabled: true
+          type: relu
+          init_policy: quantile
+    training:
+      main:
+        strategy: local_ca
+        learning_strategy_config:
+          rule_variant: 5f
+          error_broadcast_mode: per_soma
+          decoder_update_mode: local
+          update_reactivation: false
+          update_inactive_weights: false
+          normalize_by_batch: true
+          three_factor:
+            use_conductance_scaling: true
+            use_driving_force: true
+            theta: 0.0
+            e_rev_exc: 1.0
+            e_rev_inh: 0.0
+          four_factor:
+            rho_mode: dot
+            rho_estimator: ema
+    outputs:
+      run_name: ablation_shunting_relu_reactivation
+- name: ablation_shunting_bp_reference
+  path: drafts/dendritic-local-learning/configs/fig1_mnist_shunting_bp_fixed100.yaml
+  overrides:
+    model:
+      core:
+        reactivation:
+          init_policy: quantile
+    outputs:
+      run_name: ablation_shunting_bp_reference
+- name: ablation_additive_full_config
+  path: drafts/dendritic-local-learning/configs/fig1_mnist_shunting_bp_fixed100.yaml
+  overrides:
+    model:
+      core:
+        type: dendritic_additive
+        reactivation:
+          init_policy: quantile
+    training:
+      main:
+        strategy: local_ca
+        learning_strategy_config:
+          rule_variant: 5f
+          error_broadcast_mode: per_soma
+          decoder_update_mode: local
+          update_reactivation: true
+          update_inactive_weights: false
+          normalize_by_batch: true
+          three_factor:
+            use_conductance_scaling: true
+            use_driving_force: true
+            theta: 0.0
+            e_rev_exc: 1.0
+            e_rev_inh: 0.0
+          four_factor:
+            rho_mode: dot
+            rho_estimator: ema
+    outputs:
+      run_name: ablation_additive_full_config
+- name: ablation_additive_no_quantile_init
+  path: drafts/dendritic-local-learning/configs/fig1_mnist_shunting_bp_fixed100.yaml
+  overrides:
+    model:
+      core:
+        type: dendritic_additive
+        reactivation:
+          init_policy: analytical
+    training:
+      main:
+        strategy: local_ca
+        learning_strategy_config:
+          rule_variant: 5f
+          error_broadcast_mode: per_soma
+          decoder_update_mode: local
+          update_reactivation: true
+          update_inactive_weights: false
+          normalize_by_batch: true
+          three_factor:
+            use_conductance_scaling: true
+            use_driving_force: true
+            theta: 0.0
+            e_rev_exc: 1.0
+            e_rev_inh: 0.0
+          four_factor:
+            rho_mode: dot
+            rho_estimator: ema
+    outputs:
+      run_name: ablation_additive_no_quantile_init
+- name: ablation_additive_no_learned_bm
+  path: drafts/dendritic-local-learning/configs/fig1_mnist_shunting_bp_fixed100.yaml
+  overrides:
+    model:
+      core:
+        type: dendritic_additive
+        reactivation:
+          init_policy: quantile
+    training:
+      main:
+        strategy: local_ca
+        learning_strategy_config:
+          rule_variant: 5f
+          error_broadcast_mode: per_soma
+          decoder_update_mode: local
+          update_reactivation: false
+          update_inactive_weights: false
+          normalize_by_batch: true
+          three_factor:
+            use_conductance_scaling: true
+            use_driving_force: true
+            theta: 0.0
+            e_rev_exc: 1.0
+            e_rev_inh: 0.0
+          four_factor:
+            rho_mode: dot
+            rho_estimator: ema
+    outputs:
+      run_name: ablation_additive_no_learned_bm
+- name: ablation_additive_with_soma
+  path: drafts/dendritic-local-learning/configs/fig1_mnist_shunting_bp_fixed100.yaml
+  overrides:
+    model:
+      core:
+        type: dendritic_additive
+        morphology:
+          somatic_synapses: true
+        reactivation:
+          init_policy: quantile
+    training:
+      main:
+        strategy: local_ca
+        learning_strategy_config:
+          rule_variant: 5f
+          error_broadcast_mode: per_soma
+          decoder_update_mode: local
+          update_reactivation: true
+          update_inactive_weights: false
+          normalize_by_batch: true
+          three_factor:
+            use_conductance_scaling: true
+            use_driving_force: true
+            theta: 0.0
+            e_rev_exc: 1.0
+            e_rev_inh: 0.0
+          four_factor:
+            rho_mode: dot
+            rho_estimator: ema
+    outputs:
+      run_name: ablation_additive_with_soma
+- name: ablation_additive_no_reactivation
+  path: drafts/dendritic-local-learning/configs/fig1_mnist_shunting_bp_fixed100.yaml
+  overrides:
+    model:
+      core:
+        type: dendritic_additive
+        reactivation:
+          enabled: false
+          type: none
+          init_policy: quantile
+    training:
+      main:
+        strategy: local_ca
+        learning_strategy_config:
+          rule_variant: 5f
+          error_broadcast_mode: per_soma
+          decoder_update_mode: local
+          update_reactivation: false
+          update_inactive_weights: false
+          normalize_by_batch: true
+          three_factor:
+            use_conductance_scaling: true
+            use_driving_force: true
+            theta: 0.0
+            e_rev_exc: 1.0
+            e_rev_inh: 0.0
+          four_factor:
+            rho_mode: dot
+            rho_estimator: ema
+    outputs:
+      run_name: ablation_additive_no_reactivation
+- name: ablation_additive_relu_reactivation
+  path: drafts/dendritic-local-learning/configs/fig1_mnist_shunting_bp_fixed100.yaml
+  overrides:
+    model:
+      core:
+        type: dendritic_additive
+        reactivation:
+          enabled: true
+          type: relu
+          init_policy: quantile
+    training:
+      main:
+        strategy: local_ca
+        learning_strategy_config:
+          rule_variant: 5f
+          error_broadcast_mode: per_soma
+          decoder_update_mode: local
+          update_reactivation: false
+          update_inactive_weights: false
+          normalize_by_batch: true
+          three_factor:
+            use_conductance_scaling: true
+            use_driving_force: true
+            theta: 0.0
+            e_rev_exc: 1.0
+            e_rev_inh: 0.0
+          four_factor:
+            rho_mode: dot
+            rho_estimator: ema
+    outputs:
+      run_name: ablation_additive_relu_reactivation
+- name: ablation_additive_bp_reference
+  path: drafts/dendritic-local-learning/configs/fig1_mnist_shunting_bp_fixed100.yaml
+  overrides:
+    model:
+      core:
+        type: dendritic_additive
+        reactivation:
+          init_policy: quantile
+    outputs:
+      run_name: ablation_additive_bp_reference

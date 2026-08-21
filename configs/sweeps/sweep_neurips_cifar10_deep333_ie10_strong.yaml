@@ -1,0 +1,71 @@
+output_dir: "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/sweep_runs"
+
+outputs:
+  run_name: "sweep_neurips_cifar10_deep333_ie10_strong"
+
+slurm_config:
+  account: "kempner_dev"
+  partition: "kempner_h100_priority3"
+  time: "18:00:00"
+  nodes: 1
+  ntasks_per_node: 1
+  gpus_per_node: 1
+  cpus_per_task: 8
+  mem: 64GB
+  max_concurrent_jobs: 12
+  modules_to_load: []
+  conda_env_path: ""
+  training_script: "src/dendritic_modeling/scripts/training/train_experiments.py"
+
+experiment_settings:
+  seeds_per_condition: 3
+  base_seed: 42
+  use_array_jobs: true
+
+configs:
+  - name: "cifar10_shunting_deep333_ie10_standard"
+    path: "drafts/dendritic-local-learning/configs/cifar10_shunting_deep333_ie10_standard_strong.yaml"
+  - name: "cifar10_additive_deep333_ie10_standard"
+    path: "drafts/dendritic-local-learning/configs/cifar10_additive_deep333_ie10_standard_strong.yaml"
+  - name: "cifar10_shunting_deep333_ie10_localca_localdec"
+    path: "drafts/dendritic-local-learning/configs/cifar10_shunting_deep333_ie10_localca_strong.yaml"
+  - name: "cifar10_shunting_deep333_ie10_localca_bpdec"
+    path: "drafts/dendritic-local-learning/configs/cifar10_shunting_deep333_ie10_localca_strong.yaml"
+    overrides:
+      training:
+        main:
+          learning_strategy_config:
+            decoder_update_mode: "backprop"
+      outputs:
+        run_name: "cifar10_shunting_deep333_ie10_localca_bpdec"
+  - name: "cifar10_shunting_deep333_ie10_path_transport_bpdec"
+    path: "drafts/dendritic-local-learning/configs/cifar10_shunting_deep333_ie10_localca_strong.yaml"
+    overrides:
+      training:
+        main:
+          learning_strategy_config:
+            error_broadcast_mode: "path_transport"
+            decoder_update_mode: "backprop"
+      outputs:
+        run_name: "cifar10_shunting_deep333_ie10_path_transport_bpdec"
+  - name: "cifar10_additive_deep333_ie10_localca_bpdec"
+    path: "drafts/dendritic-local-learning/configs/cifar10_additive_deep333_ie10_localca_strong.yaml"
+    overrides:
+      training:
+        main:
+          learning_strategy_config:
+            decoder_update_mode: "backprop"
+      outputs:
+        run_name: "cifar10_additive_deep333_ie10_localca_bpdec"
+  - name: "cifar10_additive_deep333_ie10_path_transport_bpdec"
+    path: "drafts/dendritic-local-learning/configs/cifar10_additive_deep333_ie10_localca_strong.yaml"
+    overrides:
+      training:
+        main:
+          learning_strategy_config:
+            error_broadcast_mode: "path_transport"
+            decoder_update_mode: "backprop"
+      outputs:
+        run_name: "cifar10_additive_deep333_ie10_path_transport_bpdec"
+  - name: "cifar10_shunting_deep333_ie10_multistage"
+    path: "drafts/dendritic-local-learning/configs/cifar10_shunting_deep333_ie10_multistage_strong.yaml"

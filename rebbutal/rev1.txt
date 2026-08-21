@@ -1,0 +1,171 @@
+Meta Review of Submission29735 by Area Chair UroA
+Meta Reviewby Area Chair UroA21 Jul 2026, 17:29 (modified: 23 Jul 2026, 14:28)Senior Area Chairs, Area Chairs, Authors, Reviewers Submitted, Program Chairs, Area Chair UroARevisions
+Metareview:
+This paper studies local credit assignment in dendritic branches in conductance-based neuron models. It derives that the gradient factorizes into a local eligibility term and a non-local compartment error scaled by a path gain. Eventually, the authors claim the path gain can be modulated via shunting inhibition, an observation in dendrites. The study tests its models on MNIST and CIFAR-10. Reviewers acknowledge the conceptual contribution of this paper, including reformulating the local credit assignment as an approximation problem and the usage of shunting inhibition to facilitate backpropagation.
+
+Nevertheless, there are some serious concerns raised by reviewers, which need to be thoroughly addressed during the rebuttal and discussion period.
+
+Technical concerns:
+Optimal rank-1 approximation is not equivalent to the uniform spatial broadcast used by the algorithm.
+
+The theoretically derived three-factor rule performs much worse than the 5F modifier, making the reviewer doubt the main claim of the paper about whether the shunting and a scalar broadcast are sufficient for local learning.
+
+Writing clarity
+Add:
+Official Review of Submission29735 by Reviewer QPha
+Official Reviewby Reviewer QPha26 Jun 2026, 07:51 (modified: 23 Jul 2026, 12:43)Program Chairs, Senior Area Chairs, Area Chairs, Reviewers Submitted, Authors, Reviewer QPhaRevisions
+Summary:
+This paper studies local credit assignment (LocalCA) in a tree-structured conductance-based model. The main insight of the paper is that for the considered tree-structured graph the gradient of the loss wrt to the local synaptic conductances factorises into a term that the authors call local eligibility (product of presynaptic activity, total input resistance of compartment, and the difference between the synaptic reversal potential and current compartment voltage (the driving force)) and a non-local compartment error. This compartment error is the somatic error scaled by a "path gain" through the tree. The authors propose that shunting inhibition multiplicatively modulates these path gains, which sometimes makes the exact error field more compressible and therefore easier to approximate with a low-bandwidth broadcast.
+
+The main contribution made by this submission is the reinterpretation of local credit assignment as an approximation problem. More precisely, the authors propose that a rank-1 broadcast can replace the exact compartment-specific field 
+. The authors report that shunting inhibition reduces path-gain dispersion, makes exact compartment errors more low-rank, improves LocalCA-to-back-propagation alignment, and improves local-learning performance relative to an additive E/I control.
+
+Significance. The main contribution of the paper is conceptual. It proposes mechanism by which dendritic biophysics could alter credit assignment. Rather than treating inhibition only as a way to suppress neural activity, the paper proposess that conductance-based inhibition changes local input resistance, therefore changes both local synaptic sensitivity and the gain with which errors from distal branches transport toward the soma. This implies that inhibition can select which dendritic compartments receive strong versus weak credit signals. This is an intresting contribution regarding the biological credit assignment problem.
+
+Contribution Type: General: Most submissions will fall into this type.
+Strengths And Weaknesses:
+Strengths
+I find the factorisation of the loss an intresting contribution
+
+The implemented experiments aim to distinguish the underlying mechanism by measuring gradient reconstruction, local-to-back-propagation alignment, norm mismatch, path-gain coefficient of variation, error-matrix singular values, inhibitory interventions, morphology dependence, and feedback-bandwidth dependence.
+
+Weaknesses
+Optimal rank-1 approximation is not equivalent to the uniform spatial broadcast used by the algorithm. The approximation assumes scalar broadcast (the rank-1 approximation to have an all one spatial vector), while the experiments test for rank-1 compressibility, which is not the same, because in a general rank-1 approximation one vector is not necessarily uniform, neither can it always be transformed into one.
+
+The result is established for a directed feedforward conductance tree.
+
+The more well performing results depend on the empirical 5F modifier, while the theorem-derived 3F rule performs much worse. Thus I would say that the paper does not show (yet) that shunting plus a scalar broadcast are sufficient for local learning. It rather shows that this combination is useful with additional empirically chosen local preconditioning.
+
+Minor
+There is some overlap of text and other objects/arrows in some figures of the paper.
+Please explain why the residual-variance factor 
+ should be considered as a confidence measure.
+The abstract mentions abbreviations (LocalCA, 5F etc) that are not resolved before, so the reader has no idea what these mean, without reading the full text.
+Figure 1 caption: "gold-ringed soma" I think with this phrase the authors refer to the schematic illustrating soma with a yellow/gold ring. However, I find the word "gold-ringed" odd, while the sentence as it is structured, does not indicate that the authors refer to the illustration.
+Phrase "synapse banks" sounds odd to me, not sure whether it is often used.
+I would start first with introducing the equation 1 and then writing the paragraph currently in lines 78 - 105 that mentions the scaling of parameters etc. Otherwise the reader encounters objects/variables without having a concrete idea yet how these relate or fit together in your model. Current version first describes how equations behave, and then reports the equations which is uncomfortable to read, because the reader has to skim through the text to find the relations you are referring to.
+Quality: 2: not good
+Clarity: 2: not good
+Significance: 3: good
+Originality: 3: good
+Questions:
+can the authors define over which axes the covariance, variance, path-gain CV, and error-matrix SVD are computed in every figure.
+
+What is the constrained reconstruction error of the exact compartment-error field using the exact spatial form available to the rank-1 broadcast?
+
+Would the advantage conferred by shunting inhibition persist for 3F alone after matching activation distributions, gradient norms, and learning-rate schedules between additive and shunting models?
+
+Can you provide shunting-versus-additive comparisons separately for the 3F, 4F, and 5F rules?
+
+The authors already cite previous work introducing models with detailed dendrites where different dendritic compartments receive different teaching signals. can the authors probably point out more clear in what way their proposed mechanism differs from these previous approaches?
+
+The proposed framework assumes access to the somatic error for the updates. How could this signal be generated biologically?
+
+Can you provide a theoretical justification on why inhibitory conductances minimise the effective rank of the error matrix?
+
+Would active dendritic nonlinearities amplify or diminish your path-gain mechanism? Do you have any intuition, theoretical insight or empirical result?
+
+Do the path-gain statistics depend on the symmetry/ geometry of the dendritic tree?
+
+Limitations:
+Largely yes.
+
+The authors should additionally mention that the low-rank SVD analysis measures whether the error field has an optimal unconstrained rank-1 approximation, while the implemented broadcast is more restricted, since it has a uniform spatial pattern across compartments. The paper should state that low-rank alone does not guarantee compatibility with this particular broadcast.
+
+Rating: 2: Reject: For instance, a paper with technical flaws, weak evaluation, inadequate reproducibility and incompletely addressed ethical considerations.
+Confidence: 3: You are fairly confident in your assessment. It is possible that you did not understand some parts of the submission or that you are unfamiliar with some pieces of related work. Math/other details were not carefully checked.
+Ethical Concerns: NO or VERY MINOR ethics concerns only
+Paper Formatting Concerns:
+no
+
+Code Of Conduct Acknowledgement: Yes
+Responsible Reviewing Acknowledgement: Yes
+Add:
+Official Review of Submission29735 by Reviewer s2E9
+Official Reviewby Reviewer s2E925 Jun 2026, 05:58 (modified: 23 Jul 2026, 12:43)Program Chairs, Senior Area Chairs, Area Chairs, Reviewers Submitted, Authors, Reviewer s2E9Revisions
+Summary:
+The paper tries to solve the fundamental credit assignment problem. In standard backprop, we say that the delta w is proportional to the error and the activation. While the authors say that, in the case of pyramidal neurons, no distinct credit is assigned to each neuron, unlike in standard backpropagation. The paper claims that there is a low-bandwidth global signal rather than local signals, i.e., a credit for each neuron. Authors evaluate whether three components such as tree-structured dendrites, excitatory/inhibitory conductance synapses, and shunting inhibition can reshape the geometry of error propagation. In here, the shunting Inhibition acts as a control mechanism for error transmission in dendritic paths.
+
+Contribution Type: General: Most submissions will fall into this type.
+Strengths And Weaknesses:
+Strengths
+
+The shift from developing a new local learning rule to replace backprop to the analysis if a neuron's biophysics can make the backprop easier to approximate is novel.
+The derivation of the exact gradients for dendritic trees and proving that synaptic gradients factorise into a local eligibility term and a non-local compartment error provides a rigorous mathematical framework for local learning.
+The theoretical claims are supported by the right set of experiments, such as gradient reconstruction, alignments, error compressibility, interventions by inhibition and oracle.
+Weakness
+
+The scalability of the method isn't shown in the paper due to its limited evaluation on Fashion MNIST, CIFAR-10, and synthetic tasks. Evaluation should be shown on larger datasets, such as CIF100, TinyImagenet, Imagenet-A, or R.
+From equation (4) we understand that the 
+ is described as a compartment error, but the theory isn't clear on how the path gain 
+ can be learned or estimated.
+The advantages of shunting inhibition aren't theoretically justified. Rather, it's empirically shown in the paper.
+The change of neuron from pyramidal or even if just the structure changes from a single parent, leading to a non-unique path, changing the equations. Generalizability is not shown with respect to different networks or across datasets.
+Quality: 3: good
+Clarity: 3: good
+Significance: 3: good
+Originality: 3: good
+Questions:
+What is the goal of the paper - to bridge the gap between neuroscience and deep learning? In that case, it would be great to understand the biophysical underpinnings of this work, for instance, how inhibitory neurotransmitters mediate shunting inhibition in the classification task? Given that computations in the brain are more precisely represented by Hodgkin-Huxley-like models, and neuronal spikes also are shown to play a role.
+If the goal is to improve deep learning inspired by neuroscience, then please extend your evaluation to STOA datasets like ImageNet and ImageNet-R. A comparison with STOA performance is also necessary.
+A significant amount of such learning algorithm variants exists in the literature, such as FF, PEPITA, SPELA, Trifecta, NoProp, LLS to name a few. Please thoroughly compare your work with similar works.
+It's not clear why we should go for shunting inhibition from the present manuscript contents. Please compare and report the memory, wall-clock time, and energy estimates for your work with STOA models, in addition to classification accuracy.
+How would you extend this design to CNNs or transformers?
+Limitations:
+Yes
+
+Rating: 3: Borderline reject: Technically solid paper where reasons to reject, e.g., limited evaluation, outweigh reasons to accept, e.g., good evaluation. Please use sparingly.
+Confidence: 4: You are confident in your assessment, but not absolutely certain. It is unlikely, but not impossible, that you did not understand some parts of the submission or that you are unfamiliar with some pieces of related work.
+Ethical Concerns: NO or VERY MINOR ethics concerns only
+Paper Formatting Concerns:
+None
+
+[Minor] I would prefer to read the experimental results in the main paper rather than in the appendix.
+
+Code Of Conduct Acknowledgement: Yes
+Responsible Reviewing Acknowledgement: Yes
+Add:
+Official Review of Submission29735 by Reviewer QgDY
+Official Reviewby Reviewer QgDY24 Jun 2026, 20:00 (modified: 23 Jul 2026, 12:43)Program Chairs, Senior Area Chairs, Area Chairs, Reviewers Submitted, Authors, Reviewer QgDYRevisions
+Summary:
+The paper approximates single neurons as conductance-based dendritic networks to tackle the problem of how neurons could implement credit assignment without backprop. In this conductance-based network, they derive the 'conductance-stage path gain'. They factorize the synaptic gradient in terms of presynaptic activity, driving force, and input resistance, and one non-local compartment error. They then perform a series of experiments with MNIST, Fashion-MNIST data to highlight the regimes where shunting modulated input resistance can make localCA better.
+
+Contribution Type: General: Most submissions will fall into this type.
+Strengths And Weaknesses:
+Strengths
+The topic is interesting and important for neuroAI.
+There is not much work in my knowledge that incorporates the role of morphology in credit assignment and plasticity, and novel theoretical frameworks might be needed with new datasets that are able to image local dendritic activity and plasticity.
+Weaknesses
+Paper is very hard to follow. Specific comments below:
+The abstract, introduction and model derivation introduce a lot of jargon and unclear terminology. e.g. ‘identity upward transfer’, ‘localCA’ in the abstract, ‘E/I synapse banks’, ‘pathway-broadcast mixing weight’, ‘depth-dependent modulation in morphology extensions’. It took me a couple of reads for context to understand what they mean. I see that a lot of these terms are properly elaborated in the appendix - so either the authors provide an intuitive, abbreviated understanding of these in the main text or link to the relevant section in the appendix.
+The simplifying assumptions are not elaborated on, or explained well.
+Figure captions are inadequate, and the figures are hard to interpret.
+Paper organization and structuring is not great. I could not follow the link between the theoretical derivations, the implications to local learning rules (subsequent section) and then the experiments section. The flow needs to be improved quite a bit in order for the paper to be intelligible. Perhaps the authors could move some details of derivations to the appendix, and elaborate on the background, study rationale etc instead? I see that a lot of those might have been relegated to the appendix. But I feel like readers should be able to follow the paper without reading the appendix in detail.
+
+
+Perhaps due to the structure and writing of the paper, the significance of the study and future applications are not very clear to me. I see that there is an appendix table S5 listed in the Discussions and Limitations section that points to biological predictions; I’d have appreciated a simplified version of that somewhere in the main text.
+
+Weirdly, the limitations of the paper, in terms of the biological plausibility assumptions, are relegated to a subsection in the appendix. This should be in the main text. Throughout my read of the paper, I was looking for this section in order to understand how to build on their model - see my question below.
+
+Quality: 2: not good
+Clarity: 1: poor
+Significance: 3: good
+Originality: 2: not good
+Questions:
+How would the authors propose that the limitations around their framework that uses passive cable equations rather than temporal membrane dynamics, be addressed? Do they expect these to have second-order effects?
+
+Related to the question above, Are the dynamic effects in this conductance-based models, that boil down to changes in local conductances, decidedly first order? Can there be other non-linear effects that operate on longer timescales, such as calcium and neuromodulatory dynamics, that can be build onto this work? How might those be taken into consideration?
+
+To what extent is this framework relevant to real neuronal morphologies? Is this work supposed to give a general idea of how branching morphology features into local credit-assignment, and so minute differences in branching patterns won’t cause significant differences across neurons of the same cell type or across cell types? Suppose I wanted to study the differences in local credit assignment across morphologies, would this framework be relevant?
+
+Limitations:
+Limitations were somewhat addressed but not entirely; key limitations were relegated to the appendix. See comment 3 under ‘Weaknesses’
+
+Rating: 2: Reject: For instance, a paper with technical flaws, weak evaluation, inadequate reproducibility and incompletely addressed ethical considerations.
+Confidence: 2: You are willing to defend your assessment, but it is quite likely that you did not understand the central parts of the submission or that you are unfamiliar with some pieces of related work. Math/other details were not carefully checked.
+Ethical Concerns: NO or VERY MINOR ethics concerns only
+Paper Formatting Concerns:
+Did not notice anything.
+
+Code Of Conduct Acknowledgement: Yes
+Responsible Reviewing Acknowledgement: Yes
