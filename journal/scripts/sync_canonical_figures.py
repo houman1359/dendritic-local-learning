@@ -43,6 +43,18 @@ FIGURE_MAP: dict[str, str] = {
     "main/figure_09_panels_I-J": "fig_fulltree_boundary",
     "main/figure_09_panels_K-N": "fig8_alignment_controlled",
     "main/figure_09_panel_O": "fig_credit_phase_plane",
+    # Shared vector teaching schematics used by the publication compositor.
+    "components/schematic_fig2_ownership_address": "schematic_fig2_ownership_address",
+    "components/schematic_fig3_route_resolution": "schematic_fig3_route_resolution",
+    "components/schematic_fig4_credit_operator": "schematic_fig4_credit_operator",
+    "components/schematic_fig5_physical_depth": "schematic_fig5_physical_depth",
+    "components/schematic_fig6_generalization": "schematic_fig6_generalization",
+    "components/schematic_fig7_anatomy_pipeline": "schematic_fig7_anatomy_pipeline",
+    "components/schematic_fig8_focal_shunt": "schematic_fig8_focal_shunt",
+    "components/schematic_fig9_alignment_boundary": "schematic_fig9_alignment_boundary",
+    "components/animal_pairs_wide": "fig_animal_pairs_wide",
+    "components/active_dose_main": "fig_active_dose_main",
+    "components/physical_controls_main": "fig_physical_controls_main",
     # Supplementary Information: generated source blocks S1--S27.  The
     # compositor adds compact S18--S19 blocks and S28 from selected diagnostic
     # panels.

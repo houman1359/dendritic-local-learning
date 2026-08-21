@@ -31,6 +31,38 @@ are local build products and are not canonical assets.
 | 8 | `figure_08.pdf` | Focal shunting with the electrotonic boundary emphasized and active-conductance sensitivity |
 | 9 | `figure_09.pdf` | Measured-response nulls, imposed-alignment rescue, animal test and complete-tree boundary |
 
+## Final panel sequence
+
+This is the panel lettering used by `main.tex`; modular source letters are not
+publication letters.
+
+- **Figure 1:** A point/tree comparison; B network layer; C coordinate,
+  address and gain; D eligibility times transported error; E evidence path.
+- **Figure 2:** A identity/ownership/address schematic; B MNIST feedback;
+  C gradient alignment; D identity gain across depth; E ownership; F credit
+  reversal; G Fashion-MNIST ladder; H paired bottleneck contrasts.
+- **Figure 3:** A route-resolution schematic and condition key; B learning
+  across bandwidth; C best-control contrast; D task--topology alignment;
+  E representation match; F capture and learning.
+- **Figure 4:** A credit-operator utility schematic; B spectral alignment;
+  C predictive utility; D route-resolution crossover; E projection boundary;
+  F reliability gains; G alignment-by-bandwidth synthesis.
+- **Figure 5:** A matched physical-depth design; B backpropagation depth test;
+  C primary contrasts; D LocalCA transport; E divisive control; F serial
+  versus grouped-point composition.
+- **Figure 6:** A generalization designs; B aligned H4; C reversed H4;
+  D H4 contrasts; E optimum across task depth; F BP task-family boundary;
+  G LocalCA boundary; H architecture-by-alignment interaction.
+- **Figure 7:** A anatomy-to-economy pipeline; B mapped reconstruction;
+  C reciprocal-cable field; D sparse capacity; E eight-channel efficiency;
+  F capture per wire; G independent-animal direction.
+- **Figure 8:** A matched focal-shunt design; B relation selectivity; C passive
+  dose response; D adjoint transport; E electrotonic boundary; F active dose
+  response; G cellwise contrast.
+- **Figure 9:** A evidence-boundary schematic; B structure--function null;
+  C task-field capture; D held-out learning; E imposed alignment; F signed
+  six-animal contrast; G full-tree learning; H anatomy boundary.
+
 Supplementary Figures S18--S28 retain the expanded physical-depth controls,
 prospective identity/ownership diagnostics, full morphology diagnostics,
 focal-shunting controls, measured-response diagnostics and the trained

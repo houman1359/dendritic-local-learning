@@ -60,22 +60,43 @@ CANONICAL_ASSETS = {
 
 CANONICAL_ASSIGNMENTS = {
     "fig1.asset": ("fig1", "all"),
-    "fig2.asset": ("fig2", "a-b"),
-    "prospective.learning.asset": ("fig2", "c-e"),
-    "fashion.asset": ("fig2", "f-g"),
+    "fig2.asset": ("fig2", "b-c"),
+    "prospective.learning.asset": ("fig2", "d-f"),
+    "fashion.asset": ("fig2", "g-h"),
     "subtree.factorial.asset": ("fig3", "all"),
     "creditphase.asset": ("fig4", "a-f"),
     "phaseplane.asset": ("fig4", "g"),
-    "physical.asset": ("fig5", "a-f"),
-    "pointcredit.asset": ("fig5", "g-h"),
-    "fig3.asset": ("fig7", "a-d"),
+    "physical.asset": ("fig5", "b-e"),
+    "pointcredit.asset": ("fig5", "f"),
+    "fig3.asset": ("fig7", "b-d"),
     "capturewire.asset": ("fig7", "e-f"),
     "fig4.asset": ("fig8", "a-e"),
     "extensions.asset": ("fig8", "f-g"),
-    "fig6.asset": ("fig9", "a-e"),
-    "extensions.fulltree.asset": ("fig9", "f-g"),
+    "fig6.asset": ("fig9", "b-f"),
+    "extensions.fulltree.asset": ("fig9", "g-h"),
     "alignmentdose.asset": ("figS18", "c-e"),
     "remainingphysical.asset": ("figS18", "f-k"),
+}
+
+CANONICAL_GENERATORS = {
+    entry_id: "scripts/assemble_compact_main_figures.py"
+    for entry_id in (
+        "fig1.asset",
+        "fig2.asset",
+        "prospective.learning.asset",
+        "fashion.asset",
+        "subtree.factorial.asset",
+        "creditphase.asset",
+        "phaseplane.asset",
+        "physical.asset",
+        "pointcredit.asset",
+        "fig3.asset",
+        "capturewire.asset",
+        "fig4.asset",
+        "extensions.asset",
+        "fig6.asset",
+        "extensions.fulltree.asset",
+    )
 }
 
 # This standalone controlled-alignment graphic was superseded by the focused
@@ -87,7 +108,7 @@ NEW_DETAIL_ASSETS = {
     "physical.h4.asset": {
         "figure": "fig6",
         "path": "figures/main/figure_06.pdf",
-        "generator": "scripts/analyze_physical_depth_h4_factorial.py",
+        "generator": "scripts/assemble_compact_main_figures.py",
         "notes": "H4 depth-saturation test: exact backpropagation, point emulation, local credit, and mechanism controls.",
     },
     "prospective.detail.asset": {
@@ -150,7 +171,7 @@ NEW_PROVENANCE_ENTRIES = {
     "taskfamily.asset": {
         "record_type": "figure_asset",
         "figure": "fig6",
-        "panel": "e-g",
+        "panel": "f-h",
         "path": "figures/main/figure_06.pdf",
         "generator": "scripts/assemble_compact_main_figures.py",
         "replication_unit": "paired independent training seed (n=10)",
@@ -159,7 +180,7 @@ NEW_PROVENANCE_ENTRIES = {
     "taskfamily.outcomes": {
         "record_type": "panel_source",
         "figure": "fig6",
-        "panel": "e-g",
+        "panel": "f-h",
         "path": "source_data/task_family_alignment/seed_outcomes.csv",
         "generator": "scripts/analyze_task_family_alignment_factorial.py",
         "replication_unit": "paired independent training seed (n=10)",
@@ -168,7 +189,7 @@ NEW_PROVENANCE_ENTRIES = {
     "taskfamily.conditions": {
         "record_type": "panel_source",
         "figure": "fig6",
-        "panel": "e-f",
+        "panel": "f-g",
         "path": "source_data/task_family_alignment/condition_summary.csv",
         "generator": "scripts/analyze_task_family_alignment_factorial.py",
         "replication_unit": "paired independent training seed (n=10)",
@@ -177,7 +198,7 @@ NEW_PROVENANCE_ENTRIES = {
     "taskfamily.contrasts": {
         "record_type": "panel_source",
         "figure": "fig6",
-        "panel": "g",
+        "panel": "h",
         "path": "source_data/task_family_alignment/paired_contrasts.csv",
         "generator": "scripts/analyze_task_family_alignment_factorial.py",
         "replication_unit": "paired independent training seed (n=10)",
@@ -254,12 +275,13 @@ def resolve_project_path(raw_path: str) -> Path:
 # Correct stale prose left by an earlier numbering-only remap.  These notes
 # are descriptive metadata, not independent scientific content.
 CANONICAL_NOTES = {
-    "fig3.e": "Direct-presynaptic-type-only sensitivity analysis shown in Fig. 7H.",
-    "fig4.b": "Cell-level additive, depth-shuffled, and focal-shunt localization shown in Fig. 8C.",
-    "fig4.c": "Dose response and focal-depth localization values shown in Fig. 8D--E.",
+    "fig2.asset": "Final eight-panel identity, ownership and within-tree-address figure with shared vector schematic.",
+    "fig3.e": "Direct-presynaptic-type-only sensitivity analysis shown in Supplementary Fig. 20H.",
+    "fig4.b": "Cell-level additive, depth-shuffled, and focal-shunt localization shown in Fig. 8B.",
+    "fig4.c": "Dose response and focal-depth localization values shown in Fig. 8B--C.",
     "fig4.effects": "Descendant, sister, ancestor, and unrelated category effects shown in Fig. 8B.",
-    "fig4.e.cell": "Cell-level exact factor-freeze values underlying the same-voltage driving-force and full-shunt contrast in Fig. 8H.",
-    "fig4.e.site": "Site-level factor substitutions supporting the Fig. 8H cell summary and supplementary Shapley analysis.",
+    "fig4.e.cell": "Cell-level exact factor-freeze values underlying the same-voltage driving-force and full-shunt contrast in Fig. 8D.",
+    "fig4.e.site": "Site-level factor substitutions supporting the Fig. 8D cell summary and supplementary Shapley analysis.",
 }
 
 
@@ -301,6 +323,13 @@ def main() -> None:
                 updated += 1
             if row.get("panel") != panel:
                 row["panel"] = panel
+                updated += 1
+
+        generator = CANONICAL_GENERATORS.get(entry_id)
+        if generator is not None:
+            expected_generator = PROJECT_PREFIX + generator
+            if row.get("generator_path") != expected_generator:
+                row["generator_path"] = expected_generator
                 updated += 1
 
         canonical_note = CANONICAL_NOTES.get(entry_id)

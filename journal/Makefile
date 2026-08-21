@@ -61,6 +61,8 @@ figures:
 	$(PYTHON) scripts/analyze_physical_alignment_dose.py
 	$(PYTHON) scripts/analyze_remaining_physical_experiments.py
 	$(PYTHON) scripts/analyze_fashion_feedback_ladder.py
+	$(PYTHON) scripts/build_main_figure_schematics.py
+	$(PYTHON) scripts/build_main_physical_control_panels.py
 	$(PYTHON) scripts/sync_canonical_figures.py
 	$(PYTHON) scripts/assemble_compact_main_figures.py
 

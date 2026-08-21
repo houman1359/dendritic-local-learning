@@ -29,6 +29,18 @@ FIGURES = JOURNAL / "figures"
 OUT = HERE / "pdf_assets"
 
 CROPS: dict[str, tuple] = {
+    # Shared paper/talk vector schematics.  These are full-page copies rather
+    # than raster crops, so the workshop and journal use one graphical
+    # vocabulary while retaining independently composed layouts.
+    "ownership_schematic": (
+        "components/schematic_fig2_ownership_address", (0, 0, 2160, 1140)
+    ),
+    "physical_stage_schematic": (
+        "components/schematic_fig5_physical_depth", (0, 0, 1440, 1230)
+    ),
+    "focal_shunt_schematic": (
+        "components/schematic_fig8_focal_shunt", (0, 0, 3120, 1590)
+    ),
     # phase_plane: talk variant — legend column cropped off (the slide carries
     # the single legend) and the panel letter covered.  Retuned 2026-08-20
     # against the regenerated full-width band sheet (4320x1380 @600dpi): plot

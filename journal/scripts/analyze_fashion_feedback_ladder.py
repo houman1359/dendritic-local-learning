@@ -276,10 +276,8 @@ def plot(frame: pd.DataFrame, summary: pd.DataFrame, contrasts: pd.DataFrame) ->
     axes[1].set_xticks([0.5, 2.5], ["identity", "within-tree\ntransport"])
     axes[1].set_yticks([0, 2, 4, 6])
     axes[1].set_ylabel("paired accuracy gain (pp)")
-    # This block is published as Fig. 2 G-H, where the ladder panel carrying
-    # the colour key is lettered G.
-    axes[1].text(0.97, 0.97, "colors as in F", transform=axes[1].transAxes,
-                 color=COLORS["mute"], fontsize=PT_SMALL, ha="right", va="top")
+    # The adjacent ladder is the two-colour key; avoid a cross-panel note in
+    # the data region because the publication compositor can change letters.
     panel_title(axes[1], "Q", "Replicated bottleneck")
     style_axis(axes[1])
     # After style_axis (which resets tick geometry): group labels sit at the

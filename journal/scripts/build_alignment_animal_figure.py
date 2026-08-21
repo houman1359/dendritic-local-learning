@@ -55,6 +55,7 @@ ALIGNMENT = ROOT / "source_data" / "alignment_controlled"
 ANIMAL = ROOT / "source_data" / "animal_learning_francioni"
 OUTPUT_ALIGNMENT = ROOT / "figures" / "generated" / "fig8_alignment_controlled"
 OUTPUT_ANIMAL = ROOT / "figures" / "generated" / "fig_animal_credit_supplement"
+OUTPUT_ANIMAL_PAIRS = ROOT / "figures" / "generated" / "fig_animal_pairs_wide"
 
 METHODS = (
     "morphology-selected paths",
@@ -443,6 +444,18 @@ def main() -> None:
     mode_energy(animal_axes[2], summary)
     neuron_distributions(animal_axes[3], neuron)
     _save(animal_fig, OUTPUT_ANIMAL)
+
+    # The animal-pair result is promoted into a half-width main panel.  A
+    # purpose-built wide source avoids the large side margins produced when
+    # the portrait panel of the four-column supplementary strip is enlarged.
+    pairs_fig, pairs_ax = plt.subplots(
+        1,
+        1,
+        figsize=(FIG_W * (4.4 / 7.2), 2.42),
+        gridspec_kw={"left": 0.19, "right": 0.97, "bottom": 0.20, "top": 0.84},
+    )
+    animal_pairs(pairs_ax, animal)
+    _save(pairs_fig, OUTPUT_ANIMAL_PAIRS)
 
 
 if __name__ == "__main__":

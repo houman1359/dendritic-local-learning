@@ -35,6 +35,8 @@ class Panel:
     col: int
     nrows: int
     ncols: int
+    erase_heading: bool = True
+    erase_phrases: tuple[str, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -59,10 +61,26 @@ SOURCE_START = {
 }
 
 
-def panel(filename: str, letter: str, nrows: int, ncols: int) -> Panel:
+def panel(
+    filename: str,
+    letter: str,
+    nrows: int,
+    ncols: int,
+    *,
+    erase_heading: bool = True,
+    erase_phrases: tuple[str, ...] = (),
+) -> Panel:
     start = SOURCE_START.get(filename, "A")
     index = ord(letter.upper()) - ord(start)
-    return Panel(filename, index // ncols, index % ncols, nrows, ncols)
+    return Panel(
+        filename,
+        index // ncols,
+        index % ncols,
+        nrows,
+        ncols,
+        erase_heading,
+        erase_phrases,
+    )
 
 
 def copy_page(source: str, destination: str) -> None:
@@ -344,16 +362,34 @@ def compose(
         scale = min(target.width / clip.width, target.height / clip.height)
         shown_x = target.x0 + (target.width - clip.width * scale) / 2
         shown_y = target.y0 + (target.height - clip.height * scale) / 2
-        for span_rect in _title_spans(source_page, clip):
-            heading_box = fitz.Rect(
-                max(target.x0, shown_x + (span_rect.x0 - 2.0 - clip.x0) * scale),
-                target.y0,
-                min(target.x1, shown_x + (span_rect.x1 + 2.0 - clip.x0) * scale),
-                shown_y + (span_rect.y1 + 1.5 - clip.y0) * scale,
-            )
-            page_out.draw_rect(
-                heading_box, color=None, fill=(1, 1, 1), overlay=True
-            )
+        if spec.erase_heading:
+            for span_rect in _title_spans(source_page, clip):
+                heading_box = fitz.Rect(
+                    max(target.x0, shown_x + (span_rect.x0 - 2.0 - clip.x0) * scale),
+                    target.y0,
+                    min(target.x1, shown_x + (span_rect.x1 + 2.0 - clip.x0) * scale),
+                    shown_y + (span_rect.y1 + 1.5 - clip.y0) * scale,
+                )
+                page_out.draw_rect(
+                    heading_box, color=None, fill=(1, 1, 1), overlay=True
+                )
+        # A few legacy modular panels carry letter-dependent cross-references
+        # (for example, “key as in A”).  Remove those explicitly when the
+        # final compositor supplies a self-contained key elsewhere; never
+        # white out a broad fixed band that could cover data.
+        for phrase in spec.erase_phrases:
+            for phrase_rect in source_page.search_for(phrase):
+                if not clip.intersects(phrase_rect):
+                    continue
+                phrase_box = fitz.Rect(
+                    shown_x + (phrase_rect.x0 - 1.5 - clip.x0) * scale,
+                    shown_y + (phrase_rect.y0 - 1.0 - clip.y0) * scale,
+                    shown_x + (phrase_rect.x1 + 1.5 - clip.x0) * scale,
+                    shown_y + (phrase_rect.y1 + 1.0 - clip.y0) * scale,
+                )
+                page_out.draw_rect(
+                    phrase_box, color=None, fill=(1, 1, 1), overlay=True
+                )
         page_out.insert_text(
             fitz.Point(target.x0 + 3, target.y0 + 12),
             chr(ord("A") + index),
@@ -384,13 +420,19 @@ def compose(
 
 
 def main() -> None:
-    # Figures 1 and 3 are already designed as single coherent canvases.
+    # Figure 1 is already designed as a single coherent canvas.
     copy_page("figure_01_panels_A-E.pdf", "figure_01.pdf")
-    copy_page("figure_03_panels_A-F.pdf", "figure_03.pdf")
 
     compose(
         MAIN / "figure_02.pdf",
         [
+            panel(
+                "../components/schematic_fig2_ownership_address.pdf",
+                "A",
+                1,
+                1,
+                erase_heading=False,
+            ),
             panel("figure_02_panels_A-F.pdf", "B", 2, 3),
             panel("figure_02_panels_A-F.pdf", "C", 2, 3),
             panel("figure_02_panels_G-O.pdf", "G", 3, 3),
@@ -400,26 +442,70 @@ def main() -> None:
             panel("figure_02_panels_P-Q.pdf", "Q", 1, 2),
         ],
         [
+            "Identity, ownership and address",
             "Neuron-indexed feedback",
             "Gradient alignment",
-            "MNIST identity gain",
-            "Matched routing",
-            "Within-neuron routing",
-            "Second-dataset ladder",
+            "Identity gain across depth",
+            "Matched ownership",
+            "Within-tree credit reversal",
+            "Fashion-MNIST ladder",
             "Replicated bottleneck",
+        ],
+        rows=4,
+        cols=12,
+        height=515,
+        slots=[
+            Slot(0, 0, colspan=12),
+            Slot(1, 0, colspan=4),
+            Slot(1, 4, colspan=4),
+            Slot(1, 8, colspan=4),
+            Slot(2, 0, colspan=6),
+            Slot(2, 6, colspan=6),
+            Slot(3, 0, colspan=6),
+            Slot(3, 6, colspan=6),
+        ],
+        row_heights=[118.0, 125.0, 125.0, 130.0],
+    )
+
+    # A single wide route-resolution schematic replaces the four tiny tree
+    # icons.  The empirical panels then occupy two balanced rows and can be
+    # read at manuscript scale without stretching.
+    compose(
+        MAIN / "figure_03.pdf",
+        [
+            panel(
+                "../components/schematic_fig3_route_resolution.pdf",
+                "A",
+                1,
+                1,
+                erase_heading=False,
+            ),
+            panel("figure_03_panels_A-F.pdf", "B", 2, 3),
+            panel("figure_03_panels_A-F.pdf", "C", 2, 3),
+            panel("figure_03_panels_A-F.pdf", "D", 2, 3),
+            panel("figure_03_panels_A-F.pdf", "E", 2, 3),
+            panel("figure_03_panels_A-F.pdf", "F", 2, 3),
+        ],
+        [
+            "Nested addresses refine route resolution",
+            "Learning across bandwidth",
+            "Best-control contrast",
+            "Task–topology alignment",
+            "Representation match",
+            "Capture and learning",
         ],
         rows=3,
         cols=6,
-        height=445,
+        height=410,
         slots=[
-            Slot(0, 0, colspan=2),
-            Slot(0, 2, colspan=2),
-            Slot(0, 4, colspan=2),
-            Slot(1, 0, colspan=3),
-            Slot(1, 3, colspan=3),
+            Slot(0, 0, colspan=6),
+            Slot(1, 0, colspan=2),
+            Slot(1, 2, colspan=2),
+            Slot(1, 4, colspan=2),
             Slot(2, 0, colspan=3),
             Slot(2, 3, colspan=3),
         ],
+        row_heights=[120.0, 145.0, 143.0],
     )
 
     # The alignment-by-bandwidth plane is the theory's most compact boundary
@@ -429,7 +515,13 @@ def main() -> None:
     compose(
         MAIN / "figure_04.pdf",
         [
-            panel("figure_04_panels_A-I.pdf", "A", 3, 3),
+            panel(
+                "../components/schematic_fig4_credit_operator.pdf",
+                "A",
+                1,
+                1,
+                erase_heading=False,
+            ),
             panel("figure_04_panels_A-I.pdf", "B", 3, 3),
             panel("figure_04_panels_A-I.pdf", "I", 3, 3),
             panel("figure_04_panels_A-I.pdf", "D", 3, 3),
@@ -458,49 +550,74 @@ def main() -> None:
             Slot(1, 4, colspan=2),
             Slot(2, 0, colspan=6),
         ],
-        row_heights=[135.0, 135.0, 186.0],
+        row_heights=[145.0, 145.0, 174.0],
     )
 
     compose(
         MAIN / "figure_05.pdf",
         [
-            *[panel("figure_05_panels_A-F.pdf", letter, 2, 3) for letter in "ABCDEF"],
-            panel("figure_05_panels_G-L.pdf", "G", 2, 3),
-            panel("figure_05_panels_G-L.pdf", "H", 2, 3),
+            panel(
+                "../components/schematic_fig5_physical_depth.pdf",
+                "A",
+                1,
+                1,
+                erase_heading=False,
+            ),
+            panel("figure_05_panels_A-F.pdf", "C", 2, 3),
+            panel("figure_05_panels_A-F.pdf", "D", 2, 3),
+            panel("figure_05_panels_A-F.pdf", "E", 2, 3),
+            panel("../components/physical_controls_main.pdf", "A", 1, 2),
+            panel("../components/physical_controls_main.pdf", "B", 1, 2),
         ],
         [
-            "Matched-resource depth",
-            "Nested divisive task",
+            "Matched resources and task composition",
             "Backprop depth test",
             "Prespecified contrasts",
             "Local credit transport",
             "Divisive control",
-            "Architecture controls",
             "Serial composition",
         ],
-        rows=2,
-        cols=4,
-        height=330,
+        rows=3,
+        cols=6,
+        height=420,
         slots=[
-            Slot(0, 0),
-            Slot(0, 1),
-            Slot(0, 2),
-            Slot(0, 3),
-            Slot(1, 0),
-            Slot(1, 1),
-            Slot(1, 2),
-            Slot(1, 3),
+            Slot(0, 0, colspan=6),
+            Slot(1, 0, colspan=2),
+            Slot(1, 2, colspan=2),
+            Slot(1, 4, colspan=2),
+            Slot(2, 0, colspan=3),
+            Slot(2, 3, colspan=3),
         ],
+        row_heights=[118.0, 143.0, 143.0],
     )
 
     compose(
         MAIN / "figure_06.pdf",
-        [panel("figure_06_panels_A-D.pdf", letter, 2, 2) for letter in "ABCD"]
+        [
+            panel(
+                "../components/schematic_fig6_generalization.pdf",
+                "A",
+                1,
+                1,
+                erase_heading=False,
+            )
+        ]
+        + [
+            panel(
+                "figure_06_panels_A-D.pdf",
+                letter,
+                2,
+                2,
+                erase_phrases=("key as in A",) if letter == "B" else (),
+            )
+            for letter in "ABCD"
+        ]
         + [
             panel("../generated/fig_task_family_alignment_composite.pdf", letter, 1, 3)
             for letter in "ABC"
         ],
         [
+            "Two generalization tests",
             "H4 aligned hierarchy",
             "H4 reversed placement",
             "Frozen H4 contrasts",
@@ -509,31 +626,39 @@ def main() -> None:
             "Task-family boundary under LocalCA",
             "Architecture × alignment interaction",
         ],
-        rows=3,
+        rows=4,
         cols=6,
-        height=450,
+        height=455,
         slots=[
-            Slot(0, 0, colspan=2),
-            Slot(0, 2, colspan=2),
-            Slot(0, 4, colspan=2),
-            Slot(1, 0, colspan=2),
-            Slot(1, 2, colspan=2),
-            Slot(1, 4, colspan=2),
-            Slot(2, 2, colspan=2),
+            Slot(0, 0, colspan=6),
+            Slot(1, 0, colspan=3),
+            Slot(1, 3, colspan=3),
+            Slot(2, 0, colspan=3),
+            Slot(2, 3, colspan=3),
+            Slot(3, 0, colspan=2),
+            Slot(3, 2, colspan=2),
+            Slot(3, 4, colspan=2),
         ],
+        row_heights=[108.0, 124.0, 124.0, 128.0],
     )
 
     figure_07_panels = [
+        panel(
+            "../components/schematic_fig7_anatomy_pipeline.pdf",
+            "A",
+            1,
+            1,
+            erase_heading=False,
+        ),
         panel("figure_07_panels_A-J.pdf", "A", 2, 3),
-        panel("figure_07_panels_A-J.pdf", "B", 2, 3),
         panel("figure_07_panels_A-J.pdf", "E", 2, 3),
         panel("figure_07_panels_A-J.pdf", "C", 2, 3),
         panel("figure_07_panels_K-L.pdf", "K", 1, 2),
         panel("figure_07_panels_K-L.pdf", "L", 1, 2),
     ]
     figure_07_titles = [
-        "Reconstructed tree",
-        "Ancestry addresses",
+        "From reconstruction to route economy",
+        "Mapped reconstruction",
         "Reciprocal cable field",
         "Sparse route capacity",
         "Wire efficiency at eight channels",
@@ -551,28 +676,35 @@ def main() -> None:
         figure_07_titles,
         rows=3,
         cols=6,
-        height=390,
+        height=410,
         slots=[
-            Slot(0, 0, colspan=2),
-            Slot(0, 2, colspan=2),
-            Slot(0, 4, colspan=2),
-            Slot(1, 0, colspan=3),
-            Slot(1, 3, colspan=3),
-            Slot(2, 0, colspan=3),
-            Slot(2, 3, colspan=3),
+            Slot(0, 0, colspan=6),
+            Slot(1, 0, colspan=2),
+            Slot(1, 2, colspan=2),
+            Slot(1, 4, colspan=2),
+            Slot(2, 0, colspan=2),
+            Slot(2, 2, colspan=2),
+            Slot(2, 4, colspan=2),
         ],
+        row_heights=[100.0, 145.0, 145.0],
     )
 
     compose(
         MAIN / "figure_08.pdf",
         [
-            panel("figure_08_panels_A-I.pdf", "A", 2, 3),
+            panel(
+                "../components/schematic_fig8_focal_shunt.pdf",
+                "A",
+                1,
+                1,
+                erase_heading=False,
+            ),
             panel("figure_08_panels_A-I.pdf", "B", 2, 3),
             panel("figure_08_panels_A-I.pdf", "D", 2, 3),
             panel("figure_08_panels_A-I.pdf", "E", 2, 3),
             panel("figure_08_panels_A-I.pdf", "F", 2, 3),
-            panel("figure_08_panels_J-M.pdf", "K", 1, 4),
-            panel("figure_08_panels_J-M.pdf", "L", 1, 4),
+            panel("../components/active_dose_main.pdf", "A", 1, 2),
+            panel("../components/active_dose_main.pdf", "B", 1, 2),
         ],
         [
             "Matched focal shunt",
@@ -584,17 +716,18 @@ def main() -> None:
             "Cellwise contrast",
         ],
         rows=3,
-        cols=4,
-        height=405,
+        cols=12,
+        height=448,
         slots=[
-            Slot(0, 0, colspan=2),
-            Slot(0, 2, colspan=2),
-            Slot(1, 0),
-            Slot(1, 1),
-            Slot(1, 2, colspan=2),
-            Slot(2, 0, colspan=2),
-            Slot(2, 2, colspan=2),
+            Slot(0, 0, colspan=6),
+            Slot(0, 6, colspan=3),
+            Slot(0, 9, colspan=3),
+            Slot(1, 0, colspan=6),
+            Slot(1, 6, colspan=6),
+            Slot(2, 0, colspan=6),
+            Slot(2, 6, colspan=6),
         ],
+        row_heights=[145.0, 145.0, 144.0],
     )
 
     # Figure 9 is the empirical boundary: measured-response nulls, imposed
@@ -603,15 +736,23 @@ def main() -> None:
     compose(
         MAIN / "figure_09.pdf",
         [
+            panel(
+                "../components/schematic_fig9_alignment_boundary.pdf",
+                "A",
+                1,
+                1,
+                erase_heading=False,
+            ),
             panel("figure_09_panels_A-H.pdf", "B", 2, 3),
             panel("figure_09_panels_A-H.pdf", "C", 2, 3),
             panel("figure_09_panels_A-H.pdf", "D", 2, 3),
             panel("figure_09_panels_A-H.pdf", "E", 2, 3),
-            panel("../supplementary/figure_S17_panels_A-D.pdf", "B", 1, 4),
+            panel("../components/animal_pairs_wide.pdf", "A", 1, 1),
             panel("figure_09_panels_I-J.pdf", "I", 1, 2),
             panel("figure_09_panels_I-J.pdf", "J", 1, 2),
         ],
         [
+            "Availability, sufficiency and endogenous use",
             "Structure–function boundary",
             "Task-field capture",
             "Held-out learning",
@@ -620,18 +761,20 @@ def main() -> None:
             "Full-tree task",
             "Anatomy boundary",
         ],
-        rows=3,
-        cols=6,
-        height=420,
+        rows=4,
+        cols=12,
+        height=528,
         slots=[
-            Slot(0, 0, colspan=2),
-            Slot(0, 2, colspan=2),
-            Slot(0, 4, colspan=2),
-            Slot(1, 0, colspan=3),
-            Slot(1, 3, colspan=3),
-            Slot(2, 0, colspan=3),
-            Slot(2, 3, colspan=3),
+            Slot(0, 0, colspan=12),
+            Slot(1, 0, colspan=4),
+            Slot(1, 4, colspan=4),
+            Slot(1, 8, colspan=4),
+            Slot(2, 0, colspan=6),
+            Slot(2, 6, colspan=6),
+            Slot(3, 0, colspan=6),
+            Slot(3, 6, colspan=6),
         ],
+        row_heights=[108.0, 128.0, 128.0, 138.0],
     )
 
     # The physical-depth dose response and second-hierarchy replication remain

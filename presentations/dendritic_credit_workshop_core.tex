@@ -603,7 +603,7 @@
     \begin{column}{0.44\textwidth}
       \centering
       \vspace{0.06cm}
-      \DerangedPair[0.56]\par
+      \includegraphics[width=\linewidth,height=2.55cm,keepaspectratio]{pdf_assets/ownership_schematic.pdf}\par
       \eqstrip{\widehat\delta^{\,\mathrm{deranged}}_u=\delta_{0,\pi(u)}}
       \raggedright
       \headline[Add]{$+0.15$ to $+0.70$ pp}{correct neuron-to-tree map,
@@ -675,18 +675,7 @@
     \begin{column}{0.44\textwidth}
       \centering
       \vspace{0.04cm}
-      \begin{tikzpicture}[line cap=round]
-        \foreach \i/\lab/\stg in {0/{D1}/1,1.35/{D2}/2,2.70/{D3}/3}{
-          \begin{scope}[shift={(\i,0)}]
-            \filldraw[fill=Soma,draw=Ink!30,line width=0.5pt] (0,0) circle (0.115);
-            \foreach \s in {1,...,\stg}{
-              \node[rounded corners=1.4pt,draw=Dend,fill=ShuntPale,
-                    line width=0.6pt,minimum width=0.44cm,minimum height=0.17cm,
-                    inner sep=0pt] at (0,0.30+0.34*\s-0.34) {};
-              \draw[Dend,line width=0.8pt] (0,0.115) -- (0,0.215);}
-            \node[font=\tiny,text=Mute,anchor=north] at (0,-0.22) {\lab};
-          \end{scope}}
-      \end{tikzpicture}\par
+      \includegraphics[width=\linewidth,height=2.55cm,keepaspectratio]{pdf_assets/physical_stage_schematic.pdf}\par
       \eqstrip{V_n=\frac{E_n+C_n}{1+E_n+I_n+G_n+\epsilon}}
       \raggedright
       \headline[Shunt]{$+31$ pp}{aligned D3$-$D1, constructed; controls
@@ -733,8 +722,7 @@
     \begin{column}{0.44\textwidth}
       \centering
       \vspace{0.10cm}
-      \TreeStrip{\CreditTree[mode=shunt,shunted=false,scale=0.54,stagelabel={baseline}]}%
-                {\CreditTree[mode=shunt,shunted=true,scale=0.54,stagelabel={focal inhibition}]}\par
+      \includegraphics[width=\linewidth,height=2.80cm,keepaspectratio]{pdf_assets/focal_shunt_schematic.pdf}\par
       \raggedright
       \headline[Shunt]{$0.069$}{shunt $-$ additive localization contrast;
         8/8 cells, dose-monotone --- soma and output error matched}

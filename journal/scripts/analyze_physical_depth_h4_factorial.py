@@ -808,17 +808,6 @@ def _line_panel(
     style_axis(ax, grid="y")
     if legend:
         clean_legend(ax, loc="best", fontsize=PT_LEGEND, handlelength=2.0)
-    else:
-        ax.text(
-            0.03,
-            0.965,
-            "key as in A",
-            transform=ax.transAxes,
-            ha="left",
-            va="top",
-            fontsize=PT_SMALL,
-            color=COLORS["mute"],
-        )
 
 
 def _forest(ax: plt.Axes, contrasts: pd.DataFrame) -> None:

@@ -123,9 +123,6 @@ def main() -> None:
                      edgecolor="white", linewidth=0.4, zorder=4)
     ax_a.set_xlabel("wiring density")
     ax_a.set_ylabel("field capture")
-    ax_a.text(0.03, 0.95, "colors as in F", transform=ax_a.transAxes,
-              ha="left", va="top", fontsize=PT_ANNOT, style="italic",
-              color=COLORS["mute"])
     panel_title(ax_a, "K", "Iso-efficiency at eight channels")
     style_axis(ax_a)
 

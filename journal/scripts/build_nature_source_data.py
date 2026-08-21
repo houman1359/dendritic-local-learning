@@ -2257,6 +2257,8 @@ def final_display_file(item: SourceFile) -> SourceFile:
             figure, panels = "Figure 2", "e"
         else:
             figure = "Supplementary Figure 19"
+    elif source.startswith("source_data/fashion_feedback_ladder/"):
+        figure, panels = "Figure 2", "g-h"
     elif source.startswith("source_data/clean_exact_bp/"):
         figure, panels = "Supplementary Figure 19", "e"
     elif source.startswith("source_data/credit_phase_plane/"):
@@ -2268,13 +2270,18 @@ def final_display_file(item: SourceFile) -> SourceFile:
         figure, panels = "Supplementary Figure 18", "c-e"
     elif source.startswith("source_data/remaining_physical_experiments/"):
         figure, panels = "Supplementary Figure 18", "f-k"
-    elif source.startswith(
-        (
-            "source_data/nonlinear_physical_depth_confirmatory/",
-            "source_data/point_dendrite_credit_controls/",
+    elif source.startswith("source_data/nonlinear_physical_depth_confirmatory/"):
+        figure, panels = "Figure 5", "b-e"
+    elif source.startswith("source_data/point_dendrite_credit_controls/"):
+        figure, panels = "Figure 5", "f"
+    elif source.startswith("source_data/physical_depth_h4_factorial/"):
+        figure = "Figure 6"
+        panels = {"a-d": "b-e", "c": "d"}.get(panels, panels)
+    elif source.startswith("source_data/task_family_alignment/"):
+        figure = "Figure 6"
+        panels = {"e-g": "f-h", "e-f": "f-g", "g": "h"}.get(
+            panels, panels
         )
-    ):
-        figure = "Figure 5"
     elif source.startswith("source_data/theory/credit_capture"):
         figure = "Figure 4"
         panels = "a"
@@ -2284,7 +2291,7 @@ def final_display_file(item: SourceFile) -> SourceFile:
         figure, panels = "Supplementary Figure 20", "h"
     elif source.startswith("source_data/figure3/"):
         figure = "Figure 7"
-        panels = {"a-c": "a-b", "d-g": "d", "a-g": "a-b,d", "d-h": "d"}.get(
+        panels = {"a-c": "b", "d-g": "d", "a-g": "b,d", "d-h": "d"}.get(
             panels, panels
         )
     elif source.startswith("source_data/figure4/direct_typed"):
@@ -2306,18 +2313,18 @@ def final_display_file(item: SourceFile) -> SourceFile:
         )
     elif source.startswith("source_data/fulltree_boundary/"):
         figure = "Figure 9"
-        panels = "f-g"
+        panels = "g-h"
     elif source.startswith("source_data/figure5/"):
         if any(f"ch{value}" in source for value in (1, 2, 8)):
             figure, panels = "Supplementary Figure 22", "h"
         else:
             figure = "Figure 9"
-            panels = {"a-c": "a", "d-g": "b-c", "h": "b-c"}.get(panels, panels)
+            panels = {"a-c": "b", "d-g": "c-d", "h": "c-d"}.get(panels, panels)
     elif source.startswith("source_data/functional_topology_all_scans/"):
         figure, panels = "Supplementary Figure 22", "a-h"
     elif source.startswith("source_data/alignment_controlled/"):
         figure = "Figure 9"
-        panels = {"a-d": "d", "b-d": "d", "b-c": "d", "d": "d"}.get(
+        panels = {"a-d": "e", "b-d": "e", "b-c": "e", "d": "e"}.get(
             panels, panels
         )
     elif source.startswith("source_data/animal_learning_francioni/"):
@@ -2326,7 +2333,9 @@ def final_display_file(item: SourceFile) -> SourceFile:
         elif "common_signed_modes" in source:
             figure, panels = "Supplementary Figure 17", "c"
         else:
-            figure, panels = "Figure 9", "e"
+            figure, panels = "Figure 9", "f"
+    elif source.startswith("source_data/pinky_v185_replication/") and item.figure == "Figure 7":
+        figure, panels = "Figure 7", "g"
     elif source.startswith("source_data/capture_per_wire/"):
         figure = "Figure 7"
         panels = "e-f"
@@ -2352,7 +2361,7 @@ def final_display_file(item: SourceFile) -> SourceFile:
     if source.startswith("source_data/theory/credit_capture"):
         destination = "Figure_4/Fig4a_credit_capture_bound_verification.json"
     elif source.startswith("source_data/fulltree_boundary/"):
-        destination = re.sub(r"Fig9[^_]*_", "Fig9f-g_", destination)
+        destination = re.sub(r"Fig9[^_]*_", "Fig9g-h_", destination)
     elif source.startswith("source_data/alignment_controlled/"):
         destination = re.sub(r"Fig9[^_]*_", f"Fig9{panels}_", destination)
     elif source.startswith("source_data/animal_learning_francioni/"):
@@ -2699,9 +2708,9 @@ FILES += (
 FILES += (
     SourceFile(
         "Figure 6",
-        "e-g",
+        "f-h",
         "source_data/task_family_alignment/seed_outcomes.csv",
-        "Figure_6/Fig6e-g_task_family_seed_outcomes.csv",
+        "Figure_6/Fig6f-h_task_family_seed_outcomes.csv",
         "complete run-level outcomes",
         "paired independent training seed (n=10 per condition)",
         "fresh fixed-D3 factorial",
@@ -2709,9 +2718,9 @@ FILES += (
     ),
     SourceFile(
         "Figure 6",
-        "e-f",
+        "f-g",
         "source_data/task_family_alignment/condition_summary.csv",
-        "Figure_6/Fig6e-f_task_family_condition_summary.csv",
+        "Figure_6/Fig6f-g_task_family_condition_summary.csv",
         "derived condition summaries",
         "paired independent training seed (n=10)",
         "current derived analysis",
@@ -2719,9 +2728,9 @@ FILES += (
     ),
     SourceFile(
         "Figure 6",
-        "g",
+        "h",
         "source_data/task_family_alignment/paired_contrasts.csv",
-        "Figure_6/Fig6g_task_family_paired_contrasts.csv",
+        "Figure_6/Fig6h_task_family_paired_contrasts.csv",
         "paired seed contrasts",
         "paired independent training seed (n=10)",
         "current derived analysis",
@@ -2729,9 +2738,9 @@ FILES += (
     ),
     SourceFile(
         "Figure 6",
-        "e-g",
+        "f-h",
         "source_data/task_family_alignment/audit.json",
-        "Figure_6/Fig6e-g_task_family_audit.json",
+        "Figure_6/Fig6f-h_task_family_audit.json",
         "artifact and claim audit",
         "complete 360-fit cohort",
         "current audit",
@@ -2739,9 +2748,9 @@ FILES += (
     ),
     SourceFile(
         "Figure 7",
-        "i",
+        "g",
         "source_data/pinky_v185_replication/routing/k4_cross_animal_contrasts.csv",
-        "Figure_7/Fig7i_independent_animal_K4_contrasts.csv",
+        "Figure_7/Fig7g_independent_animal_K4_contrasts.csv",
         "cell-level cross-animal contrasts",
         "reconstructed cell; animal is the biological replication unit (two mice)",
         "independent-animal directional replication",
@@ -2858,7 +2867,7 @@ morphology, focal-shunting, measured-response and trained partition-residual
 diagnostics plus the adaptive conductance-reliability and irregular-tree
 wavelet tests, clean-source physical-depth replication and independent-animal
 structural replication. Capture per wire
-and the phase-plane synthesis are promoted to main Figures 7 and 9.
+and the phase-plane synthesis are promoted to main Figures 7 and 4.
 
 This is the submission-facing source-data package. Figure 2 panels b and c
 contain the complete clean 15-seed feedback cohort and the corresponding

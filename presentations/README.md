@@ -15,14 +15,15 @@ Self-contained copy of everything used for the talk
   address K=2,4,8 / gain / shunt / deranged).
 - `eq_style.tex` — hero-equation typography (`\heroeq`, `\term`).
 - `credit_tree_lib_test.tex` / `.pdf` — visual regression sheet for the library.
-- `pdf_assets/` — the 18 vector figure crops the deck embeds (cut from the
+- `pdf_assets/` — the 21 vector figure crops and shared schematics the deck
+  embeds (cut or copied from the
   journal manuscript's figures).
 
 ## Rebuild (self-contained)
+    python3 build_pdf_assets.py          # if journal figures changed: regenerates pdf_assets/
     python3 build_presentation.py        # compiles twice + validates 42 pages, 16:9, clean log
-    python3 build_pdf_assets.py          # only if the journal figures changed: regenerates pdf_assets/
 
-`build_pdf_assets.py` holds this deck's 18 crop definitions (600-dpi pixel
+`build_pdf_assets.py` holds this deck's 21 crop definitions (600-dpi pixel
 boxes against the journal's canonical figure sheets); if a journal sheet is
 regenerated with a new layout, re-measure the affected boxes before running it.
 Plain `pdflatex dendritic_credit_workshop.tex` (twice) also works.

@@ -222,26 +222,9 @@ def subtree_figure() -> None:
     ax_b.set_ylabel("held-out accuracy")
     panel_title(ax_b, "B", "Learning across $K$")
     style_axis(ax_b)
-    # Figure-wide key for the six feedback families (panels B and F): one
-    # centred row in the deliberate inter-row gutter, clear of every panel.
-    handles = [
-        Line2D([0], [0], color=color, marker=marker, ms=MARKER_MS - 0.6,
-               lw=LW_DATA, markeredgecolor="white", markeredgewidth=LW_EDGE,
-               label=label)
-        for color, marker, label in ROUTE_STYLE.values()
-    ]
-    clean_legend(
-        ax_b,
-        handles=handles,
-        fontsize=PT_SMALL,
-        loc="center",
-        bbox_to_anchor=(0.535, 0.496),
-        bbox_transform=fig.transFigure,
-        ncol=6,
-        columnspacing=1.0,
-        handlelength=1.2,
-        handletextpad=0.45,
-    )
+    # The publication-facing compositor places the six-family key in the
+    # wide route-resolution schematic.  Keeping this modular plot free of a
+    # figure-coordinate legend also makes its panel crops self-contained.
 
     primary = contrasts[
         contrasts.architecture.eq("dendritic_tree")
@@ -466,12 +449,8 @@ def active_extension_figure() -> None:
     ax_b.set_ylabel("descendant localization")
     panel_title(ax_b, "K", "Dose response")
     style_axis(ax_b)
-    # The two-entry key is stated once in figure 7 panel B (same hues and
-    # markers); a mute pointer in the empty lower-right replaces the boxed
-    # legend, which used to sit on the rising focal-shunt curve.
-    ax_b.text(0.97, 0.04, "colors as in B", transform=ax_b.transAxes,
-              ha="right", va="bottom", fontsize=PT_ANNOT, style="italic",
-              color=COLORS["mute"])
+    # The adjacent mechanism schematic identifies both perturbations; leave
+    # the data field free of a redundant cross-panel note.
 
     localization = active_contrasts[active_contrasts.metric.eq("localization_index")].sort_values("dose_relative_to_local_input_conductance")
     ax_c.errorbar(localization.dose_relative_to_local_input_conductance, localization.mean_shunt_minus_additive, yerr=[localization.mean_shunt_minus_additive - localization.ci95_low, localization.ci95_high - localization.mean_shunt_minus_additive], color=COLORS["shunting"], marker="D", ms=MARKER_MS, lw=LW_ERR, capsize=ERR_CAPSIZE)
@@ -510,6 +489,93 @@ def active_extension_figure() -> None:
     style_axis(ax_d, grid="x")
 
     save(fig, "fig_active_focal_extension")
+
+    # Replot the two promoted results at their final half-width aspect.  The
+    # original source strip has four portrait columns; cropping two of those
+    # into half-width main panels leaves conspicuous unused margins and small
+    # labels.  This two-column source preserves identical values and styling
+    # while using the available journal width.
+    main_fig, (main_a, main_b) = plt.subplots(
+        1,
+        2,
+        figsize=(FIG_W, 2.55),
+        gridspec_kw={"left": 0.09, "right": 0.985, "bottom": 0.18,
+                     "top": 0.84, "wspace": 0.42},
+    )
+    for perturbation, color, marker in [
+        ("focal shunt", COLORS["shunting"], "o"),
+        ("matched additive", COLORS["additive"], "s"),
+    ]:
+        part = active_summary[
+            active_summary.perturbation.eq(perturbation)
+        ].sort_values("dose_relative_to_local_input_conductance")
+        x = part.dose_relative_to_local_input_conductance.to_numpy(float)
+        main_a.plot(
+            x,
+            part.mean_localization_index,
+            color=color,
+            marker=marker,
+            ms=MARKER_MS,
+            lw=LW_DATA,
+            markeredgecolor="white",
+            markeredgewidth=LW_EDGE,
+            label=perturbation,
+        )
+        main_a.fill_between(
+            x,
+            part.ci95_low_localization_index,
+            part.ci95_high_localization_index,
+            color=color,
+            alpha=0.10,
+            linewidth=0,
+        )
+    main_a.set_xscale("log")
+    main_a.set_xticks([0.25, 1, 4], ["0.25", "1", "4"])
+    main_a.set_xlabel("normalized shunt dose")
+    main_a.set_ylabel("descendant localization")
+    panel_title(main_a, "A", "Active dose response")
+    style_axis(main_a)
+    clean_legend(main_a, loc="upper left", fontsize=PT_LEGEND)
+
+    main_b.errorbar(
+        localization.dose_relative_to_local_input_conductance,
+        localization.mean_shunt_minus_additive,
+        yerr=[
+            localization.mean_shunt_minus_additive - localization.ci95_low,
+            localization.ci95_high - localization.mean_shunt_minus_additive,
+        ],
+        color=COLORS["shunting"],
+        marker="D",
+        ms=MARKER_MS,
+        lw=LW_ERR,
+        capsize=ERR_CAPSIZE,
+    )
+    for dose in [0.25, 1, 4]:
+        values = active_cells[
+            np.isclose(
+                active_cells.dose_relative_to_local_input_conductance,
+                dose,
+            )
+        ].pivot(
+            index="root_id", columns="perturbation", values="localization_index"
+        )
+        diff = values["focal shunt"] - values["matched additive"]
+        main_b.scatter(
+            np.full(len(diff), dose) * np.exp(np.linspace(-0.045, 0.045, len(diff))),
+            diff,
+            s=SEED_MS**2,
+            color=COLORS["shunting"],
+            alpha=SEED_ALPHA,
+            edgecolors="none",
+        )
+    main_b.set_xscale("log")
+    main_b.set_xticks([0.25, 1, 4], ["0.25", "1", "4"])
+    main_b.axhline(0, color=COLORS["mute"], ls="--", lw=LW_REF)
+    main_b.set_xlabel("normalized shunt dose")
+    main_b.set_ylabel("shunt − additive localization")
+    panel_title(main_b, "B", "Cellwise contrast")
+    style_axis(main_b)
+    save(main_fig, "fig_active_dose_main")
 
 
 def fulltree_boundary_figure() -> None:
