@@ -1,4 +1,0 @@
-depth,n_seeds,mean_shared_gradient_cosine,min_shared_gradient_cosine,mean_path_gradient_cosine,min_path_gradient_cosine,mean_path_gain_cv,mean_path_gain_log_variance
-1,10,0.9457400969,0.9201073078,1,1,0.0385164966,0.001558946819
-2,10,0.7989683989,0.702053653,1,1,0.7773887098,0.4456385719
-3,10,0.767387749,0.670289506,1,1,0.6943371065,0.6203575453
