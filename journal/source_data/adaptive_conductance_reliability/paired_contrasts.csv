@@ -1,0 +1,11 @@
+heterogeneity,left_minus_right,metric,n_pairs,mean_difference,ci95_low,ci95_high,positive_pairs,wilcoxon_p_two_sided
+2,adaptive_local_shunt - adaptive_global_shunt,one_step_test_loss_decrease,50,0.0014204021,0.00115825218,0.001683526695,45,4.494182804e-13
+2,adaptive_local_shunt - adaptive_global_shunt,final_test_loss,50,-0.0162171628,-0.01791282755,-0.01450053008,0,1.776356839e-15
+2,adaptive_local_shunt - adaptive_shuffled_shunt,one_step_test_loss_decrease,50,0.0007360037978,0.0002622543275,0.001255324525,26,0.04502751099
+2,adaptive_local_shunt - adaptive_shuffled_shunt,final_test_loss,50,-0.005527598599,-0.00741786959,-0.003765761078,9,7.79873055e-08
+2,adaptive_local_shunt - noisy_no_shunt,one_step_test_loss_decrease,50,0.0006332618501,4.398351653e-05,0.001280036289,24,0.5398998477
+2,adaptive_local_shunt - noisy_no_shunt,final_test_loss,50,0.004250081465,0.002498601408,0.005975353736,39,1.780524598e-05
+2,adaptive_local_shunt - initial_oracle_shunt,one_step_test_loss_decrease,50,-8.666037994e-05,-0.0002955106326,0.0001034940766,22,0.5398998477
+2,adaptive_local_shunt - initial_oracle_shunt,final_test_loss,50,0.003448907226,0.002576536421,0.004304801545,43,4.440531498e-09
+2,adaptive_local_shunt - adaptive_point_gate,one_step_test_loss_decrease,50,-1.110223025e-18,-5.551115123e-18,3.330669074e-18,2,1
+2,adaptive_local_shunt - adaptive_point_gate,final_test_loss,50,0,-5.551115123e-18,5.551115123e-18,3,1

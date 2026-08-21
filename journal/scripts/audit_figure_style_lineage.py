@@ -116,11 +116,11 @@ def main() -> None:
                     f"noncanonical LaTeX figure scale in {relative}: {asset} uses {width}"
                 )
             pdf = ROOT / "figures" / asset
-            png = pdf.with_suffix(".png")
             if not pdf.is_file():
                 failures.append(f"missing included PDF: {pdf.relative_to(ROOT)}")
-            if not png.is_file():
-                failures.append(f"missing inspection PNG: {png.relative_to(ROOT)}")
+            # Raster previews are disposable inspection artifacts and are
+            # intentionally ignored by Git.  The publication-facing vector
+            # PDF is the sole canonical figure asset.
 
     if failures:
         raise SystemExit("Figure-lineage audit failed:\n- " + "\n- ".join(failures))

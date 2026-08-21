@@ -73,9 +73,14 @@ nonlinear_physical_depth_runs/
 physical_alignment_dose_runs/
 point_dendrite_credit_runs/
 remaining_physical_experiment_runs/
+physical_depth_h4_runs/
 
 # Historical nested working copies are not part of the journal source tree.
 drafts/
+
+# The theory-only writing experiment is retained in Git history and the local
+# archive, but is not an active submission manuscript.
+theory-paper/
 
 # Submission bundles are reproducible build products. Track the author-facing
 # cover letter/checklists, but not duplicate staging trees or ZIP archives.

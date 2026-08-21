@@ -410,3 +410,56 @@ Exact path transport adds no reliable benefit beyond neuron identity. The
 multiple manifests reflect the same source-guard event documented for the
 alignment dose response; no Fashion-MNIST configuration enabled the changed
 optional rule override.
+
+## Trained partition-residual reconstruction
+
+`trained_partition_residual/` contains the hash-gated deterministic
+reconstruction of all 2,700 trained route-factorial fits at initialization and
+training. It reports address and coefficient residuals, endpoint agreement and
+within-seed capture--accuracy associations. Rebuild with
+`python scripts/analyze_trained_partition_residual.py`.
+
+## Adaptive conductance reliability
+
+`adaptive_conductance_reliability/` contains all 1,050 outcomes from the fresh
+50-seed adaptive local reliability experiment, branch-level estimates,
+condition summaries, paired contrasts and numerical gates. Rebuild the display
+with `python scripts/build_adaptive_conductance_reliability_figure.py`.
+
+## Irregular-tree wavelet scale analysis
+
+`irregular_tree_wavelets/` contains the frozen weighted tree-Haar analysis for
+the 47-cell public-v661 cohort and original eight cells. It includes every
+mode's support and energy, cell- and cohort-level summaries, numerical audits
+and the inferential summary. Rebuild tables with
+`python scripts/analyze_irregular_tree_wavelets.py` and Supplementary Figure
+S25 with `python scripts/build_irregular_tree_wavelet_figure.py`.
+
+## H4 physical-depth factorial
+
+`physical_depth_h4_factorial/` contains all 360 intended seed--condition
+outcomes, summaries, seed-paired contrasts and the immutable-source/resource
+audit for the H4 saturation test in Figure 6A--D. The audit explicitly records
+the 90 D3 rows rerun after the original configurations failed before model
+construction. Rebuild with:
+
+```bash
+python scripts/analyze_physical_depth_h4_factorial.py \
+  --runs-root <original-H4-runs> \
+  --d3-repair-runs-root <D3-repair-runs>
+```
+
+## Physical-depth clean-source replication
+
+`physical_depth_clean_source_replication/` contains all 430 immutable-source
+same-seed H2/H3 reruns, historical concordance pairs, recomputed seed-level
+contrasts and the complete audit for Supplementary Figure S26. Rebuild with:
+
+```bash
+python scripts/analyze_physical_depth_clean_source_replication.py \
+  --remaining-runs-root <clean-H2-and-point-runs> \
+  --confirmatory-runs-root <clean-H3-runs>
+```
+
+The reruns test implementation/source concordance, not independent scientific
+replication; no outlier is removed from the paired distribution.

@@ -91,16 +91,17 @@ submission.
 
 ## Figure architecture
 
-The Article uses eight numbered main figures:
+The Article uses nine numbered main figures:
 
 1. framework and evidence chain;
 2. exactness and neuron-identity bottleneck;
 3. complete 2,700-fit subtree-address bandwidth and representation factorial;
 4. stochastic credit phase and hierarchy-depth crossover;
 5. exact-resource nonlinear physical depth, point-network and credit-coordinate controls;
-6. reconstructed route capacity and matched coarse-topology controls;
-7. focal shunting, active-conductance sensitivity and electrotonic boundary; and
-8. measured-response boundary, imposed alignment and external animal-coordinate evidence.
+6. H4 depth saturation, point emulation and local-credit controls;
+7. reconstructed route capacity and matched coarse-topology controls;
+8. focal shunting, active-conductance sensitivity and electrotonic boundary; and
+9. measured-response boundary, imposed alignment and external animal-coordinate evidence.
 
 The synapse-resolved inhibitory organization remains a complete ten-panel
 display in Supplementary Figure S12. The corrected state-matched
@@ -109,7 +110,7 @@ Supplementary Figure S13; the same-span coefficient bias--variance crossover
 is Supplementary Figure S14, within the same combined reading PDF.
 
 The inherited NeurIPS visual system remains the style source. Journal figures
-may contain more panels, but every panel must advance one of the eight steps
+may contain more panels, but every panel must advance one of the nine steps
 above and remain legible on the canonical 7.2-inch canvas. Six continued
 displays carry additional panels with unique consecutive letters, so no
 underlying evidence or Source Data was dropped during consolidation.

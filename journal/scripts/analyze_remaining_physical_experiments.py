@@ -26,10 +26,11 @@ from journal_style import (  # noqa: E402
     ERR_CAPSIZE,
     FIG_W,
     LW_DATA,
-    LW_EDGE,
     LW_ERR,
-    MARKERS,
+    LW_HAIR,
     MARKER_MS,
+    PT_LEGEND,
+    PT_SMALL,
     apply_neurips_style,
     audit_layout,
     audit_text_over_data,
@@ -534,6 +535,10 @@ def line_panel(
     regime: str,
     title: str,
     letter: str,
+    legend: bool = True,
+    legend_loc: str = "upper left",
+    key_note: str | None = None,
+    ylabel: bool = True,
 ) -> None:
     styles = [
         ("serial_tree", "full_bp", "serial BP", COLORS["shunting"], "o", "-"),
@@ -573,15 +578,38 @@ def line_panel(
             elinewidth=LW_ERR,
             capsize=ERR_CAPSIZE,
             markersize=MARKER_MS,
+            markeredgecolor="white",
+            markeredgewidth=0.5,
             label=label,
         )
     panel_title(ax, letter, title)
     ax.set_xlabel(r"physical depth $D_{\mathrm{p}}$")
-    ax.set_ylabel("test accuracy")
-    ax.set_xticks(sorted(summary[summary.hierarchy.eq(hierarchy)].depth.unique()))
-    ax.set_ylim(0.48, 1.0)
+    if ylabel:
+        ax.set_ylabel("test accuracy")
+    depths = sorted(summary[summary.hierarchy.eq(hierarchy)].depth.unique())
+    ax.set_xticks(depths)
+    ax.set_xlim(depths[0] - 0.3, depths[-1] + 0.3)
+    ax.set_ylim(0.44, 1.06)
+    ax.set_yticks([0.5, 0.6, 0.7, 0.8, 0.9, 1.0])
     style_axis(ax, grid="y")
-    clean_legend(ax, loc="best")
+    if legend:
+        if legend_loc == "below":
+            # Compact two-column key that stays inside this panel's grid
+            # cell: a wider key crossed the cell boundary and was sliced
+            # when the block is recomposed into S18.
+            clean_legend(
+                ax, loc="upper center", bbox_to_anchor=(0.50, -0.26),
+                fontsize=PT_SMALL - 0.4, ncol=2, handlelength=1.1,
+                columnspacing=0.7, handletextpad=0.4,
+            )
+        else:
+            clean_legend(ax, loc=legend_loc, fontsize=PT_LEGEND,
+                         handlelength=2.0)
+    elif key_note:
+        ax.text(
+            0.03, 0.965, key_note, transform=ax.transAxes, ha="left", va="top",
+            fontsize=PT_SMALL, color=COLORS["mute"],
+        )
 
 
 def forest(
@@ -597,7 +625,7 @@ def forest(
     indexed = contrast.set_index("contrast")
     y = np.arange(len(names))[::-1]
     colors = colors or [COLORS["shunting"]] * len(names)
-    ax.axvline(0, color=COLORS["mute"], linewidth=LW_EDGE, zorder=0)
+    ax.axvline(0, color=COLORS["mute"], linewidth=LW_HAIR, zorder=0)
     for yi, name, color in zip(y, names, colors):
         row = indexed.loc[name]
         mean = float(row.mean_pp)
@@ -609,6 +637,9 @@ def forest(
             xerr=np.asarray([[mean - low], [high - mean]]),
             fmt="o",
             color=color,
+            markerfacecolor=color,
+            markeredgecolor="white",
+            markeredgewidth=0.5,
             markersize=MARKER_MS,
             elinewidth=LW_ERR,
             capsize=ERR_CAPSIZE,
@@ -617,15 +648,19 @@ def forest(
     # Line-break long condition names so the third-column forest plots retain
     # a canonical full-width canvas without colliding with neighboring panels.
     ax.set_xlim(-2.5, 35.5)
+    ax.set_ylim(-0.6, len(names) - 0.4)
     ax.set_yticks(y, labels)
-    ax.set_xlabel("paired accuracy difference (pp)")
+    ax.set_xlabel("paired difference (pp)")
     style_axis(ax, grid="x")
 
 
 def make_figure(summary: pd.DataFrame, contrast: pd.DataFrame) -> None:
     apply_neurips_style()
-    fig = plt.figure(figsize=(FIG_W, 6.25))
-    grid = fig.add_gridspec(2, 3, wspace=0.48, hspace=0.54)
+    fig = plt.figure(figsize=(FIG_W, 5.15))
+    grid = fig.add_gridspec(
+        2, 3, left=0.115, right=0.985, top=0.9125, bottom=0.155,
+        wspace=0.62, hspace=0.74,
+    )
     axes = [fig.add_subplot(grid[r, c]) for r in range(2) for c in range(3)]
 
     line_panel(
@@ -635,6 +670,8 @@ def make_figure(summary: pd.DataFrame, contrast: pd.DataFrame) -> None:
     line_panel(
         axes[1], summary, hierarchy=3, regime="rewired_tree",
         letter="Q", title="H=3 reversed placement",
+        # S18 lettering: source panel P is published as S18 F.
+        legend=False, key_note="key as in F", ylabel=False,
     )
     forest(
         axes[2], contrast,
@@ -645,16 +682,18 @@ def make_figure(summary: pd.DataFrame, contrast: pd.DataFrame) -> None:
             "h3_star_minus_grouped__aligned__d3",
         ],
         ["serial$-$point\naligned", "serial$-$point\nreversed", "alignment\ninteraction", "star$-$point\naligned"],
-        letter="R", title="Serial composition at H=3",
+        letter="R", title="Composition at H=3",
         colors=[COLORS["shunting"], COLORS["point_mlp"], COLORS["bp"], COLORS["oracle"]],
     )
     line_panel(
         axes[3], summary, hierarchy=2, regime="aligned",
-        letter="S", title="Independent H=2 hierarchy",
+        letter="S", title="Independent H=2 hierarchy", legend_loc="below",
     )
     line_panel(
         axes[4], summary, hierarchy=2, regime="rewired_tree",
         letter="T", title="H=2 reversed placement",
+        # S18 lettering: source panel S is published as S18 I.
+        legend=False, key_note="key as in I", ylabel=False,
     )
     forest(
         axes[5], contrast,
@@ -665,20 +704,19 @@ def make_figure(summary: pd.DataFrame, contrast: pd.DataFrame) -> None:
             "h2_alignment_interaction__path_local",
         ],
         ["serial BP", "grouped BP", "shared\nLocalCA", "path\nLocalCA"],
-        letter="U", title="H=2 placement interaction",
+        letter="U", title="Interactions at H=2",
         colors=[COLORS["shunting"], COLORS["point_mlp"], COLORS["local"], COLORS["pathway"]],
     )
 
-    fig.subplots_adjust(left=0.105, right=0.985, top=0.94, bottom=0.105)
     fig.canvas.draw()
     audit_layout(fig, "fig_remaining_physical_crossovers")
     audit_text_over_data(fig, "fig_remaining_physical_crossovers")
     FIGURES.mkdir(parents=True, exist_ok=True)
-    for suffix in ("pdf", "png"):
-        fig.savefig(
-            FIGURES / f"fig_remaining_physical_crossovers.{suffix}",
-            dpi=420,
-        )
+    fig.savefig(
+        FIGURES / "fig_remaining_physical_crossovers.pdf",
+        metadata={"CreationDate": None, "ModDate": None},
+    )
+    fig.savefig(FIGURES / "fig_remaining_physical_crossovers.png", dpi=600)
     plt.close(fig)
 
 
@@ -727,6 +765,16 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--allow-incomplete", action="store_true")
     args = parser.parse_args()
+
+    if not RUNS.exists():
+        # Frozen-source render: raw run directories are not in this checkout;
+        # restyle the figure from the audited source-data summaries.
+        summary = pd.read_csv(OUTPUT / "condition_summary.csv")
+        contrasts = pd.read_csv(OUTPUT / "paired_contrasts.csv")
+        make_figure(summary, contrasts)
+        print("Rendered fig_remaining_physical_crossovers from frozen source "
+              "data (run directories absent; collection skipped).")
+        return
 
     new, collection = collect(allow_incomplete=args.allow_incomplete)
     if new.empty:

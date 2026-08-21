@@ -1,8 +1,13 @@
 # NeurIPS-to-journal figure lineage audit
 
-The journal paper is an extension of the NeurIPS/arXiv study, not an
-independent redraw of it. This audit fixes the visual and computational
-lineage of every inherited display.
+**Historical lineage snapshot.** Current editorial and figure authority is
+described in `../README.md` and `../../ASSET_AND_PROVENANCE_MAP.md`. The journal
+Article is now the canonical standalone account; the language below records
+how conference-stage material entered an earlier figure layout and must not be
+read as a competing manuscript plan.
+
+This audit fixes the visual and computational lineage of every inherited
+display.
 
 ## Exact inheritance
 

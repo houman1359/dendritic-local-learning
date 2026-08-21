@@ -3,7 +3,8 @@
 
 The release has two deliberately distinct source trees:
 
-* ``dendritic_modeling/`` is exported from the repository's committed HEAD.
+* ``dendritic_modeling/`` is exported from the repository's committed HEAD
+  through the same lightweight release filter used for article code.
   Uncommitted working-tree changes never enter this snapshot.
 * ``article_analysis/`` contains an explicit allow-list from this journal
   package.  It includes analysis code and frozen configurations, but no raw
@@ -35,7 +36,7 @@ from pathlib import Path, PurePosixPath
 
 
 JOURNAL_ROOT = Path(__file__).resolve().parents[1]
-REPOSITORY_ROOT = JOURNAL_ROOT.parents[2]
+REPOSITORY_ROOT = JOURNAL_ROOT.parent
 SUBMISSION_ROOT = JOURNAL_ROOT / "submission"
 STAGE_NAME = "software_release"
 ARCHIVE_NAME = "Dendritic_credit_assignment_software.zip"
@@ -45,6 +46,18 @@ ARCHIVE_NAME = "Dendritic_credit_assignment_software.zip"
 # PORTABILITY_PATCHES.tsv.  Tokens are intentionally conspicuous so that a
 # reviewer cannot mistake them for working paths.
 PORTABILITY_REPLACEMENTS: tuple[tuple[str, str, str], ...] = (
+    (
+        "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/"
+        "journal_extension_20260820",
+        "${DENDRITIC_RUNS_ROOT}",
+        "replace frozen project-B execution root",
+    ),
+    (
+        "/n/holylabs/kempner_dev/Users/hsafaai/Code/"
+        ".dendritic-modeling-journal-runtimes",
+        "${DENDRITIC_RUNS_ROOT}",
+        "replace clean-source execution root",
+    ),
     (
         "/n/holylabs/LABS/kempner_dev/Users/hsafaai/Code/dendritic-modeling",
         "${DENDRITIC_MODELING_ROOT}",
@@ -83,9 +96,13 @@ JOURNAL_ANALYSIS_RECORDS = (
     "NEURIPS_FIGURE_LINEAGE_AUDIT_20260804.md",
     "NONLINEAR_PHYSICAL_DEPTH_CODE_THEORY_AUDIT_20260812.md",
     "NONLINEAR_PHYSICAL_DEPTH_CONFIRMATORY_CONTRACT_20260812.md",
+    "PINKY_V185_SECOND_ANIMAL_CONTRACT_20260820.md",
+    "PINKY_V185_SECOND_ANIMAL_EXECUTION_20260820.md",
     "POSITIVE_CONDUCTANCE_STEP_CONSISTENT_CONTRACT_20260811.md",
     "REVIEW_IMPLEMENTATION_MATRIX_20260811.md",
     "SAME_SPAN_COEFFICIENT_LEARNING_CONTRACT_20260811.md",
+    "TASK_FAMILY_ALIGNMENT_CONTRACT_20260820.md",
+    "TASK_FAMILY_ALIGNMENT_EXECUTION_20260820.md",
     "TRAINED_SUBTREE_ADDRESS_EXPERIMENT_CONTRACT.md",
 )
 JOURNAL_SCRIPTS = (
@@ -99,6 +116,7 @@ JOURNAL_SCRIPTS = (
     "analyze_francioni_signed_credit.py",
     "analyze_microns_inhibitory_routes.py",
     "analyze_nonlinear_physical_depth_confirmatory.py",
+    "analyze_pinky_v185_replication.py",
     "analyze_remaining_physical_experiments.py",
     "analyze_physical_cable_sensitivity.py",
     "analyze_prospective_followup_results.py",
@@ -107,6 +125,7 @@ JOURNAL_SCRIPTS = (
     "analyze_reciprocal_routing_controls.py",
     "analyze_spatial_topology_audit.py",
     "analyze_same_span_coefficient_learning.py",
+    "analyze_task_family_alignment_factorial.py",
     "audit_prospective_learning_runs.py",
     "audit_figure_style_lineage.py",
     "audit_nature_communications_format.py",
@@ -131,12 +150,15 @@ JOURNAL_SCRIPTS = (
     "export_regular_tree_source_data.py",
     "fetch_expanded_microns_cohort.py",
     "figure1_neurips_components.py",
+    "freeze_pinky_v185_cohort.py",
     "diagnose_nonlinear_physical_depth.py",
     "generate_nonlinear_physical_depth_confirmatory.py",
     "generate_nonlinear_physical_depth_sweeps.py",
     "generate_remaining_physical_experiments.py",
+    "generate_task_family_alignment_factorial.py",
     "journal_style.py",
     "neurips_style.py",
+    "prepare_pinky_v185_replication.py",
     "run_alignment_controlled_learning.py",
     "render_nonlinear_physical_depth_calibration.py",
     "run_credit_phase_theory_experiment.py",
@@ -152,15 +174,15 @@ JOURNAL_SCRIPTS = (
 )
 ARCHIVED_ANALYSIS_SCRIPTS = (
     (
-        Path("drafts/dendritic-local-learning/neurips/scripts/summarize_init_policy_factorial.py"),
+        Path("neurips/scripts/summarize_init_policy_factorial.py"),
         "Figure 2 architecture-by-initialization-policy factorial summarizer",
     ),
     (
-        Path("drafts/dendritic-local-learning/neurips/scripts/measure_layer_soma_factorial.py"),
+        Path("neurips/scripts/measure_layer_soma_factorial.py"),
         "Figure 2 layer/soma feedback and backward-only gradient diagnostic",
     ),
     (
-        Path("drafts/dendritic-local-learning/neurips/scripts/measure_theory_diagnostics.py"),
+        Path("neurips/scripts/measure_theory_diagnostics.py"),
         "Figure 2 exact-gradient and compartment-error diagnostic dependency",
     ),
 )
@@ -290,7 +312,7 @@ def excluded(relative: Path) -> bool:
 
 
 def extract_git_head(destination: Path, commit: str) -> None:
-    """Safely extract a complete, committed Git tree."""
+    """Safely extract the release-eligible files from a committed Git tree."""
 
     payload = run_git("archive", "--format=tar", commit, text=False)
     assert isinstance(payload, bytes)
@@ -299,7 +321,10 @@ def extract_git_head(destination: Path, commit: str) -> None:
             relative = PurePosixPath(member.name)
             if relative.is_absolute() or ".." in relative.parts:
                 raise RuntimeError(f"Unsafe Git archive member: {member.name}")
-            target = destination.joinpath(*relative.parts)
+            release_relative = Path(*relative.parts)
+            if excluded(release_relative):
+                continue
+            target = destination / release_relative
             if member.isdir():
                 target.mkdir(parents=True, exist_ok=True)
                 continue
@@ -646,10 +671,17 @@ def scan_release(root: Path) -> list[str]:
             findings.append(f"excluded artifact present: {relative.as_posix()}")
             continue
         payload = path.read_bytes()
-        for pattern in PRIVATE_PATH_PATTERNS:
-            if pattern.search(payload):
-                findings.append(f"private absolute path: {relative.as_posix()}")
-                break
+        # These two packaging utilities contain the literal private-path
+        # regular expressions used to detect and sanitize release content.
+        # Their own detector patterns are not filesystem references.
+        if relative.name not in {
+            "build_nature_source_data.py",
+            "build_software_release.py",
+        }:
+            for pattern in PRIVATE_PATH_PATTERNS:
+                if pattern.search(payload):
+                    findings.append(f"private absolute path: {relative.as_posix()}")
+                    break
         for label, pattern in SECRET_PATTERNS:
             if pattern.search(payload):
                 findings.append(f"possible {label}: {relative.as_posix()}")

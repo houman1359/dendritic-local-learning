@@ -22,7 +22,7 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 if str(SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPT_DIR))
 
-from journal_style import (
+from journal_style import (  # noqa: E402
     COLORS,
     ERR_CAPSIZE,
     FIG_W,
@@ -35,6 +35,7 @@ from journal_style import (
     PT_ANNOT,
     PT_LEGEND,
     PT_SMALL,
+    PT_TICK,
     apply_neurips_style,
     audit_layout,
     audit_text_over_data,
@@ -44,6 +45,12 @@ from journal_style import (
     style_axis,
     wrap_ticklabels,
 )
+from credit_tree_schematics import MS_JUNCTION, mix  # noqa: E402
+
+# Library stroke taper (credit_tree_schematics): terminal branches print at
+# 0.70 TikZ pt, thickening toward the trunk; normalized so 1.60 pt == LW_DATA.
+_TAPER_FROM_LEAF = (0.70, 0.90, 1.20, 1.60)
+_PT2LW = LW_DATA / 1.60
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -463,16 +470,19 @@ def draw_tree(
     radius: float,
     sector_deg: float,
     color: str,
-    node_r: float = 0.011,
+    soma_r: float = 0.045,
 ) -> list[list[tuple[float, float]]]:
-    """Radial dendritic tree: soma disc at the root, tapering dend strokes.
+    """Radial dendritic tree in the credit-tree library vocabulary.
 
     ``branch_factors`` is ordered soma-to-distal in the production DendriNet
     planner; that order is preserved.  Leaves are spread evenly on an arc so
-    an 8-way fan stays readable, and stroke width tapers with the cumulative
-    branch count (a unary stage reads as a serial compartment: a straight
-    continuation through a junction glyph).  Returns node coordinates per
-    level (level 0 is the soma) so callers can anchor annotations.
+    an 8-way fan stays readable.  Glyphs and stroke taper come from
+    ``credit_tree_schematics``: terminal branches at the library's 0.70 pt
+    stroke thickening toward the trunk, white junction rings on internal
+    nodes only (a unary stage reads as a serial compartment: a straight
+    continuation through a junction glyph), bare terminal tips, and the soma
+    disc with the library's ink-mix rim.  Returns node coordinates per level
+    (level 0 is the soma) so callers can anchor annotations.
     """
     n_leaves = int(np.prod(factors))
     leaf_angles = (
@@ -480,13 +490,12 @@ def draw_tree(
         if n_leaves > 1
         else np.zeros(1)
     )
-    step = radius / len(factors)
+    depth = len(factors)
+    step = radius / depth
     current: list[tuple[float, float, int, int]] = [(x0, y0, 0, n_leaves)]
     coords: list[list[tuple[float, float]]] = [[(x0, y0)]]
-    cumulative = 1
     for level, factor in enumerate(factors, start=1):
-        cumulative *= factor
-        lw = max(LW_HAIR, LW_DATA * cumulative ** -0.45)
+        lw = _TAPER_FROM_LEAF[min(depth - level, len(_TAPER_FROM_LEAF) - 1)] * _PT2LW
         r = level * step
         next_nodes: list[tuple[float, float, int, int]] = []
         for px, py, lo, hi in current:
@@ -502,15 +511,15 @@ def draw_tree(
                 next_nodes.append((cx, cy, clo, chi))
         coords.append([(nx, ny) for nx, ny, _, _ in next_nodes])
         current = next_nodes
-    for level_nodes in coords[1:]:
+    for level_nodes in coords[1:-1]:
         for nx, ny in level_nodes:
-            ax.add_patch(
-                Circle((nx, ny), node_r, facecolor="white",
-                       edgecolor=color, lw=LW_EDGE, zorder=4)
+            ax.plot(
+                [nx], [ny], marker="o", ms=MS_JUNCTION, mfc="white",
+                mec=color, mew=LW_EDGE, ls="none", zorder=4,
             )
     ax.add_patch(
-        Circle((x0, y0), 0.030, facecolor=COLORS["soma"],
-               edgecolor=COLORS["edge"], lw=LW_EDGE, zorder=5)
+        Circle((x0, y0), soma_r, facecolor=COLORS["soma"],
+               edgecolor=mix("ink", 30), lw=LW_EDGE, zorder=5)
     )
     return coords
 
@@ -520,39 +529,26 @@ def panel_schematic(ax: plt.Axes) -> None:
     ax.set_ylim(0, 1)
     ax.axis("off")
     panel_title(ax, "A", "Matched-resource depth")
+    # Trees scaled to span the cell (drawing reaches toward the title band
+    # and the labels sit just above the cell floor).
     specs = [
-        (0.18, [8], 48.0, "D1"),
-        (0.50, [2, 3], 44.0, "D2"),
-        (0.82, [2, 1, 2], 40.0, "D3"),
+        (0.17, [8], 32.0, "D1"),
+        (0.50, [2, 3], 32.0, "D2"),
+        (0.83, [2, 1, 2], 30.0, "D3"),
     ]
     for x, factors, sector, name in specs:
         draw_tree(
-            ax, factors, x0=x, y0=0.40, radius=0.30, sector_deg=sector,
+            ax, factors, x0=x, y0=0.235, radius=0.63, sector_deg=sector,
             color=COLORS["dend"],
         )
         ax.text(
-            x, 0.915, name,
+            x, 0.118, name,
             ha="center", va="center", fontsize=PT_ANNOT, color=COLORS["ink"],
         )
         ax.text(
-            x, 0.845, rf"$D_{{\mathrm{{p}}}}={name[-1]}$",
+            x, 0.044, "[" + ",".join(map(str, factors)) + "]",
             ha="center", va="center", fontsize=PT_SMALL, color=COLORS["mute"],
         )
-        ax.text(
-            x, 0.780, "[" + ",".join(map(str, factors)) + "]",
-            ha="center", va="center", fontsize=PT_SMALL, color=COLORS["mute"],
-        )
-    ax.text(
-        0.50,
-        0.325,
-        "entries: soma → distal · 8 branch units each\n"
-        "contacts · parameters · states matched",
-        ha="center",
-        va="top",
-        linespacing=1.2,
-        fontsize=PT_SMALL,
-        color=COLORS["mute"],
-    )
 
 
 def _scope_box(
@@ -590,7 +586,7 @@ def panel_task(ax: plt.Axes) -> None:
     ax.axis("off")
     panel_title(ax, "B", "Nested divisive task")
     coords = draw_tree(
-        ax, [2, 1, 2], x0=0.28, y0=0.40, radius=0.31, sector_deg=50.0,
+        ax, [2, 1, 2], x0=0.27, y0=0.27, radius=0.51, sector_deg=52.0,
         color=COLORS["dend"],
     )
     soma = coords[0][0]
@@ -600,32 +596,27 @@ def panel_task(ax: plt.Axes) -> None:
     # Nested scopes, innermost darkest: one distal branch (fine), one soma
     # subtree (coarse), the whole tree (global).  Stacked light fills shade
     # the nesting; containment encodes the hierarchy, so no extra hues.
-    fine = _scope_box(ax, [n2_r, leaves[3]], 0.032, "#20509E")
-    coarse = _scope_box(ax, [n1_r, n2_r, leaves[2], leaves[3]], 0.050, "#5580BE")
-    tree_pts = [soma, (soma[0], soma[1] - 0.030)] + [p for lvl in coords for p in lvl]
-    whole = _scope_box(ax, tree_pts, 0.085, "#93B3DB")
+    fine = _scope_box(ax, [n2_r, leaves[3]], 0.036, "#20509E")
+    coarse = _scope_box(ax, [n1_r, n2_r, leaves[2], leaves[3]], 0.058, "#5580BE")
+    tree_pts = [soma, (soma[0], soma[1] - 0.045)] + [p for lvl in coords for p in lvl]
+    whole = _scope_box(ax, tree_pts, 0.095, "#93B3DB")
     for (x_hi, y_at), label in (
-        ((fine[1], 0.64), "fine  $G_f$"),
-        ((coarse[1], 0.47), "coarse  $G_c$"),
-        ((whole[1], 0.30), "global  $G_g$"),
+        ((fine[1], 0.72), "fine  $G_f$"),
+        ((coarse[1], 0.50), "coarse  $G_c$"),
+        ((whole[1], 0.28), "global  $G_g$"),
     ):
         ax.plot(
-            [x_hi + 0.012, 0.625], [y_at, y_at],
+            [x_hi + 0.012, 0.655], [y_at, y_at],
             color=COLORS["mute"], lw=LW_HAIR, zorder=2,
         )
         ax.text(
-            0.64, y_at, label,
+            0.67, y_at, label,
             ha="left", va="center", fontsize=PT_ANNOT, color=COLORS["ink"],
         )
     ax.text(
-        0.50, 0.205,
+        0.50, 0.045,
         r"$E_{\mathrm{distal}}=s_y\,G_f\,G_c\,G_g$",
         ha="center", va="center", fontsize=PT_ANNOT, color=COLORS["ink"],
-    )
-    ax.text(
-        0.50, 0.080,
-        "matched sensors · shuffled/reversed controls",
-        ha="center", va="center", fontsize=PT_SMALL, color=COLORS["mute"],
     )
 
 
@@ -721,13 +712,8 @@ def render_figure(summary: pd.DataFrame, contrasts: pd.DataFrame) -> None:
     panel_title(ax_c, "C", "Backprop depth test")
     style_axis(ax_c, grid="y")
     clean_legend(
-        ax_c, fontsize=PT_SMALL, loc="upper left", handles=handles_c,
-        handlelength=2.6,
-    )
-    ax_c.text(
-        0.02, 0.085, "flat controls coincide\nmarkers offset · bars: 95% CI",
-        transform=ax_c.transAxes, ha="left", va="center", linespacing=1.25,
-        fontsize=PT_SMALL, color=COLORS["mute"],
+        ax_c, fontsize=PT_LEGEND, loc="upper left", handles=handles_c,
+        bbox_to_anchor=(0.0, 0.93), handlelength=2.6,
     )
 
     # D — the four prespecified contrasts all sit near +31 pp, so the axis
@@ -739,7 +725,7 @@ def render_figure(summary: pd.DataFrame, contrasts: pd.DataFrame) -> None:
         "bp_depth_interaction__aligned_minus_rewired_tree",
     ]
     labels = [
-        "aligned D3−D1", "vs zero alignment",
+        r"aligned D3$-$D1", "vs zero alignment",
         "vs sensor shuffled", "vs tree reversed",
     ]
     part = contrasts.set_index("contrast").loc[forest_names]
@@ -756,18 +742,13 @@ def render_figure(summary: pd.DataFrame, contrasts: pd.DataFrame) -> None:
     )
     ax_d.set_yticks(y)
     ax_d.set_yticklabels(wrap_ticklabels(labels, width=10))
-    ax_d.set_ylim(-0.9, 3.6)
+    ax_d.set_ylim(-0.6, 3.6)
     ax_d.set_xlim(30.3, 32.05)
     ax_d.set_xticks([30.5, 31.0, 31.5, 32.0])
-    ax_d.tick_params(axis="y", labelsize=PT_SMALL)
-    ax_d.set_xlabel("paired effect\n(percentage points)")
+    ax_d.tick_params(axis="y", labelsize=PT_TICK)
+    ax_d.set_xlabel("paired difference (pp)")
     panel_title(ax_d, "D", "Prespecified contrasts")
     style_axis(ax_d, grid="x")
-    ax_d.text(
-        0.03, 0.965, "all 95% CIs exclude zero",
-        transform=ax_d.transAxes, ha="left", va="top",
-        fontsize=PT_SMALL, color=COLORS["mute"],
-    )
     axis_break_note(ax_d, "x axis truncated", loc="lower right")
 
     # E — both reversed curves coincide, and all four series meet at depth 1;
@@ -799,13 +780,8 @@ def render_figure(summary: pd.DataFrame, contrasts: pd.DataFrame) -> None:
     panel_title(ax_e, "E", "Local credit transport")
     style_axis(ax_e, grid="y")
     clean_legend(
-        ax_e, fontsize=PT_SMALL, loc="upper left", handles=handles_e,
+        ax_e, fontsize=PT_LEGEND, loc="upper left", handles=handles_e,
         handlelength=2.6,
-    )
-    ax_e.text(
-        0.02, 0.085, "reversed curves coincide\nmarkers offset · bars: 95% CI",
-        transform=ax_e.transAxes, ha="left", va="center", linespacing=1.25,
-        fontsize=PT_SMALL, color=COLORS["mute"],
     )
 
     # F — same uncertainty treatment as C and E (95% CI error bars).
@@ -823,16 +799,18 @@ def render_figure(summary: pd.DataFrame, contrasts: pd.DataFrame) -> None:
     ax_f.set_xlim(0.7, 3.3)
     ax_f.set_xticks([1, 2, 3])
     ax_f.set_xlabel(r"physical depth $D_{\mathrm{p}}$")
-    ax_f.set_ylabel("test accuracy")
     ax_f.set_ylim(0.44, 1.06)
     ax_f.set_yticks([0.5, 0.6, 0.7, 0.8, 0.9, 1.0])
     panel_title(ax_f, "F", "Divisive control")
     style_axis(ax_f, grid="y")
-    clean_legend(ax_f, fontsize=PT_LEGEND, loc="upper left", handles=handles_f)
+    # Two series: label the curves directly instead of a legend.
     ax_f.text(
-        0.02, 0.05, "bars: 95% CI",
-        transform=ax_f.transAxes, ha="left", va="center",
-        fontsize=PT_SMALL, color=COLORS["mute"],
+        2.05, 0.815, "shunting", ha="right", va="bottom",
+        fontsize=PT_LEGEND, color=COLORS["shunting"],
+    )
+    ax_f.text(
+        2.95, 0.492, "raw additive", ha="right", va="top",
+        fontsize=PT_LEGEND, color=COLORS["additive"],
     )
 
     FIGURES.mkdir(parents=True, exist_ok=True)
@@ -925,6 +903,17 @@ def main() -> None:
     parser.add_argument("--allow-incomplete", action="store_true")
     parser.add_argument("--no-figure", action="store_true")
     args = parser.parse_args()
+    if not RUNS.exists():
+        # Frozen-source render: this checkout carries the audited source-data
+        # summaries but not the raw run directories.  Re-render the figure
+        # from the frozen estimates without re-running collection/inference.
+        summary = pd.read_csv(SOURCE / "condition_summary.csv")
+        contrasts = pd.read_csv(SOURCE / "paired_contrasts.csv")
+        if not args.no_figure:
+            render_figure(summary, contrasts)
+        print("Rendered fig_nonlinear_physical_depth from frozen source data "
+              "(run directories absent; collection skipped).")
+        return
     frame, audit = collect(allow_incomplete=args.allow_incomplete)
     SOURCE.mkdir(parents=True, exist_ok=True)
     frame.to_csv(SOURCE / "seed_outcomes.csv", index=False, float_format="%.10g")

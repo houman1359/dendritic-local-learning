@@ -1,0 +1,117 @@
+{
+  "biological_unit": "one independent P36 male mouse",
+  "claim_boundary": "The animal is the biological replication unit. Cell-bootstrap intervals quantify within-volume stability and are not population-level animal inference.",
+  "classification": "presynaptic soma-valence labels only",
+  "cross_animal_directional_replication": {
+    "depth-only bins": {
+      "minnie65_mean": 0.21507058057481077,
+      "pinky_mean": 0.5859472573995849,
+      "same_positive_direction": true
+    },
+    "random paths": {
+      "minnie65_mean": 0.2741958582482672,
+      "pinky_mean": 0.5282166786307672,
+      "same_positive_direction": true
+    },
+    "shuffled ancestry": {
+      "minnie65_mean": 0.26610730125443716,
+      "pinky_mean": 0.6569256968685789,
+      "same_positive_direction": true
+    }
+  },
+  "dataset": "MICrONS phase-1 Pinky v185",
+  "errors": [],
+  "minnie65_k4_reference": {
+    "depth-only bins": {
+      "descriptive_cell_sign_flip_method": "not recomputed for reference cohort",
+      "descriptive_cell_sign_flip_p_two_sided": null,
+      "mean_ci95_cell_bootstrap": [
+        0.21507058057481077,
+        0.18749682746395663,
+        0.24390464225862843
+      ],
+      "median": 0.18568969086771547,
+      "n_cells": 47,
+      "positive_cells": 46
+    },
+    "random paths": {
+      "descriptive_cell_sign_flip_method": "not recomputed for reference cohort",
+      "descriptive_cell_sign_flip_p_two_sided": null,
+      "mean_ci95_cell_bootstrap": [
+        0.2741958582482672,
+        0.24141505271026212,
+        0.30819972318155664
+      ],
+      "median": 0.24655632912036063,
+      "n_cells": 47,
+      "positive_cells": 47
+    },
+    "shuffled ancestry": {
+      "descriptive_cell_sign_flip_method": "not recomputed for reference cohort",
+      "descriptive_cell_sign_flip_p_two_sided": null,
+      "mean_ci95_cell_bootstrap": [
+        0.26610730125443716,
+        0.23616344411353773,
+        0.2969801871089855
+      ],
+      "median": 0.25081034523451473,
+      "n_cells": 47,
+      "positive_cells": 47
+    }
+  },
+  "n_analyzed": 12,
+  "n_errors": 0,
+  "n_qc_included": 10,
+  "n_selected": 12,
+  "parameters": {
+    "e_scale": 0.5,
+    "i_scale": 0.5,
+    "max_mapping_distance_um": 5.0,
+    "n_shuffles": 500,
+    "seed": 20260820
+  },
+  "pinky_k4": {
+    "depth-only bins": {
+      "descriptive_cell_sign_flip_method": "exhaustive 2^n mean sign-flip",
+      "descriptive_cell_sign_flip_p_two_sided": 0.001953125,
+      "mean_ci95_cell_bootstrap": [
+        0.5859472573995849,
+        0.4838338564222721,
+        0.6957431321936518
+      ],
+      "median": 0.5311017924330587,
+      "n_cells": 10,
+      "positive_cells": 10
+    },
+    "random paths": {
+      "descriptive_cell_sign_flip_method": "exhaustive 2^n mean sign-flip",
+      "descriptive_cell_sign_flip_p_two_sided": 0.00390625,
+      "mean_ci95_cell_bootstrap": [
+        0.5282166786307672,
+        0.38601531692022856,
+        0.6407332620298669
+      ],
+      "median": 0.5597012839103022,
+      "n_cells": 10,
+      "positive_cells": 9
+    },
+    "shuffled ancestry": {
+      "descriptive_cell_sign_flip_method": "exhaustive 2^n mean sign-flip",
+      "descriptive_cell_sign_flip_p_two_sided": 0.001953125,
+      "mean_ci95_cell_bootstrap": [
+        0.6569256968685789,
+        0.5849847352198273,
+        0.7335225505629624
+      ],
+      "median": 0.6732393450196592,
+      "n_cells": 10,
+      "positive_cells": 10
+    }
+  },
+  "qc_gate": "at least 20 mapped typed incoming synapses and at least 3 inhibitory",
+  "source_code": {
+    "analyze_microns_morphology_credit.py": "cd1fcbb26d7a96d0a13882fdcfcc0493a2fa30296ccb83a7f26b7efd3373714f",
+    "analyze_pinky_v185_replication.py": "eb5186637c4535be514a304068256c91714c7a9a31254696ec77eaac69af88f3"
+  },
+  "status": "complete"
+}

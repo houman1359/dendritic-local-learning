@@ -3,16 +3,16 @@
 Checked against the official Article guidance retrieved on 9 August 2026.
 The narrative count is mechanical and excludes figure/table environments,
 displayed mathematics, citations and cross-references; the portal count may differ.
-The 8 numbered figures occupy 18 figure environments;
-10 environments are continued multi-panel displays.
+The 9 numbered figures occupy 9 figure environments;
+0 environments are continued multi-panel displays.
 
 | Item | Current | Guidance | Status |
 |---|---:|---:|---|
-| Title | 13 words | 15 | PASS |
-| Abstract | 200 words | 200 | PASS |
-| Introduction + Results + Discussion | 12292 approximate words | 5000 | ADVISORY |
-| Main display items | 8 figures | 10 | PASS |
-| References | 56 entries (general guide) | 70 | PASS |
+| Title | 7 words | 15 | PASS |
+| Abstract | 190 words | 200 | PASS |
+| Introduction + Results + Discussion | 13784 approximate words | 5000 | ADVISORY |
+| Main display items | 9 figures | 10 | PASS |
+| References | 58 entries (general guide) | 70 | PASS |
 
 Official guidance:
 

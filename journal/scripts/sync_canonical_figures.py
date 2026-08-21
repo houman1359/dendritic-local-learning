@@ -6,7 +6,7 @@ Figure-building scripts write descriptive internal filenames to
 artifacts to the exact figure/panel blocks compiled by LaTeX and uploaded to
 Overleaf.  Keeping this map explicit prevents legacy names such as
 ``fig3_microns_topology`` from being mistaken for the manuscript's Figure 3
-(that asset is now Figure 6).
+(that asset is now Figure 7).
 """
 
 from __future__ import annotations
@@ -22,8 +22,8 @@ GENERATED = ROOT / "figures" / "generated"
 
 # destination path relative to figures/ -> internal generated stem
 FIGURE_MAP: dict[str, str] = {
-    # Main manuscript: 8 numbered figures; continued blocks keep each
-    # scientific story coherent without flattening journal-scale evidence.
+    # Main-manuscript component blocks.  assemble_compact_main_figures.py
+    # composes these into exactly one publication-facing PDF per figure.
     "main/figure_01_panels_A-E": "fig1_framework",
     "main/figure_02_panels_A-F": "fig2_feedback",
     "main/figure_02_panels_G-O": "fig_prospective_learning_benefits",
@@ -34,15 +34,17 @@ FIGURE_MAP: dict[str, str] = {
     "main/figure_05_panels_G-L": "fig_point_dendrite_credit_controls",
     "main/figure_05_panels_M-O": "fig_physical_alignment_dose",
     "main/figure_05_panels_P-U": "fig_remaining_physical_crossovers",
-    "main/figure_06_panels_A-J": "fig3_microns_topology",
-    "main/figure_06_panels_K-L": "fig_capture_per_wire",
-    "main/figure_07_panels_A-I": "fig4_focal_shunting",
-    "main/figure_07_panels_J-M": "fig_active_focal_extension",
-    "main/figure_08_panels_A-H": "fig5_alignment_boundary",
-    "main/figure_08_panels_I-J": "fig_fulltree_boundary",
-    "main/figure_08_panels_K-N": "fig8_alignment_controlled",
-    "main/figure_08_panel_O": "fig_credit_phase_plane",
-    # Supplementary Information: S1--S17 in compiled order.
+    "main/figure_06_panels_A-D": "fig_physical_depth_h4_factorial",
+    "main/figure_07_panels_A-J": "fig3_microns_topology",
+    "main/figure_07_panels_K-L": "fig_capture_per_wire",
+    "main/figure_08_panels_A-I": "fig4_focal_shunting",
+    "main/figure_08_panels_J-M": "fig_active_focal_extension",
+    "main/figure_09_panels_A-H": "fig5_alignment_boundary",
+    "main/figure_09_panels_I-J": "fig_fulltree_boundary",
+    "main/figure_09_panels_K-N": "fig8_alignment_controlled",
+    "main/figure_09_panel_O": "fig_credit_phase_plane",
+    # Supplementary Information: generated source blocks S1--S27.  The
+    # compositor adds compact S18--S19 from selected diagnostic blocks.
     "supplementary/figure_S01_panels_A-E": "fig3_mechanistic_evidence",
     "supplementary/figure_S02_panels_A-E": "fig4_competence_regime",
     "supplementary/figure_S03_panels_A-D": "fig5_rule_feedback_controls",
@@ -60,6 +62,13 @@ FIGURE_MAP: dict[str, str] = {
     "supplementary/figure_S15_panels_A-D": "fig_supp_nonlinear_depth_calibration",
     "supplementary/figure_S16_panels_A-D": "fig_interior_optimum",
     "supplementary/figure_S17_panels_A-D": "fig_animal_credit_supplement",
+    "supplementary/figure_S20_panels_A-J": "fig3_microns_topology_detailed",
+    "supplementary/figure_S21_panels_A-I": "fig4_focal_shunting_detailed",
+    "supplementary/figure_S22_panels_A-H": "fig5_alignment_boundary_detailed",
+    "supplementary/figure_S23_panels_A-C": "fig_trained_partition_residual",
+    "supplementary/figure_S24_panels_A-D": "fig_adaptive_conductance_reliability",
+    "supplementary/figure_S25_panels_A-D": "fig_irregular_tree_wavelets",
+    "supplementary/figure_S26_panels_A-D": "fig_physical_depth_clean_source_replication",
     # Source component retained for provenance, not compiled separately.
     "components/supplementary_animal_credit_component": "fig_francioni_signed_credit_validation",
     # Completed but currently superseded displays, retained for provenance.
@@ -81,7 +90,9 @@ def main() -> None:
     missing: list[Path] = []
     copied = 0
     for destination_stem, source_stem in FIGURE_MAP.items():
-        for suffix in (".pdf", ".png"):
+        # Vector PDF is the sole canonical format.  Raster previews are local
+        # build products and are intentionally not copied into the repository.
+        for suffix in (".pdf",):
             source = GENERATED / f"{source_stem}{suffix}"
             destination = ROOT / "figures" / f"{destination_stem}{suffix}"
             if not source.exists():

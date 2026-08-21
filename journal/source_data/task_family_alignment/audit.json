@@ -1,0 +1,108 @@
+{
+  "alignment_alpha": [
+    0.0,
+    0.5,
+    1.0
+  ],
+  "all_gates_pass": true,
+  "architectures": [
+    "grouped_point",
+    "serial"
+  ],
+  "contract_failures": [],
+  "credits": [
+    "bp",
+    "local3f"
+  ],
+  "expected_rows": 360,
+  "fallback_mentions": 0,
+  "families": [
+    "flat_factor",
+    "local_ratio",
+    "nested_factor"
+  ],
+  "finite_metrics": true,
+  "missing_artifact_count": 0,
+  "missing_count": 0,
+  "missing_examples": [],
+  "nonfinite_alert_rows": 0,
+  "observed_rows": 360,
+  "resource_equal": true,
+  "resource_values": {
+    "active_synapses": [
+      14336
+    ],
+    "candidate_synapse_slots": [
+      21760
+    ],
+    "persistent_state_scalars": [
+      2944
+    ],
+    "trainable_parameters": [
+      66178
+    ]
+  },
+  "runs": [
+    {
+      "run_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/journal_extension_20260820/sweep_runs/task_family_alignment/journal_taskfamily_nested_factor_serial_bp_20260820081204",
+      "stem": "journal_taskfamily_nested_factor_serial_bp"
+    },
+    {
+      "run_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/journal_extension_20260820/sweep_runs/task_family_alignment/journal_taskfamily_nested_factor_serial_local3f_20260820081209",
+      "stem": "journal_taskfamily_nested_factor_serial_local3f"
+    },
+    {
+      "run_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/journal_extension_20260820/sweep_runs/task_family_alignment/journal_taskfamily_nested_factor_grouped_point_bp_20260820081156",
+      "stem": "journal_taskfamily_nested_factor_grouped_point_bp"
+    },
+    {
+      "run_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/journal_extension_20260820/sweep_runs/task_family_alignment/journal_taskfamily_nested_factor_grouped_point_local3f_20260820081200",
+      "stem": "journal_taskfamily_nested_factor_grouped_point_local3f"
+    },
+    {
+      "run_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/journal_extension_20260820/sweep_runs/task_family_alignment/journal_taskfamily_flat_factor_serial_bp_20260820081132",
+      "stem": "journal_taskfamily_flat_factor_serial_bp"
+    },
+    {
+      "run_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/journal_extension_20260820/sweep_runs/task_family_alignment/journal_taskfamily_flat_factor_serial_local3f_20260820081136",
+      "stem": "journal_taskfamily_flat_factor_serial_local3f"
+    },
+    {
+      "run_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/journal_extension_20260820/sweep_runs/task_family_alignment/journal_taskfamily_flat_factor_grouped_point_bp_20260820081123",
+      "stem": "journal_taskfamily_flat_factor_grouped_point_bp"
+    },
+    {
+      "run_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/journal_extension_20260820/sweep_runs/task_family_alignment/journal_taskfamily_flat_factor_grouped_point_local3f_20260820081127",
+      "stem": "journal_taskfamily_flat_factor_grouped_point_local3f"
+    },
+    {
+      "run_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/journal_extension_20260820/sweep_runs/task_family_alignment/journal_taskfamily_local_ratio_serial_bp_20260820081148",
+      "stem": "journal_taskfamily_local_ratio_serial_bp"
+    },
+    {
+      "run_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/journal_extension_20260820/sweep_runs/task_family_alignment/journal_taskfamily_local_ratio_serial_local3f_20260820081152",
+      "stem": "journal_taskfamily_local_ratio_serial_local3f"
+    },
+    {
+      "run_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/journal_extension_20260820/sweep_runs/task_family_alignment/journal_taskfamily_local_ratio_grouped_point_bp_20260820081140",
+      "stem": "journal_taskfamily_local_ratio_grouped_point_bp"
+    },
+    {
+      "run_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/journal_extension_20260820/sweep_runs/task_family_alignment/journal_taskfamily_local_ratio_grouped_point_local3f_20260820081143",
+      "stem": "journal_taskfamily_local_ratio_grouped_point_local3f"
+    }
+  ],
+  "seeds": [
+    10500,
+    10501,
+    10502,
+    10503,
+    10504,
+    10505,
+    10506,
+    10507,
+    10508,
+    10509
+  ],
+  "status": "complete"
+}

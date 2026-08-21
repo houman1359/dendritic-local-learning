@@ -33,7 +33,8 @@ from typing import Iterable, Sequence
 
 SCRIPT_PATH = Path(__file__).resolve()
 JOURNAL_ROOT = SCRIPT_PATH.parent.parent
-REPO_ROOT = JOURNAL_ROOT.parents[2]
+PROJECT_ROOT = JOURNAL_ROOT.parent
+LEGACY_PROJECT_PREFIX = Path("drafts/dendritic-local-learning")
 DEFAULT_MANIFEST = JOURNAL_ROOT / "source_data" / "provenance_manifest.tsv"
 DEFAULT_MANUSCRIPT = JOURNAL_ROOT / "main.tex"
 
@@ -171,7 +172,16 @@ def load_manifest(path: Path) -> tuple[list[dict[str, str]], list[Finding]]:
 
 def resolve_repo_path(raw_path: str) -> Path:
     path = Path(raw_path)
-    return path if path.is_absolute() else REPO_ROOT / path
+    if path.is_absolute():
+        return path
+    # The manifest deliberately records repository-relative provenance paths
+    # from the enclosing dendritic-modeling workspace.  Resolve those paths
+    # equally in the canonical checkout and in a standalone/recovery worktree.
+    try:
+        relative = path.relative_to(LEGACY_PROJECT_PREFIX)
+    except ValueError:
+        relative = path
+    return PROJECT_ROOT / relative
 
 
 def audit_manifest_rows(

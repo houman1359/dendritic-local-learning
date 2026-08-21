@@ -106,9 +106,6 @@ from journal_style import (
     LW_REF,
     PT_ANNOT,
     PT_LEGEND,
-    PT_SMALL,
-    PT_TICK,
-    PT_TITLE,
     apply_neurips_style,
     audit_layout,
     audit_text_over_data,
@@ -408,7 +405,7 @@ def region_image(xlim, ylim, n: int = 480) -> np.ndarray:
 
 
 def annotate(ax, text, xy, offset, *, color=None, ha="left", va="center",
-             fontsize=PT_SMALL):
+             fontsize=PT_ANNOT):
     ax.annotate(
         text,
         xy,
@@ -447,10 +444,17 @@ def main() -> None:
     frame = pd.DataFrame(points)
 
     xlim = (-0.045, 1.14)
-    ylim = (0.088, 6.2)
+    ylim = (0.088, 5.3)
 
-    fig = plt.figure(figsize=(FIG_W, 4.55))
-    ax = fig.add_axes([0.075, 0.145, 0.600, 0.760])
+    # Wide sub-block: this panel is composed into a three-column, two-sub-row
+    # slot of Figure 9 (381.5 x 185.8 pt), so the canvas is authored at that
+    # slot size and the compositor's rescale stays at ~1.0: every type token
+    # prints at the journal scale (the previous full-width 2.30 in band was
+    # rescaled to ~0.88x and pushed the assembled sheet past the text block).
+    # The legend moves below the axes so the plane keeps the same absolute
+    # annotation width as before.
+    fig = plt.figure(figsize=(FIG_W * 0.736, 2.58))
+    ax = fig.add_axes([0.102, 0.395, 0.870, 0.458])
     ax.set_xscale("linear")
     ax.set_yscale("log")
     ax.set_xlim(*xlim)
@@ -468,21 +472,23 @@ def main() -> None:
 
     # K = r reference line: a definition, not a fitted boundary.
     ax.axhline(1.0, color=COLORS["mute"], lw=LW_HAIR, ls=(0, (1, 2)), zorder=1)
-    annotate(ax, "K = r", (xlim[0], 1.0), (4, 6), color=COLORS["mute"],
-             fontsize=PT_SMALL)
+    annotate(ax, "K = r", (0.335, 1.0), (0, 5), color=COLORS["mute"],
+             fontsize=PT_ANNOT)
 
     # Region labels (mute ink; the bands are theory-derived and schematic).
     region_label = dict(color=COLORS["mute"], fontsize=PT_ANNOT, zorder=2,
                         linespacing=1.25)
     ax.text(0.60, 0.130, "neuron identity binds:\ntoo few feedback channels",
             ha="center", va="center", style="italic", **region_label)
-    ax.text(0.025, 0.435, "non-anatomical\nlow-rank routes win",
+    ax.text(0.015, 0.36, "non-anatomical\nlow-rank\nroutes win",
             ha="left", va="center", style="italic", **region_label)
-    ax.text(0.995, 0.325, "anatomical routes win\n(operating regime)",
+    # y = 0.27 keeps this region label clear below the rho=1 value callout
+    # (which hangs under the blue diamond at x = 1) while staying right of
+    # the bottom-band label, whose x extent ends near 0.75.
+    ax.text(0.995, 0.27, "ancestry routes win\n(operating regime)",
             ha="right", va="center", style="italic", **region_label)
-    ax.text(0.025, 3.1,
-            "spans coincide: anatomy ties unconstrained feedback\n"
-            "and stochastic BP; only noise rejection differs",
+    ax.text(0.025, 3.0,
+            "spans coincide:\nanatomy ties\nunconstrained feedback",
             ha="left", va="center", style="italic", **region_label)
 
     # Display positions: dodge the three points that coincide at (1, ~1).
@@ -519,9 +525,12 @@ def main() -> None:
     annotate(ax, "K=1: $-$0.36", at("factorial K=1"), (7, -6), color=green)
     annotate(ax, "K=2: $-$0.15", at("factorial K=2"), (-7, 2), ha="right",
              color=green)
-    annotate(ax, "K=4: +0.013", at("factorial K=4"), (-2, 16), ha="center",
+    # Two decimals to match every other value annotation in this panel.
+    annotate(ax, "K=4: +0.01", at("factorial K=4"), (-2, 11), ha="center",
              color=green)
-    annotate(ax, "K=8: tie", at("factorial K=8"), (-2, 9), ha="right",
+    # Right edge pulled 6 pt left of the dodged K=8 marker so the tag clears
+    # the alpha=1 callout centred over the violet square at x = 1.
+    annotate(ax, "K=8: tie", at("factorial K=8"), (-6, 8), ha="right",
              color=green)
 
     blue = FAMILY_COLORS["sweep"]
@@ -531,21 +540,24 @@ def main() -> None:
              ha="center", color=blue)
 
     violet = FAMILY_COLORS["microns"]
-    annotate(ax, "a=0: $-$0.13", at("MICrONS controlled a=0"), (7, 1),
+    annotate(ax, r"$\alpha$=0: $-$0.13", at("MICrONS controlled a=0"), (7, 1),
              color=violet)
-    annotate(ax, "a=1: +0.71", at("MICrONS controlled a=1"), (2, 9),
-             ha="left", color=violet)
+    # Centered directly above its own violet square (one row above the green
+    # K=8 tag), not over the dodged credit-reversal triangle to its right.
+    annotate(ax, r"$\alpha$=1: +0.71", at("MICrONS controlled a=1"), (0, 13),
+             ha="center", color=violet)
 
-    annotate(ax, "measured responses: null\n(ancestry 0.475 vs shuffle 0.446)",
-             at("measured responses (null)"), (0, 11), ha="center",
-             color=COLORS["mute"])
-    # The reversal label moves to the free lower-right corner; a hairline
-    # leader (drawn separately so its endpoints stay clear of the text box)
-    # ties it back to the dodged triangle.
+    # The measured-responses point is keyed once, by its legend entry; a
+    # duplicate in-plot label would double-key the single point.
+    # The reversal label lives in the free upper-right region, well clear of
+    # the "ancestry routes win" region label and the rho=1 callout that share
+    # the lower-right corner; a hairline leader (drawn separately so its
+    # endpoints stay clear of the text box and of the alpha=1 callout) ties
+    # it back to the dodged triangle.
     reversal_x, reversal_y = at("credit reversal K=2")
-    ax.text(1.115, 0.56, "routing necessary:\n+4.4 pts", ha="right", va="top",
-            fontsize=PT_SMALL, color=FAMILY_COLORS["reversal"], zorder=5)
-    ax.plot([reversal_x + 0.004, 1.082], [reversal_y * 0.93, 0.60],
+    ax.text(1.130, 5.0, "routing necessary:\n+4.4 pts", ha="right", va="top",
+            fontsize=PT_ANNOT, color=FAMILY_COLORS["reversal"], zorder=5)
+    ax.plot([reversal_x + 0.004, 1.090], [reversal_y * 1.14, 2.05],
             color=FAMILY_COLORS["reversal"], lw=LW_HAIR, alpha=0.6, zorder=4)
 
     # ── Axes cosmetics ─────────────────────────────────────────────────────
@@ -555,7 +567,7 @@ def main() -> None:
     ax.minorticks_off()
     ax.set_xlabel("task–anatomy alignment\n"
                   "(fraction of task-gradient energy in the anatomical route span)")
-    ax.set_ylabel("feedback bandwidth / task rank  ($K/r_{\\mathrm{eff}}$)")
+    ax.set_ylabel("feedback bandwidth\n/ task rank  ($K/r_{\\mathrm{eff}}$)")
     panel_title(ax, "O", "Alignment × bandwidth phase plane")
     style_axis(ax)
 
@@ -577,33 +589,26 @@ def main() -> None:
                outcome="null", with_line=False),
         handle("reversal", "Credit reversal, $K$=2", with_line=False),
         Line2D([], [], markerfacecolor=COLORS["edge"],
-               label="anatomical routes win / tie", **neutral),
+               label="ancestry routes win / tie", **neutral),
         Line2D([], [], markerfacecolor="white",
-               label="anatomical routes lose", **neutral),
+               label="ancestry routes lose", **neutral),
     ]
-    legend = ax.legend(
+    # Three columns below the axes: the sub-block slot has no side column for
+    # the legend, and a horizontal legend costs no annotation width.
+    legend = fig.legend(
         handles=handles,
-        loc="upper left",
-        bbox_to_anchor=(1.02, 1.005),
+        loc="lower center",
+        bbox_to_anchor=(0.5, 0.008),
+        ncol=3,
         frameon=False,
         fontsize=PT_LEGEND,
-        handlelength=1.4,
-        handletextpad=0.7,
-        labelspacing=0.85,
+        handlelength=1.1,
+        handletextpad=0.5,
+        labelspacing=0.30,
+        columnspacing=0.9,
         borderaxespad=0.0,
     )
     legend.set_zorder(7)
-
-    fig.text(
-        0.693, 0.360,
-        "Bands: credit-operator regimes\n"
-        "(conceptual boundaries, not fitted).\n\n"
-        "Labels: ancestry-minus-best-control\n"
-        "endpoint. Exact point coordinates and\n"
-        "display offsets are in Source Data.",
-        ha="left", va="top", fontsize=PT_SMALL, color=COLORS["mute"],
-        linespacing=1.45,
-    )
 
     # ── Export the plotted points with provenance ─────────────────────────
     OUT.mkdir(parents=True, exist_ok=True)
