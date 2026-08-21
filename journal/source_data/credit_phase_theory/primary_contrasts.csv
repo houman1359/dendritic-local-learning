@@ -1,4 +1,0 @@
-analysis,left_minus_right,metric,n_pairs,mean_difference,ci95_low,ci95_high,positive_pairs,ties,wilcoxon_p_two_sided
-spectral_alignment_rho1_k4,ancestry - random_rank,spectral_capture,50,0.5519550524,0.535292581,0.5685631922,50,0,1.776356839e-15
-matched_depth_minus_best_mismatched_depth,D=H - best D!=H,final_population_loss,200,-0.09567505791,-0.114878428,-0.0775606745,39,0,3.046153005e-19
-reliability_alignment_high_heterogeneity,reliability_aligned - best_global_gain,population_loss_decrease,50,1.241468506,1.116049965,1.372798738,50,0,1.776356839e-15
