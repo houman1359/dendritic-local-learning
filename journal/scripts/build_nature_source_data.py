@@ -2260,8 +2260,8 @@ def final_display_file(item: SourceFile) -> SourceFile:
     elif source.startswith("source_data/clean_exact_bp/"):
         figure, panels = "Supplementary Figure 19", "e"
     elif source.startswith("source_data/credit_phase_plane/"):
-        figure = "Figure 9"
-        panels = "k"
+        figure = "Figure 4"
+        panels = "g"
     elif source.startswith("source_data/credit_phase_"):
         figure = "Figure 4"
     elif source.startswith("source_data/physical_alignment_dose/"):
@@ -2279,12 +2279,12 @@ def final_display_file(item: SourceFile) -> SourceFile:
         figure = "Figure 4"
         panels = "a"
     elif source.startswith("source_data/reciprocal_routing/"):
-        figure, panels = "Figure 7", "e-f"
+        figure, panels = "Figure 7", "c"
     elif source.startswith("source_data/figure3/typed_only"):
         figure, panels = "Supplementary Figure 20", "h"
     elif source.startswith("source_data/figure3/"):
         figure = "Figure 7"
-        panels = {"a-c": "a-b", "d-g": "c-d", "a-g": "a-d", "d-h": "c-d"}.get(
+        panels = {"a-c": "a-b", "d-g": "d", "a-g": "a-b,d", "d-h": "d"}.get(
             panels, panels
         )
     elif source.startswith("source_data/figure4/direct_typed"):
@@ -2294,42 +2294,42 @@ def final_display_file(item: SourceFile) -> SourceFile:
             figure, panels = "Supplementary Figure 21", "f"
         else:
             figure = "Figure 8"
-            panels = {"d-e": "d"}.get(panels, panels)
+            panels = {"d-e": "c"}.get(panels, panels)
     elif source.startswith("source_data/focal_decomposition/"):
-        figure, panels = "Figure 8", "e"
+        figure, panels = "Figure 8", "d"
     elif source.startswith("source_data/physical_cable_sensitivity/"):
-        figure, panels = "Figure 8", "f"
+        figure, panels = "Figure 8", "e"
     elif source.startswith("source_data/focal_selectivity_active_ensemble/"):
         figure = "Figure 8"
-        panels = {"a-d": "g-j", "b-d": "h-j", "b-c": "h-i", "c": "i"}.get(
+        panels = {"a-d": "f-g", "b-d": "f-g", "b-c": "f-g", "c": "g"}.get(
             panels, panels
         )
     elif source.startswith("source_data/fulltree_boundary/"):
         figure = "Figure 9"
-        panels = "g-h"
+        panels = "f-g"
     elif source.startswith("source_data/figure5/"):
         if any(f"ch{value}" in source for value in (1, 2, 8)):
             figure, panels = "Supplementary Figure 22", "h"
         else:
             figure = "Figure 9"
-            panels = {"a-c": "a-b", "d-g": "c-d", "h": "c-d"}.get(panels, panels)
+            panels = {"a-c": "a", "d-g": "b-c", "h": "b-c"}.get(panels, panels)
     elif source.startswith("source_data/functional_topology_all_scans/"):
         figure, panels = "Supplementary Figure 22", "a-h"
     elif source.startswith("source_data/alignment_controlled/"):
         figure = "Figure 9"
-        panels = {"a-d": "e-f", "b-d": "e-f", "b-c": "e-f", "d": "f"}.get(
+        panels = {"a-d": "d", "b-d": "d", "b-c": "d", "d": "d"}.get(
             panels, panels
         )
     elif source.startswith("source_data/animal_learning_francioni/"):
         if "neuron_sd_residual" in source:
             figure, panels = "Supplementary Figure 17", "d"
         elif "common_signed_modes" in source:
-            figure, panels = "Figure 9", "j"
+            figure, panels = "Supplementary Figure 17", "c"
         else:
-            figure, panels = "Figure 9", "i-j"
+            figure, panels = "Figure 9", "e"
     elif source.startswith("source_data/capture_per_wire/"):
         figure = "Figure 7"
-        panels = "g-h"
+        panels = "e-f"
 
     if figure == item.figure and panels == item.panels:
         return item
@@ -2352,7 +2352,7 @@ def final_display_file(item: SourceFile) -> SourceFile:
     if source.startswith("source_data/theory/credit_capture"):
         destination = "Figure_4/Fig4a_credit_capture_bound_verification.json"
     elif source.startswith("source_data/fulltree_boundary/"):
-        destination = re.sub(r"Fig9[^_]*_", "Fig9g-h_", destination)
+        destination = re.sub(r"Fig9[^_]*_", "Fig9f-g_", destination)
     elif source.startswith("source_data/alignment_controlled/"):
         destination = re.sub(r"Fig9[^_]*_", f"Fig9{panels}_", destination)
     elif source.startswith("source_data/animal_learning_francioni/"):
@@ -2361,9 +2361,9 @@ def final_display_file(item: SourceFile) -> SourceFile:
         )
         destination = re.sub(r"(?:Fig|SuppFig)\d+[^_]*_", f"{prefix}_", destination)
     elif source.startswith("source_data/capture_per_wire/"):
-        destination = re.sub(r"(?:Fig|SuppFig)\d+[^_]*_", "Fig7g-h_", destination)
+        destination = re.sub(r"(?:Fig|SuppFig)\d+[^_]*_", "Fig7e-f_", destination)
     elif source.startswith("source_data/credit_phase_plane/"):
-        destination = "Figure_9/Fig9k_phase_plane_points.csv"
+        destination = "Figure_4/Fig4g_phase_plane_points.csv"
     return replace(item, figure=figure, panels=panels, destination=destination)
 
 
@@ -2419,6 +2419,12 @@ FILES += tuple(
     for item in FILES
     if item.source.startswith("source_data/point_dendrite_credit_controls/")
     and item.figure != "Supplementary Figure 18"
+)
+FILES += tuple(
+    duplicate_for_supplement(item, 28, "a-b")
+    for item in FILES
+    if item.source.startswith("source_data/point_dendrite_credit_controls/")
+    and item.figure == "Figure 5"
 )
 FILES += tuple(
     duplicate_for_supplement(item, 19, "a-d")

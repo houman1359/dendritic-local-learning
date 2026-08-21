@@ -428,7 +428,7 @@ def _plot_legacy(frame: pd.DataFrame, summary: pd.DataFrame) -> None:
             }[feedback]
             panel_title(ax, feedback_letters[row][col], short_feedback.capitalize())
             ax.set_xticks([1, 2, 3, 4])
-            ax.set_xlabel("dendritic depth")
+            ax.set_xlabel("dendritic stage count")
             if col == 0:
                 ax.set_ylabel(
                     "MNIST accuracy" if task == "mnist" else "noise-task accuracy"
@@ -461,7 +461,7 @@ def _plot_legacy(frame: pd.DataFrame, summary: pd.DataFrame) -> None:
         ax.axhline(0, color=COLORS["mute"], lw=0.8, ls="--", zorder=0)
         panel_title(ax, ("G", "H")[row], "Routing map")
         ax.set_xticks([2, 4])
-        ax.set_xlabel("dendritic depth")
+        ax.set_xlabel("dendritic stage count")
         ax.set_ylabel("routing benefit (pp)")
         style_axis(ax)
 
@@ -744,7 +744,7 @@ def _plot_streamlined_main() -> None:
             )
         ax.axhline(0, color=COLORS["mute"], ls="--", lw=LW_REF)
         ax.set_xticks([1, 2, 3, 4])
-        ax.set_xlabel("dendritic depth")
+        ax.set_xlabel("dendritic stage count")
         ax.set_ylabel("accuracy gain (pp)")
         panel_title(ax, letter, title)
         style_axis(ax)
@@ -826,7 +826,7 @@ def _plot_streamlined_main() -> None:
     ax_c.set_xticks([1, 2, 3, 4])
     ax_c.set_ylim(-0.30, 0.66)
     ax_c.set_yticks([-0.2, 0.0, 0.2, 0.4])
-    ax_c.set_xlabel("dendritic depth")
+    ax_c.set_xlabel("dendritic stage count")
     ax_c.set_ylabel("exact transport − BP (pp)")
     panel_title(ax_c, "I", "Historical exact/BP")
     style_axis(ax_c)
@@ -1223,7 +1223,7 @@ def _plot_three_claim_main() -> None:
             )
     ax_a.axhline(0, color=COLORS["mute"], ls=":", lw=LW_REF)
     ax_a.set_xticks([1, 2, 3, 4])
-    ax_a.set_xlabel("dendritic depth")
+    ax_a.set_xlabel("dendritic stage count")
     ax_a.set_ylabel("local - backprop (pp)")
     panel_title(ax_a, "A", "Gap to backpropagation")
     style_axis(ax_a)

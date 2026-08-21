@@ -583,7 +583,7 @@ def line_panel(
             label=label,
         )
     panel_title(ax, letter, title)
-    ax.set_xlabel(r"physical depth $D_{\mathrm{p}}$")
+    ax.set_xlabel(r"physical stage count $D_{\mathrm{p}}$")
     if ylabel:
         ax.set_ylabel("test accuracy")
     depths = sorted(summary[summary.hierarchy.eq(hierarchy)].depth.unique())

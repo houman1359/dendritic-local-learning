@@ -797,7 +797,7 @@ def _line_panel(
             markeredgewidth=0.5,
         )
     panel_title(ax, letter, title)
-    ax.set_xlabel(r"physical depth $D_{\mathrm{p}}$")
+    ax.set_xlabel(r"physical stage count $D_{\mathrm{p}}$")
     ax.set_ylabel("test accuracy")
     ax.set_xticks([1, 2, 3, 4])
     ax.set_xlim(0.7, 4.3)
@@ -927,7 +927,7 @@ def _cross_hierarchy_panel(ax: plt.Axes, h4: pd.DataFrame) -> None:
         )
     panel_title(ax, "D", "Trained optimum across task depth")
     ax.set_xlabel(r"task hierarchy $H$")
-    ax.set_ylabel(r"best mean physical depth $D_{\mathrm{p}}^*$")
+    ax.set_ylabel(r"best mean stage count $D_{\mathrm{p}}^*$")
     ax.set_xticks([2, 3, 4])
     ax.set_yticks([1, 2, 3, 4])
     ax.set_xlim(1.75, 4.25)

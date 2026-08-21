@@ -248,9 +248,9 @@ def main() -> None:
             color=COLORS["ink"], lw=LW_EDGE, zorder=3,
             solid_joinstyle="miter",
         )
-    ax_c.set_xlabel(r"routed depth $D_{\mathrm{r}}$")
+    ax_c.set_xlabel(r"route resolution $D_{\mathrm{r}}$")
     ax_c.set_ylabel("task depth $H$")
-    panel_title(ax_c, "C", "Depth matching")
+    panel_title(ax_c, "C", "Route-resolution matching")
     style_axis(ax_c)
     # Key for the outlined diagonal, kept with the panel so it stands alone.
     ax_c.text(0.5, -0.285, r"boxes: $D_{\mathrm{r}}=H$",
@@ -292,9 +292,9 @@ def main() -> None:
                           alpha=0.10, linewidth=0)
     ax_d.set_yscale("log")
     ax_d.set_xticks([1, 2, 3, 4])
-    ax_d.set_xlabel(r"routed depth $D_{\mathrm{r}}$")
+    ax_d.set_xlabel(r"route resolution $D_{\mathrm{r}}$")
     ax_d.set_ylabel("final loss")
-    panel_title(ax_d, "D", "Depth crossover")
+    panel_title(ax_d, "D", "Route-resolution crossover")
     style_axis(ax_d)
     clean_legend(ax_d, loc="upper left", fontsize=PT_LEGEND, ncol=2)
     ax_d.text(0.98, 0.03, "coincident markers\noffset",
@@ -402,7 +402,7 @@ def main() -> None:
                      marker=marker, s=MARKER_MS ** 2, label=label, zorder=3,
                      edgecolors="white", linewidths=0.4)
     ax_g.set_xticks([1, 2, 3, 4])
-    ax_g.set_xlabel("address depth")
+    ax_g.set_xlabel("route resolution")
     ax_g.set_ylabel("spectral capture")
     panel_title(ax_g, "G", "Span invariance")
     style_axis(ax_g)
@@ -423,7 +423,7 @@ def main() -> None:
                   ms=MARKER_MS, lw=LW_DATA, label=label)
     ax_h.set_yscale("log")
     ax_h.set_xticks([1, 2, 3, 4])
-    ax_h.set_xlabel("address depth")
+    ax_h.set_xlabel("route resolution")
     ax_h.set_ylabel("Gram condition number")
     panel_title(ax_h, "H", "Route conditioning")
     style_axis(ax_h)

@@ -384,17 +384,15 @@ def compose(
 
 
 def main() -> None:
-    # Figures 1, 3 and 4 were already designed as single coherent canvases.
+    # Figures 1 and 3 are already designed as single coherent canvases.
     copy_page("figure_01_panels_A-E.pdf", "figure_01.pdf")
     copy_page("figure_03_panels_A-F.pdf", "figure_03.pdf")
-    copy_page("figure_04_panels_A-I.pdf", "figure_04.pdf")
 
     compose(
         MAIN / "figure_02.pdf",
         [
             panel("figure_02_panels_A-F.pdf", "B", 2, 3),
             panel("figure_02_panels_A-F.pdf", "C", 2, 3),
-            panel("figure_02_panels_A-F.pdf", "D", 2, 3),
             panel("figure_02_panels_G-O.pdf", "G", 3, 3),
             panel("figure_02_panels_G-O.pdf", "J", 3, 3),
             panel("figure_02_panels_G-O.pdf", "M", 3, 3),
@@ -404,7 +402,6 @@ def main() -> None:
         [
             "Neuron-indexed feedback",
             "Gradient alignment",
-            "Exact error transport",
             "MNIST identity gain",
             "Matched routing",
             "Within-neuron routing",
@@ -413,7 +410,45 @@ def main() -> None:
         ],
         rows=3,
         cols=6,
-        height=458,
+        height=445,
+        slots=[
+            Slot(0, 0, colspan=2),
+            Slot(0, 2, colspan=2),
+            Slot(0, 4, colspan=2),
+            Slot(1, 0, colspan=3),
+            Slot(1, 3, colspan=3),
+            Slot(2, 0, colspan=3),
+            Slot(2, 3, colspan=3),
+        ],
+    )
+
+    # The alignment-by-bandwidth plane is the theory's most compact boundary
+    # map, so it closes Figure 4 at full width rather than competing with ten
+    # heterogeneous panels in the biological-boundary figure.  Same-span and
+    # conditioning diagnostics remain in Supplementary Figure S14.
+    compose(
+        MAIN / "figure_04.pdf",
+        [
+            panel("figure_04_panels_A-I.pdf", "A", 3, 3),
+            panel("figure_04_panels_A-I.pdf", "B", 3, 3),
+            panel("figure_04_panels_A-I.pdf", "I", 3, 3),
+            panel("figure_04_panels_A-I.pdf", "D", 3, 3),
+            panel("figure_04_panels_A-I.pdf", "E", 3, 3),
+            panel("figure_04_panels_A-I.pdf", "F", 3, 3),
+            panel("figure_09_panel_O.pdf", "O", 1, 1),
+        ],
+        [
+            "Credit-operator utility",
+            "Spectral alignment",
+            "Predictive utility",
+            "Route-resolution crossover",
+            "Projection boundary",
+            "Reliability gains",
+            "Alignment × bandwidth",
+        ],
+        rows=3,
+        cols=6,
+        height=470,
         slots=[
             Slot(0, 0, colspan=2),
             Slot(0, 2, colspan=2),
@@ -421,9 +456,9 @@ def main() -> None:
             Slot(1, 0, colspan=2),
             Slot(1, 2, colspan=2),
             Slot(1, 4, colspan=2),
-            Slot(2, 0, colspan=3),
-            Slot(2, 3, colspan=3),
+            Slot(2, 0, colspan=6),
         ],
+        row_heights=[135.0, 135.0, 186.0],
     )
 
     compose(
@@ -432,8 +467,6 @@ def main() -> None:
             *[panel("figure_05_panels_A-F.pdf", letter, 2, 3) for letter in "ABCDEF"],
             panel("figure_05_panels_G-L.pdf", "G", 2, 3),
             panel("figure_05_panels_G-L.pdf", "H", 2, 3),
-            panel("figure_05_panels_G-L.pdf", "J", 2, 3),
-            panel("figure_05_panels_G-L.pdf", "K", 2, 3),
         ],
         [
             "Matched-resource depth",
@@ -444,12 +477,10 @@ def main() -> None:
             "Divisive control",
             "Architecture controls",
             "Serial composition",
-            "Credit-coordinate ladder",
-            "BP–local decomposition",
         ],
-        rows=3,
+        rows=2,
         cols=4,
-        height=458,
+        height=330,
         slots=[
             Slot(0, 0),
             Slot(0, 1),
@@ -459,8 +490,6 @@ def main() -> None:
             Slot(1, 1),
             Slot(1, 2),
             Slot(1, 3),
-            Slot(2, 0, colspan=2),
-            Slot(2, 2, colspan=2),
         ],
     )
 
@@ -495,18 +524,18 @@ def main() -> None:
     )
 
     figure_07_panels = [
-        panel("figure_07_panels_A-J.pdf", letter, 2, 3) for letter in "ABCDEF"
-    ] + [
+        panel("figure_07_panels_A-J.pdf", "A", 2, 3),
+        panel("figure_07_panels_A-J.pdf", "B", 2, 3),
+        panel("figure_07_panels_A-J.pdf", "E", 2, 3),
+        panel("figure_07_panels_A-J.pdf", "C", 2, 3),
         panel("figure_07_panels_K-L.pdf", "K", 1, 2),
         panel("figure_07_panels_K-L.pdf", "L", 1, 2),
     ]
     figure_07_titles = [
         "Reconstructed tree",
         "Ancestry addresses",
-        "Sparse route capacity",
-        "Model-field controls",
         "Reciprocal cable field",
-        "Topology controls",
+        "Sparse route capacity",
         "Wire efficiency at eight channels",
         "Wiring-normalized capture",
     ]
@@ -521,90 +550,87 @@ def main() -> None:
         figure_07_panels,
         figure_07_titles,
         rows=3,
-        cols=3,
-        height=430,
+        cols=6,
+        height=390,
+        slots=[
+            Slot(0, 0, colspan=2),
+            Slot(0, 2, colspan=2),
+            Slot(0, 4, colspan=2),
+            Slot(1, 0, colspan=3),
+            Slot(1, 3, colspan=3),
+            Slot(2, 0, colspan=3),
+            Slot(2, 3, colspan=3),
+        ],
     )
 
     compose(
         MAIN / "figure_08.pdf",
-        [panel("figure_08_panels_A-I.pdf", letter, 2, 3) for letter in "ABCDEF"]
-        + [panel("figure_08_panels_J-M.pdf", letter, 1, 4) for letter in "JKLM"],
+        [
+            panel("figure_08_panels_A-I.pdf", "A", 2, 3),
+            panel("figure_08_panels_A-I.pdf", "B", 2, 3),
+            panel("figure_08_panels_A-I.pdf", "D", 2, 3),
+            panel("figure_08_panels_A-I.pdf", "E", 2, 3),
+            panel("figure_08_panels_A-I.pdf", "F", 2, 3),
+            panel("figure_08_panels_J-M.pdf", "K", 1, 4),
+            panel("figure_08_panels_J-M.pdf", "L", 1, 4),
+        ],
         [
             "Matched focal shunt",
             "Tree-relation selectivity",
-            "Within-cell controls",
             "Dose response",
             "Adjoint transport",
-            "Electrotonic limit",
-            "Active channels",
+            "Electrotonic regime",
             "Active dose response",
             "Cellwise contrast",
-            "Signed outcome",
         ],
         rows=3,
         cols=4,
-        height=430,
+        height=405,
         slots=[
-            Slot(0, 0),
-            Slot(0, 1),
-            Slot(0, 2),
-            Slot(0, 3),
+            Slot(0, 0, colspan=2),
+            Slot(0, 2, colspan=2),
             Slot(1, 0),
             Slot(1, 1),
-            Slot(1, 2),
-            Slot(1, 3),
+            Slot(1, 2, colspan=2),
             Slot(2, 0, colspan=2),
             Slot(2, 2, colspan=2),
         ],
     )
 
-    # Figure 9 closes with the unifying phase plane as a three-column block
-    # spanning two sub-rows.  Its source canvas is authored at exactly that
-    # slot size (381.5 x 185.8 pt), so the compositor rescale stays at ~1.0
-    # and every type token prints at the journal scale, while the sheet stays
-    # inside the LaTeX text block (the earlier full-width band forced a
-    # 518 x 600 pt sheet that overflowed the page by 71.5 pt).  The stacked
-    # full-tree panels I-J fill the remaining column at their previous scale.
+    # Figure 9 is the empirical boundary: measured-response nulls, imposed
+    # alignment, signed animal coordinates and the complete-tree learning
+    # test.  The quantitative synthesis plane now belongs to Figure 4.
     compose(
         MAIN / "figure_09.pdf",
         [
-            *[panel("figure_09_panels_A-H.pdf", letter, 2, 3) for letter in "ABCDEF"],
+            panel("figure_09_panels_A-H.pdf", "B", 2, 3),
+            panel("figure_09_panels_A-H.pdf", "C", 2, 3),
+            panel("figure_09_panels_A-H.pdf", "D", 2, 3),
+            panel("figure_09_panels_A-H.pdf", "E", 2, 3),
             panel("../supplementary/figure_S17_panels_A-D.pdf", "B", 1, 4),
-            panel("../supplementary/figure_S17_panels_A-D.pdf", "C", 1, 4),
             panel("figure_09_panels_I-J.pdf", "I", 1, 2),
             panel("figure_09_panels_I-J.pdf", "J", 1, 2),
-            panel("figure_09_panel_O.pdf", "O", 1, 1),
         ],
         [
-            "Measured cohort",
             "Structure–function boundary",
             "Task-field capture",
             "Held-out learning",
             "Controlled alignment",
-            "Capture vs progress",
             "Signed contrast, six animals",
-            "Signed mode",
             "Full-tree task",
             "Anatomy boundary",
-            "Alignment × bandwidth",
         ],
-        rows=4,
-        cols=4,
-        height=480,
-        row_heights=[134.0, 145.8, 91.38, 91.38],
+        rows=3,
+        cols=6,
+        height=420,
         slots=[
-            Slot(0, 0),
-            Slot(0, 1),
-            Slot(0, 2),
-            Slot(0, 3),
-            Slot(1, 0),
-            Slot(1, 1),
-            Slot(1, 2),
-            Slot(1, 3),
-            Slot(2, 0),
-            Slot(3, 0),
-            # 3 columns x 2 sub-rows = the phase plane's authored canvas size.
-            Slot(2, 1, rowspan=2, colspan=3),
+            Slot(0, 0, colspan=2),
+            Slot(0, 2, colspan=2),
+            Slot(0, 4, colspan=2),
+            Slot(1, 0, colspan=3),
+            Slot(1, 3, colspan=3),
+            Slot(2, 0, colspan=3),
+            Slot(2, 3, colspan=3),
         ],
     )
 
@@ -656,7 +682,22 @@ def main() -> None:
         height=458,
     )
 
-    print("Assembled nine compact main figures and Supplementary Figures S18--S19.")
+    compose(
+        SUPP / "figure_S28_panels_A-B.pdf",
+        [
+            panel("figure_05_panels_G-L.pdf", "J", 2, 3),
+            panel("figure_05_panels_G-L.pdf", "K", 2, 3),
+        ],
+        [
+            "Credit-coordinate ladder",
+            "BP–local decomposition",
+        ],
+        rows=1,
+        cols=2,
+        height=220,
+    )
+
+    print("Assembled nine compact main figures and Supplementary Figures S18, S19 and S28.")
 
 
 if __name__ == "__main__":

@@ -683,7 +683,7 @@ def _line_panel(
             label=label,
         )
     panel_title(ax, letter, f"Clean source: H={hierarchy} {regime.replace('_', ' ')}")
-    ax.set_xlabel(r"physical depth $D_{\mathrm{p}}$")
+    ax.set_xlabel(r"physical stage count $D_{\mathrm{p}}$")
     ax.set_ylabel("test accuracy")
     ax.set_xticks(list(range(1, hierarchy + 1)))
     style_axis(ax, grid="y")

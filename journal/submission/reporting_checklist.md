@@ -9,7 +9,7 @@ Status key: `[x]` complete in the current draft; `[~]` drafted but requires a fi
       guideline; the automated format audit records the exact current count.
 - [x] Main narrative is organized as Introduction, Results, Discussion and Methods.
 - [x] The working article contains nine numbered main figures, each compiled
-      from one vector PDF. Expanded controls are Supplementary Figures S1--S27.
+      from one vector PDF. Expanded controls are Supplementary Figures S1--S28.
 - [x] A standalone Supplementary Information manuscript compiles.
 - [x] A cover letter and standalone related-work/overlap statement are drafted.
 - [ ] Confirm the final corresponding author, postal address, email and journal-portal metadata.
@@ -90,9 +90,9 @@ Status key: `[x]` complete in the current draft; `[~]` drafted but requires a fi
 
 ## Figure and source-data integrity
 
-- [x] Every quantitative panel in the nine numbered main figures and twenty-seven supplementary figures has machine-readable source tables with plotted values and unit identifiers; conceptual panels are programmatic. The 360-fit H4 and 360-fit task-family factorials and 430-fit immutable-source replication passed their frozen artifact and resource gates; Supplementary Figure S23 reconstructs all 2,700 route-factorial fits, Supplementary Figure S24 reports all 1,050 adaptive-reliability outcomes, Supplementary Figure S25 reports the irregular-tree analysis, Supplementary Figure S26 reports H2/H3 source concordance and Supplementary Figure S27 reports the independent-animal structural analysis.
+- [x] Every quantitative panel in the nine numbered main figures and twenty-eight supplementary figures has machine-readable source tables with plotted values and unit identifiers; conceptual panels are programmatic. The 360-fit H4 and 360-fit task-family factorials and 430-fit immutable-source replication passed their frozen artifact and resource gates; Supplementary Figure S23 reconstructs all 2,700 route-factorial fits, Supplementary Figure S24 reports all 1,050 adaptive-reliability outcomes, Supplementary Figure S25 reports the irregular-tree analysis, Supplementary Figure S26 reports H2/H3 source concordance, Supplementary Figure S27 reports the independent-animal structural analysis and Supplementary Figure S28 retains the physical-depth credit-coordinate diagnostics.
 - [x] The panel-level provenance manifest records source path, SHA-256 hash,
-      generator and inferential unit for Figures 1--9 and Supplementary Figures S1--S27; hashes include the final alignment-dose, Fashion-MNIST, detailed morphology, focal and measured-response panels, trained partition residual, adaptive reliability, irregular-tree wavelets, clean-source replication, task-family boundary and Pinky analysis.
+      generator and inferential unit for Figures 1--9 and Supplementary Figures S1--S28; hashes include the final alignment-dose, Fashion-MNIST, detailed morphology, focal and measured-response panels, trained partition residual, adaptive reliability, irregular-tree wavelets, clean-source replication, task-family boundary, Pinky analysis and physical-depth credit-coordinate diagnostics.
 - [x] Plotting scripts read the frozen source tables or write and then read the deterministic analysis outputs; numerical result labels are not maintained as an independent hand-entered source.
 - [~] Final figures use embedded Type 1 or TrueType fonts and a consistent,
       color-accessible palette; the existing renders and the alignment-dose

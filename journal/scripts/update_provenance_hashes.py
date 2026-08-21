@@ -38,8 +38,7 @@ CANONICAL_ASSETS = {
     "extensions.asset": "figures/main/figure_08.pdf",
     "extensions.fulltree.asset": "figures/main/figure_09.pdf",
     "fig6.asset": "figures/main/figure_09.pdf",
-    "fig8.asset": "figures/main/figure_09.pdf",
-    "phaseplane.asset": "figures/main/figure_09.pdf",
+    "phaseplane.asset": "figures/main/figure_04.pdf",
     "inherited.s1.asset": "figures/supplementary/figure_S01_panels_A-E.pdf",
     "inherited.s2.asset": "figures/supplementary/figure_S02_panels_A-E.pdf",
     "inherited.s3.asset": "figures/supplementary/figure_S03_panels_A-D.pdf",
@@ -61,24 +60,28 @@ CANONICAL_ASSETS = {
 
 CANONICAL_ASSIGNMENTS = {
     "fig1.asset": ("fig1", "all"),
-    "fig2.asset": ("fig2", "a-c"),
-    "prospective.learning.asset": ("fig2", "d-f"),
-    "fashion.asset": ("fig2", "g-h"),
+    "fig2.asset": ("fig2", "a-b"),
+    "prospective.learning.asset": ("fig2", "c-e"),
+    "fashion.asset": ("fig2", "f-g"),
     "subtree.factorial.asset": ("fig3", "all"),
-    "creditphase.asset": ("fig4", "all"),
+    "creditphase.asset": ("fig4", "a-f"),
+    "phaseplane.asset": ("fig4", "g"),
     "physical.asset": ("fig5", "a-f"),
-    "pointcredit.asset": ("fig5", "g-j"),
-    "fig3.asset": ("fig7", "a-f"),
-    "capturewire.asset": ("fig7", "g-h"),
-    "fig4.asset": ("fig8", "a-f"),
-    "extensions.asset": ("fig8", "g-j"),
-    "fig6.asset": ("fig9", "a-f"),
-    "extensions.fulltree.asset": ("fig9", "g-h"),
-    "fig8.asset": ("fig9", "i-j"),
-    "phaseplane.asset": ("fig9", "k"),
+    "pointcredit.asset": ("fig5", "g-h"),
+    "fig3.asset": ("fig7", "a-d"),
+    "capturewire.asset": ("fig7", "e-f"),
+    "fig4.asset": ("fig8", "a-e"),
+    "extensions.asset": ("fig8", "f-g"),
+    "fig6.asset": ("fig9", "a-e"),
+    "extensions.fulltree.asset": ("fig9", "f-g"),
     "alignmentdose.asset": ("figS18", "c-e"),
     "remainingphysical.asset": ("figS18", "f-k"),
 }
+
+# This standalone controlled-alignment graphic was superseded by the focused
+# main-panel summary plus Supplementary Figure S5.  Its numerical source rows
+# remain registered; the obsolete publication asset row does not.
+SUPERSEDED_ENTRIES = {"fig8.asset"}
 
 NEW_DETAIL_ASSETS = {
     "physical.h4.asset": {
@@ -135,6 +138,12 @@ NEW_DETAIL_ASSETS = {
         "generator": "scripts/analyze_physical_depth_clean_source_replication.py",
         "notes": "Immutable-source same-seed replication of all 430 load-bearing H2/H3 physical-depth fits.",
     },
+    "physical.diagnostics.asset": {
+        "figure": "figS28",
+        "path": "figures/supplementary/figure_S28_panels_A-B.pdf",
+        "generator": "scripts/assemble_compact_main_figures.py",
+        "notes": "Credit-coordinate ladder and backpropagation--local decomposition demoted from the focused main physical-depth figure.",
+    },
 }
 
 NEW_PROVENANCE_ENTRIES = {
@@ -190,7 +199,7 @@ NEW_PROVENANCE_ENTRIES = {
         "path": "figures/supplementary/figure_S27_panels_A-D.pdf",
         "generator": "scripts/analyze_pinky_v185_replication.py",
         "replication_unit": "reconstructed cell (10 QC-passing of 12 selected; one second mouse)",
-        "notes": "Independent-animal structural route-capacity replication; panel C is promoted as Fig. 7I.",
+        "notes": "Independent-animal structural route-capacity replication; panel C is promoted as Fig. 7G.",
     },
     "pinky.cohort": {
         "record_type": "panel_source",
@@ -204,7 +213,7 @@ NEW_PROVENANCE_ENTRIES = {
     "pinky.curves": {
         "record_type": "panel_source",
         "figure": "fig7/figS27",
-        "panel": "i/b-d",
+        "panel": "g/b-d",
         "path": "source_data/pinky_v185_replication/routing/feedback_compression_curves.csv",
         "generator": "scripts/analyze_pinky_v185_replication.py",
         "replication_unit": "QC-passing reconstructed cell (n=10; one second mouse)",
@@ -213,7 +222,7 @@ NEW_PROVENANCE_ENTRIES = {
     "pinky.contrasts": {
         "record_type": "panel_source",
         "figure": "fig7/figS27",
-        "panel": "i/c",
+        "panel": "g/c",
         "path": "source_data/pinky_v185_replication/routing/k4_cross_animal_contrasts.csv",
         "generator": "scripts/analyze_pinky_v185_replication.py",
         "replication_unit": "reconstructed cell; animal is the biological unit (two mice)",
@@ -266,7 +275,9 @@ def main() -> None:
     with MANIFEST.open(newline="", encoding="utf-8") as handle:
         reader = csv.DictReader(handle, delimiter="\t")
         fieldnames = list(reader.fieldnames or [])
-        rows = list(reader)
+        rows = [
+            row for row in reader if row.get("entry_id", "") not in SUPERSEDED_ENTRIES
+        ]
     if "source_path" not in fieldnames or "sha256" not in fieldnames:
         raise ValueError("manifest must contain source_path and sha256 columns")
 

@@ -278,7 +278,7 @@ def plot(frame: pd.DataFrame, summary: pd.DataFrame, contrasts: pd.DataFrame) ->
     axes[1].set_ylabel("paired accuracy gain (pp)")
     # This block is published as Fig. 2 G-H, where the ladder panel carrying
     # the colour key is lettered G.
-    axes[1].text(0.97, 0.97, "colors as in G", transform=axes[1].transAxes,
+    axes[1].text(0.97, 0.97, "colors as in F", transform=axes[1].transAxes,
                  color=COLORS["mute"], fontsize=PT_SMALL, ha="right", va="top")
     panel_title(axes[1], "Q", "Replicated bottleneck")
     style_axis(axes[1])

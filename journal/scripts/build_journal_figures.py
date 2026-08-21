@@ -246,6 +246,52 @@ def _temper_glyph_arrows(glyph_ax, factor=0.55, *, hide=False):
 # -------------------------------------------------------------------------
 
 
+def _panel_point_vs_dendritic(ax: plt.Axes) -> None:
+    """Point-neuron coordinate versus dendritic within-cell addresses.
+
+    This is the paper-scale counterpart of the workshop's point-versus-tree
+    schematic.  It deliberately uses the shared vector tree rather than the
+    Canvas raster: the comparison stays editable, uses the journal palette,
+    and makes no anatomical or quantitative claim.
+    """
+
+    ax.set_xlim(0, 1)
+    ax.set_ylim(0, 1)
+    ax.axis("off")
+    panel_title(ax, "A", "Point unit → dendritic tree")
+
+    # Point unit: synapses can have different eligibilities, but the
+    # task-dependent coordinate is shared across the cell.
+    soma = (0.235, 0.54)
+    for index, y in enumerate((0.76, 0.63, 0.45, 0.32)):
+        x0 = 0.055
+        ax.plot([x0, soma[0] - 0.052], [y, soma[1]], color=COLORS["mute"],
+                lw=LW_EDGE, solid_capstyle="round", zorder=2)
+        ax.plot([x0], [y], marker="o", ms=3.2, mfc="white",
+                mec=COLORS["mute"], mew=LW_EDGE, zorder=3)
+        if index == 0:
+            ax.text(x0 - 0.012, y, r"$x_i$", ha="right", va="center",
+                    fontsize=PT_SMALL, color=COLORS["ink"])
+    ax.add_patch(Circle(soma, 0.052, fc=COLORS["soma"],
+                        ec=COLORS["edge"], lw=LW_EDGE, zorder=4))
+    ax.annotate("", xy=(0.375, soma[1]), xytext=(soma[0] + 0.052, soma[1]),
+                arrowprops=dict(arrowstyle="-|>", color=COLORS["additive"],
+                                lw=LW_ERR, mutation_scale=6.0))
+    ax.text(0.215, 0.205, "shared coordinate", ha="center", va="center",
+            fontsize=PT_ANNOT, color=COLORS["additive"])
+    ax.text(0.215, 0.115, r"$\delta_u$", ha="center", va="center",
+            fontsize=PT_SMALL, color=COLORS["mute"])
+
+    # Same visual object used throughout the journal and workshop figures.
+    tree_ax = ax.inset_axes([0.47, 0.19, 0.49, 0.70])
+    draw_credit_tree(tree_ax, mode="address", K=4, scale=0.72, labels=False)
+    _temper_glyph_arrows(tree_ax, 0.65)
+    ax.text(0.74, 0.205, "subtree addresses", ha="center", va="center",
+            fontsize=PT_ANNOT, color=COLORS["ink"])
+    ax.text(0.74, 0.115, r"$\delta_{u,k}$", ha="center", va="center",
+            fontsize=PT_SMALL, color=COLORS["mute"])
+
+
 def _panel_credit_hierarchy(ax: plt.Axes) -> None:
     """Coordinate -> address -> gain in the shared credit-tree vocabulary.
 
@@ -292,7 +338,7 @@ def _panel_general_adjoint(ax: plt.Axes) -> None:
     """
 
     panel_title(ax, "D", "Local eligibility × transported error")
-    draw_credit_tree(ax, mode="eligibility", ylim=(-0.98, 3.32))
+    draw_credit_tree(ax, mode="eligibility", ylim=(-1.20, 3.32))
     add = COLORS["additive"]
 
     def lerp(a, b, f):
@@ -324,13 +370,19 @@ def _panel_general_adjoint(ax: plt.Axes) -> None:
             fontsize=PT_ANNOT, color=add)
     ax.text(0.30, 2.00, r"$\alpha_3$", ha="right", va="center",
             fontsize=PT_ANNOT, color=add)
-    ax.text(0.20, 2.52, r"$\widetilde{\alpha}_n$", ha="right", va="center",
+    ax.text(0.20, 2.52, r"$q_n$", ha="right", va="center",
             fontsize=PT_SMALL, color=COLORS["ink"])
 
+    # Lead with the model-general adjoint identity.  The path product is a
+    # directed-tree corollary, not the definition of transported error for a
+    # reciprocal cable or a recurrent compartmental system.
     ax.text(0.60, -0.72,
-            r"$\partial\mathcal{L}/\partial g_i \;=\; "
-            r"e_i\,\delta_u\,\widetilde{\alpha}_n$",
+            r"$\frac{\partial\mathcal{L}}{\partial g_i}="
+            r"x_i(E_i-V_n)\,q_n$",
             ha="center", va="center", fontsize=PT_ANNOT, color=COLORS["ink"])
+    ax.text(0.60, -1.08,
+            r"directed tree: $q_n=R_n^{\rm tot}\,\delta_{0,u}\widetilde{\alpha}_n$",
+            ha="center", va="center", fontsize=PT_SMALL, color=COLORS["mute"])
 
 
 def _panel_evidence_ladder(ax: plt.Axes) -> None:
@@ -501,8 +553,9 @@ def _tidy_panel_b_pools(ax: plt.Axes) -> None:
 
 
 def figure1() -> None:
-    # A and B preserve the polished NeurIPS model language. C--E add the
-    # journal-specific hierarchy, unifying theorem, and evidential scope.
+    # Panel B preserves the polished NeurIPS network language.  A and C--E
+    # use the shared journal/workshop vector vocabulary for the point-to-tree
+    # comparison, hierarchy, unifying theorem, and evidential scope.
     # The left margin clears the fixed -30 pt panel-letter gutter so the
     # A and D letters cannot clip at the canvas edge.
     fig = plt.figure(figsize=(FIG_W, 5.10))
@@ -515,15 +568,11 @@ def figure1() -> None:
     ax_c = fig.add_subplot(grid[0, 4:6])
     ax_d = fig.add_subplot(grid[1, 0:3])
     ax_e = fig.add_subplot(grid[1, 3:6])
-    neurips_panel_a(ax_a)
+    _panel_point_vs_dendritic(ax_a)
     neurips_panel_b(ax_b)
-    _restyle_inherited_panel(ax_a, "A", "Dendritic E/I unit")
     _restyle_inherited_panel(ax_b, "B", "Network layer")
-    _restyle_neuron_schematic(ax_a)
     _restyle_neuron_schematic(ax_b)
-    _tidy_panel_a_output(ax_a)
     _tidy_panel_b_pools(ax_b)
-    _snap_schematic_type(ax_a)
     _snap_schematic_type(ax_b)
     _panel_credit_hierarchy(ax_c)
     _panel_general_adjoint(ax_d)
@@ -1874,7 +1923,7 @@ def figure5() -> None:
     )
     ax_b.axvline(0, color=COLORS["mute"], ls="--", lw=LW_REF)
     ax_b.set_yticks(y_values)
-    ax_b.set_yticklabels([])
+    ax_b.set_yticklabels([f"target {index + 1}" for index in y_values])
     ax_b.invert_yaxis()
     ax_b.set_xlabel("partial shared-ancestry effect")
     panel_title(ax_b, "B", "Structure-function boundary")

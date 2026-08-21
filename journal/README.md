@@ -73,7 +73,7 @@ define the boundary of the theory.
   main Article followed by all Supplementary Information.
 - `references.bib`: shared bibliography.
 - `figures/main/`: canonical assets compiled as main Figures 1--9.
-- `figures/supplementary/`: canonical assets compiled as S1--S27.
+- `figures/supplementary/`: canonical assets compiled as S1--S28.
 - `figures/generated/`: internal descriptive-name outputs from figure scripts;
   these are never referenced by LaTeX or included in the Overleaf bundle.
 - `figures/README.md`: authoritative figure, panel, and asset map.

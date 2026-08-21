@@ -115,7 +115,7 @@ def main() -> None:
         ax_a.plot(row.depth + offset, row.accuracy, "o", ms=2.3, color=COLORS["ink"], alpha=0.60)
     ax_a.axhline(0.5, color=COLORS["mute"], ls="--", lw=LW_REF)
     ax_a.set_xticks([1, 2, 3])
-    ax_a.set_xlabel(r"physical depth $D_{\mathrm{p}}$")
+    ax_a.set_xlabel(r"physical stage count $D_{\mathrm{p}}$")
     ax_a.set_ylabel("accuracy")
     ax_a.set_ylim(0.48, 0.72)
     panel_title(ax_a, "A", "Original shift canary failed")
