@@ -390,18 +390,19 @@ such localized gain available.
 \centering
 \includegraphics[width=\textwidth]{main/figure_01.pdf}
 \caption{\textbf{From neuronal coordinates to dendritic credit addresses.}
-\textbf{A}, A task supplies one output error, but learning must assign the sign
-and magnitude of change across many synaptic parameters. \textbf{B}, A point
-neuron supplies one shared destination coordinate $\delta_u$; a branching tree
-can additionally expose subtree-resolved coordinates $\delta_{u,k}$.
-\textbf{C}, The proposed information hierarchy separates neuron identity
-(coordinate), within-neuron subtree location (address), and path-dependent
-route gain. \textbf{D}, Exact gradients factor into synapse-local eligibility
-$e_i$ and neuron-level error transported through the ancestor-path gain
-$\widetilde{\alpha}_n$. \textbf{E}, The evidence proceeds from exact
-factorization to signal--noise predictions, trained route controls and the
-anatomical and physiological boundary; the diagram states the test sequence,
-not an assumption that anatomical routes are used in vivo.}
+\textbf{A}, Local synaptic states are distributed across a branching tree,
+whereas the task supplies an error at the neuronal output. \textbf{B}, A
+population layer of dendritic excitatory and inhibitory units supplies a task
+readout; output error first arrives at each neuronal soma.
+\textbf{C}, Once a neuron-level coordinate $\delta_u$ arrives, dendritic
+subtrees provide distinct addresses and path conductances scale route gain.
+The following experiments test these levels in that order before asking when
+additional route resolution is useful.
+\textbf{D}, The central factorization as a teaching cartoon: local synaptic
+eligibility is multiplied by a neuron-level error transported through a
+route-specific gain. \textbf{E}, Evidence path from factorization and
+signal--noise theory through trained route tests, anatomical capacity and the
+functional alignment boundary.}
 \label{fig:framework}
 
 \end{figure}

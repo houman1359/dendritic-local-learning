@@ -9,8 +9,8 @@ The 9 numbered figures occupy 9 figure environments;
 | Item | Current | Guidance | Status |
 |---|---:|---:|---|
 | Title | 7 words | 15 | PASS |
-| Abstract | 203 words | 200 | NEEDS REVISION |
-| Introduction + Results + Discussion | 13999 approximate words | 5000 | ADVISORY |
+| Abstract | 190 words | 200 | PASS |
+| Introduction + Results + Discussion | 13784 approximate words | 5000 | ADVISORY |
 | Main display items | 9 figures | 10 | PASS |
 | References | 58 entries (general guide) | 70 | PASS |
 

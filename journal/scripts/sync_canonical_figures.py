@@ -77,12 +77,6 @@ FIGURE_MAP: dict[str, str] = {
     "archive_superseded/trained_subtree_address": "fig_trained_subtree_address",
 }
 
-# Conceptual artwork also keeps an editable SVG master. Quantitative panels
-# remain canonical as vector PDFs generated directly from their source data.
-EDITABLE_VECTOR_MAP: dict[str, str] = {
-    "main/figure_01": "fig1_framework",
-}
-
 
 def sha256(path: Path) -> str:
     digest = hashlib.sha256()
@@ -114,19 +108,6 @@ def main() -> None:
                 continue
             shutil.copy2(source, destination)
             copied += 1
-
-    for destination_stem, source_stem in EDITABLE_VECTOR_MAP.items():
-        source = GENERATED / f"{source_stem}.svg"
-        destination = ROOT / "figures" / f"{destination_stem}.svg"
-        if not source.exists():
-            if not destination.exists():
-                missing.append(source)
-            continue
-        destination.parent.mkdir(parents=True, exist_ok=True)
-        if destination.exists() and sha256(destination) == sha256(source):
-            continue
-        shutil.copy2(source, destination)
-        copied += 1
 
     if missing:
         joined = "\n".join(f"  - {path.relative_to(ROOT)}" for path in missing)
