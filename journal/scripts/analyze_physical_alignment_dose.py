@@ -27,13 +27,13 @@ from journal_style import (  # noqa: E402
     FIG_W,
     LW_DATA,
     LW_ERR,
+    LW_HAIR,
     MARKERS,
     MARKER_MS,
-    PT_SMALL,
+    PT_LEGEND,
     apply_neurips_style,
     audit_layout,
     audit_text_over_data,
-    clean_legend,
     panel_title,
     style_axis,
 )
@@ -261,10 +261,13 @@ def analyze(frame: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFra
 
 def render(summary: pd.DataFrame, contrasts: pd.DataFrame) -> None:
     apply_neurips_style()
-    fig, axes = plt.subplots(1, 3, figsize=(FIG_W, 2.65), gridspec_kw={
-        "left": 0.09, "right": 0.985, "bottom": 0.18, "top": 0.84, "wspace": 0.52,
+    fig, axes = plt.subplots(1, 3, figsize=(FIG_W, 2.50), gridspec_kw={
+        "left": 0.115, "right": 0.985, "bottom": 0.16, "top": 0.82, "wspace": 0.62,
     })
-    colors = {1: COLORS["mute"], 2: COLORS["oracle"], 3: COLORS["dend"]}
+    # D2 wears a lighter tint of the depth-family green (violet is
+    # reserved figure-wide for the grouped-star family).
+    colors = {1: COLORS["mute"], 2: "#6FB58F", 3: COLORS["shunting"]}
+    label_y = {}
     for depth, marker in zip((1, 2, 3), MARKERS):
         part = summary[summary.depth.eq(depth)].sort_values("alignment_alpha")
         mean = part.mean_test_accuracy.to_numpy()
@@ -272,23 +275,39 @@ def render(summary: pd.DataFrame, contrasts: pd.DataFrame) -> None:
         high = part.ci95_high_test_accuracy.to_numpy()
         axes[0].errorbar(part.alignment_alpha, mean, yerr=np.vstack([mean-low, high-mean]),
                          color=colors[depth], marker=marker, ms=MARKER_MS, lw=LW_DATA,
-                         elinewidth=LW_ERR, capsize=ERR_CAPSIZE, label=f"D{depth}")
+                         markeredgecolor="white", markeredgewidth=0.5,
+                         elinewidth=LW_ERR, capsize=ERR_CAPSIZE)
+        label_y[depth] = float(mean[-1])
+    # Three series: direct labels at the curve ends instead of a legend.
+    label_y[1] -= 0.021  # D1/D2 ends nearly coincide; nudge apart
+    label_y[2] += 0.021
+    for depth in (1, 2, 3):
+        axes[0].text(
+            1.06, label_y[depth], f"D{depth}", ha="left", va="center",
+            fontsize=PT_LEGEND, color=colors[depth],
+        )
+    axes[0].set_xlim(-0.07, 1.23)
+    axes[0].set_xticks([0.0, 0.25, 0.50, 0.75, 1.0])
+    axes[0].set_ylim(0.44, 1.06)
+    axes[0].set_yticks([0.5, 0.6, 0.7, 0.8, 0.9, 1.0])
     axes[0].set_xlabel("sensor alignment $\\alpha$")
     axes[0].set_ylabel("test accuracy")
     panel_title(axes[0], "M", "Alignment dose")
     style_axis(axes[0], grid="y")
-    clean_legend(axes[0], fontsize=PT_SMALL, loc="upper left")
 
     effect = contrasts[contrasts.alignment_alpha.notna()].sort_values("alignment_alpha")
     mean = 100 * effect.mean_difference.to_numpy()
     low = 100 * effect.ci95_low.to_numpy()
     high = 100 * effect.ci95_high.to_numpy()
-    axes[1].axhline(0, color=COLORS["mute"], lw=0.7)
+    axes[1].axhline(0, color=COLORS["mute"], lw=LW_HAIR, zorder=0)
     axes[1].errorbar(effect.alignment_alpha, mean, yerr=np.vstack([mean-low, high-mean]),
-                     color=COLORS["dend"], marker="o", ms=MARKER_MS, lw=LW_DATA,
+                     color=COLORS["shunting"], marker="o", ms=MARKER_MS, lw=LW_DATA,
+                     markeredgecolor="white", markeredgewidth=0.5,
                      elinewidth=LW_ERR, capsize=ERR_CAPSIZE)
+    axes[1].set_xlim(-0.07, 1.07)
+    axes[1].set_xticks([0.0, 0.25, 0.50, 0.75, 1.0])
     axes[1].set_xlabel("sensor alignment $\\alpha$")
-    axes[1].set_ylabel("D3 − D1 (points)")
+    axes[1].set_ylabel("D3 − D1 (pp)")
     panel_title(axes[1], "N", "Depth benefit")
     style_axis(axes[1], grid="y")
 
@@ -298,19 +317,28 @@ def render(summary: pd.DataFrame, contrasts: pd.DataFrame) -> None:
     mean = 100 * rows.mean_difference.to_numpy()
     low = 100 * rows.ci95_low.to_numpy()
     high = 100 * rows.ci95_high.to_numpy()
-    axes[2].axvline(0, color=COLORS["mute"], lw=0.7)
+    axes[2].axvline(0, color=COLORS["mute"], lw=LW_HAIR)
     axes[2].errorbar(mean, y, xerr=np.vstack([mean-low, high-mean]), fmt="o",
-                     color=COLORS["dend"], ecolor=COLORS["dend"], ms=MARKER_MS,
+                     color=COLORS["shunting"], ecolor=COLORS["shunting"],
+                     markerfacecolor=COLORS["shunting"], markeredgecolor="white",
+                     markeredgewidth=0.5, ms=MARKER_MS,
                      elinewidth=LW_ERR, capsize=ERR_CAPSIZE)
-    axes[2].set_yticks(y, [r"$\alpha=.75-.25$", r"linear slope"])
-    axes[2].set_xlabel("depth-benefit change (points)")
+    axes[2].set_xlim(-2.5, 30.5)
+    axes[2].set_xticks([0, 10, 20, 30])
+    axes[2].set_ylim(-0.6, 1.6)
+    axes[2].set_yticks(y, [r"$\alpha$ 0.75 − 0.25", "linear slope"])
+    axes[2].set_xlabel("depth-benefit change (pp)")
     panel_title(axes[2], "O", "Dose contrasts")
     style_axis(axes[2], grid="x")
     FIGURES.mkdir(parents=True, exist_ok=True)
-    audit_text_over_data(fig)
-    audit_layout(fig)
-    for suffix in ("pdf", "png"):
-        fig.savefig(FIGURES / f"fig_physical_alignment_dose.{suffix}", dpi=420)
+    fig.canvas.draw()
+    audit_layout(fig, "fig_physical_alignment_dose")
+    audit_text_over_data(fig, "fig_physical_alignment_dose")
+    fig.savefig(
+        FIGURES / "fig_physical_alignment_dose.pdf",
+        metadata={"CreationDate": None, "ModDate": None},
+    )
+    fig.savefig(FIGURES / "fig_physical_alignment_dose.png", dpi=600)
     plt.close(fig)
 
 
@@ -318,6 +346,15 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--allow-incomplete", action="store_true")
     args = parser.parse_args()
+    if not RUNS.exists():
+        # Frozen-source render: raw run directories are not in this checkout;
+        # restyle the figure from the audited source-data summaries.
+        summary = pd.read_csv(OUTPUT / "condition_summary.csv")
+        contrasts = pd.read_csv(OUTPUT / "paired_contrasts.csv")
+        render(summary, contrasts)
+        print("Rendered fig_physical_alignment_dose from frozen source data "
+              "(run directories absent; collection skipped).")
+        return
     new, audit = collect(args.allow_incomplete)
     OUTPUT.mkdir(parents=True, exist_ok=True)
     new.to_csv(OUTPUT / "new_seed_outcomes.csv", index=False)

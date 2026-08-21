@@ -30,11 +30,23 @@ from journal_style import (
     PT_LEGEND,
     PT_SMALL,
     PT_TICK,
+    SEED_MS,
     apply_neurips_style,
     audit_layout,
     audit_text_over_data,
     panel_title,
     style_axis,
+)
+from credit_tree_schematics import (
+    EDGES_A,
+    EDGES_B,
+    EDGES_C,
+    EDGES_D,
+    JUNCTIONS,
+    P as TREE_P,
+    ROOT_PT,
+    SOMA_R,
+    mix,
 )
 
 
@@ -90,47 +102,86 @@ def _schematic_frame(ax: plt.Axes) -> float:
     return ymax
 
 
+# Credit-tree schematic vocabulary (shared library geometry): deck taper in
+# TikZ pt, normalized so the trunk prints at LW_DATA, tempered exactly like
+# the library's scale-0.62 inset rendering.
+_TAPER_PT = {"A": 1.60, "B": 1.20, "C": 0.90, "D": 0.70}
+_TREE_LW = LW_DATA / _TAPER_PT["A"] * 0.62
+# Morphology-selected (ancestry) route: one root-to-leaf path of the tree.
+_ROUTE_PATH = ((ROOT_PT, "J1", "A"), ("J1", "JL", "B"),
+               ("JL", "JLR", "C"), ("JLR", "T4", "D"))
+_ROUTE_JUNCTIONS = ("J1", "JL", "JLR")
+
+
+def _tree_pt(q):
+    return TREE_P[q] if isinstance(q, str) else q
+
+
+def _route_tree(ax: plt.Axes) -> None:
+    """Library credit tree, muted, with one ancestry route selected in green."""
+    ax.set_aspect("equal", adjustable="datalim")
+    ax.update_datalim([(-2.55, -0.72), (2.55, 3.60)])
+    ax.margins(0)
+    ax.autoscale_view()
+    ax.axis("off")
+    faded = mix("mute", 30)
+    for edges, level in ((EDGES_A, "A"), (EDGES_B, "B"),
+                         (EDGES_C, "C"), (EDGES_D, "D")):
+        for a, b in edges:
+            (x0, y0), (x1, y1) = _tree_pt(a), _tree_pt(b)
+            ax.plot([x0, x1], [y0, y1], color=faded,
+                    lw=_TAPER_PT[level] * _TREE_LW, solid_capstyle="round",
+                    zorder=2)
+    for a, b, level in _ROUTE_PATH:
+        (x0, y0), (x1, y1) = _tree_pt(a), _tree_pt(b)
+        ax.plot([x0, x1], [y0, y1], color=ROUTE,
+                lw=_TAPER_PT[level] * _TREE_LW, solid_capstyle="round",
+                zorder=2.4)
+    # Credit flows outward along the selected route (transport-mode arrows).
+    for a, b in ((ROOT_PT, "J1"), ("JL", "JLR")):
+        (x0, y0), (x1, y1) = _tree_pt(a), _tree_pt(b)
+        start = (x0 + 0.38 * (x1 - x0), y0 + 0.38 * (y1 - y0))
+        end = (x0 + 0.72 * (x1 - x0), y0 + 0.72 * (y1 - y0))
+        ax.add_patch(FancyArrowPatch(start, end,
+                                     arrowstyle="-|>,head_length=3.4,head_width=2.1",
+                                     mutation_scale=1.0, lw=0.8 * _TREE_LW,
+                                     color=ROUTE, shrinkA=0, shrinkB=0,
+                                     zorder=4.5))
+    for name in JUNCTIONS:
+        on_route = name in _ROUTE_JUNCTIONS
+        ax.plot(*_tree_pt(name), marker="o", ms=2.0, mfc="white",
+                mec=ROUTE if on_route else mix("mute", 40), mew=LW_EDGE * 0.62,
+                ls="none", zorder=3)
+    ax.plot(*_tree_pt("T4"), marker="o", ms=2.0, mfc=ROUTE, mec="none",
+            ls="none", zorder=4)
+    ax.add_patch(Circle((0.0, 0.0), SOMA_R, fc=STYLE_COLORS["soma"],
+                        ec=mix("ink", 30), lw=LW_EDGE, zorder=3.5))
+    ax.text(-0.22, 3.32, "route", ha="center", va="bottom",
+            fontsize=PT_SMALL, color=ROUTE)
+
+
 def alignment_schematic(ax: plt.Axes) -> None:
     _schematic_frame(ax)
     panel_title(ax, "K", "Alignment design")
     mute = STYLE_COLORS["mute"]
     ink = STYLE_COLORS["ink"]
 
-    # Left: dendritic tree with one morphology-selected route (tapered strokes).
-    edges = [
-        ((0.25, 0.215), (0.25, 0.47), LW_DATA),
-        ((0.25, 0.47), (0.11, 0.74), LW_ERR),
-        ((0.25, 0.47), (0.40, 0.74), LW_ERR),
-        ((0.11, 0.74), (0.045, 1.00), LW_EDGE),
-        ((0.11, 0.74), (0.175, 1.03), LW_EDGE),
-        ((0.40, 0.74), (0.325, 1.03), LW_EDGE),
-        ((0.40, 0.74), (0.475, 0.99), LW_EDGE),
-    ]
-    route = (0, 2, 6)
-    for idx, (start, end, lw) in enumerate(edges):
-        color = ROUTE if idx in route else mute
-        ax.plot([start[0], end[0]], [start[1], end[1]], color=color, lw=lw,
-                solid_capstyle="round", zorder=2)
-    for xy, on_route in (((0.25, 0.47), True), ((0.11, 0.74), False),
-                         ((0.40, 0.74), True)):
-        ax.plot(*xy, marker="o", ms=2.2, color=ROUTE if on_route else mute,
-                mew=0, zorder=3)
-    ax.add_patch(Circle((0.25, 0.16), 0.055, fc=STYLE_COLORS["soma"],
-                        ec=STYLE_COLORS["edge"], lw=LW_EDGE, zorder=3))
-    ax.text(0.25, 1.17, "routes", ha="center", va="center", fontsize=PT_SMALL,
-            color=ink)
+    # Top: the shared credit tree with one morphology-selected route.
+    tree_ax = ax.inset_axes([0.0, 0.50, 1.0, 0.50])
+    _route_tree(tree_ax)
 
-    # Right: credit vignette — target gradient vs routed credit, equal norm.
-    origin = (0.70, 0.16)
-    radius = 0.62
-    ang_target, ang_routed = np.deg2rad(96.0), np.deg2rad(65.0)
+    # Bottom: credit vignette — target gradient vs routed credit, equal norm
+    # (the dashed arc states the matched norm; theta is the dose in L-M).
+    origin = (0.50, 0.29)
+    radius = 0.56
+    ang_target, ang_routed = np.deg2rad(100.0), np.deg2rad(62.0)
     tip_target = (origin[0] + radius * np.cos(ang_target),
                   origin[1] + radius * np.sin(ang_target))
     tip_routed = (origin[0] + radius * np.cos(ang_routed),
                   origin[1] + radius * np.sin(ang_routed))
-    ax.add_patch(Arc(origin, 2 * radius, 2 * radius, theta1=59, theta2=102,
+    ax.add_patch(Arc(origin, 2 * radius, 2 * radius, theta1=56, theta2=106,
                      ls=(0, (2.4, 2.0)), lw=LW_HAIR, color=mute, zorder=1))
-    ax.add_patch(Arc(origin, 0.34, 0.34, theta1=65, theta2=96,
+    ax.add_patch(Arc(origin, 0.46, 0.46, theta1=62, theta2=100,
                      lw=LW_HAIR, color=mute, zorder=1))
     ax.add_patch(FancyArrowPatch(origin, tip_target, arrowstyle="-|>",
                                  mutation_scale=9, lw=LW_DATA, color=ink,
@@ -138,18 +189,14 @@ def alignment_schematic(ax: plt.Axes) -> None:
     ax.add_patch(FancyArrowPatch(origin, tip_routed, arrowstyle="-|>",
                                  mutation_scale=9, lw=LW_DATA, color=ROUTE,
                                  shrinkA=0, shrinkB=0, zorder=3))
-    ax.text(0.742, 0.40, r"$\theta$", ha="center", va="center",
-            fontsize=PT_SMALL, color=ink)
-    ax.text(0.63, 0.53, "target", ha="right", va="center", fontsize=PT_SMALL,
-            color=ink)
-    ax.text(0.84, 0.33, "routed", ha="left", va="center", fontsize=PT_SMALL,
-            color=ROUTE)
-    ax.text(0.78, 0.035, r"$\theta$ = route alignment", ha="center",
+    ax.text(origin[0] + 0.065, origin[1] + 0.37, r"$\theta$", ha="center",
+            va="center", fontsize=PT_SMALL, color=ink)
+    ax.text(tip_target[0] - 0.10, tip_target[1] - 0.07, "target", ha="right",
+            va="center", fontsize=PT_SMALL, color=ink)
+    ax.text(tip_routed[0] + 0.03, tip_routed[1] - 0.13, "routed", ha="left",
+            va="center", fontsize=PT_SMALL, color=ROUTE)
+    ax.text(0.50, 0.07, r"$\theta$ = route alignment", ha="center",
             va="center", fontsize=PT_SMALL, color=mute)
-    ax.text(0.79, 1.17, "credit", ha="center", va="center", fontsize=PT_SMALL,
-            color=ink)
-    ax.text(0.79, 1.06, "(norm fixed)", ha="center", va="center",
-            fontsize=PT_SMALL, color=mute)
 
 
 def alignment_curve(ax: plt.Axes, curve: pd.DataFrame, metric: str, letter: str,
@@ -162,10 +209,12 @@ def alignment_curve(ax: plt.Axes, curve: pd.DataFrame, metric: str, letter: str,
         high = part[f"{metric}_ci_high"].to_numpy(float)
         ax.fill_between(x, low, high, color=METHOD_COLORS[method], alpha=0.12, linewidth=0)
         ax.plot(x, y, color=METHOD_COLORS[method], marker=METHOD_MARKERS[method],
-                ms=2.8, lw=LW_DATA, label=METHOD_LABELS[method])
+                ms=MARKER_MS, mec="white", mew=0.5, lw=LW_DATA,
+                label=METHOD_LABELS[method])
     ax.set_xlim(-2, 102)
     ax.set_ylim(-0.03, 1.04)
     ax.set_xticks([0, 50, 100])
+    ax.set_yticks([0, 0.5, 1.0])
     ax.set_xlabel("route alignment (%)")
     ax.set_ylabel(ylabel)
     panel_title(ax, letter, title)
@@ -177,7 +226,7 @@ def alignment_relation(ax: plt.Axes, cell: pd.DataFrame) -> None:
     # note declares the honest coincidence of the four strategies.
     for method in reversed(METHODS):
         part = cell[cell.method.eq(method)]
-        ax.scatter(part.credit_capture, part.iterative_progress, s=9,
+        ax.scatter(part.credit_capture, part.iterative_progress, s=SEED_MS**2,
                    color=METHOD_COLORS[method], marker=METHOD_MARKERS[method],
                    alpha=0.42, linewidths=0)
     ax.plot([0, 1], [0, 1], color=STYLE_COLORS["mute"], lw=LW_REF, ls="--")
@@ -194,6 +243,8 @@ def alignment_relation(ax: plt.Axes, cell: pd.DataFrame) -> None:
             fontsize=PT_SMALL, color=STYLE_COLORS["mute"])
     ax.set_xlim(-0.03, 1.03)
     ax.set_ylim(-0.03, 1.04)
+    ax.set_xticks([0, 0.5, 1.0])
+    ax.set_yticks([0, 0.5, 1.0])
     ax.set_xlabel("field capture")
     ax.set_ylabel("20-step progress")
     panel_title(ax, "N", "Capture–progress")
@@ -263,8 +314,10 @@ def mode_energy(ax: plt.Axes, summary: dict) -> None:
     fractions = [mode["common_energy_fraction"], mode["signed_energy_fraction"]]
     ci_lo, ci_hi = mode["animal_bootstrap_95_ci"]
     intervals = [(1.0 - ci_hi, 1.0 - ci_lo), (ci_lo, ci_hi)]
+    # The signed bar is a descriptive energy fraction, not a backprop series:
+    # keep the reserved BP red out of it (CVD colour grammar).
     ax.bar([0, 1], fractions,
-           color=[STYLE_COLORS["point_mlp"], STYLE_COLORS["bp"]],
+           color=[STYLE_COLORS["point_mlp"], STYLE_COLORS["dend"]],
            edgecolor=STYLE_COLORS["edge"], linewidth=LW_EDGE, width=0.64)
     yerr = np.array([[value - lo for value, (lo, _) in zip(fractions, intervals)],
                      [hi - value for value, (_, hi) in zip(fractions, intervals)]])
@@ -345,12 +398,20 @@ def main() -> None:
     summary = json.loads((ANIMAL / "summary.json").read_text())
 
     apply_neurips_style()
-    fig = plt.figure(figsize=(FIG_W, 2.90))
+    fig = plt.figure(figsize=(FIG_W, 2.54))
+    # left = 0.088 puts the K letter in the same gutter column as the A-H
+    # block; the wider top/right margins match the sibling fig-8 blocks
+    # (letters and panel N's last tick no longer graze the canvas edges).
     grid = fig.add_gridspec(
-        1, 4, left=0.075, right=0.99, bottom=0.285, top=0.875,
-        wspace=0.78,
+        1, 4, left=0.088, right=0.985, bottom=0.205, top=0.842,
+        wspace=0.62,
     )
     axes = [fig.add_subplot(grid[0, col]) for col in range(4)]
+
+    # The schematic column has no x label or legend row: let it use the
+    # bottom margin so its content fills the cell like the data panels.
+    box = axes[0].get_position()
+    axes[0].set_position([box.x0, 0.055, box.width, box.y1 - 0.055])
 
     alignment_schematic(axes[0])
     alignment_curve(axes[1], curve, "credit_capture", "L", "Field capture",
@@ -362,10 +423,11 @@ def main() -> None:
 
     handles = [
         Line2D([0], [0], color=METHOD_COLORS[method], marker=METHOD_MARKERS[method],
-               lw=LW_DATA, ms=3.0, label=METHOD_LABELS[method])
+               lw=LW_DATA, ms=MARKER_MS, mec="white", mew=0.5,
+               label=METHOD_LABELS[method])
         for method in METHODS
     ]
-    fig.legend(handles=handles, loc="lower center", bbox_to_anchor=(0.50, 0.018),
+    fig.legend(handles=handles, loc="lower center", bbox_to_anchor=(0.50, 0.010),
                ncol=4, frameon=False, fontsize=PT_LEGEND,
                handlelength=1.4, columnspacing=1.6, handletextpad=0.45)
     _save(fig, OUTPUT_ALIGNMENT)

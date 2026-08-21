@@ -1,0 +1,13 @@
+selection_order,selection_stratum,eligible_in_stratum,root_id,id,cell_type,x_vox,y_vox,z_vox,x_nm,y_nm,z_nm,centrality,dataset,animal,selection_status
+0,0,31,648518346349539333,58,e,83898,39867,1537,335592,159468,61480,0.24028974748619078,MICrONS phase-1 Pinky v185,"P36 male mouse, independent of minnie65",selected_before_mesh_or_synapse_outcomes
+1,1,31,648518346349531254,4,e,77264,44133,1231,309056,176532,49240,0.07831722882983683,MICrONS phase-1 Pinky v185,"P36 male mouse, independent of minnie65",selected_before_mesh_or_synapse_outcomes
+2,2,30,648518346349539825,99,e,87733,46096,1357,350932,184384,54280,0.10766265922584667,MICrONS phase-1 Pinky v185,"P36 male mouse, independent of minnie65",selected_before_mesh_or_synapse_outcomes
+3,3,30,648518346349539864,64,e,89324,48310,1290,357296,193240,51600,0.1186630696277794,MICrONS phase-1 Pinky v185,"P36 male mouse, independent of minnie65",selected_before_mesh_or_synapse_outcomes
+4,4,30,648518346349538466,453,e,84054,50604,1424,336216,202416,56960,0.10569209074598665,MICrONS phase-1 Pinky v185,"P36 male mouse, independent of minnie65",selected_before_mesh_or_synapse_outcomes
+5,5,30,648518346349538440,56,e,81567,52542,1219,326268,210168,48760,0.004266585806678085,MICrONS phase-1 Pinky v185,"P36 male mouse, independent of minnie65",selected_before_mesh_or_synapse_outcomes
+6,6,30,648518346349538278,46,e,81449,56468,1142,325796,225872,45680,0.014739254499512773,MICrONS phase-1 Pinky v185,"P36 male mouse, independent of minnie65",selected_before_mesh_or_synapse_outcomes
+7,7,30,648518346349539366,14,e,84503,61821,1239,338012,247284,49560,0.008815439239424842,MICrONS phase-1 Pinky v185,"P36 male mouse, independent of minnie65",selected_before_mesh_or_synapse_outcomes
+8,8,30,648518346349539095,111,e,77857,63138,1702,311428,252552,68080,0.5983276081017068,MICrONS phase-1 Pinky v185,"P36 male mouse, independent of minnie65",selected_before_mesh_or_synapse_outcomes
+9,9,30,648518346349538332,174,e,77051,66052,1202,308204,264208,48080,0.0833668307328354,MICrONS phase-1 Pinky v185,"P36 male mouse, independent of minnie65",selected_before_mesh_or_synapse_outcomes
+10,10,30,648518346349539785,162,e,82642,70680,1490,330568,282720,59600,0.17443840338570582,MICrONS phase-1 Pinky v185,"P36 male mouse, independent of minnie65",selected_before_mesh_or_synapse_outcomes
+11,11,30,648518346349538251,139,e,83621,72675,1222,334484,290700,48880,0.00187096951366331,MICrONS phase-1 Pinky v185,"P36 male mouse, independent of minnie65",selected_before_mesh_or_synapse_outcomes

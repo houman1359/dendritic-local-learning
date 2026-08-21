@@ -2,7 +2,9 @@
 
 Active editorial target: **Nature Communications, Article**. The authors may
 wait for the NeurIPS decision before submission, but the journal manuscript is
-maintained as a distinct, submission-ready extension. Its central contribution
+the canonical standalone scientific account, not a sequel or a second paper.
+It includes the load-bearing conference-stage foundation and the complete
+journal evidence chain. Its central contribution
 is a conditional mechanistic hierarchy---neuronal coordinate, dendritic
 address, conductance-dependent route gain and task alignment---rather than a
 claim that branch-resolved credit transport has already been observed in vivo.
@@ -27,6 +29,16 @@ complete.
       the original eight by stable nucleus identifier. At eight channels,
       morphology-defined routes exceed random, depth-bin, and
       ancestry-shuffled controls in all 47 cells.
+- [x] A frozen independent-animal Pinky v185 cohort selected 12 excitatory
+      cells without mesh or synapse outcomes; all processed successfully and
+      ten passed the direct-type QC gate. At four channels, ancestry-route
+      capture exceeds random routes, depth bins and shuffled ancestry in the
+      same direction as the separate `minnie65` mouse. Cell bootstraps remain
+      descriptive because the animal is the biological replication unit.
+- [x] A frozen irregular-tree Haar analysis resolves modeled ancestry-route
+      energy across all 47 disjoint and eight original cells. Coarse energy is
+      enriched relative to isotropic noise, whereas the anatomy-specific
+      excess over column permutation does not replicate in the 47-cell cohort.
 - [x] Focal shunting is evaluated in 45 v661 cells and 235 eligible sites;
       the topology-versus-depth-shuffle control is evaluated in 40 cells and
       230 sites. Cell, not site, is the inferential unit.
@@ -62,7 +74,7 @@ complete.
       hierarchy depth minimizes mean loss; explicit point gating matches
       reliability-aligned branch gain exactly. The companion secondary
       reanalysis covers all 20 seed blocks of the 2,700-fit factorial.
-- [x] Main Figures 1--8 and Supplementary Figures S1--S18 have
+- [x] Main Figures 1--9 and Supplementary Figures S1--S27 have
       machine-readable source tables and executable default build commands.
       Final hashes include the completed alignment-dose and Fashion-MNIST panels.
 - [x] An origin manifest, main-panel provenance manifest, original-cohort
@@ -154,6 +166,20 @@ complete.
       LocalCA retained +21.20 and +31.38 points, with +22.93 and +33.36
       placement interactions. All fits passed finite-metric, no-fallback,
       seed, manifest and exact-resource gates.
+- [x] The frozen 360-fit H4 factorial completed. D4 remained +25.63 points
+      above D1 but fell 1.46 points below D3 under BP, falsifying one-to-one
+      physical-depth tracking. The D4 architecture-by-placement interaction
+      was +25.91 points, while grouped-point BP remained flat. All 430
+      immutable-source H2/H3 reruns also completed; every load-bearing gate
+      was retained. Figure 6A--D and Supplementary Figure S26 report the full
+      positive, null and falsified outcomes.
+- [x] The fixed-D3 task-family factorial completed all 360 fits with identical
+      resources and no fallback. Under BP, serial minus grouped point at full
+      alignment was +30.32 points for nested factors, +22.20 for flat factors
+      and 0 for local ratios. Path LocalCA retained +27.59 and +12.21 points
+      for the two factor tasks but reversed to -5.32 for local ratios. Figure
+      6E--G and complete Source Data report the graded positive and adverse
+      boundaries.
 - [x] The focal-selectivity canary passed positive-definiteness and exact
       somatic-state restoration gates. The unchanged passive matrix then ran
       all eight cells and supplies Supplementary Figure S11 plus complete
@@ -170,8 +196,8 @@ complete.
       removed. The paper, supplement, and theory note build without undefined
       references, undefined citations, or overfull boxes; remaining notices are
       harmless underfull lines or compact table cells. The strict audit resolves
-      panel-provenance entries, all fourteen main-figure graphics across eight
-      numbered displays, and all eighteen supplementary
+      panel-provenance entries, all main-figure components across nine
+      numbered displays, and all supplementary
       graphics with no errors or warnings.
 - [x] The 320-run clean exact-transport/backpropagation source audit completed
       from detached commit `74792ca`: all artifacts and finite stage-complete
@@ -223,15 +249,16 @@ from this document.
 
 ## Nature Communications format checked 11 August 2026
 
-- Article title: no more than 15 words. The current title has 13.
+- Article title: no more than 15 words. The current title has 7.
 - Abstract: no more than 200 words. The current count is checked automatically
   by `scripts/audit_nature_communications_format.py`.
 - Main text: approximately 5,000 words excluding abstract, Methods, references
   and figure legends. The automated audit reports the current mechanical count;
   the submission portal count still requires confirmation.
 - Main display items: up to ten figures and/or tables. The working draft now
-  has eight numbered main figures; six continued multi-panel displays preserve
-  the complete evidence chain without exceeding the display count.
+  has nine numbered main figures, each represented by one canonical vector
+  PDF and one figure environment; the complete control inventory continues
+  through Supplementary Figure S27.
   Checkpoint-mechanism and cohort-sensitivity displays
   remain in Supplementary Figures S9 and S10, the passive focal-shunt matrix
   is Supplementary Figure S11, and the inhibitory census is Supplementary
@@ -241,8 +268,9 @@ from this document.
   Methods. The draft follows this structure.
 - References: the working limit is 70. The current bibliography has 56 entries,
   all cited and resolved by the citation audit.
-- Editorial evidence boundary: retain the one-mouse MICRONS limitation, do not
-  imply that modeled dendritic credit was measured in vivo, and submit the full
+- Editorial evidence boundary: describe Pinky as a two-animal directional
+  replication only for model-matched structural capacity; retain the one-mouse
+  limits of the inhibitory and functional analyses, do not imply that modeled dendritic credit was measured in vivo, and submit the full
   Article rather than a presubmission enquiry.
 
 These limits and initial-submission requirements were rechecked against the

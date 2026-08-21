@@ -15,30 +15,31 @@ from pathlib import Path
 
 
 JOURNAL_ROOT = Path(__file__).resolve().parents[1]
-REPOSITORY_ROOT = JOURNAL_ROOT.parents[2]
+PROJECT_ROOT = JOURNAL_ROOT.parent
 MANIFEST = JOURNAL_ROOT / "source_data" / "provenance_manifest.tsv"
 PROJECT_PREFIX = "drafts/dendritic-local-learning/journal/"
+LEGACY_PROJECT_PREFIX = Path("drafts/dendritic-local-learning")
 
 
 CANONICAL_ASSETS = {
-    "fig1.asset": "figures/main/figure_01_panels_A-E.pdf",
-    "fig2.asset": "figures/main/figure_02_panels_A-F.pdf",
-    "prospective.learning.asset": "figures/main/figure_02_panels_G-O.pdf",
-    "fashion.asset": "figures/main/figure_02_panels_P-Q.pdf",
-    "subtree.factorial.asset": "figures/main/figure_03_panels_A-F.pdf",
-    "creditphase.asset": "figures/main/figure_04_panels_A-I.pdf",
-    "physical.asset": "figures/main/figure_05_panels_A-F.pdf",
-    "pointcredit.asset": "figures/main/figure_05_panels_G-L.pdf",
-    "alignmentdose.asset": "figures/main/figure_05_panels_M-O.pdf",
-    "remainingphysical.asset": "figures/main/figure_05_panels_P-U.pdf",
-    "fig3.asset": "figures/main/figure_06_panels_A-J.pdf",
-    "capturewire.asset": "figures/main/figure_06_panels_K-L.pdf",
-    "fig4.asset": "figures/main/figure_07_panels_A-I.pdf",
-    "extensions.asset": "figures/main/figure_07_panels_J-M.pdf",
-    "extensions.fulltree.asset": "figures/main/figure_08_panels_I-J.pdf",
-    "fig6.asset": "figures/main/figure_08_panels_A-H.pdf",
-    "fig8.asset": "figures/main/figure_08_panels_K-N.pdf",
-    "phaseplane.asset": "figures/main/figure_08_panel_O.pdf",
+    "fig1.asset": "figures/main/figure_01.pdf",
+    "fig2.asset": "figures/main/figure_02.pdf",
+    "prospective.learning.asset": "figures/main/figure_02.pdf",
+    "fashion.asset": "figures/main/figure_02.pdf",
+    "subtree.factorial.asset": "figures/main/figure_03.pdf",
+    "creditphase.asset": "figures/main/figure_04.pdf",
+    "physical.asset": "figures/main/figure_05.pdf",
+    "pointcredit.asset": "figures/main/figure_05.pdf",
+    "alignmentdose.asset": "figures/supplementary/figure_S18_panels_A-K.pdf",
+    "remainingphysical.asset": "figures/supplementary/figure_S18_panels_A-K.pdf",
+    "fig3.asset": "figures/main/figure_07.pdf",
+    "capturewire.asset": "figures/main/figure_07.pdf",
+    "fig4.asset": "figures/main/figure_08.pdf",
+    "extensions.asset": "figures/main/figure_08.pdf",
+    "extensions.fulltree.asset": "figures/main/figure_09.pdf",
+    "fig6.asset": "figures/main/figure_09.pdf",
+    "fig8.asset": "figures/main/figure_09.pdf",
+    "phaseplane.asset": "figures/main/figure_09.pdf",
     "inherited.s1.asset": "figures/supplementary/figure_S01_panels_A-E.pdf",
     "inherited.s2.asset": "figures/supplementary/figure_S02_panels_A-E.pdf",
     "inherited.s3.asset": "figures/supplementary/figure_S03_panels_A-D.pdf",
@@ -58,15 +59,198 @@ CANONICAL_ASSETS = {
     "animalcredit.asset": "figures/supplementary/figure_S17_panels_A-D.pdf",
 }
 
+CANONICAL_ASSIGNMENTS = {
+    "fig1.asset": ("fig1", "all"),
+    "fig2.asset": ("fig2", "a-c"),
+    "prospective.learning.asset": ("fig2", "d-f"),
+    "fashion.asset": ("fig2", "g-h"),
+    "subtree.factorial.asset": ("fig3", "all"),
+    "creditphase.asset": ("fig4", "all"),
+    "physical.asset": ("fig5", "a-f"),
+    "pointcredit.asset": ("fig5", "g-j"),
+    "fig3.asset": ("fig7", "a-f"),
+    "capturewire.asset": ("fig7", "g-h"),
+    "fig4.asset": ("fig8", "a-f"),
+    "extensions.asset": ("fig8", "g-j"),
+    "fig6.asset": ("fig9", "a-f"),
+    "extensions.fulltree.asset": ("fig9", "g-h"),
+    "fig8.asset": ("fig9", "i-j"),
+    "phaseplane.asset": ("fig9", "k"),
+    "alignmentdose.asset": ("figS18", "c-e"),
+    "remainingphysical.asset": ("figS18", "f-k"),
+}
+
+NEW_DETAIL_ASSETS = {
+    "physical.h4.asset": {
+        "figure": "fig6",
+        "path": "figures/main/figure_06.pdf",
+        "generator": "scripts/analyze_physical_depth_h4_factorial.py",
+        "notes": "H4 depth-saturation test: exact backpropagation, point emulation, local credit, and mechanism controls.",
+    },
+    "prospective.detail.asset": {
+        "figure": "figS19",
+        "path": "figures/supplementary/figure_S19_panels_A-I.pdf",
+        "generator": "scripts/assemble_compact_main_figures.py",
+        "notes": "Detailed identity, ownership and route diagnostics underlying focused Fig. 2.",
+    },
+    "morphology.detail.asset": {
+        "figure": "figS20",
+        "path": "figures/supplementary/figure_S20_panels_A-J.pdf",
+        "generator": "scripts/build_journal_figures.py",
+        "notes": "Detailed morphology-route capacity and topology controls underlying focused Fig. 7.",
+    },
+    "focal.detail.asset": {
+        "figure": "figS21",
+        "path": "figures/supplementary/figure_S21_panels_A-I.pdf",
+        "generator": "scripts/build_journal_figures.py",
+        "notes": "Detailed focal-shunting controls and electrotonic calibration underlying focused Fig. 8.",
+    },
+    "measured.detail.asset": {
+        "figure": "figS22",
+        "path": "figures/supplementary/figure_S22_panels_A-H.pdf",
+        "generator": "scripts/build_journal_figures.py",
+        "notes": "Detailed measured-response topology and learning boundary underlying focused Fig. 9.",
+    },
+    "partition.residual.asset": {
+        "figure": "figS23",
+        "path": "figures/supplementary/figure_S23_panels_A-C.pdf",
+        "generator": "scripts/build_trained_partition_residual_figure.py",
+        "notes": "Hash-gated reconstruction by scripts/analyze_trained_partition_residual.py and seed-level capture--utility association.",
+    },
+    "adaptive.reliability.asset": {
+        "figure": "figS24",
+        "path": "figures/supplementary/figure_S24_panels_A-D.pdf",
+        "generator": "scripts/build_adaptive_conductance_reliability_figure.py",
+        "notes": "Fresh 50-seed adaptive local reliability experiment with global, shuffled, no-shunt, oracle and independent point-gate controls.",
+    },
+    "irregular.wavelet.asset": {
+        "figure": "figS25",
+        "path": "figures/supplementary/figure_S25_panels_A-D.pdf",
+        "generator": "scripts/build_irregular_tree_wavelet_figure.py",
+        "notes": "Frozen 47-cell primary and eight-cell secondary irregular-tree Haar analysis with isotropic and column-permuted controls.",
+    },
+    "clean.physical.depth.asset": {
+        "figure": "figS26",
+        "path": "figures/supplementary/figure_S26_panels_A-D.pdf",
+        "generator": "scripts/analyze_physical_depth_clean_source_replication.py",
+        "notes": "Immutable-source same-seed replication of all 430 load-bearing H2/H3 physical-depth fits.",
+    },
+}
+
+NEW_PROVENANCE_ENTRIES = {
+    "taskfamily.asset": {
+        "record_type": "figure_asset",
+        "figure": "fig6",
+        "panel": "e-g",
+        "path": "figures/main/figure_06.pdf",
+        "generator": "scripts/assemble_compact_main_figures.py",
+        "replication_unit": "paired independent training seed (n=10)",
+        "notes": "Fixed-D3 architecture-by-task-family-by-alignment boundary under exact backpropagation and path-transport LocalCA.",
+    },
+    "taskfamily.outcomes": {
+        "record_type": "panel_source",
+        "figure": "fig6",
+        "panel": "e-g",
+        "path": "source_data/task_family_alignment/seed_outcomes.csv",
+        "generator": "scripts/analyze_task_family_alignment_factorial.py",
+        "replication_unit": "paired independent training seed (n=10)",
+        "notes": "All 360 fixed-D3 task-family, architecture, credit-rule and alignment outcomes.",
+    },
+    "taskfamily.conditions": {
+        "record_type": "panel_source",
+        "figure": "fig6",
+        "panel": "e-f",
+        "path": "source_data/task_family_alignment/condition_summary.csv",
+        "generator": "scripts/analyze_task_family_alignment_factorial.py",
+        "replication_unit": "paired independent training seed (n=10)",
+        "notes": "Condition means and paired-seed bootstrap intervals for the fixed-depth task-family boundary.",
+    },
+    "taskfamily.contrasts": {
+        "record_type": "panel_source",
+        "figure": "fig6",
+        "panel": "g",
+        "path": "source_data/task_family_alignment/paired_contrasts.csv",
+        "generator": "scripts/analyze_task_family_alignment_factorial.py",
+        "replication_unit": "paired independent training seed (n=10)",
+        "notes": "Architecture-by-alignment interactions and task-family difference-in-differences.",
+    },
+    "taskfamily.audit": {
+        "record_type": "panel_source",
+        "figure": "fig6",
+        "panel": "text",
+        "path": "source_data/task_family_alignment/audit.json",
+        "generator": "scripts/analyze_task_family_alignment_factorial.py",
+        "replication_unit": "complete 360-fit audit",
+        "notes": "Completeness, finite-metric, no-fallback, seed and exact-resource gates.",
+    },
+    "pinky.asset": {
+        "record_type": "figure_asset",
+        "figure": "figS27",
+        "panel": "all",
+        "path": "figures/supplementary/figure_S27_panels_A-D.pdf",
+        "generator": "scripts/analyze_pinky_v185_replication.py",
+        "replication_unit": "reconstructed cell (10 QC-passing of 12 selected; one second mouse)",
+        "notes": "Independent-animal structural route-capacity replication; panel C is promoted as Fig. 7I.",
+    },
+    "pinky.cohort": {
+        "record_type": "panel_source",
+        "figure": "figS27",
+        "panel": "a",
+        "path": "source_data/pinky_v185_replication/cohort_manifest.csv",
+        "generator": "scripts/freeze_pinky_v185_cohort.py",
+        "replication_unit": "outcome-independent reconstructed-cell selection (n=12)",
+        "notes": "Twelve equal-count y strata with cells nearest the global x/z medians in the MICrONS Pinky v185 volume.",
+    },
+    "pinky.curves": {
+        "record_type": "panel_source",
+        "figure": "fig7/figS27",
+        "panel": "i/b-d",
+        "path": "source_data/pinky_v185_replication/routing/feedback_compression_curves.csv",
+        "generator": "scripts/analyze_pinky_v185_replication.py",
+        "replication_unit": "QC-passing reconstructed cell (n=10; one second mouse)",
+        "notes": "Cell-level capture curves for ancestry, random, depth-only, shuffled and dense routes.",
+    },
+    "pinky.contrasts": {
+        "record_type": "panel_source",
+        "figure": "fig7/figS27",
+        "panel": "i/c",
+        "path": "source_data/pinky_v185_replication/routing/k4_cross_animal_contrasts.csv",
+        "generator": "scripts/analyze_pinky_v185_replication.py",
+        "replication_unit": "reconstructed cell; animal is the biological unit (two mice)",
+        "notes": "K=4 ancestry-route advantages shown separately for the original and second MICRONS animals.",
+    },
+    "pinky.summary": {
+        "record_type": "panel_source",
+        "figure": "figS27",
+        "panel": "text",
+        "path": "source_data/pinky_v185_replication/routing/summary.json",
+        "generator": "scripts/analyze_pinky_v185_replication.py",
+        "replication_unit": "12 selected cells, 10 QC-passing; one second mouse",
+        "notes": "Frozen preprocessing, QC, route-capacity and cross-animal directional-replication summary.",
+    },
+}
+
+
+def resolve_project_path(raw_path: str) -> Path:
+    path = Path(raw_path)
+    if path.is_absolute():
+        return path
+    try:
+        relative = path.relative_to(LEGACY_PROJECT_PREFIX)
+    except ValueError:
+        relative = path
+    return PROJECT_ROOT / relative
+
+
 # Correct stale prose left by an earlier numbering-only remap.  These notes
 # are descriptive metadata, not independent scientific content.
 CANONICAL_NOTES = {
-    "fig3.e": "Direct-presynaptic-type-only sensitivity analysis shown in Fig. 6H.",
-    "fig4.b": "Cell-level additive, depth-shuffled, and focal-shunt localization shown in Fig. 7C.",
-    "fig4.c": "Dose response and focal-depth localization values shown in Fig. 7D--E.",
-    "fig4.effects": "Descendant, sister, ancestor, and unrelated category effects shown in Fig. 7B.",
-    "fig4.e.cell": "Cell-level exact factor-freeze values underlying the same-voltage driving-force and full-shunt contrast in Fig. 7H.",
-    "fig4.e.site": "Site-level factor substitutions supporting the Fig. 7H cell summary and supplementary Shapley analysis.",
+    "fig3.e": "Direct-presynaptic-type-only sensitivity analysis shown in Fig. 7H.",
+    "fig4.b": "Cell-level additive, depth-shuffled, and focal-shunt localization shown in Fig. 8C.",
+    "fig4.c": "Dose response and focal-depth localization values shown in Fig. 8D--E.",
+    "fig4.effects": "Descendant, sister, ancestor, and unrelated category effects shown in Fig. 8B.",
+    "fig4.e.cell": "Cell-level exact factor-freeze values underlying the same-voltage driving-force and full-shunt contrast in Fig. 8H.",
+    "fig4.e.site": "Site-level factor substitutions supporting the Fig. 8H cell summary and supplementary Shapley analysis.",
 }
 
 
@@ -98,12 +282,22 @@ def main() -> None:
                 updated += 1
             seen_assets.add(entry_id)
 
+        assignment = CANONICAL_ASSIGNMENTS.get(entry_id)
+        if assignment is not None:
+            figure, panel = assignment
+            if row.get("figure") != figure:
+                row["figure"] = figure
+                updated += 1
+            if row.get("panel") != panel:
+                row["panel"] = panel
+                updated += 1
+
         canonical_note = CANONICAL_NOTES.get(entry_id)
         if canonical_note is not None and row.get("notes") != canonical_note:
             row["notes"] = canonical_note
             updated += 1
 
-        source = REPOSITORY_ROOT / row["source_path"]
+        source = resolve_project_path(row["source_path"])
         if not source.is_file():
             raise FileNotFoundError(source)
         observed = sha256(source)
@@ -111,12 +305,83 @@ def main() -> None:
             row["sha256"] = observed
             updated += 1
 
+    existing_ids = {row.get("entry_id", "") for row in rows}
+    for entry_id, detail in NEW_DETAIL_ASSETS.items():
+        if entry_id in existing_ids:
+            row = next(item for item in rows if item.get("entry_id") == entry_id)
+            expected = {
+                "figure": detail["figure"],
+                "panel": "all",
+                "status": "ready",
+                "source_path": PROJECT_PREFIX + detail["path"],
+                "generator_path": PROJECT_PREFIX + detail["generator"],
+                "replication_unit": "not applicable",
+                "notes": detail["notes"],
+            }
+            for field, value in expected.items():
+                if row.get(field) != value:
+                    row[field] = value
+                    updated += 1
+            continue
+        relative_path = detail["path"]
+        source_path = PROJECT_PREFIX + relative_path
+        source = resolve_project_path(source_path)
+        if not source.is_file():
+            raise FileNotFoundError(source)
+        rows.append(
+            {
+                "entry_id": entry_id,
+                "record_type": "figure_asset",
+                "figure": detail["figure"],
+                "panel": "all",
+                "status": "ready",
+                "source_path": source_path,
+                "sha256": sha256(source),
+                "generator_path": PROJECT_PREFIX + detail["generator"],
+                "replication_unit": "not applicable",
+                "notes": detail["notes"],
+            }
+        )
+        updated += 1
+
+    existing_ids = {row.get("entry_id", "") for row in rows}
+    for entry_id, detail in NEW_PROVENANCE_ENTRIES.items():
+        source_path = PROJECT_PREFIX + detail["path"]
+        source = resolve_project_path(source_path)
+        if not source.is_file():
+            raise FileNotFoundError(source)
+        expected = {
+            "record_type": detail["record_type"],
+            "figure": detail["figure"],
+            "panel": detail["panel"],
+            "status": "ready",
+            "source_path": source_path,
+            "sha256": sha256(source),
+            "generator_path": PROJECT_PREFIX + detail["generator"],
+            "replication_unit": detail["replication_unit"],
+            "notes": detail["notes"],
+        }
+        if entry_id in existing_ids:
+            row = next(item for item in rows if item.get("entry_id") == entry_id)
+            for field, value in expected.items():
+                if row.get(field) != value:
+                    row[field] = value
+                    updated += 1
+        else:
+            rows.append({"entry_id": entry_id, **expected})
+            updated += 1
+
     missing_entries = sorted(set(CANONICAL_ASSETS) - seen_assets)
     if missing_entries:
-        raise ValueError("canonical figure assets absent from manifest: " + ", ".join(missing_entries))
+        raise ValueError(
+            "canonical figure assets absent from manifest: "
+            + ", ".join(missing_entries)
+        )
 
     with MANIFEST.open("w", newline="", encoding="utf-8") as handle:
-        writer = csv.DictWriter(handle, fieldnames=fieldnames, delimiter="\t", lineterminator="\n")
+        writer = csv.DictWriter(
+            handle, fieldnames=fieldnames, delimiter="\t", lineterminator="\n"
+        )
         writer.writeheader()
         writer.writerows(rows)
     print(f"updated {updated} provenance fields")

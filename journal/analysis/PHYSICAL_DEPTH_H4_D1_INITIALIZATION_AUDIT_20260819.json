@@ -1,0 +1,22 @@
+{
+  "status": "pass",
+  "source_commit": "a99c3a777f99913e13dfe673a3f3a28bfe3566af",
+  "config_index": 0,
+  "seed": 10400,
+  "batch_size": 32,
+  "serial_config": "journal_h4_aligned_serial_shunting_bp_20260819213856/configs/unified_config_0.yaml",
+  "serial_config_sha256": "82a8e6b94122238969b5bd9162a2e6a8269f5b91a75f2db9f0b2a7deb94df67a",
+  "grouped_config": "journal_h4_aligned_grouped_point_shunting_bp_20260819213851/configs/unified_config_0.yaml",
+  "grouped_config_sha256": "f4f1c7df7c42f19d53a7529f5d5ce083597288aeb7e21db691a0ecc47b620524",
+  "input_shape": [
+    32,
+    128
+  ],
+  "logit_shape": [
+    32,
+    2
+  ],
+  "inputs_bitwise_equal": true,
+  "logits_bitwise_equal": true,
+  "maximum_absolute_logit_difference": 0.0
+}

@@ -15,7 +15,6 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from matplotlib.lines import Line2D
 
 from journal_style import (
     COLORS,
@@ -24,7 +23,8 @@ from journal_style import (
     LW_REF,
     MARKER_MS,
     MARKERS,
-    PT_SMALL,
+    PT_ANNOT,
+    PT_LEGEND,
     apply_neurips_style,
     audit_layout,
     audit_text_over_data,
@@ -62,18 +62,31 @@ def save(fig: plt.Figure, name: str) -> None:
 
 
 def iso_efficiency(ax: plt.Axes, ratios, x_low: float, y_top: float) -> None:
-    """Dashed capture/wiring = const references on the log-x plane."""
-    xs = np.geomspace(x_low, ax.get_xlim()[1], 256)
-    for ratio in ratios:
+    """Dashed capture/wiring = const references on the log-x plane.
+
+    Each line carries a short ratio label at its exit point, inside the
+    axes; the caption decodes the family (constant capture per wire), so
+    the panel needs no separate note.
+    """
+    x_high = ax.get_xlim()[1]
+    xs = np.geomspace(x_low, x_high, 256)
+    for ratio in sorted(ratios, reverse=True):
         ys = ratio * xs
         keep = ys <= y_top
         ax.plot(xs[keep], ys[keep], ls="--", lw=LW_REF, color=COLORS["mute"],
                 zorder=1)
-        exit_x = min(y_top / ratio, ax.get_xlim()[1])
-        label = f"{ratio:g}" if ratio >= 1 else f"{ratio:.1f}"
-        ax.text(exit_x * 1.1, min(y_top, ratio * exit_x) - 0.012, label,
-                ha="left", va="top", fontsize=PT_SMALL, style="italic",
-                color=COLORS["mute"])
+        label = f"{ratio:g}"
+        if y_top / ratio < x_high:
+            # Exits through the top: label just right of the exit point,
+            # tucked under the axis ceiling.
+            ax.text(y_top / ratio * 1.14, y_top, label, ha="left", va="top",
+                    fontsize=PT_ANNOT, style="italic", color=COLORS["mute"])
+        else:
+            # Exits through the right edge: label above the line end,
+            # inside the axes.
+            ax.text(x_high * 0.96, ratio * x_high * 0.96 + 0.015, label,
+                    ha="right", va="bottom", fontsize=PT_ANNOT,
+                    style="italic", color=COLORS["mute"])
 
 
 def main() -> None:
@@ -83,16 +96,22 @@ def main() -> None:
 
     fig, (ax_a, ax_b) = plt.subplots(
         1, 2, figsize=(FIG_W, 2.55),
+        # top = 0.825 gives the K/L letters the same ~65 px (600 dpi) head
+        # margin as the figure-6 A-J block above them.
         gridspec_kw={"left": 0.075, "right": 0.985, "bottom": 0.155,
-                     "top": 0.855, "wspace": 0.42},
+                     "top": 0.825, "wspace": 0.42},
     )
 
-    # ── A: 8-channel wiring-capture plane with iso-efficiency lines ───────
+    # ── K: 8-channel wiring-capture plane with iso-efficiency lines ───────
+    # Axis ranges match panel E of this figure (the same data on the same
+    # plane); the iso lines are labeled in-line, so the panel keeps no
+    # headroom band for a key or a decoder note — the five-method key is
+    # stated once in panel L (panels D/I of the A-J strip state it too).
     ax_a.set_xscale("log")
-    ax_a.set_xlim(0.008, 1.6)
-    ax_a.set_ylim(0.0, 1.34)
-    ax_a.set_yticks([0.0, 0.5, 1.0])
-    iso_efficiency(ax_a, (0.5, 2.0, 8.0), x_low=0.009, y_top=1.0)
+    ax_a.set_xlim(0.008, 1.35)
+    ax_a.set_ylim(0.0, 0.88)
+    ax_a.set_yticks([0.0, 0.4, 0.8])
+    iso_efficiency(ax_a, (0.5, 2.0, 8.0), x_low=0.009, y_top=0.84)
     eight = cell[cell.channels.eq(8)]
     for index, (method, _, color) in enumerate(METHODS):
         part = eight[eight.method.eq(method)]
@@ -104,24 +123,13 @@ def main() -> None:
                      edgecolor="white", linewidth=0.4, zorder=4)
     ax_a.set_xlabel("wiring density")
     ax_a.set_ylabel("field capture")
+    ax_a.text(0.03, 0.95, "colors as in D", transform=ax_a.transAxes,
+              ha="left", va="top", fontsize=PT_ANNOT, style="italic",
+              color=COLORS["mute"])
     panel_title(ax_a, "K", "Iso-efficiency at eight channels")
     style_axis(ax_a)
-    clean_legend(ax_a, handles=[
-        Line2D([0], [0], marker=MARKERS[index], color="none",
-               markerfacecolor=color, markeredgecolor="none",
-               markersize=4.2, label=label)
-        for index, (_, label, color) in enumerate(METHODS)
-    ], loc="upper left", ncol=2, fontsize=PT_SMALL, columnspacing=0.6,
-        handlelength=0.9, handletextpad=0.25)
-    # The note lives in the dedicated headroom band (panel-E convention of
-    # Figure 3), right of the two-column key and clear of the point cloud
-    # and the iso-line end labels.
-    ax_a.text(0.98, 0.97, "dashed: constant\ncapture per wire",
-              transform=ax_a.transAxes, ha="right", va="top",
-              fontsize=PT_SMALL, style="italic", color=COLORS["mute"],
-              linespacing=1.25)
 
-    # ── B: capture per unit wiring across channel counts ──────────────────
+    # ── L: capture per unit wiring across channel counts ──────────────────
     for index, (method, label, color) in enumerate(METHODS):
         part = summary[summary.method.eq(method)].sort_values("channels")
         ax_b.plot(part.channels, part.mean_capture_per_wire, color=color,
@@ -138,11 +146,14 @@ def main() -> None:
     ax_b.set_ylabel("capture per unit wiring")
     panel_title(ax_b, "L", "Wiring-normalized capture")
     style_axis(ax_b)
-    clean_legend(ax_b, loc="lower right", ncol=2, fontsize=PT_SMALL,
-                 columnspacing=0.6, handlelength=1.1, handletextpad=0.3)
-    ax_b.text(0.02, 0.97, "bands: 95% cell bootstrap",
-              transform=ax_b.transAxes, ha="left", va="top",
-              fontsize=PT_SMALL, style="italic", color=COLORS["mute"])
+    # Single key for the strip (K shares its colors and markers); the
+    # bootstrap-band provenance lives in the caption, not the panel.
+    # Slim white backing keeps the key legible against the CI bands it
+    # borders (and on reruns with jittered data).
+    clean_legend(ax_b, loc="lower right", ncol=2, fontsize=PT_LEGEND,
+                 columnspacing=0.7, handlelength=1.1, handletextpad=0.3,
+                 frameon=True, facecolor="white", edgecolor="none",
+                 framealpha=0.85, borderpad=0.25)
 
     save(fig, "fig_capture_per_wire")
 

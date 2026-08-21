@@ -1,0 +1,20 @@
+{
+  "background_e_scale": 0.35,
+  "background_i_scale": 0.35,
+  "channels": 4,
+  "excitatory_reversal": 1.0,
+  "inhibitory_reversal": -0.2,
+  "initial_conductance": 0.2,
+  "input_lower_quantile": 0.1,
+  "input_maximum": 3.0,
+  "input_upper_quantile": 0.9,
+  "learning_rate": 0.02,
+  "maximum_targets": null,
+  "readout_decay": 1e-06,
+  "replicates": 10,
+  "seed": 20260731,
+  "steps": 600,
+  "test_fraction": 0.2,
+  "weight_decay": 0.001,
+  "workers": 7
+}

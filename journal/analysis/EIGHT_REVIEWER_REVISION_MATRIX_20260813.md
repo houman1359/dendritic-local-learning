@@ -1,6 +1,6 @@
 # Eight-reviewer revision matrix
 
-Last updated: 17 August 2026
+Last updated: 19 August 2026
 
 This is the implementation ledger for the 12 August eight-reviewer report.
 It distinguishes completed repairs, active analyses, new prospective evidence,
@@ -14,7 +14,7 @@ and author/external actions that cannot be completed from the repository.
   its quantitative validation. Anatomy, conductance and depth experiments map
   the theory's boundary rather than support a categorical dendritic advantage.
 - **Submission form:** the current priority is a scientifically complete
-  seven-section, eight-figure manuscript. The authors set an eventual working
+  seven-section, nine-figure manuscript. The authors set an eventual working
   target of at most approximately 8,000 narrative words; evidence and negative
   results will not be removed merely to meet the shorter journal guidance.
 
@@ -24,8 +24,8 @@ and author/external actions that cannot be completed from the repository.
 |---|---|---|
 | Broken/dead bibliography keys and missing load-bearing literature | Completed | The bibliography now contains 56 cited records, including all load-bearing works requested in the review. `scripts/audit_citations.py` reports zero undefined and zero unused keys. |
 | Placeholder Code Availability | External action | The local release is prepared; an author must publish it and mint the Zenodo DOI. The manuscript must then name URL, DOI and MIT license. |
-| Cover letter and NeurIPS dual-track status | Local revision completed; author action remains | The cover letter is now a one-page theory-first significance letter and the extension statement is retained. Authors must insert the final NeurIPS status, satisfy exclusivity, and approve the sibling-manuscript disclosures before submission. |
-| Length, display count and stale checklist | Partly completed | Results now follow seven scientific subsections and the full evidence is consolidated into eight numbered figures using continued multi-panel displays. The checklist records eight main figures and Supplementary Figs. S1--S17. Narrative length remains deliberately advisory during scientific revision, as requested by the authors. |
+| Cover letter and NeurIPS dual-track status | Local revision completed; author action remains | The cover letter is now a theory-first significance letter and the related-work statement treats the journal Article as the canonical standalone account. Authors must insert the final NeurIPS status, satisfy exclusivity, and approve the sibling-manuscript disclosures before submission. |
+| Length, display count and stale checklist | Figure inventory completed; length remains advisory | Results now follow eight scientific subsections and use nine single-file numbered figures without continued floats. The checklist records nine main figures and Supplementary Figs. S1--S27 after the independent-animal addition. Narrative length remains deliberately advisory during scientific revision, as requested by the authors. |
 
 ## Scientific and inferential repairs
 
@@ -108,6 +108,57 @@ specificity for 10.96 points. All numerical and resource gates passed.
    closes the reviewer's literal grouped-point control and second-hierarchy
    requests within the calibrated task family, not across an independent task.
 
+7. **Trained credit-partition residual (complete; all 2,700 factorial
+   fits).** The exact frozen route operators and trained endpoints were
+   reconstructed for every seed, representation and bandwidth. Correct
+   ancestry captures 0.162, 0.316, 0.547 and 1.000 of the teacher credit field
+   at $K=1,2,4,8$, whereas ownership derangement has zero non-scalar capture
+   for $K>1$. Within seed, capture ranks trained accuracy with mean Spearman
+   $\rho=0.825$ (0.810--0.838; 20/20 positive); the restricted $K<8$ mean is
+   0.640. This closes the suggested trained residual analysis: credit capture
+   explains the large bandwidth and ownership failures, but not by itself the
+   small support-specific $K=4$ ancestry advantage.
+
+8. **Adaptive conductance reliability (complete; 1,050 fresh outcomes).**
+   Paired local teaching probes estimate signal and noise online and set
+   positive shunts with no oracle signal/noise energies. At the intermediate
+   noise level, adaptive local placement improves final loss over a global
+   shunt by 0.0162 (50/50 seeds) and over shuffled placement by 0.00553 (41/50),
+   while its gain ordering correlates with the frozen oracle at $\rho=0.756$.
+   It remains 0.00425 worse than unshunted learning and 0.00345 worse than the
+   initial oracle. The experiment therefore recovers relative reliability
+   placement, not a generic absolute conductance benefit; a point gate is
+   operation-identical under the state clamp.
+
+9. **Irregular-tree wavelet scale analysis (complete; 55 reconstructed
+   cells).** A frozen weighted unbalanced tree-Haar construction resolves the
+   non-scalar conductance-weighted ancestry field into anatomical scales. In
+   the disjoint 47-cell cohort, coarse modes carry 0.407 of energy using 0.192
+   of dimensions (2.351-fold isotropic enrichment; 47/47), but the
+   actual-minus-column-permuted excess is not reliable (0.0345, interval
+   $-0.0025$--0.0713; 31/47; $P=0.078$). The positive original eight-cell
+   contrast therefore does not replicate. This closes the requested
+   irregular-tree scale analysis while strengthening the paper's boundary
+   claim rather than its anatomy-specific headline.
+
+10. **Fourth-hierarchy physical-depth factorial (running; 360 frozen
+    fits).** A clean immutable checkout crosses aligned/reversed serial
+    shunting BP, literal grouped-point BP, shared/path LocalCA and aligned
+    raw-additive BP across D1--D4 at ten fresh seeds. This is the requested
+    trained conductance-network crossover within the calibrated task family.
+    The decisive frozen test is whether D4 exceeds D3 for an $H=4$ task and
+    whether that increment disappears after placement reversal, in the
+    grouped-point control and under raw addition. Failure is retained as a
+    falsification; no post-outcome retuning is permitted.
+
+11. **Clean-source H2/H3 concordance replication (complete; 430 frozen
+    fits).** All load-bearing physical-depth and grouped-point configurations
+    were rerun from the same tracked-clean immutable commit used for H4. Every
+    outcome was paired to its historical seed and semantic condition. All 430
+    validity gates passed and every load-bearing direction and claim gate was
+    retained; this is implementation/source concordance rather than an
+    independent biological or task replication.
+
 ## Claim and writing repairs
 
 - Pair 14.2-fold model-matched capture per wire with the approximately
@@ -126,20 +177,20 @@ specificity for 10.96 points. All numerical and resource gates passed.
 
 ## Figure programme
 
-The eight-figure order is now: framework; coordinates/ownership; subtree
-address; credit-phase theory; physical depth and point controls; MICrONS
-topology plus wiring-normalized capture; focal shunting plus its active-channel
-extension; and measured-response nulls, complete-tree null, imposed-alignment
-rescue and the alignment-by-bandwidth phase plane. The six-animal signed-
+The nine-figure order is now: framework; coordinates/ownership; subtree
+address; credit-phase theory; physical depth and point controls; H4 depth
+saturation; MICrONS topology plus wiring-normalized capture; focal shunting
+plus its active-channel extension; and measured-response nulls, complete-tree
+null, imposed-alignment rescue and the alignment-by-bandwidth phase plane. The six-animal signed-
 coordinate analysis is Supplementary Fig. S17 because it validates neuron
 identity but does not test within-tree routing. QC and provenance panels remain
 available in SI. Continued displays preserve the complete panel set while
-keeping eight numbered main figures.
+keeping nine numbered main figures.
 
 The workshop deck was used as a visual-logic audit. Its reusable
 coordinate--address--gain hierarchy now sets the vocabulary of Figure 1; its
-wiring-economics panel motivated promotion of capture per wire into Figure 6;
-and its closing phase plane is now Figure 8O. Slide-only categorical wording
+wiring-economics panel motivated promotion of capture per wire into Figure 7;
+and its closing phase plane is now Figure 9K. Slide-only categorical wording
 was not imported into the manuscript.
 
 ## Author/external dependencies
