@@ -35,14 +35,16 @@ remain available solely to audit provenance. To keep GitHub-to-Overleaf
 synchronization reliable, bulky result tables and generated reading-copy PDFs
 are excluded from the active branch. The complete pre-prune evidence tree is
 preserved in `archive/pre-overleaf-prune-20260820`; the active branch retains
-the provenance manifest, analysis code, configurations and final figure PDFs.
+the provenance manifest, analysis code and final figure PDFs.
 
 The repository originated with the NeurIPS project. The journal directory is
 now the single scientific authority. The earlier independent
 `local-learning-journal` repository and the `dendritic-credit-routing` working
 repository are historical development records, not competing manuscripts.
 Historical staging trees, raw runs and superseded variants stay outside the
-active working tree; Git history remains the permanent archive.
+active working tree. Experiment YAML files remain available locally but are
+untracked because Overleaf does not need them; their tracked snapshot is
+preserved on `archive/pre-overleaf-prune-20260820`.
 
 ## Common commands
 
