@@ -1,7 +1,0 @@
-heterogeneity,left_minus_right,metric,n_pairs,mean_difference,ci95_low,ci95_high,positive_pairs,ties,wilcoxon_p_two_sided
-2,reliability_aligned_shunt - best_global_shunt,one_step_test_loss_decrease,50,0.001913093169,0.001787447808,0.002040123313,50,0,1.776356839e-15
-2,reliability_aligned_shunt - best_global_shunt,final_test_loss,50,-0.01905200686,-0.02053620157,-0.01753936631,0,0,1.776356839e-15
-2,reliability_aligned_shunt - shuffled_shunt,final_test_loss,50,-0.006706754324,-0.008524536125,-0.004973495356,6,0,3.134559279e-10
-2,reliability_aligned_shunt - anti_aligned_shunt,final_test_loss,50,-0.01366113295,-0.01658231768,-0.01083505679,5,0,3.614886168e-12
-0,reliability_aligned_shunt - best_global_shunt,final_test_loss,50,0,0,0,0,50,1
-2,reliability_aligned_shunt - explicit_point_gate,final_test_loss,50,0,0,0,0,50,1
