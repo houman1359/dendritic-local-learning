@@ -1,3 +1,0 @@
-dataset,network_type,n_runs,valid_accuracy_mean,valid_accuracy_std,test_accuracy_mean,test_accuracy_std
-context_gating,dendritic_shunting,5,0.8618000507354736,0.004266132791240597,0.861400043964386,0.004393168810086506
-mnist,dendritic_shunting,5,0.9710833191871643,0.0013514298196231646,0.9711199760437011,0.001205001615292095
