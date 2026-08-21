@@ -21,7 +21,7 @@ combined: paper supplement
 	$(PDFUNITE) main.pdf supplementary/supplementary.pdf main_with_supplementary.pdf
 
 presentation-pdf:
-	$(PYTHON) ../../presentation/credit_assignment/build_pdf_presentation.py
+	$(PYTHON) ../presentations/legacy_decks/build_pdf_presentation.py
 
 figures:
 	$(PYTHON) scripts/analyze_prospective_followup_results.py

@@ -19,17 +19,28 @@ Self-contained copy of everything used for the talk
   journal manuscript's figures).
 
 ## Rebuild (self-contained)
-    pdflatex -interaction=nonstopmode dendritic_credit_workshop.tex
-    pdflatex -interaction=nonstopmode dendritic_credit_workshop.tex
+    python3 build_presentation.py        # compiles twice + validates 42 pages, 16:9, clean log
+    python3 build_pdf_assets.py          # only if the journal figures changed: regenerates pdf_assets/
+
+`build_pdf_assets.py` holds this deck's 18 crop definitions (600-dpi pixel
+boxes against the journal's canonical figure sheets); if a journal sheet is
+regenerated with a new layout, re-measure the affected boxes before running it.
+Plain `pdflatex dendritic_credit_workshop.tex` (twice) also works.
+
+## Legacy decks
+`legacy_decks/` holds the earlier iterations of this talk (expanded 37-slide,
+story 22-slide, and math 22-slide variants, each with a with-appendix build,
+plus the pptx exports) and their own build scripts (`build_pdf_presentation.py`,
+`build_pdf_assets.py`). Moved here 2026-08-20 from
+`drafts/presentation/credit_assignment/`, which no longer exists.
 
 ## Canonical home
 This folder is the canonical home of the workshop talk as of 2026-08-19 (the
 sources were MOVED here from `drafts/presentation/credit_assignment/`, whose
 `build_pdf_presentation.py` no longer builds this deck). It is fully
 self-contained: the rebuild command above needs nothing outside this folder.
-To regenerate `pdf_assets/` crops from updated journal figures, use
-`drafts/presentation/credit_assignment/build_pdf_assets.py` and copy the
-18 assets listed in the tex sources.
+`pdf_assets/` is regenerated locally by this folder's own
+`build_pdf_assets.py`; nothing is needed from the legacy package.
 
 A stale duplicate may exist on netscratch
 (`/n/netscratch/kempner_dev/hsafaai/dendritic-local-learning-presentation/`,

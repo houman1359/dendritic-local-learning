@@ -1,6 +1,6 @@
 """Credit-tree schematic library — matplotlib port of the talk's TikZ vocabulary.
 
-Mirrors ``drafts/presentation/credit_assignment/credit_tree_lib.tex``: one
+Mirrors ``drafts/dendritic-local-learning/presentations/credit_tree_lib.tex``: one
 parameterized dendritic tree with identical geometry in every mode; only the
 decoration changes to show the quantity being defined or manipulated.  All
 coordinates are the TikZ ones verbatim, so cross-panel changes read as the
