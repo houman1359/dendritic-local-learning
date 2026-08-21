@@ -1,5 +1,0 @@
-feedback,network_type,rule_variant,decoder_update_mode,test_accuracy_mean,test_accuracy_std,test_accuracy_min,test_accuracy_max,n_seeds
-ancestry_shared,dendritic_additive,3f,local,0.9714199701933403,0.0009762900448813084,0.9700999856,0.9731999635696411,15
-ancestry_shared,dendritic_shunting,3f,local,0.9714599768335747,0.0011525139261593775,0.9692999721,0.9735999703407288,15
-scalar_fallback,dendritic_additive,3f,local,0.9157933115946932,0.006104036472771317,0.9027999639511108,0.9222999811172485,15
-scalar_fallback,dendritic_shunting,3f,local,0.9074666420568864,0.010110785363073627,0.8792999982833862,0.9213999509811401,15

@@ -1,3 +1,0 @@
-learning_strategy,seed,device,epochs,batch_size,hooks_enabled,final_evaluation_enabled,wall_time_seconds,peak_cuda_allocated_mib,peak_cuda_reserved_mib,profile_scope
-local_ca,42,NVIDIA RTX PRO 6000 Blackwell Server Edition,180,256,true,true,190.007824,1744.262695,2026.0,end-to-end process from config loading through final evaluation
-standard_backpropagation,42,NVIDIA RTX PRO 6000 Blackwell Server Edition,180,256,true,true,124.736323,1744.247070,1972.0,end-to-end process from config loading through final evaluation

@@ -1,3 +1,0 @@
-condition,dataset,core,learning_rule,rule_variant,broadcast_mode,broadcast_rank,decoder_update_mode,hsic_enabled,hsic_weight,core_type,normalize_inputs,has_i_to_e,additive_gain_mode,dendritic_normalization,reactivation_enabled,test_acc_mean,test_acc_std,test_acc_min,test_acc_max,n_seeds
-revision_figure_ground_hsic_heldout_3seed,context_gating,shunting,local_ca,5f,per_soma,4,local,True,0.0,dendritic_shunting,False,True,none,False,True,0.749333381652832,0.02581342912838313,0.7320000529289246,0.7790000438690186,3
-revision_figure_ground_hsic_heldout_3seed,context_gating,shunting,local_ca,5f,per_soma,4,local,True,0.01,dendritic_shunting,False,True,none,False,True,0.799666702747345,0.019347687529519507,0.7880000472068787,0.8220000267028809,3
