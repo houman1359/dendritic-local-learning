@@ -1,30 +1,23 @@
 # Overleaf build instructions
 
-The active manuscript is `main.tex`. Use pdfLaTeX; the bibliography is
-`references.bib`. The separate Supplementary Information source is
-`supplementary/supplementary.tex` and the combined reading copy is
-`main_with_supplementary.pdf`.
+The canonical standalone Article source is `main.tex`. Use pdfLaTeX and
+`references.bib`. Supplementary Information is in
+`supplementary/supplementary.tex`; `main_with_supplementary.pdf` is the complete
+reading copy.
 
-The manuscript compiles eight numbered main figures. Some large figures span
-more than one displayed asset through LaTeX's `ContinuedFloat`; their canonical
-filenames explicitly give the manuscript figure number and panel range.
+The Article compiles exactly nine main assets:
+`figures/main/figure_01.pdf` through `figure_09.pdf`. Supplementary assets are
+in `figures/supplementary/` (S1--S27). The exact content map is
+`figures/README.md`. Do not select the modular compositor inputs or files in
+`figures/generated/`.
 
-- Main-text assets: `figures/main/`
-- Supplementary assets: `figures/supplementary/`
-- Exact panel map: `figures/README.md`
-
-Do not upload or select files from `figures/generated/`: these are internal
-script outputs with historical descriptive names. The generated submission
-bundle already excludes them and contains only the canonical assets.
-
-From the journal project directory:
+From the journal directory:
 
 ```bash
-make combined          # compile Article + SI reading copy
-make overleaf-bundle   # rebuild submission/Overleaf_Project.zip
+make combined
+make overleaf-bundle
 ```
 
-Upload `Overleaf_Project.zip` as a new Overleaf project, or replace every file
-in an existing project with its contents. Select `main.tex` as the main
-document and pdfLaTeX as the compiler. Do not merge it with the older flat
-`fig*.pdf` assets: those filenames are deliberately absent from this package.
+Upload `submission/Overleaf_Project.zip` as a new project, select `main.tex` as
+the main document and use pdfLaTeX. Replacing an older Overleaf project in full
+is safer than mixing this package with historical `fig*.pdf` files.

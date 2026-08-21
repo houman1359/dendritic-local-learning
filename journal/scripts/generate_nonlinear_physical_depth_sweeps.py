@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Generate the frozen positive-rate nonlinear physical-depth canary.
 
-The generator copies the complete production population-network recipe into
-the journal directory, then varies only prespecified task/routing fields.  The
-resulting YAML files are self-contained; running them does not depend on the
-sibling gain--load manuscript tree.
+The generator starts from the complete production population-network recipe
+already frozen in this journal directory, then varies only prespecified
+task/routing fields.  Configuration generation is therefore self-contained
+and does not depend on the sibling gain--load manuscript tree.
 """
 
 from __future__ import annotations
@@ -18,17 +18,10 @@ from omegaconf import OmegaConf
 
 
 JOURNAL_ROOT = Path(__file__).resolve().parents[1]
-REPO_ROOT = JOURNAL_ROOT.parents[2]
-SOURCE = (
-    REPO_ROOT
-    / "drafts"
-    / "gain-load-journal"
-    / "neurips"
-    / "configs"
-    / "sweeps"
-    / "neurips_hierarchical_gain_inventory_pilot_revision.yaml"
-)
 OUTPUT = JOURNAL_ROOT / "configs" / "nonlinear_physical_depth"
+# This rendered reference contains the complete upstream recipe.  Every field
+# varied below is overwritten deterministically before a new config is emitted.
+SOURCE = OUTPUT / "canary_aligned_bp.yaml"
 RUNS = JOURNAL_ROOT / "nonlinear_physical_depth_runs"
 
 MORPHOLOGIES = [[8], [2, 3], [2, 1, 2]]
@@ -92,7 +85,8 @@ def _base(
     if regime not in REGIMES:
         raise ValueError(regime)
 
-    config["output_dir"] = str(RUNS)
+    # Keep the committed recipes portable across clones and compute nodes.
+    config["output_dir"] = RUNS.name
     config["slurm_config"].update(
         {
             "account": "kempner_dev",

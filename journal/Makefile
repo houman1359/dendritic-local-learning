@@ -3,15 +3,15 @@ PDFLATEX ?= pdflatex
 BIBTEX ?= bibtex
 PDFUNITE ?= pdfunite
 
-.PHONY: paper supplement combined theory figures canonical-figures presentation-pdf refresh-regular-tree-source test reproducibility software-release format-audit citation-audit overlap-audit submission-bundle overleaf-bundle audit clean clean-aux
+.PHONY: paper supplement combined figures canonical-figures presentation-pdf refresh-regular-tree-source test reproducibility software-release format-audit citation-audit overlap-audit submission-bundle overleaf-bundle audit clean clean-aux
 
-paper: canonical-figures
+paper:
 	$(PDFLATEX) -interaction=nonstopmode -halt-on-error main.tex
 	$(BIBTEX) main
 	$(PDFLATEX) -interaction=nonstopmode -halt-on-error main.tex
 	$(PDFLATEX) -interaction=nonstopmode -halt-on-error main.tex
 
-supplement: canonical-figures
+supplement:
 	cd supplementary && $(PDFLATEX) -interaction=nonstopmode -halt-on-error supplementary.tex
 	cd supplementary && $(BIBTEX) supplementary
 	cd supplementary && $(PDFLATEX) -interaction=nonstopmode -halt-on-error supplementary.tex
@@ -19,12 +19,6 @@ supplement: canonical-figures
 
 combined: paper supplement
 	$(PDFUNITE) main.pdf supplementary/supplementary.pdf main_with_supplementary.pdf
-
-theory:
-	cd theory-paper && $(PDFLATEX) -interaction=nonstopmode -halt-on-error main.tex
-	cd theory-paper && $(BIBTEX) main
-	cd theory-paper && $(PDFLATEX) -interaction=nonstopmode -halt-on-error main.tex
-	cd theory-paper && $(PDFLATEX) -interaction=nonstopmode -halt-on-error main.tex
 
 presentation-pdf:
 	$(PYTHON) ../../presentation/credit_assignment/build_pdf_presentation.py
@@ -36,6 +30,8 @@ figures:
 	$(PYTHON) scripts/analyze_spatial_topology_audit.py
 	$(PYTHON) scripts/analyze_prospective_learning_results.py --audit-csv source_data/prospective_learning/seed_outcomes.csv
 	$(PYTHON) scripts/build_trained_subtree_address_figure.py
+	$(PYTHON) scripts/analyze_trained_partition_residual.py
+	$(PYTHON) scripts/build_trained_partition_residual_figure.py
 	$(PYTHON) scripts/build_focal_selectivity_figure.py
 	$(PYTHON) scripts/analyze_focal_gradient_shapley.py
 	$(PYTHON) scripts/run_alignment_controlled_learning.py
@@ -53,6 +49,9 @@ figures:
 	$(PYTHON) scripts/analyze_credit_phase_spectral_bound.py
 	$(PYTHON) scripts/analyze_positive_conductance_reliability.py
 	$(PYTHON) scripts/build_positive_conductance_reliability_figure.py
+	$(PYTHON) scripts/build_adaptive_conductance_reliability_figure.py
+	$(PYTHON) scripts/analyze_irregular_tree_wavelets.py
+	$(PYTHON) scripts/build_irregular_tree_wavelet_figure.py
 	$(PYTHON) scripts/analyze_same_span_coefficient_learning.py
 	$(PYTHON) scripts/build_same_span_coefficient_figure.py
 	PYTHONPATH=../../..:scripts $(PYTHON) scripts/diagnose_nonlinear_physical_depth.py
@@ -63,9 +62,11 @@ figures:
 	$(PYTHON) scripts/analyze_remaining_physical_experiments.py
 	$(PYTHON) scripts/analyze_fashion_feedback_ladder.py
 	$(PYTHON) scripts/sync_canonical_figures.py
+	$(PYTHON) scripts/assemble_compact_main_figures.py
 
 canonical-figures:
 	$(PYTHON) scripts/sync_canonical_figures.py
+	$(PYTHON) scripts/assemble_compact_main_figures.py
 
 refresh-regular-tree-source:
 	$(PYTHON) scripts/export_regular_tree_source_data.py
@@ -95,16 +96,15 @@ submission-bundle: combined
 overleaf-bundle: combined
 	$(PYTHON) scripts/build_overleaf_bundle.py --force
 
-audit: paper supplement theory test reproducibility format-audit citation-audit overlap-audit
+audit: paper supplement test reproducibility format-audit citation-audit overlap-audit
 	$(PYTHON) scripts/audit_figure_style_lineage.py
 	$(PYTHON) scripts/audit_submission.py --strict-pending
+	$(PYTHON) scripts/audit_submission.py --strict-pending --manuscript supplementary/supplementary.tex
 
 clean-aux:
 	rm -f main.aux main.blg main.log main.out main.toc
 	rm -f supplementary/supplementary.aux supplementary/supplementary.blg supplementary/supplementary.log supplementary/supplementary.out supplementary/supplementary.toc
-	rm -f theory-paper/main.aux theory-paper/main.blg theory-paper/main.log theory-paper/main.out theory-paper/main.toc
 
 clean: clean-aux
 	rm -f main.bbl main.pdf main_with_supplementary.pdf
 	rm -f supplementary/supplementary.bbl supplementary/supplementary.pdf
-	rm -f theory-paper/main.bbl theory-paper/main.pdf
