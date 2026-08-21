@@ -9,10 +9,14 @@ Edit `journal/supplementary/supplementary.tex` for Supplementary Information.
 The canonical reading copy is `journal/main_with_supplementary.pdf`, which
 concatenates the Article and Supplementary Information.
 
-Upload only `journal/submission/Overleaf_Project.zip` to Overleaf. It is built
-from an explicit allow-list and contains only the TeX/BibTeX sources and figure
-PDFs needed to compile the current paper. Source Data and software are separate
-submission archives.
+The connected Overleaf project pulls GitHub `main` and compiles root
+`main.tex`, a two-line proxy that inputs canonical `journal/main.tex`. The repository retains the journal,
+NeurIPS and presentation directory structure, but excludes bulky result tables
+and generated reading-copy PDFs. `journal/submission/Overleaf_Project.zip` is
+an explicit-allow-list fallback containing only the TeX/BibTeX sources and
+figure PDFs required to compile the current article. Source Data and software
+remain separate submission artifacts; the complete pre-prune tracked snapshot
+is preserved in `archive/pre-overleaf-prune-20260820`.
 
 ## Archived conference snapshot
 

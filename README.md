@@ -3,8 +3,12 @@
 ## Canonical manuscript map
 
 - **Canonical scientific source:** `journal/main.tex`
-- **Canonical complete reading copy:** `journal/main_with_supplementary.pdf`
-- **Canonical Overleaf upload:** `journal/submission/Overleaf_Project.zip`
+- **Canonical complete reading copy:** build `journal/main_with_supplementary.pdf`
+  locally with `make combined` (generated PDFs are not tracked).
+- **Canonical Overleaf source:** GitHub `main`, with the root `main.tex` proxy
+  selected as the main document; it inputs `journal/main.tex` without moving
+  the scientific source. `journal/submission/Overleaf_Project.zip` remains a
+  minimal fallback package.
 - **Archived NeurIPS snapshot:** `neurips/local_credit_assignment_body.tex`, with
   `local_credit_assignment.tex` and `local_credit_assignment_arxiv.tex` as
   wrappers.
@@ -27,7 +31,11 @@ for provenance:
 Work only from `journal/`. Conference-era results used by the article are
 integrated into the journal narrative and regenerated in the journal figure
 system where possible. Frozen source tables, generator snapshots and hashes
-remain available solely to audit provenance.
+remain available solely to audit provenance. To keep GitHub-to-Overleaf
+synchronization reliable, bulky result tables and generated reading-copy PDFs
+are excluded from the active branch. The complete pre-prune evidence tree is
+preserved in `archive/pre-overleaf-prune-20260820`; the active branch retains
+the provenance manifest, analysis code, configurations and final figure PDFs.
 
 The repository originated with the NeurIPS project. The journal directory is
 now the single scientific authority. The earlier independent

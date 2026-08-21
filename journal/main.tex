@@ -12,7 +12,13 @@
 \usepackage{lineno}
 \usepackage[hidelinks,hypertexnames=false]{hyperref}
 
-\graphicspath{{figures/}}
+\ifdefined\DendriticLocalLearningRepoRoot
+  \graphicspath{{journal/figures/}}
+  \newcommand{\journalbibliography}{journal/references}
+\else
+  \graphicspath{{figures/}}
+  \newcommand{\journalbibliography}{references}
+\fi
 \raggedbottom
 \setlength{\textfloatsep}{10pt plus 2pt minus 2pt}
 \setlength{\floatsep}{8pt plus 2pt minus 2pt}
@@ -3264,7 +3270,7 @@ versioned archival DOI; no public identifier is asserted before that record is
 created.
 
 \bibliographystyle{unsrtnat}
-\bibliography{references}
+\bibliography{\journalbibliography}
 
 \section*{Acknowledgements}
 

@@ -31,8 +31,9 @@
 *.ps
 analysis/
 data/
-!figures/data/
-!figures/data/*.csv
+# Frozen numerical figure inputs are preserved on the pre-prune archive branch
+# and locally, but are not synchronized to Overleaf from active main.
+figures/data/
 # Build directories
 build/
 output/
@@ -77,8 +78,8 @@ archive/
 *.nav(busy)
 *.snm(busy)
 
-# Generated analysis artifacts — ignore all PDFs/PNGs/intermediates,
-# but keep the small CSVs that figure scripts read directly.
+# Generated analysis artifacts — ignore PDFs/PNGs/intermediates and result
+# tables. Publication-facing vector PDFs remain tracked under figures/.
 analysis/**/*.pdf
 analysis/**/*.png
 analysis/**/*.json

@@ -19,6 +19,28 @@ journal/figures/supplementary/*.png
 journal/submission/*.zip
 journal/submission/*.zip.sha256
 
+# The active branch is also synchronized to Overleaf.  Keep analysis-ready
+# result tables and generated reading copies local: canonical TeX sources and
+# publication figure PDFs are tracked, while the complete frozen evidence
+# snapshot remains recoverable from archive/pre-overleaf-prune-20260820.
+journal/source_data/*
+!journal/source_data/README.md
+!journal/source_data/provenance_manifest.tsv
+journal/main.pdf
+journal/main_with_supplementary.pdf
+journal/supplementary/supplementary.pdf
+/main.pdf
+neurips/figures/data/
+neurips/figures/*.png
+neurips/local_credit_assignment.pdf
+neurips/local_credit_assignment_arxiv.pdf
+
+# Generated presentation outputs and superseded decks stay local.  The active
+# TeX sources and the vector PDF assets they embed remain tracked.
+presentations/credit_tree_lib_test.pdf
+presentations/dendritic_credit_workshop.pdf
+presentations/legacy_decks/
+
 # Talks are maintained in drafts/presentation/credit_assignment, outside this
 # manuscript repository. Ignore any local duplicate used while testing assets.
 /presentation/

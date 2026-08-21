@@ -1,5 +1,12 @@
 # Source-data provenance
 
+The active GitHub branch tracks this inventory and its provenance manifest but
+does not track the bulky result tables, because the repository is synchronized
+directly to Overleaf. Existing local tables remain in place as ignored files.
+The complete tracked snapshot is permanently recoverable from
+`archive/pre-overleaf-prune-20260820`; release and submission archives should
+be built from that evidence snapshot rather than from Overleaf.
+
 `provenance_manifest.tsv` is the machine-readable map from each registered
 main or supplementary figure panel to its frozen source data, generating
 analysis, and replication unit.

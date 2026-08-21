@@ -1,5 +1,10 @@
 # Overleaf build instructions
 
+When Overleaf is synchronized to the complete GitHub repository, select the
+root-level `main.tex`; it inputs this directory's canonical `main.tex` while
+preserving the visible `journal/`, `neurips/`, and `presentations/` structure.
+The instructions below describe the smaller standalone ZIP fallback.
+
 The canonical standalone Article source is `main.tex`. Use pdfLaTeX and
 `references.bib`. Supplementary Information is in
 `supplementary/supplementary.tex`; `main_with_supplementary.pdf` is the complete
