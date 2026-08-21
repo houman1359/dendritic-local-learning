@@ -5,6 +5,8 @@ The manuscript has one unambiguous publication-facing figure set.
 - `main/figure_01.pdf` through `main/figure_09.pdf` are the only assets compiled
   as main Figures 1--9. Each number has one PDF and one continuous panel
   sequence.
+- `main/figure_01.svg` is the editable, live-text vector master for the
+  conceptual framework. The PDF remains the compiled manuscript asset.
 - `supplementary/figure_S01_*.pdf` through
   `supplementary/figure_S27_*.pdf` are the Supplementary Figures.
 - `generated/` contains reproducible internal outputs whose descriptive names
@@ -12,6 +14,8 @@ The manuscript has one unambiguous publication-facing figure set.
 - Older modular blocks in `main/` are compositor inputs retained for provenance;
   neither LaTeX nor the Overleaf bundle compiles them directly.
 - `components/` and `archive_superseded/` contain source or superseded assets.
+- `schematics/` contains reusable editable SVG exports of the five Figure 1
+  concepts for talks, posters and manual refinement in Illustrator.
 
 Run `make canonical-figures` after regenerating plots. It first synchronizes
 vector source blocks and then assembles the nine final PDFs. Raster previews

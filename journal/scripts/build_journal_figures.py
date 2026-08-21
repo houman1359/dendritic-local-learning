@@ -30,6 +30,13 @@ from figure1_neurips_components import panel_b as neurips_panel_b
 from inherited_neurips.generate_theory_diagnostics_figures import (
     _plot_path_gain_map as neurips_path_gain_panel,
 )
+from figure1_vector_schematics import (
+    draw_credit_assignment_gap,
+    draw_evidence_path,
+    draw_eligibility_transport,
+    draw_information_ladder,
+    draw_point_vs_dendrite,
+)
 from journal_style import (
     COLORS,
     DIV_CMAP,
@@ -104,7 +111,7 @@ def mean_ci(values: np.ndarray, seed: int = 0, n_boot: int = 20_000) -> tuple[fl
     return float(values.mean()), float(lo), float(hi)
 
 
-def save(fig: plt.Figure, stem: str) -> None:
+def save(fig: plt.Figure, stem: str, *, editable_svg: bool = False) -> None:
     FIGURES.mkdir(parents=True, exist_ok=True)
     fig.canvas.draw()
     layout = audit_layout(fig, stem)
@@ -115,6 +122,12 @@ def save(fig: plt.Figure, stem: str) -> None:
         FIGURES / f"{stem}.pdf",
         metadata={"CreationDate": None, "ModDate": None},
     )
+    if editable_svg:
+        with mpl.rc_context({"svg.fonttype": "none"}):
+            fig.savefig(
+                FIGURES / f"{stem}.svg",
+                metadata={"Date": None},
+            )
     fig.savefig(FIGURES / f"{stem}.png", dpi=600)
     plt.close(fig)
 
@@ -501,10 +514,10 @@ def _tidy_panel_b_pools(ax: plt.Axes) -> None:
 
 
 def figure1() -> None:
-    # A and B preserve the polished NeurIPS model language. C--E add the
-    # journal-specific hierarchy, unifying theorem, and evidential scope.
-    # The left margin clears the fixed -30 pt panel-letter gutter so the
-    # A and D letters cannot clip at the canvas edge.
+    # All five panels share one editable vector vocabulary.  The first row
+    # narrows the credit-assignment problem from parameter ambiguity to the
+    # coordinate/address/gain hierarchy; the second row states the exact
+    # factorization and the neutral evidence path used to map its boundary.
     fig = plt.figure(figsize=(FIG_W, 5.10))
     grid = fig.add_gridspec(
         2, 6, height_ratios=[1.02, 0.98], hspace=0.20, wspace=0.20,
@@ -515,21 +528,13 @@ def figure1() -> None:
     ax_c = fig.add_subplot(grid[0, 4:6])
     ax_d = fig.add_subplot(grid[1, 0:3])
     ax_e = fig.add_subplot(grid[1, 3:6])
-    neurips_panel_a(ax_a)
-    neurips_panel_b(ax_b)
-    _restyle_inherited_panel(ax_a, "A", "Dendritic E/I unit")
-    _restyle_inherited_panel(ax_b, "B", "Network layer")
-    _restyle_neuron_schematic(ax_a)
-    _restyle_neuron_schematic(ax_b)
-    _tidy_panel_a_output(ax_a)
-    _tidy_panel_b_pools(ax_b)
-    _snap_schematic_type(ax_a)
-    _snap_schematic_type(ax_b)
-    _panel_credit_hierarchy(ax_c)
-    _panel_general_adjoint(ax_d)
-    _panel_evidence_ladder(ax_e)
+    draw_credit_assignment_gap(ax_a)
+    draw_point_vs_dendrite(ax_b)
+    draw_information_ladder(ax_c)
+    draw_eligibility_transport(ax_d)
+    draw_evidence_path(ax_e)
 
-    save(fig, "fig1_framework")
+    save(fig, "fig1_framework", editable_svg=True)
 
 
 # -------------------------------------------------------------------------

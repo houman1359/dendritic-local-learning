@@ -24,6 +24,7 @@ presentation-pdf:
 	$(PYTHON) ../presentations/legacy_decks/build_pdf_presentation.py
 
 figures:
+	$(PYTHON) scripts/figure1_vector_schematics.py
 	$(PYTHON) scripts/analyze_prospective_followup_results.py
 	$(PYTHON) scripts/analyze_bandwidth_matched_routing.py
 	$(PYTHON) scripts/build_prospective_input_validity_audit.py
