@@ -48,3 +48,11 @@ presentations/legacy_decks/
 # Public connectomics downloads are cached locally; immutable checksums,
 # selected cohorts, and analysis-ready derivatives live under source_data/.
 journal/data/
+
+# Experiment configurations are local execution inputs and are not needed to
+# compile the Overleaf manuscript. A tracked snapshot remains on
+# archive/pre-overleaf-prune-20260820.
+journal/configs/**/*.yaml
+journal/configs/**/*.yml
+neurips/configs/**/*.yaml
+neurips/configs/**/*.yml
