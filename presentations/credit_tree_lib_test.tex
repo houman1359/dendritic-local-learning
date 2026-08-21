@@ -1,0 +1,214 @@
+% ---------------------------------------------------------------------------
+% credit_tree_lib_test.tex — regression page for the credit-tree library.
+% Mirrors the workshop preamble (fonts, palette, tikz libraries), then
+% renders every \CreditTree mode, \DerangedPair, \TreeStrip combinations,
+% and the layout macros. Build:
+%   pdflatex -interaction=nonstopmode credit_tree_lib_test.tex
+% Inspect at 150 dpi; delete aux files afterwards.
+% ---------------------------------------------------------------------------
+\documentclass[aspectratio=169,10pt]{beamer}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{tgheros}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{amsmath,amssymb,bm,mathtools,booktabs,array,etoolbox}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,calc,positioning,shapes.geometric,decorations.pathreplacing,fit,backgrounds}
+\pdfstringdefDisableCommands{\def\translate#1{#1}}
+\hypersetup{pdftitle={Credit-tree library regression page}}
+
+\definecolor{Ink}{HTML}{232323}
+\definecolor{Mute}{HTML}{69707A}
+\definecolor{Grid}{HTML}{E3E7EC}
+\definecolor{Paper}{HTML}{F7F8FA}
+\definecolor{Shunt}{HTML}{3FA26C}
+\definecolor{ShuntPale}{HTML}{E5F2EB}
+\definecolor{Add}{HTML}{20509E}
+\definecolor{AddPale}{HTML}{E8EFF9}
+\definecolor{BP}{HTML}{932F1E}
+\definecolor{Amber}{HTML}{E2A23F}
+\definecolor{Violet}{HTML}{8F66CD}
+\definecolor{Rose}{HTML}{E28FBC}
+\definecolor{Soma}{HTML}{E8873C}
+\definecolor{Dend}{HTML}{3E8E63}
+\definecolor{Exc}{HTML}{2C6CB0}
+\definecolor{Inh}{HTML}{B13138}
+
+\setbeamercolor{normal text}{fg=Ink,bg=white}
+\setbeamercolor{frametitle}{fg=Ink,bg=white}
+\setbeamercolor{structure}{fg=Shunt}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{headline}{}
+\setbeamertemplate{footline}{}
+\setbeamersize{text margin left=0.7cm,text margin right=0.7cm}
+\setbeamertemplate{frametitle}{%
+  \vspace{0.4cm}%
+  {\fontsize{12}{14}\selectfont\bfseries\color{Ink}\insertframetitle\par}%
+  \vspace{0.10cm}{\color{Grid}\rule{\textwidth}{0.35pt}\par}\vspace{0.10cm}}
+
+\input{credit_tree_lib.tex}
+\input{eq_style.tex}
+
+% math shorthands mirrored from the workshop master (for the hero-equation
+% demonstration frames)
+\newcommand{\E}{\mathbb E}
+\DeclareMathOperator{\tr}{tr}
+
+\begin{document}
+
+% 1 — forward, at ~30% slide width (scale 1) and small (0.62)
+\begin{frame}{mode=forward: scale 1.0 vs 0.62}
+  \centering
+  \CreditTree[mode=forward,scale=1.0,stagelabel={forward biophysics}]%
+  \hspace{1.4cm}%
+  \CreditTree[mode=forward,scale=0.62,stagelabel={small}]%
+\end{frame}
+
+% 1b — plain (hook variant: no notation)
+\begin{frame}{mode=plain: hook variant, synapse dots, no labels}
+  \centering
+  \CreditTree[mode=plain,scale=1.0,stagelabel={one output error arrives at the soma}]%
+  \hspace{1.4cm}%
+  \CreditTree[mode=plain,scale=0.62]%
+\end{frame}
+
+% 2 — eligibility
+\begin{frame}{mode=eligibility: zoom bubble with three local factors}
+  \centering
+  \CreditTree[mode=eligibility,scale=1.05,stagelabel={eligibility $e_i$}]%
+\end{frame}
+
+% 3 — transport
+\begin{frame}{mode=transport: soma error along one root-to-leaf path}
+  \centering
+  \CreditTree[mode=transport,scale=1.05,stagelabel={adjoint transport}]%
+  \hspace{1.4cm}%
+  \CreditTree[mode=transport,scale=0.62]%
+\end{frame}
+
+% 4 — scalar + coordinate
+\begin{frame}{mode=scalar and mode=coordinate}
+  \centering
+  \CreditTree[mode=scalar,scale=0.95,stagelabel={global scalar}]%
+  \hspace{1.6cm}%
+  \CreditTree[mode=coordinate,scale=0.95,stagelabel={neuron coordinate}]%
+\end{frame}
+
+% 5 — address K = 2 / 4 / 8
+\begin{frame}{mode=address: K = 2, 4, 8}
+  \centering
+  \CreditTree[mode=address,K=2,scale=0.68,stagelabel={$K=2$}]%
+  \hspace{0.55cm}%
+  \CreditTree[mode=address,K=4,scale=0.68,stagelabel={$K=4$}]%
+  \hspace{0.55cm}%
+  \CreditTree[mode=address,K=8,scale=0.68,stagelabel={$K=8$}]%
+\end{frame}
+
+% 6 — gain
+\begin{frame}{mode=gain: widths proportional to route gains}
+  \centering
+  \CreditTree[mode=gain,scale=1.05,stagelabel={route gain}]%
+\end{frame}
+
+% 7 — shunt false / true
+\begin{frame}{mode=shunt: shunted=false vs shunted=true}
+  \centering
+  \CreditTree[mode=shunt,shunted=false,scale=0.95,stagelabel={$g_{\mathrm{shunt}}$ off}]%
+  \hspace{1.6cm}%
+  \CreditTree[mode=shunt,shunted=true,scale=0.95,stagelabel={$g_{\mathrm{shunt}}$ on}]%
+\end{frame}
+
+% 8 — deranged pair
+\begin{frame}{DerangedPair: correct vs crossed coordinates}
+  \centering
+  \DerangedPair[1.05]%
+\end{frame}
+
+% 9 — TreeStrip, 4 stages (the ladder)
+\begin{frame}{TreeStrip: scalar to coordinate to address to gain}
+  \centering
+  \TreeStrip{\CreditTree[mode=scalar,scale=0.55,stagelabel={scalar}]}%
+            {\CreditTree[mode=coordinate,scale=0.55,stagelabel={coordinate}]}%
+            {\CreditTree[mode=address,K=4,scale=0.55,stagelabel={address}]}%
+            {\CreditTree[mode=gain,scale=0.55,stagelabel={gain}]}\par
+\end{frame}
+
+% 10 — TreeStrip, 2 stages
+\begin{frame}{TreeStrip: shunt off to shunt on}
+  \centering
+  \TreeStrip{\CreditTree[mode=shunt,shunted=false,scale=0.72,stagelabel={baseline}]}%
+            {\CreditTree[mode=shunt,shunted=true,scale=0.72,stagelabel={focal inhibition}]}\par
+\end{frame}
+
+% 11 — TreeStrip, 3 stages (forward -> eligibility -> transport)
+\begin{frame}{TreeStrip: forward to eligibility to transport}
+  \centering
+  \TreeStrip{\CreditTree[mode=forward,scale=0.58]}%
+            {\CreditTree[mode=eligibility,scale=0.58]}%
+            {\CreditTree[mode=transport,scale=0.58]}\par
+\end{frame}
+
+% 12 — eqpanel + deftag + triptych
+\begin{frame}{eqpanel, deftag, triptych}
+  \deftag{definition}\ \footnotesize eligibility is the purely local factor.\par
+  \eqpanel[definition]{%
+    $\displaystyle e_i = x_i\,R_n^{\mathrm{tot}}\,(E_i - V_n)$
+    \quad and \quad
+    $\displaystyle \frac{\partial\mathcal L}{\partial g_i}
+      = e_i\,\delta_{0,u}\,\widetilde{\alpha}_{n(i)}$}
+  \triptych{%
+    \centering\CreditTree[mode=shunt,shunted=true,scale=0.52,stagelabel={perturb}]\par}{%
+    \eqpanel[theorem]{$\widetilde{\alpha}' = \widetilde{\alpha}\,
+      \dfrac{R'}{R}$}}{%
+    \footnotesize\raggedright The perturbed subtree's credit shrinks by the
+    Sherman--Morrison factor; sibling routes are untouched. This column is
+    the widest (0.36) and holds the experimental readout.\par}
+\end{frame}
+
+% 13 — heroeq: the factorization (starred = \Large), ADJACENT terms
+\begin{frame}{heroeq: factorization with adjacent term annotations}
+  \heroeq*[theorem]{%
+    \frac{\partial\mathcal L}{\partial g_i}
+    \;=\;
+    \term[Shunt]{e_i\vphantom{\delta_n}}{local eligibility}\,
+    \term[Add]{\delta_n}{transported error}
+    \qquad
+    \delta_n=\delta_{0,u}\,\widetilde{\alpha}_n}
+  \vfill
+  {\footnotesize\color{Mute}Adjacent-term collision test: the two braces and
+   their labels must stay clear of each other, baselines aligned.\par}
+\end{frame}
+
+% 14 — heroeq: the descent bound U(M) with three semantic terms
+\begin{frame}{heroeq: descent bound, three-term anatomy}
+  \heroeq[bound]{%
+    \E\,\mathcal L(\bm w^{+})
+    \;\le\;
+    \mathcal L(\bm w)
+    \;-\;\eta\,\term[Shunt]{\bm g^{\mathsf T}\!M\bm g}{retained signal}
+    \;+\;\frac{L\eta^{2}}{2}
+      \Bigl(\term[Amber]{\lVert M\bm g\rVert_2^{2}}{curvature bias}
+      \;+\;\term[BP]{\tr(M\Sigma M^{\mathsf T})}{admitted noise}\Bigr)}
+  \vfill
+  {\footnotesize\color{Mute}Eyebrow tag, Shunt left rule only (no box),
+   colors per semantics: green retained, amber bias, BP-red noise.\par}
+\end{frame}
+
+% 15 — heroeq: optimal route gain, terms at top display level
+\begin{frame}{heroeq: optimal attenuation, untagged variant}
+  \heroeq{%
+    a_b^{*}
+    \;=\;
+    \min\Bigl\{\,1,\;
+    \term[Shunt]{S_b\vphantom{(S_b+N_b)}}{branch signal}
+    \Big/
+    \term[BP]{c\,(S_b+N_b)}{dose $\times$ (signal $+$ noise)}
+    \,\Bigr\}}
+  \vfill
+  {\footnotesize\color{Mute}Untagged \texttt{\string\heroeq} at \texttt{\string\large};
+   slash division keeps both annotated terms at top display level.\par}
+\end{frame}
+
+\end{document}

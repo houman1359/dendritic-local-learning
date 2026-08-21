@@ -594,9 +594,13 @@ def line_panel(
     style_axis(ax, grid="y")
     if legend:
         if legend_loc == "below":
+            # Compact two-column key that stays inside this panel's grid
+            # cell: a wider key crossed the cell boundary and was sliced
+            # when the block is recomposed into S18.
             clean_legend(
                 ax, loc="upper center", bbox_to_anchor=(0.50, -0.26),
-                fontsize=PT_SMALL, ncol=2, handlelength=2.0,
+                fontsize=PT_SMALL - 0.4, ncol=2, handlelength=1.1,
+                columnspacing=0.7, handletextpad=0.4,
             )
         else:
             clean_legend(ax, loc=legend_loc, fontsize=PT_LEGEND,
@@ -666,7 +670,8 @@ def make_figure(summary: pd.DataFrame, contrast: pd.DataFrame) -> None:
     line_panel(
         axes[1], summary, hierarchy=3, regime="rewired_tree",
         letter="Q", title="H=3 reversed placement",
-        legend=False, key_note="key as in P", ylabel=False,
+        # S18 lettering: source panel P is published as S18 F.
+        legend=False, key_note="key as in F", ylabel=False,
     )
     forest(
         axes[2], contrast,
@@ -687,7 +692,8 @@ def make_figure(summary: pd.DataFrame, contrast: pd.DataFrame) -> None:
     line_panel(
         axes[4], summary, hierarchy=2, regime="rewired_tree",
         letter="T", title="H=2 reversed placement",
-        legend=False, key_note="key as in S", ylabel=False,
+        # S18 lettering: source panel S is published as S18 I.
+        legend=False, key_note="key as in I", ylabel=False,
     )
     forest(
         axes[5], contrast,

@@ -17,6 +17,7 @@ from journal_style import (
     LW_REF,
     PT_ANNOT,
     PT_LEGEND,
+    PT_SMALL,
     SEED_ALPHA,
     SEED_MS,
     apply_neurips_style,
@@ -183,7 +184,11 @@ def main() -> None:
                       ms=4.0, color=color, markeredgecolor="white",
                       markeredgewidth=0.45, elinewidth=0.8, capsize=2.0, zorder=3)
     ax_d.axhline(0, color=COLORS["mute"], lw=LW_REF, ls="--")
-    ax_d.set_xticks(positions, [item[1] for item in controls], rotation=22, ha="right")
+    # Horizontal category labels (style contract: no rotated ticks); the two
+    # two-word names wrap instead of rotating.
+    horizontal = ["global", "shuffled", "no\nshunt", "oracle", "point\ngate"]
+    ax_d.set_xticks(positions, horizontal)
+    ax_d.tick_params(axis="x", labelsize=PT_SMALL - 0.8, pad=1.5)
     ax_d.set_ylabel("control loss $-$ adaptive-local loss")
     panel_title(ax_d, "D", "Final-loss boundary at high heterogeneity")
     style_axis(ax_d, grid="y")

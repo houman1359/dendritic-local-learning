@@ -801,6 +801,10 @@ def _line_panel(
     ax.set_ylabel("test accuracy")
     ax.set_xticks([1, 2, 3, 4])
     ax.set_xlim(0.7, 4.3)
+    # Headroom so the topmost mean marker and its error-bar cap clear the
+    # axes edge instead of being clipped against the top spine.
+    low, high = ax.get_ylim()
+    ax.set_ylim(low, high + 0.05 * (high - low))
     style_axis(ax, grid="y")
     if legend:
         clean_legend(ax, loc="best", fontsize=PT_LEGEND, handlelength=2.0)
@@ -829,12 +833,12 @@ def _forest(ax: plt.Axes, contrasts: pd.DataFrame) -> None:
     ]
     labels = [
         "serial BP\nD4$-$D3",
-        "depth $\times$\nplacement",
+        "depth ×\nplacement",
         "serial$-$point\nat D4",
-        "architecture $\times$\nplacement",
+        "architecture ×\nplacement",
         "shared local\nD4$-$D3",
         "path LocalCA\nD4$-$D3",
-        "shunting $\times$\ndepth",
+        "shunting ×\ndepth",
     ]
     colors = [
         COLORS["shunting"],
@@ -865,6 +869,7 @@ def _forest(ax: plt.Axes, contrasts: pd.DataFrame) -> None:
         )
     panel_title(ax, "C", "Frozen primary contrasts")
     ax.set_yticks(y, labels)
+    ax.set_ylim(-0.6, len(names) - 0.4)
     ax.set_xlabel("paired difference (pp)")
     style_axis(ax, grid="x")
 

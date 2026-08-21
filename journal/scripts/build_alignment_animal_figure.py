@@ -314,8 +314,10 @@ def mode_energy(ax: plt.Axes, summary: dict) -> None:
     fractions = [mode["common_energy_fraction"], mode["signed_energy_fraction"]]
     ci_lo, ci_hi = mode["animal_bootstrap_95_ci"]
     intervals = [(1.0 - ci_hi, 1.0 - ci_lo), (ci_lo, ci_hi)]
+    # The signed bar is a descriptive energy fraction, not a backprop series:
+    # keep the reserved BP red out of it (CVD colour grammar).
     ax.bar([0, 1], fractions,
-           color=[STYLE_COLORS["point_mlp"], STYLE_COLORS["bp"]],
+           color=[STYLE_COLORS["point_mlp"], STYLE_COLORS["dend"]],
            edgecolor=STYLE_COLORS["edge"], linewidth=LW_EDGE, width=0.64)
     yerr = np.array([[value - lo for value, (lo, _) in zip(fractions, intervals)],
                      [hi - value for value, (_, hi) in zip(fractions, intervals)]])

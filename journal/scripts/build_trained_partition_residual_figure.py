@@ -95,6 +95,20 @@ def main() -> None:
     panel_title(ax_a, "A", "Irreducible address residual")
     style_axis(ax_a, grid="y")
     clean_legend(ax_a, fontsize=PT_LEGEND - 1.0, loc="upper left")
+    # Honest coincidence note (the convention used figure-wide): the ancestry,
+    # depth-bin and random-sparse curves overlap almost exactly, so the green
+    # series is otherwise invisible beneath its two controls.
+    ax_a.text(
+        0.97,
+        0.06,
+        "ancestry, depth and random\ncurves coincide",
+        transform=ax_a.transAxes,
+        ha="right",
+        va="bottom",
+        fontsize=PT_LEGEND - 1.0,
+        style="italic",
+        color=COLORS["mute"],
+    )
 
     trained = outcomes[
         outcomes.state.eq("trained")
@@ -138,7 +152,7 @@ def main() -> None:
             zorder=3,
         )
     ax_b.set_xlabel("trained address capture")
-    ax_b.set_ylabel(r"held-out accuracy (\%)")
+    ax_b.set_ylabel("held-out accuracy (%)")
     panel_title(ax_b, "B", "Capture tracks trained utility")
     style_axis(ax_b, grid="both")
     clean_legend(

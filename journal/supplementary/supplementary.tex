@@ -24,7 +24,6 @@
 \newcommand{\E}{\mathbb{E}}
 \newcommand{\Var}{\operatorname{Var}}
 \newcommand{\Cov}{\operatorname{Cov}}
-\newcommand{\LocalCA}{\textsc{LocalCA}}
 \newcommand{\Rtot}{R^{\mathrm{tot}}}
 
 \title{Supplementary Information for\\
@@ -3236,7 +3235,9 @@ alignment $\alpha$. Intermediate levels were specified after the endpoints and
 are an interpolation, not an independent replication. \textbf{F--H}, H3 serial
 tree, literal grouped-point and grouped-star controls under aligned and
 reversed placement. \textbf{I--K}, Independent H2 hierarchy with serial BP,
-grouped-point BP and shared- or path-transport LocalCA. Lines are paired-seed
+literal grouped-point BP and shared- or path-transport LocalCA: \textbf{I}
+shows aligned placement, \textbf{J} shows the reversed-placement control for
+all four rules, and \textbf{K} shows the paired contrasts. Lines are paired-seed
 means and intervals are 95\% seed-bootstrap intervals ($n=10$). The two
 hierarchies belong to one calibrated synthetic task family.}
 \label{fig:supp_physical_depth_controls}
@@ -3273,7 +3274,7 @@ restricting the analysis to directly typed presynaptic inputs. \textbf{I,J},
 Independent reciprocal-cable field capture and its matched topology controls.
 Points are reconstructed-cell summaries; intervals are 95\% cell-bootstrap
 intervals. This figure preserves the complete diagnostic display underlying
-the focused main Figure~6.}
+the focused main Figure~7.}
 \label{fig:supp_morphology_detail}
 \end{figure}
 
@@ -3318,7 +3319,8 @@ each available route after training. Curves and intervals are means and 95\%
 seed-bootstrap intervals over 20 independent seeds. Ownership derangement
 excludes the target leaf and has zero capture for $K>1$; three partitions that
 retain the target have similar capacity at matched $K$. \textbf{B}, Trained
-address capture versus held-out accuracy for the six restricted route families
+address capture---checkpoint capture of the exact per-example coefficient
+field, in the vocabulary of the main text---versus held-out accuracy for the six restricted route families
 at $K<8$. Small grey points are seed--condition means across the four
 implementation-equivalent representations; large symbols are condition means.
 \textbf{C}, Spearman correlations computed separately within each independent
@@ -3391,7 +3393,7 @@ volume; green cells pass and gray cells fail the frozen direct-type QC gate.
 Numbers give selection order. \textbf{B}, Weighted residual across feedback
 channel budgets for the dense PCA ceiling, ancestry routes and structural
 controls in the ten included cells; lower is better. \textbf{C}, Four-channel
-ancestry-route capture advantage in the original 47-cell \texttt{minnie65}
+ancestry-route capture advantage in the disjoint 47-cell \texttt{minnie65}
 cohort and the independent Pinky cohort. Positive values favor ancestry
 routes. \textbf{D}, Pinky four-channel capture per 1,000 nonzero route
 coefficients. Points are cells; large symbols and bars are means and 95\%
@@ -3413,8 +3415,13 @@ intervals resampled target cells. Artificial-network summaries used
 independently initialized training runs. Inhibitory-census outcomes were first
 averaged within postsynaptic target. Signed-credit intervals and exact sign
 tests used animals; neuron-level source rows were descriptive only.
-Bootstrap intervals used 20,000 draws. The four-budget primary subtree scan
-used Benjamini--Hochberg correction across $K=1,2,4,8$; other parameter
+Bootstrap intervals used 20,000 draws unless an experiment's protocol states
+otherwise; the Fashion-MNIST ladder, the physical-depth, H4 and task-family
+cohorts and the external animal reanalysis used 50,000 paired draws.
+Benjamini--Hochberg correction was applied within each frozen primary family
+that specified it---the four-budget subtree scan across $K=1,2,4,8$, the six
+bandwidth-matched routing contrasts and the frozen H4 primary family; other
+parameter
 sweeps and sensitivity analyses received no multiplicity correction, are
 labeled secondary, and are not interpreted as independent confirmation.
 For the cross-animal structural check, the mouse is the replication unit.

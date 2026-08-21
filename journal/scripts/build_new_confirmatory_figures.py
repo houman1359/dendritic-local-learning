@@ -481,7 +481,9 @@ def active_extension_figure() -> None:
         ax_c.scatter(np.full(len(diff), dose) * np.exp(np.linspace(-0.045, 0.045, len(diff))), diff, s=SEED_MS**2, color=COLORS["shunting"], alpha=SEED_ALPHA, edgecolors="none")
     ax_c.set_xscale("log"); ax_c.set_xticks([0.25, 1, 4], ["0.25", "1", "4"])
     ax_c.axhline(0, color=COLORS["mute"], ls="--", lw=LW_REF)
-    ax_c.set_xlabel("normalized shunt dose")
+    # Two lines: the one-line label overhangs this narrow cell and is
+    # truncated when the block is recomposed into Figure 8.
+    ax_c.set_xlabel("normalized\nshunt dose")
     ax_c.set_ylabel("shunt − additive localization")
     panel_title(ax_c, "L", "Cellwise contrast")
     style_axis(ax_c)

@@ -329,7 +329,11 @@ def make_figure(result: dict[str, Any], figure_stem: Path) -> None:
             label=method.replace("morphology-aware paths", "ancestry routes"),
         )
     ax.set_xscale("log", base=2)
-    ax.set_xticks([1, 2, 4, 8, 16])
+    # Ticks and limits follow the measured budgets (1-8 channels); a fixed
+    # tick at 16 left a dead right band beyond the last data point.
+    channel_values = sorted(int(v) for v in curves["channels"].unique())
+    ax.set_xticks(channel_values)
+    ax.set_xlim(channel_values[0] * 0.85, channel_values[-1] * 1.18)
     ax.get_xaxis().set_major_formatter(plt.ScalarFormatter())
     ax.set_ylim(0, 1.02)
     ax.set_xlabel("feedback channels")

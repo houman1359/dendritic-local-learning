@@ -33,6 +33,7 @@ from journal_style import (  # noqa: E402
     LW_HAIR,
     MARKER_MS,
     PT_LEGEND,
+    PT_SMALL,
     apply_neurips_style,
     audit_layout,
     audit_text_over_data,
@@ -727,10 +728,27 @@ def make_figure(summary: pd.DataFrame, paired: pd.DataFrame) -> None:
     style_axis(ax_a, grid="both")
 
     delta_pp = 100 * both.test_accuracy_difference.to_numpy(float)
-    ax_b.hist(delta_pp, bins=30, color=COLORS["shunting"], alpha=0.8)
+    # The concordance mass sits within a fraction of a point; a data-range
+    # histogram (driven by a handful of outlier pairs) mutes that message.
+    # Show ±5 pp and count the outliers honestly in-panel.
+    inside = delta_pp[np.abs(delta_pp) <= 5.0]
+    outliers = int((np.abs(delta_pp) > 5.0).sum())
+    ax_b.hist(inside, bins=np.linspace(-5.0, 5.0, 41), color=COLORS["shunting"], alpha=0.8)
     ax_b.axvline(0, color=COLORS["mute"], linewidth=LW_HAIR)
+    ax_b.set_xlim(-5.0, 5.0)
     ax_b.set_xlabel("clean minus historical (pp)")
-    ax_b.set_ylabel("seed--condition pairs")
+    ax_b.set_ylabel("seed–condition pairs")
+    if outliers:
+        ax_b.text(
+            0.965,
+            0.95,
+            f"{outliers}/{delta_pp.size} pairs\nbeyond ±5 pp",
+            transform=ax_b.transAxes,
+            ha="right",
+            va="top",
+            fontsize=PT_SMALL,
+            color=COLORS["mute"],
+        )
     panel_title(ax_b, "B", "Paired source sensitivity")
     style_axis(ax_b, grid="y")
 

@@ -1,0 +1,473 @@
+% ---------------------------------------------------------------------------
+% credit_tree_lib.tex — THE CREDIT-TREE SCHEMATIC LIBRARY.
+%
+% One parameterized dendritic tree, drawn with identical geometry on every
+% slide; only its DECORATION changes to show the quantity being defined or
+% manipulated. Load from the workshop preamble via \input{credit_tree_lib.tex}
+% (after the palette definitions and \usetikzlibrary lines).
+%
+% Public interface
+%   \CreditTree[mode=<m>, scale=<s>, stagelabel=<text>, K=<2|4|8>,
+%               shunted=<true|false>]
+%     modes: plain | forward | eligibility | transport | scalar | coordinate |
+%            address (uses K) | gain | shunt (uses shunted)
+%     plain is the notation-free hook variant: tree, soma, synapse dots and
+%     an unlabeled arriving-error arrow — no algebra labels.
+%   \DerangedPair[<scale>]        correct vs deranged coordinate assignment
+%   \TreeStrip{<stage1>}{<stage2>}...   2-4 stages, Mute arrows between
+%       (scans for further brace groups; end with \par/newline or \relax
+%        before any unrelated literal `{`)
+%   \eqpanel[<TAG>]{<equations>}  Paper card, hairline border, Mute eyebrow
+%   \triptych{<left>}{<middle>}{<right>}  0.30/0.30/0.36 top-aligned columns
+%   \deftag{<word>}               inline definition eyebrow
+%
+% All trees share the SAME coordinates so cross-slide changes read as the
+% same object. tikzpicture baseline is pinned at the soma center (0,0), so
+% side-by-side trees align on their somas regardless of decorations.
+% Node fonts do not scale with [scale=...]; keep scale in 0.5-1.4.
+% ---------------------------------------------------------------------------
+
+% ---- keys -----------------------------------------------------------------
+\pgfkeys{
+  /credittree/.is family, /credittree,
+  mode/.store in       = \ctmode,
+  scale/.store in      = \ctscale,
+  stagelabel/.store in = \ctstagelabel,
+  K/.store in          = \ctK,
+  shunted/.store in    = \ctshunted,
+  default keys/.style  = {mode=forward, scale=1, stagelabel={}, K=4,
+                          shunted=true},
+}
+
+% ---- shared styles ----------------------------------------------------------
+\tikzset{
+  ctjunction/.style={circle,draw=Dend,fill=white,line width=0.6pt,
+                     inner sep=0pt,minimum size=3.2pt},
+  ctsyn/.style={circle,inner sep=0pt,minimum size=3.6pt},
+  ctlab/.style={font=\scriptsize,inner sep=1pt},
+  cttiny/.style={font=\tiny,inner sep=1pt},
+  ctfield/.style={font=\scriptsize,inner sep=1pt},
+}
+
+% ---- fixed geometry (identical across ALL modes) ----------------------------
+\newcommand{\CTcoordinates}{%
+  \coordinate (S)   at ( 0.00,0.00);
+  \coordinate (J1)  at ( 0.06,0.85);
+  \coordinate (JL)  at (-0.92,1.52);
+  \coordinate (JR)  at ( 0.88,1.44);
+  \coordinate (JLL) at (-1.72,2.02);
+  \coordinate (JLR) at (-0.58,2.32);
+  \coordinate (JRL) at ( 0.56,2.28);
+  \coordinate (JRR) at ( 1.62,1.92);
+  \coordinate (T1)  at (-2.30,2.42);
+  \coordinate (T2)  at (-1.52,2.82);
+  \coordinate (T3)  at (-0.92,3.02);
+  \coordinate (T4)  at (-0.22,3.06);
+  \coordinate (T5)  at ( 0.28,3.04);
+  \coordinate (T6)  at ( 0.94,2.94);
+  \coordinate (T7)  at ( 1.54,2.72);
+  \coordinate (T8)  at ( 2.24,2.28);
+}
+
+% Stroke taper (pt at scale 1): trunk / level-2 / level-3 / terminal.
+% \ctlwf tempers line widths and capsule widths at small scales.
+\newcommand{\CTsetwidths}{%
+  \pgfmathsetmacro{\ctlwf}{min(1.15,max(0.62,\ctscale))}%
+  \pgfmathsetmacro{\cttmp}{1.60*\ctlwf}\edef\ctwA{\cttmp pt}%
+  \pgfmathsetmacro{\cttmp}{1.20*\ctlwf}\edef\ctwB{\cttmp pt}%
+  \pgfmathsetmacro{\cttmp}{0.90*\ctlwf}\edef\ctwC{\cttmp pt}%
+  \pgfmathsetmacro{\cttmp}{0.70*\ctlwf}\edef\ctwD{\cttmp pt}%
+}
+
+% Whole tapered tree in one style (color / opacity list in #1).
+\newcommand{\CTplaintree}[1]{%
+  \draw[#1,line width=\ctwA] (0,0.17) -- (J1);
+  \draw[#1,line width=\ctwB] (J1) -- (JL)  (J1) -- (JR);
+  \draw[#1,line width=\ctwC] (JL) -- (JLL) (JL) -- (JLR)
+                             (JR) -- (JRL) (JR) -- (JRR);
+  \draw[#1,line width=\ctwD] (JLL) -- (T1) (JLL) -- (T2)
+                             (JLR) -- (T3) (JLR) -- (T4)
+                             (JRL) -- (T5) (JRL) -- (T6)
+                             (JRR) -- (T7) (JRR) -- (T8);
+}
+
+\newcommand{\CTjunctions}[1]{%
+  \foreach \ctj in {J1,JL,JR,JLL,JLR,JRL,JRR}
+    \node[ctjunction,#1] at (\ctj) {};
+}
+
+% #1 = fill, #2 = draw
+\newcommand{\CTsoma}[2]{%
+  \filldraw[fill=#1,draw=#2,line width=0.6pt] (0,0) circle (0.185);
+}
+
+\newcommand{\CTstagelabel}{%
+  \ifdefempty{\ctstagelabel}{}{%
+    \node[anchor=north,font=\scriptsize,text=Mute] at (0,-0.30)
+      {\ctstagelabel};}%
+}
+
+% Route-field capsule: pale SOLID tints (translucent look, no PDF
+% transparency, so overlaps never double-darken).  #1 tint, #2 width factor,
+% #3 path.
+\newcommand{\CTcapsule}[3]{%
+  \pgfmathsetmacro{\cttmp}{#2*\ctlwf}%
+  \draw[#1,line width=\cttmp pt,line cap=round,line join=round] #3;
+}
+
+% ===========================================================================
+% \CreditTree
+% ===========================================================================
+\newcommand{\CreditTree}[1][]{%
+  \pgfkeys{/credittree, default keys, #1}%
+  \begin{tikzpicture}[scale=\ctscale,line cap=round,baseline={(0,0)}]
+    \CTsetwidths
+    \CTcoordinates
+    % ------------------------------------------------------------ plain ----
+    % Hook variant: the anatomy and its synapses, no notation. Used before
+    % any forward-model vocabulary is defined (deck slide 2).
+    \ifdefstring{\ctmode}{plain}{%
+      \CTplaintree{Dend}
+      \CTjunctions{}
+      \CTsoma{Soma}{Ink!30}
+      % synapse population: excitatory dots on the terminal segments
+      \foreach \cta/\ctb/\ctf in {JLL/T1/0.55,JLL/T2/0.62,JLR/T3/0.55,
+                                  JLR/T4/0.62,JRL/T5/0.55,JRL/T6/0.62,
+                                  JRR/T7/0.55,JRR/T8/0.58}
+        \node[ctsyn,fill=Exc] at ($(\cta)!\ctf!(\ctb)$) {};
+      % two inhibitory contacts near the trunk
+      \node[ctsyn,fill=Inh] at ($(J1)!0.55!(JL)$) {};
+      \node[ctsyn,fill=Inh] at ($(JR)!0.45!(JRL)$) {};
+      % one arriving output error, unlabeled
+      \draw[Add,-{Stealth[length=4.5pt]},line width=0.9pt]
+        (1.30,0.60) to[bend left=14] (0.27,0.09);
+    }{}%
+    % ---------------------------------------------------------- forward ----
+    \ifdefstring{\ctmode}{forward}{%
+      \CTplaintree{Dend}
+      \CTjunctions{}
+      \CTsoma{Soma}{Ink!30}
+      % two example synapses: one excitatory, one inhibitory
+      \node[ctsyn,fill=Exc] at ($(JRR)!0.55!(T7)$) {};
+      \node[cttiny,anchor=west,text=Exc!60!Ink] at ($(JRR)!0.55!(T7)+(0.12,0.05)$)
+        {$g_i,\,E_i$};
+      \node[ctsyn,fill=Inh] at ($(J1)!0.55!(JL)$) {};
+      \node[cttiny,anchor=east,text=Inh!70!Ink] at ($(J1)!0.55!(JL)+(-0.10,-0.08)$)
+        {$g_j,\,E_j$};
+      % compartment and soma potentials
+      \node[ctlab,anchor=west,text=Ink] at ($(JRR)+(0.20,-0.04)$) {$V_n$};
+      \node[ctlab,anchor=west,text=Ink] at (0.26,-0.16) {$V_0$};
+      % conductance-quotient anchor: where R_n^tot lives
+      \draw[Mute,line width=0.45pt,dash pattern=on 1.4pt off 1.3pt]
+        (JRR) -- ++(0.30,-0.62) coordinate (ctq);
+      \node[cttiny,anchor=north,text=Mute] at (ctq) {$R_n^{\mathrm{tot}}$};
+    }{}%
+    % ------------------------------------------------------- eligibility ----
+    \ifdefstring{\ctmode}{eligibility}{%
+      \CTplaintree{Mute!32}
+      % host branch stays alive
+      \draw[Dend,line width=\ctwC] (JR) -- (JRL);
+      \draw[Dend,line width=\ctwD] (JRL) -- (T6);
+      \CTjunctions{draw=Mute!45}
+      \node[ctjunction] at (JRL) {};
+      \CTsoma{Soma!35}{Ink!15}
+      % the synapse under the lens
+      \coordinate (ctsynpt) at ($(JRL)!0.55!(T6)$);
+      \node[ctsyn,fill=Exc,minimum size=4.6pt,draw=Ink!55,line width=0.5pt]
+        at (ctsynpt) {};
+      % zoom bubble to the side
+      \coordinate (ctzc) at (2.62,1.30);
+      \draw[Grid,line width=0.6pt] (ctsynpt) -- ($(ctzc)+(-0.30,0.86)$);
+      \draw[Grid,line width=0.6pt] (ctsynpt) -- ($(ctzc)+(-0.88,-0.18)$);
+      \filldraw[fill=white,draw=Mute!60,line width=0.7pt] (ctzc) circle (0.92);
+      % row 1: presynaptic activity
+      \node[ctsyn,fill=Exc] at ($(ctzc)+(-0.52,0.44)$) {};
+      \node[ctlab,anchor=west,text=Ink] at ($(ctzc)+(-0.36,0.44)$)
+        {$x_i$ \textcolor{Mute}{\tiny presyn.}};
+      % row 2: driving-force gauge
+      \draw[Mute,line width=0.6pt]
+        ($(ctzc)+(-0.52,-0.06)$) ++(200:0.15) arc (200:-20:0.15);
+      \draw[Ink,line width=0.7pt]
+        ($(ctzc)+(-0.52,-0.06)$) -- ++(52:0.15);
+      \node[ctlab,anchor=west,text=Ink] at ($(ctzc)+(-0.30,0.00)$)
+        {$E_i-V_n$};
+      % row 3: input resistance
+      \draw[Ink,line width=0.6pt] ($(ctzc)+(-0.66,-0.50)$)
+        -- ++(0.05,0.08) -- ++(0.08,-0.16) -- ++(0.08,0.16)
+        -- ++(0.08,-0.16) -- ++(0.05,0.08);
+      \node[ctlab,anchor=west,text=Ink] at ($(ctzc)+(-0.28,-0.48)$)
+        {$R_n^{\mathrm{tot}}$};
+      \node[cttiny,anchor=north,text=Mute] at ($(ctzc)+(0,-0.98)$)
+        {local factors of $e_i$};
+    }{}%
+    % --------------------------------------------------------- transport ----
+    \ifdefstring{\ctmode}{transport}{%
+      % off-path skeleton, muted
+      \CTplaintree{Mute!30}
+      \CTjunctions{draw=Mute!40}
+      % the traversed root-to-leaf path, additive blue
+      \draw[Add,line width=\ctwA] (0,0.17) -- (J1);
+      \draw[Add,line width=\ctwB] (J1) -- (JL);
+      \draw[Add,line width=\ctwC] (JL) -- (JLR);
+      \draw[Add,line width=\ctwD] (JLR) -- (T4);
+      % mid-edge arrowheads: credit flows soma -> leaf
+      \foreach \cta/\ctb in {{0,0.17}/J1,J1/JL,JL/JLR,JLR/T4}
+        \draw[Add,-{Stealth[length=4.5pt]},line width=0.8pt]
+          ($(\cta)!0.34!(\ctb)$) -- ($(\cta)!0.60!(\ctb)$);
+      % traversed junctions carry their gains
+      \foreach \ctj in {J1,JL,JLR} \node[ctjunction,draw=Add] at (\ctj) {};
+      \node[ctlab,anchor=west,text=Add] at (0.34,0.66)   {$\alpha_1$};
+      \node[ctlab,anchor=east,text=Add] at (-1.16,1.42)  {$\alpha_2$};
+      \node[ctlab,anchor=west,text=Add] at (-0.42,2.10)  {$\alpha_3$};
+      % soma error and destination
+      \CTsoma{Soma}{Ink!30}
+      \node[ctlab,anchor=east,text=Add,font=\scriptsize\bfseries]
+        at (-0.30,-0.04) {$\delta_0$};
+      \node[ctsyn,fill=Add,minimum size=3.2pt] at (T4) {};
+    }{}%
+    % ------------------------------------------------------------ scalar ----
+    \ifdefstring{\ctmode}{scalar}{%
+      \CTplaintree{Amber}
+      \CTjunctions{draw=Amber}
+      \CTsoma{Amber!25}{Amber}
+      % one broadcast scalar, radiating from the soma
+      \node[ctlab,anchor=east,text=Amber!72!Ink,font=\scriptsize\bfseries]
+        at (-0.30,-0.04) {$m_u$};
+      \foreach \ctr in {0.36,0.50,0.64}
+        \draw[Amber!80,line width=0.55pt] (122:\ctr) arc (122:158:\ctr);
+    }{}%
+    % -------------------------------------------------------- coordinate ----
+    \ifdefstring{\ctmode}{coordinate}{%
+      \CTplaintree{Mute!55}
+      \CTjunctions{draw=Mute!60}
+      % the coordinate stops at the soma: dashed barrier across the trunk
+      \draw[Mute,line width=0.5pt,dash pattern=on 1.5pt off 1.4pt]
+        (-0.42,0.44) arc (150:30:0.485);
+      % emphasized soma carrying its own error coordinate
+      \filldraw[fill=AddPale,draw=Add,line width=1.1pt] (0,0) circle (0.185);
+      \draw[Add,-{Stealth[length=4.5pt]},line width=0.9pt]
+        (1.30,0.60) to[bend left=14] (0.27,0.09);
+      \node[ctlab,anchor=west,text=Add,font=\scriptsize\bfseries]
+        at (1.36,0.64) {$\delta_{0,u}$};
+    }{}%
+    % ----------------------------------------------------------- address ----
+    \ifdefstring{\ctmode}{address}{%
+      \begin{scope}[on background layer]
+        \ifnum\ctK=2\relax
+          \CTcapsule{Shunt!16}{13}{(0.02,0.62) -- (JL) -- (JLL) -- (T1)
+            (JLL) -- (T2) (JL) -- (JLR) -- (T3) (JLR) -- (T4)}
+          \CTcapsule{Add!15}{13}{(0.10,0.62) -- (JR) -- (JRL) -- (T5)
+            (JRL) -- (T6) (JR) -- (JRR) -- (T7) (JRR) -- (T8)}
+        \else\ifnum\ctK=4\relax
+          \CTcapsule{Shunt!16}{11}{($(JL)!0.3!(JLL)$) -- (JLL) -- (T1)
+            (JLL) -- (T2)}
+          \CTcapsule{Add!15}{11}{($(JL)!0.3!(JLR)$) -- (JLR) -- (T3)
+            (JLR) -- (T4)}
+          \CTcapsule{Amber!24}{11}{($(JR)!0.3!(JRL)$) -- (JRL) -- (T5)
+            (JRL) -- (T6)}
+          \CTcapsule{Violet!16}{11}{($(JR)!0.3!(JRR)$) -- (JRR) -- (T7)
+            (JRR) -- (T8)}
+        \else
+          \CTcapsule{Shunt!18}{8}{($(JLL)!0.25!(T1)$) -- (T1)}
+          \CTcapsule{Add!16}{8}{($(JLL)!0.25!(T2)$) -- (T2)}
+          \CTcapsule{Amber!26}{8}{($(JLR)!0.25!(T3)$) -- (T3)}
+          \CTcapsule{Violet!18}{8}{($(JLR)!0.25!(T4)$) -- (T4)}
+          \CTcapsule{Rose!28}{8}{($(JRL)!0.25!(T5)$) -- (T5)}
+          \CTcapsule{Soma!26}{8}{($(JRL)!0.25!(T6)$) -- (T6)}
+          \CTcapsule{Exc!16}{8}{($(JRR)!0.25!(T7)$) -- (T7)}
+          \CTcapsule{BP!14}{8}{($(JRR)!0.25!(T8)$) -- (T8)}
+        \fi\fi
+      \end{scope}
+      \CTplaintree{Dend}
+      \CTjunctions{}
+      \CTsoma{Soma}{Ink!30}
+      % per-field error tags (\scriptsize floor for content-bearing labels;
+      % K=8 stays label-free: eight tinted capsules already read as eight
+      % channels at the scales this mode is drawn at)
+      \ifnum\ctK=2\relax
+        \node[ctfield,text=Shunt!70!Ink] at (-1.62,3.32) {$\delta_{u,1}$};
+        \node[ctfield,text=Add!70!Ink]   at ( 1.66,3.22) {$\delta_{u,2}$};
+      \else\ifnum\ctK=4\relax
+        \node[ctfield,text=Shunt!70!Ink]  at (-2.12,3.02) {$\delta_{u,1}$};
+        \node[ctfield,text=Add!70!Ink]    at (-0.60,3.42) {$\delta_{u,2}$};
+        \node[ctfield,text=Amber!62!Ink]  at ( 0.64,3.40) {$\delta_{u,3}$};
+        \node[ctfield,text=Violet!70!Ink] at ( 2.12,2.86) {$\delta_{u,4}$};
+      \fi\fi
+    }{}%
+    % -------------------------------------------------------------- gain ----
+    \ifdefstring{\ctmode}{gain}{%
+      \begin{scope}[on background layer]
+        \CTcapsule{Shunt!16}{11}{($(JL)!0.3!(JLL)$) -- (JLL) -- (T1)
+          (JLL) -- (T2)}
+        \CTcapsule{Add!15}{11}{($(JL)!0.3!(JLR)$) -- (JLR) -- (T3)
+          (JLR) -- (T4)}
+        \CTcapsule{Amber!24}{11}{($(JR)!0.3!(JRL)$) -- (JRL) -- (T5)
+          (JRL) -- (T6)}
+        \CTcapsule{Violet!16}{11}{($(JR)!0.3!(JRR)$) -- (JRR) -- (T7)
+          (JRR) -- (T8)}
+      \end{scope}
+      % stroke widths proportional to route gains
+      \pgfmathsetmacro{\cttmp}{1.70*\ctlwf}\edef\ctga{\cttmp pt}% trunk
+      \pgfmathsetmacro{\cttmp}{1.50*\ctlwf}\edef\ctgb{\cttmp pt}% -> JL
+      \pgfmathsetmacro{\cttmp}{0.80*\ctlwf}\edef\ctgc{\cttmp pt}% -> JR
+      \draw[Dend,line width=\ctga] (0,0.17) -- (J1);
+      \draw[Dend,line width=\ctgb] (J1) -- (JL);
+      \draw[Dend,line width=\ctgc] (J1) -- (JR);
+      \pgfmathsetmacro{\cttmp}{1.45*\ctlwf}\edef\ctgd{\cttmp pt}%
+      \pgfmathsetmacro{\cttmp}{0.90*\ctlwf}\edef\ctge{\cttmp pt}%
+      \pgfmathsetmacro{\cttmp}{0.70*\ctlwf}\edef\ctgf{\cttmp pt}%
+      \pgfmathsetmacro{\cttmp}{0.45*\ctlwf}\edef\ctgg{\cttmp pt}%
+      \draw[Dend,line width=\ctgd] (JL) -- (JLL);
+      \draw[Dend,line width=\ctge] (JL) -- (JLR);
+      \draw[Dend,line width=\ctgf] (JR) -- (JRL);
+      \draw[Dend,line width=\ctgg] (JR) -- (JRR);
+      \pgfmathsetmacro{\cttmp}{1.15*\ctlwf}\edef\ctgh{\cttmp pt}%
+      \pgfmathsetmacro{\cttmp}{0.70*\ctlwf}\edef\ctgi{\cttmp pt}%
+      \pgfmathsetmacro{\cttmp}{0.55*\ctlwf}\edef\ctgj{\cttmp pt}%
+      \pgfmathsetmacro{\cttmp}{0.35*\ctlwf}\edef\ctgk{\cttmp pt}%
+      \draw[Dend,line width=\ctgh] (JLL) -- (T1) (JLL) -- (T2);
+      \draw[Dend,line width=\ctgi] (JLR) -- (T3) (JLR) -- (T4);
+      \draw[Dend,line width=\ctgj] (JRL) -- (T5) (JRL) -- (T6);
+      \draw[Dend,line width=\ctgk] (JRR) -- (T7) (JRR) -- (T8);
+      \CTjunctions{}
+      \CTsoma{Soma}{Ink!30}
+      % one junction highlighted with its route gain
+      \node[circle,draw=Ink,line width=0.7pt,inner sep=0pt,
+            minimum size=9.5pt] at (JL) {};
+      \node[ctlab,anchor=east,text=Ink] at (-1.24,1.32)
+        {$\widetilde{\alpha}_n{=}1.6$};
+    }{}%
+    % ------------------------------------------------------------- shunt ----
+    \ifdefstring{\ctmode}{shunt}{%
+      \ifdefstring{\ctshunted}{true}{%
+        % ancestors + sibling subtree unchanged
+        \draw[Dend,line width=\ctwA] (0,0.17) -- (J1);
+        \draw[Dend,line width=\ctwB] (J1) -- (JL) (J1) -- (JR);
+        \draw[Dend,line width=\ctwC] (JR) -- (JRL) (JR) -- (JRR);
+        \draw[Dend,line width=\ctwD] (JRL) -- (T5) (JRL) -- (T6)
+                                     (JRR) -- (T7) (JRR) -- (T8);
+        % descendant subtree: thinned + faded (attenuated credit)
+        \pgfmathsetmacro{\cttmp}{0.50*\ctlwf}\edef\ctws{\cttmp pt}%
+        \pgfmathsetmacro{\cttmp}{0.40*\ctlwf}\edef\ctwt{\cttmp pt}%
+        \draw[Dend!38,line width=\ctws] (JL) -- (JLL) (JL) -- (JLR);
+        \draw[Dend!38,line width=\ctwt] (JLL) -- (T1) (JLL) -- (T2)
+                                        (JLR) -- (T3) (JLR) -- (T4);
+        \foreach \ctj in {J1,JR,JRL,JRR} \node[ctjunction] at (\ctj) {};
+        \foreach \ctj in {JL} \node[ctjunction,draw=Dend] at (\ctj) {};
+        \foreach \ctj in {JLL,JLR}
+          \node[ctjunction,draw=Dend!40] at (\ctj) {};
+        \node[ctsyn,fill=Inh,minimum size=4.2pt] at ($(J1)!0.86!(JL)$) {};
+      }{%
+        \CTplaintree{Dend}
+        \CTjunctions{}
+        \node[ctsyn,fill=white,draw=Inh,line width=0.7pt,
+              minimum size=4.2pt] at ($(J1)!0.86!(JL)$) {};
+      }%
+      \CTsoma{Soma}{Ink!30}
+      \node[cttiny,anchor=east,text=Inh!80!Ink] at ($(J1)!0.86!(JL)+(-0.12,-0.13)$)
+        {$g_{\mathrm{shunt}}$};
+    }{}%
+    % stage label beneath the soma (all modes)
+    \CTstagelabel
+  \end{tikzpicture}%
+}
+
+% ===========================================================================
+% \DerangedPair[<scale>] — correct assignment (top, Add) vs deranged
+% coordinate transport (bottom, BP-red crossed arrows).
+% ===========================================================================
+\newcommand{\CTminitree}[2]{% #1 x-shift, #2 y-shift
+  \begin{scope}[shift={(#1,#2)}]
+    \draw[Dend,line width=1.1pt]  (0,0.11) -- (0.02,0.52);
+    \draw[Dend,line width=0.8pt]  (0.02,0.52) -- (-0.40,0.94);
+    \draw[Dend,line width=0.8pt]  (0.02,0.52) -- (0.44,0.90);
+    \draw[Dend,line width=0.55pt] (-0.40,0.94) -- (-0.72,1.24);
+    \draw[Dend,line width=0.55pt] (-0.40,0.94) -- (-0.16,1.34);
+    \draw[Dend,line width=0.55pt] (0.44,0.90) -- (0.22,1.30);
+    \draw[Dend,line width=0.55pt] (0.44,0.90) -- (0.76,1.18);
+    \node[ctjunction,minimum size=2.4pt] at (0.02,0.52) {};
+    \node[ctjunction,minimum size=2.4pt] at (-0.40,0.94) {};
+    \node[ctjunction,minimum size=2.4pt] at (0.44,0.90) {};
+    \filldraw[fill=Soma,draw=Ink!30,line width=0.5pt] (0,0) circle (0.13);
+  \end{scope}}
+
+\newcommand{\DerangedPair}[1][1]{%
+  \begin{tikzpicture}[scale=#1,line cap=round,baseline={(0,0.4)}]
+    % --- correct assignment (top) ---
+    \CTminitree{0}{2.55}
+    \CTminitree{2.30}{2.55}
+    \node[ctsyn,fill=Add,minimum size=4.0pt] (ctda) at (0,1.70) {};
+    \node[ctsyn,fill=Add,minimum size=4.0pt] (ctdb) at (2.30,1.70) {};
+    \node[cttiny,anchor=north,text=Add] at (0,1.60)    {$\delta_a$};
+    \node[cttiny,anchor=north,text=Add] at (2.30,1.60) {$\delta_b$};
+    \draw[Add,-{Stealth[length=4pt]},line width=0.8pt]
+      (0,1.78) -- (0,2.36);
+    \draw[Add,-{Stealth[length=4pt]},line width=0.8pt]
+      (2.30,1.78) -- (2.30,2.36);
+    \node[ctlab,anchor=west,text=Add!75!Ink] at (3.20,2.85) {correct};
+    % --- deranged assignment (bottom) ---
+    \CTminitree{0}{0.00}
+    \CTminitree{2.30}{0.00}
+    \node[ctsyn,fill=BP,minimum size=4.0pt] at (0,-0.85) {};
+    \node[ctsyn,fill=BP,minimum size=4.0pt] at (2.30,-0.85) {};
+    \node[cttiny,anchor=north,text=BP] at (0,-0.95)    {$\delta_a$};
+    \node[cttiny,anchor=north,text=BP] at (2.30,-0.95) {$\delta_b$};
+    \draw[BP,-{Stealth[length=4pt]},line width=0.8pt]
+      (0.08,-0.78) -- (2.24,-0.18);
+    \draw[BP,-{Stealth[length=4pt]},line width=0.8pt]
+      (2.22,-0.78) -- (0.06,-0.18);
+    \node[ctlab,anchor=west,text=BP] at (3.20,0.30) {deranged};
+  \end{tikzpicture}}
+
+% ===========================================================================
+% \TreeStrip{<stage1>}{<stage2>}[...] — 2-4 stages joined by Mute arrows.
+% Scans ahead for further brace groups; terminate with \par, a blank line,
+% or \relax before any unrelated literal group.
+% ===========================================================================
+\newcommand{\CTStripArrow}{%
+  \tikz[baseline={(0,0)}]{\draw[-{Stealth[length=5pt]},Mute,line width=0.9pt]
+    (0,1.02) -- (0.52,1.02);}}
+
+\makeatletter
+\newcommand{\TreeStrip}[2]{%
+  \mbox{}#1\hspace{0.26cm}\CTStripArrow\hspace{0.26cm}#2\ct@strip@more}
+\def\ct@strip@more{\@ifnextchar\bgroup{\ct@strip@take}{}}
+\def\ct@strip@take#1{%
+  \hspace{0.26cm}\CTStripArrow\hspace{0.26cm}#1\ct@strip@more}
+\makeatother
+
+% ===========================================================================
+% \eqpanel[<TAG>]{<equations>} — Paper card, Grid hairline, Mute eyebrow.
+% Inside the card use $...$ or \[...\] (with aligned); not align.
+% ===========================================================================
+\newcommand{\eqpanel}[2][]{%
+  \par\vspace{0.14cm}\noindent
+  \begin{tikzpicture}
+    \node[fill=Paper,draw=Grid,line width=0.6pt,rounded corners=3pt,
+          inner xsep=0.30cm,inner ysep=0.24cm,align=left,
+          text width=\dimexpr\linewidth-0.70cm\relax] (ctpanel) {#2};
+    \ifstrempty{#1}{}{%
+      \node[anchor=west,fill=white,inner xsep=0.10cm,inner ysep=0.045cm,
+            font=\fontsize{6}{7.2}\selectfont\bfseries,text=Mute]
+        at ([xshift=0.24cm]ctpanel.north west) {\MakeUppercase{#1}};}%
+  \end{tikzpicture}\par\vspace{0.14cm}}
+
+% ===========================================================================
+% \triptych{<left>}{<middle>}{<right>} — Act-IV experiment layout:
+% three top-aligned columns, 0.30 / 0.30 / 0.36 of the text width.
+% ===========================================================================
+\newcommand{\triptych}[3]{%
+  \par\noindent
+  \begin{minipage}[t]{0.30\textwidth}\vspace{0pt}\raggedright #1\end{minipage}%
+  \hfill
+  \begin{minipage}[t]{0.30\textwidth}\vspace{0pt}\raggedright #2\end{minipage}%
+  \hfill
+  \begin{minipage}[t]{0.36\textwidth}\vspace{0pt}\raggedright #3\end{minipage}\par}
+
+% ===========================================================================
+% \deftag{<word>} — inline definition eyebrow (Shunt tick + Mute caps).
+% ===========================================================================
+\newcommand{\deftag}[1]{%
+  {\fontsize{6.5}{8}\selectfont\bfseries
+   \textcolor{Shunt}{\rule[0.06em]{0.45em}{1.4pt}}\hspace{0.35em}%
+   \textcolor{Mute}{\MakeUppercase{#1}}}}

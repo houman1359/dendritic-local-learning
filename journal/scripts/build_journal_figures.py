@@ -1222,7 +1222,10 @@ def figure3() -> None:
         )
         errorbar_mean(ax_d, index, values, color, seed=1310 + index)
     ax_d.set_xticks(range(5))
-    ax_d.set_xticklabels(["dense", "ances.", "random", "depth", "shuffle"], rotation=28, ha="right")
+    # Staggered horizontal labels (no rotated ticks): alternate rows keep
+    # the five category names from colliding in this narrow panel.
+    ax_d.set_xticklabels(["dense", "\nances.", "random", "\ndepth", "shuffle"])
+    ax_d.tick_params(axis="x", labelsize=PT_SMALL, pad=1.5)
     ax_d.set_ylabel("model-field capture")
     ax_d.set_ylim(0.05, 0.78)
     panel_title(ax_d, "D", "Model-field controls")
@@ -1267,7 +1270,7 @@ def figure3() -> None:
     ax_e.set_xticks([1, 2, 4, 8, 16])
     ax_e.get_xaxis().set_major_formatter(mpl.ticker.ScalarFormatter())
     ax_e.set_xlabel("feedback channels")
-    ax_e.set_ylabel("cable-response capture")
+    ax_e.set_ylabel("cable-response\ncapture")
     panel_title(ax_e, "E", "Reciprocal cable field")
     style_axis(ax_e)
 
@@ -1286,14 +1289,9 @@ def figure3() -> None:
         )
         errorbar_mean(ax_f, index, values, color, seed=1510 + index)
     ax_f.set_xticks(range(len(reciprocal_labels)))
-    ax_f.set_xticklabels(
-        ["SVD", "ances.", "random", "depth", "row shuf.", "matched"],
-        rotation=32,
-        ha="right",
-        rotation_mode="anchor",
-    )
+    ax_f.set_xticklabels(["SVD", "\nances.", "random", "\ndepth", "shuf.", "\nmatched"])
     ax_f.tick_params(axis="x", labelsize=PT_SMALL - 0.8, pad=1)
-    ax_f.set_ylabel("cable-response capture")
+    ax_f.set_ylabel("cable-response\ncapture")
     panel_title(ax_f, "F", "Topology controls")
     style_axis(ax_f)
 
@@ -1488,7 +1486,7 @@ def _figure4_detailed() -> None:
     physical = physical.merge(ratio_mean, on=["cohort", "regime"], validate="many_to_one")
     for cohort, label, color, marker in [
         ("original_eight", "pilot (n=8)", COLORS["shunting"], "o"),
-        ("v661_disjoint", "replication (n=45)", COLORS["pathway"], "s"),
+        ("v661_disjoint", "minnie65 v661\n(n=45 QC)", COLORS["pathway"], "s"),
     ]:
         part = physical[physical.cohort.eq(cohort)].copy()
         if cohort == "original_eight":
@@ -1526,11 +1524,12 @@ def figure4() -> None:
     category = pd.read_csv(DATA / "figure4" / "category_effects.csv")
     category = category[np.isclose(category.dose, 1.0)]
     categories = ["descendant", "sister", "ancestor", "depth-matched unrelated", "unrelated"]
-    labels = ["desc.", "sister", "ancestor", "depth ctrl.", "unrelated"]
+    labels = ["desc.", "sister", "anc.", "depth\nctrl.", "unrel."]
     for perturbation, color, offset in [
         ("matched additive", COLORS["additive"], -0.10),
         ("focal shunt", COLORS["shunting"], 0.10),
     ]:
+        ax_b.scatter([], [], s=SEED_MS ** 2 * 2.0, color=color, label=perturbation)
         subset = category[category.perturbation.eq(perturbation)].groupby(
             ["root_id", "category"], as_index=False
         ).median_abs_log_gradient_change.mean()
@@ -1549,10 +1548,14 @@ def figure4() -> None:
             )
             errorbar_mean(ax_b, index + offset, values, color, seed=1610 + index)
     ax_b.set_xticks(range(5))
-    ax_b.set_xticklabels(labels, rotation=30, ha="right")
+    ax_b.set_xticklabels(labels)
     ax_b.set_ylabel(r"median $|\Delta\log |\nabla||$")
     panel_title(ax_b, "B", "Tree-relation selectivity")
     style_axis(ax_b)
+    # First use of the additive/shunt pairing in this figure: carry its own
+    # key (the dose-response panel repeats the colors later).
+    add_headroom(ax_b, 0.30)
+    clean_legend(ax_b, loc="upper right", fontsize=PT_SMALL)
 
     primary = pd.read_csv(DATA / "figure4" / "cell_primary_contrasts.csv")
     columns = [
@@ -1578,7 +1581,7 @@ def figure4() -> None:
         errorbar_mean(ax_c, index, values, colors[index], seed=1640 + index)
     ax_c.axhline(0, color=COLORS["mute"], ls="--", lw=LW_REF)
     ax_c.set_xticks(x_values)
-    ax_c.set_xticklabels(["additive", "reassigned", "shunt"], rotation=24, ha="right")
+    ax_c.set_xticklabels(["additive", "reassigned", "shunt"])
     ax_c.set_ylabel("localization index")
     panel_title(ax_c, "C", "Within-cell controls")
     style_axis(ax_c)
@@ -1648,8 +1651,8 @@ def figure4() -> None:
     ratio_mean = ratio.groupby(["cohort", "regime"], as_index=False).median_axial_to_leak_ratio.median()
     physical = physical.merge(ratio_mean, on=["cohort", "regime"], validate="many_to_one")
     for cohort, label, color, marker in [
-        ("original_eight", "original 8", COLORS["shunting"], "o"),
-        ("v661_disjoint", "v661 45", COLORS["pathway"], "s"),
+        ("original_eight", "pilot (n=8)", COLORS["shunting"], "o"),
+        ("v661_disjoint", "minnie65 v661\n(n=45 QC)", COLORS["pathway"], "s"),
     ]:
         subset = physical[physical.cohort.eq(cohort)].copy()
         if cohort == "original_eight":
@@ -1677,7 +1680,7 @@ def figure4() -> None:
     ax_f.axhline(0, color=COLORS["mute"], ls="--", lw=LW_REF)
     ax_f.set_xscale("log")
     ax_f.set_xlabel("median axial / leak")
-    ax_f.set_ylabel("shunt - additive localization")
+    ax_f.set_ylabel("shunt − additive\nlocalization")
     panel_title(ax_f, "F", "Electrotonic limit")
     style_axis(ax_f)
     clean_legend(ax_f, loc="upper right", fontsize=PT_SMALL)
@@ -1888,7 +1891,9 @@ def figure5() -> None:
         "scalar broadcast",
     ]
     short_labels = ["exact", "dense", "ances.", "random", "depth", "shuffle", "scalar"]
-    for ax, metric, ylabel, letter, title, limits in [
+    # Horizontal point-range strips (the S22 D/E pattern) keep every category
+    # label horizontal, honoring the no-rotated-ticks style contract.
+    for ax, metric, xlabel, letter, title, limits in [
         (ax_c, "heldout_credit_capture", "held-out field capture", "C", "Task-field capture", (0, 1.06)),
         (ax_d, "heldout_normalized_mse", "held-out normalized MSE", "D", "Held-out learning", (0.62, 1.01)),
     ]:
@@ -1896,21 +1901,42 @@ def figure5() -> None:
             metric_values = target[target.method.eq(method)][metric].to_numpy(float)
             color = METHOD_COLORS[method]
             ax.scatter(
-                index + jitter(metric_values.size, 1820 + index, 0.045),
                 metric_values,
+                index + jitter(metric_values.size, 1820 + index, 0.09),
                 s=SEED_MS ** 2,
                 color=color,
                 alpha=0.65,
                 edgecolor="white",
                 linewidth=0.2,
             )
-            errorbar_mean(ax, index, metric_values, color, seed=1830 + index)
-        ax.set_xticks(range(len(methods)))
-        ax.set_xticklabels(short_labels, rotation=32, ha="right")
-        ax.set_ylabel(ylabel)
-        ax.set_ylim(*limits)
+            mean, low, high = mean_ci(metric_values, seed=1830 + index)
+            ax.errorbar(
+                mean,
+                index,
+                xerr=[[mean - low], [high - mean]],
+                marker="D",
+                ms=MARKER_MS,
+                color=color,
+                markerfacecolor="white",
+                markeredgecolor=color,
+                markeredgewidth=LW_ERR,
+                lw=LW_ERR,
+                capsize=ERR_CAPSIZE,
+                zorder=5,
+            )
+        ax.set_yticks(range(len(methods)))
+        ax.set_yticklabels(short_labels)
+        ax.set_ylim(len(methods) - 0.4, -0.6)
+        ax.set_xlabel(xlabel)
+        ax.set_xlim(*limits)
         panel_title(ax, letter, title)
         style_axis(ax)
+    # Honest coincidence note (as in S22 D): the oracle-ceiling dictionaries
+    # sit at the axis limit, with per-target dots beneath the mean diamond.
+    ax_c.text(0.955, 0.42, "all targets $=$ 1.00", ha="right", va="center",
+              fontsize=PT_SMALL, color=COLORS["mute"])
+    ax_c.text(0.955, 1.42, r"targets $\geq$ 0.996", ha="right", va="center",
+              fontsize=PT_SMALL, color=COLORS["mute"])
 
     controlled = pd.read_csv(DATA / "alignment_controlled" / "alignment_controlled_curves.csv")
     controlled_colors = {

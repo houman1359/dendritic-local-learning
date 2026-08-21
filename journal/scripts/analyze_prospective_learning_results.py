@@ -49,8 +49,8 @@ FIGURES = ROOT / "figures" / "generated"
 
 TASK_LABEL = {"mnist": "MNIST", "noise_resilience": "Noise resilience"}
 CORE_LABEL = {
-    "dendritic_shunting": "Shunting",
-    "dendritic_additive": "Additive",
+    "dendritic_shunting": "shunting",
+    "dendritic_additive": "additive",
 }
 CORE_COLOR = {
     "dendritic_shunting": COLORS["shunting"],
@@ -756,7 +756,7 @@ def _plot_streamlined_main() -> None:
     ax_a.text(
         1.0,
         7.55,
-        "Shunting",
+        "shunting",
         color=CORE_COLOR["dendritic_shunting"],
         fontsize=PT_LEGEND,
         ha="left",
@@ -765,7 +765,7 @@ def _plot_streamlined_main() -> None:
     ax_a.text(
         1.0,
         4.4,
-        "Additive",
+        "additive",
         color=CORE_COLOR["dendritic_additive"],
         fontsize=PT_LEGEND,
         ha="left",
@@ -776,7 +776,7 @@ def _plot_streamlined_main() -> None:
     ax_b.text(
         1.05,
         7.6,
-        "Additive",
+        "additive",
         color=CORE_COLOR["dendritic_additive"],
         fontsize=PT_LEGEND,
         ha="left",
@@ -868,17 +868,30 @@ def _plot_streamlined_main() -> None:
     ax_d.tick_params(axis="x", labelsize=PT_SMALL)
     ax_d.set_ylim(-0.12, 1.04)
     ax_d.set_yticks([0.0, 0.4, 0.8])
-    ax_d.set_ylabel("correct routing gain (pp)")
+    # Two-line y label: the single-line form overhangs the panel's grid cell
+    # and was truncated when this block is recomposed into Fig. 2/S19.
+    ax_d.set_ylabel("correct routing\ngain (pp)")
     panel_title(ax_d, "J", "Matched routing")
     style_axis(ax_d)
-    # Panel G states the core colours/markers once (direct labels); this panel
-    # repeats both cues, so a mute cross-reference replaces a second key.
+    # This panel is recomposed under different letters in Fig. 2 and S19, so
+    # a letter-based cross-reference cannot stay correct in both contexts:
+    # name the two cores directly in their own hues instead.
     ax_d.text(
         0.03,
-        0.97,
-        "colors as in G",
+        0.99,
+        "shunting",
         transform=ax_d.transAxes,
-        color=COLORS["mute"],
+        color=CORE_COLOR["dendritic_shunting"],
+        fontsize=PT_SMALL,
+        ha="left",
+        va="top",
+    )
+    ax_d.text(
+        0.03,
+        0.90,
+        "additive",
+        transform=ax_d.transAxes,
+        color=CORE_COLOR["dendritic_additive"],
         fontsize=PT_SMALL,
         ha="left",
         va="top",
@@ -889,7 +902,7 @@ def _plot_streamlined_main() -> None:
         ("mnist", "additive", "MNIST\nadditive"),
         ("mnist", "shunting", "MNIST\nshunting"),
         ("noise_resilience", "additive", "noise\nadditive"),
-        ("noise_resilience", "shunting", "noise\nshunting\n(ReLU)"),
+        ("noise_resilience", "shunting", "noise\nshunt.\n(ReLU)"),
     ]
     for index, (dataset, core, label) in enumerate(clean_order):
         row = clean_exact[
@@ -953,7 +966,7 @@ def _plot_streamlined_main() -> None:
     ax_f.text(
         1.5,
         -4.4,
-        "Additive",
+        "additive",
         color=CORE_COLOR["dendritic_additive"],
         fontsize=PT_LEGEND,
         ha="center",
@@ -1110,12 +1123,13 @@ def _plot_streamlined_main() -> None:
     # this panel without occluding the arc.  Panel M (canonical lettering)
     # names all four conditions on its rows in exactly these hues, so a mute
     # cross-reference in the clear lower-right corner carries the key; the
-    # marker shapes are a redundant cue on top of the M hues, repeating the
-    # subtree full-factorial figure's shapes for the shared conditions.
+    # marker shapes are a redundant cue on top of those hues, repeating the
+    # subtree full-factorial figure's shapes for the shared conditions.  This
+    # block is published only inside S19, where the key panel is lettered G.
     ax_h.text(
         0.97,
         0.32,
-        "colors as in M",
+        "colors as in G",
         transform=ax_h.transAxes,
         color=COLORS["mute"],
         fontsize=PT_SMALL,
@@ -1339,7 +1353,7 @@ def report(summary: pd.DataFrame, contrast: pd.DataFrame) -> str:
     lines += ["", "## Value of neuron-indexed feedback", ""]
     for _, row in neuron_indexed.sort_values(["task", "core", "depth"]).iterrows():
         lines.append(
-            f"- {TASK_LABEL[row.task]}, {CORE_LABEL[row.core].lower()}, depth {int(row.depth)}: "
+            f"- {TASK_LABEL[row.task]}, {CORE_LABEL[row.core]}, depth {int(row.depth)}: "
             f"{100 * row.mean_difference:.2f} percentage points "
             f"(95% CI {100 * row.ci95_low:.2f} to {100 * row.ci95_high:.2f})."
         )

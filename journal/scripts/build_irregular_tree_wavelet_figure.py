@@ -34,7 +34,7 @@ SOURCE = ROOT / "source_data" / "irregular_tree_wavelets"
 FIGURE = ROOT / "figures" / "generated" / "fig_irregular_tree_wavelets.pdf"
 
 SCALES = ["coarse", "intermediate", "fine"]
-SCALE_LABELS = ["coarse\n$>1/4$", "intermediate\n$1/16$--$1/4$", "fine\n$\leq1/16$"]
+SCALE_LABELS = ["coarse\n$>1/4$", "intermediate\n$1/16$–$1/4$", "fine\n$\leq1/16$"]
 SCALE_COLORS = [COLORS["shunting"], COLORS["additive"], COLORS["highlight"]]
 
 
@@ -138,8 +138,8 @@ def main() -> None:
     compact_panel_title(ax_c, "C", "Coarse modes carry excess power")
     style_axis(ax_c, grid="y")
 
-    cohorts = [("original_8", "original 8", COLORS["additive"]),
-               ("public_v661_47", "disjoint 47", COLORS["shunting"])]
+    cohorts = [("original_8", "pilot\n(n=8)", COLORS["additive"]),
+               ("public_v661_47", "minnie65 v661\n(n=47)", COLORS["shunting"])]
     for index, (name, _, color) in enumerate(cohorts):
         values = cell[cell.cohort.eq(name) & cell.scale.eq("coarse")].actual_minus_shuffled.to_numpy(float)
         jitter = np.linspace(-0.10, 0.10, len(values))

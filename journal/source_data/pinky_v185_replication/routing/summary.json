@@ -111,7 +111,7 @@
   "qc_gate": "at least 20 mapped typed incoming synapses and at least 3 inhibitory",
   "source_code": {
     "analyze_microns_morphology_credit.py": "cd1fcbb26d7a96d0a13882fdcfcc0493a2fa30296ccb83a7f26b7efd3373714f",
-    "analyze_pinky_v185_replication.py": "7bd16e89c544adc84e3a9479b3a15fcd8a733647a244973ade2fa01debfb18e3"
+    "analyze_pinky_v185_replication.py": "eb5186637c4535be514a304068256c91714c7a9a31254696ec77eaac69af88f3"
   },
   "status": "complete"
 }
