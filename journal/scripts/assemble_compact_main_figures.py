@@ -19,6 +19,16 @@ import numpy as np
 ROOT = Path(__file__).resolve().parents[1]
 MAIN = ROOT / "figures" / "main"
 SUPP = ROOT / "figures" / "supplementary"
+COMPONENTS = ROOT / "figures" / "components"
+
+# A main figure that has been rebuilt as ONE native full-width canvas is
+# emitted verbatim: page in, page out, scale 1.0.  Scaling a pre-rendered
+# sub-block into a grid slot is what destroyed the journal type scale (each
+# block took a different scale factor, so one nominal 7.6 pt tick label
+# printed at anything between 4.3 and 6.9 pt across the figure set).  Drop
+# ``figures/components/main_figure_NN_native.pdf`` next to this script's
+# other components and figure NN takes the unscaled path instead.
+NATIVE_TEMPLATE = "main_figure_{:02d}_native.pdf"
 FONT_REGULAR = Path("/usr/share/fonts/urw-base35/NimbusSans-Regular.otf")
 FONT_BOLD = Path("/usr/share/fonts/urw-base35/NimbusSans-Bold.otf")
 
@@ -83,12 +93,49 @@ def panel(
     )
 
 
-def copy_page(source: str, destination: str) -> None:
+def copy_page(source: str, destination: str, *,
+              keep_metadata: bool = False) -> None:
     src = fitz.open(MAIN / source)
     out = fitz.open()
     out.insert_pdf(src)
-    out.set_metadata({})
+    metadata: dict[str, str] = {}
+    if keep_metadata:
+        # A native canvas carries its panel-geometry manifest in the PDF
+        # keywords; ``figure_canvas.audit_native_pdf`` needs it to verify
+        # per-row panel heights, so it must survive the copy.
+        keywords = (src.metadata or {}).get("keywords") or ""
+        if keywords.strip():
+            metadata["keywords"] = keywords
+    out.set_metadata(metadata)
     out.save(MAIN / destination, garbage=4, deflate=True, no_new_id=True)
+
+
+def native_component(number: int) -> Path:
+    """Path a natively built full-width canvas must occupy to be used."""
+    return COMPONENTS / NATIVE_TEMPLATE.format(int(number))
+
+
+def emit_native(number: int) -> bool:
+    """Emit ``figure_NN.pdf`` from its native canvas; report whether it ran."""
+    source = native_component(number)
+    if not source.is_file():
+        return False
+    copy_page(f"../components/{source.name}", f"figure_{int(number):02d}.pdf",
+              keep_metadata=True)
+    print(f"  figure_{int(number):02d}.pdf <- {source.name} (native, scale 1.0)")
+    return True
+
+
+def _destination_figure_number(destination: Path) -> int | None:
+    """The main-figure number a compose destination stands for, if any."""
+    destination = Path(destination)
+    if destination.parent != MAIN:
+        return None
+    stem = destination.stem
+    if not stem.startswith("figure_"):
+        return None
+    tail = stem[len("figure_"):]
+    return int(tail) if tail.isdigit() else None
 
 
 _RASTER_ZOOM = 150.0 / 72.0
@@ -390,6 +437,11 @@ def compose(
     row_heights: list[float] | None = None,
     gutter_clear_above: float = 10.0,
 ) -> None:
+    number = _destination_figure_number(destination)
+    if number is not None and emit_native(number):
+        # Rebuilt natively: keep the sub-block recipe below as the documented
+        # fallback, but never scale it into a grid slot again.
+        return
     width = 518.4
     if slots is None:
         slots = [Slot(i // cols, i % cols) for i in range(len(panels))]
@@ -498,7 +550,8 @@ def compose(
 
 def main() -> None:
     # Figure 1 is already designed as a single coherent canvas.
-    copy_page("figure_01_panels_A-E.pdf", "figure_01.pdf")
+    if not emit_native(1):
+        copy_page("figure_01_panels_A-E.pdf", "figure_01.pdf")
 
     compose(
         MAIN / "figure_02.pdf",
@@ -662,7 +715,8 @@ def main() -> None:
     # Figure 6 is authored as one coherent final-size canvas.  Its heatmaps
     # and aligned labels depend on shared row/column geometry, so splitting it
     # into heterogeneous legacy source sheets would undo the redesign.
-    copy_page("../components/main_figure6_redesigned.pdf", "figure_06.pdf")
+    if not emit_native(6):
+        copy_page("../components/main_figure6_redesigned.pdf", "figure_06.pdf")
 
     figure_07_panels = [
         panel(

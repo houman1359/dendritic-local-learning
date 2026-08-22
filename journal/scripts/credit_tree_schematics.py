@@ -92,6 +92,18 @@ MS_SYN = 3.6
 _BASE_XLIM = (-2.55, 2.55)
 _BASE_YLIM = (-0.72, 3.32)
 
+# Exactly two neutral tones are spent on de-emphasis, both mixes of the one
+# palette gray: GHOST for a back-grounded arbor (strokes and its junction
+# rings) and RIM for every soma / synapse rim on the page.  Before this the
+# same de-emphasised tree carried nine different grays across one figure.
+GHOST = mix("mute", 45)        # the single de-emphasis tint
+RIM = mix("ink", 30)           # the single soma / synapse rim tone
+# Amber #E2A23F carries only 2.2:1 against white, below the 4.5:1 floor for
+# 6.8-7.4 pt type, so the amber SERIES keeps the palette token for fills,
+# strokes and markers while amber TEXT is set in this one darkened tone
+# (4.5:1).  It is the only text-only colour on the page.
+AMBER_TEXT = mix("local", 60, "ink")
+
 
 def _pt(name):
     return P[name] if isinstance(name, str) else name
@@ -196,7 +208,7 @@ def _setup_axes(ax, xlim, ylim):
 def _mode_plain(t):
     t.tree(COLORS["dend"])
     t.junctions()
-    t.soma(COLORS["soma"], mix("ink", 30))
+    t.soma(COLORS["soma"], RIM)
     for a, b, f in (("JLL", "T1", 0.55), ("JLL", "T2", 0.62),
                     ("JLR", "T3", 0.55), ("JLR", "T4", 0.62),
                     ("JRL", "T5", 0.55), ("JRL", "T6", 0.62),
@@ -211,34 +223,34 @@ def _mode_plain(t):
 def _mode_forward(t):
     t.tree(COLORS["dend"])
     t.junctions()
-    t.soma(COLORS["soma"], mix("ink", 30))
+    t.soma(COLORS["soma"], RIM)
     syn_e = _lerp("JRR", "T7", 0.55)
     t.dot(syn_e, MS_SYN, COLORS["exc"])
-    t.text((syn_e[0] + 0.12, syn_e[1] + 0.05), r"$g_i,\,E_i$",
-           mix("exc", 60, "ink"), size=PT_SMALL, ha="left")
+    t.text((syn_e[0] + 0.12, syn_e[1] + 0.05), "gᵢ, Eᵢ",
+           COLORS["exc"], size=PT_SMALL, ha="left")
     syn_i = _lerp("J1", "JL", 0.55)
     t.dot(syn_i, MS_SYN, COLORS["inh"])
-    t.text((syn_i[0] - 0.10, syn_i[1] - 0.08), r"$g_j,\,E_j$",
-           mix("inh", 70, "ink"), size=PT_SMALL, ha="right")
-    t.text((P["JRR"][0] + 0.20, P["JRR"][1] - 0.04), r"$V_n$",
+    t.text((syn_i[0] - 0.10, syn_i[1] - 0.08), "gⱼ, Eⱼ",
+           COLORS["inh"], size=PT_SMALL, ha="right")
+    t.text((P["JRR"][0] + 0.20, P["JRR"][1] - 0.04), "Vₙ",
            COLORS["ink"], ha="left")
-    t.text((0.26, -0.16), r"$V_0$", COLORS["ink"], ha="left")
+    t.text((0.26, -0.16), "V₀", COLORS["ink"], ha="left")
     qx, qy = P["JRR"][0] + 0.30, P["JRR"][1] - 0.62
     t.ax.plot([P["JRR"][0], qx], [P["JRR"][1], qy], color=COLORS["mute"],
               lw=LW_HAIR, dashes=(1.4, 1.3), zorder=1.8)
-    t.text((qx, qy - 0.05), r"$R_n^{\mathrm{tot}}$", COLORS["mute"],
+    t.text((qx, qy - 0.05), "Rₙᵗᵒᵗ", COLORS["mute"],
            size=PT_SMALL, va="top")
 
 
 def _mode_eligibility(t):
-    t.tree(mix("mute", 32))
+    t.tree(GHOST)
     t.seg("JR", "JRL", COLORS["dend"], _TAPER_PT["C"], zorder=2.2)
     t.seg("JRL", "T6", COLORS["dend"], _TAPER_PT["D"], zorder=2.2)
-    t.junctions(edge=mix("mute", 45))
+    t.junctions(edge=GHOST)
     t.junctions(names=("JRL",))
-    t.soma(mix("soma", 35), mix("ink", 15))
+    t.soma(COLORS["soma"], RIM)
     syn = _lerp("JRL", "T6", 0.55)
-    t.dot(syn, 4.6, COLORS["exc"], mix("ink", 55), 0.5 * _PT2LW)
+    t.dot(syn, 4.6, COLORS["exc"], RIM, 0.5 * _PT2LW)
     # zoom bubble to the side
     zc = (2.62, 1.30)
     for tip in ((zc[0] - 0.30, zc[1] + 0.86), (zc[0] - 0.88, zc[1] - 0.18)):
@@ -249,10 +261,10 @@ def _mode_eligibility(t):
     t.ax.add_patch(Circle(zc, 1.04, facecolor="white",
                           edgecolor="none", zorder=4.55))
     t.ax.add_patch(Circle(zc, 0.92, facecolor="white",
-                          edgecolor=mix("mute", 60), lw=LW_EDGE, zorder=4.6))
+                          edgecolor=COLORS["mute"], lw=LW_EDGE, zorder=4.6))
     # row 1: presynaptic activity
     t.dot((zc[0] - 0.52, zc[1] + 0.44), MS_SYN, COLORS["exc"], zorder=5)
-    t.text((zc[0] - 0.36, zc[1] + 0.44), r"$x_i$", COLORS["ink"], ha="left")
+    t.text((zc[0] - 0.36, zc[1] + 0.44), "xᵢ", COLORS["ink"], ha="left")
     # "presyn." hugs the x_i label so the row stays inside the ring even on
     # small host axes, where fixed-point type covers more data units.
     t.text((zc[0] - 0.04, zc[1] + 0.435), "presyn.", COLORS["mute"],
@@ -265,7 +277,7 @@ def _mode_eligibility(t):
     t.ax.plot([gc[0], gc[0] + 0.15 * np.cos(ang)],
               [gc[1], gc[1] + 0.15 * np.sin(ang)], color=COLORS["ink"],
               lw=LW_EDGE, zorder=5, solid_capstyle="round")
-    t.text((zc[0] - 0.30, zc[1] + 0.00), r"$E_i-V_n$", COLORS["ink"],
+    t.text((zc[0] - 0.30, zc[1] + 0.00), "Eᵢ − Vₙ", COLORS["ink"],
            ha="left")
     # row 3: input resistance (zigzag)
     zx, zy = zc[0] - 0.66, zc[1] - 0.50
@@ -277,9 +289,9 @@ def _mode_eligibility(t):
         ys.append(ys[-1] + dy)
     t.ax.plot(xs, ys, color=COLORS["ink"], lw=LW_EDGE, zorder=5,
               solid_joinstyle="round")
-    t.text((zc[0] - 0.28, zc[1] - 0.48), r"$R_n^{\mathrm{tot}}$",
+    t.text((zc[0] - 0.28, zc[1] - 0.48), "Rₙᵗᵒᵗ",
            COLORS["ink"], ha="left")
-    t.text((zc[0], zc[1] - 0.98), r"local factors of $e_i$", COLORS["mute"],
+    t.text((zc[0], zc[1] - 0.98), "local factors of eᵢ", COLORS["mute"],
            size=PT_SMALL, va="top")
 
 
@@ -288,18 +300,18 @@ _TRANSPORT_PATH = [(ROOT_PT, "J1", "A"), ("J1", "JL", "B"),
 
 
 def _mode_transport(t):
-    t.tree(mix("mute", 30))
-    t.junctions(edge=mix("mute", 40))
+    t.tree(GHOST)
+    t.junctions(edge=GHOST)
     add = COLORS["additive"]
     for a, b, lvl in _TRANSPORT_PATH:
         t.seg(a, b, add, _TAPER_PT[lvl], zorder=2.4)
         t.arrow(_lerp(a, b, 0.34), _lerp(a, b, 0.60), add, tikz_pt=0.8)
     t.junctions(names=("J1", "JL", "JLR"), edge=add)
-    t.text((0.34, 0.66), r"$\alpha_1$", add, ha="left")
-    t.text((-1.16, 1.42), r"$\alpha_2$", add, ha="right")
-    t.text((-0.42, 2.10), r"$\alpha_3$", add, ha="left")
-    t.soma(COLORS["soma"], mix("ink", 30))
-    t.text((-0.30, -0.04), r"$\delta_0$", add, ha="right")
+    t.text((0.34, 0.66), "α₁", add, ha="left")
+    t.text((-1.16, 1.42), "α₂", add, ha="right")
+    t.text((-0.42, 2.10), "α₃", add, ha="left")
+    t.soma(COLORS["soma"], RIM)
+    t.text((-0.30, -0.04), "δ₀", add, ha="right")
     t.dot("T4", MS_JUNCTION, add)
 
 
@@ -307,8 +319,8 @@ def _mode_scalar(t):
     amber = COLORS["local"]
     t.tree(amber)
     t.junctions(edge=amber)
-    t.soma(mix("local", 25), amber)
-    t.text((-0.30, -0.04), r"$m_u$", mix("local", 72, "ink"), ha="right")
+    t.soma(COLORS["soma"], RIM)
+    t.text((-0.30, -0.04), "mᵤ", AMBER_TEXT, ha="right")
     for r in (0.36, 0.50, 0.64):
         t.ax.add_patch(Arc((0, 0), 2 * r, 2 * r, theta1=122, theta2=158,
                            color=mix("local", 80), lw=LW_HAIR, zorder=4))
@@ -316,8 +328,8 @@ def _mode_scalar(t):
 
 def _mode_coordinate(t):
     add = COLORS["additive"]
-    t.tree(mix("mute", 55))
-    t.junctions(edge=mix("mute", 60))
+    t.tree(GHOST)
+    t.junctions(edge=GHOST)
     # the coordinate stops at the soma: dashed barrier across the trunk
     # (TikZ arc from (-0.42,0.44), 150 deg -> 30 deg, r = 0.485)
     cx = -0.42 - 0.485 * np.cos(np.deg2rad(150.0))
@@ -326,9 +338,9 @@ def _mode_coordinate(t):
               color=COLORS["mute"], lw=LW_HAIR, zorder=4)
     arc.set_linestyle((0, (1.5, 1.4)))
     t.ax.add_patch(arc)
-    t.soma(mix("additive", 15), add, edge_lw=LW_DATA * t.f, zorder=4.2)
+    t.soma(COLORS["soma"], RIM, zorder=4.2)
     t.arrow((1.30, 0.60), (0.27, 0.09), add, tikz_pt=0.9, rad=0.12)
-    t.text((1.36, 0.64), r"$\delta_{0,u}$", add, ha="left")
+    t.text((1.36, 0.64), "δ₀,ᵤ", add, ha="left")
 
 
 _CAPSULES_K2 = [
@@ -360,12 +372,12 @@ _CAPSULES_K8 = [
     (("bp", 14), 8, [(_lerp("JRR", "T8", 0.25), "T8")]),
 ]
 _ADDRESS_TAGS = {
-    2: [((-1.62, 3.32), r"$\delta_{u,1}$", ("shunting", 70)),
-        ((1.66, 3.22), r"$\delta_{u,2}$", ("additive", 70))],
-    4: [((-2.12, 3.02), r"$\delta_{u,1}$", ("shunting", 70)),
-        ((-0.60, 3.42), r"$\delta_{u,2}$", ("additive", 70)),
-        ((0.64, 3.40), r"$\delta_{u,3}$", ("local", 62)),
-        ((2.12, 2.86), r"$\delta_{u,4}$", ("oracle", 70))],
+    2: [((-1.62, 3.32), "δᵤ,₁", ("shunting", 70)),
+        ((1.66, 3.22), "δᵤ,₂", ("additive", 70))],
+    4: [((-2.12, 3.02), "δᵤ,₁", ("shunting", 70)),
+        ((-0.60, 3.42), "δᵤ,₂", ("additive", 70)),
+        ((0.64, 3.40), "δᵤ,₃", ("local", 62)),
+        ((2.12, 2.86), "δᵤ,₄", ("oracle", 70))],
     8: [],
 }
 
@@ -382,9 +394,9 @@ def _mode_address(t, K):
     _draw_capsules(t, spec)
     t.tree(COLORS["dend"])
     t.junctions()
-    t.soma(COLORS["soma"], mix("ink", 30))
+    t.soma(COLORS["soma"], RIM)
     for xy, tag, (cname, pct) in _ADDRESS_TAGS[K]:
-        t.text(xy, tag, mix(cname, pct, "ink"))
+        t.text(xy, tag, AMBER_TEXT if cname == "local" else COLORS[cname])
 
 
 # gain-mode stroke widths (TikZ pt), keyed by edge
@@ -404,9 +416,9 @@ def _mode_gain(t):
     for (a, b), w in _GAIN_PT.items():
         t.seg(a, b, COLORS["dend"], w)
     t.junctions()
-    t.soma(COLORS["soma"], mix("ink", 30))
+    t.soma(COLORS["soma"], RIM)
     t.dot("JL", 9.5, "none", COLORS["ink"], LW_EDGE, zorder=4.4)
-    t.text((-1.24, 1.32), r"$\widetilde{\alpha}_n\!=\!1.6$", COLORS["ink"],
+    t.text((-1.24, 1.32), "ᾶₙ = 1.6", COLORS["ink"],
            ha="right")
 
 
@@ -432,9 +444,9 @@ def _mode_shunt(t, shunted):
         t.tree(dend)
         t.junctions()
         t.dot(syn, 4.2, "white", COLORS["inh"], LW_EDGE)
-    t.soma(COLORS["soma"], mix("ink", 30))
-    t.text((syn[0] - 0.12, syn[1] - 0.13), r"$g_{\mathrm{shunt}}$",
-           mix("inh", 80, "ink"), size=PT_SMALL, ha="right", va="top")
+    t.soma(COLORS["soma"], RIM)
+    t.text((syn[0] - 0.12, syn[1] - 0.13), "gₛₕᵤₙₜ",
+           COLORS["inh"], size=PT_SMALL, ha="right", va="top")
 
 
 _MODES = ("plain", "forward", "eligibility", "transport", "scalar",
@@ -503,7 +515,7 @@ def _mini_tree(t, sx, sy):
     for (jx, jy) in _MINI_JUNCTIONS:
         t.dot((sx + jx, sy + jy), 2.4, "white", COLORS["dend"], LW_EDGE)
     t.ax.add_patch(Circle((sx, sy), 0.13, facecolor=COLORS["soma"],
-                          edgecolor=mix("ink", 30), lw=LW_HAIR, zorder=3.5))
+                          edgecolor=RIM, lw=LW_HAIR, zorder=3.5))
 
 
 def draw_deranged_pair(ax, scale=1.0, *, labels=True, xlim=None, ylim=None,
@@ -521,16 +533,16 @@ def draw_deranged_pair(ax, scale=1.0, *, labels=True, xlim=None, ylim=None,
     for x0 in (0.0, 2.30):
         t.dot((x0, 1.70), 4.0, add)
         t.arrow((x0, 1.78), (x0, 2.36), add, tikz_pt=0.8, head=4.0)
-    t.text((0.0, 1.60), r"$\delta_a$", add, size=PT_SMALL, va="top")
-    t.text((2.30, 1.60), r"$\delta_b$", add, size=PT_SMALL, va="top")
-    t.text((3.20, 2.85), "correct", mix("additive", 75, "ink"), ha="left")
+    t.text((0.0, 1.60), "δᵤ", add, size=PT_SMALL, va="top")
+    t.text((2.30, 1.60), "δᵥ", add, size=PT_SMALL, va="top")
+    t.text((3.20, 2.85), "correct", COLORS["additive"], ha="left")
     # deranged assignment (bottom)
     _mini_tree(t, 0.0, 0.0)
     _mini_tree(t, 2.30, 0.0)
     t.dot((0.0, -0.85), 4.0, bp)
     t.dot((2.30, -0.85), 4.0, bp)
-    t.text((0.0, -0.95), r"$\delta_a$", bp, size=PT_SMALL, va="top")
-    t.text((2.30, -0.95), r"$\delta_b$", bp, size=PT_SMALL, va="top")
+    t.text((0.0, -0.95), "δᵤ", bp, size=PT_SMALL, va="top")
+    t.text((2.30, -0.95), "δᵥ", bp, size=PT_SMALL, va="top")
     t.arrow((0.08, -0.78), (2.24, -0.18), bp, tikz_pt=0.8, head=4.0)
     t.arrow((2.22, -0.78), (0.06, -0.18), bp, tikz_pt=0.8, head=4.0)
     t.text((3.20, 0.30), "deranged", bp, ha="left")
@@ -558,22 +570,22 @@ if __name__ == "__main__":
         ("plain", dict(mode="plain", stage_label="hook variant")),
         ("forward", dict(mode="forward", stage_label="forward biophysics")),
         ("eligibility",
-         dict(mode="eligibility", stage_label=r"eligibility $e_i$")),
+         dict(mode="eligibility", stage_label="eligibility eᵢ")),
         ("transport",
          dict(mode="transport", stage_label="adjoint transport")),
         ("scalar", dict(mode="scalar", stage_label="global scalar")),
         ("coordinate",
          dict(mode="coordinate", stage_label="neuron coordinate")),
-        ("address K=2", dict(mode="address", K=2, stage_label="$K=2$")),
-        ("address K=4", dict(mode="address", K=4, stage_label="$K=4$")),
-        ("address K=8", dict(mode="address", K=8, stage_label="$K=8$")),
+        ("address K=2", dict(mode="address", K=2, stage_label="K = 2")),
+        ("address K=4", dict(mode="address", K=4, stage_label="K = 4")),
+        ("address K=8", dict(mode="address", K=8, stage_label="K = 8")),
         ("gain", dict(mode="gain", stage_label="route gain")),
         ("shunt off",
          dict(mode="shunt", shunted=False,
-              stage_label=r"$g_{\mathrm{shunt}}$ off")),
+              stage_label="gₛₕᵤₙₜ off")),
         ("shunt on",
          dict(mode="shunt", shunted=True,
-              stage_label=r"$g_{\mathrm{shunt}}$ on")),
+              stage_label="gₛₕᵤₙₜ on")),
         ("deranged pair", None),
         ("plain, scale 0.62 no labels",
          dict(mode="plain", scale=0.62, labels=False)),
