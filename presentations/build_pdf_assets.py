@@ -36,7 +36,7 @@ CROPS: dict[str, tuple] = {
         "components/schematic_fig2_ownership_address", (0, 0, 2160, 1140)
     ),
     "physical_stage_schematic": (
-        "components/schematic_fig5_physical_depth", (0, 0, 1440, 1230)
+        "components/figure5_schematics", (0, 0, 2160, 1110)
     ),
     "focal_shunt_schematic": (
         "components/schematic_fig8_focal_shunt", (0, 0, 3120, 1590)
@@ -172,7 +172,7 @@ def crop_vector(
         )
         target.draw_rect(rect, color=None, fill=(1, 1, 1))
     destination = OUT / f"{name}.pdf"
-    output.save(destination, garbage=4, deflate=True)
+    output.save(destination, garbage=4, deflate=True, no_new_id=True)
     output.close()
     source.close()
     return destination

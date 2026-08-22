@@ -55,6 +55,8 @@ FIGURE_MAP: dict[str, str] = {
     "components/animal_pairs_wide": "fig_animal_pairs_wide",
     "components/active_dose_main": "fig_active_dose_main",
     "components/physical_controls_main": "fig_physical_controls_main",
+    "components/figure5_schematics": "fig_figure5_schematics",
+    "components/figure5_architecture_schematic": "fig_figure5_architecture_schematic",
     # Supplementary Information: generated source blocks S1--S27.  The
     # compositor adds compact S18--S19 blocks and S28 from selected diagnostic
     # panels.

@@ -603,8 +603,21 @@ def main() -> None:
     compose(
         MAIN / "figure_05.pdf",
         [
-            *[panel("figure_05_panels_A-F.pdf", letter, 2, 3) for letter in "ABCDEF"],
-            panel("figure_05_panels_G-L.pdf", "G", 2, 3),
+            panel(
+                "../components/figure5_schematics.pdf",
+                "A",
+                1,
+                2,
+                erase_heading=False,
+            ),
+            *[panel("figure_05_panels_A-F.pdf", letter, 2, 3) for letter in "BCDEF"],
+            panel(
+                "../components/figure5_architecture_schematic.pdf",
+                "A",
+                1,
+                3,
+                erase_heading=False,
+            ),
             panel("figure_05_panels_G-L.pdf", "H", 2, 3),
         ],
         [
