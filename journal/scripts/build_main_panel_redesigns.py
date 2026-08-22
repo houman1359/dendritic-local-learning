@@ -584,7 +584,11 @@ def build_figure6() -> None:
 
 def _morphology_geometry():
     segments = pd.read_csv(SOURCE / "figure3" / "segment_metrics.csv")
-    root = int(segments.groupby("root_id").size().idxmax())
+    # Use the median-sized reconstruction as the illustrative cell.  It is
+    # representative of the eight-cell cohort and remains legible at the
+    # one-third-column size used in the composite figure.
+    sizes = segments.groupby("root_id").size()
+    root = int((sizes - sizes.median()).abs().sort_values(kind="stable").index[0])
     cell = segments[segments.root_id.eq(root)].copy()
     xyz = cell[["x_um", "y_um", "z_um"]].to_numpy(float)
     centered = xyz - xyz.mean(axis=0, keepdims=True)
@@ -641,107 +645,126 @@ def _fit_arbor(ax, positions) -> None:
 def build_mapped_reconstruction() -> None:
     cell, positions, rows, parent = _morphology_geometry()
     fig, ax = plt.subplots(figsize=(FIG_W / 3, 1.62))
-    fig.subplots_adjust(left=0.02, right=0.98, bottom=0.03, top=0.98)
+    fig.subplots_adjust(left=0.02, right=0.98, bottom=0.20, top=0.99)
 
-    xy = np.asarray(list(positions.values()))
-    center = xy.mean(axis=0)
-    span = max(np.ptp(xy[:, 0]), np.ptp(xy[:, 1]))
+    # One reconstruction is enough.  Hue carries E/I balance and line width
+    # carries total mapped burden, avoiding the duplicated dense arbors in the
+    # previous version while preserving both anatomical quantities.
+    e_count = cell.E_count.to_numpy(float)
+    i_count = cell.I_count.to_numpy(float)
+    total = e_count + i_count
+    balance = np.divide(
+        e_count - i_count, total, out=np.zeros_like(total), where=total > 0
+    )
+    burden = np.log1p(total)
+    burden /= max(burden.max(), 1e-12)
+    balance_by_segment = dict(
+        zip(cell.segment_id.to_numpy(int), balance, strict=True)
+    )
+    burden_by_segment = dict(
+        zip(cell.segment_id.to_numpy(int), burden, strict=True)
+    )
+    balance_cmap = mpl.colors.LinearSegmentedColormap.from_list(
+        "contact_balance", [COLORS["inh"], "#D8DDE3", COLORS["exc"]]
+    )
 
-    def transformed(segment: int, panel_center: float):
-        px, py = (positions[segment] - center) / span
-        return panel_center + 0.41 * px, 0.54 + 0.72 * py
+    # A pale complete skeleton establishes morphology.  Only branches with a
+    # mapped burden receive the bivariate overlay.
+    _draw_arbor(ax, positions, rows, parent, base_color="#D9DDE2", lw=0.52)
+    for segment in rows:
+        p = parent[segment]
+        if p not in rows:
+            continue
+        weight = burden_by_segment[segment]
+        if weight <= 0:
+            continue
+        start, end = positions[segment], positions[p]
+        color = balance_cmap((balance_by_segment[segment] + 1) / 2)
+        ax.plot(
+            [start[0], end[0]], [start[1], end[1]], color=color,
+            lw=0.58 + 1.35 * weight, alpha=0.42 + 0.58 * weight,
+            solid_capstyle="round", zorder=3,
+        )
+    _fit_arbor(ax, positions)
 
-    for panel_center, count_column, color, label in (
-        (0.25, "E_count", COLORS["exc"], "excitatory"),
-        (0.75, "I_count", COLORS["inh"], "inhibitory"),
-    ):
-        counts = cell[count_column].to_numpy(float)
-        scale = np.log1p(counts)
-        scale /= max(scale.max(), 1e-12)
-        count_by_segment = dict(zip(cell.segment_id.to_numpy(int), scale, strict=True))
-        for segment, row in rows.items():
-            p = parent[segment]
-            if p not in rows:
-                continue
-            start, end = transformed(segment, panel_center), transformed(p, panel_center)
-            burden = count_by_segment[segment]
-            edge_color = _rgba(color, 0.18 + 0.72 * burden) if burden > 0 else "#D6DADF"
-            ax.plot(
-                [start[0], end[0]], [start[1], end[1]], color=edge_color,
-                lw=0.45 + 1.45 * burden, solid_capstyle="round", zorder=2,
-            )
-        soma_id = min(rows, key=lambda key: rows[key].topological_depth)
-        soma = transformed(soma_id, panel_center)
-        ax.scatter(soma[0], soma[1], s=28, color=COLORS["soma"],
-                   edgecolor="white", linewidth=0.5, zorder=4)
-        ax.text(panel_center, 0.08, label, ha="center", va="center",
-                fontsize=PT_ANNOT, color=color)
-    ax.plot([0.50, 0.50], [0.12, 0.92], color=COLORS["grid"], lw=LW_HAIR)
-    ax.text(0.50, 0.985, "branch color/width ∝ mapped contacts",
-            ha="center", va="top", fontsize=PT_SMALL, color=COLORS["mute"])
-    ax.set_xlim(0, 1)
-    ax.set_ylim(0, 1)
-    ax.axis("off")
+    # Compact keys sit below the morphology rather than over the data.
+    key = fig.add_axes([0.16, 0.075, 0.48, 0.040])
+    gradient = np.linspace(0, 1, 256)[None, :]
+    key.imshow(gradient, aspect="auto", cmap=balance_cmap, origin="lower")
+    key.set_xticks([0, 255], ["I-rich", "E-rich"])
+    key.tick_params(axis="x", length=0, pad=1, labelsize=PT_SMALL)
+    key.set_yticks([])
+    for spine in key.spines.values():
+        spine.set_visible(False)
+    fig.text(
+        0.69, 0.095, "width = E + I", ha="left", va="center",
+        fontsize=PT_SMALL, color=COLORS["mute"],
+    )
     save(fig, "fig_main_mapped_reconstruction", audit_overlap=False)
 
 
 def build_ancestry_addresses() -> None:
-    cell, positions, rows, parent = _morphology_geometry()
     fig, ax = plt.subplots(figsize=(FIG_W / 3, 1.62))
-    fig.subplots_adjust(left=0.02, right=0.98, bottom=0.03, top=0.98)
-    _draw_arbor(ax, positions, rows, parent, base_color="#D0D4D9", lw=0.55)
+    fig.subplots_adjust(left=0.02, right=0.98, bottom=0.04, top=0.98)
+    ax.set_xlim(0, 1)
+    ax.set_ylim(0, 1)
+    ax.axis("off")
 
-    candidates = cell[
-        (cell.topological_depth >= 2)
-        & cell.credit_domain_fraction.between(0.14, 0.32)
-    ]
-    outer_node = int(
-        candidates.loc[(candidates.credit_domain_fraction - 0.22).abs().idxmin(), "segment_id"]
+    # A deliberately simplified topology teaches the set relation.  The
+    # measured reconstruction is already carried by panel A; repeating it here
+    # obscured the definition of an ancestry address.
+    route_a = FancyBboxPatch(
+        (0.34, 0.47), 0.62, 0.47,
+        boxstyle="round,pad=0.015,rounding_size=0.035",
+        facecolor=_rgba(COLORS["shunting"], 0.10), edgecolor="none", zorder=0,
     )
-    outer = _descendants(parent, outer_node)
-    inner_candidates = cell[
-        cell.segment_id.isin(outer)
-        & (cell.topological_depth > rows[outer_node].topological_depth)
-        & cell.credit_domain_fraction.between(0.025, 0.13)
-    ]
-    inner_node = int(
-        inner_candidates.loc[
-            (inner_candidates.credit_domain_fraction - 0.07).abs().idxmin(),
-            "segment_id",
-        ]
+    route_b = FancyBboxPatch(
+        (0.58, 0.50), 0.35, 0.20,
+        boxstyle="round,pad=0.012,rounding_size=0.028",
+        facecolor=_rgba(COLORS["oracle"], 0.14), edgecolor="none", zorder=1,
     )
-    inner = _descendants(parent, inner_node)
+    ax.add_patch(route_a)
+    ax.add_patch(route_b)
 
-    for selected, color, halo, line in (
-        (outer, COLORS["shunting"], 4.4, 1.55),
-        (inner, COLORS["oracle"], 3.6, 1.65),
-    ):
-        for segment in selected:
-            p = parent.get(segment, -1)
-            if p not in rows or p not in selected:
-                continue
-            start, end = positions[segment], positions[p]
-            ax.plot([start[0], end[0]], [start[1], end[1]],
-                    color=_rgba(color, 0.14), lw=halo,
-                    solid_capstyle="round", zorder=2)
-            ax.plot([start[0], end[0]], [start[1], end[1]],
-                    color=color, lw=line, solid_capstyle="round", zorder=3)
-    for number, node, color in (("1", outer_node, COLORS["shunting"]),
-                                ("2", inner_node, COLORS["oracle"])):
-        x, y = positions[node]
-        ax.scatter(x, y, s=36, facecolor="white", edgecolor=color,
-                   linewidth=LW_ERR, zorder=6)
-        ax.text(x, y, number, ha="center", va="center", fontsize=PT_SMALL,
-                color=color, zorder=7)
-    _fit_arbor(ax, positions)
-    ax.legend(
-        handles=[
-            Line2D([], [], color=COLORS["shunting"], lw=2.2, label="route 1"),
-            Line2D([], [], color=COLORS["oracle"], lw=2.2, label="route 2 ⊂ route 1"),
-        ],
-        loc="lower left", fontsize=PT_SMALL, frameon=False,
-        handlelength=1.3, handletextpad=0.4, borderaxespad=0.0,
-    )
+    edges = [
+        ((0.10, 0.44), (0.28, 0.44)),
+        ((0.28, 0.44), (0.42, 0.70)),
+        ((0.28, 0.44), (0.43, 0.24)),
+        ((0.42, 0.70), (0.62, 0.80)),
+        ((0.42, 0.70), (0.62, 0.60)),
+        ((0.62, 0.80), (0.89, 0.88)),
+        ((0.62, 0.80), (0.89, 0.75)),
+        ((0.62, 0.60), (0.88, 0.65)),
+        ((0.62, 0.60), (0.88, 0.54)),
+        ((0.43, 0.24), (0.70, 0.33)),
+        ((0.43, 0.24), (0.70, 0.13)),
+    ]
+    route_a_edges = {1, 3, 4, 5, 6, 7, 8}
+    route_b_edges = {7, 8}
+    for index, (start, end) in enumerate(edges):
+        if index in route_b_edges:
+            color, width, order = COLORS["oracle"], 2.35, 4
+        elif index in route_a_edges:
+            color, width, order = COLORS["shunting"], 2.10, 3
+        else:
+            color, width, order = "#AEB6C0", 1.10, 2
+        ax.plot(
+            [start[0], end[0]], [start[1], end[1]], color=color,
+            lw=width, solid_capstyle="round", zorder=order,
+        )
+    ax.scatter(0.10, 0.44, s=48, color=COLORS["soma"], edgecolor="white",
+               linewidth=0.7, zorder=6)
+    ax.scatter([0.42, 0.62], [0.70, 0.60], s=30, facecolor="white",
+               edgecolor=[COLORS["shunting"], COLORS["oracle"]],
+               linewidth=LW_ERR, zorder=6)
+    ax.text(0.42, 0.70, "A", ha="center", va="center",
+            fontsize=PT_SMALL, color=COLORS["shunting"], zorder=7)
+    ax.text(0.62, 0.60, "B", ha="center", va="center",
+            fontsize=PT_SMALL, color=COLORS["oracle"], zorder=7)
+    ax.text(0.38, 0.91, "address A", ha="left", va="center",
+            fontsize=PT_ANNOT, color=COLORS["shunting"])
+    ax.text(0.74, 0.68, "B ⊂ A", ha="center", va="bottom",
+            fontsize=PT_ANNOT, color=COLORS["oracle"])
     save(fig, "fig_main_ancestry_addresses", audit_overlap=False)
 
 
@@ -749,58 +772,70 @@ def build_wire_efficiency() -> None:
     cell = pd.read_csv(SOURCE / "capture_per_wire" / "cell_method_channel.csv")
     eight = cell[cell.channels.eq(8)].copy()
     methods = [
-        ("dense PCA oracle", "dense", COLORS["oracle"], "o"),
-        ("morphology-aware paths", "ancestry", COLORS["shunting"], "s"),
-        ("random paths", "random", COLORS["point_mlp"], "D"),
-        ("depth-only bins", "depth", COLORS["additive"], "^"),
-        ("shuffled ancestry", "shuffle", COLORS["highlight"], "v"),
+        ("dense PCA oracle", "dense oracle"),
+        ("morphology-aware paths", "ancestry routes"),
+        ("random paths", "random routes"),
+        ("depth-only bins", "depth bins"),
+        ("shuffled ancestry", "shuffled ancestry"),
     ]
-    fig, ax = plt.subplots(figsize=(FIG_W / 2, 1.86))
-    fig.subplots_adjust(left=0.17, right=0.98, bottom=0.25, top=0.96)
-    ax.set_xscale("log")
-    for method, label, color, marker in methods:
-        part = eight[eight.method.eq(method)]
-        ax.scatter(
-            part.wiring_density, part.credit_capture, marker=marker, s=11,
-            color=color, alpha=0.22, edgecolors="none", zorder=2,
-        )
-        ax.scatter(
-            part.wiring_density.mean(), part.credit_capture.mean(),
-            marker=marker, s=42, color=color, edgecolor="white",
-            linewidth=0.6, zorder=5, label=label,
-        )
-    dense = eight[eight.method.eq("dense PCA oracle")]
-    ancestry = eight[eight.method.eq("morphology-aware paths")]
-    start = (dense.wiring_density.mean(), dense.credit_capture.mean())
-    end = (ancestry.wiring_density.mean(), ancestry.credit_capture.mean())
-    ax.annotate(
-        "", xy=end, xytext=start,
-        arrowprops={
-            "arrowstyle": "-|>", "color": COLORS["shunting"],
-            "lw": LW_DATA, "connectionstyle": "arc3,rad=-0.16",
-        },
+    fig, (ax_capture, ax_wiring) = plt.subplots(
+        1, 2, figsize=(FIG_W / 2, 1.86), sharey=True,
+        gridspec_kw={"width_ratios": [1, 1]},
     )
-    ax.text(
-        0.34, 0.79, "85% of dense capture\nat 6.9% of wiring",
-        transform=ax.transAxes, ha="center", va="center",
-        fontsize=PT_ANNOT, color=COLORS["shunting"],
-        bbox={"boxstyle": "round,pad=0.18", "fc": "white", "ec": "none", "alpha": 0.88},
-    )
-    ax.text(
-        0.03, 0.06, "14.2× capture per wire", transform=ax.transAxes,
-        ha="left", va="bottom", fontsize=PT_ANNOT, color=COLORS["shunting"],
-    )
-    ax.set_xlim(0.008, 1.35)
-    ax.set_ylim(0.0, 0.86)
-    ax.set_xlabel("wiring density")
-    ax.set_ylabel("field capture")
-    style_axis(ax, grid="both")
-    clean_legend(
-        ax, loc="lower right", ncol=2, fontsize=PT_SMALL,
-        handlelength=0.9, handletextpad=0.25, columnspacing=0.65,
-        frameon=True, facecolor="white", edgecolor="none", framealpha=0.88,
-    )
-    save(fig, "fig_main_wire_efficiency")
+    fig.subplots_adjust(left=0.32, right=0.985, bottom=0.24, top=0.84, wspace=0.22)
+    axes = [ax_capture, ax_wiring]
+    metrics = ["oracle_fraction", "wiring_density"]
+    titles = ["capture retained", "wiring required"]
+    y = np.arange(len(methods))[::-1]
+
+    for ax, metric, title, seed in zip(axes, metrics, titles, [20260851, 20260871], strict=True):
+        means: list[float] = []
+        lows: list[float] = []
+        highs: list[float] = []
+        colors: list[str] = []
+        for index, (method, _) in enumerate(methods):
+            values = 100 * eight.loc[eight.method.eq(method), metric].to_numpy(float)
+            mean, low, high = mean_ci(values, seed + index)
+            means.append(mean)
+            lows.append(low)
+            highs.append(high)
+            colors.append(
+                COLORS["oracle"] if index == 0
+                else COLORS["shunting"] if index == 1
+                else "#9DA5AE"
+            )
+        for ypos, mean, low, high, color, index in zip(
+            y, means, lows, highs, colors, range(len(methods)), strict=True
+        ):
+            ax.barh(
+                ypos, mean, height=0.48, color=_rgba(color, 0.18),
+                edgecolor=color, lw=LW_EDGE, zorder=2,
+            )
+            ax.errorbar(
+                mean, ypos, xerr=[[mean - low], [high - mean]], fmt="o",
+                ms=3.5, mfc=color, mec="white", mew=0.45, color=color,
+                lw=LW_ERR, capsize=ERR_CAPSIZE, zorder=4,
+            )
+            # Direct values on the ancestry row make the main comparison
+            # readable without an arrow or legend.  The dense row is 100% by
+            # definition and needs no redundant endpoint label.
+            if index == 1:
+                inside = mean > 25
+                ax.text(
+                    mean - 2.5 if inside else mean + 3.0, ypos, f"{mean:.1f}%",
+                    ha="right" if inside else "left", va="center",
+                    fontsize=PT_SMALL, color=color, fontweight="bold",
+                )
+        ax.set_xlim(0, 112)
+        ax.set_xticks([0, 50, 100])
+        ax.set_xlabel("% of dense oracle", fontsize=PT_SMALL)
+        ax.set_title(title, fontsize=PT_ANNOT, pad=3)
+        style_axis(ax, grid="x")
+        ax.tick_params(axis="x", labelsize=PT_SMALL)
+    ax_capture.set_yticks(y, [label for _, label in methods])
+    ax_capture.tick_params(axis="y", labelsize=PT_SMALL, length=0)
+    ax_wiring.tick_params(axis="y", length=0)
+    save(fig, "fig_main_wire_efficiency", audit_overlap=False)
 
 
 def build_cross_animal() -> None:
