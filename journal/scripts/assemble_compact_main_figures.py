@@ -574,7 +574,13 @@ def main() -> None:
             panel("figure_04_panels_A-I.pdf", "D", 3, 3),
             panel("figure_04_panels_A-I.pdf", "E", 3, 3),
             panel("figure_04_panels_A-I.pdf", "F", 3, 3),
-            panel("figure_09_panel_O.pdf", "O", 1, 1),
+            panel(
+                "../components/main_phase_plane_clean.pdf",
+                "A",
+                1,
+                1,
+                erase_heading=False,
+            ),
         ],
         [
             "Credit-operator utility",
@@ -587,7 +593,7 @@ def main() -> None:
         ],
         rows=3,
         cols=6,
-        height=470,
+        height=455,
         slots=[
             Slot(0, 0, colspan=2),
             Slot(0, 2, colspan=2),
@@ -597,7 +603,7 @@ def main() -> None:
             Slot(1, 4, colspan=2),
             Slot(2, 0, colspan=6),
         ],
-        row_heights=[145.0, 145.0, 174.0],
+        row_heights=[140.0, 140.0, 169.0],
     )
 
     compose(
@@ -610,7 +616,14 @@ def main() -> None:
                 2,
                 erase_heading=False,
             ),
-            *[panel("figure_05_panels_A-F.pdf", letter, 2, 3) for letter in "BCDEF"],
+            panel(
+                "../components/main_physical_task_schematic.pdf",
+                "A",
+                1,
+                1,
+                erase_heading=False,
+            ),
+            *[panel("figure_05_panels_A-F.pdf", letter, 2, 3) for letter in "CDEF"],
             panel(
                 "../components/figure5_architecture_schematic.pdf",
                 "A",
@@ -646,53 +659,43 @@ def main() -> None:
         row_heights=[100.0, 132.0, 132.0],
     )
 
-    compose(
-        MAIN / "figure_06.pdf",
-        [
-            panel(
-                "figure_06_panels_A-D.pdf",
-                letter,
-                2,
-                2,
-                erase_phrases=("key as in A",) if letter == "B" else (),
-            )
-            for letter in "ABCD"
-        ]
-        + [
-            panel("../generated/fig_task_family_alignment_composite.pdf", letter, 1, 3)
-            for letter in "ABC"
-        ],
-        [
-            "H4 aligned hierarchy",
-            "H4 reversed placement",
-            "Frozen H4 contrasts",
-            "Optimum across task depth",
-            "Task-family boundary under BP",
-            "Task-family boundary under LocalCA",
-            "Architecture × alignment interaction",
-        ],
-        rows=3,
-        cols=6,
-        height=394,
-        slots=[
-            Slot(0, 0, colspan=3),
-            Slot(0, 3, colspan=3),
-            Slot(1, 0, colspan=3),
-            Slot(1, 3, colspan=3),
-            Slot(2, 0, colspan=2),
-            Slot(2, 2, colspan=2),
-            Slot(2, 4, colspan=2),
-        ],
-        row_heights=[123.0, 123.0, 144.0],
-    )
+    # Figure 6 is authored as one coherent final-size canvas.  Its heatmaps
+    # and aligned labels depend on shared row/column geometry, so splitting it
+    # into heterogeneous legacy source sheets would undo the redesign.
+    copy_page("../components/main_figure6_redesigned.pdf", "figure_06.pdf")
 
     figure_07_panels = [
-        panel("figure_07_panels_A-J.pdf", "A", 2, 3),
-        panel("figure_07_panels_A-J.pdf", "B", 2, 3),
+        panel(
+            "../components/main_mapped_reconstruction.pdf",
+            "A",
+            1,
+            1,
+            erase_heading=False,
+        ),
+        panel(
+            "../components/main_ancestry_addresses.pdf",
+            "A",
+            1,
+            1,
+            erase_heading=False,
+        ),
         panel("figure_07_panels_A-J.pdf", "E", 2, 3),
         panel("figure_07_panels_A-J.pdf", "C", 2, 3),
-        panel("figure_07_panels_K-L.pdf", "K", 1, 2),
+        panel(
+            "../components/main_wire_efficiency.pdf",
+            "A",
+            1,
+            1,
+            erase_heading=False,
+        ),
         panel("figure_07_panels_K-L.pdf", "L", 1, 2),
+        panel(
+            "../components/main_cross_animal.pdf",
+            "A",
+            1,
+            1,
+            erase_heading=False,
+        ),
     ]
     figure_07_titles = [
         "Mapped reconstruction",
@@ -701,13 +704,8 @@ def main() -> None:
         "Sparse route capacity",
         "Wire efficiency at eight channels",
         "Wiring-normalized capture",
+        "Independent-animal direction",
     ]
-    pinky_panel = MAIN / "../supplementary/figure_S27_panels_A-D.pdf"
-    if pinky_panel.is_file():
-        figure_07_panels.append(
-            panel("../supplementary/figure_S27_panels_A-D.pdf", "C", 2, 2)
-        )
-        figure_07_titles.append("Independent-animal direction")
     compose(
         MAIN / "figure_07.pdf",
         figure_07_panels,
@@ -730,7 +728,13 @@ def main() -> None:
     compose(
         MAIN / "figure_08.pdf",
         [
-            panel("figure_08_panels_A-I.pdf", "A", 2, 3),
+            panel(
+                "../components/main_focal_schematic.pdf",
+                "A",
+                1,
+                1,
+                erase_heading=False,
+            ),
             panel("figure_08_panels_A-I.pdf", "B", 2, 3),
             panel("figure_08_panels_A-I.pdf", "D", 2, 3),
             panel("figure_08_panels_A-I.pdf", "E", 2, 3),
@@ -768,7 +772,13 @@ def main() -> None:
     compose(
         MAIN / "figure_09.pdf",
         [
-            panel("figure_09_panels_A-H.pdf", "B", 2, 3),
+            panel(
+                "../components/main_structure_function_summary.pdf",
+                "A",
+                1,
+                1,
+                erase_heading=False,
+            ),
             panel("figure_09_panels_A-H.pdf", "C", 2, 3),
             panel("figure_09_panels_A-H.pdf", "D", 2, 3),
             panel("figure_09_panels_A-H.pdf", "E", 2, 3),

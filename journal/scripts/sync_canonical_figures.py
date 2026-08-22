@@ -57,6 +57,17 @@ FIGURE_MAP: dict[str, str] = {
     "components/physical_controls_main": "fig_physical_controls_main",
     "components/figure5_schematics": "fig_figure5_schematics",
     "components/figure5_architecture_schematic": "fig_figure5_architecture_schematic",
+    # Final-aspect replacements for main panels that previously retained
+    # diagnostic-style layouts or crowded teaching graphics.
+    "components/main_phase_plane_clean": "fig_main_phase_plane_clean",
+    "components/main_physical_task_schematic": "fig_main_physical_task_schematic",
+    "components/main_figure6_redesigned": "fig_main_figure6_redesigned",
+    "components/main_mapped_reconstruction": "fig_main_mapped_reconstruction",
+    "components/main_ancestry_addresses": "fig_main_ancestry_addresses",
+    "components/main_wire_efficiency": "fig_main_wire_efficiency",
+    "components/main_cross_animal": "fig_main_cross_animal",
+    "components/main_focal_schematic": "fig_main_focal_schematic",
+    "components/main_structure_function_summary": "fig_main_structure_function_summary",
     # Supplementary Information: generated source blocks S1--S27.  The
     # compositor adds compact S18--S19 blocks and S28 from selected diagnostic
     # panels.

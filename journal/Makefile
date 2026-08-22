@@ -63,6 +63,7 @@ figures:
 	$(PYTHON) scripts/analyze_fashion_feedback_ladder.py
 	$(PYTHON) scripts/build_main_figure_schematics.py
 	$(PYTHON) scripts/build_main_physical_control_panels.py
+	$(PYTHON) scripts/build_main_panel_redesigns.py
 	$(PYTHON) scripts/sync_canonical_figures.py
 	$(PYTHON) scripts/assemble_compact_main_figures.py
 
