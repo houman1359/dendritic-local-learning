@@ -90,7 +90,7 @@ FIGURE_MAP: dict[str, str] = {
     "supplementary/figure_S17_panels_A-D": "fig_animal_credit_supplement",
     "supplementary/figure_S20_panels_A-J": "fig3_microns_topology_detailed",
     "supplementary/figure_S21_panels_A-I": "fig4_focal_shunting_detailed",
-    "supplementary/figure_S22_panels_A-H": "fig5_alignment_boundary_detailed",
+    "supplementary/figure_S22_panels_A-J": "fig5_alignment_boundary_detailed",
     "supplementary/figure_S23_panels_A-C": "fig_trained_partition_residual",
     "supplementary/figure_S24_panels_A-D": "fig_adaptive_conductance_reliability",
     "supplementary/figure_S25_panels_A-D": "fig_irregular_tree_wavelets",

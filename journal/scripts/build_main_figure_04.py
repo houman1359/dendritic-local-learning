@@ -12,9 +12,18 @@ whose sub-blocks the compact assembler used to scale into grid slots.
 
 Layout (12-column module, one horizontal and one vertical gutter)::
 
-    row 0   A operator schematic | B spectral advantage | C predictive utility
-    row 1   D route-resolution   | E projection boundary
-    row 2   F reliability gains  | G alignment x bandwidth
+    row 0   A operator schematic  | B spectral advantage | C route-resolution
+    row 1   D projection boundary | E reliability gains
+    row 2   F predictive utility  | G alignment x bandwidth
+
+The letters run in reading order and A-E now run as one uninterrupted
+theoretical argument -- operator utility, spectral alignment, hierarchy x
+resolution, the signal-noise boundary, the reliability gain -- before F
+validates the theory against observed one-step progress and G synthesises
+the plane.  The observed-progress scatter used to sit at C, inside the
+theory sequence; moving it to F costs it nothing but the shape of its slot
+(it now reads across six modules instead of four, and the route-resolution
+curves read across four instead of six).
 
 Three module widths only -- four modules in row 0, six in rows 1 and 2 -- so
 every panel of a row owns an identical axes box and the whole figure starts
@@ -26,7 +35,7 @@ costs it nothing (its five families occupy a small part of the plane) and
 brings the module-normalised area spread of the figure to 1.16x.
 
 Every explanatory or methodological note that used to be printed inside a
-panel -- the marker dodges in D and F, the misrouted-control callout in C,
+panel -- the marker dodges in C and E, the misrouted-control callout in F,
 the alignment rule and the filled/open marker key in G -- now lives in the
 caption, which is where the reader looks for how a panel was drawn.  The two
 5x5 signed heatmaps still share one diverging treatment centred on zero, one
@@ -80,8 +89,8 @@ OUT = ROOT / "figures" / "components" / "main_figure_04_native.pdf"
 HEIGHT_IN = 448.0 / 72.0  # 448 pt -> aspect 1.16
 # Every reserve this figure needs is paid for by the outer margins and by the
 # two uniform gutters, never by a slice of one panel: the horizontal gutter
-# carries the next panel's y label and tick column (34.8 pt for panel C, the
-# widest) and the panel letter that sits left of it, and the vertical gutter
+# carries the next panel's y label and tick column (34.8 pt for the widest
+# panel) and the panel letter that sits left of it, and the vertical gutter
 # carries a row's x label band plus the next row's letter and title band.  So
 # no panel is ever carved on its own and every panel that starts in one grid
 # column keeps one x0 and one axes width.
@@ -94,7 +103,7 @@ ROW_WEIGHTS = (106.0, 112.0, 106.0)
 
 # The colour key of a signed heatmap, as a rail reserved along the TOP of the
 # panel's own module allocation.  Every dimension is in points and is shared
-# by both heatmaps, so B and E carry one identical key and keep the full
+# by both heatmaps, so B and D carry one identical key and keep the full
 # 4-module axes box their row-mates get.
 KEY_BAR_PT = 98.0         # bar length
 KEY_BAR_H_PT = 4.5        # bar thickness (the old vertical rail's width)
@@ -297,10 +306,10 @@ def main() -> None:
     ax_a = canvas.panel("A", 0, 0, 4, schematic=True,
                         title="Credit-operator utility")
     ax_b = canvas.panel("B", 0, 4, 4, title="Spectral alignment")
-    ax_c = canvas.panel("C", 0, 8, 4, title="Predictive utility")
-    ax_d = canvas.panel("D", 1, 0, 6, title="Route-resolution crossover")
-    ax_e = canvas.panel("E", 1, 6, 6, title="Projection boundary")
-    ax_f = canvas.panel("F", 2, 0, 6, title="Reliability gains")
+    ax_c = canvas.panel("C", 0, 8, 4, title="Route-resolution crossover")
+    ax_d = canvas.panel("D", 1, 0, 6, title="Projection boundary")
+    ax_e = canvas.panel("E", 1, 6, 6, title="Reliability gains")
+    ax_f = canvas.panel("F", 2, 0, 6, title="Predictive utility")
     ax_g = canvas.panel("G", 2, 6, 6, title="Alignment × bandwidth")
 
     # ── A ───────────────────────────────────────────────────────────────
@@ -319,30 +328,7 @@ def main() -> None:
     ax_b.set_xlabel("route budget K   (16 = full rank)", labelpad=2.0)
     ax_b.set_ylabel("alignment ρ", labelpad=1.5)
 
-    # ── C: phase utility predicts observed one-step progress ────────────
-    merged = operator.merge(
-        outcomes,
-        on=["seed", "condition_id", "architecture", "feedback_family",
-            "budget_k"],
-        validate="one_to_one")
-    merged = merged[merged.architecture.eq("dendritic_tree")]
-    ax_c.scatter(merged.maximum_guaranteed_decrease,
-                 merged.norm_matched_one_step_progress,
-                 s=7, alpha=0.30, edgecolors="none", color=COLORS["additive"])
-    ax_c.set_ylim(-1.42, 1.22)
-    ax_c.set_yticks([-1.0, -0.5, 0.0, 0.5, 1.0])
-    ci_low, ci_high = audit["seed_block_ci95_utility_vs_one_step_progress"]
-    ax_c.text(
-        0.975, 0.32,
-        f"Spearman ρ = {audit['spearman_utility_vs_one_step_progress']:.2f}"
-        + "\n" + f"95% CI {ci_low:.2f}–{ci_high:.2f}"
-        + "\n" + "n = 20 seed blocks",
-        transform=ax_c.transAxes, ha="right", va="bottom", fontsize=PT_SMALL,
-        color=COLORS["mute"], linespacing=1.35)
-    ax_c.set_xlabel("phase utility")
-    ax_c.set_ylabel("observed progress")
-
-    # ── D: final loss versus route resolution, one series per task depth ─
+    # ── C: final loss versus route resolution, one series per task depth ─
     depth_marker_dx = {3: -0.20, 4: 0.20}
     aligned = depth[depth.method.eq("aligned_tree")].pivot(
         index="task_depth", columns="model_depth",
@@ -354,53 +340,53 @@ def main() -> None:
                          "model_depth")
         xs = part.model_depth.to_numpy(dtype=float)
         ys = part.mean_final_population_loss.to_numpy(dtype=float)
-        # Only the MARKER column is dodged, exactly as panel F does it: the
+        # Only the MARKER column is dodged, exactly as panel E does it: the
         # line, and the 95% ribbon under it, stay at the true x, so a ribbon
         # can never sit beside the mean it belongs to and no segment of a
         # log-loss curve is given a distorted run.
         fanned = (np.isin(xs, (1.0, 2.0)) if task_depth in depth_marker_dx
                   else np.zeros(xs.shape, dtype=bool))
-        ax_d.plot(xs, ys, color=color, marker=marker, ms=MARKER_MS,
+        ax_c.plot(xs, ys, color=color, marker=marker, ms=MARKER_MS,
                   lw=LW_DATA, mec="white", mew=LW_HAIR,
                   markevery=list(np.flatnonzero(~fanned)),
                   label=f"H = {task_depth}")
         if fanned.any():
-            ax_d.scatter(xs[fanned] + depth_marker_dx[task_depth], ys[fanned],
+            ax_c.scatter(xs[fanned] + depth_marker_dx[task_depth], ys[fanned],
                          color=color, marker=marker, s=MARKER_MS ** 2,
                          zorder=3, edgecolors="white", linewidths=LW_HAIR)
-        ax_d.fill_between(part.model_depth,
+        ax_c.fill_between(part.model_depth,
                           part.ci95_low_final_population_loss,
                           part.ci95_high_final_population_loss, color=color,
                           alpha=0.10, linewidth=0)
-    ax_d.set_yscale("log")
-    ax_d.set_yticks([0.03, 0.1, 0.3, 1.0, 3.0])
-    ax_d.set_yticklabels(["0.03", "0.1", "0.3", "1", "3"])
-    ax_d.set_xticks([1, 2, 3, 4])
-    ax_d.set_xlim(0.70, 4.30)
-    ax_d.set_xlabel("route resolution Dᵣ   (4 = full rank)")
-    ax_d.set_ylabel("final loss")
-    ax_d.legend(loc="upper left", ncol=2, frameon=False, fontsize=PT_LEGEND,
+    ax_c.set_yscale("log")
+    ax_c.set_yticks([0.03, 0.1, 0.3, 1.0, 3.0])
+    ax_c.set_yticklabels(["0.03", "0.1", "0.3", "1", "3"])
+    ax_c.set_xticks([1, 2, 3, 4])
+    ax_c.set_xlim(0.70, 4.30)
+    ax_c.set_xlabel("route resolution Dᵣ   (4 = full rank)")
+    ax_c.set_ylabel("final loss")
+    ax_c.legend(loc="upper left", ncol=2, frameon=False, fontsize=PT_LEGEND,
                 handlelength=1.3, handletextpad=0.4, labelspacing=0.25,
                 columnspacing=0.8, borderaxespad=0.2)
 
-    # ── E: signed loss change of the common route projection ────────────
+    # ── D: signed loss change of the common route projection ────────────
     projection_wide = projection.pivot_table(
         index=["signal_retention", "noise_retention"], columns="method",
         values="mean_expected_population_loss")
     delta = (projection_wide.bp_plus_route_projection
              - projection_wide.full_stochastic_bp).unstack("signal_retention")
     signed_heatmap(
-        ax_e, delta.to_numpy() * 100.0,
+        ax_d, delta.to_numpy() * 100.0,
         [f"{v:.2f}" for v in delta.columns],
         [f"{v:.2f}" for v in delta.index],
         label="Δ loss (×10⁻²)")
-    ax_e.plot([-0.5, 0.5, 0.5, 1.5, 1.5, 3.5, 3.5],
+    ax_d.plot([-0.5, 0.5, 0.5, 1.5, 1.5, 3.5, 3.5],
               [1.5, 1.5, 2.5, 2.5, 3.5, 3.5, 4.5],
               ls="--", color=COLORS["mute"], lw=LW_REF, zorder=3)
-    ax_e.set_xlabel("retained signal fraction r", labelpad=2.0)
-    ax_e.set_ylabel("noise retention n", labelpad=1.5)
+    ax_d.set_xlabel("retained signal fraction r", labelpad=2.0)
+    ax_d.set_ylabel("noise retention n", labelpad=1.5)
 
-    # ── F: one-step reliability gains for the four gain policies ────────
+    # ── E: one-step reliability gains for the four gain policies ────────
     reliability_styles = [
         ("reliability_aligned", "SNR-aligned", C_ROUTE, MARKERS[0]),
         ("best_global_gain", "best global", C_CTRL, MARKERS[1]),
@@ -417,30 +403,53 @@ def main() -> None:
         xs = part.reliability_heterogeneity.to_numpy(dtype=float)
         ys = part.mean_population_loss_decrease.to_numpy(dtype=float)
         fanned = xs == 0.0
-        ax_f.plot(xs, ys, color=color, marker=marker, ms=MARKER_MS,
+        ax_e.plot(xs, ys, color=color, marker=marker, ms=MARKER_MS,
                   lw=LW_DATA, label=label,
                   markevery=list(np.flatnonzero(~fanned)),
                   mec="white", mew=LW_HAIR)
         if fanned.any():
-            ax_f.scatter(xs[fanned] + reliability_marker_dx[method],
+            ax_e.scatter(xs[fanned] + reliability_marker_dx[method],
                          ys[fanned], color=color, marker=marker,
                          s=MARKER_MS ** 2, zorder=3, edgecolors="white",
                          linewidths=LW_HAIR)
-        ax_f.fill_between(part.reliability_heterogeneity,
+        ax_e.fill_between(part.reliability_heterogeneity,
                           part.ci95_low_population_loss_decrease,
                           part.ci95_high_population_loss_decrease,
                           color=color, alpha=0.08, linewidth=0)
-    ax_f.axhline(0, color=COLORS["mute"], ls="--", lw=LW_REF)
-    ax_f.margins(x=0.115)
+    ax_e.axhline(0, color=COLORS["mute"], ls="--", lw=LW_REF)
+    ax_e.margins(x=0.115)
     # Pinned, not auto-located: one tick per swept heterogeneity level, so the
     # axis reads the same whatever width the module grid gives this panel.
-    ax_f.set_xticks([0.0, 0.5, 1.0, 1.5, 2.0])
-    ax_f.set_ylim(-4.0, 3.9)
-    ax_f.set_xlabel("branch-SNR heterogeneity")
-    ax_f.set_ylabel("one-step loss decrease")
-    ax_f.legend(loc="lower left", ncol=1, frameon=False, fontsize=PT_LEGEND,
+    ax_e.set_xticks([0.0, 0.5, 1.0, 1.5, 2.0])
+    ax_e.set_ylim(-4.0, 3.9)
+    ax_e.set_xlabel("branch-SNR heterogeneity")
+    ax_e.set_ylabel("one-step loss decrease")
+    ax_e.legend(loc="lower left", ncol=1, frameon=False, fontsize=PT_LEGEND,
                 handlelength=1.3, handletextpad=0.4, labelspacing=0.28,
                 borderaxespad=0.2)
+
+    # ── F: phase utility predicts observed one-step progress ────────────
+    merged = operator.merge(
+        outcomes,
+        on=["seed", "condition_id", "architecture", "feedback_family",
+            "budget_k"],
+        validate="one_to_one")
+    merged = merged[merged.architecture.eq("dendritic_tree")]
+    ax_f.scatter(merged.maximum_guaranteed_decrease,
+                 merged.norm_matched_one_step_progress,
+                 s=7, alpha=0.30, edgecolors="none", color=COLORS["additive"])
+    ax_f.set_ylim(-1.42, 1.22)
+    ax_f.set_yticks([-1.0, -0.5, 0.0, 0.5, 1.0])
+    ci_low, ci_high = audit["seed_block_ci95_utility_vs_one_step_progress"]
+    ax_f.text(
+        0.975, 0.32,
+        f"Spearman ρ = {audit['spearman_utility_vs_one_step_progress']:.2f}"
+        + "\n" + f"95% CI {ci_low:.2f}–{ci_high:.2f}"
+        + "\n" + "n = 20 seed blocks",
+        transform=ax_f.transAxes, ha="right", va="bottom", fontsize=PT_SMALL,
+        color=COLORS["mute"], linespacing=1.35)
+    ax_f.set_xlabel("phase utility")
+    ax_f.set_ylabel("observed progress")
 
     # ── G: alignment x bandwidth synthesis ──────────────────────────────
     families = [
@@ -460,7 +469,7 @@ def main() -> None:
                       zorder=0, linewidth=0)
     ax_g.fill_between(span_x, [0.24] * 2, [1.2] * 2, color=C_ROUTE,
                       alpha=0.07, zorder=0, linewidth=0)
-    # Same reference treatment as panels E and F: dashed, mute, LW_REF.
+    # Same reference treatment as panels D and E: dashed, mute, LW_REF.
     ax_g.axhline(1.0, color=COLORS["mute"], ls="--", lw=LW_REF, zorder=1)
     # Three observations sit at alignment exactly 1 and are drawn fanned in x
     # by the frozen source table; the rule marks where alignment 1 really is.

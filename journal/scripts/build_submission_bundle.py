@@ -58,7 +58,7 @@ SUPPLEMENTARY_FIGURES = (
     "supplementary/figure_S19_panels_A-I.pdf",
     "supplementary/figure_S20_panels_A-J.pdf",
     "supplementary/figure_S21_panels_A-I.pdf",
-    "supplementary/figure_S22_panels_A-H.pdf",
+    "supplementary/figure_S22_panels_A-J.pdf",
     "supplementary/figure_S23_panels_A-C.pdf",
     "supplementary/figure_S24_panels_A-D.pdf",
     "supplementary/figure_S25_panels_A-D.pdf",

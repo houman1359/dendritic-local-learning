@@ -17,41 +17,67 @@ called with the same seeds and draw counts, so the numbers are bit-identical
 to the figure this replaces.  This file only decides where they sit and how
 they are inked.
 
-Layout (12 modules, three rows)::
+The figure answers one question -- what biological evidence supports the
+theory, and where does that evidence stop -- so it is ordered as an argument
+rather than as a tour of the experiments.
 
-    A  every anatomy effect on one axis (forest, 7)   B  task-field capture (5)
-    C  coarse-model learning (6)              D  complete-tree learning (6)
-    E  design: imposed alignment (5)   F  controlled alignment (4)
-                                       G  signed animal contrast (3)
+Layout (12 modules, three rows, each row internally uniform)::
 
-Structural changes against the composed version, all layout-only:
+    A  complete-tree learning (6)     B  anatomy effect summary (6)
+    C  design: imposed alignment (6)  D  controlled alignment (6)
+    E  signed contrast (4)   F  signed-mode energy (4)   G  boundary (4)
 
-* the two structure--function point ranges that used to float alone in their
-  own cell are now the first group of the forest in A, sharing its effect
-  axis with the four complete-tree contrasts that used to be panel G;
-* C and D are an explicit shared-axis pair: one ``sharex`` axis, the identical
-  held-out normalized MSE range and ticks because they plot the same quantity
-  for two tasks, and one x label centred under the pair rather than one under
-  each panel;
-* the imposed-alignment manipulation is drawn natively as a three-stage tree
-  strip immediately left of the result it explains.  It takes five modules and
-  not four because the three stage trees have to survive being cut into
-  thirds: at four modules a stage is 40 pt wide, which is below the width the
-  arbor needs before its branches stop resolving;
-* the six-animal slope plot is short and narrow: it plots two x positions, so
-  the three modules it keeps are all the paired geometry needs.
+Two widths for seven panels, and both are whole module counts: the two
+argument rows are halves of the module and the closing row is thirds of it.
+Every panel of a row therefore has the same axes-box width and the same
+axes-box height, which is the regularity the previous seven-panel arrangement
+(six different widths across three rows, no row internally uniform) did not
+have.
 
-Why A is 7 modules and not 12.  The forest is six short rows; run across all
-twelve modules it had ~460 pt of axes width for a 0.9-wide effect axis and
-read as an empty band, and the last of that width was bought only to hold two
-outlying seed dots.  A now spans 7 modules beside B, and its effect axis is
+Narrative order, and what it moved:
+
+* A is the measured-response null itself -- held-out learning on the complete
+  reconstructed tree for the exact, ancestry, random and shuffled rules.  It
+  opens the figure because it is the result the rest of the page qualifies;
+  it was panel D;
+* B is the compact effect summary: the same six paired contrasts on one
+  effect axis (topology minus shuffled and minus random, on both the MSE and
+  the capture side, under the two structure--function rows).  It was the
+  seven-module panel A and keeps every row, mean and interval; it is compact
+  because it now spans half the module beside A rather than the whole of it;
+* C and D are the manipulation and its result, unchanged and still adjacent,
+  so the schematic sits immediately left of the curve it explains (they were
+  E and F).  C takes half the module rather than the five it took before, and
+  the three stage trees are scaled up to fill the extra width instead of
+  sitting in it: a stage is 62 pt wide here against 54 pt before, and the
+  arbor is drawn to the full stage width, so it resolves further, not less;
+* E is the six-animal P+/P- comparison (it was G): it plots two x positions,
+  so a third of the module is all the paired geometry needs, and it opens the
+  closing row rather than crowding the end of the middle one;
+* F is the signed-mode energy decomposition, promoted from Supplementary
+  Fig. S17c and ported verbatim -- same frozen ``mode_decomposition`` block,
+  same two bars, same animal-bootstrap interval;
+* G is the evidence boundary: three labelled tiers -- supported, conditional,
+  not established -- set in the paper's own hedged words.  It carries no
+  statistic of its own;
+* the coarse-surrogate capture and learning strips that were B and C are
+  demoted to Supplementary Fig. S22 (panels I and J), which already holds the
+  coarse-surrogate sensitivity analyses; they are appended there with their
+  rendering intact rather than deleted.
+
+How B keeps its row-label column without breaking the row.  B's effect axis is
 cut to the interval structure: four of the 42 per-target points fall outside
-it and are clipped, which the caption states.  Its left edge is still on the
-module grid -- A, C and E share the one column-0 ``x0`` -- and the three group
-headers ("structure-function", "full tree, MSE", "full tree, capture") still
-sit inside the plotting rectangle on their own empty header rows, so the tick
-column holds only the short row names and fits the figure's shared left
-margin.
+it and are clipped, which the caption states, and the three group headers
+("structure-function", "full tree, MSE", "full tree, capture") sit inside the
+plotting rectangle on their own empty header rows, so the tick column holds
+only the short row names.  That column still needs 48.9 pt, which is more than
+the 36 pt gutter it shares with A, and a panel that carves the shortfall out
+of its own slot alone ends up narrower than its row-mate.  So the shortfall is
+declared on BOTH sides of that one grid boundary
+(``LABEL_RESERVE_PT``): A and C yield it on their right, B and D yield it on
+their left, the canvas locks one reserve per column as it does for a colorbar
+rail, and the two panels of the row come out the same width.  Row 2 needs no
+declaration at all -- the 36 pt gutter already holds every label on it.
 """
 
 from __future__ import annotations
@@ -72,6 +98,7 @@ if str(SCRIPT_DIR) not in sys.path:
 from journal_style import (  # noqa: E402
     COLORS,
     ERR_CAPSIZE,
+    PT_ANNOT,
     LW_DATA,
     LW_EDGE,
     LW_ERR,
@@ -81,11 +108,10 @@ from journal_style import (  # noqa: E402
     PT_LEGEND,
     PT_SMALL,
     PT_TICK,
-    PT_TITLE,
     SEED_ALPHA,
     SEED_MS,
 )
-from credit_tree_schematics import GHOST, RIM, mix  # noqa: E402
+from credit_tree_schematics import AMBER_TEXT, GHOST, RIM, mix  # noqa: E402
 from figure_canvas import Margins, NativeCanvas  # noqa: E402
 from native_schematics import Frame  # noqa: E402
 
@@ -98,67 +124,106 @@ OUT = ROOT / "figures" / "components" / "main_figure_09_native.pdf"
 
 # ── canvas geometry, in points ───────────────────────────────────────────
 CANVAS_H_PT = 426.0                      # 518.4 / 426 = 1.22 aspect
-# Row 0 is the tallest row because A, at 7 modules, needs 116 pt of axes
-# height to stay inside the audit's 2.20 aspect cap for a panel that shares
-# its row; row 2 is next because the three-stage schematic in E has to carry
-# a field strip, a tree and a stage label in one column of its own cell.  The
-# spread is what the emphasis rule measures (slot-fill varies with row
-# height alone here), so the three numbers are kept inside 1.35x of one
-# another rather than sized panel by panel.
-ROW_H_PT = (120.0, 94.0, 97.0)
-# The OUTER LEFT MARGIN is the figure's one shared left reserve: it holds the
-# widest tick column on the page, which is A's row-label column
-# ("prespecified" is 46.9 pt, 48.9 pt with its tick pad).  The right margin is
-# 5 pt because no panel's last x tick label reaches its own axes edge, so 5 pt
-# is clearance rather than crowding; the one thing that did reach the canvas
-# edge was G's title, which is why the narrowest panel on the page carries the
-# shortest of the seven titles.  One horizontal gutter (36 pt) and one module
-# width (5.45 pt) serve every row.
+# One height per row, and the three are within 1.13x of one another, which is
+# what the emphasis rule measures once every row is width-uniform (slot-fill
+# then varies with row height alone).  Row 2 is the tallest because G's three
+# tiers of type are a drawing with a floor -- three text bands that cannot be
+# flattened -- and row 1 is the shortest because C's stage trees and D's
+# rescue curve both gained width in the regrid and neither needs height to
+# spend it.  The canvas total is 2 pt taller than the ragged seven-panel
+# figure this replaces, which still keeps the float and its caption on one
+# page.
+ROW_H_PT = (104.0, 96.0, 108.0)
+# The OUTER LEFT MARGIN is the figure's one shared left reserve.  It is kept
+# at 52 pt, the width the forest's row-label column used to need in column 0,
+# even though the three panels that now start in column 0 (A's labels are
+# drawn inside its own plotting rectangle, C is a schematic, E carries a
+# five-glyph tick column and one y label, 33.9 pt) need less: the margin has
+# to clear the WIDEST of them with room to spare, because any reserve grid
+# column 0 took would shorten A and C without shortening their row-mates and
+# so break the row.  The right margin is 8 pt for the same reason at the
+# other edge: it clears the last x tick label of B and D, so grid column 12
+# locks nothing either.  One horizontal gutter (36 pt) and one module width
+# (5.2 pt) serve every row.
 HGUTTER = 36.0
 VGUTTER = 36.0
-MARGINS = Margins(left=52.0, right=5.0, top=16.0, bottom=30.0)
-# Grid column 0 carries A, C and E, and the lock it takes is shared by all
-# three.  C's row-mate D starts in column 6 and needs no left reserve, so any
-# reserve column 0 took would make the C/D pair two different widths -- which
-# is why the left margin has to stay wider than A's row-label column
-# ("prespecified", 46.9 pt, 48.9 pt with its tick pad) plus the 1.5 pt
-# reserve pad.  52 pt clears it and column 0 locks nothing.
+MARGINS = Margins(left=52.0, right=8.0, top=16.0, bottom=30.0)
+# The one reserve on the page is B's row-label column ("prespecified",
+# 46.9 pt, 48.9 pt with its tick pad), which does not fit inside the 36 pt
+# gutter it shares with A.  It is DECLARED on both sides of that boundary
+# rather than measured on one: A and C give it up on their right, B and D on
+# their left, so the four panels of the two argument rows keep one width
+# instead of two.  16 pt clears the 14.4 pt the measurement asks for.
+LABEL_RESERVE_PT = 16.0
 
 MINUS = "−"
 
 # Statements the drawing must not carry inside the panel but the reader needs:
 # printed at build time so they can be pasted into the figure caption.
 CAPTION_NOTES = (
-    "CAPTION: FIG09 A - Four of the 42 per-target points fall outside the "
+    "CAPTION: FIG09 B - Four of the 42 per-target points fall outside the "
     "effect axis and are clipped (two at +0.30 in the structure–function "
     "rows, two near −0.49 in full tree, capture vs shuffled); every mean and "
     "95 % interval is drawn in full.",
-    "CAPTION: FIG09 E - One dictionary, fixed gradient energy: the same two "
+    "CAPTION: FIG09 C - One dictionary, fixed gradient energy: the same two "
     "ancestry routes are held fixed across the three stages and only the "
     "direction of the imposed task credit field changes.",
-    "CAPTION: FIG09 E - The field is f(α) ∝ (1 − α) f⊥ + α f∥, where f∥ is "
+    "CAPTION: FIG09 C - The field is f(α) ∝ (1 − α) f⊥ + α f∥, where f∥ is "
     "constant within each ancestry route (so the routes span it) and f⊥ "
     "alternates within each route (so they cannot), renormalized at every α "
     "so that ‖f‖ is the same at every stage.",
-    "CAPTION: FIG09 E - Stems above each tree are the imposed field on the "
+    "CAPTION: FIG09 C - Stems above each tree are the imposed field on the "
     "four terminal branches, up positive and down negative; the capsules "
     "beneath are the two ancestry routes, unemphasised where they cannot "
     "carry the field and in shunting green where they carry it in full.",
-    "CAPTION: FIG09 E - The three stages are α = 0, 0.4 and 1, the same "
-    "imposed alignment values swept along the x axis of F.",
+    "CAPTION: FIG09 C - The three stages are α = 0, 0.4 and 1, the same "
+    "imposed alignment values swept along the x axis of D.",
+    "CAPTION: FIG09 F - Promoted from Supplementary Fig. S17c and unchanged: "
+    "83.7 % of pooled squared projection energy across the six animal "
+    "contrast vectors lies in the signed P+/P− mode against 16.3 % in a "
+    "common scalar mode; the whiskers are the animal-bootstrap 95 % interval "
+    "for the signed fraction (60.6–95.7 %) and its complement.",
+    "CAPTION: FIG09 G - The evidence tiers restate claims established "
+    "elsewhere in the paper in the paper's own hedged words; the panel "
+    "carries no estimate, interval or test of its own.",
+    "CAPTION: FIG09 G - In full, the six tier statements are: supported -- "
+    "availability of signed neuron-specific coordinates in six animals, and "
+    "modeled ancestry capacity in the same direction in two MICrONS "
+    "animals; conditional -- benefit only when task credit rotates into the "
+    "anatomical span, and shunting regulates route gain only in permissive "
+    "electrotonic regimes; not established -- measured visual responses show "
+    "no morphology-specific alignment, and no evidence that these routes "
+    "carry endogenous task credit in vivo.",
+)
+
+# Where each panel of the previous figure went, printed at build time so the
+# caption and every in-text reference can be resequenced from the build log.
+LETTER_MOVES = (
+    "CAPTION: FIG09 D -> A (complete-tree held-out learning: exact, "
+    "topology-matched, random and site-shuffled routes)",
+    "CAPTION: FIG09 A -> B (compact effect summary: structure–function and "
+    "full-tree topology-minus-random / minus-shuffled contrasts on one axis)",
+    "CAPTION: FIG09 E -> C (imposed-alignment design, three stages)",
+    "CAPTION: FIG09 F -> D (controlled-alignment rescue curve)",
+    "CAPTION: FIG09 G -> E (signed P+/P− animal comparison, six animals)",
+    "CAPTION: FIG09 new F (signed-mode energy, promoted from Supplementary "
+    "Fig. S17c)",
+    "CAPTION: FIG09 new G (evidence boundary: supported, conditional, not "
+    "established)",
+    "CAPTION: FIG09 B -> Supplementary Fig. S22 I (coarse-surrogate "
+    "task-field capture, seven dictionaries)",
+    "CAPTION: FIG09 C -> Supplementary Fig. S22 J (coarse-surrogate held-out "
+    "learning, seven dictionaries)",
 )
 
 INK = COLORS["ink"]
 MUTE = COLORS["mute"]
 ROUTE = COLORS["shunting"]               # anatomy / ancestry route: green
 C_EXACT = COLORS["bp"]                   # exact gradient: red-brown
-C_DENSE = COLORS["oracle"]               # dense PCA oracle: violet
 C_CTRL = COLORS["point_mlp"]             # control family, first lightness
 C_CTRL_L = "#989898"                     # control family, second lightness
-C_DEPTH = C_CTRL_L                       # depth bins
 C_SHUFFLE = C_CTRL                       # shuffled ancestry
 C_RANDOM = C_CTRL                        # random control
-C_SCALAR = C_CTRL_L                      # scalar broadcast
 # Two experimentally defined neuron coordinates, not palette conditions:
 # they take the two neutral inks rather than the scalar and oracle slots.
 PPLUS = COLORS["ink"]                    # animal P+ population
@@ -167,27 +232,16 @@ PMINUS = COLORS["mute"]                  # animal P- population
 # The mean/summary glyph is MARKER_MS + 1.2 everywhere (the mark contract).
 MEAN_MS = MARKER_MS + 1.2
 
-# ── the shared held-out normalized MSE axis (identical in C and D) ───────
+# ── the held-out normalized MSE axis of panel A ─────────────────────────
 MSE_XLIM = (0.60, 1.02)
 MSE_XTICKS = (0.6, 0.7, 0.8, 0.9, 1.0)
 MSE_XLABEL = "held-out normalized MSE"
 
-# Dictionaries of the coarse segment-resolved task, in the order the frozen
-# builder used; the bootstrap seed is tied to that index, so the intervals
-# are the ones the published figure carries.
-COARSE_METHODS = (
-    ("exact backprop", "exact", C_EXACT),
-    ("dense PCA oracle", "dense", C_DENSE),
-    ("morphology-aware paths", "ancestry", ROUTE),
-    ("random nonempty paths", "random", C_RANDOM),
-    ("depth-only bins", "depth", C_DEPTH),
-    ("shuffled ancestry", "shuffle", C_SHUFFLE),
-    ("scalar broadcast", "scalar", C_SCALAR),
-)
-# Complete-tree rules, same order and seeds as the frozen builder.
-# Ordered as the same rules appear in panel C.  The trailing integer is the
-# rule's own bootstrap seed offset, kept with the rule rather than with its
-# row position, so reordering the display cannot move a published interval.
+# Complete-tree rules, same order and seeds as the frozen builder: exact
+# first, then the topology-matched routes and their two matched controls.
+# The trailing integer is the rule's own bootstrap seed offset, kept with the
+# rule rather than with its row position, so reordering the display cannot
+# move a published interval.
 TREE_METHODS = (
     ("exact compartment error", "exact", C_EXACT, 0),
     ("topology-matched routes", "ancestry", ROUTE, 1),
@@ -208,22 +262,13 @@ ALIGN_METHODS = (
 )
 
 
-# ── frozen-estimate helpers (ports; same seeds, same draw counts) ────────
-def mean_ci(values, seed, n_boot=20_000):
-    """``build_journal_figures.mean_ci``: target-bootstrap mean and 95 % CI."""
-    values = np.asarray(values, dtype=float)
-    values = values[np.isfinite(values)]
-    if values.size == 0:
-        return np.nan, np.nan, np.nan
-    if values.size == 1:
-        return float(values[0]), float(values[0]), float(values[0])
-    rng = np.random.default_rng(seed)
-    draws = rng.choice(values, size=(n_boot, values.size),
-                       replace=True).mean(axis=1)
-    low, high = np.quantile(draws, [0.025, 0.975])
-    return float(values.mean()), float(low), float(high)
-
-
+# ── frozen-estimate helper (a port; same seeds, same draw counts) ────────
+#
+# The ``mean_ci`` port that stood here served only the two coarse-surrogate
+# strips, and it went with them to ``build_journal_figures`` (which is where
+# it was ported from, and which still calls it at the same seeds for the
+# demoted panels).  What the panels on this page need is the target
+# bootstrap below.
 def bootstrap(values, seed, draws=20_000):
     """``build_new_confirmatory_figures.bootstrap``: identical estimator."""
     values = np.asarray(values, dtype=float)
@@ -235,7 +280,6 @@ def bootstrap(values, seed, draws=20_000):
 
 
 def load_tables():
-    coarse = pd.read_csv(SOURCE / "figure5" / "task_target_method_means_ch4.csv")
     tree = pd.read_csv(FULL_TREE / "cell_method_means.csv")
     curves = pd.read_csv(ALIGNMENT / "alignment_controlled_curves.csv")
     animal = pd.read_csv(ANIMAL / "animal_signed_contrasts.csv")
@@ -249,8 +293,12 @@ def load_tables():
     expanded = json.loads(
         (SOURCE / "functional_topology_all_scans" / "summary.json").read_text(
             encoding="utf-8"))["metrics"]["shared_path_partial_r"]
-    return coarse, tree, curves, animal, prespecified, all_scans, original, \
-        expanded
+    # The frozen mode decomposition behind the promoted signed-mode panel.
+    mode = json.loads(
+        (ANIMAL / "summary.json").read_text(
+            encoding="utf-8"))["mode_decomposition"]
+    return tree, curves, animal, prespecified, all_scans, original, \
+        expanded, mode
 
 
 def _spread(count, half=0.17):
@@ -260,10 +308,10 @@ def _spread(count, half=0.17):
     return np.linspace(-half, half, count)
 
 
-# ── A: every anatomy effect on one axis ──────────────────────────────────
+# ── B: the compact effect summary, every anatomy effect on one axis ──────
 def panel_forest(ax, prespecified, all_scans, tree, original, expanded, *,
                  header_x):
-    """A: six paired contrasts, one effect axis, positive favours anatomy.
+    """B: six paired contrasts, one effect axis, positive favours anatomy.
 
     The right-hand ``mean [95 % CI]`` column this panel used to print beside
     every row is gone: the marker and its whisker already ARE those three
@@ -274,8 +322,9 @@ def panel_forest(ax, prespecified, all_scans, tree, original, expanded, *,
     Only the short row names ("prespecified", "vs shuffled") are set in the
     tick column.  The three group headers are wider than any of them, and
     setting them in the same column is what used to force a 78 pt label rail
-    and push this panel's axes box 78 pt right of the column-0 edge that B and
-    E start from.  They are drawn instead as left-aligned mute text INSIDE the
+    and push this panel's axes box 78 pt right of the column edge its
+    row-mate starts from.  They are drawn instead as left-aligned mute text
+    INSIDE the
     plotting rectangle, on the empty header row above the first row of their
     group, so they still read as group titles over the rows they name while
     the tick column stays inside the figure's shared left margin.
@@ -360,7 +409,7 @@ def panel_forest(ax, prespecified, all_scans, tree, original, expanded, *,
     ax.spines["left"].set_visible(False)
 
 
-# ── B/C/D: horizontal point-range strips ─────────────────────────────────
+# ── A: the horizontal point-range strip ──────────────────────────────────
 def _strip(ax, rows, *, xlim, xticks, xlabel, tick_labels=True,
            inside_labels=False):
     """One dictionary per row: per-target dots, open-diamond mean, 95 % CI.
@@ -396,15 +445,6 @@ def _strip(ax, rows, *, xlim, xticks, xlabel, tick_labels=True,
     ax.spines["left"].set_visible(False)
 
 
-def coarse_rows(coarse, metric):
-    rows = []
-    for index, (method, label, color) in enumerate(COARSE_METHODS):
-        values = coarse[coarse.method.eq(method)][metric].to_numpy(float)
-        rows.append((label, values, *mean_ci(values, seed=1830 + index),
-                     color))
-    return rows
-
-
 def tree_rows(tree):
     rows = []
     for method, label, color, seed_index in TREE_METHODS:
@@ -415,39 +455,28 @@ def tree_rows(tree):
     return rows
 
 
-def panel_capture(ax, coarse):
-    """B: held-out task-field capture; oracle ceilings sit at the limit."""
-    _strip(ax, coarse_rows(coarse, "heldout_credit_capture"),
-           xlim=(-0.02, 1.08), xticks=(0.0, 0.5, 1.0),
-           xlabel="held-out field capture")
-    # The exact and dense rows sit on the ceiling for every target, and the
-    # per-target dots are fanned within their own row: both are coincidence
-    # and dodging disclosures, so the caption carries them, not the panel.
-
-
-def panel_coarse_learning(ax, coarse):
-    """C: held-out normalized MSE on the same cohort, same rows as B.
-
-    C opens its own row, so it names its seven dictionaries in its own tick
-    column; it carries the x label for the C/D pair, which ``build`` then
-    centres on the pair rather than on C.
-    """
-    _strip(ax, coarse_rows(coarse, "heldout_normalized_mse"),
-           xlim=MSE_XLIM, xticks=MSE_XTICKS, xlabel=MSE_XLABEL)
-
-
 def panel_tree_learning(ax, tree):
-    """D: the same quantity, same axis, on the complete reconstructed tree."""
+    """A: held-out learning on the complete reconstructed tree.
+
+    The measured-response null, and the result the rest of the page
+    qualifies, so it opens the figure.  Nothing about the drawing changed
+    when it moved from the second row: the same four rules in the same
+    order, the same estimator and seeds, the same normalized-MSE range and
+    ticks, and the rule names still set inside the panel's own empty left
+    field rather than in a tick column.  It carries the x label itself now,
+    because the coarse-surrogate strip it used to share an axis with has
+    moved to Supplementary Fig. S22.
+    """
     _strip(ax, tree_rows(tree), xlim=MSE_XLIM, xticks=MSE_XTICKS,
-           xlabel="", tick_labels=False, inside_labels=True)
+           xlabel=MSE_XLABEL, tick_labels=False, inside_labels=True)
 
 
-# ── E: the imposed-alignment manipulation, drawn natively ────────────────
+# ── C: the imposed-alignment manipulation, drawn natively ────────────────
 #
 # The manipulation used to be drawn as vector geometry -- two bare axes, three
 # arrows at 90 / 51 / 0 degrees and a dashed quarter arc for the fixed norm --
 # which states the algebra and shows nothing a reader can decode.  It is drawn
-# here in the paper's own tree vocabulary instead, as the three stages panel F
+# here in the paper's own tree vocabulary instead, as the three stages panel D
 # sweeps: one fixed dictionary of ancestry routes, and a task credit field
 # whose direction turns into their span.
 #
@@ -534,8 +563,15 @@ def _draw_stage(f, cell, alpha, label):
     label_pt = 11.5
     tree_aspect = ((E_SPAN_X[1] - E_SPAN_X[0])
                    / (E_SPAN_Y[1] - E_SPAN_Y[0]))
+    # The tree takes the WIDTH of its stage cell whenever the cell is tall
+    # enough to hold it -- the first term -- and falls back to a share of the
+    # cell height only when it is not.  That share is 0.60 and not the 0.52 it
+    # was at five modules: half the module gives each stage 62 pt instead of
+    # 54, and at 0.52 the arbor would have stopped growing at 57.5 pt wide and
+    # left 5 pt of white space either side of it.  What is left of the cell is
+    # the field strip, which still gets its full reach.
     tree_h_pt = min(cell[2] * f.w_pt / tree_aspect,
-                    (cell[3] * f.h_pt - label_pt) * 0.52)
+                    (cell[3] * f.h_pt - label_pt) * 0.60)
     tree_cell = (cell[0], cell[1], cell[2], f.fy(tree_h_pt))
     place, _ = _stage_frame(f, tree_cell)
 
@@ -598,7 +634,7 @@ def _draw_stage(f, cell, alpha, label):
 
 
 def panel_alignment_design(ax):
-    """E: one fixed dictionary, the task field turned into its span."""
+    """C: one fixed dictionary, the task field turned into its span."""
     f = Frame(ax)
     for cell, (alpha, label) in zip(f.split(3, axis="x", gap_pt=4.0),
                                     E_STAGES, strict=True):
@@ -606,9 +642,9 @@ def panel_alignment_design(ax):
     return ax
 
 
-# ── F: capture against imposed alignment ─────────────────────────────────
+# ── D: capture against imposed alignment ─────────────────────────────────
 def panel_controlled_alignment(ax, curves):
-    """F: the same fixed dictionaries as alignment is imposed on the field."""
+    """D: the same fixed dictionaries as alignment is imposed on the field."""
     for method, label, color, marker, dashes in ALIGN_METHODS:
         part = curves[curves.method.eq(method)].sort_values("alignment")
         line, = ax.plot(part.alignment, part.credit_capture, color=color,
@@ -645,9 +681,9 @@ def panel_controlled_alignment(ax, curves):
     # coincidence disclosure and is reported in the caption.
 
 
-# ── G: the signed animal coordinate ──────────────────────────────────────
+# ── E: the signed animal coordinate ──────────────────────────────────────
 def panel_animal_pairs(ax, animal):
-    """G: one line per animal between its P+ and P- dendritic contrast."""
+    """E: one line per animal between its P+ and P- dendritic contrast."""
     for row in animal.itertuples(index=False):
         ax.plot([0, 1], [row.pplus_contrast, row.pminus_contrast],
                 color=MUTE, lw=LW_HAIR, alpha=0.55, zorder=1)
@@ -669,10 +705,117 @@ def panel_animal_pairs(ax, animal):
     # reported in the caption; the panel carries only the paired geometry.
 
 
+# ── F: signed-mode energy, promoted from Supplementary Fig. S17c ─────────
+def panel_mode_energy(ax, mode):
+    """F: where the six animal contrast vectors put their energy.
+
+    A port of ``build_alignment_animal_figure.mode_energy`` -- the panel that
+    was Supplementary Fig. S17c -- and nothing here recomputes it: the two
+    fractions and the animal-bootstrap interval are read from the same frozen
+    ``mode_decomposition`` block that panel read, the bars keep their colours,
+    width and edge, and the two printed percentages keep their format.  Only
+    the type and stroke tokens are the canvas's own, which is what the panel
+    was already set in.
+    """
+    fractions = [mode["common_energy_fraction"],
+                 mode["signed_energy_fraction"]]
+    ci_lo, ci_hi = mode["animal_bootstrap_95_ci"]
+    # The bootstrap is over the signed fraction; the common fraction is its
+    # complement, so its interval is the reflected one.
+    intervals = [(1.0 - ci_hi, 1.0 - ci_lo), (ci_lo, ci_hi)]
+    # The signed bar is a descriptive energy fraction, not a backprop series:
+    # keep the reserved BP red out of it (CVD colour grammar).
+    ax.bar([0, 1], fractions, color=[C_CTRL, COLORS["dend"]],
+           edgecolor=COLORS["edge"], linewidth=LW_EDGE, width=0.64)
+    yerr = np.array(
+        [[value - low
+          for value, (low, _) in zip(fractions, intervals, strict=True)],
+         [high - value
+          for value, (_, high) in zip(fractions, intervals, strict=True)]])
+    ax.errorbar([0, 1], fractions, yerr=yerr, fmt="none",
+                ecolor=COLORS["edge"], elinewidth=LW_ERR,
+                capsize=ERR_CAPSIZE, capthick=LW_ERR, zorder=4)
+    for x, value, (_, high) in zip((0, 1), fractions, intervals,
+                                   strict=True):
+        ax.text(x, high + 0.035, f"{100 * value:.1f}%", ha="center",
+                va="bottom", fontsize=PT_ANNOT, color=INK)
+    ax.text(0.03, 0.97, "95% CI,\nanimal\nbootstrap", transform=ax.transAxes,
+            ha="left", va="top", fontsize=PT_SMALL, color=MUTE)
+    ax.set_xticks([0, 1], ["common", "signed"])
+    ax.set_yticks([0, 0.5, 1.0])
+    ax.set_ylim(0, 1.13)
+    ax.set_ylabel("contrast energy")
+
+
+# ── G: what the biological evidence carries, and where it stops ──────────
+#
+# Three tiers, one band each, set in the paper's own hedged words: every line
+# below is a claim the manuscript already makes (the abstract for the two
+# conditional lines and the measured-response null, the six-animal reanalysis
+# for the signed coordinate, the cross-animal structural replication for the
+# route-capacity line, and the in-vivo caveat that closes both).  The panel
+# states no estimate, no interval and no test -- it is the figure's summary of
+# what the evidence supports, what it supports only conditionally, and what it
+# does not establish.
+# Each line is a phrase the manuscript itself uses, cut to the width a
+# third-of-the-module panel gives it at the 6.8 pt type floor (about 117 pt of
+# measured line): the statement is the short form, and the sentence it
+# abbreviates is printed into the caption at build time rather than set here
+# at a size below the type scale.  The two conditional lines are deliberately
+# parallel ("only if"), because the condition IS the claim.
+EVIDENCE_TIERS = (
+    ("supported", ROUTE, ROUTE, (
+        "signed coordinates in six animals",
+        "modeled capacity, two animals",
+    )),
+    ("conditional", COLORS["local"], AMBER_TEXT, (
+        "benefit only if credit rotates in",
+        "shunting gain only if permissive",
+    )),
+    ("not established", C_CTRL, C_CTRL, (
+        "no morphology-specific alignment",
+        "no endogenous task credit in vivo",
+    )),
+)
+# Type bands inside one tier, in points from the band's own top edge: the
+# heading line, then the two statements.  They are points and not fractions
+# because type is points: at any panel height the three lines keep the same
+# 10 pt and 9 pt separations, which is what keeps them off one another.
+TIER_HEAD_PT = 9.0
+TIER_LINE_PT = (19.0, 28.0)
+# The tier's own left rail, in points from the band edge: the bullet, then the
+# statement.  Both are tighter than they were at seven modules, because at
+# four modules the line itself is what the width has to be spent on.
+TIER_BULLET_X_PT = 5.0
+TIER_TEXT_X_PT = 9.0
+
+
+def panel_evidence_boundary(ax):
+    """G: three tiers -- supported, conditional, not established."""
+    f = Frame(ax)
+    for cell, (name, color, text_color, lines) in zip(
+            f.split(3, axis="y", gap_pt=4.0), EVIDENCE_TIERS, strict=True):
+        # The band is what makes a tier an object rather than three loose
+        # lines, and it is drawn full-cell-width in the tier's own tint so
+        # the three tiers read as one ordered scale.
+        f.group(cell, tint=mix(color, 9), edge=mix(color, 45), lw=LW_HAIR,
+                radius_pt=2.5)
+        top = cell[1] + cell[3]
+        f.text((cell[0] + f.fx(TIER_TEXT_X_PT), top - f.fy(TIER_HEAD_PT)),
+               name, size=PT_ANNOT, color=text_color, ha="left")
+        for offset, line in zip(TIER_LINE_PT, lines, strict=True):
+            y = top - f.fy(offset)
+            f.disc((cell[0] + f.fx(TIER_BULLET_X_PT), y), 0.9, fill=color,
+                   zorder=5)
+            f.text((cell[0] + f.fx(TIER_TEXT_X_PT), y), line, size=PT_SMALL,
+                   color=INK, ha="left")
+    return ax
+
+
 # ── the canvas ───────────────────────────────────────────────────────────
 def build():
-    coarse, tree, curves, animal, prespecified, all_scans, original, \
-        expanded = load_tables()
+    tree, curves, animal, prespecified, all_scans, original, expanded, mode \
+        = load_tables()
 
     canvas = NativeCanvas(
         CANVAS_H_PT / 72.0, 3, row_weights=list(ROW_H_PT),
@@ -680,55 +823,52 @@ def build():
         letters=False,
     )
 
-    # Row 0: the forest beside the capture strip.  Seven modules is what the
-    # forest's six rows and its 0.67-wide effect axis need; the five it gives
-    # up go to B, which shares the row instead of leaving the band alone on
-    # it.  A, C and E all start in grid column 0 and share one locked x0.
-    ax_a = canvas.panel("A", 0, 0, 7, grid="x")
-    ax_a.set_title("Measured-response effects on one axis", fontsize=PT_TITLE,
-                   color=INK, pad=3.0, fontweight="normal")
-    ax_b = canvas.panel("B", 0, 7, 5, grid="x", title="Task-field capture")
-
-    # Row 1: the two held-out normalized MSE panels as ONE shared-axis pair --
-    # a real ``sharex`` link, so the range and the ticks cannot drift apart,
-    # and a single x label centred under both instead of one under each.
-    ax_c = canvas.panel("C", 1, 0, 6, grid="x", title="Coarse-model learning")
-    ax_d = canvas.panel("D", 1, 6, 6, grid="x", sharex=ax_c,
+    # Row 0: the measured-response null, then the effect summary that
+    # generalises it -- half the module each.
+    ax_a = canvas.panel("A", 0, 0, 6, grid="x",
                         title="Complete-tree learning")
+    ax_b = canvas.panel("B", 0, 6, 6, grid="x", title="Anatomy effects")
 
-    # Row 2: the manipulation, its result and the animal contrast, in that
-    # order, so the schematic sits immediately left of the panel it explains.
-    ax_e = canvas.panel("E", 2, 0, 5, schematic=True,
+    # Row 1: the manipulation and its result, adjacent and equal, so the
+    # schematic sits immediately left of the curve it explains.
+    ax_c = canvas.panel("C", 1, 0, 6, schematic=True,
                         title="Imposed alignment")
-    ax_f = canvas.panel("F", 2, 5, 4, grid="y", title="Controlled alignment")
-    ax_g = canvas.panel("G", 2, 9, 3, grid="y",
-                        title="Signed contrast")
+    ax_d = canvas.panel("D", 1, 6, 6, grid="y", title="Controlled alignment")
 
-    panel_forest(ax_a, prespecified, all_scans, tree, original, expanded,
+    # Row 2: the animal coordinate, the decomposition behind it, and the
+    # boundary the whole page argues for -- a third of the module each.
+    ax_e = canvas.panel("E", 2, 0, 4, grid="y", title="Signed contrast")
+    ax_f = canvas.panel("F", 2, 4, 4, grid="y", title="Signed mode")
+    ax_g = canvas.panel("G", 2, 8, 4, schematic=True,
+                        title="Evidence boundary")
+
+    # The one declared reserve, taken symmetrically on the single grid
+    # boundary that cannot hold its labels in the gutter: B's row-label
+    # column.  Declaring it on both sides is what keeps the two panels of
+    # row 0 -- and of row 1, which shares the boundary -- one width.
+    for panel_name in ("A", "C"):
+        canvas.declare_reserve(panel_name, right=LABEL_RESERVE_PT)
+    for panel_name in ("B", "D"):
+        canvas.declare_reserve(panel_name, left=LABEL_RESERVE_PT)
+
+    panel_tree_learning(ax_a, tree)
+    panel_forest(ax_b, prespecified, all_scans, tree, original, expanded,
                  header_x=0.014)
-    panel_capture(ax_b, coarse)
-    panel_coarse_learning(ax_c, coarse)
-    panel_tree_learning(ax_d, tree)
-    panel_alignment_design(ax_e)
-    panel_controlled_alignment(ax_f, curves)
-    panel_animal_pairs(ax_g, animal)
+    panel_alignment_design(ax_c)
+    panel_controlled_alignment(ax_d, curves)
+    panel_animal_pairs(ax_e, animal)
+    panel_mode_energy(ax_f, mode)
+    panel_evidence_boundary(ax_g)
 
     # One letter offset per grid column, so every letter sits the same
     # distance left of the column its panel starts in.
     for name in ("A", "B", "C", "D", "E", "F", "G"):
         canvas.add_letter(name, canvas.axes[name], dx_pt=24.0)
 
-    # Lock first, then centre the pair's one x label on the pair's true
-    # midpoint: the lock is idempotent, so the save below re-runs it without
-    # moving anything, and an x label's horizontal overhang is invisible to
-    # the reserve measurement, which reads the x axis vertically only.
-    canvas.lock_reserves()
-    box_c, box_d = ax_c.get_position(), ax_d.get_position()
-    mid = 0.5 * (box_c.x0 + box_d.x1)
-    ax_c.xaxis.set_label_coords((mid - box_c.x0) / box_c.width, -0.190)
-
     problems = canvas.save(OUT, name="main_figure_09_native")
     for note in CAPTION_NOTES:
+        print(note)
+    for note in LETTER_MOVES:
         print(note)
     return problems
 

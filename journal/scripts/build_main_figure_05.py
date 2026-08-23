@@ -20,7 +20,7 @@ Layout (12 modules, three rows, three column edges)::
 
     A  matched-resource depth   C  backprop depth test  D  local credit
     B  nested divisive task     E  divisive control      F  serial composition
-    G  paired effect sizes (8 modules)                   H  architecture
+    G  paired effect sizes (5 modules)                   H  architecture
 
 A, B, C, D, E, F and H each span four modules, so every panel of those rows
 owns an identical axes box and the figure starts at one of three column
@@ -28,33 +28,36 @@ edges: the schematic column at module 0, the shared-axis block at modules 4
 and 8.  C, D, E and F are one shared-axis small-multiple block -- identical y
 range, ticks and units, with the tick column and y label drawn once per row.
 
-G declares the eight modules it actually occupies.  It used to be declared at
+G declares the five modules it actually occupies.  It used to be declared at
 module 4 on four modules and then draw a two-level name scheme -- a far-left
 column of family names and a second column of row names -- across the whole
 of modules 0-3, an empty slot no panel had claimed.  About 60 % of what the
 panel occupied on the page was furniture and dead space between the two label
-columns, and the forest itself printed as a narrow strip on the right.  The
-scheme is now one level, exactly as in figure 9 A: only the short row names
-are set in the tick column (they fit the figure's shared left margin, which
-is why that margin is 56 pt and not 44 pt), and the four family names are
-left-aligned mute text INSIDE the plotting rectangle, on an empty header row
-above the first row of their family.  The effect axis is 256 pt where it was
-128 pt.
+columns, and the panel itself printed as a narrow strip on the right.  The
+scheme is now one level and one column: family names and row names are both y
+tick labels, right-aligned on one edge (they fit the figure's shared left
+margin, which is why that margin is 56 pt and not 44 pt), the family name
+mute at PT_SMALL on an empty header row above its own rows.  Nothing is drawn
+inside the plotting rectangle but the estimates.
 
-G's effect axis is SPLIT.  The eleven contrasts are strongly bimodal -- three
-BP-depth controls inside (-0.68, +0.19) pp, the other eight between +16.4 and
-+31.8 pp -- so a single linear axis from -2.5 to 33.5 pp left the middle two
-thirds of the panel empty and printed every 95 % interval (0.14 to 1.16 pp)
-narrower than the marker at its centre: the reader saw dots, not estimates.
-The panel is now two sub-axes on one shared set of row positions, a null
-window and an effect window, with a marked break between them.  ``G`` itself
-keeps the whole six-module slot -- it draws the row stub, the shared x label
-and the title and no rectangle of its own -- so the geometry manifest still
-sees one ordinary panel and the column/row lock is untouched; the two
-sub-axes are hand-placed inside that box and bound to it with
+G is a BAR chart on ONE CONTINUOUS effect axis.  It used to be a
+dot-and-whisker forest on a split axis -- a null window and an effect window
+with a marked break -- because the ten contrasts are strongly bimodal: three
+BP-depth controls inside (-0.68, +0.19) pp and the other seven between +16.9
+and +31.3 pp.  The split bought resolution on the near-zero rows at the price
+of a scale the reader has to reassemble, and it cannot be kept here: a bar
+that crosses an axis break states a length that is not the number, so the
+break and both sub-axes are gone.  Each contrast is now one horizontal bar
+drawn from 0 to its mean on a single linear axis from -1.3 to 33.3 pp, with
+its 95 % paired-seed interval as a whisker in the bar's own colour.  What the
+panel now says at a glance is what the split axis hid: the three BP-depth
+controls have no bar at all, and every route-of-interest contrast has a long
+one.  What it gives up is the near-zero window -- those three estimates and
+their 0.14-1.16 pp intervals are sub-point marks against a 34.6 pp axis, and
+the reader has to go to Source Data for their values.  ``G`` is again one
+ordinary axes in its own slot: no satellite sub-axes, no break marks, no
 ``bind_satellite``.  No value, interval, n or test changed; only the mapping
-from percentage points to points on the page did, and the break is stated in
-the caption.
+from percentage points to points on the page did.
 
 Marker dodges, series coincidences and the contrast definitions are stated in
 the caption rather than inside the panels: the geometry is the report.
@@ -88,7 +91,7 @@ from journal_style import (  # noqa: E402
     PT_SMALL,
     PT_TICK,
 )
-from figure_canvas import Margins, NativeCanvas, style_panel  # noqa: E402
+from figure_canvas import Margins, NativeCanvas  # noqa: E402
 from credit_tree_schematics import MS_JUNCTION, mix  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -101,13 +104,13 @@ OUT = ROOT / "figures" / "components" / "main_figure_05_native.pdf"
 # taller canvas pushes the float off the page ("Float too large") in main.tex
 # (measured: the float overflows once the graphic prints above ~386 pt, i.e.
 # above a ~400 pt canvas at this width).
-CANVAS_H_PT = 396.0                      # 518.4 / 396 = 1.31 aspect
+CANVAS_H_PT = 384.0                      # 518.4 / 396 = 1.31 aspect
 # Row 2 carries the forest, which is eight modules wide: the audit's aspect
 # band caps a panel that shares its row at 2.40, and its emphasis rule caps
 # the spread of row heights at 1.35, so row 2 is 108 pt and rows 0 and 1 are
 # 82 pt each -- the tallest row 2 the canvas can hold without the float
 # overflowing the page.
-ROW_H_PT = (82.0, 82.0, 108.0)
+ROW_H_PT = (78.4, 78.4, 103.2)
 # What the forest's axes box is allowed to be at that row height (2.40 x 108
 # = 259.2 pt); the eight-module slot is 286.9 pt, so G yields the remainder
 # on its right rather than printing as a letterbox strip.
@@ -136,35 +139,23 @@ ACC_YLABEL = "test accuracy"
 
 MINUS = "−"
 
-# ── the split (broken) effect axis of G ──────────────────────────────────
-# The eleven prespecified contrasts are strongly bimodal.  Three BP-depth
-# controls sit inside (-0.68, +0.19) pp and the remaining eight land between
-# +16.4 and +31.8 pp, so on one linear axis from -2.5 to 33.5 pp the middle
-# two thirds of the panel carried no ink at all and every 95 % interval --
-# 0.14 to 1.16 pp wide -- printed no wider than the marker at its centre: the
-# reader saw dots, not estimates.  G is therefore drawn as TWO sub-axes on one
-# shared set of row positions, with a break between them.  The null window is
-# 2.0 pp wide and the effect window 16.4 pp, and each contrast is drawn on
-# exactly one of them.  Nothing about any estimate changes; only the mapping
-# from percentage points to points on the page does, and the break is stated
-# in the caption.
-FOREST_NULL_XLIM = (-1.0, 1.0)                  # 2.0 pp across ~1/3 of G
-FOREST_NULL_XTICKS = (-0.5, 0.0, 0.5)
-FOREST_EFFECT_XLIM = (15.9, 32.3)               # 16.4 pp across ~2/3 of G
-FOREST_EFFECT_XTICKS = (20, 25, 30)
-# Any contrast below this goes on the null sub-axis, any above on the effect
-# sub-axis.  The observed gap is 0.19 -> 16.95 pp, so the cut is unambiguous.
-FOREST_SPLIT_PP = 8.0
-# Width in proportion to the span shown would give the null window 11 % of the
-# pair; it is floored at a third so both clusters stay legible.
-FOREST_NULL_FRAC = 1.0 / 3.0
-FOREST_GAP_PT = 7.0                             # the break itself
-FOREST_MARK_PT = 2.4                            # half-length of a break stroke
-FOREST_MARK_SEP_PT = 2.4                        # between the two strokes
+# ── the single continuous effect axis of G ───────────────────────────────
+# One linear axis, no break.  The lower bound clears the one negative bar
+# (-0.43 pp) and the low end of its interval (-0.68 pp); the upper bound
+# clears the widest interval (+31.8 pp).  A bar reports its value by its
+# LENGTH, and a length is only a value on a continuous scale that starts at
+# the bar's own baseline, so the earlier split axis -- which had every bar
+# crossing a break -- is not available to this encoding.
+FOREST_XLIM = (-1.3, 33.3)
+FOREST_XTICKS = (0, 10, 20, 30)
+# Fourteen y units (ten contrasts plus four family header rows) share ~76 pt
+# of axes height, so a bar is ~3.4 pt deep and its interval caps (ERR_CAPSIZE
+# = 2.0) sit just proud of it.
+FOREST_BAR_H = 0.62
+# Fill lightness for the bar body; the outline is the row's full colour, so
+# the semantic hue survives at a fill pale enough not to shout at print size.
+FOREST_FILL_PCT = 26
 FOREST_XLABEL = "paired difference (pp)"
-# The shared x label hangs under the PAIR, on the container axes, so it has to
-# clear the sub-axes' own tick labels (pad 1.8 + one 7.6 pt line) itself.
-FOREST_XLABEL_PAD = 14.0
 
 # ── colour semantics (route of interest coloured, controls neutral) ──────
 C_ROUTE = COLORS["shunting"]             # aligned / shunting / serial tree
@@ -620,76 +611,35 @@ FOREST = (
 )
 
 
-def forest_sub_axes(canvas, ax):
-    """Split G's slot into the two sub-axes of the broken effect axis.
-
-    ``ax`` keeps the whole slot and stops being a plotting rectangle: it holds
-    the row stub, the shared x label and the title, so the geometry manifest
-    still sees one panel of one full six-module width and the column/row lock
-    keeps working untouched.  The two sub-axes are hand-placed inside that box
-    and bound to it with :meth:`NativeCanvas.bind_satellite`, so the lock pass
-    carries them along instead of letting them drift off their host.
-    """
-    fig = ax.figure
-    box = ax.get_position()
-    gap = FOREST_GAP_PT / canvas.width_pt
-    usable = box.width - gap
-    w_null = FOREST_NULL_FRAC * usable
-    ax_null = fig.add_axes([box.x0, box.y0, w_null, box.height])
-    ax_effect = fig.add_axes([box.x0 + w_null + gap, box.y0,
-                              usable - w_null, box.height])
-    for sub in (ax_null, ax_effect):
-        # Only a bottom spine: the row stub replaces the left spine exactly as
-        # it did on the single axis, and the two facing ends of the bottom
-        # spine are where the break is marked.
-        style_panel(sub, grid="x", spines=("bottom",))
-        sub.set_facecolor("none")
-        sub.set_yticks([])
-        canvas.bind_satellite(sub, ax)
-    return ax_null, ax_effect
-
-
-def forest_break_marks(ax_null, ax_effect, canvas):
-    """The standard break: two short parallel diagonals per facing spine end.
-
-    Drawn once the lock pass has settled every box, so the strokes are the
-    same length in points on both sub-axes, and added with ``add_artist`` so
-    they never enter a data limit.  Mute hairlines, nothing else in the gap.
-    """
-    for sub, x_axes in ((ax_null, 1.0), (ax_effect, 0.0)):
-        box = sub.get_position()
-        dx = FOREST_MARK_PT / (box.width * canvas.width_pt)
-        dy = FOREST_MARK_PT / (box.height * canvas.height_pt)
-        sep = FOREST_MARK_SEP_PT / (box.width * canvas.width_pt)
-        for offset in (-0.5 * sep, 0.5 * sep):
-            sub.add_artist(Line2D(
-                [x_axes + offset - dx, x_axes + offset + dx], [-dy, dy],
-                transform=sub.transAxes, color=MUTE, lw=LW_HAIR,
-                solid_capstyle="butt", clip_on=False, zorder=6))
-
-
-def panel_forest(canvas, ax, depth_contrasts, point_contrasts):
-    """G: every prespecified paired contrast on one SPLIT effect axis.
+def panel_forest(ax, depth_contrasts, point_contrasts):
+    """G: every prespecified paired contrast as a bar on ONE effect axis.
 
     ONE stub column.  Family names and row names are both y tick labels, so
     they share a single right-aligned edge and no text is drawn inside the
     plotting rectangle.  Hierarchy is carried by tone, not by position: the
     family name is mute at PT_SMALL, its rows are ink at PT_TICK.
 
-    Drawing the family names inside the axes (the earlier attempt) put them
-    on top of the near-zero markers -- three of the four "BP depth" rows sit
-    at 0 pp, exactly where a left-aligned header starts -- and forced the zero
+    Drawing the family names inside the axes (an earlier attempt) put them on
+    top of the near-zero rows -- three of the four "BP depth" rows sit at
+    0 pp, exactly where a left-aligned header starts -- and forced the zero
     reference to be broken into one stub per family so it would not strike
-    through them, which read as a rendering fault.  With the names in the
-    tick column the zero reference is one continuous rule again.
+    through them, which read as a rendering fault.  With the names in the tick
+    column the zero reference is one continuous rule again.
 
-    The effect axis is split.  The stub, the zero reference, the shared x
-    label and the title are drawn once for the pair; each contrast is drawn on
-    exactly one sub-axis, the one whose window contains it.
+    Each contrast is one bar from 0 to its mean, filled at
+    ``FOREST_FILL_PCT`` of the row's own colour and outlined in that colour at
+    ``LW_EDGE``, with the 95 % paired-seed interval drawn on top as a whisker
+    with ``ERR_CAPSIZE`` caps in the same colour.  The three flat BP-depth
+    controls are therefore bars of no visible length against the dashed zero
+    reference: the panel states "these controls did not move" as an absence,
+    which is the one reading the split axis could not give.
     """
     depth = depth_contrasts.set_index("contrast")
     point = point_contrasts.set_index("contrast")
-    ax_null, ax_effect = forest_sub_axes(canvas, ax)
+
+    # Behind the bars, and drawn before them so nothing overprints an
+    # estimate: one continuous zero reference for the whole stack.
+    ax.axvline(0.0, color=MUTE, lw=LW_REF, ls=(0, (3.0, 2.2)), zorder=1)
 
     ticks, labels, header_rows = [], [], []
     unit = 0
@@ -700,44 +650,28 @@ def panel_forest(canvas, ax, depth_contrasts, point_contrasts):
         labels.append(family)
         header_rows.append(len(labels) - 1)
         unit += 1
-        for name, key_, source, color, marker in entries:
+        for name, key_, source, color, _marker in entries:
             record = (depth if source == "depth" else point).loc[key_]
             mean = 100.0 * float(record.mean_difference)
             low = 100.0 * float(record.ci95_low)
             high = 100.0 * float(record.ci95_high)
-            # One row, one sub-axis: the window that contains its value.
-            target = ax_null if mean < FOREST_SPLIT_PP else ax_effect
-            target.errorbar(
-                [mean], [unit], xerr=np.array([[mean - low], [high - mean]]),
-                fmt=marker, ms=MARKER_MS, color=color, markerfacecolor=color,
-                markeredgecolor="white", markeredgewidth=0.55, ecolor=color,
-                elinewidth=LW_ERR, capsize=ERR_CAPSIZE, zorder=3,
+            ax.barh(unit, mean, height=FOREST_BAR_H,
+                    facecolor=mix(color, FOREST_FILL_PCT), edgecolor=color,
+                    lw=LW_EDGE, zorder=2)
+            ax.errorbar(
+                mean, unit, xerr=np.array([[mean - low], [high - mean]]),
+                fmt="none", ecolor=color, elinewidth=LW_ERR,
+                capsize=ERR_CAPSIZE, capthick=LW_ERR, zorder=4,
             )
             ticks.append(unit)
             labels.append(name)
             unit += 1
 
-    # One continuous zero reference, on the sub-axis whose window holds zero;
-    # the effect window starts at +15.9 pp, so zero is nowhere on it.
-    ax_null.axvline(0.0, color=MUTE, lw=LW_REF, ls=(0, (3.0, 2.2)), zorder=1)
-
+    ax.set_xlim(*FOREST_XLIM)
+    ax.set_xticks(list(FOREST_XTICKS))
     # A full row of clearance under the last contrast and above the first
-    # family name: at 0.4 the bottom marker sat on the x spine.
-    ylim = (unit - 0.05, -0.90)
-    for sub, xlim, xticks, xlabels in (
-        (ax_null, FOREST_NULL_XLIM, FOREST_NULL_XTICKS,
-         (f"{MINUS}0.5", "0", "0.5")),
-        (ax_effect, FOREST_EFFECT_XLIM, FOREST_EFFECT_XTICKS,
-         ("20", "25", "30")),
-    ):
-        sub.set_xlim(*xlim)
-        sub.set_xticks(list(xticks))
-        sub.set_xticklabels(list(xlabels), fontsize=PT_TICK)
-        sub.set_ylim(*ylim)
-
-    # The container carries the stub, the shared x label and the title, and
-    # draws no rectangle of its own.
-    ax.set_ylim(*ylim)
+    # family name: at 0.4 the bottom bar sat on the x spine.
+    ax.set_ylim(unit - 0.05, -0.90)
     ax.set_yticks(ticks)
     ax.set_yticklabels(labels, fontsize=PT_TICK)
     for index, label in enumerate(ax.get_yticklabels()):
@@ -746,14 +680,12 @@ def panel_forest(canvas, ax, depth_contrasts, point_contrasts):
             label.set_color(MUTE)
         else:
             label.set_color(COLORS["ink"])
-    ax.set_xticks([])
-    ax.grid(False)
-    for spine in ax.spines.values():
-        spine.set_visible(False)
-    ax.set_facecolor("none")
-    ax.set_xlabel(FOREST_XLABEL, labelpad=FOREST_XLABEL_PAD)
+    # The stub column replaces the left spine, exactly as it did on the
+    # forest: a rule there would only fence the tick labels off the bars.
+    ax.spines["left"].set_visible(False)
+    ax.set_xlabel(FOREST_XLABEL)
     ax.tick_params(axis="y", length=0.0, pad=2.0)
-    return ax_null, ax_effect
+    return ax
 
 
 def build():
@@ -785,17 +717,14 @@ def build():
     ax_f = canvas.panel("F", 1, 8, 4, grid="y", sharey=ax_e,
                         title="Serial composition")
 
-    # Row 2: the forest of paired effect sizes under the block it summarises,
-    # and the architecture schematic directly under the serial-composition
-    # result it explains.  G is declared on the eight modules it occupies --
-    # its row names are its own tick column, not a squatter in the empty cell
-    # beside it -- and yields the right-hand remainder of that slot so its
-    # axes box stays inside the aspect band a panel sharing a row must keep.
-    # G's own axes is a container: it keeps the whole six-module slot (so the
-    # manifest, the column lock and the row lock see one ordinary panel) and
-    # carries the row stub, the shared x label and the title, while the two
-    # sub-axes of the broken effect axis are placed inside it.
-    ax_g = canvas.panel("G", 2, 0, 5, title="Paired effect sizes")
+    # Row 2: the bar chart of paired effect sizes under the block it
+    # summarises, and the architecture schematic directly under the
+    # serial-composition result it explains.  G is declared on the five
+    # modules it occupies -- its row names are its own tick column, not a
+    # squatter in the empty cell beside it -- and is one ordinary axes again:
+    # the continuous effect axis needs no satellite sub-axes, so the manifest,
+    # the column lock and the row lock see exactly what is drawn.
+    ax_g = canvas.panel("G", 2, 0, 5, grid="x", title="Paired effect sizes")
     ax_h = canvas.panel("H", 2, 5, 7, schematic=True,
                         title="Architecture controls")
 
@@ -807,8 +736,7 @@ def build():
     panel_serial(ax_f, point_summary)
     panel_architecture(ax_h)
 
-    ax_g_null, ax_g_effect = panel_forest(
-        canvas, ax_g, depth_contrasts, point_contrasts)
+    panel_forest(ax_g, depth_contrasts, point_contrasts)
 
     # Panel letters sit in a fixed gutter: wide where a y label and tick
     # column occupy it, narrow where a shared axis leaves it empty.  G starts
@@ -816,12 +744,6 @@ def build():
     for name, dx in (("A", 30.0), ("B", 30.0), ("C", 34.0), ("D", 14.0),
                      ("E", 34.0), ("F", 14.0), ("G", 30.0), ("H", 14.0)):
         canvas.add_letter(name, canvas.axes[name], dx_pt=dx)
-
-    # Settle the geometry first, then mark the break: the strokes are sized in
-    # points off the boxes the lock actually produced, and the second lock
-    # inside save() is idempotent, so they stay the same length on both sides.
-    canvas.lock_reserves()
-    forest_break_marks(ax_g_null, ax_g_effect, canvas)
 
     problems = canvas.save(OUT, name="main_figure_05_native")
     return problems

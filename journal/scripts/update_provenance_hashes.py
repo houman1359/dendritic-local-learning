@@ -131,7 +131,7 @@ NEW_DETAIL_ASSETS = {
     },
     "measured.detail.asset": {
         "figure": "figS22",
-        "path": "figures/supplementary/figure_S22_panels_A-H.pdf",
+        "path": "figures/supplementary/figure_S22_panels_A-J.pdf",
         "generator": "scripts/build_journal_figures.py",
         "notes": "Detailed measured-response topology and learning boundary underlying focused Fig. 9.",
     },

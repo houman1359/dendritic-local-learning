@@ -783,7 +783,7 @@ through $H$, while finer levels carried additional noise. The test therefore
 validates the predicted crossover locations quantitatively; it does not imply
 that $D_{\mathrm{r}}=H$ for arbitrary tasks. For task depths $H=1,2,3,4$, the
 lowest mean final population loss occurred at route resolution
-$D_{\mathrm{r}}=H$ (Fig.~\ref{fig:creditphase}d and Supplementary Fig.~S16).
+$D_{\mathrm{r}}=H$ (Fig.~\ref{fig:creditphase}c and Supplementary Fig.~S16).
 Across the 200 seed--task pairs, matched depth reduced loss relative to the best
 mismatched depth by 0.0957 (95\% interval 0.0782--0.1134 after averaging the
 four task-depth contrasts within each independent seed; 48/50 seeds; two-sided
@@ -798,7 +798,7 @@ Third, independent variation of signal and noise retention recovered the
 predicted boundary. Backpropagation followed by the same route projection
 produced lower mean one-step population loss than unprojected stochastic
 backpropagation in exactly those of the 25 condition means for which rejected
-noise exceeded discarded signal (Fig.~\ref{fig:creditphase}e). The routed
+noise exceeded discarded signal (Fig.~\ref{fig:creditphase}d). The routed
 local estimator carried an additional specified coefficient-noise cost and
 never exceeded this projected-backpropagation control.
 
@@ -807,7 +807,7 @@ matched the branch signal-to-noise ratios. At maximum heterogeneity, the
 reliability-aligned gain exceeded the best single global gain by 1.241 in
 one-step loss reduction (95\% interval 1.116--1.373; 50/50 seeds;
 $P=1.78\times10^{-15}$). Shuffling or reversing the gains removed or reversed
-the benefit (Fig.~\ref{fig:creditphase}f). An explicit point gate receiving
+the benefit (Fig.~\ref{fig:creditphase}e). An explicit point gate receiving
 the same gains matched exactly (maximum difference 0).
 
 We then asked whether physical conductance could realize this oracle
@@ -888,7 +888,7 @@ with Spearman $\rho=0.937$ (seed-block 95\% interval 0.9336--0.9412) and final
 held-out accuracy with $\rho=0.916$ (0.905--0.929). Spectral capture alone
 predicted one-step progress less accurately ($\rho=0.877$), with a positive
 seed-block difference of 0.060 (0.050--0.070;
-Fig.~\ref{fig:creditphase}c). This secondary reanalysis explains the immediate
+Fig.~\ref{fig:creditphase}f). This secondary reanalysis explains the immediate
 geometry at a fixed initialization; it is not an independent trained
 experiment.
 
@@ -919,20 +919,20 @@ structure is useful.} \textbf{A}, A fixed credit operator $M$ maps an unbiased
 stochastic gradient into a routed local update; its utility balances signal
 against step gain and noise. \textbf{B}, Mean ancestry-minus-random spectral
 capture over alignment and rank ($n=50$ seeds); the advantage grows with
-alignment, vanishing at full rank. \textbf{C}, Prespecified
+alignment, vanishing at full rank. \textbf{C}, Mean final population loss for
+crossed task hierarchy $H$ and route resolution $D_{\mathrm{r}}$ (4 = full
+rank); coincident markers are offset in $x$ though every line, ribbon and
+vertex stays at its true resolution. \textbf{D}, Expected one-step loss of BP
+plus route projection minus unprojected stochastic BP; negative favors
+projection, the dashed line the analytical $n=r$ crossover. \textbf{E},
+One-step loss decrease for SNR-aligned, best global, shuffled and anti-aligned
+gains (means and 95\% intervals over 50 seeds); the point gate is identical to
+the aligned condition, and all four coincide at zero heterogeneity, where only
+marker columns are offset in $x$. \textbf{F}, Prespecified
 signal--noise--curvature utility versus norm-matched one-step progress for 540
 conditions of the 2,700-fit factorial; the interval resamples 20 seed blocks,
 and the cluster near progress $-1$ is misrouted controls of the same series,
-not a separate one. \textbf{D}, Mean final population loss for crossed task
-hierarchy $H$ and route resolution $D_{\mathrm{r}}$ (4 = full rank); coincident
-markers are offset in $x$ though every line, ribbon and vertex stays at its
-true resolution. \textbf{E}, Expected one-step loss of BP plus route projection
-minus unprojected stochastic BP; negative favors projection, the dashed line
-the analytical $n=r$ crossover. \textbf{F}, One-step loss decrease for
-SNR-aligned, best global, shuffled and anti-aligned gains (means and 95\%
-intervals over 50 seeds); the point gate is identical to the aligned condition,
-and all four coincide at zero heterogeneity, where only marker columns are
-offset in $x$. \textbf{G}, Alignment-by-bandwidth synthesis of trained and
+not a separate one. \textbf{G}, Alignment-by-bandwidth synthesis of trained and
 controlled experiments: filled markers denote an ancestry benefit or tie, open
 markers none; the dashed rule marks alignment $=1$, where the three
 observations are offset in $x$; the trained-bandwidth point at $K=4$ is the
@@ -1219,8 +1219,8 @@ one shared-soma coordinate or exact path transport.
 against the resource-identical grouped star; the green series in both is the
 same aligned serial tree drawn in \textbf{C}. \textbf{C--F} share one
 test-accuracy axis (identical range, ticks and units), labelled once per row.
-\textbf{G}, Every prespecified paired contrast on a split effect-size axis
-($\pm1.0$ pp, $+15.9$ to $+32.3$ pp), in four headed families: BP depth, the
+\textbf{G}, Every prespecified paired contrast as a bar from zero on one
+continuous effect-size axis, in four headed families: BP depth, the
 backpropagation D3-minus-D1 effect for the aligned tree and each control; vs
 control, the aligned-minus-control interactions; LocalCA depth, the LocalCA
 D3-minus-D1 effects for both credit coordinates; and architecture, the
@@ -1229,8 +1229,8 @@ Rows are aligned, zero align (zero alignment), shuffled (sensor shuffled),
 reversed (tree reversed), shared soma, exact path and serial $-$ star. The
 aligned and interaction rows exclude zero, while the zero-alignment ($+0.02$
 pp) and sensor-shuffled ($-0.01$ pp) rows of the first family span zero, which
-is the point of showing them. Each row keeps its condition's color and marker
-from \textbf{C,D,F}. \textbf{H}, The architectures behind \textbf{F}: a point
+is the point of showing them. Each bar keeps its condition's color from
+\textbf{C,D,F} and carries its 95\% paired-seed interval as a whisker. \textbf{H}, The architectures behind \textbf{F}: a point
 MLP with the resource-identical grouped star and serial tree. Flexible
 point-network and architecture controls are in Supplementary Fig.~S18, the
 credit-coordinate ladder and BP--local decomposition in Fig.~S28. All
@@ -1741,7 +1741,7 @@ After controlling for Euclidean separation and depth, functional similarity
 did not increase consistently with shared ancestry. The mean target-level
 partial rank effect was $-0.069$ (95\% target-bootstrap interval
 $-0.255$ to $0.108$), with a positive effect in three of seven cells
-(Fig.~\ref{fig:boundary}a and Supplementary Fig.~S22a). This estimand asks
+(Fig.~\ref{fig:boundary}b and Supplementary Fig.~S22a). This estimand asks
 whether within-tree position adds organization beyond geometry and complements
 the broader like-to-like wiring principle reported in the same MICrONS volume
 \citep{ding2025wiring}. Applying the deterministic rule ``all
@@ -1763,7 +1763,7 @@ identities were held out.
 Mean held-out field capture was 0.999 for a training-only dense oracle, 0.475
 for ancestry routes (labelled ``morphology'' in the display items), 0.564 for
 nonempty random paths, 0.621 for depth bins, 0.446 for ancestry-shuffled paths,
-and 0.222 for a scalar broadcast (Fig.~\ref{fig:boundary}b). The
+and 0.222 for a scalar broadcast (Supplementary Fig.~S22i). The
 ancestry-route-minus-ancestry-shuffled capture difference was 0.028
 (95\% interval $-0.146$ to $0.206$), with three of seven target cells
 positive.
@@ -1776,7 +1776,7 @@ close to the ancestry-shuffled control and did not outperform the simpler
 depth-bin or scalar dictionaries on this task. The paired ancestry-route
 improvement was 0.004 normalized-error units
 (95\% interval $-0.021$ to $0.027$), with a positive difference in four of
-seven targets (Fig.~\ref{fig:boundary}c).
+seven targets (Supplementary Fig.~S22j).
 
 A pooled capture--performance association disappeared after centering within
 target ($\rho=-0.150$; label-permutation $P=0.419$;
@@ -1800,7 +1800,7 @@ then averaged within each of the seven target cells.
 Exact compartment error achieved a mean normalized held-out MSE of 0.788.
 The ancestry-route rule (labelled ``topology'' in Source Data), random-route
 rule and site-shuffled rule reached 0.832, 0.833 and 0.839, respectively
-(Fig.~\ref{fig:boundary}d). Relative to site shuffling, ancestry routes
+(Fig.~\ref{fig:boundary}a). Relative to site shuffling, ancestry routes
 improved MSE by 0.0070 units
 (95\% target-bootstrap interval $-0.0207$ to 0.0321). Relative to random
 routes, the improvement was 0.0013 ($-0.0090$ to 0.0113). Neither contrast
@@ -1808,7 +1808,7 @@ provided reliable evidence of an advantage.
 
 At the common exact checkpoint, ancestry routes captured 0.232 of the
 eligibility-weighted update field, below site-shuffled routes at 0.439 and
-random routes at 0.358 (Fig.~\ref{fig:boundary}a). Restricted dictionaries had
+random routes at 0.358 (Fig.~\ref{fig:boundary}b). Restricted dictionaries had
 identical effective rank in every scan--split run, and exact conductance
 gradients agreed with finite differences to a maximum relative error of
 $3.1\times10^{-7}$.
@@ -1823,7 +1823,7 @@ under the credit-operator account. A single channel already captured 0.965 of
 this response family's credit energy, corresponding to an effective rank of
 1.07. A four-channel budget therefore exceeds the task's credit rank, placing
 every equal-rank dictionary in the span-saturated regime where the theory
-predicts a tie (Fig.~\ref{fig:boundary}b; the synthesis plane in
+predicts a tie (Supplementary Fig.~S22i; the synthesis plane in
 Fig.~\ref{fig:creditphase}g places this cohort in that regime). In the coarse
 model, oracle calibration makes each restricted dictionary a capacity ceiling.
 The full-tree rules, by contrast, were calibrated from anatomy alone and then
@@ -1836,7 +1836,9 @@ conductances.
 \centering
 \includegraphics[width=\textwidth]{main/figure_09.pdf}
 \caption{\textbf{Measured responses define the biological boundary, while
-imposed alignment validates the conditional prediction.} \textbf{A}, Every
+imposed alignment validates the conditional prediction.} \textbf{A}, Complete-tree
+held-out normalized MSE for exact compartment error and for topology-matched
+ancestry, random anatomical and site-shuffled routes. \textbf{B}, Every
 anatomy effect on one axis, in three headed families: structure--function, the
 measured partial ancestry rank effect (3/7 targets positive), over prespecified
 and all eligible scans; and, on the full tree, the held-out normalized-MSE
@@ -1845,23 +1847,24 @@ minus control), each against site-shuffled and random anatomical controls.
 Positive favors anatomy; no row excludes zero in that direction. Small dots are the $n=7$ per-target
 values, fanned deterministically within their row; point and whisker are their
 mean and 95\% bootstrap interval, exact values in Source Data. The axis is cut to the interval
-structure, clipping 4 of 42 points; every mean and interval is drawn in full. \textbf{B--D}, Held-out task-field
-capture and learning for exact, dense, ancestry and control dictionaries, and
-complete-tree learning for exact, ancestry, random and shuffled rules on the
-shared \textbf{C,D} axis; projection coefficients are oracle ceilings. Dots in \textbf{B} are one per target;
-exact and dense coincide at the ceiling ($1.00$, $\ge0.996$), so show no spread. \textbf{E}, The imposed-alignment manipulation
-at $\alpha=0,0.4,1$, the values swept in \textbf{F}: one dictionary at fixed
+structure, clipping 4 of 42 points; every mean and interval is drawn in full.
+\textbf{C}, The imposed-alignment manipulation
+at $\alpha=0,0.4,1$, the values swept in \textbf{D}: one dictionary at fixed
 gradient energy, so only the field direction changes, as
 $f(\alpha)\propto(1-\alpha)f_{\perp}+\alpha f_{\parallel}$ renormalized,
 with $f_{\parallel}$ constant within each route and $f_{\perp}$ alternating.
 Stems are the imposed field on the terminal branches; the capsules beneath are
-the two ancestry routes, green where they carry it in full. \textbf{F}, Rotating task credit into the
+the two ancestry routes, green where they carry it in full. \textbf{D}, Rotating task credit into the
 fixed ancestry span increases capture; the three controls form one neutral
-family separated by marker and dash, not hue. \textbf{G}, Signed neuron-coordinate
+family separated by marker and dash, not hue. \textbf{E}, Signed neuron-coordinate
 contrast in six animals: one line per animal between its P+ and P- values
 (error-reduction minus error-increase residual), signs set by the causal
-mapping, 6/6 alike. Most contrast energy is in the signed P+/P- mode, not a
-common scalar (Supplementary Fig.~S17c). Target cells or animals are the inferential units.}
+mapping, 6/6 alike. \textbf{F}, Of the pooled squared projection
+energy of those six vectors, 83.7\% lies in the signed P+/P- mode and 16.3\% in
+a common scalar mode (animal-bootstrap 95\% interval 60.6--95.7\%).
+\textbf{G}, The evidence boundary---supported, conditional, not
+established---in the paper's own hedged words. Target cells or animals are the
+inferential units.}
 \label{fig:boundary}
 \end{figure}
 
@@ -1874,7 +1877,7 @@ the span of the morphology dictionary into its orthogonal complement while
 channel count, dictionary, gradient energy and loss curvature were held fixed.
 The same fields were evaluated with morphology, random-path, depth-bin and
 ancestry-shuffled dictionaries using norm-matched or iterative projected
-descent (Fig.~\ref{fig:boundary}e,f and Supplementary Fig.~S5).
+descent (Fig.~\ref{fig:boundary}c,d and Supplementary Fig.~S5).
 
 The morphology dictionary captured exactly the imposed aligned energy, ranging
 from 0 at complete orthogonality to 1 at complete alignment. At 40\%
@@ -1912,12 +1915,12 @@ random-sign permutation $P=0.0313$). The P- contrast was negative in all six
 (mean $-0.1498$; $-0.2054$ to $-0.0866$; $P=0.0156$). Their signed
 separation was positive in every animal
 (mean 0.2251; 0.1416--0.3108; $P=0.0156$;
-Fig.~\ref{fig:boundary}g). A decomposition of the six animal contrast vectors
+Fig.~\ref{fig:boundary}e). A decomposition of the six animal contrast vectors
 showed that 83.7\% of pooled squared projection energy lay in the signed P+/P-
 mode, compared with 16.3\% in a common scalar mode. The animal-bootstrap 95\%
 interval for signed-mode energy was 60.6--95.7\%, and the
 leave-one-animal-out range was 76.5--90.2\%
-(Supplementary Fig.~S17c). Descriptive neuron-level residual distributions
+(Fig.~\ref{fig:boundary}f and Supplementary Fig.~S17c). Descriptive neuron-level residual distributions
 from the published source table are shown in Supplementary Fig.~S17d.
 
 With only six animals, these exact permutation tests lie at or one step above

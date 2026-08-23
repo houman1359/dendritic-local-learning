@@ -45,6 +45,7 @@ from journal_style import (
     PT_ANNOT,
     PT_LEGEND,
     PT_SMALL,
+    PT_TICK,
     SEED_ALPHA,
     SEED_MS,
     add_colorbar,
@@ -149,6 +150,32 @@ def eight_panel_grid(*, height: float = 6.35):
         (0, slice(0, 2)), (0, slice(2, 4)), (0, slice(4, 6)),
         (1, slice(0, 2)), (1, slice(2, 4)), (1, slice(4, 6)),
         (2, slice(0, 3)), (2, slice(3, 6)),
+    ]
+    return fig, [fig.add_subplot(gs[r, c]) for r, c in spans]
+
+
+def measured_boundary_grid(*, height: float = 7.70):
+    """Four journal rows: 3 + 3 + 2 + 2 panels at the canonical width.
+
+    The measured-response boundary figure grew a fourth row when the coarse
+    surrogate's capture and learning strips were demoted out of the main
+    figure into it.  This grid exists so that growth costs the eight panels
+    already there nothing: the row height stays within 0.02 in of the one
+    :func:`eight_panel_grid` gives at its own canvas (1.14 in against
+    1.16 in), held by spending a taller canvas and a slightly tighter row
+    gap (``hspace`` 0.66 against 0.88) rather than by flattening the eight
+    panels that were already here.
+    """
+    fig = plt.figure(figsize=(FIG_W, height))
+    gs = fig.add_gridspec(
+        4, 6, left=0.088, right=0.985, bottom=0.056, top=0.943,
+        wspace=0.94, hspace=0.66,
+    )
+    spans = [
+        (0, slice(0, 2)), (0, slice(2, 4)), (0, slice(4, 6)),
+        (1, slice(0, 2)), (1, slice(2, 4)), (1, slice(4, 6)),
+        (2, slice(0, 3)), (2, slice(3, 6)),
+        (3, slice(0, 3)), (3, slice(3, 6)),
     ]
     return fig, [fig.add_subplot(gs[r, c]) for r, c in spans]
 
@@ -1742,9 +1769,63 @@ def figure4() -> None:
 # -------------------------------------------------------------------------
 
 
+# Panels I and J below are the coarse-surrogate capture and learning strips
+# demoted out of main Figure 9, where they were panels B and C.  They are
+# reproduced here exactly as that figure drew them -- the same seven
+# dictionaries in the same order, the same ``mean_ci`` estimator at the same
+# per-row seeds (1830 + row), the same deterministic within-row dodge, the
+# same open-diamond mean glyph at ``MARKER_MS + 1.2`` and the same axis
+# ranges and ticks -- so nothing about the two displays changed when they
+# moved.  That includes their colour assignment, which is the main figure's
+# (one anatomy green, one control family at two lightnesses) and not this
+# figure's ``METHOD_COLORS``.
+DEMOTED_CTRL = COLORS["point_mlp"]
+DEMOTED_CTRL_L = "#989898"
+DEMOTED_METHODS = (
+    ("exact backprop", "exact", EXACT),
+    ("dense PCA oracle", "dense", DENSE),
+    ("morphology-aware paths", "ancestry", MORPH),
+    ("random nonempty paths", "random", DEMOTED_CTRL),
+    ("depth-only bins", "depth", DEMOTED_CTRL_L),
+    ("shuffled ancestry", "shuffle", DEMOTED_CTRL),
+    ("scalar broadcast", "scalar", DEMOTED_CTRL_L),
+)
+
+
+def _demoted_spread(count: int, half: float = 0.17) -> np.ndarray:
+    """The main figure's deterministic within-row dodge (never random)."""
+    if count == 1:
+        return np.zeros(1)
+    return np.linspace(-half, half, count)
+
+
+def _demoted_strip(ax, target, metric, *, xlim, xticks, xlabel) -> None:
+    """One dictionary per row: per-target dots, open-diamond mean, 95% CI."""
+    for index, (method, label, color) in enumerate(DEMOTED_METHODS):
+        values = target[target.method.eq(method)][metric].to_numpy(float)
+        mean, low, high = mean_ci(values, seed=1830 + index)
+        ax.scatter(values, index + _demoted_spread(values.size),
+                   s=SEED_MS ** 2, color=color, alpha=SEED_ALPHA,
+                   edgecolors="none", zorder=2)
+        ax.errorbar([mean], [index],
+                    xerr=np.array([[mean - low], [high - mean]]),
+                    marker="D", ms=MARKER_MS + 1.2, color=color,
+                    markerfacecolor="white", markeredgecolor=color,
+                    markeredgewidth=LW_ERR, ecolor=color, elinewidth=LW_ERR,
+                    capsize=ERR_CAPSIZE, zorder=4)
+    ax.set_yticks(range(len(DEMOTED_METHODS)))
+    ax.set_yticklabels([row[1] for row in DEMOTED_METHODS], fontsize=PT_TICK)
+    ax.set_ylim(len(DEMOTED_METHODS) - 0.45, -0.55)
+    ax.set_xlim(*xlim)
+    ax.set_xticks(list(xticks))
+    ax.set_xlabel(xlabel)
+    ax.tick_params(axis="y", length=0.0, pad=2.0)
+    ax.spines["left"].set_visible(False)
+
+
 def _figure5_detailed() -> None:
-    fig, axes = eight_panel_grid(height=6.35)
-    ax_a, ax_b, ax_c, ax_d, ax_e, ax_f, ax_g, ax_h = axes
+    fig, axes = measured_boundary_grid(height=7.70)
+    ax_a, ax_b, ax_c, ax_d, ax_e, ax_f, ax_g, ax_h, ax_i, ax_j = axes
     functional = pd.read_csv(DATA / "figure5" / "functional_target_metrics.csv")
     y = np.arange(len(functional))
     ax_a.barh(y, functional.n_partners, color=MORPH, alpha=0.82)
@@ -1876,6 +1957,26 @@ def _figure5_detailed() -> None:
     # clear of the wide bootstrap intervals.
     add_headroom(ax_h, 0.30)
     clean_legend(ax_h, loc="upper right", ncol=2, fontsize=PT_SMALL)
+
+    # I and J: the two coarse-surrogate strips demoted from main Figure 9.
+    _demoted_strip(ax_i, target, "heldout_credit_capture",
+                   xlim=(-0.02, 1.08), xticks=(0.0, 0.5, 1.0),
+                   xlabel="held-out field capture")
+    panel_title(ax_i, "I", "Task-field capture")
+    style_axis(ax_i, grid="x")
+    # ``style_axis`` re-arms both tick axes; the strips label their rows with
+    # a tickless column, as they did in the main figure.
+    ax_i.tick_params(axis="y", length=0.0, pad=2.0)
+    # The exact and dense rows sit on the ceiling for every target, and the
+    # per-target dots are fanned within their own row: both are coincidence
+    # and dodging disclosures, so the caption carries them, not the panel.
+    _demoted_strip(ax_j, target, "heldout_normalized_mse",
+                   xlim=(0.60, 1.02), xticks=(0.6, 0.7, 0.8, 0.9, 1.0),
+                   xlabel="held-out normalized MSE")
+    panel_title(ax_j, "J", "Coarse-model learning")
+    style_axis(ax_j, grid="x")
+    ax_j.tick_params(axis="y", length=0.0, pad=2.0)
+
     save(fig, "fig5_alignment_boundary_detailed")
 
 
