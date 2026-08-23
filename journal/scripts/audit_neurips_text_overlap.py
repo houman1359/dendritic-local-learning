@@ -25,7 +25,13 @@ def prose(text: str) -> str:
         text,
         flags=re.DOTALL,
     )
-    text = re.sub(r"\$.*?\$|\\\[.*?\\\]", " ", text, flags=re.DOTALL)
+    # A display-math opener is a single ``\[``.  Require that the backslash
+    # is not itself preceded by another backslash so a LaTeX line break with
+    # spacing (for example ``\\[4pt]`` in the author block) cannot consume
+    # everything through the next genuine ``\]`` display-math closer.
+    text = re.sub(
+        r"\$.*?\$|(?<!\\)\\\[.*?\\\]", " ", text, flags=re.DOTALL
+    )
     text = re.sub(r"\\(?:cite|citep|citet|ref|eqref|label)\{[^{}]*\}", " ", text)
     for _ in range(5):
         text = re.sub(r"\\[A-Za-z@]+\*?(?:\[[^\]]*\])?\{([^{}]*)\}", r"\1", text)
