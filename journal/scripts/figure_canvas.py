@@ -120,7 +120,9 @@ FILL_W_MIN, FILL_H_MIN = 0.92, 0.90
 ALIGN_TOL_PT = 0.5          # a column lock / row lock is exact to this
 EMPHASIS_MAX_RATIO = 1.35   # module-normalised panel area spread
 PANEL_ASPECT_MIN = 0.70     # axes-box w/h band for a panel sharing its row
-PANEL_ASPECT_MAX = 2.20
+PANEL_ASPECT_MAX = 2.40    # a wide categorical dot plot (fig 09 C,D at 2.26)
+                           # is a normal shape; 2.20 flagged those as letterboxes
+                           # while still catching genuine strips (fig 04 G was 3.84)
 PANEL_BAND_ASPECT_MAX = 4.00  # a full-width synthesis band alone on its row
 # A forest/synthesis band that spans the whole canvas alone on its row is a
 # standard display: capping it at 3.20 forced figure 09 panel A to leave ~78 pt

@@ -19,35 +19,39 @@ they are inked.
 
 Layout (12 modules, three rows)::
 
-    A  every anatomy effect on one axis (forest)
-    B  task-field capture   C  coarse-model learning   D  complete-tree learning
-    E  design: imposed alignment   F  controlled alignment   G  signed animal
-                                                                contrast
+    A  every anatomy effect on one axis (forest, 7)   B  task-field capture (5)
+    C  coarse-model learning (6)              D  complete-tree learning (6)
+    E  design: imposed alignment (5)   F  controlled alignment (4)
+                                       G  signed animal contrast (3)
 
 Structural changes against the composed version, all layout-only:
 
 * the two structure--function point ranges that used to float alone in their
   own cell are now the first group of the forest in A, sharing its effect
   axis with the four complete-tree contrasts that used to be panel G;
-* B and C are one shared-axis small-multiple block (the seven dictionaries
-  are named once, at the left of the row), and C and D carry the identical
-  held-out normalized MSE axis, range and ticks because they plot the same
-  quantity for two tasks;
-* the imposed-alignment manipulation is drawn natively as a narrow schematic
-  immediately left of the result it explains;
-* the six-animal slope plot is wide and short rather than tall and sparse.
+* C and D are an explicit shared-axis pair: one ``sharex`` axis, the identical
+  held-out normalized MSE range and ticks because they plot the same quantity
+  for two tasks, and one x label centred under the pair rather than one under
+  each panel;
+* the imposed-alignment manipulation is drawn natively as a three-stage tree
+  strip immediately left of the result it explains.  It takes five modules and
+  not four because the three stage trees have to survive being cut into
+  thirds: at four modules a stage is 40 pt wide, which is below the width the
+  arbor needs before its branches stop resolving;
+* the six-animal slope plot is short and narrow: it plots two x positions, so
+  the three modules it keeps are all the paired geometry needs.
 
-A's left edge is on the module grid.  The forest used to buy the width its
-three group headers ("structure-function", "full tree, MSE", "full tree,
-capture") needed by carving a 78 pt label rail out of its own slot and opting
-out of the column lock, which put its axes box at x0 = 122 pt while B and E,
-which start in the same grid column, sat at 44 pt.  The headers now sit inside
-the plotting rectangle, left-aligned on their own empty header rows, so the
-tick column holds only the short row names and fits the figure's shared left
-margin.  A is locked like every other panel and starts at the one column-0
-x0.  The reserve A cannot shed -- the audit's emphasis and band-aspect caps
-put a hard ceiling near 397 pt on a 126 pt-tall full-width panel -- is taken
-off its right instead, where nothing has to line up with it.
+Why A is 7 modules and not 12.  The forest is six short rows; run across all
+twelve modules it had ~460 pt of axes width for a 0.9-wide effect axis and
+read as an empty band, and the last of that width was bought only to hold two
+outlying seed dots.  A now spans 7 modules beside B, and its effect axis is
+cut to the interval structure: four of the 42 per-target points fall outside
+it and are clipped, which the caption states.  Its left edge is still on the
+module grid -- A, C and E share the one column-0 ``x0`` -- and the three group
+headers ("structure-function", "full tree, MSE", "full tree, capture") still
+sit inside the plotting rectangle on their own empty header rows, so the tick
+column holds only the short row names and fits the figure's shared left
+margin.
 """
 
 from __future__ import annotations
@@ -58,8 +62,8 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
+from matplotlib.colors import to_rgb
 from matplotlib.lines import Line2D
-from matplotlib.patches import Arc
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 if str(SCRIPT_DIR) not in sys.path:
@@ -81,6 +85,7 @@ from journal_style import (  # noqa: E402
     SEED_ALPHA,
     SEED_MS,
 )
+from credit_tree_schematics import GHOST, RIM, mix  # noqa: E402
 from figure_canvas import Margins, NativeCanvas  # noqa: E402
 from native_schematics import Frame  # noqa: E402
 
@@ -92,35 +97,56 @@ ANIMAL = SOURCE / "animal_learning_francioni"
 OUT = ROOT / "figures" / "components" / "main_figure_09_native.pdf"
 
 # ── canvas geometry, in points ───────────────────────────────────────────
-CANVAS_H_PT = 445.2                      # 518.4 / 445.2 = 1.16 aspect
-# Rows 1 and 2 are the same height and the same 4+4+4 module split, so their
-# panels are one system; row 0 is taller only because it is the full-width
-# synthesis band.  Row 1 carries 1.2 pt more slot than row 2 for one reason:
-# A is now a locked panel, so its x tick labels and x label finally count
-# against the vertical gutter above row 1 and the row lock takes that space
-# back out of row 1's slot.  Paying for it in canvas height rather than in
-# panel height is what keeps B, C and D on the same 100.0 pt axes box they
-# had while A floated free of the lock.
-ROW_H_PT = (126.0, 101.2, 100.0)
+CANVAS_H_PT = 426.0                      # 518.4 / 426 = 1.22 aspect
+# Row 0 is the tallest row because A, at 7 modules, needs 116 pt of axes
+# height to stay inside the audit's 2.20 aspect cap for a panel that shares
+# its row; row 2 is next because the three-stage schematic in E has to carry
+# a field strip, a tree and a stage label in one column of its own cell.  The
+# spread is what the emphasis rule measures (slot-fill varies with row
+# height alone here), so the three numbers are kept inside 1.35x of one
+# another rather than sized panel by panel.
+ROW_H_PT = (120.0, 94.0, 97.0)
 # The OUTER LEFT MARGIN is the figure's one shared left reserve: it holds the
-# widest tick column on the page, which is now A's row-label column
-# ("prespecified" is 46.9 pt, 48.9 pt with its tick pad).  The eight points it
-# needs beyond the old 44 come out of the right margin, which had 13 pt for an
-# overhang that does not exist -- no panel's last x tick label reaches its own
-# axes edge, so 5 pt is clearance, not crowding.  The horizontal gutter and
-# the module width are untouched at 36.0 and 5.45 pt, so B-G keep exactly the
-# 129.8 pt axes box they had; the whole 4+4+4 block simply sits 8 pt right.
+# widest tick column on the page, which is A's row-label column
+# ("prespecified" is 46.9 pt, 48.9 pt with its tick pad).  The right margin is
+# 5 pt because no panel's last x tick label reaches its own axes edge, so 5 pt
+# is clearance rather than crowding; the one thing that did reach the canvas
+# edge was G's title, which is why the narrowest panel on the page carries the
+# shortest of the seven titles.  One horizontal gutter (36 pt) and one module
+# width (5.45 pt) serve every row.
 HGUTTER = 36.0
 VGUTTER = 36.0
 MARGINS = Margins(left=52.0, right=5.0, top=16.0, bottom=30.0)
-# A is a locked panel like every other, so its axes box starts on grid column
-# 0 with B and E.  It now also FILLS its row: the audit's full-width band
-# aspect cap was raised from 3.20 to 4.00 (a forest band spanning the canvas
-# alone on its row is a standard display), so A no longer has to leave a
-# reserve beside itself.  Row 0 therefore ends flush with rows 1-2.
-FOREST_SLACK_PT = 0.0
+# Grid column 0 carries A, C and E, and the lock it takes is shared by all
+# three.  C's row-mate D starts in column 6 and needs no left reserve, so any
+# reserve column 0 took would make the C/D pair two different widths -- which
+# is why the left margin has to stay wider than A's row-label column
+# ("prespecified", 46.9 pt, 48.9 pt with its tick pad) plus the 1.5 pt
+# reserve pad.  52 pt clears it and column 0 locks nothing.
 
 MINUS = "−"
+
+# Statements the drawing must not carry inside the panel but the reader needs:
+# printed at build time so they can be pasted into the figure caption.
+CAPTION_NOTES = (
+    "CAPTION: FIG09 A - Four of the 42 per-target points fall outside the "
+    "effect axis and are clipped (two at +0.30 in the structure–function "
+    "rows, two near −0.49 in full tree, capture vs shuffled); every mean and "
+    "95 % interval is drawn in full.",
+    "CAPTION: FIG09 E - One dictionary, fixed gradient energy: the same two "
+    "ancestry routes are held fixed across the three stages and only the "
+    "direction of the imposed task credit field changes.",
+    "CAPTION: FIG09 E - The field is f(α) ∝ (1 − α) f⊥ + α f∥, where f∥ is "
+    "constant within each ancestry route (so the routes span it) and f⊥ "
+    "alternates within each route (so they cannot), renormalized at every α "
+    "so that ‖f‖ is the same at every stage.",
+    "CAPTION: FIG09 E - Stems above each tree are the imposed field on the "
+    "four terminal branches, up positive and down negative; the capsules "
+    "beneath are the two ancestry routes, unemphasised where they cannot "
+    "carry the field and in shunting green where they carry it in full.",
+    "CAPTION: FIG09 E - The three stages are α = 0, 0.4 and 1, the same "
+    "imposed alignment values swept along the x axis of F.",
+)
 
 INK = COLORS["ink"]
 MUTE = COLORS["mute"]
@@ -320,7 +346,14 @@ def panel_forest(ax, prespecified, all_scans, tree, original, expanded, *,
     # line owns no vertex on a label row.
     ax.plot([0.0, 0.0], [unit - 0.4, -1.35], color=MUTE, lw=LW_REF,
             ls=(0, (3.0, 2.2)), zorder=1, solid_capstyle="butt")
-    ax.set_xlim(-0.55, 0.36)
+    # The effect axis is cut to the interval structure, not to the seed
+    # cloud: every mean and every 95 % interval is inside (-0.376, +0.118),
+    # and holding the last four per-target dots (two at +0.30 in the
+    # structure-function rows, two near -0.49 in full tree, capture vs
+    # shuffled) cost 0.25 of range -- a quarter of the panel -- and flattened
+    # the four near-zero contrasts into the reference line.  The four dots
+    # are clipped and the caption says so.
+    ax.set_xlim(-0.45, 0.22)
     ax.set_xticks([-0.4, -0.2, 0.0, 0.2])
     ax.set_xlabel("effect (positive favors anatomy)")
     ax.tick_params(axis="y", length=0.0, pad=2.0)
@@ -393,10 +426,14 @@ def panel_capture(ax, coarse):
 
 
 def panel_coarse_learning(ax, coarse):
-    """C: held-out normalized MSE on the same cohort, same rows as B."""
+    """C: held-out normalized MSE on the same cohort, same rows as B.
+
+    C opens its own row, so it names its seven dictionaries in its own tick
+    column; it carries the x label for the C/D pair, which ``build`` then
+    centres on the pair rather than on C.
+    """
     _strip(ax, coarse_rows(coarse, "heldout_normalized_mse"),
-           xlim=MSE_XLIM, xticks=MSE_XTICKS, xlabel=MSE_XLABEL,
-           tick_labels=False)
+           xlim=MSE_XLIM, xticks=MSE_XTICKS, xlabel=MSE_XLABEL)
 
 
 def panel_tree_learning(ax, tree):
@@ -406,48 +443,166 @@ def panel_tree_learning(ax, tree):
 
 
 # ── E: the imposed-alignment manipulation, drawn natively ────────────────
+#
+# The manipulation used to be drawn as vector geometry -- two bare axes, three
+# arrows at 90 / 51 / 0 degrees and a dashed quarter arc for the fixed norm --
+# which states the algebra and shows nothing a reader can decode.  It is drawn
+# here in the paper's own tree vocabulary instead, as the three stages panel F
+# sweeps: one fixed dictionary of ancestry routes, and a task credit field
+# whose direction turns into their span.
+#
+# The stage tree is the credit-tree library's arbor truncated one level: at a
+# ~40 pt stage width the eight-terminal tree resolves into a thicket, so the
+# four subtree heads are the terminals here.  Every coordinate below is the
+# library's own, so the object is the same object as in Figures 2-4.
+E_P = {
+    "S": (0.00, 0.00), "J1": (0.06, 0.85), "JL": (-0.92, 1.52),
+    "JR": (0.88, 1.44), "T_LL": (-1.72, 2.02), "T_LR": (-0.58, 2.32),
+    "T_RL": (0.56, 2.28), "T_RR": (1.62, 1.92),
+}
+E_TRUNK = (("S", "J1"),)
+E_LIMBS = (("J1", "JL"), ("J1", "JR"))
+E_TWIGS = (("JL", "T_LL"), ("JL", "T_LR"), ("JR", "T_RL"), ("JR", "T_RR"))
+# The dictionary: two ancestry routes, one per first-order subtree.  Identical
+# in all three stages -- only which of them can carry the field changes.
+E_ROUTES = (
+    (("T_LL", "JL", "T_LR"), ("J1", "JL")),
+    (("T_RL", "JR", "T_RR"), ("J1", "JR")),
+)
+E_TERMINALS = ("T_LL", "T_LR", "T_RL", "T_RR")
+E_SPAN_X = (-2.00, 1.90)
+E_SPAN_Y = (-0.34, 2.60)
+E_STAGES = ((0.0, "α = 0"), (0.4, "α = 0.4"), (1.0, "α = 1"))
+E_CAPSULE_PT = 5.2                       # an area mark, not a line weight
+E_ROUTE_TINT = (mix("mute", 26), mix("shunting", 42))
+E_ROUTE_INK = (GHOST, ROUTE)
+# ``COLORS['dend']`` is itself a green two units from the shunting green, so
+# an arbor inked in it cannot show the emphasis this panel turns on and off.
+# The whole stage tree therefore takes the emphasis ink: unemphasised gray
+# where the routes cannot carry the field, shunting green where they can.
+
+
+def _blend(color_a, color_b, t):
+    """Straight RGB interpolation between two palette colours."""
+    a = np.asarray(to_rgb(color_a), dtype=float)
+    b = np.asarray(to_rgb(color_b), dtype=float)
+    return tuple(a + float(t) * (b - a))
+
+
+def _imposed_field(alpha):
+    """The four terminal loads of the imposed field at one alignment.
+
+    ``perp`` alternates inside each route, so no combination of the two route
+    indicators can express it; ``par`` is constant inside each route, so it is
+    exactly a combination of them.  The mixture is renormalized, which is the
+    fixed gradient energy the caption states.
+    """
+    perp = np.array([1.0, -1.0, 1.0, -1.0])
+    par = np.array([1.0, 1.0, -1.0, -1.0])
+    field = (1.0 - alpha) * perp + alpha * par
+    return field / np.linalg.norm(field)
+
+
+def _stage_frame(f, cell):
+    """Point-per-tree-unit scale and a mapper for one stage's tree."""
+    span_x = E_SPAN_X[1] - E_SPAN_X[0]
+    span_y = E_SPAN_Y[1] - E_SPAN_Y[0]
+    scale = min(cell[2] * f.w_pt / span_x, cell[3] * f.h_pt / span_y)
+    cx = cell[0] + cell[2] / 2.0
+    cy = cell[1] + cell[3] / 2.0
+    mid_x = 0.5 * (E_SPAN_X[0] + E_SPAN_X[1])
+    mid_y = 0.5 * (E_SPAN_Y[0] + E_SPAN_Y[1])
+
+    def place(point):
+        x, y = E_P[point] if isinstance(point, str) else point
+        return (cx + f.fx((x - mid_x) * scale),
+                cy + f.fy((y - mid_y) * scale))
+
+    return place, scale
+
+
+def _draw_stage(f, cell, alpha, label):
+    """One stage: the imposed field over the fixed pair of ancestry routes.
+
+    The stage reads top to bottom -- its alignment value, the field it
+    imposes, then the anatomy that has to carry it -- so the stage label
+    heads its own column and the tree stands on the cell floor.  That also
+    puts ink at both ends of the cell, which is what the canvas audit's
+    schematic cell-fill check asks of a drawing that owns a whole slot.
+    """
+    ax = f.ax
+    label_pt = 11.5
+    tree_aspect = ((E_SPAN_X[1] - E_SPAN_X[0])
+                   / (E_SPAN_Y[1] - E_SPAN_Y[0]))
+    tree_h_pt = min(cell[2] * f.w_pt / tree_aspect,
+                    (cell[3] * f.h_pt - label_pt) * 0.52)
+    tree_cell = (cell[0], cell[1], cell[2], f.fy(tree_h_pt))
+    place, _ = _stage_frame(f, tree_cell)
+
+    tint = _blend(*E_ROUTE_TINT, alpha)
+    route_ink = _blend(*E_ROUTE_INK, alpha)
+
+    # 1. the dictionary: one pale capsule per ancestry route, fixed geometry
+    for chains in E_ROUTES:
+        for chain in chains:
+            xy = np.array([place(point) for point in chain], dtype=float)
+            ax.plot(xy[:, 0], xy[:, 1], color=tint, lw=E_CAPSULE_PT,
+                    solid_capstyle="round", solid_joinstyle="round",
+                    zorder=1.3)
+    # 2. the anatomy, tapered as the tree library tapers it, in the emphasis
+    #    the field's alignment earns the routes
+    for edges, width in ((E_TRUNK, LW_DATA), (E_LIMBS, LW_ERR),
+                         (E_TWIGS, LW_EDGE)):
+        for a, b in edges:
+            ax.plot(*zip(place(a), place(b)), color=route_ink, lw=width,
+                    solid_capstyle="round", zorder=2.4)
+    for point in ("J1", "JL", "JR"):
+        f.disc(place(point), 1.25, fill="white", edge=route_ink,
+               lw=LW_EDGE, zorder=3.2)
+    for point in E_TERMINALS:
+        f.disc(place(point), 1.15, fill=route_ink, zorder=3.2)
+    f.disc(place("S"), 2.1, fill=COLORS["soma"], edge=RIM, lw=LW_EDGE,
+           zorder=3.4)
+
+    # 3. the imposed field, one stem per terminal on a shared baseline
+    strip_top = cell[1] + cell[3] - f.fy(label_pt)
+    strip_bot = tree_cell[1] + tree_cell[3]
+    base = 0.5 * (strip_top + strip_bot)
+    strip_pt = (strip_top - strip_bot) * f.h_pt
+    reach_pt = max(4.0, min(17.0, 0.42 * strip_pt))
+    values = _imposed_field(alpha)
+    xs = [place(point)[0] for point in E_TERMINALS]
+    # The field's baseline is not one rule but one capsule per route, in the
+    # route's own tint: what a route can carry is the level it holds over the
+    # terminals it owns, so a reader compares the two stems standing on one
+    # capsule rather than four stems on a common line.
+    for lo, hi in ((0, 1), (2, 3)):
+        ax.plot([xs[lo] - f.fx(2.6), xs[hi] + f.fx(2.6)], [base, base],
+                color=tint, lw=E_CAPSULE_PT, solid_capstyle="round",
+                zorder=1.2)
+    for x, value, point in zip(xs, values, E_TERMINALS, strict=True):
+        tip = base + f.fy(value * reach_pt / 0.7071)
+        ax.plot([x, x], [base, tip], color=INK, lw=LW_DATA,
+                solid_capstyle="round", zorder=4)
+        f.disc((x, tip), 1.5, fill=INK, zorder=4.2)
+        # a hairline back to the branch the load belongs to, so the strip
+        # reads as a field ON the tree and not as a second little chart
+        foot = base - f.fy(1.8) if value >= 0 else tip - f.fy(2.6)
+        leader, = ax.plot([x, x], [foot, place(point)[1] + f.fy(1.8)],
+                          color=mix("mute", 34), lw=LW_HAIR, zorder=1.5,
+                          solid_capstyle="butt")
+        leader.set_dashes((1.5, 1.4))       # a connector, not a branch
+
+    f.text((cell[0] + cell[2] / 2.0, cell[1] + cell[3] - f.fy(5.2)), label,
+           size=PT_SMALL, color=INK, va="center")
+
+
 def panel_alignment_design(ax):
-    """E: one fixed dictionary, the task field rotated into its span."""
+    """E: one fixed dictionary, the task field turned into its span."""
     f = Frame(ax)
-    px, py = f.fx, f.fy                      # points -> frame fractions
-
-    # Every landmark below is a fraction of the panel's own cell, not a fixed
-    # number of points, so the drawing fills whatever module width the row
-    # gives it instead of shrinking into a corner of a wider slot.
-    ox, oy = 0.035, 0.300
-    rx, ry = 0.620, 0.545                    # the rotated field's reach
-
-    f.text((0.185, 0.955), "task credit field", size=PT_SMALL,
-           color=MUTE, ha="left")
-
-    # The dictionary span: the anatomy the rules are read off, drawn as the
-    # green route it is, with a stage tree standing at its far end.
-    ax.plot([ox, 0.955], [oy, oy], color=ROUTE, lw=LW_DATA,
-            solid_capstyle="round", zorder=3)
-    f.stage_tree((0.865, oy + 0.020), 0.300, 2, color=ROUTE, root_r_pt=2.6)
-    f.text((0.300, 0.185), "ancestry span", size=PT_SMALL, color=ROUTE)
-
-    # One field at three rotations: the family is neutral, so no condition
-    # colour of the data panels is spent on the design.
-    for angle, label, dx, dy in ((90.0, "α = 0", 0.042, -0.020),
-                                 (50.8, "α = 0.4", 0.025, 0.060),
-                                 (0.0, "α = 1", -0.090, 0.080)):
-        theta = np.deg2rad(angle)
-        tip = (ox + rx * np.cos(theta), oy + ry * np.sin(theta))
-        f.arrow((ox, oy), tip, color=INK, lw=LW_EDGE, head=3.4, zorder=4)
-        f.text((tip[0] + dx, tip[1] + dy), label, size=PT_SMALL,
-               color=INK, ha="left", va="center")
-    arc = Arc((ox, oy), 2 * 0.478 * rx, 2 * 0.478 * ry, theta1=0.0,
-              theta2=90.0, color=MUTE, lw=LW_REF, zorder=2)
-    arc.set_linestyle((0, (2.2, 1.8)))
-    ax.add_patch(arc)
-    # Short mute leader from the field label into the arrow it names, so the
-    # line reads as an axis label and not as a second panel title.
-    f.leader((0.165, 0.945), (ox + 0.012, oy + ry - 0.060))
-
-    f.text((0.5, 0.060), "one dictionary, fixed gradient energy",
-           size=PT_SMALL, color=MUTE)
-    _ = px, py
+    for cell, (alpha, label) in zip(f.split(3, axis="x", gap_pt=4.0),
+                                    E_STAGES, strict=True):
+        _draw_stage(f, cell, alpha, label)
     return ax
 
 
@@ -525,50 +680,56 @@ def build():
         letters=False,
     )
 
-    # Row 0: the full-width synthesis band, locked to the module grid like
-    # every other panel.  Its left side is flush with column 0, so its axes
-    # box starts at the same x0 as B and E; the aspect/emphasis reserve it
-    # cannot avoid is taken off its RIGHT side instead.
-    ax_a = canvas.panel("A", 0, 0, 12, grid="x",
-                        inset_pt=(0, FOREST_SLACK_PT, 0, 0))
+    # Row 0: the forest beside the capture strip.  Seven modules is what the
+    # forest's six rows and its 0.67-wide effect axis need; the five it gives
+    # up go to B, which shares the row instead of leaving the band alone on
+    # it.  A, C and E all start in grid column 0 and share one locked x0.
+    ax_a = canvas.panel("A", 0, 0, 7, grid="x")
     ax_a.set_title("Measured-response effects on one axis", fontsize=PT_TITLE,
                    color=INK, pad=3.0, fontweight="normal")
+    ax_b = canvas.panel("B", 0, 7, 5, grid="x", title="Task-field capture")
 
-    # Rows 1 and 2: one 4+4+4 module split shared by both rows, so every
-    # panel below the band has the same width and the same height and the
-    # three column starts are the same on both rows.
-    ax_b = canvas.panel("B", 1, 0, 4, grid="x", title="Task-field capture")
-    ax_c = canvas.panel("C", 1, 4, 4, grid="x", sharey=ax_b,
-                        title="Coarse-model learning")
-    ax_d = canvas.panel("D", 1, 8, 4, grid="x",
+    # Row 1: the two held-out normalized MSE panels as ONE shared-axis pair --
+    # a real ``sharex`` link, so the range and the ticks cannot drift apart,
+    # and a single x label centred under both instead of one under each.
+    ax_c = canvas.panel("C", 1, 0, 6, grid="x", title="Coarse-model learning")
+    ax_d = canvas.panel("D", 1, 6, 6, grid="x", sharex=ax_c,
                         title="Complete-tree learning")
-    ax_c.tick_params(axis="y", labelleft=False)
 
-    ax_e = canvas.panel("E", 2, 0, 4, schematic=True,
+    # Row 2: the manipulation, its result and the animal contrast, in that
+    # order, so the schematic sits immediately left of the panel it explains.
+    ax_e = canvas.panel("E", 2, 0, 5, schematic=True,
                         title="Imposed alignment")
-    ax_f = canvas.panel("F", 2, 4, 4, grid="y", title="Controlled alignment")
-    ax_g = canvas.panel("G", 2, 8, 4, grid="y",
-                        title="Signed animal contrast")
+    ax_f = canvas.panel("F", 2, 5, 4, grid="y", title="Controlled alignment")
+    ax_g = canvas.panel("G", 2, 9, 3, grid="y",
+                        title="Signed contrast")
 
     panel_forest(ax_a, prespecified, all_scans, tree, original, expanded,
-                 header_x=0.010)
+                 header_x=0.014)
     panel_capture(ax_b, coarse)
     panel_coarse_learning(ax_c, coarse)
     panel_tree_learning(ax_d, tree)
-    # C and D plot the same quantity over the same range: the axis is named
-    # once, centred under the pair, and D drops the duplicate label.
-    ax_c.xaxis.set_label_coords(1.139, -0.190)
     panel_alignment_design(ax_e)
     panel_controlled_alignment(ax_f, curves)
     panel_animal_pairs(ax_g, animal)
 
     # One letter offset per grid column, so every letter sits the same
     # distance left of the column its panel starts in.
-    for name, dx in (("A", 24.0), ("B", 24.0), ("C", 24.0),
-                     ("D", 24.0), ("E", 24.0), ("F", 24.0), ("G", 24.0)):
-        canvas.add_letter(name, canvas.axes[name], dx_pt=dx)
+    for name in ("A", "B", "C", "D", "E", "F", "G"):
+        canvas.add_letter(name, canvas.axes[name], dx_pt=24.0)
+
+    # Lock first, then centre the pair's one x label on the pair's true
+    # midpoint: the lock is idempotent, so the save below re-runs it without
+    # moving anything, and an x label's horizontal overhang is invisible to
+    # the reserve measurement, which reads the x axis vertically only.
+    canvas.lock_reserves()
+    box_c, box_d = ax_c.get_position(), ax_d.get_position()
+    mid = 0.5 * (box_c.x0 + box_d.x1)
+    ax_c.xaxis.set_label_coords((mid - box_c.x0) / box_c.width, -0.190)
 
     problems = canvas.save(OUT, name="main_figure_09_native")
+    for note in CAPTION_NOTES:
+        print(note)
     return problems
 
 

@@ -1219,19 +1219,19 @@ one shared-soma coordinate or exact path transport.
 against the resource-identical grouped star; the green series in both is the
 same aligned serial tree drawn in \textbf{C}. \textbf{C--F} share one
 test-accuracy axis (identical range, ticks and units), labelled once per row.
-\textbf{G}, Every prespecified paired contrast on one effect-size axis, in four
-headed families: BP depth, the backpropagation D3-minus-D1 effect for the
-aligned tree and each control; vs control, the aligned-minus-control
-interactions; LocalCA depth, the LocalCA D3-minus-D1 effects for both credit
-coordinates; and architecture, the serial-minus-grouped-star contrast at D3.
+\textbf{G}, Every prespecified paired contrast on a split effect-size axis
+($\pm1.0$ pp, $+15.9$ to $+32.3$ pp), in four headed families: BP depth, the
+backpropagation D3-minus-D1 effect for the aligned tree and each control; vs
+control, the aligned-minus-control interactions; LocalCA depth, the LocalCA
+D3-minus-D1 effects for both credit coordinates; and architecture, the
+serial-minus-grouped-star contrast at D3.
 Rows are aligned, zero align (zero alignment), shuffled (sensor shuffled),
-reversed (tree reversed), shared soma, exact path and serial $-$ star. Bars are
-95\% paired-seed bootstrap intervals; the aligned and interaction rows exclude
-zero, while the zero-alignment ($+0.02$ pp) and sensor-shuffled ($-0.01$ pp)
-rows of the first family span zero, which is the point of showing
-them. Each row keeps its condition's color and marker from
-\textbf{C,D,F}. \textbf{H}, The architectures behind \textbf{F}: a point MLP
-with the resource-identical grouped star and serial tree. Flexible
+reversed (tree reversed), shared soma, exact path and serial $-$ star. The
+aligned and interaction rows exclude zero, while the zero-alignment ($+0.02$
+pp) and sensor-shuffled ($-0.01$ pp) rows of the first family span zero, which
+is the point of showing them. Each row keeps its condition's color and marker
+from \textbf{C,D,F}. \textbf{H}, The architectures behind \textbf{F}: a point
+MLP with the resource-identical grouped star and serial tree. Flexible
 point-network and architecture controls are in Supplementary Fig.~S18, the
 credit-coordinate ladder and BP--local decomposition in Fig.~S28. All
 inferential runs use paired seeds 10200--10209; lines are seed means and bars
@@ -1255,7 +1255,7 @@ raw-additive BP; row labels are the two-line forms serial BP, grouped point,
 shared LocalCA, path LocalCA and raw additive, in that order in both.
 Outlined cells mark the row maximum, and are drawn only
 where the row's values differ by at least one unit of the printed precision,
-so a flat row is not given a spurious optimum. Colour encodes the credit rule
+so a flat row is not given a spurious optimum. Color encodes the credit rule
 in \textbf{D} and \textbf{F--H}: red-brown backpropagation, amber LocalCA,
 gray the mechanism interaction; in the heat maps the fill encodes the printed
 value. The shared serial-minus-point key for \textbf{F,G} (one norm, one set of
@@ -1838,29 +1838,30 @@ conductances.
 \caption{\textbf{Measured responses define the biological boundary, while
 imposed alignment validates the conditional prediction.} \textbf{A}, Every
 anatomy effect on one axis, in three headed families: structure--function, the
-measured partial ancestry rank effect (3/7 targets positive), rows prespecified
-(one scan per target) and all scans (all eligible, averaged within); full tree,
-MSE, the held-out normalized-MSE contrast (control minus ancestry); full tree,
-capture, the update-capture contrast (ancestry minus control), both with rows
-vs shuffled (site-shuffled) and vs random (random anatomical). Positive favors
-anatomy; no row excludes zero that way. Small dots are the $n=7$ per-target
+measured partial ancestry rank effect (3/7 targets positive), over prespecified
+and all eligible scans; and, on the full tree, the held-out normalized-MSE
+contrast (control minus ancestry) and the update-capture contrast (ancestry
+minus control), each against site-shuffled and random anatomical controls.
+Positive favors anatomy; no row excludes zero in that direction. Small dots are the $n=7$ per-target
 values, fanned deterministically within their row; point and whisker are their
-mean and 95\% bootstrap interval, exact values in Source Data. \textbf{B--D},
-Held-out task-field capture and learning for exact, dense, ancestry and control
-dictionaries, and complete-tree learning for exact, ancestry, random and
-shuffled rules on the \textbf{C} axis, labels printed once per pair;
-projection coefficients are oracle ceilings. Dots in \textbf{B} are one per
-target, fanned within their row; exact and dense coincide at the ceiling
-($1.00$ every target, $\ge0.996$), so show no spread. \textbf{E}, The
-imposed-alignment manipulation at fixed gradient energy. \textbf{F}, Rotating
-task credit into the fixed ancestry span increases capture; the three controls form one
-neutral family separated by marker and dash, not hue, depth bins and shuffled
-ancestry coinciding at zero alignment. \textbf{G}, Signed neuron-coordinate
+mean and 95\% bootstrap interval, exact values in Source Data. The axis is cut to the interval
+structure, clipping 4 of 42 points; every mean and interval is drawn in full. \textbf{B--D}, Held-out task-field
+capture and learning for exact, dense, ancestry and control dictionaries, and
+complete-tree learning for exact, ancestry, random and shuffled rules on the
+shared \textbf{C,D} axis; projection coefficients are oracle ceilings. Dots in \textbf{B} are one per target;
+exact and dense coincide at the ceiling ($1.00$, $\ge0.996$), so show no spread. \textbf{E}, The imposed-alignment manipulation
+at $\alpha=0,0.4,1$, the values swept in \textbf{F}: one dictionary at fixed
+gradient energy, so only the field direction changes, as
+$f(\alpha)\propto(1-\alpha)f_{\perp}+\alpha f_{\parallel}$ renormalized,
+with $f_{\parallel}$ constant within each route and $f_{\perp}$ alternating.
+Stems are the imposed field on the terminal branches; the capsules beneath are
+the two ancestry routes, green where they carry it in full. \textbf{F}, Rotating task credit into the
+fixed ancestry span increases capture; the three controls form one neutral
+family separated by marker and dash, not hue. \textbf{G}, Signed neuron-coordinate
 contrast in six animals: one line per animal between its P+ and P- values
 (error-reduction minus error-increase residual), signs set by the causal
 mapping, 6/6 alike. Most contrast energy is in the signed P+/P- mode, not a
-common scalar (Supplementary Fig.~S17c). Target cells or animals are the
-inferential units, nested splits and simulations averaged within them.}
+common scalar (Supplementary Fig.~S17c). Target cells or animals are the inferential units.}
 \label{fig:boundary}
 \end{figure}
 
