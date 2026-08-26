@@ -837,7 +837,7 @@ def _plot_streamlined_main() -> None:
     for task_index, task in enumerate(("mnist", "noise_resilience")):
         for depth_index, depth in enumerate((2, 4)):
             base = task_index * 2 + depth_index
-            labels.append(f"{'MNIST' if task == 'mnist' else 'noise'} d{depth}")
+            labels.append(f"{'MNIST' if task == 'mnist' else 'noise'} D{depth}")
             for core, offset in (("dendritic_shunting", -0.09), ("dendritic_additive", 0.09)):
                 selected = routing[
                     routing.task.eq(task)
@@ -1247,7 +1247,7 @@ def _plot_three_claim_main() -> None:
     for task_index, task in enumerate(("mnist", "noise_resilience")):
         for depth_index, depth in enumerate((2, 4)):
             base = task_index * 2 + depth_index
-            labels.append(f"{'MNIST' if task == 'mnist' else 'noise'}\nd{depth}")
+            labels.append(f"{'MNIST' if task == 'mnist' else 'noise'}\nD{depth}")
             for core, offset in (("dendritic_shunting", -0.09), ("dendritic_additive", 0.09)):
                 row = routing[
                     routing.task.eq(task)

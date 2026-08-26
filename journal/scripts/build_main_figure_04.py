@@ -448,7 +448,7 @@ def main() -> None:
         + "\n" + "n = 20 seed blocks",
         transform=ax_f.transAxes, ha="right", va="bottom", fontsize=PT_SMALL,
         color=COLORS["mute"], linespacing=1.35)
-    ax_f.set_xlabel("phase utility")
+    ax_f.set_xlabel("operator utility")
     ax_f.set_ylabel("observed progress")
 
     # ── G: alignment x bandwidth synthesis ──────────────────────────────

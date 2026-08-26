@@ -42,6 +42,30 @@ def prose_words(text: str) -> list[str]:
     return re.findall(r"[A-Za-z0-9]+(?:[-'][A-Za-z0-9]+)*", text)
 
 
+def balanced_arguments(text: str, command: str) -> list[str]:
+    """Return brace-balanced arguments for a LaTeX command."""
+    marker = rf"\{command}{{"
+    arguments: list[str] = []
+    cursor = 0
+    while True:
+        start = text.find(marker, cursor)
+        if start < 0:
+            return arguments
+        content_start = start + len(marker)
+        depth = 1
+        index = content_start
+        while index < len(text) and depth:
+            if text[index] == "{" and (index == 0 or text[index - 1] != "\\"):
+                depth += 1
+            elif text[index] == "}" and (index == 0 or text[index - 1] != "\\"):
+                depth -= 1
+            index += 1
+        if depth:
+            raise ValueError(f"Unbalanced argument for \\{command} at offset {start}")
+        arguments.append(text[content_start:index - 1])
+        cursor = index
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--strict", action="store_true")
@@ -70,6 +94,10 @@ def main() -> int:
     # journal figure is not mistakenly counted as several figures.
     main_figures = figure_environments - continued_figures
     references = len(re.findall(r"(?m)^@\w+\s*\{", BIB.read_text(encoding="utf-8")))
+    legend_words = [
+        len(prose_words(caption))
+        for caption in balanced_arguments(narrative_match.group(1), "caption")
+    ]
 
     title_match = re.search(r"\\title\{([^{}]*)\}", tex)
     if title_match is None:
@@ -94,6 +122,14 @@ def main() -> int:
         for name, value, limit, _, enforced in checks
         if enforced and value > limit
     ]
+    overlong_legends = [
+        (index, words) for index, words in enumerate(legend_words, start=1)
+        if words > 350
+    ]
+    failures.extend(
+        (f"Figure {index} legend", words, 350)
+        for index, words in overlong_legends
+    )
 
     lines = [
         "# Nature Communications format audit",
@@ -110,6 +146,11 @@ def main() -> int:
     for name, value, limit, unit, enforced in checks:
         status = "PASS" if value <= limit else ("NEEDS REVISION" if enforced else "ADVISORY")
         lines.append(f"| {name} | {value} {unit} | {limit} | {status} |")
+    lines.extend(
+        f"| Figure {index} legend | {words} words | 350 | "
+        f"{'PASS' if words <= 350 else 'NEEDS REVISION'} |"
+        for index, words in enumerate(legend_words, start=1)
+    )
     lines.extend(
         [
             "",
@@ -128,6 +169,8 @@ def main() -> int:
     print(f"Wrote {REPORT.relative_to(ROOT)}")
     for name, value, limit, unit, _ in checks:
         print(f"{name}: {value} {unit} (guidance {limit})")
+    for index, words in enumerate(legend_words, start=1):
+        print(f"Figure {index} legend: {words} words (guidance 350)")
     return 1 if args.strict and failures else 0
 
 

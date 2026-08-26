@@ -116,17 +116,17 @@ ROLE = {
 }
 ROLE_NAME = {
     "dense": "dense oracle",
-    "ancestry": "ancestry routes",
+    "ancestry": "nested-subtree routes",
     "random": "random routes",
     "depth": "depth bins",
-    "shuffled": "shuffled ancestry",
+    "shuffled": "shuffled subtree",
     "surrogate": "matched tree",
 }
 # Short forms for the category rail of E, where the name is a tick label and
 # not a key entry: F's key carries the full name, the caption defines both.
 ROLE_TICK = {
     "dense": "dense",
-    "ancestry": "ancestry",
+    "ancestry": "subtree",
     "random": "random",
     "depth": "depth",
     "shuffled": "shuffled",
@@ -633,7 +633,7 @@ def panel_cross_animal(ax, labels, animals):
     ax.set_ylim(-0.60, n - 1 + 0.92)
     ax.set_xlim(-0.06, 0.99)
     ax.set_xticks([0.0, 0.4, 0.8])
-    ax.set_xlabel("ancestry-route capture advantage")
+    ax.set_xlabel("subtree-route capture advantage")
     ax.tick_params(axis="y", length=0.0, pad=2.5)
     ax.spines["left"].set_visible(False)
 
@@ -671,7 +671,7 @@ def build():
     ax_a = canvas.panel("A", 0, 0, 3, schematic=True,
                         title="Reconstructed arbor")
     ax_b = canvas.panel("B", 0, 3, 3, schematic=True,
-                        title="Ancestry addresses")
+                        title="Subtree addresses")
     ax_c = canvas.panel("C", 0, 6, 3, grid="y", title="Reciprocal cable field")
     ax_d = canvas.panel("D", 0, 9, 3, grid="y", sharey=ax_c,
                         title="Model-derived field")

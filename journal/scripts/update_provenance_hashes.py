@@ -60,9 +60,9 @@ CANONICAL_ASSETS = {
 
 CANONICAL_ASSIGNMENTS = {
     "fig1.asset": ("fig1", "all"),
-    "fig2.asset": ("fig2", "b-c"),
-    "prospective.learning.asset": ("fig2", "d-f"),
-    "fashion.asset": ("fig2", "g-h"),
+    "fig2.asset": ("fig2", "all"),
+    "prospective.learning.asset": ("fig2", "d-g"),
+    "fashion.asset": ("fig2", "b,e"),
     "subtree.factorial.asset": ("fig3", "all"),
     "creditphase.asset": ("fig4", "a-f"),
     "phaseplane.asset": ("fig4", "g"),
@@ -168,6 +168,42 @@ NEW_DETAIL_ASSETS = {
 }
 
 NEW_PROVENANCE_ENTRIES = {
+    "mnist.ladder.outcomes": {
+        "record_type": "panel_source",
+        "figure": "fig2",
+        "panel": "a",
+        "path": "source_data/mnist_feedback_ladder/seed_outcomes.csv",
+        "generator": "scripts/collect_mnist_feedback_ladder.py",
+        "replication_unit": "paired independent training seed (n=15 per architecture)",
+        "notes": "Complete 90-run current-source MNIST scalar, neuron-specific and exact-path feedback ladder.",
+    },
+    "mnist.ladder.conditions": {
+        "record_type": "panel_source",
+        "figure": "fig2",
+        "panel": "a",
+        "path": "source_data/mnist_feedback_ladder/condition_summary.csv",
+        "generator": "scripts/collect_mnist_feedback_ladder.py",
+        "replication_unit": "paired independent training seed (n=15 per architecture)",
+        "notes": "Condition means and paired-seed bootstrap intervals for the matched MNIST ladder.",
+    },
+    "mnist.ladder.contrasts": {
+        "record_type": "panel_source",
+        "figure": "fig2",
+        "panel": "a",
+        "path": "source_data/mnist_feedback_ladder/paired_contrasts.csv",
+        "generator": "scripts/collect_mnist_feedback_ladder.py",
+        "replication_unit": "paired independent training seed (n=15 per architecture)",
+        "notes": "Neuron-identity and exact-transport paired contrasts for both MNIST architectures.",
+    },
+    "mnist.ladder.audit": {
+        "record_type": "panel_source",
+        "figure": "fig2",
+        "panel": "text",
+        "path": "source_data/mnist_feedback_ladder/audit.json",
+        "generator": "scripts/collect_mnist_feedback_ladder.py",
+        "replication_unit": "complete 90-fit audit",
+        "notes": "Completeness, finite-metric, checkpoint, scientific-signature, source-environment and no-W&B gates.",
+    },
     "taskfamily.asset": {
         "record_type": "figure_asset",
         "figure": "fig6",

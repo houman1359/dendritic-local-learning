@@ -755,6 +755,7 @@ class NativeCanvas:
             "vgutter_pt": self.vgutter,
             "module_cols": self.module_cols,
             "margins_pt": self.margins.as_dict(),
+            "row_h_pt": [round(h, 3) for h in self._row_h],
             "reserves_locked": bool(self.lock_enabled),
             "panels": panels,
         }
@@ -1318,12 +1319,21 @@ def _audit_layout_contract(manifest, V, N):
                 - float(_marg.get("top", 0.0)) - float(_marg.get("bottom", 0.0))
                 - (_nrows - 1) * _vg)
     _row_h = _avail_h / _nrows if _nrows else 0.0
+    # Weighted rows: a canvas that declares row heights allocates a SHORT
+    # slot to a short row, and a panel filling that short slot is not
+    # under-emphasised.  Manifests written before the field fall back to the
+    # equal split above.
+    _row_list = [float(v) for v in (manifest.get("row_h_pt") or [])]
 
     def _slot_area(rec):
         cs = max(int(rec["colspan"]), 1)
         rs = max(int(rec.get("rowspan", 1)), 1)
+        r0 = int(rec.get("row", 0))
         w = cs * _mod_w + (cs - 1) * _hg
-        h = rs * _row_h + (rs - 1) * _vg
+        if _row_list and r0 + rs <= len(_row_list):
+            h = sum(_row_list[r0:r0 + rs]) + (rs - 1) * _vg
+        else:
+            h = rs * _row_h + (rs - 1) * _vg
         return max(w * h, 1e-6)
 
     density = [(rec, rec["w_pt"] * rec["h_pt"] / _slot_area(rec))

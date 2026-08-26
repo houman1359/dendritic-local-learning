@@ -1,7 +1,7 @@
 # Citation audit
 
-- Bibliography entries: 58
-- Unique cited keys: 58
+- Bibliography entries: 61
+- Unique cited keys: 61
 - Undefined cited keys: 0
 - Unused bibliography entries: 0
 

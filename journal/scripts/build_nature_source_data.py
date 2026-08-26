@@ -29,6 +29,7 @@ DEFAULT_STAGE = SUBMISSION / "nature_source_data"
 DEFAULT_ZIP = SUBMISSION / "Source_Data.zip"
 
 SANITIZED_DROP_COLUMNS = {
+    "source_data/mnist_feedback_ladder/seed_outcomes.csv": {"run_dir"},
     "source_data/inherited_neurips/error_field_decomposition_runs.csv": {"run_dir"},
     "source_data/functional_topology_all_scans/scan_metrics.csv": {"source_summary"},
     "source_data/physical_depth_h4_factorial/seed_outcomes.csv": {"run_dir"},
@@ -57,6 +58,36 @@ class SourceFile:
 
 
 FILES = (
+    SourceFile(
+        "Figure 2",
+        "a",
+        "source_data/mnist_feedback_ladder/seed_outcomes.csv",
+        "Figure_2/Fig2a_mnist_feedback_seed_outcomes.csv",
+        "paired independent training-seed values",
+        "paired training seed (n=15 per architecture)",
+        "current-source matched cohort",
+        "Complete 90-run MNIST scalar, neuron-specific and exact-path feedback ladder.",
+    ),
+    SourceFile(
+        "Figure 2",
+        "a",
+        "source_data/mnist_feedback_ladder/condition_summary.csv",
+        "Figure_2/Fig2a_mnist_feedback_condition_summary.csv",
+        "condition means and paired-seed bootstrap intervals",
+        "paired training seed (n=15 per architecture)",
+        "current-source matched cohort",
+        "Condition summaries for the complete matched MNIST ladder.",
+    ),
+    SourceFile(
+        "Figure 2",
+        "a",
+        "source_data/mnist_feedback_ladder/paired_contrasts.csv",
+        "Figure_2/Fig2a_mnist_feedback_paired_contrasts.csv",
+        "paired training-seed contrasts",
+        "paired training seed (n=15 per architecture)",
+        "current-source matched cohort",
+        "Neuron-identity and exact-transport contrasts for both MNIST architectures.",
+    ),
     SourceFile(
         "Figure 2",
         "a",
@@ -2258,7 +2289,7 @@ def final_display_file(item: SourceFile) -> SourceFile:
         else:
             figure = "Supplementary Figure 19"
     elif source.startswith("source_data/fashion_feedback_ladder/"):
-        figure, panels = "Figure 2", "f-g"
+        figure, panels = "Figure 2", "b,e"
     elif source.startswith("source_data/clean_exact_bp/"):
         figure, panels = "Supplementary Figure 19", "e"
     elif source.startswith("source_data/credit_phase_plane/"):

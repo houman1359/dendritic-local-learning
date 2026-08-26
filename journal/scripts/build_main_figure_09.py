@@ -41,8 +41,9 @@ Narrative order, and what it moved:
   opens the figure because it is the result the rest of the page qualifies;
   it was panel D;
 * B is the compact effect summary: the same six paired contrasts on one
-  effect axis (topology minus shuffled and minus random, on both the MSE and
-  the capture side, under the two structure--function rows).  It was the
+  standardized paired-effect axis (topology minus shuffled and minus random,
+  on both the MSE and the capture side, under the two structure--function
+  rows).  It was the
   seven-module panel A and keeps every row, mean and interval; it is compact
   because it now spans half the module beside A rather than the whole of it;
 * C and D are the manipulation and its result, unchanged and still adjacent,
@@ -55,19 +56,27 @@ Narrative order, and what it moved:
   so a third of the module is all the paired geometry needs, and it opens the
   closing row rather than crowding the end of the middle one;
 * F is the signed-mode energy decomposition, promoted from Supplementary
-  Fig. S17c and ported verbatim -- same frozen ``mode_decomposition`` block,
-  same two bars, same animal-bootstrap interval;
-* G is the evidence boundary: three labelled tiers -- supported, conditional,
-  not established -- set in the paper's own hedged words.  It carries no
-  statistic of its own;
+  Fig. S17c -- the same frozen ``mode_decomposition`` block and the same
+  animal-bootstrap interval, redrawn as ONE measured bar on a light 0-100 %
+  track: the common and the signed fraction are one partition of one
+  quantity, so they get one bar length and ONE conventional capped error bar
+  on that bar's own centreline, rather than two bars whose intervals are
+  reflections of each other;
+* G is the evidence boundary, drawn as a LADDER rather than written as a
+  list: the paper's own credit hierarchy (Fig. 1c) as four stacked rungs read
+  from the bottom up -- neuron coordinate, subtree address, route gain, and
+  the use of those routes for endogenous task credit in vivo -- each carrying
+  the same credit tree as Fig. 1c and panel C in the mode that defines its
+  level, and each standing on a step whose FILL is the status of its evidence
+  (shunting green supported, amber conditional, an open dashed step where
+  nothing is established).  Read upward, the steps fade exactly where the
+  paper says the evidence stops.  It carries no statistic of its own;
 * the coarse-surrogate capture and learning strips that were B and C are
   demoted to Supplementary Fig. S22 (panels I and J), which already holds the
   coarse-surrogate sensitivity analyses; they are appended there with their
   rendering intact rather than deleted.
 
-How B keeps its row-label column without breaking the row.  B's effect axis is
-cut to the interval structure: four of the 42 per-target points fall outside
-it and are clipped, which the caption states, and the three group headers
+How B keeps its row-label column without breaking the row.  The three group headers
 ("structure-function", "full tree, MSE", "full tree, capture") sit inside the
 plotting rectangle on their own empty header rows, so the tick column holds
 only the short row names.  That column still needs 48.9 pt, which is more than
@@ -90,6 +99,8 @@ import numpy as np
 import pandas as pd
 from matplotlib.colors import to_rgb
 from matplotlib.lines import Line2D
+from matplotlib.patches import FancyBboxPatch
+from matplotlib.transforms import offset_copy
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 if str(SCRIPT_DIR) not in sys.path:
@@ -113,7 +124,7 @@ from journal_style import (  # noqa: E402
 )
 from credit_tree_schematics import AMBER_TEXT, GHOST, RIM, mix  # noqa: E402
 from figure_canvas import Margins, NativeCanvas  # noqa: E402
-from native_schematics import Frame  # noqa: E402
+from native_schematics import Frame, _text_w_pt  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "source_data"
@@ -123,17 +134,27 @@ ANIMAL = SOURCE / "animal_learning_francioni"
 OUT = ROOT / "figures" / "components" / "main_figure_09_native.pdf"
 
 # ── canvas geometry, in points ───────────────────────────────────────────
-CANVAS_H_PT = 426.0                      # 518.4 / 426 = 1.22 aspect
-# One height per row, and the three are within 1.13x of one another, which is
-# what the emphasis rule measures once every row is width-uniform (slot-fill
-# then varies with row height alone).  Row 2 is the tallest because G's three
-# tiers of type are a drawing with a floor -- three text bands that cannot be
-# flattened -- and row 1 is the shortest because C's stage trees and D's
-# rescue curve both gained width in the regrid and neither needs height to
-# spend it.  The canvas total is 2 pt taller than the ragged seven-panel
-# figure this replaces, which still keeps the float and its caption on one
-# page.
-ROW_H_PT = (104.0, 96.0, 108.0)
+CANVAS_H_PT = 456.0                      # 518.4 / 456 = 1.14 aspect
+# One height per row.  Row 2 is the tallest because G's ladder is a drawing
+# with a floor -- four rungs, each carrying a tree glyph that has to stay
+# legible and up to two bands of type that cannot be flattened, plus the
+# status key -- and it was raised from 118 pt to 128 pt so the rung glyph
+# and the air between rungs both grow; E and F centre their content in the
+# taller box rather than stretching it.
+#
+# Row 2 cannot be grown on its own.  The emphasis rule compares each panel's
+# axes area against its own slot, and for a row-2 panel the slot width IS the
+# panel width (four modules and three gutters, no reserve), so its slot fill
+# is exactly h2 / mean-row-height, while the reserved half-module panels fill
+# 0.924 * h / mean-row-height.  The mean cancels: the spread is
+# (h2 - 1.14) / (0.924 * min(h0, h1 - 1.14)), independent of the canvas
+# height, so the ONLY way to buy row 2 height inside the 1.35x cap is to
+# raise the shortest of the other rows with it.  Row 1 therefore goes 96 ->
+# 106 pt, which lifts the floor from C (94.86 pt of axes) to A (104 pt) and
+# leaves the spread at 1.32x; row 0 is untouched.  C and D keep their
+# designs and gain 10 pt of height with the row.  The canvas grows by the
+# same 20 pt to 456 pt, aspect 1.14, still above the 1.10 floor.
+ROW_H_PT = (104.0, 106.0, 128.0)
 # The OUTER LEFT MARGIN is the figure's one shared left reserve.  It is kept
 # at 52 pt, the width the forest's row-label column used to need in column 0,
 # even though the three panels that now start in column 0 (A's labels are
@@ -161,10 +182,10 @@ MINUS = "−"
 # Statements the drawing must not carry inside the panel but the reader needs:
 # printed at build time so they can be pasted into the figure caption.
 CAPTION_NOTES = (
-    "CAPTION: FIG09 B - Four of the 42 per-target points fall outside the "
-    "effect axis and are clipped (two at +0.30 in the structure–function "
-    "rows, two near −0.49 in full tree, capture vs shuffled); every mean and "
-    "95 % interval is drawn in full.",
+    "CAPTION: FIG09 B - Effects with different native units are displayed as "
+    "paired standardized effects: each target-level contrast and its mean are "
+    "divided by that row's across-target standard deviation; intervals "
+    "bootstrap the complete standardized estimand.",
     "CAPTION: FIG09 C - One dictionary, fixed gradient energy: the same two "
     "ancestry routes are held fixed across the three stages and only the "
     "direction of the imposed task credit field changes.",
@@ -178,22 +199,58 @@ CAPTION_NOTES = (
     "carry the field and in shunting green where they carry it in full.",
     "CAPTION: FIG09 C - The three stages are α = 0, 0.4 and 1, the same "
     "imposed alignment values swept along the x axis of D.",
-    "CAPTION: FIG09 F - Promoted from Supplementary Fig. S17c and unchanged: "
-    "83.7 % of pooled squared projection energy across the six animal "
-    "contrast vectors lies in the signed P+/P− mode against 16.3 % in a "
-    "common scalar mode; the whiskers are the animal-bootstrap 95 % interval "
-    "for the signed fraction (60.6–95.7 %) and its complement.",
-    "CAPTION: FIG09 G - The evidence tiers restate claims established "
-    "elsewhere in the paper in the paper's own hedged words; the panel "
-    "carries no estimate, interval or test of its own.",
-    "CAPTION: FIG09 G - In full, the six tier statements are: supported -- "
-    "availability of signed neuron-specific coordinates in six animals, and "
-    "modeled ancestry capacity in the same direction in two MICrONS "
-    "animals; conditional -- benefit only when task credit rotates into the "
-    "anatomical span, and shunting regulates route gain only in permissive "
-    "electrotonic regimes; not established -- measured visual responses show "
-    "no morphology-specific alignment, and no evidence that these routes "
-    "carry endogenous task credit in vivo.",
+    "CAPTION: FIG09 F - One partition of the pooled squared projection "
+    "energy of the six animal contrast vectors: the bar is the 83.7 % that "
+    "lies in the signed P+/P− mode, drawn on a light track that runs the "
+    "full 100 %, so the remainder is the 16.3 % in a common scalar mode; "
+    "the capped error bar at the end of the bar, on its centreline, is the "
+    "animal-bootstrap 95 % interval for the "
+    "signed fraction (60.6–95.7 %), and the common fraction is its "
+    "complement, so the one interval bounds both.",
+    "CAPTION: FIG09 F - Promoted from Supplementary Fig. S17c: the same "
+    "frozen mode decomposition and the same interval, drawn as one bar "
+    "with one conventional error bar rather than as two bars with mirrored "
+    "whiskers.",
+    "CAPTION: FIG09 G - The panel is the paper's own credit hierarchy "
+    "drawn as a ladder and read from the bottom up -- neuron coordinate "
+    "δᵤ, subtree address δᵤ,ₖ, route gain ᾶₙ, and the use of those routes "
+    "for endogenous task credit in vivo. Each rung carries the same credit "
+    "tree as Fig. 1c and panel C, decorated in the mode that defines its "
+    "level, and stands on a step whose FILL is the status of its evidence: "
+    "shunting green where measurement supports the level, amber where the "
+    "level holds only under a stated condition, and an open, dashed step "
+    "where nothing is established. The panel carries no estimate, interval "
+    "or test of its own; every statement on it restates, in the "
+    "manuscript's own hedged words, a result established elsewhere in the "
+    "paper, and the chip beside a rung names the evidence that carries it "
+    "(a letter pair is a panel of this figure; 7g is Fig. 7g and 8f is "
+    "Fig. 8f).",
+    "CAPTION: FIG09 G - Rung 1, neuron coordinate δᵤ, 'signed, in six "
+    "animals' (E,F): a signed, neuron-specific teaching coordinate is "
+    "available -- the causal P+/P− contrast separates the two selected "
+    "neurons in all six animals of the Francioni reanalysis and 83.7 % of "
+    "the pooled contrast energy lies in the signed mode. Supported by "
+    "measurement.",
+    "CAPTION: FIG09 G - Rung 2, subtree address δᵤ,ₖ, 'modeled capacity "
+    "only' (Fig. 7g): modeled subtree-route capacity runs in the same "
+    "direction in two independent MICrONS animals. Supported for MODELED "
+    "capacity; the measured caveat is carried by rung 4, not by this rung.",
+    "CAPTION: FIG09 G - Rung 3, route gain ᾶₙ, 'only in permissive "
+    "regimes' (Fig. 8f): shunting regulates route gain only in permissive "
+    "electrotonic regimes -- the shunt-minus-additive localization falls to "
+    "zero as the axial-to-leak conductance ratio rises. Conditional.",
+    "CAPTION: FIG09 G - Rung 4, use for endogenous task credit in vivo, "
+    "'no morphology-specific alignment' (A,B): measured visual responses "
+    "show no morphology-specific alignment, and there is no evidence that "
+    "these routes carry endogenous task credit in vivo. Not established -- "
+    "the null is the absence of evidence for endogenous task credit, not a "
+    "demonstration that these routes are unused.",
+    "CAPTION: FIG09 G - The ladder holds biological evidence only, so the "
+    "imposed-alignment rescue of panels C and D is not a rung on it: "
+    "nested-subtree routes give a benefit only if task credit rotates into "
+    "the anatomical span, and that is a constructive sufficiency test with "
+    "oracle projection coefficients rather than evidence about the measured "
+    "cells.",
 )
 
 # Where each panel of the previous figure went, printed at build time so the
@@ -208,8 +265,8 @@ LETTER_MOVES = (
     "CAPTION: FIG09 G -> E (signed P+/P− animal comparison, six animals)",
     "CAPTION: FIG09 new F (signed-mode energy, promoted from Supplementary "
     "Fig. S17c)",
-    "CAPTION: FIG09 new G (evidence boundary: supported, conditional, not "
-    "established)",
+    "CAPTION: FIG09 new G (evidence ladder: the four levels of the credit "
+    "hierarchy, each step filled with the status of its evidence)",
     "CAPTION: FIG09 B -> Supplementary Fig. S22 I (coarse-surrogate "
     "task-field capture, seven dictionaries)",
     "CAPTION: FIG09 C -> Supplementary Fig. S22 J (coarse-surrogate held-out "
@@ -232,6 +289,22 @@ PMINUS = COLORS["mute"]                  # animal P- population
 # The mean/summary glyph is MARKER_MS + 1.2 everywhere (the mark contract).
 MEAN_MS = MARKER_MS + 1.2
 
+# ── the standardized paired-effect axis of panel B ──────────────────────
+# The right limit holds every upper bound on the page: the widest is the
+# full-tree MSE "vs shuffled" row at +1.76, which the previous +1.7 limit cut
+# by six hundredths of a unit and drew as though it ended on the spine.
+# The left limit does NOT hold every lower bound.  The full-tree capture
+# "vs random" row runs to -10.97 -- a standardized effect that wide is a
+# small-denominator excursion of the bootstrap, and an axis stretched to
+# contain it would squeeze the other five rows and all their dots into a
+# fifth of the panel.  That one whisker is therefore drawn to the panel edge
+# and given an explicit arrowhead there (``_truncation_head``), and its true
+# bound is printed into the caption at build time.  A clipped whisker is
+# never left to look bounded.
+FOREST_XLIM = (-2.2, 1.9)
+FOREST_XTICKS = (-2.0, -1.0, 0.0, 1.0)
+FOREST_XLABEL = "paired standardized effect"
+
 # ── the held-out normalized MSE axis of panel A ─────────────────────────
 MSE_XLIM = (0.60, 1.02)
 MSE_XTICKS = (0.6, 0.7, 0.8, 0.9, 1.0)
@@ -244,7 +317,7 @@ MSE_XLABEL = "held-out normalized MSE"
 # move a published interval.
 TREE_METHODS = (
     ("exact compartment error", "exact", C_EXACT, 0),
-    ("topology-matched routes", "ancestry", ROUTE, 1),
+    ("topology-matched routes", "subtree", ROUTE, 1),
     ("random anatomical routes", "random", C_RANDOM, 3),
     ("site-shuffled routes", "shuffle", C_SHUFFLE, 2),
 )
@@ -255,7 +328,7 @@ TREE_METHODS = (
 # by marker AND dash so they stay apart between marker positions -- they run
 # within 0.01 of one another below alignment 0.6.
 ALIGN_METHODS = (
-    ("morphology-selected paths", "morphology", ROUTE, "o", None),
+    ("morphology-selected paths", "subtree", ROUTE, "o", None),
     ("random paths", "random", C_CTRL, "s", None),
     ("depth bins", "depth", C_CTRL, "^", (3.0, 1.8)),
     ("ancestry-shuffled paths", "shuffle", C_CTRL_L, "D", None),
@@ -277,6 +350,27 @@ def bootstrap(values, seed, draws=20_000):
                        replace=True).mean(axis=1)
     low, high = np.quantile(means, [0.025, 0.975])
     return float(values.mean()), float(low), float(high)
+
+
+def standardized_bootstrap(values, seed, draws=20_000):
+    """Paired standardized mean and target-bootstrap interval.
+
+    Panel B combines partial rank correlations, normalized-MSE differences
+    and capture differences. Dividing each paired target contrast by its
+    across-target sample standard deviation puts all rows on one effect-size
+    scale. The bootstrap recomputes the complete standardized estimand.
+    """
+    values = np.asarray(values, dtype=float)
+    scale = values.std(ddof=1)
+    if not np.isfinite(scale) or scale <= 0:
+        raise ValueError("standardized effect requires nonzero target variance")
+    rng = np.random.default_rng(seed)
+    samples = rng.choice(values, size=(draws, len(values)), replace=True)
+    sample_scale = samples.std(axis=1, ddof=1)
+    keep = np.isfinite(sample_scale) & (sample_scale > 0)
+    effects = samples[keep].mean(axis=1) / sample_scale[keep]
+    low, high = np.quantile(effects, [0.025, 0.975])
+    return values / scale, float(values.mean() / scale), float(low), float(high)
 
 
 def load_tables():
@@ -308,10 +402,60 @@ def _spread(count, half=0.17):
     return np.linspace(-half, half, count)
 
 
+# ── B: a whisker that leaves the panel says so ──────────────────────────
+def _truncation_head(ax, y, value, color, *, xlim=None):
+    """Draw an arrowhead where an interval bound falls outside the axes.
+
+    Matplotlib clips a whisker at the axes edge, so an interval that runs
+    off the panel and an interval that happens to end on the spine ink the
+    same pixels: the reader sees a bounded interval that is not bounded.
+    The head is set in the row's own colour with its tip on the limit and
+    its body inside the panel, so the truncation is visible at the whisker
+    itself, and the true bound is stated in the caption.
+
+    Returns ``True`` when the bound is out of range (nothing about the
+    estimate changes; this only reports that the interval continues).
+    """
+    low, high = FOREST_XLIM if xlim is None else xlim
+    if low <= value <= high:
+        return False
+    edge, marker, inward = ((low, "<", 1.0) if value < low
+                            else (high, ">", -1.0))
+    # Offset in POINTS, not in data: the head is a fixed-size glyph, so its
+    # tip lands on the limit whatever the row's data scale is.
+    # MARKER_MS, not the larger MEAN_MS: the head is a note on the whisker,
+    # not a second summary glyph competing with the mean diamond, and the
+    # smaller head also keeps its tip clear of the row-label column.
+    inside = offset_copy(ax.transData, fig=ax.figure,
+                         x=inward * MARKER_MS / 2.0, y=0.0, units="points")
+    ax.plot([edge], [y], marker=marker, ms=MARKER_MS, linestyle="none",
+            color=color, markerfacecolor=color, markeredgecolor=color,
+            markeredgewidth=LW_ERR, transform=inside, clip_on=False,
+            zorder=5)
+    return True
+
+
+def _truncation_note(truncated):
+    """The build-time caption sentence for every whisker clipped in B."""
+    spans = "; ".join(
+        f"{header} {name} = [{MINUS if low < 0 else ''}{abs(low):.2f}, "
+        f"{MINUS if high < 0 else ''}{abs(high):.2f}]"
+        for header, name, low, high in truncated)
+    low, high = FOREST_XLIM
+    return ("CAPTION: FIG09 B - The effect axis is clipped at "
+            f"{MINUS if low < 0 else ''}{abs(low):.1f} to "
+            f"{high:.1f}; an arrowhead on a whisker marks an interval that "
+            "continues past the panel edge rather than ending there. "
+            f"Clipped row{'s' if len(truncated) > 1 else ''} and "
+            f"{'their' if len(truncated) > 1 else 'its'} full 95 % "
+            f"interval{'s' if len(truncated) > 1 else ''}: {spans}. "
+            "Every other interval is shown whole.")
+
+
 # ── B: the compact effect summary, every anatomy effect on one axis ──────
 def panel_forest(ax, prespecified, all_scans, tree, original, expanded, *,
                  header_x):
-    """B: six paired contrasts, one effect axis, positive favours anatomy.
+    """B: six paired standardized contrasts; positive favours anatomy.
 
     The right-hand ``mean [95 % CI]`` column this panel used to print beside
     every row is gone: the marker and its whisker already ARE those three
@@ -328,6 +472,10 @@ def panel_forest(ax, prespecified, all_scans, tree, original, expanded, *,
     plotting rectangle, on the empty header row above the first row of their
     group, so they still read as group titles over the rows they name while
     the tick column stays inside the figure's shared left margin.
+
+    Returns the rows whose interval leaves ``FOREST_XLIM``, each with its
+    true bounds, so the caption can name them: such a row is drawn with an
+    arrowhead at the panel edge instead of a silently clipped whisker.
     """
     partial_a = prespecified.partial_shared_path_r.to_numpy(float)
     partial_b = all_scans.shared_path_partial_r.to_numpy(float)
@@ -349,24 +497,30 @@ def panel_forest(ax, prespecified, all_scans, tree, original, expanded, *,
         (wide[(capture, "topology-matched routes")]
          - wide[(capture, "random anatomical routes")]).to_numpy(float),
     ]
-    stats = [bootstrap(values, 91_000 + index)
-             for index, values in enumerate(contrasts)]
-
-    groups = (
+    raw_groups = (
         ("structure–function",
-         (("prespecified", partial_a, float(original["mean"]),
-           *map(float, original["bootstrap_95_ci_mean"]), ROUTE),
-          ("all scans", partial_b, float(expanded["mean"]),
-           *map(float, expanded["target_bootstrap_ci95"]), ROUTE))),
+         (("prespecified", partial_a, ROUTE),
+          ("all scans", partial_b, ROUTE))),
         ("full tree, MSE",
-         (("vs shuffled", contrasts[0], *stats[0], C_SHUFFLE),
-          ("vs random", contrasts[1], *stats[1], C_RANDOM))),
+         (("vs shuffled", contrasts[0], C_SHUFFLE),
+          ("vs random", contrasts[1], C_RANDOM))),
         ("full tree, capture",
-         (("vs shuffled", contrasts[2], *stats[2], C_SHUFFLE),
-          ("vs random", contrasts[3], *stats[3], C_RANDOM))),
+         (("vs shuffled", contrasts[2], C_SHUFFLE),
+          ("vs random", contrasts[3], C_RANDOM))),
     )
+    groups = []
+    seed_offset = 0
+    for header, rows in raw_groups:
+        standardized_rows = []
+        for name, values, color in rows:
+            shown, mean, low, high = standardized_bootstrap(
+                values, 91_000 + seed_offset)
+            standardized_rows.append((name, shown, mean, low, high, color))
+            seed_offset += 1
+        groups.append((header, tuple(standardized_rows)))
 
     ticks, labels = [], []
+    truncated = []
     unit = 0
     for header, rows in groups:
         # ``header_x`` is an axes fraction on the y-axis transform, so a small
@@ -385,6 +539,12 @@ def panel_forest(ax, prespecified, all_scans, tree, original, expanded, *,
                         markerfacecolor="white", markeredgecolor=color,
                         markeredgewidth=LW_ERR, ecolor=color,
                         elinewidth=LW_ERR, capsize=ERR_CAPSIZE, zorder=4)
+            # Any bound outside the axis gets a head in the row's colour,
+            # and the row is handed to the caption with its true bounds.
+            heads = [_truncation_head(ax, unit, bound, color)
+                     for bound in (low, high)]
+            if any(heads):
+                truncated.append((header, name, low, high))
             ticks.append(unit)
             labels.append(name)
             unit += 1
@@ -395,18 +555,12 @@ def panel_forest(ax, prespecified, all_scans, tree, original, expanded, *,
     # line owns no vertex on a label row.
     ax.plot([0.0, 0.0], [unit - 0.4, -1.35], color=MUTE, lw=LW_REF,
             ls=(0, (3.0, 2.2)), zorder=1, solid_capstyle="butt")
-    # The effect axis is cut to the interval structure, not to the seed
-    # cloud: every mean and every 95 % interval is inside (-0.376, +0.118),
-    # and holding the last four per-target dots (two at +0.30 in the
-    # structure-function rows, two near -0.49 in full tree, capture vs
-    # shuffled) cost 0.25 of range -- a quarter of the panel -- and flattened
-    # the four near-zero contrasts into the reference line.  The four dots
-    # are clipped and the caption says so.
-    ax.set_xlim(-0.45, 0.22)
-    ax.set_xticks([-0.4, -0.2, 0.0, 0.2])
-    ax.set_xlabel("effect (positive favors anatomy)")
+    ax.set_xlim(*FOREST_XLIM)
+    ax.set_xticks(list(FOREST_XTICKS))
+    ax.set_xlabel(FOREST_XLABEL)
     ax.tick_params(axis="y", length=0.0, pad=2.0)
     ax.spines["left"].set_visible(False)
+    return truncated
 
 
 # ── A: the horizontal point-range strip ──────────────────────────────────
@@ -660,7 +814,7 @@ def panel_controlled_alignment(ax, curves):
     ax.set_ylim(-0.04, 1.06)
     ax.set_xticks([0.0, 0.5, 1.0])
     ax.set_yticks([0.0, 0.5, 1.0])
-    ax.set_xlabel("imposed morphology alignment")
+    ax.set_xlabel("imposed subtree alignment")
     ax.set_ylabel("held-out field capture")
     handles = []
     for _, label, color, marker, dashes in ALIGN_METHODS:
@@ -698,117 +852,519 @@ def panel_animal_pairs(ax, animal):
     ax.set_xticks([0, 1], ["P+", f"P{MINUS}"])
     for label, color in zip(ax.get_xticklabels(), (PPLUS, PMINUS)):
         label.set_color(color)
-    ax.set_ylim(-0.28, 0.21)
+    # The limits widen with row 2 rather than the data stretching into it:
+    # the panel's information is the SLOPE of each animal's pair, so the
+    # units-per-point of the y axis is held at what the 116.9 pt box had and
+    # the extra 10 pt becomes air above and below, symmetric about the same
+    # centre (−0.035).  The tick set does not move.
+    ax.set_ylim(-0.30, 0.23)
     ax.set_yticks([-0.2, -0.1, 0.0, 0.1, 0.2])
     ax.set_ylabel("dendritic contrast")
     # The sign convention, the six animals and the 6/6 sign count are all
     # reported in the caption; the panel carries only the paired geometry.
 
 
-# ── F: signed-mode energy, promoted from Supplementary Fig. S17c ─────────
+# ── F: one partition of the contrast energy, drawn as one measured bar ───
+#
+# The promoted Supplementary Fig. S17c panel drew the common and the signed
+# fraction as two separate vertical bars, each with its own animal-bootstrap
+# whisker, and printed both percentages above them.  That states one quantity
+# three times: the two fractions are one partition and sum to 1 by
+# construction, so the second bar carries no information the first does not,
+# the second whisker is the reflection of the first -- one uncertainty drawn
+# twice -- and the printed numbers repeat what the axis already encodes.
+#
+# The first single-bar redraw kept that honesty but lost the uncertainty.  It
+# hung the capped whisker in the WHITE ABOVE a 50 pt stacked bar and reached
+# the 83.7 % boundary through a thin vertical connector, so the interval read
+# as a detached element rather than as the uncertainty ON that boundary, and
+# its right cap sat close enough to the 100 % end to look like a statement
+# about the whole bar.  This is the conventional drawing instead: ONE
+# measured bar for the signed fraction on a light 0-100 % track that keeps
+# the partition visible, and a capped error bar at the END of that bar drawn
+# on the bar's OWN centreline, where it can only be read as the uncertainty
+# of that bar's length -- no floating whisker and no connector.  The bar is
+# less than half its former thickness, so the bar and its error bar read as
+# one object rather than as a slab with an afterthought above it.  Each mode
+# is still named beside its own segment rather than in a legend, and the two
+# percentages and the interval stay in the caption.
+SIGNED_LABEL_PT = 9.2        # name band above the measured bar
+SIGNED_LABEL_GAP_PT = 2.6    # that band -> the bar it names
+BAR_H_PT = 20.0              # thin enough that bar and error bar are one mark
+COMMON_LEADER_PT = 6.0       # bar bottom -> the remainder's own name
+COMMON_LABEL_PT = 9.2        # direct label for the too-small remainder
+TRACK_FILL_PCT = 12          # the 0-100 % track: the control gray, lightened
+TRACK_EDGE_PCT = 34
+ENERGY_TICKS = (0, 25, 50, 75, 100)
+
+
 def panel_mode_energy(ax, mode):
     """F: where the six animal contrast vectors put their energy.
 
-    A port of ``build_alignment_animal_figure.mode_energy`` -- the panel that
-    was Supplementary Fig. S17c -- and nothing here recomputes it: the two
-    fractions and the animal-bootstrap interval are read from the same frozen
-    ``mode_decomposition`` block that panel read, the bars keep their colours,
-    width and edge, and the two printed percentages keep their format.  Only
-    the type and stroke tokens are the canvas's own, which is what the panel
-    was already set in.
+    One measured horizontal bar on a 0-100 % axis -- the signed P+/P− mode in
+    the anatomy green -- standing on a light track that runs the full extent,
+    so the remainder that is the common scalar mode stays visible as part of
+    one partition.  Nothing is recomputed: the two fractions and the
+    animal-bootstrap interval are read from the same ``mode_decomposition``
+    block the supplementary panel read.
     """
-    fractions = [mode["common_energy_fraction"],
-                 mode["signed_energy_fraction"]]
-    ci_lo, ci_hi = mode["animal_bootstrap_95_ci"]
-    # The bootstrap is over the signed fraction; the common fraction is its
-    # complement, so its interval is the reflected one.
-    intervals = [(1.0 - ci_hi, 1.0 - ci_lo), (ci_lo, ci_hi)]
-    # The signed bar is a descriptive energy fraction, not a backprop series:
-    # keep the reserved BP red out of it (CVD colour grammar).
-    ax.bar([0, 1], fractions, color=[C_CTRL, COLORS["dend"]],
-           edgecolor=COLORS["edge"], linewidth=LW_EDGE, width=0.64)
-    yerr = np.array(
-        [[value - low
-          for value, (low, _) in zip(fractions, intervals, strict=True)],
-         [high - value
-          for value, (_, high) in zip(fractions, intervals, strict=True)]])
-    ax.errorbar([0, 1], fractions, yerr=yerr, fmt="none",
-                ecolor=COLORS["edge"], elinewidth=LW_ERR,
-                capsize=ERR_CAPSIZE, capthick=LW_ERR, zorder=4)
-    for x, value, (_, high) in zip((0, 1), fractions, intervals,
-                                   strict=True):
-        ax.text(x, high + 0.035, f"{100 * value:.1f}%", ha="center",
-                va="bottom", fontsize=PT_ANNOT, color=INK)
-    ax.text(0.03, 0.97, "95% CI,\nanimal\nbootstrap", transform=ax.transAxes,
-            ha="left", va="top", fontsize=PT_SMALL, color=MUTE)
-    ax.set_xticks([0, 1], ["common", "signed"])
-    ax.set_yticks([0, 0.5, 1.0])
-    ax.set_ylim(0, 1.13)
-    ax.set_ylabel("contrast energy")
+    signed = 100.0 * float(mode["signed_energy_fraction"])
+    common = 100.0 * float(mode["common_energy_fraction"])
+    ci_lo, ci_hi = (100.0 * float(v)
+                    for v in mode["animal_bootstrap_95_ci"])
+
+    box = ax.get_position()
+    h_pt = box.height * ax.get_figure().get_size_inches()[1] * 72.0
+
+    def fy(pt):
+        """Points measured down from the axes top -> axes y fraction."""
+        return 1.0 - pt / h_pt
+
+    ax.set_xlim(0.0, 100.0)
+    ax.set_ylim(0.0, 1.0)
+
+    # The bar band is a fixed stack of points -- name, bar, leader, name --
+    # CENTRED in whatever height row 2 gives the panel, so a taller row buys
+    # the panel air above and below its one mark instead of a thicker slab.
+    block_pt = (SIGNED_LABEL_PT + SIGNED_LABEL_GAP_PT + BAR_H_PT
+                + COMMON_LEADER_PT + COMMON_LABEL_PT)
+    top_pt = max(0.5 * (h_pt - block_pt), 0.0)
+
+    bar_top_pt = top_pt + SIGNED_LABEL_PT + SIGNED_LABEL_GAP_PT
+    y_top, y_bot = fy(bar_top_pt), fy(bar_top_pt + BAR_H_PT)
+    y_mid = 0.5 * (y_top + y_bot)
+
+    # 1. the full extent, so the partition is still one quantity ...
+    ax.barh(y_mid, 100.0, left=0.0, height=y_top - y_bot,
+            color=mix("point_mlp", TRACK_FILL_PCT),
+            edgecolor=mix("point_mlp", TRACK_EDGE_PCT), linewidth=LW_HAIR,
+            zorder=2)
+    # 2. ... and the measured part of it: one bar, one length.
+    ax.barh(y_mid, signed, left=0.0, height=y_top - y_bot,
+            color=COLORS["dend"], edgecolor=COLORS["edge"],
+            linewidth=LW_EDGE, zorder=3)
+
+    # The signed bar is named directly above its own run of green (the name
+    # is 46 % of the axis wide and starts at 0, so it never overhangs the
+    # 83.7 % boundary); the remainder is 16 % of the axis, about 21 pt, so it
+    # is named just beneath itself on a hairline leader.  No legend.
+    ax.text(0.0, fy(top_pt + SIGNED_LABEL_PT / 2.0),
+            f"signed P+/P{MINUS} mode", ha="left", va="center",
+            fontsize=PT_ANNOT, color=INK, zorder=5)
+    x_common = signed + 0.5 * common
+    label_pt = bar_top_pt + BAR_H_PT + COMMON_LEADER_PT + COMMON_LABEL_PT / 2.0
+    ax.plot([x_common, x_common],
+            [y_bot, fy(bar_top_pt + BAR_H_PT + COMMON_LEADER_PT)],
+            color=MUTE, lw=LW_HAIR, solid_capstyle="round", zorder=2)
+    ax.text(100.0, fy(label_pt), "common scalar mode", ha="right",
+            va="center", fontsize=PT_ANNOT, color=INK, zorder=5)
+
+    # The animal bootstrap, once, and conventionally: a capped error bar on
+    # the END of the measured bar, on the bar's own centreline.
+    _, caps, _ = ax.errorbar(
+        [signed], [y_mid], xerr=[[signed - ci_lo], [ci_hi - signed]],
+        fmt="none", ecolor=INK, elinewidth=LW_ERR,
+        capsize=ERR_CAPSIZE, capthick=LW_ERR, zorder=5)
+    for cap in caps:                     # a cap is a stroke, not a fill
+        cap.set_markerfacecolor("none")
+
+    ax.set_yticks([])
+    ax.spines["left"].set_visible(False)
+    ax.set_xticks(list(ENERGY_TICKS))
+    ax.set_xlabel("share of contrast energy (%)")
+    # The two percentages, the interval and the aggregation are in the
+    # caption; the panel carries the proportion and its one uncertainty.
 
 
-# ── G: what the biological evidence carries, and where it stops ──────────
+# ── G: the evidence ladder ───────────────────────────────────────────────
 #
-# Three tiers, one band each, set in the paper's own hedged words: every line
-# below is a claim the manuscript already makes (the abstract for the two
-# conditional lines and the measured-response null, the six-animal reanalysis
-# for the signed coordinate, the cross-animal structural replication for the
-# route-capacity line, and the in-vivo caveat that closes both).  The panel
-# states no estimate, no interval and no test -- it is the figure's summary of
-# what the evidence supports, what it supports only conditionally, and what it
-# does not establish.
-# Each line is a phrase the manuscript itself uses, cut to the width a
-# third-of-the-module panel gives it at the 6.8 pt type floor (about 117 pt of
-# measured line): the statement is the short form, and the sentence it
-# abbreviates is printed into the caption at build time rather than set here
-# at a size below the type scale.  The two conditional lines are deliberately
-# parallel ("only if"), because the condition IS the claim.
-EVIDENCE_TIERS = (
-    ("supported", ROUTE, ROUTE, (
-        "signed coordinates in six animals",
-        "modeled capacity, two animals",
-    )),
-    ("conditional", COLORS["local"], AMBER_TEXT, (
-        "benefit only if credit rotates in",
-        "shunting gain only if permissive",
-    )),
-    ("not established", C_CTRL, C_CTRL, (
-        "no morphology-specific alignment",
-        "no endogenous task credit in vivo",
-    )),
+# The closing panel used to be three tinted boxes of bullets, which is a
+# slide, not a figure.  It is drawn here as the paper's OWN credit hierarchy
+# (Fig. 1c) turned into a ladder: four stacked rungs read from the bottom up
+# -- neuron coordinate δᵤ, subtree address δᵤ,ₖ, route gain, and the use of
+# those routes for endogenous task credit in vivo -- so the closing panel
+# answers "where does the evidence stop" spatially rather than in prose.
+#
+# Each rung carries the credit tree in the manipulation mode that DEFINES
+# that level, in the vocabulary of Figures 1-4 and of panel C of this figure:
+# the coordinate arrives at the soma and stops there (dashed barrier, one
+# arrow in the adjoint blue); the address splits the arbor into two tinted
+# subtree routes; the gain keeps those routes and thickens one of them; and
+# the top rung is the same arbor with nothing lit at all.  The tree is the
+# library's arbor truncated one level, exactly as panel C truncates it, so
+# four terminals resolve at a 4-module rung height where eight would be a
+# thicket; the library's own labels are never set at this size.
+#
+# EVIDENCE STATUS IS THE FILL OF THE STEP, not a word list: each rung stands
+# on a full-width step inked shunting green where measurement supports the
+# level, amber where the level holds only under a stated condition, and left
+# open -- white, dashed outline, a broken step -- where nothing is
+# established.  Read upward the steps go green, green, amber, broken, so the
+# eye sees the evidence fade exactly where the paper says it stops before it
+# reads a single word.  One three-swatch key at the foot names the three
+# fills; there are no tier headings, no tinted tier boxes and no bullets.
+#
+# Beside each rung sits the short form of its condition or gap and one mute
+# chip naming the evidence that carries it (``E,F`` is a panel pair of this
+# figure, ``7g`` is Fig. 7g and ``8f`` is Fig. 8f).  Every shortened statement
+# is printed in full, with its attribution, into the caption at build time.
+LADDER_SUPPORTED = ROUTE                 # measurement supports the level
+LADDER_CONDITIONAL = COLORS["local"]     # holds only under a stated condition
+LADDER_OPEN = None                       # nothing established: an open step
+
+# (glyph mode, rung name, symbol, symbol tone, short condition, chip, status)
+# Index 0 is the BOTTOM rung: the ladder is read upward, in the hierarchy's
+# own order, so the drawing order below is the reading order.
+EVIDENCE_RUNGS = (
+    ("coordinate", "coordinate", "δᵤ", COLORS["additive"],
+     "signed, in six animals", "E,F", LADDER_SUPPORTED),
+    ("address", "subtree address", "δᵤ,ₖ", INK,
+     "modeled capacity only", "7g", LADDER_SUPPORTED),
+    ("gain", "route gain", "ᾶₙ", INK,
+     "only in permissive regimes", "8f", LADDER_CONDITIONAL),
+    ("open", "endogenous use in vivo", None, MUTE,
+     "no morphology-specific alignment", "A,B", LADDER_OPEN),
 )
-# Type bands inside one tier, in points from the band's own top edge: the
-# heading line, then the two statements.  They are points and not fractions
-# because type is points: at any panel height the three lines keep the same
-# 10 pt and 9 pt separations, which is what keeps them off one another.
-TIER_HEAD_PT = 9.0
-TIER_LINE_PT = (19.0, 28.0)
-# The tier's own left rail, in points from the band edge: the bullet, then the
-# statement.  Both are tighter than they were at seven modules, because at
-# four modules the line itself is what the width has to be spent on.
-TIER_BULLET_X_PT = 5.0
-TIER_TEXT_X_PT = 9.0
+LADDER_KEY = (
+    (LADDER_SUPPORTED, "supported"),
+    (LADDER_CONDITIONAL, "conditional"),
+    (LADDER_OPEN, "not established"),
+)
+
+# The ladder band, in points: type is points, so every reserve here is one.
+RUNG_STEP_PT = 2.4           # the step a rung stands on (an area mark)
+RUNG_STEP_GAP_PT = 0.9       # a rung -> the step it stands on
+RUNG_GAP_PT = 4.6            # a step -> the NEXT rung up.  Five times the
+                             # gap above, so a step reads as belonging to
+                             # the rung standing on it rather than as a
+                             # divider floating between two of them.  The
+                             # 10 pt row 2 gained is split between this gap
+                             # and the glyph: the ladder is not four rungs
+                             # closer together at a larger size, it is four
+                             # larger rungs further apart.
+RUNG_NAME_PT = 8.0           # name band (7.2 pt type)
+RUNG_LINE_PT = 7.2           # condition leading (6.8 pt type)
+RUNG_SYMBOL_GAP_PT = 3.2     # rung name -> its symbol
+GLYPH_GAP_PT = 3.5           # tree glyph -> text column
+GLYPH_MIN_PT = 12.0          # below this the four-terminal arbor stops reading
+RUNG_TEXT_R_PT = 1.5         # text column -> panel right edge
+KEY_GAP_PT = 2.8             # last step -> the status key
+KEY_LINE_PT = 7.4            # key row
+KEY_SWATCH_PT = 4.6
+KEY_LABEL_GAP_PT = 2.4       # swatch -> its label
+KEY_ITEM_GAP_PT = 7.0        # between two key items
+CHIP_PAD_X_PT = 2.2
+CHIP_H_PT = 8.2
+CHIP_GAP_PT = 2.4            # statement text -> chip
+CHIP_CLEAR_PT = 1.5          # a chip never lands this close to the text
+# Words a condition is not broken after when any other break will do.
+HANGING_WORDS = frozenset(
+    ("a", "an", "and", "in", "into", "of", "on", "only", "the", "to",
+     "two", "six", "no", "not", "if", "when"))
+
+# The rung glyph is panel C's stage tree -- the credit-tree library's arbor
+# truncated one level, on the library's own coordinates -- so a rung here and
+# a stage there are the same object, and both are the Figure 1-4 arbor with
+# its two first-order subtrees kept and its eight terminals folded into four.
+G_SPAN_X = E_SPAN_X
+G_SPAN_Y = (-0.30, 2.60)                 # clears the soma disc and the tips
+G_ASPECT = ((G_SPAN_X[1] - G_SPAN_X[0])
+            / (G_SPAN_Y[1] - G_SPAN_Y[0]))
+# The two subtree-route capsules, in the tints the library gives K = 2.
+G_ROUTE_TINT = (mix("shunting", 20), mix("additive", 18))
+G_CAPSULE_PT = 3.2                       # an area mark, not a line weight
+# Gain mode: the same taper the library keys per edge, folded onto the
+# truncated arbor -- one first-order subtree driven hard, the other weakly.
+G_GAIN_LW = {("J1", "JL"): LW_ERR, ("J1", "JR"): LW_HAIR,
+             ("JL", "T_LL"): LW_EDGE, ("JL", "T_LR"): LW_EDGE,
+             ("JR", "T_RL"): LW_HAIR, ("JR", "T_RR"): LW_HAIR}
+
+
+def _glyph_place(f, cell):
+    """Map the truncated stage tree's coordinates into one rung cell."""
+    x0, y0, w, h = cell
+
+    def place(point):
+        x, y = E_P[point] if isinstance(point, str) else point
+        return (x0 + w * (x - G_SPAN_X[0]) / (G_SPAN_X[1] - G_SPAN_X[0]),
+                y0 + h * (y - G_SPAN_Y[0]) / (G_SPAN_Y[1] - G_SPAN_Y[0]))
+
+    return place
+
+
+def _rung_glyph(f, cell, mode):
+    """One rung's tree, decorated in the mode that defines its level."""
+    ax = f.ax
+    place = _glyph_place(f, cell)
+    # The arbor is lit only where the level itself is defined on it: the
+    # coordinate stops at the soma, so its arbor is the library's ghost tree
+    # with one blue arrow; the address and the gain live ON the arbor, so
+    # theirs is inked; and the top rung is the address arbor with nothing lit
+    # at all -- the same two routes, in the de-emphasis tint, and no soma
+    # arrival, which is exactly the claim that has no evidence behind it.
+    lit = mode in ("address", "gain")
+    ink = COLORS["dend"] if lit else GHOST
+    if mode in ("address", "gain", "open"):
+        tints = (G_ROUTE_TINT if lit
+                 else (mix("mute", 13), mix("mute", 13)))
+        for tint, chains in zip(tints, E_ROUTES, strict=True):
+            for chain in chains:
+                xy = np.array([place(point) for point in chain], dtype=float)
+                ax.plot(xy[:, 0], xy[:, 1], color=tint, lw=G_CAPSULE_PT,
+                        solid_capstyle="round", solid_joinstyle="round",
+                        zorder=1.3)
+    for a, b in E_TRUNK:
+        ax.plot(*zip(place(a), place(b)), color=ink,
+                lw=LW_DATA if mode == "gain" else LW_ERR,
+                solid_capstyle="round", zorder=2.4)
+    for edges, width in ((E_LIMBS, LW_EDGE), (E_TWIGS, LW_HAIR)):
+        for a, b in edges:
+            ax.plot(*zip(place(a), place(b)), color=ink,
+                    lw=G_GAIN_LW[(a, b)] if mode == "gain" else width,
+                    solid_capstyle="round", zorder=2.4)
+    for point in ("J1", "JL", "JR"):
+        f.disc(place(point), 1.05, fill="white", edge=ink, lw=LW_HAIR,
+               zorder=3.2)
+    for point in E_TERMINALS:
+        f.disc(place(point), 0.95, fill=ink, zorder=3.2)
+    soma_lit = mode != "open"
+    f.disc(place("S"), 1.7,
+           fill=COLORS["soma"] if soma_lit else mix("soma", 34),
+           edge=RIM if soma_lit else GHOST, lw=LW_HAIR, zorder=3.4)
+    if mode == "coordinate":
+        # the coordinate arrives at the soma and stops there: the library's
+        # dashed barrier across the trunk, and one arrow in the adjoint blue
+        mid = place((0.03, 0.40))
+        half = f.fx(3.2)
+        barrier, = ax.plot([mid[0] - half, mid[0] + half],
+                           [mid[1] - f.fy(0.9), mid[1] + f.fy(0.9)],
+                           color=MUTE, lw=LW_HAIR, zorder=3.6,
+                           solid_capstyle="butt")
+        barrier.set_dashes((1.3, 1.2))
+        f.arrow(place((1.62, 0.66)), place((0.34, 0.12)),
+                color=COLORS["additive"], lw=LW_EDGE, head=3.2, rad=0.12,
+                zorder=4.0)
+    if mode == "gain":
+        # the library's gain ring on the junction whose path conductance is
+        # the one being read off
+        f.disc(place("JL"), 3.0, fill="none", edge=INK, lw=LW_HAIR,
+               zorder=4.2)
+
+
+def _wrap_condition(ax, text, *, width_pt, reserve_pt, max_lines=2):
+    """Break one condition into at most ``max_lines`` lines, or ``None``.
+
+    ``reserve_pt`` is what the chip takes on the LAST line, so a condition is
+    never set under its own tag.
+    """
+    def w(s):
+        return _text_w_pt(ax, s, PT_SMALL)
+
+    if w(text) + reserve_pt <= width_pt - CHIP_CLEAR_PT:
+        return [text]
+    if max_lines < 2:
+        return None
+    words = text.split()
+    # Among the breaks that fit, take the one that BALANCES the two lines
+    # rather than the greedy one: a 22 pt column sets a greedy break as a
+    # full line over a one-word widow, and two even lines read better beside
+    # a glyph the same height as the pair.  Two passes: the first refuses to
+    # leave a function word hanging at the end of line one, the second takes
+    # any break that fits.
+    for avoid_hanging in (True, False):
+        best = None
+        for split in range(1, len(words)):
+            if avoid_hanging and words[split - 1].lower() in HANGING_WORDS:
+                continue
+            first = " ".join(words[:split])
+            second = " ".join(words[split:])
+            w_first, w_second = w(first), w(second)
+            if w_first > width_pt:
+                continue
+            if w_second + reserve_pt > width_pt - CHIP_CLEAR_PT:
+                continue
+            span = max(w_first, w_second + reserve_pt)
+            if best is None or span < best[0]:
+                best = (span, [first, second])
+        if best is not None:
+            return best[1]
+    return None
+
+
+def _chip(f, x_right, y, label, *, width_pt):
+    """One small mute pill naming the evidence a rung rests on."""
+    height = f.fy(CHIP_H_PT)
+    x0 = x_right - f.fx(width_pt)
+    f.ax.add_patch(FancyBboxPatch(
+        (x0, y - height / 2.0), f.fx(width_pt), height,
+        boxstyle=f"round,pad=0,rounding_size={height / 2.0}",
+        facecolor=mix("mute", 10), edgecolor=mix("mute", 42),
+        linewidth=LW_HAIR, zorder=5, transform=f.ax.transData, clip_on=False,
+    ))
+    f.text((x0 + f.fx(width_pt) / 2.0, y), label, size=PT_SMALL, color=MUTE,
+           zorder=6)
+
+
+def _step(f, y_pt, status, *, x0=0.0, width=1.0, height_pt=RUNG_STEP_PT,
+          radius_pt=1.2):
+    """One rung of the ladder, filled with the status of its evidence.
+
+    A supported or conditional level stands on a solid step; a level with no
+    evidence behind it stands on an OPEN step -- white, dashed outline -- so
+    the ladder is visibly broken where the paper says the evidence stops.
+    """
+    height = f.fy(height_pt)
+    patch = FancyBboxPatch(
+        (x0, 1.0 - f.fy(y_pt) - height), width, height,
+        boxstyle=f"round,pad=0,rounding_size={f.fy(radius_pt)}",
+        facecolor="white" if status is None else status,
+        edgecolor=mix("mute", 50) if status is None else "none",
+        linewidth=LW_HAIR if status is None else 0.0,
+        zorder=2.0, transform=f.ax.transData, clip_on=False,
+    )
+    if status is None:
+        patch.set_linestyle((0, (2.4, 1.9)))
+    f.ax.add_patch(patch)
+    return patch
+
+
+def _key_rows(ax, f):
+    """Pack the three status swatches into as few full-width rows as fit."""
+    items = [(status, label,
+              KEY_SWATCH_PT + KEY_LABEL_GAP_PT
+              + _text_w_pt(ax, label, PT_SMALL))
+             for status, label in LADDER_KEY]
+    rows, row, used = [], [], 0.0
+    for item in items:
+        step = item[2] + (KEY_ITEM_GAP_PT if row else 0.0)
+        if row and used + step > f.w_pt:
+            rows.append(row)
+            row, used = [item], item[2]
+            continue
+        row.append(item)
+        used += step
+    if row:
+        rows.append(row)
+    return rows
 
 
 def panel_evidence_boundary(ax):
-    """G: three tiers -- supported, conditional, not established."""
+    """G: the credit hierarchy as a ladder, each rung filled with its status.
+
+    Nothing here is a statistic: the panel restates, in the manuscript's own
+    hedged words, what the biological evidence carries at each level of the
+    hierarchy the paper tests, and where it stops.
+    """
     f = Frame(ax)
-    for cell, (name, color, text_color, lines) in zip(
-            f.split(3, axis="y", gap_pt=4.0), EVIDENCE_TIERS, strict=True):
-        # The band is what makes a tier an object rather than three loose
-        # lines, and it is drawn full-cell-width in the tier's own tint so
-        # the three tiers read as one ordered scale.
-        f.group(cell, tint=mix(color, 9), edge=mix(color, 45), lw=LW_HAIR,
-                radius_pt=2.5)
-        top = cell[1] + cell[3]
-        f.text((cell[0] + f.fx(TIER_TEXT_X_PT), top - f.fy(TIER_HEAD_PT)),
-               name, size=PT_ANNOT, color=text_color, ha="left")
-        for offset, line in zip(TIER_LINE_PT, lines, strict=True):
-            y = top - f.fy(offset)
-            f.disc((cell[0] + f.fx(TIER_BULLET_X_PT), y), 0.9, fill=color,
-                   zorder=5)
-            f.text((cell[0] + f.fx(TIER_TEXT_X_PT), y), line, size=PT_SMALL,
-                   color=INK, ha="left")
+    key_rows = _key_rows(ax, f)
+    key_h = KEY_LINE_PT * len(key_rows)
+    ladder_h = f.h_pt - key_h - KEY_GAP_PT
+    n = len(EVIDENCE_RUNGS)
+    chips = [_text_w_pt(ax, rung[5], PT_SMALL) + 2 * CHIP_PAD_X_PT
+             for rung in EVIDENCE_RUNGS]
+
+    # 1. The glyph is as tall as the ladder can afford it: start from the
+    #    uniform rung pitch and shrink until every condition has been set in
+    #    at most two lines AND the four rungs still fit the band.  Shrinking
+    #    the glyph widens the text column, so a rung never loses a word to
+    #    make room for its own picture.
+    plan = None
+    glyph_h = (ladder_h - (n - 1) * RUNG_GAP_PT) / n \
+        - RUNG_STEP_PT - RUNG_STEP_GAP_PT
+    while glyph_h >= GLYPH_MIN_PT:
+        glyph_w = glyph_h * G_ASPECT
+        text_w = f.w_pt - glyph_w - GLYPH_GAP_PT - RUNG_TEXT_R_PT
+        rows, total, ok = [], (n - 1) * RUNG_GAP_PT, True
+        for rung, chip_w in zip(EVIDENCE_RUNGS, chips, strict=True):
+            _, name, symbol, _, condition, _, _ = rung
+            head_w = _text_w_pt(ax, name, PT_ANNOT)
+            if symbol:
+                head_w += (RUNG_SYMBOL_GAP_PT
+                           + _text_w_pt(ax, symbol, PT_ANNOT))
+            on_head = (head_w + CHIP_GAP_PT + chip_w
+                       <= text_w - CHIP_CLEAR_PT)
+            lines = _wrap_condition(
+                ax, condition, width_pt=text_w,
+                reserve_pt=0.0 if on_head else chip_w + CHIP_GAP_PT)
+            if lines is None:
+                ok = False
+                break
+            # The chip rides the EARLIEST line that has room for it -- the
+            # name row when the name and its symbol leave the space, else the
+            # first condition line -- so a tag never floats a line below the
+            # statement it tags.
+            chip_line = -1 if on_head else len(lines) - 1
+            if not on_head:
+                for line_no, line in enumerate(lines):
+                    if (_text_w_pt(ax, line, PT_SMALL) + CHIP_GAP_PT + chip_w
+                            <= text_w - CHIP_CLEAR_PT):
+                        chip_line = line_no
+                        break
+            text_h = RUNG_NAME_PT + RUNG_LINE_PT * len(lines)
+            rows.append((head_w, chip_line, lines, max(glyph_h, text_h)))
+            total += rows[-1][3] + RUNG_STEP_PT + RUNG_STEP_GAP_PT
+        if ok and total <= ladder_h + 1e-6:
+            plan = (glyph_w, text_w, rows, ladder_h - total)
+            break
+        glyph_h -= 0.25
+    if plan is None:
+        raise ValueError("evidence ladder does not fit panel G at "
+                         f"{f.w_pt:.1f} x {f.h_pt:.1f} pt")
+    glyph_w, text_w, rows, slack = plan
+    air = slack / n                      # spent as air inside every rung
+    text_x = f.fx(glyph_w + GLYPH_GAP_PT)
+    right = 1.0 - f.fx(RUNG_TEXT_R_PT)
+
+    # 2. Draw from the TOP of the panel down, which is the top of the ladder
+    #    down: ``EVIDENCE_RUNGS`` is in reading order, bottom first.
+    y_pt = 0.0
+    order = list(zip(EVIDENCE_RUNGS, chips, rows, strict=True))[::-1]
+    for index, (rung, chip_w, row) in enumerate(order):
+        mode, name, symbol, tone, _, chip, status = rung
+        head_w, chip_line, lines, content_h = row
+        content_h += air
+        # the tree glyph literally STANDS on the rung's own step: it is
+        # bottom-aligned in the band, not centred in it, so the soma sits on
+        # the step whatever the text beside it does.
+        gh = min(content_h, glyph_w / G_ASPECT)
+        _rung_glyph(f, (0.0, 1.0 - f.fy(y_pt + content_h),
+                        f.fx(glyph_w), f.fy(gh)), mode)
+        # the rung name, its symbol and (where it fits) its evidence chip
+        text_h = RUNG_NAME_PT + RUNG_LINE_PT * len(lines)
+        ty = y_pt + (content_h - text_h) / 2.0
+        head_y = 1.0 - f.fy(ty + RUNG_NAME_PT / 2.0)
+        f.text((text_x, head_y), name, size=PT_ANNOT,
+               color=MUTE if status is None else INK, ha="left")
+        if symbol:
+            f.text((text_x + f.fx(_text_w_pt(ax, name, PT_ANNOT)
+                                  + RUNG_SYMBOL_GAP_PT), head_y), symbol,
+                   size=PT_ANNOT, color=tone, ha="left")
+        if chip_line < 0:
+            _chip(f, right, head_y, chip, width_pt=chip_w)
+        ty += RUNG_NAME_PT
+        for line_no, line in enumerate(lines):
+            y = 1.0 - f.fy(ty + RUNG_LINE_PT / 2.0)
+            f.text((text_x, y), line, size=PT_SMALL, color=MUTE, ha="left")
+            if line_no == chip_line:
+                _chip(f, right, y, chip, width_pt=chip_w)
+            ty += RUNG_LINE_PT
+        y_pt += content_h + RUNG_STEP_GAP_PT
+        _step(f, y_pt, status)
+        y_pt += RUNG_STEP_PT + (RUNG_GAP_PT if index < n - 1 else 0.0)
+
+    # 3. One key, three swatches, no tier headings.
+    y_pt += KEY_GAP_PT
+    for row in key_rows:
+        y = 1.0 - f.fy(y_pt + KEY_LINE_PT / 2.0)
+        x = 0.0
+        for status, label, width in row:
+            _step(f, y_pt + (KEY_LINE_PT - KEY_SWATCH_PT) / 2.0, status,
+                  x0=x, width=f.fx(KEY_SWATCH_PT), height_pt=KEY_SWATCH_PT,
+                  radius_pt=1.1)
+            f.text((x + f.fx(KEY_SWATCH_PT + KEY_LABEL_GAP_PT), y), label,
+                   size=PT_SMALL, color=MUTE, ha="left")
+            x += f.fx(width + KEY_ITEM_GAP_PT)
+        y_pt += KEY_LINE_PT
     return ax
 
 
@@ -838,9 +1394,9 @@ def build():
     # Row 2: the animal coordinate, the decomposition behind it, and the
     # boundary the whole page argues for -- a third of the module each.
     ax_e = canvas.panel("E", 2, 0, 4, grid="y", title="Signed contrast")
-    ax_f = canvas.panel("F", 2, 4, 4, grid="y", title="Signed mode")
+    ax_f = canvas.panel("F", 2, 4, 4, grid="x", title="Signed mode")
     ax_g = canvas.panel("G", 2, 8, 4, schematic=True,
-                        title="Evidence boundary")
+                        title="Evidence ladder")
 
     # The one declared reserve, taken symmetrically on the single grid
     # boundary that cannot hold its labels in the gutter: B's row-label
@@ -852,21 +1408,34 @@ def build():
         canvas.declare_reserve(panel_name, left=LABEL_RESERVE_PT)
 
     panel_tree_learning(ax_a, tree)
-    panel_forest(ax_b, prespecified, all_scans, tree, original, expanded,
-                 header_x=0.014)
+    truncated = panel_forest(ax_b, prespecified, all_scans, tree, original,
+                             expanded, header_x=0.014)
     panel_alignment_design(ax_c)
     panel_controlled_alignment(ax_d, curves)
     panel_animal_pairs(ax_e, animal)
     panel_mode_energy(ax_f, mode)
-    panel_evidence_boundary(ax_g)
 
     # One letter offset per grid column, so every letter sits the same
     # distance left of the column its panel starts in.
     for name in ("A", "B", "C", "D", "E", "F", "G"):
         canvas.add_letter(name, canvas.axes[name], dx_pt=24.0)
 
+    # G is set in points inside its own axes box, and the box is only final
+    # once the reserves are locked (row 2 yields whatever F's new percentage
+    # axis cannot hang in the bottom margin).  Lock here, with every other
+    # panel and every letter already on the canvas, so the tier bands are
+    # laid out against the height the panel actually gets; ``save`` locks
+    # again and finds nothing to move, because G declares no decoration.
+    canvas.lock_reserves()
+    panel_evidence_boundary(ax_g)
+
     problems = canvas.save(OUT, name="main_figure_09_native")
-    for note in CAPTION_NOTES:
+    # B's clipping note is generated, not typed: the bounds it prints are the
+    # ones the panel just drew, so the caption cannot drift from the figure.
+    notes = list(CAPTION_NOTES)
+    if truncated:
+        notes.insert(1, _truncation_note(truncated))
+    for note in notes:
         print(note)
     for note in LETTER_MOVES:
         print(note)

@@ -10,19 +10,24 @@ sizes and a dozen different stroke weights.  Here every panel is drawn onto
 one 12-module :class:`figure_canvas.NativeCanvas` at exactly 518.4 pt and the
 component is copied into ``figures/main/figure_02.pdf`` at scale 1.0.
 
-Structure (three rows on one 12-module grid, one axes-box height per row):
+Structure (four rows on one 12-module grid, one axes-box height per row):
 
-* row 0 -- the identity bottleneck as small multiples: MNIST and
-  Fashion-MNIST held-out accuracy share ONE accuracy axis (label, range and
-  tick labels appear once, at the left of the row) and the exact-gradient
-  cosine sits beside them on the same feedback ladder; three panels, four
-  modules each;
-* row 1 -- the ownership/address schematic (five modules), drawn natively
+* row 0 -- the task and the three feedback resolutions as four schematic
+  cells sharing one panel letter: the classification pipeline ends in the
+  readout error, and three cards define the ladder's x-categories (one
+  value for the layer; one coordinate per neuron; the complete
+  per-compartment field), so the data rows under them read without a
+  legend;
+* row 1 -- the identity bottleneck as small multiples: matched three-rung
+  feedback ladders for MNIST and Fashion-MNIST use separately labeled
+  accuracy axes because their baselines differ, and the exact-gradient cosine
+  sits beside them; three panels, four modules each;
+* row 2 -- the ownership/address schematic (five modules), drawn natively
   from the shared credit-tree vocabulary, immediately left of the forest it
   explains (seven modules): every paired "X minus Y" contrast of the figure
   on ONE effect-size axis, grouped and labelled, carrying the paired seed
   differences and the published estimate with its 95% interval;
-* row 2 -- the within-tree credit reversal and the identity gain across
+* row 3 -- the within-tree credit reversal and the identity gain across
   dendritic stage count, six modules each, the latter on exactly the same
   contrast scale as the forest.
 
@@ -58,6 +63,7 @@ from figure_canvas import (  # noqa: E402
     COLORS,
     ERR_CAPSIZE,
     LW_DATA,
+    LW_EDGE,
     LW_ERR,
     LW_HAIR,
     LW_REF,
@@ -72,14 +78,19 @@ from figure_canvas import (  # noqa: E402
     enforce_tokens,
     style_panel,
 )
-from credit_tree_schematics import draw_credit_tree, draw_deranged_pair  # noqa: E402
+from credit_tree_schematics import (  # noqa: E402
+    AMBER_TEXT,
+    draw_credit_tree,
+    draw_deranged_pair,
+    mix,
+)
 from native_schematics import Frame, MIN_CORE_PT  # noqa: E402
+from build_main_figure_01 import mini_tree  # noqa: E402
 from journal_style import paired_lines  # noqa: E402
 
 # Inherited panel logic, imported rather than re-implemented so that the
 # marks and the bootstrap intervals stay identical to the published blocks.
 from build_journal_figures import (  # noqa: E402
-    _temper_glyph_arrows,
     errorbar_mean,
     jitter,
 )
@@ -98,9 +109,13 @@ INK = COLORS["ink"]
 CORE_COLOR = {"dendritic_shunting": SHUNT, "dendritic_additive": ADD}
 CORE_MARKER = {"dendritic_shunting": "o", "dendritic_additive": "s"}
 
-# One accuracy axis for the held-out-accuracy panels of the top row.
-ACC_LIM = (0.828, 0.982)
-ACC_TICKS = [0.84, 0.88, 0.92, 0.96]
+# Dataset-specific accuracy axes expose the within-dataset feedback effect.
+# Cross-dataset effect sizes are compared on the common percentage-point axis
+# in panel E, so forcing A and B onto one absolute-accuracy range is unnecessary.
+MNIST_ACC_LIM = (0.892, 0.980)
+MNIST_ACC_TICKS = [0.90, 0.92, 0.94, 0.96, 0.98]
+FASHION_ACC_LIM = (0.824, 0.894)
+FASHION_ACC_TICKS = [0.84, 0.86, 0.88]
 ACC_LABEL = "held-out accuracy"
 
 # One contrast axis, shared by the forest (x) and the depth panel (y).
@@ -108,7 +123,7 @@ GAIN_LIM = (-0.85, 8.85)
 GAIN_TICKS = [0, 2, 4, 6, 8]
 GAIN_LABEL = "accuracy difference (pp)"
 
-LADDER_TICKS = ["scalar\nfallback", "neuron\nindexed", "exact\npath"]
+LADDER_TICKS = ["scalar\nbroadcast", "neuron\nspecific", "exact\npath"]
 
 # One declared convention for the two categorical panels: the per-seed cloud
 # is drawn as a symmetric deterministic fan a quarter-row BELOW its own mean
@@ -121,6 +136,153 @@ SEED_FAN = 0.05
 def _fan(n):
     """Symmetric deterministic spread for a per-seed cloud."""
     return np.linspace(-SEED_FAN, SEED_FAN, n) if n > 1 else np.zeros(n)
+
+
+# ── row 0: the task and the three feedback resolutions ───────────────────
+# The row answers the two questions every data row below assumes: what the
+# network is trained on, and what one rung of the feedback ladder means.
+# The task cell runs image -> dendritic layer -> readout error, and three
+# cards carry the ladder's exact x-category wording with the manuscript's
+# own definitions.  Each card shows the same two-unit layer receiving that
+# error at one resolution, so the contrast IS the cards' only difference.
+# The four cells are separate grid panels (a full-width band would be a
+# letterbox strip) but share the single letter A.  Signal hues follow the
+# manuscript-wide semantics: amber = scalar broadcast, additive blue = the
+# per-neuron coordinate, red-brown = the exact / backpropagated field.
+
+BP = COLORS["bp"]
+AMBER = COLORS["local"]
+PIXEL = mix("ink", 82)
+
+UNIT_HALF_PT = 8.0       # half-height of one mini unit inside a card
+UNIT_GAP_PT = 21.0       # vertical spacing of the two stacked units
+
+# 5x5 ink mask for the input glyph: a low-resolution digit.
+_DIGIT = ("01110", "10001", "00110", "01000", "11111")
+
+
+def _digit_glyph(f, cx, cy, side_pt):
+    """A pixel-grid input image centred at (cx, cy), frame fractions."""
+    w, h = f.fx(side_pt), f.fy(side_pt)
+    x0, y0 = cx - w / 2.0, cy - h / 2.0
+    f.group((x0, y0, w, h), tint="white", edge=COLORS["grid"],
+            lw=LW_HAIR, radius_pt=1.2)
+    cw, ch = w / 5.0, h / 5.0
+    for r, row in enumerate(_DIGIT):
+        for c, bit in enumerate(row):
+            if bit == "1":
+                f.ax.add_patch(Rectangle(
+                    (x0 + (c + 0.07) * cw, y0 + (4 - r + 0.07) * ch),
+                    0.86 * cw, 0.86 * ch, facecolor=PIXEL,
+                    edgecolor="none", zorder=3))
+
+
+def _unit_pair(f, x_soma, y_mid):
+    """Two stacked mini units with somas at one x; returns soma y's."""
+    ys = (y_mid + f.fy(UNIT_GAP_PT) / 2.0, y_mid - f.fy(UNIT_GAP_PT) / 2.0)
+    for cy in ys:
+        mini_tree(f, x_soma, cy, f.fy(UNIT_HALF_PT))
+    return ys
+
+
+def _card_scalar(f, core):
+    """One error value for the whole layer: one source, both somas."""
+    x0, y0, w, h = core
+    sx, mid = x0 + 0.42 * w, y0 + 0.52 * h
+    top, bot = _unit_pair(f, sx, mid)
+    src = (sx + f.fx(24.0), mid)
+    f.arrow(src, (sx + f.fx(4.5), top), color=AMBER, lw=LW_EDGE, head=4.0,
+            rad=0.22)
+    f.arrow(src, (sx + f.fx(4.5), bot), color=AMBER, lw=LW_EDGE, head=4.0,
+            rad=-0.22)
+    f.disc(src, 2.1, fill=AMBER)
+    f.text((src[0], src[1] + f.fy(8.0)), "δ₀", size=PT_ANNOT,
+           color=AMBER_TEXT)
+
+
+def _card_neuron(f, core):
+    """One coordinate per neuron: two distinct arrows, one per soma."""
+    x0, y0, w, h = core
+    sx, mid = x0 + 0.42 * w, y0 + 0.52 * h
+    top, bot = _unit_pair(f, sx, mid)
+    tail = sx + f.fx(24.0)
+    for cy, tag in ((top, "δᵤ"), (bot, "δᵥ")):
+        f.arrow((tail, cy), (sx + f.fx(4.5), cy), color=ADD, lw=LW_EDGE,
+                head=4.0)
+        f.text((tail + f.fx(3.5), cy), tag, size=PT_ANNOT, color=ADD,
+               ha="left", va="center")
+
+
+def _card_exact(f, core):
+    """The complete field: every compartment carries its own error."""
+    x0, y0, w, h = core
+    sx, mid = x0 + 0.42 * w, y0 + 0.52 * h
+    top, bot = _unit_pair(f, sx, mid)
+    tail = sx + f.fx(24.0)
+    dy = f.fy(UNIT_HALF_PT) / 1.5
+    for cy in (top, bot):
+        f.arrow((tail, cy), (sx + f.fx(4.5), cy), color=BP, lw=LW_EDGE,
+                head=4.0)
+        for my in (cy + 0.98 * dy, cy - 0.98 * dy):
+            f.disc((sx - f.fx(9.5), my), 1.15, fill=BP, zorder=5)
+
+
+def panel_task(ax):
+    """Image -> dendritic layer -> readout error, one schematic cell."""
+    f = Frame(ax)
+    cell = (0.0, 0.0, 1.0, 1.0)
+    f.group(cell, tint=None, edge=COLORS["grid"])
+    core = f.cell_text(cell, title="task", subtitle="image → class label",
+                       min_core_pt=MIN_CORE_PT)
+    x0, y0, w, h = core
+    cy = y0 + 0.50 * h
+    start = x0 + (w - f.fx(96.0)) / 2.0
+
+    def px(pt):
+        return start + f.fx(pt)
+
+    _digit_glyph(f, px(10.0), cy, 16.0)
+    f.arrow((px(20.0), cy), (px(27.0), cy), color=MUTE, lw=LW_EDGE,
+            head=3.6)
+    soma_x = px(48.0)
+    top, bot = _unit_pair(f, soma_x, cy)
+    for uy, bend in ((top, 0.14), (bot, -0.14)):
+        f.arrow((soma_x + f.fx(3.5), uy), (px(58.5), cy), color=MUTE,
+                lw=LW_HAIR, head=3.2, rad=bend)
+    box = (px(60.5), cy - f.fy(6.5), f.fx(15.0), f.fy(13.0))
+    f.group(box, tint=mix("mute", 8), edge=COLORS["grid"], lw=LW_HAIR,
+            radius_pt=2.0)
+    f.text((px(68.0), cy), "ŷ", size=PT_ANNOT, color=INK)
+    # the readout error: what the three cards deliver back at three grains
+    f.arrow((px(77.5), cy), (px(84.5), cy), color=MUTE, lw=LW_EDGE,
+            head=3.6)
+    f.disc((px(89.0), cy), 2.2, fill=BP)
+    f.text((px(89.0), cy + f.fy(8.0)), "δ₀", size=PT_ANNOT, color=BP)
+    return ax
+
+
+# One card per ladder rung: the title carries the x-category's exact
+# wording, the gloss its one-line definition; that is the panel's whole
+# prose.
+RESOLUTION_CARDS = (
+    ("scalar", "scalar broadcast", AMBER_TEXT,
+     "one value for the layer", _card_scalar),
+    ("neuron", "neuron specific", ADD,
+     "one δᵤ per neuron", _card_neuron),
+    ("exact", "exact path", BP,
+     "full field ∂ℒ/∂Vₙ", _card_exact),
+)
+
+
+def panel_resolution_card(ax, title, tone, gloss, draw):
+    """One feedback-resolution card: the two-unit layer, one delivery."""
+    f = Frame(ax)
+    cell = (0.0, 0.0, 1.0, 1.0)
+    f.group(cell, tint=None, edge=COLORS["grid"])
+    core = f.cell_text(cell, title=title, title_color=tone, subtitle=gloss,
+                       min_core_pt=MIN_CORE_PT)
+    draw(f, core)
+    return ax
 
 
 # ── row 0: the feedback ladder, one accuracy axis ────────────────────────
@@ -170,31 +332,48 @@ def _paired_ladder(ax, data, metric, *, gradient=False):
 
 
 def panel_mnist_ladder(ax):
-    """MNIST held-out accuracy under scalar vs neuron-indexed feedback."""
-    acc = pd.read_csv(DATA / "figure2" / "feedback_accuracy_runs.csv")
-    _paired_ladder(ax, acc, "test_accuracy")
-    ax.set_xticks([0, 1])
-    ax.set_xticklabels(LADDER_TICKS[:2])
-    ax.set_xlim(-0.52, 1.52)
-    ax.set_ylim(*ACC_LIM)
-    ax.set_yticks(ACC_TICKS)
+    """Matched MNIST scalar, neuron-specific and exact-path ladder."""
+    seeds = pd.read_csv(DATA / "mnist_feedback_ladder" / "seed_outcomes.csv")
+    summary = pd.read_csv(
+        DATA / "mnist_feedback_ladder" / "condition_summary.csv")
+    order = ["scalar broadcast", "neuron specific", "exact path"]
+    offsets = {"shunting": -0.06, "additive": 0.06}
+    colors = {"shunting": SHUNT, "additive": ADD}
+    markers = {"shunting": "o", "additive": "s"}
+    for architecture in ("shunting", "additive"):
+        wide = (seeds[seeds.architecture.eq(architecture)]
+                .pivot(index="seed", columns="feedback",
+                       values="test_accuracy")
+                .loc[:, order])
+        x = np.arange(3, dtype=float) + offsets[architecture]
+        for values in wide.to_numpy(float):
+            ax.plot(x, values, color=colors[architecture], alpha=0.24,
+                    lw=LW_HAIR, zorder=2)
+        for column, xi in zip(order, x):
+            values = wide[column].to_numpy(float)
+            ax.scatter(np.full(values.size, xi)
+                       + jitter(values.size, 30 + order.index(column), 0.018),
+                       values, s=SEED_MS ** 2, color=colors[architecture],
+                       alpha=SEED_ALPHA, marker=markers[architecture],
+                       edgecolors="none", zorder=3)
+        part = (summary[summary.architecture.eq(architecture)]
+                .set_index("feedback").loc[order])
+        mean = part.mean_accuracy.to_numpy(float)
+        ax.errorbar(
+            x, mean,
+            yerr=np.vstack([mean - part.ci95_low, part.ci95_high - mean]),
+            color=colors[architecture], marker=markers[architecture],
+            markerfacecolor="white", markeredgecolor=colors[architecture],
+            markeredgewidth=LW_ERR, ms=MARKER_MS, lw=LW_DATA,
+            elinewidth=LW_ERR, capsize=ERR_CAPSIZE, zorder=4)
+    ax.set_xticks(range(3))
+    ax.set_xticklabels(LADDER_TICKS)
+    ax.set_xlim(-0.52, 2.52)
+    ax.set_ylim(*MNIST_ACC_LIM)
+    ax.set_yticks(MNIST_ACC_TICKS)
     ax.set_ylabel(ACC_LABEL)
     ax.yaxis.set_major_formatter(PercentFormatter(1.0, decimals=0))
     style_panel(ax)
-    # The manipulation itself, under its own category: a global scalar
-    # broadcast reaching one soma, and a neuron-indexed coordinate.  The two
-    # glyphs sit on a tinted key strip that spans the panel, so they read as
-    # an annotation of the x categories and not as marks at 84-88% accuracy.
-    strip = Rectangle((0.0, 0.035), 1.0, 0.345, transform=ax.transAxes,
-                      facecolor=COLORS["panel_bg"], edgecolor="none",
-                      zorder=0.3)
-    ax.add_patch(strip)
-    for centre, mode in ((0.0, "scalar"), (1.0, "coordinate")):
-        x0 = (centre + 0.52) / 2.04 - 0.17
-        glyph = ax.inset_axes([x0, 0.055, 0.34, 0.30])
-        glyph.set_facecolor("none")
-        draw_credit_tree(glyph, mode=mode, scale=0.60, labels=False)
-        _temper_glyph_arrows(glyph, 0.45)
     return ax
 
 
@@ -238,11 +417,11 @@ def panel_fashion_ladder(ax):
     ax.set_xticks(range(3))
     ax.set_xticklabels(LADDER_TICKS)
     ax.set_xlim(-0.52, 2.52)
-    ax.set_ylim(*ACC_LIM)
-    ax.set_yticks(ACC_TICKS)
+    ax.set_ylim(*FASHION_ACC_LIM)
+    ax.set_yticks(FASHION_ACC_TICKS)
+    ax.set_ylabel(ACC_LABEL)
+    ax.yaxis.set_major_formatter(PercentFormatter(1.0, decimals=0))
     style_panel(ax)
-    # Shared axis: label, tick labels and numbers live once, on panel a.
-    ax.set_yticklabels([])
     return ax
 
 
@@ -251,12 +430,20 @@ def panel_gradient(ax):
     grad = pd.read_csv(DATA / "figure2" / "feedback_gradient_runs.csv")
     _paired_ladder(ax, grad, "branch_numel_weighted_cosine", gradient=True)
     ax.axhline(0, color=MUTE, ls="--", lw=LW_REF, zorder=0)
-    ax.set_xticks([0, 1])
-    ax.set_xticklabels(LADDER_TICKS[:2])
-    ax.set_xlim(-0.52, 1.88)
-    ax.set_ylim(-0.16, 0.86)
-    ax.set_yticks([0.0, 0.2, 0.4, 0.6, 0.8])
-    ax.set_ylabel("dendritic-gradient cosine")
+    # Exact path transport is the exact gradient, so its cosine is one by
+    # definition. Show that ceiling as a reference marker rather than as an
+    # empirical seed cloud or a third trained cohort.
+    ax.scatter([2.0], [1.0], s=MARKER_MS ** 2, marker="D",
+               facecolor="white", edgecolor=COLORS["oracle"],
+               linewidth=LW_ERR, zorder=5)
+    ax.text(2.0, 0.945, "by definition", color=COLORS["oracle"],
+            fontsize=PT_SMALL, ha="center", va="top")
+    ax.set_xticks([0, 1, 2])
+    ax.set_xticklabels(LADDER_TICKS)
+    ax.set_xlim(-0.52, 2.52)
+    ax.set_ylim(-0.16, 1.08)
+    ax.set_yticks([0.0, 0.2, 0.4, 0.6, 0.8, 1.0])
+    ax.set_ylabel("cosine with exact gradient")
     style_panel(ax)
     # Two series: direct labels at the separated right endpoints replace a
     # legend box.  This is the figure's colour and marker key.
@@ -292,7 +479,7 @@ def _fit(frame, rect, aspect):
 
 
 def panel_ownership_address(ax):
-    """Neuron ownership (which tree) beside within-tree address (where).
+    """Coordinate-to-arbor assignment beside within-tree address.
 
     Drawn natively on this axes from the shared credit-tree vocabulary.  The
     two cells sit side by side because the panel is now one row high like
@@ -310,8 +497,8 @@ def panel_ownership_address(ax):
         f.group(rect, tint=None, edge=COLORS["grid"])
 
     core = f.cell_text(
-        left, title="neuron ownership", title_color=SHUNT,
-        subtitle="which tree gets δᵤ?",
+        left, title="arbor assignment", title_color=SHUNT,
+        subtitle="which arbor gets δᵤ?",
         min_core_pt=MIN_CORE_PT + 10.0)
     sub = ax.inset_axes(_fit(f, Frame.inset(core, bottom=0.04),
                              DERANGED_ASPECT),
@@ -388,7 +575,9 @@ def _ownership_rows():
                                 values="test_accuracy")
         paired = 100 * (wide["correct"] - wide["shuffled"]).dropna().to_numpy(float)
         rows.append({
-            "label": f"{task_label[task]} d{depth} {core.split('_')[1]}",
+            # Uppercase D-notation: the manuscript defines D1-D4 and never
+            # uses a lowercase variant, so the row labels match the text.
+            "label": f"{task_label[task]} D{depth} {core.split('_')[1]}",
             "color": CORE_COLOR[core],
             "marker": CORE_MARKER[core],
             "mean": 100 * float(row.mean_difference),
@@ -419,9 +608,9 @@ def panel_forest(ax):
 
     fashion = _fashion_rows()
     groups = [
-        ("identity", fashion["neuron indexed - scalar fallback"]),
+        ("neuron-specific", fashion["neuron indexed - scalar fallback"]),
         ("transport", fashion["exact path - neuron indexed"]),
-        ("ownership", _ownership_rows()),
+        ("assignment", _ownership_rows()),
     ]
     header_trans = mtransforms.offset_copy(
         ax.get_yaxis_transform(), fig=ax.get_figure(), x=-HEADER_LEFT_PT,
@@ -498,20 +687,74 @@ SUBTREE_MARKERS = {
     "exact_transport": "D",
     "gated_point_emulation": "P",
 }
-# Shortest unambiguous form for every row label: the category column is a
-# tick column like any other, so it is locked to the grid column's reserve
-# and must not grow into the panel beside it.
+# One-line row labels: the reversal panel sits under the forest and shares
+# its grid column, so the label column inherits the forest's reserve and a
+# single line fits without growing any other panel.
 SUBTREE_LABEL = {
-    "neuron_shared_k1": "neuron\nshared",
-    "correct_subtree_k2": "correct\nancestry",
-    "within_neuron_deranged_k2": "route\nderanged",
-    "random_dense_rank2": "random\nrank-2",
-    "exact_transport": "exact\ntransport",
-    "gated_point_emulation": "gated\npoint",
+    "neuron_shared_k1": "neuron shared",
+    "correct_subtree_k2": "nested subtree",
+    "within_neuron_deranged_k2": "route deranged",
+    "random_dense_rank2": "random rank-2",
+    "exact_transport": "exact transport",
+    "gated_point_emulation": "gated point",
 }
 SUBTREE_ORDER = ["correct_subtree_k2", "exact_transport",
                  "gated_point_emulation", "neuron_shared_k1",
                  "random_dense_rank2", "within_neuron_deranged_k2"]
+
+# One in-axes icon per condition row: where the somatic error lands on the
+# two sibling routes.  The upper route carries the context-selected signal
+# (marked by the presynaptic dot), so correct routing and exact transport
+# point at it, the derangement points away from it, the shared control fans
+# one value into both, the rank-2 control crosses into both (a mixture) and
+# the gated point collapses the fork into one gated wire.  The icons sit in
+# the data-free band left of the panel's first datum (route deranged starts
+# at 19%), wear their own row's series colour, and use the ladder-figure
+# grammar: routes as strokes, deliveries as arrows.
+ICON_VERTEX_X = 0.106             # the fork's common vertex
+ICON_BRANCH_X = 0.134             # branch tip x
+ICON_ORIGIN_X = 0.171             # where the somatic error arrives from
+ICON_LAND_X = 0.141               # arrowhead landing x
+ICON_DY = 0.36                    # half-separation of the two routes
+_ICON_ARROW = "-|>,head_length=2.7,head_width=1.7"
+
+
+def _route_icon(ax, y, condition, color):
+    """Delivery glyph for one credit-reversal condition row."""
+    from matplotlib.patches import FancyArrowPatch
+
+    up, down = y - ICON_DY, y + ICON_DY
+    flat = condition == "gated_point_emulation"
+    tip_ys = [y] if flat else [up, down]
+    for ty in tip_ys:
+        ax.plot([ICON_VERTEX_X, ICON_BRANCH_X], [y, ty], color=MUTE,
+                lw=LW_EDGE, solid_capstyle="round", zorder=4)
+    # the context-selected signal stream: a presynaptic dot on the target
+    ax.scatter([ICON_BRANCH_X], [y if flat else up], s=2.6 ** 2,
+               color=COLORS["exc"], edgecolors="none", zorder=5)
+
+    def arrow(y_from, y_to):
+        ax.add_patch(FancyArrowPatch(
+            (ICON_ORIGIN_X, y_from), (ICON_LAND_X, y_to),
+            arrowstyle=_ICON_ARROW, mutation_scale=1.0, color=color,
+            lw=LW_EDGE, shrinkA=0.0, shrinkB=0.0, capstyle="round",
+            zorder=5))
+
+    if condition in ("correct_subtree_k2", "exact_transport"):
+        arrow(y, up)
+    elif condition == "within_neuron_deranged_k2":
+        arrow(up, down)
+    elif condition == "neuron_shared_k1":
+        arrow(y, up)
+        arrow(y, down)
+    elif condition == "random_dense_rank2":
+        arrow(up, down)
+        arrow(down, up)
+    else:                                    # gated point: one gated wire
+        arrow(y, y)
+        gate_x = 0.156
+        ax.plot([gate_x, gate_x], [y - 0.15, y + 0.15], color=color,
+                lw=LW_EDGE, solid_capstyle="round", zorder=6)
 
 
 def panel_credit_reversal(ax):
@@ -528,6 +771,7 @@ def panel_credit_reversal(ax):
         values = subtree[
             subtree.condition.eq(condition)].test_accuracy.to_numpy(float)
         color = SUBTREE_COLORS[condition]
+        _route_icon(ax, float(index), condition, color)
         ax.scatter(values, index - SEED_DY + _fan(values.size),
                    s=SEED_MS ** 2, color=color, alpha=SEED_ALPHA,
                    edgecolors="none", zorder=3)
@@ -539,8 +783,6 @@ def panel_credit_reversal(ax):
                     elinewidth=LW_ERR, capsize=ERR_CAPSIZE, zorder=5)
     ax.set_yticks(range(len(SUBTREE_ORDER)))
     ax.set_yticklabels([SUBTREE_LABEL[c] for c in SUBTREE_ORDER])
-    for tick_label in ax.get_yticklabels():
-        tick_label.set_linespacing(1.02)
     ax.set_ylim(len(SUBTREE_ORDER) - 0.45, -0.62)
     ax.set_xlim(0.10, 0.92)
     ax.set_xticks([0.2, 0.4, 0.6, 0.8])
@@ -574,7 +816,11 @@ def panel_identity_depth(ax):
                     markeredgewidth=LW_ERR, ms=MARKER_MS, lw=LW_DATA,
                     elinewidth=LW_ERR, capsize=ERR_CAPSIZE)
     ax.axhline(0, color=MUTE, ls="--", lw=LW_REF, zorder=0)
+    # D-ticks make this panel the figure's definition of the D-notation:
+    # the axis label says what a stage count is, the ticks name the levels,
+    # and the D2/D4 rows of the forest index into them.
     ax.set_xticks([1, 2, 3, 4])
+    ax.set_xticklabels(["D1", "D2", "D3", "D4"])
     ax.set_xlim(0.62, 4.38)
     ax.set_ylim(*GAIN_LIM)
     ax.set_yticks(GAIN_TICKS)
@@ -589,42 +835,91 @@ def panel_identity_depth(ax):
 
 
 # ── the canvas ───────────────────────────────────────────────────────────
-# Three equal rows on one 12-module grid.  No panel carves its own reserve:
-# every left reserve is the column lock the canvas measures, so the three
-# panels of row 0 share one width, the two panels of row 2 share one width,
-# and the forest -- the only panel whose row-label column is wider than a
-# gutter -- has a grid column of its own to take that reserve out of.
-CANVAS_H_PT = 463.0                       # 518.4 / 463.0 = 1.12 aspect
+# Four rows on one 12-module grid: the schematic band, the three ladders,
+# the schematic-plus-forest row and the reversal/depth row.  No panel carves
+# its own reserve: every left reserve is the column lock the canvas
+# measures, topped up by ``_equalise_row`` so panels of one row that start
+# in different grid columns still share one axes-box width.
+CANVAS_H_PT = 488.0                       # 518.4 / 488.0 = 1.06 aspect
+ROW_H_PT = (68.0, 87.0, 107.0, 102.0)
+VGUTTER_PT = 28.0
+
+
+def _equalise_row(canvas, names_cols):
+    """Declare left reserves so same-row panels share one axes width.
+
+    The column lock equalises panels that start in the SAME grid column;
+    panels of one row that start in different columns can still differ by a
+    point or two of tick-label width.  Measure after the first lock, then
+    top the narrow reserves up to the widest so the row is exact.
+    """
+    boxes = {name: canvas.axes[name].get_position() for name in names_cols}
+    widths = {name: box.width * canvas.width_pt
+              for name, box in boxes.items()}
+    target = min(widths.values())
+    for name, col in names_cols.items():
+        extra = widths[name] - target
+        if extra <= 0.05:
+            continue
+        slot_x = (canvas.margins.left
+                  + col * (canvas._module_w + canvas.hgutter))
+        left_now = boxes[name].x0 * canvas.width_pt - slot_x
+        canvas.declare_reserve(name, left=left_now + extra)
 
 
 def build(height_in=CANVAS_H_PT / 72.0, path=None):
-    canvas = NativeCanvas(height_in, 3, row_weights=[1.0, 1.0, 1.0],
-                          hgutter_pt=32.0, vgutter_pt=38.0,
-                          margins=Margins(left=46.0, right=12.0, top=16.0,
+    canvas = NativeCanvas(height_in, 4, row_weights=list(ROW_H_PT),
+                          hgutter_pt=32.0, vgutter_pt=VGUTTER_PT,
+                          margins=Margins(left=46.0, right=12.0, top=14.0,
                                           bottom=26.0))
 
-    ax_a = canvas.panel("mnist", 0, 0, 4, title="MNIST feedback ladder")
-    ax_b = canvas.panel("fashion", 0, 4, 4, title="Fashion-MNIST replication")
-    ax_c = canvas.panel("gradient", 0, 8, 4, title="Exact-gradient alignment")
-    ax_d = canvas.panel("schematic", 1, 0, 5, schematic=True, letter="")
-    ax_e = canvas.panel("forest", 1, 5, 7, title="Paired accuracy contrasts",
+    ax_task = canvas.panel("task", 0, 0, 3, schematic=True, letter="",
+                           lock=False)
+    card_axes = []
+    for index, (name, *_rest) in enumerate(RESOLUTION_CARDS):
+        card_axes.append(canvas.panel(f"card_{name}", 0, 3 * (index + 1), 3,
+                                      schematic=True, letter=""))
+    ax_a = canvas.panel("mnist", 1, 0, 4, title="MNIST", letter="B")
+    ax_b = canvas.panel("fashion", 1, 4, 4, title="Fashion-MNIST",
+                        letter="C")
+    ax_c = canvas.panel("gradient", 1, 8, 4,
+                        title="Gradient alignment", letter="D")
+    ax_d = canvas.panel("schematic", 2, 0, 5, schematic=True, letter="")
+    ax_e = canvas.panel("forest", 2, 5, 7, title="Paired accuracy contrasts",
                         letter="")
-    ax_f = canvas.panel("reversal", 2, 0, 6, title="Within-tree reversal",
+    # The reversal sits UNDER the forest so its one-line condition labels
+    # share the forest's label-column reserve; the narrow depth panel takes
+    # the slot under the schematic.  This also puts the panels in the order
+    # the Results cite them (depth before reversal).
+    ax_f = canvas.panel("depth", 3, 0, 5,
+                        title="Neuron-specific gain across depth",
                         letter="")
-    ax_g = canvas.panel("depth", 2, 6, 6, title="Identity gain across depth",
+    ax_g = canvas.panel("reversal", 3, 5, 7, title="Within-tree reversal",
                         letter="")
-    canvas.add_letter("D", ax_d)
-    canvas.add_letter("E", ax_e)
-    canvas.add_letter("F", ax_f)
-    canvas.add_letter("G", ax_g)
+    canvas.add_letter("A", ax_task)
+    canvas.add_letter("E", ax_d)
+    canvas.add_letter("F", ax_e)
+    canvas.add_letter("G", ax_f)
+    canvas.add_letter("H", ax_g)
 
     panel_mnist_ladder(ax_a)
     panel_fashion_ladder(ax_b)
     panel_gradient(ax_c)
     panel_ownership_address(ax_d)
     panel_forest(ax_e)
-    panel_credit_reversal(ax_f)
-    panel_identity_depth(ax_g)
+    panel_identity_depth(ax_f)
+    panel_credit_reversal(ax_g)
+
+    # The ladder row starts in three different grid columns; measure the
+    # first lock, equalise the row, then draw the schematic cells on final
+    # geometry (their Frames capture the axes box at draw time).
+    canvas.lock_reserves()
+    _equalise_row(canvas, {"mnist": 0, "fashion": 4, "gradient": 8})
+    canvas.lock_reserves()
+    panel_task(ax_task)
+    for ax_card, (_name, title, tone, gloss, draw) in zip(card_axes,
+                                                          RESOLUTION_CARDS):
+        panel_resolution_card(ax_card, title, tone, gloss, draw)
 
     target = Path(path) if path else COMPONENTS / "main_figure_02_native.pdf"
     problems = canvas.save(target, name="main_figure_02_native")

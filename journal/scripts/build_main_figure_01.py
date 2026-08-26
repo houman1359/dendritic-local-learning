@@ -15,26 +15,27 @@ Layout (one 12-module grid, two half-width columns and a closing band)::
     | C  coordinate -> address | D  eligibility x error   |
     |    -> gain               |                          |
     +--------------------------+--------------------------+
-    | E  evidence path: five streams as a full-width band  |
+    | E  roadmap of the Results: six stages, full width    |
     +------------------------------------------------------+
 
 Every panel of a row is the same axes-box height and every panel of a grid
 column the same width: A, B, C and D each claim six of the twelve modules
 and E claims all twelve, so the only size difference on the page is a whole
 number of modules.  A and B are the feeders, C is the coordinate ladder, D
-is the equation anchor and E is the closing band whose left-to-right order
-is the order the caption states for the Results streams.
+is the equation anchor and E is the closing band whose six cards run in the
+order of the Results subsections: exact factorization, the coordinate and
+address tests, the credit-operator boundary, task-aligned physical depth,
+anatomical routes with conductance gain, and the functional boundary.
 
 Emits ``figures/components/main_figure_01_native.pdf`` (+ 600 dpi PNG), the
 path ``assemble_compact_main_figures.emit_native(1)`` copies verbatim into
 ``figures/main/figure_01.pdf``.
 
-Content is identical to the panels built by ``build_journal_figures.figure1``
-(``_panel_point_vs_dendritic``, the frozen NeurIPS panel B, ``_panel_credit_
-hierarchy``, ``_panel_general_adjoint`` and ``_panel_evidence_ladder``):
-same five panels, same schematic vocabulary, same symbols, same equations,
-same five evidence streams in the same order.  Only the geometry, the type
-scale and the stroke weights change.
+Panels A, C and D keep the content of ``build_journal_figures.figure1``
+(``_panel_point_vs_dendritic``, ``_panel_credit_hierarchy`` and
+``_panel_general_adjoint``): same schematic vocabulary, same symbols, same
+equations.  Panel B adds the neuron-specific feedback return the caption
+describes, and panel E is the six-stage roadmap above.
 """
 
 from __future__ import annotations
@@ -84,15 +85,16 @@ INH = COLORS["inh"]
 EDGE = COLORS["edge"]
 
 # ── canvas geometry, in points (one module grid, one h- and one v-gutter) ──
-CANVAS_H_PT = 465.0            # 518.4 / 465.0 = 1.11 aspect
+CANVAS_H_PT = 443.0            # 518.4 / 443.0 = 1.17 aspect
 MARGINS = Margins(left=32.0, right=8.0, top=20.0, bottom=9.0)
 HGUTTER = 22.0
 VGUTTER = 20.0
-# Two 122 pt rows of half-width panels and one 152 pt closing band.  The band
-# is taller because it is twice as wide: at 478.4 x 152 pt it carries the
-# same axes area per module as its 228.2 x 122 pt row-mates above, which is
-# what keeps the emphasis on the page modest and the row-mates identical.
-ROW_PT = [122.0, 122.0, 152.0]
+# Two 122 pt rows of half-width panels and one 130 pt closing band.  With six
+# roadmap cards across 478.4 pt each card is ~71 pt wide, so its width-limited
+# tree glyph stands ~55 pt tall; 130 pt is that glyph plus the card's two text
+# bands and paddings, which keeps the closing band free of dead vertical space
+# while its row-mates stay identical.
+ROW_PT = [122.0, 122.0, 130.0]
 LETTER_DX = 20.0
 LETTER_DY = 5.0
 TITLE_PAD = 4.0
@@ -278,6 +280,25 @@ def panel_b(ax):
     ax.text(unit_x, 0.075, "N dendritic E/I units", ha="center",
             va="center", fontsize=PT_SMALL, color=MUTE)
 
+    # -- feedback return: the loss assigns one error coordinate per neuron,
+    #    so a thin additive-blue bus leaves the readout, runs under the
+    #    output column and rises on one spine; a short arrow then delivers
+    #    δᵤ to each soma from below, echoing panel A's coordinate arrow.
+    fb_x = 0.664
+    fb_y = 0.150
+    rd_cx = (box_x0 + box_x1) / 2.0
+    ax.plot([rd_cx, rd_cx], [0.480, fb_y], color=BLUE, lw=LW_HAIR,
+            solid_capstyle="round", zorder=2)
+    ax.plot([rd_cx, fb_x], [fb_y, fb_y], color=BLUE, lw=LW_HAIR,
+            solid_capstyle="round", zorder=2)
+    ax.plot([fb_x, fb_x], [fb_y, unit_ys[0] - 0.052], color=BLUE,
+            lw=LW_HAIR, solid_capstyle="round", zorder=2)
+    for y in unit_ys:
+        f.arrow((fb_x, y - 0.052), (unit_x + f.fx(3.4), y - f.fy(3.6)),
+                color=BLUE, lw=LW_HAIR, head=3.2, rad=0.16, zorder=2.4)
+    ax.text(fb_x - f.fx(4.0), 0.365, "δᵤ", ha="right", va="center",
+            fontsize=PT_ANNOT, color=BLUE)
+
 
 # ── C: coordinate -> address -> gain (the headline ladder) ────────────────
 # Each rung carries its tree, its name, its symbol and the one question the
@@ -424,29 +445,101 @@ def panel_d(ax):
             ha="center", va="center", fontsize=PT_SMALL, color=MUTE)
 
 
-# ── E: evidence path (full-width ribbon) ──────────────────────────────────
+# ── E: roadmap of the Results (full-width ribbon) ─────────────────────────
+# Six cards, one per stage of the Results, in the order the subsections run:
+# exact factorization; the coordinate and address tests (Results 2-3); the
+# credit-operator boundary (Results 4); task-aligned physical depth (Results
+# 5); anatomical routes and conductance gain (Results 6-7); the measured
+# functional boundary (Results 8).  Every glyph is drawn from the shared
+# credit-tree vocabulary so the roadmap previews the figures that follow.
+
+
+def _glyph_factorization(f, rect):
+    """Transported error over the ghost arbor: the blue path product."""
+    tree_inset(f, rect, mode="transport", scale=0.85, arrow_scale=0.7)
+
+
+def _glyph_coord_address(f, rect):
+    """Address capsules plus the coordinate arrow into the soma."""
+    sub, _ = tree_inset(f, rect, mode="address", K=4, scale=0.85)
+    sub.add_patch(FancyArrowPatch(
+        (1.30, 0.60), (0.27, 0.09),
+        arrowstyle="-|>,head_length=3.2,head_width=2.0", mutation_scale=1.0,
+        connectionstyle="arc3,rad=0.12", color=BLUE, lw=LW_EDGE,
+        capstyle="round", zorder=4.5))
+
+
+def _glyph_operator(f, rect):
+    """Stochastic credit ĝ through the route operator M: kept directions.
+
+    The compact form of ``native_schematics.draw_credit_operator``: the
+    operator box in the route green, the exiting dot row in the kept /
+    admitted-noise / discarded tones (green / amber / gray).
+    """
+    x0, y0, w, h = rect
+    cx = x0 + w / 2.0
+    cy = y0 + h / 2.0
+    f.text((cx, cy + f.fy(25.0)), "ĝ", size=PT_ANNOT, color=INK)
+    f.arrow((cx, cy + f.fy(19.5)), (cx, cy + f.fy(10.5)), color=MUTE,
+            lw=LW_EDGE, head=3.4)
+    box = (cx - f.fx(11.0), cy - f.fy(5.0), f.fx(22.0), f.fy(14.0))
+    f.group(box, tint=mix("shunting", 10), edge=mix("shunting", 45),
+            lw=LW_EDGE, radius_pt=2.0, zorder=2)
+    f.text((cx, cy + f.fy(2.0)), "M", size=PT_ANNOT, color=GREEN, zorder=6)
+    f.arrow((cx, cy - f.fy(6.5)), (cx, cy - f.fy(15.5)), color=MUTE,
+            lw=LW_EDGE, head=3.4)
+    tones = (GREEN, GREEN, GREEN, COLORS["local"], MUTE)
+    for i, tone in enumerate(tones):
+        f.disc((cx + f.fx(5.2 * (i - 2)), cy - f.fy(21.0)), 1.9, fill=tone,
+               zorder=5)
+
+
+def _glyph_depth(f, rect):
+    """Two-to-three physical stages of increasing depth (Fig. 5 geometry)."""
+    x0, y0, w, h = rect
+    base = y0 + h / 2.0 - f.fy(18.0)   # soma line of the tree-glyph cards
+    height = f.fy(22.0)
+    for dx, depth in zip((-22.0, 0.0, 22.0), (1, 2, 3)):
+        f.stage_tree((x0 + w / 2.0 + f.fx(dx), base), height, depth)
+
+
+def _glyph_anatomy_gain(f, rect):
+    """Reconstructed arbor with contacts, plus the route-gain ring."""
+    sub, _ = tree_inset(f, rect, mode="plain", scale=0.85, hide_arrows=True)
+    sub.plot([CT.P["JL"][0]], [CT.P["JL"][1]], marker="o", ms=8.0,
+             mfc="none", mec=INK, mew=LW_EDGE, ls="none", zorder=4.4)
+
+
+def _glyph_boundary(f, rect):
+    """The de-emphasised (shunted) arbor of the measured-response test."""
+    tree_inset(f, rect, mode="shunt", shunted=True, scale=0.85)
+
+
 STREAMS = (
-    (dict(mode="coordinate"), "Exact factorization",
-     "eligibility × compartment error", COLORS["bp"], 0.60),
-    (dict(mode="address", K=4), "Signal–noise theory",
-     "useful route resolution", COLORS["oracle"], None),
-    (dict(mode="gain"), "Trained route tests",
-     "identity → ownership\n→ address → depth", COLORS["per_soma"], None),
-    (dict(mode="plain"), "Anatomical capacity",
-     "sparse ancestry fields", COLORS["shunting"], "hide"),
-    (dict(mode="shunt", shunted=True), "Functional boundary",
-     "measured task–route alignment", COLORS["highlight"], None),
+    (_glyph_factorization, "Exact factorization",
+     "eligibility × error"),
+    (_glyph_coord_address, "Coordinate + address",
+     "which neuron, which subtree"),
+    (_glyph_operator, "Credit operator",
+     "when restricted routes help"),
+    (_glyph_depth, "Physical depth",
+     "task-aligned stage count"),
+    (_glyph_anatomy_gain, "Routes + gain",
+     "arbor capacity, conductance gain"),
+    (_glyph_boundary, "Functional boundary",
+     "measured task alignment"),
 )
 
 
-# The band is twice as wide as the panels above it, so each stream is set as
-# a card that fills the band's full height: the card rule carries the ink to
-# the top and the bottom of the row, which is what lets the closing band be
-# as tall as its module span asks without opening a blank strip inside it.
+# Each stage is a card filling the band's full height: the glyph above one
+# name line (wrapping to two on the narrow six-across cards) and a mute-free
+# one-line gloss that follows the name down, so mixed name depths never
+# overprint their glosses.
 CARD_PAD_PT = 3.5
-NAME_Y_PT = 42.0
-PHRASE_Y_PT = 33.0
 GLYPH_BOT_PT = 52.0
+NAME_TOP_PT = 48.5
+NAME_LINE_PT = 9.6
+NAME_GLOSS_GAP_PT = 2.4
 
 
 def panel_e(ax):
@@ -456,23 +549,25 @@ def panel_e(ax):
     cell_w = (1.0 - (n - 1) * gap) / n
     pad = f.fx(CARD_PAD_PT)
     glyph_bot = f.fy(GLYPH_BOT_PT)
-    for index, (tree_kw, name, phrase, tone, arrows) in enumerate(STREAMS):
+    text_w_pt = (cell_w - 2 * pad) * f.w_pt
+    for index, (glyph, name, phrase) in enumerate(STREAMS):
         x0 = index * (cell_w + gap)
         cx = x0 + cell_w / 2.0
         f.group((x0, 0.0, cell_w, 1.0), tint=None, edge=COLORS["grid"],
                 lw=LW_HAIR, radius_pt=3.0, zorder=0.5)
-        tree_inset(
-            f, (x0 + pad, glyph_bot, cell_w - 2 * pad,
-                1.0 - glyph_bot - f.fy(CARD_PAD_PT)),
-            scale=0.85, hide_arrows=arrows == "hide",
-            arrow_scale=arrows if isinstance(arrows, float) else None,
-            **tree_kw)
-        ax.text(cx, f.fy(NAME_Y_PT), name, ha="center", va="center",
-                fontsize=PT_ANNOT, color=INK)
-        wrapped = phrase if "\n" in phrase else _wrap_to_width(
-            ax, phrase, PT_SMALL, (cell_w - 2 * pad) * f.w_pt, max_lines=3)
-        ax.text(cx, f.fy(PHRASE_Y_PT), wrapped, ha="center", va="top",
-                fontsize=PT_SMALL, color=INK, linespacing=1.35)
+        glyph(f, (x0 + pad, glyph_bot, cell_w - 2 * pad,
+                  1.0 - glyph_bot - f.fy(CARD_PAD_PT)))
+        wrapped_name = _wrap_to_width(ax, name, PT_ANNOT, text_w_pt,
+                                      max_lines=2) or name
+        name_lines = wrapped_name.count("\n") + 1
+        ax.text(cx, f.fy(NAME_TOP_PT), wrapped_name, ha="center", va="top",
+                fontsize=PT_ANNOT, color=INK, linespacing=1.25)
+        gloss_top = (NAME_TOP_PT - NAME_LINE_PT * name_lines
+                     - NAME_GLOSS_GAP_PT)
+        wrapped = _wrap_to_width(ax, phrase, PT_SMALL, text_w_pt,
+                                 max_lines=4 - name_lines) or phrase
+        ax.text(cx, f.fy(gloss_top), wrapped, ha="center", va="top",
+                fontsize=PT_SMALL, color=MUTE, linespacing=1.35)
         if index + 1 < n:
             mid = x0 + cell_w + gap / 2.0
             y = (1.0 + glyph_bot) / 2.0
@@ -492,7 +587,7 @@ def build():
         ("B", 0, 6, 6, 1, "Network layer", panel_b),
         ("C", 1, 0, 6, 1, "Coordinate → address → gain", panel_c),
         ("D", 1, 6, 6, 1, "Local eligibility × transported error", panel_d),
-        ("E", 2, 0, 12, 1, "Evidence path", panel_e),
+        ("E", 2, 0, 12, 1, "Roadmap of the Results", panel_e),
     ]
     for letter, row, col, span, rowspan, title, draw in spec:
         ax = canvas.panel(letter, row, col, span, rowspan=rowspan,
