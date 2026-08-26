@@ -47,6 +47,11 @@ class Panel:
     ncols: int
     erase_heading: bool = True
     erase_phrases: tuple[str, ...] = ()
+    # Re-expand the measured clip top by this many points AFTER the
+    # heading-band clamp, for the rare source panel whose rotated y label
+    # rises into its own title row (the compose-time white-out still covers
+    # any re-included heading spans, which are erased span-by-span).
+    pad_top_pt: float = 0.0
 
 
 @dataclass(frozen=True)
@@ -361,6 +366,8 @@ def _content_rect(page: fitz.Page, spec: Panel, cell: fitz.Rect) -> fitz.Rect:
             # rotated y labels were deliberately excluded by _title_spans.
             heading_bottom = max(rect.y1 for rect in heading_spans)
             result.y0 = max(result.y0, min(result.y1 - 1.0, heading_bottom + 1.5))
+        if spec.pad_top_pt:
+            result.y0 = max(cell.y0, result.y0 - spec.pad_top_pt)
     _CONTENT_CACHE[spec] = result
     return result
 
@@ -459,7 +466,13 @@ def compose(
     for index, (spec, slot, title) in enumerate(
         zip(panels, slots, titles, strict=True)
     ):
-        source = opened.setdefault(spec.filename, fitz.open(MAIN / spec.filename))
+        # Sources normally live in figures/main; the reduced regular-tree
+        # boundary sheet recomposes panels of an inherited supplementary
+        # asset, so fall back to figures/supplementary for those.
+        source_path = MAIN / spec.filename
+        if not source_path.is_file():
+            source_path = SUPP / spec.filename
+        source = opened.setdefault(spec.filename, fitz.open(source_path))
         source_page = source[0]
         target = _slot_rect(slot, rows, cols, width, height, row_heights)
         cell = _source_rect(source_page, spec)
@@ -912,6 +925,86 @@ def main() -> None:
         height=458,
     )
 
+    # Reduced regular-tree boundary sheet: the three panels of the inherited
+    # nine-panel regime archive that are not replots of S1-S3 content (depth
+    # stress, teaching-signal noise, flattened CIFAR-10).  The crops keep the
+    # archived marks bit-identical; only the heading band is redrawn.
+    compose(
+        SUPP / "figure_S04_panels_A-C.pdf",
+        [panel("figure_S04_panels_A-I.pdf", letter, 3, 3)
+         for letter in "CDI"],
+        [
+            "Depth stress",
+            "Noisy teaching signal",
+            "Harder-data control",
+        ],
+        rows=1,
+        cols=3,
+        height=178,
+    )
+
+    # Duplication-trimmed detail sheets: each keeps only the panels that do
+    # not replot a main-figure display, recomposed bit-identically from the
+    # full synced sheets (which remain on disk as the archived sources).
+    compose(
+        SUPP / "figure_S17_panels_A-B.pdf",
+        [panel("figure_S17_panels_A-D.pdf", "A", 1, 4),
+         panel("figure_S17_panels_A-D.pdf", "D", 1, 4)],
+        [
+            "Signed causal mapping",
+            "Neuron-level residuals",
+        ],
+        rows=1,
+        cols=2,
+        height=205,
+    )
+
+    compose(
+        SUPP / "figure_S20_panels_A-B.pdf",
+        [Panel("figure_S20_panels_A-J.pdf", 0, 2, 4, 3, pad_top_pt=6.5,
+               erase_phrases=("Domains versus depth",)),
+         # The 4x2 reading of the irregular source grid leaves panel J's
+         # letter inside this cell's whitespace valley; white it out.
+         Panel("figure_S20_panels_A-J.pdf", 2, 1, 4, 2,
+               erase_phrases=("J",))],
+        [
+            "Route support",
+            "Direct-type capture",
+        ],
+        rows=1,
+        cols=2,
+        height=140,
+    )
+
+    compose(
+        SUPP / "figure_S21_panels_A-D.pdf",
+        [panel("figure_S21_panels_A-I.pdf", L, 3, 3) for L in "CEFG"],
+        [
+            "Within-cell controls",
+            "Focal-site depth",
+            "Scale and reversal sensitivity",
+            "Direct presynaptic types",
+        ],
+        rows=2,
+        cols=2,
+        height=330,
+    )
+
+    compose(
+        SUPP / "figure_S27_panels_A-C.pdf",
+        [Panel("figure_S27_panels_A-D.pdf", 0, 0, 2, 2),
+         Panel("figure_S27_panels_A-D.pdf", 0, 1, 2, 2, pad_top_pt=8.0),
+         Panel("figure_S27_panels_A-D.pdf", 1, 1, 2, 2)],
+        [
+            "Pinky v185 cohort",
+            "Residual across budgets",
+            "Capture per coefficients",
+        ],
+        rows=2,
+        cols=2,
+        height=430,
+    )
+
     compose(
         SUPP / "figure_S28_panels_A-B.pdf",
         [
@@ -927,7 +1020,7 @@ def main() -> None:
         height=220,
     )
 
-    print("Assembled nine compact main figures and Supplementary Figures S18, S19 and S28.")
+    print("Assembled nine compact main figures and Supplementary Figures S04 (reduced), S18, S19 and S28.")
 
 
 if __name__ == "__main__":

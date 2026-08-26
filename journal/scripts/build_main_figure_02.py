@@ -7,14 +7,14 @@ panels B/C, ``fig_prospective_learning_benefits`` panels G/J/M and
 ``fig_fashion_feedback_ladder`` panels P/Q) that the compositor scaled into a
 grid at three different factors, so one page carried nine different type
 sizes and a dozen different stroke weights.  Here every panel is drawn onto
-one 12-module :class:`figure_canvas.NativeCanvas` at exactly 518.4 pt and the
+one 12-module :class:`figure_canvas.NativeCanvas` at exactly 518.4 pt wide and the
 component is copied into ``figures/main/figure_02.pdf`` at scale 1.0.
 
 Structure (four rows on one 12-module grid, one axes-box height per row):
 
 * row 0 -- the task and the three feedback resolutions as four schematic
   cells sharing one panel letter: the classification pipeline ends in the
-  readout error, and three cards define the ladder's x-categories (one
+  readout error, and three cards define the ladder's resolution levels (one
   value for the layer; one coordinate per neuron; the complete
   per-compartment field), so the data rows under them read without a
   legend;
@@ -27,13 +27,13 @@ Structure (four rows on one 12-module grid, one axes-box height per row):
   explains (seven modules): every paired "X minus Y" contrast of the figure
   on ONE effect-size axis, grouped and labelled, carrying the paired seed
   differences and the published estimate with its 95% interval;
-* row 3 -- the within-tree credit reversal and the identity gain across
-  dendritic stage count, six modules each, the latter on exactly the same
-  contrast scale as the forest.
+* row 3 -- the identity gain across dendritic stage count (five modules,
+  on exactly the same contrast scale as the forest) beside the within-tree
+  credit reversal (seven modules, sharing the forest's label column).
 
 The geometry is column-locked: the left reserve of a grid column is the
-maximum any panel of that column needs, so the three panels of row 0 are one
-width, the two panels of row 2 are one width, and every panel of a row has
+maximum any panel of that column needs, so the three panels of row 1 are one
+width, the label-heavy panels of one grid column share one reserve, and every panel of a row has
 one axes-box height.  Numbers that only repeat a mark's own position (a
 right-hand "mean [95% CI]" column beside a forest, a value printed next to a
 bar) are not drawn: the geometry is the report and the exact values live in
@@ -111,9 +111,9 @@ CORE_MARKER = {"dendritic_shunting": "o", "dendritic_additive": "s"}
 
 # Dataset-specific accuracy axes expose the within-dataset feedback effect.
 # Cross-dataset effect sizes are compared on the common percentage-point axis
-# in panel E, so forcing A and B onto one absolute-accuracy range is unnecessary.
-MNIST_ACC_LIM = (0.892, 0.980)
-MNIST_ACC_TICKS = [0.90, 0.92, 0.94, 0.96, 0.98]
+# in panel F, so forcing B and C onto one absolute-accuracy range is unnecessary.
+MNIST_ACC_LIM = (0.820, 0.982)
+MNIST_ACC_TICKS = [0.84, 0.88, 0.92, 0.96]
 FASHION_ACC_LIM = (0.824, 0.894)
 FASHION_ACC_TICKS = [0.84, 0.86, 0.88]
 ACC_LABEL = "held-out accuracy"
@@ -123,7 +123,8 @@ GAIN_LIM = (-0.85, 8.85)
 GAIN_TICKS = [0, 2, 4, 6, 8]
 GAIN_LABEL = "accuracy difference (pp)"
 
-LADDER_TICKS = ["scalar\nbroadcast", "neuron\nspecific", "exact\npath"]
+STRICT_LADDER_TICKS = ["strict\nscalar", "neuron\nspecific", "exact\npath"]
+FALLBACK_LADDER_TICKS = ["scalar\nfallback", "neuron\nspecific", "exact\npath"]
 
 # One declared convention for the two categorical panels: the per-seed cloud
 # is drawn as a symmetric deterministic fan a quarter-row BELOW its own mean
@@ -147,7 +148,7 @@ def _fan(n):
 # error at one resolution, so the contrast IS the cards' only difference.
 # The four cells are separate grid panels (a full-width band would be a
 # letterbox strip) but share the single letter A.  Signal hues follow the
-# manuscript-wide semantics: amber = scalar broadcast, additive blue = the
+# manuscript-wide semantics: amber = the scalar level, additive blue = the
 # per-neuron coordinate, red-brown = the exact / backpropagated field.
 
 BP = COLORS["bp"]
@@ -261,11 +262,15 @@ def panel_task(ax):
     return ax
 
 
-# One card per ladder rung: the title carries the x-category's exact
-# wording, the gloss its one-line definition; that is the panel's whole
-# prose.
+# One card per RESOLUTION LEVEL, with the gloss its one-line definition;
+# that is the panel's whole prose.  The scalar level now exists in two
+# implementations (the strict rung of the MNIST ladder in B and the
+# historical matched-width fallback of the Fashion and gradient panels in C
+# and D), so the first card carries the level's bare name "scalar" that both
+# tick wordings extend; the other two cards still carry their x-categories'
+# exact wording.
 RESOLUTION_CARDS = (
-    ("scalar", "scalar broadcast", AMBER_TEXT,
+    ("scalar", "scalar", AMBER_TEXT,
      "one value for the layer", _card_scalar),
     ("neuron", "neuron specific", ADD,
      "one δᵤ per neuron", _card_neuron),
@@ -285,7 +290,7 @@ def panel_resolution_card(ax, title, tone, gloss, draw):
     return ax
 
 
-# ── row 0: the feedback ladder, one accuracy axis ────────────────────────
+# ── row 1: the feedback ladder, one accuracy axis ────────────────────────
 def _paired_ladder(ax, data, metric, *, gradient=False):
     """Ported verbatim from ``build_journal_figures.paired_feedback_panel``.
 
@@ -367,7 +372,7 @@ def panel_mnist_ladder(ax):
             markeredgewidth=LW_ERR, ms=MARKER_MS, lw=LW_DATA,
             elinewidth=LW_ERR, capsize=ERR_CAPSIZE, zorder=4)
     ax.set_xticks(range(3))
-    ax.set_xticklabels(LADDER_TICKS)
+    ax.set_xticklabels(STRICT_LADDER_TICKS)
     ax.set_xlim(-0.52, 2.52)
     ax.set_ylim(*MNIST_ACC_LIM)
     ax.set_yticks(MNIST_ACC_TICKS)
@@ -396,7 +401,7 @@ def panel_fashion_ladder(ax):
             ax.plot(x, values, color=colors[architecture], alpha=0.24,
                     lw=LW_HAIR, zorder=2)
         # Same uncertainty convention as the row-mates: per-seed dots under
-        # the published mean and interval (A and C scatter their seeds too).
+        # the published mean and interval (B and D scatter their seeds too).
         for column, xi in zip(order, x):
             vals = wide[column].to_numpy(float)
             ax.scatter(np.full(vals.size, xi)
@@ -415,7 +420,7 @@ def panel_fashion_ladder(ax):
                     markeredgewidth=LW_ERR, ms=MARKER_MS, lw=LW_DATA,
                     elinewidth=LW_ERR, capsize=ERR_CAPSIZE, zorder=4)
     ax.set_xticks(range(3))
-    ax.set_xticklabels(LADDER_TICKS)
+    ax.set_xticklabels(FALLBACK_LADDER_TICKS)
     ax.set_xlim(-0.52, 2.52)
     ax.set_ylim(*FASHION_ACC_LIM)
     ax.set_yticks(FASHION_ACC_TICKS)
@@ -439,11 +444,11 @@ def panel_gradient(ax):
     ax.text(2.0, 0.945, "by definition", color=COLORS["oracle"],
             fontsize=PT_SMALL, ha="center", va="top")
     ax.set_xticks([0, 1, 2])
-    ax.set_xticklabels(LADDER_TICKS)
+    ax.set_xticklabels(FALLBACK_LADDER_TICKS)
     ax.set_xlim(-0.52, 2.52)
     ax.set_ylim(-0.16, 1.08)
     ax.set_yticks([0.0, 0.2, 0.4, 0.6, 0.8, 1.0])
-    ax.set_ylabel("cosine with exact gradient")
+    ax.set_ylabel("exact-gradient cosine")
     style_panel(ax)
     # Two series: direct labels at the separated right endpoints replace a
     # legend box.  This is the figure's colour and marker key.
@@ -454,7 +459,7 @@ def panel_gradient(ax):
     return ax
 
 
-# ── row 1, left: the schematic ───────────────────────────────────────────
+# ── row 2, left: the schematic ───────────────────────────────────────────
 # The deranged-pair glyph direct-labels its two rows ("correct", "deranged")
 # to the right of the trees, so the frame it is drawn in has to be wide
 # enough to hold those labels: the library's own frame stops at the trees and
@@ -518,7 +523,7 @@ def panel_ownership_address(ax):
     return ax
 
 
-# ── row 1, right: the forest ─────────────────────────────────────────────
+# ── row 2, right: the forest ─────────────────────────────────────────────
 def _fashion_rows():
     seeds = pd.read_csv(DATA / "fashion_feedback_ladder" / "seed_outcomes.csv")
     contrasts = pd.read_csv(
@@ -662,7 +667,7 @@ def panel_forest(ax):
     return ax
 
 
-# ── row 2 ────────────────────────────────────────────────────────────────
+# ── row 3 ────────────────────────────────────────────────────────────────
 # One colour and one marker per routing condition, following the
 # manuscript-wide routing taxonomy shared with Figs. 3, 5 and 8: red-brown =
 # exact transport (the ceiling), green = anatomy-correct routing, rose =
@@ -761,8 +766,8 @@ def panel_credit_reversal(ax):
     """Held-out accuracy in the two-stream within-tree credit reversal.
 
     The four-line note this panel used to print (that its top three rows
-    coincide on 10/10 seeds, that its accuracy range is wider than A and B,
-    and that its seed dots follow the convention of E) is disclosure, not
+    coincide on 10/10 seeds, that its accuracy range is wider than B and C,
+    and that its seed dots follow the convention of F) is disclosure, not
     graphic content: it has moved to the caption.
     """
     subtree = pd.read_csv(
@@ -787,7 +792,7 @@ def panel_credit_reversal(ax):
     ax.set_xlim(0.10, 0.92)
     ax.set_xticks([0.2, 0.4, 0.6, 0.8])
     ax.set_xlabel(ACC_LABEL)
-    # Same unit as panels A and B: held-out accuracy is a percentage
+    # Same unit as panels B and C: held-out accuracy is a percentage
     # everywhere on the page.  Only the range differs, and the panel says so.
     ax.xaxis.set_major_formatter(PercentFormatter(1.0, decimals=0))
     style_panel(ax, grid="x")
@@ -840,9 +845,9 @@ def panel_identity_depth(ax):
 # its own reserve: every left reserve is the column lock the canvas
 # measures, topped up by ``_equalise_row`` so panels of one row that start
 # in different grid columns still share one axes-box width.
-CANVAS_H_PT = 488.0                       # 518.4 / 488.0 = 1.06 aspect
-ROW_H_PT = (68.0, 87.0, 107.0, 102.0)
-VGUTTER_PT = 28.0
+CANVAS_H_PT = 468.0                       # full-width figure plus legend fits one page
+ROW_H_PT = (68.0, 87.0, 108.0, 106.0)
+VGUTTER_PT = 62.0 / 3.0
 
 
 def _equalise_row(canvas, names_cols):
@@ -870,33 +875,39 @@ def _equalise_row(canvas, names_cols):
 def build(height_in=CANVAS_H_PT / 72.0, path=None):
     canvas = NativeCanvas(height_in, 4, row_weights=list(ROW_H_PT),
                           hgutter_pt=32.0, vgutter_pt=VGUTTER_PT,
-                          margins=Margins(left=46.0, right=12.0, top=14.0,
-                                          bottom=26.0))
+                          margins=Margins(left=46.0, right=12.0, top=12.0,
+                                          bottom=25.0))
 
     ax_task = canvas.panel("task", 0, 0, 3, schematic=True, letter="",
-                           lock=False)
+                           inset_pt=(2.0, 2.0, 2.0, 2.0), lock=False)
     card_axes = []
     for index, (name, *_rest) in enumerate(RESOLUTION_CARDS):
         card_axes.append(canvas.panel(f"card_{name}", 0, 3 * (index + 1), 3,
-                                      schematic=True, letter=""))
-    ax_a = canvas.panel("mnist", 1, 0, 4, title="MNIST", letter="B")
+                                      schematic=True, letter="",
+                                      inset_pt=(2.0, 2.0, 2.0, 2.0)))
+    ax_a = canvas.panel("mnist", 1, 0, 4, title="MNIST", letter="B",
+                        inset_pt=(1.0, 1.0, 1.0, 1.0))
     ax_b = canvas.panel("fashion", 1, 4, 4, title="Fashion-MNIST",
-                        letter="C")
+                        letter="C", inset_pt=(1.0, 1.0, 1.0, 1.0))
     ax_c = canvas.panel("gradient", 1, 8, 4,
-                        title="Gradient alignment", letter="D")
+                        title="Gradient alignment", letter="",
+                        inset_pt=(1.0, 1.0, 1.0, 1.0))
     ax_d = canvas.panel("schematic", 2, 0, 5, schematic=True, letter="")
     ax_e = canvas.panel("forest", 2, 5, 7, title="Paired accuracy contrasts",
-                        letter="")
+                        letter="", inset_pt=(0.0, 2.0, 0.0, 0.0))
     # The reversal sits UNDER the forest so its one-line condition labels
     # share the forest's label-column reserve; the narrow depth panel takes
     # the slot under the schematic.  This also puts the panels in the order
     # the Results cite them (depth before reversal).
     ax_f = canvas.panel("depth", 3, 0, 5,
-                        title="Neuron-specific gain across depth",
+                        title="Neuron-specific gain over fallback",
                         letter="")
     ax_g = canvas.panel("reversal", 3, 5, 7, title="Within-tree reversal",
-                        letter="")
+                        letter="", inset_pt=(0.0, 2.0, 0.0, 0.0))
     canvas.add_letter("A", ax_task)
+    # The rotated gradient-axis label reaches the top of its panel; place D
+    # in the inter-panel gutter so the two glyphs cannot collide.
+    canvas.add_letter("D", ax_c, dx_pt=46.0)
     canvas.add_letter("E", ax_d)
     canvas.add_letter("F", ax_e)
     canvas.add_letter("G", ax_f)

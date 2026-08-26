@@ -11,11 +11,14 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 NEURIPS_ROOT = ROOT.parent / "neurips"
 
+# The canonical S01-S03 paths now carry journal-native redraws; the
+# byte-identical NeurIPS/arXiv assets are archived under
+# figures/supplementary/inherited/ and are what these lineage checks pin.
 SHARED_NEURIPS_FILES = {
     "scripts/neurips_style.py": "scripts/neurips_style.py",
-    "figures/supplementary/figure_S01_panels_A-E.pdf": "figures/fig3_mechanistic_evidence.pdf",
-    "figures/supplementary/figure_S02_panels_A-E.pdf": "figures/fig4_competence_regime.pdf",
-    "figures/supplementary/figure_S03_panels_A-D.pdf": "figures/fig5_rule_feedback_controls.pdf",
+    "figures/supplementary/inherited/figure_S01_panels_A-E.pdf": "figures/fig3_mechanistic_evidence.pdf",
+    "figures/supplementary/inherited/figure_S02_panels_A-E.pdf": "figures/fig4_competence_regime.pdf",
+    "figures/supplementary/inherited/figure_S03_panels_A-D.pdf": "figures/fig5_rule_feedback_controls.pdf",
 }
 
 FROZEN_HASHES = {
@@ -24,9 +27,9 @@ FROZEN_HASHES = {
     "scripts/inherited_neurips/generate_neurips_figures.py": "d03020396906e4ea59db2464dcfd1ad3a33da213d9c7cc970f637cd55e94223d",
     "scripts/inherited_neurips/generate_revision_figures.py": "ded3e36ea4684443b4e5f5f6e7a181c50793f9a9653e209cf40d5ec920ad510b",
     "scripts/inherited_neurips/generate_theory_diagnostics_figures.py": "213610d30ebaebfd7e7417da7b3787221bc8a578bb2d4da9f9a9f82780aede80",
-    "figures/supplementary/figure_S01_panels_A-E.pdf": "88c0fe5290fc4b07539af46388f1ba150ce09c30a3b236881b14f153869c327f",
-    "figures/supplementary/figure_S02_panels_A-E.pdf": "90e4d2378aa8579eeb4f7d6bf47034ea31545730710ad4aee00c6df21cec031a",
-    "figures/supplementary/figure_S03_panels_A-D.pdf": "b51c005792b7165a94f02d661820e1ae7df104304be440d21e1e3e59258431fc",
+    "figures/supplementary/inherited/figure_S01_panels_A-E.pdf": "88c0fe5290fc4b07539af46388f1ba150ce09c30a3b236881b14f153869c327f",
+    "figures/supplementary/inherited/figure_S02_panels_A-E.pdf": "90e4d2378aa8579eeb4f7d6bf47034ea31545730710ad4aee00c6df21cec031a",
+    "figures/supplementary/inherited/figure_S03_panels_A-D.pdf": "b51c005792b7165a94f02d661820e1ae7df104304be440d21e1e3e59258431fc",
 }
 
 FORBIDDEN_PRODUCTION_TOKENS = (

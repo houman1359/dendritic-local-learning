@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
-"""Audit the current-source matched MNIST ladder and freeze publication tables.
+"""Audit the matched MNIST ladder and freeze publication tables.
 
-Scalar, neuron-specific and exact-path feedback were re-executed from one
-source commit with matched architecture-specific specifications. Publication
-tables are written only when all 90 architecture-by-feedback-by-seed outcomes
-and checkpoints are present and valid. The earlier 60-run coordinate cohort is
-loaded only to preserve an explicit comparison audit; it is not plotted.
+Strict-scalar, neuron-specific and exact-path feedback were executed with
+matched architecture-specific specifications. Publication tables are written
+only when all 90 architecture-by-feedback-by-seed outcomes and checkpoints are
+present and valid. The current-source legacy scalar-fallback arm and the
+earlier 60-run coordinate cohort are retained as implementation audits; neither
+is plotted.
 """
 
 from __future__ import annotations
@@ -25,6 +26,12 @@ import yaml
 JOURNAL = Path(__file__).resolve().parents[1]
 OLD_SOURCE = JOURNAL / "source_data" / "figure2" / "feedback_accuracy_runs.csv"
 OUTPUT = JOURNAL / "source_data" / "mnist_feedback_ladder"
+CONTRACT = (
+    JOURNAL
+    / "configs"
+    / "mnist_feedback_ladder"
+    / "strict_scalar_control_contract.yaml"
+)
 PROJECT_RUN_ROOT = Path(
     "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/"
     "journal_extension_20260820/sweep_runs/mnist_feedback_ladder"
@@ -35,6 +42,7 @@ CORE_LABEL = {
     "dendritic_additive": "additive",
 }
 MODE_LABEL = {
+    "scalar": "scalar broadcast",
     "per_soma": "scalar broadcast",
     "per_soma_shared": "neuron specific",
     "path_transport": "exact path",
@@ -130,6 +138,7 @@ def collect_run(
     run: Path,
     expected_core: str,
     expected_modes: tuple[str, ...],
+    cohort: str,
 ) -> tuple[pd.DataFrame, dict[str, Any]]:
     if not run.is_dir():
         raise FileNotFoundError(run)
@@ -221,7 +230,7 @@ def collect_run(
                 "config_sha256": sha256(config_path),
                 "result_sha256": sha256(final_path),
                 "checkpoint_sha256": sha256(checkpoint),
-                "cohort": "matched_current_source_ladder_2026-08-25",
+                "cohort": cohort,
             }
         )
 
@@ -245,6 +254,64 @@ def collect_run(
         "source_identity": manifest.get("source_identity", {}),
         "scheduler_profile": scheduler,
     }
+
+
+def source_code_fingerprint(record: dict[str, Any]) -> dict[str, str]:
+    """Return hashes of executable source files, excluding sweep documents."""
+    files = record["source_identity"].get("files", [])
+    return {
+        str(item["path"]): str(item["sha256"])
+        for item in files
+        if str(item.get("path", "")).startswith("repo:src/")
+    }
+
+
+def compare_strict_to_legacy(
+    strict: pd.DataFrame, legacy: pd.DataFrame
+) -> tuple[pd.DataFrame, pd.DataFrame]:
+    """Freeze paired strict-minus-legacy outcomes and the contract decision."""
+    contract = yaml.safe_load(CONTRACT.read_text(encoding="utf-8"))
+    margin = float(contract["materiality_margin_accuracy"])
+    row_frames: list[pd.DataFrame] = []
+    contrast_rows: list[dict[str, Any]] = []
+    for architecture_index, architecture in enumerate(("shunting", "additive")):
+        strict_part = strict[strict.architecture.eq(architecture)].copy()
+        legacy_part = legacy[legacy.architecture.eq(architecture)].copy()
+        paired = strict_part.merge(
+            legacy_part,
+            on=["architecture", "seed"],
+            how="inner",
+            validate="one_to_one",
+            suffixes=("_strict", "_legacy"),
+        ).sort_values("seed")
+        if len(paired) != len(EXPECTED_SEEDS):
+            raise RuntimeError(f"{architecture}: incomplete strict-to-legacy pairing")
+        differences = (
+            paired.test_accuracy_strict - paired.test_accuracy_legacy
+        ).to_numpy(float)
+        mean, low, high = bootstrap_mean(
+            differences, 252_000 + architecture_index
+        )
+        paired["strict_minus_legacy"] = differences
+        row_frames.append(paired)
+        contrast_rows.append(
+            {
+                "architecture": architecture,
+                "n_paired_seeds": len(differences),
+                "strict_mean_accuracy": float(paired.test_accuracy_strict.mean()),
+                "legacy_mean_accuracy": float(paired.test_accuracy_legacy.mean()),
+                "mean_strict_minus_legacy": mean,
+                "ci95_low": low,
+                "ci95_high": high,
+                "materiality_margin_accuracy": margin,
+                "practically_equivalent": bool(low >= -margin and high <= margin),
+                "strict_higher_seeds": int(np.sum(differences > 0)),
+                "legacy_higher_seeds": int(np.sum(differences < 0)),
+                "tied_seeds": int(np.sum(differences == 0)),
+                "exact_two_sided_sign_flip_p": exact_sign_flip_p(differences),
+            }
+        )
+    return pd.concat(row_frames, ignore_index=True), pd.DataFrame(contrast_rows)
 
 
 def summarize(frame: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
@@ -325,6 +392,18 @@ def main() -> None:
         default=None,
         help="exact-path additive run directory (default: unique matching run)",
     )
+    parser.add_argument(
+        "--strict-shunting",
+        type=Path,
+        default=None,
+        help="strict-scalar shunting run directory (default: unique matching run)",
+    )
+    parser.add_argument(
+        "--strict-additive",
+        type=Path,
+        default=None,
+        help="strict-scalar additive run directory (default: unique matching run)",
+    )
     args = parser.parse_args()
 
     def resolve(explicit: Path | None, pattern: str) -> Path:
@@ -349,38 +428,85 @@ def main() -> None:
     additive_run = resolve(
         args.additive, "journal_mnist_feedback_ladder_exact_path_additive_15seed_*"
     )
+    strict_shunting_run = resolve(
+        args.strict_shunting,
+        "journal_mnist_feedback_ladder_strict_scalar_shunting_15seed_*",
+    )
+    strict_additive_run = resolve(
+        args.strict_additive,
+        "journal_mnist_feedback_ladder_strict_scalar_additive_15seed_*",
+    )
     historical = load_existing()
     coordinate_modes = ("per_soma", "per_soma_shared")
     coordinate_shunting, coordinate_shunting_record = collect_run(
-        coordinate_shunting_run, "dendritic_shunting", coordinate_modes
+        coordinate_shunting_run,
+        "dendritic_shunting",
+        coordinate_modes,
+        "matched_current_source_coordinates_2026-08-25",
     )
     coordinate_additive, coordinate_additive_record = collect_run(
-        coordinate_additive_run, "dendritic_additive", coordinate_modes
+        coordinate_additive_run,
+        "dendritic_additive",
+        coordinate_modes,
+        "matched_current_source_coordinates_2026-08-25",
     )
     shunting, shunting_record = collect_run(
-        shunting_run, "dendritic_shunting", ("path_transport",)
+        shunting_run,
+        "dendritic_shunting",
+        ("path_transport",),
+        "matched_current_source_exact_path_2026-08-25",
     )
     additive, additive_record = collect_run(
-        additive_run, "dendritic_additive", ("path_transport",)
+        additive_run,
+        "dendritic_additive",
+        ("path_transport",),
+        "matched_current_source_exact_path_2026-08-25",
     )
-    for architecture, coordinate_record, exact_record in (
-        ("shunting", coordinate_shunting_record, shunting_record),
-        ("additive", coordinate_additive_record, additive_record),
+    strict_shunting, strict_shunting_record = collect_run(
+        strict_shunting_run,
+        "dendritic_shunting",
+        ("scalar",),
+        "matched_strict_scalar_control_2026-08-26",
+    )
+    strict_additive, strict_additive_record = collect_run(
+        strict_additive_run,
+        "dendritic_additive",
+        ("scalar",),
+        "matched_strict_scalar_control_2026-08-26",
+    )
+    for architecture, coordinate_record, exact_record, strict_record in (
+        (
+            "shunting",
+            coordinate_shunting_record,
+            shunting_record,
+            strict_shunting_record,
+        ),
+        (
+            "additive",
+            coordinate_additive_record,
+            additive_record,
+            strict_additive_record,
+        ),
     ):
-        if (
-            coordinate_record["scientific_signature_sha256"]
-            != exact_record["scientific_signature_sha256"]
-        ):
+        signatures = {
+            coordinate_record["scientific_signature_sha256"],
+            exact_record["scientific_signature_sha256"],
+            strict_record["scientific_signature_sha256"],
+        }
+        if len(signatures) != 1:
             raise RuntimeError(
-                f"{architecture}: coordinate and exact-path scientific signatures differ"
+                f"{architecture}: coordinate, exact-path and strict-scalar "
+                "scientific signatures differ"
             )
     run_records = [
         coordinate_shunting_record,
         coordinate_additive_record,
         shunting_record,
         additive_record,
+        strict_shunting_record,
+        strict_additive_record,
     ]
-    source_versions = {
+    source_environments = {
         (
             record["source_identity"].get("git", {}).get("commit"),
             record["source_identity"].get("git", {}).get("tracked_diff_sha256"),
@@ -388,16 +514,45 @@ def main() -> None:
         )
         for record in run_records
     }
-    if len(source_versions) != 1:
-        raise RuntimeError("the four ladder arrays do not share one source environment")
+    source_code_fingerprints = {
+        json.dumps(source_code_fingerprint(record), sort_keys=True)
+        for record in run_records
+    }
+    if len(source_code_fingerprints) != 1:
+        raise RuntimeError("ladder arrays do not share identical executable source files")
+    python_versions = {
+        record["source_identity"].get("python_version") for record in run_records
+    }
+    if len(python_versions) != 1:
+        raise RuntimeError("ladder arrays do not share one Python version")
+
+    legacy_scalar = pd.concat(
+        [coordinate_shunting, coordinate_additive], ignore_index=True
+    )
+    legacy_scalar = legacy_scalar[legacy_scalar.broadcast_mode.eq("per_soma")].copy()
+    neuron_specific = pd.concat(
+        [coordinate_shunting, coordinate_additive], ignore_index=True
+    )
+    neuron_specific = neuron_specific[
+        neuron_specific.broadcast_mode.eq("per_soma_shared")
+    ].copy()
+    strict_scalar = pd.concat(
+        [strict_shunting, strict_additive], ignore_index=True
+    )
     frame = pd.concat(
-        [coordinate_shunting, coordinate_additive, shunting, additive],
+        [strict_scalar, neuron_specific, shunting, additive],
         ignore_index=True,
     )
     if len(frame) != 90 or frame.duplicated(["architecture", "feedback", "seed"]).any():
         raise RuntimeError("combined ladder is not a complete 90-cell paired design")
     summary, contrasts = summarize(frame)
-    comparison = frame[frame.feedback.ne("exact path")].merge(
+    strict_audit, strict_contrasts = compare_strict_to_legacy(
+        strict_scalar, legacy_scalar
+    )
+    historical_coordinates = pd.concat(
+        [legacy_scalar, neuron_specific], ignore_index=True
+    )
+    comparison = historical_coordinates.merge(
         historical[["architecture", "seed", "feedback", "test_accuracy"]],
         on=["architecture", "seed", "feedback"],
         how="inner",
@@ -430,19 +585,45 @@ def main() -> None:
     )
     summary.to_csv(OUTPUT / "condition_summary.csv", index=False)
     contrasts.to_csv(OUTPUT / "paired_contrasts.csv", index=False)
+    strict_audit.to_csv(
+        OUTPUT / "strict_scalar_implementation_audit.csv", index=False
+    )
+    strict_contrasts.to_csv(
+        OUTPUT / "strict_scalar_paired_contrasts.csv", index=False
+    )
     report = {
         "status": "complete_and_validated",
         "n_historical_rows_used_for_comparison_only": len(historical),
         "n_current_coordinate_rows": len(coordinate_shunting) + len(coordinate_additive),
         "n_current_exact_path_rows": len(shunting) + len(additive),
-        "n_combined_rows": len(frame),
+        "n_strict_scalar_control_rows": len(strict_scalar),
+        "n_main_figure_rows": len(frame),
+        "n_audited_current_rows": len(frame) + len(legacy_scalar),
         "seeds": list(EXPECTED_SEEDS),
+        "strict_scalar_analysis_contract": {
+            "path": str(CONTRACT),
+            "sha256": sha256(CONTRACT),
+        },
+        "strict_scalar_practical_equivalence": strict_contrasts.to_dict(
+            orient="records"
+        ),
         "existing_source": {
             "path": str(OLD_SOURCE),
             "sha256": sha256(OLD_SOURCE),
         },
         "historical_coordinate_concordance": historical_concordance,
-        "source_environment": list(source_versions)[0],
+        "source_environments": [
+            {
+                "commit": commit,
+                "tracked_diff_sha256": diff,
+                "python_version": python,
+            }
+            for commit, diff, python in sorted(source_environments)
+        ],
+        "executable_source_files_identical": True,
+        "executable_source_fingerprint_sha256": hashlib.sha256(
+            next(iter(source_code_fingerprints)).encode("utf-8")
+        ).hexdigest(),
         "current_source_runs": run_records,
         "scheduler_overrides": {
             "coordinate_shunting_tasks_6_29": {
@@ -459,6 +640,14 @@ def main() -> None:
                 "job_id": "41843847",
                 "partition": "kempner_requeue",
                 "qos": "normal",
+            },
+            "strict_scalar_shunting_tasks_0_14": {
+                "job_id": "41913862",
+                "partition": "kempner_h100_priority",
+            },
+            "strict_scalar_additive_tasks_0_14": {
+                "job_id": "41913871",
+                "partition": "kempner_h100_priority",
             },
         },
     }

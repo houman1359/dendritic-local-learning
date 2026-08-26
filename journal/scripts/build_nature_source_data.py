@@ -30,6 +30,10 @@ DEFAULT_ZIP = SUBMISSION / "Source_Data.zip"
 
 SANITIZED_DROP_COLUMNS = {
     "source_data/mnist_feedback_ladder/seed_outcomes.csv": {"run_dir"},
+    "source_data/mnist_feedback_ladder/strict_scalar_implementation_audit.csv": {
+        "run_dir_strict",
+        "run_dir_legacy",
+    },
     "source_data/inherited_neurips/error_field_decomposition_runs.csv": {"run_dir"},
     "source_data/functional_topology_all_scans/scan_metrics.csv": {"source_summary"},
     "source_data/physical_depth_h4_factorial/seed_outcomes.csv": {"run_dir"},
@@ -60,49 +64,69 @@ class SourceFile:
 FILES = (
     SourceFile(
         "Figure 2",
-        "a",
+        "b",
         "source_data/mnist_feedback_ladder/seed_outcomes.csv",
-        "Figure_2/Fig2a_mnist_feedback_seed_outcomes.csv",
+        "Figure_2/Fig2b_mnist_feedback_seed_outcomes.csv",
         "paired independent training-seed values",
         "paired training seed (n=15 per architecture)",
-        "current-source matched cohort",
-        "Complete 90-run MNIST scalar, neuron-specific and exact-path feedback ladder.",
+        "executable-source matched cohort",
+        "Complete 90-run MNIST strict-scalar, neuron-specific and exact-path feedback ladder.",
     ),
     SourceFile(
         "Figure 2",
-        "a",
+        "b",
         "source_data/mnist_feedback_ladder/condition_summary.csv",
-        "Figure_2/Fig2a_mnist_feedback_condition_summary.csv",
+        "Figure_2/Fig2b_mnist_feedback_condition_summary.csv",
         "condition means and paired-seed bootstrap intervals",
         "paired training seed (n=15 per architecture)",
-        "current-source matched cohort",
+        "executable-source matched cohort",
         "Condition summaries for the complete matched MNIST ladder.",
     ),
     SourceFile(
         "Figure 2",
-        "a",
+        "b",
         "source_data/mnist_feedback_ladder/paired_contrasts.csv",
-        "Figure_2/Fig2a_mnist_feedback_paired_contrasts.csv",
+        "Figure_2/Fig2b_mnist_feedback_paired_contrasts.csv",
         "paired training-seed contrasts",
         "paired training seed (n=15 per architecture)",
-        "current-source matched cohort",
+        "executable-source matched cohort",
         "Neuron-identity and exact-transport contrasts for both MNIST architectures.",
     ),
     SourceFile(
         "Figure 2",
-        "a",
+        "text",
+        "source_data/mnist_feedback_ladder/strict_scalar_implementation_audit.csv",
+        "Figure_2/Text_strict_scalar_implementation_audit.csv",
+        "paired strict-scalar and legacy implementation outcomes",
+        "paired training seed (n=15 per architecture)",
+        "current matched implementation audit",
+        "Seed-paired audit of the strict scalar used in the figure against the legacy scalar-fallback condition.",
+    ),
+    SourceFile(
+        "Figure 2",
+        "text",
+        "source_data/mnist_feedback_ladder/strict_scalar_paired_contrasts.csv",
+        "Figure_2/Text_strict_scalar_paired_contrasts.csv",
+        "paired implementation contrasts and practical-equivalence decision",
+        "paired training seed (n=15 per architecture)",
+        "current matched implementation audit",
+        "Strict-scalar minus legacy paired effects under the analysis rule frozen before outcome inspection.",
+    ),
+    SourceFile(
+        "Methods",
+        "gradient check",
         "source_data/figure2/exact_gradient_reconstruction_runs.csv",
-        "Figure_2/Fig2a_exact_gradient_reconstruction_runs.csv",
+        "Methods/exact_gradient_reconstruction_runs.csv",
         "independent diagnostic runs",
         "diagnostic run (n=100)",
         "current",
         "Exact analytic-gradient reconstruction against automatic differentiation.",
     ),
     SourceFile(
-        "Figure 2",
-        "b",
+        "Supplementary Figure 2",
+        "e",
         "source_data/figure2/feedback_accuracy_runs.csv",
-        "Figure_2/Fig2b_feedback_accuracy_runs.csv",
+        "Supplementary_Figure_2/SuppFig2e_legacy_feedback_accuracy_runs.csv",
         "independent training-seed values",
         "paired training seed (n=15 per architecture)",
         "current clean cohort",
@@ -110,79 +134,79 @@ FILES = (
     ),
     SourceFile(
         "Figure 2",
-        "c",
+        "d",
         "source_data/figure2/feedback_gradient_runs.csv",
-        "Figure_2/Fig2c_feedback_gradient_runs.csv",
+        "Figure_2/Fig2d_feedback_gradient_runs.csv",
         "independent checkpoint/seed values",
         "paired trained checkpoint / seed (n=15 per architecture)",
         "current clean cohort",
         "Fixed-checkpoint diagnostics for both feedback fields at all 30 checkpoints from the validated clean training cohort.",
     ),
     SourceFile(
-        "Figure 2",
-        "d",
+        "Supplementary Figure 3",
+        "c",
         "source_data/figure2/exact_transport_and_backprop_runs.csv",
-        "Figure_2/Fig2d_exact_transport_and_backprop_runs.csv",
+        "Supplementary_Figure_3/SuppFig3c_exact_transport_and_backprop_runs.csv",
         "independent training-seed values",
         "training seed (n=5 per condition)",
         "current",
         "Twenty exact-transport factorial runs and five same-architecture backpropagation references, exported directly from archived final.json files and verified against the frozen summaries.",
     ),
     SourceFile(
-        "Figure 2",
-        "d",
+        "Supplementary Figure 3",
+        "c",
         "source_data/figure2/exact_transport_factorial_summary.csv",
-        "Figure_2/Fig2d_exact_transport_factorial_summary.csv",
+        "Supplementary_Figure_3/SuppFig3c_exact_transport_factorial_summary.csv",
         "derived condition summaries",
         "training seed (n=5 per condition)",
         "current derived summary",
         "Four exact-transport condition summaries verified against the included independent-seed table.",
     ),
     SourceFile(
-        "Figure 2",
-        "d",
+        "Supplementary Figure 3",
+        "c",
         "source_data/figure2/backprop_summary.csv",
-        "Figure_2/Fig2d_backprop_summary.csv",
+        "Supplementary_Figure_3/SuppFig3c_backprop_summary.csv",
         "derived reference summary",
         "training seed (n=5)",
         "current derived summary",
         "Matched backpropagation summary verified against the included independent-seed table.",
     ),
     SourceFile(
-        "Figure 2",
-        "e",
+        "Supplementary Figure 1",
+        "a",
         "source_data/figure2/path_gain_cv_runs.csv",
-        "Figure_2/Fig2e_path_gain_cv_runs.csv",
+        "Supplementary_Figure_1/SuppFig1a_path_gain_cv_runs.csv",
         "independent checkpoint/seed values",
         "paired training seed (n=5 per architecture)",
         "current separate diagnostic cohort",
         "Path-gain coefficient of variation across compartments within examples at five inhibitory synapses per branch; run, configuration, and checkpoint hashes are included.",
     ),
     SourceFile(
-        "Figure 2",
-        "f",
+        "Methods",
+        "initialization control",
         "source_data/figure2/initialization_factorial_runs.csv",
-        "Figure_2/Fig2f_initialization_factorial_runs.csv",
+        "Methods/initialization_factorial_runs.csv",
         "independent training-seed values",
         "paired training seed (n=15 per architecture and initialization policy)",
         "current archived factorial",
         "Complete two-architecture by two-initialization-policy factorial underlying the operating-point control reported in the main text.",
     ),
     SourceFile(
-        "Figure 2",
-        "f",
+        "Methods",
+        "initialization control",
         "source_data/figure2/initialization_factorial_summary.csv",
-        "Figure_2/Fig2f_initialization_factorial_summary.csv",
+        "Methods/initialization_factorial_summary.csv",
         "derived condition summaries",
         "paired training seed (n=15 per architecture and initialization policy)",
         "current derived summary",
         "Condition means, sample standard deviations, standard errors, and sample counts derived from the included run-level table.",
     ),
     SourceFile(
-        "Figure 2",
-        "f",
+        "Methods",
+        "initialization control",
         "source_data/figure2/initialization_factorial_paired_tests.csv",
-        "Figure_2/Fig2f_initialization_factorial_paired_tests.csv",
+        "Methods/initialization_factorial_paired_tests.csv",
         "derived paired comparisons",
         "paired training seed (n=15)",
         "current derived support",
@@ -2282,14 +2306,17 @@ def final_display_file(item: SourceFile) -> SourceFile:
     elif source.startswith("source_data/prospective_input_validity/"):
         if item.figure == "Supplementary Figure 9":
             pass
-        elif panels == "a-c":
-            figure, panels = "Figure 2", "c"
-        elif panels == "d":
-            figure, panels = "Figure 2", "d"
+        elif Path(source).name.startswith("central_valid_"):
+            figure, panels = "Figure 2", "g"
+        elif Path(source).name in {
+            "followup_publication_seed_outcomes.csv",
+            "routing_valid_paired_contrasts.csv",
+        }:
+            figure, panels = "Figure 2", "f"
         else:
             figure = "Supplementary Figure 19"
     elif source.startswith("source_data/fashion_feedback_ladder/"):
-        figure, panels = "Figure 2", "b,e"
+        figure, panels = "Figure 2", "c,f"
     elif source.startswith("source_data/clean_exact_bp/"):
         figure, panels = "Supplementary Figure 19", "e"
     elif source.startswith("source_data/credit_phase_plane/"):
@@ -2415,6 +2442,27 @@ def final_display_file(item: SourceFile) -> SourceFile:
 
 FILES = tuple(final_display_file(item) for item in FILES)
 
+# Main Figure 2H is a focused endpoint view of the same two-stream cohort whose
+# full mechanism and gradient audits remain in Supplementary Figure 19.
+_FIG2H_SOURCES = {
+    "seed_outcomes.csv",
+    "condition_summary.csv",
+    "paired_contrasts.csv",
+}
+FILES += tuple(
+    replace(
+        item,
+        figure="Figure 2",
+        panels="h",
+        destination=(
+            "Figure_2/Fig2h_credit_reversal_" + Path(item.source).name
+        ),
+    )
+    for item in FILES
+    if item.source.startswith("source_data/trained_subtree_address/")
+    and Path(item.source).name in _FIG2H_SOURCES
+)
+
 
 def duplicate_for_supplement(item: SourceFile, number: int, panels: str) -> SourceFile:
     """Reuse one numerical source for a detailed supplementary display."""
@@ -2473,9 +2521,19 @@ FILES += tuple(
     and item.figure == "Figure 5"
 )
 FILES += tuple(
-    duplicate_for_supplement(item, 19, "a-d")
+    duplicate_for_supplement(item, 19, "a-c")
+    for item in FILES
+    if item.source.startswith("source_data/prospective_input_validity/central_valid_")
+    and item.figure == "Figure 2"
+)
+FILES += tuple(
+    duplicate_for_supplement(item, 19, "d")
     for item in FILES
     if item.source.startswith("source_data/prospective_input_validity/")
+    and Path(item.source).name in {
+        "followup_publication_seed_outcomes.csv",
+        "routing_valid_paired_contrasts.csv",
+    }
     and item.figure == "Figure 2"
 )
 

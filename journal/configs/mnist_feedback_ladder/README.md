@@ -18,6 +18,32 @@ The new outcomes must not enter Figure 2A until all 90 configurations pass the
 same completeness, finite-metric, checkpoint and resolved-configuration audits
 used for the existing scalar and neuron-specific conditions.
 
+## Strict-scalar implementation control
+
+The two `strict_scalar_*_15seed.yaml` specifications add a 30-run control that
+forces `error_broadcast_mode: scalar` at every stage. This isolates the 640
+near-somatic parameters that retained neuron coordinates in the legacy
+`per_soma` implementation; every input synapse already received a strict
+scalar in that legacy arm. The paired analysis and main-figure decision rule
+were frozen before inspecting outcomes in
+`strict_scalar_control_contract.yaml`. W&B remains disabled and all outputs use
+the same `kempner_project_b` root and H100 scheduler profile as the matched
+ladder.
+
+The contract SHA256 is
+`a29e92efb472398afc5ae6991a0f767cebf3a06a5961bf201b42e3a0a5842fe1`.
+The arrays were submitted on 26 August 2026 as Slurm jobs `41913862`
+(shunting) and `41913871` (additive). The executable source hashes in their
+frozen manifests match the 25 August ladder; the outer repository commit
+differs only because later commits did not modify those executable files.
+All 30 tasks completed with exit code zero and passed the resolved-mode,
+finite-metric, checkpoint, seed-balance and no-W&B gates. The strict arm was
+not practically equivalent to the legacy fallback: strict-minus-legacy
+accuracy was -4.859 percentage points in shunting networks (95% paired-seed
+bootstrap interval, -5.669 to -3.994) and -2.274 points in additive networks
+(-2.699 to -1.796). The strict arm therefore replaces the legacy scalar rung
+in Figure 2; the legacy arm remains an explicit implementation audit.
+
 ## Execution record
 
 The current-source arrays were submitted on 25 August 2026 from commit

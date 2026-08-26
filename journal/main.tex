@@ -139,16 +139,13 @@ operations that are often conflated: choosing a neuron-specific error
 coordinate, assigning refinements of that coordinate to locations within the
 tree and setting the gain along each route.
 
-Here we develop this separation from first principles. We first derive the
-gradient of an ordinary network node and define the corresponding local
-three-factor approximation. We then replace that node by a conductance-based
-dendritic tree. The dendritic gradient again factorizes into local eligibility
-and error, but the error is now a compartment-resolved field transported from
-the soma. The forward conductance equation shows explicitly why presynaptic
-activity, local input resistance and synaptic driving force form the
-eligibility term, and why shunting changes the gain of error transport. This
-derivation converts dendritic credit assignment into a representation problem:
-how well can a limited set of biological routes approximate the exact
+Here we develop this separation from first principles. Replacing a point node
+by a conductance-based dendritic tree changes one error coordinate into a
+soma-transported compartment field while retaining a local eligibility--error
+factorization. The forward conductance equation identifies presynaptic
+activity, input resistance and driving force as eligibility and shows how
+shunting changes transport gain. This turns dendritic credit assignment into a
+representation problem: how well can biological routes approximate the exact
 compartment-error field?
 
 We answer this question with a stochastic credit operator that maps the exact
@@ -165,21 +162,11 @@ required by the task (Fig.~\ref{fig:framework}).
 
 \section*{Results}
 
-We first derive the exact gradient of a single network node and identify which
-part of that gradient is locally available at a synapse. We then repeat the
-derivation after replacing the point node by a conductance-based dendritic
-tree. This progression defines four increasingly informative feedback objects:
-a scalar shared across a layer, a neuron-specific coordinate, a set of
-within-arbor addresses and the exact compartment-resolved error. The first two
-experiments compare these objects before the stochastic theory asks when the
-extra spatial detail is useful.
-
-Exact backpropagated and compartment-resolved errors are used below as
-information ceilings. They are not proposed biological signals. Similarly, a
-dendritic routing advantage is not a claim that the computation is unique to
-dendritic material: a point model supplied with the same parameter groups,
-routing fields and gains must reproduce it. Our question is what information
-the tree can make available without supplying those operations explicitly.
+The derivation defines four feedback objects: a layer-wide scalar, a
+neuron-specific coordinate, within-arbor addresses and the exact
+compartment-resolved error. Exact errors are information ceilings; gains
+reproduced by point models with matched parameter groups, routes and gains
+reflect structured credit rather than uniquely dendritic material.
 
 \subsection*{From a network node to a local dendritic learning rule}
 
@@ -227,13 +214,24 @@ uses its own eligibility and a communicated teaching coordinate, rather than a
 parameter-specific downstream Jacobian. It does not mean that the teaching
 coordinate is independent of the global task.
 
-We next replace point neuron \(u\) by a rooted dendritic tree with soma \(n=0\).
-Compartment \(n\) receives synaptic conductances \(g_i\) driven by activities
-\(x_i\) toward reversal potentials \(E_i\), leak conductance \(g_n^L\) toward
-\(E_L\), and child-to-parent coupling conductances
-\(g_{c\to n}^{\mathrm{den}}\). A child transmits
-\(a_c=f_c(V_c)\). In the directed conductance model used for the controlled
-experiments,
+We next replace point neuron \(u\) by a rooted dendritic tree with soma
+\(n=0\). Compartment \(n\) receives synaptic conductances \(g_i\), presynaptic
+activities \(x_i\) and reversal potentials \(E_i\); \(\mathcal S_n\) includes
+both excitatory and inhibitory contacts. Leak conductance \(g_n^L\) has
+reversal \(E_L\), and \(g_{c\to n}^{\mathrm{den}}\) couples child \(c\) to its
+parent. Each child transmits \(a_c=f_c(V_c)\), and the somatic output is
+\(y_u=f_0(V_0)\). The compartmental dynamics underlying the directed model are
+the current balance
+\begin{equation}
+C_n\frac{dV_n}{dt}
+=g_n^L(E_L-V_n)
++\sum_{i\in\mathcal S_n}g_i x_i(E_i-V_n)
++\sum_{c\in\mathcal C_n}g_{c\to n}^{\mathrm{den}}(a_c-V_n).
+\label{eq:directedcurrentbalance}
+\end{equation}
+The simulations evaluate the steady state, obtained by setting the left-hand
+side of Eq.~\ref{eq:directedcurrentbalance} to zero. Collecting the terms that
+multiply \(V_n\) gives
 \begin{align}
 g_n^{\mathrm{tot}}
 &=g_n^L+\sum_{i\in\mathcal S_n}g_i x_i
@@ -245,15 +243,20 @@ g_n^LE_L+\sum_{i\in\mathcal S_n}g_i x_iE_i
 \qquad R_n^{\mathrm{tot}}=(g_n^{\mathrm{tot}})^{-1}.
 \label{eq:directedvoltage}
 \end{align}
-Unlike an additive point unit, a conductance enters both the weighted-current
-numerator and the total-conductance denominator. An inhibitory conductance can
-therefore lower \(R_n^{\mathrm{tot}}\) and attenuate other inputs even when its
-net current is small. This is the shunting operation studied below.
+Thus \(V_n\) is a conductance-weighted steady-state voltage. A contact \(j\) is
+inhibitory when its reversal is \(E_j=E_I\). Its effective conductance
+\(g_jx_j\) enters \(g_n^{\mathrm{tot}}\) even when \(V_n\simeq E_I\) and its
+net current \(g_jx_j(E_I-V_n)\) is small. It can therefore lower local input
+resistance and attenuate other inputs without acting like a matched negative
+current. This divisive effect is shunting.
 
-Differentiating Eq.~\ref{eq:directedvoltage} with respect to a synaptic
-conductance gives the local voltage sensitivity
+The same steady-state equation determines the conductance gradient. Holding
+the presynaptic activities and child outputs fixed, quotient differentiation
+gives
 \begin{equation}
 \frac{\partial V_n}{\partial g_i}
+=\frac{x_iE_i g_n^{\mathrm{tot}}-x_i(g_n^{\mathrm{tot}}V_n)}
+       {(g_n^{\mathrm{tot}})^2}
 =x_iR_n^{\mathrm{tot}}(E_i-V_n).
 \label{eq:localsensitivity}
 \end{equation}
@@ -266,7 +269,19 @@ Applying the chain rule from the loss to \(V_n\) then gives
 \end{equation}
 where presynaptic activity, input resistance and driving force are local to the
 synapse or its host compartment. All remaining task dependence lies in the
-compartment error.
+compartment error. Equation~\ref{eq:factorization} applies to excitation and
+inhibition alike. Writing an inhibitory parameter as \(g_j^I\),
+\begin{equation}
+\frac{\partial\mathcal L}{\partial g_j^I}
+=x_jR_n^{\mathrm{tot}}(E_I-V_n)
+\frac{\partial\mathcal L}{\partial V_n}.
+\label{eq:shuntinggradient}
+\end{equation}
+Near the inhibitory reversal, the direct driving-force factor can be small,
+while the same conductance still changes \(R_n^{\mathrm{tot}}\) and therefore
+the sensitivities of other synapses and compartments. This distinction between
+the local gradient of a shunt and its effect on transported credit is central
+to the perturbation experiments below.
 
 Let \(p(n)\) be the parent of compartment \(n\), and let
 \(\delta_{0,u}=\partial\mathcal L/\partial V_0\) be the exact somatic error of
@@ -294,29 +309,38 @@ soma. Thus dendrites do not change the basic eligibility--error logic of
 Eq.~\ref{eq:pointneuron}; they replace one neuron-specific error coordinate by a
 spatial field of compartment errors.
 
-Shunting acts directly on this transport. If an added inhibitory conductance
-\(G_k^I\) changes the input resistance of compartment \(k\) while the forward
-state and coupling conductances are held fixed, the conductance-only path gain
-\(\alpha_n^{\mathrm{cond}}\) satisfies
+Shunting acts directly on this transport. Consider the partial effect of an
+added inhibitory conductance \(G_k^I\) on the conductance-only path gain
+\(\alpha_n^{\mathrm{cond}}\), holding the state-dependent branch derivatives
+and coupling conductances fixed. Then
 \begin{equation}
 \frac{\partial\log\alpha_n^{\mathrm{cond}}}{\partial G_k^I}
 =-R_k^{\mathrm{tot}}\,\mathbf 1\!\left[k\in\operatorname{path}(n\to0)\right].
 \label{eq:shuntpathgain}
 \end{equation}
-An inhibitory conductance therefore attenuates error transport only for
-compartments whose path crosses its location, with a magnitude set by local
-input resistance. Equation~\ref{eq:shuntpathgain} establishes a potential
-route-gain mechanism, not a learning advantage: the same conductance can also
-alter forward voltage, and the effect may vanish outside a permissive
-electrotonic regime.
+The direct gain effect is zero off the path and negative on the path, with a
+magnitude set by local input resistance. Equation~\ref{eq:shuntpathgain}
+isolates a possible route-gain mechanism; it does not establish a learning
+advantage. A physical shunt also changes the forward voltage, driving forces
+and possibly branch derivatives, and its net effect can vanish outside a
+permissive electrotonic regime. At the regular-tree operating point the
+mechanism is visible descriptively: the conductance-stage path-gain field was
+far less dispersed under shunting than in the matched additive model
+(coefficient of variation 0.229 versus 1.161, an 80.3\% reduction, with the
+same ordering in all five paired seeds; Supplementary Fig.~S1A). This is an
+operating-point, unweighted statistic; it does not by itself establish an
+improved gradient direction or a learning benefit.
 
 The directed path product is a special case of the Almeida--Pineda steady-state
 adjoint \citep{almeida1987asynchronous,pineda1987recurrent}. For any
 differentiable compartmental system
 \(\bm F(\bm V,\bm g,\bm x)=\bm 0\), define
-\(J_V=\partial\bm F/\partial\bm V\) and solve
+\(J_V=\partial\bm F/\partial\bm V\). Implicit differentiation gives
 \begin{equation}
-J_V^{\mathsf T}\bm q=\nabla_{\bm V}\mathcal L.
+J_V^{\mathsf T}\bm q=\nabla_{\bm V}\mathcal L,
+\qquad
+\frac{\partial\mathcal L}{\partial g_i}
+=-\bm q^{\mathsf T}\frac{\partial\bm F}{\partial g_i}.
 \label{eq:generaladjoint}
 \end{equation}
 For the residual convention \(\bm F=G\bm V-\bm b\), the exact conductance
@@ -328,9 +352,10 @@ gradient is
 \label{eq:generalconductancegradient}
 \end{equation}
 Here \(q_n\) is the loss sensitivity to a small current injected at compartment
-\(n\). In the directed model, the input-resistance factor is assigned to local
-eligibility and the remaining voltage-space error is
-\(\partial\mathcal L/\partial V_n\), as in Eq.~\ref{eq:factorization}. In a
+\(n\). In the directed model,
+\(q_n=R_n^{\mathrm{tot}}\partial\mathcal L/\partial V_n\):
+Eq.~\ref{eq:factorization} displays input resistance in the eligibility,
+whereas Eq.~\ref{eq:generalconductancegradient} absorbs it into the adjoint. In a
 reciprocal passive cable, the same error is transported by the Green's function
 \(G^{-1}\) rather than a single path product \citep{rall1962dendrites}. This
 connects the present derivation to recurrent adjoints, cable theory and earlier
@@ -363,8 +388,7 @@ the fraction retained by a restricted dictionary.
 
 Equations~\ref{eq:factorization} and \ref{eq:pathgain} matched automatic
 differentiation across 100 diagnostic runs (maximum relative error
-\(1.88\times10^{-7}\)). Exact transport is used only as an information ceiling.
-The experiments below first determine how much is gained by selecting the
+\(1.88\times10^{-7}\)). We next determine how much is gained by selecting the
 correct neuron and then ask whether within-arbor addresses add useful credit.
 
 \begin{figure}[t]
@@ -385,9 +409,9 @@ addressed field communicates \(K\) refinements; conductance scales their path
 gain. \textbf{D}, Exact differentiation separates the conductance gradient into
 local eligibility and a transported compartment error. The adjoint \(q_n\) is
 model-general; the path product is its directed-tree specialization. The
-local-factor key and the displayed adjoint product state one identity: the
-input-resistance factor \(R_n^{\mathrm{tot}}\) is assigned to local
-eligibility in Eq.~\ref{eq:factorization} and absorbed into \(q_n\) here.
+local-factor key and the displayed adjoint product use equivalent error
+conventions: \(q_n=R_n^{\mathrm{tot}}\partial\mathcal L/\partial V_n\) in the
+directed tree.
 \textbf{E}, Roadmap of the Results. We first derive the exact
 eligibility--error factorization, then test neuron-specific and
 subtree-resolved feedback. The stochastic credit operator defines when
@@ -416,25 +440,43 @@ neuron has been selected.
 
 In regular trees with two branching stages and three children per branch
 (\([3,3]\) trees), neuron-specific feedback increased MNIST accuracy from
-\(90.74\%\) to \(97.13\%\) in shunting networks and from \(91.59\%\) to
-\(97.12\%\) in matched additive networks (15/15 paired seeds in both;
-Fig.~\ref{fig:feedback}b). Exact compartment-wise transport then changed
+\(85.88\%\) to \(97.13\%\) in shunting networks (mean paired difference,
+11.249 percentage points; 95\% paired-seed interval, 10.446--12.032) and from
+\(89.31\%\) to \(97.12\%\) in matched additive networks (7.809 points;
+7.237--8.431). All 15 paired seeds improved in both architectures (two-sided
+sign-flip \(P=6.10\times10^{-5}\); Fig.~\ref{fig:feedback}b). Exact
+compartment-wise transport then changed
 shunting accuracy by only \(0.045\) percentage points (95\% paired-seed
 interval, \(-0.018\) to \(0.102\); 10 positive, 4 negative and 1 tied seed;
 two-sided sign-flip \(P=0.186\)). In the additive network it produced a small
 but reliable \(0.186\)-point improvement (\(0.115\) to \(0.257\); 14/15
 positive seeds; \(P=3.05\times10^{-4}\)), reaching \(97.31\%\). Thus selecting
-the correct neuron accounted for more than 96\% of the mean scalar-to-exact
-accuracy gap in both architectures; perfect within-tree transport was a
-secondary, architecture-dependent correction.
+the correct neuron accounted for 99.6\% and 97.7\% of the mean
+scalar-to-exact accuracy gap in shunting and additive networks, respectively;
+perfect within-tree transport was a secondary, architecture-dependent
+correction.
+
+The strict control also exposed a high-leverage detail in the historical
+implementation. The legacy scalar-fallback arm retained neuron coordinates in
+only 640 near-somatic parameters (0.027\% of the core), yet it outperformed
+strict scalar by 4.859 points in shunting networks (3.994--5.669; 15/15 seeds)
+and 2.274 points in additive networks (1.796--2.699; 14/15, one tie). Thus a
+small near-somatic parameter set cannot be dismissed by parameter count alone.
+Conversely, strict scalar learning did not make the neurons identical: it
+still reached \(85.88\%\) and \(89.31\%\), because the shared teaching value
+multiplied neuron- and synapse-specific eligibility traces. The limitation was
+the dimensionality of the teaching signal, not a collapse of the hidden layer
+to one neuron.
 
 An independent fixed-checkpoint diagnostic, evaluated at networks trained
-with neuron-specific feedback, found that mean local--exact gradient cosine
-rose from approximately zero to 0.708 in shunting trees and 0.625 in additive
-trees (Fig.~\ref{fig:feedback}d). In a separate five-seed MNIST shunting
+with neuron-specific feedback, found that replacing the legacy
+matched-width/scalar-fallback field with neuron-specific sharing raised mean
+local--exact gradient cosine from approximately zero to 0.708 in shunting
+trees and 0.625 in additive trees (Fig.~\ref{fig:feedback}d). In a separate
+five-seed MNIST shunting
 implementation check, the factorization-derived local rule with exact
 transport reached \(97.18\%\), compared with \(97.03\%\) for matched
-backpropagation. Together, these controls show that most of the scalar deficit
+backpropagation (Supplementary Fig.~S3C). Together, these controls show that most of the scalar deficit
 arose because the feedback pathway failed to identify the receiving neuron,
 not because the synapse-local eligibility in
 Eq.~\ref{eq:factorization} was incorrect.
@@ -448,13 +490,15 @@ architectural depths, not cell types or feedback-route depths. Of 640 planned
 runs, 480 satisfied the positive-conductance input-validity criterion; the
 excluded signed-rate conditions cannot define a valid shunting denominator and
 are reported in Methods. Across the retained runs, neuron-specific feedback
-improved accuracy over scalar feedback by 4.92--6.99 percentage points on
-MNIST and 9.76--14.16 points on the additive noise task; all 120 retained seed
-pairs improved (Fig.~\ref{fig:feedback}g). Exact transport placed mean
+improved accuracy over the legacy matched-width/scalar-fallback field by
+4.92--6.99 percentage points on MNIST (Fig.~\ref{fig:feedback}g) and
+9.76--14.16 points on the additive noise task; all 120 retained seed pairs
+improved (Supplementary Fig.~S19). Exact transport placed mean
 local-rule accuracy within 0.14
 points of matched backpropagation across all 12 retained task--model--depth
-conditions. Fashion-MNIST reproduced the neuron-specific gain (4.46 points for
-shunting and 3.78 for additive trees, 10/10 paired seeds each) but found no
+conditions. Fashion-MNIST reproduced the neuron-specific gain relative to the
+same fallback field (4.46 points for shunting and 3.78 for additive trees,
+10/10 paired seeds each) but found no
 reliable additional benefit of exact path transport
 (Fig.~\ref{fig:feedback}c,f). Selecting the correct neuron was therefore the
 dominant improvement across datasets, architectures and depths; perfecting
@@ -465,12 +509,12 @@ Neuron selection and within-neuron routing are distinct
 we preserved every neuron-specific coordinate and the total feedback bandwidth
 but permuted which arbor received each coordinate. Correct
 coordinate-to-arbor assignment added 0.15--0.70 points and was favored in
-58/60 pairs, much smaller than the scalar-to-neuron-specific gain
+58/60 pairs, much smaller than the coordinate-bandwidth gain
 (Fig.~\ref{fig:feedback}f). An independent 320-run implementation check found
 no material exact-transport--backpropagation difference across depth, task and
 forward model. Physical depth itself was nevertheless costly at fixed terminal
 branch and contact counts: D4 underperformed D1 in all 40 valid additive
-seed--feedback comparisons, by 7.92 points under scalar feedback and
+seed--feedback comparisons, by 7.92 points under the matched-width fallback and
 1.06--1.37 points with neuron-specific, exact or backpropagated credit
 (Supplementary Figs.~S8 and S19). Depth therefore magnifies poor feedback; it
 does not generically improve learning.
@@ -497,10 +541,14 @@ feedback bandwidth.} \textbf{A}, The task and the three feedback
 resolutions: one value for the whole layer, one
 coordinate \(\widehat\delta_u\) per neuron, or the complete per-compartment
 field \(\partial\mathcal L/\partial V_n\).
-\textbf{B}, Held-out MNIST accuracy across the ladder in the 15-seed current-source cohort (90 fits). \textbf{C}, The same ladder in an
-independent ten-seed Fashion-MNIST cohort; accuracy axes are
-dataset-specific. \textbf{D}, Cosine between the local-rule and exact
-gradients at neuron-specific checkpoints; the
+\textbf{B}, Held-out MNIST accuracy across the strict-scalar,
+neuron-specific and exact-path ladder (15 paired seeds; 90 fits). The legacy
+scalar-fallback audit is reported in the text and Supplementary Information.
+\textbf{C}, The corresponding ladder in an independent ten-seed
+Fashion-MNIST cohort; this cohort used the historical scalar fallback, and
+accuracy axes are dataset-specific. \textbf{D}, Cosine between the local-rule
+and exact gradients at neuron-specific checkpoints; the scalar diagnostic is
+the historical fallback and the
 exact-path cosine is one by definition. \textbf{E}, Two assignment
 questions: which arbor receives \(\delta_u\) (coordinate-to-arbor
 assignment), and where inside that tree a refinement \(\delta_{u,k}\) acts
@@ -508,7 +556,7 @@ assignment), and where inside that tree a refinement \(\delta_{u,k}\) acts
 effects for adding neuron-specific information and exact path transport,
 followed by the MNIST and synthetic-task effects of correcting a deranged
 coordinate-to-arbor map (run at D2 and D4 only). \textbf{G}, The
-neuron-specific-minus-scalar accuracy effect across physical stage counts
+neuron-specific-minus-fallback accuracy effect across physical stage counts
 D1--D4. \textbf{H}, Held-out accuracy in the two-stream
 credit-reversal task, where sibling subtrees require different credit;
 random rank-2 mixes the two routes through a fixed rotation; correct subtree
@@ -788,6 +836,12 @@ direction. We denote the number of serial forward stages by
 \(D_{\mathrm p}\), displayed as D1--D4 for one through four stages. These two
 notions of depth need not agree.
 
+Generic increases in nominal dendritic depth impaired learning in the
+regular-tree stress test, particularly under restricted feedback
+(Supplementary Fig.~S4A). We therefore asked a narrower question: can serial
+depth become useful when resources are matched and the order of divisive
+stages mirrors the hierarchy of the task?
+
 We isolated forward composition with a positive-rate divisive task
 \citep{holt1997shunting,carandini2012normalization}. The target depended on
 three nested multiplicative factors at fine, coarse and global scales. A serial
@@ -922,8 +976,8 @@ perturbation field, compared with 0.285 for random paths, 0.222 for depth bins
 and 0.198 after subtree shuffling. To remove circularity, we generated a second
 field from the reciprocal cable rather than from the route kernel. The ordering
 persisted: capture was 0.696 for nested subtrees, 0.347 for random paths, 0.447
-for depth bins and 0.308 after shuffling
-(Fig.~\ref{fig:topology}c,d). Degree--depth surrogate trees recovered much of
+for depth bins and 0.308 after shuffling (Fig.~\ref{fig:topology}c,d; route
+support and direct-type controls in Supplementary Fig.~S20). Degree--depth surrogate trees recovered much of
 the effect, however, showing that most capacity came from coarse depth and
 branching structure; the increment attributable to fine ancestry depended on
 the field generator.
@@ -938,13 +992,14 @@ These ratios count feedback connections; they do not estimate cable length,
 metabolic cost or connection reliability.
 
 Two additional cohorts tested robustness. A disjoint 47-cell
-\texttt{minnie65} cohort reproduced the route ordering. We then applied the
+\texttt{minnie65} cohort reproduced the route ordering (Supplementary
+Fig.~S10). We then applied the
 same pipeline to a 12-cell Pinky v185 cohort from a second MICrONS mouse; ten
 cells passed the predefined quality criteria. At four channels, nested-subtree
 capture exceeded random, depth-bin and shuffled controls in all ten cells
 (Fig.~\ref{fig:topology}g). The two animals therefore agree in the direction of
 model-matched structural capacity, but \(n=2\) animals supports only
-descriptive animal-level replication.
+descriptive animal-level replication (Supplementary Fig.~S27).
 
 A tree-Haar decomposition further asked whether irregular arbors provide the
 coarse-to-fine hierarchy used in the theory. In the 47-cell cohort, coarse
@@ -995,6 +1050,15 @@ anatomy, not observed task gradients.}
 
 \subsection*{Shunting regulates route gain only in permissive electrotonic regimes}
 
+The regular-tree foundation experiments showed that feedback bandwidth,
+teaching noise, inhibition and nominal depth interact strongly, but those
+sweeps did not isolate conductance-specific error transport from changes in
+forward state and optimization, and some historical noise-task shunting
+conditions fall outside the positive-conductance input-validity criterion
+used here (Supplementary Figs.~S1--S4). We therefore treat them as regime and
+robustness boundaries; the current-matched focal intervention below is the
+direct test of conductance-dependent adjoint transport.
+
 An anatomical subtree is a candidate address; it becomes a gain-control route
 only if a local conductance change affects credit preferentially within that
 subtree. We therefore compared a focal inhibitory conductance with an additive
@@ -1033,7 +1097,7 @@ Fig.~\ref{fig:focal}b,c). Restoring the baseline adjoint while holding the
 post-shunt voltage field fixed removed 0.079 of localization. A two-factor
 Shapley decomposition likewise attributed most of the contrast to altered
 adjoint transport rather than to the synaptic driving force. A disjoint
-45-cell v661 cohort showed the same direction. These controls identify a
+45-cell v661 cohort showed the same direction (Supplementary Fig.~S10). These controls identify a
 conductance-specific change in the modeled gradient at matched somatic state.
 
 The effect was not present at standard passive cable parameters. At
@@ -1165,7 +1229,8 @@ norm-matched full-gradient loss reduction. It lost to every control at
 orthogonality and exceeded every control at complete alignment in all eight
 cells (Fig.~\ref{fig:boundary}d). This controlled rescue establishes
 sufficiency of alignment for the model. Because it uses imposed fields and
-oracle projection coefficients, it does not establish endogenous route use.
+oracle projection coefficients, it does not establish endogenous route use
+(Supplementary Fig.~S5).
 
 As an external comparison at the neuron-coordinate level, we reanalyzed the
 six-animal causal P+/P- brain--computer-interface experiment of Francioni et
@@ -1176,7 +1241,8 @@ animals (mean 0.2251). The signed mode contained 83.7\% of the pooled squared
 projection energy (95\% animal-bootstrap interval 60.6--95.7\%;
 Fig.~\ref{fig:boundary}e,f). This retrospective re-expression is consistent
 with neuron-specific teaching coordinates, but it is not an independent test
-of those coordinates and says nothing about within-arbor routing.
+of those coordinates and says nothing about within-arbor routing
+(Supplementary Fig.~S17).
 
 The combined results occupy the alignment--bandwidth plane introduced in
 Fig.~\ref{fig:creditphase}g. A scalar signal loses neuron identity; full-rank
@@ -1213,7 +1279,12 @@ upper control is exact backpropagation followed by the same projection.
 The experiments separate two questions that are often conflated. The first is
 how a circuit selects the correct neuron. Replacing a scalar broadcast with one
 teaching coordinate per neuron recovers most of the learning deficit across
-MNIST, Fashion-MNIST and the prospective depth cohorts. The second is how that
+MNIST, Fashion-MNIST and the prospective depth cohorts. A flattened CIFAR-10
+control reproduces the same feedback-information ordering ($29.7\%$ under
+scalar feedback, $35.0\%$ at rank four, $47.2\%$ with exact transport and
+$49.5\%$ for backpropagation), although without a convolutional front end or
+augmentation it is a generality check rather than a vision benchmark
+(Supplementary Fig.~S4C). The second is how that
 coordinate is distributed within the selected neuron. Correct ownership of
 the coordinate adds a smaller benefit, and nested-subtree addresses help only
 at intermediate bandwidth when task credit varies on the scale those routes
@@ -1349,38 +1420,31 @@ types.
 
 \subsection*{Directed conductance-tree network}
 
-Each compartment combines nonnegative excitatory and inhibitory synaptic
-conductances with leak and child-to-parent dendritic coupling. Excitatory and
-inhibitory reversal potentials were fixed within each experiment, and raw
-trainable parameters were transformed into nonnegative conductances. Before
-transmitting activity to its parent, a compartment could apply the monotone
-branch-output nonlinearity $a_n=f_n(V_n)$. The implementation calls this
-operation reactivation; when it was disabled, $f_n$ was the identity.
-Supplementary Section~S1 gives the complete forward
-equations, derivatives with respect to raw parameters, and temporal order of
-the local update.
-
-Let $p(n)$ denote the parent of compartment $n$. The chain rule gives the
-compartment-error recursion
-\begin{equation}
-\frac{\partial\mathcal L}{\partial V_n}
-=\frac{\partial\mathcal L}{\partial V_{p(n)}}
-f_n'(V_n)R_{p(n)}^{\mathrm{tot}}g_{n\to p(n)}^{\mathrm{den}}.
-\end{equation}
-Multiplying this relation along the unique path gives
-Eq.~\ref{eq:pathgain}, and differentiating the local conductance-balance
-equation given in Supplementary Section~S1 with respect to $g_i$ gives
-Eq.~\ref{eq:factorization}. We checked the analytical
-gradients against PyTorch automatic differentiation on fixed batches and
-checkpoints. Parameter tensors, rather than individual elements, served as the
-units of the reconstruction diagnostic.
+Each compartment implemented the current balance in
+Eq.~\ref{eq:directedcurrentbalance}. Because coupling was directed from child
+to parent, a forward pass evaluated the tree from terminal compartments to the
+soma and directly produced the steady state in Eq.~\ref{eq:directedvoltage}; no
+iterative equilibrium solver was required for these controlled networks.
+Excitatory and inhibitory reversal potentials were fixed within each
+experiment. Raw trainable parameters were mapped monotonically to nonnegative
+conductances, and a compartment could apply the branch-output nonlinearity
+$a_n=f_n(V_n)$ before transmission. The implementation calls this operation
+reactivation; $f_n$ was the identity when it was disabled. Supplementary
+Section~S1 specifies the parameter transform, complete derivatives and update
+order. We checked Eqs.~\ref{eq:factorization} and \ref{eq:pathgain} against
+PyTorch automatic differentiation on fixed batches and checkpoints. Parameter
+tensors, rather than individual elements, were the units of the reconstruction
+diagnostic.
 
 \subsection*{Local learning and feedback fields}
 
-The three-factor update was computed as the batch average
+For a mini-batch of size $B$, the implemented three-factor gradient estimate
+was
 \begin{equation}
 \widehat{\nabla}_{g_i}\mathcal L
-=x_iR_n^{\mathrm{tot}}(E_i-V_n)\widehat\delta_n.
+=\frac{1}{B}\sum_{b=1}^{B}
+x_i^{(b)}R_n^{\mathrm{tot},(b)}
+\bigl(E_i-V_n^{(b)}\bigr)\widehat\delta_n^{(b)}.
 \end{equation}
 The tested fields $\widehat\delta_n$ included a global scalar broadcast, the
 width-matched scalar implementation used by the released code,
@@ -1398,23 +1462,41 @@ than theoretically required teaching signals.
 Regular-tree feedback comparisons used MNIST classification with matched
 $[3,3]$ morphologies, optimizers, decoders, schedules and paired
 initializations within each architecture. The complete feedback ladder crossed
-scalar broadcast, neuron-specific feedback and exact path transport with two
-architectures and 15 independently initialized seeds, yielding 90 fits. All
-three fields were executed from the same clean source commit with identical
-scientific configurations after removing seed and feedback mode; W\&B was
-disabled. Every run was required to contain its resolved configuration, finite
-held-out metric and final checkpoint. The separate exact-transport
+strict scalar broadcast, neuron-specific feedback and exact path transport with
+two architectures and 15 independently initialized seeds, yielding 90 fits.
+In the strict-scalar arm, the decoder-derived somatic error was reduced to one
+signed value per example and that value was used at every local-rule stage.
+Every run was required to contain its resolved configuration, finite held-out
+metric and final checkpoint, and W\&B was disabled. The three fields used
+identical executable source files and Python environments, and their resolved
+scientific configurations were identical after removing seed and feedback
+mode. The separate exact-transport
 rule-by-decoder implementation check used five matched shunting seeds per
 condition. Test data remained hidden during checkpoint selection.
 Supplementary Section~S5 and the accompanying machine-readable configurations
 report the full hyperparameters and provenance.
 
-The scalar and neuron-specific arms re-executed the released implementation
-with the width- and connectivity-matched additive architecture. Relative to
-the archived conference cohort, the four current condition means shifted by
-at most 0.20 percentage points; the present full ladder, rather than the
-archived values, is used in Fig.~\ref{fig:feedback}b and all reported MNIST
-contrasts \citep{safaai2026localcredit}.
+We also audited the earlier legacy \texttt{per\_soma} scalar-fallback arm. In
+that implementation, the 128-dimensional somatic error was retained only at
+the 128-wide somatic stage and was reduced to one signed scalar at the 384- and
+1,152-wide dendritic stages. Thus every feedforward synaptic update---spanning
+2,408,448 candidate parameters and 92,160 active contacts per network---used
+scalar feedback. Neuron-specific coordinates reached only 384 final
+branch-to-soma couplings and 256 somatic gain and threshold parameters (640 of
+2,413,312 core parameters, 0.027\%). A separate 30-fit strict-scalar control
+tested whether this near-somatic exception affected the reported accuracy
+contrast. Before inspecting its outcomes, we froze a practical-equivalence
+margin of $\pm0.5$ percentage points and required the 95\% paired-seed
+bootstrap interval to lie wholly inside that margin; the main-figure rule used
+strict scalar regardless of this audit's direction.
+
+The neuron-specific and legacy scalar-fallback arms re-executed the released
+implementation with the width- and connectivity-matched additive architecture.
+Relative to the archived conference cohort, their four condition means shifted
+by at most 0.20 percentage points. Figure~\ref{fig:feedback}b and all primary
+MNIST contrasts instead use the separately executed strict-scalar arm together
+with the matched neuron-specific and exact-path arms; the legacy values are
+retained only for the implementation audit \citep{safaai2026localcredit}.
 
 The Fashion-MNIST replication changed only the dataset. It retained the same
 regular $[3,3]$ architecture, 128 somata, contact counts, three-factor rule,
@@ -1426,9 +1508,10 @@ validation examples. The official 10,000-image test set was evaluated only
 after checkpoint selection. These seed labels are also used by the unrelated
 physical-depth cohort, but the experiments are independent.
 
-Sixty fits crossed two architectures with scalar feedback, neuron-specific
-feedback and exact path transport. The primary replication criterion required
-the paired neuron-specific-minus-scalar interval to exclude zero and at least
+Sixty fits crossed two architectures with the matched-width/scalar-fallback
+field, neuron-specific feedback and exact path transport. The primary
+replication criterion required the paired neuron-specific-minus-fallback
+interval to exclude zero and at least
 8/10 seed differences to be positive in each architecture. Intervals used
 50,000 paired-seed bootstrap draws, and exact two-sided sign-flip tests
 enumerated all $2^{10}$ assignments. Quality-control criteria required
@@ -1452,8 +1535,9 @@ convolutional front end, data augmentation or large-scale benchmark claim.
 
 The prospective depth-by-feedback cohort was specified before outcomes were
 inspected. It crossed two tasks, two neuron models, four dendritic depths and
-three local feedback fields (a global scalar broadcast, neuron-specific sharing
-and exact path transport) at ten seeds. One matched backpropagation model was
+three local feedback fields (the legacy matched-width/scalar fallback,
+neuron-specific sharing and exact path transport) at ten seeds. One matched
+backpropagation model was
 also trained for every task--core--depth--seed combination, yielding 480
 local-learning and 160 backpropagation runs. All local conditions used the
 factorization-derived three-factor rule.
@@ -2055,7 +2139,8 @@ $28\times28$ feature plane into 16 disjoint rectangles per neuron, whereas the
 random map sampled each branch independently from all 784 coordinates. A
 configuration-level audit quantified unique coordinate coverage and
 cross-branch overlap for the same ten topology seeds. The validity rule
-removed 80 synthetic-noise shunting runs, leaving 240 comparisons. Because a
+removed 80 synthetic-noise shunting runs, leaving 240 comparisons
+(Supplementary Fig.~S7). Because a
 spatial effect shared by backpropagation reflects forward connectivity, this
 cohort was not used to support topology-specific credit transport.
 
@@ -2066,12 +2151,13 @@ terminal branches and 960--968 active contacts per soma. The cohort therefore
 matches terminal branches and input contacts, but not compartment count or
 trainable-parameter count.
 
-For the prospective fixed-checkpoint diagnostic, scalar, neuron-specific and
-exact teaching fields were evaluated at 120 input-valid backpropagation
+For the prospective fixed-checkpoint diagnostic, matched-width/scalar-fallback,
+neuron-specific and exact teaching fields were evaluated at 120 input-valid backpropagation
 checkpoints on one frozen test batch of 128 examples. Only nonsomatic
 dendritic stages and their trainable branch parameters entered the field and
 gradient vectors. Scaled capture was one minus the squared residual after the
-candidate vector was optimally rescaled to the exact vector.
+candidate vector was optimally rescaled to the exact vector (Supplementary
+Fig.~S9).
 
 For the learning endpoint, each candidate gradient was normalized to the
 exact-gradient norm and applied without additional training. The step size was

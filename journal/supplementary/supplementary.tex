@@ -101,7 +101,16 @@ $x_i$ and reversal potential $E_i$, child-to-parent coupling conductances
 $g_{c\to n}^{\mathrm{den}}$, and leak $g_n^L$ with reversal $E_L$. A child
 transmits $a_c=f_c(V_c)$, where $f_c$ is the branch output nonlinearity
 (named ``reactivation'' in the implementation) and is the identity when that
-mechanism is disabled. The steady-state voltage is
+mechanism is disabled. Before taking the steady state, the directed
+compartmental dynamics are
+\begin{equation}
+C_n\dot V_n
+=g_n^L(E_L-V_n)
++\sum_{i\in\mathcal S_n}g_i^{\mathrm{syn}}x_i(E_i-V_n)
++\sum_{c\in\mathcal C_n}g_{c\to n}^{\mathrm{den}}(a_c-V_n).
+\label{eq:s_current_balance}
+\end{equation}
+Setting $\dot V_n=0$ and collecting the coefficients of $V_n$ gives
 \begin{align}
 g_n^{\mathrm{tot}}
 &=g_n^L+\sum_{i\in\mathcal S_n}g_i^{\mathrm{syn}}x_i
@@ -117,15 +126,22 @@ V_n
 For nonnegative conductances and activities, Eq.~\ref{eq:s_voltage} is a
 conductance-weighted average of leak, synaptic reversal potentials and child
 activities. This boundedness is useful for numerical stability, but is not
-required for the chain-rule factorization below.
+required for the chain-rule factorization below. Excitatory and inhibitory
+contacts obey the same current balance but have different reversal potentials.
+In particular, an inhibitory conductance remains in $g_n^{\mathrm{tot}}$ when
+$V_n=E_I$ and its net current is zero; it can therefore reduce
+$R_n^{\mathrm{tot}}$ by shunting without producing a first-order voltage
+deflection at that operating point.
 
 \subsection{Local sensitivities and synaptic eligibility}
 
-Differentiating the numerator and denominator of
-Eq.~\ref{eq:s_voltage} gives
+Writing the numerator of Eq.~\ref{eq:s_voltage} as
+$b_n=g_n^{\mathrm{tot}}V_n$, quotient differentiation gives
 \begin{align}
 \frac{\partial V_n}{\partial g_i^{\mathrm{syn}}}
-&=x_iR_n^{\mathrm{tot}}(E_i-V_n),
+&=\frac{x_iE_i g_n^{\mathrm{tot}}-x_i b_n}
+        {(g_n^{\mathrm{tot}})^2}
+=x_iR_n^{\mathrm{tot}}(E_i-V_n),
 \label{eq:s_syn_sensitivity}\\
 \frac{\partial V_n}{\partial V_c}
 &=f_c'(V_c)g_{c\to n}^{\mathrm{den}}R_n^{\mathrm{tot}},
@@ -142,7 +158,11 @@ Thus the exact gradient of a synaptic conductance is
 \label{eq:s_factorization}
 \end{equation}
 The eligibility contains quantities available at the synapse or its host
-compartment. All remaining task dependence lies in the compartment error.
+compartment. All remaining task dependence lies in the compartment error. For
+an inhibitory contact, setting \(E_i=E_I\) in Eq.~\ref{eq:s_factorization}
+gives its shunting-conductance gradient; near \(V_n=E_I\), that direct gradient
+can be small even though the conductance still reduces \(R_n^{\mathrm{tot}}\)
+and changes the sensitivity of other inputs.
 
 \subsection{Transport of the somatic error}
 
@@ -318,7 +338,9 @@ rather than assumed from the identity.
 \subsection{Feedback fields}
 
 Table~\ref{tab:feedback_objects} defines the feedback objects without
-conflating bandwidth with routing. The matched-width/scalar-fallback field
+conflating bandwidth with routing. The strict scalar field used for the
+plotted MNIST ladder applies Eq.~\ref{eq:s_scalar_reduction} at every
+local-rule stage. The matched-width/scalar-fallback field
 reuses a somatic vector only at a stage of the same width; at wider stages it
 uses the same robust scalar reduction as the global scalar condition. For a
 two-dimensional somatic error vector $\bm\delta_b$ in example $b$, the code
@@ -340,6 +362,25 @@ neuron's coordinate over that neuron's descendants. The ancestry-shared field
 does exactly that, using one communicated coordinate per neuron and the tree as
 a fixed coordinate-to-arbor map. Exact transport supplies the entire path derivative and
 is an information upper bound.
+
+In the regular $[3,3]$ networks, the legacy matched-width field retained the
+128-dimensional somatic vector only at the 128-wide stage. It reduced the
+field to one scalar at the 384- and 1,152-wide stages, so all 2,408,448
+candidate feedforward synaptic parameters (92,160 active contacts) received
+strict scalar feedback. The exception comprised 384 final branch-to-soma
+couplings and 256 somatic gain and threshold parameters: 640 of 2,413,312 core
+parameters (0.027\%). We therefore trained a separate 15-seed strict-scalar
+cohort in each architecture and use that cohort, rather than the legacy arm,
+for the scalar rung in the main figure.
+The exception was not functionally negligible. Strict scalar reduced mean
+accuracy relative to the legacy arm by 4.859 percentage points in shunting
+networks (95\% paired-seed interval, 3.994--5.669; legacy higher in 15/15
+seeds) and by 2.274 points in additive networks (1.796--2.699; legacy higher
+in 14/15 seeds, one tie). Both intervals lay well outside the frozen
+$\pm0.5$-point practical-equivalence margin. These results show that a small
+near-somatic parameter group can exert disproportionate control over learning;
+they do not imply that the remaining neurons collapse under strict scalar
+feedback, because their local eligibility traces remain distinct.
 
 \subsection{Conditional gradient alignment}
 
@@ -2015,22 +2056,24 @@ and post hoc. In particular, ancestry, depth-interleaved and random sparse
 partitions had similar address capture at matched $K$, so the residual does
 not explain the small trained ancestry advantage at $K=4$.
 
-\subsection{Inherited regular-tree figures and expanded regime archive}
+\subsection{Regular-tree foundation and boundary experiments}
 
-The three figures below are reproduced without redrawing from the final
-NeurIPS/arXiv revision of the regular-tree study. Their PDF assets, panel
-definitions, and frozen generator scripts are preserved byte for byte in the
-journal repository. We retain them here because they show the original
-mechanistic and learning controls in exactly the form in which they were first
-reported. The following expanded archive reorganizes the same validated
-regular-tree evidence alongside additional task and stress controls; it is an
-extension, not a replacement for these inherited displays.
+The three figures below present the regular-tree foundation experiments of
+this paper: the mechanistic, performance and rule-control evidence on which
+the main-text experiments build and which, where noted, they supersede with
+larger or more causally separated designs. For provenance, the same frozen
+cohorts, panel definitions and generator scripts also appeared in the
+associated preprint; the figures are redrawn here in the journal's house
+style from the archived generators' frozen aggregations, and the original
+displays are preserved byte for byte in the repository
+(\texttt{figures/supplementary/inherited/}). A reduced boundary sheet follows with the three stress
+tests that are not replotted from these figures.
 
-\begin{figure}[ht]
+\begin{figure}[p]
 \centering
 \includegraphics[width=\textwidth]{supplementary/figure_S01_panels_A-E.pdf}
-\caption{\textbf{Mechanistic chain from path gains to learning, reproduced
-from the original regular-tree study.} \textbf{A}, Conductance-stage path-gain
+\caption{\textbf{Mechanistic chain from path gains to learning in the
+regular-tree foundation cohorts.} \textbf{A}, Conductance-stage path-gain
 field at five inhibitory synapses per branch; the inset shows paired-seed
 coefficients of variation. \textbf{B}, Stage-resolved cosine between the
 matched-width/scalar-fallback field and the exact MNIST error on distal and
@@ -2040,9 +2083,11 @@ the learned shunting model: inhibition is zeroed, sample shuffled, replaced by
 a per-branch batch mean, or replaced by one uniform matched mean.
 \textbf{D,E}, Feedback fidelity and learning on the noise-resilience task;
 solid lines denote matched-width/scalar-fallback feedback and dashed lines
-exact transported error. Error bars are $\pm1$ s.d. over checkpoints. This
-figure is the unchanged NeurIPS/arXiv asset generated by the archived original
-script. Its cross-architecture comparisons define operating regimes and do
+exact transported error. Error bars are $\pm1$ s.d. over checkpoints
+(\textbf{B}) and over runs (\textbf{D,E}). Every plotted value, cohort and
+panel definition is preserved unchanged from the archived generator and also
+appeared in the associated preprint; the display is redrawn in the journal
+style. Its cross-architecture comparisons define operating regimes and do
 not establish a general backward shunting advantage. Noise-task shunting
 cells in panels \textbf{D,E} use the signed-input convention that the journal
 input-validity rule excludes for fresh cohorts; the corrected
@@ -2050,29 +2095,34 @@ non-negative-transfer audit in the main text supersedes them for inference.}
 \label{fig:inherited_mechanistic}
 \end{figure}
 
-\begin{figure}[ht]
+\begin{figure}[p]
 \centering
 \includegraphics[width=\textwidth]{supplementary/figure_S02_panels_A-E.pdf}
 \caption{\textbf{Matched-capacity performance, regime dependence, and
-feedback definition, reproduced from the original regular-tree study.}
+feedback definition in the regular-tree foundation cohorts.}
 \textbf{A}, Matched shunting backpropagation and five-factor local learning on
 MNIST, Fashion-MNIST, and figure-ground MNIST. \textbf{B}, Inhibitory
 dose-response. \textbf{C}, Descriptive morphology-by-inhibition performance.
 \textbf{D}, Exact-transport, reactivation, normalized-eligibility,
 gain-matched-additive, and additive-core controls on MNIST. \textbf{E},
-Fifteen-seed comparison showing the gain from preserving one soma teaching
-coordinate for every compartment of the corresponding modeled neuron.
-Error bars are $\pm1$ s.d. This is the unchanged NeurIPS/arXiv figure asset;
-the prospective journal experiments extend its feedback result across depth,
-input-valid task--core conditions, and routing controls.}
+Fifteen-seed legacy matched-width/scalar-fallback cohort: the gain from
+preserving one soma teaching coordinate for every compartment of the
+corresponding modeled neuron, measured against the fallback field. This is
+the historical estimate that the strict-scalar ladder of main
+Fig.~2 supersedes; it is not another estimate of the strict-scalar contrast.
+Error bars are $\pm1$ s.d. The underlying cohorts, statistics and
+annotations are preserved unchanged from the archived generator and also
+appeared in the associated preprint; the display is redrawn in the journal
+style. The prospective journal experiments extend its feedback result across
+depth, input-valid task--core conditions, and routing controls.}
 \label{fig:inherited_competence}
 \end{figure}
 
-\begin{figure}[ht]
+\begin{figure}[p]
 \centering
 \includegraphics[width=\textwidth]{supplementary/figure_S03_panels_A-D.pdf}
 \caption{\textbf{Rule and feedback controls identify the principal learning
-bottleneck, reproduced from the original regular-tree study.} \textbf{A},
+bottleneck in the regular-tree foundation cohorts.} \textbf{A},
 Within-shunting comparison of the three-, four-, and five-factor rules in an
 archived three-seed cohort. \textbf{B}, Somatic teaching error versus an
 unmatched compartment-local quantity. \textbf{C}, Five-seed exact-transport
@@ -2080,20 +2130,27 @@ factorial showing that the theorem-derived three-factor rule approaches
 matched backpropagation when the required compartment error is supplied.
 \textbf{D}, Noise-resilience feedback ladder spanning scalar,
 path-propagated, random low-rank, and transported-oracle fields. Error bars are
-$\pm1$ s.d. This is the unchanged NeurIPS/arXiv figure asset and generator;
-exact transport is an information oracle. Noise-task shunting cells in panel
+$\pm1$ s.d. Every plotted value, seed count and interval is preserved
+unchanged from the archived generator and also appeared in the associated
+preprint; the display is redrawn in the journal style. Exact transport is an
+information oracle. Noise-task shunting cells in panel
 \textbf{D} use the signed-input convention that the journal input-validity
 rule excludes for fresh cohorts; the corrected non-negative-transfer audit in
 the main text supersedes them for inference.}
 \label{fig:inherited_rule_feedback}
 \end{figure}
 
-The journal synthesis retains the validated task, inhibition-dose, depth,
-broadcast-noise, rule-family, error-source, feedback-rank and flattened
-CIFAR-10 controls from the original study. These analyses use the historical
-frozen configurations rather than a newly tuned joint sweep. Most conditions
-contain five independent seeds; the rule-family and error-source comparisons
-contain three and are descriptive. Broadcast noise is zero-mean Gaussian noise
+The reduced boundary sheet below retains the three regular-tree stress tests
+that are not replots of the foundation figures: the nominal-depth sweep, the
+broadcast-noise sweep and the flattened CIFAR-10 control. The remaining six
+panels of the historical nine-panel regime sheet replotted evidence already
+shown in Supplementary Figs.~S1--S3 (tasks, inhibitory dose, rule family,
+error source, mechanism controls and the feedback-rank ladder) and are
+omitted here; their endpoints remain in
+Table~\ref{tab:regular_regimes} and the archived asset is preserved in the
+repository. These analyses use the historical frozen configurations rather
+than a newly tuned joint sweep, with five independent seeds per condition
+unless noted. Broadcast noise is zero-mean Gaussian noise
 added to the available teaching signal, with $\sigma$ measured relative to the
 unperturbed signal scale. The depth sweep changes the number of dendritic
 stages at fixed somatic population width. CIFAR-10 images are flattened and use
@@ -2105,29 +2162,24 @@ in Supplementary Figs.~\ref{fig:inherited_mechanistic},
 \ref{fig:regular_regimes}, and
 Table~\ref{tab:regular_regimes}.
 
-\begin{figure}[ht]
+\begin{figure}[!ht]
 \centering
-\includegraphics[width=\textwidth]{supplementary/figure_S04_panels_A-I.pdf}
-\caption{\textbf{Regular-tree learning across tasks, operating regimes, and
-feedback constraints.} \textbf{A}, Test accuracy on MNIST (MN), Fashion-MNIST
-(FMN), and figure-ground MNIST (FG) under shunting backpropagation and low-bandwidth
-local learning in shunting and additive trees. \textbf{B}, Local-learning
-accuracy as inhibitory synapses per branch vary on MNIST (solid) and the
-noise-resilience task (dashed). \textbf{C}, Accuracy as nominal dendritic depth
-increases. Solid lines are local learning and faint dashed lines are matched
-backpropagation; colour denotes shunting or additive architecture.
-\textbf{D}, Accuracy after adding zero-mean Gaussian noise with standard
-deviation $\sigma$ to the broadcast teaching signal. \textbf{E}, Three-, four-,
-and five-factor rules within the same shunting, scalar-feedback cohort.
-\textbf{F}, Accuracy when the teaching factor is the somatic error or an
-unmatched local quantity. \textbf{G}, Separate five-seed controls for exact
-transport, reactivation, and additive gain or normalization, shown with a
-matched backpropagation reference. \textbf{H}, Noise-task accuracy across
-scalar, path-propagated, random low-rank, and exact-transport feedback.
-\textbf{I}, Flattened CIFAR-10 control in the shunting architecture. Bars and
-lines show means; error bars show sample standard deviations across independent
-training seeds ($n=5$ unless noted). Panels \textbf{E,F} use the archived
-three-seed rule and error-source cohorts.}
+\includegraphics[width=\textwidth]{supplementary/figure_S04_panels_A-C.pdf}
+\caption{\textbf{Additional regular-tree stress and boundary tests.}
+\textbf{A}, Accuracy as nominal dendritic depth increases. Solid lines are
+local learning and faint dashed lines are matched backpropagation; colour
+denotes shunting or additive architecture. Generic depth is costly here,
+especially under restricted feedback; the resource-matched, task-aligned
+experiments of main Figs.~5--6 ask the narrower question this boundary
+motivates. \textbf{B}, Accuracy after adding zero-mean Gaussian noise with
+standard deviation $\sigma$ to the broadcast teaching signal. This stress
+test is an empirical precursor of the admitted-noise term of the
+credit-operator theory, not a quantitative validation of it: it does not
+separately estimate the route operator, signal covariance, or forward-state
+effects. \textbf{C}, Flattened CIFAR-10 control in the shunting architecture,
+with no convolutional front end or augmentation. Bars and lines show means;
+error bars show sample standard deviations across independent training seeds
+($n=5$).}
 \label{fig:regular_regimes}
 \end{figure}
 
@@ -2509,8 +2561,8 @@ cells. In the disjoint v661 cohort, 45 cells supplied 235 eligible sites. The
 same contrast was 0.138 (0.116--0.162), positive in 45/45 cells. Forty cells
 with at least two eligible sites supplied the reassigned-relation control; the
 true relation exceeded this control by 0.118 (0.094--0.144), with
-39 positive cells and one numerical tie (main v661 robustness figure, panels
-f,g). Cells, rather than
+39 positive cells and one numerical tie (Supplementary
+Fig.~\ref{fig:supp_v661}F,G). Cells, rather than
 sites or relation draws, were the
 units of inference.
 
@@ -2982,8 +3034,9 @@ the original motor-learning data.}
 disjoint image regions. \textbf{B}, Unique input coordinates reached by each
 neuron under independently sampled random branches and the spatial map.
 \textbf{C}, Mean pairwise Jaccard overlap between branch input sets.
-\textbf{D}, Spatial-minus-random accuracy under backpropagation (BP), scalar,
-neuron-indexed ancestry and exact feedback. MNIST averages shunting and
+\textbf{D}, Spatial-minus-random accuracy under backpropagation (BP), the
+legacy matched-width/scalar-fallback field, neuron-indexed ancestry and exact
+feedback. MNIST averages shunting and
 additive models within seed; the randomly projected noise task uses the
 input-valid additive model only. Points and intervals show means and 95\%
 paired-seed bootstrap intervals. Each learning condition contains ten paired
@@ -3000,8 +3053,8 @@ local credit assignment.}
 \caption{\textbf{Fixed terminal-branch and input-contact budgets do not make
 greater dendritic depth intrinsically beneficial.}
 \textbf{A--C}, Held-out accuracy across depths one to four under scalar,
-neuron-indexed ancestry and exact feedback for the input-valid additive
-network. \textbf{D}, Matched backpropagation. \textbf{E}, Prespecified paired
+the legacy matched-width/scalar-fallback field, neuron-indexed ancestry and
+exact feedback for the input-valid additive network. \textbf{D}, Matched backpropagation. \textbf{E}, Prespecified paired
 depth-four-minus-depth-one accuracy contrasts. \textbf{F}, The gap between
 local and matched backpropagated learning. \textbf{G}, Active contacts and
 trainable-parameter counts. \textbf{H,I}, Runtime and peak memory. Each
@@ -3009,7 +3062,9 @@ condition contains ten paired seeds; points and intervals are means and 95\%
 paired-seed bootstrap intervals. All four retained depth-four-minus-depth-one
 contrasts were negative in 10/10 pairs (Wilcoxon $P=0.001953$). The design fixes 16 terminal
 branches and 960--968 active contacts per soma, but does not match compartment
-or trainable-parameter count.}
+or trainable-parameter count. Shunting series are displayed for completeness;
+the synthetic-task shunting conditions fail the positive-conductance
+input-validity rule and are excluded from inference.}
 \label{fig:supp_fixed_budget}
 \end{figure}
 
@@ -3207,19 +3262,16 @@ initialization geometry. Analysis:
 
 \begin{figure}[p]
 \centering
-\includegraphics[width=\textwidth]{supplementary/figure_S17_panels_A-D.pdf}
+\includegraphics[width=\textwidth]{supplementary/figure_S17_panels_A-B.pdf}
 \caption{\textbf{Published animal data support signed neuron-specific teaching
 coordinates.} \textbf{A}, In the source brain--computer-interface experiment,
 the causal mapping assigned opposite signs to P+ and P- populations, predicting
-opposite dendritic contrasts. \textbf{B}, Error-reduction minus error-increase
-standardized dendritic residual for P+ and P- in six animals; lines pair the two
-populations within animal. \textbf{C}, Fraction of the two-coordinate contrast
-energy in a common scalar mode and the signed P+/P- mode; intervals are 95\%
-animal-bootstrap intervals. \textbf{D}, Descriptive neuron-level residual
+opposite dendritic contrasts. \textbf{B}, Descriptive neuron-level residual
 distributions from the published source table; dots show means. Animal, not
-neuron, is the inferential unit. This external consistency test supports signed
-neuron-specific information but does not resolve within-tree transport or uniquely identify
-a conductance mechanism.}
+neuron, is the inferential unit. The paired signed contrast and the mode-energy
+decomposition appear as main Fig.~9E,F. This external consistency test supports
+signed neuron-specific information but does not resolve within-tree transport
+or uniquely identify a conductance mechanism.}
 \label{fig:supp_animal_credit}
 \end{figure}
 
@@ -3247,8 +3299,9 @@ hierarchies belong to one calibrated synthetic task family.}
 \centering
 \includegraphics[width=\textwidth]{supplementary/figure_S19_panels_A-I.pdf}
 \caption{\textbf{Prospective neuron-specific, assignment and route diagnostics.}
-\textbf{A,B}, Neuron-indexed-minus-scalar accuracy across depth on MNIST and
-the input-valid additive noise task. \textbf{C}, Exact-transport-minus-BP
+\textbf{A,B}, Neuron-specific-minus-scalar accuracy across depth on MNIST and
+the input-valid additive noise task; the scalar arm of this cohort is the
+legacy matched-width/scalar-fallback field. \textbf{C}, Exact-transport-minus-BP
 accuracy in the retained historical conditions. \textbf{D}, Correct-minus-
 deranged coordinate-to-arbor assignment at matched bandwidth. \textbf{E},
 Depth-averaged exact-minus-BP accuracy in the independent clean-source audit.
@@ -3263,34 +3316,28 @@ seed-bootstrap intervals. Exact transport is an information ceiling.}
 
 \begin{figure}[p]
 \centering
-\includegraphics[width=\textwidth]{supplementary/figure_S20_panels_A-J.pdf}
-\caption{\textbf{Detailed morphology-route capacity and control analyses.}
-\textbf{A}, Reconstructed arbor with mapped excitatory and inhibitory contacts.
-\textbf{B}, Example ancestry-defined route domains. \textbf{C,D}, Route support
-and participation rank. \textbf{E,F}, Model-derived field capture across
-channel budget and the eight-channel comparison. \textbf{G}, Paired
-ancestry-minus-control contrasts. \textbf{H}, Eight-channel capture after
-restricting the analysis to directly typed presynaptic inputs. \textbf{I,J},
-Independent reciprocal-cable field capture and its matched topology controls.
-Points are reconstructed-cell summaries; intervals are 95\% cell-bootstrap
-intervals. This figure preserves the complete diagnostic display underlying
-the focused main Figure~7.}
+\includegraphics[width=\textwidth]{supplementary/figure_S20_panels_A-B.pdf}
+\caption{\textbf{Morphology-route support and direct-type capacity controls.}
+\textbf{A}, Fraction of ancestry-domain support across topological depth.
+\textbf{B}, Eight-channel model-field capture after restricting the analysis
+to directly typed presynaptic inputs. Points are reconstructed-cell
+summaries; intervals are 95\% cell-bootstrap intervals. The arbor, domain,
+capture-curve and control displays of the earlier detailed sheet appear as
+main Fig.~7 and Tables~\ref{tab:capacity} and \ref{tab:reciprocal_capacity}.}
 \label{fig:supp_morphology_detail}
 \end{figure}
 
 \begin{figure}[p]
 \centering
-\includegraphics[width=\textwidth]{supplementary/figure_S21_panels_A-I.pdf}
-\caption{\textbf{Detailed focal-shunting controls and electrotonic boundary.}
-\textbf{A}, State-matched focal intervention. \textbf{B}, Exact-gradient
-change by topological relation. \textbf{C}, Within-cell shunt, additive and
-relation-reassignment controls. \textbf{D}, Perturbation-dose response.
-\textbf{E}, Effect across focal-site depth. \textbf{F}, Conductance-scale and
-inhibitory-reversal sensitivity. \textbf{G}, Direct presynaptic-type control.
-\textbf{H}, Exact factor-freeze contrast isolating transported error.
-\textbf{I}, Physical cable calibration across axial-to-leak regimes. Sites are
-nested within eight reconstructed cells; intervals are 95\% cell-bootstrap
-intervals.}
+\includegraphics[width=\textwidth]{supplementary/figure_S21_panels_A-D.pdf}
+\caption{\textbf{Within-cell focal-shunting controls and sensitivity.}
+\textbf{A}, Within-cell shunt, additive and relation-reassignment controls.
+\textbf{B}, Effect across focal-site depth. \textbf{C}, Conductance-scale and
+inhibitory-reversal sensitivity. \textbf{D}, Direct presynaptic-type control.
+Sites are nested within eight reconstructed cells; intervals are 95\%
+cell-bootstrap intervals. The intervention schematic, relation selectivity,
+dose response, factor-freeze contrast and electrotonic calibration appear as
+main Fig.~8.}
 \label{fig:supp_focal_detail}
 \end{figure}
 
@@ -3307,7 +3354,7 @@ Capture--utility association after accounting for target identity.
 \textbf{H}, Morphology-minus-shuffle contrasts across feedback bandwidth.
 \textbf{I,J}, Coarse-surrogate held-out task-field capture and held-out
 normalized MSE for all seven dictionaries (exact, dense, ancestry, random,
-depth, shuffle and scalar), moved here from the main boundary figure;
+depth, shuffle and scalar), complementing main Fig.~9;
 projection coefficients are oracle ceilings, dots are one per target, and in
 \textbf{I} exact and dense coincide at the ceiling ($1.00$, $\ge0.996$), so
 show no spread.
@@ -3392,20 +3439,18 @@ replication.}
 
 \begin{figure}[p]
 \centering
-\includegraphics[width=\textwidth]{supplementary/figure_S27_panels_A-D.pdf}
+\includegraphics[width=\textwidth]{supplementary/figure_S27_panels_A-C.pdf}
 \caption{\textbf{Independent-animal structural routing replication.}
 \textbf{A}, Outcome-independent 12-cell Pinky v185 cohort across the archived
 volume; green cells pass and gray cells fail the frozen direct-type QC gate.
 Numbers give selection order. \textbf{B}, Weighted residual across feedback
 channel budgets for the dense PCA ceiling, nested-subtree routes and structural
-controls in the ten included cells; lower is better. \textbf{C}, Four-channel
-ancestry-route capture advantage in the disjoint 47-cell \texttt{minnie65}
-cohort and the independent Pinky cohort. Positive values favor ancestry
-routes. \textbf{D}, Pinky four-channel capture per 1,000 nonzero route
-coefficients. Points are cells; large symbols and bars are means and 95\%
-cell-bootstrap intervals. Cells are nested within volumes and are not
-independent animals. The target fields are model matched and do not measure
-biological teaching signals.}
+controls in the ten included cells; lower is better. \textbf{C}, Pinky
+four-channel capture per 1,000 nonzero route coefficients. Points are cells;
+large symbols and bars are means and 95\% cell-bootstrap intervals. Cells are
+nested within volumes and are not independent animals. The cross-cohort
+four-channel capture comparison appears as main Fig.~7G. The target fields
+are model matched and do not measure biological teaching signals.}
 \label{fig:supp_pinky}
 \end{figure}
 
@@ -3741,7 +3786,8 @@ Model size & 2,414,602 trainable raw parameters in the archived feedback runs, o
 \toprule
 Protocol & Seeds; epochs & Core output & Rule and feedback & Adam learning rates \\
 \midrule
-Feedback definition & 42--56; 180 & Identity & 3F, local decoder; matched-width/scalar fallback or neuron-indexed sharing & TopK $1.5\times10^{-3}$; child coupling $7\times10^{-4}$; reactivation $5\times10^{-4}$; decoder $1.5\times10^{-3}$ \\
+Main feedback ladder & 42--56; 180 & Identity & 3F, local decoder; strict scalar, neuron-indexed sharing or exact path transport & TopK $1.5\times10^{-3}$; child coupling $7\times10^{-4}$; reactivation $5\times10^{-4}$; decoder $1.5\times10^{-3}$ \\
+Legacy scalar audit & 42--56; 180 & Identity & 3F, local decoder; matched-width/scalar fallback & Same as the main feedback ladder \\
 Exact-transport factorial & 42--46; 200 & ReLU & 3F or 5F crossed with local or backpropagated decoder; exact path-transported compartment error & TopK $1.5\times10^{-3}$; child coupling $7\times10^{-4}$; reactivation $5\times10^{-4}$; decoder $1.5\times10^{-3}$ \\
 Backpropagation reference & 42--46; 200 & ReLU & Standard backpropagation through the matched shunting tree and decoder & TopK and decoder $10^{-3}$; child coupling and reactivation $5\times10^{-4}$ \\
 \bottomrule
@@ -3765,7 +3811,7 @@ feedback-definition protocol.
 \toprule
 Cohort & Surviving run artifacts & Hardware record & Software record \\
 \midrule
-Current matched feedback ladder, 90 runs & All resolved configurations, checkpoints, logs, final metrics, frozen sweep manifests and SHA-256 hashes & Heterogeneous NVIDIA accelerators; scheduler placement did not change any scientific configuration & Python 3.10.13; clean Git commit \texttt{6c1aaa25}; identical scientific signatures across feedback fields within each architecture \\
+Current matched feedback program, 120 runs (90 plotted) & All resolved configurations, checkpoints, logs, final metrics, frozen sweep manifests and SHA-256 hashes & Heterogeneous NVIDIA accelerators; scheduler placement did not change any scientific configuration & Python 3.10.13; clean Git commits \texttt{6c1aaa25} and \texttt{bd5f905e}; executable source hashes and scientific signatures identical across feedback fields within each architecture \\
 Earlier coordinate and gradient-diagnostic cohort, 60 runs & All resolved configurations, checkpoints, logs, final metrics, frozen sweep manifests and SHA-256 hashes & NVIDIA H200; 4.006 summed GPU-hours across both arrays & Python 3.10.13; Git commit \texttt{4ba38bde}; tracked worktree recorded as dirty; hashes of generator and critical model sources frozen \\
 Prospective depth-by-feedback cohort, 640 executions (480 retained) & All resolved configurations, checkpoints, learning curves, held-out metrics, resource records, frozen manifests, source hashes and the outcome-independent 1,840-run validity ledger & 73.29 summed GPU-hours over heterogeneous NVIDIA accelerators & Frozen source identity plus a verified equivalence audit for two later changes that are inactive in every resolved configuration; signed-noise shunting cells are excluded from inference \\
 Prospective checkpoint diagnostic, 3,200 historical rows (2,400 retained) & Five feedback-field labels and four step sizes at each of 160 checkpoints; publication analysis uses 120 input-valid independently trained checkpoints & Fixed-checkpoint analysis; no additional model training & Complete balance and finite-value checks; checkpoint-clustered bootstrap analysis and exclusion ledger frozen with the source tables \\
@@ -3845,11 +3891,13 @@ Exact transport & Somatic error and exact sample-specific path derivative & Dist
 \begin{table}[ht]
 \centering
 \caption{Principal regular-tree learning and gradient results. Values are mean
-$\pm$ s.d. over independent seeds. The first six accuracy rows are the matched
-current-source 90-fit ladder. Gradient-cosine entries are a separate
-fixed-checkpoint diagnostic evaluated at neuron-specific-trained checkpoints;
-the exact-path cosine is one by construction. The final two rows are an
-independent rule-and-decoder implementation check.}
+$\pm$ s.d. over independent seeds. Strict scalar, neuron-specific sharing and
+exact transport form the matched 90-fit accuracy ladder; the legacy
+matched-width/scalar-fallback rows are retained as an implementation audit.
+Gradient-cosine entries are a separate fixed-checkpoint diagnostic evaluated
+at neuron-specific-trained checkpoints; it compared the legacy fallback with
+neuron-specific sharing, and the exact-path cosine is one by construction. The
+final two rows are an independent rule-and-decoder implementation check.}
 \label{tab:regular_results}
 \small
 \begingroup
@@ -3858,10 +3906,12 @@ independent rule-and-decoder implementation check.}
 \toprule
 Architecture & Feedback or learning condition & $n$ & Test accuracy (\%) & Dendritic-gradient cosine \\
 \midrule
-Shunting & Scalar broadcast, 3F & 15 & $90.74\pm0.54$ & $0.012\pm0.059$ \\
+Shunting & Strict scalar broadcast, 3F & 15 & $85.88\pm1.62$ & --- \\
+Shunting & Legacy scalar fallback, 3F & 15 & $90.74\pm0.54$ & $0.012\pm0.059$ \\
 Shunting & Neuron-specific sharing, 3F & 15 & $97.13\pm0.07$ & $0.708\pm0.027$ \\
 Shunting & Exact transport, 3F & 15 & $97.17\pm0.13$ & 1 by definition \\
-Additive & Scalar broadcast, 3F & 15 & $91.59\pm0.67$ & $-0.001\pm0.047$ \\
+Additive & Strict scalar broadcast, 3F & 15 & $89.31\pm1.27$ & --- \\
+Additive & Legacy scalar fallback, 3F & 15 & $91.59\pm0.67$ & $-0.001\pm0.047$ \\
 Additive & Neuron-specific sharing, 3F & 15 & $97.12\pm0.13$ & $0.625\pm0.035$ \\
 Additive & Exact transport, 3F & 15 & $97.31\pm0.12$ & 1 by definition \\
 Shunting implementation check & Exact transport, 3F, local decoder & 5 & $97.18\pm0.12$ & 1 by definition \\
@@ -3869,6 +3919,24 @@ Matched reference & Backpropagation & 5 & $97.03\pm0.08$ & 1 by definition \\
 \bottomrule
 \end{tabular}
 \endgroup
+\end{table}
+
+\begin{table}[ht]
+\centering
+\caption{Strict-scalar implementation audit. Accuracy differences are paired
+by seed and reported in percentage points with 95\% paired-seed bootstrap
+intervals. The practical-equivalence rule was frozen before outcome inspection
+and required the entire interval to lie within $\pm0.5$ points.}
+\label{tab:strict_scalar_audit}
+\small
+\begin{tabular}{lcccc}
+\toprule
+Architecture & Strict scalar (\%) & Legacy fallback (\%) & Strict minus legacy (points) & Seed ordering \\
+\midrule
+Shunting & 85.88 & 90.74 & $-4.859$ [$-5.669,-3.994$] & 0/15 strict higher \\
+Additive & 89.31 & 91.59 & $-2.274$ [$-2.699,-1.796$] & 0 higher, 1 tie \\
+\bottomrule
+\end{tabular}
 \end{table}
 
 \begin{table}[ht]

@@ -54,6 +54,9 @@ figures:
 	$(PYTHON) scripts/build_irregular_tree_wavelet_figure.py
 	$(PYTHON) scripts/analyze_same_span_coefficient_learning.py
 	$(PYTHON) scripts/build_same_span_coefficient_figure.py
+	$(PYTHON) scripts/build_supplementary_figure_s01_native.py
+	$(PYTHON) scripts/build_supplementary_figure_s02_native.py
+	$(PYTHON) scripts/build_supplementary_figure_s03_native.py
 	PYTHONPATH=../../..:scripts $(PYTHON) scripts/diagnose_nonlinear_physical_depth.py
 	$(PYTHON) scripts/analyze_nonlinear_physical_depth_confirmatory.py
 	$(PYTHON) scripts/render_nonlinear_physical_depth_calibration.py

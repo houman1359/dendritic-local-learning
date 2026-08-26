@@ -42,7 +42,7 @@ CANONICAL_ASSETS = {
     "inherited.s1.asset": "figures/supplementary/figure_S01_panels_A-E.pdf",
     "inherited.s2.asset": "figures/supplementary/figure_S02_panels_A-E.pdf",
     "inherited.s3.asset": "figures/supplementary/figure_S03_panels_A-D.pdf",
-    "regimes.asset": "figures/supplementary/figure_S04_panels_A-I.pdf",
+    "regimes.asset": "figures/supplementary/figure_S04_panels_A-C.pdf",
     "fig7.asset": "figures/supplementary/figure_S05_panels_A-H.pdf",
     "interference.asset": "figures/supplementary/figure_S06_panels_A-D.pdf",
     "spatial.audit.asset": "figures/supplementary/figure_S07_panels_A-D.pdf",
@@ -55,14 +55,14 @@ CANONICAL_ASSETS = {
     "same_span.asset": "figures/supplementary/figure_S14_panels_A-F.pdf",
     "physical_calibration.asset": "figures/supplementary/figure_S15_panels_A-D.pdf",
     "interior.asset": "figures/supplementary/figure_S16_panels_A-D.pdf",
-    "animalcredit.asset": "figures/supplementary/figure_S17_panels_A-D.pdf",
+    "animalcredit.asset": "figures/supplementary/figure_S17_panels_A-B.pdf",
 }
 
 CANONICAL_ASSIGNMENTS = {
     "fig1.asset": ("fig1", "all"),
     "fig2.asset": ("fig2", "all"),
-    "prospective.learning.asset": ("fig2", "d-g"),
-    "fashion.asset": ("fig2", "b,e"),
+    "prospective.learning.asset": ("fig2", "f-g"),
+    "fashion.asset": ("fig2", "c,f"),
     "subtree.factorial.asset": ("fig3", "all"),
     "creditphase.asset": ("fig4", "a-f"),
     "phaseplane.asset": ("fig4", "g"),
@@ -81,6 +81,10 @@ CANONICAL_ASSIGNMENTS = {
 CANONICAL_GENERATORS = {
     entry_id: "scripts/assemble_compact_main_figures.py"
     for entry_id in (
+        # The reduced regular-tree boundary sheet is recomposed by the
+        # compositor from the archived nine-panel asset (panels C, D, I).
+        "regimes.asset",
+        "animalcredit.asset",
         "fig1.asset",
         "fig2.asset",
         "prospective.learning.asset",
@@ -98,6 +102,16 @@ CANONICAL_GENERATORS = {
         "extensions.fulltree.asset",
     )
 }
+
+# The regular-tree foundation sheets are redrawn by native journal builders
+# from the frozen archived aggregations; the byte-identical originals live in
+# figures/supplementary/inherited/.
+CANONICAL_GENERATORS["inherited.s1.asset"] = (
+    "scripts/build_supplementary_figure_s01_native.py")
+CANONICAL_GENERATORS["inherited.s2.asset"] = (
+    "scripts/build_supplementary_figure_s02_native.py")
+CANONICAL_GENERATORS["inherited.s3.asset"] = (
+    "scripts/build_supplementary_figure_s03_native.py")
 
 # This standalone controlled-alignment graphic was superseded by the focused
 # main-panel summary plus Supplementary Figure S5.  Its numerical source rows
@@ -119,14 +133,14 @@ NEW_DETAIL_ASSETS = {
     },
     "morphology.detail.asset": {
         "figure": "figS20",
-        "path": "figures/supplementary/figure_S20_panels_A-J.pdf",
-        "generator": "scripts/build_journal_figures.py",
+        "path": "figures/supplementary/figure_S20_panels_A-B.pdf",
+        "generator": "scripts/assemble_compact_main_figures.py",
         "notes": "Detailed morphology-route capacity and topology controls underlying focused Fig. 7.",
     },
     "focal.detail.asset": {
         "figure": "figS21",
-        "path": "figures/supplementary/figure_S21_panels_A-I.pdf",
-        "generator": "scripts/build_journal_figures.py",
+        "path": "figures/supplementary/figure_S21_panels_A-D.pdf",
+        "generator": "scripts/assemble_compact_main_figures.py",
         "notes": "Detailed focal-shunting controls and electrotonic calibration underlying focused Fig. 8.",
     },
     "measured.detail.asset": {
@@ -171,29 +185,29 @@ NEW_PROVENANCE_ENTRIES = {
     "mnist.ladder.outcomes": {
         "record_type": "panel_source",
         "figure": "fig2",
-        "panel": "a",
+        "panel": "b",
         "path": "source_data/mnist_feedback_ladder/seed_outcomes.csv",
         "generator": "scripts/collect_mnist_feedback_ladder.py",
         "replication_unit": "paired independent training seed (n=15 per architecture)",
-        "notes": "Complete 90-run current-source MNIST scalar, neuron-specific and exact-path feedback ladder.",
+        "notes": "Complete 90-run MNIST strict-scalar, neuron-specific and exact-path feedback ladder.",
     },
     "mnist.ladder.conditions": {
         "record_type": "panel_source",
         "figure": "fig2",
-        "panel": "a",
+        "panel": "b",
         "path": "source_data/mnist_feedback_ladder/condition_summary.csv",
         "generator": "scripts/collect_mnist_feedback_ladder.py",
         "replication_unit": "paired independent training seed (n=15 per architecture)",
-        "notes": "Condition means and paired-seed bootstrap intervals for the matched MNIST ladder.",
+        "notes": "Condition means and paired-seed bootstrap intervals for the strict-scalar MNIST ladder.",
     },
     "mnist.ladder.contrasts": {
         "record_type": "panel_source",
         "figure": "fig2",
-        "panel": "a",
+        "panel": "b",
         "path": "source_data/mnist_feedback_ladder/paired_contrasts.csv",
         "generator": "scripts/collect_mnist_feedback_ladder.py",
         "replication_unit": "paired independent training seed (n=15 per architecture)",
-        "notes": "Neuron-identity and exact-transport paired contrasts for both MNIST architectures.",
+        "notes": "Strict-scalar-to-neuron-specific and exact-transport paired contrasts for both MNIST architectures.",
     },
     "mnist.ladder.audit": {
         "record_type": "panel_source",
@@ -201,8 +215,26 @@ NEW_PROVENANCE_ENTRIES = {
         "panel": "text",
         "path": "source_data/mnist_feedback_ladder/audit.json",
         "generator": "scripts/collect_mnist_feedback_ladder.py",
-        "replication_unit": "complete 90-fit audit",
-        "notes": "Completeness, finite-metric, checkpoint, scientific-signature, source-environment and no-W&B gates.",
+        "replication_unit": "complete 120-fit current-cohort audit",
+        "notes": "Completeness, finite-metric, checkpoint, scientific-signature, executable-source, source-environment and no-W&B gates for the 90 plotted fits plus 30 legacy implementation controls.",
+    },
+    "mnist.scalar.audit.rows": {
+        "record_type": "panel_source",
+        "figure": "figS5",
+        "panel": "text",
+        "path": "source_data/mnist_feedback_ladder/strict_scalar_implementation_audit.csv",
+        "generator": "scripts/collect_mnist_feedback_ladder.py",
+        "replication_unit": "paired independent training seed (n=15 per architecture)",
+        "notes": "Seed-paired strict scalar versus legacy matched-width/scalar-fallback implementation audit.",
+    },
+    "mnist.scalar.audit.contrasts": {
+        "record_type": "panel_source",
+        "figure": "figS5",
+        "panel": "text",
+        "path": "source_data/mnist_feedback_ladder/strict_scalar_paired_contrasts.csv",
+        "generator": "scripts/collect_mnist_feedback_ladder.py",
+        "replication_unit": "paired independent training seed (n=15 per architecture)",
+        "notes": "Frozen practical-equivalence analysis for strict scalar minus the legacy implementation.",
     },
     "taskfamily.asset": {
         "record_type": "figure_asset",
@@ -253,8 +285,8 @@ NEW_PROVENANCE_ENTRIES = {
         "record_type": "figure_asset",
         "figure": "figS27",
         "panel": "all",
-        "path": "figures/supplementary/figure_S27_panels_A-D.pdf",
-        "generator": "scripts/analyze_pinky_v185_replication.py",
+        "path": "figures/supplementary/figure_S27_panels_A-C.pdf",
+        "generator": "scripts/assemble_compact_main_figures.py",
         "replication_unit": "reconstructed cell (10 QC-passing of 12 selected; one second mouse)",
         "notes": "Independent-animal structural route-capacity replication; panel C is promoted as Fig. 7G.",
     },
@@ -320,6 +352,44 @@ CANONICAL_NOTES = {
     "fig4.e.site": "Site-level factor substitutions supporting the Fig. 8D cell summary and supplementary Shapley analysis.",
 }
 
+# The focused eight-panel Figure 2 replaced an older, much larger panel map.
+# Keep each numerical record attached to where it is now displayed (or to the
+# Methods/Supplement when it is no longer a main-figure result).  Entry IDs are
+# deliberately stable so archived analyses remain traceable.
+CANONICAL_METADATA = {
+    "fig2.a": ("methods", "gradient check"),
+    "fig2.b": ("figS2", "e"),
+    "fig2.c": ("fig2", "d"),
+    "fig2.d": ("figS3", "c"),
+    "fig2.d.bp": ("figS3", "c"),
+    "fig2.d.runs": ("figS3", "c"),
+    "fig2.path_gain": ("figS1", "a"),
+    "fig2.init.runs": ("methods", "initialization control"),
+    "fig2.init.summary": ("methods", "initialization control"),
+    "fig2.init.tests": ("methods", "initialization control"),
+    "fig2.feedback_relevance.runs": ("methods", "feedback diagnostic"),
+    "fig2.feedback_relevance.summary": ("methods", "feedback diagnostic"),
+    "prospective.learning.seeds": ("fig2/figS19", "g/a-c"),
+    "prospective.learning.conditions": ("fig2/figS19", "g/a-c"),
+    "prospective.learning.contrasts": ("fig2/figS19", "g/a-c"),
+    "prospective.routing.runs": ("fig2/figS19", "f/d"),
+    "prospective.routing.contrasts": ("fig2/figS19", "f/d"),
+    "prospective.dose.conditions": ("figS8", "a-d,g-i"),
+    "prospective.dose.contrasts": ("figS8", "e-f"),
+    "subtree.phase1.outcomes": ("fig2/figS19", "h/g,i"),
+    "subtree.phase1.gradients": ("figS19", "h"),
+    "subtree.phase1.contrasts": ("fig2/figS19", "h/g,i"),
+    "subtree.phase1.summary": ("fig2/figS19", "h/g-i"),
+    "subtree.phase1.ledger": ("figS19", "text"),
+    "subtree.phase1.reproducibility": ("figS19", "text"),
+    "fashion.outcomes": ("fig2", "c,f"),
+    "fashion.conditions": ("fig2", "c,f"),
+    "fashion.contrasts": ("fig2", "f"),
+    "fashion.audit": ("fig2", "text"),
+    "mnist.scalar.audit.rows": ("tableS16", "all"),
+    "mnist.scalar.audit.contrasts": ("tableS16", "all"),
+}
+
 
 def sha256(path: Path) -> str:
     digest = hashlib.sha256()
@@ -372,6 +442,16 @@ def main() -> None:
         if canonical_note is not None and row.get("notes") != canonical_note:
             row["notes"] = canonical_note
             updated += 1
+
+        metadata = CANONICAL_METADATA.get(entry_id)
+        if metadata is not None:
+            figure, panel = metadata
+            if row.get("figure") != figure:
+                row["figure"] = figure
+                updated += 1
+            if row.get("panel") != panel:
+                row["panel"] = panel
+                updated += 1
 
         source = resolve_project_path(row["source_path"])
         if not source.is_file():
