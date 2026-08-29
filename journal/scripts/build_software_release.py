@@ -589,8 +589,8 @@ def write_portability_manifest(
 def release_readme(commit: str, journal_commit: str) -> str:
     return f"""# Dendritic credit-assignment software
 
-This reviewer archive accompanies *Dendritic topology and conductance organize
-local credit assignment*. It contains the complete committed Dendritic
+This reviewer archive accompanies *When dendritic structure helps local credit
+assignment*. It contains the complete committed Dendritic
 Modeling implementation at Git commit `{commit}` and the article-specific
 analysis, configuration, validation, and provenance code from journal-package
 commit `{journal_commit}`.

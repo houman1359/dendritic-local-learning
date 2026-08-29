@@ -285,27 +285,22 @@ def operator_schematic(ax) -> None:
 
     # The guarantee, on a recessive card that spans the cell.
     card_x0, card_x1 = x_lo + 0.06, x_hi - 0.06
-    card_y1 = -0.75
-    card_y0 = y_lo + 0.08
+    card_y1 = -0.30
+    card_y0 = -1.72
     ax.add_patch(FancyBboxPatch(
         (card_x0, card_y0), card_x1 - card_x0, card_y1 - card_y0,
         boxstyle="round,pad=0.10", facecolor=COLORS["panel_bg"],
         edgecolor=COLORS["grid"], lw=LW_HAIR, zorder=0.5))
-    mid = 0.5 * (card_y0 + card_y1)
-    frac_x = 0.5 * (card_x0 + card_x1) + 1.35
-    ax.text(card_x0 + 1.30, mid + 0.24, "guaranteed\nutility ∝",
+    # Render the complete ratio as one mathematical object.  Independent text
+    # lines collide after physical-point coordinates are converted into this
+    # schematic's tree coordinate system.
+    frac_x = 0.5 * (card_x0 + card_x1)
+    ax.text(
+        frac_x, card_y1 - 0.73,
+        r"$U(M)=\frac{[\mu^{\mathsf{T}}M\mu]^2}"
+        r"{2L\,[\Vert M\mu\Vert_2^2+\mathrm{tr}(M\Sigma M^{\mathsf{T}})]}$",
         ha="center", va="center", fontsize=PT_ANNOT, color=COLORS["ink"],
-            linespacing=1.3)
-    ax.text(frac_x, mid + 0.80, "[μᵀMμ]²", ha="center",
-            va="center", fontsize=PT_ANNOT, color=COLORS["ink"])
-    ax.plot([frac_x - 2.35, frac_x + 2.35], [mid + 0.24, mid + 0.24],
-            color=COLORS["ink"], lw=LW_HAIR, zorder=2)
-    ax.text(frac_x, mid - 0.32, "‖Mμ‖² + tr(MΣMᵀ)",
-            ha="center", va="center", fontsize=PT_ANNOT, color=COLORS["ink"])
-    ax.text(0.5 * (card_x0 + card_x1), card_y0 + 0.32,
-            "signal² / (finite-step gain + noise)",
-            ha="center", va="center", fontsize=PT_SMALL, style="italic",
-            color=COLORS["mute"])
+    )
 
 
 def main() -> None:
