@@ -631,8 +631,10 @@ def make_figure(
         ax_a.text(idx, value + 1.0, str(value), ha="center", va="bottom", fontsize=PT_ANNOT, fontweight="bold")
     ax_a.set_xticks(range(3), labels)
     for label in ax_a.get_xticklabels():
-        label.set_rotation(24)
+        # 24 deg let "v661" overprint the ascenders of "inh. census".
+        label.set_rotation(45)
         label.set_ha("right")
+        label.set_rotation_mode("anchor")
     ax_a.set_ylabel("target cells")
     ax_a.set_ylim(0, 54)
     style_axis(ax_a, grid="y")

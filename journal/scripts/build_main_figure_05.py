@@ -1,755 +1,404 @@
 #!/usr/bin/env python3
-"""Main Figure 5 as ONE native full-width canvas.
+"""Final Main Figure 5 -- partial addresses in a hierarchical task.
 
-Physical depth and the point/dendrite controls used to live in four
-pre-rendered sub-blocks (``fig_nonlinear_physical_depth``,
-``fig_point_dendrite_credit_controls``, ``fig_physical_alignment_dose`` and
-``fig_remaining_physical_crossovers``) that the compositor scaled into grid
-slots.  Every block was scaled by a different factor, so one figure carried
-eight different type sizes and a dozen different stroke weights.  This module
-rebuilds the figure natively at scale 1.0 on a single 12-column module grid,
-so a 7.6 pt tick label is 7.6 pt and an ``LW_EDGE`` spine is 0.7 pt.
-
-Nothing here recomputes an estimate.  Every mean, 95 % interval and paired
-contrast is read from the frozen source-data tables that the confirmatory
-analyzers wrote (``source_data/nonlinear_physical_depth_confirmatory`` and
-``source_data/point_dendrite_credit_controls``); this file only decides where
-the numbers sit on the page and how they are inked.
-
-Layout (12 modules, three rows, three column edges)::
-
-    A  matched-resource depth   C  backprop depth test  D  local credit
-    B  nested divisive task     E  divisive control      F  serial composition
-    G  paired effect sizes (5 modules)                   H  architecture
-
-A, B, C, D, E, F and H each span four modules, so every panel of those rows
-owns an identical axes box and the figure starts at one of three column
-edges: the schematic column at module 0, the shared-axis block at modules 4
-and 8.  C, D, E and F are one shared-axis small-multiple block -- identical y
-range, ticks and units, with the tick column and y label drawn once per row.
-
-G declares the five modules it actually occupies.  It used to be declared at
-module 4 on four modules and then draw a two-level name scheme -- a far-left
-column of family names and a second column of row names -- across the whole
-of modules 0-3, an empty slot no panel had claimed.  About 60 % of what the
-panel occupied on the page was furniture and dead space between the two label
-columns, and the panel itself printed as a narrow strip on the right.  The
-scheme is now one level and one column: family names and row names are both y
-tick labels, right-aligned on one edge (they fit the figure's shared left
-margin, which is why that margin is 56 pt and not 44 pt), the family name
-mute at PT_SMALL on an empty header row above its own rows.  Nothing is drawn
-inside the plotting rectangle but the estimates.
-
-G is a BAR chart on ONE CONTINUOUS effect axis.  It used to be a
-dot-and-whisker forest on a split axis -- a null window and an effect window
-with a marked break -- because the ten contrasts are strongly bimodal: three
-BP-depth controls inside (-0.68, +0.19) pp and the other seven between +16.9
-and +31.3 pp.  The split bought resolution on the near-zero rows at the price
-of a scale the reader has to reassemble, and it cannot be kept here: a bar
-that crosses an axis break states a length that is not the number, so the
-break and both sub-axes are gone.  Each contrast is now one horizontal bar
-drawn from 0 to its mean on a single linear axis from -1.3 to 33.3 pp, with
-its 95 % paired-seed interval as a whisker in the bar's own colour.  What the
-panel now says at a glance is what the split axis hid: the three BP-depth
-controls have no bar at all, and every route-of-interest contrast has a long
-one.  What it gives up is the near-zero window -- those three estimates and
-their 0.14-1.16 pp intervals are sub-point marks against a 34.6 pp axis, and
-the reader has to go to Source Data for their values.  ``G`` is again one
-ordinary axes in its own slot: no satellite sub-axes, no break marks, no
-``bind_satellite``.  No value, interval, n or test changed; only the mapping
-from percentage points to points on the page did.
-
-Marker dodges, series coincidences and the contrast definitions are stated in
-the caption rather than inside the panels: the geometry is the report.
+The eight-context subtree-address factorial is shown as its own experiment.
+The canvas makes the task hierarchy and every load-bearing control explicit
+before showing the bandwidth sweep: correct ancestry routes, incorrect route
+assignment, a degree/depth-matched rewired tree and matched non-anatomical
+rank/sparsity controls.  All numerical panels read the unchanged frozen
+source-data tables used by the former combined Figure 3.
 """
 
 from __future__ import annotations
 
-import sys
 from pathlib import Path
 
+import matplotlib as mpl
 import numpy as np
 import pandas as pd
-from matplotlib.lines import Line2D
-from matplotlib.patches import Circle, FancyBboxPatch
+from matplotlib.font_manager import FontProperties
+from matplotlib.patches import FancyBboxPatch, Rectangle
+from matplotlib.textpath import TextPath
 
-SCRIPT_DIR = Path(__file__).resolve().parent
-if str(SCRIPT_DIR) not in sys.path:
-    sys.path.insert(0, str(SCRIPT_DIR))
-
-from journal_style import (  # noqa: E402
+from routing_figure_panels import (
+    SUBTREE,
+    address_ladder_compact,
+    bandwidth_sweep_compact,
+    route_contrasts_compact,
+    topology_alignment_compact,
+)
+from credit_tree_schematics import mix
+from figure_canvas import (
     COLORS,
-    ERR_CAPSIZE,
+    FIG_W,
     LW_DATA,
     LW_EDGE,
-    LW_ERR,
     LW_HAIR,
     LW_REF,
-    MARKER_MS,
     PT_ANNOT,
-    PT_LEGEND,
+    PT_LABEL,
     PT_SMALL,
-    PT_TICK,
+    Margins,
+    NativeCanvas,
+    token_subscript,
 )
-from figure_canvas import Margins, NativeCanvas  # noqa: E402
-from credit_tree_schematics import MS_JUNCTION, mix  # noqa: E402
+from native_schematics import Frame
+
 
 ROOT = Path(__file__).resolve().parents[1]
-DEPTH_SOURCE = ROOT / "source_data" / "nonlinear_physical_depth_confirmatory"
-POINT_SOURCE = ROOT / "source_data" / "point_dendrite_credit_controls"
-OUT = ROOT / "figures" / "components" / "main_figure_05_native.pdf"
+COMPONENT = ROOT / "figures" / "components" / "main_figure_05_native.pdf"
+CANONICAL = ROOT / "figures" / "main" / "figure_05.pdf"
 
-# ── canvas geometry, in points ───────────────────────────────────────────
-# 400 pt is the tallest this figure may print: its caption is long, and a
-# taller canvas pushes the float off the page ("Float too large") in main.tex
-# (measured: the float overflows once the graphic prints above ~386 pt, i.e.
-# above a ~400 pt canvas at this width).
-CANVAS_H_PT = 384.0                      # 518.4 / 396 = 1.31 aspect
-# Row 2 carries the forest, which is eight modules wide: the audit's aspect
-# band caps a panel that shares its row at 2.40, and its emphasis rule caps
-# the spread of row heights at 1.35, so row 2 is 108 pt and rows 0 and 1 are
-# 82 pt each -- the tallest row 2 the canvas can hold without the float
-# overflowing the page.
-ROW_H_PT = (78.4, 78.4, 103.2)
-# What the forest's axes box is allowed to be at that row height (2.40 x 108
-# = 259.2 pt); the eight-module slot is 286.9 pt, so G yields the remainder
-# on its right rather than printing as a letterbox strip.
-# G now takes exactly six modules; no slot is yielded, so the old
-# FOREST_W_PT hand-width is gone.
-# The horizontal gutter carries the shared-axis block's y label and tick
-# column AND the panel letter that sits left of it, and the vertical gutter
-# carries a row's x label band plus the next row's letter and title band, so
-# no panel has to carve a reserve out of its own slot and every panel of a
-# grid column keeps one x0 and one axes width.
-HGUTTER = 38.0
-VGUTTER = 38.0
-# 56 pt of left margin, not 44: the forest's tick column ("shared soma"
-# is 49.4 pt at 7.6 pt) has to fit the margin that grid column 0 already
-# offers, or the column lock would carve it out of A and B as well and
-# they would no longer share a width with their row-mates.
-MARGINS = Margins(left=56.0, right=13.0, top=18.0, bottom=30.0)
+CANVAS_H_PT = 450.0
+HEIGHT_IN = CANVAS_H_PT / 72.0
+ROW_PT = [139.0, 101.0, 105.0]
+HGUTTER_PT = 34.0
+VGUTTER_PT = 37.0
 
-# ── the shared accuracy axis (identical in C, D, E and F) ────────────────
-ACC_YLIM = (0.44, 1.06)
-ACC_YTICKS = (0.5, 0.6, 0.7, 0.8, 0.9, 1.0)
-ACC_XLIM = (0.66, 3.34)
-ACC_XTICKS = (1, 2, 3)
-ACC_XLABEL = "physical stage count Dₚ"
-ACC_YLABEL = "test accuracy"
-
-MINUS = "−"
-
-# ── the single continuous effect axis of G ───────────────────────────────
-# One linear axis, no break.  The lower bound clears the one negative bar
-# (-0.43 pp) and the low end of its interval (-0.68 pp); the upper bound
-# clears the widest interval (+31.8 pp).  A bar reports its value by its
-# LENGTH, and a length is only a value on a continuous scale that starts at
-# the bar's own baseline, so the earlier split axis -- which had every bar
-# crossing a break -- is not available to this encoding.
-FOREST_XLIM = (-1.3, 33.3)
-FOREST_XTICKS = (0, 10, 20, 30)
-# Fourteen y units (ten contrasts plus four family header rows) share ~76 pt
-# of axes height, so a bar is ~3.4 pt deep and its interval caps (ERR_CAPSIZE
-# = 2.0) sit just proud of it.
-FOREST_BAR_H = 0.62
-# Fill lightness for the bar body; the outline is the row's full colour, so
-# the semantic hue survives at a fill pale enough not to shout at print size.
-FOREST_FILL_PCT = 26
-FOREST_XLABEL = "paired difference (pp)"
-
-# ── colour semantics (route of interest coloured, controls neutral) ──────
-C_ROUTE = COLORS["shunting"]             # aligned / shunting / serial tree
-C_ADDITIVE = COLORS["additive"]          # raw additive divisive control
-C_SHUFFLE = COLORS["highlight"]          # sensor shuffled owns the rose slot
-C_CONTROL = COLORS["point_mlp"]          # control gray
-C_CONTROL_LIGHT = mix(COLORS["point_mlp"], 72)   # second control lightness
-C_SHARED = COLORS["local"]               # shared-soma (scalar/local) amber
-C_PATH = COLORS["oracle"]                # exact path transport violet
 INK = COLORS["ink"]
 MUTE = COLORS["mute"]
-DEND = COLORS["dend"]
-
-# Library stroke taper (credit_tree_schematics): terminal branches print at
-# 0.70 TikZ pt, thickening toward the trunk; normalized so 1.60 pt == LW_DATA.
-_TAPER_FROM_LEAF = (0.70, 0.90, 1.20, 1.60)
-_PT2LW = LW_DATA / 1.60
-
-
-# ── data access (frozen tables only; nothing is recomputed here) ─────────
-def load_tables():
-    depth_summary = pd.read_csv(DEPTH_SOURCE / "condition_summary.csv")
-    depth_contrasts = pd.read_csv(DEPTH_SOURCE / "paired_contrasts.csv")
-    point_summary = pd.read_csv(POINT_SOURCE / "condition_summary.csv")
-    point_contrasts = pd.read_csv(POINT_SOURCE / "paired_contrasts.csv")
-    return depth_summary, depth_contrasts, point_summary, point_contrasts
+GREEN = COLORS["shunting"]
+PURPLE = COLORS["oracle"]
+GRAY = COLORS["point_mlp"]
+# Route index is an ordinal series, so the four routes use the manuscript
+# slate ramp rather than reserved condition hues (green = correct routing,
+# amber = neuron-shared, blue = Fig 2 additive, violet = oracle/best control
+# in E and F).  The ramp's three published steps are #9AA5B4 / #5F6B7E /
+# #2E3947; the second entry is their light-to-mid midpoint, added here only
+# because this schematic draws four routes.
+ROUTE_COLORS = ("#9AA5B4", "#7C8899", "#5F6B7E", "#2E3947")
 
 
-def _rows(frame, **filters):
-    part = frame
-    for column, value in filters.items():
-        part = part[part[column].eq(value)]
-    return part.sort_values("depth")
+def _span_pt(text: str, size: float) -> float:
+    """Advance width of ``text`` in points at the figure's own sans face."""
+    if not text:
+        return 0.0
+    path = TextPath((0.0, 0.0), text, size=size,
+                    prop=FontProperties(size=size))
+    return float(path.get_extents().x1)
 
 
-def series(ax, frame, *, color, marker, filled=True, dashes=None, dx=0.0,
-           label=None, handles=None, **filters):
-    """Seed-mean line at true x with 95 % seed-bootstrap interval bars.
+def _centred_subscript(f: Frame, xy, base, sub, tail="", *, color,
+                       size=PT_SMALL, va="center") -> None:
+    """Centred base+subscript+tail chain drawn with token type sizes only.
 
-    ``dx`` moves only the marker/error-bar column so honestly coincident
-    series stay separable, and ``dashes`` interleaves the dash phase of two
-    curves that genuinely lie on top of one another; both are declared inside
-    the panel that uses them.  Values, intervals and n are the frozen table's.
+    ``token_subscript`` anchors its chain on the left, so the group is
+    measured first and the base span is shifted by half the total advance.
+    A long tail is set as its own span sharing the base's baseline: the
+    helper's chained tail re-anchors on the subscript's box and would leave
+    a running sentence sitting a descender below the words before it.
     """
-    part = _rows(frame, **filters)
-    x = part.depth.to_numpy(float)
-    mean = part.mean_test_accuracy.to_numpy(float)
-    low = part.ci95_low_test_accuracy.to_numpy(float)
-    high = part.ci95_high_test_accuracy.to_numpy(float)
-    face = color if filled else "white"
-    style = "-" if dashes is None else dashes
-    # Trim the polyline to the dodged marker centre instead of letting it run
-    # past: every drawn vertex stays at the table's own x, so no segment of
-    # the curve is given a distorted run, and no bare stub hangs off the end.
-    xs_line, ys_line = x, mean
-    if dx:
-        edge = (x[0] if dx > 0 else x[-1]) + dx
-        keep = x > edge if dx > 0 else x < edge
-        y_edge = float(np.interp(edge, x, mean))
-        xs_line = (np.append(edge, x[keep]) if dx > 0
-                   else np.append(x[keep], edge))
-        ys_line = (np.append(y_edge, mean[keep]) if dx > 0
-                   else np.append(mean[keep], y_edge))
-    ax.plot(xs_line, ys_line, color=color, lw=LW_DATA, ls=style, zorder=2,
-            solid_capstyle="round")
-    ax.errorbar(
-        x + dx, mean, yerr=np.vstack([mean - low, high - mean]),
-        fmt=marker, ms=MARKER_MS, color=color, markerfacecolor=face,
-        markeredgecolor=color if not filled else "white",
-        markeredgewidth=LW_EDGE if not filled else 0.55,
-        ecolor=color, elinewidth=LW_ERR, capsize=ERR_CAPSIZE, zorder=3,
+    head_pt = _span_pt(base, size) + 0.4 + _span_pt(sub, size)
+    width_pt = head_pt + ((0.6 + _span_pt(tail, size)) if tail else 0.0)
+    left = xy[0] - f.fx(width_pt / 2.0)
+    token_subscript(f.ax, left, xy[1], base, sub,
+                    size=size, sub_size=size, color=color, ha="left", va=va,
+                    zorder=6, clip_on=False)
+    if tail:
+        f.text((left + f.fx(head_pt + 0.6), xy[1]), tail, size=size,
+               color=color, ha="left", va=va, zorder=6)
+
+
+def hierarchical_task(ax) -> None:
+    """Eight active streams whose distractors follow binary-tree distance."""
+    f = Frame(ax, labels=True, scale=0.95)
+    _centred_subscript(
+        f, (0.50, 0.955), "context c", "3",
+        " sets target y; all eight streams remain active",
+        color=INK, va="top")
+
+    leaf_x = np.linspace(0.055, 0.945, 8)
+    levels = (
+        (np.asarray([0.50]), 0.82),
+        (np.asarray([0.275, 0.725]), 0.66),
+        (np.asarray([0.105, 0.335, 0.665, 0.895]), 0.49),
+        (leaf_x, 0.31),
     )
-    if handles is not None and label:
-        handles.append(Line2D(
-            [], [], color=color, lw=LW_DATA, ls=style, marker=marker,
-            ms=MARKER_MS, markerfacecolor=face,
-            markeredgecolor=color if not filled else "white",
-            markeredgewidth=LW_EDGE if not filled else 0.55, label=label))
-    return part
-
-
-def accuracy_axis(ax, *, left=True, bottom=True):
-    ax.set_xlim(*ACC_XLIM)
-    ax.set_xticks(list(ACC_XTICKS))
-    ax.set_ylim(*ACC_YLIM)
-    ax.set_yticks(list(ACC_YTICKS))
-    if left:
-        ax.set_ylabel(ACC_YLABEL)
-    else:
-        ax.tick_params(axis="y", labelleft=False)
-    if bottom:
-        ax.set_xlabel(ACC_XLABEL)
-    return ax
-
-
-def key(ax, handles, *, loc="upper left", bbox=(0.0, 1.0)):
-    legend = ax.legend(handles=handles, loc=loc, bbox_to_anchor=bbox,
-                       frameon=False, fontsize=PT_LEGEND, handlelength=2.0,
-                       handletextpad=0.5, labelspacing=0.28, borderpad=0.1,
-                       borderaxespad=0.0)
-    for text in legend.get_texts():
-        text.set_color(INK)
-    return legend
-
-
-# ── schematic vocabulary, drawn in the panel's own point frame ───────────
-def point_frame(ax):
-    """Give ``ax`` a 1:1 point coordinate frame filling its own box."""
-    fig = ax.get_figure()
-    fw, fh = fig.get_size_inches()
-    box = ax.get_position()
-    w_pt = box.width * fw * 72.0
-    h_pt = box.height * fh * 72.0
-    ax.set_xlim(0.0, w_pt)
-    ax.set_ylim(0.0, h_pt)
-    ax.set_axis_off()
-    ax.set_facecolor("none")
-    return w_pt, h_pt
-
-
-def draw_tree(ax, factors, *, x0, y0, radius, sector_deg, color=DEND,
-              soma_r=3.0):
-    """Radial dendritic tree in the credit-tree library vocabulary.
-
-    ``factors`` is ordered soma-to-distal, as in the production DendriNet
-    planner.  Leaves spread evenly on an arc so an 8-way fan stays readable;
-    stroke taper, white junction rings on internal nodes and the soma disc
-    with its ink-mix rim come from ``credit_tree_schematics``.
-    """
-    n_leaves = int(np.prod(factors))
-    leaf_angles = (
-        np.deg2rad(np.linspace(-sector_deg / 2.0, sector_deg / 2.0, n_leaves))
-        if n_leaves > 1 else np.zeros(1)
-    )
-    depth = len(factors)
-    step = radius / depth
-    # A trunk, as in the shared library: the arbor leaves the soma as one
-    # LW_DATA stroke and tapers outward, instead of fanning straight off the
-    # soma disc.  Without it these trees print lighter than figure 4's.
-    trunk = 0.22 * step
-    ax.plot([x0, x0], [y0, y0 + trunk], color=color,
-            lw=_TAPER_FROM_LEAF[-1] * _PT2LW, solid_capstyle="round",
-            zorder=3)
-    current = [(x0, y0 + trunk, 0, n_leaves)]
-    coords = [[(x0, y0 + trunk)]]
-    for level, factor in enumerate(factors, start=1):
-        lw = _TAPER_FROM_LEAF[min(depth - level,
-                                  len(_TAPER_FROM_LEAF) - 1)] * _PT2LW
-        r = level * step
-        nxt = []
-        for px, py, lo, hi in current:
-            span = (hi - lo) // factor
-            for child in range(factor):
-                clo, chi = lo + child * span, lo + (child + 1) * span
-                angle = float(leaf_angles[clo:chi].mean())
-                cx = x0 + r * np.sin(angle)
-                cy = y0 + r * np.cos(angle)
-                ax.plot([px, cx], [py, cy], color=color, lw=lw,
-                        solid_capstyle="round", zorder=3)
-                nxt.append((cx, cy, clo, chi))
-        coords.append([(nx, ny) for nx, ny, _, _ in nxt])
-        current = nxt
-    for level_nodes in coords[1:-1]:
-        for nx, ny in level_nodes:
-            ax.plot([nx], [ny], marker="o", ms=MS_JUNCTION, mfc="white",
-                    mec=color, mew=LW_EDGE, ls="none", zorder=4)
-    ax.add_patch(Circle((x0, y0), soma_r, facecolor=COLORS["soma"],
-                        edgecolor=mix("ink", 30), lw=LW_EDGE, zorder=5))
-    return coords
-
-
-def bracket(ax, x0, x1, y, *, drop=3.0, color=MUTE):
-    """Scaffolding brace naming a shared budget across the motifs beneath."""
-    ax.plot([x0, x1], [y, y], color=color, lw=LW_HAIR, zorder=1,
-            solid_capstyle="round")
-    for x in (x0, x1):
-        ax.plot([x, x], [y, y - drop], color=color, lw=LW_HAIR, zorder=1,
-                solid_capstyle="round")
-
-
-def scope_box(ax, points, pad, edge, *, fill="#20509E", alpha=0.05,
-              round_pt=3.0):
-    xs = [p[0] for p in points]
-    ys = [p[1] for p in points]
-    x_lo, x_hi = min(xs) - pad, max(xs) + pad
-    y_lo, y_hi = min(ys) - pad, max(ys) + pad
-    for face, edge_color, z in ((fill, "none", 1), ("none", edge, 2)):
-        ax.add_patch(FancyBboxPatch(
-            (x_lo, y_lo), x_hi - x_lo, y_hi - y_lo,
-            boxstyle=f"round,pad=1.0,rounding_size={round_pt}",
-            facecolor=face, alpha=alpha if face != "none" else 1.0,
-            edgecolor=edge_color, lw=LW_EDGE, zorder=z))
-    return x_lo - 1.0, x_hi + 1.0, y_lo - 1.0, y_hi + 1.0
-
-
-# ── panels ───────────────────────────────────────────────────────────────
-def panel_depth_ladder(ax):
-    """A: the three physical depth stages at one matched forward budget."""
-    w, h = point_frame(ax)
-    specs = ((8,), (2, 3), (2, 1, 2))
-    sectors = (42.0, 38.0, 34.0)
-    centres = [w * f for f in (0.165, 0.50, 0.835)]
-    base_y = 0.225 * h
-    radius = 0.495 * h
-    for x, factors, sector in zip(centres, specs, sectors, strict=True):
-        draw_tree(ax, list(factors), x0=x, y0=base_y, radius=radius,
-                  sector_deg=sector)
-    for x, factors, name in zip(centres, specs, ("1", "2", "3"), strict=True):
-        ax.text(x, 0.120 * h, f"Dₚ = {name}", ha="center",
-                va="center", fontsize=PT_SMALL, color=INK)
-        ax.text(x, 0.030 * h, "[" + ",".join(map(str, factors)) + "]",
-                ha="center", va="center", fontsize=PT_SMALL, color=MUTE)
-    bracket(ax, w * 0.02, w * 0.98, 0.800 * h, drop=0.030 * h)
-    # The brace names the matched budget in one line, exactly as panel H does;
-    # what the three stages hold constant beyond the branch count (contacts and
-    # parameters) is stated in the caption, not wrapped across the panel.
-    ax.text(w * 0.5, 0.905 * h, "same 8 branch units",
-            ha="center", va="center", fontsize=PT_SMALL, color=MUTE)
-
-
-STAGE_COLORS = ("#20509E", "#3F6BB0", "#5580BE")   # fine -> coarse -> global
-
-
-def panel_task(ax):
-    """B: the serial divisive chain, one gain sensor per physical stage."""
-    w, h = point_frame(ax)
-    box_x0, box_x1 = 0.033 * w, 0.545 * w
-    centres = (0.785 * h, 0.585 * h, 0.385 * h)
-    box_h = 0.135 * h
-    stages = (
-        ("G₁   fine", STAGE_COLORS[0]),
-        ("G₂   coarse", STAGE_COLORS[1]),
-        ("G₃   global", STAGE_COLORS[2]),
-    )
-    ax.text(0.5 * (box_x0 + box_x1), 0.945 * h, "class signal  s",
-            ha="center", va="center", fontsize=PT_SMALL, color=INK)
-    ax.annotate("", xy=(0.5 * (box_x0 + box_x1), centres[0] + box_h / 2.0),
-                xytext=(0.5 * (box_x0 + box_x1), 0.900 * h),
-                arrowprops=dict(arrowstyle="-|>,head_length=3.2,head_width=2.0",
-                                mutation_scale=1.0, color=MUTE,
-                                lw=LW_EDGE, shrinkA=0, shrinkB=0))
-    sensor_x = 0.685 * w
-    for index, ((label, color), y) in enumerate(zip(stages, centres,
-                                                    strict=True)):
-        ax.add_patch(FancyBboxPatch(
-            (box_x0, y - box_h / 2.0), box_x1 - box_x0, box_h,
-            boxstyle="round,pad=0,rounding_size=2.6",
-            facecolor=mix(color, 9), edgecolor=color, lw=LW_EDGE, zorder=2))
-        ax.text(0.5 * (box_x0 + box_x1), y, label, ha="center", va="center",
-                fontsize=PT_SMALL, color=color, zorder=4)
-        ax.plot([box_x1 + 1.5, sensor_x - 3.4], [y, y], color=MUTE,
-                lw=LW_HAIR, zorder=1, solid_capstyle="round")
-        ax.plot([sensor_x], [y], marker="o", ms=MS_JUNCTION + 0.6,
-                mfc="white", mec=color, mew=LW_EDGE, ls="none", zorder=4)
-        if index < 2:
-            ax.annotate(
-                "", xy=(0.5 * (box_x0 + box_x1), centres[index + 1]
-                        + box_h / 2.0),
-                xytext=(0.5 * (box_x0 + box_x1), y - box_h / 2.0),
-                arrowprops=dict(
-                    arrowstyle="-|>,head_length=3.2,head_width=2.0",
-                    mutation_scale=1.0, color=MUTE, lw=LW_EDGE,
-                    shrinkA=0, shrinkB=0))
-    bracket_x = sensor_x + 0.055 * w
-    ax.plot([bracket_x, bracket_x], [centres[2], centres[0]], color=MUTE,
-            lw=LW_HAIR, zorder=1, solid_capstyle="round")
-    for y in (centres[0], centres[2]):
-        ax.plot([bracket_x - 0.022 * w, bracket_x], [y, y], color=MUTE,
-                lw=LW_HAIR, zorder=1, solid_capstyle="round")
-    # A one-word rail label, not a sentence: the drawing already shows one
-    # sensor opposite each stage, and the caption says so in words.
-    ax.text(bracket_x + 0.030 * w, centres[1], "sensors",
-            ha="left", va="center", fontsize=PT_SMALL, color=MUTE)
-    ax.annotate("", xy=(0.5 * (box_x0 + box_x1), 0.230 * h),
-                xytext=(0.5 * (box_x0 + box_x1), centres[2] - box_h / 2.0),
-                arrowprops=dict(arrowstyle="-|>,head_length=3.2,head_width=2.0",
-                                mutation_scale=1.0, color=MUTE,
-                                lw=LW_EDGE, shrinkA=0, shrinkB=0))
-    ax.add_patch(Circle((0.5 * (box_x0 + box_x1), 0.180 * h), 0.045 * h,
-                        facecolor=COLORS["soma"], edgecolor=mix("ink", 30),
-                        lw=LW_EDGE, zorder=5))
-    ax.text(0.5 * (box_x0 + box_x1) + 0.075 * w, 0.180 * h, "soma",
-            ha="left", va="center", fontsize=PT_SMALL, color=MUTE)
-    ax.text(0.5 * w, 0.045 * h, "distal drive = s · G₁ · G₂ · G₃",
-            ha="center", va="center", fontsize=PT_ANNOT, color=INK)
-
-
-def panel_architecture(ax):
-    """H: the resource-identical architectures compared in F."""
-    w, h = point_frame(ax)
-    centres = [w * f for f in (0.16, 0.50, 0.84)]
-    base_y = 0.235 * h
-    radius = 0.52 * h
-    # Point MLP: crossed dense layers, control gray.
-    layer_y = (base_y, base_y + 0.26 * h, base_y + 0.52 * h)
-    node_dx = 0.052 * w
-    layers = []
-    for y, count in zip(layer_y, (3, 4, 3), strict=True):
-        layers.append([(centres[0] + off, y)
-                       for off in np.linspace(-node_dx, node_dx, count)])
-    for lower, upper in zip(layers[:-1], layers[1:], strict=True):
-        for px, py in lower:
-            for qx, qy in upper:
-                ax.plot([px, qx], [py, qy], color=MUTE, lw=LW_HAIR,
-                        zorder=2, solid_capstyle="round")
-    for level in layers:
-        for px, py in level:
-            ax.plot([px], [py], marker="o", ms=MS_JUNCTION, mfc="white",
-                    mec=C_CONTROL_LIGHT, mew=LW_EDGE, ls="none", zorder=4)
-    draw_tree(ax, [4, 1], x0=centres[1], y0=base_y, radius=radius,
-              sector_deg=34.0, color=C_CONTROL)
-    draw_tree(ax, [2, 1, 2], x0=centres[2], y0=base_y, radius=radius,
-              sector_deg=30.0, color=C_ROUTE)
-    for x, label, color in (
-        (centres[0], "point\nMLP", MUTE),
-        (centres[1], "grouped\nstar", C_CONTROL),
-        (centres[2], "serial\ntree", C_ROUTE),
-    ):
-        ax.text(x, 0.075 * h, label, ha="center", va="center",
-                linespacing=1.15, fontsize=PT_SMALL, color=color)
-    bracket(ax, centres[1] - 0.14 * w, centres[2] + 0.14 * w, 0.905 * h,
-            drop=0.03 * h)
-    ax.text((centres[1] + centres[2]) / 2.0, 0.962 * h,
-            "same 8 branch modules", ha="center", va="center",
-            fontsize=PT_SMALL, color=MUTE)
-
-
-def panel_backprop_depth(ax, summary):
-    """C: does physical depth help, and only when the hierarchy matches?"""
-    handles = []
-    # Zero alignment and sensor shuffled lie on top of one another to within
-    # 0.01 pp, so their dash phases interleave and their marker columns are
-    # dodged; the dodge is declared in the panel.
-    spec = (
-        ("aligned", "aligned serial tree", C_ROUTE, "o", True, None, -0.055),
-        ("zero_alignment", "zero alignment", C_CONTROL_LIGHT, "v", False,
-         (0.0, (1.4, 1.6)), -0.055),
-        ("sensor_shuffled", "sensor shuffled", C_SHUFFLE, "^", False,
-         (1.5, (1.4, 1.6)), 0.055),
-        ("rewired_tree", "tree reversed", C_CONTROL, "D", False,
-         (0.0, (1.4, 1.6)), 0.055),
-    )
-    for regime, label, color, marker, filled, dashes, dx in spec:
-        series(ax, summary, color=color, marker=marker, filled=filled,
-               dashes=dashes, dx=dx, label=label, handles=handles,
-               regime=regime, mechanism="shunting", method="bp",
-               transport="backpropagation")
-    accuracy_axis(ax, left=True, bottom=True)
-    key(ax, handles)
-
-
-def panel_local_transport(ax, summary):
-    """D: the same depth test under two local credit coordinates."""
-    handles = []
-    # All four series meet at one stage and the two reversed curves coincide
-    # throughout, so the four marker columns are dodged and the reversed dash
-    # phases interleave.
-    spec = (
-        ("per_soma_shared", "aligned", "shared soma, aligned", C_SHARED, "o",
-         True, None, -0.150),
-        ("path_transport", "aligned", "exact path, aligned", C_PATH, "^",
-         True, None, -0.050),
-        ("per_soma_shared", "rewired_tree", "shared soma, reversed", C_SHARED,
-         "s", False, (0.0, (3.2, 3.2)), 0.050),
-        ("path_transport", "rewired_tree", "exact path, reversed", C_PATH,
-         "D", False, (3.2, (3.2, 3.2)), 0.150),
-    )
-    for transport, regime, label, color, marker, filled, dashes, dx in spec:
-        series(ax, summary, color=color, marker=marker, filled=filled,
-               dashes=dashes, dx=dx, label=None, handles=None,
-               regime=regime, mechanism="shunting", method="local3f",
-               transport=transport)
-    accuracy_axis(ax, left=False, bottom=True)
-    # Factorial key: colour names the coordinate, line style names the
-    # placement.  Spelling out all four crossings ("shared soma, reversed")
-    # ran the legend into the D_p = 3 exact-path marker at this panel width.
-    handles = [
-        Line2D([], [], color=C_SHARED, marker="o", markersize=MARKER_MS,
-               linestyle="-", linewidth=LW_DATA, label="shared soma"),
-        Line2D([], [], color=C_PATH, marker="^", markersize=MARKER_MS,
-               linestyle="-", linewidth=LW_DATA, label="exact path"),
-        Line2D([], [], color=COLORS["mute"], linestyle="-",
-               linewidth=LW_DATA, label="aligned"),
-        Line2D([], [], color=COLORS["mute"], linestyle=(0.0, (3.2, 3.2)),
-               linewidth=LW_DATA, label="reversed"),
-    ]
-    key(ax, handles)
-
-
-def panel_divisive(ax, summary):
-    """E: the depth gain needs the divisive (shunting) mechanism."""
-    series(ax, summary, color=C_ROUTE, marker="o", regime="aligned",
-           mechanism="shunting", method="bp", transport="backpropagation")
-    series(ax, summary, color=C_ADDITIVE, marker="s", regime="aligned",
-           mechanism="additive", method="bp", transport="backpropagation")
-    accuracy_axis(ax, left=True, bottom=True)
-    ax.text(2.06, 0.800, "aligned serial tree", ha="right", va="bottom",
-            fontsize=PT_LEGEND, color=C_ROUTE)
-    ax.text(3.02, 0.492, "raw additive", ha="right", va="top",
-            fontsize=PT_LEGEND, color=C_ADDITIVE)
-
-
-def panel_serial(ax, summary):
-    """F: serial composition, against the resource-identical grouped star."""
-    series(ax, summary, color=C_ROUTE, marker="o", regime="aligned",
-           architecture="serial_tree", credit="full_bp")
-    series(ax, summary, color=C_CONTROL, marker="s", filled=False,
-           dashes=(0.0, (3.2, 2.0)), regime="aligned",
-           architecture="all_active_star", credit="full_bp")
-    accuracy_axis(ax, left=False, bottom=True)
-    ax.text(3.02, 0.952, "aligned serial tree", ha="right", va="bottom",
-            fontsize=PT_LEGEND, color=C_ROUTE)
-    ax.text(3.02, 0.575, "grouped star", ha="right", va="top",
-            fontsize=PT_LEGEND, color=C_CONTROL)
-
-
-# A row keeps its own condition's colour AND its own marker in every panel
-# of the figure, and a control keeps the control's colour in both the level
-# block and the interaction block, so one row label never carries two hues.
-FOREST = (
-    ("BP depth", (
-        ("aligned", "bp_depth_d3_minus_d1__aligned", "depth", C_ROUTE, "o"),
-        ("zero align", "bp_depth_d3_minus_d1__zero_alignment", "depth",
-         C_CONTROL_LIGHT, "v"),
-        ("shuffled", "bp_depth_d3_minus_d1__sensor_shuffled", "depth",
-         C_SHUFFLE, "^"),
-        ("reversed", "bp_depth_d3_minus_d1__rewired_tree", "depth",
-         C_CONTROL, "D"),
-    )),
-    ("vs control", (
-        ("zero align",
-         "bp_depth_interaction__aligned_minus_zero_alignment", "depth",
-         C_CONTROL_LIGHT, "v"),
-        ("shuffled",
-         "bp_depth_interaction__aligned_minus_sensor_shuffled", "depth",
-         C_SHUFFLE, "^"),
-        ("reversed",
-         "bp_depth_interaction__aligned_minus_rewired_tree", "depth",
-         C_CONTROL, "D"),
-    )),
-    ("LocalCA depth", (
-        ("shared soma",
-         "local_depth_d3_minus_d1__aligned__per_soma_shared", "depth",
-         C_SHARED, "o"),
-        ("exact path",
-         "local_depth_d3_minus_d1__aligned__path_transport", "depth",
-         C_PATH, "^"),
-    )),
-    ("architecture", (
-        ("serial − star", "serial_minus_star__aligned__d3", "point", C_ROUTE,
-         "o"),
-    )),
-)
-
-
-def panel_forest(ax, depth_contrasts, point_contrasts):
-    """G: every prespecified paired contrast as a bar on ONE effect axis.
-
-    ONE stub column.  Family names and row names are both y tick labels, so
-    they share a single right-aligned edge and no text is drawn inside the
-    plotting rectangle.  Hierarchy is carried by tone, not by position: the
-    family name is mute at PT_SMALL, its rows are ink at PT_TICK.
-
-    Drawing the family names inside the axes (an earlier attempt) put them on
-    top of the near-zero rows -- three of the four "BP depth" rows sit at
-    0 pp, exactly where a left-aligned header starts -- and forced the zero
-    reference to be broken into one stub per family so it would not strike
-    through them, which read as a rendering fault.  With the names in the tick
-    column the zero reference is one continuous rule again.
-
-    Each contrast is one bar from 0 to its mean, filled at
-    ``FOREST_FILL_PCT`` of the row's own colour and outlined in that colour at
-    ``LW_EDGE``, with the 95 % paired-seed interval drawn on top as a whisker
-    with ``ERR_CAPSIZE`` caps in the same colour.  The three flat BP-depth
-    controls are therefore bars of no visible length against the dashed zero
-    reference: the panel states "these controls did not move" as an absence,
-    which is the one reading the split axis could not give.
-    """
-    depth = depth_contrasts.set_index("contrast")
-    point = point_contrasts.set_index("contrast")
-
-    # Behind the bars, and drawn before them so nothing overprints an
-    # estimate: one continuous zero reference for the whole stack.
-    ax.axvline(0.0, color=MUTE, lw=LW_REF, ls=(0, (3.0, 2.2)), zorder=1)
-
-    ticks, labels, header_rows = [], [], []
-    unit = 0
-    for family, entries in FOREST:
-        # The family name is a tick label like every row name, so the stub has
-        # one right-aligned edge and nothing is drawn over the data.
-        ticks.append(unit)
-        labels.append(family)
-        header_rows.append(len(labels) - 1)
-        unit += 1
-        for name, key_, source, color, _marker in entries:
-            record = (depth if source == "depth" else point).loc[key_]
-            mean = 100.0 * float(record.mean_difference)
-            low = 100.0 * float(record.ci95_low)
-            high = 100.0 * float(record.ci95_high)
-            ax.barh(unit, mean, height=FOREST_BAR_H,
-                    facecolor=mix(color, FOREST_FILL_PCT), edgecolor=color,
-                    lw=LW_EDGE, zorder=2)
-            ax.errorbar(
-                mean, unit, xerr=np.array([[mean - low], [high - mean]]),
-                fmt="none", ecolor=color, elinewidth=LW_ERR,
-                capsize=ERR_CAPSIZE, capthick=LW_ERR, zorder=4,
+    selected = 2
+    # Tree edges, with the selected ancestry path highlighted.
+    for level in range(3):
+        parents, py = levels[level]
+        children, cy = levels[level + 1]
+        for child_idx, cx in enumerate(children):
+            parent_idx = child_idx // 2
+            on_path = (
+                (level == 0 and parent_idx == 0 and child_idx == 0)
+                or (level == 1 and parent_idx == 0 and child_idx == 1)
+                or (level == 2 and parent_idx == 1 and child_idx == selected)
             )
-            ticks.append(unit)
-            labels.append(name)
-            unit += 1
+            f.leader((parents[parent_idx], py), (cx, cy),
+                     color=GREEN if on_path else COLORS["edge"],
+                     lw=LW_DATA if on_path else LW_EDGE)
+    for level, (nodes, y) in enumerate(levels):
+        for idx, x in enumerate(nodes):
+            on_path = ((level == 0) or
+                       (level == 1 and idx == 0) or
+                       (level == 2 and idx == 1) or
+                       (level == 3 and idx == selected))
+            f.disc((x, y), 3.3 if level < 3 else 3.7,
+                   fill="white" if level < 3 else
+                   (GREEN if idx == selected else COLORS["panel_bg"]),
+                   edge=GREEN if on_path else COLORS["edge"], lw=LW_EDGE)
 
-    ax.set_xlim(*FOREST_XLIM)
-    ax.set_xticks(list(FOREST_XTICKS))
-    # A full row of clearance under the last contrast and above the first
-    # family name: at 0.4 the bottom bar sat on the x spine.
-    ax.set_ylim(unit - 0.05, -0.90)
-    ax.set_yticks(ticks)
-    ax.set_yticklabels(labels, fontsize=PT_TICK)
-    for index, label in enumerate(ax.get_yticklabels()):
-        if index in header_rows:
-            label.set_fontsize(PT_SMALL)
-            label.set_color(MUTE)
+    evidence = (
+        "−0.45y", "−0.45y", "+y", "−0.15y",
+        "−0.75y", "−0.75y", "−0.75y", "−0.75y",
+    )
+    for idx, (x, val) in enumerate(zip(leaf_x, evidence, strict=True)):
+        color = GREEN if idx == selected else MUTE
+        _centred_subscript(f, (x, 0.215), "c", str(idx + 1), color=color)
+        f.text((x, 0.115), val, size=PT_SMALL, color=color)
+
+    # The three brackets name the increasing distractor strength without
+    # repeating prose under every leaf.
+    bracket_y = 0.035
+    groups = ((0, 1, "same half"), (3, 3, "sibling"), (4, 7, "other half"))
+    for start, end, label in groups:
+        left = leaf_x[start] - 0.025
+        right = leaf_x[end] + 0.025
+        f.rule(bracket_y + 0.018, left, right, color=COLORS["grid"], lw=LW_HAIR)
+        f.text(((left + right) / 2.0, bracket_y), label,
+               size=PT_SMALL, color=MUTE, va="top")
+
+
+def _card(f: Frame, rect, title, subtitle, *, accent):
+    x0, y0, width, height = rect
+    f.group(rect, tint=mix("shunting", 6) if accent == GREEN else COLORS["panel_bg"],
+            edge=mix("shunting", 45) if accent == GREEN else COLORS["grid"])
+    f.text((x0 + frame_dx(f, 5.0), y0 + height - f.fy(6.0)), title,
+           size=PT_ANNOT, color=accent, ha="left", va="top")
+    f.text((x0 + frame_dx(f, 5.0), y0 + height - f.fy(17.0)), subtitle,
+           size=PT_SMALL, color=MUTE, ha="left", va="top")
+
+
+def frame_dx(f: Frame, pt: float) -> float:
+    return f.fx(pt)
+
+
+# The eight task contexts fall into four groups of two; a matched route is
+# exactly one of those groups.  Colouring the leaves by group and the route
+# bars by the signal they carry lets one encoding separate all three
+# tree-structured controls: matched = bar colour equals its leaves' colour;
+# deranged = right leaves, wrong colour; rewired = right colour, wrong leaves.
+LEAF_GROUP = (0, 0, 1, 1, 2, 2, 3, 3)
+ROUTE_SUPPORTS = {
+    "matched": ((0, 1), (2, 3), (4, 5), (6, 7)),
+    "deranged": ((0, 1), (2, 3), (4, 5), (6, 7)),
+    # same four routes, same two leaves each (degree and depth unchanged),
+    # but the pairs no longer follow the task's own grouping
+    "rewired": ((0, 4), (1, 6), (2, 5), (3, 7)),
+}
+ROUTE_SIGNAL = {
+    "matched": (0, 1, 2, 3),
+    "deranged": (2, 3, 0, 1),   # the permutation the control applies
+    "rewired": (0, 1, 2, 3),
+}
+
+
+def _bar_levels(supports):
+    """Greedy vertical levels so overlapping route spans never collide."""
+    levels, ends = [], []
+    for lo, hi in supports:
+        for level, last in enumerate(ends):
+            if lo > last:
+                levels.append(level)
+                ends[level] = hi
+                break
         else:
-            label.set_color(COLORS["ink"])
-    # The stub column replaces the left spine, exactly as it did on the
-    # forest: a rule there would only fence the tick labels off the bars.
-    ax.spines["left"].set_visible(False)
-    ax.set_xlabel(FOREST_XLABEL)
-    ax.tick_params(axis="y", length=0.0, pad=2.0)
-    return ax
+            levels.append(len(ends))
+            ends.append(hi)
+    return levels
 
 
-def build():
-    depth_summary, depth_contrasts, point_summary, point_contrasts = \
-        load_tables()
+def _route_bars(f: Frame, rect, mode: str, *, name_rows: bool = False) -> None:
+    """Four rank-matched routes over the eight terminal dendritic branches."""
+    x0, y0, width, height = rect
+    xs = np.linspace(x0 + 0.09 * width, x0 + 0.91 * width, 8)
+    leaf_y = y0 + 0.13 * height
+    supports = ROUTE_SUPPORTS[mode]
+    signals = ROUTE_SIGNAL[mode]
+    levels = _bar_levels(supports)
+    span = 0.66 * height
+    step = span / max(len(set(levels)), 1)
+
+    # Each leaf is drawn as a terminal dendritic branch -- a short stub
+    # continuing toward the soma, capped by the addressable terminal itself --
+    # so the row reads as branches rather than as anonymous circles.  The cap
+    # is tinted by the task group whose stream that branch carries, which is
+    # what makes a group-mixing route visible.
+    for idx, xpos in enumerate(xs):
+        tone = ROUTE_COLORS[LEAF_GROUP[idx]]
+        f.ax.plot([xpos, xpos], [leaf_y - f.fy(5.0), leaf_y - f.fy(1.4)],
+                  color=mix("dend", 45), lw=LW_HAIR, solid_capstyle="round",
+                  zorder=3)
+        f.disc((xpos, leaf_y), 2.6, fill=mix(tone, 26), edge=tone,
+               lw=LW_EDGE, zorder=4)
+
+    for route, (lo, hi) in enumerate(supports):
+        color = ROUTE_COLORS[signals[route]]
+        bar_y = leaf_y + 0.22 * height + levels[route] * step
+        left, right = xs[lo], xs[hi]
+        f.ax.plot([left, right], [bar_y, bar_y], color=color, lw=2.6,
+                  solid_capstyle="round", zorder=3)
+        # one leg per covered leaf: the route's support, drawn explicitly
+        for leaf in (lo, hi):
+            f.ax.plot([xs[leaf], xs[leaf]],
+                      [bar_y - f.fy(1.0), leaf_y + f.fy(3.2)],
+                      color=color, lw=LW_HAIR, solid_capstyle="round",
+                      zorder=2)
+
+    if name_rows:
+        top = leaf_y + 0.22 * height + max(levels) * step
+        f.text((x0 + 0.50 * width, top + f.fy(7.5)), "K = 4 feedback routes",
+               size=PT_SMALL, color=MUTE, va="bottom")
+        f.text((x0 + 0.50 * width, leaf_y - f.fy(8.0)),
+               "8 terminal branches", size=PT_SMALL, color=MUTE, va="top")
+
+
+def _nonanatomical_basis(f: Frame, rect) -> None:
+    """Dense signed rank-four basis over the SAME eight addresses.
+
+    Drawn on the other cards' geometry -- the eight leaves sit where they sit
+    everywhere else and each matrix column is one of them -- so the reader can
+    see directly that this control keeps the feedback bandwidth (four rows)
+    while abandoning contiguous subtree support (every row touches addresses
+    from several task groups).
+    """
+    x0, y0, width, height = rect
+    xs = np.linspace(x0 + 0.09 * width, x0 + 0.91 * width, 8)
+    leaf_y = y0 + 0.13 * height
+    matrix = np.asarray([
+        [1, 1, -1, -1, 1, 1, -1, -1],
+        [1, -1, 1, -1, 1, -1, 1, -1],
+        [1, 0, -1, 1, 0, -1, 1, -1],
+        [0, 1, 1, -1, -1, 1, -1, 0],
+    ])
+    for idx, xpos in enumerate(xs):
+        tone = ROUTE_COLORS[LEAF_GROUP[idx]]
+        f.ax.plot([xpos, xpos], [leaf_y - f.fy(5.0), leaf_y - f.fy(1.4)],
+                  color=mix("dend", 45), lw=LW_HAIR, solid_capstyle="round",
+                  zorder=3)
+        f.disc((xpos, leaf_y), 2.6, fill=mix(tone, 26), edge=tone,
+               lw=LW_EDGE, zorder=4)
+
+    cell_w = (xs[1] - xs[0]) * 0.86
+    cell_h = 0.13 * height
+    base_y = leaf_y + 0.20 * height
+    for row in range(4):
+        y = base_y + (3 - row) * cell_h
+        # a chip in the route ramp names the row as one feedback channel
+        # inset so the four chips read as four rows, not one continuous rail
+        f.ax.plot([x0 + 0.042 * width, x0 + 0.042 * width],
+                  [y + 0.16 * cell_h, y + 0.84 * cell_h],
+                  color=ROUTE_COLORS[row], lw=2.6, solid_capstyle="butt",
+                  zorder=4)
+        for col in range(8):
+            value = matrix[row, col]
+            face = (mix("oracle", 30) if value > 0 else
+                    mix("point_mlp", 34) if value < 0 else "white")
+            f.ax.add_patch(Rectangle(
+                (xs[col] - cell_w / 2.0, y), cell_w, cell_h,
+                facecolor=face, edgecolor="white", linewidth=LW_HAIR,
+                transform=f.ax.transData, zorder=3,
+            ))
+
+    # One cell is one route's signed weight on one branch: the column sits
+    # over the branch it weights and the row carries its route chip.  A label
+    # above the matrix collided with the card subtitle, so the caption names
+    # the cell and the row chips carry the route identity here.
+    f.text((x0 + 0.50 * width, leaf_y - f.fy(8.0)),
+           "8 terminal branches", size=PT_SMALL, color=MUTE, va="top")
+
+
+def route_controls(ax, indices) -> None:
+    """Visual dictionary for selected control questions at K=4."""
+    f = Frame(ax, labels=True, scale=0.94)
+    all_specs = (
+        ("matched subtrees", "task groups = subtrees", GREEN),
+        ("deranged assignment", "same routes, wrong signals", GRAY),
+        ("rewired tree", "same degree and depth", GRAY),
+        ("non-anatomical basis", "same feedback bandwidth", PURPLE),
+    )
+    chosen = tuple((index, all_specs[index]) for index in indices)
+    cells = f.split(len(chosen), axis="x", gap_pt=8.0,
+                    pad_pt=(0, 0, 0, 0))
+    for rect, (_, (title, subtitle, accent)) in zip(cells, chosen, strict=True):
+        _card(f, rect, title, subtitle, accent=accent)
+    # Lower drawing rooms deliberately use identical geometry.
+    for (index, _), rect in zip(chosen, cells, strict=True):
+        x0, y0, width, height = rect
+        room = (x0, y0 + 0.07 * height, width, 0.67 * height)
+        if index == 0:
+            _route_bars(f, room, "matched", name_rows=True)
+        elif index == 1:
+            _route_bars(f, room, "deranged")
+        elif index == 2:
+            _route_bars(f, room, "rewired")
+        else:
+            _nonanatomical_basis(f, room)
+
+
+
+def _move_label(ax, text: str, xy) -> None:
+    """Re-anchor one in-panel direct label without changing its wording."""
+    for artist in ax.texts:
+        if artist.get_text() == text:
+            artist.set_position(xy)
+            return
+    raise LookupError(f"direct label {text!r} not found")
+
+
+def build() -> list:
+    mpl.rcParams["lines.markeredgewidth"] = LW_EDGE
+    outcomes = pd.read_csv(SUBTREE / "seed_outcomes.csv")
+    summary = pd.read_csv(SUBTREE / "condition_summary.csv")
+    contrasts = pd.read_csv(SUBTREE / "paired_contrasts.csv")
+    dendritic = summary[summary.architecture.eq("dendritic_tree")]
 
     canvas = NativeCanvas(
-        CANVAS_H_PT / 72.0, 3, row_weights=list(ROW_H_PT),
-        hgutter_pt=HGUTTER, vgutter_pt=VGUTTER, margins=MARGINS,
-        letters=False,
+        HEIGHT_IN, 3, row_weights=ROW_PT,
+        hgutter_pt=HGUTTER_PT, vgutter_pt=VGUTTER_PT,
+        margins=Margins(left=34.0, right=12.0, top=22.0, bottom=26.0),
     )
+    ax_a = canvas.panel("A", 0, 0, 7, schematic=True,
+                        title="Eight-context hierarchical task")
+    ax_b = canvas.panel("B", 0, 7, 5, schematic=True,
+                        title="Feedback bandwidth within one neuron")
+    ax_c = canvas.panel("C", 1, 0, 6, schematic=True,
+                        title="Route-assignment controls at K = 4")
+    ax_d = canvas.panel("D", 1, 6, 6, schematic=True,
+                        title="Topology and basis controls at K = 4")
+    ax_e = canvas.panel("E", 2, 0, 4,
+                        title="Learning across bandwidth")
+    ax_f = canvas.panel("F", 2, 4, 4,
+                        title="Route assignment")
+    ax_g = canvas.panel("G", 2, 8, 4,
+                        title="Matched versus rewired topology")
 
-    # Column 0, rows 0 and 1: the two design schematics, immediately left of
-    # the shared-axis accuracy block they explain.  No inset: the horizontal
-    # gutter -- not a slice of these panels -- carries the block's y label,
-    # its tick column and the panel letter that sits left of them.
-    ax_a = canvas.panel("A", 0, 0, 4, schematic=True,
-                        title="Matched-resource depth")
-    ax_b = canvas.panel("B", 1, 0, 4, schematic=True,
-                        title="Nested divisive task")
+    hierarchical_task(ax_a)
+    address_ladder_compact(ax_b)
+    route_controls(ax_c, (0, 1))
+    route_controls(ax_d, (2, 3))
+    bandwidth_sweep_compact(ax_e, outcomes, dendritic)
+    route_contrasts_compact(ax_f, contrasts)
+    # "vs best" sat on the K = 1 diamond and its lower whisker; move it into
+    # the empty well under the rising violet segment.
+    _move_label(ax_f, "vs best", (0.52, -46.0))
+    topology_alignment_compact(ax_g, outcomes)
 
-    # Rows 0-1, columns 4-11: one shared-axis small-multiple block.  Same y
-    # range, ticks and units throughout; the tick column and label are drawn
-    # once per row and the right-hand siblings drop them entirely.
-    ax_c = canvas.panel("C", 0, 4, 4, grid="y", title="Backprop depth test")
-    ax_d = canvas.panel("D", 0, 8, 4, grid="y", sharey=ax_c,
-                        title="Local credit transport")
-    ax_e = canvas.panel("E", 1, 4, 4, grid="y", title="Divisive control")
-    ax_f = canvas.panel("F", 1, 8, 4, grid="y", sharey=ax_e,
-                        title="Serial composition")
-
-    # Row 2: the bar chart of paired effect sizes under the block it
-    # summarises, and the architecture schematic directly under the
-    # serial-composition result it explains.  G is declared on the five
-    # modules it occupies -- its row names are its own tick column, not a
-    # squatter in the empty cell beside it -- and is one ordinary axes again:
-    # the continuous effect axis needs no satellite sub-axes, so the manifest,
-    # the column lock and the row lock see exactly what is drawn.
-    ax_g = canvas.panel("G", 2, 0, 5, grid="x", title="Paired effect sizes")
-    ax_h = canvas.panel("H", 2, 5, 7, schematic=True,
-                        title="Architecture controls")
-
-    panel_depth_ladder(ax_a)
-    panel_task(ax_b)
-    panel_backprop_depth(ax_c, depth_summary)
-    panel_local_transport(ax_d, depth_summary)
-    panel_divisive(ax_e, depth_summary)
-    panel_serial(ax_f, point_summary)
-    panel_architecture(ax_h)
-
-    panel_forest(ax_g, depth_contrasts, point_contrasts)
-
-    # Panel letters sit in a fixed gutter: wide where a y label and tick
-    # column occupy it, narrow where a shared axis leaves it empty.  G starts
-    # in grid column 0, so its letter takes the same offset A and B take.
-    for name, dx in (("A", 30.0), ("B", 30.0), ("C", 34.0), ("D", 14.0),
-                     ("E", 34.0), ("F", 14.0), ("G", 30.0), ("H", 14.0)):
-        canvas.add_letter(name, canvas.axes[name], dx_pt=dx)
-
-    problems = canvas.save(OUT, name="main_figure_05_native")
+    COMPONENT.parent.mkdir(parents=True, exist_ok=True)
+    problems = canvas.save(COMPONENT, name="main_figure_05_native")
+    CANONICAL.parent.mkdir(parents=True, exist_ok=True)
+    CANONICAL.write_bytes(COMPONENT.read_bytes())
     return problems
 
 
+def main() -> None:
+    problems = build()
+    for problem in problems:
+        print(f"  {problem}")
+    print(f"  canvas width {FIG_W * 72:.1f} pt, height {CANVAS_H_PT:.1f} pt")
+
+
 if __name__ == "__main__":
-    issues = build()
-    if issues:
-        raise SystemExit(f"main_figure_05_native: {len(issues)} layout issues")
+    main()

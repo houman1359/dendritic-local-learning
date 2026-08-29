@@ -520,21 +520,26 @@ def _mini_tree(t, sx, sy):
 
 def draw_deranged_pair(ax, scale=1.0, *, labels=True, xlim=None, ylim=None,
                        autoscale=True):
-    """Correct assignment (top, blue) vs deranged transport (bottom, red)."""
+    """Correct assignment (top, blue) vs deranged transport (bottom, gray)."""
     if autoscale:
         x = (-0.95, 4.35) if xlim is None else xlim
         y = (-1.25, 4.05) if ylim is None else ylim
         _setup_axes(ax, x, y)
     t = _Tree(ax, scale, labels)
-    add, bp = COLORS["additive"], COLORS["bp"]
+    # The deranged map is a CONTROL, so it is drawn in the control
+    # gray.  It previously used COLORS["bp"], the hue this figure
+    # simultaneously declares to mean the exact backpropagated field.
+    add, bp = COLORS["additive"], COLORS["mute"]
     # correct assignment (top)
     _mini_tree(t, 0.0, 2.55)
     _mini_tree(t, 2.30, 2.55)
     for x0 in (0.0, 2.30):
         t.dot((x0, 1.70), 4.0, add)
         t.arrow((x0, 1.78), (x0, 2.36), add, tikz_pt=0.8, head=4.0)
-    t.text((0.0, 1.60), "δᵤ", add, size=PT_SMALL, va="top")
-    t.text((2.30, 1.60), "δᵥ", add, size=PT_SMALL, va="top")
+    # Set beside the feed dot, not under it: at va="top" from y=1.60 the
+    # glyphs fell inside the 4 pt dot and were overprinted by the arrow.
+    t.text((-0.22, 1.70), "δᵤ", add, size=PT_SMALL, ha="right", va="center")
+    t.text((2.08, 1.70), "δᵥ", add, size=PT_SMALL, ha="right", va="center")
     t.text((3.20, 2.85), "correct", COLORS["additive"], ha="left")
     # deranged assignment (bottom)
     _mini_tree(t, 0.0, 0.0)

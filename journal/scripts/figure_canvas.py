@@ -158,6 +158,15 @@ HGUTTER_PT = 30.0           # one horizontal gutter, figure-wide
 VGUTTER_PT = 32.0           # one vertical gutter, figure-wide
 LETTER_DX_PT = 28.0         # letter sits in the gutter, left of the tick band
 LETTER_DY_PT = 2.5          # baseline above the axes top
+# A panel letter must be the highest and the leftmost mark of its own panel,
+# with every other mark set clear below and to the right of it.  A fixed
+# offset from the AXES cannot promise that, because a rotated y label or a
+# wide category tick reaches further left than the axes box and a centred
+# title rises as high as the letter.  These two are measured against the
+# panel's real ink instead, once the layout is final.
+LETTER_CLEAR_PT = 4.2       # letter top above the panel's topmost other ink
+LETTER_GAP_PT = 3.4         # letter right edge to the panel's leftmost ink
+LETTER_CAP_FRAC = 0.72      # cap height of the bold face, as a size fraction
 
 
 def snap_font_pt(value: float) -> float:
@@ -212,6 +221,36 @@ def style_panel(ax, *, grid="none", spines=("left", "bottom"),
     ax.xaxis.label.set_color(COLORS["ink"])
     ax.yaxis.label.set_color(COLORS["ink"])
     return ax
+
+
+def token_subscript(ax, x, y, base, sub, tail="", *, size=PT_ANNOT,
+                    sub_size=PT_SMALL, color=None, ha="left", va="center",
+                    drop_pt=1.6, zorder=5, clip_on=True, transform=None):
+    """Draw ``base``+subscript+``tail`` using only token type sizes.
+
+    Mathtext shrinks subscripts to 0.7x the requested size, which lands
+    between the type tokens and fails the strict audit.  This helper chains
+    plain-text spans instead: the subscript is a real token size, baseline
+    dropped by ``drop_pt``, and each following span anchors on the previous
+    span's box, so the group survives layout moves.  Left-anchor the group
+    (``ha`` applies to the base span); short in-panel symbols never need
+    centred subscripted text.
+    """
+    color = COLORS["ink"] if color is None else color
+    kwargs = {"transform": transform} if transform is not None else {}
+    base_text = ax.text(x, y, base, fontsize=size, color=color, ha=ha,
+                        va=va, zorder=zorder, clip_on=clip_on, **kwargs)
+    sub_text = ax.annotate(sub, xy=(1.0, 0.0), xycoords=base_text,
+                           xytext=(0.4, -drop_pt), textcoords="offset points",
+                           fontsize=sub_size, color=color, ha="left",
+                           va="baseline", zorder=zorder,
+                           annotation_clip=clip_on)
+    if tail:
+        ax.annotate(tail, xy=(1.0, 0.0), xycoords=sub_text,
+                    xytext=(0.6, drop_pt), textcoords="offset points",
+                    fontsize=size, color=color, ha="left", va="baseline",
+                    zorder=zorder, annotation_clip=clip_on)
+    return base_text
 
 
 def enforce_tokens(fig, *, fonts=True, strokes=True):
@@ -282,6 +321,15 @@ def _reserve(need_pt, avail_pt, pad_pt, cap_pt):
 
 
 # ── the canvas ───────────────────────────────────────────────────────────
+def _text_width_pt(artist, renderer) -> float:
+    """Rendered advance width of one text artist, in points."""
+    try:
+        bb = artist.get_window_extent(renderer=renderer)
+        return float(bb.width) * 72.0 / artist.figure.dpi
+    except Exception:
+        return 0.0
+
+
 class NativeCanvas:
     """One full-width figure on one 12-column module grid.
 
@@ -460,11 +508,35 @@ class NativeCanvas:
         return art
 
     def _sync_letters(self):
-        """Keep every panel letter glued to its panel after a lock pass."""
+        """Place every panel letter above and left of its panel's own ink.
+
+        The letter is measured against the panel's tight bounding box -- the
+        axes plus its labels, ticks and title -- so it clears a rotated y
+        label and a centred title rather than a nominal axes corner.  If the
+        measurement is unavailable the fixed offsets still apply.
+        """
+        try:
+            renderer = self.fig.canvas.get_renderer()
+        except Exception:
+            renderer = None
         for item in self._letters:
-            box = item["ax"].get_position()
+            ax = item["ax"]
+            box = ax.get_position()
             x = box.x0 * self.width_pt - item["dx_pt"]
             y = box.y1 * self.height_pt + item["dy_pt"]
+            if renderer is not None:
+                try:
+                    tight = ax.get_tightbbox(renderer).transformed(
+                        self.fig.dpi_scale_trans.inverted())
+                except Exception:
+                    tight = None
+                if tight is not None:
+                    cap = LETTER_CAP_FRAC * PANEL_LABEL_PT
+                    left_pt = tight.x0 * 72.0
+                    top_pt = tight.y1 * 72.0
+                    width_pt = _text_width_pt(item["art"], renderer)
+                    x = min(x, left_pt - LETTER_GAP_PT - width_pt)
+                    y = max(y, top_pt + LETTER_CLEAR_PT - cap)
             item["art"].set_position((max(x, 2.5) / self.width_pt,
                                       y / self.height_pt))
 

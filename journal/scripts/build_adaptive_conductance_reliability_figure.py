@@ -126,8 +126,10 @@ def main() -> None:
 
     methods = [
         ("noisy_no_shunt", "no shunt", COLORS["ink"], "o"),
-        ("adaptive_global_shunt", "adaptive global", COLORS["per_soma"], "s"),
-        ("adaptive_shuffled_shunt", "adaptive shuffled", COLORS["additive"], "^"),
+        # Both are controls: grays, not the salmon feedback slot and
+        # not Figure 2's additive-architecture blue.
+        ("adaptive_global_shunt", "adaptive global", COLORS["point_mlp"], "s"),
+        ("adaptive_shuffled_shunt", "adaptive shuffled", COLORS["mute"], "^"),
         ("adaptive_local_shunt", "adaptive local", COLORS["shunting"], "D"),
         ("initial_oracle_shunt", "initial oracle", COLORS["oracle"], "P"),
     ]

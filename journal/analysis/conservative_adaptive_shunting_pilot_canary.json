@@ -1,0 +1,31 @@
+{
+  "adaptive_config_sha256": "bc2ed6e8da2f81b004b64aeb5e00cb4b9181e776b04e8ed38db8911578cb0588",
+  "adaptive_script_sha256": "62bf96af7d877737a16c3a19ab3f4e9a0fbba4a6e26dcd67c13c85ee39cb92cb",
+  "numerical_gates": {
+    "maximum_adaptive_point_gate_trajectory_error": 9.103828801926284e-15,
+    "maximum_estimated_gain": 1.0,
+    "maximum_physical_shunt_finite_difference_error": 2.7414235592686283e-08,
+    "maximum_relative_finite_difference_error": 2.2785527271434936e-09,
+    "maximum_state_match_error": 2.220446049250313e-16,
+    "minimum_estimated_gain": 0.030000000000000027,
+    "minimum_input_rate": 0.0,
+    "passed": true,
+    "tested_doses": [
+      0.0,
+      0.1,
+      0.25,
+      0.5,
+      0.75,
+      1.0
+    ]
+  },
+  "outcomes_are_not_pilot_or_confirmatory": true,
+  "phase": "artifact_only_canary",
+  "pilot_config_sha256": "44198a48f51f0b1ac73281b742a219b491dc4454b63fd0693f29631c4f537d6f",
+  "pilot_script_sha256": "78c811146d8dc46a8614b2998016b2a3e92bfecf1757f24fd0ac35af0e1b33ae",
+  "positive_conductance_script_sha256": "7f8f0388a8f4b1f1923eeecbdae2a2ba56cfee56c9cb7c46240397921cbddd1e",
+  "repeated_control_audit": {
+    "maximum_repeated_control_difference": 0.0,
+    "passed": true
+  }
+}

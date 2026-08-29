@@ -68,7 +68,7 @@ FIGURE_MAP: dict[str, str] = {
     "components/main_cross_animal": "fig_main_cross_animal",
     "components/main_focal_schematic": "fig_main_focal_schematic",
     "components/main_structure_function_summary": "fig_main_structure_function_summary",
-    # Supplementary Information: generated source blocks S1--S27.  The
+    # Supplementary Information: generated source blocks S1--S29.  The
     # compositor adds compact S18--S19 blocks and S28 from selected diagnostic
     # panels.
     "supplementary/figure_S01_panels_A-E": "fig3_mechanistic_evidence",

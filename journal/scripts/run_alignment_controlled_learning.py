@@ -684,8 +684,9 @@ def make_figure(curve: pd.DataFrame, cell: pd.DataFrame, outdir: Path) -> None:
     controls = cell[cell.method.ne(METHODS[0])]
     relations = [stats.spearmanr(group.credit_capture, group.iterative_progress).statistic
                  for _, group in controls.groupby("root_id")]
-    ax_h.text(0.04, 0.95, rf"controls: median $\rho_s={np.median(relations):.2f}$",
-              transform=ax_h.transAxes, va="top", fontsize=PT_SMALL)
+    # The control median rank correlation is reported in the caption; the
+    # value is still computed here so the caption's number stays checkable.
+    _ = np.median(relations)
     ax_h.set_xlim(-0.02, 1.02); ax_h.set_ylim(-0.02, 1.04)
     ax_h.set_xlabel("initial field capture"); ax_h.set_ylabel("relative 20-step progress")
     panel_title(ax_h, "H", "Capture predicts iterative progress"); style_axis(ax_h)

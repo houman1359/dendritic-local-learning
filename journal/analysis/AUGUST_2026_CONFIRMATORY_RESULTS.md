@@ -93,6 +93,35 @@ operation or establish sustained superiority over unshunted local learning.
 
 ## Completed trained and mechanistic experiments
 
+### Continuous path-demand boundary
+
+The frozen Fashion-MNIST branch-conflict experiment completed all 2,400
+confirmatory fits across 20 paired seeds, branch counts `B=2,4,8`, eight nested
+conflict doses and five routing conditions. Every branch received a nonzero
+view, while a downstream context gate selected one branch for the somatic
+readout. At zero conflict, correct-path minus neuron-shared accuracy was
+`+0.08`, `+0.01` and `-0.16` percentage points for `B=2,4,8`, respectively,
+all within the prespecified two-point equivalence margin. At full conflict the
+effects were `+34.90`, `+58.20` and `+57.40` points.
+
+The seed-wise accuracy-advantage slope on conflict was positive in 20/20 seeds
+at every branch count: means `0.2456`, `0.6478` and `0.7503`, with 95% paired-
+seed intervals `0.2105--0.2801`, `0.6376--0.6586` and `0.7382--0.7622`.
+Chance crossings of the mean shared-credit curves were `0.964`, `0.668` and
+`0.573`, close to the analytic shared-mode boundaries `1`, `2/3` and `4/7`.
+The seed-wise transition order `B=8 < B=4 < B=2` held in all 20 pairs.
+Analytic backpropagation and the explicitly gated grouped-point condition were
+identical to correct routing; the maximum analytic-versus-autograd gradient
+error was `3.43e-7`.
+
+Interpretation: the experiment supplies the missing continuous existence test.
+Branch-selective information becomes useful when off-route eligibilities
+conflict, and its failure boundary is predicted by branch count. It does not
+show that biological dendrites are uniquely necessary: the selector can be
+carried by a routed teaching coefficient or by an equivalent branch-local
+eligibility gate, and the mechanism-matched task does not estimate prevalence
+in natural learning.
+
 ### Within-neuron address hierarchy
 
 The shallow credit-reversal phase used ten paired seeds and 80 frozen fits.
@@ -261,26 +290,45 @@ difference was 5.90 points. Every interval includes zero. This is evidence of
 close training-level agreement at the condition-average scale, not a formal
 equivalence test or an identity claim.
 
+## Fresh raw-additive CIFAR-10 feedback ladder
+
+The configuration-limited provisional additive baseline was replaced by an
+independently frozen 20-seed ladder at the validation-selected operating point.
+All 80 fits passed source, pairing, calibration, checkpoint and convergence
+audits. Mean test accuracies were 34.47% for strict scalar, 50.87% for
+neuron-specific, 50.01% for exact path and 50.12% for matched BP.
+Neuron-specific minus scalar was +16.393 percentage points (95% paired interval
+15.878--16.908; 20/20 positive; Holm-adjusted directional
+`P=5.57e-24`). Exact path minus neuron-specific was -0.859 points
+(-1.171 to -0.547; 2/20 positive), so the prespecified path-resolution
+promotion gate failed. Exact path and BP were formally equivalent within the
+frozen +/-1-point margin (`P_TOST=1.58e-5`). The result supports a harder-data
+neuron-identity bandwidth claim, not a CIFAR benefit of finer dendritic path
+transport.
+
 ## Paper and presentation placement
 
 - Main Figure 1: point neuron to dendritic coordinate/address/gain hierarchy
   and the general adjoint theorem.
-- Main Figure 2: neuronal-coordinate bandwidth, ownership, fixed-budget depth
-  and Fashion-MNIST replication.
-- Main Figure 3: complete 2,700-fit address-bandwidth factorial and the shallow
-  credit-reversal anchor.
+- Main Figure 2: neuronal-coordinate bandwidth, ownership, fixed-budget depth,
+  the Fashion-MNIST replication and the branch-conflict transition overview.
+- Main Figure 3: branch-conflict task and analytic boundary followed by the
+  complete 2,700-fit nested-address bandwidth factorial.
 - Main Figure 4: stochastic credit phase, hierarchy-depth crossover,
   reliability controls and frozen-factorial utility reanalysis.
 - Main Figure 5: exact-resource physical depth, point controls, BP--LocalCA
   decomposition, alignment dose, literal grouped point and H2 replication.
-- Main Figures 6--8: reconstructed route capacity, focal conductance and the
-  measured-alignment/animal boundary.
-- Supplementary Figures S1--S18 retain the derivations, audit controls,
+- Main Figures 6--9: nonlinear-depth saturation and task-family boundaries,
+  reconstructed route capacity, focal conductance and the measured-alignment/
+  animal boundary.
+- Supplementary Figures S1--S29 retain the derivations, audit controls,
   robustness analyses, active/full-tree details and quantitative inventories.
+- Supplementary Figure S4D reports the fresh raw-additive CIFAR-10 ladder; the
+  38.98% provisional cohort remains excluded.
 - The combined manuscript contains the Supplementary Information in the same
-  111-page PDF. The presentation package contains 22-slide story-first and
-  derivation-first cores, a 37-slide expanded version, technical appendices and
-  an editable 15-slide PowerPoint.
+  128-page PDF. The current workshop package contains a 26-slide technical core
+  and seven backup slides in a 34-page, native-vector PDF, with speaker notes and
+  15/30/45-minute cut maps.
 
 ## Submission boundary
 

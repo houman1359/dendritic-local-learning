@@ -610,7 +610,10 @@ def _line_panel(
             "shunting",
             "full_bp",
             "serial BP",
-            COLORS["shunting"],
+            # Serial BP is exact backpropagation; the sheet previously drew
+            # it in the routing green reserved for the local/selective
+            # mechanism, inverting the manuscript-wide code.
+            COLORS["bp"],
             "o",
             "-",
         ),
@@ -683,7 +686,9 @@ def _line_panel(
             label=label,
         )
     panel_title(ax, letter, f"Clean source: H={hierarchy} {regime.replace('_', ' ')}")
-    ax.set_xlabel(r"physical stage count $D_{\mathrm{p}}$")
+    # Match the caption's wording ("physical depth") and avoid
+    # mathtext, whose 0.7x subscript falls below the 6.8 pt floor.
+    ax.set_xlabel("physical depth D\u209a")
     ax.set_ylabel("test accuracy")
     ax.set_xticks(list(range(1, hierarchy + 1)))
     style_axis(ax, grid="y")

@@ -31,6 +31,7 @@ from journal_style import (  # noqa: E402
     LW_HAIR,
     MARKER_MS,
     PT_LEGEND,
+    PT_SMALL,
     apply_neurips_style,
     audit_layout,
     audit_text_over_data,
@@ -61,7 +62,10 @@ METHOD_STYLE = {
     "morphology-aware paths": (COLORS["dend"], "-", "o"),
     "random paths": (COLORS["point_mlp"], ":", "s"),
     "shuffled ancestry": (COLORS["highlight"], "-.", "^"),
-    "depth-only bins": (COLORS["pathway"], (0, (3, 1, 1, 1)), "v"),
+    # COLORS["pathway"] is the same #8F66CD as COLORS["oracle"], so the
+    # depth control and the dense oracle drew as two crossing violet
+    # lines.  Depth is blue on the other anatomy sheets (S20, S22).
+    "depth-only bins": (COLORS["additive"], (0, (3, 1, 1, 1)), "v"),
 }
 
 
@@ -300,7 +304,7 @@ def make_figure(result: dict[str, Any], figure_stem: Path) -> None:
     colors = np.where(selected["root_id"].isin(included), COLORS["dend"], COLORS["mute"])
     ax.scatter(selected["x_nm"] / 1_000, selected["y_nm"] / 1_000, c=colors, s=25)
     for row in selected.itertuples(index=False):
-        ax.text(row.x_nm / 1_000 + 1.2, row.y_nm / 1_000, str(row.selection_order + 1), fontsize=6.4)
+        ax.text(row.x_nm / 1_000 + 1.2, row.y_nm / 1_000, str(row.selection_order + 1), fontsize=PT_SMALL)
     ax.set_xlabel("volume x (µm)")
     ax.set_ylabel("volume y (µm)")
     ax.set_aspect("equal", adjustable="datalim")
@@ -339,7 +343,9 @@ def make_figure(result: dict[str, Any], figure_stem: Path) -> None:
     ax.set_xlabel("feedback channels")
     ax.set_ylabel("weighted residual (lower is better)")
     style_axis(ax, grid="y")
-    clean_legend(ax, fontsize=PT_LEGEND - 0.5, ncol=1)
+    # The frameless legend sat on the ancestry curve and its error
+    # bars; auto_clear re-places it off the data.
+    clean_legend(ax, fontsize=PT_LEGEND, ncol=1, auto_clear=True)
 
     ax = axes[1, 0]
     panel_title(ax, "C", "K=4 direction in two animals")

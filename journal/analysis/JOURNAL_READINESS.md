@@ -74,9 +74,17 @@ complete.
       hierarchy depth minimizes mean loss; explicit point gating matches
       reliability-aligned branch gain exactly. The companion secondary
       reanalysis covers all 20 seed blocks of the 2,700-fit factorial.
-- [x] Main Figures 1--9 and Supplementary Figures S1--S27 have
+- [x] Main Figures 1--9 and Supplementary Figures S1--S29 have
       machine-readable source tables and executable default build commands.
       Final hashes include the completed alignment-dose and Fashion-MNIST panels.
+- [x] The fresh 80-run raw-additive CIFAR-10 ladder passed all configuration,
+      provenance, calibration and convergence audits. Matched BP reached
+      50.12%. Neuron-specific feedback improved on strict scalar feedback by
+      16.393 percentage points (20/20 paired seeds), whereas exact path
+      transport was 0.859 points below neuron-specific feedback and was
+      equivalent to BP within the frozen one-point margin. The bandwidth result
+      is used in the main text; the full four-arm boundary is Supplementary
+      Fig. S4D and a workshop backup slide.
 - [x] An origin manifest, main-panel provenance manifest, original-cohort
       accounting, task-target manifest, v661 cohort manifest, and v661
       endpoint exclusion log are present.
@@ -103,7 +111,7 @@ complete.
       dated collection-time source-equivalence audit proves that the four
       post-freeze code additions were inactive for every resolved configuration and reproduces
       the original frozen hashes after removing those exact blocks. The
-      validity-qualified prospective programme now supplies main Figure 3 and
+      validity-qualified prospective programme now supplies main Figure 2 and
       Supplementary Figures S7--S9.
 - [x] The validity-qualified mechanism diagnostic retains 120 independently
       trained checkpoints and all 2,400 corresponding rows. At the primary
@@ -130,16 +138,23 @@ complete.
       accuracy and exact-versus-backpropagation gates. The unchanged code and
       configuration then completed 80 confirmatory runs; all run-level
       outcomes, gradient audits, route ledgers, hashes and paired contrasts are
-      in `source_data/trained_subtree_address/` and main Figure 3G--I.
+      in `source_data/trained_subtree_address/` and Supplementary Figure S19G.
+- [x] The continuous Fashion-MNIST path-demand canary passed balance,
+      nested-conflict, finite-value, analytic-gradient and implementation-
+      equivalence gates. All 2,400 confirmatory fits completed. Path-resolved
+      and shared credit were equivalent at zero conflict; the path advantage
+      rose to 34.90--58.20 percentage points at full conflict, and the trained
+      transition followed the analytic branch-count ordering. Main Figures
+      2H and 3A--D plus Supplementary Figure S29 report the result.
 - [x] The complete subtree-address factorial ran 2,700 fits across 20 paired
       seeds, four feedback budgets and five matched representations. The
       corrected stochastic controls are paired across representations;
-      dendritic and explicit point/flat emulations agree exactly. Main Figure 4
+      dendritic and explicit point/flat emulations agree exactly. Main Figure 3
       reports the bandwidth-dependent ancestry result and the rewired-tree
       control.
 - [x] The credit-phase canary passed orthogonality, idempotence, span-invariance
       and point-gate equivalence gates. The unchanged hashes then produced all
-      10,800 confirmatory rows across 50 seeds. Main Figure 5 and the new
+      10,800 confirmatory rows across 50 seeds. Main Figure 4 and the new
       stochastic-operator propositions report the conditional positive and
       null boundaries.
 - [x] The step-consistent state-matched conductance correction passed
@@ -226,7 +241,7 @@ from this document.
       in-development table.
 - [x] Expanded and refreshed the provenance manifest for the confirmatory,
       inhibitory, animal, interference, prospective, physical-depth and
-      second-dataset figures. The current eight-main and eighteen-supplementary
+      second-dataset figures. The current nine-main and twenty-nine-supplementary
       display audit passes with no errors or warnings.
 - [ ] Deposit final code and derived source data in an archival repository and
       record the commit, URL, and DOI.

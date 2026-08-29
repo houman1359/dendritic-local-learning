@@ -1,0 +1,4 @@
+branches,predicted_boundary,trained_mean_curve_chance_crossing,trained_minus_predicted,chance_accuracy,interpolation
+2,1,0.9643919261,-0.03560807391,0.5,first linear crossing of the plotted mean shared-credit accuracy curve
+4,0.6666666667,0.6682972661,0.001630599394,0.5,first linear crossing of the plotted mean shared-credit accuracy curve
+8,0.5714285714,0.5733555299,0.001926958424,0.5,first linear crossing of the plotted mean shared-credit accuracy curve

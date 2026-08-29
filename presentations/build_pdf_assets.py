@@ -39,15 +39,13 @@ CROPS: dict[str, tuple] = {
         "components/figure5_schematics", (0, 0, 2160, 1110)
     ),
     "focal_shunt_schematic": (
-        "components/schematic_fig8_focal_shunt", (0, 0, 3120, 1590)
+        "components/schematic_fig8_focal_shunt", (0, 0, 3120, 1230)
     ),
-    # phase_plane: talk variant — legend column cropped off (the slide carries
-    # the single legend) and the panel letter covered.  Retuned 2026-08-20
-    # against the regenerated full-width band sheet (4320x1380 @600dpi): plot
-    # ink ends at x=3092, legend starts at x=3160, letter "O" at (78,76)-(143,142).
+    # Clean theory-first phase plane shared with main Figure 4.  The component
+    # already contains one compact legend and adequate lower padding, so the
+    # slide does not duplicate or clip its key.
     "phase_plane": (
-        "main/figure_09_panel_O", (0, 0, 3120, 1380), 0,
-        ((40, 20, 220, 200),),
+        "components/main_phase_plane_clean", (0, 0, 4320, 1452)
     ),
     "capture_per_wire": (
         "main/figure_07_panels_K-L", (2200, 0, 4320, 1530), 0,
@@ -101,7 +99,7 @@ CROPS: dict[str, tuple] = {
     "fulltree_no_signed": (
         "main/figure_09_panels_I-J", (0, 0, 4320, 1572)
     ),
-    # panel N alone (capture–progress, rho_s = 0.99) — the single anchor for
+    # Panel N alone (capture-progress, rho_s = 0.99): the single anchor for
     # the alignment-rescue slide.  The crop keeps the full letter row and
     # covers the letter inside the page.
     "alignment_rescue_n": (
@@ -121,6 +119,9 @@ CROPS: dict[str, tuple] = {
     ),
     "same_span_risk_f": (
         "supplementary/figure_S14_panels_A-F", (3000, 1595, 4320, 2800)
+    ),
+    "cifar_confirmatory_ladder": (
+        "supplementary/figure_S04_panels_A-D", (2160, 1490, 4320, 2983)
     ),
 }
 

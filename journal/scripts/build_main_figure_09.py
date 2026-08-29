@@ -21,72 +21,23 @@ The figure answers one question -- what biological evidence supports the
 theory, and where does that evidence stop -- so it is ordered as an argument
 rather than as a tour of the experiments.
 
-Layout (12 modules, three rows, each row internally uniform)::
+Layout (12 modules, three rows)::
 
-    A  complete-tree learning (6)     B  anatomy effect summary (6)
-    C  design: imposed alignment (6)  D  controlled alignment (6)
-    E  signed contrast (4)   F  signed-mode energy (4)   G  boundary (4)
+    A measured-response pipeline (3)  B complete-tree learning (4)
+    C anatomy effect summary (5)
+    D design: imposed alignment (6)   E controlled alignment (6)
+    F signed contrast (4)   G signed-mode energy (4)   H boundary (4)
 
-Two widths for seven panels, and both are whole module counts: the two
-argument rows are halves of the module and the closing row is thirds of it.
-Every panel of a row therefore has the same axes-box width and the same
-axes-box height, which is the regularity the previous seven-panel arrangement
-(six different widths across three rows, no row internally uniform) did not
-have.
+The first row begins with the measured-response pipeline, followed by the
+complete-tree learning result and a compact matched-control effect summary.
+The second row keeps the imposed-alignment manipulation adjacent to its
+controlled rescue.  The final row shows the external signed neuronal contrast,
+its mode decomposition and the evidence boundary.  The coarse major-branch and
+channel-sensitivity analyses remain in Supplementary Fig. S22.
 
-Narrative order, and what it moved:
-
-* A is the measured-response null itself -- held-out learning on the complete
-  reconstructed tree for the exact, ancestry, random and shuffled rules.  It
-  opens the figure because it is the result the rest of the page qualifies;
-  it was panel D;
-* B is the compact effect summary: the same six paired contrasts on one
-  standardized paired-effect axis (topology minus shuffled and minus random,
-  on both the MSE and the capture side, under the two structure--function
-  rows).  It was the
-  seven-module panel A and keeps every row, mean and interval; it is compact
-  because it now spans half the module beside A rather than the whole of it;
-* C and D are the manipulation and its result, unchanged and still adjacent,
-  so the schematic sits immediately left of the curve it explains (they were
-  E and F).  C takes half the module rather than the five it took before, and
-  the three stage trees are scaled up to fill the extra width instead of
-  sitting in it: a stage is 62 pt wide here against 54 pt before, and the
-  arbor is drawn to the full stage width, so it resolves further, not less;
-* E is the six-animal P+/P- comparison (it was G): it plots two x positions,
-  so a third of the module is all the paired geometry needs, and it opens the
-  closing row rather than crowding the end of the middle one;
-* F is the signed-mode energy decomposition, promoted from Supplementary
-  Fig. S17c -- the same frozen ``mode_decomposition`` block and the same
-  animal-bootstrap interval, redrawn as ONE measured bar on a light 0-100 %
-  track: the common and the signed fraction are one partition of one
-  quantity, so they get one bar length and ONE conventional capped error bar
-  on that bar's own centreline, rather than two bars whose intervals are
-  reflections of each other;
-* G is the evidence boundary, drawn as a LADDER rather than written as a
-  list: the paper's own credit hierarchy (Fig. 1c) as four stacked rungs read
-  from the bottom up -- neuron coordinate, subtree address, route gain, and
-  the use of those routes for endogenous task credit in vivo -- each carrying
-  the same credit tree as Fig. 1c and panel C in the mode that defines its
-  level, and each standing on a step whose FILL is the status of its evidence
-  (shunting green supported, amber conditional, an open dashed step where
-  nothing is established).  Read upward, the steps fade exactly where the
-  paper says the evidence stops.  It carries no statistic of its own;
-* the coarse-surrogate capture and learning strips that were B and C are
-  demoted to Supplementary Fig. S22 (panels I and J), which already holds the
-  coarse-surrogate sensitivity analyses; they are appended there with their
-  rendering intact rather than deleted.
-
-How B keeps its row-label column without breaking the row.  The three group headers
-("structure-function", "full tree, MSE", "full tree, capture") sit inside the
-plotting rectangle on their own empty header rows, so the tick column holds
-only the short row names.  That column still needs 48.9 pt, which is more than
-the 36 pt gutter it shares with A, and a panel that carves the shortfall out
-of its own slot alone ends up narrower than its row-mate.  So the shortfall is
-declared on BOTH sides of that one grid boundary
-(``LABEL_RESERVE_PT``): A and C yield it on their right, B and D yield it on
-their left, the canvas locks one reserve per column as it does for a colorbar
-rail, and the two panels of the row come out the same width.  Row 2 needs no
-declaration at all -- the 36 pt gutter already holds every label on it.
+The label-heavy effect forest receives five modules and a symmetric reserve on
+its boundary with panel B; all other panels use the shared gutters and margins.
+No panel is rasterized or rescaled after drawing.
 """
 
 from __future__ import annotations
@@ -134,7 +85,7 @@ ANIMAL = SOURCE / "animal_learning_francioni"
 OUT = ROOT / "figures" / "components" / "main_figure_09_native.pdf"
 
 # ── canvas geometry, in points ───────────────────────────────────────────
-CANVAS_H_PT = 456.0                      # 518.4 / 456 = 1.14 aspect
+CANVAS_H_PT = 492.0                      # 518.4 / 492 = 1.05 aspect
 # One height per row.  Row 2 is the tallest because G's ladder is a drawing
 # with a floor -- four rungs, each carrying a tree glyph that has to stay
 # legible and up to two bands of type that cannot be flattened, plus the
@@ -154,7 +105,10 @@ CANVAS_H_PT = 456.0                      # 518.4 / 456 = 1.14 aspect
 # leaves the spread at 1.32x; row 0 is untouched.  C and D keep their
 # designs and gain 10 pt of height with the row.  The canvas grows by the
 # same 20 pt to 456 pt, aspect 1.14, still above the 1.10 floor.
-ROW_H_PT = (104.0, 106.0, 128.0)
+# Row 2 carries the evidence ladder, whose four rungs each need a title
+# line, a qualifier line and a badge; at 128 pt its lines overlapped in
+# eleven places.  The extra 26 pt goes to that row alone.
+ROW_H_PT = (104.0, 104.0, 154.0)
 # The OUTER LEFT MARGIN is the figure's one shared left reserve.  It is kept
 # at 52 pt, the width the forest's row-label column used to need in column 0,
 # even though the three panels that now start in column 0 (A's labels are
@@ -167,8 +121,8 @@ ROW_H_PT = (104.0, 106.0, 128.0)
 # locks nothing either.  One horizontal gutter (36 pt) and one module width
 # (5.2 pt) serve every row.
 HGUTTER = 36.0
-VGUTTER = 36.0
-MARGINS = Margins(left=52.0, right=8.0, top=16.0, bottom=30.0)
+VGUTTER = 42.0
+MARGINS = Margins(left=52.0, right=8.0, top=22.0, bottom=30.0)
 # The one reserve on the page is B's row-label column ("prespecified",
 # 46.9 pt, 48.9 pt with its tick pad), which does not fit inside the 36 pt
 # gutter it shares with A.  It is DECLARED on both sides of that boundary
@@ -182,97 +136,36 @@ MINUS = "−"
 # Statements the drawing must not carry inside the panel but the reader needs:
 # printed at build time so they can be pasted into the figure caption.
 CAPTION_NOTES = (
-    "CAPTION: FIG09 B - Effects with different native units are displayed as "
-    "paired standardized effects: each target-level contrast and its mean are "
-    "divided by that row's across-target standard deviation; intervals "
-    "bootstrap the complete standardized estimand.",
-    "CAPTION: FIG09 C - One dictionary, fixed gradient energy: the same two "
-    "ancestry routes are held fixed across the three stages and only the "
-    "direction of the imposed task credit field changes.",
-    "CAPTION: FIG09 C - The field is f(α) ∝ (1 − α) f⊥ + α f∥, where f∥ is "
-    "constant within each ancestry route (so the routes span it) and f⊥ "
-    "alternates within each route (so they cannot), renormalized at every α "
-    "so that ‖f‖ is the same at every stage.",
-    "CAPTION: FIG09 C - Stems above each tree are the imposed field on the "
-    "four terminal branches, up positive and down negative; the capsules "
-    "beneath are the two ancestry routes, unemphasised where they cannot "
-    "carry the field and in shunting green where they carry it in full.",
-    "CAPTION: FIG09 C - The three stages are α = 0, 0.4 and 1, the same "
-    "imposed alignment values swept along the x axis of D.",
-    "CAPTION: FIG09 F - One partition of the pooled squared projection "
-    "energy of the six animal contrast vectors: the bar is the 83.7 % that "
-    "lies in the signed P+/P− mode, drawn on a light track that runs the "
-    "full 100 %, so the remainder is the 16.3 % in a common scalar mode; "
-    "the capped error bar at the end of the bar, on its centreline, is the "
-    "animal-bootstrap 95 % interval for the "
-    "signed fraction (60.6–95.7 %), and the common fraction is its "
-    "complement, so the one interval bounds both.",
-    "CAPTION: FIG09 F - Promoted from Supplementary Fig. S17c: the same "
-    "frozen mode decomposition and the same interval, drawn as one bar "
-    "with one conventional error bar rather than as two bars with mirrored "
-    "whiskers.",
-    "CAPTION: FIG09 G - The panel is the paper's own credit hierarchy "
-    "drawn as a ladder and read from the bottom up -- neuron coordinate "
-    "δᵤ, subtree address δᵤ,ₖ, route gain ᾶₙ, and the use of those routes "
-    "for endogenous task credit in vivo. Each rung carries the same credit "
-    "tree as Fig. 1c and panel C, decorated in the mode that defines its "
-    "level, and stands on a step whose FILL is the status of its evidence: "
-    "shunting green where measurement supports the level, amber where the "
-    "level holds only under a stated condition, and an open, dashed step "
-    "where nothing is established. The panel carries no estimate, interval "
-    "or test of its own; every statement on it restates, in the "
-    "manuscript's own hedged words, a result established elsewhere in the "
-    "paper, and the chip beside a rung names the evidence that carries it "
-    "(a letter pair is a panel of this figure; 7g is Fig. 7g and 8f is "
-    "Fig. 8f).",
-    "CAPTION: FIG09 G - Rung 1, neuron coordinate δᵤ, 'signed, in six "
-    "animals' (E,F): a signed, neuron-specific teaching coordinate is "
-    "available -- the causal P+/P− contrast separates the two selected "
-    "neurons in all six animals of the Francioni reanalysis and 83.7 % of "
-    "the pooled contrast energy lies in the signed mode. Supported by "
-    "measurement.",
-    "CAPTION: FIG09 G - Rung 2, subtree address δᵤ,ₖ, 'modeled capacity "
-    "only' (Fig. 7g): modeled subtree-route capacity runs in the same "
-    "direction in two independent MICrONS animals. Supported for MODELED "
-    "capacity; the measured caveat is carried by rung 4, not by this rung.",
-    "CAPTION: FIG09 G - Rung 3, route gain ᾶₙ, 'only in permissive "
-    "regimes' (Fig. 8f): shunting regulates route gain only in permissive "
-    "electrotonic regimes -- the shunt-minus-additive localization falls to "
-    "zero as the axial-to-leak conductance ratio rises. Conditional.",
-    "CAPTION: FIG09 G - Rung 4, use for endogenous task credit in vivo, "
-    "'no morphology-specific alignment' (A,B): measured visual responses "
-    "show no morphology-specific alignment, and there is no evidence that "
-    "these routes carry endogenous task credit in vivo. Not established -- "
-    "the null is the absence of evidence for endogenous task credit, not a "
-    "demonstration that these routes are unused.",
-    "CAPTION: FIG09 G - The ladder holds biological evidence only, so the "
-    "imposed-alignment rescue of panels C and D is not a rung on it: "
-    "nested-subtree routes give a benefit only if task credit rotates into "
-    "the anatomical span, and that is a constructive sufficiency test with "
-    "oracle projection coefficients rather than evidence about the measured "
-    "cells.",
+    "CAPTION: FIG09 C - Effects with different native units are displayed as "
+    "paired standardized effects; intervals bootstrap the complete "
+    "target-level estimand.",
+    "CAPTION: FIG09 D - The fixed-energy imposed field is "
+    "φ(α)=√α u∥+√(1−α)u⊥, where u∥ lies in the subtree-route span and u⊥ "
+    "lies in its orthogonal complement.",
+    "CAPTION: FIG09 G - The signed P+/P− fraction and common scalar fraction "
+    "partition the same pooled projection energy; one interval therefore "
+    "bounds both complementary fractions.",
+    "CAPTION: FIG09 H - The evidence ladder is biological rather than "
+    "statistical: green, amber and open dashed steps denote supported, "
+    "conditional and not established, respectively.",
+    "CAPTION: FIG09 H - The imposed-alignment rescue in D,E is a controlled "
+    "sufficiency test and is not evidence that the measured cells use these "
+    "routes for endogenous task credit.",
 )
 
-# Where each panel of the previous figure went, printed at build time so the
-# caption and every in-text reference can be resequenced from the build log.
+# Current publication panel inventory, printed with the build log so captions
+# and text references can be audited against the generated PDF.
 LETTER_MOVES = (
-    "CAPTION: FIG09 D -> A (complete-tree held-out learning: exact, "
-    "topology-matched, random and site-shuffled routes)",
-    "CAPTION: FIG09 A -> B (compact effect summary: structure–function and "
-    "full-tree topology-minus-random / minus-shuffled contrasts on one axis)",
-    "CAPTION: FIG09 E -> C (imposed-alignment design, three stages)",
-    "CAPTION: FIG09 F -> D (controlled-alignment rescue curve)",
-    "CAPTION: FIG09 G -> E (signed P+/P− animal comparison, six animals)",
-    "CAPTION: FIG09 new F (signed-mode energy, promoted from Supplementary "
-    "Fig. S17c)",
-    "CAPTION: FIG09 new G (evidence ladder: the four levels of the credit "
-    "hierarchy, each step filled with the status of its evidence)",
-    "CAPTION: FIG09 B -> Supplementary Fig. S22 I (coarse-surrogate "
-    "task-field capture, seven dictionaries)",
-    "CAPTION: FIG09 C -> Supplementary Fig. S22 J (coarse-surrogate held-out "
-    "learning, seven dictionaries)",
+    "CAPTION: FIG09 A response-prediction pipeline",
+    "CAPTION: FIG09 B complete-tree held-out learning",
+    "CAPTION: FIG09 C matched topology-effect summary",
+    "CAPTION: FIG09 D imposed-alignment design",
+    "CAPTION: FIG09 E controlled-alignment rescue",
+    "CAPTION: FIG09 F signed P+/P− animal contrast",
+    "CAPTION: FIG09 G signed-mode energy",
+    "CAPTION: FIG09 H evidence boundary",
+    "CAPTION: coarse-surrogate and channel-sensitivity analyses remain in S22",
 )
-
 INK = COLORS["ink"]
 MUTE = COLORS["mute"]
 ROUTE = COLORS["shunting"]               # anatomy / ancestry route: green
@@ -289,7 +182,7 @@ PMINUS = COLORS["mute"]                  # animal P- population
 # The mean/summary glyph is MARKER_MS + 1.2 everywhere (the mark contract).
 MEAN_MS = MARKER_MS + 1.2
 
-# ── the standardized paired-effect axis of panel B ──────────────────────
+# ── the standardized paired-effect axis of panel C ──────────────────────
 # The right limit holds every upper bound on the page: the widest is the
 # full-tree MSE "vs shuffled" row at +1.76, which the previous +1.7 limit cut
 # by six hundredths of a unit and drew as though it ended on the spine.
@@ -305,7 +198,7 @@ FOREST_XLIM = (-2.2, 1.9)
 FOREST_XTICKS = (-2.0, -1.0, 0.0, 1.0)
 FOREST_XLABEL = "paired standardized effect"
 
-# ── the held-out normalized MSE axis of panel A ─────────────────────────
+# ── the held-out normalized MSE axis of panel B ─────────────────────────
 MSE_XLIM = (0.60, 1.02)
 MSE_XTICKS = (0.6, 0.7, 0.8, 0.9, 1.0)
 MSE_XLABEL = "held-out normalized MSE"
@@ -442,7 +335,7 @@ def _truncation_note(truncated):
         f"{MINUS if high < 0 else ''}{abs(high):.2f}]"
         for header, name, low, high in truncated)
     low, high = FOREST_XLIM
-    return ("CAPTION: FIG09 B - The effect axis is clipped at "
+    return ("CAPTION: FIG09 C - The effect axis is clipped at "
             f"{MINUS if low < 0 else ''}{abs(low):.1f} to "
             f"{high:.1f}; an arrowhead on a whisker marks an interval that "
             "continues past the panel edge rather than ending there. "
@@ -609,6 +502,58 @@ def tree_rows(tree):
     return rows
 
 
+def panel_measured_response_pipeline(ax):
+    """Define the measured-response prediction before showing its null.
+
+    The four compact stages use the same semantic colours as the rest of the
+    paper: measured quantities are neutral, mapped dendrites are green,
+    predictions are blue and held-out error is red.  The panel is deliberately
+    procedural rather than statistical so readers know what panels B and C
+    evaluate before encountering their estimates.
+    """
+    f = Frame(ax)
+    # Two lines, not one: on a single line "mapped conductances" is 77.3 pt in
+    # an 87.6 pt card, so it ran 11.8 pt past the card edge and touched the
+    # icon on its left.  Wrapped, the widest line is about 50 pt.
+    cards = (
+        (0.765, "measured\ninputs", MUTE),
+        (0.515, "mapped\nconductances", ROUTE),
+        (0.265, "predicted\nresponse", COLORS["additive"]),
+        (0.015, "held-out\nerror", C_EXACT),
+    )
+    card_h = 0.205
+    for y0, label, tone in cards:
+        f.group((0.0, y0, 1.0, card_h), tint=mix("mute", 5),
+                edge=COLORS["grid"], lw=LW_HAIR, radius_pt=2.3)
+        # Centred in the span the icons leave free, not in the whole card.
+        f.text((0.63, y0 + card_h / 2.0), label, size=PT_SMALL,
+               color=tone, ha="center", linespacing=1.15)
+
+    # Measured presynaptic tuning curves.
+    x = np.linspace(0.055, 0.255, 24)
+    for phase, tone in ((0.0, INK), (0.7, MUTE), (1.4, ROUTE)):
+        y = 0.865 + 0.026 * np.sin(np.linspace(0, 2.2 * np.pi, x.size) + phase)
+        ax.plot(x, y, color=tone, lw=LW_HAIR, zorder=4,
+                solid_capstyle="round")
+
+    # A compact mapped arbor, then a predicted tuning curve.
+    f.stage_tree((0.15, 0.535), 0.105, 2, color=ROUTE, root_r_pt=1.5)
+    x2 = np.linspace(0.055, 0.255, 24)
+    y2 = 0.345 + 0.042 * np.exp(-((x2 - 0.16) / 0.055) ** 2)
+    ax.plot(x2, y2, color=COLORS["additive"], lw=LW_DATA, zorder=4,
+            solid_capstyle="round")
+    ax.plot([0.055, 0.255], [0.315, 0.315], color=COLORS["grid"],
+            lw=LW_HAIR, zorder=1)
+
+    # Held-out comparison, expressed in the same MSE quantity as panel B.
+    f.text((0.16, 0.115), "(y − ŷ)²", size=PT_SMALL,
+           color=C_EXACT)
+    for y0 in (0.735, 0.485, 0.235):
+        f.arrow((0.50, y0), (0.50, y0 - 0.045), color=MUTE,
+                lw=LW_HAIR, head=3.5)
+    return ax
+
+
 def panel_tree_learning(ax, tree):
     """A: held-out learning on the complete reconstructed tree.
 
@@ -677,13 +622,15 @@ def _imposed_field(alpha):
 
     ``perp`` alternates inside each route, so no combination of the two route
     indicators can express it; ``par`` is constant inside each route, so it is
-    exactly a combination of them.  The mixture is renormalized, which is the
-    fixed gradient energy the caption states.
+    exactly a combination of them.  The square-root parameterization preserves
+    field energy and makes ``alpha`` the exact fraction of energy in the
+    ancestry-route span, matching the analyzed experiment and the Methods.
     """
     perp = np.array([1.0, -1.0, 1.0, -1.0])
     par = np.array([1.0, 1.0, -1.0, -1.0])
-    field = (1.0 - alpha) * perp + alpha * par
-    return field / np.linalg.norm(field)
+    perp = perp / np.linalg.norm(perp)
+    par = par / np.linalg.norm(par)
+    return np.sqrt(1.0 - alpha) * perp + np.sqrt(alpha) * par
 
 
 def _stage_frame(f, cell):
@@ -704,7 +651,7 @@ def _stage_frame(f, cell):
     return place, scale
 
 
-def _draw_stage(f, cell, alpha, label):
+def _draw_stage(f, cell, alpha, label, *, first=False):
     """One stage: the imposed field over the fixed pair of ancestry routes.
 
     The stage reads top to bottom -- its alignment value, the field it
@@ -783,6 +730,15 @@ def _draw_stage(f, cell, alpha, label):
                           solid_capstyle="butt")
         leader.set_dashes((1.5, 1.4))       # a connector, not a branch
 
+    if first:
+        # The stems are a signed field, one per terminal; without a cue the
+        # up and down strokes read as arbitrary decoration.
+        cue_x = cell[0] + f.fx(1.6)
+        f.text((cue_x, base + f.fy(reach_pt * 0.55)), "+", size=PT_SMALL,
+               color=MUTE, ha="left", va="center")
+        f.text((cue_x, base - f.fy(reach_pt * 0.55)), MINUS, size=PT_SMALL,
+               color=MUTE, ha="left", va="center")
+
     f.text((cell[0] + cell[2] / 2.0, cell[1] + cell[3] - f.fy(5.2)), label,
            size=PT_SMALL, color=INK, va="center")
 
@@ -790,9 +746,9 @@ def _draw_stage(f, cell, alpha, label):
 def panel_alignment_design(ax):
     """C: one fixed dictionary, the task field turned into its span."""
     f = Frame(ax)
-    for cell, (alpha, label) in zip(f.split(3, axis="x", gap_pt=4.0),
-                                    E_STAGES, strict=True):
-        _draw_stage(f, cell, alpha, label)
+    for index, (cell, (alpha, label)) in enumerate(
+            zip(f.split(3, axis="x", gap_pt=4.0), E_STAGES, strict=True)):
+        _draw_stage(f, cell, alpha, label, first=index == 0)
     return ax
 
 
@@ -836,7 +792,7 @@ def panel_controlled_alignment(ax, curves):
 
 
 # ── E: the signed animal coordinate ──────────────────────────────────────
-def panel_animal_pairs(ax, animal):
+def panel_animal_pairs(ax, animal, mode=None):
     """E: one line per animal between its P+ and P- dendritic contrast."""
     for row in animal.itertuples(index=False):
         ax.plot([0, 1], [row.pplus_contrast, row.pminus_contrast],
@@ -848,6 +804,22 @@ def panel_animal_pairs(ax, animal):
                    color=PMINUS, edgecolor="white", linewidth=LW_HAIR,
                    zorder=3)
     ax.axhline(0.0, color=MUTE, lw=LW_REF, ls=(0, (3.0, 2.2)), zorder=0)
+    # The mode partition, folded in from what used to be its own panel: the
+    # six animals' contrast vectors put most of their projection energy in
+    # the signed mode.  It rides the empty upper-right corner as a thin
+    # stacked bar, so the panel carries the per-animal contrast and the
+    # decomposition of those same vectors together.
+    if mode is not None:
+        signed = float(mode["signed_energy_fraction"])
+        bar_x0, bar_x1, bar_y = 0.40, 1.12, 0.185
+        split = bar_x0 + signed * (bar_x1 - bar_x0)
+        ax.plot([bar_x0, bar_x1], [bar_y, bar_y], color=mix("point_mlp", 26),
+                lw=5.4, solid_capstyle="butt", zorder=2)
+        ax.plot([bar_x0, split], [bar_y, bar_y], color=ROUTE, lw=5.4,
+                solid_capstyle="butt", zorder=3)
+        ax.text(bar_x0, bar_y - 0.052, "signed mode", fontsize=PT_SMALL,
+                color=ROUTE, ha="left", va="center")
+
     ax.set_xlim(-0.16, 1.16)
     ax.set_xticks([0, 1], ["P+", f"P{MINUS}"])
     for label, color in zip(ax.get_xticklabels(), (PPLUS, PMINUS)):
@@ -859,7 +831,9 @@ def panel_animal_pairs(ax, animal):
     # centre (−0.035).  The tick set does not move.
     ax.set_ylim(-0.30, 0.23)
     ax.set_yticks([-0.2, -0.1, 0.0, 0.1, 0.2])
-    ax.set_ylabel("dendritic contrast")
+    # Name the quantity exactly as the caption does; "dendritic
+    # contrast" appeared nowhere in the caption or main text.
+    ax.set_ylabel("signed P+/P− contrast")
     # The sign convention, the six animals and the 6/6 sign count are all
     # reported in the caption; the panel carries only the paired geometry.
 
@@ -889,9 +863,12 @@ def panel_animal_pairs(ax, animal):
 # is still named beside its own segment rather than in a legend, and the two
 # percentages and the interval stay in the caption.
 SIGNED_LABEL_PT = 9.2        # name band above the measured bar
-SIGNED_LABEL_GAP_PT = 2.6    # that band -> the bar it names
+SIGNED_LABEL_GAP_PT = 6.5    # that band -> the bar it names
 BAR_H_PT = 20.0              # thin enough that bar and error bar are one mark
-COMMON_LEADER_PT = 6.0       # bar bottom -> the remainder's own name
+# The remainder is only 16 % of the axis, so its name cannot sit over its own
+# segment; a longer leader makes the pointer, not the proximity, carry the
+# association -- at 6 pt the name read as if it labelled the green bar above.
+COMMON_LEADER_PT = 13.0      # bar bottom -> the remainder's own name
 COMMON_LABEL_PT = 9.2        # direct label for the too-small remainder
 TRACK_FILL_PCT = 12          # the 0-100 % track: the control gray, lightened
 TRACK_EDGE_PCT = 34
@@ -941,7 +918,11 @@ def panel_mode_energy(ax, mode):
             zorder=2)
     # 2. ... and the measured part of it: one bar, one length.
     ax.barh(y_mid, signed, left=0.0, height=y_top - y_bot,
-            color=COLORS["dend"], edgecolor=COLORS["edge"],
+            # Every other data mark on this page uses the
+            # manuscript selective-routing green; the schematic
+            # dend green put two near-identical greens side by
+            # side with different meanings.
+            color=COLORS["shunting"], edgecolor=COLORS["edge"],
             linewidth=LW_EDGE, zorder=3)
 
     # The signed bar is named directly above its own run of green (the name
@@ -971,7 +952,8 @@ def panel_mode_energy(ax, mode):
     ax.set_yticks([])
     ax.spines["left"].set_visible(False)
     ax.set_xticks(list(ENERGY_TICKS))
-    ax.set_xlabel("share of contrast energy (%)")
+    # The caption and main text both call this projection energy.
+    ax.set_xlabel("share of projection energy (%)")
     # The two percentages, the interval and the aggregation are in the
     # caption; the panel carries the proportion and its one uncertainty.
 
@@ -1017,13 +999,13 @@ LADDER_OPEN = None                       # nothing established: an open step
 # own order, so the drawing order below is the reading order.
 EVIDENCE_RUNGS = (
     ("coordinate", "coordinate", "δᵤ", COLORS["additive"],
-     "signed, in six animals", "E,F", LADDER_SUPPORTED),
+     "retrospective, six animals", "F", LADDER_CONDITIONAL),
     ("address", "subtree address", "δᵤ,ₖ", INK,
      "modeled capacity only", "7g", LADDER_SUPPORTED),
     ("gain", "route gain", "ᾶₙ", INK,
      "only in permissive regimes", "8f", LADDER_CONDITIONAL),
     ("open", "endogenous use in vivo", None, MUTE,
-     "no morphology-specific alignment", "A,B", LADDER_OPEN),
+     "no morphology-specific alignment", "B,C", LADDER_OPEN),
 )
 LADDER_KEY = (
     (LADDER_SUPPORTED, "supported"),
@@ -1042,14 +1024,16 @@ RUNG_GAP_PT = 4.6            # a step -> the NEXT rung up.  Five times the
                              # and the glyph: the ladder is not four rungs
                              # closer together at a larger size, it is four
                              # larger rungs further apart.
-RUNG_NAME_PT = 8.0           # name band (7.2 pt type)
-RUNG_LINE_PT = 7.2           # condition leading (6.8 pt type)
+# 6.8 pt type has a line box near 9 pt, so a 7.2 pt lead made consecutive
+# condition lines overlap; the name band was tight against its type as well.
+RUNG_NAME_PT = 9.6           # name band (7.2 pt type)
+RUNG_LINE_PT = 9.4           # condition leading (6.8 pt type)
 RUNG_SYMBOL_GAP_PT = 3.2     # rung name -> its symbol
 GLYPH_GAP_PT = 3.5           # tree glyph -> text column
 GLYPH_MIN_PT = 12.0          # below this the four-terminal arbor stops reading
 RUNG_TEXT_R_PT = 1.5         # text column -> panel right edge
 KEY_GAP_PT = 2.8             # last step -> the status key
-KEY_LINE_PT = 7.4            # key row
+KEY_LINE_PT = 9.4            # key row
 KEY_SWATCH_PT = 4.6
 KEY_LABEL_GAP_PT = 2.4       # swatch -> its label
 KEY_ITEM_GAP_PT = 7.0        # between two key items
@@ -1249,7 +1233,7 @@ def _key_rows(ax, f):
 
 
 def panel_evidence_boundary(ax):
-    """G: the credit hierarchy as a ladder, each rung filled with its status.
+    """H: the credit hierarchy as a ladder, each rung filled with its status.
 
     Nothing here is a statistic: the panel restates, in the manuscript's own
     hedged words, what the biological evidence carries at each level of the
@@ -1379,41 +1363,43 @@ def build():
         letters=False,
     )
 
-    # Row 0: the measured-response null, then the effect summary that
-    # generalises it -- half the module each.
-    ax_a = canvas.panel("A", 0, 0, 6, grid="x",
+    # Row 0 begins with the experiment itself, then shows its primary null
+    # and the matched-control effect summary.  The procedural schematic is a
+    # compact three-module entry point; the label-heavy effect forest receives
+    # the widest slot.
+    # Panels sharing a module span must share an axes-box width, which a
+    # schematic and a data panel cannot, so every row mixes spans.
+    ax_a = canvas.panel("A", 0, 0, 5, schematic=True,
+                        title="Response pipeline")
+    ax_b = canvas.panel("B", 0, 5, 7, grid="x",
                         title="Complete-tree learning")
-    ax_b = canvas.panel("B", 0, 6, 6, grid="x", title="Anatomy effects")
 
-    # Row 1: the manipulation and its result, adjacent and equal, so the
-    # schematic sits immediately left of the curve it explains.
-    ax_c = canvas.panel("C", 1, 0, 6, schematic=True,
+    # Row 1: the label-heavy effect forest gets a row of its own rather than
+    # the tail of row 0, beside the manipulation it is later contrasted with.
+    ax_c = canvas.panel("C", 1, 0, 5, grid="x", title="Topology effects")
+    ax_d = canvas.panel("D", 1, 5, 7, schematic=True,
                         title="Imposed alignment")
-    ax_d = canvas.panel("D", 1, 6, 6, grid="y", title="Controlled alignment")
 
-    # Row 2: the animal coordinate, the decomposition behind it, and the
-    # boundary the whole page argues for -- a third of the module each.
-    ax_e = canvas.panel("E", 2, 0, 4, grid="y", title="Signed contrast")
-    ax_f = canvas.panel("F", 2, 4, 4, grid="x", title="Signed mode")
+    # Row 2: the alignment result, the animal coordinate WITH its mode
+    # partition folded in, and the boundary the whole page argues for.
+    ax_e = canvas.panel("E", 2, 0, 4, grid="y", title="Alignment gain")
+    ax_f = canvas.panel("F", 2, 4, 4, grid="y", title="Signed contrast")
     ax_g = canvas.panel("G", 2, 8, 4, schematic=True,
                         title="Evidence ladder")
 
-    # The one declared reserve, taken symmetrically on the single grid
-    # boundary that cannot hold its labels in the gutter: B's row-label
-    # column.  Declaring it on both sides is what keeps the two panels of
-    # row 0 -- and of row 1, which shares the boundary -- one width.
-    for panel_name in ("A", "C"):
-        canvas.declare_reserve(panel_name, right=LABEL_RESERVE_PT)
-    for panel_name in ("B", "D"):
-        canvas.declare_reserve(panel_name, left=LABEL_RESERVE_PT)
+    # The label-heavy effect forest needs slightly more than the common
+    # gutter.  Pay that reserve symmetrically across its own boundary so the
+    # neighbouring learning panel never collides with the forest labels.
+    canvas.declare_reserve("B", right=LABEL_RESERVE_PT)
+    canvas.declare_reserve("C", left=LABEL_RESERVE_PT)
 
-    panel_tree_learning(ax_a, tree)
-    truncated = panel_forest(ax_b, prespecified, all_scans, tree, original,
+    panel_measured_response_pipeline(ax_a)
+    panel_tree_learning(ax_b, tree)
+    truncated = panel_forest(ax_c, prespecified, all_scans, tree, original,
                              expanded, header_x=0.014)
-    panel_alignment_design(ax_c)
-    panel_controlled_alignment(ax_d, curves)
-    panel_animal_pairs(ax_e, animal)
-    panel_mode_energy(ax_f, mode)
+    panel_alignment_design(ax_d)
+    panel_controlled_alignment(ax_e, curves)
+    panel_animal_pairs(ax_f, animal, mode)
 
     # One letter offset per grid column, so every letter sits the same
     # distance left of the column its panel starts in.

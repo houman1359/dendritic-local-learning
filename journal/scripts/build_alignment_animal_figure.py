@@ -328,8 +328,7 @@ def mode_energy(ax: plt.Axes, summary: dict) -> None:
     for x, value, (_, hi) in zip((0, 1), fractions, intervals):
         ax.text(x, hi + 0.035, f"{100 * value:.1f}%", ha="center", va="bottom",
                 fontsize=PT_ANNOT, color=STYLE_COLORS["ink"])
-    ax.text(0.03, 0.97, "95% CI,\nanimal\nbootstrap", transform=ax.transAxes,
-            ha="left", va="top", fontsize=PT_SMALL, color=STYLE_COLORS["mute"])
+    # What the bars represent is a caption fact, not a panel annotation.
     ax.set_xticks([0, 1], ["common", "signed"])
     ax.set_yticks([0, 0.5, 1.0])
     ax.set_ylim(0, 1.13)

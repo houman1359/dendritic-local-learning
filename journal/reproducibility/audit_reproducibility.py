@@ -202,6 +202,21 @@ def audit_rerun_specs() -> None:
             raise AssertionError(f"unexpected sweep count in {filename}")
 
 
+# Frozen execution records of completed cluster runs.  These CIFAR-10 launch
+# specifications document exactly what ran (the confirmatory one is byte-pinned
+# by analyze_cifar10_additive_feedback_ladder_confirmatory.py's
+# EXPECTED_INPUT_YAML_SHA256); rewriting their site-specific paths would break
+# the freeze chain or falsify the execution record, so they are excluded from
+# the private-path release rule and are not shipped as re-runnable recipes.
+FROZEN_EXECUTION_RECORDS = {
+    "configs/cifar10_additive_feedback_ladder_confirmatory.yaml",
+    "configs/cifar10_additive_operator_compatibility.yaml",
+    "configs/cifar10_bp_recipe_init_screen.yaml",
+    "configs/cifar10_credit_ladder_pilot.yaml",
+    "configs/cifar10_historical_bp_reproduction.yaml",
+}
+
+
 def audit_private_paths() -> None:
     forbidden = (
         re.compile(r"/n/(?:home[^/]*|holylabs)/"),
@@ -215,6 +230,8 @@ def audit_private_paths() -> None:
             if not path.is_file() or path.suffix.lower() not in suffixes:
                 continue
             if path.resolve() == Path(__file__).resolve():
+                continue
+            if str(path.relative_to(ROOT)) in FROZEN_EXECUTION_RECORDS:
                 continue
             text = path.read_text(encoding="utf-8", errors="replace")
             if any(pattern.search(text) for pattern in forbidden):

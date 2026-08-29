@@ -26,10 +26,10 @@ tempers marker sizes and stroke weights only -- geometry always fills the
 cell -- and every resulting weight is snapped back onto the journal token
 set, so a schematic can never introduce a foreign line width.
 
-The eight builders keep the ``build_main_figure_schematics`` component names:
-ownership/address (Fig 2), route resolution (Fig 3), credit operator (Fig 4),
-physical depth (Fig 5), physical generalization (Fig 6), anatomy pipeline
-(Fig 7), focal shunt (Fig 8) and alignment boundary (Fig 9).
+The shared vocabulary is reused by the native numbered builders: feedback
+resolution (Fig. 2), the credit operator (Fig. 3), routing tasks (Figs. 4--5),
+physical depth (Fig. 6), anatomy (Fig. 7), focal shunting (Fig. 8) and the
+measured-response boundary (Fig. 9).
 """
 
 from __future__ import annotations
@@ -55,6 +55,7 @@ from journal_style import (
 
 INK = COLORS["ink"]
 MUTE = COLORS["mute"]
+_SOMA_RIM = mix("ink", 30)
 GRID = COLORS["grid"]
 GREEN = COLORS["shunting"]
 BLUE = COLORS["additive"]
@@ -341,8 +342,11 @@ class Frame:
         """Small balanced serial tree: one physical processing stage."""
         color = GREEN if color is None else color
         cx, base = xy
-        self.disc((cx, base), root_r_pt, fill=COLORS["soma"], edge=INK,
-                  lw=LW_EDGE, zorder=4)
+        # Pale shared rim, as every other soma in the figure system uses;
+        # the near-black INK rim made stage trees read as a different object
+        # from their sibling cards.
+        self.disc((cx, base), root_r_pt, fill=COLORS["soma"],
+                  edge=_SOMA_RIM, lw=LW_EDGE, zorder=4)
         current = [(cx, base + height * 0.06)]
         span = self.fx(0.30 * self.h_pt * height)
         step = height * 0.94 / max(depth, 1)

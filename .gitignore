@@ -8,7 +8,7 @@
 *.out
 *.synctex.gz
 *.toc
-
+#presentations/*
 # Reproducible raster previews; publication assets are vector PDFs.
 journal/figures/components/*.png
 journal/figures/generated/*.png
@@ -26,6 +26,8 @@ journal/submission/*.zip.sha256
 journal/source_data/*
 !journal/source_data/README.md
 !journal/source_data/provenance_manifest.tsv
+!journal/source_data/path_necessity_fashion/
+!journal/source_data/path_necessity_fashion/**
 journal/main.pdf
 journal/main_with_supplementary.pdf
 journal/supplementary/supplementary.pdf

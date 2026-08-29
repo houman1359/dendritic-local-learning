@@ -1,0 +1,12 @@
+{
+  "complete_seed_count": 20,
+  "all_finite": true,
+  "maximum_exact_autograd_gradient_abs_difference": 3.427267074584961e-07,
+  "maximum_exact_equivalent_endpoint_difference": 0.0,
+  "all_interaction_positive_fraction_pass": true,
+  "all_full_conflict_effects_pass": true,
+  "all_zero_conflict_effects_within_margin": true,
+  "all_full_conflict_derangement_effects_positive": true,
+  "exact_equivalence_checks_pass": true,
+  "conditional_path_necessity_supported": true
+}

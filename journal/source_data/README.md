@@ -426,6 +426,28 @@ training. It reports address and coefficient residuals, endpoint agreement and
 within-seed capture--accuracy associations. Rebuild with
 `python scripts/analyze_trained_partition_residual.py`.
 
+## Fashion-MNIST path-demand boundary
+
+`path_necessity_fashion/` contains all 2,400 frozen confirmatory outcomes for
+the branch-conflict experiment, the task and gradient audits, paired route
+contrasts, seed-wise interaction slopes and analytic-versus-trained boundary
+summaries. Rebuild the compact tables from the project-B raw outputs with
+`python scripts/run_path_necessity_fashion.py --phase aggregate`, summarize the
+discrete transition with `python scripts/analyze_path_necessity_boundary.py`,
+and regenerate Supplementary Figure S29 with
+`python scripts/build_path_necessity_fashion_figure.py`.
+
+The frozen configuration labels conflict probability `alpha`; manuscript and
+figure notation uses \(\chi\) for the same dose so that \(\alpha\) remains
+available for the separate physical-depth alignment parameter. The executed
+table's `simultaneously_driven_branches_per_example` column means that every
+branch receives a nonzero input view; `active_forward_branches_per_example=1`
+records that only the context-selected branch contributes to the logit.
+
+The experiment shows when branch-selective information is useful. It does not
+show that dendritic material is uniquely required: analytic backpropagation and
+the matched gated-point implementation coincide with correct routing.
+
 ## Adaptive conductance reliability
 
 `adaptive_conductance_reliability/` contains all 1,050 outcomes from the fresh

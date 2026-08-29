@@ -31,10 +31,35 @@ def test_source_data_inventory_matches_final_display_numbering() -> None:
         if (match := re.fullmatch(r"Supplementary Figure (\d+)", figure))
     }
     assert main_numbers == set(range(2, 10))  # Figure 1 is conceptual.
-    assert supplementary_numbers == set(range(1, 29))
+    assert supplementary_numbers == set(range(1, 30))
 
 
 def test_source_data_destinations_are_unique_and_sources_exist() -> None:
     destinations = [item.destination for item in builder.FILES]
     assert len(destinations) == len(set(destinations))
     assert not [item.source for item in builder.FILES if not (JOURNAL / item.source).is_file()]
+
+
+def test_supplementary_figure_4_uses_only_current_panel_mapping() -> None:
+    items = [
+        item for item in builder.FILES if item.figure == "Supplementary Figure 4"
+    ]
+    assert {item.panels for item in items} == {"a", "b", "c", "d"}
+    assert all(
+        "SuppFig4a_depth_scaling" in item.destination
+        for item in items
+        if item.panels == "a"
+    )
+    assert all(
+        "SuppFig4b_broadcast_noise" in item.destination
+        for item in items
+        if item.panels == "b"
+    )
+    assert all(
+        "SuppFig4c_cifar10_control" in item.destination
+        for item in items
+        if item.panels == "c"
+    )
+    assert all(
+        "raw_additive" in item.destination for item in items if item.panels == "d"
+    )

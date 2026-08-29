@@ -15,7 +15,7 @@ The paper is organized around one conditional claim:
 > controls which synapses can share credit, and useful learning requires the
 > resulting routes to align with task credit.
 
-The package distinguishes eighteen levels of evidence:
+The package distinguishes nineteen levels of evidence:
 
 1. exact mathematical identities for conductance trees;
 2. controlled learning experiments in regular artificial trees, including a
@@ -60,6 +60,8 @@ The package distinguishes eighteen levels of evidence:
 18. an outcome-independent 12-cell Pinky v185 cohort from a biologically
     independent MICrONS mouse, with ten cells passing direct-type QC and the
     model-matched routing direction repeating across animals.
+19. a frozen 2,400-fit Fashion-MNIST branch-conflict family that locates the
+    predicted transition from neuron-shared to branch-selective credit.
 
 Modeled gradients on reconstructed anatomy are not described as measurements
 of biological learning. Negative alignment results are retained because they
@@ -73,7 +75,7 @@ define the boundary of the theory.
   main Article followed by all Supplementary Information.
 - `references.bib`: shared bibliography.
 - `figures/main/`: canonical assets compiled as main Figures 1--9.
-- `figures/supplementary/`: canonical assets compiled as S1--S28.
+- `figures/supplementary/`: canonical assets compiled as S1--S29.
 - `figures/generated/`: internal descriptive-name outputs from figure scripts;
   these are never referenced by LaTeX or included in the Overleaf bundle.
 - `figures/README.md`: authoritative figure, panel, and asset map.
@@ -124,12 +126,14 @@ The manuscript build requires a standard TeX distribution with pdfLaTeX and
 BibTeX. Figure generation requires Python 3 with NumPy, pandas, SciPy,
 Matplotlib, and seaborn. The current working manuscript contains nine numbered
 main figures. `make figures` regenerates the publication-facing journal figures.
+`make canonical-figures` rebuilds the nine native full-width figure canvases
+and then emits the exact numbered PDFs compiled by LaTeX.
 Audited conference-era generator snapshots and source tables are retained under
 `scripts/inherited_neurips/` and `source_data/inherited_neurips/`. The prospective
 figure command reads the audited run and checkpoint tables already packaged in
 `source_data/prospective_learning/`; the checkpoint collector is kept separate
 because it re-evaluates the frozen models. The unified draft has nine numbered
-main figures and twenty-seven supplementary figures. Each main figure is one vector
+main figures and twenty-nine supplementary figures. Each main figure is one vector
 PDF with a single consecutive panel sequence; expanded diagnostics remain in
 Supplementary Information.
 `make overleaf-bundle` writes the current allow-listed package and ZIP under
@@ -176,10 +180,12 @@ checkpoints passed, and all four depth-averaged intervals include zero. The
 global mean difference is -0.0545 percentage points across 160 pairs, reported
 as agreement rather than formal equivalence. These analyses supply Figure 2 and
 Supplementary Figures S7--S9; the trained 2,700-fit address factorial supplies
-Figure 3. The point--dendrite controls, alignment interpolation and H2
-hierarchy replication and H4 saturation test supply Figure 5, the immutable-source
-H2/H3 audit supplies Supplementary Figure S26, and the Fashion-MNIST replication
-extends Figure 2. Stable public
+Figures 3 and 5. The point--dendrite controls, alignment interpolation and H2
+hierarchy replication and H4 saturation test supply Figure 6, the immutable-source
+H2/H3 audit supplies Supplementary Figure S26, and the ordinary Fashion-MNIST
+replication extends Figure 2. The continuous Fashion-MNIST branch-conflict
+family supplies the path-demand transition in Figure 4 and Supplementary
+Figure S29. Stable public
 identifiers are recorded for MICrONS minnie65 materialization 1822, the v661
 static release, and each DANDI asset. The DANDI dataset remains a draft
 version, and the in-development synapse-target proxy remains secondary until

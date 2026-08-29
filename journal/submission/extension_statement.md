@@ -28,7 +28,8 @@ The integrated Article adds and unifies:
 - an operator signal--noise bound that predicts when restricted credit routes
   help, including alignment, depth and reliability phase boundaries;
 - prospective identity and ownership controls, a Fashion-MNIST replication,
-  a two-stream credit-reversal test and a 2,700-fit subtree-address factorial;
+  a continuous 2,400-fit branch-conflict path-demand test, a minimal two-stream
+  predecessor and a 2,700-fit subtree-address factorial;
 - task-aligned physical-depth experiments with grouped-star, literal
   grouped-point, flexible point-network, alignment-dose and second-hierarchy
   controls;

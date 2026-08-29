@@ -48,6 +48,12 @@ ARCHIVE_NAME = "Dendritic_credit_assignment_software.zip"
 PORTABILITY_REPLACEMENTS: tuple[tuple[str, str, str], ...] = (
     (
         "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/"
+        "journal_extension_20260828",
+        "${DENDRITIC_RUNS_ROOT}",
+        "replace frozen path-demand execution root",
+    ),
+    (
+        "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/"
         "journal_extension_20260820",
         "${DENDRITIC_RUNS_ROOT}",
         "replace frozen project-B execution root",
@@ -98,6 +104,7 @@ JOURNAL_ANALYSIS_RECORDS = (
     "NONLINEAR_PHYSICAL_DEPTH_CONFIRMATORY_CONTRACT_20260812.md",
     "PINKY_V185_SECOND_ANIMAL_CONTRACT_20260820.md",
     "PINKY_V185_SECOND_ANIMAL_EXECUTION_20260820.md",
+    "PATH_NECESSITY_CREDIT_CONFLICT_CONTRACT_20260828.md",
     "POSITIVE_CONDUCTANCE_STEP_CONSISTENT_CONTRACT_20260811.md",
     "REVIEW_IMPLEMENTATION_MATRIX_20260811.md",
     "SAME_SPAN_COEFFICIENT_LEARNING_CONTRACT_20260811.md",
@@ -116,6 +123,7 @@ JOURNAL_SCRIPTS = (
     "analyze_francioni_signed_credit.py",
     "analyze_microns_inhibitory_routes.py",
     "analyze_nonlinear_physical_depth_confirmatory.py",
+    "analyze_path_necessity_boundary.py",
     "analyze_pinky_v185_replication.py",
     "analyze_remaining_physical_experiments.py",
     "analyze_physical_cable_sensitivity.py",
@@ -137,6 +145,7 @@ JOURNAL_SCRIPTS = (
     "build_credit_phase_figure.py",
     "build_microns_v661_replication_figure.py",
     "build_nature_source_data.py",
+    "build_path_necessity_fashion_figure.py",
     "build_positive_conductance_reliability_figure.py",
     "build_same_span_coefficient_figure.py",
     "build_focal_selectivity_figure.py",
@@ -165,6 +174,7 @@ JOURNAL_SCRIPTS = (
     "run_focal_selectivity_active_ensemble.py",
     "run_focal_selectivity_phase1.py",
     "run_positive_conductance_reliability.py",
+    "run_path_necessity_fashion.py",
     "run_reconstructed_tree_task_learning.py",
     "run_same_span_coefficient_learning.py",
     "run_trained_subtree_address_full_factorial.py",
@@ -298,11 +308,28 @@ def remove_generated_tree(path: Path) -> None:
     raise last_error
 
 
+# Frozen execution records of completed cluster runs (see
+# reproducibility/audit_reproducibility.py FROZEN_EXECUTION_RECORDS): the
+# confirmatory YAML is byte-pinned by its analyzer and all five carry
+# site-specific paths that document what actually ran.  They are provenance
+# records, not portable recipes, so the release omits them; their summaries,
+# hashes and outcomes ship in source_data instead.
+FROZEN_EXECUTION_RECORD_FILES = {
+    "cifar10_additive_feedback_ladder_confirmatory.yaml",
+    "cifar10_additive_operator_compatibility.yaml",
+    "cifar10_bp_recipe_init_screen.yaml",
+    "cifar10_credit_ladder_pilot.yaml",
+    "cifar10_historical_bp_reproduction.yaml",
+}
+
+
 def excluded(relative: Path) -> bool:
     parts = set(relative.parts)
     if parts & EXCLUDED_DIRECTORY_NAMES:
         return True
     if relative.name in EXCLUDED_FILE_NAMES:
+        return True
+    if relative.name in FROZEN_EXECUTION_RECORD_FILES:
         return True
     if relative.suffix.lower() in EXCLUDED_SUFFIXES:
         return True
@@ -576,6 +603,8 @@ commit `{journal_commit}`.
 - `article_analysis/code/`: standalone regular-tree checks, reconstructed-tree
   analyses, and the portable CAVE/DANDI measured-response pipeline.
 - `article_analysis/configs/`: frozen and portable experiment specifications.
+  The five CIFAR-10 launch records with site-specific paths are intentionally
+  omitted; their frozen summaries and hashes ship in the source-data package.
 - `article_analysis/scripts/`: figure, source-data, cohort, perturbation,
   rerun-validation, and controlled-learning scripts.
 - `article_analysis/archived_analysis_scripts/`: byte-identical diagnostic

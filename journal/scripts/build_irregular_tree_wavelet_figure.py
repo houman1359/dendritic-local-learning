@@ -108,7 +108,9 @@ def main() -> None:
                   label="actual routes")
     ax_b.plot(x + 0.10, shuffled, "s--", color=COLORS["point_mlp"], lw=LW_REF,
               ms=3.6, label="permuted ancestry")
-    ax_b.plot(x, isotropic, "_", color=COLORS["oracle"], ms=11,
+    # A dimension-matched noise null is a control: gray, like its
+    # sibling null above.  Violet is reserved for the oracle.
+    ax_b.plot(x, isotropic, "_", color=COLORS["mute"], ms=11,
               markeredgewidth=1.6, label="isotropic noise")
     ax_b.set_xticks(x, SCALE_LABELS)
     ax_b.set_ylim(0, 0.56)

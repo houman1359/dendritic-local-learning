@@ -1,0 +1,4 @@
+branches,predicted_boundary,n_seeds,utility_boundary_observed_seeds,mean_utility_boundary,min_utility_boundary,max_utility_boundary,accuracy_boundary_observed_seeds,mean_accuracy_boundary,min_accuracy_boundary,max_accuracy_boundary
+2,1,20,10,1,1,1,15,1,1,1
+4,0.6666666667,20,20,0.7208333333,0.6666666667,0.75,20,0.7083333333,0.6666666667,0.75
+8,0.5714285714,20,20,0.5885714286,0.5714285714,0.6,20,0.59,0.5714285714,0.6

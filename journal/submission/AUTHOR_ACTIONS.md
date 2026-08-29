@@ -43,21 +43,19 @@ This document separates tasks that can be checked from the repository from decis
       physical-depth, point--dendrite, alignment-dose, Fashion-MNIST, literal
       grouped-point, independent H2, task-family, phase-plane,
       wiring-efficiency and two-animal structural-capacity data. Its manifest
-      matches the nine-main-figure and twenty-seven-supplementary-figure layout.
-- [x] The standalone Article is committed, and the reviewer software archive
-      was rebuilt from clean commit `e99ef6b0d9ccd658542656b4b2e938e5dfb08c74`.
-      It includes the task-family and Pinky v185 code, portable configurations,
-      tests, contracts and execution records. Its policy scan found no private
-      paths, credentials, caches, checkpoints, unpublished data or scheduler
-      logs.
+      matches the nine-main-figure and twenty-nine-supplementary-figure layout.
+- [ ] Commit the current integrated Article, CIFAR-10 confirmation, figures and
+      workshop source, then rebuild the reviewer software archive from that
+      clean commit. The August 20--21 archive from commit `e99ef6b0` predates
+      the current integration and must not be submitted.
 - [x] Recorded the source commit, package versions, accelerator model, random
       seeds, run manifests, and checkpoint or output hashes for the reported
       artificial-network results.
 - [ ] Confirm that all public-source identifiers are current: MICrONS `minnie65_public`, materialization 1822, the official v661 release, the source-study DOI, DANDI Dandiset 000402 and the seven assets used here.
 - [ ] Replace the draft DANDI version with an immutable version or DOI if one becomes available; otherwise state the live status accurately and provide asset identifiers.
-- [x] Repository tests, numerical checks, manuscript builds and strict main/SI
-      submission audits passed against the committed scientific package; the
-      software archive records its clean source commit and checksums.
+- [ ] Repository tests, numerical checks, manuscript builds and strict main/SI
+      submission audits pass in the working tree; repeat them from the final
+      clean commit and record that source commit and the rebuilt archive hashes.
 - [x] Freeze the current technical package only after all required files and provenance hashes are final, then build it with `python scripts/build_submission_bundle.py`. Rebuild the bundle after any author-day metadata or disclosure changes.
 
 ## Declarations requiring author confirmation

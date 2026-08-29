@@ -9,7 +9,7 @@ Status key: `[x]` complete in the current draft; `[~]` drafted but requires a fi
       guideline; the automated format audit records the exact current count.
 - [x] Main narrative is organized as Introduction, Results, Discussion and Methods.
 - [x] The working article contains nine numbered main figures, each compiled
-      from one vector PDF. Expanded controls are Supplementary Figures S1--S28.
+      from one vector PDF. Expanded controls are Supplementary Figures S1--S29.
 - [x] A standalone Supplementary Information manuscript compiles.
 - [x] A cover letter and standalone related-work/overlap statement are drafted.
 - [ ] Confirm the final corresponding author, postal address, email and journal-portal metadata.
@@ -29,7 +29,7 @@ Status key: `[x]` complete in the current draft; `[~]` drafted but requires a fi
       contacts and connections are nested within 20 targets.
 - [x] The external signed-credit replication unit is the animal (n=6).
 - [x] Sites, synapses, stimulus pairs, batches, epochs and Monte Carlo streams are not counted as independent biological replicates.
-- [x] Sample sizes are stated in the main text and supplement: 1,840 historical prospective/follow-up executions with 1,000 input-valid runs retained; a detached 320-run exact/backpropagation audit; 120 retained diagnostic checkpoints; 2,700 trained subtree-address fits at 20 paired seeds; 200 same-task point--dendrite and BP--local-credit fits, 90 physical-alignment interpolation fits, 220 literal-point/second-hierarchy fits, a 360-fit H4 factorial, a separate 360-fit fixed-D3 task-family factorial, 430 same-seed immutable-source H2/H3 reruns and 60 Fashion-MNIST ladder fits at ten paired seeds; 1,050 adaptive-reliability outcomes at 50 fresh paired seeds; 15 paired seeds for the earlier feedback experiment; five seeds for the earlier exact-transport factorial; eight pilot morphology cells; 512 accepted active-conductance equilibria; 47 disjoint v661 routing cells; 12 outcome-independently selected Pinky cells with ten passing direct-type QC; 45 v661 focal cells with 235 sites; 40 v661 relation-control cells with 230 sites; 20 inhibitory-census targets with 402 multi-clump connections; 13 eligible functional scans nested in seven targets; 520 complete-tree fits; and six animals in the external signed-credit reanalysis.
+- [x] Sample sizes are stated in the main text and supplement: 1,840 historical prospective/follow-up executions with 1,000 input-valid runs retained; a detached 320-run exact/backpropagation audit; 120 retained diagnostic checkpoints; 2,400 branch-conflict path-demand fits and 2,700 trained subtree-address fits, each at 20 paired seeds; 200 same-task point--dendrite and BP--local-credit fits, 90 physical-alignment interpolation fits, 220 literal-point/second-hierarchy fits, a 360-fit H4 factorial, a separate 360-fit fixed-D3 task-family factorial, 430 same-seed immutable-source H2/H3 reruns and 60 Fashion-MNIST ladder fits at ten paired seeds; 1,050 adaptive-reliability outcomes at 50 fresh paired seeds; 15 paired seeds for the earlier feedback experiment; five seeds for the earlier exact-transport factorial; eight pilot morphology cells; 512 accepted active-conductance equilibria; 47 disjoint v661 routing cells; 12 outcome-independently selected Pinky cells with ten passing direct-type QC; 45 v661 focal cells with 235 sites; 40 v661 relation-control cells with 230 sites; 20 inhibitory-census targets with 402 multi-clump connections; 13 eligible functional scans nested in seven targets; 520 complete-tree fits; and six animals in the external signed-credit reanalysis.
 - [x] No new animals or human participants were used; biological data are from public MICrONS/DANDI and publisher-supplied source-data resources.
 - [x] The selected-cell and nested-cell limitations of MICrONS are stated;
       Pinky supplies a second animal only for model-matched structural capacity.
@@ -90,9 +90,9 @@ Status key: `[x]` complete in the current draft; `[~]` drafted but requires a fi
 
 ## Figure and source-data integrity
 
-- [x] Every quantitative panel in the nine numbered main figures and twenty-eight supplementary figures has machine-readable source tables with plotted values and unit identifiers; conceptual panels are programmatic. The 360-fit H4 and 360-fit task-family factorials and 430-fit immutable-source replication passed their frozen artifact and resource gates; Supplementary Figure S23 reconstructs all 2,700 route-factorial fits, Supplementary Figure S24 reports all 1,050 adaptive-reliability outcomes, Supplementary Figure S25 reports the irregular-tree analysis, Supplementary Figure S26 reports H2/H3 source concordance, Supplementary Figure S27 reports the independent-animal structural analysis and Supplementary Figure S28 retains the physical-depth credit-coordinate diagnostics.
+- [x] Every quantitative panel in the nine numbered main figures and twenty-nine supplementary figures has machine-readable source tables with plotted values and unit identifiers; conceptual panels are programmatic. The 360-fit H4 and 360-fit task-family factorials and 430-fit immutable-source replication passed their frozen artifact and resource gates; Supplementary Figure S23 reconstructs all 2,700 route-factorial fits, Supplementary Figure S24 reports all 1,050 adaptive-reliability outcomes, Supplementary Figure S25 reports the irregular-tree analysis, Supplementary Figure S26 reports H2/H3 source concordance, Supplementary Figure S27 reports the independent-animal structural analysis, Supplementary Figure S28 retains the physical-depth credit-coordinate diagnostics and Supplementary Figure S29 reports the complete branch-conflict boundary.
 - [x] The panel-level provenance manifest records source path, SHA-256 hash,
-      generator and inferential unit for Figures 1--9 and Supplementary Figures S1--S28; hashes include the final alignment-dose, Fashion-MNIST, detailed morphology, focal and measured-response panels, trained partition residual, adaptive reliability, irregular-tree wavelets, clean-source replication, task-family boundary, Pinky analysis and physical-depth credit-coordinate diagnostics.
+      generator and inferential unit for Figures 1--9 and Supplementary Figures S1--S29; hashes include the final alignment-dose, Fashion-MNIST, detailed morphology, focal and measured-response panels, trained partition residual, adaptive reliability, irregular-tree wavelets, clean-source replication, task-family boundary, Pinky analysis, physical-depth credit-coordinate diagnostics and branch-conflict path-demand family.
 - [x] Plotting scripts read the frozen source tables or write and then read the deterministic analysis outputs; numerical result labels are not maintained as an independent hand-entered source.
 - [~] Final figures use embedded Type 1 or TrueType fonts and a consistent,
       color-accessible palette; the existing renders and the alignment-dose
@@ -109,7 +109,7 @@ Status key: `[x]` complete in the current draft; `[~]` drafted but requires a fi
 - [x] Derived manifests, endpoint exclusion logs and non-restricted source data are organized locally for release.
 - [ ] Deposit the final derived-data package in a stable repository and add its DOI/accession.
 - [x] The journal-formatted Source Data package was regenerated for the final
-      eight-main-figure, twenty-five-supplementary-figure layout. Its allow-listed
+      nine-main-figure, twenty-nine-supplementary-figure layout. Its allow-listed
       archive includes the H3 literal grouped-point control, the
       independent H2 BP/LocalCA cohort, paired contrasts and completeness audit;
       the ZIP integrity check passes.
@@ -167,6 +167,6 @@ Status key: `[x]` complete in the current draft; `[~]` drafted but requires a fi
 - [x] All references were verified against publisher or indexed bibliographic records.
 - [x] The main manuscript and supplement compile without errors, and the final
   Source Data archive opens cleanly after integration of the fixed-budget
-  cohort and eight-display figure order.
+  cohort and nine-display figure order.
 - [ ] No unresolved placeholders remain in submission files.
 - [ ] Cover letter statements about exclusivity, approval, competing interests and availability are true on the day of submission.

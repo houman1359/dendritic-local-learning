@@ -71,7 +71,7 @@ from journal_style import (  # noqa: E402
     SEED_ALPHA,
     SEED_MS,
 )
-from figure_canvas import Margins, NativeCanvas  # noqa: E402
+from figure_canvas import Margins, NativeCanvas, token_subscript  # noqa: E402
 from credit_tree_schematics import MS_JUNCTION, mix  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -79,7 +79,7 @@ DATA = ROOT / "source_data"
 OUT = ROOT / "figures" / "components" / "main_figure_07_native.pdf"
 
 # ── canvas geometry, in points ───────────────────────────────────────────
-CANVAS_H_PT = 440.0                      # 518.4 / 440 = 1.18 aspect
+CANVAS_H_PT = 458.0                      # 518.4 / 440 = 1.18 aspect
 # Three equal rows and one wide horizontal gutter.  The gutter is the
 # figure's single shared left reserve: it is set wider than the widest y
 # label and tick column on the page, and the left margin wider than the
@@ -87,8 +87,8 @@ CANVAS_H_PT = 440.0                      # 518.4 / 440 = 1.18 aspect
 # slot.  Every panel of a grid column therefore keeps one x0 and one axes
 # width, and every row-mate one height.
 HGUTTER = 34.0
-VGUTTER = 30.0
-MARGINS = Margins(left=48.0, right=13.0, top=16.0, bottom=28.0)
+VGUTTER = 36.0
+MARGINS = Margins(left=48.0, right=13.0, top=22.0, bottom=28.0)
 
 INK = COLORS["ink"]
 MUTE = COLORS["mute"]
@@ -440,7 +440,7 @@ def panel_arbor(ax):
             fontsize=PT_SMALL, color=MUTE)
 
 
-# ── B: nested ancestry addresses, drawn in the shared tree vocabulary ────
+# ── B: subtree routes and the field-capture operation ────────────────────
 def panel_addresses(ax):
     blank_axes(ax)
     w_pt, h_pt = box_pt(ax)
@@ -499,8 +499,18 @@ def panel_addresses(ax):
         ax.text(node[0], node[1], tag, ha="center", va="center",
                 fontsize=PT_SMALL, color=C_ROUTE, zorder=6)
 
-    ax.text(0.50, 0.912, "B ⊂ A", ha="center", va="center",
-            fontsize=PT_ANNOT, color=INK)
+    # Define the quantity used by every data panel before showing its values.
+    # P_A is the orthogonal projection onto the span of the K route columns;
+    # the caption expands the notation, while the panel makes the operation
+    # and its normalized energy measure visible at first encounter.
+    token_subscript(ax, 0.395, 0.935, "q → P", "A", " q",
+                    size=PT_ANNOT, sub_size=PT_SMALL, color=INK,
+                    ha="left", va="center")
+    token_subscript(ax, 0.285, 0.842, "C", "A", " = ‖Pq‖² ⁄ ‖q‖²",
+                    size=PT_SMALL, sub_size=PT_SMALL, color=MUTE,
+                    ha="left", va="center")
+    ax.text(0.50, 0.755, "B ⊂ A", ha="center", va="center",
+            fontsize=PT_SMALL, color=INK)
     # "one channel per address" is the panel's definition, not its geometry;
     # the caption carries it.
     ax.text(0.585, 0.055, "soma", ha="left", va="center", fontsize=PT_SMALL,
@@ -671,7 +681,7 @@ def build():
     ax_a = canvas.panel("A", 0, 0, 3, schematic=True,
                         title="Reconstructed arbor")
     ax_b = canvas.panel("B", 0, 3, 3, schematic=True,
-                        title="Subtree addresses")
+                        title="Subtree projection")
     ax_c = canvas.panel("C", 0, 6, 3, grid="y", title="Reciprocal cable field")
     ax_d = canvas.panel("D", 0, 9, 3, grid="y", sharey=ax_c,
                         title="Model-derived field")

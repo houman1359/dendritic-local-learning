@@ -32,6 +32,10 @@ NATIVE_TEMPLATE = "main_figure_{:02d}_native.pdf"
 FONT_REGULAR = Path("/usr/share/fonts/urw-base35/NimbusSans-Regular.otf")
 FONT_BOLD = Path("/usr/share/fonts/urw-base35/NimbusSans-Bold.otf")
 
+# Composed sheets carry the same panel-letter size as every native sheet, so a
+# reader paging through the supplement meets one lettering scale throughout.
+PANEL_LETTER_PT = 10.5
+
 if not FONT_REGULAR.is_file() or not FONT_BOLD.is_file():
     raise FileNotFoundError(
         "The vector compositor requires embedded Nimbus Sans fonts from urw-base35"
@@ -84,6 +88,7 @@ def panel(
     *,
     erase_heading: bool = True,
     erase_phrases: tuple[str, ...] = (),
+    pad_top_pt: float = 0.0,
 ) -> Panel:
     start = SOURCE_START.get(filename, "A")
     index = ord(letter.upper()) - ord(start)
@@ -95,6 +100,7 @@ def panel(
         ncols,
         erase_heading,
         erase_phrases,
+        pad_top_pt,
     )
 
 
@@ -535,7 +541,7 @@ def compose(
         page_out.insert_text(
             fitz.Point(target.x0 + 1.5, target.y0 + 11.0),
             chr(ord("A") + index),
-            fontsize=9.5,
+            fontsize=PANEL_LETTER_PT,
             fontname="dllbold",
             fontfile=str(FONT_BOLD),
             color=(0.06, 0.06, 0.06),
@@ -894,11 +900,18 @@ def main() -> None:
             "Alignment dose",
             "Depth benefit",
             "Dose contrasts",
-            "H3 models",
-            "H3 outcomes",
+            # Titles name the placement regime each source panel actually
+            # shows (P/Q/T were "H=3 aligned hierarchy", "H=3 reversed
+            # placement", "H=2 reversed placement").  The earlier
+            # models/outcomes and "local learning" retitles erased the
+            # aligned-versus-reversed contrast the caption relies on, and J
+            # includes serial and grouped-point BP, so "local learning" was
+            # simply wrong.
+            "H3 aligned hierarchy",
+            "H3 reversed placement",
             "H3 interaction",
-            "H2 hierarchy",
-            "H2 local learning",
+            "H2 aligned hierarchy",
+            "H2 reversed placement",
             "H2 contrasts",
         ],
         rows=3,
@@ -908,7 +921,23 @@ def main() -> None:
 
     compose(
         SUPP / "figure_S19_panels_A-I.pdf",
-        [panel("figure_02_panels_G-O.pdf", letter, 3, 3) for letter in "GHIJKLMNO"],
+        [
+            # Source panels I and K carry the rotated label "exact transport
+            # - BP (pp)", whose closing bracket rises into the heading band;
+            # without the re-expansion the sheet composed a truncated "(pp".
+            panel(
+                "figure_02_panels_G-O.pdf", letter, 3, 3,
+                pad_top_pt=4.0 if letter in "IK" else 0.0,
+                # Re-expanding the clip also re-admits each source panel's own
+                # heading, so erase it span-by-span.
+                erase_phrases=(
+                    ("Historical exact/BP",) if letter == "I"
+                    else ("Clean-source exact/BP",) if letter == "K"
+                    else ()
+                ),
+            )
+            for letter in "GHIJKLMNO"
+        ],
         [
             "MNIST identity",
             "Noise-task identity",
@@ -925,23 +954,10 @@ def main() -> None:
         height=458,
     )
 
-    # Reduced regular-tree boundary sheet: the three panels of the inherited
-    # nine-panel regime archive that are not replots of S1-S3 content (depth
-    # stress, teaching-signal noise, flattened CIFAR-10).  The crops keep the
-    # archived marks bit-identical; only the heading band is redrawn.
-    compose(
-        SUPP / "figure_S04_panels_A-C.pdf",
-        [panel("figure_S04_panels_A-I.pdf", letter, 3, 3)
-         for letter in "CDI"],
-        [
-            "Depth stress",
-            "Noisy teaching signal",
-            "Harder-data control",
-        ],
-        rows=1,
-        cols=3,
-        height=178,
-    )
+    # The reduced regular-tree boundary sheet (S04 panels A-C) is now drawn
+    # natively by scripts/build_supplementary_figure_s04_native.py from the
+    # frozen regime tables; the archived nine-panel asset remains on disk for
+    # provenance.
 
     # Duplication-trimmed detail sheets: each keeps only the panels that do
     # not replot a main-figure display, recomposed bit-identically from the
@@ -978,7 +994,15 @@ def main() -> None:
 
     compose(
         SUPP / "figure_S21_panels_A-D.pdf",
-        [panel("figure_S21_panels_A-I.pdf", L, 3, 3) for L in "CEFG"],
+        [
+            # Source panel G's rotated "localization difference" label rises
+            # into its heading band and composed as "localization differenc".
+            panel(
+                "figure_S21_panels_A-I.pdf", L, 3, 3,
+                pad_top_pt=4.0 if L == "G" else 0.0,
+            )
+            for L in "CEFG"
+        ],
         [
             "Within-cell controls",
             "Focal-site depth",
@@ -1020,7 +1044,7 @@ def main() -> None:
         height=220,
     )
 
-    print("Assembled nine compact main figures and Supplementary Figures S04 (reduced), S18, S19 and S28.")
+    print("Assembled nine compact main figures and Supplementary Figures S17, S18, S19, S20, S21, S27 and S28.")
 
 
 if __name__ == "__main__":

@@ -66,6 +66,18 @@ METHOD_LABELS = {
     "shuffled ancestry": "shuffled\nancestry",
 }
 
+# Single-word tick forms for the narrow category rails.  Always index these by
+# the method list itself: a hard-coded positional list previously labelled
+# morphology-aware paths as "ances.", which named the panel's own test
+# condition after the ancestry control it is contrasted against.
+METHOD_TICKS = {
+    "dense PCA oracle": "dense",
+    "morphology-aware paths": "morph.",
+    "random paths": "random",
+    "depth-only bins": "depth",
+    "shuffled ancestry": "shuffled",
+}
+
 
 def mean_ci(values: np.ndarray, seed: int, n_boot: int = 20_000) -> tuple[float, float, float]:
     values = np.asarray(values, dtype=float)
@@ -338,7 +350,8 @@ def render(curves: pd.DataFrame, focal: pd.DataFrame, summary: dict) -> None:
             lw=LW_ERR,
             zorder=5,
         )
-    ax_c.set_xticks(range(len(methods)), ["dense", "ances.", "random", "depth", "shuffle"], rotation=30, ha="right")
+    ax_c.set_xticks(range(len(methods)), [METHOD_TICKS[m] for m in methods],
+                    rotation=30, ha="right")
     ax_c.set_ylim(0, 1.0)
     ax_c.set_ylabel("capture at 8 channels")
     panel_title(ax_c, "C", "Eight-channel capture")

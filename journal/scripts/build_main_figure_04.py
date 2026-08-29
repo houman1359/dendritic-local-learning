@@ -1,532 +1,360 @@
 #!/usr/bin/env python3
-"""Main Figure 4 -- credit-operator phase theory -- as ONE native canvas.
+"""Final Main Figure 4 -- branch-specific credit under local conflict.
 
-The figure is authored at exactly ``journal_style.FIG_W`` (518.4 pt) and
-emitted at scale 1.0, so every tick label is 7.6 pt on the compiled page and
-every panel in a row is the same physical size.  Nothing here recomputes a
-result: the panels read the same frozen source tables, apply the same
-pivots and the same summary statistics as
-``scripts/build_credit_phase_figure.py`` (panels A, B, D, E, F, I) and
-``scripts/build_main_panel_redesigns.build_phase_plane`` (the phase plane),
-whose sub-blocks the compact assembler used to scale into grid slots.
-
-Layout (12-column module, one horizontal and one vertical gutter)::
-
-    row 0   A operator schematic  | B spectral advantage | C route-resolution
-    row 1   D projection boundary | E reliability gains
-    row 2   F predictive utility  | G alignment x bandwidth
-
-The letters run in reading order and A-E now run as one uninterrupted
-theoretical argument -- operator utility, spectral alignment, hierarchy x
-resolution, the signal-noise boundary, the reliability gain -- before F
-validates the theory against observed one-step progress and G synthesises
-the plane.  The observed-progress scatter used to sit at C, inside the
-theory sequence; moving it to F costs it nothing but the shape of its slot
-(it now reads across six modules instead of four, and the route-resolution
-curves read across four instead of six).
-
-Three module widths only -- four modules in row 0, six in rows 1 and 2 -- so
-every panel of a row owns an identical axes box and the whole figure starts
-at one of four column edges.  The synthesis panel G used to run the full
-twelve modules as a 474 x 124 pt letterbox strip: normalised by the modules
-it spans it was the largest panel on the page and its aspect was outside any
-sane band.  It now takes the same six-module share as its row-mate, which
-costs it nothing (its five families occupy a small part of the plane) and
-brings the module-normalised area spread of the figure to 1.16x.
-
-Every explanatory or methodological note that used to be printed inside a
-panel -- the marker dodges in C and E, the misrouted-control callout in F,
-the alignment rule and the filled/open marker key in G -- now lives in the
-caption, which is where the reader looks for how a panel was drawn.  The two
-5x5 signed heatmaps still share one diverging treatment centred on zero, one
-cell-annotation format and one geometrically identical colour key, drawn as
-a horizontal rail inside the panel's own height rather than as a vertical bar
-carved out of its width.
+This dedicated figure separates the continuously controlled branch-conflict
+experiment from the hierarchical subtree-routing experiment.  It uses the
+same source tables and journal-wide vector tokens as the earlier combined
+Figure 3, but gives the task, its analytic boundary and its implementation
+controls enough room to be understood without relying on the caption.
 """
 
 from __future__ import annotations
 
-import json
-import math
 from pathlib import Path
 
+import matplotlib as mpl
 import numpy as np
 import pandas as pd
-from matplotlib.colors import TwoSlopeNorm
-from matplotlib.lines import Line2D
-from matplotlib.patches import FancyArrowPatch, FancyBboxPatch, Rectangle
+from matplotlib.patches import FancyBboxPatch
 
-from credit_tree_schematics import draw_credit_tree
+from routing_figure_panels import (
+    PATH_NECESSITY,
+    path_accuracy_facets,
+    shared_mode_boundary,
+)
+from credit_tree_schematics import mix
 from figure_canvas import (
     COLORS,
-    DIV_CMAP,
+    ERR_CAPSIZE,
+    FIG_W,
     LW_DATA,
     LW_EDGE,
     LW_HAIR,
     LW_REF,
     MARKER_MS,
-    MARKERS,
     PT_ANNOT,
-    PT_LABEL,
-    PT_LEGEND,
     PT_SMALL,
-    PT_TICK,
-    SEQ_CMAP,
+    SEED_ALPHA,
+    SEED_MS,
     Margins,
     NativeCanvas,
-    audit_native_pdf,
+    token_subscript,
 )
-from journal_style import annotate_heatmap
+from native_schematics import Frame
+from routing_figure_panels import draw_conflict_neuron, draw_credit_fan
 
 
 ROOT = Path(__file__).resolve().parents[1]
-PHASE = ROOT / "source_data" / "credit_phase_theory"
-EXISTING = ROOT / "source_data" / "credit_phase_existing"
-FACTORIAL = ROOT / "source_data" / "trained_subtree_address_full_factorial"
-PLANE = ROOT / "source_data" / "credit_phase_plane"
-OUT = ROOT / "figures" / "components" / "main_figure_04_native.pdf"
+COMPONENT = ROOT / "figures" / "components" / "main_figure_04_native.pdf"
+CANONICAL = ROOT / "figures" / "main" / "figure_04.pdf"
 
-HEIGHT_IN = 448.0 / 72.0  # 448 pt -> aspect 1.16
-# Every reserve this figure needs is paid for by the outer margins and by the
-# two uniform gutters, never by a slice of one panel: the horizontal gutter
-# carries the next panel's y label and tick column (34.8 pt for the widest
-# panel) and the panel letter that sits left of it, and the vertical gutter
-# carries a row's x label band plus the next row's letter and title band.  So
-# no panel is ever carved on its own and every panel that starts in one grid
-# column keeps one x0 and one axes width.
-HGUTTER = 38.0
-VGUTTER = 40.0
-MARGINS = Margins(left=38.0, right=12.0, top=18.0, bottom=26.0)
-# Row 1 carries the sweep panels and gets the extra 6 pt of height; the module
-# grid does the rest, so the module-normalised areas stay inside 1.16x.
-ROW_WEIGHTS = (106.0, 112.0, 106.0)
+CANVAS_H_PT = 474.0
+HEIGHT_IN = CANVAS_H_PT / 72.0
+ROW_PT = [137.0, 120.0, 111.0]
+HGUTTER_PT = 34.0
+VGUTTER_PT = 37.0
 
-# The colour key of a signed heatmap, as a rail reserved along the TOP of the
-# panel's own module allocation.  Every dimension is in points and is shared
-# by both heatmaps, so B and D carry one identical key and keep the full
-# 4-module axes box their row-mates get.
-KEY_BAR_PT = 98.0         # bar length
-KEY_BAR_H_PT = 4.5        # bar thickness (the old vertical rail's width)
-KEY_TOP_PT = 1.0          # axes top -> key label
-KEY_LABEL_PT = 9.5        # key-label line
-KEY_LABEL_GAP_PT = 1.5    # key label -> bar
-KEY_TICK_PT = 2.0         # tick length below the bar
-KEY_TICKGAP_PT = 1.0      # tick -> tick number
-KEY_TICKLAB_PT = 9.0      # tick-number line
-KEY_GRID_GAP_PT = 5.5     # key -> matrix
-KEY_STRIP_PT = (KEY_TOP_PT + KEY_LABEL_PT + KEY_LABEL_GAP_PT + KEY_BAR_H_PT
-                + KEY_TICK_PT + KEY_TICKGAP_PT + KEY_TICKLAB_PT
-                + KEY_GRID_GAP_PT)
-
-# One colour per family, fixed for the whole figure.
-C_ROUTE = COLORS["shunting"]      # the anatomy/route-of-interest series
-C_CTRL = COLORS["point_mlp"]      # neutral control gray
-C_SHUFFLE = COLORS["highlight"]   # shuffle rose (palette semantics)
-C_ANTI = COLORS["additive"]       # anti-aligned route
-C_ORACLE = COLORS["oracle"]
-C_BP = COLORS["bp"]
-# Task hierarchy H is an ordered factor, so it gets the sequential ramp
-# rather than four unrelated hues (S5).
-H_COLORS = [SEQ_CMAP(v) for v in (0.34, 0.56, 0.78, 1.00)]
+INK = COLORS["ink"]
+MUTE = COLORS["mute"]
+GREEN = COLORS["shunting"]
+AMBER = COLORS["local"]
+PURPLE = COLORS["oracle"]
+GRAY = COLORS["point_mlp"]
 
 
-class _MinusFmt:
-    """Heatmap cell values with a true minus sign (and never a bare "-0")."""
-
-    def __init__(self, spec: str = "{:.2f}", half_away: bool = False):
-        self.spec = spec
-        self.half_away = half_away
-
-    def format(self, value: float) -> str:
-        v = float(value)
-        if self.half_away:
-            v = math.copysign(math.floor(abs(v) + 0.5), v)
-        s = self.spec.format(v)
-        if s.lstrip("-").strip("0").strip(".") == "":
-            s = s.lstrip("-")
-        return s.replace("-", "−")
+def _box(frame: Frame, center, width, height, *, face, edge, radius=3.0):
+    """Rounded box whose corner radius is specified in physical points."""
+    cx, cy = center
+    patch = FancyBboxPatch(
+        (cx - width / 2.0, cy - height / 2.0), width, height,
+        boxstyle=f"round,pad=0.002,rounding_size={frame.fy(radius)}",
+        facecolor=face, edgecolor=edge, linewidth=LW_EDGE,
+        transform=frame.ax.transData, clip_on=False, zorder=3,
+    )
+    frame.ax.add_patch(patch)
+    return patch
 
 
-def signed_heatmap(ax, matrix, xlabels, ylabels, *, label):
-    """The figure's ONE signed-heatmap treatment: DIV, zero-centred, keyed.
+def _trial_card(frame: Frame, rect, *, conflict: bool) -> None:
+    """One compatible or conflicting trial, drawn as a dendritic unit."""
+    x0, y0, width, height = rect
+    # Tint and border strength follow the manuscript's emphasis card (Fig. 5's
+    # "matched subtrees": fill #F3F9F6, edge #A9D5BD).  At mix 52 these two
+    # borders were the most saturated card edges in the figure set.
+    face = mix("shunting", 8) if not conflict else mix("highlight", 7)
+    edge = mix("shunting", 44) if not conflict else mix("highlight", 44)
+    frame.group(rect, tint=face, edge=edge)
+    frame.text(
+        (x0 + frame.fx(6.0), y0 + height - frame.fy(5.0)),
+        "compatible: χ = 0" if not conflict else "conflicting: χ = 1",
+        size=PT_ANNOT, color=GREEN if not conflict else COLORS["highlight"],
+        ha="left", va="top",
+    )
+    draw_conflict_neuron(
+        frame,
+        (x0 + 0.06 * width, y0 + 0.10 * height,
+         0.88 * width, 0.66 * height),
+        conflict=conflict,
+    )
+    frame.text(
+        (x0 + width - frame.fx(5.0), y0 + frame.fy(6.0)),
+        "same update sign" if not conflict else "opposing update signs",
+        size=PT_SMALL, color=GREEN if not conflict else COLORS["highlight"],
+        ha="right", va="bottom",
+    )
 
-    The matrix keeps the panel's whole axes box -- the full 4-module share
-    every other panel in its row gets -- and the colour key takes a rail
-    reserved along the top of that same box.  A vertical bar on the right
-    cannot do this: its bar, tick numbers and rotated label need 46 pt, and
-    there is no thirteenth module to pay for them, so the rail can only come
-    out of the matrix itself.  Taken vertically the same furniture is paid
-    for out of the panel's own height, and both heatmaps print at their
-    row-mates' width with one identical key.
+
+def branch_conflict_task(ax) -> None:
+    """Side-by-side endpoints of the continuous conflict-dose family."""
+    frame = Frame(ax, labels=True, scale=0.94)
+    cells = frame.split(2, axis="x", gap_pt=9.0, pad_pt=(0, 0, 0, 0))
+    _trial_card(frame, cells[0], conflict=False)
+    _trial_card(frame, cells[1], conflict=True)
+
+
+def backward_credit_schematic(ax) -> None:
+    """Separate forward selection from branch-resolved learning signals."""
+    frame = Frame(ax, labels=True, scale=0.96)
+    rows = frame.split(3, axis="y", gap_pt=6.0, pad_pt=(0, 0, 1.5, 1.5))
+    # Each row names the quantity it delivers, in the notation the text and
+    # Supplementary Fig. S29 use.  The earlier forms printed a bare
+    # "δ·1[b = c]" beside "(δ/B)·1", where the two "1"s meant different
+    # things (an indicator and a ones-vector) and neither expression said
+    # what was being defined.
+    specs = (
+        ("local eligibility", ("e", "b", " ≠ 0 for every branch"),
+         MUTE, "eligibility"),
+        ("branch-specific credit", ("δ", "b", " = δ · 1[b = c]"),
+         GREEN, "selective"),
+        ("neuron-shared credit", ("δ", "b", " = δ / B for every branch"),
+         AMBER, "shared"),
+    )
+    for rect, (title, equation, color, glyph_mode) in zip(rows, specs, strict=True):
+        x0, y0, width, height = rect
+        frame.group(rect, tint=COLORS["panel_bg"], edge=COLORS["grid"])
+        frame.text((x0 + frame.fx(5.0), y0 + 0.66 * height), title,
+                   size=PT_SMALL, color=color, ha="left")
+        base, sub, tail = equation
+        if sub:
+            token_subscript(frame.ax, x0 + frame.fx(5.0),
+                            y0 + 0.30 * height, base, sub, tail,
+                            size=PT_SMALL, sub_size=PT_SMALL, color=INK,
+                            ha="left", va="center")
+        else:
+            frame.text((x0 + frame.fx(5.0), y0 + 0.30 * height), base,
+                       size=PT_SMALL, color=INK, ha="left")
+        draw_credit_fan(
+            frame,
+            (x0 + 0.60 * width, y0 + 0.06 * height,
+             0.36 * width, 0.88 * height),
+            mode=glyph_mode, color=color,
+        )
+
+
+def full_conflict_controls(ax, summary: pd.DataFrame,
+                           seeds: pd.DataFrame | None = None) -> None:
+    """Full-conflict trained accuracy with every implementation control.
+
+    This panel merges what used to be two: the paired correct-minus-shared
+    effect and the equivalence/derangement controls were both slices of the
+    same chi = 1 endpoint, so they are now one summary carrying the levels,
+    the per-seed spread and all five conditions.  The chi = 0 null they used
+    to state separately is the left edge of panel D.
     """
-    limit = float(np.max(np.abs(matrix)))
-    norm = TwoSlopeNorm(vmin=-limit, vcenter=0.0, vmax=limit)
-    image = ax.imshow(matrix, origin="lower", aspect="auto", cmap=DIV_CMAP,
-                      norm=norm)
-    ax.set_xticks(np.arange(len(xlabels)), xlabels)
-    ax.set_yticks(np.arange(len(ylabels)), ylabels)
-    annotate_heatmap(ax, image, matrix, fmt=_MinusFmt("{:.0f}", True),
-                     fontsize=PT_SMALL)
-    for spine in ax.spines.values():
-        spine.set_visible(False)
-    ax.tick_params(length=0.0)
+    endpoint = summary[np.isclose(summary.conflict_probability, 1.0)]
+    branches = np.asarray([2, 4, 8], dtype=float)
 
-    # The key rail, in points converted to data units from the panel's own
-    # axes box, so both heatmaps get a geometrically identical key.
-    rows, cols = matrix.shape
-    fig_w, fig_h = ax.figure.get_size_inches()
-    box = ax.get_position()
-    w_pt = box.width * fig_w * 72.0
-    h_pt = box.height * fig_h * 72.0
-    ux = cols / w_pt                          # data units per point, x
-    uy = rows / (h_pt - KEY_STRIP_PT)         # data units per point, y
-    top = rows - 0.5 + KEY_STRIP_PT * uy
-    bar_top = top - (KEY_TOP_PT + KEY_LABEL_PT + KEY_LABEL_GAP_PT) * uy
-    bar_bottom = bar_top - KEY_BAR_H_PT * uy
-    centre = 0.5 * (cols - 1)
-    bar_x0 = centre - 0.5 * KEY_BAR_PT * ux
-    bar_x1 = centre + 0.5 * KEY_BAR_PT * ux
+    correct = endpoint[endpoint.condition.eq("correct_path")].set_index(
+        "branches").loc[branches]
+    mean = correct.mean_test_accuracy.to_numpy(float)
+    low = correct.ci95_low_test_accuracy.to_numpy(float)
+    high = correct.ci95_high_test_accuracy.to_numpy(float)
+    ax.errorbar(branches, mean, yerr=[mean - low, high - mean],
+                color=GREEN, marker="o", markerfacecolor="white",
+                markeredgecolor=GREEN, markeredgewidth=LW_EDGE,
+                ms=MARKER_MS + 0.6, lw=LW_DATA, capsize=ERR_CAPSIZE, zorder=4)
+    # The three series are numerically identical.  Concentric markers preserve
+    # that fact visually without horizontal jitter that would imply a dose.
+    ax.plot(branches, mean, lw=0, marker="s", ms=MARKER_MS + 3.0,
+            markerfacecolor="none", markeredgecolor=PURPLE,
+            markeredgewidth=LW_EDGE, zorder=3)
+    ax.plot(branches, mean, lw=0, marker="+", ms=MARKER_MS + 1.4,
+            color=COLORS["bp"], markeredgewidth=LW_EDGE, zorder=5)
 
-    ramp = np.linspace(-limit, limit, 256)[None, :]
-    ax.imshow(ramp, origin="lower", aspect="auto", cmap=DIV_CMAP, norm=norm,
-              extent=(bar_x0, bar_x1, bar_bottom, bar_top),
-              interpolation="bilinear", zorder=3)
-    ax.add_patch(Rectangle(
-        (bar_x0, bar_bottom), bar_x1 - bar_x0, bar_top - bar_bottom,
-        facecolor="none", edgecolor=COLORS["edge"], lw=LW_EDGE, zorder=4))
+    for condition, color, marker, label in (
+        ("neuron_shared_k1", AMBER, "D", "neuron shared"),
+        ("within_neuron_deranged", GRAY, "v", "deranged route"),
+    ):
+        part = endpoint[endpoint.condition.eq(condition)].set_index(
+            "branches").loc[branches]
+        y = part.mean_test_accuracy.to_numpy(float)
+        lo = part.ci95_low_test_accuracy.to_numpy(float)
+        hi = part.ci95_high_test_accuracy.to_numpy(float)
+        ax.errorbar(branches, y, yerr=[y - lo, hi - y], color=color,
+                    marker=marker, markerfacecolor="white",
+                    markeredgecolor=color, markeredgewidth=LW_EDGE,
+                    ms=MARKER_MS, lw=LW_DATA, capsize=ERR_CAPSIZE,
+                    label=label, zorder=3)
 
-    # The two 5x5 grids present as a matched pair but normalise to their own
-    # maxima, so each key declares its own end value: nobody should compare a
-    # hue across the two panels.
-    fmt = _MinusFmt("{:.0f}", True)
-    step = limit / 2.0
-    tick_y = bar_bottom - KEY_TICK_PT * uy
-    label_y = tick_y - KEY_TICKGAP_PT * uy
-    for value in (-limit, -step, 0.0, step, limit):
-        x = bar_x0 + (value + limit) / (2.0 * limit) * (bar_x1 - bar_x0)
-        ax.add_patch(Rectangle(
-            (x - 0.5 * LW_EDGE * ux, tick_y), LW_EDGE * ux,
-            KEY_TICK_PT * uy, facecolor=COLORS["edge"], edgecolor="none",
-            zorder=4))
-        ax.text(x, label_y, fmt.format(value), ha="center", va="top",
-                fontsize=PT_TICK, color=COLORS["ink"])
-    ax.text(centre, top - (KEY_TOP_PT + 0.5 * KEY_LABEL_PT) * uy, label,
-            ha="center", va="center", fontsize=PT_LABEL, color=COLORS["ink"])
+    # Per-seed spread for the two conditions the contrast is about, drawn as
+    # a deterministic fan so the reader sees the 20 paired fits behind each
+    # mean rather than a bare interval.
+    if seeds is not None:
+        full = seeds[np.isclose(seeds.conflict_probability, 1.0)]
+        for condition, tone in (("correct_path", GREEN),
+                                ("neuron_shared_k1", AMBER)):
+            part = full[full.condition.eq(condition)]
+            for index, branch in enumerate(branches):
+                values = part[part.branches.eq(int(branch))].test_accuracy
+                values = values.to_numpy(float)
+                if not values.size:
+                    continue
+                # Constant fan width: the x axis is linear in B, so scaling
+                # the spread by B made the B=8 cloud three times wider than
+                # the B=2 one and pushed it off its own marker.
+                offset = np.linspace(-0.24, 0.24, values.size)
+                ax.plot(np.full(values.size, branch) + offset,
+                        values, linestyle="none", marker="o", ms=SEED_MS,
+                        color=tone, alpha=SEED_ALPHA,
+                        markeredgecolor="none", zorder=2)
 
-    ax.set_xlim(-0.5, cols - 0.5)
-    ax.set_ylim(-0.5, top)
-    # The y label belongs to the matrix, not to the matrix plus its key rail.
-    ax.yaxis.label.set_y(0.5 * (h_pt - KEY_STRIP_PT) / h_pt)
-    return image
+    # A compact in-panel key occupies the empty middle band; a conventional
+    # legend would cover the two low-accuracy curves.
+    key_specs = (
+        (0.705, GREEN, "o", "path = BP = gated point"),
+        (0.640, AMBER, "D", "neuron shared"),
+        (0.575, GRAY, "v", "deranged route"),
+    )
+    for ypos, color, marker, label in key_specs:
+        ax.plot([2.55, 2.95], [ypos, ypos], color=color, lw=LW_DATA,
+                marker=marker, markerfacecolor="white",
+                markeredgewidth=LW_EDGE, ms=MARKER_MS - 0.6,
+                markevery=[1], clip_on=False, zorder=6)
+        ax.text(3.30, ypos, label, fontsize=PT_SMALL, color=color,
+                ha="left", va="center")
+    # The green row stands for three coincident implementations that the panel
+    # draws as concentric glyphs.  Repeat the gated-point square and the
+    # backpropagation plus on its key marker, so both are identified where the
+    # reader first meets them rather than appearing as unexplained overprints.
+    ax.plot([2.95], [key_specs[0][0]], lw=0, marker="s",
+            ms=MARKER_MS + 2.4, markerfacecolor="none",
+            markeredgecolor=PURPLE, markeredgewidth=LW_EDGE,
+            clip_on=False, zorder=6)
+    ax.plot([2.95], [key_specs[0][0]], lw=0, marker="+",
+            ms=MARKER_MS + 0.8, color=COLORS["bp"],
+            markeredgewidth=LW_EDGE, clip_on=False, zorder=7)
+    ax.axhline(0.5, color=MUTE, lw=LW_REF, dashes=(2.2, 1.8), zorder=0)
+    ax.text(8.30, 0.507, "chance", fontsize=PT_SMALL, color=MUTE,
+            ha="right", va="bottom")
+    ax.set_xlim(1.55, 8.45)
+    ax.set_ylim(0.18, 0.84)
+    ax.set_xticks(branches, ["2", "4", "8"])
+    ax.set_yticks([0.2, 0.5, 0.8])
+    ax.set_xlabel("branches B")
+    ax.set_ylabel("held-out accuracy")
 
 
-# ── A: the credit operator ───────────────────────────────────────────────
-def operator_schematic(ax) -> None:
-    """Restricted-route credit tree feeding the guaranteed-utility ratio.
+def boundary_test(ax, crossings: pd.DataFrame) -> None:
+    """Observed chance crossing against the analytic boundary, per B.
 
-    The drawing is the shared credit-tree vocabulary in *address* mode (the
-    K = 4 nested route capsules this figure manipulates): the task gradient
-    enters at the soma, the route capsules carry it, and the routed update
-    leaves at the canopy.  Underneath, on a recessive card that spans the
-    cell, sits the guarantee the phase panels sweep.  The world frame is
-    sized in points from the cell itself, so the schematic fills its cell
-    instead of floating inside it.
+    This is the figure's central prediction actually being tested: panel C
+    derives chi_c = B/[2(B-1)] and panel D marks it, but only this panel
+    compares it with where the trained shared rule really fell to chance.
+    It was previously available only as Supplementary Fig. S29c.
     """
-    fig_w, fig_h = ax.figure.get_size_inches()
-    box = ax.get_position()
-    w_pt = box.width * fig_w * 72.0
-    h_pt = box.height * fig_h * 72.0
-    unit = 15.5                                   # points per tree unit
-    x_lo = -2.62
-    x_hi = x_lo + w_pt / unit
-    y_hi = 3.50
-    y_lo = y_hi - h_pt / unit
-    draw_credit_tree(ax, mode="address", K=4, labels=False, scale=0.85,
-                     xlim=(x_lo, x_hi), ylim=(y_lo, y_hi))
+    crossings = crossings.sort_values("branches")
+    branches = crossings.branches.to_numpy(int)
+    x = np.arange(len(branches), dtype=float)
+    predicted = crossings.predicted_boundary.to_numpy(float)
+    observed = crossings.trained_mean_curve_chance_crossing.to_numpy(float)
 
-    # Right column, top to bottom: the operator flow.
-    lab_x = 4.35
-    ax.add_patch(FancyArrowPatch(
-        (2.32, 2.30), (3.32, 2.70), arrowstyle="-|>", mutation_scale=7,
-        connectionstyle="arc3,rad=0.12", lw=LW_REF, color=COLORS["ink"],
-        capstyle="round", zorder=4.5))
-    ax.text(3.46, 2.66, "update\n−η M(g + ξ)", ha="left",
-            va="center", fontsize=PT_SMALL, color=COLORS["ink"],
-            linespacing=1.25)
-    ax.plot([3.55, 2.32], [1.47, 1.80], color=COLORS["mute"], lw=LW_HAIR,
-            zorder=1.6)
-    ax.text(lab_x, 1.45, "routes M", ha="center", va="center",
-            fontsize=PT_SMALL, color=C_ROUTE)
-    ax.add_patch(FancyArrowPatch(
-        (2.95, 0.14), (0.36, 0.02), arrowstyle="-|>", mutation_scale=7,
-        connectionstyle="arc3,rad=-0.10", lw=LW_REF, color=C_ORACLE,
-        capstyle="round", zorder=4.5))
-    ax.text(lab_x, 0.32, "task\ngradient g", ha="center", va="center",
-            fontsize=PT_SMALL, color=C_ORACLE, linespacing=1.25)
+    for xpos, theory, trained in zip(x, predicted, observed, strict=True):
+        ax.plot([xpos, xpos], [theory, trained], color=MUTE, lw=LW_HAIR,
+                alpha=0.7, zorder=1)
+    ax.plot(x, predicted, color=INK, lw=LW_REF, dashes=(2.4, 1.8), zorder=2)
+    ax.plot(x, observed, color=AMBER, lw=LW_DATA, zorder=3)
+    ax.plot(x, predicted, linestyle="none", marker="D", ms=MARKER_MS,
+            markerfacecolor="white", markeredgecolor=INK,
+            markeredgewidth=LW_EDGE, zorder=4, label="analytic boundary")
+    ax.plot(x, observed, linestyle="none", marker="o", ms=MARKER_MS,
+            markerfacecolor=AMBER, markeredgecolor="white",
+            markeredgewidth=LW_EDGE, zorder=5,
+            label="trained chance crossing")
+    ax.legend(loc="lower left", bbox_to_anchor=(0.0, 0.02), frameon=False,
+              handlelength=1.5, handletextpad=0.45, borderaxespad=0.0,
+              fontsize=PT_SMALL)
+    ax.set_xlim(-0.35, 2.35)
+    ax.set_ylim(0.50, 1.06)
+    ax.set_xticks(x, [str(branch) for branch in branches])
+    ax.set_yticks([0.50, 0.75, 1.00])
+    ax.set_xlabel("branches B")
+    ax.set_ylabel("conflict threshold χ")
 
-    # The guarantee, on a recessive card that spans the cell.
-    card_x0, card_x1 = x_lo + 0.06, x_hi - 0.06
-    card_y1 = -0.75
-    card_y0 = y_lo + 0.08
-    ax.add_patch(FancyBboxPatch(
-        (card_x0, card_y0), card_x1 - card_x0, card_y1 - card_y0,
-        boxstyle="round,pad=0.10", facecolor=COLORS["panel_bg"],
-        edgecolor=COLORS["grid"], lw=LW_HAIR, zorder=0.5))
-    mid = 0.5 * (card_y0 + card_y1)
-    frac_x = 0.5 * (card_x0 + card_x1) + 1.35
-    ax.text(card_x0 + 1.30, mid + 0.24, "guaranteed\nutility ∝",
-            ha="center", va="center", fontsize=PT_SMALL, color=COLORS["ink"],
-            linespacing=1.3)
-    ax.text(frac_x, mid + 0.80, "[gᵀMg]²", ha="center",
-            va="center", fontsize=PT_ANNOT, color=COLORS["ink"])
-    ax.plot([frac_x - 2.35, frac_x + 2.35], [mid + 0.24, mid + 0.24],
-            color=COLORS["ink"], lw=LW_HAIR, zorder=2)
-    ax.text(frac_x, mid - 0.32, "‖Mg‖² + tr(MΣMᵀ)",
-            ha="center", va="center", fontsize=PT_ANNOT, color=COLORS["ink"])
-    ax.text(0.5 * (card_x0 + card_x1), card_y0 + 0.32,
-            "signal² / (finite-step gain + noise)",
-            ha="center", va="center", fontsize=PT_SMALL, style="italic",
-            color=COLORS["mute"])
+
+def build() -> list:
+    mpl.rcParams["lines.markeredgewidth"] = LW_EDGE
+    summary = pd.read_csv(PATH_NECESSITY / "condition_summary.csv")
+    seeds = pd.read_csv(PATH_NECESSITY / "seed_outcomes.csv")
+    crossings = pd.read_csv(PATH_NECESSITY / "plotted_crossings.csv")
+
+    # The caption states that the conflict interaction is positive in every
+    # paired seed (20/20 at each B).  No panel plots that statistic any more,
+    # so verify it here rather than letting the claim drift from the data.
+    interactions = pd.read_csv(PATH_NECESSITY / "interaction_summary.csv")
+    positive = interactions.set_index("branches").loc[[2, 4, 8]].positive_pairs
+    if not np.all(positive.to_numpy(int) == 20):
+        raise ValueError(
+            "Fig. 4 caption claims 20/20 positive interaction slopes at each "
+            f"B; source table reports {positive.to_dict()}"
+        )
+
+    canvas = NativeCanvas(
+        HEIGHT_IN, 3, row_weights=ROW_PT,
+        hgutter_pt=HGUTTER_PT, vgutter_pt=VGUTTER_PT,
+        # Left margin 44, not 36: at 36 the C/E y labels reached the canvas edge,
+        # so their panel letters hit the 2.5 pt clamp and could not sit left of
+        # their own labels.
+        margins=Margins(left=44.0, right=13.0, top=22.0, bottom=26.0),
+    )
+    fig = canvas.fig
+    # Row 0 is 7/5, not 8/4: at 8/4 the two task cards were the largest
+    # cards in the manuscript (146x131 pt) while B's three cards were so
+    # narrow that their glyphs drew at a quarter of A's linear scale.
+    ax_a = canvas.panel("A", 0, 0, 7, schematic=True,
+                        title="Context-gated branch-conflict task")
+    ax_b = canvas.panel("B", 0, 7, 5, schematic=True,
+                        title="Forward selection, backward credit")
+    ax_c = canvas.panel("C", 1, 0, 5,
+                        title="Predicted shared-mode boundary")
+    ax_d = canvas.panel("D", 1, 5, 7, schematic=True,
+                        title="Trained transition follows the boundary")
+    ax_e = canvas.panel("E", 2, 0, 6,
+                        title="Full conflict: routing decides the outcome")
+    ax_f = canvas.panel("F", 2, 6, 6,
+                        title="Observed collapse follows the prediction")
+
+    branch_conflict_task(ax_a)
+    backward_credit_schematic(ax_b)
+    shared_mode_boundary(ax_c)
+    path_accuracy_facets(ax_d, summary)
+    for text in ax_d.texts:
+        if text.get_text() == "held-out accuracy":
+            text.set_x(-0.035)
+    full_conflict_controls(ax_e, summary, seeds)
+    boundary_test(ax_f, crossings)
+
+    COMPONENT.parent.mkdir(parents=True, exist_ok=True)
+    problems = canvas.save(COMPONENT, name="main_figure_04_native")
+    CANONICAL.parent.mkdir(parents=True, exist_ok=True)
+    CANONICAL.write_bytes(COMPONENT.read_bytes())
+    return problems
 
 
 def main() -> None:
-    spectral = pd.read_csv(PHASE / "spectral_phase_summary.csv")
-    depth = pd.read_csv(PHASE / "depth_training_summary.csv")
-    projection = pd.read_csv(PHASE / "projection_phase_summary.csv")
-    reliability = pd.read_csv(PHASE / "reliability_phase_summary.csv")
-    operator = pd.read_csv(EXISTING / "operator_metrics.csv")
-    outcomes = pd.read_csv(FACTORIAL / "seed_outcomes.csv")
-    audit = json.loads((EXISTING / "summary.json").read_text())
-    points = pd.read_csv(PLANE / "points.csv", keep_default_na=False)
-
-    canvas = NativeCanvas(
-        HEIGHT_IN, 3, row_weights=list(ROW_WEIGHTS),
-        hgutter_pt=HGUTTER, vgutter_pt=VGUTTER, margins=MARGINS,
-    )
-    ax_a = canvas.panel("A", 0, 0, 4, schematic=True,
-                        title="Credit-operator utility")
-    ax_b = canvas.panel("B", 0, 4, 4, title="Spectral alignment")
-    ax_c = canvas.panel("C", 0, 8, 4, title="Route-resolution crossover")
-    ax_d = canvas.panel("D", 1, 0, 6, title="Projection boundary")
-    ax_e = canvas.panel("E", 1, 6, 6, title="Reliability gains")
-    ax_f = canvas.panel("F", 2, 0, 6, title="Predictive utility")
-    ax_g = canvas.panel("G", 2, 6, 6, title="Alignment × bandwidth")
-
-    # ── A ───────────────────────────────────────────────────────────────
-    operator_schematic(ax_a)
-
-    # ── B: ancestry-minus-random spectral capture (signed) ──────────────
-    wide = spectral.pivot_table(
-        index=["alignment", "budget_k"], columns="method",
-        values="mean_spectral_capture")
-    advantage = (wide.ancestry - wide.random_rank).unstack("budget_k")
-    signed_heatmap(
-        ax_b, advantage.to_numpy() * 100.0,
-        [str(v) for v in advantage.columns],
-        [f"{v:.2f}" for v in advantage.index],
-        label="capture advantage (×10⁻²)")
-    ax_b.set_xlabel("route budget K   (16 = full rank)", labelpad=2.0)
-    ax_b.set_ylabel("alignment ρ", labelpad=1.5)
-
-    # ── C: final loss versus route resolution, one series per task depth ─
-    depth_marker_dx = {3: -0.20, 4: 0.20}
-    aligned = depth[depth.method.eq("aligned_tree")].pivot(
-        index="task_depth", columns="model_depth",
-        values="mean_final_population_loss")
-    for task_depth, color, marker in zip(sorted(aligned.index), H_COLORS,
-                                         MARKERS):
-        part = depth[depth.method.eq("aligned_tree")
-                     & depth.task_depth.eq(task_depth)].sort_values(
-                         "model_depth")
-        xs = part.model_depth.to_numpy(dtype=float)
-        ys = part.mean_final_population_loss.to_numpy(dtype=float)
-        # Only the MARKER column is dodged, exactly as panel E does it: the
-        # line, and the 95% ribbon under it, stay at the true x, so a ribbon
-        # can never sit beside the mean it belongs to and no segment of a
-        # log-loss curve is given a distorted run.
-        fanned = (np.isin(xs, (1.0, 2.0)) if task_depth in depth_marker_dx
-                  else np.zeros(xs.shape, dtype=bool))
-        ax_c.plot(xs, ys, color=color, marker=marker, ms=MARKER_MS,
-                  lw=LW_DATA, mec="white", mew=LW_HAIR,
-                  markevery=list(np.flatnonzero(~fanned)),
-                  label=f"H = {task_depth}")
-        if fanned.any():
-            ax_c.scatter(xs[fanned] + depth_marker_dx[task_depth], ys[fanned],
-                         color=color, marker=marker, s=MARKER_MS ** 2,
-                         zorder=3, edgecolors="white", linewidths=LW_HAIR)
-        ax_c.fill_between(part.model_depth,
-                          part.ci95_low_final_population_loss,
-                          part.ci95_high_final_population_loss, color=color,
-                          alpha=0.10, linewidth=0)
-    ax_c.set_yscale("log")
-    ax_c.set_yticks([0.03, 0.1, 0.3, 1.0, 3.0])
-    ax_c.set_yticklabels(["0.03", "0.1", "0.3", "1", "3"])
-    ax_c.set_xticks([1, 2, 3, 4])
-    ax_c.set_xlim(0.70, 4.30)
-    ax_c.set_xlabel("route resolution Dᵣ   (4 = full rank)")
-    ax_c.set_ylabel("final loss")
-    ax_c.legend(loc="upper left", ncol=2, frameon=False, fontsize=PT_LEGEND,
-                handlelength=1.3, handletextpad=0.4, labelspacing=0.25,
-                columnspacing=0.8, borderaxespad=0.2)
-
-    # ── D: signed loss change of the common route projection ────────────
-    projection_wide = projection.pivot_table(
-        index=["signal_retention", "noise_retention"], columns="method",
-        values="mean_expected_population_loss")
-    delta = (projection_wide.bp_plus_route_projection
-             - projection_wide.full_stochastic_bp).unstack("signal_retention")
-    signed_heatmap(
-        ax_d, delta.to_numpy() * 100.0,
-        [f"{v:.2f}" for v in delta.columns],
-        [f"{v:.2f}" for v in delta.index],
-        label="Δ loss (×10⁻²)")
-    ax_d.plot([-0.5, 0.5, 0.5, 1.5, 1.5, 3.5, 3.5],
-              [1.5, 1.5, 2.5, 2.5, 3.5, 3.5, 4.5],
-              ls="--", color=COLORS["mute"], lw=LW_REF, zorder=3)
-    ax_d.set_xlabel("retained signal fraction r", labelpad=2.0)
-    ax_d.set_ylabel("noise retention n", labelpad=1.5)
-
-    # ── E: one-step reliability gains for the four gain policies ────────
-    reliability_styles = [
-        ("reliability_aligned", "SNR-aligned", C_ROUTE, MARKERS[0]),
-        ("best_global_gain", "best global", C_CTRL, MARKERS[1]),
-        ("shuffled_shunting", "shuffled", C_SHUFFLE, MARKERS[2]),
-        ("anti_aligned_shunting", "anti-aligned", C_ANTI, MARKERS[3]),
-    ]
-    reliability_marker_dx = {
-        "reliability_aligned": -0.165, "best_global_gain": -0.055,
-        "shuffled_shunting": 0.055, "anti_aligned_shunting": 0.165,
-    }
-    for method, label, color, marker in reliability_styles:
-        part = reliability[reliability.method.eq(method)].sort_values(
-            "reliability_heterogeneity")
-        xs = part.reliability_heterogeneity.to_numpy(dtype=float)
-        ys = part.mean_population_loss_decrease.to_numpy(dtype=float)
-        fanned = xs == 0.0
-        ax_e.plot(xs, ys, color=color, marker=marker, ms=MARKER_MS,
-                  lw=LW_DATA, label=label,
-                  markevery=list(np.flatnonzero(~fanned)),
-                  mec="white", mew=LW_HAIR)
-        if fanned.any():
-            ax_e.scatter(xs[fanned] + reliability_marker_dx[method],
-                         ys[fanned], color=color, marker=marker,
-                         s=MARKER_MS ** 2, zorder=3, edgecolors="white",
-                         linewidths=LW_HAIR)
-        ax_e.fill_between(part.reliability_heterogeneity,
-                          part.ci95_low_population_loss_decrease,
-                          part.ci95_high_population_loss_decrease,
-                          color=color, alpha=0.08, linewidth=0)
-    ax_e.axhline(0, color=COLORS["mute"], ls="--", lw=LW_REF)
-    ax_e.margins(x=0.115)
-    # Pinned, not auto-located: one tick per swept heterogeneity level, so the
-    # axis reads the same whatever width the module grid gives this panel.
-    ax_e.set_xticks([0.0, 0.5, 1.0, 1.5, 2.0])
-    ax_e.set_ylim(-4.0, 3.9)
-    ax_e.set_xlabel("branch-SNR heterogeneity")
-    ax_e.set_ylabel("one-step loss decrease")
-    ax_e.legend(loc="lower left", ncol=1, frameon=False, fontsize=PT_LEGEND,
-                handlelength=1.3, handletextpad=0.4, labelspacing=0.28,
-                borderaxespad=0.2)
-
-    # ── F: phase utility predicts observed one-step progress ────────────
-    merged = operator.merge(
-        outcomes,
-        on=["seed", "condition_id", "architecture", "feedback_family",
-            "budget_k"],
-        validate="one_to_one")
-    merged = merged[merged.architecture.eq("dendritic_tree")]
-    ax_f.scatter(merged.maximum_guaranteed_decrease,
-                 merged.norm_matched_one_step_progress,
-                 s=7, alpha=0.30, edgecolors="none", color=COLORS["additive"])
-    ax_f.set_ylim(-1.42, 1.22)
-    ax_f.set_yticks([-1.0, -0.5, 0.0, 0.5, 1.0])
-    ci_low, ci_high = audit["seed_block_ci95_utility_vs_one_step_progress"]
-    ax_f.text(
-        0.975, 0.32,
-        f"Spearman ρ = {audit['spearman_utility_vs_one_step_progress']:.2f}"
-        + "\n" + f"95% CI {ci_low:.2f}–{ci_high:.2f}"
-        + "\n" + "n = 20 seed blocks",
-        transform=ax_f.transAxes, ha="right", va="bottom", fontsize=PT_SMALL,
-        color=COLORS["mute"], linespacing=1.35)
-    ax_f.set_xlabel("operator utility")
-    ax_f.set_ylabel("observed progress")
-
-    # ── G: alignment x bandwidth synthesis ──────────────────────────────
-    families = [
-        ("factorial", "trained bandwidth", C_ROUTE, MARKERS[0], True),
-        ("sweep", "spectral theory", COLORS["additive"], MARKERS[1], True),
-        ("microns", "imposed alignment", C_ORACLE, MARKERS[2], True),
-        ("measured", None, C_CTRL, MARKERS[3], False),
-        ("reversal", "credit reversal", C_BP, MARKERS[4], False),
-    ]
-    ax_g.set_yscale("log")
-    ax_g.set_xlim(-0.045, 1.12)
-    ax_g.set_ylim(0.088, 7.0)
-    span_x = [-0.045, 1.12]
-    ax_g.fill_between(span_x, [0.088] * 2, [0.24] * 2, color=COLORS["local"],
-                      alpha=0.10, zorder=0, linewidth=0)
-    ax_g.fill_between(span_x, [1.2] * 2, [7.0] * 2, color=C_CTRL, alpha=0.07,
-                      zorder=0, linewidth=0)
-    ax_g.fill_between(span_x, [0.24] * 2, [1.2] * 2, color=C_ROUTE,
-                      alpha=0.07, zorder=0, linewidth=0)
-    # Same reference treatment as panels D and E: dashed, mute, LW_REF.
-    ax_g.axhline(1.0, color=COLORS["mute"], ls="--", lw=LW_REF, zorder=1)
-    # Three observations sit at alignment exactly 1 and are drawn fanned in x
-    # by the frozen source table; the rule marks where alignment 1 really is.
-    ax_g.axvline(1.0, color=COLORS["mute"], ls="--", lw=LW_REF, zorder=1)
-    for family, label, color, marker, has_line in families:
-        part = points[points.family.eq(family)].sort_values("x_plot")
-        if has_line:
-            ax_g.plot(part.x_plot, part.y_plot, color=color, lw=LW_DATA,
-                      alpha=0.85, zorder=2)
-        for row in part.itertuples(index=False):
-            filled = str(row.outcome) not in {"loss", "null"}
-            ax_g.plot(row.x_plot, row.y_plot, marker=marker, ms=MARKER_MS,
-                      ls="none", mfc=color if filled else "white", mec=color,
-                      mew=LW_REF, zorder=4)
-    # The lone measured-response diamond is already labelled directly, so it
-    # is not repeated as a key entry (S6).
-    handles = [Line2D([], [], color=color, marker=marker,
-                      lw=LW_DATA if has_line else 0, markersize=MARKER_MS,
-                      markeredgewidth=LW_REF, label=label)
-               for _, label, color, marker, has_line in families
-               if label is not None]
-    ax_g.legend(handles=handles, loc="upper left", ncol=1, frameon=False,
-                fontsize=PT_LEGEND, handlelength=1.3, handletextpad=0.4,
-                labelspacing=0.28, borderaxespad=0.15)
-    # Regime names label the quiet background bands directly, in their
-    # shortest unambiguous form; the bands themselves are defined in the
-    # caption, and so are the alignment rule and the filled/open marker key
-    # that used to be printed here as two blocks of running text.
-    ax_g.text(0.70, 0.128, "bandwidth limited", color=COLORS["mute"],
-              fontsize=PT_ANNOT, style="italic", ha="center", va="center")
-    ax_g.text(-0.02, 0.325, "misaligned", color=COLORS["mute"],
-              fontsize=PT_ANNOT, style="italic", ha="left", va="center")
-    ax_g.text(0.88, 0.300, "matched regime", color=COLORS["mute"],
-              fontsize=PT_ANNOT, style="italic", ha="center", va="center")
-    ax_g.text(1.105, 4.6, "span saturated", color=COLORS["mute"],
-              fontsize=PT_ANNOT, style="italic", ha="right", va="center")
-    ax_g.annotate("rank-saturated null", xy=(0.474526, 3.73089),
-                  xytext=(9, -12), textcoords="offset points", ha="left",
-                  va="center", fontsize=PT_SMALL, color=C_CTRL,
-                  arrowprops={"arrowstyle": "-", "color": C_CTRL,
-                              "lw": LW_HAIR, "shrinkA": 1, "shrinkB": 3})
-    ax_g.annotate("routing required", xy=(1.06, 1.00036), xytext=(-3, 13),
-                  textcoords="offset points", ha="right", va="bottom",
-                  fontsize=PT_SMALL, color=C_BP,
-                  arrowprops={"arrowstyle": "-", "color": C_BP,
-                              "lw": LW_HAIR})
-    ax_g.set_xticks([0, 0.25, 0.5, 0.75, 1.0])
-    ax_g.set_yticks([0.125, 0.25, 0.5, 1, 2, 4])
-    ax_g.set_yticklabels(["1/8", "1/4", "1/2", "1", "2", "4"])
-    ax_g.minorticks_off()
-    ax_g.set_xlabel("task–anatomy alignment")
-    ax_g.set_ylabel("bandwidth / task rank (K/r)")
-
-    problems = canvas.save(OUT, name="main_figure_04_native")
-    for violation in audit_native_pdf(OUT):
-        print(f"    {violation}")
-    return problems
+    problems = build()
+    for problem in problems:
+        print(f"  {problem}")
+    print(f"  canvas width {FIG_W * 72:.1f} pt, height {CANVAS_H_PT:.1f} pt")
 
 
 if __name__ == "__main__":

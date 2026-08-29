@@ -3,8 +3,38 @@
 Self-contained copy of everything used for the talk
 "What dendritic structure adds to learning".
 
+## Canonical workshop deck
+
+The visually reviewed compact deck is the canonical workshop presentation.
+The earlier expanded deck remains beside it as a recoverable technical source:
+
+- `dendritic_credit_workshop_25.pdf` — 26 core slides with no act dividers,
+  one Backup divider, and seven backup slides (34 pages total).
+- `dendritic_credit_workshop_25.tex`, `_core.tex`, `_appendix.tex` — native
+  16:9 source; Canvas images are design references only and are not embedded.
+- `speaker_notes_workshop_25.md` — 29–30 minute narration and backup jump
+  table.
+- `workshop_slide_map_25.md` — 15/20/full-deck cuts and asset-provenance rules.
+- `build_presentation_25.py` — compiles twice; verifies page count, 16:9
+  geometry, renderability, and absence of Canvas dependencies.
+
+Rebuild the canonical deck with `python3 build_presentation_25.py`.
+
+The credit-conflict task on core slides 16–17 is rebuilt from the same source
+data and schematic logic as Supplementary Fig. S29, but at projection-scale
+type sizes and with \(\chi\) used consistently for conflict probability:
+
+    python3 build_path_necessity_talk_assets.py
+    python3 build_presentation_25.py
+
+This writes `pdf_assets/path_necessity_task.pdf` and
+`pdf_assets/path_necessity_results.pdf`. Both are vector PDFs with no embedded
+raster images. The result establishes a benefit of branch-selective credit in
+a controlled conflict regime; the matched gated-point implementation makes
+clear that the required resource is an address, not dendritic material alone.
+
 ## Contents
-- `dendritic_credit_workshop.pdf` — the final deck (42 pages: 35 core slides,
+- `dendritic_credit_workshop.pdf` — the earlier expanded deck (42 pages: 35 core slides,
   Backup divider, 6 backup slides for Q&A).
 - `speaker_notes_workshop.md` — 30-minute narration; secondary statistics
   removed from the slides are woven in here in bold (say-only).
@@ -15,7 +45,7 @@ Self-contained copy of everything used for the talk
   address K=2,4,8 / gain / shunt / deranged).
 - `eq_style.tex` — hero-equation typography (`\heroeq`, `\term`).
 - `credit_tree_lib_test.tex` / `.pdf` — visual regression sheet for the library.
-- `pdf_assets/` — the 21 vector figure crops and shared schematics the deck
+- `pdf_assets/` — the 24 vector figure crops, data panels, and shared schematics the deck
   embeds (cut or copied from the
   journal manuscript's figures).
 

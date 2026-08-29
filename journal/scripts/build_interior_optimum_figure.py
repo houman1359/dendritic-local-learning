@@ -44,11 +44,15 @@ ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "source_data" / "interior_optimum"
 FIGURES = ROOT / "figures" / "generated"
 
+# Task depth H is an ORDINAL series, so it takes the manuscript slate ramp.
+# It previously wore four reserved condition hues (additive blue, routing
+# green, shared amber, backprop red-brown), which put the whole reserved
+# vocabulary on arbitrary depth levels.
 H_COLORS = {
-    1: COLORS["additive"],
-    2: COLORS["shunting"],
-    3: COLORS["local"],
-    4: COLORS["bp"],
+    1: "#9AA5B4",
+    2: "#7C8899",
+    3: "#5F6B7E",
+    4: "#2E3947",
 }
 
 
@@ -59,7 +63,10 @@ def main() -> None:
     per_k = pd.read_csv(SOURCE / "factorial_contrast_summary.csv")
 
     fig, axes = plt.subplots(
-        2, 2, figsize=(FIG_W * 0.72, FIG_W * 0.60),
+        # Author at the full 518.4 pt canvas: at 0.72 x FIG_W the sheet
+        # was upscaled ~1.39x by \includegraphics[width=\textwidth],
+        # so every glyph and stroke printed off-token.
+        2, 2, figsize=(FIG_W, FIG_W * 0.78),
         gridspec_kw={"wspace": 0.46, "hspace": 0.62},
     )
     (ax_a, ax_b), (ax_c, ax_d) = axes
@@ -141,14 +148,16 @@ def main() -> None:
         (
             "mean_accuracy_contrast",
             ("accuracy_ci_low", "accuracy_ci_high"),
-            COLORS["bp"],
+            # These three are endpoint metrics, not the backprop and oracle
+            # conditions whose hues they used to borrow.
+            COLORS["ink"],
             "o",
             "held-out accuracy",
         ),
         (
             "mean_utility_contrast",
             ("utility_ci_low", "utility_ci_high"),
-            COLORS["oracle"],
+            COLORS["per_soma"],
             "s",
             "utility $U$ (vs best of four)",
         ),

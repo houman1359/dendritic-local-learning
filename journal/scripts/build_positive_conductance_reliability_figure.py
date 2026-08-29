@@ -216,7 +216,11 @@ def main() -> None:
     ax_f.errorbar(x, values, yerr=np.vstack([values - lows, highs - values]),
                   color=COLORS["ink"], fmt="none", elinewidth=0.7, capsize=1.8)
     ax_f.axhline(0, color=COLORS["mute"], ls="--", lw=LW_REF)
-    ax_f.set_xticks(x, [entry[1] for entry in controls], rotation=24, ha="right")
+    # Five multi-word labels in a third-width panel overprinted at
+    # 24 deg ("global" ran into "shuffled", "no shunt" into "point
+    # gate"); a steeper angle separates them.
+    ax_f.set_xticks(x, [entry[1] for entry in controls],
+                    rotation=45, ha="right", rotation_mode="anchor")
     ax_f.set_ylabel("control loss $-$ aligned loss")
     panel_title(ax_f, "F", "Final boundary")
     style_axis(ax_f, grid="y")

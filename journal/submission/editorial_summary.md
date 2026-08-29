@@ -14,8 +14,13 @@ soma-derived error transported through dendritic paths. A stochastic
 credit-operator bound predicts when restricted routes help from retained task
 signal, update gain and admitted noise; its utility predicts independent
 trained outcomes with Spearman correlations 0.937 and 0.916. Experiments then
-map the boundary. Neuron identity supplies the dominant feedback gain and
-task-aligned ancestry helps only at intermediate bandwidth. Depth alone hurts
+map the boundary. Neuron identity supplies the dominant feedback gain on
+ordinary image tasks. In a continuous Fashion-MNIST branch-conflict family,
+however, path-selective information adds 35--58 percentage points at full
+conflict and the shared-credit failure threshold shifts with branch count as
+predicted. A matched gated-point model identifies the resource as branch
+selection rather than dendritic material. Task-aligned ancestry is competitive
+only at intermediate bandwidth. Depth alone hurts
 at fixed budgets. On a mechanism-matched task, an aligned serial tree beats a
 resource-identical nonserial control by 31 points, but flexible
 parameter-matched point MLPs beat the tree by about seven points. Reconstructed

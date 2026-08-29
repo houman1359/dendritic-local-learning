@@ -609,11 +609,15 @@ def _plot_legacy(frame: pd.DataFrame, summary: pd.DataFrame) -> None:
     descent = (
         mechanism.groupby("feedback_family").norm_matched_is_descent.sum().to_dict()
     )
+    # The denominator is the checkpoint count that survives this panel's own
+    # filter (primary relative step, input-valid cohort), not the unfiltered
+    # collection total; hard-coding the latter understated every fraction.
+    checkpoints = mechanism.groupby("feedback_family").size().to_dict()
     for index, family in enumerate(feedback_order):
         ax_i.text(
             index,
             -1.45,
-            f"{int(descent[family])}/160 descent",
+            f"{int(descent[family])}/{int(checkpoints[family])} descent",
             ha="center",
             va="bottom",
             fontsize=PT_SMALL,

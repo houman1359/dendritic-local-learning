@@ -1,0 +1,10 @@
+{
+  "ordered_prediction": "B=8 boundary < B=4 boundary < B=2 boundary",
+  "utility_strict_order_pairs": 20,
+  "utility_total_pairs": 20,
+  "utility_exact_sign_p_two_sided": 1.9073486328125e-06,
+  "accuracy_strict_order_pairs": 20,
+  "accuracy_total_pairs": 20,
+  "accuracy_exact_sign_p_two_sided": 1.9073486328125e-06,
+  "right_censoring_rule": "missing boundary is treated as beyond chi=1 only for the ordering test"
+}

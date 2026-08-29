@@ -6,7 +6,7 @@ The manuscript has one unambiguous publication-facing figure set.
   as main Figures 1--9. Each number has one PDF and one continuous panel
   sequence.
 - `supplementary/figure_S01_*.pdf` through
-  `supplementary/figure_S28_*.pdf` are the Supplementary Figures.
+  `supplementary/figure_S29_*.pdf` are the Supplementary Figures.
 - `generated/` contains reproducible internal outputs whose descriptive names
   are not manuscript figure numbers.
 - Older modular blocks in `main/` are compositor inputs retained for provenance;
@@ -21,56 +21,55 @@ are local build products and are not canonical assets.
 
 | Figure | Compiled asset | Content |
 |---|---|---|
-| 1 | `figure_01.pdf` | Coordinates, dendritic addresses, gain and eligibility-by-transport factorization |
-| 2 | `figure_02.pdf` | Neuron-specific feedback, coordinate-to-arbor assignment, two-stream routing and Fashion-MNIST replication; exactness audits are in the SI |
-| 3 | `figure_03.pdf` | Trained subtree-address factorial across feedback bandwidth |
-| 4 | `figure_04.pdf` | Credit-operator signal--noise theory, quantitative validation and alignment-by-bandwidth synthesis |
-| 5 | `figure_05.pdf` | Task-aligned physical depth and decisive point/dendrite controls at H2--H3 |
-| 6 | `figure_06.pdf` | H4 depth saturation plus the fixed-depth task-family and alignment boundary |
-| 7 | `figure_07.pdf` | Reconstructed-arbor route capacity, wiring efficiency and independent-animal direction |
-| 8 | `figure_08.pdf` | Focal shunting with the electrotonic boundary emphasized and active-conductance sensitivity |
-| 9 | `figure_09.pdf` | Measured-response nulls, imposed-alignment rescue, animal test and complete-tree boundary |
+| 1 | `figure_01.pdf` | Point-to-dendrite gradient factorization and the coordinate--address--gain framework |
+| 2 | `figure_02.pdf` | Standard-task feedback ladder: scalar, neuron-specific and compartment-resolved learning signals |
+| 3 | `figure_03.pdf` | Credit-operator signal--noise theory, quantitative validation and alignment-by-bandwidth synthesis |
+| 4 | `figure_04.pdf` | Context-gated branch conflict and the predicted boundary at which branch-specific feedback is required |
+| 5 | `figure_05.pdf` | Hierarchical partial addressing, feedback bandwidth and matched subtree/topology controls |
+| 6 | `figure_06.pdf` | Unified serial physical-depth boundary across task family, hierarchy and sensor alignment |
+| 7 | `figure_07.pdf` | Reconstructed-arbor route capacity, field capture, wiring efficiency and second-animal direction |
+| 8 | `figure_08.pdf` | Focal shunting and the conductance-state boundary for spatially selective route gain |
+| 9 | `figure_09.pdf` | Measured-response pipeline and null, imposed-alignment rescue, animal contrast and evidence boundary |
 
 ## Final panel sequence
 
-This is the panel lettering used by `main.tex`; modular source letters are not
-publication letters.
+This is the panel lettering used by `main.tex`; the native builder number and
+compiled figure number are identical.
 
 - **Figure 1:** A point/tree comparison; B network layer; C coordinate,
-  address and gain; D eligibility times transported error; E evidence path.
-- **Figure 2:** A MNIST feedback; B Fashion-MNIST ladder; C gradient alignment;
-  D coordinate-to-arbor assignment versus within-tree address; E paired
-  bottleneck contrasts; F two-stream credit reversal; G neuron-specific gain
-  across depth.
-- **Figure 3:** A compact route-resolution key; B learning
-  across bandwidth; C best-control contrast; D task--topology alignment;
-  E representation match; F capture and learning.
-- **Figure 4:** A credit-operator utility schematic; B spectral alignment;
-  C predictive utility; D route-resolution crossover; E projection boundary;
-  F reliability gains; G alignment-by-bandwidth synthesis.
-- **Figure 5:** A matched physical-depth inventory; B nested divisive task;
-  C backpropagation depth test; D local-credit transport; E additive control;
-  F serial-versus-grouped architecture control; G paired contrasts; H model
-  architectures.
-- **Figure 6:** A H4 design; B aligned H4; C reversed H4; D H4 contrasts;
-  E optimum across task depth; F BP task-family boundary; G local-credit
-  task-family boundary; H architecture-by-alignment interaction.
-- **Figure 7:** A mapped reconstruction; B ancestry addresses; C reciprocal-
-  cable field; D sparse capacity; E eight-channel efficiency;
-  F capture per wire; G independent-animal direction.
+  address and gain; D eligibility times transported error; E Results roadmap.
+- **Figure 2:** A task and the three feedback resolutions; B MNIST ladder;
+  C Fashion-MNIST ladder; D gradient alignment; E signal-to-arbor assignment
+  versus within-tree address; F paired bottleneck contrasts.
+- **Figure 3:** A credit-operator utility schematic; B spectral alignment;
+  C route-resolution crossover; D projection boundary; E reliability gains;
+  F predictive utility; G alignment-by-bandwidth synthesis.
+- **Figure 4:** A compatible/conflicting task schematic; B forward selection
+  versus backward credit; C analytic shared-mode boundary; D trained
+  transition; E conflict-dependent benefit; F implementation controls.
+- **Figure 5:** A eight-context hierarchy; B feedback-bandwidth ladder;
+  C route-assignment control; D topology and basis controls; E learning across
+  bandwidth; F paired route effects; G matched-versus-rewired topology.
+- **Figure 6:** A nested, flat and local-ratio task families; B architecture
+  controls; C H=3 quantitative boundary; D H=4 aligned/reversed factorial;
+  E hierarchy-by-physical-depth saturation; F backpropagation and G local-rule
+  alignment dose responses.
+- **Figure 7:** A mapped reconstruction; B subtree projection and field-capture
+  definition; C reciprocal-cable field; D model-derived field; E eight-channel
+  efficiency; F wiring-normalized capture; G independent-animal direction.
 - **Figure 8:** A matched focal-shunt design; B relation selectivity; C passive
-  dose response; D adjoint transport; E electrotonic boundary; F active dose
-  response; G cellwise contrast.
-- **Figure 9:** A complete-tree measured-response learning; B standardized
-  anatomy-effect summary; C imposed-alignment design; D controlled rescue;
-  E signed six-animal reanalysis; F signed-mode decomposition; G evidence
-  boundary.
-
-Supplementary Figures S18--S28 retain the expanded physical-depth controls,
+  dose response; D exact factor-freeze test; E active dose response;
+  F electrotonic boundary; G cellwise contrast.
+- **Figure 9:** A measured-response pipeline; B complete-tree learning;
+  C standardized topology effects; D imposed-alignment design; E controlled
+  rescue; F signed six-animal contrast; G signed-mode decomposition;
+  H evidence boundary.
+Supplementary Figures S18--S29 retain the expanded physical-depth controls,
 prospective feedback/assignment diagnostics, full morphology diagnostics,
 focal-shunting controls, measured-response diagnostics and the trained
 partition-residual reconstruction and adaptive conductance-reliability test,
 followed by the irregular-tree multiscale analysis, immutable-source H2/H3
-replication, independent-animal Pinky routing analysis and physical-depth
-credit-coordinate diagnostics. No
+replication, independent-animal Pinky routing analysis, physical-depth
+credit-coordinate diagnostics and the complete path-demand task and boundary.
+No
 evidence-bearing panel removed from the main narrative is discarded.

@@ -43,6 +43,7 @@ SANITIZED_DROP_COLUMNS = {
 }
 
 SANITIZED_JSON_PATHS = {
+    "source_data/cifar10_additive_feedback_ladder_confirmatory/summary.json",
     "source_data/physical_depth_h4_factorial/audit.json",
     "source_data/physical_depth_clean_source_replication/audit.json",
     "source_data/task_family_alignment/audit.json",
@@ -926,6 +927,23 @@ def shifted_expanded_file(item: SourceFile) -> SourceFile:
         else f"Fig{new_number}"
     )
     destination = destination.replace(f"Fig{old_number}", new_prefix, 1)
+    if item.figure == "Figure 3":
+        # The historical nine-panel regime sheet is now a four-panel boundary
+        # figure. Six duplicated panels are supplied under the unchanged
+        # Supplementary Figures 1--3 and are filtered when FILES is assembled.
+        # Relabel the three retained historical panels to their current
+        # positions; fresh raw-additive CIFAR-10 is appended as panel d below.
+        panel_mapping = {"c": "a", "d": "b", "i": "c"}
+        current_panel = panel_mapping[item.panels]
+        destination = destination.replace(
+            f"SuppFig4{item.panels}", f"SuppFig4{current_panel}", 1
+        )
+        return replace(
+            item,
+            figure=new_figure,
+            panels=current_panel,
+            destination=destination,
+        )
     return replace(
         item,
         figure=new_figure,
@@ -1954,7 +1972,11 @@ FILES = (
     *NEW_CONFIRMATORY_FILES,
     *(shifted_extension_file(item) for item in EXTENSION_FILES),
     *INHERITED_NEURIPS_FILES,
-    *(shifted_expanded_file(item) for item in EXPANDED_FILES),
+    *(
+        shifted_expanded_file(item)
+        for item in EXPANDED_FILES
+        if item.figure != "Figure 3" or item.panels in {"c", "d", "i"}
+    ),
     *(shifted_legacy_file(item) for item in FILES),
 )
 
@@ -1964,6 +1986,46 @@ FILES = (
 # allow-list entries ensures that the submission archive cannot silently lag
 # the compiled nine-figure manuscript.
 FILES += (
+    SourceFile(
+        "Supplementary Figure 4",
+        "d",
+        "source_data/cifar10_additive_feedback_ladder_confirmatory/seed_outcomes.csv",
+        "Supplementary_Figure_4/SuppFig4d_CIFAR10_raw_additive_seed_outcomes.csv",
+        "complete run-level outcomes",
+        "paired independent training seed (n=20 per condition)",
+        "fresh frozen confirmation",
+        "All 80 strict-scalar, neuron-specific, exact-path and matched-backpropagation outcomes.",
+    ),
+    SourceFile(
+        "Supplementary Figure 4",
+        "d",
+        "source_data/cifar10_additive_feedback_ladder_confirmatory/condition_summary.csv",
+        "Supplementary_Figure_4/SuppFig4d_CIFAR10_raw_additive_condition_summary.csv",
+        "condition summaries",
+        "paired independent training seed (n=20)",
+        "current derived analysis",
+        "Condition means, standard deviations and Student-t confidence intervals.",
+    ),
+    SourceFile(
+        "Supplementary Figure 4",
+        "d",
+        "source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv",
+        "Supplementary_Figure_4/SuppFig4d_CIFAR10_raw_additive_paired_contrasts.csv",
+        "paired seed contrasts",
+        "paired independent training seed (n=20)",
+        "current derived analysis",
+        "Holm-adjusted superiority tests, exact sign-flip sensitivities and seed differences.",
+    ),
+    SourceFile(
+        "Supplementary Figure 4",
+        "d",
+        "source_data/cifar10_additive_feedback_ladder_confirmatory/summary.json",
+        "Supplementary_Figure_4/SuppFig4d_CIFAR10_raw_additive_audit.json",
+        "artifact and claim audit",
+        "complete 80-fit paired cohort",
+        "current frozen audit",
+        "Completeness, source identity, calibration, convergence, adequacy, superiority and equivalence gates.",
+    ),
     SourceFile(
         "Figure 2",
         "p-q",
@@ -2300,7 +2362,8 @@ def final_display_file(item: SourceFile) -> SourceFile:
         figure = "Figure 3"
     elif source.startswith("source_data/trained_subtree_address/"):
         # The two-stream route diagnostics are retained in full as S19g--i;
-        # their held-out endpoint is summarized in main Figure 2e.
+        # the Results text identifies this as the predecessor to the continuous
+        # branch-conflict task, but no two-stream panel remains in the main set.
         figure = "Supplementary Figure 19"
         panels = {"g,i": "g,i", "h": "h", "g-i": "g-i"}.get(panels, panels)
     elif source.startswith("source_data/prospective_input_validity/"):
@@ -2442,26 +2505,129 @@ def final_display_file(item: SourceFile) -> SourceFile:
 
 FILES = tuple(final_display_file(item) for item in FILES)
 
-# Main Figure 2H is a focused endpoint view of the same two-stream cohort whose
-# full mechanism and gradient audits remain in Supplementary Figure 19.
-_FIG2H_SOURCES = {
-    "seed_outcomes.csv",
-    "condition_summary.csv",
-    "paired_contrasts.csv",
+# Figure 4 is the continuous path-demand family; the
+# existing subtree-factorial display is compressed into panels e--h.
+_SUBTREE_PANEL_MAP = {
+    "seed_outcomes.csv": "e-h",
+    "condition_summary.csv": "f-h",
+    "paired_contrasts.csv": "g-h",
+    "mechanism_ledger.csv": "e-h",
+    "summary.json": "e-h",
 }
-FILES += tuple(
-    replace(
-        item,
-        figure="Figure 2",
-        panels="h",
-        destination=(
-            "Figure_2/Fig2h_credit_reversal_" + Path(item.source).name
+_remapped_files = []
+for item in FILES:
+    if (
+        item.figure == "Figure 3"
+        and item.source.startswith(
+            "source_data/trained_subtree_address_full_factorial/"
+        )
+    ):
+        panels = _SUBTREE_PANEL_MAP[Path(item.source).name]
+        destination = re.sub(r"Fig3[^_]*_", f"Fig3{panels}_", item.destination)
+        item = replace(item, panels=panels, destination=destination)
+    _remapped_files.append(item)
+FILES = tuple(_remapped_files)
+
+# ── Renumber main-figure entries to the restructured figure order ────────
+# The manuscript now runs: 1 framework, 2 feedback identity, 3 credit-operator
+# theory, 4 branch conflict, 5 subtree routing, 6 physical depth, 7 anatomical
+# routes, 8 focal shunting, 9 measured boundary.  Entries written under the
+# older order are renumbered here by their SOURCE-DATA prefix, which names the
+# experiment unambiguously; the destination folder and FigN filename prefix
+# follow the corrected figure so no source-data folder describes the wrong
+# experiment.
+_PREFIX_TO_FIGURE = (
+    ("source_data/theory/", "Figure 3"),
+    ("source_data/credit_phase", "Figure 3"),
+    ("source_data/path_necessity_fashion/", "Figure 4"),
+    ("source_data/trained_subtree_address_full_factorial/", "Figure 5"),
+    ("source_data/interior_optimum/", "Figure 5"),
+    ("source_data/nonlinear_physical_depth", "Figure 6"),
+    ("source_data/physical_depth_h4_factorial/", "Figure 6"),
+    ("source_data/point_dendrite_credit_controls/", "Figure 6"),
+    ("source_data/physical_alignment_dose/", "Figure 6"),
+    ("source_data/figure3/", "Figure 7"),
+    ("source_data/microns_inhibitory_routes/", "Figure 7"),
+    ("source_data/capture_per_wire/", "Figure 7"),
+    ("source_data/figure4/", "Figure 8"),
+    ("source_data/focal_", "Figure 8"),
+    ("source_data/physical_cable_sensitivity/", "Figure 8"),
+    ("source_data/fulltree_boundary/", "Figure 9"),
+    ("source_data/functional_topology_all_scans/", "Figure 9"),
+    ("source_data/alignment_controlled/", "Figure 9"),
+    ("source_data/animal_learning_francioni/", "Figure 9"),
+)
+
+
+def _renumber_main(item: SourceFile) -> SourceFile:
+    if not item.figure.startswith("Figure "):
+        return item
+    for prefix, figure in _PREFIX_TO_FIGURE:
+        if item.source.startswith(prefix):
+            break
+    else:
+        return item
+    if item.figure == figure:
+        return item
+    old_n = item.figure.split()[1]
+    new_n = figure.split()[1]
+    destination = item.destination
+    if destination.startswith(f"Figure_{old_n}/"):
+        destination = f"Figure_{new_n}/" + destination.split("/", 1)[1]
+    destination = re.sub(rf"\bFig{old_n}(?=[a-z_\-])", f"Fig{new_n}",
+                        destination)
+    return replace(item, figure=figure, destination=destination)
+
+
+FILES = tuple(_renumber_main(item) for item in FILES)
+
+# The continuous path-demand family supersedes the two-stream endpoint in main
+# Figure 2H and supplies the first four panels of the revised Figure 3.  The
+# original two-stream source remains packaged with Supplementary Figure 19.
+_PATH_DEMAND_FILES = (
+    ("seed_outcomes.csv", "independent condition outcomes"),
+    ("condition_summary.csv", "condition means and seed-bootstrap intervals"),
+    ("paired_contrasts.csv", "paired route contrasts at every conflict dose"),
+    ("interaction_summary.csv", "seed-wise route-by-conflict interaction summary"),
+    ("seedwise_interactions.csv", "one primary route-by-conflict slope per independent seed"),
+    ("boundary_summary.csv", "predicted and discrete empirical boundaries"),
+    ("boundary_by_seed.csv", "seed-level utility and trained-accuracy boundary doses"),
+    ("boundary_order.json", "seed-wise test of the predicted boundary ordering"),
+    ("plotted_crossings.csv", "descriptive mean-curve crossings plotted in Supplementary Figure 29c"),
+    ("mechanism_audit.csv", "task-balance and gradient implementation audit"),
+    ("audit.json", "confirmatory interpretation-gate audit"),
+)
+
+for filename, role in _PATH_DEMAND_FILES:
+    source = f"source_data/path_necessity_fashion/{filename}"
+    suffix = Path(filename).stem
+    common = dict(
+        source=source,
+        role=role,
+        independent_unit="paired independent training seed (n=20 per branch count)",
+        status="frozen confirmatory cohort",
+        notes=(
+            "Fashion-MNIST branch-conflict family with B=2,4,8 and eight "
+            "nested conflict doses; exact/BP/gated-point equality was audited."
         ),
     )
-    for item in FILES
-    if item.source.startswith("source_data/trained_subtree_address/")
-    and Path(item.source).name in _FIG2H_SOURCES
-)
+    FILES += (
+        SourceFile(
+            figure="Figure 4",
+            panels="c-f",
+            destination=f"Figure_4/Fig4c-f_path_demand_{suffix}{Path(filename).suffix}",
+            **common,
+        ),
+        SourceFile(
+            figure="Supplementary Figure 29",
+            panels="a-c",
+            destination=(
+                f"Supplementary_Figure_29/SuppFig29a-c_path_demand_"
+                f"{suffix}{Path(filename).suffix}"
+            ),
+            **common,
+        ),
+    )
 
 
 def duplicate_for_supplement(item: SourceFile, number: int, panels: str) -> SourceFile:
@@ -2518,7 +2684,7 @@ FILES += tuple(
     duplicate_for_supplement(item, 28, "a-b")
     for item in FILES
     if item.source.startswith("source_data/point_dendrite_credit_controls/")
-    and item.figure == "Figure 5"
+    and item.figure == "Figure 6"
 )
 FILES += tuple(
     duplicate_for_supplement(item, 19, "a-c")
@@ -2913,6 +3079,237 @@ FILES += (
     ),
 )
 
+# ── Panel-span ground-truth corrections (2026-08-28) ─────────────────────
+# Every main-figure entry above was audited against the panel its source is
+# actually drawn in by the current native builders.  Entries whose data feed
+# no drawn panel become Text_ companions; entries duplicated verbatim by a
+# supplementary home are dropped; three files move to the figure that really
+# draws them.  Keys are the pre-correction destinations, which are unique.
+# None: drop the entry (a correct duplicate elsewhere already packages it).
+_PANEL_CORRECTIONS = {
+    # Figure 2 lost its old panels G-H; the two-stream data live in S19.
+    "Figure_2/Fig2g_seed_outcomes.csv": None,
+    "Figure_2/Fig2g_condition_summary.csv": None,
+    "Figure_2/Fig2g_paired_contrasts.csv": None,
+    "Figure_2/Fig2b_mnist_feedback_paired_contrasts.csv":
+        (None, "text", "Figure_2/Text_mnist_feedback_paired_contrasts.csv"),
+    "Figure_2/Fig2c,f_Fashion_MNIST_condition_summary.csv":
+        (None, "c", "Figure_2/Fig2c_Fashion_MNIST_condition_summary.csv"),
+    "Figure_2/Fig2c,f_Fashion_MNIST_paired_contrasts.csv":
+        (None, "f", "Figure_2/Fig2f_Fashion_MNIST_paired_contrasts.csv"),
+    "Figure_2/Fig2c,f_Fashion_MNIST_audit.json":
+        (None, "text", "Figure_2/Text_Fashion_MNIST_audit.json"),
+    # Figure 3 letters follow the native seven-panel builder.
+    "Figure_3/Fig3c-d_depth_training_seed.csv":
+        (None, "c", "Figure_3/Fig3c_depth_training_seed.csv"),
+    "Figure_3/Fig3e_projection_phase_seed.csv":
+        (None, "d", "Figure_3/Fig3d_projection_phase_seed.csv"),
+    "Figure_3/Fig3f_reliability_phase_seed.csv":
+        (None, "e", "Figure_3/Fig3e_reliability_phase_seed.csv"),
+    "Figure_3/Fig3g-h_same_span_diagnostics.csv":
+        (None, "text", "Figure_3/Text_same_span_diagnostics.csv"),
+    "Figure_3/Fig3i_operator_metrics.csv":
+        (None, "f", "Figure_3/Fig3f_operator_metrics.csv"),
+    # The capture-bound audit backs the topology-matched capacity note
+    # behind Figure 7, not any drawn Figure 3 panel.
+    "Figure_3/Fig3a_credit_capture_bound_verification.json":
+        ("Figure 7", "text",
+         "Figure_7/Text_credit_capture_bound_verification.json"),
+    # Figure 4: d,f draw condition summaries, e draws the paired seed
+    # clouds and slopes, c-d mark the analytic boundaries.
+    "Figure_4/Fig4c-f_path_demand_seed_outcomes.csv":
+        (None, "e", "Figure_4/Fig4e_path_demand_seed_outcomes.csv"),
+    # 2026-08-29: Figure 4's panels E and F were merged and the boundary test
+    # promoted from Supplementary Fig. S29c, so the drawn homes moved.
+    "Figure_4/Fig4c-f_path_demand_condition_summary.csv":
+        (None, "d,e", "Figure_4/Fig4d,e_path_demand_condition_summary.csv"),
+    "Figure_4/Fig4c-f_path_demand_paired_contrasts.csv":
+        (None, "text", "Figure_4/Text_path_demand_paired_contrasts.csv"),
+    "Figure_4/Fig4c-f_path_demand_interaction_summary.csv":
+        (None, "text", "Figure_4/Text_path_demand_interaction_summary.csv"),
+    "Figure_4/Fig4c-f_path_demand_seedwise_interactions.csv":
+        (None, "text", "Figure_4/Text_path_demand_seedwise_interactions.csv"),
+    "Figure_4/Fig4c-f_path_demand_boundary_summary.csv":
+        (None, "c-d", "Figure_4/Fig4c-d_path_demand_boundary_summary.csv"),
+    "Figure_4/Fig4c-f_path_demand_boundary_by_seed.csv": None,
+    "Figure_4/Fig4c-f_path_demand_boundary_order.json": None,
+    "Figure_4/Fig4c-f_path_demand_plotted_crossings.csv":
+        (None, "f", "Figure_4/Fig4f_path_demand_plotted_crossings.csv"),
+    "Figure_4/Fig4c-f_path_demand_mechanism_audit.csv":
+        (None, "text", "Figure_4/Text_path_demand_mechanism_audit.csv"),
+    "Figure_4/Fig4c-f_path_demand_audit.json":
+        (None, "text", "Figure_4/Text_path_demand_audit.json"),
+    # Supplementary Figure 29: panel a is a data-free schematic.
+    "Supplementary_Figure_29/SuppFig29a-c_path_demand_seed_outcomes.csv":
+        (None, "b-c",
+         "Supplementary_Figure_29/SuppFig29b-c_path_demand_seed_outcomes.csv"),
+    "Supplementary_Figure_29/SuppFig29a-c_path_demand_condition_summary.csv":
+        (None, "b-c",
+         "Supplementary_Figure_29/"
+         "SuppFig29b-c_path_demand_condition_summary.csv"),
+    "Supplementary_Figure_29/SuppFig29a-c_path_demand_paired_contrasts.csv":
+        (None, "text",
+         "Supplementary_Figure_29/Text_path_demand_paired_contrasts.csv"),
+    "Supplementary_Figure_29/SuppFig29a-c_path_demand_interaction_summary.csv":
+        (None, "text",
+         "Supplementary_Figure_29/Text_path_demand_interaction_summary.csv"),
+    "Supplementary_Figure_29/"
+    "SuppFig29a-c_path_demand_seedwise_interactions.csv":
+        (None, "text",
+         "Supplementary_Figure_29/Text_path_demand_seedwise_interactions.csv"),
+    "Supplementary_Figure_29/SuppFig29a-c_path_demand_boundary_summary.csv":
+        (None, "b-c",
+         "Supplementary_Figure_29/SuppFig29b-c_path_demand_boundary_summary.csv"),
+    "Supplementary_Figure_29/SuppFig29a-c_path_demand_boundary_by_seed.csv":
+        (None, "c",
+         "Supplementary_Figure_29/SuppFig29c_path_demand_boundary_by_seed.csv"),
+    "Supplementary_Figure_29/SuppFig29a-c_path_demand_boundary_order.json":
+        (None, "c",
+         "Supplementary_Figure_29/SuppFig29c_path_demand_boundary_order.json"),
+    "Supplementary_Figure_29/SuppFig29a-c_path_demand_plotted_crossings.csv":
+        (None, "c",
+         "Supplementary_Figure_29/SuppFig29c_path_demand_plotted_crossings.csv"),
+    "Supplementary_Figure_29/SuppFig29a-c_path_demand_mechanism_audit.csv":
+        (None, "text",
+         "Supplementary_Figure_29/Text_path_demand_mechanism_audit.csv"),
+    "Supplementary_Figure_29/SuppFig29a-c_path_demand_audit.json":
+        (None, "text", "Supplementary_Figure_29/Text_path_demand_audit.json"),
+    # Figure 5: e bandwidth sweep, f route contrasts, g paired bootstrap.
+    "Figure_5/Fig5e-h_seed_outcomes.csv":
+        (None, "e,g", "Figure_5/Fig5e,g_seed_outcomes.csv"),
+    "Figure_5/Fig5f-h_condition_summary.csv":
+        (None, "e", "Figure_5/Fig5e_condition_summary.csv"),
+    "Figure_5/Fig5g-h_paired_contrasts.csv":
+        (None, "f", "Figure_5/Fig5f_paired_contrasts.csv"),
+    "Figure_5/Fig5e-h_mechanism_ledger.csv":
+        (None, "text", "Figure_5/Text_subtree_factorial_mechanism_ledger.csv"),
+    "Figure_5/Fig5e-h_summary.json":
+        (None, "text", "Figure_5/Text_subtree_factorial_summary.json"),
+    # Figure 6: c is the H=3 boundary with point controls, d-e the H4
+    # heatmaps, f-g the task-family boundary; contrasts back prose.
+    "Figure_6/Fig6c-f_seed_outcomes.csv":
+        (None, "c", "Figure_6/Fig6c_seed_outcomes.csv"),
+    "Figure_6/Fig6c-f_condition_summary.csv":
+        (None, "c", "Figure_6/Fig6c_condition_summary.csv"),
+    "Figure_6/Fig6c-f_paired_contrasts.csv":
+        (None, "text", "Figure_6/Text_H3_paired_contrasts.csv"),
+    "Figure_6/Text_artifact_and_claim_audit.json": (None, "text", None),
+    "Figure_6/Text_checkpoint_gradient_summary.csv": (None, "text", None),
+    "Figure_6/Fig6g-h_point_dendrite_seed_outcomes.csv":
+        (None, "c", "Figure_6/Fig6c_point_dendrite_seed_outcomes.csv"),
+    "Figure_6/Fig6g-h_point_dendrite_condition_summary.csv":
+        (None, "c", "Figure_6/Fig6c_point_dendrite_condition_summary.csv"),
+    "Figure_6/Fig6g-h_point_dendrite_paired_contrasts.csv":
+        (None, "text", "Figure_6/Text_point_dendrite_paired_contrasts.csv"),
+    "Figure_6/Fig6g-h_point_dendrite_audit.json":
+        (None, "text", "Figure_6/Text_point_dendrite_audit.json"),
+    "Figure_6/Fig6a-d_H4_seed_outcomes.csv":
+        (None, "d-e", "Figure_6/Fig6d-e_H4_seed_outcomes.csv"),
+    "Figure_6/Fig6a-d_H4_condition_summary.csv":
+        (None, "d", "Figure_6/Fig6d_H4_condition_summary.csv"),
+    "Figure_6/Fig6c_H4_paired_contrasts.csv":
+        (None, "text", "Figure_6/Text_H4_paired_contrasts.csv"),
+    "Figure_6/Fig6a-d_H4_audit.json":
+        (None, "text", "Figure_6/Text_H4_audit.json"),
+    "Figure_6/Fig6e-g_task_family_seed_outcomes.csv":
+        (None, "f-g", "Figure_6/Fig6f-g_task_family_seed_outcomes.csv"),
+    "Figure_6/Fig6e-f_task_family_condition_summary.csv":
+        (None, "f-g", "Figure_6/Fig6f-g_task_family_condition_summary.csv"),
+    "Figure_6/Fig6g_task_family_paired_contrasts.csv":
+        (None, "text", "Figure_6/Text_task_family_paired_contrasts.csv"),
+    "Figure_6/Fig6e-g_task_family_audit.json":
+        (None, "text", "Figure_6/Text_task_family_audit.json"),
+    # Figure 7: only panel A draws segment metrics; the cell inventory
+    # supports the cohort prose (full detail lives in S20).
+    "Figure_7/Fig7a-b_segment_metrics.csv":
+        (None, "a", "Figure_7/Fig7a_segment_metrics.csv"),
+    "Figure_7/Fig7a-b,d_cell_metrics.csv":
+        (None, "text", "Figure_7/Text_cell_metrics.csv"),
+    # Figure 8: e active dose, f electrotonic boundary, g paired forest.
+    "Figure_8/Fig8e_physical_cable_contrasts.csv":
+        (None, "f", "Figure_8/Fig8f_physical_cable_contrasts.csv"),
+    "Figure_8/Fig8f-g_active_cell_metrics.csv":
+        (None, "g", "Figure_8/Fig8g_active_cell_metrics.csv"),
+    "Figure_8/Fig8f-g_active_condition_summary.csv":
+        (None, "e", "Figure_8/Fig8e_active_condition_summary.csv"),
+    "Figure_8/Fig8f-g_active_acceptance_ledger.csv":
+        (None, "text", "Figure_8/Text_active_acceptance_ledger.csv"),
+    "Figure_8/Fig8f-g_active_summary.json":
+        (None, "text", "Figure_8/Text_active_summary.json"),
+    # Figure 9: a pipeline schematic, b-c full-tree and topology rows,
+    # d alignment schematic, e controlled curves, f animal contrast
+    # with its mode partition, g evidence ladder.
+    "Figure_9/Fig9f-g_full_tree_cell_method_means.csv":
+        (None, "b-c", "Figure_9/Fig9b-c_full_tree_cell_method_means.csv"),
+    "Figure_9/Fig9f-g_full_tree_scan_method_means.csv":
+        (None, "b-c", "Figure_9/Fig9b-c_full_tree_scan_method_means.csv"),
+    "Figure_9/Fig9f-g_full_tree_summary.json":
+        (None, "text", "Figure_9/Text_full_tree_summary.json"),
+    "Figure_9/Fig9d_alignment_controlled_runs.csv.gz":
+        (None, "e", "Figure_9/Fig9e_alignment_controlled_runs.csv.gz"),
+    "Figure_9/Fig9d_alignment_controlled_curves.csv":
+        (None, "e", "Figure_9/Fig9e_alignment_controlled_curves.csv"),
+    "Figure_9/Fig9d_cell_alignment_metrics.csv":
+        (None, "e", "Figure_9/Fig9e_cell_alignment_metrics.csv"),
+    "Figure_9/Fig9d_dictionary_audit.csv":
+        (None, "e", "Figure_9/Fig9e_dictionary_audit.csv"),
+    "Figure_9/Fig9d_alignment_summary.json":
+        (None, "e", "Figure_9/Fig9e_alignment_summary.json"),
+    "Figure_9/Fig9e_animal_signed_contrasts.csv":
+        (None, "f", "Figure_9/Fig9f_animal_signed_contrasts.csv"),
+    "Figure_9/Fig9e_animal_summary.json":
+        (None, "f", "Figure_9/Fig9f_animal_summary.json"),
+    "Figure_9/Fig9a_functional_target_metrics.csv":
+        (None, "c", "Figure_9/Fig9c_functional_target_metrics.csv"),
+    "Figure_9/Fig9a_functional_summary.json":
+        (None, "text", "Figure_9/Text_functional_summary.json"),
+    # The ch4 task table is drawn in the Figure 3 phase plane (its ch1/2/8
+    # companions, packaged with Supplementary Figure 22, set the dense-
+    # oracle effective rank); the ch4 summary is S22 text support.
+    "Figure_9/Fig9b-c_task_target_method_means_ch4.csv":
+        ("Figure 3", "g", "Figure_3/Fig3g_task_target_method_means_ch4.csv"),
+    "Figure_9/Fig9b-c_task_summary_ch4.json": None,
+    # Supplementary Figure 19: panel letters follow the native sheet; the
+    # S8-lettered duplicates of its panel-f files are dropped.
+    "Supplementary_Figure_19/Text_clean_exact_bp_audit_summary.json":
+        (None, "text", None),
+    "Supplementary_Figure_19/SuppFig19a-d_g-i_condition_summary.csv": None,
+    "Supplementary_Figure_19/SuppFig19e-f_paired_contrasts.csv": None,
+    # Supplementary Figure 17 keeps only old panels A and D (relettered
+    # A-B); the common-signed-modes table backs the signed-mode prose.
+    "Supplementary_Figure_17/SuppFig17d_common_signed_modes.csv":
+        (None, "text", "Supplementary_Figure_17/Text_common_signed_modes.csv"),
+    "Supplementary_Figure_17/SuppFig17d_neuron_residual_distributions.csv":
+        (None, "b",
+         "Supplementary_Figure_17/SuppFig17b_neuron_residual_distributions.csv"),
+}
+
+_corrected_files = []
+_correction_hits = set()
+for item in FILES:
+    correction = _PANEL_CORRECTIONS.get(item.destination, "keep")
+    if correction != "keep":
+        _correction_hits.add(item.destination)
+    if correction is None:
+        continue
+    if correction != "keep":
+        figure, panels, destination = correction
+        item = replace(
+            item,
+            figure=figure if figure is not None else item.figure,
+            panels=panels,
+            destination=(destination if destination is not None
+                         else item.destination),
+        )
+    _corrected_files.append(item)
+_missing_corrections = set(_PANEL_CORRECTIONS) - _correction_hits
+if _missing_corrections:
+    raise RuntimeError(
+        "panel corrections matched no entry: "
+        + ", ".join(sorted(_missing_corrections))
+    )
+FILES = tuple(_corrected_files)
+
 
 README = """# Source Data
 
@@ -2938,18 +3335,18 @@ nested observations; they are not counted as independent biological
 replicates.
 
 Figure 2 contains the feedback-coordinate, ownership, input-validity and
-Fashion-MNIST ladders. Figure 3 contains the 2,700-fit subtree-address
-factorial and its two-stream anchor. Figure 4 contains the stochastic
-credit-operator phase tests. Figure 5 contains the H2--H3 physical-depth,
-point--dendrite and BP--local-credit controls, and Figure 6 contains the H4
-depth-saturation and fixed-D3 task-family-by-alignment extensions. Figures
+Fashion-MNIST ladders. Figure 3 contains the stochastic credit-operator phase
+tests and the alignment--bandwidth synthesis. Figure 4 is the continuous
+branch-conflict path-demand family. Figure 5 is the 2,700-fit subtree-address
+factorial. Figure 6 contains the H2--H4 physical-depth, point--dendrite,
+BP--local-credit and task-family-by-alignment extensions. Figures
 7--9 contain reconstructed-anatomy capacity, focal conductance,
 measured-response, controlled-alignment and six-animal boundary tests; Figure
 7 also shows the independent-animal directional replication of structural
 route capacity.
 Supplementary Figures 1--3 reproduce the three unchanged regular-tree figures
 from the final NeurIPS/arXiv revision, and Supplementary Figure 4 is the
-expanded regular-tree regime archive. Supplementary Figure 5 is a constructed
+reduced four-panel regular-tree boundary sheet. Supplementary Figure 5 is a constructed
 topology--task alignment control, Supplementary Figure 6 is an exact
 deterministic interference calculation, and Supplementary Figure 7 audits the
 fixed spatial-connectivity control. Supplementary Figure 8 is the fixed-budget
@@ -2957,12 +3354,13 @@ depth control, Supplementary Figure 9 is the complete checkpoint diagnostic,
 Supplementary Figure 10 is the same-mouse v661 sensitivity cohort, and
 Supplementary Figures 11--17 contain conductance, inhibitory, same-span,
 calibration, interior-optimum and external-animal analyses. Supplementary
-Figures 18--27 retain the expanded physical-depth, prospective routing,
+Figures 18--29 retain the expanded physical-depth, prospective routing,
 morphology, focal-shunting, measured-response and trained partition-residual
 diagnostics plus the adaptive conductance-reliability and irregular-tree
-wavelet tests, clean-source physical-depth replication and independent-animal
-structural replication. Capture per wire
-and the phase-plane synthesis are promoted to main Figures 7 and 4.
+wavelet tests, clean-source physical-depth replication, independent-animal
+structural replication, physical-depth diagnostics and the complete
+branch-conflict boundary. Capture per wire
+and the phase-plane synthesis are promoted to main Figures 7 and 3.
 
 This is the submission-facing source-data package. Figure 2 panels b and c
 contain the complete clean 15-seed feedback cohort and the corresponding
@@ -2975,9 +3373,12 @@ outcomes, 120 input-valid bandwidth-matched routing outcomes, the detached
 The complete 1,840-run historical input-validity ledger is supplied, including
 the excluded inhibitory-dose family. The 120-checkpoint diagnostic is supplied
 as Supplementary Figure 9; Figure 7 is the reconstructed-morphology routing
-analysis.
-Supplementary Figure 4 retains validated regular-tree task, stress, rule,
-feedback and harder-data controls. No current figure panel or
+analysis, Figure 4 the branch-conflict family, Figure 5 the subtree-address
+factorial and Figure 6 the physical-depth program.
+Supplementary Figure 4 retains the historical depth, teaching-noise and
+shunting-only CIFAR-10 boundaries together with the fresh raw-additive
+CIFAR-10 ladder. The omitted historical panels are represented in
+Supplementary Figures 1--3. No current figure panel or
 quantitative main-text control has a known source-data completeness gap.
 
 The public-v661 sensitivity cohort is disjoint from the original eight-cell
@@ -3149,14 +3550,11 @@ rule-family, error-source, exact-transport, and feedback-ladder tables.
 
 SUPPLEMENTARY_FIGURE_4_README = """# Supplementary Figure 4 source data
 
-These files retain the expanded task, inhibition-dose, depth,
-broadcast-noise, rule-family, error-source, mechanism-control, feedback-rank
-and flattened CIFAR-10 archive. Most conditions contain five independent
-training seeds; the rule and error-source panels contain three and are
-descriptive. Exact transport is an information oracle. The cross-architecture
-panels define robustness regimes and do not isolate a backward shunting
-mechanism. The CIFAR-10 panel uses flattened images and is not a competitive
-vision benchmark.
+These files retain the historical depth, broadcast-noise and shunting-only
+flattened-CIFAR-10 boundaries and the fresh 20-seed raw-additive CIFAR-10
+feedback ladder. The first three panels contain five independent seeds per
+condition. Exact transport is an information oracle. These harder-data panels
+are transfer and mechanism controls, not competitive vision benchmarks.
 """
 
 

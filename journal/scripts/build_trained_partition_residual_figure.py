@@ -33,8 +33,11 @@ FIGURE = ROOT / "figures" / "generated" / "fig_trained_partition_residual.pdf"
 FAMILIES = [
     ("correct_ancestry_subtrees", "ancestry routes", COLORS["dend"], "o"),
     ("depth_interleaved_bins", "depth bins", COLORS["additive"], "s"),
-    ("random_sparse_matched", "random sparse", COLORS["oracle"], "^"),
-    ("within_neuron_route_derangement", "deranged ownership", COLORS["bp"], "D"),
+    # Controls are grays.  These two previously wore the reserved
+    # oracle violet and backprop red-brown, so a cross-figure reader
+    # met an "oracle ceiling" and a "BP" curve that were neither.
+    ("random_sparse_matched", "random sparse", COLORS["point_mlp"], "^"),
+    ("within_neuron_route_derangement", "deranged ownership", COLORS["mute"], "D"),
 ]
 RESTRICTED = [
     "correct_ancestry_subtrees",
@@ -133,10 +136,12 @@ def main() -> None:
     condition_means = seed_condition.groupby(
         ["feedback_family", "budget_k"], as_index=False
     ).agg(address_capture=("address_capture", "mean"), heldout_accuracy=("heldout_accuracy", "mean"))
+    # K is an ordinal budget, so it takes the manuscript slate ramp rather
+    # than three unrelated semantic hues.
     budget_style = {
-        1: ("o", COLORS["low_rank"]),
-        2: ("s", COLORS["additive"]),
-        4: ("D", COLORS["dend"]),
+        1: ("o", "#9AA5B4"),
+        2: ("s", "#5F6B7E"),
+        4: ("D", "#2E3947"),
     }
     for budget, (marker, color) in budget_style.items():
         part = condition_means[condition_means.budget_k.eq(budget)]

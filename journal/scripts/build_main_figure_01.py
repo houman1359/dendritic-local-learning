@@ -85,10 +85,10 @@ INH = COLORS["inh"]
 EDGE = COLORS["edge"]
 
 # ── canvas geometry, in points (one module grid, one h- and one v-gutter) ──
-CANVAS_H_PT = 443.0            # 518.4 / 443.0 = 1.17 aspect
-MARGINS = Margins(left=32.0, right=8.0, top=20.0, bottom=9.0)
+CANVAS_H_PT = 461.0            # 518.4 / 443.0 = 1.17 aspect
+MARGINS = Margins(left=32.0, right=8.0, top=26.0, bottom=9.0)
 HGUTTER = 22.0
-VGUTTER = 20.0
+VGUTTER = 26.0
 # Two 122 pt rows of half-width panels and one 130 pt closing band.  With six
 # roadmap cards across 478.4 pt each card is ~71 pt wide, so its width-limited
 # tree glyph stands ~55 pt tall; 130 pt is that glyph plus the card's two text
@@ -203,7 +203,10 @@ def panel_a(ax):
     ax.text(fan_x + f.fx(5.2), 0.968, "xᵢ", ha="left", va="center",
             fontsize=PT_SMALL, color=INK)
     f.disc(soma, 5.8, fill=SOMA, edge=RIM, lw=LW_EDGE, zorder=4)
-    f.arrow((soma[0] + f.fx(7.2), soma[1]), (0.430, soma[1]), color=BLUE,
+    # This is the title's "point unit -> dendritic tree" mapping arrow, so it
+    # takes the mute feedforward ink.  In blue it read as the neuron EMITTING
+    # a coordinate, since a blue arrow means delivered error everywhere else.
+    f.arrow((soma[0] + f.fx(7.2), soma[1]), (0.430, soma[1]), color=MUTE,
             lw=LW_ERR_ARROW, head=3.6, zorder=5)
     ax.text(0.215, label_y, "shared coordinate  δᵤ", ha="center",
             va="center", fontsize=PT_ANNOT, color=BLUE)
@@ -447,10 +450,9 @@ def panel_d(ax):
 
 # ── E: roadmap of the Results (full-width ribbon) ─────────────────────────
 # Six cards, one per stage of the Results, in the order the subsections run:
-# exact factorization; the coordinate and address tests (Results 2-3); the
-# credit-operator boundary (Results 4); task-aligned physical depth (Results
-# 5); anatomical routes and conductance gain (Results 6-7); the measured
-# functional boundary (Results 8).  Every glyph is drawn from the shared
+# exact factorization; neuron selection; the credit-operator boundary;
+# controlled branch-address tests; task-aligned physical depth; and the
+# anatomical, conductance and measured-response boundary. Every glyph is drawn from the shared
 # credit-tree vocabulary so the roadmap previews the figures that follow.
 
 
@@ -459,8 +461,19 @@ def _glyph_factorization(f, rect):
     tree_inset(f, rect, mode="transport", scale=0.85, arrow_scale=0.7)
 
 
+def _glyph_coordinate(f, rect):
+    """A neuron-specific signal delivered to one soma."""
+    sub, _ = tree_inset(f, rect, mode="plain", scale=0.85,
+                        hide_arrows=True)
+    sub.add_patch(FancyArrowPatch(
+        (1.30, 0.60), (0.27, 0.09),
+        arrowstyle="-|>,head_length=3.2,head_width=2.0", mutation_scale=1.0,
+        connectionstyle="arc3,rad=0.12", color=BLUE, lw=LW_EDGE,
+        capstyle="round", zorder=4.5))
+
+
 def _glyph_coord_address(f, rect):
-    """Address capsules plus the coordinate arrow into the soma."""
+    """Subtree-address capsules after the neuron has been selected."""
     sub, _ = tree_inset(f, rect, mode="address", K=4, scale=0.85)
     sub.add_patch(FancyArrowPatch(
         (1.30, 0.60), (0.27, 0.09),
@@ -518,16 +531,16 @@ def _glyph_boundary(f, rect):
 STREAMS = (
     (_glyph_factorization, "Exact factorization",
      "eligibility × error"),
-    (_glyph_coord_address, "Coordinate + address",
-     "which neuron, which subtree"),
+    (_glyph_coordinate, "Neuron selection",
+     "one signal per neuron"),
     (_glyph_operator, "Credit operator",
      "when restricted routes help"),
+    (_glyph_coord_address, "Branch addresses",
+     "conflict + hierarchy"),
     (_glyph_depth, "Physical depth",
      "task-aligned stage count"),
-    (_glyph_anatomy_gain, "Routes + gain",
-     "arbor capacity, conductance gain"),
-    (_glyph_boundary, "Functional boundary",
-     "measured task alignment"),
+    (_glyph_anatomy_gain, "Biological boundary",
+     "capacity, gain, alignment"),
 )
 
 
@@ -592,8 +605,10 @@ def build():
     for letter, row, col, span, rowspan, title, draw in spec:
         ax = canvas.panel(letter, row, col, span, rowspan=rowspan,
                           schematic=True)
+        # Centre panel titles as every other main sheet does; Figure 1 was
+        # the only builder still left-aligning them.
         ax.set_title(title, fontsize=PT_TITLE, color=INK, pad=TITLE_PAD,
-                     loc="left", fontweight="normal")
+                     loc="center", fontweight="normal")
         canvas.add_letter(letter, ax, dx_pt=LETTER_DX, dy_pt=LETTER_DY)
         draw(ax)
     problems = canvas.save(OUT, name="main_figure_01_native")

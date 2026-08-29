@@ -1,64 +1,31 @@
 #!/usr/bin/env python3
-"""Main Figure 6 as ONE native full-width canvas.
+"""Build the unified physical-depth boundary figure.
 
-Figure 6 was already authored at final size, so nothing here recomputes an
-estimate: every mean, ``n``, 95 % interval and paired contrast is read from
-the same frozen source tables through the same helpers as
-``build_main_panel_redesigns.build_figure6``.  What this module owns is
-geometry and encoding hygiene, and it now carries the two structural moves
-the other main figures received.
+This figure combines the clearest design material from the former physical-
+depth figure with the hierarchy-depth and task-family boundary experiments.
+It is deliberately a *single* native 7.2-inch canvas: all panel titles,
+labels, line weights, gutters and colours therefore use the same journal
+tokens as the other main figures and are never rescaled by a compositor.
 
-Structure
----------
-*A schematic column beside the result it explains.*  Panel A draws the H4
-construction natively in the ``native_schematics`` vocabulary -- the nested
-task hierarchy of depth :math:`H=4`, the ladder of physical stage counts
-D1--D4 it is mapped onto, and the aligned versus reversed sensor placements
--- and sits immediately left of panel B, the accuracy matrix that tests it.
-It is drawn as a landscape composition (the hierarchy across the top, the
-stage ladder and the two placements beneath it) because it now owns half of
-the top row rather than a third of it.
+No result is recomputed. Panels C--G read the frozen seed summaries produced
+by the confirmatory analyzers. Panels A and B only explain the manipulations:
 
-*Modest emphasis.*  The claim of this figure is that accuracy saturates once
-the physical stage count reaches D3.  That matrix (B) is still the largest
-panel on the page, but it is larger only by spanning more modules: six of
-twelve on the top row, so it prints 1.6x the area of a panel on the rows
-below instead of the 2.9x it used to take, and its module-normalised area is
-within 1.07x of every other panel.  Its printed values keep the one type step
-they had.
+* H is the number of latent gain levels in the task;
+* D_p is the number of ordered nonlinear stages in the model;
+* nested factors require ordered cancellation, flat factors preserve the
+  product without a nested grouping, and local ratios expose the divisive
+  information within a stage;
+* the serial dendritic model, resource-identical grouped-point emulation and
+  flexible point-network ceiling are visually and verbally distinct.
 
-Three module widths, three column edges::
+Layout (12-column module grid)::
 
-    row 0   A  H4 construction (6 modules)   B  H4, aligned placement (6)
-    row 1   C  reversed placement  D  seed-paired contrasts  E  depth x hierarchy
-    row 2   F  serial benefit, BP  G  serial benefit, LocalCA  H  interaction
+    A  three task families (7)        B  architecture controls (5)
+    C  H=3 quantitative boundary (6) D  H=4 aligned/reversed boundary (6)
+    E  depth x hierarchy (4)         F  alignment dose, BP (4)
+                                      G  alignment dose, local rule (4)
 
-Every panel of a row owns an identical axes box, and every reserve the figure
-needs is paid for by the outer margins and the two uniform gutters rather
-than by a slice of one panel: the row-label columns of B, C and F are set in
-two lines so they fit the gutter or the left margin, the contrast names of D
-are set inside D's own plotting rectangle above the bars they name, and both
-colour keys sit in space the grid already owns -- the accuracy key in the
-right margin beside B, the effect key in the gutter between the two panels it
-explains.  So no panel carves its own reserve and the whole figure starts at
-one of four column edges.
-
-* B, C and E are one shared-scale small multiple: the same accuracy norm, the
-  same D1--D4 column axis and one colour key;
-* F and G are the second shared-scale pair, with their key between them;
-* the reversed-placement control (C) takes the neutral gray title tone the
-  palette reserves for controls, and the mechanism-interaction contrast in D
-  keeps the neutral gray it already had;
-* H recolours by *credit rule* (backprop red-brown, LocalCA amber) with two
-  direct end-of-line labels instead of a legend.
-
-The paired differences in D are read off the geometry -- point, interval and
-the zero reference -- not from a printed value beside each bar; the exact
-numbers live in Source Data and the running text.
-
-Output: ``figures/components/main_figure_06_native.pdf`` (+ 600-dpi PNG),
-which ``assemble_compact_main_figures.emit_native(6)`` copies to
-``figures/main/figure_06.pdf`` at scale 1.0.
+Output: ``figures/components/main_figure_06_native.pdf`` and its audit PNG.
 """
 
 from __future__ import annotations
@@ -68,474 +35,704 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
-from matplotlib.colors import Normalize, TwoSlopeNorm
+from matplotlib.colors import Normalize
+from matplotlib.patches import Circle, FancyBboxPatch
 
-sys.path.insert(0, str(Path(__file__).resolve().parent))
+SCRIPT_DIR = Path(__file__).resolve().parent
+if str(SCRIPT_DIR) not in sys.path:
+    sys.path.insert(0, str(SCRIPT_DIR))
 
+from credit_tree_schematics import AMBER_TEXT, mix  # noqa: E402
 from figure_canvas import (  # noqa: E402
     COLORS,
-    DIV_CMAP,
     ERR_CAPSIZE,
+    LW_DATA,
     LW_EDGE,
     LW_ERR,
     LW_HAIR,
     LW_REF,
+    MARKER_MS,
     Margins,
     NativeCanvas,
-    PT_LABEL,
+    PT_ANNOT,
     PT_SMALL,
-    PT_TICK,
-    PT_TITLE,
     SEQ_CMAP,
     style_panel,
-)
-from credit_tree_schematics import AMBER_TEXT, mix  # noqa: E402
-from native_schematics import Frame  # noqa: E402
-from build_main_panel_redesigns import (  # noqa: E402
-    H4_ROWS,
-    _h4_matrix,
-    _hierarchy_depth_matrix,
-    _rgba,
-    _task_matrix,
 )
 
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "source_data"
-COMPONENTS = ROOT / "figures" / "components"
-OUTPUT = COMPONENTS / "main_figure_06_native.pdf"
+OUTPUT = ROOT / "figures" / "components" / "main_figure_06_native.pdf"
 
-# ── canvas geometry (points) ─────────────────────────────────────────────
-HEIGHT_IN = 440.0 / 72.0            # aspect 1.18, inside the 1.05-1.55 band
-# The horizontal gutter carries a panel's two-line row-label column, its
-# panel letter and (between F and G) the shared effect key; the vertical
-# gutter carries a row's x label band plus the next row's letter and title
-# band.  Nothing is carved out of a panel, so every panel that starts in one
-# grid column keeps one x0 and one axes width.
+# ── canonical geometry and palette ──────────────────────────────────────
+CANVAS_H_PT = 438.0
+ROW_H_PT = (105.0, 92.0, 92.0)
 HGUTTER = 38.0
-VGUTTER = 38.0
-# The left margin holds the two-line row-label column of the panels that
-# start a row at module 0; the right margin holds the accuracy key rail.
-MARGINS = Margins(left=44.0, right=44.0, top=18.0, bottom=26.0)
-ROW_WEIGHTS = (104.0, 108.0, 108.0)
-RAIL_W = 6.0                        # colour-key bar width
-RAIL_GAP = 4.0                      # bar left edge beyond the module grid
+VGUTTER = 44.0
+MARGINS = Margins(left=45.0, right=35.0, top=24.0, bottom=28.0)
 
-# The key spans the data it encodes: panel E reaches 0.967 and panel B 0.867,
-# so a 0.88 ceiling printed a 0.97 cell and a 0.87 cell in the same blue.
-ACCURACY_NORM = Normalize(vmin=0.52, vmax=0.97)
-ACCURACY_TICKS = (0.55, 0.65, 0.75, 0.85, 0.95)
-ACCURACY_TICK_LABELS = ("0.55", "0.65", "0.75", "0.85", "0.95")
-EFFECT_NORM = TwoSlopeNorm(vmin=-8, vcenter=0, vmax=32)
-EFFECT_TICKS = (-8, 0, 10, 20, 30)
-EFFECT_TICK_LABELS = ("−8", "0", "+10", "+20", "+30")
+INK = COLORS["ink"]
+MUTE = COLORS["mute"]
+C_SERIAL = COLORS["shunting"]
+# "serial BP" is exact backpropagation, so it takes the reserved
+# backprop hue.  C_SERIAL stays green where it marks the serial
+# ARCHITECTURE (the panel-B schematic and the aligned-sensor tag).
+C_SERIAL_BP = COLORS["bp"]
+C_GROUPED = COLORS["point_mlp"]
+C_POINT = COLORS["ink"]   # neutral ceiling reference, not an architecture
+C_PATH = COLORS["oracle"]
+C_SHARED = COLORS["local"]
+C_ADDITIVE = COLORS["additive"]
 
-DEPTH_LABELS = ("D1", "D2", "D3", "D4")
-DEPTH_AXIS = "physical stage count"
-FAMILY_LABELS = ("nested\nfactors", "flat\nfactors", "local\nratios")
-# Panel H puts three categories across a 4-module slot, so it uses the short
-# form; panels F and G carry the full names on the shared row-label column.
-FAMILY_SHORT = ("nested", "flat", "local")
-ALPHA_LABELS = ("0", "0.5", "1")
-ALPHA_AXIS = "sensor alignment α"
+C_NESTED = COLORS["shunting"]
+C_FLAT = COLORS["additive"]
+C_LOCAL_RATIO = COLORS["highlight"]
+FAMILY_SPECS = (
+    ("nested_factor", "nested factors", C_NESTED, "o"),
+    ("flat_factor", "flat factors", C_FLAT, "s"),
+    ("local_ratio", "local ratios", C_LOCAL_RATIO, "^"),
+)
 
-# The five H4 conditions.  Order and meaning are exactly ``H4_ROWS``; the
-# names are set in two lines so the label column of a matrix is 24 pt wide
-# and fits the gutter or the outer margin the grid already provides, instead
-# of being carved out of the panel and making it narrower than its row-mates.
-H4_ROW_LABELS = [row[0].replace(" ", "\n") for row in H4_ROWS]
-
-# Colour carries the CREDIT RULE throughout figure 6 (red-brown = backprop,
-# amber = LocalCA, gray = the mechanism interaction), exactly as panels D, F,
-# G and H use it; the row label carries the mechanism.
-CONTRAST_SPECS = [
-    ("depth__serial_bp__aligned__d4_d3", "serial BP, D4 − D3", "bp"),
-    ("depth__serial_bp__aligned__d4_d1", "serial BP, D4 − D1", "bp"),
-    ("serial_minus_grouped__aligned__d4", "serial − point, D4", "bp"),
-    ("depth__shared_local__aligned__d4_d3", "shared local, D4 − D3", "local"),
-    ("depth__path_local__aligned__d4_d3", "path local, D4 − D3", "local"),
-    ("shunting_additive_depth_interaction__aligned__d4_d3", "shunt × depth",
-     "point_mlp"),
-]
-
-# Amber is legible as a fill but not as 6.8 pt type on white, so every amber
-# TEXT element on the page uses the darkened text tone.
-TEXT_COLOR = {"local": AMBER_TEXT}
-
-# Value ramp for the four nested task factors in the schematic: one hue (the
-# palette's oracle violet, which already carries "nested divisive task"
-# throughout the paper) at four tints, so the ladder reads as four levels of
-# one construct rather than four different things.
-FACTOR_TINTS = (20, 34, 48, 62)
-
-# The hierarchy tags are set as literal Unicode subscript digits rather than
-# as mathtext: every other figure in the paper does the same, and mathtext
-# shrinks a subscript to 0.7 of its base (4.76 pt here), which is below the
-# 6.8 pt type floor and illegible in print.
-SUBSCRIPT_DIGITS = "₀₁₂₃₄₅₆₇₈₉"
+ACC_NORM = Normalize(vmin=0.52, vmax=0.99)
+H4_ROWS = (
+    ("BP", "serial_tree", "shunting", "full_bp"),
+    ("exact", "serial_tree", "shunting", "local_path"),
+    ("shared", "serial_tree", "shunting", "local_shared"),
+    ("grouped", "grouped_point", "shunting", "full_bp"),
+    ("additive", "serial_tree", "raw_additive", "full_bp"),
+)
 
 
-# ── drawing helpers ──────────────────────────────────────────────────────
-def _num(fmt: str, value: float) -> str:
-    """Format a number with a true minus sign, never a hyphen or a "+0"."""
-    text = fmt.format(value).replace("-", "−")
-    if text.lstrip("+−").strip("0").strip(".") == "":
-        text = text.lstrip("+−")
-    return text
+# ── general drawing helpers ─────────────────────────────────────────────
+def _advance_pt(text: str, size: float) -> float:
+    """Advance width of ``text`` at the figure's own sans face, in points."""
+    if not text:
+        return 0.0
+    from matplotlib.font_manager import FontProperties
+    from matplotlib.textpath import TextPath
+    path = TextPath((0.0, 0.0), text, size=size, prop=FontProperties(size=size))
+    return float(path.get_extents().x1)
 
 
-def _heatmap(ax, matrix, col_labels, *, row_labels=None, cmap, norm, fmt,
-             best_by_row=False, value_size=PT_SMALL):
-    """Annotated matrix: identical encoding to the frozen Figure 6 panels."""
+def formula(ax, x, y, parts, *, size=PT_SMALL, color=None, ha="center"):
+    """Draw an expression as baseline-shifted runs, all at one token size.
+
+    ``parts`` is a sequence of ``(text, dy_pt)``; a positive ``dy`` raises a
+    superscript and a negative one drops a subscript.  Mathtext is banned by
+    the figure contract because its 0.7x sub-glyphs fall below the 6.8 pt
+    floor, and precomposed Unicode sub/superscripts render at whatever size
+    and weight the face happens to carry for them -- the Latin capital
+    superscripts especially.  Chaining real spans keeps every glyph on the
+    token scale and in the same face.
+    """
+    color = INK if color is None else color
+    widths = [_advance_pt(text, size) for text, _ in parts]
+    total = sum(widths)
+    if ha == "center":
+        cursor = x - total / 2.0
+    elif ha == "right":
+        cursor = x - total
+    else:
+        cursor = x
+    for (text, dy), width in zip(parts, widths):
+        ax.text(cursor, y + dy, text, ha="left", va="center",
+                fontsize=size, color=color)
+        cursor += width
+    return total
+
+
+
+def point_frame(ax):
+    """Put a schematic axes into its own physical point coordinate frame."""
+    fig = ax.get_figure()
+    fw, fh = fig.get_size_inches()
+    box = ax.get_position()
+    width = box.width * fw * 72.0
+    height = box.height * fh * 72.0
+    ax.set_xlim(0.0, width)
+    ax.set_ylim(0.0, height)
+    ax.set_axis_off()
+    ax.set_facecolor("none")
+    return width, height
+
+
+def round_box(ax, xy, width, height, *, edge, fill=None, radius=2.4,
+              lw=LW_EDGE, zorder=2):
+    patch = FancyBboxPatch(
+        xy, width, height,
+        boxstyle=f"round,pad=0,rounding_size={radius}",
+        facecolor=fill if fill is not None else mix(edge, 10),
+        edgecolor=edge, lw=lw, zorder=zorder,
+    )
+    ax.add_patch(patch)
+    return patch
+
+
+def arrow(ax, start, end, *, color=MUTE, lw=LW_EDGE, zorder=3):
+    ax.annotate(
+        "", xy=end, xytext=start,
+        arrowprops=dict(
+            arrowstyle="-|>,head_length=3.0,head_width=1.9",
+            mutation_scale=1.0, color=color, lw=lw,
+            shrinkA=0, shrinkB=0,
+        ),
+        zorder=zorder,
+    )
+
+
+def _series(frame: pd.DataFrame, **filters) -> pd.DataFrame:
+    out = frame
+    for key, value in filters.items():
+        out = out[out[key].eq(value)]
+    return out.sort_values("depth")
+
+
+def accuracy_curve(ax, frame, *, color, marker, label, y_columns,
+                   filled=True, dashes="-", dx=0.0, **filters):
+    rows = _series(frame, **filters)
+    x = rows.depth.to_numpy(float) + dx
+    mean = rows[y_columns[0]].to_numpy(float)
+    low = rows[y_columns[1]].to_numpy(float)
+    high = rows[y_columns[2]].to_numpy(float)
+    ax.plot(x, mean, color=color, lw=LW_DATA, ls=dashes,
+            solid_capstyle="round", zorder=2)
+    ax.errorbar(
+        x, mean, yerr=np.vstack([mean - low, high - mean]),
+        fmt=marker, ms=MARKER_MS, mfc=color if filled else "white",
+        mec="white" if filled else color,
+        mew=LW_EDGE, ecolor=color, elinewidth=LW_ERR,
+        capsize=ERR_CAPSIZE, zorder=3,
+    )
+    return float(x[-1]), float(mean[-1]), label
+
+
+def _luminance(rgba) -> float:
+    return 0.2126 * rgba[0] + 0.7152 * rgba[1] + 0.0722 * rgba[2]
+
+
+def heatmap(ax, matrix, row_labels, col_labels, *, best_by_row=True,
+            fmt="{:.2f}"):
+    """Sequential heatmap with values as the primary quantitative channel."""
+    cmap = SEQ_CMAP.copy()
+    cmap.set_bad("#F2F3F5")
     masked = np.ma.masked_invalid(matrix)
-    cmap_local = cmap.copy()
-    cmap_local.set_bad("#F2F3F5")
-    image = ax.imshow(masked, cmap=cmap_local, norm=norm, aspect="auto",
+    image = ax.imshow(masked, cmap=cmap, norm=ACC_NORM, aspect="auto",
                       interpolation="nearest")
     for row in range(matrix.shape[0]):
         finite = np.flatnonzero(np.isfinite(matrix[row]))
         best = finite[np.argmax(matrix[row, finite])] if len(finite) else None
-        # A row whose whole spread is under one unit of the printed precision
-        # has no readable optimum, so it gets no "best" outline: the heavy box
-        # would assert a best stage count the printed numbers do not support.
-        if best is not None and len(finite) > 1 and (
-                matrix[row, finite].max() - matrix[row, finite].min() < 0.01):
-            best = None
+        if best is not None and len(finite) > 1:
+            spread = matrix[row, finite].max() - matrix[row, finite].min()
+            if spread < 0.01:
+                best = None
         for col in range(matrix.shape[1]):
             value = matrix[row, col]
             if not np.isfinite(value):
-                ax.text(col, row, "—", ha="center", va="center",
-                        fontsize=value_size, color=COLORS["mute"])
                 continue
-            rgba = cmap_local(norm(value))
-            lum = 0.2126 * rgba[0] + 0.7152 * rgba[1] + 0.0722 * rgba[2]
-            ax.text(col, row, _num(fmt, value), ha="center", va="center",
-                    fontsize=value_size,
-                    color="white" if lum < 0.48 else COLORS["ink"])
+            rgba = cmap(ACC_NORM(value))
+            ax.text(col, row, fmt.format(value), ha="center", va="center",
+                    fontsize=PT_SMALL,
+                    color="white" if _luminance(rgba) < 0.48 else INK)
             if best_by_row and col == best:
-                # Drawn as a stroked path rather than a patch: it is a
-                # pointer, not a datum, and the text-over-data audit rightly
-                # treats patches under labels as marks.
                 x0, x1 = col - 0.46, col + 0.46
                 y0, y1 = row - 0.43, row + 0.43
                 ax.plot([x0, x1, x1, x0, x0], [y0, y0, y1, y1, y0],
-                        color=COLORS["ink"], lw=LW_ERR, solid_joinstyle="miter",
+                        color=INK, lw=LW_ERR, solid_joinstyle="miter",
                         solid_capstyle="butt", zorder=5)
-    ax.set_xticks(range(len(col_labels)), col_labels)
-    if row_labels is None:
-        ax.set_yticks(range(matrix.shape[0]), [""] * matrix.shape[0])
-    else:
-        ax.set_yticks(range(len(row_labels)), list(row_labels))
+    ax.set_xticks(range(len(col_labels)), list(col_labels))
+    ax.set_yticks(range(len(row_labels)), list(row_labels))
     ax.tick_params(axis="both", length=0, pad=2.0, labelsize=PT_SMALL)
     for spine in ax.spines.values():
         spine.set_visible(False)
     return image
 
 
-def _title(ax, text, *, color=None):
-    ax.set_title(text, fontsize=PT_TITLE, loc="center", pad=3.5,
-                 color=color or COLORS["ink"], fontweight="normal")
-
-
-def _key_rail_left(canvas, mappable, ax, label, ticks, tick_labels):
-    """Colour key in the host panel's own left reserve, ticks facing left.
-
-    The key for a small-multiple pair belongs beside the panels it explains.
-    Drawn here it abuts the left edge of the right-hand panel and looks across
-    the gutter at the left-hand one, instead of sitting in a right-edge rail
-    next to an unrelated bar chart.
-    """
-    fig = canvas.fig
+def color_rail(canvas, image, ax, label="test accuracy"):
+    """Put one shared accuracy key in the reserved right outer margin."""
     box = ax.get_position()
-    # The rail stands in the uniform gutter, not in a reserve carved out of a
-    # panel, so it is pushed as close to its host as the bar allows: what is
-    # left of the gutter is exactly what the tick numbers and the key label
-    # need, and F's own last tick label still clears them.
-    x1_pt = box.x0 * canvas.width_pt - 3.0
-    cax = fig.add_axes([
-        (x1_pt - RAIL_W) / canvas.width_pt, box.y0,
-        RAIL_W / canvas.width_pt, box.height,
+    x0 = box.x1 + 4.0 / canvas.width_pt
+    cax = canvas.fig.add_axes([
+        x0, box.y0, 6.0 / canvas.width_pt, box.height,
     ])
-    cbar = fig.colorbar(mappable, cax=cax, ticks=list(ticks))
+    cbar = canvas.fig.colorbar(image, cax=cax, ticks=[0.55, 0.70, 0.85, 0.99])
     cbar.outline.set_linewidth(LW_EDGE)
     cbar.outline.set_edgecolor(COLORS["edge"])
-    cax.yaxis.set_ticks_position("left")
-    cax.yaxis.set_label_position("left")
-    cbar.ax.set_yticklabels(list(tick_labels))
-    cbar.ax.tick_params(labelsize=PT_SMALL, width=LW_EDGE, length=2.2, pad=1.5,
-                        color=COLORS["edge"], labelcolor=COLORS["ink"])
-    cbar.set_label(label, fontsize=PT_LABEL, labelpad=1.5,
-                   color=COLORS["ink"])
+    cbar.ax.tick_params(labelsize=PT_SMALL, width=LW_EDGE, length=2.2,
+                        pad=1.3, color=COLORS["edge"], labelcolor=INK)
+    # At pad=2 the title sat on the 0.99 tick label (3.3 pt of overlap); the
+    # rail is narrow, so the title needs the tick row's own height cleared.
+    cbar.ax.set_title("accuracy", fontsize=PT_SMALL, pad=7.5, color=INK)
     canvas.bind_satellite(cax, ax)
-    return cbar
 
 
-def _key_rail(canvas, mappable, row, rowspan, label, ticks, tick_labels):
-    """A slim labelled colour key in the reserved right-edge rail.
+# ── A: task-family schematics ───────────────────────────────────────────
+def panel_task_families(ax):
+    w, h = point_frame(ax)
+    gap = 8.0
+    card_w = (w - 2 * gap) / 3.0
+    card_h = h - 17.0
+    card_y = 10.0
 
-    Taking the rail out of the outer margin instead of out of a panel is what
-    lets small-multiple siblings keep byte-identical widths: the 12-module
-    pitch cannot be split, so a colorbar carved from one panel of a pair
-    always makes that panel visibly narrower than its twin.
-    """
-    fig = canvas.fig
-    x0, y_top, w, h = canvas.slot_pt(row, 0, canvas.module_cols, rowspan)
-    rail_x = x0 + w + RAIL_GAP
-    cax = fig.add_axes([
-        rail_x / canvas.width_pt,
-        (canvas.height_pt - y_top - h) / canvas.height_pt,
-        RAIL_W / canvas.width_pt,
-        h / canvas.height_pt,
-    ])
-    cbar = fig.colorbar(mappable, cax=cax, ticks=list(ticks))
-    cbar.outline.set_linewidth(LW_EDGE)
-    cbar.outline.set_edgecolor(COLORS["edge"])
-    cbar.ax.set_yticklabels(list(tick_labels))
-    cbar.ax.tick_params(labelsize=PT_TICK, width=LW_EDGE, length=2.2, pad=1.5,
-                        color=COLORS["edge"], labelcolor=COLORS["ink"])
-    cbar.set_label(label, fontsize=PT_LABEL, labelpad=3.0,
-                   color=COLORS["ink"])
-    return cbar
+    cards = (
+        (0.0, "nested factors", C_NESTED),
+        (card_w + gap, "flat factors", C_FLAT),
+        (2 * (card_w + gap), "local ratios", C_LOCAL_RATIO),
+    )
+    for x0, label, color in cards:
+        round_box(ax, (x0, card_y), card_w, card_h, edge=mix(color, 50),
+                  fill=mix(color, 5), radius=3.0, lw=LW_HAIR, zorder=0)
+        ax.text(x0 + card_w / 2, h - 5.0, label, ha="center", va="top",
+                fontsize=7.2, color=color,
+                bbox=dict(facecolor="white", edgecolor="none", pad=0.5))
+
+    # Nested: one signal is successively modulated by three ordered levels.
+    x0 = cards[0][0]
+    cy = card_y + 0.57 * card_h
+    # Lay the chain out from explicit widths.  The five linspace anchors gave
+    # 12.65 pt of spacing for 16 pt boxes, so the boxes overlapped by 3.35 pt
+    # and every arrow ran from +9 to +3.65 -- a negative length whose head
+    # landed on the next box's border and on its label.
+    # Caps differ because "s" is one glyph and the terminal is the two-run
+    # x_E; a wider gap gives each arrow a visible shaft instead of a head
+    # jammed against the next box.
+    box_w, gap = 12.5, 5.8
+    cap_left, cap_right = 4.5, 9.5
+    chain_w = 3 * box_w + 4 * gap + cap_left + cap_right
+    left = x0 + (card_w - chain_w) / 2.0
+    ax.text(left + cap_left / 2.0, cy, "s", ha="center", va="center",
+            fontsize=PT_SMALL, color=INK)
+    edges = [left + cap_left + gap + index * (box_w + gap) for index in range(3)]
+    for index, (bx, color_pct) in enumerate(zip(edges, (24, 40, 56)), start=1):
+        arrow(ax, (bx - gap + 1.3, cy), (bx - 1.3, cy),
+              color=mix(C_NESTED, 65))
+        round_box(ax, (bx, cy - 7.0), box_w, 14.0,
+                  edge=C_NESTED, fill=mix(C_NESTED, color_pct), radius=2.0)
+        ax.text(bx + box_w / 2.0, cy, f"G{index}", ha="center", va="center",
+                fontsize=PT_SMALL, color=INK)
+    tail = edges[-1] + box_w
+    arrow(ax, (tail + 1.3, cy), (tail + gap - 1.3, cy), color=C_NESTED)
+    # The chain ends at the OBSERVED excitatory coordinate.  Labelling it "y"
+    # collided with the Methods, where y is the class label that enters the
+    # signal, not the quantity that leaves the gain chain.
+    formula(ax, tail + gap + cap_right / 2.0, cy,
+            (("x", 0.0), ("E", -1.6)))
+    # The generative parameterisation (b_E, class label y, contrast delta) is
+    # Methods material: none of those symbols is defined in this figure, and
+    # its y is not the y that used to end the chain above.  The drawing already
+    # states the structure -- one signal, three ordered gains.
+    formula(ax, x0 + card_w / 2, card_y + 0.20 * card_h,
+            (("s", 0.0), (" \u00d7 G", 0.0), ("1", -1.6), ("G", 0.0),
+             ("2", -1.6), ("G", 0.0), ("3", -1.6), (" in order", 0.0)))
+    ax.text(x0 + card_w / 2, card_y + 0.06 * card_h,
+            # 90.4 pt of text in a 74.6 pt card overflowed 8 pt each side;
+            # the full phrasing is in the caption.
+            "ordered cancellation", ha="center", va="bottom",
+            fontsize=PT_SMALL, color=MUTE)
+
+    # Flat: the same product is present, but factors belong to unrelated
+    # feature groups rather than one nested hierarchy.
+    x0 = cards[1][0]
+    centres = np.linspace(x0 + 0.22 * card_w, x0 + 0.78 * card_w, 3)
+    top_y = card_y + 0.64 * card_h
+    comb = (x0 + card_w / 2, card_y + 0.39 * card_h)
+    for index, cx in enumerate(centres, start=1):
+        round_box(ax, (cx - 10.0, top_y - 7.0), 20.0, 14.0,
+                  edge=C_FLAT, fill=mix(C_FLAT, 16 + 13 * index), radius=2.0)
+        ax.text(cx, top_y, f"G{index}", ha="center", va="center",
+                fontsize=PT_SMALL, color=INK)
+        # Stop on the product node's top edge, not its centre: ending at
+        # ``comb`` drove every connector through the box border and under
+        # the product glyph.
+        start = (cx, top_y - 9.0)
+        stop_y = comb[1] + 6.5 + 2.0
+        span = start[1] - comb[1]
+        t = (start[1] - stop_y) / span if span else 0.0
+        arrow(ax, start, (cx + t * (comb[0] - cx), stop_y),
+              color=mix(C_FLAT, 65))
+    round_box(ax, (comb[0] - 10.0, comb[1] - 6.5), 20.0, 13.0,
+              edge=C_FLAT, fill="white", radius=6.0)
+    ax.text(*comb, "∏", ha="center", va="center",
+            fontsize=7.2, color=C_FLAT)
+    # Parallel to the nested card's "s x G1G2G3 in order", so the product
+    # node is grounded by the expression directly beneath it: the same three
+    # gains, combined without an order.  The bare product glyph appears
+    # nowhere in the manuscript, so it cannot stand unexplained.
+    formula(ax, x0 + card_w / 2, card_y + 0.17 * card_h,
+            (("G", 0.0), ("1", -1.6), ("G", 0.0), ("2", -1.6),
+             ("G", 0.0), ("3", -1.6), (" in any order", 0.0)))
+
+    # Local ratio: excitatory and inhibitory observations already meet in
+    # each module; no across-stage cancellation is required.
+    x0 = cards[2][0]
+    centres = np.linspace(x0 + 0.20 * card_w, x0 + 0.80 * card_w, 3)
+    pair_y = card_y + 0.62 * card_h
+    ratio_y = card_y + 0.38 * card_h
+    for index, cx in enumerate(centres, start=1):
+        ax.plot([cx - 5.0], [pair_y], marker="o", ms=4.2, mfc=mix("exc", 24),
+                mec=COLORS["exc"], mew=LW_EDGE, ls="none", zorder=4)
+        ax.plot([cx + 5.0], [pair_y], marker="o", ms=4.2, mfc=mix("inh", 24),
+                mec=COLORS["inh"], mew=LW_EDGE, ls="none", zorder=4)
+        ax.text(cx - 5.0, pair_y + 8.0, "E", ha="center", va="center",
+                fontsize=PT_SMALL, color=COLORS["exc"])
+        ax.text(cx + 5.0, pair_y + 8.0, "I", ha="center", va="center",
+                fontsize=PT_SMALL, color=COLORS["inh"])
+        arrow(ax, (cx, pair_y - 3.0), (cx, ratio_y + 7.0),
+              color=mix(C_LOCAL_RATIO, 65))
+        round_box(ax, (cx - 9.0, ratio_y - 6.0), 18.0, 12.0,
+                  edge=C_LOCAL_RATIO, fill=mix(C_LOCAL_RATIO, 18), radius=2.0)
+        ax.text(cx, ratio_y, f"r{index}", ha="center", va="center",
+                fontsize=PT_SMALL, color=INK)
+    # "is local" is the card's own title, so the expression alone is enough
+    # and stays inside the 74.6 pt card once its runs are at token size.
+    formula(ax, x0 + card_w / 2, card_y + 0.13 * card_h,
+            (("r", 0.0), ("l", -1.6), (" = x", 0.0), ("l", -1.6),
+             ("E", 1.9), (" / x", 0.0), ("l", -1.6), ("I", 1.9)))
+
+    # The H and alpha definitions are caption material, not panel furniture.
 
 
-# ── A: the H4 construction, drawn natively ───────────────────────────────
-def panel_construction(ax) -> None:
-    """Task hierarchy depth, physical stage count, and the two placements.
-
-    A landscape composition for a landscape cell: the nested task factors
-    (violet, one hue at four tints) run across the top of the cell, and under
-    them sit the ladder of physical stage counts whose D1--D4 tags are
-    exactly panel B's column axis (left) and the aligned/reversed sensor maps
-    in the route green and the control gray (right).  Everything is laid out
-    in points measured down from the top of the cell, so the drawing keeps its
-    clearances whatever slot it is given.
-    """
-    f = Frame(ax, labels=True)
-    green = COLORS["shunting"]
-    mute = COLORS["mute"]
-    height = f.h_pt
-
-    def y(pt: float) -> float:
-        """Points measured down from the top of the cell -> y fraction."""
-        return 1.0 - pt / height
-
-    # 1. the task: four nested factors, across the top of the cell -- the
-    #    fourth hierarchy this figure adds to the H2/H3 cohorts of Figure 5.
-    f.text((0.5, y(6.0)), r"task hierarchy $H=4$", size=PT_SMALL)
-    for index in range(4):
-        top = 13.0 + index * 8.8
-        f.group((0.02, y(top + 7.0), 0.96 - 0.175 * index, f.fy(7.0)),
-                tint=mix("oracle", FACTOR_TINTS[index]),
-                edge=mix("oracle", 62), lw=LW_EDGE, radius_pt=1.5,
-                zorder=1.0)
-        f.text((0.02 + f.fx(8.0), y(top + 3.5)),
-               f"G{SUBSCRIPT_DIGITS[index + 1]}", size=PT_SMALL)
-
-    # 2. bottom left: the ladder of physical stage counts the task is mapped
-    #    onto, tagged with panel B's own column axis.
-    f.text((0.225, y(57.0)), "physical stages", size=PT_SMALL)
-    base = 92.0
-    for index, depth in enumerate((1, 2, 3, 4)):
-        cx = 0.055 + 0.115 * index
-        for level in range(depth):
-            top = base - (level + 1) * 4.8 - level * 1.5
-            f.group((cx - f.fx(6.5), y(top + 4.8), f.fx(13.0), f.fy(4.8)),
-                    tint=mix("shunting", 26), edge=green, lw=LW_EDGE,
-                    radius_pt=1.1, zorder=1.0)
-        f.text((cx, y(97.0)), f"D{depth}", size=PT_SMALL)
-
-    # 3. bottom right: the two placements -- which factor each stage sees.
-    f.text((0.77, y(57.0)), "sensor placement", size=PT_SMALL)
-    for x0, x1, color, name, order in (
-        (0.565, 0.725, green, "aligned", (0, 1, 2, 3)),
-        (0.815, 0.975, mute, "reversed", (3, 2, 1, 0)),
-    ):
-        for src, dst in enumerate(order):
-            ax.plot([x0, x1], [y(70.0 + 5.5 * src), y(70.0 + 5.5 * dst)],
-                    color=color, lw=f.lw(LW_HAIR), solid_capstyle="round",
-                    zorder=2)
-        for index in range(4):
-            f.disc((x0, y(70.0 + 5.5 * index)), 1.5,
-                   fill=mix("oracle", FACTOR_TINTS[index]),
-                   edge=mix("oracle", 62), lw=LW_HAIR, zorder=4)
-            f.disc((x1, y(70.0 + 5.5 * index)), 1.5,
-                   fill=mix("shunting", 55), edge=green, lw=LW_HAIR,
-                   zorder=4)
-        f.text(((x0 + x1) / 2.0, y(97.0)), name, size=PT_SMALL, color=color)
+# ── B: architecture schematics ──────────────────────────────────────────
+def _soma(ax, x, y):
+    ax.add_patch(Circle((x, y), 3.2, facecolor=COLORS["soma"],
+                        edgecolor=mix("ink", 30), lw=LW_EDGE, zorder=5))
 
 
-# ── the figure ───────────────────────────────────────────────────────────
+def panel_architectures(ax):
+    w, h = point_frame(ax)
+    centres = (0.16 * w, 0.50 * w, 0.84 * w)
+    y0 = 0.24 * h
+    module_y = 0.66 * h
+    bracket_y = 0.87 * h
+
+    x = centres[0]
+    _soma(ax, x, y0)
+    prev = (x, y0 + 3.3)
+    for level in range(3):
+        cy = y0 + 14.0 + level * 13.0
+        ax.plot([prev[0], x], [prev[1], cy - 4.5], color=C_SERIAL,
+                lw=LW_DATA, solid_capstyle="round")
+        # 28 pt, not 18: the 25.4 pt "stage N" label overran the capsule by
+        # 3.8 pt on each side and the border stroke cut through the glyphs.
+        round_box(ax, (x - 14.0, cy - 4.5), 28.0, 9.0,
+                  edge=C_SERIAL, fill=mix(C_SERIAL, 20 + 14 * level),
+                  radius=2.0)
+        ax.text(x, cy, f"stage {level + 1}", ha="center", va="center",
+                fontsize=PT_SMALL, color=INK)
+        prev = (x, cy + 4.5)
+    ax.text(x, 0.14 * h, "serial tree", ha="center", va="center",
+            fontsize=7.2, color=C_SERIAL)
+    ax.text(x, 0.045 * h, "Dₚ = 3\nserial",
+            ha="center", va="center", linespacing=1.05,
+            fontsize=PT_SMALL, color=MUTE)
+
+    x = centres[1]
+    _soma(ax, x, y0)
+    # 16 pt boxes on a 15 pt pitch overlapped by 1 pt, so the three modules
+    # touched.  13 pt boxes on a 16.5 pt pitch leave a 3.5 pt gap and still
+    # hold the 9.6 pt "mN" label.
+    offsets = (-16.5, 0.0, 16.5)
+    for index, dx in enumerate(offsets, start=1):
+        cy = module_y
+        round_box(ax, (x + dx - 6.5, cy - 4.5), 13.0, 9.0,
+                  edge=C_GROUPED, fill=mix(C_GROUPED, 12 + 11 * index),
+                  radius=2.0)
+        ax.text(x + dx, cy, f"m{index}", ha="center", va="center",
+                fontsize=PT_SMALL, color=INK)
+        ax.plot([x + dx, x], [cy - 4.5, y0 + 3.3], color=C_GROUPED,
+                lw=LW_EDGE, solid_capstyle="round")
+    ax.text(x, 0.14 * h, "grouped point", ha="center", va="center",
+            fontsize=7.2, color=C_GROUPED)
+    ax.text(x, 0.045 * h, "same modules\nparallel", ha="center", va="center",
+            linespacing=1.05, fontsize=PT_SMALL, color=MUTE)
+
+    x = centres[2]
+    layer_y = (y0, y0 + 21.0, y0 + 42.0)
+    counts = (3, 4, 3)
+    layers = []
+    for cy, count in zip(layer_y, counts, strict=True):
+        nodes = [(x + dx, cy) for dx in np.linspace(-12.0, 12.0, count)]
+        layers.append(nodes)
+    for lower, upper in zip(layers[:-1], layers[1:], strict=True):
+        for px, py in lower:
+            for qx, qy in upper:
+                ax.plot([px, qx], [py, qy], color=mix(C_POINT, 48),
+                        lw=LW_HAIR, solid_capstyle="round", zorder=1)
+    for nodes in layers:
+        for px, py in nodes:
+            ax.plot([px], [py], marker="o", ms=3.5, mfc="white",
+                    mec=C_POINT, mew=LW_EDGE, ls="none", zorder=4)
+    ax.text(x, 0.14 * h, "point MLP", ha="center", va="center",
+            fontsize=7.2, color=C_POINT)
+    ax.text(x, 0.045 * h, "flexible\nceiling", ha="center",
+            va="center", linespacing=1.05, fontsize=PT_SMALL, color=MUTE)
+
+    ax.plot([centres[0] - 20.0, centres[1] + 20.0],
+            [bracket_y, bracket_y],
+            color=MUTE, lw=LW_HAIR)
+    for bx in (centres[0] - 20.0, centres[1] + 20.0):
+        ax.plot([bx, bx], [bracket_y, bracket_y - 3.0],
+                color=MUTE, lw=LW_HAIR)
+    ax.text((centres[0] + centres[1]) / 2, bracket_y + 3.0,
+            "identical contacts and trainable resources", ha="center",
+            va="bottom", fontsize=PT_SMALL, color=MUTE)
+
+
+# ── C: H=3 boundary ─────────────────────────────────────────────────────
+def panel_h3(ax, depth_summary, point_summary):
+    labels = []
+    ycols = ("mean_test_accuracy", "ci95_low_test_accuracy",
+             "ci95_high_test_accuracy")
+    labels.append(accuracy_curve(
+        ax, depth_summary, color=C_SERIAL_BP, marker="o", label="serial BP",
+        y_columns=ycols, regime="aligned", mechanism="shunting",
+        method="bp", transport="backpropagation"))
+    labels.append(accuracy_curve(
+        ax, depth_summary, color=C_PATH, marker="^", label="exact error",
+        y_columns=ycols, regime="aligned", mechanism="shunting",
+        method="local3f", transport="path_transport", dx=-0.025))
+    labels.append(accuracy_curve(
+        ax, depth_summary, color=C_SHARED, marker="s", label="shared signal",
+        y_columns=ycols, regime="aligned", mechanism="shunting",
+        method="local3f", transport="per_soma_shared", dx=0.025))
+    labels.append(accuracy_curve(
+        ax, point_summary, color=C_GROUPED, marker="D", label="grouped point",
+        y_columns=ycols, regime="aligned", architecture="all_active_star",
+        credit="full_bp", filled=False, dashes=(0, (3.0, 2.0))))
+    labels.append(accuracy_curve(
+        ax, depth_summary, color=C_ADDITIVE, marker="v", label="raw additive",
+        y_columns=ycols, regime="aligned", mechanism="additive",
+        method="bp", transport="backpropagation", filled=False,
+        dashes=(0, (1.5, 1.5))))
+
+    point = point_summary[
+        point_summary.regime.eq("aligned")
+        & point_summary.architecture.eq("point_mlp_total")
+        & point_summary.credit.eq("full_bp")
+    ].iloc[0]
+    ceiling = float(point.mean_test_accuracy)
+    ax.axhspan(float(point.ci95_low_test_accuracy),
+               float(point.ci95_high_test_accuracy), color=mix(C_POINT, 8),
+               zorder=0)
+    ax.axhline(ceiling, color=C_POINT, lw=LW_REF,
+               ls=(0, (5.0, 2.2)), zorder=1)
+
+    ax.set_xlim(0.78, 4.03)
+    ax.set_xticks([1, 2, 3], ["D1", "D2", "D3"])
+    ax.set_ylim(0.48, 1.025)
+    ax.set_yticks([0.5, 0.6, 0.7, 0.8, 0.9, 1.0])
+    ax.set_xlabel("serial physical depth Dₚ")
+    ax.set_ylabel("test accuracy")
+
+    direct = [
+        (ceiling, "point-network ceiling", C_POINT),
+        (labels[0][1], labels[0][2], C_SERIAL_BP),
+        (labels[1][1], labels[1][2], C_PATH),
+        (labels[2][1], labels[2][2], AMBER_TEXT),
+        (labels[3][1], labels[3][2], C_GROUPED),
+        (labels[4][1], labels[4][2], C_ADDITIVE),
+    ]
+    offsets = (0.000, 0.006, -0.006, 0.000, 0.000, 0.000)
+    for index, ((value, label, color), dy) in enumerate(
+            zip(direct, offsets, strict=True)):
+        # The ceiling is an axhline spanning the whole axes, so its own label
+        # sat on the rule and was struck through; the curve labels end at
+        # D3 and need no backing.
+        backing = (dict(facecolor="white", edgecolor="none", pad=0.8)
+                   if index == 0 else None)
+        ax.text(3.12, value + dy, label, ha="left", va="center",
+                fontsize=PT_SMALL, color=color, bbox=backing)
+
+
+# ── D: H=4 aligned/reversed boundary ────────────────────────────────────
+def h4_matrix(summary, regime):
+    """Row-by-depth means and their 95% paired-seed bootstrap bounds."""
+    matrix = np.full((len(H4_ROWS), 4), np.nan)
+    low = np.full((len(H4_ROWS), 4), np.nan)
+    high = np.full((len(H4_ROWS), 4), np.nan)
+    for row_index, (_, architecture, mechanism, credit) in enumerate(H4_ROWS):
+        rows = summary[
+            summary.regime.eq(regime)
+            & summary.architecture.eq(architecture)
+            & summary.mechanism.eq(mechanism)
+            & summary.credit.eq(credit)
+        ]
+        for row in rows.itertuples(index=False):
+            col = int(row.depth) - 1
+            matrix[row_index, col] = float(row.mean_test_accuracy)
+            low[row_index, col] = float(row.ci_low)
+            high[row_index, col] = float(row.ci_high)
+    return matrix, low, high
+
+
+def panel_h4(ax, summary):
+    aligned, aligned_lo, aligned_hi = h4_matrix(summary, "aligned")
+    reversed_, _, _ = h4_matrix(summary, "rewired_tree")
+    combined = np.concatenate(
+        [aligned, np.full((len(H4_ROWS), 1), np.nan), reversed_], axis=1)
+    col_labels = ("D1", "D2", "D3", "D4", "", "D1", "D2", "D3", "D4")
+    image = heatmap(ax, combined, [row[0] for row in H4_ROWS], col_labels,
+                    best_by_row=False)
+
+    # An outline is a claim that this depth is the best of its row, so draw it
+    # only where the bootstrap intervals actually support one: the best cell's
+    # lower bound must clear the runner-up's upper bound.  The old rule marked
+    # any non-tied maximum whose row spread exceeded 0.01, which outlined
+    # differences whose intervals overlap -- and, in the reversed block, a
+    # 0.8 pp blip on an otherwise flat row, contradicting the result that
+    # reversing sensor order removes the depth benefit.  Reversed placement is
+    # therefore left unmarked.
+    for row in range(aligned.shape[0]):
+        finite = np.flatnonzero(np.isfinite(aligned[row]))
+        if len(finite) < 2:
+            continue
+        order = finite[np.argsort(aligned[row, finite])[::-1]]
+        best, runner_up = int(order[0]), int(order[1])
+        if aligned_lo[row, best] <= aligned_hi[row, runner_up]:
+            continue
+        x0, x1 = best - 0.46, best + 0.46
+        y0, y1 = row - 0.43, row + 0.43
+        ax.plot([x0, x1, x1, x0, x0], [y0, y0, y1, y1, y0],
+                color=INK, lw=LW_ERR, solid_joinstyle="miter",
+                solid_capstyle="butt", zorder=5)
+
+    ax.axvline(4.0, color="white", lw=LW_DATA, zorder=4)
+    ax.text(1.5, 1.01, "aligned sensors", ha="center", va="bottom",
+            transform=ax.get_xaxis_transform(), fontsize=7.2,
+            color=C_SERIAL, clip_on=False)
+    ax.text(6.5, 1.01, "reversed sensors", ha="center", va="bottom",
+            transform=ax.get_xaxis_transform(), fontsize=7.2,
+            color=MUTE, clip_on=False)
+    ax.set_xlabel("serial physical depth Dₚ")
+    return image
+
+
+# ── E: hierarchy x physical depth ───────────────────────────────────────
+def hierarchy_matrix(h4_seed):
+    h23 = pd.read_csv(
+        SOURCE / "physical_depth_clean_source_replication" / "seed_outcomes.csv"
+    )
+    common = pd.concat([h23, h4_seed], ignore_index=True, sort=False)
+    common = common[
+        common.hierarchy.isin([2, 3, 4])
+        & common.regime.eq("aligned")
+        & common.architecture.eq("serial_tree")
+        & common.mechanism.eq("shunting")
+        & common.credit.eq("full_bp")
+    ]
+    matrix = np.full((3, 4), np.nan)
+    for (hierarchy, depth), rows in common.groupby(["hierarchy", "depth"]):
+        matrix[int(hierarchy) - 2, int(depth) - 1] = rows.test_accuracy.mean()
+    return matrix
+
+
+# ── F,G: task-family alignment dose response ────────────────────────────
+def panel_alignment(ax, effects, credit, *, left):
+    for family, label, color, marker in FAMILY_SPECS:
+        rows = effects[
+            effects.family.eq(family) & effects.credit.eq(credit)
+        ].sort_values("alignment_alpha")
+        x = rows.alignment_alpha.to_numpy(float)
+        mean = 100.0 * rows.mean_difference.to_numpy(float)
+        low = 100.0 * rows.ci95_low.to_numpy(float)
+        high = 100.0 * rows.ci95_high.to_numpy(float)
+        ax.plot(x, mean, color=color, lw=LW_DATA, marker=marker,
+                ms=MARKER_MS, mfc=color, mec="white", mew=LW_EDGE,
+                solid_capstyle="round", zorder=2)
+        ax.errorbar(x, mean, yerr=np.vstack([mean - low, high - mean]),
+                    fmt="none", ecolor=color, elinewidth=LW_ERR,
+                    capsize=ERR_CAPSIZE, zorder=3)
+        # The zero rule runs the full axis, so a family that ends near zero
+        # ("local ratios" ends at -0.7 pp) had its label struck through.
+        ax.text(1.035, mean[-1], label, ha="left", va="center",
+                fontsize=PT_SMALL, color=color,
+                bbox=dict(facecolor="white", edgecolor="none", pad=0.8))
+
+    ax.axhline(0, color=MUTE, lw=LW_REF, ls=(0, (3.0, 2.2)), zorder=1)
+    ax.set_xlim(-0.06, 1.48)
+    ax.set_xticks([0, 0.5, 1], ["0", "0.5", "1"])
+    ax.set_ylim(-10.5, 33.5)
+    ax.set_yticks([-10, 0, 10, 20, 30])
+    ax.set_xlabel("task–sensor alignment α")
+    if left:
+        ax.set_ylabel("serial − grouped point (pp)")
+    else:
+        ax.tick_params(axis="y", labelleft=False)
+
+
 def build() -> list[str]:
-    summary = pd.read_csv(
+    depth_summary = pd.read_csv(
+        SOURCE / "nonlinear_physical_depth_confirmatory" / "condition_summary.csv"
+    )
+    point_summary = pd.read_csv(
+        SOURCE / "point_dendrite_credit_controls" / "condition_summary.csv"
+    )
+    h4_summary = pd.read_csv(
         SOURCE / "physical_depth_h4_factorial" / "condition_summary.csv"
     )
-    contrasts = pd.read_csv(
-        SOURCE / "physical_depth_h4_factorial" / "paired_contrasts.csv"
-    ).set_index("contrast")
     h4_seed = pd.read_csv(
         SOURCE / "physical_depth_h4_factorial" / "seed_outcomes.csv"
     )
     task_effects = pd.read_csv(
         SOURCE / "task_family_alignment" / "architecture_effects.csv"
     )
-    task_contrasts = pd.read_csv(
-        SOURCE / "task_family_alignment" / "paired_contrasts.csv"
+
+    canvas = NativeCanvas(
+        CANVAS_H_PT / 72.0, 3, row_weights=list(ROW_H_PT),
+        hgutter_pt=HGUTTER, vgutter_pt=VGUTTER, margins=MARGINS,
+        letters=False,
     )
 
-    canvas = NativeCanvas(HEIGHT_IN, 3, row_weights=list(ROW_WEIGHTS),
-                          hgutter_pt=HGUTTER, vgutter_pt=VGUTTER,
-                          margins=MARGINS)
+    ax_a = canvas.panel("A", 0, 0, 7, schematic=True,
+                        title="Task structure, held apart from model depth")
+    ax_b = canvas.panel("B", 0, 7, 5, schematic=True,
+                        title="Architectures compared")
+    ax_c = canvas.panel("C", 1, 0, 6, grid="y",
+                        title="H=3: matched serial computation")
+    ax_d = canvas.panel("D", 1, 6, 6,
+                        title="H=4: alignment exposes the boundary")
+    ax_e = canvas.panel("E", 2, 0, 4,
+                        title="Depth saturates")
+    ax_f = canvas.panel("F", 2, 4, 4, grid="y",
+                        title="Alignment dose, backpropagation")
+    ax_g = canvas.panel("G", 2, 8, 4, grid="y", sharey=ax_f,
+                        title="Alignment dose, local rule")
 
-    # Row 0: the design, then the headline matrix it explains.  Six modules
-    # each: B is the largest panel on the page by spanning more modules, not
-    # by taking space out of its neighbours.
-    ax_a = canvas.panel("A", 0, 0, 6, schematic=True, letter="")
-    ax_b = canvas.panel("B", 0, 6, 6, letter="")
-    # Row 1: the placement control, the inferential summary, the sweep.
-    ax_c = canvas.panel("C", 1, 0, 4, letter="")
-    ax_d = canvas.panel("D", 1, 4, 4, grid="x", letter="")
-    style_panel(ax_d, grid="x", spines=("bottom",))
-    ax_e = canvas.panel("E", 1, 8, 4, letter="")
-    # Row 2: the task-family experiment.
-    ax_f = canvas.panel("F", 2, 0, 4, letter="")
-    ax_g = canvas.panel("G", 2, 4, 4, letter="")
-    ax_h = canvas.panel("H", 2, 8, 4, grid="y", letter="")
-    # One letter offset per column: wide where a two-line row-label column
-    # occupies the gutter or the margin, narrow where nothing does.
-    for name, dx in (("A", 34.0), ("B", 34.0), ("C", 34.0), ("D", 14.0),
-                     ("E", 30.0), ("F", 34.0), ("G", 14.0), ("H", 30.0)):
+    panel_task_families(ax_a)
+    panel_architectures(ax_b)
+    panel_h3(ax_c, depth_summary, point_summary)
+    image = panel_h4(ax_d, h4_summary)
+    ax_d.set_title("H=4: alignment exposes the boundary", pad=14.0)
+
+    heatmap(ax_e, hierarchy_matrix(h4_seed), ("H2", "H3", "H4"),
+            ("D1", "D2", "D3", "D4"), best_by_row=True)
+    ax_e.set_xlabel("serial physical depth Dₚ")
+    ax_e.set_ylabel("task hierarchy depth H")
+
+    panel_alignment(ax_f, task_effects, "bp", left=True)
+    panel_alignment(ax_g, task_effects, "local3f", left=False)
+
+    style_panel(ax_c, grid="y")
+    style_panel(ax_f, grid="y")
+    style_panel(ax_g, grid="y")
+
+    for name, dx in (
+        ("A", 30.0), ("B", 14.0), ("C", 34.0), ("D", 30.0),
+        ("E", 32.0), ("F", 50.0), ("G", 14.0),
+    ):
         canvas.add_letter(name, canvas.axes[name], dx_pt=dx)
 
-    # ── A: the manipulation this figure tests.
-    panel_construction(ax_a)
-    _title(ax_a, "H4 factorial design")
-
-    # ── B: the headline. H4 accuracy under aligned sensor placement, on the
-    # widest slot of the tallest row, with its values one type step up.
-    image_acc = _heatmap(ax_b, _h4_matrix(summary, "aligned"), DEPTH_LABELS,
-                         row_labels=H4_ROW_LABELS, cmap=SEQ_CMAP,
-                         norm=ACCURACY_NORM, fmt="{:.2f}", best_by_row=True,
-                         value_size=PT_LABEL)
-    _title(ax_b, "H4, aligned placement")
-    ax_b.set_xlabel(DEPTH_AXIS, fontsize=PT_LABEL, color=COLORS["ink"])
-
-    # ── C: the placement control, same rows, same scale, neutral title.
-    _heatmap(ax_c, _h4_matrix(summary, "rewired_tree"), DEPTH_LABELS,
-             row_labels=H4_ROW_LABELS, cmap=SEQ_CMAP, norm=ACCURACY_NORM,
-             fmt="{:.2f}", best_by_row=True)
-    _title(ax_c, "Reversed placement", color=COLORS["mute"])
-    ax_c.set_xlabel(DEPTH_AXIS, fontsize=PT_LABEL, color=COLORS["ink"])
-
-    # ── D: seed-paired frozen contrasts on one effect-size axis.
-    # The contrast name is set inside the panel, above the bar it names, so
-    # the row-label column costs the panel nothing and D keeps the same axes
-    # box as C and E.  No value is printed beside a bar: the point, its
-    # interval and the zero reference already report the difference, and the
-    # exact numbers live in Source Data and the running text.
-    y = np.arange(len(CONTRAST_SPECS))[::-1]
-    ax_d.axvline(0, color=COLORS["mute"], lw=LW_REF, ls="--", zorder=0)
-    for yi, (name, label, key) in zip(y, CONTRAST_SPECS, strict=True):
-        color = COLORS[key]
-        row = contrasts.loc[name]
-        mean = float(row.mean_pp)
-        low = float(row.ci_low_pp)
-        high = float(row.ci_high_pp)
-        ax_d.barh(yi, mean, height=0.34, color=_rgba(color, 0.20),
-                  edgecolor=color, lw=LW_EDGE, zorder=1)
-        ax_d.errorbar(
-            mean, yi, xerr=[[mean - low], [high - mean]], fmt="D",
-            ms=4.2, mfc="white", mec=color, mew=LW_ERR, color=color,
-            lw=LW_ERR, capsize=ERR_CAPSIZE, zorder=3,
-        )
-        ax_d.text(-4.4, yi + 0.26, label, ha="left", va="bottom",
-                  fontsize=PT_SMALL, color=TEXT_COLOR.get(key, color))
-    ax_d.set_yticks([])
-    ax_d.set_ylim(-0.55, len(CONTRAST_SPECS) - 1 + 0.92)
-    ax_d.tick_params(axis="y", length=0, pad=2.0, labelsize=PT_SMALL)
-    ax_d.tick_params(axis="x", labelsize=PT_TICK)
-    ax_d.set_xlabel("paired accuracy difference (pp)", fontsize=PT_LABEL,
-                    color=COLORS["ink"])
-    ax_d.set_xlim(-5.0, 36.0)
-    ax_d.set_xticks([0, 10, 20, 30])
-    _title(ax_d, "Seed-paired H4 contrasts")
-
-    # ── E: the same accuracy scale across task hierarchy and stage count.
-    _heatmap(ax_e, _hierarchy_depth_matrix(h4_seed), DEPTH_LABELS,
-             row_labels=("H2", "H3", "H4"), cmap=SEQ_CMAP,
-             norm=ACCURACY_NORM, fmt="{:.2f}", best_by_row=True)
-    ax_e.set_xlabel(DEPTH_AXIS, fontsize=PT_LABEL, color=COLORS["ink"])
-    _title(ax_e, "Depth × hierarchy")
-
-    # ── F, G: serial-minus-grouped-point advantage; shared labels and key.
-    image_eff = _heatmap(ax_f, _task_matrix(task_effects, "bp"), ALPHA_LABELS,
-                         row_labels=FAMILY_LABELS, cmap=DIV_CMAP,
-                         norm=EFFECT_NORM, fmt="{:+.1f}")
-    _heatmap(ax_g, _task_matrix(task_effects, "local3f"), ALPHA_LABELS,
-             row_labels=None, cmap=DIV_CMAP, norm=EFFECT_NORM, fmt="{:+.1f}")
-    _title(ax_f, "Serial benefit, BP", color=COLORS["bp"])
-    _title(ax_g, "Serial benefit, LocalCA", color=AMBER_TEXT)
-    for ax in (ax_f, ax_g):
-        ax.set_xlabel(ALPHA_AXIS, fontsize=PT_LABEL, color=COLORS["ink"])
-
-    # ── H: the alpha = 0 -> 1 change in that advantage, by credit rule.
-    # Colour now carries the credit rule (the thing that differs between F
-    # and G); the task family is already carried by position.
-    interaction = task_contrasts[
-        task_contrasts.estimand.eq("alignment_interaction")
-    ]
-    families = ("nested_factor", "flat_factor", "local_ratio")
-    positions = np.arange(3)
-    width = 0.34
-    for credit, key, offset in (("bp", "bp", -width / 2),
-                                ("local3f", "local", width / 2)):
-        color = COLORS[key]
-        for index, family in enumerate(families):
-            row = interaction[
-                interaction.family.eq(family) & interaction.credit.eq(credit)
-            ].iloc[0]
-            mean = 100 * float(row.mean_difference)
-            low = 100 * float(row.ci95_low)
-            high = 100 * float(row.ci95_high)
-            xpos = positions[index] + offset
-            ax_h.bar(xpos, mean, width=width * 0.88,
-                     color=_rgba(color, 0.24), edgecolor=color, lw=LW_EDGE,
-                     zorder=2)
-            ax_h.errorbar(xpos, mean, yerr=[[mean - low], [high - mean]],
-                          fmt="none", ecolor=color, elinewidth=LW_ERR,
-                          capsize=ERR_CAPSIZE, zorder=3)
-    ax_h.axhline(0, color=COLORS["mute"], lw=LW_REF, ls="--", zorder=1)
-    ax_h.set_xticks(positions, list(FAMILY_SHORT))
-    ax_h.set_xlim(-0.62, 2.62)
-    ax_h.set_ylim(-19.0, 34.0)
-    ax_h.set_yticks([-10, 0, 10, 20, 30])
-    ax_h.tick_params(axis="x", length=0, pad=2.0, labelsize=PT_SMALL)
-    ax_h.tick_params(axis="y", labelsize=PT_TICK)
-    ax_h.set_ylabel("interaction (pp)", fontsize=PT_LABEL,
-                    color=COLORS["ink"], labelpad=1.5)
-    _title(ax_h, "Alignment interaction")
-    # Direct labels in clear whitespace over the local-ratio group; no box.
-    ax_h.text(2.46, 31.0, "BP", ha="right", va="center", fontsize=PT_SMALL,
-              color=COLORS["bp"])
-    ax_h.text(2.46, 24.0, "LocalCA", ha="right", va="center",
-              fontsize=PT_SMALL, color=AMBER_TEXT)
-
-    # ── colour keys: the accuracy scale in the reserved right rail beside
-    # the headline, the effect scale between the two panels that share it.
-    _key_rail(canvas, image_acc, 0, 1, "mean test accuracy", ACCURACY_TICKS,
-              ACCURACY_TICK_LABELS)
-    _key_rail_left(canvas, image_eff, ax_g, "serial − point (pp)",
-                   EFFECT_TICKS, EFFECT_TICK_LABELS)
-
-    problems = canvas.save(OUTPUT, name="main_figure_06_native")
-    return problems
+    color_rail(canvas, image, ax_d)
+    return canvas.save(OUTPUT, name="main_figure_06_native")
 
 
 def main() -> None:
     problems = build()
     if problems:
-        print(f"  {len(problems)} layout/overlap problems")
-    else:
-        print("  clean: no layout or text-over-data problems")
+        raise SystemExit(
+            f"main_figure_06_native: {len(problems)} layout/overlap problems"
+        )
+    print("main_figure_06_native: clean")
 
 
 if __name__ == "__main__":
