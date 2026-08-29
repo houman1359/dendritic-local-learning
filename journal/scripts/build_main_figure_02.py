@@ -809,9 +809,9 @@ def panel_identity_depth(ax):
 # its own reserve: every left reserve is the column lock the canvas
 # measures, topped up by ``_equalise_row`` so panels of one row that start
 # in different grid columns still share one axes-box width.
-CANVAS_H_PT = 360.0                       # compact standard-task figure
+CANVAS_H_PT = 398.0                       # compact standard-task figure
 ROW_H_PT = (68.0, 87.0, 108.0)
-VGUTTER_PT = 62.0 / 3.0 + 6.0
+VGUTTER_PT = 62.0 / 3.0 + 25.0
 
 
 def _equalise_row(canvas, names_cols):

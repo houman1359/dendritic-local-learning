@@ -87,13 +87,13 @@ COMPONENTS = ROOT / "figures" / "components"
 OUTPUT = COMPONENTS / "main_figure_08_native.pdf"
 
 # ── canvas geometry (points) ─────────────────────────────────────────────
-HEIGHT_IN = 488.0 / 72.0            # aspect 1.10, inside the 1.05-1.55 band
+HEIGHT_IN = 493.0 / 72.0            # aspect 1.10, inside the 1.05-1.55 band
 # The horizontal gutter is the figure's ONE shared left reserve: it is set
 # wide enough to hold the widest y label and tick column on the page, so no
 # panel has to carve that space out of its own module slot and every panel of
 # a grid column keeps the same x0 and the same axes width.
 HGUTTER = 36.0
-VGUTTER = 44.0
+VGUTTER = 48.0
 MARGINS = Margins(left=40.0, right=8.0, top=21.0, bottom=27.0)
 ROW_WEIGHTS = (1.00, 1.00, 1.00)
 

@@ -48,11 +48,11 @@ ROOT = Path(__file__).resolve().parents[1]
 COMPONENT = ROOT / "figures" / "components" / "main_figure_04_native.pdf"
 CANONICAL = ROOT / "figures" / "main" / "figure_04.pdf"
 
-CANVAS_H_PT = 474.0
+CANVAS_H_PT = 493.0
 HEIGHT_IN = CANVAS_H_PT / 72.0
 ROW_PT = [137.0, 120.0, 111.0]
 HGUTTER_PT = 34.0
-VGUTTER_PT = 37.0
+VGUTTER_PT = 47.0
 
 INK = COLORS["ink"]
 MUTE = COLORS["mute"]

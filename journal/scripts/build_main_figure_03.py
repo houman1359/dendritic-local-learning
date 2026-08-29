@@ -86,7 +86,7 @@ FACTORIAL = ROOT / "source_data" / "trained_subtree_address_full_factorial"
 PLANE = ROOT / "source_data" / "credit_phase_plane"
 OUT = ROOT / "figures" / "components" / "main_figure_03_native.pdf"
 
-HEIGHT_IN = 466.0 / 72.0  # 448 pt -> aspect 1.16
+HEIGHT_IN = 470.0 / 72.0  # 448 pt -> aspect 1.16
 # Every reserve this figure needs is paid for by the outer margins and by the
 # two uniform gutters, never by a slice of one panel: the horizontal gutter
 # carries the next panel's y label and tick column (34.8 pt for the widest
@@ -95,7 +95,7 @@ HEIGHT_IN = 466.0 / 72.0  # 448 pt -> aspect 1.16
 # no panel is ever carved on its own and every panel that starts in one grid
 # column keeps one x0 and one axes width.
 HGUTTER = 38.0
-VGUTTER = 46.0
+VGUTTER = 48.0
 MARGINS = Margins(left=38.0, right=12.0, top=24.0, bottom=26.0)
 # Row 1 carries the sweep panels and gets the extra 6 pt of height; the module
 # grid does the rest, so the module-normalised areas stay inside 1.16x.

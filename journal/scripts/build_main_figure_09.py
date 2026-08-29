@@ -85,7 +85,7 @@ ANIMAL = SOURCE / "animal_learning_francioni"
 OUT = ROOT / "figures" / "components" / "main_figure_09_native.pdf"
 
 # ── canvas geometry, in points ───────────────────────────────────────────
-CANVAS_H_PT = 492.0                      # 518.4 / 492 = 1.05 aspect
+CANVAS_H_PT = 493.0                      # 518.4 / 492 = 1.05 aspect
 # One height per row.  Row 2 is the tallest because G's ladder is a drawing
 # with a floor -- four rungs, each carrying a tree glyph that has to stay
 # legible and up to two bands of type that cannot be flattened, plus the
@@ -121,7 +121,7 @@ ROW_H_PT = (104.0, 104.0, 154.0)
 # locks nothing either.  One horizontal gutter (36 pt) and one module width
 # (5.2 pt) serve every row.
 HGUTTER = 36.0
-VGUTTER = 42.0
+VGUTTER = 48.0
 MARGINS = Margins(left=52.0, right=8.0, top=22.0, bottom=30.0)
 # The one reserve on the page is B's row-label column ("prespecified",
 # 46.9 pt, 48.9 pt with its tick pad), which does not fit inside the 36 pt
@@ -817,8 +817,15 @@ def panel_animal_pairs(ax, animal, mode=None):
                 lw=5.4, solid_capstyle="butt", zorder=2)
         ax.plot([bar_x0, split], [bar_y, bar_y], color=ROUTE, lw=5.4,
                 solid_capstyle="butt", zorder=3)
-        ax.text(bar_x0, bar_y - 0.052, "signed mode", fontsize=PT_SMALL,
-                color=ROUTE, ha="left", va="center")
+        # The green segment is wide enough to carry its own value; the 16 %
+        # remainder is not, so a hairline leader drops from its middle to a
+        # label parked in the empty right shoulder of the panel.
+        ax.text(0.5 * (bar_x0 + split), bar_y, f"signed {100 * signed:.0f}%",
+                fontsize=PT_SMALL, color="white", ha="center", va="center",
+                zorder=4)
+        ax.text(bar_x1, bar_y - 0.046,
+                f"common {100 * (1.0 - signed):.0f}%", fontsize=PT_SMALL,
+                color=mix("point_mlp", 62), ha="right", va="center")
 
     ax.set_xlim(-0.16, 1.16)
     ax.set_xticks([0, 1], ["P+", f"P{MINUS}"])

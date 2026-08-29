@@ -66,10 +66,10 @@ SOURCE = ROOT / "source_data"
 OUTPUT = ROOT / "figures" / "components" / "main_figure_06_native.pdf"
 
 # ── canonical geometry and palette ──────────────────────────────────────
-CANVAS_H_PT = 438.0
+CANVAS_H_PT = 446.0
 ROW_H_PT = (105.0, 92.0, 92.0)
 HGUTTER = 38.0
-VGUTTER = 44.0
+VGUTTER = 48.0
 MARGINS = Margins(left=45.0, right=35.0, top=24.0, bottom=28.0)
 
 INK = COLORS["ink"]

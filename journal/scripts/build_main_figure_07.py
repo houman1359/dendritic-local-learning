@@ -79,7 +79,7 @@ DATA = ROOT / "source_data"
 OUT = ROOT / "figures" / "components" / "main_figure_07_native.pdf"
 
 # ── canvas geometry, in points ───────────────────────────────────────────
-CANVAS_H_PT = 458.0                      # 518.4 / 440 = 1.18 aspect
+CANVAS_H_PT = 482.0                      # 518.4 / 440 = 1.18 aspect
 # Three equal rows and one wide horizontal gutter.  The gutter is the
 # figure's single shared left reserve: it is set wider than the widest y
 # label and tick column on the page, and the left margin wider than the
@@ -87,7 +87,7 @@ CANVAS_H_PT = 458.0                      # 518.4 / 440 = 1.18 aspect
 # slot.  Every panel of a grid column therefore keeps one x0 and one axes
 # width, and every row-mate one height.
 HGUTTER = 34.0
-VGUTTER = 36.0
+VGUTTER = 46.0
 MARGINS = Margins(left=48.0, right=13.0, top=22.0, bottom=28.0)
 
 INK = COLORS["ink"]
