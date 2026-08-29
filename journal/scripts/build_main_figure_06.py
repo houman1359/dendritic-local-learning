@@ -70,7 +70,7 @@ CANVAS_H_PT = 446.0
 ROW_H_PT = (105.0, 92.0, 92.0)
 HGUTTER = 38.0
 VGUTTER = 48.0
-MARGINS = Margins(left=45.0, right=35.0, top=24.0, bottom=28.0)
+MARGINS = Margins(left=48.0, right=35.0, top=24.0, bottom=28.0)
 
 INK = COLORS["ink"]
 MUTE = COLORS["mute"]
@@ -97,7 +97,7 @@ FAMILY_SPECS = (
 ACC_NORM = Normalize(vmin=0.52, vmax=0.99)
 H4_ROWS = (
     ("BP", "serial_tree", "shunting", "full_bp"),
-    ("exact", "serial_tree", "shunting", "local_path"),
+    ("LocalCA", "serial_tree", "shunting", "local_path"),
     ("shared", "serial_tree", "shunting", "local_shared"),
     ("grouped", "grouped_point", "shunting", "full_bp"),
     ("additive", "serial_tree", "raw_additive", "full_bp"),
@@ -300,7 +300,7 @@ def panel_task_families(ax):
     cap_left, cap_right = 4.5, 9.5
     chain_w = 3 * box_w + 4 * gap + cap_left + cap_right
     left = x0 + (card_w - chain_w) / 2.0
-    ax.text(left + cap_left / 2.0, cy, "s", ha="center", va="center",
+    ax.text(left + cap_left / 2.0, cy, "sᵧ", ha="center", va="center",
             fontsize=PT_SMALL, color=INK)
     edges = [left + cap_left + gap + index * (box_w + gap) for index in range(3)]
     for index, (bx, color_pct) in enumerate(zip(edges, (24, 40, 56)), start=1):
@@ -308,7 +308,7 @@ def panel_task_families(ax):
               color=mix(C_NESTED, 65))
         round_box(ax, (bx, cy - 7.0), box_w, 14.0,
                   edge=C_NESTED, fill=mix(C_NESTED, color_pct), radius=2.0)
-        ax.text(bx + box_w / 2.0, cy, f"G{index}", ha="center", va="center",
+        ax.text(bx + box_w / 2.0, cy, f"h{index}", ha="center", va="center",
                 fontsize=PT_SMALL, color=INK)
     tail = edges[-1] + box_w
     arrow(ax, (tail + 1.3, cy), (tail + gap - 1.3, cy), color=C_NESTED)
@@ -322,8 +322,9 @@ def panel_task_families(ax):
     # its y is not the y that used to end the chain above.  The drawing already
     # states the structure -- one signal, three ordered gains.
     formula(ax, x0 + card_w / 2, card_y + 0.20 * card_h,
-            (("s", 0.0), (" \u00d7 G", 0.0), ("1", -1.6), ("G", 0.0),
-             ("2", -1.6), ("G", 0.0), ("3", -1.6), (" in order", 0.0)))
+            (("s", 0.0), ("y", -1.6), (" \u00d7 h", 0.0), ("1", -1.6),
+             ("h", 0.0), ("2", -1.6), ("h", 0.0), ("3", -1.6),
+             (" in order", 0.0)))
     ax.text(x0 + card_w / 2, card_y + 0.06 * card_h,
             # 90.4 pt of text in a 74.6 pt card overflowed 8 pt each side;
             # the full phrasing is in the caption.
@@ -339,7 +340,7 @@ def panel_task_families(ax):
     for index, cx in enumerate(centres, start=1):
         round_box(ax, (cx - 10.0, top_y - 7.0), 20.0, 14.0,
                   edge=C_FLAT, fill=mix(C_FLAT, 16 + 13 * index), radius=2.0)
-        ax.text(cx, top_y, f"G{index}", ha="center", va="center",
+        ax.text(cx, top_y, f"h{index}", ha="center", va="center",
                 fontsize=PT_SMALL, color=INK)
         # Stop on the product node's top edge, not its centre: ending at
         # ``comb`` drove every connector through the box border and under
@@ -359,8 +360,8 @@ def panel_task_families(ax):
     # gains, combined without an order.  The bare product glyph appears
     # nowhere in the manuscript, so it cannot stand unexplained.
     formula(ax, x0 + card_w / 2, card_y + 0.17 * card_h,
-            (("G", 0.0), ("1", -1.6), ("G", 0.0), ("2", -1.6),
-             ("G", 0.0), ("3", -1.6), (" in any order", 0.0)))
+            (("h", 0.0), ("1", -1.6), ("h", 0.0), ("2", -1.6),
+             ("h", 0.0), ("3", -1.6), (" in any order", 0.0)))
 
     # Local ratio: excitatory and inhibitory observations already meet in
     # each module; no across-stage cancellation is required.
@@ -488,7 +489,7 @@ def panel_h3(ax, depth_summary, point_summary):
         y_columns=ycols, regime="aligned", mechanism="shunting",
         method="bp", transport="backpropagation"))
     labels.append(accuracy_curve(
-        ax, depth_summary, color=C_PATH, marker="^", label="exact error",
+        ax, depth_summary, color=C_PATH, marker="^", label="exact-path LocalCA",
         y_columns=ycols, regime="aligned", mechanism="shunting",
         method="local3f", transport="path_transport", dx=-0.025))
     labels.append(accuracy_curve(
@@ -688,26 +689,30 @@ def build() -> list[str]:
     ax_b = canvas.panel("B", 0, 7, 5, schematic=True,
                         title="Architectures compared")
     ax_c = canvas.panel("C", 1, 0, 6, grid="y",
-                        title="H=3: matched serial computation")
+                        title="Hₚ=3: matched serial computation")
     ax_d = canvas.panel("D", 1, 6, 6,
-                        title="H=4: alignment exposes the boundary")
+                        title="Hₚ=4: alignment exposes the boundary")
     ax_e = canvas.panel("E", 2, 0, 4,
-                        title="Depth saturates")
+                        title="Serial BP depth optimum")
     ax_f = canvas.panel("F", 2, 4, 4, grid="y",
-                        title="Alignment dose, backpropagation")
+                        title="Alignment dose, BP")
     ax_g = canvas.panel("G", 2, 8, 4, grid="y", sharey=ax_f,
-                        title="Alignment dose, local rule")
+                        title="Alignment dose, path LocalCA")
 
     panel_task_families(ax_a)
     panel_architectures(ax_b)
     panel_h3(ax_c, depth_summary, point_summary)
     image = panel_h4(ax_d, h4_summary)
-    ax_d.set_title("H=4: alignment exposes the boundary", pad=14.0)
+    ax_d.set_title("Hₚ=4: alignment exposes the boundary", pad=14.0)
 
-    heatmap(ax_e, hierarchy_matrix(h4_seed), ("H2", "H3", "H4"),
+    hierarchy = hierarchy_matrix(h4_seed)
+    heatmap(ax_e, hierarchy, ("Hₚ=2", "Hₚ=3", "Hₚ=4"),
             ("D1", "D2", "D3", "D4"), best_by_row=True)
+    for row, col in np.argwhere(~np.isfinite(hierarchy)):
+        ax_e.text(col, row, "—", ha="center", va="center",
+                  fontsize=PT_SMALL, color=MUTE, zorder=5)
     ax_e.set_xlabel("serial physical depth Dₚ")
-    ax_e.set_ylabel("task hierarchy depth H")
+    ax_e.set_ylabel("task gain tiers Hₚ")
 
     panel_alignment(ax_f, task_effects, "bp", left=True)
     panel_alignment(ax_g, task_effects, "local3f", left=False)
@@ -718,7 +723,7 @@ def build() -> list[str]:
 
     for name, dx in (
         ("A", 30.0), ("B", 14.0), ("C", 34.0), ("D", 30.0),
-        ("E", 32.0), ("F", 50.0), ("G", 14.0),
+        ("E", 32.0), ("F", 34.0), ("G", 14.0),
     ):
         canvas.add_letter(name, canvas.axes[name], dx_pt=dx)
 

@@ -49,7 +49,7 @@ CORE_COLOR = {
 }
 FEEDBACK_ORDER = ["per_soma", "per_soma_shared", "path_transport"]
 FEEDBACK_LABEL = {
-    "per_soma": "Scalar",
+    "per_soma": "Legacy fallback",
     "per_soma_shared": "Neuron-indexed",
     "per_soma_shuffled": "Shuffled ancestry",
     "path_transport": "Exact transport",
@@ -1133,8 +1133,8 @@ def plot_fixed_budget(summary: pd.DataFrame, contrasts: pd.DataFrame) -> None:
                 label=CORE_LABEL[core],
             )
         panel_title(ax, next(letters), FEEDBACK_LABEL[feedback])
-        ax.set_xticks([1, 2, 3, 4])
-        ax.set_xlabel("dendritic depth")
+        ax.set_xticks([1, 2, 3, 4], ["D1", "D2", "D3", "D4"])
+        ax.set_xlabel("physical depth")
         if ax is axes[0, 0]:
             ax.set_ylabel("test accuracy")
         style_axis(ax)
@@ -1148,8 +1148,8 @@ def plot_fixed_budget(summary: pd.DataFrame, contrasts: pd.DataFrame) -> None:
             label=CORE_LABEL[core],
         )
     panel_title(ax, next(letters), "Backpropagation")
-    ax.set_xticks([1, 2, 3, 4])
-    ax.set_xlabel("dendritic depth")
+    ax.set_xticks([1, 2, 3, 4], ["D1", "D2", "D3", "D4"])
+    ax.set_xlabel("physical depth")
     style_axis(ax)
 
     ax = axes[1, 1]
@@ -1177,8 +1177,11 @@ def plot_fixed_budget(summary: pd.DataFrame, contrasts: pd.DataFrame) -> None:
             label=CORE_LABEL[core],
         )
     ax.axhline(0, color=COLORS["mute"], lw=LW_REF, ls="--")
-    ax.set_xticks(np.arange(4), ["BP", "Scalar", "Neuron", "Exact"])
-    ax.set_ylabel("depth 4 - depth 1 (pp)")
+    ax.set_xticks(np.arange(4), ["BP", "fallback", "neuron", "exact"])
+    ax.tick_params(axis="x", labelrotation=24)
+    for label in ax.get_xticklabels():
+        label.set_horizontalalignment("right")
+    ax.set_ylabel("D4 - D1 (pp)")
     panel_title(ax, next(letters), "Fixed-contact depth")
     style_axis(ax)
 
@@ -1202,8 +1205,8 @@ def plot_fixed_budget(summary: pd.DataFrame, contrasts: pd.DataFrame) -> None:
                 label=f"{CORE_LABEL[core]}, {FEEDBACK_LABEL[feedback].lower()}",
             )
     ax.axhline(0, color=COLORS["mute"], lw=LW_REF, ls="-.")
-    ax.set_xticks([1, 2, 3, 4])
-    ax.set_xlabel("dendritic depth")
+    ax.set_xticks([1, 2, 3, 4], ["D1", "D2", "D3", "D4"])
+    ax.set_xlabel("physical depth")
     ax.set_ylabel("local - BP (pp)")
     panel_title(ax, next(letters), "Local-learning gap")
     style_axis(ax)
@@ -1220,22 +1223,19 @@ def plot_fixed_budget(summary: pd.DataFrame, contrasts: pd.DataFrame) -> None:
         lw=LW_DATA,
         label="active synapses",
     )
-    ax2 = ax.twinx()
-    ax2.plot(
+    ax.plot(
         resource.depth,
         resource.total_parameters / 1e6,
         color=COLORS["oracle"],
         marker="s",
         lw=LW_DATA,
-        label="parameters",
+        label="trainable parameters",
     )
-    ax.set_xticks([1, 2, 3, 4])
-    ax.set_xlabel("dendritic depth")
-    ax.set_ylabel("active synapses (M)", color=COLORS["dend"])
-    ax2.set_ylabel("parameters (M)", color=COLORS["oracle"])
+    ax.set_xticks([1, 2, 3, 4], ["D1", "D2", "D3", "D4"])
+    ax.set_xlabel("physical depth")
+    ax.set_ylabel("count (millions)")
     panel_title(ax, next(letters), "Matched input budget")
     style_axis(ax)
-    style_axis(ax2)
 
     ax = axes[2, 1]
     for core in valid_cores:
@@ -1252,8 +1252,8 @@ def plot_fixed_budget(summary: pd.DataFrame, contrasts: pd.DataFrame) -> None:
             lw=LW_DATA,
             label=CORE_LABEL[core],
         )
-    ax.set_xticks([1, 2, 3, 4])
-    ax.set_xlabel("dendritic depth")
+    ax.set_xticks([1, 2, 3, 4], ["D1", "D2", "D3", "D4"])
+    ax.set_xlabel("physical depth")
     ax.set_ylabel("mean runtime (min)")
     panel_title(ax, next(letters), "Runtime")
     style_axis(ax)
@@ -1273,8 +1273,8 @@ def plot_fixed_budget(summary: pd.DataFrame, contrasts: pd.DataFrame) -> None:
             lw=LW_DATA,
             label=CORE_LABEL[core],
         )
-    ax.set_xticks([1, 2, 3, 4])
-    ax.set_xlabel("dendritic depth")
+    ax.set_xticks([1, 2, 3, 4], ["D1", "D2", "D3", "D4"])
+    ax.set_xlabel("physical depth")
     ax.set_ylabel("peak allocated memory (MiB)")
     panel_title(ax, next(letters), "Memory")
     style_axis(ax)
@@ -1299,6 +1299,9 @@ def plot_fixed_budget(summary: pd.DataFrame, contrasts: pd.DataFrame) -> None:
         metadata={"CreationDate": None, "ModDate": None},
     )
     fig.savefig(FIGURES / "fig_prospective_fixed_budget_depth.png", dpi=350)
+    canonical = ROOT / "figures" / "supplementary" / "figure_S08_panels_A-I.pdf"
+    canonical.parent.mkdir(parents=True, exist_ok=True)
+    fig.savefig(canonical, metadata={"CreationDate": None, "ModDate": None})
     plt.close(fig)
 
 

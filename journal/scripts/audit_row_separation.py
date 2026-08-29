@@ -42,11 +42,16 @@ def gaps(path, dpi=300.0):
                 a = int(max(0, (float(p["x0_pt"]) - LABEL_BITE_PT) * zoom))
                 b = int(min(W, (float(p["x0_pt"]) + float(p["w_pt"]) + 8) * zoom))
                 keep[a:b] = False
-        rows_ink = ink[:, keep].any(axis=1)
-        # search from the lower row-i axes edge to the upper row-(i+1) edge,
-        # widened so decorations hanging out of either box are seen
         s = max(0, int((band[i][1] - 6.0) * zoom))
-        e = min(len(rows_ink) - 1, int((band[i + 1][0] + 6.0) * zoom))
+        e = min(int((band[i + 1][0] + 6.0) * zoom), ink.shape[0] - 1)
+        # A column inked down essentially the whole band is a connector or a
+        # bracket drawn ACROSS the gutter on purpose, not a row crowding its
+        # neighbour: it would read as a zero gap everywhere it appears, so it
+        # is masked exactly as a row-spanning panel is.
+        span = ink[s:e + 1]
+        if span.shape[0]:
+            keep &= span.mean(axis=0) < 0.9
+        rows_ink = ink[:, keep].any(axis=1)
         best = run = 0
         for has in rows_ink[s:e + 1]:
             run = 0 if has else run + 1

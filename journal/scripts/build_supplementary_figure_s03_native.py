@@ -183,8 +183,8 @@ def exact_transport_values():
 # salmon for the path-propagated field, a gray control ramp for the random
 # low-rank fields and the oracle violet for exact transport.
 LADDER_ROWS = (
-    ("scalar", "per_soma", 4, False, COLORS["scalar"]),
-    ("path", "per_soma", 4, True, COLORS["per_soma"]),
+    ("legacy\nfallback", "per_soma", 4, False, COLORS["scalar"]),
+    ("fallback\n+ path", "per_soma", 4, True, COLORS["per_soma"]),
     ("rank 2", "low_rank", 2, False, GRAY_RAMP[0]),
     ("rank 4", "low_rank", 4, False, GRAY_RAMP[1]),
     ("rank 8", "low_rank", 8, False, GRAY_RAMP[2]),

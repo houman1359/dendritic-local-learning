@@ -48,7 +48,7 @@ ROOT = Path(__file__).resolve().parents[1]
 COMPONENT = ROOT / "figures" / "components" / "main_figure_04_native.pdf"
 CANONICAL = ROOT / "figures" / "main" / "figure_04.pdf"
 
-CANVAS_H_PT = 493.0
+CANVAS_H_PT = 469.0
 HEIGHT_IN = CANVAS_H_PT / 72.0
 ROW_PT = [137.0, 120.0, 111.0]
 HGUTTER_PT = 34.0
@@ -314,7 +314,7 @@ def build() -> list:
         # Left margin 44, not 36: at 36 the C/E y labels reached the canvas edge,
         # so their panel letters hit the 2.5 pt clamp and could not sit left of
         # their own labels.
-        margins=Margins(left=44.0, right=13.0, top=22.0, bottom=26.0),
+        margins=Margins(left=51.0, right=13.0, top=22.0, bottom=26.0),
     )
     fig = canvas.fig
     # Row 0 is 7/5, not 8/4: at 8/4 the two task cards were the largest

@@ -5,12 +5,14 @@ The manuscript has one unambiguous publication-facing figure set.
 - `main/figure_01.pdf` through `main/figure_09.pdf` are the only assets compiled
   as main Figures 1--9. Each number has one PDF and one continuous panel
   sequence.
-- `supplementary/figure_S01_*.pdf` through
-  `supplementary/figure_S29_*.pdf` are the Supplementary Figures.
+- The exact Supplementary Figure assets are the 29 files referenced by
+  `supplementary/supplementary.tex`; the submission and Overleaf builders verify
+  this list before packaging it.
 - `generated/` contains reproducible internal outputs whose descriptive names
   are not manuscript figure numbers.
-- Older modular blocks in `main/` are compositor inputs retained for provenance;
-  neither LaTeX nor the Overleaf bundle compiles them directly.
+- Wider-span blocks in `main/` and `supplementary/` are compositor inputs
+  retained for reproducibility. They are not manuscript figures, and neither
+  LaTeX nor the Overleaf bundle includes them directly.
 - `components/` and `archive_superseded/` contain source or superseded assets.
 
 Run `make canonical-figures` after regenerating plots. It first synchronizes
@@ -62,8 +64,8 @@ compiled figure number are identical.
   F electrotonic boundary; G cellwise contrast.
 - **Figure 9:** A measured-response pipeline; B complete-tree learning;
   C standardized topology effects; D imposed-alignment design; E controlled
-  rescue; F signed six-animal contrast; G signed-mode decomposition;
-  H evidence boundary.
+  rescue; F signed six-animal contrast with the signed/common-mode energy
+  partition inset; G evidence boundary.
 Supplementary Figures S18--S29 retain the expanded physical-depth controls,
 prospective feedback/assignment diagnostics, full morphology diagnostics,
 focal-shunting controls, measured-response diagnostics and the trained

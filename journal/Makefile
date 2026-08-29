@@ -3,7 +3,7 @@ PDFLATEX ?= pdflatex
 BIBTEX ?= bibtex
 PDFUNITE ?= pdfunite
 
-.PHONY: paper supplement combined figures canonical-figures presentation-pdf refresh-regular-tree-source test reproducibility software-release format-audit citation-audit overlap-audit submission-bundle overleaf-bundle audit clean clean-aux
+.PHONY: paper supplement combined figures canonical-figures presentation-pdf refresh-regular-tree-source test reproducibility software-release format-audit citation-audit overlap-audit layout-audit submission-bundle overleaf-bundle audit clean clean-aux
 
 paper:
 	$(PDFLATEX) -interaction=nonstopmode -halt-on-error main.tex
@@ -116,13 +116,16 @@ citation-audit:
 overlap-audit:
 	$(PYTHON) scripts/audit_neurips_text_overlap.py --strict
 
-submission-bundle: combined
+layout-audit:
+	$(PYTHON) scripts/audit_latex_layout.py
+
+submission-bundle: combined layout-audit
 	$(PYTHON) scripts/build_submission_bundle.py --force --software-archive submission/Dendritic_credit_assignment_software.zip
 
-overleaf-bundle: combined
+overleaf-bundle: combined layout-audit
 	$(PYTHON) scripts/build_overleaf_bundle.py --force
 
-audit: paper supplement test reproducibility format-audit citation-audit overlap-audit
+audit: combined layout-audit test reproducibility format-audit citation-audit overlap-audit
 	$(PYTHON) scripts/audit_figure_style_lineage.py
 	$(PYTHON) scripts/audit_submission.py --strict-pending
 	$(PYTHON) scripts/audit_submission.py --strict-pending --manuscript supplementary/supplementary.tex

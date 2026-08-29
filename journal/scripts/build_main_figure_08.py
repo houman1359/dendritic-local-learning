@@ -94,7 +94,7 @@ HEIGHT_IN = 493.0 / 72.0            # aspect 1.10, inside the 1.05-1.55 band
 # a grid column keeps the same x0 and the same axes width.
 HGUTTER = 36.0
 VGUTTER = 48.0
-MARGINS = Margins(left=40.0, right=8.0, top=21.0, bottom=27.0)
+MARGINS = Margins(left=49.0, right=8.0, top=21.0, bottom=27.0)
 ROW_WEIGHTS = (1.00, 1.00, 1.00)
 
 # ── one encoding vocabulary for the whole figure ─────────────────────────
@@ -196,7 +196,7 @@ def _site_xy(rect):
 
 
 def panel_focal_shunt(ax, *, width_pt, height_pt):
-    """Same focal Delta V, two ways: matched current vs open conductance.
+    """Current-matched additive injection versus an open conductance.
 
     The pair is the talk library's ``mode=shunt`` tree drawn twice -- open
     inhibitory ring (conductance off, the current-matched additive control)
@@ -221,18 +221,20 @@ def panel_focal_shunt(ax, *, width_pt, height_pt):
                          labels=False)
         enforce_tokens(sub)
 
-    # Scaffolding bracket: the two edits are matched on the local voltage.
+    # The baseline focal current is matched and a separate somatic current
+    # restores the baseline soma voltage.  Local dendritic voltages are not
+    # clamped, so the graphic must not claim a matched focal Delta V.
     bx0, bx1, by = 0.020, 0.980, 0.968
     ax.plot([bx0, bx1], [by, by], color=MUTE, lw=LW_HAIR, zorder=2,
             solid_capstyle="butt")
     for x in (bx0, bx1):
         ax.plot([x, x], [by, by - 0.022], color=MUTE, lw=LW_HAIR, zorder=2)
-    ax.text(0.5, 0.908, "same focal ΔV", ha="center", va="center",
-            fontsize=PT_SMALL, color=MUTE)
+    ax.text(0.5, 0.908, "baseline focal current matched; soma V restored",
+            ha="center", va="center", fontsize=PT_SMALL, color=MUTE)
 
     lx = left_rect[0] + left_rect[2] / 2.0
     rx = right_rect[0] + right_rect[2] / 2.0
-    ax.text(lx, bottom - 0.075, "matched additive", ha="center", va="center",
+    ax.text(lx, bottom - 0.075, "current-matched additive", ha="center", va="center",
             fontsize=PT_ANNOT, color=ADDITIVE)
     ax.text(rx, bottom - 0.075, "focal shunt", ha="center", va="center",
             fontsize=PT_ANNOT, color=SHUNT)
@@ -325,7 +327,7 @@ def panel_passive_dose(ax):
     ax.set_ylabel(LOCAL_LABEL, fontsize=PT_LABEL, color=INK)
     _direct_label(ax, 0.275, 0.213, "focal shunt", SHUNT)
     _direct_label(ax, 0.275, 0.150, "matched additive", ADDITIVE)
-    _title(ax, "Permissive dose response")
+    _title(ax, "Passive high-conductance dose")
     return ax
 
 
@@ -347,14 +349,15 @@ def panel_factor_freeze(ax):
         _mean_marker(ax, index, values, colors[index], markers[index],
                      seed=1710 + index)
     _zero_line(ax)
-    _tick_labels(ax, "x", (0, 1), ("driving force\nonly", "full shunt"))
+    _tick_labels(ax, "x", (0, 1),
+                 ("baseline\nadjoint", "post-shunt\nadjoint"))
     ax.set_xlim(-0.52, 1.52)
     ax.set_ylim(*LOCAL_YLIM)
     ax.set_yticks(list(LOCAL_YTICKS))
     ax.set_yticklabels([])          # ticks stay; only the labels are shared
     ax.tick_params(axis="x", length=0, pad=2.5)
     # D shares C's y axis (ticks kept, labels dropped); the caption says so.
-    _title(ax, "Exact factor freeze")
+    _title(ax, "Adjoint decomposition")
     return ax
 
 
@@ -394,7 +397,7 @@ def panel_active_dose(ax, summary):
 # ── panel F (headline): the electrotonic boundary ────────────────────────
 COHORTS = (
     ("original_eight", "pilot, n = 8", SHUNT, M_CONTRAST),
-    ("v661_disjoint", "minnie65 v661, n = 45", REPLICATE, M_REPLICATE),
+    ("v661_disjoint", "MICrONS mouse 1, n = 45", REPLICATE, M_REPLICATE),
 )
 CONTRAST_LABEL = "shunt − additive localization"
 # The same quantity, set on two lines where it is the (rotated) y axis of a
@@ -452,9 +455,22 @@ def panel_electrotonic(ax):
     # condition of the pilot cohort and the standard-calibration null are
     # methodological notes and are carried by the caption.
     _direct_label(ax, 1.02, 0.0295, "pilot, n = 8", SHUNT)
-    _direct_label(ax, 3.9, 0.0895, "minnie65 v661, n = 45", REPLICATE)
+    _direct_label(ax, 3.9, 0.0895, "MICrONS mouse 1, n = 45", REPLICATE)
 
-    _ = standard
+    # Mark the standard passive calibration explicitly.  Its two cohort
+    # values differ in axial/leak ratio, so a bracket is more honest than one
+    # vertical reference line.
+    standard_x = sorted(value[0] for value in standard.values())
+    if len(standard_x) == 2:
+        y_bar = 0.010
+        ax.plot(standard_x, [y_bar, y_bar], color=MUTE, lw=LW_HAIR,
+                solid_capstyle="butt", zorder=2)
+        for x_value in standard_x:
+            ax.plot([x_value, x_value], [y_bar - 0.002, y_bar + 0.002],
+                    color=MUTE, lw=LW_HAIR, zorder=2)
+        ax.text(np.sqrt(standard_x[0] * standard_x[1]), y_bar + 0.004,
+                "standard passive  Rₘ=15,000", ha="center", va="bottom",
+                fontsize=PT_SMALL, color=MUTE)
     _title(ax, "Electrotonic boundary")
     return ax
 
@@ -531,7 +547,7 @@ def build() -> list[str]:
     box = ax_a.get_position()
     panel_focal_shunt(ax_a, width_pt=box.width * canvas.width_pt,
                       height_pt=box.height * canvas.height_pt)
-    _title(ax_a, "Matched focal shunt")
+    _title(ax_a, "Matched focal perturbations")
 
     panel_tree_relation(ax_b)
     panel_passive_dose(ax_c)

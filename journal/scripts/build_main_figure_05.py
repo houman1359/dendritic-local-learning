@@ -49,7 +49,7 @@ ROOT = Path(__file__).resolve().parents[1]
 COMPONENT = ROOT / "figures" / "components" / "main_figure_05_native.pdf"
 CANONICAL = ROOT / "figures" / "main" / "figure_05.pdf"
 
-CANVAS_H_PT = 450.0
+CANVAS_H_PT = 440.0
 HEIGHT_IN = CANVAS_H_PT / 72.0
 ROW_PT = [139.0, 101.0, 105.0]
 HGUTTER_PT = 34.0
@@ -102,10 +102,9 @@ def _centred_subscript(f: Frame, xy, base, sub, tail="", *, color,
 def hierarchical_task(ax) -> None:
     """Eight active streams whose distractors follow binary-tree distance."""
     f = Frame(ax, labels=True, scale=0.95)
-    _centred_subscript(
-        f, (0.50, 0.955), "context c", "3",
-        " sets target y; all eight streams remain active",
-        color=INK, va="top")
+    f.text((0.50, 0.955),
+           "context c = 3 selects stream 3; selected stream carries +y; all streams active",
+           size=PT_SMALL, color=INK, ha="center", va="top")
 
     leaf_x = np.linspace(0.055, 0.945, 8)
     levels = (
@@ -302,6 +301,26 @@ def _nonanatomical_basis(f: Frame, rect) -> None:
                 transform=f.ax.transData, zorder=3,
             ))
 
+    # Compact signed-weight key.  Without it, the purple/gray/white cells can
+    # be mistaken for four categorical route identities rather than entries
+    # of a dense signed basis.
+    key_y = y0 + 0.955 * height
+    key_x = x0 + 0.48 * width
+    key_specs = ((mix("oracle", 30), "+"),
+                 (mix("point_mlp", 34), "−"),
+                 ("white", "0"))
+    f.text((key_x - f.fx(4.0), key_y), "weight", size=PT_SMALL,
+           color=MUTE, ha="right", va="center")
+    for index, (face, symbol) in enumerate(key_specs):
+        xpos = key_x + index * f.fx(13.0)
+        f.ax.add_patch(Rectangle(
+            (xpos, key_y - f.fy(3.0)), f.fx(6.0), f.fy(6.0),
+            facecolor=face, edgecolor=COLORS["grid"], linewidth=LW_HAIR,
+            transform=f.ax.transData, zorder=4,
+        ))
+        f.text((xpos + f.fx(8.0), key_y), symbol, size=PT_SMALL,
+               color=INK, ha="left", va="center")
+
     # One cell is one route's signed weight on one branch: the column sits
     # over the branch it weights and the row carries its route chip.  A label
     # above the matrix collided with the card subtitle, so the caption names
@@ -348,6 +367,36 @@ def _move_label(ax, text: str, xy) -> None:
     raise LookupError(f"direct label {text!r} not found")
 
 
+def _rename_label(ax, old: str, new: str) -> None:
+    """Rename one direct series label without touching plotted values."""
+    for artist in ax.texts:
+        if artist.get_text() == old:
+            artist.set_text(new)
+            return
+    raise LookupError(f"direct label {old!r} not found")
+
+
+def _annotate_k4_advantage(ax, contrasts: pd.DataFrame) -> None:
+    """Expose the small but prespecified K=4 interior contrast on its scale."""
+    row = contrasts[
+        contrasts.architecture.eq("dendritic_tree")
+        & contrasts.endpoint.eq("heldout_accuracy")
+        & contrasts.contrast.eq(
+            "correct - best_matched_nonanatomical_oracle")
+        & contrasts.budget_k.eq(4)
+    ]
+    if len(row) != 1:
+        raise ValueError(f"expected one K=4 matched-control contrast, got {len(row)}")
+    value = 100.0 * float(row.iloc[0].mean_difference)
+    ax.annotate(f"K=4: +{value:.2f} pp", xy=(2.0, value), xytext=(2.74, 14.0),
+                textcoords="data", ha="right", va="center",
+                fontsize=PT_SMALL, color=PURPLE,
+                bbox=dict(boxstyle="round,pad=0.18", facecolor="white",
+                          edgecolor=COLORS["grid"], linewidth=LW_HAIR),
+                arrowprops=dict(arrowstyle="-", color=PURPLE, lw=LW_HAIR,
+                                shrinkA=2.0, shrinkB=3.0), zorder=7)
+
+
 def build() -> list:
     mpl.rcParams["lines.markeredgewidth"] = LW_EDGE
     outcomes = pd.read_csv(SUBTREE / "seed_outcomes.csv")
@@ -358,7 +407,7 @@ def build() -> list:
     canvas = NativeCanvas(
         HEIGHT_IN, 3, row_weights=ROW_PT,
         hgutter_pt=HGUTTER_PT, vgutter_pt=VGUTTER_PT,
-        margins=Margins(left=34.0, right=12.0, top=22.0, bottom=26.0),
+        margins=Margins(left=43.0, right=12.0, top=22.0, bottom=26.0),
     )
     ax_a = canvas.panel("A", 0, 0, 7, schematic=True,
                         title="Eight-context hierarchical task")
@@ -380,10 +429,13 @@ def build() -> list:
     route_controls(ax_c, (0, 1))
     route_controls(ax_d, (2, 3))
     bandwidth_sweep_compact(ax_e, outcomes, dendritic)
+    _rename_label(ax_e, "best control", "best non-anatomical")
     route_contrasts_compact(ax_f, contrasts)
     # "vs best" sat on the K = 1 diamond and its lower whisker; move it into
     # the empty well under the rising violet segment.
     _move_label(ax_f, "vs best", (0.52, -46.0))
+    _rename_label(ax_f, "vs best", "vs best non-anatomical")
+    _annotate_k4_advantage(ax_f, contrasts)
     topology_alignment_compact(ax_g, outcomes)
 
     COMPONENT.parent.mkdir(parents=True, exist_ok=True)

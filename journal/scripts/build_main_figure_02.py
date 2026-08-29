@@ -128,7 +128,7 @@ GAIN_TICKS = [0, 2, 4, 6]
 GAIN_LABEL = "accuracy difference (pp)"
 
 STRICT_LADDER_TICKS = ["strict\nscalar", "neuron\nspecific", "exact\npath"]
-FALLBACK_LADDER_TICKS = ["scalar\nfallback", "neuron\nspecific", "exact\npath"]
+FALLBACK_LADDER_TICKS = ["legacy scalar\nfallback", "neuron\nspecific", "exact\npath"]
 
 # One declared convention for the two categorical panels: the per-seed cloud
 # is drawn as a symmetric deterministic fan a quarter-row BELOW its own mean
@@ -201,7 +201,7 @@ def _card_scalar(f, core):
     f.arrow(src, (sx + f.fx(4.5), bot), color=AMBER, lw=LW_EDGE, head=4.0,
             rad=-0.22)
     f.disc(src, 2.1, fill=AMBER)
-    f.text((src[0], src[1] + f.fy(8.0)), "δ₀", size=PT_ANNOT,
+    f.text((src[0], src[1] + f.fy(8.0)), "s", size=PT_ANNOT,
            color=AMBER_TEXT)
 
 
@@ -262,7 +262,8 @@ def panel_task(ax):
     f.arrow((px(77.5), cy), (px(84.5), cy), color=MUTE, lw=LW_EDGE,
             head=3.6)
     f.disc((px(89.0), cy), 2.2, fill=BP)
-    f.text((px(89.0), cy + f.fy(8.0)), "δ₀", size=PT_ANNOT, color=BP)
+    f.text((px(89.0), cy + f.fy(8.0)), "δₒᵤₜ", size=PT_ANNOT,
+           color=BP)
     return ax
 
 
@@ -275,7 +276,7 @@ def panel_task(ax):
 # exact wording.
 RESOLUTION_CARDS = (
     ("scalar", "scalar", AMBER_TEXT,
-     "one value for the layer", _card_scalar),
+     "one scalar s for the layer", _card_scalar),
     ("neuron", "neuron specific", ADD,
      "one δᵤ per neuron", _card_neuron),
     ("exact", "exact path", BP,
@@ -430,6 +431,9 @@ def panel_fashion_ladder(ax):
     ax.set_yticks(FASHION_ACC_TICKS)
     ax.set_ylabel(ACC_LABEL)
     ax.yaxis.set_major_formatter(PercentFormatter(1.0, decimals=0))
+    # This archived cohort predates the strict-scalar control in B.  The
+    # x-category itself carries the "legacy" qualifier, so provenance is
+    # explicit without placing a badge over the upper seed cloud.
     style_panel(ax)
     return ax
 
@@ -839,7 +843,7 @@ def _equalise_row(canvas, names_cols):
 def build(height_in=CANVAS_H_PT / 72.0, path=None):
     canvas = NativeCanvas(height_in, 3, row_weights=list(ROW_H_PT),
                           hgutter_pt=32.0, vgutter_pt=VGUTTER_PT,
-                          margins=Margins(left=46.0, right=12.0, top=18.0,
+                          margins=Margins(left=48.0, right=12.0, top=18.0,
                                           bottom=25.0))
 
     ax_task = canvas.panel("task", 0, 0, 3, schematic=True, letter="",

@@ -86,7 +86,7 @@ FACTORIAL = ROOT / "source_data" / "trained_subtree_address_full_factorial"
 PLANE = ROOT / "source_data" / "credit_phase_plane"
 OUT = ROOT / "figures" / "components" / "main_figure_03_native.pdf"
 
-HEIGHT_IN = 470.0 / 72.0  # 448 pt -> aspect 1.16
+HEIGHT_IN = 442.0 / 72.0
 # Every reserve this figure needs is paid for by the outer margins and by the
 # two uniform gutters, never by a slice of one panel: the horizontal gutter
 # carries the next panel's y label and tick column (34.8 pt for the widest
@@ -95,8 +95,8 @@ HEIGHT_IN = 470.0 / 72.0  # 448 pt -> aspect 1.16
 # no panel is ever carved on its own and every panel that starts in one grid
 # column keeps one x0 and one axes width.
 HGUTTER = 38.0
-VGUTTER = 48.0
-MARGINS = Margins(left=38.0, right=12.0, top=24.0, bottom=26.0)
+VGUTTER = 58.0
+MARGINS = Margins(left=51.0, right=12.0, top=23.0, bottom=27.0)
 # Row 1 carries the sweep panels and gets the extra 6 pt of height; the module
 # grid does the rest, so the module-normalised areas stay inside 1.16x.
 ROW_WEIGHTS = (106.0, 112.0, 106.0)
@@ -369,7 +369,7 @@ def main() -> None:
         ax_c.plot(xs, ys, color=color, marker=marker, ms=MARKER_MS,
                   lw=LW_DATA, mec="white", mew=LW_HAIR,
                   markevery=list(np.flatnonzero(~fanned)),
-                  label=f"H = {task_depth}")
+                  label=rf"$H_{{\rm c}}={task_depth}$")
         if fanned.any():
             ax_c.scatter(xs[fanned] + depth_marker_dx[task_depth], ys[fanned],
                          color=color, marker=marker, s=MARKER_MS ** 2,
@@ -403,8 +403,8 @@ def main() -> None:
     ax_d.plot([-0.5, 0.5, 0.5, 1.5, 1.5, 3.5, 3.5],
               [1.5, 1.5, 2.5, 2.5, 3.5, 3.5, 4.5],
               ls="--", color=COLORS["mute"], lw=LW_REF, zorder=3)
-    ax_d.set_xlabel("retained signal fraction r", labelpad=2.0)
-    ax_d.set_ylabel("noise retention n", labelpad=1.5,
+    ax_d.set_xlabel(r"retained signal fraction  $f_{\rm sig}$", labelpad=2.0)
+    ax_d.set_ylabel(r"retained noise fraction  $f_{\rm noise}$", labelpad=1.5,
                     y=matrix_label_y(ax_d), ha="center")
 
     # ── E: one-step reliability gains for the four gain policies ────────
@@ -478,7 +478,7 @@ def main() -> None:
     ax_g.set_xlim(-0.045, 1.12)
     ax_g.set_ylim(0.088, 7.0)
     span_x = [-0.045, 1.12]
-    # K/r is an ordinal axis, so the three regimes take an ordered light slate
+    # K/r_eff is an ordinal axis, so the three regimes take an ordered light slate
     # ramp (lightest at low K/r) rather than three near-invisible hues at
     # alpha 0.07-0.10, which were impossible to tell apart and competed with
     # the condition colours of the data.
@@ -542,7 +542,10 @@ def main() -> None:
     ax_g.set_yticklabels(["1/8", "1/4", "1/2", "1", "2", "4"])
     ax_g.minorticks_off()
     ax_g.set_xlabel("task–anatomy alignment")
-    ax_g.set_ylabel("bandwidth / task rank")
+    # Set on two lines: rotated, one long line overran the panel and climbed
+    # into the row above, past G's own letter.  Two lines stack as adjacent
+    # columns, each about half as tall, and stay inside the axes.
+    ax_g.set_ylabel("bandwidth / effective\ntask rank  " r"$K/r_{\rm eff}$")
 
     problems = canvas.save(OUT, name="main_figure_03_native")
     for violation in audit_native_pdf(OUT):

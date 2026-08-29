@@ -167,6 +167,7 @@ LETTER_DY_PT = 2.5          # baseline above the axes top
 LETTER_CLEAR_PT = 4.2       # letter top above the panel's topmost other ink
 LETTER_GAP_PT = 3.4         # letter right edge to the panel's leftmost ink
 LETTER_CAP_FRAC = 0.72      # cap height of the bold face, as a size fraction
+LETTER_HOME_PT = 6.0        # shared left edge of the row-leading letters
 
 
 def snap_font_pt(value: float) -> float:
@@ -539,6 +540,37 @@ class NativeCanvas:
                     y = max(y, top_pt + LETTER_CLEAR_PT - cap)
             item["art"].set_position((max(x, 2.5) / self.width_pt,
                                       y / self.height_pt))
+        self._align_lead_letters()
+
+    def _align_lead_letters(self):
+        """Give the row-leading letters one shared left edge.
+
+        Each letter has just been placed against its own panel's ink, so a
+        panel carrying long row labels drives its letter far left while a
+        schematic with no y decoration leaves its letter far right, and the
+        page reads down a ragged margin.  The row-leading letters are pulled
+        onto one fixed edge, the same edge in every figure of the set, so the
+        letters read as a margin rule rather than as nine different indents.
+        The edge only holds if every row-leading panel keeps its own ink out
+        of the letter column; ``audit_letter_alignment.py`` measures that and
+        names the figures whose left margin is too narrow to allow it.
+        """
+        lead = {}
+        for rec in self._records:
+            if not rec.get("_letter"):
+                continue
+            row = int(rec.get("row", 0))
+            if (row not in lead
+                    or int(rec.get("col", 0)) < int(lead[row].get("col", 0))):
+                lead[row] = rec
+        axes = {id(self.axes[rec["name"]]) for rec in lead.values()
+                if rec["name"] in self.axes}
+        group = [it for it in self._letters if id(it["ax"]) in axes]
+        if len(group) < 2:
+            return
+        home = LETTER_HOME_PT / self.width_pt
+        for it in group:
+            it["art"].set_position((home, it["art"].get_position()[1]))
 
     # -- column-locked reserves -------------------------------------------
     def _record_for(self, panel):

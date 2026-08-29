@@ -90,6 +90,15 @@ observations. The main MICrONS cohorts come from one \texttt{minnie65} mouse;
 the Pinky v185 cohort comes from a second mouse. Cells within either volume
 are not independent animal-level replicates.
 
+Throughout, plain italic symbols denote scalars, bold lower-case symbols
+denote vectors, and bold upper-case symbols denote matrices. The principal
+indices are $u$ (modeled neuron), $n$ (compartment), $i$ (synapse) and
+$k$ (feedback route). $D_{\mathrm p}$ denotes physical dendritic depth,
+$D_{\mathrm r}$ routed address depth, $H$ task-hierarchy depth and $K$
+the number of communicated feedback channels. A consolidated notation table
+appears in Table~\ref{tab:notation}; symbols needed for a derivation are also
+defined locally at first use.
+
 \section{Exact gradients in a directed conductance tree}
 \label{note:derivation}
 
@@ -123,6 +132,10 @@ V_n
 \qquad R_n^{\mathrm{tot}}=(g_n^{\mathrm{tot}})^{-1}.
 \label{eq:s_voltage}
 \end{align}
+The soma obeys the same current balance with $n=0$, including its child
+couplings and any explicitly modeled somatic inputs, but has no parent term.
+The controlled regular-tree architectures used here have no external somatic
+input synapses unless a control is explicitly described otherwise.
 For nonnegative conductances and activities, Eq.~\ref{eq:s_voltage} is a
 conductance-weighted average of leak, synaptic reversal potentials and child
 activities. This boundedness is useful for numerical stability, but is not
@@ -399,6 +412,16 @@ For nonnegative path gains and nonzero gradients,
 \qquad w_i=(e_i\delta_0^V)^2.
 \label{eq:s_alignment}
 \end{equation}
+Here
+\begin{equation}
+\overline\alpha_w=\frac{\sum_iw_i\widetilde\alpha_{n(i)}}{\sum_iw_i},
+\qquad
+\mathrm{CV}_w(\widetilde\alpha)^2
+=\frac{\sum_iw_i[\widetilde\alpha_{n(i)}-\overline\alpha_w]^2}
+{\overline\alpha_w^2\sum_iw_i},
+\end{equation}
+so $\mathrm{CV}_w$ is the eligibility-energy-weighted coefficient of
+variation of the path gain.
 This identity explains why path-gain dispersion can matter after the correct
 somatic coordinate has been supplied. It does not solve the separate problem
 of supplying the correct coordinate across network layers.
@@ -413,10 +436,11 @@ $\bm\beta$ contain state-dependent route gains. A low-bandwidth teaching
 vector $\bm z\in\mathbb R^K$ generates a synaptic field
 \begin{equation}
 \widehat{\bm g}=\Phi_{T,K}\bm z,
-\qquad \Phi_{T,K}=W_eA_T\operatorname{diag}(\bm\beta)S_K,
+\qquad \Phi_{T,K}=D_eA_T\operatorname{diag}(\bm\beta)S_K,
 \label{eq:s_dictionary}
 \end{equation}
-where $W_e$ holds local eligibility or anatomical weights and $S_K$ assigns
+where the diagonal matrix $D_e$ holds local eligibility or anatomical weights
+and $S_K$ assigns
 the $K$ communicated channels to route sites. Topology fixes support. Conductance changes gain
 and conditioning but does not create an ancestry relation that is absent from
 $A_T$.
@@ -425,10 +449,22 @@ $A_T$.
 
 Separate the synapse-local eligibility from the task-dependent coefficient
 field and let $\bm c_u\in\mathbb R^{N_u}$ denote the latter for neuron $u$.
+For a positive diagonal coordinate-weight matrix $W$, define
+\begin{equation}
+\lVert\bm v\rVert_W^2=\bm v^{\mathsf T}W\bm v,
+\qquad
+P_{\Phi,W}=\Phi(\Phi^{\mathsf T}W\Phi)^\dagger\Phi^{\mathsf T}W.
+\label{eq:s_weighted_projector}
+\end{equation}
+This is the $W$-orthogonal projector onto $\operatorname{col}(\Phi)$.
+Equivalently, with $\overline\Phi=W^{1/2}\Phi$,
+$\overline P_\Phi=\overline\Phi\,\overline\Phi^\dagger
+=W^{1/2}P_{\Phi,W}W^{-1/2}$ is the ordinary Euclidean projector in the
+transformed coordinates.
 For a prespecified nested family of dictionaries $\Phi_{u,K}$, define
 \begin{equation}
 d_{\epsilon,u}=\min\left\{K:
-\frac{\mathbb E\lVert P_{\Phi_{u,K}}\bm c_u\rVert_W^2}
+\frac{\mathbb E\lVert P_{\Phi_{u,K},W}\bm c_u\rVert_W^2}
 {\mathbb E\lVert\bm c_u\rVert_W^2}\geq1-\epsilon\right\}.
 \label{eq:s_address_dimension}
 \end{equation}
@@ -438,10 +474,11 @@ counted as an extra teaching coordinate.
 
 For any fixed $\Phi\in\mathbb R^{N_u\times K}$, all fields generated as
 $\Phi\bm z$ lie in $\operatorname{col}(\Phi)$ and hence occupy at most
-$\operatorname{rank}(\Phi)\leq K$ dimensions. Conversely, the least-squares field
-in that space is $P_\Phi\bm c_u$, and its expected weighted residual energy is
+$\operatorname{rank}(\Phi)\leq K$ dimensions. Conversely, the weighted
+least-squares field in that space is $P_{\Phi,W}\bm c_u$, and its expected
+weighted residual energy is
 \begin{equation}
-\mathbb E\lVert(I-P_\Phi)\bm c_u\rVert_W^2
+\mathbb E\lVert(I-P_{\Phi,W})\bm c_u\rVert_W^2
 =\operatorname{tr}\!\left[(I-\overline P_\Phi)\overline C_c\right],
 \qquad
 \overline C_c=\mathbb E[W^{1/2}\bm c_u\bm c_u^{\mathsf T}W^{1/2}].
@@ -460,7 +497,8 @@ point-neuron networks.
 
 \subsection{Field capture}
 
-Let $W$ be a positive diagonal matrix that defines the coordinate weighting.
+Use the positive diagonal coordinate weighting and transformed projector
+defined in Eq.~\ref{eq:s_weighted_projector}.
 Set $\overline{\bm g}=W^{1/2}\bm g$,
 $\overline\Phi_{T,K}=W^{1/2}\Phi_{T,K}$, and let
 $\overline P_\Phi$ be the ordinary Euclidean orthogonal projector onto the
@@ -498,7 +536,10 @@ projector $P$,
 \frac{\sum_{j=1}^{K}\lambda_j}{\sum_{j=1}^{p}\lambda_j}.
 \label{eq:s_ky_fan_capture}
 \end{equation}
-Equality is attained by the projector onto the leading $K$ eigendirections.
+Equality is attained by any rank-$K$ projector whose range is a
+Ky--Fan-maximizing invariant subspace: it contains every eigenspace with
+eigenvalue strictly greater than $\lambda_K$ and may choose the remaining
+directions within the eigenspace at $\lambda_K$.
 The difference between the right side and anatomical capture is the
 rank-matched spectral regret.
 \end{proposition}
@@ -665,8 +706,9 @@ more rejected noise to compensate for the discarded signal.
 \subsection{Interior optimum along the nested route ladder}
 \label{note:interior_optimum}
 
-Every feedback field studied in this work is, up to coefficient noise, a
-projector on one nested ladder,
+The scalar, neuron-specific and correctly routed ancestry projectors used in
+the controlled hierarchy analyses form, up to coefficient noise, the nested
+ladder
 $P_{\mathrm{scalar}}\subset P_{\mathrm{neuron}}\subset
 P_{\mathrm{ancestry},K}\subset I$. Along such a ladder the capture of
 Eq.~\ref{eq:s_capture} is monotone by construction, but the guaranteed
@@ -698,6 +740,8 @@ full rank. Equations~\ref{eq:s_projector_utility} and
 \ref{eq:s_marginal_condition}, together with the interior-maximum
 construction, are verified numerically in the released test suite
 (\texttt{tests/test\_laminar\_optimality.py}).
+Random, deranged and independently gained route families elsewhere in the
+paper need not lie on this same nested ladder.
 
 Two prespecified experiments locate this optimum empirically
 (Supplementary Fig.~\ref{fig:supp_interior_optimum}; analysis code is included
@@ -729,11 +773,11 @@ supports are nested or disjoint. An unconstrained rank-$K$ feedback matrix
 is the comparison class. For the balanced binary tree used in the
 factorial, the span of the $K$-route ancestry dictionary equals the span of
 the $K$ coarsest vectors of the orthonormal tree-Haar basis
-$W=[\bm h_1,\dots,\bm h_n]$ (constant, then sibling-subtree differences,
+$U=[\bm h_1,\dots,\bm h_n]$ (constant, then sibling-subtree differences,
 coarse to fine) for every admissible budget $K\in\{1,2,4,\dots,n\}$.
 
 \begin{proposition}[Laminar capture of hierarchical covariance]
-Let the task-credit covariance be $C=W\Lambda W^{\mathsf T}$ with
+Let the task-credit covariance be $C=U\Lambda U^{\mathsf T}$ with
 $\Lambda=\operatorname{diag}(\lambda_1,\dots,\lambda_n)$ ordered so that
 $\lambda_1\geq\lambda_2\geq\cdots\geq\lambda_n\geq0$ along the
 coarse-to-fine Haar order. Then for every admissible budget $K$ the
@@ -753,8 +797,9 @@ exactly as
 \end{equation}
 the leading-eigenspace energy outside the laminar span minus the trailing
 energy that the span retains. It is therefore bounded above by the former
-term, and is zero exactly when the span of the top-$K$ eigenvectors of $C$
-is contained in the ancestry span.
+term. The shortfall is zero exactly when $P_{A,K}$ is Ky--Fan maximizing;
+when $\lambda_K>\lambda_{K+1}$, this is equivalent to the ancestry span
+being the unique leading-$K$ eigenspace.
 \end{proposition}
 
 \begin{proof}
@@ -764,8 +809,9 @@ orthogonal projector maximizes $\operatorname{tr}(PC)$ exactly on a top-$K$ eige
 (Ky--Fan). For general $C$, expanding
 $\operatorname{tr}(P_{A,K}C)=\sum_j\lambda_j\lVert P_{A,K}\bm v_j\rVert_2^2$
 and $\lVert P_{A,K}\bm v_i\rVert_2^2=1-\lVert(I-P_{A,K})\bm v_i\rVert_2^2$
-for $i\leq K$ gives the stated decomposition; it vanishes iff $P_{A,K}$
-projects onto a top-$K$ eigenspace.
+for $i\leq K$ gives the stated decomposition. Ky--Fan's equality condition,
+including arbitrary choices inside a degenerate cutoff eigenspace, gives the
+last statement.
 \end{proof}
 
 Thus anatomy is an optimal rank-$K$ feedback basis precisely for
@@ -979,30 +1025,31 @@ function, focal site and electrotonic regime and is evaluated numerically in
 the focal experiments.
 
 \begin{corollary}[Spectral size of a focal passive perturbation]
-Under the preceding assumptions, let $H=G^{-1}$ and
-$H'=(G+\kappa\bm e_k\bm e_k^{\mathsf T})^{-1}$. The inverse-operator change is
+Under the preceding assumptions, let $\mathcal R=G^{-1}$ and
+$\mathcal R'=(G+\kappa\bm e_k\bm e_k^{\mathsf T})^{-1}$. The inverse-operator change is
 rank one and
 \begin{equation}
-\lVert H'-H\rVert_2
-=\frac{\kappa\lVert H\bm e_k\rVert_2^2}
-{1+\kappa H_{kk}}
+\lVert \mathcal R'-\mathcal R\rVert_2
+=\frac{\kappa\lVert \mathcal R\bm e_k\rVert_2^2}
+{1+\kappa \mathcal R_{kk}}
 \leq
-\frac{\kappa\lVert H\rVert_2^2}
+\frac{\kappa\lVert \mathcal R\rVert_2^2}
 {1+\kappa/\lambda_{\max}(G)}.
 \label{eq:s_focal_inverse_norm}
 \end{equation}
 Consequently, for any adjoint source $\bm s$,
-$\lVert(H'-H)\bm s\rVert_2\leq
-\lVert H'-H\rVert_2\lVert\bm s\rVert_2$.
+$\lVert(\mathcal R'-\mathcal R)\bm s\rVert_2\leq
+\lVert \mathcal R'-\mathcal R\rVert_2\lVert\bm s\rVert_2$.
 \end{corollary}
 
 \noindent\emph{Proof.}
 Sherman--Morrison gives
-$H'-H=-\kappa(H\bm e_k)(H\bm e_k)^{\mathsf T}/(1+\kappa H_{kk})$.
+$\mathcal R'-\mathcal R=-\kappa(\mathcal R\bm e_k)(\mathcal R\bm e_k)^{\mathsf T}/
+(1+\kappa \mathcal R_{kk})$.
 The norm of this symmetric rank-one matrix is its scalar coefficient times
-$\lVert H\bm e_k\rVert_2^2$. Use
-$\lVert H\bm e_k\rVert_2\leq\lVert H\rVert_2$ and
-$H_{kk}\geq\lambda_{\min}(H)=1/\lambda_{\max}(G)$ for the bound.
+$\lVert \mathcal R\bm e_k\rVert_2^2$. Use
+$\lVert \mathcal R\bm e_k\rVert_2\leq\lVert \mathcal R\rVert_2$ and
+$\mathcal R_{kk}\geq\lambda_{\min}(\mathcal R)=1/\lambda_{\max}(G)$ for the bound.
 \hfill$\square$
 
 Equation~\ref{eq:s_focal_inverse_norm} makes the electrotonic boundary
@@ -1026,8 +1073,8 @@ useful even when the backward address span is unchanged.
 
 Depth can also impose a transport cost. In an idealized ensemble with equal
 local eligibility, let the route gain be
-$A=\prod_{\ell=1}^{D_{\mathrm{p}}}G_\ell$ and assume independent
-$\log G_\ell$ with variances $\sigma_\ell^2$. The cosine between a shared
+$A=\prod_{\ell=1}^{D_{\mathrm{p}}}G_\ell$ and assume independent Gaussian
+log gains, $\log G_\ell\sim\mathcal N(\mu_\ell,\sigma_\ell^2)$. The cosine between a shared
 coefficient and the exact gain-weighted field in the large-route limit is
 \begin{equation}
 \frac{\E A}{\sqrt{\E A^2}}
@@ -1070,25 +1117,25 @@ We next tested the physical realization of
 Eq.~\ref{eq:s_reliability_gain} in a separate trained branch model. Every input
 rate $x_{bid}$ was nonnegative and every trainable excitatory conductance was
 $g_{bd}=\operatorname{softplus}(q_{bd})$. For branch $b$, define total
-unshunted conductance and voltage
+unshunted conductance and voltage on example $i$
 \begin{equation}
-G_b=g^L+\sum_d x_{bd}g_{bd},\qquad
-V_b=\frac{\sum_d x_{bd}g_{bd}}{G_b}.
+G_{bi}=g^L+\sum_d x_{bid}g_{bd},\qquad
+V_{bi}=\frac{\sum_d x_{bid}g_{bd}}{G_{bi}}.
 \label{eq:s_positive_branch_voltage}
 \end{equation}
 A fixed shunt $\kappa_b\geq0$ had reversal zero. To isolate its effect on
 input resistance from its effect on the forward feature, an oracle current
-$\kappa_bV_b$ was added on each example. The perturbed state is therefore
+$\kappa_bV_{bi}$ was added on each example. The perturbed state is therefore
 \begin{equation}
-V_b'=\frac{\sum_d x_{bd}g_{bd}+\kappa_bV_b}{G_b+\kappa_b}=V_b,
+V_{bi}'=\frac{\sum_d x_{bid}g_{bd}+\kappa_bV_{bi}}{G_{bi}+\kappa_b}=V_{bi},
 \qquad
-\frac{\partial V_b'}{\partial q_{bd}}
-=\frac{x_{bd}(1-V_b)}{G_b+\kappa_b}\,
+\frac{\partial V_{bi}'}{\partial q_{bd}}
+=\frac{x_{bid}(1-V_{bi})}{G_{bi}+\kappa_b}\,
 \operatorname{sigmoid}(q_{bd}).
 \label{eq:s_state_matched_shunt}
 \end{equation}
-Relative to the unshunted eligibility, the physical input-resistance factor
-is $G_b/(G_b+\kappa_b)$. The compensating current was recomputed from the
+Relative to the unshunted eligibility, the example-specific physical
+input-resistance factor is $G_{bi}/(G_{bi}+\kappa_b)$. The compensating current was recomputed from the
 pre-shunt state and treated as a clamp, not differentiated as an independently
 learned pathway. Consequently this manipulation deliberately removes forward
 feature suppression while retaining conductance attenuation in the local
@@ -1101,14 +1148,15 @@ Initial full-data gradients supplied
 $S_b=\lVert\bm g_b\rVert_2^2$. Coefficient-noise variance was then scaled so
 that
 \begin{equation}
-N_b=S_b\exp(-2hx_b),\qquad x_b\in[-1,1],
+N_b=S_b\exp(-2h x_b),\qquad x_b\in[-1,1],
 \end{equation}
-for eight evenly spaced branch indices and
-$h\in\{0,0.5,1,1.5,2\}$. The statistical reliability was
+where $x_b$ is the evenly spaced branch-order coordinate and
+$h\in\{0,0.5,1,1.5,2\}$ controls reliability heterogeneity. The statistical reliability was
 $r_b=S_b/(S_b+N_b)$, lower-bounded at 0.03 for numerical stability. Because
 the common step was $\eta=c/L$ with $c=0.5$, the corrected fixed-step target
 was $a_b^*=\min\{1,r_b/c\}$ and the initial shunt was
-$\kappa_b=\overline G_b[(a_b^*)^{-1}-1]$. Shunts remained fixed during the 40
+$\kappa_b=\overline G_b[(a_b^*)^{-1}-1]$, where $\overline G_b$ is the
+training-example mean of $G_{bi}$ at initialization. Shunts remained fixed during the 40
 updates; the excitatory conductance parameters were trained, and the same
 coefficient-noise realizations were used across matched methods within seed.
 
@@ -2233,8 +2281,9 @@ factorial showing that the theorem-derived three-factor rule approaches
 matched backpropagation when the required compartment error is supplied;
 its ordinate spans less than one percentage point, so the visible
 differences are small in absolute terms.
-\textbf{D}, Noise-resilience feedback ladder spanning scalar,
-path-propagated, random low-rank, and transported-oracle fields. Error bars are
+\textbf{D}, Noise-resilience feedback ladder spanning the legacy
+matched-width/scalar-fallback field, that same field with path propagation,
+random rank-2/4/8 fields, and the exact-transport oracle. Error bars are
 $\pm1$ s.d. Every plotted value, seed count and interval is preserved
 unchanged from the archived generator and also appeared in the associated
 preprint; the display is redrawn in the journal style. Exact transport is an
@@ -2270,7 +2319,7 @@ in Supplementary Figs.~\ref{fig:inherited_mechanistic},
 \ref{fig:regular_regimes}, and
 Table~\ref{tab:regular_regimes}.
 
-\begin{figure}[!ht]
+\begin{figure}[p]
 \centering
 \includegraphics[width=\textwidth]{supplementary/figure_S04_panels_A-D.pdf}
 \caption{\textbf{Additional regular-tree stress and boundary tests.}
@@ -2551,11 +2600,11 @@ a loss depending on somatic voltage, the adjoint error was
 \qquad
 \frac{\partial\mathcal L}{\partial w_i}=q_i(E_E-V_i).
 \end{equation}
-A focal shunt $\eta_k$ gives
-$G'=G+\eta_k\bm e_k\bm e_k^T$. The Sherman--Morrison identity yields
+A focal shunt $\kappa_k$ gives
+$G'=G+\kappa_k\bm e_k\bm e_k^T$. The Sherman--Morrison identity yields
 \begin{equation}
 \bm q'=\bm q-
-\frac{\eta_kq_k}{1+\eta_k(G^{-1})_{kk}}G^{-1}\bm e_k.
+\frac{\kappa_kq_k}{1+\kappa_k(G^{-1})_{kk}}G^{-1}\bm e_k.
 \label{eq:s_sherman}
 \end{equation}
 Let $\bm c_k=G^{-1}\bm e_k$ be the $k$th Green's-function column and let
@@ -2563,10 +2612,10 @@ $r_k=c_{k,k}=(G^{-1})_{kk}>0$. Then
 \begin{equation}
 \Delta\bm q=-a_k\bm c_k,
 \qquad
-a_k=\frac{\eta_kq_k}{1+\eta_kr_k},
+a_k=\frac{\kappa_kq_k}{1+\kappa_kr_k},
 \qquad
-\frac{\partial |a_k|}{\partial\eta_k}
-=\frac{|q_k|}{(1+\eta_kr_k)^2}>0.
+\frac{\partial |a_k|}{\partial\kappa_k}
+=\frac{|q_k|}{(1+\kappa_kr_k)^2}>0.
 \label{eq:s_shunt_amplitude}
 \end{equation}
 The perturbation amplitude saturates at $|q_k|/r_k$, while its normalized
@@ -2585,8 +2634,10 @@ or logarithmic changes additionally divide by the baseline $q_i$, and the full
 synaptic gradient also contains the post-perturbation driving force. This is
 why axial coupling, leak, background conductance and local input resistance
 must be varied explicitly rather than inferred from topology alone.
-The first-order-current-matched additive control injected
-$\eta_k(E_I-V_k)$ at the same node without changing $G$. An independently
+The baseline-current-matched additive control injected
+$\kappa_k(E_I-V_k)$ at the same node without changing $G$. This equals the
+current carried by the added shunt at the unperturbed voltage; its local
+voltage effect matches the shunt only to first order in dose. An independently
 solved state-matching compensatory current injection restored baseline somatic
 voltage after both interventions. This is not a continuously adjusted voltage
 clamp. Therefore the somatic scalar error was fixed, while shunting
@@ -2703,9 +2754,9 @@ $R_m=15{,}000\,\Omega\,\mathrm{cm}^2$ it was negligible or small. These are
 sensitivity settings, not fits to the recorded cells, and the model remains
 passive and steady-state.
 
-We then froze a phase-1 matrix before its numerical canary. It fixed
-$R_a=150\,\Omega\,$cm and crossed
-$R_m\in\{300,1000,15{,}000\}\,\Omega\,$cm$^2$, distributed leak-like
+We then fixed a phase-1 matrix before its numerical preflight. It used
+\(R_a=150\,\Omega\,\mathrm{cm}\) and crossed
+\(R_m\in\{300,1000,15{,}000\}\,\Omega\,\mathrm{cm}^2\), distributed leak-like
 background conductance of 0, 1 or 4 times baseline leak, and three dose
 definitions. Relative-local doses were 0.25, 1 and 2 times membrane-plus-
 synaptic conductance; fixed doses were 0.05, 0.5 and 5 nS; input-normalized
@@ -2746,7 +2797,7 @@ state. Acceptance required all voltages to lie in the frozen range, maximum
 absolute state residual below $10^{-10}$, and minimum eigenvalue of the
 symmetrized local Jacobian above $10^{-8}$. The implicit-adjoint calculation
 then used the exact inverse of this Jacobian. Focal shunting and a
-first-order-current-matched additive input were evaluated at 0.25, 1 and 4
+baseline-current-matched additive input were evaluated at 0.25, 1 and 4
 times local input conductance; an independently solved somatic current restored
 the baseline somatic voltage. Up to 256 attempts were permitted to obtain 64
 accepted draws per cell. All first 64 attempts were accepted in every cell,
@@ -3175,13 +3226,17 @@ local credit assignment.}
 \includegraphics[width=\textwidth]{supplementary/figure_S08_panels_A-I.pdf}
 \caption{\textbf{Fixed terminal-branch and input-contact budgets do not make
 greater dendritic depth intrinsically beneficial.}
-\textbf{A--C}, Held-out accuracy across depths one to four under scalar,
-the legacy matched-width/scalar-fallback field, neuron-indexed ancestry and
-exact feedback for the input-valid raw-additive network. \textbf{D}, Matched
+\textbf{A--C}, Held-out accuracy across D1--D4 under, respectively, the
+legacy matched-width/scalar-fallback, neuron-specific and exact-path fields
+for the input-valid raw-additive network. Here D1--D4 denote one through four
+physical dendritic stages while terminal-branch and input-contact budgets are
+held fixed. \textbf{D}, Matched
 backpropagation. \textbf{E}, Prespecified paired
 depth-four-minus-depth-one accuracy contrasts. \textbf{F}, The gap between
-local and matched backpropagated learning. \textbf{G}, Active contacts and
-trainable-parameter counts. \textbf{H,I}, Runtime and peak memory. Each
+local and matched backpropagated learning; dotted, dashed and solid lines are
+legacy fallback, neuron-specific and exact-path fields. \textbf{G}, Active
+contacts (green circles) and trainable-parameter counts (violet squares).
+\textbf{H,I}, Runtime and peak memory. Each
 condition contains ten paired seeds; points and intervals are means and 95\%
 paired-seed bootstrap intervals. All four retained depth-four-minus-depth-one
 contrasts were negative in 10/10 pairs (Wilcoxon $P=0.001953$). The design fixes 16 terminal
@@ -3225,7 +3280,7 @@ Eight-channel wiring-capture trade-off; morphology paths used 8.1\% of
 dense-feedback wiring. \textbf{E}, Within-cell morphology advantage over
 random paths, depth bins, and ancestry shuffles; all three contrasts were
 positive in 47/47 cells. \textbf{F}, Localization of exact-gradient changes
-after a unit-dose focal shunt and first-order-current-matched additive
+after a unit-dose focal shunt and baseline-current-matched additive
 perturbation ($n=45$ cells, 235 sites). \textbf{G}, Localization for true
 descendant relations and relation templates reassigned to other focal sites
 ($n=40$ cells, 230 sites). \textbf{H}, Direct presynaptic E/I-label coverage
@@ -3251,7 +3306,7 @@ dose across 101 sites, three membrane resistances and three background levels.
 Points are site--regime values and are descriptive because sites and regimes
 are repeated within cell. The dotted line marks $S_k=1$. \textbf{C}, Fraction
 of descendant gradients attenuated, enhanced or sign reversed at
-$R_m=1{,}000\,\Omega\,$cm$^2$, background multiplier one and unit
+\(R_m=1{,}000\,\Omega\,\mathrm{cm}^2\), background multiplier one and unit
 input-conductance dose. All tested passive focal-shunt conditions had the same
 qualitative signed outcome: attenuation without enhancement or sign reversal.
 Specific resistances and background levels are sensitivity parameters, not
@@ -3387,15 +3442,16 @@ initialization geometry. Analysis:
 \begin{figure}[p]
 \centering
 \includegraphics[width=\textwidth]{supplementary/figure_S17_panels_A-B.pdf}
-\caption{\textbf{Published animal data support signed neuron-specific teaching
-coordinates.} \textbf{A}, In the source brain--computer-interface experiment,
+\caption{\textbf{Published animal data are consistent with signed
+neuron-specific teaching coordinates.} \textbf{A}, In the source
+brain--computer-interface experiment,
 the causal mapping assigned opposite signs to P+ and P- populations, predicting
 opposite dendritic contrasts. \textbf{B}, Descriptive neuron-level residual
 distributions from the published source table; dots show means and bars show
 95\% animal-bootstrap intervals. Animal, not
-neuron, is the inferential unit. The paired signed contrast and the mode-energy
-decomposition appear as main Fig.~9F,G. This external consistency test supports
-signed neuron-specific information but does not resolve within-tree transport
+neuron, is the inferential unit ($n=6$ animals). The paired signed contrast and the mode-energy
+decomposition appear as main Fig.~9F,G. This calibrated external comparison is
+consistent with signed neuron-specific information but does not resolve within-tree transport
 or uniquely identify a conductance mechanism.}
 \label{fig:supp_animal_credit}
 \end{figure}
@@ -3405,18 +3461,23 @@ or uniquely identify a conductance mechanism.}
 \includegraphics[width=\textwidth]{supplementary/figure_S18_panels_A-K.pdf}
 \caption{\textbf{Physical-depth controls, alignment interpolation and
 hierarchy replication.} \textbf{A}, Paired serial-minus-grouped-star effects
-and the D3 alignment interaction. \textbf{B}, Flexible point networks matched
+and the D3 alignment interaction. D1--D4 denote one through four physical
+dendritic stages. \textbf{B}, Flexible point networks matched
 to active or total parameter count versus the serial D3 tree. \textbf{C--E},
 Accuracy, D3-minus-D1 benefit and paired dose contrasts across sensor--task
 alignment $\alpha$. Intermediate levels were specified after the endpoints and
-are an interpolation, not an independent replication. \textbf{F--H}, H3 serial
+are an interpolation, not an independent replication. \textbf{F--H}, H3
+(three-level task hierarchy) serial
 tree, literal grouped-point and grouped-star controls under aligned and
-reversed placement. \textbf{I--K}, Independent H2 hierarchy with serial BP,
+reversed placement. \textbf{I--K}, Independent H2 (two-level task hierarchy)
+with serial BP,
 literal grouped-point BP and shared- or path-transport LocalCA: \textbf{I}
 shows aligned placement, \textbf{J} shows the reversed-placement control for
 all four rules, and \textbf{K} shows the paired contrasts. Lines are paired-seed
-means and intervals are 95\% seed-bootstrap intervals ($n=10$). The two
-hierarchies belong to one calibrated synthetic task family.}
+means and intervals are 95\% seed-bootstrap intervals ($n=10$ independent
+seeds per condition). The H2 and H3 experiments belong to one calibrated
+synthetic task family; H4 denotes the four-level extension reported elsewhere
+in this Supplementary Information.}
 \label{fig:supp_physical_depth_controls}
 \end{figure}
 
@@ -3424,8 +3485,8 @@ hierarchies belong to one calibrated synthetic task family.}
 \centering
 \includegraphics[width=\textwidth]{supplementary/figure_S19_panels_A-I.pdf}
 \caption{\textbf{Prospective neuron-specific, assignment and route diagnostics.}
-\textbf{A,B}, Neuron-specific-minus-scalar accuracy across depth on MNIST and
-the input-valid raw-additive noise task; the scalar arm of this cohort is the
+\textbf{A,B}, Neuron-specific-minus-fallback accuracy across depth on MNIST and
+the input-valid raw-additive noise task; the reference arm of this cohort is the
 legacy matched-width/scalar-fallback field. \textbf{C}, Exact-transport-minus-BP
 accuracy in the retained historical conditions. \textbf{D}, Correct-minus-
 deranged coordinate-to-arbor assignment at matched bandwidth. \textbf{E},
@@ -3436,7 +3497,10 @@ experiment (Supplementary Table~S1).
 \textbf{H}, Exact-gradient capture versus norm-matched one-step progress.
 \textbf{I}, Forgetting of the first context after adaptation to the second.
 Small points are paired seeds and larger symbols and bars are means and 95\%
-seed-bootstrap intervals. Exact transport is an information ceiling.}
+seed-bootstrap intervals. Panels \textbf{A--G,I} use ten independent paired
+seeds per condition; panel \textbf{H} uses 120 input-valid independently
+trained checkpoints as the descriptive units. Exact transport is an
+information ceiling.}
 \label{fig:supp_prospective_diagnostics}
 \end{figure}
 
@@ -3457,7 +3521,11 @@ main Fig.~7 and Tables~\ref{tab:capacity} and \ref{tab:reciprocal_capacity}.}
 \centering
 \includegraphics[width=\textwidth]{supplementary/figure_S21_panels_A-D.pdf}
 \caption{\textbf{Within-cell focal-shunting controls and sensitivity.}
-\textbf{A}, Within-cell shunt, additive and relation-reassignment controls.
+\textbf{A}, Within-cell controls. Shunt and baseline-current-matched additive
+values are localization indices (descendant minus depth-matched unrelated
+median absolute log-gradient change); the relation-reassignment value compares
+the true relation with a matched foreign relation template. Positive values
+favor descendant localization for the physical shunt or true relation.
 \textbf{B}, Effect across focal-site depth. \textbf{C}, Conductance-scale and
 inhibitory-reversal sensitivity. \textbf{D}, Direct presynaptic-type control.
 Sites are nested within eight reconstructed cells; intervals are 95\%
@@ -3471,20 +3539,18 @@ main Fig.~8.}
 \centering
 \includegraphics[width=\textwidth]{supplementary/figure_S22_panels_A-J.pdf}
 \caption{\textbf{Detailed measured-response topology and learning boundary.}
-\textbf{A}, Seven-target response cohort. \textbf{B}, Geometry-controlled
+\textbf{A}, Seven-target cohort. \textbf{B}, Geometry-controlled
 structure--function relation. \textbf{C}, Target topology metrics.
-\textbf{D,E}, Four-channel task-field capture and held-out learning across
-exact, dense, ancestry and matched control dictionaries. \textbf{F},
-Target-level dependence of morphology-minus-shuffle effects. \textbf{G},
-Capture--utility association after accounting for target identity.
-\textbf{H}, Morphology-minus-shuffle contrasts across feedback bandwidth.
-\textbf{I,J}, Coarse-surrogate held-out task-field capture and held-out
-normalized MSE for all seven dictionaries (exact, dense, ancestry, random,
-depth, shuffle and scalar), complementing main Fig.~9;
-projection coefficients are oracle ceilings, dots are one per target, and in
-\textbf{I} exact and dense coincide at the ceiling ($1.00$, $\ge0.996$), so
-show no spread.
-Stimulus splits and scans are nested within seven target cells.}
+\textbf{D,E}, Four-channel field capture and held-out learning for exact, dense,
+ancestry and matched control dictionaries. \textbf{F}, Target-level
+ancestry-minus-site-shuffle effects; positive capture and negative normalized-MSE
+contrasts favor ancestry. \textbf{G}, Capture--utility association adjusted for
+target identity. \textbf{H}, The same signed contrast across bandwidth.
+\textbf{I,J}, Coarse-surrogate held-out field capture and normalized MSE for all
+seven dictionaries, complementing main Fig.~9. Coefficients are oracle
+projection ceilings and dots are targets; in \textbf{I}, exact and dense
+coincide at the ceiling ($1.00$, $\ge0.996$). Stimulus splits and scans are
+nested within seven target cells.}
 \label{fig:supp_measured_detail}
 \end{figure}
 
@@ -4002,6 +4068,7 @@ $g_n^{\mathrm{tot}}$, $R_n^{\mathrm{tot}}$ & Total compartment conductance and i
 $\delta_u$, $\delta_{u,k}$ & Neuron-level teaching coordinate and its route-$k$ refinement within neuron $u$. \\
 $\delta_{0,u}$ (or $\delta_0^V$), $\partial\mathcal L/\partial V_n$ & Exact somatic error for neuron $u$ (single-tree voltage-space notation in parentheses) and exact compartment voltage-space error. \\
 $\alpha_n^{\mathrm{cond}}$, $\widetilde\alpha_n$ & Conductance-only and effective path gains; the latter includes reactivation derivatives. \\
+$\overline\alpha_w$, $\mathrm{CV}_w$ & Eligibility-energy-weighted mean and coefficient of variation of the effective path gain. \\
 $\alpha$, $\rho$ & Sensor alignment in the physical-depth task and covariance alignment in the spectral-alignment experiment. \\
 $\chi$, $\chi_c$ & Credit-conflict probability in the branch-conflict task and its centered mean-field boundary. The frozen execution contract calls this same dose $\alpha$. \\
 $\bm w$, $\bm g$, $\widehat{\bm g}$ & Parameter vector, exact population gradient, and its unbiased stochastic estimate. \\
@@ -4013,10 +4080,12 @@ $D_{\mathrm{p}}$; D1--D4 & Physical dendritic stage count; D1--D4 mean $D_{\math
 $A_T$ & Binary synapse-by-route ancestry matrix of tree $T$. \\
 $\Gamma_{ik}$ & Direct ancestry-route sensitivity from candidate route $k$ to excitatory site $i$. \\
 $\Phi_{T,K}$ & $K$-channel feedback dictionary implemented by topology, route gains, channel allocation and weights. \\
+$D_e$, $U$ & Diagonal eligibility/anatomical-weight matrix in the route dictionary and orthonormal tree-Haar basis, respectively. \\
 $W$ & Positive diagonal coordinate-weight matrix; summed excitatory synaptic area in the structural MICrONS analysis. \\
-$\overline P_\Phi$ & Ordinary Euclidean orthogonal projector onto the columns of $W^{1/2}\Phi_{T,K}$. \\
+$P_{\Phi,W}$, $\overline P_\Phi$ & Weighted projector onto $\operatorname{col}(\Phi)$ and its ordinary Euclidean representation in coordinates transformed by $W^{1/2}$. \\
 $\mathcal C_K$ & Field-energy capture at feedback-channel budget $K$ in the stated coordinates. \\
-$G$, $R_a$, $R_m$ & Passive conductance matrix, axial resistivity, and specific membrane resistance. \\
+$G$, $\mathcal R$, $R_a$, $R_m$ & Passive conductance matrix, inverse response operator $\mathcal R=G^{-1}$, axial resistivity, and specific membrane resistance. \\
+$\kappa_k$, $\kappa_b$ & Focal shunt conductance at compartment $k$ and branch-specific reliability shunt, respectively. \\
 $B$ & Number of branches in the branch-conflict task; mini-batch size only when used as the subscript in $\langle\cdot\rangle_B$. \\
 $S_K$, $C_g$ & Feedback-channel assignment matrix in Eq.~\ref{eq:s_dictionary} and gradient covariance, respectively. \\
 \bottomrule

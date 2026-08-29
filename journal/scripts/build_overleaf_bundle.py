@@ -9,7 +9,11 @@ import shutil
 import zipfile
 from pathlib import Path
 
-from build_submission_bundle import MAIN_FIGURES, SUPPLEMENTARY_FIGURES
+from build_submission_bundle import (
+    MAIN_FIGURES,
+    SUPPLEMENTARY_FIGURES,
+    verify_figure_allowlist,
+)
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -42,6 +46,7 @@ def inputs() -> dict[Path, Path]:
 
 
 def build(stage: Path, archive: Path, *, force: bool) -> None:
+    verify_figure_allowlist()
     digest = archive.with_suffix(archive.suffix + ".sha256")
     if force:
         if stage != DEFAULT_STAGE.resolve() or archive != DEFAULT_ZIP.resolve():

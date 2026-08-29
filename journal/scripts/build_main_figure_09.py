@@ -85,7 +85,7 @@ ANIMAL = SOURCE / "animal_learning_francioni"
 OUT = ROOT / "figures" / "components" / "main_figure_09_native.pdf"
 
 # ── canvas geometry, in points ───────────────────────────────────────────
-CANVAS_H_PT = 493.0                      # 518.4 / 492 = 1.05 aspect
+CANVAS_H_PT = 483.0
 # One height per row.  Row 2 is the tallest because G's ladder is a drawing
 # with a floor -- four rungs, each carrying a tree glyph that has to stay
 # legible and up to two bands of type that cannot be flattened, plus the
@@ -121,6 +121,9 @@ ROW_H_PT = (104.0, 104.0, 154.0)
 # locks nothing either.  One horizontal gutter (36 pt) and one module width
 # (5.2 pt) serve every row.
 HGUTTER = 36.0
+# Compact the formerly empty inter-row bands rather than shrinking panel
+# contents.  This preserves nearly the same usable panel heights while
+# keeping the complete figure and caption within one manuscript page.
 VGUTTER = 48.0
 MARGINS = Margins(left=52.0, right=8.0, top=22.0, bottom=30.0)
 # The one reserve on the page is B's row-label column ("prespecified",
@@ -130,6 +133,7 @@ MARGINS = Margins(left=52.0, right=8.0, top=22.0, bottom=30.0)
 # their left, so the four panels of the two argument rows keep one width
 # instead of two.  16 pt clears the 14.4 pt the measurement asks for.
 LABEL_RESERVE_PT = 16.0
+C_LABEL_RESERVE_PT = 22.0   # C row labels -> clear of the letter column
 
 MINUS = "−"
 
@@ -140,15 +144,15 @@ CAPTION_NOTES = (
     "paired standardized effects; intervals bootstrap the complete "
     "target-level estimand.",
     "CAPTION: FIG09 D - The fixed-energy imposed field is "
-    "φ(α)=√α u∥+√(1−α)u⊥, where u∥ lies in the subtree-route span and u⊥ "
+    "φ(a)=√a u∥+√(1−a)u⊥, where u∥ lies in the subtree-route span and u⊥ "
     "lies in its orthogonal complement.",
-    "CAPTION: FIG09 G - The signed P+/P− fraction and common scalar fraction "
+    "CAPTION: FIG09 F - The signed P+/P− fraction and common scalar fraction "
     "partition the same pooled projection energy; one interval therefore "
     "bounds both complementary fractions.",
-    "CAPTION: FIG09 H - The evidence ladder is biological rather than "
+    "CAPTION: FIG09 G - The evidence ladder is biological rather than "
     "statistical: green, amber and open dashed steps denote supported, "
     "conditional and not established, respectively.",
-    "CAPTION: FIG09 H - The imposed-alignment rescue in D,E is a controlled "
+    "CAPTION: FIG09 G - The imposed-alignment rescue in D,E is a controlled "
     "sufficiency test and is not evidence that the measured cells use these "
     "routes for endogenous task credit.",
 )
@@ -162,8 +166,7 @@ LETTER_MOVES = (
     "CAPTION: FIG09 D imposed-alignment design",
     "CAPTION: FIG09 E controlled-alignment rescue",
     "CAPTION: FIG09 F signed P+/P− animal contrast",
-    "CAPTION: FIG09 G signed-mode energy",
-    "CAPTION: FIG09 H evidence boundary",
+    "CAPTION: FIG09 G evidence boundary",
     "CAPTION: coarse-surrogate and channel-sensitivity analyses remain in S22",
 )
 INK = COLORS["ink"]
@@ -201,7 +204,7 @@ FOREST_XLABEL = "paired standardized effect"
 # ── the held-out normalized MSE axis of panel B ─────────────────────────
 MSE_XLIM = (0.60, 1.02)
 MSE_XTICKS = (0.6, 0.7, 0.8, 0.9, 1.0)
-MSE_XLABEL = "held-out normalized MSE"
+MSE_XLABEL = "held-out normalized MSE  (lower is better)"
 
 # Complete-tree rules, same order and seeds as the frozen builder: exact
 # first, then the topology-matched routes and their two matched controls.
@@ -393,7 +396,7 @@ def panel_forest(ax, prespecified, all_scans, tree, original, expanded, *,
     raw_groups = (
         ("structure–function",
          (("prespecified", partial_a, ROUTE),
-          ("all scans", partial_b, ROUTE))),
+          ("all valid scans", partial_b, ROUTE))),
         ("full tree, MSE",
          (("vs shuffled", contrasts[0], C_SHUFFLE),
           ("vs random", contrasts[1], C_RANDOM))),
@@ -600,7 +603,7 @@ E_ROUTES = (
 E_TERMINALS = ("T_LL", "T_LR", "T_RL", "T_RR")
 E_SPAN_X = (-2.00, 1.90)
 E_SPAN_Y = (-0.34, 2.60)
-E_STAGES = ((0.0, "α = 0"), (0.4, "α = 0.4"), (1.0, "α = 1"))
+E_STAGES = ((0.0, "a = 0"), (0.4, "a = 0.4"), (1.0, "a = 1"))
 E_CAPSULE_PT = 5.2                       # an area mark, not a line weight
 E_ROUTE_TINT = (mix("mute", 26), mix("shunting", 42))
 E_ROUTE_INK = (GHOST, ROUTE)
@@ -617,20 +620,20 @@ def _blend(color_a, color_b, t):
     return tuple(a + float(t) * (b - a))
 
 
-def _imposed_field(alpha):
+def _imposed_field(a):
     """The four terminal loads of the imposed field at one alignment.
 
     ``perp`` alternates inside each route, so no combination of the two route
     indicators can express it; ``par`` is constant inside each route, so it is
     exactly a combination of them.  The square-root parameterization preserves
-    field energy and makes ``alpha`` the exact fraction of energy in the
+    field energy and makes ``a`` the exact fraction of energy in the
     ancestry-route span, matching the analyzed experiment and the Methods.
     """
     perp = np.array([1.0, -1.0, 1.0, -1.0])
     par = np.array([1.0, 1.0, -1.0, -1.0])
     perp = perp / np.linalg.norm(perp)
     par = par / np.linalg.norm(par)
-    return np.sqrt(1.0 - alpha) * perp + np.sqrt(alpha) * par
+    return np.sqrt(1.0 - a) * perp + np.sqrt(a) * par
 
 
 def _stage_frame(f, cell):
@@ -651,7 +654,7 @@ def _stage_frame(f, cell):
     return place, scale
 
 
-def _draw_stage(f, cell, alpha, label, *, first=False):
+def _draw_stage(f, cell, alignment_a, label, *, first=False):
     """One stage: the imposed field over the fixed pair of ancestry routes.
 
     The stage reads top to bottom -- its alignment value, the field it
@@ -676,8 +679,8 @@ def _draw_stage(f, cell, alpha, label, *, first=False):
     tree_cell = (cell[0], cell[1], cell[2], f.fy(tree_h_pt))
     place, _ = _stage_frame(f, tree_cell)
 
-    tint = _blend(*E_ROUTE_TINT, alpha)
-    route_ink = _blend(*E_ROUTE_INK, alpha)
+    tint = _blend(*E_ROUTE_TINT, alignment_a)
+    route_ink = _blend(*E_ROUTE_INK, alignment_a)
 
     # 1. the dictionary: one pale capsule per ancestry route, fixed geometry
     for chains in E_ROUTES:
@@ -707,7 +710,7 @@ def _draw_stage(f, cell, alpha, label, *, first=False):
     base = 0.5 * (strip_top + strip_bot)
     strip_pt = (strip_top - strip_bot) * f.h_pt
     reach_pt = max(4.0, min(17.0, 0.42 * strip_pt))
-    values = _imposed_field(alpha)
+    values = _imposed_field(alignment_a)
     xs = [place(point)[0] for point in E_TERMINALS]
     # The field's baseline is not one rule but one capsule per route, in the
     # route's own tint: what a route can carry is the level it holds over the
@@ -746,9 +749,9 @@ def _draw_stage(f, cell, alpha, label, *, first=False):
 def panel_alignment_design(ax):
     """C: one fixed dictionary, the task field turned into its span."""
     f = Frame(ax)
-    for index, (cell, (alpha, label)) in enumerate(
+    for index, (cell, (a, label)) in enumerate(
             zip(f.split(3, axis="x", gap_pt=4.0), E_STAGES, strict=True)):
-        _draw_stage(f, cell, alpha, label, first=index == 0)
+        _draw_stage(f, cell, a, label, first=index == 0)
     return ax
 
 
@@ -770,7 +773,7 @@ def panel_controlled_alignment(ax, curves):
     ax.set_ylim(-0.04, 1.06)
     ax.set_xticks([0.0, 0.5, 1.0])
     ax.set_yticks([0.0, 0.5, 1.0])
-    ax.set_xlabel("imposed subtree alignment")
+    ax.set_xlabel("imposed subtree alignment  a")
     ax.set_ylabel("held-out field capture")
     handles = []
     for _, label, color, marker, dashes in ALIGN_METHODS:
@@ -840,7 +843,7 @@ def panel_animal_pairs(ax, animal, mode=None):
     ax.set_yticks([-0.2, -0.1, 0.0, 0.1, 0.2])
     # Name the quantity exactly as the caption does; "dendritic
     # contrast" appeared nowhere in the caption or main text.
-    ax.set_ylabel("signed P+/P− contrast")
+    ax.set_ylabel("source residual contrast")
     # The sign convention, the six animals and the 6/6 sign count are all
     # reported in the caption; the panel carries only the paired geometry.
 
@@ -1006,13 +1009,13 @@ LADDER_OPEN = None                       # nothing established: an open step
 # own order, so the drawing order below is the reading order.
 EVIDENCE_RUNGS = (
     ("coordinate", "coordinate", "δᵤ", COLORS["additive"],
-     "retrospective, six animals", "F", LADDER_CONDITIONAL),
-    ("address", "subtree address", "δᵤ,ₖ", INK,
-     "modeled capacity only", "7g", LADDER_SUPPORTED),
+     "retrospective (n=6)", None, LADDER_CONDITIONAL),
+    ("address", "subtree route", "cᵤ,ₖ", INK,
+     "capacity, not use", None, LADDER_SUPPORTED),
     ("gain", "route gain", "ᾶₙ", INK,
-     "only in permissive regimes", "8f", LADDER_CONDITIONAL),
-    ("open", "endogenous use in vivo", None, MUTE,
-     "no morphology-specific alignment", "B,C", LADDER_OPEN),
+     "high conductance only", None, LADDER_CONDITIONAL),
+    ("open", "endogenous task use", None, MUTE,
+     "no anatomy alignment", None, LADDER_OPEN),
 )
 LADDER_KEY = (
     (LADDER_SUPPORTED, "supported"),
@@ -1023,7 +1026,7 @@ LADDER_KEY = (
 # The ladder band, in points: type is points, so every reserve here is one.
 RUNG_STEP_PT = 2.4           # the step a rung stands on (an area mark)
 RUNG_STEP_GAP_PT = 0.9       # a rung -> the step it stands on
-RUNG_GAP_PT = 4.6            # a step -> the NEXT rung up.  Five times the
+RUNG_GAP_PT = 4.0            # a step -> the NEXT rung up.  The compact
                              # gap above, so a step reads as belonging to
                              # the rung standing on it rather than as a
                              # divider floating between two of them.  The
@@ -1251,7 +1254,8 @@ def panel_evidence_boundary(ax):
     key_h = KEY_LINE_PT * len(key_rows)
     ladder_h = f.h_pt - key_h - KEY_GAP_PT
     n = len(EVIDENCE_RUNGS)
-    chips = [_text_w_pt(ax, rung[5], PT_SMALL) + 2 * CHIP_PAD_X_PT
+    chips = [(0.0 if not rung[5]
+              else _text_w_pt(ax, rung[5], PT_SMALL) + 2 * CHIP_PAD_X_PT)
              for rung in EVIDENCE_RUNGS]
 
     # 1. The glyph is as tall as the ladder can afford it: start from the
@@ -1267,16 +1271,17 @@ def panel_evidence_boundary(ax):
         text_w = f.w_pt - glyph_w - GLYPH_GAP_PT - RUNG_TEXT_R_PT
         rows, total, ok = [], (n - 1) * RUNG_GAP_PT, True
         for rung, chip_w in zip(EVIDENCE_RUNGS, chips, strict=True):
-            _, name, symbol, _, condition, _, _ = rung
+            _, name, symbol, _, condition, chip, _ = rung
             head_w = _text_w_pt(ax, name, PT_ANNOT)
             if symbol:
                 head_w += (RUNG_SYMBOL_GAP_PT
                            + _text_w_pt(ax, symbol, PT_ANNOT))
-            on_head = (head_w + CHIP_GAP_PT + chip_w
-                       <= text_w - CHIP_CLEAR_PT)
+            on_head = bool(chip) and (head_w + CHIP_GAP_PT + chip_w
+                                      <= text_w - CHIP_CLEAR_PT)
             lines = _wrap_condition(
                 ax, condition, width_pt=text_w,
-                reserve_pt=0.0 if on_head else chip_w + CHIP_GAP_PT)
+                reserve_pt=(0.0 if on_head or not chip
+                            else chip_w + CHIP_GAP_PT))
             if lines is None:
                 ok = False
                 break
@@ -1284,8 +1289,9 @@ def panel_evidence_boundary(ax):
             # name row when the name and its symbol leave the space, else the
             # first condition line -- so a tag never floats a line below the
             # statement it tags.
-            chip_line = -1 if on_head else len(lines) - 1
-            if not on_head:
+            chip_line = (-1 if on_head else
+                         (len(lines) - 1 if chip else None))
+            if chip and not on_head:
                 for line_no, line in enumerate(lines):
                     if (_text_w_pt(ax, line, PT_SMALL) + CHIP_GAP_PT + chip_w
                             <= text_w - CHIP_CLEAR_PT):
@@ -1330,13 +1336,13 @@ def panel_evidence_boundary(ax):
             f.text((text_x + f.fx(_text_w_pt(ax, name, PT_ANNOT)
                                   + RUNG_SYMBOL_GAP_PT), head_y), symbol,
                    size=PT_ANNOT, color=tone, ha="left")
-        if chip_line < 0:
+        if chip_line is not None and chip_line < 0:
             _chip(f, right, head_y, chip, width_pt=chip_w)
         ty += RUNG_NAME_PT
         for line_no, line in enumerate(lines):
             y = 1.0 - f.fy(ty + RUNG_LINE_PT / 2.0)
             f.text((text_x, y), line, size=PT_SMALL, color=MUTE, ha="left")
-            if line_no == chip_line:
+            if chip_line is not None and line_no == chip_line:
                 _chip(f, right, y, chip, width_pt=chip_w)
             ty += RUNG_LINE_PT
         y_pt += content_h + RUNG_STEP_GAP_PT
@@ -1376,29 +1382,35 @@ def build():
     # the widest slot.
     # Panels sharing a module span must share an axes-box width, which a
     # schematic and a data panel cannot, so every row mixes spans.
-    ax_a = canvas.panel("A", 0, 0, 5, schematic=True,
+    ax_a = canvas.panel("A", 0, 0, 6, schematic=True,
                         title="Response pipeline")
-    ax_b = canvas.panel("B", 0, 5, 7, grid="x",
+    ax_b = canvas.panel("B", 0, 6, 6, grid="x",
                         title="Complete-tree learning")
 
     # Row 1: the label-heavy effect forest gets a row of its own rather than
     # the tail of row 0, beside the manipulation it is later contrasted with.
-    ax_c = canvas.panel("C", 1, 0, 5, grid="x", title="Topology effects")
-    ax_d = canvas.panel("D", 1, 5, 7, schematic=True,
+    ax_c = canvas.panel("C", 1, 0, 7, grid="x", title="Topology effects")
+    ax_d = canvas.panel("D", 1, 7, 5, schematic=True,
                         title="Imposed alignment")
 
     # Row 2: the alignment result, the animal coordinate WITH its mode
     # partition folded in, and the boundary the whole page argues for.
     ax_e = canvas.panel("E", 2, 0, 4, grid="y", title="Alignment gain")
-    ax_f = canvas.panel("F", 2, 4, 4, grid="y", title="Signed contrast")
+    ax_f = canvas.panel("F", 2, 4, 4, grid="y",
+                        title="P+ − P− signed separation")
     ax_g = canvas.panel("G", 2, 8, 4, schematic=True,
                         title="Evidence ladder")
 
-    # The label-heavy effect forest needs slightly more than the common
-    # gutter.  Pay that reserve symmetrically across its own boundary so the
-    # neighbouring learning panel never collides with the forest labels.
-    canvas.declare_reserve("B", right=LABEL_RESERVE_PT)
-    canvas.declare_reserve("C", left=LABEL_RESERVE_PT)
+    # E and G reserve 16 pt for their y-axis furniture.  F has a comparable
+    # four-module slot but no natural left reserve, so declare the same amount
+    # explicitly and keep the closing row geometrically aligned.
+    canvas.declare_reserve("F", left=LABEL_RESERVE_PT)
+    # C's category labels are drawn as text, not tick labels, so measuring
+    # cannot see them: undeclared they hang past the left margin and into the
+    # column the row-leading panel letters own.  Declaring them insets the
+    # whole first column -- A, C and E together -- which keeps the letters
+    # leftmost without widening the page margin, and so without squeezing D.
+    canvas.declare_reserve("C", left=C_LABEL_RESERVE_PT)
 
     panel_measured_response_pipeline(ax_a)
     panel_tree_learning(ax_b, tree)

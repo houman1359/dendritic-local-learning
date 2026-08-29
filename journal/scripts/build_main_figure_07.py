@@ -88,7 +88,7 @@ CANVAS_H_PT = 482.0                      # 518.4 / 440 = 1.18 aspect
 # width, and every row-mate one height.
 HGUTTER = 34.0
 VGUTTER = 46.0
-MARGINS = Margins(left=48.0, right=13.0, top=22.0, bottom=28.0)
+MARGINS = Margins(left=61.0, right=13.0, top=22.0, bottom=28.0)
 
 INK = COLORS["ink"]
 MUTE = COLORS["mute"]
@@ -196,13 +196,14 @@ def morphology_geometry():
     centered = xyz - xyz.mean(axis=0, keepdims=True)
     _, _, basis = np.linalg.svd(centered, full_matrices=False)
     projected = centered @ basis[:2].T
-    projected /= max(np.ptp(projected[:, 0]), np.ptp(projected[:, 1]))
+    span_um = max(np.ptp(projected[:, 0]), np.ptp(projected[:, 1]))
+    projected /= span_um
     positions = {int(seg): point for seg, point
                  in zip(cell.segment_id.to_numpy(int), projected, strict=True)}
     rows = {int(row.segment_id): row for row in cell.itertuples(index=False)}
     parent = {int(row.segment_id): int(row.parent_segment_id)
               for row in cell.itertuples(index=False)}
-    return cell, positions, rows, parent
+    return cell, positions, rows, parent, span_um
 
 
 def model_field_curves():
@@ -275,8 +276,10 @@ def cross_animal_rows():
     controls = [("random paths", "vs random"),
                 ("depth-only bins", "vs depth"),
                 ("shuffled ancestry", "vs shuffled")]
-    animals = [("minnie65 v661", "minnie65", C_MINNIE, "s", -0.13, 0),
-               ("Pinky v185", "Pinky v185", C_PINKY, "o", 0.13, 20)]
+    animals = [("minnie65 v661", "MICrONS mouse 1 (n=47)",
+                C_MINNIE, "s", -0.13, 0),
+               ("Pinky v185", "MICrONS mouse 2 (n=10)",
+                C_PINKY, "o", 0.13, 20)]
     out = []
     for animal, label, color, marker, offset, seed_shift in animals:
         subset = contrasts[contrasts.animal.eq(animal)]
@@ -358,14 +361,18 @@ def capture_axis(ax, *, left: bool):
 
 # ── A: the reconstruction, hue = E/I balance, width = mapped burden ──────
 def panel_arbor(ax):
-    cell, positions, rows, parent = morphology_geometry()
+    cell, positions, rows, parent, span_um = morphology_geometry()
     blank_axes(ax)
     w_pt, h_pt = box_pt(ax)
 
-    e_count = cell.E_count.to_numpy(float)
-    i_count = cell.I_count.to_numpy(float)
-    total = e_count + i_count
-    balance = np.divide(e_count - i_count, total,
+    # Both visual channels encode mapped contact area.  Earlier drafts used
+    # contact counts in the renderer while the panel and caption said area.
+    # Using E_size/I_size here makes the graphic agree with the reported
+    # anatomical quantity without changing any downstream numerical result.
+    e_area = cell.E_size.to_numpy(float)
+    i_area = cell.I_size.to_numpy(float)
+    total = e_area + i_area
+    balance = np.divide(e_area - i_area, total,
                         out=np.zeros_like(total), where=total > 0)
     burden = np.log1p(total)
     burden /= max(burden.max(), 1e-12)
@@ -412,6 +419,19 @@ def panel_arbor(ax):
                          facecolor=COLORS["soma"], edgecolor="white",
                          lw=LW_EDGE, zorder=6))
 
+    # The PCA projection is isotropically scaled, so a horizontal 50-µm bar
+    # remains metric after fitting the reconstruction into the panel.
+    xy_raw = np.asarray(list(positions.values()), dtype=float)
+    anchor = np.asarray([xy_raw[:, 0].min(), xy_raw[:, 1].min()])
+    scale_points = to_axes(np.vstack([anchor,
+                                      anchor + [50.0 / span_um, 0.0]]))
+    scale_width = float(scale_points[1, 0] - scale_points[0, 0])
+    scale_x0, scale_y = 0.055, 0.405
+    ax.plot([scale_x0, scale_x0 + scale_width], [scale_y, scale_y],
+            color=INK, lw=LW_DATA, solid_capstyle="butt", zorder=7)
+    ax.text(scale_x0 + scale_width / 2.0, scale_y - 0.032, "50 µm",
+            ha="center", va="top", fontsize=PT_SMALL, color=INK, zorder=7)
+
     # Slim labelled key for the signed hue, in its own band under the arbor:
     # the ramp with its two poles named at the ends, then the width encoding.
     gradient = np.linspace(0.0, 1.0, 256)[None, :]
@@ -436,7 +456,8 @@ def panel_arbor(ax):
                 fontsize=PT_SMALL, color=INK)
     ax.text(0.5 * (bar[0] + bar[1]), 0.290, "(E " + MINUS + " I) / (E + I)",
             ha="center", va="center", fontsize=PT_SMALL, color=INK)
-    ax.text(0.5, 0.038, "width = E + I", ha="center", va="center",
+    ax.text(0.5, 0.038, "width = log mapped area (E + I), 5 levels",
+            ha="center", va="center",
             fontsize=PT_SMALL, color=MUTE)
 
 
@@ -651,8 +672,8 @@ def panel_cross_animal(ax, labels, animals):
     # belong to, staggered so the two names never share a line.
     top = y[0]
     for label, color, offset, x_at, y_at in (
-            ("minnie65", C_MINNIE, -0.13, 0.268, 0.30),
-            ("Pinky v185", C_PINKY, 0.13, 0.527, 0.70)):
+            ("MICrONS mouse 1 (n=47)", C_MINNIE, -0.13, 0.268, 0.30),
+            ("MICrONS mouse 2 (n=10)", C_PINKY, 0.13, 0.527, 0.70)):
         ax.plot([x_at, x_at], [top + offset + 0.10, top + y_at - 0.13],
                 color=MUTE, lw=LW_HAIR, solid_capstyle="round", zorder=2)
         ax.text(x_at, top + y_at, label, ha="center", va="center",

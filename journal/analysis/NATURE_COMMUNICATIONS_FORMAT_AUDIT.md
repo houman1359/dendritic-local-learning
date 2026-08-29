@@ -9,19 +9,19 @@ The 9 numbered figures occupy 9 figure environments;
 | Item | Current | Guidance | Status |
 |---|---:|---:|---|
 | Title | 7 words | 15 | PASS |
-| Abstract | 200 words | 200 | PASS |
-| Introduction + Results + Discussion | 7558 approximate words | 5000 | ADVISORY |
+| Abstract | 199 words | 200 | PASS |
+| Introduction + Results + Discussion | 7735 approximate words | 5000 | ADVISORY |
 | Main display items | 9 figures | 10 | PASS |
 | References | 62 entries (general guide) | 70 | PASS |
-| Figure 1 legend | 206 words | 350 | PASS |
-| Figure 2 legend | 177 words | 350 | PASS |
-| Figure 3 legend | 267 words | 350 | PASS |
-| Figure 4 legend | 245 words | 350 | PASS |
-| Figure 5 legend | 313 words | 350 | PASS |
-| Figure 6 legend | 247 words | 350 | PASS |
-| Figure 7 legend | 196 words | 350 | PASS |
-| Figure 8 legend | 150 words | 350 | PASS |
-| Figure 9 legend | 315 words | 350 | PASS |
+| Figure 1 legend | 247 words | 350 | PASS |
+| Figure 2 legend | 203 words | 350 | PASS |
+| Figure 3 legend | 192 words | 350 | PASS |
+| Figure 4 legend | 157 words | 350 | PASS |
+| Figure 5 legend | 207 words | 350 | PASS |
+| Figure 6 legend | 258 words | 350 | PASS |
+| Figure 7 legend | 226 words | 350 | PASS |
+| Figure 8 legend | 191 words | 350 | PASS |
+| Figure 9 legend | 220 words | 350 | PASS |
 
 Official guidance:
 

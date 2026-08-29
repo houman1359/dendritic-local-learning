@@ -208,7 +208,7 @@ def panel_a(ax):
     # a coordinate, since a blue arrow means delivered error everywhere else.
     f.arrow((soma[0] + f.fx(7.2), soma[1]), (0.430, soma[1]), color=MUTE,
             lw=LW_ERR_ARROW, head=3.6, zorder=5)
-    ax.text(0.215, label_y, "shared coordinate  δᵤ", ha="center",
+    ax.text(0.215, label_y, "one neuronal coordinate  δᵤ", ha="center",
             va="center", fontsize=PT_ANNOT, color=BLUE)
 
     # The tree fills its sub-cell edge to edge and starts exactly one
@@ -219,7 +219,7 @@ def panel_a(ax):
     tree_ax, tree_box = tree_inset(
         f, (tree_x0, f.fy(13.0), 1.0 - tree_x0, 1.0 - f.fy(13.0)),
         mode="address", K=4, scale=0.95, arrow_scale=0.65)
-    ax.text(tree_box[0] + tree_box[2] / 2.0, label_y, "subtree addresses  δᵤ,ₖ",
+    ax.text(tree_box[0] + tree_box[2] / 2.0, label_y, "subtree coefficients  cᵤ,ₖ",
             ha="center", va="center", fontsize=PT_ANNOT, color=INK)
 
 
@@ -278,7 +278,7 @@ def panel_b(ax):
             lw=LW_EDGE, head=3.6)
     f.disc((delta_x, 0.605), 2.6, fill=COLORS["bp"], edge="white",
            lw=LW_HAIR, zorder=8)
-    ax.text(delta_x, 0.605 + f.fy(6.5), "δ₀", ha="center",
+    ax.text(delta_x, 0.605 + f.fy(6.5), "δₒᵤₜ", ha="center",
             va="bottom", fontsize=PT_ANNOT, color=COLORS["bp"])
     ax.text(unit_x, 0.075, "N dendritic E/I units", ha="center",
             va="center", fontsize=PT_SMALL, color=MUTE)
@@ -310,7 +310,7 @@ def panel_b(ax):
 # sets...") is prose, not graphic content, and has moved to the caption.
 STAGES = (
     (dict(mode="coordinate"), "coordinate", "δᵤ", BLUE, "which neuron"),
-    (dict(mode="address", K=4), "address", "δᵤ,ₖ", INK, "which subtree"),
+    (dict(mode="address", K=4), "address", "cᵤ,ₖ", INK, "which subtree"),
     (dict(mode="gain"), "gain", "ᾶₙ", INK, "how strongly"),
 )
 
@@ -410,7 +410,7 @@ def panel_d(ax):
     kx = key[0] + f.fx(4.0)
     lx = key[0] + f.fx(11.0)
     head_y = key[1] + key[3] - f.fy(8.0)
-    ax.text(key[0], head_y, "local factors of eᵢ", ha="left", va="center",
+    ax.text(key[0], head_y, "directed-tree eligibility  eᵢ", ha="left", va="center",
             fontsize=PT_SMALL, color=MUTE, zorder=6)
     # mute scaffolding rule instead of a box: it groups the three rows and
     # carries the column out to the cell edge without a second key convention
@@ -442,9 +442,9 @@ def panel_d(ax):
     ax.text(lx, rows[2], "Rₙᵗᵒᵗ", ha="left", va="center",
             fontsize=PT_SMALL, color=INK, zorder=6)
 
-    ax.text(0.5, f.fy(23.0), "∂ℒ / ∂gᵢ = xᵢ (Eᵢ − Vₙ) qₙ",
+    ax.text(0.5, f.fy(23.0), "directed tree:  ∂ℒ / ∂gᵢ = [xᵢ Rₙᵗᵒᵗ (Eᵢ − Vₙ)] [∂ℒ / ∂Vₙ]",
             ha="center", va="center", fontsize=PT_ANNOT, color=INK)
-    ax.text(0.5, f.fy(5.0), "directed tree:  qₙ = Rₙᵗᵒᵗ δ₀,ᵤ ᾶₙ",
+    ax.text(0.5, f.fy(5.0), "general adjoint:  = xᵢ (Eᵢ − Vₙ) qₙ,   qₙ = Rₙᵗᵒᵗ ∂ℒ / ∂Vₙ",
             ha="center", va="center", fontsize=PT_SMALL, color=MUTE)
 
 
