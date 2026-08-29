@@ -48,138 +48,163 @@
 \linenumbers
 
 \begin{abstract}
-Learning requires assigning a circuit-level outcome to the synapses that
-caused it. Backpropagation solves this problem exactly, but its error signals
-are not local. We show that a point-neuron gradient separates into a
-synapse-local eligibility trace and a neuron-specific learning signal, and
-derive its extension to a conductance-based dendritic tree. Each conductance
-gradient is a local product of presynaptic activity,
-input resistance and driving force, multiplied by a compartment-specific error
-transported through the arbor. This factorization separates three questions:
-which neuron should learn, which dendritic locations need distinct signals and
-how conductance controls their gain. On standard image tasks, identifying the
-correct neuron provides most of the benefit; resolving dendritic paths adds
-little. A controlled branch-conflict task shows that branch-specific signals
-become necessary when different branches require opposing updates. Separately,
-a stochastic operator bound predicts when restricted routes retain aligned
-signal while excluding sufficient noise. In mechanism-matched synthetic
-tasks, serial dendritic depth is useful
-only when its nonlinear operations match the required computation.
-Reconstructed arbors provide sparse candidate routes, but the one-mouse
-MICrONS visual-response cohort does not reveal their endogenous use. Dendritic
-structure is therefore a conditional substrate for routing local credit, not a
-general solution to credit assignment.
+Learning changes the weights of a neural network to improve an objective.
+Credit assignment asks which weights should change and by how much.
+Backpropagation computes exact gradients, but uses backward information not
+locally available to each weight. For a point-neuron network,
+the gradient of each incoming weight factorizes into a weight-specific
+eligibility and a neuron-specific learning signal. We extend this result to
+conductance-based dendritic trees, where synaptic weights are conductances
+distributed across compartments. Each gradient combines local eligibility with
+a compartment-specific error transported through the arbor, separating neuron
+identity, dendritic address and conductance-dependent route gain. We represent
+restricted feedback as a credit operator mapping gradients to local updates; a
+stochastic bound predicts when it preserves aligned signal while rejecting
+noise. On image tasks, neuron-specific feedback explains most of the
+improvement from a scalar broadcast to exact feedback; path resolution adds
+little. In a controlled branch-conflict task, branch-specific feedback helps
+when branches require opposing updates. In mechanism-matched tasks, serial
+depth helps only when its nonlinear operations match task structure.
+Reconstructed arbors provide sparse candidate routes, but a one-mouse MICrONS
+visual-response cohort reveals no preferential alignment with them.
+Dendritic structure therefore supports local credit assignment under matched
+conditions rather than replacing backpropagation.
 \end{abstract}
 
 \section*{Introduction}
 
-Learning in a network is a credit-assignment problem. A change at one synapse
-can influence many downstream neurons before it affects behavior or a task
-loss. The synapse must therefore be modified according to a consequence that
-is computed elsewhere in the circuit. Backpropagation provides the exact
-mathematical solution by applying the chain rule from the loss to every
-parameter \citep{rumelhart1986learning}. Although standard backpropagation is
-not itself a biological mechanism, it defines the error information that a
-biological learning rule must approximate
+Learning in a neural network adjusts its parameters to improve an objective.
+Most parameters are weights that set the strengths of connections between
+units. Because the objective is evaluated at the output, an internal weight
+acts through downstream computations before its consequence is known.
+\emph{Credit assignment} determines how changing each weight would affect the
+objective and therefore how it should be updated.
+
+For a differentiable network, backpropagation applies the chain rule backward
+to compute the exact gradient of every weight \citep{rumelhart1986learning}. In
+recurrent or steady-state networks, the same calculation can be written as an
+adjoint system \citep{almeida1987asynchronous,pineda1987recurrent}. These
+calculations define the required information, not a biological mechanism.
+Local activity does not determine this gradient, which also depends on
+downstream weights, nonlinearities and the objective.
+A biological rule must combine locally available information with a limited
+signal carrying this downstream consequence
 \citep{whittington2019theories,lillicrap2020backprop}.
 
-For a point neuron, this requirement has a familiar three-factor form. The
-gradient of an incoming synapse is the product of a local eligibility
-trace---set by pre- and postsynaptic variables---and a task-dependent learning
-signal assigned to the postsynaptic neuron. Hebbian plasticity describes the
-local association \citep{hebb1949organization}; supervised and reinforcement
-learning add an outcome-dependent factor
-\citep{fremaux2016threefactor}. We use \emph{learning signal} for this
-task-dependent factor and reserve \emph{exact error} for the derivative
-computed by backpropagation. A rule is local here when the synapse combines its
-own eligibility with an available learning signal. The signal may still depend
-on a global objective.
+The point-neuron abstraction exposes this separation. A point unit combines
+weighted inputs into one state and produces one output. Each incoming-weight
+gradient factorizes into a connection-specific \emph{eligibility}, determined
+by the input and local state, and a task-dependent \emph{learning signal}
+assigned to the unit. Biologically, such a weight represents synaptic efficacy.
+Hebbian plasticity describes the local association between pre- and
+postsynaptic variables \citep{hebb1949organization}; three-factor rules add an
+outcome-dependent signal \citep{fremaux2016threefactor}. We call this
+task-dependent factor a \emph{learning signal}. Backpropagation supplies its
+exact value, whereas a candidate biological mechanism supplies an available
+approximation. A rule is \emph{local} here when a weight uses its own
+eligibility and an available learning signal; that signal may still depend on
+the network-wide objective.
 
-Biologically motivated learning theories differ largely in how they construct
-this signal. Feedback alignment uses a separate feedback pathway
+Biologically motivated theories differ in how they construct and communicate
+learning signals. Feedback alignment uses a separate feedback pathway
 \citep{lillicrap2016feedback,nokland2016dfa}; equilibrium, predictive and
 prospective methods infer errors or target states from network dynamics
 \citep{scellier2017equilibrium,whittington2017predictive,
-song2024prospective}; and eligibility propagation explicitly combines
-synaptic traces with neuron-specific learning signals
-\citep{bellec2020eprop}. These mechanisms are distinct, but they expose a
-common information constraint. One scalar broadcast to a layer cannot specify
-different updates for different neurons, whereas one signal per neuron can
-\citep{werfel2005learning,lillicrap2016feedback}. We refer to this number of
-independently communicated signals as the \emph{feedback bandwidth}.
+song2024prospective}; and eligibility propagation combines synaptic traces with
+neuron-specific signals \citep{bellec2020eprop}. Despite these mechanistic
+differences, feedback can assign independent task-dependent factors only to
+units that it addresses separately. A scalar broadcast cannot specify
+independent task-dependent factors for different units, whereas one signal per
+unit can \citep{werfel2005learning,lillicrap2016feedback}. A shared scalar does
+not equalize weights: each retains its own eligibility, while only the
+task-dependent factor is shared. \emph{Feedback bandwidth} is the number of
+independently communicated signals at a given routing level, across neurons or
+across locations within one neuron.
 
-Point-neuron descriptions stop at the cell boundary, but a biological neuron
-contains thousands of synapses distributed over a branching dendritic arbor.
-Cable filtering, nonlinear dendritic integration and spatially organized
-inhibition make different locations within the same neuron functionally
-distinct \citep{rall1962dendrites,koch1999biophysics,
+A point-neuron model collapses a cell to one state and one learning signal. A
+biological neuron instead receives thousands of synaptic inputs across a
+branching dendritic arbor. Cable filtering, nonlinear integration and spatially
+organized inhibition make dendritic locations functionally distinct
+\citep{rall1962dendrites,koch1999biophysics,
 poirazi2003pyramidal,london2005dendritic,spruston2008pyramidal,
-branco2010single,larkum2013cellular}. Once feedback has selected the correct
-neuron, a second question therefore arises: do different parts of its arbor
-need different learning signals? We call the support of such a signal a
-\emph{dendritic address}. For example, one branch point can define an address
-containing all of its descendant synapses. A set of addresses provides a
-low-dimensional basis for approximating the exact spatial pattern of credit
-within a neuron.
+branco2010single,larkum2013cellular}. Once feedback selects a neuron, must it
+also distinguish locations within that neuron? We call the set of locations
+reached by one signal a \emph{dendritic address}. A branch point, for example,
+defines an address containing its descendant compartments and their synaptic
+inputs. The indicator patterns of several addresses span a low-dimensional
+subspace used to approximate the exact spatial distribution of credit.
 
-Conductance adds a further distinction. Excitatory and inhibitory synapses
-change both current and total membrane conductance. An inhibitory conductance
-can reduce local input resistance and attenuate other inputs even when its own
-net current is small; this is shunting inhibition
+The physical meaning of a weight also changes in a conductance-based dendritic
+model: the synaptic weight is a conductance rather than an additive coefficient.
+Excitatory and inhibitory conductances change both injected current and total
+membrane conductance. An inhibitory conductance can therefore lower input
+resistance and attenuate other inputs even when its own net current is small;
+this is shunting inhibition
 \citep{holt1997shunting,chance2002gain,gidon2012inhibition,
-lovettbarron2012regulation}. Because dendritic input resistance also controls
-how voltage perturbations propagate, conductance can change the gain with
-which a learning signal reaches downstream synapses. We call this scaling the
-\emph{route gain}. Neuron identity, dendritic address and route gain are thus
-three separate components of dendritic credit assignment.
+lovettbarron2012regulation}. Input resistance also controls how voltage
+perturbations propagate, so conductance can rescale the transport of a somatic
+loss derivative to a dendritic compartment. We call this scaling
+the \emph{route gain}. Neuron identity, dendritic address and route gain specify
+which neuron should learn, which locations need distinct signals and how
+strongly each signal should act.
 
-Dendrites already play central roles in learning theories. Somatic prediction,
-segregated basal and apical compartments, interneuron circuits, bursts and
-prospective dynamics have all been used to generate or compare teaching
-signals \citep{urbanczik2014dendritic,schiess2016somatodendritic,
+Dendrites already contribute to theories of somatic prediction, segregated
+basal and apical learning, interneuron-mediated teaching, burst-dependent
+plasticity and prospective dynamics
+\citep{urbanczik2014dendritic,schiess2016somatodendritic,
 guerguiev2017segregated,sacramento2018dendritic,payeur2021burst,
 ellenberger2026gle,richards2019dendritic}. Cable sensitivities have also been
 used to optimize the input--output function of a reconstructed neuron
-\citep{bicknell2021synaptic}. These studies show how dendrites can participate
-in learning. A different question remains unresolved: when does the branching
-structure of a complete arbor provide useful resolution for routing a
-circuit-level learning signal, and when is one signal per neuron sufficient?
+\citep{bicknell2021synaptic}. These studies establish that dendrites can
+participate in learning. The unresolved question is when the branching
+structure of a complete arbor provides useful resolution beyond one learning
+signal per neuron.
 
-We address this question from the exact gradient outward. We first derive a
-local learning rule for a conductance-based dendritic tree and show that the
-gradient remains an eligibility multiplied by a learning signal, but the
-single point-neuron error becomes a field over dendritic compartments. We then
-compare progressively richer feedback: a layer-wide scalar, one signal per
-neuron, several signals assigned to dendritic subtrees and the exact
-compartment-resolved error. A stochastic credit-operator theory next predicts
-when restricted routes retain useful signal while rejecting noise. Controlled
-tasks then probe branch conflict directly and test hierarchy matching under
-restricted feedback.
-Finally, we separate backward routing from the forward computational role of
-dendritic depth and test route capacity, conductance-dependent gain and
-functional alignment in reconstructed arbors. This sequence yields a
-conditional answer: dendritic structure helps only when the task requires
-credit distinctions that match the available addresses and their gains
-(Fig.~\ref{fig:framework}).
+We therefore ask what information the exact dendritic gradient requires, when
+a restricted set of feedback routes can retain useful signal while excluding
+noise, and whether reconstructed arbors provide and regulate such routes. We
+begin from the exact gradient and derive a local rule for a conductance-based
+tree. The point-neuron eligibility--signal factorization remains, but one
+neuron-specific error becomes a field over compartments. We compare a
+layer-wide scalar, one signal per neuron, several subtree signals and the exact
+compartment-resolved error. Grouped-point controls give a non-dendritic model
+the same feedback operator, separating signal resolution from dendritic
+implementation.
+
+We represent each restricted feedback pathway as a \emph{credit operator} that
+maps an exact or noisy gradient to the update available to the local rule. We
+derive a stochastic bound on its expected one-step loss reduction and use it to
+organize the experiments by feedback bandwidth, task--route alignment and
+noise. On image tasks, selecting the neuron explains
+most of the improvement over a scalar broadcast; path resolution adds little.
+In a controlled branch-conflict task, subtree routes help when branches require
+conflicting updates. We distinguish this backward-routing problem from forward
+computation: in the mechanism-matched tasks tested, serial depth helps only when
+its nonlinear stages match the task hierarchy. Reconstructed arbors provide
+sparse candidate routes, and conductance regulates their gain only in a
+permissive regime; a one-mouse MICrONS visual-response cohort reveals no
+preferential alignment with those routes. Thus dendritic structure helps local
+credit assignment when task
+distinctions match available addresses and gains, not as a generic consequence
+of adding branches or depth (Fig.~\ref{fig:framework}).
 
 \section*{Results}
 
-We proceed from the information required by the learning rule. After deriving
-the exact point-neuron and dendritic gradients, we test neuron identity,
-within-neuron address resolution and the signal--noise conditions under which
-restricted routes help. We then separate backward routing from forward serial
-computation and close by testing route capacity, conductance-dependent gain and
-functional alignment in reconstructed arbors. Exact backpropagation provides
-the information ceiling; point and grouped-point controls distinguish an
-informational effect from a specifically dendritic implementation.
+We proceed from the exact gradient to progressively restricted feedback and
+then to biological route capacity, gain and alignment. Exact backpropagation is
+the information ceiling; point and grouped-point controls distinguish feedback
+resolution from a dendritic implementation.
 
 \begin{figure}[tbp]
 \centering
 \includegraphics[width=\textwidth]{main/figure_01.pdf}
 \caption{\textbf{Credit assignment from a point neuron to a dendritic tree.}
-\textbf{A}, At a point neuron, each synapse combines a local eligibility trace
-with one neuron-specific learning signal. A dendritic tree introduces
-locations that can receive distinct refinements of that signal. \textbf{B}, A
+\textbf{A}, At a point unit, each incoming-weight gradient is the product of a
+connection-specific eligibility and one neuron-specific learning signal. In a
+dendritic neuron, the adjustable weights are synaptic conductances distributed
+across locations that can receive distinct learning-signal values. The change
+from \(\delta_u\) to \(c_{u,k}\) resolves one neuron-level coordinate into
+several within-neuron route coefficients. \textbf{B}, A
 circuit-level loss first assigns a derivative \(\delta_{\rm out}\) to each
 network output. Feedback transports this information to produce the
 neuron-specific signal \(\delta_u\); one such coordinate is shared within, not
@@ -254,7 +279,8 @@ We now replace point neuron \(u\) with a rooted dendritic tree whose soma is
 compartment \(n=0\). Compartment \(n\) has voltage \(V_n\) and receives
 synapses \(i\in\mathcal S_n\). Synapse \(i\) has conductance \(g_i\),
 presynaptic activity \(x_i\) and reversal potential \(E_i\). The compartment
-also receives leak conductance \(g_n^L\) and signals
+also has membrane capacitance \(C_n\), leak conductance \(g_n^L\) with reversal
+potential \(E_L\), and signals
 \(a_c=f_c(V_c)\) from its children \(c\in\mathcal C_n\), coupled by
 \(g_{c\to n}^{\mathrm{den}}\). The soma produces the neuronal output
 \(y_u=f_0(V_0)\). In the directed-tree model, the voltage obeys the current
@@ -353,10 +379,15 @@ the soma. A point neuron has one exact learning signal. A dendritic tree has a
 spatial field of exact compartment errors obtained by transporting the somatic
 error through these path gains.
 
-Shunting acts directly on this transport. Consider the partial effect of an
-added inhibitory conductance \(G_k^I\) on the conductance-only path gain
-\(\alpha_n^{\mathrm{cond}}\), holding the state-dependent branch derivatives
-and coupling conductances fixed. Define
+To isolate direct conductance effects from branch-nonlinearity derivatives,
+define the conductance-only path gain
+\(\alpha_n^{\mathrm{cond}}\equiv
+\prod_{(i\to k)\in\operatorname{path}(n\to0)}
+R_k^{\mathrm{tot}}g_{i\to k}^{\mathrm{den}}\), obtained from
+\(\widetilde\alpha_n\) by omitting the branch derivatives \(f_i'(V_i)\).
+Shunting acts directly on this factor. Let \(G_k^I\) be an added inhibitory
+conductance contributing to \(g_k^{\mathrm{tot}}\), with the coupling
+conductances fixed. Define
 \(\mathcal A(n)=\{k:(i\to k)\in\operatorname{path}(n\to0)\}\), the parent
 endpoints of the path edges. These are the strict ancestors of \(n\) (including
 the soma if its conductance is varied). Then
@@ -365,8 +396,8 @@ the soma if its conductance is varied). Then
 =-R_k^{\mathrm{tot}}\,\mathbf 1\!\left[k\in\mathcal A(n)\right].
 \label{eq:shuntpathgain}
 \end{equation}
-The direct effect is zero for routes that do not pass through compartment
-\(k\), and it attenuates routes that do. Its magnitude is set by the local
+The direct effect is zero unless \(k\in\mathcal A(n)\), and it attenuates the
+route when \(k\in\mathcal A(n)\). Its magnitude is set by the local
 input resistance. Equation~\ref{eq:shuntpathgain} identifies a possible
 route-gain mechanism, not a learning advantage: a physical shunt also changes
 the forward voltage, driving forces and branch derivatives, and the spatial
@@ -1438,9 +1469,10 @@ directed tree, $q_n=R_n^{\mathrm{tot}}\delta^V_{n,u}$. The circuit-output
 derivative in Fig.~\ref{fig:framework} is $\delta_{\rm out}$ and is distinct
 from the somatic compartment index $n=0$.
 
-The feedback bandwidth $K$ is the number of independently communicated
-learning signals per neuron. The coefficient vector $\bm c_u$ contains those
-$K$ route signals, the route matrix $A_u$ assigns them to compartments, and
+Feedback bandwidth is the number of independently communicated learning
+signals at the routing level under study. For within-neuron routing, $K$ is the
+number of route signals per neuron. The coefficient vector $\bm c_u$ contains
+those $K$ signals, the route matrix $A_u$ assigns them to compartments, and
 its column space is the route span. We reserve
 $D_{\mathrm r}$ for backward feedback-route resolution and
 $D_{\mathrm p}$ for the number of serial stages in the forward model. Display
