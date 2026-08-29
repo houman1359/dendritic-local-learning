@@ -9,7 +9,7 @@ This document separates tasks that can be checked from the repository from decis
 - [ ] **Approve authorship.** All authors must approve the title, author order, affiliations, corresponding authors, CRediT statement, acknowledgements, funding statement, competing-interests statement, and submitted files. Maceo Richards remains an author because the integrated Article retains theory and experiments from the earlier work.
 - [x] **Finish the journal-package evidence freeze.** The clean Figure 2 cohort,
       all figures, Source Data, provenance hashes, and strict audit are complete.
-      The final clean-checkout repeat remains listed below.
+      The clean-commit repeat and reviewer-archive rebuild are recorded below.
 - [ ] **Create immutable data and code records.** Deposit the final derived source data and software release in an appropriate stable repository. Add the public or reviewer-accessible URL, immutable version or commit, DOI/accession when available, license, and access conditions to the Data availability and Code availability statements.
 - [ ] **Resolve the MICrONS proxy-table status.** Confirm a citable public release and access terms for `synapse_target_predictions_ssa_v2`. If that cannot be done, retain proxy-derived results only as clearly labeled secondary analyses and ensure that the direct-type public analysis carries the principal robustness claim.
 
@@ -35,7 +35,9 @@ This document separates tasks that can be checked from the repository from decis
 - [ ] Confirm that exact transport, fitted coefficients and dense projections are labeled as information oracles wherever used.
 - [ ] Run a final overlap review against arXiv:2607.03556 and any proceedings version. Cite reused foundations and replace avoidable verbatim overlap.
 - [ ] Check every citation against the final bibliographic record, including spelling, year, journal, volume, pages or article number and DOI where appropriate.
-- [ ] Verify that all figures remain legible at journal size, use accessible colors, contain embedded fonts, have no overlapping labels, and agree with their legends and in-text callouts.
+- [x] All main and supplementary figures were inspected at journal size; their
+      labels remain legible, fonts are embedded, adjacent panels do not overlap,
+      and the legends and in-text callouts agree with the rendered panels.
 
 ## Data, code and reproducibility
 
@@ -44,18 +46,19 @@ This document separates tasks that can be checked from the repository from decis
       grouped-point, independent H2, task-family, phase-plane,
       wiring-efficiency and two-animal structural-capacity data. Its manifest
       matches the nine-main-figure and twenty-nine-supplementary-figure layout.
-- [ ] Commit the current integrated Article, CIFAR-10 confirmation, figures and
-      workshop source, then rebuild the reviewer software archive from that
-      clean commit. The August 20--21 archive from commit `e99ef6b0` predates
-      the current integration and must not be submitted.
+- [x] The integrated Article, CIFAR-10 confirmation, figures and workshop source
+      are committed, and the reviewer software archive has been rebuilt from a
+      clean commit. Verify its supplied SHA-256 sidecar immediately before
+      upload.
 - [x] Recorded the source commit, package versions, accelerator model, random
       seeds, run manifests, and checkpoint or output hashes for the reported
       artificial-network results.
 - [ ] Confirm that all public-source identifiers are current: MICrONS `minnie65_public`, materialization 1822, the official v661 release, the source-study DOI, DANDI Dandiset 000402 and the seven assets used here.
 - [ ] Replace the draft DANDI version with an immutable version or DOI if one becomes available; otherwise state the live status accurately and provide asset identifiers.
-- [ ] Repository tests, numerical checks, manuscript builds and strict main/SI
-      submission audits pass in the working tree; repeat them from the final
-      clean commit and record that source commit and the rebuilt archive hashes.
+- [x] Repository tests, numerical checks, manuscript builds and strict main/SI
+      submission audits were repeated from the clean committed source. The
+      release metadata records that commit, and each rebuilt archive has a
+      SHA-256 sidecar.
 - [x] Freeze the current technical package only after all required files and provenance hashes are final, then build it with `python scripts/build_submission_bundle.py`. Rebuild the bundle after any author-day metadata or disclosure changes.
 
 ## Declarations requiring author confirmation

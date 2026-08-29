@@ -17,10 +17,10 @@ Active materials:
 - `../main_with_supplementary.pdf`: combined main Article and Supplementary
   Information reading copy.
 
-The August 20--21 `nature_communications_bundle/`, software, Overleaf and
-combined submission archives predate the current CIFAR-10, figure and text
-integration and must not be submitted. Rebuild them only from the final clean
-commit after the author-side gates in `AUTHOR_ACTIONS.md` are resolved.
+The Nature Communications, reviewer-software and Overleaf archives have been
+rebuilt from the integrated clean source. Their `.sha256` sidecars should be
+verified immediately before upload. Rebuild every archive after any further
+change to the manuscript, figures, analysis code or submission materials.
 
 Build the active bundle only after compiling the paper and supplement,
 refreshing Source Data and resolving author-day metadata:
