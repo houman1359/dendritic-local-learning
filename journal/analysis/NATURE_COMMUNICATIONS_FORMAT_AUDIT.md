@@ -21,7 +21,7 @@ The 9 numbered figures occupy 9 figure environments;
 | Figure 6 legend | 258 words | 350 | PASS |
 | Figure 7 legend | 226 words | 350 | PASS |
 | Figure 8 legend | 201 words | 350 | PASS |
-| Figure 9 legend | 226 words | 350 | PASS |
+| Figure 9 legend | 251 words | 350 | PASS |
 
 Official guidance:
 

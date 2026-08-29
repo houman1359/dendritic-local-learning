@@ -16,7 +16,7 @@ import sys
 from pathlib import Path
 
 import fitz
-from PIL import Image, ImageChops, ImageOps
+from PIL import Image, ImageChops, ImageDraw, ImageFont, ImageOps
 
 
 HERE = Path(__file__).resolve().parent
@@ -102,7 +102,29 @@ def render_pdf_assets() -> None:
             temporary = ASSETS / f".{name}.raw.png"
             pixmap.save(temporary)
         with Image.open(temporary) as image:
-            trim_white(image).save(ASSETS / f"{name}.png", optimize=True)
+            rendered = trim_white(image)
+            if name == "phase_plane":
+                # The slide uses the implementation-neutral name because the
+                # plane includes both anatomical and non-anatomical routes.
+                # Replace only the presentation raster's x-axis wording; the
+                # numerical panel and its geometry remain unchanged.
+                draw = ImageDraw.Draw(rendered)
+                # Cover the complete manuscript-axis label before adding the
+                # presentation wording.  The wider box also removes the final
+                # letters of "task-anatomy alignment" at high raster scale.
+                draw.rectangle((600, 528, 1300, 605), fill="white")
+                font = ImageFont.truetype(
+                    "/usr/share/fonts/urw-base35/NimbusSans-Regular.otf", 39
+                )
+                label = "task–route alignment"
+                bbox = draw.textbbox((0, 0), label, font=font)
+                draw.text(
+                    ((rendered.width - (bbox[2] - bbox[0])) / 2, 539),
+                    label,
+                    fill="#222222",
+                    font=font,
+                )
+            rendered.save(ASSETS / f"{name}.png", optimize=True)
         temporary.unlink()
 
     # The older talk crop says "scalar fallback".  The current primary MNIST
@@ -132,30 +154,74 @@ def render_pdf_assets() -> None:
                 rendered = rendered.crop(
                     (int(rendered.width * post_crop_left), 0, rendered.width, rendered.height)
                 )
+            if output_name == "alignment_gain":
+                # Keep the presentation symbol consistent with the equation
+                # on slide 19 without changing the canonical paper panel.
+                draw = ImageDraw.Draw(rendered)
+                draw.rectangle((0, 748, rendered.width, rendered.height), fill="white")
+                font = ImageFont.truetype(
+                    "/usr/share/fonts/urw-base35/NimbusSans-Regular.otf", 35
+                )
+                label = "imposed subtree alignment  a_route"
+                bbox = draw.textbbox((0, 0), label, font=font)
+                draw.text(
+                    ((rendered.width - (bbox[2] - bbox[0])) / 2, 765),
+                    label,
+                    fill="#222222",
+                    font=font,
+                )
             rendered.save(ASSETS / f"{output_name}.png", optimize=True)
         temporary.unlink()
 
     render_clip(
         "main_figure_02_native.pdf",
         "mnist_strict_scalar",
-        (0.025, 0.238, 0.337, 0.58),
+        (0.035, 0.255, 0.337, 0.58),
     )
     render_clip(
         "main_figure_07_native.pdf",
         "capture_per_wire_current",
-        (0.49, 0.345, 0.995, 0.995),
+        (0.555, 0.345, 0.995, 0.995),
     )
     render_clip(
         "main_figure_09_native.pdf",
         "boundary_learning",
-        (0.29, 0.005, 0.57, 0.315),
-        post_crop_left=0.012,
+        (0.565, 0.0, 0.995, 0.315),
     )
     render_clip(
         "main_figure_09_native.pdf",
         "boundary_topology",
-        (0.545, 0.005, 0.985, 0.315),
-        post_crop_left=0.055,
+        (0.0, 0.285, 0.605, 0.60),
+    )
+    render_clip(
+        "main_figure_03_native.pdf",
+        "operator_utility_validation",
+        (0.015, 0.675, 0.49, 0.995),
+    )
+    render_clip(
+        "main_figure_09_native.pdf",
+        "alignment_rotation",
+        (0.575, 0.285, 0.995, 0.585),
+    )
+    render_clip(
+        "main_figure_09_native.pdf",
+        "alignment_gain",
+        (0.005, 0.64, 0.37, 0.995),
+    )
+    render_clip(
+        "main_figure_05_native.pdf",
+        "hierarchy_task_current",
+        (0.0, 0.0, 0.62, 0.34),
+    )
+    render_clip(
+        "main_figure_05_native.pdf",
+        "hierarchy_bandwidth_current",
+        (0.61, 0.0, 0.995, 0.34),
+    )
+    render_clip(
+        "main_figure_05_native.pdf",
+        "hierarchy_learning_current",
+        (0.0, 0.64, 0.325, 0.995),
     )
 
 
@@ -214,33 +280,54 @@ def dendrite_svg(*, compact: bool = False, labels: bool = True) -> str:
     </svg>"""
 
 
-def credit_pipeline_svg() -> str:
-    nodes = [
-        (115, "task loss", "global outcome", "#E48743"),
-        (430, "network", "many layers", "#2D67B1"),
-        (745, "neuron", "many branches", "#168F83"),
-        (1060, "subtree", "many synapses", "#7654B5"),
-        (1375, "parameter", "one update", "#BF4E5A"),
-    ]
-    blocks = []
-    for x, title, sub, color in nodes:
-        blocks.append(
-            f'<rect x="{x}" y="185" width="245" height="175" rx="28" fill="#FFFFFF" stroke="{color}" stroke-width="4"/>'
-            f'<circle cx="{x+44}" cy="225" r="16" fill="{color}" opacity=".18"/>'
-            f'<circle cx="{x+44}" cy="225" r="7" fill="{color}"/>'
-            f'<text x="{x+122}" y="273" text-anchor="middle" class="svg-title">{title}</text>'
-            f'<text x="{x+122}" y="313" text-anchor="middle" class="svg-sub">{sub}</text>'
+def credit_assignment_svg() -> str:
+    """Forward computation and backward credit with one highlighted weight."""
+    layers = [(120, 4, "input"), (410, 5, "hidden"), (700, 4, "hidden"), (990, 2, "output")]
+    coords: list[list[tuple[int, int]]] = []
+    edges: list[str] = []
+    nodes: list[str] = []
+    for x, count, label in layers:
+        ys = [135 + j * (330 // max(1, count - 1)) for j in range(count)]
+        coords.append([(x, y) for y in ys])
+        nodes.extend(
+            f'<circle cx="{x}" cy="{y}" r="18" fill="#FFFFFF" stroke="#2D67B1" stroke-width="4"/>'
+            for y in ys
         )
-    arrows = []
-    for x in (360, 675, 990, 1305):
-        arrows.append(f'<path d="M{x} 272 H{x+58}" stroke="#98A6B6" stroke-width="5" marker-end="url(#arrow)"/>')
+        nodes.append(f'<text x="{x}" y="525" text-anchor="middle" class="layer">{label}</text>')
+    for left, right in zip(coords[:-1], coords[1:]):
+        for x1, y1 in left:
+            for x2, y2 in right:
+                edges.append(f'<path d="M{x1+20} {y1} L{x2-20} {y2}" stroke="#D4DCE4" stroke-width="2"/>')
+
+    # One weight is the local recipient of a gradient assembled through many
+    # downstream paths.  Keep this edge and its reverse path visually dominant.
+    edges.append('<path d="M138 355 L392 300" stroke="#168F83" stroke-width="9"/>')
     return f"""
-    <svg viewBox="0 0 1740 600" class="wide-svg">
-      <defs><marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M0,0 L12,6 L0,12 z" fill="#98A6B6"/></marker></defs>
-      <style>.svg-title{{font:700 29px Arial,sans-serif;fill:#12233F}}.svg-sub{{font:23px Arial,sans-serif;fill:#617187}}</style>
-      {''.join(blocks)}{''.join(arrows)}
-      <path d="M1498 408 C1280 520 520 520 238 408" fill="none" stroke="#BF4E5A" stroke-width="6" stroke-dasharray="13 11" marker-end="url(#arrow)"/>
-      <text x="875" y="548" text-anchor="middle" font-family="Arial,sans-serif" font-size="25" font-weight="700" fill="#BF4E5A">credit must travel backward; plasticity remains local</text>
+    <svg viewBox="0 0 1540 570" class="wide-svg" role="img" aria-label="Network computation and backward credit assignment">
+      <defs>
+        <marker id="forwardArrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M0 0 L12 6 L0 12 z" fill="#2D67B1"/></marker>
+        <marker id="creditArrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M0 0 L12 6 L0 12 z" fill="#BF4E5A"/></marker>
+      </defs>
+      <style>.layer{{font:22px Arial,sans-serif;fill:#617187}}.label{{font:700 23px Arial,sans-serif;fill:#12233F}}.small{{font:20px Arial,sans-serif;fill:#617187}}</style>
+      <g>{''.join(edges)}</g><g>{''.join(nodes)}</g>
+      <rect x="1110" y="220" width="160" height="92" rx="25" fill="#FBEDE2" stroke="#E48743" stroke-width="4"/>
+      <text x="1190" y="275" text-anchor="middle" font-family="Georgia,serif" font-size="34" font-weight="700" fill="#12233F">loss ℒ</text>
+      <path d="M1008 255 H1090" stroke="#2D67B1" stroke-width="7" marker-end="url(#forwardArrow)"/>
+      <text x="690" y="45" text-anchor="middle" class="label" fill="#2D67B1">forward computation: weights → prediction → loss</text>
+      <path d="M1170 340 C970 480 590 550 276 382" fill="none" stroke="#BF4E5A" stroke-width="7" stroke-dasharray="13 10" marker-end="url(#creditArrow)"/>
+      <circle cx="267" cy="365" r="18" fill="#168F83" stroke="#FFFFFF" stroke-width="5"/>
+      <rect x="40" y="330" width="190" height="74" rx="20" fill="#E6F3F0" stroke="#168F83" stroke-width="3"/>
+      <text x="135" y="362" text-anchor="middle" class="label" fill="#168F83">one weight wᵢ</text>
+      <text x="135" y="390" text-anchor="middle" class="small">one local update</text>
+      <path d="M230 367 H246" stroke="#168F83" stroke-width="4"/>
+      <text x="770" y="548" text-anchor="middle" class="label" fill="#BF4E5A">backward credit: how much did changing wᵢ affect ℒ?</text>
+      <g transform="translate(1295,90)">
+        <rect width="220" height="325" rx="26" fill="#FFFFFF" stroke="#DDE5EA" stroke-width="3"/>
+        <text x="110" y="52" text-anchor="middle" class="label">credit must specify</text>
+        <circle cx="38" cy="108" r="15" fill="#2D67B1"/><text x="69" y="116" class="small">which neuron?</text>
+        <circle cx="38" cy="178" r="15" fill="#7654B5"/><text x="69" y="186" class="small">which location?</text>
+        <circle cx="38" cy="248" r="15" fill="#BF4E5A"/><text x="69" y="256" class="small">sign and magnitude?</text>
+      </g>
     </svg>"""
 
 
@@ -333,9 +420,11 @@ def focal_comparison_svg() -> str:
         <circle cx="370" cy="300" r="14" fill="#2D67B1" stroke="#FFFFFF" stroke-width="4"/>
         <circle cx="965" cy="300" r="14" fill="#BF4E5A" stroke="#FFFFFF" stroke-width="4"/>
         <path d="M506 310 H606" stroke="#8795A5" stroke-width="6" marker-end="url(#focalArrow)"/>
-        <text x="558" y="276" text-anchor="middle" font-size="20" font-weight="700" fill="#617187">same local ΔV</text>
-        <text x="262" y="548" text-anchor="middle" font-size="21" fill="#617187">forward voltage matched</text>
-        <text x="857" y="548" text-anchor="middle" font-size="21" fill="#3D9667">G changes → transported q changes</text>
+        <text x="558" y="270" text-anchor="middle" font-size="19" font-weight="700" fill="#617187">same baseline</text>
+        <text x="558" y="296" text-anchor="middle" font-size="19" font-weight="700" fill="#617187">first-order current</text>
+        <text x="262" y="540" text-anchor="middle" font-size="20" fill="#617187">somatic voltage restored</text>
+        <text x="262" y="568" text-anchor="middle" font-size="17" fill="#617187">local dendritic voltage is not matched</text>
+        <text x="857" y="548" text-anchor="middle" font-size="20" fill="#3D9667">only the shunt changes G</text>
         <path d="M965 282 C930 230 900 210 855 198" fill="none" stroke="#BF4E5A" stroke-width="5" stroke-dasharray="8 7"/>
         <text x="850" y="170" text-anchor="middle" font-size="20" font-weight="700" fill="#BF4E5A">descendant route</text>
       </g>
@@ -345,32 +434,43 @@ def focal_comparison_svg() -> str:
 def transport_svg() -> str:
     return """
     <svg viewBox="0 0 850 560" class="wide-svg">
-      <defs><marker id="down" markerWidth="11" markerHeight="11" refX="9" refY="5.5" orient="auto"><path d="M0 0 L11 5.5 L0 11 z" fill="#7654B5"/></marker></defs>
+      <defs><marker id="down" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="#7654B5"/></marker></defs>
       <path d="M420 475 L420 345 M420 362 L245 220 M420 362 L605 215 M245 220 L145 92 M245 220 L315 70 M605 215 L545 72 M605 215 L720 95" fill="none" stroke="#B7C2CC" stroke-width="13" stroke-linecap="round"/>
-      <path d="M720 95 L605 215 L420 362 L420 475" fill="none" stroke="#7654B5" stroke-width="12" stroke-linecap="round" marker-end="url(#down)"/>
+      <path d="M420 475 L420 362 L605 215 L720 95" fill="none" stroke="#7654B5" stroke-width="12" stroke-linecap="round" marker-end="url(#down)"/>
       <circle cx="420" cy="492" r="48" fill="#E48743" stroke="#FFFFFF" stroke-width="6"/>
-      <g font-family="Arial,sans-serif" font-size="23" font-weight="700"><text x="724" y="62" text-anchor="middle" fill="#7654B5">compartment n</text><text x="505" y="522" fill="#E48743">somatic error δ₀</text></g>
+      <g font-family="Arial,sans-serif" font-size="23" font-weight="700"><text x="724" y="62" text-anchor="middle" fill="#7654B5">compartment n</text><text x="505" y="522" fill="#E48743">somatic learning signal δ₀</text></g>
       <g fill="#FFFFFF" stroke="#7654B5" stroke-width="4"><circle cx="720" cy="95" r="11"/><circle cx="605" cy="215" r="11"/><circle cx="420" cy="362" r="11"/></g>
     </svg>"""
 
 
-def experiment_roadmap_svg() -> str:
-    cards = [
-        (65, "1", "ordinary tasks", "Is neuron identity enough?", "#2D67B1"),
-        (450, "2", "controlled conflict", "When must branches differ?", "#BF4E5A"),
-        (835, "3", "hierarchical routes", "Which bandwidth and topology?", "#7654B5"),
-        (1220, "4", "reconstructed arbors", "Are routes available and used?", "#168F83"),
-    ]
-    out = []
-    for x, num, title, q, color in cards:
-        out.append(f"""
-        <rect x="{x}" y="115" width="330" height="310" rx="30" fill="#FFFFFF" stroke="{color}" stroke-width="3"/>
-        <circle cx="{x+50}" cy="166" r="28" fill="{color}"/><text x="{x+50}" y="176" text-anchor="middle" fill="#FFFFFF" font-size="27" font-weight="700">{num}</text>
-        <text x="{x+165}" y="236" text-anchor="middle" fill="#12233F" font-size="29" font-weight="700">{title}</text>
-        <text x="{x+165}" y="290" text-anchor="middle" fill="#617187" font-size="22"><tspan x="{x+165}" dy="0">{q.split(' ')[0]} {q.split(' ')[1]}</tspan><tspan x="{x+165}" dy="31">{' '.join(q.split(' ')[2:])}</tspan></text>
-        <path d="M{x+90} 362 H{x+240}" stroke="{color}" stroke-width="8" stroke-linecap="round" opacity=".72"/>
-        """)
-    return f'<svg viewBox="0 0 1620 540" class="wide-svg"><g font-family="Arial,sans-serif">{"".join(out)}</g></svg>'
+def credit_operator_svg() -> str:
+    """Show how an available feedback pathway transforms a noisy gradient."""
+    return """
+    <svg viewBox="0 0 1450 600" class="wide-svg" role="img" aria-label="Credit operator transforms an exact stochastic gradient into an available update">
+      <defs><marker id="opArrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M0 0 L12 6 L0 12 z" fill="#64748B"/></marker></defs>
+      <g font-family="Arial,sans-serif">
+        <rect x="35" y="92" width="390" height="410" rx="30" fill="#FFFFFF" stroke="#C9D8EA" stroke-width="3"/>
+        <text x="230" y="142" text-anchor="middle" font-size="28" font-weight="700" fill="#12233F">stochastic BP gradient</text>
+        <text x="230" y="188" text-anchor="middle" font-size="33" font-weight="700" fill="#2D67B1">μ<tspan baseline-shift="sub" font-size="22">BP</tspan> = μ + ξ</text>
+        <path d="M95 410 C150 250 205 390 260 235 C310 130 350 318 382 210" fill="none" stroke="#9EB9DD" stroke-width="6"/>
+        <path d="M95 395 C160 330 220 300 382 205" fill="none" stroke="#2D67B1" stroke-width="8"/>
+        <text x="230" y="463" text-anchor="middle" font-size="20" fill="#617187">signal μ plus mini-batch noise ξ</text>
+
+        <path d="M445 300 H560" stroke="#64748B" stroke-width="7" marker-end="url(#opArrow)"/>
+        <rect x="585" y="155" width="280" height="290" rx="34" fill="#F0ECF8" stroke="#7654B5" stroke-width="4"/>
+        <text x="725" y="222" text-anchor="middle" font-size="30" font-weight="700" fill="#7654B5">credit operator M</text>
+        <g fill="#7654B5" opacity=".85"><rect x="650" y="270" width="28" height="105" rx="6"/><rect x="700" y="242" width="28" height="133" rx="6"/><rect x="750" y="304" width="28" height="71" rx="6"/><rect x="800" y="215" width="28" height="160" rx="6"/></g>
+        <text x="725" y="414" text-anchor="middle" font-size="20" fill="#617187">select · assign · scale</text>
+
+        <path d="M885 300 H1000" stroke="#64748B" stroke-width="7" marker-end="url(#opArrow)"/>
+        <rect x="1025" y="92" width="390" height="410" rx="30" fill="#FFFFFF" stroke="#B9DED7" stroke-width="3"/>
+        <text x="1220" y="142" text-anchor="middle" font-size="28" font-weight="700" fill="#12233F">available local update</text>
+        <text x="1220" y="188" text-anchor="middle" font-size="33" font-weight="700" fill="#168F83">μ<tspan baseline-shift="sub" font-size="22">route</tspan> = M μ<tspan baseline-shift="sub" font-size="22">BP</tspan></text>
+        <path d="M1085 395 C1150 330 1210 300 1372 205" fill="none" stroke="#168F83" stroke-width="8"/>
+        <path d="M1085 432 C1160 370 1240 345 1372 296" fill="none" stroke="#B9DED7" stroke-width="6" stroke-dasharray="9 8"/>
+        <text x="1220" y="463" text-anchor="middle" font-size="20" fill="#617187">retains some signal and some noise</text>
+      </g>
+    </svg>"""
 
 
 def hierarchy_svg() -> str:
@@ -392,22 +492,24 @@ def hierarchy_svg() -> str:
 
 def evidence_svg() -> str:
     rows = [
-        ("neuron identity", "supported", "ordinary tasks + animal coordinate", "#168F83", 1.0),
-        ("subtree addresses", "conditional", "large only under task-aligned conflict", "#E48743", 0.72),
-        ("route gain by shunting", "conditional", "requires a high-conductance regime", "#E48743", 0.55),
-        ("endogenous morphology alignment", "not established", "measured-response analyses are null", "#8B98A7", 0.28),
+        ("neuron identity", "SUPPORTED IN MODELS", "dominant in standard tasks; retrospective animal contrast is consistent", "#168F83", "#E6F3F0"),
+        ("subtree addresses", "CONDITIONAL", "large when local updates conflict; topology adds a narrow gain", "#C77A31", "#FBEDE2"),
+        ("route gain by shunting", "CONDITIONAL", "emerges only in permissive high-conductance regimes", "#C77A31", "#FBEDE2"),
+        ("anatomical route capacity", "STRUCTURALLY SUPPORTED", "sparse candidate routes on reconstructed arbors", "#7654B5", "#F0ECF8"),
+        ("endogenous morphology alignment", "NOT ESTABLISHED", "measured visual-response analyses are null", "#6F7C8A", "#EEF2F5"),
     ]
     parts = []
-    for j, (name, status, note, color, width) in enumerate(rows):
-        y = 74 + j * 125
+    for j, (name, status, note, color, pale) in enumerate(rows):
+        y = 28 + j * 108
         parts.append(f"""
-        <text x="35" y="{y+30}" font-size="27" font-weight="700" fill="#12233F">{name}</text>
-        <text x="35" y="{y+65}" font-size="20" fill="#617187">{note}</text>
-        <rect x="650" y="{y}" width="720" height="54" rx="27" fill="#E8EDF1"/>
-        <rect x="650" y="{y}" width="{720*width:.0f}" height="54" rx="27" fill="{color}"/>
-        <text x="1395" y="{y+35}" text-anchor="end" font-size="22" font-weight="700" fill="{color}">{status}</text>
+        <rect x="18" y="{y}" width="1160" height="86" rx="20" fill="#FFFFFF" stroke="#DDE5EA" stroke-width="2"/>
+        <circle cx="60" cy="{y+43}" r="15" fill="{color}"/>
+        <text x="92" y="{y+35}" font-size="25" font-weight="700" fill="#12233F">{name}</text>
+        <text x="92" y="{y+64}" font-size="18" fill="#617187">{note}</text>
+        <rect x="845" y="{y+20}" width="305" height="46" rx="23" fill="{pale}" stroke="{color}" stroke-width="2"/>
+        <text x="997" y="{y+50}" text-anchor="middle" font-size="18" font-weight="800" fill="{color}">{status}</text>
         """)
-    return f'<svg viewBox="0 0 1450 585" class="wide-svg"><g font-family="Arial,sans-serif">{"".join(parts)}</g></svg>'
+    return f'<svg viewBox="0 0 1200 585" class="wide-svg"><g font-family="Arial,sans-serif">{"".join(parts)}</g></svg>'
 
 
 def img(name: str, alt: str, cls: str = "plot") -> str:
@@ -436,12 +538,12 @@ def build_slides() -> list[dict[str, str]]:
     slides.append({
         "class": "title-slide",
         "kicker": "Kempner Learning Dynamics Workshop · 15–20 minutes",
-        "title": "When dendritic structure helps local credit assignment",
+        "title": "When can dendritic structure help local credit assignment?",
         "body": f"""
           <div class="title-grid">
             <div class="title-copy">
               <div class="title-rule"></div>
-              <div class="title-sub">From neuron-level errors to subtree addresses, route gain, and an alignment boundary</div>
+              <div class="title-sub">Feedback bandwidth, within-neuron address, conductance-dependent route gain, and an alignment boundary</div>
               <div class="authors">Houman Safaai · Maceo Richards · Bernardo L. Sabatini</div>
               <div class="affiliation">Kempner Institute, Harvard University · Harvard Medical School</div>
             </div>
@@ -453,157 +555,185 @@ def build_slides() -> list[dict[str, str]]:
 
     slides.append(slide(
         "THE PROBLEM",
-        "Credit assignment is a routing problem",
-        f'<div class="full-visual">{credit_pipeline_svg()}</div><div class="equation compact">parameter credit &nbsp;=&nbsp; ∂ℒ / ∂θᵢ</div>',
-        "A circuit computes one global outcome, but learning must reach the local parameters that caused it.",
+        "Learning changes network weights; credit assigns each change",
+        f'<div class="full-visual credit-visual">{credit_assignment_svg()}</div><div class="equation compact credit-eq">ℒ = ℒ(f(x; w), y) &nbsp;&nbsp;·&nbsp;&nbsp; Δwᵢ = −η ∂ℒ/∂wᵢ</div>',
+        "A global objective must be converted into a destination, sign, and magnitude for every trainable weight.",
     ))
 
     slides.append(slide(
         "THE MATHEMATICAL REFERENCE",
-        "Backpropagation provides exact parameter credit",
+        "Backpropagation defines the exact neuron-specific learning signal",
         f"""
-        <div class="two-col col-56-44">
+        <div class="two-col col-56-44 bp-layout">
           <div>{network_svg()}</div>
-          <div class="stack">
-            <div class="equation">ΔW<sup>ℓ</sup><sub>ji</sub> = −η · h<sup>ℓ−1</sup><sub>i</sub> · δ<sup>ℓ</sup><sub>j</sub></div>
-            {card('local factor', '<p>Presynaptic activity and the derivative at the receiving unit.</p>', tone='teal')}
-            {card('nonlocal factor', '<p>A parameter-specific error assembled by the reverse chain rule.</p>', tone='red')}
-            <div class="precision-note">We use backpropagation to define the target information—not as a claim about literal neural implementation.</div>
+          <div class="stack compact-stack">
+            <div class="equation compact">zᵤ = Σ<sub>i∈in(u)</sub>wᵢxᵢ+bᵤ, &nbsp; yᵤ=fᵤ(zᵤ)</div>
+            <div class="equation compact">δᵤ ≡ ∂ℒ/∂yᵤ = Σ<sub>v:u→v</sub>w<sub>uv</sub>f′<sub>v</sub>(z<sub>v</sub>)δ<sub>v</sub></div>
+            <div class="signal-definition"><b>δᵤ</b> is exact task information assigned to neuron <b>u</b>—not yet to one weight.</div>
+            <div class="taxonomy">
+              <div><b>fixed/random feedback</b><span>feedback alignment; direct feedback</span></div>
+              <div><b>inferred targets or states</b><span>equilibrium propagation; predictive coding</span></div>
+              <div><b>eligibility + learning signal</b><span>three-factor rules; e-prop</span></div>
+              <div><b>dendritic teaching signals</b><span>somato-dendritic and apical-error models</span></div>
+            </div>
           </div>
         </div>""",
-        "Backpropagation answers three questions for every parameter: destination, sign, and magnitude.",
-        "Rumelhart et al. (1986); Lillicrap et al. (2020)",
+        "Backpropagation is the information reference; biological theories differ in how the returned signal is produced.",
+        "Rumelhart et al. (1986); Lillicrap et al. (2016); Scellier & Bengio (2017); Bellec et al. (2020)",
     ))
 
     slides.append(slide(
-        "LOCAL LEARNING",
-        "A local rule preserves eligibility and approximates the error",
+        "POINT-NEURON LOCAL LEARNING",
+        "Local learning preserves eligibility and approximates the returned signal",
         f"""
-        <div class="hero-equation">
-          <span class="eq-left">Δwᵢ = −η</span>
-          <span class="term teal"><b>eᵢ</b><small>synapse-local eligibility</small></span>
+        <div class="hero-equation point-factorization">
+          <span class="eq-left">∂ℒ/∂wᵢ =</span>
+          <span class="term teal"><b>xᵢ f′ᵤ(zᵤ)</b><small>local eligibility eᵢ</small></span>
           <span class="times">×</span>
-          <span class="term blue"><b>δ̂ᵤ</b><small>communicated learning signal</small></span>
+          <span class="term blue"><b>δᵤ</b><small>exact neuron signal</small></span>
         </div>
-        <div class="three-col lower-cards">
-          {card('local', '<p><b>eᵢ</b> can use presynaptic activity, voltage, driving force, and gates.</p>', tone='teal')}
-          {card('task-dependent', '<p><b>δ̂ᵤ</b> may depend on a global objective even when the synaptic update is local.</p>', tone='blue')}
-          {card('information-limited', '<p>The feedback pathway determines which distinctions the rule can express.</p>', tone='purple')}
-        </div>""",
-        "Locality specifies where an update is computed; feedback bandwidth specifies what the update can know.",
-        "Hebb (1949); Frémaux & Gerstner (2016); Bellec et al. (2020)",
-    ))
-
-    slides.append(slide(
-        "FEEDBACK BANDWIDTH",
-        "The first bottleneck is which neuron should learn",
-        f'<div class="full-visual bandwidth">{bandwidth_svg()}</div><div class="note-band"><b>Important:</b> a shared scalar does not make neurons identical. Each synapse still has its own eligibility and initialization; the scalar only removes task-specific feedback coordinates.</div>',
-        "Neuron identity and within-neuron address are different credit-assignment problems.",
-        "Werfel, Xie & Seung (2005); Lillicrap et al. (2016)",
+        <div class="two-col col-52-48 local-rule-row">
+          <div class="equation">Δwᵢ = −η eᵢ δ<sup>avail</sup><sub>u</sub></div>
+          <div class="stack compact-stack">
+            {card('one layer-wide scalar m', '<p>Every neuron receives the same task-dependent coordinate.</p>', tone='orange')}
+            {card('one signal δ<sup>avail</sup><sub>u</sub> per neuron', '<p>Feedback identifies the postsynaptic neuron while the eligibility remains weight-specific.</p>', tone='blue')}
+          </div>
+        </div>
+        <div class="note-band"><b>A shared scalar does not equalize the weights:</b> each update still contains a different eligibility eᵢ.</div>""",
+        "Locality determines where an update is computed; feedback bandwidth determines what task information it can use.",
+        "Werfel, Xie & Seung (2005); Frémaux & Gerstner (2016)",
     ))
 
     slides.append(slide(
         "FROM A POINT TO A TREE",
-        "A dendritic arbor adds state, addresses, and route gain",
+        "Dendrites add within-neuron state, address, and route gain",
         f"""
-        <div class="two-col col-52-48">
-          <div class="tree-panel">{dendrite_svg(compact=True, labels=False)}</div>
-          <div class="stack resource-stack">
-            {card('1 · local state', '<p>Voltages and conductances change the eligibility computed at each synapse.</p><span class="analogy">ML analogy: feature-dependent local Jacobian</span>', tone='teal')}
-            {card('2 · subtree address', '<p>A small number of signals can target nested groups of synapses.</p><span class="analogy">ML analogy: structured low-rank routing</span>', tone='purple')}
-            {card('3 · route gain', '<p>Conductance can scale how strongly error propagates along one path.</p><span class="analogy">ML analogy: state-dependent feedback preconditioner</span>', tone='orange')}
+        <div class="two-col col-50-50 dendrite-resource-layout">
+          <div class="tree-panel labeled-tree">{dendrite_svg(compact=True, labels=True)}</div>
+          <div class="stack resource-stack compact-stack">
+            <div class="mapping-line">network weight wᵢ &nbsp;→&nbsp; synaptic conductance gᵢ on compartment n</div>
+            <div class="equation compact">δ<sup>V, avail</sup><sub>u</sub> = A<sub>u</sub>β<sub>u</sub>, &nbsp; A<sub>u</sub>∈ℝ<sup>Nᵤ×K</sup></div>
+            <div class="route-definitions"><b>K</b>: independently communicated within-neuron signals &nbsp;·&nbsp; column k of <b>Aᵤ</b>: support and gain of route k</div>
+            {card('local state', '<p>Voltage and conductance determine the eligibility at each synapse.</p>', tone='teal')}
+            {card('subtree address', '<p>A few coefficients βᵤ can target nested groups of synapses.</p>', tone='purple')}
+            {card('route gain', '<p>Conductance can scale how strongly a returned signal reaches one path.</p>', tone='orange')}
           </div>
         </div>""",
-        "The question is not whether dendrites add parameters—it is whether their spatial structure matches the credit the task requires.",
+        "Neuron identity and within-neuron address are distinct credit-assignment problems.",
     ))
 
     slides.append(slide(
-        "FORWARD DYNAMICS",
+        "DIRECTED-TREE STEADY STATE",
         "Conductance makes dendritic voltage a normalized quotient",
         f"""
-        <div class="two-col col-44-56">
+        <div class="two-col col-44-56 conductance-layout">
           <div>{conductance_svg()}</div>
-          <div class="stack">
-            <div class="equation multiline">Vₙ = <span class="frac"><span>gᴸEᴸ + Σᵢ gᵢxᵢEᵢ + Σ<sub>c</sub> g<sup>den</sup><sub>c→n</sub>a<sub>c</sub></span><span>gᴸ + Σᵢ gᵢxᵢ + Σ<sub>c</sub> g<sup>den</sup><sub>c→n</sub></span></span></div>
-            <div class="equation-caption">R<sup>tot</sup><sub>n</sub> = 1 / g<sup>tot</sup><sub>n</sub> is the local input resistance.</div>
+          <div class="stack compact-stack">
+            <div class="equation compact">g<sup>tot</sup><sub>n</sub> = g<sup>L</sup><sub>n</sub> + Σ<sub>i∈syn(n)</sub>gᵢxᵢ + Σ<sub>c∈child(n)</sub>g<sup>den</sup><sub>c→n</sub>, &nbsp; R<sup>tot</sup><sub>n</sub>=1/g<sup>tot</sup><sub>n</sub></div>
+            <div class="equation multiline">Vₙ = R<sup>tot</sup><sub>n</sub>[g<sup>L</sup><sub>n</sub>E<sup>L</sup> + Σ<sub>i∈syn(n)</sub>gᵢxᵢE<sup>rev</sup><sub>i</sub> + Σ<sub>c∈child(n)</sub>g<sup>den</sup><sub>c→n</sub>a<sub>c</sub>], &nbsp; a<sub>c</sub>=f<sub>c</sub>(V<sub>c</sub>)</div>
             <div class="compare-row">
-              {card('additive current', '<p>Can match the local voltage change without changing <b>gᵗᵒᵗ</b>.</p>', tone='blue')}
-              {card('shunting conductance', '<p>Changes both voltage and the denominator that controls sensitivity.</p>', tone='red')}
+              {card('additive current', '<p>Changes the numerator without changing total conductance.</p>', tone='blue')}
+              {card('shunting conductance', '<p>Raises g<sup>tot</sup><sub>n</sub> and lowers R<sup>tot</sup><sub>n</sub>, even when net shunt current is small.</p>', tone='red')}
             </div>
+            <div class="shunt-callout">Vₙ≈E<sub>I</sub> ⇒ g<sub>I</sub>x<sub>I</sub>(E<sub>I</sub>−Vₙ)≈0, but g<sub>I</sub>x<sub>I</sub> still changes the denominator.</div>
           </div>
         </div>""",
-        "A shunt can change the gain of other synapses even when its own net current is small.",
+        "Shunting changes local sensitivity because conductance appears in the voltage denominator.",
         "Holt & Koch (1997); Chance et al. (2002); Gidon & Segev (2012)",
     ))
 
     slides.append(slide(
         "THE EXACT DENDRITIC GRADIENT",
-        "Eligibility stays local; the error becomes a field over the arbor",
+        "Dendritic credit still factorizes into eligibility × learning signal",
         f"""
-        <div class="two-col col-48-52">
-          <div>{transport_svg()}</div>
+        <div class="two-col col-44-56 gradient-layout">
+          <div>{conductance_svg()}</div>
           <div class="stack equation-stack">
-            <div class="hero-equation small">
+            <div class="definition-box">δ<sup>V</sup><sub>n</sub> ≡ ∂ℒ/∂Vₙ &nbsp; is the compartment learning signal</div>
+            <div class="equation compact">∂Vₙ/∂gᵢ = xᵢR<sup>tot</sup><sub>n</sub>(E<sup>rev</sup><sub>i</sub>−Vₙ)</div>
+            <div class="hero-equation small gradient-factorization">
               <span class="eq-left">∂ℒ/∂gᵢ =</span>
-              <span class="term teal"><b>xᵢR<sup>tot</sup><sub>n</sub>(Eᵢ−Vₙ)</b><small>local dendritic eligibility eᵢ</small></span>
+              <span class="term teal"><b>xᵢR<sup>tot</sup><sub>n</sub>(E<sup>rev</sup><sub>i</sub>−Vₙ)</b><small>local dendritic eligibility e<sup>den</sup><sub>i</sub></small></span>
               <span class="times">×</span>
-              <span class="term purple"><b>∂ℒ/∂Vₙ</b><small>compartment error</small></span>
+              <span class="term purple"><b>δ<sup>V</sup><sub>n</sub></b><small>returned compartment signal</small></span>
             </div>
-            <div class="equation">∂ℒ/∂Vₙ = δ<sub>0,u</sub> · α̃ₙ</div>
-            <div class="path-product">α̃ₙ = ∏<sub>(i→k) on path(n→0)</sub> f′ᵢ(Vᵢ) R<sup>tot</sup><sub>k</sub> g<sup>den</sup><sub>i→k</sub></div>
-            <div class="precision-note">In a general compartmental model, the same transported field is obtained from the steady-state adjoint J<sub>V</sub><sup>T</sup>q = ∇<sub>V</sub>ℒ.</div>
           </div>
         </div>""",
-        "Dendrites do not create the circuit-level error; they can distribute it through spatially structured gains and addresses.",
-        "Almeida (1987); Pineda (1987)",
+        "The local factor changes with dendritic state; the circuit-level learning signal still has to reach the correct compartment.",
     ))
 
     slides.append(slide(
-        "EXPERIMENTAL LOGIC",
-        "We test the need for progressively richer credit",
-        f'<div class="full-visual roadmap">{experiment_roadmap_svg()}</div><div class="axis-ribbon"><span>low feedback resolution</span><div class="axis-line"></div><span>high feedback resolution</span></div>',
-        "Every positive result is paired with a matched point implementation to separate the information resource from dendritic material.",
+        "TRANSPORT OVER THE TREE",
+        "Tree transport turns one somatic signal into a compartment field",
+        f"""
+        <div class="two-col col-48-52 transport-layout">
+          <div>{transport_svg()}</div>
+          <div class="stack equation-stack">
+            <div class="equation compact">δ<sup>V</sup><sub>0</sub> = f′<sub>0</sub>(V<sub>0</sub>)δᵤ, &nbsp;&nbsp; δ<sup>V</sup><sub>n</sub> = δ<sup>V</sup><sub>0</sub>γₙ</div>
+            <div class="path-product">γₙ = ∏<sub>(j→k)∈path(n→0)</sub> f′<sub>j</sub>(V<sub>j</sub>) R<sup>tot</sup><sub>k</sub> g<sup>den</sup><sub>j→k</sub></div>
+            {card('directed tree', '<p>The product is indexed child→parent (n→0); returned credit propagates over the same path in reverse (0→n).</p>', tone='purple')}
+            {card('reconstructed reciprocal cable', '<p>The corresponding field is obtained from the steady-state adjoint J<sub>V</sub><sup>T</sup>q=∇<sub>V</sub>ℒ.</p>', tone='gray')}
+          </div>
+        </div>""",
+        "Dendrites do not generate the task error; they transform a neuron-level signal into spatially structured compartment credit.",
+        "Almeida (1987); Pineda (1987); Schiess, Urbanczik & Senn (2016)",
+    ))
+
+    slides.append(slide(
+        "THE CREDIT OPERATOR",
+        "A feedback pathway selects, assigns, and scales stochastic credit",
+        f"""
+        <div class="operator-layout">
+          <div class="operator-visual">{credit_operator_svg()}</div>
+          <div class="operator-equations">
+            <div class="equation compact">μ<sub>BP</sub>=μ+ξ, &nbsp; 𝔼[ξ]=0, &nbsp; Cov(ξ)=Σ</div>
+            <div class="equation compact">μ<sub>route</sub>=Mμ<sub>BP</sub>, &nbsp; w<sup>+</sup>=w−ημ<sub>route</sub></div>
+            <div class="operator-note"><span><b>M = I:</b> unrestricted backpropagation of the stochastic gradient. Restricted routes change the span, assignment, or gain of the available update.</span></div>
+          </div>
+        </div>""",
+        "The operator M lets one theory describe scalar, neuron-specific, subtree-targeted, and exact compartment feedback.",
+    ))
+
+    slides.append(slide(
+        "SIGNAL–NOISE PHASE THEORY",
+        "Operator utility balances retained signal, update cost, and noise",
+        f"""
+        <div class="two-col col-54-46 utility-layout">
+          <div class="stack compact-stack">
+            <div class="utility main-utility">
+              <div class="utility-name">operator utility · requires positive task alignment</div>
+              <div class="equation multiline">U(M)=<span class="frac"><span>[μ<sup>T</sup>Mμ]²</span><span>2L<sub>sm</sub>[‖Mμ‖²+tr(MΣM<sup>T</sup>)]</span></span></div>
+            </div>
+            <div class="three-term-row">
+              <span class="pill teal">task-aligned signal</span>
+              <span class="pill orange">finite-step update cost</span>
+              <span class="pill red">admitted stochastic noise</span>
+            </div>
+            {stat('ρ<sub>s</sub> = 0.937', 'utility versus observed norm-matched one-step progress across 540 trained conditions', tone='teal')}
+            {stat('ρ<sub>s</sub> = 0.916', 'utility versus final trained accuracy', tone='purple')}
+          </div>
+          <div class="plot-card utility-plot">{img('operator_utility_validation', 'Operator utility versus observed progress')}</div>
+        </div>
+        <div class="scope-strip">Exact for an isotropic quadratic with Hessian L<sub>sm</sub>I; otherwise a curvature bound and one-step smoothness guarantee. It predicts large contrasts and within-family progress—not every trajectory-accrued difference.</div>""",
+        "Restricted routing helps only when its retained, aligned signal compensates for the signal it discards and the noise it admits.",
     ))
 
     slides.append(slide(
         "STANDARD IMAGE TASKS",
-        "Neuron-specific feedback supplies nearly all useful resolution",
+        "Neuron identity—not exact path resolution—dominates both standard tasks",
         f"""
-        <div class="two-col col-50-50 plot-pair">
-          <div class="plot-card"><div class="plot-label">MNIST · strict-scalar confirmation</div>{img('mnist_strict_scalar', 'MNIST strict-scalar feedback ladder')}</div>
-          <div class="plot-card"><div class="plot-label">CIFAR-10 · fresh additive confirmation</div>{img('cifar_confirmatory_ladder', 'CIFAR-10 feedback ladder')}</div>
+        <div class="two-col col-50-50 plot-pair standard-plots">
+          <div class="plot-card"><div class="plot-label">MNIST · strict scalar → neuron signal → exact compartment field</div>{img('mnist_strict_scalar', 'MNIST strict-scalar feedback ladder')}</div>
+          <div class="plot-card"><div class="plot-label">Flattened CIFAR-10 · additive tree · “exact path” = exact compartment field</div>{img('cifar_confirmatory_ladder', 'CIFAR-10 feedback ladder')}</div>
         </div>
-        <div class="stat-row">
-          {stat('+0.19 pp', 'exact path over neuron-specific feedback on additive MNIST', tone='purple')}
-          {stat('−0.86 pp', 'exact path versus neuron-specific feedback on CIFAR-10', tone='red')}
-          {stat('no generic gain', 'harder data do not create a need for within-tree routing', tone='blue')}
+        <div class="comparison-table">
+          <div class="comparison-head"><span>model/task</span><span>scalar → neuron</span><span>neuron → exact field</span></div>
+          <div><span>MNIST · shunting</span><b class="blue-text">+11.25 pp</b><b>+0.045 pp</b></div>
+          <div><span>MNIST · additive</span><b class="blue-text">+7.81 pp</b><b>+0.186 pp</b></div>
+          <div><span>CIFAR-10 · additive</span><b class="blue-text">+16.39 pp</b><b class="red-text">−0.86 pp</b></div>
         </div>""",
-        "On ordinary classification, selecting the correct neuron is the dominant feedback bottleneck.",
-        "Paired-seed means; exact intervals and tests are reported in Fig. 2 and Source Data.",
-    ))
-
-    slides.append(slide(
-        "A STOCHASTIC CREDIT OPERATOR",
-        "Restricted feedback helps only when it rejects more noise than signal",
-        f"""
-        <div class="two-col col-50-50 theory-grid">
-          <div class="stack">
-            <div class="equation">μ<sub>M</sub> = M(μ + ξ)</div>
-            <div class="utility">
-              <div class="utility-name">operator utility</div>
-              <div class="equation multiline">U(M) = <span class="frac"><span>[ μ<sup>T</sup>Mμ ]²</span><span>2L [ ‖Mμ‖² + tr(MΣM<sup>T</sup>) ]</span></span></div>
-            </div>
-            <div class="three-term-row">
-              <span class="pill teal">retained signal</span>
-              <span class="pill orange">finite-step cost</span>
-              <span class="pill red">admitted noise</span>
-            </div>
-            {stat('ρ = 0.937', 'utility versus observed one-step progress across trained conditions', tone='teal')}
-          </div>
-          <div class="plot-card phase-card">{img('phase_plane', 'Alignment and bandwidth phase plane')}</div>
-        </div>""",
-        "Useful routing requires both task alignment and the right bandwidth; more detailed feedback is not always better.",
-        "Theory is exact for quadratic losses and a one-step smoothness bound otherwise.",
+        "On both tasks, most of the gain comes from selecting the correct neuron; exact within-tree resolution adds little.",
+        "Paired-seed means; CIFAR exact field and BP are equivalent within the predefined ±1-point margin.",
     ))
 
     slides.append(slide(
@@ -616,7 +746,9 @@ def build_slides() -> list[dict[str, str]]:
             {card('input', '<p>All B branches receive a Fashion-MNIST image and form nonzero eligibility.</p>', tone='blue')}
             {card('forward selector', '<p>Context c selects the branch whose image determines the target.</p>', tone='teal')}
             {card('conflict dose χ', '<p>Nonselected images vary from class-compatible (χ=0) to opposite-class (χ=1).</p>', tone='red')}
-            <div class="equation compact">d<sub>b</sub><sup>branch</sup> ∝ Σᵢ δᵢ 𝟙[cᵢ=b] xᵢ,b</div>
+            <div class="equation compact">d<sup>branch</sup><sub>b</sub> = N<sup>−1</sup>Σ<sub>t</sub>δ<sub>t</sub>𝟙[c<sub>t</sub>=b]x<sub>t,b</sub></div>
+            <div class="equation compact">d<sup>shared</sup><sub>b</sub> = N<sup>−1</sup>Σ<sub>t</sub>δ<sub>t</sub>B<sup>−1</sup>x<sub>t,b</sub></div>
+            <div class="branch-symbols"><b>N</b>: trials &nbsp;·&nbsp; <b>δ<sub>t</sub></b>: downstream logit gradient &nbsp;·&nbsp; <b>d<sub>b</sub></b>: mean update direction for branch b</div>
           </div>
         </div>""",
         "At zero conflict, one shared signal is sufficient; at high conflict, different branches require opposite updates.",
@@ -629,10 +761,10 @@ def build_slides() -> list[dict[str, str]]:
         <div class="two-col col-67-33 result-layout">
           <div class="plot-card large-plot">{img('path_necessity_results', 'Branch-conflict theory and trained results')}</div>
           <div class="stack">
-            <div class="equation boundary-eq">χ<sub>c</sub> = B / [2(B−1)]</div>
+            <div class="equation boundary-eq">λ<sub>shared</sub>=B−2χ(B−1) &nbsp;→&nbsp; χ<sub>c</sub>=B/[2(B−1)]</div>
             {stat('35–58 pp', 'branch-specific gain over shared feedback at full conflict', tone='purple')}
             {card('causal control', '<p>Cyclically deranged routes fail despite identical rank and sparsity.</p>', tone='red')}
-            {card('implementation control', '<p>A context-gated point model matches correct routing.</p>', tone='gray')}
+            {card('implementation control', '<p>Analytic BP, the correct route, and a gated-point calculation are equivalent forms of the same routing matrix.</p>', tone='gray')}
           </div>
         </div>""",
         "The task establishes a need for an address—not a unique need for dendritic material.",
@@ -643,17 +775,12 @@ def build_slides() -> list[dict[str, str]]:
         "CONTROLLED TASK 2 · DEFINITION",
         "Nested tasks ask whether a few subtree addresses are efficient",
         f"""
-        <div class="two-col col-48-52">
-          <div class="tree-panel hierarchy">{hierarchy_svg()}</div>
-          <div class="stack">
-            <div class="bandwidth-scale">
-              <div><b>K = 1</b><span>one signal for the whole neuron</span></div>
-              <div><b>K = 2</b><span>two coarse subtrees</span></div>
-              <div><b>K = 4</b><span>four intermediate subtrees</span></div>
-              <div><b>K = 8</b><span>one signal per terminal branch</span></div>
-            </div>
-            {card('task hierarchy', '<p>Eight active streams occupy the leaves; opposite-sign distractors strengthen with tree distance.</p>', tone='purple')}
-            {card('matched controls', '<p>Same rank, sparsity, parameter count, and forward resources; only route assignment or basis changes.</p>', tone='gray')}
+        <div class="hierarchy-definition-layout">
+          <div class="plot-card hierarchy-task-plot">{img('hierarchy_task_current', 'Eight-context hierarchical task with selected stream and distance-dependent distractors')}</div>
+          <div class="stack compact-stack hierarchy-side">
+            <div class="equation compact">δ<sup>V, avail</sup> = A<sub>K</sub>β, &nbsp; rank(A<sub>K</sub>)=K</div>
+            <div class="plot-card hierarchy-bandwidth-plot">{img('hierarchy_bandwidth_current', 'Within-neuron feedback bandwidth K equals 1, 2, 4, or 8')}</div>
+            {card('matched controls', '<p>Rank, sparsity, parameter count, and forward resources are held fixed; only route assignment, basis, or topology changes.</p>', tone='gray')}
           </div>
         </div>""",
         "Intermediate K tests whether tree-structured feedback is a useful low-dimensional basis for task credit.",
@@ -664,11 +791,11 @@ def build_slides() -> list[dict[str, str]]:
         "Subtree addresses help—but fine topology adds only a narrow gain",
         f"""
         <div class="two-col col-63-37 result-layout">
-          <div class="plot-card large-plot">{img('subtree_k_sweep', 'Accuracy across feedback bandwidth')}</div>
+          <div class="plot-card large-plot">{img('hierarchy_learning_current', 'Accuracy across feedback bandwidth with directly labeled correct, deranged, and best non-anatomical routes')}</div>
           <div class="stack">
-            {stat('+61 pp', 'matched subtrees over one neuron-shared signal at K=4', tone='purple')}
-            {stat('+1.3 pp', 'matched subtrees over the strongest non-anatomical low-rank control at K=4', tone='teal')}
-            {card('boundary', '<p>Matched subtrees lose at low K and tie at full rank. Rewiring removes the intermediate advantage.</p>', tone='orange')}
+            {stat('+61.1 pp', 'correct ancestry assignment over cyclic derangement at the same K=4 bandwidth', tone='purple')}
+            {stat('+1.27 pp', 'correct ancestry over the strongest matched non-anatomical low-rank control at K=4', tone='teal')}
+            {card('against the matched low-rank basis', '<p>Ancestry loses at K=1,2; wins only at K=4; and ties at full rank K=8. Rewiring removes the intermediate advantage.</p>', tone='orange')}
             {card('equivalence', '<p>Dendritic, grouped-point, and gated-point implementations coincide for the same routed field.</p>', tone='gray')}
           </div>
         </div>""",
@@ -677,40 +804,23 @@ def build_slides() -> list[dict[str, str]]:
     ))
 
     slides.append(slide(
-        "A SEPARATE FORWARD QUESTION",
-        "Physical depth helps only when serial computation matches the task",
-        f"""
-        <div class="two-col col-48-52 depth-layout">
-          <div class="stack">
-            <div class="plot-card schematic-card">{img('physical_stage_schematic', 'Matched serial and grouped-point architectures')}</div>
-            <div class="task-chips"><span class="pill teal">nested factors</span><span class="pill blue">flat factors</span><span class="pill orange">local ratios</span></div>
-            <div class="definition-box"><b>D<sub>p</sub></b> = serial physical stages &nbsp;·&nbsp; <b>H</b> = task hierarchy &nbsp;·&nbsp; <b>α</b> = task–sensor alignment</div>
-          </div>
-          <div class="plot-card depth-result">{img('physical_depth_headline', 'Physical-depth boundary')}</div>
-        </div>
-        <div class="stat-row depth-stats">
-          {stat('+30.9 pp', 'aligned serial BP: D3 over D1 on the calibrated H=3 task', tone='teal')}
-          {stat('+11.0 pp', 'exact compartment feedback over one shared somatic signal at D3', tone='purple')}
-          {stat('not universal', 'useful depth saturates and can hurt on local-ratio tasks', tone='orange')}
-        </div>""",
-        "Depth is a task-matched inductive bias under constraints, not a general expressivity advantage over point networks.",
-        "Grouped-point and flexible point controls separate composition, parameter count, and implementation.",
-    ))
-
-    slides.append(slide(
         "BIOLOGICAL CAPACITY",
         "Real arbors provide sparse candidate routes, mostly through coarse geometry",
         f"""
         <div class="two-col col-48-52 anatomy-layout">
           <div class="tree-panel anatomy-tree">{dendrite_svg(compact=True, labels=False)}<div class="route-overlay"><span>branch points define nested supports</span><span>q → P<sub>A</sub>q</span></div></div>
-          <div class="stack">
-            <div class="plot-card capture-plot">{img('capture_per_wire_current', 'Wiring-normalized capture')}</div>
-            <div class="stat-row compact-stats">
-              {stat('85%', 'of dense field capture', tone='teal')}
-              {stat('7%', 'of dense feedback connections', tone='purple')}
-              {stat('≈2.8×', 'cellwise capture per connection over density-matched shuffled routes', tone='orange')}
+          <div class="stack anatomy-data">
+            <div class="equation compact capture-equation"><span class="capture-formula">C<sub>A</sub>(q)=‖P<sub>A</sub>q‖²/‖q‖²</span><span class="capture-definition">fraction of field energy in the route span</span></div>
+            <div class="anatomy-evidence-grid">
+              <div class="plot-card capture-plot">{img('capture_per_wire_current', 'Wiring-normalized field capture')}</div>
+              <div class="anatomy-metrics">
+                {stat('85%', 'of dense field capture', tone='teal')}
+                {stat('≈7%', 'of dense route-matrix connections', tone='purple')}
+                {stat('14.2×', 'dense capture per connection', tone='blue')}
+                {stat('≈2.7×', 'over a density-matched shuffled dictionary', tone='orange')}
+              </div>
             </div>
-            <div class="precision-note">Replicated in a disjoint 47-cell cohort and ten cells from a second MICrONS mouse. These are modeled fields on measured anatomy—not observed task gradients.</div>
+            <div class="precision-note">Connections are nonzero route-matrix entries—not cable length, energy, or reliability. Replicated in a disjoint 47-cell cohort and ten cells from a second MICrONS mouse; fields are modeled, not observed task gradients.</div>
           </div>
         </div>""",
         "Morphology supplies a sparse route dictionary; most capacity comes from branch depth and coarse topology.",
@@ -723,42 +833,72 @@ def build_slides() -> list[dict[str, str]]:
         <div class="two-col col-58-42 shunt-layout">
           <div class="plot-card shunt-schematic">{focal_comparison_svg()}</div>
           <div class="stack">
-            <div class="equation compact">q′ = q − [κ q<sub>k</sub> / (1 + κ(G⁻¹)<sub>kk</sub>)] G⁻¹e<sub>k</sub></div>
+            <div class="equation compact">q′ = q − [κ<sub>k</sub>q<sub>k</sub>/(1+κ<sub>k</sub>(G⁻¹)<sub>kk</sub>)]G⁻¹e<sub>k</sub></div>
             <div class="plot-card boundary-plot">{img('focal_boundary', 'Electrotonic boundary for focal shunting')}</div>
-            {card('standard passive calibration', '<p>The shunt-minus-current localization contrast is effectively zero.</p>', tone='gray')}
+            {card('standard passive calibration', '<p>At R<sub>m</sub>=15,000 Ω cm², the shunt-minus-current localization contrast is effectively zero.</p>', tone='gray')}
             {card('high-conductance regime', '<p>Descendant-localized changes emerge and survive active-channel extensions.</p>', tone='teal')}
           </div>
         </div>""",
         "Shunting is a state-dependent route-gain mechanism, not a generic learning advantage.",
-        "Matched-current controls isolate the conductance operator from the local voltage change.",
+        "Baseline first-order focal current is matched and somatic voltage restored; local dendritic voltage is not matched.",
     ))
 
     slides.append(slide(
-        "FUNCTIONAL EVIDENCE",
-        "Measured responses are null; imposed task alignment rescues the same routes",
+        "MEASURED FUNCTIONAL EVIDENCE",
+        "Measured visual responses show no morphology-specific alignment",
         f"""
-        <div class="two-col col-50-50 plot-pair biological-pair">
-          <div class="plot-card"><div class="plot-label">Measured MICrONS visual responses</div><div class="measured-grid">{img('boundary_learning', 'Held-out complete-tree learning')}{img('boundary_topology', 'Topology effects')}</div></div>
-          <div class="plot-card"><div class="plot-label">Controlled rotation into the subtree span</div>{img('alignment_rescue_n', 'Alignment rescue')}</div>
+        <div class="two-col col-44-56 measured-null-layout">
+          <div class="stack">
+            <div class="measured-pipeline">
+              <div>measured presynaptic responses</div><span>→</span>
+              <div>mapped conductances on each reconstructed target arbor</div><span>→</span>
+              <div>held-out postsynaptic-response prediction</div>
+            </div>
+            {card('question', '<p>Does the measured input–output relation align more strongly with nested subtrees than with matched alternative route dictionaries?</p>', tone='teal')}
+            {card('inferential scope', '<p>Seven target cells from one MICrONS mouse; exact compartment errors are the reference.</p>', tone='gray')}
+          </div>
+          <div class="plot-card measured-null-plot">
+            <div class="plot-label">Held-out learning and topology-minus-control effects</div>
+            <div class="measured-grid">{img('boundary_learning', 'Held-out complete-tree learning')}{img('boundary_topology', 'Topology effects')}</div>
+          </div>
         </div>
-        <div class="contrast-row">
-          {card('what the data show', '<p>Nested subtrees do not beat random or site-shuffled routes for held-out response prediction or field capture.</p>', tone='gray')}
-          {card('what the rescue shows', '<p>Holding anatomy and field energy fixed, capture rises continuously as the task field rotates into the subtree span.</p>', tone='teal')}
+        <div class="null-result-strip">Nested subtrees do not outperform random or site-shuffled routes for held-out prediction, field capture, or within-arbor structure–function similarity.</div>""",
+        "Measured anatomy supplies candidate routes, but these visual responses provide no evidence that the task uses them preferentially.",
+    ))
+
+    slides.append(slide(
+        "CONTROLLED ALIGNMENT RESCUE",
+        "The same anatomical routes capture task credit aligned to their span",
+        f"""
+        <div class="two-col col-48-52 alignment-layout">
+          <div class="stack compact-stack">
+            <div class="equation compact">φ(a<sub>route</sub>) = √a<sub>route</sub> u<sub>∥</sub> + √(1−a<sub>route</sub>) u<sub>⊥</sub></div>
+            <div class="alignment-definitions">u<sub>∥</sub>∈col(A), &nbsp; u<sub>⊥</sub>⊥col(A), &nbsp; ‖u<sub>∥</sub>‖=‖u<sub>⊥</sub>‖=1</div>
+            <div class="plot-card rotation-plot">{img('alignment_rotation', 'Fixed-energy task field rotated into the subtree route span')}</div>
+            {card('controlled quantity', '<p>Anatomy, field energy, curvature, and route count are fixed; only alignment with the subtree span changes.</p>', tone='gray')}
+          </div>
+          <div class="stack">
+            <div class="plot-card alignment-gain-plot">{img('alignment_gain', 'Field capture across imposed alignment')}</div>
+            <div class="equation compact">C<sub>A</sub>[φ(a<sub>route</sub>)]=a<sub>route</sub> &nbsp; by construction</div>
+            {card('n = 8 reconstructed cells', '<p>Controls test whether the gain is specific to the true subtree span. The manipulation proves conditional representational sufficiency—not trained learning or endogenous biological use.</p>', tone='teal')}
+          </div>
         </div>""",
-        "The routes are sufficient when aligned, but their endogenous use is not established by the measured visual-response task.",
+        "Alignment is sufficient for representational capture in the model; endogenous morphology-specific alignment remains unestablished.",
     ))
 
     slides.append(slide(
         "SYNTHESIS",
-        "Dendrites provide conditional resources for local credit",
+        "Alignment and bandwidth determine which dendritic resources help",
         f"""
-        <div class="two-col col-58-42 synthesis-layout">
-          <div class="evidence-panel">{evidence_svg()}</div>
+        <div class="two-col col-52-48 final-layout">
+          <div class="stack phase-stack">
+            <div class="plot-card final-phase">{img('phase_plane', 'Task-route alignment and relative feedback bandwidth phase plane')}</div>
+            <div class="phase-definition">relative bandwidth = K/r<sub>eff</sub>, &nbsp; r<sub>eff</sub>=(Σᵢλᵢ)²/Σᵢλᵢ² &nbsp;·&nbsp; λᵢ: task-credit-spectrum eigenvalues</div>
+            <div class="precision-note">Coordinates are estimated separately within each experiment. Regime tint and the K/r<sub>eff</sub>=1 boundary are theoretical, not fitted.</div>
+          </div>
           <div class="stack final-stack">
-            {card('1 · identify the neuron', '<p>One learning coordinate per neuron carries most of the practical benefit on ordinary tasks.</p>', tone='blue')}
-            {card('2 · address the subtree', '<p>Useful when branches require different task-dependent updates and route bandwidth is matched.</p>', tone='purple')}
-            {card('3 · regulate route gain', '<p>Conductance can shape transport, but only in an appropriate electrotonic state.</p>', tone='teal')}
-            <div class="final-question">The decisive variable is <b>alignment between task credit and the available route span.</b></div>
+            <div class="evidence-panel categorical">{evidence_svg()}</div>
+            <div class="final-question"><b>Neuron identity</b> usually matters first; <b>subtree address</b> helps under task-aligned conflict; <b>shunting</b> changes route gain only in permissive electrotonic states.</div>
           </div>
         </div>""",
         "Dendritic structure is a conditional substrate for routing local credit—not a general replacement for backpropagation.",
@@ -847,9 +987,30 @@ h1 { margin:0; font-family:Georgia,"Nimbus Roman",serif; font-size:52px; line-he
 .hierarchy { height:650px; }.bandwidth-scale { display:grid; gap:10px; }.bandwidth-scale > div { display:grid; grid-template-columns:105px 1fr; gap:12px; align-items:center; padding:13px 18px; background:white; border:2px solid #D8CDE9; border-radius:15px; }.bandwidth-scale b { color:var(--purple); font-size:25px; }.bandwidth-scale span { color:var(--muted); font-size:20px; }
 .depth-layout { height:535px; align-items:stretch; }.schematic-card { height:285px; }.depth-result { height:100%; }.definition-box { text-align:center; background:var(--purple-pale); color:#554070; }.depth-stats { margin-top:14px; }.depth-stats .stat { min-height:84px; }
 .anatomy-layout { align-items:stretch; }.anatomy-tree { position:relative; height:660px; }.route-overlay { position:absolute; left:45px; right:45px; bottom:35px; display:flex; justify-content:space-between; color:var(--purple); font-size:19px; font-weight:800; }.capture-plot { height:400px; }.compact-stats .stat { min-height:88px; padding:10px 14px; }.compact-stats .stat-value { font-size:29px; }
-.shunt-layout { align-items:stretch; }.shunt-schematic { height:100%; }.boundary-plot { height:285px; }
+.shunt-layout { align-items:stretch; }.shunt-schematic { height:100%; }.boundary-plot { height:325px; }.shunt-layout .card { padding:15px 20px; }.shunt-layout .card-title { font-size:21px; }.shunt-layout .card p { font-size:18px; }
 .biological-pair { height:510px; }.contrast-row { margin-top:18px; }.contrast-row .card { min-height:148px; }
 .synthesis-layout { align-items:stretch; }.evidence-panel { height:650px; display:flex; align-items:center; }.final-stack .card { padding:18px 22px; }.final-question { background:linear-gradient(90deg,var(--teal-pale),var(--purple-pale)); color:var(--ink); font-size:23px; }
+
+/* Revised 20-slide workshop sequence. */
+.credit-visual { height:565px; }.credit-eq { position:absolute; left:300px; right:300px; bottom:4px; }
+.bp-layout { align-items:stretch; }.bp-layout .network-svg { max-height:555px; margin-top:30px; }
+.compact-stack { gap:12px; }.signal-definition,.mapping-line,.route-definitions,.operator-note,.alignment-definitions,.phase-definition { padding:13px 17px; border-radius:14px; background:#EEF2F5; color:#526176; font-size:19px; line-height:1.3; }
+.signal-definition { background:var(--blue-pale); color:#315881; }
+.taxonomy { display:grid; gap:7px; }.taxonomy > div { display:grid; grid-template-columns:44% 56%; align-items:center; padding:9px 13px; border-left:5px solid var(--grid); background:#FFFFFF; border-radius:9px; box-shadow:0 3px 10px rgba(18,35,63,.035); }
+.taxonomy b { font-size:16px; color:var(--ink); }.taxonomy span { font-size:15px; color:var(--muted); }
+.point-factorization { margin:30px auto 20px; }.point-factorization .term { min-width:385px; }.local-rule-row { height:245px; align-items:stretch; }.local-rule-row > .equation { align-self:center; }.local-rule-row .card { padding:15px 20px; }.local-rule-row .card-title { font-size:21px; }.local-rule-row .card p { font-size:18px; }
+.dendrite-resource-layout { align-items:stretch; }.labeled-tree { height:660px; }.mapping-line { background:var(--teal-pale); color:#2F6C65; font-weight:700; text-align:center; }.route-definitions { background:var(--purple-pale); color:#5E4A82; font-size:17px; }.resource-stack .card { padding:13px 19px; }.resource-stack .card-title { font-size:20px; }.resource-stack .card p { font-size:18px; }
+.conductance-layout,.gradient-layout,.transport-layout { align-items:stretch; }.conductance-layout > div:first-child,.gradient-layout > div:first-child,.transport-layout > div:first-child { display:flex; align-items:center; }.conductance-layout .equation.multiline { font-size:30px; }.shunt-callout { padding:13px 18px; border:2px solid #EBC7CB; border-radius:14px; background:var(--red-pale); color:#8C3D48; font:700 19px/1.3 Georgia,serif; text-align:center; }
+.gradient-factorization { margin:0; }.gradient-factorization .term { min-width:250px; }.gradient-factorization .term:first-of-type { min-width:475px; }.gradient-factorization .term b { font-size:27px; }.transport-layout .card { padding:17px 21px; }.transport-layout .card-title { font-size:21px; }.transport-layout .card p { font-size:19px; }
+.operator-layout { display:grid; grid-template-rows:455px 170px; gap:10px; height:100%; }.operator-visual { min-height:0; }.operator-equations { display:grid; grid-template-columns:1fr 1fr 1.25fr; gap:15px; align-items:stretch; }.operator-equations .equation { display:flex; align-items:center; justify-content:center; font-size:27px; }.operator-note { display:flex; align-items:center; font-size:18px; }.operator-note b { display:inline-block; margin-right:.28em; color:var(--ink); }
+.utility-layout { height:575px; align-items:stretch; }.main-utility { padding:14px; }.main-utility .equation { padding:7px 2px 0; font-size:29px; }.utility-plot { padding:10px; }.scope-strip { margin-top:12px; padding:10px 18px; border-radius:14px; background:#EEF2F5; color:#56667A; font-size:17px; text-align:center; }.utility-layout .stat { min-height:73px; padding:8px 15px; }.utility-layout .stat-value { font-size:27px; }.utility-layout .stat-label { font-size:15px; }
+.standard-plots { height:470px; }.comparison-table { margin-top:12px; display:grid; border:2px solid var(--grid); border-radius:15px; overflow:hidden; background:#FFFFFF; }.comparison-table > div { display:grid; grid-template-columns:1.5fr 1fr 1fr; gap:12px; padding:7px 16px; border-top:1px solid var(--grid); font-size:17px; align-items:center; }.comparison-table > div:first-child { border-top:0; }.comparison-head { background:#EEF2F5; color:var(--muted); font-weight:800; }.blue-text { color:var(--blue); }.red-text { color:var(--red); }
+.hierarchy-definition-layout { display:grid; grid-template-columns:55% 45%; gap:28px; height:100%; align-items:stretch; }.hierarchy-task-plot { height:100%; }.hierarchy-bandwidth-plot { height:385px; }.hierarchy-side .card { padding:15px 20px; }.hierarchy-side .card-title { font-size:20px; }.hierarchy-side .card p { font-size:18px; }
+.branch-symbols { padding:9px 12px; border-radius:12px; background:#EEF2F5; color:var(--muted); font-size:15px; line-height:1.25; text-align:center; }.branch-symbols b { color:var(--ink); }
+.four-stat-row { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-top:8px; }.four-stat-row .stat { min-width:0; }.capture-equation { padding:9px 16px; display:grid; grid-template-columns:auto 1fr; align-items:baseline; justify-content:center; gap:25px; }.capture-formula { color:var(--ink); font:26px/1.2 Georgia,serif; white-space:nowrap; }.capture-definition { color:var(--muted); font:17px/1.2 Arial,sans-serif; }.anatomy-evidence-grid { display:grid; grid-template-columns:46% 54%; gap:12px; height:430px; min-height:0; }.anatomy-layout .capture-plot { height:100%; padding:10px; }.anatomy-layout .capture-plot .plot { width:100%; height:100%; }.anatomy-metrics { display:grid; grid-template-rows:repeat(4,1fr); gap:9px; min-height:0; }.anatomy-metrics .stat { min-height:0; padding:10px 14px; display:flex; flex-direction:column; justify-content:center; }.anatomy-metrics .stat-value { font-size:28px; }.anatomy-metrics .stat-label { font-size:16px; }.anatomy-data .precision-note { font-size:16px; line-height:1.32; padding:12px 15px; }
+.measured-null-layout { height:570px; align-items:stretch; }.measured-pipeline { display:grid; gap:7px; text-align:center; }.measured-pipeline div { padding:14px; border-radius:14px; background:#FFFFFF; border:2px solid var(--grid); font-size:19px; font-weight:700; }.measured-pipeline span { color:var(--teal); font-size:25px; line-height:1; }.measured-null-plot { height:100%; }.null-result-strip { margin-top:12px; padding:13px 20px; border-radius:14px; background:#EEF2F5; color:#56667A; font-size:18px; font-weight:700; text-align:center; }
+.alignment-layout { align-items:stretch; }.rotation-plot { height:310px; }.alignment-gain-plot { height:455px; }.alignment-definitions { background:var(--purple-pale); color:#5E4A82; text-align:center; }.alignment-layout .card { padding:14px 19px; }.alignment-layout .card-title { font-size:20px; }.alignment-layout .card p { font-size:18px; }
+.final-layout { align-items:stretch; }.phase-stack { gap:10px; }.final-phase { height:455px; padding:9px; }.phase-definition { background:var(--purple-pale); color:#5E4A82; text-align:center; font-family:Georgia,serif; }.evidence-panel.categorical { height:535px; }.final-stack { gap:11px; }.final-stack .final-question { font-size:18px; padding:13px 17px; }
 
 .title-slide { padding:0; background:linear-gradient(135deg,#F9FAF7 0%,#F4F7F5 64%,#EEF5F3 100%); }
 .title-slide::before,.title-slide .takeaway,.title-slide .source { display:none; }

@@ -50,7 +50,7 @@ import numpy as np
 import pandas as pd
 from matplotlib.colors import to_rgb
 from matplotlib.lines import Line2D
-from matplotlib.patches import FancyBboxPatch
+from matplotlib.patches import FancyArrowPatch, FancyBboxPatch
 from matplotlib.transforms import offset_copy
 
 SCRIPT_DIR = Path(__file__).resolve().parent
@@ -85,7 +85,7 @@ ANIMAL = SOURCE / "animal_learning_francioni"
 OUT = ROOT / "figures" / "components" / "main_figure_09_native.pdf"
 
 # ── canvas geometry, in points ───────────────────────────────────────────
-CANVAS_H_PT = 483.0
+CANVAS_H_PT = 468.0
 # One height per row.  Row 2 is the tallest because G's ladder is a drawing
 # with a floor -- four rungs, each carrying a tree glyph that has to stay
 # legible and up to two bands of type that cannot be flattened, plus the
@@ -108,7 +108,7 @@ CANVAS_H_PT = 483.0
 # Row 2 carries the evidence ladder, whose four rungs each need a title
 # line, a qualifier line and a badge; at 128 pt its lines overlapped in
 # eleven places.  The extra 26 pt goes to that row alone.
-ROW_H_PT = (104.0, 104.0, 154.0)
+ROW_H_PT = (98.0, 98.0, 166.0)
 # The OUTER LEFT MARGIN is the figure's one shared left reserve.  It is kept
 # at 52 pt, the width the forest's row-label column used to need in column 0,
 # even though the three panels that now start in column 0 (A's labels are
@@ -505,55 +505,108 @@ def tree_rows(tree):
     return rows
 
 
-def panel_measured_response_pipeline(ax):
-    """Define the measured-response prediction before showing its null.
+# ── A: what B and C actually compare ─────────────────────────────────────
+#
+# This panel used to be a four-stage flowchart -- measured inputs, mapped
+# conductances, predicted response, held-out error.  That is the generic
+# setup of any regression, and it is not what the text sends a reader here
+# to see: the sentence citing panel A describes the FEEDBACK ROUTE
+# DICTIONARY, and B's four categories ("exact", "subtree", "random",
+# "shuffle") were otherwise bare words on an axis.  The panel now draws that
+# dictionary, in B's order and B's colours, so A reads as a pictorial legend
+# for the strip beside it.
+#
+# The arbor is a row of eight terminals under four tinted bands, one band per
+# nested subtree.  A route is a chip laid over the terminals it feeds, so the
+# comparison is one question of shape: does the chip lie inside a band?
+# Matched routes do, random anatomical routes are contiguous but cut across
+# them, and shuffled routes are not contiguous at all.
+N_TERM = 8
+TERM_X = np.linspace(0.375, 0.965, N_TERM)
+BAND_OF = (0, 0, 1, 1, 2, 2, 3, 3)          # which nested subtree each feeds
+ROW_Y = (0.855, 0.645, 0.435, 0.225)        # one row per rule, B's order
+CHIP_LW = 4.0                               # route chip thickness
+TERM_R_PT = 1.35
+LABEL_X = 0.315
 
-    The four compact stages use the same semantic colours as the rest of the
-    paper: measured quantities are neutral, mapped dendrites are green,
-    predictions are blue and held-out error is red.  The panel is deliberately
-    procedural rather than statistical so readers know what panels B and C
-    evaluate before encountering their estimates.
+# Exact learning is the only rule with a trial-specific signal at every
+# compartment, so its chips are eight singletons.  The three restricted rules
+# share ONE fixed spatial vector and differ only in the routes it is poured
+# into -- the caveat the text makes in a single sentence and that a reader
+# has to carry into B to read its null correctly.
+ROUTE_SETS = (
+    tuple((i,) for i in range(N_TERM)),                 # exact: per compartment
+    ((0, 1), (2, 3), (4, 5), (6, 7)),                   # matched to the bands
+    ((0,), (1, 2), (3, 4), (5, 6), (7,)),               # contiguous, off-band
+    ((0, 5), (1, 3), (2, 7), (4, 6)),                   # not contiguous at all
+)
+
+
+def panel_route_dictionary(ax):
+    """A: the feedback route dictionary the rest of the row evaluates.
+
+    One row per rule, in the order and colour B uses, so the reader can carry
+    a shape from here straight to its estimate.  Nothing is recomputed: the
+    panel is a definition, and the four rules are the four in TREE_METHODS.
     """
     f = Frame(ax)
-    # Two lines, not one: on a single line "mapped conductances" is 77.3 pt in
-    # an 87.6 pt card, so it ran 11.8 pt past the card edge and touched the
-    # icon on its left.  Wrapped, the widest line is about 50 pt.
-    cards = (
-        (0.765, "measured\ninputs", MUTE),
-        (0.515, "mapped\nconductances", ROUTE),
-        (0.265, "predicted\nresponse", COLORS["additive"]),
-        (0.015, "held-out\nerror", C_EXACT),
-    )
-    card_h = 0.205
-    for y0, label, tone in cards:
-        f.group((0.0, y0, 1.0, card_h), tint=mix("mute", 5),
-                edge=COLORS["grid"], lw=LW_HAIR, radius_pt=2.3)
-        # Centred in the span the icons leave free, not in the whole card.
-        f.text((0.63, y0 + card_h / 2.0), label, size=PT_SMALL,
-               color=tone, ha="center", linespacing=1.15)
+    ax.set_xlim(0, 1)
+    ax.set_ylim(0, 1)
+    ax.set_axis_off()
 
-    # Measured presynaptic tuning curves.
-    x = np.linspace(0.055, 0.255, 24)
-    for phase, tone in ((0.0, INK), (0.7, MUTE), (1.4, ROUTE)):
-        y = 0.865 + 0.026 * np.sin(np.linspace(0, 2.2 * np.pi, x.size) + phase)
-        ax.plot(x, y, color=tone, lw=LW_HAIR, zorder=4,
-                solid_capstyle="round")
+    # The anatomy, drawn once behind every rule: four nested subtrees as
+    # tinted columns, so "inside a band" is legible without four little trees
+    # (at this width an eight-terminal tree resolves into a thicket).
+    half = 0.5 * (TERM_X[1] - TERM_X[0])
+    for band in range(4):
+        members = [i for i in range(N_TERM) if BAND_OF[i] == band]
+        x0 = TERM_X[members[0]] - half * 0.86
+        x1 = TERM_X[members[-1]] + half * 0.86
+        f.group((x0, 0.135, x1 - x0, 0.80), tint=mix("point_mlp", 9),
+                edge="none", radius_pt=2.0, zorder=0.3)
 
-    # A compact mapped arbor, then a predicted tuning curve.
-    f.stage_tree((0.15, 0.535), 0.105, 2, color=ROUTE, root_r_pt=1.5)
-    x2 = np.linspace(0.055, 0.255, 24)
-    y2 = 0.345 + 0.042 * np.exp(-((x2 - 0.16) / 0.055) ** 2)
-    ax.plot(x2, y2, color=COLORS["additive"], lw=LW_DATA, zorder=4,
-            solid_capstyle="round")
-    ax.plot([0.055, 0.255], [0.315, 0.315], color=COLORS["grid"],
-            lw=LW_HAIR, zorder=1)
+    # The three restricted rules are marked as one group: they do not get
+    # four independently varying teaching signals, and the figure should say
+    # so.  A rule beside them, not a box around them -- a box wide enough to
+    # hold the labels ran off both edges of the panel.
+    ax.plot([0.055, 0.055], [0.152, 0.712], color=mix("point_mlp", 40),
+            lw=LW_HAIR, solid_capstyle="butt", zorder=2)
+    for y_end in (0.152, 0.712):
+        ax.plot([0.055, 0.085], [y_end, y_end], color=mix("point_mlp", 40),
+                lw=LW_HAIR, solid_capstyle="butt", zorder=2)
 
-    # Held-out comparison, expressed in the same MSE quantity as panel B.
-    f.text((0.16, 0.115), "(y − ŷ)²", size=PT_SMALL,
-           color=C_EXACT)
-    for y0 in (0.735, 0.485, 0.235):
-        f.arrow((0.50, y0), (0.50, y0 - 0.045), color=MUTE,
-                lw=LW_HAIR, head=3.5)
+    for row, ((_, label, color, _), routes) in enumerate(
+            zip(TREE_METHODS, ROUTE_SETS, strict=True)):
+        y = ROW_Y[row]
+        f.text((LABEL_X, y), label, size=PT_ANNOT, color=color, ha="right")
+        for i in range(N_TERM):
+            f.disc((TERM_X[i], y - 0.062), TERM_R_PT, fill=MUTE, zorder=3)
+        for route in routes:
+            xs = [TERM_X[i] for i in route]
+            if len(route) == 1:
+                ax.plot([xs[0] - half * 0.30, xs[0] + half * 0.30],
+                        [y + 0.028, y + 0.028], color=color, lw=CHIP_LW,
+                        solid_capstyle="round", zorder=4)
+            elif route[-1] - route[0] == len(route) - 1:
+                ax.plot([xs[0], xs[-1]], [y + 0.028, y + 0.028], color=color,
+                        lw=CHIP_LW, solid_capstyle="round", zorder=4)
+            else:
+                # A route that is not a subtree cannot be one bar: its sites
+                # are drawn where they are and tied by an arc, which is the
+                # whole point of the shuffled control.
+                for x in xs:
+                    ax.plot([x - half * 0.30, x + half * 0.30],
+                            [y + 0.028, y + 0.028], color=color, lw=CHIP_LW,
+                            solid_capstyle="round", zorder=4)
+                ax.add_patch(FancyArrowPatch(
+                    (xs[0], y + 0.028), (xs[-1], y + 0.028),
+                    arrowstyle="-", connectionstyle="arc3,rad=-0.16",
+                    lw=LW_HAIR, color=color, zorder=3.5, clip_on=False))
+
+    # Short enough to sit inside the panel: the full statement -- that the
+    # error is a scalar and only the routes differ -- is in the caption.
+    f.text((0.5 * (TERM_X[0] + TERM_X[-1]), 0.048), "one fixed spatial vector",
+           size=PT_SMALL, color=MUTE)
     return ax
 
 
@@ -1383,7 +1436,7 @@ def build():
     # Panels sharing a module span must share an axes-box width, which a
     # schematic and a data panel cannot, so every row mixes spans.
     ax_a = canvas.panel("A", 0, 0, 6, schematic=True,
-                        title="Response pipeline")
+                        title="Feedback route dictionary")
     ax_b = canvas.panel("B", 0, 6, 6, grid="x",
                         title="Complete-tree learning")
 
@@ -1412,7 +1465,7 @@ def build():
     # leftmost without widening the page margin, and so without squeezing D.
     canvas.declare_reserve("C", left=C_LABEL_RESERVE_PT)
 
-    panel_measured_response_pipeline(ax_a)
+    panel_route_dictionary(ax_a)
     panel_tree_learning(ax_b, tree)
     truncated = panel_forest(ax_c, prespecified, all_scans, tree, original,
                              expanded, header_x=0.014)
