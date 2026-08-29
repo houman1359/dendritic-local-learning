@@ -754,7 +754,8 @@ in the release). In the hierarchy-depth
 routing experiment the initialization utility of the aligned tree, computed
 per seed and task depth, placed its argmax at the trained loss minimum in
 135 of 200 seed--task pairs, and the group-mean argmax matched the trained
-optimum exactly at $H=1,2,3$; at the full-rank boundary $H=4$ the one-step
+optimum exactly at $H_{\mathrm c}=1,2,3$; at the full-rank boundary
+$H_{\mathrm c}=4$ the one-step
 bound was conservative and favoured $D_{\mathrm{r}}=2$, reflecting its single-step
 horizon. In the trained subtree factorial the same initialization utility
 reproduced the exact ties at $K=8$, where every span coincides, but did not
@@ -1057,11 +1058,10 @@ $\lVert \mathcal R\bm e_k\rVert_2\leq\lVert \mathcal R\rVert_2$ and
 $\mathcal R_{kk}\geq\lambda_{\min}(\mathcal R)=1/\lambda_{\max}(G)$ for the bound.
 \hfill$\square$
 
-Equation~\ref{eq:s_focal_inverse_norm} makes the electrotonic boundary
-explicit: a well-conditioned, strongly grounded cable has small
-$\lVert G^{-1}\rVert_2$ and therefore cannot show a large global adjoint
-change at fixed shunt dose. The bound is global and conservative; the
-descendant-enriched spatial contrast remains a Green's-function question.
+Equation~\ref{eq:s_focal_inverse_norm} provides only a global magnitude ceiling
+on the total adjoint change. It does not predict the localization contrast or
+the observed crossover with membrane conductance. Those spatial effects depend
+on the Green's-function profile and electrotonic length constant of the cable.
 
 \subsection{Why depth can help or hurt}
 
@@ -1491,7 +1491,7 @@ same scalar count as the serial child aggregator it replaces and copies its
 initialized raw conductances. Tests required copied projection parameters,
 finite gradients and exact D1 logits against the serial hierarchy.
 
-After the preceding $H=3$ endpoints were known, a dated contract froze 60
+After the preceding $H_{\mathrm p}=3$ endpoints were known, a dated contract froze 60
 literal grouped-point fits crossing aligned or reversed placement, D1--D3 and
 the same paired seeds 10200--10209. The frozen serial outcomes were retained
 unchanged as the reference. Under alignment, grouped-point means were 0.6096,
@@ -1504,7 +1504,7 @@ literal grouped point was 0.06 points at aligned D3 (0.01--0.13; 7/10
 positive; $P=0.0840$), which did not pass the frozen directional claim gate.
 
 We separately changed hierarchy depth before viewing any new outcome. The
-$H=2$ generator used two 32-feature sensor tiers, fixed inventory counts 4/4
+$H_{\mathrm p}=2$ generator used two 32-feature sensor tiers, fixed inventory counts 4/4
 and exact-resource D1 $[8]$ and D2 $[4,1]$ morphologies. All remaining task,
 signal, gain, axial-coupling, optimizer and stopping settings were inherited
 without retuning. Aligned and reversed placement were crossed with serial BP,
@@ -1548,7 +1548,7 @@ The primary family was frozen before execution: aligned serial-BP D4--D3 and
 D4--D1, their placement interactions, the D4 architecture-by-placement
 interaction, shared- and path-LocalCA D4--D3 effects and interactions, and the
 shunting-minus-additive D4--D3 interaction. Failure of D4 to exceed D3 was
-defined prospectively as falsification of the simple $D_{\mathrm p}=H$
+defined prospectively as falsification of the simple $D_{\mathrm p}=H_{\mathrm p}$
 trained crossover. Intervals used 50,000 paired-seed bootstrap draws, exact
 two-sided sign-flip tests enumerated all $2^{10}$ assignments, and the primary
 family was Benjamini--Hochberg corrected. A directional positive statement
@@ -3425,12 +3425,14 @@ contrasts.}
 \includegraphics[width=\textwidth]{supplementary/figure_S16_panels_A-D.pdf}
 \caption{\textbf{The credit-operator bound locates the trained depth optimum
 but not the trained ancestry advantage.} \textbf{A}, Mean final population
-loss across routed depth $D_{\mathrm{r}}$ for task depths $H=1$--$4$ in the frozen
+loss across routed depth $D_{\mathrm{r}}$ for task depths
+$H_{\mathrm c}=1$--$4$ in the frozen
 hierarchy-depth routing experiment (aligned tree, $n=50$ seeds); open circles
 mark the loss minimum. \textbf{B}, Mean initialization utility
 (Supplementary Eq.~\ref{eq:s_projector_utility}) for the same conditions;
 open circles mark the utility maximum. The group-level argmax matches the
-trained optimum exactly at $H=1,2,3$; at the full-rank boundary $H=4$ the
+trained optimum exactly at $H_{\mathrm c}=1,2,3$; at the full-rank boundary
+$H_{\mathrm c}=4$ the
 one-step bound is conservative and favours $D_{\mathrm{r}}=2$. \textbf{C}, Per-pair
 predicted (argmax utility) versus observed (argmin loss) best depth over all
 200 seed--task pairs; 135 pairs lie on the diagonal. \textbf{D},
@@ -4083,7 +4085,7 @@ $\bm q$ & Adjoint field; $q_n$ is the loss sensitivity to a small current inject
 $M$, $\Sigma$, $U(M)$ & Credit operator, stochastic-gradient covariance, and the operator utility (guaranteed-progress score). \\
 $K$ & Number of communicated feedback channels or route fields. \\
 $H_{\mathrm c}$, $D_{\mathrm{r}}$ & Task-credit hierarchy and routed address depth in the fixed-state signal--noise experiment. \\
-$D_{\mathrm{p}}$; D1--D4 & Physical dendritic stage count; D1--D4 mean $D_{\mathrm{p}}=1,\ldots,4$. In $[b_1,\ldots,b_{D_{\mathrm{p}}}]$, branching factors are ordered soma-to-distal. \\
+$H_{\mathrm p}$, $D_{\mathrm{p}}$; D1--D4 & Physical task hierarchy and physical dendritic stage count; D1--D4 mean $D_{\mathrm{p}}=1,\ldots,4$. In $[b_1,\ldots,b_{D_{\mathrm{p}}}]$, branching factors are ordered soma-to-distal. \\
 $A_T$ & Binary synapse-by-route ancestry matrix of tree $T$. \\
 $\Gamma_{ik}$ & Direct ancestry-route sensitivity from candidate route $k$ to excitatory site $i$. \\
 $\Phi_{T,K}$ & $K$-channel feedback dictionary implemented by topology, route gains, channel allocation and weights. \\

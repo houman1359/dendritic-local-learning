@@ -65,7 +65,7 @@ a stochastic operator bound predicts when restricted routes retain aligned
 signal while excluding sufficient noise. In mechanism-matched synthetic
 tasks, serial dendritic depth is useful
 only when its nonlinear operations match the required computation.
-Reconstructed arbors provide sparse candidate routes, but the analyzed
+Reconstructed arbors provide sparse candidate routes, but the one-mouse
 MICrONS visual-response cohort does not reveal their endogenous use. Dendritic
 structure is therefore a conditional substrate for routing local credit, not a
 general solution to credit assignment.
@@ -667,8 +667,10 @@ global, shuffled and anti-aligned gains. \textbf{F}, Predicted utility versus
 observed one-step progress in 540 trained-factorial conditions (Spearman
 \(\rho=0.937\), 95\% seed-block interval 0.93--0.94). \textbf{G}, Experiments
 located by task--anatomy alignment and relative bandwidth
-\(K/r_{\rm eff}\). Filled markers denote a subtree benefit or tie; open markers
-denote no benefit. Regime tints and the \(K/r_{\rm eff}=1\) line are theoretical,
+\(K/r_{\mathrm{eff}}\), where
+\(r_{\mathrm{eff}}=(\sum_i\lambda_i)^2/\sum_i\lambda_i^2\) is the effective
+rank of the task-credit spectrum \(\{\lambda_i\}\). Filled markers denote a subtree benefit or tie; open markers
+denote no benefit. Regime tints and the \(K/r_{\mathrm{eff}}=1\) line are theoretical,
 not fitted. Panels \textbf{B--E} use 50 paired seeds; heatmaps show means and
 curves show means with 95\% seed-bootstrap intervals. Panel \textbf{F} resamples
 20 seed blocks. Small horizontal offsets separate coincident markers without
@@ -1001,12 +1003,12 @@ subtrees tested the assignment of measured supports and degree--depth
 surrogate trees tested how much could be explained without fine topology.
 
 We first analyzed eight reconstructed intratelencephalic neurons from one
-MICrONS mouse. Nested-subtree channels captured more of a route-matched field
-than random paths, depth bins or shuffled supports
-(Fig.~\ref{fig:topology}c,d; route support and direct-type controls in
-Supplementary Fig.~S20). The same ordering persisted for an independently
-generated field derived from the reciprocal cable rather than the route
-kernel. Degree--depth surrogate trees recovered much of the effect, however.
+MICrONS mouse. For an independently generated field derived from the reciprocal
+cable, nested-subtree channels captured more field energy than random paths, depth bins or
+shuffled supports (Fig.~\ref{fig:topology}c). The same ordering held for the
+route-matched field (Fig.~\ref{fig:topology}d; route-support and direct-type
+controls in Supplementary Fig.~S20). Degree--depth surrogate trees recovered
+much of the effect, however.
 Thus most of the representational capacity followed coarse branching and depth;
 the additional contribution of fine topology depended on how the target field
 was generated.
@@ -1169,7 +1171,7 @@ The anatomical analyses establish that subtree routes are available, and the
 perturbation analyses identify a possible gain mechanism. Neither result shows
 that biological activity uses those routes during learning. We therefore
 paired reconstructed MICrONS arbors with repeated visual responses from mapped
-presynaptic partners and target cells.
+presynaptic partners and target cells in one mouse.
 
 The learning task was to predict each target cell's measured response on held-out
 visual conditions. Presynaptic responses entered the reconstructed tree as
@@ -1243,7 +1245,7 @@ effects for structure--function similarity, held-out MSE and field capture;
 positive values favor subtrees. ``Prespecified'' uses one predefined scan per
 target; ``all scans'' averages eligible scans within target. An arrowhead marks
 an interval extending beyond the axis; Source Data give its full bound. Panels
-\textbf{B,C} use seven target cells. \textbf{D}, Controlled
+\textbf{B,C} use seven target cells from one MICrONS mouse. \textbf{D}, Controlled
 alignment
 \(\bm\phi(a)=\sqrt a\,\bm u_{\parallel}+\sqrt{1-a}\,\bm u_{\perp}\)
 rotates a fixed-energy field between the subtree-route span and its orthogonal
@@ -1821,7 +1823,9 @@ of the leading $K$ eigenvalues divided by total covariance energy. Because the
 endpoint covariances had equal trace, ancestry-minus-random capture varied
 affinely with alignment. Endpoint differences therefore gave the exact
 per-seed crossover; seeds already favoring ancestry at zero alignment were
-assigned threshold zero. Capture was $\tr(P\Sigma_g)/\tr(\Sigma_g)$.
+assigned threshold zero. In these unweighted coordinates, let
+\(\overline\Sigma_g\) denote the task-gradient covariance; capture was
+$\tr(P\overline\Sigma_g)/\tr(\overline\Sigma_g)$.
 
 The same-span diagnostic compared raw nested indicators, their tree-Haar basis
 and indicators multiplied by fixed nonzero lognormal column gains. Rank,

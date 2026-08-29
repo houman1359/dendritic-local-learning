@@ -311,7 +311,7 @@ def panel_b(ax):
 STAGES = (
     (dict(mode="coordinate"), "coordinate", "δᵤ", BLUE, "which neuron"),
     (dict(mode="address", K=4), "address", "cᵤ,ₖ", INK, "which subtree"),
-    (dict(mode="gain"), "gain", "ᾶₙ", INK, "how strongly"),
+    (dict(mode="gain"), "gain", r"$\widetilde{\alpha}_n$", INK, "how strongly"),
 )
 
 TREE_COL = 0.235                  # the rung's tree column, in frame fractions
