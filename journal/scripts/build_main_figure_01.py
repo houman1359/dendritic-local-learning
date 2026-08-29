@@ -85,7 +85,7 @@ INH = COLORS["inh"]
 EDGE = COLORS["edge"]
 
 # ── canvas geometry, in points (one module grid, one h- and one v-gutter) ──
-CANVAS_H_PT = 461.0            # 518.4 / 443.0 = 1.17 aspect
+CANVAS_H_PT = 453.0            # 518.4 / 453.0 = 1.14 aspect
 MARGINS = Margins(left=32.0, right=8.0, top=26.0, bottom=9.0)
 HGUTTER = 22.0
 VGUTTER = 26.0

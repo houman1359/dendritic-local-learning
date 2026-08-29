@@ -225,7 +225,8 @@ neuron-specific feedback, derive when a restricted route should help, test
 branch addresses under controlled conflict and hierarchy, distinguish
 backward route resolution from forward physical depth, and then test route
 capacity, conductance-dependent gain and functional alignment in reconstructed
-arbors.}
+arbors. Throughout, an orange disc is the soma, green the dendrite and the
+routes on it, and a tinted halo one addressable subtree.}
 \label{fig:framework}
 \end{figure}
 
@@ -870,6 +871,9 @@ bandwidth \(K=1,2,4,8\) resolves progressively finer nested subtrees within
 one neuron. \textbf{C}, The route-assignment controls at \(K=4\). Every card is drawn
 over the same eight branches. Matched routes carry each group's own signal;
 the cyclic derangement preserves route supports and permutes their signals.
+Shade identifies which of the four signals a route carries and which each
+terminal branch expects, so a matched route shares the shade of the branches
+beneath it and a deranged one does not.
 \textbf{D}, A degree- and depth-matched rewiring breaks task--tree alignment,
 whereas a dense signed basis supplies a non-anatomical four-channel control.
 Matrix hue gives signed route weight. \textbf{E}, Held-out accuracy across
@@ -1268,9 +1272,9 @@ unestablished endogenous use of morphology-specific routes
 \includegraphics[width=\textwidth]{main/figure_09.pdf}
 \caption{\textbf{Measured responses define the biological boundary; imposed
 alignment validates the conditional prediction.} \textbf{A}, The four rules compared in
-\textbf{B}: tinted columns are the four nested subtrees, and a bar marks the
-sites each route feeds. Only exact uses trial-specific compartment errors; the
-restricted rules share one fixed vector. \textbf{B}, Held-out
+\textbf{B}, in B's colours: a bar marks the sites one route feeds, and arcs
+join the sites of a shuffled route, which is no subtree. Only exact learning
+uses trial-specific compartment errors. \textbf{B}, Held-out
 normalized mean-squared error (MSE) under exact compartment errors, nested subtrees, random routes
 and site-shuffled subtrees; lower is better. \textbf{C}, Standardized subtree
 effects for structure--function similarity, held-out MSE and field capture;

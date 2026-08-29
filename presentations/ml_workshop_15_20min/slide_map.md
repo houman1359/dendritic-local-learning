@@ -19,7 +19,10 @@ Use:
 `1–13, 18–20`
 
 This cut is about 13:35 of scripted speech, leaving real time for transitions.
-Omit slides 14–17. On slide 20, summarize the omitted arc in two sentences:
+Omit slides 14–17. After slide 13, bridge directly to slide 18 with: “The
+controlled task establishes why a branch address can be needed; we now ask
+whether nested routes on reconstructed arbors are preferentially aligned with
+measured biological function.” On slide 20, summarize the omitted arc in two sentences:
 “At intermediate bandwidth, matched ancestry adds a small topology-specific
 gain beyond rank-matched alternatives. Reconstructed arbors supply sparse
 candidate routes, and shunting changes their modeled gain only in permissive

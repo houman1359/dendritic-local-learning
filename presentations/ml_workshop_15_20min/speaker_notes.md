@@ -222,8 +222,8 @@ address?
 branch should control the output.
 
 Here \(N\) is the number of trials, \(\delta_t\) is the downstream logit
-gradient on trial \(t\), and \(\mathbf d_b\) is the mean update direction for
-branch \(b\).
+gradient on trial \(t\), \(\mathbf 1[\cdot]\) is the indicator function, and
+\(\mathbf d_b\) is the mean update direction for branch \(b\).
 
 All \(B\) branches receive a Fashion-MNIST image and form nonzero eligibility.
 On trial \(t\), context \(c_t\) selects the branch whose image defines the

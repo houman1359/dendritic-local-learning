@@ -103,6 +103,11 @@ def render_pdf_assets() -> None:
             pixmap.save(temporary)
         with Image.open(temporary) as image:
             rendered = trim_white(image)
+            if name == "cifar_confirmatory_ladder":
+                # Imported panel letters are useful in the manuscript but
+                # distracting when only one panel is shown in the talk.
+                draw = ImageDraw.Draw(rendered)
+                draw.rectangle((0, 0, 90, 82), fill="white")
             if name == "phase_plane":
                 # The slide uses the implementation-neutral name because the
                 # plane includes both anatomical and non-anatomical routes.
@@ -112,14 +117,14 @@ def render_pdf_assets() -> None:
                 # Cover the complete manuscript-axis label before adding the
                 # presentation wording.  The wider box also removes the final
                 # letters of "task-anatomy alignment" at high raster scale.
-                draw.rectangle((600, 528, 1300, 605), fill="white")
+                draw.rectangle((500, 548, 1400, 615), fill="white")
                 font = ImageFont.truetype(
                     "/usr/share/fonts/urw-base35/NimbusSans-Regular.otf", 39
                 )
                 label = "task–route alignment"
                 bbox = draw.textbbox((0, 0), label, font=font)
                 draw.text(
-                    ((rendered.width - (bbox[2] - bbox[0])) / 2, 539),
+                    ((rendered.width - (bbox[2] - bbox[0])) / 2, 552),
                     label,
                     fill="#222222",
                     font=font,
@@ -154,21 +159,47 @@ def render_pdf_assets() -> None:
                 rendered = rendered.crop(
                     (int(rendered.width * post_crop_left), 0, rendered.width, rendered.height)
                 )
+            if output_name == "boundary_topology":
+                draw = ImageDraw.Draw(rendered)
+                draw.rectangle((0, 0, 105, 90), fill="white")
+            if output_name == "alignment_rotation":
+                draw = ImageDraw.Draw(rendered)
+                draw.rectangle((90, 0, 225, 90), fill="white")
+                draw.rectangle((0, rendered.height - 70, 110, rendered.height), fill="white")
             if output_name == "alignment_gain":
                 # Keep the presentation symbol consistent with the equation
                 # on slide 19 without changing the canonical paper panel.
                 draw = ImageDraw.Draw(rendered)
-                draw.rectangle((0, 748, rendered.width, rendered.height), fill="white")
+                # Remove clipped E/F panel-letter fragments introduced by the
+                # wider vertical crop used to retain the top data point.
+                draw.rectangle((0, 0, 105, 55), fill="white")
+                draw.rectangle((rendered.width - 105, 0, rendered.width, 55), fill="white")
+                label_top = rendered.height - 72
+                draw.rectangle((0, label_top, rendered.width, rendered.height), fill="white")
                 font = ImageFont.truetype(
                     "/usr/share/fonts/urw-base35/NimbusSans-Regular.otf", 35
                 )
-                label = "imposed subtree alignment  a_route"
+                sub_font = ImageFont.truetype(
+                    "/usr/share/fonts/urw-base35/NimbusSans-Regular.otf", 23
+                )
+                label = "imposed subtree alignment  a"
+                sub_label = "route"
                 bbox = draw.textbbox((0, 0), label, font=font)
+                sub_bbox = draw.textbbox((0, 0), sub_label, font=sub_font)
+                total_width = (bbox[2] - bbox[0]) + (sub_bbox[2] - sub_bbox[0])
+                x = (rendered.width - total_width) / 2
+                y = rendered.height - 55
                 draw.text(
-                    ((rendered.width - (bbox[2] - bbox[0])) / 2, 765),
+                    (x, y),
                     label,
                     fill="#222222",
                     font=font,
+                )
+                draw.text(
+                    (x + (bbox[2] - bbox[0]), y + 20),
+                    sub_label,
+                    fill="#222222",
+                    font=sub_font,
                 )
             rendered.save(ASSETS / f"{output_name}.png", optimize=True)
         temporary.unlink()
@@ -181,17 +212,17 @@ def render_pdf_assets() -> None:
     render_clip(
         "main_figure_07_native.pdf",
         "capture_per_wire_current",
-        (0.555, 0.345, 0.995, 0.995),
+        (0.525, 0.345, 0.995, 0.995),
     )
     render_clip(
         "main_figure_09_native.pdf",
         "boundary_learning",
-        (0.565, 0.0, 0.995, 0.315),
+        (0.565, 0.0, 0.995, 0.285),
     )
     render_clip(
         "main_figure_09_native.pdf",
         "boundary_topology",
-        (0.0, 0.285, 0.605, 0.60),
+        (0.0, 0.285, 0.605, 0.575),
     )
     render_clip(
         "main_figure_03_native.pdf",
@@ -206,7 +237,7 @@ def render_pdf_assets() -> None:
     render_clip(
         "main_figure_09_native.pdf",
         "alignment_gain",
-        (0.005, 0.64, 0.37, 0.995),
+        (0.005, 0.605, 0.37, 0.995),
     )
     render_clip(
         "main_figure_05_native.pdf",
@@ -686,7 +717,7 @@ def build_slides() -> list[dict[str, str]]:
         <div class="operator-layout">
           <div class="operator-visual">{credit_operator_svg()}</div>
           <div class="operator-equations">
-            <div class="equation compact">μ<sub>BP</sub>=μ+ξ, &nbsp; 𝔼[ξ]=0, &nbsp; Cov(ξ)=Σ</div>
+            <div class="equation compact">μ<sub>BP</sub>=μ+ξ, &nbsp; E[ξ]=0, &nbsp; Cov(ξ)=Σ</div>
             <div class="equation compact">μ<sub>route</sub>=Mμ<sub>BP</sub>, &nbsp; w<sup>+</sup>=w−ημ<sub>route</sub></div>
             <div class="operator-note"><span><b>M = I:</b> unrestricted backpropagation of the stochastic gradient. Restricted routes change the span, assignment, or gain of the available update.</span></div>
           </div>
@@ -746,9 +777,9 @@ def build_slides() -> list[dict[str, str]]:
             {card('input', '<p>All B branches receive a Fashion-MNIST image and form nonzero eligibility.</p>', tone='blue')}
             {card('forward selector', '<p>Context c selects the branch whose image determines the target.</p>', tone='teal')}
             {card('conflict dose χ', '<p>Nonselected images vary from class-compatible (χ=0) to opposite-class (χ=1).</p>', tone='red')}
-            <div class="equation compact">d<sup>branch</sup><sub>b</sub> = N<sup>−1</sup>Σ<sub>t</sub>δ<sub>t</sub>𝟙[c<sub>t</sub>=b]x<sub>t,b</sub></div>
+            <div class="equation compact">d<sup>branch</sup><sub>b</sub> = N<sup>−1</sup>Σ<sub>t</sub>δ<sub>t</sub><span class="indicator-one">1</span>[c<sub>t</sub>=b]x<sub>t,b</sub></div>
             <div class="equation compact">d<sup>shared</sup><sub>b</sub> = N<sup>−1</sup>Σ<sub>t</sub>δ<sub>t</sub>B<sup>−1</sup>x<sub>t,b</sub></div>
-            <div class="branch-symbols"><b>N</b>: trials &nbsp;·&nbsp; <b>δ<sub>t</sub></b>: downstream logit gradient &nbsp;·&nbsp; <b>d<sub>b</sub></b>: mean update direction for branch b</div>
+            <div class="branch-symbols"><b>N</b>: trials &nbsp;·&nbsp; <b>δ<sub>t</sub></b>: downstream logit gradient &nbsp;·&nbsp; <b>1[·]</b>: indicator<br><b>d<sub>b</sub></b>: mean update direction for branch b</div>
           </div>
         </div>""",
         "At zero conflict, one shared signal is sufficient; at high conflict, different branches require opposite updates.",
@@ -1006,7 +1037,7 @@ h1 { margin:0; font-family:Georgia,"Nimbus Roman",serif; font-size:52px; line-he
 .utility-layout { height:575px; align-items:stretch; }.main-utility { padding:14px; }.main-utility .equation { padding:7px 2px 0; font-size:29px; }.utility-plot { padding:10px; }.scope-strip { margin-top:12px; padding:10px 18px; border-radius:14px; background:#EEF2F5; color:#56667A; font-size:17px; text-align:center; }.utility-layout .stat { min-height:73px; padding:8px 15px; }.utility-layout .stat-value { font-size:27px; }.utility-layout .stat-label { font-size:15px; }
 .standard-plots { height:470px; }.comparison-table { margin-top:12px; display:grid; border:2px solid var(--grid); border-radius:15px; overflow:hidden; background:#FFFFFF; }.comparison-table > div { display:grid; grid-template-columns:1.5fr 1fr 1fr; gap:12px; padding:7px 16px; border-top:1px solid var(--grid); font-size:17px; align-items:center; }.comparison-table > div:first-child { border-top:0; }.comparison-head { background:#EEF2F5; color:var(--muted); font-weight:800; }.blue-text { color:var(--blue); }.red-text { color:var(--red); }
 .hierarchy-definition-layout { display:grid; grid-template-columns:55% 45%; gap:28px; height:100%; align-items:stretch; }.hierarchy-task-plot { height:100%; }.hierarchy-bandwidth-plot { height:385px; }.hierarchy-side .card { padding:15px 20px; }.hierarchy-side .card-title { font-size:20px; }.hierarchy-side .card p { font-size:18px; }
-.branch-symbols { padding:9px 12px; border-radius:12px; background:#EEF2F5; color:var(--muted); font-size:15px; line-height:1.25; text-align:center; }.branch-symbols b { color:var(--ink); }
+.branch-symbols { padding:8px 12px; border-radius:12px; background:#EEF2F5; color:var(--muted); font-size:18px; line-height:1.24; text-align:center; }.branch-symbols b { color:var(--ink); }.indicator-one { font-family:Arial,Nimbus Sans,sans-serif; font-weight:800; }
 .four-stat-row { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-top:8px; }.four-stat-row .stat { min-width:0; }.capture-equation { padding:9px 16px; display:grid; grid-template-columns:auto 1fr; align-items:baseline; justify-content:center; gap:25px; }.capture-formula { color:var(--ink); font:26px/1.2 Georgia,serif; white-space:nowrap; }.capture-definition { color:var(--muted); font:17px/1.2 Arial,sans-serif; }.anatomy-evidence-grid { display:grid; grid-template-columns:46% 54%; gap:12px; height:430px; min-height:0; }.anatomy-layout .capture-plot { height:100%; padding:10px; }.anatomy-layout .capture-plot .plot { width:100%; height:100%; }.anatomy-metrics { display:grid; grid-template-rows:repeat(4,1fr); gap:9px; min-height:0; }.anatomy-metrics .stat { min-height:0; padding:10px 14px; display:flex; flex-direction:column; justify-content:center; }.anatomy-metrics .stat-value { font-size:28px; }.anatomy-metrics .stat-label { font-size:16px; }.anatomy-data .precision-note { font-size:16px; line-height:1.32; padding:12px 15px; }
 .measured-null-layout { height:570px; align-items:stretch; }.measured-pipeline { display:grid; gap:7px; text-align:center; }.measured-pipeline div { padding:14px; border-radius:14px; background:#FFFFFF; border:2px solid var(--grid); font-size:19px; font-weight:700; }.measured-pipeline span { color:var(--teal); font-size:25px; line-height:1; }.measured-null-plot { height:100%; }.null-result-strip { margin-top:12px; padding:13px 20px; border-radius:14px; background:#EEF2F5; color:#56667A; font-size:18px; font-weight:700; text-align:center; }
 .alignment-layout { align-items:stretch; }.rotation-plot { height:310px; }.alignment-gain-plot { height:455px; }.alignment-definitions { background:var(--purple-pale); color:#5E4A82; text-align:center; }.alignment-layout .card { padding:14px 19px; }.alignment-layout .card-title { font-size:20px; }.alignment-layout .card p { font-size:18px; }

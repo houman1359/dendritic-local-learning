@@ -524,7 +524,8 @@ def tree_rows(tree):
 N_TERM = 8
 TERM_X = np.linspace(0.375, 0.965, N_TERM)
 BAND_OF = (0, 0, 1, 1, 2, 2, 3, 3)          # which nested subtree each feeds
-ROW_Y = (0.855, 0.645, 0.435, 0.225)        # one row per rule, B's order
+ROW_Y = (0.815, 0.635, 0.455, 0.275)        # one row per rule, B's order
+SITE_Y = 0.145                              # the eight sites, drawn once
 CHIP_LW = 4.0                               # route chip thickness
 TERM_R_PT = 1.35
 LABEL_X = 0.315
@@ -562,16 +563,25 @@ def panel_route_dictionary(ax):
         members = [i for i in range(N_TERM) if BAND_OF[i] == band]
         x0 = TERM_X[members[0]] - half * 0.86
         x1 = TERM_X[members[-1]] + half * 0.86
-        f.group((x0, 0.135, x1 - x0, 0.80), tint=mix("point_mlp", 9),
+        f.group((x0, 0.105, x1 - x0, 0.82), tint=mix("point_mlp", 9),
                 edge="none", radius_pt=2.0, zorder=0.3)
+    f.text((0.5 * (TERM_X[0] + TERM_X[-1]), 0.955), "one nested subtree each",
+           size=PT_SMALL, color=MUTE)
+
+    # The eight sites, drawn ONCE beneath the rules rather than repeated under
+    # every one of them: repeated, they read as a second kind of block.
+    for i in range(N_TERM):
+        f.disc((TERM_X[i], SITE_Y), TERM_R_PT, fill=MUTE, zorder=3)
+    f.text((TERM_X[0] - half * 1.5, SITE_Y), "sites", size=PT_SMALL,
+           color=MUTE, ha="right")
 
     # The three restricted rules are marked as one group: they do not get
     # four independently varying teaching signals, and the figure should say
     # so.  A rule beside them, not a box around them -- a box wide enough to
     # hold the labels ran off both edges of the panel.
-    ax.plot([0.055, 0.055], [0.152, 0.712], color=mix("point_mlp", 40),
+    ax.plot([0.055, 0.055], [0.205, 0.700], color=mix("point_mlp", 40),
             lw=LW_HAIR, solid_capstyle="butt", zorder=2)
-    for y_end in (0.152, 0.712):
+    for y_end in (0.205, 0.700):
         ax.plot([0.055, 0.085], [y_end, y_end], color=mix("point_mlp", 40),
                 lw=LW_HAIR, solid_capstyle="butt", zorder=2)
 
@@ -579,8 +589,6 @@ def panel_route_dictionary(ax):
             zip(TREE_METHODS, ROUTE_SETS, strict=True)):
         y = ROW_Y[row]
         f.text((LABEL_X, y), label, size=PT_ANNOT, color=color, ha="right")
-        for i in range(N_TERM):
-            f.disc((TERM_X[i], y - 0.062), TERM_R_PT, fill=MUTE, zorder=3)
         for route in routes:
             xs = [TERM_X[i] for i in route]
             if len(route) == 1:
@@ -605,7 +613,7 @@ def panel_route_dictionary(ax):
 
     # Short enough to sit inside the panel: the full statement -- that the
     # error is a scalar and only the routes differ -- is in the caption.
-    f.text((0.5 * (TERM_X[0] + TERM_X[-1]), 0.048), "one fixed spatial vector",
+    f.text((0.5, 0.042), "bracketed rules share one fixed spatial vector",
            size=PT_SMALL, color=MUTE)
     return ax
 
@@ -707,7 +715,7 @@ def _stage_frame(f, cell):
     return place, scale
 
 
-def _draw_stage(f, cell, alignment_a, label, *, first=False):
+def _draw_stage(f, cell, alignment_a, label):
     """One stage: the imposed field over the fixed pair of ancestry routes.
 
     The stage reads top to bottom -- its alignment value, the field it
@@ -786,25 +794,63 @@ def _draw_stage(f, cell, alignment_a, label, *, first=False):
                           solid_capstyle="butt")
         leader.set_dashes((1.5, 1.4))       # a connector, not a branch
 
-    if first:
-        # The stems are a signed field, one per terminal; without a cue the
-        # up and down strokes read as arbitrary decoration.
-        cue_x = cell[0] + f.fx(1.6)
-        f.text((cue_x, base + f.fy(reach_pt * 0.55)), "+", size=PT_SMALL,
-               color=MUTE, ha="left", va="center")
-        f.text((cue_x, base - f.fy(reach_pt * 0.55)), MINUS, size=PT_SMALL,
-               color=MUTE, ha="left", va="center")
-
     f.text((cell[0] + cell[2] / 2.0, cell[1] + cell[3] - f.fy(5.2)), label,
            size=PT_SMALL, color=INK, va="center")
+
+
+E_KEY_PT = 12.0        # the key band under the three stages
+
+
+def _alignment_key(f):
+    """Name D's three marks: the route, the field on it, and the alignment.
+
+    The panel draws a capsule, a stem and a grey-to-green ramp, and none of
+    them is a convention a reader arrives with.  A key costs about an eighth
+    of the panel height and removes the need to carry three definitions from
+    the caption into the drawing.
+    """
+    ax = f.ax
+    y = f.fy(0.46 * E_KEY_PT)
+    glyph, gap, pad = f.fx(9.0), f.fx(3.0), f.fx(7.5)
+    tint = _blend(*E_ROUTE_TINT, 0.55)
+
+    def capsule(x0):
+        ax.plot([x0, x0 + glyph], [y, y], color=tint, lw=E_CAPSULE_PT,
+                solid_capstyle="round", zorder=3)
+
+    def stem(x0):
+        capsule(x0)
+        for at, reach in ((0.30, 4.2), (0.70, -4.2)):
+            sx = x0 + at * glyph
+            ax.plot([sx, sx], [y, y + f.fy(reach)], color=INK, lw=LW_DATA,
+                    solid_capstyle="round", zorder=4)
+            f.disc((sx, y + f.fy(reach)), 1.15, fill=INK, zorder=4)
+
+    def ramp(x0):
+        # Two halves, not a smooth sweep: at 9 pt a continuous grey-to-green
+        # gradient reads as one green line.
+        for k, t in enumerate((0.0, 1.0)):
+            ax.plot([x0 + 0.5 * glyph * k, x0 + 0.5 * glyph * (k + 1)],
+                    [y, y], color=_blend(*E_ROUTE_INK, t), lw=E_CAPSULE_PT,
+                    solid_capstyle="butt", zorder=3)
+
+    x = f.fx(1.5)
+    for draw, text in ((capsule, "route"), (stem, "signed field"),
+                       (ramp, "alignment a")):
+        draw(x)
+        f.text((x + glyph + gap, y), text, size=PT_SMALL, color=MUTE,
+               ha="left")
+        x += glyph + gap + f.fx(_text_w_pt(ax, text, PT_SMALL)) + pad
 
 
 def panel_alignment_design(ax):
     """C: one fixed dictionary, the task field turned into its span."""
     f = Frame(ax)
-    for index, (cell, (a, label)) in enumerate(
-            zip(f.split(3, axis="x", gap_pt=4.0), E_STAGES, strict=True)):
-        _draw_stage(f, cell, a, label, first=index == 0)
+    for cell, (a, label) in zip(f.split(3, axis="x", gap_pt=4.0),
+                                E_STAGES, strict=True):
+        _draw_stage(f, Frame.inset(cell, bottom=f.fy(E_KEY_PT) / cell[3]),
+                    a, label)
+    _alignment_key(f)
     return ax
 
 

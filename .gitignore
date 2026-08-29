@@ -42,6 +42,7 @@ neurips/local_credit_assignment_arxiv.pdf
 presentations/credit_tree_lib_test.pdf
 presentations/dendritic_credit_workshop.pdf
 presentations/legacy_decks/
+presentations/ml_workshop_15_20min/.render_tmp/
 
 # Talks are maintained in drafts/presentation/credit_assignment, outside this
 # manuscript repository. Ignore any local duplicate used while testing assets.

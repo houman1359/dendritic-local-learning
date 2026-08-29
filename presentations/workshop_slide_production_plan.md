@@ -373,6 +373,9 @@ local update. Label \(M\) with `select · assign · scale`.
 \mathbf w^+=\mathbf w-\eta\boldsymbol\mu_{\rm route}.
 \]
 
+The rendered slide uses the font-safe form \(E[\boldsymbol\xi]=0\); say
+“expectation of the noise is zero.”
+
 The slide uses the plain display labels \(\boldsymbol\mu_{\rm BP}\) and
 \(\boldsymbol\mu_{\rm route}\) so the stochastic and routed gradients remain
 visually distinct at presentation distance; the manuscript notation
@@ -459,8 +462,9 @@ eligibility. Context \(c_t\) selects the branch that determines the target.
 \]
 
 **Symbol strip:** \(N\) is the number of trials; \(\delta_t\) is the
-downstream logit gradient on trial \(t\); and \(\mathbf d_b\) is the mean
-update direction for branch \(b\).
+downstream logit gradient on trial \(t\); \(\mathbf 1[\cdot]\) is the
+indicator function; and \(\mathbf d_b\) is the mean update direction for
+branch \(b\).
 
 **Critical explanation:** \(1/B\) matches scale but carries no branch
 identity. The selector \(\mathbf1[c_t=b]\) is the missing information.
