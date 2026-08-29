@@ -128,7 +128,7 @@ PANEL_BAND_ASPECT_MAX = 4.00  # a full-width synthesis band alone on its row
 # standard display: capping it at 3.20 forced figure 09 panel A to leave ~78 pt
 # of white beside it, trading a ragged left edge for a ragged right one.  4.00
 # admits a full-width band at the row heights these figures use.
-RESERVE_PAD_PT = 1.5        # breathing room added to a measured reserve
+RESERVE_PAD_PT = 8.0        # breathing room added to a measured reserve
 RESERVE_MAX_FRAC = 0.42     # a lock may never eat more of a slot than this
 LETTER_BAND_PT = 13.0       # the panel letter's own band in the top gutter
 BLANK_BAND_PT = 14.0
@@ -520,6 +520,7 @@ class NativeCanvas:
             renderer = self.fig.canvas.get_renderer()
         except Exception:
             renderer = None
+        lead = self._lead_axes()
         for item in self._letters:
             ax = item["ax"]
             box = ax.get_position()
@@ -536,11 +537,30 @@ class NativeCanvas:
                     left_pt = tight.x0 * 72.0
                     top_pt = tight.y1 * 72.0
                     width_pt = _text_width_pt(item["art"], renderer)
-                    x = min(x, left_pt - LETTER_GAP_PT - width_pt)
+                    clear = left_pt - LETTER_GAP_PT - width_pt
+                    # A row-leading letter is pulled to the shared margin, so
+                    # it takes the leftmost of the two.  Every other letter
+                    # sits as far RIGHT as its own panel allows: the fixed
+                    # offset would push it back into the neighbour on its
+                    # left, which is where letters and neighbours collide.
+                    x = min(x, clear) if id(ax) in lead else clear
                     y = max(y, top_pt + LETTER_CLEAR_PT - cap)
             item["art"].set_position((max(x, 2.5) / self.width_pt,
                                       y / self.height_pt))
         self._align_lead_letters()
+
+    def _lead_axes(self):
+        """Axes ids of the panel that leads each row, among lettered panels."""
+        lead = {}
+        for rec in self._records:
+            if not rec.get("_letter"):
+                continue
+            row = int(rec.get("row", 0))
+            if (row not in lead
+                    or int(rec.get("col", 0)) < int(lead[row].get("col", 0))):
+                lead[row] = rec
+        return {id(self.axes[rec["name"]]) for rec in lead.values()
+                if rec["name"] in self.axes}
 
     def _align_lead_letters(self):
         """Give the row-leading letters one shared left edge.
@@ -555,17 +575,7 @@ class NativeCanvas:
         of the letter column; ``audit_letter_alignment.py`` measures that and
         names the figures whose left margin is too narrow to allow it.
         """
-        lead = {}
-        for rec in self._records:
-            if not rec.get("_letter"):
-                continue
-            row = int(rec.get("row", 0))
-            if (row not in lead
-                    or int(rec.get("col", 0)) < int(lead[row].get("col", 0))):
-                lead[row] = rec
-        axes = {id(self.axes[rec["name"]]) for rec in lead.values()
-                if rec["name"] in self.axes}
-        group = [it for it in self._letters if id(it["ax"]) in axes]
+        group = [it for it in self._letters if id(it["ax"]) in self._lead_axes()]
         if len(group) < 2:
             return
         home = LETTER_HOME_PT / self.width_pt
@@ -839,12 +849,29 @@ class NativeCanvas:
     # -- output -----------------------------------------------------------
     PUBLIC_RECORD_KEYS = ("name", "row", "col", "colspan", "rowspan",
                           "x0_pt", "y0_pt", "w_pt", "h_pt", "schematic",
-                          "locked")
+                          "locked", "tx0_pt", "tx1_pt")
 
     def manifest(self):
+        try:
+            renderer = self.fig.canvas.get_renderer()
+        except Exception:
+            renderer = None
         panels = []
         for rec in self._records:                 # honour post-hoc nudges
-            box = self.axes[rec["name"]].get_position()
+            ax = self.axes[rec["name"]]
+            box = ax.get_position()
+            # The panel's FULL horizontal extent -- axes plus its ticks,
+            # labels and title.  Recorded here because a rendered page cannot
+            # say which panel a given mark belongs to, and neighbour-clearance
+            # checks need exactly that.
+            if renderer is not None:
+                try:
+                    tb = ax.get_tightbbox(renderer).transformed(
+                        self.fig.dpi_scale_trans.inverted())
+                    rec["tx0_pt"] = round(tb.x0 * 72.0, 3)
+                    rec["tx1_pt"] = round((tb.x0 + tb.width) * 72.0, 3)
+                except Exception:
+                    pass
             rec["x0_pt"] = round(box.x0 * self.width_pt, 3)
             rec["y0_pt"] = round(box.y0 * self.height_pt, 3)
             rec["w_pt"] = round(box.width * self.width_pt, 3)

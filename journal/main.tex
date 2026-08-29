@@ -1,3 +1,4 @@
+\ifdefined\pdfminorversion\pdfminorversion=7\fi
 \documentclass[11pt]{article}
 
 \usepackage[letterpaper,margin=0.78in]{geometry}
@@ -355,10 +356,13 @@ error through these path gains.
 Shunting acts directly on this transport. Consider the partial effect of an
 added inhibitory conductance \(G_k^I\) on the conductance-only path gain
 \(\alpha_n^{\mathrm{cond}}\), holding the state-dependent branch derivatives
-and coupling conductances fixed. Then
+and coupling conductances fixed. Define
+\(\mathcal A(n)=\{k:(i\to k)\in\operatorname{path}(n\to0)\}\), the parent
+endpoints of the path edges. These are the strict ancestors of \(n\) (including
+the soma if its conductance is varied). Then
 \begin{equation}
 \frac{\partial\log\alpha_n^{\mathrm{cond}}}{\partial G_k^I}
-=-R_k^{\mathrm{tot}}\,\mathbf 1\!\left[k\in\operatorname{path}(n\to0)\right].
+=-R_k^{\mathrm{tot}}\,\mathbf 1\!\left[k\in\mathcal A(n)\right].
 \label{eq:shuntpathgain}
 \end{equation}
 The direct effect is zero for routes that do not pass through compartment
@@ -578,7 +582,9 @@ U(M)=\frac{[\bm\mu^{\mathsf T}M\bm\mu]^2}
 A restricted pathway can improve a noisy update only when the noise it rejects
 compensates for the useful gradient signal it loses. It cannot outperform the
 exact full-batch gradient at matched first-order step norm. The bound is exact
-for a quadratic loss and otherwise describes guaranteed one-step progress.
+for the isotropic quadratic whose Hessian is \(LI\); for a general quadratic it
+remains a curvature upper bound, and for a general smooth loss it describes
+guaranteed one-step progress.
 Field capture, defined above, measures representation of the exact field by
 the route span; \(U(M)\) additionally accounts for alignment, gain and admitted
 noise.
@@ -770,8 +776,9 @@ exact-route calculations coincide as concentric markers, while shared and
 rank- and sparsity-matched deranged routes fail. Branch-specific feedback gains
 35--58 percentage points, with a positive conflict interaction in 20/20 seeds
 at each \(B\); at \(\chi=0\), the rules are equivalent. \textbf{F}, Trained
-chance-crossing dose versus \(\chi_c\). Curves and bars show seed means and 95\%
-seed-bootstrap intervals; small points in \textbf{E} are individual seeds.}
+chance-crossing dose versus \(\chi_c\). Curves show seed means; bands and bars
+show 95\% seed-bootstrap intervals, and small points in \textbf{E} are
+individual seeds.}
 \label{fig:branchconflict}
 \end{figure}
 
@@ -909,6 +916,14 @@ parameter-matched point networks exceeded the serial tree
 task-matched inductive bias under constrained architecture, not a general
 expressivity advantage over point networks.
 
+Useful depth also saturated. An independent two-level task benefited from D2,
+whereas the four-level extension reached its best performance at D3 rather
+than D4 (Fig.~\ref{fig:physicaldepth}d,e). The fourth serial stage still
+outperformed D1 but added transport and optimization costs without improving
+the representation beyond D3. Physical depth therefore does not obey a
+universal \(D_{\mathrm p}=H_{\mathrm p}\) rule, even when the task contains
+\(H_{\mathrm p}\) hierarchical factors.
+
 The benefit required strong task--sensor alignment. We varied alignment
 continuously by correlating each sensor with the corresponding latent gain:
 \(\alpha=0\) made them independent and \(\alpha=1\) made the sensor exact.
@@ -918,14 +933,6 @@ parameter-matched parallel grouped-point model
 remained flat even at complete alignment, and reversing sensor order removed
 the serial advantage. These controls separate ordered composition from sensor
 availability and parameter count.
-
-Useful depth also saturated. An independent two-level task benefited from D2,
-whereas the four-level extension reached its best performance at D3 rather
-than D4 (Fig.~\ref{fig:physicaldepth}d,e). The fourth serial stage still
-outperformed D1 but added transport and optimization costs without improving
-the representation beyond D3. Physical depth therefore does not obey a
-universal \(D_{\mathrm p}=H_{\mathrm p}\) rule, even when the task contains
-\(H_{\mathrm p}\) hierarchical factors.
 
 To test task specificity directly, we fixed the architecture at D3 and changed
 what computation was required (Fig.~\ref{fig:physicaldepth}a,f,g). The
@@ -1146,8 +1153,8 @@ model. \textbf{D}, Factor-freeze analysis showing that restoring the baseline
 adjoint removes most localization. \textbf{E}, Dose response after adding
 voltage-dependent Na, K, Ca, HCN and NMDA conductances and recomputing the
 local steady-state Jacobian. \textbf{F}, Shunt-minus-current localization
-across cable calibrations in the original (\(n=8\)) and independent
-(\(n=45\)) cohorts. The effect is null at the standard passive calibration.
+across cable calibrations in the pilot cohort (\(n=8\)) and in MICrONS mouse
+1 (\(n=45\)), the two curves labelled in the panel. The effect is null at the standard passive calibration.
 \textbf{G}, Cellwise active-model contrasts in the high-conductance regime.
 Panels \textbf{B--E,G} use the original eight reconstructed cells. Points are
 cell means; lines and intervals are 95\% cell-bootstrap summaries.
@@ -1230,7 +1237,7 @@ unestablished endogenous use of morphology-specific routes
 alignment validates the conditional prediction.} \textbf{A}, Arbor-mapped
 presynaptic responses predict postsynaptic responses on held-out visual
 conditions. \textbf{B}, Held-out
-normalized MSE under exact compartment errors, nested subtrees, random routes
+normalized mean-squared error (MSE) under exact compartment errors, nested subtrees, random routes
 and site-shuffled subtrees; lower is better. \textbf{C}, Standardized subtree
 effects for structure--function similarity, held-out MSE and field capture;
 positive values favor subtrees. ``Prespecified'' uses one predefined scan per

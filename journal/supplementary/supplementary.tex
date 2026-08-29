@@ -1,3 +1,4 @@
+\ifdefined\pdfminorversion\pdfminorversion=7\fi
 \documentclass[11pt]{article}
 
 \usepackage[letterpaper,margin=0.82in]{geometry}
@@ -70,7 +71,7 @@ coordinate basis. Thirteenth, the nonlinear physical-depth experiment trains the
 production positive-rate population model on a selected hierarchical task
 after transparently reported accessibility pilots and tests H2--H4 within one
 calibrated synthetic task family; it is not a full
-$D_{\mathrm r}\times H\times K\times\rho$ regime grid or an impossibility result for
+\(D_{\mathrm p}\times H_{\mathrm p}\times K\times\alpha\) regime grid or an impossibility result for
 grouped point models. Exact transported errors and fitted projection coefficients are
 information oracles wherever they appear.
 Fourteenth, the fixed-D3 task-family factorial varies latent hierarchy,
@@ -94,8 +95,9 @@ Throughout, plain italic symbols denote scalars, bold lower-case symbols
 denote vectors, and bold upper-case symbols denote matrices. The principal
 indices are $u$ (modeled neuron), $n$ (compartment), $i$ (synapse) and
 $k$ (feedback route). $D_{\mathrm p}$ denotes physical dendritic depth,
-$D_{\mathrm r}$ routed address depth, $H$ task-hierarchy depth and $K$
-the number of communicated feedback channels. A consolidated notation table
+$D_{\mathrm r}$ routed address depth, $H_{\mathrm c}$ task-credit hierarchy in
+the operator experiment, $H_{\mathrm p}$ latent hierarchy depth in the
+physical-depth tasks and $K$ the number of communicated feedback channels. A consolidated notation table
 appears in Table~\ref{tab:notation}; symbols needed for a derivation are also
 defined locally at first use.
 
@@ -266,8 +268,10 @@ whose path crosses $k$,
 \end{cases}
 \label{eq:s_inhibitory_gain}
 \end{equation}
-where $\mathcal A(n)$ contains the compartments through which credit from $n$
-passes to the soma. Equation~\ref{eq:s_inhibitory_gain} proves path-selective
+where
+$\mathcal A(n)=\{k:(i\to k)\in\operatorname{path}(n\to0)\}$ contains the
+parent endpoints of the path edges: the strict ancestors of $n$, including
+the soma if its conductance is varied. Equation~\ref{eq:s_inhibitory_gain} proves path-selective
 attenuation. It does not prove that attenuation improves optimization.
 
 For $z_n=\log\alpha_n^{\mathrm{cond}}$ and path-dependent attenuation
@@ -355,8 +359,8 @@ conflating bandwidth with routing. The strict scalar field used for the
 plotted MNIST ladder applies Eq.~\ref{eq:s_scalar_reduction} at every
 local-rule stage. The matched-width/scalar-fallback field
 reuses a somatic vector only at a stage of the same width; at wider stages it
-uses the same robust scalar reduction as the global scalar condition. For a
-two-dimensional somatic error vector $\bm\delta_b$ in example $b$, the code
+uses the same robust scalar reduction as the global scalar condition. For an
+$N$-dimensional somatic error vector $\bm\delta_b$ in example $b$, the code
 first computes $\mu_b=N^{-1}\sum_u\delta_{b,u}$. With $\epsilon=10^{-6}$,
 \begin{equation}
 s_b=
@@ -447,8 +451,8 @@ $A_T$.
 
 \subsection{Address dimension and the point-neuron resource comparison}
 
-Separate the synapse-local eligibility from the task-dependent coefficient
-field and let $\bm c_u\in\mathbb R^{N_u}$ denote the latter for neuron $u$.
+Separate the synapse-local eligibility from the task-dependent target credit
+field and let $\bm t_u\in\mathbb R^{N_u}$ denote the latter for neuron $u$.
 For a positive diagonal coordinate-weight matrix $W$, define
 \begin{equation}
 \lVert\bm v\rVert_W^2=\bm v^{\mathsf T}W\bm v,
@@ -464,8 +468,8 @@ transformed coordinates.
 For a prespecified nested family of dictionaries $\Phi_{u,K}$, define
 \begin{equation}
 d_{\epsilon,u}=\min\left\{K:
-\frac{\mathbb E\lVert P_{\Phi_{u,K},W}\bm c_u\rVert_W^2}
-{\mathbb E\lVert\bm c_u\rVert_W^2}\geq1-\epsilon\right\}.
+\frac{\mathbb E\lVert P_{\Phi_{u,K},W}\bm t_u\rVert_W^2}
+{\mathbb E\lVert\bm t_u\rVert_W^2}\geq1-\epsilon\right\}.
 \label{eq:s_address_dimension}
 \end{equation}
 This definition concerns the task-dependent coefficient after eligibility has
@@ -475,13 +479,13 @@ counted as an extra teaching coordinate.
 For any fixed $\Phi\in\mathbb R^{N_u\times K}$, all fields generated as
 $\Phi\bm z$ lie in $\operatorname{col}(\Phi)$ and hence occupy at most
 $\operatorname{rank}(\Phi)\leq K$ dimensions. Conversely, the weighted
-least-squares field in that space is $P_{\Phi,W}\bm c_u$, and its expected
+least-squares field in that space is $P_{\Phi,W}\bm t_u$, and its expected
 weighted residual energy is
 \begin{equation}
-\mathbb E\lVert(I-P_{\Phi,W})\bm c_u\rVert_W^2
-=\operatorname{tr}\!\left[(I-\overline P_\Phi)\overline C_c\right],
+\mathbb E\lVert(I-P_{\Phi,W})\bm t_u\rVert_W^2
+=\operatorname{tr}\!\left[(I-\overline P_\Phi)\overline\Sigma_t\right],
 \qquad
-\overline C_c=\mathbb E[W^{1/2}\bm c_u\bm c_u^{\mathsf T}W^{1/2}].
+\overline\Sigma_t=\mathbb E[W^{1/2}\bm t_u\bm t_u^{\mathsf T}W^{1/2}].
 \label{eq:s_address_residual}
 \end{equation}
 Equations~\ref{eq:s_address_dimension}--\ref{eq:s_address_residual} prove the
@@ -513,12 +517,12 @@ columns of $\overline\Phi_{T,K}$. Field capture in this coordinate system is
 \end{equation}
 The unweighted case has $W=I$. The MICrONS structural analysis uses summed
 mapped excitatory synaptic area on the diagonal of $W$. For transformed
-gradient covariance $\overline C_g=\E[\overline{\bm g}\overline{\bm g}^{T}]$,
+gradient covariance $\overline\Sigma_g=\E[\overline{\bm g}\overline{\bm g}^{T}]$,
 expected capture for a fixed projector is
 \begin{equation}
-\mathcal C_K(\overline C_g;\Phi,W)
-=\frac{\operatorname{tr}(\overline P_\Phi\overline C_g)}
-{\operatorname{tr}(\overline C_g)}.
+\mathcal C_K(\overline\Sigma_g;\Phi,W)
+=\frac{\operatorname{tr}(\overline P_\Phi\overline\Sigma_g)}
+{\operatorname{tr}(\overline\Sigma_g)}.
 \label{eq:s_covariance_matching}
 \end{equation}
 Equation~\ref{eq:s_covariance_matching} states the topology--task matching
@@ -526,12 +530,12 @@ condition: a sparse anatomical basis is useful only to the extent that task
 credit lies in its span.
 
 \begin{proposition}[Ky--Fan credit-capacity bound]
-Let the eigenvalues of $\overline C_g\succeq0$ satisfy
+Let the eigenvalues of $\overline\Sigma_g\succeq0$ satisfy
 $\lambda_1\geq\cdots\geq\lambda_p\geq0$. For every rank-$K$ orthogonal
 projector $P$,
 \begin{equation}
-\frac{\operatorname{tr}(P\overline C_g)}
-{\operatorname{tr}(\overline C_g)}
+\frac{\operatorname{tr}(P\overline\Sigma_g)}
+{\operatorname{tr}(\overline\Sigma_g)}
 \leq
 \frac{\sum_{j=1}^{K}\lambda_j}{\sum_{j=1}^{p}\lambda_j}.
 \label{eq:s_ky_fan_capture}
@@ -546,7 +550,7 @@ rank-matched spectral regret.
 
 \noindent\emph{Proof.}
 Ky--Fan's maximum principle gives
-$\max_{\operatorname{rank}(P)=K}\operatorname{tr}(P\overline C_g)
+$\max_{\operatorname{rank}(P)=K}\operatorname{tr}(P\overline\Sigma_g)
 =\sum_{j=1}^{K}\lambda_j$. Division by the fixed total spectral energy proves
 Eq.~\ref{eq:s_ky_fan_capture}. \hfill$\square$
 
@@ -617,7 +621,8 @@ does not show that a biological circuit can infer the oracle coefficients.
 \subsection{Expected descent with signal, gain and noise}
 
 Let $\mathcal L:\mathbb R^p\rightarrow\mathbb R$ have $L$-Lipschitz gradient
-at the state under study. Write $\bm g=\nabla\mathcal L(\bm w)$ and let
+on a neighborhood containing every update segment from $\bm w$ to
+$\bm w-\eta M\widehat{\bm g}$. Write $\bm g=\nabla\mathcal L(\bm w)$ and let
 $\widehat{\bm g}=\bm g+\bm\xi$, where
 $\E\bm\xi=0$ and $\E\bm\xi\bm\xi^{\mathsf T}=\Sigma$. A fixed matrix $M$
 collects every restriction imposed between the population gradient and the
@@ -1092,8 +1097,8 @@ The experiment used the 16-column orthonormal Haar basis of a balanced binary
 tree. The spectral screen mixed a tree-aligned covariance with an independent
 rotation having the same eigenvalues and compared ancestry, random rank and
 dense principal-eigenspace projectors. The depth screen sampled targets from
-tree levels no finer than $H$ and assigned increasing noise to levels finer
-than $H$; aligned and leaf-rewired projectors were updated with identical noise
+tree levels no finer than $H_{\mathrm c}$ and assigned increasing noise to levels finer
+than $H_{\mathrm c}$; aligned and leaf-rewired projectors were updated with identical noise
 draws for 80 steps. The projection screen directly crossed signal retention
 and noise retention. The reliability screen crossed eight branch blocks with
 five degrees of oppositely ordered signal and noise energy. Full parameters,
@@ -1102,7 +1107,7 @@ seeds, gates and row counts are frozen in
 summaries and contrasts are in
 \texttt{source\_data/credit\_phase\_theory/}.
 
-The two canary seeds tested numerical artifacts only. Fifty untouched
+Two preflight seeds, excluded from inference, tested numerical artifacts. Fifty untouched
 confirmatory seeds supplied the inferential unit; intervals used 20,000 paired
 seed-bootstrap draws and central paired contrasts used two-sided Wilcoxon
 tests. All full-rank projectors agreed to $4.44\times10^{-16}$, route-wise
@@ -1172,8 +1177,8 @@ is the optimization reference.
 
 The preceding pilot is retained as a historical artifact because it used
 $r_b$ despite taking $c=0.5$. After identifying that inconsistency, the
-corrected configuration and predictions were frozen before outcomes for two
-new artifact-only canary seeds. Confirmatory execution then used 50 fresh
+corrected configuration and predictions were fixed before two new preflight
+seeds, which were excluded from inference. Confirmatory execution then used 50 fresh
 paired seeds 8100--8149 with unchanged configuration and runner hashes. All
 2,250 expected seed--condition rows completed. The minimum input rate was
 zero, maximum state mismatch was $2.22\times10^{-16}$, and independently
@@ -1228,7 +1233,7 @@ heterogeneity levels $h\in\{0,1,2\}$ crossed exact clean backpropagation,
 noisy no-shunt learning, the fixed initial-oracle shunt, adaptive local,
 adaptive global and fixed-permutation adaptive shunts, and an independently
 computed adaptive point gate. Main update noise and estimator-probe noise were
-paired across methods. Two artifact-only canary seeds passed before 50 fresh
+paired across methods. Two preflight seeds, excluded from inference, passed before 50 fresh
 confirmatory seeds 8200--8249 were evaluated, producing all 1,050 planned
 seed--condition outcomes. Maximum state error was
 $2.22\times10^{-16}$, maximum physical-shunt finite-difference error was
@@ -1276,7 +1281,7 @@ and 80 updates. The target address residual was below
 $1.45\times10^{-30}$ in every condition, so all reported loss is within-span
 coefficient-estimation error.
 
-The predictions were frozen before two artifact-only canary seeds and 50
+The predictions were fixed before two preflight seeds, excluded from inference, and 50
 paired seeds 9100--9149. The prediction that Haar coordinates would always
 reduce finite-time error was false. At $n_{\mathrm{eff}}=4$, raw-minus-Haar
 final loss was $-0.2774$ (95\% paired interval $-0.3260$ to $-0.2313$) and
@@ -1332,7 +1337,7 @@ trainable parameters (66,178), active synapses (14,336), candidate slots
 law was the same positive-conductance division used elsewhere in the paper,
 with identity reactivation and learned softplus-positive synaptic weights.
 
-The original canary used signal contrast 0.24, training gain SD 0.25 and an
+The original pilot used signal contrast 0.24, training gain SD 0.25 and an
 unseen test gain SD 1.2. Deeper networks fit training better, but BP and both
 LocalCA transports remained at chance on the shifted test distribution
 (Supplementary Fig.~\ref{fig:supp_nonlinear_depth_calibration}A). This failed
@@ -1795,13 +1800,15 @@ stopping and mixed precision were disabled. Runs used deterministic PyTorch
 settings, disabled TF32 and cuDNN benchmarking, and used the highest float32
 matrix-multiplication precision.
 
-The reported feedback comparison contains 15 seeds (42--56) per architecture
-and feedback condition. It is a clean current-code cohort run after freezing
-the design and replacement policy. Complete resolved configurations,
-checkpoints, logs, source and output hashes, and job records are retained for
-all 60 runs. The clean cohort replaced the earlier mixed archive irrespective
-of the observed effect; the superseded rows remain in the audit archive but
-are not used in the article.
+The main feedback ladder contains 15 seeds (42--56) for each of three feedback
+fields in each architecture (90 runs). A separate legacy
+matched-width/scalar-fallback arm at the same seeds and architectures adds 30
+runs, yielding the 120-run current matched feedback program. It was executed
+with the current code after the design and replacement policy were fixed.
+Complete resolved configurations, checkpoints, logs, source and output hashes,
+and job records are retained for all 120 runs. The current program replaced
+the earlier mixed archive irrespective of the observed effect; superseded rows
+remain in the audit archive but are not used in the article.
 
 The Fashion-MNIST replication retained these shunting and raw-additive
 architectures, contact pattern,
@@ -1938,15 +1945,15 @@ branch, backpropagation or three local feedback fields, and ten paired seeds,
 for 400 runs. Its primary endpoint was the change from dose 0 to dose 40 in the
 shunting-minus-raw-additive accuracy difference. Because all 200 shunting cells
 used the invalid signed-input convention, the full family is excluded from
-figures and inference; its executions remain in the public validity ledger.
+figures and inference; its executions remain in the public validity record.
 
-\subsection{Detached clean exact-transport/backpropagation audit}
+\subsection{Version-controlled exact-transport/backpropagation audit}
 
 The replacement implementation audit crossed exact path transport or standard
 backpropagation, MNIST or the synthetic noise-resilience task, raw-additive or
 positive-conductance shunting cores, depths one through four and seeds 42--51.
 It therefore contained 320 training runs and 160 method pairs. All accepted
-runs executed from detached tracked-clean source commit
+runs used the same versioned, unmodified source commit
 \texttt{74792ca91724066148f36c758191744a315d62b3}; the nested synthetic-data
 repository was fixed at commit
 \texttt{4f3612a52756c3691e5bd269c6465c02f240c1e8}. The raw-additive synthetic model
@@ -2020,8 +2027,8 @@ Supplementary Fig.~\ref{fig:supp_mechanism} displays the complete diagnostic.
 This experiment implements the primary within-neuron support contrast from the
 trained-address contract on a deliberately minimal two-sibling model. It does
 not implement the complete architecture-by-$K$ factorial. The phase-1 JSON
-configuration and executable were hashed before canary seed 4099 was run. The
-canary checked artifact integrity and nondegeneracy only: neuron-shared capture
+configuration and executable were hashed before preflight seed 4099 was run. The
+preflight checked artifact integrity and nondegeneracy only: neuron-shared capture
 was 0.506, correct-route capture was 1.000, correct-route held-out accuracy was
 0.814, and analytic exact transport agreed identically with analytic
 backpropagation. Because all frozen gates passed, the same unchanged files were
@@ -2123,7 +2130,7 @@ unit-normalized per example. Data, initialization, mini-batch order and every
 stochastic control map were keyed to seed, method family and $K$, so matched
 representations saw identical stochastic realizations.
 
-A preconfirmatory canary required exact context balance, zero context--label
+A preflight required exact context balance, zero context--label
 correlation, nonzero activity in all streams, neuron-shared gradient capture
 below 0.2, exact capture of one, numerical equality of analytic exact transport
 and backpropagation, zero fallback counts, and exact agreement among the four
@@ -2131,7 +2138,7 @@ implementation-equivalent representations. The first large execution was
 invalidated after a post-run audit detected that stochastic control maps were
 not paired across representation labels. Those rows were quarantined before
 scientific interpretation. The random streams were corrected, the
-implementation-equivalence check was promoted to a canary gate, and the entire
+implementation-equivalence check was made a required preflight criterion, and the entire
 2,700-fit cohort was rerun. Only this corrected cohort is reported.
 
 Table~\ref{tab:subtree_factorial} gives the primary bandwidth contrasts.
@@ -2692,7 +2699,7 @@ More directly, full shunting and the driving-force-only state share the same
 post-shunt voltage field and differ only in whether the adjoint transport field
 is updated. Their localization difference was 0.079 and was positive in all
 eight cells. This is the exact factor-freeze contrast plotted in main
-focal-perturbation figure, panel h.
+Fig.~8D.
 
 Because the gradient factors and the localization statistic are nonlinear,
 these four payoffs are not an additive decomposition. We therefore allocated
@@ -3394,7 +3401,7 @@ assert a biological implementation of the preconditioner.}
 \centering
 \includegraphics[width=\textwidth]{supplementary/figure_S15_panels_A-D.pdf}
 \caption{\textbf{Transparent calibration of the nonlinear physical-depth
-operating point.} \textbf{A}, The original aligned shunting-BP canary at
+operating point.} \textbf{A}, The original aligned shunting-BP pilot at
 signal contrast 0.24 fit the training distribution increasingly with depth
 but remained at chance under the prespecified severe gain shift (test gain SD
 1.2). Bars are two-seed means and dots are the individual exploratory seeds.
@@ -3450,7 +3457,7 @@ opposite dendritic contrasts. \textbf{B}, Descriptive neuron-level residual
 distributions from the published source table; dots show means and bars show
 95\% animal-bootstrap intervals. Animal, not
 neuron, is the inferential unit ($n=6$ animals). The paired signed contrast and the mode-energy
-decomposition appear as main Fig.~9F,G. This calibrated external comparison is
+decomposition appear together in main Fig.~9F. This calibrated external comparison is
 consistent with signed neuron-specific information but does not resolve within-tree transport
 or uniquely identify a conductance mechanism.}
 \label{fig:supp_animal_credit}
@@ -3684,7 +3691,7 @@ seed-wise confirmatory tests use the prespecified interaction slopes and
 discrete boundary order. Analytic backpropagation and an explicitly gated
 grouped-point implementation coincide with correct routing in the same frozen
 cohort; those arms are not redrawn here, and are shown in main
-Fig.~4F. The experiment
+Fig.~4D,E. The experiment
 establishes a need for branch-selective information somewhere in the local
 update, not a dendrite-exclusive implementation.}
 \label{fig:supp_path_demand}
@@ -4035,8 +4042,8 @@ Cohort & Surviving run artifacts & Hardware record & Software record \\
 Current matched feedback program, 120 runs (90 plotted) & All resolved configurations, checkpoints, logs, final metrics, frozen sweep manifests and SHA-256 hashes & Heterogeneous NVIDIA accelerators; scheduler placement did not change any scientific configuration & Python 3.10.13; clean Git commits \texttt{6c1aaa25} and \texttt{bd5f905e}; executable source hashes and scientific signatures identical across feedback fields within each architecture \\
 Earlier coordinate and gradient-diagnostic cohort, 60 runs & All resolved configurations, checkpoints, logs, final metrics, frozen sweep manifests and SHA-256 hashes & NVIDIA H200; 4.006 summed GPU-hours across both arrays & Python 3.10.13; Git commit \texttt{4ba38bde}; tracked worktree recorded as dirty; hashes of generator and critical model sources frozen \\
 Prospective depth-by-feedback cohort, 640 executions (480 retained) & All resolved configurations, checkpoints, learning curves, held-out metrics, resource records, frozen manifests, source hashes and the outcome-independent 1,840-run validity ledger & 73.29 summed GPU-hours over heterogeneous NVIDIA accelerators & Frozen source identity plus a verified equivalence audit for two later changes that are inactive in every resolved configuration; signed-noise shunting cells are excluded from inference \\
-Prospective checkpoint diagnostic, 3,200 historical rows (2,400 retained) & Five feedback-field labels and four step sizes at each of 160 checkpoints; publication analysis uses 120 input-valid independently trained checkpoints & Fixed-checkpoint analysis; no additional model training & Complete balance and finite-value checks; checkpoint-clustered bootstrap analysis and exclusion ledger frozen with the source tables \\
-Clean exact-transport/backpropagation audit, 320 runs & Resolved configurations, seed records, checkpoints, learning summaries, final metrics, scheduler and training logs, frozen sweep manifests and SHA-256 hashes & NVIDIA H200 for every resource-corrected rerun; initial incomplete attempts are excluded and archived & Detached tracked-clean root commit \texttt{74792ca}; nested synthetic-data commit \texttt{4f3612a5}; signed transfer retained for raw-additive noise, explicit ReLU transfer used for positive-conductance shunting noise \\
+Prospective checkpoint diagnostic, 3,200 historical rows (2,400 retained) & Five feedback-field labels and four step sizes at each of 160 checkpoints; the reported analysis uses 120 input-valid independently trained checkpoints & Fixed-checkpoint analysis; no additional model training & Complete balance and finite-value checks; checkpoint-clustered bootstrap analysis and exclusion record fixed with the source tables \\
+Clean exact-transport/backpropagation audit, 320 runs & Resolved configurations, seed records, checkpoints, learning summaries, final metrics, scheduler and training logs, frozen sweep manifests and SHA-256 hashes & NVIDIA H200 for every resource-corrected rerun; initial incomplete attempts are excluded and archived & Versioned, unmodified root commit \texttt{74792ca}; nested synthetic-data commit \texttt{4f3612a5}; signed transfer retained for raw-additive noise, explicit ReLU transfer used for positive-conductance shunting noise \\
 Exact-transport factorial, 20 runs & Resolved configurations, checkpoints, logs and grouped result table & NVIDIA A100-SXM4-40GB; 2.953 GPU-hours total & Exact commit, Python and package environment not archived \\
 Backpropagation reference, 5 runs & Resolved configurations, checkpoints, logs and grouped result table & NVIDIA A100-SXM4-40GB; 0.474 GPU-hours total & Exact commit, Python and package environment not archived \\
 \bottomrule
@@ -4065,17 +4072,17 @@ $V_n$, $a_n$ & Conductance-stage voltage and transmitted activity of compartment
 $g_i$, $g_{c\to n}^{\mathrm{den}}$ & Scalar synaptic conductance and child-to-parent coupling conductance. These are distinct from bold gradient symbols. \\
 $E_i$, $x_i$ & Synaptic reversal potential and presynaptic activity. \\
 $g_n^{\mathrm{tot}}$, $R_n^{\mathrm{tot}}$ & Total compartment conductance and its reciprocal input resistance. \\
-$\delta_u$, $\delta_{u,k}$ & Neuron-level teaching coordinate and its route-$k$ refinement within neuron $u$. \\
-$\delta_{0,u}$ (or $\delta_0^V$), $\partial\mathcal L/\partial V_n$ & Exact somatic error for neuron $u$ (single-tree voltage-space notation in parentheses) and exact compartment voltage-space error. \\
+$\delta_u$, $c_{u,k}$ & Neuron-level learning signal and route-$k$ coefficient within neuron $u$. \\
+$\delta^V_{0,u}$, $\delta^V_{n,u}$ & Exact somatic and compartment voltage-space errors for neuron $u$. \\
 $\alpha_n^{\mathrm{cond}}$, $\widetilde\alpha_n$ & Conductance-only and effective path gains; the latter includes reactivation derivatives. \\
 $\overline\alpha_w$, $\mathrm{CV}_w$ & Eligibility-energy-weighted mean and coefficient of variation of the effective path gain. \\
-$\alpha$, $\rho$ & Sensor alignment in the physical-depth task and covariance alignment in the spectral-alignment experiment. \\
+$\alpha$, $\rho$, $a$ & Sensor alignment in the physical-depth task, covariance alignment in the spectral experiment, and imposed route-span energy fraction. \\
 $\chi$, $\chi_c$ & Credit-conflict probability in the branch-conflict task and its centered mean-field boundary. The frozen execution contract calls this same dose $\alpha$. \\
 $\bm w$, $\bm g$, $\widehat{\bm g}$ & Parameter vector, exact population gradient, and its unbiased stochastic estimate. \\
 $\bm q$ & Adjoint field; $q_n$ is the loss sensitivity to a small current injected at compartment $n$. \\
 $M$, $\Sigma$, $U(M)$ & Credit operator, stochastic-gradient covariance, and the operator utility (guaranteed-progress score). \\
 $K$ & Number of communicated feedback channels or route fields. \\
-$H$, $D_{\mathrm{r}}$ & Task-hierarchy depth and routed address depth in the fixed-state signal--noise experiment. \\
+$H_{\mathrm c}$, $D_{\mathrm{r}}$ & Task-credit hierarchy and routed address depth in the fixed-state signal--noise experiment. \\
 $D_{\mathrm{p}}$; D1--D4 & Physical dendritic stage count; D1--D4 mean $D_{\mathrm{p}}=1,\ldots,4$. In $[b_1,\ldots,b_{D_{\mathrm{p}}}]$, branching factors are ordered soma-to-distal. \\
 $A_T$ & Binary synapse-by-route ancestry matrix of tree $T$. \\
 $\Gamma_{ik}$ & Direct ancestry-route sensitivity from candidate route $k$ to excitatory site $i$. \\
@@ -4084,10 +4091,11 @@ $D_e$, $U$ & Diagonal eligibility/anatomical-weight matrix in the route dictiona
 $W$ & Positive diagonal coordinate-weight matrix; summed excitatory synaptic area in the structural MICrONS analysis. \\
 $P_{\Phi,W}$, $\overline P_\Phi$ & Weighted projector onto $\operatorname{col}(\Phi)$ and its ordinary Euclidean representation in coordinates transformed by $W^{1/2}$. \\
 $\mathcal C_K$ & Field-energy capture at feedback-channel budget $K$ in the stated coordinates. \\
+$\bm t_u$, $\overline\Sigma_t$ & Exact target credit field over the compartments of neuron $u$ and its covariance in the $W^{1/2}$-transformed coordinates. \\
 $G$, $\mathcal R$, $R_a$, $R_m$ & Passive conductance matrix, inverse response operator $\mathcal R=G^{-1}$, axial resistivity, and specific membrane resistance. \\
 $\kappa_k$, $\kappa_b$ & Focal shunt conductance at compartment $k$ and branch-specific reliability shunt, respectively. \\
 $B$ & Number of branches in the branch-conflict task; mini-batch size only when used as the subscript in $\langle\cdot\rangle_B$. \\
-$S_K$, $C_g$ & Feedback-channel assignment matrix in Eq.~\ref{eq:s_dictionary} and gradient covariance, respectively. \\
+$S_K$, $\overline\Sigma_g$ & Feedback-channel assignment matrix in Eq.~\ref{eq:s_dictionary} and transformed gradient covariance, respectively. \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -4195,7 +4203,7 @@ outcome-independent conductance-validity rule.
 
 \begin{table}[ht]
 \centering
-\caption{Detached tracked-clean exact-transport/backpropagation audit. Within
+\caption{Version-controlled exact-transport/backpropagation audit. Within
 each task and core, accuracy was first averaged over depths one through four
 for each paired seed. Values are percentages; intervals are 20,000-draw paired-
 seed bootstrap intervals and $P$ values are descriptive two-sided Wilcoxon

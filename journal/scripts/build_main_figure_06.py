@@ -518,7 +518,10 @@ def panel_h3(ax, depth_summary, point_summary):
     ax.axhline(ceiling, color=C_POINT, lw=LW_REF,
                ls=(0, (5.0, 2.2)), zorder=1)
 
-    ax.set_xlim(0.78, 4.03)
+    # The direct labels are set left-aligned from D3; the axis has to hold
+    # the longest of them ("point-network ceiling") or it runs out of the
+    # panel and into D's row labels.
+    ax.set_xlim(0.78, 4.78)
     ax.set_xticks([1, 2, 3], ["D1", "D2", "D3"])
     ax.set_ylim(0.48, 1.025)
     ax.set_yticks([0.5, 0.6, 0.7, 0.8, 0.9, 1.0])

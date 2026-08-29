@@ -209,11 +209,14 @@ def panel_focal_shunt(ax, *, width_pt, height_pt):
     ax.set_axis_off()
 
     top = 0.868
-    tree_w = 0.445
+    # The pair sits left inside the panel rather than filling it edge to
+    # edge: the right shoulder it gives up is the clearance B's letter needs.
+    span = 0.925
+    tree_w = 0.412
     tree_h = min(0.625, (tree_w * width_pt / TREE_ASPECT) / height_pt)
     bottom = top - tree_h
     left_rect = (0.0, bottom, tree_w, tree_h)
-    right_rect = (1.0 - tree_w, bottom, tree_w, tree_h)
+    right_rect = (span - tree_w, bottom, tree_w, tree_h)
 
     for rect, shunted in ((left_rect, False), (right_rect, True)):
         sub = _tree_inset(ax, rect)
@@ -224,12 +227,12 @@ def panel_focal_shunt(ax, *, width_pt, height_pt):
     # The baseline focal current is matched and a separate somatic current
     # restores the baseline soma voltage.  Local dendritic voltages are not
     # clamped, so the graphic must not claim a matched focal Delta V.
-    bx0, bx1, by = 0.020, 0.980, 0.968
+    bx0, bx1, by = 0.012, span - 0.012, 0.968
     ax.plot([bx0, bx1], [by, by], color=MUTE, lw=LW_HAIR, zorder=2,
             solid_capstyle="butt")
     for x in (bx0, bx1):
         ax.plot([x, x], [by, by - 0.022], color=MUTE, lw=LW_HAIR, zorder=2)
-    ax.text(0.5, 0.908, "baseline focal current matched; soma V restored",
+    ax.text(0.5 * span, 0.908, "baseline focal current matched; soma V restored",
             ha="center", va="center", fontsize=PT_SMALL, color=MUTE)
 
     lx = left_rect[0] + left_rect[2] / 2.0
@@ -454,8 +457,8 @@ def panel_electrotonic(ax):
     # Only the two series names stay on the panel (T5): the axial-resistivity
     # condition of the pilot cohort and the standard-calibration null are
     # methodological notes and are carried by the caption.
-    _direct_label(ax, 1.02, 0.0295, "pilot, n = 8", SHUNT)
-    _direct_label(ax, 3.9, 0.0895, "MICrONS mouse 1, n = 45", REPLICATE)
+    _direct_label(ax, 1.02, 0.0295, "pilot cohort", SHUNT)
+    _direct_label(ax, 3.9, 0.0895, "MICrONS mouse 1", REPLICATE)
 
     # Mark the standard passive calibration explicitly.  Its two cohort
     # values differ in axial/leak ratio, so a bracket is more honest than one
@@ -468,8 +471,10 @@ def panel_electrotonic(ax):
         for x_value in standard_x:
             ax.plot([x_value, x_value], [y_bar - 0.002, y_bar + 0.002],
                     color=MUTE, lw=LW_HAIR, zorder=2)
-        ax.text(np.sqrt(standard_x[0] * standard_x[1]), y_bar + 0.004,
-                "standard passive  Rₘ=15,000", ha="center", va="bottom",
+        # Set right-aligned on the bracket's own right end.  Centred on the
+        # bracket it grew past the axis and landed on G's rotated y label.
+        ax.text(standard_x[1], y_bar + 0.004,
+                "standard passive  Rₘ=15,000", ha="right", va="bottom",
                 fontsize=PT_SMALL, color=MUTE)
     _title(ax, "Electrotonic boundary")
     return ax

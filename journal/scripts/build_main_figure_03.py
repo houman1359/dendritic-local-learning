@@ -294,7 +294,7 @@ def operator_schematic(ax) -> None:
     mid = 0.5 * (card_y0 + card_y1)
     frac_x = 0.5 * (card_x0 + card_x1) + 1.35
     ax.text(card_x0 + 1.30, mid + 0.24, "guaranteed\nutility ∝",
-            ha="center", va="center", fontsize=PT_SMALL, color=COLORS["ink"],
+        ha="center", va="center", fontsize=PT_ANNOT, color=COLORS["ink"],
             linespacing=1.3)
     ax.text(frac_x, mid + 0.80, "[μᵀMμ]²", ha="center",
             va="center", fontsize=PT_ANNOT, color=COLORS["ink"])

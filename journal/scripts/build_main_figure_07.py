@@ -627,8 +627,7 @@ def panel_per_wire(ax, summary):
                mfc=ROLE[role][0] if ROLE[role][2] else "white",
                mec=ROLE[role][0], mew=LW_EDGE,
                label=ROLE_NAME[role])
-        for role in ("dense", "ancestry", "random", "depth", "shuffled",
-                     "surrogate")
+        for _, role in WIRE_METHODS
     ]
     legend = ax.legend(handles=handles, loc="lower right", fontsize=PT_LEGEND,
                        frameon=True, facecolor="white", edgecolor="none",
