@@ -182,19 +182,34 @@ def _digit_glyph(f, cx, cy, side_pt):
                     edgecolor="none", zorder=3))
 
 
-def _unit_pair(f, x_soma, y_mid):
-    """Two stacked mini units with somas at one x; returns soma y's."""
-    ys = (y_mid + f.fy(UNIT_GAP_PT) / 2.0, y_mid - f.fy(UNIT_GAP_PT) / 2.0)
+def _unit_pair(f, x_soma, y_mid, *, avail_pt=None):
+    """Two stacked mini units with somas at one x; returns soma y's.
+
+    ``avail_pt`` is the core height the pair has to live in.  A card whose
+    subtitle wraps to two lines keeps less core than one whose subtitle fits
+    on a single line, and at the fixed size the lower unit's tips were drawn
+    straight through the card floor.  Given the room it has, the pair scales
+    to fit and every card's arbor stays whole.
+    """
+    half, gap = UNIT_HALF_PT, UNIT_GAP_PT
+    if avail_pt is not None:
+        # tips reach 1.55/1.5 of the half-height beyond the outer somas, so
+        # the pair spans gap + 2 * 1.033 * half
+        need = gap + 2.07 * half
+        if need > avail_pt > 0:
+            k = avail_pt / need
+            half, gap = half * k, gap * k
+    ys = (y_mid + f.fy(gap) / 2.0, y_mid - f.fy(gap) / 2.0)
     for cy in ys:
-        mini_tree(f, x_soma, cy, f.fy(UNIT_HALF_PT))
-    return ys
+        mini_tree(f, x_soma, cy, f.fy(half))
+    return ys, half
 
 
 def _card_scalar(f, core):
     """One error value for the whole layer: one source, both somas."""
     x0, y0, w, h = core
     sx, mid = x0 + 0.42 * w, y0 + 0.52 * h
-    top, bot = _unit_pair(f, sx, mid)
+    (top, bot), unit_half = _unit_pair(f, sx, mid, avail_pt=h * f.h_pt)
     src = (sx + f.fx(24.0), mid)
     f.arrow(src, (sx + f.fx(4.5), top), color=AMBER, lw=LW_EDGE, head=4.0,
             rad=0.22)
@@ -209,7 +224,7 @@ def _card_neuron(f, core):
     """One coordinate per neuron: two distinct arrows, one per soma."""
     x0, y0, w, h = core
     sx, mid = x0 + 0.42 * w, y0 + 0.52 * h
-    top, bot = _unit_pair(f, sx, mid)
+    (top, bot), unit_half = _unit_pair(f, sx, mid, avail_pt=h * f.h_pt)
     tail = sx + f.fx(24.0)
     for cy, tag in ((top, "δᵤ"), (bot, "δᵥ")):
         f.arrow((tail, cy), (sx + f.fx(4.5), cy), color=ADD, lw=LW_EDGE,
@@ -219,17 +234,34 @@ def _card_neuron(f, core):
 
 
 def _card_exact(f, core):
-    """The complete field: every compartment carries its own error."""
+    """The complete field: every compartment carries its own error.
+
+    Drawn as one arrow into the soma this card was the neuron card in a
+    different colour -- same geometry, same single delivery -- and nothing
+    on it said "per compartment".  The transported field now runs OUT along
+    the arbor's own edges and terminates in a mark on every compartment, so
+    the three cards differ in the one way that matters: one value for the
+    layer, one per neuron, one per compartment.
+    """
     x0, y0, w, h = core
     sx, mid = x0 + 0.42 * w, y0 + 0.52 * h
-    top, bot = _unit_pair(f, sx, mid)
+    (top, bot), unit_half = _unit_pair(f, sx, mid, avail_pt=h * f.h_pt)
     tail = sx + f.fx(24.0)
-    dy = f.fy(UNIT_HALF_PT) / 1.5
+    dy = f.fy(unit_half) / 1.5
+    tip_x, mid_x = sx - f.fx(18.0), sx - f.fx(9.5)
     for cy in (top, bot):
         f.arrow((tail, cy), (sx + f.fx(4.5), cy), color=BP, lw=LW_EDGE,
                 head=4.0)
-        for my in (cy + 0.98 * dy, cy - 0.98 * dy):
-            f.disc((sx - f.fx(9.5), my), 1.15, fill=BP, zorder=5)
+        mid_ys = (cy + 0.98 * dy, cy - 0.98 * dy)
+        tip_ys = (cy + 1.55 * dy, cy + 0.50 * dy,
+                  cy - 0.50 * dy, cy - 1.55 * dy)
+        # Marks only, not a red overlay of the edges: painted along the
+        # branches the field hid the green the rest of the paper uses for
+        # dendrite, and the card stopped reading as an arbor at all.
+        for my in mid_ys:
+            f.disc((mid_x, my), 1.15, fill=BP, zorder=5)
+        for ly in tip_ys:
+            f.disc((tip_x, ly), 1.15, fill=BP, zorder=5)
 
 
 def panel_task(ax):
@@ -250,7 +282,7 @@ def panel_task(ax):
     f.arrow((px(20.0), cy), (px(27.0), cy), color=MUTE, lw=LW_EDGE,
             head=3.6)
     soma_x = px(48.0)
-    top, bot = _unit_pair(f, soma_x, cy)
+    (top, bot), _ = _unit_pair(f, soma_x, cy)
     for uy, bend in ((top, 0.14), (bot, -0.14)):
         f.arrow((soma_x + f.fx(3.5), uy), (px(58.5), cy), color=MUTE,
                 lw=LW_HAIR, head=3.2, rad=bend)
@@ -280,7 +312,7 @@ RESOLUTION_CARDS = (
     ("neuron", "neuron specific", ADD,
      "one δᵤ per neuron", _card_neuron),
     ("exact", "exact path", BP,
-     "full field ∂ℒ/∂Vₙ", _card_exact),
+     "one ∂ℒ/∂Vₙ per compartment", _card_exact),
 )
 
 
@@ -842,7 +874,7 @@ def _equalise_row(canvas, names_cols):
 
 def build(height_in=CANVAS_H_PT / 72.0, path=None):
     canvas = NativeCanvas(height_in, 3, row_weights=list(ROW_H_PT),
-                          hgutter_pt=32.0, vgutter_pt=VGUTTER_PT,
+                          hgutter_pt=24.0, vgutter_pt=VGUTTER_PT,
                           margins=Margins(left=48.0, right=12.0, top=18.0,
                                           bottom=25.0))
 
