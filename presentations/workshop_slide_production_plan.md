@@ -379,8 +379,8 @@ The rendered slide uses the font-safe form \(E[\boldsymbol\xi]=0\); say
 The slide uses the plain display labels \(\boldsymbol\mu_{\rm BP}\) and
 \(\boldsymbol\mu_{\rm route}\) so the stochastic and routed gradients remain
 visually distinct at presentation distance; the manuscript notation
-\(\widehat{\boldsymbol\mu}\) and \(\widetilde{\boldsymbol\mu}\) is shown as
-their formal equivalence.
+\(\widehat{\boldsymbol\mu}\) and \(\widetilde{\boldsymbol\mu}\) is connected to
+these labels in the speaker notes rather than displayed on the slide.
 
 **Required clarification:** \(M=I\) is unrestricted backpropagation of the
 stochastic gradient, not the full-batch gradient.
@@ -398,10 +398,12 @@ U(M)=
 \frac{[\boldsymbol\mu^{\mathsf T}M\boldsymbol\mu]^2}
 {2L_{\rm sm}\left[
 \|M\boldsymbol\mu\|^2+
-\operatorname{tr}(M\Sigma M^{\mathsf T})\right]},
-\qquad
-\boldsymbol\mu^{\mathsf T}M\boldsymbol\mu>0.
+\operatorname{tr}(M\Sigma M^{\mathsf T})\right]}.
 \]
+
+**Condition:** The visible header says `positive task alignment required`;
+the spoken mathematical condition is
+\(\boldsymbol\mu^{\mathsf T}M\boldsymbol\mu>0\).
 
 **Visible labels:** task-aligned signal; finite-step update cost; admitted
 stochastic noise.
@@ -420,8 +422,9 @@ guarantee. It does not predict every trajectory-accrued small difference.
 **Purpose:** Establish the principal negative boundary before introducing
 tasks deliberately requiring branch credit.
 
-**Visible plots:** MNIST strict-scalar ladder; flattened CIFAR-10 additive
-ladder without a convolutional front end.
+**Visible plots:** MNIST strict-scalar ladder with green labelled as shunting
+and blue as additive; flattened CIFAR-10 additive ladder without a
+convolutional front end.
 
 **Required numeric table:**
 
@@ -566,8 +569,10 @@ route-matrix connections; 14.2× dense capture per connection; approximately
 **Qualification:** Connections mean route-matrix nonzeros, not cable length,
 energy, or reliability. These are modeled fields on measured anatomy.
 
-**Replication:** Disjoint 47-cell cohort and ten QC-passing cells from a second
-MICrONS mouse.
+**Replication:** The full route ordering replicates in a disjoint 47-cell
+cohort. In a second MICrONS mouse, only the model-matched subtree advantage is
+reproduced in 10/10 QC-passing cells; animal-level inference remains
+descriptive.
 
 ### Slide 17 — Focal shunting changes descendant credit only in permissive regimes
 

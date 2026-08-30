@@ -87,7 +87,6 @@ def render_pdf_assets() -> None:
         "physical_depth_headline",
         "capture_per_wire",
         "focal_shunt_schematic",
-        "focal_boundary",
         "fulltree_no_signed",
         "alignment_rescue_n",
         "animal_signed",
@@ -107,7 +106,11 @@ def render_pdf_assets() -> None:
                 # Imported panel letters are useful in the manuscript but
                 # distracting when only one panel is shown in the talk.
                 draw = ImageDraw.Draw(rendered)
-                draw.rectangle((0, 0, 90, 82), fill="white")
+                draw.rectangle((0, 0, 128, 88), fill="white")
+                font = ImageFont.truetype(
+                    "/usr/share/fonts/urw-base35/NimbusSans-Regular.otf", 38
+                )
+                draw.text((50, 43), "60%", fill="#222222", font=font)
             if name == "phase_plane":
                 # The slide uses the implementation-neutral name because the
                 # plane includes both anatomical and non-anatomical routes.
@@ -162,6 +165,13 @@ def render_pdf_assets() -> None:
             if output_name == "boundary_topology":
                 draw = ImageDraw.Draw(rendered)
                 draw.rectangle((0, 0, 105, 90), fill="white")
+            if output_name == "operator_utility_validation":
+                draw = ImageDraw.Draw(rendered)
+                draw.rectangle((0, 0, 105, 90), fill="white")
+            if output_name == "focal_boundary_current":
+                draw = ImageDraw.Draw(rendered)
+                draw.rectangle((0, 0, 105, 82), fill="white")
+                draw.rectangle((rendered.width - 105, 0, rendered.width, 82), fill="white")
             if output_name == "alignment_rotation":
                 draw = ImageDraw.Draw(rendered)
                 draw.rectangle((90, 0, 225, 90), fill="white")
@@ -213,6 +223,11 @@ def render_pdf_assets() -> None:
         "main_figure_07_native.pdf",
         "capture_per_wire_current",
         (0.525, 0.345, 0.995, 0.995),
+    )
+    render_clip(
+        "main_figure_08_native.pdf",
+        "focal_boundary_current",
+        (0.0, 0.67, 0.505, 0.995),
     )
     render_clip(
         "main_figure_09_native.pdf",
@@ -523,7 +538,7 @@ def hierarchy_svg() -> str:
 
 def evidence_svg() -> str:
     rows = [
-        ("neuron identity", "SUPPORTED IN MODELS", "dominant in standard tasks; retrospective animal contrast is consistent", "#168F83", "#E6F3F0"),
+        ("neuron identity", "SUPPORTED IN MODELS", "dominant in the standard-task model benchmarks", "#168F83", "#E6F3F0"),
         ("subtree addresses", "CONDITIONAL", "large when local updates conflict; topology adds a narrow gain", "#C77A31", "#FBEDE2"),
         ("route gain by shunting", "CONDITIONAL", "emerges only in permissive high-conductance regimes", "#C77A31", "#FBEDE2"),
         ("anatomical route capacity", "STRUCTURALLY SUPPORTED", "sparse candidate routes on reconstructed arbors", "#7654B5", "#F0ECF8"),
@@ -644,7 +659,7 @@ def build_slides() -> list[dict[str, str]]:
           <div class="stack resource-stack compact-stack">
             <div class="mapping-line">network weight wᵢ &nbsp;→&nbsp; synaptic conductance gᵢ on compartment n</div>
             <div class="equation compact">δ<sup>V, avail</sup><sub>u</sub> = A<sub>u</sub>β<sub>u</sub>, &nbsp; A<sub>u</sub>∈ℝ<sup>Nᵤ×K</sup></div>
-            <div class="route-definitions"><b>K</b>: independently communicated within-neuron signals &nbsp;·&nbsp; column k of <b>Aᵤ</b>: support and gain of route k</div>
+            <div class="route-definitions"><b>Nᵤ</b>: compartments &nbsp;·&nbsp; <b>K</b>: independent within-neuron signals &nbsp;·&nbsp; column k of <b>Aᵤ</b>: route-k support and gain</div>
             {card('local state', '<p>Voltage and conductance determine the eligibility at each synapse.</p>', tone='teal')}
             {card('subtree address', '<p>A few coefficients βᵤ can target nested groups of synapses.</p>', tone='purple')}
             {card('route gain', '<p>Conductance can scale how strongly a returned signal reaches one path.</p>', tone='orange')}
@@ -732,7 +747,7 @@ def build_slides() -> list[dict[str, str]]:
         <div class="two-col col-54-46 utility-layout">
           <div class="stack compact-stack">
             <div class="utility main-utility">
-              <div class="utility-name">operator utility · requires positive task alignment</div>
+              <div class="utility-name">operator utility · positive task alignment required</div>
               <div class="equation multiline">U(M)=<span class="frac"><span>[μ<sup>T</sup>Mμ]²</span><span>2L<sub>sm</sub>[‖Mμ‖²+tr(MΣM<sup>T</sup>)]</span></span></div>
             </div>
             <div class="three-term-row">
@@ -754,7 +769,7 @@ def build_slides() -> list[dict[str, str]]:
         "Neuron identity—not exact path resolution—dominates both standard tasks",
         f"""
         <div class="two-col col-50-50 plot-pair standard-plots">
-          <div class="plot-card"><div class="plot-label">MNIST · strict scalar → neuron signal → exact compartment field</div>{img('mnist_strict_scalar', 'MNIST strict-scalar feedback ladder')}</div>
+          <div class="plot-card"><div class="plot-label">MNIST · <span class="green-text">green = shunting</span> · <span class="blue-text">blue = additive</span></div>{img('mnist_strict_scalar', 'MNIST strict-scalar feedback ladder')}</div>
           <div class="plot-card"><div class="plot-label">Flattened CIFAR-10 · additive tree · “exact path” = exact compartment field</div>{img('cifar_confirmatory_ladder', 'CIFAR-10 feedback ladder')}</div>
         </div>
         <div class="comparison-table">
@@ -851,7 +866,7 @@ def build_slides() -> list[dict[str, str]]:
                 {stat('≈2.7×', 'over a density-matched shuffled dictionary', tone='orange')}
               </div>
             </div>
-            <div class="precision-note">Connections are nonzero route-matrix entries—not cable length, energy, or reliability. Replicated in a disjoint 47-cell cohort and ten cells from a second MICrONS mouse; fields are modeled, not observed task gradients.</div>
+            <div class="precision-note">Connections are nonzero route-matrix entries—not cable length, energy, or reliability. The ordering replicated in a disjoint 47-cell cohort. A second MICrONS mouse reproduced the model-matched subtree advantage in 10/10 QC-passing cells; animal-level inference remains descriptive. Fields are modeled, not observed task gradients.</div>
           </div>
         </div>""",
         "Morphology supplies a sparse route dictionary; most capacity comes from branch depth and coarse topology.",
@@ -865,7 +880,7 @@ def build_slides() -> list[dict[str, str]]:
           <div class="plot-card shunt-schematic">{focal_comparison_svg()}</div>
           <div class="stack">
             <div class="equation compact">q′ = q − [κ<sub>k</sub>q<sub>k</sub>/(1+κ<sub>k</sub>(G⁻¹)<sub>kk</sub>)]G⁻¹e<sub>k</sub></div>
-            <div class="plot-card boundary-plot">{img('focal_boundary', 'Electrotonic boundary for focal shunting')}</div>
+            <div class="plot-card boundary-plot">{img('focal_boundary_current', 'Current Figure 8F electrotonic boundary for focal shunting')}</div>
             {card('standard passive calibration', '<p>At R<sub>m</sub>=15,000 Ω cm², the shunt-minus-current localization contrast is effectively zero.</p>', tone='gray')}
             {card('high-conductance regime', '<p>Descendant-localized changes emerge and survive active-channel extensions.</p>', tone='teal')}
           </div>
@@ -1035,7 +1050,7 @@ h1 { margin:0; font-family:Georgia,"Nimbus Roman",serif; font-size:52px; line-he
 .gradient-factorization { margin:0; }.gradient-factorization .term { min-width:250px; }.gradient-factorization .term:first-of-type { min-width:475px; }.gradient-factorization .term b { font-size:27px; }.transport-layout .card { padding:17px 21px; }.transport-layout .card-title { font-size:21px; }.transport-layout .card p { font-size:19px; }
 .operator-layout { display:grid; grid-template-rows:455px 170px; gap:10px; height:100%; }.operator-visual { min-height:0; }.operator-equations { display:grid; grid-template-columns:1fr 1fr 1.25fr; gap:15px; align-items:stretch; }.operator-equations .equation { display:flex; align-items:center; justify-content:center; font-size:27px; }.operator-note { display:flex; align-items:center; font-size:18px; }.operator-note b { display:inline-block; margin-right:.28em; color:var(--ink); }
 .utility-layout { height:575px; align-items:stretch; }.main-utility { padding:14px; }.main-utility .equation { padding:7px 2px 0; font-size:29px; }.utility-plot { padding:10px; }.scope-strip { margin-top:12px; padding:10px 18px; border-radius:14px; background:#EEF2F5; color:#56667A; font-size:17px; text-align:center; }.utility-layout .stat { min-height:73px; padding:8px 15px; }.utility-layout .stat-value { font-size:27px; }.utility-layout .stat-label { font-size:15px; }
-.standard-plots { height:470px; }.comparison-table { margin-top:12px; display:grid; border:2px solid var(--grid); border-radius:15px; overflow:hidden; background:#FFFFFF; }.comparison-table > div { display:grid; grid-template-columns:1.5fr 1fr 1fr; gap:12px; padding:7px 16px; border-top:1px solid var(--grid); font-size:17px; align-items:center; }.comparison-table > div:first-child { border-top:0; }.comparison-head { background:#EEF2F5; color:var(--muted); font-weight:800; }.blue-text { color:var(--blue); }.red-text { color:var(--red); }
+.standard-plots { height:470px; }.comparison-table { margin-top:12px; display:grid; border:2px solid var(--grid); border-radius:15px; overflow:hidden; background:#FFFFFF; }.comparison-table > div { display:grid; grid-template-columns:1.5fr 1fr 1fr; gap:12px; padding:7px 16px; border-top:1px solid var(--grid); font-size:17px; align-items:center; }.comparison-table > div:first-child { border-top:0; }.comparison-head { background:#EEF2F5; color:var(--muted); font-weight:800; }.blue-text { color:var(--blue); }.green-text { color:var(--green); }.red-text { color:var(--red); }
 .hierarchy-definition-layout { display:grid; grid-template-columns:55% 45%; gap:28px; height:100%; align-items:stretch; }.hierarchy-task-plot { height:100%; }.hierarchy-bandwidth-plot { height:385px; }.hierarchy-side .card { padding:15px 20px; }.hierarchy-side .card-title { font-size:20px; }.hierarchy-side .card p { font-size:18px; }
 .branch-symbols { padding:8px 12px; border-radius:12px; background:#EEF2F5; color:var(--muted); font-size:18px; line-height:1.24; text-align:center; }.branch-symbols b { color:var(--ink); }.indicator-one { font-family:Arial,Nimbus Sans,sans-serif; font-weight:800; }
 .four-stat-row { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-top:8px; }.four-stat-row .stat { min-width:0; }.capture-equation { padding:9px 16px; display:grid; grid-template-columns:auto 1fr; align-items:baseline; justify-content:center; gap:25px; }.capture-formula { color:var(--ink); font:26px/1.2 Georgia,serif; white-space:nowrap; }.capture-definition { color:var(--muted); font:17px/1.2 Arial,sans-serif; }.anatomy-evidence-grid { display:grid; grid-template-columns:46% 54%; gap:12px; height:430px; min-height:0; }.anatomy-layout .capture-plot { height:100%; padding:10px; }.anatomy-layout .capture-plot .plot { width:100%; height:100%; }.anatomy-metrics { display:grid; grid-template-rows:repeat(4,1fr); gap:9px; min-height:0; }.anatomy-metrics .stat { min-height:0; padding:10px 14px; display:flex; flex-direction:column; justify-content:center; }.anatomy-metrics .stat-value { font-size:28px; }.anatomy-metrics .stat-label { font-size:16px; }.anatomy-data .precision-note { font-size:16px; line-height:1.32; padding:12px 15px; }

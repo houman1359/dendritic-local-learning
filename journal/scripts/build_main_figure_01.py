@@ -294,11 +294,15 @@ def panel_b(ax):
             solid_capstyle="round", zorder=2)
     ax.plot([rd_cx, fb_x], [fb_y, fb_y], color=BLUE, lw=LW_HAIR,
             solid_capstyle="round", zorder=2)
-    ax.plot([fb_x, fb_x], [fb_y, unit_ys[0] - 0.052], color=BLUE,
+    ax.plot([fb_x, fb_x], [fb_y, unit_ys[0] - 0.078], color=BLUE,
             lw=LW_HAIR, solid_capstyle="round", zorder=2)
     for y in unit_ys:
-        f.arrow((fb_x, y - 0.052), (unit_x + f.fx(3.4), y - f.fy(3.6)),
-                color=BLUE, lw=LW_HAIR, head=3.2, rad=0.16, zorder=2.4)
+        # The return runs on its OWN line, well under the forward arrow, and
+        # turns up into the soma from below.  Delivered 3.6 pt under the
+        # forward stroke it ran almost parallel to it and the two read as one
+        # thick two-headed connector rather than as a loop.
+        f.arrow((fb_x, y - 0.078), (unit_x + f.fx(2.6), y - f.fy(7.8)),
+                color=BLUE, lw=LW_HAIR, head=3.2, rad=0.30, zorder=2.4)
     ax.text(fb_x - f.fx(4.0), 0.365, "δᵤ", ha="right", va="center",
             fontsize=PT_ANNOT, color=BLUE)
 

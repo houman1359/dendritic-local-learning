@@ -38,9 +38,10 @@ Use:
 `1–13, 20`
 
 This preserves the full derivation, operator theory, the standard-task
-boundary, and the strongest positive necessity experiment. It omits the
-anatomical and biological evidence rather than compressing it into unsupported
-claims.
+boundary, and the strongest positive necessity experiment. Slides 14–19 are
+omitted. On slide 20, explicitly introduce the right-hand evidence ladder as
+a one-slide summary of paper results that were not shown in this cut; do not
+expand the biological claims unless asked.
 
 ## Biology-focused 17-minute version
 

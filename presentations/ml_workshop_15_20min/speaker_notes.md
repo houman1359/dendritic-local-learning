@@ -86,9 +86,11 @@ signal act?
 In the dendritic model, trainable network weights become conductances \(g_i\)
 distributed across compartments \(n\). The routed field is
 \(\boldsymbol\delta_u^{V,{\rm avail}}=A_u\boldsymbol\beta_u\). The \(K\) entries
-of \(\boldsymbol\beta_u\) are independently communicated signals; each column
-of \(A_u\) defines one route's spatial support and gain. This separates local
-state, subtree address, and route gain.
+of \(\boldsymbol\beta_u\) are independently communicated signals, and \(N_u\)
+is the number of compartments in neuron \(u\), so
+\(A_u\in\mathbb R^{N_u\times K}\). Each column of \(A_u\) defines one route's
+spatial support and gain. This separates local state, subtree address, and
+route gain.
 
 A grouped-point model can be supplied with the same \(A_u\), so a positive
 result establishes the value of the routed information before it establishes
@@ -300,9 +302,11 @@ is the more modest approximately 2.7-fold advantage over a shuffled
 dictionary. “Connections” means nonzero route-matrix entries, not cable
 length, energy, or reliability.
 
-The ordering replicates in a disjoint 47-cell cohort and in ten
-quality-controlled cells from a second MICrONS mouse. These are modeled fields
-on measured anatomy, not observed task gradients.
+The full route ordering replicates in a disjoint 47-cell cohort. In a second
+MICrONS mouse, the model-matched subtree advantage is positive in all ten
+quality-controlled cells; this is descriptive cell-level replication, not an
+independent animal-level inferential test. These are modeled fields on
+measured anatomy, not observed task gradients.
 
 **Transition:** A branch point supplies an address; can conductance regulate
 its gain?
