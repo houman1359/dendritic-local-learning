@@ -192,7 +192,7 @@ def main() -> None:
         ("shuffled_shunt", "shuffled", COLORS["mute"]),
         ("anti_aligned_shunt", "anti", COLORS["additive"]),
         ("noisy_no_shunt", "no shunt", COLORS["ink"]),
-        ("explicit_point_gate", "point gate", COLORS["dend"]),
+        ("explicit_point_gate", "point gain", COLORS["dend"]),
     ]
     values, lows, highs = [], [], []
     for control, _, _ in controls:

@@ -931,8 +931,8 @@ def main() -> None:
                 # Re-expanding the clip also re-admits each source panel's own
                 # heading, so erase it span-by-span.
                 erase_phrases=(
-                    ("Historical exact/BP",) if letter == "I"
-                    else ("Clean-source exact/BP",) if letter == "K"
+                    ("Initial exact/BP comparison",) if letter == "I"
+                    else ("Version-locked exact/BP",) if letter == "K"
                     else ()
                 ),
             )
@@ -943,7 +943,7 @@ def main() -> None:
             "Noise-task identity",
             "Exact vs BP",
             "Ownership",
-            "Clean exact vs BP",
+            "Version-locked exact vs BP",
             "Fixed-budget depth",
             "Two-stream learning",
             "Capture vs progress",

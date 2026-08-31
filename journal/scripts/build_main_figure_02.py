@@ -128,7 +128,7 @@ GAIN_TICKS = [0, 2, 4, 6]
 GAIN_LABEL = "accuracy difference (pp)"
 
 STRICT_LADDER_TICKS = ["strict\nscalar", "neuron\nspecific", "exact\npath"]
-FALLBACK_LADDER_TICKS = ["legacy scalar\nfallback", "neuron\nspecific", "exact\npath"]
+FALLBACK_LADDER_TICKS = ["matched-width\nscalar fallback", "neuron\nspecific", "exact\npath"]
 
 # One declared convention for the two categorical panels: the per-seed cloud
 # is drawn as a symmetric deterministic fan a quarter-row BELOW its own mean

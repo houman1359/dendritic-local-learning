@@ -299,7 +299,7 @@ def make_figure(result: dict[str, Any], figure_stem: Path) -> None:
 
     fig, axes = plt.subplots(2, 2, figsize=(FIG_W, 5.45))
     ax = axes[0, 0]
-    panel_title(ax, "A", "Frozen independent-animal cohort")
+    panel_title(ax, "A", "Independent-animal sample")
     selected = cohort.copy()
     colors = np.where(selected["root_id"].isin(included), COLORS["dend"], COLORS["mute"])
     ax.scatter(selected["x_nm"] / 1_000, selected["y_nm"] / 1_000, c=colors, s=25)

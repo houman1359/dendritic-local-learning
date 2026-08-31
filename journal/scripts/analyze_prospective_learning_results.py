@@ -832,7 +832,7 @@ def _plot_streamlined_main() -> None:
     ax_c.set_yticks([-0.2, 0.0, 0.2, 0.4])
     ax_c.set_xlabel("dendritic stage count")
     ax_c.set_ylabel("exact transport − BP (pp)")
-    panel_title(ax_c, "I", "Historical exact/BP")
+    panel_title(ax_c, "I", "Initial exact/BP comparison")
     style_axis(ax_c)
     clean_legend(ax_c, fontsize=PT_LEGEND, loc="upper right", auto_clear=True)
 
@@ -929,7 +929,7 @@ def _plot_streamlined_main() -> None:
     ax_e.set_xticks(range(4), [item[2] for item in clean_order])
     ax_e.tick_params(axis="x", labelsize=PT_SMALL)
     ax_e.set_ylabel("exact transport − BP (pp)")
-    panel_title(ax_e, "K", "Clean-source exact/BP")
+    panel_title(ax_e, "K", "Version-locked exact/BP")
     style_axis(ax_e)
 
     fixed = followup_contrast[

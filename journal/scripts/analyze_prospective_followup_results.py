@@ -49,7 +49,7 @@ CORE_COLOR = {
 }
 FEEDBACK_ORDER = ["per_soma", "per_soma_shared", "path_transport"]
 FEEDBACK_LABEL = {
-    "per_soma": "Legacy fallback",
+    "per_soma": "Scalar fallback",
     "per_soma_shared": "Neuron-indexed",
     "per_soma_shuffled": "Shuffled ancestry",
     "path_transport": "Exact transport",

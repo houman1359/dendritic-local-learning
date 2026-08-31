@@ -727,8 +727,8 @@ def make_figure(summary: pd.DataFrame, paired: pd.DataFrame) -> None:
     ax_a.plot(limits, limits, color=COLORS["mute"], linewidth=LW_HAIR, linestyle="--")
     ax_a.set_xlim(limits)
     ax_a.set_ylim(limits)
-    ax_a.set_xlabel("historical test accuracy")
-    ax_a.set_ylabel("clean-source test accuracy")
+    ax_a.set_xlabel("reference test accuracy")
+    ax_a.set_ylabel("version-locked test accuracy")
     panel_title(ax_a, "A", "Outcome concordance")
     style_axis(ax_a, grid="both")
 
@@ -741,7 +741,7 @@ def make_figure(summary: pd.DataFrame, paired: pd.DataFrame) -> None:
     ax_b.hist(inside, bins=np.linspace(-5.0, 5.0, 41), color=COLORS["shunting"], alpha=0.8)
     ax_b.axvline(0, color=COLORS["mute"], linewidth=LW_HAIR)
     ax_b.set_xlim(-5.0, 5.0)
-    ax_b.set_xlabel("clean minus historical (pp)")
+    ax_b.set_xlabel("version-locked minus reference (pp)")
     ax_b.set_ylabel("seed–condition pairs")
     if outliers:
         ax_b.text(

@@ -93,7 +93,7 @@ HEIGHT_IN = 493.0 / 72.0            # aspect 1.10, inside the 1.05-1.55 band
 # panel has to carve that space out of its own module slot and every panel of
 # a grid column keeps the same x0 and the same axes width.
 HGUTTER = 36.0
-VGUTTER = 48.0
+VGUTTER = 57.0
 MARGINS = Margins(left=49.0, right=8.0, top=21.0, bottom=27.0)
 ROW_WEIGHTS = (1.00, 1.00, 1.00)
 
@@ -237,7 +237,7 @@ def panel_focal_shunt(ax, *, width_pt, height_pt):
 
     lx = left_rect[0] + left_rect[2] / 2.0
     rx = right_rect[0] + right_rect[2] / 2.0
-    ax.text(lx, bottom - 0.075, "current-matched additive", ha="center", va="center",
+    ax.text(lx, bottom - 0.075, "matched current injection", ha="center", va="center",
             fontsize=PT_ANNOT, color=ADDITIVE)
     ax.text(rx, bottom - 0.075, "focal shunt", ha="center", va="center",
             fontsize=PT_ANNOT, color=SHUNT)
@@ -284,7 +284,7 @@ def panel_tree_relation(ax):
                   color=INK)
     ax.tick_params(axis="x", length=0, pad=2.5)
     _direct_label(ax, 0.52, 0.152, "focal shunt", SHUNT)
-    _direct_label(ax, 0.52, 0.124, "matched additive", ADDITIVE)
+    _direct_label(ax, 0.52, 0.124, "current injection", ADDITIVE)
     _title(ax, "Tree-relation selectivity")
     return ax
 
@@ -329,7 +329,7 @@ def panel_passive_dose(ax):
     ax.set_xlabel("perturbation dose", fontsize=PT_LABEL, color=INK)
     ax.set_ylabel(LOCAL_LABEL, fontsize=PT_LABEL, color=INK)
     _direct_label(ax, 0.275, 0.213, "focal shunt", SHUNT)
-    _direct_label(ax, 0.275, 0.150, "matched additive", ADDITIVE)
+    _direct_label(ax, 0.275, 0.150, "current injection", ADDITIVE)
     _title(ax, "Passive high-conductance dose")
     return ax
 
@@ -390,7 +390,7 @@ def panel_active_dose(ax, summary):
     ax.set_xlabel("normalized shunt dose", fontsize=PT_LABEL, color=INK)
     ax.set_ylabel(LOCAL_LABEL, fontsize=PT_LABEL, color=INK)
     _direct_label(ax, 0.245, 1.30, "focal shunt", SHUNT)
-    _direct_label(ax, 0.245, 1.06, "matched additive", ADDITIVE)
+    _direct_label(ax, 0.245, 1.06, "current injection", ADDITIVE)
     # E carries the same quantity as C and D on a wider range; the caption
     # carries that disclosure rather than the panel.
     _title(ax, "Active dose response")
@@ -402,10 +402,10 @@ COHORTS = (
     ("original_eight", "pilot, n = 8", SHUNT, M_CONTRAST),
     ("v661_disjoint", "MICrONS mouse 1, n = 45", REPLICATE, M_REPLICATE),
 )
-CONTRAST_LABEL = "shunt − additive localization"
+CONTRAST_LABEL = "shunt − current-injection localization"
 # The same quantity, set on two lines where it is the (rotated) y axis of a
 # panel whose row is shorter than the label is long.
-CONTRAST_LABEL_Y = "shunt − additive\nlocalization"
+CONTRAST_LABEL_Y = "shunt − current injection\nlocalization"
 
 
 def panel_electrotonic(ax):
@@ -457,7 +457,7 @@ def panel_electrotonic(ax):
     # Only the two series names stay on the panel (T5): the axial-resistivity
     # condition of the pilot cohort and the standard-calibration null are
     # methodological notes and are carried by the caption.
-    _direct_label(ax, 1.02, 0.0295, "pilot cohort", SHUNT)
+    _direct_label(ax, 1.02, 0.0115, "initial 8-cell sample", SHUNT)
     _direct_label(ax, 3.9, 0.0895, "MICrONS mouse 1", REPLICATE)
 
     # Mark the standard passive calibration explicitly.  Its two cohort

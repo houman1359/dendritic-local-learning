@@ -373,9 +373,9 @@ def build(path=None, *, confirmatory_analysis_dir=None):
                             title="Harder-data control")
     else:
         ax_c = canvas.panel("cifar", 1, 0, 6, grid="y",
-                            title="Historical shunting ladder")
+                            title="Shunting feedback ladder")
         ax_d = canvas.panel("cifar_confirmatory", 1, 6, 6, grid="y",
-                            title="Fresh raw-additive ladder")
+                            title="Raw-additive feedback ladder")
     panel_depth(ax_a)
     panel_noise(ax_b)
     panel_cifar(ax_c)

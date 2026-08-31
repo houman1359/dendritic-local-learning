@@ -133,7 +133,7 @@ MARGINS = Margins(left=52.0, right=8.0, top=22.0, bottom=30.0)
 # their left, so the four panels of the two argument rows keep one width
 # instead of two.  16 pt clears the 14.4 pt the measurement asks for.
 LABEL_RESERVE_PT = 16.0
-C_LABEL_RESERVE_PT = 22.0   # C row labels -> clear of the letter column
+C_LABEL_RESERVE_PT = 30.0   # C row labels -> clear of the letter column
 
 MINUS = "−"
 
@@ -395,8 +395,8 @@ def panel_forest(ax, prespecified, all_scans, tree, original, expanded, *,
     ]
     raw_groups = (
         ("structure–function",
-         (("prespecified", partial_a, ROUTE),
-          ("all valid scans", partial_b, ROUTE))),
+        (("single scan", partial_a, ROUTE),
+          ("all eligible scans", partial_b, ROUTE))),
         ("full tree, MSE",
          (("vs shuffled", contrasts[0], C_SHUFFLE),
           ("vs random", contrasts[1], C_RANDOM))),

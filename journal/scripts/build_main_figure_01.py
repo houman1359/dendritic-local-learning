@@ -317,28 +317,82 @@ def panel_b(ax):
 # stage answers.  The sentence that used to sit under every rung ("one error
 # value per neuron...", "K coordinates per neuron...", "path conductance
 # sets...") is prose, not graphic content, and has moved to the caption.
-STAGES = (
-    (dict(mode="coordinate"), "coordinate", "δᵤ", BLUE, "which neuron"),
-    (dict(mode="address", K=4), "address", "cᵤ,ₖ", INK, "which subtree"),
-    (dict(mode="gain"), "gain", r"$\widetilde{\alpha}_n$", INK, "how strongly"),
-)
+STAGES = (("coordinate", "coordinate", "which neuron"),
+          ("address", "address", "which subtree"),
+          ("gain", "gain", "how strongly"))
 
-TREE_COL = 0.235                  # the rung's tree column, in frame fractions
-TEXT_COL = 0.275
+TREE_COL = 0.30                   # the rung's tree column, in frame fractions
+TEXT_COL = 0.345
+
+# The address rung's ONE selected subtree, and the route that reaches it.
+# The K=4 library mode drew all four subtree capsules over one tree, and at
+# rung size the overlapping tints read as noise while nothing was actually
+# selected; "which subtree" needs exactly one answer on display.  The gain
+# rung then re-uses panel D's idiom -- the transported route drawn edge by
+# edge in additive blue -- so "which" (a lit subtree) and "how strongly" (the
+# blue delivery with its gain) stop being the same picture with a ring on it.
+_ADDR_SUBTREE_C = [("JL", "JLL")]
+_ADDR_SUBTREE_D = [("JLL", "T1"), ("JLL", "T2")]
+_ADDR_CAPSULE = [(CT._lerp("JL", "JLL", 0.3), "JLL", "T1"), ("JLL", "T2")]
+# Panel D's route strokes, refitted: at a third of D's tree height its head
+# geometry renders as blobs that swallow the edges they decorate.
+_GAIN_ROUTE = ((CT.ROOT_PT, CT.P["J1"]),
+               (CT.P["J1"], CT.P["JL"]),
+               (CT.P["JL"], CT.P["JLL"]))
+
+
+def _rung_tree(f, rect, rung):
+    """One rung glyph, drawn natively in panel D's vocabulary."""
+    if rung == "coordinate":
+        sub, _ = tree_inset(f, rect, scale=1.0, arrow_scale=0.75,
+                            ylim=TREE_YL_TIGHT, mode="coordinate")
+        sub.text(1.42, 0.72, "δᵤ", ha="left", va="center",
+                 fontsize=PT_SMALL, color=BLUE)
+        return
+    aspect = (TREE_XL[1] - TREE_XL[0]) / (TREE_YL_TIGHT[1] - TREE_YL_TIGHT[0])
+    x0, y0, w, h = rect
+    w_pt, h_pt = w * f.w_pt, h * f.h_pt
+    if w_pt / h_pt > aspect:
+        fit_h, fit_w = h_pt, h_pt * aspect
+    else:
+        fit_w, fit_h = w_pt, w_pt / aspect
+    box = (x0 + (w - f.fx(fit_w)) / 2.0, y0 + (h - f.fy(fit_h)) / 2.0,
+           f.fx(fit_w), f.fy(fit_h))
+    sub = f.ax.inset_axes(box, transform=f.ax.transData, zorder=3)
+    sub.set_facecolor("none")
+    CT._setup_axes(sub, TREE_XL, TREE_YL_TIGHT)
+    t = CT._Tree(sub, 1.0, False)
+    t.capsule(mix("shunting", 18), 11, _ADDR_CAPSULE)
+    t.tree(GHOST)
+    t.edges(_ADDR_SUBTREE_C, DEND, CT._TAPER_PT["C"], zorder=2.2)
+    t.edges(_ADDR_SUBTREE_D, DEND, CT._TAPER_PT["D"], zorder=2.2)
+    t.junctions(edge=GHOST)
+    t.soma(SOMA, RIM)
+    if rung == "address":
+        sub.text(-1.62, 1.16, "cᵤ,ₖ", ha="center", va="center",
+                 fontsize=PT_SMALL, color=INK)
+        return
+    for a, b in _GAIN_ROUTE:
+        sub.plot([a[0], b[0]], [a[1], b[1]], color=BLUE, lw=LW_HAIR,
+                 solid_capstyle="round", zorder=2.6)
+        sub.add_patch(FancyArrowPatch(
+            CT._lerp(a, b, 0.30), CT._lerp(a, b, 0.62),
+            arrowstyle="-|>,head_length=1.7,head_width=1.1",
+            mutation_scale=1.0, color=BLUE, lw=LW_HAIR, capstyle="round",
+            zorder=4.5))
+    sub.text(-0.52, 0.55, "α̃ₙ", ha="right", va="center",
+             fontsize=PT_SMALL, color=BLUE)
 
 
 def panel_c(ax):
     f = Frame(ax)
     band = 1.0 / 3.0
-    for index, (tree_kw, name, symbol, tone, question) in enumerate(STAGES):
+    for index, (rung, name, question) in enumerate(STAGES):
         top = 1.0 - index * band
         core = (0.0, top - band * 0.96, TREE_COL, band * 0.92)
-        tree_inset(f, core, scale=1.0, arrow_scale=0.75,
-                   ylim=TREE_YL_TIGHT, **tree_kw)
+        _rung_tree(f, core, rung)
         ax.text(TEXT_COL, top - band * 0.36, name, ha="left", va="center",
                 fontsize=PT_LABEL, color=INK)
-        ax.text(1.0, top - band * 0.36, symbol, ha="right", va="center",
-                fontsize=PT_ANNOT, color=tone)
         ax.text(TEXT_COL, top - band * 0.68, question, ha="left",
                 va="center", fontsize=PT_ANNOT, color=MUTE)
         if index:
