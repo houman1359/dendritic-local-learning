@@ -219,7 +219,7 @@ def panel_a(ax):
     tree_ax, tree_box = tree_inset(
         f, (tree_x0, f.fy(13.0), 1.0 - tree_x0, 1.0 - f.fy(13.0)),
         mode="address", K=4, scale=0.95, arrow_scale=0.65)
-    ax.text(tree_box[0] + tree_box[2] / 2.0, label_y, "subtree coefficients  cᵤ,ₖ",
+    ax.text(tree_box[0] + tree_box[2] / 2.0, label_y, "route signals  cᵤ,ₖ",
             ha="center", va="center", fontsize=PT_ANNOT, color=INK)
 
 

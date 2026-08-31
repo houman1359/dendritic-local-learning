@@ -398,6 +398,34 @@ rather than assumed from the identity.
 
 \subsection{Feedback fields}
 
+For neuron $u$ with $N_u$ routed dendritic compartments, indexed
+$n=1,\ldots,N_u$ while the soma retains index $n=0$, let
+$\bm\delta^V_u=(\delta^V_{1,u},\ldots,\delta^V_{N_u,u})^{\mathsf T}$ collect
+the exact compartment errors and let $\widehat{\bm\delta}^V_u$ collect the
+values available to the local rule. Let
+$\bm c_u=(c_{u,1},\ldots,c_{u,K})^{\mathsf T}$ contain the signed values
+carried by $K$ feedback channels. Let
+$A_u\in\mathbb R^{N_u\times K}$ be their fixed compartmental address matrix:
+column $k$ is the spatial field produced by unit amplitude on channel $k$, and
+$(A_u)_{nk}$ is its delivery weight at compartment $n$. Linear superposition of
+the channel fields gives
+\begin{equation}
+\widehat{\bm\delta}^{V}_u=A_u\bm c_u,
+\qquad
+\widehat\delta^V_{n,u}=\sum_{k=1}^{K}(A_u)_{nk}c_{u,k}.
+\label{eq:s_routed_field}
+\end{equation}
+This is a definition of the restricted routing model, not a consequence of
+the membrane current balance. The address matrix specifies where signals can
+be delivered; the coefficient vector specifies the values delivered on the
+current example. The model is exact for $A_u=I$ and
+$\bm c_u=\bm\delta^V_u$. It becomes a neuron-wide broadcast for
+$K=1$ and $A_u=\bm 1_{N_u}$. A binary subtree column is one on descendants of
+its branch point and zero elsewhere. The equation leaves coefficient
+estimation open: projection analyses use best-fitting oracle coefficients to
+measure representational capacity, whereas learning experiments use the
+feedback rule specified for that task.
+
 Table~\ref{tab:feedback_objects} defines the feedback objects without
 conflating bandwidth with routing. The strict scalar field used for the
 plotted MNIST ladder applies Eq.~\ref{eq:s_scalar_reduction} at every
@@ -481,9 +509,9 @@ of supplying the correct coordinate across network layers.
 
 Let $A_T$ be the synapse-by-route ancestry matrix of tree $T$, and let
 $\bm\beta$ contain state-dependent route gains. A low-bandwidth teaching
-vector $\bm z\in\mathbb R^K$ generates a synaptic field
+coefficient vector $\bm c\in\mathbb R^K$ generates a synaptic field
 \begin{equation}
-\widehat{\bm g}=\Phi_{T,K}\bm z,
+\widehat{\bm g}=\Phi_{T,K}\bm c,
 \qquad \Phi_{T,K}=D_eA_T\operatorname{diag}(\bm\beta)S_K,
 \label{eq:s_dictionary}
 \end{equation}
@@ -492,6 +520,10 @@ and $S_K$ assigns
 the $K$ communicated channels to route sites. Topology fixes support. Conductance changes gain
 and conditioning but does not create an ancestry relation that is absent from
 $A_T$.
+The compartment-level matrix $A_u$ in Eq.~\ref{eq:s_routed_field} is the
+general address map. Here $A_T$ is its anatomy-specific lift to synapse
+coordinates, and $\Phi_{T,K}$ is the resulting synaptic-update dictionary
+after eligibility, route gain and channel selection are included.
 
 \subsection{Address dimension and the point-neuron resource comparison}
 
@@ -521,7 +553,7 @@ been factored out; heterogeneous presynaptic activity alone is therefore not
 counted as an extra teaching coordinate.
 
 For any fixed $\Phi\in\mathbb R^{N_u\times K}$, all fields generated as
-$\Phi\bm z$ lie in $\operatorname{col}(\Phi)$ and hence occupy at most
+$\Phi\bm c$ lie in $\operatorname{col}(\Phi)$ and hence occupy at most
 $\operatorname{rank}(\Phi)\leq K$ dimensions. Conversely, the weighted
 least-squares field in that space is $P_{\Phi,W}\bm t_u$, and its expected
 weighted residual energy is
@@ -877,20 +909,20 @@ numerically in \texttt{tests/test\_laminar\_optimality.py}.
 
 \subsection{Point-neuron partition residual and route-coefficient error}
 
-Let $c_i$ be the exact task-dependent coefficient remaining after local
+Let $t_i$ be the exact task-dependent target remaining after local
 eligibility has been factored out, let $w_i>0$ be coordinate weights, and let
 $\pi(i)$ assign synapse $i$ to a group that must share one teaching
 coefficient. The best allowed field minimizes
-$\sum_iw_i[c_i-z_{\pi(i)}]^2$.
+$\sum_iw_i[t_i-c_{\pi(i)}]^2$.
 
 \begin{proposition}[Shared-coefficient residual]
 For every group $G$, the optimum is its weighted mean
 \begin{equation}
-\bar c_G=\frac{\sum_{i\in G}w_ic_i}{\sum_{i\in G}w_i},
+c_G^*=\frac{\sum_{i\in G}w_it_i}{\sum_{i\in G}w_i},
 \end{equation}
 and the irreducible residual is
 \begin{equation}
-\mathcal R(\pi)=\sum_G\sum_{i\in G}w_i(c_i-\bar c_G)^2.
+\mathcal R(\pi)=\sum_G\sum_{i\in G}w_i(t_i-c_G^*)^2.
 \label{eq:s_partition_variance}
 \end{equation}
 Refining a partition cannot increase $\mathcal R$; it decreases the residual
@@ -900,7 +932,7 @@ groups.
 
 \noindent\emph{Proof.}
 Differentiate the separable weighted least-squares objective with respect to
-each $z_G$. The refinement statement follows because the old solution remains
+each $c_G$. The refinement statement follows because the old solution remains
 feasible when two or more refined coefficients are constrained to be equal.
 \hfill$\square$
 
@@ -911,21 +943,21 @@ model can implement the same partition, which is why the resource-matched
 point controls in the main article coincide with the dendritic implementation.
 
 For a general dictionary $\Phi$ and positive diagonal $W$, let
-$\bm z^*=\arg\min_{\bm z}\lVert\bm c-\Phi\bm z\rVert_W^2$ and let
-$\widehat{\bm z}$ be the coefficients actually supplied by a local circuit.
+$\bm c^*=\arg\min_{\bm c}\lVert\bm t-\Phi\bm c\rVert_W^2$ and let
+$\widehat{\bm c}$ be the coefficients actually supplied by a local circuit.
 Weighted projection orthogonality yields the exact decomposition
 \begin{equation}
-\lVert\bm c-\Phi\widehat{\bm z}\rVert_W^2
-=\underbrace{\lVert\bm c-\Phi\bm z^*\rVert_W^2}_{\text{address / representation error}}
-+\underbrace{\lVert \Phi(\widehat{\bm z}-\bm z^*)\rVert_W^2}_{\text{coefficient-estimation error}}.
+\lVert\bm t-\Phi\widehat{\bm c}\rVert_W^2
+=\underbrace{\lVert\bm t-\Phi\bm c^*\rVert_W^2}_{\text{address / representation error}}
++\underbrace{\lVert \Phi(\widehat{\bm c}-\bm c^*)\rVert_W^2}_{\text{coefficient-estimation error}}.
 \label{eq:s_field_error_decomposition}
 \end{equation}
-If the coefficient error is unbiased with covariance $\Omega_z$, the expected
+If the coefficient error is unbiased with covariance $\Omega_c$, the expected
 second term is
-$\operatorname{tr}(\Phi^{\mathsf T}W\Phi\,\Omega_z)$. The Gram matrix
+$\operatorname{tr}(\Phi^{\mathsf T}W\Phi\,\Omega_c)$. The Gram matrix
 $G_\Phi=\Phi^{\mathsf T}W\Phi$ therefore controls how coefficient error is expressed.
 Small positive eigenvalues amplify the inverse problem used to estimate
-$\bm z^*$, while column coherence makes individual route coefficients poorly
+$\bm c^*$, while column coherence makes individual route coefficients poorly
 identifiable even when their combined field is stable. Address rank alone is
 not a complete learning metric.
 
@@ -952,41 +984,42 @@ by Eq.~\ref{eq:s_static_gain_span}.
 \subsection{Finite-time coefficient learning has a bias--variance crossover}
 
 Equal span does not imply equal coefficient dynamics. Let the realized field
-be $\bm f_t=\Phi\bm z_t$, normalize vanilla coefficient descent by
+be $\bm f_t=\Phi\bm c_t$, normalize vanilla coefficient descent by
 $\lambda_{\max}(\Phi\Phi^{\mathsf T})$, and define
-$A=\Phi\Phi^{\mathsf T}/\lambda_{\max}$. For noisy rate-based target estimates
+$H_\Phi=\Phi\Phi^{\mathsf T}/\lambda_{\max}$. For normalized coefficient step
+$\eta$ and noisy rate-based target estimates
 $\bm g+\bm\xi_t$, with
 $\E\bm\xi_t=0$ and
 $\operatorname{Cov}(\bm\xi_t)=\sigma^2I/n$, the field iteration is
 \begin{equation}
-\bm f_{t+1}=\bm f_t-cA(\bm f_t-\bm g-\bm\xi_t).
+\bm f_{t+1}=\bm f_t-\eta H_\Phi(\bm f_t-\bm g-\bm\xi_t).
 \label{eq:s_coefficient_field_iteration}
 \end{equation}
 
 \begin{proposition}[Exact finite-time coefficient risk]
 Assume $\bm f_0=0$, $\bm g\in\operatorname{col}(\Phi)$ and let
-$(\mu_j,\bm u_j)$ be the positive eigenpairs of $A$, with
+$(\mu_j,\bm u_j)$ be the positive eigenpairs of $H_\Phi$, with
 $\theta_j=\bm u_j^{\mathsf T}\bm g$. For independent isotropic noise and a
 stable step, the expected population loss after $T$ updates is
 \begin{equation}
 \E\frac{\lVert\bm f_T-\bm g\rVert_2^2}{2}
 =\frac12\sum_j\left[
-(1-c\mu_j)^{2T}\theta_j^2
+(1-\eta\mu_j)^{2T}\theta_j^2
 +\frac{\sigma^2}{n}
-\frac{(c\mu_j)^2[1-(1-c\mu_j)^{2T}]}
-{1-(1-c\mu_j)^2}
+\frac{(\eta\mu_j)^2[1-(1-\eta\mu_j)^{2T}]}
+{1-(1-\eta\mu_j)^2}
 \right].
 \label{eq:s_coefficient_finite_risk}
 \end{equation}
-For Gram-preconditioned descent, $A=P_\Phi$ and all positive $\mu_j=1$;
+For Gram-preconditioned descent, $H_\Phi=P_\Phi$ and all positive $\mu_j=1$;
 therefore every dictionary with the same projector has the same field
 trajectory under common observations.
 \end{proposition}
 
 \noindent\emph{Proof.}
 Project Eq.~\ref{eq:s_coefficient_field_iteration} onto each eigenvector. The
-deterministic error contracts by $1-c\mu_j$ per step. Independent innovations
-have variance $(c\mu_j)^2\sigma^2/n$ and accumulate as a finite geometric
+deterministic error contracts by $1-\eta\mu_j$ per step. Independent innovations
+have variance $(\eta\mu_j)^2\sigma^2/n$ and accumulate as a finite geometric
 series. Summing half the modal second moments gives
 Eq.~\ref{eq:s_coefficient_finite_risk}. Gram preconditioning replaces
 $\Phi^{\mathsf T}\Phi$ by its pseudoinverse on the positive subspace, so the induced
@@ -2677,10 +2710,9 @@ The reversal \(E_{\mathrm I}\) does not appear in
 Eq.~\ref{eq:s_sherman} because the adjoint transport depends on \(G'\), not on
 the forward source \(\bm b'\). It remains in the solved voltage and in every
 inhibitory driving force.
-Let $\bm c_k=G^{-1}\bm e_k$ be the $k$th Green's-function column and let
-$r_k=c_{k,k}=(G^{-1})_{kk}>0$. Then
+Let $r_k=(G^{-1})_{kk}>0$. Then
 \begin{equation}
-\Delta\bm q=-a_k\bm c_k,
+\Delta\bm q=-a_kG^{-1}\bm e_k,
 \qquad
 a_k=\frac{\kappa_kq_k}{1+\kappa_kr_k},
 \qquad
@@ -2689,12 +2721,13 @@ a_k=\frac{\kappa_kq_k}{1+\kappa_kr_k},
 \label{eq:s_shunt_amplitude}
 \end{equation}
 The perturbation amplitude saturates at $|q_k|/r_k$, while its normalized
-spatial profile is fixed by $\bm c_k$ in this linear passive state. For a
+spatial profile is fixed by the Green's-function column $G^{-1}\bm e_k$ in
+this linear passive state. For a
 descendant set $D(k)$ and a prespecified matched comparison set $C(k)$, define
 \begin{equation}
 S_k(D,C)=
-\frac{\operatorname{median}_{i\in D(k)}|c_{k,i}|}
-{\operatorname{median}_{j\in C(k)}|c_{k,j}|}.
+\frac{\operatorname{median}_{i\in D(k)}|(G^{-1})_{ik}|}
+{\operatorname{median}_{j\in C(k)}|(G^{-1})_{jk}|}.
 \label{eq:s_electrotonic_selectivity}
 \end{equation}
 Because the common amplitude $|a_k|$ cancels, $S_k>1$ is necessary and
@@ -4140,7 +4173,9 @@ $g_i$, $x_i$, $g_ix_i$ & Nonnegative maximal synaptic conductance, presynaptic a
 $E_i^{\mathrm{rev}}$, $E_{\mathrm E}$, $E_{\mathrm I}$, $E_{\mathrm L}$ & Contact-specific, excitatory, inhibitory and leak reversal potentials. E/I polarity is set by reversal, not by a signed conductance. \\
 $G_n^{\mathrm E}$, $G_n^{\mathrm I}$ & Aggregate activity-weighted excitatory and inhibitory open conductances. \\
 $g_n^{\mathrm{tot}}$, $R_n^{\mathrm{tot}}$ & Total compartment conductance and its reciprocal input resistance. \\
-$\delta_u$, $c_{u,k}$ & Neuron-level learning signal and route-$k$ coefficient within neuron $u$. \\
+$\delta_u$ & Exact neuron-level learning signal for point neuron $u$. \\
+$N_u$ & Number of routed nonsomatic compartments in neuron $u$. \\
+$A_u$, $\bm c_u$ & Fixed $N_u\times K$ compartmental address matrix and example-dependent vector of $K$ signed channel values; $\widehat{\bm\delta}^{V}_u=A_u\bm c_u$. \\
 $\delta^V_{0,u}$, $\delta^V_{n,u}$ & Exact somatic and compartment voltage-space errors for neuron $u$. \\
 $\alpha_n^{\mathrm{cond}}$, $\widetilde\alpha_n$ & Conductance-only and effective path gains; the latter includes reactivation derivatives. \\
 $\overline\alpha_w$, $\mathrm{CV}_w$ & Eligibility-energy-weighted mean and coefficient of variation of the effective path gain. \\
