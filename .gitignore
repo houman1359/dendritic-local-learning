@@ -8,6 +8,9 @@
 *.out
 *.synctex.gz
 *.toc
+*.md
+presentations/*
+
 #presentations/*
 # Reproducible raster previews; publication assets are vector PDFs.
 journal/figures/components/*.png
