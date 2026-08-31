@@ -777,7 +777,7 @@ def figure2() -> None:
     ax_a.set_ylim(2.5e-13, 1e-6)
     ax_a.set_yticks([1e-12, 1e-10, 1e-8, 1e-6])
     ax_a.set_xlim(-0.55, 1.55)
-    panel_title(ax_a, "A", "Transport reconstruction check")
+    panel_title(ax_a, "A", "Transport reconstruction")
     style_axis(ax_a)
 
     acc = pd.read_csv(DATA / "figure2" / "feedback_accuracy_runs.csv")
@@ -787,7 +787,7 @@ def figure2() -> None:
     paired_feedback_panel(ax_b, acc, "test_accuracy", ylabel="MNIST accuracy",
                           ylim=(0.855, 0.978))
     ax_b.yaxis.set_major_formatter(mpl.ticker.PercentFormatter(1.0, decimals=0))
-    panel_title(ax_b, "B", "Neuron-indexed feedback")
+    panel_title(ax_b, "B", "Neuron-specific feedback")
     for x_center, tree_kw in ((0.0, dict(mode="scalar")),
                               (1.0, dict(mode="coordinate"))):
         glyph = ax_b.inset_axes([x_center - 0.15, 0.8565, 0.30, 0.0205],
@@ -797,7 +797,7 @@ def figure2() -> None:
     clean_legend(
         ax_b, handles=[
             Line2D([0], [0], color=COLORS["shunting"], marker="o", label="shunting"),
-            Line2D([0], [0], color=COLORS["additive"], marker="s", label="additive"),
+            Line2D([0], [0], color=COLORS["additive"], marker="s", label="raw additive"),
         ], loc="lower right", bbox_to_anchor=(1.0, 0.26),
     )
 
@@ -860,7 +860,7 @@ def figure2() -> None:
             continue
         s = text.get_text()
         if "Add." in s or "Shunt." in s:
-            text.set_text(s.replace("Add.", "additive").replace("Shunt.", "shunting"))
+            text.set_text(s.replace("Add.", "normalized additive").replace("Shunt.", "shunting"))
         text.set_fontsize(snap_pt(text.get_fontsize()))
     for inset in getattr(ax_e, "child_axes", []):
         # Inset bars are keyed by color to the trees directly above them,

@@ -584,7 +584,7 @@ def main() -> None:
             panel("figure_02_panels_P-Q.pdf", "Q", 1, 2),
         ],
         [
-            "Neuron-indexed feedback",
+            "Neuron-specific feedback",
             "Gradient alignment",
             "Identity gain across depth",
             "Matched ownership",

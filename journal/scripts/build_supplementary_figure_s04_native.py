@@ -119,8 +119,8 @@ def panel_depth(ax):
             ha="center", va="top")
     ax.text(1.12, 0.575, "shunting", color=SHUNT, fontsize=PT_LEGEND,
             ha="left", va="bottom")
-    ax.text(1.12, 0.44, "additive", color=ADD, fontsize=PT_LEGEND,
-            ha="left", va="top")
+    ax.text(1.85, 0.38, "normalized additive", color=ADD, fontsize=PT_LEGEND,
+            ha="center", va="top")
     return ax
 
 
@@ -143,8 +143,8 @@ def panel_noise(ax):
     ax.yaxis.set_major_formatter(PercentFormatter(1.0, decimals=0))
     ax.text(0.52, 0.60, "shunting", color=SHUNT, fontsize=PT_LEGEND,
             ha="left", va="bottom")
-    ax.text(0.30, 0.30, "additive", color=ADD, fontsize=PT_LEGEND,
-            ha="left", va="top")
+    ax.text(0.78, 0.34, "normalized additive", color=ADD, fontsize=PT_LEGEND,
+            ha="center", va="bottom")
     return ax
 
 

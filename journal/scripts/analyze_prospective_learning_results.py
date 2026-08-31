@@ -63,7 +63,7 @@ CORE_MARKER = {
     "dendritic_additive": MARKERS[1],
 }
 FEEDBACK_LABEL = {
-    "per_soma": "Matched-width fallback",
+    "per_soma": "Scalar fallback",
     "per_soma_shared": "Neuron-specific",
     "path_transport": "Exact path",
     "backprop": "Backpropagation",
@@ -466,7 +466,7 @@ def _plot_legacy(frame: pd.DataFrame, summary: pd.DataFrame) -> None:
         style_axis(ax)
 
     dose_modes = [
-        ("local_ca", "per_soma", "I", "Matched-width fallback"),
+        ("local_ca", "per_soma", "I", "Scalar fallback"),
         ("local_ca", "per_soma_shared", "J", "Neuron-specific"),
         ("local_ca", "path_transport", "K", "Exact"),
         ("standard", "backprop", "L", "Backprop"),
@@ -903,10 +903,10 @@ def _plot_streamlined_main() -> None:
 
     clean_exact = clean_exact[clean_exact.depth.eq("all_depths_seed_mean")].copy()
     clean_order = [
-        ("mnist", "additive", "MNIST\nraw\nadditive"),
-        ("mnist", "shunting", "MNIST\nshunting"),
-        ("noise_resilience", "additive", "noise\nraw\nadditive"),
-        ("noise_resilience", "shunting", "noise\nshunting\n(ReLU)"),
+        ("mnist", "additive", "MNIST\nraw add."),
+        ("mnist", "shunting", "\nshunt."),
+        ("noise_resilience", "additive", "noise\nraw add."),
+        ("noise_resilience", "shunting", "\nshunt.\n(ReLU)"),
     ]
     for index, (dataset, core, label) in enumerate(clean_order):
         row = clean_exact[
@@ -927,12 +927,7 @@ def _plot_streamlined_main() -> None:
         )
     ax_e.axhline(0, color=COLORS["mute"], ls="--", lw=LW_REF)
     ax_e.set_xticks(range(4))
-    repeat_ticks = ax_e.set_xticklabels([item[2] for item in clean_order])
-    # Edge categories are multi-line scientific names. Align them inward so
-    # the compositor does not split the final letter of ``shunting`` into the
-    # neighboring panel when it crops this source sheet for Supplementary S19.
-    repeat_ticks[0].set_ha("left")
-    repeat_ticks[-1].set_ha("right")
+    ax_e.set_xticklabels([item[2] for item in clean_order])
     ax_e.tick_params(axis="x", labelsize=PT_SMALL)
     ax_e.set_ylabel("exact transport − BP (pp)")
     panel_title(ax_e, "K", "Same-seed exact/BP repeat")

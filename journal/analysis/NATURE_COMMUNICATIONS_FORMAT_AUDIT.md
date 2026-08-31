@@ -10,11 +10,11 @@ The 9 numbered figures occupy 9 figure environments;
 |---|---:|---:|---|
 | Title | 7 words | 15 | PASS |
 | Abstract | 200 words | 200 | PASS |
-| Introduction + Results + Discussion | 9356 approximate words | 5000 | ADVISORY |
+| Introduction + Results + Discussion | 9413 approximate words | 5000 | ADVISORY |
 | Main display items | 9 figures | 10 | PASS |
 | References | 62 entries (general guide) | 70 | PASS |
 | Figure 1 legend | 236 words | 350 | PASS |
-| Figure 2 legend | 258 words | 350 | PASS |
+| Figure 2 legend | 294 words | 350 | PASS |
 | Figure 3 legend | 210 words | 350 | PASS |
 | Figure 4 legend | 162 words | 350 | PASS |
 | Figure 5 legend | 237 words | 350 | PASS |

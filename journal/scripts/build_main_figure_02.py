@@ -127,15 +127,11 @@ GAIN_LIM = (-0.85, 6.35)
 GAIN_TICKS = [0, 2, 4, 6]
 GAIN_LABEL = "accuracy difference (pp)"
 
-# One word per rung: at three modules the two-line forms ran into each
-# other; strict-vs-fallback stays in the caption and Methods, where it was
-# already stated per panel.
-STRICT_LADDER_TICKS = ["scalar", "neuron", "exact"]
-# Panels C and D use the full term ``matched-width scalar-fallback feedback``.
-# The compact tick says ``scalar fallback`` so it remains legible at the
-# journal's final column width; the caption gives the complete definition and
-# distinguishes it from the strict scalar condition in panel B.
-FALLBACK_LADDER_TICKS = ["fallback", "neuron", "exact"]
+# Keep the scientifically distinct feedback conditions visible in the
+# artwork.  Angled, single-line ticks remain separate at journal column width
+# without conflating strict scalar feedback with matched-width scalar fallback.
+STRICT_LADDER_TICKS = ["strict scalar", "neuron-specific", "exact path"]
+FALLBACK_LADDER_TICKS = ["scalar fallback", "neuron-specific", "exact path"]
 
 # One declared convention for the two categorical panels: the per-seed cloud
 # is drawn as a symmetric deterministic fan a quarter-row BELOW its own mean
@@ -148,6 +144,15 @@ SEED_FAN = 0.05
 def _fan(n):
     """Symmetric deterministic spread for a per-seed cloud."""
     return np.linspace(-SEED_FAN, SEED_FAN, n) if n > 1 else np.zeros(n)
+
+
+def _style_feedback_ticks(ax):
+    """Keep the three feedback conditions legible in quarter-width panels."""
+    ax.tick_params(axis="x", labelsize=PT_SMALL, pad=1.5)
+    for label in ax.get_xticklabels():
+        label.set_rotation(28)
+        label.set_ha("right")
+        label.set_rotation_mode("anchor")
 
 
 # ── row 0: the task and the three feedback resolutions ───────────────────
@@ -381,36 +386,38 @@ def _paired_ladder(ax, data, metric, *, gradient=False):
 
 
 def panel_path_gain_cv(ax):
-    """E: within-neuron dispersion of the path-gain profile, per seed.
+    """E: within-neuron dispersion of the transported-error profile.
 
-    The mechanistic companion to the ladder on its left: by the path-gain
-    factorization the exact field of one neuron is its somatic coordinate
-    scaled by \u03b1\u0303\u2099, so this panel's quantity is exactly how much of the field a
-    repeated neuron coordinate leaves unstated.  Five paired seeds, the same
-    pairing idiom as the row's other panels; the two means go to the caption.
-    This analysis stood in the journal draft's Figure 2 as a call into the
-    frozen NeurIPS generator and was dropped in the native rebuild; it is
-    drawn natively here from the same run table.
+    Computed on this figure's OWN models -- the exact-path checkpoints of
+    panel B's ladder, fifteen paired seeds per architecture, raw-additive
+    and shunting under one identical definition (the batch-RMS of dL/dV at
+    each dendritic compartment over the RMS at its own soma; Methods).  The
+    NeurIPS-era cohort this panel first reused measured the conductance-only
+    gain on the NORMALIZED-additive model and ordered the architectures the
+    other way around; the definition and cohort are stated in Methods so the
+    two results read as different measurements, not a contradiction.
     """
-    cv = pd.read_csv(DATA / "figure2" / "path_gain_cv_runs.csv")
-    archs = ["dendritic_additive", "dendritic_shunting"]
-    colors = {archs[0]: ADD, archs[1]: SHUNT}
-    pivot = cv.pivot_table(index="seed", columns="network_type",
+    cv = pd.read_csv(DATA / "figure2" / "path_gain_dispersion_ladder_runs.csv")
+    archs = ["additive", "shunting"]
+    colors = {"additive": ADD, "shunting": SHUNT}
+    marker = {"additive": "s", "shunting": "o"}
+    pivot = cv.pivot_table(index="seed", columns="architecture",
                            values="path_gain_cv_mean").dropna()
-    paired_lines(ax, 0, 1, pivot[archs[0]], pivot[archs[1]],
+    paired_lines(ax, 0, 1, pivot["additive"], pivot["shunting"],
                  color=COLORS["mute"], lw=LW_HAIR, alpha=0.30)
     for i, arch in enumerate(archs):
         vals = pivot[arch].to_numpy(float)
         ax.scatter(np.full(vals.size, float(i))
                    + jitter(vals.size, 70 + i, 0.03), vals,
                    s=SEED_MS ** 2, color=colors[arch], alpha=SEED_ALPHA,
-                   marker=CORE_MARKER[arch], edgecolors="none", zorder=3)
+                   marker=marker[arch], edgecolors="none", zorder=3)
         errorbar_mean(ax, i, vals, colors[arch], seed=80 + i,
-                      marker=CORE_MARKER[arch])
+                      marker=marker[arch])
     ax.set_xlim(-0.5, 1.5)
-    ax.set_xticks([0, 1], ["additive", "shunting"])
-    ax.set_ylim(0.0, 1.32)
-    ax.set_ylabel("path-gain CV within neuron")
+    ax.set_xticks([0, 1], ["raw\nadditive", "shunting"])
+    ax.tick_params(axis="x", labelsize=PT_SMALL)
+    ax.set_ylim(0.0, 0.62)
+    ax.set_ylabel("transported-error CV within neuron")
     return ax
 
 
@@ -457,6 +464,7 @@ def panel_mnist_ladder(ax):
     ax.set_ylabel(ACC_LABEL)
     ax.yaxis.set_major_formatter(PercentFormatter(1.0, decimals=0))
     style_panel(ax)
+    _style_feedback_ticks(ax)
     return ax
 
 
@@ -505,6 +513,7 @@ def panel_fashion_ladder(ax):
     ax.set_ylabel(ACC_LABEL)
     ax.yaxis.set_major_formatter(PercentFormatter(1.0, decimals=0))
     style_panel(ax)
+    _style_feedback_ticks(ax)
     return ax
 
 
@@ -528,6 +537,7 @@ def panel_gradient(ax):
     ax.set_yticks([0.0, 0.2, 0.4, 0.6, 0.8, 1.0])
     ax.set_ylabel("exact-gradient cosine")
     style_panel(ax)
+    _style_feedback_ticks(ax)
     # Two series: direct labels at the separated right endpoints replace a
     # legend box.  This is the figure's colour and marker key.
     ax.text(1.20, 0.712, "shunting", color=SHUNT, fontsize=PT_LEGEND,
@@ -873,7 +883,7 @@ def panel_identity_depth(ax):
     style_panel(ax)
     ax.text(1.16, 7.9, "shunting", color=SHUNT, fontsize=PT_LEGEND,
             ha="left", va="center")
-    ax.text(1.16, 3.4, "additive", color=ADD, fontsize=PT_LEGEND,
+    ax.text(1.16, 3.4, "raw additive", color=ADD, fontsize=PT_LEGEND,
             ha="left", va="center")
     return ax
 

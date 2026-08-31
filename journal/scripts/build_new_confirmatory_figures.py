@@ -463,7 +463,7 @@ def active_extension_figure() -> None:
     # Two lines: the one-line label overhangs this narrow cell and is
     # truncated when the block is recomposed into Figure 8.
     ax_c.set_xlabel("normalized\nshunt dose")
-    ax_c.set_ylabel("shunt − additive localization")
+    ax_c.set_ylabel("shunt − current-injection localization")
     panel_title(ax_c, "L", "Cellwise contrast")
     style_axis(ax_c)
 
@@ -572,7 +572,7 @@ def active_extension_figure() -> None:
     main_b.set_xticks([0.25, 1, 4], ["0.25", "1", "4"])
     main_b.axhline(0, color=COLORS["mute"], ls="--", lw=LW_REF)
     main_b.set_xlabel("normalized shunt dose")
-    main_b.set_ylabel("shunt − additive localization")
+    main_b.set_ylabel("shunt − current-injection localization")
     panel_title(main_b, "B", "Cellwise contrast")
     style_axis(main_b)
     save(main_fig, "fig_active_dose_main")
