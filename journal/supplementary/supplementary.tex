@@ -106,34 +106,57 @@ defined locally at first use.
 
 \subsection{Steady-state compartment voltage}
 
-Let a rooted dendritic tree have soma node 0. A non-somatic compartment $n$
-receives synaptic conductances $g_i^{\mathrm{syn}}$ with presynaptic activity
-$x_i$ and reversal potential $E_i$, child-to-parent coupling conductances
-$g_{c\to n}^{\mathrm{den}}$, and leak $g_n^L$ with reversal $E_L$. A child
+Let a rooted dendritic tree have soma node 0. A non-somatic compartment \(n\)
+receives excitatory contacts \(\mathcal S_n^{\mathrm E}\) and inhibitory
+contacts \(\mathcal S_n^{\mathrm I}\), with
+\(\mathcal S_n=\mathcal S_n^{\mathrm E}\mathbin{\dot\cup}
+\mathcal S_n^{\mathrm I}\). A contact of type
+\(X\in\{\mathrm E,\mathrm I\}\) has nonnegative maximal conductance \(g_i^X\),
+nonnegative presynaptic activity \(x_i^X\), open conductance \(g_i^Xx_i^X\),
+and reversal \(E_X\). We use
+\(E_i^{\mathrm{rev}}=E_{\mathrm E}\) on
+\(\mathcal S_n^{\mathrm E}\) and
+\(E_i^{\mathrm{rev}}=E_{\mathrm I}\) on
+\(\mathcal S_n^{\mathrm I}\); when contact type is not at issue, we write the
+generic \(g_i^{\mathrm{syn}}\), \(x_i\), and \(E_i^{\mathrm{rev}}\).
+Define the aggregate open conductances
+\[
+G_n^{\mathrm E}=\sum_{i\in\mathcal S_n^{\mathrm E}}g_i^{\mathrm E}x_i^{\mathrm E},
+\qquad
+G_n^{\mathrm I}=\sum_{j\in\mathcal S_n^{\mathrm I}}g_j^{\mathrm I}x_j^{\mathrm I}.
+\]
+The compartment also receives child-to-parent coupling conductances
+\(g_{c\to n}^{\mathrm{den}}\), and has leak \(g_n^{\mathrm L}\) with reversal
+\(E_{\mathrm L}\). A child
 transmits $a_c=f_c(V_c)$, where $f_c$ is the branch output nonlinearity
 (named ``reactivation'' in the implementation) and is the identity when that
 mechanism is disabled. Before taking the steady state, the directed
 compartmental dynamics are
 \begin{equation}
 C_n\dot V_n
-=g_n^L(E_L-V_n)
-+\sum_{i\in\mathcal S_n}g_i^{\mathrm{syn}}x_i(E_i-V_n)
+=g_n^{\mathrm L}(E_{\mathrm L}-V_n)
++G_n^{\mathrm E}(E_{\mathrm E}-V_n)
++G_n^{\mathrm I}(E_{\mathrm I}-V_n)
 +\sum_{c\in\mathcal C_n}g_{c\to n}^{\mathrm{den}}(a_c-V_n).
 \label{eq:s_current_balance}
 \end{equation}
 Setting $\dot V_n=0$ and collecting the coefficients of $V_n$ gives
 \begin{align}
 g_n^{\mathrm{tot}}
-&=g_n^L+\sum_{i\in\mathcal S_n}g_i^{\mathrm{syn}}x_i
-  +\sum_{c\in\mathcal C_n}g_{c\to n}^{\mathrm{den}},\\
+&=g_n^{\mathrm L}+G_n^{\mathrm E}+G_n^{\mathrm I}
+  +G_n^{\mathrm{child}},\\
 V_n
 &=R_n^{\mathrm{tot}}
-\left(g_n^LE_L+
-\sum_{i\in\mathcal S_n}g_i^{\mathrm{syn}}x_iE_i+
-\sum_{c\in\mathcal C_n}g_{c\to n}^{\mathrm{den}}a_c\right),
+\left(g_n^{\mathrm L}E_{\mathrm L}
++G_n^{\mathrm E}E_{\mathrm E}
++G_n^{\mathrm I}E_{\mathrm I}
++J_n^{\mathrm{child}}\right),
 \qquad R_n^{\mathrm{tot}}=(g_n^{\mathrm{tot}})^{-1}.
 \label{eq:s_voltage}
 \end{align}
+Here
+\(G_n^{\mathrm{child}}=\sum_cg_{c\to n}^{\mathrm{den}}\) and
+\(J_n^{\mathrm{child}}=\sum_cg_{c\to n}^{\mathrm{den}}a_c\).
 The soma obeys the same current balance with $n=0$, including its child
 couplings and any explicitly modeled somatic inputs, but has no parent term.
 The controlled regular-tree architectures used here have no external somatic
@@ -141,12 +164,20 @@ input synapses unless a control is explicitly described otherwise.
 For nonnegative conductances and activities, Eq.~\ref{eq:s_voltage} is a
 conductance-weighted average of leak, synaptic reversal potentials and child
 activities. This boundedness is useful for numerical stability, but is not
-required for the chain-rule factorization below. Excitatory and inhibitory
-contacts obey the same current balance but have different reversal potentials.
-In particular, an inhibitory conductance remains in $g_n^{\mathrm{tot}}$ when
-$V_n=E_I$ and its net current is zero; it can therefore reduce
-$R_n^{\mathrm{tot}}$ by shunting without producing a first-order voltage
-deflection at that operating point.
+required for the chain-rule factorization below. Both E and I increase
+\(g_n^{\mathrm{tot}}\); they differ through the driving forces
+\(E_{\mathrm E}-V_n\) and \(E_{\mathrm I}-V_n\), not through a signed
+conductance. When \(E_{\mathrm I}<V_n<E_{\mathrm E}\), the former is
+depolarizing and the latter hyperpolarizing. At \(V_n=E_{\mathrm I}\), an
+inhibitory conductance has zero net current but still reduces
+\(R_n^{\mathrm{tot}}\), producing a pure shunt at that operating point.
+
+The directed artificial-tree simulations use the dimensionless convention
+\(g_n^{\mathrm L}=1\), \(E_{\mathrm L}=E_{\mathrm I}=0\), and
+\(E_{\mathrm E}=1\), so inhibition is denominator-only. The reconstructed
+focal-cable analysis uses \(E_{\mathrm E}=1\) and
+\(E_{\mathrm I}=-0.2\), so its inhibitory perturbation is both
+hyperpolarizing and shunting. Neither convention is a fit in millivolts.
 
 \subsection{Local sensitivities and synaptic eligibility}
 
@@ -154,9 +185,9 @@ Writing the numerator of Eq.~\ref{eq:s_voltage} as
 $b_n=g_n^{\mathrm{tot}}V_n$, quotient differentiation gives
 \begin{align}
 \frac{\partial V_n}{\partial g_i^{\mathrm{syn}}}
-&=\frac{x_iE_i g_n^{\mathrm{tot}}-x_i b_n}
+&=\frac{x_iE_i^{\mathrm{rev}} g_n^{\mathrm{tot}}-x_i b_n}
         {(g_n^{\mathrm{tot}})^2}
-=x_iR_n^{\mathrm{tot}}(E_i-V_n),
+=x_iR_n^{\mathrm{tot}}(E_i^{\mathrm{rev}}-V_n),
 \label{eq:s_syn_sensitivity}\\
 \frac{\partial V_n}{\partial V_c}
 &=f_c'(V_c)g_{c\to n}^{\mathrm{den}}R_n^{\mathrm{tot}},
@@ -168,16 +199,18 @@ $b_n=g_n^{\mathrm{tot}}V_n$, quotient differentiation gives
 Thus the exact gradient of a synaptic conductance is
 \begin{equation}
 \frac{\partial\mathcal L}{\partial g_i^{\mathrm{syn}}}
-=\underbrace{x_iR_n^{\mathrm{tot}}(E_i-V_n)}_{\text{local eligibility}}
+=\underbrace{x_iR_n^{\mathrm{tot}}(E_i^{\mathrm{rev}}-V_n)}_{\text{local eligibility}}
 \underbrace{\frac{\partial\mathcal L}{\partial V_n}}_{\text{compartment error}}.
 \label{eq:s_factorization}
 \end{equation}
 The eligibility contains quantities available at the synapse or its host
-compartment. All remaining task dependence lies in the compartment error. For
-an inhibitory contact, setting \(E_i=E_I\) in Eq.~\ref{eq:s_factorization}
-gives its shunting-conductance gradient; near \(V_n=E_I\), that direct gradient
-can be small even though the conductance still reduces \(R_n^{\mathrm{tot}}\)
-and changes the sensitivity of other inputs.
+compartment. All remaining task dependence lies in the compartment error. In
+particular, excitatory and inhibitory contacts use
+\(x_i^{\mathrm E}R_n^{\mathrm{tot}}(E_{\mathrm E}-V_n)\) and
+\(x_j^{\mathrm I}R_n^{\mathrm{tot}}(E_{\mathrm I}-V_n)\), respectively.
+Near \(V_n=E_{\mathrm I}\), the inhibitory contact's own gradient can be small
+even though its conductance still reduces \(R_n^{\mathrm{tot}}\) and changes
+the sensitivity of other inputs.
 
 \subsection{Transport of the somatic error}
 
@@ -236,12 +269,15 @@ The implicit-function theorem gives
 \end{equation}
 For the residual convention $\bm F=G\bm V-\bm b$, a conductance synapse at
 compartment $n$ has
-$\partial\bm F/\partial g_i=x_i(V_n-E_i)\bm e_n$, and therefore
+$\partial\bm F/\partial g_i=x_i(V_n-E_i^{\mathrm{rev}})\bm e_n$, and therefore
 \begin{equation}
 \frac{\partial\mathcal L}{\partial g_i}
-=x_i(E_i-V_n)q_n.
+=x_i(E_i^{\mathrm{rev}}-V_n)q_n.
 \label{eq:s_general_synapse}
 \end{equation}
+Both contact classes add positive diagonal loading to \(G\), while their
+different reversals enter \(\bm b\) and the local driving force in
+Eq.~\ref{eq:s_general_synapse}.
 Equations~\ref{eq:s_general_adjoint}--\ref{eq:s_general_synapse} recover the
 directed path product when $J_V$ is triangular. For the reciprocal passive
 cable, $J_V=G$ is symmetric positive definite, so
@@ -252,16 +288,18 @@ hold; no passive symmetry is assumed by the general identity.
 
 \subsection{Conductance-specific control of path gain}
 
-Holding coupling conductances and the forward state fixed, add inhibitory
-conductance $\Delta G_k^I\geq0$ at compartment $k$. For a compartment $n$
+Holding coupling conductances and the forward state fixed, add effective
+inhibitory conductance $\Delta G_k^{\mathrm I}\geq0$ at compartment $k$. This
+is an activity-weighted aggregate conductance, not an individual maximal
+synaptic conductance. For a compartment $n$
 whose path crosses $k$,
 \begin{equation}
-\frac{\alpha_n^{\mathrm{cond}}(\Delta G^I)}
+\frac{\alpha_n^{\mathrm{cond}}(\Delta G^{\mathrm I})}
      {\alpha_n^{\mathrm{cond}}(0)}
 =\prod_{k\in\mathcal A(n)}
- \frac{g_k^{\mathrm{tot}}}{g_k^{\mathrm{tot}}+\Delta G_k^I},
+ \frac{g_k^{\mathrm{tot}}}{g_k^{\mathrm{tot}}+\Delta G_k^{\mathrm I}},
 \qquad
-\frac{\partial\log\alpha_n^{\mathrm{cond}}}{\partial G_k^I}
+\frac{\partial\log\alpha_n^{\mathrm{cond}}}{\partial G_k^{\mathrm I}}
 =\begin{cases}
 -R_k^{\mathrm{tot}}, & k\in\mathcal A(n),\\
 0, & k\notin\mathcal A(n),
@@ -273,6 +311,12 @@ $\mathcal A(n)=\{k:(i\to k)\in\operatorname{path}(n\to0)\}$ contains the
 parent endpoints of the path edges: the strict ancestors of $n$, including
 the soma if its conductance is varied. Equation~\ref{eq:s_inhibitory_gain} proves path-selective
 attenuation. It does not prove that attenuation improves optimization.
+No reversal potential appears in Eq.~\ref{eq:s_inhibitory_gain} because this
+calculation retains only the total-conductance denominator while holding the
+forward state fixed. Any positive conductance has the same direct denominator
+effect. It is specifically a shunt when \(E_{\mathrm I}\) is near the local
+voltage, so that its accompanying current is small; the full forward and
+gradient effects retain \(E_{\mathrm I}\).
 
 For $z_n=\log\alpha_n^{\mathrm{cond}}$ and path-dependent attenuation
 $\beta_n$, the perturbed log gain is $z_n'=z_n-\beta_n$, so
@@ -294,7 +338,7 @@ available voltage-space teaching field $\widehat\delta_n$ for the exact
 compartment error:
 \begin{equation}
 \widehat\nabla_{g_i^{\mathrm{syn}}}\mathcal L
-=\left\langle x_iR_n^{\mathrm{tot}}(E_i-V_n)
+=\left\langle x_iR_n^{\mathrm{tot}}(E_i^{\mathrm{rev}}-V_n)
 \widehat\delta_n\right\rangle_B,
 \qquad
 \widehat\nabla_{g_{c\to n}^{\mathrm{den}}}\mathcal L
@@ -1708,27 +1752,34 @@ The configuration alias \texttt{dendritic\_additive} set shunting and additive
 normalization to false and used the raw-additive mode. For compartment $n$,
 its source implementation can be written
 \begin{align}
-E_n^{\mathrm{add}}&=\sum_{i\in\mathcal S_n^E}g_i^Ex_i,
-&I_n^{\mathrm{add}}&=\sum_{i\in\mathcal S_n^I}g_i^Ix_i,\\
-C_n^{\mathrm{add}}&=\sum_{c\in\mathcal C_n}g_{c\to n}^{\mathrm{den}}a_c,
-&V_n^{\mathrm{add}}&=E_n^{\mathrm{add}}-I_n^{\mathrm{add}}+C_n^{\mathrm{add}},
+J_n^{\mathrm E,\mathrm{add}}
+&=\sum_{i\in\mathcal S_n^{\mathrm E}}g_i^{\mathrm E}x_i^{\mathrm E},
+&J_n^{\mathrm I,\mathrm{add}}
+&=\sum_{j\in\mathcal S_n^{\mathrm I}}g_j^{\mathrm I}x_j^{\mathrm I},\\
+J_n^{\mathrm{child},\mathrm{add}}
+&=\sum_{c\in\mathcal C_n}g_{c\to n}^{\mathrm{den}}a_c,
+&V_n^{\mathrm{add}}
+&=J_n^{\mathrm E,\mathrm{add}}-J_n^{\mathrm I,\mathrm{add}}
++J_n^{\mathrm{child},\mathrm{add}},
 \qquad a_n=f_n(V_n^{\mathrm{add}}).
 \label{eq:s_additive_forward}
 \end{align}
 Consequently,
 \begin{equation}
-\frac{\partial V_n^{\mathrm{add}}}{\partial g_i^E}=x_i,
+\frac{\partial V_n^{\mathrm{add}}}{\partial g_i^{\mathrm E}}=x_i^{\mathrm E},
 \quad
-\frac{\partial V_n^{\mathrm{add}}}{\partial g_i^I}=-x_i,
+\frac{\partial V_n^{\mathrm{add}}}{\partial g_j^{\mathrm I}}=-x_j^{\mathrm I},
 \quad
 \frac{\partial V_n^{\mathrm{add}}}{\partial g_{c\to n}^{\mathrm{den}}}=a_c,
 \quad
 \delta_c^V=\delta_n^Vg_{c\to n}^{\mathrm{den}}f_c'(V_c).
 \label{eq:s_additive_derivatives}
 \end{equation}
-Thus this control retained subtractive E/I input, the same branching graph and
-reactivation, but omitted the conductance denominator, reversal-potential
-driving force and parent-compartment resistance. Raw-parameter gradients in
+Thus this control retained subtractive excitatory and inhibitory currents, the
+same branching graph and reactivation, but omitted the conductance denominator,
+reversal-potential driving force and parent-compartment resistance. Its
+inhibitory term is a negative current contribution, not a negative
+conductance. Raw-parameter gradients in
 both architectures also included the softplus derivative.
 
 The current and prospective regular-tree cohorts use this raw operator. The
@@ -1736,7 +1787,9 @@ inherited April foundation cohorts in Supplementary Figs.~S1--S4 instead used
 the then-current \texttt{dendritic\_additive} alias, which standardized the raw
 voltage separately within each example \(s\) across the output coordinates
 \(n\) of every stage. Writing
-\(Z_{sn}=E_{sn}^{\mathrm{add}}-I_{sn}^{\mathrm{add}}+C_{sn}^{\mathrm{add}}\),
+\(Z_{sn}=J_{sn}^{\mathrm E,\mathrm{add}}
+-J_{sn}^{\mathrm I,\mathrm{add}}
++J_{sn}^{\mathrm{child},\mathrm{add}}\),
 that historical operator was
 \begin{equation}
 V_{sn}^{\mathrm{hist}}=
@@ -2605,15 +2658,25 @@ a loss depending on somatic voltage, the adjoint error was
 \begin{equation}
 \bm q=G^{-1}\bm e_s\frac{\partial\mathcal L}{\partial V_s},
 \qquad
-\frac{\partial\mathcal L}{\partial w_i}=q_i(E_E-V_i).
+\frac{\partial\mathcal L}{\partial w_i}=q_i(E_{\mathrm E}-V_i).
 \end{equation}
-A focal shunt $\kappa_k$ gives
-$G'=G+\kappa_k\bm e_k\bm e_k^T$. The Sherman--Morrison identity yields
+A focal inhibitory conductance \(\kappa_k\) gives
+\[
+G'=G+\kappa_k\bm e_k\bm e_k^{\mathsf T},
+\qquad
+\bm b'=\bm b+\kappa_kE_{\mathrm I}\bm e_k .
+\]
+Thus it changes both conductance loading and the forward source. The
+Sherman--Morrison identity for the transport change yields
 \begin{equation}
 \bm q'=\bm q-
 \frac{\kappa_kq_k}{1+\kappa_k(G^{-1})_{kk}}G^{-1}\bm e_k.
 \label{eq:s_sherman}
 \end{equation}
+The reversal \(E_{\mathrm I}\) does not appear in
+Eq.~\ref{eq:s_sherman} because the adjoint transport depends on \(G'\), not on
+the forward source \(\bm b'\). It remains in the solved voltage and in every
+inhibitory driving force.
 Let $\bm c_k=G^{-1}\bm e_k$ be the $k$th Green's-function column and let
 $r_k=c_{k,k}=(G^{-1})_{kk}>0$. Then
 \begin{equation}
@@ -2642,7 +2705,7 @@ synaptic gradient also contains the post-perturbation driving force. This is
 why axial coupling, leak, background conductance and local input resistance
 must be varied explicitly rather than inferred from topology alone.
 The baseline-current-matched additive control injected
-$\kappa_k(E_I-V_k)$ at the same node without changing $G$. This equals the
+$\kappa_k(E_{\mathrm I}-V_k)$ at the same node without changing $G$. This equals the
 current carried by the added shunt at the unperturbed voltage; its local
 voltage effect matches the shunt only to first order in dose. An independently
 solved state-matching compensatory current injection restored baseline somatic
@@ -2660,7 +2723,7 @@ least three excitatory descendants and
 three comparison sites. At most 16 eligible sites were sampled per cell across
 quartiles of topological depth. The primary model used excitatory and
 inhibitory synaptic scales of 0.35 and normalized reversal potentials
-$E_E=1$ and $E_I=-0.2$. Synapses were classified as descendants, ancestors,
+$E_{\mathrm E}=1$ and $E_{\mathrm I}=-0.2$. Synapses were classified as descendants, ancestors,
 sister-subtree sites or unrelated sites. Unrelated synapses within each
 template were matched to descendant cable depth. For baseline gradient $g_i$
 and perturbed gradient $g_i'$, we defined
@@ -2688,7 +2751,7 @@ cells. The dose contrast increased from 0.018 at 0.25 local-conductance units
 to 0.128 at two units.
 
 We separated the two factors in the exact gradient algebraically. Writing
-$d_i=E_E-V_i$ and $d'_i=E_E-V'_i$, full shunting uses $q'_id'_i$,
+$d_i=E_{\mathrm E}-V_i$ and $d'_i=E_{\mathrm E}-V'_i$, full shunting uses $q'_id'_i$,
 adjoint-only substitution uses $q'_id_i$, and driving-force-only substitution
 uses $q_id'_i$. At unit dose, their mean localization indices were 0.104,
 0.130 and 0.026, respectively, compared with 0.035 for the matched additive
@@ -2995,7 +3058,7 @@ Every complete compressed reconstruction was instantiated as a reciprocal
 passive conductance system. Each imaged partner supplied a trainable
 non-negative excitatory conductance at its dominant mapped segment. For
 trial-specific soma prediction error, the exact input gradient factored into
-the local term $x_i(E_E-V_i)$ and the exact soma-to-segment adjoint from the
+the local term $x_i(E_{\mathrm E}-V_i)$ and the exact soma-to-segment adjoint from the
 inverse conductance operator. Readout and bias parameters received exact
 gradients under every method.
 
@@ -4071,8 +4134,11 @@ Symbol & Definition \\
 \midrule
 $u$, $n$, $i$ & Indices for a neuron, compartment and synapse, respectively. \\
 $V_n$, $a_n$ & Conductance-stage voltage and transmitted activity of compartment $n$; $a_n=f_n(V_n)$. \\
-$g_i$, $g_{c\to n}^{\mathrm{den}}$ & Scalar synaptic conductance and child-to-parent coupling conductance. These are distinct from bold gradient symbols. \\
-$E_i$, $x_i$ & Synaptic reversal potential and presynaptic activity. \\
+$g_{c\to n}^{\mathrm{den}}$ & Nonnegative child-to-parent coupling conductance. \\
+$\mathcal S_n^{\mathrm E}$, $\mathcal S_n^{\mathrm I}$ & Excitatory and inhibitory contact sets on compartment \(n\); contact class is fixed. \\
+$g_i$, $x_i$, $g_ix_i$ & Nonnegative maximal synaptic conductance, presynaptic activity and resulting open conductance. These are distinct from bold gradient symbols. \\
+$E_i^{\mathrm{rev}}$, $E_{\mathrm E}$, $E_{\mathrm I}$, $E_{\mathrm L}$ & Contact-specific, excitatory, inhibitory and leak reversal potentials. E/I polarity is set by reversal, not by a signed conductance. \\
+$G_n^{\mathrm E}$, $G_n^{\mathrm I}$ & Aggregate activity-weighted excitatory and inhibitory open conductances. \\
 $g_n^{\mathrm{tot}}$, $R_n^{\mathrm{tot}}$ & Total compartment conductance and its reciprocal input resistance. \\
 $\delta_u$, $c_{u,k}$ & Neuron-level learning signal and route-$k$ coefficient within neuron $u$. \\
 $\delta^V_{0,u}$, $\delta^V_{n,u}$ & Exact somatic and compartment voltage-space errors for neuron $u$. \\
@@ -4452,12 +4518,12 @@ passive-model response on one mouse's reconstructed anatomy.
 \centering
 \caption{Focal-perturbation sensitivity at unit dose. The primary condition is
 the first row. Scale multiplies normalized excitatory and inhibitory synaptic
-conductance; $E_I$ is the inhibitory reversal potential in normalized units.}
+conductance; $E_{\mathrm I}$ is the inhibitory reversal potential in normalized units.}
 \label{tab:focal_sensitivity}
 \small
 \begin{tabular}{ccccccl}
 \toprule
-Scale & $E_I$ & Shunt localization & Additive localization & Difference & Positive cells & $P$ \\
+Scale & $E_{\mathrm I}$ & Shunt localization & Additive localization & Difference & Positive cells & $P$ \\
 \midrule
 0.35 & $-0.2$ & 0.104 & 0.035 & 0.069 & 8/8 & 0.0078 \\
 0.10 & $-0.2$ & 0.101 & 0.019 & 0.081 & 8/8 & 0.0078 \\
