@@ -140,7 +140,7 @@ def main() -> None:
     compact_panel_title(ax_c, "C", "Coarse modes carry excess power")
     style_axis(ax_c, grid="y")
 
-    cohorts = [("original_8", "pilot\n(n=8)", COLORS["additive"]),
+    cohorts = [("original_8", "initial sample\n(n=8)", COLORS["additive"]),
                ("public_v661_47", "minnie65 v661\n(n=47)", COLORS["shunting"])]
     for index, (name, _, color) in enumerate(cohorts):
         values = cell[cell.cohort.eq(name) & cell.scale.eq("coarse")].actual_minus_shuffled.to_numpy(float)

@@ -128,7 +128,7 @@ GAIN_TICKS = [0, 2, 4, 6]
 GAIN_LABEL = "accuracy difference (pp)"
 
 STRICT_LADDER_TICKS = ["strict\nscalar", "neuron\nspecific", "exact\npath"]
-FALLBACK_LADDER_TICKS = ["matched-width\nscalar fallback", "neuron\nspecific", "exact\npath"]
+FALLBACK_LADDER_TICKS = ["matched-width\nfallback", "neuron\nspecific", "exact\npath"]
 
 # One declared convention for the two categorical panels: the per-seed cloud
 # is drawn as a symmetric deterministic fan a quarter-row BELOW its own mean
@@ -494,7 +494,7 @@ def panel_gradient(ax):
     # legend box.  This is the figure's colour and marker key.
     ax.text(1.20, 0.712, "shunting", color=SHUNT, fontsize=PT_LEGEND,
             ha="left", va="center")
-    ax.text(1.20, 0.575, "additive", color=ADD, fontsize=PT_LEGEND,
+    ax.text(1.20, 0.575, "raw additive", color=ADD, fontsize=PT_LEGEND,
             ha="left", va="center")
     return ax
 
@@ -591,7 +591,7 @@ def _fashion_rows():
                     .pivot(index="seed", columns="feedback",
                            values="test_accuracy"))
             rows.append({
-                "label": f"Fashion {architecture}",
+                "label": f"Fashion {'raw additive' if architecture == 'additive' else architecture}",
                 "color": SHUNT if architecture == "shunting" else ADD,
                 "marker": "o" if architecture == "shunting" else "s",
                 "mean": 100 * float(row.mean_difference),
@@ -630,7 +630,8 @@ def _ownership_rows():
         rows.append({
             # Uppercase D-notation: the manuscript defines D1-D4 and never
             # uses a lowercase variant, so the row labels match the text.
-            "label": f"{task_label[task]} D{depth} {core.split('_')[1]}",
+            "label": f"{task_label[task]} D{depth} "
+                     f"{'raw additive' if core == 'dendritic_additive' else 'shunting'}",
             "color": CORE_COLOR[core],
             "marker": CORE_MARKER[core],
             "mean": 100 * float(row.mean_difference),

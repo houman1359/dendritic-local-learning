@@ -621,8 +621,9 @@ compartment field then changed accuracy by less than 0.2 points. Thus nearly
 all of the scalar-to-exact improvement came from identifying the correct
 neuron, not from resolving its dendritic paths.
 
-A strict-scalar control showed that allowing neuron-specific feedback to reach
-a small set of near-somatic parameters increased performance. We therefore use
+Comparison with strict scalar feedback showed that the matched-width
+scalar-fallback implementation performed better because it preserved
+neuron-specific coordinates for a small set of near-somatic parameters. We therefore use
 strict scalar feedback in the primary MNIST comparison; Methods quantify the
 affected parameters and compare the two implementations. Importantly, scalar
 feedback did not make all neurons identical.
@@ -654,7 +655,19 @@ update is a descent direction, so both rules reach the same capacity-limited
 plateau and the residual misaligned component costs performance only when
 different compartments require opposing updates. The branch-conflict task
 below constructs exactly that regime, and there the alignment difference does
-become an accuracy difference (Fig.~\ref{fig:branchconflict}). Shunting and raw-additive
+become an accuracy difference (Fig.~\ref{fig:branchconflict}). The
+within-neuron structure of the exact field explains why the repeated
+coordinate loses so little. By Eq.~\ref{eq:pathgain}, the compartment errors
+of one neuron are its somatic coordinate scaled by the path-gain profile
+\(\widetilde\alpha_n\); wherever that profile is positive, repeating one
+\(\widehat\delta_u\) misstates compartment-wise magnitudes but no signs.
+Supplementary Fig.~S1A measures the profile's within-neuron dispersion and
+compares architectures: the paired-seed coefficient of variation of the
+conductance-stage path gain was 1.16 in the normalized-additive tree and 0.23
+in the shunting tree, whose conductance loading compresses the exact field
+toward a uniformly scaled copy of the neuron coordinate. One error per neuron
+is therefore close to sufficient by construction, and closer still under
+shunting. Shunting and raw-additive
 forward models showed the same qualitative feedback ordering, with no general
 optimization advantage for shunting.
 
@@ -696,13 +709,18 @@ transport has cosine one by definition. \textbf{E}, Assigning a learning
 signal to the correct neuron is distinct from targeting refinements of that
 signal to locations within its arbor. \textbf{F}, Paired effects of adding
 neuron-specific feedback, exact within-arbor transport and correct
-signal-to-arbor assignment. Row labels D2 and D4 denote architectures with two
+signal-to-arbor assignment. Here ``neuron-specific'' is neuron-specific minus
+matched-width scalar-fallback feedback on Fashion-MNIST; ``transport'' is exact
+path transport minus neuron-specific feedback on Fashion-MNIST; and
+``assignment'' is correct minus deranged neuron-to-arbor assignment for the
+indicated task, depth and neuron model. Row labels D2 and D4 denote architectures with two
 and four serial dendritic stages, respectively; the dots behind each row are the individual
 paired seed differences. Faint lines pair seeds; large
 symbols and bars show means and 95\% seed-bootstrap intervals. Panel-specific
 sample sizes are \(n=15\) paired seeds per architecture in \textbf{B,D} and
 \(n=10\) in \textbf{C,F}; Methods report the model definitions and numerical
-implementation checks.}
+implementation checks. Green circles denote shunting trees and blue squares
+denote raw-additive trees.}
 \label{fig:feedback}
 \end{figure}
 
@@ -1838,7 +1856,7 @@ completion, checkpoint and convergence criteria.
 The depth-by-feedback experiment was specified before outcomes were
 examined. It crossed two tasks, raw-additive and shunting neuron models, four
 dendritic depths and three local feedback fields (the
-matched-width scalar fallback, neuron-specific sharing and exact path transport)
+matched-width scalar-fallback feedback, neuron-specific sharing and exact path transport)
 at ten seeds. One matched
 backpropagation model was
 also trained for every task--core--depth--seed combination, yielding 480
@@ -2277,7 +2295,7 @@ differences. All 220 fits completed with finite metrics, no fallback or
 nonfinite alert, the expected seeds and exact resource equality. Configurations,
 run-level outcomes and paired contrasts are provided with the Source Data.
 
-\subsection*{Four-level hierarchy and source-concordance analysis}
+\subsection*{Four-level hierarchy and repeated-analysis reproducibility}
 
 We specified an $H_{\mathrm p}=4$ experiment to distinguish a hierarchy-matched depth
 prediction from the simpler possibility that the deepest available model
@@ -2316,8 +2334,8 @@ before any affected model was trained. All 360 fits then completed with finite
 metrics, no fallback or resource failure and exactly one outcome per
 seed--condition pair.
 
-We also repeated 430 principal H2/H3 conditions with the same seeds under
-version-locked source. This source-concordance analysis tested implementation
+We also repeated 430 principal H2/H3 conditions with the same seeds under a
+versioned source snapshot. This repeated-analysis comparison tested implementation
 stability rather than providing an independent task or biological replication.
 All principal shunting, placement, point-control and local-credit contrasts
 preserved their direction; paired differences and the complete concordance
@@ -2720,7 +2738,7 @@ Primary excitatory and inhibitory synaptic scales were both 0.35, with
 normalized reversal potentials
 $E_{\mathrm E}=1$ and $E_{\mathrm I}=-0.2$. Conductance doses were
 0.25, 0.5, 1 and 2 times the local membrane-plus-synaptic conductance. The
-baseline-current-matched current-injection control applied the first-order current
+baseline-current-matched current injection applied the first-order current
 $\kappa_k(E_{\mathrm I}-V_k)$ at the same node without changing $G$. After either
 intervention, an independently solved compensatory current restored baseline
 somatic voltage. This intervention is not the derivative of a continuously

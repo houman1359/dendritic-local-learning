@@ -381,7 +381,7 @@ def panel_fidelity(ax, summary):
     # key at the separated solid endpoints -- no legend box.
     ax.text(21.0, 0.88, "exact transport", ha="center", va="top",
             fontsize=PT_ANNOT, color=INK)
-    ax.text(21.0, 0.33, "MW fallback", ha="center", va="bottom",
+    ax.text(21.0, 0.33, "matched-width\nfallback", ha="center", va="bottom",
             fontsize=PT_ANNOT, color=INK)
     ax.text(42.5, ends["dendritic_shunting"], "shunting", ha="left",
             va="center", fontsize=PT_LEGEND, color=SHUNT)
@@ -414,7 +414,7 @@ def panel_learning(ax, summary, oracle_summary):
 
     ax.text(24.0, 96.6, "exact transport", ha="center", va="bottom",
             fontsize=PT_ANNOT, color=INK)
-    ax.text(24.0, 77.5, "MW fallback", ha="center", va="top",
+    ax.text(24.0, 77.5, "matched-width\nfallback", ha="center", va="top",
             fontsize=PT_ANNOT, color=INK)
 
     ax.set_xticks(IE_TICKS)

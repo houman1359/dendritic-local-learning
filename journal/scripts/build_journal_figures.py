@@ -1433,13 +1433,14 @@ def _figure4_detailed() -> None:
     ax_b.set_yticks(range(5)); ax_b.set_yticklabels(labels)
     ax_b.tick_params(axis="y", labelsize=PT_SMALL)
     ax_b.set_ylim(4.6, -0.6)
+    ax_b.set_xlim(-0.01, 0.24)
     ax_b.set_xlabel(r"median $|\Delta\log |\nabla||$")
     panel_title(ax_b, "B", "Change by tree relation")
     style_axis(ax_b)
     clean_legend(
         ax_b, handles=[
             Line2D([0], [0], color=COLORS["additive"], marker="s",
-                   linestyle="none", label="matched additive"),
+                   linestyle="none", label="current injection"),
             Line2D([0], [0], color=COLORS["shunting"], marker="o",
                    linestyle="none", label="focal shunt"),
         ], loc="lower right", fontsize=PT_SMALL, auto_clear=True,
@@ -1457,7 +1458,7 @@ def _figure4_detailed() -> None:
                      color=colors[i], alpha=0.75, edgecolor="white", linewidth=0.2)
         errorbar_mean(ax_c, i, arr, colors[i], seed=440 + i)
     ax_c.axhline(0, color=COLORS["mute"], ls="--", lw=LW_REF)
-    ax_c.set_xticks(xs); ax_c.set_xticklabels(["additive", "reassigned", "shunt"])
+    ax_c.set_xticks(xs); ax_c.set_xticklabels(["current\ninjection", "reassigned", "shunt"])
     ax_c.tick_params(axis="x", labelsize=PT_SMALL)
     ax_c.set_ylabel("localization index")
     # Open the floor slightly (as in panel H) so the dashed zero reference
@@ -1480,8 +1481,9 @@ def _figure4_detailed() -> None:
             xvals.append(dose); means.append(m); lows.append(lo); highs.append(hi)
         order = np.argsort(xvals); xvals = np.asarray(xvals)[order]; means = np.asarray(means)[order]
         lows = np.asarray(lows)[order]; highs = np.asarray(highs)[order]
+        display_label = "current injection" if perturb == "matched additive" else perturb
         ax_d.plot(xvals, means, marker=marker, ms=3.5, lw=LW_DATA, color=color,
-                  markeredgecolor="white", markeredgewidth=0.3, label=perturb)
+                  markeredgecolor="white", markeredgewidth=0.3, label=display_label)
         ax_d.fill_between(xvals, lows, highs, color=color, alpha=0.12, linewidth=0)
     ax_d.set_xscale("log", base=2); ax_d.set_xticks([0.25, 0.5, 1, 2])
     ax_d.get_xaxis().set_major_formatter(mpl.ticker.ScalarFormatter())
@@ -1561,8 +1563,8 @@ def _figure4_detailed() -> None:
     ratio_mean = ratio.groupby(["cohort", "regime"], as_index=False).median_axial_to_leak_ratio.median()
     physical = physical.merge(ratio_mean, on=["cohort", "regime"], validate="many_to_one")
     for cohort, label, color, marker in [
-        ("original_eight", "pilot (n=8)", COLORS["shunting"], "o"),
-        ("v661_disjoint", "minnie65 v661\n(n=45 QC)", COLORS["pathway"], "s"),
+        ("original_eight", "initial sample (n=8)", COLORS["shunting"], "o"),
+        ("v661_disjoint", "MICrONS mouse 1\n(n=45)", COLORS["pathway"], "s"),
     ]:
         part = physical[physical.cohort.eq(cohort)].copy()
         if cohort == "original_eight":
@@ -1605,7 +1607,8 @@ def figure4() -> None:
         ("matched additive", COLORS["additive"], -0.10),
         ("focal shunt", COLORS["shunting"], 0.10),
     ]:
-        ax_b.scatter([], [], s=SEED_MS ** 2 * 2.0, color=color, label=perturbation)
+        display_label = "current injection" if perturbation == "matched additive" else perturbation
+        ax_b.scatter([], [], s=SEED_MS ** 2 * 2.0, color=color, label=display_label)
         subset = category[category.perturbation.eq(perturbation)].groupby(
             ["root_id", "category"], as_index=False
         ).median_abs_log_gradient_change.mean()
@@ -1657,7 +1660,7 @@ def figure4() -> None:
         errorbar_mean(ax_c, index, values, colors[index], seed=1640 + index)
     ax_c.axhline(0, color=COLORS["mute"], ls="--", lw=LW_REF)
     ax_c.set_xticks(x_values)
-    ax_c.set_xticklabels(["additive", "reassigned", "shunt"])
+    ax_c.set_xticklabels(["current\ninjection", "reassigned", "shunt"])
     ax_c.set_ylabel("localization index")
     panel_title(ax_c, "C", "Within-cell controls")
     style_axis(ax_c)
@@ -1683,7 +1686,8 @@ def figure4() -> None:
         means = np.asarray(means)[order]
         lows = np.asarray(lows)[order]
         highs = np.asarray(highs)[order]
-        ax_d.plot(x_values, means, marker="o", ms=3.5, lw=LW_DATA, color=color, label=perturbation)
+        display_label = "current injection" if perturbation == "matched additive" else perturbation
+        ax_d.plot(x_values, means, marker="o", ms=3.5, lw=LW_DATA, color=color, label=display_label)
         ax_d.fill_between(x_values, lows, highs, color=color, alpha=0.12, linewidth=0)
     ax_d.set_xscale("log", base=2)
     ax_d.set_xticks([0.25, 0.5, 1, 2])
@@ -1727,8 +1731,8 @@ def figure4() -> None:
     ratio_mean = ratio.groupby(["cohort", "regime"], as_index=False).median_axial_to_leak_ratio.median()
     physical = physical.merge(ratio_mean, on=["cohort", "regime"], validate="many_to_one")
     for cohort, label, color, marker in [
-        ("original_eight", "pilot (n=8)", COLORS["shunting"], "o"),
-        ("v661_disjoint", "minnie65 v661\n(n=45 QC)", COLORS["pathway"], "s"),
+        ("original_eight", "initial sample (n=8)", COLORS["shunting"], "o"),
+        ("v661_disjoint", "MICrONS mouse 1\n(n=45)", COLORS["pathway"], "s"),
     ]:
         subset = physical[physical.cohort.eq(cohort)].copy()
         if cohort == "original_eight":
@@ -1756,7 +1760,7 @@ def figure4() -> None:
     ax_f.axhline(0, color=COLORS["mute"], ls="--", lw=LW_REF)
     ax_f.set_xscale("log")
     ax_f.set_xlabel("median axial / leak")
-    ax_f.set_ylabel("shunt − additive\nlocalization")
+    ax_f.set_ylabel("shunt − current injection\nlocalization")
     panel_title(ax_f, "F", "Electrotonic limit")
     style_axis(ax_f)
     clean_legend(ax_f, loc="upper right", fontsize=PT_SMALL)

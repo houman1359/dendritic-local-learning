@@ -66,7 +66,7 @@ def main() -> None:
     ax_a.set_xscale("log")
     ax_a.axhline(0, color=COLORS["mute"], ls="--", lw=0.8)
     ax_a.set_xlabel("fixed shunt conductance (nS)")
-    ax_a.set_ylabel("shunt - additive localization")
+    ax_a.set_ylabel("shunt − current-injection\nlocalization")
     panel_title(ax_a, "A", "Fixed absolute dose")
     style_axis(ax_a)
     clean_legend(ax_a, fontsize=PT_LEGEND - 0.4, loc="best")

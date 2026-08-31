@@ -63,9 +63,9 @@ CORE_MARKER = {
     "dendritic_additive": MARKERS[1],
 }
 FEEDBACK_LABEL = {
-    "per_soma": "Scalar",
-    "per_soma_shared": "Neuron-indexed",
-    "path_transport": "Exact transport",
+    "per_soma": "Matched-width fallback",
+    "per_soma_shared": "Neuron-specific",
+    "path_transport": "Exact path",
     "backprop": "Backpropagation",
 }
 
@@ -467,7 +467,7 @@ def _plot_legacy(frame: pd.DataFrame, summary: pd.DataFrame) -> None:
 
     dose_modes = [
         ("local_ca", "per_soma", "I", "Scalar"),
-        ("local_ca", "per_soma_shared", "J", "Neuron-indexed"),
+        ("local_ca", "per_soma_shared", "J", "Neuron-specific"),
         ("local_ca", "path_transport", "K", "Exact"),
         ("standard", "backprop", "L", "Backprop"),
     ]
@@ -723,8 +723,8 @@ def _plot_streamlined_main() -> None:
         & contrast.contrast.eq("neuron-indexed - scalar")
     ]
     for ax, task, letter, title in [
-        (ax_a, "mnist", "G", "MNIST identity gain"),
-        (ax_b, "noise_resilience", "H", "Noise-task identity gain"),
+        (ax_a, "mnist", "G", "MNIST neuron-specific gain"),
+        (ax_b, "noise_resilience", "H", "Noise-task neuron-specific gain"),
     ]:
         for core in ("dendritic_shunting", "dendritic_additive"):
             part = identity[identity.task.eq(task) & identity.core.eq(core)].sort_values("depth")

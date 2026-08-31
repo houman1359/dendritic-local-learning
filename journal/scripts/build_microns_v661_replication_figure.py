@@ -288,7 +288,7 @@ def render(curves: pd.DataFrame, focal: pd.DataFrame, summary: dict) -> None:
     ax_a.barh(np.arange(len(type_counts)), type_counts.to_numpy(), color=COLORS["morphology"], alpha=0.86)
     ax_a.set_yticks(np.arange(len(type_counts))); ax_a.set_yticklabels(type_counts.index)
     ax_a.invert_yaxis(); ax_a.set_xlabel("reconstructed cells")
-    panel_title(ax_a, "A", "Independent 47-cell sample")
+    panel_title(ax_a, "A", "Independent sample (n = 47)")
     style_axis(ax_a, grid="x")
 
     for method_index, method in enumerate(methods):
@@ -390,7 +390,7 @@ def render(curves: pd.DataFrame, focal: pd.DataFrame, summary: dict) -> None:
         focal,
         "matched_additive_localization",
         "focal_shunt_localization",
-        ("first-order-current-\nmatched additive", "focal\nshunt"),
+        ("matched current\ninjection", "focal\nshunt"),
         (COLORS["additive"], COLORS["shunting"]),
         3000,
     )
@@ -406,7 +406,7 @@ def render(curves: pd.DataFrame, focal: pd.DataFrame, summary: dict) -> None:
         color=COLORS["shunting"],
         fontsize=PT_SMALL,
     )
-    panel_title(ax_f, "F", "Shunt versus additive")
+    panel_title(ax_f, "F", "Matched perturbations")
 
     plot_pair(
         ax_g,
@@ -465,18 +465,18 @@ def write_tex(summary: dict) -> None:
     cohort = summary["cohort"]
     direct = focal["shunt_minus_additive"]
     topology = focal["topology_minus_depth_shuffle"]
-    caption = rf"""\textbf{{Structural credit routing and focal shunting in a frozen MICrONS v661 sensitivity cohort.}}
-\textbf{{A}}, Composition of the frozen 47-cell cohort by excitatory cell class.
+    caption = rf"""\textbf{{Structural credit routing and focal shunting in an independent MICrONS v661 cell sample.}}
+\textbf{{A}}, Composition of the 47-cell sample by excitatory cell class.
 \textbf{{B}}, Cell-mean modeled field capture across feedback-channel budgets for a dense PCA oracle, morphology-defined paths, random paths, depth bins and ancestry shuffles ($n=47$ cells through eight channels; $n=46$ at 16 channels). Twenty perturbation streams were averaged within each cell and condition; bands are 95\% cell-bootstrap confidence intervals.
 \textbf{{C}}, Cell-level capture at eight channels.
 \textbf{{D}}, Eight-channel wiring-capture trade-off; morphology paths used {100 * routing['mean_morphology_wiring_density']:.1f}\% of dense-feedback wiring.
 \textbf{{E}}, Within-cell morphology advantage over the three structural controls.
-\textbf{{F}}, At dose 1, localization after a focal shunt and first-order-current-matched additive perturbation ($n={direct['n_cells']}$ cells, {direct['n_focal_sites']} focal sites).
+\textbf{{F}}, At dose 1, localization after a focal shunt and baseline-current-matched current injection ($n={direct['n_cells']}$ cells, {direct['n_focal_sites']} focal sites).
 \textbf{{G}}, Localization for the true descendant relation and relation templates reassigned within cell ($n={topology['n_cells']}$ cells, {topology['n_focal_sites']} focal sites).
-\textbf{{H}}, Direct E/I-label coverage and eligible focal-site count by cell class. Diamonds and intervals in \textbf{{C,E--G}} show cell means and 95\% cell-bootstrap confidence intervals. Cells, not focal sites or streams, are the independent units. The cohort excludes the original eight cells by stable nucleus identifier but comes from the same MICrONS mouse. It uses historical static v661 reconstructions and direct presynaptic coarse E/I calls only ({cohort['n_total_direct_typed_synapses']:,} annotations before spatial mapping, {cohort['n_total_mapped_direct_synapses']:,} mapped contacts; 4.71\% of incoming synapses). These are structural and passive-network model tests, not measurements of in vivo learning.
+\textbf{{H}}, Direct E/I-label coverage and eligible focal-site count by cell class. Diamonds and intervals in \textbf{{C,E--G}} show cell means and 95\% cell-bootstrap confidence intervals. Cells, not focal sites or streams, are the independent units. The sample excludes the initial eight cells by stable nucleus identifier but comes from the same MICrONS mouse. It uses the public static v661 reconstructions and direct presynaptic coarse E/I calls only ({cohort['n_total_direct_typed_synapses']:,} annotations before spatial mapping, {cohort['n_total_mapped_direct_synapses']:,} mapped contacts; 4.71\% of incoming synapses). These are structural and passive-network model tests, not measurements of in vivo learning.
 """
     paragraph = rf"""\paragraph{{Disjoint-cell sensitivity analysis in public MICrONS v661 reconstructions.}}
-We froze a 55-cell V1 excitatory cohort before computing sensitivity outcomes and excluded the eight discovery cells by stable nucleus identifier. All 47 remaining v661 skeletons and postsynaptic meshworks were available from the public static release. Twenty perturbation streams were averaged within each cell. At eight feedback channels, morphology-defined paths captured {100 * routing['mean_capture']['morphology_paths']:.1f}\% of weighted modeled field energy using {100 * routing['mean_morphology_wiring_density']:.1f}\% of dense-feedback wiring, compared with {100 * routing['mean_capture']['dense_oracle']:.1f}\% for the dense PCA oracle. Morphology capture exceeded random paths by {100 * routing['morphology_minus_random']['mean_difference']:.1f} percentage points (95\% CI {100 * routing['morphology_minus_random']['cell_bootstrap_ci95'][0]:.1f}--{100 * routing['morphology_minus_random']['cell_bootstrap_ci95'][1]:.1f}), depth bins by {100 * routing['morphology_minus_depth']['mean_difference']:.1f} points ({100 * routing['morphology_minus_depth']['cell_bootstrap_ci95'][0]:.1f}--{100 * routing['morphology_minus_depth']['cell_bootstrap_ci95'][1]:.1f}) and ancestry shuffles by {100 * routing['morphology_minus_shuffled']['mean_difference']:.1f} points ({100 * routing['morphology_minus_shuffled']['cell_bootstrap_ci95'][0]:.1f}--{100 * routing['morphology_minus_shuffled']['cell_bootstrap_ci95'][1]:.1f}); all three contrasts were positive in 47/47 cells. Across {direct['n_focal_sites']} eligible sites in {direct['n_cells']} cells, focal shunting increased descendant-selective gradient localization relative to the first-order-current-matched additive control by {direct['mean_difference']:.3f} ({direct['cell_bootstrap_ci95'][0]:.3f}--{direct['cell_bootstrap_ci95'][1]:.3f}; {direct['cells_positive']}/{direct['n_cells']} cells). The true relation also exceeded reassigned relations by {topology['mean_difference']:.3f} ({topology['cell_bootstrap_ci95'][0]:.3f}--{topology['cell_bootstrap_ci95'][1]:.3f}; {topology['cells_positive']} positive and one numerical tie among {topology['n_cells']} cells). Because this analysis uses a historical release from the same animal and direct E/I labels cover 4.71\% of incoming synapses ({cohort['n_total_direct_typed_synapses']:,} before mapping; {cohort['n_total_mapped_direct_synapses']:,} mapped), it supports robustness across disjoint reconstructed cells, not independent-animal generalization or an in vivo learning claim.
+We defined a 55-cell V1 excitatory sample before computing sensitivity outcomes and excluded the initial eight cells by stable nucleus identifier. All 47 remaining v661 skeletons and postsynaptic meshworks were available from the public static release. Twenty perturbation streams were averaged within each cell. At eight feedback channels, morphology-defined paths captured {100 * routing['mean_capture']['morphology_paths']:.1f}\% of weighted modeled field energy using {100 * routing['mean_morphology_wiring_density']:.1f}\% of dense-feedback wiring, compared with {100 * routing['mean_capture']['dense_oracle']:.1f}\% for the dense PCA oracle. Morphology capture exceeded random paths by {100 * routing['morphology_minus_random']['mean_difference']:.1f} percentage points (95\% CI {100 * routing['morphology_minus_random']['cell_bootstrap_ci95'][0]:.1f}--{100 * routing['morphology_minus_random']['cell_bootstrap_ci95'][1]:.1f}), depth bins by {100 * routing['morphology_minus_depth']['mean_difference']:.1f} points ({100 * routing['morphology_minus_depth']['cell_bootstrap_ci95'][0]:.1f}--{100 * routing['morphology_minus_depth']['cell_bootstrap_ci95'][1]:.1f}) and ancestry shuffles by {100 * routing['morphology_minus_shuffled']['mean_difference']:.1f} points ({100 * routing['morphology_minus_shuffled']['cell_bootstrap_ci95'][0]:.1f}--{100 * routing['morphology_minus_shuffled']['cell_bootstrap_ci95'][1]:.1f}); all three contrasts were positive in 47/47 cells. Across {direct['n_focal_sites']} eligible sites in {direct['n_cells']} cells, focal shunting increased descendant-selective gradient localization relative to the baseline-current-matched current-injection control by {direct['mean_difference']:.3f} ({direct['cell_bootstrap_ci95'][0]:.3f}--{direct['cell_bootstrap_ci95'][1]:.3f}; {direct['cells_positive']}/{direct['n_cells']} cells). The true relation also exceeded reassigned relations by {topology['mean_difference']:.3f} ({topology['cell_bootstrap_ci95'][0]:.3f}--{topology['cell_bootstrap_ci95'][1]:.3f}; {topology['cells_positive']} positive and one numerical tie among {topology['n_cells']} cells). Because this analysis uses a public static release from the same animal and direct E/I labels cover 4.71\% of incoming synapses ({cohort['n_total_direct_typed_synapses']:,} before mapping; {cohort['n_total_mapped_direct_synapses']:,} mapped), it supports robustness across non-overlapping reconstructed cells, not independent-animal generalization or an in vivo learning claim.
 """
     (DATA / "tex_ready_caption_and_results.tex").write_text(
         "% TeX-ready caption and results text for the public-v661 main figure.\n"

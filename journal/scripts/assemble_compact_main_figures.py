@@ -939,8 +939,8 @@ def main() -> None:
             for letter in "GHIJKLMNO"
         ],
         [
-            "MNIST identity",
-            "Noise-task identity",
+            "MNIST neuron-specific gain",
+            "Noise-task neuron-specific gain",
             "Exact vs BP",
             "Ownership",
             "Version-locked exact vs BP",

@@ -630,7 +630,7 @@ def _line_panel(
             "serial_tree",
             "shunting",
             "local_shared",
-            "shared LocalCA",
+            "shared-soma LocalCA",
             COLORS["local"],
             "D",
             "-.",
@@ -685,7 +685,7 @@ def _line_panel(
             markeredgewidth=0.5,
             label=label,
         )
-    panel_title(ax, letter, f"Clean source: H={hierarchy} {regime.replace('_', ' ')}")
+    panel_title(ax, letter, f"Repeated analysis: H={hierarchy}")
     # Match the caption's wording ("physical depth") and avoid
     # mathtext, whose 0.7x subscript falls below the 6.8 pt floor.
     ax.set_xlabel("physical depth D\u209a")
@@ -727,8 +727,8 @@ def make_figure(summary: pd.DataFrame, paired: pd.DataFrame) -> None:
     ax_a.plot(limits, limits, color=COLORS["mute"], linewidth=LW_HAIR, linestyle="--")
     ax_a.set_xlim(limits)
     ax_a.set_ylim(limits)
-    ax_a.set_xlabel("reference test accuracy")
-    ax_a.set_ylabel("version-locked test accuracy")
+    ax_a.set_xlabel("original test accuracy")
+    ax_a.set_ylabel("repeated-run test accuracy")
     panel_title(ax_a, "A", "Outcome concordance")
     style_axis(ax_a, grid="both")
 
@@ -741,7 +741,7 @@ def make_figure(summary: pd.DataFrame, paired: pd.DataFrame) -> None:
     ax_b.hist(inside, bins=np.linspace(-5.0, 5.0, 41), color=COLORS["shunting"], alpha=0.8)
     ax_b.axvline(0, color=COLORS["mute"], linewidth=LW_HAIR)
     ax_b.set_xlim(-5.0, 5.0)
-    ax_b.set_xlabel("version-locked minus reference (pp)")
+    ax_b.set_xlabel("repeated minus original (pp)")
     ax_b.set_ylabel("seed–condition pairs")
     if outliers:
         ax_b.text(
@@ -754,7 +754,7 @@ def make_figure(summary: pd.DataFrame, paired: pd.DataFrame) -> None:
             fontsize=PT_SMALL,
             color=COLORS["mute"],
         )
-    panel_title(ax_b, "B", "Paired source sensitivity")
+    panel_title(ax_b, "B", "Original–repeat differences")
     style_axis(ax_b, grid="y")
 
     _line_panel(ax_c, summary, 2, "aligned", "C")

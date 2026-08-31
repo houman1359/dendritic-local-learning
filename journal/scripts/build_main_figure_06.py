@@ -493,7 +493,7 @@ def panel_h3(ax, depth_summary, point_summary):
         y_columns=ycols, regime="aligned", mechanism="shunting",
         method="local3f", transport="path_transport", dx=-0.025))
     labels.append(accuracy_curve(
-        ax, depth_summary, color=C_SHARED, marker="s", label="shared signal",
+        ax, depth_summary, color=C_SHARED, marker="s", label="shared-soma LocalCA",
         y_columns=ycols, regime="aligned", mechanism="shunting",
         method="local3f", transport="per_soma_shared", dx=0.025))
     labels.append(accuracy_curve(

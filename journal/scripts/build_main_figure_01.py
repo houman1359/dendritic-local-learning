@@ -341,15 +341,19 @@ _GAIN_ROUTE = ((CT.ROOT_PT, CT.P["J1"]),
                (CT.P["JL"], CT.P["JLL"]))
 
 
+RUNG_XL = (-3.05, 2.55)          # room for the halo left of T1; no dead right
+
+
 def _rung_tree(f, rect, rung):
     """One rung glyph, drawn natively in panel D's vocabulary."""
     if rung == "coordinate":
         sub, _ = tree_inset(f, rect, scale=1.0, arrow_scale=0.75,
-                            ylim=TREE_YL_TIGHT, mode="coordinate")
+                            xlim=RUNG_XL, ylim=TREE_YL_TIGHT,
+                            mode="coordinate")
         sub.text(1.42, 0.72, "δᵤ", ha="left", va="center",
                  fontsize=PT_SMALL, color=BLUE)
         return
-    aspect = (TREE_XL[1] - TREE_XL[0]) / (TREE_YL_TIGHT[1] - TREE_YL_TIGHT[0])
+    aspect = (RUNG_XL[1] - RUNG_XL[0]) / (TREE_YL_TIGHT[1] - TREE_YL_TIGHT[0])
     x0, y0, w, h = rect
     w_pt, h_pt = w * f.w_pt, h * f.h_pt
     if w_pt / h_pt > aspect:
@@ -360,7 +364,7 @@ def _rung_tree(f, rect, rung):
            f.fx(fit_w), f.fy(fit_h))
     sub = f.ax.inset_axes(box, transform=f.ax.transData, zorder=3)
     sub.set_facecolor("none")
-    CT._setup_axes(sub, TREE_XL, TREE_YL_TIGHT)
+    CT._setup_axes(sub, RUNG_XL, TREE_YL_TIGHT)
     t = CT._Tree(sub, 1.0, False)
     t.capsule(mix("shunting", 18), 11, _ADDR_CAPSULE)
     t.tree(GHOST)
@@ -369,7 +373,21 @@ def _rung_tree(f, rect, rung):
     t.junctions(edge=GHOST)
     t.soma(SOMA, RIM)
     if rung == "address":
-        sub.text(-1.62, 1.16, "cᵤ,ₖ", ha="center", va="center",
+        # One digit inside each quarter's fork -- the address is an index
+        # into K discrete subtrees, and the selected index is the one the
+        # halo answers.  Set above the canopy the digits crowded the divider
+        # to the row above; a white backing lets each sit in its own fork
+        # over the ghost strokes instead.
+        for k, (tx, ty) in enumerate(((-1.85, 2.42), (-0.57, 2.78),
+                                      (0.59, 2.74), (1.77, 2.32)), 1):
+            selected = k == 1
+            sub.text(tx, ty, str(k), ha="center", va="center",
+                     fontsize=PT_SMALL, color=INK if selected else MUTE,
+                     fontweight="bold" if selected else "normal",
+                     bbox=None if selected else dict(
+                         facecolor="white", edgecolor="none", pad=0.5),
+                     zorder=5)
+        sub.text(-1.62, 1.10, "cᵤ,ₖ₌₁", ha="center", va="center",
                  fontsize=PT_SMALL, color=INK)
         return
     for a, b in _GAIN_ROUTE:
