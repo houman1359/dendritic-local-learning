@@ -127,8 +127,15 @@ GAIN_LIM = (-0.85, 6.35)
 GAIN_TICKS = [0, 2, 4, 6]
 GAIN_LABEL = "accuracy difference (pp)"
 
-STRICT_LADDER_TICKS = ["strict\nscalar", "neuron\nspecific", "exact\npath"]
-FALLBACK_LADDER_TICKS = ["matched-width\nfallback", "neuron\nspecific", "exact\npath"]
+# One word per rung: at three modules the two-line forms ran into each
+# other; strict-vs-fallback stays in the caption and Methods, where it was
+# already stated per panel.
+STRICT_LADDER_TICKS = ["scalar", "neuron", "exact"]
+# Panels C and D use the full term ``matched-width scalar-fallback feedback``.
+# The compact tick says ``scalar fallback`` so it remains legible at the
+# journal's final column width; the caption gives the complete definition and
+# distinguishes it from the strict scalar condition in panel B.
+FALLBACK_LADDER_TICKS = ["fallback", "neuron", "exact"]
 
 # One declared convention for the two categorical panels: the per-seed cloud
 # is drawn as a symmetric deterministic fan a quarter-row BELOW its own mean
@@ -302,7 +309,7 @@ def panel_task(ax):
 # One card per RESOLUTION LEVEL, with the gloss its one-line definition;
 # that is the panel's whole prose.  The scalar level now exists in two
 # implementations (the strict rung of the MNIST ladder in B and the
-# historical matched-width fallback of the Fashion and gradient panels in C
+# matched-width scalar-fallback rung of the Fashion and gradient panels in C
 # and D), so the first card carries the level's bare name "scalar" that both
 # tick wordings extend; the other two cards still carry their x-categories'
 # exact wording.
@@ -370,6 +377,40 @@ def _paired_ladder(ax, data, metric, *, gradient=False):
         for i, cond in enumerate(columns):
             errorbar_mean(ax, xs[i], pivot[cond].to_numpy(float),
                           colors[arch], seed=40 + i, marker=CORE_MARKER[arch])
+    return ax
+
+
+def panel_path_gain_cv(ax):
+    """E: within-neuron dispersion of the path-gain profile, per seed.
+
+    The mechanistic companion to the ladder on its left: by the path-gain
+    factorization the exact field of one neuron is its somatic coordinate
+    scaled by \u03b1\u0303\u2099, so this panel's quantity is exactly how much of the field a
+    repeated neuron coordinate leaves unstated.  Five paired seeds, the same
+    pairing idiom as the row's other panels; the two means go to the caption.
+    This analysis stood in the journal draft's Figure 2 as a call into the
+    frozen NeurIPS generator and was dropped in the native rebuild; it is
+    drawn natively here from the same run table.
+    """
+    cv = pd.read_csv(DATA / "figure2" / "path_gain_cv_runs.csv")
+    archs = ["dendritic_additive", "dendritic_shunting"]
+    colors = {archs[0]: ADD, archs[1]: SHUNT}
+    pivot = cv.pivot_table(index="seed", columns="network_type",
+                           values="path_gain_cv_mean").dropna()
+    paired_lines(ax, 0, 1, pivot[archs[0]], pivot[archs[1]],
+                 color=COLORS["mute"], lw=LW_HAIR, alpha=0.30)
+    for i, arch in enumerate(archs):
+        vals = pivot[arch].to_numpy(float)
+        ax.scatter(np.full(vals.size, float(i))
+                   + jitter(vals.size, 70 + i, 0.03), vals,
+                   s=SEED_MS ** 2, color=colors[arch], alpha=SEED_ALPHA,
+                   marker=CORE_MARKER[arch], edgecolors="none", zorder=3)
+        errorbar_mean(ax, i, vals, colors[arch], seed=80 + i,
+                      marker=CORE_MARKER[arch])
+    ax.set_xlim(-0.5, 1.5)
+    ax.set_xticks([0, 1], ["additive", "shunting"])
+    ax.set_ylim(0.0, 1.32)
+    ax.set_ylabel("path-gain CV within neuron")
     return ax
 
 
@@ -463,9 +504,6 @@ def panel_fashion_ladder(ax):
     ax.set_yticks(FASHION_ACC_TICKS)
     ax.set_ylabel(ACC_LABEL)
     ax.yaxis.set_major_formatter(PercentFormatter(1.0, decimals=0))
-    # This archived cohort predates the strict-scalar control in B.  The
-    # x-category itself carries the "legacy" qualifier, so provenance is
-    # explicit without placing a badge over the upper seed cloud.
     style_panel(ax)
     return ax
 
@@ -886,13 +924,15 @@ def build(height_in=CANVAS_H_PT / 72.0, path=None):
         card_axes.append(canvas.panel(f"card_{name}", 0, 3 * (index + 1), 3,
                                       schematic=True, letter="",
                                       inset_pt=(2.0, 2.0, 2.0, 2.0)))
-    ax_a = canvas.panel("mnist", 1, 0, 4, title="MNIST", letter="B",
+    ax_a = canvas.panel("mnist", 1, 0, 3, title="MNIST", letter="B",
                         inset_pt=(1.0, 1.0, 1.0, 1.0))
-    ax_b = canvas.panel("fashion", 1, 4, 4, title="Fashion-MNIST",
+    ax_b = canvas.panel("fashion", 1, 3, 3, title="Fashion-MNIST",
                         letter="C", inset_pt=(1.0, 1.0, 1.0, 1.0))
-    ax_c = canvas.panel("gradient", 1, 8, 4,
+    ax_c = canvas.panel("gradient", 1, 6, 3,
                         title="Gradient alignment", letter="",
                         inset_pt=(1.0, 1.0, 1.0, 1.0))
+    ax_cv = canvas.panel("pathcv", 1, 9, 3, title="Path-gain dispersion",
+                         letter="", inset_pt=(1.0, 1.0, 1.0, 1.0))
     ax_d = canvas.panel("schematic", 2, 0, 5, schematic=True, letter="")
     ax_e = canvas.panel("forest", 2, 5, 7, title="Paired accuracy contrasts",
                         letter="", inset_pt=(0.0, 2.0, 0.0, 0.0))
@@ -900,12 +940,14 @@ def build(height_in=CANVAS_H_PT / 72.0, path=None):
     # The rotated gradient-axis label reaches the top of its panel; place D
     # in the inter-panel gutter so the two glyphs cannot collide.
     canvas.add_letter("D", ax_c, dx_pt=46.0)
-    canvas.add_letter("E", ax_d)
-    canvas.add_letter("F", ax_e)
+    canvas.add_letter("E", ax_cv, dx_pt=46.0)
+    canvas.add_letter("F", ax_d)
+    canvas.add_letter("G", ax_e)
 
     panel_mnist_ladder(ax_a)
     panel_fashion_ladder(ax_b)
     panel_gradient(ax_c)
+    panel_path_gain_cv(ax_cv)
     panel_ownership_address(ax_d)
     panel_forest(ax_e)
 
@@ -913,7 +955,8 @@ def build(height_in=CANVAS_H_PT / 72.0, path=None):
     # first lock, equalise the row, then draw the schematic cells on final
     # geometry (their Frames capture the axes box at draw time).
     canvas.lock_reserves()
-    _equalise_row(canvas, {"mnist": 0, "fashion": 4, "gradient": 8})
+    _equalise_row(canvas, {"mnist": 0, "fashion": 3, "gradient": 6,
+                           "pathcv": 9})
     canvas.lock_reserves()
     panel_task(ax_task)
     for ax_card, (_name, title, tone, gloss, draw) in zip(card_axes,

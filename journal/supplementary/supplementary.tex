@@ -1494,7 +1494,7 @@ complete, we found that the LocalCA reference used a different, split
 optimizer. We therefore specified 60 additional soma-broadcast fits using the
 LocalCA optimizer before viewing their outcomes. This optimizer-matched
 broadcast reached 0.7771 at aligned D3, compared
-with 0.7778 for shared LocalCA: broadcast minus LocalCA was $-0.06$ points
+with 0.7778 for shared-soma LocalCA: broadcast minus LocalCA was $-0.06$ points
 ($-0.23$ to 0.09; 5/10 positive; $P=0.492$). Changing only the broadcast
 optimizer cost 13.47 points (12.89--14.05; 10/10 positive). Within LocalCA,
 path transport exceeded the shared coordinate by 10.96 points (10.34--11.58;
@@ -1617,7 +1617,7 @@ The primary comparisons were prespecified before outcomes were analyzed:
 aligned serial-BP D4--D3 and
 D4--D1, their placement interactions, the D4 architecture-by-placement
 interaction, shared- and path-LocalCA D4--D3 effects and interactions, and the
-shunting-minus-additive D4--D3 interaction. Failure of D4 to exceed D3 was
+shunting-minus-raw-additive D4--D3 interaction. Failure of D4 to exceed D3 was
 defined prospectively as falsification of the simple $D_{\mathrm p}=H_{\mathrm p}$
 trained crossover. Intervals used 50,000 paired-seed bootstrap draws, exact
 two-sided sign-flip tests enumerated all $2^{10}$ assignments, and the primary
@@ -2282,10 +2282,9 @@ not explain the small trained ancestry advantage at $K=4$.
 
 Supplementary Figs.~S1--S4 summarize the regular-tree mechanism, performance
 and feedback-control analyses. Some of these analyses were also reported in
-the associated preprint \citep{safaai2026localcredit}. In these figures, an
-unqualified ``additive'' label denotes the normalized-additive model in
-Eq.~\ref{eq:s_historical_normalized_additive}; explicitly labeled
-raw-additive conditions use Eq.~\ref{eq:s_additive_forward}. Supplementary
+the associated preprint \citep{safaai2026localcredit}. These figures label the
+normalized-additive model in Eq.~\ref{eq:s_historical_normalized_additive} and
+the raw-additive model in Eq.~\ref{eq:s_additive_forward} explicitly. Supplementary
 Fig.~S4C contains only the shunting architecture.
 
 \begin{figure}[p]
@@ -2310,8 +2309,7 @@ not establish a general backward shunting advantage; the interventions in
 state-matched focal test of main Fig.~8 provides the conductance-specific
 transport comparison they could not isolate. Noise-task shunting cells in
 panels \textbf{D,E} used signed transfer values to define conductances and are
-therefore treated as descriptive rather than inferential. Unqualified
-``additive'' labels denote normalized-additive integration.}
+therefore treated as descriptive rather than inferential.}
 \label{fig:inherited_mechanistic}
 \end{figure}
 
@@ -2321,20 +2319,18 @@ therefore treated as descriptive rather than inferential. Unqualified
 \caption{\textbf{Matched-capacity performance, regime dependence, and
 feedback definition in the regular-tree models.}
 \textbf{A}, Matched shunting backpropagation and five-factor local learning on
-MNIST, Fashion-MNIST, and figure-ground MNIST; its unqualified additive series
-uses the normalized-additive model. \textbf{B}, Inhibitory
+MNIST, Fashion-MNIST, and figure-ground MNIST; the blue series uses the
+normalized-additive model. \textbf{B}, Inhibitory
 dose-response. \textbf{C}, Descriptive morphology-by-inhibition performance.
 \textbf{D}, Exact-transport and reactivation controls, followed by raw
-additive (``add''), gain-modified raw additive (``gain'') and
-normalized-additive (``norm'') controls on MNIST. \textbf{E},
+additive (``raw''), gain-modified raw additive (``gain'') and
+normalized-additive (``normalized'') controls on MNIST. \textbf{E},
 Fifteen-seed comparison of matched-width scalar-fallback and neuron-specific
 feedback: the gain from
 preserving one soma teaching coordinate for every compartment of the
 corresponding modeled neuron, measured against the fallback field. Main Fig.~2
 uses strict scalar feedback and provides the primary scalar-to-neuron-specific
-comparison. Error bars are $\pm1$ s.d. Outside the explicitly separated
-controls in \textbf{D}, unqualified ``additive'' labels denote
-normalized-additive integration.}
+comparison. Error bars are $\pm1$ s.d.}
 \label{fig:inherited_competence}
 \end{figure}
 
@@ -2355,8 +2351,8 @@ matched-width scalar-fallback field, that same field with path propagation,
 random rank-2/4/8 fields, and the exact-transport oracle. Error bars are
 $\pm1$ s.d. Exact transport is an information oracle. Noise-task shunting
 conditions in \textbf{D} used signed transfer values to define conductances and
-are therefore treated as descriptive. Any unqualified ``additive'' label
-denotes normalized-additive integration.}
+are therefore treated as descriptive. The blue series in \textbf{B} is the
+normalized-additive model.}
 \label{fig:inherited_rule_feedback}
 \end{figure}
 
@@ -2400,9 +2396,9 @@ runs, and large symbols with bars show means and 95\% Student-\(t\) intervals.
 Neuron-specific feedback improved on strict scalar feedback by 16.393
 percentage points, whereas exact path transport was 0.859 points lower than
 neuron-specific feedback and equivalent to matched backpropagation within the
-prespecified \(\pm1\)-point margin. Unqualified ``additive'' axis labels in
-\textbf{A,B} denote normalized-additive integration; \textbf{C} contains no
-additive condition, and \textbf{D} uses the raw-additive model.}
+prespecified \(\pm1\)-point margin. Panels \textbf{A,B} use the
+normalized-additive model; \textbf{C} contains no additive condition, and
+\textbf{D} uses the raw-additive model.}
 \label{fig:regular_regimes}
 \end{figure}
 
@@ -3313,8 +3309,8 @@ paired-seed bootstrap intervals. All four retained depth-four-minus-depth-one
 contrasts were negative in 10/10 pairs (Wilcoxon $P=0.001953$). The design fixes 16 terminal
 branches and 960--968 active contacts per soma, but does not match compartment
 or trainable-parameter count. Shunting series are displayed for completeness;
-the synthetic-task shunting conditions fail the positive-conductance
-nonnegative-conductance criterion and are excluded from inference.}
+the synthetic-task shunting conditions fail the nonnegative-conductance
+criterion and are excluded from inference.}
 \label{fig:supp_fixed_budget}
 \end{figure}
 
@@ -3544,7 +3540,7 @@ are an interpolation, not an independent replication. \textbf{F--H}, H3
 tree, literal grouped-point and grouped-star controls under aligned and
 reversed placement. \textbf{I--K}, Independent H2 (two-level task hierarchy)
 with serial BP,
-literal grouped-point BP and shared- or path-transport LocalCA: \textbf{I}
+literal grouped-point BP and shared-soma or exact-path LocalCA: \textbf{I}
 shows aligned placement, \textbf{J} shows the reversed-placement control for
 all four rules, and \textbf{K} shows the paired contrasts. Lines are paired-seed
 means and intervals are 95\% seed-bootstrap intervals ($n=10$ independent
@@ -3561,9 +3557,9 @@ in this Supplementary Information.}
 \textbf{A,B}, Neuron-specific-minus-fallback accuracy across depth on MNIST and
 the conductance-compatible raw-additive noise task; the reference condition is
 matched-width scalar-fallback feedback. \textbf{C}, Exact-transport-minus-BP
-accuracy in the initial conditions. \textbf{D}, Correct-minus-
+accuracy in the original analysis. \textbf{D}, Correct-minus-
 deranged coordinate-to-arbor assignment at matched bandwidth. \textbf{E},
-Depth-averaged exact-minus-BP accuracy in the version-locked source-concordance analysis.
+Depth-averaged exact-minus-BP accuracy in a same-seed computational repeat.
 \textbf{F}, Depth-four-minus-depth-one accuracy at fixed terminal branches and
 contacts. \textbf{G}, Held-out accuracy in the two-stream subtree-address
 experiment (Supplementary Table~S1).
@@ -3724,10 +3720,10 @@ are model matched and do not measure biological teaching signals.}
 \includegraphics[width=\textwidth]{supplementary/figure_S28_panels_A-B.pdf}
 \caption{\textbf{Teaching-coordinate and optimizer diagnostics for the
 physical-depth experiment.} \textbf{A}, Credit-coordinate ladder from full
-backpropagation through soma-broadcast automatic differentiation to shared-
-and path-transport LocalCA. \textbf{B}, Paired D3 decomposition of the
+backpropagation through soma-broadcast automatic differentiation to shared-soma
+and exact-path LocalCA. \textbf{B}, Paired D3 decomposition of the
 backpropagation--local gap into coordinate, optimizer, eligibility and
-path-specificity contrasts. These post-outcome diagnostics localize the
+path-specificity contrasts. These secondary diagnostic analyses localize the
 remaining performance separation; they are not independent trained
 experiments. Points are paired seeds and intervals are 95\% paired-seed
 bootstrap intervals.}
@@ -3985,7 +3981,7 @@ cells.}
 \small
 \begin{tabular}{crrrr}
 \toprule
-Dose & Shunt localization & Additive localization & Shunt--additive & Shunt energy ratio \\
+Dose & Shunt localization & Current-injection localization & Shunt minus current injection & Shunt energy ratio \\
 \midrule
 0.25 & 0.1587 & 0.0398 & 0.1189 & 0.7154 \\
 1 & 0.5287 & 0.1470 & 0.3817 & 0.3302 \\
@@ -4182,7 +4178,7 @@ Feedback field & Communicated values & Spatial assignment & Interpretation \\
 \midrule
 Global scalar & Robust mean-or-signed-maximum reduction in Eq.~\ref{eq:s_scalar_reduction} & Same value at every receiving unit & Deliberately removes neuron and branch identity. \\
 Matched-width scalar-fallback feedback & Somatic vector at a same-width stage; otherwise the same robust scalar & Coordinate-wise only at the matched stage & Retains neuron-specific values only at a same-width stage; not ancestry sharing. \\
-Neuron-indexed subtree sharing & One coordinate per modeled neuron & Each coordinate repeated over all compartments descended from that soma & Tests neuron-specific feedback and correct coordinate-to-arbor assignment, not distinct within-tree addresses. \\
+Neuron-specific subtree sharing & One coordinate per modeled neuron & Each coordinate repeated over all compartments descended from that soma & Tests neuron-specific feedback and correct coordinate-to-arbor assignment, not distinct within-tree addresses. \\
 Correct sibling-subtree routing & $K$ coefficients within one modeled neuron & Each coefficient assigned to its context-relevant subtree & Trained test of within-neuron address support at $K=2$. \\
 Within-neuron derangement & The same $K$ coefficients as correct routing & Fixed permutation among sibling routes inside the neuron & Alignment control at matched coordinate count and sparse nonzeros. \\
 Rank-$K$ random & $K$ projected coordinates & Fixed random compartment mixing & Bandwidth control without anatomical routes. \\
@@ -4327,7 +4323,7 @@ Noise task & Raw additive & 4 & 0.15 (0.02--0.28) & 8/10 & 0.1055 \\
 correction across the six tests; the raw-additive depth-four noise contrast did
 not. Across conditions, 58/60 paired seeds
 favored correct assignment. The modest effect relative to the much larger
-scalar-to-neuron-indexed contrast separates a dominant coordinate-bandwidth
+scalar-fallback-to-neuron-specific contrast separates a dominant coordinate-bandwidth
 contribution from a smaller assignment-specific routing contribution.
 \end{table}
 
@@ -4529,7 +4525,7 @@ conductance; $E_{\mathrm I}$ is the inhibitory reversal potential in normalized 
 \small
 \begin{tabular}{ccccccl}
 \toprule
-Scale & $E_{\mathrm I}$ & Shunt localization & Additive localization & Difference & Positive cells & $P$ \\
+Scale & $E_{\mathrm I}$ & Shunt localization & Current-injection localization & Difference & Positive cells & $P$ \\
 \midrule
 0.35 & $-0.2$ & 0.104 & 0.035 & 0.069 & 8/8 & 0.0078 \\
 0.10 & $-0.2$ & 0.101 & 0.019 & 0.081 & 8/8 & 0.0078 \\

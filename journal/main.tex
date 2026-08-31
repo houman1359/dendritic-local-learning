@@ -661,20 +661,26 @@ coordinate loses so little. By Eq.~\ref{eq:pathgain}, the compartment errors
 of one neuron are its somatic coordinate scaled by the path-gain profile
 \(\widetilde\alpha_n\); wherever that profile is positive, repeating one
 \(\widehat\delta_u\) misstates compartment-wise magnitudes but no signs.
-Supplementary Fig.~S1A measures the profile's within-neuron dispersion and
-compares architectures: the paired-seed coefficient of variation of the
+Figure~\ref{fig:feedback}E measures the profile's within-neuron dispersion
+and compares architectures (Supplementary Fig.~S1A shows the corresponding
+path-gain fields): the paired-seed coefficient of variation of the
 conductance-stage path gain was 1.16 in the normalized-additive tree and 0.23
 in the shunting tree, whose conductance loading compresses the exact field
 toward a uniformly scaled copy of the neuron coordinate. One error per neuron
 is therefore close to sufficient by construction, and closer still under
-shunting. Shunting and raw-additive
+shunting. The same compression is consistent with the larger
+scalar-to-neuron gain of the shunting tree in \textbf{B}: when the
+within-neuron profile is nearly uniform, the neuron coordinate carries nearly
+the entire exact field, so supplying it recovers almost everything scalar
+feedback withheld. This is an association across two architectures, not a
+causal isolation. Shunting and raw-additive
 forward models showed the same qualitative feedback ordering, with no general
 optimization advantage for shunting.
 
 Identifying a neuron is also distinct from assigning its signal to the correct
-arbor (Fig.~\ref{fig:feedback}E). Permuting neuron-specific signals across
+arbor (Fig.~\ref{fig:feedback}F). Permuting neuron-specific signals across
 arbors preserved total bandwidth but produced a small, consistent loss.
-Figure~\ref{fig:feedback}F places the paired effects on one scale: selecting
+Figure~\ref{fig:feedback}G places the paired effects on one scale: selecting
 the neuron was the dominant gain, exact within-arbor transport added little on
 the standard tasks, and correct signal ownership produced a smaller benefit.
 
@@ -705,9 +711,14 @@ feedback rather than the strict scalar feedback used in \textbf{B} (Methods).
 \textbf{D}, Alignment of updates computed with matched-width scalar-fallback,
 neuron-specific and exact feedback to the exact gradient at fixed trained
 checkpoints. Exact
-transport has cosine one by definition. \textbf{E}, Assigning a learning
+transport has cosine one by definition. \textbf{E}, Within-neuron
+coefficient of variation of the conductance-stage path-gain profile, five
+paired seeds per architecture: 1.16 in the normalized-additive tree of
+Supplementary Fig.~S1 and 0.23 in the shunting tree, whose conductance
+loading compresses the exact field toward a uniformly scaled copy of the
+neuron coordinate. \textbf{F}, Assigning a learning
 signal to the correct neuron is distinct from targeting refinements of that
-signal to locations within its arbor. \textbf{F}, Paired effects of adding
+signal to locations within its arbor. \textbf{G}, Paired effects of adding
 neuron-specific feedback, exact within-arbor transport and correct
 signal-to-arbor assignment. Here ``neuron-specific'' is neuron-specific minus
 matched-width scalar-fallback feedback on Fashion-MNIST; ``transport'' is exact
@@ -717,10 +728,11 @@ indicated task, depth and neuron model. Row labels D2 and D4 denote architecture
 and four serial dendritic stages, respectively; the dots behind each row are the individual
 paired seed differences. Faint lines pair seeds; large
 symbols and bars show means and 95\% seed-bootstrap intervals. Panel-specific
-sample sizes are \(n=15\) paired seeds per architecture in \textbf{B,D} and
-\(n=10\) in \textbf{C,F}; Methods report the model definitions and numerical
+sample sizes are \(n=15\) paired seeds per architecture in \textbf{B,D},
+\(n=5\) in \textbf{E} and \(n=10\) in \textbf{C,G}; Methods report the model definitions and numerical
 implementation checks. Green circles denote shunting trees and blue squares
-denote raw-additive trees.}
+denote raw-additive trees, except in \textbf{E}, whose additive condition is
+the normalized-additive model of Supplementary Fig.~S1 (Methods).}
 \label{fig:feedback}
 \end{figure}
 
@@ -1748,7 +1760,7 @@ than theoretically required teaching signals.
 
 Two additive forward models were used in the regular-tree analyses. The
 raw-additive model used in the main comparisons
-(Fig.~\ref{fig:feedback}B--D,F) computes the voltage
+(Fig.~\ref{fig:feedback}B--D,G) computes the voltage
 \(V_{sn}^{\mathrm{raw}}=J_{sn}^{\mathrm E}-J_{sn}^{\mathrm I}
 +J_{sn}^{\mathrm{child}}\) before reactivation, where the three \(J\) terms
 are aggregate excitatory, inhibitory and child currents. It contains signed
@@ -1830,8 +1842,8 @@ local-mismatch control, contains three seeds and is treated descriptively.
 Supplementary Section~S5 describes the synthetic context-gating and
 noise-resilience classification tasks. CIFAR-10 images were flattened, with no
 convolutional front end, data augmentation or large-scale benchmark claim.
-In Supplementary Figs.~S1--S4, the label ``additive'' denotes the
-normalized-additive model unless explicitly identified as raw additive. The
+Supplementary Figs.~S1--S4 explicitly label the normalized-additive and
+raw-additive models. The
 flattened CIFAR-10 panel in Supplementary Fig.~S4C contains only the shunting
 architecture.
 

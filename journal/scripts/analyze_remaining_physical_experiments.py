@@ -551,8 +551,8 @@ def line_panel(
     else:
         styles.extend(
             [
-                ("serial_tree", "local_shared", "shared LocalCA", COLORS["local"], "D", "-."),
-                ("serial_tree", "local_path", "path LocalCA", COLORS["pathway"], "^", ":"),
+                ("serial_tree", "local_shared", "shared-soma", COLORS["local"], "D", "-."),
+                ("serial_tree", "local_path", "exact path", COLORS["pathway"], "^", ":"),
             ]
         )
     for architecture, credit, label, color, marker, linestyle in styles:
@@ -593,7 +593,17 @@ def line_panel(
     ax.set_yticks([0.5, 0.6, 0.7, 0.8, 0.9, 1.0])
     style_axis(ax, grid="y")
     if legend:
-        if legend_loc == "below":
+        if legend_loc == "inside":
+            # The H2 key must survive extraction into the four-column S18
+            # layout. Keep its compact names inside the unused lower part of
+            # the axes instead of placing a legend outside the source panel,
+            # where the compositor would clip it.
+            clean_legend(
+                ax, loc="lower center", bbox_to_anchor=(0.50, 0.01),
+                fontsize=PT_SMALL - 0.6, ncol=2, handlelength=0.9,
+                columnspacing=0.45, handletextpad=0.25,
+            )
+        elif legend_loc == "below":
             # Compact two-column key that stays inside this panel's grid
             # cell: a wider key crossed the cell boundary and was sliced
             # when the block is recomposed into S18.
@@ -687,7 +697,7 @@ def make_figure(summary: pd.DataFrame, contrast: pd.DataFrame) -> None:
     )
     line_panel(
         axes[3], summary, hierarchy=2, regime="aligned",
-        letter="S", title="Independent H=2 hierarchy", legend_loc="below",
+        letter="S", title="Independent H=2 hierarchy", legend_loc="inside",
     )
     line_panel(
         axes[4], summary, hierarchy=2, regime="rewired_tree",

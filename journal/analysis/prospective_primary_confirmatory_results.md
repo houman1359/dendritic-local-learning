@@ -17,18 +17,18 @@ Every frozen execution passed the historical artifact audit. Artificial-network 
 
 ## Value of neuron-indexed feedback
 
-- MNIST, additive, depth 1: 5.11 percentage points (95% CI 4.80 to 5.45).
-- MNIST, additive, depth 2: 4.92 percentage points (95% CI 4.59 to 5.30).
-- MNIST, additive, depth 3: 6.15 percentage points (95% CI 5.64 to 6.64).
-- MNIST, additive, depth 4: 6.32 percentage points (95% CI 5.88 to 6.77).
+- MNIST, raw additive, depth 1: 5.11 percentage points (95% CI 4.80 to 5.45).
+- MNIST, raw additive, depth 2: 4.92 percentage points (95% CI 4.59 to 5.30).
+- MNIST, raw additive, depth 3: 6.15 percentage points (95% CI 5.64 to 6.64).
+- MNIST, raw additive, depth 4: 6.32 percentage points (95% CI 5.88 to 6.77).
 - MNIST, shunting, depth 1: 6.99 percentage points (95% CI 6.51 to 7.46).
 - MNIST, shunting, depth 2: 6.81 percentage points (95% CI 6.25 to 7.38).
 - MNIST, shunting, depth 3: 6.53 percentage points (95% CI 6.09 to 7.00).
 - MNIST, shunting, depth 4: 6.99 percentage points (95% CI 6.57 to 7.39).
-- Noise resilience, additive, depth 1: 9.76 percentage points (95% CI 9.14 to 10.43).
-- Noise resilience, additive, depth 2: 12.04 percentage points (95% CI 11.20 to 12.96).
-- Noise resilience, additive, depth 3: 12.96 percentage points (95% CI 12.35 to 13.66).
-- Noise resilience, additive, depth 4: 14.16 percentage points (95% CI 13.05 to 15.40).
+- Noise resilience, raw additive, depth 1: 9.76 percentage points (95% CI 9.14 to 10.43).
+- Noise resilience, raw additive, depth 2: 12.04 percentage points (95% CI 11.20 to 12.96).
+- Noise resilience, raw additive, depth 3: 12.96 percentage points (95% CI 12.35 to 13.66).
+- Noise resilience, raw additive, depth 4: 14.16 percentage points (95% CI 13.05 to 15.40).
 - Noise resilience, shunting, depth 1: 11.11 percentage points (95% CI 10.47 to 11.86).
 - Noise resilience, shunting, depth 2: 11.08 percentage points (95% CI 10.58 to 11.54).
 - Noise resilience, shunting, depth 3: 10.84 percentage points (95% CI 10.12 to 11.65).

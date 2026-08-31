@@ -100,7 +100,7 @@ H4_ROWS = (
     ("LocalCA", "serial_tree", "shunting", "local_path"),
     ("shared", "serial_tree", "shunting", "local_shared"),
     ("grouped", "grouped_point", "shunting", "full_bp"),
-    ("additive", "serial_tree", "raw_additive", "full_bp"),
+    ("raw additive", "serial_tree", "raw_additive", "full_bp"),
 )
 
 

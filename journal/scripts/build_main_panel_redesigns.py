@@ -947,7 +947,7 @@ def build_focal_schematic() -> None:
     ax.plot([0.10, 0.90], [0.91, 0.91], color=COLORS["mute"], lw=LW_HAIR)
     ax.plot([0.10, 0.10], [0.91, 0.885], color=COLORS["mute"], lw=LW_HAIR)
     ax.plot([0.90, 0.90], [0.91, 0.885], color=COLORS["mute"], lw=LW_HAIR)
-    ax.text(0.50, 0.945, r"same focal $\Delta V$", ha="center", va="center",
+    ax.text(0.50, 0.945, "baseline focal current matched; soma V restored", ha="center", va="center",
             fontsize=PT_SMALL, color=COLORS["mute"])
 
     ax.annotate(
@@ -962,7 +962,7 @@ def build_focal_schematic() -> None:
         fontsize=PT_SMALL, color=COLORS["inh"],
         arrowprops={"arrowstyle": "-|>", "color": COLORS["inh"], "lw": LW_EDGE},
     )
-    ax.text(0.24, 0.06, "matched additive", ha="center", va="center",
+    ax.text(0.24, 0.06, "current injection", ha="center", va="center",
             fontsize=PT_ANNOT, color=COLORS["additive"])
     ax.text(0.76, 0.06, "focal shunt", ha="center", va="center",
             fontsize=PT_ANNOT, color=COLORS["inh"])

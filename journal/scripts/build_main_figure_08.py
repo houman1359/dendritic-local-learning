@@ -399,7 +399,7 @@ def panel_active_dose(ax, summary):
 
 # ── panel F (headline): the electrotonic boundary ────────────────────────
 COHORTS = (
-    ("original_eight", "pilot, n = 8", SHUNT, M_CONTRAST),
+    ("original_eight", "initial sample, n = 8", SHUNT, M_CONTRAST),
     ("v661_disjoint", "MICrONS mouse 1, n = 45", REPLICATE, M_REPLICATE),
 )
 CONTRAST_LABEL = "shunt − current-injection localization"

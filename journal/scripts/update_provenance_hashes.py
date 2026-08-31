@@ -466,7 +466,7 @@ CANONICAL_METADATA = {
     "fig2.d": ("figS3", "c"),
     "fig2.d.bp": ("figS3", "c"),
     "fig2.d.runs": ("figS3", "c"),
-    "fig2.path_gain": ("figS1", "a"),
+    "fig2.path_gain": ("fig2", "e"),
     "fig2.init.runs": ("methods", "initialization control"),
     "fig2.init.summary": ("methods", "initialization control"),
     "fig2.init.tests": ("methods", "initialization control"),

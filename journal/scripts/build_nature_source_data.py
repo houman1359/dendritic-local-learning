@@ -174,10 +174,10 @@ FILES = (
         "Matched backpropagation summary verified against the included independent-seed table.",
     ),
     SourceFile(
-        "Supplementary Figure 1",
-        "a",
+        "Figure 2",
+        "e",
         "source_data/figure2/path_gain_cv_runs.csv",
-        "Supplementary_Figure_1/SuppFig1a_path_gain_cv_runs.csv",
+        "Figure_2/Fig2e_path_gain_cv_runs.csv",
         "independent checkpoint/seed values",
         "paired training seed (n=5 per architecture)",
         "current separate diagnostic cohort",

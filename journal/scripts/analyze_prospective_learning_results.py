@@ -536,7 +536,7 @@ def _plot_legacy(frame: pd.DataFrame, summary: pd.DataFrame) -> None:
         "ancestry_available",
         "exact_transport",
     ]
-    feedback_labels = ["matched-width\nfallback", "neuron-\nspecific", "exact\npath"]
+    feedback_labels = ["scalar\nfallback", "neuron-\nspecific", "exact\npath"]
     feedback_colors = [COLORS["scalar"], COLORS["per_soma"], COLORS["oracle"]]
 
     def distribution_panel(ax, metric: str, letter: str, title: str, ylabel: str, ylim):
@@ -801,9 +801,9 @@ def _plot_streamlined_main() -> None:
         ("mnist", "dendritic_shunting", CORE_COLOR["dendritic_shunting"],
          CORE_MARKER["dendritic_shunting"], "-", -0.10, "MNIST · shunting"),
         ("mnist", "dendritic_additive", CORE_COLOR["dendritic_additive"],
-         CORE_MARKER["dendritic_additive"], "-", 0.0, "MNIST · additive"),
+         CORE_MARKER["dendritic_additive"], "-", 0.0, "MNIST · raw additive"),
         ("noise_resilience", "dendritic_additive", COLORS["local"],
-         MARKERS[2], "--", 0.10, "noise · additive"),
+         MARKERS[2], "--", 0.10, "noise · raw additive"),
     ]
     for task, core, color, marker, linestyle, dodge, label in exact_specs:
         part = exact[exact.task.eq(task) & exact.core.eq(core)].sort_values("depth")
@@ -832,7 +832,7 @@ def _plot_streamlined_main() -> None:
     ax_c.set_yticks([-0.2, 0.0, 0.2, 0.4])
     ax_c.set_xlabel("dendritic stage count")
     ax_c.set_ylabel("exact transport − BP (pp)")
-    panel_title(ax_c, "I", "Initial exact/BP comparison")
+    panel_title(ax_c, "I", "Original exact/BP")
     style_axis(ax_c)
     clean_legend(ax_c, fontsize=PT_LEGEND, loc="upper right", auto_clear=True)
 
@@ -903,10 +903,10 @@ def _plot_streamlined_main() -> None:
 
     clean_exact = clean_exact[clean_exact.depth.eq("all_depths_seed_mean")].copy()
     clean_order = [
-        ("mnist", "additive", "MNIST\nraw additive"),
+        ("mnist", "additive", "MNIST\nraw\nadditive"),
         ("mnist", "shunting", "MNIST\nshunting"),
-        ("noise_resilience", "additive", "noise\nraw additive"),
-        ("noise_resilience", "shunting", "noise\nshunt.\n(ReLU)"),
+        ("noise_resilience", "additive", "noise\nraw\nadditive"),
+        ("noise_resilience", "shunting", "noise\nshunting\n(ReLU)"),
     ]
     for index, (dataset, core, label) in enumerate(clean_order):
         row = clean_exact[
@@ -926,10 +926,16 @@ def _plot_streamlined_main() -> None:
             capsize=ERR_CAPSIZE,
         )
     ax_e.axhline(0, color=COLORS["mute"], ls="--", lw=LW_REF)
-    ax_e.set_xticks(range(4), [item[2] for item in clean_order])
+    ax_e.set_xticks(range(4))
+    repeat_ticks = ax_e.set_xticklabels([item[2] for item in clean_order])
+    # Edge categories are multi-line scientific names. Align them inward so
+    # the compositor does not split the final letter of ``shunting`` into the
+    # neighboring panel when it crops this source sheet for Supplementary S19.
+    repeat_ticks[0].set_ha("left")
+    repeat_ticks[-1].set_ha("right")
     ax_e.tick_params(axis="x", labelsize=PT_SMALL)
     ax_e.set_ylabel("exact transport − BP (pp)")
-    panel_title(ax_e, "K", "Repeated-analysis exact/BP")
+    panel_title(ax_e, "K", "Same-seed exact/BP repeat")
     style_axis(ax_e)
 
     fixed = followup_contrast[
@@ -937,7 +943,7 @@ def _plot_streamlined_main() -> None:
         & followup_contrast.contrast.eq("depth 4 - depth 1")
     ].copy()
     feedback_specs = [
-        ("per_soma", "matched-width fallback"),
+        ("per_soma", "scalar fallback"),
         ("per_soma_shared", "neuron-specific"),
         ("path_transport", "exact path"),
         ("backprop", "backprop"),
@@ -961,7 +967,7 @@ def _plot_streamlined_main() -> None:
         )
     ax_f.axhline(0, color=COLORS["mute"], ls="--", lw=LW_REF)
     ax_f.set_xticks(range(4))
-    ax_f.set_xticklabels(["matched-width\nfallback", "neuron\nspecific", "exact\npath", "BP"])
+    ax_f.set_xticklabels(["scalar\nfallback", "neuron\nspecific", "exact\npath", "BP"])
     ax_f.tick_params(axis="x", labelsize=PT_SMALL)
     ax_f.set_ylabel("depth 4 − depth 1 (pp)")
     panel_title(ax_f, "L", "Fixed-budget depth")

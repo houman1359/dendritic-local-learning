@@ -41,7 +41,7 @@ FIGURES = ROOT / "figures" / "generated"
 CORE_ORDER = ["dendritic_shunting", "dendritic_additive"]
 CORE_LABEL = {
     "dendritic_shunting": "Shunting",
-    "dendritic_additive": "Additive",
+    "dendritic_additive": "Raw additive",
 }
 CORE_COLOR = {
     "dendritic_shunting": COLORS["shunting"],
@@ -49,7 +49,7 @@ CORE_COLOR = {
 }
 FEEDBACK_ORDER = ["per_soma", "per_soma_shared", "path_transport"]
 FEEDBACK_LABEL = {
-    "per_soma": "Matched-width fallback",
+    "per_soma": "Scalar fallback",
     "per_soma_shared": "Neuron-specific",
     "per_soma_shuffled": "Shuffled ancestry",
     "path_transport": "Exact path",

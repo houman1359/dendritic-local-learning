@@ -9,7 +9,7 @@ MAIN = JOURNAL / "main.tex"
 
 MAIN_PANEL_INVENTORY = {
     "fig:framework": "abcde",
-    "fig:feedback": "abcdef",
+    "fig:feedback": "abcdefg",
     "fig:creditphase": "abcdefg",
     "fig:branchconflict": "abcdef",
     "fig:subtreefactorial": "abcdefg",

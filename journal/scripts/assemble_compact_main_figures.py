@@ -931,8 +931,8 @@ def main() -> None:
                 # Re-expanding the clip also re-admits each source panel's own
                 # heading, so erase it span-by-span.
                 erase_phrases=(
-                    ("Initial exact/BP comparison",) if letter == "I"
-                    else ("Repeated-analysis exact/BP",) if letter == "K"
+                    ("Original exact/BP",) if letter == "I"
+                    else ("Same-seed exact/BP repeat",) if letter == "K"
                     else ()
                 ),
             )
@@ -941,9 +941,9 @@ def main() -> None:
         [
             "MNIST neuron-specific gain",
             "Noise-task neuron-specific gain",
-            "Exact vs BP",
-            "Ownership",
-            "Repeated-analysis exact vs BP",
+            "Original exact vs BP",
+            "Arbor assignment",
+            "Same-seed exact vs BP repeat",
             "Fixed-budget depth",
             "Two-stream learning",
             "Capture vs progress",

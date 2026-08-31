@@ -740,10 +740,10 @@ def render_figure(summary: pd.DataFrame, contrasts: pd.DataFrame) -> None:
 
     credit_specs = [
         ("full_bp", COLORS["bp"], "full BP", "o", "-"),
-        ("soma_broadcast_bp", COLORS["additive"], "broadcast (BP opt.)", "s", "--"),
-        ("soma_broadcast_matched", COLORS["highlight"], "broadcast (local opt.)", "v", "--"),
-        ("local_path", COLORS["pathway"], "path LocalCA", "^", "-."),
-        ("local_shared", COLORS["local"], "shared LocalCA", "D", ":"),
+        ("soma_broadcast_bp", COLORS["additive"], "soma broadcast\n(BP optimizer)", "s", "--"),
+        ("soma_broadcast_matched", COLORS["highlight"], "soma broadcast\n(LocalCA optimizer)", "v", "--"),
+        ("local_path", COLORS["pathway"], "exact-path LocalCA", "^", "-."),
+        ("local_shared", COLORS["local"], "shared-soma LocalCA", "D", ":"),
     ]
     for credit, color, label, marker, linestyle in credit_specs:
         _line(ax_d, summary, architecture="serial_tree", credit=credit, color=color, label=label, marker=marker, linestyle=linestyle)

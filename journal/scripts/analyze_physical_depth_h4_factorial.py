@@ -742,7 +742,7 @@ def _line_panel(
             "serial_tree",
             "shunting",
             "local_shared",
-            "shared LocalCA",
+            "shared-soma LocalCA",
             COLORS["local"],
             "D",
             "-.",
@@ -856,7 +856,7 @@ def _forest(ax: plt.Axes, contrasts: pd.DataFrame) -> None:
             elinewidth=LW_ERR,
             capsize=ERR_CAPSIZE,
         )
-    panel_title(ax, "C", "Frozen primary contrasts")
+    panel_title(ax, "C", "Primary contrasts")
     ax.set_yticks(y, labels)
     ax.set_ylim(-0.6, len(names) - 0.4)
     ax.set_xlabel("paired difference (pp)")

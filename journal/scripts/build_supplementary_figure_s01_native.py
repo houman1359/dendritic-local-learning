@@ -80,7 +80,10 @@ MUTE = COLORS["mute"]
 
 CORE_MARKER = {"dendritic_shunting": "o", "dendritic_additive": "s"}
 CORE_COLOR = {"dendritic_shunting": SHUNT, "dendritic_additive": ADD}
-CORE_WORD = {"dendritic_shunting": "shunting", "dendritic_additive": "additive"}
+CORE_WORD = {
+    "dendritic_shunting": "shunting",
+    "dendritic_additive": "normalized additive",
+}
 
 # Shared axes for the two noise-resilience sweeps (D, E): identical x
 # geometry so the reader carries the N_I positions across the pair.
@@ -154,7 +157,7 @@ def panel_path_gains(ax, summary, path_gain_seed):
     norm = mcolors.Normalize(vmin=float(all_logs.min()),
                              vmax=float(all_logs.max()))
 
-    _draw_gain_tree(ax, x0=0.03, name="additive", cv=add_cv, gains=add_gains,
+    _draw_gain_tree(ax, x0=0.03, name="normalized additive", cv=add_cv, gains=add_gains,
                     tone=ADD, norm=norm, label_soma=False)
     _draw_gain_tree(ax, x0=0.60, name="shunting", cv=shunt_cv,
                     gains=shunt_gains, tone=SHUNT, norm=norm, label_soma=True)
@@ -189,7 +192,7 @@ def panel_path_gains(ax, summary, path_gain_seed):
     inset.set_xlim(-0.55, 1.55)
     inset.set_ylim(0.0, 1.36)
     inset.set_xticks([0, 1])
-    inset.set_xticklabels(["add.", "shunt."], fontsize=PT_SMALL)
+    inset.set_xticklabels(["norm.\nadditive", "shunting"], fontsize=PT_SMALL)
     inset.set_yticks([0, 1])
     inset.set_yticklabels(["0", "1"], fontsize=PT_SMALL)
     inset.tick_params(length=1.8, width=LW_HAIR, pad=0.8)
@@ -260,7 +263,7 @@ def panel_field_cosine(ax, decomposition_runs):
     # Direct color key in the data-free upper-left corner (no legend box).
     ax.text(-0.50, 0.288, "shunting", ha="left", va="top",
             fontsize=PT_LEGEND, color=SHUNT)
-    ax.text(-0.50, 0.257, "additive", ha="left", va="top",
+    ax.text(-0.50, 0.257, "normalized\nadditive", ha="left", va="top",
             fontsize=PT_LEGEND, color=ADD)
 
     ax.set_xticks(x)
@@ -381,11 +384,11 @@ def panel_fidelity(ax, summary):
     # key at the separated solid endpoints -- no legend box.
     ax.text(21.0, 0.88, "exact transport", ha="center", va="top",
             fontsize=PT_ANNOT, color=INK)
-    ax.text(21.0, 0.33, "matched-width\nfallback", ha="center", va="bottom",
+    ax.text(21.0, 0.33, "scalar\nfallback", ha="center", va="bottom",
             fontsize=PT_ANNOT, color=INK)
     ax.text(42.5, ends["dendritic_shunting"], "shunting", ha="left",
             va="center", fontsize=PT_LEGEND, color=SHUNT)
-    ax.text(42.5, ends["dendritic_additive"], "additive", ha="left",
+    ax.text(42.5, ends["dendritic_additive"], "normalized\nadditive", ha="left",
             va="center", fontsize=PT_LEGEND, color=ADD)
 
     ax.set_xticks(IE_TICKS)
@@ -414,7 +417,7 @@ def panel_learning(ax, summary, oracle_summary):
 
     ax.text(24.0, 96.6, "exact transport", ha="center", va="bottom",
             fontsize=PT_ANNOT, color=INK)
-    ax.text(24.0, 77.5, "matched-width\nfallback", ha="center", va="top",
+    ax.text(24.0, 77.5, "scalar\nfallback", ha="center", va="top",
             fontsize=PT_ANNOT, color=INK)
 
     ax.set_xticks(IE_TICKS)

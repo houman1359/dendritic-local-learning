@@ -160,8 +160,8 @@ def panel_tasks(ax, report):
             ha="left", va="center")
     ax.text(1.0, 106.5, "shunting", color=SHUNT, fontsize=PT_LEGEND,
             ha="center", va="center")
-    ax.text(2.55, 106.5, "additive", color=ADD, fontsize=PT_LEGEND,
-            ha="right", va="center")
+    ax.text(2.55, 109.0, "normalized\nadditive", color=ADD,
+            fontsize=PT_LEGEND, ha="right", va="center", linespacing=0.95)
     return ax
 
 
@@ -246,7 +246,7 @@ def panel_morphology(ax, report):
     ax.set_ylim(-8, 29)
     ax.set_yticks([0, 10, 20])
     ax.set_xlabel(XLABEL_NI)
-    ax.set_ylabel("shunting − additive (pp)")
+    ax.set_ylabel("shunting − normalized additive (pp)")
     ax.text(41.0, 5.2, "depth 2", color=DEPTH_COLORS[2], fontsize=PT_LEGEND,
             ha="right", va="center")
     ax.text(41.0, 17.6, "depth 3", color=DEPTH_COLORS[3], fontsize=PT_LEGEND,
@@ -296,10 +296,10 @@ def panel_controls(ax, report):
         (2.0, "Transport", [("BP", bp, BP), ("PT", transport, ORACLE)]),
         (1.0, "Activation", [("id", identity, _tint(SHUNT, 0.45)),
                              ("tanh", tanh, SHUNT)]),
-        (0.0, "Additive", [("add", add_none, ADD),
+        (0.0, "Additive controls", [("raw", add_none, ADD),
                            ("gain", None if gain.empty else gain.iloc[0],
                             _tint(ADD, 0.30)),
-                           ("norm", None if norm.empty else norm.iloc[0],
+                           ("normalized", None if norm.empty else norm.iloc[0],
                             _tint(ADD, 0.55))]),
     ]
     height = 0.18
@@ -397,7 +397,7 @@ def panel_feedback(ax, report):
     # Direct colour words in the data-free lower right (no legend box).
     ax.text(1.02, 90.15, "shunting", color=SHUNT, fontsize=PT_LEGEND,
             ha="center", va="center")
-    ax.text(1.02, 89.25, "additive", color=ADD, fontsize=PT_LEGEND,
+    ax.text(1.02, 89.25, "normalized additive", color=ADD, fontsize=PT_LEGEND,
             ha="center", va="center")
     return ax
 

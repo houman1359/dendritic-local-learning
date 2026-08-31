@@ -179,7 +179,7 @@ def exact_transport_values():
 
 # Same six ladder cells, same order and same filters as the frozen generator
 # (the rank-1 row of the CSV is excluded there too).  Colour is the only
-# change: amber for the legacy matched-width/scalar fallback, the per-soma
+# change: amber for matched-width scalar-fallback feedback, the per-soma
 # salmon for the path-propagated field, a gray control ramp for the random
 # low-rank fields and the oracle violet for exact transport.
 LADDER_ROWS = (
@@ -239,7 +239,7 @@ def panel_error_source(ax):
     bw = 0.30
     specs = [
         ("dendritic_shunting", "shunting", COLORS["shunting"]),
-        ("dendritic_additive", "additive", COLORS["additive"]),
+        ("dendritic_additive", "normalized additive", COLORS["additive"]),
     ]
     for j, (core, label, color) in enumerate(specs):
         means, stds = table[core]
@@ -258,7 +258,7 @@ def panel_error_source(ax):
     ax.text(0.97, 0.94, "shunting", color=COLORS["shunting"],
             fontsize=PT_LEGEND, ha="right", va="center",
             transform=ax.transAxes)
-    ax.text(0.97, 0.85, "additive", color=COLORS["additive"],
+    ax.text(0.97, 0.85, "normalized additive", color=COLORS["additive"],
             fontsize=PT_LEGEND, ha="right", va="center",
             transform=ax.transAxes)
     return ax
