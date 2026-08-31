@@ -525,7 +525,7 @@ def panel_d(ax):
 
     ax.text(0.5, f.fy(23.0), "directed tree:  ∂ℒ / ∂gᵢ = [xᵢ Rₙᵗᵒᵗ (Eᵢ − Vₙ)] [∂ℒ / ∂Vₙ]",
             ha="center", va="center", fontsize=PT_ANNOT, color=INK)
-    ax.text(0.5, f.fy(5.0), "general adjoint:  ∂ℒ / ∂gᵢ = xᵢ (Eᵢ − Vₙ) qₙ,   qₙ = Rₙᵗᵒᵗ ∂ℒ / ∂Vₙ",
+    ax.text(0.5, f.fy(5.0), "general adjoint:  Jᵥᵀ q = ∇ᵥℒ,   ∂ℒ / ∂gᵢ = xᵢ (Eᵢ − Vₙ) qₙ",
             ha="center", va="center", fontsize=PT_SMALL, color=MUTE)
 
 

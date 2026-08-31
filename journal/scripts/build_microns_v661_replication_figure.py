@@ -288,7 +288,7 @@ def render(curves: pd.DataFrame, focal: pd.DataFrame, summary: dict) -> None:
     ax_a.barh(np.arange(len(type_counts)), type_counts.to_numpy(), color=COLORS["morphology"], alpha=0.86)
     ax_a.set_yticks(np.arange(len(type_counts))); ax_a.set_yticklabels(type_counts.index)
     ax_a.invert_yaxis(); ax_a.set_xlabel("reconstructed cells")
-    panel_title(ax_a, "A", "Independent sample (n = 47)")
+    panel_title(ax_a, "A", "Non-overlapping sample (n = 47)")
     style_axis(ax_a, grid="x")
 
     for method_index, method in enumerate(methods):

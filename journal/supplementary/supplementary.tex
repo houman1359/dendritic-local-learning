@@ -2003,7 +2003,7 @@ Runs were included if they contained the specified configuration and seed, a
 checkpoint, complete learning curves, all expected dendritic stages,
 nondegenerate learned couplings and finite held-out metrics, without a
 transport-shape fallback. All 640 runs met these completion criteria. A later,
-outcome-independent input-validity criterion excluded the 160 synthetic-noise
+outcome-independent conductance-validity criterion excluded the 160 synthetic-noise
 shunting runs because their
 signed transfer output is not a valid positive-conductance drive. The 480
 retained runs contain both neuron models on MNIST and the raw-additive model on
@@ -2075,7 +2075,7 @@ three local feedback fields, two maps, and ten paired seeds. Each distal branch
 had 21 contacts. Spatial branches recursively partitioned the $28\times28$
 feature plane into 16 disjoint regions per neuron, whereas random branches
 sampled independently from all 784 coordinates. Supplementary
-Fig.~\ref{fig:supp_spatial_audit} reports the 240 input-valid learning
+Fig.~\ref{fig:supp_spatial_audit} reports the 240 conductance-valid learning
 contrasts together with the corresponding coverage analysis. MNIST retains
 both cores; the noise task retains the raw-additive core. Because the effect
 persists under backpropagation and on the randomly projected task, it is
@@ -2086,7 +2086,7 @@ A fourth prespecified cohort varied depth while holding 16 terminal branches and
 approximately fixed input contact budget. The four depth conditions contained
 960, 960, 968 and 960 active contacts per soma, respectively. It crossed two
 neuron models, backpropagation or three local feedback fields, four depths and
-ten paired seeds, giving 320 runs. The input-valid synthetic comparison retains
+ten paired seeds, giving 320 runs. The conductance-valid synthetic comparison retains
 the 160 raw-additive runs. This control matches terminal branches and contacts,
 not trainable parameters: deeper networks still contain more compartments and
 more coupling and reactivation parameters. Supplementary
@@ -2094,7 +2094,7 @@ Fig.~\ref{fig:supp_fixed_budget} reports their complete depth profiles and the
 prespecified depth-four-minus-depth-one contrasts.
 
 We then evaluated matched-width scalar-fallback, neuron-specific and exact
-teaching fields at the 120 input-valid backpropagation checkpoints on one fixed
+teaching fields at the 120 conductance-valid backpropagation checkpoints on one fixed
 held-out batch. Only nonsomatic stages
 and their trainable branch parameters entered the field and gradient vectors.
 For each candidate field we computed scaled error-field capture,
@@ -3283,7 +3283,7 @@ neuron under independently sampled random branches and the spatial map.
 matched-width scalar-fallback feedback, neuron-specific sharing and exact path
 transport. MNIST averages shunting and
 raw-additive models within seed; the randomly projected noise task uses the
-input-valid raw-additive model only. Points and intervals show means and 95\%
+conductance-valid raw-additive model only. Points and intervals show means and 95\%
 paired-seed bootstrap intervals. Each learning condition contains ten paired
 seeds. The map has the same number of contacts
 in both conditions but greater unique coverage and no cross-branch collisions
@@ -3299,7 +3299,7 @@ local credit assignment.}
 greater dendritic depth intrinsically beneficial.}
 \textbf{A--C}, Held-out accuracy across D1--D4 under, respectively, the
 matched-width scalar-fallback, neuron-specific and exact-path fields
-for the input-valid raw-additive network. Here D1--D4 denote one through four
+for the conductance-valid raw-additive network. Here D1--D4 denote one through four
 physical dendritic stages while terminal-branch and input-contact budgets are
 held fixed. \textbf{D}, Matched
 backpropagation. \textbf{E}, Prespecified paired
@@ -3314,7 +3314,7 @@ contrasts were negative in 10/10 pairs (Wilcoxon $P=0.001953$). The design fixes
 branches and 960--968 active contacts per soma, but does not match compartment
 or trainable-parameter count. Shunting series are displayed for completeness;
 the synthetic-task shunting conditions fail the positive-conductance
-input-validity rule and are excluded from inference.}
+nonnegative-conductance criterion and are excluded from inference.}
 \label{fig:supp_fixed_budget}
 \end{figure}
 
@@ -3323,7 +3323,7 @@ input-validity rule and are excluded from inference.}
 \includegraphics[width=\textwidth]{supplementary/figure_S09_panels_A-D.pdf}
 \caption{\textbf{Credit geometry predicts the loss change available to a local
 update.} \textbf{A}, Cosine between candidate and exact dendritic gradients at
-120 input-valid matched backpropagation checkpoints. \textbf{B}, Eligibility-weighted
+120 conductance-valid matched backpropagation checkpoints. \textbf{B}, Eligibility-weighted
 gradient energy retained after optimal rescaling. \textbf{C}, Loss decrease
 after matching each candidate update to the exact-gradient norm; labels give
 the number of checkpoints in which the update decreased loss. \textbf{D},
@@ -3571,7 +3571,7 @@ experiment (Supplementary Table~S1).
 \textbf{I}, Forgetting of the first context after adaptation to the second.
 Small points are paired seeds and larger symbols and bars are means and 95\%
 seed-bootstrap intervals. Panels \textbf{A--G,I} use ten independent paired
-seeds per condition; panel \textbf{H} uses 120 input-valid independently
+seeds per condition; panel \textbf{H} uses 120 conductance-valid independently
 trained checkpoints as the descriptive units. Exact transport is an
 information ceiling.}
 \label{fig:supp_prospective_diagnostics}
@@ -3688,7 +3688,7 @@ from one mouse. Modeled route fields are not measured teaching signals.}
 \begin{figure}[p]
 \centering
 \includegraphics[width=\textwidth]{supplementary/figure_S26_panels_A-D.pdf}
-\caption{\textbf{Independent reruns reproduce the H2/H3 physical-depth
+\caption{\textbf{Same-seed reruns reproduce the H2/H3 physical-depth
 results.} \textbf{A}, Held-out accuracy from each of 430
 repeated runs versus its same-seed original outcome. The dashed line
 is identity. \textbf{B}, Distribution of paired repeated-minus-original
@@ -4205,9 +4205,9 @@ final two rows are an independent rule-and-decoder implementation check. All
 rows labeled raw additive use Eq.~\ref{eq:s_additive_forward}, not the
 normalized-additive model used in Supplementary Figs.~S1--S4.}
 \label{tab:regular_results}
-\small
+\footnotesize
 \begingroup
-\setlength{\tabcolsep}{4pt}
+\setlength{\tabcolsep}{3pt}
 \begin{tabular}{llccc}
 \toprule
 Architecture & Feedback or learning condition & $n$ & Test accuracy (\%) & Dendritic-gradient cosine \\
@@ -4234,7 +4234,9 @@ by seed and reported in percentage points with 95\% paired-seed bootstrap
 intervals. The practical-equivalence criterion was specified before outcome inspection
 and required the entire interval to lie within $\pm0.5$ points.}
 \label{tab:strict_scalar_audit}
-\small
+\footnotesize
+\begingroup
+\setlength{\tabcolsep}{3.5pt}
 \begin{tabular}{lcccc}
 \toprule
 Architecture & Strict scalar feedback (\%) & Scalar-fallback feedback (\%) & Strict minus fallback (points) & Seed ordering \\
@@ -4243,6 +4245,7 @@ Shunting & 85.88 & 90.74 & $-4.859$ [$-5.669,-3.994$] & 0/15 strict higher \\
 Raw additive & 89.31 & 91.59 & $-2.274$ [$-2.699,-1.796$] & 0 higher, 1 tie \\
 \bottomrule
 \end{tabular}
+\endgroup
 \end{table}
 
 \begin{table}[ht]
@@ -4378,7 +4381,7 @@ Feature-degree coefficient of variation & 1.507 & 1.155 \\
 \begin{table}[ht]
 \centering
 \caption{Fixed-checkpoint credit-to-step analysis at relative step
-$10^{-5}$. Values are means over 120 input-valid independently trained backpropagation
+$10^{-5}$. Values are means over 120 conductance-valid independently trained backpropagation
 checkpoints. One-step progress is the loss decrease from a norm-matched
 candidate update divided by that from the exact update.}
 \label{tab:feedback_step}
