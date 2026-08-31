@@ -412,7 +412,7 @@ feedback rule specified for that task.
 
 Table~\ref{tab:feedback_objects} defines the feedback objects without
 conflating bandwidth with routing. The strict scalar field used for the
-plotted MNIST ladder applies Eq.~\ref{eq:s_scalar_reduction} at every
+plotted MNIST ladder applies the scalar reduction defined below at every
 local-rule stage. The matched-width scalar-fallback field
 reuses a somatic vector only at a stage of the same width; at wider stages it
 uses the same robust scalar reduction as the global scalar condition. For an
@@ -2094,8 +2094,8 @@ Fig.~\ref{fig:supp_fixed_budget} reports their complete depth profiles and the
 prespecified depth-four-minus-depth-one contrasts.
 
 We then evaluated matched-width scalar-fallback, neuron-specific and exact
-teaching fields at the 120 conductance-valid backpropagation checkpoints on one fixed
-held-out batch. Only nonsomatic stages
+teaching fields on one fixed held-out batch, at each of the 120
+conductance-valid backpropagation checkpoints. Only nonsomatic stages
 and their trainable branch parameters entered the field and gradient vectors.
 For each candidate field we computed scaled error-field capture,
 eligibility-weighted gradient capture and cosine, and the loss change after
@@ -2264,7 +2264,7 @@ decomposition closed within $7.28\times10^{-12}$. On the dendritic-tree
 representation, trained correct-ancestry capture was 0.162, 0.315, 0.547 and
 1.000 at $K=1,2,4,8$. Fixed coordinate-to-arbor derangement had the common scalar value
 at $K=1$ and zero capture at $K=2,4,8$, because its active support excluded the
-target leaf (Supplementary Fig.~\ref{fig:supp_partition_residual}a).
+target leaf (Supplementary Fig.~\ref{fig:supp_partition_residual}A).
 
 For each seed we averaged implementation-equivalent representations within
 feedback family and budget, then correlated trained capture with held-out
@@ -2273,7 +2273,7 @@ accuracy across conditions. The mean within-seed Spearman correlation was
 Wilcoxon $P=1.91\times10^{-6}$). Restricting the analysis to the six route
 families and $K<8$ removed the exact full-rank boundary and gave 0.639
 (0.610--0.665; 20/20 positive; $P=1.91\times10^{-6}$; Supplementary
-Fig.~\ref{fig:supp_partition_residual}b,c). This association is descriptive
+Fig.~\ref{fig:supp_partition_residual}B,C). This association is descriptive
 and post hoc. In particular, ancestry, depth-interleaved and random sparse
 partitions had similar address capture at matched $K$, so the residual does
 not explain the small trained ancestry advantage at $K=4$.
@@ -2554,7 +2554,7 @@ independent, non-overlapping sample of 47 cells captured 0.756 of modeled field
 energy with 8.08\% of dense wiring, compared with 0.839 for the dense oracle,
 0.302 for random paths,
 0.441 for depth bins and 0.330 for ancestry shuffles
-(Supplementary Fig.~\ref{fig:supp_v661}b--d). The morphology advantage over every
+(Supplementary Fig.~\ref{fig:supp_v661}B--D). The morphology advantage over every
 structural control was positive in 47/47 cells. The cohort is from the same
 mouse, is layer-imbalanced, descends from a convenience export, and uses an
 earlier reconstruction release. Direct presynaptic E/I labels were available
@@ -3294,7 +3294,7 @@ local credit assignment.}
 
 \begin{figure}[ht]
 \centering
-\includegraphics[width=\textwidth]{supplementary/figure_S08_panels_A-I.pdf}
+\includegraphics[width=0.98\textwidth]{supplementary/figure_S08_panels_A-I.pdf}
 \caption{\textbf{Fixed terminal-branch and input-contact budgets do not make
 greater dendritic depth intrinsically beneficial.}
 \textbf{A--C}, Held-out accuracy across D1--D4 under, respectively, the

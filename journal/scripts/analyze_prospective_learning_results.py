@@ -422,9 +422,9 @@ def _plot_legacy(frame: pd.DataFrame, summary: pd.DataFrame) -> None:
                     alpha=0.65,
                 )
             short_feedback = {
-                "per_soma": "scalar",
-                "per_soma_shared": "neuron-indexed",
-                "path_transport": "exact",
+                "per_soma": "matched-width fallback",
+                "per_soma_shared": "neuron-specific",
+                "path_transport": "exact path",
             }[feedback]
             panel_title(ax, feedback_letters[row][col], short_feedback.capitalize())
             ax.set_xticks([1, 2, 3, 4])
@@ -466,7 +466,7 @@ def _plot_legacy(frame: pd.DataFrame, summary: pd.DataFrame) -> None:
         style_axis(ax)
 
     dose_modes = [
-        ("local_ca", "per_soma", "I", "Scalar"),
+        ("local_ca", "per_soma", "I", "Matched-width fallback"),
         ("local_ca", "per_soma_shared", "J", "Neuron-specific"),
         ("local_ca", "path_transport", "K", "Exact"),
         ("standard", "backprop", "L", "Backprop"),
@@ -536,7 +536,7 @@ def _plot_legacy(frame: pd.DataFrame, summary: pd.DataFrame) -> None:
         "ancestry_available",
         "exact_transport",
     ]
-    feedback_labels = ["scalar", "neuron-indexed", "exact"]
+    feedback_labels = ["matched-width\nfallback", "neuron-\nspecific", "exact\npath"]
     feedback_colors = [COLORS["scalar"], COLORS["per_soma"], COLORS["oracle"]]
 
     def distribution_panel(ax, metric: str, letter: str, title: str, ylabel: str, ylim):
@@ -937,9 +937,9 @@ def _plot_streamlined_main() -> None:
         & followup_contrast.contrast.eq("depth 4 - depth 1")
     ].copy()
     feedback_specs = [
-        ("per_soma", "scalar"),
-        ("per_soma_shared", "neuron-indexed"),
-        ("path_transport", "exact"),
+        ("per_soma", "matched-width fallback"),
+        ("per_soma_shared", "neuron-specific"),
+        ("path_transport", "exact path"),
         ("backprop", "backprop"),
     ]
     for index, (feedback, _) in enumerate(feedback_specs):
@@ -961,7 +961,7 @@ def _plot_streamlined_main() -> None:
         )
     ax_f.axhline(0, color=COLORS["mute"], ls="--", lw=LW_REF)
     ax_f.set_xticks(range(4))
-    ax_f.set_xticklabels(["scalar", "neuron\nindexed", "exact", "BP"])
+    ax_f.set_xticklabels(["matched-width\nfallback", "neuron\nspecific", "exact\npath", "BP"])
     ax_f.tick_params(axis="x", labelsize=PT_SMALL)
     ax_f.set_ylabel("depth 4 − depth 1 (pp)")
     panel_title(ax_f, "L", "Fixed-budget depth")
@@ -970,7 +970,7 @@ def _plot_streamlined_main() -> None:
     ax_f.text(
         1.5,
         -4.4,
-        "additive",
+        "raw additive",
         color=CORE_COLOR["dendritic_additive"],
         fontsize=PT_LEGEND,
         ha="center",
@@ -1199,9 +1199,9 @@ def _plot_three_claim_main() -> None:
 
     gap = contrast[contrast.family.eq("local_minus_bp")].copy()
     feedback_specs = [
-        ("per_soma - backprop", "scalar", COLORS["scalar"]),
-        ("per_soma_shared - backprop", "neuron-indexed", COLORS["per_soma"]),
-        ("path_transport - backprop", "exact transport", COLORS["oracle"]),
+        ("per_soma - backprop", "matched-width fallback", COLORS["scalar"]),
+        ("per_soma_shared - backprop", "neuron-specific", COLORS["per_soma"]),
+        ("path_transport - backprop", "exact path", COLORS["oracle"]),
     ]
     for contrast_name, label, color in feedback_specs:
         for task, marker, linestyle in [
@@ -1232,9 +1232,9 @@ def _plot_three_claim_main() -> None:
     panel_title(ax_a, "A", "Gap to backpropagation")
     style_axis(ax_a)
     hierarchy_handles = [
-        Line2D([0], [0], color=COLORS["scalar"], lw=LW_DATA, label="scalar"),
-        Line2D([0], [0], color=COLORS["per_soma"], lw=LW_DATA, label="neuron-indexed"),
-        Line2D([0], [0], color=COLORS["oracle"], lw=LW_DATA, label="exact transport"),
+        Line2D([0], [0], color=COLORS["scalar"], lw=LW_DATA, label="matched-width fallback"),
+        Line2D([0], [0], color=COLORS["per_soma"], lw=LW_DATA, label="neuron-specific"),
+        Line2D([0], [0], color=COLORS["oracle"], lw=LW_DATA, label="exact path"),
         Line2D([0], [0], color=COLORS["ink"], marker="o", lw=LW_DATA, label="MNIST"),
         Line2D([0], [0], color=COLORS["ink"], marker="s", ls="--", lw=LW_DATA, label="noise task"),
     ]
@@ -1279,9 +1279,9 @@ def _plot_three_claim_main() -> None:
 
     dose = followup_summary[followup_summary.family.eq("inhibition")].copy()
     dose_specs = [
-        ("local_ca", "per_soma", "scalar", COLORS["scalar"], "o"),
-        ("local_ca", "per_soma_shared", "neuron-indexed", COLORS["per_soma"], "s"),
-        ("local_ca", "path_transport", "exact", COLORS["oracle"], "^"),
+        ("local_ca", "per_soma", "matched-width fallback", COLORS["scalar"], "o"),
+        ("local_ca", "per_soma_shared", "neuron-specific", COLORS["per_soma"], "s"),
+        ("local_ca", "path_transport", "exact path", COLORS["oracle"], "^"),
         ("standard", "backprop", "backprop", COLORS["bp"], "D"),
     ]
     for strategy, feedback, label, color, marker in dose_specs:
