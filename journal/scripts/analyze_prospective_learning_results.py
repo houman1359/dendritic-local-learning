@@ -50,7 +50,7 @@ FIGURES = ROOT / "figures" / "generated"
 TASK_LABEL = {"mnist": "MNIST", "noise_resilience": "Noise resilience"}
 CORE_LABEL = {
     "dendritic_shunting": "shunting",
-    "dendritic_additive": "additive",
+    "dendritic_additive": "raw additive",
 }
 CORE_COLOR = {
     "dendritic_shunting": COLORS["shunting"],
@@ -769,7 +769,7 @@ def _plot_streamlined_main() -> None:
     ax_a.text(
         1.0,
         4.4,
-        "additive",
+        "raw additive",
         color=CORE_COLOR["dendritic_additive"],
         fontsize=PT_LEGEND,
         ha="left",
@@ -780,7 +780,7 @@ def _plot_streamlined_main() -> None:
     ax_b.text(
         1.05,
         7.6,
-        "additive",
+        "raw additive",
         color=CORE_COLOR["dendritic_additive"],
         fontsize=PT_LEGEND,
         ha="left",
@@ -893,7 +893,7 @@ def _plot_streamlined_main() -> None:
     ax_d.text(
         0.03,
         0.90,
-        "additive",
+        "raw additive",
         transform=ax_d.transAxes,
         color=CORE_COLOR["dendritic_additive"],
         fontsize=PT_SMALL,
@@ -903,9 +903,9 @@ def _plot_streamlined_main() -> None:
 
     clean_exact = clean_exact[clean_exact.depth.eq("all_depths_seed_mean")].copy()
     clean_order = [
-        ("mnist", "additive", "MNIST\nadditive"),
+        ("mnist", "additive", "MNIST\nraw additive"),
         ("mnist", "shunting", "MNIST\nshunting"),
-        ("noise_resilience", "additive", "noise\nadditive"),
+        ("noise_resilience", "additive", "noise\nraw additive"),
         ("noise_resilience", "shunting", "noise\nshunt.\n(ReLU)"),
     ]
     for index, (dataset, core, label) in enumerate(clean_order):
@@ -929,7 +929,7 @@ def _plot_streamlined_main() -> None:
     ax_e.set_xticks(range(4), [item[2] for item in clean_order])
     ax_e.tick_params(axis="x", labelsize=PT_SMALL)
     ax_e.set_ylabel("exact transport − BP (pp)")
-    panel_title(ax_e, "K", "Version-locked exact/BP")
+    panel_title(ax_e, "K", "Repeated-analysis exact/BP")
     style_axis(ax_e)
 
     fixed = followup_contrast[

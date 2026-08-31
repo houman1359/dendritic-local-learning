@@ -932,7 +932,7 @@ def main() -> None:
                 # heading, so erase it span-by-span.
                 erase_phrases=(
                     ("Initial exact/BP comparison",) if letter == "I"
-                    else ("Version-locked exact/BP",) if letter == "K"
+                    else ("Repeated-analysis exact/BP",) if letter == "K"
                     else ()
                 ),
             )
@@ -943,7 +943,7 @@ def main() -> None:
             "Noise-task neuron-specific gain",
             "Exact vs BP",
             "Ownership",
-            "Version-locked exact vs BP",
+            "Repeated-analysis exact vs BP",
             "Fixed-budget depth",
             "Two-stream learning",
             "Capture vs progress",
