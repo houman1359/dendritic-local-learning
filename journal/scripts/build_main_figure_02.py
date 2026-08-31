@@ -128,10 +128,11 @@ GAIN_TICKS = [0, 2, 4, 6]
 GAIN_LABEL = "accuracy difference (pp)"
 
 # Keep the scientifically distinct feedback conditions visible in the
-# artwork.  Angled, single-line ticks remain separate at journal column width
-# without conflating strict scalar feedback with matched-width scalar fallback.
-STRICT_LADDER_TICKS = ["strict scalar", "neuron-specific", "exact path"]
-FALLBACK_LADDER_TICKS = ["scalar fallback", "neuron-specific", "exact path"]
+# artwork.  The axis gives the three scientific resolution levels; the caption
+# states that the scalar arm is strict in B and uses the matched-width
+# scalar-fallback implementation in C--D.
+STRICT_LADDER_TICKS = ["scalar", "neuron-specific", "exact path"]
+FALLBACK_LADDER_TICKS = ["scalar", "neuron-specific", "exact path"]
 
 # One declared convention for the two categorical panels: the per-seed cloud
 # is drawn as a symmetric deterministic fan a quarter-row BELOW its own mean
@@ -150,7 +151,7 @@ def _style_feedback_ticks(ax):
     """Keep the three feedback conditions legible in quarter-width panels."""
     ax.tick_params(axis="x", labelsize=PT_SMALL, pad=1.5)
     for label in ax.get_xticklabels():
-        label.set_rotation(28)
+        label.set_rotation(35)
         label.set_ha("right")
         label.set_rotation_mode("anchor")
 
@@ -459,7 +460,7 @@ def panel_mnist_ladder(ax):
             elinewidth=LW_ERR, capsize=ERR_CAPSIZE, zorder=4)
     ax.set_xticks(range(3))
     ax.set_xticklabels(STRICT_LADDER_TICKS)
-    ax.set_xlim(-0.52, 2.52)
+    ax.set_xlim(-0.35, 2.35)
     ax.set_ylim(*MNIST_ACC_LIM)
     ax.set_yticks(MNIST_ACC_TICKS)
     ax.set_ylabel(ACC_LABEL)
@@ -508,7 +509,7 @@ def panel_fashion_ladder(ax):
                     elinewidth=LW_ERR, capsize=ERR_CAPSIZE, zorder=4)
     ax.set_xticks(range(3))
     ax.set_xticklabels(FALLBACK_LADDER_TICKS)
-    ax.set_xlim(-0.52, 2.52)
+    ax.set_xlim(-0.35, 2.35)
     ax.set_ylim(*FASHION_ACC_LIM)
     ax.set_yticks(FASHION_ACC_TICKS)
     ax.set_ylabel(ACC_LABEL)
@@ -533,7 +534,7 @@ def panel_gradient(ax):
             fontsize=PT_SMALL, ha="center", va="top")
     ax.set_xticks([0, 1, 2])
     ax.set_xticklabels(FALLBACK_LADDER_TICKS)
-    ax.set_xlim(-0.52, 2.52)
+    ax.set_xlim(-0.35, 2.35)
     ax.set_ylim(-0.16, 1.08)
     ax.set_yticks([0.0, 0.2, 0.4, 0.6, 0.8, 1.0])
     ax.set_ylabel("exact-gradient cosine")
@@ -710,10 +711,15 @@ def panel_forest(ax):
     from matplotlib import transforms as mtransforms
 
     fashion = _fashion_rows()
+    # Each header carries the panel it summarizes: the first two blocks are
+    # C's ladder steps re-expressed as paired within-seed effect sizes, and
+    # the third is the correct-minus-deranged test that F draws.  Without
+    # the pointers the Fashion rows read as one more dataset rather than as
+    # C's own contrasts on an inferential scale.
     groups = [
-        ("neuron-specific", fashion["neuron indexed - scalar fallback"]),
-        ("transport", fashion["exact path - neuron indexed"]),
-        ("assignment", _ownership_rows()),
+        ("neuron-specific (C)", fashion["neuron indexed - scalar fallback"]),
+        ("transport (C)", fashion["exact path - neuron indexed"]),
+        ("assignment (F)", _ownership_rows()),
     ]
     header_trans = mtransforms.offset_copy(
         ax.get_yaxis_transform(), fig=ax.get_figure(), x=-HEADER_LEFT_PT,
@@ -757,6 +763,12 @@ def panel_forest(ax):
     ax.set_yticklabels(labels)
     ax.set_ylim(y - 0.5, -0.62)
     ax.set_xlim(*GAIN_LIM)
+    # The D-notation is defined in the physical-depth section, three
+    # figures later; its first use is here, so the key rides the empty
+    # lower-right corner of the axes.
+    ax.text(0.985, 0.03, "D2 / D4: two / four dendritic stages",
+            transform=ax.transAxes, fontsize=PT_SMALL, color=MUTE,
+            ha="right", va="bottom", zorder=6)
     ax.set_xticks(GAIN_TICKS)
     ax.set_xlabel(GAIN_LABEL)
     style_panel(ax)
@@ -943,7 +955,7 @@ def build(height_in=CANVAS_H_PT / 72.0, path=None):
                         title="Gradient alignment", letter="",
                         inset_pt=(1.0, 1.0, 1.0, 1.0))
     ax_cv = canvas.panel("pathcv", 1, 9, 3,
-                         title="Transported field vs depth",
+                         title="Transported error",
                          letter="", inset_pt=(1.0, 1.0, 1.0, 1.0))
     ax_d = canvas.panel("schematic", 2, 0, 5, schematic=True, letter="")
     ax_e = canvas.panel("forest", 2, 5, 7, title="Paired accuracy contrasts",

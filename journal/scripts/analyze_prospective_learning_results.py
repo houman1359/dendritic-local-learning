@@ -63,7 +63,7 @@ CORE_MARKER = {
     "dendritic_additive": MARKERS[1],
 }
 FEEDBACK_LABEL = {
-    "per_soma": "Scalar fallback",
+    "per_soma": "Matched-width fallback",
     "per_soma_shared": "Neuron-specific",
     "path_transport": "Exact path",
     "backprop": "Backpropagation",
@@ -466,10 +466,10 @@ def _plot_legacy(frame: pd.DataFrame, summary: pd.DataFrame) -> None:
         style_axis(ax)
 
     dose_modes = [
-        ("local_ca", "per_soma", "I", "Scalar fallback"),
+        ("local_ca", "per_soma", "I", "Matched-width fallback"),
         ("local_ca", "per_soma_shared", "J", "Neuron-specific"),
-        ("local_ca", "path_transport", "K", "Exact"),
-        ("standard", "backprop", "L", "Backprop"),
+        ("local_ca", "path_transport", "K", "Exact path"),
+        ("standard", "backprop", "L", "Backpropagation"),
     ]
     for col, (strategy, feedback, letter, title) in enumerate(dose_modes):
         ax = axes[2, col]
@@ -536,7 +536,8 @@ def _plot_legacy(frame: pd.DataFrame, summary: pd.DataFrame) -> None:
         "ancestry_available",
         "exact_transport",
     ]
-    feedback_labels = ["scalar\nfallback", "neuron-\nspecific", "exact\npath"]
+    feedback_labels = ["matched-width\nfallback", "neuron-\nspecific",
+                       "exact\npath"]
     feedback_colors = [COLORS["scalar"], COLORS["per_soma"], COLORS["oracle"]]
 
     def distribution_panel(ax, metric: str, letter: str, title: str, ylabel: str, ylim):
@@ -831,8 +832,8 @@ def _plot_streamlined_main() -> None:
     ax_c.set_ylim(-0.30, 0.66)
     ax_c.set_yticks([-0.2, 0.0, 0.2, 0.4])
     ax_c.set_xlabel("dendritic stage count")
-    ax_c.set_ylabel("exact transport − BP (pp)")
-    panel_title(ax_c, "I", "Original exact/BP")
+    ax_c.set_ylabel("exact path − BP (pp)")
+    panel_title(ax_c, "I", "Reference exact path–BP")
     style_axis(ax_c)
     clean_legend(ax_c, fontsize=PT_LEGEND, loc="upper right", auto_clear=True)
 
@@ -929,8 +930,8 @@ def _plot_streamlined_main() -> None:
     ax_e.set_xticks(range(4))
     ax_e.set_xticklabels([item[2] for item in clean_order])
     ax_e.tick_params(axis="x", labelsize=PT_SMALL)
-    ax_e.set_ylabel("exact transport − BP (pp)")
-    panel_title(ax_e, "K", "Same-seed exact/BP repeat")
+    ax_e.set_ylabel("exact path − BP (pp)")
+    panel_title(ax_e, "K", "Same-seed exact path–BP")
     style_axis(ax_e)
 
     fixed = followup_contrast[
@@ -962,7 +963,8 @@ def _plot_streamlined_main() -> None:
         )
     ax_f.axhline(0, color=COLORS["mute"], ls="--", lw=LW_REF)
     ax_f.set_xticks(range(4))
-    ax_f.set_xticklabels(["scalar\nfallback", "neuron\nspecific", "exact\npath", "BP"])
+    ax_f.set_xticklabels(["MW\nfallback", "neuron-\nspecific",
+                          "exact\npath", "BP"])
     ax_f.tick_params(axis="x", labelsize=PT_SMALL)
     ax_f.set_ylabel("depth 4 − depth 1 (pp)")
     panel_title(ax_f, "L", "Fixed-budget depth")
@@ -1014,7 +1016,7 @@ def _plot_streamlined_main() -> None:
         "random_dense_rank2",
     ]
     condition_short = {
-        "neuron_shared_k1": "neuron",
+        "neuron_shared_k1": "neuron-\nshared",
         "correct_subtree_k2": "correct\nancestry",
         "within_neuron_deranged_k2": "route\nderangement",
         "random_dense_rank2": "random\nrank-2",

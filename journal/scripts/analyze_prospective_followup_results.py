@@ -49,7 +49,7 @@ CORE_COLOR = {
 }
 FEEDBACK_ORDER = ["per_soma", "per_soma_shared", "path_transport"]
 FEEDBACK_LABEL = {
-    "per_soma": "Scalar fallback",
+    "per_soma": "Matched-width fallback",
     "per_soma_shared": "Neuron-specific",
     "per_soma_shuffled": "Shuffled ancestry",
     "path_transport": "Exact path",
@@ -1177,7 +1177,8 @@ def plot_fixed_budget(summary: pd.DataFrame, contrasts: pd.DataFrame) -> None:
             label=CORE_LABEL[core],
         )
     ax.axhline(0, color=COLORS["mute"], lw=LW_REF, ls="--")
-    ax.set_xticks(np.arange(4), ["BP", "fallback", "neuron", "exact"])
+    ax.set_xticks(np.arange(4), ["BP", "matched-width\nfallback",
+                                 "neuron-\nspecific", "exact\npath"])
     ax.tick_params(axis="x", labelrotation=24)
     for label in ax.get_xticklabels():
         label.set_horizontalalignment("right")
