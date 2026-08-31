@@ -182,7 +182,7 @@ def full_conflict_controls(ax, summary: pd.DataFrame,
             color=COLORS["bp"], markeredgewidth=LW_EDGE, zorder=5)
 
     for condition, color, marker, label in (
-        ("neuron_shared_k1", AMBER, "D", "neuron shared"),
+        ("neuron_shared_k1", AMBER, "D", "neuron-shared"),
         ("within_neuron_deranged", GRAY, "v", "deranged route"),
     ):
         part = endpoint[endpoint.condition.eq(condition)].set_index(
@@ -222,7 +222,7 @@ def full_conflict_controls(ax, summary: pd.DataFrame,
     # legend would cover the two low-accuracy curves.
     key_specs = (
         (0.705, GREEN, "o", "path = BP = gated point"),
-        (0.640, AMBER, "D", "neuron shared"),
+        (0.640, AMBER, "D", "neuron-shared"),
         (0.575, GRAY, "v", "deranged route"),
     )
     for ypos, color, marker, label in key_specs:

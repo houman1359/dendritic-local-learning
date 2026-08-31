@@ -293,11 +293,11 @@ def panel_controls(ax, report):
     ].sort_values("test_acc_mean", ascending=False)
 
     grouped = [
-        (2.0, "Transport", [("BP", bp, BP), ("PT", transport, ORACLE)]),
-        (1.0, "Activation", [("id", identity, _tint(SHUNT, 0.45)),
+        (2.0, "Transport", [("BP", bp, BP), ("exact path", transport, ORACLE)]),
+        (1.0, "Activation", [("identity", identity, _tint(SHUNT, 0.45)),
                              ("tanh", tanh, SHUNT)]),
-        (0.0, "Additive controls", [("raw", add_none, ADD),
-                           ("gain", None if gain.empty else gain.iloc[0],
+        (0.0, "Additive models", [("raw", add_none, ADD),
+                           ("gain-modified", None if gain.empty else gain.iloc[0],
                             _tint(ADD, 0.30)),
                            ("normalized", None if norm.empty else norm.iloc[0],
                             _tint(ADD, 0.55))]),
@@ -333,7 +333,7 @@ def panel_controls(ax, report):
     return ax
 
 
-# ── panel E: legacy neuron-wise feedback definition (generator 1394-1487) ─
+# ── panel E: neuron-specific feedback definition (generator 1394-1487) ───
 def panel_feedback(ax, report):
     feedback_definition = _read("feedback_definition_details.csv")
     revision_exact = _read("revision_exact_transport_factorial_grouped.csv")
@@ -383,13 +383,13 @@ def panel_feedback(ax, report):
     ax.axhline(exact_value, color=ORACLE, lw=LW_REF, ls=":", zorder=2)
     ax.text(1.40, bp_value - 0.12, "BP", color=BP, fontsize=PT_LEGEND,
             ha="right", va="top")
-    ax.text(1.40, exact_value + 0.12, "PT", color=ORACLE,
+    ax.text(1.40, exact_value + 0.12, "exact path", color=ORACLE,
             fontsize=PT_LEGEND, ha="right", va="bottom")
     report(f"E reference lines: BP={bp_value:.4f} PT={exact_value:.4f}")
     ax.text(0.02, 0.97, "15/15 pairs", transform=ax.transAxes, ha="left",
             va="top", fontsize=PT_ANNOT, color=MUTE)
     ax.set_xticks(x)
-    ax.set_xticklabels(["scalar\nfallback", "neuron\nspecific"])
+    ax.set_xticklabels(["matched-width\nfallback", "neuron-\nspecific"])
     ax.set_xlim(-0.20, 1.42)
     ax.set_ylim(88.5, 98.2)
     ax.set_yticks([90, 94, 98])

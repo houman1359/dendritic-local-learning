@@ -338,7 +338,7 @@ def path_accuracy_facets(host, summary: pd.DataFrame) -> None:
         else:
             ax.text(0.02, 0.505, "chance", fontsize=PT_SMALL, color=MUTE,
                     ha="left", va="bottom")
-            ax.text(0.05, 0.735, "neuron shared", fontsize=PT_SMALL,
+            ax.text(0.05, 0.735, "neuron-shared", fontsize=PT_SMALL,
                     color=AMBER, ha="left", va="top")
 
 

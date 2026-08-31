@@ -645,7 +645,7 @@ not by itself show that task difficulty caused the larger identity effect.
 Gradient diagnostics supported the same interpretation. At fixed trained
 checkpoints, neuron-specific feedback was substantially better aligned with
 the exact gradient than the matched-width scalar-fallback field
-(Fig.~\ref{fig:feedback}D). With exact transport, the factorized local rule
+(Fig.~\ref{fig:feedback}D). With exact path transport, the factorized local rule
 matched automatic differentiation (Methods) and trained performance matched
 backpropagation (Supplementary Fig.~S3C). The main approximation error
 therefore arose in the communicated learning signal, rather than in the local
@@ -661,18 +661,23 @@ coordinate loses so little. By Eq.~\ref{eq:pathgain}, the compartment errors
 of one neuron are its somatic coordinate scaled by the path-gain profile
 \(\widetilde\alpha_n\); wherever that profile is positive, repeating one
 \(\widehat\delta_u\) misstates compartment-wise magnitudes but no signs.
-Figure~\ref{fig:feedback}E measures the dispersion of that profile on this
+Figure~\ref{fig:feedback}E shows what that profile looks like on this
 figure's own models, at the exact-path checkpoints of \textbf{B} and under
-one definition for both architectures (Methods): the within-neuron
-coefficient of variation was 0.18 in the raw-additive tree and 0.54 in the
-shunting tree. Both are well below one, so in either architecture the exact
-field within a neuron is dominated by its neuron coordinate, and repeating
-\(\widehat\delta_u\) misstates magnitudes only modestly -- consistent with
-exact transport adding less than 0.2 points in \textbf{B}. The dispersion
-itself is architecture- and measure-dependent: the conductance-only gain of
-the earlier normalized-additive cohort ordered the two architectures the
-other way (Supplementary Fig.~S1A), and neither ordering by itself explains
-the architecture difference in the scalar-to-neuron gain. Shunting and raw-additive
+one definition for both architectures (Methods). The deviation from a
+repeated neuron coordinate is dominated by a smooth attenuation with depth:
+transport through conductance loading scales the shunting tree's field to
+0.47 of the somatic magnitude at the mid stage and 0.21 at the distal stage,
+while the raw-additive tree, whose transport divides by no conductance,
+stays nearly flat. Branch-to-branch differences at a shared depth are small
+in both architectures. A depth-graded, sign-preserving rescaling is the most
+benign way an exact field can differ from its repeated neuron coordinate,
+which is why exact transport adds less than 0.2 points in \textbf{B}; and
+the conductance loading that sets the shunting gradient is the same lever
+the focal-perturbation analysis later manipulates as route gain
+(Eq.~\ref{eq:shuntpathgain}, Fig.~\ref{fig:focal}). The conductance-only
+dispersion of the earlier normalized-additive cohort (Supplementary
+Fig.~S1A) measured a different quantity on a different additive model and is
+not comparable rung by rung. Shunting and raw-additive
 forward models showed the same qualitative feedback ordering, with no general
 optimization advantage for shunting.
 
@@ -685,7 +690,7 @@ the standard tasks, and correct signal ownership produced a smaller benefit.
 
 Finally, we varied the number of serial dendritic stages in ordinary image and
 noise tasks. Neuron-specific feedback remained the main improvement at every valid depth,
-and exact transport remained close to matched backpropagation
+and exact path transport remained close to matched backpropagation
 (Supplementary Fig.~S19). Increasing depth by
 itself was detrimental at fixed terminal-branch and contact budgets. Physical
 depth therefore adds a computational and credit-transport cost unless the task
@@ -710,10 +715,13 @@ feedback rather than the strict scalar feedback used in \textbf{B} (Methods).
 \textbf{D}, Alignment of updates computed with matched-width scalar-fallback
 feedback, neuron-specific feedback and exact path transport to the exact gradient
 at fixed trained checkpoints. Exact path transport has cosine one by definition.
-\textbf{E}, Within-neuron
-coefficient of variation of the transported-error magnitude profile at the
-exact-path checkpoints of \textbf{B}, fifteen paired seeds per architecture:
-0.18 in the raw-additive tree and 0.54 in the shunting tree (Methods).
+\textbf{E}, Mean transported-error
+magnitude per dendritic depth, relative to the soma, at the exact-path
+checkpoints of \textbf{B}; faint lines are the fifteen paired seeds per
+architecture (Methods). Conductance loading attenuates the shunting tree's
+field to 0.47 at the mid stage and 0.21 at the distal stage, whereas the
+raw-additive tree stays near flat (0.80 and 0.66); branch-to-branch spread
+at one depth is small in both (within-depth CV 0.05--0.44).
 \textbf{F}, Assigning a learning
 signal to the correct neuron is distinct from targeting refinements of that
 signal to locations within its arbor. \textbf{G}, Paired effects of adding
@@ -1117,7 +1125,7 @@ D3. As serial stages differentiated branch states, a shared somatic signal
 became less aligned with the exact gradient. Reversing the sensor order removed
 both local-learning benefits. Optimizer-matched automatic-differentiation
 controls reproduced this separation (Supplementary Fig.~S28).
-Exact-path LocalCA denotes exact feedback transport, not optimizer identity:
+Exact-path LocalCA denotes exact path transport, not optimizer identity:
 LocalCA and backpropagation used learning rates fixed separately before this
 comparison, so their trained endpoints need not coincide.
 
@@ -1817,9 +1825,11 @@ by automatic differentiation. The transported magnitude of compartment
 \(n\) is the batch root-mean-square of that gradient divided by the batch
 root-mean-square at its own soma, the empirical counterpart of the path gain
 in Eq.~\ref{eq:pathgain}, computed identically in both architectures with
-no model-specific terms. The reported statistic is the coefficient of
-variation of this magnitude across the twelve dendritic compartments of each
-neuron, averaged over the 128 neurons. It differs by construction from the
+no model-specific terms. Panel \textbf{E} reports the neuron-averaged mean of this magnitude at
+each dendritic depth; the summary coefficient of variation across each
+neuron's twelve dendritic compartments, averaged over the 128 neurons, was
+0.18 (raw additive) and 0.54 (shunting), with the within-depth components
+0.17/0.05 and 0.44/0.06 (distal/mid). It differs by construction from the
 conductance-only path-gain dispersion of Supplementary Fig.~S1A, which omits
 branch derivatives and was measured on the normalized-additive cohort; the
 two orderings therefore need not agree, and do not.
@@ -1873,7 +1883,7 @@ path and matched-backpropagation conditions. All conditions used the raw-additiv
 model, Adam at \(10^{-3}\), at most 200 epochs, early-stopping patience 40,
 zero Adam weight decay and a model-specific sparse active-weight maintenance
 rate of 0.01. The superiority family used paired directional \(t\) tests with
-Holm correction and exact sign-flip sensitivity tests. Exact transport and
+Holm correction and exact sign-flip sensitivity tests. Exact path transport and
 backpropagation were compared by two one-sided paired \(t\) tests with a
 prespecified \(\pm1\)-point equivalence margin. All 80 runs met the predefined
 completion, checkpoint and convergence criteria.
@@ -2015,7 +2025,7 @@ model. The one-neuron and depth-shared fields applied the logistic output error
 to both branches. Correct $K=2$ feedback applied the error only to the selected
 sibling, whereas fixed derangement applied it to the other sibling. The random
 rank-two control rotated the two context coordinates using a seed-fixed
-orthogonal matrix. Exact transport and analytic backpropagation used the
+orthogonal matrix. Exact path transport and analytic backpropagation used the
 selected-branch derivative. The gated-point emulation used the same two
 parameter groups and context-gated input eligibility, providing the explicit
 point-model resource needed to reproduce the dendritic address.

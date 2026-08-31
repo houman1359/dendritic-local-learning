@@ -922,17 +922,13 @@ def main() -> None:
     compose(
         SUPP / "figure_S19_panels_A-I.pdf",
         [
-            # Source panels I and K carry the rotated label "exact transport
-            # - BP (pp)", whose closing bracket rises into the heading band;
-            # without the re-expansion the sheet composed a truncated "(pp".
+            # Source panels I and K use the compact rotated label
+            # "exact path - BP (pp)", which fits below the heading-band clamp.
             panel(
                 "figure_02_panels_G-O.pdf", letter, 3, 3,
-                pad_top_pt=4.0 if letter in "IK" else 0.0,
-                # Re-expanding the clip also re-admits each source panel's own
-                # heading, so erase it span-by-span.
                 erase_phrases=(
-                    ("Original exact/BP",) if letter == "I"
-                    else ("Same-seed exact/BP repeat",) if letter == "K"
+                    ("Reference exact path–BP",) if letter == "I"
+                    else ("Same-seed exact path–BP",) if letter == "K"
                     else ()
                 ),
             )
@@ -941,9 +937,9 @@ def main() -> None:
         [
             "MNIST neuron-specific gain",
             "Noise-task neuron-specific gain",
-            "Original exact vs BP",
+            "Reference exact path–BP",
             "Arbor assignment",
-            "Same-seed exact vs BP repeat",
+            "Same-seed exact path–BP",
             "Fixed-budget depth",
             "Two-stream learning",
             "Capture vs progress",

@@ -192,7 +192,7 @@ def panel_path_gains(ax, summary, path_gain_seed):
     inset.set_xlim(-0.55, 1.55)
     inset.set_ylim(0.0, 1.36)
     inset.set_xticks([0, 1])
-    inset.set_xticklabels(["norm.\nadditive", "shunting"], fontsize=PT_SMALL)
+    inset.set_xticklabels(["normalized\nadditive", "shunting"], fontsize=PT_SMALL)
     inset.set_yticks([0, 1])
     inset.set_yticklabels(["0", "1"], fontsize=PT_SMALL)
     inset.tick_params(length=1.8, width=LW_HAIR, pad=0.8)
@@ -382,9 +382,9 @@ def panel_fidelity(ax, summary):
 
     # Condition annotations (linestyle key) and the figure's color/marker
     # key at the separated solid endpoints -- no legend box.
-    ax.text(21.0, 0.88, "exact transport", ha="center", va="top",
+    ax.text(21.0, 0.88, "exact path", ha="center", va="top",
             fontsize=PT_ANNOT, color=INK)
-    ax.text(21.0, 0.33, "scalar\nfallback", ha="center", va="bottom",
+    ax.text(21.0, 0.33, "matched-width\nfallback", ha="center", va="bottom",
             fontsize=PT_ANNOT, color=INK)
     ax.text(42.5, ends["dendritic_shunting"], "shunting", ha="left",
             va="center", fontsize=PT_LEGEND, color=SHUNT)
@@ -415,9 +415,9 @@ def panel_learning(ax, summary, oracle_summary):
         print(f"[E] {core} exact-transport accuracy: ie0 {y[0]:.3f} "
               f"+- {err[0]:.3f}; ie40 {y[-1]:.3f} +- {err[-1]:.3f} %")
 
-    ax.text(24.0, 96.6, "exact transport", ha="center", va="bottom",
+    ax.text(24.0, 96.6, "exact path", ha="center", va="bottom",
             fontsize=PT_ANNOT, color=INK)
-    ax.text(24.0, 77.5, "scalar\nfallback", ha="center", va="top",
+    ax.text(24.0, 77.5, "matched-width\nfallback", ha="center", va="top",
             fontsize=PT_ANNOT, color=INK)
 
     ax.set_xticks(IE_TICKS)

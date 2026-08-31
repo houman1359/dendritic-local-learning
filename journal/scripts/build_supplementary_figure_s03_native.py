@@ -33,7 +33,7 @@ House palette semantics: rule hues keep their dedicated ``rule_3f/4f/5f``
 slots; shunting is green and additive blue as in every main figure; the
 exact-transport family wears the oracle violet (two lightness steps for the
 two decoders); matched backpropagation is the red-brown ``bp`` reference;
-the legacy matched-width/scalar-fallback field is amber; the random low-rank
+the matched-width scalar-fallback field is amber; the random low-rank
 fields are gray controls at three lightness steps.
 
 Emits to the canonical ``figures/supplementary/figure_S03_panels_A-D.pdf``
@@ -183,12 +183,12 @@ def exact_transport_values():
 # salmon for the path-propagated field, a gray control ramp for the random
 # low-rank fields and the oracle violet for exact transport.
 LADDER_ROWS = (
-    ("scalar\nfallback", "per_soma", 4, False, COLORS["scalar"]),
-    ("fallback\n+ path", "per_soma", 4, True, COLORS["per_soma"]),
-    ("rank 2", "low_rank", 2, False, GRAY_RAMP[0]),
-    ("rank 4", "low_rank", 4, False, GRAY_RAMP[1]),
-    ("rank 8", "low_rank", 8, False, GRAY_RAMP[2]),
-    ("oracle", "path_transport", 4, False, ORACLE),
+    ("MW\nfallback", "per_soma", 4, False, COLORS["scalar"]),
+    ("MW +\npath", "per_soma", 4, True, COLORS["per_soma"]),
+    ("random\nrank 2", "low_rank", 2, False, GRAY_RAMP[0]),
+    ("random\nrank 4", "low_rank", 4, False, GRAY_RAMP[1]),
+    ("random\nrank 8", "low_rank", 8, False, GRAY_RAMP[2]),
+    ("exact\npath", "path_transport", 4, False, ORACLE),
 )
 
 
@@ -328,7 +328,7 @@ def build(path: Path | str = TARGET):
     ax_b = canvas.panel("error_source", 0, 5, 7,
                         title="Error source", grid="y")
     ax_c = canvas.panel("exact_transport", 1, 0, 5,
-                        title="Exact-transport factorial", grid="y")
+                        title="Exact-path-transport factorial", grid="y")
     ax_d = canvas.panel("feedback_ladder", 1, 5, 7,
                         title="Feedback ladder (noise task)", grid="y")
 

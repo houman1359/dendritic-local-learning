@@ -130,7 +130,7 @@ def path_task_schematic(ax) -> None:
     frame.text((0.32, 0.085),
                "δ·1[b = c]",
                size=PT_ANNOT, color=GREEN, ha="left")
-    frame.text((0.02, 0.025), "neuron shared", size=PT_SMALL,
+    frame.text((0.02, 0.025), "neuron-shared", size=PT_SMALL,
                color=AMBER, ha="left")
     frame.text((0.32, 0.025), "δ/B per branch",
                size=PT_ANNOT, color=AMBER, ha="left")

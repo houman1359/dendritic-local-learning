@@ -118,7 +118,7 @@ def main() -> None:
     ax_a.set_xlabel(r"physical stage count $D_{\mathrm{p}}$")
     ax_a.set_ylabel("accuracy")
     ax_a.set_ylim(0.48, 0.72)
-    panel_title(ax_a, "A", "Original shift canary failed")
+    panel_title(ax_a, "A", "Severe gain shift prevents generalization")
     style_axis(ax_a, grid="y")
     clean_legend(ax_a, fontsize=PT_LEGEND, loc="upper left")
 

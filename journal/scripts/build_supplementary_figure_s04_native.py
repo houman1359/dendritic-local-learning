@@ -152,19 +152,19 @@ def panel_noise(ax):
 # gray for the random rank field, oracle violet for exact transport and the
 # red-brown backpropagation reference.
 CIFAR_SPECS = (
-    ("cifar10_shunting_5f_per_soma_learned_i", "scalar", COLORS["local"]),
-    ("cifar10_shunting_5f_low_rank4_learned_i", "rank 4",
+    ("cifar10_shunting_5f_per_soma_learned_i", "matched-width\nfallback", COLORS["local"]),
+    ("cifar10_shunting_5f_low_rank4_learned_i", "random\nrank 4",
      COLORS["point_mlp"]),
-    ("cifar10_shunting_5f_path_transport_learned_i", "exact",
+    ("cifar10_shunting_5f_path_transport_learned_i", "exact\npath",
      COLORS["oracle"]),
-    ("cifar10_shunting_standard_learned_i", "backprop", COLORS["bp"]),
+    ("cifar10_shunting_standard_learned_i", "BP", COLORS["bp"]),
 )
 
 CONFIRMATORY_SPECS = (
-    ("strict scalar", "scalar", COLORS["scalar"], "o"),
-    ("neuron specific", "neuron", COLORS["per_soma"], "s"),
-    ("exact path", "exact path", COLORS["oracle"], "^"),
-    ("backpropagation", "backprop", COLORS["bp"], "D"),
+    ("strict scalar", "strict\nscalar", COLORS["scalar"], "o"),
+    ("neuron specific", "neuron-\nspecific", COLORS["per_soma"], "s"),
+    ("exact path", "exact\npath", COLORS["oracle"], "^"),
+    ("backpropagation", "BP", COLORS["bp"], "D"),
 )
 CONFIRMATORY_CONTRASTS = {
     "neuron specific minus strict scalar",

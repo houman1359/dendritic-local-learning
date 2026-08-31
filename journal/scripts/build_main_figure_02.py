@@ -321,7 +321,7 @@ def panel_task(ax):
 RESOLUTION_CARDS = (
     ("scalar", "scalar", AMBER_TEXT,
      "one scalar s for the layer", _card_scalar),
-    ("neuron", "neuron specific", ADD,
+    ("neuron", "neuron-specific", ADD,
      "one δᵤ per neuron", _card_neuron),
     ("exact", "exact path", BP,
      "one ∂ℒ/∂Vₙ per compartment", _card_exact),
@@ -386,38 +386,39 @@ def _paired_ladder(ax, data, metric, *, gradient=False):
 
 
 def panel_path_gain_cv(ax):
-    """E: within-neuron dispersion of the transported-error profile.
+    """E: the transported field against depth, on this figure's own models.
 
-    Computed on this figure's OWN models -- the exact-path checkpoints of
-    panel B's ladder, fifteen paired seeds per architecture, raw-additive
-    and shunting under one identical definition (the batch-RMS of dL/dV at
-    each dendritic compartment over the RMS at its own soma; Methods).  The
-    NeurIPS-era cohort this panel first reused measured the conductance-only
-    gain on the NORMALIZED-additive model and ordered the architectures the
-    other way around; the definition and cohort are stated in Methods so the
-    two results read as different measurements, not a contradiction.
+    Drawn as the profile itself rather than one dispersion number: two bare
+    CVs said the architectures differ without saying how, and the how is the
+    result -- transport through conductance loading attenuates the shunting
+    tree's field smoothly with depth (soma 1, mid 0.47, distal 0.21) while
+    the raw-additive tree, which divides by no conductance, stays nearly
+    flat.  Computed at panel B's exact-path checkpoints, fifteen paired
+    seeds per architecture, one identical definition (Methods); the CV
+    summaries live in the caption.
     """
     cv = pd.read_csv(DATA / "figure2" / "path_gain_dispersion_ladder_runs.csv")
-    archs = ["additive", "shunting"]
     colors = {"additive": ADD, "shunting": SHUNT}
     marker = {"additive": "s", "shunting": "o"}
-    pivot = cv.pivot_table(index="seed", columns="architecture",
-                           values="path_gain_cv_mean").dropna()
-    paired_lines(ax, 0, 1, pivot["additive"], pivot["shunting"],
-                 color=COLORS["mute"], lw=LW_HAIR, alpha=0.30)
-    for i, arch in enumerate(archs):
-        vals = pivot[arch].to_numpy(float)
-        ax.scatter(np.full(vals.size, float(i))
-                   + jitter(vals.size, 70 + i, 0.03), vals,
-                   s=SEED_MS ** 2, color=colors[arch], alpha=SEED_ALPHA,
-                   marker=marker[arch], edgecolors="none", zorder=3)
-        errorbar_mean(ax, i, vals, colors[arch], seed=80 + i,
-                      marker=marker[arch])
-    ax.set_xlim(-0.5, 1.5)
-    ax.set_xticks([0, 1], ["raw\nadditive", "shunting"])
-    ax.tick_params(axis="x", labelsize=PT_SMALL)
-    ax.set_ylim(0.0, 0.62)
-    ax.set_ylabel("transported-error CV within neuron")
+    xs = np.array([0.0, 1.0, 2.0])          # soma, mid, distal
+    ax.axhline(1.0, color=COLORS["grid"], lw=LW_REF, zorder=1)
+    for arch in ("additive", "shunting"):
+        sub = cv[cv.architecture.eq(arch)]
+        prof = np.column_stack([np.ones(len(sub)),
+                                sub.stage1_mean.to_numpy(float),
+                                sub.stage0_mean.to_numpy(float)])
+        for row in prof:
+            ax.plot(xs, row, color=colors[arch], lw=LW_HAIR,
+                    alpha=SEED_ALPHA * 0.6, zorder=2)
+        mean = prof.mean(axis=0)
+        ax.plot(xs, mean, color=colors[arch], lw=LW_DATA, zorder=4,
+                marker=marker[arch], ms=MARKER_MS,
+                markerfacecolor="white", markeredgewidth=LW_ERR)
+    ax.set_xlim(-0.25, 2.25)
+    ax.set_xticks(xs, ["soma", "mid", "distal"])
+    ax.set_ylim(0.0, 1.09)
+    ax.set_yticks([0.0, 0.5, 1.0])
+    ax.set_ylabel("transported magnitude")
     return ax
 
 
@@ -941,7 +942,8 @@ def build(height_in=CANVAS_H_PT / 72.0, path=None):
     ax_c = canvas.panel("gradient", 1, 6, 3,
                         title="Gradient alignment", letter="",
                         inset_pt=(1.0, 1.0, 1.0, 1.0))
-    ax_cv = canvas.panel("pathcv", 1, 9, 3, title="Path-gain dispersion",
+    ax_cv = canvas.panel("pathcv", 1, 9, 3,
+                         title="Transported field vs depth",
                          letter="", inset_pt=(1.0, 1.0, 1.0, 1.0))
     ax_d = canvas.panel("schematic", 2, 0, 5, schematic=True, letter="")
     ax_e = canvas.panel("forest", 2, 5, 7, title="Paired accuracy contrasts",

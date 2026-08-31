@@ -429,10 +429,10 @@ s_b=
 For a one-dimensional input the coordinate is retained. The replacement
 prevents cancellation from silently producing a zero teaching signal. The
 replacement count was not recorded in the initial runs and was therefore
-measured directly in the repeated analysis. The matched-width field does not repeat each
-neuron's coordinate over that neuron's descendants. The ancestry-shared field
+measured directly in the same-seed computational rerun. The matched-width field does not repeat each
+neuron's coordinate over that neuron's descendants. The neuron-specific feedback field
 does exactly that, using one communicated coordinate per neuron and the tree as
-a fixed coordinate-to-arbor map. Exact transport supplies the entire path derivative and
+a fixed coordinate-to-arbor map. Exact path transport supplies the entire path derivative and
 is an information upper bound.
 
 In the regular $[3,3]$ networks, the matched-width scalar-fallback field retained the
@@ -442,10 +442,10 @@ candidate feedforward synaptic parameters (92,160 active contacts) received
 strict scalar feedback. The exception comprised 384 final branch-to-soma
 couplings and 256 somatic gain and threshold parameters: 640 of 2,413,312 core
 parameters (0.027\%). We therefore trained a separate 15-seed strict-scalar
-condition in each architecture and use it, rather than scalar fallback,
+condition in each architecture and use it, rather than matched-width scalar-fallback feedback,
 for the scalar rung in the main figure.
 The exception was not functionally negligible. Strict scalar reduced mean
-accuracy relative to scalar fallback by 4.859 percentage points in shunting
+accuracy relative to matched-width scalar-fallback feedback by 4.859 percentage points in shunting
 networks (95\% paired-seed interval, 3.994--5.669; fallback higher in 15/15
 seeds) and by 2.274 points in raw-additive networks (1.796--2.699; fallback higher
 in 14/15 seeds, one tie). Both intervals lay well outside the prespecified
@@ -1420,14 +1420,14 @@ analysis at signal contrast 0.80, per-factor train/test log-gain SD 0.25 and
 child conductance 16. The
 seven conditions were aligned shunting BP; zero-alignment, shuffled-sensor and
 reversed-placement shunting BP; aligned raw-additive BP; and aligned or
-reversed-placement shunting LocalCA with shared-soma and path transport. Each
+reversed-placement shunting LocalCA with shared-soma and exact-path feedback. Each
 condition crossed D1, D2 and D3 over the same ten paired seeds 10200--10209.
 The primary contrasts,
 resource- and accessibility-matching criteria, bootstrap procedure and claim
 boundaries were specified in advance. In particular, aligned D3--D1 alone
 tests forward capacity. Task--tree specificity requires an
 aligned-minus-control depth interaction, and a local-credit claim requires
-the corresponding LocalCA contrast. Raw additive is a mechanism control; a
+the corresponding LocalCA contrast. The raw-additive tree is a forward-mechanism control; a
 point model with sufficient flexible capacity can in principle emulate the
 hierarchy, a boundary tested directly in the same-task controls below.
 
@@ -1440,15 +1440,15 @@ independent sensors, $-0.01$ for shuffled trials and $-0.43$ for reversed
 placement. Their aligned-minus-control depth interactions were 30.84, 30.87
 and 31.28 points, respectively, all positive in 10/10 paired seeds. Aligned
 raw-additive BP instead fell from 0.5733 to 0.5190. Under LocalCA, aligned
-D3-minus-D1 was 16.95 points (16.37--17.44) for shared-soma feedback and 27.90
-points (27.24--28.53) for path transport. The corresponding
+D3-minus-D1 was 16.95 points (16.37--17.44) for shared-soma LocalCA and 27.90
+points (27.24--28.53) for exact-path LocalCA. The corresponding
 aligned-minus-reversed interactions were 17.72 points (17.27--18.18) and
 28.68 points (28.07--29.27), both positive in 10/10 seeds. These interactions,
 rather than the aligned depth effects alone, support task--tree specificity.
 
 In a post hoc mechanism analysis, we evaluated one fixed held-out batch at
 each of the 30 aligned-shunting BP checkpoints. Exact
-path LocalCA reproduced the selected autograd conductance-gradient direction
+Exact-path LocalCA reproduced the selected autograd conductance-gradient direction
 at every checkpoint (minimum cosine 0.9999999999994; no missing gradient
 tensors). Mean shared-soma cosine was 0.9457 at D1, 0.7990 at D2 and 0.7674 at
 D3. Its paired D3-minus-D1 change was $-0.1784$ (95\% seed-bootstrap interval
@@ -1494,11 +1494,12 @@ complete, we found that the LocalCA reference used a different, split
 optimizer. We therefore specified 60 additional soma-broadcast fits using the
 LocalCA optimizer before viewing their outcomes. This optimizer-matched
 broadcast reached 0.7771 at aligned D3, compared
-with 0.7778 for shared-soma LocalCA: broadcast minus LocalCA was $-0.06$ points
+with 0.7778 for shared-soma LocalCA: soma-broadcast autograd minus shared-soma
+LocalCA was $-0.06$ points
 ($-0.23$ to 0.09; 5/10 positive; $P=0.492$). Changing only the broadcast
 optimizer cost 13.47 points (12.89--14.05; 10/10 positive). Within LocalCA,
-path transport exceeded the shared coordinate by 10.96 points (10.34--11.58;
-10/10 positive), while full BP remained 3.09 points above path LocalCA
+exact-path LocalCA exceeded shared-soma LocalCA by 10.96 points (10.34--11.58;
+10/10 positive), while full BP remained 3.09 points above exact-path LocalCA
 (2.48--3.79; 10/10 positive). Thus, for this task, the tested eligibility
 expression adds no detectable penalty after matching teaching coordinate and
 optimizer; path specificity and optimizer regime account for the larger
@@ -1599,7 +1600,7 @@ task family, not an independent dataset. Model configurations, software
 versions, per-seed metrics and every paired contrast are in
 \texttt{source\_data/remaining\_physical\_experiments/}.
 
-\subsection{Four-level hierarchy and repeated-analysis reproducibility}
+\subsection{Four-level hierarchy and computational reproducibility}
 
 The four-level hierarchy used the same positive-rate generator, optimizer,
 conductance scale, stopping rule and calibrated signal regime without
@@ -1616,7 +1617,7 @@ paired seeds (10400--10409) were the inferential units.
 The primary comparisons were prespecified before outcomes were analyzed:
 aligned serial-BP D4--D3 and
 D4--D1, their placement interactions, the D4 architecture-by-placement
-interaction, shared- and path-LocalCA D4--D3 effects and interactions, and the
+interaction, shared-soma and exact-path LocalCA D4--D3 effects and interactions, and the
 shunting-minus-raw-additive D4--D3 interaction. Failure of D4 to exceed D3 was
 defined prospectively as falsification of the simple $D_{\mathrm p}=H_{\mathrm p}$
 trained crossover. Intervals used 50,000 paired-seed bootstrap draws, exact
@@ -1660,13 +1661,13 @@ direction.
 We separately tested computational reproducibility by repeating all 220
 H2/literal-point fits and 210 principal H3 fits with versioned source
 commit \texttt{a99c3a7}, using the same configurations and paired seeds. We
-refer to the previously reported values as the original analysis and these
-same-seed reruns as the repeated analysis. All 430 repeated fits met the
+refer to the previously reported values as the original runs and these
+same-seed reruns as the reruns. All 430 rerun fits met the
 source-version, completeness, finite-metric, seed and resource criteria. The
 median absolute original-versus-repeated difference in held-out accuracy
 was 0.030 percentage points, the mean difference was 0.154 points, and 357/430
 pairs were within 0.1 points. The maximum difference was 15.01 points in the
-raw-additive negative-control condition. Repeated-analysis H2 and H3 aligned
+raw-additive forward-mechanism control. Rerun H2 and H3 aligned
 serial-BP depth effects were 30.84 and 30.86 points; the
 architecture-by-placement interactions were 32.43 and 31.27 points. Every
 principal shunting and local-credit comparison preserved its direction and met
@@ -1679,7 +1680,7 @@ biological replication (Supplementary Fig.~\ref{fig:supp_clean_source}).
 The task-family experiment fixed the DendriNet architecture at D3
 $[2,1,2]$ and crossed three data generators, three task--sensor alignments
 $\alpha\in\{0,0.5,1\}$, serial versus literal grouped-point composition,
-and BP versus exact path-transport LocalCA. Ten paired seeds 10500--10509
+and BP versus exact-path LocalCA. Ten paired seeds 10500--10509
 gave 360 planned fits. All architectures used 66,178 trainable
 parameters, 14,336 active contacts, 21,760 candidate slots, 2,944 persistent
 state scalars and identical input tensors. Only child-to-parent composition
@@ -1738,7 +1739,7 @@ both reached 0.99999 accuracy at $\alpha=1$. The nested-minus-flat and
 nested-minus-local-ratio interaction contrasts were 8.16 and 29.12 points,
 respectively, and were positive in every paired seed.
 
-Under path-transport LocalCA, the nested-factor serial-minus-grouped contrast
+Under exact-path LocalCA, the nested-factor serial-minus-grouped contrast
 changed from $-0.11$ points at $\alpha=0$ to 27.59 points at $\alpha=1$, an
 alignment interaction of 27.70 points (26.64--28.64; 10/10). The flat-factor
 interaction was 12.37 points (11.39--13.43; 10/10). The local-ratio result
@@ -1777,7 +1778,7 @@ scores. The archived model-resource record contained 2,414,602 trainable raw
 parameters in total, including candidate synaptic arrays, couplings,
 reactivation parameters and decoder.
 
-\subsection{Raw and stage-normalized additive controls}
+\subsection{Raw-additive and normalized-additive controls}
 
 The configuration alias \texttt{dendritic\_additive} set shunting and additive
 normalization to false and used the raw-additive mode. For compartment $n$,
@@ -2013,7 +2014,7 @@ comparison. Table~\ref{tab:prospective_learning} summarizes the retained
 feedback contrasts.
 
 To separate feedback dimension from assignment, an additional prespecified cohort
-compared correct neuron-specific sharing with a fixed derangement at depths two
+compared correct neuron-specific feedback with a fixed derangement at depths two
 and four. The derangement preserves the number and per-example distribution of
 teaching coordinates, the forward network, and the training path; only the
 coordinate-to-tree address changes. Applying the same validity rule removed
@@ -2029,7 +2030,7 @@ used the invalid signed-input convention, the full family is excluded from
 figures and inference. Its configurations and exclusion status are retained in
 Source Data.
 
-\subsection{Repeated exact-transport/backpropagation analysis}
+\subsection{Exact-path-transport/backpropagation rerun}
 
 To repeat the comparison with valid conductance inputs, we crossed exact path
 transport or standard
@@ -2042,7 +2043,7 @@ repository used commit
 \texttt{4f3612a52756c3691e5bd269c6465c02f240c1e8}. The raw-additive synthetic model
 retained its signed transfer output. The positive-conductance shunting model
 used an explicit ReLU output transfer for both learning methods before
-conductances entered the denominator. This repeated analysis therefore uses
+conductances entered the denominator. This rerun therefore uses
 valid nonnegative shunting inputs and is not a direct re-execution of the
 excluded signed-input conditions.
 
@@ -2055,7 +2056,7 @@ same final metric was recomputed in streaming batches and still had to be
 finite. Initial attempts that lacked the required nested data repository, had
 insufficient memory or reached the signed-shunting input check produced no
 endpoint and were excluded independently of outcome. Missing configurations
-were re-executed without changing their scientific settings. Inference paired exact transport and
+were re-executed without changing their scientific settings. Inference paired exact path transport and
 backpropagation by seed within task, core and depth. The four plotted task--core
 effects first averaged the four depths within seed and then used a 20,000-draw
 paired-seed bootstrap interval; two-sided Wilcoxon tests are supplied as
@@ -2113,7 +2114,7 @@ deliberately minimal two-sibling model; it is distinct from the complete
 architecture-by-$K$ factorial. One pilot seed (4099), excluded from inference,
 checked numerical integrity and nondegeneracy: neuron-shared capture
 was 0.506, correct-route capture was 1.000, correct-route held-out accuracy was
-0.814, and analytic exact transport agreed identically with analytic
+0.814, and analytic exact path transport agreed identically with analytic
 backpropagation. The same configuration was then used for ten paired analysis
 seeds (4100--4109).
 
@@ -2167,12 +2168,12 @@ Source Data.}
 \toprule
 Condition & Channels & Test accuracy & Initial capture & Switch forgetting \\
 \midrule
-Neuron shared & 1 & 0.7624 & 0.5095 & 0.5566 \\
-Same-depth shared & 1 & 0.7624 & 0.5095 & 0.5566 \\
+Neuron-shared & 1 & 0.7624 & 0.5095 & 0.5566 \\
+Same-depth neuron-shared & 1 & 0.7624 & 0.5095 & 0.5566 \\
 Correct sibling subtrees & 2 & 0.8063 & 1.0000 & 0.0000 \\
 Within-neuron derangement & 2 & 0.1963 & 0.0000 & 0.0006 \\
 Random dense rank two & 2 & 0.5847 & 0.2791 & $-0.0014$ \\
-Exact transport & 2 & 0.8063 & 1.0000 & 0.0000 \\
+Exact path transport & 2 & 0.8063 & 1.0000 & 0.0000 \\
 Analytic backpropagation & 2 & 0.8063 & 1.0000 & 0.0000 \\
 Gated point emulation & 1 + gated eligibility & 0.8063 & 1.0000 & 0.0000 \\
 \bottomrule
@@ -2215,7 +2216,7 @@ representations saw identical stochastic realizations.
 
 Initial pilot checks verified exact context balance, zero context--label
 correlation, nonzero activity in all streams, neuron-shared gradient capture
-below 0.2, exact capture of one, numerical equality of analytic exact transport
+below 0.2, exact capture of one, numerical equality of analytic exact path transport
 and backpropagation, and zero fallback counts. After the first large run, we
 found that stochastic control maps had not been paired across representation
 labels. Those outcomes were excluded before scientific analysis. We corrected
@@ -2302,7 +2303,7 @@ the learned shunting model: inhibition is zeroed, sample shuffled, replaced by
 a per-branch batch mean, or replaced by one uniform matched mean.
 \textbf{D,E}, Feedback fidelity and learning on the noise-resilience task;
 solid lines denote matched-width scalar-fallback feedback and dashed lines
-exact transported error. Error bars are $\pm1$ s.d. over checkpoints
+exact path transport. Error bars are $\pm1$ s.d. over checkpoints
 (\textbf{B}) and over runs (\textbf{D,E}). Cross-architecture comparisons define operating regimes and do
 not establish a general backward shunting advantage; the interventions in
 \textbf{C} also change the trained forward computation, and the
@@ -2322,8 +2323,8 @@ feedback definition in the regular-tree models.}
 MNIST, Fashion-MNIST, and figure-ground MNIST; the blue series uses the
 normalized-additive model. \textbf{B}, Inhibitory
 dose-response. \textbf{C}, Descriptive morphology-by-inhibition performance.
-\textbf{D}, Exact-transport and reactivation controls, followed by raw
-additive (``raw''), gain-modified raw additive (``gain'') and
+\textbf{D}, Exact-path-transport and reactivation controls, followed by raw
+additive (``raw''), gain-modified raw-additive (``gain-modified'') and
 normalized-additive (``normalized'') controls on MNIST. \textbf{E},
 Fifteen-seed comparison of matched-width scalar-fallback and neuron-specific
 feedback: the gain from
@@ -2341,15 +2342,16 @@ comparison. Error bars are $\pm1$ s.d.}
 bottleneck in the regular-tree models.} \textbf{A}, Within-shunting comparison
 of the three-, four-, and five-factor rules in a three-seed experiment.
 \textbf{B}, Somatic teaching error versus an
-unmatched compartment-local quantity. \textbf{C}, Five-seed exact-transport
+unmatched compartment-local quantity. \textbf{C}, Five-seed exact-path-transport
 factorial showing that the theorem-derived three-factor rule approaches
 matched backpropagation when the required compartment error is supplied;
 its ordinate spans less than one percentage point, so the visible
 differences are small in absolute terms.
 \textbf{D}, Noise-resilience feedback ladder spanning the
-matched-width scalar-fallback field, that same field with path propagation,
-random rank-2/4/8 fields, and the exact-transport oracle. Error bars are
-$\pm1$ s.d. Exact transport is an information oracle. Noise-task shunting
+matched-width scalar-fallback field, that same field with path propagation
+(``MW'' denotes matched-width in the panel),
+random rank-2/4/8 fields, and exact path transport. Error bars are
+$\pm1$ s.d. Exact path transport is an information oracle. Noise-task shunting
 conditions in \textbf{D} used signed transfer values to define conductances and
 are therefore treated as descriptive. The blue series in \textbf{B} is the
 normalized-additive model.}
@@ -2387,7 +2389,8 @@ test is an empirical precursor of the admitted-noise term of the
 credit-operator theory, not a quantitative validation of it: it does not
 separately estimate the route operator, signal covariance, or forward-state
 effects. \textbf{C}, Flattened CIFAR-10 control in the shunting architecture,
-with no convolutional front end or augmentation. Bars and lines show means;
+with no convolutional front end or augmentation; its first arm uses
+matched-width scalar-fallback feedback. Bars and lines show means;
 error bars show sample standard deviations across independent training seeds
 ($n=5$). \textbf{D}, Raw-additive CIFAR-10 ladder across strict scalar,
 neuron-specific, exact-path and matched-backpropagation feedback (20 paired
@@ -3276,7 +3279,7 @@ disjoint image regions. \textbf{B}, Unique input coordinates reached by each
 neuron under independently sampled random branches and the spatial map.
 \textbf{C}, Mean pairwise Jaccard overlap between branch input sets.
 \textbf{D}, Spatial-minus-random accuracy under backpropagation (BP), the
-matched-width scalar-fallback feedback, neuron-specific sharing and exact path
+matched-width scalar-fallback feedback, neuron-specific feedback and exact path
 transport. MNIST averages shunting and
 raw-additive models within seed; the randomly projected noise task uses the
 conductance-valid raw-additive model only. Points and intervals show means and 95\%
@@ -3328,7 +3331,7 @@ fields; the interval for Spearman's $\rho$ resamples checkpoints. In
 \textbf{A--C}, boxes show the interquartile range, whiskers the 5th--95th
 percentiles, and diamonds the mean with a 95\% checkpoint-bootstrap interval.
 All panels use one held-out batch per checkpoint and relative step
-$10^{-5}$. Exact transport is an information oracle.}
+$10^{-5}$. Exact path transport is an information oracle.}
 \label{fig:supp_mechanism}
 \end{figure}
 
@@ -3554,22 +3557,22 @@ in this Supplementary Information.}
 \centering
 \includegraphics[width=\textwidth]{supplementary/figure_S19_panels_A-I.pdf}
 \caption{\textbf{Neuron-specific, assignment and route diagnostics.}
-\textbf{A,B}, Neuron-specific-minus-fallback accuracy across depth on MNIST and
+\textbf{A,B}, Neuron-specific-minus-scalar-fallback accuracy across depth on MNIST and
 the conductance-compatible raw-additive noise task; the reference condition is
-matched-width scalar-fallback feedback. \textbf{C}, Exact-transport-minus-BP
-accuracy in the original analysis. \textbf{D}, Correct-minus-
+matched-width scalar-fallback feedback. \textbf{C}, Exact-path-transport-minus-BP
+accuracy in the original runs. \textbf{D}, Correct-minus-
 deranged coordinate-to-arbor assignment at matched bandwidth. \textbf{E},
-Depth-averaged exact-minus-BP accuracy in a same-seed computational repeat;
+Depth-averaged exact-path-transport-minus-BP accuracy in a same-seed computational rerun;
 ``raw add.'' and ``shunt.'' denote the raw-additive and shunting models.
 \textbf{F}, Depth-four-minus-depth-one accuracy at fixed terminal branches and
-contacts. \textbf{G}, Held-out accuracy in the two-stream subtree-address
+contacts (``MW'' denotes matched-width). \textbf{G}, Held-out accuracy in the two-stream subtree-address
 experiment (Supplementary Table~S1).
 \textbf{H}, Exact-gradient capture versus norm-matched one-step progress.
 \textbf{I}, Forgetting of the first context after adaptation to the second.
 Small points are paired seeds and larger symbols and bars are means and 95\%
 seed-bootstrap intervals. Panels \textbf{A--G,I} use ten independent paired
 seeds per condition; panel \textbf{H} uses 120 conductance-valid independently
-trained checkpoints as the descriptive units. Exact transport is an
+trained checkpoints as the descriptive units. Exact path transport is an
 information ceiling.}
 \label{fig:supp_prospective_diagnostics}
 \end{figure}
@@ -3687,9 +3690,9 @@ from one mouse. Modeled route fields are not measured teaching signals.}
 \includegraphics[width=\textwidth]{supplementary/figure_S26_panels_A-D.pdf}
 \caption{\textbf{Same-seed reruns reproduce the H2/H3 physical-depth
 results.} \textbf{A}, Held-out accuracy from each of 430
-repeated runs versus its same-seed original outcome. The dashed line
-is identity. \textbf{B}, Distribution of paired repeated-minus-original
-differences. \textbf{C,D}, Repeated-analysis aligned H2 and H3 accuracy
+same-seed reruns versus its original outcome. The dashed line
+is identity. \textbf{B}, Distribution of paired rerun-minus-original
+differences. \textbf{C,D}, Rerun aligned H2 and H3 accuracy
 for serial BP, literal grouped-point BP, shared-soma LocalCA, exact-path
 LocalCA and the H3 raw-additive control. Lines and intervals are paired-seed
 means and 95\% seed-bootstrap intervals ($n=10$). The H2/H3 depth,
@@ -4061,7 +4064,7 @@ Modeled population & One layer of 128 excitatory modeled neurons; no separate in
 Tree & $[3,3]$: nine distal, three proximal and one somatic compartment per neuron; no somatic input synapses. \\
 Input contacts & Per dendritic compartment, separate TopK arrays selected 40 excitatory and 20 inhibitory inputs from 784 candidates per sign; 92,160 active contacts among 2,408,448 candidate synaptic parameters. \\
 Parameterization & Nonnegative synaptic and child-coupling conductances obtained by softplus transformation; inactive local weights were not updated. \\
-Reactivation & Learned $[\tanh(m(V-b))+1]/2$ at distal, proximal and somatic stages. Shunting used analytical initialization; raw additive used 0.1/0.9 occupancy-quantile calibration. \\
+Reactivation & Learned $[\tanh(m(V-b))+1]/2$ at distal, proximal and somatic stages. Shunting used analytical initialization; raw-additive used 0.1/0.9 occupancy-quantile calibration. \\
 Readout & Linear map from 128 soma activities to 10 class scores. \\
 Model size & 2,414,602 trainable raw parameters in the feedback experiments, of which 2,408,448 were candidate synaptic parameters. \\
 \bottomrule
@@ -4077,7 +4080,7 @@ Model size & 2,414,602 trainable raw parameters in the feedback experiments, of 
 \toprule
 Protocol & Seeds; epochs & Core output & Rule and feedback & Adam learning rates \\
 \midrule
-Main feedback ladder & 42--56; 180 & Identity & 3F, local decoder; strict scalar feedback, neuron-specific sharing or exact path transport & TopK $1.5\times10^{-3}$; child coupling $7\times10^{-4}$; reactivation $5\times10^{-4}$; decoder $1.5\times10^{-3}$ \\
+Main feedback ladder & 42--56; 180 & Identity & 3F, local decoder; strict scalar feedback, neuron-specific feedback or exact path transport & TopK $1.5\times10^{-3}$; child coupling $7\times10^{-4}$; reactivation $5\times10^{-4}$; decoder $1.5\times10^{-3}$ \\
 Scalar-fallback comparison & 42--56; 180 & Identity & 3F, local decoder; matched-width scalar-fallback feedback & Same as the main feedback ladder \\
 Exact-transport factorial & 42--46; 200 & ReLU & 3F or 5F crossed with local or backpropagated decoder; exact path-transported compartment error & TopK $1.5\times10^{-3}$; child coupling $7\times10^{-4}$; reactivation $5\times10^{-4}$; decoder $1.5\times10^{-3}$ \\
 Backpropagation reference & 42--46; 200 & ReLU & Standard backpropagation through the matched shunting tree and decoder & TopK and decoder $10^{-3}$; child coupling and reactivation $5\times10^{-4}$ \\
@@ -4106,7 +4109,7 @@ Matched feedback experiment, 120 runs (90 plotted) & All resolved configurations
 Coordinate and gradient-diagnostic experiment, 60 runs & All resolved configurations, checkpoints, logs, final metrics, versioned sweep manifests and SHA-256 hashes & NVIDIA H200; 4.006 summed GPU-hours across both arrays & Python 3.10.13; Git commit \texttt{4ba38bde}; archived source state includes tracked modifications; generator and model-source hashes are recorded \\
 Depth-by-feedback experiment, 640 runs (480 included) & All resolved configurations, checkpoints, learning curves, held-out metrics, resource records, versioned manifests, source hashes and the outcome-independent 1,840-run validity table & 73.29 summed GPU-hours over heterogeneous NVIDIA accelerators & Versioned source identity plus numerical-equivalence checks for two later changes that are inactive in every resolved configuration; signed-noise shunting conditions are excluded from inference \\
 Fixed-checkpoint diagnostic, 3,200 rows (2,400 included) & Five feedback-field labels and four step sizes at each of 160 checkpoints; the reported analysis uses 120 conductance-valid independently trained checkpoints & Fixed-checkpoint analysis; no additional model training & Complete balance and finite-value checks; checkpoint-clustered bootstrap analysis and exclusion record supplied with the source tables \\
-Repeated exact-transport/backpropagation analysis, 320 runs & Resolved configurations, seed records, checkpoints, learning summaries, final metrics, scheduler and training logs, versioned sweep manifests and SHA-256 hashes & NVIDIA H200 for all included runs; incomplete runs are excluded & Versioned, unmodified root commit \texttt{74792ca}; nested synthetic-data commit \texttt{4f3612a5}; signed transfer retained for raw-additive noise, explicit ReLU transfer used for positive-conductance shunting noise \\
+Same-seed exact-path-transport/backpropagation rerun, 320 runs & Resolved configurations, seed records, checkpoints, learning summaries, final metrics, scheduler and training logs, versioned sweep manifests and SHA-256 hashes & NVIDIA H200 for all included runs; incomplete runs are excluded & Versioned, unmodified root commit \texttt{74792ca}; nested synthetic-data commit \texttt{4f3612a5}; signed transfer retained for raw-additive noise, explicit ReLU transfer used for positive-conductance shunting noise \\
 Exact-transport factorial, 20 runs & Resolved configurations, checkpoints, logs and grouped result table & NVIDIA A100-SXM4-40GB; 2.953 GPU-hours total & Exact commit, Python and package environment not recorded \\
 Backpropagation reference, 5 runs & Resolved configurations, checkpoints, logs and grouped result table & NVIDIA A100-SXM4-40GB; 0.474 GPU-hours total & Exact commit, Python and package environment not recorded \\
 \bottomrule
@@ -4115,7 +4118,7 @@ Backpropagation reference, 5 runs & Resolved configurations, checkpoints, logs a
 \vspace{3pt}
 \footnotesize Portable sweep files, all resolved configurations, source-data
 tables, source hashes and validation records for the current 15-seed feedback
-ladder, the fixed-checkpoint diagnostic and the 320-run repeated analysis
+ladder, the fixed-checkpoint diagnostic and the 320-run same-seed rerun
 are supplied with the article.
 Hardware times are sums of Slurm elapsed
 time over GPU tasks, not wall-clock latency.
@@ -4177,14 +4180,14 @@ $S_K$, $\overline\Sigma_g$ & Feedback-channel assignment matrix in Eq.~\ref{eq:s
 \toprule
 Feedback field & Communicated values & Spatial assignment & Interpretation \\
 \midrule
-Global scalar & Robust mean-or-signed-maximum reduction in Eq.~\ref{eq:s_scalar_reduction} & Same value at every receiving unit & Deliberately removes neuron and branch identity. \\
+Strict scalar feedback & Robust mean-or-signed-maximum reduction in Eq.~\ref{eq:s_scalar_reduction} & Same value at every receiving unit & Deliberately removes neuron and branch identity. \\
 Matched-width scalar-fallback feedback & Somatic vector at a same-width stage; otherwise the same robust scalar & Coordinate-wise only at the matched stage & Retains neuron-specific values only at a same-width stage; not ancestry sharing. \\
-Neuron-specific subtree sharing & One coordinate per modeled neuron & Each coordinate repeated over all compartments descended from that soma & Tests neuron-specific feedback and correct coordinate-to-arbor assignment, not distinct within-tree addresses. \\
+Neuron-specific feedback (arbor-shared) & One coordinate per modeled neuron & Each coordinate repeated over all compartments descended from that soma & Tests neuron-specific feedback and correct coordinate-to-arbor assignment, not distinct within-tree addresses. \\
 Correct sibling-subtree routing & $K$ coefficients within one modeled neuron & Each coefficient assigned to its context-relevant subtree & Trained test of within-neuron address support at $K=2$. \\
 Within-neuron derangement & The same $K$ coefficients as correct routing & Fixed permutation among sibling routes inside the neuron & Alignment control at matched coordinate count and sparse nonzeros. \\
 Rank-$K$ random & $K$ projected coordinates & Fixed random compartment mixing & Bandwidth control without anatomical routes. \\
 Selected paths & $K$ channel coefficients & Sparse real ancestry domains & Tests topology-matched route capacity. \\
-Exact transport & Somatic error and exact sample-specific path derivative & Distinct exact value at every compartment & Information oracle; not proposed as an available biological signal. \\
+Exact path transport & Somatic error and exact sample-specific path derivative & Distinct exact value at every compartment & Information oracle; not proposed as an available biological signal. \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -4192,14 +4195,14 @@ Exact transport & Somatic error and exact sample-specific path derivative & Dist
 \begin{table}[ht]
 \centering
 \caption{Principal regular-tree learning and gradient results. Values are mean
-$\pm$ s.d. over independent seeds. Strict scalar, neuron-specific sharing and
-exact transport form the matched 90-fit accuracy ladder; the matched-width
+$\pm$ s.d. over independent seeds. Strict scalar feedback, neuron-specific feedback and
+exact path transport form the matched 90-fit accuracy ladder; the matched-width
 scalar-fallback rows provide a separate comparison with the strict-scalar condition.
 Gradient-cosine entries are a separate fixed-checkpoint diagnostic evaluated
-at neuron-specific-trained checkpoints; it compared the scalar fallback with
-neuron-specific sharing, and the exact-path cosine is one by construction. The
+at neuron-specific-trained checkpoints; it compared matched-width scalar-fallback
+feedback with neuron-specific feedback, and the exact-path cosine is one by construction. The
 final two rows are an independent rule-and-decoder implementation check. All
-rows labeled raw additive use Eq.~\ref{eq:s_additive_forward}, not the
+rows labeled raw-additive use Eq.~\ref{eq:s_additive_forward}, not the
 normalized-additive model used in Supplementary Figs.~S1--S4.}
 \label{tab:regular_results}
 \footnotesize
@@ -4211,13 +4214,13 @@ Architecture & Feedback or learning condition & $n$ & Test accuracy (\%) & Dendr
 \midrule
 Shunting & Strict scalar feedback, 3F & 15 & $85.88\pm1.62$ & --- \\
 Shunting & Matched-width scalar-fallback feedback, 3F & 15 & $90.74\pm0.54$ & $0.012\pm0.059$ \\
-Shunting & Neuron-specific sharing, 3F & 15 & $97.13\pm0.07$ & $0.708\pm0.027$ \\
-Shunting & Exact transport, 3F & 15 & $97.17\pm0.13$ & 1 by definition \\
-Raw additive & Strict scalar feedback, 3F & 15 & $89.31\pm1.27$ & --- \\
-Raw additive & Matched-width scalar-fallback feedback, 3F & 15 & $91.59\pm0.67$ & $-0.001\pm0.047$ \\
-Raw additive & Neuron-specific sharing, 3F & 15 & $97.12\pm0.13$ & $0.625\pm0.035$ \\
-Raw additive & Exact transport, 3F & 15 & $97.31\pm0.12$ & 1 by definition \\
-Shunting implementation check & Exact transport, 3F, local decoder & 5 & $97.18\pm0.12$ & 1 by definition \\
+Shunting & Neuron-specific feedback, 3F & 15 & $97.13\pm0.07$ & $0.708\pm0.027$ \\
+Shunting & Exact path transport, 3F & 15 & $97.17\pm0.13$ & 1 by definition \\
+Raw-additive & Strict scalar feedback, 3F & 15 & $89.31\pm1.27$ & --- \\
+Raw-additive & Matched-width scalar-fallback feedback, 3F & 15 & $91.59\pm0.67$ & $-0.001\pm0.047$ \\
+Raw-additive & Neuron-specific feedback, 3F & 15 & $97.12\pm0.13$ & $0.625\pm0.035$ \\
+Raw-additive & Exact path transport, 3F & 15 & $97.31\pm0.12$ & 1 by definition \\
+Shunting implementation check & Exact path transport, 3F, local decoder & 5 & $97.18\pm0.12$ & 1 by definition \\
 Matched reference & Backpropagation & 5 & $97.03\pm0.08$ & 1 by definition \\
 \bottomrule
 \end{tabular}
@@ -4236,10 +4239,10 @@ and required the entire interval to lie within $\pm0.5$ points.}
 \setlength{\tabcolsep}{3.5pt}
 \begin{tabular}{lcccc}
 \toprule
-Architecture & Strict scalar feedback (\%) & Scalar-fallback feedback (\%) & Strict minus fallback (points) & Seed ordering \\
+Architecture & Strict scalar (\%) & Matched-width fallback (\%) & Strict minus fallback (points) & Seed ordering \\
 \midrule
 Shunting & 85.88 & 90.74 & $-4.859$ [$-5.669,-3.994$] & 0/15 strict higher \\
-Raw additive & 89.31 & 91.59 & $-2.274$ [$-2.699,-1.796$] & 0 higher, 1 tie \\
+Raw-additive & 89.31 & 91.59 & $-2.274$ [$-2.699,-1.796$] & 0 higher, 1 tie \\
 \bottomrule
 \end{tabular}
 \endgroup
@@ -4259,8 +4262,8 @@ task--model--depth conditions.}
 \toprule
 Task & Contrast & Accuracy difference & Paired-seed ordering \\
 \midrule
-MNIST & Neuron-specific minus matched-width scalar fallback & $4.92$--$6.99$ percentage points & Positive in 80/80 pairs \\
-Noise resilience, raw additive & Neuron-specific minus matched-width scalar fallback & $9.76$--$14.16$ percentage points & Positive in 40/40 pairs \\
+MNIST & Neuron-specific feedback minus matched-width scalar-fallback feedback & $4.92$--$6.99$ percentage points & Positive in 80/80 pairs \\
+Noise resilience, raw-additive & Neuron-specific feedback minus matched-width scalar-fallback feedback & $9.76$--$14.16$ percentage points & Positive in 40/40 pairs \\
 Retained conditions & Exact 3F minus matched backpropagation & At most $0.14$ percentage points in absolute mean difference & 12 matched task--model--depth conditions \\
 \bottomrule
 \end{tabularx}
@@ -4285,9 +4288,9 @@ tests.}
 \toprule
 Task & Core & Exact accuracy & BP accuracy & Exact $-$ BP (95\% interval) & Exact $>$ BP & $P$ \\
 \midrule
-MNIST & Raw additive & 97.013 & 97.008 & $0.005$ ($-0.028$--$0.041$) & 4/10 & 1.000 \\
+MNIST & Raw-additive & 97.013 & 97.008 & $0.005$ ($-0.028$--$0.041$) & 4/10 & 1.000 \\
 MNIST & Shunting & 96.960 & 96.973 & $-0.013$ ($-0.047$--$0.022$) & 4/10 & 0.492 \\
-Noise resilience & Raw additive & 33.378 & 33.490 & $-0.112$ ($-0.465$--$0.247$) & 4/10 & 0.625 \\
+Noise resilience & Raw-additive & 33.378 & 33.490 & $-0.112$ ($-0.465$--$0.247$) & 4/10 & 0.625 \\
 Noise resilience & Shunting (ReLU) & 36.690 & 36.788 & $-0.098$ ($-0.653$--$0.390$) & 7/10 & 1.000 \\
 \bottomrule
 \end{tabular}
@@ -4310,12 +4313,12 @@ paired-seed bootstrap intervals; $P$ values are exact two-sided Wilcoxon tests.}
 \toprule
 Task & Neuron model & Depth & Difference (95\% interval) & Positive pairs & $P$ \\
 \midrule
-MNIST & Raw additive & 2 & 0.51 (0.37--0.62) & 10/10 & 0.0020 \\
-MNIST & Raw additive & 4 & 0.39 (0.31--0.45) & 10/10 & 0.0020 \\
+MNIST & Raw-additive & 2 & 0.51 (0.37--0.62) & 10/10 & 0.0020 \\
+MNIST & Raw-additive & 4 & 0.39 (0.31--0.45) & 10/10 & 0.0020 \\
 MNIST & Shunting & 2 & 0.57 (0.43--0.69) & 10/10 & 0.0020 \\
 MNIST & Shunting & 4 & 0.38 (0.31--0.44) & 10/10 & 0.0020 \\
-Noise task & Raw additive & 2 & 0.70 (0.56--0.84) & 10/10 & 0.0020 \\
-Noise task & Raw additive & 4 & 0.15 (0.02--0.28) & 8/10 & 0.1055 \\
+Noise task & Raw-additive & 2 & 0.70 (0.56--0.84) & 10/10 & 0.0020 \\
+Noise task & Raw-additive & 4 & 0.15 (0.02--0.28) & 8/10 & 0.1055 \\
 \bottomrule
 \end{tabular}
 
@@ -4388,8 +4391,8 @@ candidate update divided by that from the exact update.}
 Feedback field & Gradient cosine & Gradient capture & Relative progress & Descent checkpoints \\
 \midrule
 Matched-width scalar-fallback feedback & 0.027 & 0.003 & 0.013 & 75/120 \\
-Neuron-specific sharing & 0.586 & 0.355 & 0.636 & 120/120 \\
-Exact transport & 1.000 & 1.000 & 1.000 & 120/120 \\
+Neuron-specific feedback & 0.586 & 0.355 & 0.636 & 120/120 \\
+Exact path transport & 1.000 & 1.000 & 1.000 & 120/120 \\
 \bottomrule
 \end{tabularx}
 
@@ -4413,10 +4416,10 @@ seeds.}
 \toprule
 Analysis & Contrast & Endpoint 1 & Endpoint 2 \\
 \midrule
-Depth stress & One to four dendritic layers & Shunting: $63.5\pm6.2$\% to $57.4\pm4.2$\% & Normalized additive: $54.9\pm5.4$\% to $29.7\pm10.5$\% \\
-Broadcast-noise stress & $\sigma=0$ to $\sigma=1$ & Shunting: $0.617\pm0.022$ to $0.469\pm0.062$ & Normalized additive: $0.465\pm0.052$ to $0.114\pm0.009$ \\
-Noise-task feedback & Scalar versus rank eight & Scalar: $0.662\pm0.016$; rank eight: $0.795\pm0.019$ & Exact transport: $0.847\pm0.018$ \\
-Flattened CIFAR-10 & Scalar versus rank four & Scalar: $29.7\pm1.3$\%; rank four: $35.0\pm1.0$\% & Exact transport: $47.2\pm0.6$\%; BP: $49.5\pm0.4$\% \\
+Depth stress & One to four dendritic layers & Shunting: $63.5\pm6.2$\% to $57.4\pm4.2$\% & Normalized-additive: $54.9\pm5.4$\% to $29.7\pm10.5$\% \\
+Broadcast-noise stress & $\sigma=0$ to $\sigma=1$ & Shunting: $0.617\pm0.022$ to $0.469\pm0.062$ & Normalized-additive: $0.465\pm0.052$ to $0.114\pm0.009$ \\
+Noise-task feedback & Matched-width fallback versus random rank eight & Matched-width fallback: $0.662\pm0.016$; random rank eight: $0.795\pm0.019$ & Exact path transport: $0.847\pm0.018$ \\
+Flattened CIFAR-10 & Matched-width fallback versus random rank four & Matched-width fallback: $29.7\pm1.3$\%; random rank four: $35.0\pm1.0$\% & Exact path transport: $47.2\pm0.6$\%; BP: $49.5\pm0.4$\% \\
 Raw-additive CIFAR-10 & Strict scalar versus neuron-specific & Strict scalar: $34.47\pm1.06$\%; neuron-specific: $50.87\pm0.38$\% & Exact path: $50.01\pm0.54$\%; BP: $50.12\pm0.56$\% \\
 \bottomrule
 \end{tabularx}
@@ -4425,7 +4428,7 @@ Raw-additive CIFAR-10 & Strict scalar versus neuron-specific & Strict scalar: $3
 \footnotesize The first two rows compare complete forward architectures and
 therefore establish robustness regimes rather than a causal backward effect of
 shunting; their additive entries use the normalized-additive model.
-Exact transport is an information oracle. The first flattened-CIFAR-10
+Exact path transport is an information oracle. The first flattened-CIFAR-10
 analysis uses the shunting model only. The final row uses the
 raw-additive model and 20 paired seeds. Both are harder-data
 mechanism controls, not state-of-the-art image classification comparisons.
@@ -4715,11 +4718,11 @@ are provided in Source Data.
 Evidence & Supported conclusion & Not established \\
 \midrule
 Exact factorization & Conductance-tree gradients separate local eligibility from transported compartment error. & A biological circuit computes exact gradients or has exact path transport. \\
-Regular-tree feedback & Preserving neuron-specific information closes most of the scalar-feedback gap in both tested architectures; exact transport makes 3F sufficient; feedback quality orders norm-matched one-step progress. & Universal advantage of shunting, or superior accuracy, memory or latency relative to backpropagation. \\
+Regular-tree feedback & Preserving neuron-specific information closes most of the scalar-feedback gap in both tested architectures; exact path transport makes 3F sufficient; feedback quality orders norm-matched one-step progress. & Universal advantage of shunting, or superior accuracy, memory or latency relative to backpropagation. \\
 Branch-conflict path demand & Branch-selective information becomes useful when off-route eligibilities conflict; the shared-credit failure boundary moves with branch count as predicted. & A dendrite-exclusive mechanism, a need for multiple feedback errors rather than an equivalent eligibility gate, or prevalence of this regime in natural tasks. \\
 Subtree-address factorial & Task-aligned nested ancestry has a small advantage over matched non-anatomical routes at intermediate bandwidth and over a rewired tree at intermediate budgets. & A uniquely dendritic advantage; matched gated point and flat implementations reproduce the same result, and unrestricted low-rank routes win at the smallest budgets. \\
 Credit-operator theory & Retained signal, admitted noise and task hierarchy predict when a restricted route or additional address depth improves a stochastic update. & Superiority to exact full-batch backpropagation, a positive-conductance forward mechanism or learned branch reliability. \\
-Physical-depth controls & Across H2--H4 variants of one mechanism-matched task family, serial divisive composition beats resource-identical star and literal grouped-point controls only when task factors match physical order; shared and path LocalCA retain aligned effects. H4 saturates at D3 under BP, falsifying one-to-one depth tracking. Flexible parameter-matched point MLPs beat the serial tree, and soma-broadcast controls localize the BP--local separation. & A dendrite-exclusive expressivity advantage, natural-task prevalence, biological availability of exact path transport or optimizer-independent equivalence of BP and LocalCA. \\
+Physical-depth controls & Across H2--H4 variants of one mechanism-matched task family, serial divisive composition beats resource-identical star and literal grouped-point controls only when task factors match physical order; shared-soma and exact-path LocalCA retain aligned effects. H4 saturates at D3 under BP, falsifying one-to-one depth tracking. Flexible parameter-matched point MLPs beat the serial tree, and soma-broadcast controls localize the BP--local separation. & A dendrite-exclusive expressivity advantage, natural-task prevalence, biological availability of exact path transport or optimizer-independent equivalence of BP and LocalCA. \\
 State-matched reliability conductance & Fixed positive shunts approximate the step-consistent oracle reliability ordering and outperform global, shuffled and anti-aligned shunts under heterogeneous branch noise. & Exact block-scalar attenuation, autonomous shunt learning, a dendrite-exclusive operation or sustained final-loss superiority over unshunted noisy learning. \\
 Same-span coefficient learning & Coordinate conditioning creates the finite-data bias--variance crossover predicted by exact linear risk, despite identical route capacity. & A biological Gram preconditioner, unconditional benefit of orthogonal or ill-conditioned coordinates, or new address span. \\
 Conductance-valid artificial-tree analyses & Neuron-specific, assignment, spatial and fixed-budget conclusions persist in the 1,000 included artificial-tree runs; the inhibitory-dose family is excluded. & Any claim derived from signed synthetic inputs driving positive-conductance shunting cells. \\

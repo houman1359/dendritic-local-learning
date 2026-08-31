@@ -83,7 +83,7 @@ def main() -> None:
         "exact_transport",
         "gated_point_emulation",
     ]
-    labels = ["neuron", "correct", "deranged", "random", "exact", "gated\npoint"]
+    labels = ["neuron-\nshared", "correct", "deranged", "random", "exact", "gated\npoint"]
     fig, (ax_a, ax_b, ax_c) = plt.subplots(
         1,
         3,
@@ -114,7 +114,7 @@ def main() -> None:
         "within_neuron_deranged_k2",
         "random_dense_rank2",
     ]
-    geometry_labels = ["neuron shared", "correct", "deranged", "random rank-2"]
+    geometry_labels = ["neuron-shared", "correct", "deranged", "random rank-2"]
     for condition, label in zip(geometry_conditions, geometry_labels):
         part = frame[frame.condition.eq(condition)]
         ax_b.scatter(
@@ -144,7 +144,7 @@ def main() -> None:
         "within_neuron_deranged_k2",
         "random_dense_rank2",
     ]
-    switch_labels = ["correct", "neuron", "deranged", "random"]
+    switch_labels = ["correct", "neuron-shared", "deranged", "random"]
     for index, condition in enumerate(switch_conditions):
         values = frame[
             frame.condition.eq(condition)

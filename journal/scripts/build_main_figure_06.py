@@ -96,11 +96,11 @@ FAMILY_SPECS = (
 
 ACC_NORM = Normalize(vmin=0.52, vmax=0.99)
 H4_ROWS = (
-    ("BP", "serial_tree", "shunting", "full_bp"),
-    ("LocalCA", "serial_tree", "shunting", "local_path"),
-    ("shared", "serial_tree", "shunting", "local_shared"),
-    ("grouped", "grouped_point", "shunting", "full_bp"),
-    ("raw additive", "serial_tree", "raw_additive", "full_bp"),
+    ("serial BP", "serial_tree", "shunting", "full_bp"),
+    ("exact-path\nLocalCA", "serial_tree", "shunting", "local_path"),
+    ("shared-soma\nLocalCA", "serial_tree", "shunting", "local_shared"),
+    ("grouped-point\nBP", "grouped_point", "shunting", "full_bp"),
+    ("raw-additive\nBP", "serial_tree", "raw_additive", "full_bp"),
 )
 
 
@@ -700,7 +700,7 @@ def build() -> list[str]:
     ax_f = canvas.panel("F", 2, 4, 4, grid="y",
                         title="Alignment dose, BP")
     ax_g = canvas.panel("G", 2, 8, 4, grid="y", sharey=ax_f,
-                        title="Alignment dose, path LocalCA")
+                        title="Alignment dose, exact-path LocalCA")
 
     panel_task_families(ax_a)
     panel_architectures(ax_b)

@@ -165,7 +165,7 @@ def main() -> None:
         ("adaptive_shuffled_shunt", "shuffled", COLORS["additive"]),
         ("noisy_no_shunt", "no shunt", COLORS["ink"]),
         ("initial_oracle_shunt", "oracle", COLORS["oracle"]),
-        ("adaptive_point_gate", "point gate", COLORS["dend"]),
+        ("adaptive_point_gate", "point gain", COLORS["dend"]),
     ]
     high_outcomes = outcomes[np.isclose(outcomes.reliability_heterogeneity, 2.0)]
     wide = high_outcomes.pivot(index="seed", columns="method", values="final_test_loss")
@@ -188,7 +188,7 @@ def main() -> None:
     ax_d.axhline(0, color=COLORS["mute"], lw=LW_REF, ls="--")
     # Horizontal category labels (style contract: no rotated ticks); the two
     # two-word names wrap instead of rotating.
-    horizontal = ["global", "shuffled", "no\nshunt", "oracle", "point\ngate"]
+    horizontal = ["global", "shuffled", "no\nshunt", "oracle", "point\ngain"]
     ax_d.set_xticks(positions, horizontal)
     ax_d.tick_params(axis="x", labelsize=PT_SMALL - 0.8, pad=1.5)
     ax_d.set_ylabel("control loss $-$ adaptive-local loss")

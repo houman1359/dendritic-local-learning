@@ -119,10 +119,20 @@ def run_cv(run_dir: Path, x: torch.Tensor, y: torch.Tensor) -> dict:
     profile = torch.cat(ratios, dim=1)
     cv = (profile.std(dim=1, unbiased=True)
           / profile.mean(dim=1)).numpy()
+    # The depth decomposition panel E draws: the neuron-mean transported
+    # magnitude of each stage, and the residual spread among branches that
+    # share a depth, so the smooth conductance-set attenuation and genuine
+    # same-depth route differentiation are reported apart.
+    stage_stats = {}
+    for i, r in enumerate(ratios):
+        stage_stats[f"stage{i}_mean"] = float(r.mean())
+        stage_stats[f"stage{i}_within_cv"] = float((r.std(dim=1, unbiased=True)
+                                                    / r.mean(dim=1)).mean())
     return {
         "seed": int(config.experiment.seed),
         "path_gain_cv_mean": float(np.mean(cv)),
         "path_gain_cv_median": float(np.median(cv)),
+        **stage_stats,
         "compartments_per_neuron": int(profile.shape[1]),
         "n_soma": n_soma,
         "probe_accuracy": accuracy,
@@ -159,9 +169,10 @@ def main() -> None:
                   f"(acc {row['probe_accuracy']:.3f})")
     frame = pd.DataFrame(rows)
     frame = frame[["architecture", "seed", "path_gain_cv_mean",
-                   "path_gain_cv_median", "compartments_per_neuron",
-                   "n_soma", "probe_accuracy", "config_sha256",
-                   "checkpoint_sha256", "run_dir"]]
+                   "path_gain_cv_median", "stage0_mean", "stage1_mean",
+                   "stage0_within_cv", "stage1_within_cv",
+                   "compartments_per_neuron", "n_soma", "probe_accuracy",
+                   "config_sha256", "checkpoint_sha256", "run_dir"]]
     OUT.parent.mkdir(parents=True, exist_ok=True)
     frame.to_csv(OUT, index=False)
     print(f"wrote {OUT} ({len(frame)} rows)")
