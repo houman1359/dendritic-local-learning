@@ -1758,11 +1758,24 @@ combinations. Context therefore had zero correlation with label, both streams
 were active, and the inactive stream was a structured distractor rather than a
 zero mask.
 
-For branch weights $\bm w_A,\bm w_B$, the somatic logit was
+Write \(c\in\{0,1\}\) for the context, \(\bm x_A,\bm x_B\) for the two
+sibling-stream inputs and \(\bm w_A,\bm w_B\) for the weights on the two
+branches. The context gates which branch drives the soma. With
+\(\mathbb 1[\cdot]\) the indicator, exactly one of the two terms survives
+and the other is multiplied by zero, so the somatic logit was
 \begin{equation}
-z=\mathbb 1[c=0]\bm w_A^{\mathsf T}\bm x_A+
-\mathbb 1[c=1]\bm w_B^{\mathsf T}\bm x_B.
+z=\mathbb 1[c=0]\,\bm w_A^{\mathsf T}\bm x_A+
+\mathbb 1[c=1]\,\bm w_B^{\mathsf T}\bm x_B,
 \end{equation}
+that is, \(z=\bm w_A^{\mathsf T}\bm x_A\) on context \(c=0\) and
+\(z=\bm w_B^{\mathsf T}\bm x_B\) on context \(c=1\). The gate acts on the
+two branch sums, not on the inputs: \(\bm x_A\) and \(\bm x_B\) both carry
+structured, label-dependent signal on every trial, as described above, so the
+unselected stream is a distractor the neuron must learn to exclude rather than
+an input that has been switched off. This is what makes the credit-assignment
+question non-trivial: the correct \(K=2\) rule must deliver the output error
+to the branch the context selected, and the derangement control delivers it to
+the sibling that was not selected.
 All conditions shared the paired initialization, mini-batches and forward
 model. The one-neuron and depth-shared fields applied the logistic output error
 to both branches. Correct $K=2$ feedback applied the error only to the selected
