@@ -81,6 +81,7 @@ from figure_canvas import (  # noqa: E402
 )
 from credit_tree_schematics import (  # noqa: E402
     AMBER_TEXT,
+    RIM,
     draw_credit_tree,
     draw_deranged_pair,
     mix,
@@ -123,8 +124,8 @@ ACC_LABEL = "held-out accuracy"
 # Seed dots span [-0.53, 5.89] and every mean/CI lies in [-0.21, 4.88],
 # so the old 8.85 upper bound left ~30% of the axis empty and
 # compressed the near-zero assignment contrasts that carry the point.
-GAIN_LIM = (-0.85, 6.35)
-GAIN_TICKS = [0, 2, 4, 6]
+GAIN_LIM = (-1.1, 13.0)
+GAIN_TICKS = [0, 4, 8, 12]
 GAIN_LABEL = "accuracy difference (pp)"
 
 # Keep the scientifically distinct feedback conditions visible in the
@@ -622,14 +623,21 @@ def panel_ownership_address(ax):
 
 
 # ── row 2, right: the forest ─────────────────────────────────────────────
-def _fashion_rows():
-    seeds = pd.read_csv(DATA / "fashion_feedback_ladder" / "seed_outcomes.csv")
+def _mnist_rows():
+    """Panel B's own ladder as paired per-seed effect sizes.
+
+    G first summarized the FASHION ladder here while its assignment block
+    ran on MNIST, so the one-scale comparison mixed tasks for no reason the
+    figure could state.  Every block now stands on MNIST; the Fashion
+    replication keeps its own panel (C), where its levels already appear.
+    """
+    seeds = pd.read_csv(DATA / "mnist_feedback_ladder" / "seed_outcomes.csv")
     contrasts = pd.read_csv(
-        DATA / "fashion_feedback_ladder" / "paired_contrasts.csv")
+        DATA / "mnist_feedback_ladder" / "paired_contrasts.csv")
     pairs = {
-        "neuron indexed - scalar fallback":
-            ("neuron indexed", "scalar fallback"),
-        "exact path - neuron indexed": ("exact path", "neuron indexed"),
+        "neuron specific - scalar broadcast":
+            ("neuron specific", "scalar broadcast"),
+        "exact path - neuron specific": ("exact path", "neuron specific"),
     }
     out = {}
     for name, (high, low) in pairs.items():
@@ -641,7 +649,7 @@ def _fashion_rows():
                     .pivot(index="seed", columns="feedback",
                            values="test_accuracy"))
             rows.append({
-                "label": f"Fashion {'raw additive' if architecture == 'additive' else architecture}",
+                "label": f"MNIST {'raw additive' if architecture == 'additive' else architecture}",
                 "color": SHUNT if architecture == "shunting" else ADD,
                 "marker": "o" if architecture == "shunting" else "s",
                 "mean": 100 * float(row.mean_difference),
@@ -697,7 +705,27 @@ def _ownership_rows():
 # minus neuron-indexed", "correct minus deranged neuron-to-tree map") is a
 # definition and belongs in the caption, not in a sentence-long in-panel
 # header that has to be set at half the width of the plot.
-HEADER_LEFT_PT = 52.0
+def _depth_key(ax):
+    """D2/D4 glyphs: a stage chain per label, in the anatomy vocabulary."""
+    x_axis = ax.get_xaxis_transform()          # x in data, y in axes coords
+    seg, base, gap = 0.055, 0.16, 0.9
+    for x0, stages, tag in ((9.3, 2, "D2"), (11.2, 4, "D4")):
+        ax.scatter([x0], [base], s=14.0, color=COLORS["soma"],
+                   edgecolors=RIM, linewidths=LW_HAIR, transform=x_axis,
+                   zorder=6, clip_on=False)
+        for k in range(stages):
+            y0 = base + 0.035 + k * seg
+            ax.plot([x0, x0], [y0, y0 + seg * 0.72], color=COLORS["dend"],
+                    lw=LW_EDGE, solid_capstyle="round", transform=x_axis,
+                    zorder=6, clip_on=False)
+            ax.plot([x0, x0 + 0.25], [y0 + seg * 0.72, y0 + seg * 0.95],
+                    color=COLORS["dend"], lw=LW_HAIR, solid_capstyle="round",
+                    transform=x_axis, zorder=6, clip_on=False)
+        ax.text(x0 + gap, base + 0.02, tag, fontsize=PT_SMALL, color=MUTE,
+                ha="left", va="bottom", transform=x_axis, zorder=6)
+
+
+HEADER_LEFT_PT = 80.0
 
 
 def panel_forest(ax):
@@ -710,15 +738,15 @@ def panel_forest(ax):
     """
     from matplotlib import transforms as mtransforms
 
-    fashion = _fashion_rows()
+    mnist = _mnist_rows()
     # Each header carries the panel it summarizes: the first two blocks are
     # C's ladder steps re-expressed as paired within-seed effect sizes, and
     # the third is the correct-minus-deranged test that F draws.  Without
     # the pointers the Fashion rows read as one more dataset rather than as
     # C's own contrasts on an inferential scale.
     groups = [
-        ("neuron-specific (C)", fashion["neuron indexed - scalar fallback"]),
-        ("transport (C)", fashion["exact path - neuron indexed"]),
+        ("neuron-specific (B)", mnist["neuron specific - scalar broadcast"]),
+        ("transport (B)", mnist["exact path - neuron specific"]),
         ("assignment (F)", _ownership_rows()),
     ]
     header_trans = mtransforms.offset_copy(
@@ -765,10 +793,10 @@ def panel_forest(ax):
     ax.set_xlim(*GAIN_LIM)
     # The D-notation is defined in the physical-depth section, three
     # figures later; its first use is here, so the key rides the empty
-    # lower-right corner of the axes.
-    ax.text(0.985, 0.03, "D2 / D4: two / four dendritic stages",
-            transform=ax.transAxes, fontsize=PT_SMALL, color=MUTE,
-            ha="right", va="bottom", zorder=6)
+    # lower-right corner -- and it is DRAWN, not glossed: a soma with two
+    # stacked dendritic stages beside a soma with four says what "stage
+    # count" means without a sentence.
+    _depth_key(ax)
     ax.set_xticks(GAIN_TICKS)
     ax.set_xlabel(GAIN_LABEL)
     style_panel(ax)

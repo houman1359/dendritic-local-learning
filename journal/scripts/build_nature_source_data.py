@@ -2385,11 +2385,11 @@ def final_display_file(item: SourceFile) -> SourceFile:
             "followup_publication_seed_outcomes.csv",
             "routing_valid_paired_contrasts.csv",
         }:
-            figure, panels = "Figure 2", "f"
+            figure, panels = "Figure 2", "g"
         else:
             figure = "Supplementary Figure 19"
     elif source.startswith("source_data/fashion_feedback_ladder/"):
-        figure, panels = "Figure 2", "c,f"
+        figure, panels = "Figure 2", "c"
     elif source.startswith("source_data/clean_exact_bp/"):
         figure, panels = "Supplementary Figure 19", "e"
     elif source.startswith("source_data/credit_phase_plane/"):
@@ -3102,12 +3102,12 @@ _PANEL_CORRECTIONS = {
     "Figure_2/Fig2g_condition_summary.csv": None,
     "Figure_2/Fig2g_paired_contrasts.csv": None,
     "Figure_2/Fig2b_mnist_feedback_paired_contrasts.csv":
-        (None, "text", "Figure_2/Text_mnist_feedback_paired_contrasts.csv"),
-    "Figure_2/Fig2c,f_Fashion_MNIST_condition_summary.csv":
+        (None, "g", "Figure_2/Fig2g_mnist_feedback_paired_contrasts.csv"),
+    "Figure_2/Fig2c_Fashion_MNIST_condition_summary.csv":
         (None, "c", "Figure_2/Fig2c_Fashion_MNIST_condition_summary.csv"),
-    "Figure_2/Fig2c,f_Fashion_MNIST_paired_contrasts.csv":
-        (None, "f", "Figure_2/Fig2f_Fashion_MNIST_paired_contrasts.csv"),
-    "Figure_2/Fig2c,f_Fashion_MNIST_audit.json":
+    "Figure_2/Fig2c_Fashion_MNIST_paired_contrasts.csv":
+        (None, "text", "Figure_2/Text_Fashion_MNIST_paired_contrasts.csv"),
+    "Figure_2/Fig2c_Fashion_MNIST_audit.json":
         (None, "text", "Figure_2/Text_Fashion_MNIST_audit.json"),
     # Figure 3 letters follow the native seven-panel builder.
     "Figure_3/Fig3c-d_depth_training_seed.csv":

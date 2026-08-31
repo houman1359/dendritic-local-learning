@@ -724,17 +724,18 @@ raw-additive tree stays near flat (0.80 and 0.66); branch-to-branch spread
 at one depth is small in both (within-depth CV 0.05--0.44).
 \textbf{F}, Assigning a learning
 signal to the correct neuron is distinct from targeting refinements of that
-signal to locations within its arbor. \textbf{G}, The figure's paired within-seed effects on one scale. The
-neuron-specific and transport blocks are the Fashion-MNIST ladder steps of
-\textbf{C} (neuron-specific minus matched-width scalar-fallback, and exact
-path minus neuron-specific); the assignment block is the correct-minus-deranged
-neuron-to-arbor test drawn in \textbf{F}, on MNIST and on the synthetic
-noise-resilience task (Methods), for trees with two and four serial dendritic
-stages (D2, D4). The dots behind each row are the individual
-paired seed differences. Faint lines pair seeds; large
+signal to locations within its arbor. \textbf{G}, The figure's paired within-seed effects on one scale, all on
+MNIST. The neuron-specific and transport blocks are the ladder steps of
+\textbf{B} (neuron-specific minus strict scalar, and exact path minus
+neuron-specific); the assignment block is the correct-minus-deranged
+neuron-to-arbor test drawn in \textbf{F}, on MNIST and on the
+noise-resilience task (Methods), for trees with two and four serial
+dendritic stages (D2, D4). The Fashion-MNIST replication appears in
+\textbf{C}. Dots are the individual paired seed differences. Faint lines pair seeds; large
 symbols and bars show means and 95\% seed-bootstrap intervals. Panel-specific
 sample sizes are \(n=15\) paired seeds per architecture in \textbf{B,D,E}
-and \(n=10\) in \textbf{C,G}; Methods report the model definitions and numerical
+and the ladder blocks of \textbf{G}, \(n=10\) in \textbf{C} and the
+assignment block of \textbf{G}; Methods report the model definitions and numerical
 implementation checks. Green circles denote shunting trees and blue squares
 denote raw-additive trees.}
 \label{fig:feedback}
