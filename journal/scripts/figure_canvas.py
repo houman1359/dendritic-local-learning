@@ -164,7 +164,7 @@ LETTER_DY_PT = 2.5          # baseline above the axes top
 # wide category tick reaches further left than the axes box and a centred
 # title rises as high as the letter.  These two are measured against the
 # panel's real ink instead, once the layout is final.
-LETTER_CLEAR_PT = 4.2       # letter top above the panel's topmost other ink
+LETTER_CLEAR_PT = 5.4       # letter top above the panel's topmost other ink
 LETTER_GAP_PT = 3.4         # letter right edge to the panel's leftmost ink
 LETTER_CAP_FRAC = 0.72      # cap height of the bold face, as a size fraction
 LETTER_HOME_PT = 6.0        # shared left edge of the row-leading letters
@@ -547,7 +547,34 @@ class NativeCanvas:
                     y = max(y, top_pt + LETTER_CLEAR_PT - cap)
             item["art"].set_position((max(x, 2.5) / self.width_pt,
                                       y / self.height_pt))
+        self._level_letter_rows()
         self._align_lead_letters()
+
+    def _level_letter_rows(self):
+        """One baseline per row of letters.
+
+        Each letter clears its OWN panel's topmost ink, so a row whose
+        panels carry different decoration heights ends up with letters at
+        slightly different baselines, which reads as misalignment rather
+        than as intent.  Every letter in a grid row is lifted to the highest
+        baseline any of them earned; none may move down, so each still
+        clears its own panel.
+        """
+        row_of = {}
+        for rec in self._records:
+            if rec.get("_letter") and rec["name"] in self.axes:
+                row_of[id(self.axes[rec["name"]])] = int(rec.get("row", 0))
+        rows: dict[int, list] = {}
+        for item in self._letters:
+            row = row_of.get(id(item["ax"]))
+            if row is not None:
+                rows.setdefault(row, []).append(item)
+        for members in rows.values():
+            if len(members) < 2:
+                continue
+            top = max(it["art"].get_position()[1] for it in members)
+            for it in members:
+                it["art"].set_position((it["art"].get_position()[0], top))
 
     def _lead_axes(self):
         """Axes ids of the panel that leads each row, among lettered panels."""

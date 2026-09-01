@@ -418,6 +418,12 @@ def panel_transport_profile(ax):
                           marker=marker[arch])
     ax.set_xlim(-0.25, 2.25)
     ax.set_xticks(xs, ["soma", "mid", "distal"])
+    # The plotted ratio is the sample-wise path gain of the transport
+    # factorization, so the panel names that parameter where the curves are.
+    ax.text(0.06, 0.97, "α̃ₙ = gₙ ∕ g₀", transform=ax.transAxes,
+            fontsize=PT_SMALL, color=MUTE, ha="left", va="top")
+    ax.text(0.06, 0.855, "g = ∂ℒ/∂V", transform=ax.transAxes,
+            fontsize=PT_SMALL, color=MUTE, ha="left", va="top")
     # The raw-additive distal field is amplified above the soma whereas the
     # shunting field is attenuated. A logarithmic ordinate keeps both regimes
     # legible without compressing the smaller shunting values against zero.
@@ -467,6 +473,8 @@ def panel_path_specific_energy(ax):
 
     ax.set_xlim(-0.22, 1.22)
     ax.set_xticks(xs, ["mid", "distal"])
+    ax.text(0.06, 0.985, "‖g − ⟨g⟩ₚ‖² ∕ ‖g‖²", transform=ax.transAxes,
+            fontsize=PT_SMALL, color=MUTE, ha="left", va="top")
     ax.set_ylim(0.0, 59.0)
     ax.set_yticks([0, 20, 40])
     ax.set_ylabel("path-specific error energy (%)")
