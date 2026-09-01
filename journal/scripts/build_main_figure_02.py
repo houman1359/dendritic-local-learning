@@ -418,6 +418,13 @@ def panel_transport_profile(ax):
                           marker=marker[arch])
     ax.set_xlim(-0.25, 2.25)
     ax.set_xticks(xs, ["soma", "mid", "distal"])
+    # The plotted ratio is the sample-wise path gain of the transport
+    # factorization; the panel names that parameter where the curves are.
+    # (Restored: the fig2 content pass of ccc2710 dropped these two lines.)
+    ax.text(0.06, 0.97, "α̃ₙ = gₙ ∕ g₀", transform=ax.transAxes,
+            fontsize=PT_SMALL, color=MUTE, ha="left", va="top")
+    ax.text(0.06, 0.855, "g = ∂ℒ/∂V", transform=ax.transAxes,
+            fontsize=PT_SMALL, color=MUTE, ha="left", va="top")
     # The raw-additive distal field is amplified above the soma whereas the
     # shunting field is attenuated. A logarithmic ordinate keeps both regimes
     # legible without compressing the smaller shunting values against zero.

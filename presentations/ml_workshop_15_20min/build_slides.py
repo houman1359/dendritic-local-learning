@@ -269,6 +269,16 @@ def render_pdf_assets() -> None:
         "hierarchy_learning_current",
         (0.0, 0.64, 0.325, 0.995),
     )
+    render_clip(
+        "main_mapped_reconstruction.pdf",
+        "mapped_reconstruction",
+        (0.0, 0.0, 1.0, 1.0),
+    )
+    render_clip(
+        "main_ancestry_addresses.pdf",
+        "ancestry_addresses",
+        (0.0, 0.0, 1.0, 1.0),
+    )
 
 
 def dendrite_svg(*, compact: bool = False, labels: bool = True) -> str:
@@ -652,20 +662,23 @@ def build_slides() -> list[dict[str, str]]:
 
     slides.append(slide(
         "FROM A POINT TO A TREE",
-        "Dendrites add within-neuron state, address, and route gain",
+        "Dendrites turn one neuronal signal into four testable routing questions",
         f"""
         <div class="two-col col-50-50 dendrite-resource-layout">
           <div class="tree-panel labeled-tree">{dendrite_svg(compact=True, labels=True)}</div>
           <div class="stack resource-stack compact-stack">
             <div class="mapping-line">network weight wᵢ &nbsp;→&nbsp; synaptic conductance gᵢ on compartment n</div>
-            <div class="equation compact">δ<sup>V, avail</sup><sub>u</sub> = A<sub>u</sub>β<sub>u</sub>, &nbsp; A<sub>u</sub>∈ℝ<sup>Nᵤ×K</sup></div>
-            <div class="route-definitions"><b>Nᵤ</b>: compartments &nbsp;·&nbsp; <b>K</b>: independent within-neuron signals &nbsp;·&nbsp; column k of <b>Aᵤ</b>: route-k support and gain</div>
-            {card('local state', '<p>Voltage and conductance determine the eligibility at each synapse.</p>', tone='teal')}
-            {card('subtree address', '<p>A few coefficients βᵤ can target nested groups of synapses.</p>', tone='purple')}
-            {card('route gain', '<p>Conductance can scale how strongly a returned signal reaches one path.</p>', tone='orange')}
+            <div class="equation compact"><span class="hat-symbol">δ̂</span><sup>V</sup><sub>u</sub> = A<sub>u</sub>c<sub>u</sub>, &nbsp; A<sub>u</sub>∈ℝ<sup>Nᵤ×K</sup>, &nbsp; c<sub>u</sub>∈ℝ<sup>K</sup></div>
+            <div class="route-definitions"><b>Aᵤ</b> says where each feedback channel is delivered; <b>cᵤ</b> contains the K signed values available on the current example.</div>
+            <div class="question-grid">
+              {card('1 · coordinate + ownership', '<p>Which neuron—and which arbor—receives each signal?</p>', tone='blue')}
+              {card('2 · dendritic address', '<p>Which compartment or subtree receives it?</p>', tone='purple')}
+              {card('3 · route gain', '<p>How strongly does it reach that destination?</p>', tone='orange')}
+              {card('4 · task–route alignment', '<p>Does the available route span match the credit demanded by the task?</p>', tone='teal')}
+            </div>
           </div>
         </div>""",
-        "Neuron identity and within-neuron address are distinct credit-assignment problems.",
+        "The experiments test coordinate, address, gain, and alignment separately instead of treating “dendrites” as one intervention.",
     ))
 
     slides.append(slide(
@@ -689,39 +702,28 @@ def build_slides() -> list[dict[str, str]]:
     ))
 
     slides.append(slide(
-        "THE EXACT DENDRITIC GRADIENT",
-        "Dendritic credit still factorizes into eligibility × learning signal",
+        "EXACT LOCAL FACTOR · TRANSPORTED ERROR",
+        "The exact dendritic gradient is local eligibility × transported compartment error",
         f"""
-        <div class="two-col col-44-56 gradient-layout">
-          <div>{conductance_svg()}</div>
-          <div class="stack equation-stack">
-            <div class="definition-box">δ<sup>V</sup><sub>n</sub> ≡ ∂ℒ/∂Vₙ &nbsp; is the compartment learning signal</div>
-            <div class="equation compact">∂Vₙ/∂gᵢ = xᵢR<sup>tot</sup><sub>n</sub>(E<sup>rev</sup><sub>i</sub>−Vₙ)</div>
+        <div class="two-col col-48-52 exact-transport-layout">
+          <div class="transport-composite">
+            <div>{transport_svg()}</div>
+            <div class="transport-caption"><b>one somatic error δ<sup>V</sup><sub>0,u</sub></b><span>is transported into a field over compartments</span></div>
+          </div>
+          <div class="stack compact-stack exact-transport-equations">
+            <div class="definition-box">δ<sup>V</sup><sub>n,u</sub> ≡ ∂ℒ/∂Vₙ &nbsp;: exact error assigned to compartment n of neuron u</div>
             <div class="hero-equation small gradient-factorization">
               <span class="eq-left">∂ℒ/∂gᵢ =</span>
               <span class="term teal"><b>xᵢR<sup>tot</sup><sub>n</sub>(E<sup>rev</sup><sub>i</sub>−Vₙ)</b><small>local dendritic eligibility e<sup>den</sup><sub>i</sub></small></span>
               <span class="times">×</span>
-              <span class="term purple"><b>δ<sup>V</sup><sub>n</sub></b><small>returned compartment signal</small></span>
+              <span class="term purple"><b>δ<sup>V</sup><sub>n,u</sub></b><small>transported compartment error</small></span>
             </div>
+            <div class="equation compact">δ<sup>V</sup><sub>n,u</sub> = δ<sup>V</sup><sub>0,u</sub>α̃<sub>n</sub></div>
+            <div class="path-product">α̃<sub>n</sub> = ∏<sub>(i→k)∈path(n→0)</sub> f′<sub>i</sub>(V<sub>i</sub>) R<sup>tot</sup><sub>k</sub> g<sup>den</sup><sub>i→k</sub></div>
+            <div class="transport-scope"><b>Directed tree:</b> one exact path product. &nbsp; <b>Reciprocal cable:</b> the same field is obtained from the steady-state adjoint.</div>
           </div>
         </div>""",
-        "The local factor changes with dendritic state; the circuit-level learning signal still has to reach the correct compartment.",
-    ))
-
-    slides.append(slide(
-        "TRANSPORT OVER THE TREE",
-        "Tree transport turns one somatic signal into a compartment field",
-        f"""
-        <div class="two-col col-48-52 transport-layout">
-          <div>{transport_svg()}</div>
-          <div class="stack equation-stack">
-            <div class="equation compact">δ<sup>V</sup><sub>0</sub> = f′<sub>0</sub>(V<sub>0</sub>)δᵤ, &nbsp;&nbsp; δ<sup>V</sup><sub>n</sub> = δ<sup>V</sup><sub>0</sub>γₙ</div>
-            <div class="path-product">γₙ = ∏<sub>(j→k)∈path(n→0)</sub> f′<sub>j</sub>(V<sub>j</sub>) R<sup>tot</sup><sub>k</sub> g<sup>den</sup><sub>j→k</sub></div>
-            {card('directed tree', '<p>The product is indexed child→parent (n→0); returned credit propagates over the same path in reverse (0→n).</p>', tone='purple')}
-            {card('reconstructed reciprocal cable', '<p>The corresponding field is obtained from the steady-state adjoint J<sub>V</sub><sup>T</sup>q=∇<sub>V</sub>ℒ.</p>', tone='gray')}
-          </div>
-        </div>""",
-        "Dendrites do not generate the task error; they transform a neuron-level signal into spatially structured compartment credit.",
+        "Feedback must deliver a compartment-specific field; the synaptic eligibility itself is local and exact.",
         "Almeida (1987); Pineda (1987); Schiess, Urbanczik & Senn (2016)",
     ))
 
