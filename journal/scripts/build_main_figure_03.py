@@ -235,16 +235,16 @@ def signed_heatmap(ax, matrix, xlabels, ylabels, *, label):
 
 # ── A: the credit operator ───────────────────────────────────────────────
 def task_generator_schematic(ax) -> None:
-    """B: the synthetic task, drawn on the tree it lives on.
+    """B: the synthetic task as patterns over one set of terminals.
 
-    The first draft showed the Haar coefficient pyramid as bare squares and
-    the reader had to guess what any of it had to do with dendrites.  The
-    generator is drawn on the balanced tree itself: hierarchy levels are
-    horizontal bands of the arbor, the sixteen Haar coordinates sit one per
-    node, the coarse soma-side levels carry the task signal (green, H_c)
-    while the canopy levels carry batch noise (gray), and the feedback
-    routes are the capsule idiom of panel A, one capsule per subtree at the
-    resolved depth (blue, D_r).
+    An earlier draft put signal and noise at different heights of the arbor,
+    which read as different dendritic LOCATIONS; they differ in pattern
+    SCALE across the same terminals.  One tree, and above its eight leaves
+    three aligned strips: the feedback routes (one value per subtree at the
+    resolved depth), the task signal (piecewise-constant across whole
+    subtrees -- the tree's coarse Haar patterns, H_c scales), and minibatch
+    noise (leaf-by-leaf jitter).  Coarse-versus-fine becomes visible
+    smoothness, not height.
     """
     ax.set_xlim(0.0, 1.0)
     ax.set_ylim(0.0, 1.0)
@@ -252,73 +252,54 @@ def task_generator_schematic(ax) -> None:
     green = COLORS["dend"]
     blue = COLORS["additive"]
 
-    # node grid: soma, one trunk node, then 2, 4 and 8 nodes up to the canopy
-    leaf_x = np.linspace(0.315, 0.905, 8)
+    leaf_x = np.linspace(0.315, 0.935, 8)
     lvl3 = leaf_x.reshape(4, 2).mean(axis=1)
     lvl2 = lvl3.reshape(2, 2).mean(axis=1)
-    lvl1 = np.array([lvl2.mean()])
-    ys = {0: 0.075, 1: 0.255, 2: 0.435, 3: 0.615, 4: 0.795}
-    nodes = {1: lvl1, 2: lvl2, 3: lvl3, 4: leaf_x}
+    root_x = float(lvl2.mean())
+    y_soma, y2, y3, y_leaf = 0.045, 0.145, 0.245, 0.345
 
-    # hierarchy bands: the coarse levels carry signal, the fine ones noise
-    x0, x1 = leaf_x[0] - 0.055, leaf_x[-1] + 0.045
-    for ya, yb, tone in ((ys[1] - 0.075, ys[2] + 0.075, green),
-                         (ys[3] - 0.075, ys[4] + 0.075, COLORS["mute"])):
-        ax.add_patch(FancyBboxPatch(
-            (x0, ya), x1 - x0, yb - ya,
-            boxstyle="round,pad=0.008,rounding_size=0.02",
-            facecolor=tone, alpha=0.12, edgecolor="none", zorder=0.8))
-
-    # the arbor, in the shared vocabulary
     def edge(xa, ya, xb, yb, lw):
         ax.plot([xa, xb], [ya, yb], color=green, lw=lw,
                 solid_capstyle="round", zorder=2)
-    edge(lvl1[0], ys[0], lvl1[0], ys[1], LW_DATA)
-    for i, x in enumerate(lvl2):
-        edge(lvl1[0], ys[1], x, ys[2], LW_EDGE)
+    for x in lvl2:
+        edge(root_x, y_soma, x, y2, LW_EDGE)
     for i, x in enumerate(lvl3):
-        edge(lvl2[i // 2], ys[2], x, ys[3], LW_EDGE)
+        edge(lvl2[i // 2], y2, x, y3, LW_EDGE)
     for i, x in enumerate(leaf_x):
-        edge(lvl3[i // 2], ys[3], x, ys[4], LW_HAIR)
-    ax.scatter([lvl1[0]], [ys[0]], s=26.0, color=COLORS["soma"],
+        edge(lvl3[i // 2], y3, x, y_leaf, LW_HAIR)
+    ax.scatter([root_x], [y_soma], s=26.0, color=COLORS["soma"],
                edgecolor="white", linewidths=LW_HAIR, zorder=4)
-    # the sixteenth coordinate: the root mean, on the trunk itself
-    ax.add_patch(Rectangle(
-        (lvl1[0] - 0.015, 0.5 * (ys[0] + ys[1]) - 0.0225), 0.030, 0.045,
-        facecolor=green, edgecolor="white", linewidth=LW_HAIR, zorder=3))
 
-    # one Haar coordinate per node: green where the task signal lives
-    sq = 0.030
-    for level, xs_l in nodes.items():
-        tone = green if level <= 2 else "#9AA5B4"
-        for x in xs_l:
-            ax.add_patch(Rectangle(
-                (x - sq / 2.0, ys[level] - sq * 0.75), sq, sq * 1.5,
-                facecolor=tone, edgecolor="white", linewidth=LW_HAIR,
-                zorder=3))
+    # strip 1, on the leaves themselves: the feedback routes
+    y_route = y_leaf + 0.055
+    half = (leaf_x[1] - leaf_x[0]) / 2.0
+    for x in lvl3:
+        ax.plot([x - half - 0.014, x + half + 0.014], [y_route, y_route],
+                color=blue, lw=4.4, solid_capstyle="round", zorder=3,
+                alpha=0.55)
 
-    # feedback routes: one capsule per subtree at the resolved depth
-    for i, x in enumerate(lvl3):
-        half = (leaf_x[1] - leaf_x[0]) / 2.0 + 0.028
-        ax.add_patch(FancyBboxPatch(
-            (x - half, ys[3] - 0.055), 2 * half, ys[4] - ys[3] + 0.11,
-            boxstyle="round,pad=0.006,rounding_size=0.03",
-            facecolor="none", edgecolor=blue, linewidth=LW_HAIR,
-            zorder=2.6))
+    # strips 2 and 3: the same eight terminals, two pattern scales
+    signal = np.array([0.9, 0.9, 0.9, 0.9, -0.9, -0.9, -0.9, -0.9])
+    noise = np.array([0.55, -0.65, 0.4, -0.5, 0.6, -0.4, -0.55, 0.5])
+    for base, values, tone, reach in ((0.60, signal, green, 0.085),
+                                      (0.86, noise, "#5F6B7E", 0.055)):
+        ax.plot([leaf_x[0] - 0.03, leaf_x[-1] + 0.03], [base, base],
+                color=COLORS["grid"], lw=LW_HAIR, zorder=2)
+        for x, v in zip(leaf_x, values):
+            tip = base + v * reach
+            ax.plot([x, x], [base, tip], color=tone, lw=LW_EDGE,
+                    solid_capstyle="round", zorder=3)
+            ax.scatter([x], [tip], s=4.5, color=tone, zorder=4)
 
-    # the three definitions, set beside what they name
-    ax.text(0.02, 0.5 * (ys[1] + ys[2]), "signal μ\n$H_{\\rm c}$ levels",
+    ax.text(0.02, y_route, "routes ($D_{\\rm r}$):\none per subtree",
+            fontsize=PT_SMALL, color=blue, ha="left", va="center",
+            linespacing=1.2)
+    ax.text(0.02, 0.60, "signal μ ($H_{\\rm c}$):\ncoarse subtrees",
             fontsize=PT_SMALL, color=green, ha="left", va="center",
-            linespacing=1.25)
-    ax.text(0.02, 0.5 * (ys[3] + ys[4]) - 0.06, "noise Σ",
-            fontsize=PT_SMALL, color=COLORS["mute"], ha="left", va="center")
-    ax.text(0.02, 0.96, "routes at depth $D_{\\rm r}$",
-            fontsize=PT_SMALL, color=blue, ha="left", va="top")
-    ax.text(0.5 * (x0 + x1) + 0.03, 0.955, "",
-            fontsize=PT_SMALL, color=blue, ha="center")
-    ax.text(0.61, ys[0] - 0.062, "16 Haar coordinates",
-            fontsize=PT_SMALL, color=COLORS["mute"], ha="center",
-            va="center")
+            linespacing=1.2)
+    ax.text(0.02, 0.86, "noise ξ:\nleaf by leaf",
+            fontsize=PT_SMALL, color="#5F6B7E", ha="left", va="center",
+            linespacing=1.2)
 
 
 def operator_schematic(ax) -> None:

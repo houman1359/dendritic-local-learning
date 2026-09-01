@@ -1,5 +1,11 @@
 \documentclass[aspectratio=169,10pt]{beamer}
 
+% Author at a true presentation canvas so absolute overlays and raster donors
+% share the same 16:9 geometry instead of Beamer's small default physical page.
+\setlength{\paperwidth}{13.333in}
+\setlength{\paperheight}{7.5in}
+\geometry{paperwidth=13.333in,paperheight=7.5in}
+
 \usepackage[T1]{fontenc}
 \usepackage{tgpagella}
 \usepackage[scale=0.94]{tgheros}
@@ -53,13 +59,13 @@
 \newcommand{\nodateheader}{%
   \begin{tikzpicture}[remember picture,overlay]
     \fill[white] (current page.north west) rectangle
-      ($(current page.north east)+(0,-0.38in)$);
+      ($(current page.north east)+(0,-0.68in)$);
     \node[anchor=west,font=\sffamily\fontsize{8.5}{9}\selectfont,text=ink]
-      at ($(current page.north west)+(0.54in,-0.21in)$)
+      at ($(current page.north west)+(0.54in,-0.19in)$)
       {DENDRITES AND CREDIT ASSIGNMENT WORKSHOP};
     \draw[orange,line width=0.8pt]
-      ($(current page.north west)+(0.54in,-0.32in)$) --
-      ($(current page.north west)+(5.15in,-0.32in)$);
+      ($(current page.north west)+(0.54in,-0.36in)$) --
+      ($(current page.north west)+(5.15in,-0.36in)$);
   \end{tikzpicture}%
 }
 
@@ -174,16 +180,28 @@
 \begin{frame}[plain]
   \fullimage{restricted_routed_local_learning_rule.png}
   \begin{tikzpicture}[remember picture,overlay]
-    \fill[white] ($(current page.north west)+(0.42in,-0.88in)$) rectangle
-      ($(current page.north west)+(3.90in,-1.16in)$);
+    \fill[white] ($(current page.north west)+(0.38in,-0.38in)$) rectangle
+      ($(current page.north west)+(4.94in,-1.22in)$);
+    \node[anchor=west,text=blue,font=\sffamily\bfseries\fontsize{10.0}{11.2}\selectfont]
+      at ($(current page.north west)+(0.49in,-0.58in)$)
+      {Exact and approximate local rules};
     \node[anchor=west,text=ink,font=\sffamily\bfseries\fontsize{8.3}{9.3}\selectfont]
-      at ($(current page.north west)+(0.49in,-1.02in)$)
+      at ($(current page.north west)+(0.49in,-0.91in)$)
       {Local approximate-gradient form:};
-    \fill[white] ($(current page.north west)+(10.18in,-1.49in)$) rectangle
-      ($(current page.north west)+(13.15in,-1.78in)$);
-    \node[anchor=west,text=ink,font=\sffamily\fontsize{7.8}{8.8}\selectfont]
-      at ($(current page.north west)+(10.23in,-1.64in)$)
-      {$N_u$: routed nonsomatic compartments in neuron $u$};
+    \fill[white] ($(current page.north west)+(8.86in,-0.36in)$) rectangle
+      ($(current page.north west)+(13.18in,-2.08in)$);
+    \node[anchor=west,text=ink,font=\sffamily\fontsize{8.0}{9.2}\selectfont]
+      at ($(current page.north west)+(8.98in,-0.60in)$)
+      {$A_u\in\mathbb R^{N_u\times K}$\quad fixed route/address matrix};
+    \node[anchor=west,text=ink,font=\sffamily\fontsize{8.0}{9.2}\selectfont]
+      at ($(current page.north west)+(8.98in,-1.00in)$)
+      {$c_u=(c_{u,1},\ldots,c_{u,K})^\top$\quad communicated coefficients};
+    \node[anchor=west,text=ink,font=\sffamily\fontsize{8.0}{9.2}\selectfont]
+      at ($(current page.north west)+(8.98in,-1.40in)$)
+      {$K$\quad feedback bandwidth (number of route coefficients)};
+    \node[anchor=west,text=ink,font=\sffamily\fontsize{8.0}{9.2}\selectfont]
+      at ($(current page.north west)+(8.98in,-1.80in)$)
+      {$N_u$\quad routed nonsomatic compartments in neuron $u$};
   \end{tikzpicture}
 \end{frame}
 
@@ -294,29 +312,25 @@
 \begin{frame}[plain]
   \abstitle{Shared credit fails at the predicted conflict boundary}
   \begin{tikzpicture}[remember picture,overlay]
-    \node[anchor=north west,text=ink,font=\rmfamily\fontsize{21}{24}\selectfont]
-      at ($(current page.north west)+(0.52in,-1.30in)$)
-      {$\displaystyle \chi_c=\frac{B}{2(B-1)}$};
-    \node[anchor=north west,text=ink,align=left,text width=2.55in,
-      font=\sffamily\fontsize{9.8}{11.8}\selectfont]
-      at ($(current page.north west)+(0.52in,-2.34in)$)
-      {The trained chance crossing follows the analytic threshold for
-       $B\in\{2,4,8\}$.};
-    \node[anchor=north west,text=green,font=\sffamily\bfseries\fontsize{25}{28}\selectfont]
-      at ($(current page.north west)+(0.52in,-3.35in)$) {35--58 pp};
-    \node[anchor=north west,text=ink,align=left,text width=2.55in,
-      font=\sffamily\fontsize{9.4}{11.4}\selectfont]
-      at ($(current page.north west)+(0.52in,-3.86in)$)
-      {correct branch route over a neuron-shared signal at full conflict.};
-    \node[anchor=north west,rounded corners=6pt,draw=red!40,fill=palered,
-      text width=2.48in,align=left,inner sep=7pt,text=ink,
-      font=\sffamily\fontsize{8.5}{10.1}\selectfont]
-      at ($(current page.north west)+(0.52in,-5.07in)$)
-      {Cyclic derangement fails at matched rank and sparsity.\\20 seeds per $B$.};
+    \node[anchor=north west,inner sep=0]
+      at ($(current page.north west)+(0.48in,-1.02in)$)
+      {\includegraphics[width=12.35in]{path_necessity_results.png}};
 
-    \node[anchor=north east,inner sep=0]
-      at ($(current page.north east)+(-0.35in,-1.14in)$)
-      {\includegraphics[width=9.55in]{path_necessity_results.png}};
+    \node[anchor=north west,rounded corners=7pt,draw=purple!45,fill=palepurple,
+      text width=3.45in,align=center,inner sep=8pt,text=ink]
+      at ($(current page.north west)+(0.52in,-5.46in)$)
+      {\fontsize{15}{18}\selectfont $\displaystyle \chi_c=\frac{B}{2(B-1)}$\\[-1pt]
+       {\sffamily\fontsize{8.2}{9.8}\selectfont analytic and trained crossings agree for $B\in\{2,4,8\}$}};
+    \node[anchor=north west,rounded corners=7pt,draw=green!50,fill=paleteal,
+      text width=3.15in,align=center,inner sep=8pt,text=ink]
+      at ($(current page.north west)+(4.50in,-5.46in)$)
+      {{\color{green}\sffamily\bfseries\fontsize{19}{21}\selectfont 35--58 pp}\\[-1pt]
+       {\sffamily\fontsize{8.2}{9.8}\selectfont correct branch route over a neuron-shared signal at full conflict}};
+    \node[anchor=north west,rounded corners=7pt,draw=red!42,fill=palered,
+      text width=4.48in,align=left,inner sep=8pt,text=ink,
+      font=\sffamily\fontsize{8.5}{10.2}\selectfont]
+      at ($(current page.north west)+(8.07in,-5.46in)$)
+      {\textbf{Ownership control.} Cyclic derangement preserves rank and sparsity but sends each signal to the wrong branch; it fails across 20 seeds per $B$.};
   \end{tikzpicture}
   \takeaway{Branch-specific credit becomes useful precisely when a shared neuronal signal cancels across competing branches.}
 \end{frame}
@@ -329,11 +343,11 @@
       at ($(current page.north west)+(0.35in,-1.00in)$)
       {\includegraphics[width=5.88in,trim=22 0 0 0,clip]{hierarchy_task_current.png}};
     \node[anchor=north west,inner sep=0]
-      at ($(current page.north west)+(0.47in,-4.72in)$)
-      {\includegraphics[width=1.75in,trim=20 0 0 0,clip]{hierarchy_bandwidth_current.png}};
-    \node[anchor=north west,text=ink,align=left,text width=3.15in,
+      at ($(current page.north west)+(0.47in,-4.52in)$)
+      {\includegraphics[width=2.15in,trim=20 0 0 0,clip]{hierarchy_bandwidth_current.png}};
+    \node[anchor=north west,text=ink,align=left,text width=3.12in,
       font=\sffamily\fontsize{8.8}{10.7}\selectfont]
-      at ($(current page.north west)+(2.47in,-4.72in)$)
+      at ($(current page.north west)+(2.82in,-4.58in)$)
       {$K=1,2,4,8$ is the number of independent within-neuron route coefficients.\\[6pt]
        Route families are matched for rank, sparsity, forward computation, and feedback cost.};
 
@@ -366,7 +380,7 @@
     \node[anchor=south east,rounded corners=6pt,draw=green!55,fill=white,
       text=ink,align=center,inner xsep=8pt,inner ysep=5pt,
       font=\sffamily\bfseries\fontsize{8.5}{9.7}\selectfont]
-      at ($(current page.south east)+(-0.48in,0.47in)$)
+      at ($(current page.south east)+(-0.48in,0.68in)$)
       {Same ordering in a descriptive\\10-cell second-mouse cohort};
   \end{tikzpicture}
 \end{frame}
@@ -375,36 +389,71 @@
 \begin{frame}[plain]
   \abstitle{Focal shunting changes descendant credit only in permissive regimes}
   \begin{tikzpicture}[remember picture,overlay]
-    \node[anchor=north west,inner sep=0]
-      at ($(current page.north west)+(0.28in,-1.08in)$)
-      {\includegraphics[width=6.12in]{focal_shunt_schematic.png}};
-    \fill[white] ($(current page.north west)+(1.45in,-1.10in)$) rectangle
-      ($(current page.north west)+(4.53in,-1.42in)$);
-    \node[anchor=center,text=blue,font=\sffamily\bfseries\fontsize{10.2}{11.2}\selectfont]
-      at ($(current page.north west)+(2.98in,-1.26in)$)
-      {baseline-current-matched injection};
+    % Two matched interventions, redrawn as editable vector schematics.
+    \begin{scope}[shift={($(current page.north west)+(0.42in,-1.04in)$)},x=1in,y=1in]
+      \fill[paleblue,rounded corners=8pt] (0,0) rectangle (2.70,-2.48);
+      \draw[blue!38,rounded corners=8pt,line width=0.7pt] (0,0) rectangle (2.70,-2.48);
+      \node[anchor=north,font=\sffamily\bfseries\fontsize{9.0}{10.4}\selectfont,text=blue]
+        at (1.35,-0.14) {baseline-current-matched injection};
+      \coordinate (ls) at (1.35,-2.13);
+      \coordinate (lk) at (1.35,-1.47);
+      \draw[green!72!black,line width=2.0pt] (ls)--(1.35,-1.73)--(lk)--(0.72,-0.95);
+      \draw[green!72!black,line width=2.0pt] (lk)--(2.00,-0.98);
+      \draw[green!72!black,line width=1.45pt] (0.72,-0.95)--(0.42,-0.64) (0.72,-0.95)--(0.92,-0.56);
+      \draw[green!72!black,line width=1.45pt] (2.00,-0.98)--(1.76,-0.62) (2.00,-0.98)--(2.32,-0.63);
+      \fill[orange] (ls) circle (0.095); \draw[white,line width=0.7pt] (ls) circle (0.095);
+      \draw[red,line width=1.5pt,fill=white] (lk) circle (0.055);
+      \draw[->,blue,line width=2.0pt] (0.18,-1.47)--(1.24,-1.47);
+      \node[anchor=south,text=blue,font=\sffamily\bfseries\fontsize{8.7}{9.6}\selectfont]
+        at (0.62,-1.43) {$I_k^{\rm match}$};
+      \node[anchor=south,font=\sffamily\fontsize{8.0}{9.2}\selectfont,text=muted]
+        at (1.35,-2.39) {same baseline focal current};
+
+      \draw[->,muted,line width=1.8pt] (2.83,-1.25)--(3.12,-1.25);
+
+      \fill[paleteal,rounded corners=8pt] (3.24,0) rectangle (5.94,-2.48);
+      \draw[green!42,rounded corners=8pt,line width=0.7pt] (3.24,0) rectangle (5.94,-2.48);
+      \node[anchor=north,font=\sffamily\bfseries\fontsize{9.0}{10.4}\selectfont,text=green]
+        at (4.59,-0.14) {focal inhibitory conductance};
+      \coordinate (rs) at (4.59,-2.13);
+      \coordinate (rk) at (4.59,-1.47);
+      \draw[muted!45,line width=1.3pt] (rs)--(4.59,-1.73)--(rk)--(3.96,-0.95);
+      \draw[green,line width=3.0pt] (rk)--(5.24,-0.98);
+      \draw[muted!45,line width=1.1pt] (3.96,-0.95)--(3.66,-0.64) (3.96,-0.95)--(4.16,-0.56);
+      \draw[green,line width=2.2pt] (5.24,-0.98)--(5.00,-0.62) (5.24,-0.98)--(5.56,-0.63);
+      \fill[orange] (rs) circle (0.095); \draw[white,line width=0.7pt] (rs) circle (0.095);
+      \draw[red,line width=2.0pt,fill=white] (rk) circle (0.072);
+      \node[anchor=west,text=red,font=\sffamily\bfseries\fontsize{8.7}{9.6}\selectfont]
+        at (4.72,-1.43) {$G_k^I$};
+      \node[anchor=south,font=\sffamily\fontsize{8.0}{9.2}\selectfont,text=green]
+        at (4.59,-2.39) {only the descendant route is highlighted};
+    \end{scope}
 
     \node[anchor=north east,inner sep=0]
-      at ($(current page.north east)+(-0.28in,-1.04in)$)
+      at ($(current page.north east)+(-0.34in,-1.03in)$)
       {\includegraphics[width=6.08in]{focal_boundary_current.png}};
 
     \node[anchor=north west,rounded corners=7pt,draw=purple!45,fill=palepurple,
-      text=ink,align=center,inner sep=9pt,text width=5.55in]
-      at ($(current page.north west)+(0.48in,-3.74in)$)
+      text=ink,align=center,inner sep=8pt,text width=5.54in]
+      at ($(current page.north west)+(0.48in,-3.86in)$)
       {\fontsize{14}{17}\selectfont
       $\displaystyle
       \frac{\partial\log \widetilde\alpha_n^{\rm cond}}{\partial G_k^I}
       =-R_k^{\rm tot}\,\mathbf 1\!\left[k\in\mathcal A(n)\right]$\\[-1pt]
-      {\sffamily\fontsize{8.9}{10.5}\selectfont
-      only descendants whose route passes through site $k$ change to first order}};
-
+      {\sffamily\fontsize{8.8}{10.4}\selectfont
+      first-order change is restricted to descendants whose route passes through site $k$}};
+    \node[anchor=north west,rounded corners=7pt,draw=blue!38,fill=white,
+      text=ink,align=left,inner sep=8pt,text width=5.54in,
+      font=\sffamily\fontsize{8.8}{10.4}\selectfont]
+      at ($(current page.north west)+(0.48in,-5.28in)$)
+      {Somatic voltage is restored after both interventions. Only the shunt changes the conductance matrix $G$ and therefore the adjoint field $q=G^{-\top}\nabla_V\mathcal L$.};
     \node[anchor=north east,rounded corners=7pt,draw=green!45,fill=paleteal,
-      text=ink,align=left,inner sep=9pt,text width=5.50in,
-      font=\sffamily\fontsize{9.5}{11.4}\selectfont]
-      at ($(current page.north east)+(-0.48in,-4.86in)$)
-      {\textbf{Standard passive calibration} ($R_m=15{,}000$): null.\\
-       \textbf{Lower resistance / background conductance}: descendant localization emerges.\\
-       This is a conditional route-gain mechanism, not yet a general trained-learning advantage.};
+      text=ink,align=left,inner sep=9pt,text width=5.53in,
+      font=\sffamily\fontsize{9.2}{11.1}\selectfont]
+      at ($(current page.north east)+(-0.48in,-5.07in)$)
+      {\textbf{Standard passive calibration} ($R_m=15{,}000$): null.\\[2pt]
+       \textbf{Lower resistance / background conductance}: descendant localization emerges.\\[2pt]
+       Conditional route-gain mechanism; not a general trained-learning advantage.};
   \end{tikzpicture}
   \takeaway{Shunting can regulate an already-addressed credit route, but ordinary passive parameters do not guarantee the effect.}
 \end{frame}
@@ -442,22 +491,22 @@
        imposed task-credit field rotates into the route span.};
 
     \node[anchor=north west,inner sep=0]
-      at ($(current page.north west)+(7.30in,-1.14in)$)
-      {\includegraphics[width=4.40in]{alignment_rescue_n.png}};
+      at ($(current page.north west)+(7.38in,-1.15in)$)
+      {\includegraphics[height=4.70in]{alignment_rescue_n.png}};
     \node[anchor=north west,rounded corners=6pt,draw=green!50,fill=paleteal,
       text width=1.18in,align=center,inner sep=6pt,text=ink]
-      at ($(current page.north west)+(11.82in,-1.47in)$)
+      at ($(current page.north west)+(11.37in,-1.47in)$)
       {{\color{green}\sffamily\bfseries\fontsize{15}{17}\selectfont 8/8}\\[-1pt]
        {\sffamily\fontsize{7.5}{8.8}\selectfont lose at $a=0$; win at $a=1$}};
     \node[anchor=north west,rounded corners=6pt,draw=purple!50,fill=palepurple,
       text width=1.18in,align=center,inner sep=6pt,text=ink]
-      at ($(current page.north west)+(11.82in,-2.77in)$)
+      at ($(current page.north west)+(11.37in,-2.77in)$)
       {{\color{purple}\sffamily\bfseries\fontsize{14}{16}\selectfont $\rho_s=0.99$}\\[-1pt]
        {\sffamily\fontsize{7.5}{8.8}\selectfont capture--progress}};
     \node[anchor=north west,rounded corners=7pt,draw=orange!55,fill=paleorange,
       text width=5.45in,align=left,inner sep=9pt,text=ink,
       font=\sffamily\fontsize{8.8}{10.6}\selectfont]
-      at ($(current page.north west)+(7.30in,-5.21in)$)
+      at ($(current page.north west)+(7.38in,-5.98in)$)
       {\textbf{Establishes:} representational sufficiency of a fixed route dictionary under controlled alignment.\\[2pt]
        \textbf{Does not establish:} trained or endogenous biological alignment.};
   \end{tikzpicture}
@@ -466,29 +515,29 @@
 
 % 20 -------------------------------------------------------------------------
 \begin{frame}[plain]
-  \abstitle{Alignment and bandwidth organize the positive and null results}
+  \abstitle{Dendritic benefit lies in a matched alignment--bandwidth regime}
   \begin{tikzpicture}[remember picture,overlay]
     \node[anchor=north west,inner sep=0]
-      at ($(current page.north west)+(0.34in,-1.07in)$)
-      {\includegraphics[width=9.33in]{phase_plane.png}};
+      at ($(current page.north west)+(0.44in,-1.02in)$)
+      {\includegraphics[width=12.44in]{phase_plane.png}};
     \node[anchor=north west,text=muted,font=\sffamily\itshape\fontsize{8.2}{9.4}\selectfont]
-      at ($(current page.north west)+(6.38in,-5.83in)$)
+      at ($(current page.north west)+(0.58in,-5.58in)$)
       {theoretical regime map; boundaries are not fitted};
-
-    \node[anchor=north west,text=ink,align=left,text width=3.18in,
-      font=\sffamily\fontsize{9.2}{11.2}\selectfont]
-      at ($(current page.north west)+(9.82in,-1.18in)$)
-      {\tagpill{teal}{1}{Coordinate}\\[5pt]
-       Neuron identity closes most of the standard-task gap.\\[15pt]
-       \tagpill{purple}{2}{Address}\\[5pt]
-       Branch and subtree routes help when local credits conflict and the task matches the route span.\\[15pt]
-       \tagpill{orange}{3}{Gain}\\[5pt]
-       Anatomy supplies sparse candidate routes; shunting regulates them only in permissive regimes.};
-    \node[anchor=north west,rounded corners=7pt,draw=red!42,fill=palered,
-      text width=2.88in,align=center,inner sep=8pt,text=ink,
-      font=\sffamily\bfseries\fontsize{8.6}{10.2}\selectfont]
-      at ($(current page.north west)+(9.82in,-5.33in)$)
-      {Measured MICrONS responses show no endogenous morphology-specific alignment in the tested cohort.};
+    \node[anchor=north west,rounded corners=7pt,draw=teal!40,fill=paleteal,
+      text width=3.72in,align=left,inner sep=8pt,text=ink,
+      font=\sffamily\fontsize{8.7}{10.4}\selectfont]
+      at ($(current page.north west)+(0.48in,-5.78in)$)
+      {\tagpill{teal}{1}{Coordinate}\quad Neuron identity closes most of the standard-task gap.};
+    \node[anchor=north west,rounded corners=7pt,draw=purple!40,fill=palepurple,
+      text width=3.72in,align=left,inner sep=8pt,text=ink,
+      font=\sffamily\fontsize{8.7}{10.4}\selectfont]
+      at ($(current page.north west)+(4.55in,-5.78in)$)
+      {\tagpill{purple}{2}{Address}\quad Routes help when local credits conflict and the task matches their span.};
+    \node[anchor=north west,rounded corners=7pt,draw=orange!45,fill=paleorange,
+      text width=3.72in,align=left,inner sep=8pt,text=ink,
+      font=\sffamily\fontsize{8.7}{10.4}\selectfont]
+      at ($(current page.north west)+(8.62in,-5.78in)$)
+      {\tagpill{orange}{3}{Gain}\quad Anatomy is sparse; shunting regulates routes only in permissive regimes.};
   \end{tikzpicture}
   \takeaway{Dendritic structure is a conditional substrate for routing local credit---not a general replacement for backpropagation.}
 \end{frame}

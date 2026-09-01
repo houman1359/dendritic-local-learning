@@ -890,12 +890,13 @@ scope.
 routing helps.} \textbf{A}, The operator \(M\) maps stochastic gradient
 \(\bm\mu+\bm\xi\) to the local update; \(\bm\xi\) has covariance \(\Sigma\).
 Utility balances retained task signal against finite-step and noise costs.
-\textbf{B}, The synthetic task, drawn on its tree: one Haar coordinate per
-node (sixteen in all). The generator places the mean gradient \(\bm\mu\) on
-the \(H_{\mathrm c}\) coarsest hierarchy levels nearest the soma (green)
-and batch noise \(\Sigma\) on the finer canopy levels (gray); the feedback
-pathway is the capsule idiom of \textbf{A}, one route per subtree at the
-resolved depth \(D_{\mathrm r}\). \(H_{\mathrm c}\) and
+\textbf{B}, The synthetic task, as patterns over one set of terminals.
+Above the eight leaves of a balanced tree: the feedback routes, one value
+per subtree at the resolved depth \(D_{\mathrm r}\); the task signal
+\(\bm\mu\), piecewise-constant across whole subtrees (the tree's
+\(H_{\mathrm c}\) coarsest Haar patterns); and minibatch noise
+\(\bm\xi\), varying leaf by leaf. Signal and noise differ in pattern
+scale, not in dendritic location. \(H_{\mathrm c}\) and
 \(D_{\mathrm r}\) vary independently, and \textbf{D} sweeps their
 mismatch.
 \textbf{C}, Nested-subtree-minus-random field capture as task covariance aligns

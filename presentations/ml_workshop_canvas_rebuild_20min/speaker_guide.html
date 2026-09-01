@@ -1,0 +1,523 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+@page { size: 11in 8.5in; margin: 0; }
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; color: #12233F; font-family: Arial, sans-serif; }
+.page {
+  width: 11in; height: 8.5in; page-break-after: always; overflow: hidden;
+  padding: .34in .38in .30in; background:
+    radial-gradient(circle at 100% 0%, rgba(22,143,131,.07), transparent 28%),
+    linear-gradient(180deg,#FBFBF8,#F5F7F4);
+}
+.head { display: grid; grid-template-columns: .65in 1fr 1.05in; gap: .1in;
+  align-items: end; padding-bottom: .11in; border-bottom: 2px solid #CADDD9; }
+.num { color: #168F83; font: 700 25px Georgia, serif; }
+h1 { margin: 0; font: 700 23px/1.07 Georgia, serif; letter-spacing: -.2px; }
+.time { color: #168F83; font-weight: 800; font-size: 15px; text-align: right; }
+.body { display: grid; grid-template-columns: 31.5% 68.5%; gap: .24in; margin-top: .18in; }
+.left, .right { min-width: 0; }
+.thumb { width: 100%; border: 1px solid #CBD6DD; border-radius: 8px; box-shadow: 0 5px 16px rgba(18,35,63,.10); }
+.block { margin-top: .12in; padding: .10in .12in; border-radius: 8px; background: #FFFFFF; border-left: 4px solid #168F83; }
+.block.purple { border-left-color: #7654B5; }
+.block.orange { border-left-color: #E48743; }
+.block.gray { border-left-color: #8B98A7; }
+.label { color: #168F83; font-size: 9px; font-weight: 800; letter-spacing: .8px; text-transform: uppercase; margin-bottom: 3px; }
+.purple .label { color: #7654B5; } .orange .label { color: #B9692E; } .gray .label { color: #637181; }
+p { margin: 0; font-size: 10.5px; line-height: 1.34; }
+.script { padding: .15in .18in; border: 1.5px solid #C9E3DE; border-radius: 10px; background: #EFF8F6; }
+.script p { font-size: 12.2px; line-height: 1.38; }
+.qa { display: grid; grid-template-columns: 43% 57%; gap: .12in; margin-top: .13in; }
+.qa .block { margin-top: 0; }
+.transition { margin-top: .13in; padding: .10in .14in; border-radius: 8px; background: #12233F; color: white; }
+.transition .label { color: #A8DCD4; }
+.footer { position: absolute; left: .38in; right: .38in; bottom: .12in; color: #73808E; font-size: 8px; text-align: right; }
+
+.body { grid-template-columns: 36% 64%; gap: .26in; margin-top: .22in; }
+.thumb { border-radius: 10px; }
+.block { margin-top: .16in; padding: .13in .15in; }
+.label { font-size: 10.5px; margin-bottom: 5px; }
+p { font-size: 13px; line-height: 1.38; }
+.script { padding: .18in .20in; }
+.script p { font-size: 15px; line-height: 1.42; }
+.qa { gap: .15in; margin-top: .17in; }
+.transition { margin-top: .17in; padding: .13in .16in; }
+</style></head><body>
+<section class="page">
+  <header class="head">
+    <div class="num">01</div>
+    <h1>When dendritic structure helps local credit assignment</h1>
+    <div class="time">0:40 · scripted</div>
+  </header>
+  <div class="body">
+    <aside class="left">
+      <img class="thumb" src="file:///n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/dendritic-local-learning/presentations/ml_workshop_canvas_rebuild_20min/png/slide_01.png" alt="Slide 1 thumbnail">
+      <div class="block"><div class="label">Purpose</div><p>State the network-level problem and the conditional claim of the talk.</p></div>
+      <div class="block purple"><div class="label">How to read it</div><p>The four callouts preview the story: neuron coordinate, subtree address, route gain, and task alignment.</p></div>
+      <div class="block orange"><div class="label">Claim guardrail</div><p>Present a phase-conditioned theory, not a universal dendritic advantage.</p></div>
+    </aside>
+    <main class="right">
+      <div class="script"><div class="label">Say this</div><p>Learning requires assigning a behavioral error to the internal variables that could have caused it. Artificial networks solve this with backpropagation. Biological learning must instead use signals available to neurons, dendritic branches, and synapses. I will ask when dendritic structure supplies useful coordinates for that local credit assignment. The answer is conditional: dendrites help when feedback has the right bandwidth, the task is aligned with the available routes, and those routes transport credit reliably.</p></div>
+      <div class="qa">
+        <div class="block purple"><div class="label">Likely question</div><p>Are you claiming that dendrites implement backpropagation?</p></div>
+        <div class="block"><div class="label">Answer</div><p>No. Backpropagation is the exact reference that defines the information problem; the paper studies restricted, locally available alternatives.</p></div>
+      </div>
+      <div class="transition"><div class="label">Transition</div><p>First, why does a network objective create a local credit problem?</p></div>
+    </main>
+  </div>
+  <div class="footer">Dendrites and Credit Assignment Workshop · slide 1 of 20</div>
+</section>
+<section class="page">
+  <header class="head">
+    <div class="num">02</div>
+    <h1>Learning in the brain is a credit-assignment problem</h1>
+    <div class="time">0:45 · scripted</div>
+  </header>
+  <div class="body">
+    <aside class="left">
+      <img class="thumb" src="file:///n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/dendritic-local-learning/presentations/ml_workshop_canvas_rebuild_20min/png/slide_02.png" alt="Slide 2 thumbnail">
+      <div class="block"><div class="label">Purpose</div><p>Move from one behavioral error to many possible causal weights at several biological scales.</p></div>
+      <div class="block purple"><div class="label">How to read it</div><p>Follow the widening sequence from one task error to circuit, neuron, branch, and many candidate synapses.</p></div>
+      <div class="block orange"><div class="label">Claim guardrail</div><p>Begin with network weights and objectives before discussing synaptic mechanisms.</p></div>
+    </aside>
+    <main class="right">
+      <div class="script"><div class="label">Say this</div><p>A circuit produces behavior through many neurons, branches, synapses, and trainable weights. The final loss says whether the behavior was wrong, but it does not say which internal variable was responsible. Learning therefore has to recover three things for each parameter: its destination, the sign of change, and the magnitude. The structural question runs from which neuron, to which branch within that neuron, and finally to which synapse. This talk focuses on that spatial credit problem rather than temporal credit.</p></div>
+      <div class="qa">
+        <div class="block purple"><div class="label">Likely question</div><p>Is this the same as temporal credit assignment?</p></div>
+        <div class="block"><div class="label">Answer</div><p>No. The focus here is structural credit across neurons, branches, and synapses; temporal eligibility could be added on top.</p></div>
+      </div>
+      <div class="transition"><div class="label">Transition</div><p>Backpropagation gives the exact computational solution to this problem.</p></div>
+    </main>
+  </div>
+  <div class="footer">Dendrites and Credit Assignment Workshop · slide 2 of 20</div>
+</section>
+<section class="page">
+  <header class="head">
+    <div class="num">03</div>
+    <h1>Backpropagation solves parameter credit in artificial networks</h1>
+    <div class="time">0:50 · scripted</div>
+  </header>
+  <div class="body">
+    <aside class="left">
+      <img class="thumb" src="file:///n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/dendritic-local-learning/presentations/ml_workshop_canvas_rebuild_20min/png/slide_03.png" alt="Slide 3 thumbnail">
+      <div class="block"><div class="label">Purpose</div><p>Define the exact reference and separate local eligibility from transported error.</p></div>
+      <div class="block purple"><div class="label">How to read it</div><p>Forward arrows compute the output; purple arrows return the exact loss sensitivity. Read the equation as eligibility times returned error.</p></div>
+      <div class="block orange"><div class="label">Claim guardrail</div><p>Do not say that backpropagation sends an independent message to every weight; eligibility makes gradients parameter-specific.</p></div>
+    </aside>
+    <main class="right">
+      <div class="script"><div class="label">Say this</div><p>For a unit with preactivation u i equal to the weighted sum of its inputs, backpropagation defines delta i as the derivative of the loss with respect to u i. The weight gradient then factorizes as delta i times the presynaptic activity x j. The x j factor is local eligibility. The difficult factor is delta i, which transports downstream consequences backward through the network using the chain rule. That eligibility times transported-error decomposition will remain intact when we move from point neurons to dendrites.</p></div>
+      <div class="qa">
+        <div class="block purple"><div class="label">Likely question</div><p>Why use backpropagation if it is not a plausible neuronal mechanism?</p></div>
+        <div class="block"><div class="label">Answer</div><p>Because it supplies the exact gradient against which the direction and information content of restricted local rules can be measured.</p></div>
+      </div>
+      <div class="transition"><div class="label">Transition</div><p>Biological theories relax different requirements of that exact reverse calculation.</p></div>
+    </main>
+  </div>
+  <div class="footer">Dendrites and Credit Assignment Workshop · slide 3 of 20</div>
+</section>
+<section class="page">
+  <header class="head">
+    <div class="num">04</div>
+    <h1>Biological theories solve different parts of credit assignment</h1>
+    <div class="time">0:50 · scripted</div>
+  </header>
+  <div class="body">
+    <aside class="left">
+      <img class="thumb" src="file:///n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/dendritic-local-learning/presentations/ml_workshop_canvas_rebuild_20min/png/slide_04.png" alt="Slide 4 thumbnail">
+      <div class="block"><div class="label">Purpose</div><p>Place the work relative to three-factor rules, feedback alignment, equilibrium methods, and dendritic-error models.</p></div>
+      <div class="block purple"><div class="label">How to read it</div><p>Each column changes a different part of the exact credit pathway; the dendritic destination problem remains the focus here.</p></div>
+      <div class="block orange"><div class="label">Claim guardrail</div><p>Acknowledge the historical precedents; novelty lies in the coordinate, routing, and phase-boundary analysis.</p></div>
+    </aside>
+    <main class="right">
+      <div class="script"><div class="label">Say this</div><p>Existing theories reduce different demands of backpropagation. Three-factor rules multiply local eligibility by a modulatory signal. Feedback alignment replaces exact symmetric weights with approximate feedback. Predictive coding and equilibrium methods infer error-related quantities from dynamics. Dendritic-error models use compartmental segregation to expose teaching signals locally. Our question is narrower and complementary: once some teaching information reaches a neuron, how many coordinates does it contain, which locations receive them, and can conductance regulate their gain within the arbor?</p></div>
+      <div class="qa">
+        <div class="block purple"><div class="label">Likely question</div><p>Is this another competing learning algorithm?</p></div>
+        <div class="block"><div class="label">Answer</div><p>Primarily it is a framework for comparing the operators by which local rules distribute credit within and across neurons.</p></div>
+      </div>
+      <div class="transition"><div class="label">Transition</div><p>The unresolved spatial bottleneck appears when a biological neuron is represented as one point.</p></div>
+    </main>
+  </div>
+  <div class="footer">Dendrites and Credit Assignment Workshop · slide 4 of 20</div>
+</section>
+<section class="page">
+  <header class="head">
+    <div class="num">05</div>
+    <h1>The unresolved problem begins inside the neuron</h1>
+    <div class="time">0:45 · scripted</div>
+  </header>
+  <div class="body">
+    <aside class="left">
+      <img class="thumb" src="file:///n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/dendritic-local-learning/presentations/ml_workshop_canvas_rebuild_20min/png/slide_05.png" alt="Slide 5 thumbnail">
+      <div class="block"><div class="label">Purpose</div><p>Explain the point-neuron bandwidth bottleneck without implying neuronal collapse.</p></div>
+      <div class="block purple"><div class="label">How to read it</div><p>The left side has many distinct eligibilities but one task-dependent coordinate; the right side exposes several unresolved destinations.</p></div>
+      <div class="block orange"><div class="label">Claim guardrail</div><p>Call this a bandwidth bottleneck, not collapse or weight equalization.</p></div>
+    </aside>
+    <main class="right">
+      <div class="script"><div class="label">Say this</div><p>For a point neuron, every synaptic update can still combine its own local eligibility with one returned neuron-level signal. A shared signal does not make all weights or neurons identical: their inputs, voltages, initial conditions, and eligibilities remain different. The limitation is feedback bandwidth. One neuron-level coordinate cannot tell two simultaneously active branches that they need oppositely signed credit on the same example. Dendritic structure makes that missing within-neuron destination question explicit.</p></div>
+      <div class="qa">
+        <div class="block purple"><div class="label">Likely question</div><p>Would a shared scalar make the layer behave like one neuron?</p></div>
+        <div class="block"><div class="label">Answer</div><p>No. It restricts task-dependent learning to a low-dimensional direction while preserving state and eligibility diversity.</p></div>
+      </div>
+      <div class="transition"><div class="label">Transition</div><p>A dendritic tree adds three concrete resources beyond that point-neuron description.</p></div>
+    </main>
+  </div>
+  <div class="footer">Dendrites and Credit Assignment Workshop · slide 5 of 20</div>
+</section>
+<section class="page">
+  <header class="head">
+    <div class="num">06</div>
+    <h1>A dendritic tree adds local state, subtree addresses, and route gain</h1>
+    <div class="time">0:45 · scripted</div>
+  </header>
+  <div class="body">
+    <aside class="left">
+      <img class="thumb" src="file:///n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/dendritic-local-learning/presentations/ml_workshop_canvas_rebuild_20min/png/slide_06.png" alt="Slide 6 thumbnail">
+      <div class="block"><div class="label">Purpose</div><p>Define the biological resources before introducing any positive result.</p></div>
+      <div class="block purple"><div class="label">How to read it</div><p>The colored morphology places local state, address, gain, and task alignment directly on one arbor.</p></div>
+      <div class="block orange"><div class="label">Claim guardrail</div><p>Do not equate more compartments with more useful credit.</p></div>
+    </aside>
+    <main class="right">
+      <div class="script"><div class="label">Say this</div><p>A dendritic neuron adds local voltage and conductance state, nested subtree addresses, and state-dependent route gain. Different compartments therefore have different eligibilities. A signal delivered to one branch can be shared by its descendants without being broadcast to the full neuron. Conductance can also change how strongly a perturbation travels along that route. But these are available resources, not guaranteed benefits. Whether they help depends on the credit pattern demanded by the task.</p></div>
+      <div class="qa">
+        <div class="block purple"><div class="label">Likely question</div><p>Should greater physical dendritic depth automatically improve learning?</p></div>
+        <div class="block"><div class="label">Answer</div><p>No. Extra depth can add attenuation and noise; it helps only when computation and credit demand match the hierarchy.</p></div>
+      </div>
+      <div class="transition"><div class="label">Transition</div><p>To derive eligibility and gain, we first specify the forward conductance model.</p></div>
+    </main>
+  </div>
+  <div class="footer">Dendrites and Credit Assignment Workshop · slide 6 of 20</div>
+</section>
+<section class="page">
+  <header class="head">
+    <div class="num">07</div>
+    <h1>A dendritic neuron is a conductance tree with explicit E/I synapses</h1>
+    <div class="time">0:55 · scripted</div>
+  </header>
+  <div class="body">
+    <aside class="left">
+      <img class="thumb" src="file:///n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/dendritic-local-learning/presentations/ml_workshop_canvas_rebuild_20min/png/slide_07.png" alt="Slide 7 thumbnail">
+      <div class="block"><div class="label">Purpose</div><p>Define excitation, inhibition, steady state, and shunting in one forward model.</p></div>
+      <div class="block purple"><div class="label">How to read it</div><p>The left tree defines compartment and synapse sets; the right equations move from current balance to the normalized steady-state voltage.</p></div>
+      <div class="block orange"><div class="label">Claim guardrail</div><p>Keep reversal potentials and the denominator effect explicit whenever excitation and inhibition are compared.</p></div>
+    </aside>
+    <main class="right">
+      <div class="script"><div class="label">Say this</div><p>Each compartment receives nonnegative excitatory and inhibitory conductances. They differ through their reversal potentials, not by assigning a negative weight to inhibition. Current balance gives a steady-state voltage equal to reversal-weighted current divided by total conductance. Excitation and inhibition both increase the denominator and lower input resistance, while their driving forces determine current direction. Near the inhibitory reversal potential, an inhibitory synapse can displace voltage only weakly and still change gain through that denominator effect. That is the shunting mechanism studied here.</p></div>
+      <div class="qa">
+        <div class="block purple"><div class="label">Likely question</div><p>Is inhibition represented as a negative additive input?</p></div>
+        <div class="block"><div class="label">Answer</div><p>No. It enters as conductance times E-I minus V, so it alters both current and effective membrane conductance.</p></div>
+      </div>
+      <div class="transition"><div class="label">Transition</div><p>Differentiating this steady state shows which part of the exact gradient is locally available.</p></div>
+    </main>
+  </div>
+  <div class="footer">Dendrites and Credit Assignment Workshop · slide 7 of 20</div>
+</section>
+<section class="page">
+  <header class="head">
+    <div class="num">08</div>
+    <h1>Exact local eligibility has explicit excitatory and inhibitory cases</h1>
+    <div class="time">0:50 · scripted</div>
+  </header>
+  <div class="body">
+    <aside class="left">
+      <img class="thumb" src="file:///n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/dendritic-local-learning/presentations/ml_workshop_canvas_rebuild_20min/png/slide_08.png" alt="Slide 8 thumbnail">
+      <div class="block"><div class="label">Purpose</div><p>Derive the local conductance eligibility and distinguish it from transported error.</p></div>
+      <div class="block purple"><div class="label">How to read it</div><p>Read the large factorization left to right, then compare the green E and coral I driving-force terms.</p></div>
+      <div class="block orange"><div class="label">Claim guardrail</div><p>Do not call eligibility alone the full gradient.</p></div>
+    </aside>
+    <main class="right">
+      <div class="script"><div class="label">Say this</div><p>The exact gradient for conductance g i at compartment n again factorizes. Local eligibility contains presynaptic activity x i, local input resistance R total n, and the driving force E reverse i minus V n. The remaining factor, delta V n u, is the compartment learning signal: how the loss changes if voltage at that compartment changes. Excitatory and inhibitory eligibilities can therefore have opposite local signs when E I is below V n and E E is above it. The final gradient sign still also depends on the transported compartment error.</p></div>
+      <div class="qa">
+        <div class="block purple"><div class="label">Likely question</div><p>Does a synapse need to know the whole dendritic tree to compute eligibility?</p></div>
+        <div class="block"><div class="label">Answer</div><p>No. Eligibility uses local activity, voltage, reversal potential, and input resistance; global dependence enters through the compartment error.</p></div>
+      </div>
+      <div class="transition"><div class="label">Transition</div><p>The remaining question is how that compartment error is transported through the tree.</p></div>
+    </main>
+  </div>
+  <div class="footer">Dendrites and Credit Assignment Workshop · slide 8 of 20</div>
+</section>
+<section class="page">
+  <header class="head">
+    <div class="num">09</div>
+    <h1>Tree transport is a special case of the general adjoint</h1>
+    <div class="time">0:50 · scripted</div>
+  </header>
+  <div class="body">
+    <aside class="left">
+      <img class="thumb" src="file:///n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/dendritic-local-learning/presentations/ml_workshop_canvas_rebuild_20min/png/slide_09.png" alt="Slide 9 thumbnail">
+      <div class="block"><div class="label">Purpose</div><p>Connect the intuitive path product to the exact reciprocal-compartment calculation.</p></div>
+      <div class="block purple"><div class="label">How to read it</div><p>The left panel gives the intuitive unique-path product; the right panel gives the general implicit-system adjoint.</p></div>
+      <div class="block orange"><div class="label">Claim guardrail</div><p>Restrict exact single-path language to the directed-tree model.</p></div>
+    </aside>
+    <main class="right">
+      <div class="script"><div class="label">Say this</div><p>Write the steady state as F of V, g, and x equals zero. Implicit differentiation gives the adjoint system J V transpose q equals the loss gradient with respect to V. Intuitively, q n measures how much the loss would change if a small current were injected into compartment n. In a directed triangular tree, this solution factorizes into local transfer gains along the unique ancestry path. In a reciprocal conductance tree, a single path product is not general, but the full adjoint remains exact.</p></div>
+      <div class="qa">
+        <div class="block purple"><div class="label">Likely question</div><p>Are the path-product and adjoint calculations different algorithms?</p></div>
+        <div class="block"><div class="label">Answer</div><p>Where both apply they are equivalent forms of the same gradient; the adjoint is the general formulation.</p></div>
+      </div>
+      <div class="transition"><div class="label">Transition</div><p>We can now describe restricted feedback by the field it makes available inside each neuron.</p></div>
+    </main>
+  </div>
+  <div class="footer">Dendrites and Credit Assignment Workshop · slide 9 of 20</div>
+</section>
+<section class="page">
+  <header class="head">
+    <div class="num">10</div>
+    <h1>Restricted local learning is a routed credit operator</h1>
+    <div class="time">0:50 · scripted</div>
+  </header>
+  <div class="body">
+    <aside class="left">
+      <img class="thumb" src="file:///n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/dendritic-local-learning/presentations/ml_workshop_canvas_rebuild_20min/png/slide_10.png" alt="Slide 10 thumbnail">
+      <div class="block"><div class="label">Purpose</div><p>Put scalar, neuron-specific, subtree, and exact feedback in one notation.</p></div>
+      <div class="block purple"><div class="label">How to read it</div><p>Follow one coefficient into one colored route, then compare the four feedback resolutions along the bottom.</p></div>
+      <div class="block orange"><div class="label">Claim guardrail</div><p>Do not conflate neuron identity, arbor ownership, subtree address, and exact compartment location.</p></div>
+    </aside>
+    <main class="right">
+      <div class="script"><div class="label">Say this</div><p>For neuron u, the available compartment field is A u times c u. The columns of A u specify route supports or addresses, c u carries their signed coefficients, and K is feedback bandwidth. One layer-wide scalar provides a single shared coordinate. Neuron-specific feedback distinguishes cells but repeats one value within each arbor. Subtree feedback provides several nested addresses. Exact compartment feedback supplies one independent value per modeled location. This notation separates the content of a learning signal from where it is delivered.</p></div>
+      <div class="qa">
+        <div class="block purple"><div class="label">Likely question</div><p>Is the route matrix A u learned?</p></div>
+        <div class="block"><div class="label">Answer</div><p>Not in the principal comparisons. It defines the prescribed route dictionary; imposed alignment is stated explicitly when used.</p></div>
+      </div>
+      <div class="transition"><div class="label">Transition</div><p>The operator view lets us predict when restricting that field will help or hurt.</p></div>
+    </main>
+  </div>
+  <div class="footer">Dendrites and Credit Assignment Workshop · slide 10 of 20</div>
+</section>
+<section class="page">
+  <header class="head">
+    <div class="num">11</div>
+    <h1>A stochastic credit operator predicts when restricted routes help</h1>
+    <div class="time">0:55 · scripted</div>
+  </header>
+  <div class="body">
+    <aside class="left">
+      <img class="thumb" src="file:///n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/dendritic-local-learning/presentations/ml_workshop_canvas_rebuild_20min/png/slide_11.png" alt="Slide 11 thumbnail">
+      <div class="block"><div class="label">Purpose</div><p>Present the signal-noise utility as the theoretical centerpiece and state its empirical validation.</p></div>
+      <div class="block purple"><div class="label">How to read it</div><p>The left schematic routes signal and noise through M; the scatter tests the resulting utility against observed progress.</p></div>
+      <div class="block orange"><div class="label">Claim guardrail</div><p>Call this a predictive bound and boundary map, not a fitted law of all training trajectories.</p></div>
+    </aside>
+    <main class="right">
+      <div class="script"><div class="label">Say this</div><p>Let the exact stochastic update have mean mu and covariance Sigma, and let M be the restricted credit operator. The utility numerator is the squared alignment between useful mean gradient and routed update. The denominator penalizes routed update energy and noise, scaled by loss smoothness. The theory therefore predicts a boundary rather than a fixed ranking: extra routes help only when they capture aligned signal faster than noise. Across 540 controlled conditions, utility ranks one-step progress with Spearman 0.937 and final outcomes with 0.916.</p></div>
+      <div class="qa">
+        <div class="block purple"><div class="label">Likely question</div><p>Does this bound predict exact final accuracy?</p></div>
+        <div class="block"><div class="label">Answer</div><p>No. It is exact for a quadratic loss and most directly predicts one-step geometry; the final-outcome correlation is empirical validation.</p></div>
+      </div>
+      <div class="transition"><div class="label">Transition</div><p>Ordinary benchmark tasks first reveal which feedback coordinate is actually missing.</p></div>
+    </main>
+  </div>
+  <div class="footer">Dendrites and Credit Assignment Workshop · slide 11 of 20</div>
+</section>
+<section class="page">
+  <header class="head">
+    <div class="num">12</div>
+    <h1>Neuron identity dominates standard tasks</h1>
+    <div class="time">0:45 · scripted</div>
+  </header>
+  <div class="body">
+    <aside class="left">
+      <img class="thumb" src="file:///n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/dendritic-local-learning/presentations/ml_workshop_canvas_rebuild_20min/png/slide_12.png" alt="Slide 12 thumbnail">
+      <div class="block"><div class="label">Purpose</div><p>Show that standard image tasks demand neuron identity but little within-arbor resolution.</p></div>
+      <div class="block purple"><div class="label">How to read it</div><p>Compare adjacent rungs within each dataset: scalar to neuron-specific, then neuron-specific to exact field.</p></div>
+      <div class="block orange"><div class="label">Claim guardrail</div><p>Treat the exact-path null as a result, not as something to hide.</p></div>
+    </aside>
+    <main class="right">
+      <div class="script"><div class="label">Say this</div><p>Across MNIST and flattened CIFAR-10, replacing a layer-wide scalar with neuron-specific feedback improves accuracy by roughly eight to sixteen percentage points. Once neuron identity is available, replacing the neuron-level signal with the exact compartment field changes accuracy by less than one point. These tasks therefore require the learning system to distinguish neurons, but they provide little evidence that it must distinguish exact locations within each arbor. This null motivates a task that creates opposing branch-level credit inside one neuron.</p></div>
+      <div class="qa">
+        <div class="block purple"><div class="label">Likely question</div><p>Does this show that dendrites are unnecessary?</p></div>
+        <div class="block"><div class="label">Answer</div><p>Only for the within-arbor credit demands of these benchmark tasks and architectures; it does not generalize to every task or dendritic computation.</p></div>
+      </div>
+      <div class="transition"><div class="label">Transition</div><p>To demand an internal address, we make simultaneously active branches require conflicting updates.</p></div>
+    </main>
+  </div>
+  <div class="footer">Dendrites and Credit Assignment Workshop · slide 12 of 20</div>
+</section>
+<section class="page">
+  <header class="head">
+    <div class="num">13</div>
+    <h1>Credit conflict creates a demand for branch-specific signals</h1>
+    <div class="time">0:50 · scripted</div>
+  </header>
+  <div class="body">
+    <aside class="left">
+      <img class="thumb" src="file:///n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/dendritic-local-learning/presentations/ml_workshop_canvas_rebuild_20min/png/slide_13.png" alt="Slide 13 thumbnail">
+      <div class="block"><div class="label">Purpose</div><p>Define the controlled branch-conflict task and derive its shared-mode crossover.</p></div>
+      <div class="block purple"><div class="label">How to read it</div><p>Compare the compatible and conflicting examples on the left, then read the two equations as the shared-credit cancellation condition.</p></div>
+      <div class="block orange"><div class="label">Claim guardrail</div><p>Present this as a controlled stress test, not a claim that every natural task has this structure.</p></div>
+    </aside>
+    <main class="right">
+      <div class="script"><div class="label">Say this</div><p>All B branches are active. Context c selects the branch that determines the label, while chi controls how often nonselected branches carry opposite-class evidence. At chi zero, the branch updates are compatible. At chi one, sibling branches demand opposing credit. Summing those directions gives a shared-mode coefficient B minus two chi times B minus one, which changes sign at chi c equal to B over two times B minus one. Above that crossover, one neuron-shared signal becomes noninformative while a branch-specific route can preserve the correct local sign.</p></div>
+      <div class="qa">
+        <div class="block purple"><div class="label">Likely question</div><p>Was this task constructed to favor branch-specific credit?</p></div>
+        <div class="block"><div class="label">Answer</div><p>Yes, deliberately. It is a mechanism-matched existence test of the condition the theory says should create path demand.</p></div>
+      </div>
+      <div class="transition"><div class="label">Transition</div><p>The trained networks now let us test whether failure occurs at that predicted boundary.</p></div>
+    </main>
+  </div>
+  <div class="footer">Dendrites and Credit Assignment Workshop · slide 13 of 20</div>
+</section>
+<section class="page">
+  <header class="head">
+    <div class="num">14</div>
+    <h1>Shared credit fails at the predicted conflict boundary</h1>
+    <div class="time">0:45 · scripted</div>
+  </header>
+  <div class="body">
+    <aside class="left">
+      <img class="thumb" src="file:///n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/dendritic-local-learning/presentations/ml_workshop_canvas_rebuild_20min/png/slide_14.png" alt="Slide 14 thumbnail">
+      <div class="block"><div class="label">Purpose</div><p>Show agreement between the analytic crossover, trained collapse, and ownership control.</p></div>
+      <div class="block purple"><div class="label">How to read it</div><p>The left plot shows learning collapse at the dashed thresholds; the right plot compares analytic and trained crossings.</p></div>
+      <div class="block orange"><div class="label">Claim guardrail</div><p>The result proves a need for an address, not a unique material need for a dendritic tree.</p></div>
+    </aside>
+    <main class="right">
+      <div class="script"><div class="label">Say this</div><p>The shared rule collapses near the analytic threshold for two, four, and eight branches. At full conflict, the correct branch route improves performance by thirty-five to fifty-eight percentage points. A cyclic derangement preserves rank and sparsity but delivers each signal to the wrong branch, and it fails. This shows that additional bandwidth alone is not enough: each signal must reach the branch whose local eligibility it is intended to modulate. The main result is the alignment between the predicted sign change and the trained transition.</p></div>
+      <div class="qa">
+        <div class="block purple"><div class="label">Likely question</div><p>Could the gain come simply from adding feedback parameters?</p></div>
+        <div class="block"><div class="label">Answer</div><p>No. The cyclic derangement preserves bandwidth and sparsity while breaking ownership, so correct delivery is causal.</p></div>
+      </div>
+      <div class="transition"><div class="label">Transition</div><p>A hierarchical task asks when nested ancestry is an efficient address basis rather than merely a correct one.</p></div>
+    </main>
+  </div>
+  <div class="footer">Dendrites and Credit Assignment Workshop · slide 14 of 20</div>
+</section>
+<section class="page">
+  <header class="head">
+    <div class="num">15</div>
+    <h1>The right subtree address matters; fine topology adds a narrow gain</h1>
+    <div class="time">0:50 · scripted</div>
+  </header>
+  <div class="body">
+    <aside class="left">
+      <img class="thumb" src="file:///n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/dendritic-local-learning/presentations/ml_workshop_canvas_rebuild_20min/png/slide_15.png" alt="Slide 15 thumbnail">
+      <div class="block"><div class="label">Purpose</div><p>Separate the large ownership effect from the small topology-specific advantage.</p></div>
+      <div class="block purple"><div class="label">How to read it</div><p>Read the task hierarchy on the left, then compare the green correct, purple matched, and gray deranged curves across K.</p></div>
+      <div class="block orange"><div class="label">Claim guardrail</div><p>Always pair the 61.1-point ownership contrast with the 1.27-point topology-specific contrast.</p></div>
+    </aside>
+    <main class="right">
+      <div class="script"><div class="label">Say this</div><p>The hierarchical task organizes eight streams and exposes K independent route coefficients. At K equals four, correct ancestry assignment beats derangement by 61.1 percentage points, so ownership can be essential. But against the strongest rank- and sparsity-matched non-anatomical basis, ancestry wins by only 1.27 points. It loses at low bandwidth, wins narrowly at the intermediate budget, and ties at full rank. The robust result is therefore hierarchy-resolution matching: correct addresses carry most of the benefit, while fine tree topology adds a small conditional increment.</p></div>
+      <div class="qa">
+        <div class="block purple"><div class="label">Likely question</div><p>Why is the derangement effect so much larger than the matched low-rank effect?</p></div>
+        <div class="block"><div class="label">Answer</div><p>Derangement destroys who owns a signal; the matched low-rank basis keeps comparable bandwidth and approximates much of the useful subspace.</p></div>
+      </div>
+      <div class="transition"><div class="label">Transition</div><p>If anatomy is to support routes, reconstructed arbors should at least provide an efficient candidate dictionary.</p></div>
+    </main>
+  </div>
+  <div class="footer">Dendrites and Credit Assignment Workshop · slide 15 of 20</div>
+</section>
+<section class="page">
+  <header class="head">
+    <div class="num">16</div>
+    <h1>Real arbors provide sparse candidate routes</h1>
+    <div class="time">0:50 · scripted</div>
+  </header>
+  <div class="body">
+    <aside class="left">
+      <img class="thumb" src="file:///n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/dendritic-local-learning/presentations/ml_workshop_canvas_rebuild_20min/png/slide_16.png" alt="Slide 16 thumbnail">
+      <div class="block"><div class="label">Purpose</div><p>Present route capacity and wiring economy without claiming endogenous biological use.</p></div>
+      <div class="block purple"><div class="label">How to read it</div><p>The morphology shows candidate route supports; the center defines capture and reports both model-matched and density-matched efficiencies.</p></div>
+      <div class="block orange"><div class="label">Claim guardrail</div><p>Pair 14.2-fold with the approximately 2.7-fold density-matched control and call the second-mouse result descriptive.</p></div>
+    </aside>
+    <main class="right">
+      <div class="script"><div class="label">Say this</div><p>We extract ancestry-defined routes from reconstructed arbors and ask how much modeled credit-field energy their span captures. The route dictionary retains about eighty-five percent of dense capture using roughly seven percent of the dense route-matrix connections. The model-matched capture-per-wire ceiling is 14.2-fold; the stricter density-matched anatomical comparison is about 2.7-fold. The main analysis uses a disjoint 47-cell cohort, and the ordering recurs descriptively in ten cells from a second mouse. This establishes sparse route capacity, not observed use of those routes during learning.</p></div>
+      <div class="qa">
+        <div class="block purple"><div class="label">Likely question</div><p>Does high capture show that real neurons use these routes for credit assignment?</p></div>
+        <div class="block"><div class="label">Answer</div><p>No. It shows representational capacity of modeled fields on measured anatomy, not endogenous task gradients or plasticity.</p></div>
+      </div>
+      <div class="transition"><div class="label">Transition</div><p>Anatomy can supply addresses; conductance may regulate the gain along an already available route.</p></div>
+    </main>
+  </div>
+  <div class="footer">Dendrites and Credit Assignment Workshop · slide 16 of 20</div>
+</section>
+<section class="page">
+  <header class="head">
+    <div class="num">17</div>
+    <h1>Focal shunting changes descendant credit only in permissive regimes</h1>
+    <div class="time">0:50 · scripted</div>
+  </header>
+  <div class="body">
+    <aside class="left">
+      <img class="thumb" src="file:///n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/dendritic-local-learning/presentations/ml_workshop_canvas_rebuild_20min/png/slide_17.png" alt="Slide 17 thumbnail">
+      <div class="block"><div class="label">Purpose</div><p>Explain the matched intervention and foreground the standard-passive null.</p></div>
+      <div class="block purple"><div class="label">How to read it</div><p>Compare the two vector schematics, read the route-local derivative, then locate the standard-passive point near zero on the boundary plot.</p></div>
+      <div class="block orange"><div class="label">Claim guardrail</div><p>Never imply that ordinary passive parameters guarantee selective shunting or improved training.</p></div>
+    </aside>
+    <main class="right">
+      <div class="script"><div class="label">Say this</div><p>We compare a focal inhibitory conductance with an additive current matched to its baseline focal current, then restore somatic voltage after both interventions. Only the shunt changes the conductance matrix and therefore the adjoint field. In the directed tree, the first-order log-gain change is restricted to descendants whose route crosses the inhibited site. Empirically, the standard passive calibration at R m equal to fifteen thousand is null. Descendant localization appears only at lower resistance or with background conductance. Shunting is therefore a conditional gain mechanism, not a generic learning advantage.</p></div>
+      <div class="qa">
+        <div class="block purple"><div class="label">Likely question</div><p>Is the main focal-shunting result positive or null?</p></div>
+        <div class="block"><div class="label">Answer</div><p>At the standard passive calibration it is null; the positive localization appears only in a defined permissive conductance regime.</p></div>
+      </div>
+      <div class="transition"><div class="label">Transition</div><p>Capacity and conditional gain still do not show that measured cortical responses are aligned with those routes.</p></div>
+    </main>
+  </div>
+  <div class="footer">Dendrites and Credit Assignment Workshop · slide 17 of 20</div>
+</section>
+<section class="page">
+  <header class="head">
+    <div class="num">18</div>
+    <h1>Measured visual responses show no morphology-specific alignment</h1>
+    <div class="time">0:50 · scripted</div>
+  </header>
+  <div class="body">
+    <aside class="left">
+      <img class="thumb" src="file:///n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/dendritic-local-learning/presentations/ml_workshop_canvas_rebuild_20min/png/slide_18.png" alt="Slide 18 thumbnail">
+      <div class="block"><div class="label">Purpose</div><p>State the biological null clearly and define its limited inferential scope.</p></div>
+      <div class="block purple"><div class="label">How to read it</div><p>Follow measured inputs into the reconstruction, then compare held-out prediction error for exact, nested, and matched control routes.</p></div>
+      <div class="block orange"><div class="label">Claim guardrail</div><p>Say seven cells and one mouse aloud; do not generalize beyond this cohort and assay.</p></div>
+    </aside>
+    <main class="right">
+      <div class="script"><div class="label">Say this</div><p>We map measured presynaptic visual responses onto seven target-cell reconstructions from one MICrONS mouse and predict held-out postsynaptic responses. Nested subtree routes do not outperform random or site-shuffled matched controls; the topology effects cross zero. This is a useful boundary result. Morphology supplies possible addresses, but these measured responses do not reveal preferential alignment between those addresses and the modeled functional relation. The cohort is small and does not measure plasticity, so the result is a scoped null rather than a broad rejection of dendritic learning.</p></div>
+      <div class="qa">
+        <div class="block purple"><div class="label">Likely question</div><p>Does this rule out morphology-specific credit assignment in cortex?</p></div>
+        <div class="block"><div class="label">Answer</div><p>No. It finds no detectable advantage in this seven-cell, one-mouse assay; other tasks, states, cells, or direct plasticity measurements could differ.</p></div>
+      </div>
+      <div class="transition"><div class="label">Transition</div><p>We therefore test the narrower causal hypothesis that alignment itself is the missing variable.</p></div>
+    </main>
+  </div>
+  <div class="footer">Dendrites and Credit Assignment Workshop · slide 18 of 20</div>
+</section>
+<section class="page">
+  <header class="head">
+    <div class="num">19</div>
+    <h1>Imposed alignment makes the same anatomical dictionary useful</h1>
+    <div class="time">0:45 · scripted</div>
+  </header>
+  <div class="body">
+    <aside class="left">
+      <img class="thumb" src="file:///n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/dendritic-local-learning/presentations/ml_workshop_canvas_rebuild_20min/png/slide_19.png" alt="Slide 19 thumbnail">
+      <div class="block"><div class="label">Purpose</div><p>Demonstrate representational sufficiency without implying learned or endogenous alignment.</p></div>
+      <div class="block purple"><div class="label">How to read it</div><p>The left trees rotate the signed field into the route span; the right plot shows capture and one-step progress coinciding.</p></div>
+      <div class="block orange"><div class="label">Claim guardrail</div><p>Use the phrase imposed-alignment rescue or conditional representational sufficiency.</p></div>
+    </aside>
+    <main class="right">
+      <div class="script"><div class="label">Say this</div><p>We rotate a fixed-energy task-credit field from a direction orthogonal to the anatomical route span into a direction inside it. Anatomy, route count, field energy, and curvature remain fixed; only imposed alignment a changes. Capture and predicted progress then rise together, with median Spearman 0.99, and all eight cases lose at zero alignment but win at full alignment. This rescue explains the measured-response null and shows that the route dictionary is representationally sufficient when the geometry is matched. It does not show that cortical learning creates this alignment.</p></div>
+      <div class="qa">
+        <div class="block purple"><div class="label">Likely question</div><p>Is this a trained biological-alignment result?</p></div>
+        <div class="block"><div class="label">Answer</div><p>No. It is a controlled representational intervention, not an endogenous or longitudinal learning measurement.</p></div>
+      </div>
+      <div class="transition"><div class="label">Transition</div><p>The benchmark nulls, controlled positives, and biological boundary now fit on one common map.</p></div>
+    </main>
+  </div>
+  <div class="footer">Dendrites and Credit Assignment Workshop · slide 19 of 20</div>
+</section>
+<section class="page">
+  <header class="head">
+    <div class="num">20</div>
+    <h1>Dendritic benefit lies in a matched alignment-bandwidth regime</h1>
+    <div class="time">0:55 · scripted</div>
+  </header>
+  <div class="body">
+    <aside class="left">
+      <img class="thumb" src="file:///n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/dendritic-local-learning/presentations/ml_workshop_canvas_rebuild_20min/png/slide_20.png" alt="Slide 20 thumbnail">
+      <div class="block"><div class="label">Purpose</div><p>Synthesize the results into one final answer rather than a list of effects.</p></div>
+      <div class="block purple"><div class="label">How to read it</div><p>Move right for greater task-route alignment and upward for greater returned bandwidth; locate each positive and null result in the corresponding regime.</p></div>
+      <div class="block orange"><div class="label">Claim guardrail</div><p>The phase plane is a theoretical synthesis, not a fitted claim that natural learning occupies the favorable regime.</p></div>
+    </aside>
+    <main class="right">
+      <div class="script"><div class="label">Say this</div><p>The horizontal axis is task-route alignment; the vertical axis is feedback bandwidth relative to effective task-credit rank. At low bandwidth, credit lacks the coordinates needed to distinguish neurons or branches. At weak alignment, anatomical routes capture little useful signal. At full rank, generic operators already span the field, so anatomy loses a unique advantage. Dendritic structure is most useful in the intermediate matched regime: task-relevant credit aligns with available subtree routes, bandwidth is restricted but sufficient, and transport remains reliable. The regime background is theoretical, not fitted to the points. The main contribution is this predictive boundary map, not a claim that dendrites replace backpropagation.</p></div>
+      <div class="qa">
+        <div class="block purple"><div class="label">Likely question</div><p>What is the strongest experimental prediction from this map?</p></div>
+        <div class="block"><div class="label">Answer</div><p>Branch-specific plasticity should grow with task-route alignment at intermediate resolution, while focal inhibition should modulate it mainly in permissive high-conductance states.</p></div>
+      </div>
+      <div class="transition"><div class="label">Transition</div><p>End here: coordinate, address, and gain matter only when the task and route geometry match.</p></div>
+    </main>
+  </div>
+  <div class="footer">Dendrites and Credit Assignment Workshop · slide 20 of 20</div>
+</section></body></html>
