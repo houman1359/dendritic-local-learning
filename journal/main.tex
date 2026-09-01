@@ -565,8 +565,8 @@ means that different neurons retain distinct feedback coordinates;
 \emph{ownership} is the map from each coordinate to its corresponding arbor;
 \emph{dendritic address} specifies where that coordinate acts within the arbor.
 Route gain specifies how strongly it is transmitted. Figure~\ref{fig:framework}C
-gives the visual distinction. The feedback ladder in Fig.~\ref{fig:feedback}A,B
-varies coordinate resolution while keeping the ownership map correct.
+gives the visual distinction. The experiments below vary feedback resolution
+while keeping the coordinate-to-arbor ownership map correct.
 Stacking the routed fields across neurons and applying
 the corresponding local eligibilities produces the parameter-space credit
 operator defined in the next subsection.
@@ -614,24 +614,25 @@ signal to every neuron. Neuron-specific feedback supplied one signal
 arbor. Exact feedback supplied the complete compartment-error field. The first
 comparison tests the established bandwidth limitation of scalar feedback
 \citep{werfel2005learning,lillicrap2016feedback}; the second asks whether
-resolving locations within the selected neuron provides an additional benefit.
+resolving dendritic locations within each neuron provides an additional
+benefit.
 
 On MNIST, neuron-specific feedback produced the dominant improvement in both
-shunting and topology-matched raw-additive trees
-(Fig.~\ref{fig:feedback}B). Relative to a
-strict scalar, it increased accuracy by 11.2 and 7.8 percentage points,
-respectively. Replacing the repeated neuronal signal with the exact
-compartment field then changed accuracy by less than 0.2 points. Thus nearly
-all of the scalar-to-exact improvement came from preserving distinct feedback
-coordinates across neurons, not from resolving dendritic paths within them.
+shunting and topology-matched raw-additive trees. Relative to a strict scalar,
+it increased accuracy by 11.2 and 7.8 percentage points, respectively,
+whereas replacing the repeated neuronal signal with the exact compartment
+field changed accuracy by less than 0.2 percentage points
+(Fig.~\ref{fig:feedback}B). Thus nearly all of the scalar-to-exact improvement
+came from preserving distinct feedback coordinates across neurons, not from
+resolving dendritic paths within them.
 
-Comparison with strict scalar feedback showed that the matched-width
-scalar-fallback implementation performed better because it preserved
-neuron-specific coordinates for a small set of near-somatic parameters. We therefore use
-strict scalar feedback in the primary MNIST comparison; Methods quantify the
-affected parameters and compare the two implementations. Importantly, scalar
-feedback did not make all neurons identical.
-Every synapse still multiplied the shared learning signal by a different
+A separate control showed that the matched-width scalar-fallback
+implementation performed better than strict scalar feedback because it
+preserved neuron-specific coordinates for a small set of near-somatic
+parameters. We therefore used strict scalar feedback for the primary MNIST
+comparison; Methods quantify the affected parameters and compare the two
+implementations. Importantly, scalar feedback did not make all neurons
+identical. Every synapse still multiplied the shared learning signal by a different
 eligibility trace, determined by its input, weight and postsynaptic state.
 Scalar feedback limits the dimension of task information; it does not collapse
 the network to a single effective neuron.
@@ -656,34 +657,35 @@ similar held-out accuracy to matched backpropagation (Supplementary
 Fig.~S3C). The main approximation error
 therefore arose in the communicated learning signal, rather than in the local
 eligibility derived in Eq.~\ref{eq:factorization}. Higher alignment need not
-raise final accuracy on these tasks. Positive alignment characterizes local
-descent geometry only for a sufficiently small step; it does not determine an
-entire optimization trajectory or its final solution. Panel \textbf{C}
-therefore diagnoses the feedback approximation rather than predicting the
-accuracy plateau. The branch-conflict task below makes distinct path updates
-behaviorally necessary, and there the alignment difference becomes an
-accuracy difference (Fig.~\ref{fig:branchconflict}).
+raise final accuracy on these tasks: positive alignment characterizes local
+descent geometry only for a sufficiently small step and does not determine an
+entire optimization trajectory or its final solution. This fixed-checkpoint
+diagnostic therefore measures the fidelity of the communicated learning
+signal rather than predicting the accuracy plateau. The branch-conflict task
+below makes distinct path updates behaviorally necessary, converting the
+alignment difference into an accuracy difference
+(Fig.~\ref{fig:branchconflict}).
 
-We next separated two ways in which the exact field can differ within one
-arbor. First, its mean magnitude can change with depth. At the exact-path
-checkpoints of \textbf{B}, the shunting field attenuated from the soma toward
-distal compartments, whereas the raw-additive field was amplified at the
-distal stage (Fig.~\ref{fig:feedback}D). This contrast reflects the complete
-local derivatives, including the learned branch nonlinearities and, only in
-the shunting tree, conductance loading. Second, compartments at the same depth
-can receive different transported errors. We quantified this path-specific
-component as the fraction of exact-error energy left after replacing, for each
-example and neuron, all paths at one depth by their mean (Methods). About 18\%
-of the exact-error energy was path specific at the middle stage in both
-architectures. The
-fraction rose distally to 32\% in raw-additive trees and 53\% in shunting
-trees, with the shunting value larger in all fifteen paired seeds
-(Fig.~\ref{fig:feedback}E). Thus a larger fraction of the remaining distal
-field was path specific in shunting trees, even though its absolute magnitude
-was smaller in \textbf{D}. MNIST did not benefit materially from resolving
-that fraction: exact path transport added no more than 0.2 percentage points
-in either architecture in \textbf{B}. The task must also require different
-paths to act differently.
+We next asked how the exact error field varied within an arbor. Its mean
+magnitude can change with depth, and compartments at the same depth can
+receive different errors. At the exact-path checkpoints from the MNIST
+cohort, the shunting field attenuated from the soma toward distal
+compartments, whereas the raw-additive field was amplified at the distal
+stage (Fig.~\ref{fig:feedback}D). This contrast reflects the complete local
+derivatives, including the learned branch nonlinearities and, only in the
+shunting tree, conductance loading. To isolate variation among paths at a
+fixed depth, we measured the fraction of exact-error energy left after
+replacing, for each example and neuron, all paths at that depth by their mean
+(Methods). About 18\% of the exact-error energy was path specific at the
+middle stage in both architectures. The fraction rose distally to 32\% in
+raw-additive trees and 53\% in shunting trees, with the shunting value larger
+in all fifteen paired seeds
+(Fig.~\ref{fig:feedback}E). Thus shunting preserved a larger path-specific
+fraction distally even though the absolute distal error was smaller, consistent
+with its stronger attenuation. MNIST did not benefit materially from
+resolving this structure: exact path transport added no more than 0.2
+percentage points in either architecture (Fig.~\ref{fig:feedback}B). The
+task must also require different paths to act differently.
 
 Both observations follow the factorization in Eq.~\ref{eq:pathgain}. A
 neuron's compartment errors equal its somatic error multiplied by positive
@@ -697,18 +699,23 @@ raw-additive forward models nevertheless showed the same qualitative feedback
 ordering, with no general optimization advantage for shunting.
 
 A neuron-specific coordinate is useful only if it is delivered to the
-corresponding arbor (Fig.~\ref{fig:feedback}F). Permuting these coordinates
-across arbors preserved total bandwidth but produced a small, consistent loss:
-correct assignment beat the fixed derangement by 0.57 and 0.51 percentage
-points in two-stage shunting and raw-additive trees and by 0.38 and 0.39
-points at four stages, positive in 10/10 paired seeds in every condition.
+corresponding arbor; we refer to this coordinate-to-arbor map as ownership
+(Fig.~\ref{fig:feedback}F). Across independent two- and four-stage cohorts,
+permuting coordinates among arbors preserved total feedback bandwidth but
+produced a small, consistent loss. Correct ownership exceeded the fixed
+derangement by 0.57 and 0.51 percentage points in two-stage shunting and
+raw-additive trees and by 0.38 and 0.39 points at four stages, with a positive
+difference in all ten paired seeds in every condition
+(Fig.~\ref{fig:feedback}G).
 The mean ownership advantage was not larger in four-stage trees with 30
-nonsomatic compartments per neuron than in two-stage trees with six. These independently trained
-cohorts test who owns a signal, not the within-tree transport structure
-profiled in Fig.~\ref{fig:feedback}D,E. Figure~\ref{fig:feedback}G summarizes
-the hierarchy on two stated axes: its upper axis shows that adding
-neuron-specific coordinates produced the dominant gain and exact within-arbor transport added
-little, whereas its expanded lower axis shows the smaller ownership effect.
+nonsomatic compartments per neuron than in two-stage trees with six
+nonsomatic compartments per neuron. Because these cohorts were trained
+independently, they test the ownership map rather than the within-arbor
+transport fields quantified above. Taken together, the paired comparisons
+establish a hierarchy: adding neuron-specific coordinates produced the
+dominant gain, resolving address within an arbor added little on MNIST, and
+preserving ownership produced a smaller but consistent benefit across the
+independent cohorts.
 
 Finally, we varied the number of serial dendritic stages in ordinary image and
 noise tasks. Neuron-specific feedback remained the main improvement at every valid depth,
@@ -720,9 +727,9 @@ specifically uses its serial structure.
 
 These benchmarks establish the first boundary of the paper: once separate
 feedback coordinates are available across neurons, additional within-arbor
-path information added little in these standard-task benchmarks. We next
-develop a signal--noise theory that identifies the
-conditions under which this negative result should reverse.
+path information added little in these standard-task benchmarks. This boundary
+motivates the signal--noise theory developed next: under what conditions can
+restricted feedback retain useful credit while excluding noise?
 
 \begin{figure}[tbp]
 \centering
@@ -738,31 +745,30 @@ across nonsomatic branch tensors in separate checkpoints trained with
 neuron-specific feedback. The scalar diagnostic uses matched-width scalar-fallback
 feedback; the purple diamond marks exact path transport (cosine one by
 definition). \textbf{D}, Batch-RMS pre-reactivation voltage error by depth,
-normalized to soma, at the exact-path checkpoints from \textbf{B}. The
+normalized to soma, at the exact-path checkpoints from the MNIST ladder. The
 logarithmic axis shows attenuation in shunting trees (middle/distal means
 0.60/0.24) and distal amplification in raw-additive trees (0.91/5.21).
 \textbf{E}, Fraction of exact-error energy remaining after subtracting the
 mean across paths separately for each example, neuron and depth. The fraction
 is approximately 18\% at the middle stage and 32\% (raw-additive) or 53\%
-(shunting) distally; path information is present, but \textbf{B} shows little
-performance gain from resolving it. \textbf{F}, Neuron-to-arbor ownership and
+(shunting) distally; path information is present despite little associated
+accuracy gain. \textbf{F}, Neuron-to-arbor ownership and
 within-arbor address are distinct routing operations. \textbf{G}, Upper axis:
 paired neuron-specific-minus-strict-scalar and
-exact-path-minus-neuron-specific effects from \textbf{B}. Lower 0--1-point
+exact-path-minus-neuron-specific effects from the MNIST ladder. Lower 0--1-point
 axis: correct minus fixed-derangement ownership in separate \([2,2]\)
 two-stage (six nonsomatic compartments per neuron) and \([2,2,2,2]\)
 four-stage (30 nonsomatic compartments per neuron) cohorts. The derangement
-changes only the coordinate-to-arbor map; these data
-are distinct from \textbf{D,E}. Faint lines connect seed-matched conditions or
-depths in \textbf{B--E}; dots in \textbf{G} are paired seed differences. Open
-symbols and bars show means and 95\% seed-bootstrap intervals. Sample sizes are
+changes only the coordinate-to-arbor map; these data are independent of the
+transport-profile cohort. Faint lines connect seed-matched conditions in
+\textbf{B,C} and matched depths in \textbf{D,E}; dots in \textbf{G} are paired
+seed differences. Open symbols and bars show means and 95\% seed-bootstrap
+intervals. Sample sizes are
 \(n=15\) paired seeds per architecture in \textbf{B--E} and upper \textbf{G},
 and \(n=10\) per architecture and stage in lower \textbf{G}. Green circles
 denote shunting and blue squares raw-additive trees.}
 \label{fig:feedback}
 \end{figure}
-
-The standard-task results pose a general question: when can restricting a learning signal help rather than discard useful credit?
 
 \subsection*{A signal--noise theory predicts when restricted feedback helps}
 
@@ -1785,13 +1791,13 @@ stage-level reliability terms. We treat these terms as preconditioners rather
 than theoretically required teaching signals.
 
 Two additive forward models were used in the regular-tree analyses. The
-raw-additive model used in the main comparisons
-(Fig.~\ref{fig:feedback}B--E,G) computes the voltage
+raw-additive model used in the main comparisons computes the voltage
 \(V_{sn}^{\mathrm{raw}}=J_{sn}^{\mathrm E}-J_{sn}^{\mathrm I}
 +J_{sn}^{\mathrm{child}}\) before reactivation, where the three \(J\) terms
 are aggregate excitatory, inhibitory and child currents. It contains signed
 current contributions but no reversal-potential driving forces or
-total-conductance denominator. We denote its current weights by \(w\).
+total-conductance denominator (Fig.~\ref{fig:feedback}B--E,G). We denote its
+current weights by \(w\).
 The analyses in Supplementary Figs.~S1--S3 and S4A,B instead standardize this
 voltage separately for each example across the output coordinates of a stage,
 \(V_{sn}^{\mathrm{norm}}=(V_{sn}^{\mathrm{raw}}-\mu_s)/
@@ -1832,44 +1838,44 @@ contrast. Before inspecting its outcomes, we defined practical equivalence as
 a 95\% paired-seed bootstrap interval contained within $\pm0.5$ percentage
 points.
 
-Figure~\ref{fig:feedback}B and the primary MNIST contrasts use strict scalar
-feedback together with matched neuron-specific and exact-path conditions. The
-matched-width scalar-fallback results are reported separately to document their
-relation to the preceding analysis \citep{safaai2026localcredit}.
+The primary MNIST accuracy contrasts compared strict scalar feedback with
+matched neuron-specific and exact-path conditions
+(Fig.~\ref{fig:feedback}B). Matched-width scalar-fallback results are reported
+separately to document their relation to the preceding analysis
+\citep{safaai2026localcredit}.
 
-Figure~\ref{fig:feedback}C used a separate diagnostic cohort of fifteen
-checkpoints per architecture, each trained with neuron-specific feedback. At
-each checkpoint, the matched-width scalar-fallback and neuron-specific fields
-were evaluated without changing the weights or forward state. For each
-nonsomatic branch-parameter tensor, we computed the cosine between the
-factorized local-rule gradient and the exact automatic-differentiation
-gradient. The plotted statistic is the mean of these tensor-wise cosines
-weighted by parameter count; the exactly aligned final soma-coupling tensor
-was excluded because it does not test within-arbor transport. Exact path
-transport reproduces the exact gradient and therefore has cosine one by
-definition. The independently trained checkpoint, indexed by seed, was the
-inferential unit.
+For the fixed-checkpoint gradient diagnostic, we used a separate cohort of
+fifteen checkpoints per architecture, each trained with neuron-specific
+feedback (Fig.~\ref{fig:feedback}C). At each checkpoint, the matched-width
+scalar-fallback and neuron-specific fields were evaluated without changing the
+weights or forward state. For each nonsomatic branch-parameter tensor, we
+computed the cosine between the factorized local-rule gradient and the exact
+automatic-differentiation gradient. The plotted statistic is the mean of these
+tensor-wise cosines weighted by parameter count; the exactly aligned final
+soma-coupling tensor was excluded because it does not test within-arbor
+transport. Exact path transport reproduces the exact gradient and therefore
+has cosine one by definition. The independently trained checkpoint, indexed
+by seed, was the inferential unit.
 
-The transported-error analyses in Fig.~\ref{fig:feedback}D,E used the thirty
-final exact-path checkpoints of the same ladder, identified by their recorded
-checkpoint hashes. On one fixed held-out batch (the first 2{,}048 MNIST test
-images), automatic differentiation provided the per-example loss gradient
+To quantify error transport within an arbor, we analyzed the thirty final
+exact-path checkpoints from the same ladder, identified by their recorded
+checkpoint hashes (Fig.~\ref{fig:feedback}D,E). On one fixed held-out batch
+(the first 2{,}048 MNIST test images), automatic differentiation provided the
+per-example loss gradient
 \(g_{bup}^{(d)}=\partial L_b/\partial V_{up}^{(d)}\) at every dendritic
 stage and at the soma, where \(V_{up}^{(d)}\) is the pre-reactivation
 compartment voltage used in the forward graph. The diagnostic capture and an
 ordinary forward pass produced identical logits at all thirty checkpoints.
 Here \(b\) indexes examples, \(u\) indexes neurons and \(p\) indexes paths at
-depth \(d\). For Fig.~\ref{fig:feedback}D, the root-mean-square
-magnitude of \(g_{bup}^{(d)}\) was divided by the root-mean-square somatic
-error of neuron \(u\), then averaged over neurons and paths. This is the
-empirical transported-error profile corresponding to the path gain in
-Eq.~\ref{eq:pathgain}; the same calculation was applied to both
-architectures.
+depth \(d\). To obtain the depth profile, the root-mean-square magnitude of
+\(g_{bup}^{(d)}\) was divided by the root-mean-square somatic error of neuron
+\(u\), then averaged over neurons and paths (Fig.~\ref{fig:feedback}D). This is
+the empirical transported-error profile corresponding to the path gain in
+Eq.~\ref{eq:pathgain}; the same calculation was applied to both architectures.
 
-Figure~\ref{fig:feedback}E isolates variation among paths at a fixed depth.
-Writing
-\(\bar g_{bu}^{(d)}=P_d^{-1}\sum_{p=1}^{P_d}g_{bup}^{(d)}\), we defined the
-path-specific energy fraction
+To quantify variation among paths at a fixed depth
+(Fig.~\ref{fig:feedback}E), we set
+\(\bar g_{bu}^{(d)}=P_d^{-1}\sum_{p=1}^{P_d}g_{bup}^{(d)}\) and defined
 \begin{equation}
 \phi_d^{\mathrm{path}}
 =\frac{\sum_{b,u,p}\left(g_{bup}^{(d)}-\bar g_{bu}^{(d)}\right)^2}
@@ -1879,10 +1885,11 @@ path-specific energy fraction
 Thus \(1-\phi_d^{\mathrm{path}}\) is the fraction of exact-error energy
 captured by one path-shared value for each example, neuron and depth. The
 ratio was computed once per checkpoint, leaving the independently trained
-seed as the inferential unit. It complements rather than replaces
-Fig.~\ref{fig:feedback}D: the mean profile measures variation between depths,
-whereas \(\phi_d^{\mathrm{path}}\) measures variation among paths at the same
-depth. The conductance-only path-gain dispersion in Supplementary Fig.~S1A
+seed as the inferential unit. The mean profile measures variation between
+depths, whereas \(\phi_d^{\mathrm{path}}\) measures variation among paths at
+the same depth; the two quantities are complementary
+(Fig.~\ref{fig:feedback}D,E). The conductance-only path-gain dispersion in
+Supplementary Fig.~S1A
 omits branch derivatives and comes from a normalized-additive cohort; it is
 therefore a separate diagnostic rather than an earlier estimate of
 Eq.~\ref{eq:path-specific-energy}.
@@ -1971,9 +1978,9 @@ runs. Condition means used ten paired seeds. Paired
 contrasts used 20,000 bootstrap resamples and exact two-sided Wilcoxon tests
 computed from the ten seed differences.
 
-The neuron-to-arbor ownership control in Fig.~\ref{fig:feedback}F,G was
-specified separately. It crossed the two
-tasks and neuron models at depths two and four, with either correct
+We specified the neuron-to-arbor ownership control separately
+(Fig.~\ref{fig:feedback}F,G). It crossed the two tasks and neuron models at
+depths two and four, with either correct
 neuron-specific routing or a fixed derangement, across seeds 42--51. The
 derangement maps every somatic coordinate to a different neuron and has no
 fixed point. It preserves the number and per-example distribution of teaching
