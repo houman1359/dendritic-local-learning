@@ -102,10 +102,6 @@ def _centred_subscript(f: Frame, xy, base, sub, tail="", *, color,
 def hierarchical_task(ax) -> None:
     """Eight active streams whose distractors follow binary-tree distance."""
     f = Frame(ax, labels=True, scale=0.95)
-    f.text((0.50, 0.955),
-           "context c = 3 selects stream 3; selected stream carries +y; all streams active",
-           size=PT_SMALL, color=INK, ha="center", va="top")
-
     leaf_x = np.linspace(0.055, 0.945, 8)
     levels = (
         (np.asarray([0.50]), 0.82),
@@ -293,11 +289,12 @@ def _nonanatomical_basis(f: Frame, rect) -> None:
                   zorder=4)
         for col in range(8):
             value = matrix[row, col]
-            face = (mix("oracle", 30) if value > 0 else
-                    mix("point_mlp", 34) if value < 0 else "white")
+            face = (COLORS["oracle"] if value > 0 else
+                    "#2E3947" if value < 0 else "white")
             f.ax.add_patch(Rectangle(
                 (xs[col] - cell_w / 2.0, y), cell_w, cell_h,
-                facecolor=face, edgecolor="white", linewidth=LW_HAIR,
+                facecolor=face, edgecolor=mix("point_mlp", 22),
+                linewidth=LW_HAIR,
                 transform=f.ax.transData, zorder=3,
             ))
 
@@ -306,8 +303,8 @@ def _nonanatomical_basis(f: Frame, rect) -> None:
     # of a dense signed basis.
     key_y = y0 + 0.955 * height
     key_x = x0 + 0.48 * width
-    key_specs = ((mix("oracle", 30), "+"),
-                 (mix("point_mlp", 34), "−"),
+    key_specs = ((COLORS["oracle"], "+"),
+                 ("#2E3947", "−"),
                  ("white", "0"))
     f.text((key_x - f.fx(4.0), key_y), "weight", size=PT_SMALL,
            color=MUTE, ha="right", va="center")
