@@ -348,12 +348,12 @@ def panel_task_families(ax):
               color=mix(C_LOCAL_RATIO, 65))
         round_box(ax, (cx - 9.0, ratio_y - 6.0), 18.0, 12.0,
                   edge=C_LOCAL_RATIO, fill=mix(C_LOCAL_RATIO, 18), radius=2.0)
-        ax.text(cx, ratio_y, f"r{index}", ha="center", va="center",
+        ax.text(cx, ratio_y, rf"$R_{{{index}}}$", ha="center", va="center",
                 fontsize=PT_SMALL, color=INK)
     # "is local" is the card's own title, so the expression alone is enough
     # and stays inside the 74.6 pt card once its runs are at token size.
     formula(ax, x0 + card_w / 2, card_y + 0.19 * card_h,
-            (("r", 0.0), ("l", -1.6), (" = x", 0.0), ("l", -1.6),
+            (("R", 0.0), ("l", -1.6), (" = x", 0.0), ("l", -1.6),
              ("E", 1.9), (" / x", 0.0), ("l", -1.6), ("I", 1.9)))
     ax.text(x0 + card_w / 2, card_y + 0.05 * card_h,
             "class signal: distal only", ha="center", va="bottom",

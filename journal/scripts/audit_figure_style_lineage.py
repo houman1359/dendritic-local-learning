@@ -42,6 +42,16 @@ NONCANONICAL_WIDTH_RE = re.compile(
     r"figsize\s*=\s*\(\s*(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)"
 )
 
+# Main figures are placed at the largest width that keeps the complete figure
+# and its self-contained legend on one page.  They remain on the canonical
+# NeurIPS-derived canvas; only the LaTeX placement scale changes.  A lower
+# bound prevents a crowded sheet from being made illegibly small merely to
+# pass the page-layout audit.
+MIN_MAIN_TEXTWIDTH_SCALE = 0.85
+TEXTWIDTH_SCALE_RE = re.compile(
+    r"(?P<scale>(?:0(?:\.\d+)?|1(?:\.0+)?))?\\textwidth"
+)
+
 
 def sha256(path: Path) -> str:
     digest = hashlib.sha256()
@@ -114,10 +124,26 @@ def main() -> None:
             width = match.group("width")
             asset = match.group("asset")
             included_assets.append(asset)
-            if width != r"\textwidth":
+            width_match = TEXTWIDTH_SCALE_RE.fullmatch(width)
+            if width_match is None:
                 failures.append(
-                    f"noncanonical LaTeX figure scale in {relative}: {asset} uses {width}"
+                    f"non-textwidth LaTeX figure scale in {relative}: {asset} uses {width}"
                 )
+            else:
+                scale_text = width_match.group("scale")
+                scale = 1.0 if scale_text is None else float(scale_text)
+                if relative == "main.tex":
+                    if not MIN_MAIN_TEXTWIDTH_SCALE <= scale <= 1.0:
+                        failures.append(
+                            "main-figure placement outside the legibility range "
+                            f"[{MIN_MAIN_TEXTWIDTH_SCALE:.2f}, 1.00] in {relative}: "
+                            f"{asset} uses {width}"
+                        )
+                elif scale != 1.0:
+                    failures.append(
+                        f"supplementary figure is not full width in {relative}: "
+                        f"{asset} uses {width}"
+                    )
             pdf = ROOT / "figures" / asset
             if not pdf.is_file():
                 failures.append(f"missing included PDF: {pdf.relative_to(ROOT)}")
@@ -130,7 +156,7 @@ def main() -> None:
     print(f"Figure-lineage audit passed: {len(FROZEN_HASHES)} frozen files, "
           f"{len(SHARED_NEURIPS_FILES)} live sibling matches, "
           f"{len(production)} production generators, "
-          f"{len(included_assets)} full-width figure assets.")
+          f"{len(included_assets)} bounded-width figure placements.")
 
 
 if __name__ == "__main__":

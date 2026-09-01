@@ -116,8 +116,8 @@ ROLE = {
 }
 ROLE_NAME = {
     "dense": "dense oracle",
-    "ancestry": "nested-subtree routes",
-    "random": "random routes",
+    "ancestry": "subtree routes",
+    "random": "random anatomical routes",
     "depth": "depth bins",
     "shuffled": "shuffled subtree",
     "surrogate": "matched tree",

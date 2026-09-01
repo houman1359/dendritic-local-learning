@@ -260,7 +260,7 @@ def path_accuracy_facets(host, summary: pd.DataFrame) -> None:
     """Three identical-scale facets; exact-equivalent curves appear once."""
     host.set_xlim(0, 1)
     host.set_ylim(0, 1)
-    host.text(0.995, 1.000, "correct path = BP = gated point",
+    host.text(0.995, 1.000, "branch-specific = BP = gated point",
               fontsize=PT_SMALL, color=GREEN, ha="right", va="top")
     # Anchored on the host's own bottom edge this label rose into the three
     # facets' tick rows, overlapping five tick numbers by 4 pt.  The panel is

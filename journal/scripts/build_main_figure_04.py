@@ -229,7 +229,7 @@ def full_conflict_controls(ax, summary: pd.DataFrame,
     # A compact in-panel key occupies the empty middle band; a conventional
     # legend would cover the two low-accuracy curves.
     key_specs = (
-        (0.705, GREEN, "o", "path = BP = gated point"),
+        (0.705, GREEN, "o", "branch-specific = BP = gated point"),
         (0.640, AMBER, "D", "neuron-shared"),
         (0.575, GRAY, "v", "deranged route"),
     )

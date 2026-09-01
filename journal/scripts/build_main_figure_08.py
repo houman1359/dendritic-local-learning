@@ -400,7 +400,7 @@ def panel_active_dose(ax, summary):
 # ── panel F (headline): the electrotonic boundary ────────────────────────
 COHORTS = (
     ("original_eight", "initial sample, n = 8", SHUNT, M_CONTRAST),
-    ("v661_disjoint", "MICrONS mouse 1, n = 45", REPLICATE, M_REPLICATE),
+    ("v661_disjoint", "disjoint 45-cell cohort", REPLICATE, M_REPLICATE),
 )
 CONTRAST_LABEL = "shunt − current-injection localization"
 # The same quantity, set on two lines where it is the (rotated) y axis of a
@@ -465,7 +465,7 @@ def panel_electrotonic(ax):
     # condition of the pilot cohort and the small standard-calibration effects are
     # methodological notes and are carried by the caption.
     _direct_label(ax, 1.02, 0.0115, "initial 8-cell sample", SHUNT)
-    _direct_label(ax, 3.9, 0.0895, "MICrONS mouse 1", REPLICATE)
+    _direct_label(ax, 3.9, 0.0895, "disjoint 45-cell cohort", REPLICATE)
 
     # Mark the standard passive calibration explicitly.  Its two cohort
     # values differ in axial/leak ratio, so a bracket is more honest than one

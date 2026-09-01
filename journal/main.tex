@@ -191,10 +191,17 @@ of adding branches or depth.
 
 \section*{Results}
 
-We proceed from the exact gradient to progressively restricted feedback and
-then to biological route capacity, gain and alignment. Exact backpropagation is
-the information ceiling; point and grouped-point controls distinguish feedback
-resolution from a dendritic implementation.
+We begin with the eligibility--learning-signal factorization for a point neuron
+(Fig.~\ref{fig:framework}A) and place that signal in its circuit-level credit
+pathway (Fig.~\ref{fig:framework}B). Replacing the point neuron by a dendritic
+tree then introduces two separate quantities: the address that receives a
+signal and the gain with which that signal acts (Fig.~\ref{fig:framework}C).
+The exact gradient identifies the compartment-resolved target for this
+feedback (Fig.~\ref{fig:framework}D). We then restrict that target
+progressively and test biological route capacity, gain and alignment, following
+the experimental sequence in Fig.~\ref{fig:framework}E. Exact
+backpropagation is the information ceiling; point and grouped-point controls
+distinguish feedback resolution from a dendritic implementation.
 Throughout the Results, ``tree'' has three distinct meanings that we state
 explicitly at each experiment. The controlled network experiments use regular
 rooted trees with directed child-to-parent forward coupling. We denote such a
@@ -206,8 +213,8 @@ contains no forward dendritic model. Figures~7--9 use compressed biological
 reconstructions with reciprocal cable coupling. Thus route resolution,
 physical dendritic depth and anatomical reconstruction are separate
 experimental variables.
-Figure~\ref{fig:framework}E previews this progression. The figure is a
-conceptual overview rather than an empirical comparison: its illustrative
+Figure~\ref{fig:framework} is a conceptual overview rather than an empirical
+comparison: its illustrative
 arbor does not specify any of the simulated or reconstructed morphologies used
 later, and its symbols are introduced where they first enter the derivation
 below.
@@ -637,19 +644,19 @@ identity, then location within the arbor.
 Equation~\ref{eq:pointlocalrule} identifies the first information bottleneck:
 feedback must distinguish neurons that require different updates. Before
 testing dendritic addresses, we therefore compared three feedback resolutions
-(Fig.~\ref{fig:feedback}A). Let \(U\) be the number of neurons and let
+(Fig.~\ref{fig:feedback}A). Let \(N_{\rm cell}\) be the number of neurons and let
 \(\delta^V_{i,0,u}\) be neuron \(u\)'s decoder-derived somatic error on example
 \(i\). The strict scalar condition first reduces this vector to
 \begin{equation}
-\bar\delta_i^V=\frac{1}{U}\sum_{u=1}^{U}\delta^V_{i,0,u},\qquad
+\bar\delta_i^V=\frac{1}{N_{\rm cell}}\sum_{u=1}^{N_{\rm cell}}\delta^V_{i,0,u},\qquad
 s_i^{\rm sc}=
 \begin{cases}
-\bar\delta_i^V, & |\bar\delta_i^V|>\epsilon,\\
-\delta^V_{i,0,u_i^\star}, & |\bar\delta_i^V|\leq\epsilon,
+\bar\delta_i^V, & |\bar\delta_i^V|>\tau_{\rm sc},\\
+\delta^V_{i,0,u_i^\star}, & |\bar\delta_i^V|\leq\tau_{\rm sc},
 \end{cases}
 \quad
 u_i^\star=\arg\max_u|\delta^V_{i,0,u}|,
-\qquad \epsilon=10^{-6}.
+\qquad \tau_{\rm sc}=10^{-6}.
 \label{eq:strictscalar}
 \end{equation}
 The largest-magnitude fallback prevents a near-zero vector mean from silently
@@ -692,12 +699,26 @@ field changed accuracy by less than 0.2 percentage points
 came from preserving distinct feedback coordinates across neurons, not from
 resolving dendritic paths within them.
 
-A separate control showed that the matched-width scalar-fallback
-implementation performed better than strict scalar feedback because it
-preserved neuron-specific coordinates for a small set of near-somatic
-parameters. We therefore used strict scalar feedback for the primary MNIST
-comparison; Methods quantify the affected parameters and compare the two
-implementations. Importantly, scalar feedback did not make all neurons
+A separate implementation control, used in an earlier cohort and retained in the
+fixed-checkpoint diagnostic, applied neuron-specific feedback only when a
+local stage had the same width as the somatic error vector. If \(m\) is the
+stage width, its field was
+\begin{equation}
+\widehat{\bm\delta}^{\,\rm mw}_{i,m}=
+\begin{cases}
+(\delta^V_{i,0,1},\ldots,\delta^V_{i,0,N_{\rm cell}}),
+&m=N_{\rm cell},\\
+s_i^{\rm sc}\bm 1_m,&m\neq N_{\rm cell}.
+\end{cases}
+\label{eq:matchedwidthscalar}
+\end{equation}
+We call this the \emph{matched-width scalar-fallback} condition. In the
+\([3,3]\) networks, every dendritic-stage and feedforward-synaptic update
+received the strict scalar; neuron-specific coordinates reached only 640
+near-somatic coupling and gate parameters, 0.027\% of the core parameters.
+This small exception nevertheless improved over strict scalar feedback, so we
+used strict scalar feedback for the primary MNIST comparison. Importantly,
+scalar feedback did not make all neurons
 identical. Every synapse still multiplied the shared learning signal by a different
 eligibility trace, determined by its input, weight and postsynaptic state.
 Scalar feedback limits the dimension of task information; it does not collapse
@@ -807,7 +828,8 @@ restricted feedback retain useful credit while excluding noise?
 dominant feedback bottleneck on MNIST.} Panels \textbf{A--E} and upper
 \textbf{G} use flattened MNIST and 128 regular directed \([3,3]\) trees---three
 proximal and nine terminal compartments per soma. Green circles denote
-shunting trees and blue squares topology-matched raw-additive trees.
+shunting trees and blue squares topology-matched raw-additive trees; in
+\textbf{C}, one purple diamond marks their coincident exact-path values.
 \textbf{A}, Feedback resolution: one strict layer scalar; one coordinate per
 neuron repeated over its arbor; or the exact compartment-error field. The
 strict value \(s_i^{\rm sc}\) (shown as \(s\)) is the per-example somatic mean with the
@@ -916,17 +938,20 @@ signal and noise, and route-wise reliability
 Fig.~\ref{fig:creditphase}B is only a readable illustration of the
 16-coordinate construction.
 
-The spectral-alignment screen began from a covariance
-\(\Sigma_{\rm tree}\) whose total energy across Haar levels 0--4 was
+The spectral-alignment screen began from an exact task-credit covariance
+\(C_{\rm tree}\) whose total energy across Haar levels 0--4 was
 \((0.15,0.35,0.30,0.20,0)\). For each seed,
 a fixed orthogonal rotation \(Q\) defined a covariance with the same eigenvalues,
-and the task covariance was
+and the mixed task-credit covariance was
 \begin{equation}
-\Sigma_\rho=\rho\Sigma_{\rm tree}
- +(1-\rho)Q\Sigma_{\rm tree}Q^{\mathsf T},
+C_\rho=\rho C_{\rm tree}
+ +(1-\rho)Q C_{\rm tree}Q^{\mathsf T},
 \qquad \rho\in\{0,0.25,0.5,0.75,1\}.
 \label{eq:spectralalignment}
 \end{equation}
+Here \(C_\rho\) describes the distribution of exact task-gradient vectors; it
+is distinct from the stochastic update-noise covariance \(\Sigma\) in
+Eq.~\ref{eq:creditoperatorbound}.
 At each route budget \(K\in\{1,2,4,8,16\}\), we compared the projector onto
 the nested tree span with a seed-matched random rank-\(K\) projector and the
 leading-eigenspace rank-\(K\) ceiling. The subtree-minus-random capture
@@ -936,8 +961,10 @@ spectral capture when their span contained the leading covariance eigenspace. Th
 advantage disappeared under random alignment and at full rank, where both
 route families represented the complete space (Supplementary Section~S4).
 
-The resolution screen sampled a unit target \(\bm t\) supported on Haar levels
-through \(H_{\mathrm c}\). Feedback applied the projector
+The resolution screen used the quadratic objective
+\(\mathcal L_{\rm res}(\bm w)=\tfrac12\lVert\bm w-\bm t\rVert_2^2\), with a
+unit target \(\bm t\) supported on Haar levels through \(H_{\mathrm c}\).
+Feedback applied the projector
 \(P_{D_{\mathrm r}}\) onto levels through \(D_{\mathrm r}\) to each stochastic
 quadratic gradient:
 \begin{equation}
@@ -960,9 +987,14 @@ controlled validation of the crossover built into the generator, not a claim
 that arbitrary tasks obey \(D_{\mathrm r}=H_{\mathrm c}\).
 
 The projection screen independently set
-\(f_{\rm sig}=\lVert P\bm\mu\rVert_2^2/\lVert\bm\mu\rVert_2^2\) and
-\(f_{\rm noise}=\operatorname{tr}(P\Sigma P^{\mathsf T})/
-\operatorname{tr}(\Sigma)\), each over
+\begin{equation}
+f_{\rm sig}=\frac{\lVert P\bm\mu\rVert_2^2}{\lVert\bm\mu\rVert_2^2},
+\qquad
+f_{\rm noise}=\frac{\operatorname{tr}(P\Sigma P^{\mathsf T})}
+{\operatorname{tr}(\Sigma)},
+\label{eq:signalnoisefractions}
+\end{equation}
+each over
 \(\{0.25,0.5,0.75,0.9,1\}\). It compared the unprojected stochastic gradient
 \(\bm\mu+\bm\xi\), backpropagation followed by the same projector
 \(P(\bm\mu+\bm\xi)\) with exact coefficients, and a routed estimator with an
@@ -1002,9 +1034,18 @@ each context selected one of eight terminal parameter blocks, while
 \(K\in\{1,2,4,8\}\) coefficients delivered the output error through ancestry
 routes or bandwidth-matched controls without changing the forward parameter
 budget. The dendritic-tree subset comprised 540 trained fits---27 route
-conditions in each of 20 paired seeds. Across these fits, utility correlated
-with
-norm-matched one-step progress at \(\rho=0.937\) and predicted final accuracy
+conditions in each of 20 paired seeds. Let \(\bm g\) and \(\widetilde{\bm g}_M\)
+be the exact and routed held-out gradients at initialization, and define
+\(\widetilde{\bm g}_M^{\rm nm}=\lVert\bm g\rVert_2
+\widetilde{\bm g}_M/\lVert\widetilde{\bm g}_M\rVert_2\). The reported
+norm-matched one-step progress was
+\begin{equation}
+P_1(M)=
+\frac{\mathcal L(\bm w_0)-\mathcal L(\bm w_0-0.25\widetilde{\bm g}_M^{\rm nm})}
+{\mathcal L(\bm w_0)-\mathcal L(\bm w_0-0.25\bm g)}.
+\label{eq:normmatchedprogress}
+\end{equation}
+Across these fits, utility correlated with \(P_1\) at \(\rho=0.937\) and predicted final accuracy
 with \(\rho=0.916\), more strongly than field capture alone
 (Fig.~\ref{fig:creditphase}G and Supplementary Table~S3). It
 located the main route-resolution optima but did not predict the small
@@ -1012,10 +1053,17 @@ training-trajectory advantage of task-matched subtrees in every seed. The
 theory therefore predicts large contrasts and within-family progress, not
 every difference accumulated during nonlinear training.
 Figure~\ref{fig:creditphase}H is a secondary synthesis rather than another
-experiment. It places five independently defined families---the trained
+experiment. Its vertical coordinate is relative bandwidth
+\(K/r_{\rm eff}\), where
+\(r_{\rm eff}=(\sum_j\lambda_j)^2/\sum_j\lambda_j^2\) is the participation-ratio
+rank of the relevant task-credit spectrum. It places five independently
+defined families---the trained
 subtree task, spectral screen, imposed-alignment fields on reconstructed
 arbors, coarse measured-response null and two-stream credit-reversal
-task---on normalized alignment and relative-bandwidth coordinates. No common
+task---on family-specific alignment coordinates: exact-gradient or field
+energy captured by the tested route span, or the corresponding imposed
+alignment variable. The horizontal locations therefore share an ordering
+from weak to strong alignment, not one common empirical unit. No common
 forward morphology is implied. The plane summarizes the scope of the theory
 and the tests that follow.
 
@@ -1045,12 +1093,13 @@ No-new-training reanalysis of 540 dendritic-tree fits---27 route conditions in
 each of 20 paired seeds---from the eight-context subtree factorial
 (Fig.~\ref{fig:subtreefactorial}); utility
 predicts one-step progress (Spearman \(\rho=0.937\), interval 0.93--0.94).
-\textbf{H}, Deterministic synthesis of the trained subtree task, abstract
-spectral screen, imposed-alignment fields on reconstructed mouse visual-cortex
-arbors analyzed in Fig.~\ref{fig:topology},
-coarse measured-response null and two-stream credit-reversal task
-(Supplementary Fig.~S19G), on family-specific task--route alignment and relative bandwidth
-\(K/r_{\mathrm{eff}}\) (Methods). Filled markers denote benefit or tie; open
+\textbf{H}, Deterministic synthesis of five independently defined families---
+trained subtree, spectral, imposed-alignment, measured-response and two-stream
+credit-reversal---on family-specific task--route alignment and relative bandwidth
+\(K/r_{\mathrm{eff}}\), where
+\(r_{\mathrm{eff}}=(\sum_j\lambda_j)^2/\sum_j\lambda_j^2\). Alignment is
+computed separately within each family, not in a common unit.
+Filled markers denote benefit or tie; open
 markers no benefit. Regime tints are theoretical, not fitted, and the
 heterogeneous families are not pooled.
 Panels \textbf{C--F} use 50 paired seeds; \textbf{G} resamples 20
@@ -1374,6 +1423,12 @@ where \(B_1\) is the distal feature block, \(b_E\) is the excitatory baseline,
 a gain group at level \(\ell\), and \(H_{\mathrm p}\) is the number of latent
 gain levels. The \(z\)'s are independent standard-normal log gains; subtracting
 half their variance keeps the mean multiplicative gain equal to one.
+In the nested- and flat-factor families, the middle and proximal excitatory
+blocks carried only a small class-independent baseline (0.02) plus independent
+input noise; they were not multiplied by the latent fields. Their paired
+inhibitory blocks were the factor sensors defined next. Thus class information
+entered only through the distal excitatory block, while each physical stage
+still received the same declared E/I contact inventory.
 
 A separate inhibitory block reported each factor. At sensor alignment
 \(\alpha\), its log-gain field was
@@ -1432,8 +1487,11 @@ e^{\alpha r_{i,\ell j}+\sqrt{1-\alpha^2}\,\zeta_{i,\ell j}-v_{\ell j}/2},
 where \(\ell=1\) denotes the distal module, \(r\) and \(\zeta\) are
 independent fields with variance \(v\), and only the distal excitatory module
 carries class information. At \(\alpha=1\), the common multiplicative field
-can be cancelled within each local E/I ratio, apart from independent additive
-input noise; serial cancellation is unnecessary.
+can be cancelled within the locally available ratio
+\(R_{i,\ell j}=x^E_{i,\ell j}/x^I_{i,\ell j}\), apart from independent
+additive input noise; serial cancellation is unnecessary. We reserve the
+lower-case \(r_{i,\ell j}\) for the latent log-gain field and use \(R\) for the
+observable E/I ratio.
 
 The forward-model controls isolated the computation being tested
 (Fig.~\ref{fig:physicaldepth}B). With normalized
@@ -1442,7 +1500,7 @@ stage was
 \begin{equation}
 V_n^{\mathrm{sh}}=
 \frac{G_n^{\mathrm E}+J_n^{\mathrm{child}}}
-{1+G_n^{\mathrm E}+G_n^{\mathrm I}+G_n^{\mathrm{child}}+\epsilon},
+{1+G_n^{\mathrm E}+G_n^{\mathrm I}+G_n^{\mathrm{child}}+\varepsilon_{\rm num}},
 \qquad
 V_n^{\mathrm{add}}=G_n^{\mathrm E}-G_n^{\mathrm I}+J_n^{\mathrm{child}},
 \label{eq:physicaldepthforwardcontrols}
@@ -1455,7 +1513,7 @@ current, where \(a_c\) is child compartment \(c\)'s output and
 \(g_{c\to n}^{\mathrm{den}}\) its child-to-parent coupling conductance.
 The sum \(G_n^{\mathrm{child}}=\sum_c g_{c\to n}^{\mathrm{den}}\) is the
 corresponding denominator-only load, the leak is normalized to one, and
-\(\epsilon\) is a fixed numerical stabilizer. The raw-additive control retained
+\(\varepsilon_{\rm num}\) is a fixed numerical stabilizer. The raw-additive control retained
 the graph, inputs, masks and trainable weights but replaced the first
 expression by the second: it kept the signed E, I and child-current terms while
 removing divisive normalization and the denominator-only child load. The literal
@@ -1515,7 +1573,8 @@ both local-learning benefits. Optimizer-matched automatic-differentiation
 controls reproduced this separation (Supplementary Fig.~S28).
 At a fixed checkpoint, the shared-soma update's cosine with the exact
 conductance gradient decreased from D1 to D3, whereas exact-path transport
-reproduced the selected gradient direction (Supplementary Information).
+reproduced the selected gradient direction (Supplementary section
+``Nonlinear physical depth in the DendriNet model'').
 Exact-path LocalCA denotes exact path transport, not optimizer identity:
 LocalCA and backpropagation used learning rates fixed separately before this
 comparison, so their trained endpoints need not coincide.
@@ -1560,21 +1619,21 @@ available within one local module.
 
 \begin{figure}[tbp]
 \centering
-\includegraphics[width=0.98\textwidth]{main/figure_06.pdf}
+\includegraphics[width=0.958\textwidth]{main/figure_06.pdf}
 \caption{\textbf{Useful serial physical depth is task- and
 alignment-dependent.} Here \(H_{\mathrm p}\) is the number of latent gain
 levels and \(D_{\mathrm p}\) the number of nonsomatic child-to-parent stages;
-vectors list soma-outward branching factors. \textbf{A}, Three task families,
-illustrated independently of model depth. Here
+vectors list soma-outward branching factors. \textbf{A}, Three task families. Here
 \(m_i=b_E+y_i\Delta\) is the noise-free distal class-bearing amplitude and
 \(h_\ell\) denotes a multiplicative gain at level \(\ell\). Nested
 factors multiply it at fine, coarse and global scales with 4/2/1 groups; flat
 factors use three independent eight-group fields;
-local ratios co-locate excitatory and inhibitory observations of a cumulative
-field within each module, with class information only in the distal pair.
+local ratios \(R_\ell=x_\ell^E/x_\ell^I\) co-locate excitatory and inhibitory
+observations of a cumulative field within each module, with class information
+only in the distal pair.
 Alignment \(\alpha\) is the correlation between latent and sensor log gains.
-\textbf{B}, Serial D3 \([2,1,2]\), resource-identical literal grouped-point
-readout and near-total-parameter-matched dense MLP. The grouped model preserves
+\textbf{B}, Serial D3 \([2,1,2]\), resource-identical grouped-point readout and
+near-total-parameter-matched dense MLP. The grouped model preserves
 all eight modules but removes child-to-parent composition; the MLP is a
 flexible ceiling. \textbf{C}, Three-level nested task at \(\alpha=1\) across
 D1 \([8]\), D2 \([2,3]\) and D3 \([2,1,2]\). Curves compare serial shunting
@@ -1583,10 +1642,11 @@ raw-additive BP and the dense MLP. Shared-soma repeats each neuron's own
 somatic error across its arbor. \textbf{D}, Independent four-level cohort
 including D4 \([1,1,2,2]\), under aligned or reversed tier placement.
 \textbf{E}, Aligned serial-BP optima in independent two-, three- and four-level
-cohorts; the two-level cohort uses D2 \([4,1]\). Outlines in \textbf{D} mark
-row maxima supported by the paired interval criterion; outlines in
-\textbf{E} mark descriptive row maxima when the within-row spread exceeds
-one percentage point. Blanks were not tested. \textbf{F,G}, In a separate
+cohorts; the two-level cohort uses D2 \([4,1]\). In \textbf{D}, an aligned row
+maximum is outlined only when its 95\% bootstrap interval lies wholly above the
+runner-up's; reversed rows are unoutlined. In \textbf{E}, outlines mark
+descriptive maxima when within-row spread exceeds one percentage point. Blanks
+were not tested. \textbf{F,G}, In a separate
 fixed-D3 cohort, serial-minus-grouped-point accuracy across task family and
 \(\alpha\in\{0,0.5,1\}\), under BP or exact-path LocalCA. Multiplicative-factor
 tasks favor serial composition near exact alignment; locally available ratios
@@ -1687,13 +1747,14 @@ identity.
 
 As an aligned positive control, let
 \(\Gamma_{ik}=\mathbb 1\{i\in\operatorname{desc}(k)\}\beta_k\), where
-\(\beta_k\) is a modeled inhibitory-conductance fraction at route site \(k\).
+\(i\) indexes an input-bearing segment, \(k\) a candidate branch-point route,
+and \(\beta_k\) is the modeled inhibitory-conductance fraction at route site \(k\).
 We generated each target as
 \begin{equation*}
 \bm t=\Gamma\bm a,
 \end{equation*}
-with independent route-amplitude vector \(\bm a\). Subtree dictionaries also
-performed best in this deliberately route-generated condition
+with independent route-amplitude vector \(\bm a\). Among the sparse structured
+dictionaries, subtrees performed best in this deliberately route-generated condition
 (Fig.~\ref{fig:topology}D; route-support and direct-type controls in
 Supplementary Fig.~S20). This result demonstrates the capacity available under
 route--field alignment; it is not independent evidence that biological credit
@@ -1718,8 +1779,8 @@ Pinky v185 MICrONS mouse, 12 excitatory cells were selected by spatial strata
 before mesh or synapse outcomes were inspected; ten met the fixed requirement
 of at least 20 mapped typed incoming contacts, including at least three
 inhibitory contacts. In those ten cells, subtree capture exceeded depth-bin and
-shuffled-route capture in all ten and exceeded random-path capture in nine;
-the remaining random-path contrast was a numerical tie
+shuffled-route capture in all ten and exceeded random-anatomical-route capture
+in nine; the remaining random-anatomical-route contrast was a numerical tie
 (Fig.~\ref{fig:topology}G and Supplementary Figs.~S10, S27). The second volume
 therefore provides a directional structural replication in one additional
 animal; it does not support population inference or test endogenous route use.
@@ -1736,7 +1797,7 @@ in vivo.
 
 \begin{figure}[tbp]
 \centering
-\includegraphics[width=0.94\textwidth]{main/figure_07.pdf}
+\includegraphics[width=0.885\textwidth]{main/figure_07.pdf}
 \caption{\textbf{Reconstructed arbors provide sparse, predominantly coarse
 routes for modeled compartment fields.} Panels \textbf{A--F} use eight
 reconstructed IT neurons from MICrONS mouse 1. \textbf{A}, Median-sized arbor;
@@ -1767,7 +1828,7 @@ whiskers are 95\% cell-bootstrap intervals.
 disjoint 47-cell v661 cohort from mouse 1 and ten qualifying Pinky v185 cells
 from mouse 2.
 Points are cells; larger symbols and intervals are descriptive means and 95\%
-cell-bootstrap intervals. In mouse 2, the random-path contrast is positive in
+cell-bootstrap intervals. In mouse 2, the random-anatomical-route contrast is positive in
 9/10 cells with one numerical tie; the other two contrasts are positive in
 10/10. All fields are modeled, not observed learning signals.}
 \label{fig:topology}
@@ -1824,9 +1885,15 @@ the Sherman--Morrison identity,
 The inhibitory reversal does not enter the transport-only adjoint update in
 Eq.~\ref{eq:sherman}, because that update depends on the perturbed conductance
 operator. It enters the forward solve through \(\bm b'\) and sets the baseline
-focal current \(\kappa_k(E_{\mathrm I}-V_k)\). The measured endpoint remains
-the excitatory gradient \(\gamma_i=q_i(E_{\mathrm E}-V_i)\); the full
-perturbation calculation recomputes both \(q_i\) and \(V_i\).
+focal current \(\kappa_k(E_{\mathrm I}-V_k)\). Let
+\(h_i^{\mathrm E}=g_i^{\mathrm E}x_i^{\mathrm E}\) denote the open
+excitatory conductance at site \(i\). The measured endpoint is its gradient,
+\(\gamma_i\equiv\partial\mathcal L/\partial h_i^{\mathrm E}
+=q_i(E_{\mathrm E}-V_i)\); the gradient with respect to the maximal
+conductance is \(x_i^{\mathrm E}\gamma_i\). The focal analysis evaluates the
+unit-open-conductance sensitivity, so this distinction introduces no omitted
+input factor. The full perturbation calculation recomputes both \(q_i\) and
+\(V_i\).
 The scalar prefactor sets the magnitude of the change, whereas the
 Green's-function column \(G^{-1}\bm e_k\) determines its spatial spread. A
 focal site can selectively control a descendant route only if this column is
@@ -1839,9 +1906,8 @@ S_k=\frac{\operatorname{median}_{i\in D(k)}|(G^{-1})_{ik}|}
 \label{eq:selectivitycriterion}
 \end{equation}
 Thus \(S_k>1\) indicates a descendant-enriched transport kernel. To measure the
-perturbation itself, let
-\(\gamma_i=\partial\mathcal L/\partial g_i^{\mathrm E}\) be the
-excitatory-conductance gradient at site \(i\), and let primes
+perturbation itself, let \(\gamma_i\) be the open-excitatory-conductance
+gradient defined above, and let primes
 denote the post-perturbation values. We computed
 \begin{equation*}
 m_i=\left|\log\frac{|\gamma_i'|+\epsilon_\gamma}
@@ -1913,7 +1979,7 @@ inhibition.
 
 \begin{figure}[tbp]
 \centering
-\includegraphics[width=0.91\textwidth]{main/figure_08.pdf}
+\includegraphics[width=0.865\textwidth]{main/figure_08.pdf}
 \caption{\textbf{Focal shunting substantially changes modeled descendant
 credit in electrotonically permissive states.} \textbf{A}, Generic focal-shunt
 schematic; panels \textbf{B--G} use complete reconstructed arbors. The matched
@@ -1984,6 +2050,10 @@ Exact learning used the trial-specific compartment-error field
 \(P_D=DD^\dagger\) was the Euclidean projector onto its column space after
 the prescribed conductance weights had been incorporated into \(D\). We
 formed the subtree dictionary from four selected nonempty descendant routes.
+Candidate branch points were ranked by the product of their modeled local
+inhibitory-conductance fraction and the fraction of mapped functional input
+sites in their descendant subtree; the four highest-ranking nonempty routes
+were selected without using target responses.
 The site-shuffle control preserved each selected column's values and nonzero
 count while permuting its site assignment; the random control used an
 equal-effective-rank set of nonempty anatomical routes. We
@@ -2002,11 +2072,21 @@ identical. Each restricted condition therefore uses one fixed site-gain vector
 \(\bm v_D\) lying in a four-route span, not four independently varying
 trial signals or a biological feedback encoder (Fig.~\ref{fig:boundary}A).
 
+If measured task credit were aligned with branch ancestry, the nested-subtree
+rule should reduce held-out prediction error and better match exact trialwise
+conductance updates than the controls. It did neither. Exact compartment
+errors gave the lowest normalized mean-squared error, and nested subtrees
+showed no reliable advantage over random anatomical routes or site-shuffled
+routes (Fig.~\ref{fig:boundary}B). Normalized MSE is held-out MSE divided by
+that of the training-mean predictor. Ten fixed split/initialization replicates
+were first averaged within each scan; the 13 eligible scans were then averaged
+within their seven targets before target-level inference.
+
 We next compared trialwise conductance updates at the common checkpoint trained
-with exact compartment errors (Fig.~\ref{fig:boundary}C). Let \(U_{\mathrm{exact}}\)
-and \(U_D\) be the matrices whose rows are the exact and routed per-example
-updates, evaluated with the same checkpoint and local eligibilities. We define
-their \emph{common-checkpoint update match} as
+with exact compartment errors. Let \(U_{\mathrm{exact}}\) and \(U_D\) be the
+matrices whose rows are the exact and routed per-example updates, evaluated
+with the same checkpoint and local eligibilities. Their
+\emph{common-checkpoint update match} was
 \begin{equation}
 \mathcal M_{\Delta}(D)=1-
 \frac{\lVert U_{\mathrm{exact}}-U_D\rVert_F^2}
@@ -2018,22 +2098,22 @@ Eq.~\ref{eq:reconstructioncapture}. Because the routed update is not generally
 an orthogonal projection of the exact trialwise update,
 \(\mathcal M_{\Delta}\) can be negative; its maximum is one.
 
-If measured task credit were aligned with branch ancestry, the nested-subtree
-rule should reduce held-out prediction error and better match exact trialwise
-conductance updates than the controls. It did neither. Exact compartment
-errors gave the lowest normalized mean-squared error. Nested subtrees showed
-no reliable held-out-MSE advantage over random or site-shuffled routes, and
-their mean common-checkpoint update match was lower than both controls across
-the seven targets
-(Fig.~\ref{fig:boundary}B,C). A complementary prediction---that
-presynaptic partners mapped to the same subtree should have more similar visual
-responses after controlling for Euclidean separation and dendritic depth---was
-also unsupported (Fig.~\ref{fig:boundary}C). Together, these three endpoint
-families provide no evidence for morphology-specific alignment in
-this cohort. Normalized MSE is held-out MSE divided by that of the
-training-mean predictor. Ten fixed split/initialization replicates were first
-averaged within each scan; the 13 eligible scans in total were then averaged
-within their seven targets before target-level inference. A coarser major-branch analysis was additionally limited by a
+We also tested the complementary structure--function prediction that partners
+mapped to the same subtree should have more similar measured responses.
+Functional similarity was the Pearson correlation between condition-mean
+responses over repeated visual identities. Shared ancestry was the cable
+length from the soma to the partners' lowest common ancestor, divided by the
+shorter soma-to-contact path. Within each target, we rank-transformed both
+quantities, residualized them against log Euclidean separation and
+soma-to-contact depth difference, and correlated the residuals. To display
+these correlations together with MSE and update-match contrasts, each row in
+Fig.~\ref{fig:boundary}C is divided by the across-target sample standard
+deviation of its target-level values; the target bootstrap recomputes this
+complete standardized estimand. The subtree update match was lower than both
+controls, and the residualized structure--function association was also
+unsupported (Fig.~\ref{fig:boundary}C). Together, these three endpoint
+families provide no evidence for morphology-specific alignment in this cohort.
+A coarser major-branch analysis was additionally limited by a
 nearly rank-one response-derived field and was also null (Supplementary
 Fig.~S22). These within-arbor tests do not contradict broader like-to-like
 wiring at the population scale \citep{ding2025wiring}.
@@ -2049,8 +2129,8 @@ synthetic gradient
 where \(a\) is the fraction of field energy in the subtree span
 (Fig.~\ref{fig:boundary}D). Anatomy, route count, field norm and curvature
 were held fixed while \(a\) varied. Subtree capture rose from zero at
-orthogonality to one at complete alignment and crossed the random-path,
-depth-bin and site-shuffled controls as alignment increased
+orthogonality to one at complete alignment and crossed the controls based on
+random anatomical routes, depth bins and site shuffling as alignment increased
 (Fig.~\ref{fig:boundary}E). That capture curve is the intended representational
 manipulation and equals \(a\) by construction. The nontrivial optimization
 test used the same fields in a positive quadratic objective: norm-matched
@@ -2080,48 +2160,52 @@ with neuron-specific learning signals, but it is not an independent test of
 their existence and provides no evidence about routing within an arbor
 (Supplementary Fig.~S17).
 
-The resulting evidence ladder separates supported neuron-specific
-coordinates, conditional subtree addresses and route gain, and the presently
-unestablished endogenous use of morphology-specific routes
+The resulting biological-evidence ladder marks neuron-specific coordinates as
+conditional because the six-animal evidence is retrospective, structural
+subtree-route capacity as supported, route gain as conditional on conductance
+state, and endogenous morphology-specific task-credit use as not established
 (Fig.~\ref{fig:boundary}G).
 
 \begin{figure}[tbp]
 \centering
-\includegraphics[width=0.90\textwidth]{main/figure_09.pdf}
+\includegraphics[width=0.88\textwidth]{main/figure_09.pdf}
 \caption{\textbf{Measured responses set the biological boundary; imposed
-alignment defines a conditional positive control.} \textbf{A}, Feedback
-dictionaries used in the offline response-prediction task on one fixed
-reconstructed tree per target. Exact learning uses the
-trial-specific compartment-error field; each restricted rule multiplies the
-scalar output error by its own once-calibrated, fixed four-route profile
-(Eq.~\ref{eq:micronsrestrictedcredit}). The schematic is illustrative because
-routes on complete irregular arbors may overlap or nest. Only
-input-conductance errors differ. \textbf{B}, Scan-complete normalized MSE for
-seven targets from one mouse. Ten replicates are averaged within each of 13
-scans, then within targets; MSE is relative to the training-mean predictor.
-\textbf{C}, Standardized target-level effects with target-bootstrap intervals.
-Structure--function rows are residualized ancestry--response associations;
+alignment defines a conditional positive control.} \textbf{A}, Offline
+response prediction with one reconstructed tree per target. Exact learning uses
+the trial-specific compartment-error
+field; each restricted rule multiplies scalar output error by one fixed spatial
+field in a four-route span (Eq.~\ref{eq:micronsrestrictedcredit}). Routes are
+selected without target responses; only input-conductance errors differ.
+\textbf{B}, Scan-complete normalized MSE for seven targets from one mouse. Ten
+replicates per scan and 13 scans are averaged within targets. Dots are targets;
+diamonds and whiskers show
+target means and 95\% bootstrap intervals; the same convention applies in C.
+\textbf{C}, Each
+target-level native effect is divided by its across-target sample standard
+deviation; bootstrap resampling repeats the standardization.
+Structure--function rows are residualized ancestry--response correlations;
 other rows are control minus subtree for MSE and subtree minus control for
 common-checkpoint update match (Eq.~\ref{eq:micronsupdatematch}), so positive
-favors morphology-specific alignment. Rows distinguish
-one selected scan from all eligible scans within the same targets. The axis is
-clipped to \([-2.2,1.9]\); the arrow marks the full-tree update-match versus random
-interval extending from \(-10.97\) to \(-0.16\). \textbf{D}, Synthetic
-alignment manipulation in the initial eight reconstructions,
+favors morphology-specific alignment. The axis is clipped to \([-2.2,1.9]\);
+the arrow marks an interval extending to \(-10.97\).
+\textbf{D}, Synthetic
+alignment manipulation in eight reconstructions,
 \(\bm g(a)=\sqrt a\,\bm u_{\parallel}+\sqrt{1-a}\,\bm u_{\perp}\). The
-schematic shows representative \(a=0,0.4,1\); the analysis uses all six
-levels \(a\in\{0,0.2,0.4,0.6,0.8,1\}\). \textbf{E}, As a
+schematic shows three of six analyzed levels,
+\(a\in\{0,0.2,\ldots,1\}\). \textbf{E}, As a
 unit-energy field rotates into an eight-route subtree span, subtree capture
-equals aligned energy \(a\) by construction. Random paths, depth bins and site
-shuffling are controls; curves are eight-cell means with 95\% cell-bootstrap
+equals \(a\) by construction. Random anatomical routes, depth bins and site
+shuffling are controls; curves are eight-cell means with 95\% bootstrap
 intervals. These fields and the Supplementary Fig.~S5 optimization use no
 visual data. \textbf{F}, Retrospective signed/common decomposition of a
-separate six-animal BCI study. Each \(\Delta\) is the source-study
+six-animal BCI study. Each \(\Delta\) is the source-study
 soma--dendrite residual contrast, error reduction minus error increase. Lines
 pair \(\Delta^{P+}\) and \(\Delta^{P-}\) within animal; the bar partitions pooled energy into signed (83.7\%) and common
 (16.3\%) modes. This tests neuron identity, not within-arbor routing.
-\textbf{G}, Evidence boundary across neuron-specific coordinates, structural
-subtree capacity, state-dependent route gain and endogenous route use.}
+\textbf{G}, Biological-evidence boundary: neuron-specific coordinates are
+retrospective and conditional; structural subtree capacity is supported;
+route gain is conditional on conductance state; endogenous route use is not
+established.}
 \label{fig:boundary}
 \end{figure}
 \clearpage
@@ -2407,7 +2491,8 @@ current weights by \(w\).
 The analyses in Supplementary Figs.~S1--S3 and S4A,B instead standardize this
 voltage separately for each example across the output coordinates of a stage,
 \(V_{sn}^{\mathrm{norm}}=(V_{sn}^{\mathrm{raw}}-\mu_s)/
-(\sigma_s+\epsilon)\), with fixed reactivation parameters \(m=0.1\) and
+(\sigma_s+\varepsilon_{\rm norm})\), where \(\varepsilon_{\rm norm}\) is the
+numerical stabilizer. Reactivation used fixed parameters \(m=0.1\) and
 \(b=0\). We call this the normalized-additive model. Unless stated otherwise,
 additive comparisons in the main figures use the raw-additive model. The
 baseline-current-matched current injection in the focal-cable experiment is a
@@ -2831,7 +2916,8 @@ seeds, and paired tests were two-sided Wilcoxon signed-rank tests.
 The secondary analysis reconstructed the training data,
 initialization and route matrices for all 2,700 completed subtree-factorial
 fits. For each of 20 seeds, 64 independently sampled minibatches of size 64
-estimated gradient-noise energy at initialization. The exact full-data gradient
+estimated gradient-noise energy at initialization. Equation~\ref{eq:normmatchedprogress}
+used the frozen held-out logistic loss and a step size of 0.25. The exact full-data gradient
 provided the signal term, the largest logistic Hessian eigenvalue provided
 local smoothness, and Eq.~\ref{eq:phaseutility} provided utility. Correlations
 were restricted to the 540 dendritic-tree route conditions, and uncertainty
@@ -2864,7 +2950,7 @@ marginal distribution while removing example-wise pairing.
 At every physical stage, the conductance-based shunting equation was
 \begin{equation}
 V_n=\frac{G_n^{\mathrm E}+J_n^{\mathrm{child}}}
-{1+G_n^{\mathrm E}+G_n^{\mathrm I}+G_n^{\mathrm{child}}+\epsilon}.
+{1+G_n^{\mathrm E}+G_n^{\mathrm I}+G_n^{\mathrm{child}}+\varepsilon_{\rm num}}.
 \end{equation}
 This follows from the general conductance balance after normalizing leak
 conductance to one and setting
@@ -3338,7 +3424,7 @@ criteria required at least 20 mapped typed inputs, including at least three
 inhibitory inputs. Selected cells and exclusion reasons are reported in Source
 Data. The
 primary endpoint was sign agreement with \texttt{minnie65} for K=4
-ancestry-route capture relative to random paths, depth bins and shuffled
+ancestry-route capture relative to random anatomical routes, depth bins and shuffled
 ancestry. The mouse, not the 12 nested cells, is the biological replication
 unit; cell-bootstrap intervals describe only within-volume stability.
 
@@ -3400,9 +3486,9 @@ $\beta_k$ is the normalized inhibitory-conductance fraction at that route site. 
 normalized route-sensitivity proxy rather than the exact derivative of the
 reciprocal passive-cable solve. Perturbation fields were generated by
 multiplying independent route amplitudes by $\Gamma$. At each channel budget,
-nested-subtree routes were ranked by $\beta_k$ multiplied by the fraction of total
+subtree routes were ranked by $\beta_k$ multiplied by the fraction of total
 mapped excitatory synaptic area among their descendants. Controls were an
-unconstrained principal-component basis, random nonempty real paths, cable-depth
+unconstrained principal-component basis, random nonempty anatomical routes, cable-depth
 bins and column-wise ancestry shuffles. Channel count and the number of
 evaluated examples were matched. Feedback wiring density was defined as the
 fraction of nonzero entries in the site-by-channel dictionary.
@@ -3622,7 +3708,12 @@ $x_i(E_{\mathrm E}-V_i)$ multiplied by the segment adjoint.
 Restricted methods first projected the baseline soma-to-site transfer vector
 into one of three four-channel dictionaries: conductance-weighted ancestry, a
 column-value-preserving site shuffle, or an equal-rank random set of nonempty
-anatomical routes. This vector was calibrated once without target responses
+anatomical routes. Candidate ancestry columns were ranked by the modeled local
+inhibitory-conductance fraction times the fraction of mapped functional input
+sites in their descendants; the top four nonempty columns were retained. The
+random control sampled four columns from the same candidate set, and site
+shuffling preserved the selected ancestry columns' values and nonzero counts.
+This vector was calibrated once without target responses
 and then frozen during learning. Each restricted update used only scalar
 output error, the fixed site vector and local eligibility. All methods used
 exact readout and bias gradients.
@@ -3654,8 +3745,8 @@ selected routes, each unit-energy exact gradient was constructed as
 where $\bm u_{\parallel}\in\operatorname{span}(Q)$,
 $\bm u_{\perp}\perp\operatorname{span}(Q)$ and
 $a\in\{0,0.2,0.4,0.6,0.8,1\}$. Directions were paired across alignment
-levels. Controls were eight random real paths, eight cable-depth bins and
-row-permuted nested-subtree routes. The permutation preserved column values and
+levels. Controls were eight random anatomical routes, eight cable-depth bins and
+row-permuted subtree routes. The permutation preserved column values and
 nonzero count while breaking ancestry.
 
 Each cell contributed 40 nested Monte Carlo streams with 256 gradients per
@@ -3723,7 +3814,7 @@ imposed aligned-energy fraction $a$. Its bandwidth coordinate is derived
 analytically from the documented field generator as the geometric mean across
 cells of $a^2+8(1-a)^2/(n-8)$, where $n$ is the cell's weighted coordinate
 count; it is not read from a results table. For the coarse measured-response
-null, alignment is mean held-out field capture by nested-subtree routes, and
+null, alignment is mean held-out field capture by subtree routes, and
 $r_{\mathrm{eff}}=1.07$ is estimated from dense-oracle capture at one through
 eight channels. For the two-stream credit-reversal task, alignment is the
 initial scaled capture of correct two-subtree routing, and

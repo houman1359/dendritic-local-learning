@@ -185,7 +185,7 @@ PMINUS = COLORS["mute"]                  # animal P- population
 # The mean/summary glyph is MARKER_MS + 1.2 everywhere (the mark contract).
 MEAN_MS = MARKER_MS + 1.2
 
-# ── the standardized paired-effect axis of panel C ──────────────────────
+# ── the standardized target-level-effect axis of panel C ────────────────
 # The right limit holds every upper bound on the page: the widest is the
 # full-tree MSE "vs shuffled" row at +1.76, which the previous +1.7 limit cut
 # by six hundredths of a unit and drew as though it ended on the spine.
@@ -199,7 +199,7 @@ MEAN_MS = MARKER_MS + 1.2
 # never left to look bounded.
 FOREST_XLIM = (-2.2, 1.9)
 FOREST_XTICKS = (-2.0, -1.0, 0.0, 1.0)
-FOREST_XLABEL = "paired standardized effect"
+FOREST_XLABEL = "standardized target-level effect"
 
 # ── the held-out normalized MSE axis of panel B ─────────────────────────
 MSE_XLIM = (0.60, 1.02)
@@ -225,7 +225,7 @@ TREE_METHODS = (
 # within 0.01 of one another below alignment 0.6.
 ALIGN_METHODS = (
     ("morphology-selected paths", "subtree", ROUTE, "o", None),
-    ("random paths", "random", C_CTRL, "s", None),
+    ("random anatomical routes", "random", C_CTRL, "s", None),
     ("depth bins", "depth", C_CTRL, "^", (3.0, 1.8)),
     ("ancestry-shuffled paths", "shuffle", C_CTRL_L, "D", None),
 )
@@ -613,7 +613,7 @@ def panel_route_dictionary(ax):
 
     # Short enough to sit inside the panel: the full statement -- that the
     # error is a scalar and only the routes differ -- is in the caption.
-    f.text((0.5, 0.042), "each restricted rule uses one fixed spatial profile",
+    f.text((0.5, 0.042), "one fixed field in a four-route span per rule",
            size=PT_SMALL, color=MUTE)
     return ax
 
@@ -1072,7 +1072,7 @@ def panel_mode_energy(ax, mode):
 # The closing panel used to be three tinted boxes of bullets, which is a
 # slide, not a figure.  It is drawn here as the paper's OWN credit hierarchy
 # (Fig. 1c) turned into a ladder: four stacked rungs read from the bottom up
-# -- neuron coordinate δᵤ, subtree address δᵤ,ₖ, route gain, and the use of
+# -- neuron coordinate δᵤ, subtree address Aᵤ,ₖ, route gain, and the use of
 # those routes for endogenous task credit in vivo -- so the closing panel
 # answers "where does the evidence stop" spatially rather than in prose.
 #
@@ -1107,11 +1107,11 @@ LADDER_OPEN = None                       # nothing established: an open step
 # Index 0 is the BOTTOM rung: the ladder is read upward, in the hierarchy's
 # own order, so the drawing order below is the reading order.
 EVIDENCE_RUNGS = (
-    ("coordinate", "coordinate", "δᵤ", COLORS["additive"],
+    ("coordinate", "coordinate", r"$\delta_u$", COLORS["additive"],
      "retrospective (n=6)", None, LADDER_CONDITIONAL),
-    ("address", "subtree route", "cᵤ,ₖ", INK,
+    ("address", "subtree route", r"$A_{u,\cdot k}$", INK,
      "capacity, not use", None, LADDER_SUPPORTED),
-    ("gain", "route gain", "ᾶₙ", INK,
+    ("gain", "route gain", r"$\Lambda_k$", INK,
      "high conductance only", None, LADDER_CONDITIONAL),
     ("open", "endogenous task use", None, MUTE,
      "no anatomy alignment", None, LADDER_OPEN),
