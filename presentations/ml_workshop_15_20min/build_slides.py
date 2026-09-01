@@ -192,8 +192,8 @@ def render_pdf_assets() -> None:
                 sub_font = ImageFont.truetype(
                     "/usr/share/fonts/urw-base35/NimbusSans-Regular.otf", 23
                 )
-                label = "imposed subtree alignment  a"
-                sub_label = "route"
+                label = "imposed task–route alignment  a"
+                sub_label = ""
                 bbox = draw.textbbox((0, 0), label, font=font)
                 sub_bbox = draw.textbbox((0, 0), sub_label, font=sub_font)
                 total_width = (bbox[2] - bbox[0]) + (sub_bbox[2] - sub_bbox[0])
@@ -205,12 +205,13 @@ def render_pdf_assets() -> None:
                     fill="#222222",
                     font=font,
                 )
-                draw.text(
-                    (x + (bbox[2] - bbox[0]), y + 20),
-                    sub_label,
-                    fill="#222222",
-                    font=sub_font,
-                )
+                if sub_label:
+                    draw.text(
+                        (x + (bbox[2] - bbox[0]), y + 20),
+                        sub_label,
+                        fill="#222222",
+                        font=sub_font,
+                    )
             rendered.save(ASSETS / f"{output_name}.png", optimize=True)
         temporary.unlink()
 
@@ -768,19 +769,18 @@ def build_slides() -> list[dict[str, str]]:
 
     slides.append(slide(
         "STANDARD IMAGE TASKS",
-        "Neuron identity—not exact path resolution—dominates both standard tasks",
+        "Neuron-specific feedback—not exact within-tree resolution—dominates standard tasks",
         f"""
         <div class="two-col col-50-50 plot-pair standard-plots">
           <div class="plot-card"><div class="plot-label">MNIST · <span class="green-text">green = shunting</span> · <span class="blue-text">blue = additive</span></div>{img('mnist_strict_scalar', 'MNIST strict-scalar feedback ladder')}</div>
           <div class="plot-card"><div class="plot-label">Flattened CIFAR-10 · additive tree · “exact path” = exact compartment field</div>{img('cifar_confirmatory_ladder', 'CIFAR-10 feedback ladder')}</div>
         </div>
-        <div class="comparison-table">
-          <div class="comparison-head"><span>model/task</span><span>scalar → neuron</span><span>neuron → exact field</span></div>
-          <div><span>MNIST · shunting</span><b class="blue-text">+11.25 pp</b><b>+0.045 pp</b></div>
-          <div><span>MNIST · additive</span><b class="blue-text">+7.81 pp</b><b>+0.186 pp</b></div>
-          <div><span>CIFAR-10 · additive</span><b class="blue-text">+16.39 pp</b><b class="red-text">−0.86 pp</b></div>
+        <div class="standard-summary-row">
+          {stat('+7.8 to +16.4 pp', 'strict scalar → one distinct feedback coordinate per neuron', tone='blue')}
+          {stat('−0.86 to +0.19 pp', 'neuron-specific coordinate → exact compartment field', tone='purple')}
+          {stat('≈ backprop', 'exact field on flattened CIFAR-10, within the predefined ±1-point margin', tone='teal')}
         </div>""",
-        "On both tasks, most of the gain comes from selecting the correct neuron; exact within-tree resolution adds little.",
+        "Most of the gain comes from preserving distinct feedback coordinates across neurons; exact within-tree resolution adds little.",
         "Paired-seed means; CIFAR exact field and BP are equivalent within the predefined ±1-point margin.",
     ))
 
@@ -856,7 +856,10 @@ def build_slides() -> list[dict[str, str]]:
         "Real arbors provide sparse candidate routes, mostly through coarse geometry",
         f"""
         <div class="two-col col-48-52 anatomy-layout">
-          <div class="tree-panel anatomy-tree">{dendrite_svg(compact=True, labels=False)}<div class="route-overlay"><span>branch points define nested supports</span><span>q → P<sub>A</sub>q</span></div></div>
+          <div class="stack anatomy-visuals compact-stack">
+            <div class="plot-card mapped-arbor"><div class="plot-label">measured MICrONS morphology with mapped E/I contacts</div>{img('mapped_reconstruction', 'Reconstructed MICrONS arbor with mapped excitatory and inhibitory contacts')}</div>
+            <div class="plot-card address-inset"><div class="plot-label">branch points define nested route supports</div>{img('ancestry_addresses', 'Nested ancestry addresses on a dendritic tree')}</div>
+          </div>
           <div class="stack anatomy-data">
             <div class="equation compact capture-equation"><span class="capture-formula">C<sub>A</sub>(q)=‖P<sub>A</sub>q‖²/‖q‖²</span><span class="capture-definition">fraction of field energy in the route span</span></div>
             <div class="anatomy-evidence-grid">
@@ -871,7 +874,7 @@ def build_slides() -> list[dict[str, str]]:
             <div class="precision-note">Connections are nonzero route-matrix entries—not cable length, energy, or reliability. The ordering replicated in a disjoint 47-cell cohort. A second MICrONS mouse reproduced the model-matched subtree advantage in 10/10 QC-passing cells; animal-level inference remains descriptive. Fields are modeled, not observed task gradients.</div>
           </div>
         </div>""",
-        "Morphology supplies a sparse route dictionary; most capacity comes from branch depth and coarse topology.",
+        "Measured morphology supplies a sparse route dictionary; most capacity comes from branch depth and coarse topology.",
     ))
 
     slides.append(slide(
@@ -881,7 +884,8 @@ def build_slides() -> list[dict[str, str]]:
         <div class="two-col col-58-42 shunt-layout">
           <div class="plot-card shunt-schematic">{focal_comparison_svg()}</div>
           <div class="stack">
-            <div class="equation compact">q′ = q − [κ<sub>k</sub>q<sub>k</sub>/(1+κ<sub>k</sub>(G⁻¹)<sub>kk</sub>)]G⁻¹e<sub>k</sub></div>
+            <div class="equation compact route-gain-sensitivity">∂ log α<sup>cond</sup><sub>n</sub> / ∂G<sup>I</sup><sub>k</sub> = −R<sup>tot</sup><sub>k</sub> <span class="indicator-one">1</span>[k∈A(n)]</div>
+            <div class="route-gain-reading">A shunt directly attenuates only routes descending through compartment k; the effect scales with local input resistance.</div>
             <div class="plot-card boundary-plot">{img('focal_boundary_current', 'Current Figure 8F electrotonic boundary for focal shunting')}</div>
             {card('standard passive calibration', '<p>At R<sub>m</sub>=15,000 Ω cm², the shunt-minus-current localization contrast is effectively zero.</p>', tone='gray')}
             {card('high-conductance regime', '<p>Descendant-localized changes emerge and survive active-channel extensions.</p>', tone='teal')}
@@ -920,14 +924,14 @@ def build_slides() -> list[dict[str, str]]:
         f"""
         <div class="two-col col-48-52 alignment-layout">
           <div class="stack compact-stack">
-            <div class="equation compact">φ(a<sub>route</sub>) = √a<sub>route</sub> u<sub>∥</sub> + √(1−a<sub>route</sub>) u<sub>⊥</sub></div>
+            <div class="equation compact">φ(a) = √a u<sub>∥</sub> + √(1−a) u<sub>⊥</sub>, &nbsp; a∈[0,1]</div>
             <div class="alignment-definitions">u<sub>∥</sub>∈col(A), &nbsp; u<sub>⊥</sub>⊥col(A), &nbsp; ‖u<sub>∥</sub>‖=‖u<sub>⊥</sub>‖=1</div>
             <div class="plot-card rotation-plot">{img('alignment_rotation', 'Fixed-energy task field rotated into the subtree route span')}</div>
             {card('controlled quantity', '<p>Anatomy, field energy, curvature, and route count are fixed; only alignment with the subtree span changes.</p>', tone='gray')}
           </div>
           <div class="stack">
             <div class="plot-card alignment-gain-plot">{img('alignment_gain', 'Field capture across imposed alignment')}</div>
-            <div class="equation compact">C<sub>A</sub>[φ(a<sub>route</sub>)]=a<sub>route</sub> &nbsp; by construction</div>
+            <div class="equation compact">C<sub>A</sub>[φ(a)]=a &nbsp; by construction</div>
             {card('n = 8 reconstructed cells', '<p>Controls test whether the gain is specific to the true subtree span. The manipulation proves conditional representational sufficiency—not trained learning or endogenous biological use.</p>', tone='teal')}
           </div>
         </div>""",

@@ -1859,7 +1859,10 @@ by seed, was the inferential unit.
 
 To quantify error transport within an arbor, we analyzed the thirty final
 exact-path checkpoints from the same ladder, identified by their recorded
-checkpoint hashes (Fig.~\ref{fig:feedback}D,E). On one fixed held-out batch
+checkpoint hashes (Fig.~\ref{fig:feedback}D,E). These are the
+validation-selected models whose held-out accuracies
+Fig.~\ref{fig:feedback}B reports; the saved final and best-validation
+states were verified identical tensor by tensor. On one fixed held-out batch
 (the first 2{,}048 MNIST test images), automatic differentiation provided the
 per-example loss gradient
 \(g_{bup}^{(d)}=\partial L_b/\partial V_{up}^{(d)}\) at every dendritic
@@ -1888,7 +1891,14 @@ ratio was computed once per checkpoint, leaving the independently trained
 seed as the inferential unit. The mean profile measures variation between
 depths, whereas \(\phi_d^{\mathrm{path}}\) measures variation among paths at
 the same depth; the two quantities are complementary
-(Fig.~\ref{fig:feedback}D,E). The conductance-only path-gain dispersion in
+(Fig.~\ref{fig:feedback}D,E). Because both are built from per-example
+gradients on held-out data, they do not vanish at convergence: at a trained
+optimum only the training-set average of each weight gradient approaches
+zero, while per-example transported errors remain finite and cancel in that
+average. Both quantities are also invariant to the overall gradient scale,
+so they characterize the spatial structure of the trained transport operator
+rather than how much learning remains; a large per-example distal error does
+not mean the distal synapses are untrained. The conductance-only path-gain dispersion in
 Supplementary Fig.~S1A
 omits branch derivatives and comes from a normalized-additive cohort; it is
 therefore a separate diagnostic rather than an earlier estimate of
