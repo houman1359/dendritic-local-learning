@@ -418,12 +418,6 @@ def panel_transport_profile(ax):
                           marker=marker[arch])
     ax.set_xlim(-0.25, 2.25)
     ax.set_xticks(xs, ["soma", "mid", "distal"])
-    # The plotted ratio is the sample-wise path gain of the transport
-    # factorization, so the panel names that parameter where the curves are.
-    ax.text(0.06, 0.97, "α̃ₙ = gₙ ∕ g₀", transform=ax.transAxes,
-            fontsize=PT_SMALL, color=MUTE, ha="left", va="top")
-    ax.text(0.06, 0.855, "g = ∂ℒ/∂V", transform=ax.transAxes,
-            fontsize=PT_SMALL, color=MUTE, ha="left", va="top")
     # The raw-additive distal field is amplified above the soma whereas the
     # shunting field is attenuated. A logarithmic ordinate keeps both regimes
     # legible without compressing the smaller shunting values against zero.
@@ -536,7 +530,7 @@ def panel_mnist_ladder(ax):
 
 
 def panel_gradient(ax):
-    """Exact-gradient cosine at matched checkpoints, on the same ladder."""
+    """Branch-parameter gradient cosine at matched checkpoints."""
     grad = pd.read_csv(DATA / "figure2" / "feedback_gradient_runs.csv")
     _paired_ladder(ax, grad, "branch_numel_weighted_cosine", gradient=True)
     ax.axhline(0, color=MUTE, ls="--", lw=LW_REF, zorder=0)
@@ -551,7 +545,7 @@ def panel_gradient(ax):
     ax.set_xlim(-0.35, 2.35)
     ax.set_ylim(-0.16, 1.08)
     ax.set_yticks([0.0, 0.2, 0.4, 0.6, 0.8, 1.0])
-    ax.set_ylabel("exact-gradient cosine")
+    ax.set_ylabel("branch-gradient cosine")
     style_panel(ax)
     _style_feedback_ticks(ax)
     # Two series: direct labels at the separated right endpoints replace a
@@ -584,7 +578,7 @@ def _fit(frame, rect, aspect):
 
 
 def panel_ownership_address(ax):
-    """Coordinate-to-arbor assignment beside within-tree address.
+    """Coordinate-to-arbor ownership beside within-arbor address.
 
     Drawn natively on this axes from the shared credit-tree vocabulary.  The
     two cells sit side by side because the panel is now one row high like
@@ -610,7 +604,7 @@ def panel_ownership_address(ax):
         f.group(rect, tint=None, edge=COLORS["grid"])
 
     core = f.cell_text(
-        left, title="arbor assignment", title_color=SHUNT,
+        left, title="arbor ownership", title_color=SHUNT,
         subtitle="which arbor gets δᵤ?",
         min_core_pt=MIN_CORE_PT + 10.0)
     sub = ax.inset_axes(_fit(f, Frame.inset(core, bottom=0.04),
@@ -621,7 +615,7 @@ def panel_ownership_address(ax):
     enforce_tokens(sub)
 
     core = f.cell_text(
-        right, title="within-tree address", title_color=COLORS["oracle"],
+        right, title="within-arbor address", title_color=COLORS["oracle"],
         subtitle="where in the tree?",
         min_core_pt=MIN_CORE_PT + 10.0)
     f.tree(Frame.inset(core, left=0.06, right=0.06, bottom=0.04),
@@ -736,7 +730,7 @@ def panel_forest(ax):
         ((0.47, 0.53),
          [("neuron-specific (B)",
            mnist["neuron specific - scalar broadcast"]),
-          ("transport (B)", mnist["exact path - neuron specific"])],
+          ("path resolution (B)", mnist["exact path - neuron specific"])],
          GAIN_LIM, GAIN_TICKS, None),
         ((0.0, 0.36),
          [("ownership: correct − deranged (F)", _ownership_rows())],
