@@ -406,16 +406,23 @@ def panel_arbor(ax):
         if weight <= 0:
             continue
         start, end = place[segment], place[p]
+        # I-rich segments are the proximal trunks: short strokes in the
+        # densest part of the drawing, painted over by every crossing
+        # distal branch and by the soma disc when all strokes share one
+        # z order.  Lifting them keeps the panel's one red story --
+        # perisomatic inhibition -- visible.
+        signed_z = 3.0 if balance_by[segment] >= 0.0 else 3.6
         ax.plot([start[0], end[0]], [start[1], end[1]],
                 color=cmap((balance_by[segment] + 1.0) / 2.0),
                 lw=ladder[int(round(weight * (len(ladder) - 1)))],
-                alpha=0.45 + 0.55 * weight, solid_capstyle="round", zorder=3)
+                alpha=0.45 + 0.55 * weight, solid_capstyle="round",
+                zorder=signed_z)
 
     soma_id = min(rows, key=lambda key: rows[key].topological_depth)
     sx, sy = place[soma_id]
     # Axes fractions are not isotropic in a portrait cell, so a node drawn as
     # a Circle would print as an ellipse: give it the cell's own aspect.
-    ax.add_patch(Ellipse((sx, sy), 2 * 0.030, 2 * 0.030 * w_pt / h_pt,
+    ax.add_patch(Ellipse((sx, sy), 2 * 0.024, 2 * 0.024 * w_pt / h_pt,
                          facecolor=COLORS["soma"], edgecolor="white",
                          lw=LW_EDGE, zorder=6))
 
@@ -704,7 +711,7 @@ def build():
                         title="Subtree projection")
     ax_c = canvas.panel("C", 0, 6, 3, grid="y", title="Reciprocal cable field")
     ax_d = canvas.panel("D", 0, 9, 3, grid="y", sharey=ax_c,
-                        title="Model-derived field")
+                        title="Route-generated field")
 
     # Rows 1-2: the eight-channel economy and the independent volume on the
     # left, the wiring-normalized headline on the right across both rows.
@@ -713,7 +720,7 @@ def build():
     ax_f = canvas.panel("F", 1, 6, 6, rowspan=2, grid="y",
                         title="Wiring-normalized capture")
     ax_g = canvas.panel("G", 2, 0, 6, grid="x",
-                        title="Independent-animal direction")
+                        title="Disjoint and second-animal cohorts")
 
     panel_arbor(ax_a)
     panel_addresses(ax_b)

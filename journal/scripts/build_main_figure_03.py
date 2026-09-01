@@ -388,7 +388,7 @@ def main() -> None:
     ax_a = canvas.panel("A", 0, 0, 4, schematic=True,
                         title="Credit-operator utility")
     ax_b = canvas.panel("B", 0, 4, 4, schematic=True,
-                        title="Task generator")
+                        title="Credit hierarchy")
     ax_c = canvas.panel("C", 0, 8, 4, title="Spectral alignment")
     ax_d = canvas.panel("D", 1, 0, 4, title="Route-resolution crossover")
     ax_e = canvas.panel("E", 1, 4, 4, title="Projection boundary")

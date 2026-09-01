@@ -873,7 +873,7 @@ def panel_controlled_alignment(ax, curves):
     ax.set_xticks([0.0, 0.5, 1.0])
     ax.set_yticks([0.0, 0.5, 1.0])
     ax.set_xlabel("imposed subtree alignment  a")
-    ax.set_ylabel("held-out field capture")
+    ax.set_ylabel("field-energy capture")
     handles = []
     for _, label, color, marker, dashes in ALIGN_METHODS:
         handle = Line2D([0], [0], color=color, marker=marker, lw=LW_DATA,
@@ -1484,17 +1484,19 @@ def build():
     ax_a = canvas.panel("A", 0, 0, 6, schematic=True,
                         title="Feedback route dictionary")
     ax_b = canvas.panel("B", 0, 6, 6, grid="x",
-                        title="Complete-tree learning")
+                        title="Measured-response prediction")
 
     # Row 1: the label-heavy effect forest gets a row of its own rather than
     # the tail of row 0, beside the manipulation it is later contrasted with.
-    ax_c = canvas.panel("C", 1, 0, 7, grid="x", title="Topology effects")
+    ax_c = canvas.panel("C", 1, 0, 7, grid="x",
+                        title="Morphology-specific effects")
     ax_d = canvas.panel("D", 1, 7, 5, schematic=True,
-                        title="Imposed alignment")
+                        title="Controlled alignment")
 
     # Row 2: the alignment result, the animal coordinate WITH its mode
     # partition folded in, and the boundary the whole page argues for.
-    ax_e = canvas.panel("E", 2, 0, 4, grid="y", title="Alignment gain")
+    ax_e = canvas.panel("E", 2, 0, 4, grid="y",
+                        title="Alignment-controlled capture")
     ax_f = canvas.panel("F", 2, 4, 4, grid="y",
                         title="P+ − P− signed separation")
     ax_g = canvas.panel("G", 2, 8, 4, schematic=True,
