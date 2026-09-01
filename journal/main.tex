@@ -890,12 +890,14 @@ scope.
 routing helps.} \textbf{A}, The operator \(M\) maps stochastic gradient
 \(\bm\mu+\bm\xi\) to the local update; \(\bm\xi\) has covariance \(\Sigma\).
 Utility balances retained task signal against finite-step and noise costs.
-\textbf{B}, The synthetic task: sixteen gradient coordinates form the Haar
-ladder of a balanced tree; the generator places the mean gradient \(\bm\mu\)
-on the top \(H_{\mathrm c}\) hierarchy levels and batch noise \(\Sigma\) on
-the rest, and the feedback pathway resolves the top \(D_{\mathrm r}\)
-levels. The two brackets sit at different depths because \(H_{\mathrm c}\)
-and \(D_{\mathrm r}\) vary independently.
+\textbf{B}, The synthetic task, drawn on its tree: one Haar coordinate per
+node (sixteen in all). The generator places the mean gradient \(\bm\mu\) on
+the \(H_{\mathrm c}\) coarsest hierarchy levels nearest the soma (green)
+and batch noise \(\Sigma\) on the finer canopy levels (gray); the feedback
+pathway is the capsule idiom of \textbf{A}, one route per subtree at the
+resolved depth \(D_{\mathrm r}\). \(H_{\mathrm c}\) and
+\(D_{\mathrm r}\) vary independently, and \textbf{D} sweeps their
+mismatch.
 \textbf{C}, Nested-subtree-minus-random field capture as task covariance aligns
 with the tree and route rank increases. \textbf{D}, Final loss across task-credit
 hierarchy \(H_{\mathrm c}\) and route resolution \(D_{\mathrm r}\); their matched

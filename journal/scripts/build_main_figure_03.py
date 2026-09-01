@@ -235,76 +235,88 @@ def signed_heatmap(ax, matrix, xlabels, ylabels, *, label):
 
 # ── A: the credit operator ───────────────────────────────────────────────
 def task_generator_schematic(ax) -> None:
-    """B: the synthetic quadratic task, drawn as its Haar ladder.
+    """B: the synthetic task, drawn on the tree it lives on.
 
-    Sixteen gradient coordinates: one root coefficient and detail levels of
-    1, 2, 4 and 8 coefficients from the Haar basis of a balanced tree.  The
-    generator places the mean gradient on the top H_c hierarchy levels
-    (signal, green) and batch noise on the rest (gray); the feedback
-    pathway resolves the top D_r levels (blue bracket).  The two brackets
-    sit at DIFFERENT depths on purpose: H_c and D_r are independent knobs,
-    and panel D sweeps exactly their mismatch.
+    The first draft showed the Haar coefficient pyramid as bare squares and
+    the reader had to guess what any of it had to do with dendrites.  The
+    generator is drawn on the balanced tree itself: hierarchy levels are
+    horizontal bands of the arbor, the sixteen Haar coordinates sit one per
+    node, the coarse soma-side levels carry the task signal (green, H_c)
+    while the canopy levels carry batch noise (gray), and the feedback
+    routes are the capsule idiom of panel A, one capsule per subtree at the
+    resolved depth (blue, D_r).
     """
     ax.set_xlim(0.0, 1.0)
     ax.set_ylim(0.0, 1.0)
     ax.set_axis_off()
-    rows = (1, 1, 2, 4, 8)              # Haar coordinates per level, 16
-    signal_levels, route_levels = 2, 3  # H_c and D_r as drawn
-    top, pitch, sq_h = 0.90, 0.155, 0.095
-    centre = 0.38
-    sq_w, gap = 0.047, 0.015
     green = COLORS["dend"]
-    for level, count in enumerate(rows):
-        y = top - level * pitch - sq_h
-        width = count * sq_w + (count - 1) * gap
-        x0 = centre - width / 2.0
-        signal = level < signal_levels
-        for k in range(count):
-            ax.add_patch(Rectangle(
-                (x0 + k * (sq_w + gap), y), sq_w, sq_h,
-                facecolor=green if signal else COLORS["grid"],
-                edgecolor="white", linewidth=LW_HAIR, zorder=3))
-    y_sig_top = top
-    y_sig_bot = top - (signal_levels - 1) * pitch - sq_h
-    y_noise_top = top - signal_levels * pitch
-    y_noise_bot = top - (len(rows) - 1) * pitch - sq_h
-    # pale bands behind the two regimes, so the signal/noise split carries
-    # more weight than eight-point squares can alone
-    band_w = rows[-1] * sq_w + (rows[-1] - 1) * gap + 0.05
-    for y0, y1, tone in ((y_sig_bot - 0.02, y_sig_top + 0.02, green),
-                         (y_noise_bot - 0.02, y_noise_top + 0.02,
-                          COLORS["mute"])):
+    blue = COLORS["additive"]
+
+    # node grid: soma, one trunk node, then 2, 4 and 8 nodes up to the canopy
+    leaf_x = np.linspace(0.315, 0.905, 8)
+    lvl3 = leaf_x.reshape(4, 2).mean(axis=1)
+    lvl2 = lvl3.reshape(2, 2).mean(axis=1)
+    lvl1 = np.array([lvl2.mean()])
+    ys = {0: 0.075, 1: 0.255, 2: 0.435, 3: 0.615, 4: 0.795}
+    nodes = {1: lvl1, 2: lvl2, 3: lvl3, 4: leaf_x}
+
+    # hierarchy bands: the coarse levels carry signal, the fine ones noise
+    x0, x1 = leaf_x[0] - 0.055, leaf_x[-1] + 0.045
+    for ya, yb, tone in ((ys[1] - 0.075, ys[2] + 0.075, green),
+                         (ys[3] - 0.075, ys[4] + 0.075, COLORS["mute"])):
         ax.add_patch(FancyBboxPatch(
-            (centre - band_w / 2.0, y0), band_w, y1 - y0,
-            boxstyle="round,pad=0.008,rounding_size=0.015",
-            facecolor=tone, alpha=0.13, edgecolor="none", zorder=1))
-    # right brace: which levels carry the task signal.  Set on two lines --
-    # on one line the label overran the panel into its right neighbour.
-    bx = centre + band_w / 2.0 + 0.045
-    for y0, y1, color, label in (
-            (y_sig_bot, y_sig_top, green, "signal μ\n$H_{\\rm c}$ levels"),
-            (y_noise_bot, y_noise_top, COLORS["mute"], "noise Σ")):
-        ax.plot([bx, bx], [y0, y1], color=color, lw=LW_EDGE,
-                solid_capstyle="butt", zorder=3)
-        for yy in (y0, y1):
-            ax.plot([bx - 0.02, bx], [yy, yy], color=color, lw=LW_EDGE,
-                    solid_capstyle="butt", zorder=3)
-        ax.text(bx + 0.035, 0.5 * (y0 + y1), label, fontsize=PT_SMALL,
-                color=color, ha="left", va="center", linespacing=1.25)
-    # left bracket: how many levels the feedback pathway resolves
-    y_route_bot = top - (route_levels - 1) * pitch - sq_h
-    lx = centre - (rows[-1] * sq_w + (rows[-1] - 1) * gap) / 2.0 - 0.05
-    ax.plot([lx, lx], [y_route_bot, y_sig_top], color=COLORS["additive"],
-            lw=LW_EDGE, solid_capstyle="butt", zorder=3)
-    for yy in (y_route_bot, y_sig_top):
-        ax.plot([lx, lx + 0.02], [yy, yy], color=COLORS["additive"],
-                lw=LW_EDGE, solid_capstyle="butt", zorder=3)
-    ax.text(lx - 0.035, 0.5 * (y_route_bot + y_sig_top),
-            "routes\nresolve\nD\u1d63 levels", fontsize=PT_SMALL,
-            color=COLORS["additive"], ha="right", va="center",
+            (x0, ya), x1 - x0, yb - ya,
+            boxstyle="round,pad=0.008,rounding_size=0.02",
+            facecolor=tone, alpha=0.12, edgecolor="none", zorder=0.8))
+
+    # the arbor, in the shared vocabulary
+    def edge(xa, ya, xb, yb, lw):
+        ax.plot([xa, xb], [ya, yb], color=green, lw=lw,
+                solid_capstyle="round", zorder=2)
+    edge(lvl1[0], ys[0], lvl1[0], ys[1], LW_DATA)
+    for i, x in enumerate(lvl2):
+        edge(lvl1[0], ys[1], x, ys[2], LW_EDGE)
+    for i, x in enumerate(lvl3):
+        edge(lvl2[i // 2], ys[2], x, ys[3], LW_EDGE)
+    for i, x in enumerate(leaf_x):
+        edge(lvl3[i // 2], ys[3], x, ys[4], LW_HAIR)
+    ax.scatter([lvl1[0]], [ys[0]], s=26.0, color=COLORS["soma"],
+               edgecolor="white", linewidths=LW_HAIR, zorder=4)
+    # the sixteenth coordinate: the root mean, on the trunk itself
+    ax.add_patch(Rectangle(
+        (lvl1[0] - 0.015, 0.5 * (ys[0] + ys[1]) - 0.0225), 0.030, 0.045,
+        facecolor=green, edgecolor="white", linewidth=LW_HAIR, zorder=3))
+
+    # one Haar coordinate per node: green where the task signal lives
+    sq = 0.030
+    for level, xs_l in nodes.items():
+        tone = green if level <= 2 else "#9AA5B4"
+        for x in xs_l:
+            ax.add_patch(Rectangle(
+                (x - sq / 2.0, ys[level] - sq * 0.75), sq, sq * 1.5,
+                facecolor=tone, edgecolor="white", linewidth=LW_HAIR,
+                zorder=3))
+
+    # feedback routes: one capsule per subtree at the resolved depth
+    for i, x in enumerate(lvl3):
+        half = (leaf_x[1] - leaf_x[0]) / 2.0 + 0.028
+        ax.add_patch(FancyBboxPatch(
+            (x - half, ys[3] - 0.055), 2 * half, ys[4] - ys[3] + 0.11,
+            boxstyle="round,pad=0.006,rounding_size=0.03",
+            facecolor="none", edgecolor=blue, linewidth=LW_HAIR,
+            zorder=2.6))
+
+    # the three definitions, set beside what they name
+    ax.text(0.02, 0.5 * (ys[1] + ys[2]), "signal μ\n$H_{\\rm c}$ levels",
+            fontsize=PT_SMALL, color=green, ha="left", va="center",
             linespacing=1.25)
-    ax.text(centre, y_noise_bot - 0.085,
-            "16 Haar coordinates of a balanced tree",
+    ax.text(0.02, 0.5 * (ys[3] + ys[4]) - 0.06, "noise Σ",
+            fontsize=PT_SMALL, color=COLORS["mute"], ha="left", va="center")
+    ax.text(0.02, 0.96, "routes at depth $D_{\\rm r}$",
+            fontsize=PT_SMALL, color=blue, ha="left", va="top")
+    ax.text(0.5 * (x0 + x1) + 0.03, 0.955, "",
+            fontsize=PT_SMALL, color=blue, ha="center")
+    ax.text(0.61, ys[0] - 0.062, "16 Haar coordinates",
             fontsize=PT_SMALL, color=COLORS["mute"], ha="center",
             va="center")
 
