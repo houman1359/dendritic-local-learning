@@ -9,6 +9,8 @@
 *.synctex.gz
 *.toc
 *.md
+__pycache__/
+*.py[cod]
 #presentations/*
 #!presentations/ml_workshop_15_20min/
 #!presentations/ml_workshop_15_20min/build_speaker_guide.py

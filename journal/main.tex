@@ -447,7 +447,9 @@ the soma if its conductance is varied). Then
 =-R_k^{\mathrm{tot}}\,\mathbf 1\!\left[k\in\mathcal A(n)\right].
 \label{eq:shuntpathgain}
 \end{equation}
-The direct effect is zero unless \(k\in\mathcal A(n)\), and it attenuates the
+Here \(\mathbf 1[\cdot]\) is the indicator, equal to one when its
+condition holds and zero otherwise. The direct effect is therefore zero
+unless \(k\in\mathcal A(n)\), and it attenuates the
 route when \(k\in\mathcal A(n)\). Its magnitude is set by the local
 input resistance. The reversal potential does not appear because
 \(\alpha_n^{\mathrm{cond}}\) retains only total-conductance loading; the same
@@ -959,7 +961,9 @@ neuron-shared learning signal produced
 \label{eq:branchconflictupdates}
 \end{equation}
 Correct branch-specific feedback contains the selector
-\(\mathbb 1[b_i^\star=b]\); the shared rule does not. The factor \(1/B\) only matches
+\(\mathbb 1[b_i^\star=b]\), which keeps example \(i\)'s error in branch
+\(b\)'s update only when \(b\) was the context-selected branch
+\(b_i^\star\) on that trial; the shared rule does not. The factor \(1/B\) only matches
 update scale and contributes no branch information. The selector can be
 carried by the learning signal or, equivalently, by a branch-local eligibility
 gate (Fig.~\ref{fig:branchconflict}B).
