@@ -690,7 +690,13 @@ ordering, with no general optimization advantage for shunting.
 
 Identifying a neuron is also distinct from assigning its signal to the correct
 arbor (Fig.~\ref{fig:feedback}F). Permuting neuron-specific signals across
-arbors preserved total bandwidth but produced a small, consistent loss.
+arbors preserved total bandwidth but produced a small, consistent loss:
+correct assignment beat the fixed derangement by 0.57 and 0.51 percentage
+points in two-stage shunting and raw-additive trees and by 0.38 and 0.39
+points at four stages, positive in 10/10 paired seeds in every condition.
+The benefit did not grow from six to thirty compartments, and these
+independent cohorts test who owns a signal, not the within-tree transport
+structure profiled in Fig.~\ref{fig:feedback}D,E.
 Figure~\ref{fig:feedback}G places the paired effects on one scale: selecting
 the neuron was the dominant gain, exact within-arbor transport added little on
 the standard tasks, and correct signal ownership produced a smaller benefit.
@@ -733,12 +739,13 @@ it establishes that path information is present, not that MNIST uses it.
 \textbf{F}, Neuron-to-arbor
 assignment and within-arbor location are distinct routing operations.
 \textbf{G}, Paired MNIST effects as within-seed differences. The ladder
-blocks share one percentage-point axis; the assignment block has its own
-0--1-point axis, without which its sub-point effects sit unreadably at the
-larger scale's zero. The
-neuron-specific and transport blocks are the successive contrasts in
-\textbf{B}; the assignment block compares the correct and deranged
-neuron-to-arbor maps in \textbf{F} for two- and four-stage trees. Dots are
+blocks are the successive contrasts of \textbf{B} and share one
+percentage-point axis. The ownership block is a separate cohort answering a
+separate question, drawn on its own 0--1-point axis: correct minus deranged
+neuron-to-arbor assignment (\textbf{F}) in independent two- and four-stage
+trees, with the forward network, feedback bandwidth and the distribution of
+error values preserved; it is not derived from the checkpoints of
+\textbf{D,E}. Dots are
 independent seed differences; faint lines in \textbf{B--E} pair conditions
 or depths; large open symbols and bars show means and 95\% seed-bootstrap
 intervals. Sample sizes are \(n=15\) paired seeds per architecture in

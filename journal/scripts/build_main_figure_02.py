@@ -739,7 +739,7 @@ def panel_forest(ax):
           ("transport (B)", mnist["exact path - neuron specific"])],
          GAIN_LIM, GAIN_TICKS, None),
         ((0.0, 0.36),
-         [("assignment (F)", _ownership_rows())],
+         [("ownership: correct − deranged (F)", _ownership_rows())],
          ASSIGN_LIM, ASSIGN_TICKS, GAIN_LABEL),
     ]
     ax.set_axis_off()
