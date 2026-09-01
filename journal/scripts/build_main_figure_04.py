@@ -81,9 +81,10 @@ def _trial_card(frame: Frame, rect, *, conflict: bool) -> None:
     # Tint and border strength follow the manuscript's emphasis card (Fig. 5's
     # "matched subtrees": fill #F3F9F6, edge #A9D5BD).  At mix 52 these two
     # borders were the most saturated card edges in the figure set.
-    face = mix("shunting", 8) if not conflict else mix("highlight", 7)
-    edge = mix("shunting", 44) if not conflict else mix("highlight", 44)
-    frame.group(rect, tint=face, edge=edge)
+    # White cards with the figure set's hairline border: the colored washes
+    # this card used to carry were the most saturated fills in the set, and
+    # they muted the strokes of the very glyph they framed.
+    frame.group(rect, tint="white", edge=COLORS["grid"])
     frame.text(
         (x0 + frame.fx(6.0), y0 + height - frame.fy(5.0)),
         "compatible: χ = 0" if not conflict else "conflicting: χ = 1",
@@ -92,8 +93,8 @@ def _trial_card(frame: Frame, rect, *, conflict: bool) -> None:
     )
     draw_conflict_neuron(
         frame,
-        (x0 + 0.06 * width, y0 + 0.10 * height,
-         0.88 * width, 0.66 * height),
+        (x0 + 0.04 * width, y0 + 0.085 * height,
+         0.92 * width, 0.70 * height),
         conflict=conflict,
     )
     frame.text(
@@ -129,9 +130,16 @@ def backward_credit_schematic(ax) -> None:
         ("neuron-shared credit", ("δ", "b", " = δ / B for every branch"),
          AMBER, "shared"),
     )
-    for rect, (title, equation, color, glyph_mode) in zip(rows, specs, strict=True):
+    for index, (rect, (title, equation, color, glyph_mode)) in enumerate(
+            zip(rows, specs, strict=True)):
         x0, y0, width, height = rect
-        frame.group(rect, tint=COLORS["panel_bg"], edge=COLORS["grid"])
+        # A hairline rule above every row but the first, in place of the
+        # gray card fills: the fills made three heavy slabs of a ladder that
+        # the rest of the paper draws as ruled rows (Fig. 1C).
+        if index:
+            frame.ax.plot([x0, x0 + width],
+                          [y0 + height + frame.fy(2.6)] * 2,
+                          color=COLORS["grid"], lw=LW_HAIR, zorder=1)
         frame.text((x0 + frame.fx(5.0), y0 + 0.66 * height), title,
                    size=PT_SMALL, color=color, ha="left")
         base, sub, tail = equation
@@ -145,8 +153,8 @@ def backward_credit_schematic(ax) -> None:
                        size=PT_SMALL, color=INK, ha="left")
         draw_credit_fan(
             frame,
-            (x0 + 0.60 * width, y0 + 0.06 * height,
-             0.36 * width, 0.88 * height),
+            (x0 + 0.55 * width, y0 + 0.02 * height,
+             0.43 * width, 0.96 * height),
             mode=glyph_mode, color=color,
         )
 
@@ -254,7 +262,8 @@ def full_conflict_controls(ax, summary: pd.DataFrame,
     ax.set_ylabel("held-out accuracy")
 
 
-def boundary_test(ax, crossings: pd.DataFrame) -> None:
+def boundary_test(ax, crossings: pd.DataFrame,
+                  seed_boundaries: pd.DataFrame) -> None:
     """Observed chance crossing against the analytic boundary, per B.
 
     This is the figure's central prediction actually being tested: panel C
@@ -267,6 +276,20 @@ def boundary_test(ax, crossings: pd.DataFrame) -> None:
     x = np.arange(len(branches), dtype=float)
     predicted = crossings.predicted_boundary.to_numpy(float)
     observed = crossings.trained_mean_curve_chance_crossing.to_numpy(float)
+
+    # Per-seed crossings, grid-quantized by the dose sweep: with them the
+    # agreement stops being two coincident means and becomes visible mass on
+    # the boundary-adjacent doses.  Seeds that never reached chance inside
+    # the sweep (5/20 at B = 2) are absent by construction.
+    rng = np.random.default_rng(41)
+    for xpos, branch in zip(x, branches, strict=True):
+        doses = (seed_boundaries[seed_boundaries.branches.eq(branch)]
+                 .first_at_or_below_chance_accuracy_dose.dropna()
+                 .to_numpy(float))
+        ax.scatter(np.full(doses.size, xpos)
+                   + rng.uniform(-0.10, 0.10, doses.size), doses,
+                   s=SEED_MS ** 2, color=AMBER, alpha=0.35,
+                   edgecolors="none", zorder=2.5)
 
     for xpos, theory, trained in zip(x, predicted, observed, strict=True):
         ax.plot([xpos, xpos], [theory, trained], color=MUTE, lw=LW_HAIR,
@@ -296,6 +319,7 @@ def build() -> list:
     summary = pd.read_csv(PATH_NECESSITY / "condition_summary.csv")
     seeds = pd.read_csv(PATH_NECESSITY / "seed_outcomes.csv")
     crossings = pd.read_csv(PATH_NECESSITY / "plotted_crossings.csv")
+    seed_boundaries = pd.read_csv(PATH_NECESSITY / "boundary_by_seed.csv")
 
     # The caption states that the conflict interaction is positive in every
     # paired seed (20/20 at each B).  No panel plots that statistic any more,
@@ -341,7 +365,7 @@ def build() -> list:
         if text.get_text() == "held-out accuracy":
             text.set_x(-0.035)
     full_conflict_controls(ax_e, summary, seeds)
-    boundary_test(ax_f, crossings)
+    boundary_test(ax_f, crossings, seed_boundaries)
 
     COMPONENT.parent.mkdir(parents=True, exist_ok=True)
     problems = canvas.save(COMPONENT, name="main_figure_04_native")

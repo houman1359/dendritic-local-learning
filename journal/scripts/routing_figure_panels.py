@@ -115,16 +115,16 @@ def draw_conflict_neuron(frame, rect, *, conflict, selected=1,
         if not chosen:
             line.set_dashes((2.0, 1.8))
         # junction ring at the gate point
-        frame.disc((x_mid, y_mid), 1.5, fill="white",
+        frame.disc((x_mid, y_mid), 1.9, fill="white",
                    edge=GREEN if chosen else mix("dend", 55), lw=LW_HAIR,
                    zorder=4)
         if chosen:
-            frame.disc((x_mid, y_mid), 3.1, fill="none", edge=GREEN,
+            frame.disc((x_mid, y_mid), 3.6, fill="none", edge=GREEN,
                        lw=LW_EDGE, zorder=4)
         # active input synapse and its stream label: the branches receive
         # class VIEWS, not labels, so the streams read x with a class
         # subscript rather than a bare target.
-        frame.disc((x_tip, y_tip), 1.7, fill=EXC, zorder=4)
+        frame.disc((x_tip, y_tip), 2.2, fill=EXC, zorder=4)
         stream_color = (COLORS["highlight"] if opposite
                         else (GREEN if chosen else MUTE))
         sub = "1−y" if opposite else "y"
@@ -140,7 +140,7 @@ def draw_conflict_neuron(frame, rect, *, conflict, selected=1,
     frame.text((gate_x - frame.fx(4.6), y_mid + frame.fy(3.4)), "c",
                size=PT_SMALL, color=GREEN, ha="right", va="bottom",
                zorder=6)
-    frame.disc((cx, y_soma), 3.4, fill=SOMA, edge=RIM, lw=LW_HAIR, zorder=5)
+    frame.disc((cx, y_soma), 3.8, fill=SOMA, edge=RIM, lw=LW_HAIR, zorder=5)
     frame.arrow((cx + frame.fx(5.0), y_soma),
                 (cx + frame.fx(16.0), y_soma), color=MUTE, lw=LW_EDGE,
                 head=3.4)
@@ -174,11 +174,11 @@ def draw_credit_fan(frame, rect, *, mode, color, selected=1, n_branches=4):
                       lw=LW_EDGE, solid_capstyle="round", zorder=3)
         frame.ax.plot([x_mid, cx], [y_mid, y_soma], color=mix("dend", 45),
                       lw=LW_EDGE, solid_capstyle="round", zorder=3)
-        frame.disc((x_mid, y_mid), 1.15, fill="white",
+        frame.disc((x_mid, y_mid), 1.5, fill="white",
                    edge=mix("dend", 45), lw=LW_HAIR, zorder=4)
         if mode == "eligibility":
-            frame.disc((x_tip, y_tip), 1.5, fill=EXC, zorder=5)
-    frame.disc((cx, y_soma), 2.5, fill=SOMA, edge=RIM, lw=LW_HAIR, zorder=5)
+            frame.disc((x_tip, y_tip), 1.9, fill=EXC, zorder=5)
+    frame.disc((cx, y_soma), 2.9, fill=SOMA, edge=RIM, lw=LW_HAIR, zorder=5)
 
     # Delivery is drawn ABOVE the junction row.  All B junctions sit at one
     # height, so a fan of arrows from a single right-hand source crossed
