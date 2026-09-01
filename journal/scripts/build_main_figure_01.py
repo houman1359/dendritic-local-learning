@@ -612,7 +612,7 @@ def _glyph_boundary(f, rect):
 STREAMS = (
     (_glyph_factorization, "Exact factorization",
      "eligibility × error"),
-    (_glyph_coordinate, "Neuron selection",
+    (_glyph_coordinate, "Neuron identity",
      "one signal per neuron"),
     (_glyph_operator, "Credit operator",
      "when restricted routes help"),

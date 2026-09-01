@@ -2373,7 +2373,7 @@ FILES += (
         "derived cell-bootstrap summaries",
         "reconstructed cell (n=8; one mouse)",
         "current derived analysis",
-        "Model-matched 14.2-fold ceiling and density-matched 2.7-fold anatomy-specific factor.",
+        "Within-cell ratios before arithmetic averaging: 14.2-fold versus the dense ceiling and 2.8-fold versus the density-matched shuffled control.",
     ),
     SourceFile(
         "Figure 9",

@@ -413,7 +413,7 @@ def main() -> None:
         [f"{v:.2f}" for v in advantage.index],
         label="capture advantage (×10⁻²)")
     ax_c.set_xlabel("route budget K   (16 = full rank)", labelpad=2.0)
-    ax_c.set_ylabel("task–tree alignment ρ", labelpad=1.5,
+    ax_c.set_ylabel("task–route alignment ρ", labelpad=1.5,
                     y=matrix_label_y(ax_c), ha="center")
 
     # ── C: final loss versus route resolution, one series per task depth ─
@@ -536,11 +536,11 @@ def main() -> None:
 
     # ── G: alignment x bandwidth synthesis ──────────────────────────────
     families = [
-        ("factorial", "trained bandwidth", C_ROUTE, MARKERS[0], True),
-        ("sweep", "spectral theory", COLORS["additive"], MARKERS[1], True),
-        ("microns", "imposed alignment", C_ORACLE, MARKERS[2], True),
+        ("factorial", "trained", C_ROUTE, MARKERS[0], True),
+        ("sweep", "spectral", COLORS["additive"], MARKERS[1], True),
+        ("microns", "imposed", C_ORACLE, MARKERS[2], True),
         ("measured", None, C_CTRL, MARKERS[3], False),
-        ("reversal", "two-stream reversal (S19G)", C_BP, MARKERS[4], False),
+        ("reversal", "reversal", C_BP, MARKERS[4], False),
     ]
     ax_h.set_yscale("log")
     ax_h.set_xlim(-0.045, 1.12)
@@ -570,8 +570,6 @@ def main() -> None:
             ax_h.plot(row.x_plot, row.y_plot, marker=marker, ms=MARKER_MS,
                       ls="none", mfc=color if filled else "white", mec=color,
                       mew=LW_REF, zorder=4)
-    # The lone measured-response diamond is already labelled directly, so it
-    # is not repeated as a key entry (S6).
     handles = [Line2D([], [], color=color, marker=marker,
                       lw=LW_DATA if has_line else 0, markersize=MARKER_MS,
                       markeredgewidth=LW_REF, label=label)
@@ -593,11 +591,12 @@ def main() -> None:
                               (0.145, "bandwidth limited")):
         ax_h.text(1.10, band_y, band_name, color=COLORS["mute"],
                   fontsize=PT_ANNOT, style="italic", ha="right", va="center")
-    # Anchored in axes fractions on the right: placed in the upper left it
-    # sat directly under the legend's last row and read as a fifth key entry.
-    ax_h.annotate("rank-saturated null", xy=(0.474526, 3.73089),
-                  xytext=(0.375, 0.52), textcoords="axes fraction", ha="left",
-                  va="center", fontsize=PT_SMALL, color=C_CTRL,
+    # The measured-response point is the only family not repeated in the
+    # compact legend; label it at the point so its biological null cannot be
+    # mistaken for one of the synthetic screens.
+    ax_h.annotate("measured-response\nnull", xy=(0.474526, 3.73089),
+                  xytext=(0.54, 5.25), ha="left", va="center",
+                  fontsize=PT_SMALL, color=C_CTRL,
                   arrowprops={"arrowstyle": "-", "color": C_CTRL,
                               "lw": LW_HAIR, "shrinkA": 1, "shrinkB": 3})
     ax_h.annotate("routing required", xy=(1.06, 1.00036), xytext=(-3, 13),
@@ -609,7 +608,7 @@ def main() -> None:
     ax_h.set_yticks([0.125, 0.25, 0.5, 1, 2, 4])
     ax_h.set_yticklabels(["1/8", "1/4", "1/2", "1", "2", "4"])
     ax_h.minorticks_off()
-    ax_h.set_xlabel("task–anatomy alignment")
+    ax_h.set_xlabel("task–route alignment")
     # Set on two lines: rotated, one long line overran the panel and climbed
     # into the row above, past G's own letter.  Two lines stack as adjacent
     # columns, each about half as tall, and stay inside the axes.

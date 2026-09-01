@@ -418,13 +418,16 @@ def panel_transport_profile(ax):
                           marker=marker[arch])
     ax.set_xlim(-0.25, 2.25)
     ax.set_xticks(xs, ["soma", "mid", "distal"])
-    # The plotted ratio is the sample-wise path gain of the transport
-    # factorization; the panel names that parameter where the curves are.
-    # (Restored: the fig2 content pass of ccc2710 dropped these two lines.)
-    ax.text(0.06, 0.97, "α̃ₙ = gₙ ∕ g₀", transform=ax.transAxes,
-            fontsize=PT_SMALL, color=MUTE, ha="left", va="top")
-    ax.text(0.06, 0.855, "g = ∂ℒ/∂V", transform=ax.transAxes,
-            fontsize=PT_SMALL, color=MUTE, ha="left", va="top")
+    # Each branch value is its batch-RMS exact compartment error divided by
+    # the batch-RMS error at the branch's own soma.  The plotted stage value
+    # then averages this ratio over branches and neurons within a seed.
+    ax.text(
+        0.06, 0.97,
+        r"$\frac{\mathrm{RMS}_{\rm batch}(\delta^V_{n,u})}"
+        r"{\mathrm{RMS}_{\rm batch}(\delta^V_{0,u})}$",
+        transform=ax.transAxes, fontsize=PT_SMALL, color=MUTE,
+        ha="left", va="top",
+    )
     # The raw-additive distal field is amplified above the soma whereas the
     # shunting field is attenuated. A logarithmic ordinate keeps both regimes
     # legible without compressing the smaller shunting values against zero.
@@ -432,7 +435,7 @@ def panel_transport_profile(ax):
     ax.set_ylim(0.16, 6.4)
     ax.set_yticks([0.2, 1.0, 5.0])
     ax.set_yticklabels(["0.2", "1", "5"])
-    ax.set_ylabel("RMS voltage error / soma")
+    ax.set_ylabel("mean batch-RMS ratio")
     return ax
 
 
@@ -474,8 +477,13 @@ def panel_path_specific_energy(ax):
 
     ax.set_xlim(-0.22, 1.22)
     ax.set_xticks(xs, ["mid", "distal"])
-    ax.text(0.06, 0.985, "‖g − ⟨g⟩ₚ‖² ∕ ‖g‖²", transform=ax.transAxes,
-            fontsize=PT_SMALL, color=MUTE, ha="left", va="top")
+    ax.text(
+        0.06, 0.985,
+        r"$\frac{\|\delta^V_d-\langle\delta^V_d\rangle_p\|_2^2}"
+        r"{\|\delta^V_d\|_2^2}$",
+        transform=ax.transAxes, fontsize=PT_SMALL, color=MUTE,
+        ha="left", va="top",
+    )
     ax.set_ylim(0.0, 59.0)
     ax.set_yticks([0, 20, 40])
     ax.set_ylabel("path-specific error energy (%)")

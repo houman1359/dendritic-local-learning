@@ -141,7 +141,7 @@ MINUS = "−"
 # printed at build time so they can be pasted into the figure caption.
 CAPTION_NOTES = (
     "CAPTION: FIG09 C - Effects with different native units are displayed as "
-    "paired standardized effects; intervals bootstrap the complete "
+    "standardized target-level effects; intervals bootstrap the complete "
     "target-level estimand.",
     "CAPTION: FIG09 D - The fixed-energy imposed field is "
     "φ(a)=√a u∥+√(1−a)u⊥, where u∥ lies in the subtree-route span and u⊥ "
@@ -252,7 +252,7 @@ def standardized_bootstrap(values, seed, draws=20_000):
     """Paired standardized mean and target-bootstrap interval.
 
     Panel B combines partial rank correlations, normalized-MSE differences
-    and capture differences. Dividing each paired target contrast by its
+    and common-checkpoint update-match differences. Dividing each paired target contrast by its
     across-target sample standard deviation puts all rows on one effect-size
     scale. The bootstrap recomputes the complete standardized estimand.
     """
@@ -379,19 +379,19 @@ def panel_forest(ax, prespecified, all_scans, tree, original, expanded, *,
                       values=["heldout_normalized_mse",
                               "common_checkpoint_update_capture"])
     mse = "heldout_normalized_mse"
-    capture = "common_checkpoint_update_capture"
+    update_match = "common_checkpoint_update_capture"
     # Sign convention throughout: positive favours the anatomy route.  Lower
     # MSE is better, so the MSE contrast is control minus ancestry; higher
-    # capture is better, so the capture contrast is ancestry minus control.
+    # Higher update match is better, so its contrast is ancestry minus control.
     contrasts = [
         (wide[(mse, "site-shuffled routes")]
          - wide[(mse, "topology-matched routes")]).to_numpy(float),
         (wide[(mse, "random anatomical routes")]
          - wide[(mse, "topology-matched routes")]).to_numpy(float),
-        (wide[(capture, "topology-matched routes")]
-         - wide[(capture, "site-shuffled routes")]).to_numpy(float),
-        (wide[(capture, "topology-matched routes")]
-         - wide[(capture, "random anatomical routes")]).to_numpy(float),
+        (wide[(update_match, "topology-matched routes")]
+         - wide[(update_match, "site-shuffled routes")]).to_numpy(float),
+        (wide[(update_match, "topology-matched routes")]
+         - wide[(update_match, "random anatomical routes")]).to_numpy(float),
     ]
     raw_groups = (
         ("structure–function",
@@ -400,7 +400,7 @@ def panel_forest(ax, prespecified, all_scans, tree, original, expanded, *,
         ("full tree, MSE",
          (("vs shuffled", contrasts[0], C_SHUFFLE),
           ("vs random", contrasts[1], C_RANDOM))),
-        ("full tree, capture",
+        ("full tree, update match",
          (("vs shuffled", contrasts[2], C_SHUFFLE),
           ("vs random", contrasts[3], C_RANDOM))),
     )
@@ -531,14 +531,13 @@ TERM_R_PT = 1.35
 LABEL_X = 0.315
 
 # Exact learning is the only rule with a trial-specific signal at every
-# compartment, so its chips are eight singletons.  The three restricted rules
-# share ONE fixed spatial vector and differ only in the routes it is poured
-# into -- the caveat the text makes in a single sentence and that a reader
-# has to carry into B to read its null correctly.
+# compartment, so its chips are eight singletons. Each restricted dictionary
+# contains four routes and supplies its own once-calibrated, frozen spatial
+# profile.
 ROUTE_SETS = (
     tuple((i,) for i in range(N_TERM)),                 # exact: per compartment
     ((0, 1), (2, 3), (4, 5), (6, 7)),                   # matched to the bands
-    ((0,), (1, 2), (3, 4), (5, 6), (7,)),               # contiguous, off-band
+    ((0,), (2, 3), (4, 5), (6, 7)),                     # four valid toy subtrees
     ((0, 5), (1, 3), (2, 7), (4, 6)),                   # not contiguous at all
 )
 
@@ -565,7 +564,8 @@ def panel_route_dictionary(ax):
         x1 = TERM_X[members[-1]] + half * 0.86
         f.group((x0, 0.105, x1 - x0, 0.82), tint=mix("point_mlp", 9),
                 edge="none", radius_pt=2.0, zorder=0.3)
-    f.text((0.5 * (TERM_X[0] + TERM_X[-1]), 0.955), "one nested subtree each",
+    f.text((0.5 * (TERM_X[0] + TERM_X[-1]), 0.955),
+           "illustrative sites; complete-arbor routes may overlap",
            size=PT_SMALL, color=MUTE)
 
     # The eight sites, drawn ONCE beneath the rules rather than repeated under
@@ -613,7 +613,7 @@ def panel_route_dictionary(ax):
 
     # Short enough to sit inside the panel: the full statement -- that the
     # error is a scalar and only the routes differ -- is in the caption.
-    f.text((0.5, 0.042), "bracketed rules share one fixed spatial vector",
+    f.text((0.5, 0.042), "each restricted rule uses one fixed spatial profile",
            size=PT_SMALL, color=MUTE)
     return ax
 

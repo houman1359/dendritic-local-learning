@@ -24,7 +24,7 @@ to today.  What changes is geometry, encoding and grammar:
 * **S3** -- the electrotonic-boundary panel (F) opens the bottom row on six of
   the twelve modules, at the same axes-box height as every other panel on the
   page, because it carries the state-dependence claim and the
-  standard-calibration null;
+  small, opposite-signed standard-calibration contrasts;
 * **S4** -- the paired shunt-minus-additive contrasts of the active ensemble
   are consolidated into one forest panel (G) on a shared effect-size axis,
   which also surfaces the sign count and the Wilcoxon test that previously
@@ -330,7 +330,7 @@ def panel_passive_dose(ax):
     ax.set_ylabel(LOCAL_LABEL, fontsize=PT_LABEL, color=INK)
     _direct_label(ax, 0.275, 0.213, "focal shunt", SHUNT)
     _direct_label(ax, 0.275, 0.150, "current injection", ADDITIVE)
-    _title(ax, "Passive high-conductance dose")
+    _title(ax, "Permissive passive dose")
     return ax
 
 
@@ -413,6 +413,13 @@ def panel_electrotonic(ax):
         DATA / "physical_cable_sensitivity" / "cell_primary_contrasts.csv")
     ratio = pd.read_csv(
         DATA / "physical_cable_sensitivity" / "cell_electrotonic_ratios.csv")
+    eligible = physical[["cohort", "regime", "root_id"]].drop_duplicates()
+    ratio = ratio.merge(
+        eligible,
+        on=["cohort", "regime", "root_id"],
+        how="inner",
+        validate="one_to_one",
+    )
     ratio_mean = ratio.groupby(
         ["cohort", "regime"], as_index=False
     ).median_axial_to_leak_ratio.median()
@@ -455,7 +462,7 @@ def panel_electrotonic(ax):
     ax.set_ylabel(CONTRAST_LABEL, fontsize=PT_LABEL, color=INK)
 
     # Only the two series names stay on the panel (T5): the axial-resistivity
-    # condition of the pilot cohort and the standard-calibration null are
+    # condition of the pilot cohort and the small standard-calibration effects are
     # methodological notes and are carried by the caption.
     _direct_label(ax, 1.02, 0.0115, "initial 8-cell sample", SHUNT)
     _direct_label(ax, 3.9, 0.0895, "MICrONS mouse 1", REPLICATE)
@@ -486,7 +493,9 @@ def panel_contrast_forest(ax, contrasts, cells):
         "dose_relative_to_local_input_conductance"
     )
     doses = rows.dose_relative_to_local_input_conductance.to_numpy(float)
-    positions = np.arange(len(doses))[::-1]        # smallest dose on top
+    # Treat dose as ordered categories in the forest: the largest dose sits
+    # at the top, matching the usual high-to-low reading order of row labels.
+    positions = np.arange(len(doses))
     _zero_line(ax, axis="x")
     for y, (_, row) in zip(positions, rows.iterrows(), strict=True):
         dose = float(row.dose_relative_to_local_input_conductance)

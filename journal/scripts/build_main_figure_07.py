@@ -71,7 +71,7 @@ from journal_style import (  # noqa: E402
     SEED_ALPHA,
     SEED_MS,
 )
-from figure_canvas import Margins, NativeCanvas, token_subscript  # noqa: E402
+from figure_canvas import Margins, NativeCanvas  # noqa: E402
 from credit_tree_schematics import MS_JUNCTION, mix  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -531,12 +531,15 @@ def panel_addresses(ax):
     # P_A is the orthogonal projection onto the span of the K route columns;
     # the caption expands the notation, while the panel makes the operation
     # and its normalized energy measure visible at first encounter.
-    token_subscript(ax, 0.395, 0.935, "q → P", "A", " q",
-                    size=PT_ANNOT, sub_size=PT_SMALL, color=INK,
-                    ha="left", va="center")
-    token_subscript(ax, 0.285, 0.842, "C", "A", " = ‖Pq‖² ⁄ ‖q‖²",
-                    size=PT_SMALL, sub_size=PT_SMALL, color=MUTE,
-                    ha="left", va="center")
+    ax.text(0.395, 0.935, r"$\mathbf{t}\mapsto P_A\mathbf{t}$",
+            transform=ax.transAxes, fontsize=PT_ANNOT, color=INK,
+            ha="left", va="center")
+    ax.text(
+        0.285, 0.842,
+        r"$\mathcal{C}_A=\|P_A\mathbf{t}\|_2^2/\|\mathbf{t}\|_2^2$",
+        transform=ax.transAxes, fontsize=PT_SMALL, color=MUTE,
+        ha="left", va="center",
+    )
     ax.text(0.50, 0.755, "B ⊂ A", ha="center", va="center",
             fontsize=PT_SMALL, color=INK)
     # "one channel per address" is the panel's definition, not its geometry;
@@ -547,8 +550,7 @@ def panel_addresses(ax):
 
 # ── C, D: the two capture generators on one shared axis ──────────────────
 def panel_cable(ax, curves):
-    for role in ("dense", "ancestry", "random", "depth", "shuffled",
-                 "surrogate"):
+    for role in ("dense", "ancestry", "random", "depth", "shuffled"):
         role_line(ax, role, *curves[role])
     capture_axis(ax, left=True)
 
@@ -589,7 +591,7 @@ def panel_wire_efficiency(ax, table):
     # Two-entry key for the metric, in the whitespace the short wiring bars
     # leave under the dense and ancestry rows.
     for index, (label, filled) in enumerate((("capture retained", True),
-                                             ("wiring required", False))):
+                                             ("nonzero route coefficients", False))):
         ypos = 1.72 - 0.52 * index
         ax.add_patch(Rectangle((52.0, ypos - 0.145), 7.5, 0.29,
                                facecolor=mix(MUTE, 22) if filled else "white",

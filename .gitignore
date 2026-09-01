@@ -11,7 +11,7 @@
 *.md
 __pycache__/
 *.py[cod]
-#presentations/*
+presentations/*
 #!presentations/ml_workshop_15_20min/
 #!presentations/ml_workshop_15_20min/build_speaker_guide.py
 #!presentations/ml_workshop_15_20min/speaker_guide.html

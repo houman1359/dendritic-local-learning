@@ -12,9 +12,12 @@ by the confirmatory analyzers. Panels A and B only explain the manipulations:
 
 * H is the number of latent gain levels in the task;
 * D_p is the number of ordered nonlinear stages in the model;
-* nested factors require ordered cancellation, flat factors preserve the
-  product without a nested grouping, and local ratios expose the divisive
-  information within a stage;
+* nested and flat inputs share the commutative product
+  ``m_i product_l h_l``; nested factors have fine, coarse and global spatial
+  supports, whereas flat factors use equal-resolution supports;
+* successive cancellation is a model-side hypothesis, not part of either
+  task generator, and local ratios expose the divisive information within a
+  stage;
 * the serial dendritic model, resource-identical grouped-point emulation and
   flexible point-network ceiling are visually and verbally distinct.
 
@@ -286,82 +289,45 @@ def panel_task_families(ax):
                 fontsize=7.2, color=color,
                 bbox=dict(facecolor="white", edgecolor="none", pad=0.5))
 
-    # Nested: one signal is successively modulated by three ordered levels.
+    def support_stack(x0, color, group_counts):
+        """Draw the spatial support of each multiplicative factor."""
+        support_left = x0 + 24.0
+        support_right = x0 + card_w - 6.0
+        support_width = support_right - support_left
+        row_ys = tuple(card_y + frac * card_h for frac in (0.68, 0.54, 0.40))
+        cell_gap = 1.0
+        for level, (row_y, count) in enumerate(
+                zip(row_ys, group_counts, strict=True), start=1):
+            formula(ax, support_left - 4.0, row_y,
+                    (("h", 0.0), (str(level), -1.6)), ha="right")
+            cell_width = (support_width - (count - 1) * cell_gap) / count
+            for group in range(count):
+                cell_x = support_left + group * (cell_width + cell_gap)
+                round_box(ax, (cell_x, row_y - 3.4), cell_width, 6.8,
+                          edge=color, fill=mix(color, 20 + 10 * level),
+                          radius=0.8, lw=LW_HAIR)
+
+    product = (("x", 0.0), ("E", -1.6), (" = m", 0.0), ("i", -1.6),
+               (" × ∏", 0.0), ("ℓ", -1.6), (" h", 0.0), ("ℓ", -1.6))
+
+    # Both families use the same commutative product.  The nested generator is
+    # distinguished only by fine, coarse and global spatial supports (4/2/1
+    # groups); no serial order or successive cancellation is encoded here.
     x0 = cards[0][0]
-    cy = card_y + 0.57 * card_h
-    # Lay the chain out from explicit widths.  The five linspace anchors gave
-    # 12.65 pt of spacing for 16 pt boxes, so the boxes overlapped by 3.35 pt
-    # and every arrow ran from +9 to +3.65 -- a negative length whose head
-    # landed on the next box's border and on its label.
-    # Caps differ because "s" is one glyph and the terminal is the two-run
-    # x_E; a wider gap gives each arrow a visible shaft instead of a head
-    # jammed against the next box.
-    box_w, gap = 12.5, 5.8
-    cap_left, cap_right = 4.5, 9.5
-    chain_w = 3 * box_w + 4 * gap + cap_left + cap_right
-    left = x0 + (card_w - chain_w) / 2.0
-    ax.text(left + cap_left / 2.0, cy, "sᵧ", ha="center", va="center",
-            fontsize=PT_SMALL, color=INK)
-    edges = [left + cap_left + gap + index * (box_w + gap) for index in range(3)]
-    for index, (bx, color_pct) in enumerate(zip(edges, (24, 40, 56)), start=1):
-        arrow(ax, (bx - gap + 1.3, cy), (bx - 1.3, cy),
-              color=mix(C_NESTED, 65))
-        round_box(ax, (bx, cy - 7.0), box_w, 14.0,
-                  edge=C_NESTED, fill=mix(C_NESTED, color_pct), radius=2.0)
-        ax.text(bx + box_w / 2.0, cy, f"h{index}", ha="center", va="center",
-                fontsize=PT_SMALL, color=INK)
-    tail = edges[-1] + box_w
-    arrow(ax, (tail + 1.3, cy), (tail + gap - 1.3, cy), color=C_NESTED)
-    # The chain ends at the OBSERVED excitatory coordinate.  Labelling it "y"
-    # collided with the Methods, where y is the class label that enters the
-    # signal, not the quantity that leaves the gain chain.
-    formula(ax, tail + gap + cap_right / 2.0, cy,
-            (("x", 0.0), ("E", -1.6)))
-    # The generative parameterisation (b_E, class label y, contrast delta) is
-    # Methods material: none of those symbols is defined in this figure, and
-    # its y is not the y that used to end the chain above.  The drawing already
-    # states the structure -- one signal, three ordered gains.
-    formula(ax, x0 + card_w / 2, card_y + 0.20 * card_h,
-            (("s", 0.0), ("y", -1.6), (" \u00d7 h", 0.0), ("1", -1.6),
-             ("h", 0.0), ("2", -1.6), ("h", 0.0), ("3", -1.6),
-             (" in order", 0.0)))
+    support_stack(x0, C_NESTED, (4, 2, 1))
+    formula(ax, x0 + card_w / 2, card_y + 0.20 * card_h, product)
     ax.text(x0 + card_w / 2, card_y + 0.06 * card_h,
-            # 90.4 pt of text in a 74.6 pt card overflowed 8 pt each side;
-            # the full phrasing is in the caption.
-            "ordered cancellation", ha="center", va="bottom",
+            "fine · coarse · global", ha="center", va="bottom",
             fontsize=PT_SMALL, color=MUTE)
 
-    # Flat: the same product is present, but factors belong to unrelated
-    # feature groups rather than one nested hierarchy.
+    # Flat inputs have the identical commutative product, but every factor is
+    # defined over eight equal-resolution spatial groups.
     x0 = cards[1][0]
-    centres = np.linspace(x0 + 0.22 * card_w, x0 + 0.78 * card_w, 3)
-    top_y = card_y + 0.64 * card_h
-    comb = (x0 + card_w / 2, card_y + 0.39 * card_h)
-    for index, cx in enumerate(centres, start=1):
-        round_box(ax, (cx - 10.0, top_y - 7.0), 20.0, 14.0,
-                  edge=C_FLAT, fill=mix(C_FLAT, 16 + 13 * index), radius=2.0)
-        ax.text(cx, top_y, f"h{index}", ha="center", va="center",
-                fontsize=PT_SMALL, color=INK)
-        # Stop on the product node's top edge, not its centre: ending at
-        # ``comb`` drove every connector through the box border and under
-        # the product glyph.
-        start = (cx, top_y - 9.0)
-        stop_y = comb[1] + 6.5 + 2.0
-        span = start[1] - comb[1]
-        t = (start[1] - stop_y) / span if span else 0.0
-        arrow(ax, start, (cx + t * (comb[0] - cx), stop_y),
-              color=mix(C_FLAT, 65))
-    round_box(ax, (comb[0] - 10.0, comb[1] - 6.5), 20.0, 13.0,
-              edge=C_FLAT, fill="white", radius=6.0)
-    ax.text(*comb, "∏", ha="center", va="center",
-            fontsize=7.2, color=C_FLAT)
-    # Parallel to the nested card's "s x G1G2G3 in order", so the product
-    # node is grounded by the expression directly beneath it: the same three
-    # gains, combined without an order.  The bare product glyph appears
-    # nowhere in the manuscript, so it cannot stand unexplained.
-    formula(ax, x0 + card_w / 2, card_y + 0.17 * card_h,
-            (("h", 0.0), ("1", -1.6), ("h", 0.0), ("2", -1.6),
-             ("h", 0.0), ("3", -1.6), (" in any order", 0.0)))
+    support_stack(x0, C_FLAT, (8, 8, 8))
+    formula(ax, x0 + card_w / 2, card_y + 0.20 * card_h, product)
+    ax.text(x0 + card_w / 2, card_y + 0.06 * card_h,
+            "equal resolution", ha="center", va="bottom",
+            fontsize=PT_SMALL, color=MUTE)
 
     # Local ratio: excitatory and inhibitory observations already meet in
     # each module; no across-stage cancellation is required.
@@ -386,9 +352,12 @@ def panel_task_families(ax):
                 fontsize=PT_SMALL, color=INK)
     # "is local" is the card's own title, so the expression alone is enough
     # and stays inside the 74.6 pt card once its runs are at token size.
-    formula(ax, x0 + card_w / 2, card_y + 0.13 * card_h,
+    formula(ax, x0 + card_w / 2, card_y + 0.19 * card_h,
             (("r", 0.0), ("l", -1.6), (" = x", 0.0), ("l", -1.6),
              ("E", 1.9), (" / x", 0.0), ("l", -1.6), ("I", 1.9)))
+    ax.text(x0 + card_w / 2, card_y + 0.05 * card_h,
+            "class signal: distal only", ha="center", va="bottom",
+            fontsize=PT_SMALL, color=MUTE)
 
     # The H and alpha definitions are caption material, not panel furniture.
 
@@ -480,7 +449,7 @@ def panel_architectures(ax):
 
 
 # ── C: H=3 boundary ─────────────────────────────────────────────────────
-def panel_h3(ax, depth_summary, point_summary):
+def panel_h3(ax, depth_summary, point_summary, literal_grouped_summary):
     labels = []
     ycols = ("mean_test_accuracy", "ci95_low_test_accuracy",
              "ci95_high_test_accuracy")
@@ -497,8 +466,10 @@ def panel_h3(ax, depth_summary, point_summary):
         y_columns=ycols, regime="aligned", mechanism="shunting",
         method="local3f", transport="per_soma_shared", dx=0.025))
     labels.append(accuracy_curve(
-        ax, point_summary, color=C_GROUPED, marker="D", label="grouped point",
-        y_columns=ycols, regime="aligned", architecture="all_active_star",
+        ax, literal_grouped_summary, color=C_GROUPED, marker="D",
+        label="grouped point",
+        y_columns=("mean_test_accuracy", "ci_low", "ci_high"),
+        hierarchy=3, regime="aligned", architecture="grouped_point",
         credit="full_bp", filled=False, dashes=(0, (3.0, 2.0))))
     labels.append(accuracy_curve(
         ax, depth_summary, color=C_ADDITIVE, marker="v", label="raw additive",
@@ -604,7 +575,7 @@ def panel_h4(ax, summary):
     ax.text(1.5, 1.01, "aligned sensors", ha="center", va="bottom",
             transform=ax.get_xaxis_transform(), fontsize=7.2,
             color=C_SERIAL, clip_on=False)
-    ax.text(6.5, 1.01, "reversed sensors", ha="center", va="bottom",
+    ax.text(6.5, 1.01, "reversed tier placement", ha="center", va="bottom",
             transform=ax.get_xaxis_transform(), fontsize=7.2,
             color=MUTE, clip_on=False)
     ax.set_xlabel("serial physical depth Dₚ")
@@ -671,6 +642,9 @@ def build() -> list[str]:
     point_summary = pd.read_csv(
         SOURCE / "point_dendrite_credit_controls" / "condition_summary.csv"
     )
+    literal_grouped_summary = pd.read_csv(
+        SOURCE / "remaining_physical_experiments" / "condition_summary.csv"
+    )
     h4_summary = pd.read_csv(
         SOURCE / "physical_depth_h4_factorial" / "condition_summary.csv"
     )
@@ -704,7 +678,7 @@ def build() -> list[str]:
 
     panel_task_families(ax_a)
     panel_architectures(ax_b)
-    panel_h3(ax_c, depth_summary, point_summary)
+    panel_h3(ax_c, depth_summary, point_summary, literal_grouped_summary)
     image = panel_h4(ax_d, h4_summary)
     ax_d.set_title("Hₚ=4: alignment exposes the boundary", pad=14.0)
 

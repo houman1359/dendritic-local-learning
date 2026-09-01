@@ -136,8 +136,8 @@ def hierarchical_task(ax) -> None:
                    edge=GREEN if on_path else COLORS["edge"], lw=LW_EDGE)
 
     evidence = (
-        "−0.45y", "−0.45y", "+y", "−0.15y",
-        "−0.75y", "−0.75y", "−0.75y", "−0.75y",
+        r"$-0.45s_i$", r"$-0.45s_i$", r"$+s_i$", r"$-0.15s_i$",
+        r"$-0.75s_i$", r"$-0.75s_i$", r"$-0.75s_i$", r"$-0.75s_i$",
     )
     for idx, (x, val) in enumerate(zip(leaf_x, evidence, strict=True)):
         color = GREEN if idx == selected else MUTE
@@ -185,7 +185,9 @@ ROUTE_SUPPORTS = {
 }
 ROUTE_SIGNAL = {
     "matched": (0, 1, 2, 3),
-    "deranged": (2, 3, 0, 1),   # the permutation the control applies
+    # Destination-indexed inverse of assigned=np.roll(arange(K), 1) in the
+    # runner: destinations 0,1,2,3 receive source groups 1,2,3,0.
+    "deranged": (1, 2, 3, 0),
     "rewired": (0, 1, 2, 3),
 }
 
@@ -332,8 +334,8 @@ def route_controls(ax, indices) -> None:
     all_specs = (
         ("matched subtrees", "task groups = subtrees", GREEN),
         ("deranged assignment", "same routes, wrong signals", GRAY),
-        ("rewired tree", "same degree and depth", GRAY),
-        ("non-anatomical basis", "same feedback bandwidth", PURPLE),
+        ("example leaf permutation", "degree + depth preserved", GRAY),
+        ("non-ancestry basis", "same feedback bandwidth", PURPLE),
     )
     chosen = tuple((index, all_specs[index]) for index in indices)
     cells = f.split(len(chosen), axis="x", gap_pt=8.0,
@@ -426,12 +428,13 @@ def build() -> list:
     route_controls(ax_c, (0, 1))
     route_controls(ax_d, (2, 3))
     bandwidth_sweep_compact(ax_e, outcomes, dendritic)
-    _rename_label(ax_e, "best control", "best non-anatomical")
+    _rename_label(ax_e, "best control", "control oracle")
+    _move_label(ax_e, "control oracle", (0.12, 0.69))
     route_contrasts_compact(ax_f, contrasts)
     # "vs best" sat on the K = 1 diamond and its lower whisker; move it into
     # the empty well under the rising violet segment.
     _move_label(ax_f, "vs best", (0.52, -46.0))
-    _rename_label(ax_f, "vs best", "vs best non-anatomical")
+    _rename_label(ax_f, "vs best", "vs best matched control")
     _annotate_k4_advantage(ax_f, contrasts)
     topology_alignment_compact(ax_g, outcomes)
 
