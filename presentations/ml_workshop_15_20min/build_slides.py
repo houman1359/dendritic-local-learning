@@ -165,6 +165,11 @@ def render_pdf_assets() -> None:
             if output_name == "boundary_topology":
                 draw = ImageDraw.Draw(rendered)
                 draw.rectangle((0, 0, 105, 90), fill="white")
+            if output_name == "mnist_strict_scalar":
+                draw = ImageDraw.Draw(rendered)
+                # Remove the neighboring panel-C letter without touching the
+                # exact-path data at the right edge of panel B.
+                draw.rectangle((rendered.width - 125, 0, rendered.width, 95), fill="white")
             if output_name == "operator_utility_validation":
                 draw = ImageDraw.Draw(rendered)
                 draw.rectangle((0, 0, 105, 90), fill="white")
@@ -218,7 +223,7 @@ def render_pdf_assets() -> None:
     render_clip(
         "main_figure_02_native.pdf",
         "mnist_strict_scalar",
-        (0.035, 0.255, 0.337, 0.58),
+        (0.035, 0.255, 0.278, 0.58),
     )
     render_clip(
         "main_figure_07_native.pdf",
@@ -449,8 +454,9 @@ def conductance_svg() -> str:
       <g font-family="Arial,sans-serif">
         <path d="M405 455 L405 310 M405 350 L260 230 M405 350 L555 225 M260 230 L175 115 M260 230 L315 95 M555 225 L500 95 M555 225 L660 120" fill="none" stroke="#168F83" stroke-width="12" stroke-linecap="round"/>
         <circle cx="405" cy="475" r="48" fill="#E48743" stroke="#FFFFFF" stroke-width="6"/>
-        <g fill="#2D67B1"><circle cx="175" cy="115" r="11"/><circle cx="315" cy="95" r="11"/><circle cx="500" cy="95" r="11"/></g>
+        <g fill="#3D9667"><circle cx="175" cy="115" r="11"/><circle cx="315" cy="95" r="11"/><circle cx="500" cy="95" r="11"/></g>
         <circle cx="555" cy="225" r="14" fill="#BF4E5A"/>
+        <g font-size="20" font-weight="800"><text x="160" y="82" fill="#3D9667">E</text><text x="300" y="62" fill="#3D9667">E</text><text x="485" y="62" fill="#3D9667">E</text><text x="570" y="205" fill="#BF4E5A">I</text></g>
         <path d="M600 224 H744" stroke="#BF4E5A" stroke-width="4" stroke-dasharray="8 7"/>
         <rect x="646" y="168" width="150" height="104" rx="20" fill="#F9E9EB"/>
         <text x="721" y="207" text-anchor="middle" font-size="23" font-weight="700" fill="#BF4E5A">shunt</text>
@@ -594,13 +600,13 @@ def build_slides() -> list[dict[str, str]]:
 
     slides.append({
         "class": "title-slide",
-        "kicker": "Kempner Learning Dynamics Workshop · 15–20 minutes",
+        "kicker": "Kempner Learning Dynamics Workshop · 20-minute talk",
         "title": "When can dendritic structure help local credit assignment?",
         "body": f"""
           <div class="title-grid">
             <div class="title-copy">
               <div class="title-rule"></div>
-              <div class="title-sub">Feedback bandwidth, within-neuron address, conductance-dependent route gain, and an alignment boundary</div>
+              <div class="title-sub">From backpropagation to neuron coordinates, dendritic addresses, conductance-dependent route gain, and an alignment boundary</div>
               <div class="authors">Houman Safaai · Maceo Richards · Bernardo L. Sabatini</div>
               <div class="affiliation">Kempner Institute, Harvard University · Harvard Medical School</div>
             </div>
@@ -669,7 +675,7 @@ def build_slides() -> list[dict[str, str]]:
           <div class="tree-panel labeled-tree">{dendrite_svg(compact=True, labels=True)}</div>
           <div class="stack resource-stack compact-stack">
             <div class="mapping-line">network weight wᵢ &nbsp;→&nbsp; synaptic conductance gᵢ on compartment n</div>
-            <div class="equation compact"><span class="hat-symbol">δ̂</span><sup>V</sup><sub>u</sub> = A<sub>u</sub>c<sub>u</sub>, &nbsp; A<sub>u</sub>∈ℝ<sup>Nᵤ×K</sup>, &nbsp; c<sub>u</sub>∈ℝ<sup>K</sup></div>
+            <div class="equation compact"><span class="hat-symbol">δ</span><sup>V</sup><sub>u</sub> = A<sub>u</sub>c<sub>u</sub>, &nbsp; A<sub>u</sub>∈ℝ<sup>Nᵤ×K</sup>, &nbsp; c<sub>u</sub>∈ℝ<sup>K</sup></div>
             <div class="route-definitions"><b>Aᵤ</b> says where each feedback channel is delivered; <b>cᵤ</b> contains the K signed values available on the current example.</div>
             <div class="question-grid">
               {card('1 · coordinate + ownership', '<p>Which neuron—and which arbor—receives each signal?</p>', tone='blue')}
@@ -689,8 +695,9 @@ def build_slides() -> list[dict[str, str]]:
         <div class="two-col col-44-56 conductance-layout">
           <div>{conductance_svg()}</div>
           <div class="stack compact-stack">
-            <div class="equation compact">g<sup>tot</sup><sub>n</sub> = g<sup>L</sup><sub>n</sub> + Σ<sub>i∈syn(n)</sub>gᵢxᵢ + Σ<sub>c∈child(n)</sub>g<sup>den</sup><sub>c→n</sub>, &nbsp; R<sup>tot</sup><sub>n</sub>=1/g<sup>tot</sup><sub>n</sub></div>
-            <div class="equation multiline">Vₙ = R<sup>tot</sup><sub>n</sub>[g<sup>L</sup><sub>n</sub>E<sup>L</sup> + Σ<sub>i∈syn(n)</sub>gᵢxᵢE<sup>rev</sup><sub>i</sub> + Σ<sub>c∈child(n)</sub>g<sup>den</sup><sub>c→n</sub>a<sub>c</sub>], &nbsp; a<sub>c</sub>=f<sub>c</sub>(V<sub>c</sub>)</div>
+            <div class="ei-definition"><b>G<sup>E</sup><sub>n</sub>=Σg<sup>E</sup><sub>i</sub>x<sup>E</sup><sub>i</sub>≥0</b><b>G<sup>I</sup><sub>n</sub>=Σg<sup>I</sup><sub>j</sub>x<sup>I</sup><sub>j</sub>≥0</b><span>E and I are distinguished by reversal potentials E<sub>E</sub> and E<sub>I</sub>, not by negative conductance.</span></div>
+            <div class="equation compact">g<sup>tot</sup><sub>n</sub> = g<sup>L</sup><sub>n</sub> + G<sup>E</sup><sub>n</sub> + G<sup>I</sup><sub>n</sub> + G<sup>child</sup><sub>n</sub>, &nbsp; R<sup>tot</sup><sub>n</sub>=1/g<sup>tot</sup><sub>n</sub></div>
+            <div class="equation multiline">Vₙ = R<sup>tot</sup><sub>n</sub>(g<sup>L</sup><sub>n</sub>E<sub>L</sub> + G<sup>E</sup><sub>n</sub>E<sub>E</sub> + G<sup>I</sup><sub>n</sub>E<sub>I</sub> + J<sup>child</sup><sub>n</sub>)</div>
             <div class="compare-row">
               {card('additive current', '<p>Changes the numerator without changing total conductance.</p>', tone='blue')}
               {card('shunting conductance', '<p>Raises g<sup>tot</sup><sub>n</sub> and lowers R<sup>tot</sup><sub>n</sub>, even when net shunt current is small.</p>', tone='red')}
@@ -719,8 +726,8 @@ def build_slides() -> list[dict[str, str]]:
               <span class="times">×</span>
               <span class="term purple"><b>δ<sup>V</sup><sub>n,u</sub></b><small>transported compartment error</small></span>
             </div>
-            <div class="equation compact">δ<sup>V</sup><sub>n,u</sub> = δ<sup>V</sup><sub>0,u</sub>α̃<sub>n</sub></div>
-            <div class="path-product">α̃<sub>n</sub> = ∏<sub>(i→k)∈path(n→0)</sub> f′<sub>i</sub>(V<sub>i</sub>) R<sup>tot</sup><sub>k</sub> g<sup>den</sup><sub>i→k</sub></div>
+            <div class="equation compact">δ<sup>V</sup><sub>n,u</sub> = δ<sup>V</sup><sub>0,u</sub><span class="tilde-symbol">α</span><sub>n</sub></div>
+            <div class="path-product"><span class="tilde-symbol">α</span><sub>n</sub> = ∏<sub>(i→k)∈path(n→0)</sub> f′<sub>i</sub>(V<sub>i</sub>) R<sup>tot</sup><sub>k</sub> g<sup>den</sup><sub>i→k</sub></div>
             <div class="transport-scope"><b>Directed tree:</b> one exact path product. &nbsp; <b>Reciprocal cable:</b> the same field is obtained from the steady-state adjoint.</div>
           </div>
         </div>""",
@@ -769,7 +776,7 @@ def build_slides() -> list[dict[str, str]]:
 
     slides.append(slide(
         "STANDARD IMAGE TASKS",
-        "Neuron-specific feedback—not exact within-tree resolution—dominates standard tasks",
+        "Neuron-specific feedback dominates standard image tasks",
         f"""
         <div class="two-col col-50-50 plot-pair standard-plots">
           <div class="plot-card"><div class="plot-label">MNIST · <span class="green-text">green = shunting</span> · <span class="blue-text">blue = additive</span></div>{img('mnist_strict_scalar', 'MNIST strict-scalar feedback ladder')}</div>
@@ -871,7 +878,7 @@ def build_slides() -> list[dict[str, str]]:
                 {stat('≈2.7×', 'over a density-matched shuffled dictionary', tone='orange')}
               </div>
             </div>
-            <div class="precision-note">Connections are nonzero route-matrix entries—not cable length, energy, or reliability. The ordering replicated in a disjoint 47-cell cohort. A second MICrONS mouse reproduced the model-matched subtree advantage in 10/10 QC-passing cells; animal-level inference remains descriptive. Fields are modeled, not observed task gradients.</div>
+            <div class="precision-note">Route-matrix connections are not cable length or energy. The ordering replicated in 47 held-out cells, and the subtree advantage was positive in 10/10 quality-controlled cells from a second MICrONS mouse. These are modeled fields, not observed task gradients.</div>
           </div>
         </div>""",
         "Measured morphology supplies a sparse route dictionary; most capacity comes from branch depth and coarse topology.",
@@ -884,7 +891,7 @@ def build_slides() -> list[dict[str, str]]:
         <div class="two-col col-58-42 shunt-layout">
           <div class="plot-card shunt-schematic">{focal_comparison_svg()}</div>
           <div class="stack">
-            <div class="equation compact route-gain-sensitivity">∂ log α<sup>cond</sup><sub>n</sub> / ∂G<sup>I</sup><sub>k</sub> = −R<sup>tot</sup><sub>k</sub> <span class="indicator-one">1</span>[k∈A(n)]</div>
+            <div class="equation compact route-gain-sensitivity">∂ log α<sup>cond</sup><sub>n</sub> / ∂G<sup>I</sup><sub>k</sub> = −R<sup>tot</sup><sub>k</sub> <span class="indicator-one">1</span>[k∈𝒜(n)]</div>
             <div class="route-gain-reading">A shunt directly attenuates only routes descending through compartment k; the effect scales with local input resistance.</div>
             <div class="plot-card boundary-plot">{img('focal_boundary_current', 'Current Figure 8F electrotonic boundary for focal shunting')}</div>
             {card('standard passive calibration', '<p>At R<sub>m</sub>=15,000 Ω cm², the shunt-minus-current localization contrast is effectively zero.</p>', tone='gray')}
@@ -940,20 +947,40 @@ def build_slides() -> list[dict[str, str]]:
 
     slides.append(slide(
         "SYNTHESIS",
-        "Alignment and bandwidth determine which dendritic resources help",
+        "One alignment–bandwidth plane organizes the wins and nulls",
         f"""
-        <div class="two-col col-52-48 final-layout">
-          <div class="stack phase-stack">
-            <div class="plot-card final-phase">{img('phase_plane', 'Task-route alignment and relative feedback bandwidth phase plane')}</div>
-            <div class="phase-definition">relative bandwidth = K/r<sub>eff</sub>, &nbsp; r<sub>eff</sub>=(Σᵢλᵢ)²/Σᵢλᵢ² &nbsp;·&nbsp; λᵢ: task-credit-spectrum eigenvalues</div>
+        <div class="two-col col-67-33 phase-summary-layout">
+          <div class="plot-card phase-dominant">{img('phase_plane', 'Task-route alignment and relative feedback bandwidth phase plane')}</div>
+          <div class="stack phase-reading">
+            {card('low relative bandwidth', '<p>Too few independent coordinates: neuron identity or branch address is the bottleneck.</p>', tone='orange')}
+            {card('aligned intermediate bandwidth', '<p>Restricted routes can retain task credit while rejecting irrelevant dimensions.</p>', tone='teal')}
+            {card('full rank or weak alignment', '<p>Route capacity saturates, or available structure does not match the task.</p>', tone='purple')}
+            <div class="phase-axis-definition"><b>vertical:</b> relative bandwidth K/r<sub>eff</sub><br><b>horizontal:</b> task–route alignment</div>
             <div class="precision-note">Coordinates are estimated separately within each experiment. Regime tint and the K/r<sub>eff</sub>=1 boundary are theoretical, not fitted.</div>
           </div>
-          <div class="stack final-stack">
-            <div class="evidence-panel categorical">{evidence_svg()}</div>
-            <div class="final-question"><b>Neuron identity</b> usually matters first; <b>subtree address</b> helps under task-aligned conflict; <b>shunting</b> changes route gain only in permissive electrotonic states.</div>
-          </div>
         </div>""",
-        "Dendritic structure is a conditional substrate for routing local credit—not a general replacement for backpropagation.",
+        "Useful route resolution requires both sufficient feedback bandwidth and alignment between the task-credit field and the available routes.",
+    ))
+
+    slides.append(slide(
+        "TAKE-HOME",
+        "Coordinate → address → gain, all conditional on task–route alignment",
+        f"""
+        <div class="takehome-layout">
+          <div class="takehome-flow">
+            <div class="flow-node blue"><b>coordinate</b><span>which neuron?</span></div><div class="flow-arrow">→</div>
+            <div class="flow-node purple"><b>address</b><span>which subtree?</span></div><div class="flow-arrow">→</div>
+            <div class="flow-node orange"><b>gain</b><span>how strongly?</span></div><div class="flow-gate">enabled by <b>alignment + bandwidth</b></div>
+          </div>
+          <div class="takehome-grid">
+            {card('1 · neuron-specific coordinates come first', '<p>Across MNIST and flattened CIFAR-10, preserving distinct feedback across neurons closes most of the scalar-to-exact gap.</p>', tone='blue')}
+            {card('2 · addresses matter when local updates conflict', '<p>Branch-specific signals become necessary when simultaneously active subtrees require different or opposite changes.</p>', tone='purple')}
+            {card('3 · topology helps only in a matched regime', '<p>Nested routes add a modest advantage at intermediate aligned bandwidth; reconstructed arbors supply sparse candidate routes.</p>', tone='teal')}
+            {card('4 · conductance regulates gain conditionally', '<p>Focal shunting localizes modeled credit only in permissive states, and endogenous morphology-specific use remains unestablished.</p>', tone='orange')}
+          </div>
+          <div class="closing-statement">Dendrites are a conditional substrate for routing local credit—not a general replacement for backpropagation.</div>
+        </div>""",
+        "The central contribution is a predictive boundary map: when restricted dendritic routes help, when they do not, and why.",
     ))
 
     return slides
@@ -965,7 +992,7 @@ STYLE = r"""
   --grid:#DDE5EA; --teal:#168F83; --teal-pale:#E6F3F0;
   --blue:#2D67B1; --blue-pale:#EAF1FA; --purple:#7654B5;
   --purple-pale:#F0ECF8; --orange:#E48743; --orange-pale:#FBEDE2;
-  --red:#BF4E5A; --red-pale:#F9E9EB; --gray:#8B98A7;
+  --red:#BF4E5A; --red-pale:#F9E9EB; --green:#3D9667; --gray:#8B98A7;
 }
 * { box-sizing:border-box; }
 html, body { margin:0; width:1920px; height:1080px; overflow:hidden; background:var(--paper); }
@@ -1002,6 +1029,7 @@ h1 { margin:0; font-family:Georgia,"Nimbus Roman",serif; font-size:52px; line-he
 .frac { display:inline-flex; flex-direction:column; vertical-align:middle; align-items:stretch; }
 .frac > span:first-child { border-bottom:2px solid currentColor; padding:0 10px 7px; }
 .frac > span:last-child { padding:7px 10px 0; }
+.hat-symbol,.tilde-symbol { position:relative; display:inline-block; padding-top:.08em; }.hat-symbol::after { content:"ˆ"; position:absolute; left:50%; top:-.44em; transform:translateX(-50%); font-size:.58em; font-family:Georgia,"Nimbus Roman",serif; }.tilde-symbol::after { content:"~"; position:absolute; left:50%; top:-.48em; transform:translateX(-50%); font-size:.64em; font-family:Georgia,"Nimbus Roman",serif; }
 .hero-equation { display:flex; align-items:stretch; justify-content:center; gap:18px; margin:56px auto 45px; font-family:Georgia,"Nimbus Roman",serif; }
 .hero-equation.small { margin:0; gap:12px; flex-wrap:wrap; }
 .eq-left,.times { display:flex; align-items:center; font-size:47px; }.hero-equation.small .eq-left,.hero-equation.small .times { font-size:34px; }
@@ -1052,17 +1080,25 @@ h1 { margin:0; font-family:Georgia,"Nimbus Roman",serif; font-size:52px; line-he
 .taxonomy b { font-size:16px; color:var(--ink); }.taxonomy span { font-size:15px; color:var(--muted); }
 .point-factorization { margin:30px auto 20px; }.point-factorization .term { min-width:385px; }.local-rule-row { height:245px; align-items:stretch; }.local-rule-row > .equation { align-self:center; }.local-rule-row .card { padding:15px 20px; }.local-rule-row .card-title { font-size:21px; }.local-rule-row .card p { font-size:18px; }
 .dendrite-resource-layout { align-items:stretch; }.labeled-tree { height:660px; }.mapping-line { background:var(--teal-pale); color:#2F6C65; font-weight:700; text-align:center; }.route-definitions { background:var(--purple-pale); color:#5E4A82; font-size:17px; }.resource-stack .card { padding:13px 19px; }.resource-stack .card-title { font-size:20px; }.resource-stack .card p { font-size:18px; }
+.question-grid { display:grid; grid-template-columns:1fr 1fr; gap:11px; }.question-grid .card { min-height:116px; padding:13px 17px; }.question-grid .card-title { font-size:18px; margin-bottom:5px; }.question-grid .card p { font-size:17px; line-height:1.23; }
 .conductance-layout,.gradient-layout,.transport-layout { align-items:stretch; }.conductance-layout > div:first-child,.gradient-layout > div:first-child,.transport-layout > div:first-child { display:flex; align-items:center; }.conductance-layout .equation.multiline { font-size:30px; }.shunt-callout { padding:13px 18px; border:2px solid #EBC7CB; border-radius:14px; background:var(--red-pale); color:#8C3D48; font:700 19px/1.3 Georgia,serif; text-align:center; }
+.ei-definition { display:grid; grid-template-columns:auto auto; gap:6px 18px; align-items:center; padding:12px 17px; border-radius:14px; background:linear-gradient(90deg,var(--teal-pale),var(--red-pale)); color:#38576A; font-size:18px; }.ei-definition b:first-child { color:var(--green); }.ei-definition b:nth-child(2) { color:var(--red); }.ei-definition span { grid-column:1 / -1; color:#536276; font-size:16px; text-align:center; }
 .gradient-factorization { margin:0; }.gradient-factorization .term { min-width:250px; }.gradient-factorization .term:first-of-type { min-width:475px; }.gradient-factorization .term b { font-size:27px; }.transport-layout .card { padding:17px 21px; }.transport-layout .card-title { font-size:21px; }.transport-layout .card p { font-size:19px; }
+.exact-transport-layout { align-items:stretch; }.transport-composite { display:grid; grid-template-rows:1fr auto; height:100%; min-height:0; }.transport-composite > div:first-child { min-height:0; display:flex; align-items:center; }.transport-caption { display:flex; flex-direction:column; gap:5px; margin:0 30px 12px; padding:12px 18px; border-radius:14px; background:var(--purple-pale); text-align:center; color:#5E4A82; }.transport-caption b { font-size:20px; }.transport-caption span { font-size:17px; }.exact-transport-equations { gap:11px; }.exact-transport-equations .definition-box { font-size:18px; padding:12px 17px; }.exact-transport-equations .equation.compact { font-size:29px; padding:13px 18px; }.exact-transport-equations .path-product { font-size:24px; padding:13px 17px; }.transport-scope { padding:12px 16px; border-radius:14px; background:#EEF2F5; color:#536276; font-size:17px; line-height:1.28; text-align:center; }
 .operator-layout { display:grid; grid-template-rows:455px 170px; gap:10px; height:100%; }.operator-visual { min-height:0; }.operator-equations { display:grid; grid-template-columns:1fr 1fr 1.25fr; gap:15px; align-items:stretch; }.operator-equations .equation { display:flex; align-items:center; justify-content:center; font-size:27px; }.operator-note { display:flex; align-items:center; font-size:18px; }.operator-note b { display:inline-block; margin-right:.28em; color:var(--ink); }
 .utility-layout { height:575px; align-items:stretch; }.main-utility { padding:14px; }.main-utility .equation { padding:7px 2px 0; font-size:29px; }.utility-plot { padding:10px; }.scope-strip { margin-top:12px; padding:10px 18px; border-radius:14px; background:#EEF2F5; color:#56667A; font-size:17px; text-align:center; }.utility-layout .stat { min-height:73px; padding:8px 15px; }.utility-layout .stat-value { font-size:27px; }.utility-layout .stat-label { font-size:15px; }
 .standard-plots { height:470px; }.comparison-table { margin-top:12px; display:grid; border:2px solid var(--grid); border-radius:15px; overflow:hidden; background:#FFFFFF; }.comparison-table > div { display:grid; grid-template-columns:1.5fr 1fr 1fr; gap:12px; padding:7px 16px; border-top:1px solid var(--grid); font-size:17px; align-items:center; }.comparison-table > div:first-child { border-top:0; }.comparison-head { background:#EEF2F5; color:var(--muted); font-weight:800; }.blue-text { color:var(--blue); }.green-text { color:var(--green); }.red-text { color:var(--red); }
+.standard-summary-row { display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; margin-top:12px; }.standard-summary-row .stat { min-height:101px; padding:11px 16px; }.standard-summary-row .stat-value { font-size:27px; }.standard-summary-row .stat-label { font-size:16px; }
 .hierarchy-definition-layout { display:grid; grid-template-columns:55% 45%; gap:28px; height:100%; align-items:stretch; }.hierarchy-task-plot { height:100%; }.hierarchy-bandwidth-plot { height:385px; }.hierarchy-side .card { padding:15px 20px; }.hierarchy-side .card-title { font-size:20px; }.hierarchy-side .card p { font-size:18px; }
 .branch-symbols { padding:8px 12px; border-radius:12px; background:#EEF2F5; color:var(--muted); font-size:18px; line-height:1.24; text-align:center; }.branch-symbols b { color:var(--ink); }.indicator-one { font-family:Arial,Nimbus Sans,sans-serif; font-weight:800; }
-.four-stat-row { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-top:8px; }.four-stat-row .stat { min-width:0; }.capture-equation { padding:9px 16px; display:grid; grid-template-columns:auto 1fr; align-items:baseline; justify-content:center; gap:25px; }.capture-formula { color:var(--ink); font:26px/1.2 Georgia,serif; white-space:nowrap; }.capture-definition { color:var(--muted); font:17px/1.2 Arial,sans-serif; }.anatomy-evidence-grid { display:grid; grid-template-columns:46% 54%; gap:12px; height:430px; min-height:0; }.anatomy-layout .capture-plot { height:100%; padding:10px; }.anatomy-layout .capture-plot .plot { width:100%; height:100%; }.anatomy-metrics { display:grid; grid-template-rows:repeat(4,1fr); gap:9px; min-height:0; }.anatomy-metrics .stat { min-height:0; padding:10px 14px; display:flex; flex-direction:column; justify-content:center; }.anatomy-metrics .stat-value { font-size:28px; }.anatomy-metrics .stat-label { font-size:16px; }.anatomy-data .precision-note { font-size:16px; line-height:1.32; padding:12px 15px; }
+.four-stat-row { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-top:8px; }.four-stat-row .stat { min-width:0; }.capture-equation { padding:9px 16px; display:grid; grid-template-columns:auto 1fr; align-items:baseline; justify-content:center; gap:25px; }.capture-formula { color:var(--ink); font:26px/1.2 Georgia,serif; white-space:nowrap; }.capture-definition { color:var(--muted); font:17px/1.2 Arial,sans-serif; }.anatomy-evidence-grid { display:grid; grid-template-columns:46% 54%; gap:12px; height:388px; min-height:0; }.anatomy-layout .capture-plot { height:100%; padding:10px; }.anatomy-layout .capture-plot .plot { width:100%; height:100%; }.anatomy-metrics { display:grid; grid-template-rows:repeat(4,1fr); gap:9px; min-height:0; }.anatomy-metrics .stat { min-height:0; padding:9px 13px; display:flex; flex-direction:column; justify-content:center; }.anatomy-metrics .stat-value { font-size:27px; }.anatomy-metrics .stat-label { font-size:15px; }.anatomy-data { height:100%; justify-content:flex-start; }.anatomy-data .precision-note { font-size:15px; line-height:1.28; padding:10px 14px; }
+.anatomy-visuals { height:100%; justify-content:flex-start; overflow:hidden; }.anatomy-visuals .plot-card { min-height:0; flex:none; }.mapped-arbor { height:68%; }.address-inset { height:29%; }.anatomy-visuals .plot-label { font-size:16px; }.anatomy-visuals .plot { width:100%; height:calc(100% - 36px); min-height:0; object-fit:contain; }
 .measured-null-layout { height:570px; align-items:stretch; }.measured-pipeline { display:grid; gap:7px; text-align:center; }.measured-pipeline div { padding:14px; border-radius:14px; background:#FFFFFF; border:2px solid var(--grid); font-size:19px; font-weight:700; }.measured-pipeline span { color:var(--teal); font-size:25px; line-height:1; }.measured-null-plot { height:100%; }.null-result-strip { margin-top:12px; padding:13px 20px; border-radius:14px; background:#EEF2F5; color:#56667A; font-size:18px; font-weight:700; text-align:center; }
 .alignment-layout { align-items:stretch; }.rotation-plot { height:310px; }.alignment-gain-plot { height:455px; }.alignment-definitions { background:var(--purple-pale); color:#5E4A82; text-align:center; }.alignment-layout .card { padding:14px 19px; }.alignment-layout .card-title { font-size:20px; }.alignment-layout .card p { font-size:18px; }
 .final-layout { align-items:stretch; }.phase-stack { gap:10px; }.final-phase { height:455px; padding:9px; }.phase-definition { background:var(--purple-pale); color:#5E4A82; text-align:center; font-family:Georgia,serif; }.evidence-panel.categorical { height:535px; }.final-stack { gap:11px; }.final-stack .final-question { font-size:18px; padding:13px 17px; }
+.route-gain-sensitivity { font-size:27px !important; }.route-gain-reading { padding:11px 15px; border-radius:13px; background:var(--orange-pale); color:#80542E; font-size:17px; line-height:1.27; text-align:center; }
+.phase-summary-layout { align-items:stretch; }.phase-dominant { height:100%; padding:10px; }.phase-dominant .plot { width:100%; height:100%; }.phase-reading { gap:12px; }.phase-reading .card { padding:16px 19px; }.phase-reading .card-title { font-size:20px; }.phase-reading .card p { font-size:18px; }.phase-axis-definition { padding:13px 17px; border-radius:14px; background:var(--purple-pale); color:#5E4A82; font-size:19px; line-height:1.35; }.phase-reading .precision-note { padding:12px 16px; font-size:16px; }
+.takehome-layout { height:100%; display:grid; grid-template-rows:128px 1fr 83px; gap:18px; }.takehome-flow { display:flex; align-items:center; justify-content:center; gap:18px; }.flow-node { width:260px; padding:18px 22px; border-radius:20px; background:white; border:3px solid; text-align:center; box-shadow:0 8px 24px rgba(18,35,63,.05); }.flow-node b { display:block; font:700 29px Georgia,serif; }.flow-node span { display:block; margin-top:5px; color:var(--muted); font-size:18px; }.flow-node.blue { border-color:#BDD1EC; color:var(--blue); }.flow-node.purple { border-color:#CBBDE3; color:var(--purple); }.flow-node.orange { border-color:#F1D3B8; color:#B9692E; }.flow-arrow { font-size:43px; color:#7B8998; }.flow-gate { margin-left:22px; padding:17px 22px; border-radius:18px; background:linear-gradient(90deg,var(--teal-pale),var(--purple-pale)); color:#42546A; font-size:20px; }.takehome-grid { display:grid; grid-template-columns:1fr 1fr; gap:18px; }.takehome-grid .card { display:flex; flex-direction:column; justify-content:center; padding:22px 27px; }.takehome-grid .card-title { font-size:23px; }.takehome-grid .card p { font-size:20px; line-height:1.3; }.closing-statement { display:flex; align-items:center; justify-content:center; padding:16px 25px; border-radius:18px; background:#12233F; color:white; font:700 26px/1.25 Georgia,serif; text-align:center; }
 
 .title-slide { padding:0; background:linear-gradient(135deg,#F9FAF7 0%,#F4F7F5 64%,#EEF5F3 100%); }
 .title-slide::before,.title-slide .takeaway,.title-slide .source { display:none; }

@@ -692,11 +692,11 @@ neuron's compartment errors equal its somatic error multiplied by positive
 path gains, so ordinary feedforward trees primarily create differences in
 magnitude rather than sign. In shunting trees, the conductance loading that
 shapes these gains is also the quantity manipulated later by focal inhibition
-(Eq.~\ref{eq:shuntpathgain}, Fig.~\ref{fig:focal}). Supplementary Fig.~S1A is
-a separate conductance-only diagnostic from a normalized-additive cohort; it
-does not measure the trained exact-error field plotted here. Shunting and
-raw-additive forward models nevertheless showed the same qualitative feedback
-ordering, with no general optimization advantage for shunting.
+(Eq.~\ref{eq:shuntpathgain}, Fig.~\ref{fig:focal}). These transport
+differences did not change the feedback-resolution outcome: both
+architectures showed the same qualitative ordering across the ladder, with
+no general optimization advantage for shunting
+(Fig.~\ref{fig:feedback}B).
 
 A neuron-specific coordinate is useful only if it is delivered to the
 corresponding arbor; we refer to this coordinate-to-arbor map as ownership
