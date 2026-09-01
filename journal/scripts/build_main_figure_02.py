@@ -727,12 +727,12 @@ def panel_forest(ax):
     # the pointers the rows read as a second dataset rather than as B's own
     # contrasts on an inferential scale.
     strips = [
-        ((0.47, 0.53),
+        ((0.50, 0.50),
          [("neuron-specific (B)",
            mnist["neuron specific - scalar broadcast"]),
           ("path resolution (B)", mnist["exact path - neuron specific"])],
          GAIN_LIM, GAIN_TICKS, None),
-        ((0.0, 0.36),
+        ((0.0, 0.34),
          [("ownership: correct − deranged (F)", _ownership_rows())],
          ASSIGN_LIM, ASSIGN_TICKS, GAIN_LABEL),
     ]
@@ -798,8 +798,8 @@ def panel_forest(ax):
 # its own reserve: every left reserve is the column lock the canvas
 # measures, topped up by ``_equalise_row`` so panels of one row that start
 # in different grid columns still share one axes-box width.
-CANVAS_H_PT = 398.0                       # compact standard-task figure
-ROW_H_PT = (68.0, 87.0, 108.0)
+CANVAS_H_PT = 413.0                       # compact standard-task figure
+ROW_H_PT = (68.0, 87.0, 123.0)
 VGUTTER_PT = 62.0 / 3.0 + 25.0
 
 
