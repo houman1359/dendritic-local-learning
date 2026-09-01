@@ -40,7 +40,7 @@ SUPPLEMENTARY_FIGURES = (
     "supplementary/figure_S01_panels_A-E.pdf",
     "supplementary/figure_S02_panels_A-E.pdf",
     "supplementary/figure_S03_panels_A-D.pdf",
-    "supplementary/figure_S04_panels_A-D.pdf",
+    "supplementary/figure_S04_panels_A-E.pdf",
     "supplementary/figure_S05_panels_A-H.pdf",
     "supplementary/figure_S06_panels_A-D.pdf",
     "supplementary/figure_S07_panels_A-D.pdf",

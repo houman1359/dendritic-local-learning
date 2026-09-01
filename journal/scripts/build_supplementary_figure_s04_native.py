@@ -6,15 +6,16 @@ The reduced sheet was first produced by cropping panels C, D and I out of the
 archived nine-panel regime asset (still preserved at
 ``figures/supplementary/figure_S04_panels_A-I.pdf``); that recomposition kept
 the marks bit-identical but inherited the NeurIPS type and stroke scales and
-carried no native geometry manifest.  This builder redraws the SAME three
-panels (same letters A--C as the reduced sheet, same content, same frozen
-numbers) natively:
+carried no native geometry manifest. This builder redraws the same three
+inherited panels and appends the completed feedback ladders natively:
 
 * row 0 -- A the nominal-depth stress sweep and B the broadcast-noise sweep,
   six modules each (solid = local learning, faint dashed = matched
   backpropagation in A; whiskers are the +-1 s.d. the archived generator
   drew);
-* row 1 -- C the flattened CIFAR-10 control ladder, six modules, centred.
+* row 1 -- C the flattened CIFAR-10 control ladder; D the independent
+  raw-additive CIFAR-10 confirmation when its validated package is supplied;
+  and E the Fashion-MNIST feedback-resolution replication.
 
 Every plotted number is the archived one: the aggregations are ported
 verbatim from the frozen ``scripts/build_regular_tree_regime_figure.py``
@@ -29,8 +30,9 @@ mapping and label wording are native:
   its rotated tick labels become horizontal ones;
 * legend boxes become direct labels.
 
-The default build remains the frozen three-panel A--C sheet.  A fourth panel
-can be rendered only by explicitly supplying a finalized analysis directory
+The default build contains panels A--D (the three inherited panels and the
+Fashion-MNIST replication). The canonical five-panel sheet can be rendered
+only by explicitly supplying a finalized analysis directory
 from ``analyze_cifar10_additive_feedback_ladder_confirmatory.py``.  That path
 is deliberately fail-closed: incomplete, convergence-flagged or internally
 inconsistent outputs cannot produce a publication asset.
@@ -66,12 +68,15 @@ from figure_canvas import (  # noqa: E402
 
 ROOT = SCRIPT_DIR.parent
 SRC = ROOT / "source_data" / "regular_tree_regimes"
-OUT = ROOT / "figures" / "supplementary" / "figure_S04_panels_A-C.pdf"
-OUT_EXTENDED = ROOT / "figures" / "supplementary" / "figure_S04_panels_A-D.pdf"
+OUT = ROOT / "figures" / "supplementary" / "figure_S04_panels_A-D.pdf"
+OUT_EXTENDED = ROOT / "figures" / "supplementary" / "figure_S04_panels_A-E.pdf"
 
 DEPTH_CSV = SRC / "depth_scaling_summary.csv"
 NOISE_CSV = SRC / "broadcast_noise_summary.csv"
 CIFAR_CSV = SRC / "cifar10_control_ladder_runs.csv"
+FASHION_SRC = ROOT / "source_data" / "fashion_feedback_ladder"
+FASHION_RUNS_CSV = FASHION_SRC / "seed_outcomes.csv"
+FASHION_SUMMARY_CSV = FASHION_SRC / "condition_summary.csv"
 
 SHUNT = COLORS["shunting"]
 ADD = COLORS["additive"]
@@ -80,6 +85,11 @@ INK = COLORS["ink"]
 
 CORE_MARKER = {"dendritic_shunting": "o", "dendritic_additive": "s"}
 CORE_COLOR = {"dendritic_shunting": SHUNT, "dendritic_additive": ADD}
+
+FASHION_ORDER = ("scalar fallback", "neuron indexed", "exact path")
+FASHION_LABELS = ("matched-width\nfallback", "neuron-\nspecific", "exact\npath")
+FASHION_ARCHITECTURES = ("shunting", "additive")
+FASHION_SEEDS = set(range(10200, 10210))
 
 
 def _series(ax, x, mean, std, *, color, marker, ls="-", alpha=1.0, z=3):
@@ -152,7 +162,7 @@ def panel_noise(ax):
 # gray for the random rank field, oracle violet for exact transport and the
 # red-brown backpropagation reference.
 CIFAR_SPECS = (
-    ("cifar10_shunting_5f_per_soma_learned_i", "matched-width\nfallback", COLORS["local"]),
+    ("cifar10_shunting_5f_per_soma_learned_i", "matched-\nwidth\nfallback", COLORS["local"]),
     ("cifar10_shunting_5f_low_rank4_learned_i", "random\nrank 4",
      COLORS["point_mlp"]),
     ("cifar10_shunting_5f_path_transport_learned_i", "exact\npath",
@@ -352,6 +362,150 @@ def panel_confirmatory_cifar(ax, outcomes: pd.DataFrame):
     return ax
 
 
+def load_fashion_ladder() -> tuple[pd.DataFrame, pd.DataFrame]:
+    """Load and verify the complete paired Fashion-MNIST replication."""
+    missing = [
+        str(path) for path in (FASHION_RUNS_CSV, FASHION_SUMMARY_CSV)
+        if not path.is_file()
+    ]
+    if missing:
+        raise RuntimeError(
+            "Fashion-MNIST S4 panel requires the frozen source-data tables; "
+            "missing: " + ", ".join(missing)
+        )
+
+    outcomes = pd.read_csv(FASHION_RUNS_CSV)
+    summary = pd.read_csv(FASHION_SUMMARY_CSV)
+    errors: list[str] = []
+    outcome_columns = {"architecture", "feedback", "seed", "test_accuracy"}
+    summary_columns = {
+        "architecture", "feedback", "n_seeds", "mean_accuracy",
+        "ci95_low", "ci95_high",
+    }
+    if not outcome_columns.issubset(outcomes.columns):
+        errors.append("seed_outcomes.csv lacks required columns")
+    if not summary_columns.issubset(summary.columns):
+        errors.append("condition_summary.csv lacks required columns")
+
+    if outcome_columns.issubset(outcomes.columns):
+        if len(outcomes) != 60:
+            errors.append(f"seed_outcomes.csv has {len(outcomes)} rather than 60 rows")
+        if outcomes.duplicated(["architecture", "feedback", "seed"]).any():
+            errors.append("seed_outcomes.csv contains duplicate paired outcomes")
+        if set(outcomes["architecture"].astype(str)) != set(FASHION_ARCHITECTURES):
+            errors.append("seed_outcomes.csv has the wrong architecture inventory")
+        if set(outcomes["feedback"].astype(str)) != set(FASHION_ORDER):
+            errors.append("seed_outcomes.csv has the wrong feedback inventory")
+        for architecture in FASHION_ARCHITECTURES:
+            for feedback in FASHION_ORDER:
+                seeds = set(outcomes.loc[
+                    outcomes["architecture"].eq(architecture)
+                    & outcomes["feedback"].eq(feedback), "seed"
+                ])
+                if seeds != FASHION_SEEDS:
+                    errors.append(
+                        f"{architecture}/{feedback} does not contain the frozen "
+                        "paired seed set 10200--10209"
+                    )
+        values = pd.to_numeric(outcomes["test_accuracy"], errors="coerce")
+        if not np.isfinite(values).all() or not values.between(0.0, 1.0).all():
+            errors.append("Fashion-MNIST accuracies are non-finite or outside [0,1]")
+
+    if summary_columns.issubset(summary.columns) and outcome_columns.issubset(outcomes.columns):
+        indexed = summary.set_index(["architecture", "feedback"])
+        expected = {
+            (architecture, feedback)
+            for architecture in FASHION_ARCHITECTURES
+            for feedback in FASHION_ORDER
+        }
+        if set(indexed.index) != expected:
+            errors.append("condition_summary.csv has the wrong condition inventory")
+        else:
+            for key in sorted(expected):
+                architecture, feedback = key
+                values = outcomes.loc[
+                    outcomes["architecture"].eq(architecture)
+                    & outcomes["feedback"].eq(feedback), "test_accuracy"
+                ].to_numpy(float)
+                row = indexed.loc[key]
+                if int(row["n_seeds"]) != values.size:
+                    errors.append(f"{architecture}/{feedback}: summary n disagrees")
+                if not np.isclose(
+                    float(row["mean_accuracy"]), float(values.mean()),
+                    rtol=0.0, atol=1e-12,
+                ):
+                    errors.append(f"{architecture}/{feedback}: summary mean disagrees")
+                if not (
+                    float(row["ci95_low"]) <= float(row["mean_accuracy"])
+                    <= float(row["ci95_high"])
+                ):
+                    errors.append(f"{architecture}/{feedback}: invalid 95% interval")
+
+    if errors:
+        raise RuntimeError("Fashion-MNIST S4 source-data validation failed: "
+                           + "; ".join(errors))
+    return outcomes, summary
+
+
+def panel_fashion(ax, outcomes: pd.DataFrame, summary: pd.DataFrame):
+    """Paired Fashion-MNIST feedback ladder with archived 95% intervals."""
+    x_base = np.arange(len(FASHION_ORDER), dtype=float)
+    offsets = {"shunting": -0.07, "additive": 0.07}
+    colors = {"shunting": SHUNT, "additive": ADD}
+    markers = {"shunting": "o", "additive": "s"}
+    names = {"shunting": "shunting", "additive": "raw additive"}
+
+    for architecture in FASHION_ARCHITECTURES:
+        wide = (
+            outcomes[outcomes["architecture"].eq(architecture)]
+            .pivot(index="seed", columns="feedback", values="test_accuracy")
+            .loc[sorted(FASHION_SEEDS), list(FASHION_ORDER)]
+        )
+        seed_jitter = np.linspace(-0.012, 0.012, len(wide))
+        for (_, values), jitter_x in zip(wide.iterrows(), seed_jitter, strict=True):
+            ax.plot(
+                x_base + offsets[architecture] + jitter_x,
+                values.to_numpy(float),
+                color=colors[architecture], marker=markers[architecture],
+                markerfacecolor="white", markeredgewidth=0.35,
+                ms=2.2, lw=0.48, alpha=0.24, zorder=2,
+            )
+
+        part = (
+            summary[summary["architecture"].eq(architecture)]
+            .set_index("feedback").loc[list(FASHION_ORDER)]
+        )
+        mean = part["mean_accuracy"].to_numpy(float)
+        interval = np.vstack([
+            mean - part["ci95_low"].to_numpy(float),
+            part["ci95_high"].to_numpy(float) - mean,
+        ])
+        ax.errorbar(
+            x_base + offsets[architecture], mean, yerr=interval,
+            color=colors[architecture], marker=markers[architecture],
+            markerfacecolor="white", markeredgecolor=colors[architecture],
+            markeredgewidth=LW_ERR, ms=MARKER_MS, lw=LW_DATA,
+            elinewidth=LW_ERR, capsize=ERR_CAPSIZE, zorder=5,
+        )
+        print(
+            f"  E {names[architecture]}: means "
+            f"{list(np.round(mean, 5))} n {len(wide)}"
+        )
+
+    ax.set_xticks(x_base)
+    ax.set_xticklabels(FASHION_LABELS)
+    ax.set_xlim(-0.36, 2.36)
+    ax.set_ylim(0.828, 0.893)
+    ax.set_yticks([0.84, 0.86, 0.88])
+    ax.set_ylabel("Fashion-MNIST accuracy")
+    ax.yaxis.set_major_formatter(PercentFormatter(1.0, decimals=0))
+    ax.text(2.28, 0.842, "shunting", color=SHUNT, fontsize=PT_LEGEND,
+            ha="right", va="center")
+    ax.text(2.28, 0.8345, "raw additive", color=ADD, fontsize=PT_LEGEND,
+            ha="right", va="center")
+    return ax
+
+
 CANVAS_H_PT = 358.0                     # 518.4 / 358.0 = 1.45 aspect
 
 
@@ -361,6 +515,7 @@ def build(path=None, *, confirmatory_analysis_dir=None):
         confirmatory, _summary = load_confirmatory_analysis(
             Path(confirmatory_analysis_dir)
         )
+    fashion_outcomes, fashion_summary = load_fashion_ladder()
     canvas = NativeCanvas(CANVAS_H_PT / 72.0, 2, row_weights=[1.0, 1.0],
                           hgutter_pt=32.0, vgutter_pt=30.0,
                           margins=Margins(left=46.0, right=12.0, top=14.0,
@@ -369,22 +524,27 @@ def build(path=None, *, confirmatory_analysis_dir=None):
     ax_b = canvas.panel("noise", 0, 6, 6, grid="y",
                         title="Noisy teaching signal")
     if confirmatory is None:
-        ax_c = canvas.panel("cifar", 1, 3, 6, grid="y",
-                            title="Harder-data control")
-    else:
         ax_c = canvas.panel("cifar", 1, 0, 6, grid="y",
-                            title="Shunting feedback ladder")
-        ax_d = canvas.panel("cifar_confirmatory", 1, 6, 6, grid="y",
-                            title="Raw-additive feedback ladder")
+                            title="Harder-data control")
+        ax_e = canvas.panel("fashion", 1, 6, 6, grid="y",
+                            title="Fashion-MNIST replication")
+    else:
+        ax_c = canvas.panel("cifar", 1, 0, 4, grid="y",
+                            title="Shunting CIFAR-10")
+        ax_d = canvas.panel("cifar_confirmatory", 1, 4, 4, grid="y",
+                            title="Raw-additive CIFAR-10")
+        ax_e = canvas.panel("fashion", 1, 8, 4, grid="y",
+                            title="Fashion-MNIST")
     panel_depth(ax_a)
     panel_noise(ax_b)
     panel_cifar(ax_c)
     if confirmatory is not None:
         panel_confirmatory_cifar(ax_d, confirmatory)
+    panel_fashion(ax_e, fashion_outcomes, fashion_summary)
     target = Path(path) if path else (OUT_EXTENDED if confirmatory is not None else OUT)
     asset_name = (
-        "figure_S04_panels_A-D" if confirmatory is not None
-        else "figure_S04_panels_A-C"
+        "figure_S04_panels_A-E" if confirmatory is not None
+        else "figure_S04_panels_A-D"
     )
     problems = canvas.save(target, name=asset_name)
     for problem in problems:
@@ -400,7 +560,7 @@ if __name__ == "__main__":
         type=Path,
         help=(
             "finalized output directory from the CIFAR-10 confirmatory analyzer; "
-            "when supplied, validates 80/80 runs and emits panels A-D"
+            "when supplied, validates 80/80 runs and emits panels A-E"
         ),
     )
     args = parser.parse_args()

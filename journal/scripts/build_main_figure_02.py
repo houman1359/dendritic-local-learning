@@ -18,22 +18,21 @@ Structure (three rows on one 12-module grid, one axes-box height per row):
   value for the layer; one coordinate per neuron; the complete
   per-compartment field), so the data rows under them read without a
   legend;
-* row 1 -- the identity bottleneck as small multiples: matched three-rung
-  feedback ladders for MNIST and Fashion-MNIST use separately labeled
-  accuracy axes because their baselines differ, and the exact-gradient cosine
-  sits beside them; three panels, four modules each;
+* row 1 -- four matched diagnostic panels: the three-rung MNIST feedback
+  ladder, exact-gradient alignment, mean transported-error magnitude by
+  depth and the within-depth path-specific error-energy fraction; three
+  modules each;
 * row 2 -- the ownership/address schematic (five modules), drawn natively
   from the shared credit-tree vocabulary, immediately left of the forest it
   explains (seven modules): every paired "X minus Y" contrast of the figure
   on ONE effect-size axis, grouped and labelled, carrying the paired seed
   differences and the published estimate with its 95% interval;
-The former fourth row mixed two later questions into the standard-task
-baseline: a depth robustness audit and the context-gated branch-conflict
-experiment.  The robustness audit remains supplementary, while the conflict
-experiment now has its own main figure after the credit-operator theory.
+Fashion-MNIST and the former depth-robustness row remain supplementary.  The
+context-gated branch-conflict experiment has its own main figure after the
+credit-operator theory.
 
 The geometry is column-locked: the left reserve of a grid column is the
-maximum any panel of that column needs, so the three panels of row 1 are one
+maximum any panel of that column needs, so the four panels of row 1 are one
 width, the label-heavy panels of one grid column share one reserve, and every panel of a row has
 one axes-box height.  Numbers that only repeat a mark's own position (a
 right-hand "mean [95% CI]" column beside a forest, a value printed next to a
@@ -41,9 +40,9 @@ bar) are not drawn: the geometry is the report and the exact values live in
 Source Data.  Notes about dodging, fanning and coincidence live in the
 caption, never inside a panel.
 
-Every number, n, interval and test is the published one: summary rows come
-from the frozen source-data tables and the three panels whose intervals are
-bootstrapped in code call the inherited helpers with the inherited seeds.
+Every number, sample size, interval and test is read from the retained
+source-data tables; intervals generated here use the documented seeds and
+the shared bootstrap helpers.
 """
 
 from __future__ import annotations
@@ -81,7 +80,6 @@ from figure_canvas import (  # noqa: E402
 )
 from credit_tree_schematics import (  # noqa: E402
     AMBER_TEXT,
-    RIM,
     draw_credit_tree,
     draw_deranged_pair,
     mix,
@@ -96,7 +94,6 @@ from build_journal_figures import (  # noqa: E402
     errorbar_mean,
     jitter,
 )
-from analyze_prospective_learning_results import bootstrap_ci  # noqa: E402
 
 
 ROOT = SCRIPT_DIR.parent
@@ -111,29 +108,32 @@ INK = COLORS["ink"]
 CORE_COLOR = {"dendritic_shunting": SHUNT, "dendritic_additive": ADD}
 CORE_MARKER = {"dendritic_shunting": "o", "dendritic_additive": "s"}
 
-# Dataset-specific accuracy axes expose the within-dataset feedback effect.
-# Cross-dataset effect sizes are compared on the common percentage-point axis
-# in panel F, so forcing B and C onto one absolute-accuracy range is unnecessary.
+# The primary feedback ladder is the matched 15-seed MNIST cohort.  The
+# Fashion-MNIST replication now appears with the other cross-dataset controls
+# in Supplementary Fig. S4.
 MNIST_ACC_LIM = (0.820, 0.982)
 MNIST_ACC_TICKS = [0.84, 0.88, 0.92, 0.96]
-FASHION_ACC_LIM = (0.824, 0.894)
-FASHION_ACC_TICKS = [0.84, 0.86, 0.88]
 ACC_LABEL = "held-out accuracy"
 
-# One contrast axis, shared by the forest (x) and the depth panel (y).
+# Common effect-size axis for every block in the forest.
 # Seed dots span [-0.53, 5.89] and every mean/CI lies in [-0.21, 4.88],
 # so the old 8.85 upper bound left ~30% of the axis empty and
 # compressed the near-zero assignment contrasts that carry the point.
 GAIN_LIM = (-1.1, 13.0)
+ASSIGN_LIM = (-0.12, 1.06)   # the assignment strip: its own pp scale
+ASSIGN_TICKS = [0, 0.5, 1]
+FOREST_LABEL_RESERVE_PT = 99.0   # widest row name + tick pad + header hang
 GAIN_TICKS = [0, 4, 8, 12]
 GAIN_LABEL = "accuracy difference (pp)"
 
 # Keep the scientifically distinct feedback conditions visible in the
 # artwork.  The axis gives the three scientific resolution levels; the caption
-# states that the scalar arm is strict in B and uses the matched-width
-# scalar-fallback implementation in C--D.
-STRICT_LADDER_TICKS = ["scalar", "neuron-specific", "exact path"]
-FALLBACK_LADDER_TICKS = ["scalar", "neuron-specific", "exact path"]
+# states that the scalar arm is strict in B.  The fixed-checkpoint alignment
+# diagnostic uses the separately defined matched-width scalar field.
+STRICT_LADDER_TICKS = ["strict\nscalar", "neuron-\nspecific", "exact\npath"]
+ALIGNMENT_LADDER_TICKS = [
+    "matched-width\nfallback", "neuron-\nspecific", "exact\npath"
+]
 
 # One declared convention for the two categorical panels: the per-seed cloud
 # is drawn as a symmetric deterministic fan a quarter-row BELOW its own mean
@@ -152,7 +152,7 @@ def _style_feedback_ticks(ax):
     """Keep the three feedback conditions legible in quarter-width panels."""
     ax.tick_params(axis="x", labelsize=PT_SMALL, pad=1.5)
     for label in ax.get_xticklabels():
-        label.set_rotation(35)
+        label.set_rotation(45)
         label.set_ha("right")
         label.set_rotation_mode("anchor")
 
@@ -316,8 +316,8 @@ def panel_task(ax):
 # One card per RESOLUTION LEVEL, with the gloss its one-line definition;
 # that is the panel's whole prose.  The scalar level now exists in two
 # implementations (the strict rung of the MNIST ladder in B and the
-# matched-width scalar-fallback rung of the Fashion and gradient panels in C
-# and D), so the first card carries the level's bare name "scalar" that both
+# matched-width scalar-fallback field in the fixed-checkpoint diagnostic C),
+# so the first card carries the level's bare name "scalar" that both
 # tick wordings extend; the other two cards still carry their x-categories'
 # exact wording.
 RESOLUTION_CARDS = (
@@ -387,40 +387,89 @@ def _paired_ladder(ax, data, metric, *, gradient=False):
     return ax
 
 
-def panel_path_gain_cv(ax):
-    """E: the transported field against depth, on this figure's own models.
+def panel_transport_profile(ax):
+    """D: mean transported-error magnitude at each dendritic depth.
 
-    Drawn as the profile itself rather than one dispersion number: two bare
-    CVs said the architectures differ without saying how, and the how is the
-    result -- transport through conductance loading attenuates the shunting
-    tree's field smoothly with depth (soma 1, mid 0.47, distal 0.21) while
-    the raw-additive tree, which divides by no conductance, stays nearly
-    flat.  Computed at panel B's exact-path checkpoints, fifteen paired
-    seeds per architecture, one identical definition (Methods); the CV
-    summaries live in the caption.
+    The same batch-RMS definition is used for both architectures and each
+    branch is normalized to the RMS error at its own soma. This panel shows
+    the mean branchwise profile; panel E separately measures the fraction of
+    exact field energy that remains after removing the mean at each depth.
     """
     cv = pd.read_csv(DATA / "figure2" / "path_gain_dispersion_ladder_runs.csv")
     colors = {"additive": ADD, "shunting": SHUNT}
     marker = {"additive": "s", "shunting": "o"}
     xs = np.array([0.0, 1.0, 2.0])          # soma, mid, distal
     ax.axhline(1.0, color=COLORS["grid"], lw=LW_REF, zorder=1)
+    offsets = {"additive": -0.025, "shunting": 0.025}
     for arch in ("additive", "shunting"):
         sub = cv[cv.architecture.eq(arch)]
         prof = np.column_stack([np.ones(len(sub)),
                                 sub.stage1_mean.to_numpy(float),
                                 sub.stage0_mean.to_numpy(float)])
+        x_arch = xs + offsets[arch]
         for row in prof:
-            ax.plot(xs, row, color=colors[arch], lw=LW_HAIR,
+            ax.plot(x_arch, row, color=colors[arch], lw=LW_HAIR,
                     alpha=SEED_ALPHA * 0.6, zorder=2)
         mean = prof.mean(axis=0)
-        ax.plot(xs, mean, color=colors[arch], lw=LW_DATA, zorder=4,
-                marker=marker[arch], ms=MARKER_MS,
-                markerfacecolor="white", markeredgewidth=LW_ERR)
+        ax.plot(x_arch, mean, color=colors[arch], lw=LW_DATA, zorder=4)
+        for index, x in enumerate(x_arch):
+            errorbar_mean(ax, x, prof[:, index], colors[arch],
+                          seed=580 + 10 * index + (arch == "shunting"),
+                          marker=marker[arch])
     ax.set_xlim(-0.25, 2.25)
     ax.set_xticks(xs, ["soma", "mid", "distal"])
-    ax.set_ylim(0.0, 1.09)
-    ax.set_yticks([0.0, 0.5, 1.0])
-    ax.set_ylabel("transported magnitude")
+    # The raw-additive distal field is amplified above the soma whereas the
+    # shunting field is attenuated. A logarithmic ordinate keeps both regimes
+    # legible without compressing the smaller shunting values against zero.
+    ax.set_yscale("log")
+    ax.set_ylim(0.16, 6.4)
+    ax.set_yticks([0.2, 1.0, 5.0])
+    ax.set_yticklabels(["0.2", "1", "5"])
+    ax.set_ylabel("RMS voltage error / soma")
+    return ax
+
+
+def panel_path_specific_energy(ax):
+    """E: exact-error energy outside one depth-shared coordinate.
+
+    For every example and neuron, the branch mean is removed separately at
+    each depth.  The squared residual is divided by the exact field energy,
+    so the ordinate is the fraction of transported-error energy that a
+    depth-shared signal cannot represent.  Each faint line is one independently
+    trained exact-path checkpoint; thick open markers show the seed mean and
+    its bootstrap interval.
+    """
+    frame = pd.read_csv(
+        DATA / "figure2" / "path_gain_dispersion_ladder_runs.csv")
+    columns = ["stage1_path_specific_energy_fraction",
+               "stage0_path_specific_energy_fraction"]  # mid, distal
+    missing = sorted(set(columns) - set(frame.columns))
+    if missing:
+        raise ValueError(
+            "path-specific transported-error fields are missing: "
+            + ", ".join(missing))
+
+    xs = np.array([0.0, 1.0])
+    colors = {"additive": ADD, "shunting": SHUNT}
+    markers = {"additive": "s", "shunting": "o"}
+    for arch in ("additive", "shunting"):
+        sub = frame[frame.architecture.eq(arch)].sort_values("seed")
+        values = 100.0 * sub[columns].to_numpy(float)
+        for row in values:
+            ax.plot(xs, row, color=colors[arch], lw=LW_HAIR,
+                    alpha=SEED_ALPHA * 0.55, zorder=2)
+        ax.plot(xs, values.mean(axis=0), color=colors[arch], lw=LW_DATA,
+                zorder=4)
+        for index, x in enumerate(xs):
+            errorbar_mean(ax, x, values[:, index], colors[arch],
+                          seed=620 + 10 * index + (arch == "shunting"),
+                          marker=markers[arch])
+
+    ax.set_xlim(-0.22, 1.22)
+    ax.set_xticks(xs, ["mid", "distal"])
+    ax.set_ylim(0.0, 59.0)
+    ax.set_yticks([0, 20, 40])
+    ax.set_ylabel("path-specific error energy (%)")
     return ax
 
 
@@ -465,55 +514,13 @@ def panel_mnist_ladder(ax):
     ax.set_ylim(*MNIST_ACC_LIM)
     ax.set_yticks(MNIST_ACC_TICKS)
     ax.set_ylabel(ACC_LABEL)
-    ax.yaxis.set_major_formatter(PercentFormatter(1.0, decimals=0))
-    style_panel(ax)
-    _style_feedback_ticks(ax)
-    return ax
-
-
-def panel_fashion_ladder(ax):
-    """Fashion-MNIST replication of the ladder, on the same accuracy axis."""
-    seeds = pd.read_csv(DATA / "fashion_feedback_ladder" / "seed_outcomes.csv")
-    summary = pd.read_csv(
-        DATA / "fashion_feedback_ladder" / "condition_summary.csv")
-    order = ["scalar fallback", "neuron indexed", "exact path"]
-    offsets = {"shunting": -0.06, "additive": 0.06}
-    colors = {"shunting": SHUNT, "additive": ADD}
-    markers = {"shunting": "o", "additive": "s"}
-    for architecture in ("shunting", "additive"):
-        wide = (seeds[seeds.architecture.eq(architecture)]
-                .pivot(index="seed", columns="feedback",
-                       values="test_accuracy")
-                .loc[:, order])
-        x = np.arange(3, dtype=float) + offsets[architecture]
-        for values in wide.to_numpy(float):
-            ax.plot(x, values, color=colors[architecture], alpha=0.24,
-                    lw=LW_HAIR, zorder=2)
-        # Same uncertainty convention as the row-mates: per-seed dots under
-        # the published mean and interval (B and D scatter their seeds too).
-        for column, xi in zip(order, x):
-            vals = wide[column].to_numpy(float)
-            ax.scatter(np.full(vals.size, xi)
-                       + jitter(vals.size, 30 + order.index(column), 0.018),
-                       vals, s=SEED_MS ** 2, color=colors[architecture],
-                       alpha=SEED_ALPHA, marker=markers[architecture],
-                       edgecolors="none", zorder=3)
-        part = (summary[summary.architecture.eq(architecture)]
-                .set_index("feedback").loc[order])
-        y = part.mean_accuracy.to_numpy(float)
-        ax.errorbar(x, y,
-                    yerr=np.vstack([y - part.ci95_low, part.ci95_high - y]),
-                    color=colors[architecture], marker=markers[architecture],
-                    markerfacecolor="white",
-                    markeredgecolor=colors[architecture],
-                    markeredgewidth=LW_ERR, ms=MARKER_MS, lw=LW_DATA,
-                    elinewidth=LW_ERR, capsize=ERR_CAPSIZE, zorder=4)
-    ax.set_xticks(range(3))
-    ax.set_xticklabels(FALLBACK_LADDER_TICKS)
-    ax.set_xlim(-0.35, 2.35)
-    ax.set_ylim(*FASHION_ACC_LIM)
-    ax.set_yticks(FASHION_ACC_TICKS)
-    ax.set_ylabel(ACC_LABEL)
+    # The figure's one series legend, on its first panel: the lower-right
+    # field under the rising ladder is the only region every seed cloud
+    # leaves empty, here and in the panels that inherit the key.
+    ax.text(2.20, MNIST_ACC_LIM[0] + 0.028, "shunting", color=SHUNT,
+            fontsize=PT_LEGEND, ha="right", va="center")
+    ax.text(2.20, MNIST_ACC_LIM[0] + 0.010, "raw additive", color=ADD,
+            fontsize=PT_LEGEND, ha="right", va="center")
     ax.yaxis.set_major_formatter(PercentFormatter(1.0, decimals=0))
     style_panel(ax)
     _style_feedback_ticks(ax)
@@ -531,10 +538,8 @@ def panel_gradient(ax):
     ax.scatter([2.0], [1.0], s=MARKER_MS ** 2, marker="D",
                facecolor="white", edgecolor=COLORS["oracle"],
                linewidth=LW_ERR, zorder=5)
-    ax.text(2.0, 0.945, "by definition", color=COLORS["oracle"],
-            fontsize=PT_SMALL, ha="center", va="top")
     ax.set_xticks([0, 1, 2])
-    ax.set_xticklabels(FALLBACK_LADDER_TICKS)
+    ax.set_xticklabels(ALIGNMENT_LADDER_TICKS)
     ax.set_xlim(-0.35, 2.35)
     ax.set_ylim(-0.16, 1.08)
     ax.set_yticks([0.0, 0.2, 0.4, 0.6, 0.8, 1.0])
@@ -543,10 +548,6 @@ def panel_gradient(ax):
     _style_feedback_ticks(ax)
     # Two series: direct labels at the separated right endpoints replace a
     # legend box.  This is the figure's colour and marker key.
-    ax.text(1.20, 0.712, "shunting", color=SHUNT, fontsize=PT_LEGEND,
-            ha="left", va="center")
-    ax.text(1.20, 0.575, "raw additive", color=ADD, fontsize=PT_LEGEND,
-            ha="left", va="center")
     return ax
 
 
@@ -626,10 +627,10 @@ def panel_ownership_address(ax):
 def _mnist_rows():
     """Panel B's own ladder as paired per-seed effect sizes.
 
-    G first summarized the FASHION ladder here while its assignment block
+    G first summarized the Fashion-MNIST ladder here while its assignment block
     ran on MNIST, so the one-scale comparison mixed tasks for no reason the
-    figure could state.  Every block now stands on MNIST; the Fashion
-    replication keeps its own panel (C), where its levels already appear.
+    figure could state. Every block now uses MNIST; the Fashion-MNIST
+    replication is retained in Supplementary Fig. S4E.
     """
     seeds = pd.read_csv(DATA / "mnist_feedback_ladder" / "seed_outcomes.csv")
     contrasts = pd.read_csv(
@@ -669,13 +670,10 @@ def _ownership_rows():
         DATA / "prospective_input_validity"
         / "followup_publication_seed_outcomes.csv")
     outcomes = outcomes[outcomes.family.eq("routing")]
-    task_label = {"mnist": "MNIST", "noise_resilience": "noise"}
     order = [("mnist", "dendritic_shunting", 2),
              ("mnist", "dendritic_additive", 2),
              ("mnist", "dendritic_shunting", 4),
-             ("mnist", "dendritic_additive", 4),
-             ("noise_resilience", "dendritic_additive", 2),
-             ("noise_resilience", "dendritic_additive", 4)]
+             ("mnist", "dendritic_additive", 4)]
     rows = []
     for task, core, depth in order:
         row = contrasts[contrasts.task.eq(task) & contrasts.core.eq(core)
@@ -686,9 +684,9 @@ def _ownership_rows():
                                 values="test_accuracy")
         paired = 100 * (wide["correct"] - wide["shuffled"]).dropna().to_numpy(float)
         rows.append({
-            # Uppercase D-notation: the manuscript defines D1-D4 and never
-            # uses a lowercase variant, so the row labels match the text.
-            "label": f"{task_label[task]} D{depth} "
+            # Spell out stage count at its first use rather than introducing
+            # D2/D4 notation three figures before the physical-depth section.
+            "label": f"MNIST {depth}-stage "
                      f"{'raw additive' if core == 'dendritic_additive' else 'shunting'}",
             "color": CORE_COLOR[core],
             "marker": CORE_MARKER[core],
@@ -701,231 +699,94 @@ def _ownership_rows():
 
 
 # The three group headers name the contrast in one word each; what each
-# contrast subtracts from what ("neuron-indexed minus scalar", "exact path
-# minus neuron-indexed", "correct minus deranged neuron-to-tree map") is a
+# contrast subtracts from what ("neuron-specific minus scalar", "exact path
+# minus neuron-specific", "correct minus deranged neuron-to-tree map") is a
 # definition and belongs in the caption, not in a sentence-long in-panel
 # header that has to be set at half the width of the plot.
-def _depth_key(ax):
-    """D2/D4 glyphs: a stage chain per label, in the anatomy vocabulary."""
-    x_axis = ax.get_xaxis_transform()          # x in data, y in axes coords
-    seg, base, gap = 0.055, 0.16, 0.9
-    for x0, stages, tag in ((9.3, 2, "D2"), (11.2, 4, "D4")):
-        ax.scatter([x0], [base], s=14.0, color=COLORS["soma"],
-                   edgecolors=RIM, linewidths=LW_HAIR, transform=x_axis,
-                   zorder=6, clip_on=False)
-        for k in range(stages):
-            y0 = base + 0.035 + k * seg
-            ax.plot([x0, x0], [y0, y0 + seg * 0.72], color=COLORS["dend"],
-                    lw=LW_EDGE, solid_capstyle="round", transform=x_axis,
-                    zorder=6, clip_on=False)
-            ax.plot([x0, x0 + 0.25], [y0 + seg * 0.72, y0 + seg * 0.95],
-                    color=COLORS["dend"], lw=LW_HAIR, solid_capstyle="round",
-                    transform=x_axis, zorder=6, clip_on=False)
-        ax.text(x0 + gap, base + 0.02, tag, fontsize=PT_SMALL, color=MUTE,
-                ha="left", va="bottom", transform=x_axis, zorder=6)
-
-
 HEADER_LEFT_PT = 80.0
 
 
 def panel_forest(ax):
     """Every paired contrast of the figure on one effect-size axis.
 
-    The point and its whisker ARE the estimate and the interval, so no
-    right-hand "mean [95% CI]" column repeats them; the exact values are in
-    Source Data and in the running text.  The reclaimed width goes back into
-    the effect-size axis.
+    Two stacked strips, one x scale each: the ladder blocks live on a
+    0--13 pp axis, and the assignment block gets its own 0--1 pp axis --
+    on the shared scale its half-point effects sat inside one marker width
+    of zero and their ordering was unreadable.  The point and its whisker
+    ARE the estimate and the interval; the exact values are in Source Data
+    and the running text.
     """
     from matplotlib import transforms as mtransforms
 
     mnist = _mnist_rows()
     # Each header carries the panel it summarizes: the first two blocks are
-    # C's ladder steps re-expressed as paired within-seed effect sizes, and
+    # B's ladder steps re-expressed as paired within-seed effect sizes, and
     # the third is the correct-minus-deranged test that F draws.  Without
-    # the pointers the Fashion rows read as one more dataset rather than as
-    # C's own contrasts on an inferential scale.
-    groups = [
-        ("neuron-specific (B)", mnist["neuron specific - scalar broadcast"]),
-        ("transport (B)", mnist["exact path - neuron specific"]),
-        ("assignment (F)", _ownership_rows()),
+    # the pointers the rows read as a second dataset rather than as B's own
+    # contrasts on an inferential scale.
+    strips = [
+        ((0.47, 0.53),
+         [("neuron-specific (B)",
+           mnist["neuron specific - scalar broadcast"]),
+          ("transport (B)", mnist["exact path - neuron specific"])],
+         GAIN_LIM, GAIN_TICKS, None),
+        ((0.0, 0.36),
+         [("assignment (F)", _ownership_rows())],
+         ASSIGN_LIM, ASSIGN_TICKS, GAIN_LABEL),
     ]
-    header_trans = mtransforms.offset_copy(
-        ax.get_yaxis_transform(), fig=ax.get_figure(), x=-HEADER_LEFT_PT,
-        y=0.0, units="points")
-
-    # The dashed zero reference and an x=0 gridline would print as one
-    # mottled stroke, so the grid is drawn here without its zero member.
-    for xt in GAIN_TICKS:
-        if xt:
-            ax.axvline(xt, color=COLORS["grid"], lw=LW_HAIR, zorder=0)
-    ax.axvline(0.0, color=MUTE, ls="--", lw=LW_REF, zorder=0.1)
-    y = 0.0
-    ticks, labels = [], []
-    for index, (header, rows) in enumerate(groups):
-        # A blank half-row before every block but the first, so the mute
-        # group name reads as the head of the rows under it rather than as
-        # one more row in the same column.
-        y += 0.0 if index == 0 else 0.55
-        ax.text(0.0, y - 0.04, header, transform=header_trans,
-                fontsize=PT_ANNOT, color=MUTE, ha="left", va="center",
-                zorder=6, clip_on=False)
-        y += 1.0
-        for row in rows:
-            seeds = np.asarray(row["seeds"], dtype=float)
-            ax.scatter(seeds,
-                       np.full(seeds.size, y - SEED_DY)
-                       + _fan(seeds.size),
-                       s=SEED_MS ** 2, color=row["color"], alpha=SEED_ALPHA,
-                       edgecolors="none", zorder=3)
-            ax.errorbar(row["mean"], y,
-                        xerr=[[row["mean"] - row["lo"]],
-                              [row["hi"] - row["mean"]]],
-                        color=row["color"], marker=row["marker"],
-                        markerfacecolor="white", markeredgecolor=row["color"],
-                        markeredgewidth=LW_ERR, ms=MARKER_MS, lw=LW_ERR,
-                        elinewidth=LW_ERR, capsize=ERR_CAPSIZE, zorder=5)
-            ticks.append(y)
-            labels.append(row["label"])
+    ax.set_axis_off()
+    for (y0, height), groups, xlim, xticks, xlabel in strips:
+        sub = ax.inset_axes([0.0, y0, 1.0, height])
+        sub.set_facecolor("none")
+        header_trans = mtransforms.offset_copy(
+            sub.get_yaxis_transform(), fig=sub.get_figure(),
+            x=-HEADER_LEFT_PT, y=0.0, units="points")
+        # The dashed zero reference and an x=0 gridline would print as one
+        # mottled stroke, so the grid is drawn without its zero member.
+        for xt in xticks:
+            if xt:
+                sub.axvline(xt, color=COLORS["grid"], lw=LW_HAIR, zorder=0)
+        sub.axvline(0.0, color=MUTE, ls="--", lw=LW_REF, zorder=0.1)
+        y = 0.0
+        ticks, labels = [], []
+        for index, (header, rows) in enumerate(groups):
+            # A blank half-row before every block but the first, so the mute
+            # group name reads as the head of the rows under it rather than
+            # as one more row in the same column.
+            y += 0.0 if index == 0 else 0.55
+            sub.text(0.0, y - 0.04, header, transform=header_trans,
+                     fontsize=PT_ANNOT, color=MUTE, ha="left", va="center",
+                     zorder=6, clip_on=False)
             y += 1.0
-    ax.set_yticks(ticks)
-    ax.set_yticklabels(labels)
-    ax.set_ylim(y - 0.5, -0.62)
-    ax.set_xlim(*GAIN_LIM)
-    # The D-notation is defined in the physical-depth section, three
-    # figures later; its first use is here, so the key rides the empty
-    # lower-right corner -- and it is DRAWN, not glossed: a soma with two
-    # stacked dendritic stages beside a soma with four says what "stage
-    # count" means without a sentence.
-    _depth_key(ax)
-    ax.set_xticks(GAIN_TICKS)
-    ax.set_xlabel(GAIN_LABEL)
-    style_panel(ax)
-    ax.tick_params(axis="y", length=0, labelsize=PT_SMALL)
-    ax.spines["left"].set_visible(False)
-    return ax
-
-
-# ── row 3: a real-image path-necessity boundary ─────────────────────────
-# The old two-stream endpoint remains in Supplementary Fig. S19G.  The main
-# panel now shows the stronger task-family result: the point at which a shared
-# somatic coordinate becomes harmful shifts with the number of simultaneously
-# driven branches exactly as predicted before the confirmatory seeds ran.
-PATH_BRANCH_STYLE = {
-    2: (COLORS["additive"], "o"),
-    4: (COLORS["local"], "s"),
-    8: (COLORS["oracle"], "^"),
-}
-
-
-def panel_path_necessity(ax):
-    """Correct-path benefit across the prespecified credit-conflict family."""
-    contrasts = pd.read_csv(
-        DATA / "path_necessity_fashion" / "paired_contrasts.csv"
-    )
-    selected = contrasts[
-        contrasts.contrast.eq("correct - shared")
-        & contrasts.endpoint.eq("test_accuracy")
-    ]
-    for branches, (color, marker) in PATH_BRANCH_STYLE.items():
-        part = selected[selected.branches.eq(branches)].sort_values(
-            "conflict_probability"
-        )
-        x = part.conflict_probability.to_numpy(float)
-        y = 100.0 * part.mean_difference.to_numpy(float)
-        low = 100.0 * part.ci95_low.to_numpy(float)
-        high = 100.0 * part.ci95_high.to_numpy(float)
-        ax.plot(
-            x,
-            y,
-            color=color,
-            marker=marker,
-            markerfacecolor="white",
-            markeredgecolor=color,
-            markeredgewidth=LW_ERR,
-            ms=MARKER_MS,
-            lw=LW_DATA,
-            label=f"$B={branches}$",
-            zorder=4,
-        )
-        ax.fill_between(x, low, high, color=color, alpha=0.11, linewidth=0)
-        boundary = branches / (2.0 * (branches - 1))
-        ax.scatter(
-            [boundary],
-            [1.1],
-            marker="v",
-            s=(MARKER_MS + 0.4) ** 2,
-            facecolor=color,
-            edgecolor="white",
-            linewidth=LW_HAIR,
-            clip_on=False,
-            zorder=6,
-        )
-    ax.axhline(0, color=MUTE, ls="--", lw=LW_REF, zorder=0)
-    ax.set_xlim(-0.025, 1.025)
-    ax.set_xticks([0.0, 0.5, 1.0])
-    ax.set_ylim(-2.5, 64.0)
-    ax.set_yticks([0, 20, 40, 60])
-    ax.set_xlabel(r"credit conflict $\chi$")
-    ax.set_ylabel("correct path $-$ shared (pp)")
-    style_panel(ax)
-    ax.legend(
-        loc="upper left",
-        ncol=3,
-        frameon=False,
-        fontsize=PT_SMALL,
-        handlelength=1.2,
-        handletextpad=0.35,
-        columnspacing=0.72,
-        borderaxespad=0.12,
-    )
-    ax.text(
-        0.02,
-        0.08,
-        r"$\blacktriangledown$ predicted $\chi_c$",
-        transform=ax.transAxes,
-        fontsize=PT_SMALL,
-        color=MUTE,
-        ha="left",
-        va="bottom",
-    )
-    return ax
-
-
-def panel_identity_depth(ax):
-    """Neuron-indexed minus scalar accuracy across dendritic stage count."""
-    contrast = pd.read_csv(
-        DATA / "prospective_input_validity"
-        / "central_valid_paired_contrasts.csv")
-    identity = contrast[contrast.family.eq("feedback")
-                        & contrast.contrast.eq("neuron-indexed - scalar")
-                        & contrast.task.eq("mnist")]
-    for core in ("dendritic_shunting", "dendritic_additive"):
-        part = identity[identity.core.eq(core)].sort_values("depth")
-        x = part.depth.to_numpy(float)
-        y = 100 * part.mean_difference.to_numpy(float)
-        lo = 100 * part.ci95_low.to_numpy(float)
-        hi = 100 * part.ci95_high.to_numpy(float)
-        ax.errorbar(x, y, yerr=np.vstack([y - lo, hi - y]),
-                    color=CORE_COLOR[core], marker=CORE_MARKER[core],
-                    markerfacecolor="white", markeredgecolor=CORE_COLOR[core],
-                    markeredgewidth=LW_ERR, ms=MARKER_MS, lw=LW_DATA,
-                    elinewidth=LW_ERR, capsize=ERR_CAPSIZE)
-    ax.axhline(0, color=MUTE, ls="--", lw=LW_REF, zorder=0)
-    # D-ticks make this panel the figure's definition of the D-notation:
-    # the axis label says what a stage count is, the ticks name the levels,
-    # and the D2/D4 rows of the forest index into them.
-    ax.set_xticks([1, 2, 3, 4])
-    ax.set_xticklabels(["D1", "D2", "D3", "D4"])
-    ax.set_xlim(0.62, 4.38)
-    ax.set_ylim(*GAIN_LIM)
-    ax.set_yticks(GAIN_TICKS)
-    ax.set_xlabel("dendritic stage count")
-    ax.set_ylabel(GAIN_LABEL)
-    style_panel(ax)
-    ax.text(1.16, 7.9, "shunting", color=SHUNT, fontsize=PT_LEGEND,
-            ha="left", va="center")
-    ax.text(1.16, 3.4, "raw additive", color=ADD, fontsize=PT_LEGEND,
-            ha="left", va="center")
+            for row in rows:
+                seeds = np.asarray(row["seeds"], dtype=float)
+                sub.scatter(seeds,
+                            np.full(seeds.size, y - SEED_DY)
+                            + _fan(seeds.size),
+                            s=SEED_MS ** 2, color=row["color"],
+                            alpha=SEED_ALPHA, edgecolors="none", zorder=3)
+                sub.errorbar(row["mean"], y,
+                             xerr=[[row["mean"] - row["lo"]],
+                                   [row["hi"] - row["mean"]]],
+                             color=row["color"], marker=row["marker"],
+                             markerfacecolor="white",
+                             markeredgecolor=row["color"],
+                             markeredgewidth=LW_ERR, ms=MARKER_MS, lw=LW_ERR,
+                             elinewidth=LW_ERR, capsize=ERR_CAPSIZE,
+                             zorder=5)
+                ticks.append(y)
+                labels.append(row["label"])
+                y += 1.0
+        sub.set_yticks(ticks)
+        sub.set_yticklabels(labels)
+        sub.set_ylim(y - 0.5, -0.62)
+        sub.set_xlim(*xlim)
+        sub.set_xticks(xticks)
+        if xlabel:
+            sub.set_xlabel(xlabel)
+        style_panel(sub)
+        sub.tick_params(axis="y", length=0, labelsize=PT_SMALL)
+        sub.spines["left"].set_visible(False)
     return ax
 
 
@@ -977,29 +838,36 @@ def build(height_in=CANVAS_H_PT / 72.0, path=None):
                                       inset_pt=(2.0, 2.0, 2.0, 2.0)))
     ax_a = canvas.panel("mnist", 1, 0, 3, title="MNIST", letter="B",
                         inset_pt=(1.0, 1.0, 1.0, 1.0))
-    ax_b = canvas.panel("fashion", 1, 3, 3, title="Fashion-MNIST",
-                        letter="C", inset_pt=(1.0, 1.0, 1.0, 1.0))
-    ax_c = canvas.panel("gradient", 1, 6, 3,
-                        title="Gradient alignment", letter="",
+    ax_b = canvas.panel("gradient", 1, 3, 3,
+                        title="Gradient cosine", letter="",
                         inset_pt=(1.0, 1.0, 1.0, 1.0))
-    ax_cv = canvas.panel("pathcv", 1, 9, 3,
-                         title="Transported error",
+    ax_c = canvas.panel("transport", 1, 6, 3,
+                         title="Transport by depth",
+                         letter="", inset_pt=(1.0, 1.0, 1.0, 1.0))
+    ax_cv = canvas.panel("path_specific", 1, 9, 3,
+                         title="Path-specific fraction",
                          letter="", inset_pt=(1.0, 1.0, 1.0, 1.0))
     ax_d = canvas.panel("schematic", 2, 0, 5, schematic=True, letter="")
-    ax_e = canvas.panel("forest", 2, 5, 7, title="Paired accuracy contrasts",
+    ax_e = canvas.panel("forest", 2, 5, 7, title="Paired MNIST contrasts",
                         letter="", inset_pt=(0.0, 2.0, 0.0, 0.0))
+    # The forest is two inset strips on a switched-off host, so the column
+    # lock can no longer measure its row labels off host ticks; the label
+    # column is declared instead, sized for its widest row name plus the
+    # header overhang.
+    canvas.declare_reserve("forest", left=FOREST_LABEL_RESERVE_PT)
     canvas.add_letter("A", ax_task)
-    # The rotated gradient-axis label reaches the top of its panel; place D
+    # The rotated gradient-axis label reaches the top of its panel; place C
     # in the inter-panel gutter so the two glyphs cannot collide.
+    canvas.add_letter("C", ax_b, dx_pt=46.0)
     canvas.add_letter("D", ax_c, dx_pt=46.0)
     canvas.add_letter("E", ax_cv, dx_pt=46.0)
     canvas.add_letter("F", ax_d)
     canvas.add_letter("G", ax_e)
 
     panel_mnist_ladder(ax_a)
-    panel_fashion_ladder(ax_b)
-    panel_gradient(ax_c)
-    panel_path_gain_cv(ax_cv)
+    panel_gradient(ax_b)
+    panel_transport_profile(ax_c)
+    panel_path_specific_energy(ax_cv)
     panel_ownership_address(ax_d)
     panel_forest(ax_e)
 
@@ -1007,8 +875,8 @@ def build(height_in=CANVAS_H_PT / 72.0, path=None):
     # first lock, equalise the row, then draw the schematic cells on final
     # geometry (their Frames capture the axes box at draw time).
     canvas.lock_reserves()
-    _equalise_row(canvas, {"mnist": 0, "fashion": 3, "gradient": 6,
-                           "pathcv": 9})
+    _equalise_row(canvas, {"mnist": 0, "gradient": 3, "transport": 6,
+                           "path_specific": 9})
     canvas.lock_reserves()
     panel_task(ax_task)
     for ax_card, (_name, title, tone, gloss, draw) in zip(card_axes,

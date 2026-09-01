@@ -10,8 +10,10 @@ per architecture, the very checkpoints whose accuracies stand in panel B.
 
 Definition (stated in Methods): at the final checkpoint, on one fixed
 held-out batch (the first 2048 MNIST test images), the loss gradient
-``g_n = dL/dV_n`` is taken at every dendritic stage output and at the soma
-by automatic differentiation.  The transported magnitude of compartment
+``g_n = dL/dV_n`` is taken with respect to the pre-reactivation voltage at
+every dendritic stage and at the soma by automatic differentiation.  The
+layer's returned tensor is the post-reactivation activity and is deliberately
+not used for this calculation.  The transported magnitude of compartment
 ``n`` is the batch root-mean-square of ``g_n`` divided by the batch
 root-mean-square of its own soma's ``g_0`` -- the empirical counterpart of
 the path gain in the manuscript's transport factorization, with no
@@ -19,10 +21,20 @@ model-specific terms, so both architectures are measured identically.  The
 statistic is the coefficient of variation of that magnitude across the
 neuron's dendritic compartments, averaged over neurons.
 
+At each dendritic depth, the analyzer also measures the path-specific error
+energy that remains after replacing the exact compartment errors of every
+example and neuron by their mean across all paths at that depth.  For
+``g[b, u, p] = dL_b/dV_{u,p}``, this fraction is
+``sum((g - mean_p(g))**2) / sum(g**2)``.  It is one minus the energy captured
+by a depth-shared coordinate and is written once per trained seed, so the
+training seed remains the inferential unit.
+
 Stage tensors are soma-major: each stage of width ``n_soma * b`` chunks
 into ``n_soma`` contiguous blocks of ``b`` branches (verified against the
 weight layout used by ``DendriNet.sum_weights`` and empirically by the
-cross-stage gradient correlation, 0.42 soma-major vs 0.03 branch-major).
+cross-stage gradient correlation, 0.42 soma-major vs 0.03 branch-major).  In
+the fixed ``[3, 3]`` ladder analyzed here, stage 0 is distal, stage 1 is the
+middle depth and stage 2 is the soma.
 """
 
 from __future__ import annotations
@@ -86,22 +98,54 @@ def run_cv(run_dir: Path, x: torch.Tensor, y: torch.Tensor) -> dict:
 
     dn = model.core_network.layers[0].excitatory_cells
     n_soma, n_stage = int(dn.n_soma), int(dn.n_branch_layers) + 1
+    layers = list(dn.branch_layers[:n_stage])
     caught: dict[int, torch.Tensor] = {}
 
-    def make_hook(i):
-        def hook(_mod, _inp, out):
-            t = out if torch.is_tensor(out) else out[0]
-            t.retain_grad()
-            caught[i] = t
-        return hook
+    # A branch layer returns a(V), not V. Enable the model's analysis-current
+    # capture so each layer retains the actual pre-reactivation voltage used in
+    # the forward graph. This also selects the eager shunting calculation
+    # rather than the algebraically equivalent fused activation; the reference
+    # forward below verifies that the diagnostic path does not change logits.
+    with torch.no_grad():
+        reference_logits = model(x)
+    previous_capture = [
+        bool(getattr(layer, "_store_analysis_currents", False))
+        for layer in layers
+    ]
+    for layer in layers:
+        layer._store_analysis_currents = True
+    try:
+        model.zero_grad(set_to_none=True)
+        logits = model(x)
+        forward_max_abs_difference = float(
+            (logits.detach() - reference_logits).abs().max()
+        )
+        if forward_max_abs_difference > 1e-5:
+            raise RuntimeError(
+                f"{run_dir}: analysis capture changed logits by "
+                f"{forward_max_abs_difference:.3g}"
+            )
+        for i, layer in enumerate(layers):
+            currents = getattr(layer, "_last_analysis_currents", None)
+            voltage = (
+                currents.get("pre_gate_voltage")
+                if isinstance(currents, dict)
+                else None
+            )
+            if not torch.is_tensor(voltage) or not voltage.requires_grad:
+                raise RuntimeError(
+                    f"{run_dir}: stage-{i} pre-reactivation voltage was not captured"
+                )
+            voltage.retain_grad()
+            caught[i] = voltage
+        loss = torch.nn.functional.cross_entropy(logits, y)
+        loss.backward()
+    finally:
+        for layer, previous in zip(layers, previous_capture, strict=True):
+            layer._store_analysis_currents = previous
+            if hasattr(layer, "_last_analysis_currents"):
+                delattr(layer, "_last_analysis_currents")
 
-    handles = [dn.branch_layers[i].register_forward_hook(make_hook(i))
-               for i in range(n_stage)]
-    logits = model(x)
-    loss = torch.nn.functional.cross_entropy(logits, y)
-    loss.backward()
-    for handle in handles:
-        handle.remove()
     accuracy = float((logits.argmax(1) == y).float().mean())
     if accuracy < 0.90:
         raise RuntimeError(f"{run_dir}: probe accuracy {accuracy:.3f}")
@@ -119,15 +163,29 @@ def run_cv(run_dir: Path, x: torch.Tensor, y: torch.Tensor) -> dict:
     profile = torch.cat(ratios, dim=1)
     cv = (profile.std(dim=1, unbiased=True)
           / profile.mean(dim=1)).numpy()
-    # The depth decomposition panel E draws: the neuron-mean transported
-    # magnitude of each stage, and the residual spread among branches that
-    # share a depth, so the smooth conductance-set attenuation and genuine
-    # same-depth route differentiation are reported apart.
+    # Panels D and E separate the mean transported magnitude at each stage
+    # from the residual variation among paths that share a depth.
     stage_stats = {}
     for i, r in enumerate(ratios):
         stage_stats[f"stage{i}_mean"] = float(r.mean())
         stage_stats[f"stage{i}_within_cv"] = float((r.std(dim=1, unbiased=True)
                                                     / r.mean(dim=1)).mean())
+        # Unlike the CV above, which first reduces each branch to its RMS over
+        # the batch, this projection residual preserves input-dependent route
+        # differentiation.  Pooling squared error before taking the ratio
+        # weights example-neuron groups by their exact-gradient energy instead
+        # of over-weighting groups whose gradients are nearly zero.
+        stage_gradient = caught[i].grad.reshape(BATCH, n_soma, -1).double()
+        depth_shared = stage_gradient.mean(dim=2, keepdim=True)
+        total_energy = stage_gradient.square().sum()
+        if not torch.isfinite(total_energy) or total_energy <= 0:
+            raise RuntimeError(f"{run_dir}: degenerate stage-{i} error energy")
+        path_specific_energy = (stage_gradient - depth_shared).square().sum()
+        fraction = path_specific_energy / total_energy
+        if not torch.isfinite(fraction) or not (0 <= fraction <= 1):
+            raise RuntimeError(
+                f"{run_dir}: invalid stage-{i} path-specific energy fraction")
+        stage_stats[f"stage{i}_path_specific_energy_fraction"] = float(fraction)
     return {
         "seed": int(config.experiment.seed),
         "path_gain_cv_mean": float(np.mean(cv)),
@@ -136,6 +194,7 @@ def run_cv(run_dir: Path, x: torch.Tensor, y: torch.Tensor) -> dict:
         "compartments_per_neuron": int(profile.shape[1]),
         "n_soma": n_soma,
         "probe_accuracy": accuracy,
+        "capture_forward_max_abs_difference": forward_max_abs_difference,
         "config_sha256": sha256(run_dir / "config.json"),
         "checkpoint_sha256": sha256(run_dir / "final_model.pt"),
         # Relative to the lab run base, as the release path audit requires
@@ -171,12 +230,19 @@ def main() -> None:
     frame = frame[["architecture", "seed", "path_gain_cv_mean",
                    "path_gain_cv_median", "stage0_mean", "stage1_mean",
                    "stage0_within_cv", "stage1_within_cv",
+                   "stage0_path_specific_energy_fraction",
+                   "stage1_path_specific_energy_fraction",
                    "compartments_per_neuron", "n_soma", "probe_accuracy",
+                   "capture_forward_max_abs_difference",
                    "config_sha256", "checkpoint_sha256", "run_dir"]]
     OUT.parent.mkdir(parents=True, exist_ok=True)
     frame.to_csv(OUT, index=False)
     print(f"wrote {OUT} ({len(frame)} rows)")
     print(frame.groupby("architecture").path_gain_cv_mean
+          .agg(["mean", "std", "count"]))
+    energy_columns = ["stage1_path_specific_energy_fraction",
+                      "stage0_path_specific_energy_fraction"]
+    print(frame.groupby("architecture")[energy_columns]
           .agg(["mean", "std", "count"]))
 
 

@@ -42,6 +42,35 @@ SANITIZED_DROP_COLUMNS = {
     },
 }
 
+# The prospective follow-up ledger is shared by several displays. Figure 2G
+# draws only the MNIST ownership comparisons at D2 and D4, so its release copy
+# is row-filtered while the supplementary copies retain their broader scopes.
+DESTINATION_ROW_FILTERS = {
+    "Figure_2/Fig2g_ownership_run_outcomes.csv": {
+        "family": frozenset({"routing"}),
+        "task": frozenset({"mnist"}),
+        "depth": frozenset({"2", "4"}),
+        "core": frozenset({"dendritic_additive", "dendritic_shunting"}),
+    },
+    "Figure_2/Fig2g_ownership_contrasts.csv": {
+        "task": frozenset({"mnist"}),
+        "depth": frozenset({"2", "4"}),
+        "core": frozenset({"dendritic_additive", "dendritic_shunting"}),
+    },
+    "Supplementary_Figure_19/SuppFig19d_ownership_run_outcomes.csv": {
+        "family": frozenset({"routing"}),
+    },
+    "Supplementary_Figure_8/SuppFig8a-i_seed_outcomes.csv": {
+        "family": frozenset({"fixed_budget"}),
+    },
+}
+DESTINATION_EXPECTED_ROW_COUNTS = {
+    "Figure_2/Fig2g_ownership_run_outcomes.csv": 80,
+    "Figure_2/Fig2g_ownership_contrasts.csv": 4,
+    "Supplementary_Figure_19/SuppFig19d_ownership_run_outcomes.csv": 120,
+    "Supplementary_Figure_8/SuppFig8a-i_seed_outcomes.csv": 160,
+}
+
 SANITIZED_JSON_PATHS = {
     "source_data/cifar10_additive_feedback_ladder_confirmatory/summary.json",
     "source_data/physical_depth_h4_factorial/audit.json",
@@ -135,9 +164,9 @@ FILES = (
     ),
     SourceFile(
         "Figure 2",
-        "d",
+        "c",
         "source_data/figure2/feedback_gradient_runs.csv",
-        "Figure_2/Fig2d_feedback_gradient_runs.csv",
+        "Figure_2/Fig2c_feedback_gradient_runs.csv",
         "independent checkpoint/seed values",
         "paired trained checkpoint / seed (n=15 per architecture)",
         "current clean cohort",
@@ -175,13 +204,13 @@ FILES = (
     ),
     SourceFile(
         "Figure 2",
-        "e",
+        "d-e",
         "source_data/figure2/path_gain_dispersion_ladder_runs.csv",
-        "Figure_2/Fig2e_path_gain_dispersion_ladder_runs.csv",
-        "independent checkpoint/seed values",
+        "Figure_2/Fig2d-e_path_gain_dispersion_ladder_runs.csv",
+        "pre-reactivation voltage-error transport and path-specific-energy checkpoint/seed values",
         "paired training seed (n=15 per architecture)",
         "current fixed-checkpoint diagnostic on the Figure 2 ladder",
-        "Within-neuron transported-error CV at the exact-path checkpoints of the MNIST ladder; run, configuration, and checkpoint hashes are included.",
+        "Mean pre-reactivation voltage-error magnitude by dendritic depth and the fraction of pre-reactivation voltage-error energy that remains path specific at the MNIST exact-path checkpoints; run, configuration, and checkpoint hashes are included.",
     ),
     SourceFile(
         "Supplementary Figure 1",
@@ -963,30 +992,30 @@ def shifted_expanded_file(item: SourceFile) -> SourceFile:
 
 PROSPECTIVE_FILES = (
     SourceFile(
-        "Figure 3",
+        "Supplementary Figure 19",
         "a-c",
         "source_data/prospective_input_validity/central_valid_seed_outcomes.csv",
-        "Figure_3/Fig3a-c_seed_outcomes.csv",
+        "Supplementary_Figure_19/SuppFig19a-c_seed_outcomes.csv",
         "run-level held-out and resource values",
         "paired independent training seed (n=10 per condition)",
         "current complete prospective cohort",
         "All 480 input-valid training runs across three task--core combinations, depth, feedback, and matched backpropagation.",
     ),
     SourceFile(
-        "Figure 3",
+        "Supplementary Figure 19",
         "a-c",
         "source_data/prospective_input_validity/central_valid_condition_summary.csv",
-        "Figure_3/Fig3a-c_condition_summary.csv",
+        "Supplementary_Figure_19/SuppFig19a-c_condition_summary.csv",
         "derived condition summaries",
         "paired independent training seed (n=10 per condition)",
         "current derived summary",
-        "Condition means and paired-seed bootstrap intervals plotted in Figure 3.",
+        "Condition means and paired-seed bootstrap intervals plotted in Supplementary Figure 19A--C.",
     ),
     SourceFile(
-        "Figure 3",
+        "Supplementary Figure 19",
         "a-c",
         "source_data/prospective_input_validity/central_valid_paired_contrasts.csv",
-        "Figure_3/Fig3a-c_paired_contrasts.csv",
+        "Supplementary_Figure_19/SuppFig19a-c_paired_contrasts.csv",
         "prespecified paired contrasts",
         "paired independent training seed (n=10 per condition)",
         "current derived analysis",
@@ -2037,40 +2066,40 @@ FILES += (
         "Completeness, source identity, calibration, convergence, adequacy, superiority and equivalence gates.",
     ),
     SourceFile(
-        "Figure 2",
-        "p-q",
+        "Supplementary Figure 4",
+        "e",
         "source_data/fashion_feedback_ladder/seed_outcomes.csv",
-        "Figure_2/Fig2p-q_Fashion_MNIST_seed_outcomes.csv",
+        "Supplementary_Figure_4/SuppFig4e_Fashion_MNIST_seed_outcomes.csv",
         "complete run-level outcomes",
         "paired independent training seed (n=10 per architecture and rule)",
         "fresh preregistered replication",
         "All 60 Fashion-MNIST fits in the scalar, neuron-indexed, and exact-path feedback ladder.",
     ),
     SourceFile(
-        "Figure 2",
-        "p-q",
+        "Supplementary Figure 4",
+        "e",
         "source_data/fashion_feedback_ladder/condition_summary.csv",
-        "Figure_2/Fig2p-q_Fashion_MNIST_condition_summary.csv",
+        "Supplementary_Figure_4/SuppFig4e_Fashion_MNIST_condition_summary.csv",
         "derived condition summaries",
         "paired independent training seed (n=10)",
         "current derived analysis",
         "Accuracy summaries for shunting and additive architectures.",
     ),
     SourceFile(
-        "Figure 2",
-        "p-q",
+        "Supplementary Figure 4",
+        "e",
         "source_data/fashion_feedback_ladder/paired_contrasts.csv",
-        "Figure_2/Fig2p-q_Fashion_MNIST_paired_contrasts.csv",
+        "Supplementary_Figure_4/SuppFig4e_Fashion_MNIST_paired_contrasts.csv",
         "paired seed contrasts",
         "paired independent training seed (n=10)",
         "current derived analysis",
         "Neuron-indexed-minus-scalar and exact-path-minus-neuron-indexed contrasts.",
     ),
     SourceFile(
-        "Figure 2",
-        "p-q",
+        "Supplementary Figure 4",
+        "e",
         "source_data/fashion_feedback_ladder/audit.json",
-        "Figure_2/Fig2p-q_Fashion_MNIST_audit.json",
+        "Supplementary_Figure_4/SuppFig4e_Fashion_MNIST_audit.json",
         "artifact and claim audit",
         "complete 60-fit cohort",
         "current audit",
@@ -2380,7 +2409,7 @@ def final_display_file(item: SourceFile) -> SourceFile:
         if item.figure == "Supplementary Figure 9":
             pass
         elif Path(source).name.startswith("central_valid_"):
-            figure, panels = "Figure 2", "g"
+            figure, panels = "Supplementary Figure 19", "a-c"
         elif Path(source).name in {
             "followup_publication_seed_outcomes.csv",
             "routing_valid_paired_contrasts.csv",
@@ -2389,7 +2418,7 @@ def final_display_file(item: SourceFile) -> SourceFile:
         else:
             figure = "Supplementary Figure 19"
     elif source.startswith("source_data/fashion_feedback_ladder/"):
-        figure, panels = "Figure 2", "c"
+        figure, panels = "Supplementary Figure 4", "e"
     elif source.startswith("source_data/clean_exact_bp/"):
         figure, panels = "Supplementary Figure 19", "e"
     elif source.startswith("source_data/credit_phase_plane/"):
@@ -2697,12 +2726,6 @@ FILES += tuple(
     and item.figure == "Figure 6"
 )
 FILES += tuple(
-    duplicate_for_supplement(item, 19, "a-c")
-    for item in FILES
-    if item.source.startswith("source_data/prospective_input_validity/central_valid_")
-    and item.figure == "Figure 2"
-)
-FILES += tuple(
     duplicate_for_supplement(item, 19, "d")
     for item in FILES
     if item.source.startswith("source_data/prospective_input_validity/")
@@ -2711,6 +2734,7 @@ FILES += tuple(
         "routing_valid_paired_contrasts.csv",
     }
     and item.figure == "Figure 2"
+    and item.destination.startswith("Figure_2/Fig2g_ownership_")
 )
 
 # Several detailed supplementary displays reuse cohorts that also support
@@ -3097,18 +3121,11 @@ FILES += (
 # draws them.  Keys are the pre-correction destinations, which are unique.
 # None: drop the entry (a correct duplicate elsewhere already packages it).
 _PANEL_CORRECTIONS = {
-    # Figure 2 lost its old panels G-H; the two-stream data live in S19.
+    # Figure 2G plots the paired MNIST ladder and ownership contrasts. The
+    # fixed-budget follow-up remains Supplementary Figure 8 only.
     "Figure_2/Fig2g_seed_outcomes.csv": None,
-    "Figure_2/Fig2g_condition_summary.csv": None,
-    "Figure_2/Fig2g_paired_contrasts.csv": None,
     "Figure_2/Fig2b_mnist_feedback_paired_contrasts.csv":
         (None, "g", "Figure_2/Fig2g_mnist_feedback_paired_contrasts.csv"),
-    "Figure_2/Fig2c_Fashion_MNIST_condition_summary.csv":
-        (None, "c", "Figure_2/Fig2c_Fashion_MNIST_condition_summary.csv"),
-    "Figure_2/Fig2c_Fashion_MNIST_paired_contrasts.csv":
-        (None, "text", "Figure_2/Text_Fashion_MNIST_paired_contrasts.csv"),
-    "Figure_2/Fig2c_Fashion_MNIST_audit.json":
-        (None, "text", "Figure_2/Text_Fashion_MNIST_audit.json"),
     # Figure 3 letters follow the native seven-panel builder.
     "Figure_3/Fig3c-d_depth_training_seed.csv":
         (None, "c", "Figure_3/Fig3c_depth_training_seed.csv"),
@@ -3320,6 +3337,26 @@ if _missing_corrections:
     )
 FILES = tuple(_corrected_files)
 
+# Main Figure 2 uses a deliberately narrower ownership slice than the full
+# Supplementary Figure 19 diagnostic. Keep the shared original source path,
+# but describe the display-scoped release copies precisely.
+_FIGURE2_OWNERSHIP_METADATA = {
+    "Figure_2/Fig2g_ownership_run_outcomes.csv": (
+        "MNIST D2/D4 ownership run-level outcomes",
+        "Filter family=routing, task=mnist and depth in {2,4}; 80 paired correct-versus-fixed-deranged runs.",
+    ),
+    "Figure_2/Fig2g_ownership_contrasts.csv": (
+        "MNIST D2/D4 paired ownership contrasts",
+        "Four correct-minus-deranged MNIST effects: shunting and raw-additive trees at D2 and D4.",
+    ),
+}
+FILES = tuple(
+    replace(item, role=metadata[0], notes=metadata[1])
+    if (metadata := _FIGURE2_OWNERSHIP_METADATA.get(item.destination))
+    else item
+    for item in FILES
+)
+
 
 README = """# Source Data
 
@@ -3344,9 +3381,11 @@ Focal sites, channel draws, scans, stimulus splits, and Monte Carlo streams are
 nested observations; they are not counted as independent biological
 replicates.
 
-Figure 2 contains the feedback-coordinate, ownership, input-validity and
-Fashion-MNIST ladders. Figure 3 contains the stochastic credit-operator phase
-tests and the alignment--bandwidth synthesis. Figure 4 is the continuous
+Figure 2 contains the feedback hierarchy, MNIST accuracy ladder,
+exact-gradient alignment, mean pre-reactivation voltage-error transport,
+path-specific pre-reactivation voltage-error energy, ownership schematic and
+paired MNIST/ownership contrasts. Figure 3 contains the stochastic
+credit-operator phase tests and the alignment--bandwidth synthesis. Figure 4 is the continuous
 branch-conflict path-demand family. Figure 5 is the 2,700-fit subtree-address
 factorial. Figure 6 contains the H2--H4 physical-depth, point--dendrite,
 BP--local-credit and task-family-by-alignment extensions. Figures
@@ -3356,7 +3395,8 @@ measured-response, controlled-alignment and six-animal boundary tests; Figure
 route capacity.
 Supplementary Figures 1--3 reproduce the three unchanged regular-tree figures
 from the final NeurIPS/arXiv revision, and Supplementary Figure 4 is the
-reduced four-panel regular-tree boundary sheet. Supplementary Figure 5 is a constructed
+five-panel regular-tree boundary sheet, including the Fashion-MNIST
+replication as panel E. Supplementary Figure 5 is a constructed
 topology--task alignment control, Supplementary Figure 6 is an exact
 deterministic interference calculation, and Supplementary Figure 7 audits the
 fixed spatial-connectivity control. Supplementary Figure 8 is the fixed-budget
@@ -3372,22 +3412,29 @@ structural replication, physical-depth diagnostics and the complete
 branch-conflict boundary. Capture per wire
 and the phase-plane synthesis are promoted to main Figures 7 and 3.
 
-This is the submission-facing source-data package. Figure 2 panels b and c
-contain the complete clean 15-seed feedback cohort and the corresponding
-fixed-checkpoint diagnostics. Panel d includes all 25 independent-seed values
-and its verified aggregate summaries. Run-level data and derived summaries for
-the initialization-policy factorial and direct-type-only focal sensitivity are
-also included. Figure 2 contains the 480 input-valid primary depth-by-feedback
-outcomes, 120 input-valid bandwidth-matched routing outcomes, the detached
-320-run exact/backpropagation audit, and 160 additive fixed-budget outcomes.
-The complete 1,840-run historical input-validity ledger is supplied, including
-the excluded inhibitory-dose family. The 120-checkpoint diagnostic is supplied
-as Supplementary Figure 9; Figure 7 is the reconstructed-morphology routing
-analysis, Figure 4 the branch-conflict family, Figure 5 the subtree-address
-factorial and Figure 6 the physical-depth program.
+This is the submission-facing source-data package. Figure 2 panel B contains
+the complete clean 15-seed MNIST feedback cohort, panel C contains the
+corresponding fixed-checkpoint gradient-alignment diagnostics, and panels D--E
+share the exact-path-checkpoint table of pre-reactivation voltage-error
+transport and path-specific energy. Panel G packages the paired MNIST feedback
+contrasts and only the MNIST D2/D4 ownership subset (80 run rows and four
+paired contrasts). Panels A and F are schematics with no numerical source.
+
+The broader prospective programme is supplementary: Supplementary Figure 19A--C
+contains the 480 input-valid depth-by-feedback outcomes, panel D contains the
+full 120-run ownership cohort, and panel E contains the detached 320-run
+exact/backpropagation audit. The 160 additive fixed-budget outcomes are assigned
+to Supplementary Figure 8. The complete 1,840-run historical input-validity
+ledger is supplied, including the excluded inhibitory-dose family. The
+120-checkpoint diagnostic is supplied as Supplementary Figure 9. Run-level data
+and derived summaries for the initialization-policy factorial and
+direct-type-only focal sensitivity are also included. Figure 7 is the
+reconstructed-morphology routing analysis, Figure 4 the branch-conflict family,
+Figure 5 the subtree-address factorial and Figure 6 the physical-depth program.
 Supplementary Figure 4 retains the historical depth, teaching-noise and
 shunting-only CIFAR-10 boundaries together with the fresh raw-additive
-CIFAR-10 ladder. The omitted historical panels are represented in
+CIFAR-10 ladder and the Fashion-MNIST feedback-resolution replication. The
+omitted historical panels are represented in
 Supplementary Figures 1--3. No current figure panel or
 quantitative main-text control has a known source-data completeness gap.
 
@@ -3407,27 +3454,27 @@ and analysis design. It contains no plotted numerical observations.
 
 FIGURE_2_README = """# Figure 2 source data
 
-Panels a-c contain the run- or seed-level values plotted in the final figure.
-Panels b and c use the complete clean 15-seed feedback cohort, which passed the
-frozen completeness, scientific-configuration, checkpoint, and hash audits.
-Panel c evaluates both feedback fields at every checkpoint in that cohort.
+Panels A and F are schematics and have no numerical source. Panel B uses the
+complete paired 15-seed MNIST scalar, neuron-specific and exact-path ladder.
+Panel C contains the fixed-checkpoint exact-gradient-alignment diagnostics for
+the same two architectures.
 
-Panel d includes one row per independent seed:
+Panels D--E share `Fig2d-e_path_gain_dispersion_ladder_runs.csv`, one row for
+each of the 30 exact-path checkpoints in panel B. Panel D plots mean
+pre-reactivation voltage-error magnitude at the soma, middle and distal depth;
+panel E plots the fraction of pre-reactivation voltage-error energy remaining
+path specific after subtracting the depth-shared component.
 
-- 20 exact-transport rows: 2 rule variants x 2 decoder modes x 5 seeds;
-- 5 matched-backpropagation rows: 1 condition x 5 seeds.
+Panel G combines the paired MNIST ladder contrasts with the ownership test.
+The ownership release files contain only family=routing, task=mnist and D2/D4:
+80 correct/deranged run rows and four paired contrasts across the two
+architectures and two depths. The full 120-run routing cohort remains assigned
+to Supplementary Figure 19D.
 
-`Fig2d_exact_transport_and_backprop_runs.csv` was exported directly from the
-archived `performance/final.json` and resolved `config.json` files. It records
-the run/config identifier, seed, rule, decoder mode, feedback mode, learning
-method, architecture, dataset, and final test accuracy. Regrouping these 25
-rows reproduces every reported mean, sample s.d., minimum, maximum, and n in
-the two retained convenience summaries.
-
-The `Fig2f_initialization_factorial_*` files support the 15-seed
-architecture-by-initialization-policy control reported in the main text. The
-run-level table is primary; the summary and paired-comparison tables are
-derived from those 60 runs.
+The `Text_*` files document the strict-scalar implementation audit. The
+initialization-policy factorial is packaged under Methods, and the detached
+exact-transport/backpropagation factorial is assigned to Supplementary Figure
+3C rather than Figure 2.
 
 """
 
@@ -3561,10 +3608,11 @@ rule-family, error-source, exact-transport, and feedback-ladder tables.
 SUPPLEMENTARY_FIGURE_4_README = """# Supplementary Figure 4 source data
 
 These files retain the historical depth, broadcast-noise and shunting-only
-flattened-CIFAR-10 boundaries and the fresh 20-seed raw-additive CIFAR-10
-feedback ladder. The first three panels contain five independent seeds per
-condition. Exact transport is an information oracle. These harder-data panels
-are transfer and mechanism controls, not competitive vision benchmarks.
+flattened-CIFAR-10 boundaries, the fresh 20-seed raw-additive CIFAR-10
+feedback ladder, and the ten-seed-per-architecture Fashion-MNIST replication.
+Panels A--C contain five independent seeds per condition. Exact transport is
+an information oracle. These harder-data panels are transfer and mechanism
+controls, not competitive vision benchmarks.
 """
 
 
@@ -3641,8 +3689,9 @@ def copy_source_file(item: SourceFile, source: Path, destination: Path) -> None:
             encoding="utf-8",
         )
         return
-    drop = SANITIZED_DROP_COLUMNS.get(item.source)
-    if not drop:
+    drop = SANITIZED_DROP_COLUMNS.get(item.source, set())
+    row_filters = DESTINATION_ROW_FILTERS.get(item.destination)
+    if not drop and not row_filters:
         shutil.copy2(source, destination)
         if sha256(source) != sha256(destination):
             raise RuntimeError(f"Copy verification failed for {item.source}")
@@ -3650,7 +3699,18 @@ def copy_source_file(item: SourceFile, source: Path, destination: Path) -> None:
     with source.open(newline="", encoding="utf-8") as handle:
         reader = csv.DictReader(handle)
         fieldnames = [name for name in (reader.fieldnames or []) if name not in drop]
-        rows = [{name: row[name] for name in fieldnames} for row in reader]
+        rows = [
+            {name: row[name] for name in fieldnames}
+            for row in reader
+            if not row_filters
+            or all(row.get(name) in allowed for name, allowed in row_filters.items())
+        ]
+    expected_rows = DESTINATION_EXPECTED_ROW_COUNTS.get(item.destination)
+    if expected_rows is not None and len(rows) != expected_rows:
+        raise RuntimeError(
+            f"Expected {expected_rows} scoped rows for {item.destination}, "
+            f"found {len(rows)}"
+        )
     with destination.open("w", newline="", encoding="utf-8") as handle:
         writer = csv.DictWriter(handle, fieldnames=fieldnames, lineterminator="\n")
         writer.writeheader()
@@ -3686,6 +3746,11 @@ def write_display_readmes(stage: Path, rows: list[dict[str, str]]) -> None:
         grouped.setdefault(directory, []).append(row)
     for directory, items in grouped.items():
         figure = items[0]["figure"]
+        if figure == "Figure 2":
+            (stage / directory / "README.md").write_text(
+                FIGURE_2_README, encoding="utf-8"
+            )
+            continue
         panels = ", ".join(dict.fromkeys(item["panels"] for item in items))
         units = "; ".join(dict.fromkeys(item["independent_unit"] for item in items))
         statuses = "; ".join(dict.fromkeys(item["status"] for item in items))

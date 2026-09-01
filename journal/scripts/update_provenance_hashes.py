@@ -25,7 +25,7 @@ CANONICAL_ASSETS = {
     "fig1.asset": "figures/main/figure_01.pdf",
     "fig2.asset": "figures/main/figure_02.pdf",
     "prospective.learning.asset": "figures/supplementary/figure_S19_panels_A-I.pdf",
-    "fashion.asset": "figures/main/figure_02.pdf",
+    "fashion.asset": "figures/supplementary/figure_S04_panels_A-E.pdf",
     "subtree.factorial.asset": "figures/main/figure_05.pdf",
     "creditphase.asset": "figures/main/figure_03.pdf",
     "physical.asset": "figures/main/figure_06.pdf",
@@ -42,7 +42,7 @@ CANONICAL_ASSETS = {
     "inherited.s1.asset": "figures/supplementary/figure_S01_panels_A-E.pdf",
     "inherited.s2.asset": "figures/supplementary/figure_S02_panels_A-E.pdf",
     "inherited.s3.asset": "figures/supplementary/figure_S03_panels_A-D.pdf",
-    "regimes.asset": "figures/supplementary/figure_S04_panels_A-D.pdf",
+    "regimes.asset": "figures/supplementary/figure_S04_panels_A-E.pdf",
     "fig7.asset": "figures/supplementary/figure_S05_panels_A-H.pdf",
     "interference.asset": "figures/supplementary/figure_S06_panels_A-D.pdf",
     "spatial.audit.asset": "figures/supplementary/figure_S07_panels_A-D.pdf",
@@ -62,7 +62,7 @@ CANONICAL_ASSIGNMENTS = {
     "fig1.asset": ("fig1", "all"),
     "fig2.asset": ("fig2", "all"),
     "prospective.learning.asset": ("figS19", "all"),
-    "fashion.asset": ("fig2", "c,f"),
+    "fashion.asset": ("figS4", "e"),
     "subtree.factorial.asset": ("fig5", "all"),
     "creditphase.asset": ("fig3", "a-f"),
     "phaseplane.asset": ("fig3", "g"),
@@ -104,6 +104,8 @@ CANONICAL_GENERATORS = {
 # from the frozen archived aggregations; the byte-identical originals live in
 # figures/supplementary/inherited/.
 CANONICAL_GENERATORS["regimes.asset"] = (
+    "scripts/build_supplementary_figure_s04_native.py")
+CANONICAL_GENERATORS["fashion.asset"] = (
     "scripts/build_supplementary_figure_s04_native.py")
 CANONICAL_GENERATORS["inherited.s1.asset"] = (
     "scripts/build_supplementary_figure_s01_native.py")
@@ -305,11 +307,11 @@ NEW_PROVENANCE_ENTRIES = {
     "mnist.ladder.contrasts": {
         "record_type": "panel_source",
         "figure": "fig2",
-        "panel": "text",
+        "panel": "g",
         "path": "source_data/mnist_feedback_ladder/paired_contrasts.csv",
         "generator": "scripts/collect_mnist_feedback_ladder.py",
         "replication_unit": "paired independent training seed (n=15 per architecture)",
-        "notes": "Strict-scalar-to-neuron-specific and exact-transport paired contrasts for both MNIST architectures.",
+        "notes": "Strict-scalar-to-neuron-specific and exact-transport paired contrasts for both MNIST architectures shown in Fig. 2g.",
     },
     "mnist.ladder.audit": {
         "record_type": "panel_source",
@@ -319,6 +321,15 @@ NEW_PROVENANCE_ENTRIES = {
         "generator": "scripts/collect_mnist_feedback_ladder.py",
         "replication_unit": "complete 120-fit current-cohort audit",
         "notes": "Completeness, finite-metric, checkpoint, scientific-signature, executable-source, source-environment and no-W&B gates for the 90 plotted fits plus 30 legacy implementation controls.",
+    },
+    "fig2.path_gain_dispersion": {
+        "record_type": "panel_source",
+        "figure": "fig2",
+        "panel": "d-e",
+        "path": "source_data/figure2/path_gain_dispersion_ladder_runs.csv",
+        "generator": "scripts/analyze_fig2_path_gain_dispersion.py",
+        "replication_unit": "paired independent training seed (n=15 per architecture)",
+        "notes": "Mean pre-reactivation voltage-error magnitude by dendritic depth and path-specific exact-error energy at the MNIST exact-path checkpoints.",
     },
     "mnist.scalar.audit.rows": {
         "record_type": "panel_source",
@@ -445,7 +456,11 @@ def resolve_project_path(raw_path: str) -> Path:
 # Correct stale prose left by an earlier numbering-only remap.  These notes
 # are descriptive metadata, not independent scientific content.
 CANONICAL_NOTES = {
-    "fig2.asset": "Final six-panel feedback-resolution, ownership and transport-contrast figure.",
+    "fig2.asset": "Final seven-panel feedback hierarchy, MNIST ladder, gradient-alignment, mean-transport, path-specific-energy, ownership and paired-contrast figure.",
+    "fig2.path_gain_dispersion": "Mean pre-reactivation voltage-error magnitude by dendritic depth and path-specific exact-error energy at the MNIST exact-path checkpoints.",
+    "fig2.path_gain": "Separate N_I=5 conductance-only diagnostic cohort shown in Supplementary Fig. S1a; run, configuration and checkpoint hashes identify every value.",
+    "regimes.asset": "Five-panel regular-tree boundary sheet: retained depth, noise and CIFAR-10 tests, the raw-additive CIFAR-10 confirmation and the Fashion-MNIST replication.",
+    "fashion.asset": "Fashion-MNIST replication of the scalar, neuron-indexed and exact-path feedback ladder in Supplementary Fig. S4e.",
     "subtree.factorial.asset": "Final subtree-address bandwidth factorial with matched oracle and derangement controls.",
     "fig3.e": "Direct-presynaptic-type-only sensitivity analysis shown in Supplementary Fig. 20H.",
     "fig4.b": "Cell-level additive, depth-shuffled, and focal-shunt localization shown in Fig. 8B.",
@@ -455,18 +470,18 @@ CANONICAL_NOTES = {
     "fig4.e.site": "Site-level factor substitutions supporting the Fig. 8D cell summary and supplementary Shapley analysis.",
 }
 
-# The focused eight-panel Figure 2 replaced an older, much larger panel map.
+# The focused seven-panel Figure 2 replaced an older, much larger panel map.
 # Keep each numerical record attached to where it is now displayed (or to the
 # Methods/Supplement when it is no longer a main-figure result).  Entry IDs are
 # deliberately stable so archived analyses remain traceable.
 CANONICAL_METADATA = {
     "fig2.a": ("methods", "gradient check"),
     "fig2.b": ("figS2", "e"),
-    "fig2.c": ("fig2", "d"),
+    "fig2.c": ("fig2", "c"),
     "fig2.d": ("figS3", "c"),
     "fig2.d.bp": ("figS3", "c"),
     "fig2.d.runs": ("figS3", "c"),
-    "fig2.path_gain": ("fig2", "e"),
+    "fig2.path_gain": ("figS1", "a"),
     "fig2.init.runs": ("methods", "initialization control"),
     "fig2.init.summary": ("methods", "initialization control"),
     "fig2.init.tests": ("methods", "initialization control"),
@@ -475,8 +490,8 @@ CANONICAL_METADATA = {
     "prospective.learning.seeds": ("figS19", "a-c"),
     "prospective.learning.conditions": ("figS19", "a-c"),
     "prospective.learning.contrasts": ("figS19", "a-c"),
-    "prospective.routing.runs": ("fig2/figS19", "f/d"),
-    "prospective.routing.contrasts": ("fig2/figS19", "f/d"),
+    "prospective.routing.runs": ("fig2/figS19", "g/d"),
+    "prospective.routing.contrasts": ("fig2/figS19", "g/d"),
     "prospective.dose.conditions": ("figS8", "a-d,g-i"),
     "prospective.dose.contrasts": ("figS8", "e-f"),
     "prospective.fixed_budget.contrasts": ("figS8/figS19", "e-f/f"),
@@ -491,10 +506,11 @@ CANONICAL_METADATA = {
     "subtree.factorial.contrasts": ("fig5", "f"),
     "subtree.factorial.ledger": ("fig5", "text"),
     "subtree.factorial.summary": ("fig5", "text"),
-    "fashion.outcomes": ("fig2", "c,f"),
-    "fashion.conditions": ("fig2", "c"),
-    "fashion.contrasts": ("fig2", "f"),
-    "fashion.audit": ("fig2", "text"),
+    "fashion.outcomes": ("figS4", "e"),
+    "fashion.conditions": ("figS4", "e"),
+    "fashion.contrasts": ("figS4", "e"),
+    "fashion.audit": ("figS4", "e"),
+    "mnist.ladder.contrasts": ("fig2", "g"),
     # 2026-08-28 panel-span ground-truthing: every row below was checked
     # against the panel its source is actually drawn in by the current
     # native builders (build_main_figure_0{3,5,6,7,8,9}.py and the S18-S22

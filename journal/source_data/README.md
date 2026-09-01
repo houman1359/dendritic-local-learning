@@ -85,19 +85,20 @@ stages and their trainable branch parameters enter the reported geometry.
 `prospective_routing_control/` contains all 160 historical audited runs from
 the separately frozen correct-versus-deranged routing cohort. The 120 input-
 valid rows and six paired contrasts in `prospective_input_validity/` supply
-Figure 3D and the matched-routing Supplementary table. Correct and deranged
-conditions have the same teaching-coordinate count and per-example value
-distribution; only the coordinate-to-tree map differs.
+Supplementary Figure S19D. Main Figure 2G uses the narrower MNIST D2/D4 subset
+(80 runs and four paired contrasts). Correct and deranged conditions have the
+same teaching-coordinate count and per-example value distribution; only the
+coordinate-to-tree map differs.
 
 `prospective_followup/` contains the complete 1,200-run historical audit output
 for matched-bandwidth routing, inhibitory dose, fixed spatial topology and
 fixed-budget depth. It is a provenance archive, not the publication analysis.
 The outcome-independent validity ledger excludes the full inhibitory-dose
 family and supplies 120 routing, 240 spatial and 160 additive fixed-budget
-runs. The fixed-budget rows supply Figure 3F and Supplementary Figure S8; they
-hold 16 terminal branches and 960--968 active contacts per soma while varying
-nominal depth. The spatial rows remain a boundary control because their effect
-persists under backpropagation and on the randomly projected task.
+runs. The fixed-budget rows supply Supplementary Figure S8; they hold 16
+terminal branches and 960--968 active contacts per soma while varying nominal
+depth. The spatial rows remain a boundary control because their effect persists
+under backpropagation and on the randomly projected task.
 
 `clean_exact_bp/` contains the detached tracked-clean 320-run comparison that
 replaces the excluded dose panel. It supplies 160 seed-matched exact-transport
