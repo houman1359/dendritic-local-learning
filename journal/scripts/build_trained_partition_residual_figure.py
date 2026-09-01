@@ -58,7 +58,7 @@ def main() -> None:
     fig, axes = plt.subplots(
         1,
         3,
-        figsize=(FIG_W, 2.48),
+        figsize=(FIG_W, 2.24),
         gridspec_kw={
             "left": 0.095,
             "right": 0.985,

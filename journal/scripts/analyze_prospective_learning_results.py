@@ -520,7 +520,7 @@ def _plot_legacy(frame: pd.DataFrame, summary: pd.DataFrame) -> None:
     fig, mechanism_axes = plt.subplots(
         2,
         2,
-        figsize=(FIG_W, 4.65),
+        figsize=(FIG_W, 3.95),
         gridspec_kw={
             "left": 0.09,
             "right": 0.985,
