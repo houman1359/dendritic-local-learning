@@ -830,7 +830,8 @@ discarded signal. Finally, route-specific gains should help only when they are
 matched to heterogeneous route reliability.
 
 We tested these predictions in a controlled quadratic system whose 16 gradient
-coordinates were organized by the Haar basis of a balanced tree. The forward
+coordinates were organized by the Haar basis of a balanced tree
+(Fig.~\ref{fig:creditphase}B). The forward
 representation was fixed, allowing the experiment to isolate feedback
 geometry rather than forward dendritic computation. The task placed signal at
 a chosen number of credit-hierarchy levels \(H_{\mathrm c}\) and noise at the
@@ -841,24 +842,24 @@ serial compartments in the forward model.
 
 The four predictions held. First, the subtree-minus-random capture advantage
 increased as task covariance rotated into the subtree span
-(Fig.~\ref{fig:creditphase}B). They reached the optimal rank-\(K\) spectral
+(Fig.~\ref{fig:creditphase}C). They reached the optimal rank-\(K\) spectral
 capture when their span contained the leading covariance eigenspace. The
 advantage disappeared under random alignment and at full rank, where both
 route families represented the complete space (Supplementary Section~S4).
 
 Second, loss was minimized when route resolution matched the number of
-task-relevant hierarchy levels (Fig.~\ref{fig:creditphase}C). Coarser routes
+task-relevant hierarchy levels (Fig.~\ref{fig:creditphase}D). Coarser routes
 discarded signal, whereas finer routes admitted irrelevant noise. This is a
 controlled validation of the crossover built into the generator, not a claim
 that arbitrary tasks obey \(D_{\mathrm r}=H_{\mathrm c}\).
 
 Third, directly varying retained signal and noise recovered the predicted
 boundary: projection helped exactly when it rejected more noise than signal
-(Fig.~\ref{fig:creditphase}D). Backpropagation followed by the same projection
+(Fig.~\ref{fig:creditphase}E). Backpropagation followed by the same projection
 remained the appropriate upper control because it used the restricted span
 with exact coefficients. Fourth, when reliability differed across branches,
 route-specific gains helped only when they were aligned with the corresponding
-signal-to-noise ratios (Fig.~\ref{fig:creditphase}E). Shuffling or reversing
+signal-to-noise ratios (Fig.~\ref{fig:creditphase}F). Shuffling or reversing
 the gains removed the benefit, and a point model supplied with the same gains
 matched the routed model. This result parallels conductance-based reliability
 weighting in forward sensory integration \citep{jordan2024conductance}.
@@ -874,12 +875,12 @@ Finally, we asked whether \(U(M)\) predicts learning beyond the controlled
 one-step system. Across the trained route factorial, utility correlated with
 norm-matched one-step progress at \(\rho=0.937\) and predicted final accuracy
 with \(\rho=0.916\), more strongly than field capture alone
-(Fig.~\ref{fig:creditphase}F and Supplementary Table~S3). It
+(Fig.~\ref{fig:creditphase}G and Supplementary Table~S3). It
 located the main route-resolution optima but did not predict the small
 training-trajectory advantage of task-matched subtrees in every seed. The
 theory therefore predicts large contrasts and within-family progress, not
 every difference accumulated during nonlinear training. The
-alignment--bandwidth plane in Fig.~\ref{fig:creditphase}G summarizes this
+alignment--bandwidth plane in Fig.~\ref{fig:creditphase}H summarizes this
 scope.
 
 \begin{figure}[tbp]
@@ -889,22 +890,28 @@ scope.
 routing helps.} \textbf{A}, The operator \(M\) maps stochastic gradient
 \(\bm\mu+\bm\xi\) to the local update; \(\bm\xi\) has covariance \(\Sigma\).
 Utility balances retained task signal against finite-step and noise costs.
-\textbf{B}, Nested-subtree-minus-random field capture as task covariance aligns
-with the tree and route rank increases. \textbf{C}, Final loss across task-credit
+\textbf{B}, The synthetic task: sixteen gradient coordinates form the Haar
+ladder of a balanced tree; the generator places the mean gradient \(\bm\mu\)
+on the top \(H_{\mathrm c}\) hierarchy levels and batch noise \(\Sigma\) on
+the rest, and the feedback pathway resolves the top \(D_{\mathrm r}\)
+levels. The two brackets sit at different depths because \(H_{\mathrm c}\)
+and \(D_{\mathrm r}\) vary independently.
+\textbf{C}, Nested-subtree-minus-random field capture as task covariance aligns
+with the tree and route rank increases. \textbf{D}, Final loss across task-credit
 hierarchy \(H_{\mathrm c}\) and route resolution \(D_{\mathrm r}\); their matched
-resolution gives the controlled optimum. \textbf{D}, Projected-minus-unprojected
+resolution gives the controlled optimum. \textbf{E}, Projected-minus-unprojected
 expected loss; the dashed analytical boundary equates rejected noise and
-discarded signal. \textbf{E}, One-step progress under reliability-aligned,
-global, shuffled and anti-aligned gains. \textbf{F}, Predicted utility versus
+discarded signal. \textbf{F}, One-step progress under reliability-aligned,
+global, shuffled and anti-aligned gains. \textbf{G}, Predicted utility versus
 observed one-step progress in 540 trained-factorial conditions (Spearman
-\(\rho=0.937\), 95\% seed-block interval 0.93--0.94). \textbf{G}, Experiments
+\(\rho=0.937\), 95\% seed-block interval 0.93--0.94). \textbf{H}, Experiments
 located by task--anatomy alignment and relative bandwidth
 \(K/r_{\mathrm{eff}}\), where
 \(r_{\mathrm{eff}}=(\sum_i\lambda_i)^2/\sum_i\lambda_i^2\) is the effective
 rank of the task-credit spectrum \(\{\lambda_i\}\). Filled markers denote a subtree benefit or tie; open markers
 denote no benefit. Regime tints and the \(K/r_{\mathrm{eff}}=1\) line are theoretical,
-not fitted. Panels \textbf{B--E} use 50 paired seeds; heatmaps show means and
-curves show means with 95\% seed-bootstrap intervals. Panel \textbf{F} resamples
+not fitted. Panels \textbf{C--F} use 50 paired seeds; heatmaps show means and
+curves show means with 95\% seed-bootstrap intervals. Panel \textbf{G} resamples
 20 seed blocks. Small horizontal offsets separate coincident markers without
 changing their abscissae. Same-span controls are in Supplementary Fig.~S14.}
 \label{fig:creditphase}
@@ -1533,7 +1540,7 @@ lines in \textbf{F} pair P+ and P- within animal.}
 \end{figure}
 
 The combined results occupy the alignment--bandwidth plane introduced in
-Fig.~\ref{fig:creditphase}G. A scalar signal loses neuron identity; full-rank
+Fig.~\ref{fig:creditphase}H. A scalar signal loses neuron identity; full-rank
 feedback removes differences between equal spans; and intermediate-bandwidth
 routes help only when task credit is sufficiently aligned with their span.
 The measured-response null, the trained benefit at $K=4$ and the controlled
@@ -3085,7 +3092,7 @@ cross-study interpretation.
 
 \subsection*{Alignment-by-bandwidth synthesis plane}
 
-The synthesis panel in Fig.~\ref{fig:creditphase}G is a deterministic
+The synthesis panel in Fig.~\ref{fig:creditphase}H is a deterministic
 secondary display assembled from existing outputs; it does not rerun any
 experiment. Its horizontal coordinate is task--anatomy alignment, defined as
 the fraction of task-gradient or field energy in the anatomical route span.

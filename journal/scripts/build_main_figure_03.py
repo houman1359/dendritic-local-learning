@@ -234,6 +234,81 @@ def signed_heatmap(ax, matrix, xlabels, ylabels, *, label):
 
 
 # ── A: the credit operator ───────────────────────────────────────────────
+def task_generator_schematic(ax) -> None:
+    """B: the synthetic quadratic task, drawn as its Haar ladder.
+
+    Sixteen gradient coordinates: one root coefficient and detail levels of
+    1, 2, 4 and 8 coefficients from the Haar basis of a balanced tree.  The
+    generator places the mean gradient on the top H_c hierarchy levels
+    (signal, green) and batch noise on the rest (gray); the feedback
+    pathway resolves the top D_r levels (blue bracket).  The two brackets
+    sit at DIFFERENT depths on purpose: H_c and D_r are independent knobs,
+    and panel D sweeps exactly their mismatch.
+    """
+    ax.set_xlim(0.0, 1.0)
+    ax.set_ylim(0.0, 1.0)
+    ax.set_axis_off()
+    rows = (1, 1, 2, 4, 8)              # Haar coordinates per level, 16
+    signal_levels, route_levels = 2, 3  # H_c and D_r as drawn
+    top, pitch, sq_h = 0.90, 0.155, 0.095
+    centre = 0.38
+    sq_w, gap = 0.047, 0.015
+    green = COLORS["dend"]
+    for level, count in enumerate(rows):
+        y = top - level * pitch - sq_h
+        width = count * sq_w + (count - 1) * gap
+        x0 = centre - width / 2.0
+        signal = level < signal_levels
+        for k in range(count):
+            ax.add_patch(Rectangle(
+                (x0 + k * (sq_w + gap), y), sq_w, sq_h,
+                facecolor=green if signal else COLORS["grid"],
+                edgecolor="white", linewidth=LW_HAIR, zorder=3))
+    y_sig_top = top
+    y_sig_bot = top - (signal_levels - 1) * pitch - sq_h
+    y_noise_top = top - signal_levels * pitch
+    y_noise_bot = top - (len(rows) - 1) * pitch - sq_h
+    # pale bands behind the two regimes, so the signal/noise split carries
+    # more weight than eight-point squares can alone
+    band_w = rows[-1] * sq_w + (rows[-1] - 1) * gap + 0.05
+    for y0, y1, tone in ((y_sig_bot - 0.02, y_sig_top + 0.02, green),
+                         (y_noise_bot - 0.02, y_noise_top + 0.02,
+                          COLORS["mute"])):
+        ax.add_patch(FancyBboxPatch(
+            (centre - band_w / 2.0, y0), band_w, y1 - y0,
+            boxstyle="round,pad=0.008,rounding_size=0.015",
+            facecolor=tone, alpha=0.13, edgecolor="none", zorder=1))
+    # right brace: which levels carry the task signal.  Set on two lines --
+    # on one line the label overran the panel into its right neighbour.
+    bx = centre + band_w / 2.0 + 0.045
+    for y0, y1, color, label in (
+            (y_sig_bot, y_sig_top, green, "signal μ\n$H_{\\rm c}$ levels"),
+            (y_noise_bot, y_noise_top, COLORS["mute"], "noise Σ")):
+        ax.plot([bx, bx], [y0, y1], color=color, lw=LW_EDGE,
+                solid_capstyle="butt", zorder=3)
+        for yy in (y0, y1):
+            ax.plot([bx - 0.02, bx], [yy, yy], color=color, lw=LW_EDGE,
+                    solid_capstyle="butt", zorder=3)
+        ax.text(bx + 0.035, 0.5 * (y0 + y1), label, fontsize=PT_SMALL,
+                color=color, ha="left", va="center", linespacing=1.25)
+    # left bracket: how many levels the feedback pathway resolves
+    y_route_bot = top - (route_levels - 1) * pitch - sq_h
+    lx = centre - (rows[-1] * sq_w + (rows[-1] - 1) * gap) / 2.0 - 0.05
+    ax.plot([lx, lx], [y_route_bot, y_sig_top], color=COLORS["additive"],
+            lw=LW_EDGE, solid_capstyle="butt", zorder=3)
+    for yy in (y_route_bot, y_sig_top):
+        ax.plot([lx, lx + 0.02], [yy, yy], color=COLORS["additive"],
+                lw=LW_EDGE, solid_capstyle="butt", zorder=3)
+    ax.text(lx - 0.035, 0.5 * (y_route_bot + y_sig_top),
+            "routes\nresolve\nD\u1d63 levels", fontsize=PT_SMALL,
+            color=COLORS["additive"], ha="right", va="center",
+            linespacing=1.25)
+    ax.text(centre, y_noise_bot - 0.085,
+            "16 Haar coordinates of a balanced tree",
+            fontsize=PT_SMALL, color=COLORS["mute"], ha="center",
+            va="center")
+
+
 def operator_schematic(ax) -> None:
     """Restricted-route credit tree feeding the guaranteed-utility ratio.
 
@@ -319,15 +394,20 @@ def main() -> None:
     )
     ax_a = canvas.panel("A", 0, 0, 4, schematic=True,
                         title="Credit-operator utility")
-    ax_b = canvas.panel("B", 0, 4, 4, title="Spectral alignment")
-    ax_c = canvas.panel("C", 0, 8, 4, title="Route-resolution crossover")
-    ax_d = canvas.panel("D", 1, 0, 6, title="Projection boundary")
-    ax_e = canvas.panel("E", 1, 6, 6, title="Reliability gains")
-    ax_f = canvas.panel("F", 2, 0, 6, title="Predictive utility")
-    ax_g = canvas.panel("G", 2, 6, 6, title="Alignment × bandwidth")
+    ax_b = canvas.panel("B", 0, 4, 4, schematic=True,
+                        title="Task generator")
+    ax_c = canvas.panel("C", 0, 8, 4, title="Spectral alignment")
+    ax_d = canvas.panel("D", 1, 0, 4, title="Route-resolution crossover")
+    ax_e = canvas.panel("E", 1, 4, 4, title="Projection boundary")
+    ax_f = canvas.panel("F", 1, 8, 4, title="Reliability gains")
+    ax_g = canvas.panel("G", 2, 0, 6, title="Predictive utility")
+    ax_h = canvas.panel("H", 2, 6, 6, title="Alignment × bandwidth")
 
     # ── A ───────────────────────────────────────────────────────────────
     operator_schematic(ax_a)
+
+    # ── B: the synthetic task every phase panel sweeps ───────────────────
+    task_generator_schematic(ax_b)
 
     # ── B: ancestry-minus-random spectral capture (signed) ──────────────
     wide = spectral.pivot_table(
@@ -335,13 +415,13 @@ def main() -> None:
         values="mean_spectral_capture")
     advantage = (wide.ancestry - wide.random_rank).unstack("budget_k")
     signed_heatmap(
-        ax_b, advantage.to_numpy() * 100.0,
+        ax_c, advantage.to_numpy() * 100.0,
         [str(v) for v in advantage.columns],
         [f"{v:.2f}" for v in advantage.index],
         label="capture advantage (×10⁻²)")
-    ax_b.set_xlabel("route budget K   (16 = full rank)", labelpad=2.0)
-    ax_b.set_ylabel("task–tree alignment ρ", labelpad=1.5,
-                    y=matrix_label_y(ax_b), ha="center")
+    ax_c.set_xlabel("route budget K   (16 = full rank)", labelpad=2.0)
+    ax_c.set_ylabel("task–tree alignment ρ", labelpad=1.5,
+                    y=matrix_label_y(ax_c), ha="center")
 
     # ── C: final loss versus route resolution, one series per task depth ─
     depth_marker_dx = {3: -0.20, 4: 0.20}
@@ -361,26 +441,26 @@ def main() -> None:
         # log-loss curve is given a distorted run.
         fanned = (np.isin(xs, (1.0, 2.0)) if task_depth in depth_marker_dx
                   else np.zeros(xs.shape, dtype=bool))
-        ax_c.plot(xs, ys, color=color, marker=marker, ms=MARKER_MS,
+        ax_d.plot(xs, ys, color=color, marker=marker, ms=MARKER_MS,
                   lw=LW_DATA, mec="white", mew=LW_HAIR,
                   markevery=list(np.flatnonzero(~fanned)),
                   label=rf"$H_{{\rm c}}={task_depth}$")
         if fanned.any():
-            ax_c.scatter(xs[fanned] + depth_marker_dx[task_depth], ys[fanned],
+            ax_d.scatter(xs[fanned] + depth_marker_dx[task_depth], ys[fanned],
                          color=color, marker=marker, s=MARKER_MS ** 2,
                          zorder=3, edgecolors="white", linewidths=LW_HAIR)
-        ax_c.fill_between(part.model_depth,
+        ax_d.fill_between(part.model_depth,
                           part.ci95_low_final_population_loss,
                           part.ci95_high_final_population_loss, color=color,
                           alpha=0.10, linewidth=0)
-    ax_c.set_yscale("log")
-    ax_c.set_yticks([0.03, 0.1, 0.3, 1.0, 3.0])
-    ax_c.set_yticklabels(["0.03", "0.1", "0.3", "1", "3"])
-    ax_c.set_xticks([1, 2, 3, 4])
-    ax_c.set_xlim(0.70, 4.30)
-    ax_c.set_xlabel("route resolution Dᵣ   (4 = full rank)")
-    ax_c.set_ylabel("final loss")
-    ax_c.legend(loc="upper left", ncol=2, frameon=False, fontsize=PT_LEGEND,
+    ax_d.set_yscale("log")
+    ax_d.set_yticks([0.03, 0.1, 0.3, 1.0, 3.0])
+    ax_d.set_yticklabels(["0.03", "0.1", "0.3", "1", "3"])
+    ax_d.set_xticks([1, 2, 3, 4])
+    ax_d.set_xlim(0.70, 4.30)
+    ax_d.set_xlabel("route resolution Dᵣ   (4 = full rank)")
+    ax_d.set_ylabel("final loss")
+    ax_d.legend(loc="upper left", ncol=2, frameon=False, fontsize=PT_LEGEND,
                 handlelength=1.3, handletextpad=0.4, labelspacing=0.25,
                 columnspacing=0.8, borderaxespad=0.2)
 
@@ -391,16 +471,16 @@ def main() -> None:
     delta = (projection_wide.bp_plus_route_projection
              - projection_wide.full_stochastic_bp).unstack("signal_retention")
     signed_heatmap(
-        ax_d, delta.to_numpy() * 100.0,
+        ax_e, delta.to_numpy() * 100.0,
         [f"{v:.2f}" for v in delta.columns],
         [f"{v:.2f}" for v in delta.index],
         label="Δ loss (×10⁻²)")
-    ax_d.plot([-0.5, 0.5, 0.5, 1.5, 1.5, 3.5, 3.5],
+    ax_e.plot([-0.5, 0.5, 0.5, 1.5, 1.5, 3.5, 3.5],
               [1.5, 1.5, 2.5, 2.5, 3.5, 3.5, 4.5],
               ls="--", color=COLORS["mute"], lw=LW_REF, zorder=3)
-    ax_d.set_xlabel(r"retained signal fraction  $f_{\rm sig}$", labelpad=2.0)
-    ax_d.set_ylabel(r"retained noise fraction  $f_{\rm noise}$", labelpad=1.5,
-                    y=matrix_label_y(ax_d), ha="center")
+    ax_e.set_xlabel(r"retained signal fraction  $f_{\rm sig}$", labelpad=2.0)
+    ax_e.set_ylabel(r"retained noise fraction  $f_{\rm noise}$", labelpad=1.5,
+                    y=matrix_label_y(ax_e), ha="center")
 
     # ── E: one-step reliability gains for the four gain policies ────────
     reliability_styles = [
@@ -419,28 +499,28 @@ def main() -> None:
         xs = part.reliability_heterogeneity.to_numpy(dtype=float)
         ys = part.mean_population_loss_decrease.to_numpy(dtype=float)
         fanned = xs == 0.0
-        ax_e.plot(xs, ys, color=color, marker=marker, ms=MARKER_MS,
+        ax_f.plot(xs, ys, color=color, marker=marker, ms=MARKER_MS,
                   lw=LW_DATA, label=label,
                   markevery=list(np.flatnonzero(~fanned)),
                   mec="white", mew=LW_HAIR)
         if fanned.any():
-            ax_e.scatter(xs[fanned] + reliability_marker_dx[method],
+            ax_f.scatter(xs[fanned] + reliability_marker_dx[method],
                          ys[fanned], color=color, marker=marker,
                          s=MARKER_MS ** 2, zorder=3, edgecolors="white",
                          linewidths=LW_HAIR)
-        ax_e.fill_between(part.reliability_heterogeneity,
+        ax_f.fill_between(part.reliability_heterogeneity,
                           part.ci95_low_population_loss_decrease,
                           part.ci95_high_population_loss_decrease,
                           color=color, alpha=0.08, linewidth=0)
-    ax_e.axhline(0, color=COLORS["mute"], ls="--", lw=LW_REF)
-    ax_e.margins(x=0.115)
+    ax_f.axhline(0, color=COLORS["mute"], ls="--", lw=LW_REF)
+    ax_f.margins(x=0.115)
     # Pinned, not auto-located: one tick per swept heterogeneity level, so the
     # axis reads the same whatever width the module grid gives this panel.
-    ax_e.set_xticks([0.0, 0.5, 1.0, 1.5, 2.0])
-    ax_e.set_ylim(-4.0, 3.9)
-    ax_e.set_xlabel("branch-SNR heterogeneity")
-    ax_e.set_ylabel("one-step loss decrease")
-    ax_e.legend(loc="lower left", ncol=1, frameon=False, fontsize=PT_LEGEND,
+    ax_f.set_xticks([0.0, 0.5, 1.0, 1.5, 2.0])
+    ax_f.set_ylim(-4.0, 3.9)
+    ax_f.set_xlabel("branch-SNR heterogeneity")
+    ax_f.set_ylabel("one-step loss decrease")
+    ax_f.legend(loc="lower left", ncol=1, frameon=False, fontsize=PT_LEGEND,
                 handlelength=1.3, handletextpad=0.4, labelspacing=0.28,
                 borderaxespad=0.2)
 
@@ -451,15 +531,15 @@ def main() -> None:
             "budget_k"],
         validate="one_to_one")
     merged = merged[merged.architecture.eq("dendritic_tree")]
-    ax_f.scatter(merged.maximum_guaranteed_decrease,
+    ax_g.scatter(merged.maximum_guaranteed_decrease,
                  merged.norm_matched_one_step_progress,
                  s=7, alpha=0.30, edgecolors="none", color=COLORS["additive"])
-    ax_f.set_ylim(-1.42, 1.22)
-    ax_f.set_yticks([-1.0, -0.5, 0.0, 0.5, 1.0])
+    ax_g.set_ylim(-1.42, 1.22)
+    ax_g.set_yticks([-1.0, -0.5, 0.0, 0.5, 1.0])
     # The Spearman coefficient, its seed-block interval and n are reported in
     # the caption; printing them on the panel duplicated the caption text.
-    ax_f.set_xlabel("operator utility")
-    ax_f.set_ylabel("observed progress")
+    ax_g.set_xlabel("operator utility")
+    ax_g.set_ylabel("observed progress")
 
     # ── G: alignment x bandwidth synthesis ──────────────────────────────
     families = [
@@ -469,9 +549,9 @@ def main() -> None:
         ("measured", None, C_CTRL, MARKERS[3], False),
         ("reversal", "two-stream reversal (S19G)", C_BP, MARKERS[4], False),
     ]
-    ax_g.set_yscale("log")
-    ax_g.set_xlim(-0.045, 1.12)
-    ax_g.set_ylim(0.088, 7.0)
+    ax_h.set_yscale("log")
+    ax_h.set_xlim(-0.045, 1.12)
+    ax_h.set_ylim(0.088, 7.0)
     span_x = [-0.045, 1.12]
     # K/r_eff is an ordinal axis, so the three regimes take an ordered light slate
     # ramp (lightest at low K/r) rather than three near-invisible hues at
@@ -480,21 +560,21 @@ def main() -> None:
     for lo, hi, tint in ((0.088, 0.24, "#F2F4F7"),
                          (0.24, 1.2, "#E3E8ED"),
                          (1.2, 7.0, "#D4DBE3")):
-        ax_g.fill_between(span_x, [lo] * 2, [hi] * 2, color=tint,
+        ax_h.fill_between(span_x, [lo] * 2, [hi] * 2, color=tint,
                           zorder=0, linewidth=0)
     # Same reference treatment as panels D and E: dashed, mute, LW_REF.
-    ax_g.axhline(1.0, color=COLORS["mute"], ls="--", lw=LW_REF, zorder=1)
+    ax_h.axhline(1.0, color=COLORS["mute"], ls="--", lw=LW_REF, zorder=1)
     # Three observations sit at alignment exactly 1 and are drawn fanned in x
     # by the frozen source table; the rule marks where alignment 1 really is.
-    ax_g.axvline(1.0, color=COLORS["mute"], ls="--", lw=LW_REF, zorder=1)
+    ax_h.axvline(1.0, color=COLORS["mute"], ls="--", lw=LW_REF, zorder=1)
     for family, label, color, marker, has_line in families:
         part = points[points.family.eq(family)].sort_values("x_plot")
         if has_line:
-            ax_g.plot(part.x_plot, part.y_plot, color=color, lw=LW_DATA,
+            ax_h.plot(part.x_plot, part.y_plot, color=color, lw=LW_DATA,
                       alpha=0.85, zorder=2)
         for row in part.itertuples(index=False):
             filled = str(row.outcome) not in {"loss", "null"}
-            ax_g.plot(row.x_plot, row.y_plot, marker=marker, ms=MARKER_MS,
+            ax_h.plot(row.x_plot, row.y_plot, marker=marker, ms=MARKER_MS,
                       ls="none", mfc=color if filled else "white", mec=color,
                       mew=LW_REF, zorder=4)
     # The lone measured-response diamond is already labelled directly, so it
@@ -504,7 +584,7 @@ def main() -> None:
                       markeredgewidth=LW_REF, label=label)
                for _, label, color, marker, has_line in families
                if label is not None]
-    ax_g.legend(handles=handles, loc="upper left", ncol=1, frameon=False,
+    ax_h.legend(handles=handles, loc="upper left", ncol=1, frameon=False,
                 fontsize=PT_LEGEND, handlelength=1.3, handletextpad=0.4,
                 labelspacing=0.28, borderaxespad=0.15)
     # Regime names label the quiet background bands directly, in their
@@ -518,29 +598,29 @@ def main() -> None:
     for band_y, band_name in ((4.20, "span saturated"),
                               (0.33, "matched regime"),
                               (0.145, "bandwidth limited")):
-        ax_g.text(1.10, band_y, band_name, color=COLORS["mute"],
+        ax_h.text(1.10, band_y, band_name, color=COLORS["mute"],
                   fontsize=PT_ANNOT, style="italic", ha="right", va="center")
     # Anchored in axes fractions on the right: placed in the upper left it
     # sat directly under the legend's last row and read as a fifth key entry.
-    ax_g.annotate("rank-saturated null", xy=(0.474526, 3.73089),
+    ax_h.annotate("rank-saturated null", xy=(0.474526, 3.73089),
                   xytext=(0.375, 0.52), textcoords="axes fraction", ha="left",
                   va="center", fontsize=PT_SMALL, color=C_CTRL,
                   arrowprops={"arrowstyle": "-", "color": C_CTRL,
                               "lw": LW_HAIR, "shrinkA": 1, "shrinkB": 3})
-    ax_g.annotate("routing required", xy=(1.06, 1.00036), xytext=(-3, 13),
+    ax_h.annotate("routing required", xy=(1.06, 1.00036), xytext=(-3, 13),
                   textcoords="offset points", ha="right", va="bottom",
                   fontsize=PT_SMALL, color=C_BP,
                   arrowprops={"arrowstyle": "-", "color": C_BP,
                               "lw": LW_HAIR})
-    ax_g.set_xticks([0, 0.25, 0.5, 0.75, 1.0])
-    ax_g.set_yticks([0.125, 0.25, 0.5, 1, 2, 4])
-    ax_g.set_yticklabels(["1/8", "1/4", "1/2", "1", "2", "4"])
-    ax_g.minorticks_off()
-    ax_g.set_xlabel("task–anatomy alignment")
+    ax_h.set_xticks([0, 0.25, 0.5, 0.75, 1.0])
+    ax_h.set_yticks([0.125, 0.25, 0.5, 1, 2, 4])
+    ax_h.set_yticklabels(["1/8", "1/4", "1/2", "1", "2", "4"])
+    ax_h.minorticks_off()
+    ax_h.set_xlabel("task–anatomy alignment")
     # Set on two lines: rotated, one long line overran the panel and climbed
     # into the row above, past G's own letter.  Two lines stack as adjacent
     # columns, each about half as tall, and stay inside the axes.
-    ax_g.set_ylabel("bandwidth / effective\ntask rank  " r"$K/r_{\rm eff}$")
+    ax_h.set_ylabel("bandwidth / effective\ntask rank  " r"$K/r_{\rm eff}$")
 
     problems = canvas.save(OUT, name="main_figure_03_native")
     for violation in audit_native_pdf(OUT):

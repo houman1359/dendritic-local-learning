@@ -1785,9 +1785,9 @@ def shifted_extension_file(item: SourceFile) -> SourceFile:
 NEW_CONFIRMATORY_FILES = (
     SourceFile(
         "Figure 5",
-        "b",
+        "c",
         "source_data/credit_phase_theory/spectral_phase_seed.csv",
-        "Figure_5/Fig5b_spectral_phase_seed.csv",
+        "Figure_5/Fig5c_spectral_phase_seed.csv",
         "paired seed values",
         "paired independent simulation seed (n=50)",
         "frozen confirmatory theory experiment",
@@ -2423,7 +2423,7 @@ def final_display_file(item: SourceFile) -> SourceFile:
         figure, panels = "Supplementary Figure 19", "e"
     elif source.startswith("source_data/credit_phase_plane/"):
         figure = "Figure 4"
-        panels = "g"
+        panels = "h"
     elif source.startswith("source_data/credit_phase_"):
         figure = "Figure 4"
     elif source.startswith("source_data/physical_alignment_dose/"):
@@ -2538,7 +2538,7 @@ def final_display_file(item: SourceFile) -> SourceFile:
     elif source.startswith("source_data/capture_per_wire/"):
         destination = re.sub(r"(?:Fig|SuppFig)\d+[^_]*_", "Fig7e-f_", destination)
     elif source.startswith("source_data/credit_phase_plane/"):
-        destination = "Figure_4/Fig4g_phase_plane_points.csv"
+        destination = "Figure_4/Fig4h_phase_plane_points.csv"
     return replace(item, figure=figure, panels=panels, destination=destination)
 
 
@@ -3128,15 +3128,15 @@ _PANEL_CORRECTIONS = {
         (None, "g", "Figure_2/Fig2g_mnist_feedback_paired_contrasts.csv"),
     # Figure 3 letters follow the native seven-panel builder.
     "Figure_3/Fig3c-d_depth_training_seed.csv":
-        (None, "c", "Figure_3/Fig3c_depth_training_seed.csv"),
+        (None, "d", "Figure_3/Fig3d_depth_training_seed.csv"),
     "Figure_3/Fig3e_projection_phase_seed.csv":
-        (None, "d", "Figure_3/Fig3d_projection_phase_seed.csv"),
+        (None, "e", "Figure_3/Fig3e_projection_phase_seed.csv"),
     "Figure_3/Fig3f_reliability_phase_seed.csv":
-        (None, "e", "Figure_3/Fig3e_reliability_phase_seed.csv"),
+        (None, "f", "Figure_3/Fig3f_reliability_phase_seed.csv"),
     "Figure_3/Fig3g-h_same_span_diagnostics.csv":
         (None, "text", "Figure_3/Text_same_span_diagnostics.csv"),
     "Figure_3/Fig3i_operator_metrics.csv":
-        (None, "f", "Figure_3/Fig3f_operator_metrics.csv"),
+        (None, "g", "Figure_3/Fig3g_operator_metrics.csv"),
     # The capture-bound audit backs the topology-matched capacity note
     # behind Figure 7, not any drawn Figure 3 panel.
     "Figure_3/Fig3a_credit_capture_bound_verification.json":
@@ -3294,7 +3294,7 @@ _PANEL_CORRECTIONS = {
     # companions, packaged with Supplementary Figure 22, set the dense-
     # oracle effective rank); the ch4 summary is S22 text support.
     "Figure_9/Fig9b-c_task_target_method_means_ch4.csv":
-        ("Figure 3", "g", "Figure_3/Fig3g_task_target_method_means_ch4.csv"),
+        ("Figure 3", "h", "Figure_3/Fig3h_task_target_method_means_ch4.csv"),
     "Figure_9/Fig9b-c_task_summary_ch4.json": None,
     # Supplementary Figure 19: panel letters follow the native sheet; the
     # S8-lettered duplicates of its panel-f files are dropped.

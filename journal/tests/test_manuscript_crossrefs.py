@@ -10,7 +10,7 @@ MAIN = JOURNAL / "main.tex"
 MAIN_PANEL_INVENTORY = {
     "fig:framework": "abcde",
     "fig:feedback": "abcdefg",
-    "fig:creditphase": "abcdefg",
+    "fig:creditphase": "abcdefgh",
     "fig:branchconflict": "abcdef",
     "fig:subtreefactorial": "abcdefg",
     "fig:physicaldepth": "abcdefg",
@@ -24,7 +24,7 @@ FIGURE_BLOCK = re.compile(
 )
 PANEL_REF = re.compile(
     r"\\ref\{(?P<label>fig:[^}]+)\}"
-    r"(?P<panels>[A-Ga-g](?:(?:--|,)[A-Ga-g])*)"
+    r"(?P<panels>[A-Ha-h](?:(?:--|,)[A-Ha-h])*)"
 )
 EQUATION_LABEL = re.compile(r"\\label\{(?P<label>eq:[^}]+)\}")
 EQUATION_REF = re.compile(r"\\(?:ref|eqref)\{(?P<label>eq:[^}]+)\}")

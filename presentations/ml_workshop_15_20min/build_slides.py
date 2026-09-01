@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build the 15--20 minute ML-audience workshop deck.
+"""Build the 20-minute ML-audience workshop deck.
 
 The editable master is HTML with native SVG schematics. Frozen numerical
 panels are rendered at high resolution from the canonical vector PDF assets.
@@ -263,7 +263,9 @@ def render_pdf_assets() -> None:
     render_clip(
         "main_figure_05_native.pdf",
         "hierarchy_task_current",
-        (0.0, 0.0, 0.62, 0.34),
+        # Retain the group labels under the eight streams while stopping
+        # above the next manuscript row (panel C).
+        (0.0, 0.0, 0.62, 0.375),
     )
     render_clip(
         "main_figure_05_native.pdf",
@@ -833,7 +835,7 @@ def build_slides() -> list[dict[str, str]]:
         <div class="hierarchy-definition-layout">
           <div class="plot-card hierarchy-task-plot">{img('hierarchy_task_current', 'Eight-context hierarchical task with selected stream and distance-dependent distractors')}</div>
           <div class="stack compact-stack hierarchy-side">
-            <div class="equation compact">δ<sup>V, avail</sup> = A<sub>K</sub>β, &nbsp; rank(A<sub>K</sub>)=K</div>
+            <div class="equation compact"><span class="hat-symbol">δ</span><sup>V</sup> = A<sub>K</sub>c, &nbsp; rank(A<sub>K</sub>)=K</div>
             <div class="plot-card hierarchy-bandwidth-plot">{img('hierarchy_bandwidth_current', 'Within-neuron feedback bandwidth K equals 1, 2, 4, or 8')}</div>
             {card('matched controls', '<p>Rank, sparsity, parameter count, and forward resources are held fixed; only route assignment, basis, or topology changes.</p>', tone='gray')}
           </div>
@@ -1199,7 +1201,7 @@ def build_pdf(slide_count: int) -> None:
     document.set_metadata({
         "title": "When dendritic structure helps local credit assignment",
         "author": "Houman Safaai, Maceo Richards, Bernardo L. Sabatini",
-        "subject": "15--20 minute ML-audience workshop presentation",
+        "subject": "20-minute ML-audience workshop presentation",
     })
     document.save(PDF_OUT, deflate=True)
     document.close()

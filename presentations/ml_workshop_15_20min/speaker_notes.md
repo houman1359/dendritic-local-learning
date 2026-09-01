@@ -1,406 +1,325 @@
-# Speaker notes — 20-slide ML workshop talk
+# When can dendritic structure help local credit assignment?
 
-The scripted material below totals about **17 minutes 20 seconds**. This leaves
-roughly two minutes in a 20-minute slot for pauses, transitions, and emphasis.
-Each slide begins with the intuition to say before discussing its equation or
-plot, and ends with the intended transition.
+## 20-minute workshop speaker notes
 
-## 1. When can dendritic structure help local credit assignment? — 0:20
+Scripted time: 17:55. The remaining 2:05 is reserved for pauses, emphasis, and slide transitions.
 
-**Opening intuition:** Dendrites may help learning not by replacing
-backpropagation, but by structuring where a returned learning signal acts
-inside one neuron.
+## 1. When can dendritic structure help local credit assignment? [0:20]
 
-Today I will separate three resources: a coordinate that identifies the
-neuron, an address that selects locations within it, and a
-conductance-dependent gain along that route. The conclusion is conditional:
-these resources help only when they match distinctions required by the task.
-
-**Transition:** Start before biology, with the learning problem shared by all
-neural networks.
+**Purpose.** State the question and the conditional answer before introducing details.
 
-## 2. Learning changes network weights; credit assigns each change — 0:40
+**Say.** I will ask when dendritic structure can help a network learn from locally available signals. We will move from backpropagation to local learning and then to dendritic address and gain. The answer is conditional: useful routes require both sufficient feedback bandwidth and task-route alignment.
 
-**Before the equation:** A global objective must be converted into a local
-change for every trainable weight.
+**How to read the slide.** The subtitle previews the argument: coordinate, address, route gain, then the alignment boundary.
 
-The network maps an input to an output and a loss. Credit for weight \(w_i\) is
-the derivative \(\partial\mathcal L/\partial w_i\), and gradient descent applies
-\(\Delta w_i=-\eta\,\partial\mathcal L/\partial w_i\). The derivative answers
-three questions: which destination, which sign, and what magnitude? An
-internal weight cannot infer its downstream consequence from local activity
-alone.
+**Likely question.** Do dendrites replace backpropagation?
 
-**Transition:** Backpropagation gives the exact mathematical answer.
+**Answer.** No. Backpropagation is our exact reference. We test when restricted, dendrite-compatible feedback retains enough of that information to support learning.
 
-## 3. Backpropagation defines the exact neuron-specific learning signal — 0:55
+**Claim guardrail.** Do not claim a biological implementation of backpropagation.
 
-**Before the recursion:** Backpropagation is our information reference, not an
-assumption that neurons literally execute reverse-mode differentiation.
+**Transition.** First, what information problem does any learning rule have to solve?
 
-For neuron \(u\), \(\delta_u=\partial\mathcal L/\partial y_u\) is assembled by
-the reverse chain rule. It is neuron-specific, not parameter-specific: all
-incoming weights of the neuron share this downstream factor. Their gradients
-become different only after \(\delta_u\) is multiplied by each weight's local
-factor.
+## 2. Learning changes network weights; credit assigns each change [0:50]
 
-The literature strip places the work relative to fixed feedback,
-state/target-inference methods, eligibility-plus-modulator rules, and
-dendritic teaching-compartment models. These approaches mainly differ in how
-the neuron-level signal is generated. Our additional question is how it is
-resolved spatially after it reaches the neuron.
+**Purpose.** Define credit assignment in language shared by machine learning and computational neuroscience.
 
-**Transition:** This gives the point-neuron factorization used by a local rule.
+**Say.** A neural network maps an input to an output through many trainable weights. Training begins with one global loss, but the optimizer needs a separate update for every weight. Credit assignment is this conversion: for each parameter, which parameter should change, in which direction, and by how much? The equation at the bottom is ordinary gradient descent. The difficult object is not the forward activity itself; it is the derivative of the global loss with respect to a parameter that may be many stages upstream. This is the common problem that backpropagation and proposed neuronal learning rules must address.
 
-## 4. Local learning preserves eligibility and approximates the returned signal — 0:50
+**How to read the slide.** Follow the forward arrows to the loss, then the highlighted reverse route to one weight. Read the equation as delta w i equals minus eta times the loss derivative.
 
-**Before the factorization:** A local rule preserves the part of the gradient
-available at the connection and replaces how the task-dependent signal is
-obtained.
+**Likely question.** Is credit assignment just another name for gradient descent?
 
-For a point neuron,
+**Answer.** Gradient descent specifies how to use a derivative. Credit assignment is the problem of computing or approximating the parameter-specific information that derivative requires.
 
-\[
-\frac{\partial\mathcal L}{\partial w_i}
-=\underbrace{x_i f'_u(z_u)}_{e_i}\,\delta_u,
-\qquad
-\Delta w_i=-\eta e_i\delta_u^{\rm avail} .
-\]
+**Claim guardrail.** Keep the distinction between the optimization rule and the mechanism that supplies its derivative.
 
-Eligibility \(e_i\) is connection-specific; the available learning signal
-\(\delta_u^{\rm avail}\) may still depend on a global objective. This is the
-slide-safe label for the manuscript notation \(\widehat\delta_u\). A shared scalar
-does not make all weights equal because their inputs, states, initialization,
-and eligibilities remain different. It removes task-specific feedback
-coordinates.
+**Transition.** Backpropagation tells us exactly what that returned information would be.
 
-**Transition:** A dendrite introduces spatial locations inside the selected
-neuron.
+## 3. Backpropagation defines the exact neuron-specific learning signal [1:00]
 
-## 5. Dendrites add within-neuron state, address, and route gain — 0:50
+**Purpose.** Introduce the exact reference and situate the work among alternative credit-assignment approaches.
 
-**Opening intuition:** Once feedback identifies a neuron, a branching arbor
-creates a second assignment problem: where inside that neuron should the
-signal act?
+**Say.** For a point neuron u, the downstream network returns delta u, the derivative of the loss with respect to that neuron's output. The reverse recursion multiplies downstream errors by synaptic weights and activation derivatives, so delta u is specific to the neuron and generally nonlocal. We use this as an information reference, not as a claim that a brain literally runs backpropagation. Existing approaches replace or infer this signal in different ways: fixed feedback, state-based objectives, eligibility traces with modulatory factors, or dendritic teaching signals. Our question is complementary: once feedback is restricted, what spatial coordinates can a neuron and its dendrites provide?
 
-In the dendritic model, trainable network weights become conductances \(g_i\)
-distributed across compartments \(n\). The routed field is
-\(\boldsymbol\delta_u^{V,{\rm avail}}=A_u\boldsymbol\beta_u\). The \(K\) entries
-of \(\boldsymbol\beta_u\) are independently communicated signals, and \(N_u\)
-is the number of compartments in neuron \(u\), so
-\(A_u\in\mathbb R^{N_u\times K}\). Each column of \(A_u\) defines one route's
-spatial support and gain. This separates local state, subtree address, and
-route gain.
+**How to read the slide.** The recursion sums over neurons v downstream of u. Delta u belongs to a neuron, not yet to an individual incoming weight.
 
-A grouped-point model can be supplied with the same \(A_u\), so a positive
-result establishes the value of the routed information before it establishes
-a uniquely dendritic implementation.
+**Likely question.** Why is delta u not already weight-specific?
 
-**Transition:** Conductance is the physical ingredient that makes local state
-and route gain different from an additive weight.
+**Answer.** All incoming weights of neuron u share the same downstream loss derivative. Their different presynaptic activities and local derivatives make their final gradients distinct.
 
-## 6. Conductance makes dendritic voltage a normalized quotient — 0:55
+**Claim guardrail.** Do not imply that feedback alignment, equilibrium propagation, and three-factor rules are equivalent mechanisms.
 
-**Before the equation:** A conductance changes both the drive in the numerator
-and the total conductance in the denominator.
+**Transition.** That shared structure gives the standard local factorization.
 
-The inverse denominator is the local input resistance
-\(R_n^{\rm tot}=1/g_n^{\rm tot}\). An additive current changes the numerator
-without changing \(g_n^{\rm tot}\). A shunting conductance raises total
-conductance and lowers input resistance. Near its reversal potential, the
-shunt's own net current can be small while its denominator effect remains.
-Here \(\operatorname{syn}(n)\) denotes synapses on compartment \(n\),
-\(\operatorname{child}(n)\) its children, and
-\(a_c=f_c(V_c)\) the activation passed forward by child \(c\).
+## 4. Local learning preserves eligibility and approximates the returned signal [0:50]
 
-**Transition:** The same denominator appears in the derivative with respect to
-a synaptic conductance.
+**Purpose.** Define local learning and pre-empt the misconception that a shared scalar collapses neurons.
 
-## 7. Dendritic credit still factorizes into eligibility × learning signal — 0:50
+**Say.** For a point neuron, the exact weight gradient factorizes into a local eligibility and a neuron-specific loss signal. Eligibility uses quantities available at the connection: presynaptic activity and the postsynaptic derivative. A local rule can preserve this exact factor while replacing delta u by whatever learning signal is available. At one extreme every neuron receives the same scalar; at the other, feedback preserves one coordinate per neuron. A shared scalar does not make all weights equal, because every weight still has its own eligibility. It limits the rank of task-dependent learning information, so diversity remains but is underused.
 
-**Before the gradient:** The exact dendritic rule has the same logical
-structure as the point-neuron rule.
+**How to read the slide.** Read the factorization from left to right: local eligibility e i times exact neuron signal delta u; the available signal replaces only the second factor.
 
-Define \(\delta_n^V=\partial\mathcal L/\partial V_n\). Differentiating the
-steady-state voltage gives
+**Likely question.** Would one shared error make the hidden layer behave like one neuron?
 
-\[
-\frac{\partial\mathcal L}{\partial g_i}
-=\underbrace{x_iR_n^{\rm tot}(E_i^{\rm rev}-V_n)}_{e_i^{\rm den}}
-\underbrace{\delta_n^V}_{\text{compartment learning signal}} .
-\]
+**Answer.** No. Different inputs, activations, initial weights, and eligibilities keep units distinct. The limitation is feedback bandwidth: only one task-dependent direction is broadcast per example.
 
-The first factor is locally available from activity, input resistance, and
-driving force. The second factor is task-dependent and must reach the correct
-compartment.
+**Claim guardrail.** Call this a bandwidth bottleneck, not neuronal collapse.
 
-**Transition:** The tree determines how a neuron-level signal becomes this
-compartment field.
+**Transition.** A point neuron offers one destination; a dendritic neuron offers many internal destinations.
 
-## 8. Tree transport turns one somatic signal into a compartment field — 0:55
+## 5. Dendrites turn one neuronal signal into four testable routing questions [0:55]
 
-**Before the path product:** Returned credit travels from the somatic signal
-toward dendritic compartments.
+**Purpose.** Define the paper's organizing variables before any dendritic result is shown.
 
-For the directed-tree model,
-\(\delta_n^V=\delta_0^V\gamma_n\), where \(\gamma_n\) is the product of local
-derivatives, input resistances, and inter-compartment conductances along the
-unique path from compartment \(n\) to the soma. The path product is exact for
-this directed model. Reconstructed reciprocal cables use the steady-state
-adjoint rather than a unique directed path.
+**Say.** We now replace one point unit by a neuron with N internal compartments. The available compartment field is A u times c u. The matrix A u specifies where each of K feedback channels is delivered; c u contains their signed values on the current example. This separates four questions that are often conflated. Coordinate asks whether feedback identifies the correct neuron. Ownership asks whether that coordinate reaches the correct arbor. Address asks which subtree within the arbor receives it. Gain asks how strongly the signal propagates. Finally, alignment asks whether these available routes span the credit pattern the task actually demands.
 
-The product is indexed in the forward child-to-parent direction \(n\to0\),
-whereas the purple arrow shows the adjoint learning signal propagating over
-the same path in reverse, \(0\to n\).
+**How to read the slide.** A u has one row per compartment and one column per available channel. Multiplying by c u produces one available value at every compartment.
 
-Dendrites do not generate the circuit-level error; they spatially transform it
-after it reaches the neuron.
+**Likely question.** Is A u the anatomical adjacency matrix?
 
-**Transition:** We can represent every restricted version of this returned
-field with one mathematical object.
+**Answer.** No. It is a delivery or address matrix. Anatomy can generate its columns, but matched non-anatomical and deranged matrices let us separate route capacity from a specific topology.
 
-## 9. A feedback pathway selects, assigns, and scales stochastic credit — 0:45
+**Claim guardrail.** Grouped-point controls can emulate the same routing matrix; an address need not uniquely require dendritic material.
 
-**Before the operator:** A restricted pathway changes not only how many
-signals are present, but also where they are assigned and how strongly they
-act.
+**Transition.** To derive how route gain works, we need the conductance model.
 
-Write the stochastic backpropagation gradient as
-\(\boldsymbol\mu_{\rm BP}\equiv\widehat{\boldsymbol\mu}
-=\boldsymbol\mu+\boldsymbol\xi\), with zero-mean noise covariance \(\Sigma\).
-The available update is
-\(\boldsymbol\mu_{\rm route}\equiv\widetilde{\boldsymbol\mu}
-=M\boldsymbol\mu_{\rm BP}\). \(M=I\) is
-unrestricted backpropagation of the stochastic gradient—not a full-batch
-gradient. Scalar, neuron-specific, and subtree feedback correspond to
-structured operators of increasing bandwidth.
+## 6. Conductance makes dendritic voltage a normalized quotient [1:05]
 
-**Transition:** Restriction loses some signal, but can also exclude stochastic
-components that would enter the update.
+**Purpose.** Define excitatory, inhibitory, additive, and shunting terms before deriving gradients.
 
-## 10. Operator utility balances retained signal, update cost, and noise — 1:05
+**Say.** Each compartment receives nonnegative excitatory and inhibitory conductances. They are not distinguished by positive versus negative weights; they are distinguished by their reversal potentials. At steady state, voltage is the total reversal-weighted current divided by total conductance. Excitation and inhibition therefore affect the numerator, while both also increase the denominator and reduce local input resistance. Our additive control changes current without changing total conductance. A shunt can carry almost no net current when voltage is near the inhibitory reversal potential and still change the denominator. That denominator effect is what can regulate sensitivity and the gain of a credit route.
 
-**Before the utility:** A useful restricted route must preserve task-aligned
-gradient signal while controlling update magnitude and admitted noise.
+**How to read the slide.** G E and G I are sums of active synaptic conductances. R total is the reciprocal of leak, synaptic, and effective child conductance.
 
-The numerator of \(U(M)\) is the squared alignment of the routed update with
-the mean gradient. Its denominator contains the finite-step cost and the
-noise passed by the same operator. The positivity condition
-\(\boldsymbol\mu^{\mathsf T}M\boldsymbol\mu>0\) is required.
+**Likely question.** How can inhibition matter when its instantaneous current is near zero?
 
-Across 540 trained-factorial conditions, utility has Spearman correlation
-\(\rho_s=0.937\) with norm-matched one-step progress and \(\rho_s=0.916\)
-with final accuracy. The result is exact for an isotropic quadratic with
-Hessian \(L_{\rm sm}I\); otherwise it is a curvature bound and a one-step
-smoothness guarantee. It predicts the large contrasts and within-family
-progress, not every small difference accumulated through nonlinear training.
+**Answer.** Because conductance changes input resistance. Near the inhibitory reversal potential the numerator contribution can vanish while the denominator still increases.
 
-**Transition:** The first empirical question is whether standard tasks need
-within-neuron resolution at all.
+**Claim guardrail.** The additive comparison is a current-based control, not a claim that all point-neuron inhibition is additive.
 
-## 11. Neuron identity—not exact path resolution—dominates both standard tasks — 0:55
+**Transition.** Differentiating this steady state reveals what a synapse can compute locally and what must be transported.
 
-**Opening intuition:** On both standard tasks, selecting the correct neuron
-matters much more than resolving the exact path within that neuron.
+## 7. The exact dendritic gradient is local eligibility × transported compartment error [1:10]
 
-On MNIST, strict scalar to neuron-specific feedback adds 11.25 percentage
-points in the shunting tree and 7.81 points in the additive tree. Replacing
-the neuron signal by the exact compartment field then adds only 0.045 and
-0.186 points. On flattened CIFAR-10, neuron-specific feedback adds 16.39
-points over the scalar, while the exact compartment field is 0.86 points
-below neuron-specific feedback and is equivalent to backpropagation within
-the predefined one-point margin. “Exact path” on the source plot is the
-implementation label for the exact compartment field.
+**Purpose.** Present the central gradient factorization and distinguish directed-tree transport from the general adjoint.
 
-The larger identity effect in the flattened CIFAR-10 cohort is descriptive;
-this comparison does not identify task difficulty as its cause.
+**Say.** For conductance g i on compartment n, the exact gradient again has two factors. The local eligibility contains presynaptic activity, local input resistance, and the driving force between the synaptic reversal potential and local voltage. The second factor is delta V n u: how the loss changes if voltage at that compartment is perturbed. In the directed-tree approximation, this compartment error equals the somatic error times a path gain, alpha tilde n, which is a product of local derivatives, resistances, and coupling conductances along the unique path to the soma. For reciprocal cable models, the same error field is obtained by solving the steady-state adjoint.
 
-**Transition:** What task property actually creates a need for a branch
-address?
+**How to read the slide.** Read the first equation as local dendritic eligibility times transported compartment error. Alpha tilde n is dimensionless route gain along the directed path.
 
-## 12. Credit conflict creates a demand for branch-specific signals — 1:00
+**Likely question.** Does the path-product formula apply to a fully reciprocal dendrite?
 
-**Opening intuition:** Every branch is active, but context determines which
-branch should control the output.
+**Answer.** Not literally. It is exact for the directed-tree model. The more general result is the adjoint linear solve; the eligibility-times-compartment-error factorization remains valid.
 
-Here \(N\) is the number of trials, \(\delta_t\) is the downstream logit
-gradient on trial \(t\), \(\mathbf 1[\cdot]\) is the indicator function, and
-\(\mathbf d_b\) is the mean update direction for branch \(b\).
+**Claim guardrail.** Do not present one directed path as the general Green's function of a reciprocal cable.
 
-All \(B\) branches receive a Fashion-MNIST image and form nonzero eligibility.
-On trial \(t\), context \(c_t\) selects the branch whose image defines the
-target. The conflict dose \(\chi\) changes nonselected images from
-class-compatible to opposite-class. The correct update contains the selector
-\(\mathbf 1[c_t=b]\); the shared update contains only the scale-matching
-factor \(1/B\) and therefore carries no branch identity.
+**Transition.** We can now abstract any restricted feedback pathway as an operator on this exact field.
 
-At zero conflict, sharing is harmless. At high conflict, the same learning
-signal multiplies eligibilities that call for opposite updates.
+## 8. A feedback pathway selects, assigns, and scales stochastic credit [0:55]
 
-**Transition:** The compatibility matrix predicts where the shared mode stops
-being a descent direction.
+**Purpose.** Introduce the common mathematical object used to compare feedback schemes.
 
-## 13. Shared credit fails at the predicted conflict boundary — 0:55
+**Say.** Let mu plus xi denote a stochastic exact gradient: mu is its mean task-aligned component and xi is zero-mean sampling noise. A feedback architecture applies an operator M before the update. Identity M gives unrestricted backpropagation. A scalar broadcast, one coordinate per neuron, subtree routes, deranged routes, and an exact compartment field are different choices of M. This abstraction separates the forward neuron from the information geometry of its learning signal. It also lets us ask one quantitative question across experiments: how much useful signal does a restricted route retain, and how much update energy and noise does it admit?
 
-**Before the threshold:** The shared-mode eigenvalue is
-\(\lambda_{\rm shared}=B-2\chi(B-1)\), so it crosses zero at
-\(\chi_c=B/[2(B-1)]\).
+**How to read the slide.** M acts on the stochastic gradient field. It can restrict span, reassign coordinates, or rescale them.
 
-The thresholds are \(1\), \(2/3\), and \(4/7\) for two, four, and eight
-branches. Trained collapse points follow them. At full conflict,
-branch-specific feedback gains 35–58 percentage points over shared feedback.
-A cyclically deranged route fails at matched rank and sparsity. Analytic
-backpropagation, the correct route, and the gated-point calculation are
-algebraically equivalent forms of the same routing matrix; their agreement is
-an implementation control, not an independent replication.
+**Likely question.** Is M learned by the model?
 
-**Transition:** This compares one shared signal with complete branch
-resolution; the next task tests intermediate bandwidth.
+**Answer.** Not necessarily. The theory describes any fixed or state-dependent delivery operator. In our controlled comparisons, M is prescribed so its effects can be isolated.
 
-## 14. Nested tasks ask whether a few subtree addresses are efficient — 0:55
+**Claim guardrail.** This is a local linearization of delivered credit, not a claim that every biological pathway is globally linear.
 
-**Opening intuition:** A tree can be useful as a compressed basis only when
-the task's credit hierarchy matches its partitions.
+**Transition.** The signal-noise utility follows from the smoothness bound for one update.
 
-Eight streams are active at the leaves. Context selects one stream carrying
-positive class evidence; distractors have opposite sign and strengthen with
-tree distance. \(K\in\{1,2,4,8\}\) is the number of independently communicated
-signals within one neuron. The route matrix \(A_K\) has rank \(K\).
+## 9. Operator utility balances retained signal, update cost, and noise [1:05]
 
-Controls match rank, sparsity, forward resources, and parameter count while
-changing assignment, basis, or topology.
+**Purpose.** Make the phase theory the predictive centerpiece and state its scope honestly.
 
-**Transition:** The result separates the value of correct addresses from the
-additional value of the tree's fine topology.
+**Say.** The numerator measures squared alignment between the true mean gradient and the routed update. The denominator penalizes both the size of the retained signal and the routed noise, scaled by curvature. So a restricted operator can help when it preserves aligned signal while rejecting noisy or irrelevant dimensions. We evaluated this quantity before training across 540 conditions. Its rank correlation is 0.937 with observed norm-matched one-step progress and 0.916 with final accuracy. This is the paper's strongest quantitative result: one operator theory predicts major wins, nulls, and crossovers. It is not a guarantee for every small difference accumulated over a nonlinear trajectory.
 
-## 15. Subtree addresses help—but fine topology adds only a narrow gain — 0:55
+**How to read the slide.** Read U of M as aligned signal squared divided by curvature times routed signal-plus-noise energy.
 
-**Opening intuition:** Correct assignment matters strongly; the advantage of
-this particular anatomical basis is much smaller.
+**Likely question.** Does a high U guarantee higher final test accuracy?
 
-At the same \(K=4\) bandwidth, correct ancestry assignment exceeds cyclic
-derangement by 61.1 percentage points. Against the seedwise strongest matched
-non-anatomical low-rank control, the advantage is 1.27 points. Ancestry loses
-to that matched control at \(K=1,2\), wins only at \(K=4\), and ties at full
-rank \(K=8\). Degree- and depth-preserving rewiring removes the intermediate
-gain. Dendritic, grouped-point, and gated-point implementations coincide when
-they receive the same routed field.
+**Answer.** No. It is exact for an isotropic quadratic and otherwise a one-step smoothness guarantee. The strong final-accuracy association is empirical validation, not a theorem about all training trajectories.
 
-**Transition:** Controlled tasks establish when an address can help; anatomy
-asks whether real arbors provide candidate addresses.
+**Claim guardrail.** Lead with prediction of large contrasts and phase boundaries; keep trajectory-scale exceptions explicit.
 
-## 16. Real arbors provide sparse candidate routes, mostly through coarse geometry — 0:55
+**Transition.** The first boundary appears on ordinary image tasks.
 
-**Before capture:** Capture is the fraction of modeled credit-field energy
-contained in the route span,
-\(C_A(\mathbf q)=\|P_A\mathbf q\|^2/\|\mathbf q\|^2\).
+## 10. Neuron-specific feedback dominates standard image tasks [1:00]
 
-At eight channels, subtree routes retain 85% of the dense rank-matched capture
-using about 7% of the dense route-matrix connections. This is 14.2 times the
-dense capture per connection; the anatomy-specific density-matched comparison
-is the more modest approximately 2.7-fold advantage over a shuffled
-dictionary. “Connections” means nonzero route-matrix entries, not cable
-length, energy, or reliability.
+**Purpose.** Establish that neuron identity, rather than exact dendritic address, is the main bottleneck on standard benchmarks.
 
-The full route ordering replicates in a disjoint 47-cell cohort. In a second
-MICrONS mouse, the model-matched subtree advantage is positive in all ten
-quality-controlled cells; this is descriptive cell-level replication, not an
-independent animal-level inferential test. These are modeled fields on
-measured anatomy, not observed task gradients.
+**Say.** These ladders progressively increase feedback resolution. Moving from one strict layer-wide scalar to one coordinate per neuron improves accuracy by about eight to sixteen percentage points across MNIST and flattened CIFAR-10. Moving from one neuron-specific coordinate to the exact compartment field changes accuracy by less than one point. On CIFAR-10, the exact field is within the predefined one-point equivalence margin of backpropagation. The important conclusion is a boundary, not a universal dendritic benefit: on standard image tasks, preserving which neuron owns a learning signal is much more important than resolving the exact path inside that neuron.
 
-**Transition:** A branch point supplies an address; can conductance regulate
-its gain?
+**How to read the slide.** Compare adjacent rungs, not absolute axes across datasets. Green denotes shunting on MNIST; blue denotes the additive tree.
 
-## 17. Focal shunting changes descendant credit only in permissive regimes — 1:00
+**Likely question.** Why does the scalar network still learn well?
 
-**Opening intuition:** The key control compares conductance with an additive
-input without claiming that local dendritic voltage is matched.
+**Answer.** Every weight retains a distinct eligibility and the forward network retains many hidden units. Scalar feedback restricts task-dependent credit but does not erase representational diversity.
 
-The additive input equals the shunt's baseline first-order focal current at
-the same site. After either intervention, a separate somatic current restores
-baseline somatic voltage. Local dendritic voltage is explicitly not clamped;
-only the shunt changes the conductance matrix \(G\). The Green's-function
-column \(G^{-1}\mathbf e_k\) determines the spatial spread of the adjoint
-change.
+**Claim guardrail.** Do not claim exact dendritic routing is generally needed from these benchmarks; they show the opposite.
 
-At \(R_m=15{,}000\,\Omega\,\mathrm{cm}^2\), the shunt-minus-current
-localization contrast is effectively null. Descendant localization emerges
-only with lower membrane resistance or added background conductance and
-persists in a steady-state active-channel extension. This is a conditional
-route-gain mechanism, not a general learning advantage of inhibition.
+**Transition.** To make a branch address necessary, the task must demand incompatible updates inside one neuron.
 
-**Transition:** Anatomical capacity and a possible gain mechanism still do not
-show that biological activity uses these routes.
+## 11. Credit conflict creates a demand for branch-specific signals [1:00]
 
-## 18. Measured visual responses show no morphology-specific alignment — 0:55
+**Purpose.** Define the controlled branch-conflict task before showing its outcome.
 
-**Opening intuition:** This analysis tests whether a measured cortical
-input–output relation is preferentially aligned with measured subtree routes.
+**Say.** Here every branch is active and therefore has nonzero eligibility, but a context selects which branch determines the label. The conflict parameter chi controls the distractors. At chi equals zero, selected and nonselected streams are class-compatible, so one shared learning signal can work. At chi equals one, the nonselected branches carry the opposite class, so simultaneously active branches require different or opposing updates. The branch-specific rule gates credit by context; the shared rule broadcasts the same value across branches. This is a deliberately constructed existence test of when within-neuron address resolution is required.
 
-Presynaptic visual responses enter the reconstructed arbor as conductances,
-and the model predicts the target cell's response on held-out conditions.
-Exact compartment errors give the lowest prediction error. Across seven
-target cells from one MICrONS mouse, nested subtrees do not beat random or
-site-shuffled routes for held-out prediction, response-derived field capture,
-or within-arbor structure–function similarity.
+**How to read the slide.** B is the number of branches, c t selects the relevant branch, and d b is the mean update direction assigned to branch b.
 
-This is the strongest boundary on the biological claim.
+**Likely question.** Was this task designed to favor branch-specific routing?
 
-**Transition:** The theory predicts a causal counterfactual: the same routes
-should help if the task field is rotated into their span.
+**Answer.** Yes, deliberately. It is a mechanism-matched necessity test: we vary the precise feature, simultaneous within-neuron credit conflict, that the theory says should create path demand.
 
-## 19. The same anatomical routes capture task credit aligned to their span — 0:55
+**Claim guardrail.** Call it a controlled existence proof, not a naturalistic benchmark.
 
-**Before the rotation:** Hold the cells, anatomy, route count, field energy,
-and curvature fixed; change only alignment with the subtree span.
+**Transition.** The theory predicts the exact conflict value at which shared credit changes sign.
 
-The field \(\boldsymbol\phi(a_{\rm route})\) rotates between a unit vector in
-the route span and an orthogonal unit vector. Its subtree capture equals
-\(a_{\rm route}\) by construction. The matched controls test whether the gain
-is specific to the true subtree span across eight reconstructed cells.
+## 12. Shared credit fails at the predicted conflict boundary [0:55]
 
-This manipulation establishes conditional representational sufficiency.
-Because the field direction and projection coefficients are imposed, it is
-not a trained-learning comparison and does not demonstrate endogenous
-biological alignment.
+**Purpose.** Show that the analytic crossover predicts trained failure and that route assignment is causal.
 
-**Transition:** The wins, ties, and nulls now return to the same alignment–
-bandwidth map predicted before the experiments.
+**Say.** The shared update has an analytic eigenvalue B minus two chi times B minus one. It crosses zero at chi c equals B over two times B minus one. The trained shared rule collapses near this predicted boundary for two, four, and eight branches. At full conflict, branch-specific routing gains thirty-five to fifty-eight percentage points. A cyclic derangement keeps the same rank and sparsity but delivers each channel to the wrong branch, and it fails. Analytic backpropagation, the correct routed field, and a gated-point implementation coincide because they are equivalent calculations of the same routing matrix.
 
-## 20. Alignment and bandwidth determine which dendritic resources help — 0:50
+**How to read the slide.** Lambda shared is the useful shared-mode coefficient. Its sign change defines chi c; the plotted collapse points track that boundary.
 
-**Closing answer:** The horizontal coordinate is task–route alignment. The
-vertical coordinate is relative feedback bandwidth
-\(K/r_{\rm eff}\), where \(r_{\rm eff}\) is the effective rank of task credit.
-The \(\lambda_i\) in its definition are the eigenvalues of the task-credit
-covariance spectrum.
-Coordinates are operationalized separately within each experiment, and the
-regime tint is theoretical rather than fitted.
+**Likely question.** Why does the critical conflict depend on B?
 
-The evidence ladder separates the claims. Neuron identity is dominant in the
-model benchmarks. Branch-specific coordinates are required under controlled
-conflict. Subtree routes are a conditional intermediate basis. Reconstructed
-arbors provide sparse candidate routes. Shunting conditionally changes their
-gain. Endogenous morphology-specific use is not established by the measured
-visual-response analysis.
+**Answer.** One selected stream contributes useful signal while B minus one distractors contribute conflicting signal. Increasing B changes that balance and shifts the zero crossing.
 
-**Final sentence:** Dendritic structure is a conditional substrate for routing
-local credit—not a general replacement for backpropagation.
+**Claim guardrail.** The result establishes the need for an address, not a unique material need for a dendritic tree.
 
-## Optional backup transition — serial physical depth
+**Transition.** A second task asks whether a small hierarchy of addresses can be efficient.
 
-Physical depth is intentionally outside the 20-slide core because it asks a
-different forward-computation question. If discussion turns to depth, use the
-backup distinction
+## 13. Nested tasks ask whether a few subtree addresses are efficient [0:50]
 
-\[
-D_{\rm r}=\text{backward route resolution},
-\qquad
-D_{\rm p}=\text{forward serial physical depth}.
-\]
+**Purpose.** Define the hierarchy task and make clear that K is feedback bandwidth.
 
-The calibrated hierarchy experiment shows a task-matched compositional
-benefit, not a universal dendritic advantage: aligned D3 exceeds D1 by 30.9
-points under backpropagation, exact compartment feedback adds 11.0 points over
-one shared somatic signal at D3, and flexible parameter-matched point models
-remain an important ceiling.
+**Say.** The next task has eight input streams organized by a nested context hierarchy. We expose only K independent feedback channels inside each neuron: one shared channel, two coarse subtrees, four intermediate subtrees, or eight leaf-specific channels. A K therefore has rank K. We compare true ancestry routes with derangements and matched non-anatomical low-rank bases while holding forward resources, rank, sparsity, and parameter count fixed. K is feedback bandwidth, not physical dendritic depth. The hypothesis is that a tree becomes an efficient basis only when the task's credit covariance has a compatible nested structure.
+
+**How to read the slide.** The four route diagrams increase within-neuron bandwidth K from one to full rank eight.
+
+**Likely question.** Is increasing K the same as adding dendritic depth?
+
+**Answer.** No. K counts independent returned coordinates. Physical depth changes the forward serial computation and is a separate experiment kept in backup.
+
+**Claim guardrail.** Do not let the audience interpret K as number of dendritic levels.
+
+**Transition.** The result separates address ownership from the smaller contribution of this particular topology.
+
+## 14. Subtree addresses help—but fine topology adds only a narrow gain [0:55]
+
+**Purpose.** Separate the large value of correct address assignment from the small topology-specific effect.
+
+**Say.** At intermediate bandwidth K equals four, assigning the channels to the correct subtrees beats a cyclic derangement by sixty-one percentage points. That is the large address-assignment effect. But against the strongest matched non-anatomical low-rank basis, the ancestry advantage is only 1.27 points. Ancestry loses at K equals one and two, wins at K equals four, and ties at full rank. Rewiring removes the intermediate gain. Dendritic, grouped-point, and gated-point implementations coincide when they receive the same routed field. So the robust conclusion is that correct addresses matter; the extra value of nested anatomy is narrow and task-matched.
+
+**How to read the slide.** Compare correct ancestry first with derangement, then with the best rank- and sparsity-matched alternative. Those contrasts answer different questions.
+
+**Likely question.** Does the sixty-one-point effect prove that dendritic topology is superior?
+
+**Answer.** No. It proves that correct channel-to-subtree assignment matters. The topology-specific comparison is the much smaller 1.27-point advantage over the best matched alternative at K equals four.
+
+**Claim guardrail.** Always pair the large assignment effect with the modest topology-specific effect.
+
+**Transition.** If biological trees are candidate route dictionaries, how much field can real arbors represent per connection?
+
+## 15. Real arbors provide sparse candidate routes, mostly through coarse geometry [0:55]
+
+**Purpose.** Present anatomy as route capacity, not evidence of biological use.
+
+**Say.** We map excitatory and inhibitory contacts onto reconstructed MICrONS arbors and use branch points to define nested route supports. Capture is the fraction of a target field's energy that lies in the route span. These sparse dictionaries retain about eighty-five percent of dense capture using about seven percent of the dense route-matrix connections. That is a 14.2-fold dense-normalized ratio, but the anatomy-specific advantage over a density-matched shuffled dictionary is closer to 2.7-fold. The ordering replicates in held-out cells and a small second-mouse cohort. Most of the capacity is explained by coarse branch geometry.
+
+**How to read the slide.** P A projects a field q into the span of the route matrix A. Capture ranges from zero to one.
+
+**Likely question.** Does high capture show that the animal uses these routes for learning?
+
+**Answer.** No. It shows representational capacity of modeled route dictionaries. It does not measure endogenous task gradients or demonstrate plasticity through those routes.
+
+**Claim guardrail.** Pair 14.2-fold with the density-matched approximately 2.7-fold control and call the second-mouse result descriptive.
+
+**Transition.** Anatomy supplies addresses; conductance can in principle regulate their gain.
+
+## 16. Focal shunting changes descendant credit only in permissive regimes [1:00]
+
+**Purpose.** Explain the mechanistic contrast and foreground the standard-calibration null.
+
+**Say.** We compare a focal inhibitory conductance with an additive current chosen to match the baseline first-order focal current, then restore somatic voltage. The local dendritic voltage is intentionally not matched, because the question is whether conductance changes sensitivity beyond current injection. In the directed tree, the log gain of a descendant route changes in proportion to minus the local input resistance when the shunt lies on that route. At the standard passive calibration the localization contrast is essentially zero. In high-conductance, electrotonically permissive regimes, descendant-localized changes emerge and survive active-channel extensions. Shunting is therefore a conditional gain mechanism, not a generic learning improvement.
+
+**How to read the slide.** The indicator is one only for descendants of compartment k, and the effect scales with R total k.
+
+**Likely question.** Is the main shunting result positive or null?
+
+**Answer.** At the standard passive calibration it is null. The positive localization appears in a defined permissive high-conductance regime, which is why the claim is conditional.
+
+**Claim guardrail.** Do not imply that shunting improves training generically or that local voltage was matched.
+
+**Transition.** Capacity and conditional gain still do not show that measured cortical function uses these routes.
+
+## 17. Measured visual responses show no morphology-specific alignment [0:50]
+
+**Purpose.** State the biological null as a headline result and define its inferential scope.
+
+**Say.** For seven reconstructed target cells from one MICrONS mouse, we map measured presynaptic visual responses through the conductance model and test held-out postsynaptic-response prediction. Nested subtrees do not outperform random or site-shuffled route dictionaries for held-out learning, field capture, or within-arbor structure-function similarity. The effects are centered near zero. This is an important boundary: measured anatomy offers possible addresses, but these visual-response data do not reveal preferential alignment between those addresses and the functional relation being modeled. The cohort is small and does not measure plasticity, so the result is a scoped null rather than a general rejection of dendritic learning.
+
+**How to read the slide.** The pipeline moves from measured presynaptic responses to mapped conductances and then held-out postsynaptic prediction; the contrast plot compares topology with matched controls.
+
+**Likely question.** Does this rule out morphology-specific credit assignment in cortex?
+
+**Answer.** No. It rules out a detectable advantage in this seven-cell, one-mouse visual-response analysis. Other tasks, states, cell types, or direct plasticity measurements could differ.
+
+**Claim guardrail.** Say seven cells and one mouse aloud; never generalize the null beyond this cohort and assay.
+
+**Transition.** We therefore ask the narrower causal question: would the same routes help if the task field were aligned to them?
+
+## 18. The same anatomical routes capture task credit aligned to their span [0:50]
+
+**Purpose.** Show controlled sufficiency of alignment without implying endogenous biological use.
+
+**Say.** We construct a fixed-energy field phi of a by rotating between a unit vector inside the anatomical route span and an orthogonal unit vector. Anatomy, field energy, curvature, and route count remain fixed; only alignment a changes. By construction, anatomical capture increases linearly with a, and the true subtree routes outperform matched controls as the field enters their span. This rescue shows that the anatomical dictionary is sufficient to represent a task field when the geometry is matched. It does not show that alignment was learned, that these are endogenous cortical error signals, or that the manipulation improves a trained network.
+
+**How to read the slide.** u parallel lies in the column space of A and u perpendicular is orthogonal to it. The square roots keep total field energy fixed.
+
+**Likely question.** Is this a trained-learning experiment?
+
+**Answer.** No. It is a controlled representational analysis. Its purpose is to isolate alignment as the missing variable after the measured-response null.
+
+**Claim guardrail.** Use the phrase conditional representational sufficiency.
+
+**Transition.** The standard tasks, controlled positives, and biological nulls now occupy one common phase plane.
+
+## 19. One alignment–bandwidth plane organizes the wins and nulls [0:45]
+
+**Purpose.** Give the audience one unifying map rather than a list of disconnected results.
+
+**Say.** The horizontal axis is task-route alignment: how much demanded credit lies in the available route span. The vertical axis is feedback bandwidth relative to the effective dimensionality of the task-credit field. Low bandwidth creates a coordinate or address bottleneck. At aligned intermediate bandwidth, restricted routes can preserve useful signal while rejecting irrelevant dimensions. At full rank, route capacity saturates; at weak alignment, extra structure cannot help. Each experiment estimates its coordinates separately. The background regimes and the bandwidth-equals-effective-rank boundary are theoretical, not fitted to the outcome points.
+
+**How to read the slide.** Move right for stronger task-route alignment and up for more independent feedback coordinates relative to effective credit rank.
+
+**Likely question.** Was the phase boundary fitted to these experiments?
+
+**Answer.** No. The regime tint and K over effective-rank equals one line come from the operator theory. Experimental coordinates are estimated independently within each assay.
+
+**Claim guardrail.** Do not treat approximate point placement as a universal calibrated phase diagram.
+
+**Transition.** This leaves four conclusions, ordered by what the evidence establishes most strongly.
+
+## 20. Coordinate → address → gain, all conditional on task–route alignment [0:45]
+
+**Purpose.** End with four defensible statements and one memorable novelty claim.
+
+**Say.** The first requirement is neuron-specific coordinate: it closes most of the scalar-to-exact gap on standard tasks. Within-neuron addresses become necessary when simultaneously active branches require conflicting updates. Nested topology adds a modest advantage only at matched intermediate bandwidth, while real arbors provide sparse candidate routes. Conductance can regulate route gain in permissive states, but measured endogenous use remains unestablished. The central contribution is therefore not that dendrites always improve learning. It is a predictive boundary map of when restricted dendritic routes should help, when they should not, and why.
+
+**How to read the slide.** The final flow is coordinate, address, and gain, gated jointly by alignment and bandwidth.
+
+**Likely question.** What is the one-sentence novelty?
+
+**Answer.** A stochastic credit-operator theory quantitatively predicts when restricted dendritic routes preserve useful learning signal, and controlled experiments map both its positive regimes and its null boundaries.
+
+**Claim guardrail.** Finish on the conditional theory; do not inflate anatomy or shunting into universal benefits.
+
+**Transition.** Thank the audience and invite questions.

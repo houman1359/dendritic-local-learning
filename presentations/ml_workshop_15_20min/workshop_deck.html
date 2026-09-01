@@ -353,7 +353,7 @@ h1 { margin:0; font-family:Georgia,"Nimbus Roman",serif; font-size:52px; line-he
       </g>
     </svg></div>
           <div class="stack compact-stack">
-            <div class="ei-definition"><b>G<sup>E</sup><sub>n</sub>=Σg<sup>E</sup><sub>i</sub>x<sup>E</sup><sub>i</sub>≥0</b> &nbsp;·&nbsp; <b>G<sup>I</sup><sub>n</sub>=Σg<sup>I</sup><sub>j</sub>x<sup>I</sup><sub>j</sub>≥0</b><span>E and I are distinguished by reversal potentials E<sub>E</sub> and E<sub>I</sub>, not by negative conductance.</span></div>
+            <div class="ei-definition"><b>G<sup>E</sup><sub>n</sub>=Σg<sup>E</sup><sub>i</sub>x<sup>E</sup><sub>i</sub>≥0</b><b>G<sup>I</sup><sub>n</sub>=Σg<sup>I</sup><sub>j</sub>x<sup>I</sup><sub>j</sub>≥0</b><span>E and I are distinguished by reversal potentials E<sub>E</sub> and E<sub>I</sub>, not by negative conductance.</span></div>
             <div class="equation compact">g<sup>tot</sup><sub>n</sub> = g<sup>L</sup><sub>n</sub> + G<sup>E</sup><sub>n</sub> + G<sup>I</sup><sub>n</sub> + G<sup>child</sup><sub>n</sub>, &nbsp; R<sup>tot</sup><sub>n</sub>=1/g<sup>tot</sup><sub>n</sub></div>
             <div class="equation multiline">Vₙ = R<sup>tot</sup><sub>n</sub>(g<sup>L</sup><sub>n</sub>E<sub>L</sub> + G<sup>E</sup><sub>n</sub>E<sub>E</sub> + G<sup>I</sup><sub>n</sub>E<sub>I</sub> + J<sup>child</sup><sub>n</sub>)</div>
             <div class="compare-row">
@@ -454,7 +454,7 @@ h1 { margin:0; font-family:Georgia,"Nimbus Roman",serif; font-size:52px; line-he
             <div class="stat tone-teal"><div class="stat-value">ρ<sub>s</sub> = 0.937</div><div class="stat-label">utility versus observed norm-matched one-step progress across 540 trained conditions</div></div>
             <div class="stat tone-purple"><div class="stat-value">ρ<sub>s</sub> = 0.916</div><div class="stat-label">utility versus final trained accuracy</div></div>
           </div>
-          <div class="plot-card utility-plot"><img class="plot" src="assets/operator_utility_validation.png?v=1788237775106338278" alt="Operator utility versus observed progress"></div>
+          <div class="plot-card utility-plot"><img class="plot" src="assets/operator_utility_validation.png?v=1788239505164627347" alt="Operator utility versus observed progress"></div>
         </div>
         <div class="scope-strip">Exact for an isotropic quadratic with Hessian L<sub>sm</sub>I; otherwise a curvature bound and one-step smoothness guarantee. It predicts large contrasts and within-family progress—not every trajectory-accrued difference.</div></div>
           <div class="takeaway">Restricted routing helps only when its retained, aligned signal compensates for the signal it discards and the noise it admits.</div><div class="page">09 / 20</div>
@@ -464,8 +464,8 @@ h1 { margin:0; font-family:Georgia,"Nimbus Roman",serif; font-size:52px; line-he
           <h1>Neuron-specific feedback dominates standard image tasks</h1>
           <div class="content">
         <div class="two-col col-50-50 plot-pair standard-plots">
-          <div class="plot-card"><div class="plot-label">MNIST · <span class="green-text">green = shunting</span> · <span class="blue-text">blue = additive</span></div><img class="plot" src="assets/mnist_strict_scalar.png?v=1788237773967324704" alt="MNIST strict-scalar feedback ladder"></div>
-          <div class="plot-card"><div class="plot-label">Flattened CIFAR-10 · additive tree · “exact path” = exact compartment field</div><img class="plot" src="assets/cifar_confirmatory_ladder.png?v=1788237770484465332" alt="CIFAR-10 feedback ladder"></div>
+          <div class="plot-card"><div class="plot-label">MNIST · <span class="green-text">green = shunting</span> · <span class="blue-text">blue = additive</span></div><img class="plot" src="assets/mnist_strict_scalar.png?v=1788239504121297574" alt="MNIST strict-scalar feedback ladder"></div>
+          <div class="plot-card"><div class="plot-label">Flattened CIFAR-10 · additive tree · “exact path” = exact compartment field</div><img class="plot" src="assets/cifar_confirmatory_ladder.png?v=1788239501572705907" alt="CIFAR-10 feedback ladder"></div>
         </div>
         <div class="standard-summary-row">
           <div class="stat tone-blue"><div class="stat-value">+7.8 to +16.4 pp</div><div class="stat-label">strict scalar → one distinct feedback coordinate per neuron</div></div>
@@ -479,7 +479,7 @@ h1 { margin:0; font-family:Georgia,"Nimbus Roman",serif; font-size:52px; line-he
           <h1>Credit conflict creates a demand for branch-specific signals</h1>
           <div class="content">
         <div class="two-col col-60-40 task-layout">
-          <div class="plot-card task-card"><img class="plot" src="assets/path_necessity_task.png?v=1788237771315036374" alt="Context-gated branch-conflict task"></div>
+          <div class="plot-card task-card"><img class="plot" src="assets/path_necessity_task.png?v=1788239502191932305" alt="Context-gated branch-conflict task"></div>
           <div class="stack">
             <div class="card tone-blue "><div class="card-title">input</div><p>All B branches receive a Fashion-MNIST image and form nonzero eligibility.</p></div>
             <div class="card tone-teal "><div class="card-title">forward selector</div><p>Context c selects the branch whose image determines the target.</p></div>
@@ -496,7 +496,7 @@ h1 { margin:0; font-family:Georgia,"Nimbus Roman",serif; font-size:52px; line-he
           <h1>Shared credit fails at the predicted conflict boundary</h1>
           <div class="content">
         <div class="two-col col-67-33 result-layout">
-          <div class="plot-card large-plot"><img class="plot" src="assets/path_necessity_results.png?v=1788237771823205903" alt="Branch-conflict theory and trained results"></div>
+          <div class="plot-card large-plot"><img class="plot" src="assets/path_necessity_results.png?v=1788239502634006370" alt="Branch-conflict theory and trained results"></div>
           <div class="stack">
             <div class="equation boundary-eq">λ<sub>shared</sub>=B−2χ(B−1) &nbsp;→&nbsp; χ<sub>c</sub>=B/[2(B−1)]</div>
             <div class="stat tone-purple"><div class="stat-value">35–58 pp</div><div class="stat-label">branch-specific gain over shared feedback at full conflict</div></div>
@@ -511,10 +511,10 @@ h1 { margin:0; font-family:Georgia,"Nimbus Roman",serif; font-size:52px; line-he
           <h1>Nested tasks ask whether a few subtree addresses are efficient</h1>
           <div class="content">
         <div class="hierarchy-definition-layout">
-          <div class="plot-card hierarchy-task-plot"><img class="plot" src="assets/hierarchy_task_current.png?v=1788237775641603314" alt="Eight-context hierarchical task with selected stream and distance-dependent distractors"></div>
+          <div class="plot-card hierarchy-task-plot"><img class="plot" src="assets/hierarchy_task_current.png?v=1788239505702796305" alt="Eight-context hierarchical task with selected stream and distance-dependent distractors"></div>
           <div class="stack compact-stack hierarchy-side">
-            <div class="equation compact">δ<sup>V, avail</sup> = A<sub>K</sub>β, &nbsp; rank(A<sub>K</sub>)=K</div>
-            <div class="plot-card hierarchy-bandwidth-plot"><img class="plot" src="assets/hierarchy_bandwidth_current.png?v=1788237775821211048" alt="Within-neuron feedback bandwidth K equals 1, 2, 4, or 8"></div>
+            <div class="equation compact"><span class="hat-symbol">δ</span><sup>V</sup> = A<sub>K</sub>c, &nbsp; rank(A<sub>K</sub>)=K</div>
+            <div class="plot-card hierarchy-bandwidth-plot"><img class="plot" src="assets/hierarchy_bandwidth_current.png?v=1788239505881485656" alt="Within-neuron feedback bandwidth K equals 1, 2, 4, or 8"></div>
             <div class="card tone-gray "><div class="card-title">matched controls</div><p>Rank, sparsity, parameter count, and forward resources are held fixed; only route assignment, basis, or topology changes.</p></div>
           </div>
         </div></div>
@@ -525,7 +525,7 @@ h1 { margin:0; font-family:Georgia,"Nimbus Roman",serif; font-size:52px; line-he
           <h1>Subtree addresses help—but fine topology adds only a narrow gain</h1>
           <div class="content">
         <div class="two-col col-63-37 result-layout">
-          <div class="plot-card large-plot"><img class="plot" src="assets/hierarchy_learning_current.png?v=1788237775975426006" alt="Accuracy across feedback bandwidth with directly labeled correct, deranged, and best non-anatomical routes"></div>
+          <div class="plot-card large-plot"><img class="plot" src="assets/hierarchy_learning_current.png?v=1788239506024661282" alt="Accuracy across feedback bandwidth with directly labeled correct, deranged, and best non-anatomical routes"></div>
           <div class="stack">
             <div class="stat tone-purple"><div class="stat-value">+61.1 pp</div><div class="stat-label">correct ancestry assignment over cyclic derangement at the same K=4 bandwidth</div></div>
             <div class="stat tone-teal"><div class="stat-value">+1.27 pp</div><div class="stat-label">correct ancestry over the strongest matched non-anatomical low-rank control at K=4</div></div>
@@ -541,13 +541,13 @@ h1 { margin:0; font-family:Georgia,"Nimbus Roman",serif; font-size:52px; line-he
           <div class="content">
         <div class="two-col col-48-52 anatomy-layout">
           <div class="stack anatomy-visuals compact-stack">
-            <div class="plot-card mapped-arbor"><div class="plot-label">measured MICrONS morphology with mapped E/I contacts</div><img class="plot" src="assets/mapped_reconstruction.png?v=1788237776104184330" alt="Reconstructed MICrONS arbor with mapped excitatory and inhibitory contacts"></div>
-            <div class="plot-card address-inset"><div class="plot-label">branch points define nested route supports</div><img class="plot" src="assets/ancestry_addresses.png?v=1788237776205533426" alt="Nested ancestry addresses on a dendritic tree"></div>
+            <div class="plot-card mapped-arbor"><div class="plot-label">measured MICrONS morphology with mapped E/I contacts</div><img class="plot" src="assets/mapped_reconstruction.png?v=1788239506141203008" alt="Reconstructed MICrONS arbor with mapped excitatory and inhibitory contacts"></div>
+            <div class="plot-card address-inset"><div class="plot-label">branch points define nested route supports</div><img class="plot" src="assets/ancestry_addresses.png?v=1788239506225875057" alt="Nested ancestry addresses on a dendritic tree"></div>
           </div>
           <div class="stack anatomy-data">
             <div class="equation compact capture-equation"><span class="capture-formula">C<sub>A</sub>(q)=‖P<sub>A</sub>q‖²/‖q‖²</span><span class="capture-definition">fraction of field energy in the route span</span></div>
             <div class="anatomy-evidence-grid">
-              <div class="plot-card capture-plot"><img class="plot" src="assets/capture_per_wire_current.png?v=1788237774344141493" alt="Wiring-normalized field capture"></div>
+              <div class="plot-card capture-plot"><img class="plot" src="assets/capture_per_wire_current.png?v=1788239504439551198" alt="Wiring-normalized field capture"></div>
               <div class="anatomy-metrics">
                 <div class="stat tone-teal"><div class="stat-value">85%</div><div class="stat-label">of dense field capture</div></div>
                 <div class="stat tone-purple"><div class="stat-value">≈7%</div><div class="stat-label">of dense route-matrix connections</div></div>
@@ -594,7 +594,7 @@ h1 { margin:0; font-family:Georgia,"Nimbus Roman",serif; font-size:52px; line-he
           <div class="stack">
             <div class="equation compact route-gain-sensitivity">∂ log α<sup>cond</sup><sub>n</sub> / ∂G<sup>I</sup><sub>k</sub> = −R<sup>tot</sup><sub>k</sub> <span class="indicator-one">1</span>[k∈𝒜(n)]</div>
             <div class="route-gain-reading">A shunt directly attenuates only routes descending through compartment k; the effect scales with local input resistance.</div>
-            <div class="plot-card boundary-plot"><img class="plot" src="assets/focal_boundary_current.png?v=1788237774602697076" alt="Current Figure 8F electrotonic boundary for focal shunting"></div>
+            <div class="plot-card boundary-plot"><img class="plot" src="assets/focal_boundary_current.png?v=1788239504665870155" alt="Current Figure 8F electrotonic boundary for focal shunting"></div>
             <div class="card tone-gray "><div class="card-title">standard passive calibration</div><p>At R<sub>m</sub>=15,000 Ω cm², the shunt-minus-current localization contrast is effectively zero.</p></div>
             <div class="card tone-teal "><div class="card-title">high-conductance regime</div><p>Descendant-localized changes emerge and survive active-channel extensions.</p></div>
           </div>
@@ -617,7 +617,7 @@ h1 { margin:0; font-family:Georgia,"Nimbus Roman",serif; font-size:52px; line-he
           </div>
           <div class="plot-card measured-null-plot">
             <div class="plot-label">Held-out learning and topology-minus-control effects</div>
-            <div class="measured-grid"><img class="plot" src="assets/boundary_learning.png?v=1788237774740378543" alt="Held-out complete-tree learning"><img class="plot" src="assets/boundary_topology.png?v=1788237774930814965" alt="Topology effects"></div>
+            <div class="measured-grid"><img class="plot" src="assets/boundary_learning.png?v=1788239504803360790" alt="Held-out complete-tree learning"><img class="plot" src="assets/boundary_topology.png?v=1788239504987178884" alt="Topology effects"></div>
           </div>
         </div>
         <div class="null-result-strip">Nested subtrees do not outperform random or site-shuffled routes for held-out prediction, field capture, or within-arbor structure–function similarity.</div></div>
@@ -631,11 +631,11 @@ h1 { margin:0; font-family:Georgia,"Nimbus Roman",serif; font-size:52px; line-he
           <div class="stack compact-stack">
             <div class="equation compact">φ(a) = √a u<sub>∥</sub> + √(1−a) u<sub>⊥</sub>, &nbsp; a∈[0,1]</div>
             <div class="alignment-definitions">u<sub>∥</sub>∈col(A), &nbsp; u<sub>⊥</sub>⊥col(A), &nbsp; ‖u<sub>∥</sub>‖=‖u<sub>⊥</sub>‖=1</div>
-            <div class="plot-card rotation-plot"><img class="plot" src="assets/alignment_rotation.png?v=1788237775243633996" alt="Fixed-energy task field rotated into the subtree route span"></div>
+            <div class="plot-card rotation-plot"><img class="plot" src="assets/alignment_rotation.png?v=1788239505302897403" alt="Fixed-energy task field rotated into the subtree route span"></div>
             <div class="card tone-gray "><div class="card-title">controlled quantity</div><p>Anatomy, field energy, curvature, and route count are fixed; only alignment with the subtree span changes.</p></div>
           </div>
           <div class="stack">
-            <div class="plot-card alignment-gain-plot"><img class="plot" src="assets/alignment_gain.png?v=1788237775420355677" alt="Field capture across imposed alignment"></div>
+            <div class="plot-card alignment-gain-plot"><img class="plot" src="assets/alignment_gain.png?v=1788239505478422737" alt="Field capture across imposed alignment"></div>
             <div class="equation compact">C<sub>A</sub>[φ(a)]=a &nbsp; by construction</div>
             <div class="card tone-teal "><div class="card-title">n = 8 reconstructed cells</div><p>Controls test whether the gain is specific to the true subtree span. The manipulation proves conditional representational sufficiency—not trained learning or endogenous biological use.</p></div>
           </div>
@@ -647,7 +647,7 @@ h1 { margin:0; font-family:Georgia,"Nimbus Roman",serif; font-size:52px; line-he
           <h1>One alignment–bandwidth plane organizes the wins and nulls</h1>
           <div class="content">
         <div class="two-col col-67-33 phase-summary-layout">
-          <div class="plot-card phase-dominant"><img class="plot" src="assets/phase_plane.png?v=1788237770839201054" alt="Task-route alignment and relative feedback bandwidth phase plane"></div>
+          <div class="plot-card phase-dominant"><img class="plot" src="assets/phase_plane.png?v=1788239501835276103" alt="Task-route alignment and relative feedback bandwidth phase plane"></div>
           <div class="stack phase-reading">
             <div class="card tone-orange "><div class="card-title">low relative bandwidth</div><p>Too few independent coordinates: neuron identity or branch address is the bottleneck.</p></div>
             <div class="card tone-teal "><div class="card-title">aligned intermediate bandwidth</div><p>Restricted routes can retain task credit while rejecting irrelevant dimensions.</p></div>

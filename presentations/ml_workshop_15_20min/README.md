@@ -1,4 +1,4 @@
-# ML workshop deck — 15–20 minutes
+# ML workshop deck — 20 minutes
 
 This is the projection-ready PNG deck for the workshop talk **“When dendritic
 structure helps local credit assignment.”** It is written for a technical ML
@@ -12,10 +12,15 @@ audience that does not already know dendritic biophysics.
   `?slide=1`, `?slide=2`, and so forth.
 - `contact_sheet.png` — one-page visual inventory.
 - `speaker_notes.md` — timed narration, transitions, and claim qualifications.
+- `dendritic_credit_ml_workshop_speaker_guide.pdf` — one landscape page per
+  slide, with the slide thumbnail, exact script, visual reading, likely
+  question and answer, claim guardrail, and transition.
+- `speaker_guide.html` — editable master for the speaker-guide PDF.
 - `slide_map.md` — 15-, 17-, and 20-minute cuts.
 - `../workshop_slide_production_plan.md` — exact visible content, equations,
   interpretation, and transition for every slide.
 - `build_slides.py` — deterministic asset and export pipeline.
+- `build_speaker_guide.py` — deterministic notes and speaker-guide pipeline.
 
 ## Build
 
@@ -23,6 +28,7 @@ From the repository root:
 
 ```bash
 python presentations/ml_workshop_15_20min/build_slides.py
+python presentations/ml_workshop_15_20min/build_speaker_guide.py
 ```
 
 The builder regenerates all result panels from the canonical vector assets,
@@ -41,10 +47,10 @@ geometry.
 - The bottom ribbon carries one interpretation; secondary statistics belong
   in the notes.
 - The core deck uses `K` for within-neuron feedback bandwidth, `χ` for branch
-  conflict, `γ_n` for directed-tree path gain, and `a_route` for imposed
-  task–route alignment. Forward physical depth is omitted from the core and
-  specified as an optional backup module because it asks a separate
-  computation question.
+  conflict, `\widetilde α_n` for directed-tree path gain, `a` for imposed
+  task–route alignment, and `A_u c_u` for the available compartment field.
+  Forward physical depth is omitted from the core and specified as an optional
+  backup module because it asks a separate computation question.
 - “Exact compartment field” is the scientific condition name. “Exact path”
   appears only where it is the frozen implementation label on a source plot.
 - The focal-shunting control matches baseline first-order focal current and

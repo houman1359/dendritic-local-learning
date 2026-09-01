@@ -9,9 +9,13 @@
 *.synctex.gz
 *.toc
 *.md
-presentations/*
-
 #presentations/*
+#!presentations/ml_workshop_15_20min/
+#!presentations/ml_workshop_15_20min/build_speaker_guide.py
+#!presentations/ml_workshop_15_20min/speaker_guide.html
+#!presentations/ml_workshop_15_20min/dendritic_credit_ml_workshop_speaker_guide.pdf
+#presentations/ml_workshop_15_20min/__pycache__/
+
 # Reproducible raster previews; publication assets are vector PDFs.
 journal/figures/components/*.png
 journal/figures/generated/*.png

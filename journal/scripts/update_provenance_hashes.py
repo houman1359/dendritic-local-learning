@@ -64,7 +64,7 @@ CANONICAL_ASSIGNMENTS = {
     "prospective.learning.asset": ("figS19", "all"),
     "fashion.asset": ("figS4", "e"),
     "subtree.factorial.asset": ("fig5", "all"),
-    "creditphase.asset": ("fig3", "a-f"),
+    "creditphase.asset": ("fig3", "a-h"),
     "phaseplane.asset": ("fig3", "g"),
     "physical.asset": ("fig6", "c"),
     "pointcredit.asset": ("fig6", "c"),

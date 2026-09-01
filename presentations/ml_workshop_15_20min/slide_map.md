@@ -1,69 +1,93 @@
 # Workshop timing and cut map
 
-## Recommended 18–20 minute talk
+## Recommended 20-minute talk
 
-Use all 20 core slides. The scripted notes total about 17:20, leaving roughly
-two minutes for transitions, pauses, and emphasis.
+Use all 20 slides. The exact script totals 17:55, leaving 2:05 for pauses,
+emphasis, and transitions.
 
-The sequence is intentionally continuous:
+The narrative is one continuous chain:
 
-`network weights → backpropagation → local point rule → dendritic extension → conductance → exact dendritic gradient → credit operator → predictive utility → controlled tasks → anatomy → shunting → measured null → alignment rescue → synthesis`
+`network weights → backpropagation → local point rule → dendritic address and
+conductance → exact dendritic gradient → credit operator → predictive utility
+→ standard-task boundary → controlled address tests → anatomical capacity →
+conditional shunting → measured null → alignment rescue → phase map`
 
-Do not insert the physical-depth module into this version. It introduces a
-different forward-computation question and weakens the backward-credit arc.
+The full sequence is:
 
-## Tight 15-minute version
+| # | Time | Role in the argument |
+|---:|---:|---|
+| 1 | 0:20 | State the conditional question and answer. |
+| 2 | 0:50 | Define global credit assignment. |
+| 3 | 1:00 | Use backpropagation as the exact information reference. |
+| 4 | 0:50 | Factor point-neuron learning into eligibility and returned signal. |
+| 5 | 0:55 | Define coordinate, ownership, address, gain, and alignment. |
+| 6 | 1:05 | Introduce the conductance tree and the additive control. |
+| 7 | 1:10 | Derive local eligibility times transported compartment error. |
+| 8 | 0:55 | Represent restricted feedback by the credit operator M. |
+| 9 | 1:05 | Present operator utility and quantitative validation. |
+| 10 | 1:00 | Show that neuron identity dominates on standard image tasks. |
+| 11 | 1:00 | Define the branch-conflict necessity task. |
+| 12 | 0:55 | Show the predicted conflict boundary and trained collapse. |
+| 13 | 0:50 | Define the nested hierarchy and feedback bandwidth K. |
+| 14 | 0:55 | Separate address assignment from the smaller topology effect. |
+| 15 | 0:55 | Show sparse route capacity in reconstructed arbors. |
+| 16 | 1:00 | Show that focal shunting regulates gain only conditionally. |
+| 17 | 0:50 | State the measured-response biological null. |
+| 18 | 0:50 | Rescue route capture by imposed task-route alignment. |
+| 19 | 0:45 | Unify the experiments in the alignment-bandwidth plane. |
+| 20 | 0:45 | End with the four evidence-calibrated conclusions. |
 
-Use:
+Never show a result without its task-definition slide: 12 requires 11, and 14
+requires 13. Slide 18 follows slide 17 because it tests the variable that the
+measured null suggests is missing.
 
-`1–13, 18–20`
-
-This cut is about 13:35 of scripted speech, leaving real time for transitions.
-Omit slides 14–17. After slide 13, bridge directly to slide 18 with: “The
-controlled task establishes why a branch address can be needed; we now ask
-whether nested routes on reconstructed arbors are preferentially aligned with
-measured biological function.” On slide 20, summarize the omitted arc in two sentences:
-“At intermediate bandwidth, matched ancestry adds a small topology-specific
-gain beyond rank-matched alternatives. Reconstructed arbors supply sparse
-candidate routes, and shunting changes their modeled gain only in permissive
-conductance states.”
-
-Never show slide 13 without slide 12, or slide 15 without slide 14. Each result
-depends on its task definition.
-
-## Theory-focused 15-minute version
-
-Use:
-
-`1–13, 20`
-
-This preserves the full derivation, operator theory, the standard-task
-boundary, and the strongest positive necessity experiment. Slides 14–19 are
-omitted. On slide 20, explicitly introduce the right-hand evidence ladder as
-a one-slide summary of paper results that were not shown in this cut; do not
-expand the biological claims unless asked.
-
-## Biology-focused 17-minute version
+## Emergency 15-minute cut
 
 Use:
 
-`1–11, 16–20`
+`1–12, 15–17, 19–20`
 
-This preserves the mathematical setup, standard-task boundary, reconstructed
-anatomy, conductance mechanism, measured-response null, and controlled rescue.
-State the branch-conflict and hierarchy results orally when entering slide 16.
+Omit the nested hierarchy pair (13–14) and the imposed-alignment construction
+(18). This sequence has 15:20 of full script, so shorten slide 3 to the exact
+reference only, slide 6 to the numerator-versus-denominator distinction, and
+slide 15 to the paired 85%/7% and 2.7-fold statements. Those cuts bring spoken
+content to about 13:55.
 
-## Optional physical-depth module
+After slide 12 say: “The hierarchy experiment reaches the same conclusion at
+intermediate bandwidth: correct addresses matter strongly, whereas the
+additional advantage of ancestry over the best matched basis is 1.27 points.”
+After slide 17 say: “A controlled rotation into the anatomical span rescues
+capture, identifying alignment as the missing variable.”
 
-Physical depth belongs in backup. If the audience explicitly asks whether
-serial dendritic computation can help forward processing, insert a two-slide
-module after slide 15:
+## Theory-focused short talk
 
-1. define \(D_{\rm r}\) (backward route resolution), \(D_{\rm p}\) (forward
-   serial physical depth), task hierarchy \(H\), and task–sensor alignment
-   \(a_{\rm sens}\);
-2. show the calibrated hierarchy result and the grouped-point/flexible-point
-   controls.
+Use:
 
-The module's conclusion must remain: serial depth is a task-matched
-compositional inductive bias, not a universal advantage over point networks.
+`1–12, 19–20`
+
+This is 12:35 of scripted material. It preserves the derivation, operator
+theory, standard-task boundary, strongest address-necessity test, phase map,
+and conclusion. Summarize anatomy and shunting orally only if asked.
+
+## Biology-focused 17-minute talk
+
+Use:
+
+`1–10, 15–20`
+
+This is 14:15 of scripted material before transitions. It retains the complete
+mathematical setup, anatomical capacity, state-dependent shunting, measured
+null, alignment rescue, and synthesis. At the entrance to slide 15, summarize
+the controlled tasks in one sentence: “Addresses become necessary under
+within-neuron credit conflict, whereas ancestry adds only a small extra gain
+over matched bases at aligned intermediate bandwidth.”
+
+## Backup only
+
+Physical dendritic depth remains outside the core talk. It asks whether serial
+dendritic stages help forward computation, whereas this talk asks how task
+credit is routed backward. If asked, show a two-slide backup that first
+distinguishes route resolution from physical depth and then presents the
+grouped-point and flexible-point controls. The conclusion must remain that
+serial depth is a task-matched compositional inductive bias, not a universal
+advantage over point networks.

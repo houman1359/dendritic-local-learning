@@ -1,13 +1,16 @@
 # Workshop presentation bundle
 
-## Canonical 15–20 minute workshop deck
+## Canonical 20-minute workshop deck
 
 The audience-facing workshop presentation is:
 
 - `ml_workshop_15_20min/dendritic_credit_ml_workshop.pdf` — 20-slide core;
 - `ml_workshop_15_20min/png/` — 2560 × 1440 projection PNGs;
 - `ml_workshop_15_20min/workshop_deck.html` — editable HTML/SVG master;
-- `ml_workshop_15_20min/speaker_notes.md` — 17:20 scripted narration;
+- `ml_workshop_15_20min/speaker_notes.md` — 17:55 scripted narration;
+- `ml_workshop_15_20min/dendritic_credit_ml_workshop_speaker_guide.pdf` —
+  slide thumbnails, exact narration, visual reading, one Q&A, a claim
+  guardrail, and a transition for every slide;
 - `ml_workshop_15_20min/slide_map.md` — 15-, 17-, and 20-minute cuts;
 - `workshop_slide_production_plan.md` — exact scientific and visual
   specification for every slide.
@@ -16,6 +19,7 @@ Rebuild it from this directory with:
 
 ```bash
 python ml_workshop_15_20min/build_slides.py
+python ml_workshop_15_20min/build_speaker_guide.py
 ```
 
 The builder regenerates presentation-scale result crops from the current
@@ -33,7 +37,7 @@ and backup deck. Its TeX sources, notes, and build scripts remain available:
 - `workshop_slide_map_25.md`;
 - `build_presentation_25.py`.
 
-It is not the canonical 15–20 minute workshop deck.
+It is not the canonical 20-minute workshop deck.
 
 ## Shared resources
 
