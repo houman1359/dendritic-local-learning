@@ -3,9 +3,9 @@ SHELL := /bin/bash
 PDF := dendritic_credit_canvas_rebuild.pdf
 PNGS := $(shell seq -f 'png/slide_%02g.png' 1 20)
 
-.PHONY: all pdf png contact clean
+.PHONY: all pdf png contact guide clean
 
-all: pdf png contact
+all: pdf png contact guide
 
 pdf: $(PDF)
 
@@ -27,6 +27,9 @@ png: $(PDF)
 contact: png
 	montage png/slide_*.png -thumbnail 512x288 -tile 4x5 -geometry +12+16 \
 	  -background white contact_sheet.png
+
+guide: png
+	python3 build_speaker_guide.py
 
 clean:
 	rm -f deck.aux deck.log deck.nav deck.out deck.snm deck.toc deck.vrb

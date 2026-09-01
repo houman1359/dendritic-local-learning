@@ -252,7 +252,7 @@ def task_generator_schematic(ax) -> None:
     green = COLORS["dend"]
     blue = COLORS["additive"]
 
-    leaf_x = np.linspace(0.315, 0.935, 8)
+    leaf_x = np.linspace(0.355, 0.925, 8)
     lvl3 = leaf_x.reshape(4, 2).mean(axis=1)
     lvl2 = lvl3.reshape(2, 2).mean(axis=1)
     root_x = float(lvl2.mean())
@@ -291,15 +291,15 @@ def task_generator_schematic(ax) -> None:
                     solid_capstyle="round", zorder=3)
             ax.scatter([x], [tip], s=4.5, color=tone, zorder=4)
 
-    ax.text(0.02, y_route, "routes ($D_{\\rm r}$):\none per subtree",
-            fontsize=PT_SMALL, color=blue, ha="left", va="center",
-            linespacing=1.2)
-    ax.text(0.02, 0.60, "signal μ ($H_{\\rm c}$):\ncoarse subtrees",
-            fontsize=PT_SMALL, color=green, ha="left", va="center",
-            linespacing=1.2)
-    ax.text(0.02, 0.86, "noise ξ:\nleaf by leaf",
-            fontsize=PT_SMALL, color="#5F6B7E", ha="left", va="center",
-            linespacing=1.2)
+    # One line per label: the two-line forms stacked into each other and
+    # into the strips.  The qualifiers each label dropped live in the
+    # caption, which already states them in full.
+    ax.text(0.02, y_route, "routes ($D_{\\rm r}$)", fontsize=PT_SMALL,
+            color=blue, ha="left", va="center")
+    ax.text(0.02, 0.60, "signal μ ($H_{\\rm c}$)", fontsize=PT_SMALL,
+            color=green, ha="left", va="center")
+    ax.text(0.02, 0.86, "noise ξ", fontsize=PT_SMALL, color="#5F6B7E",
+            ha="left", va="center")
 
 
 def operator_schematic(ax) -> None:
