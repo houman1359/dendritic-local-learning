@@ -48,27 +48,29 @@
 \linenumbers
 
 \begin{abstract}
-Learning changes the weights of a neural network to improve an objective.
-Credit assignment asks which weights should change and by how much.
-Backpropagation computes exact gradients, but uses backward information not
-locally available to each weight. For a point-neuron network,
-the gradient of each incoming weight factorizes into a weight-specific
-eligibility and a neuron-specific learning signal. We extend this result to
-conductance-based dendritic trees, where synaptic weights are conductances
-distributed across compartments. Each gradient combines local eligibility with
-a compartment-specific error transported through the arbor, separating neuron
-identity, dendritic address and conductance-dependent route gain. We represent
-restricted feedback as a credit operator mapping gradients to local updates; a
-stochastic bound predicts when it preserves aligned signal while rejecting
-noise. On image tasks, neuron-specific feedback explains most of the
-improvement from scalar feedback to exact path transport; path resolution adds
-little. In a controlled branch-conflict task, branch-specific feedback helps
-when branches require opposing updates. In mechanism-matched tasks, serial
-depth helps only when its nonlinear operations match task structure.
-Reconstructed arbors provide sparse candidate routes, but a one-mouse MICrONS
-visual-response cohort reveals no preferential alignment with them.
-Dendritic structure therefore supports local credit assignment under matched
-conditions rather than replacing backpropagation.
+Credit assignment asks which weights of a neural network should change, and
+by how much.
+Backpropagation computes exact gradients but is nonlocal. For a point-neuron
+network, each incoming-weight gradient factorizes into a weight-specific
+eligibility and a neuron-specific learning signal. We extend this
+factorization to conductance-based dendritic trees, where each gradient
+combines local eligibility with a compartment error transported through the
+arbor, separating neuron identity, dendritic address and
+conductance-dependent route gain. Any restricted feedback pathway is then a
+route dictionary over the morphology, summarized by a credit operator; a
+stochastic utility bound predicts when a dictionary preserves aligned signal
+while rejecting noise, and in the reanalyzed route families its maximizer
+locates the trained optimum wherever utility varies with bandwidth. On image tasks,
+neuron-specific feedback explains most of the scalar-to-exact improvement,
+path resolution adds little, and this
+ordering survives a fixed random between-neuron map. Branch-specific
+feedback becomes necessary when branches require opposing updates, and
+serial depth helps only when its operations match task structure.
+Reconstructed arbors supply sparse, predominantly coarse dictionaries, but a
+one-mouse MICrONS cohort reveals no preferential alignment
+with them. Dendritic structure therefore supports local credit assignment
+when task structure matches an available dictionary, rather than replacing
+backpropagation.
 \end{abstract}
 
 \section*{Introduction}
@@ -868,6 +870,21 @@ dominant gain, resolving address within an arbor added little on MNIST, and
 preserving ownership produced a smaller but consistent benefit across the
 independent cohorts.
 
+The ladder's conclusions do not depend on the between-neuron stage being
+exact. In a between-by-within factorial we replaced the map
+\(F\)---exact backpropagation through the trained readout---by a fixed
+random soma-level feedback matrix (direct feedback alignment) while keeping
+every within-arbor condition, and added a soma-DFA anchor with exact
+within-tree autograd (Methods). The within-neuron ordering reproduced under
+the approximate source: neuron-specific feedback recovered \(+10.8\) and
+\(+11.0\) points over the scalar rung in additive and shunting trees (15/15
+seeds each), exact path transport again added at most \(+0.09\) points, and
+at the neuron and path rungs the random fixed map trailed the exact readout
+map by no more than about \(0.2\) points (Supplementary Fig.~S30). The dominant
+bottleneck, and the sufficiency of one coefficient per neuron on these
+tasks, are therefore properties of the within-neuron dictionary rather than
+artifacts of exact between-neuron credit.
+
 Finally, we varied the number of serial dendritic stages in ordinary image and
 noise tasks. Neuron-specific feedback remained the main improvement at every valid depth,
 and exact path transport remained close to matched backpropagation
@@ -1114,9 +1131,10 @@ with \(\rho=0.916\), more strongly than field capture alone
 also constructive. Within each parameterized route family we selected the
 bandwidth that maximizes the evaluated utility and compared it with the
 trained optimum: wherever the utility varies with \(K\) at all, its argmax
-coincides with the realized best bandwidth (25 of 25 families; the five
-route-derangement families have identically zero utility at every \(K\),
-correctly predicting that no bandwidth rescues misassigned routes; Methods
+coincides with the realized best bandwidth---in all 25 architecture-by-family
+cells, spanning five distinct route families; the derangement family's five
+cells have identically zero utility at every \(K\),
+correctly predicting that no bandwidth rescues misassigned routes (Methods
 and the closing atlas of Fig.~\ref{fig:atlas}). The utility
 located the main route-resolution optima but did not predict the small
 training-trajectory advantage of task-matched subtrees in every seed. The
@@ -1418,7 +1436,7 @@ additional roles of alignment, route gain and stochastic noise.
 
 \begin{figure}[tbp]
 \centering
-\includegraphics[width=\textwidth]{main/figure_05.pdf}
+\includegraphics[width=0.965\textwidth]{main/figure_05.pdf}
 \caption{\textbf{Task-aligned subtree routes help only at matched feedback
 resolution.} The experiment uses one scalar readout with eight independent
 terminal parameter blocks. A balanced binary routing tree defines supports;
@@ -1442,8 +1460,8 @@ the prespecified seedwise oracle over matched route controls. The oracle is an
 analysis summary, not a trained selector. \textbf{F}, Correct-minus-deranged
 address effects and correct-minus-best-control ancestry effects. Correct
 assignment is essential for \(K>1\); ancestry exceeds the strongest control
-only at \(K=4\) (\(+1.3\) points)---the small interior-bandwidth window the
-utility \(U(M)\) predicts (Fig.~\ref{fig:creditphase}).
+only at \(K=4\) (\(+1.3\) points), a trained-trajectory advantage the
+one-step utility does not itself predict (Supplementary Fig.~S16).
 \textbf{G}, Matched-minus-rewired topology effect. Rewiring matters only at
 intermediate bandwidth. Panels \textbf{E--G} show the dendritic-tree
 representation; flat, grouped-point and gated-point implementations coincide
@@ -2307,14 +2325,15 @@ gate the delivered channels' route gains in permissive states.
 
 The utility \(U(M)\) turns this collection into a single map
 (Fig.~\ref{fig:atlas}D). Re-evaluating the stored operator reanalysis
-constructively, within every parameterized route family whose evaluated
+constructively, wherever the evaluated
 utility varies with bandwidth at all, the utility-maximizing \(K\) coincides
-with the trained optimum (25 of 25 families; the five remaining derangement
-families have identically zero utility across the grid, itself the correct
-prediction that no bandwidth rescues misassigned routes). For the matched
+with the trained optimum---in all 25 architecture-by-family cells, spanning
+five distinct route families; the derangement family's five cells
+have identically zero utility across the grid, itself the correct
+prediction that no bandwidth rescues misassigned routes. For the matched
 ancestry family of the eight-context task the maximizer sits at
-\(K=8=r_{\rm eff}\), the point where feedback bandwidth equals the task's
-effective credit rank. Within the families and tasks tested, the task's
+\(K=8\), the top of the tested grid and within a tenth of a percent of the
+task's effective credit rank \(r_{\rm eff}=7.99\). Within the families and tasks tested, the task's
 credit spectrum therefore determines one optimal dictionary resolution, and
 the utility locates it without training; the measured-response null, the
 trained \(K=4\) benefit and the controlled alignment rescue occupy different
@@ -2344,9 +2363,10 @@ Fig.~\ref{fig:creditphase}H, unchanged, with each family labeled by its home
 figure. Filled markers improved over their matched control; open markers did
 not. The ring marks the constructive exhibit: for the matched ancestry
 family, the evaluated one-step utility bound \(U(M)\) is maximized at
-\(K=8=r_{\rm eff}\), coinciding with the trained optimum, as it does in
-every parameterized family whose utility varies with bandwidth (25/25;
-Methods). Background bands and the alignment rule follow
+\(K=8\), within 0.1\% of the effective task rank \(r_{\rm eff}=7.99\) and
+coinciding with the trained optimum, as in all 25 architecture-by-family
+cells (five route families) whose utility varies with bandwidth
+(Methods). Background bands and the alignment rule follow
 Fig.~\ref{fig:creditphase}H.}
 \label{fig:atlas}
 \end{figure}
@@ -2398,10 +2418,15 @@ computes the exact nonlocal error at every node. A biological local rule must
 replace that field with learning signals available to the synapse. Dendritic
 addresses can reduce the spatial approximation error within one neuron, but
 only after another circuit mechanism has produced a neuron-specific learning
-signal. Dendritic routing and feedback alignment therefore address
-complementary parts of credit assignment: one specifies the within-neuron
-basis, whereas the other concerns how a feedback pathway obtains and aligns
-the neuronal signals. Candidate physical carriers for the channel values
+signal. Feedback alignment and its direct variant are themselves credit
+operators---random fixed choices of the between-neuron factor \(F\)---so the
+two stages of the delivery pipeline are dictionary choices at different
+scales rather than competing theories. The between-by-within factorial shows
+that the stages are separable in practice: replacing exact readout
+backpropagation by a fixed random soma-level map preserved the within-neuron
+ordering and nearly all of its accuracy on MNIST (Supplementary Fig.~S30),
+so the within-neuron conclusions here do not require an exact between-neuron
+mechanism. Candidate physical carriers for the channel values
 \(c_{u,k}\) include subtree-targeted top-down axons, dendrite-targeted
 inhibition and disinhibition, and dendritic plateau or burst events
 \citep{guerguiev2017segregated,sacramento2018dendritic,payeur2021burst}; the
@@ -2781,6 +2806,20 @@ stage is exact throughout, the Results conclusions concern the within-neuron
 dictionary given a correct per-neuron signal; the between-neuron factorial
 reported with the feedback ladder tests how those conclusions change when
 \(F\) itself is approximate.
+
+In that factorial (Supplementary Fig.~S30), the DFA cells replaced the exact
+decoder Jacobian inside the local rule by a fixed random feedback matrix
+with the soma-DFA construction: entries drawn once per run from a standard
+normal, scaled by the inverse square root of the output dimension, with the
+feedback seed equal to the run seed. Every other setting of the frozen
+ladder configuration was unchanged, and the within-arbor conditions were the
+ladder's scalar, per-neuron and path-transport broadcasts. The
+DFA-by-exact cell used the soma-DFA trainer, which projects output error to
+the somas through the same construction and differentiates exactly within
+each tree. Each new cell used the ladder's fifteen seeds per dynamics (120
+new fits); the exact-readout row reuses the frozen ladder release rather
+than a rerun. Contrasts are paired by seed, with 50{,}000-draw bootstrap
+intervals and exact two-sided sign-flip tests.
 
 \subsection*{Regular-tree regime and one-step analyses}
 
@@ -4039,7 +4078,11 @@ evaluated utility of the 2{,}700-fit operator metrics was averaged within
 each (architecture, route family, bandwidth) cell; the predicted bandwidth
 is the utility argmax over the \(K\in\{1,2,4,8\}\) grid, compared against
 the argmax of trained norm-matched one-step progress and of held-out
-accuracy from the same frozen factorial. This raw within-family argmax
+accuracy from the same frozen factorial. The evaluated utilities coincide
+across architectures within each family, so the 25 concordant cells reflect
+five distinct utility curves, and both the predicted and realized optima of
+the non-degenerate families sit at the top of the tested grid. This raw
+within-family argmax
 complements the contrast-based interior-optimum analysis above: families
 whose utility is identically zero across the grid are reported as
 degenerate rather than assigned a predicted optimum.

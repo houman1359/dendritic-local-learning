@@ -120,6 +120,12 @@ CANONICAL_GENERATORS["inherited.s3.asset"] = (
 SUPERSEDED_ENTRIES = {"fig8.asset"}
 
 NEW_DETAIL_ASSETS = {
+    "factorial.s30.asset": {
+        "figure": "figS30",
+        "path": "figures/supplementary/figure_S30_panels_A-D.pdf",
+        "generator": "scripts/build_supplementary_figure_s30_native.py",
+        "notes": "Between-by-within credit factorial: the MNIST ladder crossed with a fixed random soma-level feedback source.",
+    },
     "atlas.asset": {
         "figure": "fig10",
         "path": "figures/main/figure_10.pdf",
@@ -202,6 +208,42 @@ NEW_DETAIL_ASSETS = {
 }
 
 NEW_PROVENANCE_ENTRIES = {
+    "factorial.outcomes": {
+        "record_type": "panel_source",
+        "figure": "figS30",
+        "panel": "a-d",
+        "path": "source_data/mnist_between_within_factorial/seed_outcomes.csv",
+        "generator": "scripts/collect_mnist_between_within_factorial.py",
+        "replication_unit": "paired training seed (n=15 per dynamics)",
+        "notes": "All 120 new DFA-source fits plus the reused frozen ladder row.",
+    },
+    "factorial.conditions": {
+        "record_type": "panel_source",
+        "figure": "figS30",
+        "panel": "a,b",
+        "path": "source_data/mnist_between_within_factorial/condition_summary.csv",
+        "generator": "scripts/collect_mnist_between_within_factorial.py",
+        "replication_unit": "paired training seed (n=15 per dynamics)",
+        "notes": "Cell means and seed-bootstrap intervals for every factorial condition.",
+    },
+    "factorial.contrasts": {
+        "record_type": "panel_source",
+        "figure": "figS30",
+        "panel": "c,d",
+        "path": "source_data/mnist_between_within_factorial/paired_contrasts.csv",
+        "generator": "scripts/collect_mnist_between_within_factorial.py",
+        "replication_unit": "paired training seed (n=15 per dynamics)",
+        "notes": "Within-ladder contrasts under DFA and between-source gaps at matched rungs.",
+    },
+    "factorial.audit": {
+        "record_type": "panel_source",
+        "figure": "figS30",
+        "panel": "text",
+        "path": "source_data/mnist_between_within_factorial/audit.json",
+        "generator": "scripts/collect_mnist_between_within_factorial.py",
+        "replication_unit": "not applicable",
+        "notes": "Run completeness, reused ladder row and factorial level definitions.",
+    },
     "atlas.capture": {
         "record_type": "panel_source",
         "figure": "fig10",

@@ -3937,6 +3937,33 @@ update, not a dendrite-exclusive implementation.}
 \label{fig:supp_path_demand}
 \end{figure}
 
+\begin{figure}[p]
+\centering
+\includegraphics[width=\textwidth]{supplementary/figure_S30_panels_A-D.pdf}
+\caption{\textbf{The within-neuron ladder survives an approximate
+between-neuron source.} The between-by-within factorial crosses the MNIST
+feedback ladder of main Fig.~2 with the production of the per-neuron signal:
+exact readout backpropagation (the paper's default map \(F\)) versus a fixed
+random soma-level feedback matrix (direct feedback alignment), seeded per
+run, inside the same LocalCA rule; a soma-DFA trainer with exact autograd
+inside each tree anchors the DFA-by-exact cell. All new cells reuse the
+ladder's architectures, contacts and training protocol, and the
+exact-readout row is the frozen ladder release, not a rerun.
+\textbf{A,B}, Held-out accuracy by within-neuron distribution under both
+sources, for additive and shunting trees. \textbf{C}, Dominant paired
+contrasts: under DFA, neuron-specific feedback beats the scalar rung by
+\(+10.8\) (additive) and \(+11.0\) (shunting) points, 15/15 seeds each
+(exact sign-flip \(P=6.1\times10^{-5}\)); the between-source gap at the
+scalar rung is \(+3.1\) points for additive trees and null for shunting.
+\textbf{D}, Sub-point contrasts: exact path transport adds at most
+\(+0.09\) points over neuron-specific feedback under DFA, the transport and
+autograd implementations coincide, and the readout-minus-DFA gap at the
+neuron and path rungs is no more than about \(0.2\) points. Blue is additive and
+green shunting in \textbf{C,D}. Symbols and whiskers show means and 95\%
+seed-bootstrap intervals over 15 paired seeds.}
+\label{fig:supp_between_within_factorial}
+\end{figure}
+
 \section{Statistics, reproducibility and claim controls}
 \label{note:statistics}
 

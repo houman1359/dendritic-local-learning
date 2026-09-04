@@ -9,20 +9,20 @@ The 10 numbered figures occupy 10 figure environments;
 | Item | Current | Guidance | Status |
 |---|---:|---:|---|
 | Title | 7 words | 15 | PASS |
-| Abstract | 200 words | 200 | PASS |
-| Introduction + Results + Discussion | 14735 approximate words | 5000 | ADVISORY |
+| Abstract | 198 words | 200 | PASS |
+| Introduction + Results + Discussion | 14954 approximate words | 5000 | ADVISORY |
 | Main display items | 10 figures | 10 | PASS |
 | References | 62 entries (general guide) | 70 | PASS |
 | Figure 1 legend | 286 words | 350 | PASS |
 | Figure 2 legend | 347 words | 350 | PASS |
 | Figure 3 legend | 309 words | 350 | PASS |
 | Figure 4 legend | 266 words | 350 | PASS |
-| Figure 5 legend | 282 words | 350 | PASS |
+| Figure 5 legend | 285 words | 350 | PASS |
 | Figure 6 legend | 316 words | 350 | PASS |
 | Figure 7 legend | 336 words | 350 | PASS |
 | Figure 8 legend | 309 words | 350 | PASS |
 | Figure 9 legend | 314 words | 350 | PASS |
-| Figure 10 legend | 224 words | 350 | PASS |
+| Figure 10 legend | 235 words | 350 | PASS |
 
 Official guidance:
 
