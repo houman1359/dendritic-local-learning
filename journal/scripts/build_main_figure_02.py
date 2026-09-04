@@ -52,6 +52,7 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
+from matplotlib.colors import to_rgb
 from matplotlib.patches import Rectangle
 from matplotlib.ticker import PercentFormatter
 
@@ -120,7 +121,10 @@ ACC_LABEL = "held-out accuracy"
 # so the old 8.85 upper bound left ~30% of the axis empty and
 # compressed the near-zero assignment contrasts that carry the point.
 GAIN_LIM = (-1.1, 13.0)
-ASSIGN_LIM = (-0.12, 1.06)   # the assignment strip: its own pp scale
+# The assignment strip keeps its own pp scale, but its zero sits at the SAME
+# axis fraction as the gain strip's (1.1/14.1), so the two stacked dashed
+# references align vertically instead of reading as a drafting slip.
+ASSIGN_LIM = (-0.0925, 1.093)
 ASSIGN_TICKS = [0, 0.5, 1]
 FOREST_LABEL_RESERVE_PT = 99.0   # widest row name + tick pad + header hang
 GAIN_TICKS = [0, 4, 8, 12]
@@ -208,10 +212,15 @@ def _unit_pair(f, x_soma, y_mid, *, avail_pt=None):
     half, gap = UNIT_HALF_PT, UNIT_GAP_PT
     if avail_pt is not None:
         # tips reach 1.55/1.5 of the half-height beyond the outer somas, so
-        # the pair spans gap + 2 * 1.033 * half
+        # the arbor pair spans gap + 2 * 1.033 * half -- and the exact card
+        # then centres a 1.15 pt disc ON each outer tip.  Reserve that disc
+        # plus a hair of clearance at both ends of the core, or the lowest
+        # mark of a tight card is bisected by the card's own bottom border.
+        tip_pad = 2.4
         need = gap + 2.07 * half
-        if need > avail_pt > 0:
-            k = avail_pt / need
+        room = avail_pt - 2.0 * tip_pad
+        if need > room > 0:
+            k = room / need
             half, gap = half * k, gap * k
     ys = (y_mid + f.fy(gap) / 2.0, y_mid - f.fy(gap) / 2.0)
     for cy in ys:
@@ -321,8 +330,11 @@ def panel_task(ax):
 # tick wordings extend; the other two cards still carry their x-categories'
 # exact wording.
 RESOLUTION_CARDS = (
+    # "one scalar s for the layer" wrapped with a one-word widow, the only
+    # ragged gloss in the card row; the title already names the level
+    # "scalar", so the gloss drops the repeated word and sets on one line.
     ("scalar", "scalar", AMBER_TEXT,
-     "one scalar s for the layer", _card_scalar),
+     "one s per layer", _card_scalar),
     ("neuron", "neuron-specific", ADD,
      "one δᵤ per neuron", _card_neuron),
     ("exact", "exact path", BP,
@@ -633,8 +645,27 @@ def panel_ownership_address(ax):
         right, title="within-arbor address", title_color=COLORS["oracle"],
         subtitle="where in the tree?",
         min_core_pt=MIN_CORE_PT + 10.0)
-    f.tree(Frame.inset(core, left=0.06, right=0.06, bottom=0.04),
-           mode="address", K=4)
+    tree = f.tree(Frame.inset(core, left=0.06, right=0.06, bottom=0.04),
+                  mode="address", K=4)
+    # The library paints the K=4 address capsules in pale signal hues
+    # (shunting green, additive blue, amber, oracle purple) that the rest of
+    # THIS figure spends on architectures and ceilings, so here the four
+    # patches are re-toned to one neutral hue at four lightness steps: still
+    # four distinct addresses, ordered left to right, with no false mapping
+    # onto the series key.  Capsules are the only fat pale Line2Ds on the
+    # inset, matched by their exact source tints.
+    retone = {
+        mix("shunting", 16): mix("mute", 14),
+        mix("additive", 15): mix("mute", 24),
+        mix("local", 24): mix("mute", 34),
+        mix("oracle", 16): mix("mute", 45),
+    }
+    for line in tree.lines:
+        rgb = to_rgb(line.get_color())
+        for src, dst in retone.items():
+            if np.allclose(rgb, src, atol=1e-6):
+                line.set_color(dst)
+                break
     f.arrow((left_w + gap * 0.16, 0.5), (left_w + gap * 0.84, 0.5),
             color=MUTE, lw=LW_HAIR, head=4.6)
     return ax
@@ -741,18 +772,23 @@ def panel_forest(ax):
     # the third is the correct-minus-deranged test that F draws.  Without
     # the pointers the rows read as a second dataset rather than as B's own
     # contrasts on an inferential scale.
+    # Both strips label their own x axis: they share one unit but differ in
+    # scale by ~13x, and with the label printed only under the lower strip
+    # the upper strip's bare tick numbers read as the same scale.  The upper
+    # strip therefore gives up a little height to make room for its own
+    # tick-plus-label band above the lower strip's hanging group header.
     strips = [
-        ((0.50, 0.50),
+        ((0.54, 0.46),
          [("neuron-specific (B)",
            mnist["neuron specific - scalar broadcast"]),
           ("path resolution (B)", mnist["exact path - neuron specific"])],
-         GAIN_LIM, GAIN_TICKS, None),
+         GAIN_LIM, GAIN_TICKS, GAIN_LABEL, False),
         ((0.0, 0.34),
          [("ownership: correct − deranged (F)", _ownership_rows())],
-         ASSIGN_LIM, ASSIGN_TICKS, GAIN_LABEL),
+         ASSIGN_LIM, ASSIGN_TICKS, GAIN_LABEL, True),
     ]
     ax.set_axis_off()
-    for (y0, height), groups, xlim, xticks, xlabel in strips:
+    for (y0, height), groups, xlim, xticks, xlabel, zero_below in strips:
         sub = ax.inset_axes([0.0, y0, 1.0, height])
         sub.set_facecolor("none")
         header_trans = mtransforms.offset_copy(
@@ -763,14 +799,15 @@ def panel_forest(ax):
         for xt in xticks:
             if xt:
                 sub.axvline(xt, color=COLORS["grid"], lw=LW_HAIR, zorder=0)
-        sub.axvline(0.0, color=MUTE, ls="--", lw=LW_REF, zorder=0.1)
         y = 0.0
         ticks, labels = [], []
+        header_ys = []
         for index, (header, rows) in enumerate(groups):
             # A blank half-row before every block but the first, so the mute
             # group name reads as the head of the rows under it rather than
             # as one more row in the same column.
             y += 0.0 if index == 0 else 0.55
+            header_ys.append(y - 0.04)
             sub.text(0.0, y - 0.04, header, transform=header_trans,
                      fontsize=PT_ANNOT, color=MUTE, ha="left", va="center",
                      zorder=6, clip_on=False)
@@ -797,10 +834,23 @@ def panel_forest(ax):
         sub.set_yticks(ticks)
         sub.set_yticklabels(labels)
         sub.set_ylim(y - 0.5, -0.62)
+        # The dashed zero reference.  The lower strip's hanging group header
+        # crosses x = 0, so there the line starts just below the header band
+        # instead of striking straight through the words.
+        if zero_below:
+            stop = header_ys[0] + 0.50
+            sub.axvline(0.0, color=MUTE, ls="--", lw=LW_REF, zorder=0.1,
+                        ymin=0.0, ymax=(y - 0.5 - stop) / (y - 0.5 + 0.62))
+        else:
+            sub.axvline(0.0, color=MUTE, ls="--", lw=LW_REF, zorder=0.1)
         sub.set_xlim(*xlim)
         sub.set_xticks(xticks)
         if xlabel:
-            sub.set_xlabel(xlabel)
+            # A tight pad on both strips: the upper strip's label lives in
+            # the inter-strip band just above the lower strip's hanging
+            # group header, and the pad is measured from the tick labels,
+            # so pulling it in cannot collide with them.
+            sub.set_xlabel(xlabel, labelpad=1.5)
         style_panel(sub)
         sub.tick_params(axis="y", length=0, labelsize=PT_SMALL)
         sub.spines["left"].set_visible(False)

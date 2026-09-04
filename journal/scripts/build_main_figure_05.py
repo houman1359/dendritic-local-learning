@@ -207,16 +207,25 @@ def _bar_levels(supports):
     return levels
 
 
-def _route_bars(f: Frame, rect, mode: str, *, name_rows: bool = False) -> None:
-    """Four rank-matched routes over the eight terminal dendritic branches."""
+def _route_bars(f: Frame, rect, mode: str, *, name_rows: bool = False,
+                digits: bool = False) -> None:
+    """Four rank-matched routes over the eight terminal dendritic branches.
+
+    ``digits`` prints the delivered signal group over each bar and the task
+    group under each leaf pair: the four slate tones alone are too close to
+    carry the matched-versus-deranged distinction, so the index itself is
+    printed and the panel's shared key names both digit rows.
+    """
     x0, y0, width, height = rect
     xs = np.linspace(x0 + 0.09 * width, x0 + 0.91 * width, 8)
-    leaf_y = y0 + 0.13 * height
+    stacked = mode == "rewired"
+    leaf_y = y0 + (0.24 if digits else 0.13) * height
     supports = ROUTE_SUPPORTS[mode]
     signals = ROUTE_SIGNAL[mode]
     levels = _bar_levels(supports)
-    span = 0.66 * height
+    span = (0.52 if stacked else 0.66) * height
     step = span / max(len(set(levels)), 1)
+    bar_rise = (0.30 if digits else 0.22) * height
 
     # Each leaf is drawn as a terminal dendritic branch -- a short stub
     # continuing toward the soma, capped by the addressable terminal itself --
@@ -233,23 +242,44 @@ def _route_bars(f: Frame, rect, mode: str, *, name_rows: bool = False) -> None:
 
     for route, (lo, hi) in enumerate(supports):
         color = ROUTE_COLORS[signals[route]]
-        bar_y = leaf_y + 0.22 * height + levels[route] * step
+        bar_y = leaf_y + bar_rise + levels[route] * step
         left, right = xs[lo], xs[hi]
-        f.ax.plot([left, right], [bar_y, bar_y], color=color, lw=2.6,
+        # A stacked (rewired) span drawn fat reads as covering every leaf it
+        # crosses; membership is its two endpoints, so the span thins and the
+        # endpoints carry filled dots over the supported leaves only.
+        f.ax.plot([left, right], [bar_y, bar_y], color=color,
+                  lw=LW_DATA if stacked else 2.6,
                   solid_capstyle="round", zorder=3)
+        if stacked:
+            for leaf in (lo, hi):
+                f.disc((xs[leaf], bar_y), 1.9, fill=color, zorder=4)
+            f.text((xs[lo] - f.fx(3.4), bar_y), str(signals[route] + 1),
+                   size=PT_SMALL, color=INK, ha="right", va="center")
         # one leg per covered leaf: the route's support, drawn explicitly
         for leaf in (lo, hi):
             f.ax.plot([xs[leaf], xs[leaf]],
                       [bar_y - f.fy(1.0), leaf_y + f.fy(3.2)],
                       color=color, lw=LW_HAIR, solid_capstyle="round",
                       zorder=2)
+        if digits:
+            f.text(((left + right) / 2.0, bar_y + f.fy(2.6)),
+                   str(signals[route] + 1), size=PT_SMALL, color=INK,
+                   va="bottom")
+
+    if digits:
+        for group in range(4):
+            members = [idx for idx, g in enumerate(LEAF_GROUP) if g == group]
+            f.text((float(np.mean(xs[members])), leaf_y - f.fy(6.6)),
+                   str(group + 1), size=PT_SMALL, color=MUTE, va="top")
 
     if name_rows:
-        top = leaf_y + 0.22 * height + max(levels) * step
-        f.text((x0 + 0.50 * width, top + f.fy(7.5)), "K = 4 feedback routes",
+        top = leaf_y + bar_rise + max(levels) * step
+        f.text((x0 + 0.50 * width, top + f.fy(12.0 if digits else 7.5)),
+               "K = 4 feedback routes",
                size=PT_SMALL, color=MUTE, va="bottom")
-        f.text((x0 + 0.50 * width, leaf_y - f.fy(8.0)),
-               "8 terminal branches", size=PT_SMALL, color=MUTE, va="top")
+        if not digits:
+            f.text((x0 + 0.50 * width, leaf_y - f.fy(8.0)),
+                   "8 terminal branches", size=PT_SMALL, color=MUTE, va="top")
 
 
 def _nonanatomical_basis(f: Frame, rect) -> None:
@@ -281,13 +311,15 @@ def _nonanatomical_basis(f: Frame, rect) -> None:
     cell_w = (xs[1] - xs[0]) * 0.86
     cell_h = 0.13 * height
     base_y = leaf_y + 0.20 * height
+    chip_x = xs[0] - cell_w / 2.0 - f.fx(3.0)
     for row in range(4):
         y = base_y + (3 - row) * cell_h
-        # a chip in the route ramp names the row as one feedback channel
-        # inset so the four chips read as four rows, not one continuous rail
-        f.ax.plot([x0 + 0.042 * width, x0 + 0.042 * width],
-                  [y + 0.16 * cell_h, y + 0.84 * cell_h],
-                  color=ROUTE_COLORS[row], lw=2.6, solid_capstyle="butt",
+        # a chip in the route ramp names the row as one feedback channel:
+        # clear of the matrix edge and nearly row-high so it reads as a row
+        # marker (small gaps keep the four chips from fusing into one rail)
+        f.ax.plot([chip_x, chip_x],
+                  [y + 0.08 * cell_h, y + 0.92 * cell_h],
+                  color=ROUTE_COLORS[row], lw=4.0, solid_capstyle="butt",
                   zorder=4)
         for col in range(8):
             value = matrix[row, col]
@@ -304,14 +336,14 @@ def _nonanatomical_basis(f: Frame, rect) -> None:
     # be mistaken for four categorical route identities rather than entries
     # of a dense signed basis.
     key_y = y0 + 0.955 * height
-    key_x = x0 + 0.48 * width
+    key_x = x0 + 0.44 * width
     key_specs = ((COLORS["oracle"], "+"),
                  ("#2E3947", "−"),
                  ("white", "0"))
     f.text((key_x - f.fx(4.0), key_y), "weight", size=PT_SMALL,
            color=MUTE, ha="right", va="center")
     for index, (face, symbol) in enumerate(key_specs):
-        xpos = key_x + index * f.fx(13.0)
+        xpos = key_x + index * f.fx(17.0)
         f.ax.add_patch(Rectangle(
             (xpos, key_y - f.fy(3.0)), f.fx(6.0), f.fy(6.0),
             facecolor=face, edgecolor=COLORS["grid"], linewidth=LW_HAIR,
@@ -328,8 +360,13 @@ def _nonanatomical_basis(f: Frame, rect) -> None:
            "8 terminal branches", size=PT_SMALL, color=MUTE, va="top")
 
 
-def route_controls(ax, indices) -> None:
-    """Visual dictionary for selected control questions at K=4."""
+def route_controls(ax, indices, *, key: bool = False) -> None:
+    """Visual dictionary for selected control questions at K=4.
+
+    ``key`` reserves a strip under the cards for one shared legend naming the
+    two digit rows the assignment cards print (delivered signal group on the
+    bars, task group under the leaf pairs); the cards then draw digits.
+    """
     f = Frame(ax, labels=True, scale=0.94)
     all_specs = (
         ("matched subtrees", "task groups = subtrees", GREEN),
@@ -340,18 +377,29 @@ def route_controls(ax, indices) -> None:
     chosen = tuple((index, all_specs[index]) for index in indices)
     cells = f.split(len(chosen), axis="x", gap_pt=8.0,
                     pad_pt=(0, 0, 0, 0))
+    if key:
+        lift = f.fy(10.0)
+        cells = [(cx, cy + lift, cw, ch - lift)
+                 for (cx, cy, cw, ch) in cells]
+        f.text((0.5, f.fy(3.2)),
+               "8 terminal branches · bar = delivered signal · "
+               "cap = task group",
+               size=PT_SMALL, color=MUTE, va="center")
     for rect, (_, (title, subtitle, accent)) in zip(cells, chosen, strict=True):
         _card(f, rect, title, subtitle, accent=accent)
     # Lower drawing rooms deliberately use identical geometry.
     for (index, _), rect in zip(chosen, cells, strict=True):
         x0, y0, width, height = rect
-        room = (x0, y0 + 0.07 * height, width, 0.67 * height)
+        if key:
+            room = (x0, y0 + 0.06 * height, width, 0.60 * height)
+        else:
+            room = (x0, y0 + 0.07 * height, width, 0.67 * height)
         if index == 0:
-            _route_bars(f, room, "matched", name_rows=True)
+            _route_bars(f, room, "matched", name_rows=True, digits=key)
         elif index == 1:
-            _route_bars(f, room, "deranged")
+            _route_bars(f, room, "deranged", name_rows=key, digits=key)
         elif index == 2:
-            _route_bars(f, room, "rewired")
+            _route_bars(f, room, "rewired", name_rows=True)
         else:
             _nonanatomical_basis(f, room)
 
@@ -425,11 +473,20 @@ def build() -> list:
 
     hierarchical_task(ax_a)
     address_ladder_compact(ax_b)
-    route_controls(ax_c, (0, 1))
+    route_controls(ax_c, (0, 1), key=True)
     route_controls(ax_d, (2, 3))
     bandwidth_sweep_compact(ax_e, outcomes, dendritic)
-    _rename_label(ax_e, "best control", "control oracle")
-    _move_label(ax_e, "control oracle", (0.12, 0.69))
+    # The exactly balanced binary label makes 0.5 the chance level; without
+    # the reference a reader cannot see that deranged routing is actively
+    # harmful rather than merely unhelpful.
+    ax_e.axhline(0.5, color=MUTE, lw=LW_REF, dashes=(2.4, 2.0), zorder=0)
+    ax_e.text(3.10, 0.505, "chance", color=MUTE, fontsize=PT_SMALL,
+              ha="right", va="bottom")
+    ax_e.set_ylabel("held-out accuracy")
+    # One comparator, one name: E's series and F's contrast against it both
+    # say "best matched control" (the caption defines it once).
+    _rename_label(ax_e, "best control", "best matched\ncontrol")
+    _move_label(ax_e, "best matched\ncontrol", (0.12, 0.69))
     route_contrasts_compact(ax_f, contrasts)
     # "vs best" sat on the K = 1 diamond and its lower whisker; move it into
     # the empty well under the rising violet segment.

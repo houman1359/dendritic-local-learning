@@ -17,7 +17,9 @@ import numpy as np
 import pandas as pd
 from matplotlib.patches import FancyBboxPatch
 
+import routing_figure_panels
 from routing_figure_panels import (
+    B_STYLE,
     PATH_NECESSITY,
     path_accuracy_facets,
     shared_mode_boundary,
@@ -38,7 +40,6 @@ from figure_canvas import (
     SEED_MS,
     Margins,
     NativeCanvas,
-    token_subscript,
 )
 from native_schematics import Frame
 from routing_figure_panels import draw_conflict_neuron, draw_credit_fan
@@ -60,6 +61,50 @@ GREEN = COLORS["shunting"]
 AMBER = COLORS["local"]
 PURPLE = COLORS["oracle"]
 GRAY = COLORS["point_mlp"]
+
+
+def _sub_token(ax, x, y, base, sub, tail="", *, size=PT_ANNOT,
+               sub_size=PT_SMALL, color=None, ha="left", va="center",
+               drop_pt=1.8, zorder=5, clip_on=True, transform=None):
+    """``token_subscript`` with the tail restored to the base baseline.
+
+    The shared helper chains every span on the *previous* span's bounding
+    box, so its tail inherits the subscript's drop and the base glyph reads
+    as a superscript.  Here the subscript aligns its box bottom to the
+    base's box bottom before dropping, and the tail takes its x from the
+    subscript but its y from the BASE box, so only the subscript leaves the
+    line -- the same corrected baseline logic as the boundary-value tags.
+    Signature-compatible with ``token_subscript`` so it can stand in for it
+    while this figure's panels draw.
+
+    A subscript should also be visibly smaller than its base, but the token
+    set is the only legal size vocabulary and PT_SMALL is its floor, so a
+    sub below a PT_SMALL base cannot exist (``enforce_tokens`` would snap it
+    back up).  When a caller asks for a subscript at or above its base size,
+    step the base and tail up one token (PT_SMALL -> PT_ANNOT) instead: the
+    same base-over-sub differential, entirely inside the token set, and one
+    consistent treatment for panel A's x-stream labels, B's equations and
+    D's boundary tags.
+    """
+    if sub_size >= size:
+        if size <= PT_SMALL:
+            size = PT_ANNOT
+        sub_size = PT_SMALL
+    color = COLORS["ink"] if color is None else color
+    kwargs = {"transform": transform} if transform is not None else {}
+    base_text = ax.text(x, y, base, fontsize=size, color=color, ha=ha,
+                        va=va, zorder=zorder, clip_on=clip_on, **kwargs)
+    sub_text = ax.annotate(sub, xy=(1.0, 0.0), xycoords=base_text,
+                           xytext=(0.4, -drop_pt), textcoords="offset points",
+                           fontsize=sub_size, color=color, ha="left",
+                           va="bottom", zorder=zorder,
+                           annotation_clip=clip_on)
+    if tail:
+        ax.annotate(tail, xy=(1.0, 0.0), xycoords=(sub_text, base_text),
+                    xytext=(0.6, 0.0), textcoords="offset points",
+                    fontsize=size, color=color, ha="left", va="bottom",
+                    zorder=zorder, annotation_clip=clip_on)
+    return base_text
 
 
 def _box(frame: Frame, center, width, height, *, face, edge, radius=3.0):
@@ -91,10 +136,13 @@ def _trial_card(frame: Frame, rect, *, conflict: bool) -> None:
         size=PT_ANNOT, color=GREEN if not conflict else COLORS["highlight"],
         ha="left", va="top",
     )
+    # The glyph fills the card: at 0.70 of the card height a dead band of a
+    # quarter card sat between the header and the input-label row while the
+    # soma arrow crowded the footer text.
     draw_conflict_neuron(
         frame,
-        (x0 + 0.04 * width, y0 + 0.085 * height,
-         0.92 * width, 0.70 * height),
+        (x0 + 0.04 * width, y0 + 0.10 * height,
+         0.92 * width, 0.80 * height),
         conflict=conflict,
     )
     frame.text(
@@ -144,10 +192,10 @@ def backward_credit_schematic(ax) -> None:
                    size=PT_SMALL, color=color, ha="left")
         base, sub, tail = equation
         if sub:
-            token_subscript(frame.ax, x0 + frame.fx(5.0),
-                            y0 + 0.30 * height, base, sub, tail,
-                            size=PT_SMALL, sub_size=PT_SMALL, color=INK,
-                            ha="left", va="center")
+            _sub_token(frame.ax, x0 + frame.fx(5.0),
+                       y0 + 0.30 * height, base, sub, tail,
+                       size=PT_SMALL, sub_size=PT_SMALL, color=INK,
+                       ha="left", va="center")
         else:
             frame.text((x0 + frame.fx(5.0), y0 + 0.30 * height), base,
                        size=PT_SMALL, color=INK, ha="left")
@@ -171,22 +219,26 @@ def full_conflict_controls(ax, summary: pd.DataFrame,
     """
     endpoint = summary[np.isclose(summary.conflict_probability, 1.0)]
     branches = np.asarray([2, 4, 8], dtype=float)
+    # Equally spaced categorical positions, exactly as boundary_test() below:
+    # side by side the two bottom panels used to encode the same "branches B"
+    # axis two different ways (linear here, categorical there).
+    xpos = np.arange(len(branches), dtype=float)
 
     correct = endpoint[endpoint.condition.eq("correct_path")].set_index(
         "branches").loc[branches]
     mean = correct.mean_test_accuracy.to_numpy(float)
     low = correct.ci95_low_test_accuracy.to_numpy(float)
     high = correct.ci95_high_test_accuracy.to_numpy(float)
-    ax.errorbar(branches, mean, yerr=[mean - low, high - mean],
+    ax.errorbar(xpos, mean, yerr=[mean - low, high - mean],
                 color=GREEN, marker="o", markerfacecolor="white",
                 markeredgecolor=GREEN, markeredgewidth=LW_EDGE,
                 ms=MARKER_MS + 0.6, lw=LW_DATA, capsize=ERR_CAPSIZE, zorder=4)
     # The three series are numerically identical.  Concentric markers preserve
     # that fact visually without horizontal jitter that would imply a dose.
-    ax.plot(branches, mean, lw=0, marker="s", ms=MARKER_MS + 3.0,
+    ax.plot(xpos, mean, lw=0, marker="s", ms=MARKER_MS + 3.0,
             markerfacecolor="none", markeredgecolor=PURPLE,
             markeredgewidth=LW_EDGE, zorder=3)
-    ax.plot(branches, mean, lw=0, marker="+", ms=MARKER_MS + 1.4,
+    ax.plot(xpos, mean, lw=0, marker="+", ms=MARKER_MS + 1.4,
             color=COLORS["bp"], markeredgewidth=LW_EDGE, zorder=5)
 
     for condition, color, marker, label in (
@@ -198,7 +250,7 @@ def full_conflict_controls(ax, summary: pd.DataFrame,
         y = part.mean_test_accuracy.to_numpy(float)
         lo = part.ci95_low_test_accuracy.to_numpy(float)
         hi = part.ci95_high_test_accuracy.to_numpy(float)
-        ax.errorbar(branches, y, yerr=[y - lo, hi - y], color=color,
+        ax.errorbar(xpos, y, yerr=[y - lo, hi - y], color=color,
                     marker=marker, markerfacecolor="white",
                     markeredgecolor=color, markeredgewidth=LW_EDGE,
                     ms=MARKER_MS, lw=LW_DATA, capsize=ERR_CAPSIZE,
@@ -212,16 +264,16 @@ def full_conflict_controls(ax, summary: pd.DataFrame,
         for condition, tone in (("correct_path", GREEN),
                                 ("neuron_shared_k1", AMBER)):
             part = full[full.condition.eq(condition)]
-            for index, branch in enumerate(branches):
+            for position, branch in zip(xpos, branches, strict=True):
                 values = part[part.branches.eq(int(branch))].test_accuracy
                 values = values.to_numpy(float)
                 if not values.size:
                     continue
-                # Constant fan width: the x axis is linear in B, so scaling
-                # the spread by B made the B=8 cloud three times wider than
-                # the B=2 one and pushed it off its own marker.
-                offset = np.linspace(-0.24, 0.24, values.size)
-                ax.plot(np.full(values.size, branch) + offset,
+                # Constant fan width, scaled to the unit categorical spacing
+                # (the +-0.24 of the old linear axis covered the same share
+                # of the axis span).
+                offset = np.linspace(-0.12, 0.12, values.size)
+                ax.plot(np.full(values.size, position) + offset,
                         values, linestyle="none", marker="o", ms=SEED_MS,
                         color=tone, alpha=SEED_ALPHA,
                         markeredgecolor="none", zorder=2)
@@ -234,29 +286,29 @@ def full_conflict_controls(ax, summary: pd.DataFrame,
         (0.575, GRAY, "v", "deranged route"),
     )
     for ypos, color, marker, label in key_specs:
-        ax.plot([2.55, 2.95], [ypos, ypos], color=color, lw=LW_DATA,
+        ax.plot([0.04, 0.20], [ypos, ypos], color=color, lw=LW_DATA,
                 marker=marker, markerfacecolor="white",
                 markeredgewidth=LW_EDGE, ms=MARKER_MS - 0.6,
                 markevery=[1], clip_on=False, zorder=6)
-        ax.text(3.30, ypos, label, fontsize=PT_SMALL, color=color,
+        ax.text(0.34, ypos, label, fontsize=PT_SMALL, color=color,
                 ha="left", va="center")
     # The green row stands for three coincident implementations that the panel
     # draws as concentric glyphs.  Repeat the gated-point square and the
     # backpropagation plus on its key marker, so both are identified where the
     # reader first meets them rather than appearing as unexplained overprints.
-    ax.plot([2.95], [key_specs[0][0]], lw=0, marker="s",
+    ax.plot([0.20], [key_specs[0][0]], lw=0, marker="s",
             ms=MARKER_MS + 2.4, markerfacecolor="none",
             markeredgecolor=PURPLE, markeredgewidth=LW_EDGE,
             clip_on=False, zorder=6)
-    ax.plot([2.95], [key_specs[0][0]], lw=0, marker="+",
+    ax.plot([0.20], [key_specs[0][0]], lw=0, marker="+",
             ms=MARKER_MS + 0.8, color=COLORS["bp"],
             markeredgewidth=LW_EDGE, clip_on=False, zorder=7)
     ax.axhline(0.5, color=MUTE, lw=LW_REF, dashes=(2.2, 1.8), zorder=0)
-    ax.text(8.30, 0.507, "chance", fontsize=PT_SMALL, color=MUTE,
+    ax.text(2.29, 0.507, "chance", fontsize=PT_SMALL, color=MUTE,
             ha="right", va="bottom")
-    ax.set_xlim(1.55, 8.45)
+    ax.set_xlim(-0.35, 2.35)
     ax.set_ylim(0.18, 0.84)
-    ax.set_xticks(branches, ["2", "4", "8"])
+    ax.set_xticks(xpos, ["2", "4", "8"])
     ax.set_yticks([0.2, 0.5, 0.8])
     ax.set_xlabel("branches B")
     ax.set_ylabel("held-out accuracy")
@@ -311,7 +363,17 @@ def boundary_test(ax, crossings: pd.DataFrame,
     ax.set_xticks(x, [str(branch) for branch in branches])
     ax.set_yticks([0.50, 0.75, 1.00])
     ax.set_xlabel("branches B")
-    ax.set_ylabel("conflict threshold χ")
+    # One name for the one variable: C and D call the x quantity "conflict
+    # dose", so this axis reports the chance-crossing dose, with the same
+    # subscripted boundary symbol the other panels tag.  The subscript chains
+    # on the rotated label: for a 90-degree label the glyph-down (drop)
+    # direction is +x in display space and the advance direction is +y.
+    ax.set_ylabel("chance-crossing dose χ")
+    ax.annotate("c", xy=(1.0, 1.0), xycoords=ax.yaxis.label,
+                xytext=(-0.2, 0.4), textcoords="offset points",
+                fontsize=PT_SMALL, color=INK, rotation=90,
+                rotation_mode="anchor", ha="left", va="baseline",
+                annotation_clip=False, zorder=5)
 
 
 def build() -> list:
@@ -357,13 +419,60 @@ def build() -> list:
     ax_f = canvas.panel("F", 2, 6, 6,
                         title="Observed collapse follows the prediction")
 
-    branch_conflict_task(ax_a)
-    backward_credit_schematic(ax_b)
-    shared_mode_boundary(ax_c)
-    path_accuracy_facets(ax_d, summary)
+    # The shared token_subscript raises the base glyph above the line (its
+    # tail inherits the subscript's drop); stand in the corrected helper for
+    # every panel this figure draws through routing_figure_panels -- panel A's
+    # x-subscripts and panel D's boundary tags -- and restore it so sibling
+    # builders in the same process keep the module untouched.
+    _shared_subscript = routing_figure_panels.token_subscript
+    routing_figure_panels.token_subscript = _sub_token
+    try:
+        branch_conflict_task(ax_a)
+        backward_credit_schematic(ax_b)
+        shared_mode_boundary(ax_c)
+        path_accuracy_facets(ax_d, summary)
+    finally:
+        routing_figure_panels.token_subscript = _shared_subscript
+
+    # One name for the one variable chi across C, D, F and the caption.
+    ax_c.set_xlabel("conflict dose χ")
+    # C's zero crossings ARE the analytic boundary that F labels with an open
+    # ink diamond; give the same quantity the same glyph (the line shades
+    # already distinguish B, so the per-B marker shapes said nothing).
+    for line in ax_c.get_lines():
+        if line.get_marker() not in ("", "None", None) \
+                and len(line.get_xdata()) == 1:
+            line.set_marker("D")
+            line.set_color(INK)
+            line.set_markerfacecolor("white")
+            line.set_markeredgecolor(INK)
+            line.set_markersize(MARKER_MS)
     for text in ax_d.texts:
         if text.get_text() == "held-out accuracy":
             text.set_x(-0.035)
+        elif text.get_text() == "credit-conflict probability χ":
+            text.set_text("conflict dose χ")
+        elif text.get_text() == "branch-specific = BP = gated point":
+            # Anchored top-right this label sat beside the B=8 facet's tags
+            # and read as facet-specific; moved to the host's top-left it
+            # shared a 5 pt baseline gap with the facet tag row, and the 'g'
+            # descender of "gated" struck the 'B' cap of the B=4 tag.  The
+            # header band cannot hold two text rows, so the green condition
+            # name joins "neuron-shared" inside the first facet's empty band
+            # (the full equivalence string stays in panel E's key and in the
+            # caption), and this host-level label is retired.
+            text.set_visible(False)
+    ax_d.child_axes[0].text(0.05, 0.645, "branch-specific",
+                            fontsize=PT_SMALL, color=GREEN,
+                            ha="left", va="top")
+    # The facet boundary tags carried the per-B slate shades; the lightest
+    # (B=2) had weak contrast on white, and the same quantity is inked in C
+    # and F.  Ink the tags, keep the dashed boundary lines in the shades.
+    shade_hexes = {shade.lower() for shade, _ in B_STYLE.values()}
+    for inset in ax_d.child_axes:
+        for text in inset.texts:
+            if mpl.colors.to_hex(text.get_color()).lower() in shade_hexes:
+                text.set_color(INK)
     full_conflict_controls(ax_e, summary, seeds)
     boundary_test(ax_f, crossings, seed_boundaries)
 

@@ -155,6 +155,14 @@ CAPTION_NOTES = (
     "CAPTION: FIG09 G - The imposed-alignment rescue in D,E is a controlled "
     "sufficiency test and is not evidence that the measured cells use these "
     "routes for endogenous task credit.",
+    "CAPTION: FIG09 E - The depth-bin and site-shuffling controls lie "
+    "within 0.02 of one another below a = 0.6 and are distinguished by "
+    "marker and dash style.",
+    "CAPTION: FIG09 G - Gray chips cite each rung's evidence: bare letters "
+    "are panels of this figure; 7C\N{EN DASH}G and 8F,G are panels of "
+    "Figs. 7 and 8. In the rung glyphs the two capsule tints distinguish "
+    "the two subtree routes, and the open ring marks the junction whose "
+    "conductance gates the route.",
 )
 
 # Current publication panel inventory, printed with the build log so captions
@@ -222,7 +230,7 @@ TREE_METHODS = (
 # S5, as figure 7 applies it: the morphology route keeps the anatomy green
 # and the three controls are one neutral family at two lightnesses, separated
 # by marker AND dash so they stay apart between marker positions -- they run
-# within 0.01 of one another below alignment 0.6.
+# within 0.03 of one another below alignment 0.6.
 ALIGN_METHODS = (
     ("morphology-selected paths", "subtree", ROUTE, "o", None),
     ("random anatomical routes", "random", C_CTRL, "s", None),
@@ -451,6 +459,14 @@ def panel_forest(ax, prespecified, all_scans, tree, original, expanded, *,
     # line owns no vertex on a label row.
     ax.plot([0.0, 0.0], [unit - 0.4, -1.35], color=MUTE, lw=LW_REF,
             ls=(0, (3.0, 2.2)), zorder=1, solid_capstyle="butt")
+    # The sign convention is drawn where it is read: MSE rows are control
+    # minus subtree and update-match rows subtree minus control, so positive
+    # ALWAYS favours anatomy -- but only the caption said so.  Two mute cues
+    # flank the zero line in the empty header band above the first group.
+    ax.text(0.07, -0.9, f"favors subtree \N{RIGHTWARDS ARROW}", ha="left",
+            va="center", fontsize=PT_SMALL, color=MUTE, zorder=6)
+    ax.text(-0.07, -0.9, f"\N{LEFTWARDS ARROW} favors controls", ha="right",
+            va="center", fontsize=PT_SMALL, color=MUTE, zorder=6)
     ax.set_xlim(*FOREST_XLIM)
     ax.set_xticks(list(FOREST_XTICKS))
     ax.set_xlabel(FOREST_XLABEL)
@@ -537,7 +553,7 @@ LABEL_X = 0.315
 ROUTE_SETS = (
     tuple((i,) for i in range(N_TERM)),                 # exact: per compartment
     ((0, 1), (2, 3), (4, 5), (6, 7)),                   # matched to the bands
-    ((0,), (2, 3), (4, 5), (6, 7)),                     # four valid toy subtrees
+    ((1, 2), (3, 4), (5, 6), (7,)),                     # contiguous, cut across
     ((0, 5), (1, 3), (2, 7), (4, 6)),                   # not contiguous at all
 )
 
@@ -584,6 +600,10 @@ def panel_route_dictionary(ax):
     for y_end in (0.205, 0.700):
         ax.plot([0.055, 0.085], [y_end, y_end], color=mix("point_mlp", 40),
                 lw=LW_HAIR, solid_capstyle="butt", zorder=2)
+    # ... and the bracket says WHAT it groups: without a name a figure-only
+    # reader cannot tell what the mark asserts about subtree/random/shuffle.
+    f.text((0.02, 0.755), "restricted rules", size=PT_SMALL, color=MUTE,
+           ha="left")
 
     for row, ((_, label, color, _), routes) in enumerate(
             zip(TREE_METHODS, ROUTE_SETS, strict=True)):
@@ -613,7 +633,11 @@ def panel_route_dictionary(ax):
 
     # Short enough to sit inside the panel: the full statement -- that the
     # error is a scalar and only the routes differ -- is in the caption.
-    f.text((0.5, 0.042), "one fixed field in a four-route span per rule",
+    # The note is SCOPED to the bracketed group it describes: exact learning
+    # is trial-specific per compartment, so "per rule" over all five rows
+    # claimed too much.
+    f.text((0.5, 0.042),
+           "restricted rules: one fixed field in a four-route span",
            size=PT_SMALL, color=MUTE)
     return ax
 
@@ -889,8 +913,9 @@ def panel_controlled_alignment(ax, curves):
     for text in legend.get_texts():          # never pure #000000
         text.set_color(INK)
     legend.set_zorder(6)
-    # The depth and shuffle curves coincide at alignment 0; that is a
-    # coincidence disclosure and is reported in the caption.
+    # The depth and shuffle curves run within 0.02 of one another below
+    # alignment 0.6; that coincidence disclosure is a CAPTION_NOTES line, so
+    # the caption's sentence cannot drift from the drawn curves.
 
 
 # ── E: the signed animal coordinate ──────────────────────────────────────
@@ -913,20 +938,37 @@ def panel_animal_pairs(ax, animal, mode=None):
     # decomposition of those same vectors together.
     if mode is not None:
         signed = float(mode["signed_energy_fraction"])
+        ci_lo, ci_hi = (float(v) for v in mode["animal_bootstrap_95_ci"])
         bar_x0, bar_x1, bar_y = 0.40, 1.12, 0.185
-        split = bar_x0 + signed * (bar_x1 - bar_x0)
+        span = bar_x1 - bar_x0
+        split = bar_x0 + signed * span
         ax.plot([bar_x0, bar_x1], [bar_y, bar_y], color=mix("point_mlp", 26),
                 lw=5.4, solid_capstyle="butt", zorder=2)
         ax.plot([bar_x0, split], [bar_y, bar_y], color=ROUTE, lw=5.4,
                 solid_capstyle="butt", zorder=3)
-        # The green segment is wide enough to carry its own value; the 16 %
-        # remainder is not, so a hairline leader drops from its middle to a
-        # label parked in the empty right shoulder of the panel.
-        ax.text(0.5 * (bar_x0 + split), bar_y, f"signed {100 * signed:.0f}%",
-                fontsize=PT_SMALL, color="white", ha="center", va="center",
+        # The split's own animal bootstrap, drawn rather than implied: a
+        # capped whisker directly UNDER the green/gray boundary it bounds
+        # (the bar's centreline carries the segment's white name, so the
+        # interval sits tight beneath the bar instead of through its label).
+        ax.errorbar([split], [bar_y - 0.030],
+                    xerr=np.array([[(signed - ci_lo) * span],
+                                   [(ci_hi - signed) * span]]),
+                    fmt="none", ecolor=INK, elinewidth=LW_ERR,
+                    capsize=ERR_CAPSIZE, capthick=LW_ERR, zorder=4)
+        # A cap-height centre tick under the boundary itself, so the whisker
+        # reads as this interval and not as a scale bar.
+        ax.plot([split], [bar_y - 0.030], marker="|", ms=2 * ERR_CAPSIZE,
+                linestyle="none", color=INK, markeredgewidth=LW_ERR,
                 zorder=4)
-        ax.text(bar_x1, bar_y - 0.046,
-                f"common {100 * (1.0 - signed):.0f}%", fontsize=PT_SMALL,
+        # The green segment is wide enough to carry its own value at the
+        # caption's precision (one decimal, so figure and text cross-check);
+        # the 16 % remainder is not, so its label sits beneath the gray
+        # tail, below the whisker's reach.
+        ax.text(0.5 * (bar_x0 + split), bar_y, f"signed {100 * signed:.1f}%",
+                fontsize=PT_SMALL, color="white", ha="center", va="center",
+                zorder=5)
+        ax.text(bar_x1, bar_y - 0.075,
+                f"common {100 * (1.0 - signed):.1f}%", fontsize=PT_SMALL,
                 color=mix("point_mlp", 62), ha="right", va="center")
 
     ax.set_xlim(-0.16, 1.16)
@@ -1096,9 +1138,10 @@ def panel_mode_energy(ax, mode):
 # fills; there are no tier headings, no tinted tier boxes and no bullets.
 #
 # Beside each rung sits the short form of its condition or gap and one mute
-# chip naming the evidence that carries it (``E,F`` is a panel pair of this
-# figure, ``7g`` is Fig. 7g and ``8f`` is Fig. 8f).  Every shortened statement
-# is printed in full, with its attribution, into the caption at build time.
+# chip naming the evidence that carries it (a bare letter is a panel of THIS
+# figure, ``7C-G`` is Fig. 7C-G and ``8F,G`` is Fig. 8F,G; the top rung's
+# ``B,C null`` cites the measured-response null that bounds it).  The chip
+# key is stated once in the caption at build time.
 LADDER_SUPPORTED = ROUTE                 # measurement supports the level
 LADDER_CONDITIONAL = COLORS["local"]     # holds only under a stated condition
 LADDER_OPEN = None                       # nothing established: an open step
@@ -1108,13 +1151,13 @@ LADDER_OPEN = None                       # nothing established: an open step
 # own order, so the drawing order below is the reading order.
 EVIDENCE_RUNGS = (
     ("coordinate", "coordinate", r"$\delta_u$", COLORS["additive"],
-     "retrospective (n=6)", None, LADDER_CONDITIONAL),
+     "retrospective (n=6)", "F", LADDER_CONDITIONAL),
     ("address", "subtree route", r"$A_{u,\cdot k}$", INK,
-     "capacity, not use", None, LADDER_SUPPORTED),
+     "capacity, not use", "7C\N{EN DASH}G", LADDER_SUPPORTED),
     ("gain", "route gain", r"$\Lambda_k$", INK,
-     "high conductance only", None, LADDER_CONDITIONAL),
+     "high conductance only", "8F,G", LADDER_CONDITIONAL),
     ("open", "endogenous task use", None, MUTE,
-     "no anatomy alignment", None, LADDER_OPEN),
+     "no anatomy alignment", "B,C null", LADDER_OPEN),
 )
 LADDER_KEY = (
     (LADDER_SUPPORTED, "supported"),
@@ -1541,6 +1584,13 @@ def build():
     notes = list(CAPTION_NOTES)
     if truncated:
         notes.insert(1, _truncation_note(truncated))
+    # F's interval note is generated from the same frozen block the panel
+    # just drew, for the same reason.
+    ci_lo, ci_hi = (100.0 * float(v) for v in mode["animal_bootstrap_95_ci"])
+    notes.append(
+        "CAPTION: FIG09 F - The capped whisker under the bar's split is the "
+        f"signed fraction's 95 % animal-bootstrap interval, {ci_lo:.1f} % "
+        f"to {ci_hi:.1f} %.")
     for note in notes:
         print(note)
     for note in LETTER_MOVES:

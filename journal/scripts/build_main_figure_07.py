@@ -333,6 +333,18 @@ def blank_axes(ax):
     return ax
 
 
+def role_handles(roles, names):
+    """Legend handles carrying the one shared dictionary encoding."""
+    return [
+        Line2D([0], [0], color=ROLE[role][0], lw=LW_DATA,
+               ls=(0, (3.2, 2.0)) if ROLE[role][3] else "-",
+               marker=ROLE[role][1], ms=MARKER_MS,
+               mfc=ROLE[role][0] if ROLE[role][2] else "white",
+               mec=ROLE[role][0], mew=LW_EDGE, label=names[role])
+        for role in roles
+    ]
+
+
 def role_line(ax, role, x, mean, low, high, *, zorder=2):
     color, marker, filled, dashed = ROLE[role]
     style = (0, (3.2, 2.0)) if dashed else "-"
@@ -433,7 +445,10 @@ def panel_arbor(ax):
     scale_points = to_axes(np.vstack([anchor,
                                       anchor + [50.0 / span_um, 0.0]]))
     scale_width = float(scale_points[1, 0] - scale_points[0, 0])
-    scale_x0, scale_y = 0.055, 0.405
+    # 0.455, not 0.405: at 0.405 the "50 µm" label all but touched the ramp
+    # title below it; the raised bar sits in the empty lower-left corner of
+    # the arbor band.
+    scale_x0, scale_y = 0.055, 0.455
     ax.plot([scale_x0, scale_x0 + scale_width], [scale_y, scale_y],
             color=INK, lw=LW_DATA, solid_capstyle="butt", zorder=7)
     ax.text(scale_x0 + scale_width / 2.0, scale_y - 0.032, "50 µm",
@@ -553,12 +568,33 @@ def panel_cable(ax, curves):
     for role in ("dense", "ancestry", "random", "depth", "shuffled"):
         role_line(ax, role, *curves[role])
     capture_axis(ax, left=True)
+    # C and D are one epistemic contrast, not two neutral datasets: C tests a
+    # field generated independently of the routes, D a deliberately aligned
+    # one.  Both roles are tagged in place so a figures-only reader sees it.
+    ax.text(0.03, 0.955, "independent target", transform=ax.transAxes,
+            ha="left", va="center", fontsize=PT_SMALL, color=MUTE, zorder=6)
 
 
 def panel_model(ax, curves):
     for role in ("dense", "ancestry", "random", "depth", "shuffled"):
         role_line(ax, role, *curves[role])
     capture_axis(ax, left=False)
+    ax.text(0.03, 0.955, "positive control", transform=ax.transAxes,
+            ha="left", va="center", fontsize=PT_SMALL, color=MUTE, zorder=6)
+    # Decode the five dictionaries at first use: a compact key in the empty
+    # upper left of D, inside the shared-axis C/D pair, using the same short
+    # names as E's category rail.  F's key keeps the full names.
+    legend = ax.legend(handles=role_handles(
+                           ("dense", "ancestry", "random", "depth",
+                            "shuffled"), ROLE_TICK),
+                       loc="upper left", bbox_to_anchor=(0.0, 0.90),
+                       fontsize=PT_SMALL, frameon=True, facecolor="white",
+                       edgecolor="none", framealpha=0.90, handlelength=1.4,
+                       handletextpad=0.4, borderpad=0.3, labelspacing=0.28,
+                       borderaxespad=0.2)
+    for text in legend.get_texts():          # never pure #000000
+        text.set_color(INK)
+    legend.set_zorder(6)
 
 
 # ── E: eight-channel capture retained against wiring required ────────────
@@ -622,22 +658,17 @@ def panel_per_wire(ax, summary):
         ["0.05", "0.1", "0.5", "1", "5", "10"]))
     ax.yaxis.set_minor_locator(mpl.ticker.NullLocator())
     ax.set_xlabel(CHANNEL_LABEL)
-    ax.set_ylabel("capture per unit wiring")
+    # "wiring" is only a proxy here: the y quantity is capture divided by the
+    # nonzero route-coefficient count, so the label says exactly that (it is
+    # what E's key and the caption call it), not an unmeasured cable length.
+    ax.set_ylabel("capture per route coefficient")
 
     # The eight-channel ancestry advantage over the dense oracle, and the
     # part of it that survives at matched wiring density, are ratios of two
     # plotted means: the geometry is the report, so both numbers are stated
     # in the caption instead of being printed on the panel.
 
-    handles = [
-        Line2D([0], [0], color=ROLE[role][0], lw=LW_DATA,
-               ls=(0, (3.2, 2.0)) if ROLE[role][3] else "-",
-               marker=ROLE[role][1], ms=MARKER_MS,
-               mfc=ROLE[role][0] if ROLE[role][2] else "white",
-               mec=ROLE[role][0], mew=LW_EDGE,
-               label=ROLE_NAME[role])
-        for _, role in WIRE_METHODS
-    ]
+    handles = role_handles([role for _, role in WIRE_METHODS], ROLE_NAME)
     legend = ax.legend(handles=handles, loc="lower right", fontsize=PT_LEGEND,
                        frameon=True, facecolor="white", edgecolor="none",
                        framealpha=0.90, handlelength=1.6, handletextpad=0.4,
@@ -675,6 +706,12 @@ def panel_cross_animal(ax, labels, animals):
     ax.set_xlabel("subtree-route capture advantage")
     ax.tick_params(axis="y", length=0.0, pad=2.5)
     ax.spines["left"].set_visible(False)
+
+    # The route budget of this replication, stated in-panel because C-F sweep
+    # K while G tests exactly one.  Upper right: the upper LEFT is crossed by
+    # the dashed zero reference.
+    ax.text(0.97, 0.95, "K = 4", transform=ax.transAxes, ha="right",
+            va="center", fontsize=PT_ANNOT, color=MUTE)
 
     # Direct labels replace the key: two series, named over the marker they
     # belong to, staggered so the two names never share a line.

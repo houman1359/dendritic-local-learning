@@ -208,6 +208,11 @@ def panel_a(ax):
     # a coordinate, since a blue arrow means delivered error everywhere else.
     f.arrow((soma[0] + f.fx(7.2), soma[1]), (0.430, soma[1]), color=MUTE,
             lw=LW_ERR_ARROW, head=3.6, zorder=5)
+    # The delivered coordinate itself: a short blue arrow rising into the
+    # soma from below, the same delivery idiom as panel B's per-unit return
+    # and C's coordinate rung, so the blue label names a drawn blue glyph.
+    f.arrow((soma[0], soma[1] - f.fy(19.0)), (soma[0], soma[1] - f.fy(7.6)),
+            color=BLUE, lw=LW_ERR_ARROW, head=3.2, zorder=5)
     ax.text(0.215, label_y, "one neuronal coordinate  δᵤ", ha="center",
             va="center", fontsize=PT_ANNOT, color=BLUE)
 
@@ -246,8 +251,10 @@ def panel_b(ax):
     # arrows reach their own rail without ever crossing the other one.
     f.arrow((0.155, 0.915), (bus_e, 0.915), color=EXC, lw=LW_EDGE, head=3.4)
     f.arrow((0.155, 0.200), (bus_i, 0.200), color=INH, lw=LW_EDGE, head=3.4)
-    ax.plot([bus_e, bus_e], [0.236, 0.915], color=EXC, lw=LW_EDGE,
-            alpha=0.80, solid_capstyle="round", zorder=2)
+    # The E rail runs to its topmost take-off (row 1 leaves at y + 5 pt), so
+    # no feed arrow starts above the rail's own end.
+    ax.plot([bus_e, bus_e], [0.236, unit_ys[0] + f.fy(5.0)], color=EXC,
+            lw=LW_EDGE, alpha=0.80, solid_capstyle="round", zorder=2)
     ax.plot([bus_i, bus_i], [0.200, 0.880], color=INH, lw=LW_EDGE,
             alpha=0.80, solid_capstyle="round", zorder=2)
 
@@ -274,11 +281,12 @@ def panel_b(ax):
             va="center", fontsize=PT_SMALL, color=INK, linespacing=1.2)
     f.arrow((out_bus, 0.605), (box_x0, 0.605), color=MUTE, lw=LW_HAIR,
             head=3.6)
-    f.arrow((box_x1, 0.605), (delta_x - f.fx(3.4), 0.605), color=COLORS["bp"],
+    # The loss supplies delta_out INTO the readout (caption B), so the red
+    # arrow enters from the panel edge; the old outward arrow dead-ended in
+    # an unexplained terminator disc.
+    f.arrow((delta_x, 0.605), (box_x1 + f.fx(1.2), 0.605), color=COLORS["bp"],
             lw=LW_EDGE, head=3.6)
-    f.disc((delta_x, 0.605), 2.6, fill=COLORS["bp"], edge="white",
-           lw=LW_HAIR, zorder=8)
-    ax.text(delta_x, 0.605 + f.fy(6.5), "δₒᵤₜ", ha="center",
+    ax.text((box_x1 + delta_x) / 2.0, 0.605 + f.fy(6.5), "δₒᵤₜ", ha="center",
             va="bottom", fontsize=PT_ANNOT, color=COLORS["bp"])
     ax.text(unit_x, 0.075, "N dendritic E/I units", ha="center",
             va="center", fontsize=PT_SMALL, color=MUTE)
@@ -289,13 +297,17 @@ def panel_b(ax):
     #    δᵤ to each soma from below, echoing panel A's coordinate arrow.
     fb_x = 0.664
     fb_y = 0.150
+    # Dashed strokes separate the backward pathway from the solid blue E-pool
+    # feeds at a glance (same additive blue, so blue = error stays true);
+    # only the short delivery arrows into each soma remain solid.
+    fb_dash = dict(ls=(0, (2.2, 1.6)), dash_capstyle="butt")
     rd_cx = (box_x0 + box_x1) / 2.0
     ax.plot([rd_cx, rd_cx], [0.480, fb_y], color=BLUE, lw=LW_HAIR,
-            solid_capstyle="round", zorder=2)
+            zorder=2, **fb_dash)
     ax.plot([rd_cx, fb_x], [fb_y, fb_y], color=BLUE, lw=LW_HAIR,
-            solid_capstyle="round", zorder=2)
+            zorder=2, **fb_dash)
     ax.plot([fb_x, fb_x], [fb_y, unit_ys[0] - f.fy(9.4)], color=BLUE,
-            lw=LW_HAIR, solid_capstyle="round", zorder=2)
+            lw=LW_HAIR, zorder=2, **fb_dash)
     # Orthogonal delivery, not an arc.  A curved arrow takes its head angle
     # from the tangent where the arc happens to end, so these heads pointed
     # off in directions that named nothing; and running beside the forward
@@ -305,7 +317,7 @@ def panel_b(ax):
     drop = f.fy(9.4)
     for y in unit_ys:
         ax.plot([fb_x, unit_x], [y - drop, y - drop], color=BLUE,
-                lw=LW_HAIR, solid_capstyle="round", zorder=2.4)
+                lw=LW_HAIR, zorder=2.4, **fb_dash)
         f.arrow((unit_x, y - drop), (unit_x, y - f.fy(3.4)), color=BLUE,
                 lw=LW_HAIR, head=3.2, zorder=2.4)
     ax.text(fb_x - f.fx(4.0), 0.365, "δᵤ", ha="right", va="center",
@@ -376,16 +388,15 @@ def _rung_tree(f, rect, rung):
         # One digit inside each quarter's fork -- the address is an index
         # into K discrete subtrees, and the selected index is the one the
         # halo answers.  Set above the canopy the digits crowded the divider
-        # to the row above; a white backing lets each sit in its own fork
-        # over the ghost strokes instead.
-        for k, (tx, ty) in enumerate(((-1.85, 2.42), (-0.57, 2.78),
-                                      (0.59, 2.74), (1.77, 2.32)), 1):
+        # to the row above; here each digit sits at the clear centre of its
+        # own fork wedge (no stroke within a glyph width), so no white
+        # backing is needed and no tip stroke is amputated behind a bbox.
+        for k, (tx, ty) in enumerate(((-1.95, 2.55), (-0.58, 2.95),
+                                      (0.60, 2.90), (1.89, 2.50)), 1):
             selected = k == 1
             sub.text(tx, ty, str(k), ha="center", va="center",
                      fontsize=PT_SMALL, color=INK if selected else MUTE,
                      fontweight="bold" if selected else "normal",
-                     bbox=None if selected else dict(
-                         facecolor="white", edgecolor="none", pad=0.5),
                      zorder=5)
         sub.text(-1.62, 1.10, "cᵤ,ₖ₌₁", ha="center", va="center",
                  fontsize=PT_SMALL, color=INK)
@@ -523,7 +534,10 @@ def panel_d(ax):
     ax.text(lx, rows[2], "Rₙᵗᵒᵗ", ha="left", va="center",
             fontsize=PT_SMALL, color=INK, zorder=6)
 
-    ax.text(0.5, f.fy(23.0), "directed tree:  ∂ℒ / ∂gᵢ = [xᵢ Rₙᵗᵒᵗ (Eᵢ − Vₙ)] [∂ℒ / ∂Vₙ]",
+    # The transported factor is spelled as the drawn path product, so the
+    # equation's second bracket names the alpha glyphs on the tree above
+    # (soma error delta_u times the per-branch gains, in route order).
+    ax.text(0.5, f.fy(23.0), "directed tree:  ∂ℒ / ∂gᵢ = [xᵢ Rₙᵗᵒᵗ (Eᵢ − Vₙ)] [α₃α₂α₁ δᵤ]",
             ha="center", va="center", fontsize=PT_ANNOT, color=INK)
     ax.text(0.5, f.fy(5.0), "general adjoint:  Jᵥᵀ q = ∇ᵥℒ,   ∂ℒ / ∂gᵢ = xᵢ (Eᵢ − Vₙ) qₙ",
             ha="center", va="center", fontsize=PT_SMALL, color=MUTE)

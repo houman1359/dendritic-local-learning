@@ -56,7 +56,7 @@ from matplotlib.colors import TwoSlopeNorm
 from matplotlib.lines import Line2D
 from matplotlib.patches import FancyArrowPatch, FancyBboxPatch, Rectangle
 
-from credit_tree_schematics import draw_credit_tree
+from credit_tree_schematics import draw_credit_tree, mix
 from figure_canvas import (
     COLORS,
     DIV_CMAP,
@@ -188,6 +188,15 @@ def signed_heatmap(ax, matrix, xlabels, ylabels, *, label):
     # The key rail, in points converted to data units from the panel's own
     # axes box, so both heatmaps get a geometrically identical key.
     rows, cols = matrix.shape
+    # A hairline frame around the matrix: the spines are hidden, so without it
+    # zero-valued edge cells at the near-background centre colour dissolve
+    # into the page and their annotations read as orphaned digits.  A line
+    # loop, not a Rectangle: the overlap audit treats every patch as an
+    # obstacle, and a matrix-sized patch would flag each cell annotation.
+    ax.plot([-0.5, cols - 0.5, cols - 0.5, -0.5, -0.5],
+            [-0.5, -0.5, rows - 0.5, rows - 0.5, -0.5],
+            color=COLORS["grid"], lw=LW_HAIR, solid_joinstyle="miter",
+            zorder=4)
     fig_w, fig_h = ax.figure.get_size_inches()
     box = ax.get_position()
     w_pt = box.width * fig_w * 72.0
@@ -325,6 +334,14 @@ def operator_schematic(ax) -> None:
     y_lo = y_hi - h_pt / unit
     draw_credit_tree(ax, mode="address", K=4, labels=False, scale=0.85,
                      xlim=(x_lo, x_hi), ylim=(y_lo, y_hi))
+    # The four capsules ARE the route subspaces of M, so they take one light
+    # hue -- the figure-wide route green -- instead of the shared vocabulary's
+    # four family tints, which collided with the family palette of F and H
+    # (green=trained, purple=imposed).  Two alternating tints of that one hue
+    # keep adjacent capsules separable where they meet near a junction.
+    capsules = [ln for ln in ax.lines if abs(ln.get_zorder() - 1.4) < 1e-9]
+    for i, line in enumerate(capsules):
+        line.set_color(mix("shunting", 26 if (i // 2) % 2 == 0 else 14))
 
     # Right column, top to bottom: the operator flow.
     lab_x = 4.35
@@ -418,7 +435,9 @@ def main() -> None:
                     y=matrix_label_y(ax_c), ha="center")
 
     # ── C: final loss versus route resolution, one series per task depth ─
-    depth_marker_dx = {3: -0.20, 4: 0.20}
+    # Small enough that a fanned marker still covers its own curve (the caption
+    # states the fan); +/-0.20 planted markers at impossible x-values.
+    depth_marker_dx = {3: -0.07, 4: 0.07}
     aligned = depth[depth.method.eq("aligned_tree")].pivot(
         index="task_depth", columns="model_depth",
         values="mean_final_population_loss")
@@ -483,9 +502,12 @@ def main() -> None:
         ("shuffled_shunting", "shuffled", C_SHUFFLE, MARKERS[2]),
         ("anti_aligned_shunting", "anti-aligned", C_ANTI, MARKERS[3]),
     ]
+    # All four series coincide exactly at heterogeneity 0; the fan is small
+    # enough that every marker still covers x=0 (the caption states the fan),
+    # where +/-0.165 put the outer markers at visibly impossible x-values.
     reliability_marker_dx = {
-        "reliability_aligned": -0.165, "best_global_gain": -0.055,
-        "shuffled_shunting": 0.055, "anti_aligned_shunting": 0.165,
+        "reliability_aligned": -0.06, "best_global_gain": -0.02,
+        "shuffled_shunting": 0.02, "anti_aligned_shunting": 0.06,
     }
     for method, label, color, marker in reliability_styles:
         part = reliability[reliability.method.eq(method)].sort_values(
@@ -532,8 +554,8 @@ def main() -> None:
     ax_g.set_yticks([-1.0, -0.5, 0.0, 0.5, 1.0])
     # The Spearman coefficient, its seed-block interval and n are reported in
     # the caption; printing them on the panel duplicated the caption text.
-    ax_g.set_xlabel("operator utility")
-    ax_g.set_ylabel("observed progress")
+    ax_g.set_xlabel("operator utility  $U(M)$")
+    ax_g.set_ylabel("observed progress  $P_1$")
 
     # ── G: alignment x bandwidth synthesis ──────────────────────────────
     # Families carry their home figures so the plane reads as the paper's
@@ -588,11 +610,13 @@ def main() -> None:
         if not ring.empty:
             rx = float(ring.iloc[0].x_plot)
             ry = float(ring.iloc[0].y_plot)
-            # The purple ring is defined in the caption: the bandwidth that
+            # The ring is defined in the caption: the bandwidth that
             # maximizes the evaluated one-step utility bound for the matched
             # ancestry family. The panel is too small to also carry the text.
+            # Ink, not C_ORACLE: the oracle purple is the imposed family's
+            # colour, and genuine imposed triangles sit right beside the ring.
             ax_h.plot([rx], [ry], marker="o", ms=MARKER_MS + 4.4, ls="none",
-                      mfc="none", mec=C_ORACLE, mew=LW_DATA, zorder=5)
+                      mfc="none", mec=COLORS["ink"], mew=LW_DATA, zorder=5)
     handles = [Line2D([], [], color=color, marker=marker,
                       lw=LW_DATA if has_line else 0, markersize=MARKER_MS,
                       markeredgewidth=LW_REF, label=label)
@@ -616,8 +640,11 @@ def main() -> None:
                   fontsize=PT_ANNOT, style="italic", ha="right", va="center")
     # The measured-response point is the only family not repeated in the
     # compact legend; label it at the point so its biological null cannot be
-    # mistaken for one of the synthetic screens.
-    ax_h.annotate("measured-response\nnull (Fig. 9)", xy=(0.474526, 3.73089),
+    # mistaken for one of the synthetic screens.  No hardcoded "(Fig. 9)":
+    # the family's home figure lives in the caption as a \ref, and the short
+    # second line no longer runs into the right-aligned "span saturated"
+    # band label on the same baseline.
+    ax_h.annotate("measured-response\nnull", xy=(0.474526, 3.73089),
                   xytext=(0.54, 5.25), ha="left", va="center",
                   fontsize=PT_SMALL, color=C_CTRL,
                   arrowprops={"arrowstyle": "-", "color": C_CTRL,

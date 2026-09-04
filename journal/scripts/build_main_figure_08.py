@@ -48,6 +48,7 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
+from matplotlib.patches import FancyArrowPatch
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
@@ -246,6 +247,16 @@ def panel_focal_shunt(ax, *, width_pt, height_pt):
     ax.text(rx, bottom - 0.165, "gₛₕ on", ha="center",
             va="center", fontsize=PT_SMALL, color=COLORS["inh"])
 
+    # The matched current is depicted, not just asserted: a short arrow in
+    # the additive colour enters the open (conductance-off) site of the left
+    # tree, giving the blue condition label a blue referent in the drawing.
+    site = _site_xy(left_rect)
+    tail = (site[0] - 0.105, site[1] - 0.115)
+    ax.add_patch(FancyArrowPatch(
+        tail, site, arrowstyle="-|>,head_length=4.5,head_width=2.79",
+        mutation_scale=1.0, color=ADDITIVE, lw=LW_DATA, capstyle="round",
+        shrinkA=0.0, shrinkB=2.6, zorder=4.5))
+
     # The fade convention (pale strokes = attenuated descendant credit) is a
     # methodological note and now lives in the caption, not on the drawing.
     return ax
@@ -280,7 +291,9 @@ def panel_tree_relation(ax):
     ax.set_ylim(-0.007, 0.172)
     _tick_labels(ax, "y", (0.0, 0.05, 0.10, 0.15),
                  ("0", "0.05", "0.10", "0.15"))
-    ax.set_ylabel("median |Δ log |∇||", fontsize=PT_LABEL,
+    # The axis names the quantity in the text's own notation (γᵢ is the
+    # site gradient; the plotted value is the median site-level mᵢ).
+    ax.set_ylabel("median |Δ log |γ||", fontsize=PT_LABEL,
                   color=INK)
     ax.tick_params(axis="x", length=0, pad=2.5)
     _direct_label(ax, 0.52, 0.152, "focal shunt", SHUNT)
@@ -356,10 +369,17 @@ def panel_factor_freeze(ax):
                  ("baseline\nadjoint", "post-shunt\nadjoint"))
     ax.set_xlim(-0.52, 1.52)
     ax.set_ylim(*LOCAL_YLIM)
-    ax.set_yticks(list(LOCAL_YTICKS))
-    ax.set_yticklabels([])          # ticks stay; only the labels are shared
+    # D repeats C's localization scale but sits across a gutter with a
+    # different x type, so it keeps its own tick labels: the shared left
+    # gutter already reserves the column, and a bare axis is not readable.
+    _tick_labels(ax, "y", LOCAL_YTICKS,
+                 ("0", "0.05", "0.10", "0.15", "0.20"))
     ax.tick_params(axis="x", length=0, pad=2.5)
-    # D shares C's y axis (ticks kept, labels dropped); the caption says so.
+    # Direct-label the two conditions so the amber triangle is not an
+    # unexplained third hue: amber = driving-force-only (baseline adjoint),
+    # green = the full shunt at unit dose.
+    _direct_label(ax, 0.0, 0.215, "driving-force\nonly", FREEZE, ha="center")
+    _direct_label(ax, 1.0, 0.215, "full shunt", SHUNT, ha="center")
     _title(ax, "Adjoint decomposition")
     return ax
 
@@ -463,8 +483,11 @@ def panel_electrotonic(ax):
 
     # Only the two series names stay on the panel (T5): the axial-resistivity
     # condition of the pilot cohort and the small standard-calibration effects are
-    # methodological notes and are carried by the caption.
-    _direct_label(ax, 1.02, 0.0115, "initial 8-cell sample", SHUNT)
+    # methodological notes and are carried by the caption.  The initial-sample
+    # label is set on two lines inside the clear pocket between its curve's
+    # descending limb (above) and the zero reference (below): a single line at
+    # this height ran under the curve's own tail.
+    _direct_label(ax, 1.05, 0.010, "initial\n8-cell sample", SHUNT)
     _direct_label(ax, 3.9, 0.0895, "disjoint 45-cell cohort", REPLICATE)
 
     # Mark the standard passive calibration explicitly.  Its two cohort
@@ -478,10 +501,11 @@ def panel_electrotonic(ax):
         for x_value in standard_x:
             ax.plot([x_value, x_value], [y_bar - 0.002, y_bar + 0.002],
                     color=MUTE, lw=LW_HAIR, zorder=2)
-        # Set right-aligned on the bracket's own right end.  Centred on the
-        # bracket it grew past the axis and landed on G's rotated y label.
-        ax.text(standard_x[1], y_bar + 0.004,
-                "standard passive  Rₘ=15,000", ha="right", va="bottom",
+        # The annotation floats in the empty upper-right pocket above the
+        # bracket, on two lines and with units: anchored on the bracket
+        # itself it collided with the disjoint cohort's descending curve.
+        ax.text(175.0, 0.018, "standard passive\nRₘ = 15,000 Ω cm²",
+                ha="right", va="bottom",
                 fontsize=PT_SMALL, color=MUTE)
     _title(ax, "Electrotonic boundary")
     return ax

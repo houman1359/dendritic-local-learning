@@ -72,8 +72,10 @@ C_BP = COLORS["bp"]
 # Categorical shades for the four anatomical routes in C.  Subtree identity
 # is categorical, but the palette reserves distinct hues for other series, so
 # the four routes take an ordered ramp of the route green -- the caption
-# states that shade encodes route identity, not magnitude.
-ROUTE_SHADES = [mix(C_ROUTE, pct) for pct in (100, 76, 56, 40)]
+# declares the ordering (routes sorted by size, darkest = largest), and the
+# ramp floor stays high enough that the palest route separates from the
+# neutral minor-route gray.
+ROUTE_SHADES = [mix(C_ROUTE, pct) for pct in (100, 80, 62, 48)]
 
 # The [3,3] arbor of the gallery: compartments 0-2 are proximal, compartment
 # 3 + 3*k .. 5 + 3*k are the children of proximal k.  This matches the
@@ -99,7 +101,7 @@ def panel_definition(ax):
     tree = ax.inset_axes([0.0, 0.14, 0.40, 0.84])
     tree.set_axis_off()
     draw_credit_tree(tree, mode="address", K=4, scale=0.86, labels=False)
-    ax.text(0.19, 0.035, "addresses $A_u$\non one arbor", ha="center",
+    ax.text(0.19, 0.035, "addresses $A_u$ ($K{=}4$)\non one arbor", ha="center",
             va="bottom", fontsize=PT_SMALL, color=COLORS["ink"],
             transform=ax.transAxes, linespacing=1.0)
 
@@ -154,7 +156,7 @@ def panel_gallery(ax):
             spine.set_color(COLORS["edge"])
         return inset
 
-    x, strip_w = 0.02, 0.05
+    x, strip_w = 0.045, 0.05
     block(x, strip_w, profile, seq, 1.0)
     ax.text(x + strip_w / 2, y1 + 0.035, "trained\nfield", ha="center",
             va="bottom", fontsize=PT_SMALL, color=COLORS["ink"],
@@ -162,6 +164,22 @@ def panel_gallery(ax):
     ax.text(x + strip_w / 2, y0 - 0.045,
             r"$|\partial\mathcal{L}/\partial V|$", ha="center", va="top",
             fontsize=PT_SMALL, color=COLORS["mute"], transform=ax.transAxes)
+    # Row-structure bracket: the strip's 12 rows are 3 proximal compartments
+    # (top) above 9 distal ones; two hairline brackets with rotated tags make
+    # the light-top / dark-bottom split decodable without the caption.
+    bx, cap_w, pad = x - 0.012, 0.006, 0.008
+    y_split = y1 - (y1 - y0) * 3.0 / 12.0
+    groups = [("prox", y_split + pad, y1 - pad),
+              ("distal", y0 + pad, y_split - pad)]
+    for tag, ylo, yhi in groups:
+        ax.plot([bx, bx], [ylo, yhi], transform=ax.transAxes,
+                color=COLORS["mute"], lw=LW_HAIR, clip_on=False)
+        for ycap in (ylo, yhi):
+            ax.plot([bx, bx + cap_w], [ycap, ycap], transform=ax.transAxes,
+                    color=COLORS["mute"], lw=LW_HAIR, clip_on=False)
+        ax.text(bx - 0.024, (ylo + yhi) / 2, tag, ha="center", va="center",
+                rotation=90, fontsize=PT_SMALL, color=COLORS["mute"],
+                transform=ax.transAxes)
 
     binary = LinearSegmentedColormap.from_list(
         "atlas_dict", ["#FFFFFF", C_ROUTE])
@@ -181,6 +199,12 @@ def panel_gallery(ax):
         ax.add_patch(Rectangle((x, bar_y), width * add, bar_h,
                                transform=ax.transAxes, facecolor=C_ROUTE,
                                edgecolor="none"))
+        # The shunting capture rides the same bar as a thin ink tick, so the
+        # graphic encodes both quantities the value line reports.
+        ax.add_patch(Rectangle((x + width * shunt - 0.0015, bar_y), 0.003,
+                               bar_h, transform=ax.transAxes,
+                               facecolor=COLORS["ink"], edgecolor="none",
+                               zorder=5))
         ax.text(x + width / 2, bar_y - 0.045,
                 f"{100 * add:.0f}%\n({100 * shunt:.0f}%)",
                 ha="center", va="top", fontsize=PT_SMALL,
@@ -189,7 +213,7 @@ def panel_gallery(ax):
         x += width + 0.085
 
     ax.text(0.755, bar_y + bar_h / 2 - 0.02,
-            "field-energy capture\nadditive (shunting)", ha="left",
+            "field-energy capture\nbar: additive\ntick: shunting", ha="left",
             va="center", fontsize=PT_SMALL, color=COLORS["mute"],
             transform=ax.transAxes, linespacing=1.05)
     ax.set_xlim(0, 1)
@@ -243,31 +267,43 @@ def panel_arbor_routes(ax):
         seg, par = int(row.segment_id), int(row.parent_segment_id)
         if par < 0:
             continue
-        color = shade_of.get(seg, "#E3E7EC")
+        color = shade_of.get(seg, "#EBEEF2")
         a, b = pos[par], pos[seg]
         ax.plot([a[0], b[0]], [a[1], b[1]], color=color,
-                lw=1.05 if seg in shade_of else 0.7,
+                lw=1.05 if seg in shade_of else LW_HAIR,
                 solid_capstyle="round",
                 zorder=3 if seg in shade_of else 2)
     sx, sy = pos[root_seg]
     ax.plot([sx], [sy], marker="o", ms=4.2, mfc=COLORS["soma"],
             mec=COLORS["edge"], mew=LW_HAIR, zorder=5, ls="none")
     # Route tags sit at each subtree's centroid, pushed radially away from
-    # the soma so four labels near a central soma cannot pile up on it.
+    # the soma so four labels near a central soma cannot pile up on it, plus
+    # a small tangential offset (to whichever side clears the drawn strokes
+    # better) so a near-radial terminal branch cannot end exactly on its tag.
+    ink = [np.array(list(pos.values()))]
+    ink += [(np.array([pos[s] for s in parent if parent[s] >= 0])
+             + np.array([pos[parent[s]] for s in parent if parent[s] >= 0]))
+            / 2.0]
+    ink = np.vstack(ink)
     for k, head in enumerate(heads[:4]):
         pts = np.array([pos[s] for s in membership[head]])
         cx, cy = pts.mean(axis=0)
         norm = max(np.hypot(cx - sx, cy - sy), 1e-6)
-        tx = sx + (cx - sx) / norm * (norm + 0.16)
-        ty = sy + (cy - sy) / norm * (norm + 0.16)
+        ux, uy = (cx - sx) / norm, (cy - sy) / norm
+        bx, by = sx + ux * (norm + 0.24), sy + uy * (norm + 0.24)
+        tx, ty = max(
+            ((bx - uy * s, by + ux * s) for s in (-0.06, 0.06)),
+            key=lambda c: np.hypot(ink[:, 0] - c[0], ink[:, 1] - c[1]).min())
         ax.text(tx, ty, f"$k{{=}}{k + 1}$", ha="center", va="center",
-                fontsize=PT_SMALL, color=mix(ROUTE_SHADES[k], 100, "black"))
+                fontsize=PT_SMALL, color=mix(ROUTE_SHADES[k], 65, "black"))
     n_route = sum(len(membership[h]) for h in heads[:4])
-    ax.text(0.02, 0.01,
+    # The summary sits in the row gutter under the axes box, clear of the
+    # arbor strokes that would otherwise run through it.
+    ax.text(0.5, -0.02,
             f"4 of {len(heads)} depth-1 routes cover "
             f"{n_route}/{len(parent) - 1} segments",
-            ha="left", va="bottom", fontsize=PT_SMALL, color=COLORS["mute"],
-            transform=ax.transAxes)
+            ha="center", va="top", fontsize=PT_SMALL, color=COLORS["mute"],
+            transform=ax.transAxes, clip_on=False)
     ax.set_aspect("equal", adjustable="datalim")
     ax.margins(0.05)
     ax.set_axis_off()
@@ -283,20 +319,25 @@ def panel_roadmap(ax):
     """
     binary = LinearSegmentedColormap.from_list(
         "roadmap_dict", ["#FFFFFF", C_ROUTE])
+    # Each mini carries its matrix shape (height scales with the row count,
+    # and a dimension tag names rows x columns), so the two 4-step staircases
+    # -- 4x4 branch selectors vs the 8x4 two-compartment subtree blocks --
+    # cannot be mistaken for one another.
     rows = [
         ("image classes", "MNIST ladder (Fig. 3)",
-         np.ones((12, 1)), 0.035,
+         np.ones((12, 1)), 0.035, 0.22, "12 comp × 1",
          "one coefficient\nper neuron suffices"),
         ("conflicting branches", r"$\chi>\chi_{\rm c}$ (Fig. 5)",
-         np.eye(4), 0.10,
+         np.eye(4), 0.10, 0.12, "4 branches × 4",
          "branch selectors\nbecome necessary"),
         ("nested contexts", "eight-context task (Fig. 6)",
-         np.kron(np.eye(4), np.ones((2, 1))), 0.10,
+         np.kron(np.eye(4), np.ones((2, 1))), 0.10, 0.19,
+         "8 comp × 4 subtrees",
          "subtrees win in a\n$K{=}4$ window"),
     ]
     ys = (1.0, 0.65, 0.30)
     row_h = 0.30
-    for (task, home, matrix, width, verdict), y1 in zip(rows, ys):
+    for (task, home, matrix, width, height, dims, verdict), y1 in zip(rows, ys):
         y0 = y1 - row_h
         mid = (y0 + y1) / 2
         ax.text(0.0, mid + 0.035, task, ha="left", va="center",
@@ -309,14 +350,22 @@ def panel_roadmap(ax):
                     xycoords=ax.transAxes, textcoords=ax.transAxes,
                     arrowprops={"arrowstyle": "-|>", "color": COLORS["mute"],
                                 "lw": LW_REF, "shrinkA": 0, "shrinkB": 0})
-        inset = ax.inset_axes([0.51, y0 + 0.035, width, row_h - 0.07])
+        inset = ax.inset_axes([0.51, mid - height / 2, width, height])
         inset.imshow(matrix, aspect="auto", cmap=binary, vmin=0.0, vmax=1.0,
                      interpolation="nearest")
+        if matrix.shape[0] == 8:
+            # Hairline separators split each subtree block into its two
+            # member compartments, distinguishing it from a branch selector.
+            for yline in (0.5, 2.5, 4.5, 6.5):
+                inset.axhline(yline, color="#FFFFFF", lw=LW_HAIR)
         inset.set_xticks([])
         inset.set_yticks([])
         for spine in inset.spines.values():
             spine.set_linewidth(LW_HAIR)
             spine.set_color(COLORS["edge"])
+        ax.text(0.51 + width / 2, mid - height / 2 - 0.018, dims,
+                ha="center", va="top", fontsize=PT_SMALL,
+                color=COLORS["mute"], transform=ax.transAxes)
         ax.text(0.67, mid, verdict, ha="left", va="center",
                 fontsize=PT_SMALL, color=COLORS["ink"],
                 transform=ax.transAxes, linespacing=1.05)
