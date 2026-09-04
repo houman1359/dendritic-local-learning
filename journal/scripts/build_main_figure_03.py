@@ -84,6 +84,7 @@ PHASE = ROOT / "source_data" / "credit_phase_theory"
 EXISTING = ROOT / "source_data" / "credit_phase_existing"
 FACTORIAL = ROOT / "source_data" / "trained_subtree_address_full_factorial"
 PLANE = ROOT / "source_data" / "credit_phase_plane"
+ATLAS = ROOT / "source_data" / "route_dictionary_atlas"
 OUT = ROOT / "figures" / "components" / "main_figure_03_native.pdf"
 
 HEIGHT_IN = 442.0 / 72.0
@@ -535,6 +536,10 @@ def main() -> None:
     ax_g.set_ylabel("observed progress")
 
     # ── G: alignment x bandwidth synthesis ──────────────────────────────
+    # Families carry their home figures so the plane reads as the paper's
+    # synthesis map (the trailing atlas figure was dissolved into this panel).
+    # Home figures for each family live in the caption; the panel keeps the
+    # short series names so the legend stays clear of the spectral line.
     families = [
         ("factorial", "trained", C_ROUTE, MARKERS[0], True),
         ("sweep", "spectral", COLORS["additive"], MARKERS[1], True),
@@ -570,6 +575,24 @@ def main() -> None:
             ax_h.plot(row.x_plot, row.y_plot, marker=marker, ms=MARKER_MS,
                       ls="none", mfc=color if filled else "white", mec=color,
                       mew=LW_REF, zorder=4)
+
+    # The constructive exhibit: ring the trained factorial point at the
+    # bandwidth that maximizes the evaluated one-step utility bound U(M)
+    # for the matched ancestry family (frozen in argmax_summary.csv).
+    argmax = pd.read_csv(ATLAS / "argmax_summary.csv")
+    match = argmax[argmax.architecture.eq("dendritic_tree")
+                   & argmax.feedback_family.eq("correct_ancestry_subtrees")]
+    if not match.empty:
+        best_k = int(match.iloc[0].predicted_best_k)
+        ring = points[points.label.eq(f"factorial K={best_k}")]
+        if not ring.empty:
+            rx = float(ring.iloc[0].x_plot)
+            ry = float(ring.iloc[0].y_plot)
+            # The purple ring is defined in the caption: the bandwidth that
+            # maximizes the evaluated one-step utility bound for the matched
+            # ancestry family. The panel is too small to also carry the text.
+            ax_h.plot([rx], [ry], marker="o", ms=MARKER_MS + 4.4, ls="none",
+                      mfc="none", mec=C_ORACLE, mew=LW_DATA, zorder=5)
     handles = [Line2D([], [], color=color, marker=marker,
                       lw=LW_DATA if has_line else 0, markersize=MARKER_MS,
                       markeredgewidth=LW_REF, label=label)
@@ -594,7 +617,7 @@ def main() -> None:
     # The measured-response point is the only family not repeated in the
     # compact legend; label it at the point so its biological null cannot be
     # mistaken for one of the synthetic screens.
-    ax_h.annotate("measured-response\nnull", xy=(0.474526, 3.73089),
+    ax_h.annotate("measured-response\nnull (Fig. 9)", xy=(0.474526, 3.73089),
                   xytext=(0.54, 5.25), ha="left", va="center",
                   fontsize=PT_SMALL, color=C_CTRL,
                   arrowprops={"arrowstyle": "-", "color": C_CTRL,

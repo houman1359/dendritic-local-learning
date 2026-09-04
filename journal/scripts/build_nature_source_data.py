@@ -2454,7 +2454,7 @@ FILES += (
         "family-level predicted and realized optimal bandwidths",
         "route family within architecture (n=30)",
         "current deterministic reanalysis",
-        "Utility-argmax bandwidth versus trained optimum for every parameterized route family; degenerate zero-utility families flagged. Panel c re-uses the Figure 7a segment metrics and panel d replots the Figure 3h plane points released with those figures.",
+        "Utility-argmax bandwidth versus trained optimum for every parameterized route family; degenerate zero-utility families flagged. Figure 2c re-uses the Figure 7a segment metrics, and the ringed plane replots the Figure 4h points released with that figure.",
     ),
 )
 
@@ -3429,6 +3429,75 @@ FILES = tuple(
     for item in FILES
 )
 
+# ── Dictionary-forward renumbering (2026-09-04) ──────────────────────────
+# The compiled manuscript now leads with the route-dictionary atlas as
+# Figure 2, shifts the feedback-identity, credit-operator, branch-conflict
+# and subtree-factorial figures down one number (old 2--5 -> new 3--6),
+# moves the forward serial physical-depth figure to Supplementary Figure 31,
+# and seats the atlas utility-argmax plane as new Figure 4 panel h.  This
+# layer runs last, after every legacy destination-keyed correction above, so
+# those layers keep matching the pre-renumber destinations they were written
+# against; the build-time row filters and expected row counts are re-keyed
+# below to the renamed destinations they are checked against during the copy.
+_DICTIONARY_FORWARD_FIGURES = {
+    "Figure 2": "Figure 3",
+    "Figure 3": "Figure 4",
+    "Figure 4": "Figure 5",
+    "Figure 5": "Figure 6",
+    "Figure 6": "Supplementary Figure 31",
+    "Figure 10": "Figure 2",
+}
+
+
+def dictionary_forward_file(item: SourceFile) -> SourceFile:
+    """Renumber one finalized entry onto the dictionary-forward figure order."""
+
+    if item.destination == "Figure_10/Fig10d_utility_argmax_summary.csv":
+        # The atlas alignment--bandwidth plane with the utility-argmax ring
+        # now closes the credit-operator figure as its panel h.
+        return replace(
+            item,
+            figure="Figure 4",
+            panels="h",
+            destination="Figure_4/Fig4h_utility_argmax_summary.csv",
+        )
+    figure = _DICTIONARY_FORWARD_FIGURES.get(item.figure)
+    if figure is None:
+        return item
+    old_dir = item.figure.replace(" ", "_")
+    new_dir = figure.replace(" ", "_")
+    directory, name = item.destination.split("/", 1)
+    if directory != old_dir:
+        raise RuntimeError(
+            f"Destination {item.destination} does not match figure {item.figure}"
+        )
+    old_number = item.figure.split()[-1]
+    new_number = figure.split()[-1]
+    new_prefix = (
+        f"SuppFig{new_number}"
+        if figure.startswith("Supplementary")
+        else f"Fig{new_number}"
+    )
+    name = re.sub(rf"^Fig{old_number}(?=[a-z])", new_prefix, name)
+    return replace(item, figure=figure, destination=f"{new_dir}/{name}")
+
+
+_renumbered_files = []
+_destination_renames = {}
+for _item in FILES:
+    _renumbered = dictionary_forward_file(_item)
+    _destination_renames[_item.destination] = _renumbered.destination
+    _renumbered_files.append(_renumbered)
+FILES = tuple(_renumbered_files)
+DESTINATION_ROW_FILTERS = {
+    _destination_renames.get(key, key): value
+    for key, value in DESTINATION_ROW_FILTERS.items()
+}
+DESTINATION_EXPECTED_ROW_COUNTS = {
+    _destination_renames.get(key, key): value
+    for key, value in DESTINATION_EXPECTED_ROW_COUNTS.items()
+}
+
 
 README = """# Source Data
 
@@ -3453,18 +3522,20 @@ Focal sites, channel draws, scans, stimulus splits, and Monte Carlo streams are
 nested observations; they are not counted as independent biological
 replicates.
 
-Figure 2 contains the feedback hierarchy, MNIST accuracy ladder,
-exact-gradient alignment, mean pre-reactivation voltage-error transport,
-path-specific pre-reactivation voltage-error energy, ownership schematic and
-paired MNIST/ownership contrasts. Figure 3 contains the stochastic
-credit-operator phase tests and the alignment--bandwidth synthesis. Figure 4 is the continuous
-branch-conflict path-demand family. Figure 5 is the 2,700-fit subtree-address
-factorial. Figure 6 contains the H2--H4 physical-depth, point--dendrite,
-BP--local-credit and task-family-by-alignment extensions. Figures
-7--9 contain reconstructed-anatomy capacity, focal conductance,
-measured-response, controlled-alignment and six-animal boundary tests; Figure
-7 also shows the independent-animal directional replication of structural
-route capacity.
+Figure 2 introduces the route dictionary: the trained-capture gallery and
+the anatomical-route example. Figure 3 contains the feedback hierarchy, MNIST
+accuracy ladder, exact-gradient alignment, mean pre-reactivation
+voltage-error transport, path-specific pre-reactivation voltage-error
+energy, ownership schematic and paired MNIST/ownership contrasts. Figure 4
+contains the stochastic credit-operator phase tests and the
+alignment--bandwidth synthesis with the utility-argmax exhibit. Figure 5 is
+the continuous branch-conflict path-demand family. Figure 6 is the
+2,700-fit subtree-address factorial. Figures 7--9 contain
+reconstructed-anatomy capacity, focal conductance, measured-response,
+controlled-alignment and six-animal boundary tests; Figure 7 also shows the
+independent-animal directional replication of structural route capacity. The
+H2--H4 physical-depth, point--dendrite, BP--local-credit and
+task-family-by-alignment extensions are Supplementary Figure 31.
 Supplementary Figures 1--3 reproduce the three unchanged regular-tree figures
 from the final NeurIPS/arXiv revision, and Supplementary Figure 4 is the
 five-panel regular-tree boundary sheet, including the Fashion-MNIST
@@ -3481,16 +3552,19 @@ morphology, focal-shunting, measured-response and trained partition-residual
 diagnostics plus the adaptive conductance-reliability and irregular-tree
 wavelet tests, clean-source physical-depth replication, independent-animal
 structural replication, physical-depth diagnostics and the complete
-branch-conflict boundary. Capture per wire
-and the phase-plane synthesis are promoted to main Figures 7 and 3.
+branch-conflict boundary. Supplementary Figure 30 is the between-by-within
+credit factorial and Supplementary Figure 31 the demoted physical-depth
+program. Capture per wire
+and the phase-plane synthesis are promoted to main Figures 7 and 4.
 
-This is the submission-facing source-data package. Figure 2 panel B contains
+This is the submission-facing source-data package. Figure 3 panel B contains
 the complete clean 15-seed MNIST feedback cohort, panel C contains the
 corresponding fixed-checkpoint gradient-alignment diagnostics, and panels D--E
 share the exact-path-checkpoint table of pre-reactivation voltage-error
 transport and path-specific energy. Panel G packages the paired MNIST feedback
 contrasts and only the MNIST D2/D4 ownership subset (80 run rows and four
 paired contrasts). Panels A and F are schematics with no numerical source.
+These panel notes describe Figure 3, the MNIST feedback ladder.
 
 The broader prospective programme is supplementary: Supplementary Figure 19A--C
 contains the 480 input-valid depth-by-feedback outcomes, panel D contains the
@@ -3501,8 +3575,9 @@ ledger is supplied, including the excluded inhibitory-dose family. The
 120-checkpoint diagnostic is supplied as Supplementary Figure 9. Run-level data
 and derived summaries for the initialization-policy factorial and
 direct-type-only focal sensitivity are also included. Figure 7 is the
-reconstructed-morphology routing analysis, Figure 4 the branch-conflict family,
-Figure 5 the subtree-address factorial and Figure 6 the physical-depth program.
+reconstructed-morphology routing analysis, Figure 5 the branch-conflict
+family, Figure 6 the subtree-address factorial and Supplementary Figure 31
+the physical-depth program.
 Supplementary Figure 4 retains the historical depth, teaching-noise and
 shunting-only CIFAR-10 boundaries together with the fresh raw-additive
 CIFAR-10 ladder and the Fashion-MNIST feedback-resolution replication. The
@@ -3524,14 +3599,14 @@ and analysis design. It contains no plotted numerical observations.
 """
 
 
-FIGURE_2_README = """# Figure 2 source data
+FIGURE_2_README = """# Figure 3 source data
 
 Panels A and F are schematics and have no numerical source. Panel B uses the
 complete paired 15-seed MNIST scalar, neuron-specific and exact-path ladder.
 Panel C contains the fixed-checkpoint exact-gradient-alignment diagnostics for
 the same two architectures.
 
-Panels D--E share `Fig2d-e_path_gain_dispersion_ladder_runs.csv`, one row for
+Panels D--E share `Fig3d-e_path_gain_dispersion_ladder_runs.csv`, one row for
 each of the 30 exact-path checkpoints in panel B. Panel D plots mean
 pre-reactivation voltage-error magnitude at the soma, middle and distal depth;
 panel E plots the fraction of pre-reactivation voltage-error energy remaining
@@ -3546,7 +3621,7 @@ to Supplementary Figure 19D.
 The `Text_*` files document the strict-scalar implementation audit. The
 initialization-policy factorial is packaged under Methods, and the detached
 exact-transport/backpropagation factorial is assigned to Supplementary Figure
-3C rather than Figure 2.
+3C rather than Figure 3.
 
 """
 
@@ -3818,7 +3893,9 @@ def write_display_readmes(stage: Path, rows: list[dict[str, str]]) -> None:
         grouped.setdefault(directory, []).append(row)
     for directory, items in grouped.items():
         figure = items[0]["figure"]
-        if figure == "Figure 2":
+        if figure == "Figure 3":
+            # The hand-written feedback-ladder scope note follows the ladder
+            # to its dictionary-forward home (old Figure 2 -> new Figure 3).
             (stage / directory / "README.md").write_text(
                 FIGURE_2_README, encoding="utf-8"
             )

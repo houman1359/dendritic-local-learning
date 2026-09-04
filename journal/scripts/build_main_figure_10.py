@@ -1,21 +1,25 @@
-"""Figure 10 -- the route-dictionary atlas, natively, on one canvas.
+"""Main Figure 2 -- route dictionaries over morphology, natively.
 
     row 0   A one dictionary, five instantiations | B gallery on a [3,3] arbor
-    row 1   C anatomical routes (MICrONS)         | D alignment x bandwidth
+    row 1   C anatomical routes (MICrONS)         | D task -> dictionary map
 
-The figure is the paper's synthesis object: it names the route dictionary
-once (A), shows what the candidate dictionaries look like and how much of a
-trained credit field each captures (B), paints the same construction on a
-reconstructed arbor (C), and places every experimental family on the
-alignment x bandwidth plane together with the utility-predicted optimum (D).
+The figure introduces the paper's method up front: it names the route
+dictionary once (A), shows what the candidate dictionaries look like and how
+much of a trained credit field each captures (B), paints the same
+construction on a reconstructed arbor (C), and previews which dictionary
+each experimental task family demands (D, a roadmap schematic mirroring
+Fig. 1E's experimental-logic role).
 
-Every quantitative mark reads a frozen source table: the gallery captures
-and the example field come from ``source_data/route_dictionary_atlas``
-(computed on the paper's own trained exact-path MNIST checkpoints), the
-arbor geometry is the same ``segment_metrics.csv`` cell drawn in Fig. 7A,
-the plane replots ``credit_phase_plane/points.csv`` unchanged, and the
-predicted optimum comes from ``route_dictionary_atlas/argmax_summary.csv``.
-Panel A is a labelled schematic and draws no data.
+The component keeps its historical file name (main_figure_10_native.pdf);
+the assembly map in ``assemble_compact_main_figures.py`` emits it as
+``figures/main/figure_02.pdf``. Quantitative marks read frozen source
+tables: the gallery captures and the example field come from
+``source_data/route_dictionary_atlas`` (computed on the paper's own trained
+exact-path MNIST checkpoints), and the arbor geometry is the
+``segment_metrics.csv`` cell drawn in the anatomy figure. Panels A and D
+are labelled schematics and draw no data. The alignment-by-bandwidth plane
+with the utility-argmax exhibit lives in the theory figure's panel H, not
+here.
 """
 
 from __future__ import annotations
@@ -57,7 +61,7 @@ OUT = ROOT / "figures" / "components" / "main_figure_10_native.pdf"
 HEIGHT_IN = 336.0 / 72.0
 HGUTTER = 38.0
 VGUTTER = 58.0
-MARGINS = Margins(left=51.0, right=13.5, top=23.0, bottom=27.0)
+MARGINS = Margins(left=51.0, right=13.5, top=23.0, bottom=21.0)
 ROW_WEIGHTS = (150.0, 160.0)
 
 C_ROUTE = COLORS["shunting"]      # route-of-interest series (Fig. 7 semantics)
@@ -100,9 +104,9 @@ def panel_definition(ax):
             transform=ax.transAxes, linespacing=1.0)
 
     entries = [
-        (r"$A_u$ address matrix", "delivery model (Figs 1, 2)"),
-        ("Haar route basis", "operator screens (Fig. 3)"),
-        (r"$\Phi^{(K)}$ context routes", "eight-context task (Fig. 5)"),
+        (r"$A_u$ address matrix", "delivery model (Figs 1, 3)"),
+        ("Haar route basis", "operator screens (Fig. 4)"),
+        (r"$\Phi^{(K)}$ context routes", "eight-context task (Fig. 6)"),
         (r"$A_K$ anatomical subtrees", "reconstructed arbors (Fig. 7)"),
         ("fitted subtree routes", "measured responses (Fig. 9)"),
     ]
@@ -265,90 +269,60 @@ def panel_arbor_routes(ax):
             ha="left", va="bottom", fontsize=PT_SMALL, color=COLORS["mute"],
             transform=ax.transAxes)
     ax.set_aspect("equal", adjustable="datalim")
-    ax.margins(0.11)
+    ax.margins(0.05)
     ax.set_axis_off()
 
 
-def panel_plane(ax):
-    """D: the alignment x bandwidth plane with the predicted optimum ringed."""
-    points = pd.read_csv(PLANE / "points.csv", keep_default_na=False)
-    argmax = pd.read_csv(ATLAS / "argmax_summary.csv")
+def panel_roadmap(ax):
+    """D: which dictionary each task family demands -- a labelled preview.
 
-    families = [
-        ("factorial", "eight-context task (Fig. 5)", C_ROUTE, MARKERS[0], True),
-        ("sweep", "spectral screens (Fig. 3)", COLORS["additive"],
-         MARKERS[1], True),
-        ("microns", "imposed alignment (Fig. 9)", C_ORACLE, MARKERS[2], True),
-        ("measured", None, C_CTRL, MARKERS[3], False),
-        ("reversal", "credit reversal (Fig. 2)", C_BP, MARKERS[4], False),
+    A roadmap schematic in the same role as Fig. 1E: each row pairs one
+    experimental task family with the dictionary the trained results select,
+    so the reader carries the thesis into the evidence sections. The mini
+    dictionaries are drawn to the conventions of panel B.
+    """
+    binary = LinearSegmentedColormap.from_list(
+        "roadmap_dict", ["#FFFFFF", C_ROUTE])
+    rows = [
+        ("image classes", "MNIST ladder (Fig. 3)",
+         np.ones((12, 1)), 0.035,
+         "one coefficient\nper neuron suffices"),
+        ("conflicting branches", r"$\chi>\chi_{\rm c}$ (Fig. 5)",
+         np.eye(4), 0.10,
+         "branch selectors\nbecome necessary"),
+        ("nested contexts", "eight-context task (Fig. 6)",
+         np.kron(np.eye(4), np.ones((2, 1))), 0.10,
+         "subtrees win in a\n$K{=}4$ window"),
     ]
-    ax.set_yscale("log")
-    ax.set_xlim(-0.045, 1.12)
-    ax.set_ylim(0.088, 7.0)
-    span_x = [-0.045, 1.12]
-    for lo, hi, tint in ((0.088, 0.24, "#F2F4F7"),
-                         (0.24, 1.2, "#E3E8ED"),
-                         (1.2, 7.0, "#D4DBE3")):
-        ax.fill_between(span_x, [lo] * 2, [hi] * 2, color=tint,
-                        zorder=0, linewidth=0)
-    ax.axhline(1.0, color=COLORS["mute"], ls="--", lw=LW_REF, zorder=1)
-    ax.axvline(1.0, color=COLORS["mute"], ls="--", lw=LW_REF, zorder=1)
-    for family, label, color, marker, has_line in families:
-        part = points[points.family.eq(family)].sort_values("x_plot")
-        if has_line:
-            ax.plot(part.x_plot, part.y_plot, color=color, lw=LW_DATA,
-                    alpha=0.85, zorder=2)
-        for row in part.itertuples(index=False):
-            filled = str(row.outcome) not in {"loss", "null"}
-            ax.plot(row.x_plot, row.y_plot, marker=marker, ms=MARKER_MS,
-                    ls="none", mfc=color if filled else "white", mec=color,
-                    mew=LW_REF, zorder=4)
-
-    # The constructive exhibit: ring the trained factorial point at the
-    # bandwidth that maximizes the evaluated one-step utility bound U(M)
-    # for the matched ancestry family (frozen in argmax_summary.csv).
-    match = argmax[argmax.architecture.eq("dendritic_tree")
-                   & argmax.feedback_family.eq("correct_ancestry_subtrees")]
-    if not match.empty:
-        best_k = int(match.iloc[0].predicted_best_k)
-        ring = points[points.label.eq(f"factorial K={best_k}")]
-        if not ring.empty:
-            rx = float(ring.iloc[0].x_plot)
-            ry = float(ring.iloc[0].y_plot)
-            ax.plot([rx], [ry], marker="o", ms=MARKER_MS + 4.4, ls="none",
-                    mfc="none", mec=C_ORACLE, mew=LW_DATA, zorder=5)
-            ax.annotate(f"arg max $U(M)$: $K{{=}}{best_k}$",
-                        xy=(rx, ry), xytext=(rx - 0.065, ry * 2.45),
-                        ha="right", va="center", fontsize=PT_SMALL,
-                        color=C_ORACLE,
-                        arrowprops={"arrowstyle": "-", "color": C_ORACLE,
-                                    "lw": LW_HAIR, "shrinkA": 1,
-                                    "shrinkB": 4})
-
-    handles = [Line2D([], [], color=color, marker=marker,
-                      lw=LW_DATA if has_line else 0, markersize=MARKER_MS,
-                      markeredgewidth=LW_REF, label=label)
-               for _, label, color, marker, has_line in families
-               if label is not None]
-    ax.legend(handles=handles, loc="upper left", ncol=1, frameon=False,
-              fontsize=PT_LEGEND, handlelength=1.3, handletextpad=0.4,
-              labelspacing=0.28, borderaxespad=0.15)
-    for band_y, band_name in ((4.20, "span saturated"),
-                              (0.33, "matched regime"),
-                              (0.145, "bandwidth limited")):
-        ax.text(1.10, band_y, band_name, color=COLORS["mute"],
-                fontsize=PT_ANNOT, style="italic", ha="right", va="center")
-    ax.annotate("measured-response\nnull (Fig. 9)", xy=(0.474526, 3.73089),
-                xytext=(0.585, 5.4), ha="left", va="center",
-                fontsize=PT_SMALL, color=C_CTRL,
-                arrowprops={"arrowstyle": "-", "color": C_CTRL,
-                            "lw": LW_HAIR, "shrinkA": 1, "shrinkB": 3})
-    ax.set_xticks([0, 0.25, 0.5, 0.75, 1.0])
-    ax.set_yticks([0.125, 0.25, 0.5, 1, 2, 4])
-    ax.set_yticklabels(["1/8", "1/4", "1/2", "1", "2", "4"])
-    ax.minorticks_off()
-    ax.set_xlabel("task–route alignment")
-    ax.set_ylabel("bandwidth / effective\ntask rank  " r"$K/r_{\rm eff}$")
+    ys = (1.0, 0.65, 0.30)
+    row_h = 0.30
+    for (task, home, matrix, width, verdict), y1 in zip(rows, ys):
+        y0 = y1 - row_h
+        mid = (y0 + y1) / 2
+        ax.text(0.0, mid + 0.035, task, ha="left", va="center",
+                fontsize=PT_ANNOT, color=COLORS["ink"],
+                transform=ax.transAxes)
+        ax.text(0.0, mid - 0.045, home, ha="left", va="center",
+                fontsize=PT_SMALL, color=COLORS["mute"],
+                transform=ax.transAxes)
+        ax.annotate("", xy=(0.475, mid), xytext=(0.375, mid),
+                    xycoords=ax.transAxes, textcoords=ax.transAxes,
+                    arrowprops={"arrowstyle": "-|>", "color": COLORS["mute"],
+                                "lw": LW_REF, "shrinkA": 0, "shrinkB": 0})
+        inset = ax.inset_axes([0.51, y0 + 0.035, width, row_h - 0.07])
+        inset.imshow(matrix, aspect="auto", cmap=binary, vmin=0.0, vmax=1.0,
+                     interpolation="nearest")
+        inset.set_xticks([])
+        inset.set_yticks([])
+        for spine in inset.spines.values():
+            spine.set_linewidth(LW_HAIR)
+            spine.set_color(COLORS["edge"])
+        ax.text(0.67, mid, verdict, ha="left", va="center",
+                fontsize=PT_SMALL, color=COLORS["ink"],
+                transform=ax.transAxes, linespacing=1.05)
+    ax.set_xlim(0, 1)
+    ax.set_ylim(0, 1)
+    ax.set_axis_off()
 
 
 def main():
@@ -361,12 +335,12 @@ def main():
                         title="Dictionary gallery on a [3,3] arbor")
     ax_c = canvas.panel("C", 1, 0, 5, schematic=True,
                         title="Anatomical routes (MICrONS)")
-    ax_d = canvas.panel("D", 1, 5, 7,
-                        title="Alignment × bandwidth, predicted optimum")
+    ax_d = canvas.panel("D", 1, 5, 7, schematic=True,
+                        title="Which dictionary a task demands")
     panel_definition(ax_a)
     panel_gallery(ax_b)
     panel_arbor_routes(ax_c)
-    panel_plane(ax_d)
+    panel_roadmap(ax_d)
     problems = canvas.save(OUT, name="main_figure_10_native")
     for violation in audit_native_pdf(OUT):
         print(f"    {violation}")

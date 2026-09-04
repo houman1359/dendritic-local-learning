@@ -2344,7 +2344,7 @@ synapses per branch; the inset shows paired-seed
 coefficients of variation. This quantity is computed from conductance
 loading alone on the normalized-additive cohort; it omits branch
 derivatives and is distinct from the trained exact-error profiles of main
-Fig.~2D,E, so the two are not comparable rung by rung. \textbf{B}, Stage-resolved cosine between the
+Fig.~3D,E, so the two are not comparable rung by rung. \textbf{B}, Stage-resolved cosine between the
 matched-width scalar-fallback field and the exact MNIST error on distal and
 proximal compartments. The width-matched somatic stage is excluded because
 its cosine is one by construction. \textbf{C}, Post-training intervention in
@@ -2383,7 +2383,7 @@ Fifteen-seed comparison in regular \([3,3]\) MNIST trees of matched-width
 scalar-fallback and neuron-specific
 feedback: the gain from
 preserving one soma teaching coordinate for every compartment of the
-corresponding modeled neuron, measured against the fallback field. Main Fig.~2
+corresponding modeled neuron, measured against the fallback field. Main Fig.~3
 uses strict scalar feedback and provides the primary scalar-to-neuron-specific
 comparison. Error bars are $\pm1$ s.d.}
 \label{fig:inherited_competence}
@@ -2444,7 +2444,7 @@ local learning and faint dashed lines are matched backpropagation; colour
 denotes shunting or normalized-additive architecture. Generic depth
 is costly here,
 especially under restricted feedback; the resource-matched, task-aligned
-experiments of main Fig.~6 ask the narrower question this boundary
+experiments of Supplementary Fig.~S31 ask the narrower question this boundary
 motivates. \textbf{B}, Accuracy after adding zero-mean Gaussian noise with
 standard deviation $\sigma$ to the broadcast teaching signal. This stress
 test is an empirical precursor of the admitted-noise term of the
@@ -3414,8 +3414,8 @@ local credit assignment.}
 greater dendritic depth intrinsically beneficial.}
 The synthetic noise-resilience task uses conductance-valid raw-additive trees
 with 16 terminal branches: D1 \([16]\), D2 \([4,4]\), D3 \([2,2,4]\) and D4
-\([2,2,2,2]\). These cohort-specific labels are not the morphologies in main
-Fig.~6. The experiment asks whether accuracy rises when fixed terminal and
+\([2,2,2,2]\). These cohort-specific labels are not the morphologies in Supplementary
+Fig.~S31. The experiment asks whether accuracy rises when fixed terminal and
 contact budgets are distributed across more serial stages. \textbf{A--D},
 Held-out accuracy under matched-width scalar-fallback, neuron-specific,
 exact-path and backpropagated learning, respectively. \textbf{E}, Prespecified
@@ -3622,7 +3622,7 @@ but not the trained ancestry advantage.} Panels \textbf{A--C} use the abstract
 16-coordinate balanced-tree credit-operator experiment; the tree indexes Haar
 credit modes and is not a forward dendritic morphology. Panel \textbf{D} is a
 separate reanalysis of the trained eight-stream subtree-address factorial from
-main Fig.~5. \textbf{A}, Mean final population
+main Fig.~6. \textbf{A}, Mean final population
 loss across routed depth $D_{\mathrm{r}}$ for task depths
 $H_{\mathrm c}=1$--$4$ in the
 hierarchy-depth routing experiment (aligned tree, $n=50$ seeds); open circles
@@ -3931,7 +3931,7 @@ seed-wise tests use the prespecified interaction slopes and
 discrete boundary order. Analytic backpropagation and an explicitly gated
 grouped-point implementation coincide with correct routing in the same set of
 runs; those conditions are not redrawn here, and are shown in main
-Fig.~4D,E. The experiment
+Fig.~5D,E. The experiment
 establishes a need for branch-selective information somewhere in the local
 update, not a dendrite-exclusive implementation.}
 \label{fig:supp_path_demand}
@@ -3942,7 +3942,7 @@ update, not a dendrite-exclusive implementation.}
 \includegraphics[width=\textwidth]{supplementary/figure_S30_panels_A-D.pdf}
 \caption{\textbf{The within-neuron ladder survives an approximate
 between-neuron source.} The between-by-within factorial crosses the MNIST
-feedback ladder of main Fig.~2 with the production of the per-neuron signal:
+feedback ladder of main Fig.~3 with the production of the per-neuron signal:
 exact readout backpropagation (the paper's default map \(F\)) versus a fixed
 random soma-level feedback matrix (direct feedback alignment), seeded per
 run, inside the same LocalCA rule; a soma-DFA trainer with exact autograd
@@ -3962,6 +3962,40 @@ neuron and path rungs is no more than about \(0.2\) points. Blue is additive and
 green shunting in \textbf{C,D}. Symbols and whiskers show means and 95\%
 seed-bootstrap intervals over 15 paired seeds.}
 \label{fig:supp_between_within_factorial}
+\end{figure}
+
+\begin{figure}[p]
+\centering
+\includegraphics[width=\textwidth]{supplementary/figure_S31_panels_A-G.pdf}
+\caption{\textbf{Useful serial physical depth is task- and
+alignment-dependent.} \(H_{\mathrm p}\) counts latent gain levels and \(D_{\mathrm p}\)
+nonsomatic serial stages; vectors list soma-outward branching factors. \textbf{A}, Three task families. Here
+\(m_i=b_E+y_i\Delta\) is the noise-free distal class-bearing amplitude and
+\(h_\ell\) denotes a multiplicative gain at level \(\ell\). Nested
+factors multiply it at fine, coarse and global scales with 4/2/1 groups; flat
+factors use three independent eight-group fields;
+local ratios \(R_\ell=x_\ell^E/x_\ell^I\) observe one cumulative field
+within each module, with class information only in the distal pair.
+Alignment \(\alpha\) correlates latent and sensor log gains.
+\textbf{B}, Serial D3 \([2,1,2]\), resource-identical grouped-point readout and
+near-total-parameter-matched dense MLP. The grouped model keeps the eight
+modules without serial composition; the MLP is a flexible ceiling. \textbf{C}, Three-level nested task at \(\alpha=1\) across
+D1 \([8]\), D2 \([2,3]\) and D3 \([2,1,2]\). Curves: serial shunting with BP, exact-path or shared-soma LocalCA;
+literal grouped-point BP; serial raw-additive BP; dense MLP. Shared-soma
+repeats each neuron's somatic error across its arbor. \textbf{D}, Independent four-level cohort
+including D4 \([1,1,2,2]\), under aligned or reversed tier placement.
+\textbf{E}, Aligned serial-BP optima in independent two-, three- and four-level
+cohorts; the two-level cohort uses D2 \([4,1]\). In \textbf{D}, an aligned row
+maximum is outlined only when its 95\% bootstrap interval clears the
+runner-up's; reversed rows are unoutlined. In \textbf{E}, outlines mark
+descriptive maxima when within-row spread exceeds one point; blanks were
+untested. \textbf{F,G}, In a separate
+fixed-D3 cohort, serial-minus-grouped-point accuracy across task family and
+\(\alpha\in\{0,0.5,1\}\), under BP or exact-path LocalCA. Multiplicative-factor
+tasks favor serial composition near exact alignment; locally available ratios
+do not. Numerical panels: means and 95\% paired-seed bootstrap intervals, ten
+seeds per cohort.}
+\label{fig:physicaldepth}
 \end{figure}
 
 \section{Statistics, reproducibility and claim controls}

@@ -121,6 +121,28 @@ def copy_page(source: str, destination: str, *,
     out.save(MAIN / destination, garbage=4, deflate=True, no_new_id=True)
 
 
+# 2026-09-04 dictionary-forward renumbering. Publication figure numbers no
+# longer coincide with the historical component numbers: the route-dictionary
+# figure (component 10) leads the evidence as Figure 2, the old Figures 2-5
+# shift down one, and the forward-serial-depth canvas (component 6) leaves the
+# main set for Supplementary Figure S31. Builder scripts keep their historical
+# names; this map is the single source of truth for what each published
+# figure is built from.
+FIGURE_SOURCES = {
+    1: 1,    # framework
+    2: 10,   # route dictionaries over morphology
+    3: 2,    # MNIST feedback ladder
+    4: 3,    # credit operator theory
+    5: 4,    # branch conflict
+    6: 5,    # eight-context subtree factorial
+    7: 7,    # reconstructed-arbor capacity
+    8: 8,    # focal shunting route gain
+    9: 9,    # measured boundary
+}
+PHYSICAL_DEPTH_COMPONENT = 6
+PHYSICAL_DEPTH_SUPP = "figure_S31_panels_A-G.pdf"
+
+
 def native_component(number: int) -> Path:
     """Path a natively built full-width canvas must occupy to be used."""
     return COMPONENTS / NATIVE_TEMPLATE.format(int(number))
@@ -128,13 +150,30 @@ def native_component(number: int) -> Path:
 
 def emit_native(number: int) -> bool:
     """Emit ``figure_NN.pdf`` from its native canvas; report whether it ran."""
-    source = native_component(number)
+    source = native_component(FIGURE_SOURCES.get(int(number), int(number)))
     if not source.is_file():
         return False
     copy_page(f"../components/{source.name}", f"figure_{int(number):02d}.pdf",
               keep_metadata=True)
     print(f"  figure_{int(number):02d}.pdf <- {source.name} (native, scale 1.0)")
     return True
+
+
+def emit_physical_depth_supplement() -> None:
+    """Emit the demoted forward-serial-depth canvas as Supplementary S31."""
+    source = native_component(PHYSICAL_DEPTH_COMPONENT)
+    if not source.is_file():
+        raise SystemExit(
+            "Supplementary S31 requires components/main_figure_06_native.pdf")
+    src = fitz.open(source)
+    out = fitz.open()
+    out.insert_pdf(src)
+    keywords = (src.metadata or {}).get("keywords") or ""
+    out.set_metadata({"keywords": keywords} if keywords.strip() else {})
+    out.save(SUPP / PHYSICAL_DEPTH_SUPP, garbage=4, deflate=True,
+             no_new_id=True)
+    print(f"  supplementary/{PHYSICAL_DEPTH_SUPP} <- {source.name}"
+          " (native, scale 1.0)")
 
 
 def _destination_figure_number(destination: Path) -> int | None:
@@ -1040,14 +1079,15 @@ def main() -> None:
         height=220,
     )
 
-    # Figure 10 exists only as a native canvas; there is no composed recipe
-    # to fall back to, so a missing component is a hard error.
-    if not emit_native(10):
+    # The dictionary figure exists only as a native canvas; there is no
+    # composed recipe to fall back to, so a missing component is a hard error.
+    if not emit_native(2):
         raise SystemExit(
-            "figure_10 requires components/main_figure_10_native.pdf "
+            "figure_02 requires components/main_figure_10_native.pdf "
             "(scripts/build_main_figure_10.py)")
+    emit_physical_depth_supplement()
 
-    print("Assembled ten compact main figures and Supplementary Figures S17, S18, S19, S20, S21, S27 and S28.")
+    print("Assembled nine compact main figures and Supplementary Figures S17, S18, S19, S20, S21, S27, S28 and S31.")
 
 
 if __name__ == "__main__":

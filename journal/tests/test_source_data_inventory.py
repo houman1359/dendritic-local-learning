@@ -31,8 +31,8 @@ def test_source_data_inventory_matches_final_display_numbering() -> None:
         for figure in figures
         if (match := re.fullmatch(r"Supplementary Figure (\d+)", figure))
     }
-    assert main_numbers == set(range(2, 11))  # Figure 1 is conceptual.
-    assert supplementary_numbers == set(range(1, 31))
+    assert main_numbers == set(range(2, 10))  # Figure 1 is conceptual.
+    assert supplementary_numbers == set(range(1, 32))
 
 
 def test_source_data_destinations_are_unique_and_sources_exist() -> None:
@@ -77,18 +77,18 @@ def test_figure_2_redesign_uses_current_panel_sources() -> None:
 
     gradient = by_source["source_data/figure2/feedback_gradient_runs.csv"]
     assert (gradient.figure, gradient.panels, gradient.destination) == (
-        "Figure 2",
+        "Figure 3",
         "c",
-        "Figure_2/Fig2c_feedback_gradient_runs.csv",
+        "Figure_3/Fig3c_feedback_gradient_runs.csv",
     )
 
     transport = by_source[
         "source_data/figure2/path_gain_dispersion_ladder_runs.csv"
     ]
     assert (transport.figure, transport.panels, transport.destination) == (
-        "Figure 2",
+        "Figure 3",
         "d-e",
-        "Figure_2/Fig2d-e_path_gain_dispersion_ladder_runs.csv",
+        "Figure_3/Fig3d-e_path_gain_dispersion_ladder_runs.csv",
     )
 
     conductance_only = by_source["source_data/figure2/path_gain_cv_runs.csv"]
@@ -100,7 +100,7 @@ def test_figure_2_redesign_uses_current_panel_sources() -> None:
     mnist_contrasts = by_source[
         "source_data/mnist_feedback_ladder/paired_contrasts.csv"
     ]
-    assert (mnist_contrasts.figure, mnist_contrasts.panels) == ("Figure 2", "g")
+    assert (mnist_contrasts.figure, mnist_contrasts.panels) == ("Figure 3", "g")
 
     for source in (
         "source_data/prospective_input_validity/followup_publication_seed_outcomes.csv",
@@ -108,7 +108,7 @@ def test_figure_2_redesign_uses_current_panel_sources() -> None:
     ):
         assert any(
             item.source == source
-            and (item.figure, item.panels) == ("Figure 2", "g")
+            and (item.figure, item.panels) == ("Figure 3", "g")
             for item in builder.FILES
         )
 
@@ -139,7 +139,7 @@ def test_figure_2_redesign_uses_current_panel_sources() -> None:
         for item in fashion
     )
     assert not any(
-        item.destination == "Figure_2/Fig2g_seed_outcomes.csv"
+        item.destination == "Figure_3/Fig3g_seed_outcomes.csv"
         for item in builder.FILES
     )
 
@@ -153,7 +153,7 @@ def test_figure_2_and_s4_provenance_matches_redesign() -> None:
         }
 
     transport = rows["fig2.path_gain_dispersion"]
-    assert (transport["figure"], transport["panel"]) == ("fig2", "d-e")
+    assert (transport["figure"], transport["panel"]) == ("fig3", "d-e")
     assert transport["source_path"].endswith(
         "/source_data/figure2/path_gain_dispersion_ladder_runs.csv"
     )
@@ -164,16 +164,16 @@ def test_figure_2_and_s4_provenance_matches_redesign() -> None:
     old_path_gain = rows["fig2.path_gain"]
     assert (old_path_gain["figure"], old_path_gain["panel"]) == ("figS1", "a")
     assert (rows["fig2.c"]["figure"], rows["fig2.c"]["panel"]) == (
-        "fig2",
+        "fig3",
         "c",
     )
     assert (
         rows["mnist.ladder.contrasts"]["figure"],
         rows["mnist.ladder.contrasts"]["panel"],
-    ) == ("fig2", "g")
+    ) == ("fig3", "g")
     for entry_id in ("prospective.routing.runs", "prospective.routing.contrasts"):
         assert (rows[entry_id]["figure"], rows[entry_id]["panel"]) == (
-            "fig2/figS19",
+            "fig3/figS19",
             "g/d",
         )
 
@@ -198,12 +198,12 @@ def test_figure_2_ownership_release_is_the_mnist_d2_d4_subset(
 ) -> None:
     expected = (
         (
-            "Figure_2/Fig2g_ownership_run_outcomes.csv",
+            "Figure_3/Fig3g_ownership_run_outcomes.csv",
             80,
             {"family": {"routing"}, "task": {"mnist"}, "depth": {"2", "4"}},
         ),
         (
-            "Figure_2/Fig2g_ownership_contrasts.csv",
+            "Figure_3/Fig3g_ownership_contrasts.csv",
             4,
             {"task": {"mnist"}, "depth": {"2", "4"}},
         ),
@@ -232,7 +232,7 @@ def test_figure_2_ownership_release_is_the_mnist_d2_d4_subset(
         assert len(rows) == expected_rows
         for field, values in expected_values.items():
             assert {row[field] for row in rows} == values
-        if destination.startswith("Figure_2/"):
+        if destination.startswith("Figure_3/"):
             assert {row["core"] for row in rows} == {
                 "dendritic_additive",
                 "dendritic_shunting",
@@ -244,12 +244,12 @@ def test_figure_2_source_data_readmes_describe_current_a_to_g() -> None:
         item
         for item in builder.FILES
         if item.destination
-        == "Figure_2/Fig2d-e_path_gain_dispersion_ladder_runs.csv"
+        == "Figure_3/Fig3d-e_path_gain_dispersion_ladder_runs.csv"
     )
     text = "\n".join((builder.README, builder.FIGURE_2_README, transport.role, transport.notes))
     assert "pre-reactivation voltage-error" in text
     assert "Panels A and F are schematics" in builder.FIGURE_2_README
     assert "Supplementary Figure 19A--C" in builder.README
-    assert "Figure 2 contains the 480" not in builder.README
+    assert "Figure 3 contains the 480" not in builder.README
     for stale in ("post-activation", "0.3%", "18--26", "18-26"):
         assert stale not in text

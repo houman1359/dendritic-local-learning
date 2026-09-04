@@ -606,6 +606,49 @@ construction evaluated at different resolutions and on different trees, and
 each experiment below asks the same question of it: which dictionary, at
 which resolution, should carry credit for a given task.
 
+Figure~\ref{fig:atlas} introduces this object before the evidence. The five
+instantiations are a single construction (Fig.~\ref{fig:atlas}A), and its
+candidate members are concrete matrices whose value is measurable: on the
+trained \([3,3]\) MNIST networks analyzed with the feedback ladder below,
+one broadcast coefficient already captures about half of the per-example
+compartment-error energy, three subtree channels capture 72\% (63\% under
+shunting), and the exact dictionary closes the remainder
+(Fig.~\ref{fig:atlas}B). Reconstructed arbors supply the same construction
+anatomically (Fig.~\ref{fig:atlas}C), and each trained task family below
+selects its own dictionary (Fig.~\ref{fig:atlas}D)---the claim the
+remaining sections test.
+
+\begin{figure}[tbp]
+\centering
+\includegraphics[width=\textwidth]{main/figure_02.pdf}
+\caption{\textbf{Route dictionaries over morphology.}
+\textbf{A}, Conceptual schematic: the address matrices \(A_u\) over one
+arbor, the Haar route basis of the operator screens, the context-to-block
+family \(\Phi^{(K)}\), the anatomical site-by-route dictionary \(A_K\) and
+the subtree dictionary fitted to measured responses are one construction
+evaluated on different trees; the drawn tree is illustrative.
+\textbf{B}, Candidate dictionaries on a \([3,3]\) arbor (rows: 3 proximal
+then 9 distal compartments; columns: feedback channels), beside the trained
+compartment-error profile \(|\partial\mathcal L/\partial V|\) of the
+paper's exact-path additive MNIST checkpoints (population mean; the
+shunting profile reverses, weighting proximal compartments). Bars give
+per-example field-energy capture, averaged over 15 seeds and 2{,}048
+held-out examples each, additive with shunting in parentheses.
+\textbf{C}, The Fig.~\ref{fig:topology}A reconstruction with its four
+largest depth-1 subtree routes; shade encodes route identity, gray segments
+belong to the five smaller routes, and the soma is orange.
+\textbf{D}, Roadmap in the role of Fig.~\ref{fig:framework}E: the
+dictionary each trained task family selects---one coefficient per neuron
+for image classes (Fig.~\ref{fig:feedback}), branch selectors beyond the
+conflict boundary \(\chi>\chi_{\mathrm c}\)
+(Fig.~\ref{fig:branchconflict}), and nested subtrees in an
+intermediate-bandwidth window for hierarchical contexts
+(Fig.~\ref{fig:subtreefactorial}). A preview of trained results, not a
+data panel.}
+\label{fig:atlas}
+\end{figure}
+\clearpage
+
 We call \(\bm\delta^V_u\) the exact nonsomatic \emph{credit field}. Let
 \(P_{A_u}=A_uA_u^\dagger\) be the Euclidean orthogonal projector onto the
 route span \(\operatorname{col}(A_u)\), where \(\dagger\) denotes the
@@ -901,7 +944,7 @@ restricted feedback retain useful credit while excluding noise?
 
 \begin{figure}[tbp]
 \centering
-\includegraphics[width=0.955\textwidth]{main/figure_02.pdf}
+\includegraphics[width=0.955\textwidth]{main/figure_03.pdf}
 \caption{\textbf{Neuron identity, rather than location within an arbor, is the
 dominant feedback bottleneck on MNIST.} Panels \textbf{A--E} and upper
 \textbf{G} use flattened MNIST and 128 regular directed \([3,3]\) trees---three
@@ -1134,8 +1177,8 @@ trained optimum: wherever the utility varies with \(K\) at all, its argmax
 coincides with the realized best bandwidth---in all 25 architecture-by-family
 cells, spanning five distinct route families; the derangement family's five
 cells have identically zero utility at every \(K\),
-correctly predicting that no bandwidth rescues misassigned routes (Methods
-and the closing atlas of Fig.~\ref{fig:atlas}). The utility
+correctly predicting that no bandwidth rescues misassigned routes
+(Methods; the ring in panel H marks the exhibit). The utility
 located the main route-resolution optima but did not predict the small
 training-trajectory advantage of task-matched subtrees in every seed. The
 theory therefore predicts large contrasts and within-family progress, not
@@ -1157,7 +1200,7 @@ and the tests that follow.
 
 \begin{figure}[tbp]
 \centering
-\includegraphics[width=0.965\textwidth]{main/figure_03.pdf}
+\includegraphics[width=0.93\textwidth]{main/figure_04.pdf}
 \caption{\textbf{A stochastic credit operator predicts when restricted
 feedback routing helps.} \textbf{A}, The abstract parameter-space operator
 \(M\) maps \(\bm\mu+\bm\xi\) to a local update. The tree is a route-basis
@@ -1189,8 +1232,11 @@ credit-reversal---on family-specific task--route alignment and relative bandwidt
 computed separately within each family, not in a common unit.
 Filled markers denote benefit or tie; open
 markers no benefit. Regime tints are theoretical, not fitted, and the
-heterogeneous families are not pooled. Fig.~\ref{fig:atlas}D replots this
-plane with each family's home figure and the utility-argmax exhibit.
+heterogeneous families are not pooled. Family homes: trained,
+Fig.~\ref{fig:subtreefactorial}; imposed and measured,
+Fig.~\ref{fig:boundary}; reversal, Fig.~\ref{fig:feedback}. The purple
+ring marks the utility-argmax bandwidth of the matched ancestry family,
+coinciding with its trained optimum (Methods).
 Panels \textbf{C--F} use 50 paired seeds; \textbf{G} resamples 20
 seed blocks.}
 \label{fig:creditphase}
@@ -1293,7 +1339,7 @@ including the predicted shift toward lower conflict as branch count increased.
 
 \begin{figure}[tbp]
 \centering
-\includegraphics[width=\textwidth]{main/figure_04.pdf}
+\includegraphics[width=\textwidth]{main/figure_05.pdf}
 \caption{\textbf{Branch-specific feedback is required when local updates
 conflict.} The conflict dose \(\chi\) is a task property, and
 \(\chi_{\mathrm c}=B/[2(B-1)]\) is a closed-form boundary on which route
@@ -1436,7 +1482,7 @@ additional roles of alignment, route gain and stochastic noise.
 
 \begin{figure}[tbp]
 \centering
-\includegraphics[width=0.965\textwidth]{main/figure_05.pdf}
+\includegraphics[width=0.965\textwidth]{main/figure_06.pdf}
 \caption{\textbf{Task-aligned subtree routes help only at matched feedback
 resolution.} The experiment uses one scalar readout with eight independent
 terminal parameter blocks. A balanced binary routing tree defines supports;
@@ -1560,7 +1606,7 @@ before the soma decoded the class
 \citep{holt1997shunting,carandini2012normalization}.
 
 We used three task families to distinguish hierarchical composition from
-generic multiplicative cancellation (Fig.~\ref{fig:physicaldepth}A). In the
+generic multiplicative cancellation (Supplementary Fig.~S31A). In the
 three-level \emph{nested-factor} family,
 Eq.~\ref{eq:physicaldepthtask} contained fine, coarse and global fields with
 four, two and one nested spatial groups, respectively. In the
@@ -1592,7 +1638,7 @@ lower-case \(r_{i,\ell j}\) for the latent log-gain field and use \(R\) for the
 observable E/I ratio.
 
 The forward-model controls isolated the computation being tested
-(Fig.~\ref{fig:physicaldepth}B). With normalized
+(Supplementary Fig.~S31B). With normalized
 \(E_{\mathrm L}=E_{\mathrm I}=0\), \(E_{\mathrm E}=1\), the serial shunting
 stage was
 \begin{equation}
@@ -1654,7 +1700,7 @@ integration was broken; and that exact compartment credit would become more
 important as serial stages differentiated their local states.
 
 With backpropagation, aligned D3 models outperformed aligned D1 models by 30.9
-percentage points (Fig.~\ref{fig:physicaldepth}C). In matched control conditions,
+percentage points (Supplementary Fig.~S31C). In matched control conditions,
 the D3-minus-D1 effect was near zero for independent and trial-shuffled
 sensors, and reversing tier placement removed the benefit (Supplementary
 Information and Supplementary Fig.~S18F--H). Additional stages were therefore
@@ -1662,7 +1708,7 @@ useful in this nested-factor task only when sensors reported the current
 trial's factors at the corresponding fine-to-global stages.
 
 The forward benefit remained under local learning, but its size depended on
-feedback resolution (Fig.~\ref{fig:physicaldepth}C). Repeating each neuron's
+feedback resolution (Supplementary Fig.~S31C). Repeating each neuron's
 own somatic learning signal across its arbor retained part of the D3 benefit, whereas
 the exact compartment-resolved signal recovered an additional 11 points at
 D3. As serial stages differentiated branch states, a shared somatic signal
@@ -1680,9 +1726,9 @@ comparison, so their trained endpoints need not coincide.
 The remaining controls locate the effect in ordered divisive composition. A
 raw-additive tree became worse with depth, and a
 resource-identical parallel grouped-point model could not reproduce the
-aligned serial computation (Fig.~\ref{fig:physicaldepth}B,C). More flexible
+aligned serial computation (Supplementary Fig.~S31B,C). More flexible
 parameter-matched point networks exceeded the serial tree
-(Fig.~\ref{fig:physicaldepth}B,C). Serial dendritic depth is therefore a
+(Supplementary Fig.~S31B,C). Serial dendritic depth is therefore a
 task-matched inductive bias under constrained architecture, not a general
 expressivity advantage over point networks.
 
@@ -1690,7 +1736,7 @@ Useful depth also saturated across independent two-, three- and four-level
 task cohorts with separate seed sets (Methods). The two-level task benefited
 from D2, whereas the four-level task reached its best performance at D3
 rather than D4, whose fourth stage still beat D1 but slightly reduced
-trained accuracy (Fig.~\ref{fig:physicaldepth}D,E). Physical depth therefore
+trained accuracy (Supplementary Fig.~S31D,E). Physical depth therefore
 does not obey a universal \(D_{\mathrm p}=H_{\mathrm p}\) rule, even when
 the task contains \(H_{\mathrm p}\) hierarchical factors.
 
@@ -1700,7 +1746,7 @@ zero to one in the original three-level task; the
 D3-minus-D1 advantage emerged only near exact alignment (Supplementary
 Fig.~S18C--E). We then used an independent fixed-D3 cohort at
 \(\alpha\in\{0,0.5,1\}\) to compare the three task families defined above
-(Fig.~\ref{fig:physicaldepth}F,G). Serial-minus-grouped-point accuracy rose
+(Supplementary Fig.~S31F,G). Serial-minus-grouped-point accuracy rose
 sharply with alignment for both the nested and flat multiplicative-factor
 families under BP and exact-path LocalCA, with a larger effect for nested
 factors. For the local-ratio family at exact alignment, both BP architectures
@@ -1710,44 +1756,7 @@ several separately sensed factors must be cancelled successively. They are
 unnecessary, and can add learning cost, when the relevant E/I ratio is already
 available within one local module.
 
-\begin{figure}[tbp]
-\centering
-\includegraphics[width=0.958\textwidth]{main/figure_06.pdf}
-\caption{\textbf{Useful serial physical depth is task- and
-alignment-dependent.} Here \(H_{\mathrm p}\) is the number of latent gain
-levels and \(D_{\mathrm p}\) the number of nonsomatic child-to-parent stages;
-vectors list soma-outward branching factors. \textbf{A}, Three task families. Here
-\(m_i=b_E+y_i\Delta\) is the noise-free distal class-bearing amplitude and
-\(h_\ell\) denotes a multiplicative gain at level \(\ell\). Nested
-factors multiply it at fine, coarse and global scales with 4/2/1 groups; flat
-factors use three independent eight-group fields;
-local ratios \(R_\ell=x_\ell^E/x_\ell^I\) co-locate excitatory and inhibitory
-observations of a cumulative field within each module, with class information
-only in the distal pair.
-Alignment \(\alpha\) is the correlation between latent and sensor log gains.
-\textbf{B}, Serial D3 \([2,1,2]\), resource-identical grouped-point readout and
-near-total-parameter-matched dense MLP. The grouped model preserves
-all eight modules but removes child-to-parent composition; the MLP is a
-flexible ceiling. \textbf{C}, Three-level nested task at \(\alpha=1\) across
-D1 \([8]\), D2 \([2,3]\) and D3 \([2,1,2]\). Curves compare serial shunting
-with BP, exact-path or shared-soma LocalCA, literal grouped-point BP, serial
-raw-additive BP and the dense MLP. Shared-soma repeats each neuron's own
-somatic error across its arbor. \textbf{D}, Independent four-level cohort
-including D4 \([1,1,2,2]\), under aligned or reversed tier placement.
-\textbf{E}, Aligned serial-BP optima in independent two-, three- and four-level
-cohorts; the two-level cohort uses D2 \([4,1]\). In \textbf{D}, an aligned row
-maximum is outlined only when its 95\% bootstrap interval lies wholly above the
-runner-up's; reversed rows are unoutlined. In \textbf{E}, outlines mark
-descriptive maxima when within-row spread exceeds one percentage point. Blanks
-were not tested. \textbf{F,G}, In a separate
-fixed-D3 cohort, serial-minus-grouped-point accuracy across task family and
-\(\alpha\in\{0,0.5,1\}\), under BP or exact-path LocalCA. Multiplicative-factor
-tasks favor serial composition near exact alignment; locally available ratios
-do not. Numerical panels show means and 95\% paired-seed bootstrap intervals
-over ten seeds per cohort.}
-\label{fig:physicaldepth}
-\end{figure}
-\clearpage
+
 
 \subsection*{Reconstructed arbors supply sparse, mostly coarse anatomical route dictionaries}
 
@@ -2307,24 +2316,20 @@ established.}
 
 \subsection*{One dictionary per task}
 
-The preceding sections evaluate one object---the route dictionary---at
-different resolutions, on different trees and against different tasks.
-Figure~\ref{fig:atlas} collects that object in one place. The five
-instantiations are a single construction (Fig.~\ref{fig:atlas}A), and its
-candidate members are concrete matrices whose value is measurable: on the
-paper's own trained \([3,3]\) MNIST networks, one broadcast coefficient
-already captures about half of the per-example compartment-error energy,
-three subtree channels capture 72\% (63\% under shunting), and the exact
-dictionary closes the remainder (Fig.~\ref{fig:atlas}B)---which is why the
-trained ladder saturates at one coefficient per neuron on these tasks while
-the branch-conflict boundary \(\chi_{\mathrm c}=B/[2(B-1)]\) and the
-matched-topology window at \(K=4\) mark the tasks whose credit structure
-demands more. Reconstructed arbors supply the same construction
-anatomically, coarse and sparse (Fig.~\ref{fig:atlas}C), and conductance can
-gate the delivered channels' route gains in permissive states.
+The preceding sections evaluate one object---the route dictionary of
+Fig.~\ref{fig:atlas}---at different resolutions, on different trees and
+against different tasks. The gallery captures of Fig.~\ref{fig:atlas}B
+explain why the trained ladder saturates at one coefficient per neuron on
+these tasks, while the branch-conflict boundary
+\(\chi_{\mathrm c}=B/[2(B-1)]\) and the matched-topology window at
+\(K=4\) mark the tasks whose credit structure demands more; reconstructed
+arbors supply the construction anatomically, coarse and sparse, and
+conductance can gate the delivered channels' route gains in permissive
+states.
 
-The utility \(U(M)\) turns this collection into a single map
-(Fig.~\ref{fig:atlas}D). Re-evaluating the stored operator reanalysis
+The utility \(U(M)\) turns this collection into a single map, the
+alignment--bandwidth plane of Fig.~\ref{fig:creditphase}H. Re-evaluating
+the stored operator reanalysis
 constructively, wherever the evaluated
 utility varies with bandwidth at all, the utility-maximizing \(K\) coincides
 with the trained optimum---in all 25 architecture-by-family cells, spanning
@@ -2339,38 +2344,7 @@ the utility locates it without training; the measured-response null, the
 trained \(K=4\) benefit and the controlled alignment rescue occupy different
 regions of the same conditional map.
 
-\begin{figure}[tbp]
-\centering
-\includegraphics[width=\textwidth]{main/figure_10.pdf}
-\caption{\textbf{The route-dictionary atlas.}
-\textbf{A}, Conceptual schematic: the address matrices \(A_u\) over one
-arbor, the Haar route basis of the operator screens, the context-to-block
-family \(\Phi^{(K)}\), the anatomical site-by-route dictionary \(A_K\) and
-the subtree dictionary fitted to measured responses are one construction
-evaluated on different trees; the drawn tree is illustrative.
-\textbf{B}, Candidate dictionaries on a \([3,3]\) arbor (rows: 3 proximal
-then 9 distal compartments; columns: feedback channels), beside the trained
-compartment-error profile \(|\partial\mathcal L/\partial V|\) of the
-paper's exact-path additive MNIST checkpoints (population mean; the
-shunting profile reverses, weighting proximal compartments). Bars give
-per-example field-energy capture, averaged over 15 seeds and 2{,}048
-held-out examples each, additive with shunting in parentheses.
-\textbf{C}, The Fig.~\ref{fig:topology}A reconstruction with its four
-largest depth-1 subtree routes; shade encodes route identity, gray segments
-belong to the five smaller routes, and the soma is orange.
-\textbf{D}, The alignment--bandwidth plane of
-Fig.~\ref{fig:creditphase}H, unchanged, with each family labeled by its home
-figure. Filled markers denote benefit or tie over the matched control; open
-markers no benefit. The ring marks the constructive exhibit: for the matched ancestry
-family, the evaluated one-step utility bound \(U(M)\) is maximized at
-\(K=8\), within 0.1\% of the effective task rank \(r_{\rm eff}=7.99\) and
-coinciding with the trained optimum, as in all 25 architecture-by-family
-cells (five route families) whose utility varies with bandwidth
-(Methods). Background bands and the alignment rule follow
-Fig.~\ref{fig:creditphase}H.}
-\label{fig:atlas}
-\end{figure}
-\clearpage
+
 
 \section*{Discussion}
 
@@ -2796,7 +2770,7 @@ zero-mean noise. The branch-conflict task (Fig.~\ref{fig:branchconflict}) and th
 eight-context factorial (Fig.~\ref{fig:subtreefactorial}) use a single
 output unit, so the between-neuron stage is trivially exact and only
 within-arbor routing varies. The physical-depth cohorts
-(Fig.~\ref{fig:physicaldepth}) give each neuron its own exact somatic
+(Supplementary Fig.~S31) give each neuron its own exact somatic
 derivative; shared-soma and exact-path conditions differ only within the
 arbor. The reconstructed-arbor families (Figs~\ref{fig:topology}--\ref{fig:boundary})
 model one neuron per target with the exact readout derivative, and the
@@ -4073,7 +4047,7 @@ of Fig.~\ref{fig:feedback}. For each field, capture under the broadcast
 is the projected energy fraction
 \(\lVert P_A\bm\delta\rVert_2^2/\lVert\bm\delta\rVert_2^2\); means are over
 examples and neurons, with Student-\(t\) intervals over per-seed means. For
-the family-wise argmax exhibit (Fig.~\ref{fig:atlas}D), the per-seed
+the family-wise argmax exhibit (the ring in Fig.~\ref{fig:creditphase}H), the per-seed
 evaluated utility of the 2{,}700-fit operator metrics was averaged within
 each (architecture, route family, bandwidth) cell; the predicted bandwidth
 is the utility argmax over the \(K\in\{1,2,4,8\}\) grid, compared against

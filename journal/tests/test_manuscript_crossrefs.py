@@ -9,15 +9,14 @@ MAIN = JOURNAL / "main.tex"
 
 MAIN_PANEL_INVENTORY = {
     "fig:framework": "abcde",
+    "fig:atlas": "abcd",
     "fig:feedback": "abcdefg",
     "fig:creditphase": "abcdefgh",
     "fig:branchconflict": "abcdef",
     "fig:subtreefactorial": "abcdefg",
-    "fig:physicaldepth": "abcdefg",
     "fig:topology": "abcdefg",
     "fig:focal": "abcdefg",
     "fig:boundary": "abcdefg",
-    "fig:atlas": "abcd",
 }
 
 FIGURE_BLOCK = re.compile(

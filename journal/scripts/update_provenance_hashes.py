@@ -22,14 +22,19 @@ LEGACY_PROJECT_PREFIX = Path("drafts/dendritic-local-learning")
 
 
 CANONICAL_ASSETS = {
+    # 2026-09-04 dictionary-forward renumbering: the route-dictionary atlas
+    # opens the evidence as Figure 2, so the MNIST ladder, credit-operator
+    # theory, branch conflict and subtree factorial each shift one place and
+    # the forward-serial physical-depth canvas is demoted to Supplementary
+    # Figure S31.  Entry IDs are historical generator names and never change.
     "fig1.asset": "figures/main/figure_01.pdf",
-    "fig2.asset": "figures/main/figure_02.pdf",
+    "fig2.asset": "figures/main/figure_03.pdf",
     "prospective.learning.asset": "figures/supplementary/figure_S19_panels_A-I.pdf",
     "fashion.asset": "figures/supplementary/figure_S04_panels_A-E.pdf",
-    "subtree.factorial.asset": "figures/main/figure_05.pdf",
-    "creditphase.asset": "figures/main/figure_03.pdf",
-    "physical.asset": "figures/main/figure_06.pdf",
-    "pointcredit.asset": "figures/main/figure_06.pdf",
+    "subtree.factorial.asset": "figures/main/figure_06.pdf",
+    "creditphase.asset": "figures/main/figure_04.pdf",
+    "physical.asset": "figures/supplementary/figure_S31_panels_A-G.pdf",
+    "pointcredit.asset": "figures/supplementary/figure_S31_panels_A-G.pdf",
     "alignmentdose.asset": "figures/supplementary/figure_S18_panels_A-K.pdf",
     "remainingphysical.asset": "figures/supplementary/figure_S18_panels_A-K.pdf",
     "fig3.asset": "figures/main/figure_07.pdf",
@@ -38,7 +43,7 @@ CANONICAL_ASSETS = {
     "extensions.asset": "figures/main/figure_08.pdf",
     "extensions.fulltree.asset": "figures/main/figure_09.pdf",
     "fig6.asset": "figures/main/figure_09.pdf",
-    "phaseplane.asset": "figures/main/figure_03.pdf",
+    "phaseplane.asset": "figures/main/figure_04.pdf",
     "inherited.s1.asset": "figures/supplementary/figure_S01_panels_A-E.pdf",
     "inherited.s2.asset": "figures/supplementary/figure_S02_panels_A-E.pdf",
     "inherited.s3.asset": "figures/supplementary/figure_S03_panels_A-D.pdf",
@@ -60,14 +65,14 @@ CANONICAL_ASSETS = {
 
 CANONICAL_ASSIGNMENTS = {
     "fig1.asset": ("fig1", "all"),
-    "fig2.asset": ("fig2", "all"),
+    "fig2.asset": ("fig3", "all"),
     "prospective.learning.asset": ("figS19", "all"),
     "fashion.asset": ("figS4", "e"),
-    "subtree.factorial.asset": ("fig5", "all"),
-    "creditphase.asset": ("fig3", "a-h"),
-    "phaseplane.asset": ("fig3", "g"),
-    "physical.asset": ("fig6", "c"),
-    "pointcredit.asset": ("fig6", "c"),
+    "subtree.factorial.asset": ("fig6", "all"),
+    "creditphase.asset": ("fig4", "a-h"),
+    "phaseplane.asset": ("fig4", "g"),
+    "physical.asset": ("figS31", "c"),
+    "pointcredit.asset": ("figS31", "c"),
     "fig3.asset": ("fig7", "all"),
     "capturewire.asset": ("fig7", "e-f"),
     "fig4.asset": ("fig8", "a-d,f"),
@@ -127,21 +132,21 @@ NEW_DETAIL_ASSETS = {
         "notes": "Between-by-within credit factorial: the MNIST ladder crossed with a fixed random soma-level feedback source.",
     },
     "atlas.asset": {
-        "figure": "fig10",
-        "path": "figures/main/figure_10.pdf",
+        "figure": "fig2",
+        "path": "figures/main/figure_02.pdf",
         "generator": "scripts/build_main_figure_10.py",
         "notes": "Route-dictionary atlas: unified definition, trained-capture gallery, anatomical routes and the alignment-bandwidth plane with the utility-argmax exhibit.",
     },
     "branchconflict.asset": {
-        "figure": "fig4",
-        "path": "figures/main/figure_04.pdf",
+        "figure": "fig5",
+        "path": "figures/main/figure_05.pdf",
         "generator": "scripts/build_main_figure_04.py",
         "notes": "Context-gated branch-conflict task: analytic shared-mode boundary, trained transitions and exact-route equivalence.",
     },
     "physical.h4.asset": {
-        "figure": "fig6",
+        "figure": "figS31",
         "panel": "d-e",
-        "path": "figures/main/figure_06.pdf",
+        "path": "figures/supplementary/figure_S31_panels_A-G.pdf",
         "generator": "scripts/assemble_compact_main_figures.py",
         "notes": "H4 depth-saturation test: exact backpropagation, point emulation, local credit, and mechanism controls.",
     },
@@ -246,7 +251,7 @@ NEW_PROVENANCE_ENTRIES = {
     },
     "atlas.capture": {
         "record_type": "panel_source",
-        "figure": "fig10",
+        "figure": "fig2",
         "panel": "b",
         "path": "source_data/route_dictionary_atlas/capture_summary.csv",
         "generator": "scripts/analyze_route_dictionary_atlas.py",
@@ -255,7 +260,7 @@ NEW_PROVENANCE_ENTRIES = {
     },
     "atlas.field": {
         "record_type": "panel_source",
-        "figure": "fig10",
+        "figure": "fig2",
         "panel": "b",
         "path": "source_data/route_dictionary_atlas/example_field.csv",
         "generator": "scripts/analyze_route_dictionary_atlas.py",
@@ -264,17 +269,19 @@ NEW_PROVENANCE_ENTRIES = {
     },
     "atlas.manifest": {
         "record_type": "panel_source",
-        "figure": "fig10",
+        "figure": "fig2",
         "panel": "text",
         "path": "source_data/route_dictionary_atlas/manifest.json",
         "generator": "scripts/analyze_route_dictionary_atlas.py",
         "replication_unit": "not applicable",
         "notes": "Checkpoint provenance, example counts and interval method for the atlas capture analysis.",
     },
+    # The atlas's former alignment-bandwidth plane with the utility-argmax
+    # ring now closes the credit-operator theory figure as Fig. 4h.
     "atlas.argmax": {
         "record_type": "panel_source",
-        "figure": "fig10",
-        "panel": "d",
+        "figure": "fig4",
+        "panel": "h",
         "path": "source_data/route_dictionary_atlas/argmax_summary.csv",
         "generator": "scripts/analyze_operator_argmax.py",
         "replication_unit": "route family within architecture (n=30)",
@@ -282,7 +289,7 @@ NEW_PROVENANCE_ENTRIES = {
     },
     "atlas.argmax.report": {
         "record_type": "panel_source",
-        "figure": "fig10",
+        "figure": "fig4",
         "panel": "text",
         "path": "source_data/route_dictionary_atlas/argmax_report.json",
         "generator": "scripts/analyze_operator_argmax.py",
@@ -291,7 +298,7 @@ NEW_PROVENANCE_ENTRIES = {
     },
     "path.demand.outcomes": {
         "record_type": "panel_source",
-        "figure": "fig4/figS29",
+        "figure": "fig5/figS29",
         "panel": "e/b-c",
         "path": "source_data/path_necessity_fashion/seed_outcomes.csv",
         "generator": "scripts/run_path_necessity_fashion.py",
@@ -300,7 +307,7 @@ NEW_PROVENANCE_ENTRIES = {
     },
     "path.demand.conditions": {
         "record_type": "panel_source",
-        "figure": "fig4/figS29",
+        "figure": "fig5/figS29",
         "panel": "d,e/b-c",
         "path": "source_data/path_necessity_fashion/condition_summary.csv",
         "generator": "scripts/run_path_necessity_fashion.py",
@@ -309,7 +316,7 @@ NEW_PROVENANCE_ENTRIES = {
     },
     "path.demand.contrasts": {
         "record_type": "panel_source",
-        "figure": "fig4/figS29",
+        "figure": "fig5/figS29",
         "panel": "text/text",
         "path": "source_data/path_necessity_fashion/paired_contrasts.csv",
         "generator": "scripts/run_path_necessity_fashion.py",
@@ -318,7 +325,7 @@ NEW_PROVENANCE_ENTRIES = {
     },
     "path.demand.interactions": {
         "record_type": "panel_source",
-        "figure": "fig4/figS29",
+        "figure": "fig5/figS29",
         "panel": "text/text",
         "path": "source_data/path_necessity_fashion/interaction_summary.csv",
         "generator": "scripts/run_path_necessity_fashion.py",
@@ -327,7 +334,7 @@ NEW_PROVENANCE_ENTRIES = {
     },
     "path.demand.boundaries": {
         "record_type": "panel_source",
-        "figure": "fig4/figS29",
+        "figure": "fig5/figS29",
         "panel": "c-d/b-c",
         "path": "source_data/path_necessity_fashion/boundary_summary.csv",
         "generator": "scripts/analyze_path_necessity_boundary.py",
@@ -336,7 +343,7 @@ NEW_PROVENANCE_ENTRIES = {
     },
     "path.demand.seedwise.interactions": {
         "record_type": "panel_source",
-        "figure": "fig4/figS29",
+        "figure": "fig5/figS29",
         "panel": "text/text",
         "path": "source_data/path_necessity_fashion/seedwise_interactions.csv",
         "generator": "scripts/run_path_necessity_fashion.py",
@@ -363,7 +370,7 @@ NEW_PROVENANCE_ENTRIES = {
     },
     "path.demand.plotted.crossings": {
         "record_type": "panel_source",
-        "figure": "fig4/figS29",
+        "figure": "fig5/figS29",
         "panel": "f/c",
         "path": "source_data/path_necessity_fashion/plotted_crossings.csv",
         "generator": "scripts/analyze_path_necessity_boundary.py",
@@ -381,7 +388,7 @@ NEW_PROVENANCE_ENTRIES = {
     },
     "mnist.ladder.outcomes": {
         "record_type": "panel_source",
-        "figure": "fig2",
+        "figure": "fig3",
         "panel": "b",
         "path": "source_data/mnist_feedback_ladder/seed_outcomes.csv",
         "generator": "scripts/collect_mnist_feedback_ladder.py",
@@ -390,7 +397,7 @@ NEW_PROVENANCE_ENTRIES = {
     },
     "mnist.ladder.conditions": {
         "record_type": "panel_source",
-        "figure": "fig2",
+        "figure": "fig3",
         "panel": "b",
         "path": "source_data/mnist_feedback_ladder/condition_summary.csv",
         "generator": "scripts/collect_mnist_feedback_ladder.py",
@@ -399,7 +406,7 @@ NEW_PROVENANCE_ENTRIES = {
     },
     "mnist.ladder.contrasts": {
         "record_type": "panel_source",
-        "figure": "fig2",
+        "figure": "fig3",
         "panel": "g",
         "path": "source_data/mnist_feedback_ladder/paired_contrasts.csv",
         "generator": "scripts/collect_mnist_feedback_ladder.py",
@@ -408,7 +415,7 @@ NEW_PROVENANCE_ENTRIES = {
     },
     "mnist.ladder.audit": {
         "record_type": "panel_source",
-        "figure": "fig2",
+        "figure": "fig3",
         "panel": "text",
         "path": "source_data/mnist_feedback_ladder/audit.json",
         "generator": "scripts/collect_mnist_feedback_ladder.py",
@@ -417,7 +424,7 @@ NEW_PROVENANCE_ENTRIES = {
     },
     "fig2.path_gain_dispersion": {
         "record_type": "panel_source",
-        "figure": "fig2",
+        "figure": "fig3",
         "panel": "d-e",
         "path": "source_data/figure2/path_gain_dispersion_ladder_runs.csv",
         "generator": "scripts/analyze_fig2_path_gain_dispersion.py",
@@ -444,16 +451,16 @@ NEW_PROVENANCE_ENTRIES = {
     },
     "taskfamily.asset": {
         "record_type": "figure_asset",
-        "figure": "fig6",
+        "figure": "figS31",
         "panel": "f-g",
-        "path": "figures/main/figure_06.pdf",
+        "path": "figures/supplementary/figure_S31_panels_A-G.pdf",
         "generator": "scripts/assemble_compact_main_figures.py",
         "replication_unit": "paired independent training seed (n=10)",
         "notes": "Fixed-D3 architecture-by-task-family-by-alignment boundary under exact backpropagation and path-transport LocalCA.",
     },
     "taskfamily.outcomes": {
         "record_type": "panel_source",
-        "figure": "fig6",
+        "figure": "figS31",
         "panel": "f-g",
         "path": "source_data/task_family_alignment/seed_outcomes.csv",
         "generator": "scripts/analyze_task_family_alignment_factorial.py",
@@ -462,7 +469,7 @@ NEW_PROVENANCE_ENTRIES = {
     },
     "taskfamily.conditions": {
         "record_type": "panel_source",
-        "figure": "fig6",
+        "figure": "figS31",
         "panel": "f-g",
         "path": "source_data/task_family_alignment/condition_summary.csv",
         "generator": "scripts/analyze_task_family_alignment_factorial.py",
@@ -471,7 +478,7 @@ NEW_PROVENANCE_ENTRIES = {
     },
     "taskfamily.contrasts": {
         "record_type": "panel_source",
-        "figure": "fig6",
+        "figure": "figS31",
         "panel": "text",
         "path": "source_data/task_family_alignment/paired_contrasts.csv",
         "generator": "scripts/analyze_task_family_alignment_factorial.py",
@@ -480,7 +487,7 @@ NEW_PROVENANCE_ENTRIES = {
     },
     "taskfamily.audit": {
         "record_type": "panel_source",
-        "figure": "fig6",
+        "figure": "figS31",
         "panel": "text",
         "path": "source_data/task_family_alignment/audit.json",
         "generator": "scripts/analyze_task_family_alignment_factorial.py",
@@ -568,9 +575,16 @@ CANONICAL_NOTES = {
 # Methods/Supplement when it is no longer a main-figure result).  Entry IDs are
 # deliberately stable so archived analyses remain traceable.
 CANONICAL_METADATA = {
+    # 2026-09-04 dictionary-forward renumbering: tuples below give the NEW
+    # display homes (atlas = Fig. 2, ladder = Fig. 3, credit-operator theory
+    # = Fig. 4, branch conflict = Fig. 5, subtree factorial = Fig. 6,
+    # forward-serial physical depth = Supplementary Fig. S31).  Entry IDs are
+    # historical generator names: "fig2.*" is the ladder stream (now Fig. 3),
+    # "fig3.*" is the MICrONS anatomy stream (drawn in Fig. 7), "fig4.*" is
+    # focal shunting (Fig. 8) and "fig6.*" is the measured stream (Fig. 9).
     "fig2.a": ("methods", "gradient check"),
     "fig2.b": ("figS2", "e"),
-    "fig2.c": ("fig2", "c"),
+    "fig2.c": ("fig3", "c"),
     "fig2.d": ("figS3", "c"),
     "fig2.d.bp": ("figS3", "c"),
     "fig2.d.runs": ("figS3", "c"),
@@ -580,11 +594,13 @@ CANONICAL_METADATA = {
     "fig2.init.tests": ("methods", "initialization control"),
     "fig2.feedback_relevance.runs": ("methods", "feedback diagnostic"),
     "fig2.feedback_relevance.summary": ("methods", "feedback diagnostic"),
+    "prospective.validity.ledger": ("fig3", "text"),
+    "prospective.validity.summary": ("fig3", "text"),
     "prospective.learning.seeds": ("figS19", "a-c"),
     "prospective.learning.conditions": ("figS19", "a-c"),
     "prospective.learning.contrasts": ("figS19", "a-c"),
-    "prospective.routing.runs": ("fig2/figS19", "g/d"),
-    "prospective.routing.contrasts": ("fig2/figS19", "g/d"),
+    "prospective.routing.runs": ("fig3/figS19", "g/d"),
+    "prospective.routing.contrasts": ("fig3/figS19", "g/d"),
     "prospective.dose.conditions": ("figS8", "a-d,g-i"),
     "prospective.dose.contrasts": ("figS8", "e-f"),
     "prospective.fixed_budget.contrasts": ("figS8/figS19", "e-f/f"),
@@ -594,16 +610,29 @@ CANONICAL_METADATA = {
     "subtree.phase1.summary": ("figS19", "g-i"),
     "subtree.phase1.ledger": ("figS19", "text"),
     "subtree.phase1.reproducibility": ("figS19", "text"),
-    "subtree.factorial.outcomes": ("fig3/fig5", "f/e,g"),
-    "subtree.factorial.conditions": ("fig5", "e"),
-    "subtree.factorial.contrasts": ("fig5", "f"),
-    "subtree.factorial.ledger": ("fig5", "text"),
-    "subtree.factorial.summary": ("fig5", "text"),
+    "subtree.factorial.outcomes": ("fig4/fig6", "f/e,g"),
+    "subtree.factorial.conditions": ("fig6", "e"),
+    "subtree.factorial.contrasts": ("fig6", "f"),
+    "subtree.factorial.ledger": ("fig6", "text"),
+    "subtree.factorial.summary": ("fig6", "text"),
     "fashion.outcomes": ("figS4", "e"),
     "fashion.conditions": ("figS4", "e"),
     "fashion.contrasts": ("figS4", "e"),
     "fashion.audit": ("figS4", "e"),
-    "mnist.ladder.contrasts": ("fig2", "g"),
+    "mnist.ladder.contrasts": ("fig3", "g"),
+    # Credit-operator theory stream: the seven-panel theory figure is now
+    # displayed as Figure 4 (its phase plane is panel g).
+    "creditphase.a": ("fig4", "a"),
+    "creditphase.b": ("fig4", "b"),
+    "creditphase.c-d": ("fig4", "c"),
+    "creditphase.e": ("fig4", "d"),
+    "creditphase.f": ("fig4", "e"),
+    "creditphase.g-h": ("fig4", "text"),
+    "creditphase.i": ("fig4", "f"),
+    "creditphase.spectral_theory": ("fig4", "b"),
+    "creditphase.spectral_thresholds": ("fig4", "b"),
+    "creditphase.spectral_bound_summary": ("fig4", "b"),
+    "phaseplane.points": ("fig4", "g"),
     # 2026-08-28 panel-span ground-truthing: every row below was checked
     # against the panel its source is actually drawn in by the current
     # native builders (build_main_figure_0{3,5,6,7,8,9}.py and the S18-S22
@@ -627,11 +656,23 @@ CANONICAL_METADATA = {
     "fig3.summary": ("fig7", "d"),
     "reciprocal.operator": ("fig7", "c"),
     "reciprocal.capture": ("fig7", "c"),
-    # Physical-depth main figure 6: paired contrasts back prose only.
-    "physical.contrasts": ("fig6", "text"),
-    "pointcredit.outcomes": ("fig6", "c"),
-    "pointcredit.conditions": ("fig6", "c"),
-    "pointcredit.contrasts": ("fig6", "text"),
+    # Capture-per-wire efficiency: stale "fig6 k-l" home from the pre-compact
+    # anatomy layout; the data are drawn in Figure 7e-f with their asset row.
+    "capturewire.cells": ("fig7", "e-f"),
+    "capturewire.summary": ("fig7", "e-f"),
+    # Forward-serial physical depth is now Supplementary Figure S31 (panels
+    # keep their old main-figure letters); paired contrasts back prose only.
+    "physical.schematic": ("figS31", "a-b"),
+    "physical.outcomes": ("figS31", "c"),
+    "physical.conditions": ("figS31", "c"),
+    "physical.contrasts": ("figS31", "text"),
+    "physical.audit": ("figS31", "text"),
+    "physical.mechanism": ("figS31", "text"),
+    "physical.mechanism_audit": ("figS31", "text"),
+    "pointcredit.outcomes": ("figS31", "c"),
+    "pointcredit.conditions": ("figS31", "c"),
+    "pointcredit.contrasts": ("figS31", "text"),
+    "pointcredit.audit": ("figS31", "text"),
     # Focal-shunting stream: drawn in Figure 8 and its S21 detail.
     "fig4.b": ("fig8", "c"),
     "fig4.c": ("fig8", "c"),
@@ -657,9 +698,10 @@ CANONICAL_METADATA = {
     "extensions.active.acceptance": ("fig8", "text"),
     "extensions.active.summary": ("fig8", "text"),
     # Measured-response stream: drawn in Figure 9 with S22/S5 details;
-    # the ch4 task tables also feed the fig3 phase-plane panel g.
+    # the ch4 task tables also feed the theory figure's phase-plane panel g
+    # (displayed as Fig. 4g after the renumbering).
     "fig6.a": ("fig9", "c"),
-    "fig6.b-d": ("fig3/figS22", "g/d-f"),
+    "fig6.b-d": ("fig4/figS22", "g/d-f"),
     "fig6.e.ch1.targets": ("figS22", "h"),
     "fig6.e.ch2.targets": ("figS22", "h"),
     "fig6.e.ch8.targets": ("figS22", "h"),
@@ -743,6 +785,16 @@ def main() -> None:
                 updated += 1
             if row.get("panel") != panel:
                 row["panel"] = panel
+                updated += 1
+
+        # Detail assets whose display file moved (e.g. the atlas from the
+        # retired figure_10.pdf slot to figure_02.pdf) must point at the new
+        # file before hashing; their remaining fields are enforced below.
+        detail = NEW_DETAIL_ASSETS.get(entry_id)
+        if detail is not None:
+            expected_detail_path = PROJECT_PREFIX + detail["path"]
+            if row.get("source_path") != expected_detail_path:
+                row["source_path"] = expected_detail_path
                 updated += 1
 
         source = resolve_project_path(row["source_path"])
