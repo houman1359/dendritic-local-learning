@@ -34,6 +34,7 @@ MAIN_FIGURES = (
     "main/figure_07.pdf",
     "main/figure_08.pdf",
     "main/figure_09.pdf",
+    "main/figure_10.pdf",
 )
 
 SUPPLEMENTARY_FIGURES = (

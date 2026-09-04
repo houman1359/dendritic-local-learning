@@ -37,6 +37,10 @@ journal/source_data/*
 !journal/source_data/provenance_manifest.tsv
 !journal/source_data/path_necessity_fashion/
 !journal/source_data/path_necessity_fashion/**
+!journal/source_data/route_dictionary_atlas/
+!journal/source_data/route_dictionary_atlas/**
+!journal/source_data/mnist_between_within_factorial/
+!journal/source_data/mnist_between_within_factorial/**
 journal/main.pdf
 journal/main_with_supplementary.pdf
 journal/supplementary/supplementary.pdf

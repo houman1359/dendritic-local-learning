@@ -120,6 +120,12 @@ CANONICAL_GENERATORS["inherited.s3.asset"] = (
 SUPERSEDED_ENTRIES = {"fig8.asset"}
 
 NEW_DETAIL_ASSETS = {
+    "atlas.asset": {
+        "figure": "fig10",
+        "path": "figures/main/figure_10.pdf",
+        "generator": "scripts/build_main_figure_10.py",
+        "notes": "Route-dictionary atlas: unified definition, trained-capture gallery, anatomical routes and the alignment-bandwidth plane with the utility-argmax exhibit.",
+    },
     "branchconflict.asset": {
         "figure": "fig4",
         "path": "figures/main/figure_04.pdf",
@@ -196,6 +202,51 @@ NEW_DETAIL_ASSETS = {
 }
 
 NEW_PROVENANCE_ENTRIES = {
+    "atlas.capture": {
+        "record_type": "panel_source",
+        "figure": "fig10",
+        "panel": "b",
+        "path": "source_data/route_dictionary_atlas/capture_summary.csv",
+        "generator": "scripts/analyze_route_dictionary_atlas.py",
+        "replication_unit": "training seed (n=15 per dynamics)",
+        "notes": "Broadcast, nested-subtree and exact-dictionary captures of the trained exact-path MNIST compartment-error fields.",
+    },
+    "atlas.field": {
+        "record_type": "panel_source",
+        "figure": "fig10",
+        "panel": "b",
+        "path": "source_data/route_dictionary_atlas/example_field.csv",
+        "generator": "scripts/analyze_route_dictionary_atlas.py",
+        "replication_unit": "training seed (n=15 per dynamics)",
+        "notes": "Population-mean per-compartment |dL/dV| profiles for both dynamics; the additive profile is displayed.",
+    },
+    "atlas.manifest": {
+        "record_type": "panel_source",
+        "figure": "fig10",
+        "panel": "text",
+        "path": "source_data/route_dictionary_atlas/manifest.json",
+        "generator": "scripts/analyze_route_dictionary_atlas.py",
+        "replication_unit": "not applicable",
+        "notes": "Checkpoint provenance, example counts and interval method for the atlas capture analysis.",
+    },
+    "atlas.argmax": {
+        "record_type": "panel_source",
+        "figure": "fig10",
+        "panel": "d",
+        "path": "source_data/route_dictionary_atlas/argmax_summary.csv",
+        "generator": "scripts/analyze_operator_argmax.py",
+        "replication_unit": "route family within architecture (n=30)",
+        "notes": "Utility-argmax bandwidth versus trained optimum per parameterized route family; zero-utility derangement families flagged as degenerate.",
+    },
+    "atlas.argmax.report": {
+        "record_type": "panel_source",
+        "figure": "fig10",
+        "panel": "text",
+        "path": "source_data/route_dictionary_atlas/argmax_report.json",
+        "generator": "scripts/analyze_operator_argmax.py",
+        "replication_unit": "route family within architecture (n=30)",
+        "notes": "Concordance fractions and method description for the family-wise argmax exhibit.",
+    },
     "path.demand.outcomes": {
         "record_type": "panel_source",
         "figure": "fig4/figS29",

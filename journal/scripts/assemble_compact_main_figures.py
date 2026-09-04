@@ -1040,7 +1040,14 @@ def main() -> None:
         height=220,
     )
 
-    print("Assembled nine compact main figures and Supplementary Figures S17, S18, S19, S20, S21, S27 and S28.")
+    # Figure 10 exists only as a native canvas; there is no composed recipe
+    # to fall back to, so a missing component is a hard error.
+    if not emit_native(10):
+        raise SystemExit(
+            "figure_10 requires components/main_figure_10_native.pdf "
+            "(scripts/build_main_figure_10.py)")
+
+    print("Assembled ten compact main figures and Supplementary Figures S17, S18, S19, S20, S21, S27 and S28.")
 
 
 if __name__ == "__main__":

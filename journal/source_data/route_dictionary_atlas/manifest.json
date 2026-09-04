@@ -1,0 +1,54 @@
+{
+  "description": "Fraction of per-example within-neuron compartment-error field energy captured by fixed route dictionaries at the Figure 2 MNIST [3,3] exact-path checkpoints. For each held-out example and neuron, d is the 12-vector of dL/dV over the neuron's routed compartments (3 proximal + 9 distal; soma excluded), taken by autograd on the pre-reactivation voltages at the final checkpoint; capture for address matrix A is ||P_A d||^2 / ||d||^2 with P_A the orthogonal projector onto col(A). Zero-norm fields are dropped; each seed contributes the mean capture over its remaining example-neuron fields.",
+  "bases": {
+    "broadcast_k1": "one all-ones column over the 12 routed compartments",
+    "subtrees_k3": "one indicator column per proximal compartment, covering itself and its 3 distal children",
+    "exact_k12": "identity; capture 1 by definition, asserted to numerical tolerance"
+  },
+  "compartment_ordering": "slots 0-2: proximal compartments (stage 1, soma-major); slots 3+3s+c (s,c in 0..2): distal compartment c of subtree s (stage 0, soma-major); distal local index j feeds proximal j//3 via the contiguous BlockLinear branch aggregation",
+  "interval_method": "two-sided 95% Student t interval over the per-seed mean captures (mean +/- t_{0.975, n_seeds-1} * sd / sqrt(n_seeds)); no bootstrap, fully deterministic",
+  "n_examples": 2048,
+  "n_seeds": {
+    "additive": 15,
+    "shunting": 15
+  },
+  "probe_batch": "first 2048 MNIST test images (identical to analyze_fig2_path_gain_dispersion.py)",
+  "run_dirs": {
+    "additive": [
+      "journal_extension_20260820/sweep_runs/mnist_feedback_ladder/journal_mnist_feedback_ladder_exact_path_additive_15seed_20260825173519/results/config_0",
+      "journal_extension_20260820/sweep_runs/mnist_feedback_ladder/journal_mnist_feedback_ladder_exact_path_additive_15seed_20260825173519/results/config_1",
+      "journal_extension_20260820/sweep_runs/mnist_feedback_ladder/journal_mnist_feedback_ladder_exact_path_additive_15seed_20260825173519/results/config_2",
+      "journal_extension_20260820/sweep_runs/mnist_feedback_ladder/journal_mnist_feedback_ladder_exact_path_additive_15seed_20260825173519/results/config_3",
+      "journal_extension_20260820/sweep_runs/mnist_feedback_ladder/journal_mnist_feedback_ladder_exact_path_additive_15seed_20260825173519/results/config_4",
+      "journal_extension_20260820/sweep_runs/mnist_feedback_ladder/journal_mnist_feedback_ladder_exact_path_additive_15seed_20260825173519/results/config_5",
+      "journal_extension_20260820/sweep_runs/mnist_feedback_ladder/journal_mnist_feedback_ladder_exact_path_additive_15seed_20260825173519/results/config_6",
+      "journal_extension_20260820/sweep_runs/mnist_feedback_ladder/journal_mnist_feedback_ladder_exact_path_additive_15seed_20260825173519/results/config_7",
+      "journal_extension_20260820/sweep_runs/mnist_feedback_ladder/journal_mnist_feedback_ladder_exact_path_additive_15seed_20260825173519/results/config_8",
+      "journal_extension_20260820/sweep_runs/mnist_feedback_ladder/journal_mnist_feedback_ladder_exact_path_additive_15seed_20260825173519/results/config_9",
+      "journal_extension_20260820/sweep_runs/mnist_feedback_ladder/journal_mnist_feedback_ladder_exact_path_additive_15seed_20260825173519/results/config_10",
+      "journal_extension_20260820/sweep_runs/mnist_feedback_ladder/journal_mnist_feedback_ladder_exact_path_additive_15seed_20260825173519/results/config_11",
+      "journal_extension_20260820/sweep_runs/mnist_feedback_ladder/journal_mnist_feedback_ladder_exact_path_additive_15seed_20260825173519/results/config_12",
+      "journal_extension_20260820/sweep_runs/mnist_feedback_ladder/journal_mnist_feedback_ladder_exact_path_additive_15seed_20260825173519/results/config_13",
+      "journal_extension_20260820/sweep_runs/mnist_feedback_ladder/journal_mnist_feedback_ladder_exact_path_additive_15seed_20260825173519/results/config_14"
+    ],
+    "shunting": [
+      "journal_extension_20260820/sweep_runs/mnist_feedback_ladder/journal_mnist_feedback_ladder_exact_path_shunting_15seed_20260825173517/results/config_0",
+      "journal_extension_20260820/sweep_runs/mnist_feedback_ladder/journal_mnist_feedback_ladder_exact_path_shunting_15seed_20260825173517/results/config_1",
+      "journal_extension_20260820/sweep_runs/mnist_feedback_ladder/journal_mnist_feedback_ladder_exact_path_shunting_15seed_20260825173517/results/config_2",
+      "journal_extension_20260820/sweep_runs/mnist_feedback_ladder/journal_mnist_feedback_ladder_exact_path_shunting_15seed_20260825173517/results/config_3",
+      "journal_extension_20260820/sweep_runs/mnist_feedback_ladder/journal_mnist_feedback_ladder_exact_path_shunting_15seed_20260825173517/results/config_4",
+      "journal_extension_20260820/sweep_runs/mnist_feedback_ladder/journal_mnist_feedback_ladder_exact_path_shunting_15seed_20260825173517/results/config_5",
+      "journal_extension_20260820/sweep_runs/mnist_feedback_ladder/journal_mnist_feedback_ladder_exact_path_shunting_15seed_20260825173517/results/config_6",
+      "journal_extension_20260820/sweep_runs/mnist_feedback_ladder/journal_mnist_feedback_ladder_exact_path_shunting_15seed_20260825173517/results/config_7",
+      "journal_extension_20260820/sweep_runs/mnist_feedback_ladder/journal_mnist_feedback_ladder_exact_path_shunting_15seed_20260825173517/results/config_8",
+      "journal_extension_20260820/sweep_runs/mnist_feedback_ladder/journal_mnist_feedback_ladder_exact_path_shunting_15seed_20260825173517/results/config_9",
+      "journal_extension_20260820/sweep_runs/mnist_feedback_ladder/journal_mnist_feedback_ladder_exact_path_shunting_15seed_20260825173517/results/config_10",
+      "journal_extension_20260820/sweep_runs/mnist_feedback_ladder/journal_mnist_feedback_ladder_exact_path_shunting_15seed_20260825173517/results/config_11",
+      "journal_extension_20260820/sweep_runs/mnist_feedback_ladder/journal_mnist_feedback_ladder_exact_path_shunting_15seed_20260825173517/results/config_12",
+      "journal_extension_20260820/sweep_runs/mnist_feedback_ladder/journal_mnist_feedback_ladder_exact_path_shunting_15seed_20260825173517/results/config_13",
+      "journal_extension_20260820/sweep_runs/mnist_feedback_ladder/journal_mnist_feedback_ladder_exact_path_shunting_15seed_20260825173517/results/config_14"
+    ]
+  },
+  "git_head": "635321dedfc11723c53abf5baf28019e21983c03",
+  "script": "scripts/analyze_route_dictionary_atlas.py"
+}

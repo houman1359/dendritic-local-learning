@@ -119,7 +119,13 @@ unit can \citep{werfel2005learning,lillicrap2016feedback}. A shared scalar does
 not equalize weights: each retains its own eligibility, while only the
 task-dependent factor is shared. \emph{Feedback bandwidth} is the number of
 independently communicated signals at a given routing level, across neurons or
-across locations within one neuron.
+across locations within one neuron. Each mechanism also commits, implicitly,
+to the set of update patterns its feedback can represent---a choice of basis
+for credit. Feedback alignment and its direct variant fix a random basis over
+neurons; eligibility propagation pairs one neuron-wide signal with temporal
+traces; segregated apical--basal models deliver a fixed two-address basis
+within each cell. This paper constructs such bases over dendritic morphology
+and asks which one a task requires.
 
 A point-neuron model collapses a cell to one state and one learning signal. A
 biological neuron instead receives thousands of synaptic inputs across a
@@ -132,7 +138,12 @@ also distinguish locations within that neuron? We call the set of locations
 reached by one signal a \emph{dendritic address}. A branch point, for example,
 defines an address containing its descendant compartments and their synaptic
 inputs. The indicator patterns of several addresses span a low-dimensional
-subspace used to approximate the exact spatial distribution of credit.
+subspace used to approximate the exact spatial distribution of credit. We
+call this subspace, with its generating addresses, a \emph{route dictionary}
+over the morphology, and it is the organizing object of this paper: one
+utility scores every candidate dictionary, and in each family we test, the
+structure of the task rather than the complexity of the arbor sets the
+resolution at which the dictionary should carry credit.
 
 The physical meaning of a weight also changes in a conductance-based dendritic
 model: the synaptic weight is a conductance rather than an additive coefficient.
@@ -155,7 +166,9 @@ plasticity and prospective dynamics
 guerguiev2017segregated,sacramento2018dendritic,payeur2021burst,
 ellenberger2026gle,richards2019dendritic}. Cable sensitivities have also been
 used to optimize the input--output function of a reconstructed neuron
-\citep{bicknell2021synaptic}. These studies establish that dendrites can
+\citep{bicknell2021synaptic}; in the vocabulary above, that is the full-rank
+endpoint of a route dictionary, one coefficient per compartment. These
+studies establish that dendrites can
 participate in learning. The unresolved question is when the branching
 structure of a complete arbor provides useful resolution beyond one learning
 signal per neuron.
@@ -202,17 +215,15 @@ progressively and test biological route capacity, gain and alignment, following
 the experimental sequence in Fig.~\ref{fig:framework}E. Exact
 backpropagation is the information ceiling; point and grouped-point controls
 distinguish feedback resolution from a dendritic implementation.
-Throughout the Results, ``tree'' has three distinct meanings that we state
-explicitly at each experiment. The controlled network experiments use regular
-rooted trees with directed child-to-parent forward coupling. We denote such a
-morphology by \([b_1,\ldots,b_{D_{\mathrm p}}]\), where the branching factors
-are ordered from the soma toward the distal tips. For example, \([3,3]\) has
-three proximal compartments, each with three distal children. Figure~3 instead
-uses a balanced tree only as an abstract hierarchy over credit coordinates; it
-contains no forward dendritic model. Figures~7--9 use compressed biological
-reconstructions with reciprocal cable coupling. Thus route resolution,
-physical dendritic depth and anatomical reconstruction are separate
-experimental variables.
+The route dictionaries below live on trees of three kinds, stated at each
+experiment: regular rooted trees with directed child-to-parent forward
+coupling, denoted \([b_1,\ldots,b_{D_{\mathrm p}}]\) with branching factors
+ordered from the soma toward the distal tips (\([3,3]\): three proximal
+compartments, each with three distal children); the abstract credit hierarchy
+of the operator screens, which contains no forward dendritic model; and
+compressed biological reconstructions with reciprocal cable coupling.
+Route resolution, physical dendritic depth and anatomical reconstruction
+therefore remain separate experimental variables.
 Figure~\ref{fig:framework} is a conceptual overview rather than an empirical
 comparison: its illustrative
 arbor does not specify any of the simulated or reconstructed morphologies used
@@ -221,7 +232,7 @@ below.
 
 \begin{figure}[tbp]
 \centering
-\includegraphics[width=\textwidth]{main/figure_01.pdf}
+\includegraphics[width=0.97\textwidth]{main/figure_01.pdf}
 \caption{\textbf{Credit assignment from a point neuron to a dendritic tree.}
 Panels \textbf{A--D} are conceptual schematics; the drawn topology is
 illustrative rather than an experimental morphology.
@@ -235,7 +246,8 @@ derivatives \(\delta_{\rm out}\), and feedback produces one learning signal
 \(\delta_u\) per neuron before routing within its arbor. Blue E and red I pools
 are forward input classes, not feedback signs. \textbf{C}, Within a neuron, an
 address specifies which compartments receive a signal and route gain specifies
-its strength. Signals may be tree-wide or assigned to subtrees, and conductance
+its strength. The set of available addresses is the neuron's route
+dictionary; signals may be tree-wide or assigned to subtrees, and conductance
 can modulate their gain. \textbf{D}, The exact conductance gradient is a local
 dendritic eligibility multiplied by a transported compartment error. The
 directed-tree and steady-state-adjoint forms are alternative transport
@@ -254,7 +266,7 @@ routes on it, and a tinted halo one addressable subtree.}
 \label{fig:framework}
 \end{figure}
 
-\subsection*{Exact dendritic gradients separate local eligibility from transported error}
+\subsection*{Exact gradients define a credit field, and restricted feedback is a route dictionary over the arbor}
 
 Before asking whether a dendritic morphology improves learning, we first need
 to specify the information required by an exact weight update. We begin with a
@@ -581,6 +593,17 @@ branch point and zero elsewhere. Capacity
 analyses choose their best-fitting values to measure an upper bound, whereas
 trained experiments obtain them from the feedback rule stated for that task.
 
+We call the collection of address columns available to a neuron---or, stacked
+across a population---a \emph{route dictionary} over the morphology. It is
+the central object of this paper and recurs in five guises: the address
+matrix \(A_u\) here; the Haar route basis of the operator screens; the
+context-to-block family \(\Phi^{(K)}\) of the eight-context task; the
+anatomical site-by-route dictionary \(A_K\) built from reconstructed arbors;
+and the subtree dictionary fitted to measured responses. These are one
+construction evaluated at different resolutions and on different trees, and
+each experiment below asks the same question of it: which dictionary, at
+which resolution, should carry credit for a given task.
+
 We call \(\bm\delta^V_u\) the exact nonsomatic \emph{credit field}. Let
 \(P_{A_u}=A_uA_u^\dagger\) be the Euclidean orthogonal projector onto the
 route span \(\operatorname{col}(A_u)\), where \(\dagger\) denotes the
@@ -605,7 +628,41 @@ ownership, the comparisons below keep the coordinate-to-arbor map fixed while
 varying feedback resolution or within-arbor address.
 Stacking the routed fields across neurons and applying
 the corresponding local eligibilities produces the parameter-space credit
-operator introduced after the feedback ladder.
+operator introduced after the feedback ladder. Written as a pipeline from the
+output error to the weight update, every restricted rule studied in this paper
+composes four factors,
+\[
+\Delta\bm w\;\propto\;
+-\,E\,\Bigl(\textstyle\bigoplus_{u} A_u\,\Gamma_u\Bigr)\,F\,
+\bm\delta^{\mathrm{out}},
+\]
+each with a distinct physical referent. The between-neuron map \(F\) produces
+the channel values \(\bm c_u\) from the output error; unless a section states
+otherwise, every trained experiment below computes it by exact
+backpropagation through the trained decoder, so that only the within-neuron
+factors vary. The address matrix \(A_u\) of Eq.~\ref{eq:routedfield} is
+feedback wiring: it specifies where the channels land. The diagonal
+\(\Gamma_u\) collects the realized route gains, the conductance-coupled
+scaling introduced above. The block-diagonal factor \(E\) applies the
+synapse-local eligibilities of Eq.~\ref{eq:factorization}. Expressed in
+parameter-gradient coordinates, this pipeline is the credit operator \(M\)
+analyzed after the feedback ladder; exact backpropagation corresponds to
+every factor exact.
+
+Why is the delivery a free design rather than a consequence of the forward
+wiring? The conductance equations propagate synaptic input forward to somatic
+voltage; no term in them transports the loss derivative
+\(\partial\mathcal L/\partial V\) backward. A compartment can therefore learn
+from spatially structured credit only if that credit arrives as separate
+input to the neuron, through feedback contacts whose placement defines
+\(A_u\). The forward state enters twice, in distinct roles: it fixes the
+\emph{target} of delivery, because the exact field \(\bm\delta^V_u\) already
+contains the path gains \(\tilde\alpha_n\) and, in the reciprocal cable, the
+Green's-function transport; and it modulates the \emph{realized} gain
+\(\Gamma_u\), because conductance rescales how strongly a delivered signal
+acts. The address \(A_u\) is constrained by neither role: it is feedback
+anatomy, which is why Eq.~\ref{eq:routedfield} is a basis expansion over that
+anatomy rather than an identity of the cable equations.
 
 Before comparing feedback resolutions, we also define the non-shunting
 forward control used in the regular-tree experiments. It retains the tree
@@ -639,14 +696,18 @@ Numerical gradient checks confirmed Eqs.~\ref{eq:factorization} and
 feedback information in the order implied by the derivation: first neuron
 identity, then location within the arbor.
 
-\subsection*{Neuron-specific feedback resolves the dominant information bottleneck}
+\subsection*{The route ladder saturates at one coefficient per neuron on standard image tasks}
 
 Equation~\ref{eq:pointlocalrule} identifies the first information bottleneck:
 feedback must distinguish neurons that require different updates. Before
 testing dendritic addresses, we therefore compared three feedback resolutions
 (Fig.~\ref{fig:feedback}A). Let \(N_{\rm cell}\) be the number of neurons and let
-\(\delta^V_{i,0,u}\) be neuron \(u\)'s decoder-derived somatic error on example
-\(i\). The strict scalar condition first reduces this vector to
+\(\delta^V_{i,0,u}\) be neuron \(u\)'s somatic error on example
+\(i\), computed by exact backpropagation through the trained decoder. This
+between-neuron stage is the map \(F\) of the preceding section; it is exact
+in every trained experiment unless stated otherwise, so the ladder varies
+only how the resulting per-neuron signal is distributed.
+The strict scalar condition first reduces this vector to
 \begin{equation}
 \bar\delta_i^V=\frac{1}{N_{\rm cell}}\sum_{u=1}^{N_{\rm cell}}\delta^V_{i,0,u},\qquad
 s_i^{\rm sc}=
@@ -823,15 +884,17 @@ restricted feedback retain useful credit while excluding noise?
 
 \begin{figure}[tbp]
 \centering
-\includegraphics[width=0.99\textwidth]{main/figure_02.pdf}
+\includegraphics[width=0.955\textwidth]{main/figure_02.pdf}
 \caption{\textbf{Neuron identity, rather than location within an arbor, is the
 dominant feedback bottleneck on MNIST.} Panels \textbf{A--E} and upper
 \textbf{G} use flattened MNIST and 128 regular directed \([3,3]\) trees---three
 proximal and nine terminal compartments per soma. Green circles denote
 shunting trees and blue squares topology-matched raw-additive trees; in
 \textbf{C}, one purple diamond marks their coincident exact-path values.
-\textbf{A}, Feedback resolution: one strict layer scalar; one coordinate per
-neuron repeated over its arbor; or the exact compartment-error field. The
+\textbf{A}, Three rungs of the route-dictionary
+ladder: one strict layer scalar; one coordinate per
+neuron repeated over its arbor (\(K{=}1\)); or the exact
+compartment-error field. The
 strict value \(s_i^{\rm sc}\) (shown as \(s\)) is the per-example somatic mean with the
 largest-magnitude fallback in Eq.~\ref{eq:strictscalar}. The two
 steps test neuron identity and within-arbor address, respectively. \textbf{B},
@@ -864,7 +927,7 @@ seed-bootstrap intervals; \(n=15\) paired seeds per architecture in
 \label{fig:feedback}
 \end{figure}
 
-\subsection*{A signal--noise theory predicts when restricted feedback helps}
+\subsection*{A signal--noise utility predicts when, and at what resolution, restricted feedback helps}
 
 The feedback ladder showed that removing information can harm learning, but it
 did not identify when a restricted route might help by rejecting noise. We
@@ -1047,7 +1110,14 @@ P_1(M)=
 \end{equation}
 Across these fits, utility correlated with \(P_1\) at \(\rho=0.937\) and predicted final accuracy
 with \(\rho=0.916\), more strongly than field capture alone
-(Fig.~\ref{fig:creditphase}G and Supplementary Table~S3). It
+(Fig.~\ref{fig:creditphase}G and Supplementary Table~S3). The prediction is
+also constructive. Within each parameterized route family we selected the
+bandwidth that maximizes the evaluated utility and compared it with the
+trained optimum: wherever the utility varies with \(K\) at all, its argmax
+coincides with the realized best bandwidth (25 of 25 families; the five
+route-derangement families have identically zero utility at every \(K\),
+correctly predicting that no bandwidth rescues misassigned routes; Methods
+and the closing atlas of Fig.~\ref{fig:atlas}). The utility
 located the main route-resolution optima but did not predict the small
 training-trajectory advantage of task-matched subtrees in every seed. The
 theory therefore predicts large contrasts and within-family progress, not
@@ -1101,7 +1171,8 @@ credit-reversal---on family-specific task--route alignment and relative bandwidt
 computed separately within each family, not in a common unit.
 Filled markers denote benefit or tie; open
 markers no benefit. Regime tints are theoretical, not fitted, and the
-heterogeneous families are not pooled.
+heterogeneous families are not pooled. Fig.~\ref{fig:atlas}D replots this
+plane with each family's home figure and the utility-argmax exhibit.
 Panels \textbf{C--F} use 50 paired seeds; \textbf{G} resamples 20
 seed blocks.}
 \label{fig:creditphase}
@@ -1206,7 +1277,10 @@ including the predicted shift toward lower conflict as branch count increased.
 \centering
 \includegraphics[width=\textwidth]{main/figure_04.pdf}
 \caption{\textbf{Branch-specific feedback is required when local updates
-conflict.} The experiment uses one logistic output unit with \(B\) parallel
+conflict.} The conflict dose \(\chi\) is a task property, and
+\(\chi_{\mathrm c}=B/[2(B-1)]\) is a closed-form boundary on which route
+dictionary the task demands. The experiment uses one logistic output unit
+with \(B\) parallel
 one-stage branch weight vectors and no serial or conductance nonlinearity.
 \textbf{A}, Context-gated Fashion-MNIST binary task, shown for \(B=4\). All
 branches receive an average-pooled image from classes 0 and 6; context \(c\)
@@ -1368,7 +1442,8 @@ the prespecified seedwise oracle over matched route controls. The oracle is an
 analysis summary, not a trained selector. \textbf{F}, Correct-minus-deranged
 address effects and correct-minus-best-control ancestry effects. Correct
 assignment is essential for \(K>1\); ancestry exceeds the strongest control
-only at \(K=4\).
+only at \(K=4\) (\(+1.3\) points)---the small interior-bandwidth window the
+utility \(U(M)\) predicts (Fig.~\ref{fig:creditphase}).
 \textbf{G}, Matched-minus-rewired topology effect. Rewiring matters only at
 intermediate bandwidth. Panels \textbf{E--G} show the dendritic-tree
 representation; flat, grouped-point and gated-point implementations coincide
@@ -1378,7 +1453,7 @@ seed-bootstrap intervals over 20 paired seeds.}
 \end{figure}
 \clearpage
 
-\subsection*{Serial dendritic computation helps only when its operations match the task}
+\subsection*{Forward serial depth is a separate question that raises the required credit resolution}
 
 The preceding experiments varied how a learning signal was routed while the
 forward computation remained shallow. We next asked a separate question: when
@@ -1386,7 +1461,12 @@ does composing nonlinear operations across serial dendritic compartments help
 the forward task? Feedback-route resolution \(D_{\mathrm r}\) describes the
 backward pathway, whereas \(D_{\mathrm p}\) is the number of serial stages in
 the forward morphology. We display one- through four-stage architectures as
-D1--D4; these are cohort-specific model labels, not cell types.
+D1--D4; these are cohort-specific model labels, not cell types. For the
+route-dictionary thesis, the section's main product is a boundary condition
+on credit rather than a claim about forward depth: as serial stages
+differentiate their local states, a shared somatic signal loses alignment
+with the exact gradient, and compartment-resolved credit recovers roughly
+eleven points at three stages.
 
 Unlike the abstract branch and routing models in
 Figs.~\ref{fig:branchconflict} and \ref{fig:subtreefactorial}, these networks
@@ -1588,18 +1668,13 @@ parameter-matched point networks exceeded the serial tree
 task-matched inductive bias under constrained architecture, not a general
 expressivity advantage over point networks.
 
-Useful depth also saturated across independent task cohorts. The two-level
-task used two 32-feature sensor tiers with four groups each and compared D1
-\([8]\) with D2 \([4,1]\), which has four proximal and four distal
-compartments per soma. The four-level task used four 16-feature tiers with
-group counts \([4,2,1,1]\); the three-level task used the \([4,2,1]\)
-hierarchy defined above. These cohorts used separate seed sets. The two-level task benefited from D2, whereas the
-four-level task reached its best performance at D3 rather
-than D4 (Fig.~\ref{fig:physicaldepth}D,E). The fourth serial stage still
-outperformed D1 but slightly reduced trained accuracy relative to D3 despite
-adding another serial stage. Physical depth therefore does not obey a
-universal \(D_{\mathrm p}=H_{\mathrm p}\) rule, even when the task contains
-\(H_{\mathrm p}\) hierarchical factors.
+Useful depth also saturated across independent two-, three- and four-level
+task cohorts with separate seed sets (Methods). The two-level task benefited
+from D2, whereas the four-level task reached its best performance at D3
+rather than D4, whose fourth stage still beat D1 but slightly reduced
+trained accuracy (Fig.~\ref{fig:physicaldepth}D,E). Physical depth therefore
+does not obey a universal \(D_{\mathrm p}=H_{\mathrm p}\) rule, even when
+the task contains \(H_{\mathrm p}\) hierarchical factors.
 
 The nested-factor benefit required strong task--sensor alignment. An
 interpolation cohort sampled five equally spaced values of \(\alpha\) from
@@ -1656,7 +1731,7 @@ over ten seeds per cohort.}
 \end{figure}
 \clearpage
 
-\subsection*{Reconstructed arbors provide sparse but mostly coarse feedback routes}
+\subsection*{Reconstructed arbors supply sparse, mostly coarse anatomical route dictionaries}
 
 The controlled tasks establish what a dendritic address can compute. The next
 question is whether reconstructed dendritic geometry supplies a sparse basis
@@ -1797,7 +1872,7 @@ in vivo.
 
 \begin{figure}[tbp]
 \centering
-\includegraphics[width=0.885\textwidth]{main/figure_07.pdf}
+\includegraphics[width=0.855\textwidth]{main/figure_07.pdf}
 \caption{\textbf{Reconstructed arbors provide sparse, predominantly coarse
 routes for modeled compartment fields.} Panels \textbf{A--F} use eight
 reconstructed IT neurons from MICrONS mouse 1. \textbf{A}, Median-sized arbor;
@@ -1817,7 +1892,7 @@ below subtrees at \(K=16\). \textbf{D},
 Deliberately route-generated positive-control field; subtree sites are ranked
 by inhibitory fraction times descendant excitatory-area fraction.
 \textbf{E}, At \(K=8\), capture and nonzero route coefficients relative to the
-dense oracle. \textbf{F}, Capture per coefficient across route budgets; at
+dense oracle: 85\% of dense capture at about 7\% of the coefficients. \textbf{F}, Capture per coefficient across route budgets; at
 \(K=8\), cellwise ratios are formed before averaging, giving arithmetic means
 of 14.2 relative to the dense oracle and 2.8 relative to the density-matched
 shuffled control. Panel \textbf{C} is deterministic within each arbor after
@@ -1837,9 +1912,13 @@ cell-bootstrap intervals. In mouse 2, the random-anatomical-route contrast is po
 \subsection*{Focal shunting regulates modeled route gain in high-conductance regimes}
 
 Structural capacity alone does not show that conductance can regulate a route.
-We therefore tested a route-gain mechanism: whether a focal inhibitory
-conductance changes transport of a fixed somatic loss gradient more strongly
-within its descendant subtree than at depth-matched off-route sites. We
+In the factorization of the credit pipeline above, this is the question of
+the gain factor \(\Gamma_u\): a dictionary channel's address is feedback
+wiring, but its realized gain is coupled to the conductance state of the
+arbor it acts on. We therefore tested that coupling directly: whether a focal
+inhibitory conductance changes transport of a fixed somatic loss gradient
+more strongly within its descendant subtree than at depth-matched off-route
+sites. We
 compared the shunt with a current injection that matched its baseline focal
 current and restored the same somatic voltage. No network was trained; the
 endpoint was the change in the exact modeled excitatory-conductance gradient
@@ -1923,13 +2002,10 @@ descendant gradients more strongly than depth-matched off-route gradients.
 Neither \(S_k\) nor \(\Lambda_k\) assumes that inhibition computes the error signal
 \citep{gidon2012inhibition}.
 
-For each focal branch, relation classes were fixed from the reconstructed
-tree. Descendant, ancestor and sister-subtree sites formed separate classes;
-``unrelated'' comprised the remaining off-route sites. The depth control
-selected, for every descendant site, the unrelated site with the closest
-soma-to-site cable depth. The primary localization index therefore compares
-descendants with this depth-matched subset, whereas the broader unrelated
-class is descriptive.
+For each focal branch, relation classes (descendant, ancestor,
+sister-subtree, unrelated) were fixed from the reconstructed tree; the
+primary localization index compares descendants with the depth-matched
+subset of unrelated sites, and the broader classes are descriptive.
 
 We applied the matched perturbations to the initial eight MICrONS mouse-1
 reconstructions. In the permissive dimensionless passive model, the shunt
@@ -1946,13 +2022,10 @@ voltage.
 
 Adding voltage-dependent Na, K, Ca, HCN and NMDA conductances preserved the
 dose-dependent effect in the permissive high-conductance model
-(Fig.~\ref{fig:focal}E). This model first solved the nonlinear steady state and
-computed the exact Jacobian at that equilibrium. Each finite-dose intervention
-then used the rank-one response of this fixed local linearization: steady-state
-gates and the Jacobian were held fixed, and the nonlinear equilibrium was not
-re-solved after the intervention. The analysis therefore did not simulate
-channel kinetics. Maximal conductances were prespecified random model draws,
-not fitted or measured channel densities.
+(Fig.~\ref{fig:focal}E). Each finite-dose intervention used the rank-one
+response of the exact Jacobian at the solved nonlinear steady state, with
+gates held fixed; the analysis did not simulate channel kinetics, and maximal
+conductances were prespecified random draws, not measured densities.
 
 Physical calibration then located the boundary of the effect. We repeated the
 same perturbation in both the initial eight-cell sample and a non-overlapping
@@ -1979,10 +2052,12 @@ inhibition.
 
 \begin{figure}[tbp]
 \centering
-\includegraphics[width=0.865\textwidth]{main/figure_08.pdf}
+\includegraphics[width=0.85\textwidth]{main/figure_08.pdf}
 \caption{\textbf{Focal shunting substantially changes modeled descendant
-credit in electrotonically permissive states.} \textbf{A}, Generic focal-shunt
-schematic; panels \textbf{B--G} use complete reconstructed arbors. The matched
+credit in electrotonically permissive states.} \textbf{A}, Why a dictionary
+channel's gain is state-coupled while its address is wiring: a focal
+conductance gates the transport of a fixed somatic error into its descendant
+subtree. Panels \textbf{B--G} use complete reconstructed arbors. The matched
 current injection reproduces the baseline focal current; a separate somatic
 current restores soma voltage, but local voltage is not clamped. Pale
 descendant strokes denote attenuated modeled credit. Passive dose is relative
@@ -1997,17 +2072,16 @@ expressed relative to local input conductance. The nonlinear baseline is solved 
 draw; the finite-dose response uses its fixed exact Jacobian. Maximal Na, K,
 Ca, HCN and NMDA conductances are prespecified draws, not measured densities.
 \textbf{F}, Passive calibration in the initial and a disjoint 45-cell cohort
-from the same mouse. The horizontal coordinate is the cohort median of the
-cellwise median axial/leak conductance ratio among the same cells entering the
-localization contrast. Contrasts are small and
+from the same mouse. The horizontal coordinate is the cohort median
+axial/leak conductance ratio among the cells entering the
+contrast. Contrasts are small and
 opposite-signed across cohorts at
 \(R_m=15{,}000\,\Omega\,\mathrm{cm}^2\), and substantially larger at lower
 membrane resistance. \textbf{G}, Active-model shunt-minus-injection
 localization at input-conductance doses 0.25, 1 and 4; all 8/8 cell contrasts
 are positive at each dose (two-sided exact Wilcoxon \(P=0.0078\)). Filled dots
 are cell means over 64 channel draws; open diamonds and whiskers are the mean
-and 95\% cell-bootstrap interval. Other open symbols and intervals likewise
-summarize cohort means. Sites and channel draws are first averaged within
+and 95\% cell-bootstrap interval. Sites and channel draws are first averaged within
 each reconstructed cell; cells are the units for bootstrap intervals and
 paired tests. These are modeled sensitivities, not learning or measured
 plasticity.}
@@ -2142,7 +2216,10 @@ coefficients and objective were imposed rather than inferred from biological
 activity.
 
 The final comparison addresses neuron-specific coordinates only and uses
-neither the MICrONS morphologies nor a within-arbor routing manipulation. At
+neither the MICrONS morphologies nor a within-arbor routing manipulation: in
+the factorization above it constrains the between-neuron map \(F\), not the
+within-neuron dictionary, and it is the paper's only in vivo evidence about
+that factor. At
 the neuron level, we reanalyzed the
 six-animal causal P+/P- brain--computer-interface experiment of Francioni et
 al. \citep{francioni2026vectorized}. Its published mapping assigns opposite
@@ -2210,13 +2287,69 @@ established.}
 \end{figure}
 \clearpage
 
-The combined results occupy the alignment--bandwidth plane introduced in
-Fig.~\ref{fig:creditphase}H. A scalar signal loses neuron identity; full-rank
-feedback removes differences between equal spans; and intermediate-bandwidth
-routes help only when task credit is sufficiently aligned with their span.
-The measured-response null, the trained benefit at $K=4$ and the controlled
-alignment rescue fall in different regions of this same conditional map.
+\subsection*{One dictionary per task}
 
+The preceding sections evaluate one object---the route dictionary---at
+different resolutions, on different trees and against different tasks.
+Figure~\ref{fig:atlas} collects that object in one place. The five
+instantiations are a single construction (Fig.~\ref{fig:atlas}A), and its
+candidate members are concrete matrices whose value is measurable: on the
+paper's own trained \([3,3]\) MNIST networks, one broadcast coefficient
+already captures about half of the per-example compartment-error energy,
+three subtree channels capture 72\% (63\% under shunting), and the exact
+dictionary closes the remainder (Fig.~\ref{fig:atlas}B)---which is why the
+trained ladder saturates at one coefficient per neuron on these tasks while
+the branch-conflict boundary \(\chi_{\mathrm c}=B/[2(B-1)]\) and the
+matched-topology window at \(K=4\) mark the tasks whose credit structure
+demands more. Reconstructed arbors supply the same construction
+anatomically, coarse and sparse (Fig.~\ref{fig:atlas}C), and conductance can
+gate the delivered channels' route gains in permissive states.
+
+The utility \(U(M)\) turns this collection into a single map
+(Fig.~\ref{fig:atlas}D). Re-evaluating the stored operator reanalysis
+constructively, within every parameterized route family whose evaluated
+utility varies with bandwidth at all, the utility-maximizing \(K\) coincides
+with the trained optimum (25 of 25 families; the five remaining derangement
+families have identically zero utility across the grid, itself the correct
+prediction that no bandwidth rescues misassigned routes). For the matched
+ancestry family of the eight-context task the maximizer sits at
+\(K=8=r_{\rm eff}\), the point where feedback bandwidth equals the task's
+effective credit rank. Within the families and tasks tested, the task's
+credit spectrum therefore determines one optimal dictionary resolution, and
+the utility locates it without training; the measured-response null, the
+trained \(K=4\) benefit and the controlled alignment rescue occupy different
+regions of the same conditional map.
+
+\begin{figure}[tbp]
+\centering
+\includegraphics[width=\textwidth]{main/figure_10.pdf}
+\caption{\textbf{The route-dictionary atlas.}
+\textbf{A}, Conceptual schematic: the address matrices \(A_u\) over one
+arbor, the Haar route basis of the operator screens, the context-to-block
+family \(\Phi^{(K)}\), the anatomical site-by-route dictionary \(A_K\) and
+the subtree dictionary fitted to measured responses are one construction
+evaluated on different trees; the drawn tree is illustrative.
+\textbf{B}, Candidate dictionaries on a \([3,3]\) arbor (rows: 3 proximal
+then 9 distal compartments; columns: feedback channels), beside the trained
+compartment-error profile \(|\partial\mathcal L/\partial V|\) of the
+paper's exact-path additive MNIST checkpoints (population mean; the
+shunting profile reverses, weighting proximal compartments). Bars give
+per-example field-energy capture, averaged over 15 seeds and 2{,}048
+held-out examples each, additive with shunting in parentheses.
+\textbf{C}, The Fig.~\ref{fig:topology}A reconstruction with its four
+largest depth-1 subtree routes; shade encodes route identity, gray segments
+belong to the five smaller routes, and the soma is orange.
+\textbf{D}, The alignment--bandwidth plane of
+Fig.~\ref{fig:creditphase}H, unchanged, with each family labeled by its home
+figure. Filled markers improved over their matched control; open markers did
+not. The ring marks the constructive exhibit: for the matched ancestry
+family, the evaluated one-step utility bound \(U(M)\) is maximized at
+\(K=8=r_{\rm eff}\), coinciding with the trained optimum, as it does in
+every parameterized family whose utility varies with bandwidth (25/25;
+Methods). Background bands and the alignment rule follow
+Fig.~\ref{fig:creditphase}H.}
+\label{fig:atlas}
+\end{figure}
 \clearpage
 
 \section*{Discussion}
@@ -2268,7 +2401,12 @@ only after another circuit mechanism has produced a neuron-specific learning
 signal. Dendritic routing and feedback alignment therefore address
 complementary parts of credit assignment: one specifies the within-neuron
 basis, whereas the other concerns how a feedback pathway obtains and aligns
-the neuronal signals.
+the neuronal signals. Candidate physical carriers for the channel values
+\(c_{u,k}\) include subtree-targeted top-down axons, dendrite-targeted
+inhibition and disinhibition, and dendritic plateau or burst events
+\citep{guerguiev2017segregated,sacramento2018dendritic,payeur2021burst}; the
+delivery model constrains where such signals must land, not which mechanism
+computes them.
 
 Serial dendritic depth is a separate forward-computation question. At matched
 resource budgets, serial shunting stages helped when several separately sensed
@@ -2615,6 +2753,34 @@ interval to exclude zero and at least
 enumerated all $2^{10}$ assignments. Quality-control criteria required
 complete finite results and checkpoints, the specified seeds and no fallback
 warning; every run passed.
+
+\subsection*{Between-neuron learning-signal production}
+
+Every experiment separates the production of the per-neuron learning signal
+(the map \(F\)) from its distribution within each arbor. For transparency we
+state the production mechanism for each family in one place. In the image
+feedback ladders and their ownership controls
+(Fig.~\ref{fig:feedback}), the per-neuron somatic error is the exact
+derivative of the loss through the trained decoder (a linear readout for
+MNIST and Fashion-MNIST; a 20--32--16--10 multilayer readout for the
+CIFAR-10 confirmation), and the ownership control permutes only the
+coordinate-to-arbor map, not the production. The credit-operator screens
+(Fig.~\ref{fig:creditphase}) simulate no forward neuron: the exact mean
+gradient is given, and feedback imperfection is the operator \(M\) plus
+zero-mean noise. The branch-conflict task (Fig.~\ref{fig:branchconflict}) and the
+eight-context factorial (Fig.~\ref{fig:subtreefactorial}) use a single
+output unit, so the between-neuron stage is trivially exact and only
+within-arbor routing varies. The physical-depth cohorts
+(Fig.~\ref{fig:physicaldepth}) give each neuron its own exact somatic
+derivative; shared-soma and exact-path conditions differ only within the
+arbor. The reconstructed-arbor families (Figs~\ref{fig:topology}--\ref{fig:boundary})
+model one neuron per target with the exact readout derivative, and the
+readout and bias always receive exact gradients. The focal-shunting
+experiments impose a somatic target directly. Because the between-neuron
+stage is exact throughout, the Results conclusions concern the within-neuron
+dictionary given a correct per-neuron signal; the between-neuron factorial
+reported with the feedback ladder tests how those conclusions change when
+\(F\) itself is approximate.
 
 \subsection*{Regular-tree regime and one-step analyses}
 
@@ -3852,6 +4018,31 @@ and wiring anchors were reproduced before any ratio was formed. Intervals are
 laminar-capture proposition and marginal utility condition
 (Supplementary Section~S4) are verified numerically in the released test
 suite.
+
+\subsection*{Route-dictionary atlas analyses}
+
+Two further deterministic analyses of stored outputs support
+Fig.~\ref{fig:atlas}; neither reruns training. For the gallery captures
+(Fig.~\ref{fig:atlas}B), the thirty exact-path MNIST checkpoints of the
+feedback ladder (15 seeds per dynamics) were reloaded, 2{,}048 held-out
+examples were run forward, and the per-example compartment-error field
+\(\partial\mathcal L/\partial V\) over each neuron's twelve routed
+compartments was obtained by automatic differentiation at the
+pre-reactivation voltages, exactly as in the transported-error diagnostics
+of Fig.~\ref{fig:feedback}. For each field, capture under the broadcast
+(\(K{=}1\)), nested-subtree (\(K{=}3\)) and exact (\(K{=}12\)) dictionaries
+is the projected energy fraction
+\(\lVert P_A\bm\delta\rVert_2^2/\lVert\bm\delta\rVert_2^2\); means are over
+examples and neurons, with Student-\(t\) intervals over per-seed means. For
+the family-wise argmax exhibit (Fig.~\ref{fig:atlas}D), the per-seed
+evaluated utility of the 2{,}700-fit operator metrics was averaged within
+each (architecture, route family, bandwidth) cell; the predicted bandwidth
+is the utility argmax over the \(K\in\{1,2,4,8\}\) grid, compared against
+the argmax of trained norm-matched one-step progress and of held-out
+accuracy from the same frozen factorial. This raw within-family argmax
+complements the contrast-based interior-optimum analysis above: families
+whose utility is identically zero across the grid are reported as
+degenerate rather than assigned a predicted optimum.
 
 \subsection*{Statistics and reproducibility}
 

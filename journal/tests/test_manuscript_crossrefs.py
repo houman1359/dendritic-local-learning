@@ -17,6 +17,7 @@ MAIN_PANEL_INVENTORY = {
     "fig:topology": "abcdefg",
     "fig:focal": "abcdefg",
     "fig:boundary": "abcdefg",
+    "fig:atlas": "abcd",
 }
 
 FIGURE_BLOCK = re.compile(

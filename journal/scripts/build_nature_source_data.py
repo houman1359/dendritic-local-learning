@@ -2385,11 +2385,42 @@ FILES += (
         "current synthesis",
         "Alignment-by-bandwidth coordinates and observed outcomes used in the final phase-plane synthesis.",
     ),
+    SourceFile(
+        "Figure 10",
+        "b",
+        "source_data/route_dictionary_atlas/capture_summary.csv",
+        "Figure_10/Fig10b_dictionary_capture_summary.csv",
+        "seed-mean field-energy captures with t-intervals",
+        "training seed (n=15 per dynamics)",
+        "current deterministic checkpoint reanalysis",
+        "Broadcast, nested-subtree and exact-dictionary captures of the trained exact-path MNIST compartment-error fields.",
+    ),
+    SourceFile(
+        "Figure 10",
+        "b",
+        "source_data/route_dictionary_atlas/example_field.csv",
+        "Figure_10/Fig10b_example_field_profile.csv",
+        "population-mean compartment error magnitudes",
+        "training seed (n=15 per dynamics)",
+        "current deterministic checkpoint reanalysis",
+        "Displayed per-compartment |dL/dV| profile of the trained additive checkpoints; the shunting profile is included and reverses the depth weighting.",
+    ),
+    SourceFile(
+        "Figure 10",
+        "d",
+        "source_data/route_dictionary_atlas/argmax_summary.csv",
+        "Figure_10/Fig10d_utility_argmax_summary.csv",
+        "family-level predicted and realized optimal bandwidths",
+        "route family within architecture (n=30)",
+        "current deterministic reanalysis",
+        "Utility-argmax bandwidth versus trained optimum for every parameterized route family; degenerate zero-utility families flagged. Panel c re-uses the Figure 7a segment metrics and panel d replots the Figure 3h plane points released with those figures.",
+    ),
 )
 
 
 def final_display_file(item: SourceFile) -> SourceFile:
     """Map legacy allow-list entries onto the compiled nine-figure layout."""
+
 
     source = item.source
     figure = item.figure
