@@ -22,7 +22,7 @@ The 10 numbered figures occupy 10 figure environments;
 | Figure 7 legend | 336 words | 350 | PASS |
 | Figure 8 legend | 309 words | 350 | PASS |
 | Figure 9 legend | 314 words | 350 | PASS |
-| Figure 10 legend | 235 words | 350 | PASS |
+| Figure 10 legend | 238 words | 350 | PASS |
 
 Official guidance:
 
