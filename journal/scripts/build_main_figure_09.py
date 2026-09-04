@@ -155,9 +155,10 @@ CAPTION_NOTES = (
     "CAPTION: FIG09 G - The imposed-alignment rescue in D,E is a controlled "
     "sufficiency test and is not evidence that the measured cells use these "
     "routes for endogenous task credit.",
-    "CAPTION: FIG09 E - The depth-bin and site-shuffling controls lie "
-    "within 0.02 of one another below a = 0.6 and are distinguished by "
-    "marker and dash style.",
+    "CAPTION: FIG09 E - The random-path, depth-bin and site-shuffling "
+    "controls lie within 0.03 of one another below a = 0.6 and are "
+    "distinguished by marker and dash style; at full alignment the "
+    "random-path control is the highest, at capture 0.29.",
     "CAPTION: FIG09 G - Gray chips cite each rung's evidence: bare letters "
     "are panels of this figure; 7C\N{EN DASH}G and 8F,G are panels of "
     "Figs. 7 and 8. In the rung glyphs the two capsule tints distinguish "
@@ -233,7 +234,11 @@ TREE_METHODS = (
 # within 0.03 of one another below alignment 0.6.
 ALIGN_METHODS = (
     ("morphology-selected paths", "subtree", ROUTE, "o", None),
-    ("random anatomical routes", "random", C_CTRL, "s", None),
+    # The frozen alignment_controlled_curves.csv names this control
+    # "random paths" -- NOT the full-tree table's "random anatomical
+    # routes" -- and the selection must use the table's own string or the
+    # random curve silently vanishes while its legend entry survives.
+    ("random paths", "random", C_CTRL, "s", None),
     ("depth bins", "depth", C_CTRL, "^", (3.0, 1.8)),
     ("ancestry-shuffled paths", "shuffle", C_CTRL_L, "D", None),
 )
@@ -401,10 +406,16 @@ def panel_forest(ax, prespecified, all_scans, tree, original, expanded, *,
         (wide[(update_match, "topology-matched routes")]
          - wide[(update_match, "random anatomical routes")]).to_numpy(float),
     ]
+    # The two cohorts by the names the Results text gives them -- the
+    # 69-partner selected-scan sample and the 13-scan scan-complete
+    # sensitivity cohort ("single scan"/"all eligible scans" named neither).
+    # The counts ride the labels in bare parentheses: the tick column ends
+    # 80 pt from the canvas edge, so the full "(69 partners)"/"(13 scans)"
+    # forms (109/98 pt at tick size) cannot fit; the caption spells them out.
     raw_groups = (
         ("structure–function",
-        (("single scan", partial_a, ROUTE),
-          ("all eligible scans", partial_b, ROUTE))),
+        (("selected scans (69)", partial_a, ROUTE),
+          ("scan-complete (13)", partial_b, ROUTE))),
         ("full tree, MSE",
          (("vs shuffled", contrasts[0], C_SHUFFLE),
           ("vs random", contrasts[1], C_RANDOM))),
@@ -540,8 +551,15 @@ def tree_rows(tree):
 N_TERM = 8
 TERM_X = np.linspace(0.375, 0.965, N_TERM)
 BAND_OF = (0, 0, 1, 1, 2, 2, 3, 3)          # which nested subtree each feeds
-ROW_Y = (0.815, 0.635, 0.455, 0.275)        # one row per rule, B's order
-SITE_Y = 0.145                              # the eight sites, drawn once
+# The rule rows are set at a 0.16 pitch, not the 0.18 they had -- the exact
+# row itself does not move, so its label keeps its clearance from the
+# "restricted rules" bracket name.  The band the three lower rows give up is
+# the task line at the panel foot: sites carrying measured partner inputs,
+# the soma that reads them out, and the held-out score -- without which no
+# panel says what B's axis measures.
+ROW_Y = (0.815, 0.655, 0.495, 0.335)        # one row per rule, B's order
+SITE_Y = 0.215                              # the eight sites, drawn once
+TASK_Y = 0.135                              # the readout line under the sites
 CHIP_LW = 4.0                               # route chip thickness
 TERM_R_PT = 1.35
 LABEL_X = 0.315
@@ -578,7 +596,7 @@ def panel_route_dictionary(ax):
         members = [i for i in range(N_TERM) if BAND_OF[i] == band]
         x0 = TERM_X[members[0]] - half * 0.86
         x1 = TERM_X[members[-1]] + half * 0.86
-        f.group((x0, 0.105, x1 - x0, 0.82), tint=mix("point_mlp", 9),
+        f.group((x0, 0.175, x1 - x0, 0.75), tint=mix("point_mlp", 9),
                 edge="none", radius_pt=2.0, zorder=0.3)
     f.text((0.5 * (TERM_X[0] + TERM_X[-1]), 0.955),
            "illustrative sites; complete-arbor routes may overlap",
@@ -591,13 +609,35 @@ def panel_route_dictionary(ax):
     f.text((TERM_X[0] - half * 1.5, SITE_Y), "sites", size=PT_SMALL,
            color=MUTE, ha="right")
 
+    # The task the whole row is scored on, in one line of schematic ink: the
+    # sites carry measured partner inputs, a soma reads them out, and the
+    # score is prediction of the target's held-out response.  Without it the
+    # panel defines only the CONDITIONS and "held-out normalized MSE" in B
+    # is the sole clue to what the experiment does.  Two dashed hairlines --
+    # the connector style of D's field leaders -- tie the soma to the sites
+    # row so the disc reads as their readout, not as a fifth rule.
+    soma = (0.345, TASK_Y)
+    for site in (0, 1):
+        leader, = ax.plot([TERM_X[site], soma[0] + 0.010],
+                          [SITE_Y - 0.022, TASK_Y + 0.026],
+                          color=mix("mute", 34), lw=LW_HAIR, zorder=1.5,
+                          solid_capstyle="butt")
+        leader.set_dashes((1.5, 1.4))
+    f.disc(soma, 2.1, fill=COLORS["soma"], edge=RIM, lw=LW_EDGE, zorder=3.5)
+    f.text((0.315, TASK_Y), "partner inputs", size=PT_SMALL, color=MUTE,
+           ha="right")
+    f.arrow((0.368, TASK_Y), (0.430, TASK_Y), color=MUTE, lw=LW_EDGE,
+            head=3.0, zorder=3.5)
+    f.text((0.445, TASK_Y), "predict held-out response", size=PT_SMALL,
+           color=MUTE, ha="left")
+
     # The three restricted rules are marked as one group: they do not get
     # four independently varying teaching signals, and the figure should say
     # so.  A rule beside them, not a box around them -- a box wide enough to
     # hold the labels ran off both edges of the panel.
-    ax.plot([0.055, 0.055], [0.205, 0.700], color=mix("point_mlp", 40),
+    ax.plot([0.055, 0.055], [0.270, 0.720], color=mix("point_mlp", 40),
             lw=LW_HAIR, solid_capstyle="butt", zorder=2)
-    for y_end in (0.205, 0.700):
+    for y_end in (0.270, 0.720):
         ax.plot([0.055, 0.085], [y_end, y_end], color=mix("point_mlp", 40),
                 lw=LW_HAIR, solid_capstyle="butt", zorder=2)
     # ... and the bracket says WHAT it groups: without a name a figure-only
@@ -656,6 +696,18 @@ def panel_tree_learning(ax, tree):
     """
     _strip(ax, tree_rows(tree), xlim=MSE_XLIM, xticks=MSE_XTICKS,
            xlabel=MSE_XLABEL, tick_labels=False, inside_labels=True)
+    # The normalizer, drawn where it is read: 1.0 is the error of the
+    # training-mean predictor, so each rule's distance below this line is
+    # its margin over the trivial predictor -- "normalized" was otherwise
+    # caption-only.  Same reference style as C's zero line, drawn as an
+    # explicit segment; the label runs along the line in the empty field
+    # right of the data (no dot reaches past 0.953).
+    y_lo, y_hi = ax.get_ylim()
+    ax.plot([1.0, 1.0], [y_lo, y_hi], color=MUTE, lw=LW_REF,
+            ls=(0, (3.0, 2.2)), zorder=1, solid_capstyle="butt")
+    ax.text(0.9875, 0.5 * (y_lo + y_hi), "training-mean predictor",
+            rotation=90, ha="center", va="center", fontsize=PT_SMALL,
+            color=MUTE, zorder=6)
 
 
 # ── C: the imposed-alignment manipulation, drawn natively ────────────────
@@ -970,11 +1022,24 @@ def panel_animal_pairs(ax, animal, mode=None):
         ax.text(bar_x1, bar_y - 0.075,
                 f"common {100 * (1.0 - signed):.1f}%", fontsize=PT_SMALL,
                 color=mix("point_mlp", 62), ha="right", va="center")
+        # The bar's denominator, stated in ink over the track's right end:
+        # both segments are shares of the SAME pooled projection energy,
+        # which the folded-in bar lost with panel_mode_energy's percent
+        # axis -- without it "83.7 %" floats with no stated whole.
+        ax.text(bar_x1, bar_y + 0.014, "% of pooled energy",
+                fontsize=PT_SMALL, color=MUTE, ha="right", va="bottom",
+                zorder=5)
 
     ax.set_xlim(-0.16, 1.16)
     ax.set_xticks([0, 1], ["P+", f"P{MINUS}"])
     for label, color in zip(ax.get_xticklabels(), (PPLUS, PMINUS)):
         label.set_color(color)
+    # P+/P− are defined nowhere in ink: they are the two populations the
+    # source experiment ASSIGNED opposite credit signs, so say that in one
+    # mute sublabel under each colored tick label.
+    for x, text in ((0, "assigned +"), (1, f"assigned {MINUS}")):
+        ax.text(x, -0.088, text, transform=ax.get_xaxis_transform(),
+                ha="center", va="top", fontsize=PT_SMALL, color=MUTE)
     # The limits widen with row 2 rather than the data stretching into it:
     # the panel's information is the SLOPE of each animal's pair, so the
     # units-per-point of the y axis is held at what the 116.9 pt box had and

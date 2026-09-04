@@ -47,7 +47,10 @@ from native_schematics import Frame
 
 ROOT = Path(__file__).resolve().parents[1]
 COMPONENT = ROOT / "figures" / "components" / "main_figure_05_native.pdf"
-CANONICAL = ROOT / "figures" / "main" / "figure_05.pdf"
+# The published figures/main copy is emitted ONLY by
+# assemble_compact_main_figures.py, whose FIGURE_SOURCES map assigns
+# this component its publication number; a builder-side copy would
+# bypass the 2026-09-04 dictionary-forward renumbering.
 
 CANVAS_H_PT = 440.0
 HEIGHT_IN = CANVAS_H_PT / 72.0
@@ -67,6 +70,12 @@ GRAY = COLORS["point_mlp"]
 # #2E3947; the second entry is their light-to-mid midpoint, added here only
 # because this schematic draws four routes.
 ROUTE_COLORS = ("#9AA5B4", "#7C8899", "#5F6B7E", "#2E3947")
+# Leaf-cap fills reuse the same ordinal ramp, but a flat 26% wash of each tone
+# printed as four near-identical pale grays (#E5E8EC..#C9CCCF), so "cap = task
+# group" was unreadable at print size.  Widening the mix strength along the
+# ramp keeps the slate ordinal semantics (light = group 1, dark = group 4)
+# while separating adjacent caps by ~40 L* points instead of ~4.
+CAP_FILL_PCT = (14, 42, 70, 100)
 
 
 def _span_pt(text: str, size: float) -> float:
@@ -110,6 +119,14 @@ def hierarchical_task(ax) -> None:
         (leaf_x, 0.31),
     )
     selected = 2
+    # One mute line anchors the scoring, which the ink alone never states:
+    # the cued context routes its +s_i stream to the readout, and s_i is the
+    # trial's binary label sign.  Without it the leaf coefficients read as
+    # abstract tree annotations and the classification target is only
+    # inferable from panel E's chance line.
+    f.text((0.5, 0.965),
+           r"context picks the $+s_i$ stream;  $s_i$ = label sign",
+           size=PT_SMALL, color=MUTE)
     # Tree edges, with the selected ancestry path highlighted.
     for level in range(3):
         parents, py = levels[level]
@@ -233,12 +250,13 @@ def _route_bars(f: Frame, rect, mode: str, *, name_rows: bool = False,
     # is tinted by the task group whose stream that branch carries, which is
     # what makes a group-mixing route visible.
     for idx, xpos in enumerate(xs):
-        tone = ROUTE_COLORS[LEAF_GROUP[idx]]
+        group = LEAF_GROUP[idx]
+        tone = ROUTE_COLORS[group]
         f.ax.plot([xpos, xpos], [leaf_y - f.fy(5.0), leaf_y - f.fy(1.4)],
                   color=mix("dend", 45), lw=LW_HAIR, solid_capstyle="round",
                   zorder=3)
-        f.disc((xpos, leaf_y), 2.6, fill=mix(tone, 26), edge=tone,
-               lw=LW_EDGE, zorder=4)
+        f.disc((xpos, leaf_y), 2.6, fill=mix(tone, CAP_FILL_PCT[group]),
+               edge=tone, lw=LW_EDGE, zorder=4)
 
     for route, (lo, hi) in enumerate(supports):
         color = ROUTE_COLORS[signals[route]]
@@ -301,12 +319,13 @@ def _nonanatomical_basis(f: Frame, rect) -> None:
         [0, 1, 1, -1, -1, 1, -1, 0],
     ])
     for idx, xpos in enumerate(xs):
-        tone = ROUTE_COLORS[LEAF_GROUP[idx]]
+        group = LEAF_GROUP[idx]
+        tone = ROUTE_COLORS[group]
         f.ax.plot([xpos, xpos], [leaf_y - f.fy(5.0), leaf_y - f.fy(1.4)],
                   color=mix("dend", 45), lw=LW_HAIR, solid_capstyle="round",
                   zorder=3)
-        f.disc((xpos, leaf_y), 2.6, fill=mix(tone, 26), edge=tone,
-               lw=LW_EDGE, zorder=4)
+        f.disc((xpos, leaf_y), 2.6, fill=mix(tone, CAP_FILL_PCT[group]),
+               edge=tone, lw=LW_EDGE, zorder=4)
 
     cell_w = (xs[1] - xs[0]) * 0.86
     cell_h = 0.13 * height
@@ -405,6 +424,72 @@ def route_controls(ax, indices, *, key: bool = False) -> None:
 
 
 
+def _terminal_stream_note(ax) -> None:
+    """One mute line under B's cards: the terminals ARE the task's streams.
+
+    Nothing inside the bandwidth ladder links the morphology's eight
+    terminals to panel A's eight streams (the identity map pi lives only in
+    the caption).  The four cards leave no interior band that clears both the
+    K labels and the tallest capsules at this size, so the note hangs just
+    below the frame the way panel C's key line sits under its cards; the
+    37 pt row gutter keeps it well clear of panel D.  Spans are chained by
+    measured advance exactly as ``_centred_subscript`` chains them --
+    mathtext subscripts would shrink to 0.7x and fail the type-token audit.
+    """
+    f = Frame(ax, labels=True, scale=0.86)
+    spans = (("terminals carry streams c", 0.0, 0.4),
+             ("1", -1.6, 0.6),
+             ("–c", 0.0, 0.4),
+             ("8", -1.6, 0.0))
+    width_pt = sum(_span_pt(text, PT_SMALL) + gap for text, _, gap in spans)
+    x = 0.5 - f.fx(width_pt) / 2.0
+    base_y = -0.055
+    for text, dy_pt, gap in spans:
+        f.text((x, base_y + f.fy(dy_pt)), text, size=PT_SMALL, color=MUTE,
+               ha="left", va="baseline", clip_on=False)
+        x += f.fx(_span_pt(text, PT_SMALL) + gap)
+
+
+def _structural_tie_budgets(contrasts: pd.DataFrame, name: str) -> list:
+    """Budgets at which a paired contrast ties in every one of the 20 seeds.
+
+    ``ties == 20`` in the frozen table means all 20 paired seed differences
+    are exactly zero -- a tie by construction (identity derangement at K=1,
+    one-hot transport through pi at K=8), not an estimated null.
+    """
+    rows = contrasts[
+        contrasts.architecture.eq("dendritic_tree")
+        & contrasts.endpoint.eq("heldout_accuracy")
+        & contrasts.contrast.eq(name)
+    ]
+    return sorted(int(b) for b in rows[rows.ties.eq(20)].budget_k)
+
+
+def _topology_tie_budgets(outcomes: pd.DataFrame) -> list:
+    """Budgets at which matched and rewired trees tie in every seed."""
+    correct = outcomes[
+        outcomes.feedback_family.eq("correct_ancestry_subtrees")
+    ]
+    budgets = []
+    for budget in (1, 2, 4, 8):
+        part = correct[correct.budget_k.eq(budget)]
+        left = part[part.architecture.eq("dendritic_tree")].set_index(
+            "seed").heldout_accuracy
+        right = part[part.architecture.eq(
+            "degree_depth_matched_rewired_tree")].set_index(
+            "seed").heldout_accuracy
+        diff = (left - right).dropna()
+        if len(diff) == 20 and bool(diff.eq(0.0).all()):
+            budgets.append(budget)
+    return budgets
+
+
+def _tie_note(ax, xy, *, ha, text="exact tie", va="center") -> None:
+    """Mute microtext marking a zero that is exact by construction."""
+    ax.text(xy[0], xy[1], text, fontsize=PT_SMALL, color=MUTE,
+            ha=ha, va=va, zorder=6)
+
+
 def _move_label(ax, text: str, xy) -> None:
     """Re-anchor one in-panel direct label without changing its wording."""
     for artist in ax.texts:
@@ -473,6 +558,7 @@ def build() -> list:
 
     hierarchical_task(ax_a)
     address_ladder_compact(ax_b)
+    _terminal_stream_note(ax_b)
     route_controls(ax_c, (0, 1), key=True)
     route_controls(ax_d, (2, 3))
     bandwidth_sweep_compact(ax_e, outcomes, dendritic)
@@ -495,10 +581,31 @@ def build() -> list:
     _annotate_k4_advantage(ax_f, contrasts)
     topology_alignment_compact(ax_g, outcomes)
 
+    # Structural exact ties.  At these budgets every one of the 20 paired
+    # seed differences is exactly zero by construction, but the points were
+    # drawn as ordinary data with zero-length whiskers, so a reader could not
+    # tell a tie-by-identity from an estimated no-effect.  The marked set is
+    # derived from the frozen tables here, never hard-coded.
+    derange_ties = _structural_tie_budgets(
+        contrasts, "correct - within_neuron_route_derangement")
+    oracle_ties = _structural_tie_budgets(
+        contrasts, "correct - best_matched_nonanatomical_oracle")
+    topology_ties = _topology_tie_budgets(outcomes)
+    if (derange_ties, oracle_ties, topology_ties) != ([1], [8], [1, 8]):
+        raise ValueError(
+            "structural-tie set changed: deranged %r, oracle %r, topology %r"
+            % (derange_ties, oracle_ties, topology_ties))
+    # E: the concentric K=1 pair (correct == deranged in all 20 seeds).
+    _tie_note(ax_e, (0.14, 0.142), ha="left")
+    # F: the deranged contrast at K=1 and the oracle contrast at K=8.
+    _tie_note(ax_f, (0.10, -9.0), ha="left")
+    _tie_note(ax_f, (2.92, -9.0), ha="right")
+    # G: both zero endpoints; per-point notes would sit on the rising and
+    # falling segments, so one note names both from the empty upper right.
+    _tie_note(ax_g, (3.10, 27.5), ha="right", text="K = 1, 8: exact ties")
+
     COMPONENT.parent.mkdir(parents=True, exist_ok=True)
     problems = canvas.save(COMPONENT, name="main_figure_05_native")
-    CANONICAL.parent.mkdir(parents=True, exist_ok=True)
-    CANONICAL.write_bytes(COMPONENT.read_bytes())
     return problems
 
 

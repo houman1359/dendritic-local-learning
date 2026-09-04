@@ -923,7 +923,8 @@ the approximate source: neuron-specific feedback recovered \(+10.8\) and
 \(+11.0\) points over the scalar rung in additive and shunting trees (15/15
 seeds each), exact path transport again added at most \(+0.09\) points, and
 at the neuron and path rungs the random fixed map trailed the exact readout
-map by no more than about \(0.2\) points (Supplementary Fig.~S30). The dominant
+map by no more than about \(0.2\) points (Fig.~\ref{fig:feedback}G and
+Supplementary Fig.~S30). The dominant
 bottleneck, and the sufficiency of one coefficient per neuron on these
 tasks, are therefore properties of the within-neuron dictionary rather than
 artifacts of exact between-neuron credit.
@@ -944,49 +945,49 @@ restricted feedback retain useful credit while excluding noise?
 
 \begin{figure}[tbp]
 \centering
-\includegraphics[width=0.955\textwidth]{main/figure_03.pdf}
+\includegraphics[width=0.855\textwidth]{main/figure_03.pdf}
 \caption{\textbf{Neuron identity, rather than location within an arbor, is the
 dominant feedback bottleneck on MNIST.} Panels \textbf{A--E} and upper
 \textbf{G} use flattened MNIST and 128 regular directed \([3,3]\) trees (three
-proximal, nine terminal compartments per soma). Green circles, shunting
-trees; blue squares, topology-matched raw-additive trees; in
-\textbf{C} one purple diamond marks coincident exact-path values.
-Colors inside the \textbf{A} and \textbf{F} schematic cards label
-feedback concepts, not data series.
+proximal, nine terminal compartments). Green circles, shunting; blue squares, topology-matched raw-additive
+trees; the purple diamond in \textbf{C} marks coincident exact-path
+values.
+Schematic-card colors in \textbf{A},\textbf{F} label concepts, not data
+series.
 \textbf{A}, Three rungs of the route-dictionary
 ladder: one strict layer scalar; one coordinate per
 neuron repeated over its arbor (\(K{=}1\)); or the exact
 compartment-error field. The
-strict value \(s_i^{\rm sc}\) (shown \(s\)) is the per-example somatic
-mean with the fallback of Eq.~\ref{eq:strictscalar}; the two steps test
-neuron identity and within-arbor address. \textbf{B},
+strict value \(s_i^{\rm sc}\) (shown \(s\)) follows
+Eq.~\ref{eq:strictscalar}; the two steps test neuron identity and
+within-arbor address. \textbf{B},
 Held-out accuracy. \textbf{C}, Fixed-checkpoint diagnostic in models trained with
-neuron-specific feedback: with weights and forward state fixed,
-matched-width scalar-fallback, neuron-specific and exact-path fields are
-compared by automatic differentiation; exact path has cosine one by
-construction. \textbf{D}, Exact voltage-error magnitude by depth, soma-normalized, in
+neuron-specific feedback: with weights and state fixed, matched-width
+scalar-fallback, neuron-specific and exact-path fields are compared by
+autodifferentiation; exact path has cosine one by construction. \textbf{D}, Exact voltage-error magnitude by depth, soma-normalized, in
 the exact-path checkpoints from \textbf{B}: the batch-RMS ratio
 \(\operatorname{RMS}_{\mathrm{batch}}(\delta^V_{n,u})/
 \operatorname{RMS}_{\mathrm{batch}}(\delta^V_{0,u})\), averaged over neurons
-and paths (\(n\), compartment; \(0\), soma; \(u\), neuron; RMS over the
-batch).
+and paths (\(n\), compartment; \(0\), soma; \(u\), neuron).
 \textbf{E}, Within-depth residual
 energy
 \(\lVert\bm\delta_d^V-\langle\bm\delta_d^V\rangle_{\rm path}\rVert_2^2/
 \lVert\bm\delta_d^V\rVert_2^2\), the fraction one path-shared value
-cannot represent, in the same checkpoints; the soma's single coordinate has
-identically zero residual and is omitted. Shunting attenuates distal magnitude (\textbf{D}) yet retains a larger
-path-specific fraction (\textbf{E}); these panels report no new training
-conditions. \textbf{F}, Ownership assigns a neuronal
+cannot represent, in the same checkpoints; the soma has identically zero
+residual and is omitted. Shunting attenuates distal magnitude (\textbf{D}) yet retains a larger
+path-specific fraction (\textbf{E}); no new training conditions. \textbf{F}, Ownership assigns a neuronal
 coordinate to an arbor; address assigns signals within that arbor; shading (four gray steps) marks
 distinct within-arbor addresses.
 \textbf{G}, Upper axis: neuron-specific-minus-strict-scalar and
-exact-path-minus-neuron-specific effects from the \([3,3]\) ladder. Lower axis: correct minus
+exact-path-minus-neuron-specific effects from the \([3,3]\) ladder; the
+third block repeats the neuron-identity step under the fixed random DFA
+source (Supplementary Fig.~S30). Lower axis: correct minus
 fixed-derangement ownership in separate \([2,2]\) (six nonsomatic
-compartments) and \([2,2,2,2]\) (30) experiments. The strips use different pp scales. Lines pair seeds or checkpoints; dots in \textbf{G},
-paired seed differences. Symbols and bars, means and 95\% seed-bootstrap
-intervals; \(n{=}15\) paired seeds per architecture (\textbf{B--E}, upper
-\textbf{G}), \(n{=}10\) (lower \textbf{G}).}
+compartments) and \([2,2,2,2]\) (30) experiments, and the
+readout-minus-DFA gap at the neuron rung (path rung \(\leq\)0.2 pp; S30). The strips use different pp scales. Dots in \textbf{G}, paired seed
+differences. Symbols and bars, means and 95\% seed-bootstrap intervals;
+\(n{=}15\) paired seeds per architecture (\textbf{B--E}, upper \textbf{G},
+S30 blocks), \(n{=}10\) (ownership).}
 \label{fig:feedback}
 \end{figure}
 
@@ -1329,7 +1330,7 @@ branches receiving distinct inputs increases (Fig.~\ref{fig:branchconflict}C).
 
 The trained networks followed this prediction (Fig.~\ref{fig:branchconflict}D).
 At zero conflict, branch-specific and shared feedback were practically
-equivalent. Their difference grew monotonically with \(\chi\), and
+equivalent. Their difference grew with \(\chi\), and
 branch-specific feedback gained 35--58 percentage points at full conflict.
 At full conflict, the positive effect depended on delivering the signal to the
 correct branch: a cyclic route with identical rank and sparsity failed.
@@ -1347,7 +1348,7 @@ including the predicted shift toward lower conflict as branch count increased.
 
 \begin{figure}[tbp]
 \centering
-\includegraphics[width=0.93\textwidth]{main/figure_05.pdf}
+\includegraphics[width=0.88\textwidth]{main/figure_05.pdf}
 \caption{\textbf{Branch-specific feedback is required when local updates
 conflict.} The conflict dose \(\chi\) is a task property, and
 \(\chi_{\mathrm c}=B/[2(B-1)]\) is a closed-form boundary on which route
@@ -1357,19 +1358,22 @@ one-stage branch weight vectors and no serial or conductance nonlinearity.
 \textbf{A}, Context-gated Fashion-MNIST binary task, shown for \(B=4\). All
 branches receive an average-pooled image from classes 0 and 6; context \(c\)
 (denoted \(b_i^\star\) on trial \(i\)) selects the branch that determines the
-logit. Conflict dose \(\chi\) independently replaces nonselected views with
-opposite-class images. In the schematic, the doubled ring marked \(c\) is the context gate; the solid proximal path is the selected branch's route to the soma, dashed proximal paths are gated off, and small open rings mark the gate sites of unselected branches. \textbf{B}, Every branch stores eligibility, but
+logit. Conflict dose \(\chi\) independently replaces each nonselected
+view with an opposite-class image with probability \(\chi\). In the schematic, the doubled ring marked \(c\) is the context gate; the solid proximal path is the selected branch's route to the soma, dashed proximal paths are gated off, and small open rings mark the gate sites of unselected branches. \textbf{B}, Every branch stores eligibility, but
 with \(\delta_i=\sigma(z_i)-y_i\), branch-specific feedback sends
 \(\delta_{i,b}=\delta_i\mathbb 1[b=b_i^\star]\), whereas neuron-shared
 feedback sends
 \(\delta_{i,b}=\delta_i/B\). \textbf{C}, Hypothesis: the shared-mode signal
 \(s(\chi)=1-2\chi(B-1)/B\) vanishes at
 \(\chi_c=B/[2(B-1)]\); open diamonds mark \(\chi_c\). \textbf{D}, Held-out accuracy across \(\chi\). The
-shared rule collapses near the predicted boundary for \(B=2,4,8\); correct
-routing, backpropagation (BP) and the algebraically equivalent gated-point
-calculation coincide. \textbf{E}, At full conflict, those exact-route
-calculations remain coincident, whereas neuron-shared and rank- and
-sparsity-matched cyclically deranged routes fail. The routing-by-conflict
+shared rule collapses near the predicted boundary for \(B=2,4,8\).
+\textbf{E}, At full conflict, correct routing, backpropagation (BP) and the
+algebraically equivalent gated-point calculation coincide exactly
+(concentric marks), whereas neuron-shared and deranged routes
+fail; the derangement sends each one-hot signal to the next branch,
+preserving rank and sparsity. Shared and deranged updates are then
+dominated by opposite-class views, driving the selected branch below
+chance. The routing-by-conflict
 interaction is positive in 20/20 seeds at each \(B\). \textbf{F}, Trained
 chance-crossing dose versus analytic \(\chi_c\). Diamonds show the prediction,
 the orange line the first linearly interpolated crossing of the accuracy curve
@@ -1490,7 +1494,7 @@ additional roles of alignment, route gain and stochastic noise.
 
 \begin{figure}[tbp]
 \centering
-\includegraphics[width=0.935\textwidth]{main/figure_06.pdf}
+\includegraphics[width=0.87\textwidth]{main/figure_06.pdf}
 \caption{\textbf{Task-aligned subtree routes help only at matched feedback
 resolution.} The experiment uses one scalar readout with eight independent
 terminal parameter blocks. A balanced binary routing tree defines supports;
@@ -1499,8 +1503,8 @@ its internal nodes are feedback addresses, not serial forward compartments.
 selects the stream that determines the logit; its signed-label coefficient is
 \(+s_i\) (\(s_i=2y_i-1\), the \(\pm1\) label sign), whereas active distractors carry \(-0.15s_i\), \(-0.45s_i\) or
 \(-0.75s_i\) according to hierarchical distance (Eq.~\ref{eq:subtreeaddresstask}).
-\textbf{B}, Candidate routing tree; each shaded capsule is the support of one feedback channel (capsule tints distinguish channels only, not conditions) and the orange disc marks the soma. Bandwidth \(K=1,2,4,8\) is the rank of the
-context-to-block field and is not physical depth; ancestry routes resolve the
+\textbf{B}, Candidate routing tree; each shaded capsule is the support of one feedback channel (capsule tints distinguish channels only, not conditions) and the orange disc marks the soma. Bandwidth \(K\in\{1,2,4,8\}\) is the
+context-to-block field's rank, not physical depth; ancestry routes resolve the
 shared mode, halves, sibling pairs and individual blocks, respectively
 (Eq.~\ref{eq:ancestryroutes}); \(\pi\) maps task streams to physical leaves.
 \textbf{C}, Assignment controls at \(K=4\): matched and
@@ -1510,13 +1514,17 @@ degree--depth-preserving leaf permutation breaks task--route alignment (one
 illustrative permutation is drawn; each run uses a seed-fixed permutation); a
 dense signed rank-four matrix schematically illustrates a non-ancestry basis.
 \textbf{E}, Held-out accuracy for correct ancestry routes, deranged routes and
-the best matched control: a prespecified seedwise oracle over matched route controls (an analysis summary, not a trained selector). \textbf{F}, Correct-minus-deranged
+the best matched control: the prespecified per-seed maximum over
+deranged, depth-interleaved, random-sparse and dense random-rank-\(K\)
+fields (an analysis summary, not a trained selector). \textbf{F}, Correct-minus-deranged
 address effects and correct-minus-best-matched-control ancestry effects. Correct
 assignment is essential for \(K>1\); ancestry exceeds the strongest control
 only at \(K=4\) (\(+1.3\) points), a trained-trajectory advantage the
 one-step utility does not itself predict (Supplementary Fig.~S16).
-\textbf{G}, Matched-minus-rewired topology effect. Rewiring matters only at
-intermediate bandwidth. Panels \textbf{E--G} show the dendritic-tree
+\textbf{G}, Matched-minus-rewired topology effect, both trees receiving
+correct ancestry routes. Rewiring matters only at
+intermediate bandwidth. ``Exact tie'' points are zero by construction (identity derangement,
+\(K{=}1\); coincident routes, \(K{=}8\)). Panels \textbf{E--G} show the dendritic-tree
 representation; flat, grouped-point and gated-point implementations coincide
 when given the same route matrix. Symbols and whiskers show means and 95\%
 seed-bootstrap intervals over 20 paired seeds.}
@@ -2283,32 +2291,30 @@ state, and endogenous morphology-specific task-credit use as not established
 \caption{\textbf{Measured responses set the biological boundary; imposed
 alignment is a conditional positive control.} \textbf{A}, Offline
 response prediction, one reconstructed tree per target. Exact learning uses
-the trial-specific compartment-error field; each restricted rule multiplies
+the trialwise compartment-error field; each restricted rule multiplies
 scalar output error by one fixed four-route field
 (Eq.~\ref{eq:micronsrestrictedcredit}), selected without target responses;
 only input-conductance errors differ.
-\textbf{B}, Scan-complete normalized MSE, seven targets from one mouse. Ten replicates per scan, 13 scans, target-averaged. Dots, targets;
-diamonds and whiskers, target means and 95\% bootstrap intervals (also
+\textbf{B}, Scan-complete normalized MSE, seven targets from one mouse. Ten replicates per scan, target-averaged. Dots, targets;
+diamonds and whiskers, means and 95\% bootstrap intervals (also
 \textbf{C}).
 \textbf{C}, Each
 target-level effect is standardized by its across-target standard deviation
 (the bootstrap repeats this).
-Structure--function rows are residualized ancestry--response correlations;
+Structure--function rows are residualized ancestry--response correlations
+(69 partners; 13 scans);
 the rest, control minus subtree for MSE and subtree minus control for
 update match (Eq.~\ref{eq:micronsupdatematch}), so positive
-favors morphology-specific alignment; the axis is clipped to
+favors subtree alignment; the axis is clipped to
 \([-2.2,1.9]\), the arrow marking an interval to \(-10.97\).
 \textbf{D}, Synthetic
 alignment in eight reconstructions,
-\(\bm g(a)=\sqrt a\,\bm u_{\parallel}+\sqrt{1-a}\,\bm u_{\perp}\). The
-schematic shows three of the six levels \(a\in\{0,0.2,\ldots,1\}\). \textbf{E}, As a
+\(\bm g(a)=\sqrt a\,\bm u_{\parallel}+\sqrt{1-a}\,\bm u_{\perp}\). Three of six levels \(a\in\{0,0.2,\ldots,1\}\) are drawn. \textbf{E}, As a
 unit-energy field rotates into an eight-route subtree span, capture
-equals \(a\) by construction. Random routes, depth bins and site
-shuffling are controls; curves, eight-cell means with 95\% bootstrap
-intervals. Below \(a=0.6\) the depth-bin and site-shuffle controls lie within 0.02,
-distinguished by marker and dash. These fields and the Supplementary Fig.~S5 optimization use no
-visual data. \textbf{F}, Signed/common decomposition of a six-animal BCI study
-(retrospective). Each \(\Delta\) is the source study's
+equals \(a\) by construction. Random-path, depth-bin and site-shuffle
+controls lie within 0.03 of one another below \(a=0.6\), distinguished by
+marker and dash; at \(a=1\) the random-path control is highest (0.29). Curves, eight-cell means with 95\% bootstrap intervals. These fields and the Supplementary Fig.~S5 optimization use no
+visual data. \textbf{F}, Signed/common decomposition of a six-animal BCI study. Each \(\Delta\) is the source study's
 soma--dendrite residual contrast (error reduction minus increase). Lines
 pair \(\Delta^{P+}\), \(\Delta^{P-}\) within animal; the bar splits
 pooled energy into signed (83.7\%) and common (16.3\%) modes; the whisker
@@ -2316,7 +2322,7 @@ at the split, the signed fraction's 95\% interval (60.6--95.7\%). This tests neu
 \textbf{G}, Biological-evidence boundary: neuron-specific coordinates,
 retrospective and conditional; structural subtree capacity, supported;
 route gain, conditional on conductance state; endogenous route use, not
-established. Gray chips cite each rung's evidence: bare letters, this figure's panels;
+established. Gray chips cite evidence: bare letters, this figure's panels;
 7C--G and 8F,G, Figs.~\ref{fig:topology} and \ref{fig:focal}. In the rung
 glyphs, capsule tints distinguish the two subtree routes and the open ring
 the gating junction.}

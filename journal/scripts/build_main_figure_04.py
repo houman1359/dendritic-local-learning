@@ -47,7 +47,10 @@ from routing_figure_panels import draw_conflict_neuron, draw_credit_fan
 
 ROOT = Path(__file__).resolve().parents[1]
 COMPONENT = ROOT / "figures" / "components" / "main_figure_04_native.pdf"
-CANONICAL = ROOT / "figures" / "main" / "figure_04.pdf"
+# The published figures/main copy is emitted ONLY by
+# assemble_compact_main_figures.py, whose FIGURE_SOURCES map assigns
+# this component its publication number; a builder-side copy would
+# bypass the 2026-09-04 dictionary-forward renumbering.
 
 CANVAS_H_PT = 469.0
 HEIGHT_IN = CANVAS_H_PT / 72.0
@@ -156,9 +159,16 @@ def _trial_card(frame: Frame, rect, *, conflict: bool) -> None:
 def branch_conflict_task(ax) -> None:
     """Side-by-side endpoints of the continuous conflict-dose family."""
     frame = Frame(ax, labels=True, scale=0.94)
-    cells = frame.split(2, axis="x", gap_pt=9.0, pad_pt=(0, 0, 0, 0))
+    # An 11 pt band below the cards defines the doses BETWEEN the endpoints:
+    # the cards draw only chi = 0 and chi = 1, and without this line neither
+    # the ink nor the axis tells a reader whether an intermediate dose flips
+    # views independently or a fixed fraction of branches.
+    cells = frame.split(2, axis="x", gap_pt=9.0, pad_pt=(0, 0, 0, 11.0))
     _trial_card(frame, cells[0], conflict=False)
     _trial_card(frame, cells[1], conflict=True)
+    frame.text((0.5, 0.0), "0 < χ < 1: each nonselected view flips "
+               "with prob. χ", size=PT_SMALL, color=MUTE,
+               ha="center", va="bottom")
 
 
 def backward_credit_schematic(ax) -> None:
@@ -478,8 +488,6 @@ def build() -> list:
 
     COMPONENT.parent.mkdir(parents=True, exist_ok=True)
     problems = canvas.save(COMPONENT, name="main_figure_04_native")
-    CANONICAL.parent.mkdir(parents=True, exist_ok=True)
-    CANONICAL.write_bytes(COMPONENT.read_bytes())
     return problems
 
 

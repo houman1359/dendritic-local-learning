@@ -2406,6 +2406,29 @@ FILES += (
         "current deterministic checkpoint reanalysis",
         "Displayed per-compartment |dL/dV| profile of the trained additive checkpoints; the shunting profile is included and reverses the depth weighting.",
     ),
+    # Declared in the legacy numbering ("Figure 2" = the ladder), which the
+    # dictionary-forward layer maps to Figure_3/Fig3g_*: panel G now draws
+    # the factorial's headline contrasts alongside the exact-readout ladder.
+    SourceFile(
+        "Figure 2",
+        "g",
+        "source_data/mnist_between_within_factorial/seed_outcomes.csv",
+        "Figure_2/Fig2g_factorial_seed_outcomes.csv",
+        "paired independent training-seed values",
+        "paired training seed (n=15 per dynamics)",
+        "executable-source matched cohort",
+        "Between-by-within factorial fits drawn as the DFA-source blocks of panel G; full factorial in Supplementary Figure 30.",
+    ),
+    SourceFile(
+        "Figure 2",
+        "g",
+        "source_data/mnist_between_within_factorial/paired_contrasts.csv",
+        "Figure_2/Fig2g_factorial_paired_contrasts.csv",
+        "paired training-seed contrasts",
+        "paired training seed (n=15 per dynamics)",
+        "executable-source matched cohort",
+        "DFA-source ladder step and readout-minus-DFA gaps plotted in panel G.",
+    ),
     SourceFile(
         "Supplementary Figure 30",
         "a-d",

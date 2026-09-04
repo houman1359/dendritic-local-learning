@@ -746,7 +746,62 @@ def _ownership_rows():
     return rows
 
 
-# The three group headers name the contrast in one word each; what each
+def _factorial_rows():
+    """The between-by-within factorial's headline contrasts (Supp. Fig. S30).
+
+    Two families join panel G so the between-neuron test is visible in the
+    main figure: the DFA-source ladder step (does neuron identity survive a
+    fixed random between-neuron map?) on the ladder pp scale, and the
+    readout-minus-DFA gap at matched within-rungs on the sub-point scale.
+    The exact-readout rows above them are the frozen ladder release; these
+    rows share its seeds, architectures, colors and markers.
+    """
+    seeds = pd.read_csv(
+        DATA / "mnist_between_within_factorial" / "seed_outcomes.csv")
+    contrasts = pd.read_csv(
+        DATA / "mnist_between_within_factorial" / "paired_contrasts.csv")
+
+    def rows_for(name, high, low, label_prefix=""):
+        rows = []
+        for architecture in ("shunting", "additive"):
+            row = contrasts[contrasts.contrast.eq(name)
+                            & contrasts.architecture.eq(architecture)].iloc[0]
+            part = seeds[seeds.architecture.eq(architecture)]
+            wide = part.pivot_table(index="seed",
+                                    columns=["between", "within"],
+                                    values="test_accuracy")
+            paired = 100 * (wide[high] - wide[low]).dropna().to_numpy(float)
+            rows.append({
+                "label": (label_prefix
+                          + ("raw additive" if architecture == "additive"
+                             else "shunting")),
+                "color": SHUNT if architecture == "shunting" else ADD,
+                "marker": "o" if architecture == "shunting" else "s",
+                "mean": 100 * float(row.mean_difference),
+                "lo": 100 * float(row.ci95_low),
+                "hi": 100 * float(row.ci95_high),
+                "seeds": paired,
+            })
+        return rows
+
+    return {
+        "dfa_neuron_minus_scalar": rows_for(
+            "dfa within: neuron - scalar",
+            ("dfa", "neuron specific"), ("dfa", "scalar broadcast"),
+            label_prefix="MNIST "),
+        "bp_minus_dfa": (
+            rows_for("between at neuron: readout - dfa",
+                     ("readout backprop", "neuron specific"),
+                     ("dfa", "neuron specific"),
+                     label_prefix="neuron rung, ")
+            + rows_for("between at exact path: readout - dfa",
+                       ("readout backprop", "exact path"),
+                       ("dfa", "exact path"),
+                       label_prefix="path rung, ")),
+    }
+
+
+# The group headers name the contrast in one word each; what each
 # contrast subtracts from what ("neuron-specific minus scalar", "exact path
 # minus neuron-specific", "correct minus deranged neuron-to-tree map") is a
 # definition and belongs in the caption, not in a sentence-long in-panel
@@ -777,14 +832,22 @@ def panel_forest(ax):
     # the upper strip's bare tick numbers read as the same scale.  The upper
     # strip therefore gives up a little height to make room for its own
     # tick-plus-label band above the lower strip's hanging group header.
+    factorial = _factorial_rows()
     strips = [
-        ((0.54, 0.46),
+        ((0.58, 0.42),
          [("neuron-specific (B)",
            mnist["neuron specific - scalar broadcast"]),
-          ("path resolution (B)", mnist["exact path - neuron specific"])],
+          ("path resolution (B)", mnist["exact path - neuron specific"]),
+          ("neuron-specific under DFA source (S30)",
+           factorial["dfa_neuron_minus_scalar"])],
          GAIN_LIM, GAIN_TICKS, GAIN_LABEL, False),
-        ((0.0, 0.34),
-         [("ownership: correct − deranged (F)", _ownership_rows())],
+        ((0.0, 0.36),
+         [("ownership: correct − deranged (F)", _ownership_rows()),
+          # Only the neuron-rung gap is drawn; the path-rung gap (at most
+          # 0.2 pp) stays in Supplementary Fig. S30 to keep the strip
+          # legible.
+          ("readout BP − DFA source (S30)",
+           factorial["bp_minus_dfa"][:2])],
          ASSIGN_LIM, ASSIGN_TICKS, GAIN_LABEL, True),
     ]
     ax.set_axis_off()
@@ -838,9 +901,17 @@ def panel_forest(ax):
         # crosses x = 0, so there the line starts just below the header band
         # instead of striking straight through the words.
         if zero_below:
-            stop = header_ys[0] + 0.50
-            sub.axvline(0.0, color=MUTE, ls="--", lw=LW_REF, zorder=0.1,
-                        ymin=0.0, ymax=(y - 0.5 - stop) / (y - 0.5 + 0.62))
+            # Draw the dashed zero reference in segments that dodge every
+            # hanging group header rather than striking through the words.
+            spans, previous = [], -0.62
+            for header_y in header_ys:
+                spans.append((previous, header_y - 0.34))
+                previous = header_y + 0.46
+            spans.append((previous, y - 0.5))
+            for lo, hi in spans:
+                if hi > lo:
+                    sub.plot([0.0, 0.0], [lo, hi], color=MUTE, ls="--",
+                             lw=LW_REF, zorder=0.1)
         else:
             sub.axvline(0.0, color=MUTE, ls="--", lw=LW_REF, zorder=0.1)
         sub.set_xlim(*xlim)
@@ -863,8 +934,8 @@ def panel_forest(ax):
 # its own reserve: every left reserve is the column lock the canvas
 # measures, topped up by ``_equalise_row`` so panels of one row that start
 # in different grid columns still share one axes-box width.
-CANVAS_H_PT = 413.0                       # compact standard-task figure
-ROW_H_PT = (68.0, 87.0, 123.0)
+CANVAS_H_PT = 460.0                       # compact standard-task figure
+ROW_H_PT = (68.0, 87.0, 170.0)
 VGUTTER_PT = 62.0 / 3.0 + 25.0
 
 

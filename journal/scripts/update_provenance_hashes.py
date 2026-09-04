@@ -135,7 +135,7 @@ NEW_DETAIL_ASSETS = {
         "figure": "fig2",
         "path": "figures/main/figure_02.pdf",
         "generator": "scripts/build_main_figure_10.py",
-        "notes": "Route-dictionary atlas: unified definition, trained-capture gallery, anatomical routes and the alignment-bandwidth plane with the utility-argmax exhibit.",
+        "notes": "Route-dictionary method figure: unified definition, trained-capture gallery, anatomical routes and the task-to-dictionary roadmap; the alignment-bandwidth plane lives in Figure 4H.",
     },
     "branchconflict.asset": {
         "figure": "fig5",
@@ -215,8 +215,8 @@ NEW_DETAIL_ASSETS = {
 NEW_PROVENANCE_ENTRIES = {
     "factorial.outcomes": {
         "record_type": "panel_source",
-        "figure": "figS30",
-        "panel": "a-d",
+        "figure": "fig3/figS30",
+        "panel": "g/a-d",
         "path": "source_data/mnist_between_within_factorial/seed_outcomes.csv",
         "generator": "scripts/collect_mnist_between_within_factorial.py",
         "replication_unit": "paired training seed (n=15 per dynamics)",
@@ -233,8 +233,8 @@ NEW_PROVENANCE_ENTRIES = {
     },
     "factorial.contrasts": {
         "record_type": "panel_source",
-        "figure": "figS30",
-        "panel": "c,d",
+        "figure": "fig3/figS30",
+        "panel": "g/c,d",
         "path": "source_data/mnist_between_within_factorial/paired_contrasts.csv",
         "generator": "scripts/collect_mnist_between_within_factorial.py",
         "replication_unit": "paired training seed (n=15 per dynamics)",
