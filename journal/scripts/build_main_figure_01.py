@@ -315,13 +315,23 @@ def panel_b(ax):
     # drops to its own line, runs back under the output column and turns UP
     # into the soma, so the head is vertical and aimed at what it delivers to.
     drop = f.fy(9.4)
-    for y in unit_ys:
+    # Each delivery is named delta_1..delta_4, matching y_1..y_4: with one
+    # label on the shared bus the return read as a broadcast scalar, i.e.
+    # the strict-scalar control of Fig. 3 rather than the neuron-specific
+    # feedback the panel is meant to show.  The label sits right of its
+    # arrow, under the forward stroke and above the dashed return line.
+    for index, y in enumerate(unit_ys, start=1):
         ax.plot([fb_x, unit_x], [y - drop, y - drop], color=BLUE,
                 lw=LW_HAIR, zorder=2.4, **fb_dash)
         f.arrow((unit_x, y - drop), (unit_x, y - f.fy(3.4)), color=BLUE,
                 lw=LW_HAIR, head=3.2, zorder=2.4)
-    ax.text(fb_x - f.fx(4.0), 0.365, "δᵤ", ha="right", va="center",
-            fontsize=PT_ANNOT, color=BLUE)
+        ax.text(unit_x + f.fx(3.0), y - f.fy(6.0),
+                f"δ{SUBSCRIPT_DIGITS[index]}", ha="left", va="center",
+                fontsize=PT_SMALL, color=BLUE, zorder=7)
+    # The bus keeps its generic name over its return run under the output
+    # column, where it no longer competes with a per-unit label.
+    ax.text((rd_cx + fb_x) / 2.0, fb_y + f.fy(4.0), "δᵤ", ha="center",
+            va="bottom", fontsize=PT_ANNOT, color=BLUE)
 
 
 # ── C: coordinate -> address -> gain (the headline ladder) ────────────────
@@ -409,6 +419,11 @@ def _rung_tree(f, rect, rung):
             arrowstyle="-|>,head_length=1.7,head_width=1.1",
             mutation_scale=1.0, color=BLUE, lw=LW_HAIR, capstyle="round",
             zorder=4.5))
+    # The ring names the compartment n that alpha~_n is the gain OF: the
+    # route's terminal node JLL, in panel D's black-ring idiom scaled to the
+    # rung (D's 8 pt ring on a 9 pt segment would swallow the fork).
+    sub.plot([CT.P["JLL"][0]], [CT.P["JLL"][1]], marker="o", ms=6.4,
+             mfc="none", mec=INK, mew=LW_EDGE, ls="none", zorder=4.4)
     sub.text(-0.52, 0.55, "α̃ₙ", ha="right", va="center",
              fontsize=PT_SMALL, color=BLUE)
 
@@ -433,7 +448,16 @@ def panel_c(ax):
 
 
 # ── D: local eligibility x transported error ──────────────────────────────
-SYN_F = 0.55                     # tagged synapse along the JRL -> T6 branch
+# The tagged synapse sits on the JR -> JRL segment, just proximal to the
+# ring at JRL: on the JRL -> T6 branch (distal to the ring, the library's
+# eligibility-mode placement) the compartment hosting synapse i was
+# ambiguous.  The segment is ~19 pt long and must hold the JR junction, the
+# alpha_3 route arrow, the 4.6 pt synapse and the 8 pt ring in a line, so the
+# arrow is set proximally (lerp .15-.43) and the synapse at .605: ~0.8 pt of
+# clear span on each side of the dot.
+SYN_F = 0.605                    # tagged synapse along the JR -> JRL segment
+_ROUTE_ARROW = (0.32, 0.60)      # lerp span of the route arrow on a segment
+_ROUTE_ARROW_LAST = (0.15, 0.43)  # the synapse-bearing JR -> JRL segment
 
 
 def panel_d(ax):
@@ -468,29 +492,34 @@ def panel_d(ax):
     t.junctions(edge=GHOST)
     t.junctions(names=("JRL",))
     t.soma(SOMA, RIM)
-    syn = CT._lerp("JRL", "T6", SYN_F)
-    t.dot(syn, 4.6, EXC, RIM, LW_HAIR)
+    syn = CT._lerp("JR", "JRL", SYN_F)
 
-    path = [(CT.ROOT_PT, CT.P["J1"], LW_DATA),
-            (CT.P["J1"], CT.P["JR"], LW_ERR_ARROW),
-            (CT.P["JR"], CT.P["JRL"], LW_EDGE)]
-    for a, b, lw in path:
+    path = [(CT.ROOT_PT, CT.P["J1"], LW_DATA, _ROUTE_ARROW),
+            (CT.P["J1"], CT.P["JR"], LW_ERR_ARROW, _ROUTE_ARROW),
+            (CT.P["JR"], CT.P["JRL"], LW_EDGE, _ROUTE_ARROW_LAST)]
+    for a, b, lw, (f0, f1) in path:
         sub.plot([a[0], b[0]], [a[1], b[1]], color=BLUE, lw=lw,
                  solid_capstyle="round", zorder=2.6)
         sub.add_patch(FancyArrowPatch(
-            CT._lerp(a, b, 0.32), CT._lerp(a, b, 0.60),
+            CT._lerp(a, b, f0), CT._lerp(a, b, f1),
             arrowstyle="-|>,head_length=3.2,head_width=2.0",
             mutation_scale=1.0, color=BLUE, lw=lw, capstyle="round",
             zorder=4.5))
+    # The synapse is drawn after the route so it sits ON the branch rather
+    # than under the blue stroke that now runs beneath it.
+    t.dot(syn, 4.6, EXC, RIM, LW_HAIR, zorder=4.6)
     sub.plot([CT.P["JRL"][0]], [CT.P["JRL"][1]], marker="o", ms=8.0,
              mfc="none", mec=INK, mew=LW_EDGE, ls="none", zorder=4.4)
-    sub.text(-0.30, -0.02, "δᵤ", ha="right", va="center",
+    # The soma carries delta_0 = f_0'(V_0) delta_u (the library's own
+    # transport-mode label), so the drawn bracket [a3 a2 a1 delta_0] IS
+    # Eq. pathgain and not its identity-nonlinearity special case.
+    sub.text(-0.30, -0.02, "δ₀", ha="right", va="center",
              fontsize=PT_SMALL, color=BLUE)
     sub.text(0.24, 0.44, "α₁", ha="left", va="center",
              fontsize=PT_SMALL, color=BLUE)
     sub.text(0.74, 0.92, "α₂", ha="left", va="center",
              fontsize=PT_SMALL, color=BLUE)
-    sub.text(0.22, 1.98, "α₃", ha="right", va="center",
+    sub.text(0.40, 1.72, "α₃", ha="right", va="center",
              fontsize=PT_SMALL, color=BLUE)
     sub.text(0.16, 2.66, "qₙ", ha="right", va="center",
              fontsize=PT_SMALL, color=INK)
@@ -502,7 +531,9 @@ def panel_d(ax):
     kx = key[0] + f.fx(4.0)
     lx = key[0] + f.fx(11.0)
     head_y = key[1] + key[3] - f.fy(8.0)
-    ax.text(key[0], head_y, "directed-tree eligibility  eᵢ", ha="left", va="center",
+    # No symbol in the heading: e_i is the POINT-neuron eligibility of
+    # Eq. pointneuron, and the dendritic factor carries no symbol in the text.
+    ax.text(key[0], head_y, "directed-tree eligibility", ha="left", va="center",
             fontsize=PT_SMALL, color=MUTE, zorder=6)
     # mute scaffolding rule instead of a box: it groups the three rows and
     # carries the column out to the cell edge without a second key convention
@@ -537,7 +568,7 @@ def panel_d(ax):
     # The transported factor is spelled as the drawn path product, so the
     # equation's second bracket names the alpha glyphs on the tree above
     # (soma error delta_u times the per-branch gains, in route order).
-    ax.text(0.5, f.fy(23.0), "directed tree:  ∂ℒ / ∂gᵢ = [xᵢ Rₙᵗᵒᵗ (Eᵢ − Vₙ)] [α₃α₂α₁ δᵤ]",
+    ax.text(0.5, f.fy(23.0), "directed tree:  ∂ℒ / ∂gᵢ = [xᵢ Rₙᵗᵒᵗ (Eᵢ − Vₙ)] [α₃α₂α₁ δ₀]",
             ha="center", va="center", fontsize=PT_ANNOT, color=INK)
     ax.text(0.5, f.fy(5.0), "general adjoint:  Jᵥᵀ q = ∇ᵥℒ,   ∂ℒ / ∂gᵢ = xᵢ (Eᵢ − Vₙ) qₙ",
             ha="center", va="center", fontsize=PT_SMALL, color=MUTE)
@@ -633,7 +664,7 @@ STREAMS = (
     (_glyph_coord_address, "Branch addresses",
      "conflict + hierarchy"),
     (_glyph_depth, "Physical depth",
-     "task-aligned stage count"),
+     "shared signal loses alignment (S31)"),
     (_glyph_anatomy_gain, "Biological boundary",
      "capacity, gain, alignment"),
 )

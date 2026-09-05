@@ -54,7 +54,7 @@ import numpy as np
 import pandas as pd
 from matplotlib.colors import to_rgb
 from matplotlib.patches import Rectangle
-from matplotlib.ticker import PercentFormatter
+from matplotlib.ticker import NullFormatter, PercentFormatter
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 if str(SCRIPT_DIR) not in sys.path:
@@ -116,16 +116,19 @@ MNIST_ACC_LIM = (0.820, 0.982)
 MNIST_ACC_TICKS = [0.84, 0.88, 0.92, 0.96]
 ACC_LABEL = "held-out accuracy"
 
-# Common effect-size axis for every block in the forest.
-# Seed dots span [-0.53, 5.89] and every mean/CI lies in [-0.21, 4.88],
-# so the old 8.85 upper bound left ~30% of the axis empty and
-# compressed the near-zero assignment contrasts that carry the point.
-GAIN_LIM = (-1.1, 13.0)
-# The assignment strip keeps its own pp scale, but its zero sits at the SAME
-# axis fraction as the gain strip's (1.1/14.1), so the two stacked dashed
-# references align vertically instead of reading as a drafting slip.
-ASSIGN_LIM = (-0.0925, 1.093)
-ASSIGN_TICKS = [0, 0.5, 1]
+# Effect-size axes of the forest.  Neither strip's limits are typed in:
+# each is derived from the rows it draws (every paired seed difference and
+# every interval end) padded by STRIP_PAD of that span, so a refreshed
+# table cannot silently push a seed dot past the axis edge -- the fixed
+# limits this replaces clipped five upper-tail dots of the ladder strip and
+# five negative dots of the readout-minus-DFA block.  The two strips keep
+# their own pp scales, but the zero of both sits at ONE axis fraction
+# (solved in ``_align_zero`` from whichever strip needs the larger left
+# share), so the stacked dashed references align vertically instead of
+# reading as a drafting slip.  Ticks are typed, then checked against the
+# derived limits in ``panel_forest``.
+STRIP_PAD = 0.04
+ASSIGN_TICKS = [0, 0.4, 0.8]
 FOREST_LABEL_RESERVE_PT = 99.0   # widest row name + tick pad + header hang
 GAIN_TICKS = [0, 4, 8, 12]
 GAIN_LABEL = "accuracy difference (pp)"
@@ -150,6 +153,19 @@ SEED_FAN = 0.05
 def _fan(n):
     """Symmetric deterministic spread for a per-seed cloud."""
     return np.linspace(-SEED_FAN, SEED_FAN, n) if n > 1 else np.zeros(n)
+
+
+def _definitional_marker(ax, x, y, *, color, marker):
+    """One open marker with a dashed edge: a value fixed by definition.
+
+    Measured means are open markers with a solid edge at LW_ERR; a
+    definitional constant (cosine one for exact transport in C, the
+    normalised soma ratio in D) gets the dashed edge at the reference
+    weight and a mute "def." tag beside it, so the two are never confused.
+    """
+    ax.scatter([x], [y], s=MARKER_MS ** 2, marker=marker,
+               facecolor="white", edgecolor=color, linewidth=LW_REF,
+               linestyle=(0.0, (1.4, 1.1)), zorder=5)
 
 
 def _style_feedback_ticks(ax):
@@ -424,10 +440,21 @@ def panel_transport_profile(ax):
                     alpha=SEED_ALPHA * 0.6, zorder=2)
         mean = prof.mean(axis=0)
         ax.plot(x_arch, mean, color=colors[arch], lw=LW_DATA, zorder=4)
+        # The soma column is skipped: it is identically 1 (each branch is
+        # normalised to its own soma), and drawing it through the mean
+        # helper printed a zero-width interval as if it had been estimated.
         for index, x in enumerate(x_arch):
+            if index == 0:
+                continue
             errorbar_mean(ax, x, prof[:, index], colors[arch],
                           seed=580 + 10 * index + (arch == "shunting"),
                           marker=marker[arch])
+    # One definitional marker at the soma for both architectures, in the
+    # same open-dashed-mute "def." token as panel C's reference diamond: the
+    # two mean lines leave it in their own colours.
+    _definitional_marker(ax, xs[0], 1.0, color=MUTE, marker="D")
+    ax.text(xs[0], 1.30, "def.", fontsize=PT_SMALL, color=MUTE,
+            ha="center", va="bottom", zorder=5)
     ax.set_xlim(-0.25, 2.25)
     ax.set_xticks(xs, ["soma", "mid", "distal"])
     # Each branch value is its batch-RMS exact compartment error divided by
@@ -443,10 +470,15 @@ def panel_transport_profile(ax):
     # The raw-additive distal field is amplified above the soma whereas the
     # shunting field is attenuated. A logarithmic ordinate keeps both regimes
     # legible without compressing the smaller shunting values against zero.
+    # The 1-2-5 major ladder and unlabelled minor ticks at the remaining
+    # integers of each decade declare the scale; three ticks at 0.2/1/5 did
+    # not, and a reader took the ordinate for linear.
     ax.set_yscale("log")
     ax.set_ylim(0.16, 6.4)
-    ax.set_yticks([0.2, 1.0, 5.0])
-    ax.set_yticklabels(["0.2", "1", "5"])
+    ax.set_yticks([0.2, 0.5, 1.0, 2.0, 5.0])
+    ax.set_yticklabels(["0.2", "0.5", "1", "2", "5"])
+    ax.set_yticks([0.3, 0.4, 0.6, 0.7, 0.8, 0.9, 3.0, 4.0, 6.0], minor=True)
+    ax.yaxis.set_minor_formatter(NullFormatter())
     ax.set_ylabel("mean batch-RMS ratio")
     return ax
 
@@ -562,11 +594,14 @@ def panel_gradient(ax):
     _paired_ladder(ax, grad, "branch_numel_weighted_cosine", gradient=True)
     ax.axhline(0, color=MUTE, ls="--", lw=LW_REF, zorder=0)
     # Exact path transport is the exact gradient, so its cosine is one by
-    # definition. Show that ceiling as a reference marker rather than as an
-    # empirical seed cloud or a third trained cohort.
-    ax.scatter([2.0], [1.0], s=MARKER_MS ** 2, marker="D",
-               facecolor="white", edgecolor=COLORS["oracle"],
-               linewidth=LW_ERR, zorder=5)
+    # definition: no cohort was trained or measured there.  The reference
+    # marker therefore wears the figure's definitional-constant token (open,
+    # dashed edge at the reference weight, mute "def." tag) rather than the
+    # solid-edged open marker every measured mean uses, so it cannot be read
+    # as a third seed cloud or a mean with a vanishing interval.
+    _definitional_marker(ax, 2.0, 1.0, color=COLORS["oracle"], marker="D")
+    ax.text(2.0, 0.905, "def.", fontsize=PT_SMALL, color=MUTE,
+            ha="center", va="top", zorder=5)
     ax.set_xticks([0, 1, 2])
     ax.set_xticklabels(ALIGNMENT_LADDER_TICKS)
     ax.set_xlim(-0.35, 2.35)
@@ -809,15 +844,46 @@ def _factorial_rows():
 HEADER_LEFT_PT = 80.0
 
 
+def _row_extent(row):
+    """Every x this row puts ink at: seed dots, mean and interval ends."""
+    return np.concatenate([np.asarray(row["seeds"], dtype=float),
+                           [row["mean"], row["lo"], row["hi"]]])
+
+
+def _strip_extent(groups):
+    """Padded data extent of one strip over every row it draws."""
+    drawn = np.concatenate([_row_extent(row) for _h, rows in groups
+                            for row in rows])
+    lo, hi = float(drawn.min()), float(drawn.max())
+    pad = STRIP_PAD * (hi - lo)
+    return lo - pad, hi + pad
+
+
+def _align_zero(extents):
+    """Widen each strip on the left until x = 0 sits at one shared fraction.
+
+    Every strip straddles zero; the one whose padded extent needs the
+    largest left share fixes the fraction, and the others gain empty room
+    on the left (never on the right, where the data end) to match it.
+    """
+    for lo, hi in extents:
+        if not lo < 0.0 < hi:
+            raise AssertionError(f"forest strip does not straddle zero: "
+                                 f"({lo:.3f}, {hi:.3f})")
+    frac = max((0.0 - lo) / (hi - lo) for lo, hi in extents)
+    return [(-frac / (1.0 - frac) * hi, hi) for _lo, hi in extents]
+
+
 def panel_forest(ax):
     """Every paired contrast of the figure on one effect-size axis.
 
     Two stacked strips, one x scale each: the ladder blocks live on a
-    0--13 pp axis, and the assignment block gets its own 0--1 pp axis --
+    ~15 pp axis, and the assignment block gets its own ~1 pp axis --
     on the shared scale its half-point effects sat inside one marker width
     of zero and their ordering was unreadable.  The point and its whisker
     ARE the estimate and the interval; the exact values are in Source Data
-    and the running text.
+    and the running text.  Both strips' limits are derived from the rows
+    they draw (``_strip_extent``, ``_align_zero``), never typed in.
     """
     from matplotlib import transforms as mtransforms
 
@@ -840,7 +906,7 @@ def panel_forest(ax):
           ("path resolution (B)", mnist["exact path - neuron specific"]),
           ("neuron-specific under DFA source (S30)",
            factorial["dfa_neuron_minus_scalar"])],
-         GAIN_LIM, GAIN_TICKS, GAIN_LABEL, False),
+         GAIN_TICKS, GAIN_LABEL, False),
         ((0.0, 0.36),
          [("ownership: correct − deranged (F)", _ownership_rows()),
           # Only the neuron-rung gap is drawn; the path-rung gap (at most
@@ -848,10 +914,12 @@ def panel_forest(ax):
           # legible.
           ("readout BP − DFA source (S30)",
            factorial["bp_minus_dfa"][:2])],
-         ASSIGN_LIM, ASSIGN_TICKS, GAIN_LABEL, True),
+         ASSIGN_TICKS, GAIN_LABEL, True),
     ]
+    xlims = _align_zero([_strip_extent(groups) for _g, groups, *_r in strips])
     ax.set_axis_off()
-    for (y0, height), groups, xlim, xticks, xlabel, zero_below in strips:
+    for ((y0, height), groups, xticks, xlabel, zero_below), xlim in zip(
+            strips, xlims):
         sub = ax.inset_axes([0.0, y0, 1.0, height])
         sub.set_facecolor("none")
         header_trans = mtransforms.offset_copy(
@@ -915,6 +983,21 @@ def panel_forest(ax):
         else:
             sub.axvline(0.0, color=MUTE, ls="--", lw=LW_REF, zorder=0.1)
         sub.set_xlim(*xlim)
+        # Nothing this strip draws may lie outside its own axis: a clipped
+        # seed dot silently misreports the paired distribution.
+        axis_lo, axis_hi = sub.get_xlim()
+        for _header, rows in groups:
+            for row in rows:
+                drawn = _row_extent(row)
+                if drawn.min() < axis_lo or drawn.max() > axis_hi:
+                    raise AssertionError(
+                        f"forest row {row['label']!r} draws outside its "
+                        f"strip: [{drawn.min():.3f}, {drawn.max():.3f}] vs "
+                        f"xlim ({axis_lo:.3f}, {axis_hi:.3f})")
+        if any(t < axis_lo or t > axis_hi for t in xticks):
+            raise AssertionError(
+                f"forest ticks {xticks} fall outside the derived xlim "
+                f"({axis_lo:.3f}, {axis_hi:.3f})")
         sub.set_xticks(xticks)
         if xlabel:
             # A tight pad on both strips: the upper strip's label lives in

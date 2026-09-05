@@ -25,6 +25,16 @@ asserted per seed.  Zero-norm fields are dropped before averaging; each
 seed's statistic is the mean captured fraction over its remaining
 example-neuron fields, and the training seed remains the inferential unit.
 
+Outputs (all under ``source_data/route_dictionary_atlas/``):
+``capture_by_seed.csv`` holds one row per checkpoint -- the seed-level mean
+captures, probe accuracy, field counts, per-slot ``|dL/dV|`` sums and
+checkpoint hashes; ``capture_summary.csv`` holds the per-dynamics seed means
+with their Student t intervals; ``example_field.csv`` holds the
+population-mean per-compartment ``|dL/dV|`` profile.  After writing, the
+script re-reads ``capture_by_seed.csv`` and asserts that both derived tables
+are reproduced from it to ``1e-12``, so the displayed summary is never
+detached from its seed-level source.
+
 Compartment ordering of the 12-vector (documented here, used everywhere in
 this script): slots 0-2 are the three proximal compartments (stage 1) in
 soma-major order, and slots ``3 + 3*s + c`` for ``s, c in {0, 1, 2}`` are the
@@ -79,6 +89,15 @@ N_CHILDREN = 3          # distal children per proximal branch (stage 0)
 N_ROUTED = N_PROXIMAL * (1 + N_CHILDREN)   # 12 routed compartments
 OUT_DIR = ROOT / "source_data" / "route_dictionary_atlas"
 BASES = ("broadcast_k1", "subtrees_k3", "exact_k12")
+# Leading columns of capture_by_seed.csv; every other scalar the per-seed
+# frame holds follows in frame order, then the 12 per-slot |dL/dV| sums.
+PER_SEED_LEADING_COLUMNS = (
+    "dynamics", "seed", "checkpoint_sha256", "probe_accuracy", "n_fields",
+    "capture_broadcast_k1", "capture_subtrees_k3", "capture_exact_k12",
+)
+SLOT_SUM_COLUMNS = tuple(f"abs_error_sum_slot_{slot:02d}"
+                         for slot in range(N_ROUTED))
+REPRODUCTION_TOLERANCE = 1e-12
 
 
 def route_dictionaries() -> dict[str, torch.Tensor]:
@@ -242,6 +261,69 @@ def t_interval(values: np.ndarray) -> tuple[float, float]:
     return mean - half, mean + half
 
 
+def per_seed_table(frame: pd.DataFrame) -> pd.DataFrame:
+    """One public row per checkpoint: the seed-level source of both derived
+    tables.  Every scalar of the atlas frame is kept, and the private
+    per-slot |dL/dV| sums are expanded into ``abs_error_sum_slot_*`` columns
+    so the example-field profile is recomputable from this file as well."""
+    table = frame.drop(columns=["_abs_sum_per_slot", "_n_fields_total"]).copy()
+    table["n_fields_total"] = frame["_n_fields_total"].astype(int)
+    slot_sums = np.stack(frame["_abs_sum_per_slot"].to_list())
+    for slot, column in enumerate(SLOT_SUM_COLUMNS):
+        table[column] = slot_sums[:, slot]
+    trailing = [c for c in table.columns if c not in PER_SEED_LEADING_COLUMNS]
+    table = table[list(PER_SEED_LEADING_COLUMNS) + trailing]
+    dynamics_order = {name: i for i, name in enumerate(SWEEPS)}
+    return table.sort_values(
+        ["dynamics", "seed"], kind="stable",
+        key=lambda col: col.map(dynamics_order) if col.name == "dynamics"
+        else col,
+    ).reset_index(drop=True)
+
+
+def verify_reproducible_from_seeds(per_seed_path: Path, summary_path: Path,
+                                   field_path: Path) -> float:
+    """Re-derive the summary and example-field tables from the written
+    per-seed file and require agreement to ``REPRODUCTION_TOLERANCE``.
+    Returns the largest absolute discrepancy found."""
+    read = {"float_precision": "round_trip"}
+    per_seed = pd.read_csv(per_seed_path, **read)
+    summary = pd.read_csv(summary_path, **read)
+    field = pd.read_csv(field_path, **read)
+    worst = 0.0
+    for row in summary.itertuples(index=False):
+        values = per_seed.loc[per_seed.dynamics.eq(row.dynamics),
+                              f"capture_{row.basis}"].to_numpy()
+        if len(values) != int(row.n_seeds):
+            raise RuntimeError(
+                f"{per_seed_path}: {len(values)} {row.dynamics} seeds, "
+                f"summary claims {row.n_seeds}")
+        low, high = t_interval(values)
+        for observed, expected in ((float(values.mean()), row.mean_capture),
+                                   (low, row.ci95_low_capture),
+                                   (high, row.ci95_high_capture)):
+            worst = max(worst, abs(observed - expected))
+    for dynamics, block in field.groupby("dynamics", sort=False):
+        seeds = per_seed[per_seed.dynamics.eq(dynamics)]
+        raw = seeds[list(SLOT_SUM_COLUMNS)].to_numpy().sum(axis=0) \
+            / float(seeds.n_fields_total.sum())
+        normalized = raw / raw.max()
+        block = block.sort_values("compartment_index")
+        if block.compartment_index.to_list() != list(range(N_ROUTED)):
+            raise RuntimeError(f"{field_path}: {dynamics} slots incomplete")
+        worst = max(
+            worst,
+            float(np.abs(block.mean_abs_error_raw.to_numpy() - raw).max()),
+            float(np.abs(block.mean_abs_error.to_numpy() - normalized).max()),
+        )
+    if worst > REPRODUCTION_TOLERANCE:
+        raise RuntimeError(
+            f"{summary_path} / {field_path} are not reproduced from "
+            f"{per_seed_path}: max |difference| {worst:.3g} > "
+            f"{REPRODUCTION_TOLERANCE:g}")
+    return worst
+
+
 def main() -> None:
     torch.set_grad_enabled(True)
     x, y = probe_batch()
@@ -270,6 +352,8 @@ def main() -> None:
 
     frame = pd.DataFrame(rows)
     OUT_DIR.mkdir(parents=True, exist_ok=True)
+    by_seed = per_seed_table(frame)   # `per_seed` is a loop slice below
+    by_seed.to_csv(OUT_DIR / "capture_by_seed.csv", index=False)
 
     summary_rows = []
     for dynamics in SWEEPS:
@@ -309,6 +393,14 @@ def main() -> None:
             })
     pd.DataFrame(field_rows).to_csv(OUT_DIR / "example_field.csv", index=False)
 
+    # The seed-level file is the source of record: both derived tables must
+    # recompute from it exactly (Student t interval included).
+    reproduction_error = verify_reproducible_from_seeds(
+        OUT_DIR / "capture_by_seed.csv",
+        OUT_DIR / "capture_summary.csv",
+        OUT_DIR / "example_field.csv",
+    )
+
     git_head = subprocess.run(
         ["git", "-C", str(REPO), "rev-parse", "HEAD"],
         check=True, capture_output=True, text=True).stdout.strip()
@@ -346,6 +438,13 @@ def main() -> None:
         "n_examples": BATCH,
         "n_seeds": {dynamics: int(frame.dynamics.eq(dynamics).sum())
                     for dynamics in SWEEPS},
+        "per_seed_file": (
+            "capture_by_seed.csv: one row per checkpoint with the seed-level "
+            "mean captures, probe accuracy, field counts, per-slot |dL/dV| "
+            "sums and checkpoint hashes; capture_summary.csv and "
+            "example_field.csv are re-derived from it after writing and "
+            f"must agree to {REPRODUCTION_TOLERANCE:g}"
+        ),
         "probe_batch": "first 2048 MNIST test images (identical to "
                        "analyze_fig2_path_gain_dispersion.py)",
         # Relative to the lab run base, as the release path audit requires.
@@ -362,9 +461,13 @@ def main() -> None:
         json.dump(manifest, fh, indent=2)
         fh.write("\n")
 
+    print(f"wrote {OUT_DIR / 'capture_by_seed.csv'} "
+          f"({len(by_seed)} rows x {by_seed.shape[1]} columns)")
     print(f"wrote {OUT_DIR / 'capture_summary.csv'} ({len(summary)} rows)")
     print(f"wrote {OUT_DIR / 'example_field.csv'} ({len(field_rows)} rows)")
     print(f"wrote {OUT_DIR / 'manifest.json'}")
+    print(f"per-seed reproduction check: max |difference| "
+          f"{reproduction_error:.3g} <= {REPRODUCTION_TOLERANCE:g}")
     print(summary.to_string(index=False))
 
 

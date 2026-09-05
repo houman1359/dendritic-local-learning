@@ -298,6 +298,21 @@ def panel_tree_relation(ax):
     ax.tick_params(axis="x", length=0, pad=2.5)
     _direct_label(ax, 0.52, 0.152, "focal shunt", SHUNT)
     _direct_label(ax, 0.52, 0.124, "current injection", ADDITIVE)
+
+    # The injection's two off-route squares sit at 0 with no whisker because
+    # they are zero by construction: the soma-restoring current isolates every
+    # subtree that does not contain the site.  Verify the structural zero from
+    # the frozen table before claiming it on the ink (site-level rows, unit
+    # dose): every 'unrelated' change is numerically zero.
+    injection_sites = category[category.perturbation.eq("matched additive")]
+    unrelated = injection_sites[
+        injection_sites.category.eq("unrelated")
+    ].median_abs_log_gradient_change.to_numpy(float)
+    assert unrelated.size and np.all(np.abs(unrelated) < 1e-9), (
+        "injection 'unrelated' changes are no longer structurally zero")
+    ax.text(3.35, 0.031, "injection off-route:\nzero by construction",
+            ha="center", va="bottom", fontsize=PT_SMALL, color=MUTE,
+            linespacing=1.15, zorder=6)
     _title(ax, "Tree-relation selectivity")
     return ax
 
@@ -385,11 +400,40 @@ def panel_factor_freeze(ax):
 
 
 # ── panel E: active-channel dose response ────────────────────────────────
-def panel_active_dose(ax, summary):
-    for perturbation, color, marker in (
-        ("focal shunt", SHUNT, M_SHUNT),
-        ("matched additive", ADDITIVE, M_ADD),
+# The passive model at the SAME calibration as the active ensemble (frozen
+# phase-1 table): permissive membrane resistance, unit background leak, dose
+# normalized to the local input conductance.  Its curve is overlaid on E so
+# the reader sees that adding the active conductances preserves the passive
+# dose response rather than merely taking the panel's word for it.
+PASSIVE_CALIBRATION = {
+    "membrane_resistance_ohm_cm2": 1000,
+    "background_leak_multiplier": 1,
+    "dose_scheme": "input_conductance_normalized",
+}
+# Passive overlay tint: the same two hues at a second lightness (the figure's
+# existing rule for a second cohort of one condition), dashed and stroked at
+# the reference weight so it reads as a coincident second series ON the
+# active curve instead of hiding under it.
+PASSIVE_TINT_PCT = 42
+
+
+def load_passive_reference():
+    table = pd.read_csv(
+        DATA / "focal_selectivity_phase1" / "condition_summary.csv")
+    for column, value in PASSIVE_CALIBRATION.items():
+        table = table[table[column].eq(value)]
+    assert len(table) == 6, (
+        f"expected 2 perturbations x 3 doses at the active calibration, "
+        f"got {len(table)} rows")
+    return table
+
+
+def panel_active_dose(ax, summary, passive):
+    for perturbation, color_name, marker in (
+        ("focal shunt", "shunting", M_SHUNT),
+        ("matched additive", "additive", M_ADD),
     ):
+        color = COLORS[color_name]
         part = summary[summary.perturbation.eq(perturbation)].sort_values(
             "dose_relative_to_local_input_conductance"
         )
@@ -397,11 +441,23 @@ def panel_active_dose(ax, summary):
         means = part.mean_localization_index.to_numpy(float)
         lows = part.ci95_low_localization_index.to_numpy(float)
         highs = part.ci95_high_localization_index.to_numpy(float)
+
+        # Active series: the connecting line goes down first, the passive
+        # dashes ride on top of it, and the summary markers with their
+        # whiskers come last so no dash crosses a hollow marker face.
+        ax.plot(x, means, lw=LW_DATA, color=color, zorder=3)
+        ref = passive[passive.perturbation.eq(perturbation)].sort_values(
+            "dose_value")
+        x_ref = ref.dose_value.to_numpy(float)
+        assert np.allclose(x_ref, x), "passive and active doses differ"
+        ax.plot(x_ref, ref.mean_localization_index.to_numpy(float),
+                ls="--", lw=LW_REF, color=mix(color_name, PASSIVE_TINT_PCT),
+                zorder=3.3)
         ax.errorbar(x, means, yerr=[means - lows, highs - means],
-                    marker=marker, ms=MEAN_MS, lw=LW_DATA, color=color,
+                    marker=marker, ms=MEAN_MS, ls="none", color=color,
                     markerfacecolor="white", markeredgecolor=color,
                     markeredgewidth=LW_ERR, elinewidth=LW_ERR,
-                    capsize=ERR_CAPSIZE, zorder=3)
+                    capsize=ERR_CAPSIZE, zorder=3.6)
     ax.set_xscale("log")
     _tick_labels(ax, "x", (0.25, 1, 4), ("0.25", "1", "4"))
     ax.set_xlim(0.205, 5.0)
@@ -409,8 +465,23 @@ def panel_active_dose(ax, summary):
     _tick_labels(ax, "y", (0.0, 0.5, 1.0), ("0", "0.5", "1.0"))
     ax.set_xlabel("normalized shunt dose", fontsize=PT_LABEL, color=INK)
     ax.set_ylabel(LOCAL_LABEL, fontsize=PT_LABEL, color=INK)
-    _direct_label(ax, 0.245, 1.30, "focal shunt", SHUNT)
-    _direct_label(ax, 0.245, 1.06, "current injection", ADDITIVE)
+
+    # Direct labels, each with a one-line mute sub-label naming the SIGN of
+    # the effect that the unsigned index hides: the shunt attenuates and the
+    # injection enhances descendant credit (signed localization negative in
+    # 8/8 cells for the shunt and positive in 8/8 for the injection at every
+    # dose of cell_condition_metrics.csv).  The two interventions move
+    # descendant credit in opposite directions; they are not one effect at
+    # two strengths.
+    _direct_label(ax, 0.245, 1.405, "focal shunt", SHUNT)
+    ax.text(0.245, 1.29, "attenuates descendants", color=MUTE,
+            fontsize=PT_SMALL, ha="left", va="center", zorder=6)
+    _direct_label(ax, 0.245, 1.135, "current injection", ADDITIVE)
+    ax.text(0.245, 1.02, "enhances descendants", color=MUTE,
+            fontsize=PT_SMALL, ha="left", va="center", zorder=6)
+    ax.text(0.245, 0.80, "dashed: passive,\nsame calibration", color=MUTE,
+            fontsize=PT_SMALL, ha="left", va="center", linespacing=1.15,
+            zorder=6)
     # E carries the same quantity as C and D on a wider range; the caption
     # carries that disclosure rather than the panel.
     _title(ax, "Active dose response")
@@ -426,6 +497,30 @@ CONTRAST_LABEL = "shunt − current-injection localization"
 # The same quantity, set on two lines where it is the (rotated) y axis of a
 # panel whose row is shorter than the label is long.
 CONTRAST_LABEL_Y = "shunt − current injection\nlocalization"
+# Membrane-resistance key for every marker of F.  The initial sample's labels
+# are one tick row at this y (top edge), below every whisker of that series;
+# the disjoint cohort's labels sit above their own whiskers, nudged in x
+# (multiplicative, log axis) only where a label would otherwise touch the
+# cohort's own descending curve.
+RM_ROW_Y = -0.0072
+# The multiplicative nudges are 1.5-2 pt on the 40 pt-per-decade axis: the
+# initial sample's 3000/5000 and 15,000/30,000 pairs are 20 and 28 pt apart
+# on the ratio axis and their labels would otherwise touch; the disjoint
+# cohort's 3000 label would otherwise touch that cohort's own descending
+# curve.
+RM_LABEL_NUDGE = {
+    ("original_eight", "Ra150_Rm3000"): 0.951,
+    ("original_eight", "Ra150_Rm5000"): 1.051,
+    ("original_eight", "Ra150_Rm15000"): 0.963,
+    ("original_eight", "Ra150_Rm30000"): 1.038,
+    ("v661_disjoint", "Ra150_Rm3000"): 1.12,
+}
+
+
+def _rm_label(regime: str) -> str:
+    """'Ra150_Rm15000' -> '15,000'; four-digit values keep no comma."""
+    value = int(regime.split("Rm")[1])
+    return f"{value:,}" if value >= 10_000 else str(value)
 
 
 def panel_electrotonic(ax):
@@ -470,11 +565,31 @@ def panel_electrotonic(ax):
         for px, pm, _, _, regime in points:
             if regime == "Ra150_Rm15000":
                 standard[cohort] = (px, pm)
+        # Every marker is keyed to its membrane resistance so the calibration
+        # behind each point is readable off the ink (axial resistivity is
+        # fixed at 150 Ω cm in every regime drawn).  The initial sample's
+        # labels form one secondary tick row below its diamonds; the disjoint
+        # cohort's labels sit above their triangles.  Both rows are on the
+        # outside of the pair of curves, so no label crosses either series.
+        for px, _, low, high, regime in points:
+            assert regime.startswith("Ra150_Rm"), regime
+            label = _rm_label(regime)
+            nudge = RM_LABEL_NUDGE.get((cohort, regime), 1.0)
+            if cohort == "original_eight":
+                ax.text(px * nudge, RM_ROW_Y, label, ha="center", va="top",
+                        fontsize=PT_SMALL, color=MUTE, zorder=6)
+            else:
+                ax.text(px * nudge, high + 0.0035, label, ha="center",
+                        va="bottom", fontsize=PT_SMALL, color=MUTE,
+                        zorder=6)
     _zero_line(ax)
     ax.set_xscale("log")
     _tick_labels(ax, "x", (1, 10, 100), ("1", "10", "100"))
     ax.set_xlim(0.95, 190.0)
-    ax.set_ylim(-0.013, 0.101)
+    # The y range is opened by 4.5 pt at the bottom (the Rₘ tick row of the
+    # initial sample) and 5 pt at the top (the disjoint cohort's Rₘ = 300
+    # label above its whisker); no plotted value moves.
+    ax.set_ylim(-0.0175, 0.106)
     _tick_labels(ax, "y", (0.0, 0.02, 0.04, 0.06, 0.08),
                  ("0", "0.02", "0.04", "0.06", "0.08"))
     ax.set_xlabel("median axial / leak conductance ratio", fontsize=PT_LABEL,
@@ -495,7 +610,10 @@ def panel_electrotonic(ax):
     # vertical reference line.
     standard_x = sorted(value[0] for value in standard.values())
     if len(standard_x) == 2:
-        y_bar = 0.010
+        # The bracket sits above the disjoint cohort's own Rₘ = 15,000
+        # label (which now names that marker directly), still spanning the
+        # two standard-calibration points of the two cohorts.
+        y_bar = 0.021
         ax.plot(standard_x, [y_bar, y_bar], color=MUTE, lw=LW_HAIR,
                 solid_capstyle="butt", zorder=2)
         for x_value in standard_x:
@@ -504,7 +622,7 @@ def panel_electrotonic(ax):
         # The annotation floats in the empty upper-right pocket above the
         # bracket, on two lines and with units: anchored on the bracket
         # itself it collided with the disjoint cohort's descending curve.
-        ax.text(175.0, 0.018, "standard passive\nRₘ = 15,000 Ω cm²",
+        ax.text(175.0, 0.0285, "standard passive\nRₘ = 15,000 Ω cm²",
                 ha="right", va="bottom",
                 fontsize=PT_SMALL, color=MUTE)
     _title(ax, "Electrotonic boundary")
@@ -563,6 +681,7 @@ def build() -> list[str]:
     active_summary = pd.read_csv(active / "condition_summary.csv")
     active_contrasts = pd.read_csv(active / "paired_contrasts.csv")
     active_cells = pd.read_csv(active / "cell_condition_metrics.csv")
+    passive_reference = load_passive_reference()
 
     canvas = NativeCanvas(HEIGHT_IN, 3, row_weights=list(ROW_WEIGHTS),
                           hgutter_pt=HGUTTER, vgutter_pt=VGUTTER,
@@ -590,7 +709,7 @@ def build() -> list[str]:
     panel_tree_relation(ax_b)
     panel_passive_dose(ax_c)
     panel_factor_freeze(ax_d)
-    panel_active_dose(ax_e, active_summary)
+    panel_active_dose(ax_e, active_summary, passive_reference)
     panel_electrotonic(ax_f)
     panel_contrast_forest(ax_g, active_contrasts, active_cells)
 

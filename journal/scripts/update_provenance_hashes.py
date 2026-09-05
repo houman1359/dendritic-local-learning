@@ -258,6 +258,15 @@ NEW_PROVENANCE_ENTRIES = {
         "replication_unit": "training seed (n=15 per dynamics)",
         "notes": "Broadcast, nested-subtree and exact-dictionary captures of the trained exact-path MNIST compartment-error fields.",
     },
+    "atlas.capture_by_seed": {
+        "record_type": "panel_source",
+        "figure": "fig2",
+        "panel": "b",
+        "path": "source_data/route_dictionary_atlas/capture_by_seed.csv",
+        "generator": "scripts/analyze_route_dictionary_atlas.py",
+        "replication_unit": "training seed (n=15 per dynamics)",
+        "notes": "Seed-level captures, probe accuracy, field counts and checkpoint hashes for all 30 exact-path checkpoints; the summary means and Student t intervals recompute from this file.",
+    },
     "atlas.field": {
         "record_type": "panel_source",
         "figure": "fig2",

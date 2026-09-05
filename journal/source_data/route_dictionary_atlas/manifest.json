@@ -12,6 +12,7 @@
     "additive": 15,
     "shunting": 15
   },
+  "per_seed_file": "capture_by_seed.csv: one row per checkpoint with the seed-level mean captures, probe accuracy, field counts, per-slot |dL/dV| sums and checkpoint hashes; capture_summary.csv and example_field.csv are re-derived from it after writing and must agree to 1e-12",
   "probe_batch": "first 2048 MNIST test images (identical to analyze_fig2_path_gain_dispersion.py)",
   "run_dirs": {
     "additive": [
@@ -49,6 +50,6 @@
       "journal_extension_20260820/sweep_runs/mnist_feedback_ladder/journal_mnist_feedback_ladder_exact_path_shunting_15seed_20260825173517/results/config_14"
     ]
   },
-  "git_head": "635321dedfc11723c53abf5baf28019e21983c03",
+  "git_head": "5b9d45f27a7715350341fe248f8922e1dab36e0e",
   "script": "scripts/analyze_route_dictionary_atlas.py"
 }

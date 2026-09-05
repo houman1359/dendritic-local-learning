@@ -2406,6 +2406,16 @@ FILES += (
         "current deterministic checkpoint reanalysis",
         "Displayed per-compartment |dL/dV| profile of the trained additive checkpoints; the shunting profile is included and reverses the depth weighting.",
     ),
+    SourceFile(
+        "Figure 10",
+        "b",
+        "source_data/route_dictionary_atlas/capture_by_seed.csv",
+        "Figure_10/Fig10b_dictionary_capture_by_seed.csv",
+        "seed-level capture values",
+        "training seed (n=15 per dynamics)",
+        "current deterministic checkpoint reanalysis",
+        "One row per exact-path checkpoint (15 seeds per dynamics) with its mean broadcast, nested-subtree and exact-dictionary captures, probe accuracy, field counts, per-compartment |dL/dV| sums and checkpoint hash; the panel b seed means and Student t intervals recompute from this file.",
+    ),
     # Declared in the legacy numbering ("Figure 2" = the ladder), which the
     # dictionary-forward layer maps to Figure_3/Fig3g_*: panel G now draws
     # the factorial's headline contrasts alongside the exact-readout ladder.

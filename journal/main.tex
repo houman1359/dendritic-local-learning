@@ -236,35 +236,34 @@ below.
 \centering
 \includegraphics[width=0.90\textwidth]{main/figure_01.pdf}
 \caption{\textbf{Credit assignment from a point neuron to a dendritic tree.}
-Panels \textbf{A--D} are conceptual schematics on an illustrative topology.
+\textbf{A--D} are schematics on an illustrative topology.
 \textbf{A}, At a point unit, each incoming-weight gradient combines a
-connection-specific eligibility with one neuron-specific learning signal. A
-dendritic neuron distributes conductance weights across locations that can
-receive distinct signals: replacing \(\delta_u\) by \(K\) channel values
-\(c_{u,k}\) raises within-neuron bandwidth, and a fixed address matrix
-assigns them. \textbf{B}, A circuit-level loss supplies output
+connection-specific eligibility with one neuron-specific learning signal,
+its coordinate \(\delta_u\). A dendritic neuron distributes conductance
+weights across locations that can receive distinct signals: \(K\) channel
+values \(c_{u,k}\) replace \(\delta_u\), assigned by a fixed address
+matrix. \textbf{B}, A circuit-level loss supplies output
 derivatives \(\delta_{\rm out}\), and feedback produces one learning signal
-\(\delta_u\) per neuron before routing within its arbor. Blue E and red I pools
-are forward input classes, not feedback signs; the dashed blue path is the feedback return. \textbf{C}, An
+per neuron (\(\delta_1\ldots\delta_4\)) before routing within its arbor. Blue E and red I pools
+are forward input classes, not feedback signs; dashed blue, the feedback
+return. \textbf{C}, The dotted arc marks that the coordinate stops at the soma; an
 address specifies which compartments receive a signal; route gain specifies
 its strength. The available addresses form the neuron's route
 dictionary; signals may be tree-wide or subtree-assigned. \textbf{D}, The exact conductance gradient is a local
-dendritic eligibility multiplied by a transported compartment error; here \(x_i\) is presynaptic input, \(g_i\) contact conductance, \(E_i\) its
-reversal potential, \(V_n\) and \(R_n^{\mathrm{tot}}\) compartment
-\(n\)'s voltage and total input resistance. In the directed artificial tree
-the error arrives as the drawn path product
-\(\alpha_3\alpha_2\alpha_1\,\delta_u\), the \(\alpha_j\) being per-branch
-gains whose product is panel \textbf{C}'s route gain
-\(\widetilde\alpha_n\); in a general compartmental model, including a
+dendritic eligibility multiplied by a transported compartment error; \(x_i\), presynaptic input; \(g_i\), contact conductance; \(E_i\), its
+reversal potential; \(V_n\), \(R_n^{\mathrm{tot}}\), compartment \(n\)'s
+voltage and total input resistance. In the directed artificial tree the
+error arrives as the drawn path product
+\(\alpha_3\alpha_2\alpha_1\,\delta_0\), with \(\delta_0=f_0'(V_0)\delta_u\)
+the somatic voltage error and the \(\alpha_j\) per-branch gains whose
+product is panel \textbf{C}'s route gain \(\widetilde\alpha_n\); in a general compartmental model, including a
 reciprocal cable, the adjoint \(q_n\) replaces the path product.
 \textbf{E}, Experimental
-logic. We add neuron-specific feedback, derive a credit operator \(M\) that
-predicts when a restricted route should help, test
-branch addresses under controlled conflict and hierarchy, distinguish
-backward route resolution from forward physical depth, and then test route
-capacity, conductance-dependent gain and functional alignment in reconstructed
-arbors; icons denote successive experiment families, not a shared
-morphology. Throughout, an orange disc is the soma, gray an unaddressed branch, green an addressed branch or route, blue a delivered learning signal, blue and red dots excitatory and inhibitory contacts, a black ring the queried compartment, and a tinted halo one addressable subtree; the dots leaving \(M\) are gradient components kept (green), passed with noise (amber) or discarded (gray).}
+logic: neuron-specific feedback; a credit operator \(M\) predicting when a
+restricted route helps; branch addresses under conflict and hierarchy;
+backward resolution versus forward depth (Supplementary Fig.~S31); route
+capacity, gain and alignment in reconstructed arbors. Icons denote
+experiment families, not one morphology. Throughout, an orange disc is the soma, gray an unaddressed branch, green an addressed branch or route, blue a delivered learning signal, blue and red dots excitatory and inhibitory contacts, a black ring the queried compartment, and a tinted halo one addressable subtree; the dots leaving \(M\) are gradient components kept (green), passed with noise (amber) or discarded (gray).}
 \label{fig:framework}
 \end{figure}
 
@@ -626,17 +625,22 @@ remaining sections test.
 arbor, the Haar route basis of the operator screens, the context-to-block
 family \(\Phi^{(K)}\), the anatomical site-by-route dictionary \(A_K\) and
 the subtree dictionary fitted to measured responses are one construction
-evaluated on different trees; the drawn tree is illustrative, its tinted lobes marking the four subtree address groups (the columns of the drawn \(A_u\), \(K{=}4\)).
+evaluated on different trees; the drawn tree is illustrative, its tinted
+lobes marking four subtree addresses (\(K{=}4\)); untinted trunk segments
+belong to no route.
 \textbf{B}, Candidate dictionaries on a \([3,3]\) arbor (rows: 3 proximal
 then 9 distal compartments; columns: feedback channels), beside the trained
-compartment-error profile \(|\partial\mathcal L/\partial V|\) of the
-paper's exact-path additive MNIST checkpoints (population mean, normalized to the maximum compartment; the
-shunting profile reverses, weighting proximal compartments). Bars give
+compartment-error profiles \(|\partial\mathcal L/\partial V|\) of the
+paper's exact-path MNIST checkpoints (population means, each normalized
+to its maximum compartment; the shunting profile reverses, weighting
+proximal compartments). Bars give
 per-example field-energy capture, averaged over 15 seeds and 2{,}048
 held-out examples each, additive with shunting in parentheses; the thin dark tick on each bar marks the shunting value.
 \textbf{C}, The Fig.~\ref{fig:topology}A reconstruction with its four
-largest depth-1 subtree routes; shade encodes route identity with routes ordered by size (darkest, \(k{=}1\), is the largest), gray segments
-belong to the five smaller routes, and the soma is orange.
+largest subtree routes rooted at soma-adjacent segments; shade encodes
+route identity ordered by size (darkest, \(k{=}1\), is the largest), gray
+segments belong to the five smaller routes (ranks 4 and 5 tie at seven
+segments), the soma is orange and the scale bar is 50~\(\mu\mathrm m\).
 \textbf{D}, Roadmap in the role of Fig.~\ref{fig:framework}E: the
 dictionary each trained task family selects---one coefficient per neuron
 for image classes (Fig.~\ref{fig:feedback}), branch selectors beyond the
@@ -668,7 +672,8 @@ means that different neurons retain distinct feedback coordinates;
 \emph{ownership} is the map from each coordinate to its corresponding arbor;
 \emph{dendritic address} specifies where that coordinate acts within the arbor.
 Route gain specifies how strongly it is transmitted. Figure~\ref{fig:framework}C
-gives the visual distinction. Except where an experiment explicitly deranges
+draws coordinate, address and gain; ownership is drawn with the feedback
+ladder (Fig.~\ref{fig:feedback}). Except where an experiment explicitly deranges
 ownership, the comparisons below keep the coordinate-to-arbor map fixed while
 varying feedback resolution or within-arbor address.
 Stacking the routed fields across neurons and applying
@@ -948,24 +953,22 @@ restricted feedback retain useful credit while excluding noise?
 \includegraphics[width=0.855\textwidth]{main/figure_03.pdf}
 \caption{\textbf{Neuron identity, rather than location within an arbor, is the
 dominant feedback bottleneck on MNIST.} Panels \textbf{A--E} and upper
-\textbf{G} use flattened MNIST and 128 regular directed \([3,3]\) trees (three
-proximal, nine terminal compartments). Green circles, shunting; blue squares, topology-matched raw-additive
-trees; the purple diamond in \textbf{C} marks coincident exact-path
-values.
-Schematic-card colors in \textbf{A},\textbf{F} label concepts, not data
-series.
+\textbf{G} use flattened MNIST and 128 regular directed \([3,3]\) trees. Green circles, shunting; blue squares, topology-matched raw-additive
+trees; the purple diamond in \textbf{C} is exact path's definitional
+cosine of one, not a measured cohort.
+Card colors in \textbf{A},\textbf{F} label concepts, not data series.
 \textbf{A}, Three rungs of the route-dictionary
 ladder: one strict layer scalar; one coordinate per
 neuron repeated over its arbor (\(K{=}1\)); or the exact
 compartment-error field. The
-strict value \(s_i^{\rm sc}\) (shown \(s\)) follows
-Eq.~\ref{eq:strictscalar}; the two steps test neuron identity and
-within-arbor address. \textbf{B},
+strict value \(s_i^{\rm sc}\) (\(s\)) follows Eq.~\ref{eq:strictscalar};
+the steps test neuron identity, then within-arbor address. \textbf{B},
 Held-out accuracy. \textbf{C}, Fixed-checkpoint diagnostic in models trained with
 neuron-specific feedback: with weights and state fixed, matched-width
-scalar-fallback, neuron-specific and exact-path fields are compared by
-autodifferentiation; exact path has cosine one by construction. \textbf{D}, Exact voltage-error magnitude by depth, soma-normalized, in
-the exact-path checkpoints from \textbf{B}: the batch-RMS ratio
+scalar-fallback and neuron-specific fields are compared by
+autodifferentiation. \textbf{D}, Exact voltage-error magnitude by depth (log ordinate; soma
+value 1 by normalization), exact-path checkpoints from \textbf{B}: the
+batch-RMS ratio
 \(\operatorname{RMS}_{\mathrm{batch}}(\delta^V_{n,u})/
 \operatorname{RMS}_{\mathrm{batch}}(\delta^V_{0,u})\), averaged over neurons
 and paths (\(n\), compartment; \(0\), soma; \(u\), neuron).
@@ -973,19 +976,19 @@ and paths (\(n\), compartment; \(0\), soma; \(u\), neuron).
 energy
 \(\lVert\bm\delta_d^V-\langle\bm\delta_d^V\rangle_{\rm path}\rVert_2^2/
 \lVert\bm\delta_d^V\rVert_2^2\), the fraction one path-shared value
-cannot represent, in the same checkpoints; the soma has identically zero
-residual and is omitted. Shunting attenuates distal magnitude (\textbf{D}) yet retains a larger
-path-specific fraction (\textbf{E}); no new training conditions. \textbf{F}, Ownership assigns a neuronal
-coordinate to an arbor; address assigns signals within that arbor; shading (four gray steps) marks
-distinct within-arbor addresses.
+cannot represent; the soma (zero residual) is omitted. Shunting attenuates distal magnitude (\textbf{D}) yet retains a larger
+path-specific fraction (\textbf{E}); no new training conditions. \textbf{F}, Ownership maps a neuronal
+coordinate to an arbor; address places signals within it; shading (four
+gray steps) marks distinct addresses.
 \textbf{G}, Upper axis: neuron-specific-minus-strict-scalar and
 exact-path-minus-neuron-specific effects from the \([3,3]\) ladder; the
-third block repeats the neuron-identity step under the fixed random DFA
-source (Supplementary Fig.~S30). Lower axis: correct minus
-fixed-derangement ownership in separate \([2,2]\) (six nonsomatic
+third block repeats the neuron-identity step under the fixed random
+direct-feedback-alignment (DFA) source (Supplementary Fig.~S30). Lower axis: correct-minus-deranged
+ownership in separate \([2,2]\) (six nonsomatic
 compartments) and \([2,2,2,2]\) (30) experiments, and the
 readout-minus-DFA gap at the neuron rung (path rung \(\leq\)0.2 pp; S30). The strips use different pp scales. Dots in \textbf{G}, paired seed
-differences. Symbols and bars, means and 95\% seed-bootstrap intervals;
+differences fanned below each mean; block tags name the summarized panel
+or supplement. Symbols and bars, means and 95\% seed-bootstrap intervals;
 \(n{=}15\) paired seeds per architecture (\textbf{B--E}, upper \textbf{G},
 S30 blocks), \(n{=}10\) (ownership).}
 \label{fig:feedback}
@@ -1204,49 +1207,48 @@ and the tests that follow.
 
 \begin{figure}[tbp]
 \centering
-\includegraphics[width=0.89\textwidth]{main/figure_04.pdf}
+\includegraphics[width=0.87\textwidth]{main/figure_04.pdf}
 \caption{\textbf{A stochastic credit operator predicts when restricted
 feedback routing helps.} \textbf{A}, The parameter-space operator
 \(M\) maps \(\bm\mu+\bm\xi\) to a local update; the tree is a
-route-basis illustration (not forward morphology); green capsules, its
-four subtree route subspaces (\(K=4\)). Utility balances
-retained signal against update-norm and noise costs. \textbf{B}, Eight-terminal illustration: per-terminal minibatch noise
+route-basis illustration, its green capsules four subtree route subspaces
+(\(K=4\)); utility balances retained signal against update-norm and noise
+costs. \textbf{B}, Eight-terminal illustration: per-terminal minibatch noise
 \(\bm\xi\) (top), a task signal \(\bm\mu\) piecewise-constant over
 subtrees to level \(H_{\mathrm c}\) (middle), and feedback routes carrying
 one value per subtree to depth \(D_{\mathrm r}\) (blue capsules). Panels
-\textbf{C--F} use 16 such coordinates in a balanced-tree Haar basis; no
+\textbf{C--F} use 16 such coordinates (balanced-tree Haar basis); no
 neuron is simulated. \textbf{C},
 Spectral screen: subtree-minus-random capture across alignment \(\rho\)
-and budget \(K\); at \(K=16\) both spans are complete
-(zero advantage); the leading-eigenspace projector is the rank-\(K\)
-ceiling. \textbf{D}, Resolution screen: final quadratic loss as signal occupies
-levels through \(H_{\mathrm c}\) and feedback resolves through
-\(D_{\mathrm r}\). Their match gives the designed optimum;
-neither is physical depth. \textbf{E}, Signal--noise screen:
-projected-minus-unprojected expected one-step loss. Negative favors
-projection; the dashed boundary equates rejected noise with discarded
+and budget \(K\); at \(K=16\) both spans are complete;
+the leading-eigenspace projector is the rank-\(K\) ceiling. \textbf{D}, Resolution screen: final loss as signal occupies levels
+through \(H_{\mathrm c}\) and feedback resolves through \(D_{\mathrm r}\)
+(\(D_{\mathrm r}=4\), identity); their match is the designed
+optimum; neither is physical depth. \textbf{E}, Signal--noise screen: the analytic projected-minus-unprojected
+expected one-step loss, \((f_{\rm noise}-f_{\rm sig})/2\); negative favors
+projection; the dashed boundary equates rejected noise and discarded
 signal.
 \textbf{F}, Reliability screen: one-step loss reduction under aligned, global,
 shuffled and anti-aligned gains over eight blocks; a same-gain point
-implementation matched the routed model. \textbf{G},
-No-new-training reanalysis of 540 dendritic-tree fits (27 route conditions
-\(\times\) 20 paired seeds) from the eight-context factorial
-(Fig.~\ref{fig:subtreefactorial}); utility predicts one-step progress
-(Spearman \(\rho=0.937\) [0.93, 0.94]).
+implementation matched. \textbf{G},
+No-new-training reanalysis of 540 dendritic-tree fits (27 conditions
+\(\times\) 20 seeds; Fig.~\ref{fig:subtreefactorial}); utility predicts
+one-step progress (Spearman \(\rho=0.937\) [0.93, 0.94]); utility is zero
+by definition where the routed update is not positively aligned (214/540
+fits).
 \textbf{H}, Five independent families---trained subtree,
 spectral, imposed-alignment, measured-response and two-stream
 credit-reversal---on family-specific alignment and relative bandwidth
-\(K/r_{\mathrm{eff}}\),
-\(r_{\mathrm{eff}}=(\sum_j\lambda_j)^2/\sum_j\lambda_j^2\). Alignment is
-computed per family, not in a common unit. Filled markers, benefit or tie; open,
-none; alignment-1 markers are fanned in \(x\), the dashed rule marking the
-true value. Regime tints are theoretical; families are not pooled. Family homes: trained,
+\(K/r_{\mathrm{eff}}\) (Methods). Alignment is computed per family, not in
+a common unit. Filled markers, benefit or tie; open, none; alignment-1
+markers are fanned in \(x\) (dashed rule, true value). Tints are theoretical; families are unpooled. Family homes: trained,
 Fig.~\ref{fig:subtreefactorial}; imposed and measured,
-Fig.~\ref{fig:boundary}; reversal, Fig.~\ref{fig:feedback}. The black ring marks the matched ancestry family's utility-argmax
-bandwidth, coinciding with its trained optimum (Methods).
+Fig.~\ref{fig:boundary}; reversal, Supplementary Fig.~S19. The black ring
+marks the matched ancestry family's utility-argmax bandwidth, coinciding
+with its trained optimum at the top of the tested grid (Methods).
 Coincident markers in \textbf{D,F} are dodged in \(x\); lines and
-ribbons sit at true coordinates.
-Panels \textbf{C--F}, 50 paired seeds; \textbf{G} resamples 20 seed
+ribbons are exact.
+Panels \textbf{C,D,F}, 50 paired seeds; \textbf{G} resamples 20 seed
 blocks.}
 \label{fig:creditphase}
 \end{figure}
@@ -1897,7 +1899,7 @@ before mesh or synapse outcomes were inspected; ten met the fixed requirement
 of at least 20 mapped typed incoming contacts, including at least three
 inhibitory contacts. In those ten cells, subtree capture exceeded depth-bin and
 shuffled-route capture in all ten and exceeded random-anatomical-route capture
-in nine; the remaining random-anatomical-route contrast was a numerical tie
+in nine; the remaining random-anatomical-route contrast was a structural tie (a cell with only four candidate routes)
 (Fig.~\ref{fig:topology}G and Supplementary Figs.~S10, S27). The second volume
 therefore provides a directional structural replication in one additional
 animal; it does not support population inference or test endogenous route use.
@@ -1916,39 +1918,40 @@ in vivo.
 \centering
 \includegraphics[width=0.85\textwidth]{main/figure_07.pdf}
 \caption{\textbf{Reconstructed arbors provide sparse, predominantly coarse
-routes for modeled compartment fields.} Panels \textbf{A--F} use eight
-reconstructed IT neurons from MICrONS mouse 1. \textbf{A}, Median-sized arbor;
-color is mapped-contact excitatory/inhibitory (E/I) balance, width
-log-binned total contact area (five levels), scale bar
-50~\(\mu\mathrm m\); E/I identity is direct where available, else
-proxy-derived. \textbf{B}, A subtree route covers all input-bearing
-segments below one branch point. Projecting a modeled target field \(\mathbf{t}\) on the input-bearing
-sites onto the span of the \(K\) selected routes (projector \(P_A\))
-defines capture \(\mathcal{C}_A\)
+routes for modeled fields.} Panels \textbf{A--F}: eight reconstructed MICrONS mouse-1 IT neurons. \textbf{A}, Median-sized arbor;
+color, mapped-contact excitatory/inhibitory (E/I) balance; width,
+log-binned contact area; scale bar 50~\(\mu\mathrm m\); E/I identity
+direct where available, else proxy. \textbf{B}, A subtree route covers all input-bearing
+segments below one branch point. Projecting a modeled target field \(\mathbf{t}\) on input-bearing sites
+onto the \(K\) selected routes' span (\(P_A\)) defines capture
+\(\mathcal{C}_A\)
 (Eq.~\ref{eq:reconstructioncapture}); numerical panels weight sites by
-excitatory area. \textbf{C}, Capture of a modeled cable
-shunt-response operator generated independently of the route field on the same
-arbors. Curves compare the dense oracle, subtree routes, random anatomical routes
-(nonempty), depth bins (\(K\) groups by soma-to-site cable distance) and the
-shuffled-subtree control (a site permutation preserving each column's
-values and sparsity); degree--depth surrogates are supplementary. Depth bins lead at
-\(K\leq4\), are not reliably separated at \(K=8\), and fall below
-subtrees at \(K=16\). \textbf{D},
-Route-generated positive-control field; subtree sites ranked by inhibitory
-fraction times descendant excitatory-area fraction.
-\textbf{E}, At \(K=8\), capture and nonzero route coefficients relative to the
-dense oracle: 85\% of dense capture at about 7\% of the coefficients. \textbf{F}, Capture per coefficient across route budgets; at
+excitatory area. \textbf{C}, Capture of the focal-shunt fields (columns of the modeled
+shunt-response operator), generated independently of the route field. Curves: dense oracle, subtree routes,
+random nonempty anatomical routes, depth bins (\(K\) cable-distance
+groups) and the shuffled-subtree control (site permutation preserving column values,
+sparsity); degree--depth surrogates are supplementary. Depth bins lead at
+\(K\leq4\), are unseparated at \(K=8\), and fall below subtrees at
+\(K=16\). \textbf{D},
+Route-generated positive-control field \(\bm t=\Gamma\bm a\); subtree
+sites ranked by inhibitory fraction times descendant excitatory area.
+\textbf{E}, At \(K=8\), capture and nonzero coefficients relative to the
+dense oracle: 85\% of its capture at about 7\% of its coefficients. \textbf{F}, Capture per unit wiring (capture over feedback wiring
+density) across budgets; at
 \(K=8\), cellwise ratios formed before averaging give means of 14.2 versus
-the dense oracle and 2.8 versus the density-matched shuffled control. Panel \textbf{C} is deterministic per arbor after random-control draws
-average; in \textbf{D--F} Monte Carlo streams average within cell. Curves
-and bars, eight-cell means; bands or whiskers, 95\% cell-bootstrap
+the dense oracle and 2.8 versus the density-matched shuffled control. Panel \textbf{C} is deterministic per arbor once random-control draws
+average; \textbf{D--F} average Monte Carlo streams within cell. Curves
+and bars, eight-cell means; bands/whiskers, 95\% cell-bootstrap
 intervals.
-\textbf{G}, At \(K=4\), subtree-minus-random, -depth and -shuffled capture in a
-disjoint 47-cell v661 cohort from mouse 1 and ten qualifying Pinky v185 cells
-from mouse 2.
-Points, cells; larger symbols and intervals, descriptive means and 95\%
-cell-bootstrap intervals. In mouse 2 the random-route contrast is positive
-in 9/10 cells (one tie); the other two, in 10/10. All fields are modeled, not observed learning signals.}
+\textbf{G}, At \(K=4\), control-minus-subtree weighted residual norm
+(positive favors subtrees) in a disjoint 47-cell mouse-1 v661 cohort
+and ten qualifying mouse-2 Pinky v185 cells; mouse-2 cells
+are small (5--13 excitatory segments) and near-saturated, so larger
+contrasts do not mean a stronger effect.
+Points, cells; larger symbols, means with 95\% cell-bootstrap
+intervals. In mouse 2 the random-route contrast is positive in 9/10 cells (one
+structural tie: that cell has only four candidate routes), the other two
+in 10/10. All fields are modeled, not observed.}
 \label{fig:topology}
 \end{figure}
 \clearpage
@@ -2053,8 +2056,10 @@ subset of unrelated sites, and the broader classes are descriptive.
 We applied the matched perturbations to the initial eight MICrONS mouse-1
 reconstructions. In the permissive dimensionless passive model, the shunt
 changed descendant gradients more strongly than ancestral, sister-subtree or
-depth-matched off-route gradients, whereas the matched current injection was
-less selective (Fig.~\ref{fig:focal}B). The descendant-minus-depth-control
+depth-matched off-route gradients, whereas the matched current injection
+changed descendant gradients roughly threefold less, its off-route changes
+being zero by construction because the soma-restoring current isolates every
+subtree not containing the site (Fig.~\ref{fig:focal}B). The descendant-minus-depth-control
 localization index increased with shunt dose (Fig.~\ref{fig:focal}C).
 Retaining the post-shunt voltage while replacing the post-shunt adjoint with
 its baseline value removed most of the localization
@@ -2099,34 +2104,34 @@ inhibition.
 \caption{\textbf{Focal shunting substantially changes modeled descendant
 credit in electrotonically permissive states.} \textbf{A}, Why a channel's
 gain is state-coupled while its address is wiring: a focal conductance
-gates transport of a fixed somatic error into its descendant subtree. Panels \textbf{B--G}: complete reconstructed arbors. The matched
+gates transport of a somatic error into its descendant subtree; \textbf{B--G} use complete reconstructed
+arbors. The matched
 injection reproduces the baseline focal current; a separate somatic current
-restores soma voltage (local voltage not clamped). Pale descendant
-strokes, attenuated modeled credit. Passive dose is relative
-to baseline local membrane-plus-synaptic conductance. \textbf{B--D}, Initial
-eight-cell mouse-1 cohort, permissive normalized passive model.
-\textbf{B}, Absolute log-gradient change by tree relation at unit dose (depth control: depth-matched off-route sites entering the localization
-index).
+restores soma voltage (local voltage unclamped). Pale descendant
+strokes, attenuated credit. Passive dose is relative to baseline local conductance. \textbf{B}, Initial eight-cell mouse-1 cohort (permissive normalized
+passive model): absolute log-gradient change by tree relation at unit dose
+(depth control: depth-matched off-route sites); the injection's off-route zeros are structural, the
+soma-restoring current isolating other subtrees.
 \textbf{C}, Localization index---median descendant minus depth-matched
-off-route change---versus passive dose. \textbf{D}, Holding post-shunt voltage
-fixed but restoring the baseline adjoint removes most localization. Amber, driving-force-only (baseline adjoint); green, full shunt at unit dose; gray lines pair cells; axis as \textbf{C}.
+off-route change---versus passive dose. \textbf{D}, Restoring the baseline adjoint at post-shunt voltage removes
+most localization. Amber, driving-force-only (baseline adjoint); green, full shunt; gray
+lines pair cells; axis as \textbf{C}.
 \textbf{E}, Active-model response in the same arbors, dose relative to
-local input conductance. Each dose uses the fixed exact Jacobian of the once-solved nonlinear
-baseline; maximal Na, K, Ca, HCN and NMDA conductances are prespecified
-draws, not measured densities.
+local input conductance; dashed, the passive model at the same
+calibration. Doses use the fixed exact Jacobian of the once-solved nonlinear
+baseline; maximal channel conductances are prespecified draws. The unsigned index hides direction: shunts
+attenuate and injections enhance descendant credit in every cell.
 \textbf{F}, Passive calibration in the initial and a disjoint same-mouse
-45-cell cohort. The x coordinate is the cohort median axial/leak conductance
-ratio. Contrasts are small and
-opposite-signed across cohorts at
-\(R_m=15{,}000\,\Omega\,\mathrm{cm}^2\), and substantially larger at lower
-membrane resistance. \textbf{G}, Active-model shunt-minus-injection
-localization at input-conductance doses 0.25, 1 and 4; all 8/8 cell contrasts
-are positive at each dose (exact Wilcoxon \(P=0.0078\)). Small dots are
-cells (\(n=8\) throughout; in \textbf{G}, cell means over 64 channel
-draws, dodged above each dose row); open markers and whiskers, mean and
-95\% cell-bootstrap interval. Sites and channel draws are averaged within
-cell; cells are the inference units. These are modeled sensitivities, not learning or measured
-plasticity.}
+45-cell cohort; \(x\), cohort median axial/leak conductance ratio.
+Contrasts are small and opposite-signed across cohorts at
+\(R_m=15{,}000\,\Omega\,\mathrm{cm}^2\) and far larger at lower
+membrane resistance. \textbf{G}, Active-model shunt-minus-injection localization at doses 0.25,
+1 and 4; 8/8 contrasts positive at each dose (exact Wilcoxon
+\(P=0.0078\)). Small dots, cells
+in \textbf{B,D,G} (\(n=8\); in \textbf{G}, cell means over 64 channel
+draws); open markers and whiskers, mean and 95\% cell-bootstrap
+interval, \(n=8\) except \textbf{F}'s disjoint series (\(n=45\)). Sites
+and channel draws average within cell; cells are the inference units. These are modeled sensitivities, not measured plasticity.}
 \label{fig:focal}
 \end{figure}
 \clearpage
@@ -2335,8 +2340,10 @@ the gating junction.}
 The preceding sections evaluate one object---the route dictionary of
 Fig.~\ref{fig:atlas}---at different resolutions, on different trees and
 against different tasks. The gallery captures of Fig.~\ref{fig:atlas}B
-explain why the trained ladder saturates at one coefficient per neuron on
-these tasks, while the branch-conflict boundary
+quantify what one coefficient per neuron discards---about half of the field
+energy---and the trained ladder shows that the discarded energy buys little
+accuracy on these tasks, an outcome the utility of Fig.~\ref{fig:creditphase}
+rather than capture alone accounts for, while the branch-conflict boundary
 \(\chi_{\mathrm c}=B/[2(B-1)]\) and the matched-topology window at
 \(K=4\) mark the tasks whose credit structure demands more; reconstructed
 arbors supply the construction anatomically, coarse and sparse, and

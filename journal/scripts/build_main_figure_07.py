@@ -270,7 +270,14 @@ def per_wire_summary():
 
 
 def cross_animal_rows():
-    """Ancestry-route advantage per cell, per control, per volume."""
+    """Per cell, per control, per volume: control minus subtree residual.
+
+    The frozen column is named ``morphology_capture_advantage`` but holds the
+    control-minus-subtree WEIGHTED RESIDUAL NORM at K = 4 (the replication
+    analysis pivots on ``residual``), not a difference of the capture that
+    C-F plot.  Positive still favors subtree routes; G's axis says which
+    quantity it is.
+    """
     contrasts = pd.read_csv(DATA / "pinky_v185_replication" / "routing"
                             / "k4_cross_animal_contrasts.csv")
     controls = [("random paths", "vs random"),
@@ -570,8 +577,15 @@ def panel_cable(ax, curves):
     capture_axis(ax, left=True)
     # C and D are one epistemic contrast, not two neutral datasets: C tests a
     # field generated independently of the routes, D a deliberately aligned
-    # one.  Both roles are tagged in place so a figures-only reader sees it.
+    # one.  Both roles are tagged in place so a figures-only reader sees it,
+    # and each panel names the field it captures: here the per-shunt response
+    # fields, the columns of the focal-shunt response operator of the
+    # reciprocal cable (Methods), which never touch the route dictionary.
+    # C has no key, so the name takes a second line; it must end before the
+    # K = 8 dense marker, which is where the free strip under the tag ends.
     ax.text(0.03, 0.955, "independent target", transform=ax.transAxes,
+            ha="left", va="center", fontsize=PT_SMALL, color=MUTE, zorder=6)
+    ax.text(0.03, 0.880, "focal-shunt fields", transform=ax.transAxes,
             ha="left", va="center", fontsize=PT_SMALL, color=MUTE, zorder=6)
 
 
@@ -579,8 +593,13 @@ def panel_model(ax, curves):
     for role in ("dense", "ancestry", "random", "depth", "shuffled"):
         role_line(ax, role, *curves[role])
     capture_axis(ax, left=False)
-    ax.text(0.03, 0.955, "positive control", transform=ax.transAxes,
-            ha="left", va="center", fontsize=PT_SMALL, color=MUTE, zorder=6)
+    # The key occupies the space under D's tag, so the target field goes on
+    # the tag line itself: t = Gamma a, route amplitudes pushed through the
+    # weighted route matrix (Results, Methods).
+    ax.text(0.03, 0.955,
+            r"positive control, $\mathbf{t}=\Gamma\mathbf{a}$",
+            transform=ax.transAxes, ha="left", va="center",
+            fontsize=PT_SMALL, color=MUTE, zorder=6)
     # Decode the five dictionaries at first use: a compact key in the empty
     # upper left of D, inside the shared-axis C/D pair, using the same short
     # names as E's category rail.  F's key keeps the full names.
@@ -658,10 +677,12 @@ def panel_per_wire(ax, summary):
         ["0.05", "0.1", "0.5", "1", "5", "10"]))
     ax.yaxis.set_minor_locator(mpl.ticker.NullLocator())
     ax.set_xlabel(CHANNEL_LABEL)
-    # "wiring" is only a proxy here: the y quantity is capture divided by the
-    # nonzero route-coefficient count, so the label says exactly that (it is
-    # what E's key and the caption call it), not an unmeasured cable length.
-    ax.set_ylabel("capture per route coefficient")
+    # The y quantity is capture divided by feedback wiring density (the
+    # fraction of nonzero dictionary entries), which is why the dense oracle
+    # sits at its plain capture and subtrees exceed 1: Methods call it
+    # "capture per unit wiring", so the label does too.  "Wiring" is that
+    # density, not an unmeasured cable length.
+    ax.set_ylabel("capture per unit wiring")
 
     # The eight-channel ancestry advantage over the dense oracle, and the
     # part of it that survives at matched wiring density, are ratios of two
@@ -697,13 +718,31 @@ def panel_cross_animal(ax, labels, animals):
                         mfc=color, mec="white", mew=LW_EDGE, ecolor=color,
                         elinewidth=LW_ERR, capsize=ERR_CAPSIZE,
                         capthick=LW_ERR, zorder=4)
-    ax.axvline(0.0, color=MUTE, lw=LW_REF, ls=(0, (3.0, 2.2)), zorder=1)
+    # The zero reference sits under the points, not over them: one mouse-1
+    # depth cell is at -0.005 and would otherwise hide beneath the dashes.
+    ax.axvline(0.0, color=MUTE, lw=LW_REF, ls=(0, (3.0, 2.2)), zorder=0.5)
+    # A cell sitting exactly on zero is a structural tie (its four candidate
+    # routes ARE the K = 4 subtree dictionary), so it is ringed and named
+    # rather than left to read as "near zero".
+    for label, color, marker, offset, series in animals:
+        for index, (values, _) in enumerate(series):
+            ties = values[np.abs(values) < 1e-12]
+            if ties.size == 0:
+                continue
+            ypos = y[index] + offset
+            ax.plot(ties, np.full(ties.size, ypos), ls="none", marker="o",
+                    ms=SEED_MS + 2.6, mfc="none", mec=color, mew=LW_EDGE,
+                    zorder=3, clip_on=False)
+            ax.text(0.03, ypos, "exact tie", ha="left", va="center",
+                    fontsize=PT_SMALL, color=MUTE, zorder=5)
     ax.set_yticks([y[index] for index in range(n)])
     ax.set_yticklabels(labels, fontsize=PT_TICK)
     ax.set_ylim(-0.60, n - 1 + 0.92)
     ax.set_xlim(-0.06, 0.99)
     ax.set_xticks([0.0, 0.4, 0.8])
-    ax.set_xlabel("subtree-route capture advantage")
+    # The frozen quantity is a difference of weighted residual norms (control
+    # minus subtree, K = 4), not of capture; the caption uses the same words.
+    ax.set_xlabel("control " + MINUS + " subtree weighted residual norm")
     ax.tick_params(axis="y", length=0.0, pad=2.5)
     ax.spines["left"].set_visible(False)
 
@@ -717,8 +756,8 @@ def panel_cross_animal(ax, labels, animals):
     # belong to, staggered so the two names never share a line.
     top = y[0]
     for label, color, offset, x_at, y_at in (
-            ("MICrONS mouse 1 (n=47)", C_MINNIE, -0.13, 0.268, 0.30),
-            ("MICrONS mouse 2 (n=10)", C_PINKY, 0.13, 0.527, 0.70)):
+            ("MICrONS mouse 1 (n=47)", C_MINNIE, -0.13, 0.268, 0.40),
+            ("MICrONS mouse 2 (n=10)", C_PINKY, 0.13, 0.527, 0.78)):
         ax.plot([x_at, x_at], [top + offset + 0.10, top + y_at - 0.13],
                 color=MUTE, lw=LW_HAIR, solid_capstyle="round", zorder=2)
         ax.text(x_at, top + y_at, label, ha="center", va="center",

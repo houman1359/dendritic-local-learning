@@ -5,10 +5,13 @@
 
 The figure introduces the paper's method up front: it names the route
 dictionary once (A), shows what the candidate dictionaries look like and how
-much of a trained credit field each captures (B), paints the same
-construction on a reconstructed arbor (C), and previews which dictionary
-each experimental task family demands (D, a roadmap schematic mirroring
-Fig. 1E's experimental-logic role).
+much of a trained credit field each captures (B, with the additive and
+shunting field profiles side by side), paints the same construction on a
+reconstructed arbor with a metric scale bar (C), and previews which
+dictionary each experimental task family demands (D, a roadmap schematic
+mirroring Fig. 1E's experimental-logic role). Every "Fig. N" cross-reference
+baked into A and D is derived from the assembly map's ``FIGURE_SOURCES``,
+so a renumbering there cannot leave these labels stale.
 
 The component keeps its historical file name (main_figure_10_native.pdf);
 the assembly map in ``assemble_compact_main_figures.py`` emits it as
@@ -33,6 +36,7 @@ from matplotlib.colors import LinearSegmentedColormap
 from matplotlib.lines import Line2D
 from matplotlib.patches import FancyBboxPatch, Rectangle
 
+from assemble_compact_main_figures import FIGURE_SOURCES
 from credit_tree_schematics import draw_credit_tree, mix
 from figure_canvas import (
     COLORS,
@@ -69,6 +73,26 @@ C_CTRL = COLORS["point_mlp"]      # neutral control gray
 C_ORACLE = COLORS["oracle"]
 C_BP = COLORS["bp"]
 
+# Manuscript figure number of each native component, inverted from the
+# assembly map (manuscript number -> component number) so the "Fig. N"
+# strings drawn in A and D follow any renumbering made there.
+FIG_OF = {component: number for number, component in FIGURE_SOURCES.items()}
+COMPONENT = {
+    "framework": 1,    # main_figure_01_native: framework
+    "ladder": 2,       # main_figure_02_native: MNIST feedback ladder
+    "theory": 3,       # main_figure_03_native: credit operator theory
+    "conflict": 4,     # main_figure_04_native: branch conflict
+    "factorial": 5,    # main_figure_05_native: eight-context factorial
+    "arbors": 7,       # main_figure_07_native: reconstructed-arbor capacity
+    "boundary": 9,     # main_figure_09_native: measured boundary
+}
+
+
+def fig_ref(*roles):
+    """``Fig. N`` / ``Figs N, M`` for the named components, as printed."""
+    numbers = ", ".join(str(FIG_OF[COMPONENT[role]]) for role in roles)
+    return f"Figs {numbers}" if len(roles) > 1 else f"Fig. {numbers}"
+
 # Categorical shades for the four anatomical routes in C.  Subtree identity
 # is categorical, but the palette reserves distinct hues for other series, so
 # the four routes take an ordered ramp of the route green -- the caption
@@ -91,7 +115,10 @@ def dictionary_matrices():
     for k, members in enumerate(SUBTREES):
         subtree[members, k] = 1.0
     exact = np.eye(N_COMP)
-    return [("broadcast_k1", "$K{=}1$\nbroadcast", broadcast),
+    # "one per neuron", not "broadcast": the ladder's strict layer-wide rung
+    # is the one its Source Data calls "scalar broadcast"; this column is the
+    # per-neuron coefficient repeated over the arbor.
+    return [("broadcast_k1", "$K{=}1$\none per\nneuron", broadcast),
             ("subtrees_k3", "$K{=}3$\nsubtrees", subtree),
             ("exact_k12", "$K{=}12$\nexact", exact)]
 
@@ -106,11 +133,15 @@ def panel_definition(ax):
             transform=ax.transAxes, linespacing=1.0)
 
     entries = [
-        (r"$A_u$ address matrix", "delivery model (Figs 1, 3)"),
-        ("Haar route basis", "operator screens (Fig. 4)"),
-        (r"$\Phi^{(K)}$ context routes", "eight-context task (Fig. 6)"),
-        (r"$A_K$ anatomical subtrees", "reconstructed arbors (Fig. 7)"),
-        ("fitted subtree routes", "measured responses (Fig. 9)"),
+        (r"$A_u$ address matrix",
+         f"delivery model ({fig_ref('framework', 'ladder')})"),
+        ("Haar route basis", f"operator screens ({fig_ref('theory')})"),
+        (r"$\Phi^{(K)}$ context routes",
+         f"eight-context task ({fig_ref('factorial')})"),
+        (r"$A_K$ anatomical subtrees",
+         f"reconstructed arbors ({fig_ref('arbors')})"),
+        ("fitted subtree routes",
+         f"measured responses ({fig_ref('boundary')})"),
     ]
     x0 = 0.47
     top, bottom = 0.93, 0.06
@@ -131,18 +162,24 @@ def panel_definition(ax):
 
 
 def panel_gallery(ax):
-    """B: the trained field next to each dictionary and its measured capture."""
+    """B: the trained fields next to each dictionary and its measured capture."""
     summary = pd.read_csv(ATLAS / "capture_summary.csv")
     field = pd.read_csv(ATLAS / "example_field.csv")
-    field = field[field.dynamics.eq("additive")].sort_values("compartment_index")
-    profile = field.mean_abs_error.to_numpy(float).reshape(-1, 1)
+    profiles = {
+        dynamics: (field[field.dynamics.eq(dynamics)]
+                   .sort_values("compartment_index")
+                   .mean_abs_error.to_numpy(float).reshape(-1, 1))
+        for dynamics in ("additive", "shunting")}
 
     cap = {(row.dynamics, row.basis): float(row.mean_capture)
            for row in summary.itertuples(index=False)}
 
     seq = LinearSegmentedColormap.from_list(
         "atlas_field", ["#FFFFFF", mix(C_ROUTE, 88)])
-    y0, y1 = 0.30, 0.78
+    # 0.74, not 0.78: the three-line headers (the field pair's quantity line
+    # and the K=1 column's "one per neuron") need that headroom under the
+    # panel title, whose pad is only 3 pt.
+    y0, y1 = 0.30, 0.74
     bar_y, bar_h = 0.125, 0.055
 
     def block(x, width, data, cmap, vmax):
@@ -156,17 +193,28 @@ def panel_gallery(ax):
             spine.set_color(COLORS["edge"])
         return inset
 
-    x, strip_w = 0.045, 0.05
-    block(x, strip_w, profile, seq, 1.0)
-    ax.text(x + strip_w / 2, y1 + 0.035, "trained\nfield", ha="center",
-            va="bottom", fontsize=PT_SMALL, color=COLORS["ink"],
+    # Two thin strips under one header: the additive profile (proximal low,
+    # distal high) beside the shunting profile, whose depth weighting is the
+    # reverse.  Each strip is the frozen table's own max-normalised column on
+    # one 0-1 ramp; a rotated tag under each strip names its dynamics, and
+    # the quantity symbol rides the shared header so the strip column stays
+    # as narrow as one dictionary column.
+    x, strip_w, strip_gap = 0.045, 0.04, 0.006
+    for i, dynamics in enumerate(("additive", "shunting")):
+        xs = x + i * (strip_w + strip_gap)
+        block(xs, strip_w, profiles[dynamics], seq, 1.0)
+        ax.text(xs + strip_w / 2, y0 - 0.02, dynamics, ha="center", va="top",
+                rotation=90, fontsize=PT_SMALL, color=COLORS["mute"],
+                transform=ax.transAxes)
+    pair_w = 2 * strip_w + strip_gap
+    ax.text(x + pair_w / 2, y1 + 0.035,
+            "trained\nfield\n" + r"$|\partial\mathcal{L}/\partial V|$",
+            ha="center", va="bottom", fontsize=PT_SMALL, color=COLORS["ink"],
             transform=ax.transAxes, linespacing=0.95)
-    ax.text(x + strip_w / 2, y0 - 0.045,
-            r"$|\partial\mathcal{L}/\partial V|$", ha="center", va="top",
-            fontsize=PT_SMALL, color=COLORS["mute"], transform=ax.transAxes)
-    # Row-structure bracket: the strip's 12 rows are 3 proximal compartments
+    # Row-structure bracket: each strip's 12 rows are 3 proximal compartments
     # (top) above 9 distal ones; two hairline brackets with rotated tags make
-    # the light-top / dark-bottom split decodable without the caption.
+    # the light/dark split -- and its reversal between strips -- decodable
+    # without the caption.
     bx, cap_w, pad = x - 0.012, 0.006, 0.008
     y_split = y1 - (y1 - y0) * 3.0 / 12.0
     groups = [("prox", y_split + pad, y1 - pad),
@@ -183,7 +231,9 @@ def panel_gallery(ax):
 
     binary = LinearSegmentedColormap.from_list(
         "atlas_dict", ["#FFFFFF", C_ROUTE])
-    x = 0.175
+    # 0.185 and a 0.08 gap (not 0.175 / 0.085): the second field strip
+    # widens the first column, and the right-hand legend cannot move.
+    x = 0.185
     mat_ws = {1: 0.05, 3: 0.105, 12: 0.24}
     for key, label, matrix in dictionary_matrices():
         width = mat_ws[matrix.shape[1]]
@@ -210,7 +260,7 @@ def panel_gallery(ax):
                 ha="center", va="top", fontsize=PT_SMALL,
                 color=COLORS["ink"], transform=ax.transAxes,
                 linespacing=1.05)
-        x += width + 0.085
+        x += width + 0.08
 
     ax.text(0.755, bar_y + bar_h / 2 - 0.02,
             "field-energy capture\nbar: additive\ntick: shunting", ha="left",
@@ -232,7 +282,11 @@ def arbor_routes():
     centered = xyz - xyz.mean(axis=0, keepdims=True)
     _, _, basis = np.linalg.svd(centered, full_matrices=False)
     projected = centered @ basis[:2].T
-    projected /= max(np.ptp(projected[:, 0]), np.ptp(projected[:, 1]))
+    # The same isotropic SVD projection and span normalisation as the
+    # anatomy figure's morphology_geometry(), so span_um makes a metric
+    # scale bar on this drawing too.
+    span_um = max(np.ptp(projected[:, 0]), np.ptp(projected[:, 1]))
+    projected /= span_um
     pos = {int(s): p for s, p in zip(cell.segment_id.to_numpy(int),
                                      projected, strict=True)}
     parent = {int(r.segment_id): int(r.parent_segment_id)
@@ -252,13 +306,15 @@ def arbor_routes():
         head = depth1(seg)
         if head is not None:
             membership.setdefault(head, []).append(seg)
-    heads = sorted(membership, key=lambda h: len(membership[h]), reverse=True)
-    return cell, pos, parent, root_seg, membership, heads
+    # Largest first; equal sizes (ranks 4 and 5 tie on this cell) break by
+    # segment id so the drawn choice is explicit rather than iteration order.
+    heads = sorted(membership, key=lambda h: (-len(membership[h]), h))
+    return cell, pos, parent, root_seg, membership, heads, span_um
 
 
 def panel_arbor_routes(ax):
     """C: the reconstructed arbor coloured by its four largest subtree routes."""
-    cell, pos, parent, root_seg, membership, heads = arbor_routes()
+    cell, pos, parent, root_seg, membership, heads, span_um = arbor_routes()
     shade_of = {}
     for k, head in enumerate(heads[:4]):
         for seg in membership[head]:
@@ -296,6 +352,25 @@ def panel_arbor_routes(ax):
             key=lambda c: np.hypot(ink[:, 0] - c[0], ink[:, 1] - c[1]).min())
         ax.text(tx, ty, f"$k{{=}}{k + 1}$", ha="center", va="center",
                 fontsize=PT_SMALL, color=mix(ROUTE_SHADES[k], 65, "black"))
+    # Metric scale bar in the arbor's empty lower-left corner: positions are
+    # normalised by span_um under an isotropic projection, so 50/span_um data
+    # units is 50 um, the bar the anatomy figure (Fig. 7A) carries.
+    xy = np.array(list(pos.values()))
+    x_lo, y_lo = xy.min(axis=0)
+    bar_len = 50.0 / span_um
+    ax.plot([x_lo, x_lo + bar_len], [y_lo, y_lo], color=COLORS["ink"],
+            lw=LW_DATA, solid_capstyle="butt", zorder=7)
+    ax.text(x_lo + bar_len / 2, y_lo + 0.02, "50 µm", ha="center",
+            va="bottom", fontsize=PT_SMALL, color=COLORS["ink"], zorder=7)
+    # Disclose a size tie at the drawn/undrawn boundary (ranks 4 and 5), so
+    # "four largest" is not read as a strict ordering.  The short second
+    # line keeps the note clear of the branch that ends in this corner.
+    sizes = [len(membership[h]) for h in heads]
+    if len(sizes) > 4 and sizes[3] == sizes[4]:
+        ax.text(1.0, 0.02, f"ranks 4 and 5 tie\nat {sizes[3]} segments",
+                ha="right", va="bottom", fontsize=PT_SMALL,
+                color=COLORS["mute"], transform=ax.transAxes,
+                linespacing=1.05)
     n_route = sum(len(membership[h]) for h in heads[:4])
     # The summary sits in the row gutter under the axes box, clear of the
     # arbor strokes that would otherwise run through it.
@@ -320,22 +395,29 @@ def panel_roadmap(ax):
     binary = LinearSegmentedColormap.from_list(
         "roadmap_dict", ["#FFFFFF", C_ROUTE])
     # Each mini carries its matrix shape (height scales with the row count,
-    # and a dimension tag names rows x columns), so the two 4-step staircases
-    # -- 4x4 branch selectors vs the 8x4 two-compartment subtree blocks --
-    # cannot be mistaken for one another.
+    # and a two-line dimension tag reads "rows / x columns" in one
+    # convention: what is addressed over what route), so the two 4-step
+    # staircases -- 4x4 branch selectors vs 8x4 sibling pairs over terminal
+    # parameter blocks (Fig. 6's leaves, not serial compartments) -- cannot
+    # be mistaken for one another.  The third verdict states the frozen
+    # factorial's contrast honestly: ancestry beats the best matched control
+    # only at K=4 (+1.3 pp), not that K=4 is the accuracy optimum.
     rows = [
-        ("image classes", "MNIST ladder (Fig. 3)",
-         np.ones((12, 1)), 0.035, 0.22, "12 comp × 1",
+        ("image classes", f"MNIST ladder ({fig_ref('ladder')})",
+         np.ones((12, 1)), 0.035, 0.22, "12 comp\n× 1 coefficient",
          "one coefficient\nper neuron suffices"),
-        ("conflicting branches", r"$\chi>\chi_{\rm c}$ (Fig. 5)",
-         np.eye(4), 0.10, 0.12, "4 branches × 4",
+        ("conflicting branches",
+         r"$\chi>\chi_{\rm c}$" + f" ({fig_ref('conflict')})",
+         np.eye(4), 0.10, 0.12, "4 branches\n× 4 selectors",
          "branch selectors\nbecome necessary"),
-        ("nested contexts", "eight-context task (Fig. 6)",
+        ("nested contexts", f"eight-context task ({fig_ref('factorial')})",
          np.kron(np.eye(4), np.ones((2, 1))), 0.10, 0.19,
-         "8 comp × 4 subtrees",
-         "subtrees win in a\n$K{=}4$ window"),
+         "8 blocks\n× 4 sibling pairs",
+         "ancestry beats best\ncontrol only at $K{=}4$\n(+1.3 pp)"),
     ]
-    ys = (1.0, 0.65, 0.30)
+    # Rows sit 0.02 higher than before so the two-line tag under the third
+    # mini clears the canvas's bottom margin.
+    ys = (1.0, 0.66, 0.32)
     row_h = 0.30
     for (task, home, matrix, width, height, dims, verdict), y1 in zip(rows, ys):
         y0 = y1 - row_h
@@ -365,7 +447,8 @@ def panel_roadmap(ax):
             spine.set_color(COLORS["edge"])
         ax.text(0.51 + width / 2, mid - height / 2 - 0.018, dims,
                 ha="center", va="top", fontsize=PT_SMALL,
-                color=COLORS["mute"], transform=ax.transAxes)
+                color=COLORS["mute"], transform=ax.transAxes,
+                linespacing=1.0)
         ax.text(0.67, mid, verdict, ha="left", va="center",
                 fontsize=PT_SMALL, color=COLORS["ink"],
                 transform=ax.transAxes, linespacing=1.05)

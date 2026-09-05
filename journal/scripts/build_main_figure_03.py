@@ -55,6 +55,7 @@ import pandas as pd
 from matplotlib.colors import TwoSlopeNorm
 from matplotlib.lines import Line2D
 from matplotlib.patches import FancyArrowPatch, FancyBboxPatch, Rectangle
+from matplotlib.transforms import blended_transform_factory
 
 from credit_tree_schematics import draw_credit_tree, mix
 from figure_canvas import (
@@ -161,7 +162,7 @@ class _MinusFmt:
         return s.replace("-", "−")
 
 
-def signed_heatmap(ax, matrix, xlabels, ylabels, *, label):
+def signed_heatmap(ax, matrix, xlabels, ylabels, *, label, tag=None):
     """The figure's ONE signed-heatmap treatment: DIV, zero-centred, keyed.
 
     The matrix keeps the panel's whole axes box -- the full 4-module share
@@ -235,6 +236,14 @@ def signed_heatmap(ax, matrix, xlabels, ylabels, *, label):
                 fontsize=PT_TICK, color=COLORS["ink"])
     ax.text(centre, top - (KEY_TOP_PT + 0.5 * KEY_LABEL_PT) * uy, label,
             ha="center", va="center", fontsize=PT_LABEL, color=COLORS["ink"])
+    if tag:
+        # A one-word provenance tag at the right end of the key-label line,
+        # in the mute annotation voice, flush with the matrix's right edge.
+        # E's matrix is a closed form (no seed variance), and without the
+        # tag its key reads like the 50-seed estimates of C, D and F.
+        ax.text(cols - 0.5, top - (KEY_TOP_PT + 0.5 * KEY_LABEL_PT) * uy,
+                tag, ha="right", va="center", fontsize=PT_SMALL,
+                color=COLORS["mute"], style="italic")
 
     ax.set_xlim(-0.5, cols - 0.5)
     ax.set_ylim(-0.5, top)
@@ -473,6 +482,18 @@ def main() -> None:
     ax_d.set_xlim(0.70, 4.30)
     ax_d.set_xlabel("route resolution Dᵣ   (4 = full rank)")
     ax_d.set_ylabel("final loss")
+    # D_r = 4 resolves every leaf, so the route operator is the identity
+    # (M = I, the full-rank endpoint the axis label names; it equals
+    # stochastic backpropagation to all digits in depth_training_summary).
+    # One mute tag at the foot of that column, right-aligned 1.8 pt inside
+    # the axes edge so "M = I" centres on the 4 tick; the column is
+    # data-free below the H_c = 4 ribbon (0.19), and the tag tops out near
+    # 0.045 on the log axis.
+    ax_d.text(4.25, 0.03, "identity\nM = I",
+              transform=blended_transform_factory(ax_d.transData,
+                                                  ax_d.transAxes),
+              ha="right", va="bottom", fontsize=PT_SMALL,
+              color=COLORS["mute"], style="italic", linespacing=1.15)
     ax_d.legend(loc="upper left", ncol=2, frameon=False, fontsize=PT_LEGEND,
                 handlelength=1.3, handletextpad=0.4, labelspacing=0.25,
                 columnspacing=0.8, borderaxespad=0.2)
@@ -487,7 +508,7 @@ def main() -> None:
         ax_e, delta.to_numpy() * 100.0,
         [f"{v:.2f}" for v in delta.columns],
         [f"{v:.2f}" for v in delta.index],
-        label="Δ loss (×10⁻²)")
+        label="Δ loss (×10⁻²)", tag="analytic")
     ax_e.plot([-0.5, 0.5, 0.5, 1.5, 1.5, 3.5, 3.5],
               [1.5, 1.5, 2.5, 2.5, 3.5, 3.5, 4.5],
               ls="--", color=COLORS["mute"], lw=LW_REF, zorder=3)
@@ -547,9 +568,29 @@ def main() -> None:
             "budget_k"],
         validate="one_to_one")
     merged = merged[merged.architecture.eq("dendritic_tree")]
-    ax_g.scatter(merged.maximum_guaranteed_decrease,
-                 merged.norm_matched_one_step_progress,
+    # U(M) is defined as 0 wherever the routed update is not positively
+    # aligned (mu^T M mu <= 0, optimal step 0): 214 of the 540 fits.  Those
+    # sit on the x = 0 wall by definition, not by measurement, so they are
+    # drawn as a rug of mute horizontal ticks at their true (0, P1)
+    # coordinates -- a strip on the wall rather than a column of the same
+    # dots as the measured spread -- and the count is read off the frozen
+    # table so the note can never drift from the drawing.
+    clamped = merged.maximum_guaranteed_decrease.eq(0.0)
+    assert bool((merged.loc[clamped, "retained_signal_inner_product"]
+                 <= 0.0).all())
+    spread = merged[~clamped]
+    wall = merged[clamped]
+    ax_g.scatter(spread.maximum_guaranteed_decrease,
+                 spread.norm_matched_one_step_progress,
                  s=7, alpha=0.30, edgecolors="none", color=COLORS["additive"])
+    ax_g.scatter(wall.maximum_guaranteed_decrease,
+                 wall.norm_matched_one_step_progress,
+                 s=22, alpha=0.40, marker="_", linewidths=LW_EDGE,
+                 color=COLORS["mute"], zorder=2.5)
+    ax_g.text(0.03, -0.78,
+              f"U = 0: not positively aligned\n({len(wall)}/{len(merged)})",
+              ha="left", va="center", fontsize=PT_SMALL,
+              color=COLORS["mute"], linespacing=1.15)
     ax_g.set_ylim(-1.42, 1.22)
     ax_g.set_yticks([-1.0, -0.5, 0.0, 0.5, 1.0])
     # The Spearman coefficient, its seed-block interval and n are reported in
