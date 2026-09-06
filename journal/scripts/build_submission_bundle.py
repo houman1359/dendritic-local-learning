@@ -372,7 +372,7 @@ def write_metadata(output_dir: Path, software: Path | None) -> None:
         "source_commit": repository_commit(),
         "source_worktree_clean": worktree_clean,
         "source_snapshot_method": "current explicit allowlist",
-        "numbered_main_figure_count": 9,
+        "numbered_main_figure_count": len(MAIN_FIGURES),
         "main_figure_asset_count": len(MAIN_FIGURES),
         "supplementary_figure_count": len(SUPPLEMENTARY_FIGURES),
         "source_data_archive": "Source_Data.zip",
