@@ -22,6 +22,7 @@ def main():
     output.mkdir(parents=True)
     spec = importlib.util.spec_from_file_location('draft_release',JOURNAL/'scripts/build_software_release.py')
     release = importlib.util.module_from_spec(spec);spec.loader.exec_module(release)
+    release.assert_registered_sources_allowlisted(JOURNAL)
     stage = output/'software_release'; stage.mkdir()
     implementation = release.discover_implementation_root(JOURNAL)
     commit = release.run_git('rev-parse','HEAD',repository_root=implementation).strip()

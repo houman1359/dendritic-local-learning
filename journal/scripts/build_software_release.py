@@ -119,6 +119,7 @@ JOURNAL_DIRECTORIES = (
 )
 JOURNAL_ANALYSIS_RECORDS = (
     "ANIMAL_DATA_CONTRACT.md",
+    "CIFAR10_ADDITIVE_FEEDBACK_LADDER_CONFIRMATORY_20260828.md",
     "CREDIT_PHASE_THEORY_EXPERIMENT_CONTRACT_20260811.md",
     "EXPERIMENT_CONTRACT.md",
     "MICRONS_FUNCTIONAL_INHIBITORY_CONTRACT.md",
@@ -258,6 +259,21 @@ JOURNAL_SCRIPTS += (
     'run_review_branch_trajectories.py',
     'run_review_coefficient_encoder.py',
     'run_review_coefficient_hard_readout.py',
+)
+
+# Historical generators still referenced by the canonical provenance ledger.
+# Keep their original script paths so the restored package passes the same audit.
+JOURNAL_SCRIPTS += (
+    'analyze_cifar10_additive_feedback_ladder_confirmatory.py',
+    'analyze_fashion_feedback_ladder.py',
+    'analyze_fig2_path_gain_dispersion.py',
+    'analyze_operator_argmax.py',
+    'analyze_physical_alignment_dose.py',
+    'analyze_point_dendrite_credit_controls.py',
+    'analyze_route_dictionary_atlas.py',
+    'build_capture_per_wire_figure.py',
+    'collect_mnist_between_within_factorial.py',
+    'collect_mnist_feedback_ladder.py',
 )
 
 # Release builders, manuscript auditors and local dependencies of released tests.
@@ -561,6 +577,33 @@ def required_article_input_paths(source_root: Path) -> set[str]:
         if path.is_file() and path.suffix in {".json", ".csv", ".md"}:
             selected.add("journal/" + path.relative_to(source_root).as_posix())
     return selected
+
+
+def assert_registered_sources_allowlisted(source_root: Path) -> None:
+    """Refuse a release that drops registered generators or scientific protocols."""
+    manifest = source_root / "source_data/provenance_manifest.tsv"
+    with manifest.open(newline="") as stream:
+        rows = list(csv.DictReader(stream, delimiter="\t"))
+    omitted = set()
+    prefix = Path("drafts/dendritic-local-learning")
+    for row in rows:
+        if row.get("status") != "ready":
+            continue
+        selected = [row.get("generator_path", "").strip()]
+        source = row.get("source_path", "").strip()
+        if "/journal/analysis/" in source:
+            selected.append(source)
+        for raw in filter(None, selected):
+            try:
+                relative = Path(raw).relative_to(prefix)
+            except ValueError:
+                omitted.add(raw)
+                continue
+            if not repository_file_allowed(relative, "paper"):
+                omitted.add(raw)
+    if omitted:
+        raise RuntimeError("Canonical provenance references omitted software inputs:\n- "
+                           + "\n- ".join(sorted(omitted)))
 
 
 def assert_article_inputs_committed(source_root: Path, paper_root: Path, commit: str) -> None:
@@ -1434,6 +1477,7 @@ def build(force: bool, implementation_root: Path | None = None) -> dict[str, obj
             "release so every article-specific file is tied to a commit."
         )
     assert_article_inputs_committed(JOURNAL_ROOT, PAPER_REPOSITORY_ROOT, journal_commit)
+    assert_registered_sources_allowlisted(JOURNAL_ROOT)
 
     temporary_parent = SUBMISSION_ROOT / ".software_release_build"
     ensure_submission_target(temporary_parent)

@@ -142,3 +142,28 @@ def test_ignored_allowlisted_recipe_cannot_silently_disappear(tmp_path):
     assert 'journal/configs/new.yaml' in release.required_article_input_paths(root/'journal')
     with pytest.raises(RuntimeError,match='Git-ignored recipes'):
         release.assert_article_inputs_committed(root/'journal',root,commit)
+
+
+
+def test_registered_generator_and_protocol_cannot_be_silently_omitted(tmp_path):
+    import csv
+    journal = tmp_path / "journal"
+    manifest = journal / "source_data/provenance_manifest.tsv"
+    manifest.parent.mkdir(parents=True)
+    fields = ["status", "generator_path", "source_path"]
+    def write(generator, source=""):
+        with manifest.open("w", newline="") as stream:
+            writer = csv.DictWriter(stream, fieldnames=fields, delimiter="\t")
+            writer.writeheader()
+            writer.writerow(dict(status="ready", generator_path=generator, source_path=source))
+    prefix = "drafts/dendritic-local-learning/journal/"
+    write(prefix + "scripts/not_registered_for_release.py")
+    with pytest.raises(RuntimeError, match="omitted software inputs"):
+        release.assert_registered_sources_allowlisted(journal)
+    write(prefix + "scripts/collect_mnist_feedback_ladder.py",
+          prefix + "analysis/CIFAR10_ADDITIVE_FEEDBACK_LADDER_CONFIRMATORY_20260828.md")
+    release.assert_registered_sources_allowlisted(journal)
+    write(prefix + "scripts/collect_mnist_feedback_ladder.py",
+          prefix + "analysis/unregistered_protocol.md")
+    with pytest.raises(RuntimeError, match="unregistered_protocol"):
+        release.assert_registered_sources_allowlisted(journal)
