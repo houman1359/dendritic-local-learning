@@ -15,18 +15,18 @@ submission. Do not infer author-specific declarations from the repository.
 ## Scientific and editorial sign-off
 
 - [ ] Check the final title, abstract, numerical results, Methods, figure legends and SI against the frozen source tables.
-- [ ] Confirm the scope: full-batch utility is retrospective within the same factorial; the initial linear selector retains its negative long-horizon result in S35. The new finite-label interaction pipeline learns compatible trees in a specified multi-affine model, with random-interaction and credit-rule limits retained. The conductance bridge changes input grouping within a fixed physical shape. Physical-depth gains depend on optimizer/update coordinates; exact inactive-branch gradients in the branch-conflict construction are zero.
+- [ ] Confirm the scope: full-batch utility is retrospective within the same factorial; the initial linear selector retains its negative long-horizon result in S35. The main matched interaction experiment connects learned credit geometry to fixed-profile learning under paired, input-isospectral tasks. The finite-label interaction pipeline is supporting evidence in the same paper. The conductance bridge changes input grouping within a fixed physical shape. Physical-depth gains depend on optimizer/update coordinates; exact inactive-branch gradients in the branch-conflict construction are zero.
 - [ ] Preserve the Boolean scope: seven fixed logical templates and twenty fresh seed blocks, with 6,720 fresh fits separate from 1,680 development fits, 336 excluded-smoke fits and the earlier 7,760 morphology-bridge fits. The primary grouping effect is strong; the positive but small XOR-of-AND credit effect fails the 0.01 NMSE practical margin; parity is descriptive. Canonical gate derivatives do not prove a freely trained broadcast learner must fail.
 - [ ] Keep replication units explicit: artificial-network seeds; cells within each MICrONS mouse; seven functional targets within one mouse; two MICrONS mice only for structural capacity; six external animals only for the supplementary signed-coordinate reanalysis.
 - [ ] Verify interval definitions and test families, including restored accuracy-count ties, the distinction between Wilcoxon and exact paired-mean sign-flip tests, and the two Bonferroni-adjusted 97.5% primary intervals within each of the separate finite-calibration, end-to-end and Boolean cohorts. Credit and conductance subgroup intervals remain pointwise descriptive.
 - [ ] Confirm the common-checkpoint oracle reanalysis is described as a replay diagnostic, including its small numerical drift, without claiming newly trained oracle accuracies.
 - [ ] Review historical conductance-input validity labels against resolved run metadata and retain any unresolved lineage explicitly.
 - [ ] Review overlap, citations and source licenses against the disclosed preprints and any conference publication.
-- [ ] Decide whether to shorten the author-requested roughly 8,000-word main narrative in light of the journal's approximately 5,000-word advisory guidance.
+- [ ] Decide whether to shorten the author-requested 6,000–6,500-word main narrative in light of the journal's approximately 5,000-word advisory guidance.
 
 ## Author verification of the technical release
 
-- [ ] Review the recorded compilation and layout checks and inspect the compiled main/SI PDFs, including all nine main and 44 supplementary figures.
+- [ ] Review the recorded compilation and layout checks and inspect the compiled main/SI PDFs, including all eight main and 47 supplementary figures.
 - [ ] Review the completed provenance, submission, figure, citation, overlap and test audit records for the exact source version to be submitted.
 - [ ] Review the final Source Data, software, Overleaf and submission archives against their recorded clean source snapshot and build logs. Archive names alone do not identify a version.
 - [ ] Review the automated checks of source-data and script inventories, manifests, snapshot/commit metadata, SHA-256 sidecars, archive integrity and private-path screening. Final build records and fingerprints are retained outside the archives to avoid circular hashes.

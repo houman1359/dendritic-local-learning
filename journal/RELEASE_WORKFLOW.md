@@ -48,3 +48,36 @@ Read `source_data/release_task_identity/README.md` and `task_identity.json`. The
 The frozen generator bodies retain their original equations and random-number operations. The explicit legacy wrapper accepts a seed and preserves the caller's random state; reproducing an archived training trajectory additionally requires that run's model initialization, data-generation RNG timing and complete configuration. The legacy default constructs 784 × 784 images, so full data generation requires substantial memory; the clean smoke uses 8 × 8 images solely to test the same implementation. The default dimensions must not be silently reduced when reproducing the historical cohort.
 
 After the final committed release passes these checks, rebuild the Source Data, manuscript/Overleaf and submission bundles in their dependency order and inspect their inventories separately. The software builder's exclusions do not automatically remove internal logs from other bundle builders.
+
+## Restoring released evidence without changing canonical hashes
+
+The software README uses `code/release_noise/restore_source_data.py` to restore data by `original_source`, including evidence now displayed under `Methods/retained_evidence/`. The helper verifies every released file, uses complete copies rather than display-filtered subsets, and writes `RELEASED_SOURCE_HASHES.tsv` plus an unchanged copy of the source-package manifest. A code file included as supporting Source Data is verified and reported without overwriting the committed software copy.
+
+Canonical code/data manifests retain their original hashes. The audit helper `release_hashes.py` accepts a changed portable copy only when its original hash matches that canonical expectation, its actual bytes match the released hash, and its declared transformation provenance verifies. Software links additionally check every step of `PORTABILITY_PATCHES.tsv`; no undeclared source changes are accepted. Removed private run-directory columns cannot be reconstructed from the released numeric tables. Checkpoint-level reanalysis therefore needs separately supplied or newly generated run records.
+
+
+## Historical physical-depth runtime
+
+The software archive separately exports the selected source files at implementation commit `a99c3a777f99913e13dfe673a3f3a28bfe3566af`, under `historical_runtimes/physical_depth_a99c3a7/`. `RUNTIME_ORIGINS.tsv` records each original source hash; `RUNTIME_PROVENANCE.json` records the verified commit, tree and containing refs. The archive's released-source manifest links any declared portability edits. The export does not pretend to contain a Git checkout. Replacing this runtime with the current installed core would fail the frozen source audit.
+
+After copying the paper into the documented implementation layout, preserve its source-provenance chain before restoring Source Data:
+
+```bash
+python SOFTWARE/article_analysis/code/release_noise/release_hashes.py \
+  --remap-paper --release-root SOFTWARE \
+  --journal-root SOFTWARE/dendritic_modeling/drafts/dendritic-local-learning/journal
+```
+
+This verifies the copied bytes and retains the original software paths in an explicit relocation record. Numerical restoration merges its sidecar without discarding these software identities. The original canonical hashes remain unchanged.
+
+Run the portable depth launcher in a fresh process and use the same constrained environment as the clean smoke:
+
+```bash
+/path/to/reviewer-venv/bin/python -B SOFTWARE/article_analysis/code/release_noise/physical_depth_launcher.py \
+  --source-root SOFTWARE/dendritic_modeling/drafts/dendritic-local-learning/journal/source_data/physical_depth_budget/canonical \
+  --journal-root SOFTWARE/dendritic_modeling/drafts/dendritic-local-learning/journal \
+  --runtime-root SOFTWARE/historical_runtimes/physical_depth_a99c3a7 \
+  --condition 30 --verify-only
+```
+
+Replace `--verify-only` with `--output-root NEW_OUTPUT_DIR` to rerun the chosen frozen condition. Each output directory must be new. The 600-epoch cap, validation-based checkpoint selection, early-stopping patience, initialization seed and learning rate are retained. `--smoke-epochs 1` is an explicitly excluded short run, useful for checking both the exact-gradient and LocalCA training paths without adding scientific observations. The frozen runner is preserved, including its machine-specific checkout check; the portable launcher instead verifies the historical export's bytes and uses only its verified passive observation helpers. Device and library differences can prevent bitwise trajectory identity, and their versions are recorded. This task generator is synthetic and needs no external data.

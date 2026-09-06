@@ -1,0 +1,21 @@
+{
+  "at_600_cap": 52,
+  "budgets": [
+    180,
+    600
+  ],
+  "conditions_complete": true,
+  "configuration_and_state_checks": "All 60 configurations differ only in epoch cap and output naming; saved final model tensors exactly equal validation-selected best-state tensors",
+  "fits": 60,
+  "max_abs_historical180_accuracy_difference_pp": 1.8299996852874756,
+  "median_abs_historical180_accuracy_difference_pp": 0.07000267505645752,
+  "original_180_results_preserved": true,
+  "projection": "Best-validation curves carried forward after stopping, no survivor averaging",
+  "protocol_sha256": "ba1ef873973a13a63bf669cce2949034cbce010c2da810722534f1b2c3520e07",
+  "resource_checks": "Every fit has 66178 trainable parameters and 14336 active synapses",
+  "script_sha256": "3dbbe925414bf09b8f208fc7d83d82ac5f6c8a5372aac40cc11c47b9d0334d71",
+  "seed_blocks": 10,
+  "source_concordance": "See per-run validation-curve and 180-epoch test-accuracy discrepancies; source-consistent restarts, not claimed bitwise continuation",
+  "status": "passed",
+  "training_changes": "Epoch cap only; original early stopping and optimizer recipes retained"
+}

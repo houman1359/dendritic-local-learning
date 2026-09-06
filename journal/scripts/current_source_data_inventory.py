@@ -12,6 +12,7 @@ from pathlib import Path
 
 TEXT_EXTENSIONS = {'.csv', '.tsv', '.json', '.jsonl', '.txt', '.md', '.yaml', '.yml'}
 DATA_EXTENSIONS = TEXT_EXTENSIONS | {'.npy', '.npz'}
+COMPRESSED_TABLE_SUFFIXES = ('.csv.gz', '.tsv.gz')
 
 def current_files(journal, legacy, cls, filters, counts, inventory=None):
     inventory = inventory or journal / 'source_data/credit_first_provenance/source_inventory.tsv'
@@ -43,7 +44,7 @@ def current_files(journal, legacy, cls, filters, counts, inventory=None):
         rows = list(csv.DictReader(handle, delimiter='\t'))
     for row in rows:
         source = row['source']
-        if not source.startswith('source_data/') or Path(source).suffix.lower() not in DATA_EXTENSIONS:
+        if not source.startswith('source_data/') or not (Path(source).suffix.lower() in DATA_EXTENSIONS or source.lower().endswith(COMPRESSED_TABLE_SUFFIXES)):
             continue
         if row['record_type'] == 'figure_asset':
             continue

@@ -1,7 +1,7 @@
 {
   "version": 1,
   "layout": "credit_first_eight_main_47_supplementary",
-  "physical_figure_pending": true,
+  "physical_figure_pending": false,
   "retained_template": "configs/credit_first_provenance/retained_supplementary.tsv",
   "assets": [
     {
@@ -35,6 +35,14 @@
       "component": "source_data/credit_rule_bridge/figures/credit_interaction_bridge_native.pdf",
       "panel": "a-f",
       "notes": ""
+    },
+    {
+      "figure": "fig5",
+      "path": "figures/main/figure_05.pdf",
+      "generator": "scripts/physical_depth_budget/build_main_figure5.py",
+      "component": "source_data/physical_depth_budget/figure/figure5_physical_depth_budget.pdf",
+      "panel": "a-c",
+      "notes": "Original optimizer-by-depth reference (A), all 60 extended validation trajectories (B), and three paired credit/optimizer accuracy contrasts at two budgets (C); depth contrast retained in supporting tables"
     },
     {
       "figure": "fig6",
@@ -725,6 +733,78 @@
       "generator": "",
       "replication_unit": "paired training seed (20); route families repeated",
       "notes": "Retrospective actual-update utility, not prospective selection"
+    },
+    {
+      "figure": "fig5",
+      "panel": "a",
+      "path": "source_data/point_dendrite_credit_controls/condition_summary.csv",
+      "role": "numerical source",
+      "generator": "",
+      "replication_unit": "paired training seed block (10); original and extended budgets kept separate",
+      "notes": "Original depth curves, ten seeds per condition"
+    },
+    {
+      "figure": "fig5",
+      "panel": "b",
+      "path": "source_data/physical_depth_budget/canonical/extension_validation_trajectories.csv",
+      "role": "numerical source",
+      "generator": "",
+      "replication_unit": "paired training seed block (10); original and extended budgets kept separate",
+      "notes": "All 60 new fits; stopped trajectories explicitly carried forward"
+    },
+    {
+      "figure": "fig5",
+      "panel": "c",
+      "path": "source_data/physical_depth_budget/canonical/extension_paired_contrasts.csv",
+      "role": "numerical source",
+      "generator": "",
+      "replication_unit": "paired training seed block (10); original and extended budgets kept separate",
+      "notes": "Panel C selects localca_path_minus_shared, bp_exact_minus_broadcast, and broadcast_bp_minus_localca_recipe at budgets 180 and 600; all ten paired seed blocks retained. Depth and secondary loss contrasts are supporting evidence, not additional displayed effects."
+    },
+    {
+      "figure": "fig5",
+      "panel": "c",
+      "path": "source_data/physical_depth_budget/canonical/extension_paired_seed_contrasts.csv",
+      "role": "numerical source",
+      "generator": "",
+      "replication_unit": "paired training seed block (10); original and extended budgets kept separate",
+      "notes": "Panel C selects localca_path_minus_shared, bp_exact_minus_broadcast, and broadcast_bp_minus_localca_recipe at budgets 180 and 600; all ten paired seed blocks retained. Depth and secondary loss contrasts are supporting evidence, not additional displayed effects."
+    },
+    {
+      "figure": "methods",
+      "panel": "Supplementary Table S18; task definitions and verification",
+      "path": "source_data/release_task_identity/README.md",
+      "role": "Scientific task-identity definitions and historical scope",
+      "generator": "",
+      "replication_unit": "historical training cohort; individual checkpoint records support generator identity, not new independent learning outcomes",
+      "notes": "Supports Supplementary Table S18 and the qualified task definitions for clean, prospective and inherited noise cohorts. Distinguishes confirmed noisy-line images from intended projected-noise MNIST; unresolved executed generators remain unresolved. No plotted-panel association is inferred."
+    },
+    {
+      "figure": "methods",
+      "panel": "Supplementary Table S18; task definitions and verification",
+      "path": "source_data/release_task_identity/clean_noise_input_dimension_check.csv",
+      "role": "Independent input-dimension verification from retained checkpoints",
+      "generator": "",
+      "replication_unit": "historical training cohort; individual checkpoint records support generator identity, not new independent learning outcomes",
+      "notes": "Supports Supplementary Table S18 and the qualified task definitions for clean, prospective and inherited noise cohorts. Distinguishes confirmed noisy-line images from intended projected-noise MNIST; unresolved executed generators remain unresolved. No plotted-panel association is inferred."
+    },
+    {
+      "figure": "methods",
+      "panel": "Supplementary Table S18; task definitions and verification",
+      "path": "source_data/release_task_identity/task_identity.csv",
+      "role": "Machine-readable cohort-to-task identity map",
+      "generator": "",
+      "replication_unit": "historical training cohort; individual checkpoint records support generator identity, not new independent learning outcomes",
+      "notes": "Supports Supplementary Table S18 and the qualified task definitions for clean, prospective and inherited noise cohorts. Distinguishes confirmed noisy-line images from intended projected-noise MNIST; unresolved executed generators remain unresolved. No plotted-panel association is inferred."
+    },
+    {
+      "figure": "methods",
+      "panel": "Supplementary Table S18; task definitions and verification",
+      "path": "source_data/release_task_identity/task_identity.json",
+      "role": "Task definitions, evidence hashes and historical runtime qualifications",
+      "generator": "",
+      "replication_unit": "historical training cohort; individual checkpoint records support generator identity, not new independent learning outcomes",
+      "notes": "Supports Supplementary Table S18 and the qualified task definitions for clean, prospective and inherited noise cohorts. Distinguishes confirmed noisy-line images from intended projected-noise MNIST; unresolved executed generators remain unresolved. No plotted-panel association is inferred."
     }
   ],
   "supporting_groups": [
@@ -744,7 +824,7 @@
       "path": "source_data/anatomy_commonmode",
       "figure": "methods",
       "panel": "supporting evidence and protocols",
-      "replication_unit": "reconstructed cell; original8/v661 same mouse, Pinky second mouse"
+      "replication_unit": "reconstructed cell; original eight-cell and v661 cohorts from the same mouse; Pinky is a second mouse"
     },
     {
       "path": "source_data/shunt_ancestry_gain",
@@ -779,7 +859,8 @@
     ".log",
     ".out",
     ".err",
-    ".pyc"
+    ".pyc",
+    ".pdf"
   ],
   "excluded_path_components": [
     "__pycache__",
@@ -790,7 +871,8 @@
   "allowed_document_names": [
     "README.md",
     "REPORT.md",
-    "PROTOCOL.md"
+    "PROTOCOL.md",
+    "EXTENSION_REPORT.md"
   ],
   "source_hash_manifests": [
     {
@@ -811,6 +893,29 @@
     },
     {
       "path": "source_data/shunt_ancestry_gain/figures/figure_provenance.json"
+    },
+    {
+      "path": "source_data/physical_depth_budget/figure/provenance.json",
+      "builder": "scripts/physical_depth_budget/build_main_figure5.py"
+    },
+    {
+      "path": "source_data/physical_depth_budget/canonical/compact_manifest.json",
+      "source_base": "source_data/physical_depth_budget/canonical"
+    }
+  ],
+  "completion_gates": [
+    {
+      "path": "source_data/physical_depth_budget/canonical/export_validation.json",
+      "required": {
+        "status": "passed",
+        "runs": 60
+      }
+    },
+    {
+      "path": "source_data/physical_depth_budget/canonical/compact_manifest.json",
+      "required": {
+        "status": "complete"
+      }
     }
   ]
 }

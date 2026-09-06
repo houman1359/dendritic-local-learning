@@ -8,6 +8,8 @@ import re
 from pathlib import Path
 
 
+from tex_sources import expanded_tex
+
 ROOT = Path(__file__).resolve().parents[1]
 NEURIPS_ROOT = ROOT.parent / "neurips"
 
@@ -124,7 +126,7 @@ def main() -> None:
         r"\\includegraphics\[width=(?P<width>[^]]+)\]\{(?P<asset>[^}]+)\}"
     )
     for relative in ("main.tex", "supplementary/supplementary.tex"):
-        text = (ROOT / relative).read_text(encoding="utf-8")
+        text = expanded_tex(ROOT / relative)
         for match in include_pattern.finditer(text):
             width = match.group("width")
             asset = match.group("asset")

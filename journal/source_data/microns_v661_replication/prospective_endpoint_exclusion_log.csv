@@ -1,0 +1,166 @@
+endpoint,selection_order,nucleus_id,source_root_id,v661_root_id,cell_type,frozen_before_replication_outcomes,included,exclusion_reason
+structural_routing,0,221009,864691136421187991,864691135740320660,L2IT,True,True,included
+structural_routing,1,221045,864691135992368833,864691135992368833,L2IT,True,True,included
+structural_routing,2,221058,864691135938777092,864691135082534135,L2IT,True,True,included
+structural_routing,3,221105,864691136138892669,864691135416557754,L2IT,True,True,included
+structural_routing,4,221169,864691136312164186,864691136419314071,L2IT,True,True,included
+structural_routing,5,222743,864691135480607430,864691136389026167,L2IT,True,True,included
+structural_routing,6,222814,864691135137299993,864691136486753554,L2IT,True,True,included
+structural_routing,7,222828,864691135387916629,864691135716174106,L2IT,True,True,included
+structural_routing,8,222898,864691136211425724,864691135502788957,L2IT,True,True,included
+structural_routing,9,222924,864691135640138299,864691135867632406,L2IT,True,True,included
+structural_routing,10,255117,864691135741458324,864691135938349828,L2IT,True,True,included
+structural_routing,11,255146,864691136619341965,864691136619341965,L2IT,True,True,included
+structural_routing,12,255156,864691135325071004,864691136066733720,L2IT,True,True,included
+structural_routing,13,255199,864691135861202536,864691135919106224,L2IT,True,True,included
+structural_routing,14,255213,864691135375745736,864691135455195242,L2IT,True,True,included
+structural_routing,15,255252,864691136238610447,864691135687601120,L2IT,True,True,included
+structural_routing,16,255360,864691137197373249,864691137197373249,L2IT,True,True,included
+structural_routing,17,256280,864691135938775556,864691135495249040,L2IT,True,True,included
+structural_routing,18,256313,864691135499767059,864691135468547212,L2IT,True,True,included
+structural_routing,19,256386,864691135516884435,864691135516884435,L2IT,True,True,included
+structural_routing,20,256456,864691136138779517,864691135468597132,L2IT,True,False,excluded: member of original eight-cell pilot
+structural_routing,21,256459,864691135492613471,864691136137737085,L2IT,True,True,included
+structural_routing,22,256498,864691136336208307,864691135952698659,L2IT,True,True,included
+structural_routing,23,256503,864691136390766608,864691136024229689,L2IT,True,True,included
+structural_routing,24,256512,864691135573191405,864691136663284190,L2IT,True,True,included
+structural_routing,25,256521,864691135398805281,864691135572379429,L2IT,True,True,included
+structural_routing,26,256530,864691135732318393,864691135404277230,L2IT,True,True,included
+structural_routing,27,256550,864691135060651419,864691135565275479,L2IT,True,False,excluded: member of original eight-cell pilot
+structural_routing,28,256606,864691135577749022,864691135334986985,L2IT,True,True,included
+structural_routing,29,256609,864691137198691137,864691135404231406,L2IT,True,True,included
+structural_routing,30,256610,864691135928366606,864691135947212897,L2IT,True,True,included
+structural_routing,31,258301,864691135493686111,864691136953057759,L2IT,True,True,included
+structural_routing,32,258345,864691135573814980,864691135573814980,L2IT,True,True,included
+structural_routing,33,291111,864691135409937097,864691135698631701,L2IT,True,False,excluded: member of original eight-cell pilot
+structural_routing,34,291175,864691136674749575,864691136100511093,L2IT,True,True,included
+structural_routing,35,292648,864691136043380566,864691135700475426,L2IT,True,False,excluded: member of original eight-cell pilot
+structural_routing,36,294539,864691136914414321,864691134941194851,L2IT,True,True,included
+structural_routing,37,294583,864691135743102827,864691135856845358,L2IT,True,True,included
+structural_routing,38,258209,864691135277186789,864691135591018763,L3IT,True,False,excluded: member of original eight-cell pilot
+structural_routing,39,260666,864691135447718228,864691135762339894,L3IT,True,True,included
+structural_routing,40,294510,864691135274038801,864691135658994050,L3IT,True,True,included
+structural_routing,41,228527,864691136109892792,864691136109892792,L4IT,True,True,included
+structural_routing,42,228537,864691135477476928,864691136371808392,L4IT,True,True,included
+structural_routing,43,260673,864691136927514442,864691136066506392,L4IT,True,True,included
+structural_routing,44,262777,864691136380816597,864691135367232761,L4IT,True,True,included
+structural_routing,45,262847,864691135441883720,864691135342193329,L4IT,True,True,included
+structural_routing,46,262910,864691136391027728,864691136275165965,L4IT,True,True,included
+structural_routing,47,262925,864691135719900721,864691136066697624,L4IT,True,True,included
+structural_routing,48,263003,864691135106556749,864691135856802606,L4IT,True,True,included
+structural_routing,49,263031,864691136288301507,864691135716106266,L4IT,True,True,included
+structural_routing,50,264889,864691135324623260,864691135772366667,L4IT,True,False,excluded: member of original eight-cell pilot
+structural_routing,51,264990,864691136288644291,864691136673975943,L4IT,True,True,included
+structural_routing,52,267033,864691135431616048,864691136195348812,L5ET,True,True,included
+structural_routing,53,264871,864691135739661169,864691136444507779,L5IT,True,False,excluded: member of original eight-cell pilot
+structural_routing,54,264888,864691135196576298,864691135395143157,L5IT,True,False,excluded: member of original eight-cell pilot
+focal_shunt_vs_additive,0,221009,864691136421187991,864691135740320660,L2IT,True,True,included
+focal_shunt_vs_additive,1,221045,864691135992368833,864691135992368833,L2IT,True,True,included
+focal_shunt_vs_additive,2,221058,864691135938777092,864691135082534135,L2IT,True,True,included
+focal_shunt_vs_additive,3,221105,864691136138892669,864691135416557754,L2IT,True,True,included
+focal_shunt_vs_additive,4,221169,864691136312164186,864691136419314071,L2IT,True,False,no site met descendant and matched-unrelated eligibility criteria
+focal_shunt_vs_additive,5,222743,864691135480607430,864691136389026167,L2IT,True,True,included
+focal_shunt_vs_additive,6,222814,864691135137299993,864691136486753554,L2IT,True,True,included
+focal_shunt_vs_additive,7,222828,864691135387916629,864691135716174106,L2IT,True,True,included
+focal_shunt_vs_additive,8,222898,864691136211425724,864691135502788957,L2IT,True,True,included
+focal_shunt_vs_additive,9,222924,864691135640138299,864691135867632406,L2IT,True,True,included
+focal_shunt_vs_additive,10,255117,864691135741458324,864691135938349828,L2IT,True,True,included
+focal_shunt_vs_additive,11,255146,864691136619341965,864691136619341965,L2IT,True,False,no site met descendant and matched-unrelated eligibility criteria
+focal_shunt_vs_additive,12,255156,864691135325071004,864691136066733720,L2IT,True,True,included
+focal_shunt_vs_additive,13,255199,864691135861202536,864691135919106224,L2IT,True,True,included
+focal_shunt_vs_additive,14,255213,864691135375745736,864691135455195242,L2IT,True,True,included
+focal_shunt_vs_additive,15,255252,864691136238610447,864691135687601120,L2IT,True,True,included
+focal_shunt_vs_additive,16,255360,864691137197373249,864691137197373249,L2IT,True,True,included
+focal_shunt_vs_additive,17,256280,864691135938775556,864691135495249040,L2IT,True,True,included
+focal_shunt_vs_additive,18,256313,864691135499767059,864691135468547212,L2IT,True,True,included
+focal_shunt_vs_additive,19,256386,864691135516884435,864691135516884435,L2IT,True,True,included
+focal_shunt_vs_additive,20,256456,864691136138779517,864691135468597132,L2IT,True,False,original pilot excluded from replication
+focal_shunt_vs_additive,21,256459,864691135492613471,864691136137737085,L2IT,True,True,included
+focal_shunt_vs_additive,22,256498,864691136336208307,864691135952698659,L2IT,True,True,included
+focal_shunt_vs_additive,23,256503,864691136390766608,864691136024229689,L2IT,True,True,included
+focal_shunt_vs_additive,24,256512,864691135573191405,864691136663284190,L2IT,True,True,included
+focal_shunt_vs_additive,25,256521,864691135398805281,864691135572379429,L2IT,True,True,included
+focal_shunt_vs_additive,26,256530,864691135732318393,864691135404277230,L2IT,True,True,included
+focal_shunt_vs_additive,27,256550,864691135060651419,864691135565275479,L2IT,True,False,original pilot excluded from replication
+focal_shunt_vs_additive,28,256606,864691135577749022,864691135334986985,L2IT,True,True,included
+focal_shunt_vs_additive,29,256609,864691137198691137,864691135404231406,L2IT,True,True,included
+focal_shunt_vs_additive,30,256610,864691135928366606,864691135947212897,L2IT,True,True,included
+focal_shunt_vs_additive,31,258301,864691135493686111,864691136953057759,L2IT,True,True,included
+focal_shunt_vs_additive,32,258345,864691135573814980,864691135573814980,L2IT,True,True,included
+focal_shunt_vs_additive,33,291111,864691135409937097,864691135698631701,L2IT,True,False,original pilot excluded from replication
+focal_shunt_vs_additive,34,291175,864691136674749575,864691136100511093,L2IT,True,True,included
+focal_shunt_vs_additive,35,292648,864691136043380566,864691135700475426,L2IT,True,False,original pilot excluded from replication
+focal_shunt_vs_additive,36,294539,864691136914414321,864691134941194851,L2IT,True,True,included
+focal_shunt_vs_additive,37,294583,864691135743102827,864691135856845358,L2IT,True,True,included
+focal_shunt_vs_additive,38,258209,864691135277186789,864691135591018763,L3IT,True,False,original pilot excluded from replication
+focal_shunt_vs_additive,39,260666,864691135447718228,864691135762339894,L3IT,True,True,included
+focal_shunt_vs_additive,40,294510,864691135274038801,864691135658994050,L3IT,True,True,included
+focal_shunt_vs_additive,41,228527,864691136109892792,864691136109892792,L4IT,True,True,included
+focal_shunt_vs_additive,42,228537,864691135477476928,864691136371808392,L4IT,True,True,included
+focal_shunt_vs_additive,43,260673,864691136927514442,864691136066506392,L4IT,True,True,included
+focal_shunt_vs_additive,44,262777,864691136380816597,864691135367232761,L4IT,True,True,included
+focal_shunt_vs_additive,45,262847,864691135441883720,864691135342193329,L4IT,True,True,included
+focal_shunt_vs_additive,46,262910,864691136391027728,864691136275165965,L4IT,True,True,included
+focal_shunt_vs_additive,47,262925,864691135719900721,864691136066697624,L4IT,True,True,included
+focal_shunt_vs_additive,48,263003,864691135106556749,864691135856802606,L4IT,True,True,included
+focal_shunt_vs_additive,49,263031,864691136288301507,864691135716106266,L4IT,True,True,included
+focal_shunt_vs_additive,50,264889,864691135324623260,864691135772366667,L4IT,True,False,original pilot excluded from replication
+focal_shunt_vs_additive,51,264990,864691136288644291,864691136673975943,L4IT,True,True,included
+focal_shunt_vs_additive,52,267033,864691135431616048,864691136195348812,L5ET,True,True,included
+focal_shunt_vs_additive,53,264871,864691135739661169,864691136444507779,L5IT,True,False,original pilot excluded from replication
+focal_shunt_vs_additive,54,264888,864691135196576298,864691135395143157,L5IT,True,False,original pilot excluded from replication
+focal_true_vs_depth_shuffle,0,221009,864691136421187991,864691135740320660,L2IT,True,True,included
+focal_true_vs_depth_shuffle,1,221045,864691135992368833,864691135992368833,L2IT,True,False,eligible for shunt-additive contrast; insufficient second site for within-cell depth shuffle
+focal_true_vs_depth_shuffle,2,221058,864691135938777092,864691135082534135,L2IT,True,False,eligible for shunt-additive contrast; insufficient second site for within-cell depth shuffle
+focal_true_vs_depth_shuffle,3,221105,864691136138892669,864691135416557754,L2IT,True,True,included
+focal_true_vs_depth_shuffle,4,221169,864691136312164186,864691136419314071,L2IT,True,False,no site met descendant and matched-unrelated eligibility criteria
+focal_true_vs_depth_shuffle,5,222743,864691135480607430,864691136389026167,L2IT,True,True,included
+focal_true_vs_depth_shuffle,6,222814,864691135137299993,864691136486753554,L2IT,True,True,included
+focal_true_vs_depth_shuffle,7,222828,864691135387916629,864691135716174106,L2IT,True,True,included
+focal_true_vs_depth_shuffle,8,222898,864691136211425724,864691135502788957,L2IT,True,True,included
+focal_true_vs_depth_shuffle,9,222924,864691135640138299,864691135867632406,L2IT,True,True,included
+focal_true_vs_depth_shuffle,10,255117,864691135741458324,864691135938349828,L2IT,True,True,included
+focal_true_vs_depth_shuffle,11,255146,864691136619341965,864691136619341965,L2IT,True,False,no site met descendant and matched-unrelated eligibility criteria
+focal_true_vs_depth_shuffle,12,255156,864691135325071004,864691136066733720,L2IT,True,True,included
+focal_true_vs_depth_shuffle,13,255199,864691135861202536,864691135919106224,L2IT,True,True,included
+focal_true_vs_depth_shuffle,14,255213,864691135375745736,864691135455195242,L2IT,True,True,included
+focal_true_vs_depth_shuffle,15,255252,864691136238610447,864691135687601120,L2IT,True,True,included
+focal_true_vs_depth_shuffle,16,255360,864691137197373249,864691137197373249,L2IT,True,True,included
+focal_true_vs_depth_shuffle,17,256280,864691135938775556,864691135495249040,L2IT,True,True,included
+focal_true_vs_depth_shuffle,18,256313,864691135499767059,864691135468547212,L2IT,True,True,included
+focal_true_vs_depth_shuffle,19,256386,864691135516884435,864691135516884435,L2IT,True,False,eligible for shunt-additive contrast; insufficient second site for within-cell depth shuffle
+focal_true_vs_depth_shuffle,20,256456,864691136138779517,864691135468597132,L2IT,True,False,original pilot excluded from replication
+focal_true_vs_depth_shuffle,21,256459,864691135492613471,864691136137737085,L2IT,True,False,eligible for shunt-additive contrast; insufficient second site for within-cell depth shuffle
+focal_true_vs_depth_shuffle,22,256498,864691136336208307,864691135952698659,L2IT,True,True,included
+focal_true_vs_depth_shuffle,23,256503,864691136390766608,864691136024229689,L2IT,True,True,included
+focal_true_vs_depth_shuffle,24,256512,864691135573191405,864691136663284190,L2IT,True,False,eligible for shunt-additive contrast; insufficient second site for within-cell depth shuffle
+focal_true_vs_depth_shuffle,25,256521,864691135398805281,864691135572379429,L2IT,True,True,included
+focal_true_vs_depth_shuffle,26,256530,864691135732318393,864691135404277230,L2IT,True,True,included
+focal_true_vs_depth_shuffle,27,256550,864691135060651419,864691135565275479,L2IT,True,False,original pilot excluded from replication
+focal_true_vs_depth_shuffle,28,256606,864691135577749022,864691135334986985,L2IT,True,True,included
+focal_true_vs_depth_shuffle,29,256609,864691137198691137,864691135404231406,L2IT,True,True,included
+focal_true_vs_depth_shuffle,30,256610,864691135928366606,864691135947212897,L2IT,True,True,included
+focal_true_vs_depth_shuffle,31,258301,864691135493686111,864691136953057759,L2IT,True,True,included
+focal_true_vs_depth_shuffle,32,258345,864691135573814980,864691135573814980,L2IT,True,True,included
+focal_true_vs_depth_shuffle,33,291111,864691135409937097,864691135698631701,L2IT,True,False,original pilot excluded from replication
+focal_true_vs_depth_shuffle,34,291175,864691136674749575,864691136100511093,L2IT,True,True,included
+focal_true_vs_depth_shuffle,35,292648,864691136043380566,864691135700475426,L2IT,True,False,original pilot excluded from replication
+focal_true_vs_depth_shuffle,36,294539,864691136914414321,864691134941194851,L2IT,True,True,included
+focal_true_vs_depth_shuffle,37,294583,864691135743102827,864691135856845358,L2IT,True,True,included
+focal_true_vs_depth_shuffle,38,258209,864691135277186789,864691135591018763,L3IT,True,False,original pilot excluded from replication
+focal_true_vs_depth_shuffle,39,260666,864691135447718228,864691135762339894,L3IT,True,True,included
+focal_true_vs_depth_shuffle,40,294510,864691135274038801,864691135658994050,L3IT,True,True,included
+focal_true_vs_depth_shuffle,41,228527,864691136109892792,864691136109892792,L4IT,True,True,included
+focal_true_vs_depth_shuffle,42,228537,864691135477476928,864691136371808392,L4IT,True,True,included
+focal_true_vs_depth_shuffle,43,260673,864691136927514442,864691136066506392,L4IT,True,True,included
+focal_true_vs_depth_shuffle,44,262777,864691136380816597,864691135367232761,L4IT,True,True,included
+focal_true_vs_depth_shuffle,45,262847,864691135441883720,864691135342193329,L4IT,True,True,included
+focal_true_vs_depth_shuffle,46,262910,864691136391027728,864691136275165965,L4IT,True,True,included
+focal_true_vs_depth_shuffle,47,262925,864691135719900721,864691136066697624,L4IT,True,True,included
+focal_true_vs_depth_shuffle,48,263003,864691135106556749,864691135856802606,L4IT,True,True,included
+focal_true_vs_depth_shuffle,49,263031,864691136288301507,864691135716106266,L4IT,True,True,included
+focal_true_vs_depth_shuffle,50,264889,864691135324623260,864691135772366667,L4IT,True,False,original pilot excluded from replication
+focal_true_vs_depth_shuffle,51,264990,864691136288644291,864691136673975943,L4IT,True,True,included
+focal_true_vs_depth_shuffle,52,267033,864691135431616048,864691136195348812,L5ET,True,True,included
+focal_true_vs_depth_shuffle,53,264871,864691135739661169,864691136444507779,L5IT,True,False,original pilot excluded from replication
+focal_true_vs_depth_shuffle,54,264888,864691135196576298,864691135395143157,L5IT,True,False,original pilot excluded from replication

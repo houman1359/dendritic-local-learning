@@ -1,0 +1,116 @@
+{
+  "analysis_type": "frozen structural multiscale capacity analysis",
+  "bootstrap_draws": 20000,
+  "boundaries": [
+    "Route fields are modeled conductance-weighted ancestry columns, not measured biological teaching signals.",
+    "The isotropic and ancestry-permuted references define noise geometries; they are not estimates of in-vivo noise.",
+    "All reconstructed cells come from one mouse; cells are the inferential units and permutation draws are nested.",
+    "A point system with the same independently addressable coordinates can emulate the linear operation."
+  ],
+  "cell_level_tests": {
+    "original_8:coarse": {
+      "actual_minus_shuffled": {
+        "cells_positive": 8,
+        "mean": 0.06768165131891463,
+        "n_cells": 8,
+        "two_sided_wilcoxon_p": 0.0078125
+      },
+      "isotropic_enrichment_minus_one": {
+        "cells_positive": 8,
+        "mean": 1.4745164681214336,
+        "n_cells": 8,
+        "two_sided_wilcoxon_p": 0.0078125
+      }
+    },
+    "original_8:fine": {
+      "actual_minus_shuffled": {
+        "cells_positive": 0,
+        "mean": -0.11621383673492544,
+        "n_cells": 8,
+        "two_sided_wilcoxon_p": 0.0078125
+      },
+      "isotropic_enrichment_minus_one": {
+        "cells_positive": 0,
+        "mean": -0.6118412889520322,
+        "n_cells": 8,
+        "two_sided_wilcoxon_p": 0.0078125
+      }
+    },
+    "original_8:intermediate": {
+      "actual_minus_shuffled": {
+        "cells_positive": 6,
+        "mean": 0.04853218541601084,
+        "n_cells": 8,
+        "two_sided_wilcoxon_p": 0.25
+      },
+      "isotropic_enrichment_minus_one": {
+        "cells_positive": 7,
+        "mean": 0.8309043467377679,
+        "n_cells": 8,
+        "two_sided_wilcoxon_p": 0.015625
+      }
+    },
+    "public_v661_47:coarse": {
+      "actual_minus_shuffled": {
+        "cells_positive": 31,
+        "mean": 0.0345106095496111,
+        "n_cells": 47,
+        "two_sided_wilcoxon_p": 0.07798191063142212
+      },
+      "isotropic_enrichment_minus_one": {
+        "cells_positive": 47,
+        "mean": 1.3514510848310413,
+        "n_cells": 47,
+        "two_sided_wilcoxon_p": 1.4210854715202004e-14
+      }
+    },
+    "public_v661_47:fine": {
+      "actual_minus_shuffled": {
+        "cells_positive": 20,
+        "mean": -0.013167414627071475,
+        "n_cells": 47,
+        "two_sided_wilcoxon_p": 0.15596115164532875
+      },
+      "isotropic_enrichment_minus_one": {
+        "cells_positive": 0,
+        "mean": -0.6576930520458868,
+        "n_cells": 47,
+        "two_sided_wilcoxon_p": 1.4210854715202004e-14
+      }
+    },
+    "public_v661_47:intermediate": {
+      "actual_minus_shuffled": {
+        "cells_positive": 19,
+        "mean": -0.02134319492253962,
+        "n_cells": 47,
+        "two_sided_wilcoxon_p": 0.1721288052877128
+      },
+      "isotropic_enrichment_minus_one": {
+        "cells_positive": 30,
+        "mean": 0.13355521464987558,
+        "n_cells": 47,
+        "two_sided_wilcoxon_p": 0.016035560343993893
+      }
+    }
+  },
+  "input_sha256": {
+    "primary": "b41dd7fde2cbc665b963d23e388f278b9d40638c01d98f82c4b048e73777db2b",
+    "secondary": "7829c298c4e5b3209b758fb88b92b55f070420c00b383436e5d4e1601e7ff1cf"
+  },
+  "max_energy_decomposition_relative_error": 3.9779214016719247e-16,
+  "max_orthonormality_error": 4.440892098500626e-16,
+  "n_cells": {
+    "original_8": 8,
+    "public_v661_47": 47
+  },
+  "numerical_gates": {
+    "complete_scale_mode_count": true,
+    "energy_decomposition_at_most_1e-10": true,
+    "finite_cell_scale_summary": true,
+    "full_rank_basis": true,
+    "orthonormality_at_most_1e-10": true
+  },
+  "permutation_draws_per_cell": 256,
+  "seed": 20260819,
+  "status": "complete"
+}

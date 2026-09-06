@@ -10,6 +10,7 @@ from __future__ import annotations
 import argparse
 import csv
 import hashlib
+import gzip
 import json
 import re
 import shutil
@@ -4117,6 +4118,18 @@ for _panels, _sources in _MAIN_MORPHOLOGY_SOURCES.items():
 
 
 
+# A complete ledger is needed to restore all analyses. Display-scoped copies
+# below keep their original filters and do not substitute for this full table.
+FILES += (SourceFile(
+    "Methods", "complete follow-up ledger",
+    "source_data/prospective_input_validity/followup_publication_seed_outcomes.csv",
+    "Methods/followup_publication_seed_outcomes_complete.csv",
+    "unfiltered retained publication-outcome ledger",
+    "training seed within the original declared cohort",
+    "historical; see cohort and input-validity records",
+    "Complete source table for restoration; per-display copies remain separately filtered."
+),)
+
 # The explicit current panel map supplies new main-figure identities; all
 # historical numerical evidence and display-specific filters remain retained.
 from current_source_data_inventory import CurrentInventory, TEXT_EXTENSIONS
@@ -4509,15 +4522,14 @@ def audit_no_machine_local_paths(stage: Path) -> None:
     forbidden = ("/n/holylabs/", "/n/holylfs06/", "/n/home13/")
     findings: list[str] = []
     for path in stage.rglob("*"):
-        if not path.is_file() or path.suffix.lower() not in {
-            ".csv",
-            ".json",
-            ".md",
-            ".tsv",
-            ".txt",
-        }:
+        compressed_table = path.name.endswith((".csv.gz", ".tsv.gz"))
+        if not path.is_file() or not (path.suffix.lower() in TEXT_EXTENSIONS or compressed_table):
             continue
-        text = path.read_text(encoding="utf-8", errors="ignore")
+        if compressed_table:
+            with gzip.open(path, "rt", encoding="utf-8") as handle:
+                text = handle.read()
+        else:
+            text = path.read_text(encoding="utf-8")
         if any(prefix in text for prefix in forbidden):
             findings.append(str(path.relative_to(stage)))
     if findings:
@@ -4616,6 +4628,8 @@ def build(stage: Path, zip_path: Path, *, force: bool = False) -> None:
         # so no inherited prose can describe a superseded panel assignment.
         write_display_readmes(work, rows)
         write_manifest(work, rows)
+        from release_version import source_version
+        (work / "SOURCE_VERSION.json").write_text(json.dumps(source_version(JOURNAL), indent=2) + "\n")
         audit_no_machine_local_paths(work)
         shutil.copytree(work, stage)
         make_zip(work, zip_path)

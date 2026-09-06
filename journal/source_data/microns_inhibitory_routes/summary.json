@@ -1,0 +1,253 @@
+{
+  "claim_level": "one-mouse structural organization and route-capacity analysis",
+  "cohort": {
+    "n_all_input_locations": 116401,
+    "n_connections_with_two_or_more_axonal_clumps": 402,
+    "n_functionally_annotated_overlap": 16,
+    "n_independent_v661_targets": 47,
+    "n_inhibitory_census_overlap": 20,
+    "n_known_column_inhibitory_contacts": 2789,
+    "n_known_inhibitory_cells": 116,
+    "n_known_inhibitory_connections": 670,
+    "n_mapped_input_locations": 114775,
+    "n_mapped_known_inhibitory_cells": 114,
+    "n_mapped_known_inhibitory_contacts": 2637
+  },
+  "limitations": [
+    "The MICrONS volume is one mouse; target cells are nested samples, not animal replicates.",
+    "Known inhibitory contacts include only presynaptic inhibitory neurons whose somata are in the census column.",
+    "Five of 20 targets changed root IDs between v661 and v795 and were joined by stable nucleus identity; unchanged segmentation is not assumed.",
+    "The packaged census table does not provide a per-target proofreading-status field, so no proofreading claim is made.",
+    "All-input locations are used as a generic eligibility proxy; unlabelled inputs are not asserted to be excitatory.",
+    "Structural route organization and capacity do not show that the routes carried learning signals in vivo."
+  ],
+  "mapping": {
+    "all_input_pass_fraction": 0.9869574998034183,
+    "coordinate_transform": {
+      "affine_raw_xyz1_to_slanted_um": [
+        [
+          0.003984778792366985,
+          0.0003486229709906291,
+          3.467085206679448e-19
+        ],
+        [
+          -0.0003486229709906349,
+          0.003984778792366982,
+          -3.469446951953614e-18
+        ],
+        [
+          1.824908926797306e-18,
+          1.8482355863377873e-18,
+          0.04000000000000001
+        ],
+        [
+          -1.462625605196026e-14,
+          -396.67103221028447,
+          -2.002190339198393e-13
+        ]
+      ],
+      "maximum_residual_um": 1.639614891002561e-12,
+      "median_residual_um": 9.947598300641403e-13,
+      "n_paired_locations": 80114
+    },
+    "inhibitory_pass_fraction": 0.946083651179326,
+    "max_distance_um": 5.0
+  },
+  "tests": {
+    "axon_clustered_connection_route_overlap": {
+      "bootstrap_95_ci": [
+        -0.0037087726412353113,
+        0.02789597723754192
+      ],
+      "mean_delta": 0.011726701095277944,
+      "median_delta": -0.0030891037121992806,
+      "n_targets": 92,
+      "ordering_negative": 48,
+      "ordering_positive": 41,
+      "wilcoxon_alternative": "greater",
+      "wilcoxon_p": 0.39278317425548975
+    },
+    "axon_clustered_connection_shared_path": {
+      "bootstrap_95_ci": [
+        6.315541589164549e-05,
+        0.029209243996199476
+      ],
+      "mean_delta": 0.014264550566742269,
+      "median_delta": 0.0,
+      "n_targets": 92,
+      "ordering_negative": 44,
+      "ordering_positive": 45,
+      "wilcoxon_alternative": "greater",
+      "wilcoxon_p": 0.10418156513732107
+    },
+    "axon_clustered_connection_tree_distance": {
+      "bootstrap_95_ci": [
+        -20.202827685812448,
+        1.4116213470381462
+      ],
+      "mean_delta": -9.36791117527607,
+      "median_delta": -11.843241058679414,
+      "n_targets": 92,
+      "ordering_negative": 62,
+      "ordering_positive": 30,
+      "wilcoxon_alternative": "less",
+      "wilcoxon_p": 0.0008050911721037247
+    },
+    "connection_route_overlap": {
+      "bootstrap_95_ci": [
+        0.006029327166485939,
+        0.07426030546187941
+      ],
+      "mean_delta": 0.03224972545820699,
+      "median_delta": 0.015151697500772263,
+      "n_targets": 20,
+      "ordering_negative": 6,
+      "ordering_positive": 14,
+      "wilcoxon_alternative": "greater",
+      "wilcoxon_p": 0.005344390869140625
+    },
+    "connection_shared_path": {
+      "bootstrap_95_ci": [
+        0.00907631122475522,
+        0.0766396466365903
+      ],
+      "mean_delta": 0.03569488305353138,
+      "median_delta": 0.016609838788676536,
+      "n_targets": 20,
+      "ordering_negative": 5,
+      "ordering_positive": 15,
+      "wilcoxon_alternative": "greater",
+      "wilcoxon_p": 0.0027904510498046875
+    },
+    "connection_tree_distance": {
+      "bootstrap_95_ci": [
+        -21.46021886333286,
+        -4.150526262641436
+      ],
+      "mean_delta": -12.003230040564455,
+      "median_delta": -9.127784619370892,
+      "n_targets": 20,
+      "ordering_negative": 15,
+      "ordering_positive": 5,
+      "wilcoxon_alternative": "less",
+      "wilcoxon_p": 0.0031948089599609375
+    },
+    "contact_descendant_fraction": {
+      "bootstrap_95_ci": [
+        -0.002216554064397863,
+        0.005642506485010367
+      ],
+      "mean_delta": 0.0016448401241062204,
+      "median_delta": 0.0008429522144663851,
+      "n_targets": 20,
+      "ordering_negative": 10,
+      "ordering_positive": 10,
+      "wilcoxon_alternative": "two-sided",
+      "wilcoxon_p": 0.5458755493164062
+    },
+    "contact_specificity": {
+      "bootstrap_95_ci": [
+        -0.10254136651001801,
+        -0.0048194112023226595
+      ],
+      "mean_delta": -0.054291398312631314,
+      "median_delta": -0.03865412482264508,
+      "n_targets": 20,
+      "ordering_negative": 15,
+      "ordering_positive": 5,
+      "wilcoxon_alternative": "two-sided",
+      "wilcoxon_p": 0.021484375
+    },
+    "dtc_minus_ptc_descendant_fraction": {
+      "bootstrap_95_ci": [
+        -0.023102978581073852,
+        -0.010522297789373273
+      ],
+      "mean_delta": -0.016179761328863763,
+      "median_delta": -0.011601183218522179,
+      "n_targets": 20,
+      "ordering_negative": 20,
+      "ordering_positive": 0,
+      "wilcoxon_alternative": "less",
+      "wilcoxon_p": 9.5367431640625e-07
+    },
+    "eight_routes_selected_minus_depth bins": {
+      "bootstrap_95_ci": [
+        0.3125836537334296,
+        0.3793481832918032
+      ],
+      "mean_delta": 0.3461957536557282,
+      "median_delta": 0.3613224916505535,
+      "n_targets": 20,
+      "ordering_negative": 0,
+      "ordering_positive": 20,
+      "wilcoxon_alternative": "greater",
+      "wilcoxon_p": 9.5367431640625e-07
+    },
+    "eight_routes_selected_minus_depth-preserving ancestry shuffle": {
+      "bootstrap_95_ci": [
+        0.34372928799332936,
+        0.40370010377660687
+      ],
+      "mean_delta": 0.37376633213949095,
+      "median_delta": 0.36824082643868183,
+      "n_targets": 20,
+      "ordering_negative": 0,
+      "ordering_positive": 20,
+      "wilcoxon_alternative": "greater",
+      "wilcoxon_p": 9.5367431640625e-07
+    },
+    "eight_routes_selected_minus_random actual routes": {
+      "bootstrap_95_ci": [
+        0.3325564485193445,
+        0.39483874515406486
+      ],
+      "mean_delta": 0.3637998915158196,
+      "median_delta": 0.3542569747180099,
+      "n_targets": 20,
+      "ordering_negative": 0,
+      "ordering_positive": 20,
+      "wilcoxon_alternative": "greater",
+      "wilcoxon_p": 9.5367431640625e-07
+    },
+    "spatially_matched_connection_route_overlap": {
+      "bootstrap_95_ci": [
+        -0.006282005698004545,
+        0.05003978213866026
+      ],
+      "mean_delta": 0.015105047956986379,
+      "median_delta": -0.001201680794925433,
+      "n_targets": 20,
+      "ordering_negative": 11,
+      "ordering_positive": 9,
+      "wilcoxon_alternative": "greater",
+      "wilcoxon_p": 0.5363607406616211
+    },
+    "spatially_matched_connection_shared_path": {
+      "bootstrap_95_ci": [
+        -0.011205979553821998,
+        0.046364822080823195
+      ],
+      "mean_delta": 0.01068480678515765,
+      "median_delta": -0.00722803355703527,
+      "n_targets": 20,
+      "ordering_negative": 12,
+      "ordering_positive": 8,
+      "wilcoxon_alternative": "greater",
+      "wilcoxon_p": 0.8255949020385742
+    },
+    "spatially_matched_connection_tree_distance": {
+      "bootstrap_95_ci": [
+        -12.057755183783351,
+        2.2280382590955448
+      ],
+      "mean_delta": -4.272467632151824,
+      "median_delta": -3.6762319684924676,
+      "n_targets": 20,
+      "ordering_negative": 13,
+      "ordering_positive": 7,
+      "wilcoxon_alternative": "less",
+      "wilcoxon_p": 0.10808372497558594
+    }
+  }
+}

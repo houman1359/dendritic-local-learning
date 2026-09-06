@@ -1,0 +1,13 @@
+{
+  "python": "system Python3.10; Torch2.9.1 unchanged",
+  "overlay": "/n/holylabs/kempner_dev/Users/hsafaai/Code/.dendritic-modeling-journal-runtimes/depth-budget-wandb-overlay-20260906",
+  "packages": {
+    "wandb": "0.23.1",
+    "protobuf": "6.33.5"
+  },
+  "reason": "WandB0.23.1 only dispatches protobuf3/4/5/6; shared protobuf7caused import failure. Independent overlay leaves shared packages untouched.",
+  "failed_jobs": [
+    44799974,
+    44800299
+  ]
+}

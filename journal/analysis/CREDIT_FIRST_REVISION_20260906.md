@@ -1,48 +1,58 @@
-# Preserve the task-to-credit narrative
+# Credit-first revision, 6 September 2026
 
-The user's 6 September clarification supersedes the proposed represent–estimate–learn reorganization in `PANEL_RESPONSE_20260906.md`. This remains the credit-assignment paper. The constructive morphology results support its task-to-credit argument; noisy-query structure estimation is supplementary material within the same article, not a replacement paper.
+The paper keeps its original question: which spatial distinctions must useful dendritic credit preserve for a task? The retained title is **Dendritic morphology as a dictionary for local credit assignment**. Forward representability is a prerequisite for the learning comparisons; the noisy-query structure estimator remains supplementary evidence within this same Article. It does not replace the task-to-credit argument.
 
-## Central question and scope
+The new evidence supports that decision. It does not restore the failed initialization selector, and it does not establish a universal law from scalar task rank to optimal morphology.
 
-Which distinctions must a useful dendritic learning signal preserve for a particular task? The experimental sequence progresses from population feedback to context-dependent branch selection, ancestry grouping and cross-branch interactions, then examines serial computation and biological candidate routes. This is a set of conditional comparisons, not yet a theorem that interaction order monotonically determines a minimum feedback rank.
+## What the new experiments establish
 
-Retain the route dictionary as the organizing representation. Forward compatibility is a prerequisite for interpreting a learning failure, so the cut criterion belongs immediately before the higher-order credit comparison. The initialization-moment selector's prospective failure must remain explicit, including the fixed-tree comparator. The local one-step bound and noise screens move beside their derivations in SI, with a short Results explanation.
+| Comparison | Evidence | Interpretation in the revised paper |
+|---|---|---|
+| Matched pairwise versus quartic tasks | One compatible tree, equal input-sensitivity second moments, paired weights/data/minibatches; 432 development and 1,200 fresh fits. Exact versus initially calibrated Adam NMSE: 0.0317 versus 0.0236 for pairwise, 0.1516 versus 0.9813 for quartic. The task-by-credit contrast is 0.838 [95% paired interval 0.719, 0.931], positive in all twenty seeds; a common rate gives 0.843 [0.727, 0.935]. | A fixed spatial profile can support pairwise learning but leaves a large higher-order error gap in this controlled model and training budget. |
+| Credit geometry of those same learners | At exact-trained states, best rank-one path capture is 99.7% for pairwise, 46.1% for quartic and 44.8% for the separate nested target. Loss-weighted, eligibility-weighted and site-normalized checks retain the separation. Independent replay of 600 earlier fits reproduces their recorded metrics. | Identical input spectra can accompany different learned credit spectra. Uniform-broadcast capture does **not** separate the tasks; the relevant profile can be signed and nonuniform. This is learned-state geometry, not an initialization selector or proof of the minimum number of external error signals. |
+| Positive-conductance boundary | Every tested fixed-profile rule learns the compatible positive-conductance teacher accurately with Adam. It is a separate teacher, not an implementation of the algebraic quartic target. | The higher-order result is not promoted to a universal conductance-neuron law. |
+| Anatomical routes beyond broadcast | Every family spends one of its K columns on the same constant component. At K=8 in 47 disjoint v661 cells, ancestry/depth-bin total capture is 0.619/0.511 and residual capture is 0.527/0.392. The total-capture difference is 0.108 [0.077, 0.135], positive in 45/47 cells. Ancestry also exceeds degree–depth surrogates by 0.041 [0.020, 0.062]. | Anatomy supplies additional spatial capacity after the original common-mode mismatch is repaired. Actual rank and wiring costs remain explicit. Cohorts and mice are not pooled. All 65 operators and 149,331 dictionary evaluations are retained. |
+| Focal shunt identity | Exact passive-tree algebra and numerical checks show a common adjoint factor within each block of the shunt site's ancestry partition. | A focal shunt implements gains on the **baseline-weighted ancestry partition**. This unifies conductance with the dictionary framework; it is not a diagonal action on an arbitrary overlapping dictionary, and local driving forces can vary within a block. |
+| Physical-depth budget extension | Sixty paired restarts preserve the original recipes and stopping rule, extending the maximum to 600 epochs. The exact-BP D3–D1 accuracy advantage grows from 30.82 to 38.17 points. The LocalCA exact-minus-shared accuracy contrast changes from +10.86 to −1.52 points, reversing in all ten seeds; the BP contrast is +0.48 points. | Forward-depth benefit persists. The original LocalCA credit advantage is a finite-budget accuracy result. A secondary comparison retains lower exact-credit cross-entropy (0.254 versus 0.276), so metric and budget both matter. All fifty D3 fits still reach the 600-epoch cap with declining validation loss; no convergence claim is made. |
 
-Keep the current dictionary title provisionally. Do not adopt “determines the credit resolution ... need” until fair fixed-profile and intermediate-resolution controls establish that strength of claim. The narrative target is 6,000–6,500 words, as accepted in the latest user message, with complete technical protocols retained in SI.
+At fixed weights and inputs, path derivatives do not depend on the labels. Eighty relabeling controls confirm this. The capture analysis therefore explicitly separates the initial state, each rule's own trajectory, and common reference states. An oracle rank-one profile measures capacity; it is not a newly trained encoder.
 
-## Evidence being collected before the abstract is finalized
+## The resulting main sequence
 
-1. **Credit-field capture and spectra.** Compare matching and quartet targets with equal input-sensitivity spectra, holding tree, initial weights and input evaluation patterns fixed where possible. Nested targets provide a separate higher-order comparison; their compatible topology is not automatically the same. Measure uniform-broadcast capture, the best fixed spatial rank-one profile, intermediate subtree spans and the complete field. Distinguish per-example ratios, pooled error-weighted energy, and eligibility-weighted parameter updates. Report initial and trained states, and common reference states where available.
-2. **Matched learning rules.** Compare exact credit, unit broadcast, a label-free frozen initial-sensitivity profile, and a fixed sign profile in both algebraic and positive-conductance trees, with comparable development tuning and paired fresh seeds. Retain per-family outcomes and full trajectories. Save states so the geometry and learning analyses refer to the same runs.
-3. **Anatomical common mode.** Give all route families the same budgeted broadcast component. Report total and residual-field capture, rank, and nonzero wiring. Freeze the analysis before extending it to the cached disjoint anatomical cohort and the second animal, with cohort scope stated precisely.
-4. **Depth budget.** Audit the original endpoint trajectories and source configuration, then extend the relevant paired comparisons under a defined longer budget. Distinguish fixed-update progress, validation-selected performance and convergence. No asymptotic claim follows merely from a falling validation curve.
+1. Framework and image tasks: preserving neuronal identity accounts for most of the feedback benefit; exact path resolution adds little and slightly reduces flattened-CIFAR-10 accuracy.
+2. Context conflict: branch-selective information prevents harmful off-route updates; the analytic threshold and equivalent eligibility-gating interpretation are explicit.
+3. Ancestry at matched bandwidth: the coefficient-derived K profile precedes the 1.27-point K=4 result. The location follows from the generator and is not presented as a discovered optimum.
+4. Interaction order and credit: compatible same-tree tasks, paired learning curves, common-rate contrast and learned-state capture form the central new evidence.
+5. Serial physical depth and learning budget: promoted from S31, with optimizer and longer-training comparisons.
+6. Anatomical dictionaries beyond a common broadcast: original, disjoint-cell and second-mouse cohorts shown separately, with rank and cost.
+7. Shunting as ancestry gain: the electrotonic boundary receives a wide quantitative axis; the weak-channel ensemble is labeled a linearization check and moved to S47.
+8. Measured responses: empirical ancestry–response similarity is separated from the offline transfer-geometry comparison. The support matrix is reconstructed from actual saved routes; coverage counts mapped partner inputs, some sharing physical segments.
 
-At fixed weights, tree and input, the path-sensitivity vector is independent of the target label. Multiplying it by a scalar output error does not change its normalized per-example projection capture. Initial task differences must therefore be interpreted through differences in states, operating points or error weighting rather than attributed automatically to target order. Low uniform capture with high best-fixed-profile capture indicates a profile-calibration problem, not a need for many independently varying channels. Low capture by all fixed profiles still does not, by itself, prove that final task learning requires exact gradients; the matched learning experiment is essential.
+The old complete image diagnostic sheet is S45; the local utility/noise screens are S46. The conceptual evidence map and final checklist panel are removed. The substantive forward-construction, noisy-query selection and Boolean analyses remain in the supplement.
 
-## Outcome-dependent interpretation
+## Writing and corrections
 
-- If higher-order tasks lose capture even under the best fixed profile and show a robust learning deficit with matched calibrated feedback, the new material supports a stronger task-to-credit mechanism.
-- If a calibrated fixed profile rescues learning, emphasize the spatial pattern or sign that credit must preserve, rather than full compartment resolution.
-- If capture does not distinguish the learning outcomes, explain the result through the observed dynamics and optimization controls; do not force a spectrum account.
-- The ancestry experiment's budget profile is a designed prediction from its coefficients. State that prediction before showing its trained agreement; do not describe the K=4 location as discovered prospectively.
-- The shunt identity reweights credit on the shunt site's ancestry partition. Explain the baseline-weighted partition basis and retain the distinct driving-force contribution; do not claim a diagonal gain on every arbitrary selected dictionary.
-- The empirical ancestry–response similarity result and the modeled transfer-profile learning diagnostic remain separate tests. “No demonstrated endogenous use” is a scope statement, not proof of biological absence.
+The abstract has five sentences and leads with credit. The final narrative is approximately **6,433 words**, with **2,690 words of Methods** and a **140-word abstract**. This meets the agreed 6,000–6,500-word working target; the journal’s approximately 5,000-word narrative guidance remains an advisory. The Discussion synthesizes the task-to-credit evidence rather than walking through an equal-weight inventory of sections.
 
-## Eight-figure working sequence
+Variables, task generators, panel citations and equation introductions were checked. The matched interaction experiment now defines pair/quartet notation and the nested target in the main text. The shunt adjoint is defined physically. Repeated limitations are consolidated around the corresponding claim.
 
-1. Framework and image-task reference, retaining one clear distinction between population feedback and intra-arbor delivery.
-2. Context-dependent branch selection, with the analytic conflict threshold and the correct interpretation of own-state versus common-state diagnostics.
-3. Ancestry at matched bandwidth, with the coefficient-derived budget prediction and readable small-effect axes.
-4. Interaction structure and credit: forward compatibility as a prerequisite, then the capture/profile bridge and matched learning comparison as the central evidence.
-5. Serial physical depth and optimizer/budget dependence, promoted from S31.
-6. Anatomical route dictionaries beyond the shared broadcast, with capacity and cost separated.
-7. Focal shunting as ancestry-partition gain, with signed changes, physical dose and the electrotonic selectivity boundary.
-8. Measured responses: actual selected route supports, empirical structure–function uncertainty and the transfer-geometry diagnostic.
+The main K=4 statistic consistently uses the Holm-adjusted paired Wilcoxon value, P=0.0101; the alternative paired mean-sign-flip test remains explicitly identified in SI. S8F uses correctly registered numeric depths. The caption typo and Greedy DOI are corrected. The predecessor credit preprint is cited in the main text and the inherited foundations are disclosed.
 
-The noisy-query estimator, converged-pilot controls, extensive forward census, one-step screens, conceptual Fig. 3H and Fig. 9F checklist do not lead the main argument. Retain substantive scientific results in SI; remove redundant conceptual panels.
+The noise-task audit found a genuine historical naming collision. The clean 320-fit exact/BP control in **Supplementary Table S18** used a three-class noisy-line generator, with the frozen dispatcher's unusually large 784-pixel side length verified against checkpoint dimensions. It is not corrupted MNIST. Other historical cohorts retain an intended projected-noise MNIST protocol but lack the executed nested-generator hash; inherited S1/S3 aggregates have incomplete joins. The paper states these limits and the released loader requires explicit generator names. S26 is the separate 430-fit H2/H3 physical reproduction and must not be confused with this control.
 
-## Preservation and implementation state
+## Preservation and release verification
 
-The complete 5 September paper snapshot, commit `5483817839c16a9d48c343062dee4f6340ed84cd`, has now been imported into the canonical paper repository as the reachable branch `credit-paper-baseline-20260906`. The active branch remains unchanged. This preserves the starting manuscript and figures without mixing in concurrently edited production work.
+The preceding complete paper snapshot is reachable as `credit-paper-baseline-20260906` at `5483817839c16a9d48c343062dee4f6340ed84cd`. An additional revision checkpoint is reachable as `credit-first-revision-checkpoint-20260906` at `e30b10b114170e654a78558ec83060253dec980b`. The shared working checkout and its index were left intact.
 
-New analyses use separate script and Source Data directories. Existing reported cohorts are preserved. The new capture and rule-bridge results will be assessed before changing the title or making stronger abstract claims. The mechanical corrections and minimal, executable release plan from the preceding response remain applicable.
+The reviewer software is rebuilt from explicit committed allowlists, excluding the unrelated presentation, experiment runners and internal revision logs. A clean CPU virtual environment without system site-packages installed the pinned dependencies, passed pip check and passed installation/dispatch tests. Source Data retains complete outcome ledgers as well as display-specific subsets. Original and portable-copy hashes are recorded separately; restoration checks the full chain and refuses incomplete reconstruction.
+
+The full depth extension is complete: 60 paired restarts, 34,159 observed epochs, and 208 compact export files, including complete histories and all 120 configuration copies. The historical runtime was preserved at the reachable a99c3a7 commit. Two excluded one-epoch release smokes passed for exact BP and LocalCA.
+
+Final integration commit, test counts, archive names and checksums are recorded in the release-validation section below. Author-specific declarations, official conference status and immutable public deposition identifiers remain matters for the actual submission; this work does not assert a rejection, withdrawal or journal submission.
+
+
+## Final release validation
+
+The main PDF has 29 pages and the supplement 138 pages (167-page combined reading copy). All eight main figures and 47 supplementary figures are included. Both TeX builds finish without warnings or box/float overflows; the combined PDF preserves all page text, links and bookmarks. The format, citation, overlap, figure-lineage, main/SI provenance, additive-reference and reproducibility checks pass. The final provenance inventory covers 2,785 records and 2,713 distinct files.
+
+The final committed build and archive validation record is written separately to `analysis/CREDIT_FIRST_RELEASE_VALIDATION_20260906.json` so the frozen source does not contain a circular reference to its own commit or archive hashes. Generated ZIPs are excluded from version control and built from the clean, reachable release branch.

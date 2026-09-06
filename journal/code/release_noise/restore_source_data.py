@@ -32,7 +32,7 @@ def child(root, relative):
     return result
 
 
-def restoration_plan(source_data, journal):
+def restoration_plan(source_data, journal, verified_software_rows=None):
     with (source_data/'manifest.tsv').open(newline='') as stream:
         reader = csv.DictReader(stream,delimiter='\t')
         required = {'file','original_source','sha256','original_sha256','transformation'}
@@ -41,12 +41,19 @@ def restoration_plan(source_data, journal):
         rows = list(reader)
     grouped = defaultdict(list)
     for row in rows:
-        if not row['original_source'].startswith('source_data/'):
-            raise ValueError('Only source_data/ destinations are restored by this helper')
         source = child(source_data,row['file'])
         target = child(journal,row['original_source'])
         if not source.is_file() or digest(source) != row['sha256']:
             raise ValueError(f'Released source checksum mismatch: {row["file"]}')
+        if not row['original_source'].startswith('source_data/'):
+            if not row['original_source'].startswith(('scripts/','code/','configs/','tests/')):
+                raise ValueError('Unexpected non-data original_source in Source Data manifest')
+            # Code is supplied by the separately committed software archive.
+            # Verify this evidence copy without overwriting installed sources.
+            if verified_software_rows is not None:
+                verified_software_rows.append({'original_source':row['original_source'],
+                                               'file':row['file'],'sha256':row['sha256']})
+            continue
         grouped[target].append((row,source))
     plan, issues = [], []
     for target, candidates in sorted(grouped.items()):
@@ -78,11 +85,13 @@ def main():
     parser.add_argument('--dry-run',action='store_true')
     args=parser.parse_args()
     source_data=args.source_data_root.resolve();journal=args.journal_root.resolve()
-    plan,issues=restoration_plan(source_data,journal)
+    verified_software_rows=[]
+    plan,issues=restoration_plan(source_data,journal,verified_software_rows)
     report={'status':'needs_complete_sources' if issues else 'passed',
-            'restorable_original_sources':len(plan),'issues':issues,'dry_run':args.dry_run}
-    print(json.dumps(report,indent=2))
+            'restorable_original_sources':len(plan),'issues':issues,'dry_run':args.dry_run,
+            'verified_software_sources_not_overwritten':verified_software_rows}
     if issues:
+        print(json.dumps(report,indent=2))
         raise SystemExit('Restoration stopped before writing; inspect the manifest issues above')
     if not args.dry_run:
         for source,target,row in plan:
@@ -91,6 +100,9 @@ def main():
                 shutil.copyfile(source,target)
             if digest(target) != row['sha256']:
                 raise RuntimeError(f'Restored checksum differs: {target}')
+        from release_hashes import write_source_data_sidecars
+        write_source_data_sidecars(journal,source_data,plan)
+    print(json.dumps(report,indent=2))
 
 
 if __name__=='__main__':main()

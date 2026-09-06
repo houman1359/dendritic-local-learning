@@ -43,6 +43,8 @@ PAPER_REPOSITORY_ROOT = JOURNAL_ROOT.parent
 SUBMISSION_ROOT = JOURNAL_ROOT / "submission"
 STAGE_NAME = "software_release"
 ARCHIVE_NAME = "Dendritic_credit_assignment_software.zip"
+PHYSICAL_RUNTIME_COMMIT = "a99c3a777f99913e13dfe673a3f3a28bfe3566af"
+PHYSICAL_RUNTIME_DIRECTORY = "historical_runtimes/physical_depth_a99c3a7"
 
 # Only the explicitly selected committed package and article sources are retained.  These replacements affect only
 # historical machine-local defaults; each changed file is listed in
@@ -205,6 +207,7 @@ JOURNAL_SCRIPTS = (
 # Current native figure builders and their local Python dependencies.
 JOURNAL_SCRIPTS += (
     'current_source_data_inventory.py',
+    'release_version.py',
     'tex_sources.py',
     'build_utility_supplement.py',
     'analyze_physical_depth_clean_source_replication.py',
@@ -502,11 +505,15 @@ def repository_file_allowed(relative: Path, scope: str | None) -> bool:
         "journal/main.tex", "journal/references.bib", "journal/Makefile",
         "journal/pytest.ini", "journal/RELEASE_WORKFLOW.md",
         "journal/README.md", "journal/OVERLEAF_README.md",
+        "journal/figures/README.md",
         "journal/credit_first_framework_figure.tex",
         "journal/source_data/README.md", "journal/source_data/provenance_manifest.tsv",
     }:
         return True
     if name.startswith("journal/figures/"):
+        canonical = re.fullmatch(r"journal/figures/main/figure_(\d+)\.pdf", name)
+        if canonical and not 1 <= int(canonical[1]) <= 8:
+            return False
         return relative.suffix.lower() in {".pdf", ".png", ".svg", ".jpg", ".jpeg", ".eps"}
     if name.startswith("journal/supplementary/"):
         return relative.suffix == ".tex"
@@ -566,7 +573,7 @@ def assert_article_inputs_committed(source_root: Path, paper_root: Path, commit:
                            + "\n- ".join(missing))
 
 
-def prune_release_entrypoints(root: Path) -> list[dict[str, str | int]]:
+def prune_release_entrypoints(root: Path, release_prefix: str = "dendritic_modeling") -> list[dict[str, str | int]]:
     """Remove command registrations for drivers outside the allowlist."""
     path = root / "pyproject.toml"
     original = path.read_bytes()
@@ -587,7 +594,7 @@ def prune_release_entrypoints(root: Path) -> list[dict[str, str | int]]:
     if not removed:
         return []
     path.write_text("".join(kept))
-    return [{"path": "dendritic_modeling/pyproject.toml",
+    return [{"path": release_prefix + "/pyproject.toml",
              "origin_sha256": hashlib.sha256(original).hexdigest(), "release_sha256": sha256(path),
              "replacement_count": len(removed),
              "reason": "remove entrypoints for excluded unrelated drivers: " + ", ".join(removed)}]
@@ -654,6 +661,26 @@ def export_repository_snapshots(
         if not path.is_file():
             raise RuntimeError(f"Missing essential software release input: {path.relative_to(destination)}")
     return {"implementation": len(list_files(implementation)), "paper": len(list_files(paper))}
+
+
+def export_physical_runtime(root: Path, implementation_root: Path) -> dict[str, object]:
+    """Export the exact historical source used by the depth budget extension."""
+    provenance = verify_reachable_commit(implementation_root, PHYSICAL_RUNTIME_COMMIT)
+    destination = root / PHYSICAL_RUNTIME_DIRECTORY
+    extract_git_head(destination, PHYSICAL_RUNTIME_COMMIT,
+                     repository_root=implementation_root, scope="implementation")
+    original_files = list_files(destination)
+    with (destination / "RUNTIME_ORIGINS.tsv").open("w", newline="") as handle:
+        writer = csv.writer(handle, delimiter="\t", lineterminator="\n")
+        writer.writerow(("path", "original_sha256", "commit"))
+        writer.writerows((p.relative_to(destination).as_posix(), sha256(p), PHYSICAL_RUNTIME_COMMIT)
+                         for p in original_files)
+    metadata = dict(provenance, role="Physical-depth budget extension runtime",
+                    source_files=len(original_files), export_directory=PHYSICAL_RUNTIME_DIRECTORY,
+                    git_metadata_included=False,
+                    identity_check="Original source digests plus declared released-byte transformations; no fabricated Git checkout identity")
+    (destination / "RUNTIME_PROVENANCE.json").write_text(json.dumps(metadata, indent=2) + "\n")
+    return metadata
 
 
 def copy_tree_allowlisted(source: Path, destination: Path) -> int:
@@ -883,6 +910,69 @@ def write_portability_manifest(
         writer.writerows(changes)
 
 
+def capture_release_origins(root: Path, implementation_commit: str, paper_commit: str) -> dict[str, dict[str, str]]:
+    """Freeze original bytes before any declared release-only transformation."""
+    records = {}
+    historical = {path.name: path.as_posix() for path, _ in ARCHIVED_ANALYSIS_SCRIPTS}
+    for path in list_files(root):
+        relative = path.relative_to(root).as_posix()
+        repository, commit, source = "generated", "", relative
+        if relative.startswith("dendritic_modeling/"):
+            repository, commit, source = "implementation", implementation_commit, relative.split("/", 1)[1]
+        elif relative.startswith(PHYSICAL_RUNTIME_DIRECTORY + "/"):
+            repository, commit = "implementation", PHYSICAL_RUNTIME_COMMIT
+            source = relative[len(PHYSICAL_RUNTIME_DIRECTORY) + 1:]
+            if source in {"RUNTIME_ORIGINS.tsv", "RUNTIME_PROVENANCE.json"}:
+                repository, commit = "generated", ""
+        elif relative.startswith("journal_package/"):
+            repository, commit, source = "paper", paper_commit, relative.split("/", 1)[1]
+        elif relative.startswith("article_analysis/"):
+            local = relative.split("/", 1)[1]
+            repository, commit = "paper", paper_commit
+            if local.startswith("archived_analysis_scripts/") and path.name in historical:
+                source = historical[path.name]
+            elif local.startswith("source_data_metadata/"):
+                source = "journal/source_data/" + local.split("/", 1)[1]
+            elif local.startswith("analysis_records/"):
+                source = "journal/analysis/" + local.split("/", 1)[1]
+            elif local.startswith("archived_analysis_scripts/"):
+                repository, commit, source = "generated", "", relative
+            else:
+                source = "journal/" + local
+        records[relative] = {"origin_sha256": sha256(path), "origin_repository": repository,
+                             "origin_commit": commit, "origin_path": source}
+    return records
+
+
+def write_released_source_hashes(root: Path, origins: dict[str, dict[str, str]]) -> int:
+    """Link unchanged canonical identities to verified portable software bytes."""
+    provenance = root / "PORTABILITY_PATCHES.tsv"
+    with provenance.open(newline="") as handle:
+        changes = list(csv.DictReader(handle, delimiter="\t"))
+    provenance_digest = sha256(provenance)
+    rows = []
+    for relative, origin in sorted(origins.items()):
+        path = root / relative
+        actual = sha256(path)
+        chain = [change for change in changes if change["path"] == relative]
+        current = origin["origin_sha256"]
+        for change in chain:
+            if change["origin_sha256"] != current:
+                raise RuntimeError(f"Broken release transformation chain: {relative}")
+            current = change["release_sha256"]
+        if current != actual:
+            raise RuntimeError(f"Undeclared change to release source: {relative}")
+        rows.append(dict(path=relative, kind="software", **origin, release_sha256=actual,
+                         transformation="; ".join(change["reason"] for change in chain) or "byte-identical",
+                         provenance_file=provenance.name, provenance_sha256=provenance_digest))
+    fields = ("path", "kind", "origin_sha256", "release_sha256", "transformation",
+              "provenance_file", "provenance_sha256", "origin_repository", "origin_commit", "origin_path")
+    with (root / "RELEASED_SOURCE_HASHES.tsv").open("w", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=fields, delimiter="\t", lineterminator="\n")
+        writer.writeheader(); writer.writerows(rows)
+    return len(rows)
+
+
 def release_readme(commit: str, journal_commit: str) -> str:
     return f"""# Dendritic credit-assignment software
 
@@ -920,10 +1010,19 @@ configuration, validation, and provenance code from that paper snapshot.
   archived hardware accounting, and archive boundaries.
 - `article_analysis/analysis_records/`: the frozen experiment contract and
   experiment protocols. Internal review/revision logs are excluded.
+- `historical_runtimes/physical_depth_a99c3a7/`: selected source files from
+  the exact reachable implementation commit used for the physical-depth
+  extension, with per-file original hashes and commit/ref provenance.
+  Its Git metadata are not fabricated or included. The portable launcher
+  verifies the exported bytes directly.
 - `PORTABILITY_PATCHES.tsv`: machine-local defaults changed in the release
   copies, with paths relative to this release root. Scientific parameters are
   not modified. Frozen source hashes describe the original source bytes; this
   manifest documents the release-only portability transformations.
+- `RELEASED_SOURCE_HASHES.tsv`: unchanged original source hashes linked to released
+  bytes, their repository/commit origins and the declared transformation chain.
+  Canonical protocol manifests retain original hashes. The release helper
+  `article_analysis/code/release_noise/release_hashes.py` verifies both identities.
 - `SHA256SUMS.tsv`: SHA-256 digest and size of every other released file.
 
 Numerical panel data are distributed separately in `Source_Data.zip`; its
@@ -940,7 +1039,14 @@ source-dependent checks or figure builders:
 ```bash
 mkdir -p dendritic_modeling/drafts/dendritic-local-learning
 cp -R journal_package/. dendritic_modeling/drafts/dendritic-local-learning/
+python article_analysis/code/release_noise/release_hashes.py \\
+  --remap-paper --release-root . \\
+  --journal-root dendritic_modeling/drafts/dendritic-local-learning/journal
 ```
+
+The remapping step verifies every copied paper file against the software archive
+and preserves the original archive paths and transformation chain in explicit
+local sidecars. Subsequent Source Data restoration retains these software links.
 
 Extract `Source_Data.zip` so its `manifest.tsv` is inside a `Source_Data/`
 directory. Restore by the manifest's `original_source` field; display homes such
@@ -961,8 +1067,36 @@ explicit display-specific subsets, and refuses conflicting copies or differing
 existing destinations before writing. Portable released bytes need not equal
 the original research-file hash. If only filtered copies exist, the dry run
 identifies the missing complete source instead of silently restoring a truncated
-table. Use the current manifest with `original_source` and `transformation`
+table. Restoration writes `RELEASED_SOURCE_HASHES.tsv` and an unchanged copy of
+the package manifest, `RELEASED_SOURCE_MANIFEST.tsv`, beside the restored journal.
+Audits retain canonical original hashes and verify the separate released-byte
+link through `release_hashes.py`. Removed private run-directory columns are not
+reconstructed; checkpoint-level reanalysis requires separately supplied or
+reviewer-generated run records. Use the current manifest with `original_source` and `transformation`
 columns; old archives do not establish current package identity.
+
+The depth extension requires the historical runtime; the current installed core
+is not a substitute for its frozen source identity. After restoring Source Data,
+verify one condition with the portable launcher (run from the release root):
+
+```bash
+python -B article_analysis/code/release_noise/physical_depth_launcher.py \\
+  --source-root dendritic_modeling/drafts/dendritic-local-learning/journal/source_data/physical_depth_budget/canonical \\
+  --journal-root dendritic_modeling/drafts/dendritic-local-learning/journal \\
+  --runtime-root historical_runtimes/physical_depth_a99c3a7 \\
+  --condition 30 --verify-only
+```
+
+For a full rerun, replace `--verify-only` with `--output-root NEW_OUTPUT_DIR`.
+The original 600-epoch cap, validation-selection rule, patience, seed and rate
+remain frozen. Conditions 0–59 are listed in `extension_protocol.json`.
+An optional `--smoke-epochs 1` changes the budget explicitly and labels the output
+as an excluded smoke check. The original `extend.py` is preserved; the launcher
+uses its verified passive observation helpers and records all source identities
+and library versions. It imports the verified historical runtime in a fresh
+process rather than invoking its machine-specific Git checkout check. This
+establishes source identity, not bitwise equivalence across devices and library
+versions. The synthetic hierarchical task requires no external dataset.
 
 The structure and finite-horizon investigations retain their original analysis
 paths in their frozen runners. Their released numerical copies are under
@@ -1319,16 +1453,19 @@ def build(force: bool, implementation_root: Path | None = None) -> dict[str, obj
         snapshot_counts = export_repository_snapshots(
             temporary_stage, implementation_root, commit, journal_commit
         )
+        physical_runtime = export_physical_runtime(temporary_stage, implementation_root)
         git_file_count = snapshot_counts["implementation"]
         portability_changes = []
-        packaging_changes = prune_release_entrypoints(repository_destination)
-        portability_changes.extend(packaging_changes)
         committed_paper = temporary_stage / "journal_package"
         journal_counts = copy_journal_material(article_destination, source_root=committed_paper / "journal")
         archived_scripts = copy_archived_analysis_scripts(
             article_destination / "archived_analysis_scripts", paper_root=committed_paper
         )
-        for snapshot_name in ("dendritic_modeling", "journal_package", "article_analysis"):
+        release_origins = capture_release_origins(temporary_stage, commit, journal_commit)
+        portability_changes.extend(prune_release_entrypoints(repository_destination))
+        portability_changes.extend(prune_release_entrypoints(
+            temporary_stage / PHYSICAL_RUNTIME_DIRECTORY, PHYSICAL_RUNTIME_DIRECTORY))
+        for snapshot_name in ("dendritic_modeling", "journal_package", "article_analysis", PHYSICAL_RUNTIME_DIRECTORY):
             for change in sanitize_git_snapshot(temporary_stage / snapshot_name):
                 change["path"] = f"{snapshot_name}/{change['path']}"
                 portability_changes.append(change)
@@ -1343,7 +1480,10 @@ def build(force: bool, implementation_root: Path | None = None) -> dict[str, obj
             temporary_stage / "PORTABILITY_PATCHES.tsv", portability_changes
         )
 
+        released_source_hash_count = write_released_source_hashes(temporary_stage, release_origins)
         metadata = {
+            "released_source_hash_count": released_source_hash_count,
+            "physical_depth_historical_runtime": physical_runtime,
             "release": "Dendritic credit-assignment software",
             "release_schema": 3,
             "implementation_repository_commit": commit,

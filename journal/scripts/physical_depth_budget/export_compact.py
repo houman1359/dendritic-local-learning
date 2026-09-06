@@ -19,6 +19,8 @@ TABLES = [
     'extension_source_concordance.csv', 'extension_paired_contrasts.csv',
     'extension_paired_seed_contrasts.csv', 'extension_budget_interactions.csv',
     'extension_summary.csv', 'original_epoch_diagnostics.csv',
+    'extension_loss_contrasts.csv', 'extension_loss_seed_contrasts.csv',
+    'extension_checkpoint_validation.csv',
     'original_validation_trajectories.csv', 'original_epoch_summary.csv',
 ]
 AUDITS = [
@@ -110,6 +112,8 @@ def main():
                       if path.exists()}
             dump(stage / 'run_records' / f'condition_{index:02d}.json', dict(
                 condition=meta, audit=public_audit, endpoint_metrics=metrics,
+                original_endpoint_metrics=json.loads(Path(record['original_final_metrics']).read_text()),
+                original_training_summary=json.loads(Path(record['original_training_summary']).read_text()),
                 training_summary={key: value for key, value in summary.items()
                                   if key not in ('train_losses', 'valid_losses')},
                 additional_metadata=extras,

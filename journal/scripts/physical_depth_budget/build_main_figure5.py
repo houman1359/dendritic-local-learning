@@ -31,7 +31,7 @@ def main():
     audit=json.loads((data/'extension_validation.json').read_text());assert audit['status']=='passed'
     summary=pd.read_csv(JOURNAL/'source_data/point_dendrite_credit_controls/condition_summary.csv')
     curves=pd.read_csv(data/'extension_validation_trajectories.csv');contrasts=pd.read_csv(data/'extension_paired_contrasts.csv');seeds=pd.read_csv(data/'extension_paired_seed_contrasts.csv')
-    apply_neurips_style();fig,axes=plt.subplots(3,1,figsize=(FIG_W,7.8));fig.subplots_adjust(left=.12,right=.98,bottom=.08,top=.96,hspace=.58)
+    apply_neurips_style();fig,axes=plt.subplots(3,1,figsize=(FIG_W,7.35));fig.subplots_adjust(left=.12,right=.98,bottom=.08,top=.96,hspace=.67)
     ax=axes[0]
     for credit,label,color,marker,ls in SPECS:
         part=summary[summary.architecture.eq('serial_tree')&summary.regime.eq('aligned')&summary.credit.eq(credit)].sort_values('depth')
@@ -54,8 +54,7 @@ def main():
     ax.text(184,.97,'180',transform=ax.get_xaxis_transform(),va='top',fontsize=PT_LEGEND,color=COLORS['mute'])
     ax.legend(loc='upper center',bbox_to_anchor=(.5,-.26),ncol=3,frameon=False,fontsize=PT_SMALL,columnspacing=1.5)
     ax=axes[2]
-    labels=[('depth_gain_exact_bp','Depth: exact BP, D3−D1'),
-        ('localca_path_minus_shared','LocalCA: exact path−shared soma'),
+    labels=[('localca_path_minus_shared','LocalCA: exact path−shared soma'),
         ('bp_exact_minus_broadcast','BP recipe: exact−broadcast'),
         ('broadcast_bp_minus_localca_recipe','Broadcast: BP−LocalCA recipe')]
     for index,(key,label) in enumerate(labels):
@@ -65,11 +64,12 @@ def main():
             assert len(values)==10
             ax.scatter(values,index+offset+np.linspace(-.045,.045,10),s=SEED_MS**2,color=COLORS[color],alpha=SEED_ALPHA*.65,zorder=2)
             ax.errorbar(row['mean'],index+offset,xerr=[[row['mean']-row.ci95_low],[row.ci95_high-row['mean']]],
-                fmt=marker,ms=MARKER_MS,capsize=ERR_CAPSIZE,color=COLORS[color],lw=LW_ERR,label=f'{budget}-epoch budget' if index==0 else None)
-    ax.set_yticks(range(4),[v[1] for v in labels],fontsize=PT_ANNOT);ax.invert_yaxis()
+                fmt=marker,ms=MARKER_MS,capsize=ERR_CAPSIZE,color=COLORS[color],lw=LW_ERR,label=f'{budget} epochs' if index==0 else None)
+    ax.set_yticks(range(len(labels)),[v[1] for v in labels],fontsize=PT_ANNOT);ax.invert_yaxis()
     ax.axvline(0,color=COLORS['mute'],ls=':',lw=LW_REF);ax.set_xlabel('Paired test-accuracy difference (percentage points)')
-    fig.text(.12,ax.get_position().y1+.014,'Credit contrasts in the same extended trajectories',ha='left',fontsize=PT_TITLE)
-    ax.legend(loc='lower right',frameon=False,fontsize=PT_LEGEND)
+    fig.text(.12,ax.get_position().y1+.018,'Credit and optimizer contrasts',ha='left',fontsize=PT_TITLE)
+    handles,legend_labels=ax.get_legend_handles_labels()
+    fig.legend(handles,legend_labels,loc='upper right',bbox_to_anchor=(.99,ax.get_position().y1+.04),ncol=2,frameon=False,fontsize=PT_LEGEND,columnspacing=1.1,handletextpad=.5,borderaxespad=0)
     # Long contrast descriptions use a separate left label column at full figure width.
     position=ax.get_position();ax.set_position([.48,position.y0,.50,position.height])
     for letter,ax in zip('ABC',axes):

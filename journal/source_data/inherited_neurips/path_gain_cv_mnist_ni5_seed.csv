@@ -1,0 +1,11 @@
+seed,network_type,path_gain_cv_mean
+42,dendritic_additive,1.194492
+42,dendritic_shunting,0.242038
+43,dendritic_additive,1.168990
+43,dendritic_shunting,0.222133
+44,dendritic_additive,1.127294
+44,dendritic_shunting,0.221094
+45,dendritic_additive,1.128141
+45,dendritic_shunting,0.215244
+46,dendritic_additive,1.188416
+46,dendritic_shunting,0.244172

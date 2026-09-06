@@ -40,6 +40,11 @@ LEGACY_PROJECT_PREFIX = Path("drafts/dendritic-local-learning")
 DEFAULT_MANIFEST = JOURNAL_ROOT / "source_data" / "provenance_manifest.tsv"
 DEFAULT_MANUSCRIPT = JOURNAL_ROOT / "main.tex"
 
+# The software and restored Source Data archives retain canonical original
+# hashes. Declared portability edits have their own independently checked chain.
+sys.path.insert(0, str(JOURNAL_ROOT / "code"))
+from release_noise.release_hashes import verify_released_file
+
 REQUIRED_MANIFEST_FIELDS = {
     "entry_id",
     "record_type",
@@ -224,13 +229,16 @@ def audit_manifest_rows(
         else:
             observed_hash = sha256_file(source)
             if observed_hash != expected_hash:
-                findings.append(
-                    Finding(
-                        "error",
-                        "source.hash_mismatch",
-                        f"{entry_id}: {source_raw} changed; expected {expected_hash}, observed {observed_hash}",
+                released = verify_released_file(source, expected_hash, journal_root=JOURNAL_ROOT)
+                if not released["verified"]:
+                    findings.append(
+                        Finding(
+                            "error",
+                            "source.hash_mismatch",
+                            f"{entry_id}: {source_raw} changed; expected {expected_hash}, "
+                            f"observed {observed_hash}; {released['reason']}",
+                        )
                     )
-                )
 
         if generator_raw and not resolve_repo_path(generator_raw).is_file():
             findings.append(

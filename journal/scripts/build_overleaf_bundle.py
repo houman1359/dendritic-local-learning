@@ -7,6 +7,7 @@ from tex_sources import tex_sources
 
 import argparse
 import hashlib
+import json
 import shutil
 import zipfile
 from pathlib import Path
@@ -81,6 +82,11 @@ def build(stage: Path, archive: Path, *, force: bool) -> None:
         shutil.copy2(source, destination)
         if sha256(source) != sha256(destination):
             raise RuntimeError(f"Copy verification failed: {relative}")
+
+    from release_version import source_version
+    version = source_version(ROOT)
+    version['files'] = {str(relative): sha256(source) for source, relative in sources.items()}
+    (stage / 'SOURCE_VERSION.json').write_text(json.dumps(version, indent=2, sort_keys=True) + '\n')
 
     # Overleaf expects the TeX project at ZIP root, with no enclosing bundle
     # directory and no software/source-data archives mixed into the editor.

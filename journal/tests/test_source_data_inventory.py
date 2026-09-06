@@ -40,7 +40,8 @@ def test_source_data_inventory_matches_final_display_numbering() -> None:
     assert any(item.source.endswith("/candidate_outcomes.csv") for item in prospective)
     interaction = [item for item in builder.FILES if item.figure == "Figure 4"]
     assert any("credit_rule_bridge/" in item.source for item in interaction)
-    assert any("credit_resolution_bridge/" in item.source for item in interaction)
+    assert any(item.panels == "f" and item.source.endswith("credit_rule_bridge/summaries/all_diagnostics.csv") for item in interaction)
+    assert any("credit_resolution_bridge/" in item.source for item in builder.FILES if item.figure == "Methods")
     anatomy = [item for item in builder.FILES if item.figure == "Figure 6"]
     assert any("anatomy_commonmode/" in item.source for item in anatomy)
     assert not any("morphology_calibration" in item.source for item in anatomy)
@@ -56,8 +57,10 @@ def test_source_data_destinations_are_unique_and_sources_exist() -> None:
 
 def test_supplementary_figure_4_uses_only_current_panel_mapping() -> None:
     items = [
-        item for item in builder.FILES if item.figure == "Supplementary Figure 4"
+        item for item in builder.FILES if item.figure == "Supplementary Figure 4" and item.panels != "archived"
     ]
+    archived = [item for item in builder.FILES if item.figure == "Supplementary Figure 4" and item.panels == "archived"]
+    assert len(archived) == 9
     assert {item.panels for item in items} == {"a", "b", "c", "d", "e"}
     assert all(
         "SuppFig4a_depth_scaling" in item.destination
@@ -272,10 +275,23 @@ def test_path_portability_preserves_numeric_values(tmp_path: Path) -> None:
     import json
     path = tmp_path / "lineage.json"
     source = {"loss": 0.123456789012345, "seed": 17,
-              "source": "/n/home13/example/original/run.json"}
+              "source": "/".join(("", "n", "home13", "example", "original", "run.json"))}
     path.write_text(json.dumps(source))
     changes = builder.portable_text_copy(path)
     released = json.loads(path.read_text())
     assert released["loss"] == source["loss"] and released["seed"] == source["seed"]
     assert released["source"].endswith("example/original/run.json")
-    assert changes and "/n/home13/" not in path.read_text()
+    assert changes and ("/n/" + "home13/") not in path.read_text()
+
+
+def test_complete_anatomy_dictionary_evaluations_are_included() -> None:
+    import gzip
+    complete = sorted((JOURNAL / "source_data/anatomy_commonmode").rglob("rows_*.csv.gz"))
+    assert len(complete) == 65
+    released = {item.source for item in builder.FILES}
+    assert all(str(path.relative_to(JOURNAL)) in released for path in complete)
+    rows = 0
+    for path in complete:
+        with gzip.open(path, "rt") as handle:
+            rows += sum(1 for _ in csv.DictReader(handle))
+    assert rows == 149331

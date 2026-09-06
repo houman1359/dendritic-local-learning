@@ -7,21 +7,21 @@ author-specific action still required. This audit does not replace official form
 ## Structure and editorial scope
 
 - [x] Revised title and a main narrative organized as Introduction, Results, Discussion and Methods.
-- [x] Nine main figures and Supplementary Figures S1–S44; the physical-depth programme is in S31 and the external six-animal reanalysis is in S17.
+- [x] Eight main figures and Supplementary Figures S1–S47; physical depth is promoted to main Figure5 with its full programme retained in S31 and the external six-animal reanalysis is in S17.
 - [x] Cover letter, editorial summary and overlap statement reflect the dictionary formulation and conditional results.
-- [x] The initial costed selector in a finite linear tree class retains its negative long-horizon result in S35. Figure 6 distinguishes exact interaction constraints, finite-label tree selection, a separate fresh end-to-end learning cohort, and conductance input grouping within a fixed physical shape.
-- [ ] Verify current abstract/title/reference/display guidance and decide on length: the author requested roughly 8,000 main-text words, while the local audit retains approximately 5,000 as advisory journal guidance.
+- [x] The initial costed selector in a finite linear tree class retains its negative long-horizon result in S35. Main Figure4 links matched pairwise/quartic learning to learned credit geometry; forward construction and noisy-query tree selection remain supporting analyses in the same paper.
+- [ ] Verify current abstract/title/reference/display guidance and decide on length: the author requested 6,000–6,500 main-text words, while the local audit retains approximately 5,000 as advisory journal guidance.
 - [ ] Confirm current related-manuscript status, authorship and author-approved declarations.
 
 ## Design and biological scope
 
 - [x] Artificial-network comparisons use paired training seeds as the independent unit where applicable.
 - [x] Cells, contacts, sites, scans and stimulus splits are distinguished from animal replication.
-- [x] Structural analyses include two MICrONS mice; original minnie65, the disjoint 47-cell cohort, functional and focal analyses remain within one mouse. Pinky contributes only the structural directional replication.
+- [x] Structural analyses include two MICrONS mice; original minnie65, the disjoint 47-cell cohort, functional and focal analyses remain within one mouse. Pinky contributes structural capacity comparisons, including the common-mode follow-up, with eight cells eligible at K=8.
 - [x] Functional analyses use seven postsynaptic targets and 13 eligible scans; scan and stimulus-split observations are nested within targets.
 - [x] The external six-animal result concerns signed response coordinates, not measured dendritic credit gradients.
 - [x] No new animal or human experiments are claimed; public-source reuse and model assumptions are described.
-- [x] Dendritic depth, spatial credit routing, active sensitivity and actual learning measurements are distinguished.
+- [x] Dendritic depth, spatial credit routing, weak-channel linearization and actual learning measurements are distinguished.
 - [ ] Confirm inclusion/exclusion tables, outcome-free selection statements, source-data IDs and proxy-table access conditions against the final release.
 
 ## Reanalyses and new model experiments
@@ -30,7 +30,7 @@ author-specific action still required. This audit does not replace official form
 - [x] Direct checks reproduce 270 stored gradient moments and verify actual one-step decreases exceed the global bound; all 2,700 denominators are finite and positive.
 - [x] Pooled score correlations use 5,000 whole-seed bootstrap draws; within-family prediction, degeneracy, regret, endpoint baselines and nine distinct nonconstant mean curves are exported.
 - [x] K=4 ancestry effects include individual paired controls, the declared four-control best comparator, bootstrap intervals and separately identified multiplicity-corrected tests. Exact accuracy-count ties are restored before Wilcoxon ranks.
-- [x] Figure 9C shows native-unit target effects rather than standardized effects on a common clipped scale.
+- [x] Figure8 shows native target-level response correlations, actual input-route supports and separate learning/geometry comparisons.
 - [x] `analyze_fulltree_within_span_oracle.py` replays 130 exact-learning fits and compares frozen and trial-dependent coefficients within fixed dictionaries at common checkpoints. Three replays drift beyond 1e-5 NMSE; maximum drift is 0.000574, retained without exclusions. No oracle-trained trajectories are inferred.
 - [x] Both analysis folders include source/script hashes, numerical outputs and methodological notes.
 - [x] Completed a prospectively sealed held-out candidate-tree experiment: 20 independent seeds, 12,800 candidate fits, fixed reference spectra under rotation and genuine minibatch updates. The moment selector loses to rank-only and fixed baselines; no general morphology law is claimed.
@@ -47,7 +47,7 @@ author-specific action still required. This audit does not replace official form
 - [x] Main ancestry comparisons report individual seeds, effect sizes and paired intervals; exact sign-flip and Wilcoxon results are not conflated.
 - [x] S7 describes the plotted owner standard deviations; S17 distinguishes plotted neuron SEM from separate animal-level inference.
 - [x] Optimizer-dependent physical-depth contrasts are displayed without calling the unmatched comparison a fully controlled factorial interaction.
-- [x] The phase/evidence map is explicitly conceptual; unrelated experimental coordinates do not imply common empirical phase boundaries.
+- [x] The conceptual evidence map and final-panel checklist are removed; the local utility and noise screens are retained in S46 beside their derivations.
 - [ ] Verify every final interval/test label against its generating table and inspect panel readability in the compiled PDFs.
 - [x] Completed the bounded run-lineage audit: historical S1/S3 shunting execution remains unresolved; S8 joins all 320 runs to the retained audit, with 160 additive runs retained and 160 shunting runs excluded. Raw resolved configs are absent; no validity is inferred from config names.
 

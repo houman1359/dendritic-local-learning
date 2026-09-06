@@ -1,0 +1,34 @@
+# Analysis contract frozen before inspection of strict-scalar outcomes.
+contract_date: 2026-08-26
+purpose: >-
+  Determine whether retaining neuron coordinates in the 128-wide somatic stage
+  of the legacy per_soma condition materially affected the scalar rung in the
+  matched MNIST feedback ladder.
+architectures:
+  - shunting
+  - additive
+seeds: [42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56]
+strict_mode: scalar
+legacy_mode: per_soma
+primary_outcome: final_test_accuracy
+primary_contrast: strict_scalar_minus_legacy_per_soma
+pairing_unit: seed_within_architecture
+materiality_margin_accuracy: 0.005
+decision_rule: >-
+  Call the legacy leak immaterial for an architecture only if the two-sided
+  95% paired bootstrap confidence interval for the mean accuracy difference is
+  wholly contained in [-0.005, 0.005]. This is a practical-equivalence rule,
+  not a preregistered hypothesis test.
+main_figure_rule: >-
+  If all completeness and provenance gates pass, use the strict-scalar cohort
+  for the scalar rung of Figure 2A regardless of whether the legacy comparison
+  meets the materiality rule. Retain the legacy cohort in source data and the
+  Supplementary Information as an implementation audit.
+required_gates:
+  expected_runs: 30
+  finite_final_metric: true
+  resolved_mode_is_scalar: true
+  unique_seed_architecture_pairs: true
+  checkpoint_present: true
+  wandb_disabled: true
+

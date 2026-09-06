@@ -2,11 +2,11 @@
 
 Article: **Dendritic morphology as a dictionary for local credit assignment**.
 Prepared from the manuscript, executable protocols and frozen numerical record
-on 5 September 2026. These are field-by-field technical answers for author
+on 6 September 2026. These are field-by-field technical answers for author
 review. They do not confirm authorship, funding, conflicts, ethics approval,
 exclusive consideration or public release identifiers.
 
-Current display inventory: nine main figures and 44 supplementary figures.
+Current display inventory: eight main figures and 47 supplementary figures. The credit-first revision adds 432 development and 1,200 fresh matched-credit fits, independent saved-state capture analysis, budget-matched anatomical common-mode comparisons across 65 modeled operators, and the exact passive ancestry-partition gain identity. Historical noise-task generators are distinguished by cohort; unresolved execution lineage remains explicit.
 
 The original official PDFs are unchanged. The Machine Learning Checklist has
 a populated AcroForm draft, `DRAFT_machine-learning-checklist_technical.pdf`.
@@ -37,7 +37,7 @@ in Reader before upload.
 | 1. Source code | Yes: reviewer software archive containing the modeling implementation, article analyses, configurations, tests and provenance. Insert the final archive/repository identifier after the final build. |
 | 1. Compiled standalone software | Not applicable: this is research source code, not a compiled standalone application. |
 | 1. Test dataset and replication instructions | Yes: deterministic synthetic generators, numerical tests, source tables, public benchmark identifiers and stage-specific instructions. Restricted/raw upstream biological caches are not redistributed; their access conditions and identifiers are documented. |
-| 1. README/install/run instructions | Yes: repository and article READMEs, reproducibility instructions, environment records and experiment-specific READMEs. The release audit verifies isolated source snapshots and runnable checks in the current dependency environment; a fresh dependency-environment installation is not claimed. |
+| 1. README/install/run instructions | Yes: repository and article READMEs, reproducibility instructions, environment records and experiment-specific READMEs. A clean CPU virtual environment without system site-packages installed the pinned release dependencies, passed pip check and passed the focused installation/dispatch tests. Final archive hashes identify the committed source version. |
 | 1. Reviewer access | Local review archives are prepared; confirm the actual uploaded archive or reviewer-access link at submission. |
 | 1. Pretrained models | No externally pretrained foundation model is used. Archived experiment checkpoints are outputs of the reported models, not external pretraining. |
 | 1. Post-publication code/data access | Availability statements are drafted. Final immutable access identifiers require author completion. |

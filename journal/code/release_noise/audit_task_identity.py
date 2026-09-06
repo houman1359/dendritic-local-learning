@@ -36,7 +36,7 @@ def main():
     prospective=prospective[prospective.task=='noise_resilience']
     follow=pd.read_csv(JOURNAL/'source_data/prospective_followup/seed_outcomes.csv')
     follow=follow[follow.task=='noise_resilience']
-    mapping=[dict(cohort='clean exact-path/backpropagation rerun',source_folder='clean_exact_bp',figures='S26 and exact/BP source tables',
+    mapping=[dict(cohort='clean exact-path/backpropagation rerun',source_folder='clean_exact_bp',figures='Supplementary Table S18 and exact/BP source tables',
         n_noise_runs=len(clean),identity='three-class noisy-line images',status='resolved_by_frozen_clean_nested_commit',
         source_commit=NESTED,source_sha256=digest(committed),classes=3,input_shape=[784,784],flattened_inputs=784**2,
         generator='NoisyLineDataset; blank, one horizontal line or one vertical line; iid Gaussian pixel noise SD0.2',

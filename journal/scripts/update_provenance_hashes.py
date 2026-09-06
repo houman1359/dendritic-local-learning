@@ -103,13 +103,19 @@ def build(*, prepare=False):
         raise RuntimeError("Physical-depth panel map is pending; --prepare cannot update the release manifest")
     for item in layout.get("source_hash_manifests", []):
         saved = json.loads((JOURNAL_ROOT / item["path"]).read_text())
-        for key in ("source_sha256", "sources_sha256", "builders_sha256"):
+        source_base = JOURNAL_ROOT / item.get("source_base", "")
+        for key in ("source_sha256", "sources_sha256", "builders_sha256", "inputs", "files"):
             for source, expected in saved.get(key, {}).items():
-                if sha256(JOURNAL_ROOT / source) != expected:
-                    raise ValueError(f"Figure source changed since recorded rendering: {source}")
+                if sha256(source_base / source) != expected:
+                    raise ValueError(f"Source differs from recorded manifest {item['path']}: {source}")
         if item.get("builder") and saved.get("builder_sha256"):
             if sha256(JOURNAL_ROOT / item["builder"]) != saved["builder_sha256"]:
                 raise ValueError(f"Figure builder changed since recorded rendering: {item['builder']}")
+    for gate in layout.get("completion_gates", []):
+        observed = json.loads((JOURNAL_ROOT / gate["path"]).read_text())
+        for key, expected in gate["required"].items():
+            if observed.get(key) != expected:
+                raise ValueError(f"Experimental completion gate failed: {gate['path']} {key}")
     template = JOURNAL_ROOT / layout["retained_template"]
     rows = read_tsv(template)
     original_sources = {r["source_path"] for r in rows}

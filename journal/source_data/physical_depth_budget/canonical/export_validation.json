@@ -1,0 +1,13 @@
+{
+  "configurations_copied_without_changes": 120,
+  "epoch_test_metrics_used_for_selection": false,
+  "exporter_sha256": "40d4ad15df7a396c76c96e3ef4a0aff43d6bcc7c45f5fbfa4c87f38e4f1d9773",
+  "observed_epochs": 34159,
+  "observed_metric_rows": 34159,
+  "raw_hash_verification": "All extension raw artifact hashes checked by analyze_extension.py; original source hashes checked during export",
+  "raw_inventory_rows": 35290,
+  "runs": 60,
+  "source_audit_sha256": "a8981cbee5b536553a2096d810e1196efdca2c6cc3b10b26d8c689f3680a08c0",
+  "status": "passed",
+  "underlying_raw_files_preserved": true
+}

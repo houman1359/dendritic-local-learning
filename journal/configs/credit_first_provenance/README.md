@@ -17,10 +17,19 @@ Run `python scripts/update_provenance_hashes.py` after the final assets and
 experimental exports are complete. It verifies canonical PDF identity against
 builder outputs, checks recorded figure-input hashes, and produces the
 canonical manifest and flat `source_data/credit_first_provenance/source_inventory.tsv`.
-`--check` checks those outputs without rewriting them. `--prepare` writes only
-an explicitly incomplete draft under `analysis/`.
+`--check` checks those outputs in the original source checkout without rewriting
+them. `--prepare` writes only an explicitly incomplete draft under `analysis/`.
+After archive restoration, use `scripts/audit_submission.py`: it preserves the
+original expectations and verifies declared portability edits through the
+separate released-byte hash ledger. Do not regenerate canonical original
+hashes from sanitized release copies.
 
 The physical-depth source export contains consolidated histories, endpoints,
 configurations and raw-file hash inventories. Per-epoch raw JSON trees,
 checkpoints, execution logs and internal revision prose are not automatically
 included in the public Source Data inventory.
+
+Automatic supporting-file discovery includes compressed numerical tables
+(`.csv.gz`) but excludes derived PDF/PNG renderings. Canonical publication
+PDFs retain their explicit asset records and are verified against the declared
+builder outputs before the manifest is written.

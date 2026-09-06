@@ -6,6 +6,8 @@ import importlib.util
 import sys
 from pathlib import Path
 
+import pytest
+
 
 JOURNAL_ROOT = Path(__file__).resolve().parents[1]
 SPEC = importlib.util.spec_from_file_location(
@@ -216,6 +218,89 @@ def test_pending_changes_from_warning_to_error_in_strict_mode(tmp_path: Path) ->
     release = audit.audit_manifest_rows(rows, strict_pending=True)
     assert [finding.severity for finding in development] == ["warning"]
     assert [finding.severity for finding in release] == ["error"]
+
+
+def _write_release_table(path: Path, rows: list[dict[str, str]]) -> None:
+    with path.open("w", newline="", encoding="utf-8") as stream:
+        writer = csv.DictWriter(stream, fieldnames=list(rows[0]), delimiter="\t")
+        writer.writeheader()
+        writer.writerows(rows)
+
+
+def _released_fixture(tmp_path: Path, kind: str):
+    """Retain the original expectation while declaring two distinct releases."""
+    source = tmp_path / "source_data" / "measurements.csv"
+    source.parent.mkdir()
+    source.write_text("score,run_dir\n0.5,/private/workspace\n", encoding="utf-8")
+    row = _ready_row(source)
+    original = row["sha256"]
+    source.write_text("score,run_dir\n0.5,WORKSPACE\n", encoding="utf-8")
+    intermediate = _digest(source)
+    source.write_text("score\n0.5\n", encoding="utf-8")
+    released = _digest(source)
+    relative = source.relative_to(tmp_path).as_posix()
+    if kind == "software":
+        provenance = tmp_path / "PORTABILITY_PATCHES.tsv"
+        transformations = [
+            dict(path=relative, origin_sha256=original, release_sha256=intermediate,
+                 reason="replace private runtime path"),
+            dict(path=relative, origin_sha256=intermediate, release_sha256=released,
+                 reason="remove runtime-only column"),
+        ]
+    else:
+        provenance = tmp_path / "RELEASED_SOURCE_MANIFEST.tsv"
+        transformations = [dict(original_source=relative, original_sha256=original,
+                                sha256=released, transformation="removed columns: run_dir")]
+    _write_release_table(provenance, transformations)
+    sidecar = tmp_path / "RELEASED_SOURCE_HASHES.tsv"
+    record = dict(path=relative, kind=kind, origin_sha256=original,
+                  release_sha256=released, transformation="removed columns: run_dir",
+                  provenance_file=provenance.name, provenance_sha256=_digest(provenance))
+    _write_release_table(sidecar, [record])
+    return source, row, provenance, transformations, sidecar, record
+
+
+@pytest.mark.parametrize("kind", ["software", "source_data"])
+def test_declared_released_bytes_preserve_original_expectation(tmp_path: Path, kind: str) -> None:
+    source, row, *_ = _released_fixture(tmp_path, kind)
+    original_expectation = row["sha256"]
+    assert _digest(source) != original_expectation
+    assert audit.audit_manifest_rows([row], strict_pending=True) == []
+    assert row["sha256"] == original_expectation
+
+
+@pytest.mark.parametrize("kind", ["software", "source_data"])
+@pytest.mark.parametrize("damage", ["original", "released_bytes", "provenance", "missing_chain"])
+def test_release_hash_chain_rejects_tampering(tmp_path: Path, kind: str, damage: str) -> None:
+    source, row, provenance, changes, sidecar, record = _released_fixture(tmp_path, kind)
+    if damage == "original":
+        # Matching released bytes cannot authorize a different original source.
+        record["origin_sha256"] = "0" * 64
+        _write_release_table(sidecar, [record])
+    elif damage == "released_bytes":
+        source.write_text("score\n0.9\n", encoding="utf-8")
+    elif damage == "provenance":
+        provenance.write_text(provenance.read_text() + "tampered\n", encoding="utf-8")
+    else:
+        changes[0]["origin_sha256" if kind == "software" else "original_sha256"] = "0" * 64
+        _write_release_table(provenance, changes)
+        # Rehashing a broken declaration does not repair the original→release link.
+        record["provenance_sha256"] = _digest(provenance)
+        _write_release_table(sidecar, [record])
+    findings = audit.audit_manifest_rows([row], strict_pending=True)
+    assert [finding.code for finding in findings] == ["source.hash_mismatch"]
+
+
+def test_display_filtered_copy_cannot_replace_complete_canonical_data(tmp_path: Path) -> None:
+    source, row, provenance, changes, sidecar, record = _released_fixture(tmp_path, "source_data")
+    description = "display-specific row filter: condition == shown"
+    changes[0]["transformation"] = description
+    _write_release_table(provenance, changes)
+    record.update(transformation=description, provenance_sha256=_digest(provenance))
+    _write_release_table(sidecar, [record])
+    findings = audit.audit_manifest_rows([row], strict_pending=True)
+    assert [finding.code for finding in findings] == ["source.hash_mismatch"]
+    assert "display-filtered data" in findings[0].message
 
 
 def test_repository_manifest_has_no_missing_or_changed_ready_sources() -> None:

@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 """Retain every extended trajectory and compare its 180/600-epoch windows."""
 import json
+import copy
 from pathlib import Path
 import numpy as np
 import pandas as pd
+import yaml
 from extend import OUT,sha,dump
 
 CONTRASTS=[
@@ -20,11 +22,19 @@ def boot(values):
 
 
 def main():
-    protocol=json.loads((OUT/'extension_protocol.json').read_text());rows=[];curves=[];replay=[]
+    import torch
+    protocol=json.loads((OUT/'extension_protocol.json').read_text());rows=[];curves=[];replay=[];state_checks=[]
     for record in protocol['conditions']:
         folder=Path(record['results_dir']);audit=json.loads((folder/'extension_audit.json').read_text())
         assert audit['status']=='complete' and not audit['benchmark']
         for file,digest in audit['output_sha256'].items():assert sha(folder/file)==digest
+        original_config=yaml.safe_load(Path(record['original_config']).read_text())
+        extension_config=yaml.safe_load(Path(record['config']).read_text())
+        restored=copy.deepcopy(extension_config)
+        restored['training']['main']['common']['epochs']=original_config['training']['main']['common']['epochs']
+        for key in ['results_dir','run_name']:restored['outputs'][key]=original_config['outputs'][key]
+        assert restored==original_config
+        assert extension_config['training']['main']['common']['epochs']==600
         meta={k:record[k] for k in ['index','arm','depth','seed']}
         model_folder=Path(audit['model_results_dir'])
         resources=json.loads((model_folder/'model_resources.json').read_text())
@@ -32,6 +42,19 @@ def main():
         assert resources['active_synapses']==14336
         summary=json.loads((model_folder/'training_summary.json').read_text())
         losses=np.array(summary['valid_losses'],float);assert np.isfinite(losses).all()
+        snapshot_path=folder/f'extension_state_{len(losses)}.pt'
+        snapshot=torch.load(snapshot_path,map_location='cpu',weights_only=False)
+        final_state=torch.load(model_folder/'final_model.pt',map_location='cpu',weights_only=True)
+        assert set(snapshot['best_model'])==set(final_state)
+        assert all(torch.equal(snapshot['best_model'][key],value) for key,value in final_state.items())
+        assert snapshot['valid_losses']==summary['valid_losses']
+        assert snapshot['optimizer']['state']['state']
+        assert set(snapshot['rng'])=={'python','numpy','torch','cuda'}
+        state_checks.append(meta|dict(config_changes_limited_to_epoch_cap_and_output_names=True,
+            validation_selected_final_model_exactly_matches_saved_best_state=True,
+            optimizer_and_global_random_states_available=True,
+            snapshot_epoch=len(losses),snapshot_sha256=sha(snapshot_path),
+            final_model_sha256=sha(model_folder/'final_model.pt')))
         best=np.minimum.accumulate(losses)
         final=json.loads((model_folder/'performance/final.json').read_text())
         if len(losses)>=180:
@@ -56,6 +79,7 @@ def main():
     df=pd.DataFrame(rows);df.to_csv(OUT/'extension_endpoints.csv',index=False)
     pd.DataFrame(curves).to_csv(OUT/'extension_validation_trajectories.csv',index=False)
     pd.DataFrame(replay).to_csv(OUT/'extension_source_concordance.csv',index=False)
+    pd.DataFrame(state_checks).to_csv(OUT/'extension_checkpoint_validation.csv',index=False)
     contrasts=[];seedrows=[]
     for budget,group in df.groupby('budget'):
         wide=group.pivot(index='seed',columns=['arm','depth'],values='test_accuracy')
@@ -65,6 +89,20 @@ def main():
             seedrows.extend(dict(budget=int(budget),contrast=name,seed=int(seed),difference_pp=float(v)) for seed,v in values.items())
     contrastdf=pd.DataFrame(contrasts);contrastdf.to_csv(OUT/'extension_paired_contrasts.csv',index=False)
     seeddf=pd.DataFrame(seedrows);seeddf.to_csv(OUT/'extension_paired_seed_contrasts.csv',index=False)
+    # Retain both logged loss metrics alongside accuracy; these descriptive
+    # secondary contrasts clarify metric dependence, with no new primary test.
+    losscontrasts=[];lossseed=[]
+    for budget,group in df.groupby('budget'):
+        for metric in ['test_loss','best_valid_loss']:
+            wide=group.pivot(index='seed',columns=['arm','depth'],values=metric)
+            for name,left,right in CONTRASTS:
+                values=wide[left]-wide[right]
+                losscontrasts.append(dict(budget=int(budget),metric=metric,contrast=name,
+                    scope='descriptive secondary loss contrast; same validation-selected states',**boot(values)))
+                lossseed.extend(dict(budget=int(budget),metric=metric,contrast=name,
+                    seed=int(seed),difference=float(v)) for seed,v in values.items())
+    pd.DataFrame(losscontrasts).to_csv(OUT/'extension_loss_contrasts.csv',index=False)
+    pd.DataFrame(lossseed).to_csv(OUT/'extension_loss_seed_contrasts.csv',index=False)
     changes=[]
     for label,g in seeddf.groupby('contrast'):
         wide=g.pivot(index='seed',columns='budget',values='difference_pp')
@@ -81,6 +119,7 @@ def main():
         median_abs_historical180_accuracy_difference_pp=float(np.median([abs(r['test_accuracy_difference_pp']) for r in replay])),
         at_600_cap=int(df[df.budget==600].at_budget_cap.sum()),
         resource_checks='Every fit has 66178 trainable parameters and 14336 active synapses',
+        configuration_and_state_checks='All 60 configurations differ only in epoch cap and output naming; saved final model tensors exactly equal validation-selected best-state tensors',
         projection='Best-validation curves carried forward after stopping, no survivor averaging',
         protocol_sha256=sha(OUT/'extension_protocol.json'),script_sha256=sha(__file__))
     dump(OUT/'extension_validation.json',audit)

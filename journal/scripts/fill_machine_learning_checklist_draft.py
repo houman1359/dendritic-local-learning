@@ -31,7 +31,7 @@ TEXT = {
     156: "Analytic gradients, explicit route dictionaries and controlled ablations; SI S1-S5.",
     160: "Methods and SI: accuracy, loss/NMSE, capture, update match, costed regret, selectivity.",
     166: "MNIST, Fashion-MNIST and CIFAR-10; Methods and SI S5.",
-    170: "Figs. 2, 5-6/S31/S34-S44: fixed/rank/chance, pilot, point/ridge; privileged target-informed references.",
+    170: "Figs. 1-8/S31/S34-S47: broadcast, rank, chance, point/ridge and privileged target-informed references.",
     175: "No state-of-the-art accuracy or deployment claim; comparisons isolate mechanisms, information, optimization and resource constraints.",
     178: "Feedback/topology/optimizer/shunt; input grouping, exact/broadcast credit; cue and mapping controls.",
 }
