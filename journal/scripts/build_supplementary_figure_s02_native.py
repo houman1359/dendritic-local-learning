@@ -173,7 +173,6 @@ def panel_inhibition(ax, report):
     for ct, ds, color, ls in [
         ("dendritic_shunting", "mnist", SHUNT, "-"),
         ("dendritic_additive", "mnist", ADD, "-"),
-        ("dendritic_shunting", "noise_resilience", SHUNT, "--"),
         ("dendritic_additive", "noise_resilience", ADD, "--"),
     ]:
         sub = ie_data[(ie_data["network_type"] == ct)
@@ -251,6 +250,8 @@ def panel_morphology(ax, report):
             ha="right", va="center")
     ax.text(41.0, 17.6, "depth 3", color=DEPTH_COLORS[3], fontsize=PT_LEGEND,
             ha="right", va="center")
+    ax.text(.03, .96, "depth and resources change", transform=ax.transAxes,
+            fontsize=PT_SMALL, color=MUTE, va="top")
     return ax
 
 
@@ -313,13 +314,10 @@ def panel_controls(ax, report):
             mean = float(row["test_acc_mean"]) * 100.0
             std = float(row["test_acc_std"]) * 100.0
             ypos = center + offset
-            ax.barh(ypos, mean - x_base, left=x_base, height=height,
-                    xerr=std, color=color, edgecolor="white", lw=LW_EDGE,
-                    capsize=ERR_CAPSIZE, error_kw={"lw": LW_ERR})
-            inside = (mean - x_base) > 3.2
-            ax.text(x_base + 0.28 if inside else mean + std + 0.35, ypos,
-                    label, ha="left", va="center", fontsize=PT_SMALL,
-                    color="white" if inside else INK, zorder=6)
+            ax.errorbar(mean,ypos,xerr=std,fmt="o",ms=3.5,color=color,
+                        lw=LW_ERR,capsize=ERR_CAPSIZE)
+            ax.text(x_base+.08,ypos,label,ha="left",va="center",
+                    fontsize=PT_SMALL,color=color,zorder=6)
             report(f"D {label}: {mean:.4f}+-{std:.4f}")
         ax.text(0.015, center + 0.32, group_label,
                 transform=ax.get_yaxis_transform(), ha="left", va="bottom",
@@ -397,7 +395,7 @@ def panel_feedback(ax, report):
     # Direct colour words in the data-free lower right (no legend box).
     ax.text(1.02, 90.15, "shunting", color=SHUNT, fontsize=PT_LEGEND,
             ha="center", va="center")
-    ax.text(1.02, 89.25, "normalized additive", color=ADD, fontsize=PT_LEGEND,
+    ax.text(1.02, 89.25, "additive (legacy)", color=ADD, fontsize=PT_LEGEND,
             ha="center", va="center")
     return ax
 

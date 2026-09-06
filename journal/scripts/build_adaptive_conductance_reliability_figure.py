@@ -7,6 +7,7 @@ from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
+from journal_style import style_direct_color_labels
 import pandas as pd
 from matplotlib.patches import FancyArrowPatch, FancyBboxPatch
 
@@ -121,6 +122,8 @@ def main() -> None:
     ax_b.set_xlabel("branch index")
     ax_b.set_ylabel("attenuation gain")
     panel_title(ax_b, "B", "Estimated branch ordering")
+    ax_b.text(.03,.96,"mean ± SD",transform=ax_b.transAxes,va="top",
+              fontsize=PT_LEGEND-0.4,color=COLORS["mute"])
     style_axis(ax_b, grid="y")
     clean_legend(ax_b, fontsize=PT_LEGEND - 0.4, loc="lower right")
 
@@ -144,7 +147,9 @@ def main() -> None:
     ax_c.set_xticks([0, 1, 2])
     ax_c.set_xlabel("credit-reliability heterogeneity")
     ax_c.set_ylabel("test loss after 40 updates")
-    panel_title(ax_c, "C", "Adaptive placement is conditional")
+    panel_title(ax_c, "C", "No endpoint gain over no shunt")
+    ax_c.text(.03,.95,"mean / 95% CI",transform=ax_c.transAxes,va="top",
+              fontsize=PT_LEGEND-0.4,color=COLORS["mute"])
     style_axis(ax_c, grid="both")
     handles, labels = ax_c.get_legend_handles_labels()
     fig.legend(
@@ -161,8 +166,8 @@ def main() -> None:
     )
 
     controls = [
-        ("adaptive_global_shunt", "global", COLORS["per_soma"]),
-        ("adaptive_shuffled_shunt", "shuffled", COLORS["additive"]),
+        ("adaptive_global_shunt", "global", COLORS["point_mlp"]),
+        ("adaptive_shuffled_shunt", "shuffled", COLORS["mute"]),
         ("noisy_no_shunt", "no shunt", COLORS["ink"]),
         ("initial_oracle_shunt", "oracle", COLORS["oracle"]),
         ("adaptive_point_gate", "point gain", COLORS["dend"]),
@@ -190,11 +195,12 @@ def main() -> None:
     # two-word names wrap instead of rotating.
     horizontal = ["global", "shuffled", "no\nshunt", "oracle", "point\ngain"]
     ax_d.set_xticks(positions, horizontal)
-    ax_d.tick_params(axis="x", labelsize=PT_SMALL - 0.8, pad=1.5)
+    ax_d.tick_params(axis="x", labelsize=PT_SMALL, pad=2.0)
     ax_d.set_ylabel("control loss $-$ adaptive-local loss")
     panel_title(ax_d, "D", "Final-loss boundary at high heterogeneity")
     style_axis(ax_d, grid="y")
 
+    style_direct_color_labels(fig)
     fig.canvas.draw()
     audit_layout(fig, "fig_adaptive_conductance_reliability")
     audit_text_over_data(fig, "fig_adaptive_conductance_reliability")

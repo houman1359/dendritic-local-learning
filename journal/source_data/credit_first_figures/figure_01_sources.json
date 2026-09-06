@@ -1,0 +1,24 @@
+{
+  "panel_sources": {
+    "A": "Public build_main_figure_01.panel_factorization_readable; directed-tree eligibility and exact path example",
+    "B": "New six-site illustrative matrices; no experimental data or fitted coefficients",
+    "C": "New diagram of readout-derivative versus fixed-random feedback source; does not equate DFA with within-tree broadcast",
+    "D": "Public build_main_figure_02.panel_mnist_ladder; original 15-seed MNIST means, intervals and paired points",
+    "E": "Original paired neuron-minus-scalar contrasts, two MNIST sources plus flattened CIFAR-10 readout source",
+    "F": "Original exact-path-minus-neuron contrasts, same row ordering and sources as E"
+  },
+  "source_sha256": {
+    "scripts/credit_first_figures/build_framework.py": "189e911e29410204bd002746cbec2eb8b622dcb37e1fb08fec85cceed699a015",
+    "scripts/build_main_figure_01.py": "125fed573a737382951738db70253f791969a786b1248186b9d338337f87e208",
+    "scripts/build_main_figure_02.py": "b3031c1a01989e7575d3529a9eccf16aba58ba45def609105bf7dd9a753499b4",
+    "scripts/figure_canvas.py": "498dec86dcac34c9841538fa7b5bf7b7311d468db8fbe0c7a648fbb9508c5e1f",
+    "scripts/journal_style.py": "32a3272cebb949784b694bc6dbb495cf74f6ba4ddf97d18d44f3ef54e082844e",
+    "source_data/mnist_feedback_ladder/condition_summary.csv": "ede6ee940a7cff4356211c49c4dbc2cc595183adf50b99df8e18023a576e0027",
+    "source_data/mnist_feedback_ladder/seed_outcomes.csv": "b259ca8e913412508d3357d24a56e478c11d0ec5722c9fd7eccca0274181d2a9",
+    "source_data/mnist_feedback_ladder/paired_contrasts.csv": "e23b4650950f89420fd187d4c637e94230227a85972e8fc5e9e9db0e61e33b31",
+    "source_data/mnist_between_within_factorial/paired_contrasts.csv": "6416c2a755041d1f1c29cdc01aef76b265cf177268933e1eaa9ee040852b3c94",
+    "source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv": "cc19f7467e39e25c2f708ed7ff99b63c0f02a76ca0c6a85c940827b1a813186d"
+  },
+  "numerical_scope": "No new fitting, bootstrap, significance test or modification to source outcomes; existing confidence intervals replayed exactly.",
+  "layout_findings": []
+}

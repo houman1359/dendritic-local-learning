@@ -1,0 +1,459 @@
+{
+  "alignment_energy_fractions": [
+    0.0,
+    0.2,
+    0.4,
+    0.6,
+    0.8,
+    1.0
+  ],
+  "analysis_type": "controlled oracle-capacity and quadratic-optimization experiment",
+  "boundaries": [
+    "Alignment is imposed by construction; the experiment establishes conditional sufficiency, not that MICrONS anatomy learned or represents these gradients.",
+    "Projection coefficients use the exact gradient and are oracle upper bounds for each feedback family.",
+    "The quadratic objective has fixed anatomy-independent curvature and does not represent a sensory benchmark.",
+    "The eight reconstructed cells are the biological replication units; Monte Carlo streams are nested sensitivity samples."
+  ],
+  "capture_progress_relation_non_morphology": {
+    "cell_values": [
+      {
+        "root_id": 864691135060651419,
+        "spearman_r": 0.9917440660474718
+      },
+      {
+        "root_id": 864691135196576298,
+        "spearman_r": 0.981424148606811
+      },
+      {
+        "root_id": 864691135277186789,
+        "spearman_r": 0.9938080495356036
+      },
+      {
+        "root_id": 864691135324623260,
+        "spearman_r": 0.9690402476780186
+      },
+      {
+        "root_id": 864691135409937097,
+        "spearman_r": 0.9958720330237358
+      },
+      {
+        "root_id": 864691135739661169,
+        "spearman_r": 0.9876160990712075
+      },
+      {
+        "root_id": 864691135810666525,
+        "spearman_r": 0.9917440660474718
+      },
+      {
+        "root_id": 864691136043380566,
+        "spearman_r": 0.9876160990712075
+      }
+    ],
+    "median_within_cell_spearman_r": 0.9896800825593397,
+    "note": "The relation is evaluated under a fixed anisotropic quadratic and provides a controlled bridge from capacity to optimization, not independent biological evidence. No p-value is assigned to nested alignment levels and methods.",
+    "range": [
+      0.9690402476780186,
+      0.9958720330237358
+    ]
+  },
+  "cell_ids": [
+    864691135060651419,
+    864691135196576298,
+    864691135277186789,
+    864691135324623260,
+    864691135409937097,
+    864691135739661169,
+    864691135810666525,
+    864691136043380566
+  ],
+  "channels": 8,
+  "claim": "Alignment between an exact task-gradient field and a reconstructed-tree routing basis is sufficient to determine the capture and optimization benefit available to restricted feedback.",
+  "dictionary_metadata": [
+    {
+      "effective_ranks": {
+        "ancestry-shuffled paths": 8,
+        "depth bins": 8,
+        "morphology-selected paths": 8,
+        "random paths": 8
+      },
+      "n_weighted_coordinates": 128,
+      "random_route_indices": [
+        96,
+        15,
+        60,
+        39,
+        2,
+        136,
+        104,
+        100
+      ],
+      "requested_channels": 8,
+      "root_id": 864691135060651419,
+      "selected_route_indices": [
+        56,
+        27,
+        28,
+        17,
+        10,
+        81,
+        29,
+        79
+      ],
+      "wiring_nonzeros": {
+        "ancestry-shuffled paths": 32,
+        "depth bins": 128,
+        "morphology-selected paths": 32,
+        "random paths": 81
+      }
+    },
+    {
+      "effective_ranks": {
+        "ancestry-shuffled paths": 8,
+        "depth bins": 8,
+        "morphology-selected paths": 8,
+        "random paths": 8
+      },
+      "n_weighted_coordinates": 21,
+      "random_route_indices": [
+        7,
+        11,
+        2,
+        15,
+        13,
+        3,
+        1,
+        4
+      ],
+      "requested_channels": 8,
+      "root_id": 864691135196576298,
+      "selected_route_indices": [
+        5,
+        8,
+        7,
+        6,
+        15,
+        4,
+        12,
+        10
+      ],
+      "wiring_nonzeros": {
+        "ancestry-shuffled paths": 12,
+        "depth bins": 21,
+        "morphology-selected paths": 12,
+        "random paths": 30
+      }
+    },
+    {
+      "effective_ranks": {
+        "ancestry-shuffled paths": 8,
+        "depth bins": 8,
+        "morphology-selected paths": 8,
+        "random paths": 8
+      },
+      "n_weighted_coordinates": 95,
+      "random_route_indices": [
+        50,
+        73,
+        67,
+        76,
+        24,
+        83,
+        60,
+        44
+      ],
+      "requested_channels": 8,
+      "root_id": 864691135277186789,
+      "selected_route_indices": [
+        5,
+        46,
+        10,
+        24,
+        1,
+        67,
+        84,
+        4
+      ],
+      "wiring_nonzeros": {
+        "ancestry-shuffled paths": 90,
+        "depth bins": 95,
+        "morphology-selected paths": 90,
+        "random paths": 22
+      }
+    },
+    {
+      "effective_ranks": {
+        "ancestry-shuffled paths": 8,
+        "depth bins": 8,
+        "morphology-selected paths": 8,
+        "random paths": 8
+      },
+      "n_weighted_coordinates": 34,
+      "random_route_indices": [
+        28,
+        11,
+        18,
+        16,
+        12,
+        38,
+        9,
+        14
+      ],
+      "requested_channels": 8,
+      "root_id": 864691135324623260,
+      "selected_route_indices": [
+        5,
+        15,
+        30,
+        32,
+        11,
+        17,
+        4,
+        25
+      ],
+      "wiring_nonzeros": {
+        "ancestry-shuffled paths": 14,
+        "depth bins": 34,
+        "morphology-selected paths": 14,
+        "random paths": 18
+      }
+    },
+    {
+      "effective_ranks": {
+        "ancestry-shuffled paths": 8,
+        "depth bins": 8,
+        "morphology-selected paths": 8,
+        "random paths": 8
+      },
+      "n_weighted_coordinates": 70,
+      "random_route_indices": [
+        15,
+        67,
+        29,
+        6,
+        43,
+        45,
+        33,
+        56
+      ],
+      "requested_channels": 8,
+      "root_id": 864691135409937097,
+      "selected_route_indices": [
+        21,
+        16,
+        10,
+        1,
+        11,
+        28,
+        5,
+        13
+      ],
+      "wiring_nonzeros": {
+        "ancestry-shuffled paths": 54,
+        "depth bins": 70,
+        "morphology-selected paths": 54,
+        "random paths": 23
+      }
+    },
+    {
+      "effective_ranks": {
+        "ancestry-shuffled paths": 8,
+        "depth bins": 8,
+        "morphology-selected paths": 8,
+        "random paths": 8
+      },
+      "n_weighted_coordinates": 32,
+      "random_route_indices": [
+        12,
+        21,
+        7,
+        17,
+        32,
+        10,
+        9,
+        18
+      ],
+      "requested_channels": 8,
+      "root_id": 864691135739661169,
+      "selected_route_indices": [
+        5,
+        9,
+        8,
+        25,
+        17,
+        10,
+        12,
+        20
+      ],
+      "wiring_nonzeros": {
+        "ancestry-shuffled paths": 20,
+        "depth bins": 32,
+        "morphology-selected paths": 20,
+        "random paths": 16
+      }
+    },
+    {
+      "effective_ranks": {
+        "ancestry-shuffled paths": 8,
+        "depth bins": 8,
+        "morphology-selected paths": 8,
+        "random paths": 8
+      },
+      "n_weighted_coordinates": 116,
+      "random_route_indices": [
+        84,
+        119,
+        81,
+        68,
+        46,
+        98,
+        90,
+        60
+      ],
+      "requested_channels": 8,
+      "root_id": 864691135810666525,
+      "selected_route_indices": [
+        39,
+        29,
+        19,
+        52,
+        72,
+        55,
+        6,
+        63
+      ],
+      "wiring_nonzeros": {
+        "ancestry-shuffled paths": 42,
+        "depth bins": 116,
+        "morphology-selected paths": 42,
+        "random paths": 25
+      }
+    },
+    {
+      "effective_ranks": {
+        "ancestry-shuffled paths": 8,
+        "depth bins": 8,
+        "morphology-selected paths": 8,
+        "random paths": 8
+      },
+      "n_weighted_coordinates": 55,
+      "random_route_indices": [
+        12,
+        11,
+        7,
+        42,
+        50,
+        25,
+        56,
+        43
+      ],
+      "requested_channels": 8,
+      "root_id": 864691136043380566,
+      "selected_route_indices": [
+        35,
+        15,
+        16,
+        3,
+        23,
+        26,
+        19,
+        17
+      ],
+      "wiring_nonzeros": {
+        "ancestry-shuffled paths": 27,
+        "depth bins": 55,
+        "morphology-selected paths": 27,
+        "random paths": 10
+      }
+    }
+  ],
+  "endpoint_capture_comparisons": {
+    "alignment_0": {
+      "ancestry-shuffled paths": {
+        "cell_bootstrap_ci95": [
+          -0.21849431732399793,
+          -0.09512831121406308
+        ],
+        "cells_positive": 0,
+        "exact_two_sided_wilcoxon_p": 0.0078125,
+        "mean_morphology_minus_control": -0.15203232470632427,
+        "n_cells": 8
+      },
+      "depth bins": {
+        "cell_bootstrap_ci95": [
+          -0.22801855536530402,
+          -0.09142511065534889
+        ],
+        "cells_positive": 0,
+        "exact_two_sided_wilcoxon_p": 0.0078125,
+        "mean_morphology_minus_control": -0.15309747338195198,
+        "n_cells": 8
+      },
+      "random paths": {
+        "cell_bootstrap_ci95": [
+          -0.189647779773938,
+          -0.08552606541659381
+        ],
+        "cells_positive": 0,
+        "exact_two_sided_wilcoxon_p": 0.0078125,
+        "mean_morphology_minus_control": -0.13464594286150605,
+        "n_cells": 8
+      }
+    },
+    "alignment_1": {
+      "ancestry-shuffled paths": {
+        "cell_bootstrap_ci95": [
+          0.7277642594472808,
+          0.8643380374855254
+        ],
+        "cells_positive": 8,
+        "exact_two_sided_wilcoxon_p": 0.0078125,
+        "mean_morphology_minus_control": 0.7992066058350629,
+        "n_cells": 8
+      },
+      "depth bins": {
+        "cell_bootstrap_ci95": [
+          0.688405371407786,
+          0.8147239384836819
+        ],
+        "cells_positive": 8,
+        "exact_two_sided_wilcoxon_p": 0.0078125,
+        "mean_morphology_minus_control": 0.7529927405811614,
+        "n_cells": 8
+      },
+      "random paths": {
+        "cell_bootstrap_ci95": [
+          0.6198973578764778,
+          0.788925389921286
+        ],
+        "cells_positive": 8,
+        "exact_two_sided_wilcoxon_p": 0.0078125,
+        "mean_morphology_minus_control": 0.7102092549858813,
+        "n_cells": 8
+      }
+    }
+  },
+  "exact_gradients_per_stream": 256,
+  "monte_carlo_streams_per_cell": 40,
+  "n_microns_cells": 8,
+  "provenance": {
+    "analysis_script": "scripts/run_alignment_controlled_learning.py",
+    "analysis_script_sha256": "e9249fbcc5d41e26e4cb072d114b0d99b319901d975ebd5fcd96c2930dc507f4",
+    "base_random_seed": 20260731,
+    "input_segment_table": "source_data/figure3/segment_metrics.csv",
+    "input_segment_table_sha256": "7829c298c4e5b3209b758fb88b92b55f070420c00b383436e5d4e1601e7ff1cf",
+    "software": {
+      "numpy": "1.26.4",
+      "pandas": "2.3.3",
+      "scipy": "1.15.3"
+    }
+  },
+  "quadratic_objective": {
+    "condition_number": 3.0,
+    "curvature": "a diagonal, anatomy-independent spectrum from 0.5 to 1.5, randomly permuted once per nested stream and held fixed across alignment levels and feedback methods",
+    "form": "L(theta) = 0.5 * (theta - target)' H (theta - target) in summed-synaptic-area-weighted coordinates",
+    "iterative_learning_rate": 0.25,
+    "iterative_steps": 20,
+    "one_step_update_norm_fraction": 0.1
+  },
+  "status": "complete"
+}

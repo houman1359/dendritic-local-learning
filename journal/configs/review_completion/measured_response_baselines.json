@@ -1,0 +1,16 @@
+{
+  "study": "cached_measured_response_baselines_and_input_sensitivity",
+  "status": "secondary_protocol_fixed_before_new_baseline_outcomes_not_public_preregistration",
+  "outer_splits": "same_130_stimulus_identity_splits_as_fulltree_boundary",
+  "inner_folds": 3,
+  "ridge_penalties": [0.0, 0.0001, 0.001, 0.01, 0.1, 1.0, 10.0, 100.0],
+  "primary_methods": ["training_mean", "ols_all", "ridge_all"],
+  "secondary_masks": ["manual_only", "training_reliability_ge_0", "training_reliability_ge_0.1", "training_reliability_ge_0.2"],
+  "retained_input_fractions": [0.25, 0.5, 0.75],
+  "mask_draws": 5,
+  "added_feature_noise_sd": [0.25, 0.5, 1.0],
+  "preprocessing": "historical_train_quantile_clip_then_train_only_column_standardization; raw_standardized_ridge_as_secondary_reference",
+  "bootstrap_draws": 20000,
+  "analysis_seed": 20260907,
+  "scope": "Seven targets from one mouse. Train-only nested tuning and split-wise reliability filters; perturbation draws average before scan and target aggregation. Missingness removes observed presynaptic features and cannot recover unobserved inputs or estimate population power. Archived nonlinear fits are descriptive paired references, not retrained under each sensitivity mask."
+}

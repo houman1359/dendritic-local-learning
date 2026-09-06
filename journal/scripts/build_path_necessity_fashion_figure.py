@@ -58,10 +58,10 @@ ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "source_data" / "path_necessity_fashion"
 OUTPUT = ROOT / "figures" / "supplementary" / "figure_S29_panels_A-C.pdf"
 
-CANVAS_H_PT = 336.0
+CANVAS_H_PT = 530.0
 HEIGHT_IN = CANVAS_H_PT / 72.0
-ROW_WEIGHTS = (132.0, 132.0)
-HGUTTER_PT = 39.0
+ROW_WEIGHTS = (132.0, 132.0, 145.0)
+HGUTTER_PT = 31.0
 VGUTTER_PT = 37.0
 
 INK = COLORS["ink"]
@@ -250,6 +250,8 @@ def build() -> list:
     mpl.rcParams["lines.markeredgewidth"] = LW_EDGE
     summary = pd.read_csv(SOURCE / "condition_summary.csv")
     crossings = pd.read_csv(SOURCE / "plotted_crossings.csv")
+    seed_boundaries=pd.read_csv(SOURCE/"boundary_by_seed.csv")
+    trajectories=pd.read_csv(ROOT/"source_data/review_branch_trajectories/gradient_trajectories.csv")
     required = {
         "correct_path", "neuron_shared_k1", "backpropagation",
         "gated_point_emulation", "within_neuron_deranged",
@@ -259,9 +261,10 @@ def build() -> list:
         raise ValueError(f"path-necessity source table lacks conditions: {missing}")
 
     canvas = NativeCanvas(
-        HEIGHT_IN, 2, row_weights=list(ROW_WEIGHTS),
+        HEIGHT_IN, 3, row_weights=list(ROW_WEIGHTS),
         hgutter_pt=HGUTTER_PT, vgutter_pt=VGUTTER_PT,
         margins=Margins(left=34.0, right=12.0, top=16.0, bottom=26.0),
+        letters=False,
     )
     ax_a = canvas.panel(
         "A", 0, 0, 6, rowspan=2, schematic=True,
@@ -269,19 +272,58 @@ def build() -> list:
     )
     ax_b = canvas.panel(
         "B", 0, 6, 6, grid="none",
-        title="Learning crosses the predicted boundary",
+        title="Shared credit fails with conflict",
     )
     ax_c = canvas.panel(
         "C", 1, 6, 6, grid="y",
-        title="Observed collapse follows theory",
+        title="Predicted and learned thresholds",
     )
 
     path_task_schematic(ax_a)
     _accuracy_panel(ax_b, summary)
-    _boundary_panel(ax_c, crossings)
+    from build_main_figure_04 import boundary_test
+    boundary_test(ax_c,crossings,seed_boundaries)
+
+    interval_rows=[]
+    specs=[("common_exact_state",0,"#9AA5B4","-","epoch 0"),
+           ("common_exact_state",50,"#5F6B7E","-","epoch 50"),
+           ("common_exact_state",250,"#202936","-","epoch 250"),
+           ("own_state",250,AMBER,"--","own state, 250")]
+    for col,branch,letter in [(0,2,"D"),(4,4,"E"),(8,8,"F")]:
+        ax=canvas.panel(letter,2,col,4,grid="y",title=f"Update alignment, B={branch}")
+        for state,epoch,color,ls,label in specs:
+            part=trajectories[trajectories.branches.eq(branch)&trajectories.condition.eq("neuron_shared_k1")
+                              &trajectories.state_comparison.eq(state)&trajectories.epoch.eq(epoch)]
+            xx=[];means=[];low=[];high=[]
+            for dose,group in part.groupby("conflict_probability"):
+                vals=group.sort_values("seed").gradient_cosine.to_numpy();assert len(vals)==20
+                rng=np.random.default_rng(29000+branch*100+epoch+(state=="own_state"))
+                lo,hi=np.quantile(rng.choice(vals,(5000,len(vals)),replace=True).mean(axis=1),[.025,.975])
+                xx.append(dose);means.append(vals.mean());low.append(lo);high.append(hi)
+                interval_rows.append(dict(branches=branch,epoch=epoch,state_comparison=state,
+                                          conflict_probability=dose,mean_cosine=vals.mean(),ci95_low=lo,ci95_high=hi,n_seeds=20))
+            ax.plot(xx,means,color=color,ls=ls,marker="o",ms=2.8,lw=LW_DATA,label=label)
+            ax.fill_between(xx,low,high,color=color,alpha=.10,lw=0)
+        ax.axhline(0,color=MUTE,lw=LW_REF,ls=":")
+        ax.set_ylim(-1.05,1.08);ax.set_xticks([0,.5,1]);ax.set_yticks([-1,0,1])
+        ax.set_xlabel("credit conflict χ")
+        if letter=="D":
+            ax.set_ylabel("cosine with exact update")
+            ax.legend(loc="lower left",frameon=False,fontsize=PT_SMALL,
+                       handlelength=1.2,labelspacing=.2)
+        canvas.add_letter(letter,ax)
+    pd.DataFrame(interval_rows).to_csv(ROOT/"source_data/review_branch_trajectories/figure_S29_gradient_intervals.csv",index=False)
+
+    # A spans both rows.  The generic row-leading-letter alignment otherwise
+    # places C at A's left edge, next to the wrong schematic.
+    canvas.add_letter("A", ax_a)
+    canvas.add_letter("B", ax_b)
+    ax_c.text(-0.14, 1.14, "C", transform=ax_c.transAxes,
+              fontsize=10.5, fontweight="bold", ha="left", va="bottom",
+              color=INK, clip_on=False)
 
     OUTPUT.parent.mkdir(parents=True, exist_ok=True)
-    return canvas.save(OUTPUT, name="figure_S29_panels_A-C")
+    return canvas.save(OUTPUT, name="figure_S29_panels_A-F")
 
 
 def main() -> None:

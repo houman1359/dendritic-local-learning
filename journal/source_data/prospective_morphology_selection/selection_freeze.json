@@ -1,0 +1,114 @@
+{
+  "calibration_files": [
+    {
+      "path": "calibration/confirmatory/seed_7200.csv",
+      "sha256": "58b0fef7204798b23b0d87bdcc512e17ea78c407d7555413f00aa3b4bb01561a"
+    },
+    {
+      "path": "calibration/confirmatory/seed_7201.csv",
+      "sha256": "37daecd13cee5de8cb697fb12b3fa05fc6fc78df0e305474c5ca1540ea6babb2"
+    },
+    {
+      "path": "calibration/confirmatory/seed_7202.csv",
+      "sha256": "1d5e2a293147a9a4b98338fa1ba027eccef7d2a43d050a2ede6da34d4373c3fb"
+    },
+    {
+      "path": "calibration/confirmatory/seed_7203.csv",
+      "sha256": "9d78d2f050310f6636169744524d4c6ee615a996650e290368a8e37b37c08a64"
+    },
+    {
+      "path": "calibration/confirmatory/seed_7204.csv",
+      "sha256": "48731d503904bc938579a4c9e6323a579c032e8ee838fd4e7163373b670b0467"
+    },
+    {
+      "path": "calibration/confirmatory/seed_7205.csv",
+      "sha256": "cfb15b6bd0a93dff5d600ba2dd7f2d7f6f92d007c7339621ecb56419125a2045"
+    },
+    {
+      "path": "calibration/confirmatory/seed_7206.csv",
+      "sha256": "74e35d87cd0340fbe7e6e99f700f1d7027c81b271c9b6f8a337b47d0ea6d12ea"
+    },
+    {
+      "path": "calibration/confirmatory/seed_7207.csv",
+      "sha256": "557d955e22e151e5794426d5565e01d1789272ea9e5e7991ea581c8ca2d9df8f"
+    },
+    {
+      "path": "calibration/confirmatory/seed_7208.csv",
+      "sha256": "9217ca32f5e81e58be7bc6ebee28d9f03dd1b484861602e9088e95d5181c71d8"
+    },
+    {
+      "path": "calibration/confirmatory/seed_7209.csv",
+      "sha256": "b27c404620ccb382f8818a92cd0a2a1b8e49888a6dae23dce2a4020984330ef7"
+    },
+    {
+      "path": "calibration/confirmatory/seed_7210.csv",
+      "sha256": "09f5a20003e70e9af6160cc92307d9282ebe25867fdd7b36a9be445044461388"
+    },
+    {
+      "path": "calibration/confirmatory/seed_7211.csv",
+      "sha256": "01517bd5e992c96e3708a0142e04c5a4ed8984dbf534dfbb42bcf2883cf01f61"
+    },
+    {
+      "path": "calibration/confirmatory/seed_7212.csv",
+      "sha256": "6bcff185f0d93d7b5e7dcf04f74391e5462dc7e16ec6b43a60598dd2b8c98b88"
+    },
+    {
+      "path": "calibration/confirmatory/seed_7213.csv",
+      "sha256": "a5f55a98900ff9f9f9958802be07de3c08aafa49dfa18db30a51cc1fc8af1ad8"
+    },
+    {
+      "path": "calibration/confirmatory/seed_7214.csv",
+      "sha256": "e2fea8752f51f550f2720b1c45d026b4e18c383ddaec036b174c2b8ba24e4ae7"
+    },
+    {
+      "path": "calibration/confirmatory/seed_7215.csv",
+      "sha256": "394020c2e62ae43e4ffcba7518ac059e28887829405441bcef1f48fc29e5b4fa"
+    },
+    {
+      "path": "calibration/confirmatory/seed_7216.csv",
+      "sha256": "43f0f127b70b1d9264475a4fb29426767e793001dad1bbb79dd5ad48eb9ca15c"
+    },
+    {
+      "path": "calibration/confirmatory/seed_7217.csv",
+      "sha256": "c7a969b3c8018d63cd8403979f1cf61c00667e1fa6e8188dd3eaa518bad92f84"
+    },
+    {
+      "path": "calibration/confirmatory/seed_7218.csv",
+      "sha256": "68785c08cf18c6a48fc786dd6f73184b6d595442fae46b7cfb4bc84af1c5874e"
+    },
+    {
+      "path": "calibration/confirmatory/seed_7219.csv",
+      "sha256": "7893022e791cd39d3d9e3f07bbcabbd0267c6d8c09a41847ca0d7926f8b349b5"
+    }
+  ],
+  "development_files": [
+    {
+      "path": "runs/development/seed_6100.csv",
+      "sha256": "bd3a0fa32ad5e11ebda8b28c4bbaf6c1269b9a32204d3f9f9b2288a88c3c6eb2"
+    },
+    {
+      "path": "runs/development/seed_6101.csv",
+      "sha256": "373b89885bb98c803eed5faa8e378065db8960db697f11047c0ab6ae4a2d626c"
+    },
+    {
+      "path": "runs/development/seed_6102.csv",
+      "sha256": "b6c61d0d5aac2e228dadbe9e0d23747f38d2285eb601b256c89ace1c8c24b12c"
+    },
+    {
+      "path": "runs/development/seed_6103.csv",
+      "sha256": "2576154052016c0d9cdb7609cbc9294c2f1bc826db6a43b2ce1bb16ed3d00b9a"
+    },
+    {
+      "path": "runs/development/seed_6104.csv",
+      "sha256": "ee3f4edcc6e48092ab51fefbbca20341861ae979a4f5f08f895d6ba8116362de"
+    }
+  ],
+  "development_fit_sha256": "1201798b5157d677fb0726a37a103751605c3fad6a1094a129aae69cdf50e562",
+  "n_selections": 3200,
+  "n_tasks": 320,
+  "protocol_sha256": "aebb52030bf5a6403123f432f691676fdb85236d46a7585d83874a76312349dd",
+  "runner_sha256": "2f32eef50b50a2e2f4860efdafeda54125d577ed236e3961051a7ea573bf3def",
+  "selection_sha256": "486bc18f35d0ed888d8a56bcfedebca9c7afa18ee7848b5893f2a87b812ea200",
+  "status": "sealed_before_any_confirmatory_candidate_training",
+  "utc": "2026-09-05T16:11:16.935027+00:00"
+}

@@ -1,0 +1,19 @@
+{
+  "all_conditions_retained": true,
+  "benchmark": true,
+  "completed_utc": "2026-09-06T12:36:03.653880+00:00",
+  "model": "algebraic",
+  "n_fits": 24,
+  "phase": "development",
+  "protocol_freeze_sha256": "eca67103897fc3f4251844479ad99ab04ae61544b3f176389ec82ff0760c01d4",
+  "seconds": 0.3638370980042964,
+  "seed": 210100,
+  "selection_freeze_sha256": null,
+  "slurm_job_id": "44798770",
+  "source_files_sha256": {
+    "seed_210100_curves.csv": "d4aa5f01da806f1570cc45a576560e143eab4ee972445a238fcef24b9c92342a",
+    "seed_210100_diagnostics.csv": "59c248b61a277e7ad125f4ba7e3b68244d4694c06870ce66d60f700fad9f9ef4",
+    "seed_210100_task_matching_metadata.json": "3e2f3628f6beab34eb23f23cc0c46426855fdca3671ba73b0aecb68a2de1cada",
+    "seed_210100_task_matching_states.npz": "7a3548d59dc90a91c4af57549476f803d869aa73c8917c35c30ab088facd8c38"
+  }
+}

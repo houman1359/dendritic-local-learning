@@ -30,11 +30,13 @@ from routing_figure_panels import (
 from credit_tree_schematics import mix
 from figure_canvas import (
     COLORS,
+    ERR_CAPSIZE,
     FIG_W,
     LW_DATA,
     LW_EDGE,
     LW_HAIR,
     LW_REF,
+    MARKER_MS,
     PT_ANNOT,
     PT_LABEL,
     PT_SMALL,
@@ -52,9 +54,9 @@ COMPONENT = ROOT / "figures" / "components" / "main_figure_05_native.pdf"
 # this component its publication number; a builder-side copy would
 # bypass the 2026-09-04 dictionary-forward renumbering.
 
-CANVAS_H_PT = 440.0
+CANVAS_H_PT = 550.0
 HEIGHT_IN = CANVAS_H_PT / 72.0
-ROW_PT = [139.0, 101.0, 105.0]
+ROW_PT = [139.0, 101.0, 105.0, 90.0]
 HGUTTER_PT = 34.0
 VGUTTER_PT = 37.0
 
@@ -328,7 +330,7 @@ def _nonanatomical_basis(f: Frame, rect) -> None:
                edge=tone, lw=LW_EDGE, zorder=4)
 
     cell_w = (xs[1] - xs[0]) * 0.86
-    cell_h = 0.13 * height
+    cell_h = 0.115 * height
     base_y = leaf_y + 0.20 * height
     chip_x = xs[0] - cell_w / 2.0 - f.fx(3.0)
     for row in range(4):
@@ -354,7 +356,7 @@ def _nonanatomical_basis(f: Frame, rect) -> None:
     # Compact signed-weight key.  Without it, the purple/gray/white cells can
     # be mistaken for four categorical route identities rather than entries
     # of a dense signed basis.
-    key_y = y0 + 0.955 * height
+    key_y = y0 + 0.89 * height
     key_x = x0 + 0.44 * width
     key_specs = ((COLORS["oracle"], "+"),
                  ("#2E3947", "−"),
@@ -529,6 +531,57 @@ def _annotate_k4_advantage(ax, contrasts: pd.DataFrame) -> None:
                                 shrinkA=2.0, shrinkB=3.0), zorder=7)
 
 
+def k4_contrasts(ax_h, ax_i):
+    directory = ROOT / "source_data/review_evidence_reanalysis"
+    summary = pd.read_csv(directory / "ancestry_k4_control_contrasts.csv")
+    pairs = pd.read_csv(directory / "ancestry_control_paired_differences.csv")
+    pairs = pairs[pairs.budget_k.eq(4)]
+    specifications = (
+        (ax_h, [("best_matched_nonanatomical_oracle", "maximum of four controls")]),
+        (ax_i, [("random_rank_k", "dense rank-4"),
+                ("random_sparse_matched", "random sparse"),
+                ("depth_interleaved_bins", "depth-interleaved"),
+                ("within_neuron_route_derangement", "deranged")]),
+    )
+    for ax, controls in specifications:
+        for index, (control, label) in enumerate(controls):
+            row = summary[summary.control.eq(control)].iloc[0]
+            values = pairs[pairs.control.eq(control)].accuracy_difference_pp.to_numpy(float)
+            y = len(controls) - 1 - index
+            ax.scatter(values, y + np.linspace(-0.16, 0.16, len(values)),
+                       color=PURPLE, s=8, alpha=0.35, edgecolors="none", zorder=2)
+            ax.errorbar(row.mean_difference_pp, y,
+                        xerr=[[row.mean_difference_pp - row.ci95_low_pp],
+                              [row.ci95_high_pp - row.mean_difference_pp]],
+                        fmt="D", ms=MARKER_MS, color=PURPLE, mfc="white",
+                        lw=LW_DATA, capsize=ERR_CAPSIZE, zorder=3)
+            if ax is ax_i:
+                p = row.p_holm_four_individual_controls_at_k4
+                ax.text(-0.035, y, label,
+                        transform=ax.get_yaxis_transform(), ha="right",
+                        va="center", fontsize=PT_SMALL, color=MUTE)
+                ax.text(0.99, y + 0.23, f"Holm P={p:.2g}",
+                        transform=ax.get_yaxis_transform(), ha="right",
+                        va="bottom", fontsize=PT_SMALL, color=MUTE)
+        ax.axvline(0, color=MUTE, ls="--", lw=LW_REF, zorder=0)
+        ax.set_yticks([])
+        ax.tick_params(axis="y", labelsize=PT_SMALL, length=0)
+        ax.set_ylim(-0.45, len(controls) - 0.25)
+        ax.set_xlabel("ancestry − control accuracy (pp)")
+    ax_h.set_yticks([])
+    ax_h.set_xlim(-5, 7)
+    primary = summary[summary.control.eq("best_matched_nonanatomical_oracle")].iloc[0]
+    ax_h.text(0.03, 0.93,
+              f"{primary.mean_difference_pp:+.2f} pp "
+              f"[{primary.ci95_low_pp:.2f}, {primary.ci95_high_pp:.2f}]\n"
+              f"{int(primary.positive_seeds)}/20 seeds positive; Holm P="
+              f"{primary.p_holm_four_budgets:.4f}",
+              transform=ax_h.transAxes, va="top", ha="left",
+              fontsize=PT_SMALL, color=PURPLE,
+              bbox=dict(facecolor="white", edgecolor="none", pad=0.2))
+    ax_i.set_xlim(-12, 78)
+
+
 def build() -> list:
     mpl.rcParams["lines.markeredgewidth"] = LW_EDGE
     outcomes = pd.read_csv(SUBTREE / "seed_outcomes.csv")
@@ -537,7 +590,7 @@ def build() -> list:
     dendritic = summary[summary.architecture.eq("dendritic_tree")]
 
     canvas = NativeCanvas(
-        HEIGHT_IN, 3, row_weights=ROW_PT,
+        HEIGHT_IN, 4, row_weights=ROW_PT,
         hgutter_pt=HGUTTER_PT, vgutter_pt=VGUTTER_PT,
         margins=Margins(left=43.0, right=12.0, top=22.0, bottom=26.0),
     )
@@ -550,11 +603,17 @@ def build() -> list:
     ax_d = canvas.panel("D", 1, 6, 6, schematic=True,
                         title="Topology and basis controls at K = 4")
     ax_e = canvas.panel("E", 2, 0, 4,
-                        title="Learning across bandwidth")
+                        title="Bandwidth and learning")
     ax_f = canvas.panel("F", 2, 4, 4,
                         title="Route assignment")
     ax_g = canvas.panel("G", 2, 8, 4,
-                        title="Matched versus rewired topology")
+                        title="Matched versus rewired")
+    ax_h = canvas.panel("H", 3, 0, 6,
+                        title="K = 4: ancestry versus best control")
+    # The forest has its own explicit label column, not a column-wide reserve
+    # that would also narrow the schematic above it.
+    ax_i = canvas.panel("I", 3, 6, 6, inset_pt=(48.0, 0.0, 0.0, 0.0),
+                        lock=False, title="K = 4: individual controls")
 
     hierarchical_task(ax_a)
     address_ladder_compact(ax_b)
@@ -580,6 +639,7 @@ def build() -> list:
     _rename_label(ax_f, "vs best", "vs best matched control")
     _annotate_k4_advantage(ax_f, contrasts)
     topology_alignment_compact(ax_g, outcomes)
+    k4_contrasts(ax_h, ax_i)
 
     # Structural exact ties.  At these budgets every one of the 20 paired
     # seed differences is exactly zero by construction, but the points were
@@ -604,7 +664,17 @@ def build() -> list:
     # falling segments, so one note names both from the empty upper right.
     _tie_note(ax_g, (3.10, 27.5), ha="right", text="K = 1, 8: exact ties")
 
+    from build_main_figure_02 import _equalise_row
+    canvas.lock_reserves()
+    _equalise_row(canvas, {"E": 0, "F": 4, "G": 8})
+    canvas.lock_reserves()
+    # I's private label column must not exempt its plot from H's row height.
+    for record in canvas._records:
+        if record["name"] == "I":
+            record["inset_pt"] = (48.0, 0.0, *canvas._locks["H"][2:])
     COMPONENT.parent.mkdir(parents=True, exist_ok=True)
+    from journal_style import style_direct_color_labels
+    style_direct_color_labels(canvas.fig)
     problems = canvas.save(COMPONENT, name="main_figure_05_native")
     return problems
 

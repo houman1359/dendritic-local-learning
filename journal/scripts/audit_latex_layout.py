@@ -10,6 +10,8 @@ from pathlib import Path
 
 DEFAULT_LOGS = (Path("main.log"), Path("supplementary/supplementary.log"))
 PROHIBITED = (
+    re.compile(r"^!\s"),
+    re.compile(r"Fatal error occurred", re.IGNORECASE),
     re.compile(r"Float too large for page", re.IGNORECASE),
     re.compile(r"Overfull \\vbox", re.IGNORECASE),
     re.compile(r"Overfull \\hbox", re.IGNORECASE),
@@ -28,9 +30,10 @@ def main() -> int:
         if not log_path.is_file():
             failures.append(f"{log_path}: missing log; compile the document first")
             continue
-        for line_number, line in enumerate(
-            log_path.read_text(encoding="utf-8", errors="replace").splitlines(), 1
-        ):
+        log_text = log_path.read_text(encoding="utf-8", errors="replace")
+        if "Output written on " not in log_text:
+            failures.append(f"{log_path}: no successful output marker; finish compilation first")
+        for line_number, line in enumerate(log_text.splitlines(), 1):
             if any(pattern.search(line) for pattern in PROHIBITED):
                 failures.append(f"{log_path}:{line_number}: {line.strip()}")
 

@@ -55,9 +55,12 @@ def main() -> None:
     }
     for rm, part in absolute.groupby("membrane_resistance_ohm_cm2"):
         part = part.sort_values("dose_value")
-        ax_a.plot(
+        ax_a.errorbar(
             part.dose_value,
             part.mean_shunt_minus_additive,
+            yerr=np.vstack([part.mean_shunt_minus_additive-part.ci95_low,
+                            part.ci95_high-part.mean_shunt_minus_additive]),
+            capsize=2,
             color=colors[float(rm)],
             marker="o",
             lw=LW_DATA,
@@ -67,7 +70,7 @@ def main() -> None:
     ax_a.axhline(0, color=COLORS["mute"], ls="--", lw=0.8)
     ax_a.set_xlabel("fixed shunt conductance (nS)")
     ax_a.set_ylabel("shunt − current-injection\nlocalization")
-    panel_title(ax_a, "A", "Fixed absolute dose")
+    panel_title(ax_a, "A", "Fixed dose (nS); 8-cell intervals")
     style_axis(ax_a)
     clean_legend(ax_a, fontsize=PT_LEGEND - 0.4, loc="best")
 
@@ -93,6 +96,8 @@ def main() -> None:
     ax_b.set_xscale("log")
     ax_b.set_xlabel(r"transport selectivity $S_k$")
     ax_b.set_ylabel("localization index")
+    ax_b.text(.98,.07,"dose / input conductance = 1",transform=ax_b.transAxes,
+              va="bottom",ha="right",fontsize=PT_LEGEND-0.4,color=COLORS["mute"])
     panel_title(ax_b, "B", "Cable selectivity")
     style_axis(ax_b)
 
@@ -119,6 +124,14 @@ def main() -> None:
     ax_c.set_ylim(0, 1)
     panel_title(ax_c, "C", "Signed outcomes")
     style_axis(ax_c, grid="y")
+    central_sites=rows[rows.dose_scheme.eq("input_conductance_normalized")
+                       &np.isclose(rows.dose_value,1)
+                       &np.isclose(rows.membrane_resistance_ohm_cm2,1000)
+                       &np.isclose(rows.background_leak_multiplier,1)
+                       &rows.perturbation.eq("focal shunt")]
+    ax_c.text(.98,.94,f"{len(central_sites)} sites / {central_sites.root_id.nunique()} cells",
+              ha="right",va="top",transform=ax_c.transAxes,fontsize=PT_LEGEND-0.4,
+              color=COLORS["mute"])
 
     fig.canvas.draw()
     audit_layout(fig, "fig_focal_selectivity_matrix")

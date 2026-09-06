@@ -1,0 +1,10 @@
+{
+  "exact_constructions_sha256": "9ebfc55973ffc685e2f009123163ed354b580dfe5a53e19ec4020271b64025c6",
+  "exact_parameter_box_certificates_verified": 49,
+  "exact_parseval_and_mean_checks": 7,
+  "exact_rank_and_construction_agreement_family_tree_pairs": 105,
+  "exact_raw_truth_table_constructions_verified": 49,
+  "exhaustive_tree_count": 15,
+  "maximum_coefficient_squared_rational": "16/15",
+  "source_sha256": "b151da57b758b3c3fda193ff2cd7ce28fe0661b8ae336ffa80cf4875cfe0899b"
+}

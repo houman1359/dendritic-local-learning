@@ -1,0 +1,11 @@
+{
+  "return_code": 0,
+  "diagnostic_lines": [
+    "Output written on check.pdf (3 pages, 135039 bytes)."
+  ],
+  "source_sha256": {
+    "METHODS_AND_PROPOSITIONS.tex": "659977b136843fd8ae47c6bddda86dfab0c2fe02b791afbbfbc91965b02465cc",
+    "POSTHOC_PROJECTION.tex": "0aac1647407277e9cf9aa26271c4e205c055b2ffdeec45a6bc048f61376aece2"
+  },
+  "scope": "Standalone syntax/layout check of new fragments in article + amsmath/amssymb, not a canonical manuscript build"
+}

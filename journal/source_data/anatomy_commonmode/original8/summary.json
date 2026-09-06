@@ -1,0 +1,189 @@
+{
+  "cohort": "original8",
+  "common_capture_mean": 0.31375945246535925,
+  "comparisons": [
+    {
+      "cells_negative": 0,
+      "cells_positive": 8,
+      "ci95": [
+        0.07530239052961399,
+        0.10415867820055524
+      ],
+      "control": "common + random routes",
+      "mean_difference": 0.08862320155015285,
+      "metric": "total_capture",
+      "n_cells": 8,
+      "wilcoxon_holm_p": 0.03125,
+      "wilcoxon_p": 0.0078125
+    },
+    {
+      "cells_negative": 0,
+      "cells_positive": 8,
+      "ci95": [
+        0.11750011545439842,
+        0.17033086607750741
+      ],
+      "control": "common + depth bins",
+      "mean_difference": 0.14081832866050636,
+      "metric": "total_capture",
+      "n_cells": 8,
+      "wilcoxon_holm_p": 0.03125,
+      "wilcoxon_p": 0.0078125
+    },
+    {
+      "cells_negative": 0,
+      "cells_positive": 8,
+      "ci95": [
+        0.1426769648216433,
+        0.18032004999109763
+      ],
+      "control": "common + shuffled routes",
+      "mean_difference": 0.15895604142900496,
+      "metric": "total_capture",
+      "n_cells": 8,
+      "wilcoxon_holm_p": 0.03125,
+      "wilcoxon_p": 0.0078125
+    },
+    {
+      "cells_negative": 1,
+      "cells_positive": 7,
+      "ci95": [
+        0.02015675608184332,
+        0.06722501777300921
+      ],
+      "control": "common + surrogate ancestry",
+      "mean_difference": 0.04400162209122625,
+      "metric": "total_capture",
+      "n_cells": 8,
+      "wilcoxon_holm_p": 0.03125,
+      "wilcoxon_p": 0.015625
+    },
+    {
+      "cells_negative": 0,
+      "cells_positive": 8,
+      "ci95": [
+        0.11157460277591766,
+        0.14965069960736138
+      ],
+      "control": "common + random routes",
+      "mean_difference": 0.1299247382282327,
+      "metric": "residual_capture",
+      "n_cells": 8,
+      "wilcoxon_holm_p": 0.03125,
+      "wilcoxon_p": 0.0078125
+    },
+    {
+      "cells_negative": 0,
+      "cells_positive": 8,
+      "ci95": [
+        0.16591731132872112,
+        0.2644150589519225
+      ],
+      "control": "common + depth bins",
+      "mean_difference": 0.21161993135125862,
+      "metric": "residual_capture",
+      "n_cells": 8,
+      "wilcoxon_holm_p": 0.03125,
+      "wilcoxon_p": 0.0078125
+    },
+    {
+      "cells_negative": 0,
+      "cells_positive": 8,
+      "ci95": [
+        0.2037375170636563,
+        0.27030047515967226
+      ],
+      "control": "common + shuffled routes",
+      "mean_difference": 0.23558869761130669,
+      "metric": "residual_capture",
+      "n_cells": 8,
+      "wilcoxon_holm_p": 0.03125,
+      "wilcoxon_p": 0.0078125
+    },
+    {
+      "cells_negative": 1,
+      "cells_positive": 7,
+      "ci95": [
+        0.030704892250384364,
+        0.09394416595054529
+      ],
+      "control": "common + surrogate ancestry",
+      "mean_difference": 0.06296464969583536,
+      "metric": "residual_capture",
+      "n_cells": 8,
+      "wilcoxon_holm_p": 0.03125,
+      "wilcoxon_p": 0.015625
+    }
+  ],
+  "focus_channels": 8,
+  "focus_means": {
+    "common + ancestry": {
+      "coverage": 1.0,
+      "dictionary_rank": 8.0,
+      "incremental_total_capture": 0.27166927182763356,
+      "nonzero_coefficients": 93.0,
+      "residual_capture": 0.40822549689190346,
+      "total_capture": 0.5854287242929928,
+      "wiring_density": 0.1724580422511589
+    },
+    "common + depth bins": {
+      "coverage": 1.0,
+      "dictionary_rank": 8.0,
+      "incremental_total_capture": 0.13085094316712717,
+      "nonzero_coefficients": 128.625,
+      "residual_capture": 0.19660556554064487,
+      "total_capture": 0.4446103956324864,
+      "wiring_density": 0.23296173817918778
+    },
+    "common + random routes": {
+      "coverage": 1.0,
+      "dictionary_rank": 7.814375,
+      "incremental_total_capture": 0.18304607027748068,
+      "nonzero_coefficients": 100.353125,
+      "residual_capture": 0.27830075866367077,
+      "total_capture": 0.49680552274283996,
+      "wiring_density": 0.1971104209555673
+    },
+    "common + shuffled routes": {
+      "coverage": 1.0,
+      "dictionary_rank": 7.796875,
+      "incremental_total_capture": 0.11271323039862857,
+      "nonzero_coefficients": 93.0,
+      "residual_capture": 0.17263679928059678,
+      "total_capture": 0.4264726828639878,
+      "wiring_density": 0.1724580422511589
+    },
+    "common + surrogate ancestry": {
+      "coverage": 1.0,
+      "dictionary_rank": 7.994375,
+      "incremental_total_capture": 0.22766764973640727,
+      "nonzero_coefficients": 138.26500000000001,
+      "residual_capture": 0.3452608471960681,
+      "total_capture": 0.5414271022017665,
+      "wiring_density": 0.23972041793546897
+    },
+    "common-constrained SVD": {
+      "coverage": 1.0,
+      "dictionary_rank": 8.0,
+      "incremental_total_capture": 0.3792114607689829,
+      "nonzero_coefficients": 551.0,
+      "residual_capture": 0.5687495144679608,
+      "total_capture": 0.6929709132343421,
+      "wiring_density": 1.0
+    }
+  },
+  "n_analyzed_cells": 8,
+  "n_focus_cells": 8,
+  "protocol_sha256": "ae4f8f36c0a9bb3d41fc621709575255267368ecf8da84cccf895d2914a48f8b",
+  "rank_one_capture_mean": 0.32604766969988597,
+  "scope": [
+    "The original 8-cell augmentation is post hoc development.",
+    "The protocol is frozen before these independent-generator outcomes are computed in the 47 disjoint v661 cells or Pinky; both cohorts had previously been analyzed using route-generated positive controls.",
+    "v661 is the same MICrONS mouse as original8, not an independent animal.",
+    "Pinky is one separately documented animal; cells are nested within that animal.",
+    "Equal channel count is not equal wiring or necessarily equal actual rank.",
+    "Modeled response capacity is not measured endogenous use of dendritic learning signals.",
+    "Surrogate comparison distinguishes coarse ancestry statistics from specificity of individual branch identities."
+  ],
+  "status": "complete"
+}

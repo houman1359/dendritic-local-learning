@@ -1,899 +1,236 @@
 #!/usr/bin/env python3
-"""Refresh provenance hashes and enforce current figure-asset paths.
+"""Canonical explicit credit-first provenance; use --prepare before Figure5 is ready.
 
-Figure numbers and panel assignments in the manifest are publication facts,
-not historical generator names.  This script therefore changes only the
-canonical path of each figure asset and the SHA-256 values of existing source
-files.  It never silently renumbers figures, panels, or prose notes.
+No main-panel assignments are inferred by historical renumbering. The retained
+SI/supporting template and new panel map are versioned inputs. --prepare writes
+an incomplete candidate under analysis, never the release manifest.
 """
-
 from __future__ import annotations
-
+import argparse
 import csv
 import hashlib
+import io
+import json
+import os
+import re
 from pathlib import Path
-
 
 JOURNAL_ROOT = Path(__file__).resolve().parents[1]
 PROJECT_ROOT = JOURNAL_ROOT.parent
-MANIFEST = JOURNAL_ROOT / "source_data" / "provenance_manifest.tsv"
 PROJECT_PREFIX = "drafts/dendritic-local-learning/journal/"
-LEGACY_PROJECT_PREFIX = Path("drafts/dendritic-local-learning")
+MANIFEST = JOURNAL_ROOT / "source_data/provenance_manifest.tsv"
+MAP_PATH = JOURNAL_ROOT / "configs/credit_first_provenance/panel_sources.json"
+INVENTORY = JOURNAL_ROOT / "source_data/credit_first_provenance/source_inventory.tsv"
+FIELDS = ["entry_id", "record_type", "figure", "panel", "status", "source_path",
+          "sha256", "generator_path", "replication_unit", "notes"]
+_HASH_CACHE = {}
 
 
-CANONICAL_ASSETS = {
-    # 2026-09-04 dictionary-forward renumbering: the route-dictionary atlas
-    # opens the evidence as Figure 2, so the MNIST ladder, credit-operator
-    # theory, branch conflict and subtree factorial each shift one place and
-    # the forward-serial physical-depth canvas is demoted to Supplementary
-    # Figure S31.  Entry IDs are historical generator names and never change.
-    "fig1.asset": "figures/main/figure_01.pdf",
-    "fig2.asset": "figures/main/figure_03.pdf",
-    "prospective.learning.asset": "figures/supplementary/figure_S19_panels_A-I.pdf",
-    "fashion.asset": "figures/supplementary/figure_S04_panels_A-E.pdf",
-    "subtree.factorial.asset": "figures/main/figure_06.pdf",
-    "creditphase.asset": "figures/main/figure_04.pdf",
-    "physical.asset": "figures/supplementary/figure_S31_panels_A-G.pdf",
-    "pointcredit.asset": "figures/supplementary/figure_S31_panels_A-G.pdf",
-    "alignmentdose.asset": "figures/supplementary/figure_S18_panels_A-K.pdf",
-    "remainingphysical.asset": "figures/supplementary/figure_S18_panels_A-K.pdf",
-    "fig3.asset": "figures/main/figure_07.pdf",
-    "capturewire.asset": "figures/main/figure_07.pdf",
-    "fig4.asset": "figures/main/figure_08.pdf",
-    "extensions.asset": "figures/main/figure_08.pdf",
-    "extensions.fulltree.asset": "figures/main/figure_09.pdf",
-    "fig6.asset": "figures/main/figure_09.pdf",
-    "phaseplane.asset": "figures/main/figure_04.pdf",
-    "inherited.s1.asset": "figures/supplementary/figure_S01_panels_A-E.pdf",
-    "inherited.s2.asset": "figures/supplementary/figure_S02_panels_A-E.pdf",
-    "inherited.s3.asset": "figures/supplementary/figure_S03_panels_A-D.pdf",
-    "regimes.asset": "figures/supplementary/figure_S04_panels_A-E.pdf",
-    "fig7.asset": "figures/supplementary/figure_S05_panels_A-H.pdf",
-    "interference.asset": "figures/supplementary/figure_S06_panels_A-D.pdf",
-    "spatial.audit.asset": "figures/supplementary/figure_S07_panels_A-D.pdf",
-    "prospective.fixed_budget.asset": "figures/supplementary/figure_S08_panels_A-I.pdf",
-    "prospective.mechanism.asset": "figures/supplementary/figure_S09_panels_A-D.pdf",
-    "fig5.asset": "figures/supplementary/figure_S10_panels_A-H.pdf",
-    "focalmatrix.asset": "figures/supplementary/figure_S11_panels_A-C.pdf",
-    "inhcensus.asset": "figures/supplementary/figure_S12_panels_A-J.pdf",
-    "positive.asset": "figures/supplementary/figure_S13_panels_A-F.pdf",
-    "same_span.asset": "figures/supplementary/figure_S14_panels_A-F.pdf",
-    "physical_calibration.asset": "figures/supplementary/figure_S15_panels_A-D.pdf",
-    "interior.asset": "figures/supplementary/figure_S16_panels_A-D.pdf",
-    "animalcredit.asset": "figures/supplementary/figure_S17_panels_A-B.pdf",
-}
-
-CANONICAL_ASSIGNMENTS = {
-    "fig1.asset": ("fig1", "all"),
-    "fig2.asset": ("fig3", "all"),
-    "prospective.learning.asset": ("figS19", "all"),
-    "fashion.asset": ("figS4", "e"),
-    "subtree.factorial.asset": ("fig6", "all"),
-    "creditphase.asset": ("fig4", "a-h"),
-    "phaseplane.asset": ("fig4", "g"),
-    "physical.asset": ("figS31", "c"),
-    "pointcredit.asset": ("figS31", "c"),
-    "fig3.asset": ("fig7", "all"),
-    "capturewire.asset": ("fig7", "e-f"),
-    "fig4.asset": ("fig8", "a-d,f"),
-    "extensions.asset": ("fig8", "e,g"),
-    "fig6.asset": ("fig9", "a,c-g"),
-    "extensions.fulltree.asset": ("fig9", "b-c,h"),
-    "alignmentdose.asset": ("figS18", "c-e"),
-    "remainingphysical.asset": ("figS18", "f-k"),
-}
-
-CANONICAL_GENERATORS = {
-    entry_id: "scripts/assemble_compact_main_figures.py"
-    for entry_id in (
-        "animalcredit.asset",
-        "fig1.asset",
-        "fig2.asset",
-        "prospective.learning.asset",
-        "fashion.asset",
-        "subtree.factorial.asset",
-        "creditphase.asset",
-        "phaseplane.asset",
-        "physical.asset",
-        "pointcredit.asset",
-        "fig3.asset",
-        "capturewire.asset",
-        "fig4.asset",
-        "extensions.asset",
-        "fig6.asset",
-        "extensions.fulltree.asset",
-    )
-}
-
-# The regular-tree foundation sheets are redrawn by native journal builders
-# from the frozen archived aggregations; the byte-identical originals live in
-# figures/supplementary/inherited/.
-CANONICAL_GENERATORS["regimes.asset"] = (
-    "scripts/build_supplementary_figure_s04_native.py")
-CANONICAL_GENERATORS["fashion.asset"] = (
-    "scripts/build_supplementary_figure_s04_native.py")
-CANONICAL_GENERATORS["inherited.s1.asset"] = (
-    "scripts/build_supplementary_figure_s01_native.py")
-CANONICAL_GENERATORS["inherited.s2.asset"] = (
-    "scripts/build_supplementary_figure_s02_native.py")
-CANONICAL_GENERATORS["inherited.s3.asset"] = (
-    "scripts/build_supplementary_figure_s03_native.py")
-
-# This standalone controlled-alignment graphic was superseded by the focused
-# main-panel summary plus Supplementary Figure S5.  Its numerical source rows
-# remain registered; the obsolete publication asset row does not.
-SUPERSEDED_ENTRIES = {"fig8.asset"}
-
-NEW_DETAIL_ASSETS = {
-    "factorial.s30.asset": {
-        "figure": "figS30",
-        "path": "figures/supplementary/figure_S30_panels_A-D.pdf",
-        "generator": "scripts/build_supplementary_figure_s30_native.py",
-        "notes": "Between-by-within credit factorial: the MNIST ladder crossed with a fixed random soma-level feedback source.",
-    },
-    "atlas.asset": {
-        "figure": "fig2",
-        "path": "figures/main/figure_02.pdf",
-        "generator": "scripts/build_main_figure_10.py",
-        "notes": "Route-dictionary method figure: unified definition, trained-capture gallery, anatomical routes and the task-to-dictionary roadmap; the alignment-bandwidth plane lives in Figure 4H.",
-    },
-    "branchconflict.asset": {
-        "figure": "fig5",
-        "path": "figures/main/figure_05.pdf",
-        "generator": "scripts/build_main_figure_04.py",
-        "notes": "Context-gated branch-conflict task: analytic shared-mode boundary, trained transitions and exact-route equivalence.",
-    },
-    "physical.h4.asset": {
-        "figure": "figS31",
-        "panel": "d-e",
-        "path": "figures/supplementary/figure_S31_panels_A-G.pdf",
-        "generator": "scripts/assemble_compact_main_figures.py",
-        "notes": "H4 depth-saturation test: exact backpropagation, point emulation, local credit, and mechanism controls.",
-    },
-    "prospective.detail.asset": {
-        "figure": "figS19",
-        "path": "figures/supplementary/figure_S19_panels_A-I.pdf",
-        "generator": "scripts/assemble_compact_main_figures.py",
-        "notes": "Detailed identity, ownership and route diagnostics underlying focused Fig. 2.",
-    },
-    "morphology.detail.asset": {
-        "figure": "figS20",
-        "path": "figures/supplementary/figure_S20_panels_A-B.pdf",
-        "generator": "scripts/assemble_compact_main_figures.py",
-        "notes": "Detailed morphology-route capacity and topology controls underlying focused Fig. 7.",
-    },
-    "focal.detail.asset": {
-        "figure": "figS21",
-        "path": "figures/supplementary/figure_S21_panels_A-D.pdf",
-        "generator": "scripts/assemble_compact_main_figures.py",
-        "notes": "Detailed focal-shunting controls and electrotonic calibration underlying focused Fig. 8.",
-    },
-    "measured.detail.asset": {
-        "figure": "figS22",
-        "path": "figures/supplementary/figure_S22_panels_A-J.pdf",
-        "generator": "scripts/build_journal_figures.py",
-        "notes": "Detailed measured-response topology and learning boundary underlying focused Fig. 9.",
-    },
-    "partition.residual.asset": {
-        "figure": "figS23",
-        "path": "figures/supplementary/figure_S23_panels_A-C.pdf",
-        "generator": "scripts/build_trained_partition_residual_figure.py",
-        "notes": "Hash-gated reconstruction by scripts/analyze_trained_partition_residual.py and seed-level capture--utility association.",
-    },
-    "adaptive.reliability.asset": {
-        "figure": "figS24",
-        "path": "figures/supplementary/figure_S24_panels_A-D.pdf",
-        "generator": "scripts/build_adaptive_conductance_reliability_figure.py",
-        "notes": "Fresh 50-seed adaptive local reliability experiment with global, shuffled, no-shunt, oracle and independent point-gate controls.",
-    },
-    "irregular.wavelet.asset": {
-        "figure": "figS25",
-        "path": "figures/supplementary/figure_S25_panels_A-D.pdf",
-        "generator": "scripts/build_irregular_tree_wavelet_figure.py",
-        "notes": "Frozen 47-cell primary and eight-cell secondary irregular-tree Haar analysis with isotropic and column-permuted controls.",
-    },
-    "clean.physical.depth.asset": {
-        "figure": "figS26",
-        "path": "figures/supplementary/figure_S26_panels_A-D.pdf",
-        "generator": "scripts/analyze_physical_depth_clean_source_replication.py",
-        "notes": "Immutable-source same-seed replication of all 430 load-bearing H2/H3 physical-depth fits.",
-    },
-    "physical.diagnostics.asset": {
-        "figure": "figS28",
-        "path": "figures/supplementary/figure_S28_panels_A-B.pdf",
-        "generator": "scripts/assemble_compact_main_figures.py",
-        "notes": "Credit-coordinate ladder and backpropagation--local decomposition demoted from the focused main physical-depth figure.",
-    },
-    "path.demand.asset": {
-        "figure": "figS29",
-        "path": "figures/supplementary/figure_S29_panels_A-C.pdf",
-        "generator": "scripts/build_path_necessity_fashion_figure.py",
-        "notes": "Controlled Fashion-MNIST branch-conflict task, analytic shared-mode boundary and trained transition.",
-    },
-}
-
-NEW_PROVENANCE_ENTRIES = {
-    "factorial.outcomes": {
-        "record_type": "panel_source",
-        "figure": "fig3/figS30",
-        "panel": "g/a-d",
-        "path": "source_data/mnist_between_within_factorial/seed_outcomes.csv",
-        "generator": "scripts/collect_mnist_between_within_factorial.py",
-        "replication_unit": "paired training seed (n=15 per dynamics)",
-        "notes": "All 120 new DFA-source fits plus the reused frozen ladder row.",
-    },
-    "factorial.conditions": {
-        "record_type": "panel_source",
-        "figure": "figS30",
-        "panel": "a,b",
-        "path": "source_data/mnist_between_within_factorial/condition_summary.csv",
-        "generator": "scripts/collect_mnist_between_within_factorial.py",
-        "replication_unit": "paired training seed (n=15 per dynamics)",
-        "notes": "Cell means and seed-bootstrap intervals for every factorial condition.",
-    },
-    "factorial.contrasts": {
-        "record_type": "panel_source",
-        "figure": "fig3/figS30",
-        "panel": "g/c,d",
-        "path": "source_data/mnist_between_within_factorial/paired_contrasts.csv",
-        "generator": "scripts/collect_mnist_between_within_factorial.py",
-        "replication_unit": "paired training seed (n=15 per dynamics)",
-        "notes": "Within-ladder contrasts under DFA and between-source gaps at matched rungs.",
-    },
-    "factorial.audit": {
-        "record_type": "panel_source",
-        "figure": "figS30",
-        "panel": "text",
-        "path": "source_data/mnist_between_within_factorial/audit.json",
-        "generator": "scripts/collect_mnist_between_within_factorial.py",
-        "replication_unit": "not applicable",
-        "notes": "Run completeness, reused ladder row and factorial level definitions.",
-    },
-    "atlas.capture": {
-        "record_type": "panel_source",
-        "figure": "fig2",
-        "panel": "b",
-        "path": "source_data/route_dictionary_atlas/capture_summary.csv",
-        "generator": "scripts/analyze_route_dictionary_atlas.py",
-        "replication_unit": "training seed (n=15 per dynamics)",
-        "notes": "Broadcast, nested-subtree and exact-dictionary captures of the trained exact-path MNIST compartment-error fields.",
-    },
-    "atlas.capture_by_seed": {
-        "record_type": "panel_source",
-        "figure": "fig2",
-        "panel": "b",
-        "path": "source_data/route_dictionary_atlas/capture_by_seed.csv",
-        "generator": "scripts/analyze_route_dictionary_atlas.py",
-        "replication_unit": "training seed (n=15 per dynamics)",
-        "notes": "Seed-level captures, probe accuracy, field counts and checkpoint hashes for all 30 exact-path checkpoints; the summary means and Student t intervals recompute from this file.",
-    },
-    "atlas.field": {
-        "record_type": "panel_source",
-        "figure": "fig2",
-        "panel": "b",
-        "path": "source_data/route_dictionary_atlas/example_field.csv",
-        "generator": "scripts/analyze_route_dictionary_atlas.py",
-        "replication_unit": "training seed (n=15 per dynamics)",
-        "notes": "Population-mean per-compartment |dL/dV| profiles for both dynamics; the additive profile is displayed.",
-    },
-    "atlas.manifest": {
-        "record_type": "panel_source",
-        "figure": "fig2",
-        "panel": "text",
-        "path": "source_data/route_dictionary_atlas/manifest.json",
-        "generator": "scripts/analyze_route_dictionary_atlas.py",
-        "replication_unit": "not applicable",
-        "notes": "Checkpoint provenance, example counts and interval method for the atlas capture analysis.",
-    },
-    # The atlas's former alignment-bandwidth plane with the utility-argmax
-    # ring now closes the credit-operator theory figure as Fig. 4h.
-    "atlas.argmax": {
-        "record_type": "panel_source",
-        "figure": "fig4",
-        "panel": "h",
-        "path": "source_data/route_dictionary_atlas/argmax_summary.csv",
-        "generator": "scripts/analyze_operator_argmax.py",
-        "replication_unit": "route family within architecture (n=30)",
-        "notes": "Utility-argmax bandwidth versus trained optimum per parameterized route family; zero-utility derangement families flagged as degenerate.",
-    },
-    "atlas.argmax.report": {
-        "record_type": "panel_source",
-        "figure": "fig4",
-        "panel": "text",
-        "path": "source_data/route_dictionary_atlas/argmax_report.json",
-        "generator": "scripts/analyze_operator_argmax.py",
-        "replication_unit": "route family within architecture (n=30)",
-        "notes": "Concordance fractions and method description for the family-wise argmax exhibit.",
-    },
-    "path.demand.outcomes": {
-        "record_type": "panel_source",
-        "figure": "fig5/figS29",
-        "panel": "e/b-c",
-        "path": "source_data/path_necessity_fashion/seed_outcomes.csv",
-        "generator": "scripts/run_path_necessity_fashion.py",
-        "replication_unit": "paired independent training seed (n=20 per branch count)",
-        "notes": "All 2,400 confirmatory fits across B=2,4,8, eight conflict doses and five routing conditions.",
-    },
-    "path.demand.conditions": {
-        "record_type": "panel_source",
-        "figure": "fig5/figS29",
-        "panel": "d,e/b-c",
-        "path": "source_data/path_necessity_fashion/condition_summary.csv",
-        "generator": "scripts/run_path_necessity_fashion.py",
-        "replication_unit": "paired independent training seed (n=20 per branch count)",
-        "notes": "Condition means and seed-bootstrap intervals across the frozen conflict doses.",
-    },
-    "path.demand.contrasts": {
-        "record_type": "panel_source",
-        "figure": "fig5/figS29",
-        "panel": "text/text",
-        "path": "source_data/path_necessity_fashion/paired_contrasts.csv",
-        "generator": "scripts/run_path_necessity_fashion.py",
-        "replication_unit": "paired independent training seed (n=20 per branch count)",
-        "notes": "Correct-minus-shared and rank-matched derangement contrasts at every conflict dose.",
-    },
-    "path.demand.interactions": {
-        "record_type": "panel_source",
-        "figure": "fig5/figS29",
-        "panel": "text/text",
-        "path": "source_data/path_necessity_fashion/interaction_summary.csv",
-        "generator": "scripts/run_path_necessity_fashion.py",
-        "replication_unit": "paired independent training seed (n=20 per branch count)",
-        "notes": "Seed-wise correct-minus-shared accuracy slopes on conflict dose.",
-    },
-    "path.demand.boundaries": {
-        "record_type": "panel_source",
-        "figure": "fig5/figS29",
-        "panel": "c-d/b-c",
-        "path": "source_data/path_necessity_fashion/boundary_summary.csv",
-        "generator": "scripts/analyze_path_necessity_boundary.py",
-        "replication_unit": "paired independent training seed (n=20 per branch count)",
-        "notes": "Analytic boundaries and first nonpositive-utility or chance-level trained doses.",
-    },
-    "path.demand.seedwise.interactions": {
-        "record_type": "panel_source",
-        "figure": "fig5/figS29",
-        "panel": "text/text",
-        "path": "source_data/path_necessity_fashion/seedwise_interactions.csv",
-        "generator": "scripts/run_path_necessity_fashion.py",
-        "replication_unit": "paired independent training seed (n=20 per branch count)",
-        "notes": "One prespecified correct-minus-shared accuracy slope on conflict dose per seed and branch count.",
-    },
-    "path.demand.seedwise.boundaries": {
-        "record_type": "panel_source",
-        "figure": "figS29",
-        "panel": "c",
-        "path": "source_data/path_necessity_fashion/boundary_by_seed.csv",
-        "generator": "scripts/run_path_necessity_fashion.py",
-        "replication_unit": "paired independent training seed (n=20 per branch count)",
-        "notes": "First nonpositive initial utility and first chance-level trained dose for every seed.",
-    },
-    "path.demand.boundary.order": {
-        "record_type": "panel_source",
-        "figure": "figS29",
-        "panel": "c",
-        "path": "source_data/path_necessity_fashion/boundary_order.json",
-        "generator": "scripts/analyze_path_necessity_boundary.py",
-        "replication_unit": "paired independent training seed (n=20)",
-        "notes": "Seed-wise strict ordering audit with prespecified right-censoring of unobserved B=2 crossings.",
-    },
-    "path.demand.plotted.crossings": {
-        "record_type": "panel_source",
-        "figure": "fig5/figS29",
-        "panel": "f/c",
-        "path": "source_data/path_necessity_fashion/plotted_crossings.csv",
-        "generator": "scripts/analyze_path_necessity_boundary.py",
-        "replication_unit": "descriptive mean curve over 20 independent seeds per branch count",
-        "notes": "Linearly interpolated chance crossings shown in Supplementary Figure 29c.",
-    },
-    "path.demand.audit": {
-        "record_type": "panel_source",
-        "figure": "methods",
-        "panel": "path-demand audit",
-        "path": "source_data/path_necessity_fashion/audit.json",
-        "generator": "scripts/run_path_necessity_fashion.py",
-        "replication_unit": "complete 2,400-fit audit",
-        "notes": "Finite-value, analytic-gradient, exact-equivalence and interpretation-gate audit.",
-    },
-    "mnist.ladder.outcomes": {
-        "record_type": "panel_source",
-        "figure": "fig3",
-        "panel": "b",
-        "path": "source_data/mnist_feedback_ladder/seed_outcomes.csv",
-        "generator": "scripts/collect_mnist_feedback_ladder.py",
-        "replication_unit": "paired independent training seed (n=15 per architecture)",
-        "notes": "Complete 90-run MNIST strict-scalar, neuron-specific and exact-path feedback ladder.",
-    },
-    "mnist.ladder.conditions": {
-        "record_type": "panel_source",
-        "figure": "fig3",
-        "panel": "b",
-        "path": "source_data/mnist_feedback_ladder/condition_summary.csv",
-        "generator": "scripts/collect_mnist_feedback_ladder.py",
-        "replication_unit": "paired independent training seed (n=15 per architecture)",
-        "notes": "Condition means and paired-seed bootstrap intervals for the strict-scalar MNIST ladder.",
-    },
-    "mnist.ladder.contrasts": {
-        "record_type": "panel_source",
-        "figure": "fig3",
-        "panel": "g",
-        "path": "source_data/mnist_feedback_ladder/paired_contrasts.csv",
-        "generator": "scripts/collect_mnist_feedback_ladder.py",
-        "replication_unit": "paired independent training seed (n=15 per architecture)",
-        "notes": "Strict-scalar-to-neuron-specific and exact-transport paired contrasts for both MNIST architectures shown in Fig. 2g.",
-    },
-    "mnist.ladder.audit": {
-        "record_type": "panel_source",
-        "figure": "fig3",
-        "panel": "text",
-        "path": "source_data/mnist_feedback_ladder/audit.json",
-        "generator": "scripts/collect_mnist_feedback_ladder.py",
-        "replication_unit": "complete 120-fit current-cohort audit",
-        "notes": "Completeness, finite-metric, checkpoint, scientific-signature, executable-source, source-environment and no-W&B gates for the 90 plotted fits plus 30 legacy implementation controls.",
-    },
-    "fig2.path_gain_dispersion": {
-        "record_type": "panel_source",
-        "figure": "fig3",
-        "panel": "d-e",
-        "path": "source_data/figure2/path_gain_dispersion_ladder_runs.csv",
-        "generator": "scripts/analyze_fig2_path_gain_dispersion.py",
-        "replication_unit": "paired independent training seed (n=15 per architecture)",
-        "notes": "Mean pre-reactivation voltage-error magnitude by dendritic depth and path-specific exact-error energy at the MNIST exact-path checkpoints.",
-    },
-    "mnist.scalar.audit.rows": {
-        "record_type": "panel_source",
-        "figure": "methods",
-        "panel": "strict-scalar implementation audit",
-        "path": "source_data/mnist_feedback_ladder/strict_scalar_implementation_audit.csv",
-        "generator": "scripts/collect_mnist_feedback_ladder.py",
-        "replication_unit": "paired independent training seed (n=15 per architecture)",
-        "notes": "Seed-paired strict scalar versus legacy matched-width/scalar-fallback implementation audit.",
-    },
-    "mnist.scalar.audit.contrasts": {
-        "record_type": "panel_source",
-        "figure": "methods",
-        "panel": "strict-scalar implementation audit",
-        "path": "source_data/mnist_feedback_ladder/strict_scalar_paired_contrasts.csv",
-        "generator": "scripts/collect_mnist_feedback_ladder.py",
-        "replication_unit": "paired independent training seed (n=15 per architecture)",
-        "notes": "Frozen practical-equivalence analysis for strict scalar minus the legacy implementation.",
-    },
-    "taskfamily.asset": {
-        "record_type": "figure_asset",
-        "figure": "figS31",
-        "panel": "f-g",
-        "path": "figures/supplementary/figure_S31_panels_A-G.pdf",
-        "generator": "scripts/assemble_compact_main_figures.py",
-        "replication_unit": "paired independent training seed (n=10)",
-        "notes": "Fixed-D3 architecture-by-task-family-by-alignment boundary under exact backpropagation and path-transport LocalCA.",
-    },
-    "taskfamily.outcomes": {
-        "record_type": "panel_source",
-        "figure": "figS31",
-        "panel": "f-g",
-        "path": "source_data/task_family_alignment/seed_outcomes.csv",
-        "generator": "scripts/analyze_task_family_alignment_factorial.py",
-        "replication_unit": "paired independent training seed (n=10)",
-        "notes": "All 360 fixed-D3 task-family, architecture, credit-rule and alignment outcomes.",
-    },
-    "taskfamily.conditions": {
-        "record_type": "panel_source",
-        "figure": "figS31",
-        "panel": "f-g",
-        "path": "source_data/task_family_alignment/condition_summary.csv",
-        "generator": "scripts/analyze_task_family_alignment_factorial.py",
-        "replication_unit": "paired independent training seed (n=10)",
-        "notes": "Condition means and paired-seed bootstrap intervals for the fixed-depth task-family boundary.",
-    },
-    "taskfamily.contrasts": {
-        "record_type": "panel_source",
-        "figure": "figS31",
-        "panel": "text",
-        "path": "source_data/task_family_alignment/paired_contrasts.csv",
-        "generator": "scripts/analyze_task_family_alignment_factorial.py",
-        "replication_unit": "paired independent training seed (n=10)",
-        "notes": "Architecture-by-alignment interactions and task-family difference-in-differences.",
-    },
-    "taskfamily.audit": {
-        "record_type": "panel_source",
-        "figure": "figS31",
-        "panel": "text",
-        "path": "source_data/task_family_alignment/audit.json",
-        "generator": "scripts/analyze_task_family_alignment_factorial.py",
-        "replication_unit": "complete 360-fit audit",
-        "notes": "Completeness, finite-metric, no-fallback, seed and exact-resource gates.",
-    },
-    "pinky.asset": {
-        "record_type": "figure_asset",
-        "figure": "figS27",
-        "panel": "all",
-        "path": "figures/supplementary/figure_S27_panels_A-C.pdf",
-        "generator": "scripts/assemble_compact_main_figures.py",
-        "replication_unit": "reconstructed cell (10 QC-passing of 12 selected; one second mouse)",
-        "notes": "Independent-animal structural route-capacity replication; panel C is promoted as Fig. 7G.",
-    },
-    "pinky.cohort": {
-        "record_type": "panel_source",
-        "figure": "figS27",
-        "panel": "a",
-        "path": "source_data/pinky_v185_replication/cohort_manifest.csv",
-        "generator": "scripts/freeze_pinky_v185_cohort.py",
-        "replication_unit": "outcome-independent reconstructed-cell selection (n=12)",
-        "notes": "Twelve equal-count y strata with cells nearest the global x/z medians in the MICrONS Pinky v185 volume.",
-    },
-    "pinky.curves": {
-        "record_type": "panel_source",
-        "figure": "figS27",
-        "panel": "b-d",
-        "path": "source_data/pinky_v185_replication/routing/feedback_compression_curves.csv",
-        "generator": "scripts/analyze_pinky_v185_replication.py",
-        "replication_unit": "QC-passing reconstructed cell (n=10; one second mouse)",
-        "notes": "Cell-level capture curves for ancestry, random, depth-only, shuffled and dense routes.",
-    },
-    "pinky.contrasts": {
-        "record_type": "panel_source",
-        "figure": "fig7/figS27",
-        "panel": "g/c",
-        "path": "source_data/pinky_v185_replication/routing/k4_cross_animal_contrasts.csv",
-        "generator": "scripts/analyze_pinky_v185_replication.py",
-        "replication_unit": "reconstructed cell; animal is the biological unit (two mice)",
-        "notes": "K=4 ancestry-route advantages shown separately for the original and second MICRONS animals.",
-    },
-    "pinky.summary": {
-        "record_type": "panel_source",
-        "figure": "figS27",
-        "panel": "text",
-        "path": "source_data/pinky_v185_replication/routing/summary.json",
-        "generator": "scripts/analyze_pinky_v185_replication.py",
-        "replication_unit": "12 selected cells, 10 QC-passing; one second mouse",
-        "notes": "Frozen preprocessing, QC, route-capacity and cross-animal directional-replication summary.",
-    },
-}
-
-
-def resolve_project_path(raw_path: str) -> Path:
+def resolve_project_path(raw_path):
     path = Path(raw_path)
     if path.is_absolute():
         return path
-    try:
-        relative = path.relative_to(LEGACY_PROJECT_PREFIX)
-    except ValueError:
-        relative = path
-    return PROJECT_ROOT / relative
+    if raw_path.startswith(PROJECT_PREFIX):
+        return JOURNAL_ROOT / raw_path[len(PROJECT_PREFIX):]
+    legacy = "drafts/dendritic-local-learning/"
+    if raw_path.startswith(legacy):
+        return PROJECT_ROOT / raw_path[len(legacy):]
+    return JOURNAL_ROOT / path
 
 
-# Correct stale prose left by an earlier numbering-only remap.  These notes
-# are descriptive metadata, not independent scientific content.
-CANONICAL_NOTES = {
-    "fig2.asset": "Final seven-panel feedback hierarchy, MNIST ladder, gradient-alignment, mean-transport, path-specific-energy, ownership and paired-contrast figure.",
-    "fig2.path_gain_dispersion": "Mean pre-reactivation voltage-error magnitude by dendritic depth and path-specific exact-error energy at the MNIST exact-path checkpoints.",
-    "fig2.path_gain": "Separate N_I=5 conductance-only diagnostic cohort shown in Supplementary Fig. S1a; run, configuration and checkpoint hashes identify every value.",
-    "regimes.asset": "Five-panel regular-tree boundary sheet: retained depth, noise and CIFAR-10 tests, the raw-additive CIFAR-10 confirmation and the Fashion-MNIST replication.",
-    "fashion.asset": "Fashion-MNIST replication of the scalar, neuron-indexed and exact-path feedback ladder in Supplementary Fig. S4e.",
-    "subtree.factorial.asset": "Final subtree-address bandwidth factorial with matched oracle and derangement controls.",
-    "fig3.e": "Direct-presynaptic-type-only sensitivity analysis shown in Supplementary Fig. 20H.",
-    "fig4.b": "Cell-level additive, depth-shuffled, and focal-shunt localization shown in Fig. 8B.",
-    "fig4.c": "Dose response and focal-depth localization values shown in Fig. 8B--C.",
-    "fig4.effects": "Descendant, sister, ancestor, and unrelated category effects shown in Fig. 8B.",
-    "fig4.e.cell": "Cell-level exact factor-freeze values underlying the same-voltage driving-force and full-shunt contrast in Fig. 8D.",
-    "fig4.e.site": "Site-level factor substitutions supporting the Fig. 8D cell summary and supplementary Shapley analysis.",
-}
-
-# The focused seven-panel Figure 2 replaced an older, much larger panel map.
-# Keep each numerical record attached to where it is now displayed (or to the
-# Methods/Supplement when it is no longer a main-figure result).  Entry IDs are
-# deliberately stable so archived analyses remain traceable.
-CANONICAL_METADATA = {
-    # 2026-09-04 dictionary-forward renumbering: tuples below give the NEW
-    # display homes (atlas = Fig. 2, ladder = Fig. 3, credit-operator theory
-    # = Fig. 4, branch conflict = Fig. 5, subtree factorial = Fig. 6,
-    # forward-serial physical depth = Supplementary Fig. S31).  Entry IDs are
-    # historical generator names: "fig2.*" is the ladder stream (now Fig. 3),
-    # "fig3.*" is the MICrONS anatomy stream (drawn in Fig. 7), "fig4.*" is
-    # focal shunting (Fig. 8) and "fig6.*" is the measured stream (Fig. 9).
-    "fig2.a": ("methods", "gradient check"),
-    "fig2.b": ("figS2", "e"),
-    "fig2.c": ("fig3", "c"),
-    "fig2.d": ("figS3", "c"),
-    "fig2.d.bp": ("figS3", "c"),
-    "fig2.d.runs": ("figS3", "c"),
-    "fig2.path_gain": ("figS1", "a"),
-    "fig2.init.runs": ("methods", "initialization control"),
-    "fig2.init.summary": ("methods", "initialization control"),
-    "fig2.init.tests": ("methods", "initialization control"),
-    "fig2.feedback_relevance.runs": ("methods", "feedback diagnostic"),
-    "fig2.feedback_relevance.summary": ("methods", "feedback diagnostic"),
-    "prospective.validity.ledger": ("fig3", "text"),
-    "prospective.validity.summary": ("fig3", "text"),
-    "prospective.learning.seeds": ("figS19", "a-c"),
-    "prospective.learning.conditions": ("figS19", "a-c"),
-    "prospective.learning.contrasts": ("figS19", "a-c"),
-    "prospective.routing.runs": ("fig3/figS19", "g/d"),
-    "prospective.routing.contrasts": ("fig3/figS19", "g/d"),
-    "prospective.dose.conditions": ("figS8", "a-d,g-i"),
-    "prospective.dose.contrasts": ("figS8", "e-f"),
-    "prospective.fixed_budget.contrasts": ("figS8/figS19", "e-f/f"),
-    "subtree.phase1.outcomes": ("figS19", "g,i"),
-    "subtree.phase1.gradients": ("figS19", "h"),
-    "subtree.phase1.contrasts": ("figS19", "g,i"),
-    "subtree.phase1.summary": ("figS19", "g-i"),
-    "subtree.phase1.ledger": ("figS19", "text"),
-    "subtree.phase1.reproducibility": ("figS19", "text"),
-    "subtree.factorial.outcomes": ("fig4/fig6", "f/e,g"),
-    "subtree.factorial.conditions": ("fig6", "e"),
-    "subtree.factorial.contrasts": ("fig6", "f"),
-    "subtree.factorial.ledger": ("fig6", "text"),
-    "subtree.factorial.summary": ("fig6", "text"),
-    "fashion.outcomes": ("figS4", "e"),
-    "fashion.conditions": ("figS4", "e"),
-    "fashion.contrasts": ("figS4", "e"),
-    "fashion.audit": ("figS4", "e"),
-    "mnist.ladder.contrasts": ("fig3", "g"),
-    # Credit-operator theory stream: the seven-panel theory figure is now
-    # displayed as Figure 4 (its phase plane is panel g).
-    "creditphase.a": ("fig4", "a"),
-    "creditphase.b": ("fig4", "b"),
-    "creditphase.c-d": ("fig4", "c"),
-    "creditphase.e": ("fig4", "d"),
-    "creditphase.f": ("fig4", "e"),
-    "creditphase.g-h": ("fig4", "text"),
-    "creditphase.i": ("fig4", "f"),
-    "creditphase.spectral_theory": ("fig4", "b"),
-    "creditphase.spectral_thresholds": ("fig4", "b"),
-    "creditphase.spectral_bound_summary": ("fig4", "b"),
-    "phaseplane.points": ("fig4", "g"),
-    # 2026-08-28 panel-span ground-truthing: every row below was checked
-    # against the panel its source is actually drawn in by the current
-    # native builders (build_main_figure_0{3,5,6,7,8,9}.py and the S18-S22
-    # assemblies).  Rows whose data feed no drawn panel are "text".
-    # Old physical-depth Figure 5 panels M-U now live in Supplementary S18.
-    "alignmentdose.outcomes": ("figS18", "c-d"),
-    "alignmentdose.conditions": ("figS18", "c"),
-    "alignmentdose.contrasts": ("figS18", "d-e"),
-    "alignmentdose.audit": ("figS18", "text"),
-    "remainingphysical.outcomes": ("figS18", "f-j"),
-    "remainingphysical.conditions": ("figS18", "f-j"),
-    "remainingphysical.contrasts": ("figS18", "h,k"),
-    "remainingphysical.audit": ("figS18", "text"),
-    # MICrONS anatomy stream: drawn homes are Figure 7 (and its S20 detail);
-    # the capture-bound audit backs the topology-matched capacity note.
-    "fig3.capture_bound": ("fig7", "text"),
-    "fig3.a": ("fig7", "a"),
-    "fig3.b-d": ("fig7", "d"),
-    "fig3.cell": ("fig7", "text"),
-    "fig3.e": ("figS20", "h"),
-    "fig3.summary": ("fig7", "d"),
-    "reciprocal.operator": ("fig7", "c"),
-    "reciprocal.capture": ("fig7", "c"),
-    # Capture-per-wire efficiency: stale "fig6 k-l" home from the pre-compact
-    # anatomy layout; the data are drawn in Figure 7e-f with their asset row.
-    "capturewire.cells": ("fig7", "e-f"),
-    "capturewire.summary": ("fig7", "e-f"),
-    # Forward-serial physical depth is now Supplementary Figure S31 (panels
-    # keep their old main-figure letters); paired contrasts back prose only.
-    "physical.schematic": ("figS31", "a-b"),
-    "physical.outcomes": ("figS31", "c"),
-    "physical.conditions": ("figS31", "c"),
-    "physical.contrasts": ("figS31", "text"),
-    "physical.audit": ("figS31", "text"),
-    "physical.mechanism": ("figS31", "text"),
-    "physical.mechanism_audit": ("figS31", "text"),
-    "pointcredit.outcomes": ("figS31", "c"),
-    "pointcredit.conditions": ("figS31", "c"),
-    "pointcredit.contrasts": ("figS31", "text"),
-    "pointcredit.audit": ("figS31", "text"),
-    # Focal-shunting stream: drawn in Figure 8 and its S21 detail.
-    "fig4.b": ("fig8", "c"),
-    "fig4.c": ("fig8", "c"),
-    "fig4.effects": ("fig8", "b"),
-    "fig4.d.primary": ("figS21", "f"),
-    "fig4.d.scale01": ("figS21", "f"),
-    "fig4.d.scale10": ("figS21", "f"),
-    "fig4.d.irevm05": ("figS21", "f"),
-    "fig4.d.irev0": ("figS21", "f"),
-    "fig4.e.cell": ("fig8", "d"),
-    "fig4.e.site": ("fig8", "d"),
-    "fig4.e.payoffs": ("fig8", "d"),
-    "fig4.e.bootstrap": ("fig8", "d"),
-    "fig4.e.summary": ("fig8", "d"),
-    "fig4.typed.effects": ("figS21", "g"),
-    "fig4.typed.cells": ("figS21", "g"),
-    "fig4.typed.sites": ("figS21", "g"),
-    "fig4.typed.summary": ("figS21", "g"),
-    "physical.focal.cells": ("fig8", "f"),
-    "extensions.active.cells": ("fig8", "g"),
-    "extensions.active.conditions": ("fig8", "e"),
-    "extensions.active.contrasts": ("fig8", "g"),
-    "extensions.active.acceptance": ("fig8", "text"),
-    "extensions.active.summary": ("fig8", "text"),
-    # Measured-response stream: drawn in Figure 9 with S22/S5 details;
-    # the ch4 task tables also feed the theory figure's phase-plane panel g
-    # (displayed as Fig. 4g after the renumbering).
-    "fig6.a": ("fig9", "c"),
-    "fig6.b-d": ("fig4/figS22", "g/d-f"),
-    "fig6.e.ch1.targets": ("figS22", "h"),
-    "fig6.e.ch2.targets": ("figS22", "h"),
-    "fig6.e.ch8.targets": ("figS22", "h"),
-    "fig6.e.ch1": ("figS22", "h"),
-    "fig6.e.ch2": ("figS22", "h"),
-    "fig6.e.ch4": ("figS22", "text"),
-    "fig6.e.ch8": ("figS22", "h"),
-    "fig6.functional_summary": ("fig9", "text"),
-    "fig8.alignment.schematic": ("fig9", "d"),
-    "fig8.alignment.curves": ("fig9", "e"),
-    "fig8.alignment.cells": ("figS5", "g-h"),
-    "fig8.alignment.dictionary": ("figS5", "a"),
-    "fig8.alignment.summary": ("fig9", "d-e"),
-    "fig8.animal.schematic": ("fig9", "f"),
-    "functional.allscans.cells": ("fig9", "c"),
-    "functional.allscans.scans": ("fig9", "c"),
-    # S17 keeps only old panels A and D (relettered A-B); the common
-    # signed-mode table backs the signed-mode prose and Fig. 9G caption.
-    "animalcredit.modes": ("figS17", "text"),
-    "animalcredit.neurons": ("figS17", "b"),
-}
-
-
-def sha256(path: Path) -> str:
+def sha256(path):
+    path = path.resolve()
+    if path in _HASH_CACHE:
+        return _HASH_CACHE[path]
+    before = path.stat()
     digest = hashlib.sha256()
     with path.open("rb") as handle:
         for block in iter(lambda: handle.read(1024 * 1024), b""):
             digest.update(block)
-    return digest.hexdigest()
+    after = path.stat()
+    if (before.st_size, before.st_mtime_ns) != (after.st_size, after.st_mtime_ns):
+        raise RuntimeError(f"Source changed while hashing: {path}")
+    _HASH_CACHE[path] = digest.hexdigest()
+    return _HASH_CACHE[path]
 
 
-def main() -> None:
-    with MANIFEST.open(newline="", encoding="utf-8") as handle:
+def read_tsv(path):
+    with path.open(newline="", encoding="utf-8") as handle:
         reader = csv.DictReader(handle, delimiter="\t")
-        fieldnames = list(reader.fieldnames or [])
-        rows = [
-            row for row in reader if row.get("entry_id", "") not in SUPERSEDED_ENTRIES
-        ]
-    if "source_path" not in fieldnames or "sha256" not in fieldnames:
-        raise ValueError("manifest must contain source_path and sha256 columns")
+        if list(reader.fieldnames or []) != FIELDS:
+            raise ValueError(f"Unexpected manifest columns: {path}")
+        return list(reader)
 
-    updated = 0
-    seen_assets: set[str] = set()
+
+def serialized(rows, fields=FIELDS):
+    buffer = io.StringIO(newline="")
+    writer = csv.DictWriter(buffer, fieldnames=fields, delimiter="\t", lineterminator="\n")
+    writer.writeheader()
+    writer.writerows(rows)
+    return buffer.getvalue()
+
+
+def write_atomic(path, value):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = path.with_name(path.name + ".tmp")
+    temporary.write_text(value, encoding="utf-8")
+    temporary.replace(path)
+
+
+def record(entry_id, path, figure, panel, *, role, generator="", unit="not applicable",
+           notes="", record_type="panel_source"):
+    source = JOURNAL_ROOT / path
+    if not source.is_file():
+        raise FileNotFoundError(source)
+    if generator and not (JOURNAL_ROOT / generator).is_file():
+        raise FileNotFoundError(JOURNAL_ROOT / generator)
+    return dict(entry_id=entry_id, record_type=record_type, figure=figure,
+                panel=panel, status="ready", source_path=PROJECT_PREFIX + path,
+                sha256=sha256(source),
+                generator_path=PROJECT_PREFIX + generator if generator else "",
+                replication_unit=unit, notes=f"{role}. {notes}".strip())
+
+
+def source_id(prefix, path, figure="", panel=""):
+    token = hashlib.sha256(f"{path}|{figure}|{panel}".encode()).hexdigest()[:16]
+    return f"creditfirst.{prefix}.{token}"
+
+
+def build(*, prepare=False):
+    _HASH_CACHE.clear()
+    layout = json.loads(MAP_PATH.read_text())
+    if layout.get("physical_figure_pending") and not prepare:
+        raise RuntimeError("Physical-depth panel map is pending; --prepare cannot update the release manifest")
+    for item in layout.get("source_hash_manifests", []):
+        saved = json.loads((JOURNAL_ROOT / item["path"]).read_text())
+        for key in ("source_sha256", "sources_sha256", "builders_sha256"):
+            for source, expected in saved.get(key, {}).items():
+                if sha256(JOURNAL_ROOT / source) != expected:
+                    raise ValueError(f"Figure source changed since recorded rendering: {source}")
+        if item.get("builder") and saved.get("builder_sha256"):
+            if sha256(JOURNAL_ROOT / item["builder"]) != saved["builder_sha256"]:
+                raise ValueError(f"Figure builder changed since recorded rendering: {item['builder']}")
+    template = JOURNAL_ROOT / layout["retained_template"]
+    rows = read_tsv(template)
+    original_sources = {r["source_path"] for r in rows}
     for row in rows:
-        entry_id = row.get("entry_id", "")
-        canonical = CANONICAL_ASSETS.get(entry_id)
-        if canonical is not None:
-            expected = PROJECT_PREFIX + canonical
-            if row.get("source_path") != expected:
-                row["source_path"] = expected
-                updated += 1
-            seen_assets.add(entry_id)
+        row["sha256"] = sha256(resolve_project_path(row["source_path"]))
+        generator = row.get("generator_path", "")
+        if generator and not resolve_project_path(generator).is_file():
+            raise FileNotFoundError(resolve_project_path(generator))
+    for asset in layout["assets"]:
+        canonical = JOURNAL_ROOT / asset["path"]
+        component = JOURNAL_ROOT / asset["component"]
+        if sha256(canonical) != sha256(component):
+            raise ValueError(f"Canonical asset differs from declared builder output: {canonical}")
+        rows.append(record(f"creditfirst.{asset['figure']}.asset", asset["path"],
+                           asset["figure"], asset["panel"], role="Current publication asset",
+                           generator=asset["generator"], notes=asset.get("notes", ""),
+                           record_type="figure_asset"))
+    for item in layout["records"]:
+        rows.append(record(source_id("panel", item["path"], item["figure"], item["panel"]),
+                           item["path"], item["figure"], item["panel"], role=item["role"],
+                           generator=item.get("generator", ""), unit=item["replication_unit"],
+                           notes=item.get("notes", "")))
+    provenance_paths = {"scripts/update_provenance_hashes.py", str(MAP_PATH.relative_to(JOURNAL_ROOT)),
+                        layout["retained_template"]}
+    provenance_paths.update(a["generator"] for a in layout["assets"])
+    for path in sorted(provenance_paths):
+        rows.append(record(source_id("implementation", path), path, "methods", "implementation",
+                           role="Versioned provenance map or figure implementation",
+                           record_type="generator_snapshot"))
+    excluded_extensions = set(layout.get("excluded_extensions", []))
+    excluded_components = set(layout.get("excluded_path_components", []))
+    allowed_documents = set(layout.get("allowed_document_names", []))
+    excluded = []
+    known = {r["source_path"] for r in rows}
+    supporting_count = 0
+    for group in layout["supporting_groups"]:
+        directory = JOURNAL_ROOT / group["path"]
+        if not directory.is_dir():
+            raise FileNotFoundError(directory)
+        paths = []
+        group_exclusions = set(group.get("exclude_subdirectories", []))
+        group_extensions = set(group.get("excluded_extensions", []))
+        for root, dirs, files in os.walk(directory):
+            dirs[:] = sorted(d for d in dirs if d not in excluded_components
+                             and str((Path(root) / d).relative_to(directory)) not in group_exclusions)
+            paths.extend(Path(root) / name for name in sorted(files))
+        for path in sorted(paths):
+            relative = str(path.relative_to(JOURNAL_ROOT))
+            if (path.suffix in excluded_extensions | group_extensions or excluded_components.intersection(path.parts)
+                    or (path.suffix == ".md" and path.name not in allowed_documents)):
+                excluded.append(relative)
+                continue
+            if PROJECT_PREFIX + relative in known:
+                continue
+            rows.append(record(source_id("support", relative), relative, group["figure"], group["panel"],
+                               role="Supporting experimental source or scientific protocol",
+                               unit=group["replication_unit"],
+                               notes="Byte inventory; no plotted-panel association is inferred. Generating code and frozen choices are identified by the experimental protocol."))
+            known.add(PROJECT_PREFIX + relative)
+            supporting_count += 1
+    ids = [r["entry_id"] for r in rows]
+    if len(set(ids)) != len(ids):
+        raise ValueError("Duplicate provenance entry IDs")
+    if not original_sources.issubset({r["source_path"] for r in rows}):
+        raise ValueError("A retained numerical or SI source disappeared")
+    main = {r["figure"] for r in rows if r["record_type"] == "figure_asset" and re.fullmatch(r"fig\d+", r["figure"])}
+    supplementary = {f for r in rows if r["record_type"] == "figure_asset" for f in r["figure"].split("/") if re.fullmatch(r"figS\d+", f)}
+    expected_main = {f"fig{k}" for k in range(1, 9)}
+    expected_supplementary = {f"figS{k}" for k in range(1, 48)}
+    if not prepare and main != expected_main:
+        raise ValueError(f"Main assets do not match eight-figure layout: {sorted(main)}")
+    if supplementary != expected_supplementary:
+        raise ValueError(f"SI assets differ from S1--S47: missing={sorted(expected_supplementary-supplementary)} extra={sorted(supplementary-expected_supplementary)}")
+    for row in rows:
+        for f in row["figure"].split("/"):
+            if re.fullmatch(r"fig\d+", f) and f not in expected_main:
+                raise ValueError(f"Obsolete main assignment remains: {row['entry_id']}")
+    summary = dict(status="incomplete preparation" if prepare else "complete",
+                   n_rows=len(rows), n_unique_sources=len({r["source_path"] for r in rows}),
+                   n_retained_rows=len(read_tsv(template)), n_new_supporting_records=supporting_count,
+                   main_figures=sorted(main), supplementary_figures=sorted(supplementary),
+                   excluded_nondata_files=excluded,
+                   excluded_raw_groups={g["path"]: g.get("exclude_subdirectories", [])
+                                        for g in layout["supporting_groups"] if g.get("exclude_subdirectories")},
+                   panel_map_sha256=sha256(MAP_PATH), template_sha256=sha256(template))
+    return rows, summary
 
-        assignment = CANONICAL_ASSIGNMENTS.get(entry_id)
-        if assignment is not None:
-            figure, panel = assignment
-            if row.get("figure") != figure:
-                row["figure"] = figure
-                updated += 1
-            if row.get("panel") != panel:
-                row["panel"] = panel
-                updated += 1
 
-        generator = CANONICAL_GENERATORS.get(entry_id)
-        if generator is not None:
-            expected_generator = PROJECT_PREFIX + generator
-            if row.get("generator_path") != expected_generator:
-                row["generator_path"] = expected_generator
-                updated += 1
+def inventory(rows):
+    fields = ["entry_id", "figure", "panel", "source", "record_type", "independent_unit", "notes", "sha256"]
+    records = [dict(entry_id=r["entry_id"], figure=r["figure"], panel=r["panel"],
+                    source=r["source_path"].removeprefix(PROJECT_PREFIX),
+                    record_type=r["record_type"], independent_unit=r["replication_unit"],
+                    notes=r["notes"], sha256=r["sha256"]) for r in rows]
+    return serialized(records, fields)
 
-        canonical_note = CANONICAL_NOTES.get(entry_id)
-        if canonical_note is not None and row.get("notes") != canonical_note:
-            row["notes"] = canonical_note
-            updated += 1
 
-        metadata = CANONICAL_METADATA.get(entry_id)
-        if metadata is not None:
-            figure, panel = metadata
-            if row.get("figure") != figure:
-                row["figure"] = figure
-                updated += 1
-            if row.get("panel") != panel:
-                row["panel"] = panel
-                updated += 1
-
-        # Detail assets whose display file moved (e.g. the atlas from the
-        # retired figure_10.pdf slot to figure_02.pdf) must point at the new
-        # file before hashing; their remaining fields are enforced below.
-        detail = NEW_DETAIL_ASSETS.get(entry_id)
-        if detail is not None:
-            expected_detail_path = PROJECT_PREFIX + detail["path"]
-            if row.get("source_path") != expected_detail_path:
-                row["source_path"] = expected_detail_path
-                updated += 1
-
-        source = resolve_project_path(row["source_path"])
-        if not source.is_file():
-            raise FileNotFoundError(source)
-        observed = sha256(source)
-        if row.get("sha256") != observed:
-            row["sha256"] = observed
-            updated += 1
-
-    existing_ids = {row.get("entry_id", "") for row in rows}
-    for entry_id, detail in NEW_DETAIL_ASSETS.items():
-        if entry_id in existing_ids:
-            row = next(item for item in rows if item.get("entry_id") == entry_id)
-            expected = {
-                "figure": detail["figure"],
-                "panel": detail.get("panel", "all"),
-                "status": "ready",
-                "source_path": PROJECT_PREFIX + detail["path"],
-                "generator_path": PROJECT_PREFIX + detail["generator"],
-                "replication_unit": "not applicable",
-                "notes": detail["notes"],
-            }
-            for field, value in expected.items():
-                if row.get(field) != value:
-                    row[field] = value
-                    updated += 1
-            continue
-        relative_path = detail["path"]
-        source_path = PROJECT_PREFIX + relative_path
-        source = resolve_project_path(source_path)
-        if not source.is_file():
-            raise FileNotFoundError(source)
-        rows.append(
-            {
-                "entry_id": entry_id,
-                "record_type": "figure_asset",
-                "figure": detail["figure"],
-                "panel": detail.get("panel", "all"),
-                "status": "ready",
-                "source_path": source_path,
-                "sha256": sha256(source),
-                "generator_path": PROJECT_PREFIX + detail["generator"],
-                "replication_unit": "not applicable",
-                "notes": detail["notes"],
-            }
-        )
-        updated += 1
-
-    existing_ids = {row.get("entry_id", "") for row in rows}
-    for entry_id, detail in NEW_PROVENANCE_ENTRIES.items():
-        source_path = PROJECT_PREFIX + detail["path"]
-        source = resolve_project_path(source_path)
-        if not source.is_file():
-            raise FileNotFoundError(source)
-        expected = {
-            "record_type": detail["record_type"],
-            "figure": detail["figure"],
-            "panel": detail["panel"],
-            "status": "ready",
-            "source_path": source_path,
-            "sha256": sha256(source),
-            "generator_path": PROJECT_PREFIX + detail["generator"],
-            "replication_unit": detail["replication_unit"],
-            "notes": detail["notes"],
-        }
-        if entry_id in existing_ids:
-            row = next(item for item in rows if item.get("entry_id") == entry_id)
-            for field, value in expected.items():
-                if row.get(field) != value:
-                    row[field] = value
-                    updated += 1
-        else:
-            rows.append({"entry_id": entry_id, **expected})
-            updated += 1
-
-    missing_entries = sorted(set(CANONICAL_ASSETS) - seen_assets)
-    if missing_entries:
-        raise ValueError(
-            "canonical figure assets absent from manifest: "
-            + ", ".join(missing_entries)
-        )
-
-    with MANIFEST.open("w", newline="", encoding="utf-8") as handle:
-        writer = csv.DictWriter(
-            handle, fieldnames=fieldnames, delimiter="\t", lineterminator="\n"
-        )
-        writer.writeheader()
-        writer.writerows(rows)
-    print(f"updated {updated} provenance fields")
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--prepare", action="store_true", help="Write an incomplete analysis-only candidate")
+    parser.add_argument("--check", action="store_true", help="Check current release ledger against actual sources")
+    args = parser.parse_args()
+    if args.prepare and args.check:
+        parser.error("--prepare and --check are mutually exclusive")
+    rows, summary = build(prepare=args.prepare)
+    contents = serialized(rows)
+    if args.prepare:
+        target = JOURNAL_ROOT / "analysis/credit_first_provenance_20260906/prepared_manifest.tsv"
+        write_atomic(target, contents)
+        write_atomic(target.with_name("prepared_source_inventory.tsv"), inventory(rows))
+        write_atomic(target.with_name("preparation_validation.json"), json.dumps(summary, indent=2) + "\n")
+    elif args.check:
+        if MANIFEST.read_text() != contents:
+            raise RuntimeError("Canonical provenance is stale; run scripts/update_provenance_hashes.py")
+        if INVENTORY.read_text() != inventory(rows):
+            raise RuntimeError("Canonical flat source inventory is stale")
+    else:
+        write_atomic(MANIFEST, contents)
+        write_atomic(INVENTORY, inventory(rows))
+        write_atomic(INVENTORY.with_name("validation.json"), json.dumps(summary, indent=2) + "\n")
+    print(json.dumps({k: v for k, v in summary.items() if k != "excluded_nondata_files"}, indent=2))
 
 
 if __name__ == "__main__":

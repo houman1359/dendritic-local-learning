@@ -7,6 +7,7 @@ from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
+from journal_style import style_direct_color_labels
 import pandas as pd
 from matplotlib.patches import FancyArrowPatch, FancyBboxPatch
 
@@ -45,22 +46,22 @@ def schematic(ax: plt.Axes) -> None:
     ax.set_xlim(0, 1)
     ax.set_ylim(0, 1)
     ax.axis("off")
-    panel_title(ax, "A", "Physical isolation")
+    panel_title(ax, "A", "Oracle state clamp")
     boxes = [
-        (0.03, 0.59, 0.25, 0.19, "positive input\nrates $x\\geq0$", COLORS["dend"]),
-        (0.38, 0.59, 0.25, 0.19, "branch\nvoltage $V$", COLORS["oracle"]),
-        (0.73, 0.59, 0.24, 0.19, "local\neligibility", COLORS["shunting"]),
+        (0.00, 0.50, 0.29, 0.40, "positive\ninput\nrates\n$x\\geq0$", COLORS["dend"]),
+        (0.355, 0.50, 0.29, 0.40, "branch\nvoltage $V$", COLORS["oracle"]),
+        (0.71, 0.50, 0.29, 0.40, "local\neligibility", COLORS["shunting"]),
     ]
     for x, y, width, height, label, color in boxes:
         ax.add_patch(
             FancyBboxPatch(
                 (x, y), width, height, boxstyle="round,pad=0.018",
-                facecolor="white", edgecolor=color, lw=LW_DATA,
+                facecolor="white", edgecolor=color, lw=LW_DATA, clip_on=False,
             )
         )
         ax.text(x + width / 2, y + height / 2, label, ha="center", va="center",
-                fontsize=5.6, color=color, linespacing=1.25)
-    for left, right in ((0.28, 0.38), (0.63, 0.73)):
+                fontsize=PT_SMALL, color=color, linespacing=1.25)
+    for left, right in ((0.29, 0.355), (0.645, 0.71)):
         ax.add_patch(FancyArrowPatch((left, 0.685), (right, 0.685), arrowstyle="-|>",
                                      mutation_scale=8, lw=LW_REF, color=COLORS["mute"]))
     ax.text(0.50, 0.42, r"shunt $\kappa_b\geq0$  +  clamp current $\kappa_bV$",
@@ -102,7 +103,7 @@ def main() -> None:
         gridspec_kw={
             "left": 0.105,
             "right": 0.985,
-            "bottom": 0.105,
+            "bottom": 0.135,
             "top": 0.90,
             "wspace": 0.68,
             "hspace": 0.82,
@@ -212,20 +213,27 @@ def main() -> None:
     values = np.asarray(values)
     lows = np.asarray(lows)
     highs = np.asarray(highs)
-    ax_f.bar(x, values, color=[entry[2] for entry in controls], width=0.68)
-    ax_f.errorbar(x, values, yerr=np.vstack([values - lows, highs - values]),
-                  color=COLORS["ink"], fmt="none", elinewidth=0.7, capsize=1.8)
+    seed_rows=pd.read_csv(SOURCE/"seed_outcomes.csv")
+    high=seed_rows[np.isclose(seed_rows.reliability_heterogeneity,2)]
+    wide=high.pivot(index="seed",columns="method",values="final_test_loss")
+    for i,(control,label,color) in enumerate(controls):
+        paired=(wide[control]-wide["reliability_aligned_shunt"]).dropna().to_numpy()
+        ax_f.scatter(i+np.linspace(-.13,.13,len(paired)),paired,s=6,color=color,alpha=.35,zorder=2)
+        ax_f.errorbar(i,values[i],yerr=[[values[i]-lows[i]],[highs[i]-values[i]]],
+                      color=color,fmt="D",ms=3.6,elinewidth=.8,capsize=1.8,zorder=4)
     ax_f.axhline(0, color=COLORS["mute"], ls="--", lw=LW_REF)
     # Five multi-word labels in a third-width panel overprinted at
     # 24 deg ("global" ran into "shuffled", "no shunt" into "point
     # gate"); a steeper angle separates them.
     ax_f.set_xticks(x, [entry[1] for entry in controls],
-                    rotation=45, ha="right", rotation_mode="anchor")
+                    rotation=45, ha="right", rotation_mode="anchor",
+                    fontsize=PT_SMALL)
     ax_f.set_ylabel("control loss $-$ aligned loss")
-    panel_title(ax_f, "F", "Final boundary")
+    panel_title(ax_f, "F", "Paired endpoint effects")
     style_axis(ax_f, grid="y")
 
     FIGURES.mkdir(parents=True, exist_ok=True)
+    style_direct_color_labels(fig)
     fig.canvas.draw()
     audit_layout(fig, "fig_positive_conductance_reliability")
     audit_text_over_data(fig, "fig_positive_conductance_reliability")

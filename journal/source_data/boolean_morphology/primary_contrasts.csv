@@ -1,0 +1,3 @@
+optimizer,rate_scope,contrast,n_seeds,mean_difference,ci95_low,ci95_high,ci975_low,ci975_high,primary,margin_nmse,passes_adjusted_interval_and_mean_margin
+adam,development_selected,broadcast_minus_exact_compatible,20,0.0025066650320410997,0.0018666912835590083,0.003198975368958975,0.0017800167447584916,0.003318376342500666,True,0.01,False
+adam,development_selected,crossed_minus_compatible_exact,20,0.5631738150664298,0.5501480688703344,0.5798901714737712,0.5491435457703584,0.5827489877700951,True,0.01,True

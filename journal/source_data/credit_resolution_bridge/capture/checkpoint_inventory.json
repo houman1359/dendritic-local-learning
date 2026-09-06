@@ -1,0 +1,62 @@
+[
+  {
+    "checkpoint_files": 0,
+    "cohort": "algebraic",
+    "files": [],
+    "state": "metrics only; replay required"
+  },
+  {
+    "checkpoint_files": 20,
+    "cohort": "end_to_end",
+    "files": [
+      "source_data/morphology_calibration/end_to_end/runs/seed_930910_weights.npz",
+      "source_data/morphology_calibration/end_to_end/runs/seed_930911_weights.npz",
+      "source_data/morphology_calibration/end_to_end/runs/seed_930912_weights.npz",
+      "source_data/morphology_calibration/end_to_end/runs/seed_930913_weights.npz",
+      "source_data/morphology_calibration/end_to_end/runs/seed_930914_weights.npz",
+      "source_data/morphology_calibration/end_to_end/runs/seed_930915_weights.npz",
+      "source_data/morphology_calibration/end_to_end/runs/seed_930916_weights.npz",
+      "source_data/morphology_calibration/end_to_end/runs/seed_930917_weights.npz",
+      "source_data/morphology_calibration/end_to_end/runs/seed_930918_weights.npz",
+      "source_data/morphology_calibration/end_to_end/runs/seed_930919_weights.npz",
+      "source_data/morphology_calibration/end_to_end/runs/seed_930920_weights.npz",
+      "source_data/morphology_calibration/end_to_end/runs/seed_930921_weights.npz",
+      "source_data/morphology_calibration/end_to_end/runs/seed_930922_weights.npz",
+      "source_data/morphology_calibration/end_to_end/runs/seed_930923_weights.npz",
+      "source_data/morphology_calibration/end_to_end/runs/seed_930924_weights.npz",
+      "source_data/morphology_calibration/end_to_end/runs/seed_930925_weights.npz",
+      "source_data/morphology_calibration/end_to_end/runs/seed_930926_weights.npz",
+      "source_data/morphology_calibration/end_to_end/runs/seed_930927_weights.npz",
+      "source_data/morphology_calibration/end_to_end/runs/seed_930928_weights.npz",
+      "source_data/morphology_calibration/end_to_end/runs/seed_930929_weights.npz"
+    ],
+    "state": "final states only; initial state reproducible from declared seed"
+  },
+  {
+    "checkpoint_files": 20,
+    "cohort": "conductance",
+    "files": [
+      "source_data/morphology_conductance/runs/fresh/seed_15400_final_states.npz",
+      "source_data/morphology_conductance/runs/fresh/seed_15401_final_states.npz",
+      "source_data/morphology_conductance/runs/fresh/seed_15402_final_states.npz",
+      "source_data/morphology_conductance/runs/fresh/seed_15403_final_states.npz",
+      "source_data/morphology_conductance/runs/fresh/seed_15404_final_states.npz",
+      "source_data/morphology_conductance/runs/fresh/seed_15405_final_states.npz",
+      "source_data/morphology_conductance/runs/fresh/seed_15406_final_states.npz",
+      "source_data/morphology_conductance/runs/fresh/seed_15407_final_states.npz",
+      "source_data/morphology_conductance/runs/fresh/seed_15408_final_states.npz",
+      "source_data/morphology_conductance/runs/fresh/seed_15409_final_states.npz",
+      "source_data/morphology_conductance/runs/fresh/seed_15410_final_states.npz",
+      "source_data/morphology_conductance/runs/fresh/seed_15411_final_states.npz",
+      "source_data/morphology_conductance/runs/fresh/seed_15412_final_states.npz",
+      "source_data/morphology_conductance/runs/fresh/seed_15413_final_states.npz",
+      "source_data/morphology_conductance/runs/fresh/seed_15414_final_states.npz",
+      "source_data/morphology_conductance/runs/fresh/seed_15415_final_states.npz",
+      "source_data/morphology_conductance/runs/fresh/seed_15416_final_states.npz",
+      "source_data/morphology_conductance/runs/fresh/seed_15417_final_states.npz",
+      "source_data/morphology_conductance/runs/fresh/seed_15418_final_states.npz",
+      "source_data/morphology_conductance/runs/fresh/seed_15419_final_states.npz"
+    ],
+    "state": "final states only; initial state reproducible from declared seed"
+  }
+]

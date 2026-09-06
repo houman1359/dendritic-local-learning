@@ -1,0 +1,97 @@
+{
+  "analysis": "task-derived credit capture and projected local learning",
+  "capture_utility_association": {
+    "methods": [
+      "depth-only bins",
+      "morphology-aware paths",
+      "random nonempty paths",
+      "scalar broadcast",
+      "shuffled ancestry"
+    ],
+    "n_target_clusters": 7,
+    "n_target_method_observations": 35,
+    "note": "Both variables are centered within target. The target-stratified null reassigns learning outcomes among method labels within each target and compares the centered statistic with the observed centered rho. The pooled rho is descriptive and is not tested.",
+    "permutation_extreme_count": 11,
+    "pooled_spearman_rho_descriptive": -0.7372774428711623,
+    "unit": "target-by-method means excluding exact and PCA oracles",
+    "valid_permutations": 20000,
+    "within_target_centered_method_label_permutation_two_sided_p": 0.000599970001499925,
+    "within_target_centered_spearman_rho": -0.6206364783401094,
+    "within_target_centered_target_bootstrap_ci95": [
+      -0.8420087459444209,
+      -0.312862600820716
+    ]
+  },
+  "errors": [],
+  "interpretation_level": "oracle channel-capacity and sufficiency test on a real response-prediction objective",
+  "method_target_means": {
+    "dense PCA oracle": {
+      "heldout_credit_capture": 0.965410975623102,
+      "heldout_normalized_mse": 0.7909280705165221
+    },
+    "depth-only bins": {
+      "heldout_credit_capture": 0.22245182405594205,
+      "heldout_normalized_mse": 0.8012698264274328
+    },
+    "exact backprop": {
+      "heldout_credit_capture": 1.0,
+      "heldout_normalized_mse": 0.7777992717396789
+    },
+    "morphology-aware paths": {
+      "heldout_credit_capture": 0.19733016151809069,
+      "heldout_normalized_mse": 0.8983782450047909
+    },
+    "random nonempty paths": {
+      "heldout_credit_capture": 0.18929158976657842,
+      "heldout_normalized_mse": 0.9187793311018752
+    },
+    "scalar broadcast": {
+      "heldout_credit_capture": 0.22245182405594205,
+      "heldout_normalized_mse": 0.8012698264274328
+    },
+    "shuffled ancestry": {
+      "heldout_credit_capture": 0.13185898635682067,
+      "heldout_normalized_mse": 0.9249472523392356
+    }
+  },
+  "n_replicates_per_target": 10,
+  "n_target_method_runs": 490,
+  "n_targets": 7,
+  "parameters": {
+    "activation": "tanh",
+    "learning_rate": 0.015,
+    "manual_only": false,
+    "min_repeat_reliability": null,
+    "seed": 20260721,
+    "steps": 1200,
+    "test_fraction": 0.2,
+    "weight_decay": 0.001
+  },
+  "primary_budget_channels": 1,
+  "primary_credit_capture_contrast": {
+    "contrast": "morphology-aware paths minus shuffled ancestry",
+    "mean_difference": 0.06547117516127,
+    "morphology_higher_count": 2,
+    "morphology_lower_count": 5,
+    "n_targets": 7,
+    "target_bootstrap_ci95": [
+      -0.07700549237393088,
+      0.29708431552969156
+    ],
+    "wilcoxon_two_sided_p": 0.8125
+  },
+  "primary_learning_contrast": {
+    "contrast": "morphology-aware paths minus shuffled ancestry",
+    "mean_difference": -0.02656900733444461,
+    "morphology_higher_count": 4,
+    "morphology_lower_count": 3,
+    "n_targets": 7,
+    "target_bootstrap_ci95": [
+      -0.1004862078664114,
+      0.03961272593108878
+    ],
+    "wilcoxon_two_sided_p": 0.8125
+  },
+  "split": "held-out stimulus identities",
+  "status": "completed"
+}

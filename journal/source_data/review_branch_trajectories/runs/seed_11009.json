@@ -1,0 +1,48 @@
+{
+  "seed": 11009,
+  "device": "cuda",
+  "gpu": "NVIDIA H100 80GB HBM3",
+  "torch": "2.9.1+cu128",
+  "numpy": "2.2.6",
+  "python": "3.10.13",
+  "config_sha256": "7b81bca5b40ad223c86053de3b7fd1470173be0d59a86708c6a0dd8fe4794dd0",
+  "script_sha256": "9811441935930a910cc3c1a4008ec62973af73cc009e3f1f43d153dcc466ba4e",
+  "maximum_exact_autograd_gradient_abs_difference": 2.5331974029541016e-07,
+  "maximum_exact_equivalent_endpoint_difference": 0.0,
+  "nested_conflict_masks": true,
+  "all_finite": true,
+  "dataset": {
+    "dataset": "FashionMNIST",
+    "classes": [
+      0,
+      6
+    ],
+    "train_binary_counts": [
+      6000,
+      6000
+    ],
+    "test_binary_counts": [
+      1000,
+      1000
+    ],
+    "raw_sha256": {
+      "train-images-idx3-ubyte": "c59f468a2f672dc815687fe0f83887768d799fd8a3f3276145d20f83aa44d888",
+      "train-labels-idx1-ubyte": "bad3541b69d912435c50bb6ba87bec294ff4f6a2e1246121d8633921760443d9",
+      "t10k-images-idx3-ubyte": "5b4141f0afbad91edebe8549f8fcffe087ea10ca49f1dbef5c9a5cd8815ce37b",
+      "t10k-labels-idx1-ubyte": "0402a96d92fd2663957122ceb108a494c5af83dab82d92729df917d7dec38c34"
+    },
+    "average_pool_side": 4,
+    "feature_dim": 50
+  },
+  "diagnostic_script_sha256": "63dc68c306d83d92315034463d2c408ac219a39cffea90c28d27e48e1b2621a8",
+  "checkpoints": [
+    0,
+    1,
+    10,
+    50,
+    100,
+    250
+  ],
+  "maximum_accuracy_replay_error": 4.9765025433856636e-11,
+  "maximum_loss_replay_error": 2.3974617846533874e-09
+}

@@ -1,0 +1,347 @@
+\subsection{Interaction structure at fixed input-sensitivity rank}
+\label{note:interaction_structure}
+
+The preceding linear experiment allowed a dense trainable input map, which
+can compensate for generic route rotations. Let $\Phi$ contain $K$
+orthonormal route columns, write $W=\Phi V$ with
+$V\in\mathbb R^{K\times8}$, and let $Q_r$ contain the $r$ active
+context columns of $Q$. The context-visible transfer is then
+$Q_r^{\mathsf T}H_T\Phi$. When this matrix
+has row rank $r$, a suitable $V$ reproduces every noiseless context. Finite-time
+conditioning and cost can still differ, but detailed shape then need not
+restrict representation. We therefore conducted a separate mechanism study
+with explicit local input access. This analysis followed the original
+prospective outcomes and is an exhaustive population diagnostic, not another
+prospective test of the original selector.
+
+To impose local input access, we placed eight independent Rademacher inputs
+(each equally likely to be $-1$ or $+1$) at named leaves of a binary tree.
+For internal node $v$, let $u_{\mathrm L}$ and $u_{\mathrm R}$ be its
+child outputs and let $a_v,b_v,c_v,d_v$ be its four trainable coefficients.
+Each of the seven internal nodes computes
+\begin{equation}
+ u_v=a_v+b_vu_{\mathrm L}+c_vu_{\mathrm R}
+       +d_vu_{\mathrm L}u_{\mathrm R}.
+ \label{eq:s_multiaffine_node}
+\end{equation}
+Only the root is read out. Every candidate has 28 free coefficients and 14
+edges, with no dense input mixing, intermediate readout or access to inputs
+outside a node's subtree.
+The fixed pool combines three shapes---a balanced tree, a comb and a tree
+with a $3+5$ root split---with the same four predetermined leaf permutations,
+giving twelve candidates. Equal edge
+and coefficient counts do not imply equal cable length, latency or biological
+energy cost. These signed algebraic nodes are not conductance compartments.
+
+The primary target census contains all 105 perfect matchings $M$ and all
+35 unordered four-plus-four partitions $A$ of the eight inputs:
+\begin{equation}
+ f_M(\bm x)=\tfrac12\sum_{(i,j)\in M}x_ix_j,
+ \qquad
+ f_A(\bm x)=\tfrac12\left(\prod_{i\in A}x_i+
+                              \prod_{i\notin A}x_i\right).
+ \label{eq:s_interaction_targets}
+\end{equation}
+The targets are enumerated independently of the candidate trees. Evaluating
+all $2^8=256$ equally weighted inputs gives target variances 1 and $1/2$,
+respectively. For the continuous derivative of each target's unique
+multilinear extension,
+\begin{equation}
+ \E[\nabla_{\bm x}f\,\nabla_{\bm x}f^{\mathsf T}]=I_8/4.
+ \label{eq:s_equal_input_sensitivity}
+\end{equation}
+Thus both algebraic and participation-ratio effective rank are eight, and
+the complete input-sensitivity spectrum agrees. This is a property of the
+target, not equality of changing model parameter-gradient or synaptic-credit
+moments. Normalized MSE (NMSE) divides population squared error by the stated
+target variance.
+
+Interaction-tensor descriptions have previously been used to analyze
+structured neural function classes \citep{cohen2016tensor}. The centered
+constant-feature criterion below is derived for the specific local model in
+Eq.~\ref{eq:s_multiaffine_node}.
+
+\subsection{A necessary and sufficient centered-cut condition}
+\label{note:centered_cut_theorem}
+
+For each subset $U$ of input indices, define the Walsh function
+$\chi_U(\bm x)=\prod_{i\in U}x_i$, with $\chi_\emptyset=1$. These
+functions form an orthonormal basis under the uniform input distribution.
+Writing $c_U$ for the coefficient of $\chi_U$ gives
+$f=\sum_U c_U\chi_U$. If $\bm c_f$ and $\bm c_g$ collect the
+coefficients of two functions $f$ and $g$, Parseval's identity gives
+$\E[(f-g)^2]=\|\bm c_f-\bm c_g\|^2$. For the leaf set $S$ of an actual
+subtree, reshape the target coefficients into $C_S$, with row index a subset
+of $S$ and column index a subset of its complement $\bar S$. Let $C_S^\circ$ denote
+this matrix after removing the row for the empty subset of $S$.
+
+\begin{proposition}[Exact representation by a scalar multi-affine tree]
+\label{prop:s_centered_tree_iff}
+For a fixed binary tree with one named Rademacher input at each leaf, a target
+is represented exactly by Eq.~\ref{eq:s_multiaffine_node} and a root-only
+output if and only if $\operatorname{rank}(C_S^\circ)\leq1$ at every proper
+subtree cut.
+\end{proposition}
+
+\begin{proof}
+Every ancestor is affine in a particular child's output, and sibling inputs
+are disjoint. Consequently a represented function can be written
+$g=A(\bm x_{\bar S})+h_S(\bm x_S)B(\bm x_{\bar S})$. Its full cut matrix
+has rank at most two; removing the empty-$S$ row leaves rank at most one.
+This proves necessity.
+
+For sufficiency, call a cut active when $C_S^\circ\ne0$. At each active
+cut, choose a centered function $h_S$ whose
+Fourier coefficients span the column space of $C_S^\circ$, and define
+$V_S=\operatorname{span}\{1,h_S\}$. If $C_S^\circ=0$, take $h_S=0$ and
+$V_S=\operatorname{span}\{1\}$. At a leaf use
+$V_i=\operatorname{span}\{1,x_i\}$. The condition implies
+$f\in V_S\otimes\mathcal H_{\bar S}$, where $\mathcal H$ is the complete
+finite-dimensional function space on the indicated inputs.
+
+For sibling leaf sets $L$ and $R$, the orthogonal projections onto $V_L$
+and $V_R$ commute because
+they act on disjoint input factors. Hence
+$f\in V_L\otimes V_R\otimes\mathcal H_{\overline{L\cup R}}$.
+For a non-root parent $P=L\cup R$ with nonzero centered component, write
+$f=1_P\otimes A+h_P\otimes B$, with $B\ne0$. Contracting the outside
+factor against a linear functional that maps $B$ to one gives
+$h_P+c1_P\in V_L\otimes V_R$, where $c$ is a scalar contributed by $A$. Since the constant function also belongs to
+this product space, so does $h_P$. It is therefore a linear combination of
+$1,h_L,h_R,h_Lh_R$, exactly the four allowed features. Inactive parent
+features are zero and cause no exception. At the root, the complete target
+itself belongs to the product of its children's spaces. Induction supplies
+all local coefficients and proves sufficiency.
+\end{proof}
+
+Retaining the constant feature in every subtree makes this criterion
+stronger than an uncentered rank-two constraint. Let
+$\mathcal T_{\rm proper}$ be the leaf sets of the tree's proper subtrees,
+and let $\sigma_j(C_S^\circ)$ be the singular values in decreasing
+order. The optimal low-rank approximation identity and Parseval then give
+\begin{equation}
+ \operatorname{MSE}(f,g)\geq
+ \max_{S\in\mathcal T_{\rm proper}}
+       \sum_{j\geq2}\sigma_j(C_S^\circ)^2.
+ \label{eq:s_centered_cut_bound}
+\end{equation}
+Taking the maximum preserves a lower bound. Summing tails from overlapping
+cuts instead gives a heuristic score, without the same guarantee. A positive maximum-cut bound need not equal the true optimum.
+The condition applies to actual subtree cuts; the complement of a subtree
+need not itself be a subtree. For the matching $(12)(34)(56)(78)$, an
+even--odd root split has centered tail $0.75$, whereas the full rank-two tail
+is $0.5$. For the two-quartet target with supports $1234$ and $5678$, a
+five-leaf subtree $12345$ has centered tail $0.25$ despite a zero full
+rank-two tail. Supplementary Fig.~\ref{fig:supp_interaction_structure}
+compares both bounds with fitted population error.
+
+The proof requires ancestors to be affine in each child's output. A general
+nonlinear scalar ancestor can generate higher cut rank from one scalar
+feature. Neither the necessity condition nor Eq.~\ref{eq:s_centered_cut_bound}
+therefore applies automatically to a tanh tree or a conductance model.
+
+\subsection{Population fitting, complete-tree construction and depth}
+\label{note:constructive_morphology}
+
+All twelve candidates were fitted to every primary target by 32 alternating
+least-squares (ALS) sweeps with four fixed random restarts. Conditional on the
+other nodes, the design for one node is
+$q(\bm x)[1,u_L,u_R,u_Lu_R]$, where $q$ is the derivative of the root with
+respect to that node's output. The offset is the current root output minus
+$q u_v$. Sweeps alternate postorder and preorder. Hidden mean/scale gauges
+are normalized with exact parent compensation. Every restart and checkpoints
+at 0, 2, 8 and 32 sweeps are retained: 6,720 fits and 26,880 checkpoint rows.
+The endpoint is the smallest achieved NMSE among the four restarts. The difference between this endpoint and
+Eq.~\ref{eq:s_centered_cut_bound} can reflect both incomplete optimization
+and a loose bound, so it is not a certified optimization gap. Full-domain fitting
+has no held-out generalization interpretation.
+
+For score-based selection among the twelve fixed candidates, values within
+$10^{-10}$ are treated as ties and resolved by lexicographic candidate
+identifier. A separately retained summary applies this tolerance to the raw
+floating-point minima without changing any fit.
+The two-sweep pilot fits every candidate; the best-fixed baseline chooses a
+single candidate per family in hindsight. The uniform-random baseline is its
+exact candidate expectation. Family averages and paired shape/assignment
+counts are descriptive censuses, with error comparisons at tolerance
+$10^{-7}$ and no sampling confidence intervals over the enumerated tasks.
+The lower bound is attained within this tolerance in 1,407/1,680 endpoints.
+Although some restarts develop large cancelling coefficients, every case
+selected by a deterministic policy has an existing equivalent restart within
+$10^{-7}$ NMSE whose coefficient norm is at most 2.645752. All original fits,
+including the remaining poorly conditioned case, remain included.
+
+To search beyond the fixed pool, we used an exploratory dynamic program
+over all input subsets. Let $c(S)$ be the normalized cut tail from
+Eq.~\ref{eq:s_centered_cut_bound}, with zero cost at the root and leaves.
+Let $b(S)$ be the smallest achievable maximum cut cost for a subtree on
+leaf set $S$, with base case $b(\{i\})=0$. Then
+\begin{equation}
+ b(S)=\max\left\{c(S),\min_{L\dot\cup R=S}
+                            \max[b(L),b(R)]\right\}.
+ \label{eq:s_tree_minimax_dp}
+\end{equation}
+Every binary tree decomposes into one root split and two independent
+children, so this recurrence covers all trees. A second pass restricts every
+cut to the globally minimal threshold, then minimizes total tail, depth and
+deterministic split ties. Costs are rounded to 12 decimals for numerical
+ties. This corrected two-pass version is retained separately from the first
+exploratory construction and agrees with exhaustive enumeration of all 945
+six-input trees on four random cost tables. At a zero threshold, the theorem
+makes the minimum-depth solution the shallowest exact tree in this class;
+for a positive threshold only the cut score, not fitted error, is optimized.
+
+Dominant left singular vectors of the centered cut matrices define local
+scalar features, and four-feature least squares recovers each node's
+coefficients. All 105 matching and 35 quartic targets reconstruct at minimum
+depth three. A separate positive control uses 24 unique seeded permutations
+$\pi$ of the nested target
+\begin{equation}
+ f_\pi(\bm x)=\tfrac12\sum_{k\in\{2,4,6,8\}}
+                         \prod_{j=1}^k x_{\pi(j)}.
+\end{equation}
+Its rank is eight but its spectrum
+$(1/4,1/4,1/2,1/2,3/4,3/4,1,1)$ differs from the primary families; it is
+constant only within this control family. Every nested target requires
+depth four. An independent depth-constrained recurrence gives minimum
+centered-cut NMSE bound 0.146446609407 at depth at most three and zero at
+depth four. All 164 constructions have NMSE below $7\times10^{-30}$ and
+maximum absolute coefficient one up to rounding
+(Supplementary Fig.~\ref{fig:supp_constructive_morphology}). The algorithm
+uses the complete target Fourier tensor: these are exact-target capacity
+certificates, not predictions from limited calibration data.
+
+\input{morphology_calibration_methods}
+\input{morphology_end_to_end_methods}
+
+\input{morphology_credit_methods}
+\input{morphology_conductance_methods}
+
+\subsection{Finite-horizon forecasts for the contextual linear learner}
+\label{note:finite_horizon_morphology}
+
+To diagnose the original scalar extrapolation independently of structural
+capacity, we froze a new finite-horizon predictor before fresh calibration
+or training. The candidate pool, learning rate $\eta=0.35$, minibatch size
+$B=32$, 256-update horizon and objective cost remained unchanged. Five
+original development seeds were diagnostic. Twenty new seeds (9300--9319)
+crossed four ranks, two noise levels, two held-out angles, both transfer arms
+and both training regimes. Every candidate was trained, yielding 25,600 new
+fits and 76,800 checkpoint outcomes at updates 16, 64 and 256. The new
+non-pilot scores were hash-sealed before each seed's outcomes. No predictor
+hyperparameter was fitted to the new endpoints.
+This separates mode-dependent learning dynamics from a scalar initial slope,
+as motivated by analyses of deep linear learning and task alignment with
+kernel eigenfunctions \citep{lampinen2019generalization,canatar2021spectral}.
+
+To forecast learning, we express the weights in route coordinates. For
+orthonormal routes $\Phi$, the learner stays in $W=\Phi V$. For context
+$j$ with decoder $\bm a_j$, define the effective route vector
+$\bm c_j=\Phi^{\mathsf T}H_T^{\mathsf T}\bm a_j$.
+The scalar prediction is $\bm c_j^{\mathsf T}V\bm x$ and the actual update
+is minibatch descent in $V$. Let $\bm v=\operatorname{vec}(V)$ stack the route-coordinate weights.
+For calibration example $i$ with input $\bm x_i$, label $y_i$ and effective
+route vector $\bm c_i$, define
+$\bm z_i=\operatorname{vec}(\bm c_i\bm x_i^{\mathsf T})$. With
+$\E_i$ denoting an average over the calibration-fit examples, set
+$H_{\rm emp}=\E_i[\bm z_i\bm z_i^{\mathsf T}]$ and
+$\bm b_{\rm emp}=\E_i[y_i\bm z_i]$. Write
+$H_{\rm emp}=U\operatorname{diag}(\lambda)U^{\mathsf T}$, with orthonormal
+eigenvectors in $U$ and eigenvalues in $\lambda$. After $T$ updates,
+full-batch descent from zero gives
+\begin{equation}
+ \bm v_T=U\operatorname{diag}\!\left(
+ \frac{1-(1-\eta\lambda)^T}{\lambda}\right)U^{\mathsf T}\bm b_{\rm emp},
+ \label{eq:s_spectral_forecast}
+\end{equation}
+The diagonal expression is evaluated separately at each eigenvalue, with
+continuous value $\eta T$ when that eigenvalue is zero. The empirical selector
+fits the first 512 calibration examples and evaluates on the other 512;
+Eq.~\ref{eq:s_spectral_forecast} is exact for that full-batch surrogate,
+not for the original cached-data SGD process.
+
+For fresh inputs $\bm x\sim\mathcal N(0,I_d)$, where $d$ is the input
+dimension, a smaller recurrence describes stochastic gradient descent (SGD).
+Let $p_j$ be the context probabilities and $\bm t_j\in\mathbb R^d$ the
+target coefficient vector in context $j$. Suppose
+$y=\bm t_j^{\mathsf T}\bm x+\epsilon$, with independent zero-mean noise
+of variance $\sigma_j^2$. The exact recurrence closes on the mean weights
+$M=\E[V]\in\mathbb R^{K\times d}$ and the route-space variance matrix
+$\Gamma=\E[(V-M)(V-M)^{\mathsf T}]$. The latter sums weight covariance
+over the input coordinates; it is not the full vectorized parameter
+covariance. Define
+\begin{align}
+ C&=\sum_jp_j\bm c_j\bm c_j^{\mathsf T},&
+ D&=\sum_jp_j\bm c_j\bm t_j^{\mathsf T},&
+ \bar G&=CM-D,\\
+ R_j&=\|M^{\mathsf T}\bm c_j-\bm t_j\|^2+
+                    \bm c_j^{\mathsf T}\Gamma\bm c_j,&
+ A_\eta&=I-\eta C,\\
+ J&=\sum_jp_j\bm c_j\bm c_j^{\mathsf T}
+                  [(d+2)R_j+d\sigma_j^2],&
+ K_G&=C\Gamma C+\bar G\bar G^{\mathsf T}.
+\end{align}
+Here $\bar G$ is the mean gradient, $R_j$ is the expected squared residual
+excluding observation noise, $J$ is the second moment of the single-example
+gradient Gram matrix, and $K_G$ is the corresponding second moment of the
+conditional-mean gradient. For a fixed residual coefficient vector
+$\bm e$, Gaussian fourth moments yield
+$\E[(\bm e^{\mathsf T}\bm x-\epsilon)^2\|\bm x\|^2]
+=(d+2)\|\bm e\|^2+d\sigma_j^2$. Conditioning first on the current
+weights, the Gram of a minibatch-mean gradient is its conditional-mean Gram
+plus $1/B$ times its conditional variance. Total covariance therefore gives
+\begin{align}
+ M_{t+1}&=M_t-\eta\bar G_t,\\
+ \Gamma_{t+1}&=A_\eta\Gamma_t A_\eta^{\mathsf T}
+                      +\frac{\eta^2}{B}(J_t-K_{G,t}),
+ \label{eq:s_fresh_sgd_moments}\\
+ \E[\mathcal L_T]&=\tfrac12\sum_jp_j[R_j(T)+\sigma_j^2].
+\end{align}
+Thus the forecast updates gradient noise as the residual and weight
+variance change during learning. Gaussian input fourth moments and fresh independent
+minibatches are essential. Noise need only have the stated first two moments.
+This closure is not asserted for nonlinear targets, anisotropic inputs,
+adaptive optimizers or correlated samples.
+
+The primary plug-in predictor estimates context frequencies, conditional
+coefficient vectors and residual noise variances using 1,024 independent
+calibration examples. Coefficients use ordinary least squares without an
+intercept, and noise variances use residual degrees of freedom. Its recurrence
+is exact for the fitted Gaussian population and is a plug-in approximation
+for the generating population. Population-oracle versions instead receive
+true teacher coefficients and noise moments and are labeled privileged.
+The 16-step pilot performs real candidate updates and evaluates on
+calibration observations; its computation is included. An observed-context-
+count baseline chooses the smallest permitted $K$ covering the number of
+distinct observed context vectors, followed by the cheapest tree. This baseline and a conditioning baseline restricted to the same observed
+count were added after inspecting development results, then frozen
+separately before the new outcomes. Context count equals generating
+rank in this constructed family; it is not a general estimator of credit rank.
+
+We ran both fresh-example SGD and minibatches resampled from a fixed
+2,048-example cache, retaining a common 4,096-example test set. Reusing a
+cache makes later weights dependent on those examples and violates the fresh
+recurrence's independence assumption. Population-oracle prediction minus
+exact population loss of the realized weights quantifies that discrepancy.
+All task conditions are averaged within each independent seed before 10,000
+whole-seed bootstrap draws. Intervals are pointwise; the many secondary
+selector, rank and regime comparisons are not interpreted as separately
+confirmed discoveries. No new multiplicity-adjusted significance claim is
+made from these interval plots. Undefined correlations in numerically
+constant cases are retained with explicit defined-task counts rather than
+used to exclude outcomes.
+
+Supplementary Fig.~\ref{fig:supp_finite_horizon_selection} shows endpoint
+regret, strong baselines and implementation time;
+Supplementary Fig.~\ref{fig:supp_finite_horizon_prediction} shows prediction
+accuracy and cache sensitivity. The primary forecast reaches mean fixed-cache
+regret $0.000064$ and $0.000042$ in the feedback and joint arms, while the
+cheap observed-count baseline reaches $0.000134$ and $0.000197$. Thus the
+large improvement over the original scalar score does not establish a large
+advantage for fine morphology selection. Focused tests compare singular
+spectral formulas with direct descent, stochastic moments with exact Gaussian
+quadrature, and enforce that predictors cannot request training or test
+observations. Checks of source hashes and pre-outcome selection records passed. Numerical data,
+protocols, complete outcomes and exported source hashes are provided in
+\texttt{source\_data/morphology\_structure/} and
+\texttt{source\_data/morphology\_finite\_horizon/}.

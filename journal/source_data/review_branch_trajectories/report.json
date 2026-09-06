@@ -1,0 +1,16 @@
+{
+  "complete": true,
+  "diagnostic_rows": 28800,
+  "seeds": 20,
+  "checkpoints": [
+    0,
+    1,
+    10,
+    50,
+    100,
+    250
+  ],
+  "maximum_accuracy_replay_error": 4.98535657201e-11,
+  "maximum_loss_replay_error": 4.97314367465e-09,
+  "scope": "Newly re-executed trajectories of the existing frozen task; no new biological replication. No-alignment crossings are retained as censored/absent observations, never discarded. Own-state and common-state geometry are separate. A zero inner product is an instantaneous descent boundary, not a trained chance crossing."
+}

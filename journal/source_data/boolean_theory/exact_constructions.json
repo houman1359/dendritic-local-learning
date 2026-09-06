@@ -1,0 +1,3346 @@
+[
+  {
+    "all_normalized_coefficients_within_box_2_exact": true,
+    "family": "and4",
+    "max_abs_normalized_coefficient": 1.0327955589886444,
+    "max_normalized_coefficient_squared_rational": "16/15",
+    "mean_rational": "1/16",
+    "normalized_node_coefficients": {
+      "(((a,b),c),d)": [
+        0.7745966692414834,
+        1.0327955589886444,
+        1.0327955589886444,
+        1.0327955589886444
+      ],
+      "((a,b),c)": [
+        -0.5,
+        0.5,
+        0.5,
+        0.5
+      ],
+      "(a,b)": [
+        -0.5,
+        0.5,
+        0.5,
+        0.5
+      ]
+    },
+    "normalized_root_denominator": "sqrt(15/256)",
+    "normalized_root_numerator_rational": [
+      "3/16",
+      "1/4",
+      "1/4",
+      "1/4"
+    ],
+    "raw_node_coefficients_rational": {
+      "(((a,b),c),d)": [
+        "1/4",
+        "1/4",
+        "1/4",
+        "1/4"
+      ],
+      "((a,b),c)": [
+        "-1/2",
+        "1/2",
+        "1/2",
+        "1/2"
+      ],
+      "(a,b)": [
+        "-1/2",
+        "1/2",
+        "1/2",
+        "1/2"
+      ]
+    },
+    "raw_truth_table_verified_exactly": true,
+    "signed_slice_outside_contexts": {
+      "(((a,b),c),d)": {},
+      "((a,b),c)": {
+        "3": 1
+      },
+      "(a,b)": {
+        "2": 1,
+        "3": 1
+      }
+    },
+    "tree": "(((a,b),c),d)",
+    "tree_id": "T01",
+    "variance_rational": "15/256"
+  },
+  {
+    "all_normalized_coefficients_within_box_2_exact": true,
+    "family": "and4",
+    "max_abs_normalized_coefficient": 1.0327955589886444,
+    "max_normalized_coefficient_squared_rational": "16/15",
+    "mean_rational": "1/16",
+    "normalized_node_coefficients": {
+      "(((a,b),d),c)": [
+        0.7745966692414834,
+        1.0327955589886444,
+        1.0327955589886444,
+        1.0327955589886444
+      ],
+      "((a,b),d)": [
+        -0.5,
+        0.5,
+        0.5,
+        0.5
+      ],
+      "(a,b)": [
+        -0.5,
+        0.5,
+        0.5,
+        0.5
+      ]
+    },
+    "normalized_root_denominator": "sqrt(15/256)",
+    "normalized_root_numerator_rational": [
+      "3/16",
+      "1/4",
+      "1/4",
+      "1/4"
+    ],
+    "raw_node_coefficients_rational": {
+      "(((a,b),d),c)": [
+        "1/4",
+        "1/4",
+        "1/4",
+        "1/4"
+      ],
+      "((a,b),d)": [
+        "-1/2",
+        "1/2",
+        "1/2",
+        "1/2"
+      ],
+      "(a,b)": [
+        "-1/2",
+        "1/2",
+        "1/2",
+        "1/2"
+      ]
+    },
+    "raw_truth_table_verified_exactly": true,
+    "signed_slice_outside_contexts": {
+      "(((a,b),d),c)": {},
+      "((a,b),d)": {
+        "2": 1
+      },
+      "(a,b)": {
+        "2": 1,
+        "3": 1
+      }
+    },
+    "tree": "(((a,b),d),c)",
+    "tree_id": "T02",
+    "variance_rational": "15/256"
+  },
+  {
+    "all_normalized_coefficients_within_box_2_exact": true,
+    "family": "and4",
+    "max_abs_normalized_coefficient": 1.0327955589886444,
+    "max_normalized_coefficient_squared_rational": "16/15",
+    "mean_rational": "1/16",
+    "normalized_node_coefficients": {
+      "(((a,c),b),d)": [
+        0.7745966692414834,
+        1.0327955589886444,
+        1.0327955589886444,
+        1.0327955589886444
+      ],
+      "((a,c),b)": [
+        -0.5,
+        0.5,
+        0.5,
+        0.5
+      ],
+      "(a,c)": [
+        -0.5,
+        0.5,
+        0.5,
+        0.5
+      ]
+    },
+    "normalized_root_denominator": "sqrt(15/256)",
+    "normalized_root_numerator_rational": [
+      "3/16",
+      "1/4",
+      "1/4",
+      "1/4"
+    ],
+    "raw_node_coefficients_rational": {
+      "(((a,c),b),d)": [
+        "1/4",
+        "1/4",
+        "1/4",
+        "1/4"
+      ],
+      "((a,c),b)": [
+        "-1/2",
+        "1/2",
+        "1/2",
+        "1/2"
+      ],
+      "(a,c)": [
+        "-1/2",
+        "1/2",
+        "1/2",
+        "1/2"
+      ]
+    },
+    "raw_truth_table_verified_exactly": true,
+    "signed_slice_outside_contexts": {
+      "(((a,c),b),d)": {},
+      "((a,c),b)": {
+        "3": 1
+      },
+      "(a,c)": {
+        "1": 1,
+        "3": 1
+      }
+    },
+    "tree": "(((a,c),b),d)",
+    "tree_id": "T03",
+    "variance_rational": "15/256"
+  },
+  {
+    "all_normalized_coefficients_within_box_2_exact": true,
+    "family": "and4",
+    "max_abs_normalized_coefficient": 1.0327955589886444,
+    "max_normalized_coefficient_squared_rational": "16/15",
+    "mean_rational": "1/16",
+    "normalized_node_coefficients": {
+      "(((a,c),d),b)": [
+        0.7745966692414834,
+        1.0327955589886444,
+        1.0327955589886444,
+        1.0327955589886444
+      ],
+      "((a,c),d)": [
+        -0.5,
+        0.5,
+        0.5,
+        0.5
+      ],
+      "(a,c)": [
+        -0.5,
+        0.5,
+        0.5,
+        0.5
+      ]
+    },
+    "normalized_root_denominator": "sqrt(15/256)",
+    "normalized_root_numerator_rational": [
+      "3/16",
+      "1/4",
+      "1/4",
+      "1/4"
+    ],
+    "raw_node_coefficients_rational": {
+      "(((a,c),d),b)": [
+        "1/4",
+        "1/4",
+        "1/4",
+        "1/4"
+      ],
+      "((a,c),d)": [
+        "-1/2",
+        "1/2",
+        "1/2",
+        "1/2"
+      ],
+      "(a,c)": [
+        "-1/2",
+        "1/2",
+        "1/2",
+        "1/2"
+      ]
+    },
+    "raw_truth_table_verified_exactly": true,
+    "signed_slice_outside_contexts": {
+      "(((a,c),d),b)": {},
+      "((a,c),d)": {
+        "1": 1
+      },
+      "(a,c)": {
+        "1": 1,
+        "3": 1
+      }
+    },
+    "tree": "(((a,c),d),b)",
+    "tree_id": "T04",
+    "variance_rational": "15/256"
+  },
+  {
+    "all_normalized_coefficients_within_box_2_exact": true,
+    "family": "and4",
+    "max_abs_normalized_coefficient": 1.0327955589886444,
+    "max_normalized_coefficient_squared_rational": "16/15",
+    "mean_rational": "1/16",
+    "normalized_node_coefficients": {
+      "(((a,d),b),c)": [
+        0.7745966692414834,
+        1.0327955589886444,
+        1.0327955589886444,
+        1.0327955589886444
+      ],
+      "((a,d),b)": [
+        -0.5,
+        0.5,
+        0.5,
+        0.5
+      ],
+      "(a,d)": [
+        -0.5,
+        0.5,
+        0.5,
+        0.5
+      ]
+    },
+    "normalized_root_denominator": "sqrt(15/256)",
+    "normalized_root_numerator_rational": [
+      "3/16",
+      "1/4",
+      "1/4",
+      "1/4"
+    ],
+    "raw_node_coefficients_rational": {
+      "(((a,d),b),c)": [
+        "1/4",
+        "1/4",
+        "1/4",
+        "1/4"
+      ],
+      "((a,d),b)": [
+        "-1/2",
+        "1/2",
+        "1/2",
+        "1/2"
+      ],
+      "(a,d)": [
+        "-1/2",
+        "1/2",
+        "1/2",
+        "1/2"
+      ]
+    },
+    "raw_truth_table_verified_exactly": true,
+    "signed_slice_outside_contexts": {
+      "(((a,d),b),c)": {},
+      "((a,d),b)": {
+        "2": 1
+      },
+      "(a,d)": {
+        "1": 1,
+        "2": 1
+      }
+    },
+    "tree": "(((a,d),b),c)",
+    "tree_id": "T05",
+    "variance_rational": "15/256"
+  },
+  {
+    "all_normalized_coefficients_within_box_2_exact": true,
+    "family": "and4",
+    "max_abs_normalized_coefficient": 1.0327955589886444,
+    "max_normalized_coefficient_squared_rational": "16/15",
+    "mean_rational": "1/16",
+    "normalized_node_coefficients": {
+      "(((a,d),c),b)": [
+        0.7745966692414834,
+        1.0327955589886444,
+        1.0327955589886444,
+        1.0327955589886444
+      ],
+      "((a,d),c)": [
+        -0.5,
+        0.5,
+        0.5,
+        0.5
+      ],
+      "(a,d)": [
+        -0.5,
+        0.5,
+        0.5,
+        0.5
+      ]
+    },
+    "normalized_root_denominator": "sqrt(15/256)",
+    "normalized_root_numerator_rational": [
+      "3/16",
+      "1/4",
+      "1/4",
+      "1/4"
+    ],
+    "raw_node_coefficients_rational": {
+      "(((a,d),c),b)": [
+        "1/4",
+        "1/4",
+        "1/4",
+        "1/4"
+      ],
+      "((a,d),c)": [
+        "-1/2",
+        "1/2",
+        "1/2",
+        "1/2"
+      ],
+      "(a,d)": [
+        "-1/2",
+        "1/2",
+        "1/2",
+        "1/2"
+      ]
+    },
+    "raw_truth_table_verified_exactly": true,
+    "signed_slice_outside_contexts": {
+      "(((a,d),c),b)": {},
+      "((a,d),c)": {
+        "1": 1
+      },
+      "(a,d)": {
+        "1": 1,
+        "2": 1
+      }
+    },
+    "tree": "(((a,d),c),b)",
+    "tree_id": "T06",
+    "variance_rational": "15/256"
+  },
+  {
+    "all_normalized_coefficients_within_box_2_exact": true,
+    "family": "and4",
+    "max_abs_normalized_coefficient": 1.0327955589886444,
+    "max_normalized_coefficient_squared_rational": "16/15",
+    "mean_rational": "1/16",
+    "normalized_node_coefficients": {
+      "((a,(b,c)),d)": [
+        0.7745966692414834,
+        1.0327955589886444,
+        1.0327955589886444,
+        1.0327955589886444
+      ],
+      "(a,(b,c))": [
+        -0.5,
+        0.5,
+        0.5,
+        0.5
+      ],
+      "(b,c)": [
+        -0.5,
+        0.5,
+        0.5,
+        0.5
+      ]
+    },
+    "normalized_root_denominator": "sqrt(15/256)",
+    "normalized_root_numerator_rational": [
+      "3/16",
+      "1/4",
+      "1/4",
+      "1/4"
+    ],
+    "raw_node_coefficients_rational": {
+      "((a,(b,c)),d)": [
+        "1/4",
+        "1/4",
+        "1/4",
+        "1/4"
+      ],
+      "(a,(b,c))": [
+        "-1/2",
+        "1/2",
+        "1/2",
+        "1/2"
+      ],
+      "(b,c)": [
+        "-1/2",
+        "1/2",
+        "1/2",
+        "1/2"
+      ]
+    },
+    "raw_truth_table_verified_exactly": true,
+    "signed_slice_outside_contexts": {
+      "((a,(b,c)),d)": {},
+      "(a,(b,c))": {
+        "3": 1
+      },
+      "(b,c)": {
+        "0": 1,
+        "3": 1
+      }
+    },
+    "tree": "((a,(b,c)),d)",
+    "tree_id": "T07",
+    "variance_rational": "15/256"
+  },
+  {
+    "all_normalized_coefficients_within_box_2_exact": true,
+    "family": "and4",
+    "max_abs_normalized_coefficient": 1.0327955589886444,
+    "max_normalized_coefficient_squared_rational": "16/15",
+    "mean_rational": "1/16",
+    "normalized_node_coefficients": {
+      "((a,(b,d)),c)": [
+        0.7745966692414834,
+        1.0327955589886444,
+        1.0327955589886444,
+        1.0327955589886444
+      ],
+      "(a,(b,d))": [
+        -0.5,
+        0.5,
+        0.5,
+        0.5
+      ],
+      "(b,d)": [
+        -0.5,
+        0.5,
+        0.5,
+        0.5
+      ]
+    },
+    "normalized_root_denominator": "sqrt(15/256)",
+    "normalized_root_numerator_rational": [
+      "3/16",
+      "1/4",
+      "1/4",
+      "1/4"
+    ],
+    "raw_node_coefficients_rational": {
+      "((a,(b,d)),c)": [
+        "1/4",
+        "1/4",
+        "1/4",
+        "1/4"
+      ],
+      "(a,(b,d))": [
+        "-1/2",
+        "1/2",
+        "1/2",
+        "1/2"
+      ],
+      "(b,d)": [
+        "-1/2",
+        "1/2",
+        "1/2",
+        "1/2"
+      ]
+    },
+    "raw_truth_table_verified_exactly": true,
+    "signed_slice_outside_contexts": {
+      "((a,(b,d)),c)": {},
+      "(a,(b,d))": {
+        "2": 1
+      },
+      "(b,d)": {
+        "0": 1,
+        "2": 1
+      }
+    },
+    "tree": "((a,(b,d)),c)",
+    "tree_id": "T08",
+    "variance_rational": "15/256"
+  },
+  {
+    "all_normalized_coefficients_within_box_2_exact": true,
+    "family": "and4",
+    "max_abs_normalized_coefficient": 1.0327955589886444,
+    "max_normalized_coefficient_squared_rational": "16/15",
+    "mean_rational": "1/16",
+    "normalized_node_coefficients": {
+      "((a,(c,d)),b)": [
+        0.7745966692414834,
+        1.0327955589886444,
+        1.0327955589886444,
+        1.0327955589886444
+      ],
+      "(a,(c,d))": [
+        -0.5,
+        0.5,
+        0.5,
+        0.5
+      ],
+      "(c,d)": [
+        -0.5,
+        0.5,
+        0.5,
+        0.5
+      ]
+    },
+    "normalized_root_denominator": "sqrt(15/256)",
+    "normalized_root_numerator_rational": [
+      "3/16",
+      "1/4",
+      "1/4",
+      "1/4"
+    ],
+    "raw_node_coefficients_rational": {
+      "((a,(c,d)),b)": [
+        "1/4",
+        "1/4",
+        "1/4",
+        "1/4"
+      ],
+      "(a,(c,d))": [
+        "-1/2",
+        "1/2",
+        "1/2",
+        "1/2"
+      ],
+      "(c,d)": [
+        "-1/2",
+        "1/2",
+        "1/2",
+        "1/2"
+      ]
+    },
+    "raw_truth_table_verified_exactly": true,
+    "signed_slice_outside_contexts": {
+      "((a,(c,d)),b)": {},
+      "(a,(c,d))": {
+        "1": 1
+      },
+      "(c,d)": {
+        "0": 1,
+        "1": 1
+      }
+    },
+    "tree": "((a,(c,d)),b)",
+    "tree_id": "T09",
+    "variance_rational": "15/256"
+  },
+  {
+    "all_normalized_coefficients_within_box_2_exact": true,
+    "family": "and4",
+    "max_abs_normalized_coefficient": 1.0327955589886444,
+    "max_normalized_coefficient_squared_rational": "16/15",
+    "mean_rational": "1/16",
+    "normalized_node_coefficients": {
+      "((a,b),(c,d))": [
+        0.7745966692414834,
+        1.0327955589886444,
+        1.0327955589886444,
+        1.0327955589886444
+      ],
+      "(a,b)": [
+        -0.5,
+        0.5,
+        0.5,
+        0.5
+      ],
+      "(c,d)": [
+        -0.5,
+        0.5,
+        0.5,
+        0.5
+      ]
+    },
+    "normalized_root_denominator": "sqrt(15/256)",
+    "normalized_root_numerator_rational": [
+      "3/16",
+      "1/4",
+      "1/4",
+      "1/4"
+    ],
+    "raw_node_coefficients_rational": {
+      "((a,b),(c,d))": [
+        "1/4",
+        "1/4",
+        "1/4",
+        "1/4"
+      ],
+      "(a,b)": [
+        "-1/2",
+        "1/2",
+        "1/2",
+        "1/2"
+      ],
+      "(c,d)": [
+        "-1/2",
+        "1/2",
+        "1/2",
+        "1/2"
+      ]
+    },
+    "raw_truth_table_verified_exactly": true,
+    "signed_slice_outside_contexts": {
+      "((a,b),(c,d))": {},
+      "(a,b)": {
+        "2": 1,
+        "3": 1
+      },
+      "(c,d)": {
+        "0": 1,
+        "1": 1
+      }
+    },
+    "tree": "((a,b),(c,d))",
+    "tree_id": "T10",
+    "variance_rational": "15/256"
+  },
+  {
+    "all_normalized_coefficients_within_box_2_exact": true,
+    "family": "and4",
+    "max_abs_normalized_coefficient": 1.0327955589886444,
+    "max_normalized_coefficient_squared_rational": "16/15",
+    "mean_rational": "1/16",
+    "normalized_node_coefficients": {
+      "((a,c),(b,d))": [
+        0.7745966692414834,
+        1.0327955589886444,
+        1.0327955589886444,
+        1.0327955589886444
+      ],
+      "(a,c)": [
+        -0.5,
+        0.5,
+        0.5,
+        0.5
+      ],
+      "(b,d)": [
+        -0.5,
+        0.5,
+        0.5,
+        0.5
+      ]
+    },
+    "normalized_root_denominator": "sqrt(15/256)",
+    "normalized_root_numerator_rational": [
+      "3/16",
+      "1/4",
+      "1/4",
+      "1/4"
+    ],
+    "raw_node_coefficients_rational": {
+      "((a,c),(b,d))": [
+        "1/4",
+        "1/4",
+        "1/4",
+        "1/4"
+      ],
+      "(a,c)": [
+        "-1/2",
+        "1/2",
+        "1/2",
+        "1/2"
+      ],
+      "(b,d)": [
+        "-1/2",
+        "1/2",
+        "1/2",
+        "1/2"
+      ]
+    },
+    "raw_truth_table_verified_exactly": true,
+    "signed_slice_outside_contexts": {
+      "((a,c),(b,d))": {},
+      "(a,c)": {
+        "1": 1,
+        "3": 1
+      },
+      "(b,d)": {
+        "0": 1,
+        "2": 1
+      }
+    },
+    "tree": "((a,c),(b,d))",
+    "tree_id": "T11",
+    "variance_rational": "15/256"
+  },
+  {
+    "all_normalized_coefficients_within_box_2_exact": true,
+    "family": "and4",
+    "max_abs_normalized_coefficient": 1.0327955589886444,
+    "max_normalized_coefficient_squared_rational": "16/15",
+    "mean_rational": "1/16",
+    "normalized_node_coefficients": {
+      "((a,d),(b,c))": [
+        0.7745966692414834,
+        1.0327955589886444,
+        1.0327955589886444,
+        1.0327955589886444
+      ],
+      "(a,d)": [
+        -0.5,
+        0.5,
+        0.5,
+        0.5
+      ],
+      "(b,c)": [
+        -0.5,
+        0.5,
+        0.5,
+        0.5
+      ]
+    },
+    "normalized_root_denominator": "sqrt(15/256)",
+    "normalized_root_numerator_rational": [
+      "3/16",
+      "1/4",
+      "1/4",
+      "1/4"
+    ],
+    "raw_node_coefficients_rational": {
+      "((a,d),(b,c))": [
+        "1/4",
+        "1/4",
+        "1/4",
+        "1/4"
+      ],
+      "(a,d)": [
+        "-1/2",
+        "1/2",
+        "1/2",
+        "1/2"
+      ],
+      "(b,c)": [
+        "-1/2",
+        "1/2",
+        "1/2",
+        "1/2"
+      ]
+    },
+    "raw_truth_table_verified_exactly": true,
+    "signed_slice_outside_contexts": {
+      "((a,d),(b,c))": {},
+      "(a,d)": {
+        "1": 1,
+        "2": 1
+      },
+      "(b,c)": {
+        "0": 1,
+        "3": 1
+      }
+    },
+    "tree": "((a,d),(b,c))",
+    "tree_id": "T12",
+    "variance_rational": "15/256"
+  },
+  {
+    "all_normalized_coefficients_within_box_2_exact": true,
+    "family": "and4",
+    "max_abs_normalized_coefficient": 1.0327955589886444,
+    "max_normalized_coefficient_squared_rational": "16/15",
+    "mean_rational": "1/16",
+    "normalized_node_coefficients": {
+      "((b,c),d)": [
+        -0.5,
+        0.5,
+        0.5,
+        0.5
+      ],
+      "(a,((b,c),d))": [
+        0.7745966692414834,
+        1.0327955589886444,
+        1.0327955589886444,
+        1.0327955589886444
+      ],
+      "(b,c)": [
+        -0.5,
+        0.5,
+        0.5,
+        0.5
+      ]
+    },
+    "normalized_root_denominator": "sqrt(15/256)",
+    "normalized_root_numerator_rational": [
+      "3/16",
+      "1/4",
+      "1/4",
+      "1/4"
+    ],
+    "raw_node_coefficients_rational": {
+      "((b,c),d)": [
+        "-1/2",
+        "1/2",
+        "1/2",
+        "1/2"
+      ],
+      "(a,((b,c),d))": [
+        "1/4",
+        "1/4",
+        "1/4",
+        "1/4"
+      ],
+      "(b,c)": [
+        "-1/2",
+        "1/2",
+        "1/2",
+        "1/2"
+      ]
+    },
+    "raw_truth_table_verified_exactly": true,
+    "signed_slice_outside_contexts": {
+      "((b,c),d)": {
+        "0": 1
+      },
+      "(a,((b,c),d))": {},
+      "(b,c)": {
+        "0": 1,
+        "3": 1
+      }
+    },
+    "tree": "(a,((b,c),d))",
+    "tree_id": "T13",
+    "variance_rational": "15/256"
+  },
+  {
+    "all_normalized_coefficients_within_box_2_exact": true,
+    "family": "and4",
+    "max_abs_normalized_coefficient": 1.0327955589886444,
+    "max_normalized_coefficient_squared_rational": "16/15",
+    "mean_rational": "1/16",
+    "normalized_node_coefficients": {
+      "((b,d),c)": [
+        -0.5,
+        0.5,
+        0.5,
+        0.5
+      ],
+      "(a,((b,d),c))": [
+        0.7745966692414834,
+        1.0327955589886444,
+        1.0327955589886444,
+        1.0327955589886444
+      ],
+      "(b,d)": [
+        -0.5,
+        0.5,
+        0.5,
+        0.5
+      ]
+    },
+    "normalized_root_denominator": "sqrt(15/256)",
+    "normalized_root_numerator_rational": [
+      "3/16",
+      "1/4",
+      "1/4",
+      "1/4"
+    ],
+    "raw_node_coefficients_rational": {
+      "((b,d),c)": [
+        "-1/2",
+        "1/2",
+        "1/2",
+        "1/2"
+      ],
+      "(a,((b,d),c))": [
+        "1/4",
+        "1/4",
+        "1/4",
+        "1/4"
+      ],
+      "(b,d)": [
+        "-1/2",
+        "1/2",
+        "1/2",
+        "1/2"
+      ]
+    },
+    "raw_truth_table_verified_exactly": true,
+    "signed_slice_outside_contexts": {
+      "((b,d),c)": {
+        "0": 1
+      },
+      "(a,((b,d),c))": {},
+      "(b,d)": {
+        "0": 1,
+        "2": 1
+      }
+    },
+    "tree": "(a,((b,d),c))",
+    "tree_id": "T14",
+    "variance_rational": "15/256"
+  },
+  {
+    "all_normalized_coefficients_within_box_2_exact": true,
+    "family": "and4",
+    "max_abs_normalized_coefficient": 1.0327955589886444,
+    "max_normalized_coefficient_squared_rational": "16/15",
+    "mean_rational": "1/16",
+    "normalized_node_coefficients": {
+      "(a,(b,(c,d)))": [
+        0.7745966692414834,
+        1.0327955589886444,
+        1.0327955589886444,
+        1.0327955589886444
+      ],
+      "(b,(c,d))": [
+        -0.5,
+        0.5,
+        0.5,
+        0.5
+      ],
+      "(c,d)": [
+        -0.5,
+        0.5,
+        0.5,
+        0.5
+      ]
+    },
+    "normalized_root_denominator": "sqrt(15/256)",
+    "normalized_root_numerator_rational": [
+      "3/16",
+      "1/4",
+      "1/4",
+      "1/4"
+    ],
+    "raw_node_coefficients_rational": {
+      "(a,(b,(c,d)))": [
+        "1/4",
+        "1/4",
+        "1/4",
+        "1/4"
+      ],
+      "(b,(c,d))": [
+        "-1/2",
+        "1/2",
+        "1/2",
+        "1/2"
+      ],
+      "(c,d)": [
+        "-1/2",
+        "1/2",
+        "1/2",
+        "1/2"
+      ]
+    },
+    "raw_truth_table_verified_exactly": true,
+    "signed_slice_outside_contexts": {
+      "(a,(b,(c,d)))": {},
+      "(b,(c,d))": {
+        "0": 1
+      },
+      "(c,d)": {
+        "0": 1,
+        "1": 1
+      }
+    },
+    "tree": "(a,(b,(c,d)))",
+    "tree_id": "T15",
+    "variance_rational": "15/256"
+  },
+  {
+    "all_normalized_coefficients_within_box_2_exact": true,
+    "family": "or4",
+    "max_abs_normalized_coefficient": 1.0327955589886444,
+    "max_normalized_coefficient_squared_rational": "16/15",
+    "mean_rational": "15/16",
+    "normalized_node_coefficients": {
+      "(((a,b),c),d)": [
+        -0.7745966692414834,
+        1.0327955589886444,
+        1.0327955589886444,
+        -1.0327955589886444
+      ],
+      "((a,b),c)": [
+        0.5,
+        0.5,
+        0.5,
+        -0.5
+      ],
+      "(a,b)": [
+        0.5,
+        0.5,
+        0.5,
+        -0.5
+      ]
+    },
+    "normalized_root_denominator": "sqrt(15/256)",
+    "normalized_root_numerator_rational": [
+      "-3/16",
+      "1/4",
+      "1/4",
+      "-1/4"
+    ],
+    "raw_node_coefficients_rational": {
+      "(((a,b),c),d)": [
+        "3/4",
+        "1/4",
+        "1/4",
+        "-1/4"
+      ],
+      "((a,b),c)": [
+        "1/2",
+        "1/2",
+        "1/2",
+        "-1/2"
+      ],
+      "(a,b)": [
+        "1/2",
+        "1/2",
+        "1/2",
+        "-1/2"
+      ]
+    },
+    "raw_truth_table_verified_exactly": true,
+    "signed_slice_outside_contexts": {
+      "(((a,b),c),d)": {},
+      "((a,b),c)": {
+        "3": 0
+      },
+      "(a,b)": {
+        "2": 0,
+        "3": 0
+      }
+    },
+    "tree": "(((a,b),c),d)",
+    "tree_id": "T01",
+    "variance_rational": "15/256"
+  },
+  {
+    "all_normalized_coefficients_within_box_2_exact": true,
+    "family": "or4",
+    "max_abs_normalized_coefficient": 1.0327955589886444,
+    "max_normalized_coefficient_squared_rational": "16/15",
+    "mean_rational": "15/16",
+    "normalized_node_coefficients": {
+      "(((a,b),d),c)": [
+        -0.7745966692414834,
+        1.0327955589886444,
+        1.0327955589886444,
+        -1.0327955589886444
+      ],
+      "((a,b),d)": [
+        0.5,
+        0.5,
+        0.5,
+        -0.5
+      ],
+      "(a,b)": [
+        0.5,
+        0.5,
+        0.5,
+        -0.5
+      ]
+    },
+    "normalized_root_denominator": "sqrt(15/256)",
+    "normalized_root_numerator_rational": [
+      "-3/16",
+      "1/4",
+      "1/4",
+      "-1/4"
+    ],
+    "raw_node_coefficients_rational": {
+      "(((a,b),d),c)": [
+        "3/4",
+        "1/4",
+        "1/4",
+        "-1/4"
+      ],
+      "((a,b),d)": [
+        "1/2",
+        "1/2",
+        "1/2",
+        "-1/2"
+      ],
+      "(a,b)": [
+        "1/2",
+        "1/2",
+        "1/2",
+        "-1/2"
+      ]
+    },
+    "raw_truth_table_verified_exactly": true,
+    "signed_slice_outside_contexts": {
+      "(((a,b),d),c)": {},
+      "((a,b),d)": {
+        "2": 0
+      },
+      "(a,b)": {
+        "2": 0,
+        "3": 0
+      }
+    },
+    "tree": "(((a,b),d),c)",
+    "tree_id": "T02",
+    "variance_rational": "15/256"
+  },
+  {
+    "all_normalized_coefficients_within_box_2_exact": true,
+    "family": "or4",
+    "max_abs_normalized_coefficient": 1.0327955589886444,
+    "max_normalized_coefficient_squared_rational": "16/15",
+    "mean_rational": "15/16",
+    "normalized_node_coefficients": {
+      "(((a,c),b),d)": [
+        -0.7745966692414834,
+        1.0327955589886444,
+        1.0327955589886444,
+        -1.0327955589886444
+      ],
+      "((a,c),b)": [
+        0.5,
+        0.5,
+        0.5,
+        -0.5
+      ],
+      "(a,c)": [
+        0.5,
+        0.5,
+        0.5,
+        -0.5
+      ]
+    },
+    "normalized_root_denominator": "sqrt(15/256)",
+    "normalized_root_numerator_rational": [
+      "-3/16",
+      "1/4",
+      "1/4",
+      "-1/4"
+    ],
+    "raw_node_coefficients_rational": {
+      "(((a,c),b),d)": [
+        "3/4",
+        "1/4",
+        "1/4",
+        "-1/4"
+      ],
+      "((a,c),b)": [
+        "1/2",
+        "1/2",
+        "1/2",
+        "-1/2"
+      ],
+      "(a,c)": [
+        "1/2",
+        "1/2",
+        "1/2",
+        "-1/2"
+      ]
+    },
+    "raw_truth_table_verified_exactly": true,
+    "signed_slice_outside_contexts": {
+      "(((a,c),b),d)": {},
+      "((a,c),b)": {
+        "3": 0
+      },
+      "(a,c)": {
+        "1": 0,
+        "3": 0
+      }
+    },
+    "tree": "(((a,c),b),d)",
+    "tree_id": "T03",
+    "variance_rational": "15/256"
+  },
+  {
+    "all_normalized_coefficients_within_box_2_exact": true,
+    "family": "or4",
+    "max_abs_normalized_coefficient": 1.0327955589886444,
+    "max_normalized_coefficient_squared_rational": "16/15",
+    "mean_rational": "15/16",
+    "normalized_node_coefficients": {
+      "(((a,c),d),b)": [
+        -0.7745966692414834,
+        1.0327955589886444,
+        1.0327955589886444,
+        -1.0327955589886444
+      ],
+      "((a,c),d)": [
+        0.5,
+        0.5,
+        0.5,
+        -0.5
+      ],
+      "(a,c)": [
+        0.5,
+        0.5,
+        0.5,
+        -0.5
+      ]
+    },
+    "normalized_root_denominator": "sqrt(15/256)",
+    "normalized_root_numerator_rational": [
+      "-3/16",
+      "1/4",
+      "1/4",
+      "-1/4"
+    ],
+    "raw_node_coefficients_rational": {
+      "(((a,c),d),b)": [
+        "3/4",
+        "1/4",
+        "1/4",
+        "-1/4"
+      ],
+      "((a,c),d)": [
+        "1/2",
+        "1/2",
+        "1/2",
+        "-1/2"
+      ],
+      "(a,c)": [
+        "1/2",
+        "1/2",
+        "1/2",
+        "-1/2"
+      ]
+    },
+    "raw_truth_table_verified_exactly": true,
+    "signed_slice_outside_contexts": {
+      "(((a,c),d),b)": {},
+      "((a,c),d)": {
+        "1": 0
+      },
+      "(a,c)": {
+        "1": 0,
+        "3": 0
+      }
+    },
+    "tree": "(((a,c),d),b)",
+    "tree_id": "T04",
+    "variance_rational": "15/256"
+  },
+  {
+    "all_normalized_coefficients_within_box_2_exact": true,
+    "family": "or4",
+    "max_abs_normalized_coefficient": 1.0327955589886444,
+    "max_normalized_coefficient_squared_rational": "16/15",
+    "mean_rational": "15/16",
+    "normalized_node_coefficients": {
+      "(((a,d),b),c)": [
+        -0.7745966692414834,
+        1.0327955589886444,
+        1.0327955589886444,
+        -1.0327955589886444
+      ],
+      "((a,d),b)": [
+        0.5,
+        0.5,
+        0.5,
+        -0.5
+      ],
+      "(a,d)": [
+        0.5,
+        0.5,
+        0.5,
+        -0.5
+      ]
+    },
+    "normalized_root_denominator": "sqrt(15/256)",
+    "normalized_root_numerator_rational": [
+      "-3/16",
+      "1/4",
+      "1/4",
+      "-1/4"
+    ],
+    "raw_node_coefficients_rational": {
+      "(((a,d),b),c)": [
+        "3/4",
+        "1/4",
+        "1/4",
+        "-1/4"
+      ],
+      "((a,d),b)": [
+        "1/2",
+        "1/2",
+        "1/2",
+        "-1/2"
+      ],
+      "(a,d)": [
+        "1/2",
+        "1/2",
+        "1/2",
+        "-1/2"
+      ]
+    },
+    "raw_truth_table_verified_exactly": true,
+    "signed_slice_outside_contexts": {
+      "(((a,d),b),c)": {},
+      "((a,d),b)": {
+        "2": 0
+      },
+      "(a,d)": {
+        "1": 0,
+        "2": 0
+      }
+    },
+    "tree": "(((a,d),b),c)",
+    "tree_id": "T05",
+    "variance_rational": "15/256"
+  },
+  {
+    "all_normalized_coefficients_within_box_2_exact": true,
+    "family": "or4",
+    "max_abs_normalized_coefficient": 1.0327955589886444,
+    "max_normalized_coefficient_squared_rational": "16/15",
+    "mean_rational": "15/16",
+    "normalized_node_coefficients": {
+      "(((a,d),c),b)": [
+        -0.7745966692414834,
+        1.0327955589886444,
+        1.0327955589886444,
+        -1.0327955589886444
+      ],
+      "((a,d),c)": [
+        0.5,
+        0.5,
+        0.5,
+        -0.5
+      ],
+      "(a,d)": [
+        0.5,
+        0.5,
+        0.5,
+        -0.5
+      ]
+    },
+    "normalized_root_denominator": "sqrt(15/256)",
+    "normalized_root_numerator_rational": [
+      "-3/16",
+      "1/4",
+      "1/4",
+      "-1/4"
+    ],
+    "raw_node_coefficients_rational": {
+      "(((a,d),c),b)": [
+        "3/4",
+        "1/4",
+        "1/4",
+        "-1/4"
+      ],
+      "((a,d),c)": [
+        "1/2",
+        "1/2",
+        "1/2",
+        "-1/2"
+      ],
+      "(a,d)": [
+        "1/2",
+        "1/2",
+        "1/2",
+        "-1/2"
+      ]
+    },
+    "raw_truth_table_verified_exactly": true,
+    "signed_slice_outside_contexts": {
+      "(((a,d),c),b)": {},
+      "((a,d),c)": {
+        "1": 0
+      },
+      "(a,d)": {
+        "1": 0,
+        "2": 0
+      }
+    },
+    "tree": "(((a,d),c),b)",
+    "tree_id": "T06",
+    "variance_rational": "15/256"
+  },
+  {
+    "all_normalized_coefficients_within_box_2_exact": true,
+    "family": "or4",
+    "max_abs_normalized_coefficient": 1.0327955589886444,
+    "max_normalized_coefficient_squared_rational": "16/15",
+    "mean_rational": "15/16",
+    "normalized_node_coefficients": {
+      "((a,(b,c)),d)": [
+        -0.7745966692414834,
+        1.0327955589886444,
+        1.0327955589886444,
+        -1.0327955589886444
+      ],
+      "(a,(b,c))": [
+        0.5,
+        0.5,
+        0.5,
+        -0.5
+      ],
+      "(b,c)": [
+        0.5,
+        0.5,
+        0.5,
+        -0.5
+      ]
+    },
+    "normalized_root_denominator": "sqrt(15/256)",
+    "normalized_root_numerator_rational": [
+      "-3/16",
+      "1/4",
+      "1/4",
+      "-1/4"
+    ],
+    "raw_node_coefficients_rational": {
+      "((a,(b,c)),d)": [
+        "3/4",
+        "1/4",
+        "1/4",
+        "-1/4"
+      ],
+      "(a,(b,c))": [
+        "1/2",
+        "1/2",
+        "1/2",
+        "-1/2"
+      ],
+      "(b,c)": [
+        "1/2",
+        "1/2",
+        "1/2",
+        "-1/2"
+      ]
+    },
+    "raw_truth_table_verified_exactly": true,
+    "signed_slice_outside_contexts": {
+      "((a,(b,c)),d)": {},
+      "(a,(b,c))": {
+        "3": 0
+      },
+      "(b,c)": {
+        "0": 0,
+        "3": 0
+      }
+    },
+    "tree": "((a,(b,c)),d)",
+    "tree_id": "T07",
+    "variance_rational": "15/256"
+  },
+  {
+    "all_normalized_coefficients_within_box_2_exact": true,
+    "family": "or4",
+    "max_abs_normalized_coefficient": 1.0327955589886444,
+    "max_normalized_coefficient_squared_rational": "16/15",
+    "mean_rational": "15/16",
+    "normalized_node_coefficients": {
+      "((a,(b,d)),c)": [
+        -0.7745966692414834,
+        1.0327955589886444,
+        1.0327955589886444,
+        -1.0327955589886444
+      ],
+      "(a,(b,d))": [
+        0.5,
+        0.5,
+        0.5,
+        -0.5
+      ],
+      "(b,d)": [
+        0.5,
+        0.5,
+        0.5,
+        -0.5
+      ]
+    },
+    "normalized_root_denominator": "sqrt(15/256)",
+    "normalized_root_numerator_rational": [
+      "-3/16",
+      "1/4",
+      "1/4",
+      "-1/4"
+    ],
+    "raw_node_coefficients_rational": {
+      "((a,(b,d)),c)": [
+        "3/4",
+        "1/4",
+        "1/4",
+        "-1/4"
+      ],
+      "(a,(b,d))": [
+        "1/2",
+        "1/2",
+        "1/2",
+        "-1/2"
+      ],
+      "(b,d)": [
+        "1/2",
+        "1/2",
+        "1/2",
+        "-1/2"
+      ]
+    },
+    "raw_truth_table_verified_exactly": true,
+    "signed_slice_outside_contexts": {
+      "((a,(b,d)),c)": {},
+      "(a,(b,d))": {
+        "2": 0
+      },
+      "(b,d)": {
+        "0": 0,
+        "2": 0
+      }
+    },
+    "tree": "((a,(b,d)),c)",
+    "tree_id": "T08",
+    "variance_rational": "15/256"
+  },
+  {
+    "all_normalized_coefficients_within_box_2_exact": true,
+    "family": "or4",
+    "max_abs_normalized_coefficient": 1.0327955589886444,
+    "max_normalized_coefficient_squared_rational": "16/15",
+    "mean_rational": "15/16",
+    "normalized_node_coefficients": {
+      "((a,(c,d)),b)": [
+        -0.7745966692414834,
+        1.0327955589886444,
+        1.0327955589886444,
+        -1.0327955589886444
+      ],
+      "(a,(c,d))": [
+        0.5,
+        0.5,
+        0.5,
+        -0.5
+      ],
+      "(c,d)": [
+        0.5,
+        0.5,
+        0.5,
+        -0.5
+      ]
+    },
+    "normalized_root_denominator": "sqrt(15/256)",
+    "normalized_root_numerator_rational": [
+      "-3/16",
+      "1/4",
+      "1/4",
+      "-1/4"
+    ],
+    "raw_node_coefficients_rational": {
+      "((a,(c,d)),b)": [
+        "3/4",
+        "1/4",
+        "1/4",
+        "-1/4"
+      ],
+      "(a,(c,d))": [
+        "1/2",
+        "1/2",
+        "1/2",
+        "-1/2"
+      ],
+      "(c,d)": [
+        "1/2",
+        "1/2",
+        "1/2",
+        "-1/2"
+      ]
+    },
+    "raw_truth_table_verified_exactly": true,
+    "signed_slice_outside_contexts": {
+      "((a,(c,d)),b)": {},
+      "(a,(c,d))": {
+        "1": 0
+      },
+      "(c,d)": {
+        "0": 0,
+        "1": 0
+      }
+    },
+    "tree": "((a,(c,d)),b)",
+    "tree_id": "T09",
+    "variance_rational": "15/256"
+  },
+  {
+    "all_normalized_coefficients_within_box_2_exact": true,
+    "family": "or4",
+    "max_abs_normalized_coefficient": 1.0327955589886444,
+    "max_normalized_coefficient_squared_rational": "16/15",
+    "mean_rational": "15/16",
+    "normalized_node_coefficients": {
+      "((a,b),(c,d))": [
+        -0.7745966692414834,
+        1.0327955589886444,
+        1.0327955589886444,
+        -1.0327955589886444
+      ],
+      "(a,b)": [
+        0.5,
+        0.5,
+        0.5,
+        -0.5
+      ],
+      "(c,d)": [
+        0.5,
+        0.5,
+        0.5,
+        -0.5
+      ]
+    },
+    "normalized_root_denominator": "sqrt(15/256)",
+    "normalized_root_numerator_rational": [
+      "-3/16",
+      "1/4",
+      "1/4",
+      "-1/4"
+    ],
+    "raw_node_coefficients_rational": {
+      "((a,b),(c,d))": [
+        "3/4",
+        "1/4",
+        "1/4",
+        "-1/4"
+      ],
+      "(a,b)": [
+        "1/2",
+        "1/2",
+        "1/2",
+        "-1/2"
+      ],
+      "(c,d)": [
+        "1/2",
+        "1/2",
+        "1/2",
+        "-1/2"
+      ]
+    },
+    "raw_truth_table_verified_exactly": true,
+    "signed_slice_outside_contexts": {
+      "((a,b),(c,d))": {},
+      "(a,b)": {
+        "2": 0,
+        "3": 0
+      },
+      "(c,d)": {
+        "0": 0,
+        "1": 0
+      }
+    },
+    "tree": "((a,b),(c,d))",
+    "tree_id": "T10",
+    "variance_rational": "15/256"
+  },
+  {
+    "all_normalized_coefficients_within_box_2_exact": true,
+    "family": "or4",
+    "max_abs_normalized_coefficient": 1.0327955589886444,
+    "max_normalized_coefficient_squared_rational": "16/15",
+    "mean_rational": "15/16",
+    "normalized_node_coefficients": {
+      "((a,c),(b,d))": [
+        -0.7745966692414834,
+        1.0327955589886444,
+        1.0327955589886444,
+        -1.0327955589886444
+      ],
+      "(a,c)": [
+        0.5,
+        0.5,
+        0.5,
+        -0.5
+      ],
+      "(b,d)": [
+        0.5,
+        0.5,
+        0.5,
+        -0.5
+      ]
+    },
+    "normalized_root_denominator": "sqrt(15/256)",
+    "normalized_root_numerator_rational": [
+      "-3/16",
+      "1/4",
+      "1/4",
+      "-1/4"
+    ],
+    "raw_node_coefficients_rational": {
+      "((a,c),(b,d))": [
+        "3/4",
+        "1/4",
+        "1/4",
+        "-1/4"
+      ],
+      "(a,c)": [
+        "1/2",
+        "1/2",
+        "1/2",
+        "-1/2"
+      ],
+      "(b,d)": [
+        "1/2",
+        "1/2",
+        "1/2",
+        "-1/2"
+      ]
+    },
+    "raw_truth_table_verified_exactly": true,
+    "signed_slice_outside_contexts": {
+      "((a,c),(b,d))": {},
+      "(a,c)": {
+        "1": 0,
+        "3": 0
+      },
+      "(b,d)": {
+        "0": 0,
+        "2": 0
+      }
+    },
+    "tree": "((a,c),(b,d))",
+    "tree_id": "T11",
+    "variance_rational": "15/256"
+  },
+  {
+    "all_normalized_coefficients_within_box_2_exact": true,
+    "family": "or4",
+    "max_abs_normalized_coefficient": 1.0327955589886444,
+    "max_normalized_coefficient_squared_rational": "16/15",
+    "mean_rational": "15/16",
+    "normalized_node_coefficients": {
+      "((a,d),(b,c))": [
+        -0.7745966692414834,
+        1.0327955589886444,
+        1.0327955589886444,
+        -1.0327955589886444
+      ],
+      "(a,d)": [
+        0.5,
+        0.5,
+        0.5,
+        -0.5
+      ],
+      "(b,c)": [
+        0.5,
+        0.5,
+        0.5,
+        -0.5
+      ]
+    },
+    "normalized_root_denominator": "sqrt(15/256)",
+    "normalized_root_numerator_rational": [
+      "-3/16",
+      "1/4",
+      "1/4",
+      "-1/4"
+    ],
+    "raw_node_coefficients_rational": {
+      "((a,d),(b,c))": [
+        "3/4",
+        "1/4",
+        "1/4",
+        "-1/4"
+      ],
+      "(a,d)": [
+        "1/2",
+        "1/2",
+        "1/2",
+        "-1/2"
+      ],
+      "(b,c)": [
+        "1/2",
+        "1/2",
+        "1/2",
+        "-1/2"
+      ]
+    },
+    "raw_truth_table_verified_exactly": true,
+    "signed_slice_outside_contexts": {
+      "((a,d),(b,c))": {},
+      "(a,d)": {
+        "1": 0,
+        "2": 0
+      },
+      "(b,c)": {
+        "0": 0,
+        "3": 0
+      }
+    },
+    "tree": "((a,d),(b,c))",
+    "tree_id": "T12",
+    "variance_rational": "15/256"
+  },
+  {
+    "all_normalized_coefficients_within_box_2_exact": true,
+    "family": "or4",
+    "max_abs_normalized_coefficient": 1.0327955589886444,
+    "max_normalized_coefficient_squared_rational": "16/15",
+    "mean_rational": "15/16",
+    "normalized_node_coefficients": {
+      "((b,c),d)": [
+        0.5,
+        0.5,
+        0.5,
+        -0.5
+      ],
+      "(a,((b,c),d))": [
+        -0.7745966692414834,
+        1.0327955589886444,
+        1.0327955589886444,
+        -1.0327955589886444
+      ],
+      "(b,c)": [
+        0.5,
+        0.5,
+        0.5,
+        -0.5
+      ]
+    },
+    "normalized_root_denominator": "sqrt(15/256)",
+    "normalized_root_numerator_rational": [
+      "-3/16",
+      "1/4",
+      "1/4",
+      "-1/4"
+    ],
+    "raw_node_coefficients_rational": {
+      "((b,c),d)": [
+        "1/2",
+        "1/2",
+        "1/2",
+        "-1/2"
+      ],
+      "(a,((b,c),d))": [
+        "3/4",
+        "1/4",
+        "1/4",
+        "-1/4"
+      ],
+      "(b,c)": [
+        "1/2",
+        "1/2",
+        "1/2",
+        "-1/2"
+      ]
+    },
+    "raw_truth_table_verified_exactly": true,
+    "signed_slice_outside_contexts": {
+      "((b,c),d)": {
+        "0": 0
+      },
+      "(a,((b,c),d))": {},
+      "(b,c)": {
+        "0": 0,
+        "3": 0
+      }
+    },
+    "tree": "(a,((b,c),d))",
+    "tree_id": "T13",
+    "variance_rational": "15/256"
+  },
+  {
+    "all_normalized_coefficients_within_box_2_exact": true,
+    "family": "or4",
+    "max_abs_normalized_coefficient": 1.0327955589886444,
+    "max_normalized_coefficient_squared_rational": "16/15",
+    "mean_rational": "15/16",
+    "normalized_node_coefficients": {
+      "((b,d),c)": [
+        0.5,
+        0.5,
+        0.5,
+        -0.5
+      ],
+      "(a,((b,d),c))": [
+        -0.7745966692414834,
+        1.0327955589886444,
+        1.0327955589886444,
+        -1.0327955589886444
+      ],
+      "(b,d)": [
+        0.5,
+        0.5,
+        0.5,
+        -0.5
+      ]
+    },
+    "normalized_root_denominator": "sqrt(15/256)",
+    "normalized_root_numerator_rational": [
+      "-3/16",
+      "1/4",
+      "1/4",
+      "-1/4"
+    ],
+    "raw_node_coefficients_rational": {
+      "((b,d),c)": [
+        "1/2",
+        "1/2",
+        "1/2",
+        "-1/2"
+      ],
+      "(a,((b,d),c))": [
+        "3/4",
+        "1/4",
+        "1/4",
+        "-1/4"
+      ],
+      "(b,d)": [
+        "1/2",
+        "1/2",
+        "1/2",
+        "-1/2"
+      ]
+    },
+    "raw_truth_table_verified_exactly": true,
+    "signed_slice_outside_contexts": {
+      "((b,d),c)": {
+        "0": 0
+      },
+      "(a,((b,d),c))": {},
+      "(b,d)": {
+        "0": 0,
+        "2": 0
+      }
+    },
+    "tree": "(a,((b,d),c))",
+    "tree_id": "T14",
+    "variance_rational": "15/256"
+  },
+  {
+    "all_normalized_coefficients_within_box_2_exact": true,
+    "family": "or4",
+    "max_abs_normalized_coefficient": 1.0327955589886444,
+    "max_normalized_coefficient_squared_rational": "16/15",
+    "mean_rational": "15/16",
+    "normalized_node_coefficients": {
+      "(a,(b,(c,d)))": [
+        -0.7745966692414834,
+        1.0327955589886444,
+        1.0327955589886444,
+        -1.0327955589886444
+      ],
+      "(b,(c,d))": [
+        0.5,
+        0.5,
+        0.5,
+        -0.5
+      ],
+      "(c,d)": [
+        0.5,
+        0.5,
+        0.5,
+        -0.5
+      ]
+    },
+    "normalized_root_denominator": "sqrt(15/256)",
+    "normalized_root_numerator_rational": [
+      "-3/16",
+      "1/4",
+      "1/4",
+      "-1/4"
+    ],
+    "raw_node_coefficients_rational": {
+      "(a,(b,(c,d)))": [
+        "3/4",
+        "1/4",
+        "1/4",
+        "-1/4"
+      ],
+      "(b,(c,d))": [
+        "1/2",
+        "1/2",
+        "1/2",
+        "-1/2"
+      ],
+      "(c,d)": [
+        "1/2",
+        "1/2",
+        "1/2",
+        "-1/2"
+      ]
+    },
+    "raw_truth_table_verified_exactly": true,
+    "signed_slice_outside_contexts": {
+      "(a,(b,(c,d)))": {},
+      "(b,(c,d))": {
+        "0": 0
+      },
+      "(c,d)": {
+        "0": 0,
+        "1": 0
+      }
+    },
+    "tree": "(a,(b,(c,d)))",
+    "tree_id": "T15",
+    "variance_rational": "15/256"
+  },
+  {
+    "all_normalized_coefficients_within_box_2_exact": true,
+    "family": "parity4",
+    "max_abs_normalized_coefficient": 1.0,
+    "max_normalized_coefficient_squared_rational": "1",
+    "mean_rational": "1/2",
+    "normalized_node_coefficients": {
+      "(((a,b),c),d)": [
+        0.0,
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "((a,b),c)": [
+        0.0,
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "(a,b)": [
+        0.0,
+        0.0,
+        0.0,
+        -1.0
+      ]
+    },
+    "normalized_root_denominator": "sqrt(1/4)",
+    "normalized_root_numerator_rational": [
+      "0",
+      "0",
+      "0",
+      "-1/2"
+    ],
+    "raw_node_coefficients_rational": {
+      "(((a,b),c),d)": [
+        "1/2",
+        "0",
+        "0",
+        "-1/2"
+      ],
+      "((a,b),c)": [
+        "0",
+        "0",
+        "0",
+        "-1"
+      ],
+      "(a,b)": [
+        "0",
+        "0",
+        "0",
+        "-1"
+      ]
+    },
+    "raw_truth_table_verified_exactly": true,
+    "signed_slice_outside_contexts": {
+      "(((a,b),c),d)": {},
+      "((a,b),c)": {
+        "3": 0
+      },
+      "(a,b)": {
+        "2": 0,
+        "3": 0
+      }
+    },
+    "tree": "(((a,b),c),d)",
+    "tree_id": "T01",
+    "variance_rational": "1/4"
+  },
+  {
+    "all_normalized_coefficients_within_box_2_exact": true,
+    "family": "parity4",
+    "max_abs_normalized_coefficient": 1.0,
+    "max_normalized_coefficient_squared_rational": "1",
+    "mean_rational": "1/2",
+    "normalized_node_coefficients": {
+      "(((a,b),d),c)": [
+        0.0,
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "((a,b),d)": [
+        0.0,
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "(a,b)": [
+        0.0,
+        0.0,
+        0.0,
+        -1.0
+      ]
+    },
+    "normalized_root_denominator": "sqrt(1/4)",
+    "normalized_root_numerator_rational": [
+      "0",
+      "0",
+      "0",
+      "-1/2"
+    ],
+    "raw_node_coefficients_rational": {
+      "(((a,b),d),c)": [
+        "1/2",
+        "0",
+        "0",
+        "-1/2"
+      ],
+      "((a,b),d)": [
+        "0",
+        "0",
+        "0",
+        "-1"
+      ],
+      "(a,b)": [
+        "0",
+        "0",
+        "0",
+        "-1"
+      ]
+    },
+    "raw_truth_table_verified_exactly": true,
+    "signed_slice_outside_contexts": {
+      "(((a,b),d),c)": {},
+      "((a,b),d)": {
+        "2": 0
+      },
+      "(a,b)": {
+        "2": 0,
+        "3": 0
+      }
+    },
+    "tree": "(((a,b),d),c)",
+    "tree_id": "T02",
+    "variance_rational": "1/4"
+  },
+  {
+    "all_normalized_coefficients_within_box_2_exact": true,
+    "family": "parity4",
+    "max_abs_normalized_coefficient": 1.0,
+    "max_normalized_coefficient_squared_rational": "1",
+    "mean_rational": "1/2",
+    "normalized_node_coefficients": {
+      "(((a,c),b),d)": [
+        0.0,
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "((a,c),b)": [
+        0.0,
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "(a,c)": [
+        0.0,
+        0.0,
+        0.0,
+        -1.0
+      ]
+    },
+    "normalized_root_denominator": "sqrt(1/4)",
+    "normalized_root_numerator_rational": [
+      "0",
+      "0",
+      "0",
+      "-1/2"
+    ],
+    "raw_node_coefficients_rational": {
+      "(((a,c),b),d)": [
+        "1/2",
+        "0",
+        "0",
+        "-1/2"
+      ],
+      "((a,c),b)": [
+        "0",
+        "0",
+        "0",
+        "-1"
+      ],
+      "(a,c)": [
+        "0",
+        "0",
+        "0",
+        "-1"
+      ]
+    },
+    "raw_truth_table_verified_exactly": true,
+    "signed_slice_outside_contexts": {
+      "(((a,c),b),d)": {},
+      "((a,c),b)": {
+        "3": 0
+      },
+      "(a,c)": {
+        "1": 0,
+        "3": 0
+      }
+    },
+    "tree": "(((a,c),b),d)",
+    "tree_id": "T03",
+    "variance_rational": "1/4"
+  },
+  {
+    "all_normalized_coefficients_within_box_2_exact": true,
+    "family": "parity4",
+    "max_abs_normalized_coefficient": 1.0,
+    "max_normalized_coefficient_squared_rational": "1",
+    "mean_rational": "1/2",
+    "normalized_node_coefficients": {
+      "(((a,c),d),b)": [
+        0.0,
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "((a,c),d)": [
+        0.0,
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "(a,c)": [
+        0.0,
+        0.0,
+        0.0,
+        -1.0
+      ]
+    },
+    "normalized_root_denominator": "sqrt(1/4)",
+    "normalized_root_numerator_rational": [
+      "0",
+      "0",
+      "0",
+      "-1/2"
+    ],
+    "raw_node_coefficients_rational": {
+      "(((a,c),d),b)": [
+        "1/2",
+        "0",
+        "0",
+        "-1/2"
+      ],
+      "((a,c),d)": [
+        "0",
+        "0",
+        "0",
+        "-1"
+      ],
+      "(a,c)": [
+        "0",
+        "0",
+        "0",
+        "-1"
+      ]
+    },
+    "raw_truth_table_verified_exactly": true,
+    "signed_slice_outside_contexts": {
+      "(((a,c),d),b)": {},
+      "((a,c),d)": {
+        "1": 0
+      },
+      "(a,c)": {
+        "1": 0,
+        "3": 0
+      }
+    },
+    "tree": "(((a,c),d),b)",
+    "tree_id": "T04",
+    "variance_rational": "1/4"
+  },
+  {
+    "all_normalized_coefficients_within_box_2_exact": true,
+    "family": "parity4",
+    "max_abs_normalized_coefficient": 1.0,
+    "max_normalized_coefficient_squared_rational": "1",
+    "mean_rational": "1/2",
+    "normalized_node_coefficients": {
+      "(((a,d),b),c)": [
+        0.0,
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "((a,d),b)": [
+        0.0,
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "(a,d)": [
+        0.0,
+        0.0,
+        0.0,
+        -1.0
+      ]
+    },
+    "normalized_root_denominator": "sqrt(1/4)",
+    "normalized_root_numerator_rational": [
+      "0",
+      "0",
+      "0",
+      "-1/2"
+    ],
+    "raw_node_coefficients_rational": {
+      "(((a,d),b),c)": [
+        "1/2",
+        "0",
+        "0",
+        "-1/2"
+      ],
+      "((a,d),b)": [
+        "0",
+        "0",
+        "0",
+        "-1"
+      ],
+      "(a,d)": [
+        "0",
+        "0",
+        "0",
+        "-1"
+      ]
+    },
+    "raw_truth_table_verified_exactly": true,
+    "signed_slice_outside_contexts": {
+      "(((a,d),b),c)": {},
+      "((a,d),b)": {
+        "2": 0
+      },
+      "(a,d)": {
+        "1": 0,
+        "2": 0
+      }
+    },
+    "tree": "(((a,d),b),c)",
+    "tree_id": "T05",
+    "variance_rational": "1/4"
+  },
+  {
+    "all_normalized_coefficients_within_box_2_exact": true,
+    "family": "parity4",
+    "max_abs_normalized_coefficient": 1.0,
+    "max_normalized_coefficient_squared_rational": "1",
+    "mean_rational": "1/2",
+    "normalized_node_coefficients": {
+      "(((a,d),c),b)": [
+        0.0,
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "((a,d),c)": [
+        0.0,
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "(a,d)": [
+        0.0,
+        0.0,
+        0.0,
+        -1.0
+      ]
+    },
+    "normalized_root_denominator": "sqrt(1/4)",
+    "normalized_root_numerator_rational": [
+      "0",
+      "0",
+      "0",
+      "-1/2"
+    ],
+    "raw_node_coefficients_rational": {
+      "(((a,d),c),b)": [
+        "1/2",
+        "0",
+        "0",
+        "-1/2"
+      ],
+      "((a,d),c)": [
+        "0",
+        "0",
+        "0",
+        "-1"
+      ],
+      "(a,d)": [
+        "0",
+        "0",
+        "0",
+        "-1"
+      ]
+    },
+    "raw_truth_table_verified_exactly": true,
+    "signed_slice_outside_contexts": {
+      "(((a,d),c),b)": {},
+      "((a,d),c)": {
+        "1": 0
+      },
+      "(a,d)": {
+        "1": 0,
+        "2": 0
+      }
+    },
+    "tree": "(((a,d),c),b)",
+    "tree_id": "T06",
+    "variance_rational": "1/4"
+  },
+  {
+    "all_normalized_coefficients_within_box_2_exact": true,
+    "family": "parity4",
+    "max_abs_normalized_coefficient": 1.0,
+    "max_normalized_coefficient_squared_rational": "1",
+    "mean_rational": "1/2",
+    "normalized_node_coefficients": {
+      "((a,(b,c)),d)": [
+        0.0,
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "(a,(b,c))": [
+        0.0,
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "(b,c)": [
+        0.0,
+        0.0,
+        0.0,
+        -1.0
+      ]
+    },
+    "normalized_root_denominator": "sqrt(1/4)",
+    "normalized_root_numerator_rational": [
+      "0",
+      "0",
+      "0",
+      "-1/2"
+    ],
+    "raw_node_coefficients_rational": {
+      "((a,(b,c)),d)": [
+        "1/2",
+        "0",
+        "0",
+        "-1/2"
+      ],
+      "(a,(b,c))": [
+        "0",
+        "0",
+        "0",
+        "-1"
+      ],
+      "(b,c)": [
+        "0",
+        "0",
+        "0",
+        "-1"
+      ]
+    },
+    "raw_truth_table_verified_exactly": true,
+    "signed_slice_outside_contexts": {
+      "((a,(b,c)),d)": {},
+      "(a,(b,c))": {
+        "3": 0
+      },
+      "(b,c)": {
+        "0": 0,
+        "3": 0
+      }
+    },
+    "tree": "((a,(b,c)),d)",
+    "tree_id": "T07",
+    "variance_rational": "1/4"
+  },
+  {
+    "all_normalized_coefficients_within_box_2_exact": true,
+    "family": "parity4",
+    "max_abs_normalized_coefficient": 1.0,
+    "max_normalized_coefficient_squared_rational": "1",
+    "mean_rational": "1/2",
+    "normalized_node_coefficients": {
+      "((a,(b,d)),c)": [
+        0.0,
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "(a,(b,d))": [
+        0.0,
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "(b,d)": [
+        0.0,
+        0.0,
+        0.0,
+        -1.0
+      ]
+    },
+    "normalized_root_denominator": "sqrt(1/4)",
+    "normalized_root_numerator_rational": [
+      "0",
+      "0",
+      "0",
+      "-1/2"
+    ],
+    "raw_node_coefficients_rational": {
+      "((a,(b,d)),c)": [
+        "1/2",
+        "0",
+        "0",
+        "-1/2"
+      ],
+      "(a,(b,d))": [
+        "0",
+        "0",
+        "0",
+        "-1"
+      ],
+      "(b,d)": [
+        "0",
+        "0",
+        "0",
+        "-1"
+      ]
+    },
+    "raw_truth_table_verified_exactly": true,
+    "signed_slice_outside_contexts": {
+      "((a,(b,d)),c)": {},
+      "(a,(b,d))": {
+        "2": 0
+      },
+      "(b,d)": {
+        "0": 0,
+        "2": 0
+      }
+    },
+    "tree": "((a,(b,d)),c)",
+    "tree_id": "T08",
+    "variance_rational": "1/4"
+  },
+  {
+    "all_normalized_coefficients_within_box_2_exact": true,
+    "family": "parity4",
+    "max_abs_normalized_coefficient": 1.0,
+    "max_normalized_coefficient_squared_rational": "1",
+    "mean_rational": "1/2",
+    "normalized_node_coefficients": {
+      "((a,(c,d)),b)": [
+        0.0,
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "(a,(c,d))": [
+        0.0,
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "(c,d)": [
+        0.0,
+        0.0,
+        0.0,
+        -1.0
+      ]
+    },
+    "normalized_root_denominator": "sqrt(1/4)",
+    "normalized_root_numerator_rational": [
+      "0",
+      "0",
+      "0",
+      "-1/2"
+    ],
+    "raw_node_coefficients_rational": {
+      "((a,(c,d)),b)": [
+        "1/2",
+        "0",
+        "0",
+        "-1/2"
+      ],
+      "(a,(c,d))": [
+        "0",
+        "0",
+        "0",
+        "-1"
+      ],
+      "(c,d)": [
+        "0",
+        "0",
+        "0",
+        "-1"
+      ]
+    },
+    "raw_truth_table_verified_exactly": true,
+    "signed_slice_outside_contexts": {
+      "((a,(c,d)),b)": {},
+      "(a,(c,d))": {
+        "1": 0
+      },
+      "(c,d)": {
+        "0": 0,
+        "1": 0
+      }
+    },
+    "tree": "((a,(c,d)),b)",
+    "tree_id": "T09",
+    "variance_rational": "1/4"
+  },
+  {
+    "all_normalized_coefficients_within_box_2_exact": true,
+    "family": "parity4",
+    "max_abs_normalized_coefficient": 1.0,
+    "max_normalized_coefficient_squared_rational": "1",
+    "mean_rational": "1/2",
+    "normalized_node_coefficients": {
+      "((a,b),(c,d))": [
+        0.0,
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "(a,b)": [
+        0.0,
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "(c,d)": [
+        0.0,
+        0.0,
+        0.0,
+        -1.0
+      ]
+    },
+    "normalized_root_denominator": "sqrt(1/4)",
+    "normalized_root_numerator_rational": [
+      "0",
+      "0",
+      "0",
+      "-1/2"
+    ],
+    "raw_node_coefficients_rational": {
+      "((a,b),(c,d))": [
+        "1/2",
+        "0",
+        "0",
+        "-1/2"
+      ],
+      "(a,b)": [
+        "0",
+        "0",
+        "0",
+        "-1"
+      ],
+      "(c,d)": [
+        "0",
+        "0",
+        "0",
+        "-1"
+      ]
+    },
+    "raw_truth_table_verified_exactly": true,
+    "signed_slice_outside_contexts": {
+      "((a,b),(c,d))": {},
+      "(a,b)": {
+        "2": 0,
+        "3": 0
+      },
+      "(c,d)": {
+        "0": 0,
+        "1": 0
+      }
+    },
+    "tree": "((a,b),(c,d))",
+    "tree_id": "T10",
+    "variance_rational": "1/4"
+  },
+  {
+    "all_normalized_coefficients_within_box_2_exact": true,
+    "family": "parity4",
+    "max_abs_normalized_coefficient": 1.0,
+    "max_normalized_coefficient_squared_rational": "1",
+    "mean_rational": "1/2",
+    "normalized_node_coefficients": {
+      "((a,c),(b,d))": [
+        0.0,
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "(a,c)": [
+        0.0,
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "(b,d)": [
+        0.0,
+        0.0,
+        0.0,
+        -1.0
+      ]
+    },
+    "normalized_root_denominator": "sqrt(1/4)",
+    "normalized_root_numerator_rational": [
+      "0",
+      "0",
+      "0",
+      "-1/2"
+    ],
+    "raw_node_coefficients_rational": {
+      "((a,c),(b,d))": [
+        "1/2",
+        "0",
+        "0",
+        "-1/2"
+      ],
+      "(a,c)": [
+        "0",
+        "0",
+        "0",
+        "-1"
+      ],
+      "(b,d)": [
+        "0",
+        "0",
+        "0",
+        "-1"
+      ]
+    },
+    "raw_truth_table_verified_exactly": true,
+    "signed_slice_outside_contexts": {
+      "((a,c),(b,d))": {},
+      "(a,c)": {
+        "1": 0,
+        "3": 0
+      },
+      "(b,d)": {
+        "0": 0,
+        "2": 0
+      }
+    },
+    "tree": "((a,c),(b,d))",
+    "tree_id": "T11",
+    "variance_rational": "1/4"
+  },
+  {
+    "all_normalized_coefficients_within_box_2_exact": true,
+    "family": "parity4",
+    "max_abs_normalized_coefficient": 1.0,
+    "max_normalized_coefficient_squared_rational": "1",
+    "mean_rational": "1/2",
+    "normalized_node_coefficients": {
+      "((a,d),(b,c))": [
+        0.0,
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "(a,d)": [
+        0.0,
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "(b,c)": [
+        0.0,
+        0.0,
+        0.0,
+        -1.0
+      ]
+    },
+    "normalized_root_denominator": "sqrt(1/4)",
+    "normalized_root_numerator_rational": [
+      "0",
+      "0",
+      "0",
+      "-1/2"
+    ],
+    "raw_node_coefficients_rational": {
+      "((a,d),(b,c))": [
+        "1/2",
+        "0",
+        "0",
+        "-1/2"
+      ],
+      "(a,d)": [
+        "0",
+        "0",
+        "0",
+        "-1"
+      ],
+      "(b,c)": [
+        "0",
+        "0",
+        "0",
+        "-1"
+      ]
+    },
+    "raw_truth_table_verified_exactly": true,
+    "signed_slice_outside_contexts": {
+      "((a,d),(b,c))": {},
+      "(a,d)": {
+        "1": 0,
+        "2": 0
+      },
+      "(b,c)": {
+        "0": 0,
+        "3": 0
+      }
+    },
+    "tree": "((a,d),(b,c))",
+    "tree_id": "T12",
+    "variance_rational": "1/4"
+  },
+  {
+    "all_normalized_coefficients_within_box_2_exact": true,
+    "family": "parity4",
+    "max_abs_normalized_coefficient": 1.0,
+    "max_normalized_coefficient_squared_rational": "1",
+    "mean_rational": "1/2",
+    "normalized_node_coefficients": {
+      "((b,c),d)": [
+        0.0,
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "(a,((b,c),d))": [
+        0.0,
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "(b,c)": [
+        0.0,
+        0.0,
+        0.0,
+        -1.0
+      ]
+    },
+    "normalized_root_denominator": "sqrt(1/4)",
+    "normalized_root_numerator_rational": [
+      "0",
+      "0",
+      "0",
+      "-1/2"
+    ],
+    "raw_node_coefficients_rational": {
+      "((b,c),d)": [
+        "0",
+        "0",
+        "0",
+        "-1"
+      ],
+      "(a,((b,c),d))": [
+        "1/2",
+        "0",
+        "0",
+        "-1/2"
+      ],
+      "(b,c)": [
+        "0",
+        "0",
+        "0",
+        "-1"
+      ]
+    },
+    "raw_truth_table_verified_exactly": true,
+    "signed_slice_outside_contexts": {
+      "((b,c),d)": {
+        "0": 0
+      },
+      "(a,((b,c),d))": {},
+      "(b,c)": {
+        "0": 0,
+        "3": 0
+      }
+    },
+    "tree": "(a,((b,c),d))",
+    "tree_id": "T13",
+    "variance_rational": "1/4"
+  },
+  {
+    "all_normalized_coefficients_within_box_2_exact": true,
+    "family": "parity4",
+    "max_abs_normalized_coefficient": 1.0,
+    "max_normalized_coefficient_squared_rational": "1",
+    "mean_rational": "1/2",
+    "normalized_node_coefficients": {
+      "((b,d),c)": [
+        0.0,
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "(a,((b,d),c))": [
+        0.0,
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "(b,d)": [
+        0.0,
+        0.0,
+        0.0,
+        -1.0
+      ]
+    },
+    "normalized_root_denominator": "sqrt(1/4)",
+    "normalized_root_numerator_rational": [
+      "0",
+      "0",
+      "0",
+      "-1/2"
+    ],
+    "raw_node_coefficients_rational": {
+      "((b,d),c)": [
+        "0",
+        "0",
+        "0",
+        "-1"
+      ],
+      "(a,((b,d),c))": [
+        "1/2",
+        "0",
+        "0",
+        "-1/2"
+      ],
+      "(b,d)": [
+        "0",
+        "0",
+        "0",
+        "-1"
+      ]
+    },
+    "raw_truth_table_verified_exactly": true,
+    "signed_slice_outside_contexts": {
+      "((b,d),c)": {
+        "0": 0
+      },
+      "(a,((b,d),c))": {},
+      "(b,d)": {
+        "0": 0,
+        "2": 0
+      }
+    },
+    "tree": "(a,((b,d),c))",
+    "tree_id": "T14",
+    "variance_rational": "1/4"
+  },
+  {
+    "all_normalized_coefficients_within_box_2_exact": true,
+    "family": "parity4",
+    "max_abs_normalized_coefficient": 1.0,
+    "max_normalized_coefficient_squared_rational": "1",
+    "mean_rational": "1/2",
+    "normalized_node_coefficients": {
+      "(a,(b,(c,d)))": [
+        0.0,
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "(b,(c,d))": [
+        0.0,
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "(c,d)": [
+        0.0,
+        0.0,
+        0.0,
+        -1.0
+      ]
+    },
+    "normalized_root_denominator": "sqrt(1/4)",
+    "normalized_root_numerator_rational": [
+      "0",
+      "0",
+      "0",
+      "-1/2"
+    ],
+    "raw_node_coefficients_rational": {
+      "(a,(b,(c,d)))": [
+        "1/2",
+        "0",
+        "0",
+        "-1/2"
+      ],
+      "(b,(c,d))": [
+        "0",
+        "0",
+        "0",
+        "-1"
+      ],
+      "(c,d)": [
+        "0",
+        "0",
+        "0",
+        "-1"
+      ]
+    },
+    "raw_truth_table_verified_exactly": true,
+    "signed_slice_outside_contexts": {
+      "(a,(b,(c,d)))": {},
+      "(b,(c,d))": {
+        "0": 0
+      },
+      "(c,d)": {
+        "0": 0,
+        "1": 0
+      }
+    },
+    "tree": "(a,(b,(c,d)))",
+    "tree_id": "T15",
+    "variance_rational": "1/4"
+  },
+  {
+    "all_normalized_coefficients_within_box_2_exact": true,
+    "family": "or_of_ands",
+    "max_abs_normalized_coefficient": 0.629940788348712,
+    "max_normalized_coefficient_squared_rational": "25/63",
+    "mean_rational": "7/16",
+    "normalized_node_coefficients": {
+      "((a,b),(c,d))": [
+        0.629940788348712,
+        0.5039526306789696,
+        0.5039526306789696,
+        -0.5039526306789696
+      ],
+      "(a,b)": [
+        -0.5,
+        0.5,
+        0.5,
+        0.5
+      ],
+      "(c,d)": [
+        -0.5,
+        0.5,
+        0.5,
+        0.5
+      ]
+    },
+    "normalized_root_denominator": "sqrt(63/256)",
+    "normalized_root_numerator_rational": [
+      "5/16",
+      "1/4",
+      "1/4",
+      "-1/4"
+    ],
+    "raw_node_coefficients_rational": {
+      "((a,b),(c,d))": [
+        "3/4",
+        "1/4",
+        "1/4",
+        "-1/4"
+      ],
+      "(a,b)": [
+        "-1/2",
+        "1/2",
+        "1/2",
+        "1/2"
+      ],
+      "(c,d)": [
+        "-1/2",
+        "1/2",
+        "1/2",
+        "1/2"
+      ]
+    },
+    "raw_truth_table_verified_exactly": true,
+    "signed_slice_outside_contexts": {
+      "((a,b),(c,d))": {},
+      "(a,b)": {
+        "2": 0,
+        "3": 0
+      },
+      "(c,d)": {
+        "0": 0,
+        "1": 0
+      }
+    },
+    "tree": "((a,b),(c,d))",
+    "tree_id": "T10",
+    "variance_rational": "63/256"
+  },
+  {
+    "all_normalized_coefficients_within_box_2_exact": true,
+    "family": "xor_of_ands",
+    "max_abs_normalized_coefficient": 1.0327955589886444,
+    "max_normalized_coefficient_squared_rational": "16/15",
+    "mean_rational": "3/8",
+    "normalized_node_coefficients": {
+      "((a,b),(c,d))": [
+        0.2581988897471611,
+        0.0,
+        0.0,
+        -1.0327955589886444
+      ],
+      "(a,b)": [
+        -0.5,
+        0.5,
+        0.5,
+        0.5
+      ],
+      "(c,d)": [
+        -0.5,
+        0.5,
+        0.5,
+        0.5
+      ]
+    },
+    "normalized_root_denominator": "sqrt(15/64)",
+    "normalized_root_numerator_rational": [
+      "1/8",
+      "0",
+      "0",
+      "-1/2"
+    ],
+    "raw_node_coefficients_rational": {
+      "((a,b),(c,d))": [
+        "1/2",
+        "0",
+        "0",
+        "-1/2"
+      ],
+      "(a,b)": [
+        "-1/2",
+        "1/2",
+        "1/2",
+        "1/2"
+      ],
+      "(c,d)": [
+        "-1/2",
+        "1/2",
+        "1/2",
+        "1/2"
+      ]
+    },
+    "raw_truth_table_verified_exactly": true,
+    "signed_slice_outside_contexts": {
+      "((a,b),(c,d))": {},
+      "(a,b)": {
+        "2": 0,
+        "3": 0
+      },
+      "(c,d)": {
+        "0": 0,
+        "1": 0
+      }
+    },
+    "tree": "((a,b),(c,d))",
+    "tree_id": "T10",
+    "variance_rational": "15/64"
+  },
+  {
+    "all_normalized_coefficients_within_box_2_exact": true,
+    "family": "and_of_xors",
+    "max_abs_normalized_coefficient": 1.0,
+    "max_normalized_coefficient_squared_rational": "1",
+    "mean_rational": "1/4",
+    "normalized_node_coefficients": {
+      "((a,b),(c,d))": [
+        0.0,
+        0.5773502691896258,
+        0.5773502691896258,
+        0.5773502691896258
+      ],
+      "(a,b)": [
+        0.0,
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "(c,d)": [
+        0.0,
+        0.0,
+        0.0,
+        -1.0
+      ]
+    },
+    "normalized_root_denominator": "sqrt(3/16)",
+    "normalized_root_numerator_rational": [
+      "0",
+      "1/4",
+      "1/4",
+      "1/4"
+    ],
+    "raw_node_coefficients_rational": {
+      "((a,b),(c,d))": [
+        "1/4",
+        "1/4",
+        "1/4",
+        "1/4"
+      ],
+      "(a,b)": [
+        "0",
+        "0",
+        "0",
+        "-1"
+      ],
+      "(c,d)": [
+        "0",
+        "0",
+        "0",
+        "-1"
+      ]
+    },
+    "raw_truth_table_verified_exactly": true,
+    "signed_slice_outside_contexts": {
+      "((a,b),(c,d))": {},
+      "(a,b)": {
+        "2": 0,
+        "3": 1
+      },
+      "(c,d)": {
+        "0": 0,
+        "1": 1
+      }
+    },
+    "tree": "((a,b),(c,d))",
+    "tree_id": "T10",
+    "variance_rational": "3/16"
+  },
+  {
+    "all_normalized_coefficients_within_box_2_exact": true,
+    "family": "nested",
+    "max_abs_normalized_coefficient": 0.5393598899705937,
+    "max_normalized_coefficient_squared_rational": "16/55",
+    "mean_rational": "5/16",
+    "normalized_node_coefficients": {
+      "(a,(b,(c,d)))": [
+        -0.13483997249264842,
+        0.5393598899705937,
+        0.5393598899705937,
+        0.5393598899705937
+      ],
+      "(b,(c,d))": [
+        0.5,
+        0.5,
+        0.5,
+        -0.5
+      ],
+      "(c,d)": [
+        -0.5,
+        0.5,
+        0.5,
+        0.5
+      ]
+    },
+    "normalized_root_denominator": "sqrt(55/256)",
+    "normalized_root_numerator_rational": [
+      "-1/16",
+      "1/4",
+      "1/4",
+      "1/4"
+    ],
+    "raw_node_coefficients_rational": {
+      "(a,(b,(c,d)))": [
+        "1/4",
+        "1/4",
+        "1/4",
+        "1/4"
+      ],
+      "(b,(c,d))": [
+        "1/2",
+        "1/2",
+        "1/2",
+        "-1/2"
+      ],
+      "(c,d)": [
+        "-1/2",
+        "1/2",
+        "1/2",
+        "1/2"
+      ]
+    },
+    "raw_truth_table_verified_exactly": true,
+    "signed_slice_outside_contexts": {
+      "(a,(b,(c,d)))": {},
+      "(b,(c,d))": {
+        "0": 1
+      },
+      "(c,d)": {
+        "0": 1,
+        "1": 0
+      }
+    },
+    "tree": "(a,(b,(c,d)))",
+    "tree_id": "T15",
+    "variance_rational": "55/256"
+  }
+]

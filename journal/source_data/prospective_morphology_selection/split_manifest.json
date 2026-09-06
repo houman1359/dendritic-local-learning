@@ -1,0 +1,54 @@
+{
+  "seeds": {
+    "confirmatory": [
+      7200,
+      7201,
+      7202,
+      7203,
+      7204,
+      7205,
+      7206,
+      7207,
+      7208,
+      7209,
+      7210,
+      7211,
+      7212,
+      7213,
+      7214,
+      7215,
+      7216,
+      7217,
+      7218,
+      7219
+    ],
+    "development": [
+      6100,
+      6101,
+      6102,
+      6103,
+      6104
+    ]
+  },
+  "angles_pi": {
+    "confirmatory": [
+      0.125,
+      0.375
+    ],
+    "development": [
+      0.0,
+      0.25,
+      0.5
+    ]
+  },
+  "data_kinds": {
+    "calibration": 11,
+    "training": 23,
+    "test": 37
+  },
+  "rng": "numpy SeedSequence([task_seed, rank, data_kind_offset]); angle/noise conditions use coupled draws",
+  "disjoint_seed_sets": true,
+  "disjoint_heldout_angles": true,
+  "selection_sha256": "486bc18f35d0ed888d8a56bcfedebca9c7afa18ee7848b5893f2a87b812ea200",
+  "selection_utc": "2026-09-05T16:11:16.935027+00:00"
+}

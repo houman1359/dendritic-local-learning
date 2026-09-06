@@ -1,41 +1,15 @@
 #!/usr/bin/env python3
-"""Main Figure 1 as ONE native full-width canvas (no sub-block rescaling).
+"""Merged opening framework and quantitative dictionary atlas.
 
-Figure 1 is entirely schematic, so the whole page is drawn here from the
-shared credit-tree vocabulary (``credit_tree_schematics``) on a single
-:class:`figure_canvas.NativeCanvas`.  Nothing is pre-rendered and nothing is
-scaled afterwards, so a 7.2 pt annotation is 7.2 pt in the compiled PDF and
-an ``LW_EDGE`` stroke is 0.7 pt everywhere on the page.
+A identifies the task readout that supplies distinct neuronal coordinates.
+B shows eligibility times delivered error for a directed conductance tree.
+C works through A c numerically on the same [3,3] compartment ordering used
+by D's route dictionaries. E shows retained 15-seed MNIST field-capture data
+with the existing 95% intervals. Both older results roadmaps are omitted.
+The anatomy preview remains with the main reconstruction figure.
 
-Layout (one 12-module grid, two half-width columns and a closing band)::
-
-    +--------------------------+--------------------------+
-    | A  point unit -> tree    | B  network layer         |
-    +--------------------------+--------------------------+
-    | C  coordinate -> address | D  eligibility x error   |
-    |    -> gain               |                          |
-    +--------------------------+--------------------------+
-    | E  roadmap of the Results: six stages, full width    |
-    +------------------------------------------------------+
-
-Every panel of a row is the same axes-box height and every panel of a grid
-column the same width: A, B, C and D each claim six of the twelve modules
-and E claims all twelve, so the only size difference on the page is a whole
-number of modules.  A and B are the feeders, C is the coordinate ladder, D
-is the equation anchor and E is the closing band whose six cards run in the
-order of the Results subsections: exact factorization, the coordinate and
-address tests, the credit-operator boundary, task-aligned physical depth,
-anatomical routes with conductance gain, and the functional boundary.
-
-Emits ``figures/components/main_figure_01_native.pdf`` (+ 600 dpi PNG), the
-path ``assemble_compact_main_figures.emit_native(1)`` copies verbatim into
-``figures/main/figure_01.pdf``.
-
-Panels A, C and D keep the content of ``build_journal_figures.figure1``
-(``_panel_point_vs_dendritic``, ``_panel_credit_hierarchy`` and
-``_panel_general_adjoint``): same schematic vocabulary, same symbols, same
-equations.  Panel B adds the neuron-specific feedback return the caption
-describes, and panel E is the six-stage roadmap above.
+Legacy helper functions remain import-compatible: Figure 3 uses mini_tree.
+The build() entry point draws only the current five-panel composition.
 """
 
 from __future__ import annotations
@@ -49,6 +23,8 @@ import matplotlib
 matplotlib.use("Agg")
 
 import numpy as np
+import pandas as pd
+from matplotlib.colors import LinearSegmentedColormap
 from matplotlib.patches import Arc, Circle, FancyArrowPatch
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -715,28 +691,174 @@ def panel_e(ax):
 
 
 # ── build ─────────────────────────────────────────────────────────────────
+def panel_coordinate_source(ax):
+    """Show the neuronal coordinate supplied by the task readout."""
+    f = Frame(ax)
+    for i, y in enumerate((0.80, 0.51, 0.22), start=1):
+        mini_tree(f, 0.26, y, 0.10)
+        f.arrow((0.29, y), (0.60, y), color=MUTE, lw=LW_EDGE, head=3.4)
+        ax.text(0.46, y + 0.06, f"y{SUBSCRIPT_DIGITS[i]}", ha="center",
+                fontsize=PT_LABEL, color=INK)
+        ax.plot([0.60, 0.60], [y, 0.51], color=MUTE, lw=LW_HAIR)
+        ax.plot([0.68, 0.31], [y - 0.095] * 2, color=BLUE,
+                lw=LW_EDGE, ls=(0, (2, 2)))
+        f.arrow((0.31, y - 0.095), (0.265, y - 0.03),
+                color=BLUE, lw=LW_EDGE, head=3.4)
+        ax.text(0.45, y - 0.14, f"δ{SUBSCRIPT_DIGITS[i]}",
+                ha="center", fontsize=PT_LABEL, color=BLUE)
+    ax.plot([0.68, 0.68], [0.125, 0.80], color=BLUE, lw=LW_EDGE,
+            ls=(0, (2, 2)))
+    f.group((0.72, 0.35, 0.27, 0.31), tint=COLORS["panel_bg"],
+            edge=EDGE, lw=LW_EDGE, radius_pt=2)
+    ax.text(0.855, 0.505, "task\nreadout", ha="center", va="center",
+            fontsize=PT_LABEL, color=INK)
+    f.arrow((0.60, 0.54), (0.72, 0.54), color=MUTE, lw=LW_EDGE, head=3.4)
+    f.arrow((0.72, 0.42), (0.68, 0.42), color=BLUE, lw=LW_EDGE, head=3.4)
+    ax.text(0.855, 0.85, "loss", ha="center", fontsize=PT_LABEL,
+            color=COLORS["bp"])
+    f.arrow((0.855, 0.80), (0.855, 0.67), color=COLORS["bp"],
+            lw=LW_EDGE, head=3.4)
+    ax.text(0.03, 0.015, "coordinate: which neuron?", fontsize=PT_LABEL,
+            color=BLUE, ha="left")
+
+
+def panel_factorization_readable(ax):
+    f = Frame(ax)
+    sub, _ = tree_inset(f, (0.00, 0.26, 0.40, 0.69), mode="transport",
+                        labels=False, scale=0.85)
+    ax.text(0.62, 0.92, "directed conductance tree", ha="center",
+            fontsize=PT_ANNOT, color=MUTE)
+    ax.text(0.62, 0.74, "Δgᵢ = −η eᵢ εₙ", ha="center", fontsize=PT_TITLE,
+            color=INK)
+    ax.text(0.43, 0.56, "eᵢ = xᵢ Rₙ (Eᵢ − Vₙ)", fontsize=PT_LABEL,
+            color=DEND)
+    ax.text(0.43, 0.43, "local eligibility", fontsize=PT_ANNOT, color=DEND)
+    ax.text(0.43, 0.25, "εₙ = α₃α₂α₁ δ₀", fontsize=PT_LABEL, color=BLUE)
+    ax.text(0.43, 0.12, "delivered error", fontsize=PT_ANNOT, color=BLUE)
+    ax.text(0.02, 0.015, "gain: how strongly along the route?",
+            fontsize=PT_LABEL, color=INK, ha="left")
+
+
+def panel_worked_dictionary(ax):
+    """An explicit A c example using the same [3,3] arbor as the atlas."""
+    from build_main_figure_10 import dictionary_matrices, SUBTREES
+    f = Frame(ax)
+    colors = [BLUE, COLORS["bp"], MUTE]
+    root = (0.018, 0.50)
+    for k, yc in enumerate((0.82, 0.50, 0.18)):
+        prox = (0.11, yc)
+        ax.plot([root[0], prox[0]], [root[1], prox[1]], color=colors[k], lw=LW_DATA)
+        ax.plot(*prox, marker="o", ms=4.0, color=colors[k])
+        ax.text(prox[0] - .013, prox[1] + .085, str(k), ha="center", fontsize=PT_ANNOT)
+        for j in range(3):
+            leaf = (.22, yc + (1 - j) * .087)
+            ax.plot([prox[0], leaf[0]], [prox[1], leaf[1]], color=colors[k], lw=LW_EDGE)
+            ax.plot(*leaf, marker="o", ms=3.3, color=colors[k])
+            ax.text(.24, leaf[1], str(3 + 3*k + j), va="center", fontsize=PT_ANNOT)
+    f.disc(root, 4, fill=SOMA, edge=RIM, lw=LW_EDGE)
+    ax.text(.12, -.015, "one [3,3] arbor", ha="center", fontsize=PT_LABEL)
+    A = dictionary_matrices()[1][2]
+    c = np.array([1., -1., 0.])
+    delivered = A @ c
+    cmap = LinearSegmentedColormap.from_list("worked_credit", [COLORS["bp"], "white", BLUE])
+
+    def matrix(box, data, *, signed=False, numbers=False):
+        inner = ax.inset_axes(box)
+        inner.imshow(data, aspect="auto", interpolation="nearest", vmin=-1 if signed else 0,
+                     vmax=1, cmap=cmap if signed else LinearSegmentedColormap.from_list("address", ["white", DEND]))
+        inner.set_xticks([]); inner.set_yticks([])
+        for spine in inner.spines.values():
+            spine.set_color(EDGE); spine.set_linewidth(LW_HAIR)
+        if numbers:
+            for i in range(data.shape[0]):
+                for j in range(data.shape[1]):
+                    value = data[i, j]
+                    inner.text(j, i, f"{value:+.0f}" if value else "0", ha="center", va="center",
+                               color="white" if value else INK, fontsize=PT_ANNOT)
+        return inner
+
+    ma = matrix([.35, .035, .12, .88], A)
+    ma.set_yticks(range(12)); ma.set_yticklabels(range(12), fontsize=PT_SMALL)
+    ma.tick_params(axis="y", length=0, pad=2)
+    matrix([.535, .365, .06, .34], c.reshape(-1,1), signed=True, numbers=True)
+    matrix([.685, .035, .06, .88], delivered.reshape(-1,1), signed=True, numbers=True)
+    for x, label in [(.41,"A: addresses"), (.565,"c: coordinates"), (.715,"A c: field")]:
+        ax.text(x, .945, label, ha="center", fontsize=PT_LABEL)
+    ax.text(.50, .52, "×", ha="center", fontsize=PT_TITLE)
+    ax.text(.64, .52, "=", ha="center", fontsize=PT_TITLE)
+    ax.text(.79, .74, "12 compartments\n3 route coefficients", fontsize=PT_LABEL,
+            va="center", linespacing=1.5)
+    ax.text(.79, .36, "positive / negative / zero\ncredit can reach\ndifferent subtrees", fontsize=PT_ANNOT,
+            va="center", linespacing=1.4)
+    ax.text(.79, .07, "a dictionary need not\nbe orthonormal", fontsize=PT_ANNOT, color=MUTE)
+
+
+def panel_compact_atlas(ax):
+    from build_main_figure_10 import dictionary_matrices
+    field = pd.read_csv(ROOT / "source_data/route_dictionary_atlas/example_field.csv")
+    seq = LinearSegmentedColormap.from_list("atlasgreen", ["white", DEND])
+    for x, dynamics in [(.035, "additive"), (.105, "shunting")]:
+        values = field[field.dynamics.eq(dynamics)].sort_values("compartment_index").mean_abs_error.to_numpy()[:,None]
+        ia = ax.inset_axes([x,.19,.045,.65]); ia.imshow(values,aspect="auto",cmap=seq,vmin=0,vmax=1)
+        ia.set_xticks([]);ia.set_yticks([])
+        ax.text(x+.0225,.15,"add." if dynamics == "additive" else "shunt.",
+                ha="center",va="top",fontsize=PT_SMALL)
+    ax.text(.09,.955,"normalized",ha="center",fontsize=PT_ANNOT)
+    ax.text(.09,.86,"|∂ℒ / ∂V|",ha="center",fontsize=PT_ANNOT)
+    for (key, label, A), (x,w) in zip(dictionary_matrices(),[(.235,.05),(.395,.12),(.655,.28)]):
+        ia=ax.inset_axes([x,.19,w,.65]);ia.imshow(A,aspect="auto",cmap=seq,vmin=0,vmax=1)
+        ia.set_xticks([]);ia.set_yticks([])
+        for sp in ia.spines.values():sp.set_linewidth(LW_HAIR);sp.set_color(EDGE)
+        ax.text(x+w/2,.90,{1:"K=1",3:"K=3",12:"K=12"}[A.shape[1]],ha="center",fontsize=PT_LABEL)
+        ax.text(x+w/2,.12,{1:"one per\nneuron",3:"subtrees",12:"exact field"}[A.shape[1]],
+                ha="center",va="top",fontsize=PT_ANNOT)
+
+
+def panel_atlas_capture(ax):
+    p = ROOT / "source_data/route_dictionary_atlas"
+    summary = pd.read_csv(p / "capture_summary.csv")
+    seeds = pd.read_csv(p / "capture_by_seed.csv")
+    for dynamics, offset, color, marker in [("additive",-.13,BLUE,"s"),("shunting",.13,GREEN,"o")]:
+        for i,key in enumerate(["broadcast_k1","subtrees_k3","exact_k12"]):
+            row=summary[(summary.dynamics.eq(dynamics))&(summary.basis.eq(key))].iloc[0]
+            vals=100*seeds[seeds.dynamics.eq(dynamics)][f"capture_{key}"].to_numpy()
+            ax.scatter(i+offset+np.linspace(-.045,.045,len(vals)),vals,s=6,color=color,alpha=.28,zorder=2)
+            mean=100*row.mean_capture
+            ax.errorbar(i+offset,mean,yerr=[[mean-100*row.ci95_low_capture],[100*row.ci95_high_capture-mean]],
+                        marker=marker,color=color,ms=3.2,lw=LW_EDGE,capsize=2,zorder=3)
+    ax.set_xticks(range(3),["K=1","K=3","K=12"])
+    ax.set_ylim(0,106);ax.set_yticks([0,50,100]);ax.set_xlim(-.5,2.5)
+    ax.set_ylabel("voltage-error energy (%)",fontsize=PT_LABEL)
+    ax.text(.03,.17,"additive",color=BLUE,fontsize=PT_ANNOT,transform=ax.transAxes)
+    ax.text(.03,.07,"shunting",color=GREEN,fontsize=PT_ANNOT,transform=ax.transAxes)
+    ax.text(.98,.03,"15 seeds / core",ha="right",fontsize=PT_SMALL,color=MUTE,transform=ax.transAxes)
+
+
 def build():
     canvas = NativeCanvas(
-        CANVAS_H_PT / 72.0, nrows=3, row_weights=ROW_PT,
-        hgutter_pt=HGUTTER, vgutter_pt=VGUTTER, margins=MARGINS,
+        468.0 / 72.0, nrows=3, row_weights=[128,140,130],
+        hgutter_pt=30.0, vgutter_pt=30.0,
+        margins=Margins(left=26.0,right=9.0,top=24.0,bottom=30.0),
         letters=False,
     )
     spec = [
-        ("A", 0, 0, 6, 1, "Point unit → dendritic tree", panel_a),
-        ("B", 0, 6, 6, 1, "Network layer", panel_b),
-        ("C", 1, 0, 6, 1, "Coordinate → address → gain", panel_c),
-        ("D", 1, 6, 6, 1, "Local eligibility × transported error", panel_d),
-        ("E", 2, 0, 12, 1, "Roadmap of the Results", panel_e),
+        ("A",0,0,6,1,"Neuronal credit comes from the task",panel_coordinate_source),
+        ("B",0,6,6,1,"Eligibility × delivered error",panel_factorization_readable),
+        ("C",1,0,12,1,"Address: where does each credit coordinate act?",panel_worked_dictionary),
+        ("D",2,0,8,1,"One morphology, different dictionaries",panel_compact_atlas),
+        ("E",2,8,4,1,"Field capture (MNIST)",panel_atlas_capture),
     ]
     for letter, row, col, span, rowspan, title, draw in spec:
         ax = canvas.panel(letter, row, col, span, rowspan=rowspan,
-                          schematic=True)
+                          schematic=letter != "E")
         # Centre panel titles as every other main sheet does; Figure 1 was
         # the only builder still left-aligning them.
         ax.set_title(title, fontsize=PT_TITLE, color=INK, pad=TITLE_PAD,
                      loc="center", fontweight="normal")
         canvas.add_letter(letter, ax, dx_pt=LETTER_DX, dy_pt=LETTER_DY)
         draw(ax)
+    from journal_style import style_direct_color_labels
+    style_direct_color_labels(canvas.fig)
     problems = canvas.save(OUT, name="main_figure_01_native")
     return problems
 

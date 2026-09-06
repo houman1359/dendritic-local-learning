@@ -1,0 +1,16 @@
+{
+  "output_sha256": "70669acf931af11f69fd0dded39d1f0b0e2820dbc9e498f2d36e4056659c98aa",
+  "builders_sha256": {
+    "scripts/shunt_ancestry_gain/build_figure.py": "5caa33ac3a372ebcb5d449d021b0100816b5b9319c7d90fc513b18d6ed8dbfe1",
+    "scripts/build_main_figure_08.py": "f9960d1b058bfef5486e436ef511fbcb98e751a3fe515587be6929b1d7305cc5"
+  },
+  "source_sha256": {
+    "source_data/figure4/category_effects.csv": "fb9167d8d5426a872f768f8381ede9a65edc0277d640fb497bcb90d78195a22c",
+    "source_data/figure4/focal_localization.csv": "4673a634299e0cdf3b29df3d8686f2fa47e418e92a734c078dded81e2beaab4c",
+    "source_data/focal_decomposition/cell_shapley.csv": "46e9e224e59bff91d416b3d4e4f51b8992634badd8b76e7b86576bcbdab187c4",
+    "source_data/physical_cable_sensitivity/cell_primary_contrasts.csv": "22a7db680c64680a81695e2df6eea67b3bfcef6dc814fefd06ccfab2495af2a6",
+    "source_data/physical_cable_sensitivity/cell_electrotonic_ratios.csv": "027f6d0f23e201aced4fbbbcef50f74975233f59e895ca001cdee110123c1038"
+  },
+  "scientific_data": "B\u2013E call the unchanged archived panel functions; same source rows and bootstrap seeds. A illustrates the exact partition corollary without fitted gains.",
+  "changes": "Active-channel check moved out of main figure; physical boundary now spans full width; ancestry identity added."
+}

@@ -1,0 +1,624 @@
+{
+  "adaptive_secondary": "Estimated-polynomial DP only at256/.5, same28coefficients/14edges and training; can select outside12-tree menu, so signed regret against that menu is retained",
+  "alpha_grid": [
+    0.15,
+    0.35,
+    0.65
+  ],
+  "calibration_noise_sd": [
+    0.0,
+    0.5
+  ],
+  "calibration_sizes": [
+    64,
+    256,
+    1024
+  ],
+  "calibration_split": "First75% fit, remaining25% independent-draw gate; both selector and pilot have the same total query budget; samples have independent fresh noise even when input patterns repeat",
+  "candidates": [
+    {
+      "children": {
+        "10": [
+          8,
+          9
+        ],
+        "11": [
+          4,
+          5
+        ],
+        "12": [
+          6,
+          7
+        ],
+        "13": [
+          11,
+          12
+        ],
+        "14": [
+          10,
+          13
+        ],
+        "8": [
+          0,
+          1
+        ],
+        "9": [
+          2,
+          3
+        ]
+      },
+      "name": "balanced_p0",
+      "permutation": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "shape": "balanced"
+    },
+    {
+      "children": {
+        "10": [
+          8,
+          9
+        ],
+        "11": [
+          1,
+          5
+        ],
+        "12": [
+          3,
+          7
+        ],
+        "13": [
+          11,
+          12
+        ],
+        "14": [
+          10,
+          13
+        ],
+        "8": [
+          0,
+          4
+        ],
+        "9": [
+          2,
+          6
+        ]
+      },
+      "name": "balanced_p1",
+      "permutation": [
+        0,
+        4,
+        2,
+        6,
+        1,
+        5,
+        3,
+        7
+      ],
+      "shape": "balanced"
+    },
+    {
+      "children": {
+        "10": [
+          8,
+          9
+        ],
+        "11": [
+          2,
+          3
+        ],
+        "12": [
+          6,
+          1
+        ],
+        "13": [
+          11,
+          12
+        ],
+        "14": [
+          10,
+          13
+        ],
+        "8": [
+          5,
+          0
+        ],
+        "9": [
+          4,
+          7
+        ]
+      },
+      "name": "balanced_p2",
+      "permutation": [
+        5,
+        0,
+        4,
+        7,
+        2,
+        3,
+        6,
+        1
+      ],
+      "shape": "balanced"
+    },
+    {
+      "children": {
+        "10": [
+          8,
+          9
+        ],
+        "11": [
+          7,
+          1
+        ],
+        "12": [
+          2,
+          5
+        ],
+        "13": [
+          11,
+          12
+        ],
+        "14": [
+          10,
+          13
+        ],
+        "8": [
+          0,
+          6
+        ],
+        "9": [
+          3,
+          4
+        ]
+      },
+      "name": "balanced_p3",
+      "permutation": [
+        0,
+        6,
+        3,
+        4,
+        7,
+        1,
+        2,
+        5
+      ],
+      "shape": "balanced"
+    },
+    {
+      "children": {
+        "10": [
+          4,
+          9
+        ],
+        "11": [
+          3,
+          10
+        ],
+        "12": [
+          2,
+          11
+        ],
+        "13": [
+          1,
+          12
+        ],
+        "14": [
+          0,
+          13
+        ],
+        "8": [
+          6,
+          7
+        ],
+        "9": [
+          5,
+          8
+        ]
+      },
+      "name": "comb_p0",
+      "permutation": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "shape": "comb"
+    },
+    {
+      "children": {
+        "10": [
+          1,
+          9
+        ],
+        "11": [
+          6,
+          10
+        ],
+        "12": [
+          2,
+          11
+        ],
+        "13": [
+          4,
+          12
+        ],
+        "14": [
+          0,
+          13
+        ],
+        "8": [
+          3,
+          7
+        ],
+        "9": [
+          5,
+          8
+        ]
+      },
+      "name": "comb_p1",
+      "permutation": [
+        0,
+        4,
+        2,
+        6,
+        1,
+        5,
+        3,
+        7
+      ],
+      "shape": "comb"
+    },
+    {
+      "children": {
+        "10": [
+          2,
+          9
+        ],
+        "11": [
+          7,
+          10
+        ],
+        "12": [
+          4,
+          11
+        ],
+        "13": [
+          0,
+          12
+        ],
+        "14": [
+          5,
+          13
+        ],
+        "8": [
+          6,
+          1
+        ],
+        "9": [
+          3,
+          8
+        ]
+      },
+      "name": "comb_p2",
+      "permutation": [
+        5,
+        0,
+        4,
+        7,
+        2,
+        3,
+        6,
+        1
+      ],
+      "shape": "comb"
+    },
+    {
+      "children": {
+        "10": [
+          7,
+          9
+        ],
+        "11": [
+          4,
+          10
+        ],
+        "12": [
+          3,
+          11
+        ],
+        "13": [
+          6,
+          12
+        ],
+        "14": [
+          0,
+          13
+        ],
+        "8": [
+          2,
+          5
+        ],
+        "9": [
+          1,
+          8
+        ]
+      },
+      "name": "comb_p3",
+      "permutation": [
+        0,
+        6,
+        3,
+        4,
+        7,
+        1,
+        2,
+        5
+      ],
+      "shape": "comb"
+    },
+    {
+      "children": {
+        "10": [
+          3,
+          4
+        ],
+        "11": [
+          6,
+          7
+        ],
+        "12": [
+          5,
+          11
+        ],
+        "13": [
+          10,
+          12
+        ],
+        "14": [
+          9,
+          13
+        ],
+        "8": [
+          1,
+          2
+        ],
+        "9": [
+          0,
+          8
+        ]
+      },
+      "name": "mixed_p0",
+      "permutation": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "shape": "mixed"
+    },
+    {
+      "children": {
+        "10": [
+          6,
+          1
+        ],
+        "11": [
+          3,
+          7
+        ],
+        "12": [
+          5,
+          11
+        ],
+        "13": [
+          10,
+          12
+        ],
+        "14": [
+          9,
+          13
+        ],
+        "8": [
+          4,
+          2
+        ],
+        "9": [
+          0,
+          8
+        ]
+      },
+      "name": "mixed_p1",
+      "permutation": [
+        0,
+        4,
+        2,
+        6,
+        1,
+        5,
+        3,
+        7
+      ],
+      "shape": "mixed"
+    },
+    {
+      "children": {
+        "10": [
+          7,
+          2
+        ],
+        "11": [
+          6,
+          1
+        ],
+        "12": [
+          3,
+          11
+        ],
+        "13": [
+          10,
+          12
+        ],
+        "14": [
+          9,
+          13
+        ],
+        "8": [
+          0,
+          4
+        ],
+        "9": [
+          5,
+          8
+        ]
+      },
+      "name": "mixed_p2",
+      "permutation": [
+        5,
+        0,
+        4,
+        7,
+        2,
+        3,
+        6,
+        1
+      ],
+      "shape": "mixed"
+    },
+    {
+      "children": {
+        "10": [
+          4,
+          7
+        ],
+        "11": [
+          2,
+          5
+        ],
+        "12": [
+          1,
+          11
+        ],
+        "13": [
+          10,
+          12
+        ],
+        "14": [
+          9,
+          13
+        ],
+        "8": [
+          6,
+          3
+        ],
+        "9": [
+          0,
+          8
+        ]
+      },
+      "name": "mixed_p3",
+      "permutation": [
+        0,
+        6,
+        3,
+        4,
+        7,
+        1,
+        2,
+        5
+      ],
+      "shape": "mixed"
+    }
+  ],
+  "confirmatory_seeds": [
+    820910,
+    820911,
+    820912,
+    820913,
+    820914,
+    820915,
+    820916,
+    820917,
+    820918,
+    820919,
+    820920,
+    820921,
+    820922,
+    820923,
+    820924,
+    820925,
+    820926,
+    820927,
+    820928,
+    820929
+  ],
+  "development_seeds": [
+    720910,
+    720911,
+    720912,
+    720913,
+    720914
+  ],
+  "distribution_scope": "New signed/random-amplitude functions; covariance is NOT held isospectral across these tasks; old exact experiment supplies that separate control",
+  "estimator": "Lasso all255 Walsh monomials, intercept separately fitted then excluded from interaction score, alpha=c*sd(fit_y)*sqrt(2log256/n_fit), cyclic coordinate descent,tol1e-8,max20000",
+  "failure_policy": "Retain every fit. Nonfinite or linear algebra failures receive declared loss 1000000.0; report all failure counts and convergence warnings.",
+  "families": [
+    "matching",
+    "quartet",
+    "nested_prefix",
+    "random_interactions"
+  ],
+  "inference": "20paired seed blocks;four families averaged within seed;10000 seed bootstrap;descriptive95%CI and Bonferroni97.5% two-sided CIs for two primary comparisons;declare meaningful superiority only if adjusted lower>0 and mean improvement>=.01",
+  "known_prior": "Eight named Rademacher inputs, generic multilinear polynomial dictionary of all255 nonconstant monomials; sparse estimation prior; no family/support/true-coefficient access",
+  "meaningful_margin_nmse": 0.01,
+  "model": "Eight Rademacher input leaves;seven bilinear internal nodes;28 coefficients;14 edges;root-only output",
+  "oracle_references": "Full-target cut choice,full-target DP,exact population errors and best-trained menu use truth only after all confirmatory calibration choices are sealed;privileged retrospective references",
+  "pilot": "2ALS sweeps,one initialization per candidate,fit calibration75%,score remaining25%;not continued into final training",
+  "primary_comparisons": [
+    "estimated_cut versus development_best_fixed",
+    "estimated_cut versus two_sweep_pilot"
+  ],
+  "primary_condition": {
+    "calibration_noise_sd": 0.5,
+    "calibration_rows": 256
+  },
+  "primary_endpoint": "Independent4096-draw clean-target MSE normalized by true target variance1; noisy-test MSE and exact256-point population error are secondary evaluation-only outputs",
+  "primary_regret": "Policy test NMSE minus retrospective minimum test NMSE over12 fixed candidates, each with validation-selected restart",
+  "rank_baseline": "99.5%-energy input-gradient covariance rank inferred from same estimated polynomial; development lookup to candidate, no family labels, bins with fewer than2 development tasks use development-best fixed",
+  "restart_selection": "Minimum independent noisy validation MSE;never test or full-population error",
+  "schema": "finite_noisy_morphology_calibration/v1",
+  "selector": "Smallest estimated centered-cut maximum; among scores within1e-10 choose smallest summed cut tails; among those within1e-10 choose lexicographic candidate. Sum is heuristic only, not a bound.",
+  "source_hashes": {
+    "scripts/morphology_calibration/bridge.py": "06c72e1fbe61a6a88d20ba109c46a9960bce13c1ddcdc053fd21908955f1dd50",
+    "scripts/morphology_calibration/run.py": "6ad8ff5562de2d7ba54d9ab860cba9c054cbdfcee83486b84468760eb1bc0c83",
+    "scripts/morphology_calibration/test_bridge.py": "4da6df4579c0af4ce4a97b58b1ca9513e38a2a9e2a574932153721dd5006f6e3",
+    "scripts/morphology_structure/constructive.py": "8259af41912cee139998b84dffef9827d44fe8a175a89e6eb91bb1f534303a46",
+    "scripts/morphology_structure/constructive_dp_v2.py": "1a34d6933706c924eca6458d48940a53e97bff57756ad1a68444585e4b5ac964",
+    "scripts/morphology_structure/model.py": "fe89ef9331795a4dbf3f04ff1d7b18dc8f955b9da8119a2fdcce4f5edbd68cf7"
+  },
+  "streams": "Calibration IDs100..105;training10,validation11,test12,task1; SeedSequence(seed,family,stream);all independent draws, input patterns may repeat",
+  "task_generation": "Independent permutations, Rademacher signs, amplitudes Uniform(.5,1.5), coefficient-L2 normalization; random control selects four distinct masks uniformly from all degree2..8 masks independently of candidates",
+  "training": {
+    "restarts": 2,
+    "sweeps": 32,
+    "test_rows": 4096,
+    "training_noise": 0.3,
+    "training_rows": 1024,
+    "validation_rows": 512
+  }
+}

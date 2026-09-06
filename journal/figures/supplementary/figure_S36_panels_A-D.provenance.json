@@ -1,0 +1,11 @@
+{
+  "builder": "scripts/build_morphology_followup_figures.py",
+  "builder_sha256": "d18344b8a18422dfeb467b7f6f150af3f8e4d1475a977e5278447174851f8f57",
+  "figure": "S36",
+  "panels": "A-D",
+  "scope": "Rendering only; source outcomes and protocol unchanged",
+  "sources": {
+    "source_data/morphology_structure/audit_policy_summary.csv": "0404848bc37ab50016476f5e0b8be74cd81e8f2803758e6d0ab0314587ceddc9",
+    "source_data/morphology_structure/candidate_outcomes.csv": "15ab5b7e996439e146b72f5b0b0048044f91b20298ebfcf8f85e21931749ae59"
+  }
+}

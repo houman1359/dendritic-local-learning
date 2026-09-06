@@ -22,18 +22,20 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from matplotlib.patches import Circle, FancyArrowPatch, FancyBboxPatch
 import numpy as np
+from journal_style import style_direct_color_labels
 import pandas as pd
 
 
 PROJECT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PROJECT / "scripts"))
-from neurips_style import (  # noqa: E402
+from journal_style import (  # noqa: E402
     COLORS,
     LW_DATA,
     LW_EDGE,
     LW_REF,
     PT_ANNOT,
     PT_SMALL,
+    SEQ_CMAP,
     apply_neurips_style,
     audit_layout,
     audit_text_over_data,
@@ -90,7 +92,7 @@ def numerical_forgetting(
 def _draw_routes(ax) -> None:
     clean_schematic_axis(ax)
     ax.set_xlim(0, 10)
-    ax.set_ylim(0, 7)
+    ax.set_ylim(-1.3, 7)
     ax.plot([5, 5, 2.1, 5, 7.9], [0.8, 2.2, 5.4, 2.2, 5.4], color=COLORS["dend"], lw=3.2)
     ax.add_patch(Circle((5, 0.75), 0.42, fc=COLORS["soma"], ec=COLORS["edge"], lw=LW_EDGE))
     ax.plot([2.15, 4.15], [5.25, 3.15], color=COLORS["additive"], lw=5.2, alpha=0.72)
@@ -99,10 +101,11 @@ def _draw_routes(ax) -> None:
     ax.text(8.15, 5.95, "Task B route", ha="center", color=COLORS["inh"], fontsize=PT_ANNOT, fontweight="bold")
     ax.add_patch(FancyArrowPatch((7.25, 4.55), (3.45, 3.95), arrowstyle="-|>", mutation_scale=8, linestyle="--", color=COLORS["highlight"], lw=1.2))
     ax.text(5.3, 4.65, "leakage", ha="center", color=COLORS["highlight"], fontsize=PT_ANNOT)
-    ax.add_patch(FancyBboxPatch((2.1, 0.18), 5.8, 1.18, boxstyle="round,pad=0.12", fc="#F7F8FA", ec=COLORS["edge"], lw=LW_EDGE))
+    # Keep the explanatory box below the soma and wide enough for its text.
+    ax.add_patch(FancyBboxPatch((0.8, -1.1), 8.4, 1.18, boxstyle="round,pad=0.12", fc="#F7F8FA", ec=COLORS["edge"], lw=LW_EDGE))
     box_style = dict(facecolor="#F7F8FA", edgecolor="none", pad=0.12)
-    ax.text(5, 0.91, "forgetting depends on route overlap", ha="center", fontsize=PT_ANNOT, fontweight="bold", bbox=box_style)
-    ax.text(5, 0.46, "and off-route credit leakage", ha="center", fontsize=PT_SMALL, bbox=box_style)
+    ax.text(5, -0.37, "forgetting depends on route overlap", ha="center", fontsize=PT_ANNOT, bbox=box_style)
+    ax.text(5, -0.82, "and off-route credit leakage", ha="center", fontsize=PT_SMALL, bbox=box_style)
 
 
 def _draw_animal_bridge(ax) -> None:
@@ -116,7 +119,7 @@ def _draw_animal_bridge(ax) -> None:
     ]
     for x, y, w, h, text, color in boxes:
         ax.add_patch(FancyBboxPatch((x, y), w, h, boxstyle="round,pad=0.12", fc="white", ec=color, lw=1.2))
-        ax.text(x + w / 2, y + h / 2, text, ha="center", va="center", fontsize=PT_SMALL, fontweight="bold", color=color, bbox=dict(facecolor="white", edgecolor="none", pad=0.08))
+        ax.text(x + w / 2, y + h / 2, text, ha="center", va="center", fontsize=PT_SMALL, color=color, bbox=dict(facecolor="white", edgecolor="none", pad=0.08))
     for left in [2.92, 6.40]:
         ax.add_patch(FancyArrowPatch((left, 5.18), (left + 0.75, 5.18), arrowstyle="-|>", mutation_scale=8, color=COLORS["mute"], lw=1.1))
     ax.add_patch(FancyBboxPatch((0.75, 1.05), 8.50, 1.72, boxstyle="round,pad=0.14", fc="#FAF4F7", ec=COLORS["highlight"], lw=LW_EDGE))
@@ -128,14 +131,15 @@ def _draw_animal_bridge(ax) -> None:
 
 
 def make_figure(frame: pd.DataFrame, stem: Path, eta: float) -> None:
-    fig, axes = grid_figure(2, 2, panel_h=2.0, gap_h=0.72, gap_w=1.02, margin_t=0.52)
+    fig, axes = grid_figure(2, 2, panel_h=2.0, gap_h=0.72, gap_w=1.02,
+                            margin_t=0.52, margin_r=0.52)
     ax = axes.ravel()
     _draw_routes(ax[0])
-    panel_title(ax[0], "A", "Route overlap creates interference")
+    panel_title(ax[0], "A", "Static quadratic interference")
 
     pivot = frame.pivot(index="leakage", columns="overlap", values="exact_forgetting")
     im = ax[1].imshow(
-        pivot.to_numpy(), origin="lower", aspect="auto", cmap="magma",
+        pivot.to_numpy(), origin="lower", aspect="auto", cmap=SEQ_CMAP,
         extent=[pivot.columns.min(), pivot.columns.max(), pivot.index.min(), pivot.index.max()],
     )
     ax[1].set_xlabel("route overlap")
@@ -145,9 +149,14 @@ def make_figure(frame: pd.DataFrame, stem: Path, eta: float) -> None:
     panel_title(ax[1], "B", "Exact one-step forgetting")
     style_axis(ax[1])
 
-    for leakage, color in zip([0.0, 0.25, 0.5, 1.0], [COLORS["shunting"], COLORS["rule_3f"], COLORS["highlight"], COLORS["inh"]]):
+    for leakage, color, linestyle in zip(
+        [0.0, 0.25, 0.5, 1.0],
+        [SEQ_CMAP(t) for t in [0.40, 0.60, 0.80, 1.0]],
+        [":", "--", "-.", "-"],
+    ):
         part = frame[np.isclose(frame.leakage, leakage)]
-        ax[2].plot(part.overlap, part.exact_forgetting, color=color, lw=LW_DATA, label=f"leak={leakage:g}")
+        ax[2].plot(part.overlap, part.exact_forgetting, color=color, ls=linestyle,
+                   lw=LW_DATA, label=f"leak={leakage:g}")
     ax[2].axhline(0, color=COLORS["mute"], lw=LW_REF, ls="--")
     ax[2].set_xlabel("route overlap")
     ax[2].set_ylabel("Task A loss increase")
@@ -156,8 +165,9 @@ def make_figure(frame: pd.DataFrame, stem: Path, eta: float) -> None:
     style_axis(ax[2], grid="both")
 
     _draw_animal_bridge(ax[3])
-    panel_title(ax[3], "D", "Link to branch-specific motor learning")
+    panel_title(ax[3], "D", "Biological prediction (not tested here)")
 
+    style_direct_color_labels(fig)
     audit_layout(fig, stem.name)
     audit_text_over_data(fig, stem.name)
     stem.parent.mkdir(parents=True, exist_ok=True)

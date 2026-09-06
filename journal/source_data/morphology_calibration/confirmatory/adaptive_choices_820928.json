@@ -1,0 +1,198 @@
+{
+  "matching": {
+    "coefficient_sha256": "a4cf73dee7c8985719b74dbd3621786088d1c6249548932c7ae501264561995f",
+    "estimated_bound": 0.011727415365,
+    "selection_seconds": 0.16009250306524336,
+    "tree": {
+      "children": {
+        "10": [
+          8,
+          9
+        ],
+        "11": [
+          6,
+          7
+        ],
+        "12": [
+          10,
+          11
+        ],
+        "13": [
+          1,
+          5
+        ],
+        "14": [
+          12,
+          13
+        ],
+        "8": [
+          0,
+          4
+        ],
+        "9": [
+          2,
+          3
+        ]
+      },
+      "name": "estimated_adaptive_dp",
+      "permutation": [
+        0,
+        4,
+        2,
+        3,
+        6,
+        7,
+        1,
+        5
+      ],
+      "shape": "adaptive"
+    }
+  },
+  "nested_prefix": {
+    "coefficient_sha256": "af76a9617307a9195774a9e5768939ac3ecc55666259a4432ffebd1c0913dbff",
+    "estimated_bound": 0.050347523499,
+    "selection_seconds": 0.15698923403397202,
+    "tree": {
+      "children": {
+        "10": [
+          3,
+          6
+        ],
+        "11": [
+          9,
+          10
+        ],
+        "12": [
+          8,
+          11
+        ],
+        "13": [
+          12,
+          5
+        ],
+        "14": [
+          13,
+          1
+        ],
+        "8": [
+          0,
+          7
+        ],
+        "9": [
+          2,
+          4
+        ]
+      },
+      "name": "estimated_adaptive_dp",
+      "permutation": [
+        0,
+        7,
+        2,
+        4,
+        3,
+        6,
+        5,
+        1
+      ],
+      "shape": "adaptive"
+    }
+  },
+  "quartet": {
+    "coefficient_sha256": "e713ecb910e186ea587846c56b48245337a4adb776530f9fa39fd969a5ad48af",
+    "estimated_bound": 0.025596207746,
+    "selection_seconds": 0.15783884294796735,
+    "tree": {
+      "children": {
+        "10": [
+          8,
+          9
+        ],
+        "11": [
+          3,
+          4
+        ],
+        "12": [
+          1,
+          11
+        ],
+        "13": [
+          12,
+          2
+        ],
+        "14": [
+          10,
+          13
+        ],
+        "8": [
+          0,
+          6
+        ],
+        "9": [
+          5,
+          7
+        ]
+      },
+      "name": "estimated_adaptive_dp",
+      "permutation": [
+        0,
+        6,
+        5,
+        7,
+        1,
+        3,
+        4,
+        2
+      ],
+      "shape": "adaptive"
+    }
+  },
+  "random_interactions": {
+    "coefficient_sha256": "c1f895867d2b7a12d68f85e5f59df6b36a46fb757f37534b4f26d34fb009fc0d",
+    "estimated_bound": 0.014014900206,
+    "selection_seconds": 0.1555663530016318,
+    "tree": {
+      "children": {
+        "10": [
+          1,
+          7
+        ],
+        "11": [
+          9,
+          10
+        ],
+        "12": [
+          2,
+          4
+        ],
+        "13": [
+          11,
+          12
+        ],
+        "14": [
+          13,
+          6
+        ],
+        "8": [
+          0,
+          5
+        ],
+        "9": [
+          8,
+          3
+        ]
+      },
+      "name": "estimated_adaptive_dp",
+      "permutation": [
+        0,
+        5,
+        3,
+        1,
+        7,
+        2,
+        4,
+        6
+      ],
+      "shape": "adaptive"
+    }
+  }
+}

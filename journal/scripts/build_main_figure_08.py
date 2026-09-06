@@ -88,13 +88,13 @@ COMPONENTS = ROOT / "figures" / "components"
 OUTPUT = COMPONENTS / "main_figure_08_native.pdf"
 
 # ── canvas geometry (points) ─────────────────────────────────────────────
-HEIGHT_IN = 493.0 / 72.0            # aspect 1.10, inside the 1.05-1.55 band
+HEIGHT_IN = 456.0 / 72.0            # common 0.92-textwidth placement
 # The horizontal gutter is the figure's ONE shared left reserve: it is set
 # wide enough to hold the widest y label and tick column on the page, so no
 # panel has to carve that space out of its own module slot and every panel of
 # a grid column keeps the same x0 and the same axes width.
 HGUTTER = 36.0
-VGUTTER = 57.0
+VGUTTER = 50.0
 MARGINS = Margins(left=49.0, right=8.0, top=21.0, bottom=27.0)
 ROW_WEIGHTS = (1.00, 1.00, 1.00)
 
@@ -463,7 +463,7 @@ def panel_active_dose(ax, summary, passive):
     ax.set_xlim(0.205, 5.0)
     ax.set_ylim(-0.055, 1.48)
     _tick_labels(ax, "y", (0.0, 0.5, 1.0), ("0", "0.5", "1.0"))
-    ax.set_xlabel("normalized shunt dose", fontsize=PT_LABEL, color=INK)
+    ax.set_xlabel("dose / local input conductance", fontsize=PT_LABEL, color=INK)
     ax.set_ylabel(LOCAL_LABEL, fontsize=PT_LABEL, color=INK)
 
     # Direct labels, each with a one-line mute sub-label naming the SIGN of
@@ -479,12 +479,12 @@ def panel_active_dose(ax, summary, passive):
     _direct_label(ax, 0.245, 1.135, "current injection", ADDITIVE)
     ax.text(0.245, 1.02, "enhances descendants", color=MUTE,
             fontsize=PT_SMALL, ha="left", va="center", zorder=6)
-    ax.text(0.245, 0.80, "dashed: passive,\nsame calibration", color=MUTE,
+    ax.text(0.245, 0.80, "baseline J fixed\npassive: dashed", color=MUTE,
             fontsize=PT_SMALL, ha="left", va="center", linespacing=1.15,
             zorder=6)
     # E carries the same quantity as C and D on a wider range; the caption
     # carries that disclosure rather than the panel.
-    _title(ax, "Active dose response")
+    _title(ax, "Linearized active sensitivity")
     return ax
 
 
@@ -493,7 +493,7 @@ COHORTS = (
     ("original_eight", "initial sample, n = 8", SHUNT, M_CONTRAST),
     ("v661_disjoint", "disjoint 45-cell cohort", REPLICATE, M_REPLICATE),
 )
-CONTRAST_LABEL = "shunt − current-injection localization"
+CONTRAST_LABEL = "shunt − current localization"
 # The same quantity, set on two lines where it is the (rotated) y axis of a
 # panel whose row is shorter than the label is long.
 CONTRAST_LABEL_Y = "shunt − current injection\nlocalization"
@@ -713,6 +713,8 @@ def build() -> list[str]:
     panel_electrotonic(ax_f)
     panel_contrast_forest(ax_g, active_contrasts, active_cells)
 
+    from journal_style import style_direct_color_labels
+    style_direct_color_labels(canvas.fig)
     problems = canvas.save(OUTPUT, name="main_figure_08_native")
     return problems
 

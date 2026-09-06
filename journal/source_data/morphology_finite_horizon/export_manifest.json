@@ -1,0 +1,1201 @@
+{
+  "files": [
+    {
+      "bytes": 6819,
+      "destination": "source_data/morphology_finite_horizon/DERIVATION.md",
+      "sha256": "bb3875f302b797d95104f34619ad3ed1caa465b464abfca3b0f9dfbd555ecf46",
+      "source": "analysis/morphology_investigation_20260905/dynamics/DERIVATION.md"
+    },
+    {
+      "bytes": 2379,
+      "destination": "source_data/morphology_finite_horizon/README.md",
+      "sha256": "00adc29fcfe906fb07148705e9e7c2372d5f4f9b377b0e4157ea14b38d059c64",
+      "source": "analysis/morphology_investigation_20260905/dynamics/README.md"
+    },
+    {
+      "bytes": 10737,
+      "destination": "source_data/morphology_finite_horizon/REPORT.md",
+      "sha256": "d54517a105a5512d036f72f73afde83279debb1d40928e0c726d101878f8d640",
+      "source": "analysis/morphology_investigation_20260905/dynamics/REPORT.md"
+    },
+    {
+      "bytes": 114,
+      "destination": "source_data/morphology_finite_horizon/dependency_versions.json",
+      "sha256": "822a5f56465fe55ec11415d232e48d409a9f734133d18d43a895c25c289ad49f",
+      "source": "analysis/morphology_investigation_20260905/dynamics/dependency_versions.json"
+    },
+    {
+      "bytes": 462,
+      "destination": "source_data/morphology_finite_horizon/fresh_validation.json",
+      "sha256": "9b30ac3c8d1dc16a452b3024439d074b03d35e16e0a23573c942ee4d8ae8f6dd",
+      "source": "analysis/morphology_investigation_20260905/dynamics/fresh_validation.json"
+    },
+    {
+      "bytes": 490,
+      "destination": "source_data/morphology_finite_horizon/operator_test_results.txt",
+      "sha256": "be9b56e02d7bfe26f8eaa67e8cf10074ad8670428e2ce75fe683753b2c9ed914",
+      "source": "analysis/morphology_investigation_20260905/dynamics/operator_test_results.txt"
+    },
+    {
+      "bytes": 3723,
+      "destination": "source_data/morphology_finite_horizon/protocol.json",
+      "sha256": "689abe998236c9cd9154eb1dd35ea0dec374d08f478b5df64b432f71a584e32d",
+      "source": "analysis/morphology_investigation_20260905/dynamics/protocol.json"
+    },
+    {
+      "bytes": 3723,
+      "destination": "source_data/morphology_finite_horizon/protocol_freeze_stdout.json",
+      "sha256": "edc6b92d1445fe9587c4b02f57e27053ced367a26992921a96e08d0e979786b6",
+      "source": "analysis/morphology_investigation_20260905/dynamics/protocol_freeze_stdout.json"
+    },
+    {
+      "bytes": 845,
+      "destination": "source_data/morphology_finite_horizon/runs/development/seed_6100_audit.json",
+      "sha256": "57ed921a73100a980a0660647bdde90bbf7798a8d2afbc1b640438731f1ba17d",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/development/seed_6100_audit.json"
+    },
+    {
+      "bytes": 1263954,
+      "destination": "source_data/morphology_finite_horizon/runs/development/seed_6100_outcomes.csv",
+      "sha256": "79ac2da8899ace540b838fe46e32e8abe7663f0382bbf2d64e53a03a26b29f86",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/development/seed_6100_outcomes.csv"
+    },
+    {
+      "bytes": 399585,
+      "destination": "source_data/morphology_finite_horizon/runs/development/seed_6100_pilot.csv",
+      "sha256": "f2f4dfa6e6d75e5f9c1003068571879324645411801c65b61f86788653e8d1c5",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/development/seed_6100_pilot.csv"
+    },
+    {
+      "bytes": 3248802,
+      "destination": "source_data/morphology_finite_horizon/runs/development/seed_6100_predictions.csv",
+      "sha256": "70b9080d773190ad6b6aa261126eea6041395dd22e45d3876a0d090472e1531c",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/development/seed_6100_predictions.csv"
+    },
+    {
+      "bytes": 355,
+      "destination": "source_data/morphology_finite_horizon/runs/development/seed_6100_selection_seal.json",
+      "sha256": "ee713e97a819a1350934b494b7f2479f5e158fb19b87ca4104b2c198e6d9642c",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/development/seed_6100_selection_seal.json"
+    },
+    {
+      "bytes": 39253,
+      "destination": "source_data/morphology_finite_horizon/runs/development/seed_6100_timings.csv",
+      "sha256": "2f4e6fee0afd09394dd1a0fa792db54cfa40221c2d28c978dde1ee4b648c4c8d",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/development/seed_6100_timings.csv"
+    },
+    {
+      "bytes": 844,
+      "destination": "source_data/morphology_finite_horizon/runs/development/seed_6101_audit.json",
+      "sha256": "358d65a132ec63ec18f79a5d35ed65702b94aab00fd84b0a5e349003292cdc7f",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/development/seed_6101_audit.json"
+    },
+    {
+      "bytes": 1264237,
+      "destination": "source_data/morphology_finite_horizon/runs/development/seed_6101_outcomes.csv",
+      "sha256": "77d2e45864ca01251fadce0d81d3f004bb29daf237fefdbb8e03d4a638c3a555",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/development/seed_6101_outcomes.csv"
+    },
+    {
+      "bytes": 399591,
+      "destination": "source_data/morphology_finite_horizon/runs/development/seed_6101_pilot.csv",
+      "sha256": "5db1c4c4f823b6a4e05d536f53b96c5b5a6f9e3550eb19d7b74c513e905bd95b",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/development/seed_6101_pilot.csv"
+    },
+    {
+      "bytes": 3250047,
+      "destination": "source_data/morphology_finite_horizon/runs/development/seed_6101_predictions.csv",
+      "sha256": "dbda6e811e4bb068c9af0341247580c509aad7e93848ae592d619fda3571848f",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/development/seed_6101_predictions.csv"
+    },
+    {
+      "bytes": 355,
+      "destination": "source_data/morphology_finite_horizon/runs/development/seed_6101_selection_seal.json",
+      "sha256": "ddd982a0111c5c2011b6129ba1e880b41306df6e6604a007f7831c064c52da59",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/development/seed_6101_selection_seal.json"
+    },
+    {
+      "bytes": 39291,
+      "destination": "source_data/morphology_finite_horizon/runs/development/seed_6101_timings.csv",
+      "sha256": "189b7bf2172172f33ebba20a40b606d3e02d18a0f16dd2f9e681b15e965307ab",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/development/seed_6101_timings.csv"
+    },
+    {
+      "bytes": 847,
+      "destination": "source_data/morphology_finite_horizon/runs/development/seed_6102_audit.json",
+      "sha256": "54c7dca9d715c605351168d2b5f2e9600327742f0120801a15f5092d5cfa0fed",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/development/seed_6102_audit.json"
+    },
+    {
+      "bytes": 1263873,
+      "destination": "source_data/morphology_finite_horizon/runs/development/seed_6102_outcomes.csv",
+      "sha256": "56475d81954d8ac53e7229ed5ad9a0aed9d434765af1ca938805f1da2fed9e1a",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/development/seed_6102_outcomes.csv"
+    },
+    {
+      "bytes": 399616,
+      "destination": "source_data/morphology_finite_horizon/runs/development/seed_6102_pilot.csv",
+      "sha256": "683f3e206c1f96e082c6dee57f771bd1fa059bd9c4b32b0e0b0455aa3c6d88e9",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/development/seed_6102_pilot.csv"
+    },
+    {
+      "bytes": 3249243,
+      "destination": "source_data/morphology_finite_horizon/runs/development/seed_6102_predictions.csv",
+      "sha256": "bd6b9e023c15cadf237546b4752589ac26017102518619adcf02aadc84d8d072",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/development/seed_6102_predictions.csv"
+    },
+    {
+      "bytes": 355,
+      "destination": "source_data/morphology_finite_horizon/runs/development/seed_6102_selection_seal.json",
+      "sha256": "7822e528dd40b0b95aa45cb623e627a93e35d4d6ad61968533833bcd296cc564",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/development/seed_6102_selection_seal.json"
+    },
+    {
+      "bytes": 39314,
+      "destination": "source_data/morphology_finite_horizon/runs/development/seed_6102_timings.csv",
+      "sha256": "1a118180a31e825535f221d6e6bf73369b3723b3d6cce8a31caecf8cb8288641",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/development/seed_6102_timings.csv"
+    },
+    {
+      "bytes": 846,
+      "destination": "source_data/morphology_finite_horizon/runs/development/seed_6103_audit.json",
+      "sha256": "3f9786527e548234529a560bc94eecd2ee365ccbaf191df0f3468b45c6590259",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/development/seed_6103_audit.json"
+    },
+    {
+      "bytes": 1264216,
+      "destination": "source_data/morphology_finite_horizon/runs/development/seed_6103_outcomes.csv",
+      "sha256": "23ec3ec2171a632d73b800904b696655efc092bd2c8f29da3b866333c23766de",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/development/seed_6103_outcomes.csv"
+    },
+    {
+      "bytes": 399584,
+      "destination": "source_data/morphology_finite_horizon/runs/development/seed_6103_pilot.csv",
+      "sha256": "0e6f10eec170548e07ac97892acff3d97348fef8282123bbffe0783dc6172291",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/development/seed_6103_pilot.csv"
+    },
+    {
+      "bytes": 3249976,
+      "destination": "source_data/morphology_finite_horizon/runs/development/seed_6103_predictions.csv",
+      "sha256": "2cc180a20230d10381591e2576a558f108fb8f62ff1eae447c0e2b8e7410e678",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/development/seed_6103_predictions.csv"
+    },
+    {
+      "bytes": 355,
+      "destination": "source_data/morphology_finite_horizon/runs/development/seed_6103_selection_seal.json",
+      "sha256": "8f0205131d9e0220aa4b4dc7bc008802ea6ca06620cd7067481e1e746c6814c2",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/development/seed_6103_selection_seal.json"
+    },
+    {
+      "bytes": 39267,
+      "destination": "source_data/morphology_finite_horizon/runs/development/seed_6103_timings.csv",
+      "sha256": "bb185942146d0bdbd81bbc1f067788c552b9811c6348ac3911b9d8535211030d",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/development/seed_6103_timings.csv"
+    },
+    {
+      "bytes": 846,
+      "destination": "source_data/morphology_finite_horizon/runs/development/seed_6104_audit.json",
+      "sha256": "435ac4f8cf91c01f5a3084849e330899af8a9577d9e076111e4442a40f467500",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/development/seed_6104_audit.json"
+    },
+    {
+      "bytes": 1263942,
+      "destination": "source_data/morphology_finite_horizon/runs/development/seed_6104_outcomes.csv",
+      "sha256": "27b5cde09002582629829d7d457952d2de5404cb511e697408a295d64fbae57c",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/development/seed_6104_outcomes.csv"
+    },
+    {
+      "bytes": 399533,
+      "destination": "source_data/morphology_finite_horizon/runs/development/seed_6104_pilot.csv",
+      "sha256": "932de6b8a16521a6efe78693c2cf9406d682ae4472bc7a01fb4912e4f7625237",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/development/seed_6104_pilot.csv"
+    },
+    {
+      "bytes": 3249692,
+      "destination": "source_data/morphology_finite_horizon/runs/development/seed_6104_predictions.csv",
+      "sha256": "47eaa7f70124a04aea92e30e920f7239725e6127fd138ccdb4af50395ee84153",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/development/seed_6104_predictions.csv"
+    },
+    {
+      "bytes": 355,
+      "destination": "source_data/morphology_finite_horizon/runs/development/seed_6104_selection_seal.json",
+      "sha256": "1553cb50fd2021590e1f4c8b9a422738e1a8d857bce5f850d9e6c615f1281bcb",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/development/seed_6104_selection_seal.json"
+    },
+    {
+      "bytes": 39295,
+      "destination": "source_data/morphology_finite_horizon/runs/development/seed_6104_timings.csv",
+      "sha256": "354d44ce4fa9a3883d542907972b866fff775d30498d1eb22f656fd05d88e661",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/development/seed_6104_timings.csv"
+    },
+    {
+      "bytes": 818,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9300_audit.json",
+      "sha256": "5a77a6ebb6458a2d647bf8069d63887d41a59d56cc19151aefb2ccd8943af5ff",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9300_audit.json"
+    },
+    {
+      "bytes": 853409,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9300_outcomes.csv",
+      "sha256": "ee1e7006c1b87c1f8b3357f24e82a21e2bf880de5ddffce3bb178fcbccf3dc87",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9300_outcomes.csv"
+    },
+    {
+      "bytes": 269926,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9300_pilot.csv",
+      "sha256": "8402efa2d275893a8841fda5f6b997b36f4e7791c826e67c58639d8be6b6134a",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9300_pilot.csv"
+    },
+    {
+      "bytes": 2194147,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9300_predictions.csv",
+      "sha256": "240c39b5300ced611e5ad82b4dd573d045580c180bb4e972f03466709c9094d6",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9300_predictions.csv"
+    },
+    {
+      "bytes": 349,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9300_selection_seal.json",
+      "sha256": "181ce3547d79d6fc0ea37da849a49596b47098473167d7abcc20997b4713d1fd",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9300_selection_seal.json"
+    },
+    {
+      "bytes": 26236,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9300_timings.csv",
+      "sha256": "bd98ffbdb4bf5ec5354b7f99c8e53bff3f4bf6bc470f8d7caa8ce7c3c1306d5b",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9300_timings.csv"
+    },
+    {
+      "bytes": 818,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9301_audit.json",
+      "sha256": "67d87317587135ac32d448320ec113c8559015e73ddf14995442bf32622a2018",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9301_audit.json"
+    },
+    {
+      "bytes": 853588,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9301_outcomes.csv",
+      "sha256": "6866fac3f418014e7e81837987f7510e92928fe6bb992a67209d8780bb10e0fa",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9301_outcomes.csv"
+    },
+    {
+      "bytes": 269891,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9301_pilot.csv",
+      "sha256": "ba254bfb8ebc81bfc4c97b00e72d7acf42b52f086b54420c20ba293d08d78356",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9301_pilot.csv"
+    },
+    {
+      "bytes": 2194296,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9301_predictions.csv",
+      "sha256": "38205a794fc079cf785f0c15eed6b5a9a682facb7c5ca33fe4d1df71e256c8c4",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9301_predictions.csv"
+    },
+    {
+      "bytes": 349,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9301_selection_seal.json",
+      "sha256": "c59f6efe6ed91b0f54cafb13f3e70aa5e4a382fcb4380dcb70eddaffef95fa6b",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9301_selection_seal.json"
+    },
+    {
+      "bytes": 26219,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9301_timings.csv",
+      "sha256": "e616e2a2ed0457f5b756268c5b7d99710b62ddbcc949b58756a752b65df1127a",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9301_timings.csv"
+    },
+    {
+      "bytes": 817,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9302_audit.json",
+      "sha256": "adeba76d9ce267dc78da949f52fb6ae1f1c8c89f1531e2214a4b599e33668973",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9302_audit.json"
+    },
+    {
+      "bytes": 853443,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9302_outcomes.csv",
+      "sha256": "4fa4daca79283731e8dd9bc072a7397982e8c6719bdf1be0f43ba71dbf7097d2",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9302_outcomes.csv"
+    },
+    {
+      "bytes": 269920,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9302_pilot.csv",
+      "sha256": "7ff0da3a2fd9a040d821b70805a10c7657548534b45e96382033df9919473071",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9302_pilot.csv"
+    },
+    {
+      "bytes": 2194097,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9302_predictions.csv",
+      "sha256": "dd5fb64ea266efd6044b51770db2cc1b59e65ef7ac4d341a7ba8a54e682e074b",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9302_predictions.csv"
+    },
+    {
+      "bytes": 349,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9302_selection_seal.json",
+      "sha256": "db7432feff5762a111e4f7573e035da5aa33dc031d049c65a6f72028f1c9efbe",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9302_selection_seal.json"
+    },
+    {
+      "bytes": 26269,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9302_timings.csv",
+      "sha256": "8bf5f648e8659fec43ba55cdd47dd0b2af93de89001fbffde15626c8fc30a8ab",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9302_timings.csv"
+    },
+    {
+      "bytes": 817,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9303_audit.json",
+      "sha256": "0c4c794173f5da876e07e06ee13aa74e108982c9e18cfb5235470d7254cfa493",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9303_audit.json"
+    },
+    {
+      "bytes": 853575,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9303_outcomes.csv",
+      "sha256": "9764bf118aa77fee17f52fb9ab6a6e545b30dcfe3d6b0c8f5216a3b0910bc346",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9303_outcomes.csv"
+    },
+    {
+      "bytes": 269936,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9303_pilot.csv",
+      "sha256": "36c954ae9b202f9cf2f180f7243356692f783b7c60471892795891ada24b81cc",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9303_pilot.csv"
+    },
+    {
+      "bytes": 2194452,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9303_predictions.csv",
+      "sha256": "ca39c3a92da06f77c33bf7b984f188dc0c216ed2f6edc8d35d6e1593eefb4710",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9303_predictions.csv"
+    },
+    {
+      "bytes": 349,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9303_selection_seal.json",
+      "sha256": "3cb61013688d1741b108b46d5f20728a6c55207d586879c6a616a86484e0e637",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9303_selection_seal.json"
+    },
+    {
+      "bytes": 26205,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9303_timings.csv",
+      "sha256": "8aafe39ba4d31ad6d2970d8b4fa2fb0ee3efd1c663a028a09a2393e8d99bc991",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9303_timings.csv"
+    },
+    {
+      "bytes": 818,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9304_audit.json",
+      "sha256": "811c33904658757f07b6d1da338f9ee0dbed377a8f2733a232cb54a1507409b1",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9304_audit.json"
+    },
+    {
+      "bytes": 853478,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9304_outcomes.csv",
+      "sha256": "4c736969d68085d6e2bccc44e9e5387f936bb277952be37f864903dd52305e5b",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9304_outcomes.csv"
+    },
+    {
+      "bytes": 269968,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9304_pilot.csv",
+      "sha256": "c04607dcd743b4a768d2f05ced5ef33846eba0041764f8cca535fb4fb14b447d",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9304_pilot.csv"
+    },
+    {
+      "bytes": 2194491,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9304_predictions.csv",
+      "sha256": "ddae805f3a753f51086b20567438ddd8036c35c996d1891eab3b2bf2f7dd6e9b",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9304_predictions.csv"
+    },
+    {
+      "bytes": 349,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9304_selection_seal.json",
+      "sha256": "3634755c25e3f4d3512f866590fcc33f5e6534c0e520e4dc04c94a25b76a4c99",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9304_selection_seal.json"
+    },
+    {
+      "bytes": 26213,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9304_timings.csv",
+      "sha256": "f3bd4d3b8a491146c57a417ff7e3da2232334476d2289dd313b20689c7ac508f",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9304_timings.csv"
+    },
+    {
+      "bytes": 818,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9305_audit.json",
+      "sha256": "f985ca9746ae256b2ba3239477848cd75f49bc48e0ddd19448a62d911658fd71",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9305_audit.json"
+    },
+    {
+      "bytes": 853391,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9305_outcomes.csv",
+      "sha256": "a831fad9c3b8540f60174815b667133f9e0887060f9b0c06474056b04d8c1004",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9305_outcomes.csv"
+    },
+    {
+      "bytes": 269941,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9305_pilot.csv",
+      "sha256": "395f5bd7603be9b2a4797597192b30f2c23c8aa055e47b86d50f60520abd3da0",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9305_pilot.csv"
+    },
+    {
+      "bytes": 2194582,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9305_predictions.csv",
+      "sha256": "fcc94b0108db094f924db15511cb3cc1a92c76bda243b709391e53548746f2f2",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9305_predictions.csv"
+    },
+    {
+      "bytes": 349,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9305_selection_seal.json",
+      "sha256": "e2531ef5ff18099378f1d58a33080ca189340ff77023459ef1ee1e9999790600",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9305_selection_seal.json"
+    },
+    {
+      "bytes": 26228,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9305_timings.csv",
+      "sha256": "55e8514a52ea9fcf4ab304da38fd5fc44c70c47831f4a2826e164628f32fcf43",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9305_timings.csv"
+    },
+    {
+      "bytes": 817,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9306_audit.json",
+      "sha256": "45b521f714cd0ca9946c63a6cd518ddee363e34edcac1633ff5d6abb2ded2a3e",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9306_audit.json"
+    },
+    {
+      "bytes": 853371,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9306_outcomes.csv",
+      "sha256": "3b3dbe50e28275d25b7019cb26f385bf83e56c67b086bb51228e1dac162ccb8e",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9306_outcomes.csv"
+    },
+    {
+      "bytes": 269832,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9306_pilot.csv",
+      "sha256": "0073e31c5af99b9b6b32898e6022c7e35b6e6b8cb67116b72dbbfd95f35f707a",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9306_pilot.csv"
+    },
+    {
+      "bytes": 2194107,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9306_predictions.csv",
+      "sha256": "392cb3fe4a8694b3a188afb42e322eadb20861a685a17da97908be5398d5ff83",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9306_predictions.csv"
+    },
+    {
+      "bytes": 349,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9306_selection_seal.json",
+      "sha256": "a39128245385f2588a1a713b8c1ddbc7614c1e3e85de71db22f41a8f00a0ec04",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9306_selection_seal.json"
+    },
+    {
+      "bytes": 26243,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9306_timings.csv",
+      "sha256": "49731ee6529caa24e43319bb59063bd735263db03ea4a13514f1751f5c438ae2",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9306_timings.csv"
+    },
+    {
+      "bytes": 818,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9307_audit.json",
+      "sha256": "1878d7b313cf6b9bbeeecee84b7c3b474a507954d7882bc041d4e03c6e628d0b",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9307_audit.json"
+    },
+    {
+      "bytes": 853560,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9307_outcomes.csv",
+      "sha256": "1ac75b4c8037098ca4bc66ec17570ab9c2212a8baddab8b09606fe0ee3700f8a",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9307_outcomes.csv"
+    },
+    {
+      "bytes": 269967,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9307_pilot.csv",
+      "sha256": "533fa54b4e4c0eedb46fa57a1509d78caa4f992d06f2c1bd153b2b0af74e7f7c",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9307_pilot.csv"
+    },
+    {
+      "bytes": 2194468,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9307_predictions.csv",
+      "sha256": "7deaa28b8906087f214936062ae2aede47565b10552b756d9bcbbf8579edc7f7",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9307_predictions.csv"
+    },
+    {
+      "bytes": 349,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9307_selection_seal.json",
+      "sha256": "cdbc26d46bac165ed05a060e109c309753975e919c6046dc199bd436079e2b83",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9307_selection_seal.json"
+    },
+    {
+      "bytes": 26215,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9307_timings.csv",
+      "sha256": "cbc84bb02c113692a3c9944f6daa4f21c758f295e20cc47967d2fe886f971a8e",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9307_timings.csv"
+    },
+    {
+      "bytes": 818,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9308_audit.json",
+      "sha256": "c1f606adb6585c150315d6f8ddbbc1313de509be645ac585833b0935bd1d5b48",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9308_audit.json"
+    },
+    {
+      "bytes": 853410,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9308_outcomes.csv",
+      "sha256": "d8d95193f7c51765e5c7b89adb028b57406080f6d7a0b0c70f98bdfb29de236b",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9308_outcomes.csv"
+    },
+    {
+      "bytes": 269921,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9308_pilot.csv",
+      "sha256": "d3beb92723defda827df9f57dc62e17aba451859b3ce1fd1f92febfb46227b05",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9308_pilot.csv"
+    },
+    {
+      "bytes": 2193865,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9308_predictions.csv",
+      "sha256": "82103fc93bd024abe2f1e8d7f7a2e0620f8b99ec85a5664be1192a29ef45f417",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9308_predictions.csv"
+    },
+    {
+      "bytes": 349,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9308_selection_seal.json",
+      "sha256": "d42b8c37568783ecd8ba18cd37fe857a645fe2a4b30c6b6aea902146ad082933",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9308_selection_seal.json"
+    },
+    {
+      "bytes": 26219,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9308_timings.csv",
+      "sha256": "fd1445c3ce0d1a0569c14ef8203167d432f2673064c00c7772451f4e0362380d",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9308_timings.csv"
+    },
+    {
+      "bytes": 818,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9309_audit.json",
+      "sha256": "3441409dd988ed43931447fe3d224a74e2964a02747a3dfa1ffd18a6c4ffcbf8",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9309_audit.json"
+    },
+    {
+      "bytes": 853459,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9309_outcomes.csv",
+      "sha256": "c7d75276ffbfedf9ba0b4c6b7d6f32b025557ca862713ece34a3da6866c6d956",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9309_outcomes.csv"
+    },
+    {
+      "bytes": 269937,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9309_pilot.csv",
+      "sha256": "3267cea15565f8e01295c6b11a88f1f43339650ba51b612168ef93f9178d5957",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9309_pilot.csv"
+    },
+    {
+      "bytes": 2194524,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9309_predictions.csv",
+      "sha256": "7999cd0c5fff3151af2005ef9b270718fc586fd578ba42de85e4b2e781c414af",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9309_predictions.csv"
+    },
+    {
+      "bytes": 349,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9309_selection_seal.json",
+      "sha256": "7ad29df657772f67740f18f7ff3d7b1dfcc89cec2d3c9a8f5f93e833802e42f0",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9309_selection_seal.json"
+    },
+    {
+      "bytes": 26224,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9309_timings.csv",
+      "sha256": "d28abd401201ed67fbb6a574ee6634584972793d372087723377a759a30d9893",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9309_timings.csv"
+    },
+    {
+      "bytes": 818,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9310_audit.json",
+      "sha256": "2aa0d37d35c0487c49b1cb95d2346dac8f37ff163d2510ae8d7715998c4a6a74",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9310_audit.json"
+    },
+    {
+      "bytes": 853539,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9310_outcomes.csv",
+      "sha256": "ac0be377cddf2e5e9af4227a9daf7bce1a9c7efe1c1d218f591399983cacbe98",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9310_outcomes.csv"
+    },
+    {
+      "bytes": 269933,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9310_pilot.csv",
+      "sha256": "bc1f98d3e10995cbdc7e972a7d2d8868d47e3db6f9c28f7b3311d76bf3bd81bc",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9310_pilot.csv"
+    },
+    {
+      "bytes": 2194425,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9310_predictions.csv",
+      "sha256": "42c969e9fa1f776625e330eed20e74b377599e8dcc6c1a76a73fefcb7826b8a5",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9310_predictions.csv"
+    },
+    {
+      "bytes": 349,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9310_selection_seal.json",
+      "sha256": "6a25da59332b9a6f026efd76cd0888946f05a21c50202961b2da9dbb4cad92e3",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9310_selection_seal.json"
+    },
+    {
+      "bytes": 26266,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9310_timings.csv",
+      "sha256": "32626631eddbb2d155a8ddbc9ce75a5d23f1e96f3ce7b30e2fc1eb9144ee0872",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9310_timings.csv"
+    },
+    {
+      "bytes": 818,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9311_audit.json",
+      "sha256": "83c308ecf9c24150378bdb6c51cb8342df7c1742a64cb85b0498a62f8f882396",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9311_audit.json"
+    },
+    {
+      "bytes": 853235,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9311_outcomes.csv",
+      "sha256": "900bf3f128e5934b27f9ec68c3ad3b2c8e559b3f9204e2c02dc7d4af516393a8",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9311_outcomes.csv"
+    },
+    {
+      "bytes": 269907,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9311_pilot.csv",
+      "sha256": "dbc0cf39dd9545af16d2f57573ccf28d9685b48998546fc4ec0848ff51746f36",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9311_pilot.csv"
+    },
+    {
+      "bytes": 2194188,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9311_predictions.csv",
+      "sha256": "e83c68ea949eced2c251977b6c946370c8fadcc57117fdfe2d0c4fb554ae5181",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9311_predictions.csv"
+    },
+    {
+      "bytes": 349,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9311_selection_seal.json",
+      "sha256": "7d59fd6069c6ae8102c1b63d8196d2ed6c8f3ce7eb4660a9e758c59cbd9cee97",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9311_selection_seal.json"
+    },
+    {
+      "bytes": 26229,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9311_timings.csv",
+      "sha256": "6cd5b3e9cd8c74c2ffd2f6170e57c62112e25f5522a1e24f581fc458a877e4dd",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9311_timings.csv"
+    },
+    {
+      "bytes": 818,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9312_audit.json",
+      "sha256": "34afaccde8c49d44a2eb7d18a4dd9216349e3d86dfb263a1e212b8a884f53482",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9312_audit.json"
+    },
+    {
+      "bytes": 853499,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9312_outcomes.csv",
+      "sha256": "d3c5f658562f2c3911a2e428565ced18fd5d1a92ec64f7d4c451df29f21bc893",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9312_outcomes.csv"
+    },
+    {
+      "bytes": 269946,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9312_pilot.csv",
+      "sha256": "9ce83229c0c7b59cad79bf2aa5fb13c783639f7b70b6e3aec804d48c37222189",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9312_pilot.csv"
+    },
+    {
+      "bytes": 2194338,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9312_predictions.csv",
+      "sha256": "2a6ac681bc4192d6a8538cfab2b3e17493eb8b93a6b7c532153d5b799649299c",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9312_predictions.csv"
+    },
+    {
+      "bytes": 349,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9312_selection_seal.json",
+      "sha256": "3bb1c1ec8942a447711940022c4bdba1838785e60f6c2d2eda56cf85756cf7f3",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9312_selection_seal.json"
+    },
+    {
+      "bytes": 26255,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9312_timings.csv",
+      "sha256": "864770c10ea3ebf3444e0c462159ca25d1a8bcb95d044f723be955b4daa19b42",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9312_timings.csv"
+    },
+    {
+      "bytes": 818,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9313_audit.json",
+      "sha256": "932e341b72f4d104f0a41c96beb0cfe60a57b668e5222f937b1f504c7ebee131",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9313_audit.json"
+    },
+    {
+      "bytes": 853443,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9313_outcomes.csv",
+      "sha256": "8a617a41680a5d8c646323b5721e81c8c20ceb27fcaababc9b4a5d600f3f9fa1",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9313_outcomes.csv"
+    },
+    {
+      "bytes": 269899,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9313_pilot.csv",
+      "sha256": "d6d5c0bdcc279132f6fe4af9930b23d14af7e8eee0745ce7c7e2f5d51d9c1fc8",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9313_pilot.csv"
+    },
+    {
+      "bytes": 2194093,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9313_predictions.csv",
+      "sha256": "f6ac6e4f0e3baf6ccf8d17a36550c2654e19be307fcc266455959552640b1781",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9313_predictions.csv"
+    },
+    {
+      "bytes": 349,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9313_selection_seal.json",
+      "sha256": "1ede47d4953810884d0b828537f3625fb15ba97c1b38815fe731aff874286bc0",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9313_selection_seal.json"
+    },
+    {
+      "bytes": 26208,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9313_timings.csv",
+      "sha256": "42689a2710f950e8b755bac0152f273d692927525d84303715db90be208d4f8a",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9313_timings.csv"
+    },
+    {
+      "bytes": 817,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9314_audit.json",
+      "sha256": "3953b41ea76ad55f39edb2a302ca1f6b3d32fee332d4573c803eee847cfa6c3f",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9314_audit.json"
+    },
+    {
+      "bytes": 853418,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9314_outcomes.csv",
+      "sha256": "3900d019917d03ffee2abcf72331197db7008b007feee4900ca59df673ac118e",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9314_outcomes.csv"
+    },
+    {
+      "bytes": 269915,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9314_pilot.csv",
+      "sha256": "ed543423b0372d7f2bff77e4e386f5337aed9e62e4e22d248e3523cf9957b5da",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9314_pilot.csv"
+    },
+    {
+      "bytes": 2194127,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9314_predictions.csv",
+      "sha256": "c846915ef59cf8cdeff3e4e18ed227a63a975dd763c7974f2bae9bcea66d77fe",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9314_predictions.csv"
+    },
+    {
+      "bytes": 349,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9314_selection_seal.json",
+      "sha256": "1f903de909362d870e49cd1c80394542d898692a9006c95e68c784ce17876480",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9314_selection_seal.json"
+    },
+    {
+      "bytes": 26236,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9314_timings.csv",
+      "sha256": "57afa4669098bcf0a35cd1de84a3c009afac6bc6d73e4f9ec6bde84148e65fea",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9314_timings.csv"
+    },
+    {
+      "bytes": 818,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9315_audit.json",
+      "sha256": "6900ed391a2baa29063ad12e4babc1d9c33d1482dfae25a1e4a9e9e1dd3ef35a",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9315_audit.json"
+    },
+    {
+      "bytes": 853740,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9315_outcomes.csv",
+      "sha256": "3351a7218b6734a826f0c68606725b5693749317cf57bdf8558e35d15ef1e8b2",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9315_outcomes.csv"
+    },
+    {
+      "bytes": 269885,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9315_pilot.csv",
+      "sha256": "baaa8faa9c3e26926299231dc7b1b3e907b24aaeb6503898bf27c1cb01501092",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9315_pilot.csv"
+    },
+    {
+      "bytes": 2194241,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9315_predictions.csv",
+      "sha256": "6e8a22b071a64045012f9d9880c6e5e4d4b07e7b87b6604cdfcb4d989f942e3b",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9315_predictions.csv"
+    },
+    {
+      "bytes": 349,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9315_selection_seal.json",
+      "sha256": "5a240bb22eab373964dd1c0c9be5fc282f98c27e2b4065a6838c35c0824df1b3",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9315_selection_seal.json"
+    },
+    {
+      "bytes": 26218,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9315_timings.csv",
+      "sha256": "8ab9a3d32206043f1be56c00adf5ba88fe5b92a6f3facae8ddc3db7d5222b1f0",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9315_timings.csv"
+    },
+    {
+      "bytes": 818,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9316_audit.json",
+      "sha256": "6a9d2d8e4790c90c853a07466343d5713b95e810794570996641e72c704c09c7",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9316_audit.json"
+    },
+    {
+      "bytes": 853462,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9316_outcomes.csv",
+      "sha256": "097d53ffe8e116c470ef5f9baa8a49c14080bc90ba2f9de4f371768a34c7a142",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9316_outcomes.csv"
+    },
+    {
+      "bytes": 269924,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9316_pilot.csv",
+      "sha256": "c1ad0368f975acdb50fef340f9f17994033987fc0d5c5c0e08794ca8bd80702d",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9316_pilot.csv"
+    },
+    {
+      "bytes": 2194380,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9316_predictions.csv",
+      "sha256": "2c64eb1d623e482b4467dc9b7d19007b2759d6187af04c756bb6af5db6318d52",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9316_predictions.csv"
+    },
+    {
+      "bytes": 349,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9316_selection_seal.json",
+      "sha256": "c059ac5132b65a3d4f1c8033edf3a1f22528e6946a4f0ca87dc798acfdc685f1",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9316_selection_seal.json"
+    },
+    {
+      "bytes": 26254,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9316_timings.csv",
+      "sha256": "83f80528c22d919d7ac96385f767a0b0544649f82b93ca87e6763ece9e056e80",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9316_timings.csv"
+    },
+    {
+      "bytes": 817,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9317_audit.json",
+      "sha256": "3b9c86db2ff09a60bc93fa910995e10d9b8b0a51921c30c5552f9e4163815566",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9317_audit.json"
+    },
+    {
+      "bytes": 853526,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9317_outcomes.csv",
+      "sha256": "fb36c985a33989c4fe913b709e9330bdbaaf76330b9dd58166fe42f720b8fe4a",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9317_outcomes.csv"
+    },
+    {
+      "bytes": 269940,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9317_pilot.csv",
+      "sha256": "0e4c27adbea7daf18e4dc40fa293fd068b0e384f883437ff44b080f8091a4ba8",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9317_pilot.csv"
+    },
+    {
+      "bytes": 2194643,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9317_predictions.csv",
+      "sha256": "0d5bdc9e3ecb94a7f9308c090064be45620b8c64f9e5b39c62f435f932498b35",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9317_predictions.csv"
+    },
+    {
+      "bytes": 349,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9317_selection_seal.json",
+      "sha256": "6b40b7e478bef5e5c8743680711a2cf44befc51db63ac59e7d0e8169fc6c5088",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9317_selection_seal.json"
+    },
+    {
+      "bytes": 26237,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9317_timings.csv",
+      "sha256": "df6ecc8494c902924c73eae9ff091015bb3a269312b20d37762cbd93fbfad143",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9317_timings.csv"
+    },
+    {
+      "bytes": 817,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9318_audit.json",
+      "sha256": "46d53180bd72ef705d9ea6c15cd7dd1998007798dc59e13fd753663aa1e4f3d6",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9318_audit.json"
+    },
+    {
+      "bytes": 853355,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9318_outcomes.csv",
+      "sha256": "cca20aaf5f614a95c3a8260d7f2106dbe54a6224b63e910e22f17d606db0d635",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9318_outcomes.csv"
+    },
+    {
+      "bytes": 269915,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9318_pilot.csv",
+      "sha256": "49a4f3aef6196e8031770eaa02b1952cc0ee7f86ff4c1a8abda5bd22b5c3cbfa",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9318_pilot.csv"
+    },
+    {
+      "bytes": 2193635,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9318_predictions.csv",
+      "sha256": "d7a91639ee16f63b610ea8bd645439b343ba0137620e6ce7cfb10ce450b5e1ef",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9318_predictions.csv"
+    },
+    {
+      "bytes": 349,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9318_selection_seal.json",
+      "sha256": "68e516ae77480efac9b750b4d4a3068c619aa7e01e2ab4327e4b5bda9d1fc36d",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9318_selection_seal.json"
+    },
+    {
+      "bytes": 26247,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9318_timings.csv",
+      "sha256": "e0d68c8636b01eecb317dfecb5d8c9d26918ccaaf67d13a6f6dce5df5fb03172",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9318_timings.csv"
+    },
+    {
+      "bytes": 817,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9319_audit.json",
+      "sha256": "5c70c5bee4f74b55988a9e4c0957e963acd8c77c47361c6210dbcb4b380225d3",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9319_audit.json"
+    },
+    {
+      "bytes": 853349,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9319_outcomes.csv",
+      "sha256": "e6339fede5575c23c5c82c213ca72f78bd85cdce37a0194cb78289f191f58f97",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9319_outcomes.csv"
+    },
+    {
+      "bytes": 269895,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9319_pilot.csv",
+      "sha256": "9fddc9218218809508c6d082d0dea79db08819eca36c1cb9037ab26aa65e9f1d",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9319_pilot.csv"
+    },
+    {
+      "bytes": 2194190,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9319_predictions.csv",
+      "sha256": "77fcf432b4c3f89642723390bb9ae10d229cb5ff31f2f1b4d9d867e34c9fb1d5",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9319_predictions.csv"
+    },
+    {
+      "bytes": 349,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9319_selection_seal.json",
+      "sha256": "4cdeb1786aa7990c23b7885af54e412602c6b1c3910469468077602ecfcfae1f",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9319_selection_seal.json"
+    },
+    {
+      "bytes": 26241,
+      "destination": "source_data/morphology_finite_horizon/runs/fresh/seed_9319_timings.csv",
+      "sha256": "b4ef2f683807ba178c5fbfcfb948984bce916afabff8a5103871d11cf2f5e146",
+      "source": "analysis/morphology_investigation_20260905/dynamics/runs/fresh/seed_9319_timings.csv"
+    },
+    {
+      "bytes": 4146,
+      "destination": "source_data/morphology_finite_horizon/slurm_accounting.tsv",
+      "sha256": "a10a96884055c595d0d44059f80ead3ba2aedbdada2d6421156834c0613599c4",
+      "source": "analysis/morphology_investigation_20260905/dynamics/slurm_accounting.tsv"
+    },
+    {
+      "bytes": 680,
+      "destination": "source_data/morphology_finite_horizon/summaries/development/comparative_computational_cost.csv",
+      "sha256": "f93289addb496b5e9f74d280858a43e3ffc9b523dfcda31fc6b7628910b2b2ca",
+      "source": "analysis/morphology_investigation_20260905/dynamics/summaries/development/comparative_computational_cost.csv"
+    },
+    {
+      "bytes": 127192,
+      "destination": "source_data/morphology_finite_horizon/summaries/development/endpoint_oracle_choices.csv",
+      "sha256": "27ad1871115039f2080fa16dcb10e5b2dac0f99dfeb7ee50df830c0f1b158e35",
+      "source": "analysis/morphology_investigation_20260905/dynamics/summaries/development/endpoint_oracle_choices.csv"
+    },
+    {
+      "bytes": 2074120,
+      "destination": "source_data/morphology_finite_horizon/summaries/development/endpoint_policies_with_secondary_baselines.csv",
+      "sha256": "fda90e2169255505af583f387a4fe6fb7afd1a70588bee0b3ae0aede3737fce0",
+      "source": "analysis/morphology_investigation_20260905/dynamics/summaries/development/endpoint_policies_with_secondary_baselines.csv"
+    },
+    {
+      "bytes": 32601,
+      "destination": "source_data/morphology_finite_horizon/summaries/development/endpoint_summary_with_secondary_baselines.csv",
+      "sha256": "935c066464a9073255d6cf996e316d2f65a5e1b6354eb4536570bcb21fab9179",
+      "source": "analysis/morphology_investigation_20260905/dynamics/summaries/development/endpoint_summary_with_secondary_baselines.csv"
+    },
+    {
+      "bytes": 3678,
+      "destination": "source_data/morphology_finite_horizon/summaries/development/observed_context_counts.csv",
+      "sha256": "dd24964ecf0bc1629f24aa64d7e9174c9935922ca7c578b1afb6c2d5cfe9df60",
+      "source": "analysis/morphology_investigation_20260905/dynamics/summaries/development/observed_context_counts.csv"
+    },
+    {
+      "bytes": 10452,
+      "destination": "source_data/morphology_finite_horizon/summaries/development/observed_count_timings.csv",
+      "sha256": "fb24595aad2aa3355824bdbd4a25535a1ed5bd84a762f938316be712ccedf9ea",
+      "source": "analysis/morphology_investigation_20260905/dynamics/summaries/development/observed_count_timings.csv"
+    },
+    {
+      "bytes": 12107,
+      "destination": "source_data/morphology_finite_horizon/summaries/development/paired_contrasts_with_secondary_baselines.csv",
+      "sha256": "37ebde6dbc60b9f4d258d82c09d67e498c946aa9fdf3094fcb5f2aecdbeb9783",
+      "source": "analysis/morphology_investigation_20260905/dynamics/summaries/development/paired_contrasts_with_secondary_baselines.csv"
+    },
+    {
+      "bytes": 4072,
+      "destination": "source_data/morphology_finite_horizon/summaries/development/paired_primary_contrasts.csv",
+      "sha256": "cd6394508a2654c60a551ff0d4c7ce204cf12d91fecdd2a57b0a99cbac55fbaf",
+      "source": "analysis/morphology_investigation_20260905/dynamics/summaries/development/paired_primary_contrasts.csv"
+    },
+    {
+      "bytes": 64118,
+      "destination": "source_data/morphology_finite_horizon/summaries/development/policy_summary.csv",
+      "sha256": "52a02f6b2621a93b05e1c334bb77d3a0f1faacbd2107549e7f74e486148fb07e",
+      "source": "analysis/morphology_investigation_20260905/dynamics/summaries/development/policy_summary.csv"
+    },
+    {
+      "bytes": 13756,
+      "destination": "source_data/morphology_finite_horizon/summaries/development/prediction_summary.csv",
+      "sha256": "da7f0e94c362b5d689ec3b5f575930c62baa6f6c356b237ca6fb258f5a395e7f",
+      "source": "analysis/morphology_investigation_20260905/dynamics/summaries/development/prediction_summary.csv"
+    },
+    {
+      "bytes": 48745,
+      "destination": "source_data/morphology_finite_horizon/summaries/development/prediction_summary_by_rank_with_defined_counts.csv",
+      "sha256": "8629056cd6c44ae8143d53af3c0c574a0bd31c4c7cb585dbd4c10f661191c658",
+      "source": "analysis/morphology_investigation_20260905/dynamics/summaries/development/prediction_summary_by_rank_with_defined_counts.csv"
+    },
+    {
+      "bytes": 630,
+      "destination": "source_data/morphology_finite_horizon/summaries/development/report.json",
+      "sha256": "841a9c53ad7fe888d8a81f7e41a61146a4e611211fddeea5f06479f675d19930",
+      "source": "analysis/morphology_investigation_20260905/dynamics/summaries/development/report.json"
+    },
+    {
+      "bytes": 3541721,
+      "destination": "source_data/morphology_finite_horizon/summaries/development/selected_policies.csv",
+      "sha256": "cfe5a51f43a68d806efed02b157e40481b4bcacbc60d605731505cb152aaf955",
+      "source": "analysis/morphology_investigation_20260905/dynamics/summaries/development/selected_policies.csv"
+    },
+    {
+      "bytes": 40360,
+      "destination": "source_data/morphology_finite_horizon/summaries/development/selection_budget_tree_counts.csv",
+      "sha256": "c8024c39f675c077253076161308ebd5bb3dbd2d1cb846aab1d2a85859cae0b4",
+      "source": "analysis/morphology_investigation_20260905/dynamics/summaries/development/selection_budget_tree_counts.csv"
+    },
+    {
+      "bytes": 425,
+      "destination": "source_data/morphology_finite_horizon/summaries/development/supplemental_report.json",
+      "sha256": "427f351d53e43ed7421f334fe3fde23d7dfbbdf7cce3d38d026235895c282ce1",
+      "source": "analysis/morphology_investigation_20260905/dynamics/summaries/development/supplemental_report.json"
+    },
+    {
+      "bytes": 628,
+      "destination": "source_data/morphology_finite_horizon/summaries/development/timing_summary.csv",
+      "sha256": "b56778edf1d1164aefcaf0cecf109978b1337cd399ed0d422e63a255bf0050d2",
+      "source": "analysis/morphology_investigation_20260905/dynamics/summaries/development/timing_summary.csv"
+    },
+    {
+      "bytes": 189329,
+      "destination": "source_data/morphology_finite_horizon/summaries/development/timings.csv",
+      "sha256": "1269534b540ab6731a1618c9a21db2e88cd4b4f4160d55b1f0a373d7677e4f3d",
+      "source": "analysis/morphology_investigation_20260905/dynamics/summaries/development/timings.csv"
+    },
+    {
+      "bytes": 1462753,
+      "destination": "source_data/morphology_finite_horizon/summaries/development/within_task_predictions.csv",
+      "sha256": "a98cb4611c615b00a836cb49899129f4d8fb326cf445f55c88a5d6e2d6eb1176",
+      "source": "analysis/morphology_investigation_20260905/dynamics/summaries/development/within_task_predictions.csv"
+    },
+    {
+      "bytes": 647,
+      "destination": "source_data/morphology_finite_horizon/summaries/fresh/cache_misspecification_contrasts.csv",
+      "sha256": "7ec75e32344cb5999b44127b3423d0d7b8a8ab01793cb4569169ddf9ba8d3ba1",
+      "source": "analysis/morphology_investigation_20260905/dynamics/summaries/fresh/cache_misspecification_contrasts.csv"
+    },
+    {
+      "bytes": 675,
+      "destination": "source_data/morphology_finite_horizon/summaries/fresh/comparative_computational_cost.csv",
+      "sha256": "a45585965df392d5bb8bbe73b6b35fb9569dd8b63947d0cb2f1322a409ce6b84",
+      "source": "analysis/morphology_investigation_20260905/dynamics/summaries/fresh/comparative_computational_cost.csv"
+    },
+    {
+      "bytes": 342728,
+      "destination": "source_data/morphology_finite_horizon/summaries/fresh/endpoint_oracle_choices.csv",
+      "sha256": "73cc0a9254c08c3f4bbfe334154ea8b6f4172d709f41a73141406eddceac22f2",
+      "source": "analysis/morphology_investigation_20260905/dynamics/summaries/fresh/endpoint_oracle_choices.csv"
+    },
+    {
+      "bytes": 5564140,
+      "destination": "source_data/morphology_finite_horizon/summaries/fresh/endpoint_policies_with_secondary_baselines.csv",
+      "sha256": "c9f2d3817fea4fec570a6de0fe1b307ef551023e3a7d0c7c9fd51a51a31c42a4",
+      "source": "analysis/morphology_investigation_20260905/dynamics/summaries/fresh/endpoint_policies_with_secondary_baselines.csv"
+    },
+    {
+      "bytes": 30710,
+      "destination": "source_data/morphology_finite_horizon/summaries/fresh/endpoint_summary_with_secondary_baselines.csv",
+      "sha256": "6b12cdd7309037dfac652d5f65113959c77655d7a038deb08bb77c145d610496",
+      "source": "analysis/morphology_investigation_20260905/dynamics/summaries/fresh/endpoint_summary_with_secondary_baselines.csv"
+    },
+    {
+      "bytes": 9678,
+      "destination": "source_data/morphology_finite_horizon/summaries/fresh/observed_context_counts.csv",
+      "sha256": "842846a0d07b2f29d0ce2a4f1dff4d2bd03ca862b73273a0311290df72857f2d",
+      "source": "analysis/morphology_investigation_20260905/dynamics/summaries/fresh/observed_context_counts.csv"
+    },
+    {
+      "bytes": 27735,
+      "destination": "source_data/morphology_finite_horizon/summaries/fresh/observed_count_timings.csv",
+      "sha256": "4d067ac7afb40d9ffa805cb81361d7fb9edf77c105b631b65d24cad82a4e0d59",
+      "source": "analysis/morphology_investigation_20260905/dynamics/summaries/fresh/observed_count_timings.csv"
+    },
+    {
+      "bytes": 11077,
+      "destination": "source_data/morphology_finite_horizon/summaries/fresh/oracle_population_bias_by_regime.csv",
+      "sha256": "6809acfc4620303b0a8ea8df99d41909fa700f155034218382aab44b1a63e500",
+      "source": "analysis/morphology_investigation_20260905/dynamics/summaries/fresh/oracle_population_bias_by_regime.csv"
+    },
+    {
+      "bytes": 1337,
+      "destination": "source_data/morphology_finite_horizon/summaries/fresh/oracle_population_bias_overall.csv",
+      "sha256": "553311b17c894edf8b11c71ba1abad1a626bceca399ca918098962a4dba7f611",
+      "source": "analysis/morphology_investigation_20260905/dynamics/summaries/fresh/oracle_population_bias_overall.csv"
+    },
+    {
+      "bytes": 12490,
+      "destination": "source_data/morphology_finite_horizon/summaries/fresh/paired_contrasts_with_secondary_baselines.csv",
+      "sha256": "b178a415982ce36167a54cf1fd34ca64bc21baee600cc9becaf87a960192dcdf",
+      "source": "analysis/morphology_investigation_20260905/dynamics/summaries/fresh/paired_contrasts_with_secondary_baselines.csv"
+    },
+    {
+      "bytes": 4235,
+      "destination": "source_data/morphology_finite_horizon/summaries/fresh/paired_primary_contrasts.csv",
+      "sha256": "2db03662620cb47efbc59acfa74ecdb06f7172972da8b3196bc9d9ac33a6527c",
+      "source": "analysis/morphology_investigation_20260905/dynamics/summaries/fresh/paired_primary_contrasts.csv"
+    },
+    {
+      "bytes": 61778,
+      "destination": "source_data/morphology_finite_horizon/summaries/fresh/policy_summary.csv",
+      "sha256": "30e55b8073fd2d103fb6a00cbbe6b6072b086a90ff6e42bb3b16a5bd583055de",
+      "source": "analysis/morphology_investigation_20260905/dynamics/summaries/fresh/policy_summary.csv"
+    },
+    {
+      "bytes": 13748,
+      "destination": "source_data/morphology_finite_horizon/summaries/fresh/prediction_summary.csv",
+      "sha256": "11f67afc9acae204f8f3eb15c1245f848cd7fb9c6a01cae0809f6647014a32c9",
+      "source": "analysis/morphology_investigation_20260905/dynamics/summaries/fresh/prediction_summary.csv"
+    },
+    {
+      "bytes": 48788,
+      "destination": "source_data/morphology_finite_horizon/summaries/fresh/prediction_summary_by_rank_with_defined_counts.csv",
+      "sha256": "f051fe761d18adf7b67126b5d6cdc6435909744145ca42d692e53c7b1fbe9056",
+      "source": "analysis/morphology_investigation_20260905/dynamics/summaries/fresh/prediction_summary_by_rank_with_defined_counts.csv"
+    },
+    {
+      "bytes": 760,
+      "destination": "source_data/morphology_finite_horizon/summaries/fresh/report.json",
+      "sha256": "2f0bce1404eb46fc80fa1bca4bc84c806e929664c9203eaa3bbc94a7ad41a571",
+      "source": "analysis/morphology_investigation_20260905/dynamics/summaries/fresh/report.json"
+    },
+    {
+      "bytes": 9504148,
+      "destination": "source_data/morphology_finite_horizon/summaries/fresh/selected_policies.csv",
+      "sha256": "491b2da02e90a1e758695a1e974a4746b88674ac2f48a8531b6d5ad3a4825e0c",
+      "source": "analysis/morphology_investigation_20260905/dynamics/summaries/fresh/selected_policies.csv"
+    },
+    {
+      "bytes": 35647,
+      "destination": "source_data/morphology_finite_horizon/summaries/fresh/selection_budget_tree_counts.csv",
+      "sha256": "8c626076c4313c8bc701d48a76ba83adbd3086fbad37b3ac145be9900191851b",
+      "source": "analysis/morphology_investigation_20260905/dynamics/summaries/fresh/selection_budget_tree_counts.csv"
+    },
+    {
+      "bytes": 420,
+      "destination": "source_data/morphology_finite_horizon/summaries/fresh/supplemental_report.json",
+      "sha256": "a0b725fc00acb56192fc2657b47c4bc96b929571b77706c0b80703391aafaba0",
+      "source": "analysis/morphology_investigation_20260905/dynamics/summaries/fresh/supplemental_report.json"
+    },
+    {
+      "bytes": 626,
+      "destination": "source_data/morphology_finite_horizon/summaries/fresh/timing_summary.csv",
+      "sha256": "4e0116d031f4d52dd754bcac9d5854f64f60c170fd7c010cdc8a91b0a7a7d405",
+      "source": "analysis/morphology_investigation_20260905/dynamics/summaries/fresh/timing_summary.csv"
+    },
+    {
+      "bytes": 504707,
+      "destination": "source_data/morphology_finite_horizon/summaries/fresh/timings.csv",
+      "sha256": "153d6ba71465543cbe20461a5e8f3e4168e5ada5cb4db5ce037a5bf2b4421ae7",
+      "source": "analysis/morphology_investigation_20260905/dynamics/summaries/fresh/timings.csv"
+    },
+    {
+      "bytes": 3909244,
+      "destination": "source_data/morphology_finite_horizon/summaries/fresh/within_task_predictions.csv",
+      "sha256": "dd2087a1bd5a678442aa011fccad6c5c1ccdb1edf78b200f9e439d367d5772d2",
+      "source": "analysis/morphology_investigation_20260905/dynamics/summaries/fresh/within_task_predictions.csv"
+    },
+    {
+      "bytes": 781,
+      "destination": "source_data/morphology_finite_horizon/supplemental_baseline_protocol.json",
+      "sha256": "5a97b378437b8b3888cf7443dc6be30acae9e92626fc476126006ed26015a729",
+      "source": "analysis/morphology_investigation_20260905/dynamics/supplemental_baseline_protocol.json"
+    }
+  ],
+  "independent_unit": "20 independent fresh seed blocks; task conditions and candidate fits nested",
+  "source_root": "analysis/morphology_investigation_20260905/dynamics",
+  "status": "Completed investigation copied for manuscript integration; frozen original sources retained"
+}

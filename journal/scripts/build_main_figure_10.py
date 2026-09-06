@@ -409,7 +409,7 @@ def panel_roadmap(ax):
         ("conflicting branches",
          r"$\chi>\chi_{\rm c}$" + f" ({fig_ref('conflict')})",
          np.eye(4), 0.10, 0.12, "4 branches\n× 4 selectors",
-         "branch selectors\nbecome necessary"),
+         "update gating\nbecomes necessary"),
         ("nested contexts", f"eight-context task ({fig_ref('factorial')})",
          np.kron(np.eye(4), np.ones((2, 1))), 0.10, 0.19,
          "8 blocks\n× 4 sibling pairs",
@@ -468,7 +468,7 @@ def main():
     ax_c = canvas.panel("C", 1, 0, 5, schematic=True,
                         title="Anatomical routes (MICrONS)")
     ax_d = canvas.panel("D", 1, 5, 7, schematic=True,
-                        title="Which dictionary a task demands")
+                        title="Task-dependent routing results")
     panel_definition(ax_a)
     panel_gallery(ax_b)
     panel_arbor_routes(ax_c)

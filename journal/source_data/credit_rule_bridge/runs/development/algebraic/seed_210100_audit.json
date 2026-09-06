@@ -1,0 +1,23 @@
+{
+  "all_conditions_retained": true,
+  "benchmark": false,
+  "completed_utc": "2026-09-06T12:36:26.827403+00:00",
+  "model": "algebraic",
+  "n_fits": 72,
+  "phase": "development",
+  "protocol_freeze_sha256": "eca67103897fc3f4251844479ad99ab04ae61544b3f176389ec82ff0760c01d4",
+  "seconds": 4.41073606594,
+  "seed": 210100,
+  "selection_freeze_sha256": null,
+  "slurm_job_id": "44798793",
+  "source_files_sha256": {
+    "seed_210100_curves.csv": "add479474cbb3f4fe1fae142d4ab85d1f4932c83dd96436e6a2929711d2a11fb",
+    "seed_210100_diagnostics.csv": "91dc28be37d721d6b02b9c55d8665fe00c18033e15141e8d529b0c9ed00b415b",
+    "seed_210100_task_matching_metadata.json": "3e2f3628f6beab34eb23f23cc0c46426855fdca3671ba73b0aecb68a2de1cada",
+    "seed_210100_task_matching_states.npz": "20747349d73ca9357a50552f0eb3e5932050b18fb82b11ddcb0ff71f8c1c1033",
+    "seed_210100_task_nested_metadata.json": "704c42456c4a92782748676f3640d8bfd846ea6867364ad3dd497bf06000b7cc",
+    "seed_210100_task_nested_states.npz": "e7c57dcf310156505187d3d356946807a02ea5f909c734249411e6d56198dfc1",
+    "seed_210100_task_quartet_metadata.json": "67531e6066773a9f348238e51a84580d740661a31fcefde446e4f665d30f90a0",
+    "seed_210100_task_quartet_states.npz": "7bddc474b393d40f10aea9ae051ba4ee073333f0ca60cc2cd2a1720376773ed9"
+  }
+}

@@ -1,0 +1,10 @@
+test_missing_mixed_interaction_is_zero_for_arbitrary_student (test_interaction_bound.InteractionBoundTests) ... ok
+test_population_moment_factorization_and_orthogonal_residual (test_interaction_bound.InteractionBoundTests) ... ok
+test_planted_task_and_input_spectrum_invariance (test_model.ConductanceTests) ... ok
+test_production_forward_and_autograd_match_eligibility_paths (test_model.ConductanceTests) ... ok
+test_projection_normal_equations_and_label_free_calibration (test_model.ConductanceTests) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.708s
+
+OK

@@ -1,0 +1,9 @@
+test_empirical_spectral_matches_direct_updates_and_heldout_risk (test_operators.OperatorTests) ... ok
+test_population_fullbatch_spectral_matches_recurrence (test_operators.OperatorTests) ... ok
+test_sgd_second_moment_matches_exact_gaussian_quadrature (test_operators.OperatorTests) ... ok
+test_predictors_request_only_calibration_examples (test_prediction_inputs.PredictionInputTests) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.242s
+
+OK

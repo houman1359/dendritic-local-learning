@@ -90,9 +90,16 @@ def main() -> int:
 
     cited = "safaai2026localcredit" in journal_text
     disclosure_text = EXTENSION.read_text(encoding="utf-8").lower()
-    disclosure_mentions_foundation = (
-        "complete load-bearing foundation" in disclosure_text
-        and "canonical, standalone" in disclosure_text
+    # This is the complete standalone Article, integrating an earlier public
+    # project version. Disclosure of that version is required; a main-text
+    # self-citation and particular extension-framing phrases are not.
+    prior_record_disclosed = "arxiv:2607.03556" in disclosure_text
+    disclosure_mentions_foundation = all(
+        phrase in disclosure_text
+        for phrase in ("standalone", "conductance-tree", "factorization", "regular-tree")
+    )
+    conference_status_disclosed = (
+        "pending official conference decision" in disclosure_text
     )
     lines = [
         "# NeurIPS-to-journal text reuse audit",
@@ -107,7 +114,9 @@ def main() -> int:
         f"- Exact normalized sentence matches: {len(exact)}",
         f"- Near matches at similarity >= 0.82: {len(near)}",
         f"- Earlier work cited in the journal manuscript: {'yes' if cited else 'NO'}",
+        f"- Earlier public project version identified in the disclosure: {'yes' if prior_record_disclosed else 'NO'}",
         f"- Related-work statement identifies the integrated foundation: {'yes' if disclosure_mentions_foundation else 'NO'}",
+        f"- Pending conference status recorded: {'yes' if conference_status_disclosed else 'NO'}",
         "",
         "## Exact matches",
         "",
@@ -133,10 +142,12 @@ def main() -> int:
             "",
             "The shared conductance equations, exact eligibility--error factorization,",
             "path-gain definition and regular-tree controls are the disclosed foundation.",
-            "The journal-specific claim depends on the prospective interventions, real-arbor",
-            "route analyses, focal conductance controls, topology--task alignment tests and",
-            "external animal-coordinate analysis itemized in `submission/extension_statement.md`.",
-            "Re-run this audit against any accepted proceedings version before submission.",
+            "The Article presents these results as one standalone work with the route-dictionary",
+            "formulation, prospective selection test, coefficient-learning experiments,",
+            "anatomical analyses and biological limits. Earlier public versions and the",
+            "pending conference decision are disclosed in `submission/extension_statement.md`.",
+            "Update the disclosure when the official conference outcome is known; if a",
+            "proceedings version exists, also compare against that exact version.",
             "",
         ]
     )
@@ -144,7 +155,11 @@ def main() -> int:
     print(f"Wrote {REPORT.relative_to(ROOT)}")
     print(f"Exact matches: {len(exact)}; near matches: {len(near)}")
 
-    failed = not cited or not disclosure_mentions_foundation
+    failed = not (
+        prior_record_disclosed
+        and disclosure_mentions_foundation
+        and conference_status_disclosed
+    )
     return 1 if args.strict and failed else 0
 
 

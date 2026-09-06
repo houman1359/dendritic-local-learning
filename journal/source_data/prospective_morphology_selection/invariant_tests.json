@@ -1,0 +1,17 @@
+{
+  "fixed_reference_spectrum_errors": {
+    "rank_1_spectrum_error": 5.551115123125783e-16,
+    "rank_2_spectrum_error": 4.996003610813204e-16,
+    "rank_4_spectrum_error": 2.498001805406602e-16,
+    "rank_8_spectrum_error": 8.326672684688674e-17
+  },
+  "fullbatch_decrease_minus_bound": 0.0008861060583258487,
+  "kappa_zero_identity": true,
+  "maximum_gradient_finite_difference_error": 1.104042864075172e-10,
+  "minibatch_covariance_relative_error": 0.0020314892032213816,
+  "n_candidates": 20,
+  "n_tree_nodes": 15,
+  "projector_idempotence": true,
+  "schur_reduction_identity": true,
+  "status": "passed"
+}

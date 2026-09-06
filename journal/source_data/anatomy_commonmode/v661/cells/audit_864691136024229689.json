@@ -1,0 +1,20 @@
+{
+  "budgets": [
+    1,
+    2,
+    4,
+    8,
+    16
+  ],
+  "cohort": "v661",
+  "common_capture": 0.16886013760567253,
+  "elapsed_seconds": 2.011302627972327,
+  "n_e_sites": 28,
+  "n_i_sites": 53,
+  "rank_one_capture": 0.18776620088614035,
+  "residual_rank": 27,
+  "residual_weighted_energy": 7.112128036064047,
+  "response_rank": 28,
+  "root_id": 864691136024229689,
+  "total_weighted_energy": 8.55707728369038
+}

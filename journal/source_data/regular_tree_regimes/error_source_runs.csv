@@ -1,0 +1,13 @@
+config_id,network_type,error_broadcast_mode,decoder_update_mode,seed,test_accuracy
+config_0,dendritic_additive,per_soma,local,42,0.8992999792098999
+config_1,dendritic_additive,per_soma,local,43,0.8965999484062195
+config_2,dendritic_additive,per_soma,local,44,0.8854999542236328
+config_6,dendritic_additive,local_mismatch,local,42,0.3837999999523163
+config_7,dendritic_additive,local_mismatch,local,43,0.2762999832630157
+config_8,dendritic_additive,local_mismatch,local,44,0.3651999831199646
+config_12,dendritic_shunting,per_soma,local,42,0.9070999622344971
+config_13,dendritic_shunting,per_soma,local,43,0.9116999506950378
+config_14,dendritic_shunting,per_soma,local,44,0.9168999791145325
+config_18,dendritic_shunting,local_mismatch,local,42,0.1986999958753586
+config_19,dendritic_shunting,local_mismatch,local,43,0.1257999986410141
+config_20,dendritic_shunting,local_mismatch,local,44,0.1134999990463257

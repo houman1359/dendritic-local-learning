@@ -1,0 +1,12 @@
+{
+  "builder": "scripts/build_morphology_followup_figures.py",
+  "builder_sha256": "d18344b8a18422dfeb467b7f6f150af3f8e4d1475a977e5278447174851f8f57",
+  "figure": "S37",
+  "panels": "A-D",
+  "scope": "Rendering only; source outcomes and protocol unchanged",
+  "sources": {
+    "source_data/morphology_structure/constructive_dp_v2/adaptive_constructions.csv": "f5b3555727ff8c200c061f68e07b266433663f7b560a19c3638cfd14d7feacba",
+    "source_data/morphology_structure/constructive_dp_v2/constructed_trees.json": "82c0f2aec0f21e391ac5a3569ff6fc0e951a1fa5ef89c58e465b5250213cb112",
+    "source_data/morphology_structure/design/constructive_depth_certificate.csv": "a9c57bb86a6884b59ef2d1826144929fb7d2ffb9cdec9a5caaad68b5653f4eeb"
+  }
+}

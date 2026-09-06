@@ -18,11 +18,13 @@ sys.modules[SPEC.name] = bundle
 SPEC.loader.exec_module(bundle)
 
 
+from tex_sources import expanded_tex
+
 GRAPHIC = re.compile(r"\\includegraphics(?:\[[^\]]*\])?\{([^}]+)\}")
 
 
 def included_figures(tex_path: Path) -> set[str]:
-    return set(GRAPHIC.findall(tex_path.read_text(encoding="utf-8")))
+    return set(GRAPHIC.findall(expanded_tex(tex_path)))
 
 
 def test_bundle_figure_allowlist_matches_compiled_manuscripts() -> None:

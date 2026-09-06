@@ -42,11 +42,11 @@ NONCANONICAL_WIDTH_RE = re.compile(
     r"figsize\s*=\s*\(\s*(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)"
 )
 
-# Main figures are placed at the largest width that keeps the complete figure
-# and its self-contained legend on one page.  They remain on the canonical
-# NeurIPS-derived canvas; only the LaTeX placement scale changes.  A lower
-# bound prevents a crowded sheet from being made illegibly small merely to
-# pass the page-layout audit.
+# A common main placement preserves the same printed text and line sizes
+# across the eight native-width canvases. Figure heights carry the layout
+# adjustments required for self-contained captions. Supplementary sheets
+# remain full width.
+MAIN_TEXTWIDTH_SCALE = 1.0
 MIN_MAIN_TEXTWIDTH_SCALE = 0.85
 TEXTWIDTH_SCALE_RE = re.compile(
     r"(?P<scale>(?:0(?:\.\d+)?|1(?:\.0+)?))?\\textwidth"
@@ -92,14 +92,19 @@ def main() -> None:
     production: list[Path] = []
     for path in sorted((ROOT / "scripts").glob("*.py")):
         text = path.read_text(encoding="utf-8")
-        if "savefig" not in text and "save_figure" not in text:
+        if not any(token in text for token in ("savefig", "save_figure", "NativeCanvas(")):
             continue
-        if path.name in {"neurips_style.py", "audit_figure_style_lineage.py"}:
+        if path.name in {
+            "neurips_style.py", "audit_figure_style_lineage.py",
+            # This validator suppresses savefig while collecting numerical
+            # artists from old/new renderers; it does not produce figures.
+            "validate_supplementary_s17_s20_replay.py",
+        }:
             continue
         production.append(path)
         if not any(
             token in text
-            for token in ("neurips_style import", "journal_style import")
+            for token in ("neurips_style import", "journal_style import", "figure_canvas import")
         ):
             failures.append(f"production generator does not import shared style: {path.name}")
         for token in FORBIDDEN_PRODUCTION_TOKENS:
@@ -109,7 +114,7 @@ def main() -> None:
             failures.append(
                 f"production generator hard-codes a noncanonical figure width: {path.name}"
             )
-        if not any(token in text for token in ("FIG_W", "MAIN_W", "grid_figure(")):
+        if not any(token in text for token in ("FIG_W", "MAIN_W", "grid_figure(", "NativeCanvas(")):
             failures.append(
                 f"production generator does not use the canonical NeurIPS canvas: {path.name}"
             )
@@ -133,6 +138,12 @@ def main() -> None:
                 scale_text = width_match.group("scale")
                 scale = 1.0 if scale_text is None else float(scale_text)
                 if relative == "main.tex":
+                    if scale != MAIN_TEXTWIDTH_SCALE:
+                        failures.append(
+                            "inconsistent main-figure print scale in "
+                            f"{relative}: {asset} uses {width}; "
+                            f"expected {MAIN_TEXTWIDTH_SCALE:.2f} textwidth"
+                        )
                     if not MIN_MAIN_TEXTWIDTH_SCALE <= scale <= 1.0:
                         failures.append(
                             "main-figure placement outside the legibility range "

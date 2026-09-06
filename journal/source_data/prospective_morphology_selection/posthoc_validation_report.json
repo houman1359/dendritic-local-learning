@@ -1,0 +1,135 @@
+{
+  "all_confirmatory_shards_checked_seal": true,
+  "all_expected_calibration_bounds_pass": true,
+  "all_oracle_budgets_equal_reference_rank": true,
+  "caveat": "The global bound is global in W for finite calibration loss. Its score-to-independent-test-decrease or long-horizon-generalization relation is empirical. This diagnostic was added after confirmatory outcomes; the primary selector is unchanged.",
+  "diagnostic_script_sha256": "64d20bb3996e96d79eb6223a1bbb2fca951c7a8257c4036fbb782acef67ea895",
+  "first_step_correlations": [
+    {
+      "arm": "feedback_only",
+      "ci95_high": 0.9863808139534885,
+      "ci95_low": 0.980687863372093,
+      "endpoint": "actual_training_first_step_test_decrease",
+      "mean_within_task_rho": 0.9836918604651164,
+      "n_seed_blocks": 20,
+      "pooled_descriptive_rho": 0.9524216232356224
+    },
+    {
+      "arm": "feedback_only",
+      "ci95_high": 0.9996511627906978,
+      "ci95_low": 0.9994234496124031,
+      "endpoint": "exact_expected_calibration_decrease",
+      "mean_within_task_rho": 0.9995445736434109,
+      "n_seed_blocks": 20,
+      "pooled_descriptive_rho": 0.9973030367264276
+    },
+    {
+      "arm": "joint_forward_feedback",
+      "ci95_high": 0.9775518092105261,
+      "ci95_low": 0.9695110432330827,
+      "endpoint": "actual_training_first_step_test_decrease",
+      "mean_within_task_rho": 0.9739050751879699,
+      "n_seed_blocks": 20,
+      "pooled_descriptive_rho": 0.9551931241807405
+    },
+    {
+      "arm": "joint_forward_feedback",
+      "ci95_high": 0.9971663533834585,
+      "ci95_low": 0.9958364661654133,
+      "endpoint": "exact_expected_calibration_decrease",
+      "mean_within_task_rho": 0.9965695488721803,
+      "n_seed_blocks": 20,
+      "pooled_descriptive_rho": 0.9995798198139606
+    }
+  ],
+  "maximum_expected_calibration_bound_slack": 0.0327380878206849,
+  "minimum_expected_calibration_bound_slack": 3.4758648431281944e-05,
+  "n_confirmatory_candidates": 12800,
+  "n_first_step_conditions": 12800,
+  "protocol_sha256": "aebb52030bf5a6403123f432f691676fdb85236d46a7585d83874a76312349dd",
+  "rank_baseline_comparisons": [
+    {
+      "arm": "feedback_only",
+      "ci95_high": 0.03697044434575371,
+      "ci95_low": 0.036301694046301645,
+      "left_policy": "rank_only",
+      "mean_left_advantage": 0.036638691026356654,
+      "n_seed_blocks": 20,
+      "positive_seed_blocks": 20,
+      "right_policy": "development_best"
+    },
+    {
+      "arm": "feedback_only",
+      "ci95_high": 0.03697044434575371,
+      "ci95_low": 0.036301694046301645,
+      "left_policy": "rank_only",
+      "mean_left_advantage": 0.036638691026356654,
+      "n_seed_blocks": 20,
+      "positive_seed_blocks": 20,
+      "right_policy": "maximum_budget"
+    },
+    {
+      "arm": "feedback_only",
+      "ci95_high": -0.06433500202894835,
+      "ci95_low": -0.07955690137182093,
+      "left_policy": "moment_selector",
+      "mean_left_advantage": -0.0722412610757773,
+      "n_seed_blocks": 20,
+      "positive_seed_blocks": 0,
+      "right_policy": "rank_only"
+    },
+    {
+      "arm": "feedback_only",
+      "ci95_high": -0.027620607406425572,
+      "ci95_low": -0.04300109371843754,
+      "left_policy": "moment_selector",
+      "mean_left_advantage": -0.03560257004942066,
+      "n_seed_blocks": 20,
+      "positive_seed_blocks": 0,
+      "right_policy": "development_best"
+    },
+    {
+      "arm": "joint_forward_feedback",
+      "ci95_high": 0.03468111495731233,
+      "ci95_low": 0.034270956301845776,
+      "left_policy": "rank_only",
+      "mean_left_advantage": 0.034480077398330214,
+      "n_seed_blocks": 20,
+      "positive_seed_blocks": 20,
+      "right_policy": "development_best"
+    },
+    {
+      "arm": "joint_forward_feedback",
+      "ci95_high": 0.03468111495731233,
+      "ci95_low": 0.034270956301845776,
+      "left_policy": "rank_only",
+      "mean_left_advantage": 0.034480077398330214,
+      "n_seed_blocks": 20,
+      "positive_seed_blocks": 20,
+      "right_policy": "maximum_budget"
+    },
+    {
+      "arm": "joint_forward_feedback",
+      "ci95_high": -0.09154028464953902,
+      "ci95_low": -0.09973398474202042,
+      "left_policy": "moment_selector",
+      "mean_left_advantage": -0.09582962768823873,
+      "n_seed_blocks": 20,
+      "positive_seed_blocks": 0,
+      "right_policy": "rank_only"
+    },
+    {
+      "arm": "joint_forward_feedback",
+      "ci95_high": -0.0570596733743166,
+      "ci95_low": -0.06522588092651314,
+      "left_policy": "moment_selector",
+      "mean_left_advantage": -0.06134955028990852,
+      "n_seed_blocks": 20,
+      "positive_seed_blocks": 0,
+      "right_policy": "development_best"
+    }
+  ],
+  "runner_sha256": "2f32eef50b50a2e2f4860efdafeda54125d577ed236e3961051a7ea573bf3def",
+  "sealed_selection_sha256": "486bc18f35d0ed888d8a56bcfedebca9c7afa18ee7848b5893f2a87b812ea200",
+  "status": "completed_posthoc_diagnostic_primary_selection_unchanged"
+}

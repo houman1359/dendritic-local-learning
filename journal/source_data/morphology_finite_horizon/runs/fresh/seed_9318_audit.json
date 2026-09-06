@@ -1,0 +1,22 @@
+{
+  "cohort": "fresh",
+  "completed_utc": "2026-09-05T18:09:20.475690+00:00",
+  "elapsed_seconds": 18.10866625898052,
+  "host": "holy7c24306.rc.fas.harvard.edu",
+  "n_outcomes": 3840,
+  "n_pilot": 1280,
+  "n_predictions": 10240,
+  "numpy": "2.2.6",
+  "original_replay_max_loss_difference": null,
+  "original_runner_sha256": "2f32eef50b50a2e2f4860efdafeda54125d577ed236e3961051a7ea573bf3def",
+  "prediction_seal": {
+    "cohort": "fresh",
+    "pilot": "Budgeted 16-step selector; evaluated before endpoint outcomes",
+    "predictions_sha256": "d7a91639ee16f63b610ea8bd645439b343ba0137620e6ce7cfb10ce450b5e1ef",
+    "protocol_sha256": "689abe998236c9cd9154eb1dd35ea0dec374d08f478b5df64b432f71a584e32d",
+    "sealed_utc": "2026-09-05T18:09:07.034999+00:00",
+    "seed": 9318
+  },
+  "seed": 9318,
+  "thread_limit": "1"
+}

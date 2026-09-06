@@ -1827,6 +1827,151 @@ def _demoted_strip(ax, target, metric, *, xlim, xticks, xlabel) -> None:
     ax.spines["left"].set_visible(False)
 
 
+def _figure5_final_supplement() -> list[str]:
+    """Render final S22 directly, preserving frozen A--H values and intervals."""
+    from figure_canvas import Margins, NativeCanvas, slim_colorbar
+    canvas = NativeCanvas(440 / 72, 3, hgutter_pt=39, vgutter_pt=58,
+                          margins=Margins(left=48, right=16, top=24, bottom=36))
+    fig = canvas.fig
+    ax_a = canvas.panel("partners", 0, 0, 4, title="Mapped partner coverage", grid="x")
+    ax_b = canvas.panel("alignment", 0, 4, 4, title="Measured alignment", grid="x")
+    ax_c = canvas.panel("metrics", 0, 8, 4, title="Topology associations")
+    ax_d = canvas.panel("capture", 1, 0, 4, title="Surrogate capture", grid="x")
+    ax_e = canvas.panel("learning", 1, 4, 4, title="Surrogate learning", grid="x")
+    ax_f = canvas.panel("contrasts", 1, 8, 4, title="Paired surrogate effects")
+    ax_g = canvas.panel("centering", 2, 0, 6, title="Within-target capture versus loss")
+    ax_h = canvas.panel("budget", 2, 6, 6, title="Route-budget effects")
+    functional = pd.read_csv(DATA / "figure5" / "functional_target_metrics.csv")
+    y = np.arange(len(functional))
+    ax_a.barh(y, functional.n_partners, color=MORPH, alpha=0.82)
+    ax_a.set_yticks(y); ax_a.set_yticklabels([f"target {i + 1}" for i in y])
+    ax_a.invert_yaxis(); ax_a.set_xlabel("presynaptic partners")
+    style_axis(ax_a, grid="x")
+
+    vals = functional.partial_shared_path_r.to_numpy(float)
+    ax_b.scatter(vals, y, s=SEED_MS ** 2 * 1.4, color=MORPH, alpha=0.78,
+                 edgecolor="white", linewidth=0.25)
+    ax_b.axvline(0, color=COLORS["mute"], ls="--", lw=LW_REF)
+    ax_b.set_yticks(y); ax_b.set_yticklabels([str(i + 1) for i in y])
+    ax_b.set_ylabel("target cell")
+    ax_b.invert_yaxis()
+    ax_b.set_xlabel("partial ancestry correlation")
+    style_axis(ax_b)
+
+    metrics = functional[["shared_path_r", "negative_tree_distance_r", "partial_shared_path_r",
+                          "same_major_branch_delta"]].copy()
+    names = ["path", "dist.", "partial", "branch"]
+    im = ax_c.imshow(metrics.to_numpy(float).T, aspect="auto", cmap=DIV_CMAP, vmin=-0.6, vmax=0.6)
+    ax_c.set_xticks(range(len(functional))); ax_c.set_xticklabels([str(i + 1) for i in range(len(functional))])
+    ax_c.set_yticks(range(4)); ax_c.set_yticklabels(names)
+    ax_c.set_xlabel("target cell")
+    for spine in ax_c.spines.values(): spine.set_visible(False)
+    # A slim colorbar defines the signed scale; the panel cedes a little
+    # width so the bar and its tick labels stay inside the canvas.
+    slim_colorbar(fig, ax_c, im, label=r"$r$ or $\Delta$", width_pt=4.0, pad_pt=3.0)
+
+    target = pd.read_csv(DATA / "figure5" / "task_target_method_means_ch4.csv")
+    methods = ["exact backprop", "dense PCA oracle", "morphology-aware paths",
+               "random nonempty paths", "depth-only bins", "shuffled ancestry", "scalar broadcast"]
+    short = ["exact", "dense", "ancestry", "random", "depth", "shuffle", "scalar"]
+    # Horizontal strips keep every category label horizontal: methods run
+    # down the y axis and the metric spans the x axis.
+    for ax, metric, xlabel, title, xlim in [
+        (ax_d, "heldout_credit_capture", "held-out field capture", "Task-field capacity", (0, 1.06)),
+        (ax_e, "heldout_normalized_mse", "held-out normalized MSE", "Learning outcome", (0.60, 1.01)),
+    ]:
+        for i, method in enumerate(methods):
+            arr = target[target.method.eq(method)][metric].to_numpy(float)
+            color = METHOD_COLORS[method]
+            ax.scatter(arr, i + jitter(arr.size, 600 + i, 0.09), s=SEED_MS ** 2,
+                       color=color, alpha=0.65, edgecolor="white", linewidth=0.2)
+            m, lo, hi = mean_ci(arr, seed=610 + i)
+            ax.errorbar(m, i, xerr=[[m - lo], [hi - m]], marker="D", ms=MARKER_MS,
+                        color=color, markerfacecolor="white",
+                        markeredgecolor=color, markeredgewidth=LW_ERR,
+                        lw=LW_ERR, capsize=ERR_CAPSIZE, zorder=5)
+        ax.set_yticks(range(len(methods))); ax.set_yticklabels(short)
+        ax.set_ylim(len(methods) - 0.4, -0.6)
+        ax.set_xlabel(xlabel); ax.set_xlim(*xlim)
+        style_axis(ax)
+    # Honest coincidence: the exact-backprop captures are identically 1.00
+    # and the dense-oracle captures span 0.996-1.00, so the per-target dots
+    # sit beneath the mean diamond rather than being spread out.
+    ax_d.text(0.955, 0, "all targets $=$ 1.00", ha="right", va="center",
+              fontsize=PT_SMALL, color=COLORS["mute"])
+    ax_d.text(0.955, 1, r"targets $\geq$ 0.996", ha="right", va="center",
+              fontsize=PT_SMALL, color=COLORS["mute"])
+
+    paired = target.pivot(index="target_root_id", columns="method", values=["heldout_credit_capture", "heldout_normalized_mse"])
+    xdiff = paired["heldout_credit_capture"]["morphology-aware paths"] - paired["heldout_credit_capture"]["shuffled ancestry"]
+    ydiff = paired["heldout_normalized_mse"]["shuffled ancestry"] - paired["heldout_normalized_mse"]["morphology-aware paths"]
+    ax_f.scatter(xdiff, ydiff, s=24, color=MORPH, alpha=0.78, edgecolor="white", linewidth=0.35)
+    for i, (xv, yv) in enumerate(zip(xdiff, ydiff), start=1):
+        ax_f.annotate(str(i), (xv, yv), xytext=(3, 2), textcoords="offset points", fontsize=PT_SMALL)
+    ax_f.axhline(0, color=COLORS["mute"], lw=LW_REF, ls="--")
+    ax_f.axvline(0, color=COLORS["mute"], lw=LW_REF, ls="--")
+    ax_f.set_xlabel(r"capture: ancestry $-$ shuffle"); ax_f.set_ylabel("shuffle − ancestry\nnormalized MSE")
+    ax_f.set_xticks([-0.3, 0.0, 0.3])
+    ax_f.set_yticks([-0.04, 0.0, 0.04])
+    ax_f.set_ylim(-0.055, 0.055)
+    style_axis(ax_f)
+
+    structural = target[~target.method.isin(["exact backprop", "dense PCA oracle"])].copy()
+    structural["capture_centered"] = structural.heldout_credit_capture - structural.groupby("target_root_id").heldout_credit_capture.transform("mean")
+    structural["mse_centered"] = structural.heldout_normalized_mse - structural.groupby("target_root_id").heldout_normalized_mse.transform("mean")
+    structural_short = dict(zip(methods, short))
+    # One condition-to-marker mapping figure-wide (matches the K-N block's
+    # shared legend): ancestry=o, random=s, depth=^, shuffle=D; the scalar
+    # control takes the next MARKERS slot.
+    structural_markers = {
+        "morphology-aware paths": "o",
+        "random nonempty paths": "s",
+        "depth-only bins": "^",
+        "shuffled ancestry": "D",
+        "scalar broadcast": "v",
+    }
+    for method, group in structural.groupby("method"):
+        ax_g.scatter(group.capture_centered, group.mse_centered, s=14,
+                     color=METHOD_COLORS[method], alpha=0.65,
+                     marker=structural_markers[method],
+                     label=structural_short[method])
+    ax_g.axhline(0, color=COLORS["mute"], ls="--", lw=LW_REF)
+    ax_g.axvline(0, color=COLORS["mute"], ls="--", lw=LW_REF)
+    ax_g.set_xlabel("within-target centered capture"); ax_g.set_ylabel("centered\nnormalized MSE")
+    style_axis(ax_g)
+    add_headroom(ax_g, 0.22)
+    clean_legend(ax_g, loc="upper left", ncol=3, fontsize=PT_SMALL,
+                 auto_clear=True)
+
+    channels = [1, 2, 4, 8]
+    cap_m, cap_lo, cap_hi, learn_m, learn_lo, learn_hi = [], [], [], [], [], []
+    for ch in channels:
+        obj = json.loads((DATA / "figure5" / f"task_summary_ch{ch}.json").read_text())
+        cap = obj["primary_credit_capture_contrast"]
+        learn = obj["primary_learning_contrast"]
+        cap_m.append(cap["mean_difference"]); cap_lo.append(cap["target_bootstrap_ci95"][0]); cap_hi.append(cap["target_bootstrap_ci95"][1])
+        learn_m.append(-learn["mean_difference"]); learn_lo.append(-learn["target_bootstrap_ci95"][1]); learn_hi.append(-learn["target_bootstrap_ci95"][0])
+    ax_h.errorbar(np.asarray(channels) - 0.08, cap_m,
+                  yerr=[np.asarray(cap_m) - cap_lo, np.asarray(cap_hi) - cap_m],
+                  marker="o", color=MORPH, lw=LW_DATA, capsize=ERR_CAPSIZE, label="capture")
+    ax_h.errorbar(np.asarray(channels) + 0.08, learn_m,
+                  yerr=[np.asarray(learn_m) - learn_lo, np.asarray(learn_hi) - learn_m],
+                  marker="s", color=SHUFFLE, lw=LW_DATA, capsize=ERR_CAPSIZE, label="MSE improvement")
+    ax_h.axhline(0, color=COLORS["mute"], lw=LW_REF, ls="--")
+    ax_h.set_xscale("log", base=2); ax_h.set_xticks(channels)
+    ax_h.get_xaxis().set_major_formatter(mpl.ticker.ScalarFormatter())
+    ax_h.set_xlabel("feedback channels"); ax_h.set_ylabel("paired effect")
+    style_axis(ax_h)
+    # One-row legend above the tallest error bar: headroom keeps the key
+    # clear of the wide bootstrap intervals.
+    add_headroom(ax_h, 0.30)
+    clean_legend(ax_h, loc="upper right", ncol=2, fontsize=PT_SMALL)
+
+
+    path = ROOT / "figures/supplementary/figure_S22_panels_A-J.pdf"
+    return canvas.save(path, name="figure_S22_panels_A-H_final")
+
+
 def _figure5_detailed() -> None:
     fig, axes = measured_boundary_grid(height=7.70)
     ax_a, ax_b, ax_c, ax_d, ax_e, ax_f, ax_g, ax_h, ax_i, ax_j = axes
@@ -1905,7 +2050,7 @@ def _figure5_detailed() -> None:
         ax_f.annotate(str(i), (xv, yv), xytext=(3, 2), textcoords="offset points", fontsize=PT_SMALL)
     ax_f.axhline(0, color=COLORS["mute"], lw=LW_REF, ls="--")
     ax_f.axvline(0, color=COLORS["mute"], lw=LW_REF, ls="--")
-    ax_f.set_xlabel(r"capture: ancestry $-$ shuffle"); ax_f.set_ylabel("MSE gain")
+    ax_f.set_xlabel(r"capture: ancestry $-$ shuffle"); ax_f.set_ylabel("shuffle − ancestry MSE")
     panel_title(ax_f, "F", "Target dependence")
     style_axis(ax_f)
 

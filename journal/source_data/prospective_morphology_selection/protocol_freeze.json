@@ -1,0 +1,9 @@
+{
+  "candidate_manifest_sha256": "67a06629a1ffd25ce1eca591c67216866111bcdfd3dee53af9991ba32adadccb",
+  "numpy": "2.2.6",
+  "protocol_sha256": "aebb52030bf5a6403123f432f691676fdb85236d46a7585d83874a76312349dd",
+  "python": "3.10.13",
+  "runner_sha256": "2f32eef50b50a2e2f4860efdafeda54125d577ed236e3961051a7ea573bf3def",
+  "status": "frozen_before_development_or_confirmatory_training",
+  "utc": "2026-09-05T16:08:03.803522+00:00"
+}

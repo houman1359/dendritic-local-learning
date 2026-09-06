@@ -1,0 +1,7 @@
+{
+  "max_scaling_spectrum_difference": 7.105427357601002e-15,
+  "scope": "Static coordinate scaling only; affine state shifts/different parameterizations or nonlinear coordinates not covered",
+  "script_sha256": "7f3722b4ffdf09504eab877ee8a63f8e22d31c30ae8f2bcd8029ea2d5f6647e8",
+  "states": 3600,
+  "status": "passed"
+}

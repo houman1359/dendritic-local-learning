@@ -79,7 +79,7 @@ DATA = ROOT / "source_data"
 OUT = ROOT / "figures" / "components" / "main_figure_07_native.pdf"
 
 # ── canvas geometry, in points ───────────────────────────────────────────
-CANVAS_H_PT = 482.0                      # 518.4 / 440 = 1.18 aspect
+CANVAS_H_PT = 446.0                      # common 0.92-textwidth placement
 # Three equal rows and one wide horizontal gutter.  The gutter is the
 # figure's single shared left reserve: it is set wider than the widest y
 # label and tick column on the page, and the left margin wider than the
@@ -87,7 +87,7 @@ CANVAS_H_PT = 482.0                      # 518.4 / 440 = 1.18 aspect
 # slot.  Every panel of a grid column therefore keeps one x0 and one axes
 # width, and every row-mate one height.
 HGUTTER = 34.0
-VGUTTER = 46.0
+VGUTTER = 40.0
 MARGINS = Margins(left=61.0, right=13.0, top=22.0, bottom=28.0)
 
 INK = COLORS["ink"]
@@ -485,7 +485,7 @@ def panel_arbor(ax):
                 fontsize=PT_SMALL, color=INK)
     ax.text(0.5 * (bar[0] + bar[1]), 0.290, "(E " + MINUS + " I) / (E + I)",
             ha="center", va="center", fontsize=PT_SMALL, color=INK)
-    ax.text(0.5, 0.038, "width = log mapped area (E + I), 5 levels",
+    ax.text(0.5, 0.015, "width: mapped area\n(log scale; 5 levels)",
             ha="center", va="center",
             fontsize=PT_SMALL, color=MUTE)
 
@@ -557,10 +557,10 @@ def panel_addresses(ax):
             transform=ax.transAxes, fontsize=PT_ANNOT, color=INK,
             ha="left", va="center")
     ax.text(
-        0.285, 0.842,
-        r"$\mathcal{C}_A=\|P_A\mathbf{t}\|_2^2/\|\mathbf{t}\|_2^2$",
+        0.50, 0.842,
+        "retained field energy",
         transform=ax.transAxes, fontsize=PT_SMALL, color=MUTE,
-        ha="left", va="center",
+        ha="center", va="center",
     )
     ax.text(0.50, 0.755, "B ⊂ A", ha="center", va="center",
             fontsize=PT_SMALL, color=INK)
@@ -794,9 +794,9 @@ def build():
     # Rows 1-2: the eight-channel economy and the independent volume on the
     # left, the wiring-normalized headline on the right across both rows.
     ax_e = canvas.panel("E", 1, 0, 6, grid="x",
-                        title="Eight-channel capture and wiring")
+                        title="Route-generated capture and wiring")
     ax_f = canvas.panel("F", 1, 6, 6, rowspan=2, grid="y",
-                        title="Wiring-normalized capture")
+                        title="Route-generated wiring efficiency")
     ax_g = canvas.panel("G", 2, 0, 6, grid="x",
                         title="Disjoint and second-animal cohorts")
 
@@ -813,6 +813,11 @@ def build():
     for name in ("A", "B", "C", "D", "E", "F", "G"):
         canvas.add_letter(name, canvas.axes[name], dx_pt=24.0)
 
+    from build_main_figure_02 import _equalise_row
+    canvas.lock_reserves()
+    _equalise_row(canvas, {"A": 0, "B": 3, "C": 6, "D": 9})
+    from journal_style import style_direct_color_labels
+    style_direct_color_labels(canvas.fig)
     problems = canvas.save(OUT, name="main_figure_07_native")
     return problems
 

@@ -1,0 +1,124 @@
+{
+  "numpy": "2.2.6",
+  "pandas": "2.3.3",
+  "protocol": {
+    "algebraic": {
+      "label_noise_sd": 0.15,
+      "n_test": 4096,
+      "n_training": 2048,
+      "n_validation": 1024,
+      "parameter_bound": 2.0
+    },
+    "batch_size": 64,
+    "checkpoints": [
+      0,
+      1,
+      16,
+      64,
+      256,
+      512,
+      1024
+    ],
+    "conductance": {
+      "label_noise_sd": 0.0,
+      "log_conductance_bound": 5.0,
+      "n_diagnostic": 512,
+      "n_test": 4096,
+      "n_training": 1024,
+      "n_validation": 1024
+    },
+    "conductance_pairing": "Existing positive conductance teacher under all three compatible input permutations; identical initial conductances and example/minibatch streams across rules. Conductance teachers are not the algebraic interaction-order tasks.",
+    "development_seeds": [
+      210100,
+      210101,
+      210102
+    ],
+    "fresh_seeds": [
+      211200,
+      211201,
+      211202,
+      211203,
+      211204,
+      211205,
+      211206,
+      211207,
+      211208,
+      211209,
+      211210,
+      211211,
+      211212,
+      211213,
+      211214,
+      211215,
+      211216,
+      211217,
+      211218,
+      211219
+    ],
+    "gradient_norm_clip": 10.0,
+    "inference": "20 independent paired fresh seed blocks. Conductance input permutations are paired conditions, not replicates. Primary interaction and all rule/task/optimizer contrasts retained. Descriptive 95% paired whole-seed bootstrap intervals use 10000 draws; no unplanned significance or equivalence claim.",
+    "interpretation": "A one-profile oracle uses current exact fields and is an expressivity diagnostic, not a trained biological credit rule. High rank-one capture can coexist with poor unit broadcast. Failure of calibration does not by itself establish that all six independent channels are necessary; dynamics and intermediate-dimensional dictionaries remain possible. Positive and null outcomes are retained equally.",
+    "metrics": "Primary final test NMSE; clean full-domain algebraic population NMSE secondary. Save learning curves and every declared checkpoint. Exclude root from spatial field metrics. Record unweighted paths and error-weighted credit fields, uniform/calibrated/sign oracle one-profile projection capture, best rank-one capture, full-rank capture, effective rank, actual-delivery squared error and cosine, full local-gradient cosine, and previous minibatch Adam-direction versus checkpoint full-gradient cosine.",
+    "n_calibration": 256,
+    "optimizers": [
+      "sgd",
+      "adam"
+    ],
+    "primary_hypothesis": "In algebraic Adam fits, the calibrated-minus-exact final test-NMSE gap is larger for quartet than matching targets on the identical compatible balanced tree. No positive result is assumed.",
+    "profiles": "At each student's initial unlabeled calibration states, average its exact output-to-unit path derivative over examples. Freeze this six-site vector without normalization. Unit profile is all ones; sign profile is its sign with zero mapped to zero. Root derivative always remains exactly one. Calibration uses no target labels, but requires initial model path information and is not proposed as a biological estimator.",
+    "purpose": "Separate uniform broadcast from an initially calibrated fixed spatial profile while preserving the task-to-credit argument as a testable hypothesis.",
+    "rates": {
+      "algebraic": {
+        "adam": [
+          0.003,
+          0.01,
+          0.03
+        ],
+        "sgd": [
+          0.003,
+          0.01,
+          0.03
+        ]
+      },
+      "conductance": {
+        "adam": [
+          0.003,
+          0.01,
+          0.03
+        ],
+        "sgd": [
+          0.001,
+          0.003,
+          0.01
+        ]
+      }
+    },
+    "rules": [
+      "exact",
+      "unit_broadcast",
+      "calibrated_broadcast",
+      "sign_broadcast"
+    ],
+    "secondary_hypotheses": [
+      "Initial spatial calibration improves over unit broadcast",
+      "Nested targets replicate any calibrated-minus-exact gap on their own compatible tree",
+      "Positive conductance teachers reveal whether the same credit-rule distinction extends across model classes"
+    ],
+    "selection": "Per model, optimizer and rule, choose the rate minimizing final validation NMSE averaged equally over three development seeds and all three tasks; ties go to smaller rate. Also freeze one common rate per model/optimizer averaged over all rules. Fresh fits run the union of selected and common rates, all outcomes retained. No selection uses fresh labels, capture or endpoint outcomes.",
+    "steps": 1024,
+    "stopping": "Exactly 1024 steps for every arm, no early stopping. This measures fixed-budget learning, not convergence. A 64-step first-development-seed benchmark is recorded separately and excluded from selection. It cannot change the frozen task, rate or seed scope.",
+    "task_pairing": "Matching and quartet use the same random input permutation, balanced tree, initial coefficients, calibration inputs, training/test input matrices, additive-noise realization and minibatch stream per seed. Both input-gradient covariances equal I/4. Nested uses the original prefix supports and its own compatible tree, without an isospectral or same-tree claim. All random signs retained.",
+    "version": 1
+  },
+  "python": "3.10.13",
+  "source_sha256": {
+    "configs/credit_rule_bridge/protocol.json": "a5bb778898ab8aa2929fccd0eb6367171b91b13fab01520bd5563a6fbad74774",
+    "scripts/credit_rule_bridge/models.py": "86f3cc539942dd3c858f4fcc2f91e2604220b72e3628e9d463fb86574f1dbf23",
+    "scripts/credit_rule_bridge/run.py": "537c18b757e7dbcb56333be5f6da80f0f0440774a894c4fd7187af6bebb2f185",
+    "scripts/credit_rule_bridge/test_bridge.py": "49e8770e5fe7901191916455a177990a8b5ee287b46b4f475d2d62a4184ddcab",
+    "scripts/morphology_conductance/model.py": "0319c1cf13ee702eb8ef460937d14c9a7cddb53cfbfc491c2fe60abb889ad706",
+    "scripts/morphology_credit/experiment.py": "11e83f4d7c50bbfa6033fd0f30bd2be22aa23e9e90e053502616f517bb612d81",
+    "scripts/morphology_structure/constructive_dp_v2.py": "1a34d6933706c924eca6458d48940a53e97bff57756ad1a68444585e4b5ac964",
+    "scripts/morphology_structure/model.py": "fe89ef9331795a4dbf3f04ff1d7b18dc8f955b9da8119a2fdcce4f5edbd68cf7"
+  }
+}

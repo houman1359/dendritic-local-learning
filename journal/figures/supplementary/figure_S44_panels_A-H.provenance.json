@@ -1,0 +1,18 @@
+{
+  "builder": "scripts/build_boolean_morphology_figures.py",
+  "builder_sha256": "db45edf9893570a95b7a42613b805ac25b4a414ec414ac958e9873f7aa7cc894",
+  "figure": "S44",
+  "panels": "A-H",
+  "scope": "Rendering only; source outcomes and protocol unchanged",
+  "sources": {
+    "source_data/boolean_morphology/analysis_record.json": "c83f41a2ca03b2b94188c1eb81a5bdebad2f0173483ce5d219e51d2f17ebf316",
+    "source_data/boolean_morphology/condition_summary.csv": "912dd45099db5fb08d3515f3c3b6abea1c156184bcee0303dcae165ec41d59e2",
+    "source_data/boolean_morphology/paired_primary_contrasts.csv": "b250a7f9077d6719ca1c16d2b21f50eaff0e8892c38908055bebc3a84497c0df",
+    "source_data/boolean_morphology/primary_contrasts.csv": "87fba85a887d924c2a600d2a9382a5b4e4358d0207409018e4787659d1546f8e",
+    "source_data/boolean_morphology/protocol.json": "4373c421dd8ad60de8275d8384f441fc7c19d000232081bbb5be2eb7df0597df",
+    "source_data/boolean_morphology/same_rate_contrast_summary.csv": "6c3c691a2db8bfdc4f0be526a592c659d47eed1ea5123409ef7588ec6bbd0d12",
+    "source_data/boolean_morphology/selected_endpoints.csv": "471b8768654992bfe286d4aaf79f42e2415a68063ba95e19becf38485074c14f",
+    "source_data/boolean_morphology/selected_rates.json": "ca33ec0fb171a7ed9b432334b65b0d144b017f6ea00eff26078b57d505253718",
+    "source_data/boolean_morphology/trajectory_summary.csv": "9a88e53ff7932613466d20268d733e363ca09ae6f62f1690b63490391db42079"
+  }
+}

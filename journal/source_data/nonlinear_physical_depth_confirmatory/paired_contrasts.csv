@@ -1,0 +1,15 @@
+contrast,family,detail,n_pairs,mean_difference,ci95_low,ci95_high,positive_pairs,negative_pairs,exact_sign_flip_p_two_sided
+bp_depth_d3_minus_d1__aligned,bp_depth,"shunting BP D3-D1, aligned",10,0.3085500002,0.3045099974,0.3130399944,10,0,0.001953125
+bp_depth_d3_minus_d1__zero_alignment,bp_depth,"shunting BP D3-D1, zero_alignment",10,0.0001899957657,-0.00163000226,0.001819986105,6,3,0.84765625
+bp_depth_d3_minus_d1__sensor_shuffled,bp_depth,"shunting BP D3-D1, sensor_shuffled",10,-0.0001300036907,-0.0008499979973,0.0005000054836,6,4,0.751953125
+bp_depth_d3_minus_d1__rewired_tree,bp_depth,"shunting BP D3-D1, rewired_tree",10,-0.004270005226,-0.006739997864,-0.001480013132,1,8,0.0234375
+bp_depth_interaction__aligned_minus_zero_alignment,bp_interaction,(D3-D1) aligned - zero alignment,10,0.3083600044,0.3039300023,0.3128600241,10,0,0.001953125
+bp_depth_interaction__aligned_minus_sensor_shuffled,bp_interaction,(D3-D1) aligned - sensor shuffled,10,0.3086800039,0.3048800111,0.3129600048,10,0,0.001953125
+bp_depth_interaction__aligned_minus_rewired_tree,bp_interaction,(D3-D1) aligned - tree reversed,10,0.3128200054,0.3066700101,0.3182400048,10,0,0.001953125
+local_depth_d3_minus_d1__aligned__per_soma_shared,local_depth,"aligned LocalCA D3-D1, per_soma_shared",10,0.1694699883,0.1636599898,0.1743599834,10,0,0.001953125
+local_depth_interaction__aligned_minus_rewired__per_soma_shared,local_interaction,"LocalCA aligned-reversed depth effect, per_soma_shared",10,0.1772399962,0.1726999938,0.1817799926,10,0,0.001953125
+local_depth_d3_minus_d1__aligned__path_transport,local_depth,"aligned LocalCA D3-D1, path_transport",10,0.2790499926,0.2723700105,0.285289979,10,0,0.001953125
+local_depth_interaction__aligned_minus_rewired__path_transport,local_interaction,"LocalCA aligned-reversed depth effect, path_transport",10,0.2867799997,0.2807200074,0.292719996,10,0,0.001953125
+mechanism_shunting_minus_additive__d1,mechanism,"aligned BP shunting-additive, D1",10,0.03636999428,0.0110497418,0.07101999223,8,2,0.017578125
+mechanism_shunting_minus_additive__d2,mechanism,"aligned BP shunting-additive, D2",10,0.1369199932,0.1183297288,0.1559899867,10,0,0.001953125
+mechanism_shunting_minus_additive__d3,mechanism,"aligned BP shunting-additive, D3",10,0.3991799951,0.3848599911,0.4121002547,10,0,0.001953125

@@ -1,0 +1,7 @@
+{
+  "ci95_high": 0.014232539902523085,
+  "ci95_low": 0.012280830820787715,
+  "mean_incompatible_population_nmse_lower_bound": 0.01322210966537823,
+  "n_seed_blocks": 20,
+  "unit": "Population NMSE lower bound; converged quadrature, not an observed test error"
+}

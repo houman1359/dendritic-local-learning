@@ -3,9 +3,10 @@
 
 Every main figure is authored as ONE matplotlib canvas at exactly the
 canonical width (``journal_style.FIG_W`` inches = 518.4 pt) and emitted at
-scale 1.0.  Nothing is ever rescaled afterwards, so a nominal 7.6 pt tick
-label is 7.6 pt in the compiled PDF of every figure, an ``LW_EDGE`` spine is
-0.7 pt everywhere, and two panels in one row are the same physical size.
+scale 1.0. Native font and stroke sizes are preserved in these standalone
+assets. Manuscript inclusion rescales them by the placed width divided by
+518.4 pt; that scale must also be checked on the compiled page. A common
+placement width preserves consistent printed typography across figures.
 This module owns that geometry, hard-enforces the journal token set on the
 artists it produces, and audits the emitted PDF.
 

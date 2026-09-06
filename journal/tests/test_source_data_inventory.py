@@ -31,8 +31,21 @@ def test_source_data_inventory_matches_final_display_numbering() -> None:
         for figure in figures
         if (match := re.fullmatch(r"Supplementary Figure (\d+)", figure))
     }
-    assert main_numbers == set(range(2, 10))  # Figure 1 is conceptual.
-    assert supplementary_numbers == set(range(1, 32))
+    assert main_numbers == set(range(1, 9))  # Figure 1 includes trained dictionary statistics.
+    assert supplementary_numbers == set(range(1, 48))
+    prospective = [item for item in builder.FILES if item.figure == "Supplementary Figure 35"]
+    assert prospective
+    assert all(item.source.startswith("source_data/prospective_morphology_selection/") for item in prospective)
+    assert any(item.source.endswith("/sealed_confirmatory_selections.csv") for item in prospective)
+    assert any(item.source.endswith("/candidate_outcomes.csv") for item in prospective)
+    interaction = [item for item in builder.FILES if item.figure == "Figure 4"]
+    assert any("credit_rule_bridge/" in item.source for item in interaction)
+    assert any("credit_resolution_bridge/" in item.source for item in interaction)
+    anatomy = [item for item in builder.FILES if item.figure == "Figure 6"]
+    assert any("anatomy_commonmode/" in item.source for item in anatomy)
+    assert not any("morphology_calibration" in item.source for item in anatomy)
+    assert any("release_task_identity/task_identity.json" in item.source for item in builder.FILES)
+
 
 
 def test_source_data_destinations_are_unique_and_sources_exist() -> None:
@@ -72,23 +85,23 @@ def test_supplementary_figure_4_uses_only_current_panel_mapping() -> None:
     )
 
 
-def test_figure_2_redesign_uses_current_panel_sources() -> None:
-    by_source = {item.source: item for item in builder.FILES}
+def test_s45_retains_original_image_panel_sources() -> None:
+    by_source = {item.source: item for item in builder.FILES if item.figure.startswith("Supplementary")}
 
     gradient = by_source["source_data/figure2/feedback_gradient_runs.csv"]
     assert (gradient.figure, gradient.panels, gradient.destination) == (
-        "Figure 3",
+        "Supplementary Figure 45",
         "c",
-        "Figure_3/Fig3c_feedback_gradient_runs.csv",
+        "Supplementary_Figure_45/SuppFig45c_feedback_gradient_runs.csv",
     )
 
     transport = by_source[
         "source_data/figure2/path_gain_dispersion_ladder_runs.csv"
     ]
     assert (transport.figure, transport.panels, transport.destination) == (
-        "Figure 3",
+        "Supplementary Figure 45",
         "d-e",
-        "Figure_3/Fig3d-e_path_gain_dispersion_ladder_runs.csv",
+        "Supplementary_Figure_45/SuppFig45d-e_path_gain_dispersion_ladder_runs.csv",
     )
 
     conductance_only = by_source["source_data/figure2/path_gain_cv_runs.csv"]
@@ -100,7 +113,7 @@ def test_figure_2_redesign_uses_current_panel_sources() -> None:
     mnist_contrasts = by_source[
         "source_data/mnist_feedback_ladder/paired_contrasts.csv"
     ]
-    assert (mnist_contrasts.figure, mnist_contrasts.panels) == ("Figure 3", "g")
+    assert (mnist_contrasts.figure, mnist_contrasts.panels) == ("Supplementary Figure 45", "g")
 
     for source in (
         "source_data/prospective_input_validity/followup_publication_seed_outcomes.csv",
@@ -108,7 +121,7 @@ def test_figure_2_redesign_uses_current_panel_sources() -> None:
     ):
         assert any(
             item.source == source
-            and (item.figure, item.panels) == ("Figure 3", "g")
+            and (item.figure, item.panels) == ("Supplementary Figure 45", "g")
             for item in builder.FILES
         )
 
@@ -121,7 +134,7 @@ def test_figure_2_redesign_uses_current_panel_sources() -> None:
     ]
     assert len(central) == 3
     assert all(
-        (item.figure, item.panels) == ("Supplementary Figure 19", "a-c")
+        (item.figure, item.panels) == ("Supplementary Figure 19", "text")
         and item.destination.startswith(
             "Supplementary_Figure_19/SuppFig19a-c_"
         )
@@ -139,12 +152,12 @@ def test_figure_2_redesign_uses_current_panel_sources() -> None:
         for item in fashion
     )
     assert not any(
-        item.destination == "Figure_3/Fig3g_seed_outcomes.csv"
+        item.destination == "Supplementary_Figure_45/SuppFig45g_seed_outcomes.csv"
         for item in builder.FILES
     )
 
 
-def test_figure_2_and_s4_provenance_matches_redesign() -> None:
+def test_s45_image_and_s4_provenance_preserve_source_lineage() -> None:
     manifest = JOURNAL / "source_data" / "provenance_manifest.tsv"
     with manifest.open(newline="", encoding="utf-8") as handle:
         rows = {
@@ -153,7 +166,7 @@ def test_figure_2_and_s4_provenance_matches_redesign() -> None:
         }
 
     transport = rows["fig2.path_gain_dispersion"]
-    assert (transport["figure"], transport["panel"]) == ("fig3", "d-e")
+    assert (transport["figure"], transport["panel"]) == ("figS45", "d-e")
     assert transport["source_path"].endswith(
         "/source_data/figure2/path_gain_dispersion_ladder_runs.csv"
     )
@@ -164,17 +177,17 @@ def test_figure_2_and_s4_provenance_matches_redesign() -> None:
     old_path_gain = rows["fig2.path_gain"]
     assert (old_path_gain["figure"], old_path_gain["panel"]) == ("figS1", "a")
     assert (rows["fig2.c"]["figure"], rows["fig2.c"]["panel"]) == (
-        "fig3",
+        "figS45",
         "c",
     )
     assert (
         rows["mnist.ladder.contrasts"]["figure"],
         rows["mnist.ladder.contrasts"]["panel"],
-    ) == ("fig3", "g")
+    ) == ("figS45", "g")
     for entry_id in ("prospective.routing.runs", "prospective.routing.contrasts"):
         assert (rows[entry_id]["figure"], rows[entry_id]["panel"]) == (
-            "fig3/figS19",
-            "g/d",
+            "figS45/figS19",
+            "g/text",
         )
 
     for entry_id in (
@@ -198,12 +211,12 @@ def test_figure_2_ownership_release_is_the_mnist_d2_d4_subset(
 ) -> None:
     expected = (
         (
-            "Figure_3/Fig3g_ownership_run_outcomes.csv",
+            "Supplementary_Figure_45/SuppFig45g_ownership_run_outcomes.csv",
             80,
             {"family": {"routing"}, "task": {"mnist"}, "depth": {"2", "4"}},
         ),
         (
-            "Figure_3/Fig3g_ownership_contrasts.csv",
+            "Supplementary_Figure_45/SuppFig45g_ownership_contrasts.csv",
             4,
             {"task": {"mnist"}, "depth": {"2", "4"}},
         ),
@@ -232,24 +245,37 @@ def test_figure_2_ownership_release_is_the_mnist_d2_d4_subset(
         assert len(rows) == expected_rows
         for field, values in expected_values.items():
             assert {row[field] for row in rows} == values
-        if destination.startswith("Figure_3/"):
+        if destination.startswith("Supplementary_Figure_45/"):
             assert {row["core"] for row in rows} == {
                 "dendritic_additive",
                 "dendritic_shunting",
             }
 
 
-def test_figure_2_source_data_readmes_describe_current_a_to_g() -> None:
-    transport = next(
-        item
-        for item in builder.FILES
-        if item.destination
-        == "Figure_3/Fig3d-e_path_gain_dispersion_ladder_runs.csv"
-    )
-    text = "\n".join((builder.README, builder.FIGURE_2_README, transport.role, transport.notes))
-    assert "pre-reactivation voltage-error" in text
-    assert "Panels A and F are schematics" in builder.FIGURE_2_README
-    assert "Supplementary Figure 19A--C" in builder.README
-    assert "Figure 3 contains the 480" not in builder.README
-    for stale in ("post-activation", "0.3%", "18--26", "18-26"):
-        assert stale not in text
+def test_current_readmes_follow_manifest_and_archive_keeps_original_hashes(tmp_path: Path) -> None:
+    current = next(item for item in builder.FILES if item.figure == "Figure 6")
+    directory = Path(current.destination).parts[0]
+    (tmp_path / directory).mkdir()
+    builder.write_display_readmes(tmp_path, [{
+        "file": current.destination, "figure": current.figure,
+        "panels": current.panels, "independent_unit": current.independent_unit,
+        "status": current.status,
+    }])
+    text = (tmp_path / directory / "README.md").read_text()
+    assert "Figure 6 source data" in text
+    assert current.panels in text
+    assert "eight main and 47 supplementary figures" in builder.README
+    assert "initialization selector" not in text
+
+
+def test_path_portability_preserves_numeric_values(tmp_path: Path) -> None:
+    import json
+    path = tmp_path / "lineage.json"
+    source = {"loss": 0.123456789012345, "seed": 17,
+              "source": "/n/home13/example/original/run.json"}
+    path.write_text(json.dumps(source))
+    changes = builder.portable_text_copy(path)
+    released = json.loads(path.read_text())
+    assert released["loss"] == source["loss"] and released["seed"] == source["seed"]
+    assert released["source"].endswith("example/original/run.json")
+    assert changes and "/n/home13/" not in path.read_text()

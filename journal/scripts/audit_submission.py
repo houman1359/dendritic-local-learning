@@ -18,6 +18,8 @@ second is the pre-submission gate and treats it as an error.
 
 from __future__ import annotations
 
+from tex_sources import expanded_tex
+
 import argparse
 import csv
 import hashlib
@@ -261,7 +263,7 @@ def audit_manuscript(
     if not manuscript.is_file():
         return [Finding("error", "manuscript.missing", f"Missing manuscript: {manuscript}")], []
 
-    text = strip_tex_comments(manuscript.read_text(encoding="utf-8"))
+    text = strip_tex_comments(expanded_tex(manuscript))
     findings: list[Finding] = []
     graphics: list[Path] = []
     conditional_graphics = {Path(path).name for path in IF_FILE_EXISTS_RE.findall(text)}

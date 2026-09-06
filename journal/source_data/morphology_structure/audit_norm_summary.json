@@ -1,0 +1,57 @@
+{
+  "best_restarts_norm_gt_1e+04": 4,
+  "best_restarts_norm_gt_1e+08": 4,
+  "candidate_endpoints_without_equivalent_norm_le_1e+04": 1,
+  "candidate_endpoints_without_equivalent_norm_le_1e+08": 1,
+  "equivalent_endpoint_tolerance": 1e-07,
+  "final_fits_norm_gt_1e+04": 20,
+  "final_fits_norm_gt_1e+08": 16,
+  "maximum_minimum_equivalent_norm": 15708020844.125984,
+  "n_candidate_endpoints": 1680,
+  "n_final_fits": 6720,
+  "scope": "Existing feasible alternative within endpoint tolerance; all original fits and best endpoints retained",
+  "selected_policies": [
+    {
+      "max_equivalent_norm": 2.6457513110645907,
+      "n_selected": 140,
+      "no_equivalent_norm_le_1e4": 0,
+      "no_equivalent_norm_le_1e8": 0,
+      "policy": "best_fixed_in_hindsight"
+    },
+    {
+      "max_equivalent_norm": 2.6457513110645907,
+      "n_selected": 140,
+      "no_equivalent_norm_le_1e4": 0,
+      "no_equivalent_norm_le_1e8": 0,
+      "policy": "centered_cut_bound"
+    },
+    {
+      "max_equivalent_norm": 2.6457513110645907,
+      "n_selected": 140,
+      "no_equivalent_norm_le_1e4": 0,
+      "no_equivalent_norm_le_1e8": 0,
+      "policy": "centered_cut_sum"
+    },
+    {
+      "max_equivalent_norm": 2.6457513110645907,
+      "n_selected": 140,
+      "no_equivalent_norm_le_1e4": 0,
+      "no_equivalent_norm_le_1e8": 0,
+      "policy": "fixed_balanced_p0"
+    },
+    {
+      "max_equivalent_norm": 2.6457513110645907,
+      "n_selected": 140,
+      "no_equivalent_norm_le_1e4": 0,
+      "no_equivalent_norm_le_1e8": 0,
+      "policy": "full_cut_bound"
+    },
+    {
+      "max_equivalent_norm": 2.6457513110645907,
+      "n_selected": 140,
+      "no_equivalent_norm_le_1e4": 0,
+      "no_equivalent_norm_le_1e8": 0,
+      "policy": "two_sweep_pilot"
+    }
+  ]
+}

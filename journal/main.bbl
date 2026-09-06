@@ -1,0 +1,451 @@
+\begin{thebibliography}{57}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Rall(1962)]{rall1962dendrites}
+Wilfrid Rall.
+\newblock Theory of physiological properties of dendrites.
+\newblock \emph{Annals of the New York Academy of Sciences}, 96\penalty0
+  (4):\penalty0 1071--1092, 1962.
+\newblock \doi{10.1111/j.1749-6632.1962.tb54120.x}.
+
+\bibitem[Koch(1999)]{koch1999biophysics}
+Christof Koch.
+\newblock \emph{Biophysics of Computation: Information Processing in Single
+  Neurons}.
+\newblock Oxford University Press, 1999.
+\newblock \doi{10.1093/oso/9780195104912.001.0001}.
+
+\bibitem[Poirazi et~al.(2003)Poirazi, Brannon, and Mel]{poirazi2003pyramidal}
+Panayiota Poirazi, Terrence Brannon, and Bartlett~W. Mel.
+\newblock Pyramidal neuron as two-layer neural network.
+\newblock \emph{Neuron}, 37\penalty0 (6):\penalty0 989--999, 2003.
+\newblock \doi{10.1016/S0896-6273(03)00149-1}.
+
+\bibitem[London and H{\"a}usser(2005)]{london2005dendritic}
+Michael London and Michael H{\"a}usser.
+\newblock Dendritic computation.
+\newblock \emph{Annual Review of Neuroscience}, 28:\penalty0 503--532, 2005.
+\newblock \doi{10.1146/annurev.neuro.28.061604.135703}.
+
+\bibitem[Spruston(2008)]{spruston2008pyramidal}
+Nelson Spruston.
+\newblock Pyramidal neurons: dendritic structure and synaptic integration.
+\newblock \emph{Nature Reviews Neuroscience}, 9:\penalty0 206--221, 2008.
+\newblock \doi{10.1038/nrn2286}.
+
+\bibitem[Branco and H{\"a}usser(2010)]{branco2010single}
+Tiago Branco and Michael H{\"a}usser.
+\newblock The single dendritic branch as a fundamental functional unit in the
+  nervous system.
+\newblock \emph{Current Opinion in Neurobiology}, 20\penalty0 (4):\penalty0
+  494--502, 2010.
+\newblock \doi{10.1016/j.conb.2010.07.009}.
+
+\bibitem[Larkum(2013)]{larkum2013cellular}
+Matthew Larkum.
+\newblock A cellular mechanism for cortical associations: an organizing
+  principle for the cerebral cortex.
+\newblock \emph{Trends in Neurosciences}, 36\penalty0 (3):\penalty0 141--151,
+  2013.
+\newblock \doi{10.1016/j.tins.2012.11.006}.
+
+\bibitem[Rumelhart et~al.(1986)Rumelhart, Hinton, and
+  Williams]{rumelhart1986learning}
+David~E. Rumelhart, Geoffrey~E. Hinton, and Ronald~J. Williams.
+\newblock Learning representations by back-propagating errors.
+\newblock \emph{Nature}, 323:\penalty0 533--536, 1986.
+\newblock \doi{10.1038/323533a0}.
+
+\bibitem[Almeida(1987)]{almeida1987asynchronous}
+Luis~B. Almeida.
+\newblock A learning rule for asynchronous perceptrons with feedback in a
+  combinatorial environment.
+\newblock In \emph{Proceedings of the First IEEE International Conference on
+  Neural Networks}, volume~2, pages 609--618, 1987.
+
+\bibitem[Pineda(1987)]{pineda1987recurrent}
+Fernando~J. Pineda.
+\newblock Generalization of back-propagation to recurrent neural networks.
+\newblock \emph{Physical Review Letters}, 59\penalty0 (19):\penalty0
+  2229--2232, 1987.
+\newblock \doi{10.1103/PhysRevLett.59.2229}.
+
+\bibitem[Hebb(1949)]{hebb1949organization}
+Donald~O. Hebb.
+\newblock \emph{The Organization of Behavior: A Neuropsychological Theory}.
+\newblock Wiley, New York, 1949.
+
+\bibitem[Fr{\'e}maux and Gerstner(2016)]{fremaux2016threefactor}
+Nicolas Fr{\'e}maux and Wulfram Gerstner.
+\newblock Neuromodulated spike-timing-dependent plasticity, and theory of
+  three-factor learning rules.
+\newblock \emph{Frontiers in Neural Circuits}, 9:\penalty0 85, 2016.
+\newblock \doi{10.3389/fncir.2015.00085}.
+
+\bibitem[Lillicrap et~al.(2016)Lillicrap, Cownden, Tweed, and
+  Akerman]{lillicrap2016feedback}
+Timothy~P. Lillicrap, Daniel Cownden, Douglas~B. Tweed, and Colin~J. Akerman.
+\newblock Random synaptic feedback weights support error backpropagation for
+  deep learning.
+\newblock \emph{Nature Communications}, 7:\penalty0 13276, 2016.
+\newblock \doi{10.1038/ncomms13276}.
+
+\bibitem[N{\o}kland(2016)]{nokland2016dfa}
+Arild N{\o}kland.
+\newblock Direct feedback alignment provides learning in deep neural networks.
+\newblock In \emph{Advances in Neural Information Processing Systems},
+  volume~29, pages 1037--1045, 2016.
+
+\bibitem[Scellier and Bengio(2017)]{scellier2017equilibrium}
+Benjamin Scellier and Yoshua Bengio.
+\newblock Equilibrium propagation: bridging the gap between energy-based models
+  and backpropagation.
+\newblock \emph{Frontiers in Computational Neuroscience}, 11:\penalty0 24,
+  2017.
+\newblock \doi{10.3389/fncom.2017.00024}.
+
+\bibitem[Whittington and Bogacz(2017)]{whittington2017predictive}
+James C.~R. Whittington and Rafal Bogacz.
+\newblock An approximation of the error backpropagation algorithm in a
+  predictive coding network with local {Hebbian} synaptic plasticity.
+\newblock \emph{Neural Computation}, 29\penalty0 (5):\penalty0 1229--1262,
+  2017.
+\newblock \doi{10.1162/NECO_a_00949}.
+
+\bibitem[Song et~al.(2024)Song, Millidge, Salvatori, Lukasiewicz, Xu, and
+  Bogacz]{song2024prospective}
+Yuhang Song, Beren Millidge, Tommaso Salvatori, Thomas Lukasiewicz, Zhenghua
+  Xu, and Rafal Bogacz.
+\newblock Inferring neural activity before plasticity as a foundation for
+  learning beyond backpropagation.
+\newblock \emph{Nature Neuroscience}, 27:\penalty0 348--358, 2024.
+\newblock \doi{10.1038/s41593-023-01514-1}.
+
+\bibitem[Bellec et~al.(2020)Bellec, Scherr, Subramoney, Hajek, Salaj,
+  Legenstein, and Maass]{bellec2020eprop}
+Guillaume Bellec, Franz Scherr, Anand Subramoney, Elias Hajek, Darjan Salaj,
+  Robert Legenstein, and Wolfgang Maass.
+\newblock A solution to the learning dilemma for recurrent networks of spiking
+  neurons.
+\newblock \emph{Nature Communications}, 11:\penalty0 3625, 2020.
+\newblock \doi{10.1038/s41467-020-17236-y}.
+
+\bibitem[Werfel et~al.(2005)Werfel, Xie, and Seung]{werfel2005learning}
+Justin Werfel, Xiaohui Xie, and H.~Sebastian Seung.
+\newblock Learning curves for stochastic gradient descent in linear feedforward
+  networks.
+\newblock \emph{Neural Computation}, 17\penalty0 (12):\penalty0 2699--2718,
+  2005.
+\newblock \doi{10.1162/089976605774320539}.
+
+\bibitem[Whittington and Bogacz(2019)]{whittington2019theories}
+James C.~R. Whittington and Rafal Bogacz.
+\newblock Theories of error back-propagation in the brain.
+\newblock \emph{Trends in Cognitive Sciences}, 23\penalty0 (3):\penalty0
+  235--250, 2019.
+\newblock \doi{10.1016/j.tics.2018.12.005}.
+
+\bibitem[Lillicrap et~al.(2020)Lillicrap, Santoro, Marris, Akerman, and
+  Hinton]{lillicrap2020backprop}
+Timothy~P. Lillicrap, Adam Santoro, Luke Marris, Colin~J. Akerman, and Geoffrey
+  Hinton.
+\newblock Backpropagation and the brain.
+\newblock \emph{Nature Reviews Neuroscience}, 21:\penalty0 335--346, 2020.
+\newblock \doi{10.1038/s41583-020-0277-3}.
+
+\bibitem[Francioni et~al.(2026)Francioni, Tang, Toloza, Ding, Brown, and
+  Harnett]{francioni2026vectorized}
+Valerio Francioni, Vincent~D. Tang, Enrique H.~S. Toloza, Zilan Ding, Norma~J.
+  Brown, and Mark~T. Harnett.
+\newblock Vectorized instructive signals in cortical dendrites.
+\newblock \emph{Nature}, 652:\penalty0 1254--1263, 2026.
+\newblock \doi{10.1038/s41586-026-10190-7}.
+
+\bibitem[Koch et~al.(1983)Koch, Poggio, and Torre]{koch1983nonlinear}
+C.~Koch, T.~Poggio, and V.~Torre.
+\newblock Nonlinear interactions in a dendritic tree: localization, timing, and
+  role in information processing.
+\newblock \emph{Proceedings of the National Academy of Sciences USA},
+  80\penalty0 (9):\penalty0 2799--2802, 1983.
+\newblock \doi{10.1073/pnas.80.9.2799}.
+
+\bibitem[Holt and Koch(1997)]{holt1997shunting}
+Gary~R. Holt and Christof Koch.
+\newblock Shunting inhibition does not have a divisive effect on firing rates.
+\newblock \emph{Neural Computation}, 9\penalty0 (5):\penalty0 1001--1013, 1997.
+\newblock \doi{10.1162/neco.1997.9.5.1001}.
+
+\bibitem[Chance et~al.(2002)Chance, Abbott, and Reyes]{chance2002gain}
+Frances~S. Chance, L.~F. Abbott, and Alex~D. Reyes.
+\newblock Gain modulation from background synaptic input.
+\newblock \emph{Neuron}, 35\penalty0 (4):\penalty0 773--782, 2002.
+\newblock \doi{10.1016/S0896-6273(02)00820-6}.
+
+\bibitem[Gidon and Segev(2012)]{gidon2012inhibition}
+Albert Gidon and Idan Segev.
+\newblock Principles governing the operation of synaptic inhibition in
+  dendrites.
+\newblock \emph{Neuron}, 75\penalty0 (2):\penalty0 330--341, 2012.
+\newblock \doi{10.1016/j.neuron.2012.05.015}.
+
+\bibitem[Lovett-Barron et~al.(2012)Lovett-Barron, Turi, Kaifosh, Lee, Bolze,
+  Sun, Nicoud, Zemelman, Sternson, and Losonczy]{lovettbarron2012regulation}
+Matthew Lovett-Barron, Gergely~F. Turi, Patrick Kaifosh, Peter~H. Lee,
+  Fr{\'e}d{\'e}ric Bolze, Xiao-Hua Sun, Jean-Fran{\c c}ois Nicoud, Boris~V.
+  Zemelman, Scott~M. Sternson, and Attila Losonczy.
+\newblock Regulation of neuronal input transformations by tunable dendritic
+  inhibition.
+\newblock \emph{Nature Neuroscience}, 15:\penalty0 423--430, 2012.
+\newblock \doi{10.1038/nn.3024}.
+
+\bibitem[Urbanczik and Senn(2014)]{urbanczik2014dendritic}
+Robert Urbanczik and Walter Senn.
+\newblock Learning by the dendritic prediction of somatic spiking.
+\newblock \emph{Neuron}, 81\penalty0 (3):\penalty0 521--528, 2014.
+\newblock \doi{10.1016/j.neuron.2013.11.030}.
+
+\bibitem[Schiess et~al.(2016)Schiess, Urbanczik, and
+  Senn]{schiess2016somatodendritic}
+Mathieu Schiess, Robert Urbanczik, and Walter Senn.
+\newblock Somato-dendritic synaptic plasticity and error-backpropagation in
+  active dendrites.
+\newblock \emph{PLOS Computational Biology}, 12\penalty0 (2):\penalty0
+  e1004638, 2016.
+\newblock \doi{10.1371/journal.pcbi.1004638}.
+
+\bibitem[Guerguiev et~al.(2017)Guerguiev, Lillicrap, and
+  Richards]{guerguiev2017segregated}
+Jordan Guerguiev, Timothy~P. Lillicrap, and Blake~A. Richards.
+\newblock Towards deep learning with segregated dendrites.
+\newblock \emph{eLife}, 6:\penalty0 e22901, 2017.
+\newblock \doi{10.7554/eLife.22901}.
+
+\bibitem[Sacramento et~al.(2018)Sacramento, Ponte~Costa, Bengio, and
+  Senn]{sacramento2018dendritic}
+Jo{\~a}o Sacramento, Rui Ponte~Costa, Yoshua Bengio, and Walter Senn.
+\newblock Dendritic cortical microcircuits approximate the backpropagation
+  algorithm.
+\newblock In \emph{Advances in Neural Information Processing Systems},
+  volume~31, 2018.
+
+\bibitem[Payeur et~al.(2021)Payeur, Guerguiev, Zenke, Richards, and
+  Naud]{payeur2021burst}
+Alexandre Payeur, Jordan Guerguiev, Friedemann Zenke, Blake~A. Richards, and
+  Richard Naud.
+\newblock Burst-dependent synaptic plasticity can coordinate learning in
+  hierarchical circuits.
+\newblock \emph{Nature Neuroscience}, 24:\penalty0 1010--1019, 2021.
+\newblock \doi{10.1038/s41593-021-00857-x}.
+
+\bibitem[Ellenberger et~al.(2026)Ellenberger, Haider, Benitez, Jordan, Max,
+  Jaras, Kriener, and Petrovici]{ellenberger2026gle}
+Benjamin Ellenberger, Paul Haider, Federico Benitez, Jakob Jordan, Kevin Max,
+  Ismael Jaras, Laura Kriener, and Mihai~A. Petrovici.
+\newblock Backpropagation through space, time and the brain.
+\newblock \emph{Nature Communications}, 17:\penalty0 66, 2026.
+\newblock \doi{10.1038/s41467-025-66666-z}.
+
+\bibitem[Richards and Lillicrap(2019)]{richards2019dendritic}
+Blake~A. Richards and Timothy~P. Lillicrap.
+\newblock Dendritic solutions to the credit assignment problem.
+\newblock \emph{Current Opinion in Neurobiology}, 54:\penalty0 28--36, 2019.
+\newblock \doi{10.1016/j.conb.2018.08.003}.
+
+\bibitem[Bicknell and H{\"a}usser(2021)]{bicknell2021synaptic}
+Brendan~A. Bicknell and Michael H{\"a}usser.
+\newblock A synaptic learning rule for exploiting nonlinear dendritic
+  computation.
+\newblock \emph{Neuron}, 109\penalty0 (24):\penalty0 4001--4017.e10, 2021.
+\newblock \doi{10.1016/j.neuron.2021.09.044}.
+
+\bibitem[Safaai et~al.(2026{\natexlab{a}})Safaai, Richards, and
+  Sabatini]{safaai2026localcredit}
+Houman Safaai, Maceo Richards, and Bernardo~L. Sabatini.
+\newblock Shunting inhibition and dendritic branching shape local credit
+  assignment.
+\newblock \emph{arXiv preprint arXiv:2607.03556}, 2026{\natexlab{a}}.
+\newblock URL \url{https://arxiv.org/abs/2607.03556}.
+
+\bibitem[Carandini and Heeger(2012)]{carandini2012normalization}
+Matteo Carandini and David~J. Heeger.
+\newblock Normalization as a canonical neural computation.
+\newblock \emph{Nature Reviews Neuroscience}, 13:\penalty0 51--62, 2012.
+\newblock \doi{10.1038/nrn3136}.
+
+\bibitem[{MICrONS Consortium}(2025)]{microns2025}
+{MICrONS Consortium}.
+\newblock Functional connectomics spanning multiple areas of mouse visual
+  cortex.
+\newblock \emph{Nature}, 640:\penalty0 435--447, 2025.
+\newblock \doi{10.1038/s41586-025-08790-w}.
+
+\bibitem[Destexhe et~al.(2003)Destexhe, Rudolph, and
+  Par{\'e}]{destexhe2003highconductance}
+Alain Destexhe, Michael Rudolph, and Denis Par{\'e}.
+\newblock The high-conductance state of neocortical neurons in vivo.
+\newblock \emph{Nature Reviews Neuroscience}, 4:\penalty0 739--751, 2003.
+\newblock \doi{10.1038/nrn1198}.
+
+\bibitem[Ding et~al.(2025)Ding, Fahey, Papadopoulos, Wang, Celii, Papadopoulos,
+  Chang, Kunin, et~al.]{ding2025wiring}
+Zhuokun Ding, Paul~G. Fahey, Stelios Papadopoulos, Eric~Y. Wang, Brendan Celii,
+  Christos Papadopoulos, Andersen Chang, Alexander~B. Kunin, et~al.
+\newblock Functional connectomics reveals general wiring rule in mouse visual
+  cortex.
+\newblock \emph{Nature}, 640:\penalty0 459--469, 2025.
+\newblock \doi{10.1038/s41586-025-08840-3}.
+
+\bibitem[Hackbusch and K{\"u}hn(2009)]{hackbusch2009tensor}
+Wolfgang Hackbusch and Stefan K{\"u}hn.
+\newblock A new scheme for the tensor representation.
+\newblock \emph{Journal of Fourier Analysis and Applications}, 15:\penalty0
+  706--722, 2009.
+\newblock \doi{10.1007/s00041-009-9094-9}.
+
+\bibitem[Grasedyck(2010)]{grasedyck2010hierarchical}
+Lars Grasedyck.
+\newblock Hierarchical singular value decomposition of tensors.
+\newblock \emph{SIAM Journal on Matrix Analysis and Applications}, 31\penalty0
+  (4):\penalty0 2029--2054, 2010.
+\newblock \doi{10.1137/090764189}.
+
+\bibitem[Cohen et~al.(2016)Cohen, Sharir, and Shashua]{cohen2016tensor}
+Nadav Cohen, Or~Sharir, and Amnon Shashua.
+\newblock On the expressive power of deep learning: A tensor analysis.
+\newblock In \emph{Proceedings of the 29th Conference on Learning Theory},
+  volume~49 of \emph{Proceedings of Machine Learning Research}, pages 698--728,
+  2016.
+\newblock URL \url{https://proceedings.mlr.press/v49/cohen16.html}.
+
+\bibitem[Rossbroich and Zenke(2023)]{rossbroich2023disinhibitory}
+Julian Rossbroich and Friedemann Zenke.
+\newblock Dis-inhibitory neuronal circuits can control the sign of synaptic
+  plasticity.
+\newblock In \emph{Advances in Neural Information Processing Systems},
+  volume~36, pages 64059--64082. Curran Associates, Inc., 2023.
+\newblock \doi{10.52202/075280-2799}.
+
+\bibitem[Galloni et~al.(2026)Galloni, Peddada, Chennawar, and
+  Milstein]{galloni2026cellular}
+Alessandro~R. Galloni, Ajay Peddada, Yash Chennawar, and Aaron~D. Milstein.
+\newblock Cellular and subcellular specialization enables biology-constrained
+  deep learning.
+\newblock \emph{Cell Reports}, 45\penalty0 (4):\penalty0 117159, 2026.
+\newblock \doi{10.1016/j.celrep.2026.117159}.
+
+\bibitem[Greedy et~al.(2026)Greedy, Zhu, Duriez, Pemberton, McCarthy,
+  Kermani~Nejad, and Ponte~Costa]{greedy2026celltype}
+Will Greedy, Heng~Wei Zhu, Alexia Duriez, Joseph Pemberton, Patrick~T.
+  McCarthy, Kevin Kermani~Nejad, and Rui Ponte~Costa.
+\newblock Cell-type-specific cortical feedback coordinates hierarchical credit
+  assignment.
+\newblock \emph{bioRxiv}, 2026.
+\newblock \doi{10.64898/2026.06.16.732595}.
+
+\bibitem[Safaai et~al.(2026{\natexlab{b}})Safaai, Richards, Khoshnevis, and
+  Sabatini]{safaai2026gainload}
+Houman Safaai, Maceo Richards, Naeem Khoshnevis, and Bernardo~L. Sabatini.
+\newblock When branch-local shunting helps: A gain-load-alignment principle for
+  dendritic {E/I} networks.
+\newblock \emph{arXiv preprint arXiv:2607.24990}, 2026{\natexlab{b}}.
+\newblock URL \url{https://arxiv.org/abs/2607.24990}.
+
+\bibitem[Cichon and Gan(2015)]{cichon2015branch}
+Joseph Cichon and Wen-Biao Gan.
+\newblock Branch-specific dendritic ca2+ spikes cause persistent synaptic
+  plasticity.
+\newblock \emph{Nature}, 520:\penalty0 180--185, 2015.
+\newblock \doi{10.1038/nature14251}.
+
+\bibitem[Bloss et~al.(2016)Bloss, Cembrowski, Karsh, Colonell, Fetter, and
+  Spruston]{bloss2016structured}
+Erik~B. Bloss, Mark~S. Cembrowski, Bill Karsh, Jennifer Colonell, Richard~D.
+  Fetter, and Nelson Spruston.
+\newblock Structured dendritic inhibition supports branch-selective integration
+  in {CA1} pyramidal cells.
+\newblock \emph{Neuron}, 89\penalty0 (5):\penalty0 1016--1030, 2016.
+\newblock \doi{10.1016/j.neuron.2016.01.029}.
+
+\bibitem[Chavlis and Poirazi(2025)]{chavlis2025dendrites}
+Spyridon Chavlis and Panayiota Poirazi.
+\newblock Dendrites endow artificial neural networks with accurate, robust and
+  parameter-efficient learning.
+\newblock \emph{Nature Communications}, 16:\penalty0 943, 2025.
+\newblock \doi{10.1038/s41467-025-56297-9}.
+
+\bibitem[Veness et~al.(2021)Veness, Lattimore, Budden, Bhoopchand, Mattern,
+  Grabska-Barwinska, Sezener, Wang, Toth, Schmitt, and
+  Hutter]{sezener2021gated}
+Joel Veness, Tor Lattimore, David Budden, Avishkar Bhoopchand, Christopher
+  Mattern, Agnieszka Grabska-Barwinska, Eren Sezener, Jianan Wang, Peter Toth,
+  Simon Schmitt, and Marcus Hutter.
+\newblock Gated linear networks.
+\newblock In \emph{Proceedings of the AAAI Conference on Artificial
+  Intelligence}, volume~35, pages 10015--10023, 2021.
+\newblock \doi{10.1609/aaai.v35i11.17202}.
+
+\bibitem[Iyer et~al.(2022)Iyer, Grewal, Velu, Oliveira~Souza, Forest, and
+  Ahmad]{iyer2022activedendrites}
+Abhiram Iyer, Karan Grewal, Akash Velu, Lucas Oliveira~Souza, Jeremy Forest,
+  and Subutai Ahmad.
+\newblock Avoiding catastrophe: active dendrites enable multi-task learning in
+  dynamic environments.
+\newblock \emph{Frontiers in Neurorobotics}, 16:\penalty0 846219, 2022.
+\newblock \doi{10.3389/fnbot.2022.846219}.
+
+\bibitem[Lv et~al.(2025)Lv, Xu, Lu, Wang, Wang, Xu, Yu, Du, Zheng, and
+  Huang]{lv2025dendritic}
+Changze Lv, Jingwen Xu, Yiyang Lu, Xiaohua Wang, Zhenghua Wang, Zhibo Xu,
+  Di~Yu, Xin Du, Xiaoqing Zheng, and Xuanjing Huang.
+\newblock Dendritic localized learning: Toward biologically plausible
+  algorithm.
+\newblock In \emph{Proceedings of the 42nd International Conference on Machine
+  Learning}, volume 267 of \emph{Proceedings of Machine Learning Research},
+  pages 41682--41700. PMLR, 2025.
+\newblock URL \url{https://proceedings.mlr.press/v267/lv25c.html}.
+
+\bibitem[Bittner et~al.(2017)Bittner, Milstein, Grienberger, Romani, and
+  Magee]{bittner2017btsp}
+Ken~C. Bittner, Aaron~D. Milstein, Christine Grienberger, Sandro Romani, and
+  Jeffrey~C. Magee.
+\newblock Behavioral time scale synaptic plasticity underlies {CA1} place
+  fields.
+\newblock \emph{Science}, 357\penalty0 (6355):\penalty0 1033--1036, 2017.
+\newblock \doi{10.1126/science.aan3846}.
+
+\bibitem[Magee and Grienberger(2020)]{magee2020plasticity}
+Jeffrey~C. Magee and Christine Grienberger.
+\newblock Synaptic plasticity forms and functions.
+\newblock \emph{Annual Review of Neuroscience}, 43:\penalty0 95--117, 2020.
+\newblock \doi{10.1146/annurev-neuro-090919-022842}.
+
+\bibitem[Schneider-Mizell et~al.(2025)Schneider-Mizell, Bodor, Brittain,
+  Buchanan, Bumbarger, Elabbady, Gamlin, Kapner, Kinn, Mahalingam, Seshamani,
+  Suckow, Takeno, Torres, Yin, Dorkenwald, Bae, Castro, Halageri, Jia, Jordan,
+  Kemnitz, Lee, Li, Lu, Macrina, Mitchell, Mondal, Mu, Nehoran, Popovych,
+  Silversmith, Turner, Wong, Wu, Reimer, Tolias, Seung, Reid, Collman, and
+  da~Costa]{schneidermizell2025inhibitory}
+Casey~M. Schneider-Mizell, Agnes~L. Bodor, Derrick Brittain, JoAnn Buchanan,
+  Daniel~J. Bumbarger, Leila Elabbady, Clare Gamlin, Daniel Kapner, Sam Kinn,
+  Gayathri Mahalingam, Sharmishtaa Seshamani, Shelby Suckow, Marc Takeno,
+  Russel Torres, Wenjing Yin, Sven Dorkenwald, J.~Alexander Bae, Manuel~A.
+  Castro, Akhilesh Halageri, Zhen Jia, Chris Jordan, Nico Kemnitz, Kisuk Lee,
+  Kai Li, Ran Lu, Thomas Macrina, Eric Mitchell, Shanka~Subhra Mondal, Shang
+  Mu, Barak Nehoran, Sergiy Popovych, William Silversmith, Nicholas~L. Turner,
+  William Wong, Jingpeng Wu, Jacob Reimer, Andreas~S. Tolias, H.~Sebastian
+  Seung, R.~Clay Reid, Forrest Collman, and Nuno~Ma{\c c}arico da~Costa.
+\newblock Inhibitory specificity from a connectomic census of mouse visual
+  cortex.
+\newblock \emph{Nature}, 640:\penalty0 448--458, 2025.
+\newblock \doi{10.1038/s41586-024-07780-8}.
+
+\bibitem[{MICrONS Consortium}(2020)]{microns_pinky_v185}
+{MICrONS Consortium}.
+\newblock {MICrONS Layer 2/3 Data Tables}, 2020.
+\newblock URL \url{https://doi.org/10.5281/zenodo.3710459}.
+
+\end{thebibliography}

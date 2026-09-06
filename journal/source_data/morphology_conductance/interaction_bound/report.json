@@ -1,0 +1,12 @@
+{
+  "all_compatible_bounds_zero": true,
+  "hermite_bound_never_exceeds_anova": true,
+  "max_order32_vs64_nmse_bound_difference": 1.1237424185628342e-11,
+  "max_order64_vs128_nmse_bound_difference": 7.979727989493313e-17,
+  "mean_incompatible_nmse_lower_bound": 0.013222109665378278,
+  "min_incompatible_nmse_lower_bound": 0.005367065537954887,
+  "n_seeds": 20,
+  "n_task_candidate_pairs": 180,
+  "protocol_sha256": "41c290c5597743e25529980303f8a95641db7e37e6bba9d7aa2bae57cf707a3c",
+  "scope": "Exact analytic bound; numerical expectation evaluated by converged quadrature, not a formally certified integration error"
+}

@@ -1,0 +1,60 @@
+{
+  "depth": {
+    "n_pairs": 200,
+    "agreement_fraction": 0.675,
+    "agreement_count": 135,
+    "observed_matched_fraction": 0.805,
+    "predicted_matched_fraction": 0.545,
+    "group_level_argmax_match": {
+      "1": {
+        "observed_best_depth": 1,
+        "predicted_best_depth": 1
+      },
+      "2": {
+        "observed_best_depth": 2,
+        "predicted_best_depth": 2
+      },
+      "3": {
+        "observed_best_depth": 3,
+        "predicted_best_depth": 3
+      },
+      "4": {
+        "observed_best_depth": 4,
+        "predicted_best_depth": 2
+      }
+    }
+  },
+  "factorial": {
+    "pipeline_check": {
+      "published": {
+        "mean": 0.0127,
+        "ci_low": 0.0059,
+        "ci_high": 0.0197,
+        "wins": 15
+      },
+      "reproduced": {
+        "mean": 0.012670898445,
+        "ci_low": 0.005810546874875,
+        "ci_high": 0.019506835950000002,
+        "wins": 15,
+        "n": 20
+      },
+      "passes": true
+    },
+    "group_peak": {
+      "observed_peak_k": 4,
+      "predicted_peak_k": 8
+    },
+    "per_seed_agreement_fraction": 0.3,
+    "per_seed_agreement_count": 6,
+    "n_seeds": 20,
+    "control_families": [
+      "depth_interleaved_bins",
+      "learned_rank_k_upper_bound",
+      "random_rank_k",
+      "random_sparse_matched"
+    ]
+  },
+  "rng_seed": 20260812,
+  "n_bootstrap": 20000
+}

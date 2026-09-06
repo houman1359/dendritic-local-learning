@@ -9,6 +9,7 @@ from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
+from journal_style import style_direct_color_labels
 import pandas as pd
 from matplotlib.patches import FancyArrowPatch, FancyBboxPatch
 
@@ -80,8 +81,12 @@ def schematic(ax: plt.Axes) -> None:
                 color=color)
         ax.add_patch(FancyArrowPatch((0.36, 0.66), (0.62, y), arrowstyle="-|>",
                                      mutation_scale=7, lw=LW_REF, color=COLORS["mute"]))
-    ax.text(0.50, 0.16, r"same $P_\Phi$; different $\Phi^\top\Phi$",
+    ax.text(0.50, 0.20, r"same $P_\Phi$; different $\Phi^\top\Phi$",
             ha="center", va="center", fontsize=PT_ANNOT, color=COLORS["ink"])
+    gate=json.loads((SOURCE / "summary.json").read_text())["numerical_gates"]
+    error=gate["maximum_preconditioned_trajectory_difference"]
+    ax.text(.50,-.02,f"Gram-preconditioned trajectories agree\nmaximum difference {error:.2g}",
+            ha="center",va="center",fontsize=PT_ANNOT,color=COLORS["mute"])
 
 
 def trajectory(ax: plt.Axes, summary: pd.DataFrame, sample_size: int, letter: str) -> None:
@@ -209,6 +214,7 @@ def main() -> None:
                bbox_to_anchor=(0.79, 0.012), ncol=2, frameon=False,
                fontsize=PT_LEGEND - 0.4, handlelength=1.3, columnspacing=0.9)
     FIGURES.mkdir(parents=True, exist_ok=True)
+    style_direct_color_labels(fig)
     fig.canvas.draw()
     audit_layout(fig, "fig_same_span_coefficient_learning")
     audit_text_over_data(fig, "fig_same_span_coefficient_learning")

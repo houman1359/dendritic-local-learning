@@ -58,11 +58,11 @@ def main() -> None:
     fig, axes = plt.subplots(
         1,
         3,
-        figsize=(FIG_W, 2.24),
+        figsize=(FIG_W, 2.55),
         gridspec_kw={
             "left": 0.095,
             "right": 0.985,
-            "bottom": 0.23,
+            "bottom": 0.30,
             "top": 0.82,
             "wspace": 0.62,
         },
@@ -94,8 +94,8 @@ def main() -> None:
     ax_a.set_xticks([1, 2, 4, 8])
     ax_a.set_ylim(-0.04, 1.04)
     ax_a.set_xlabel("teaching-route budget $K$")
-    ax_a.set_ylabel("capture of exact coefficient field")
-    panel_title(ax_a, "A", "Irreducible address residual")
+    ax_a.set_ylabel("exact-field capture")
+    panel_title(ax_a, "A", "Capture by route budget")
     style_axis(ax_a, grid="y")
     clean_legend(ax_a, fontsize=PT_LEGEND - 1.0, loc="upper left")
     # Honest coincidence note (the convention used figure-wide): the ancestry,

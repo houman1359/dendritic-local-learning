@@ -1,0 +1,51 @@
+{
+  "all_outcome_file_times_after_global_seal": true,
+  "calibration_records": 480,
+  "coefficient_selections_reproduced": 480,
+  "exact_population_lower_bound_checks": 1120,
+  "final_parameter_norm_above10000": 0,
+  "frozen_source_hashes_verified": true,
+  "full_fit_replays": [
+    {
+      "candidate": "balanced_p0",
+      "family": "matching",
+      "max_absolute_error": 0.0,
+      "restarts": 2,
+      "seed": 820910
+    },
+    {
+      "candidate": "balanced_p0",
+      "family": "quartet",
+      "max_absolute_error": 0.0,
+      "restarts": 2,
+      "seed": 820910
+    },
+    {
+      "candidate": "balanced_p0",
+      "family": "nested_prefix",
+      "max_absolute_error": 0.0,
+      "restarts": 2,
+      "seed": 820910
+    },
+    {
+      "candidate": "balanced_p0",
+      "family": "random_interactions",
+      "max_absolute_error": 0.0,
+      "restarts": 2,
+      "seed": 820910
+    }
+  ],
+  "max_cut_score_reconstruction_error": 4.440892098500626e-16,
+  "maximum_final_parameter_norm": 2.661469669819961,
+  "minimum_excess_above_bound": 0.0005303206223080367,
+  "observation_independence": "Independent draw/source stream IDs, not disjoint input patterns; repeated inputs have fresh independent noise",
+  "scope": "Numerical/data-contract validation in current environment; no new scientific endpoints or model selection tuning",
+  "sealed_artifact_hashes_verified": 100,
+  "seconds": 34.465761865023524,
+  "source_sample_hashes": 480,
+  "source_stream_contracts": 80,
+  "status": "passed",
+  "total_confirmatory_calibration_label_queries": 215040,
+  "total_fits": 2240,
+  "validation_only_restart_choices_verified": 1120
+}

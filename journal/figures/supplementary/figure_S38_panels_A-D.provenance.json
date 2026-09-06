@@ -1,0 +1,11 @@
+{
+  "builder": "scripts/build_morphology_followup_figures.py",
+  "builder_sha256": "d18344b8a18422dfeb467b7f6f150af3f8e4d1475a977e5278447174851f8f57",
+  "figure": "S38",
+  "panels": "A-D",
+  "scope": "Rendering only; source outcomes and protocol unchanged",
+  "sources": {
+    "source_data/morphology_finite_horizon/summaries/fresh/comparative_computational_cost.csv": "a45585965df392d5bb8bbe73b6b35fb9569dd8b63947d0cb2f1322a409ce6b84",
+    "source_data/morphology_finite_horizon/summaries/fresh/endpoint_summary_with_secondary_baselines.csv": "6b12cdd7309037dfac652d5f65113959c77655d7a038deb08bb77c145d610496"
+  }
+}

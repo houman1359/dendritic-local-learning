@@ -1,0 +1,125 @@
+{
+  "completed_confirmatory_fits_before_amendment": 0,
+  "excluded_full_smoke_fits": 6,
+  "excluded_full_smoke_sha256": "551274ba49b5de314ac67bf2aaeee86373a22fa58c0c6ce0153641db04aad4b8",
+  "failed_array_job": 44647208,
+  "failed_job_logs": [
+    {
+      "index": 0,
+      "stderr_sha256": "f432c02e765d919a749bf8d094f30e998d4bc6bd016b57c4fa8c33347916827c",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "index": 1,
+      "stderr_sha256": "f432c02e765d919a749bf8d094f30e998d4bc6bd016b57c4fa8c33347916827c",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "index": 2,
+      "stderr_sha256": "f432c02e765d919a749bf8d094f30e998d4bc6bd016b57c4fa8c33347916827c",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "index": 3,
+      "stderr_sha256": "f432c02e765d919a749bf8d094f30e998d4bc6bd016b57c4fa8c33347916827c",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "index": 4,
+      "stderr_sha256": "f432c02e765d919a749bf8d094f30e998d4bc6bd016b57c4fa8c33347916827c",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "index": 5,
+      "stderr_sha256": "f432c02e765d919a749bf8d094f30e998d4bc6bd016b57c4fa8c33347916827c",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "index": 6,
+      "stderr_sha256": "f432c02e765d919a749bf8d094f30e998d4bc6bd016b57c4fa8c33347916827c",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "index": 7,
+      "stderr_sha256": "f432c02e765d919a749bf8d094f30e998d4bc6bd016b57c4fa8c33347916827c",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "index": 8,
+      "stderr_sha256": "f432c02e765d919a749bf8d094f30e998d4bc6bd016b57c4fa8c33347916827c",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "index": 9,
+      "stderr_sha256": "f432c02e765d919a749bf8d094f30e998d4bc6bd016b57c4fa8c33347916827c",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "index": 10,
+      "stderr_sha256": "f432c02e765d919a749bf8d094f30e998d4bc6bd016b57c4fa8c33347916827c",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "index": 11,
+      "stderr_sha256": "f432c02e765d919a749bf8d094f30e998d4bc6bd016b57c4fa8c33347916827c",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "index": 12,
+      "stderr_sha256": "f432c02e765d919a749bf8d094f30e998d4bc6bd016b57c4fa8c33347916827c",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "index": 13,
+      "stderr_sha256": "f432c02e765d919a749bf8d094f30e998d4bc6bd016b57c4fa8c33347916827c",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "index": 14,
+      "stderr_sha256": "f432c02e765d919a749bf8d094f30e998d4bc6bd016b57c4fa8c33347916827c",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "index": 15,
+      "stderr_sha256": "f432c02e765d919a749bf8d094f30e998d4bc6bd016b57c4fa8c33347916827c",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "index": 16,
+      "stderr_sha256": "f432c02e765d919a749bf8d094f30e998d4bc6bd016b57c4fa8c33347916827c",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "index": 17,
+      "stderr_sha256": "f432c02e765d919a749bf8d094f30e998d4bc6bd016b57c4fa8c33347916827c",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "index": 18,
+      "stderr_sha256": "f432c02e765d919a749bf8d094f30e998d4bc6bd016b57c4fa8c33347916827c",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "index": 19,
+      "stderr_sha256": "f432c02e765d919a749bf8d094f30e998d4bc6bd016b57c4fa8c33347916827c",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "frozen_scientific_sources": {
+    "scripts/morphology_calibration/bridge.py": "06c72e1fbe61a6a88d20ba109c46a9960bce13c1ddcdc053fd21908955f1dd50",
+    "scripts/morphology_calibration/end_to_end.py": "e479b56b42184d8508e52d7b03aae6b344e65b8bdc859e1a6267a9d96cde0fc6",
+    "scripts/morphology_calibration/run_serialization_fix_v2.py": "59287affb0a39fb34bc7bf90164b311c94fcd74071d3ee20633382c142b5c5e3",
+    "scripts/morphology_calibration/test_end_to_end.py": "bc77e9d679b0dca3e4ca117611ab648c7f52d81876987952ad414a49503ff35e",
+    "scripts/morphology_credit/experiment.py": "11e83f4d7c50bbfa6033fd0f30bd2be22aa23e9e90e053502616f517bb612d81",
+    "scripts/morphology_structure/constructive.py": "8259af41912cee139998b84dffef9827d44fe8a175a89e6eb91bb1f534303a46",
+    "scripts/morphology_structure/constructive_dp_v2.py": "1a34d6933706c924eca6458d48940a53e97bff57756ad1a68444585e4b5ac964",
+    "scripts/morphology_structure/model.py": "fe89ef9331795a4dbf3f04ff1d7b18dc8f955b9da8119a2fdcce4f5edbd68cf7"
+  },
+  "protocol_sha256": "9de2449e4d95b0a5cbd9b0dfd5792cf91d122eb24b9f39409e05c38a9e1744e6",
+  "reason": "Oracle helper returns(tree,bound) but frozen train unpacked anunusedthirdvalue;adapter appendsNone withoutchangingtreeorbound",
+  "regression_sha256": "23b79a5a4ff141be9fc9ed85f3f160467041d6e1975642371867b11881b3e932",
+  "runtime_fix_sha256": "0f33c9df11c67ae7ae284228a44414f18cc4e8c633c74e082fde57231c5f08b9",
+  "selection_or_scientific_settings_changed": false,
+  "selection_seal_sha256": "d9a86d08f3de537fe1c9a6a2836fc6cd2d4ad9814b91081069eb3216d9265391",
+  "utc": "2026-09-05T19:34:04.867494+00:00"
+}

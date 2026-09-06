@@ -1,0 +1,5 @@
+arm,endpoint,mean_within_task_rho,ci95_low,ci95_high,n_seed_blocks,pooled_descriptive_rho
+feedback_only,actual_training_first_step_test_decrease,0.9836918604651164,0.980687863372093,0.9863808139534885,20,0.9524216232356224
+feedback_only,exact_expected_calibration_decrease,0.9995445736434109,0.9994234496124031,0.9996511627906978,20,0.9973030367264276
+joint_forward_feedback,actual_training_first_step_test_decrease,0.9739050751879699,0.9695110432330827,0.9775518092105261,20,0.9551931241807405
+joint_forward_feedback,exact_expected_calibration_decrease,0.9965695488721803,0.9958364661654133,0.9971663533834585,20,0.9995798198139606

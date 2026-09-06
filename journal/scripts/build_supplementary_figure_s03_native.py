@@ -56,10 +56,12 @@ if str(SCRIPT_DIR) not in sys.path:
 from figure_canvas import (  # noqa: E402
     COLORS,
     ERR_CAPSIZE,
+    LW_EDGE,
     LW_HAIR,
     LW_REF,
     PT_ANNOT,
     PT_LEGEND,
+    PT_SMALL,
     LW_ERR,
     Margins,
     NativeCanvas,
@@ -220,13 +222,17 @@ def panel_rule_family(ax):
     x = np.arange(len(rules), dtype=float)
     vals = [data[r] for r in rules]
     errs = [errors[r] for r in rules]
-    ax.bar(x, vals, 0.62, yerr=errs, color=colors, **BAR_KW, **ERR_KW)
+    for xp, value, err, color in zip(x, vals, errs, colors):
+        ax.errorbar(xp, value, yerr=err, fmt="o", color=color,
+                    ms=3.6, capsize=ERR_CAPSIZE, lw=LW_ERR)
     ax.set_xticks(x)
     ax.set_xticklabels(rules)
     ax.set_xlim(-0.55, 2.55)
     ax.set_ylim(84, 94)
     ax.set_yticks([84, 86, 88, 90, 92, 94])
     ax.set_ylabel("MNIST accuracy (%)")
+    ax.text(.02,.04,"3-seed mean ± SD",transform=ax.transAxes,
+            fontsize=PT_SMALL,color=COLORS["mute"])
     print("  [A] rule family (mean, sd):",
           {r: (round(v, 4), round(e, 4)) for r, v, e in zip(rules, vals, errs)})
     return ax
@@ -245,6 +251,12 @@ def panel_error_source(ax):
         means, stds = table[core]
         ax.bar(x + (j - 0.5) * bw, means, bw * 0.92, yerr=stds, color=color,
                **BAR_KW, **ERR_KW)
+        raw = pd.read_csv(LOCAL_MISMATCH_RUNS_CSV)
+        for index, mode in enumerate(("per_soma", "local_mismatch")):
+            values=100*raw[(raw.network_type.eq(core)) & (raw.error_broadcast_mode.eq(mode))
+                           & raw.decoder_update_mode.eq("local")].test_accuracy.to_numpy()
+            ax.scatter(index+(j-.5)*bw+np.linspace(-.05,.05,len(values)),values,
+                       s=12,facecolors="white",edgecolors=INK,lw=LW_HAIR,zorder=5)
         print(f"  [B] {label} (mean, sd) per (somatic, mismatch):",
               [(round(m, 4), round(s, 4)) for m, s in zip(means, stds)])
     ax.set_xticks(x)
@@ -264,8 +276,8 @@ def panel_error_source(ax):
     return ax
 
 
-def panel_exact_transport(ax):
-    """C -- five-seed exact-transport factorial vs matched backpropagation."""
+def panel_exact_transport_legacy(ax):
+    """Historical aggregate encoding, retained for provenance."""
     cells, bp_mean = exact_transport_values()
     x = np.arange(2, dtype=float)
     bw = 0.28
@@ -298,6 +310,34 @@ def panel_exact_transport(ax):
     return ax
 
 
+def panel_exact_transport(ax):
+    """Five paired endpoints, with explicit differences against matched BP."""
+    runs=pd.read_csv(DATA_FIG2 / "exact_transport_and_backprop_runs.csv")
+    bp=runs[runs.learning_method.eq("standard")].set_index("seed").test_accuracy
+    rng=np.random.default_rng(20260905)
+    labels=[]
+    for y,(rule,decoder) in enumerate([("3f","backprop"),("5f","backprop"),
+                                       ("3f","local"),("5f","local")]):
+        selected=runs[runs.rule.eq(rule)&runs.decoder_mode.eq(decoder)].set_index("seed").test_accuracy
+        paired=100*(selected-bp).dropna().to_numpy()
+        assert len(paired)==5
+        draws=rng.choice(paired,(20000,len(paired)),replace=True).mean(axis=1)
+        lo,hi=np.quantile(draws,[.025,.975]);mean=paired.mean()
+        color=ORACLE if decoder=="backprop" else ORACLE_LIGHT
+        ax.scatter(paired,y+np.linspace(-.09,.09,len(paired)),s=16,
+                   facecolors="white",edgecolors=color,lw=LW_EDGE,zorder=4)
+        ax.errorbar(mean,y,xerr=[[mean-lo],[hi-mean]],fmt="D",ms=3.5,
+                    color=color,capsize=ERR_CAPSIZE,lw=LW_ERR,zorder=5)
+        labels.append(f"{rule.upper()}, {'BP' if decoder=='backprop' else 'local'} decoder")
+    ax.axvline(0,color=COLORS["bp"],ls="--",lw=LW_REF)
+    ax.set_yticks(range(4),labels);ax.invert_yaxis()
+    ax.set_xlabel("exact transport − matched BP accuracy (pp)")
+    ax.set_ylim(3.5,-.5)
+    ax.text(.99,.03,"5 paired seeds / 95% bootstrap CI",ha="right",
+            transform=ax.transAxes,fontsize=PT_SMALL,color=COLORS["mute"])
+    return ax
+
+
 def panel_feedback_ladder(ax):
     """D -- the noise-resilience feedback ladder (display convention kept)."""
     labels, vals, errs, colors = noise_ladder_values()
@@ -327,16 +367,13 @@ def build(path: Path | str = TARGET):
                         title="Rule family (shunting)", grid="y")
     ax_b = canvas.panel("error_source", 0, 5, 7,
                         title="Error source", grid="y")
-    ax_c = canvas.panel("exact_transport", 1, 0, 5,
-                        title="Exact-path-transport factorial", grid="y")
-    ax_d = canvas.panel("feedback_ladder", 1, 5, 7,
-                        title="Feedback ladder (noise task)", grid="y")
+    ax_c = canvas.panel("exact_transport", 1, 0, 12,
+                        title="Exact-path-transport factorial (MNIST)", grid="x")
 
     print(f"Building {Path(path).name}")
     panel_rule_family(ax_a)
     panel_error_source(ax_b)
     panel_exact_transport(ax_c)
-    panel_feedback_ladder(ax_d)
 
     problems = canvas.save(Path(path), name="figure_S03_panels_A-D",
                            png=False)

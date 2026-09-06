@@ -1,0 +1,43 @@
+{
+  "checks": [
+    {
+      "arm": "feedback_only",
+      "maximum_test_loss_replay_error": 1.0947644252537633e-47,
+      "n_candidates": 20,
+      "task_id": "s7200_r1_n000_a125"
+    },
+    {
+      "arm": "joint_forward_feedback",
+      "maximum_test_loss_replay_error": 1.0947644252537633e-47,
+      "n_candidates": 20,
+      "task_id": "s7200_r1_n000_a125"
+    },
+    {
+      "arm": "feedback_only",
+      "maximum_test_loss_replay_error": 5.551115123125783e-17,
+      "n_candidates": 20,
+      "task_id": "s7207_r4_n750_a375"
+    },
+    {
+      "arm": "joint_forward_feedback",
+      "maximum_test_loss_replay_error": 5.551115123125783e-17,
+      "n_candidates": 20,
+      "task_id": "s7207_r4_n750_a375"
+    },
+    {
+      "arm": "feedback_only",
+      "maximum_test_loss_replay_error": 5.551115123125783e-17,
+      "n_candidates": 20,
+      "task_id": "s7219_r8_n750_a125"
+    },
+    {
+      "arm": "joint_forward_feedback",
+      "maximum_test_loss_replay_error": 5.551115123125783e-17,
+      "n_candidates": 20,
+      "task_id": "s7219_r8_n750_a125"
+    }
+  ],
+  "n_replayed_final_candidates": 120,
+  "runner_sha256": "2f32eef50b50a2e2f4860efdafeda54125d577ed236e3961051a7ea573bf3def",
+  "status": "passed"
+}

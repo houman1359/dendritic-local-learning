@@ -1,0 +1,14 @@
+{
+  "builder": "scripts/build_morphology_bridge_figures.py",
+  "builder_sha256": "6d708037c4f314ecaa615a109354363ec74d1c5f522ca0c0ef6edaea6f131cdf",
+  "figure": "S40",
+  "panels": "A-F",
+  "scope": "Rendering only; source outcomes and protocol unchanged",
+  "sources": {
+    "source_data/morphology_credit/development_fit.json": "1cbe2d817915985ebe3bf47891522f186c305c8f1d427133cc5da2373bb7b8ed",
+    "source_data/morphology_credit/figure_condition_summary.csv": "d73c20f914bdb43ef43a17864eaa26926d83bca7bb1bc1c3d1d2e12adf0f6236",
+    "source_data/morphology_credit/figure_gradient_summary.csv": "6166eb131cf266f3bec7c05377c525f7b9f6895fdcb43dd4195350f067991fba",
+    "source_data/morphology_credit/summaries/fresh/all_rate_sensitivity.csv": "46c09303b95c7ebf895c840cb544cf85a867e54a65f4db3912d5ffd10bb75171",
+    "source_data/morphology_credit/summaries/fresh/paired_contrasts.csv": "a5286b8e01584df2fc4c44d16eaf3bc0835979b93584a7e97cee3f46ff5427d0"
+  }
+}

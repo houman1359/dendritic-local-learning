@@ -1,0 +1,24 @@
+{
+  "study": "focal_selectivity_active_linearization_ensemble",
+  "status": "complete_confirmatory",
+  "scope_boundary": "Active steady-state channel ensemble linearized around each accepted nonlinear equilibrium in eight reconstructed cells. Channel draws are nested sensitivity analyses, not biological replicates; the study is not a spiking or kinetic-channel simulation.",
+  "config_sha256": "e43bbe2285395bfb5a0953d622bf3b7f90a485168069ef28d3ca0ed2f5d3b395",
+  "script_sha256": "2c7e583a1cd036e6fba0d48cdfe06373827de4ee4a3848d1509a1413fe5fdc40",
+  "python": "3.10.13",
+  "numpy": "1.26.4",
+  "n_cells": 8,
+  "accepted_draws_per_cell": 64,
+  "n_accepted_cell_draws": 512,
+  "n_focal_sites": 101,
+  "n_site_draw_condition_rows": 38784,
+  "numerical_gates": {
+    "rows": 38784,
+    "all_finite": true,
+    "maximum_state_residual": 9.511176568555157e-11,
+    "maximum_soma_state_residual": 9.71445146547012e-17,
+    "minimum_jacobian_eigenvalue": 1.0837533226370397,
+    "minimum_acceptance_fraction": 1.0,
+    "minimum_accepted_draws_per_cell": 64,
+    "passed": true
+  }
+}

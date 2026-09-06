@@ -1,0 +1,10 @@
+{
+  "added_after_primary_freeze": true,
+  "added_before_fresh_outcomes": true,
+  "cohort": "development",
+  "context_counts_equal_generating_rank": true,
+  "n_seed_blocks": 5,
+  "supplemental_protocol_sha256": "5a97b378437b8b3888cf7443dc6be30acae9e92626fc476126006ed26015a729",
+  "undefined_correlation_policy": "Retained as NA; defined counts reported; no task or outcome exclusions",
+  "undefined_loss_correlations": 212
+}

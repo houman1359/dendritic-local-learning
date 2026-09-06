@@ -1,0 +1,28 @@
+[
+  {
+    "file": "anatomy_commonmode_capacity.pdf",
+    "width_pt": 518.4000244140625,
+    "height_pt": 403.20001220703125,
+    "min_font_pt": 6.800000190734863,
+    "font_names": [
+      "DejaVuSans",
+      "DejaVuSans-Bold"
+    ],
+    "text_outside_page": [],
+    "visual_review": "Reviewed both full-size PNG renderings; no overlaps or clipping found.",
+    "sha256": "4c1ca84acd645bc3870f2ccc35da411b4ed7f5f080837e44ac33090a5af9f2ce"
+  },
+  {
+    "file": "anatomy_commonmode_controls.pdf",
+    "width_pt": 518.4000244140625,
+    "height_pt": 482.3999938964844,
+    "min_font_pt": 6.800000190734863,
+    "font_names": [
+      "DejaVuSans",
+      "DejaVuSans-Bold"
+    ],
+    "text_outside_page": [],
+    "visual_review": "Reviewed both full-size PNG renderings; no overlaps or clipping found.",
+    "sha256": "f7547eb705343e69a7c8199df9ad8686e52f6768e7c8c26d989d1f877676bdc6"
+  }
+]

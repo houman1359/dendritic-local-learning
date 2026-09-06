@@ -1,0 +1,15 @@
+{
+  "builder": "scripts/build_morphology_bridge_figures.py",
+  "builder_sha256": "6d708037c4f314ecaa615a109354363ec74d1c5f522ca0c0ef6edaea6f131cdf",
+  "figure": "S42",
+  "panels": "A-F",
+  "scope": "Rendering only; source outcomes and protocol unchanged",
+  "sources": {
+    "source_data/morphology_conductance/interaction_bound/population_bounds.csv": "4eb7003db09e00185b4094774f22ac18c23f81116f79654f0e9cf6e79270e3e4",
+    "source_data/morphology_conductance/interaction_bound/seed_summary.json": "cbb25fb562bc5e6ef6b582dd0fa8780cfc6c2372da5b93ccf185b724bb976826",
+    "source_data/morphology_conductance/summaries/fresh/credit_geometry_summary.csv": "326533b151db2e4d95e4ccf95112031074ba0588d0156bbf52714b260b923c65",
+    "source_data/morphology_conductance/summaries/fresh/learning_summary.csv": "35d8c795fb1599406e5a2734252bdc17bc2e1287901830a99d81306a8bad075c",
+    "source_data/morphology_conductance/summaries/fresh/paired_contrasts.csv": "2116945b289731d2d563e369840fc11ab559395d91b9197e7a96900a277f3bf8",
+    "source_data/morphology_conductance/summaries/fresh/paired_seed_contrasts.csv": "0c105f789847e81a3a007a026d381565bc97cbcb0aa822d556ae3c8f1db8a7c4"
+  }
+}

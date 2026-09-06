@@ -1,9 +1,9 @@
 # Citation audit
 
-- Bibliography entries: 62
-- Unique cited keys: 61
+- Bibliography entries: 71
+- Unique cited keys: 63
 - Undefined cited keys: 0
-- Unused bibliography entries: 1
+- Unused bibliography entries: 8
 
 ## Undefined keys
 
@@ -11,6 +11,13 @@
 
 ## Unused entries
 
+- `jordan2024conductance`
+- `kornfeld2020anatomical`
+- `meier2026criticalperiod`
+- `penafernandez2026signedxor`
+- `sadtler2014constraints`
 - `vogels2011inhibitory`
+- `weis2025morphology`
+- `xiao2017fashionmnist`
 
 Unused entries are reported for editorial cleanup; only undefined cited keys are a strict build failure.

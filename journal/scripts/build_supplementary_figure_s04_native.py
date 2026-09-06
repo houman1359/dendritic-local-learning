@@ -46,6 +46,7 @@ import sys
 from pathlib import Path
 
 import numpy as np
+from journal_style import style_direct_color_labels
 import pandas as pd
 from matplotlib.ticker import PercentFormatter
 from scipy import stats
@@ -87,7 +88,7 @@ CORE_MARKER = {"dendritic_shunting": "o", "dendritic_additive": "s"}
 CORE_COLOR = {"dendritic_shunting": SHUNT, "dendritic_additive": ADD}
 
 FASHION_ORDER = ("scalar fallback", "neuron indexed", "exact path")
-FASHION_LABELS = ("matched-width\nfallback", "neuron-\nspecific", "exact\npath")
+FASHION_LABELS = ("matched-\nwidth\nfallback", "neuron-\nspecific", "exact\npath")
 FASHION_ARCHITECTURES = ("shunting", "additive")
 FASHION_SEEDS = set(range(10200, 10210))
 
@@ -117,9 +118,9 @@ def panel_depth(ax):
                     sub["test_accuracy_std"], color=CORE_COLOR[network],
                     marker=CORE_MARKER[network], ls=ls, alpha=alpha,
                     z=3 if strategy == "local_ca" else 2)
-    ax.set_xticks([1, 2, 3, 4])
+    ax.set_xticks([1, 2, 3, 4],["D1\n[9]","D2\n[3,3]","D3\n[3,3,3]","D4\n[3,3,3,3]"])
     ax.set_xlim(0.62, 4.38)
-    ax.set_xlabel("dendritic layers")
+    ax.set_xlabel("physical depth; resources also change")
     ax.set_ylabel("test accuracy")
     ax.set_ylim(0.15, 0.98)
     ax.yaxis.set_major_formatter(PercentFormatter(1.0, decimals=0))
@@ -162,7 +163,7 @@ def panel_noise(ax):
 # gray for the random rank field, oracle violet for exact transport and the
 # red-brown backpropagation reference.
 CIFAR_SPECS = (
-    ("cifar10_shunting_5f_per_soma_learned_i", "matched-\nwidth\nfallback", COLORS["local"]),
+    ("cifar10_shunting_5f_per_soma_learned_i", "width-\nmatched\nfallback", COLORS["local"]),
     ("cifar10_shunting_5f_low_rank4_learned_i", "random\nrank 4",
      COLORS["point_mlp"]),
     ("cifar10_shunting_5f_path_transport_learned_i", "exact\npath",
@@ -201,7 +202,7 @@ def panel_cifar(ax):
                    s=7.0, facecolor="white", edgecolor=color,
                    linewidth=0.55, zorder=4)
     ax.set_xticks(range(len(CIFAR_SPECS)))
-    ax.set_xticklabels([label for _, label, _ in CIFAR_SPECS])
+    ax.set_xticklabels([label for _, label, _ in CIFAR_SPECS], fontsize=PT_SMALL)
     ax.set_xlim(-0.62, len(CIFAR_SPECS) - 0.38)
     ax.set_ylim(0.0, 0.56)
     ax.set_yticks([0.0, 0.2, 0.4])
@@ -359,6 +360,10 @@ def panel_confirmatory_cifar(ax, outcomes: pd.DataFrame):
     ax.set_ylim(0.0, upper)
     ax.set_ylabel("CIFAR-10 accuracy")
     ax.yaxis.set_major_formatter(PercentFormatter(1.0, decimals=0))
+    bp_mean=float(wide.iloc[:,-1].mean())
+    ax.axhspan(bp_mean-.01,bp_mean+.01,color=MUTE,alpha=.12,zorder=0)
+    ax.text(.04,.08,"BP equivalence: ±1 pp\n20 seeds; 95% t intervals",
+            transform=ax.transAxes,fontsize=PT_SMALL,color=MUTE,va="bottom")
     return ax
 
 
@@ -546,6 +551,7 @@ def build(path=None, *, confirmatory_analysis_dir=None):
         "figure_S04_panels_A-E" if confirmatory is not None
         else "figure_S04_panels_A-D"
     )
+    style_direct_color_labels(canvas.fig)
     problems = canvas.save(target, name=asset_name)
     for problem in problems:
         print(f"    {problem}")

@@ -1,113 +1,25 @@
-# When dendritic structure helps local credit assignment
+# Dendritic morphology as a dictionary for local credit assignment
 
-This directory is the self-contained package for the canonical, standalone
-journal article. It integrates the load-bearing theory, simulations and
-controls developed during the conference project with the subsequent
-topology, conductance and biological-boundary experiments. It assumes no prior
-paper. The active target is a **Nature Communications Article**; any related
-conference or preprint status will be disclosed at submission but does not
-determine the article's scientific scope.
+This directory contains the canonical manuscript prepared as a *Nature Communications* Article. Its central question is which spatial distinctions a task's learning signals must preserve. The main sequence progresses from neuron identity on image tasks to branch selection under conflict, ancestry grouping under hierarchical distractors, and learned credit geometry under higher-order interactions. Morphology supplies spatial feedback patterns; local conductance can change their gains.
 
-The paper is organized around one conditional claim:
+Eight main figures follow this task-to-credit argument. A matched pairwise/quartic comparison tests fixed spatial credit on the same trees, inputs and initializations, while physical-depth experiments examine the dependence on optimizer and training budget. Reconstructed arbors test the capacity of anatomy-derived routes beyond a shared broadcast. The final figure separates empirical ancestry–response similarity from an offline transfer-geometry diagnostic. The measured responses do not establish endogenous dendritic credit assignment.
 
-> Dendritic trees transform limited neuron-level teaching signals into
-> structured synaptic credit. Conductance controls route gain, topology
-> controls which synapses can share credit, and useful learning requires the
-> resulting routes to align with task credit.
+The Supplementary Information contains 47 figures, S1–S47. It retains the representability and morphology-estimation analyses, the unsuccessful prospective initialization-based selector, Boolean controls, alternative optimizers and expanded biological/model diagnostics. These support the credit argument without replacing it with a general morphology-selection claim. The current display map is in [figures/README.md](figures/README.md).
 
-The package distinguishes nineteen levels of evidence:
+## Files and reproducibility
 
-1. exact mathematical identities for conductance trees;
-2. controlled learning experiments in regular artificial trees, including a
-   complete 640-run historical depth-by-feedback factorial (480 input-valid
-   runs), a 120-checkpoint input-valid credit-to-loss diagnostic, a 120-run
-   retained bandwidth-matched routing control, a detached 320-run clean
-   exact-transport/backpropagation audit, a 240-run retained spatial-topology
-   boundary control, and a 160-run retained fixed-contact depth control;
-3. a frozen 50-seed stochastic quadratic phase experiment testing spectral
-   alignment, hierarchy-depth matching, projection denoising and branch
-   reliability, plus operator and trained partition-residual reanalyses of the
-   completed 2,700-fit factorial;
-4. a fresh 270-fit exact-resource positive-rate physical-depth experiment with
-   backpropagation, LocalCA, alignment, shuffled-sensor, reversed-placement and
-   raw-additive controls;
-5. 200 paired point--dendrite and BP--local-credit fits separating serial
-   composition, point-network capacity, coordinate restriction, optimizer
-   effects and path specificity;
-6. a 90-fit prospective interpolation across three intermediate task--sensor
-   alignment doses, joined to the frozen endpoint cohorts;
-7. a preregistered 60-fit Fashion-MNIST replication of the scalar,
-   neuron-indexed and exact-path feedback ladder;
-8. a frozen 220-fit literal grouped-point and independent-H2 control that
-   replicates the serial-composition crossover under BP and LocalCA;
-9. a separate frozen 50-seed trained positive-conductance mechanism test with
-   fixed oracle shunts and an exact state clamp;
-10. a fresh 50-seed adaptive-conductance test estimating branch reliability
-    from paired noisy local credit observations;
-11. model-based analyses and perturbations on eight reconstructed MICrONS trees,
-   including independent reciprocal-cable and physical-unit controls;
-12. a disjoint 47-cell public-v661 sensitivity cohort from the same mouse,
-   including a frozen irregular-tree wavelet analysis against isotropic and
-   ancestry-permuted controls;
-13. analyses of measured MICrONS visual responses;
-14. a synapse-resolved inhibitory census with presynaptic-axon and 3D controls;
-15. a controlled sufficiency test that rotates exact task credit into or out of
-   a fixed reconstructed-tree routing subspace; and
-16. a retrospective six-animal consistency test of signed neuron identity.
-17. a frozen 360-fit fixed-D3 factorial crossing nested factors, flat factors
-    and local ratios with three alignment doses, matched serial/grouped-point
-    resources and BP/path-transport LocalCA; and
-18. an outcome-independent 12-cell Pinky v185 cohort from a biologically
-    independent MICrONS mouse, with ten cells passing direct-type QC and the
-    model-matched routing direction repeating across animals.
-19. a frozen 2,400-fit Fashion-MNIST branch-conflict family that locates the
-    predicted transition from neuron-shared to branch-selective credit.
+- `main.tex` and `supplementary/supplementary.tex` are the canonical text sources; their local TeX inputs are required for complete builds.
+- `main.pdf`, `supplementary/supplementary.pdf` and `main_with_supplementary.pdf` are generated reading copies. Their page counts must be taken from the final compiled files.
+- `figures/main/` and `figures/supplementary/` contain numbered publication assets. Native components and older assets elsewhere are not additional numbered figures.
+- `source_data/` contains retained numerical evidence. `source_data/credit_first_provenance/` supplies the current panel map; the package manifest records each source's original path, released path and checksum.
+- `scripts/`, `code/`, `configs/` and `reproducibility/` contain implementations, protocols, checks and provenance boundaries.
+- `submission/` contains editorial documents and generated release bundles.
 
-Modeled gradients on reconstructed anatomy are not described as measurements
-of biological learning. Negative alignment results are retained because they
-define the boundary of the theory.
+The new matched credit study is implemented in `scripts/credit_rule_bridge/`; saved states and complete outcomes are in `source_data/credit_rule_bridge/`. Independent field, gauge and replay checks are in `scripts/credit_resolution_bridge/`. The common-broadcast anatomy controls, depth-budget extension and ancestry-gain calculation have dedicated `anatomy_commonmode`, `physical_depth_budget` and `shunt_ancestry_gain` folders. Development choices, fresh tests and descriptive diagnostics remain identified in their protocols and result records.
 
-## Files
+The historical key `noise_resilience` refers to two different generators. The clean exact/BP rerun used three-class noisy-line images; projected-noise MNIST is the intended protocol for separate prospective cohorts, whose executed nested generator bytes were not pinned. Some inherited aggregates remain unresolved. See `source_data/release_task_identity/README.md` and the explicit release adapter in `code/release_noise/`.
 
-- `main.tex`: journal manuscript, including Methods and declarations.
-- `supplementary/supplementary.tex`: supplementary theory and controls.
-- `main_with_supplementary.pdf`: combined reading copy containing the complete
-  main Article followed by all Supplementary Information.
-- `references.bib`: shared bibliography.
-- `figures/main/`: canonical assets compiled as main Figures 1--9.
-- `figures/supplementary/`: canonical assets compiled as S1--S29.
-- `figures/generated/`: internal descriptive-name outputs from figure scripts;
-  these are never referenced by LaTeX or included in the Overleaf bundle.
-- `figures/README.md`: authoritative figure, panel, and asset map.
-- `source_data/`: numerical source data organized by figure and panel.
-- `scripts/`: figure generation and journal-specific analyses.
-- `configs/regular_tree/`: archived artificial-tree sweeps, representative
-  resolved configurations, frozen manifest, and result tables.
-- `configs/reruns/`: frozen full 15-seed replacement sweeps for the feedback
-  comparison. The two 30-task arrays completed and passed the prospective
-  design, completeness, checkpoint, and hash checks on 31 July 2026. Their
-  current-code results now supply Figure 2.
-- `configs/task_derived/`: complete machine-readable specification of the
-  measured-response branch model.
-- `code/`: additive reference equations, exact reconstructed-tree source
-  scripts, and a portable CAVE/DANDI task-derived analysis pipeline.
-- `reproducibility/`: origin hashes, hardware accounting, seven-target and
-  full eight-cell cohort manifests, archive boundaries, rerun records, and the
-  exact conference-to-journal figure-lineage map.
-- `analysis/EVIDENCE_LEDGER.md`: claim-to-evidence and provenance audit.
-- `analysis/AUGUST_2026_CONFIRMATORY_RESULTS.md`: consolidated numerical
-  report for the new theory, trained-address, focal-conductance, functional
-  boundary and clean implementation studies.
-- `analysis/EXPERIMENT_CONTRACT.md`: frozen analyses and decision rules.
-- `analysis/alignment_controlled_results.md`: controlled topology--task
-  alignment result and its scope.
-- `analysis/JOURNAL_READINESS.md`: remaining submission requirements.
-- `analysis/NATURE_COMMUNICATIONS_PROGRAM.md`: target story, figure plan and
-  evidence boundary.
-- `submission/`: cover letter, reporting checklists, Source Data, and the
-  checksummed reviewer software release.
-
-## Build
+## Build and release
 
 From this directory:
 
@@ -116,97 +28,15 @@ make figures
 make paper
 make supplement
 make combined
-make overleaf-bundle
-make reproducibility
-make software-release
 make audit
 ```
 
-The manuscript build requires a standard TeX distribution with pdfLaTeX and
-BibTeX. Figure generation requires Python 3 with NumPy, pandas, SciPy,
-Matplotlib, and seaborn. The current working manuscript contains nine numbered
-main figures. `make figures` regenerates the publication-facing journal figures.
-`make canonical-figures` rebuilds the nine native full-width figure canvases
-and then emits the exact numbered PDFs compiled by LaTeX.
-Audited conference-era generator snapshots and source tables are retained under
-`scripts/inherited_neurips/` and `source_data/inherited_neurips/`. The prospective
-figure command reads the audited run and checkpoint tables already packaged in
-`source_data/prospective_learning/`; the checkpoint collector is kept separate
-because it re-evaluates the frozen models. The unified draft has nine numbered
-main figures and twenty-nine supplementary figures. Each main figure is one vector
-PDF with a single consecutive panel sequence; expanded diagnostics remain in
-Supplementary Information.
-`make overleaf-bundle` writes the current allow-listed package and ZIP under
-`submission/`; see `OVERLEAF_README.md` before uploading.
-The inherited arXiv/NeurIPS regular-tree tables are already frozen in this
-repository. Authors with access to the sibling source project can verify and
-refresh those exports with `make refresh-regular-tree-source`.
-The public-v661 figure command
-also refreshes its panel tables and exclusion manifest.
-`make software-release` exports a clean Git-HEAD copy of the complete training
-implementation, adds explicitly allow-listed journal analysis materials,
-sanitizes historical machine-local defaults, and validates both file-level
-checksums and the final ZIP. Its outputs are
-`submission/software_release/` and
-`submission/Dendritic_credit_assignment_software.zip`.
+`rebuild_final_publication_figures.py` renders the current eight main and 47 supplementary figures from retained evidence. Historical builder numbers can differ from publication numbers; running an old compositor directly can restore an obsolete layout. Figure generation uses Python, NumPy, pandas, SciPy, Matplotlib and PyMuPDF. Manuscripts require pdfLaTeX/BibTeX. Biological reanalysis additionally requires the upstream data/cache access documented by each pipeline.
 
-## Current evidence and release boundary
+After the text, figures, panel provenance and Source Data are finalized, commit the scientific inputs and rebuild the software and other bundles in dependency order. [RELEASE_WORKFLOW.md](RELEASE_WORKFLOW.md) describes committed-source packaging, the isolated installation smoke and the explicit noise-generator choices. [OVERLEAF_README.md](OVERLEAF_README.md) describes the manuscript project. Existing archives can be stale even when their checksums are valid.
 
-The structural result is supported in the original eight-cell pilot and in a
-frozen 47-cell cohort that is disjoint by stable nucleus identifier. The
-larger cohort uses historical MICrONS minnie65 version 661 reconstructions and
-direct presynaptic coarse E/I calls. It is a same-mouse sensitivity analysis,
-not an independent-animal replication or an in vivo learning experiment.
-Focal-gradient factor decomposition and the alignment-controlled experiment
-are complete and have panel-level source data.
+To restore Source Data, use `manifest.tsv`'s `original_source` field, not the display folder name. Supporting evidence now stored under `Methods/retained_evidence/` still belongs at its recorded `source_data/` path for analysis. The software package includes `code/release_noise/restore_source_data.py`, which checks hashes and refuses to substitute display-filtered tables for complete sources.
 
-The current 15-seed regular-tree feedback table is a fully archived clean
-cohort with all 60 configurations, checkpoints, logs, result hashes, and
-scheduler records retained. It prospectively replaced the earlier mixed
-archive, which remains available only as an audit artifact. The larger
-prospective experiment contains 640 audited training runs; an outcome-
-independent input rule retains 480. Its publication diagnostic evaluates
-feedback geometry and one-step loss change at 120 matched backpropagation
-checkpoints. A bandwidth-matched routing cohort retains 120 valid runs and
-isolates correct neuron-to-tree assignment. The complete 400-run inhibitory-
-dose family is excluded because its prespecified cross-core endpoint depends
-on signed synthetic inputs driving positive-conductance shunting cells. A
-240-run valid spatial-topology control identifies a forward coverage effect
-shared by backpropagation, and a 160-run valid fixed-contact control shows that
-scalar feedback amplifies the optimization cost of increasing depth. The
-detached 320-run audit independently compares exact transport with
-backpropagation under valid transfers; all artifacts and finite stage-complete
-checkpoints passed, and all four depth-averaged intervals include zero. The
-global mean difference is -0.0545 percentage points across 160 pairs, reported
-as agreement rather than formal equivalence. These analyses supply Figure 2 and
-Supplementary Figures S7--S9; the trained 2,700-fit address factorial supplies
-Figures 3 and 5. The point--dendrite controls, alignment interpolation and H2
-hierarchy replication and H4 saturation test supply Figure 6, the immutable-source
-H2/H3 audit supplies Supplementary Figure S26, and the ordinary Fashion-MNIST
-replication extends Figure 2. The continuous Fashion-MNIST branch-conflict
-family supplies the path-demand transition in Figure 4 and Supplementary
-Figure S29. Stable public
-identifiers are recorded for MICrONS minnie65 materialization 1822, the v661
-static release, and each DANDI asset. The DANDI dataset remains a draft
-version, and the in-development synapse-target proxy remains secondary until
-it has a public release identifier.
+## Prior dissemination and author information
 
-See `analysis/EVIDENCE_LEDGER.md` for the claim-level record and
-`analysis/JOURNAL_READINESS.md` for unresolved submission gates. The complete
-1,840-run historical ledger preserves all executions and records 640 input-
-invalid exclusions without using outcomes. Only validity-qualified identity,
-routing, spatial-topology and fixed-budget conclusions enter the paper.
-
-## Source projects and publication overlap
-
-The mathematical foundation and regular-tree experiments were first developed
-in the archived `../neurips` project. Reconstructed-tree and MICrONS analyses
-were first developed in `../../dendritic-credit-routing`. The present article
-is the sole scientific authority and states every load-bearing result directly;
-the source repositories establish provenance rather than a prerequisite
-reading order. Any arXiv or conference status must be disclosed in the cover
-letter.
-
-A second related preprint, arXiv:2607.24990, uses the same broader DendriNet
-framework to study forward population readout. It is cited and disclosed but
-is not part of the journal article's backward credit-routing evidence.
+The conductance-tree foundation, LocalCA rule and early regular-tree experiments were previously disseminated in arXiv:2607.03556. The forward population-readout preprint arXiv:2607.24990 is distinct related work. Their relationship to this Article is documented in `submission/extension_statement.md`. This project is being prepared as the sole journal paper; the recorded NeurIPS decision status and author declarations belong in the submission documents. Local compilation and packaging do not submit the manuscript.

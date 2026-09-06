@@ -1,0 +1,4 @@
+family,tree_id,tree,depth,internal_cuts,internal_nodes,coefficients,edges,maximum_centered_cut_rank,raw_mse_lower_bound,normalized_mse_lower_bound,zero_bound_exact,exact_construction_verified,exact_construction_max_abs_coefficient,exact_construction_box_2_verified,grouping,compatible,normalized_mse_lower_bound_exact,display_label
+xor_of_ands,T10,"((a,b),(c,d))",2,ab;cd,3,12,6,1,0.0,0.0,True,True,1.0327955589886444,True,ab|cd,True,0,exact possible
+xor_of_ands,T11,"((a,c),(b,d))",2,ac;bd,3,12,6,3,0.125,0.5333333333333333,False,False,,,ac|bd,False,8/15,NMSE ≥ 8/15
+xor_of_ands,T12,"((a,d),(b,c))",2,ad;bc,3,12,6,3,0.125,0.5333333333333333,False,False,,,ad|bc,False,8/15,NMSE ≥ 8/15

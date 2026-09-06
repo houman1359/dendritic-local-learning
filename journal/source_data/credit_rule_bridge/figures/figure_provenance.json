@@ -1,0 +1,18 @@
+{
+  "builder_sha256": "e3b151b691a04b083ef07dc67661cde34b216ee8a130affc57fa7636b3c17b7d",
+  "field": "Unweighted six-site nonsomatic path; optimal current fixed rank-one direction; one oracle coefficient per example",
+  "figure": "source_data/credit_rule_bridge/figures/credit_interaction_bridge_native.pdf",
+  "figure_sha256": "9a1816b2d9e42637bba5f5a8cd0d88dd74e9299e25e96c42b357c7b8cc08a8e6",
+  "n_seed_blocks": 20,
+  "optimizer": "Adam",
+  "panels": "A\u2013F",
+  "selection": "B\u2013D use frozen per-rule rates; E includes frozen common-rate control; F uses exact-rule selected rate",
+  "sources_sha256": {
+    "source_data/credit_rule_bridge/protocol_freeze.json": "eca67103897fc3f4251844479ad99ab04ae61544b3f176389ec82ff0760c01d4",
+    "source_data/credit_rule_bridge/selection_freeze.json": "c979c9c1bb9264a1d980da8d13c24479967e749f7d6d21212e3a3187268ef2db",
+    "source_data/credit_rule_bridge/summaries/all_curves.csv": "cfd75001a0c29f91543dd55eff1042784106cdde90b6b33535fc9e518b968321",
+    "source_data/credit_rule_bridge/summaries/all_diagnostics.csv": "a11538ed5d5e95c11863bdd0b8b1b89dbc4ed5819d307f17d8e39e2a766af562",
+    "source_data/credit_rule_bridge/summaries/paired_contrasts.csv": "b2355b467a7725016fb7e97f258c9d1a663534471ed8cc0d8229d819cad386a7",
+    "source_data/credit_rule_bridge/summaries/paired_seed_contrasts.csv": "00640e3b8be61bffd83bbecfc6259277c0f1e24974da56d49f10a2dbd1f22955"
+  }
+}

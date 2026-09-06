@@ -1,0 +1,86 @@
+\subsection{Direct confirmation from noisy morphology estimates to gradient learning}
+\label{note:morphology_end_to_end}
+
+The calibration study evaluated selected trees with an alternating least-squares
+fitter. A separate cohort tested whether its estimates also supported
+ordinary gradient learning, completing the sequence from noisy calibration
+to tree construction and parameter updates (main Fig.~6,
+Supplementary Fig.~\ref{fig:supp_morphology_calibration}G,H). Twenty new seed
+blocks (930910--930929) were disjoint from the preceding calibration and
+credit cohorts. Each generated one fresh matching, quartic, nested-prefix
+and random-interaction target using the same prespecified mixture of signs,
+coefficient magnitudes and input assignments. Every target had population
+variance one; the input-gradient second moment was not held identical across
+this mixture.
+
+We retained the 255-monomial Lasso with penalty scale 0.15, the same
+intercept treatment and the same subset dynamic program. The selector received 192 noisy observations
+from a total calibration budget of 256, with label-noise SD 0.5. The remaining
+64 observations were reserved and were not used to select or tune this
+follow-up. Neither family labels nor true support or coefficients were
+supplied to the estimator. All eighty estimated trees were recorded together with cryptographic
+hashes before parameter learning. The fixed balanced tree was the earlier
+development-best baseline. A third tree was constructed from true
+coefficients after sealing as a privileged structural reference. No
+construction weights or other target-derived initialization were used.
+
+Each tree was trained with either exact path credit or unit root broadcast,
+giving six conditions per task and 480 fits. Root sensitivity remained one;
+broadcast replaced the six other internal sensitivities by one. No oracle
+projection coefficients or proximal-zone definition were needed. Each
+forward model had seven multi-affine internal units, 28 coefficients,
+fourteen edges and root-only output; trees with a leaf directly below the
+root were permitted.
+
+Adam used $(\beta_1,\beta_2)=(0.9,0.999)$ and $\epsilon=10^{-8}$. Learning
+rates were copied without retuning from the previous credit-development
+record: 0.01 for exact credit and 0.003 for broadcast. The comparison therefore tests frozen optimizer recipes at different
+learning rates. All six conditions
+shared a label-independent Gaussian initialization with SD 0.5, zero biases,
+and the same minibatch indices. Initial coefficients and subsequent updates
+were clipped to $[-2,2]$; each condition's gradient norm was clipped at ten.
+Learning differentiated half-MSE divided by the known target variance,
+using 1,024 updates of 64 observations sampled with replacement from a fixed
+2,048-observation training dataset. Training label-noise SD was 0.15.
+Separate 4,096-observation test data had independent noise of the same SD.
+Calibration, training, test, initialization and minibatch streams each used
+a separate deterministic random-seed assignment. Repeated Rademacher input patterns were
+allowed; observation identities and noise draws were independent across
+splits. There was no validation selection, early stopping, new rate search
+or continuation from calibration fits.
+
+The primary endpoint was noisy-test NMSE after 1,024 updates, with expected
+noise floor 0.0225 for every family. Clean independent-test and exact
+256-pattern population errors were secondary. Two primary paired contrasts
+compared fixed minus estimated tree error under exact credit, and broadcast
+minus exact error on estimated trees. Four family differences were averaged
+within each seed before 10,000 whole-seed bootstrap resamples. The two primary
+contrasts used Bonferroni-adjusted two-sided 97.5\% intervals and the
+prespecified 0.01-NMSE meaningful-improvement margin. Family-specific and
+true-coefficient-reference comparisons used descriptive pointwise 95\%
+intervals. The primary pooled improvements were 0.45913 NMSE
+$[0.38489,0.53227]$ and 0.60750 $[0.56916,0.64610]$, respectively.
+
+Matching, quartic and nested targets approached the noise floor under the
+estimated-tree exact-credit recipe, while random interactions retained
+substantial error. Broadcast performed slightly better on matching tasks;
+exact credit did not dominate every family. The tree constructed from the full target is a privileged structural
+reference, not an oracle for the final endpoint: a better interaction score
+need not produce a better finite-training outcome. These results test the declared finite-data
+construction and learning pipeline, with its specified function class,
+optimizer and credit assumptions, rather than a general morphology law or a
+biophysical coefficient mechanism.
+
+A pre-training interface mismatch in an oracle helper stopped the initial
+array before initialization or fitting. Retained failure records and a
+hashed runtime adapter document the repair; scientific settings and sealed
+estimates were unchanged. An excluded development smoke (seed 721000)
+subsequently exercised all six conditions through the complete training
+horizon. Its six fits are excluded from the fresh sample. All 480 fresh
+trajectories and final weights were retained. Independent replay reproduced
+all eighty Lasso-to-tree choices from sealed observations and all reported
+test, clean-test and population errors from saved final weights, with
+maximum metric difference zero. Initialization and source-role hashes
+matched, and every parameter remained in the declared box. The complete protocol, runtime adapter, excluded implementation check,
+selection record and validation results
+are supplied under \texttt{source\_data/morphology\_calibration/end\_to\_end}.

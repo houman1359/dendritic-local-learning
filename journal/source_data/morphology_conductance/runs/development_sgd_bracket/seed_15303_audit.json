@@ -1,0 +1,9 @@
+{
+  "all_outcomes_retained": true,
+  "elapsed_seconds": 14.77833683800418,
+  "n_curve_rows": 720,
+  "n_fits": 144,
+  "phase": "development_sgd_bracket",
+  "protocol_sha256": "3fb50aa8261ebc26dde577254fff10afd70297564a7b0bb0c193008d263cd411",
+  "seed": 15303
+}

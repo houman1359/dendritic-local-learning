@@ -1,0 +1,52 @@
+{
+  "bootstrap_draws": 10000,
+  "failed_fits": 0,
+  "fresh_fits": 6720,
+  "fresh_trajectory_rows": 53760,
+  "primary_contrasts": [
+    {
+      "ci95_high": 0.003198975368958975,
+      "ci95_low": 0.0018666912835590083,
+      "ci975_high": 0.003318376342500666,
+      "ci975_low": 0.0017800167447584916,
+      "contrast": "broadcast_minus_exact_compatible",
+      "margin_nmse": 0.01,
+      "mean_difference": 0.0025066650320410997,
+      "n_seeds": 20,
+      "optimizer": "adam",
+      "passes_adjusted_interval_and_mean_margin": false,
+      "primary": true,
+      "rate_scope": "development_selected"
+    },
+    {
+      "ci95_high": 0.5798901714737712,
+      "ci95_low": 0.5501480688703344,
+      "ci975_high": 0.5827489877700951,
+      "ci975_low": 0.5491435457703584,
+      "contrast": "crossed_minus_compatible_exact",
+      "margin_nmse": 0.01,
+      "mean_difference": 0.5631738150664298,
+      "n_seeds": 20,
+      "optimizer": "adam",
+      "passes_adjusted_interval_and_mean_margin": true,
+      "primary": true,
+      "rate_scope": "development_selected"
+    }
+  ],
+  "protocol_sha256": "4373c421dd8ad60de8275d8384f441fc7c19d000232081bbb5be2eb7df0597df",
+  "rates": {
+    "adam": {
+      "broadcast": 0.01,
+      "exact": 0.003
+    },
+    "sgd": {
+      "broadcast": 0.01,
+      "exact": 0.03
+    }
+  },
+  "scope": "Seven fixed logical templates; paired seeds vary permutation, initialization and sampled noisy data. No new functional families.",
+  "script_sha256": "472c95cda7653de91b86916635ce7963b96fc1a743d1c42da38639e709110d9e",
+  "seed_blocks": 20,
+  "selected_rate_fits": 2240,
+  "selection_sha256": "965160e7d9126f974da817735dfb0ec1df35b6f09cc2056fabdab5a9f3c5a8a1"
+}

@@ -1,0 +1,25 @@
+{
+  "representative": {
+    "target_root_id": 864691135810666525,
+    "session": 4,
+    "scan_idx": 10
+  },
+  "selection": "Median mapped-input count, identifier ties; no outcome selection",
+  "coordinate_definition": "Rows are mapped partner inputs; multiple inputs can share a physical segment. Legacy n_sites and sites_per_route keys count these input coordinates.",
+  "mean_scan_coverage": 0.47972467452105455,
+  "mean_sites_per_route": 1.3076923076923077,
+  "all_one_site_scans": 6,
+  "n_scans": 13,
+  "n_targets": 7,
+  "source_sha256": {
+    "scripts/credit_first_figures/build_measured.py": "11b00277d05bec19a210e496050ed585f63978e53b18b5db3aab4d877313c77c",
+    "source_data/figure3/segment_metrics.csv": "7829c298c4e5b3209b758fb88b92b55f070420c00b383436e5d4e1601e7ff1cf",
+    "source_data/fulltree_boundary/output/dictionary_and_validation_metadata.jsonl": "12bd1392df9c3db14b9746f042786dcabbc9fd7f8acc99926277217b55554c7f",
+    "source_data/review_evidence_reanalysis/functional_native_contrasts.csv": "c7352f39853bb27f8dcb19b9b8baec0e3442634998c6abeae7ad0e6398dbf72d",
+    "source_data/review_evidence_reanalysis/functional_native_target_effects.csv": "ef15a48beb64b0f20e79990ee354ea3a2206532bc767e3b0ebf7aa8ef63c4af7",
+    "source_data/review_response_baselines/target_metrics.csv": "b81749a6d252221d7b4e7b1ec7501cdff488858ae0c9ffadbadaf5b8b7d96c62",
+    "source_data/fulltree_within_span_oracle/cell_metrics.csv": "ea56a91ee61f3e69d28e995dd63e0e3127e7b47f88c01b512da3fed6a7e96c6b",
+    "source_data/fulltree_within_span_oracle/condition_summary.csv": "c92b8abfd39e34ffb6adaab8f0bc7e84d504a7aae33de669f8bce9ca4d9380df"
+  },
+  "layout_findings": []
+}

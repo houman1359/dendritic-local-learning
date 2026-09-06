@@ -1,0 +1,104 @@
+{
+  "all_gates_pass": true,
+  "expected_new_rows": 200,
+  "fallback_mentions": 0,
+  "finite_metrics": true,
+  "missing_count": 0,
+  "missing_examples": [],
+  "nonfinite_alert_rows": 0,
+  "observed_new_rows": 200,
+  "point_parameter_counts": {
+    "point_mlp_active": [
+      15055
+    ],
+    "point_mlp_total": [
+      66200
+    ]
+  },
+  "runs": [
+    {
+      "expected": 10,
+      "generated": 10,
+      "manifest_sha256": "0c0132dfaf116afc95c4e63afa562d307f1bcf578bafd09e154de40d95852de5",
+      "run_dir": "point_dendrite_credit_runs/journal_point_credit_aligned_active_param_mlp_bp_20260813003553",
+      "stem": "aligned_active_param_mlp_bp"
+    },
+    {
+      "expected": 30,
+      "generated": 30,
+      "manifest_sha256": "4a4ae6a2351d2d57b8f725c69b6665229366c2c16f76604e5c4966a306733e62",
+      "run_dir": "point_dendrite_credit_runs/journal_point_credit_aligned_all_active_star_bp_20260813003554",
+      "stem": "aligned_all_active_star_bp"
+    },
+    {
+      "expected": 30,
+      "generated": 30,
+      "manifest_sha256": "f14d411f7610e3f17d2a412ae3dcfd9f588bb9b38d24cd7b2e7d799563ab1328",
+      "run_dir": "point_dendrite_credit_runs/journal_point_credit_aligned_soma_broadcast_bp_20260813003556",
+      "stem": "aligned_soma_broadcast_bp"
+    },
+    {
+      "expected": 10,
+      "generated": 10,
+      "manifest_sha256": "bd21276f9ff63b876309d5104df1101c1b129794393e24b16d334d8b78a82738",
+      "run_dir": "point_dendrite_credit_runs/journal_point_credit_aligned_total_param_mlp_bp_20260813003558",
+      "stem": "aligned_total_param_mlp_bp"
+    },
+    {
+      "expected": 30,
+      "generated": 30,
+      "manifest_sha256": "308f2f7cfcdbed969e38457de00f264d88efe6478ecb23b6239f21e24c577928",
+      "run_dir": "point_dendrite_credit_runs/journal_point_credit_rewired_tree_all_active_star_bp_20260813003559",
+      "stem": "rewired_tree_all_active_star_bp"
+    },
+    {
+      "expected": 30,
+      "generated": 30,
+      "manifest_sha256": "3efb09225ddeafeddbbe8672269dfe01fd19a5a12c8308d9299019063da604ec",
+      "run_dir": "point_dendrite_credit_runs/journal_point_credit_rewired_tree_soma_broadcast_bp_20260813003601",
+      "stem": "rewired_tree_soma_broadcast_bp"
+    },
+    {
+      "expected": 30,
+      "generated": 30,
+      "manifest_sha256": "c936e6c4f954b389a8e9069d5b7c64070e9bf28c6d113cf77c6a16c8b6910649",
+      "run_dir": "point_dendrite_credit_runs/journal_point_credit_aligned_soma_broadcast_matched_optimizer_20260813010628",
+      "stem": "aligned_soma_broadcast_matched_optimizer"
+    },
+    {
+      "expected": 30,
+      "generated": 30,
+      "manifest_sha256": "d1a90ed9c7a849cb51151cee36ef1298c1cb0ad2e6ba1a80604993658314e3cd",
+      "run_dir": "point_dendrite_credit_runs/journal_point_credit_rewired_tree_soma_broadcast_matched_optimizer_20260813010631",
+      "stem": "rewired_tree_soma_broadcast_matched_optimizer"
+    }
+  ],
+  "seeds": [
+    10200,
+    10201,
+    10202,
+    10203,
+    10204,
+    10205,
+    10206,
+    10207,
+    10208,
+    10209
+  ],
+  "status": "complete",
+  "structured_resource_equal": true,
+  "structured_resource_unique_values": {
+    "active_synapses": [
+      14336
+    ],
+    "candidate_synapse_slots": [
+      21760
+    ],
+    "persistent_state_scalars": [
+      2944
+    ],
+    "trainable_parameters": [
+      66178
+    ]
+  }
+}

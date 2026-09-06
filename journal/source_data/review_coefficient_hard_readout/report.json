@@ -1,0 +1,49 @@
+{
+  "complete": true,
+  "n_seeds": 20,
+  "models_per_seed": 108,
+  "trajectory_rows": 10800,
+  "protocol_sha256": "dd3042208dda2e8b656be4c59b71914a9588d7d61f35a85ffc06a49f6da0b252",
+  "primary_contrasts": [
+    {
+      "calibration_samples": 256,
+      "cue_noise_sd": 0.5,
+      "cue_delay_trials": 0,
+      "control": "oracle_context",
+      "mean_pp": -16.259765625,
+      "ci95_low_pp": -17.82958984375,
+      "ci95_high_pp": -14.8291015625,
+      "positive_seeds": 0,
+      "p_wilcoxon": 1.9073486328125e-06,
+      "primary_family_holm_p": 5.7220458984375e-06
+    },
+    {
+      "calibration_samples": 256,
+      "cue_noise_sd": 0.5,
+      "cue_delay_trials": 0,
+      "control": "frozen_profile",
+      "mean_pp": 45.361328125,
+      "ci95_low_pp": 43.68646240234375,
+      "ci95_high_pp": 46.91900634765624,
+      "positive_seeds": 20,
+      "p_wilcoxon": 1.9073486328125e-06,
+      "primary_family_holm_p": 5.7220458984375e-06
+    },
+    {
+      "calibration_samples": 256,
+      "cue_noise_sd": 0.5,
+      "cue_delay_trials": 0,
+      "control": "mismatched_encoder",
+      "mean_pp": 44.96826171875,
+      "ci95_low_pp": 43.27142333984375,
+      "ci95_high_pp": 46.51611328125,
+      "positive_seeds": 20,
+      "p_wilcoxon": 8.844915021211901e-05,
+      "primary_family_holm_p": 8.844915021211901e-05
+    }
+  ],
+  "scope": "Exploratory follow-up specified after observing the soft-encoder results. The identical learned context estimator uses a deterministic maximum-probability subtree readout. Original seeds and task data are paired sensitivity units, not a new independent replication. The encoder is unchanged; no task outcome selects its readout parameters. An imposed local branch-context cue is available during forward activation. The encoder learns its mapping to four subtree coefficients using local branch activation targets on separate calibration trials. It never receives exact parameter gradients or held-out task labels. Its weights are frozen before task training. Trial delay is a cue/eligibility mismatch under independent contexts, not a calibrated physiological time constant.",
+  "exploratory_after_soft_outcomes": true,
+  "readout": "maximum_probability_subtree",
+  "wrapper_sha256": "9eab37b0c92e87e51a3d9f6f2279c1e63e2378d8a01f3148b1220ced604652e6"
+}

@@ -1,0 +1,9 @@
+{
+  "all_metrics_finite": true,
+  "model_scope": "Matching/quartet are isospectral and share architecture/initialization/data; nested is a separate compatible-tree replication; conductance is a different positive teacher model",
+  "n_curve_rows": 8400,
+  "n_fresh_fits": 1200,
+  "n_seed_blocks": 20,
+  "primary_contrast": "Algebraic Adam calibrated-minus-exact gap: quartet minus matching",
+  "uncertainty": "10000 paired whole-seed bootstrap draws; 95% intervals descriptive, no multiplicity claim"
+}

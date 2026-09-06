@@ -1,0 +1,43 @@
+target_root_id,endpoint,comparison,unit,effect
+864691135810666525,structure_function_partial_r,selected_scans,partial rank correlation,0.102070778129
+864691135060651419,structure_function_partial_r,selected_scans,partial rank correlation,-0.176672832676
+864691135277186789,structure_function_partial_r,selected_scans,partial rank correlation,0.0760758072721
+864691135739661169,structure_function_partial_r,selected_scans,partial rank correlation,-0.417165261286
+864691135196576298,structure_function_partial_r,selected_scans,partial rank correlation,-0.358036738295
+864691135324623260,structure_function_partial_r,selected_scans,partial rank correlation,-0.0143239844701
+864691135409937097,structure_function_partial_r,selected_scans,partial rank correlation,0.301822114807
+864691135060651419,structure_function_partial_r,scan_complete,partial rank correlation,-0.0126492532
+864691135196576298,structure_function_partial_r,scan_complete,partial rank correlation,-0.3580367383
+864691135277186789,structure_function_partial_r,scan_complete,partial rank correlation,0.0703918215
+864691135324623260,structure_function_partial_r,scan_complete,partial rank correlation,-0.01432398447
+864691135409937097,structure_function_partial_r,scan_complete,partial rank correlation,0.3018221148
+864691135739661169,structure_function_partial_r,scan_complete,partial rank correlation,-0.4171652613
+864691135810666525,structure_function_partial_r,scan_complete,partial rank correlation,0.0904821776
+864691135060651419,heldout_normalized_mse,site-shuffled routes,normalized MSE,0.0543036113192
+864691135196576298,heldout_normalized_mse,site-shuffled routes,normalized MSE,0.0322434829597
+864691135277186789,heldout_normalized_mse,site-shuffled routes,normalized MSE,-0.00458450183852
+864691135324623260,heldout_normalized_mse,site-shuffled routes,normalized MSE,0.0339736919873
+864691135409937097,heldout_normalized_mse,site-shuffled routes,normalized MSE,-0.0420099996544
+864691135739661169,heldout_normalized_mse,site-shuffled routes,normalized MSE,0.0189333349119
+864691135810666525,heldout_normalized_mse,site-shuffled routes,normalized MSE,-0.043919202165
+864691135060651419,heldout_normalized_mse,random anatomical routes,normalized MSE,0.0231179960805
+864691135196576298,heldout_normalized_mse,random anatomical routes,normalized MSE,0.0151856866924
+864691135277186789,heldout_normalized_mse,random anatomical routes,normalized MSE,0.000317606557479
+864691135324623260,heldout_normalized_mse,random anatomical routes,normalized MSE,0.00185224830336
+864691135409937097,heldout_normalized_mse,random anatomical routes,normalized MSE,-0.00898904173754
+864691135739661169,heldout_normalized_mse,random anatomical routes,normalized MSE,9.40579303332e-05
+864691135810666525,heldout_normalized_mse,random anatomical routes,normalized MSE,-0.0227524639151
+864691135060651419,common_checkpoint_update_capture,site-shuffled routes,update match,-0.380578949273
+864691135196576298,common_checkpoint_update_capture,site-shuffled routes,update match,0.00446028947313
+864691135277186789,common_checkpoint_update_capture,site-shuffled routes,update match,-0.107312026069
+864691135324623260,common_checkpoint_update_capture,site-shuffled routes,update match,-0.483385191567
+864691135409937097,common_checkpoint_update_capture,site-shuffled routes,update match,-0.0968106464229
+864691135739661169,common_checkpoint_update_capture,site-shuffled routes,update match,-0.488799004437
+864691135810666525,common_checkpoint_update_capture,site-shuffled routes,update match,0.103262275153
+864691135060651419,common_checkpoint_update_capture,random anatomical routes,update match,-0.192596979408
+864691135196576298,common_checkpoint_update_capture,random anatomical routes,update match,-0.155369094639
+864691135277186789,common_checkpoint_update_capture,random anatomical routes,update match,-0.176602207672
+864691135324623260,common_checkpoint_update_capture,random anatomical routes,update match,-0.188679367422
+864691135409937097,common_checkpoint_update_capture,random anatomical routes,update match,-0.100574484883
+864691135739661169,common_checkpoint_update_capture,random anatomical routes,update match,-0.219786760287
+864691135810666525,common_checkpoint_update_capture,random anatomical routes,update match,0.149899516643

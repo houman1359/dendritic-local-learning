@@ -88,7 +88,7 @@ PLANE = ROOT / "source_data" / "credit_phase_plane"
 ATLAS = ROOT / "source_data" / "route_dictionary_atlas"
 OUT = ROOT / "figures" / "components" / "main_figure_03_native.pdf"
 
-HEIGHT_IN = 442.0 / 72.0
+HEIGHT_IN = 420.0 / 72.0
 # Every reserve this figure needs is paid for by the outer margins and by the
 # two uniform gutters, never by a slice of one panel: the horizontal gutter
 # carries the next panel's y label and tick column (34.8 pt for the widest
@@ -97,7 +97,7 @@ HEIGHT_IN = 442.0 / 72.0
 # no panel is ever carved on its own and every panel that starts in one grid
 # column keeps one x0 and one axes width.
 HGUTTER = 38.0
-VGUTTER = 58.0
+VGUTTER = 55.0
 MARGINS = Margins(left=51.0, right=12.0, top=23.0, bottom=27.0)
 # Row 1 carries the sweep panels and gets the extra 6 pt of height; the module
 # grid does the rest, so the module-normalised areas stay inside 1.16x.
@@ -386,14 +386,13 @@ def operator_schematic(ax) -> None:
         (card_x0, card_y0), card_x1 - card_x0, card_y1 - card_y0,
         boxstyle="round,pad=0.10", facecolor=COLORS["panel_bg"],
         edgecolor=COLORS["grid"], lw=LW_HAIR, zorder=0.5))
-    # Render the complete ratio as one mathematical object.  Independent text
-    # lines collide after physical-point coordinates are converted into this
-    # schematic's tree coordinate system.
+    # Spell out the two moments instead of printing a nested fraction whose
+    # subscripts become illegible at manuscript placement. The caption and
+    # fixed-operator equation retain their exact mathematical definitions.
     frac_x = 0.5 * (card_x0 + card_x1)
     ax.text(
         frac_x, card_y1 - 0.73,
-        r"$U(M)=\frac{[\mu^{\mathsf{T}}M\mu]^2}"
-        r"{2L\,[\Vert M\mu\Vert_2^2+\mathrm{tr}(M\Sigma M^{\mathsf{T}})]}$",
+        "U(M) = [mean alignment]₊² /\n(2L × mean squared update)",
         ha="center", va="center", fontsize=PT_ANNOT, color=COLORS["ink"],
     )
 
@@ -413,15 +412,15 @@ def main() -> None:
         hgutter_pt=HGUTTER, vgutter_pt=VGUTTER, margins=MARGINS,
     )
     ax_a = canvas.panel("A", 0, 0, 4, schematic=True,
-                        title="Credit-operator utility")
+                        title="Fixed-operator special case")
     ax_b = canvas.panel("B", 0, 4, 4, schematic=True,
                         title="Credit hierarchy")
     ax_c = canvas.panel("C", 0, 8, 4, title="Spectral alignment")
-    ax_d = canvas.panel("D", 1, 0, 4, title="Route-resolution crossover")
+    ax_d = canvas.panel("D", 1, 0, 4, title="Route resolution")
     ax_e = canvas.panel("E", 1, 4, 4, title="Projection boundary")
     ax_f = canvas.panel("F", 1, 8, 4, title="Reliability gains")
-    ax_g = canvas.panel("G", 2, 0, 6, title="Predictive utility")
-    ax_h = canvas.panel("H", 2, 6, 6, title="Alignment × bandwidth")
+    ax_g = canvas.panel("G", 2, 0, 6, title="Full-batch utility reanalysis")
+    ax_h = canvas.panel("H", 2, 6, 6, title="Conceptual evidence map")
 
     # ── A ───────────────────────────────────────────────────────────────
     operator_schematic(ax_a)
@@ -440,7 +439,7 @@ def main() -> None:
         [f"{v:.2f}" for v in advantage.index],
         label="capture advantage (×10⁻²)")
     ax_c.set_xlabel("route budget K   (16 = full rank)", labelpad=2.0)
-    ax_c.set_ylabel("task–route alignment ρ", labelpad=1.5,
+    ax_c.set_ylabel("covariance mixture ρ", labelpad=1.5,
                     y=matrix_label_y(ax_c), ha="center")
 
     # ── C: final loss versus route resolution, one series per task depth ─
@@ -562,12 +561,9 @@ def main() -> None:
                 borderaxespad=0.2)
 
     # ── F: phase utility predicts observed one-step progress ────────────
-    merged = operator.merge(
-        outcomes,
-        on=["seed", "condition_id", "architecture", "feedback_family",
-            "budget_k"],
-        validate="one_to_one")
+    merged = pd.read_csv(ROOT / "source_data/review_evidence_reanalysis/moment_scores.csv")
     merged = merged[merged.architecture.eq("dendritic_tree")]
+    utility = "deterministic_maximum_bound_decrease"
     # U(M) is defined as 0 wherever the routed update is not positively
     # aligned (mu^T M mu <= 0, optimal step 0): 214 of the 540 fits.  Those
     # sit on the x = 0 wall by definition, not by measurement, so they are
@@ -575,15 +571,15 @@ def main() -> None:
     # coordinates -- a strip on the wall rather than a column of the same
     # dots as the measured spread -- and the count is read off the frozen
     # table so the note can never drift from the drawing.
-    clamped = merged.maximum_guaranteed_decrease.eq(0.0)
+    clamped = merged[utility].eq(0.0)
     assert bool((merged.loc[clamped, "retained_signal_inner_product"]
                  <= 0.0).all())
     spread = merged[~clamped]
     wall = merged[clamped]
-    ax_g.scatter(spread.maximum_guaranteed_decrease,
+    ax_g.scatter(spread[utility],
                  spread.norm_matched_one_step_progress,
                  s=7, alpha=0.30, edgecolors="none", color=COLORS["additive"])
-    ax_g.scatter(wall.maximum_guaranteed_decrease,
+    ax_g.scatter(wall[utility],
                  wall.norm_matched_one_step_progress,
                  s=22, alpha=0.40, marker="_", linewidths=LW_EDGE,
                  color=COLORS["mute"], zorder=2.5)
@@ -595,7 +591,7 @@ def main() -> None:
     ax_g.set_yticks([-1.0, -0.5, 0.0, 0.5, 1.0])
     # The Spearman coefficient, its seed-block interval and n are reported in
     # the caption; printing them on the panel duplicated the caption text.
-    ax_g.set_xlabel("operator utility  $U(M)$")
+    ax_g.set_xlabel("deterministic moment utility")
     ax_g.set_ylabel("observed progress  $P_1$")
 
     # ── G: alignment x bandwidth synthesis ──────────────────────────────
@@ -613,72 +609,28 @@ def main() -> None:
     ax_h.set_yscale("log")
     ax_h.set_xlim(-0.045, 1.12)
     ax_h.set_ylim(0.088, 7.0)
-    span_x = [-0.045, 1.12]
-    # K/r_eff is an ordinal axis, so the three regimes take an ordered light slate
-    # ramp (lightest at low K/r) rather than three near-invisible hues at
-    # alpha 0.07-0.10, which were impossible to tell apart and competed with
-    # the condition colours of the data.
-    for lo, hi, tint in ((0.088, 0.24, "#F2F4F7"),
-                         (0.24, 1.2, "#E3E8ED"),
-                         (1.2, 7.0, "#D4DBE3")):
-        ax_h.fill_between(span_x, [lo] * 2, [hi] * 2, color=tint,
-                          zorder=0, linewidth=0)
-    # Same reference treatment as panels D and E: dashed, mute, LW_REF.
-    ax_h.axhline(1.0, color=COLORS["mute"], ls="--", lw=LW_REF, zorder=1)
+    # Family-specific alignment measurements do not support a shared fitted
+    # phase boundary.  Show observations only, without regime bands, connecting
+    # trajectories or a highlighted utility argmax.
     # Three observations sit at alignment exactly 1 and are drawn fanned in x
     # by the frozen source table; the rule marks where alignment 1 really is.
     ax_h.axvline(1.0, color=COLORS["mute"], ls="--", lw=LW_REF, zorder=1)
     for family, label, color, marker, has_line in families:
         part = points[points.family.eq(family)].sort_values("x_plot")
-        if has_line:
-            ax_h.plot(part.x_plot, part.y_plot, color=color, lw=LW_DATA,
-                      alpha=0.85, zorder=2)
         for row in part.itertuples(index=False):
             filled = str(row.outcome) not in {"loss", "null"}
             ax_h.plot(row.x_plot, row.y_plot, marker=marker, ms=MARKER_MS,
                       ls="none", mfc=color if filled else "white", mec=color,
                       mew=LW_REF, zorder=4)
 
-    # The constructive exhibit: ring the trained factorial point at the
-    # bandwidth that maximizes the evaluated one-step utility bound U(M)
-    # for the matched ancestry family (frozen in argmax_summary.csv).
-    argmax = pd.read_csv(ATLAS / "argmax_summary.csv")
-    match = argmax[argmax.architecture.eq("dendritic_tree")
-                   & argmax.feedback_family.eq("correct_ancestry_subtrees")]
-    if not match.empty:
-        best_k = int(match.iloc[0].predicted_best_k)
-        ring = points[points.label.eq(f"factorial K={best_k}")]
-        if not ring.empty:
-            rx = float(ring.iloc[0].x_plot)
-            ry = float(ring.iloc[0].y_plot)
-            # The ring is defined in the caption: the bandwidth that
-            # maximizes the evaluated one-step utility bound for the matched
-            # ancestry family. The panel is too small to also carry the text.
-            # Ink, not C_ORACLE: the oracle purple is the imposed family's
-            # colour, and genuine imposed triangles sit right beside the ring.
-            ax_h.plot([rx], [ry], marker="o", ms=MARKER_MS + 4.4, ls="none",
-                      mfc="none", mec=COLORS["ink"], mew=LW_DATA, zorder=5)
     handles = [Line2D([], [], color=color, marker=marker,
-                      lw=LW_DATA if has_line else 0, markersize=MARKER_MS,
+                      lw=0, markersize=MARKER_MS,
                       markeredgewidth=LW_REF, label=label)
                for _, label, color, marker, has_line in families
                if label is not None]
     ax_h.legend(handles=handles, loc="upper left", ncol=1, frameon=False,
                 fontsize=PT_LEGEND, handlelength=1.3, handletextpad=0.4,
                 labelspacing=0.28, borderaxespad=0.15)
-    # Regime names label the quiet background bands directly, in their
-    # shortest unambiguous form; the bands themselves are defined in the
-    # caption, and so are the alignment rule and the filled/open marker key
-    # that used to be printed here as two blocks of running text.
-    # One right-hand column, each name vertically centred in the band it
-    # names, so the background tints have an unambiguous key.  "misaligned"
-    # is gone: it named an x-region while its three neighbours named y-bands,
-    # and it shared the green band with "matched regime".
-    for band_y, band_name in ((4.20, "span saturated"),
-                              (0.33, "matched regime"),
-                              (0.145, "bandwidth limited")):
-        ax_h.text(1.10, band_y, band_name, color=COLORS["mute"],
-                  fontsize=PT_ANNOT, style="italic", ha="right", va="center")
     # The measured-response point is the only family not repeated in the
     # compact legend; label it at the point so its biological null cannot be
     # mistaken for one of the synthetic screens.  No hardcoded "(Fig. 9)":
@@ -699,12 +651,20 @@ def main() -> None:
     ax_h.set_yticks([0.125, 0.25, 0.5, 1, 2, 4])
     ax_h.set_yticklabels(["1/8", "1/4", "1/2", "1", "2", "4"])
     ax_h.minorticks_off()
-    ax_h.set_xlabel("task–route alignment")
+    ax_h.set_xlabel("alignment (family-specific metric)")
     # Set on two lines: rotated, one long line overran the panel and climbed
     # into the row above, past G's own letter.  Two lines stack as adjacent
     # columns, each about half as tall, and stay inside the axes.
     ax_h.set_ylabel("bandwidth / effective\ntask rank  " r"$K/r_{\rm eff}$")
 
+    # Equal widths for the two six-module quantitative panels.
+    from build_main_figure_02 import _equalise_row
+    canvas.lock_reserves()
+    _equalise_row(canvas, {"G": 0, "H": 6})
+    canvas.lock_reserves()
+    _equalise_row(canvas, {"A": 0, "B": 4, "C": 8})
+    from journal_style import style_direct_color_labels
+    style_direct_color_labels(canvas.fig)
     problems = canvas.save(OUT, name="main_figure_03_native")
     for violation in audit_native_pdf(OUT):
         print(f"    {violation}")

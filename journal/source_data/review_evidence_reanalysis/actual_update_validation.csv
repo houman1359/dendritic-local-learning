@@ -1,0 +1,3 @@
+seed,n_conditions,maximum_archived_moment_reconstruction_error,minimum_actual_fullbatch_decrease_minus_global_bound,all_actual_step_bounds_pass
+4200,135,4.94103868931e-10,0.000100388139323,True
+4219,135,3.9397285434e-10,0.000281165220682,True

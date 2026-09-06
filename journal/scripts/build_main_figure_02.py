@@ -352,7 +352,7 @@ RESOLUTION_CARDS = (
     ("scalar", "scalar", AMBER_TEXT,
      "one s per layer", _card_scalar),
     ("neuron", "neuron-specific", ADD,
-     "one δᵤ per neuron", _card_neuron),
+     "one δᵤ / neuron", _card_neuron),
     ("exact", "exact path", BP,
      "one ∂ℒ/∂Vₙ per compartment", _card_exact),
 )
@@ -462,8 +462,7 @@ def panel_transport_profile(ax):
     # then averages this ratio over branches and neurons within a seed.
     ax.text(
         0.06, 0.97,
-        r"$\frac{\mathrm{RMS}_{\rm batch}(\delta^V_{n,u})}"
-        r"{\mathrm{RMS}_{\rm batch}(\delta^V_{0,u})}$",
+        "soma-normalized\nbatch RMS",
         transform=ax.transAxes, fontsize=PT_SMALL, color=MUTE,
         ha="left", va="top",
     )
@@ -523,8 +522,7 @@ def panel_path_specific_energy(ax):
     ax.set_xticks(xs, ["mid", "distal"])
     ax.text(
         0.06, 0.985,
-        r"$\frac{\|\delta^V_d-\langle\delta^V_d\rangle_p\|_2^2}"
-        r"{\|\delta^V_d\|_2^2}$",
+        "within-depth\nresidual",
         transform=ax.transAxes, fontsize=PT_SMALL, color=MUTE,
         ha="left", va="top",
     )
@@ -1017,9 +1015,9 @@ def panel_forest(ax):
 # its own reserve: every left reserve is the column lock the canvas
 # measures, topped up by ``_equalise_row`` so panels of one row that start
 # in different grid columns still share one axes-box width.
-CANVAS_H_PT = 460.0                       # compact standard-task figure
-ROW_H_PT = (68.0, 87.0, 170.0)
-VGUTTER_PT = 62.0 / 3.0 + 25.0
+CANVAS_H_PT = 428.0                       # common 0.92-textwidth placement
+ROW_H_PT = (75.0, 87.0, 170.0)
+VGUTTER_PT = 38.0
 
 
 def _equalise_row(canvas, names_cols):
@@ -1105,6 +1103,8 @@ def build(height_in=CANVAS_H_PT / 72.0, path=None):
         panel_resolution_card(ax_card, title, tone, gloss, draw)
 
     target = Path(path) if path else COMPONENTS / "main_figure_02_native.pdf"
+    from journal_style import style_direct_color_labels
+    style_direct_color_labels(canvas.fig)
     problems = canvas.save(target, name="main_figure_02_native")
     for problem in problems:
         print(f"    {problem}")

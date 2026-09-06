@@ -1,52 +1,13 @@
-# Nature Communications editorial summary
+# Editorial summary
 
-## Proposed title
+**Title:** Dendritic morphology as a dictionary for local credit assignment
 
-When dendritic structure helps local credit assignment
+This Article asks which spatial distinctions dendritic credit must preserve for different tasks. Morphology supplies candidate delivery patterns; conductance sets their gain. The main evidence follows neuron identity on image tasks, branch selection under context conflict, ancestry grouping with hierarchical distractors, and more resolved credit for higher-order interactions.
 
-## Editorial summary
+The central new comparison holds the forward tree and input-sensitivity spectrum fixed. Pairwise and quartic targets are both representable, but their trained exact credit fields differ in their best rank-one capture. Fresh, paired learning experiments show that a fixed spatial profile supports pairwise learning yet leaves a large quartic error gap. Capture is an oracle diagnostic of the learned field, not a prospective selector or a claim that each compartment requires an independent external teaching signal. Physical-depth experiments test how serial computation, credit and optimizer settings interact.
 
-Learning theories commonly ask how a teaching signal reaches the correct
-neuron. We address the complementary subcellular problem: once that signal is
-available, what does a branched conductance tree add to its distribution among
-synapses? Exact differentiation separates synapse-local eligibility from a
-soma-derived error transported through dendritic paths. A stochastic
-credit-operator bound predicts when restricted routes help from retained task
-signal, update gain and admitted noise; its utility predicts independent
-trained outcomes with Spearman correlations 0.937 and 0.916. Experiments then
-map the boundary. Neuron identity supplies the dominant feedback gain on
-ordinary image tasks. In a continuous Fashion-MNIST branch-conflict family,
-however, path-selective information adds 35--58 percentage points at full
-conflict and the shared-credit failure threshold shifts with branch count as
-predicted. A matched gated-point model identifies the resource as branch
-selection rather than dendritic material. Task-aligned ancestry is competitive
-only at intermediate bandwidth. Depth alone hurts
-at fixed budgets. On a mechanism-matched task, an aligned serial tree beats a
-resource-identical nonserial control by 31 points, but flexible
-parameter-matched point MLPs beat the tree by about seven points. Reconstructed
-MICRONS arbors supply sparse, mainly coarse ancestry routes; focal shunting is
-null at textbook passive calibration and regulates descendant sensitivity only
-in permissive high-conductance regimes. Measured responses define a negative
-alignment boundary, whereas controlled objectives show that learning benefit
-follows task--route alignment. The Article therefore identifies a conditional
-hierarchy: coordinates identify neurons, ancestry addresses synapses,
-conductance regulates routes and alignment determines utility.
+Reconstructed anatomy supplies sparse spatial dictionaries beyond a budget-matched broadcast. Independent modeled shunt-response fields test those dictionaries across separate cohorts. A focal shunt applies exact gains to the baseline-weighted ancestry partition in a passive tree, while electrical calibration limits the range of spatial selectivity. Measured responses do not show preferential ancestry alignment; the separate offline learning comparison diagnoses transfer geometry.
 
-## Significance and boundary
+The failed initialization selector remains explicit. Forward representability, noisy-query tree estimation and learning dynamics are distinguished in the supporting analyses without replacing the credit-first argument. The paper does not infer optimal morphology from a scalar task rank.
 
-The advance is a mechanistic bridge from network-level credit assignment to
-subcellular structure, tested through prospective simulations, reconstructed
-anatomy, synapse-resolved inhibition, cable perturbations and public animal
-data. We do not claim that modeled gradients were measured in vivo, that
-MICRONS provides independent-animal replication, or that shunting is generally
-superior. Exact transport and fitted projections are information oracles.
-
-## Relationship to the disclosed earlier version
-
-The NeurIPS/arXiv manuscript established the conductance-tree factorization and
-regular-tree learning problem. The journal Article depends on new prospective
-interventions, sparse route-dictionary theory, reconstructed-cell and
-inhibitory-census analyses, reciprocal and physical cable controls, alignment
-tests and external animal evidence. The complete relationship is documented in
-`extension_statement.md`; both related manuscripts will be disclosed to the
-editor.
+The predecessor preprint is cited and its inherited material disclosed. The author intends this Article as the only publication from the credit project, but the prior conference submission has no official final decision recorded here. Author declarations and final consideration status must be verified before upload.

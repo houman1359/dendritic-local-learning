@@ -1,0 +1,816 @@
+{
+  "version": 1,
+  "layout": "credit_first_eight_main_47_supplementary",
+  "physical_figure_pending": true,
+  "retained_template": "configs/credit_first_provenance/retained_supplementary.tsv",
+  "assets": [
+    {
+      "figure": "fig1",
+      "path": "figures/main/figure_01.pdf",
+      "generator": "scripts/credit_first_figures/build_framework.py",
+      "component": "figures/components/credit_first_figure_01.pdf",
+      "panel": "a-f",
+      "notes": ""
+    },
+    {
+      "figure": "fig2",
+      "path": "figures/main/figure_02.pdf",
+      "generator": "scripts/build_main_figure_04.py",
+      "component": "figures/components/main_figure_04_native.pdf",
+      "panel": "a-f",
+      "notes": ""
+    },
+    {
+      "figure": "fig3",
+      "path": "figures/main/figure_03.pdf",
+      "generator": "scripts/credit_first_figures/build_ancestry.py",
+      "component": "figures/components/credit_first_figure_03.pdf",
+      "panel": "a-f",
+      "notes": ""
+    },
+    {
+      "figure": "fig4",
+      "path": "figures/main/figure_04.pdf",
+      "generator": "scripts/credit_rule_bridge/build_figure.py",
+      "component": "source_data/credit_rule_bridge/figures/credit_interaction_bridge_native.pdf",
+      "panel": "a-f",
+      "notes": ""
+    },
+    {
+      "figure": "fig6",
+      "path": "figures/main/figure_06.pdf",
+      "generator": "scripts/credit_first_figures/build_anatomy.py",
+      "component": "figures/components/credit_first_figure_06.pdf",
+      "panel": "a-e",
+      "notes": ""
+    },
+    {
+      "figure": "fig7",
+      "path": "figures/main/figure_07.pdf",
+      "generator": "scripts/shunt_ancestry_gain/build_figure.py",
+      "component": "source_data/shunt_ancestry_gain/figures/shunt_ancestry_gain_native.pdf",
+      "panel": "a-e",
+      "notes": ""
+    },
+    {
+      "figure": "fig8",
+      "path": "figures/main/figure_08.pdf",
+      "generator": "scripts/credit_first_figures/build_measured.py",
+      "component": "figures/components/credit_first_figure_08.pdf",
+      "panel": "a-e",
+      "notes": ""
+    },
+    {
+      "figure": "figS46",
+      "path": "figures/supplementary/figure_S46_utility.pdf",
+      "generator": "scripts/build_utility_supplement.py",
+      "component": "figures/supplementary/figure_S46_utility.pdf",
+      "panel": "a-g",
+      "notes": "Conceptual former main3H is absent"
+    },
+    {
+      "figure": "figS47",
+      "path": "figures/supplementary/figure_shunt_weak_channels.pdf",
+      "generator": "scripts/shunt_ancestry_gain/build_figure.py",
+      "component": "source_data/shunt_ancestry_gain/figures/weak_channel_linearization_check.pdf",
+      "panel": "a-b",
+      "notes": "Fixed baseline Jacobian weak-channel linearization check"
+    }
+  ],
+  "records": [
+    {
+      "figure": "fig1",
+      "panel": "a",
+      "path": "scripts/build_main_figure_01.py",
+      "role": "schematic source",
+      "generator": "",
+      "replication_unit": "not applicable",
+      "notes": "panel_factorization_readable: illustrative chain rule, no measured data"
+    },
+    {
+      "figure": "fig1",
+      "panel": "b-c",
+      "path": "scripts/credit_first_figures/build_framework.py",
+      "role": "schematic source",
+      "generator": "",
+      "replication_unit": "not applicable",
+      "notes": "Six-site dictionaries and between-neuron feedback diagram, no fitted numerical data"
+    },
+    {
+      "figure": "fig1",
+      "panel": "b",
+      "path": "source_data/credit_first_figures/figure_01_illustrative_dictionaries.npz",
+      "role": "illustrative matrix",
+      "generator": "scripts/credit_first_figures/build_framework.py",
+      "replication_unit": "not applicable",
+      "notes": ""
+    },
+    {
+      "figure": "fig1",
+      "panel": "d",
+      "path": "source_data/mnist_feedback_ladder/seed_outcomes.csv",
+      "role": "numerical source",
+      "generator": "",
+      "replication_unit": "paired training seed (15 per architecture)",
+      "notes": ""
+    },
+    {
+      "figure": "fig1",
+      "panel": "d",
+      "path": "source_data/mnist_feedback_ladder/condition_summary.csv",
+      "role": "numerical source",
+      "generator": "",
+      "replication_unit": "paired training seed (15 per architecture)",
+      "notes": ""
+    },
+    {
+      "figure": "fig1",
+      "panel": "e-f",
+      "path": "source_data/mnist_feedback_ladder/paired_contrasts.csv",
+      "role": "numerical source",
+      "generator": "",
+      "replication_unit": "paired training seed (15 MNIST; 20 CIFAR-10)",
+      "notes": ""
+    },
+    {
+      "figure": "fig1",
+      "panel": "e-f",
+      "path": "source_data/mnist_between_within_factorial/paired_contrasts.csv",
+      "role": "numerical source",
+      "generator": "",
+      "replication_unit": "paired training seed (15 MNIST; 20 CIFAR-10)",
+      "notes": ""
+    },
+    {
+      "figure": "fig1",
+      "panel": "e-f",
+      "path": "source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv",
+      "role": "numerical source",
+      "generator": "",
+      "replication_unit": "paired training seed (15 MNIST; 20 CIFAR-10)",
+      "notes": ""
+    },
+    {
+      "figure": "fig1",
+      "panel": "e-f",
+      "path": "source_data/credit_first_figures/figure_01_contrasts.csv",
+      "role": "numerical source",
+      "generator": "",
+      "replication_unit": "paired training seed (15 MNIST; 20 CIFAR-10)",
+      "notes": ""
+    },
+    {
+      "figure": "fig2",
+      "panel": "a-c",
+      "path": "scripts/build_main_figure_04.py",
+      "role": "schematic and analytic source",
+      "generator": "",
+      "replication_unit": "not applicable",
+      "notes": "Task and routing diagrams plus centered-evidence analytic boundary"
+    },
+    {
+      "figure": "fig2",
+      "panel": "d-e",
+      "path": "source_data/path_necessity_fashion/condition_summary.csv",
+      "role": "numerical source",
+      "generator": "",
+      "replication_unit": "paired training seed (20 per branch count)",
+      "notes": ""
+    },
+    {
+      "figure": "fig2",
+      "panel": "d-e",
+      "path": "source_data/path_necessity_fashion/seed_outcomes.csv",
+      "role": "numerical source",
+      "generator": "",
+      "replication_unit": "paired training seed (20 per branch count)",
+      "notes": ""
+    },
+    {
+      "figure": "fig2",
+      "panel": "f",
+      "path": "source_data/path_necessity_fashion/plotted_crossings.csv",
+      "role": "numerical source",
+      "generator": "",
+      "replication_unit": "paired training seed (20 per branch count)",
+      "notes": ""
+    },
+    {
+      "figure": "fig2",
+      "panel": "f",
+      "path": "source_data/path_necessity_fashion/boundary_by_seed.csv",
+      "role": "numerical source",
+      "generator": "",
+      "replication_unit": "paired training seed (20 per branch count)",
+      "notes": ""
+    },
+    {
+      "figure": "fig2",
+      "panel": "caption",
+      "path": "source_data/path_necessity_fashion/interaction_summary.csv",
+      "role": "caption numerical support",
+      "generator": "",
+      "replication_unit": "paired training seed (20 per branch count)",
+      "notes": "20/20 interaction statement; not a plotted extra panel"
+    },
+    {
+      "figure": "fig3",
+      "panel": "a",
+      "path": "scripts/build_main_figure_05.py",
+      "role": "schematic source",
+      "generator": "",
+      "replication_unit": "not applicable",
+      "notes": "hierarchical_task draws the fixed coefficient design"
+    },
+    {
+      "figure": "fig3",
+      "panel": "b",
+      "path": "configs/trained_subtree_address/full_factorial_confirmatory.json",
+      "role": "design consequence",
+      "generator": "scripts/credit_first_figures/build_ancestry.py",
+      "replication_unit": "not applicable",
+      "notes": "Raw sums -3.05,-0.05,0.85,1; route rows divide by sqrt(group size)"
+    },
+    {
+      "figure": "fig3",
+      "panel": "b",
+      "path": "source_data/credit_first_figures/figure_03_coefficient_prediction.csv",
+      "role": "design consequence",
+      "generator": "scripts/credit_first_figures/build_ancestry.py",
+      "replication_unit": "not applicable",
+      "notes": "Raw sums -3.05,-0.05,0.85,1; route rows divide by sqrt(group size)"
+    },
+    {
+      "figure": "fig3",
+      "panel": "c-d",
+      "path": "source_data/trained_subtree_address_full_factorial/condition_summary.csv",
+      "role": "numerical source",
+      "generator": "",
+      "replication_unit": "paired training seed (20)",
+      "notes": "C: bandwidth; D: matched-minus-rewired topology"
+    },
+    {
+      "figure": "fig3",
+      "panel": "c-d",
+      "path": "source_data/trained_subtree_address_full_factorial/seed_outcomes.csv",
+      "role": "numerical source",
+      "generator": "",
+      "replication_unit": "paired training seed (20)",
+      "notes": "C: bandwidth; D: matched-minus-rewired topology"
+    },
+    {
+      "figure": "fig3",
+      "panel": "e-f",
+      "path": "source_data/review_evidence_reanalysis/ancestry_k4_control_contrasts.csv",
+      "role": "numerical source",
+      "generator": "",
+      "replication_unit": "paired training seed (20)",
+      "notes": "K4 maximum-over-four primary comparator and dense/sparse/depth controls"
+    },
+    {
+      "figure": "fig3",
+      "panel": "e-f",
+      "path": "source_data/review_evidence_reanalysis/ancestry_control_paired_differences.csv",
+      "role": "numerical source",
+      "generator": "",
+      "replication_unit": "paired training seed (20)",
+      "notes": "K4 maximum-over-four primary comparator and dense/sparse/depth controls"
+    },
+    {
+      "figure": "fig3",
+      "panel": "e-f",
+      "path": "source_data/credit_first_figures/figure_03_k4_contrasts.csv",
+      "role": "numerical source",
+      "generator": "",
+      "replication_unit": "paired training seed (20)",
+      "notes": "K4 maximum-over-four primary comparator and dense/sparse/depth controls"
+    },
+    {
+      "figure": "fig4",
+      "panel": "a",
+      "path": "scripts/credit_rule_bridge/models.py",
+      "role": "task schematic source",
+      "generator": "",
+      "replication_unit": "not applicable",
+      "notes": "Pairwise/quartic interaction supports; compatible tree; signed coefficients"
+    },
+    {
+      "figure": "fig4",
+      "panel": "a",
+      "path": "scripts/credit_rule_bridge/build_figure.py",
+      "role": "task schematic source",
+      "generator": "",
+      "replication_unit": "not applicable",
+      "notes": "Pairwise/quartic interaction supports; compatible tree; signed coefficients"
+    },
+    {
+      "figure": "fig4",
+      "panel": "b-d",
+      "path": "source_data/credit_rule_bridge/summaries/all_curves.csv",
+      "role": "numerical source",
+      "generator": "",
+      "replication_unit": "paired fresh seed block (20)",
+      "notes": ""
+    },
+    {
+      "figure": "fig4",
+      "panel": "e",
+      "path": "source_data/credit_rule_bridge/summaries/paired_contrasts.csv",
+      "role": "numerical source",
+      "generator": "",
+      "replication_unit": "paired fresh seed block (20)",
+      "notes": ""
+    },
+    {
+      "figure": "fig4",
+      "panel": "e",
+      "path": "source_data/credit_rule_bridge/summaries/paired_seed_contrasts.csv",
+      "role": "numerical source",
+      "generator": "",
+      "replication_unit": "paired fresh seed block (20)",
+      "notes": ""
+    },
+    {
+      "figure": "fig4",
+      "panel": "f",
+      "path": "source_data/credit_rule_bridge/summaries/all_diagnostics.csv",
+      "role": "numerical source",
+      "generator": "",
+      "replication_unit": "paired fresh seed block (20)",
+      "notes": "Exact Adam selected-rate initial/final six-site path rank-one capture"
+    },
+    {
+      "figure": "fig4",
+      "panel": "b-f",
+      "path": "source_data/credit_rule_bridge/figures/figure_source.csv",
+      "role": "plotted numerical export",
+      "generator": "scripts/credit_rule_bridge/build_figure.py",
+      "replication_unit": "paired fresh seed block (20)",
+      "notes": ""
+    },
+    {
+      "figure": "fig6",
+      "panel": "a",
+      "path": "source_data/figure3/segment_metrics.csv",
+      "role": "measured geometry",
+      "generator": "",
+      "replication_unit": "one illustrative reconstructed cell",
+      "notes": "Median-size original cohort example, root864691135409937097; no response-outcome selection"
+    },
+    {
+      "figure": "fig6",
+      "panel": "b-c,e",
+      "path": "source_data/anatomy_commonmode/v661/cell_method_summary.csv",
+      "role": "numerical source",
+      "generator": "",
+      "replication_unit": "reconstructed cell (47; one mouse)",
+      "notes": ""
+    },
+    {
+      "figure": "fig6",
+      "panel": "b-c,e",
+      "path": "source_data/anatomy_commonmode/v661/summary.json",
+      "role": "numerical source",
+      "generator": "",
+      "replication_unit": "reconstructed cell (47; one mouse)",
+      "notes": ""
+    },
+    {
+      "figure": "fig6",
+      "panel": "d",
+      "path": "source_data/anatomy_commonmode/original8/cell_method_summary.csv",
+      "role": "numerical source",
+      "generator": "",
+      "replication_unit": "reconstructed cells, cohorts kept separate; two mice total",
+      "notes": ""
+    },
+    {
+      "figure": "fig6",
+      "panel": "d",
+      "path": "source_data/anatomy_commonmode/v661/cell_method_summary.csv",
+      "role": "numerical source",
+      "generator": "",
+      "replication_unit": "reconstructed cells, cohorts kept separate; two mice total",
+      "notes": ""
+    },
+    {
+      "figure": "fig6",
+      "panel": "d",
+      "path": "source_data/anatomy_commonmode/pinky/cell_method_summary.csv",
+      "role": "numerical source",
+      "generator": "",
+      "replication_unit": "reconstructed cells, cohorts kept separate; two mice total",
+      "notes": ""
+    },
+    {
+      "figure": "fig6",
+      "panel": "b,e",
+      "path": "source_data/credit_first_figures/figure_06_primary_means.csv",
+      "role": "plotted numerical export",
+      "generator": "scripts/credit_first_figures/build_anatomy.py",
+      "replication_unit": "reconstructed cells; see panel-specific cohort",
+      "notes": ""
+    },
+    {
+      "figure": "fig6",
+      "panel": "c",
+      "path": "source_data/credit_first_figures/figure_06_residual_contrasts.csv",
+      "role": "plotted numerical export",
+      "generator": "scripts/credit_first_figures/build_anatomy.py",
+      "replication_unit": "reconstructed cells; see panel-specific cohort",
+      "notes": ""
+    },
+    {
+      "figure": "fig6",
+      "panel": "d",
+      "path": "source_data/credit_first_figures/figure_06_cohort_points.csv",
+      "role": "plotted numerical export",
+      "generator": "scripts/credit_first_figures/build_anatomy.py",
+      "replication_unit": "reconstructed cells; see panel-specific cohort",
+      "notes": ""
+    },
+    {
+      "figure": "fig7",
+      "panel": "a",
+      "path": "scripts/shunt_ancestry_gain/build_figure.py",
+      "role": "analytic schematic source",
+      "generator": "",
+      "replication_unit": "not applicable",
+      "notes": "Exact baseline-weighted ancestry partition; no estimated gains"
+    },
+    {
+      "figure": "fig7",
+      "panel": "a",
+      "path": "scripts/shunt_ancestry_gain/test_partition.py",
+      "role": "analytic identity validation",
+      "generator": "",
+      "replication_unit": "not applicable",
+      "notes": "Exact baseline-weighted ancestry partition; no estimated gains"
+    },
+    {
+      "figure": "fig7",
+      "panel": "b",
+      "path": "source_data/figure4/category_effects.csv",
+      "role": "numerical source",
+      "generator": "",
+      "replication_unit": "reconstructed cell (8); sites nested",
+      "notes": ""
+    },
+    {
+      "figure": "fig7",
+      "panel": "c",
+      "path": "source_data/figure4/focal_localization.csv",
+      "role": "numerical source",
+      "generator": "",
+      "replication_unit": "reconstructed cell (8); sites nested",
+      "notes": ""
+    },
+    {
+      "figure": "fig7",
+      "panel": "d",
+      "path": "source_data/focal_decomposition/cell_shapley.csv",
+      "role": "numerical source",
+      "generator": "",
+      "replication_unit": "reconstructed cell (8)",
+      "notes": ""
+    },
+    {
+      "figure": "fig7",
+      "panel": "e",
+      "path": "source_data/physical_cable_sensitivity/cell_primary_contrasts.csv",
+      "role": "numerical source",
+      "generator": "",
+      "replication_unit": "reconstructed cells (8 original;45 disjoint extension;one mouse)",
+      "notes": ""
+    },
+    {
+      "figure": "fig7",
+      "panel": "e",
+      "path": "source_data/physical_cable_sensitivity/cell_electrotonic_ratios.csv",
+      "role": "numerical source",
+      "generator": "",
+      "replication_unit": "reconstructed cells (8 original;45 disjoint extension;one mouse)",
+      "notes": ""
+    },
+    {
+      "figure": "fig8",
+      "panel": "a",
+      "path": "source_data/review_evidence_reanalysis/functional_native_contrasts.csv",
+      "role": "numerical source",
+      "generator": "",
+      "replication_unit": "postsynaptic target (7); scans nested",
+      "notes": ""
+    },
+    {
+      "figure": "fig8",
+      "panel": "a",
+      "path": "source_data/review_evidence_reanalysis/functional_native_target_effects.csv",
+      "role": "numerical source",
+      "generator": "",
+      "replication_unit": "postsynaptic target (7); scans nested",
+      "notes": ""
+    },
+    {
+      "figure": "fig8",
+      "panel": "b-c",
+      "path": "source_data/figure3/segment_metrics.csv",
+      "role": "realized model support",
+      "generator": "",
+      "replication_unit": "13 scans nested within7 targets; descriptive",
+      "notes": ""
+    },
+    {
+      "figure": "fig8",
+      "panel": "b-c",
+      "path": "source_data/fulltree_boundary/output/dictionary_and_validation_metadata.jsonl",
+      "role": "realized model support",
+      "generator": "",
+      "replication_unit": "13 scans nested within7 targets; descriptive",
+      "notes": ""
+    },
+    {
+      "figure": "fig8",
+      "panel": "b-c",
+      "path": "source_data/credit_first_figures/figure_08_support.csv",
+      "role": "realized model support",
+      "generator": "",
+      "replication_unit": "13 scans nested within7 targets; descriptive",
+      "notes": ""
+    },
+    {
+      "figure": "fig8",
+      "panel": "b-c",
+      "path": "source_data/credit_first_figures/figure_08_actual_support.npz",
+      "role": "realized model support",
+      "generator": "",
+      "replication_unit": "13 scans nested within7 targets; descriptive",
+      "notes": ""
+    },
+    {
+      "figure": "fig8",
+      "panel": "d",
+      "path": "source_data/review_response_baselines/target_metrics.csv",
+      "role": "numerical source",
+      "generator": "",
+      "replication_unit": "postsynaptic target (7); scans/splits nested",
+      "notes": ""
+    },
+    {
+      "figure": "fig8",
+      "panel": "d",
+      "path": "source_data/credit_first_figures/figure_08_prediction_summary.csv",
+      "role": "numerical source",
+      "generator": "",
+      "replication_unit": "postsynaptic target (7); scans/splits nested",
+      "notes": ""
+    },
+    {
+      "figure": "fig8",
+      "panel": "e",
+      "path": "source_data/fulltree_within_span_oracle/cell_metrics.csv",
+      "role": "numerical source",
+      "generator": "",
+      "replication_unit": "postsynaptic target (7); scans/splits nested",
+      "notes": ""
+    },
+    {
+      "figure": "fig8",
+      "panel": "e",
+      "path": "source_data/fulltree_within_span_oracle/condition_summary.csv",
+      "role": "numerical source",
+      "generator": "",
+      "replication_unit": "postsynaptic target (7); scans/splits nested",
+      "notes": ""
+    },
+    {
+      "figure": "figS45",
+      "panel": "a",
+      "path": "scripts/build_main_figure_02.py",
+      "role": "schematic source",
+      "generator": "",
+      "replication_unit": "not applicable",
+      "notes": ""
+    },
+    {
+      "figure": "figS47",
+      "panel": "a",
+      "path": "source_data/focal_selectivity_active_ensemble/condition_summary.csv",
+      "role": "numerical source",
+      "generator": "",
+      "replication_unit": "reconstructed cell (8); channel draws/sites nested",
+      "notes": ""
+    },
+    {
+      "figure": "figS47",
+      "panel": "a",
+      "path": "source_data/focal_selectivity_phase1/condition_summary.csv",
+      "role": "numerical source",
+      "generator": "",
+      "replication_unit": "reconstructed cell (8); channel draws/sites nested",
+      "notes": ""
+    },
+    {
+      "figure": "figS47",
+      "panel": "b",
+      "path": "source_data/focal_selectivity_active_ensemble/paired_contrasts.csv",
+      "role": "numerical source",
+      "generator": "",
+      "replication_unit": "reconstructed cell (8); channel draws/sites nested",
+      "notes": ""
+    },
+    {
+      "figure": "figS47",
+      "panel": "b",
+      "path": "source_data/focal_selectivity_active_ensemble/cell_condition_metrics.csv",
+      "role": "numerical source",
+      "generator": "",
+      "replication_unit": "reconstructed cell (8); channel draws/sites nested",
+      "notes": ""
+    },
+    {
+      "figure": "figS46",
+      "panel": "a-b",
+      "path": "scripts/build_utility_supplement.py",
+      "role": "schematic source",
+      "generator": "",
+      "replication_unit": "not applicable",
+      "notes": "Fixed-operator and hierarchy schematics, no outcome panel"
+    },
+    {
+      "figure": "figS46",
+      "panel": "a",
+      "path": "code/theory/credit_phase.py",
+      "role": "analytic source",
+      "generator": "",
+      "replication_unit": "not applicable",
+      "notes": ""
+    },
+    {
+      "figure": "figS46",
+      "panel": "c",
+      "path": "source_data/credit_phase_theory/spectral_phase_seed.csv",
+      "role": "numerical source",
+      "generator": "",
+      "replication_unit": "independent simulation seed",
+      "notes": ""
+    },
+    {
+      "figure": "figS46",
+      "panel": "c",
+      "path": "source_data/credit_phase_theory/spectral_phase_summary.csv",
+      "role": "numerical source",
+      "generator": "",
+      "replication_unit": "independent simulation seed",
+      "notes": ""
+    },
+    {
+      "figure": "figS46",
+      "panel": "d",
+      "path": "source_data/credit_phase_theory/depth_training_seed.csv",
+      "role": "numerical source",
+      "generator": "",
+      "replication_unit": "independent simulation seed",
+      "notes": ""
+    },
+    {
+      "figure": "figS46",
+      "panel": "d",
+      "path": "source_data/credit_phase_theory/depth_training_summary.csv",
+      "role": "numerical source",
+      "generator": "",
+      "replication_unit": "independent simulation seed",
+      "notes": ""
+    },
+    {
+      "figure": "figS46",
+      "panel": "e",
+      "path": "source_data/credit_phase_theory/projection_phase_seed.csv",
+      "role": "numerical source",
+      "generator": "",
+      "replication_unit": "independent simulation seed",
+      "notes": ""
+    },
+    {
+      "figure": "figS46",
+      "panel": "e",
+      "path": "source_data/credit_phase_theory/projection_phase_summary.csv",
+      "role": "numerical source",
+      "generator": "",
+      "replication_unit": "independent simulation seed",
+      "notes": ""
+    },
+    {
+      "figure": "figS46",
+      "panel": "f",
+      "path": "source_data/credit_phase_theory/reliability_phase_seed.csv",
+      "role": "numerical source",
+      "generator": "",
+      "replication_unit": "independent simulation seed",
+      "notes": ""
+    },
+    {
+      "figure": "figS46",
+      "panel": "f",
+      "path": "source_data/credit_phase_theory/reliability_phase_summary.csv",
+      "role": "numerical source",
+      "generator": "",
+      "replication_unit": "independent simulation seed",
+      "notes": ""
+    },
+    {
+      "figure": "figS46",
+      "panel": "g",
+      "path": "source_data/review_evidence_reanalysis/moment_scores.csv",
+      "role": "numerical source",
+      "generator": "",
+      "replication_unit": "paired training seed (20); route families repeated",
+      "notes": "Retrospective actual-update utility, not prospective selection"
+    }
+  ],
+  "supporting_groups": [
+    {
+      "path": "source_data/credit_rule_bridge",
+      "figure": "methods",
+      "panel": "supporting evidence and protocols",
+      "replication_unit": "paired fresh seed block (20); development separate"
+    },
+    {
+      "path": "source_data/credit_resolution_bridge",
+      "figure": "methods",
+      "panel": "supporting evidence and protocols",
+      "replication_unit": "paired seed block; saved-state diagnostics, not extra independent observations"
+    },
+    {
+      "path": "source_data/anatomy_commonmode",
+      "figure": "methods",
+      "panel": "supporting evidence and protocols",
+      "replication_unit": "reconstructed cell; original8/v661 same mouse, Pinky second mouse"
+    },
+    {
+      "path": "source_data/shunt_ancestry_gain",
+      "figure": "methods",
+      "panel": "supporting evidence and protocols",
+      "replication_unit": "analytic identity and numerical checks"
+    },
+    {
+      "path": "source_data/physical_depth_budget",
+      "figure": "methods",
+      "panel": "supporting evidence and protocols",
+      "replication_unit": "paired training seed; original and extension kept distinct",
+      "exclude_subdirectories": [
+        "extension_runs",
+        "runs",
+        "benchmark",
+        "failed_attempts"
+      ],
+      "excluded_extensions": [
+        ".pt"
+      ]
+    },
+    {
+      "path": "source_data/credit_first_figures",
+      "figure": "methods",
+      "panel": "supporting evidence and protocols",
+      "replication_unit": "panel-specific; no new independent observations"
+    }
+  ],
+  "excluded_extensions": [
+    ".png",
+    ".log",
+    ".out",
+    ".err",
+    ".pyc"
+  ],
+  "excluded_path_components": [
+    "__pycache__",
+    "logs"
+  ],
+  "scope": "Explicit panel lineage only; other completed new outputs are Methods support. No inherited main-only association is silently renumbered.",
+  "original_manifest_sha256": "058bc8a0e482324ee0ebb0a47571e3d688c7eb1ad3a88ef434cc25c350ed49cf",
+  "allowed_document_names": [
+    "README.md",
+    "REPORT.md",
+    "PROTOCOL.md"
+  ],
+  "source_hash_manifests": [
+    {
+      "path": "source_data/credit_first_figures/figure_01_sources.json"
+    },
+    {
+      "path": "source_data/credit_first_figures/figure_03_sources.json"
+    },
+    {
+      "path": "source_data/credit_first_figures/figure_06_sources.json"
+    },
+    {
+      "path": "source_data/credit_first_figures/figure_08_sources.json"
+    },
+    {
+      "path": "source_data/credit_rule_bridge/figures/figure_provenance.json",
+      "builder": "scripts/credit_rule_bridge/build_figure.py"
+    },
+    {
+      "path": "source_data/shunt_ancestry_gain/figures/figure_provenance.json"
+    }
+  ]
+}

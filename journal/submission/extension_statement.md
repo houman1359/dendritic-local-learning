@@ -1,53 +1,16 @@
-# Related-work and overlap statement
+# Related-manuscript disclosure and current status
 
-## Works disclosed
+The current standalone Article is *Dendritic morphology as a dictionary for local credit assignment*, intended for submission to *Nature Communications*. It supplies its own definitions, theory, experiments and Methods.
 
-- *Shunting inhibition and dendritic branching shape local credit assignment*,
-  arXiv:2607.03556, submitted to NeurIPS 2026.
-- *When branch-local shunting helps: a gain-load-alignment principle for
-  dendritic E/I networks*, arXiv:2607.24990.
-- Current Article: *When dendritic structure helps local credit assignment*.
+The project has the following related public records:
 
-The current Article is the canonical, standalone presentation of the local
-credit-assignment project. It assumes no earlier paper and does not rely on a
-conference publication for definitions, derivations, experiments or methods.
-The conference-era manuscript is treated as a disclosed prior version, not as
-Part I of a two-paper scientific sequence. Its status will be updated on the
-date of submission and the editor will receive the related manuscripts.
+- *Shunting inhibition and dendritic branching shape local credit assignment*, arXiv:2607.03556, previously submitted to NeurIPS 2026.
+- *When branch-local shunting helps: a gain-load-alignment principle for dendritic E/I networks*, arXiv:2607.24990, addressing related forward-computation questions.
 
-## Material integrated into the standalone Article
+As reported by the author on 5 September 2026, the NeurIPS submission is expected not to be accepted but has not been officially rejected. The author intends the Nature Communications Article as the sole publication from this project. The repository therefore records a pending official conference decision; it does not assert rejection, withdrawal, absence of concurrent consideration or confirmed compliance with journal exclusivity rules.
 
-The Article retains the complete load-bearing foundation: the conductance-tree
-equations; exact eligibility-by-transport gradient factorization; compartment
-error recursion; three-factor local rule; exact-gradient validation; and the
-regular-tree scalar, neuron-indexed and exact-transport learning comparisons.
-This material is required for the Article to be scientifically self-contained.
+Before journal submission, the authors should update the exact conference status, provide related manuscripts if requested, and confirm the applicable prior-publication, text/figure-reuse and exclusive-consideration requirements. Prior public dissemination remains disclosed regardless of the conference outcome.
 
-The integrated Article adds and unifies:
+The Article incorporates the conductance-tree equations, exact eligibility/transport factorization, LocalCA rules and regular-tree controls from the earlier credit preprint, which is cited in the main text and Supplementary Information. Supplementary Figures S1–S3 retain the corresponding foundations and lineage records. This Article develops the morphology-constrained route dictionary and tests task-dependent credit resolution through image classification, context conflict, hierarchical distractors and higher-order cross-branch interactions. Fresh matched learning and checkpoint analyses distinguish input-sensitivity spectra from learned credit spectra. Anatomical common-mode controls and a passive ancestry-partition identity connect the framework to reconstructed geometry and conductance-dependent gains.
 
-- an operator signal--noise bound that predicts when restricted credit routes
-  help, including alignment, depth and reliability phase boundaries;
-- prospective identity and ownership controls, a Fashion-MNIST replication,
-  a continuous 2,400-fit branch-conflict path-demand test, a minimal two-stream
-  predecessor and a 2,700-fit subtree-address factorial;
-- task-aligned physical-depth experiments with grouped-star, literal
-  grouped-point, flexible point-network, alignment-dose and second-hierarchy
-  controls;
-- route-capacity and capture-per-wiring analyses on reconstructed MICrONS
-  arbors, plus a disjoint same-mouse sensitivity cohort;
-- focal passive and active-conductance tests that identify the electrotonic
-  regime in which shunting localizes modeled credit;
-- measured-response and complete-tree null results, a controlled alignment
-  rescue, and an external six-animal signed-coordinate analysis.
-
-The resulting scientific claim is conditional: dendritic topology supplies
-sparse addresses and conductance regulates route gain, but these resources aid
-learning only when their span and physical ordering align with task credit.
-Point models supplied with the same explicit groups or gates reproduce the
-corresponding computations. The Article therefore reports both positive
-existence tests and the experimentally mapped failure regimes.
-
-The gain--load preprint studies forward population readout. The present Article
-studies backward credit transport, local synaptic gradients, route-restricted
-learning and focal perturbations. Shared public anatomy and related authorship
-are disclosed to avoid ambiguity.
+The failed prospective initialization selector remains explicit. The representability theorem, noisy-query structure-estimation pipeline, finite-horizon prediction, Boolean controls and other supporting experiments remain within this same Article and its Supplementary Information. They do not establish a general task-rank-to-optimal-morphology rule. Measured-response and electrical-state boundaries are retained alongside the positive results.

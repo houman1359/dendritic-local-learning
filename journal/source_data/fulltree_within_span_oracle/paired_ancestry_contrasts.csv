@@ -1,0 +1,7 @@
+mode,control,n_targets,ancestry_minus_control_mean,ci95_low,ci95_high,positive_targets
+frozen_baseline,site-shuffled routes,7,-0.207025522215,-0.371751961162,-0.0426431179319,2
+frozen_baseline,random anatomical routes,7,-0.126245176905,-0.192079288911,-0.0272895351706,1
+trialwise_field_projection,site-shuffled routes,7,-0.205821085307,-0.37056195224,-0.0407021176115,2
+trialwise_field_projection,random anatomical routes,7,-0.124925019714,-0.189312619895,-0.0249931345478,1
+trialwise_update_oracle,site-shuffled routes,7,-0.224120375245,-0.392650579722,-0.0605052657776,1
+trialwise_update_oracle,random anatomical routes,7,-0.141133014465,-0.212506424183,-0.0388465751019,1

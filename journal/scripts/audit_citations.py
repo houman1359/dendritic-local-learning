@@ -8,6 +8,8 @@ import re
 from pathlib import Path
 
 
+from tex_sources import expanded_tex
+
 ROOT = Path(__file__).resolve().parents[1]
 SOURCES = (ROOT / "main.tex", ROOT / "supplementary" / "supplementary.tex")
 BIB = ROOT / "references.bib"
@@ -29,7 +31,7 @@ def main() -> int:
     bib_keys = set(re.findall(r"(?m)^@\w+\s*\{\s*([^,\s]+)\s*,", BIB.read_text(encoding="utf-8")))
     source_keys: dict[str, set[str]] = {}
     for source in SOURCES:
-        source_keys[str(source.relative_to(ROOT))] = citation_keys(source.read_text(encoding="utf-8"))
+        source_keys[str(source.relative_to(ROOT))] = citation_keys(expanded_tex(source))
     cited = set().union(*source_keys.values())
     undefined = sorted(cited - bib_keys)
     unused = sorted(bib_keys - cited)

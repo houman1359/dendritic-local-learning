@@ -1,0 +1,413 @@
+{
+  "analysis": "focal shunting perturbation of exact credit on real MICrONS morphologies",
+  "doses": [
+    0.25,
+    0.5,
+    1.0,
+    2.0
+  ],
+  "errors": [],
+  "interpretation_level": "mechanistic passive-network test on measured anatomy",
+  "n_cells": 8,
+  "n_focal_sites": 101,
+  "parameters": {
+    "e_scale": 0.1,
+    "excitatory_reversal": 1.0,
+    "i_scale": 0.1,
+    "inhibitory_reversal": -0.2,
+    "max_focal_sites_per_cell": 16,
+    "minimum_descendant_and_comparison_sites": 3,
+    "seed": 20260721
+  },
+  "primary_contrast": {
+    "cell_bootstrap_ci95": [
+      0.06260210804938324,
+      0.09661500706999382
+    ],
+    "cells_positive": 8,
+    "depth_shuffled_relation_control": {
+      "cell_bootstrap_ci95": [
+        0.054542458657311915,
+        0.0923396872780583
+      ],
+      "cells_positive": 8,
+      "mean_shunt_depth_shuffled_localization": 0.02547778208460419,
+      "mean_true_minus_depth_shuffled": 0.07516338464655671,
+      "procedure": "200 relation templates sampled from other focal sites, stratified by focal-site topological-depth quartile when another site was available; otherwise sampled from another site in the same cell",
+      "wilcoxon_two_sided_p": 0.0078125
+    },
+    "dose": 1.0,
+    "mean_matched_additive_localization_index": 0.019251426170739192,
+    "mean_shunt_localization_index": 0.10064116673116091,
+    "mean_shunt_minus_additive": 0.08138974056042171,
+    "n_cells": 8,
+    "n_focal_sites": 101,
+    "wilcoxon_two_sided_p": 0.0078125
+  },
+  "status": "completed",
+  "validation": {
+    "cell_checks": [
+      {
+        "finite_difference_checks": [
+          {
+            "analytic": 0.003329446226442615,
+            "finite_difference": 0.0033294456081023327,
+            "relative_error": 1.8571865713817426e-07,
+            "segment_id": 5894
+          },
+          {
+            "analytic": 0.013381331650407117,
+            "finite_difference": 0.013381327046424474,
+            "relative_error": 3.440601252045127e-07,
+            "segment_id": 7968
+          },
+          {
+            "analytic": 0.002199256626193468,
+            "finite_difference": 0.0021992558885131075,
+            "relative_error": 3.354225930648475e-07,
+            "segment_id": 7203
+          }
+        ],
+        "matrix_minimum_eigenvalue": 0.5389268438633972,
+        "matrix_symmetry_error": 0.0,
+        "maximum_soma_clamp_error": 0.0,
+        "n_e_segments": 128,
+        "n_eligible_focal_sites": 54,
+        "n_segments": 146,
+        "n_selected_focal_sites": 16,
+        "root_id": 864691135060651419,
+        "selected_focal_segments": [
+          5224,
+          5233,
+          5239,
+          5247,
+          5272,
+          5275,
+          5527,
+          5906,
+          6037,
+          6446,
+          6503,
+          7166,
+          7305,
+          7362,
+          7803,
+          8390
+        ]
+      },
+      {
+        "finite_difference_checks": [
+          {
+            "analytic": 0.062271582115729016,
+            "finite_difference": 0.062271574008399,
+            "relative_error": 1.3019309515203527e-07,
+            "segment_id": 4724
+          },
+          {
+            "analytic": 0.021158164153078803,
+            "finite_difference": 0.021158153451494854,
+            "relative_error": 5.057898157627305e-07,
+            "segment_id": 5625
+          },
+          {
+            "analytic": 0.026296528649479862,
+            "finite_difference": 0.026296517519064366,
+            "relative_error": 4.23265581700462e-07,
+            "segment_id": 5542
+          }
+        ],
+        "matrix_minimum_eigenvalue": 0.9423930588195858,
+        "matrix_symmetry_error": 0.0,
+        "maximum_soma_clamp_error": 0.0,
+        "n_e_segments": 21,
+        "n_eligible_focal_sites": 4,
+        "n_segments": 22,
+        "n_selected_focal_sites": 4,
+        "root_id": 864691135196576298,
+        "selected_focal_segments": [
+          5647,
+          4720,
+          4724,
+          4737
+        ]
+      },
+      {
+        "finite_difference_checks": [
+          {
+            "analytic": 0.012201248762695146,
+            "finite_difference": 0.01220124323797478,
+            "relative_error": 4.5279958423969005e-07,
+            "segment_id": 3577
+          },
+          {
+            "analytic": 0.000530242634839731,
+            "finite_difference": 0.0005302422945163698,
+            "relative_error": 6.418257205652543e-07,
+            "segment_id": 2427
+          },
+          {
+            "analytic": 0.002731186883728711,
+            "finite_difference": 0.0027311859440715125,
+            "relative_error": 3.440471994074484e-07,
+            "segment_id": 3031
+          }
+        ],
+        "matrix_minimum_eigenvalue": 0.6158174984563466,
+        "matrix_symmetry_error": 0.0,
+        "maximum_soma_clamp_error": 0.0,
+        "n_e_segments": 95,
+        "n_eligible_focal_sites": 33,
+        "n_segments": 104,
+        "n_selected_focal_sites": 16,
+        "root_id": 864691135277186789,
+        "selected_focal_segments": [
+          1502,
+          1507,
+          1533,
+          1558,
+          1573,
+          1584,
+          2152,
+          2160,
+          2489,
+          2692,
+          2869,
+          2986,
+          3172,
+          3520,
+          3960,
+          3974
+        ]
+      },
+      {
+        "finite_difference_checks": [
+          {
+            "analytic": 0.05205698089352102,
+            "finite_difference": 0.05205697717336477,
+            "relative_error": 7.146315790318703e-08,
+            "segment_id": 7308
+          },
+          {
+            "analytic": 0.04497524446068515,
+            "finite_difference": 0.044975234980704215,
+            "relative_error": 2.107821990937732e-07,
+            "segment_id": 7255
+          },
+          {
+            "analytic": 0.023722389598421552,
+            "finite_difference": 0.023722373732049107,
+            "relative_error": 6.68835337149425e-07,
+            "segment_id": 7694
+          }
+        ],
+        "matrix_minimum_eigenvalue": 0.8404739296352282,
+        "matrix_symmetry_error": 0.0,
+        "maximum_soma_clamp_error": 0.0,
+        "n_e_segments": 34,
+        "n_eligible_focal_sites": 10,
+        "n_segments": 40,
+        "n_selected_focal_sites": 10,
+        "root_id": 864691135324623260,
+        "selected_focal_segments": [
+          6979,
+          5647,
+          6686,
+          7255,
+          6880,
+          6518,
+          5652,
+          5677,
+          6526,
+          5785
+        ]
+      },
+      {
+        "finite_difference_checks": [
+          {
+            "analytic": 0.029950029024548408,
+            "finite_difference": 0.029950027347069863,
+            "relative_error": 5.600924605395893e-08,
+            "segment_id": 4701
+          },
+          {
+            "analytic": 0.0012339593863379661,
+            "finite_difference": 0.0012339587129872598,
+            "relative_error": 5.456830377167216e-07,
+            "segment_id": 4674
+          },
+          {
+            "analytic": 0.004204280907821125,
+            "finite_difference": 0.004204277814778834,
+            "relative_error": 7.356887798071328e-07,
+            "segment_id": 5188
+          }
+        ],
+        "matrix_minimum_eigenvalue": 0.6126379341276403,
+        "matrix_symmetry_error": 0.0,
+        "maximum_soma_clamp_error": 0.0,
+        "n_e_segments": 70,
+        "n_eligible_focal_sites": 24,
+        "n_segments": 78,
+        "n_selected_focal_sites": 15,
+        "root_id": 864691135409937097,
+        "selected_focal_segments": [
+          4216,
+          4220,
+          4227,
+          4239,
+          4250,
+          4285,
+          4298,
+          4396,
+          4465,
+          4637,
+          4828,
+          4996,
+          5179,
+          5814,
+          5917
+        ]
+      },
+      {
+        "finite_difference_checks": [
+          {
+            "analytic": 0.008648617206864629,
+            "finite_difference": 0.008648611826700403,
+            "relative_error": 6.22083750142203e-07,
+            "segment_id": 970
+          },
+          {
+            "analytic": 0.007204012057168353,
+            "finite_difference": 0.007204004948135889,
+            "relative_error": 9.86815736423481e-07,
+            "segment_id": 905
+          },
+          {
+            "analytic": 0.007683491534031714,
+            "finite_difference": 0.007683487179832582,
+            "relative_error": 5.666953769876348e-07,
+            "segment_id": 1078
+          }
+        ],
+        "matrix_minimum_eigenvalue": 0.765479717880708,
+        "matrix_symmetry_error": 0.0,
+        "maximum_soma_clamp_error": 0.0,
+        "n_e_segments": 32,
+        "n_eligible_focal_sites": 8,
+        "n_segments": 34,
+        "n_selected_focal_sites": 8,
+        "root_id": 864691135739661169,
+        "selected_focal_segments": [
+          729,
+          920,
+          433,
+          15,
+          878,
+          18,
+          31,
+          199
+        ]
+      },
+      {
+        "finite_difference_checks": [
+          {
+            "analytic": 0.000476427758170246,
+            "finite_difference": 0.00047642756406673925,
+            "relative_error": 4.0741435281784793e-07,
+            "segment_id": 8325
+          },
+          {
+            "analytic": 0.00026677279689108136,
+            "finite_difference": 0.00026677260400731484,
+            "relative_error": 7.230263683913325e-07,
+            "segment_id": 8517
+          },
+          {
+            "analytic": 0.005401551264989179,
+            "finite_difference": 0.0054015492079173555,
+            "relative_error": 3.8082982512397365e-07,
+            "segment_id": 8788
+          }
+        ],
+        "matrix_minimum_eigenvalue": 0.27617836715871097,
+        "matrix_symmetry_error": 0.0,
+        "maximum_soma_clamp_error": 0.0,
+        "n_e_segments": 116,
+        "n_eligible_focal_sites": 49,
+        "n_segments": 128,
+        "n_selected_focal_sites": 16,
+        "root_id": 864691135810666525,
+        "selected_focal_segments": [
+          7755,
+          7772,
+          7777,
+          7796,
+          7833,
+          8108,
+          8269,
+          8471,
+          9024,
+          9119,
+          9807,
+          9818,
+          9822,
+          9937,
+          10007,
+          10400
+        ]
+      },
+      {
+        "finite_difference_checks": [
+          {
+            "analytic": 0.002459799978476344,
+            "finite_difference": 0.0024597992531738555,
+            "relative_error": 2.9486238514851664e-07,
+            "segment_id": 2545
+          },
+          {
+            "analytic": 0.004355787977032033,
+            "finite_difference": 0.00435578684232496,
+            "relative_error": 2.6050557994963484e-07,
+            "segment_id": 2390
+          },
+          {
+            "analytic": 0.0075175153123676584,
+            "finite_difference": 0.007517510391963356,
+            "relative_error": 6.545253449174345e-07,
+            "segment_id": 3728
+          }
+        ],
+        "matrix_minimum_eigenvalue": 0.5198132107709446,
+        "matrix_symmetry_error": 0.0,
+        "maximum_soma_clamp_error": 0.0,
+        "n_e_segments": 55,
+        "n_eligible_focal_sites": 16,
+        "n_segments": 64,
+        "n_selected_focal_sites": 16,
+        "root_id": 864691136043380566,
+        "selected_focal_segments": [
+          2488,
+          2245,
+          3165,
+          3235,
+          3638,
+          3914,
+          2622,
+          2958,
+          2254,
+          3589,
+          2266,
+          2267,
+          2281,
+          2382,
+          2390,
+          2398
+        ]
+      }
+    ],
+    "maximum_adjoint_finite_difference_relative_error": 9.86815736423481e-07,
+    "maximum_matrix_symmetry_error": 0.0,
+    "maximum_soma_clamp_error": 0.0,
+    "minimum_matrix_eigenvalue": 0.27617836715871097
+  }
+}

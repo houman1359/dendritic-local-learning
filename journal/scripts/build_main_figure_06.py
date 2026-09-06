@@ -37,6 +37,7 @@ import sys
 from pathlib import Path
 
 import numpy as np
+from journal_style import style_direct_color_labels
 import pandas as pd
 from matplotlib.colors import Normalize
 from matplotlib.patches import Circle, FancyBboxPatch
@@ -69,10 +70,10 @@ SOURCE = ROOT / "source_data"
 OUTPUT = ROOT / "figures" / "components" / "main_figure_06_native.pdf"
 
 # ── canonical geometry and palette ──────────────────────────────────────
-CANVAS_H_PT = 446.0
-ROW_H_PT = (105.0, 92.0, 92.0)
+CANVAS_H_PT = 508.0
+ROW_H_PT = (105.0, 92.0, 92.0, 65.0)
 HGUTTER = 38.0
-VGUTTER = 48.0
+VGUTTER = 31.0
 MARGINS = Margins(left=48.0, right=35.0, top=24.0, bottom=28.0)
 
 INK = COLORS["ink"]
@@ -370,7 +371,7 @@ def _soma(ax, x, y):
 
 def panel_architectures(ax):
     w, h = point_frame(ax)
-    centres = (0.16 * w, 0.50 * w, 0.84 * w)
+    centres = (0.12 * w, 0.50 * w, 0.88 * w)
     y0 = 0.24 * h
     module_y = 0.66 * h
     bracket_y = 0.87 * h
@@ -434,7 +435,7 @@ def panel_architectures(ax):
                     mec=C_POINT, mew=LW_EDGE, ls="none", zorder=4)
     ax.text(x, 0.14 * h, "point MLP", ha="center", va="center",
             fontsize=7.2, color=C_POINT)
-    ax.text(x, 0.045 * h, "flexible\nceiling", ha="center",
+    ax.text(x, 0.045 * h, "matched params\nceiling", ha="center",
             va="center", linespacing=1.05, fontsize=PT_SMALL, color=MUTE)
 
     ax.plot([centres[0] - 20.0, centres[1] + 20.0],
@@ -444,7 +445,7 @@ def panel_architectures(ax):
         ax.plot([bx, bx], [bracket_y, bracket_y - 3.0],
                 color=MUTE, lw=LW_HAIR)
     ax.text((centres[0] + centres[1]) / 2, bracket_y + 3.0,
-            "identical contacts and trainable resources", ha="center",
+            "same modules and contacts", ha="center",
             va="bottom", fontsize=PT_SMALL, color=MUTE)
 
 
@@ -635,6 +636,41 @@ def panel_alignment(ax, effects, credit, *, left):
         ax.tick_params(axis="y", labelleft=False)
 
 
+def panel_optimizer_dependence(ax):
+    """Display the existing paired coordinate contrasts for each optimizer."""
+    directory = SOURCE / "point_dendrite_credit_controls"
+    summary = pd.read_csv(directory / "paired_contrasts.csv")
+    runs = pd.read_csv(directory / "combined_seed_outcomes.csv")
+    runs = runs[runs.regime.eq("aligned") & runs.architecture.eq("serial_tree")
+                & runs.depth.eq(3)]
+    wide = runs.pivot(index="seed", columns="credit", values="test_accuracy")
+    specs = (
+        ("full_bp_minus_soma_broadcast__aligned__d3", "full_bp",
+         "soma_broadcast_bp", "BP optimizer: BP − soma-broadcast autograd", C_SERIAL_BP),
+        ("local_path_minus_local_shared__aligned__d3", "local_path",
+         "local_shared", "LocalCA optimizer: exact path − shared soma", C_PATH),
+    )
+    for index, (name, left, right, label, color) in enumerate(specs):
+        row = summary[summary.contrast.eq(name)].iloc[0]
+        y = 1 - index
+        values = 100 * (wide[left] - wide[right]).to_numpy(float)
+        ax.scatter(values, y + np.linspace(-0.10, 0.10, len(values)),
+                   color=color, s=10, alpha=0.45, edgecolors="none", zorder=2)
+        mean = 100 * row.mean_difference
+        ax.errorbar(mean, y,
+                    xerr=[[mean - 100 * row.ci95_low],
+                          [100 * row.ci95_high - mean]],
+                    fmt="D", color=color, mfc="white", ms=MARKER_MS,
+                    lw=LW_ERR, capsize=ERR_CAPSIZE, zorder=3)
+        ax.text(0.02, y + 0.25, label, transform=ax.get_yaxis_transform(),
+                color=color, fontsize=PT_SMALL, ha="left", va="bottom")
+    ax.axvline(0, color=MUTE, ls="--", lw=LW_REF)
+    ax.set_yticks([])
+    ax.set_xlim(-0.8, 13.0)
+    ax.set_ylim(-0.35, 1.65)
+    ax.set_xlabel("paired gain from resolved credit at D3 (pp)")
+
+
 def build() -> list[str]:
     depth_summary = pd.read_csv(
         SOURCE / "nonlinear_physical_depth_confirmatory" / "condition_summary.csv"
@@ -656,7 +692,7 @@ def build() -> list[str]:
     )
 
     canvas = NativeCanvas(
-        CANVAS_H_PT / 72.0, 3, row_weights=list(ROW_H_PT),
+        CANVAS_H_PT / 72.0, 4, row_weights=list(ROW_H_PT),
         hgutter_pt=HGUTTER, vgutter_pt=VGUTTER, margins=MARGINS,
         letters=False,
     )
@@ -675,6 +711,8 @@ def build() -> list[str]:
                         title="Alignment dose, BP")
     ax_g = canvas.panel("G", 2, 8, 4, grid="y", sharey=ax_f,
                         title="Alignment dose, exact-path LocalCA")
+    ax_h = canvas.panel("H", 3, 0, 12,
+                        title="Credit-resolution benefit depends on optimization")
 
     panel_task_families(ax_a)
     panel_architectures(ax_b)
@@ -693,6 +731,7 @@ def build() -> list[str]:
 
     panel_alignment(ax_f, task_effects, "bp", left=True)
     panel_alignment(ax_g, task_effects, "local3f", left=False)
+    panel_optimizer_dependence(ax_h)
 
     style_panel(ax_c, grid="y")
     style_panel(ax_f, grid="y")
@@ -701,10 +740,12 @@ def build() -> list[str]:
     for name, dx in (
         ("A", 30.0), ("B", 14.0), ("C", 34.0), ("D", 30.0),
         ("E", 32.0), ("F", 34.0), ("G", 14.0),
+        ("H", 32.0),
     ):
         canvas.add_letter(name, canvas.axes[name], dx_pt=dx)
 
     color_rail(canvas, image, ax_d)
+    style_direct_color_labels(canvas.fig)
     return canvas.save(OUTPUT, name="main_figure_06_native")
 
 

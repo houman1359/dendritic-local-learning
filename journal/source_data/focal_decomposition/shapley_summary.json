@@ -1,0 +1,171 @@
+{
+  "analysis": "two-factor Shapley attribution of focal gradient localization",
+  "bootstrap": {
+    "draws": 20000,
+    "interval": "2.5th and 97.5th percentiles",
+    "method": "hierarchical percentile bootstrap: resample cells with replacement, then focal sites within each sampled cell occurrence; average sites within cell and weight cells equally",
+    "sampling_unit": "cell",
+    "seed": 20260731
+  },
+  "estimands": {
+    "full_shunt_minus_matched_additive": {
+      "inference": {
+        "adjoint_shapley": {
+          "cells_negative": 0,
+          "cells_positive": 8,
+          "hierarchical_bootstrap_ci95": [
+            0.06299072989350883,
+            0.11088884293632129
+          ],
+          "wilcoxon_two_sided_p": 0.0078125
+        },
+        "adjoint_share_of_total": {
+          "hierarchical_bootstrap_ci95": [
+            1.133205549640155,
+            1.465484543231941
+          ]
+        },
+        "driving_force_shapley": {
+          "cells_negative": 8,
+          "cells_positive": 0,
+          "hierarchical_bootstrap_ci95": [
+            -0.02930532833194859,
+            -0.009140486111986578
+          ],
+          "wilcoxon_two_sided_p": 0.0078125
+        },
+        "driving_force_share_of_total": {
+          "hierarchical_bootstrap_ci95": [
+            -0.46548454323194166,
+            -0.1332055496401551
+          ]
+        },
+        "factor_interaction": {
+          "cells_negative": 8,
+          "cells_positive": 0,
+          "hierarchical_bootstrap_ci95": [
+            -0.02297327847999434,
+            -0.010809928226172636
+          ],
+          "wilcoxon_two_sided_p": 0.0078125
+        },
+        "total_contrast": {
+          "cells_negative": 0,
+          "cells_positive": 8,
+          "hierarchical_bootstrap_ci95": [
+            0.04941668441562304,
+            0.0913193978003463
+          ],
+          "wilcoxon_two_sided_p": 0.0078125
+        }
+      },
+      "n_cells": 8,
+      "n_focal_sites": 101,
+      "observed_equal_cell_mean": {
+        "adjoint_shapley": 0.08683554196363295,
+        "adjoint_share_of_total": 1.250840563369212,
+        "driving_force_shapley": -0.01741379109737038,
+        "driving_force_share_of_total": -0.2508405633692119,
+        "factor_interaction": -0.016430317373676572,
+        "total_contrast": 0.06942175086626258
+      },
+      "validation": {
+        "maximum_absolute_bootstrap_reconciliation_residual": 5.551115123125783e-17,
+        "maximum_absolute_cell_reconciliation_residual": 5.898059818321144e-18,
+        "maximum_absolute_site_reconciliation_residual": 5.551115123125783e-17
+      }
+    },
+    "full_shunt_minus_unperturbed": {
+      "inference": {
+        "adjoint_shapley": {
+          "cells_negative": 0,
+          "cells_positive": 8,
+          "hierarchical_bootstrap_ci95": [
+            0.07449376134472468,
+            0.13552045994420428
+          ],
+          "wilcoxon_two_sided_p": 0.0078125
+        },
+        "adjoint_share_of_total": {
+          "hierarchical_bootstrap_ci95": [
+            0.9983294725747596,
+            1.00004674569598
+          ]
+        },
+        "driving_force_shapley": {
+          "cells_negative": 2,
+          "cells_positive": 6,
+          "hierarchical_bootstrap_ci95": [
+            -5.1302248389384525e-06,
+            0.00017406214451706872
+          ],
+          "wilcoxon_two_sided_p": 0.1484375
+        },
+        "driving_force_share_of_total": {
+          "hierarchical_bootstrap_ci95": [
+            -4.674569597986746e-05,
+            0.0016705274252404349
+          ]
+        },
+        "factor_interaction": {
+          "cells_negative": 8,
+          "cells_positive": 0,
+          "hierarchical_bootstrap_ci95": [
+            -0.0807302577705464,
+            -0.029547324166152862
+          ],
+          "wilcoxon_two_sided_p": 0.0078125
+        },
+        "total_contrast": {
+          "cells_negative": 0,
+          "cells_positive": 8,
+          "hierarchical_bootstrap_ci95": [
+            0.07455067672838314,
+            0.1355861665052756
+          ],
+          "wilcoxon_two_sided_p": 0.0078125
+        }
+      },
+      "n_cells": 8,
+      "n_focal_sites": 101,
+      "observed_equal_cell_mean": {
+        "adjoint_shapley": 0.10429234234441465,
+        "adjoint_share_of_total": 0.9995877784208295,
+        "driving_force_shapley": 4.300928341131313e-05,
+        "driving_force_share_of_total": 0.00041222157917032086,
+        "factor_interaction": -0.05134391813523996,
+        "total_contrast": 0.10433535162782598
+      },
+      "validation": {
+        "maximum_absolute_bootstrap_reconciliation_residual": 5.551115123125783e-17,
+        "maximum_absolute_cell_reconciliation_residual": 6.938893903907228e-18,
+        "maximum_absolute_site_reconciliation_residual": 5.551115123125783e-17
+      }
+    }
+  },
+  "input": "source_data/focal_decomposition/site_decomposition.csv",
+  "input_sha256": "bc67e97ab965c94e86c5f2dd252e914a112bc2bff7c39f89439becaeca6d1573",
+  "interpretive_boundary": "The matched-additive reference gives an exact Shapley allocation of the observed full-shunt-versus-additive localization contrast, but it is not a literal no-factor factorial corner. The unperturbed-reference result is the conventional factorial sensitivity. Both operate on the nonlinear localization-index payoff. Adjoint-only and driving-force-only states are algebraic substitutions in the passive model, not independent biological interventions or evidence of in vivo plasticity.",
+  "outputs": {
+    "bootstrap": "source_data/focal_decomposition/shapley_bootstrap_draws.csv.gz",
+    "cell": "source_data/focal_decomposition/cell_shapley.csv",
+    "site": "source_data/focal_decomposition/site_shapley.csv",
+    "summary": "source_data/focal_decomposition/shapley_summary.json"
+  },
+  "payoff": "localization_index",
+  "primary_estimand": "full_shunt_minus_matched_additive",
+  "sensitivity_estimand": "full_shunt_minus_unperturbed",
+  "shapley_definition": {
+    "adjoint": "0.5 * [(v10 - v00) + (v11 - v01)]",
+    "driving_force": "0.5 * [(v01 - v00) + (v11 - v10)]",
+    "identity": "adjoint + driving_force = v11 - v00",
+    "interaction": "v11 - v10 - v01 + v00",
+    "states": {
+      "v00_primary": "matched additive localization",
+      "v00_sensitivity": "unperturbed localization, exactly zero by definition",
+      "v01": "driving-force-only localization",
+      "v10": "adjoint-only localization",
+      "v11": "full-shunt localization"
+    }
+  }
+}

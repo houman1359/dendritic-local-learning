@@ -1,0 +1,109 @@
+sensitivity,model,task,optimizer,contrast,mean,ci95_low,ci95_high,n_seeds,positive_seeds
+selected_rate,algebraic,matching,adam,unit_broadcast minus exact,-0.006561901264670977,-0.023908527877453838,0.0033259118539830765,20,7
+selected_rate,algebraic,matching,adam,calibrated_broadcast minus exact,-0.008150041898870183,-0.024885802800111413,0.0006914294664872423,20,15
+selected_rate,algebraic,matching,adam,sign_broadcast minus exact,-0.008150038699286384,-0.024885799382121647,0.0006914330980425025,20,15
+selected_rate,algebraic,matching,adam,unit_broadcast minus calibrated_broadcast,0.001588140634199205,-0.0002019387177718688,0.0036447694063312785,20,6
+selected_rate,algebraic,matching,sgd,unit_broadcast minus exact,-0.03674405296404204,-0.08503712537975397,-0.0013068497486103758,20,10
+selected_rate,algebraic,matching,sgd,calibrated_broadcast minus exact,0.2333383436353634,0.14519407429835585,0.3264199942653247,20,19
+selected_rate,algebraic,matching,sgd,sign_broadcast minus exact,-0.04116960677508191,-0.08963469991355841,-0.005252522366530094,20,6
+selected_rate,algebraic,matching,sgd,unit_broadcast minus calibrated_broadcast,-0.27008239659940547,-0.36349468207419305,-0.17998661929091525,20,0
+selected_rate,algebraic,nested,adam,unit_broadcast minus exact,0.7292688666937017,0.7091106589796903,0.7474342918494126,20,20
+selected_rate,algebraic,nested,adam,calibrated_broadcast minus exact,0.7460052200658656,0.7268204392109656,0.7612980028020996,20,20
+selected_rate,algebraic,nested,adam,sign_broadcast minus exact,0.7460048297689096,0.7268196556895526,0.7612980082856569,20,20
+selected_rate,algebraic,nested,adam,unit_broadcast minus calibrated_broadcast,-0.016736353372163816,-0.03793132224158057,0.003079776570143984,20,7
+selected_rate,algebraic,nested,sgd,unit_broadcast minus exact,0.500993199939678,0.4008281351212367,0.5997595453977107,20,19
+selected_rate,algebraic,nested,sgd,calibrated_broadcast minus exact,0.5621931826633727,0.4491635354643166,0.6753014483005005,20,20
+selected_rate,algebraic,nested,sgd,sign_broadcast minus exact,0.5099146779732349,0.4059889553270972,0.6124308030930435,20,20
+selected_rate,algebraic,nested,sgd,unit_broadcast minus calibrated_broadcast,-0.06119998272369478,-0.10319643230720761,-0.02404069974378045,20,5
+selected_rate,algebraic,quartet,adam,unit_broadcast minus exact,0.8166088390627104,0.66730578345808,0.9380310019679023,20,19
+selected_rate,algebraic,quartet,adam,calibrated_broadcast minus exact,0.829667239670813,0.7074324116302538,0.9288008414745692,20,20
+selected_rate,algebraic,quartet,adam,sign_broadcast minus exact,0.829667299503881,0.707432575427761,0.9288010564481632,20,20
+selected_rate,algebraic,quartet,adam,unit_broadcast minus calibrated_broadcast,-0.01305840060810265,-0.0746420895869328,0.04101620618622484,20,8
+selected_rate,algebraic,quartet,sgd,unit_broadcast minus exact,0.6590026152815303,0.5209772780071515,0.7866134865034806,20,20
+selected_rate,algebraic,quartet,sgd,calibrated_broadcast minus exact,0.6555103902232735,0.5271815831697099,0.7743135523085284,20,20
+selected_rate,algebraic,quartet,sgd,sign_broadcast minus exact,0.7187347025848967,0.574520976038631,0.8494791210790066,20,20
+selected_rate,algebraic,quartet,sgd,unit_broadcast minus calibrated_broadcast,0.003492225058256754,-0.04681693172687746,0.058178239069159275,20,10
+selected_rate,conductance,0,adam,unit_broadcast minus exact,-3.8752899303754114e-06,-8.401263067700885e-06,-1.7813214245174457e-07,20,6
+selected_rate,conductance,0,adam,calibrated_broadcast minus exact,-3.875285860337189e-06,-8.401256440851855e-06,-1.781307080258434e-07,20,6
+selected_rate,conductance,0,adam,sign_broadcast minus exact,-3.8752899303754114e-06,-8.401263067700885e-06,-1.7813214245174457e-07,20,6
+selected_rate,conductance,0,adam,unit_broadcast minus calibrated_broadcast,-4.070038223591046e-12,-7.812669838979484e-12,-1.2584378694969893e-12,20,2
+selected_rate,conductance,0,sgd,unit_broadcast minus exact,-0.012940955009950109,-0.016796731555214175,-0.00949814562942549,20,0
+selected_rate,conductance,0,sgd,calibrated_broadcast minus exact,0.004110853403178955,0.001611826017777447,0.007704659855013364,20,19
+selected_rate,conductance,0,sgd,sign_broadcast minus exact,-0.012940955009950109,-0.016796731555214175,-0.00949814562942549,20,0
+selected_rate,conductance,0,sgd,unit_broadcast minus calibrated_broadcast,-0.017051808413129064,-0.023703550140961135,-0.011636689981910683,20,0
+selected_rate,conductance,1,adam,unit_broadcast minus exact,-5.850835526097319e-06,-1.636250302580051e-05,-1.3341800509381705e-07,20,7
+selected_rate,conductance,1,adam,calibrated_broadcast minus exact,-5.8508328339123535e-06,-1.6362500665456095e-05,-1.3341637475324879e-07,20,7
+selected_rate,conductance,1,adam,sign_broadcast minus exact,-5.850835526097319e-06,-1.636250302580051e-05,-1.3341800509381705e-07,20,7
+selected_rate,conductance,1,adam,unit_broadcast minus calibrated_broadcast,-2.692184966377404e-12,-4.647630980727734e-12,-1.0248931835239469e-12,20,0
+selected_rate,conductance,1,sgd,unit_broadcast minus exact,-0.0145920809702485,-0.018524243321690028,-0.010906880656393605,20,0
+selected_rate,conductance,1,sgd,calibrated_broadcast minus exact,0.00450293243331819,0.0023320672505435223,0.007256657708783808,20,19
+selected_rate,conductance,1,sgd,sign_broadcast minus exact,-0.0145920809702485,-0.018524243321690028,-0.010906880656393605,20,0
+selected_rate,conductance,1,sgd,unit_broadcast minus calibrated_broadcast,-0.01909501340356669,-0.02463532032931555,-0.01401310613173175,20,0
+selected_rate,conductance,2,adam,unit_broadcast minus exact,-1.4406640367421974e-05,-4.24213188259978e-05,-8.438666538991636e-08,20,4
+selected_rate,conductance,2,adam,calibrated_broadcast minus exact,-1.4406637776035979e-05,-4.2421312687748076e-05,-8.438571546348494e-08,20,4
+selected_rate,conductance,2,adam,sign_broadcast minus exact,-1.4406640367421974e-05,-4.24213188259978e-05,-8.438666538991636e-08,20,4
+selected_rate,conductance,2,adam,unit_broadcast minus calibrated_broadcast,-2.5913859929604446e-12,-5.9768410654119e-12,-4.721342586352676e-13,20,0
+selected_rate,conductance,2,sgd,unit_broadcast minus exact,-0.013413670899902978,-0.017154907401718576,-0.009875027744408653,20,0
+selected_rate,conductance,2,sgd,calibrated_broadcast minus exact,0.00424589763505951,0.0020947600457690615,0.006772594329010744,20,15
+selected_rate,conductance,2,sgd,sign_broadcast minus exact,-0.013413670899902978,-0.017154907401718576,-0.009875027744408653,20,0
+selected_rate,conductance,2,sgd,unit_broadcast minus calibrated_broadcast,-0.017659568534962485,-0.023110386130122902,-0.012560202110055926,20,0
+selected_rate,algebraic,quartet_minus_matching,adam,unit_broadcast minus exact interaction,0.8231707403273815,0.6774735979210003,0.9406573840620254,20,19
+selected_rate,algebraic,quartet_minus_matching,adam,calibrated_broadcast minus exact interaction,0.8378172815696834,0.7190435929903065,0.9307531820366128,20,20
+selected_rate,algebraic,quartet_minus_matching,adam,sign_broadcast minus exact interaction,0.8378173382031674,0.7190436277678677,0.9307532086111773,20,20
+selected_rate,algebraic,quartet_minus_matching,sgd,unit_broadcast minus exact interaction,0.6957466682455723,0.5528728930945895,0.8282685806985122,20,19
+selected_rate,algebraic,quartet_minus_matching,sgd,calibrated_broadcast minus exact interaction,0.4221720465879101,0.27227411944195895,0.5655916604589739,20,19
+selected_rate,algebraic,quartet_minus_matching,sgd,sign_broadcast minus exact interaction,0.7599043093599787,0.6159504198034934,0.8899415148336292,20,20
+common_rate,algebraic,matching,adam,unit_broadcast minus exact,-0.006561901264670977,-0.023908527877453838,0.0033259118539830765,20,7
+common_rate,algebraic,matching,adam,calibrated_broadcast minus exact,-0.00888374288642693,-0.025531110379059144,-0.00014405511251327734,20,2
+common_rate,algebraic,matching,adam,sign_broadcast minus exact,-0.008883742845136565,-0.025531110429733415,-0.00014405521474533895,20,2
+common_rate,algebraic,matching,adam,unit_broadcast minus calibrated_broadcast,0.002321841621755949,0.0005888707987053977,0.004341131930041068,20,13
+common_rate,algebraic,matching,sgd,unit_broadcast minus exact,-0.04180822278565736,-0.09014387869527044,-0.00574442967218118,20,4
+common_rate,algebraic,matching,sgd,calibrated_broadcast minus exact,0.2333383436353634,0.14519407429835585,0.3264199942653247,20,19
+common_rate,algebraic,matching,sgd,sign_broadcast minus exact,-0.04205367858345142,-0.0904659115285323,-0.005960400487278307,20,2
+common_rate,algebraic,matching,sgd,unit_broadcast minus calibrated_broadcast,-0.27514656642102076,-0.3686081867363116,-0.18534556914259104,20,0
+common_rate,algebraic,nested,adam,unit_broadcast minus exact,0.7292688666937017,0.7091106589796903,0.7474342918494126,20,20
+common_rate,algebraic,nested,adam,calibrated_broadcast minus exact,0.7447957485665881,0.729773168776563,0.7580013032385602,20,20
+common_rate,algebraic,nested,adam,sign_broadcast minus exact,0.7447956283259296,0.7297728013699865,0.7580012946642003,20,20
+common_rate,algebraic,nested,adam,unit_broadcast minus calibrated_broadcast,-0.015526881872886566,-0.033331408308907066,0.0014203959592377945,20,6
+common_rate,algebraic,nested,sgd,unit_broadcast minus exact,0.49124864123150525,0.3855645982565158,0.5960757940166467,20,20
+common_rate,algebraic,nested,sgd,calibrated_broadcast minus exact,0.5621931826633727,0.4491635354643166,0.6753014483005005,20,20
+common_rate,algebraic,nested,sgd,sign_broadcast minus exact,0.5132329561092107,0.40438500633778346,0.6177620650796286,20,19
+common_rate,algebraic,nested,sgd,unit_broadcast minus calibrated_broadcast,-0.07094454143186757,-0.12072249837972601,-0.025546104857348283,20,8
+common_rate,algebraic,quartet,adam,unit_broadcast minus exact,0.8166088390627104,0.66730578345808,0.9380310019679023,20,19
+common_rate,algebraic,quartet,adam,calibrated_broadcast minus exact,0.8346006028319695,0.7147443321462291,0.9315525480356774,20,20
+common_rate,algebraic,quartet,adam,sign_broadcast minus exact,0.834600485905123,0.7147441181198675,0.9315523456986214,20,20
+common_rate,algebraic,quartet,adam,unit_broadcast minus calibrated_broadcast,-0.017991763769258862,-0.08914176936527347,0.04944730770794925,20,7
+common_rate,algebraic,quartet,sgd,unit_broadcast minus exact,1.2523071351472377,0.6598280507784269,2.1679817103756065,20,20
+common_rate,algebraic,quartet,sgd,calibrated_broadcast minus exact,0.6555103902232735,0.5271815831697099,0.7743135523085284,20,20
+common_rate,algebraic,quartet,sgd,sign_broadcast minus exact,0.6845415439908724,0.5541534357981385,0.8050314832726804,20,20
+common_rate,algebraic,quartet,sgd,unit_broadcast minus calibrated_broadcast,0.5967967449239643,0.009568211832243847,1.5109833788118574,20,12
+common_rate,conductance,0,adam,unit_broadcast minus exact,-3.8752899303754114e-06,-8.401263067700885e-06,-1.7813214245174457e-07,20,6
+common_rate,conductance,0,adam,calibrated_broadcast minus exact,-3.875285860337189e-06,-8.401256440851855e-06,-1.781307080258434e-07,20,6
+common_rate,conductance,0,adam,sign_broadcast minus exact,-3.8752899303754114e-06,-8.401263067700885e-06,-1.7813214245174457e-07,20,6
+common_rate,conductance,0,adam,unit_broadcast minus calibrated_broadcast,-4.070038223591046e-12,-7.812669838979484e-12,-1.2584378694969893e-12,20,2
+common_rate,conductance,0,sgd,unit_broadcast minus exact,-0.012940955009950109,-0.016796731555214175,-0.00949814562942549,20,0
+common_rate,conductance,0,sgd,calibrated_broadcast minus exact,0.004110853403178955,0.001611826017777447,0.007704659855013364,20,19
+common_rate,conductance,0,sgd,sign_broadcast minus exact,-0.012940955009950109,-0.016796731555214175,-0.00949814562942549,20,0
+common_rate,conductance,0,sgd,unit_broadcast minus calibrated_broadcast,-0.017051808413129064,-0.023703550140961135,-0.011636689981910683,20,0
+common_rate,conductance,1,adam,unit_broadcast minus exact,-5.850835526097319e-06,-1.636250302580051e-05,-1.3341800509381705e-07,20,7
+common_rate,conductance,1,adam,calibrated_broadcast minus exact,-5.8508328339123535e-06,-1.6362500665456095e-05,-1.3341637475324879e-07,20,7
+common_rate,conductance,1,adam,sign_broadcast minus exact,-5.850835526097319e-06,-1.636250302580051e-05,-1.3341800509381705e-07,20,7
+common_rate,conductance,1,adam,unit_broadcast minus calibrated_broadcast,-2.692184966377404e-12,-4.647630980727734e-12,-1.0248931835239469e-12,20,0
+common_rate,conductance,1,sgd,unit_broadcast minus exact,-0.0145920809702485,-0.018524243321690028,-0.010906880656393605,20,0
+common_rate,conductance,1,sgd,calibrated_broadcast minus exact,0.00450293243331819,0.0023320672505435223,0.007256657708783808,20,19
+common_rate,conductance,1,sgd,sign_broadcast minus exact,-0.0145920809702485,-0.018524243321690028,-0.010906880656393605,20,0
+common_rate,conductance,1,sgd,unit_broadcast minus calibrated_broadcast,-0.01909501340356669,-0.02463532032931555,-0.01401310613173175,20,0
+common_rate,conductance,2,adam,unit_broadcast minus exact,-1.4406640367421974e-05,-4.24213188259978e-05,-8.438666538991636e-08,20,4
+common_rate,conductance,2,adam,calibrated_broadcast minus exact,-1.4406637776035979e-05,-4.2421312687748076e-05,-8.438571546348494e-08,20,4
+common_rate,conductance,2,adam,sign_broadcast minus exact,-1.4406640367421974e-05,-4.24213188259978e-05,-8.438666538991636e-08,20,4
+common_rate,conductance,2,adam,unit_broadcast minus calibrated_broadcast,-2.5913859929604446e-12,-5.9768410654119e-12,-4.721342586352676e-13,20,0
+common_rate,conductance,2,sgd,unit_broadcast minus exact,-0.013413670899902978,-0.017154907401718576,-0.009875027744408653,20,0
+common_rate,conductance,2,sgd,calibrated_broadcast minus exact,0.00424589763505951,0.0020947600457690615,0.006772594329010744,20,15
+common_rate,conductance,2,sgd,sign_broadcast minus exact,-0.013413670899902978,-0.017154907401718576,-0.009875027744408653,20,0
+common_rate,conductance,2,sgd,unit_broadcast minus calibrated_broadcast,-0.017659568534962485,-0.023110386130122902,-0.012560202110055926,20,0
+common_rate,algebraic,quartet_minus_matching,adam,unit_broadcast minus exact interaction,0.8231707403273815,0.6774735979210003,0.9406573840620254,20,19
+common_rate,algebraic,quartet_minus_matching,adam,calibrated_broadcast minus exact interaction,0.8434843457183965,0.7271907217284305,0.9347230884724235,20,20
+common_rate,algebraic,quartet_minus_matching,adam,sign_broadcast minus exact interaction,0.8434842287502595,0.7271905950508322,0.9347229686920863,20,20
+common_rate,algebraic,quartet_minus_matching,sgd,unit_broadcast minus exact interaction,1.294115357932895,0.6932219311475382,2.225027008744094,20,20
+common_rate,algebraic,quartet_minus_matching,sgd,calibrated_broadcast minus exact interaction,0.4221720465879101,0.27227411944195895,0.5655916604589739,20,19
+common_rate,algebraic,quartet_minus_matching,sgd,sign_broadcast minus exact interaction,0.7265952225743237,0.5935822762154139,0.8479655379165478,20,20

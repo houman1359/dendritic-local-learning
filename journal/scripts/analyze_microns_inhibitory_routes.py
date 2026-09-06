@@ -546,7 +546,7 @@ def plot_examples(ax: plt.Axes, example_payloads: list[dict]) -> None:
     ax.axis("off")
     # Keep this heading compact: panel A is narrow and its title sits directly
     # to the left at manuscript scale.
-    panel_title(ax, "B", "Inhibitory contacts on six trees")
+    panel_title(ax, "B", "Inhibitory contacts: x–y projections")
     slots = [(0.02, 0.68), (0.52, 0.68), (0.02, 0.36), (0.52, 0.36), (0.02, 0.04), (0.52, 0.04)]
     for payload, (x0, y0) in zip(example_payloads[:6], slots):
         nodes = payload["nodes"]
@@ -573,6 +573,12 @@ def plot_examples(ax: plt.Axes, example_payloads: list[dict]) -> None:
             linewidth=0,
             rasterized=True,
         )
+        # Each tree is scaled independently; retain a physical reference.
+        bar_um = 20.0 if scale*50 > .16 else 50.0
+        bx, by = x0+.02, y0+.245
+        ax.plot([bx,bx+scale*bar_um],[by,by],color=COLORS["ink"],lw=1.0)
+        ax.text(bx+scale*bar_um/2,by+.010,f"{bar_um:g} µm",
+                ha="center",va="bottom",fontsize=PT_SMALL-1)
         ax.text(
             x0 + 0.22,
             y0 - 0.005,

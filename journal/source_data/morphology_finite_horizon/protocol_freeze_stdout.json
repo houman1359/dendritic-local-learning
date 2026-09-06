@@ -1,0 +1,121 @@
+{
+  "version": 1,
+  "title": "Finite-horizon predictors for a frozen contextual linear learner",
+  "created_utc": "2026-09-05T18:01:40.869995+00:00",
+  "diagnostic_development_seeds": [
+    6100,
+    6101,
+    6102,
+    6103,
+    6104
+  ],
+  "diagnostic_old_confirmation_seeds": [
+    7200,
+    7201,
+    7202,
+    7203,
+    7204,
+    7205,
+    7206,
+    7207,
+    7208,
+    7209,
+    7210,
+    7211,
+    7212,
+    7213,
+    7214,
+    7215,
+    7216,
+    7217,
+    7218,
+    7219
+  ],
+  "fresh_confirmation_seeds": [
+    9300,
+    9301,
+    9302,
+    9303,
+    9304,
+    9305,
+    9306,
+    9307,
+    9308,
+    9309,
+    9310,
+    9311,
+    9312,
+    9313,
+    9314,
+    9315,
+    9316,
+    9317,
+    9318,
+    9319
+  ],
+  "fresh_angles_pi": [
+    0.125,
+    0.375
+  ],
+  "ranks": [
+    1,
+    2,
+    4,
+    8
+  ],
+  "noise_sds": [
+    0.0,
+    0.75
+  ],
+  "checkpoints": [
+    16,
+    64,
+    256
+  ],
+  "primary_checkpoint": 256,
+  "pilot_steps": 16,
+  "n_calibration": 1024,
+  "empirical_calibration_fit": 512,
+  "empirical_calibration_evaluation": 512,
+  "n_training_cache": 2048,
+  "n_test": 4096,
+  "batch_size": 32,
+  "eta": 0.35,
+  "cost": "half-MSE + 0.08 * (K/8 + 0.1 * normalized cable length)",
+  "primary_selector": "gaussian_plugin_sgd",
+  "secondary_selectors": [
+    "gaussian_plugin_fullbatch",
+    "gaussian_oracle_sgd",
+    "gaussian_oracle_fullbatch",
+    "empirical_split_fullbatch",
+    "pilot16",
+    "original_scalar",
+    "rank_only",
+    "development_best",
+    "maximum_budget"
+  ],
+  "assumptions": {
+    "gaussian": "x ~ N(0,I); observed discrete context; conditionally linear target; independent label noise",
+    "plugin": "Context vectors/frequencies, conditional target coefficients and unbiased noise variances estimated using calibration only",
+    "oracle": "True generating context vectors, uniform probabilities, target coefficients and label-noise variance; privileged diagnostic",
+    "empirical": "Exact GD on first 512 calibration rows; risk on remaining 512; surrogate for 2048-cache SGD",
+    "fresh_sgd": "Exact population moment recurrence for fresh iid minibatches; finite-cache use is model misspecification",
+    "pilot": "Sixteen actual training steps on every candidate, evaluated on calibration observations; extra candidate-training cost is measured"
+  },
+  "population_comparison": "Both finite-cache and fresh-example SGD; common held-out test and paired candidate sampling",
+  "inference": "20 independent seed blocks, conditions averaged within seed; 10000 whole-seed bootstrap resamples",
+  "outcomes": "Retain all candidates, ranks, noises, angles, arms and training regimes; no endpoint-dependent exclusions",
+  "tuning": "No new fitted selector hyperparameters; original scalar/rank/fixed choices read unchanged from original development fit",
+  "status": "Frozen before fresh calibration or training outcomes",
+  "code_sha256": {
+    "scripts/morphology_dynamics/investigate.py": "d3acd5b464a4a9d62084dbeb5ea63c732aa994d5f5e9f5b296c3ec2747c2d818",
+    "scripts/morphology_dynamics/operators.py": "4d5c95cfe520e3b81d85dc7e3ea5ed809f23fb0f9d808915dabec4f32c4e782f",
+    "scripts/morphology_dynamics/test_operators.py": "93c4477e9e713ff2c679bb380310e853270abf14763534a0b14978f82e7810e2",
+    "scripts/morphology_dynamics/test_prediction_inputs.py": "f5bd6cecfa8c067e537b8a9b7870ac4d82d549debe3e1acb9b3dbde873e13963"
+  },
+  "original_runner_sha256": "2f32eef50b50a2e2f4860efdafeda54125d577ed236e3961051a7ea573bf3def",
+  "original_protocol_sha256": "aebb52030bf5a6403123f432f691676fdb85236d46a7585d83874a76312349dd",
+  "original_development_fit_sha256": "1201798b5157d677fb0726a37a103751605c3fad6a1094a129aae69cdf50e562",
+  "python": "3.10.13",
+  "numpy": "2.2.6"
+}

@@ -3,6 +3,8 @@
 
 from __future__ import annotations
 
+from tex_sources import expanded_tex
+
 import argparse
 import re
 from pathlib import Path
@@ -26,10 +28,12 @@ def remove_environment(text: str, environment: str) -> str:
 def prose_words(text: str) -> list[str]:
     text = re.sub(r"(?m)(?<!\\)%.*$", " ", text)
     for environment in (
-        "figure", "figure*", "table", "table*", "equation", "align", "align*", "gather"
+        "figure", "figure*", "table", "table*", "equation", "equation*",
+        "align", "align*", "gather", "gather*"
     ):
         text = remove_environment(text, environment)
     text = re.sub(r"\$.*?\$", " ", text, flags=re.DOTALL)
+    text = re.sub(r"\\\(.*?\\\)", " ", text, flags=re.DOTALL)
     text = re.sub(r"\\\[.*?\\\]", " ", text, flags=re.DOTALL)
     text = re.sub(r"\\(?:cite|citep|citet|ref|eqref|label)\{[^{}]*\}", " ", text)
     for _ in range(4):
@@ -69,9 +73,11 @@ def balanced_arguments(text: str, command: str) -> list[str]:
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--strict", action="store_true")
+    parser.add_argument("--main-word-target", type=int, default=6500,
+                        help="Author's current working target; separate from journal guidance")
     args = parser.parse_args()
 
-    tex = MAIN.read_text(encoding="utf-8")
+    tex = expanded_tex(MAIN)
     abstract_match = re.search(r"\\begin\{abstract\}(.*?)\\end\{abstract\}", tex, re.DOTALL)
     if abstract_match is None:
         raise SystemExit("Abstract not found")
@@ -83,6 +89,10 @@ def main() -> int:
     if narrative_match is None:
         raise SystemExit("Introduction-to-Methods narrative not found")
     main_words = len(prose_words(narrative_match.group(1)))
+    methods_match = re.search(
+        r"\\section\*?\{Methods\}(.*?)\\section\*?\{Ethics and data reuse\}", tex, re.DOTALL
+    )
+    methods_words = len(prose_words(methods_match.group(1))) if methods_match else None
     figure_environments = len(
         re.findall(r"\\begin\{figure\*?\}", narrative_match.group(1))
     )
@@ -93,7 +103,10 @@ def main() -> int:
     # than creating another display item.  Report both quantities so a large
     # journal figure is not mistakenly counted as several figures.
     main_figures = figure_environments - continued_figures
-    references = len(re.findall(r"(?m)^@\w+\s*\{", BIB.read_text(encoding="utf-8")))
+    # The cohort table is in Methods and counts toward the same display budget.
+    main_tables = len(re.findall(r"\\begin\{(?:table\*?|longtable)\}", tex))
+    main_displays = main_figures + main_tables
+    references = len({key.strip() for group in re.findall(r"\\(?:cite|citep|citet)\{([^}]+)\}", tex) for key in group.split(",")})
     legend_words = [
         len(prose_words(caption))
         for caption in balanced_arguments(narrative_match.group(1), "caption")
@@ -111,10 +124,9 @@ def main() -> int:
         # than as a hard initial-submission ceiling. Report it, but do not make
         # --strict fail solely because a developed journal draft exceeds it.
         ("Introduction + Results + Discussion", main_words, 5000, "approximate words", False),
-        # Keep the complete working scientific display during revision, as
-        # requested by the authors. Consolidation to ten items is a pre-upload
-        # editorial action rather than an active scientific-content gate.
-        ("Main display items", main_figures, 10, "figures", False),
+        ("Author working narrative target", main_words, args.main_word_target, "approximate words", False),
+        # Figures and the Methods cohort table share the ten-display budget.
+        ("Main display items", main_displays, 10, "figures and tables", True),
         ("References", references, 70, "entries (general guide)", True),
     ]
     failures = [
@@ -134,11 +146,15 @@ def main() -> int:
     lines = [
         "# Nature Communications format audit",
         "",
-        "Checked against the official Article guidance retrieved on 9 August 2026.",
+        "Checked against the official Article guidance retrieved on 5 September 2026.",
         "The narrative count is mechanical and excludes figure/table environments,",
-        "displayed mathematics, citations and cross-references; the portal count may differ.",
+        "inline/displayed mathematics, citations and cross-references; the portal count may differ.",
+        f"The author requested a 6,000–6,500-word working narrative (current target {args.main_word_target}); this does not",
+        "change the journal's approximately 5,000-word guidance.",
+        f"Methods prose: {methods_words} words (reported separately from the narrative).",
         f"The {main_figures} numbered figures occupy {figure_environments} figure environments;",
         f"{continued_figures} environments are continued multi-panel displays.",
+        f"There are {main_tables} main tables, including Methods tables; total display items: {main_displays}.",
         "",
         "| Item | Current | Guidance | Status |",
         "|---|---:|---:|---|",

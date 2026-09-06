@@ -1,0 +1,9 @@
+{
+  "utc": "2026-09-05T15:59:14.170074+00:00",
+  "scope": "local protocol freeze before any new run, not public preregistration",
+  "files": {
+    "configs/review_completion/coefficient_encoder.json": "dd3042208dda2e8b656be4c59b71914a9588d7d61f35a85ffc06a49f6da0b252",
+    "scripts/run_review_coefficient_encoder.py": "b8417335202a5eb9336d8ca76a027618ad17011a81b02a726f8e7d42913b6561",
+    "scripts/run_trained_subtree_address_full_factorial.py": "c5d75b8ea9bc29d7fd24ca53c360c4bbdf825d7fa31f84727af4b7dd47e875dd"
+  }
+}

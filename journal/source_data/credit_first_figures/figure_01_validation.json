@@ -1,0 +1,128 @@
+{
+  "status": "passed",
+  "paired_mean_recomputations": [
+    {
+      "endpoint": "neuron_identity",
+      "task": "MNIST",
+      "source": "Readout",
+      "architecture": "shunting",
+      "n_seeds": 15,
+      "max_mean_error_pp": 8.881784197001252e-15
+    },
+    {
+      "endpoint": "neuron_identity",
+      "task": "MNIST",
+      "source": "Readout",
+      "architecture": "additive",
+      "n_seeds": 15,
+      "max_mean_error_pp": 8.881784197001252e-16
+    },
+    {
+      "endpoint": "neuron_identity",
+      "task": "MNIST",
+      "source": "DFA",
+      "architecture": "shunting",
+      "n_seeds": 15,
+      "max_mean_error_pp": 1.7763568394002505e-15
+    },
+    {
+      "endpoint": "neuron_identity",
+      "task": "MNIST",
+      "source": "DFA",
+      "architecture": "additive",
+      "n_seeds": 15,
+      "max_mean_error_pp": 1.7763568394002505e-15
+    },
+    {
+      "endpoint": "neuron_identity",
+      "task": "CIFAR-10",
+      "source": "Readout",
+      "architecture": "additive",
+      "n_seeds": 20,
+      "max_mean_error_pp": 3.552713678800501e-15
+    },
+    {
+      "endpoint": "path_resolution",
+      "task": "MNIST",
+      "source": "Readout",
+      "architecture": "shunting",
+      "n_seeds": 15,
+      "max_mean_error_pp": 1.4849232954361469e-15
+    },
+    {
+      "endpoint": "path_resolution",
+      "task": "MNIST",
+      "source": "Readout",
+      "architecture": "additive",
+      "n_seeds": 15,
+      "max_mean_error_pp": 8.18789480661053e-15
+    },
+    {
+      "endpoint": "path_resolution",
+      "task": "MNIST",
+      "source": "DFA",
+      "architecture": "shunting",
+      "n_seeds": 15,
+      "max_mean_error_pp": 7.5842110369706e-15
+    },
+    {
+      "endpoint": "path_resolution",
+      "task": "MNIST",
+      "source": "DFA",
+      "architecture": "additive",
+      "n_seeds": 15,
+      "max_mean_error_pp": 1.0921819004749977e-14
+    },
+    {
+      "endpoint": "path_resolution",
+      "task": "CIFAR-10",
+      "source": "Readout",
+      "architecture": "additive",
+      "n_seeds": 20,
+      "max_mean_error_pp": 1.021405182655144e-14
+    }
+  ],
+  "minimum_font_pt": 6.800000190734863,
+  "text_outside_page": [],
+  "pdf_sha256": "68617122f17b036540b87527973d04be541145dd9ffb92a7637c4d8a72db7c56",
+  "visual_review": "Final full-size rendering inspected; C heading overlap repaired, category ticks made horizontal, panel titles and letters clear. No remaining overlap or clipping.",
+  "panel_letter_boxes": {
+    "A": [
+      6.0,
+      6.685502052307129,
+      14.12700080871582,
+      18.91800308227539
+    ],
+    "B": [
+      249.60000610351562,
+      6.685502052307129,
+      257.60101318359375,
+      18.91800308227539
+    ],
+    "C": [
+      6.0,
+      170.9870147705078,
+      13.707000732421875,
+      183.21951293945312
+    ],
+    "D": [
+      249.60000610351562,
+      170.9870147705078,
+      258.31500244140625,
+      183.21951293945312
+    ],
+    "E": [
+      6.0,
+      336.2433166503906,
+      13.171500205993652,
+      348.4757995605469
+    ],
+    "F": [
+      249.60000610351562,
+      336.2433166503906,
+      256.7715148925781,
+      348.4757995605469
+    ]
+  },
+  "second_column_letters_aligned": true
+}

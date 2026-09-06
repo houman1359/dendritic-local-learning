@@ -1,0 +1,8 @@
+{
+  "cohort": "development",
+  "pilot": "Budgeted 16-step selector; evaluated before endpoint outcomes",
+  "predictions_sha256": "2cc180a20230d10381591e2576a558f108fb8f62ff1eae447c0e2b8e7410e678",
+  "protocol_sha256": "689abe998236c9cd9154eb1dd35ea0dec374d08f478b5df64b432f71a584e32d",
+  "sealed_utc": "2026-09-05T18:03:04.022028+00:00",
+  "seed": 6103
+}

@@ -1,0 +1,105 @@
+{
+  "compatible": true,
+  "groups": [
+    [
+      0,
+      1
+    ],
+    [
+      2,
+      3
+    ]
+  ],
+  "model": "conductance",
+  "parameter_layout": "16 log-conductances",
+  "phase": "fresh",
+  "records": [
+    {
+      "common_rate": true,
+      "model": "conductance",
+      "optimizer": "sgd",
+      "rate": 0.01,
+      "rule": "exact",
+      "selected_rate": true
+    },
+    {
+      "common_rate": true,
+      "model": "conductance",
+      "optimizer": "sgd",
+      "rate": 0.01,
+      "rule": "unit_broadcast",
+      "selected_rate": true
+    },
+    {
+      "common_rate": true,
+      "model": "conductance",
+      "optimizer": "sgd",
+      "rate": 0.01,
+      "rule": "calibrated_broadcast",
+      "selected_rate": true
+    },
+    {
+      "common_rate": true,
+      "model": "conductance",
+      "optimizer": "sgd",
+      "rate": 0.01,
+      "rule": "sign_broadcast",
+      "selected_rate": true
+    },
+    {
+      "common_rate": true,
+      "model": "conductance",
+      "optimizer": "adam",
+      "rate": 0.03,
+      "rule": "exact",
+      "selected_rate": true
+    },
+    {
+      "common_rate": true,
+      "model": "conductance",
+      "optimizer": "adam",
+      "rate": 0.03,
+      "rule": "unit_broadcast",
+      "selected_rate": true
+    },
+    {
+      "common_rate": true,
+      "model": "conductance",
+      "optimizer": "adam",
+      "rate": 0.03,
+      "rule": "calibrated_broadcast",
+      "selected_rate": true
+    },
+    {
+      "common_rate": true,
+      "model": "conductance",
+      "optimizer": "adam",
+      "rate": 0.03,
+      "rule": "sign_broadcast",
+      "selected_rate": true
+    }
+  ],
+  "same_tree_scope": "All rules and three paired compatible input permutations",
+  "seed": 211213,
+  "task": "0",
+  "task_group": 0,
+  "teacher_log_conductances": [
+    0.5822577535963351,
+    0.382641910363154,
+    0.5878038087418929,
+    0.5203929786861679,
+    -0.548198446070131,
+    -0.415697395901314,
+    -0.29217347982274355,
+    -0.5184182364093024,
+    0.6915682292620415,
+    1.495395555957292,
+    1.3442290148904286,
+    0.995189424817784,
+    1.1145780392994062,
+    1.0087355984098878,
+    1.6601354698429815,
+    1.5726817283352226
+  ],
+  "variance": 0.004587312032974753
+}

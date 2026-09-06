@@ -1,0 +1,25 @@
+{
+  "all_25_seeds_and_8400_endpoints_reconstructed": true,
+  "all_choices_precede_fresh_start": true,
+  "all_frozen_streams_and_hashes_match": true,
+  "development_fits": 1680,
+  "elapsed_seconds": 14.423274522065185,
+  "fresh_fits": 6720,
+  "full_training_replay": {
+    "all_final_weights_and_nontiming_trajectories_bit_identical": true,
+    "complete_fits": 336,
+    "seed": 2026210,
+    "steps": 2048
+  },
+  "gradient_validation": "Three pre-freeze unit tests include48central-difference parameter checks across four trees, root equality, truth-table normalization and leaf-permutation equivalence.",
+  "independently_evaluated_endpoint_max_abs_error": 2.220446049250313e-16,
+  "protocol_sha256": "4373c421dd8ad60de8275d8384f441fc7c19d000232081bbb5be2eb7df0597df",
+  "selection_sha256": "965160e7d9126f974da817735dfb0ec1df35b6f09cc2056fabdab5a9f3c5a8a1",
+  "status": "passed",
+  "validation_environment": {
+    "numpy": "2.2.6",
+    "pandas": "2.3.3",
+    "python": "3.10.13"
+  },
+  "validator_sha256": "a5f8c1dab73f6b32ac08227a4a0a9606a676e9ccc11d2aae6bdf04cfe8251cc9"
+}

@@ -1,0 +1,11 @@
+{
+  "audit_script_sha256": "b151da57b758b3c3fda193ff2cd7ce28fe0661b8ae336ffa80cf4875cfe0899b",
+  "exported_normalized_constructions_replayed": 49,
+  "maximum_absolute_normalized_truth_table_error": 2.220446049250313e-16,
+  "patterns_per_construction": 16,
+  "pytest_output": "......                                                                   [100%]\n6 passed in 1.16s",
+  "test_return_code": 0,
+  "test_script_sha256": "75295ce5a537b2f940d798d7dbac943d05cb964ac135418728badd973a53452e",
+  "validation_runtime_seconds": 6.9551924880361184,
+  "validation_script_sha256": "92c383cd43b50d3c4037cefb3cb7f53ff4b7d30f3f8d51c699dff46baf2b1e5a"
+}

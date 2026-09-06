@@ -1,0 +1,13 @@
+effective_sample_size,left_minus_right,n_pairs,mean_loss_difference,ci95_low,ci95_high,positive_pairs,ties,wilcoxon_p_two_sided
+4,raw_nested_indicators / vanilla_local - tree_haar / vanilla_local,50,-0.2774033061,-0.3259752431,-0.2313416639,0,0,1.776356839e-15
+4,static_gain_scaled_nested / vanilla_local - tree_haar / vanilla_local,50,-0.1905510343,-0.2500161169,-0.133488772,10,0,1.049004652e-07
+4,static_gain_scaled_nested / vanilla_local - static_gain_scaled_nested / gram_preconditioned_control,50,-0.1905510343,-0.2511651996,-0.1335952404,10,0,1.049004652e-07
+16,raw_nested_indicators / vanilla_local - tree_haar / vanilla_local,50,-0.05050337162,-0.06577951243,-0.03630370238,9,0,1.757493884e-08
+16,static_gain_scaled_nested / vanilla_local - tree_haar / vanilla_local,50,0.08465543272,0.05777890935,0.1129590148,40,0,1.128730034e-07
+16,static_gain_scaled_nested / vanilla_local - static_gain_scaled_nested / gram_preconditioned_control,50,0.08465543272,0.05755805259,0.1130921713,40,0,1.128730034e-07
+64,raw_nested_indicators / vanilla_local - tree_haar / vanilla_local,50,0.01084592336,0.006324324362,0.01532659117,39,0,2.306897466e-05
+64,static_gain_scaled_nested / vanilla_local - tree_haar / vanilla_local,50,0.1548998894,0.1295803627,0.1806818008,49,0,8.881784197e-15
+64,static_gain_scaled_nested / vanilla_local - static_gain_scaled_nested / gram_preconditioned_control,50,0.1548998894,0.1302333824,0.1808196296,49,0,8.881784197e-15
+256,raw_nested_indicators / vanilla_local - tree_haar / vanilla_local,50,0.02555365379,0.02171201285,0.02952388027,50,0,1.776356839e-15
+256,static_gain_scaled_nested / vanilla_local - tree_haar / vanilla_local,50,0.1709071681,0.1457638545,0.1968587153,50,0,1.776356839e-15
+256,static_gain_scaled_nested / vanilla_local - static_gain_scaled_nested / gram_preconditioned_control,50,0.1709071681,0.1463015412,0.1968309907,50,0,1.776356839e-15

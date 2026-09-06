@@ -1,0 +1,233 @@
+{
+  "compatible": true,
+  "groups": [
+    [
+      0,
+      2
+    ],
+    [
+      1,
+      3
+    ]
+  ],
+  "model": "conductance",
+  "parameter_layout": "16 log-conductances",
+  "phase": "development",
+  "records": [
+    {
+      "common_rate": false,
+      "model": "conductance",
+      "optimizer": "sgd",
+      "rate": 0.001,
+      "rule": "exact",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "model": "conductance",
+      "optimizer": "sgd",
+      "rate": 0.003,
+      "rule": "exact",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "model": "conductance",
+      "optimizer": "sgd",
+      "rate": 0.01,
+      "rule": "exact",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "model": "conductance",
+      "optimizer": "sgd",
+      "rate": 0.001,
+      "rule": "unit_broadcast",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "model": "conductance",
+      "optimizer": "sgd",
+      "rate": 0.003,
+      "rule": "unit_broadcast",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "model": "conductance",
+      "optimizer": "sgd",
+      "rate": 0.01,
+      "rule": "unit_broadcast",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "model": "conductance",
+      "optimizer": "sgd",
+      "rate": 0.001,
+      "rule": "calibrated_broadcast",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "model": "conductance",
+      "optimizer": "sgd",
+      "rate": 0.003,
+      "rule": "calibrated_broadcast",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "model": "conductance",
+      "optimizer": "sgd",
+      "rate": 0.01,
+      "rule": "calibrated_broadcast",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "model": "conductance",
+      "optimizer": "sgd",
+      "rate": 0.001,
+      "rule": "sign_broadcast",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "model": "conductance",
+      "optimizer": "sgd",
+      "rate": 0.003,
+      "rule": "sign_broadcast",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "model": "conductance",
+      "optimizer": "sgd",
+      "rate": 0.01,
+      "rule": "sign_broadcast",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "model": "conductance",
+      "optimizer": "adam",
+      "rate": 0.003,
+      "rule": "exact",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "model": "conductance",
+      "optimizer": "adam",
+      "rate": 0.01,
+      "rule": "exact",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "model": "conductance",
+      "optimizer": "adam",
+      "rate": 0.03,
+      "rule": "exact",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "model": "conductance",
+      "optimizer": "adam",
+      "rate": 0.003,
+      "rule": "unit_broadcast",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "model": "conductance",
+      "optimizer": "adam",
+      "rate": 0.01,
+      "rule": "unit_broadcast",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "model": "conductance",
+      "optimizer": "adam",
+      "rate": 0.03,
+      "rule": "unit_broadcast",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "model": "conductance",
+      "optimizer": "adam",
+      "rate": 0.003,
+      "rule": "calibrated_broadcast",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "model": "conductance",
+      "optimizer": "adam",
+      "rate": 0.01,
+      "rule": "calibrated_broadcast",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "model": "conductance",
+      "optimizer": "adam",
+      "rate": 0.03,
+      "rule": "calibrated_broadcast",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "model": "conductance",
+      "optimizer": "adam",
+      "rate": 0.003,
+      "rule": "sign_broadcast",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "model": "conductance",
+      "optimizer": "adam",
+      "rate": 0.01,
+      "rule": "sign_broadcast",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "model": "conductance",
+      "optimizer": "adam",
+      "rate": 0.03,
+      "rule": "sign_broadcast",
+      "selected_rate": false
+    }
+  ],
+  "same_tree_scope": "All rules and three paired compatible input permutations",
+  "seed": 210102,
+  "task": "1",
+  "task_group": 1,
+  "teacher_log_conductances": [
+    0.5656685193189219,
+    0.7963097954535469,
+    0.3994010406720006,
+    0.9033816488857837,
+    -0.8900315294039848,
+    0.19452526694682415,
+    -0.3536488489941351,
+    -0.072377467427165,
+    1.1547018257635937,
+    0.9106008658467666,
+    1.4063717065954602,
+    1.2191080788593116,
+    1.539308852764736,
+    0.8151563445700133,
+    1.4072589662449189,
+    1.4963725412136397
+  ],
+  "variance": 0.005202760697687838
+}

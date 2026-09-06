@@ -121,20 +121,17 @@ def copy_page(source: str, destination: str, *,
     out.save(MAIN / destination, garbage=4, deflate=True, no_new_id=True)
 
 
-# 2026-09-04 dictionary-forward renumbering. Publication figure numbers no
-# longer coincide with the historical component numbers: the route-dictionary
-# figure (component 10) leads the evidence as Figure 2, the old Figures 2-5
-# shift down one, and the forward-serial-depth canvas (component 6) leaves the
-# main set for Supplementary Figure S31. Builder scripts keep their historical
-# names; this map is the single source of truth for what each published
-# figure is built from.
+# Final publication order after the 2026-09-05 review. Internal builder
+# identifiers are stable; component12 supplies the revised interaction-and-learning Figure6, and
+# component6 supplies Supplementary S31. The opening framework includes
+# the useful numerical atlas formerly held in component10.
 FIGURE_SOURCES = {
     1: 1,    # framework
-    2: 10,   # route dictionaries over morphology
-    3: 2,    # MNIST feedback ladder
-    4: 3,    # credit operator theory
-    5: 4,    # branch conflict
-    6: 5,    # eight-context subtree factorial
+    2: 2,    # MNIST feedback ladder
+    3: 3,    # credit operator theory
+    4: 4,    # branch conflict
+    5: 5,    # eight-context subtree factorial
+    6: 12,   # interaction constraints and finite-data morphology learning
     7: 7,    # reconstructed-arbor capacity
     8: 8,    # focal shunting route gain
     9: 9,    # measured boundary
@@ -606,7 +603,7 @@ def compose(
     out.save(destination, garbage=4, deflate=True, no_new_id=True)
 
 
-def main() -> None:
+def historical_main() -> None:
     # Figure 1 is already designed as a single coherent canvas.
     if not emit_native(1):
         copy_page("figure_01_panels_A-E.pdf", "figure_01.pdf")
@@ -1035,6 +1032,7 @@ def main() -> None:
             panel(
                 "figure_S21_panels_A-I.pdf", L, 3, 3,
                 pad_top_pt=4.0 if L == "G" else 0.0,
+                erase_phrases=("Direct synapse-type control",) if L == "G" else (),
             )
             for L in "CEFG"
         ],
@@ -1088,6 +1086,13 @@ def main() -> None:
     emit_physical_depth_supplement()
 
     print("Assembled nine compact main figures and Supplementary Figures S17, S18, S19, S20, S21, S27, S28 and S31.")
+
+
+def main() -> None:
+    # Public entry point follows the current frozen-data rebuild sequence.
+    # historical_main is retained only as documentation of obsolete panels.
+    from rebuild_final_publication_figures import main as rebuild_final
+    rebuild_final()
 
 
 if __name__ == "__main__":

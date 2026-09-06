@@ -1,0 +1,146 @@
+{
+  "adam_betas": [
+    0.9,
+    0.999
+  ],
+  "adam_epsilon": 1e-08,
+  "batch_size": 32,
+  "checkpoints": [
+    0,
+    1,
+    16,
+    64,
+    256,
+    512,
+    1024,
+    2048
+  ],
+  "development_seeds": [
+    2026110,
+    2026111,
+    2026112,
+    2026113,
+    2026114
+  ],
+  "excluded_smoke_seed": 2026000,
+  "expected_fresh_fits": 6720,
+  "failures": "Retain all outcomes. A nonfinite gradient/update stops only that condition; lastfinite weights retained and subsequent NMSE assigned1e6, accuracies0 with failure_step.",
+  "families": [
+    "and4",
+    "or4",
+    "parity4",
+    "or_of_ands",
+    "xor_of_ands",
+    "and_of_xors",
+    "nested"
+  ],
+  "fresh_seeds": [
+    2026210,
+    2026211,
+    2026212,
+    2026213,
+    2026214,
+    2026215,
+    2026216,
+    2026217,
+    2026218,
+    2026219,
+    2026220,
+    2026221,
+    2026222,
+    2026223,
+    2026224,
+    2026225,
+    2026226,
+    2026227,
+    2026228,
+    2026229
+  ],
+  "functional_scope": "Seven FIXED logical templates. Random permutation/data/noise/initialization seeds are new, not new functional families. No general Boolean/morphology law or biophysical equivalence claimed.",
+  "gradient_clip": 10.0,
+  "initialization": "GaussianSD0.5 node coefficients; biases0; clip tobox2; no target labels/coefficients/gates supplied to initialization.",
+  "initialization_sd": 0.5,
+  "input_access": "All16 input patterns have uniform probability. Training/test draws are independent with replacement and fresh normalized-label Gaussian noise. Input patterns may recur.",
+  "label_coordinates": "bits=(physical Rademacher x[:,common_seed_permutation]+1)/2; center and population-variance-normalize each complete16-row truth table",
+  "noise_sd": 0.15,
+  "optimizers": [
+    "sgd",
+    "adam"
+  ],
+  "parameter_bound": 2.0,
+  "permutation": "One common physical leaf permutation per seed applies to all semantic task variables and all candidate tree leaves.",
+  "primary_comparisons": [
+    "Adam exact XOR-of-AND: mean balanced_ac_bd/balanced_ad_bc minus balanced_ab_cd",
+    "Adam XOR-of-AND on balanced_ab_cd: broadcast minus exact"
+  ],
+  "primary_endpoint": "Exhaustive CLEAN16-pattern NMSE in exactly centered,unitvariance target coordinates; no sampled-test or observed-class-variance denominator.",
+  "primary_inference": "20 paired seed blocks;10000bootstrapdraws;two Bonferroni-adjusted two-sided97.5% intervals; success requires positive lower bound and meanimprovement>=0.01NMSE. Other intervals95%descriptive.",
+  "primary_rate_scope": "Use frozen per-optimizer/per-rule rates; broadcast/exact comparison is a development-selected recipe contrast. Same-rate outcomes retained.",
+  "rate_selection": "For each optimizer/rule, choose smallest minimizer within absolute1e-12 tolerance of mean final CLEAN populationNMSE over all5developmentseeds,7tasks,4trees. Keep all3rates in fresh runs. Bounded recipe comparison; no exhaustive optimizer claim.",
+  "rates": [
+    0.003,
+    0.01,
+    0.03
+  ],
+  "resources": {
+    "edges": 6,
+    "inputs": 4,
+    "internal_units": 3,
+    "parameters": 12,
+    "root_outputs": 1
+  },
+  "rules": [
+    "exact",
+    "broadcast"
+  ],
+  "secondary_endpoints": "Independent1024-example noisy testNMSE; exhaustive accuracy and balancedaccuracy at normalized threshold(raw0.5); gradientcosine and clip counts descriptive.",
+  "seeds": "Each seed has independent per-family training/test/initialization/batch streams; all paired tree/rule/optimizer/rate conditions share these streams within family.",
+  "steps": 2048,
+  "test_samples": 1024,
+  "training_samples": 256,
+  "trees": {
+    "balanced_ab_cd": [
+      [
+        0,
+        1
+      ],
+      [
+        2,
+        3
+      ]
+    ],
+    "balanced_ac_bd": [
+      [
+        0,
+        2
+      ],
+      [
+        1,
+        3
+      ]
+    ],
+    "balanced_ad_bc": [
+      [
+        0,
+        3
+      ],
+      [
+        1,
+        2
+      ]
+    ],
+    "comb_a_b_cd": [
+      0,
+      [
+        1,
+        [
+          2,
+          3
+        ]
+      ]
+    ]
+  },
+  "update": "Gradient of half mean squared normalized-label error. Exact path derivative or all nonroot sensitivities1; root sensitivity1 underboth. Train every coefficient.",
+  "version": 1,
+  "zero_initial_bias": true
+}

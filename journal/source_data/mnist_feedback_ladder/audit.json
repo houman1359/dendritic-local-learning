@@ -1,0 +1,1007 @@
+{
+  "current_source_runs": [
+    {
+      "manifest_sha256": "44c8a8e0f5d49ddb45d5acdf7242954a444cedfa4f470362bdea34587f0e53f0",
+      "run_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/journal_extension_20260820/sweep_runs/mnist_feedback_ladder/journal_mnist_feedback_ladder_coordinates_shunting_15seed_20260825174136",
+      "scheduler_profile": {
+        "account": "kempner_bsabatini_lab",
+        "partition": "kempner_h100_priority",
+        "placeholder": false,
+        "profile_id": "kempner_bsabatini_lab_h100_priority",
+        "validated": true
+      },
+      "scientific_signature_sha256": "7381f53907b62e93f58f36c19f383f9c3a8fb990cf8fe3f80b60264b7d7375d8",
+      "source_identity": {
+        "files": [
+          {
+            "path": "repo:drafts/dendritic-local-learning/journal/configs/mnist_feedback_ladder/coordinates_shunting_15seed.yaml",
+            "sha256": "3d57984fbd47654971acaa44c4a8ac885702acfbb60eca64c320059cc867a090"
+          },
+          {
+            "path": "repo:drafts/dendritic-local-learning/journal/configs/reruns/feedback_definition_shunting_15seed.yaml",
+            "sha256": "0a1f9a4db29778835f212256e2a107d3d984c1ed604570e01bcfb4e14e1f4d7f"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/config/model_aliases.py",
+            "sha256": "ea57ca43f5b7379bc4cb9b9617a01955eb1dcf48275326e1e120f80687533d24"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/config/reactivation.py",
+            "sha256": "f49d706285ea72814cef04b1294134efefa9ba631448fe6040ca99ac8a358276"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/dendritic/branch_layer.py",
+            "sha256": "9bf4a07edfdc0e5b566c921f035b31b7a359d7aa6a10b63471bda49556c4ddbb"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/dendritic/dendrinet.py",
+            "sha256": "3f8fda8d12a11bbd5531e73beb5abeec2afc3ac5b74dbca11bcaac73f5c702f3"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/dendritic/initialize_methods.py",
+            "sha256": "5fb6065994841024cad2fa71357601995084d8ec04d10a8a7beb63a38fa4b488"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/dendritic/initialize_reactivation.py",
+            "sha256": "db5117f12c8c233a3f736c8400e59f8494e2c275c73ecb232aa004c07985ee7f"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/dendritic/synapse_config.py",
+            "sha256": "60560266cb6d5fced08b0c37420d26019475400004f5a7487442714aaca35ade"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/ei_layer.py",
+            "sha256": "d5c736bf0c8720e1b3a608633778b6a415dd276e9310fec7325865056c47b98e"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/ei_network.py",
+            "sha256": "1a3d2715172f8f339221ccb960c72586f2b3f65cf4806ea6a76eb4330e287c58"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/synapse/factory.py",
+            "sha256": "cb2a84925abac2c6dd262226e2fca36dac1b90b3b5afc19f65697ebf06130658"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/synapse/indexed_sparse.py",
+            "sha256": "04e2525d5a49b59c8e1c93ee2ad830ceb4e51baf12a97a793ab8371add577af2"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/synapse/spatial_morphology.py",
+            "sha256": "e4e2bfb10c92f4f88eee64a77e81d245ff5391c6582b352e1d115d0773369c43"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/synapse/structured_mask.py",
+            "sha256": "85625fc187c6e92b19982f85f25919586170fe615356d95a71d0dffac704e8f5"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/synapse/topk.py",
+            "sha256": "251858450a91b682b398a8e571bf8343cf58f0ed488d49b801e78e408d41e6e0"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/factory.py",
+            "sha256": "6ef13c99bac5e269c3f664e04cde230a61bd0daa146bffa8bcb35c480a3b5343"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/scripts/sweeps/control_plane.py",
+            "sha256": "a8495b72ab1c278710b49ef674dfd0714394b34ae59cac80ab256618e22e974c"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/scripts/sweeps/sweep_manager.py",
+            "sha256": "e29c1e58f907675f5a44d298002ad6ca33e83564a4c02fdddac3ada4c1a3f551"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/scripts/sweeps/unified/sweep_types/unified_sweep.py",
+            "sha256": "06bf4e5291deefc643d195c5f4ed010a56799959dbef9abcdce2d539d9351841"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/scripts/training/train_experiments.py",
+            "sha256": "21ad42542679da8ef0f1f53d79134f8151861eabc6d8aee002182feaeaafce03"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/training/strategies/local_learning.py",
+            "sha256": "c71b9946752c9cd40259ff8bfd0198f1521dc29c5af23ad52f63bcdafbe8acb3"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/training/strategies/local_learning_parts/local_learning_broadcast_mixin.py",
+            "sha256": "b6a5ae4caf350e3325c1c6fe4f2efc3eb1b1d6f9f6931900e6736b5b7c1a03a7"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/training/strategies/local_learning_parts/local_learning_broadcast_transport_mixin.py",
+            "sha256": "896b40963846b9c5ad2f9d13a187183b7cb08495bfe5d4238a3f263d76f54cf3"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/training/strategies/local_learning_parts/local_learning_epoch.py",
+            "sha256": "d0835bb8d590f3feee0858b9d04766c82cf42a842c6a7dfb3737bca381b7b702"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/training/strategies/local_learning_parts/local_learning_gradient_utils.py",
+            "sha256": "a5fc3de83c48031efcff9f3a78eca51518f853a5ba7a195cbf1910e7bdcb49cd"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/training/strategies/local_learning_parts/local_learning_post_factors_mixin.py",
+            "sha256": "fd3726a27272013ef6d6f3f5b95d38d46d1ed6c56940992d26b5fa0ec76f062a"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/training/strategies/local_learning_parts/local_learning_rule_mixin.py",
+            "sha256": "5a7644ffc9807112ce94736bbbbe820f299b0bb08daa11c22144f00c07050f02"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/training/strategies/local_learning_parts/local_learning_signals.py",
+            "sha256": "4b6bd13d26d932acf33899489095b06483e9162c4948eb096b22ad44df36903a"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/training/strategies/local_learning_parts/local_learning_topk_mixin.py",
+            "sha256": "7198d4b0d90013023407cc61fe828d752c359616f83fb0b8f830ef2eecfe4f0f"
+          }
+        ],
+        "git": {
+          "available": true,
+          "branch": "iss373_hs",
+          "commit": "6c1aaa25abd056c417842e1c46378b65d036f6a7",
+          "tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "tracked_worktree_dirty": false
+        },
+        "python_version": "3.10.13",
+        "repository_name": "dendritic-modeling"
+      }
+    },
+    {
+      "manifest_sha256": "f3c8f1d8f352433085aefc09aadbcfab17dd482751955b3cfc8405430c5c9ae4",
+      "run_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/journal_extension_20260820/sweep_runs/mnist_feedback_ladder/journal_mnist_feedback_ladder_coordinates_additive_15seed_20260825174138",
+      "scheduler_profile": {
+        "account": "kempner_bsabatini_lab",
+        "partition": "kempner_h100_priority",
+        "placeholder": false,
+        "profile_id": "kempner_bsabatini_lab_h100_priority",
+        "validated": true
+      },
+      "scientific_signature_sha256": "4142772af52d455ae644ac271cc3031b78111e5c39b5983c9a60248046354fdb",
+      "source_identity": {
+        "files": [
+          {
+            "path": "repo:drafts/dendritic-local-learning/journal/configs/mnist_feedback_ladder/coordinates_additive_15seed.yaml",
+            "sha256": "07c0f49569612070a82f28f05220d605839c0c8f80265bb0c99cbbb8bf691cb5"
+          },
+          {
+            "path": "repo:drafts/dendritic-local-learning/journal/configs/reruns/feedback_definition_additive_15seed.yaml",
+            "sha256": "33c48c002f9b3eaa10a1c7bf9b9c0995451bf03d2823d2524501b2f8570ddf61"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/config/model_aliases.py",
+            "sha256": "ea57ca43f5b7379bc4cb9b9617a01955eb1dcf48275326e1e120f80687533d24"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/config/reactivation.py",
+            "sha256": "f49d706285ea72814cef04b1294134efefa9ba631448fe6040ca99ac8a358276"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/dendritic/branch_layer.py",
+            "sha256": "9bf4a07edfdc0e5b566c921f035b31b7a359d7aa6a10b63471bda49556c4ddbb"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/dendritic/dendrinet.py",
+            "sha256": "3f8fda8d12a11bbd5531e73beb5abeec2afc3ac5b74dbca11bcaac73f5c702f3"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/dendritic/initialize_methods.py",
+            "sha256": "5fb6065994841024cad2fa71357601995084d8ec04d10a8a7beb63a38fa4b488"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/dendritic/initialize_reactivation.py",
+            "sha256": "db5117f12c8c233a3f736c8400e59f8494e2c275c73ecb232aa004c07985ee7f"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/dendritic/synapse_config.py",
+            "sha256": "60560266cb6d5fced08b0c37420d26019475400004f5a7487442714aaca35ade"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/ei_layer.py",
+            "sha256": "d5c736bf0c8720e1b3a608633778b6a415dd276e9310fec7325865056c47b98e"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/ei_network.py",
+            "sha256": "1a3d2715172f8f339221ccb960c72586f2b3f65cf4806ea6a76eb4330e287c58"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/synapse/factory.py",
+            "sha256": "cb2a84925abac2c6dd262226e2fca36dac1b90b3b5afc19f65697ebf06130658"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/synapse/indexed_sparse.py",
+            "sha256": "04e2525d5a49b59c8e1c93ee2ad830ceb4e51baf12a97a793ab8371add577af2"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/synapse/spatial_morphology.py",
+            "sha256": "e4e2bfb10c92f4f88eee64a77e81d245ff5391c6582b352e1d115d0773369c43"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/synapse/structured_mask.py",
+            "sha256": "85625fc187c6e92b19982f85f25919586170fe615356d95a71d0dffac704e8f5"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/synapse/topk.py",
+            "sha256": "251858450a91b682b398a8e571bf8343cf58f0ed488d49b801e78e408d41e6e0"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/factory.py",
+            "sha256": "6ef13c99bac5e269c3f664e04cde230a61bd0daa146bffa8bcb35c480a3b5343"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/scripts/sweeps/control_plane.py",
+            "sha256": "a8495b72ab1c278710b49ef674dfd0714394b34ae59cac80ab256618e22e974c"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/scripts/sweeps/sweep_manager.py",
+            "sha256": "e29c1e58f907675f5a44d298002ad6ca33e83564a4c02fdddac3ada4c1a3f551"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/scripts/sweeps/unified/sweep_types/unified_sweep.py",
+            "sha256": "06bf4e5291deefc643d195c5f4ed010a56799959dbef9abcdce2d539d9351841"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/scripts/training/train_experiments.py",
+            "sha256": "21ad42542679da8ef0f1f53d79134f8151861eabc6d8aee002182feaeaafce03"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/training/strategies/local_learning.py",
+            "sha256": "c71b9946752c9cd40259ff8bfd0198f1521dc29c5af23ad52f63bcdafbe8acb3"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/training/strategies/local_learning_parts/local_learning_broadcast_mixin.py",
+            "sha256": "b6a5ae4caf350e3325c1c6fe4f2efc3eb1b1d6f9f6931900e6736b5b7c1a03a7"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/training/strategies/local_learning_parts/local_learning_broadcast_transport_mixin.py",
+            "sha256": "896b40963846b9c5ad2f9d13a187183b7cb08495bfe5d4238a3f263d76f54cf3"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/training/strategies/local_learning_parts/local_learning_epoch.py",
+            "sha256": "d0835bb8d590f3feee0858b9d04766c82cf42a842c6a7dfb3737bca381b7b702"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/training/strategies/local_learning_parts/local_learning_gradient_utils.py",
+            "sha256": "a5fc3de83c48031efcff9f3a78eca51518f853a5ba7a195cbf1910e7bdcb49cd"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/training/strategies/local_learning_parts/local_learning_post_factors_mixin.py",
+            "sha256": "fd3726a27272013ef6d6f3f5b95d38d46d1ed6c56940992d26b5fa0ec76f062a"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/training/strategies/local_learning_parts/local_learning_rule_mixin.py",
+            "sha256": "5a7644ffc9807112ce94736bbbbe820f299b0bb08daa11c22144f00c07050f02"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/training/strategies/local_learning_parts/local_learning_signals.py",
+            "sha256": "4b6bd13d26d932acf33899489095b06483e9162c4948eb096b22ad44df36903a"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/training/strategies/local_learning_parts/local_learning_topk_mixin.py",
+            "sha256": "7198d4b0d90013023407cc61fe828d752c359616f83fb0b8f830ef2eecfe4f0f"
+          }
+        ],
+        "git": {
+          "available": true,
+          "branch": "iss373_hs",
+          "commit": "6c1aaa25abd056c417842e1c46378b65d036f6a7",
+          "tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "tracked_worktree_dirty": false
+        },
+        "python_version": "3.10.13",
+        "repository_name": "dendritic-modeling"
+      }
+    },
+    {
+      "manifest_sha256": "8b473a9aba5d39422203e3d64c303610d533407bd583dbdb93fb6766bc7a6ecf",
+      "run_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/journal_extension_20260820/sweep_runs/mnist_feedback_ladder/journal_mnist_feedback_ladder_exact_path_shunting_15seed_20260825173517",
+      "scheduler_profile": {
+        "account": "kempner_bsabatini_lab",
+        "partition": "kempner_h100_priority",
+        "placeholder": false,
+        "profile_id": "kempner_bsabatini_lab_h100_priority",
+        "validated": true
+      },
+      "scientific_signature_sha256": "7381f53907b62e93f58f36c19f383f9c3a8fb990cf8fe3f80b60264b7d7375d8",
+      "source_identity": {
+        "files": [
+          {
+            "path": "repo:drafts/dendritic-local-learning/journal/configs/mnist_feedback_ladder/exact_path_shunting_15seed.yaml",
+            "sha256": "999fed5791254fce84220a11aee190e3da22b37d2a4abe7be2b14f6a75ee1b4c"
+          },
+          {
+            "path": "repo:drafts/dendritic-local-learning/journal/configs/reruns/feedback_definition_shunting_15seed.yaml",
+            "sha256": "0a1f9a4db29778835f212256e2a107d3d984c1ed604570e01bcfb4e14e1f4d7f"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/config/model_aliases.py",
+            "sha256": "ea57ca43f5b7379bc4cb9b9617a01955eb1dcf48275326e1e120f80687533d24"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/config/reactivation.py",
+            "sha256": "f49d706285ea72814cef04b1294134efefa9ba631448fe6040ca99ac8a358276"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/dendritic/branch_layer.py",
+            "sha256": "9bf4a07edfdc0e5b566c921f035b31b7a359d7aa6a10b63471bda49556c4ddbb"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/dendritic/dendrinet.py",
+            "sha256": "3f8fda8d12a11bbd5531e73beb5abeec2afc3ac5b74dbca11bcaac73f5c702f3"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/dendritic/initialize_methods.py",
+            "sha256": "5fb6065994841024cad2fa71357601995084d8ec04d10a8a7beb63a38fa4b488"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/dendritic/initialize_reactivation.py",
+            "sha256": "db5117f12c8c233a3f736c8400e59f8494e2c275c73ecb232aa004c07985ee7f"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/dendritic/synapse_config.py",
+            "sha256": "60560266cb6d5fced08b0c37420d26019475400004f5a7487442714aaca35ade"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/ei_layer.py",
+            "sha256": "d5c736bf0c8720e1b3a608633778b6a415dd276e9310fec7325865056c47b98e"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/ei_network.py",
+            "sha256": "1a3d2715172f8f339221ccb960c72586f2b3f65cf4806ea6a76eb4330e287c58"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/synapse/factory.py",
+            "sha256": "cb2a84925abac2c6dd262226e2fca36dac1b90b3b5afc19f65697ebf06130658"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/synapse/indexed_sparse.py",
+            "sha256": "04e2525d5a49b59c8e1c93ee2ad830ceb4e51baf12a97a793ab8371add577af2"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/synapse/spatial_morphology.py",
+            "sha256": "e4e2bfb10c92f4f88eee64a77e81d245ff5391c6582b352e1d115d0773369c43"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/synapse/structured_mask.py",
+            "sha256": "85625fc187c6e92b19982f85f25919586170fe615356d95a71d0dffac704e8f5"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/synapse/topk.py",
+            "sha256": "251858450a91b682b398a8e571bf8343cf58f0ed488d49b801e78e408d41e6e0"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/factory.py",
+            "sha256": "6ef13c99bac5e269c3f664e04cde230a61bd0daa146bffa8bcb35c480a3b5343"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/scripts/sweeps/control_plane.py",
+            "sha256": "a8495b72ab1c278710b49ef674dfd0714394b34ae59cac80ab256618e22e974c"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/scripts/sweeps/sweep_manager.py",
+            "sha256": "e29c1e58f907675f5a44d298002ad6ca33e83564a4c02fdddac3ada4c1a3f551"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/scripts/sweeps/unified/sweep_types/unified_sweep.py",
+            "sha256": "06bf4e5291deefc643d195c5f4ed010a56799959dbef9abcdce2d539d9351841"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/scripts/training/train_experiments.py",
+            "sha256": "21ad42542679da8ef0f1f53d79134f8151861eabc6d8aee002182feaeaafce03"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/training/strategies/local_learning.py",
+            "sha256": "c71b9946752c9cd40259ff8bfd0198f1521dc29c5af23ad52f63bcdafbe8acb3"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/training/strategies/local_learning_parts/local_learning_broadcast_mixin.py",
+            "sha256": "b6a5ae4caf350e3325c1c6fe4f2efc3eb1b1d6f9f6931900e6736b5b7c1a03a7"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/training/strategies/local_learning_parts/local_learning_broadcast_transport_mixin.py",
+            "sha256": "896b40963846b9c5ad2f9d13a187183b7cb08495bfe5d4238a3f263d76f54cf3"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/training/strategies/local_learning_parts/local_learning_epoch.py",
+            "sha256": "d0835bb8d590f3feee0858b9d04766c82cf42a842c6a7dfb3737bca381b7b702"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/training/strategies/local_learning_parts/local_learning_gradient_utils.py",
+            "sha256": "a5fc3de83c48031efcff9f3a78eca51518f853a5ba7a195cbf1910e7bdcb49cd"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/training/strategies/local_learning_parts/local_learning_post_factors_mixin.py",
+            "sha256": "fd3726a27272013ef6d6f3f5b95d38d46d1ed6c56940992d26b5fa0ec76f062a"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/training/strategies/local_learning_parts/local_learning_rule_mixin.py",
+            "sha256": "5a7644ffc9807112ce94736bbbbe820f299b0bb08daa11c22144f00c07050f02"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/training/strategies/local_learning_parts/local_learning_signals.py",
+            "sha256": "4b6bd13d26d932acf33899489095b06483e9162c4948eb096b22ad44df36903a"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/training/strategies/local_learning_parts/local_learning_topk_mixin.py",
+            "sha256": "7198d4b0d90013023407cc61fe828d752c359616f83fb0b8f830ef2eecfe4f0f"
+          }
+        ],
+        "git": {
+          "available": true,
+          "branch": "iss373_hs",
+          "commit": "6c1aaa25abd056c417842e1c46378b65d036f6a7",
+          "tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "tracked_worktree_dirty": false
+        },
+        "python_version": "3.10.13",
+        "repository_name": "dendritic-modeling"
+      }
+    },
+    {
+      "manifest_sha256": "f708a6c8c0c94c010817ab1d53deab1c67cad69c97d8b8685c3f57a55a5df521",
+      "run_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/journal_extension_20260820/sweep_runs/mnist_feedback_ladder/journal_mnist_feedback_ladder_exact_path_additive_15seed_20260825173519",
+      "scheduler_profile": {
+        "account": "kempner_bsabatini_lab",
+        "partition": "kempner_h100_priority",
+        "placeholder": false,
+        "profile_id": "kempner_bsabatini_lab_h100_priority",
+        "validated": true
+      },
+      "scientific_signature_sha256": "4142772af52d455ae644ac271cc3031b78111e5c39b5983c9a60248046354fdb",
+      "source_identity": {
+        "files": [
+          {
+            "path": "repo:drafts/dendritic-local-learning/journal/configs/mnist_feedback_ladder/exact_path_additive_15seed.yaml",
+            "sha256": "eb8fd6b81c588a631b959b00af8658d179a5eab0e1cbcc090e41c1212ada5edf"
+          },
+          {
+            "path": "repo:drafts/dendritic-local-learning/journal/configs/reruns/feedback_definition_additive_15seed.yaml",
+            "sha256": "33c48c002f9b3eaa10a1c7bf9b9c0995451bf03d2823d2524501b2f8570ddf61"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/config/model_aliases.py",
+            "sha256": "ea57ca43f5b7379bc4cb9b9617a01955eb1dcf48275326e1e120f80687533d24"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/config/reactivation.py",
+            "sha256": "f49d706285ea72814cef04b1294134efefa9ba631448fe6040ca99ac8a358276"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/dendritic/branch_layer.py",
+            "sha256": "9bf4a07edfdc0e5b566c921f035b31b7a359d7aa6a10b63471bda49556c4ddbb"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/dendritic/dendrinet.py",
+            "sha256": "3f8fda8d12a11bbd5531e73beb5abeec2afc3ac5b74dbca11bcaac73f5c702f3"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/dendritic/initialize_methods.py",
+            "sha256": "5fb6065994841024cad2fa71357601995084d8ec04d10a8a7beb63a38fa4b488"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/dendritic/initialize_reactivation.py",
+            "sha256": "db5117f12c8c233a3f736c8400e59f8494e2c275c73ecb232aa004c07985ee7f"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/dendritic/synapse_config.py",
+            "sha256": "60560266cb6d5fced08b0c37420d26019475400004f5a7487442714aaca35ade"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/ei_layer.py",
+            "sha256": "d5c736bf0c8720e1b3a608633778b6a415dd276e9310fec7325865056c47b98e"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/ei_network.py",
+            "sha256": "1a3d2715172f8f339221ccb960c72586f2b3f65cf4806ea6a76eb4330e287c58"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/synapse/factory.py",
+            "sha256": "cb2a84925abac2c6dd262226e2fca36dac1b90b3b5afc19f65697ebf06130658"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/synapse/indexed_sparse.py",
+            "sha256": "04e2525d5a49b59c8e1c93ee2ad830ceb4e51baf12a97a793ab8371add577af2"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/synapse/spatial_morphology.py",
+            "sha256": "e4e2bfb10c92f4f88eee64a77e81d245ff5391c6582b352e1d115d0773369c43"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/synapse/structured_mask.py",
+            "sha256": "85625fc187c6e92b19982f85f25919586170fe615356d95a71d0dffac704e8f5"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/synapse/topk.py",
+            "sha256": "251858450a91b682b398a8e571bf8343cf58f0ed488d49b801e78e408d41e6e0"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/factory.py",
+            "sha256": "6ef13c99bac5e269c3f664e04cde230a61bd0daa146bffa8bcb35c480a3b5343"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/scripts/sweeps/control_plane.py",
+            "sha256": "a8495b72ab1c278710b49ef674dfd0714394b34ae59cac80ab256618e22e974c"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/scripts/sweeps/sweep_manager.py",
+            "sha256": "e29c1e58f907675f5a44d298002ad6ca33e83564a4c02fdddac3ada4c1a3f551"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/scripts/sweeps/unified/sweep_types/unified_sweep.py",
+            "sha256": "06bf4e5291deefc643d195c5f4ed010a56799959dbef9abcdce2d539d9351841"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/scripts/training/train_experiments.py",
+            "sha256": "21ad42542679da8ef0f1f53d79134f8151861eabc6d8aee002182feaeaafce03"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/training/strategies/local_learning.py",
+            "sha256": "c71b9946752c9cd40259ff8bfd0198f1521dc29c5af23ad52f63bcdafbe8acb3"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/training/strategies/local_learning_parts/local_learning_broadcast_mixin.py",
+            "sha256": "b6a5ae4caf350e3325c1c6fe4f2efc3eb1b1d6f9f6931900e6736b5b7c1a03a7"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/training/strategies/local_learning_parts/local_learning_broadcast_transport_mixin.py",
+            "sha256": "896b40963846b9c5ad2f9d13a187183b7cb08495bfe5d4238a3f263d76f54cf3"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/training/strategies/local_learning_parts/local_learning_epoch.py",
+            "sha256": "d0835bb8d590f3feee0858b9d04766c82cf42a842c6a7dfb3737bca381b7b702"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/training/strategies/local_learning_parts/local_learning_gradient_utils.py",
+            "sha256": "a5fc3de83c48031efcff9f3a78eca51518f853a5ba7a195cbf1910e7bdcb49cd"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/training/strategies/local_learning_parts/local_learning_post_factors_mixin.py",
+            "sha256": "fd3726a27272013ef6d6f3f5b95d38d46d1ed6c56940992d26b5fa0ec76f062a"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/training/strategies/local_learning_parts/local_learning_rule_mixin.py",
+            "sha256": "5a7644ffc9807112ce94736bbbbe820f299b0bb08daa11c22144f00c07050f02"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/training/strategies/local_learning_parts/local_learning_signals.py",
+            "sha256": "4b6bd13d26d932acf33899489095b06483e9162c4948eb096b22ad44df36903a"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/training/strategies/local_learning_parts/local_learning_topk_mixin.py",
+            "sha256": "7198d4b0d90013023407cc61fe828d752c359616f83fb0b8f830ef2eecfe4f0f"
+          }
+        ],
+        "git": {
+          "available": true,
+          "branch": "iss373_hs",
+          "commit": "6c1aaa25abd056c417842e1c46378b65d036f6a7",
+          "tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "tracked_worktree_dirty": false
+        },
+        "python_version": "3.10.13",
+        "repository_name": "dendritic-modeling"
+      }
+    },
+    {
+      "manifest_sha256": "3612d74c3b01f62a67f968e22e41757d19a23023f03959775f7f95eca2687559",
+      "run_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/journal_extension_20260820/sweep_runs/mnist_feedback_ladder/journal_mnist_feedback_ladder_strict_scalar_shunting_15seed_20260826004509",
+      "scheduler_profile": {
+        "account": "kempner_bsabatini_lab",
+        "partition": "kempner_h100_priority",
+        "placeholder": false,
+        "profile_id": "kempner_bsabatini_lab_h100_priority",
+        "validated": true
+      },
+      "scientific_signature_sha256": "7381f53907b62e93f58f36c19f383f9c3a8fb990cf8fe3f80b60264b7d7375d8",
+      "source_identity": {
+        "files": [
+          {
+            "path": "repo:drafts/dendritic-local-learning/journal/configs/mnist_feedback_ladder/strict_scalar_shunting_15seed.yaml",
+            "sha256": "361d8ed50724677a0d5305b0447d0a8144a56d94cf0f351e60f14903a71889ed"
+          },
+          {
+            "path": "repo:drafts/dendritic-local-learning/journal/configs/reruns/feedback_definition_shunting_15seed.yaml",
+            "sha256": "0a1f9a4db29778835f212256e2a107d3d984c1ed604570e01bcfb4e14e1f4d7f"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/config/model_aliases.py",
+            "sha256": "ea57ca43f5b7379bc4cb9b9617a01955eb1dcf48275326e1e120f80687533d24"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/config/reactivation.py",
+            "sha256": "f49d706285ea72814cef04b1294134efefa9ba631448fe6040ca99ac8a358276"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/dendritic/branch_layer.py",
+            "sha256": "9bf4a07edfdc0e5b566c921f035b31b7a359d7aa6a10b63471bda49556c4ddbb"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/dendritic/dendrinet.py",
+            "sha256": "3f8fda8d12a11bbd5531e73beb5abeec2afc3ac5b74dbca11bcaac73f5c702f3"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/dendritic/initialize_methods.py",
+            "sha256": "5fb6065994841024cad2fa71357601995084d8ec04d10a8a7beb63a38fa4b488"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/dendritic/initialize_reactivation.py",
+            "sha256": "db5117f12c8c233a3f736c8400e59f8494e2c275c73ecb232aa004c07985ee7f"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/dendritic/synapse_config.py",
+            "sha256": "60560266cb6d5fced08b0c37420d26019475400004f5a7487442714aaca35ade"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/ei_layer.py",
+            "sha256": "d5c736bf0c8720e1b3a608633778b6a415dd276e9310fec7325865056c47b98e"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/ei_network.py",
+            "sha256": "1a3d2715172f8f339221ccb960c72586f2b3f65cf4806ea6a76eb4330e287c58"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/synapse/factory.py",
+            "sha256": "cb2a84925abac2c6dd262226e2fca36dac1b90b3b5afc19f65697ebf06130658"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/synapse/indexed_sparse.py",
+            "sha256": "04e2525d5a49b59c8e1c93ee2ad830ceb4e51baf12a97a793ab8371add577af2"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/synapse/spatial_morphology.py",
+            "sha256": "e4e2bfb10c92f4f88eee64a77e81d245ff5391c6582b352e1d115d0773369c43"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/synapse/structured_mask.py",
+            "sha256": "85625fc187c6e92b19982f85f25919586170fe615356d95a71d0dffac704e8f5"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/synapse/topk.py",
+            "sha256": "251858450a91b682b398a8e571bf8343cf58f0ed488d49b801e78e408d41e6e0"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/factory.py",
+            "sha256": "6ef13c99bac5e269c3f664e04cde230a61bd0daa146bffa8bcb35c480a3b5343"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/scripts/sweeps/control_plane.py",
+            "sha256": "a8495b72ab1c278710b49ef674dfd0714394b34ae59cac80ab256618e22e974c"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/scripts/sweeps/sweep_manager.py",
+            "sha256": "e29c1e58f907675f5a44d298002ad6ca33e83564a4c02fdddac3ada4c1a3f551"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/scripts/sweeps/unified/sweep_types/unified_sweep.py",
+            "sha256": "06bf4e5291deefc643d195c5f4ed010a56799959dbef9abcdce2d539d9351841"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/scripts/training/train_experiments.py",
+            "sha256": "21ad42542679da8ef0f1f53d79134f8151861eabc6d8aee002182feaeaafce03"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/training/strategies/local_learning.py",
+            "sha256": "c71b9946752c9cd40259ff8bfd0198f1521dc29c5af23ad52f63bcdafbe8acb3"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/training/strategies/local_learning_parts/local_learning_broadcast_mixin.py",
+            "sha256": "b6a5ae4caf350e3325c1c6fe4f2efc3eb1b1d6f9f6931900e6736b5b7c1a03a7"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/training/strategies/local_learning_parts/local_learning_broadcast_transport_mixin.py",
+            "sha256": "896b40963846b9c5ad2f9d13a187183b7cb08495bfe5d4238a3f263d76f54cf3"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/training/strategies/local_learning_parts/local_learning_epoch.py",
+            "sha256": "d0835bb8d590f3feee0858b9d04766c82cf42a842c6a7dfb3737bca381b7b702"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/training/strategies/local_learning_parts/local_learning_gradient_utils.py",
+            "sha256": "a5fc3de83c48031efcff9f3a78eca51518f853a5ba7a195cbf1910e7bdcb49cd"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/training/strategies/local_learning_parts/local_learning_post_factors_mixin.py",
+            "sha256": "fd3726a27272013ef6d6f3f5b95d38d46d1ed6c56940992d26b5fa0ec76f062a"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/training/strategies/local_learning_parts/local_learning_rule_mixin.py",
+            "sha256": "5a7644ffc9807112ce94736bbbbe820f299b0bb08daa11c22144f00c07050f02"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/training/strategies/local_learning_parts/local_learning_signals.py",
+            "sha256": "4b6bd13d26d932acf33899489095b06483e9162c4948eb096b22ad44df36903a"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/training/strategies/local_learning_parts/local_learning_topk_mixin.py",
+            "sha256": "7198d4b0d90013023407cc61fe828d752c359616f83fb0b8f830ef2eecfe4f0f"
+          }
+        ],
+        "git": {
+          "available": true,
+          "branch": "iss373_hs",
+          "commit": "bd5f905e3c67c2566c770368e2a3a3299affb77a",
+          "tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "tracked_worktree_dirty": false
+        },
+        "python_version": "3.10.13",
+        "repository_name": "dendritic-modeling"
+      }
+    },
+    {
+      "manifest_sha256": "2f06ca8e7601998245575c0f572861a19e503406e60713ad06f9346fb5803af5",
+      "run_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/journal_extension_20260820/sweep_runs/mnist_feedback_ladder/journal_mnist_feedback_ladder_strict_scalar_additive_15seed_20260826004511",
+      "scheduler_profile": {
+        "account": "kempner_bsabatini_lab",
+        "partition": "kempner_h100_priority",
+        "placeholder": false,
+        "profile_id": "kempner_bsabatini_lab_h100_priority",
+        "validated": true
+      },
+      "scientific_signature_sha256": "4142772af52d455ae644ac271cc3031b78111e5c39b5983c9a60248046354fdb",
+      "source_identity": {
+        "files": [
+          {
+            "path": "repo:drafts/dendritic-local-learning/journal/configs/mnist_feedback_ladder/strict_scalar_additive_15seed.yaml",
+            "sha256": "985a9450ccc027e93176dea16c6de5dda85f5281549af0a97b9e800a7a6fa827"
+          },
+          {
+            "path": "repo:drafts/dendritic-local-learning/journal/configs/reruns/feedback_definition_additive_15seed.yaml",
+            "sha256": "33c48c002f9b3eaa10a1c7bf9b9c0995451bf03d2823d2524501b2f8570ddf61"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/config/model_aliases.py",
+            "sha256": "ea57ca43f5b7379bc4cb9b9617a01955eb1dcf48275326e1e120f80687533d24"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/config/reactivation.py",
+            "sha256": "f49d706285ea72814cef04b1294134efefa9ba631448fe6040ca99ac8a358276"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/dendritic/branch_layer.py",
+            "sha256": "9bf4a07edfdc0e5b566c921f035b31b7a359d7aa6a10b63471bda49556c4ddbb"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/dendritic/dendrinet.py",
+            "sha256": "3f8fda8d12a11bbd5531e73beb5abeec2afc3ac5b74dbca11bcaac73f5c702f3"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/dendritic/initialize_methods.py",
+            "sha256": "5fb6065994841024cad2fa71357601995084d8ec04d10a8a7beb63a38fa4b488"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/dendritic/initialize_reactivation.py",
+            "sha256": "db5117f12c8c233a3f736c8400e59f8494e2c275c73ecb232aa004c07985ee7f"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/dendritic/synapse_config.py",
+            "sha256": "60560266cb6d5fced08b0c37420d26019475400004f5a7487442714aaca35ade"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/ei_layer.py",
+            "sha256": "d5c736bf0c8720e1b3a608633778b6a415dd276e9310fec7325865056c47b98e"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/ei_network.py",
+            "sha256": "1a3d2715172f8f339221ccb960c72586f2b3f65cf4806ea6a76eb4330e287c58"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/synapse/factory.py",
+            "sha256": "cb2a84925abac2c6dd262226e2fca36dac1b90b3b5afc19f65697ebf06130658"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/synapse/indexed_sparse.py",
+            "sha256": "04e2525d5a49b59c8e1c93ee2ad830ceb4e51baf12a97a793ab8371add577af2"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/synapse/spatial_morphology.py",
+            "sha256": "e4e2bfb10c92f4f88eee64a77e81d245ff5391c6582b352e1d115d0773369c43"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/synapse/structured_mask.py",
+            "sha256": "85625fc187c6e92b19982f85f25919586170fe615356d95a71d0dffac704e8f5"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/excitation_inhibition/synapse/topk.py",
+            "sha256": "251858450a91b682b398a8e571bf8343cf58f0ed488d49b801e78e408d41e6e0"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/networks/architectures/factory.py",
+            "sha256": "6ef13c99bac5e269c3f664e04cde230a61bd0daa146bffa8bcb35c480a3b5343"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/scripts/sweeps/control_plane.py",
+            "sha256": "a8495b72ab1c278710b49ef674dfd0714394b34ae59cac80ab256618e22e974c"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/scripts/sweeps/sweep_manager.py",
+            "sha256": "e29c1e58f907675f5a44d298002ad6ca33e83564a4c02fdddac3ada4c1a3f551"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/scripts/sweeps/unified/sweep_types/unified_sweep.py",
+            "sha256": "06bf4e5291deefc643d195c5f4ed010a56799959dbef9abcdce2d539d9351841"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/scripts/training/train_experiments.py",
+            "sha256": "21ad42542679da8ef0f1f53d79134f8151861eabc6d8aee002182feaeaafce03"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/training/strategies/local_learning.py",
+            "sha256": "c71b9946752c9cd40259ff8bfd0198f1521dc29c5af23ad52f63bcdafbe8acb3"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/training/strategies/local_learning_parts/local_learning_broadcast_mixin.py",
+            "sha256": "b6a5ae4caf350e3325c1c6fe4f2efc3eb1b1d6f9f6931900e6736b5b7c1a03a7"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/training/strategies/local_learning_parts/local_learning_broadcast_transport_mixin.py",
+            "sha256": "896b40963846b9c5ad2f9d13a187183b7cb08495bfe5d4238a3f263d76f54cf3"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/training/strategies/local_learning_parts/local_learning_epoch.py",
+            "sha256": "d0835bb8d590f3feee0858b9d04766c82cf42a842c6a7dfb3737bca381b7b702"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/training/strategies/local_learning_parts/local_learning_gradient_utils.py",
+            "sha256": "a5fc3de83c48031efcff9f3a78eca51518f853a5ba7a195cbf1910e7bdcb49cd"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/training/strategies/local_learning_parts/local_learning_post_factors_mixin.py",
+            "sha256": "fd3726a27272013ef6d6f3f5b95d38d46d1ed6c56940992d26b5fa0ec76f062a"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/training/strategies/local_learning_parts/local_learning_rule_mixin.py",
+            "sha256": "5a7644ffc9807112ce94736bbbbe820f299b0bb08daa11c22144f00c07050f02"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/training/strategies/local_learning_parts/local_learning_signals.py",
+            "sha256": "4b6bd13d26d932acf33899489095b06483e9162c4948eb096b22ad44df36903a"
+          },
+          {
+            "path": "repo:src/dendritic_modeling/training/strategies/local_learning_parts/local_learning_topk_mixin.py",
+            "sha256": "7198d4b0d90013023407cc61fe828d752c359616f83fb0b8f830ef2eecfe4f0f"
+          }
+        ],
+        "git": {
+          "available": true,
+          "branch": "iss373_hs",
+          "commit": "bd5f905e3c67c2566c770368e2a3a3299affb77a",
+          "tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "tracked_worktree_dirty": false
+        },
+        "python_version": "3.10.13",
+        "repository_name": "dendritic-modeling"
+      }
+    }
+  ],
+  "executable_source_files_identical": true,
+  "executable_source_fingerprint_sha256": "43e1743da5c5e8fb149738502899cd6a8eb88f614a0fdd96fda6e7058a6ed7a2",
+  "existing_source": {
+    "path": "/n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/dendritic-local-learning/journal/source_data/figure2/feedback_accuracy_runs.csv",
+    "sha256": "15498b41b3f1c51f202aeebdece28c1eaadedc1c66415bac9156d8a3654a8926"
+  },
+  "historical_coordinate_concordance": [
+    {
+      "architecture": "additive",
+      "feedback": "neuron specific",
+      "maximum_absolute_difference": 0.0037999749183654785,
+      "mean_current_minus_historical": -0.00015999873479205878,
+      "n_paired_seeds": 15
+    },
+    {
+      "architecture": "additive",
+      "feedback": "scalar broadcast",
+      "maximum_absolute_difference": 0.015600025653839222,
+      "mean_current_minus_historical": -0.0017399986584981431,
+      "n_paired_seeds": 15
+    },
+    {
+      "architecture": "shunting",
+      "feedback": "neuron specific",
+      "maximum_absolute_difference": 0.0017000436782835804,
+      "mean_current_minus_historical": -0.0003266692161559911,
+      "n_paired_seeds": 15
+    },
+    {
+      "architecture": "shunting",
+      "feedback": "scalar broadcast",
+      "maximum_absolute_difference": 0.0153999924659729,
+      "mean_current_minus_historical": 0.001986662546793642,
+      "n_paired_seeds": 15
+    }
+  ],
+  "n_audited_current_rows": 120,
+  "n_current_coordinate_rows": 60,
+  "n_current_exact_path_rows": 30,
+  "n_historical_rows_used_for_comparison_only": 60,
+  "n_main_figure_rows": 90,
+  "n_strict_scalar_control_rows": 30,
+  "scheduler_overrides": {
+    "coordinate_additive_tasks_0_5": {
+      "job_id": "41842076",
+      "partition": "kempner_eng",
+      "qos": "normal"
+    },
+    "coordinate_additive_tasks_6_29": {
+      "job_id": "41843847",
+      "partition": "kempner_requeue",
+      "qos": "normal"
+    },
+    "coordinate_shunting_tasks_6_29": {
+      "job_id": "41843834",
+      "partition": "kempner_requeue",
+      "qos": "normal"
+    },
+    "strict_scalar_additive_tasks_0_14": {
+      "job_id": "41913871",
+      "partition": "kempner_h100_priority"
+    },
+    "strict_scalar_shunting_tasks_0_14": {
+      "job_id": "41913862",
+      "partition": "kempner_h100_priority"
+    }
+  },
+  "seeds": [
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51,
+    52,
+    53,
+    54,
+    55,
+    56
+  ],
+  "source_environments": [
+    {
+      "commit": "6c1aaa25abd056c417842e1c46378b65d036f6a7",
+      "python_version": "3.10.13",
+      "tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "commit": "bd5f905e3c67c2566c770368e2a3a3299affb77a",
+      "python_version": "3.10.13",
+      "tracked_diff_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "status": "complete_and_validated",
+  "strict_scalar_analysis_contract": {
+    "path": "/n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/dendritic-local-learning/journal/configs/mnist_feedback_ladder/strict_scalar_control_contract.yaml",
+    "sha256": "a29e92efb472398afc5ae6991a0f767cebf3a06a5961bf201b42e3a0a5842fe1"
+  },
+  "strict_scalar_practical_equivalence": [
+    {
+      "architecture": "shunting",
+      "ci95_high": -0.03993999540805817,
+      "ci95_low": -0.056693331499894466,
+      "exact_two_sided_sign_flip_p": 6.103515625e-05,
+      "legacy_higher_seeds": 15,
+      "legacy_mean_accuracy": 0.9073666413625081,
+      "materiality_margin_accuracy": 0.005,
+      "mean_strict_minus_legacy": -0.04858665466308594,
+      "n_paired_seeds": 15,
+      "practically_equivalent": false,
+      "strict_higher_seeds": 0,
+      "strict_mean_accuracy": 0.8587799866994222,
+      "tied_seeds": 0
+    },
+    {
+      "architecture": "additive",
+      "ci95_high": -0.017960007985432944,
+      "ci95_low": -0.02699351261059443,
+      "exact_two_sided_sign_flip_p": 0.0001220703125,
+      "legacy_higher_seeds": 14,
+      "legacy_mean_accuracy": 0.915886648495992,
+      "materiality_margin_accuracy": 0.005,
+      "mean_strict_minus_legacy": -0.02274000644683838,
+      "n_paired_seeds": 15,
+      "practically_equivalent": false,
+      "strict_higher_seeds": 0,
+      "strict_mean_accuracy": 0.8931466420491536,
+      "tied_seeds": 1
+    }
+  ]
+}

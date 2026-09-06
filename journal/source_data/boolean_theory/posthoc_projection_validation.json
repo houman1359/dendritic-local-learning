@@ -1,0 +1,13 @@
+{
+  "audit_source_sha256": "b151da57b758b3c3fda193ff2cd7ce28fe0661b8ae336ffa80cf4875cfe0899b",
+  "exclusions": "Does not establish broadcast impossibility, a finite-sample zero, or a grouping obstruction",
+  "fresh_primary_table_already_available_sha256": "87fba85a887d924c2a600d2a9382a5b4e4358d0207409018e4787659d1546f8e",
+  "full_domain_conditional_expectation_crosschecks": 98,
+  "motivation": "Interpret differing parity and XOR-of-AND broadcast behavior; requested after viewing fresh outcomes",
+  "parity_all_14_proper_subsets_exactly_zero": true,
+  "scope": "At fixed parameters, proper-subtree eligibility is a function only of its own inputs. Zero projection eliminates its direct population target term, not all indirect learning.",
+  "source_sha256": "54a434133cb05e099a4be608d56d69791cf635b01547d9faedc8b0b5de443c9e",
+  "status": "post_hoc_after_fresh_learning_outcomes_no_new_training",
+  "table_sha256": "f66f90c04e0323ae0cfaeacd7eb3ebba6669dd360c9f3324ab486afd18b5a48c",
+  "xor_of_ands_all_six_pair_projection_energies_exactly": "1/5"
+}

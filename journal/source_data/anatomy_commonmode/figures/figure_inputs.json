@@ -1,0 +1,7 @@
+{
+  "scripts/anatomy_commonmode/build_figures.py": "bfeed9df0b1f8ce39f8597499871be96aba83cb40d5d9f03a78a8817b05e41da",
+  "scripts/journal_style.py": "32a3272cebb949784b694bc6dbb495cf74f6ba4ddf97d18d44f3ef54e082844e",
+  "source_data/anatomy_commonmode/original8/cell_method_summary.csv": "eb899a6833a0783e4b3e171adca3046800e64e6c942a517986395b251cde2880",
+  "source_data/anatomy_commonmode/v661/cell_method_summary.csv": "c99a3f24cb1d2a6b53455b10496aa03428a9be99beea5fdaf7a5e45da11fa010",
+  "source_data/anatomy_commonmode/pinky/cell_method_summary.csv": "67ed12fde8e4de04ac20e1fd3e6c3677bb2f63129d255ca742e2b891f59dfc48"
+}

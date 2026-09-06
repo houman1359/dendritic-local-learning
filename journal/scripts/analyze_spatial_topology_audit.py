@@ -17,6 +17,7 @@ from pathlib import Path
 
 import matplotlib.pyplot as plt
 import numpy as np
+from journal_style import style_direct_color_labels
 import pandas as pd
 import torch
 
@@ -30,13 +31,14 @@ from dendritic_modeling.networks.architectures.excitation_inhibition.synapse.ind
 from dendritic_modeling.networks.architectures.excitation_inhibition.synapse.spatial_morphology import (  # noqa: E402
     sample_spatial_morphology_indices,
 )
-from neurips_style import (  # noqa: E402
+from journal_style import (  # noqa: E402
     COLORS,
     ERR_CAPSIZE,
     FIG_W,
     LW_ERR,
     LW_REF,
     PT_LEGEND,
+    PT_SMALL,
     apply_neurips_style,
     audit_layout,
     audit_text_over_data,
@@ -218,7 +220,7 @@ def plot(owner: pd.DataFrame, performance: pd.DataFrame) -> None:
             "left": 0.075,
             "right": 0.985,
             "bottom": 0.25,
-            "top": 0.82,
+            "top": 0.74,
             "wspace": 0.63,
         },
     )
@@ -233,24 +235,30 @@ def plot(owner: pd.DataFrame, performance: pd.DataFrame) -> None:
     image = np.zeros((28, 28), dtype=float)
     for branch, values in enumerate(example):
         image.flat[values.numpy()] = branch + 1
-    ax.imshow(image, cmap="viridis", interpolation="nearest")
+    # The integer values name distinct branches; they are not an ordered
+    # measurement. Retain the sampled input map and use a categorical key.
+    from matplotlib.colors import ListedColormap
+    branch_colors = plt.get_cmap("tab20")(np.arange(BRANCHES_PER_OWNER))
+    ax.imshow(image, cmap=ListedColormap(["#F4F6F7", *branch_colors]),
+              vmin=0, vmax=BRANCHES_PER_OWNER, interpolation="nearest")
+    ax.set_anchor("N")
     ax.set_xticks([])
     ax.set_yticks([])
-    panel_title(ax, "A", "Disjoint spatial regions")
+    panel_title(ax, "A", "Disjoint spatial\nregions")
 
     for ax, letter, metric, title, ylabel in [
         (
             axes[1],
             "B",
             "unique_input_features",
-            "Unique input coverage",
+            "Unique input\ncoverage",
             "features per neuron",
         ),
         (
             axes[2],
             "C",
             "mean_pairwise_branch_jaccard",
-            "Cross-branch collision",
+            "Cross-branch\ncollision",
             "mean branch Jaccard",
         ),
     ]:
@@ -305,12 +313,15 @@ def plot(owner: pd.DataFrame, performance: pd.DataFrame) -> None:
             label="MNIST" if task == "mnist" else "Noise task",
         )
     ax.axhline(0, color=COLORS["mute"], ls="--", lw=LW_REF)
-    ax.set_xticks(x, ["BP", "Scalar", "Ancestry", "Exact"], rotation=25, ha="right")
+    ax.set_xticks(x, ["BP", "MW scalar", "Neuron", "Exact path"],
+                  rotation=30, ha="right")
     ax.set_ylabel("spatial - random (pp)")
-    panel_title(ax, "D", "Forward effect")
-    clean_legend(ax, fontsize=PT_LEGEND, loc="upper right")
+    panel_title(ax, "D", "Forward\neffect")
+    clean_legend(ax, fontsize=PT_SMALL, loc="upper right",
+                 handlelength=0.7, handletextpad=0.3, borderaxespad=0.15)
     style_axis(ax)
 
+    style_direct_color_labels(fig)
     audit_text_over_data(fig, "fig_spatial_topology_audit")
     audit_layout(fig, "fig_spatial_topology_audit")
     for suffix in ("pdf", "png"):

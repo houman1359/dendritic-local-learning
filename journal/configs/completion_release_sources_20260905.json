@@ -1,0 +1,3392 @@
+[
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/README.md",
+    "destination": "Figure_6/prospective_morphology_selection/README.md",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/additional_paired_policy_contrasts.csv",
+    "destination": "Figure_6/prospective_morphology_selection/additional_paired_policy_contrasts.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/calibration/confirmatory/seed_7200.csv",
+    "destination": "Figure_6/prospective_morphology_selection/calibration/confirmatory/seed_7200.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/calibration/confirmatory/seed_7200_update_means.npz",
+    "destination": "Figure_6/prospective_morphology_selection/calibration/confirmatory/seed_7200_update_means.npz",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/calibration/confirmatory/seed_7201.csv",
+    "destination": "Figure_6/prospective_morphology_selection/calibration/confirmatory/seed_7201.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/calibration/confirmatory/seed_7201_update_means.npz",
+    "destination": "Figure_6/prospective_morphology_selection/calibration/confirmatory/seed_7201_update_means.npz",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/calibration/confirmatory/seed_7202.csv",
+    "destination": "Figure_6/prospective_morphology_selection/calibration/confirmatory/seed_7202.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/calibration/confirmatory/seed_7202_update_means.npz",
+    "destination": "Figure_6/prospective_morphology_selection/calibration/confirmatory/seed_7202_update_means.npz",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/calibration/confirmatory/seed_7203.csv",
+    "destination": "Figure_6/prospective_morphology_selection/calibration/confirmatory/seed_7203.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/calibration/confirmatory/seed_7203_update_means.npz",
+    "destination": "Figure_6/prospective_morphology_selection/calibration/confirmatory/seed_7203_update_means.npz",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/calibration/confirmatory/seed_7204.csv",
+    "destination": "Figure_6/prospective_morphology_selection/calibration/confirmatory/seed_7204.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/calibration/confirmatory/seed_7204_update_means.npz",
+    "destination": "Figure_6/prospective_morphology_selection/calibration/confirmatory/seed_7204_update_means.npz",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/calibration/confirmatory/seed_7205.csv",
+    "destination": "Figure_6/prospective_morphology_selection/calibration/confirmatory/seed_7205.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/calibration/confirmatory/seed_7205_update_means.npz",
+    "destination": "Figure_6/prospective_morphology_selection/calibration/confirmatory/seed_7205_update_means.npz",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/calibration/confirmatory/seed_7206.csv",
+    "destination": "Figure_6/prospective_morphology_selection/calibration/confirmatory/seed_7206.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/calibration/confirmatory/seed_7206_update_means.npz",
+    "destination": "Figure_6/prospective_morphology_selection/calibration/confirmatory/seed_7206_update_means.npz",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/calibration/confirmatory/seed_7207.csv",
+    "destination": "Figure_6/prospective_morphology_selection/calibration/confirmatory/seed_7207.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/calibration/confirmatory/seed_7207_update_means.npz",
+    "destination": "Figure_6/prospective_morphology_selection/calibration/confirmatory/seed_7207_update_means.npz",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/calibration/confirmatory/seed_7208.csv",
+    "destination": "Figure_6/prospective_morphology_selection/calibration/confirmatory/seed_7208.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/calibration/confirmatory/seed_7208_update_means.npz",
+    "destination": "Figure_6/prospective_morphology_selection/calibration/confirmatory/seed_7208_update_means.npz",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/calibration/confirmatory/seed_7209.csv",
+    "destination": "Figure_6/prospective_morphology_selection/calibration/confirmatory/seed_7209.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/calibration/confirmatory/seed_7209_update_means.npz",
+    "destination": "Figure_6/prospective_morphology_selection/calibration/confirmatory/seed_7209_update_means.npz",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/calibration/confirmatory/seed_7210.csv",
+    "destination": "Figure_6/prospective_morphology_selection/calibration/confirmatory/seed_7210.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/calibration/confirmatory/seed_7210_update_means.npz",
+    "destination": "Figure_6/prospective_morphology_selection/calibration/confirmatory/seed_7210_update_means.npz",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/calibration/confirmatory/seed_7211.csv",
+    "destination": "Figure_6/prospective_morphology_selection/calibration/confirmatory/seed_7211.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/calibration/confirmatory/seed_7211_update_means.npz",
+    "destination": "Figure_6/prospective_morphology_selection/calibration/confirmatory/seed_7211_update_means.npz",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/calibration/confirmatory/seed_7212.csv",
+    "destination": "Figure_6/prospective_morphology_selection/calibration/confirmatory/seed_7212.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/calibration/confirmatory/seed_7212_update_means.npz",
+    "destination": "Figure_6/prospective_morphology_selection/calibration/confirmatory/seed_7212_update_means.npz",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/calibration/confirmatory/seed_7213.csv",
+    "destination": "Figure_6/prospective_morphology_selection/calibration/confirmatory/seed_7213.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/calibration/confirmatory/seed_7213_update_means.npz",
+    "destination": "Figure_6/prospective_morphology_selection/calibration/confirmatory/seed_7213_update_means.npz",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/calibration/confirmatory/seed_7214.csv",
+    "destination": "Figure_6/prospective_morphology_selection/calibration/confirmatory/seed_7214.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/calibration/confirmatory/seed_7214_update_means.npz",
+    "destination": "Figure_6/prospective_morphology_selection/calibration/confirmatory/seed_7214_update_means.npz",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/calibration/confirmatory/seed_7215.csv",
+    "destination": "Figure_6/prospective_morphology_selection/calibration/confirmatory/seed_7215.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/calibration/confirmatory/seed_7215_update_means.npz",
+    "destination": "Figure_6/prospective_morphology_selection/calibration/confirmatory/seed_7215_update_means.npz",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/calibration/confirmatory/seed_7216.csv",
+    "destination": "Figure_6/prospective_morphology_selection/calibration/confirmatory/seed_7216.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/calibration/confirmatory/seed_7216_update_means.npz",
+    "destination": "Figure_6/prospective_morphology_selection/calibration/confirmatory/seed_7216_update_means.npz",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/calibration/confirmatory/seed_7217.csv",
+    "destination": "Figure_6/prospective_morphology_selection/calibration/confirmatory/seed_7217.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/calibration/confirmatory/seed_7217_update_means.npz",
+    "destination": "Figure_6/prospective_morphology_selection/calibration/confirmatory/seed_7217_update_means.npz",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/calibration/confirmatory/seed_7218.csv",
+    "destination": "Figure_6/prospective_morphology_selection/calibration/confirmatory/seed_7218.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/calibration/confirmatory/seed_7218_update_means.npz",
+    "destination": "Figure_6/prospective_morphology_selection/calibration/confirmatory/seed_7218_update_means.npz",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/calibration/confirmatory/seed_7219.csv",
+    "destination": "Figure_6/prospective_morphology_selection/calibration/confirmatory/seed_7219.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/calibration/confirmatory/seed_7219_update_means.npz",
+    "destination": "Figure_6/prospective_morphology_selection/calibration/confirmatory/seed_7219_update_means.npz",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/calibration/development/seed_6100.csv",
+    "destination": "Figure_6/prospective_morphology_selection/calibration/development/seed_6100.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/calibration/development/seed_6100_update_means.npz",
+    "destination": "Figure_6/prospective_morphology_selection/calibration/development/seed_6100_update_means.npz",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/calibration/development/seed_6101.csv",
+    "destination": "Figure_6/prospective_morphology_selection/calibration/development/seed_6101.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/calibration/development/seed_6101_update_means.npz",
+    "destination": "Figure_6/prospective_morphology_selection/calibration/development/seed_6101_update_means.npz",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/calibration/development/seed_6102.csv",
+    "destination": "Figure_6/prospective_morphology_selection/calibration/development/seed_6102.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/calibration/development/seed_6102_update_means.npz",
+    "destination": "Figure_6/prospective_morphology_selection/calibration/development/seed_6102_update_means.npz",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/calibration/development/seed_6103.csv",
+    "destination": "Figure_6/prospective_morphology_selection/calibration/development/seed_6103.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/calibration/development/seed_6103_update_means.npz",
+    "destination": "Figure_6/prospective_morphology_selection/calibration/development/seed_6103_update_means.npz",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/calibration/development/seed_6104.csv",
+    "destination": "Figure_6/prospective_morphology_selection/calibration/development/seed_6104.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/calibration/development/seed_6104_update_means.npz",
+    "destination": "Figure_6/prospective_morphology_selection/calibration/development/seed_6104_update_means.npz",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/candidate_equivalence_classes.csv",
+    "destination": "Figure_6/prospective_morphology_selection/candidate_equivalence_classes.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/candidate_manifest.json",
+    "destination": "Figure_6/prospective_morphology_selection/candidate_manifest.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/candidate_outcomes.csv",
+    "destination": "Figure_6/prospective_morphology_selection/candidate_outcomes.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/development_fit.json",
+    "destination": "Figure_6/prospective_morphology_selection/development_fit.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/execution_summary.json",
+    "destination": "Figure_6/prospective_morphology_selection/execution_summary.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/first_step_correlation_summary.csv",
+    "destination": "Figure_6/prospective_morphology_selection/first_step_correlation_summary.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/first_step_diagnostics/seed_7200.csv",
+    "destination": "Figure_6/prospective_morphology_selection/first_step_diagnostics/seed_7200.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/first_step_diagnostics/seed_7201.csv",
+    "destination": "Figure_6/prospective_morphology_selection/first_step_diagnostics/seed_7201.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/first_step_diagnostics/seed_7202.csv",
+    "destination": "Figure_6/prospective_morphology_selection/first_step_diagnostics/seed_7202.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/first_step_diagnostics/seed_7203.csv",
+    "destination": "Figure_6/prospective_morphology_selection/first_step_diagnostics/seed_7203.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/first_step_diagnostics/seed_7204.csv",
+    "destination": "Figure_6/prospective_morphology_selection/first_step_diagnostics/seed_7204.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/first_step_diagnostics/seed_7205.csv",
+    "destination": "Figure_6/prospective_morphology_selection/first_step_diagnostics/seed_7205.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/first_step_diagnostics/seed_7206.csv",
+    "destination": "Figure_6/prospective_morphology_selection/first_step_diagnostics/seed_7206.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/first_step_diagnostics/seed_7207.csv",
+    "destination": "Figure_6/prospective_morphology_selection/first_step_diagnostics/seed_7207.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/first_step_diagnostics/seed_7208.csv",
+    "destination": "Figure_6/prospective_morphology_selection/first_step_diagnostics/seed_7208.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/first_step_diagnostics/seed_7209.csv",
+    "destination": "Figure_6/prospective_morphology_selection/first_step_diagnostics/seed_7209.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/first_step_diagnostics/seed_7210.csv",
+    "destination": "Figure_6/prospective_morphology_selection/first_step_diagnostics/seed_7210.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/first_step_diagnostics/seed_7211.csv",
+    "destination": "Figure_6/prospective_morphology_selection/first_step_diagnostics/seed_7211.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/first_step_diagnostics/seed_7212.csv",
+    "destination": "Figure_6/prospective_morphology_selection/first_step_diagnostics/seed_7212.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/first_step_diagnostics/seed_7213.csv",
+    "destination": "Figure_6/prospective_morphology_selection/first_step_diagnostics/seed_7213.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/first_step_diagnostics/seed_7214.csv",
+    "destination": "Figure_6/prospective_morphology_selection/first_step_diagnostics/seed_7214.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/first_step_diagnostics/seed_7215.csv",
+    "destination": "Figure_6/prospective_morphology_selection/first_step_diagnostics/seed_7215.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/first_step_diagnostics/seed_7216.csv",
+    "destination": "Figure_6/prospective_morphology_selection/first_step_diagnostics/seed_7216.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/first_step_diagnostics/seed_7217.csv",
+    "destination": "Figure_6/prospective_morphology_selection/first_step_diagnostics/seed_7217.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/first_step_diagnostics/seed_7218.csv",
+    "destination": "Figure_6/prospective_morphology_selection/first_step_diagnostics/seed_7218.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/first_step_diagnostics/seed_7219.csv",
+    "destination": "Figure_6/prospective_morphology_selection/first_step_diagnostics/seed_7219.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/first_step_diagnostics.csv",
+    "destination": "Figure_6/prospective_morphology_selection/first_step_diagnostics.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/first_step_within_task_correlations.csv",
+    "destination": "Figure_6/prospective_morphology_selection/first_step_within_task_correlations.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/grouped_policy_summary.csv",
+    "destination": "Figure_6/prospective_morphology_selection/grouped_policy_summary.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/invariant_tests.json",
+    "destination": "Figure_6/prospective_morphology_selection/invariant_tests.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/oracle_choice_distribution.csv",
+    "destination": "Figure_6/prospective_morphology_selection/oracle_choice_distribution.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/paired_policy_seed_contrasts.csv",
+    "destination": "Figure_6/prospective_morphology_selection/paired_policy_seed_contrasts.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/paired_regret_summary.csv",
+    "destination": "Figure_6/prospective_morphology_selection/paired_regret_summary.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/policy_outcomes.csv",
+    "destination": "Figure_6/prospective_morphology_selection/policy_outcomes.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/policy_seed_means.csv",
+    "destination": "Figure_6/prospective_morphology_selection/policy_seed_means.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/policy_summary.csv",
+    "destination": "Figure_6/prospective_morphology_selection/policy_summary.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/posthoc_validation_report.json",
+    "destination": "Figure_6/prospective_morphology_selection/posthoc_validation_report.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/protocol.json",
+    "destination": "Figure_6/prospective_morphology_selection/protocol.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/protocol_freeze.json",
+    "destination": "Figure_6/prospective_morphology_selection/protocol_freeze.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/replay_validation.json",
+    "destination": "Figure_6/prospective_morphology_selection/replay_validation.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/report.json",
+    "destination": "Figure_6/prospective_morphology_selection/report.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/retrospective_oracle.csv",
+    "destination": "Figure_6/prospective_morphology_selection/retrospective_oracle.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/runs/confirmatory/seed_7200.csv",
+    "destination": "Figure_6/prospective_morphology_selection/runs/confirmatory/seed_7200.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/runs/confirmatory/seed_7200_audit.json",
+    "destination": "Figure_6/prospective_morphology_selection/runs/confirmatory/seed_7200_audit.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/runs/confirmatory/seed_7201.csv",
+    "destination": "Figure_6/prospective_morphology_selection/runs/confirmatory/seed_7201.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/runs/confirmatory/seed_7201_audit.json",
+    "destination": "Figure_6/prospective_morphology_selection/runs/confirmatory/seed_7201_audit.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/runs/confirmatory/seed_7202.csv",
+    "destination": "Figure_6/prospective_morphology_selection/runs/confirmatory/seed_7202.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/runs/confirmatory/seed_7202_audit.json",
+    "destination": "Figure_6/prospective_morphology_selection/runs/confirmatory/seed_7202_audit.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/runs/confirmatory/seed_7203.csv",
+    "destination": "Figure_6/prospective_morphology_selection/runs/confirmatory/seed_7203.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/runs/confirmatory/seed_7203_audit.json",
+    "destination": "Figure_6/prospective_morphology_selection/runs/confirmatory/seed_7203_audit.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/runs/confirmatory/seed_7204.csv",
+    "destination": "Figure_6/prospective_morphology_selection/runs/confirmatory/seed_7204.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/runs/confirmatory/seed_7204_audit.json",
+    "destination": "Figure_6/prospective_morphology_selection/runs/confirmatory/seed_7204_audit.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/runs/confirmatory/seed_7205.csv",
+    "destination": "Figure_6/prospective_morphology_selection/runs/confirmatory/seed_7205.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/runs/confirmatory/seed_7205_audit.json",
+    "destination": "Figure_6/prospective_morphology_selection/runs/confirmatory/seed_7205_audit.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/runs/confirmatory/seed_7206.csv",
+    "destination": "Figure_6/prospective_morphology_selection/runs/confirmatory/seed_7206.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/runs/confirmatory/seed_7206_audit.json",
+    "destination": "Figure_6/prospective_morphology_selection/runs/confirmatory/seed_7206_audit.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/runs/confirmatory/seed_7207.csv",
+    "destination": "Figure_6/prospective_morphology_selection/runs/confirmatory/seed_7207.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/runs/confirmatory/seed_7207_audit.json",
+    "destination": "Figure_6/prospective_morphology_selection/runs/confirmatory/seed_7207_audit.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/runs/confirmatory/seed_7208.csv",
+    "destination": "Figure_6/prospective_morphology_selection/runs/confirmatory/seed_7208.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/runs/confirmatory/seed_7208_audit.json",
+    "destination": "Figure_6/prospective_morphology_selection/runs/confirmatory/seed_7208_audit.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/runs/confirmatory/seed_7209.csv",
+    "destination": "Figure_6/prospective_morphology_selection/runs/confirmatory/seed_7209.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/runs/confirmatory/seed_7209_audit.json",
+    "destination": "Figure_6/prospective_morphology_selection/runs/confirmatory/seed_7209_audit.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/runs/confirmatory/seed_7210.csv",
+    "destination": "Figure_6/prospective_morphology_selection/runs/confirmatory/seed_7210.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/runs/confirmatory/seed_7210_audit.json",
+    "destination": "Figure_6/prospective_morphology_selection/runs/confirmatory/seed_7210_audit.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/runs/confirmatory/seed_7211.csv",
+    "destination": "Figure_6/prospective_morphology_selection/runs/confirmatory/seed_7211.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/runs/confirmatory/seed_7211_audit.json",
+    "destination": "Figure_6/prospective_morphology_selection/runs/confirmatory/seed_7211_audit.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/runs/confirmatory/seed_7212.csv",
+    "destination": "Figure_6/prospective_morphology_selection/runs/confirmatory/seed_7212.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/runs/confirmatory/seed_7212_audit.json",
+    "destination": "Figure_6/prospective_morphology_selection/runs/confirmatory/seed_7212_audit.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/runs/confirmatory/seed_7213.csv",
+    "destination": "Figure_6/prospective_morphology_selection/runs/confirmatory/seed_7213.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/runs/confirmatory/seed_7213_audit.json",
+    "destination": "Figure_6/prospective_morphology_selection/runs/confirmatory/seed_7213_audit.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/runs/confirmatory/seed_7214.csv",
+    "destination": "Figure_6/prospective_morphology_selection/runs/confirmatory/seed_7214.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/runs/confirmatory/seed_7214_audit.json",
+    "destination": "Figure_6/prospective_morphology_selection/runs/confirmatory/seed_7214_audit.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/runs/confirmatory/seed_7215.csv",
+    "destination": "Figure_6/prospective_morphology_selection/runs/confirmatory/seed_7215.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/runs/confirmatory/seed_7215_audit.json",
+    "destination": "Figure_6/prospective_morphology_selection/runs/confirmatory/seed_7215_audit.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/runs/confirmatory/seed_7216.csv",
+    "destination": "Figure_6/prospective_morphology_selection/runs/confirmatory/seed_7216.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/runs/confirmatory/seed_7216_audit.json",
+    "destination": "Figure_6/prospective_morphology_selection/runs/confirmatory/seed_7216_audit.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/runs/confirmatory/seed_7217.csv",
+    "destination": "Figure_6/prospective_morphology_selection/runs/confirmatory/seed_7217.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/runs/confirmatory/seed_7217_audit.json",
+    "destination": "Figure_6/prospective_morphology_selection/runs/confirmatory/seed_7217_audit.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/runs/confirmatory/seed_7218.csv",
+    "destination": "Figure_6/prospective_morphology_selection/runs/confirmatory/seed_7218.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/runs/confirmatory/seed_7218_audit.json",
+    "destination": "Figure_6/prospective_morphology_selection/runs/confirmatory/seed_7218_audit.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/runs/confirmatory/seed_7219.csv",
+    "destination": "Figure_6/prospective_morphology_selection/runs/confirmatory/seed_7219.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/runs/confirmatory/seed_7219_audit.json",
+    "destination": "Figure_6/prospective_morphology_selection/runs/confirmatory/seed_7219_audit.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/runs/development/seed_6100.csv",
+    "destination": "Figure_6/prospective_morphology_selection/runs/development/seed_6100.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/runs/development/seed_6100_audit.json",
+    "destination": "Figure_6/prospective_morphology_selection/runs/development/seed_6100_audit.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/runs/development/seed_6101.csv",
+    "destination": "Figure_6/prospective_morphology_selection/runs/development/seed_6101.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/runs/development/seed_6101_audit.json",
+    "destination": "Figure_6/prospective_morphology_selection/runs/development/seed_6101_audit.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/runs/development/seed_6102.csv",
+    "destination": "Figure_6/prospective_morphology_selection/runs/development/seed_6102.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/runs/development/seed_6102_audit.json",
+    "destination": "Figure_6/prospective_morphology_selection/runs/development/seed_6102_audit.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/runs/development/seed_6103.csv",
+    "destination": "Figure_6/prospective_morphology_selection/runs/development/seed_6103.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/runs/development/seed_6103_audit.json",
+    "destination": "Figure_6/prospective_morphology_selection/runs/development/seed_6103_audit.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/runs/development/seed_6104.csv",
+    "destination": "Figure_6/prospective_morphology_selection/runs/development/seed_6104.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/runs/development/seed_6104_audit.json",
+    "destination": "Figure_6/prospective_morphology_selection/runs/development/seed_6104_audit.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/sealed_confirmatory_selections.csv",
+    "destination": "Figure_6/prospective_morphology_selection/sealed_confirmatory_selections.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/selected_vs_oracle_choices.csv",
+    "destination": "Figure_6/prospective_morphology_selection/selected_vs_oracle_choices.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/selection_freeze.json",
+    "destination": "Figure_6/prospective_morphology_selection/selection_freeze.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/slurm_accounting.tsv",
+    "destination": "Figure_6/prospective_morphology_selection/slurm_accounting.tsv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/source_manifest.tsv",
+    "destination": "Figure_6/prospective_morphology_selection/source_manifest.tsv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/split_manifest.json",
+    "destination": "Figure_6/prospective_morphology_selection/split_manifest.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 6",
+    "panels": "a-f",
+    "source": "source_data/prospective_morphology_selection/within_task_correlations.csv",
+    "destination": "Figure_6/prospective_morphology_selection/within_task_correlations.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired independent task seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_encoder/README.md",
+    "destination": "Supplementary_Figure_32/review_coefficient_encoder/README.md",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_encoder/canary/seed_51999.csv",
+    "destination": "Supplementary_Figure_32/review_coefficient_encoder/canary/seed_51999.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_encoder/canary/seed_51999.json",
+    "destination": "Supplementary_Figure_32/review_coefficient_encoder/canary/seed_51999.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_encoder/condition_summary.csv",
+    "destination": "Supplementary_Figure_32/review_coefficient_encoder/condition_summary.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_encoder/paired_contrasts.csv",
+    "destination": "Supplementary_Figure_32/review_coefficient_encoder/paired_contrasts.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_encoder/protocol_freeze.json",
+    "destination": "Supplementary_Figure_32/review_coefficient_encoder/protocol_freeze.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_encoder/report.json",
+    "destination": "Supplementary_Figure_32/review_coefficient_encoder/report.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_encoder/runs/seed_52000.csv",
+    "destination": "Supplementary_Figure_32/review_coefficient_encoder/runs/seed_52000.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_encoder/runs/seed_52000.json",
+    "destination": "Supplementary_Figure_32/review_coefficient_encoder/runs/seed_52000.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_encoder/runs/seed_52001.csv",
+    "destination": "Supplementary_Figure_32/review_coefficient_encoder/runs/seed_52001.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_encoder/runs/seed_52001.json",
+    "destination": "Supplementary_Figure_32/review_coefficient_encoder/runs/seed_52001.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_encoder/runs/seed_52002.csv",
+    "destination": "Supplementary_Figure_32/review_coefficient_encoder/runs/seed_52002.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_encoder/runs/seed_52002.json",
+    "destination": "Supplementary_Figure_32/review_coefficient_encoder/runs/seed_52002.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_encoder/runs/seed_52003.csv",
+    "destination": "Supplementary_Figure_32/review_coefficient_encoder/runs/seed_52003.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_encoder/runs/seed_52003.json",
+    "destination": "Supplementary_Figure_32/review_coefficient_encoder/runs/seed_52003.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_encoder/runs/seed_52004.csv",
+    "destination": "Supplementary_Figure_32/review_coefficient_encoder/runs/seed_52004.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_encoder/runs/seed_52004.json",
+    "destination": "Supplementary_Figure_32/review_coefficient_encoder/runs/seed_52004.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_encoder/runs/seed_52005.csv",
+    "destination": "Supplementary_Figure_32/review_coefficient_encoder/runs/seed_52005.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_encoder/runs/seed_52005.json",
+    "destination": "Supplementary_Figure_32/review_coefficient_encoder/runs/seed_52005.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_encoder/runs/seed_52006.csv",
+    "destination": "Supplementary_Figure_32/review_coefficient_encoder/runs/seed_52006.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_encoder/runs/seed_52006.json",
+    "destination": "Supplementary_Figure_32/review_coefficient_encoder/runs/seed_52006.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_encoder/runs/seed_52007.csv",
+    "destination": "Supplementary_Figure_32/review_coefficient_encoder/runs/seed_52007.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_encoder/runs/seed_52007.json",
+    "destination": "Supplementary_Figure_32/review_coefficient_encoder/runs/seed_52007.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_encoder/runs/seed_52008.csv",
+    "destination": "Supplementary_Figure_32/review_coefficient_encoder/runs/seed_52008.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_encoder/runs/seed_52008.json",
+    "destination": "Supplementary_Figure_32/review_coefficient_encoder/runs/seed_52008.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_encoder/runs/seed_52009.csv",
+    "destination": "Supplementary_Figure_32/review_coefficient_encoder/runs/seed_52009.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_encoder/runs/seed_52009.json",
+    "destination": "Supplementary_Figure_32/review_coefficient_encoder/runs/seed_52009.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_encoder/runs/seed_52010.csv",
+    "destination": "Supplementary_Figure_32/review_coefficient_encoder/runs/seed_52010.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_encoder/runs/seed_52010.json",
+    "destination": "Supplementary_Figure_32/review_coefficient_encoder/runs/seed_52010.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_encoder/runs/seed_52011.csv",
+    "destination": "Supplementary_Figure_32/review_coefficient_encoder/runs/seed_52011.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_encoder/runs/seed_52011.json",
+    "destination": "Supplementary_Figure_32/review_coefficient_encoder/runs/seed_52011.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_encoder/runs/seed_52012.csv",
+    "destination": "Supplementary_Figure_32/review_coefficient_encoder/runs/seed_52012.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_encoder/runs/seed_52012.json",
+    "destination": "Supplementary_Figure_32/review_coefficient_encoder/runs/seed_52012.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_encoder/runs/seed_52013.csv",
+    "destination": "Supplementary_Figure_32/review_coefficient_encoder/runs/seed_52013.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_encoder/runs/seed_52013.json",
+    "destination": "Supplementary_Figure_32/review_coefficient_encoder/runs/seed_52013.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_encoder/runs/seed_52014.csv",
+    "destination": "Supplementary_Figure_32/review_coefficient_encoder/runs/seed_52014.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_encoder/runs/seed_52014.json",
+    "destination": "Supplementary_Figure_32/review_coefficient_encoder/runs/seed_52014.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_encoder/runs/seed_52015.csv",
+    "destination": "Supplementary_Figure_32/review_coefficient_encoder/runs/seed_52015.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_encoder/runs/seed_52015.json",
+    "destination": "Supplementary_Figure_32/review_coefficient_encoder/runs/seed_52015.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_encoder/runs/seed_52016.csv",
+    "destination": "Supplementary_Figure_32/review_coefficient_encoder/runs/seed_52016.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_encoder/runs/seed_52016.json",
+    "destination": "Supplementary_Figure_32/review_coefficient_encoder/runs/seed_52016.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_encoder/runs/seed_52017.csv",
+    "destination": "Supplementary_Figure_32/review_coefficient_encoder/runs/seed_52017.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_encoder/runs/seed_52017.json",
+    "destination": "Supplementary_Figure_32/review_coefficient_encoder/runs/seed_52017.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_encoder/runs/seed_52018.csv",
+    "destination": "Supplementary_Figure_32/review_coefficient_encoder/runs/seed_52018.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_encoder/runs/seed_52018.json",
+    "destination": "Supplementary_Figure_32/review_coefficient_encoder/runs/seed_52018.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_encoder/runs/seed_52019.csv",
+    "destination": "Supplementary_Figure_32/review_coefficient_encoder/runs/seed_52019.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_encoder/runs/seed_52019.json",
+    "destination": "Supplementary_Figure_32/review_coefficient_encoder/runs/seed_52019.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_encoder/trajectories.csv",
+    "destination": "Supplementary_Figure_32/review_coefficient_encoder/trajectories.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_hard_readout/README.md",
+    "destination": "Supplementary_Figure_32/review_coefficient_hard_readout/README.md",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_hard_readout/condition_summary.csv",
+    "destination": "Supplementary_Figure_32/review_coefficient_hard_readout/condition_summary.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_hard_readout/paired_contrasts.csv",
+    "destination": "Supplementary_Figure_32/review_coefficient_hard_readout/paired_contrasts.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_hard_readout/protocol_freeze.json",
+    "destination": "Supplementary_Figure_32/review_coefficient_hard_readout/protocol_freeze.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_hard_readout/report.json",
+    "destination": "Supplementary_Figure_32/review_coefficient_hard_readout/report.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_hard_readout/runs/seed_52000.csv",
+    "destination": "Supplementary_Figure_32/review_coefficient_hard_readout/runs/seed_52000.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_hard_readout/runs/seed_52000.json",
+    "destination": "Supplementary_Figure_32/review_coefficient_hard_readout/runs/seed_52000.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_hard_readout/runs/seed_52001.csv",
+    "destination": "Supplementary_Figure_32/review_coefficient_hard_readout/runs/seed_52001.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_hard_readout/runs/seed_52001.json",
+    "destination": "Supplementary_Figure_32/review_coefficient_hard_readout/runs/seed_52001.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_hard_readout/runs/seed_52002.csv",
+    "destination": "Supplementary_Figure_32/review_coefficient_hard_readout/runs/seed_52002.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_hard_readout/runs/seed_52002.json",
+    "destination": "Supplementary_Figure_32/review_coefficient_hard_readout/runs/seed_52002.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_hard_readout/runs/seed_52003.csv",
+    "destination": "Supplementary_Figure_32/review_coefficient_hard_readout/runs/seed_52003.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_hard_readout/runs/seed_52003.json",
+    "destination": "Supplementary_Figure_32/review_coefficient_hard_readout/runs/seed_52003.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_hard_readout/runs/seed_52004.csv",
+    "destination": "Supplementary_Figure_32/review_coefficient_hard_readout/runs/seed_52004.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_hard_readout/runs/seed_52004.json",
+    "destination": "Supplementary_Figure_32/review_coefficient_hard_readout/runs/seed_52004.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_hard_readout/runs/seed_52005.csv",
+    "destination": "Supplementary_Figure_32/review_coefficient_hard_readout/runs/seed_52005.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_hard_readout/runs/seed_52005.json",
+    "destination": "Supplementary_Figure_32/review_coefficient_hard_readout/runs/seed_52005.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_hard_readout/runs/seed_52006.csv",
+    "destination": "Supplementary_Figure_32/review_coefficient_hard_readout/runs/seed_52006.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_hard_readout/runs/seed_52006.json",
+    "destination": "Supplementary_Figure_32/review_coefficient_hard_readout/runs/seed_52006.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_hard_readout/runs/seed_52007.csv",
+    "destination": "Supplementary_Figure_32/review_coefficient_hard_readout/runs/seed_52007.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_hard_readout/runs/seed_52007.json",
+    "destination": "Supplementary_Figure_32/review_coefficient_hard_readout/runs/seed_52007.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_hard_readout/runs/seed_52008.csv",
+    "destination": "Supplementary_Figure_32/review_coefficient_hard_readout/runs/seed_52008.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_hard_readout/runs/seed_52008.json",
+    "destination": "Supplementary_Figure_32/review_coefficient_hard_readout/runs/seed_52008.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_hard_readout/runs/seed_52009.csv",
+    "destination": "Supplementary_Figure_32/review_coefficient_hard_readout/runs/seed_52009.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_hard_readout/runs/seed_52009.json",
+    "destination": "Supplementary_Figure_32/review_coefficient_hard_readout/runs/seed_52009.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_hard_readout/runs/seed_52010.csv",
+    "destination": "Supplementary_Figure_32/review_coefficient_hard_readout/runs/seed_52010.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_hard_readout/runs/seed_52010.json",
+    "destination": "Supplementary_Figure_32/review_coefficient_hard_readout/runs/seed_52010.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_hard_readout/runs/seed_52011.csv",
+    "destination": "Supplementary_Figure_32/review_coefficient_hard_readout/runs/seed_52011.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_hard_readout/runs/seed_52011.json",
+    "destination": "Supplementary_Figure_32/review_coefficient_hard_readout/runs/seed_52011.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_hard_readout/runs/seed_52012.csv",
+    "destination": "Supplementary_Figure_32/review_coefficient_hard_readout/runs/seed_52012.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_hard_readout/runs/seed_52012.json",
+    "destination": "Supplementary_Figure_32/review_coefficient_hard_readout/runs/seed_52012.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_hard_readout/runs/seed_52013.csv",
+    "destination": "Supplementary_Figure_32/review_coefficient_hard_readout/runs/seed_52013.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_hard_readout/runs/seed_52013.json",
+    "destination": "Supplementary_Figure_32/review_coefficient_hard_readout/runs/seed_52013.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_hard_readout/runs/seed_52014.csv",
+    "destination": "Supplementary_Figure_32/review_coefficient_hard_readout/runs/seed_52014.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_hard_readout/runs/seed_52014.json",
+    "destination": "Supplementary_Figure_32/review_coefficient_hard_readout/runs/seed_52014.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_hard_readout/runs/seed_52015.csv",
+    "destination": "Supplementary_Figure_32/review_coefficient_hard_readout/runs/seed_52015.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_hard_readout/runs/seed_52015.json",
+    "destination": "Supplementary_Figure_32/review_coefficient_hard_readout/runs/seed_52015.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_hard_readout/runs/seed_52016.csv",
+    "destination": "Supplementary_Figure_32/review_coefficient_hard_readout/runs/seed_52016.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_hard_readout/runs/seed_52016.json",
+    "destination": "Supplementary_Figure_32/review_coefficient_hard_readout/runs/seed_52016.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_hard_readout/runs/seed_52017.csv",
+    "destination": "Supplementary_Figure_32/review_coefficient_hard_readout/runs/seed_52017.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_hard_readout/runs/seed_52017.json",
+    "destination": "Supplementary_Figure_32/review_coefficient_hard_readout/runs/seed_52017.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_hard_readout/runs/seed_52018.csv",
+    "destination": "Supplementary_Figure_32/review_coefficient_hard_readout/runs/seed_52018.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_hard_readout/runs/seed_52018.json",
+    "destination": "Supplementary_Figure_32/review_coefficient_hard_readout/runs/seed_52018.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_hard_readout/runs/seed_52019.csv",
+    "destination": "Supplementary_Figure_32/review_coefficient_hard_readout/runs/seed_52019.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_hard_readout/runs/seed_52019.json",
+    "destination": "Supplementary_Figure_32/review_coefficient_hard_readout/runs/seed_52019.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 32",
+    "panels": "a-f",
+    "source": "source_data/review_coefficient_hard_readout/trajectories.csv",
+    "destination": "Supplementary_Figure_32/review_coefficient_hard_readout/trajectories.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 29",
+    "panels": "d-f",
+    "source": "source_data/review_branch_trajectories/README.md",
+    "destination": "Supplementary_Figure_29/review_branch_trajectories/README.md",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 29",
+    "panels": "d-f",
+    "source": "source_data/review_branch_trajectories/condition_summary.csv",
+    "destination": "Supplementary_Figure_29/review_branch_trajectories/condition_summary.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 29",
+    "panels": "d-f",
+    "source": "source_data/review_branch_trajectories/endpoint_replay.csv",
+    "destination": "Supplementary_Figure_29/review_branch_trajectories/endpoint_replay.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 29",
+    "panels": "d-f",
+    "source": "source_data/review_branch_trajectories/figure_S29_gradient_intervals.csv",
+    "destination": "Supplementary_Figure_29/review_branch_trajectories/figure_S29_gradient_intervals.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 29",
+    "panels": "d-f",
+    "source": "source_data/review_branch_trajectories/gradient_trajectories.csv",
+    "destination": "Supplementary_Figure_29/review_branch_trajectories/gradient_trajectories.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 29",
+    "panels": "d-f",
+    "source": "source_data/review_branch_trajectories/report.json",
+    "destination": "Supplementary_Figure_29/review_branch_trajectories/report.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 29",
+    "panels": "d-f",
+    "source": "source_data/review_branch_trajectories/runs/endpoints_11000.csv",
+    "destination": "Supplementary_Figure_29/review_branch_trajectories/runs/endpoints_11000.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 29",
+    "panels": "d-f",
+    "source": "source_data/review_branch_trajectories/runs/endpoints_11001.csv",
+    "destination": "Supplementary_Figure_29/review_branch_trajectories/runs/endpoints_11001.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 29",
+    "panels": "d-f",
+    "source": "source_data/review_branch_trajectories/runs/endpoints_11002.csv",
+    "destination": "Supplementary_Figure_29/review_branch_trajectories/runs/endpoints_11002.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 29",
+    "panels": "d-f",
+    "source": "source_data/review_branch_trajectories/runs/endpoints_11003.csv",
+    "destination": "Supplementary_Figure_29/review_branch_trajectories/runs/endpoints_11003.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 29",
+    "panels": "d-f",
+    "source": "source_data/review_branch_trajectories/runs/endpoints_11004.csv",
+    "destination": "Supplementary_Figure_29/review_branch_trajectories/runs/endpoints_11004.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 29",
+    "panels": "d-f",
+    "source": "source_data/review_branch_trajectories/runs/endpoints_11005.csv",
+    "destination": "Supplementary_Figure_29/review_branch_trajectories/runs/endpoints_11005.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 29",
+    "panels": "d-f",
+    "source": "source_data/review_branch_trajectories/runs/endpoints_11006.csv",
+    "destination": "Supplementary_Figure_29/review_branch_trajectories/runs/endpoints_11006.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 29",
+    "panels": "d-f",
+    "source": "source_data/review_branch_trajectories/runs/endpoints_11007.csv",
+    "destination": "Supplementary_Figure_29/review_branch_trajectories/runs/endpoints_11007.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 29",
+    "panels": "d-f",
+    "source": "source_data/review_branch_trajectories/runs/endpoints_11008.csv",
+    "destination": "Supplementary_Figure_29/review_branch_trajectories/runs/endpoints_11008.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 29",
+    "panels": "d-f",
+    "source": "source_data/review_branch_trajectories/runs/endpoints_11009.csv",
+    "destination": "Supplementary_Figure_29/review_branch_trajectories/runs/endpoints_11009.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 29",
+    "panels": "d-f",
+    "source": "source_data/review_branch_trajectories/runs/endpoints_11010.csv",
+    "destination": "Supplementary_Figure_29/review_branch_trajectories/runs/endpoints_11010.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 29",
+    "panels": "d-f",
+    "source": "source_data/review_branch_trajectories/runs/endpoints_11011.csv",
+    "destination": "Supplementary_Figure_29/review_branch_trajectories/runs/endpoints_11011.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 29",
+    "panels": "d-f",
+    "source": "source_data/review_branch_trajectories/runs/endpoints_11012.csv",
+    "destination": "Supplementary_Figure_29/review_branch_trajectories/runs/endpoints_11012.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 29",
+    "panels": "d-f",
+    "source": "source_data/review_branch_trajectories/runs/endpoints_11013.csv",
+    "destination": "Supplementary_Figure_29/review_branch_trajectories/runs/endpoints_11013.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 29",
+    "panels": "d-f",
+    "source": "source_data/review_branch_trajectories/runs/endpoints_11014.csv",
+    "destination": "Supplementary_Figure_29/review_branch_trajectories/runs/endpoints_11014.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 29",
+    "panels": "d-f",
+    "source": "source_data/review_branch_trajectories/runs/endpoints_11015.csv",
+    "destination": "Supplementary_Figure_29/review_branch_trajectories/runs/endpoints_11015.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 29",
+    "panels": "d-f",
+    "source": "source_data/review_branch_trajectories/runs/endpoints_11016.csv",
+    "destination": "Supplementary_Figure_29/review_branch_trajectories/runs/endpoints_11016.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 29",
+    "panels": "d-f",
+    "source": "source_data/review_branch_trajectories/runs/endpoints_11017.csv",
+    "destination": "Supplementary_Figure_29/review_branch_trajectories/runs/endpoints_11017.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 29",
+    "panels": "d-f",
+    "source": "source_data/review_branch_trajectories/runs/endpoints_11018.csv",
+    "destination": "Supplementary_Figure_29/review_branch_trajectories/runs/endpoints_11018.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 29",
+    "panels": "d-f",
+    "source": "source_data/review_branch_trajectories/runs/endpoints_11019.csv",
+    "destination": "Supplementary_Figure_29/review_branch_trajectories/runs/endpoints_11019.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 29",
+    "panels": "d-f",
+    "source": "source_data/review_branch_trajectories/runs/seed_11000.csv",
+    "destination": "Supplementary_Figure_29/review_branch_trajectories/runs/seed_11000.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 29",
+    "panels": "d-f",
+    "source": "source_data/review_branch_trajectories/runs/seed_11000.json",
+    "destination": "Supplementary_Figure_29/review_branch_trajectories/runs/seed_11000.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 29",
+    "panels": "d-f",
+    "source": "source_data/review_branch_trajectories/runs/seed_11001.csv",
+    "destination": "Supplementary_Figure_29/review_branch_trajectories/runs/seed_11001.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 29",
+    "panels": "d-f",
+    "source": "source_data/review_branch_trajectories/runs/seed_11001.json",
+    "destination": "Supplementary_Figure_29/review_branch_trajectories/runs/seed_11001.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 29",
+    "panels": "d-f",
+    "source": "source_data/review_branch_trajectories/runs/seed_11002.csv",
+    "destination": "Supplementary_Figure_29/review_branch_trajectories/runs/seed_11002.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 29",
+    "panels": "d-f",
+    "source": "source_data/review_branch_trajectories/runs/seed_11002.json",
+    "destination": "Supplementary_Figure_29/review_branch_trajectories/runs/seed_11002.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 29",
+    "panels": "d-f",
+    "source": "source_data/review_branch_trajectories/runs/seed_11003.csv",
+    "destination": "Supplementary_Figure_29/review_branch_trajectories/runs/seed_11003.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 29",
+    "panels": "d-f",
+    "source": "source_data/review_branch_trajectories/runs/seed_11003.json",
+    "destination": "Supplementary_Figure_29/review_branch_trajectories/runs/seed_11003.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 29",
+    "panels": "d-f",
+    "source": "source_data/review_branch_trajectories/runs/seed_11004.csv",
+    "destination": "Supplementary_Figure_29/review_branch_trajectories/runs/seed_11004.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 29",
+    "panels": "d-f",
+    "source": "source_data/review_branch_trajectories/runs/seed_11004.json",
+    "destination": "Supplementary_Figure_29/review_branch_trajectories/runs/seed_11004.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 29",
+    "panels": "d-f",
+    "source": "source_data/review_branch_trajectories/runs/seed_11005.csv",
+    "destination": "Supplementary_Figure_29/review_branch_trajectories/runs/seed_11005.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 29",
+    "panels": "d-f",
+    "source": "source_data/review_branch_trajectories/runs/seed_11005.json",
+    "destination": "Supplementary_Figure_29/review_branch_trajectories/runs/seed_11005.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 29",
+    "panels": "d-f",
+    "source": "source_data/review_branch_trajectories/runs/seed_11006.csv",
+    "destination": "Supplementary_Figure_29/review_branch_trajectories/runs/seed_11006.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 29",
+    "panels": "d-f",
+    "source": "source_data/review_branch_trajectories/runs/seed_11006.json",
+    "destination": "Supplementary_Figure_29/review_branch_trajectories/runs/seed_11006.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 29",
+    "panels": "d-f",
+    "source": "source_data/review_branch_trajectories/runs/seed_11007.csv",
+    "destination": "Supplementary_Figure_29/review_branch_trajectories/runs/seed_11007.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 29",
+    "panels": "d-f",
+    "source": "source_data/review_branch_trajectories/runs/seed_11007.json",
+    "destination": "Supplementary_Figure_29/review_branch_trajectories/runs/seed_11007.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 29",
+    "panels": "d-f",
+    "source": "source_data/review_branch_trajectories/runs/seed_11008.csv",
+    "destination": "Supplementary_Figure_29/review_branch_trajectories/runs/seed_11008.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 29",
+    "panels": "d-f",
+    "source": "source_data/review_branch_trajectories/runs/seed_11008.json",
+    "destination": "Supplementary_Figure_29/review_branch_trajectories/runs/seed_11008.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 29",
+    "panels": "d-f",
+    "source": "source_data/review_branch_trajectories/runs/seed_11009.csv",
+    "destination": "Supplementary_Figure_29/review_branch_trajectories/runs/seed_11009.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 29",
+    "panels": "d-f",
+    "source": "source_data/review_branch_trajectories/runs/seed_11009.json",
+    "destination": "Supplementary_Figure_29/review_branch_trajectories/runs/seed_11009.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 29",
+    "panels": "d-f",
+    "source": "source_data/review_branch_trajectories/runs/seed_11010.csv",
+    "destination": "Supplementary_Figure_29/review_branch_trajectories/runs/seed_11010.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 29",
+    "panels": "d-f",
+    "source": "source_data/review_branch_trajectories/runs/seed_11010.json",
+    "destination": "Supplementary_Figure_29/review_branch_trajectories/runs/seed_11010.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 29",
+    "panels": "d-f",
+    "source": "source_data/review_branch_trajectories/runs/seed_11011.csv",
+    "destination": "Supplementary_Figure_29/review_branch_trajectories/runs/seed_11011.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 29",
+    "panels": "d-f",
+    "source": "source_data/review_branch_trajectories/runs/seed_11011.json",
+    "destination": "Supplementary_Figure_29/review_branch_trajectories/runs/seed_11011.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 29",
+    "panels": "d-f",
+    "source": "source_data/review_branch_trajectories/runs/seed_11012.csv",
+    "destination": "Supplementary_Figure_29/review_branch_trajectories/runs/seed_11012.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 29",
+    "panels": "d-f",
+    "source": "source_data/review_branch_trajectories/runs/seed_11012.json",
+    "destination": "Supplementary_Figure_29/review_branch_trajectories/runs/seed_11012.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 29",
+    "panels": "d-f",
+    "source": "source_data/review_branch_trajectories/runs/seed_11013.csv",
+    "destination": "Supplementary_Figure_29/review_branch_trajectories/runs/seed_11013.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 29",
+    "panels": "d-f",
+    "source": "source_data/review_branch_trajectories/runs/seed_11013.json",
+    "destination": "Supplementary_Figure_29/review_branch_trajectories/runs/seed_11013.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 29",
+    "panels": "d-f",
+    "source": "source_data/review_branch_trajectories/runs/seed_11014.csv",
+    "destination": "Supplementary_Figure_29/review_branch_trajectories/runs/seed_11014.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 29",
+    "panels": "d-f",
+    "source": "source_data/review_branch_trajectories/runs/seed_11014.json",
+    "destination": "Supplementary_Figure_29/review_branch_trajectories/runs/seed_11014.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 29",
+    "panels": "d-f",
+    "source": "source_data/review_branch_trajectories/runs/seed_11015.csv",
+    "destination": "Supplementary_Figure_29/review_branch_trajectories/runs/seed_11015.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 29",
+    "panels": "d-f",
+    "source": "source_data/review_branch_trajectories/runs/seed_11015.json",
+    "destination": "Supplementary_Figure_29/review_branch_trajectories/runs/seed_11015.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 29",
+    "panels": "d-f",
+    "source": "source_data/review_branch_trajectories/runs/seed_11016.csv",
+    "destination": "Supplementary_Figure_29/review_branch_trajectories/runs/seed_11016.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 29",
+    "panels": "d-f",
+    "source": "source_data/review_branch_trajectories/runs/seed_11016.json",
+    "destination": "Supplementary_Figure_29/review_branch_trajectories/runs/seed_11016.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 29",
+    "panels": "d-f",
+    "source": "source_data/review_branch_trajectories/runs/seed_11017.csv",
+    "destination": "Supplementary_Figure_29/review_branch_trajectories/runs/seed_11017.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 29",
+    "panels": "d-f",
+    "source": "source_data/review_branch_trajectories/runs/seed_11017.json",
+    "destination": "Supplementary_Figure_29/review_branch_trajectories/runs/seed_11017.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 29",
+    "panels": "d-f",
+    "source": "source_data/review_branch_trajectories/runs/seed_11018.csv",
+    "destination": "Supplementary_Figure_29/review_branch_trajectories/runs/seed_11018.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 29",
+    "panels": "d-f",
+    "source": "source_data/review_branch_trajectories/runs/seed_11018.json",
+    "destination": "Supplementary_Figure_29/review_branch_trajectories/runs/seed_11018.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 29",
+    "panels": "d-f",
+    "source": "source_data/review_branch_trajectories/runs/seed_11019.csv",
+    "destination": "Supplementary_Figure_29/review_branch_trajectories/runs/seed_11019.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 29",
+    "panels": "d-f",
+    "source": "source_data/review_branch_trajectories/runs/seed_11019.json",
+    "destination": "Supplementary_Figure_29/review_branch_trajectories/runs/seed_11019.json",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 29",
+    "panels": "d-f",
+    "source": "source_data/review_branch_trajectories/zero_alignment_crossings.csv",
+    "destination": "Supplementary_Figure_29/review_branch_trajectories/zero_alignment_crossings.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "paired training seed (n=20)",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 33",
+    "panels": "a-f",
+    "source": "source_data/review_morphology_uncertainty/README.md",
+    "destination": "Supplementary_Figure_33/review_morphology_uncertainty/README.md",
+    "role": "completed follow-up source",
+    "independent_unit": "reconstructed cell; synapses nested",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 33",
+    "panels": "a-f",
+    "source": "source_data/review_morphology_uncertainty/cell_sensitivity_means.csv",
+    "destination": "Supplementary_Figure_33/review_morphology_uncertainty/cell_sensitivity_means.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "reconstructed cell; synapses nested",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 33",
+    "panels": "a-f",
+    "source": "source_data/review_morphology_uncertainty/compression_geometry_audit.csv",
+    "destination": "Supplementary_Figure_33/review_morphology_uncertainty/compression_geometry_audit.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "reconstructed cell; synapses nested",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 33",
+    "panels": "a-f",
+    "source": "source_data/review_morphology_uncertainty/confusion_by_cell.csv",
+    "destination": "Supplementary_Figure_33/review_morphology_uncertainty/confusion_by_cell.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "reconstructed cell; synapses nested",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 33",
+    "panels": "a-f",
+    "source": "source_data/review_morphology_uncertainty/confusion_pooled.csv",
+    "destination": "Supplementary_Figure_33/review_morphology_uncertainty/confusion_pooled.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "reconstructed cell; synapses nested",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 33",
+    "panels": "a-f",
+    "source": "source_data/review_morphology_uncertainty/label_missingness.csv",
+    "destination": "Supplementary_Figure_33/review_morphology_uncertainty/label_missingness.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "reconstructed cell; synapses nested",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 33",
+    "panels": "a-f",
+    "source": "source_data/review_morphology_uncertainty/mapping_radius_sensitivity.csv",
+    "destination": "Supplementary_Figure_33/review_morphology_uncertainty/mapping_radius_sensitivity.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "reconstructed cell; synapses nested",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 33",
+    "panels": "a-f",
+    "source": "source_data/review_morphology_uncertainty/report.json",
+    "destination": "Supplementary_Figure_33/review_morphology_uncertainty/report.json",
+    "role": "completed follow-up source",
+    "independent_unit": "reconstructed cell; synapses nested",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 34",
+    "panels": "a-d",
+    "source": "source_data/review_response_baselines/README.md",
+    "destination": "Supplementary_Figure_34/review_response_baselines/README.md",
+    "role": "completed follow-up source",
+    "independent_unit": "postsynaptic target (n=7); scans and splits nested",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 34",
+    "panels": "a-d",
+    "source": "source_data/review_response_baselines/condition_summary.csv",
+    "destination": "Supplementary_Figure_34/review_response_baselines/condition_summary.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "postsynaptic target (n=7); scans and splits nested",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 34",
+    "panels": "a-d",
+    "source": "source_data/review_response_baselines/figure_S34_provenance.json",
+    "destination": "Supplementary_Figure_34/review_response_baselines/figure_S34_provenance.json",
+    "role": "completed follow-up source",
+    "independent_unit": "postsynaptic target (n=7); scans and splits nested",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 34",
+    "panels": "a-d",
+    "source": "source_data/review_response_baselines/input_manifest.json",
+    "destination": "Supplementary_Figure_34/review_response_baselines/input_manifest.json",
+    "role": "completed follow-up source",
+    "independent_unit": "postsynaptic target (n=7); scans and splits nested",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 34",
+    "panels": "a-d",
+    "source": "source_data/review_response_baselines/paired_ridge_contrasts.csv",
+    "destination": "Supplementary_Figure_34/review_response_baselines/paired_ridge_contrasts.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "postsynaptic target (n=7); scans and splits nested",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 34",
+    "panels": "a-d",
+    "source": "source_data/review_response_baselines/perturbation_runs.csv",
+    "destination": "Supplementary_Figure_34/review_response_baselines/perturbation_runs.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "postsynaptic target (n=7); scans and splits nested",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 34",
+    "panels": "a-d",
+    "source": "source_data/review_response_baselines/report.json",
+    "destination": "Supplementary_Figure_34/review_response_baselines/report.json",
+    "role": "completed follow-up source",
+    "independent_unit": "postsynaptic target (n=7); scans and splits nested",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 34",
+    "panels": "a-d",
+    "source": "source_data/review_response_baselines/run_metrics.csv",
+    "destination": "Supplementary_Figure_34/review_response_baselines/run_metrics.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "postsynaptic target (n=7); scans and splits nested",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 34",
+    "panels": "a-d",
+    "source": "source_data/review_response_baselines/scan_metrics.csv",
+    "destination": "Supplementary_Figure_34/review_response_baselines/scan_metrics.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "postsynaptic target (n=7); scans and splits nested",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 34",
+    "panels": "a-d",
+    "source": "source_data/review_response_baselines/target_metrics.csv",
+    "destination": "Supplementary_Figure_34/review_response_baselines/target_metrics.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "postsynaptic target (n=7); scans and splits nested",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Supplementary Figure 34",
+    "panels": "a-d",
+    "source": "source_data/review_response_baselines/training_only_reliability.csv",
+    "destination": "Supplementary_Figure_34/review_response_baselines/training_only_reliability.csv",
+    "role": "completed follow-up source",
+    "independent_unit": "postsynaptic target (n=7); scans and splits nested",
+    "status": "completed",
+    "notes": "Completed review follow-up; retain all conditions and stated primary versus posthoc scope. Numerical source/protocol hashes and replication units are supplied in the folder."
+  },
+  {
+    "figure": "Figure 1",
+    "panels": "a-d",
+    "source": "scripts/build_main_figure_01.py",
+    "destination": "Figure_1/Merged_dictionary_illustration_source.py",
+    "role": "current panel source",
+    "independent_unit": "not applicable",
+    "status": "completed",
+    "notes": "Programmatic merged introduction and illustrative dictionary example."
+  },
+  {
+    "figure": "Supplementary Figure 31",
+    "panels": "h",
+    "source": "source_data/point_dendrite_credit_controls/combined_seed_outcomes.csv",
+    "destination": "Supplementary_Figure_31/SuppFig31h_optimizer_seed_outcomes.csv",
+    "role": "current panel source",
+    "independent_unit": "paired training seed (n=10)",
+    "status": "completed",
+    "notes": "Complete paired optimizer contrast source; no fully controlled interaction claimed."
+  },
+  {
+    "figure": "Supplementary Figure 31",
+    "panels": "h",
+    "source": "source_data/point_dendrite_credit_controls/paired_contrasts.csv",
+    "destination": "Supplementary_Figure_31/SuppFig31h_optimizer_paired_contrasts.csv",
+    "role": "current panel source",
+    "independent_unit": "paired training seed (n=10)",
+    "status": "completed",
+    "notes": "Separate BP and LocalCA recipe credit-resolution contrasts."
+  },
+  {
+    "figure": "Supplementary Figure 29",
+    "panels": "d-f",
+    "source": "source_data/review_branch_trajectories/fashion_cache_manifest.json",
+    "destination": "Supplementary_Figure_29/review_branch_trajectories/fashion_cache_manifest.json",
+    "role": "public dataset cache provenance",
+    "independent_unit": "public dataset artifact",
+    "status": "completed",
+    "notes": "Official public Fashion-MNIST file URLs, compressed MD5 and decompressed SHA-256; the successful trajectory replay changed only the local cache path."
+  },
+  {
+    "figure": "Supplementary Figure 34",
+    "panels": "a-d",
+    "source": "source_data/review_response_baselines/heldout_exclusion_audit.csv",
+    "destination": "Supplementary_Figure_34/review_response_baselines/heldout_exclusion_audit.csv",
+    "role": "independent baseline audit",
+    "independent_unit": "postsynaptic target (n=7); scans/splits nested",
+    "status": "completed",
+    "notes": "Independent reconstruction of outer train/test splits and held-out exclusion checks; audit does not change fitted outcomes."
+  },
+  {
+    "figure": "Supplementary Figure 34",
+    "panels": "a-d",
+    "source": "source_data/review_response_baselines/outer_split_audit.csv",
+    "destination": "Supplementary_Figure_34/review_response_baselines/outer_split_audit.csv",
+    "role": "independent baseline audit",
+    "independent_unit": "postsynaptic target (n=7); scans/splits nested",
+    "status": "completed",
+    "notes": "Independent reconstruction of outer train/test splits and held-out exclusion checks; audit does not change fitted outcomes."
+  },
+  {
+    "figure": "Supplementary Figure 34",
+    "panels": "a-d",
+    "source": "source_data/review_response_baselines/validation_report.json",
+    "destination": "Supplementary_Figure_34/review_response_baselines/validation_report.json",
+    "role": "independent baseline audit",
+    "independent_unit": "postsynaptic target (n=7); scans/splits nested",
+    "status": "completed",
+    "notes": "Independent reconstruction of outer train/test splits and held-out exclusion checks; audit does not change fitted outcomes."
+  },
+  {
+    "figure": "Supplementary Figure 21",
+    "panels": "b",
+    "source": "source_data/review_focal_depth/figure_S21_depth_intervals.csv",
+    "destination": "Supplementary_Figure_21/review_focal_depth/figure_S21_depth_intervals.csv",
+    "role": "displayed depth-bin cell summaries and intervals",
+    "independent_unit": "cells within one mouse; varying count by depth",
+    "status": "completed",
+    "notes": "Per-cell site averages, then 10,000 cell-bootstrap draws within each depth bin. Counts are displayed; the single-cell bin has a degenerate descriptive interval, not population uncertainty."
+  }
+]

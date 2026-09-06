@@ -1,0 +1,19 @@
+{
+  "status": "passed",
+  "tests_passed": 4,
+  "tree_site_dose_cases": 2400,
+  "largest_identity_residual": 2.220446049250313e-16,
+  "figures": [
+    {
+      "file": "shunt_ancestry_gain_native.pdf",
+      "outside_text": [],
+      "pages": 1
+    },
+    {
+      "file": "weak_channel_linearization_check.pdf",
+      "outside_text": [],
+      "pages": 1
+    }
+  ],
+  "native_audit": "shunt_ancestry_gain_native.pdf: 0 violations"
+}

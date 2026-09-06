@@ -1,9 +1,8 @@
 PYTHON ?= python
 PDFLATEX ?= pdflatex
 BIBTEX ?= bibtex
-PDFUNITE ?= pdfunite
 
-.PHONY: paper supplement combined figures canonical-figures presentation-pdf refresh-regular-tree-source test reproducibility software-release format-audit citation-audit overlap-audit layout-audit submission-bundle overleaf-bundle audit clean clean-aux
+.PHONY: historical-figures-refresh paper supplement combined figures canonical-figures presentation-pdf refresh-regular-tree-source test reproducibility software-release format-audit citation-audit overlap-audit layout-audit submission-bundle overleaf-bundle audit clean clean-aux
 
 paper:
 	$(PDFLATEX) -interaction=nonstopmode -halt-on-error main.tex
@@ -18,12 +17,12 @@ supplement:
 	cd supplementary && $(PDFLATEX) -interaction=nonstopmode -halt-on-error supplementary.tex
 
 combined: paper supplement
-	$(PDFUNITE) main.pdf supplementary/supplementary.pdf main_with_supplementary.pdf
+	$(PYTHON) scripts/combine_manuscript_pdfs.py
 
 presentation-pdf:
 	$(PYTHON) ../presentations/legacy_decks/build_pdf_presentation.py
 
-figures:
+historical-figures-refresh:
 	$(PYTHON) scripts/analyze_prospective_followup_results.py
 	$(PYTHON) scripts/analyze_bandwidth_matched_routing.py
 	$(PYTHON) scripts/build_prospective_input_validity_audit.py
@@ -81,18 +80,9 @@ figures:
 	$(PYTHON) scripts/sync_canonical_figures.py
 	$(PYTHON) scripts/assemble_compact_main_figures.py
 
-canonical-figures:
-	$(PYTHON) scripts/build_main_figure_01.py
-	$(PYTHON) scripts/build_main_figure_02.py
-	$(PYTHON) scripts/build_main_figure_03.py
-	$(PYTHON) scripts/build_main_figure_04.py
-	$(PYTHON) scripts/build_main_figure_05.py
-	$(PYTHON) scripts/build_main_figure_06.py
-	$(PYTHON) scripts/build_main_figure_07.py
-	$(PYTHON) scripts/build_main_figure_08.py
-	$(PYTHON) scripts/build_main_figure_09.py
-	$(PYTHON) scripts/sync_canonical_figures.py
-	$(PYTHON) scripts/assemble_compact_main_figures.py
+# Frozen-data rendering: no training or historical analysis refresh.
+figures canonical-figures:
+	$(PYTHON) scripts/rebuild_final_publication_figures.py
 
 refresh-regular-tree-source:
 	$(PYTHON) scripts/export_regular_tree_source_data.py

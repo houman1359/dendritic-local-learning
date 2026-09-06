@@ -1,0 +1,9 @@
+{
+  "claims": "Observed discrete-context count is not a general inferred credit-rank estimator; this task exposes its context structure directly",
+  "created_utc": "2026-09-05T18:06:41.686785+00:00",
+  "observed_count_cheapest": "Count distinct calibrated context vectors; choose smallest allowed K >= count, then cheapest resource cost",
+  "observed_count_conditioning": "Restrict to that same observed-count K; choose smallest sealed Gaussian plug-in SGD predicted final objective",
+  "primary_protocol_sha256": "689abe998236c9cd9154eb1dd35ea0dec374d08f478b5df64b432f71a584e32d",
+  "script_sha256": "36fcd50c6f34ad61b45622df347840d952baa596556290423cb941d11a50d607",
+  "status": "Secondary baseline added after primary freeze and development inspection, before fresh outcomes"
+}

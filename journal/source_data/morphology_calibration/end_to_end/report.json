@@ -1,0 +1,37 @@
+{
+  "final_failures": 0,
+  "fits": 480,
+  "max_abs_parameter": 2.0,
+  "primary_contrasts": [
+    {
+      "ci95_high": 0.5233198964592279,
+      "ci95_low": 0.3948293520505193,
+      "ci975_high": 0.532268163248317,
+      "ci975_low": 0.384889667267149,
+      "contrast": "fixed_exact_minus_estimated_exact",
+      "family": "all",
+      "mean_difference": 0.4591316527195183,
+      "meaningful_superiority": true,
+      "primary": true,
+      "seed_count": 20
+    },
+    {
+      "ci95_high": 0.6411834537592721,
+      "ci95_low": 0.5736329841719187,
+      "ci975_high": 0.6461037269120056,
+      "ci975_low": 0.5691559788503392,
+      "contrast": "estimated_broadcast_minus_exact",
+      "family": "all",
+      "mean_difference": 0.6075018739119817,
+      "meaningful_superiority": true,
+      "primary": true,
+      "seed_count": 20
+    }
+  ],
+  "protocol_sha256": "9de2449e4d95b0a5cbd9b0dfd5792cf91d122eb24b9f39409e05c38a9e1744e6",
+  "rows": 2880,
+  "scope": "Fresh-function end-to-end composition in bounded multilinear model;primary noisy-testfloor.0225;not a conductance orunknown-familyvalidation",
+  "seeds": 20,
+  "selection_seal_sha256": "d9a86d08f3de537fe1c9a6a2836fc6cd2d4ad9814b91081069eb3216d9265391",
+  "status": "complete"
+}

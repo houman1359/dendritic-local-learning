@@ -3,6 +3,8 @@
 
 from __future__ import annotations
 
+from tex_sources import tex_sources
+
 import argparse
 import hashlib
 import shutil
@@ -39,9 +41,13 @@ def inputs() -> dict[Path, Path]:
         ROOT / "figures" / "README.md": Path("figures/README.md"),
         ROOT / "supplementary" / "supplementary.tex": Path("supplementary/supplementary.tex"),
         ROOT / "supplementary" / "supplementary.bbl": Path("supplementary/supplementary.bbl"),
+        ROOT / "supplementary" / "boolean_morphology_methods.tex": Path("supplementary/boolean_morphology_methods.tex"),
     }
     for relative in MAIN_FIGURES + SUPPLEMENTARY_FIGURES:
         files[ROOT / "figures" / relative] = Path("figures") / relative
+    for root in (ROOT / "main.tex", ROOT / "supplementary/supplementary.tex"):
+        for source in tex_sources(root):
+            files[source] = source.relative_to(ROOT)
     return files
 
 

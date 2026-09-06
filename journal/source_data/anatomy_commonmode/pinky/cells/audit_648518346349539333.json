@@ -1,0 +1,19 @@
+{
+  "budgets": [
+    1,
+    2,
+    4,
+    8
+  ],
+  "cohort": "pinky",
+  "common_capture": 0.40590401151220956,
+  "elapsed_seconds": 0.9923969189403579,
+  "n_e_sites": 9,
+  "n_i_sites": 12,
+  "rank_one_capture": 0.4956760199954711,
+  "residual_rank": 8,
+  "residual_weighted_energy": 0.931385686200982,
+  "response_rank": 9,
+  "root_id": 648518346349539333,
+  "total_weighted_energy": 1.567736029613207
+}

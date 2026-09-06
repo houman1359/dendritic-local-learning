@@ -744,10 +744,20 @@ def make_figure(summary: pd.DataFrame, paired: pd.DataFrame) -> None:
     ax_b.set_xlabel("repeated minus original (pp)")
     ax_b.set_ylabel("seed–condition pairs")
     if outliers:
+        # Overflow triangles retain the omitted observations visibly at each
+        # edge; their ordinate is the number of pairs beyond that edge.
+        for edge, marker, outside in (
+            (-5.0, "<", delta_pp[delta_pp < -5.0]),
+            (5.0, ">", delta_pp[delta_pp > 5.0]),
+        ):
+            if len(outside):
+                ax_b.scatter([edge], [len(outside)], marker=marker, s=36,
+                             color=COLORS["ink"], clip_on=False, zorder=4)
         ax_b.text(
             0.965,
             0.95,
-            f"{outliers}/{delta_pp.size} pairs\nbeyond ±5 pp",
+            f"{outliers}/{delta_pp.size} pairs\noutside ±5 pp\n"
+            "triangles = overflow",
             transform=ax_b.transAxes,
             ha="right",
             va="top",

@@ -1101,6 +1101,13 @@ def plot_topology(summary: pd.DataFrame, contrasts: pd.DataFrame) -> None:
 
 
 def plot_fixed_budget(summary: pd.DataFrame, contrasts: pd.DataFrame) -> None:
+    # Journal typography is local to this rendering-only entry point.
+    from journal_style import (COLORS, LW_DATA, LW_ERR, LW_REF, PT_LEGEND,
+                               apply_neurips_style, panel_title, style_axis,
+                               style_direct_color_labels)
+    apply_neurips_style()
+    core_colors = {"dendritic_additive": COLORS["additive"],
+                   "dendritic_shunting": COLORS["shunting"]}
     data = summary[summary.family == "fixed_budget"]
     valid_cores = [core for core in CORE_ORDER if core in set(data.core)]
     if not valid_cores:
@@ -1129,7 +1136,7 @@ def plot_fixed_budget(summary: pd.DataFrame, contrasts: pd.DataFrame) -> None:
                     & (data.core == core)
                 ],
                 "depth",
-                color=CORE_COLOR[core],
+                color=core_colors[core],
                 label=CORE_LABEL[core],
             )
         panel_title(ax, next(letters), FEEDBACK_LABEL[feedback])
@@ -1144,7 +1151,7 @@ def plot_fixed_budget(summary: pd.DataFrame, contrasts: pd.DataFrame) -> None:
             ax,
             data[(data.strategy == "standard") & (data.core == core)],
             "depth",
-            color=CORE_COLOR[core],
+            color=core_colors[core],
             label=CORE_LABEL[core],
         )
     panel_title(ax, next(letters), "Backpropagation")
@@ -1171,17 +1178,13 @@ def plot_fixed_budget(summary: pd.DataFrame, contrasts: pd.DataFrame) -> None:
                 ]
             ),
             fmt="o",
-            color=CORE_COLOR[core],
+            color=core_colors[core],
             lw=LW_ERR,
             capsize=ERR_CAPSIZE,
             label=CORE_LABEL[core],
         )
     ax.axhline(0, color=COLORS["mute"], lw=LW_REF, ls="--")
-    ax.set_xticks(np.arange(4), ["BP", "matched-width\nfallback",
-                                 "neuron-\nspecific", "exact\npath"])
-    ax.tick_params(axis="x", labelrotation=24)
-    for label in ax.get_xticklabels():
-        label.set_horizontalalignment("right")
+    ax.set_xticks(np.arange(4), ["BP", "MW\nscalar", "Neuron", "Exact\npath"])
     ax.set_ylabel("D4 - D1 (pp)")
     panel_title(ax, next(letters), "Fixed-contact depth")
     style_axis(ax)
@@ -1192,13 +1195,16 @@ def plot_fixed_budget(summary: pd.DataFrame, contrasts: pd.DataFrame) -> None:
     ]
     for core in valid_cores:
         for feedback, ls in zip(FEEDBACK_ORDER, (":", "--", "-")):
-            part = gap[(gap.core == core) & (gap.feedback == feedback)].sort_values(
-                "depth"
-            )
+            part = gap[(gap.core == core) & (gap.feedback == feedback)].copy()
+            # The shared CSV also contains depth contrasts such as "4 - 2".
+            # Convert this filtered series before plotting; string categories
+            # otherwise start at zero and disagree with the D1--D4 ticks.
+            part["depth"] = pd.to_numeric(part["depth"], errors="raise")
+            part = part.sort_values("depth")
             ax.plot(
                 part.depth,
                 100 * part.mean_difference,
-                color=CORE_COLOR[core],
+                color=core_colors[core],
                 ls=ls,
                 marker="o",
                 ms=3.6,
@@ -1211,6 +1217,11 @@ def plot_fixed_budget(summary: pd.DataFrame, contrasts: pd.DataFrame) -> None:
     ax.set_ylabel("local - BP (pp)")
     panel_title(ax, next(letters), "Local-learning gap")
     style_axis(ax)
+    if len(valid_cores) == 1:
+        handles, _ = ax.get_legend_handles_labels()
+        ax.legend(handles[:3], ["MW scalar", "Neuron", "Exact path"],
+                  loc="center", bbox_to_anchor=(0.58, 0.55),
+                  fontsize=7, frameon=False)
 
     ax = axes[2, 0]
     resource = data[
@@ -1237,6 +1248,9 @@ def plot_fixed_budget(summary: pd.DataFrame, contrasts: pd.DataFrame) -> None:
     ax.set_ylabel("count (millions)")
     panel_title(ax, next(letters), "Matched input budget")
     style_axis(ax)
+    handles, _ = ax.get_legend_handles_labels()
+    ax.legend(handles, ["active contacts", "parameters"], loc="center",
+              bbox_to_anchor=(0.56, 0.43), fontsize=7, frameon=False)
 
     ax = axes[2, 1]
     for core in valid_cores:
@@ -1248,7 +1262,7 @@ def plot_fixed_budget(summary: pd.DataFrame, contrasts: pd.DataFrame) -> None:
         ax.plot(
             part.depth,
             part.mean_duration_seconds / 60,
-            color=CORE_COLOR[core],
+            color=core_colors[core],
             marker="o",
             lw=LW_DATA,
             label=CORE_LABEL[core],
@@ -1269,14 +1283,14 @@ def plot_fixed_budget(summary: pd.DataFrame, contrasts: pd.DataFrame) -> None:
         ax.plot(
             part.depth,
             part.mean_peak_memory_bytes / 2**20,
-            color=CORE_COLOR[core],
+            color=core_colors[core],
             marker="o",
             lw=LW_DATA,
             label=CORE_LABEL[core],
         )
     ax.set_xticks([1, 2, 3, 4], ["D1", "D2", "D3", "D4"])
     ax.set_xlabel("physical depth")
-    ax.set_ylabel("peak allocated memory (MiB)")
+    ax.set_ylabel("peak memory (MiB)")
     panel_title(ax, next(letters), "Memory")
     style_axis(ax)
 
@@ -1291,7 +1305,15 @@ def plot_fixed_budget(summary: pd.DataFrame, contrasts: pd.DataFrame) -> None:
         fontsize=PT_LEGEND,
     )
 
+    # The legacy line helper uses the historical module constants. Normalize
+    # stroke weight only, retaining every point and confidence interval.
+    for ax in axes.ravel():
+        for line in ax.lines:
+            line.set_linewidth(min(line.get_linewidth(), LW_DATA))
+        for collection in ax.collections:
+            collection.set_linewidth(LW_ERR)
     FIGURES.mkdir(parents=True, exist_ok=True)
+    style_direct_color_labels(fig)
     fig.canvas.draw()
     audit_layout(fig, "fig_prospective_fixed_budget_depth")
     audit_text_over_data(fig, "fig_prospective_fixed_budget_depth")

@@ -1,43 +1,15 @@
 #!/usr/bin/env python3
-"""Main Figure 9 as ONE native full-width canvas.
+"""Build the measured-response boundary as a single native vector canvas.
 
-The measured-response boundary used to be composed from four pre-rendered
-sub-blocks (``fig_main_structure_function_summary``, ``fig5_alignment_boundary``
-panels C-E, ``fig_animal_pairs_wide`` and ``fig_fulltree_boundary``) that the
-compositor scaled into grid slots.  Each block got its own scale factor, so
-the compiled page carried eight different type sizes (5.6-9.5 pt) and two
-dozen stroke weights, and no two panels were the same size.  This module
-rebuilds the figure natively at scale 1.0 on one 12-column module grid, so a
-7.6 pt tick label is 7.6 pt and an ``LW_EDGE`` spine is 0.7 pt everywhere.
+A/B show the fixed feedback dictionary and held-out response prediction.
+C shows target-level effects on three independent native-unit axes rather
+than standardizing correlations, MSE and update-match differences together.
+D/E retain the imposed-alignment manipulation and its capture check.
+F summarizes the evidence boundary. The external signed-coordinate animal
+reanalysis remains in Supplementary Figure S17, not a main data panel.
 
-Nothing here recomputes an estimate.  Every mean, 95 % interval, per-target
-value and sign count is read from the same frozen source tables the old
-builders read, through ports of their own ``mean_ci``/``bootstrap`` helpers
-called with the same seeds and draw counts, so the numbers are bit-identical
-to the figure this replaces.  This file only decides where they sit and how
-they are inked.
-
-The figure answers one question -- what biological evidence supports the
-theory, and where does that evidence stop -- so it is ordered as an argument
-rather than as a tour of the experiments.
-
-Layout (12 modules, three rows)::
-
-    A measured-response pipeline (3)  B complete-tree learning (4)
-    C anatomy effect summary (5)
-    D design: imposed alignment (6)   E controlled alignment (6)
-    F signed contrast (4)   G signed-mode energy (4)   H boundary (4)
-
-The first row begins with the measured-response pipeline, followed by the
-complete-tree learning result and a compact matched-control effect summary.
-The second row keeps the imposed-alignment manipulation adjacent to its
-controlled rescue.  The final row shows the external signed neuronal contrast,
-its mode decomposition and the evidence boundary.  The coarse major-branch and
-channel-sensitivity analyses remain in Supplementary Fig. S22.
-
-The label-heavy effect forest receives five modules and a symmetric reserve on
-its boundary with panel B; all other panels use the shared gutters and margins.
-No panel is rasterized or rescaled after drawing.
+All numerical values are read from frozen source tables, including the
+review_evidence_reanalysis target contrasts. No training is run here.
 """
 
 from __future__ import annotations
@@ -52,6 +24,7 @@ from matplotlib.colors import to_rgb
 from matplotlib.lines import Line2D
 from matplotlib.patches import FancyArrowPatch, FancyBboxPatch
 from matplotlib.transforms import offset_copy
+from matplotlib.ticker import MaxNLocator as plt_maxnlocator
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 if str(SCRIPT_DIR) not in sys.path:
@@ -85,7 +58,7 @@ ANIMAL = SOURCE / "animal_learning_francioni"
 OUT = ROOT / "figures" / "components" / "main_figure_09_native.pdf"
 
 # ── canvas geometry, in points ───────────────────────────────────────────
-CANVAS_H_PT = 468.0
+CANVAS_H_PT = 500.0
 # One height per row.  Row 2 is the tallest because G's ladder is a drawing
 # with a floor -- four rungs, each carrying a tree glyph that has to stay
 # legible and up to two bands of type that cannot be flattened, plus the
@@ -108,7 +81,7 @@ CANVAS_H_PT = 468.0
 # Row 2 carries the evidence ladder, whose four rungs each need a title
 # line, a qualifier line and a badge; at 128 pt its lines overlapped in
 # eleven places.  The extra 26 pt goes to that row alone.
-ROW_H_PT = (98.0, 98.0, 166.0)
+ROW_H_PT = (98.0, 145.0, 153.0)
 # The OUTER LEFT MARGIN is the figure's one shared left reserve.  It is kept
 # at 52 pt, the width the forest's row-label column used to need in column 0,
 # even though the three panels that now start in column 0 (A's labels are
@@ -137,46 +110,14 @@ C_LABEL_RESERVE_PT = 30.0   # C row labels -> clear of the letter column
 
 MINUS = "−"
 
-# Statements the drawing must not carry inside the panel but the reader needs:
-# printed at build time so they can be pasted into the figure caption.
-CAPTION_NOTES = (
-    "CAPTION: FIG09 C - Effects with different native units are displayed as "
-    "standardized target-level effects; intervals bootstrap the complete "
-    "target-level estimand.",
-    "CAPTION: FIG09 D - The fixed-energy imposed field is "
-    "φ(a)=√a u∥+√(1−a)u⊥, where u∥ lies in the subtree-route span and u⊥ "
-    "lies in its orthogonal complement.",
-    "CAPTION: FIG09 F - The signed P+/P− fraction and common scalar fraction "
-    "partition the same pooled projection energy; one interval therefore "
-    "bounds both complementary fractions.",
-    "CAPTION: FIG09 G - The evidence ladder is biological rather than "
-    "statistical: green, amber and open dashed steps denote supported, "
-    "conditional and not established, respectively.",
-    "CAPTION: FIG09 G - The imposed-alignment rescue in D,E is a controlled "
-    "sufficiency test and is not evidence that the measured cells use these "
-    "routes for endogenous task credit.",
-    "CAPTION: FIG09 E - The random-path, depth-bin and site-shuffling "
-    "controls lie within 0.03 of one another below a = 0.6 and are "
-    "distinguished by marker and dash style; at full alignment the "
-    "random-path control is the highest, at capture 0.29.",
-    "CAPTION: FIG09 G - Gray chips cite each rung's evidence: bare letters "
-    "are panels of this figure; 7C\N{EN DASH}G and 8F,G are panels of "
-    "Figs. 7 and 8. In the rung glyphs the two capsule tints distinguish "
-    "the two subtree routes, and the open ring marks the junction whose "
-    "conductance gates the route.",
-)
-
-# Current publication panel inventory, printed with the build log so captions
-# and text references can be audited against the generated PDF.
+# Current panel inventory; captions are printed from the values drawn below.
 LETTER_MOVES = (
-    "CAPTION: FIG09 A response-prediction pipeline",
-    "CAPTION: FIG09 B complete-tree held-out learning",
-    "CAPTION: FIG09 C matched topology-effect summary",
-    "CAPTION: FIG09 D imposed-alignment design",
-    "CAPTION: FIG09 E controlled-alignment rescue",
-    "CAPTION: FIG09 F signed P+/P− animal contrast",
-    "CAPTION: FIG09 G evidence boundary",
-    "CAPTION: coarse-surrogate and channel-sensitivity analyses remain in S22",
+    "FIG09 A fixed feedback-route dictionary",
+    "FIG09 B measured-response prediction",
+    "FIG09 C native-unit morphology effects",
+    "FIG09 D imposed alignment",
+    "FIG09 E alignment manipulation check",
+    "FIG09 F evidence boundary",
 )
 INK = COLORS["ink"]
 MUTE = COLORS["mute"]
@@ -1216,13 +1157,13 @@ LADDER_OPEN = None                       # nothing established: an open step
 # own order, so the drawing order below is the reading order.
 EVIDENCE_RUNGS = (
     ("coordinate", "coordinate", r"$\delta_u$", COLORS["additive"],
-     "retrospective (n=6)", "F", LADDER_CONDITIONAL),
+     "retrospective (6 animals)", "S17", LADDER_CONDITIONAL),
     ("address", "subtree route", r"$A_{u,\cdot k}$", INK,
-     "capacity, not use", "7C\N{EN DASH}G", LADDER_SUPPORTED),
-    ("gain", "route gain", r"$\Lambda_k$", INK,
+     "modeled capacity", "7C\N{EN DASH}G", LADDER_SUPPORTED),
+    ("gain", "spatial transfer", None, INK,
      "high conductance only", "8F,G", LADDER_CONDITIONAL),
     ("open", "endogenous task use", None, MUTE,
-     "no anatomy alignment", "B,C null", LADDER_OPEN),
+     "no detected alignment", "B,C null", LADDER_OPEN),
 )
 LADDER_KEY = (
     (LADDER_SUPPORTED, "supported"),
@@ -1572,6 +1513,55 @@ def panel_evidence_boundary(ax):
     return ax
 
 
+def panel_native_effects(parent):
+    """Draw each endpoint in its native units, without shared standardization."""
+    directory = SOURCE / "review_evidence_reanalysis"
+    summary = pd.read_csv(directory / "functional_native_contrasts.csv")
+    values = pd.read_csv(directory / "functional_native_target_effects.csv")
+    specifications = (
+        ("structure_function_partial_r", "partial rank correlation",
+         (("selected_scans", "69 partners", ROUTE),
+          ("scan_complete", "13 scans", ROUTE))),
+        ("heldout_normalized_mse", "normalized MSE: control − subtree",
+         (("site-shuffled routes", "shuffled", C_SHUFFLE),
+          ("random anatomical routes", "random", C_RANDOM))),
+        ("common_checkpoint_update_capture", "update match: subtree − control",
+         (("site-shuffled routes", "shuffled", C_SHUFFLE),
+          ("random anatomical routes", "random", C_RANDOM))),
+    )
+    bounds = parent.get_position()
+    for index, (endpoint, label, rows) in enumerate(specifications):
+        bottom = bounds.y0 + bounds.height * (0.735 - 0.34 * index)
+        ax = parent.figure.add_axes([
+            bounds.x0 + 0.25 * bounds.width, bottom,
+            0.73 * bounds.width, 0.20 * bounds.height,
+        ])
+        ax.axvline(0, color=MUTE, ls="--", lw=LW_REF, zorder=0)
+        for row_index, (comparison, short, color) in enumerate(rows):
+            row = summary[summary.endpoint.eq(endpoint)
+                          & summary.comparison.eq(comparison)].iloc[0]
+            individual = values[values.endpoint.eq(endpoint)
+                                & values.comparison.eq(comparison)].effect.to_numpy(float)
+            yy = 1 - row_index
+            ax.scatter(individual, yy + np.linspace(-0.13, 0.13, len(individual)),
+                       s=SEED_MS ** 2, color=color, alpha=SEED_ALPHA,
+                       edgecolors="none", zorder=2)
+            ax.errorbar(row["mean"], yy,
+                        xerr=[[row["mean"] - row.ci95_low],
+                              [row.ci95_high - row["mean"]]],
+                        fmt="D", mfc="white", mec=color, color=color,
+                        ms=MARKER_MS, lw=LW_ERR, capsize=ERR_CAPSIZE, zorder=3)
+        ax.set_yticks([1, 0], [row[1] for row in rows])
+        ax.set_ylim(-0.45, 1.45)
+        ax.tick_params(axis="both", labelsize=PT_SMALL, pad=1.2)
+        ax.xaxis.set_major_locator(plt_maxnlocator(3))
+        ax.set_title(label, fontsize=PT_SMALL, pad=1.3, color=MUTE)
+        ax.spines[["top", "right", "left"]].set_visible(False)
+        ax.spines["bottom"].set_color(MUTE)
+        ax.spines["bottom"].set_linewidth(LW_HAIR)
+        ax.tick_params(axis="y", length=0)
+
+
 # ── the canvas ───────────────────────────────────────────────────────────
 def build():
     tree, curves, animal, prespecified, all_scans, original, expanded, mode \
@@ -1594,73 +1584,38 @@ def build():
     ax_b = canvas.panel("B", 0, 6, 6, grid="x",
                         title="Measured-response prediction")
 
-    # Row 1: the label-heavy effect forest gets a row of its own rather than
-    # the tail of row 0, beside the manipulation it is later contrasted with.
-    ax_c = canvas.panel("C", 1, 0, 7, grid="x",
-                        title="Morphology-specific effects")
+    # Native-unit contrasts occupy three independent horizontal axes in C.
+    ax_c = canvas.panel("C", 1, 0, 7, schematic=True,
+                        title="Morphology effects in native units")
     ax_d = canvas.panel("D", 1, 7, 5, schematic=True,
-                        title="Controlled alignment")
-
-    # Row 2: the alignment result, the animal coordinate WITH its mode
-    # partition folded in, and the boundary the whole page argues for.
-    ax_e = canvas.panel("E", 2, 0, 4, grid="y",
-                        title="Alignment-controlled capture")
-    ax_f = canvas.panel("F", 2, 4, 4, grid="y",
-                        title="P+ − P− signed separation")
-    ax_g = canvas.panel("G", 2, 8, 4, schematic=True,
-                        title="Evidence ladder")
-
-    # E and G reserve 16 pt for their y-axis furniture.  F has a comparable
-    # four-module slot but no natural left reserve, so declare the same amount
-    # explicitly and keep the closing row geometrically aligned.
-    canvas.declare_reserve("F", left=LABEL_RESERVE_PT)
-    # C's category labels are drawn as text, not tick labels, so measuring
-    # cannot see them: undeclared they hang past the left margin and into the
-    # column the row-leading panel letters own.  Declaring them insets the
-    # whole first column -- A, C and E together -- which keeps the letters
-    # leftmost without widening the page margin, and so without squeezing D.
-    canvas.declare_reserve("C", left=C_LABEL_RESERVE_PT)
+                        title="Imposed alignment")
+    ax_e = canvas.panel("E", 2, 0, 6, grid="y",
+                        title="Alignment manipulation check")
+    ax_f = canvas.panel("F", 2, 6, 6, schematic=True,
+                        title="Evidence boundary")
 
     panel_route_dictionary(ax_a)
     panel_tree_learning(ax_b, tree)
-    truncated = panel_forest(ax_c, prespecified, all_scans, tree, original,
-                             expanded, header_x=0.014)
     panel_alignment_design(ax_d)
     panel_controlled_alignment(ax_e, curves)
-    panel_animal_pairs(ax_f, animal, mode)
-
-    # One letter offset per grid column, so every letter sits the same
-    # distance left of the column its panel starts in.
-    for name in ("A", "B", "C", "D", "E", "F", "G"):
+    for name in ("A", "B", "C", "D", "E", "F"):
         canvas.add_letter(name, canvas.axes[name], dx_pt=24.0)
-
-    # G is set in points inside its own axes box, and the box is only final
-    # once the reserves are locked (row 2 yields whatever F's new percentage
-    # axis cannot hang in the bottom margin).  Lock here, with every other
-    # panel and every letter already on the canvas, so the tier bands are
-    # laid out against the height the panel actually gets; ``save`` locks
-    # again and finds nothing to move, because G declares no decoration.
     canvas.lock_reserves()
-    panel_evidence_boundary(ax_g)
+    panel_native_effects(ax_c)
+    panel_evidence_boundary(ax_f)
 
+    from journal_style import style_direct_color_labels
+    style_direct_color_labels(canvas.fig)
     problems = canvas.save(OUT, name="main_figure_09_native")
-    # B's clipping note is generated, not typed: the bounds it prints are the
-    # ones the panel just drew, so the caption cannot drift from the figure.
-    notes = list(CAPTION_NOTES)
-    if truncated:
-        notes.insert(1, _truncation_note(truncated))
-    # F's interval note is generated from the same frozen block the panel
-    # just drew, for the same reason.
-    ci_lo, ci_hi = (100.0 * float(v) for v in mode["animal_bootstrap_95_ci"])
-    notes.append(
-        "CAPTION: FIG09 F - The capped whisker under the bar's split is the "
-        f"signed fraction's 95 % animal-bootstrap interval, {ci_lo:.1f} % "
-        f"to {ci_hi:.1f} %.")
-    for note in notes:
-        print(note)
-    for note in LETTER_MOVES:
-        print(note)
-    return problems
+    print("CAPTION FIG09 C: Three separate native-unit axes. Structure–function: "
+          "partial rank correlation, selected-scan sample (69 partners) and "
+          "scan-complete sample (13 scans); MSE: control minus subtree; "
+          "update match: subtree minus control. Dots are seven targets and "
+          "diamonds/whiskers are means and 95% target-bootstrap intervals.")
+    print("CAPTION FIG09 D,E: Imposed alignment and its capture manipulation check; "
+          "capture equals alignment by construction. No visual-response data are used.")
+    print("CAPTION FIG09 F: Evidence boundary; the external signed-coordinate "
+          "reanalysis is shown only in Supplementary Fig. S17 and its source table.")
 
 
 if __name__ == "__main__":

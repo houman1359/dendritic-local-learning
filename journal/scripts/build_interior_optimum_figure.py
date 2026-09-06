@@ -113,7 +113,8 @@ def main() -> None:
             mec=color,
             mew=1.0,
         )
-    ax_a.set_xlabel("routed depth $D$")
+    ax_a.set_xlabel("routed depth $D_r$")
+    ax_a.set_yscale("log")
     ax_a.set_ylabel("mean final population loss")
     ax_a.set_xticks([1, 2, 3, 4])
     panel_title(ax_a, "A", "Trained loss across depth")
@@ -121,7 +122,7 @@ def main() -> None:
     ax_a.legend(frameon=False, fontsize=PT_LEGEND - 0.4, handlelength=1.3,
                 loc="upper left", borderaxespad=0.2)
 
-    ax_b.set_xlabel("routed depth $D$")
+    ax_b.set_xlabel("routed depth $D_r$")
     ax_b.set_ylabel("initialization utility $U$")
     ax_b.set_xticks([1, 2, 3, 4])
     panel_title(ax_b, "B", "Bound utility across depth")
@@ -140,69 +141,39 @@ def main() -> None:
     panel_title(ax_c, "C", "Optimum location per pair")
     add_colorbar(fig, ax_c, im, label="seed--task pairs")
 
-    # D - factorial contrasts across budget K.
-    per_k = per_k.sort_values("budget_k")
-    ks = per_k["budget_k"].to_numpy()
-    x = np.arange(len(ks))
-    series = [
-        (
-            "mean_accuracy_contrast",
-            ("accuracy_ci_low", "accuracy_ci_high"),
-            # These three are endpoint metrics, not the backprop and oracle
-            # conditions whose hues they used to borrow.
-            COLORS["ink"],
-            "o",
-            "held-out accuracy",
-        ),
-        (
-            "mean_utility_contrast",
-            ("utility_ci_low", "utility_ci_high"),
-            COLORS["per_soma"],
-            "s",
-            "utility $U$ (vs best of four)",
-        ),
-        (
-            "mean_utility_contrast_non_oracle",
-            ("utility_non_oracle_ci_low", "utility_non_oracle_ci_high"),
-            COLORS["low_rank"],
-            "^",
-            "utility $U$ (vs non-oracle)",
-        ),
-    ]
-    for col, (lo, hi), color, marker, label in series:
-        y = per_k[col].to_numpy()
-        yerr = np.vstack([y - per_k[lo].to_numpy(), per_k[hi].to_numpy() - y])
-        ax_d.errorbar(
-            x,
-            y,
-            yerr=yerr,
-            color=color,
-            marker=marker,
-            ms=3.6,
-            lw=LW_DATA,
-            elinewidth=LW_REF,
-            capsize=1.6,
-            label=label,
-        )
-    ax_d.axhline(0, color=COLORS["mute"], ls=":", lw=LW_REF)
-    ax_d.set_ylim(-0.56, 0.12)
-    peak = per_k.loc[per_k["mean_accuracy_contrast"].idxmax()]
-    ax_d.annotate(
-        "trained peak",
-        xy=(list(ks).index(int(peak["budget_k"])), peak["mean_accuracy_contrast"]),
-        xytext=(0.9, 0.075),
-        fontsize=PT_ANNOT,
-        color=COLORS["bp"],
-        arrowprops={"arrowstyle": "-", "lw": LW_REF, "color": COLORS["bp"]},
+    # D uses a single native unit: ancestry-minus-best-control moment utility.
+    # The comparison set is the declared four controls, without substituting
+    # the learned PCA ceiling for route derangement.
+    revised = pd.read_csv(ROOT / "source_data/review_evidence_reanalysis/"
+                          "ancestry_utility_contrast_summary.csv")
+    specs = (
+        ("deterministic_maximum_bound_decrease", COLORS["shunting"], "o",
+         "full-batch training"),
+        ("hypothetical_minibatch64_maximum_bound_decrease", COLORS["local"], "s",
+         "hypothetical minibatch 64"),
     )
-    ax_d.set_xticks(x, [str(int(k)) for k in ks])
+    for criterion, color, marker, label in specs:
+        part = revised[revised.criterion.eq(criterion)].sort_values("budget_k")
+        x = np.arange(len(part))
+        means = part["mean"].to_numpy(float)
+        ax_d.errorbar(x, means,
+                      yerr=[means - part.ci95_low, part.ci95_high - means],
+                      color=color, marker=marker, ms=3.6, lw=LW_DATA,
+                      elinewidth=LW_REF, capsize=1.6, label=label)
+    ax_d.axhline(0, color=COLORS["mute"], ls=":", lw=LW_REF)
+    ax_d.set_xticks(range(4), ["1", "2", "4", "8"])
+    ax_d.set_ylim(-1.0, 0.50)
     ax_d.set_xlabel("feedback budget $K$")
-    ax_d.set_ylabel("ancestry $-$ best control")
-    panel_title(ax_d, "D", "Trained versus one-step contrast")
+    ax_d.set_ylabel("ancestry − best-control utility")
+    ax_d.annotate("trained accuracy peak", xy=(2, 0.263), xytext=(0.9, 0.43),
+                   fontsize=PT_ANNOT, color=COLORS["ink"],
+                   arrowprops={"arrowstyle": "-", "lw": LW_REF,
+                               "color": COLORS["ink"]})
+    panel_title(ax_d, "D", "Utility depends on the noise model")
     style_axis(ax_d)
     handles, labels = ax_d.get_legend_handles_labels()
     fig.legend(handles, labels, loc="lower center",
-               bbox_to_anchor=(0.5, 0.005), ncol=3, frameon=False,
+               bbox_to_anchor=(0.5, 0.005), ncol=2, frameon=False,
                fontsize=PT_LEGEND - 0.4, handlelength=1.3, columnspacing=1.0)
 
     FIGURES.mkdir(parents=True, exist_ok=True)

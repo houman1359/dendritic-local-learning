@@ -1,0 +1,103 @@
+\begin{thebibliography}{13}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Safaai et~al.(2026)Safaai, Richards, and
+  Sabatini]{safaai2026localcredit}
+Houman Safaai, Maceo Richards, and Bernardo~L. Sabatini.
+\newblock Shunting inhibition and dendritic branching shape local credit
+  assignment.
+\newblock \emph{arXiv preprint arXiv:2607.03556}, 2026.
+\newblock URL \url{https://arxiv.org/abs/2607.03556}.
+
+\bibitem[Horn and Johnson(2013)]{horn2013matrix}
+Roger~A. Horn and Charles~R. Johnson.
+\newblock \emph{Matrix Analysis}.
+\newblock Cambridge University Press, 2 edition, 2013.
+\newblock \doi{10.1017/CBO9781139020411}.
+
+\bibitem[Nesterov(2004)]{nesterov2004convex}
+Yurii Nesterov.
+\newblock \emph{Introductory Lectures on Convex Optimization: A Basic Course},
+  volume~87 of \emph{Applied Optimization}.
+\newblock Springer, 2004.
+\newblock \doi{10.1007/978-1-4419-8853-9}.
+
+\bibitem[Cohen et~al.(2016)Cohen, Sharir, and Shashua]{cohen2016tensor}
+Nadav Cohen, Or~Sharir, and Amnon Shashua.
+\newblock On the expressive power of deep learning: A tensor analysis.
+\newblock In \emph{Proceedings of the 29th Conference on Learning Theory},
+  volume~49 of \emph{Proceedings of Machine Learning Research}, pages 698--728,
+  2016.
+\newblock URL \url{https://proceedings.mlr.press/v49/cohen16.html}.
+
+\bibitem[Lampinen and Ganguli(2019)]{lampinen2019generalization}
+Andrew~K. Lampinen and Surya Ganguli.
+\newblock An analytic theory of generalization dynamics and transfer learning
+  in deep linear networks.
+\newblock In \emph{International Conference on Learning Representations}, 2019.
+\newblock URL \url{https://openreview.net/forum?id=ryfMLoCqtQ}.
+
+\bibitem[Canatar et~al.(2021)Canatar, Bordelon, and
+  Pehlevan]{canatar2021spectral}
+Abdulkadir Canatar, Blake Bordelon, and Cengiz Pehlevan.
+\newblock Spectral bias and task-model alignment explain generalization in
+  kernel regression and infinitely wide neural networks.
+\newblock \emph{Nature Communications}, 12:\penalty0 2914, 2021.
+\newblock \doi{10.1038/s41467-021-23103-1}.
+
+\bibitem[Hackbusch and K{\"u}hn(2009)]{hackbusch2009tensor}
+Wolfgang Hackbusch and Stefan K{\"u}hn.
+\newblock A new scheme for the tensor representation.
+\newblock \emph{Journal of Fourier Analysis and Applications}, 15:\penalty0
+  706--722, 2009.
+\newblock \doi{10.1007/s00041-009-9094-9}.
+
+\bibitem[Grasedyck(2010)]{grasedyck2010hierarchical}
+Lars Grasedyck.
+\newblock Hierarchical singular value decomposition of tensors.
+\newblock \emph{SIAM Journal on Matrix Analysis and Applications}, 31\penalty0
+  (4):\penalty0 2029--2054, 2010.
+\newblock \doi{10.1137/090764189}.
+
+\bibitem[{MICrONS Consortium}(2025)]{microns2025}
+{MICrONS Consortium}.
+\newblock Functional connectomics spanning multiple areas of mouse visual
+  cortex.
+\newblock \emph{Nature}, 640:\penalty0 435--447, 2025.
+\newblock \doi{10.1038/s41586-025-08790-w}.
+
+\bibitem[Turner et~al.(2022)Turner, Macrina, Bae, Yang, Wilson,
+  Schneider-Mizell, Lee, Lu, Wu, Bodor, et~al.]{turner2022neocortex}
+Nicholas~L. Turner, Thomas Macrina, J.~Alexander Bae, Runzhe Yang, Alyssa~M.
+  Wilson, Casey Schneider-Mizell, Kisuk Lee, Ran Lu, Jingpeng Wu, Agnes~L.
+  Bodor, et~al.
+\newblock Reconstruction of neocortex: Organelles, compartments, cells,
+  circuits, and activity.
+\newblock \emph{Cell}, 185\penalty0 (6):\penalty0 1082--1100.e24, 2022.
+\newblock \doi{10.1016/j.cell.2022.01.023}.
+
+\bibitem[{MICrONS Consortium}(2020)]{microns_pinky_v185}
+{MICrONS Consortium}.
+\newblock {MICrONS Layer 2/3 Data Tables}, 2020.
+\newblock URL \url{https://doi.org/10.5281/zenodo.3710459}.
+
+\bibitem[Gavish et~al.(2010)Gavish, Nadler, and Coifman]{gavish2010wavelets}
+Matan Gavish, Boaz Nadler, and Ronald~R. Coifman.
+\newblock Multiscale wavelets on trees, graphs and high dimensional data:
+  Theory and applications to semi supervised learning.
+\newblock In \emph{Proceedings of the 27th International Conference on Machine
+  Learning}, 2010.
+\newblock URL \url{https://icml.cc/Conferences/2010/papers/137.pdf}.
+
+\bibitem[Cichon and Gan(2015)]{cichon2015branch}
+Joseph Cichon and Wen-Biao Gan.
+\newblock Branch-specific dendritic ca2+ spikes cause persistent synaptic
+  plasticity.
+\newblock \emph{Nature}, 520:\penalty0 180--185, 2015.
+\newblock \doi{10.1038/nature14251}.
+
+\end{thebibliography}

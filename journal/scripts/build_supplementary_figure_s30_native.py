@@ -110,9 +110,9 @@ def panel_contrasts(ax, contrasts, rows, *, legend=False):
                              & contrasts.contrast.eq(key)]
             if part.empty:
                 continue
-            mean = float(part.mean_difference.iloc[0])
-            low = float(part.ci95_low.iloc[0])
-            high = float(part.ci95_high.iloc[0])
+            mean = 100.0 * float(part.mean_difference.iloc[0])
+            low = 100.0 * float(part.ci95_low.iloc[0])
+            high = 100.0 * float(part.ci95_high.iloc[0])
             ax.plot([low, high], [y + offset] * 2, color=color, lw=LW_DATA,
                     solid_capstyle="butt", zorder=2)
             ax.plot([mean], [y + offset], marker="o", ms=MARKER_MS - 0.6,
@@ -124,7 +124,7 @@ def panel_contrasts(ax, contrasts, rows, *, legend=False):
     ax.axvline(0.0, color=COLORS["mute"], ls="--", lw=LW_REF, zorder=1)
     ax.set_yticks([])
     ax.set_ylim(min(ys) - 0.5, max(ys) + 0.62)
-    ax.set_xlabel("paired seed difference (accuracy)")
+    ax.set_xlabel("paired accuracy difference (pp)")
     if legend:
         handles = [Line2D([], [], color=COLORS["additive"], lw=LW_DATA,
                           label="additive"),

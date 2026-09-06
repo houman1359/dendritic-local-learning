@@ -8,15 +8,14 @@ JOURNAL = Path(__file__).resolve().parents[1]
 MAIN = JOURNAL / "main.tex"
 
 MAIN_PANEL_INVENTORY = {
-    "fig:framework": "abcde",
-    "fig:atlas": "abcd",
-    "fig:feedback": "abcdefg",
-    "fig:creditphase": "abcdefgh",
+    "fig:framework": "abcdef",
     "fig:branchconflict": "abcdef",
-    "fig:subtreefactorial": "abcdefg",
-    "fig:topology": "abcdefg",
-    "fig:focal": "abcdefg",
-    "fig:boundary": "abcdefg",
+    "fig:subtreefactorial": "abcdef",
+    "fig:prospective": "abcdef",
+    "fig:physicaldepth": "abc",
+    "fig:topology": "abcde",
+    "fig:focal": "abcde",
+    "fig:boundary": "abcde",
 }
 
 FIGURE_BLOCK = re.compile(
@@ -24,7 +23,7 @@ FIGURE_BLOCK = re.compile(
 )
 PANEL_REF = re.compile(
     r"\\ref\{(?P<label>fig:[^}]+)\}"
-    r"(?P<panels>[A-Ha-h](?:(?:--|,)[A-Ha-h])*)"
+    r"(?P<panels>[A-Ia-i](?:(?:--|,)[A-Ia-i])*)"
 )
 EQUATION_LABEL = re.compile(r"\\label\{(?P<label>eq:[^}]+)\}")
 EQUATION_REF = re.compile(r"\\(?:ref|eqref)\{(?P<label>eq:[^}]+)\}")

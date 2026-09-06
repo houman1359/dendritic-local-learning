@@ -1,0 +1,35 @@
+{
+  "exact_theory_checks": {
+    "matching_crossed_pair": {
+      "centered_rank1_tail": 0.25,
+      "full_rank2_tail": 0.25
+    },
+    "matching_even_odd": {
+      "centered_rank1_tail": 0.75,
+      "full_rank2_tail": 0.5
+    },
+    "quartet_five_leaf": {
+      "centered_rank1_tail": 0.25,
+      "full_rank2_tail": 0.0
+    }
+  },
+  "fit_diagnostic_scope": "final whole-fit diagnostics repeated in each checkpoint row, not checkpoint-local values",
+  "gap_scope": "gap above lower bound combines possible optimization error and bound looseness",
+  "input_sensitivity_scope": "I/4 describes target input gradients, not model parameter-gradient moments",
+  "max_recorded_sweep_error_increase": 3.055937725093827e-10,
+  "maximum_endpoint_minus_lower_bound": 0.4999999999999999,
+  "maximum_final_parameter_norm": 331946171319.7318,
+  "maximum_parameter_norm": 9826865712326656.0,
+  "minimum_endpoint_minus_lower_bound": -5.587932894179914e-10,
+  "n_candidates": 1680,
+  "n_changed_deterministic_choices": 31,
+  "n_full_fits": 6720,
+  "outcome_comparison_tolerance": 1e-07,
+  "source_sha256": {
+    "all_trajectories.csv": "da3e11582b2211ad35478670060e2ba58a340ce31338769281bfb469f45d0439",
+    "candidate_outcomes.csv": "15ab5b7e996439e146b72f5b0b0048044f91b20298ebfcf8f85e21931749ae59",
+    "protocol.json": "c3d020330c2db9c0a6ec225444d63784a413f98babc22de5fbc3d928f390b875"
+  },
+  "tie_absolute_tolerance": 1e-10,
+  "tie_rule": "minimum score within absolute tolerance; lexicographic candidate ID"
+}

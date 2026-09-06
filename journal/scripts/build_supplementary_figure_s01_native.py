@@ -294,7 +294,7 @@ INTERVENTION_COLOR = {
     "mean_clamp_i": COLORS["per_soma"],
     "uniform_matched_i": COLORS["oracle"],
 }
-DATASET_ORDER = [("mnist", "MNIST"), ("noise_resilience", "noise")]
+DATASET_ORDER = [("mnist", "MNIST")]
 
 
 def panel_inhibition(ax, causal):
@@ -340,7 +340,7 @@ def panel_inhibition(ax, causal):
 
     ax.set_xticks(centers)
     ax.set_xticklabels([label for _dataset, label in DATASET_ORDER])
-    ax.set_xlim(centers[0] - 0.66, centers[1] + 0.66)
+    ax.set_xlim(centers[0] - 0.66, centers[-1] + 0.66)
     ax.set_ylim(0, 140)
     ax.set_yticks([0, 50, 100])
     ax.set_ylabel("accuracy (%)")
@@ -350,7 +350,9 @@ def panel_inhibition(ax, causal):
 # ── panels D, E: noise-resilience fidelity and learning sweeps ───────────
 def _sweep(ax, frame, mean_col, std_col, *, linestyle, scale=1.0):
     """One core's line on an N_I sweep, mean +- 1 s.d. as whiskers."""
-    for core in ("dendritic_shunting", "dendritic_additive"):
+    # The inherited noise/shunting aggregate has no resolved execution
+    # lineage. Retain the additive data; unresolved rows stay in Source Data.
+    for core in ("dendritic_additive",):
         sub = frame[frame["network_type"] == core].sort_values("ie_value")
         x = pd.to_numeric(sub["ie_value"], errors="coerce").to_numpy(float)
         y = scale * sub[mean_col].to_numpy(dtype=float)
@@ -386,9 +388,7 @@ def panel_fidelity(ax, summary):
             fontsize=PT_ANNOT, color=INK)
     ax.text(21.0, 0.33, "matched-width\nfallback", ha="center", va="bottom",
             fontsize=PT_ANNOT, color=INK)
-    ax.text(42.5, ends["dendritic_shunting"], "shunting", ha="left",
-            va="center", fontsize=PT_LEGEND, color=SHUNT)
-    ax.text(42.5, ends["dendritic_additive"], "normalized\nadditive", ha="left",
+    ax.text(42.5, ends["dendritic_additive"], "additive", ha="left",
             va="center", fontsize=PT_LEGEND, color=ADD)
 
     ax.set_xticks(IE_TICKS)
@@ -447,9 +447,9 @@ def build(path: Path = OUT):
     ax_c = canvas.panel("inhibition", 0, 8, 4, grid="y",
                         title="Inhibition interventions")
     ax_d = canvas.panel("fidelity", 1, 0, 6, grid="y",
-                        title="Feedback fidelity (noise task)")
+                        title="Noise-task fidelity (additive)")
     ax_e = canvas.panel("learning", 1, 6, 6, grid="y",
-                        title="Learning (noise task)")
+                        title="Noise-task learning (additive)")
 
     panel_path_gains(ax_a, summary, path_gain_seed)
     panel_field_cosine(ax_b, decomposition_runs)

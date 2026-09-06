@@ -1,16 +1,19 @@
 #!/usr/bin/env python3
 """Build and validate the reviewer software archive.
 
-The release has two deliberately distinct source trees:
+The release has three deliberately distinct source trees:
 
-* ``dendritic_modeling/`` is exported from the repository's committed HEAD
-  through the same lightweight release filter used for article code.
+* ``dendritic_modeling/`` is exported from the implementation repository's committed HEAD,
+  including its installable src-layout package.
   Uncommitted working-tree changes never enter this snapshot.
+* ``journal_package/`` separately exports the clean paper repository, including
+  manuscript sources and historical vector figure components.
 * ``article_analysis/`` contains an explicit allow-list from this journal
   package.  It includes analysis code and frozen configurations, but no raw
   data, model checkpoints, scheduler scripts, logs, or caches.
 
-The build is deterministic for a fixed Git HEAD and fixed journal inputs.
+The exported files are deterministic for fixed implementation/paper commits.
+Archive metadata also records the implementation working-tree state at build time.
 Machine-specific paths in historical, committed auxiliary configurations are
 replaced with documented placeholders in the release copy only.
 """
@@ -36,12 +39,12 @@ from pathlib import Path, PurePosixPath
 
 
 JOURNAL_ROOT = Path(__file__).resolve().parents[1]
-REPOSITORY_ROOT = JOURNAL_ROOT.parent
+PAPER_REPOSITORY_ROOT = JOURNAL_ROOT.parent
 SUBMISSION_ROOT = JOURNAL_ROOT / "submission"
 STAGE_NAME = "software_release"
 ARCHIVE_NAME = "Dendritic_credit_assignment_software.zip"
 
-# The full committed repository is retained.  These replacements affect only
+# Only the explicitly selected committed package and article sources are retained.  These replacements affect only
 # historical machine-local defaults; each changed file is listed in
 # PORTABILITY_PATCHES.tsv.  Tokens are intentionally conspicuous so that a
 # reviewer cannot mistake them for working paths.
@@ -90,26 +93,39 @@ PORTABILITY_REPLACEMENTS: tuple[tuple[str, str, str], ...] = (
         "${DENDRITIC_RUNS_ROOT}",
         "replace historical run root not distributed with the article",
     ),
+    (
+        "/n/holylabs/kempner_dev/Users/hsafaai",
+        "${DENDRITIC_LOCAL_WORKSPACE}",
+        "replace auxiliary production workspace, environment and cached-input roots",
+    ),
+    (
+        "/n/holylabs/...",
+        "${DENDRITIC_LOCAL_WORKSPACE}",
+        "replace illustrative cluster-root placeholder in production help text",
+    ),
 )
 
-JOURNAL_DIRECTORIES = ("code", "configs", "tests", "reproducibility")
+JOURNAL_DIRECTORIES = (
+    "code", "configs", "tests", "reproducibility",
+    "scripts/morphology_structure", "scripts/morphology_dynamics",
+    "scripts/morphology_credit", "scripts/morphology_calibration",
+    "scripts/morphology_conductance",
+    "scripts/boolean_morphology", "scripts/boolean_theory",
+    "scripts/credit_rule_bridge", "scripts/credit_resolution_bridge",
+    "scripts/anatomy_commonmode", "scripts/physical_depth_budget",
+    "scripts/shunt_ancestry_gain", "scripts/credit_first_figures",
+)
 JOURNAL_ANALYSIS_RECORDS = (
     "ANIMAL_DATA_CONTRACT.md",
     "CREDIT_PHASE_THEORY_EXPERIMENT_CONTRACT_20260811.md",
     "EXPERIMENT_CONTRACT.md",
-    "EVIDENCE_LEDGER.md",
     "MICRONS_FUNCTIONAL_INHIBITORY_CONTRACT.md",
-    "NEURIPS_FIGURE_LINEAGE_AUDIT_20260804.md",
-    "NONLINEAR_PHYSICAL_DEPTH_CODE_THEORY_AUDIT_20260812.md",
     "NONLINEAR_PHYSICAL_DEPTH_CONFIRMATORY_CONTRACT_20260812.md",
     "PINKY_V185_SECOND_ANIMAL_CONTRACT_20260820.md",
-    "PINKY_V185_SECOND_ANIMAL_EXECUTION_20260820.md",
     "PATH_NECESSITY_CREDIT_CONFLICT_CONTRACT_20260828.md",
     "POSITIVE_CONDUCTANCE_STEP_CONSISTENT_CONTRACT_20260811.md",
-    "REVIEW_IMPLEMENTATION_MATRIX_20260811.md",
     "SAME_SPAN_COEFFICIENT_LEARNING_CONTRACT_20260811.md",
     "TASK_FAMILY_ALIGNMENT_CONTRACT_20260820.md",
-    "TASK_FAMILY_ALIGNMENT_EXECUTION_20260820.md",
     "TRAINED_SUBTREE_ADDRESS_EXPERIMENT_CONTRACT.md",
 )
 JOURNAL_SCRIPTS = (
@@ -117,6 +133,10 @@ JOURNAL_SCRIPTS = (
     "analyze_bandwidth_matched_routing.py",
     "analyze_branch_credit_interference.py",
     "analyze_credit_phase_existing.py",
+    "analyze_review_evidence.py",
+    "audit_review_curve_lineage.py",
+    "analyze_fulltree_within_span_oracle.py",
+    "rebuild_review_visual_corrections.py",
     "analyze_credit_phase_spectral_bound.py",
     "analyze_focal_gradient_decomposition.py",
     "analyze_focal_gradient_shapley.py",
@@ -182,6 +202,82 @@ JOURNAL_SCRIPTS = (
     "summarize_static_microns_replication.py",
     "update_provenance_hashes.py",
 )
+# Current native figure builders and their local Python dependencies.
+JOURNAL_SCRIPTS += (
+    'current_source_data_inventory.py',
+    'tex_sources.py',
+    'build_utility_supplement.py',
+    'analyze_physical_depth_clean_source_replication.py',
+    'assemble_compact_main_figures.py',
+    'build_interior_optimum_figure.py',
+    'build_main_figure_01.py',
+    'build_main_figure_02.py',
+    'build_main_figure_03.py',
+    'build_main_figure_04.py',
+    'build_main_figure_05.py',
+    'build_main_figure_06.py',
+    'build_main_figure_07.py',
+    'build_main_figure_08.py',
+    'build_main_figure_09.py',
+    'build_main_figure_10.py',
+    'build_supplementary_figure_s01_native.py',
+    'build_supplementary_figure_s02_native.py',
+    'build_supplementary_figure_s03_native.py',
+    'build_supplementary_figure_s04_native.py',
+    'build_supplementary_figure_s30_native.py',
+    'build_trained_partition_residual_figure.py',
+    'collect_prospective_mechanism_diagnostics.py',
+    'credit_tree_schematics.py',
+    'figure_canvas.py',
+    'native_schematics.py',
+    'routing_figure_panels.py',
+)
+
+# Completed prospective and review follow-ups, with local import dependencies.
+JOURNAL_SCRIPTS += (
+    'analyze_review_morphology_uncertainty.py',
+    'analyze_review_response_baselines.py',
+    'audit_review_response_baselines.py',
+    'audit_prospective_morphology_selection.py',
+    'build_main_figure_11.py',
+    'rebuild_final_publication_figures.py',
+    'build_adaptive_conductance_reliability_figure.py',
+    'build_irregular_tree_wavelet_figure.py',
+    'build_review_completion_figures.py',
+    'build_review_response_baselines_figure.py',
+    'build_supplementary_figure_s09_native.py',
+    'build_supplementary_figure_s27_native.py',
+    'build_supplementary_figure_s21_native.py',
+    'build_supplementary_figure_s28_native.py',
+    'fetch_review_fashion_cache.py',
+    'fill_machine_learning_checklist_draft.py',
+    'run_prospective_morphology_selection.py',
+    'run_review_branch_trajectories.py',
+    'run_review_coefficient_encoder.py',
+    'run_review_coefficient_hard_readout.py',
+)
+
+# Release builders, manuscript auditors and local dependencies of released tests.
+JOURNAL_SCRIPTS += (
+    'audit_citations.py',
+    'audit_latex_layout.py',
+    'audit_neurips_text_overlap.py',
+    'build_overleaf_bundle.py',
+    'build_software_release.py',
+    'build_submission_bundle.py',
+    'combine_manuscript_pdfs.py',
+    'build_main_figure_12.py',
+    'build_boolean_morphology_figures.py',
+    'build_morphology_followup_figures.py',
+    'build_morphology_bridge_figures.py',
+    'build_morphology_credit_figure_tables.py',
+    'build_morphology_calibration_figure_tables.py',
+    'build_supplementary_figure_s35_native.py',
+    'build_supplementary_figures_s17_s20_native.py',
+    'validate_supplementary_s17_s20_replay.py',
+    'export_morphology_investigation_sources.py',
+)
+
 ARCHIVED_ANALYSIS_SCRIPTS = (
     (
         Path("neurips/scripts/summarize_init_policy_factorial.py"),
@@ -196,9 +292,9 @@ ARCHIVED_ANALYSIS_SCRIPTS = (
         "Figure 2 exact-gradient and compartment-error diagnostic dependency",
     ),
 )
-# The reconstructed-tree task-learning bridge remains an exploratory local
-# analysis because its prespecified stability gate was not met. It is excluded
-# from the reviewer release and from publication-facing source data.
+# No additional archived-only analysis is required. The complete-tree runner
+# and its bounded common-checkpoint oracle replay are explicitly released above;
+# raw response caches remain subject to upstream access and redistribution terms.
 OPTIONAL_JOURNAL_ARCHIVED_SCRIPTS = ()
 
 EXCLUDED_DIRECTORY_NAMES = {
@@ -216,6 +312,11 @@ EXCLUDED_DIRECTORY_NAMES = {
     "results",
 }
 EXCLUDED_SUFFIXES = {
+    ".sbatch",
+    ".sh",
+    ".ppt",
+    ".pptx",
+    ".odp",
     ".ckpt",
     ".err",
     ".log",
@@ -249,11 +350,11 @@ SECRET_PATTERNS = (
 )
 
 
-def run_git(*args: str, text: bool = True) -> str | bytes:
+def run_git(*args: str, repository_root: Path, text: bool = True) -> str | bytes:
     """Run Git against the source repository and return stdout."""
 
     completed = subprocess.run(
-        ["git", "-C", str(REPOSITORY_ROOT), *args],
+        ["git", "-C", str(repository_root), *args],
         check=True,
         capture_output=True,
         text=text,
@@ -271,6 +372,26 @@ def run_journal_git(*args: str) -> str:
         text=True,
     )
     return completed.stdout
+
+
+def discover_implementation_root(start: Path, explicit: Path | None = None) -> Path:
+    """Find the actual installable package, never mistake the paper for it."""
+
+    candidates = [explicit.resolve()] if explicit is not None else [start.resolve(), *start.resolve().parents]
+    for candidate in candidates:
+        if not (candidate / "pyproject.toml").is_file():
+            continue
+        if not (candidate / "src" / "dendritic_modeling").is_dir():
+            continue
+        top = Path(str(run_git("rev-parse", "--show-toplevel", repository_root=candidate)).strip()).resolve()
+        if top != candidate:
+            continue
+        return candidate
+    raise RuntimeError(
+        "Cannot locate the production repository (pyproject.toml and "
+        "src/dendritic_modeling). Pass --implementation-root when building "
+        "from an isolated paper snapshot."
+    )
 
 
 def sha256(path: Path) -> str:
@@ -338,10 +459,150 @@ def excluded(relative: Path) -> bool:
     return False
 
 
-def extract_git_head(destination: Path, commit: str) -> None:
+def repository_file_allowed(relative: Path, scope: str | None) -> bool:
+    """Select article sources before archive extraction, using explicit roots.
+
+    Generic library modules are retained because the public network/config API
+    imports them. Unrelated experiment drivers, configs, docs and tests are not.
+    """
+    if excluded(relative):
+        return False
+    name = relative.as_posix()
+    if scope is None:
+        return True
+    if scope == "implementation":
+        if name in {"pyproject.toml", "LICENSE", "README.md"}:
+            return True
+        prefix = "src/dendritic_modeling/"
+        if not name.startswith(prefix):
+            return False
+        package_name = name[len(prefix):]
+        if not package_name.startswith("scripts/"):
+            return relative.suffix in {".py", ".json", ".yaml", ".yml", ".toml"}
+        if package_name == "scripts/__init__.py":
+            return True
+        if package_name.startswith(("scripts/script_utils/", "scripts/sweeps/")):
+            return relative.suffix == ".py"
+        return package_name in {
+            # The shared training API eagerly imports these artifact readers.
+            # Keep only this dependency closure, not the text experiment suite.
+            "scripts/text/__init__.py",
+            "scripts/text/frozen_text_windows.py",
+            "scripts/text/model_artifact_identity.py",
+            "scripts/training/train_experiments.py",
+            "scripts/training/train_experiments_fsdp.py",
+            "scripts/training/train_encoder_network.py",
+            "scripts/training/model_preverification.py",
+        }
+    if scope != "paper":
+        raise ValueError(f"Unknown release scope: {scope}")
+    if name == "LICENSE" or relative in {path for path, _ in ARCHIVED_ANALYSIS_SCRIPTS}:
+        return True
+    if name in {
+        "journal/main.tex", "journal/references.bib", "journal/Makefile",
+        "journal/pytest.ini", "journal/RELEASE_WORKFLOW.md",
+        "journal/README.md", "journal/OVERLEAF_README.md",
+        "journal/credit_first_framework_figure.tex",
+        "journal/source_data/README.md", "journal/source_data/provenance_manifest.tsv",
+    }:
+        return True
+    if name.startswith("journal/figures/"):
+        return relative.suffix.lower() in {".pdf", ".png", ".svg", ".jpg", ".jpeg", ".eps"}
+    if name.startswith("journal/supplementary/"):
+        return relative.suffix == ".tex"
+    if name.startswith("journal/source_data/release_task_identity/"):
+        return relative.suffix in {".json", ".csv", ".md"}
+    if name.startswith("journal/scripts/inherited_neurips/"):
+        return relative.suffix == ".py"
+    if name in {"journal/scripts/" + item for item in JOURNAL_SCRIPTS}:
+        return True
+    if name in {"journal/analysis/" + item for item in JOURNAL_ANALYSIS_RECORDS}:
+        return True
+    return any(name.startswith("journal/" + item + "/") for item in JOURNAL_DIRECTORIES)
+
+
+def verify_reachable_commit(repository_root: Path, commit: str) -> dict[str, object]:
+    """Require a real commit reachable from a named repository reference."""
+    resolved = str(run_git("rev-parse", "--verify", f"{commit}^{{commit}}", repository_root=repository_root)).strip()
+    if resolved != commit:
+        raise RuntimeError("Release provenance must use a full commit identifier")
+    refs = str(run_git("for-each-ref", "--contains", commit, "--format=%(refname)",
+                       "refs/heads", "refs/tags", "refs/remotes", repository_root=repository_root)).splitlines()
+    if not refs:
+        raise RuntimeError(f"Release commit {commit} is not reachable from a named branch, tag or remote reference")
+    return {
+        "commit": resolved,
+        "tree": str(run_git("rev-parse", f"{commit}^{{tree}}", repository_root=repository_root)).strip(),
+        "reachable_from_refs": sorted(refs),
+        "object_verified": True,
+    }
+
+
+def required_article_input_paths(source_root: Path) -> set[str]:
+    """Name all live allowlisted inputs, including Git-ignored YAML recipes."""
+    selected = set()
+    for directory in JOURNAL_DIRECTORIES:
+        for path in (source_root / directory).rglob("*"):
+            if path.is_file() and not path.is_symlink() and not excluded(path.relative_to(source_root / directory)):
+                selected.add("journal/" + path.relative_to(source_root).as_posix())
+    selected.update("journal/scripts/" + name for name in JOURNAL_SCRIPTS)
+    selected.update("journal/analysis/" + name for name in JOURNAL_ANALYSIS_RECORDS)
+    selected.update(path.as_posix() for path, _ in ARCHIVED_ANALYSIS_SCRIPTS)
+    selected.update("journal/source_data/release_task_identity/" + name for name in
+                    ("README.md", "task_identity.json", "task_identity.csv", "clean_noise_input_dimension_check.csv"))
+    for path in (source_root / "source_data/release_task_identity").rglob("*"):
+        if path.is_file() and path.suffix in {".json", ".csv", ".md"}:
+            selected.add("journal/" + path.relative_to(source_root).as_posix())
+    return selected
+
+
+def assert_article_inputs_committed(source_root: Path, paper_root: Path, commit: str) -> None:
+    """Refuse a clean-looking checkout that silently omits ignored inputs."""
+    tracked = set(str(run_git("ls-tree", "-r", "--name-only", commit, repository_root=paper_root)).splitlines())
+    missing = sorted(required_article_input_paths(source_root) - tracked)
+    if missing:
+        raise RuntimeError("Allowlisted article inputs are absent from the recorded paper commit. "
+                           "Review and commit them (Git-ignored recipes require git add -f):\n- "
+                           + "\n- ".join(missing))
+
+
+def prune_release_entrypoints(root: Path) -> list[dict[str, str | int]]:
+    """Remove command registrations for drivers outside the allowlist."""
+    path = root / "pyproject.toml"
+    original = path.read_bytes()
+    lines = original.decode().splitlines(keepends=True)
+    in_scripts = False
+    kept, removed = [], []
+    for line in lines:
+        stripped = line.strip()
+        if stripped.startswith("["):
+            in_scripts = stripped == "[project.scripts]"
+        match = re.match(r'[^=]+\s*=\s*"([A-Za-z0-9_.]+):[^\"]+"', stripped) if in_scripts else None
+        if match:
+            module = root / "src" / Path(*match.group(1).split("."))
+            if not module.with_suffix(".py").is_file() and not (module / "__init__.py").is_file():
+                removed.append(stripped.split("=", 1)[0].strip())
+                continue
+        kept.append(line)
+    if not removed:
+        return []
+    path.write_text("".join(kept))
+    return [{"path": "dendritic_modeling/pyproject.toml",
+             "origin_sha256": hashlib.sha256(original).hexdigest(), "release_sha256": sha256(path),
+             "replacement_count": len(removed),
+             "reason": "remove entrypoints for excluded unrelated drivers: " + ", ".join(removed)}]
+
+
+def extract_git_head(destination: Path, commit: str, *, repository_root: Path, scope: str | None = None) -> None:
     """Safely extract the release-eligible files from a committed Git tree."""
 
-    payload = run_git("archive", "--format=tar", commit, text=False)
+    paths = str(run_git("ls-tree", "-r", "--name-only", commit, repository_root=repository_root)).splitlines()
+    paths = [name for name in paths if repository_file_allowed(Path(name), scope)]
+    if not paths:
+        raise RuntimeError(f"No release-eligible files in {scope or 'repository'} snapshot")
+    # Pass only allowlisted members to git archive: excluded LFS presentation
+    # objects are never downloaded/materialized merely to discard them later.
+    payload = run_git("archive", "--format=tar", commit, "--", *paths, repository_root=repository_root, text=False)
     assert isinstance(payload, bytes)
     with tarfile.open(fileobj=io.BytesIO(payload), mode="r:") as archive:
         for member in archive.getmembers():
@@ -367,6 +628,34 @@ def extract_git_head(destination: Path, commit: str) -> None:
             target.chmod(0o755 if member.mode & stat.S_IXUSR else 0o644)
 
 
+def export_repository_snapshots(
+    destination: Path,
+    implementation_root: Path,
+    implementation_commit: str,
+    paper_commit: str,
+    *,
+    paper_root: Path | None = None,
+) -> dict[str, int]:
+    """Export both committed trees and assert the essential package boundary."""
+
+    paper_root = PAPER_REPOSITORY_ROOT if paper_root is None else paper_root
+    implementation = destination / "dendritic_modeling"
+    paper = destination / "journal_package"
+    extract_git_head(implementation, implementation_commit, repository_root=implementation_root, scope="implementation")
+    extract_git_head(paper, paper_commit, repository_root=paper_root, scope="paper")
+    required = (
+        implementation / "pyproject.toml",
+        implementation / "LICENSE",
+        implementation / "src/dendritic_modeling/__init__.py",
+        implementation / "src/dendritic_modeling/networks/architectures/excitation_inhibition/dendritic/branch_dynamics.py",
+        paper / "journal/main.tex",
+    )
+    for path in required:
+        if not path.is_file():
+            raise RuntimeError(f"Missing essential software release input: {path.relative_to(destination)}")
+    return {"implementation": len(list_files(implementation)), "paper": len(list_files(paper))}
+
+
 def copy_tree_allowlisted(source: Path, destination: Path) -> int:
     """Copy regular files while applying the release exclusion policy."""
 
@@ -385,10 +674,11 @@ def copy_tree_allowlisted(source: Path, destination: Path) -> int:
     return copied
 
 
-def copy_journal_material(destination: Path) -> dict[str, int]:
+def copy_journal_material(destination: Path, *, source_root: Path | None = None) -> dict[str, int]:
+    source_root = JOURNAL_ROOT if source_root is None else source_root
     counts: dict[str, int] = {}
     for name in JOURNAL_DIRECTORIES:
-        source = JOURNAL_ROOT / name
+        source = source_root / name
         if not source.is_dir():
             raise RuntimeError(f"Missing journal release input: {source}")
         counts[name] = copy_tree_allowlisted(source, destination / name)
@@ -397,7 +687,7 @@ def copy_journal_material(destination: Path) -> dict[str, int]:
     scripts_destination.mkdir(parents=True, exist_ok=True)
     copied_scripts = 0
     for name in JOURNAL_SCRIPTS:
-        source = JOURNAL_ROOT / "scripts" / name
+        source = source_root / "scripts" / name
         if not source.is_file():
             raise RuntimeError(f"Missing journal script: {source}")
         target = scripts_destination / name
@@ -405,7 +695,7 @@ def copy_journal_material(destination: Path) -> dict[str, int]:
         target.chmod(0o755 if os.access(source, os.X_OK) else 0o644)
         copied_scripts += 1
     counts["scripts"] = copied_scripts
-    inherited_source = JOURNAL_ROOT / "scripts" / "inherited_neurips"
+    inherited_source = source_root / "scripts" / "inherited_neurips"
     if not inherited_source.is_dir():
         raise RuntimeError(f"Missing inherited figure generators: {inherited_source}")
     counts["inherited_figure_generators"] = copy_tree_allowlisted(
@@ -417,18 +707,22 @@ def copy_journal_material(destination: Path) -> dict[str, int]:
     source_data_destination = destination / "source_data_metadata"
     source_data_destination.mkdir(parents=True, exist_ok=True)
     for relative in (Path("source_data/README.md"), Path("source_data/provenance_manifest.tsv")):
-        source = JOURNAL_ROOT / relative
+        source = source_root / relative
         if not source.is_file():
             raise RuntimeError(f"Missing source-data metadata: {source}")
         target = source_data_destination / source.name
         shutil.copyfile(source, target)
         target.chmod(0o644)
+    identity = source_root / "source_data/release_task_identity"
     counts["source_data_metadata"] = 2
+    if not identity.is_dir():
+        raise RuntimeError("Missing cohort-to-generator identity metadata in the committed paper")
+    counts["task_identity"] = copy_tree_allowlisted(identity, source_data_destination / "release_task_identity")
 
     analysis_destination = destination / "analysis_records"
     analysis_destination.mkdir(parents=True, exist_ok=True)
     for name in JOURNAL_ANALYSIS_RECORDS:
-        source = JOURNAL_ROOT / "analysis" / name
+        source = source_root / "analysis" / name
         if not source.is_file():
             raise RuntimeError(f"Missing journal analysis record: {source}")
         target = analysis_destination / name
@@ -440,7 +734,7 @@ def copy_journal_material(destination: Path) -> dict[str, int]:
 
 def git_tracked(relative: Path) -> bool:
     completed = subprocess.run(
-        ["git", "-C", str(REPOSITORY_ROOT), "ls-files", "--error-unmatch", str(relative)],
+        ["git", "-C", str(PAPER_REPOSITORY_ROOT), "ls-files", "--error-unmatch", str(relative)],
         stdout=subprocess.DEVNULL,
         stderr=subprocess.DEVNULL,
         check=False,
@@ -448,19 +742,20 @@ def git_tracked(relative: Path) -> bool:
     return completed.returncode == 0
 
 
-def copy_archived_analysis_scripts(destination: Path) -> dict[str, object]:
-    """Copy exact diagnostic sources that live outside the committed tree."""
+def copy_archived_analysis_scripts(destination: Path, *, paper_root: Path | None = None) -> dict[str, object]:
+    """Copy explicitly selected historical diagnostics from the paper repository."""
 
+    paper_root = PAPER_REPOSITORY_ROOT if paper_root is None else paper_root
     destination.mkdir(parents=True, exist_ok=True)
     records: list[dict[str, object]] = []
     requested = list(ARCHIVED_ANALYSIS_SCRIPTS)
     for relative, role in OPTIONAL_JOURNAL_ARCHIVED_SCRIPTS:
         source = JOURNAL_ROOT / relative
         if source.is_file():
-            requested.append((source.relative_to(REPOSITORY_ROOT), role))
+            requested.append((source.relative_to(PAPER_REPOSITORY_ROOT), role))
 
     for relative, role in requested:
-        source = REPOSITORY_ROOT / relative
+        source = paper_root / relative
         if not source.is_file():
             raise RuntimeError(f"Missing explicitly archived analysis script: {source}")
         target = destination / source.name
@@ -479,7 +774,7 @@ def copy_archived_analysis_scripts(destination: Path) -> dict[str, object]:
                 "origin_sha256": source_digest,
                 "copy_sha256": copy_digest,
                 "bytes": target.stat().st_size,
-                "git_tracked_at_release_head": git_tracked(relative),
+                "git_tracked_at_release_head": True,
                 "copy_status": "byte-identical",
                 "role": role,
             }
@@ -513,9 +808,9 @@ def copy_archived_analysis_scripts(destination: Path) -> dict[str, object]:
     )
     (destination / "README.md").write_text(
         "# Archived analysis scripts\n\n"
-        "These are byte-identical copies of the diagnostic scripts used for "
-        "the journal analyses but not present in the committed repository "
-        "snapshot. Their repository-relative origins, source and copy hashes, "
+        "These diagnostic scripts were copied byte-identically from their "
+        "explicit paper-repository origins before any declared release-only "
+        "portability substitutions. Their repository-relative origins, source and copy hashes, "
         "sizes, and Git-tracking state are recorded in `ORIGINS.tsv`.\n\n"
         f"{script_lines}\n\n"
         "The two Figure 2 diagnostics operate on trained checkpoint directories, "
@@ -565,6 +860,8 @@ def sanitize_git_snapshot(root: Path) -> list[dict[str, str | int]]:
             changes.append(
                 {
                     "path": path.relative_to(root).as_posix(),
+                    "origin_sha256": hashlib.sha256(payload).hexdigest(),
+                    "release_sha256": sha256(path),
                     "replacement_count": replacement_count,
                     "reason": "; ".join(file_reasons),
                 }
@@ -578,7 +875,7 @@ def write_portability_manifest(
     with path.open("w", encoding="utf-8", newline="") as handle:
         writer = csv.DictWriter(
             handle,
-            fieldnames=("path", "replacement_count", "reason"),
+            fieldnames=("path", "origin_sha256", "release_sha256", "replacement_count", "reason"),
             delimiter="\t",
             lineterminator="\n",
         )
@@ -589,17 +886,24 @@ def write_portability_manifest(
 def release_readme(commit: str, journal_commit: str) -> str:
     return f"""# Dendritic credit-assignment software
 
-This reviewer archive accompanies *When dendritic structure helps local credit
-assignment*. It contains the complete committed Dendritic
-Modeling implementation at Git commit `{commit}` and the article-specific
-analysis, configuration, validation, and provenance code from journal-package
-commit `{journal_commit}`.
+This reviewer archive accompanies *Dendritic morphology as a dictionary for local
+credit assignment*. It contains the release-eligible committed Dendritic
+Modeling implementation at Git commit `{commit}`, a separate committed paper
+snapshot at `{journal_commit}`, and allowlisted article-specific analysis,
+configuration, validation, and provenance code from that paper snapshot.
 
 ## Layout
 
-- `dendritic_modeling/`: a clean export of the repository Git HEAD, including
+- `dendritic_modeling/`: an export of the production repository Git HEAD, including
   the installable package, training and local-learning implementations,
-  configurations, tests, and documentation. Uncommitted files are excluded.
+  and the small set of training/sweep drivers used by this article. Generic
+  modules imported by the public package API remain; unrelated transformer,
+  text and vision experiment drivers/configs/tests and presentation files are
+  excluded. Uncommitted files are excluded.
+- `journal_package/`: a separate export of the clean paper repository Git HEAD.
+  `journal_package/journal/main.tex` is the article source, and
+  `journal_package/journal/figures/` contains its historical vector components.
+  This directory is a paper package, not the installable Python implementation.
 - `article_analysis/code/`: standalone regular-tree checks, reconstructed-tree
   analyses, and the portable CAVE/DANDI measured-response pipeline.
 - `article_analysis/configs/`: frozen and portable experiment specifications.
@@ -607,19 +911,122 @@ commit `{journal_commit}`.
   omitted; their frozen summaries and hashes ship in the source-data package.
 - `article_analysis/scripts/`: figure, source-data, cohort, perturbation,
   rerun-validation, and controlled-learning scripts.
-- `article_analysis/archived_analysis_scripts/`: byte-identical diagnostic
-  scripts used for the clean Figure 2 gradient analysis but not tracked at the
-  release commit, with origin and SHA-256 records.
+- `article_analysis/archived_analysis_scripts/`: explicitly selected historical
+  Figure 2 diagnostics, with paper-repository origins, Git-tracking state and
+  pre-portability-copy SHA-256 records. Any subsequent substitutions are listed
+  in the release-root portability manifest.
 - `article_analysis/tests/`: article-level validation tests.
 - `article_analysis/reproducibility/`: source hashes, cohort manifests,
   archived hardware accounting, and archive boundaries.
 - `article_analysis/analysis_records/`: the frozen experiment contract and
-  claim-to-evidence ledger.
+  experiment protocols. Internal review/revision logs are excluded.
 - `PORTABILITY_PATCHES.tsv`: machine-local defaults changed in the release
-  copy of the Git export. Scientific parameters are not modified.
+  copies, with paths relative to this release root. Scientific parameters are
+  not modified. Frozen source hashes describe the original source bytes; this
+  manifest documents the release-only portability transformations.
 - `SHA256SUMS.tsv`: SHA-256 digest and size of every other released file.
 
-Numerical panel data are distributed separately in `Source_Data.zip`. Raw
+Numerical panel data are distributed separately in `Source_Data.zip`; its
+`manifest.tsv` maps each released display file to its original article-relative
+source path. Rebuilding figures requires those inputs at the recorded
+`source_data/` paths, together with the retained vector components in
+`journal_package/journal/figures/`. That directory includes the historical
+full-panel sources used by the final renderer. The extra script copies in
+`article_analysis/scripts/` do not by themselves provide a complete figure
+working directory. To preserve the original repository-relative source discovery,
+restore the paper snapshot under the implementation repository before running
+source-dependent checks or figure builders:
+
+```bash
+mkdir -p dendritic_modeling/drafts/dendritic-local-learning
+cp -R journal_package/. dendritic_modeling/drafts/dendritic-local-learning/
+```
+
+Extract `Source_Data.zip` so its `manifest.tsv` is inside a `Source_Data/`
+directory. Restore by the manifest's `original_source` field; display homes such
+as `Methods/retained_evidence/` are not analysis paths:
+
+```bash
+python article_analysis/code/release_noise/restore_source_data.py \\
+  --source-data-root Source_Data \\
+  --journal-root dendritic_modeling/drafts/dendritic-local-learning/journal \\
+  --dry-run
+python article_analysis/code/release_noise/restore_source_data.py \\
+  --source-data-root Source_Data \\
+  --journal-root dendritic_modeling/drafts/dendritic-local-learning/journal
+```
+
+The helper checks released SHA-256 digests, chooses complete copies over
+explicit display-specific subsets, and refuses conflicting copies or differing
+existing destinations before writing. Portable released bytes need not equal
+the original research-file hash. If only filtered copies exist, the dry run
+identifies the missing complete source instead of silently restoring a truncated
+table. Use the current manifest with `original_source` and `transformation`
+columns; old archives do not establish current package identity.
+
+The structure and finite-horizon investigations retain their original analysis
+paths in their frozen runners. Their released numerical copies are under
+`source_data/morphology_structure/` and
+`source_data/morphology_finite_horizon/`. After restoring Source Data to the
+article-relative paths recorded in `Source_Data/manifest.tsv`, use each
+investigation's `export_manifest.json` to restore these additional analysis
+paths. From the extracted software-release root, after copying the paper into
+the implementation tree as above:
+
+```bash
+python - <<'PY'
+from pathlib import Path
+import hashlib
+import json
+import shutil
+
+journal = Path("dendritic_modeling/drafts/dendritic-local-learning/journal").resolve()
+import sys
+sys.path.insert(0, str(Path("article_analysis/code/release_noise").resolve()))
+from restore_source_data import restoration_plan
+plan, issues = restoration_plan(Path("Source_Data").resolve(), journal)
+if issues:
+    raise RuntimeError("Resolve incomplete Source Data before restoring investigation paths")
+released_records = dict((row["original_source"], row) for source, target, row in plan)
+restored = 0
+for folder in ("morphology_structure", "morphology_finite_horizon"):
+    manifest_path = journal / "source_data" / folder / "export_manifest.json"
+    manifest = json.loads(manifest_path.read_text())
+    for record in manifest["files"]:
+        released = (journal / record["destination"]).resolve()
+        original = (journal / record["source"]).resolve()
+        if not released.is_relative_to(journal) or not original.is_relative_to(journal):
+            raise RuntimeError("Manifest path leaves the restored journal tree")
+        if not record["source"].startswith("analysis/morphology_investigation_"):
+            raise RuntimeError("Unexpected legacy investigation destination")
+        provenance = released_records[record["destination"]]
+        if record["sha256"] != provenance["original_sha256"]:
+            raise RuntimeError("Investigation and package origin hashes disagree")
+        expected = provenance["sha256"]
+        if hashlib.sha256(released.read_bytes()).hexdigest() != expected:
+            raise RuntimeError("Released source digest differs: " + str(released))
+        if original.exists():
+            if hashlib.sha256(original.read_bytes()).hexdigest() != expected:
+                raise RuntimeError("Refusing to overwrite a differing file: " + str(original))
+        else:
+            original.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(released, original)
+        if hashlib.sha256(original.read_bytes()).hexdigest() != expected:
+            raise RuntimeError("Restored source digest differs: " + str(original))
+        restored += 1
+print("Verified/restored", restored, "investigation files")
+PY
+```
+
+This copies the verified released bytes without modifying them or the frozen
+runner paths. The original export hashes are checked against `original_sha256`;
+restored portable copies are checked against the current released `sha256`. It is required before running the analysis commands in the
+finite-horizon investigation README. The structure mapping also restores its
+separately exported design-certificate files. Completed training outcomes remain
+preserved; use a separate output tree for new training runs.
+
+Run `rebuild_final_publication_figures.py` from that restored journal layout;
+it only redraws frozen results. Raw
 MICRONS/CAVE and DANDI/NWB assets are not redistributed. Public identifiers,
 asset paths, access requirements, and derived-data provenance are documented
 under `article_analysis/reproducibility/` and in the Source Data archive.
@@ -632,7 +1039,16 @@ Python 3.10 or 3.11 is recommended. From the extracted release root:
 python -m venv .venv
 source .venv/bin/activate
 python -m pip install --upgrade pip
-python -m pip install -e "./dendritic_modeling[test]"
+REVIEWER_BUILD=$(mktemp -d)
+cp -R dendritic_modeling/. "$REVIEWER_BUILD/"
+python -m pip install -c article_analysis/code/release_noise/constraints.txt "$REVIEWER_BUILD[test]"
+```
+
+Figure reconstruction and PDF assembly also require PyMuPDF, which provides the
+`fitz` module and is not a dependency of the core modeling package:
+
+```bash
+python -m pip install PyMuPDF
 ```
 
 The core package dependencies are declared in
@@ -651,9 +1067,8 @@ pytest -q article_analysis/tests/test_alignment_controlled_learning.py
 
 The other article tests document full-package checks that require archived run
 directories or the complete working-paper source-data tree and are therefore
-not standalone in this software-only archive. The complete repository test
-suite is available under `dendritic_modeling/tests/`; some integration tests
-require optional data, GPU, or distributed-runtime dependencies.
+not standalone in this software-only archive. Only article tests are distributed; full production integration tests and
+unrelated project tests are outside this release scope.
 
 ## Reproducing analyses
 
@@ -679,9 +1094,28 @@ portable analyses.
 
 This archive contains source code and lightweight configuration/provenance
 records, not trained checkpoints, raw datasets, scheduler logs, or data
-caches. The Git snapshot is taken from committed HEAD so unrelated dirty
-working-tree changes cannot enter the release. Article-specific files are
-current journal-package copies and are individually checksummed.
+caches. Both Git snapshots are taken from their recorded commits, so unrelated
+dirty implementation working-tree changes cannot enter the release. The paper
+repository must be clean at build time; article-specific copies are tied to
+that paper commit and individually checksummed. The implementation working-tree
+status is checked and its change count recorded without including those changes.
+
+Historical noise tasks are explicitly separated in
+`article_analysis/source_data_metadata/release_task_identity/task_identity.json`.
+The frozen generator bodies and their source hashes are in
+`article_analysis/code/release_noise/`. Add that directory to `PYTHONPATH` to use
+the installed core's optional dataset hook. Choose `legacy_noisy_lines` or
+`projected_noise_mnist` explicitly; the ambiguous historical key is rejected.
+The former is recovered from the clean source commit; the latter is a newly
+frozen reference for the intended protocol, not proof of older executed bytes.
+MNIST images require the upstream torchvision download/cache; the download-free
+smoke substitutes tiny image tensors only to verify the noise transformation.
+
+From the extracted archive root, run:
+
+```bash
+python -I -B article_analysis/code/release_noise/cleanroom_smoke.py --release-root .
+```
 
 The software is released under the MIT license included at
 `dendritic_modeling/LICENSE`.
@@ -823,7 +1257,8 @@ def validate_zip(archive_path: Path, release_root: Path) -> int:
     return len(disk_paths)
 
 
-def build(force: bool) -> dict[str, object]:
+def build(force: bool, implementation_root: Path | None = None) -> dict[str, object]:
+    implementation_root = discover_implementation_root(JOURNAL_ROOT, implementation_root)
     SUBMISSION_ROOT.mkdir(parents=True, exist_ok=True)
     stage = SUBMISSION_ROOT / STAGE_NAME
     archive = SUBMISSION_ROOT / ARCHIVE_NAME
@@ -836,18 +1271,22 @@ def build(force: bool) -> dict[str, object]:
                 "only these generated release targets."
             )
 
-    commit = str(run_git("rev-parse", "HEAD")).strip()
-    commit_epoch = int(str(run_git("show", "-s", "--format=%ct", commit)).strip())
+    commit = str(run_git("rev-parse", "HEAD", repository_root=implementation_root)).strip()
+    implementation_provenance = verify_reachable_commit(implementation_root, commit)
+    commit_epoch = int(str(run_git("show", "-s", "--format=%ct", commit, repository_root=implementation_root)).strip())
     commit_utc = datetime.fromtimestamp(commit_epoch, tz=timezone.utc).isoformat()
-    subject = str(run_git("show", "-s", "--format=%s", commit)).strip()
+    subject = str(run_git("show", "-s", "--format=%s", commit, repository_root=implementation_root)).strip()
     status_lines = [
         line
         for line in str(
-            run_git("status", "--porcelain=v1", "--untracked-files=all")
+            run_git("status", "--porcelain=v1", "--untracked-files=all", repository_root=implementation_root)
         ).splitlines()
         if line.strip()
     ]
     journal_commit = run_journal_git("rev-parse", "HEAD").strip()
+    paper_provenance = verify_reachable_commit(PAPER_REPOSITORY_ROOT, journal_commit)
+    journal_epoch = int(run_journal_git("show", "-s", "--format=%ct", journal_commit).strip())
+    archive_epoch = max(commit_epoch, journal_epoch)
     journal_status_lines = [
         line
         for line in run_journal_git(
@@ -860,6 +1299,7 @@ def build(force: bool) -> dict[str, object]:
             "The journal repository must be clean before building the software "
             "release so every article-specific file is tied to a commit."
         )
+    assert_article_inputs_committed(JOURNAL_ROOT, PAPER_REPOSITORY_ROOT, journal_commit)
 
     temporary_parent = SUBMISSION_ROOT / ".software_release_build"
     ensure_submission_target(temporary_parent)
@@ -876,23 +1316,28 @@ def build(force: bool) -> dict[str, object]:
         repository_destination.mkdir(parents=True)
         article_destination.mkdir(parents=True)
 
-        extract_git_head(repository_destination, commit)
-        git_file_count = len(list_files(repository_destination))
-        portability_changes = sanitize_git_snapshot(repository_destination)
-        journal_counts = copy_journal_material(article_destination)
-        archived_scripts = copy_archived_analysis_scripts(
-            article_destination / "archived_analysis_scripts"
+        snapshot_counts = export_repository_snapshots(
+            temporary_stage, implementation_root, commit, journal_commit
         )
-        article_portability_changes = sanitize_git_snapshot(article_destination)
-        for change in article_portability_changes:
-            change["path"] = f"article_analysis/{change['path']}"
-        portability_changes.extend(article_portability_changes)
+        git_file_count = snapshot_counts["implementation"]
+        portability_changes = []
+        packaging_changes = prune_release_entrypoints(repository_destination)
+        portability_changes.extend(packaging_changes)
+        committed_paper = temporary_stage / "journal_package"
+        journal_counts = copy_journal_material(article_destination, source_root=committed_paper / "journal")
+        archived_scripts = copy_archived_analysis_scripts(
+            article_destination / "archived_analysis_scripts", paper_root=committed_paper
+        )
+        for snapshot_name in ("dendritic_modeling", "journal_package", "article_analysis"):
+            for change in sanitize_git_snapshot(temporary_stage / snapshot_name):
+                change["path"] = f"{snapshot_name}/{change['path']}"
+                portability_changes.append(change)
 
         (temporary_stage / "README.md").write_text(
             release_readme(commit, journal_commit), encoding="utf-8"
         )
         (temporary_stage / "README.md").chmod(0o644)
-        shutil.copyfile(REPOSITORY_ROOT / "LICENSE", temporary_stage / "LICENSE")
+        shutil.copyfile(repository_destination / "LICENSE", temporary_stage / "LICENSE")
         (temporary_stage / "LICENSE").chmod(0o644)
         write_portability_manifest(
             temporary_stage / "PORTABILITY_PATCHES.tsv", portability_changes
@@ -900,17 +1345,25 @@ def build(force: bool) -> dict[str, object]:
 
         metadata = {
             "release": "Dendritic credit-assignment software",
-            "release_schema": 1,
+            "release_schema": 3,
+            "implementation_repository_commit": commit,
+            "implementation_repository_export": "dendritic_modeling/",
+            "paper_repository_export": "journal_package/",
+            "paper_snapshot_file_count": snapshot_counts["paper"],
             "repository_commit": commit,
+            "implementation_provenance": implementation_provenance,
+            "paper_provenance": paper_provenance,
             "repository_commit_utc": commit_utc,
             "repository_commit_subject": subject,
-            "repository_snapshot_method": "git archive HEAD",
+            "repository_snapshot_method": "git archive recorded commit with explicit file allowlist",
             "journal_repository_commit": journal_commit,
+            "journal_repository_commit_utc": datetime.fromtimestamp(journal_epoch, tz=timezone.utc).isoformat(),
+            "journal_repository_snapshot_method": "git archive recorded commit with explicit file allowlist",
             "journal_repository_clean_at_build": True,
             "working_tree_dirty_at_build": bool(status_lines),
             "working_tree_change_count": len(status_lines),
             "working_tree_material_included": False,
-            "journal_material_source": "current allow-listed journal package files",
+            "journal_material_source": "allowlisted files copied only from the committed paper export",
             "git_snapshot_file_count": git_file_count,
             "journal_file_counts": journal_counts,
             "archived_analysis_scripts": archived_scripts,
@@ -925,12 +1378,15 @@ def build(force: bool) -> dict[str, object]:
                 "temporary results",
                 "Python and test caches",
                 "credential files",
+                "presentations",
+                "internal assistant and revision logs",
+                "unrelated transformer/text/vision project runners, configs and tests",
             ],
             "raw_microns_or_dandi_data_included": False,
             "trained_checkpoints_included": False,
             "credentials_included": False,
             "source_data_distribution": "separate Source_Data.zip",
-            "deterministic_timestamp_epoch": commit_epoch,
+            "deterministic_timestamp_epoch": archive_epoch,
         }
         (temporary_stage / "METADATA.json").write_text(
             json.dumps(metadata, indent=2, sort_keys=True) + "\n",
@@ -950,7 +1406,7 @@ def build(force: bool) -> dict[str, object]:
             raise RuntimeError("Internal checksum-count mismatch")
 
         temporary_archive = temporary_parent / ARCHIVE_NAME
-        write_deterministic_zip(temporary_stage, temporary_archive, commit_epoch)
+        write_deterministic_zip(temporary_stage, temporary_archive, archive_epoch)
         zip_members = validate_zip(temporary_archive, temporary_stage)
 
         if stage.exists():
@@ -1007,8 +1463,12 @@ def main() -> None:
         action="store_true",
         help="replace only the generated software-release stage and archive",
     )
+    parser.add_argument(
+        "--implementation-root", type=Path,
+        help="Production Git repository with pyproject.toml and src/dendritic_modeling; required for isolated paper snapshots without that ancestor.",
+    )
     args = parser.parse_args()
-    print(json.dumps(build(force=args.force), indent=2, sort_keys=True))
+    print(json.dumps(build(force=args.force, implementation_root=args.implementation_root), indent=2, sort_keys=True))
 
 
 if __name__ == "__main__":

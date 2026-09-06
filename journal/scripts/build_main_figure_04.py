@@ -52,11 +52,11 @@ COMPONENT = ROOT / "figures" / "components" / "main_figure_04_native.pdf"
 # this component its publication number; a builder-side copy would
 # bypass the 2026-09-04 dictionary-forward renumbering.
 
-CANVAS_H_PT = 469.0
+CANVAS_H_PT = 450.0
 HEIGHT_IN = CANVAS_H_PT / 72.0
 ROW_PT = [137.0, 120.0, 111.0]
 HGUTTER_PT = 34.0
-VGUTTER_PT = 47.0
+VGUTTER_PT = 44.0
 
 INK = COLORS["ink"]
 MUTE = COLORS["mute"]
@@ -150,7 +150,7 @@ def _trial_card(frame: Frame, rect, *, conflict: bool) -> None:
     )
     frame.text(
         (x0 + width - frame.fx(5.0), y0 + frame.fy(6.0)),
-        "same update sign" if not conflict else "opposing update signs",
+        "compatible shared updates" if not conflict else "misdirected shared updates",
         size=PT_SMALL, color=GREEN if not conflict else COLORS["highlight"],
         ha="right", va="bottom",
     )
@@ -183,7 +183,7 @@ def backward_credit_schematic(ax) -> None:
     specs = (
         ("local eligibility", ("e", "b", " ≠ 0 for every branch"),
          MUTE, "eligibility"),
-        ("branch-specific credit", ("δ", "b", " = δ · 1[b = c]"),
+        ("inactive exact gradient = 0", ("δ", "b", " = δ · 1[b = c]"),
          GREEN, "selective"),
         ("neuron-shared credit", ("δ", "b", " = δ / B for every branch"),
          AMBER, "shared"),
@@ -352,6 +352,14 @@ def boundary_test(ax, crossings: pd.DataFrame,
                    + rng.uniform(-0.10, 0.10, doses.size), doses,
                    s=SEED_MS ** 2, color=AMBER, alpha=0.35,
                    edgecolors="none", zorder=2.5)
+        n_missing = int(seed_boundaries[seed_boundaries.branches.eq(branch)]
+                        .first_at_or_below_chance_accuracy_dose.isna().sum())
+        if n_missing:
+            ax.scatter(xpos + np.linspace(-.09,.09,n_missing),
+                       np.full(n_missing,1.055),marker="^",s=SEED_MS**2,
+                       facecolors="white",edgecolors=AMBER,lw=LW_EDGE,zorder=5)
+            ax.text(xpos+.12,1.075,f"{n_missing}/20 > 1",fontsize=PT_SMALL,
+                    color=AMBER,ha="left",va="center")
 
     for xpos, theory, trained in zip(x, predicted, observed, strict=True):
         ax.plot([xpos, xpos], [theory, trained], color=MUTE, lw=LW_HAIR,
@@ -364,12 +372,12 @@ def boundary_test(ax, crossings: pd.DataFrame,
     ax.plot(x, observed, linestyle="none", marker="o", ms=MARKER_MS,
             markerfacecolor=AMBER, markeredgecolor="white",
             markeredgewidth=LW_EDGE, zorder=5,
-            label="trained chance crossing")
+            label="mean-curve crossing")
     ax.legend(loc="lower left", bbox_to_anchor=(0.0, 0.02), frameon=False,
               handlelength=1.5, handletextpad=0.45, borderaxespad=0.0,
               fontsize=PT_SMALL)
     ax.set_xlim(-0.35, 2.35)
-    ax.set_ylim(0.50, 1.06)
+    ax.set_ylim(0.50, 1.105)
     ax.set_xticks(x, [str(branch) for branch in branches])
     ax.set_yticks([0.50, 0.75, 1.00])
     ax.set_xlabel("branches B")
@@ -423,11 +431,11 @@ def build() -> list:
     ax_c = canvas.panel("C", 1, 0, 5,
                         title="Predicted shared-mode boundary")
     ax_d = canvas.panel("D", 1, 5, 7, schematic=True,
-                        title="Trained transition follows the boundary")
+                        title="Branch count shifts the trained transition")
     ax_e = canvas.panel("E", 2, 0, 6,
                         title="Full conflict: routing decides the outcome")
     ax_f = canvas.panel("F", 2, 6, 6,
-                        title="Observed collapse follows the prediction")
+                        title="Chance crossings shift with branch count")
 
     # The shared token_subscript raises the base glyph above the line (its
     # tail inherits the subscript's drop); stand in the corrected helper for
@@ -487,6 +495,8 @@ def build() -> list:
     boundary_test(ax_f, crossings, seed_boundaries)
 
     COMPONENT.parent.mkdir(parents=True, exist_ok=True)
+    from journal_style import style_direct_color_labels
+    style_direct_color_labels(canvas.fig)
     problems = canvas.save(COMPONENT, name="main_figure_04_native")
     return problems
 

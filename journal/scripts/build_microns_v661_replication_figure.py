@@ -16,9 +16,10 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 from matplotlib.lines import Line2D
 import numpy as np
+from journal_style import style_direct_color_labels
 import pandas as pd
 
-from neurips_style import (
+from journal_style import (
     COLORS as NEURIPS_COLORS,
     ERR_CAPSIZE,
     FIG_W,
@@ -263,8 +264,8 @@ def render(curves: pd.DataFrame, focal: pd.DataFrame, summary: dict) -> None:
     apply_neurips_style()
     fig = plt.figure(figsize=(FIG_W, 6.10))
     grid = fig.add_gridspec(
-        3, 6, left=0.088, right=0.985, bottom=0.068, top=0.935,
-        wspace=0.86, hspace=0.88,
+        3, 6, left=0.088, right=0.965, bottom=0.075, top=0.90,
+        wspace=1.00, hspace=0.92,
     )
     spans = [
         (0, slice(0, 2)), (0, slice(2, 4)), (0, slice(4, 6)),
@@ -288,7 +289,7 @@ def render(curves: pd.DataFrame, focal: pd.DataFrame, summary: dict) -> None:
     ax_a.barh(np.arange(len(type_counts)), type_counts.to_numpy(), color=COLORS["morphology"], alpha=0.86)
     ax_a.set_yticks(np.arange(len(type_counts))); ax_a.set_yticklabels(type_counts.index)
     ax_a.invert_yaxis(); ax_a.set_xlabel("reconstructed cells")
-    panel_title(ax_a, "A", "Non-overlapping sample (n = 47)")
+    panel_title(ax_a, "A", "47 cells, same mouse")
     style_axis(ax_a, grid="x")
 
     for method_index, method in enumerate(methods):
@@ -321,6 +322,8 @@ def render(curves: pd.DataFrame, focal: pd.DataFrame, summary: dict) -> None:
     ax_b.set_xlabel("feedback channels")
     ax_b.set_ylabel("modeled field capture")
     panel_title(ax_b, "B", "Route capacity")
+    ax_b.text(.02,.96,"constructed target fields",transform=ax_b.transAxes,
+              va="top",fontsize=PT_SMALL,color=NEURIPS_COLORS["mute"])
     style_axis(ax_b)
 
     focus = curves[curves["channels"].eq(8)]
@@ -366,7 +369,7 @@ def render(curves: pd.DataFrame, focal: pd.DataFrame, summary: dict) -> None:
                      edgecolor="white", linewidth=0.4, zorder=4)
     ax_d.set_xscale("log"); ax_d.set_xlim(0.008, 1.4); ax_d.set_ylim(0, 1.0)
     ax_d.set_xlabel("wiring density"); ax_d.set_ylabel("field capture")
-    panel_title(ax_d, "D", "Wiring-capture trade-off")
+    panel_title(ax_d, "D", "Capture and wiring")
     style_axis(ax_d)
 
     pivot = focus.pivot(index="root_id", columns="method", values="credit_capture")
@@ -381,7 +384,7 @@ def render(curves: pd.DataFrame, focal: pd.DataFrame, summary: dict) -> None:
                       color=METHOD_COLORS[method], ms=4.8, lw=LW_ERR, capsize=ERR_CAPSIZE)
     ax_e.axhline(0, color=NEURIPS_COLORS["mute"], ls="--", lw=LW_REF)
     ax_e.set_xticks(range(3)); ax_e.set_xticklabels(["random", "depth", "shuffle"])
-    ax_e.set_ylabel("morphology advantage")
+    ax_e.set_ylabel("morphology gain")
     panel_title(ax_e, "E", "Topology controls")
     style_axis(ax_e)
 
@@ -448,6 +451,7 @@ def render(curves: pd.DataFrame, focal: pd.DataFrame, summary: dict) -> None:
                 handlelength=0.8, handletextpad=0.2, columnspacing=0.5)
 
     FIGURES.mkdir(parents=True, exist_ok=True)
+    style_direct_color_labels(fig)
     fig.canvas.draw()
     audit_layout(fig, STEM)
     audit_text_over_data(fig, STEM)

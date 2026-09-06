@@ -1,0 +1,35 @@
+# End-to-end confirmation: estimated structure followed by gradient learning
+
+This follow-up tested the complete sequence from finite noisy calibration to tree construction and parameter learning. Its 20 new seed blocks (930910–930929) were disjoint from the development and confirmatory seeds of the earlier alternating-least-squares experiment. Each block generated one fresh matching, quartet, nested-prefix and random-interaction function under the same registered mixture of random signs, coefficient magnitudes and input assignments. Every target had population variance one. The task covariance was not held identical across this mixture.
+
+The Lasso scale (0.15), 255-monomial dictionary, fitted intercept treatment and subset dynamic program were unchanged. The selector received 192 noisy fitting observations from a total calibration budget of 256, with label-noise SD 0.5. The remaining 64 observations were reserved and were not used to select a tree or tune this follow-up. The estimator received no family label, planted support or true coefficient. All 80 estimated trees were globally sealed before parameter learning. The fixed balanced tree came from the earlier development-best baseline. A third tree was constructed from the true coefficients only after sealing as a privileged structural reference. No target-derived coefficient initialization or exact-construction weights were used.
+
+Each tree was trained with either exact path credit or unit somatic broadcast, giving six conditions per task and 480 fits. The root sensitivity remained one under both rules. Exact credit used the derivative through every ancestor; broadcast replaced the six nonsomatic internal sensitivities by one. No projected-field coefficients or proximal-zone assumption was needed, so trees with a leaf immediately below the root were permitted. The forward computation and parameter count were the same: seven multilinear internal units, 28 coefficients, 14 edges and a root-only output.
+
+The optimizer was Adam with beta values 0.9/0.999 and epsilon 1e-8. Learning rates were copied without retuning from the prior credit-development record: 0.01 for exact credit and 0.003 for broadcast. All six conditions shared one label-independent Gaussian initialization (mean zero, SD 0.5), with zero biases, and one minibatch-index stream. Initial coefficients and every subsequent update were clipped to the box [-2,2]. Per-condition gradient norms were clipped at 10. Learning used the derivative of half-MSE divided by the target variance, 1,024 updates and batches of 64 sampled with replacement from a fixed 2,048-observation noisy training dataset. Training noise SD was 0.15. Separate 4,096-observation test data had independently drawn noise of the same SD. Calibration, training, test, initialization and minibatch streams had separate deterministic seed roles. Repeated input patterns could occur, while observation identities and noise draws were independent across datasets. There was no validation selection, early stopping, new rate search or continuation from the calibration fit.
+
+The primary endpoint was noisy-test NMSE after 1,024 updates; its nominal irreducible floor was 0.0225. Clean independent-test and exact-population errors were secondary. The two primary paired comparisons were fixed-tree exact-credit error minus estimated-tree exact-credit error, and broadcast minus exact error on the estimated tree. Four family-specific differences were averaged within each of 20 seed blocks before 10,000 bootstrap resamples. Descriptive intervals used 95% coverage; the two primary comparisons used Bonferroni-adjusted two-sided 97.5% intervals and the previously specified 0.01-NMSE meaningful-effect margin. Family-specific comparisons and differences from the true-coefficient reference are descriptive secondary results.
+
+| Structure and learning rule | Mean noisy-test NMSE | 95% seed-bootstrap interval |
+|---|---:|---:|
+| Estimated tree, exact credit | 0.12456 | 0.09454–0.15725 |
+| Fixed balanced tree, exact credit | 0.58369 | 0.54113–0.62772 |
+| Estimated tree, broadcast | 0.73206 | 0.70318–0.76423 |
+| Fixed balanced tree, broadcast | 0.97260 | 0.94838–0.99620 |
+| True-coefficient tree, exact credit | 0.10101 | 0.08197–0.12283 |
+| True-coefficient tree, broadcast | 0.68018 | 0.64668–0.70959 |
+
+The estimated tree improved exact-credit learning over the fixed tree by 0.45913 NMSE (97.5% interval 0.38489–0.53227). On estimated trees, exact credit improved over broadcast by 0.60750 (0.56916–0.64610). Both primary comparisons exceeded the registered margin with positive adjusted lower bounds. These are absolute normalized-MSE differences, not percentage reductions.
+
+| Family | Estimated tree, exact | Estimated tree, broadcast | Fixed tree, exact | True-coefficient tree, exact |
+|---|---:|---:|---:|---:|
+| Matching | 0.02746 | 0.02345 | 0.58106 | 0.02609 |
+| Quartet | 0.02411 | 0.99313 | 0.47228 | 0.05939 |
+| Nested prefix | 0.02379 | 0.96544 | 0.57916 | 0.02394 |
+| Random interactions | 0.42288 | 0.94623 | 0.70228 | 0.29463 |
+
+The first three families approached the noise floor under estimated construction and exact credit. Random interactions retained substantial error, including with the privileged structural reference. Broadcast performed slightly better than exact credit on matching tasks under these frozen optimizer recipes; exact credit therefore did not dominate every family. The true-coefficient DP is also not an endpoint oracle: it optimizes interaction constraints, and its finite-training outcome can be worse than that of an estimated tree, as occurred for quartets. The results support the declared finite-data construction and learning pipeline, with dependencies on the function class, optimizer and credit rule. They do not establish a universal morphology law or a biophysical local-learning mechanism.
+
+A pre-training interface mismatch in the oracle helper's return values stopped the initial array before initialization or fitting. Its failed logs were retained, and `runtime_amendment.json` hashes a compatibility adapter that preserves the returned tree and bound. The original source, scientific settings and sealed estimates were unchanged. Before the retry, an excluded-development random-interaction smoke (seed 721000) completed all six conditions through all 1,024 updates and verified evaluation and weight/audit serialization. Its six fits are excluded from the confirmatory sample. The successful confirmatory run retained all trajectories and final weights. Numerical and gradient checks, the smoke report and the independent validation record are separate artifacts; no result-based tuning followed these checks.
+
+Primary source files are `summary.csv`, `contrasts.csv`, `paired_contrasts.csv`, `endpoints.csv` and `trajectories.csv`. Original per-seed data, parameter arrays and source-stream hashes are under `runs/`. Freeze and amendment files identify the exact scientific and execution versions. The independent reconstruction is recorded in `validation_report.json` and `independent_validation_rows.csv`.

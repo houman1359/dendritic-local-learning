@@ -1,0 +1,17 @@
+{
+  "builder": "scripts/build_boolean_morphology_figures.py",
+  "builder_sha256": "db45edf9893570a95b7a42613b805ac25b4a414ec414ac958e9873f7aa7cc894",
+  "figure": "S43",
+  "panels": "A-F",
+  "scope": "Rendering only; source outcomes and protocol unchanged",
+  "sources": {
+    "source_data/boolean_theory/exact_constructions.json": "9ebfc55973ffc685e2f009123163ed354b580dfe5a53e19ec4020271b64025c6",
+    "source_data/boolean_theory/gate_credit_fields.csv": "4797116f1d5e94335e92d68a8af0655fe7f6d260e1f6d5de6305a503d0d2c4fa",
+    "source_data/boolean_theory/gate_derivative_corners.csv": "25c30a80eb498d2d3f6266ae71bd9615985296f426ec862cb964e03f00cb8efc",
+    "source_data/boolean_theory/proper_subtree_projection_energy.csv": "f66f90c04e0323ae0cfaeacd7eb3ebba6669dd360c9f3324ab486afd18b5a48c",
+    "source_data/boolean_theory/report.json": "35dd5a0e6dfe2262253ae5ba0daf3ef94ff7c91ab64553a382f4316d26f3237f",
+    "source_data/boolean_theory/target_summary.csv": "d36e205316bf21700a9abe1cce672c6ab8421cea2193593db0034a5d9c1745ad",
+    "source_data/boolean_theory/tree_capacity.csv": "27fc2625d93ce79a039ed0b72e906591cb21b1328d8d44ee85b40f060e757cef",
+    "source_data/boolean_theory/truth_tables.csv": "28dd8bc500c32fda9de5474fe29fd6ffe68852872f9c218f09b816da02d97a2e"
+  }
+}

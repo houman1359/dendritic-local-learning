@@ -673,7 +673,7 @@ def make_figure(curve: pd.DataFrame, cell: pd.DataFrame, outdir: Path) -> None:
     ax_g.plot([0, 1], [0, 1], color=STYLE_COLORS["mute"], lw=LW_REF, ls="--")
     ax_g.set_xlim(-0.02, 1.02); ax_g.set_ylim(-0.02, 1.04)
     ax_g.set_xlabel("initial field capture"); ax_g.set_ylabel("relative one-step progress")
-    panel_title(ax_g, "G", "Capture predicts one-step progress"); style_axis(ax_g)
+    panel_title(ax_g, "G", "Constructed one-step identity"); style_axis(ax_g)
 
     for method in METHODS:
         part = cell[cell.method.eq(method)]
@@ -689,7 +689,7 @@ def make_figure(curve: pd.DataFrame, cell: pd.DataFrame, outdir: Path) -> None:
     _ = np.median(relations)
     ax_h.set_xlim(-0.02, 1.02); ax_h.set_ylim(-0.02, 1.04)
     ax_h.set_xlabel("initial field capture"); ax_h.set_ylabel("relative 20-step progress")
-    panel_title(ax_h, "H", "Capture predicts iterative progress"); style_axis(ax_h)
+    panel_title(ax_h, "H", "Constructed iterative relation"); style_axis(ax_h)
 
     outdir.mkdir(parents=True, exist_ok=True)
     fig.canvas.draw(); audit_layout(fig, "fig6_alignment_controlled")

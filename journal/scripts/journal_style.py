@@ -16,7 +16,7 @@ without re-running that check.
 from __future__ import annotations
 
 import matplotlib as mpl
-from matplotlib.colors import LinearSegmentedColormap, to_rgb
+from matplotlib.colors import LinearSegmentedColormap, to_rgb, to_hex
 
 import neurips_style as _base
 from neurips_style import *  # noqa: F401,F403 - deliberate style re-export
@@ -50,11 +50,64 @@ _JOURNAL_COLORS = {
 }
 COLORS.update(_JOURNAL_COLORS)  # in-place: frozen NeurIPS components see it too
 
+
+def label_color(color, background="white", min_contrast=4.5):
+    """Darken a series hue for small text on an explicitly light background.
+
+    This opt-in helper does not change the plotting palette, artists, or white
+    heatmap annotations. The contrast target uses relative sRGB luminance.
+    Do not apply it to text over an image or an unspecified background.
+    """
+    def luminance(rgb):
+        linear = [v / 12.92 if v <= 0.04045 else ((v + 0.055) / 1.055)**2.4
+                  for v in rgb]
+        return sum(v*w for v,w in zip(linear, (0.2126,0.7152,0.0722)))
+    rgb = to_rgb(color)
+    bg = luminance(to_rgb(background))
+    if bg < 0.8:
+        raise ValueError("label_color requires an explicitly light background")
+    def contrast(scale):
+        value = luminance(tuple(v*scale for v in rgb))
+        return (max(bg,value)+0.05)/(min(bg,value)+0.05)
+    if contrast(1.0) >= min_contrast:
+        return to_hex(rgb)
+    lo,hi = 0.0,1.0
+    for _ in range(40):
+        mid = (lo+hi)/2
+        if contrast(mid) >= min_contrast: lo = mid
+        else: hi = mid
+    # Round channels downward so hexadecimal quantization cannot lower the
+    # achieved contrast below the requested floor.
+    return to_hex(tuple(int(v*lo*255)/255 for v in rgb))
+
+
+def style_direct_color_labels(fig, *, colors=None, background="white"):
+    """Opt in known series-colored text on a white/pale figure to dark tones.
+
+    Only exact matches to the supplied palette are touched. Black, white,
+    grayscale text and other colors are preserved, including heatmap labels.
+    Call this only after checking that the selected direct labels lie over
+    the specified light background; data colors and marks are untouched.
+    """
+    from matplotlib.text import Text
+    selected = COLORS.values() if colors is None else colors
+    palette = {to_hex(c) for c in selected
+               if max(to_rgb(c))-min(to_rgb(c)) > 0.02}
+    count = 0
+    for artist in fig.findobj(match=Text):
+        current = to_hex(artist.get_color())
+        if current in palette:
+            replacement = label_color(current, background=background)
+            if current != replacement:
+                artist.set_color(replacement)
+                count += 1
+    return count
+
 # Fixed marker order for multi-series panels: shape is the secondary encoding
 # that keeps 6-8 ΔE pairs legal and survives grayscale printing.
 MARKERS = ("o", "s", "^", "D", "v", "P", "X")
 
-# ── Journal type scale (authored 7.2 in, printed at ~0.96 in this draft) ──
+# ── Native type scale (authored at 7.2 in; LaTeX sets the print scale) ────
 PT_TITLE = 8.8          # panel title (regular weight, sentence case)
 PT_LABEL = 8.4          # axis label
 PT_TICK = 7.6           # tick label
@@ -226,6 +279,8 @@ def apply_neurips_style() -> None:
         "legend.fontsize": PT_LEGEND,
         "legend.title_fontsize": PT_LEGEND,
         "lines.linewidth": LW_DATA,
+        # Reset marker outlines/caps so prior builders cannot change them.
+        "lines.markeredgewidth": LW_EDGE,
         "lines.markersize": MARKER_MS,
         "axes.linewidth": 0.8,
         "axes.edgecolor": COLORS["edge"],

@@ -77,7 +77,7 @@ def draw_tree_basis(ax: plt.Axes) -> None:
                 solid_capstyle="round", transform=ax.transAxes)
     ax.add_patch(Circle(points[0], 0.038, transform=ax.transAxes,
                         fc=COLORS["soma"], ec=COLORS["edge"], lw=0.6))
-    ax.text(0.50, 0.01, "nested weighted contrasts", ha="center", va="bottom",
+    ax.text(0.50, -0.15, "scale bins: descendant\nexcitatory weight fraction", ha="center", va="bottom",
             fontsize=PT_ANNOT, color=COLORS["ink"], transform=ax.transAxes)
 
 
@@ -115,7 +115,7 @@ def main() -> None:
     ax_b.set_xticks(x, SCALE_LABELS)
     ax_b.set_ylim(0, 0.56)
     ax_b.set_ylabel("non-scalar route-energy fraction")
-    compact_panel_title(ax_b, "B", "Independent 47-cell cohort")
+    compact_panel_title(ax_b, "B", "Disjoint same-animal cohort (47 cells)")
     style_axis(ax_b, grid="y")
     clean_legend(ax_b, fontsize=PT_LEGEND - 0.7, loc="upper right")
 

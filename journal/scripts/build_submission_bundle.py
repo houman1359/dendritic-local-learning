@@ -8,6 +8,8 @@ default, and scans copied text files for common private absolute paths.
 
 from __future__ import annotations
 
+from tex_sources import tex_sources, expanded_tex
+
 import argparse
 import csv
 import hashlib
@@ -33,7 +35,6 @@ MAIN_FIGURES = (
     "main/figure_06.pdf",
     "main/figure_07.pdf",
     "main/figure_08.pdf",
-    "main/figure_09.pdf",
 )
 
 SUPPLEMENTARY_FIGURES = (
@@ -68,6 +69,22 @@ SUPPLEMENTARY_FIGURES = (
     "supplementary/figure_S29_panels_A-C.pdf",
     "supplementary/figure_S30_panels_A-D.pdf",
     "supplementary/figure_S31_panels_A-G.pdf",
+    "supplementary/figure_S32_panels_A-F.pdf",
+    "supplementary/figure_S33_panels_A-F.pdf",
+    "supplementary/figure_S34_panels_A-D.pdf",
+    "supplementary/figure_S35_panels_A-F.pdf",
+    "supplementary/figure_S36_panels_A-D.pdf",
+    "supplementary/figure_S37_panels_A-D.pdf",
+    "supplementary/figure_S38_panels_A-D.pdf",
+    "supplementary/figure_S39_panels_A-F.pdf",
+    "supplementary/figure_S40_panels_A-F.pdf",
+    "supplementary/figure_S41_panels_A-H.pdf",
+    "supplementary/figure_S42_panels_A-F.pdf",
+    "supplementary/figure_S43_panels_A-F.pdf",
+    "supplementary/figure_S44_panels_A-H.pdf",
+    "supplementary/figure_S45_image_diagnostics.pdf",
+    "supplementary/figure_S46_utility.pdf",
+    "supplementary/figure_shunt_weak_channels.pdf",
 )
 
 FIGURES = MAIN_FIGURES + SUPPLEMENTARY_FIGURES
@@ -82,6 +99,12 @@ REQUIRED_FILES = {
     JOURNAL / "references.bib": Path("references.bib"),
     JOURNAL / "supplementary" / "supplementary.tex": Path(
         "supplementary/supplementary.tex"
+    ),
+    JOURNAL / "supplementary" / "morphology_followup_methods.tex": Path(
+        "supplementary/morphology_followup_methods.tex"
+    ),
+    JOURNAL / "supplementary" / "boolean_morphology_methods.tex": Path(
+        "supplementary/boolean_morphology_methods.tex"
     ),
     JOURNAL / "supplementary" / "supplementary.pdf": Path(
         "supplementary/supplementary.pdf"
@@ -112,6 +135,20 @@ REQUIRED_FILES = {
         "manifests/reproducibility_origin_manifest.tsv"
     ),
 }
+for _root in (JOURNAL / "main.tex", JOURNAL / "supplementary/supplementary.tex"):
+    for _source in tex_sources(_root):
+        REQUIRED_FILES[_source] = _source.relative_to(JOURNAL)
+
+
+
+# Official templates and prepared technical answers; no author approval implied.
+for _form_name in ("nr-software-policy.pdf", "machine-learning-checklist.pdf",
+                   "nr-reporting-summary.pdf", "download_manifest.json",
+                   "COMPLETION_ANSWERS.md", "DRAFT_machine-learning-checklist_technical.pdf",
+                   "DRAFT_machine-learning-checklist_validation.json",
+                   "machine_learning_widget_inventory.json"):
+    REQUIRED_FILES[SUBMISSION / "official_forms" / _form_name] = Path("submission_materials/official_forms") / _form_name
+
 
 SOFTWARE_CANDIDATES = (
     SUBMISSION / "Dendritic_credit_assignment_software.zip",
@@ -177,7 +214,7 @@ def verify_figure_allowlist() -> None:
         JOURNAL / "main.tex",
         JOURNAL / "supplementary" / "supplementary.tex",
     ):
-        text = manuscript.read_text(encoding="utf-8")
+        text = expanded_tex(manuscript)
         for match in GRAPHIC_PATTERN.finditer(text):
             name = Path(match.group(1)).as_posix()
             if not Path(name).suffix:
@@ -331,7 +368,7 @@ def write_metadata(output_dir: Path, software: Path | None) -> None:
     ).stdout.strip()
     metadata = {
         "target_journal": "Nature Communications",
-        "article_title": "When dendritic structure helps local credit assignment",
+        "article_title": "Dendritic morphology as a dictionary for local credit assignment",
         "source_commit": repository_commit(),
         "source_worktree_clean": worktree_clean,
         "source_snapshot_method": "current explicit allowlist",
@@ -382,15 +419,15 @@ def write_readme(output_dir: Path, software: Path | None) -> None:
     )
     text = f"""# Nature Communications initial-submission bundle
 
-Article: *When dendritic structure helps local credit assignment*
+Article: *Dendritic morphology as a dictionary for local credit assignment*
 
-This directory was assembled from an explicit allowlist by `scripts/build_submission_bundle.py`. It contains the compiled and source manuscripts, a combined main-plus-supplementary reading copy, {len(MAIN_FIGURES)} main figure assets across nine numbered figures, {len(SUPPLEMENTARY_FIGURES)} supplementary figure PDFs, references, Source Data, submission documents and provenance manifests. {software_line}
+This directory was assembled from an explicit allowlist by `scripts/build_submission_bundle.py`. It contains the compiled and source manuscripts, a combined main-plus-supplementary reading copy, {len(MAIN_FIGURES)} main figure assets across eight numbered figures, {len(SUPPLEMENTARY_FIGURES)} supplementary figure PDFs, references, Source Data, submission documents and provenance manifests. {software_line}
 
 `main_with_supplementary.pdf` contains the complete Article followed by the Supplementary Information. The separate `main.pdf` and `supplementary/supplementary.pdf` files are retained because the journal portal may request separate uploads.
 
 `manifests/bundle_manifest.tsv` records the byte size and SHA-256 digest of every other file in this directory. The manifest does not hash itself. `manifests/bundle_metadata.json` records the source commit when available.
 
-The files in `submission_materials/` include internal author checklists. Upload only the items requested by the journal portal. Official interactive reporting forms must be downloaded fresh and completed separately; see `submission_materials/OFFICIAL_FORMS_REQUIRED.md`.
+The files in `submission_materials/` include internal author checklists. Upload only the items requested by the journal portal. Official templates, prepared technical answers and a clearly labeled machine-learning draft are included. Author-only attestations and official Adobe Reader validation remain pending; see `submission_materials/OFFICIAL_FORMS_REQUIRED.md`.
 
 The bundle builder excludes auxiliary LaTeX files, logs, scheduler scripts, local caches, checkpoints and arbitrary analysis reports. It also scans copied text for common private absolute paths. Passing these automated checks does not replace author review of disclosures, licensing, confidentiality or concurrent-submission status.
 """

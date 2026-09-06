@@ -1,0 +1,20 @@
+{
+  "all_outcomes_retained": true,
+  "csv_sha256": "8e78a960b2b18be4f5bb644022a2363dcb64be03d052b7c0e2c1d04258ea0c8e",
+  "failed_fits": 0,
+  "fits": 336,
+  "npz_sha256": "f9474173a78c2adf467b61e5e4d4c8f00bd54f3645914589cda863ada970c9d5",
+  "protocol_sha256": "4373c421dd8ad60de8275d8384f441fc7c19d000232081bbb5be2eb7df0597df",
+  "rows": 2688,
+  "scheduler_job_id": "44661257",
+  "seed": 2026225,
+  "selection_sha256": "965160e7d9126f974da817735dfb0ec1df35b6f09cc2056fabdab5a9f3c5a8a1",
+  "source_files": {
+    "scripts/boolean_morphology/__init__.py": "0b70c17a6f9fba0f6e4794c99e54c59197fd3c8335264055593902112755a1df",
+    "scripts/boolean_morphology/experiment.py": "b99415cd95a72adfa031d84239b7a9248b714a5a905ee450d2e6be283bcc9f91",
+    "scripts/boolean_morphology/model.py": "bbe31ac9b66df46722c559c0e296577614a65b6ff88c7ee6503b91d352162699"
+  },
+  "split": "fresh",
+  "utc_completed": "2026-09-05T21:04:03.102871+00:00",
+  "utc_started": "2026-09-05T21:03:56.453230+00:00"
+}

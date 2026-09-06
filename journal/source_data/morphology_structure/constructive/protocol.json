@@ -1,0 +1,17 @@
+{
+  "construction": "Dominant centered Fourier direction per subtree,then exact local least squares;report all reconstruction errors",
+  "control": "For prefix24 only, original12 candidates,four fixed random ALSrestarts,32sweeps;alloutcomesretained",
+  "nested_prefix": "24 seeded permutations,coeff0.5 on prefixesoflength2,4,6,8;rank8 with fixed anisotropic gradient spectrum within family",
+  "optimizer": "DP over allinputsubsets minimizes(max centeredcut tail,sumtail,depth,totalimbalance,lexicographic split);roundtailcoststo12decimals forties",
+  "source_hashes": {
+    "constructive.py": "8259af41912cee139998b84dffef9827d44fe8a175a89e6eb91bb1f534303a46",
+    "model.py": "fe89ef9331795a4dbf3f04ff1d7b18dc8f955b9da8119a2fdcce4f5edbd68cf7"
+  },
+  "status": "exploratory_construction_after_fixed_candidate_screen",
+  "target_access": "Full256-pattern target table and exact Fourier tensor;oracle capacity study",
+  "task_counts": {
+    "nested_prefix_control": 24,
+    "quadratic_matching": 105,
+    "quartic_partition": 35
+  }
+}

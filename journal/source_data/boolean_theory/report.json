@@ -1,0 +1,71 @@
+{
+  "all_compatible_constructions_inside_box_2": true,
+  "balanced_trees": 3,
+  "bound_scope": "uniform full-domain truth-value regression; maximum cut tail is a lower bound, not sum and not classification error",
+  "centered_rank_method": "exact rational row reduction",
+  "coefficient_gauge": "signed Boolean internal states for certificates; separate canonical 0/1 gates for derivative illustrations",
+  "depth_3_trees": 12,
+  "exact_construction_method": "nonconstant signed Boolean slices; exact rational four-corner interpolation",
+  "exact_constructions": 49,
+  "families": 7,
+  "family_cut_pairs": 98,
+  "family_tree_pairs": 105,
+  "gradient_definition": "uncentered second moment of gradient of unique multi-affine extension with respect to x",
+  "labeled_unordered_binary_trees": 15,
+  "largest_certified_absolute_coefficient": 1.0327955589886444,
+  "largest_certified_coefficient_squared_rational": "16/15",
+  "normalization": "raw y in {0,1}; z=(y-E[y])/sqrt(Var(y)); x=2*bit-1",
+  "numpy_version": "2.2.6",
+  "patterns_per_family": 16,
+  "python_version": "3.10.13",
+  "runtime_seconds": 3.0186358669307083,
+  "singular_value_tail_method": "float64 SVD of exact rational raw Walsh matrix",
+  "source_sha256": "b151da57b758b3c3fda193ff2cd7ce28fe0661b8ae336ffa80cf4875cfe0899b",
+  "status": "exhaustive_finite_domain_analytic_audit_no_training",
+  "tables": {
+    "all_cuts.csv": {
+      "rows": 98,
+      "sha256": "8f104d3610227a5ec2ad8700d78dc93cb91c7579e60e1dc70b2f7d07f111f8d0"
+    },
+    "canonical_root_credit_by_pattern.csv": {
+      "rows": 48,
+      "sha256": "3137171975ee23ae627dafeadb4be41c3fd7780363406b47a6bc944c9f9a67ac"
+    },
+    "depth_summary.csv": {
+      "rows": 7,
+      "sha256": "bb7b5fc917a91fc4f1de838b2cce23f07fc2d036a80a032e601c23ef8f966926"
+    },
+    "gate_credit_fields.csv": {
+      "rows": 30603,
+      "sha256": "4797116f1d5e94335e92d68a8af0655fe7f6d260e1f6d5de6305a503d0d2c4fa"
+    },
+    "gate_derivative_corners.csv": {
+      "rows": 12,
+      "sha256": "25c30a80eb498d2d3f6266ae71bd9615985296f426ec862cb964e03f00cb8efc"
+    },
+    "main6a_grouping.csv": {
+      "rows": 3,
+      "sha256": "c48849ebfa27813068029b9e128d04bbd26d9629bf97e7e6d9950c449a929627"
+    },
+    "target_summary.csv": {
+      "rows": 7,
+      "sha256": "d36e205316bf21700a9abe1cce672c6ab8421cea2193593db0034a5d9c1745ad"
+    },
+    "tree_capacity.csv": {
+      "rows": 105,
+      "sha256": "27fc2625d93ce79a039ed0b72e906591cb21b1328d8d44ee85b40f060e757cef"
+    },
+    "tree_cuts.csv": {
+      "rows": 210,
+      "sha256": "35b6ec3c99cb825e620521ba6a410fb2d6cabd1608fb772cb3887fdcd4f74967"
+    },
+    "truth_tables.csv": {
+      "rows": 112,
+      "sha256": "28dd8bc500c32fda9de5474fe29fd6ffe68852872f9c218f09b816da02d97a2e"
+    },
+    "walsh_coefficients.csv": {
+      "rows": 112,
+      "sha256": "108402105dfe5d93a9443e0a91173c760df9249c8355548d46036b4a76ba281c"
+    }
+  }
+}

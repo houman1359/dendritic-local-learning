@@ -1,0 +1,10 @@
+{
+  "script": "scripts/build_review_response_baselines_figure.py",
+  "sources": [
+    "condition_summary.csv",
+    "target_metrics.csv",
+    "paired_ridge_contrasts.csv"
+  ],
+  "statistical_unit": "seven targets; 20,000 target-bootstrap draws",
+  "scope": "Only ridge models are refitted under observed-input perturbations; nonlinear references are archived fits."
+}

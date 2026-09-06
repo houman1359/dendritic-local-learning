@@ -1,0 +1,15 @@
+{
+  "status": "passed",
+  "checks": [
+    {
+      "amendment": "serialization_amendment.json",
+      "runtime_source_matches": true,
+      "protocol_matches": true
+    },
+    {
+      "amendment": "serialization_dispatch_amendment.json",
+      "runtime_source_matches": true,
+      "protocol_matches": true
+    }
+  ]
+}

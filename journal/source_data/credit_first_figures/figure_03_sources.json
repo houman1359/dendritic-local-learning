@@ -1,0 +1,25 @@
+{
+  "panel_sources": {
+    "A": "Public build_main_figure_05.hierarchical_task; selected stream +1 and fixed negative distractor coefficients",
+    "B": "Algebraic sum from the frozen task configuration and the actual grouped_routes support, verified across all 8 contexts; no new prospective experiment",
+    "C": "Public routing_figure_panels.bandwidth_sweep_compact; original 20-seed accuracies and original mean/interval functions",
+    "D": "Public routing_figure_panels.topology_alignment_compact; original paired matched-versus-rewired statistics and resampling seeds",
+    "E": "Frozen ancestry_k4_control_contrasts primary maximum-over-four comparator, paired points and Holm adjustment across four K budgets",
+    "F": "Same frozen reanalysis: dense rank-4, random sparse and depth-interleaved contrasts; large derangement effect remains visible in C rather than setting F's scale"
+  },
+  "source_sha256": {
+    "scripts/credit_first_figures/build_ancestry.py": "9bc272b82313f47237086e92e8a86f4afd9a530dae8094dde77381a06f56c228",
+    "scripts/build_main_figure_05.py": "27f736bdba3af1562657e77e7a4fcb5cc937f92d43833ee91667b92e1a9e0e3b",
+    "scripts/routing_figure_panels.py": "b6a38d2f1329add30c30e3e98317f3d5a3946a2133a75303d458723b32faf521",
+    "scripts/run_trained_subtree_address_full_factorial.py": "c5d75b8ea9bc29d7fd24ca53c360c4bbdf825d7fa31f84727af4b7dd47e875dd",
+    "configs/trained_subtree_address/full_factorial_confirmatory.json": "8684f7c30886e7aede7eaa71550033ad84605fcfb45220d32a2d91d2627f23b2",
+    "scripts/figure_canvas.py": "498dec86dcac34c9841538fa7b5bf7b7311d468db8fbe0c7a648fbb9508c5e1f",
+    "scripts/journal_style.py": "32a3272cebb949784b694bc6dbb495cf74f6ba4ddf97d18d44f3ef54e082844e",
+    "source_data/trained_subtree_address_full_factorial/seed_outcomes.csv": "2f2cc0d6a21fd7bd46a5437e031e69ae31626ef6650c6cced0be1d2a0861303c",
+    "source_data/trained_subtree_address_full_factorial/condition_summary.csv": "97358de3f0bfb7a91ba2aa6f164705d1a6e6d5c1b4e35b266c5e5a9fc03afb20",
+    "source_data/review_evidence_reanalysis/ancestry_k4_control_contrasts.csv": "aed995858ac591ddea7f8f0314d018e4ad4b51a810a032e99f3f1dff2b131e2a",
+    "source_data/review_evidence_reanalysis/ancestry_control_paired_differences.csv": "3746a2e477c9e6c734ffb8247745b7027288cfed33367cd04887b86457d11b22"
+  },
+  "layout_findings": [],
+  "coefficient_scope": "Raw group sums; implemented route rows divide by sqrt(group size). Signs follow from the generator and are not a newly prospective accuracy prediction."
+}

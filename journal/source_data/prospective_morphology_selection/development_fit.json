@@ -1,0 +1,24 @@
+{
+  "feedback_only": {
+    "development_best": "balanced_contiguous_k8",
+    "max_budget": "balanced_contiguous_k8",
+    "rank_only": {
+      "1": "balanced_permutation_a_k2",
+      "2": "balanced_contiguous_k4",
+      "4": "balanced_contiguous_k4",
+      "8": "balanced_contiguous_k8"
+    },
+    "utility_to_loss_scale": 1.8826404519857887
+  },
+  "joint_forward_feedback": {
+    "development_best": "balanced_contiguous_k8",
+    "max_budget": "balanced_contiguous_k8",
+    "rank_only": {
+      "1": "balanced_permutation_a_k2",
+      "2": "balanced_contiguous_k4",
+      "4": "balanced_contiguous_k4",
+      "8": "balanced_contiguous_k8"
+    },
+    "utility_to_loss_scale": 2.7531788080188346
+  }
+}

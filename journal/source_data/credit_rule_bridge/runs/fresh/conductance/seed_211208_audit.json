@@ -1,0 +1,23 @@
+{
+  "all_conditions_retained": true,
+  "benchmark": false,
+  "completed_utc": "2026-09-06T12:38:37.281759+00:00",
+  "model": "conductance",
+  "n_fits": 24,
+  "phase": "fresh",
+  "protocol_freeze_sha256": "eca67103897fc3f4251844479ad99ab04ae61544b3f176389ec82ff0760c01d4",
+  "seconds": 3.4525565209332854,
+  "seed": 211208,
+  "selection_freeze_sha256": "c979c9c1bb9264a1d980da8d13c24479967e749f7d6d21212e3a3187268ef2db",
+  "slurm_job_id": "44799007",
+  "source_files_sha256": {
+    "seed_211208_curves.csv": "6addff53fa370a41bb436afae12dd3a23bd9714fabda6938f042306aa198cf57",
+    "seed_211208_diagnostics.csv": "fe01aeb31660eb74a9a528500b1616711bbc8c86200cde4152795d4c2ae0a906",
+    "seed_211208_task_0_metadata.json": "c98e14f318a9d2bb469d7c1ecebe3d5f7a8d5bdb5ce10dee5827ad622ebdc8ee",
+    "seed_211208_task_0_states.npz": "ba69edf47c16b49a8387df78539dda47570f642f72998810bf70f4b13000314f",
+    "seed_211208_task_1_metadata.json": "d0ee608cb9d5f7e090989d07b3332d269f1b9c6e273ce7fa00f2930f4f146981",
+    "seed_211208_task_1_states.npz": "87030db2c5b35c1056489c68a686cb0ddce9f578527c1e074113c6470fe3fe7c",
+    "seed_211208_task_2_metadata.json": "446a3cbc25cd68c28f191a6b5c42a1926209f85feddedcbbd56eea1d3c127997",
+    "seed_211208_task_2_states.npz": "8b61cd5bf1f8f7b22711fbbef3f0fa1b0c3bc7f901a83bebd64a5b12ae5893d7"
+  }
+}

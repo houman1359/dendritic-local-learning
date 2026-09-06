@@ -1,0 +1,10 @@
+{
+  "analysis_protocol_sha256": "701388c034e3af00c3f4ad67be0d31e85a7330d2bc6287e5725d69c4161a56ad",
+  "archived_metric_checks": 28800,
+  "checkpoints": 3600,
+  "fits": 600,
+  "max_archived_metric_absolute_difference": 8.881784197001252e-16,
+  "projection_values_in_unit_interval": true,
+  "seed_blocks": 20,
+  "status": "passed"
+}

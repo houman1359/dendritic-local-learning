@@ -1,0 +1,11 @@
+{
+  "maximum_metric_difference": 8.659739592076221e-15,
+  "metric_checks": 20160,
+  "pairing_checks": 120,
+  "script_sha256": "a4fde4322832b49ef12a554d85a55ab2cee57e2f67a4d2f5fdc4f19a7ee71a66",
+  "seed_blocks": 20,
+  "source_protocol_sha256": "eca67103897fc3f4251844479ad99ab04ae61544b3f176389ec82ff0760c01d4",
+  "source_selection_sha256": "c979c9c1bb9264a1d980da8d13c24479967e749f7d6d21212e3a3187268ef2db",
+  "states": 5040,
+  "status": "passed"
+}

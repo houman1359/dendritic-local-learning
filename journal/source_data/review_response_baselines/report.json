@@ -1,0 +1,298 @@
+{
+  "complete": true,
+  "outer_splits": 130,
+  "n_scans": 13,
+  "n_targets": 7,
+  "nested_tuning": true,
+  "all_outer_stimulus_splits_disjoint": true,
+  "n_new_evaluations": 3380,
+  "runtime_seconds": 24.52035123598762,
+  "protocol_sha256": "63970e1890c0fe61d4c50153bf554a367ae38efc07941f0fb65251b71453b542",
+  "script_sha256": "ad09680509f5bbffe5cb2b3ae5d24acd92400c52700dc84e61164cde881834cd",
+  "historical_runs_sha256": "1427f707eee8a74c87f3fcbda5b9c9582e1d0c875c9497885609320242dec505",
+  "conditions": [
+    {
+      "method": "archived_exact compartment error",
+      "n_targets": 7,
+      "mean_nmse": 0.7876634413328667,
+      "ci95_low": 0.7277027998796982,
+      "ci95_high": 0.8377847219957424,
+      "mean_features": 8.976190476190476
+    },
+    {
+      "method": "archived_random anatomical routes",
+      "n_targets": 7,
+      "mean_nmse": 0.8333397869625132,
+      "ci95_low": 0.7821416344548727,
+      "ci95_high": 0.8849887086744063,
+      "mean_features": 8.976190476190476
+    },
+    {
+      "method": "archived_site-shuffled routes",
+      "n_targets": 7,
+      "mean_nmse": 0.8390704051923227,
+      "ci95_low": 0.7854679168661207,
+      "ci95_high": 0.8867562527852941,
+      "mean_features": 8.976190476190476
+    },
+    {
+      "method": "archived_topology-matched routes",
+      "n_targets": 7,
+      "mean_nmse": 0.8320789169751678,
+      "ci95_low": 0.7855817769807228,
+      "ci95_high": 0.8839609420556298,
+      "mean_features": 8.976190476190476
+    },
+    {
+      "method": "keep_0.25",
+      "n_targets": 7,
+      "mean_nmse": 0.9168924234343232,
+      "ci95_low": 0.8691238115324718,
+      "ci95_high": 0.9476372905439847,
+      "mean_features": 2.1547619047619047
+    },
+    {
+      "method": "keep_0.5",
+      "n_targets": 7,
+      "mean_nmse": 0.8706330137167619,
+      "ci95_low": 0.8106150885653497,
+      "ci95_high": 0.9116608038517819,
+      "mean_features": 4.214285714285714
+    },
+    {
+      "method": "keep_0.75",
+      "n_targets": 7,
+      "mean_nmse": 0.8319064327203378,
+      "ci95_low": 0.7715216619879273,
+      "ci95_high": 0.8730350724167036,
+      "mean_features": 6.821428571428571
+    },
+    {
+      "method": "manual_only",
+      "n_targets": 7,
+      "mean_nmse": 0.9120259201717766,
+      "ci95_low": 0.8824875702710561,
+      "ci95_high": 0.9393244578347854,
+      "mean_features": 3.1785714285714284
+    },
+    {
+      "method": "noise_0.25",
+      "n_targets": 7,
+      "mean_nmse": 0.8099702413647248,
+      "ci95_low": 0.7504142548533413,
+      "ci95_high": 0.8509360672742403,
+      "mean_features": 8.976190476190476
+    },
+    {
+      "method": "noise_0.5",
+      "n_targets": 7,
+      "mean_nmse": 0.8248300797230446,
+      "ci95_low": 0.7689106764312511,
+      "ci95_high": 0.8633412635404467,
+      "mean_features": 8.976190476190476
+    },
+    {
+      "method": "noise_1",
+      "n_targets": 7,
+      "mean_nmse": 0.8687490513909001,
+      "ci95_low": 0.8197169470774358,
+      "ci95_high": 0.9039027413498656,
+      "mean_features": 8.976190476190476
+    },
+    {
+      "method": "ols_all",
+      "n_targets": 7,
+      "mean_nmse": 0.8069774171280059,
+      "ci95_low": 0.7432397348751673,
+      "ci95_high": 0.8523238045351095,
+      "mean_features": 8.976190476190476
+    },
+    {
+      "method": "ridge_all",
+      "n_targets": 7,
+      "mean_nmse": 0.8028168885124002,
+      "ci95_low": 0.742243244892685,
+      "ci95_high": 0.847614939909837,
+      "mean_features": 8.976190476190476
+    },
+    {
+      "method": "ridge_raw",
+      "n_targets": 7,
+      "mean_nmse": 0.8014254220716007,
+      "ci95_low": 0.7446436755311197,
+      "ci95_high": 0.8448248513933383,
+      "mean_features": 8.976190476190476
+    },
+    {
+      "method": "training_mean",
+      "n_targets": 7,
+      "mean_nmse": 1.0,
+      "ci95_low": 1.0,
+      "ci95_high": 1.0,
+      "mean_features": 0.0
+    },
+    {
+      "method": "training_reliability_ge_0",
+      "n_targets": 7,
+      "mean_nmse": 0.8069947874184698,
+      "ci95_low": 0.7485616559366588,
+      "ci95_high": 0.8479235574144612,
+      "mean_features": 8.686904761904762
+    },
+    {
+      "method": "training_reliability_ge_0.1",
+      "n_targets": 7,
+      "mean_nmse": 0.8106180835721873,
+      "ci95_low": 0.7586924243601839,
+      "ci95_high": 0.8507050107868637,
+      "mean_features": 7.510714285714285
+    },
+    {
+      "method": "training_reliability_ge_0.2",
+      "n_targets": 7,
+      "mean_nmse": 0.8371405827873304,
+      "ci95_low": 0.7952082457538466,
+      "ci95_high": 0.880344347739993,
+      "mean_features": 5.632142857142858
+    }
+  ],
+  "ridge_contrasts": [
+    {
+      "comparator": "archived_exact compartment error",
+      "n_targets": 7,
+      "other_minus_allridge_mean_nmse": -0.015153447179533581,
+      "ci95_low": -0.027147008420102234,
+      "ci95_high": -0.004203087146253186,
+      "positive_targets": 1
+    },
+    {
+      "comparator": "archived_random anatomical routes",
+      "n_targets": 7,
+      "other_minus_allridge_mean_nmse": 0.03052289845011293,
+      "ci95_low": -0.008650884579332909,
+      "ci95_high": 0.06808578973230388,
+      "positive_targets": 5
+    },
+    {
+      "comparator": "archived_site-shuffled routes",
+      "n_targets": 7,
+      "other_minus_allridge_mean_nmse": 0.03625351667992251,
+      "ci95_low": 0.006893770321065037,
+      "ci95_high": 0.06500949903498447,
+      "positive_targets": 5
+    },
+    {
+      "comparator": "archived_topology-matched routes",
+      "n_targets": 7,
+      "other_minus_allridge_mean_nmse": 0.029262028462767598,
+      "ci95_low": -0.01300880156509159,
+      "ci95_high": 0.0735724583866073,
+      "positive_targets": 4
+    },
+    {
+      "comparator": "keep_0.25",
+      "n_targets": 7,
+      "other_minus_allridge_mean_nmse": 0.114075534921923,
+      "ci95_low": 0.09553911415583942,
+      "ci95_high": 0.1308782368718055,
+      "positive_targets": 7
+    },
+    {
+      "comparator": "keep_0.5",
+      "n_targets": 7,
+      "other_minus_allridge_mean_nmse": 0.06781612520436169,
+      "ci95_low": 0.05555932187576911,
+      "ci95_high": 0.08015139451700086,
+      "positive_targets": 7
+    },
+    {
+      "comparator": "keep_0.75",
+      "n_targets": 7,
+      "other_minus_allridge_mean_nmse": 0.029089544207937728,
+      "ci95_low": 0.020523049407413976,
+      "ci95_high": 0.036935556093644926,
+      "positive_targets": 7
+    },
+    {
+      "comparator": "manual_only",
+      "n_targets": 7,
+      "other_minus_allridge_mean_nmse": 0.10920903165937638,
+      "ci95_low": 0.04754454566426593,
+      "ci95_high": 0.1765985593683692,
+      "positive_targets": 7
+    },
+    {
+      "comparator": "noise_0.25",
+      "n_targets": 7,
+      "other_minus_allridge_mean_nmse": 0.007153352852324641,
+      "ci95_low": 0.0002740631233959863,
+      "ci95_high": 0.012070716196440687,
+      "positive_targets": 6
+    },
+    {
+      "comparator": "noise_0.5",
+      "n_targets": 7,
+      "other_minus_allridge_mean_nmse": 0.02201319121064433,
+      "ci95_low": 0.01173029744424335,
+      "ci95_high": 0.03012382100011503,
+      "positive_targets": 6
+    },
+    {
+      "comparator": "noise_1",
+      "n_targets": 7,
+      "other_minus_allridge_mean_nmse": 0.06593216287849976,
+      "ci95_low": 0.04526108297565961,
+      "ci95_high": 0.08485355466079139,
+      "positive_targets": 7
+    },
+    {
+      "comparator": "ols_all",
+      "n_targets": 7,
+      "other_minus_allridge_mean_nmse": 0.004160528615605753,
+      "ci95_low": -0.0013384718923704789,
+      "ci95_high": 0.010530586047881754,
+      "positive_targets": 4
+    },
+    {
+      "comparator": "ridge_raw",
+      "n_targets": 7,
+      "other_minus_allridge_mean_nmse": -0.001391466440799524,
+      "ci95_low": -0.015454438475754102,
+      "ci95_high": 0.010634359486711684,
+      "positive_targets": 4
+    },
+    {
+      "comparator": "training_mean",
+      "n_targets": 7,
+      "other_minus_allridge_mean_nmse": 0.19718311148759973,
+      "ci95_low": 0.15236752284819072,
+      "ci95_high": 0.25834666790522415,
+      "positive_targets": 7
+    },
+    {
+      "comparator": "training_reliability_ge_0",
+      "n_targets": 7,
+      "other_minus_allridge_mean_nmse": 0.004177898906069534,
+      "ci95_low": -6.308655509539613e-05,
+      "ci95_high": 0.008460377891728646,
+      "positive_targets": 5
+    },
+    {
+      "comparator": "training_reliability_ge_0.1",
+      "n_targets": 7,
+      "other_minus_allridge_mean_nmse": 0.007801195059787174,
+      "ci95_low": -0.0023380734901173855,
+      "ci95_high": 0.01996321795742836,
+      "positive_targets": 4
+    },
+    {
+      "comparator": "training_reliability_ge_0.2",
+      "n_targets": 7,
+      "other_minus_allridge_mean_nmse": 0.03432369427493027,
+      "ci95_low": 0.0074268426191841375,
+      "ci95_high": 0.0669805719426669,
+      "positive_targets": 6
+    }
+  ],
+  "scope": "Seven targets from one mouse. Train-only nested tuning and split-wise reliability filters; perturbation draws average before scan and target aggregation. Missingness removes observed presynaptic features and cannot recover unobserved inputs or estimate population power. Archived nonlinear fits are descriptive paired references, not retrained under each sensitivity mask."
+}
