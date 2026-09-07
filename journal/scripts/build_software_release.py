@@ -951,6 +951,32 @@ def sanitize_git_snapshot(root: Path) -> list[dict[str, str | int]]:
     return changes
 
 
+def relocate_image_invariant_test(root: Path) -> list[dict[str, str | int]]:
+    """Read restored MNIST configs without changing the frozen scientific test."""
+    original = "cfg=yaml.safe_load(Path(record['config']).read_text())"
+    replacement = (
+        "cfg=yaml.safe_load((run.OUT/'configs'/'development'/"
+        "f\"condition_{record['index']:03d}.yaml\").read_text())"
+    )
+    changes = []
+    for prefix in ("article_analysis", "journal_package/journal"):
+        relative = f"{prefix}/scripts/image_ladder_controls/test_delivery.py"
+        path = root / relative
+        payload = path.read_bytes()
+        text = payload.decode("utf-8")
+        if text.count(original) != 1:
+            raise RuntimeError(f"Unexpected frozen MNIST test layout: {relative}")
+        path.write_text(text.replace(original, replacement), encoding="utf-8")
+        changes.append({
+            "path": relative,
+            "origin_sha256": hashlib.sha256(payload).hexdigest(),
+            "release_sha256": sha256(path),
+            "replacement_count": 1,
+            "reason": "resolve frozen MNIST development configs from restored study root and unchanged condition index",
+        })
+    return changes
+
+
 def write_portability_manifest(
     path: Path, changes: Iterable[dict[str, str | int]]
 ) -> None:
@@ -1570,6 +1596,7 @@ def build(force: bool, implementation_root: Path | None = None) -> dict[str, obj
             for change in sanitize_git_snapshot(temporary_stage / snapshot_name):
                 change["path"] = f"{snapshot_name}/{change['path']}"
                 portability_changes.append(change)
+        portability_changes.extend(relocate_image_invariant_test(temporary_stage))
 
         (temporary_stage / "README.md").write_text(
             release_readme(commit, journal_commit), encoding="utf-8"

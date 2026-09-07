@@ -67,6 +67,7 @@ def main():
                  release.PHYSICAL_RUNTIME_DIRECTORY, release.IMAGE_RUNTIME_DIRECTORY):
         for change in release.sanitize_git_snapshot(stage/part):
             change['path'] = part+'/'+change['path'];changes.append(change)
+    changes.extend(release.relocate_image_invariant_test(stage))
     release.write_portability_manifest(stage/'PORTABILITY_PATCHES.tsv',changes)
     release.write_released_source_hashes(stage,origins)
     (stage/'README.md').write_text('DRAFT PREVIEW: ARTICLE FILES ARE NOT A COMMITTED RELEASE.\n\n'+release.release_readme(commit,paper_commit))

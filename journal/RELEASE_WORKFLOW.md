@@ -57,6 +57,12 @@ The software README uses `code/release_noise/restore_source_data.py` to restore 
 
 Canonical code/data manifests retain their original hashes. The audit helper `release_hashes.py` accepts a changed portable copy only when its original hash matches that canonical expectation, its actual bytes match the released hash, and its declared transformation provenance verifies. Software links additionally check every step of `PORTABILITY_PATCHES.tsv`; no undeclared source changes are accepted. Removed private run-directory columns cannot be reconstructed from the released numeric tables. Checkpoint-level reanalysis therefore needs separately supplied or newly generated run records.
 
+The released MNIST development-invariant test resolves each configuration from
+the restored study directory and its unchanged condition index. Its frozen
+repository source still records the historical path lookup. This test-only
+relocation is recorded for both exported copies in `PORTABILITY_PATCHES.tsv`;
+the configurations, assertions and scientific training code are unchanged.
+
 
 ## Historical physical-depth runtime
 
