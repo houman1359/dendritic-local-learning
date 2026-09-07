@@ -1,0 +1,63 @@
+{
+  "original_numpy": "2.2.6",
+  "portable_numpy": "1.26.4",
+  "seed": 2101,
+  "excluded_from_paper_outcomes": true,
+  "comparisons": [
+    {
+      "case": "opponent_full_primary",
+      "task": "aligned_strong",
+      "maximum_final_theta_absolute_difference": 3.730349362740526e-14,
+      "maximum_best_theta_absolute_difference": 3.730349362740526e-14
+    },
+    {
+      "case": "opponent_full_primary",
+      "task": "opposed_strong",
+      "maximum_final_theta_absolute_difference": 1.7763568394002505e-14,
+      "maximum_best_theta_absolute_difference": 1.7763568394002505e-14
+    },
+    {
+      "case": "opponent_full_primary",
+      "maximum_selected_test_nmse_absolute_difference": 5.551115123125783e-16,
+      "n_matched_conditions": 16
+    },
+    {
+      "case": "opponent_full_extension",
+      "task": "aligned_strong",
+      "maximum_final_theta_absolute_difference": 0.030590749555345242,
+      "maximum_best_theta_absolute_difference": 0.030590749555345242
+    },
+    {
+      "case": "opponent_full_extension",
+      "task": "opposed_strong",
+      "maximum_final_theta_absolute_difference": 0.042729780185751576,
+      "maximum_best_theta_absolute_difference": 0.3922000225269735
+    },
+    {
+      "case": "opponent_full_extension",
+      "maximum_selected_test_nmse_absolute_difference": 2.789077624690198e-08,
+      "n_matched_conditions": 16
+    }
+  ],
+  "extended_selected_checkpoint_changes": [
+    {
+      "task": "opposed_strong",
+      "optimizer": "adam",
+      "rule": "exact",
+      "best_step_original": 12288,
+      "best_step_portable": 16384,
+      "test_nmse_original": 1.8875049520974342e-08,
+      "test_nmse_portable": 3.349504589199679e-08
+    },
+    {
+      "task": "opposed_strong",
+      "optimizer": "adam",
+      "rule": "ancestry_three_oracle",
+      "best_step_original": 8192,
+      "best_step_portable": 16384,
+      "test_nmse_original": 1.7806242652934284e-08,
+      "test_nmse_portable": 3.007480774320325e-09
+    }
+  ],
+  "scope": "Both environments verify the same source/protocol; small floating-point differences can accumulate and alter the best validation checkpoint. These replays are excluded from scientific outcome counts."
+}

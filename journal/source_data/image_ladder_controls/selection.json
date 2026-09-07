@@ -1,0 +1,67 @@
+{
+  "created_utc": "2026-09-07T02:42:43.159108+00:00",
+  "criterion": "Only development validation loss",
+  "protocol_sha256": "bc4922ede5a74bf2e1edc740d2e6dd0aeb7eb1b750a735bd8a91cd427c64e717",
+  "selected": [
+    {
+      "architecture": "shunting",
+      "arm": "strict_scalar",
+      "development_validation_loss": 0.3987266604635451,
+      "multiplier": 3.0
+    },
+    {
+      "architecture": "shunting",
+      "arm": "neuron_shared",
+      "development_validation_loss": 0.0981555319759581,
+      "multiplier": 1.0
+    },
+    {
+      "architecture": "shunting",
+      "arm": "subtree_k3",
+      "development_validation_loss": 0.09493294791711702,
+      "multiplier": 3.0
+    },
+    {
+      "architecture": "shunting",
+      "arm": "exact_path",
+      "development_validation_loss": 0.09432339021894666,
+      "multiplier": 1.0
+    },
+    {
+      "architecture": "shunting",
+      "arm": "decoder_only",
+      "development_validation_loss": 0.9155966355005901,
+      "multiplier": 3.0
+    },
+    {
+      "architecture": "additive",
+      "arm": "strict_scalar",
+      "development_validation_loss": 0.3601477671199375,
+      "multiplier": 3.0
+    },
+    {
+      "architecture": "additive",
+      "arm": "neuron_shared",
+      "development_validation_loss": 0.0961145440671179,
+      "multiplier": 0.3
+    },
+    {
+      "architecture": "additive",
+      "arm": "subtree_k3",
+      "development_validation_loss": 0.09096555354860093,
+      "multiplier": 3.0
+    },
+    {
+      "architecture": "additive",
+      "arm": "exact_path",
+      "development_validation_loss": 0.09045413968960443,
+      "multiplier": 1.0
+    },
+    {
+      "architecture": "additive",
+      "arm": "decoder_only",
+      "development_validation_loss": 0.36354701974656844,
+      "multiplier": 1.0
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "configs_verified": 310,
+  "protocol_original_sha256": "bc4922ede5a74bf2e1edc740d2e6dd0aeb7eb1b750a735bd8a91cd427c64e717",
+  "runtime_commit": "6c1aaa25abd056c417842e1c46378b65d036f6a7",
+  "runtime_files": 502,
+  "source_manifest_sha256": "f568f0ad20dc9e91d83f5e04f9a6651c3a6aca732578c5c54fe1be39877d4a0b",
+  "status": "passed",
+  "scope": "Partial protocol/configuration export and excluded 3-epoch canaries; full Source Data and scientific endpoint replay remain separate",
+  "canaries": [
+    {
+      "rule": "subtree_k3",
+      "architecture": "shunting",
+      "runtime_sources_verified": 502,
+      "executed_historical_files": 374,
+      "initial_model_identical": true,
+      "final_core_identical": true,
+      "max_epoch_loss_differences": {
+        "train_loss": 0.0,
+        "valid_loss": 0.0,
+        "best_loss": 0.0
+      },
+      "elapsed_seconds": 91.97478486900218,
+      "replay_audit_sha256": "9d1df48592097e6b0c358fbdbf656b301778d725ae5cfbffb6cb243f4f8edecc"
+    },
+    {
+      "rule": "projected_k1",
+      "architecture": "additive",
+      "runtime_sources_verified": 502,
+      "executed_historical_files": 374,
+      "initial_model_identical": true,
+      "final_core_identical": true,
+      "max_epoch_loss_differences": {
+        "train_loss": 0.0,
+        "valid_loss": 0.0,
+        "best_loss": 0.0
+      },
+      "elapsed_seconds": 92.0383285251446,
+      "replay_audit_sha256": "66b723b863ffa4b4d46d20711977297c4239564f2803fa03544c15e2ebe4beee"
+    }
+  ],
+  "slurm_job": "44928361",
+  "preview_untouched": true,
+  "preview_original_files_reverified": 2888,
+  "preview_extra_files": 0
+}

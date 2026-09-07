@@ -1,0 +1,17 @@
+task,optimizer,rule,rate,validation_nmse,original_grid
+aligned_strong,adam,ancestry_three_oracle,0.1,2.4058049512129427e-07,False
+aligned_strong,adam,calibrated_broadcast,0.1,0.00015278712827982297,False
+aligned_strong,adam,exact,0.01,2.491249657119414e-07,True
+aligned_strong,adam,unit_broadcast,0.1,0.0001527858557868209,False
+aligned_strong,sgd,ancestry_three_oracle,3.0,1.642548880464987e-05,False
+aligned_strong,sgd,calibrated_broadcast,3.0,0.00017081380337689143,False
+aligned_strong,sgd,exact,3.0,2.1889707527888254e-05,False
+aligned_strong,sgd,unit_broadcast,1.0,0.00019727229412632832,False
+opposed_strong,adam,ancestry_three_oracle,0.03,1.1519039021793775e-07,True
+opposed_strong,adam,calibrated_broadcast,0.003,0.7197760802405564,True
+opposed_strong,adam,exact,0.03,1.0456087910255338e-07,True
+opposed_strong,adam,unit_broadcast,0.003,0.7197761006794803,True
+opposed_strong,sgd,ancestry_three_oracle,0.3,0.00014592909168483336,True
+opposed_strong,sgd,calibrated_broadcast,0.3,0.7699247009779345,True
+opposed_strong,sgd,exact,1.0,0.000143213252475626,False
+opposed_strong,sgd,unit_broadcast,0.1,0.7172426605864177,True

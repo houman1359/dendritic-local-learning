@@ -1,0 +1,15 @@
+{
+  "all_primary_conditions_extended": true,
+  "completed_utc": "2026-09-07T02:08:55.248462+00:00",
+  "continued_optimizer_and_minibatch_state": true,
+  "files_sha256": {
+    "seed_2115_aligned_strong_states.npz": "8dce72e2096a12426f6e80cadaab0331cb218b6b17422fe57639178e3043db2c",
+    "seed_2115_curves.csv": "273fdb5e523ec99408033eb3483dfa1e6b2c0232e07048ee199007ec2e4681a0",
+    "seed_2115_diagnostics.csv": "d9f6b8a4807d75c612639dcf2cbdbe0e414d15c0d41fcb55ec191fee29d652b2",
+    "seed_2115_endpoints.csv": "3edd066d5f4a0b9355dd82d57d5f4547e76ab106b648580bff3db1ef47f5653f",
+    "seed_2115_opposed_strong_states.npz": "7a8c0ef6ac83ceac8585417cdd4b02db3a7471d61330a3e56d59f32e5ab406db"
+  },
+  "primary_audit_sha256": "2270987b8149055ef1ac74ae2bb05d505213a5ca0120c616793ab5395b9448cc",
+  "script_sha256": "3de5cff8b08303ea00587a659556b04101f5b7e1b2a7f9e4842a80561267664c",
+  "seed": 2115
+}

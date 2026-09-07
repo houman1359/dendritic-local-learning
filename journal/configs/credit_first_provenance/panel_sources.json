@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "layout": "credit_first_eight_main_47_supplementary",
+  "layout": "credit_first_followup",
   "physical_figure_pending": false,
   "retained_template": "configs/credit_first_provenance/retained_supplementary.tsv",
   "assets": [
@@ -9,8 +9,8 @@
       "path": "figures/main/figure_01.pdf",
       "generator": "scripts/credit_first_figures/build_framework.py",
       "component": "figures/components/credit_first_figure_01.pdf",
-      "panel": "a-f",
-      "notes": ""
+      "panel": "a-e",
+      "notes": "A framework; B actual 12-site K1/K3/K12 dictionaries; C-D complete fresh six-rule MNIST cohort (10 paired seeds); E separate legacy DFA/CIFAR controls (15/20 seeds)."
     },
     {
       "figure": "fig2",
@@ -39,30 +39,38 @@
     {
       "figure": "fig5",
       "path": "figures/main/figure_05.pdf",
+      "generator": "scripts/conductance_credit_demand/build_opponent_figure.py",
+      "component": "source_data/conductance_credit_demand/opponent/figures/conductance_opponent_credit_native.pdf",
+      "panel": "a-f",
+      "notes": "Context-dependent opposing branch tuning; all four credit rules and two optimizers retained."
+    },
+    {
+      "figure": "fig6",
+      "path": "figures/main/figure_06.pdf",
       "generator": "scripts/physical_depth_budget/build_main_figure5.py",
       "component": "source_data/physical_depth_budget/figure/figure5_physical_depth_budget.pdf",
       "panel": "a-c",
       "notes": "Original optimizer-by-depth reference (A), all 60 extended validation trajectories (B), and three paired credit/optimizer accuracy contrasts at two budgets (C); depth contrast retained in supporting tables"
     },
     {
-      "figure": "fig6",
-      "path": "figures/main/figure_06.pdf",
+      "figure": "fig7",
+      "path": "figures/main/figure_07.pdf",
       "generator": "scripts/credit_first_figures/build_anatomy.py",
       "component": "figures/components/credit_first_figure_06.pdf",
       "panel": "a-e",
       "notes": ""
     },
     {
-      "figure": "fig7",
-      "path": "figures/main/figure_07.pdf",
+      "figure": "fig8",
+      "path": "figures/main/figure_08.pdf",
       "generator": "scripts/shunt_ancestry_gain/build_figure.py",
       "component": "source_data/shunt_ancestry_gain/figures/shunt_ancestry_gain_native.pdf",
       "panel": "a-e",
       "notes": ""
     },
     {
-      "figure": "fig8",
-      "path": "figures/main/figure_08.pdf",
+      "figure": "fig9",
+      "path": "figures/main/figure_09.pdf",
       "generator": "scripts/credit_first_figures/build_measured.py",
       "component": "figures/components/credit_first_figure_08.pdf",
       "panel": "a-e",
@@ -83,6 +91,46 @@
       "component": "source_data/shunt_ancestry_gain/figures/weak_channel_linearization_check.pdf",
       "panel": "a-b",
       "notes": "Fixed baseline Jacobian weak-channel linearization check"
+    },
+    {
+      "figure": "figS48",
+      "path": "figures/supplementary/figure_S48_normalized_shunt_dose.pdf",
+      "generator": "scripts/shunt_ancestry_gain/build_figure.py",
+      "component": "source_data/shunt_ancestry_gain/figures/normalized_passive_dose.pdf",
+      "panel": "plot",
+      "notes": "Unchanged normalized passive dose curve, moved from main shunt panel C to make room for signed physical-calibration effects."
+    },
+    {
+      "figure": "figS49",
+      "path": "figures/supplementary/figure_S49_mnist_dictionary_controls.pdf",
+      "generator": "scripts/image_ladder_controls/figure.py",
+      "component": "source_data/image_ladder_controls/figures/image_ladder_controls_native.pdf",
+      "panel": "a-f",
+      "notes": "Six-rule MNIST development rate screen, complete fresh paired comparisons and coordinate-specific capture."
+    },
+    {
+      "figure": "figS50",
+      "path": "figures/supplementary/figure_S50_conductance_small_effect.pdf",
+      "generator": "scripts/conductance_credit_demand/build_supplementary.py",
+      "component": "source_data/conductance_credit_demand/figures/supplement_first_conductance.pdf",
+      "panel": "a-d",
+      "notes": "All first-study results and opponent-tuning optimization/parameter-range controls retained."
+    },
+    {
+      "figure": "figS51",
+      "path": "figures/supplementary/figure_S51_conductance_robustness.pdf",
+      "generator": "scripts/conductance_credit_demand/build_supplementary.py",
+      "component": "source_data/conductance_credit_demand/opponent/supplementary_figures/supplement_opponent_controls.pdf",
+      "panel": "a-d",
+      "notes": "All first-study results and opponent-tuning optimization/parameter-range controls retained."
+    },
+    {
+      "figure": "figS52",
+      "path": "figures/supplementary/figure_S52_conductance_expanded_rates.pdf",
+      "generator": "scripts/conductance_credit_demand/report_expanded_rates.py",
+      "component": "source_data/conductance_credit_demand/opponent/expanded_rates/figure_expanded_rates.pdf",
+      "panel": "a-d",
+      "notes": "Rendering-only command uses --plot-only; complete 288-fit development rate screen at matched 16,384-update budget."
     }
   ],
   "records": [
@@ -93,79 +141,142 @@
       "role": "schematic source",
       "generator": "",
       "replication_unit": "not applicable",
-      "notes": "panel_factorization_readable: illustrative chain rule, no measured data"
+      "notes": "panel_factorization_readable: directed-tree eligibility and exact path example; no measured data"
     },
     {
       "figure": "fig1",
-      "panel": "b-c",
+      "panel": "b",
       "path": "scripts/credit_first_figures/build_framework.py",
       "role": "schematic source",
       "generator": "",
       "replication_unit": "not applicable",
-      "notes": "Six-site dictionaries and between-neuron feedback diagram, no fitted numerical data"
+      "notes": "Actual [3,3] tree: three proximal plus nine distal sites, with soma outside the dictionaries; K1/K3 oracle activation-error projection, K12 resolved span"
     },
     {
       "figure": "fig1",
       "panel": "b",
       "path": "source_data/credit_first_figures/figure_01_illustrative_dictionaries.npz",
-      "role": "illustrative matrix",
+      "role": "dictionary matrices",
       "generator": "scripts/credit_first_figures/build_framework.py",
       "replication_unit": "not applicable",
-      "notes": ""
+      "notes": "Exact 12x1, 12x3 and 12x12 matrices; display row permutation groups each proximal site with its three descendants"
+    },
+    {
+      "figure": "fig1",
+      "panel": "c",
+      "path": "source_data/image_ladder_controls/summaries/condition_summary_six_rules.csv",
+      "role": "numerical source",
+      "generator": "",
+      "replication_unit": "10 fresh paired training seeds per architecture",
+      "notes": "Selected-rate test-accuracy means and 95% bootstrap intervals for all six rules; source fractions converted to percentages"
+    },
+    {
+      "figure": "fig1",
+      "panel": "c-d",
+      "path": "source_data/image_ladder_controls/summaries/fresh_analysis_rows_six_rules.csv",
+      "role": "numerical source",
+      "generator": "",
+      "replication_unit": "10 fresh paired training seeds per architecture",
+      "notes": "Selected-rate seed outcomes for plotted accuracy points and paired resolution differences; epochs, initial pairing and unchanged decoder core independently checked by builder"
     },
     {
       "figure": "fig1",
       "panel": "d",
-      "path": "source_data/mnist_feedback_ladder/seed_outcomes.csv",
+      "path": "source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv",
       "role": "numerical source",
       "generator": "",
-      "replication_unit": "paired training seed (15 per architecture)",
-      "notes": ""
+      "replication_unit": "10 fresh paired training seeds per architecture",
+      "notes": "Selected-rate K3 minus projected K1 and exact path minus K3; source accuracy fractions converted to percentage points"
     },
     {
       "figure": "fig1",
-      "panel": "d",
-      "path": "source_data/mnist_feedback_ladder/condition_summary.csv",
-      "role": "numerical source",
-      "generator": "",
-      "replication_unit": "paired training seed (15 per architecture)",
-      "notes": ""
-    },
-    {
-      "figure": "fig1",
-      "panel": "e-f",
-      "path": "source_data/mnist_feedback_ladder/paired_contrasts.csv",
-      "role": "numerical source",
-      "generator": "",
-      "replication_unit": "paired training seed (15 MNIST; 20 CIFAR-10)",
-      "notes": ""
-    },
-    {
-      "figure": "fig1",
-      "panel": "e-f",
+      "panel": "e",
       "path": "source_data/mnist_between_within_factorial/paired_contrasts.csv",
       "role": "numerical source",
       "generator": "",
-      "replication_unit": "paired training seed (15 MNIST; 20 CIFAR-10)",
-      "notes": ""
+      "replication_unit": "15 legacy paired MNIST seeds per architecture",
+      "notes": "DFA exact-path-minus-neuron contrasts only; this legacy cohort is separate from fresh panels C-D"
     },
     {
       "figure": "fig1",
-      "panel": "e-f",
+      "panel": "e",
       "path": "source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv",
       "role": "numerical source",
       "generator": "",
-      "replication_unit": "paired training seed (15 MNIST; 20 CIFAR-10)",
-      "notes": ""
+      "replication_unit": "20 legacy paired CIFAR-10 seeds",
+      "notes": "Readout-derived exact-path-minus-neuron contrast only; separate raw-additive cohort"
     },
     {
       "figure": "fig1",
-      "panel": "e-f",
+      "panel": "e",
       "path": "source_data/credit_first_figures/figure_01_contrasts.csv",
-      "role": "numerical source",
+      "role": "plotted numerical source",
+      "generator": "scripts/credit_first_figures/build_framework.py",
+      "replication_unit": "15 legacy MNIST / 20 legacy CIFAR-10 paired seeds",
+      "notes": "Only the three legacy contrasts visible in panel E; retains source table and source contrast identifiers"
+    },
+    {
+      "figure": "fig1",
+      "panel": "c-e",
+      "path": "source_data/credit_first_figures/figure_01_six_arm_source.csv",
+      "role": "plotted numerical source",
+      "generator": "scripts/credit_first_figures/build_framework.py",
+      "replication_unit": "Per-source paired cohorts; fresh and legacy kept separate",
+      "notes": "Fresh C/D condition and paired summaries plus separately labeled legacy E rows, copied without numerical changes"
+    },
+    {
+      "figure": "fig1",
+      "panel": "c-d",
+      "path": "source_data/credit_first_figures/figure_01_six_arm_seed_source.csv",
+      "role": "plotted seed source",
+      "generator": "scripts/credit_first_figures/build_framework.py",
+      "replication_unit": "10 fresh paired training seeds per architecture",
+      "notes": "All 120 selected-rate arm outcomes; 12 arm means and four paired-contrast means independently recomputed as builder assertions"
+    },
+    {
+      "figure": "fig1",
+      "panel": "a-e",
+      "path": "source_data/credit_first_figures/figure_01_sources.json",
+      "role": "figure provenance",
+      "generator": "scripts/credit_first_figures/build_framework.py",
+      "replication_unit": "not applicable",
+      "notes": "Panel mapping, source SHA-256 identities, geometry findings and declared source units"
+    },
+    {
+      "figure": "fig1",
+      "panel": "c-d",
+      "path": "source_data/image_ladder_controls/protocol.json",
+      "role": "study design and selection",
       "generator": "",
-      "replication_unit": "paired training seed (15 MNIST; 20 CIFAR-10)",
-      "notes": ""
+      "replication_unit": "3 development seeds per architecture/rule/rate",
+      "notes": "Frozen base protocol or projected-K1 addendum; validation-based selection precedes fresh outcomes"
+    },
+    {
+      "figure": "fig1",
+      "panel": "c-d",
+      "path": "source_data/image_ladder_controls/selection.json",
+      "role": "study design and selection",
+      "generator": "",
+      "replication_unit": "3 development seeds per architecture/rule/rate",
+      "notes": "Frozen base protocol or projected-K1 addendum; validation-based selection precedes fresh outcomes"
+    },
+    {
+      "figure": "fig1",
+      "panel": "c-d",
+      "path": "source_data/image_ladder_controls/projected_k1/protocol.json",
+      "role": "study design and selection",
+      "generator": "",
+      "replication_unit": "3 development seeds per architecture/rule/rate",
+      "notes": "Frozen base protocol or projected-K1 addendum; validation-based selection precedes fresh outcomes"
+    },
+    {
+      "figure": "fig1",
+      "panel": "c-d",
+      "path": "source_data/image_ladder_controls/projected_k1/selection.json",
+      "role": "study design and selection",
+      "generator": "",
+      "replication_unit": "3 development seeds per architecture/rule/rate",
+      "notes": "Frozen base protocol or projected-K1 addendum; validation-based selection precedes fresh outcomes"
     },
     {
       "figure": "fig2",
@@ -357,7 +468,7 @@
       "notes": ""
     },
     {
-      "figure": "fig6",
+      "figure": "fig7",
       "panel": "a",
       "path": "source_data/figure3/segment_metrics.csv",
       "role": "measured geometry",
@@ -366,7 +477,7 @@
       "notes": "Median-size original cohort example, root864691135409937097; no response-outcome selection"
     },
     {
-      "figure": "fig6",
+      "figure": "fig7",
       "panel": "b-c,e",
       "path": "source_data/anatomy_commonmode/v661/cell_method_summary.csv",
       "role": "numerical source",
@@ -375,7 +486,7 @@
       "notes": ""
     },
     {
-      "figure": "fig6",
+      "figure": "fig7",
       "panel": "b-c,e",
       "path": "source_data/anatomy_commonmode/v661/summary.json",
       "role": "numerical source",
@@ -384,7 +495,7 @@
       "notes": ""
     },
     {
-      "figure": "fig6",
+      "figure": "fig7",
       "panel": "d",
       "path": "source_data/anatomy_commonmode/original8/cell_method_summary.csv",
       "role": "numerical source",
@@ -393,7 +504,7 @@
       "notes": ""
     },
     {
-      "figure": "fig6",
+      "figure": "fig7",
       "panel": "d",
       "path": "source_data/anatomy_commonmode/v661/cell_method_summary.csv",
       "role": "numerical source",
@@ -402,7 +513,7 @@
       "notes": ""
     },
     {
-      "figure": "fig6",
+      "figure": "fig7",
       "panel": "d",
       "path": "source_data/anatomy_commonmode/pinky/cell_method_summary.csv",
       "role": "numerical source",
@@ -411,7 +522,7 @@
       "notes": ""
     },
     {
-      "figure": "fig6",
+      "figure": "fig7",
       "panel": "b,e",
       "path": "source_data/credit_first_figures/figure_06_primary_means.csv",
       "role": "plotted numerical export",
@@ -420,7 +531,7 @@
       "notes": ""
     },
     {
-      "figure": "fig6",
+      "figure": "fig7",
       "panel": "c",
       "path": "source_data/credit_first_figures/figure_06_residual_contrasts.csv",
       "role": "plotted numerical export",
@@ -429,7 +540,7 @@
       "notes": ""
     },
     {
-      "figure": "fig6",
+      "figure": "fig7",
       "panel": "d",
       "path": "source_data/credit_first_figures/figure_06_cohort_points.csv",
       "role": "plotted numerical export",
@@ -438,7 +549,7 @@
       "notes": ""
     },
     {
-      "figure": "fig7",
+      "figure": "fig8",
       "panel": "a",
       "path": "scripts/shunt_ancestry_gain/build_figure.py",
       "role": "analytic schematic source",
@@ -447,7 +558,7 @@
       "notes": "Exact baseline-weighted ancestry partition; no estimated gains"
     },
     {
-      "figure": "fig7",
+      "figure": "fig8",
       "panel": "a",
       "path": "scripts/shunt_ancestry_gain/test_partition.py",
       "role": "analytic identity validation",
@@ -456,7 +567,7 @@
       "notes": "Exact baseline-weighted ancestry partition; no estimated gains"
     },
     {
-      "figure": "fig7",
+      "figure": "fig8",
       "panel": "b",
       "path": "source_data/figure4/category_effects.csv",
       "role": "numerical source",
@@ -465,17 +576,17 @@
       "notes": ""
     },
     {
-      "figure": "fig7",
-      "panel": "c",
+      "figure": "figS48",
+      "panel": "plot",
       "path": "source_data/figure4/focal_localization.csv",
       "role": "numerical source",
       "generator": "",
       "replication_unit": "reconstructed cell (8); sites nested",
-      "notes": ""
+      "notes": "Original normalized dose outcome ledger; all eight cells retained."
     },
     {
-      "figure": "fig7",
-      "panel": "d",
+      "figure": "fig8",
+      "panel": "c",
       "path": "source_data/focal_decomposition/cell_shapley.csv",
       "role": "numerical source",
       "generator": "",
@@ -483,7 +594,7 @@
       "notes": ""
     },
     {
-      "figure": "fig7",
+      "figure": "fig8",
       "panel": "e",
       "path": "source_data/physical_cable_sensitivity/cell_primary_contrasts.csv",
       "role": "numerical source",
@@ -492,7 +603,7 @@
       "notes": ""
     },
     {
-      "figure": "fig7",
+      "figure": "fig8",
       "panel": "e",
       "path": "source_data/physical_cable_sensitivity/cell_electrotonic_ratios.csv",
       "role": "numerical source",
@@ -501,7 +612,7 @@
       "notes": ""
     },
     {
-      "figure": "fig8",
+      "figure": "fig9",
       "panel": "a",
       "path": "source_data/review_evidence_reanalysis/functional_native_contrasts.csv",
       "role": "numerical source",
@@ -510,7 +621,7 @@
       "notes": ""
     },
     {
-      "figure": "fig8",
+      "figure": "fig9",
       "panel": "a",
       "path": "source_data/review_evidence_reanalysis/functional_native_target_effects.csv",
       "role": "numerical source",
@@ -519,7 +630,7 @@
       "notes": ""
     },
     {
-      "figure": "fig8",
+      "figure": "fig9",
       "panel": "b-c",
       "path": "source_data/figure3/segment_metrics.csv",
       "role": "realized model support",
@@ -528,7 +639,7 @@
       "notes": ""
     },
     {
-      "figure": "fig8",
+      "figure": "fig9",
       "panel": "b-c",
       "path": "source_data/fulltree_boundary/output/dictionary_and_validation_metadata.jsonl",
       "role": "realized model support",
@@ -537,7 +648,7 @@
       "notes": ""
     },
     {
-      "figure": "fig8",
+      "figure": "fig9",
       "panel": "b-c",
       "path": "source_data/credit_first_figures/figure_08_support.csv",
       "role": "realized model support",
@@ -546,7 +657,7 @@
       "notes": ""
     },
     {
-      "figure": "fig8",
+      "figure": "fig9",
       "panel": "b-c",
       "path": "source_data/credit_first_figures/figure_08_actual_support.npz",
       "role": "realized model support",
@@ -555,7 +666,7 @@
       "notes": ""
     },
     {
-      "figure": "fig8",
+      "figure": "fig9",
       "panel": "d",
       "path": "source_data/review_response_baselines/target_metrics.csv",
       "role": "numerical source",
@@ -564,7 +675,7 @@
       "notes": ""
     },
     {
-      "figure": "fig8",
+      "figure": "fig9",
       "panel": "d",
       "path": "source_data/credit_first_figures/figure_08_prediction_summary.csv",
       "role": "numerical source",
@@ -573,7 +684,7 @@
       "notes": ""
     },
     {
-      "figure": "fig8",
+      "figure": "fig9",
       "panel": "e",
       "path": "source_data/fulltree_within_span_oracle/cell_metrics.csv",
       "role": "numerical source",
@@ -582,7 +693,7 @@
       "notes": ""
     },
     {
-      "figure": "fig8",
+      "figure": "fig9",
       "panel": "e",
       "path": "source_data/fulltree_within_span_oracle/condition_summary.csv",
       "role": "numerical source",
@@ -735,7 +846,7 @@
       "notes": "Retrospective actual-update utility, not prospective selection"
     },
     {
-      "figure": "fig5",
+      "figure": "fig6",
       "panel": "a",
       "path": "source_data/point_dendrite_credit_controls/condition_summary.csv",
       "role": "numerical source",
@@ -744,7 +855,7 @@
       "notes": "Original depth curves, ten seeds per condition"
     },
     {
-      "figure": "fig5",
+      "figure": "fig6",
       "panel": "b",
       "path": "source_data/physical_depth_budget/canonical/extension_validation_trajectories.csv",
       "role": "numerical source",
@@ -753,7 +864,7 @@
       "notes": "All 60 new fits; stopped trajectories explicitly carried forward"
     },
     {
-      "figure": "fig5",
+      "figure": "fig6",
       "panel": "c",
       "path": "source_data/physical_depth_budget/canonical/extension_paired_contrasts.csv",
       "role": "numerical source",
@@ -762,7 +873,7 @@
       "notes": "Panel C selects localca_path_minus_shared, bp_exact_minus_broadcast, and broadcast_bp_minus_localca_recipe at budgets 180 and 600; all ten paired seed blocks retained. Depth and secondary loss contrasts are supporting evidence, not additional displayed effects."
     },
     {
-      "figure": "fig5",
+      "figure": "fig6",
       "panel": "c",
       "path": "source_data/physical_depth_budget/canonical/extension_paired_seed_contrasts.csv",
       "role": "numerical source",
@@ -805,6 +916,141 @@
       "generator": "",
       "replication_unit": "historical training cohort; individual checkpoint records support generator identity, not new independent learning outcomes",
       "notes": "Supports Supplementary Table S18 and the qualified task definitions for clean, prospective and inherited noise cohorts. Distinguishes confirmed noisy-line images from intended projected-noise MNIST; unresolved executed generators remain unresolved. No plotted-panel association is inferred."
+    },
+    {
+      "figure": "fig8",
+      "panel": "d",
+      "path": "source_data/shunt_ancestry_gain/signed_calibration/signed_category_effects.csv",
+      "role": "signed physical-calibration outcome",
+      "generator": "scripts/shunt_ancestry_gain/analyze_signed_calibration.py",
+      "replication_unit": "reconstructed cell,8original and45disjoint; focal sites nested",
+      "notes": "Two membrane-resistance endpoints; same archived focal sites; absolute metrics reproduce frozen originals."
+    },
+    {
+      "figure": "fig8",
+      "panel": "d",
+      "path": "source_data/shunt_ancestry_gain/signed_calibration/signed_cell_effects.csv",
+      "role": "signed physical-calibration outcome",
+      "generator": "scripts/shunt_ancestry_gain/analyze_signed_calibration.py",
+      "replication_unit": "reconstructed cell,8original and45disjoint; focal sites nested",
+      "notes": "Two membrane-resistance endpoints; same archived focal sites; absolute metrics reproduce frozen originals."
+    },
+    {
+      "figure": "fig8",
+      "panel": "d",
+      "path": "source_data/shunt_ancestry_gain/signed_calibration/signed_cohort_summary.csv",
+      "role": "signed physical-calibration outcome",
+      "generator": "scripts/shunt_ancestry_gain/analyze_signed_calibration.py",
+      "replication_unit": "reconstructed cell,8original and45disjoint; focal sites nested",
+      "notes": "Two membrane-resistance endpoints; same archived focal sites; absolute metrics reproduce frozen originals."
+    },
+    {
+      "figure": "fig5",
+      "panel": "b",
+      "path": "source_data/conductance_credit_demand/opponent/figures/nominal_teacher_tuning.csv",
+      "role": "illustrative nominal teacher curves",
+      "generator": "scripts/conductance_credit_demand/build_opponent_figure.py",
+      "replication_unit": "20 paired fresh seed blocks; development kept separate",
+      "notes": "Curves are fixed-checkpoint test NMSE; contrasts use validation-selected states within each budget. Oracle three-pattern coefficients access the exact field."
+    },
+    {
+      "figure": "fig5",
+      "panel": "c-f",
+      "path": "source_data/conductance_credit_demand/opponent/figures/figure_source.csv",
+      "role": "plotted numerical summaries",
+      "generator": "scripts/conductance_credit_demand/build_opponent_figure.py",
+      "replication_unit": "20 paired fresh seed blocks; development kept separate",
+      "notes": "Curves are fixed-checkpoint test NMSE; contrasts use validation-selected states within each budget. Oracle three-pattern coefficients access the exact field."
+    },
+    {
+      "figure": "fig5",
+      "panel": "c-d",
+      "path": "source_data/conductance_credit_demand/opponent/summaries/all_curves.csv",
+      "role": "all development, fresh and extended checkpoint outcomes",
+      "generator": "scripts/conductance_credit_demand/build_opponent_figure.py",
+      "replication_unit": "20 paired fresh seed blocks; development kept separate",
+      "notes": "Curves are fixed-checkpoint test NMSE; contrasts use validation-selected states within each budget. Oracle three-pattern coefficients access the exact field."
+    },
+    {
+      "figure": "fig5",
+      "panel": "e",
+      "path": "source_data/conductance_credit_demand/opponent/summaries/paired_contrasts.csv",
+      "role": "paired task-by-credit contrasts",
+      "generator": "scripts/conductance_credit_demand/build_opponent_figure.py",
+      "replication_unit": "20 paired fresh seed blocks; development kept separate",
+      "notes": "Curves are fixed-checkpoint test NMSE; contrasts use validation-selected states within each budget. Oracle three-pattern coefficients access the exact field."
+    },
+    {
+      "figure": "fig5",
+      "panel": "e",
+      "path": "source_data/conductance_credit_demand/opponent/summaries/paired_seed_contrasts.csv",
+      "role": "individual paired seed differences",
+      "generator": "scripts/conductance_credit_demand/build_opponent_figure.py",
+      "replication_unit": "20 paired fresh seed blocks; development kept separate",
+      "notes": "Curves are fixed-checkpoint test NMSE; contrasts use validation-selected states within each budget. Oracle three-pattern coefficients access the exact field."
+    },
+    {
+      "figure": "fig5",
+      "panel": "f",
+      "path": "source_data/conductance_credit_demand/opponent/summaries/context_gradient_summary.csv",
+      "role": "common-state conditional-gradient diagnostic",
+      "generator": "scripts/conductance_credit_demand/build_opponent_figure.py",
+      "replication_unit": "20 paired fresh seed blocks; development kept separate",
+      "notes": "Curves are fixed-checkpoint test NMSE; contrasts use validation-selected states within each budget. Oracle three-pattern coefficients access the exact field."
+    },
+    {
+      "figure": "fig5",
+      "panel": "a-b",
+      "path": "scripts/conductance_credit_demand/opponent_model.py",
+      "role": "explicit directed conductance equation and task generator",
+      "generator": "",
+      "replication_unit": "not applicable",
+      "notes": "Seven compartments and24positiveplasticconductances; nominal diagrams do not show additional experiments."
+    },
+    {
+      "figure": "figS50",
+      "panel": "a-d",
+      "path": "source_data/conductance_credit_demand/figures/supplement_first_conductance_source.csv",
+      "role": "plotted supplementary numerical outcomes",
+      "generator": "scripts/conductance_credit_demand/build_supplementary.py",
+      "replication_unit": "20 paired fresh seed blocks; three development seeds separate",
+      "notes": "Fixed-checkpoint curves and validation-selected endpoints distinguished in caption; parameter-bound replays reuse original seeds."
+    },
+    {
+      "figure": "figS51",
+      "panel": "a-d",
+      "path": "source_data/conductance_credit_demand/opponent/supplementary_figures/supplement_opponent_controls_source.csv",
+      "role": "plotted supplementary numerical outcomes",
+      "generator": "scripts/conductance_credit_demand/build_supplementary.py",
+      "replication_unit": "20 paired fresh seed blocks; three development seeds separate",
+      "notes": "Fixed-checkpoint curves and validation-selected endpoints distinguished in caption; parameter-bound replays reuse original seeds."
+    },
+    {
+      "figure": "figS49",
+      "panel": "a-f",
+      "path": "source_data/image_ladder_controls/figures/figure_source.csv",
+      "role": "plotted supplementary numerical outcomes",
+      "generator": "scripts/image_ladder_controls/figure.py",
+      "replication_unit": "10 paired fresh seeds per architecture; three development seeds separate",
+      "notes": "Selected and common rates reuse coincident fits; projection coefficients are oracle activation-space errors; capture checkpoints are not extra training replicates."
+    },
+    {
+      "figure": "figS52",
+      "panel": "a-d",
+      "path": "source_data/conductance_credit_demand/opponent/expanded_rates/figure_expanded_rates_source.csv",
+      "role": "plotted supplementary numerical outcomes",
+      "generator": "scripts/conductance_credit_demand/report_expanded_rates.py",
+      "replication_unit": "three reused original development seeds, 288 matched-budget fits",
+      "notes": "Selection uses validation only; both separately frozen follow-up triggers false; no fresh-block follow-up."
+    },
+    {
+      "figure": "methods",
+      "panel": "Positive-conductance opposed-tuning experiment; pre-outcome study design",
+      "path": "source_data/conductance_credit_demand/opponent/DESIGN.md",
+      "role": "Scientific protocol and rationale",
+      "generator": "",
+      "replication_unit": "not applicable; no new independent observations",
+      "notes": "Pre-outcome second-study specification for the paired aligned/opposed conductance tasks. The released scientific README refers to this design; its inclusion does not add an independent training cohort."
     }
   ],
   "supporting_groups": [
@@ -852,6 +1098,33 @@
       "figure": "methods",
       "panel": "supporting evidence and protocols",
       "replication_unit": "panel-specific; no new independent observations"
+    },
+    {
+      "path": "source_data/conductance_credit_demand",
+      "figure": "methods",
+      "panel": "conductance task protocols, development and complete outcomes",
+      "replication_unit": "paired fresh seed block (20 per separately frozen study); continuations and sensitivity use the same blocks",
+      "excluded_extensions": [
+        ".pt",
+        ".zip",
+        ".tex"
+      ]
+    },
+    {
+      "path": "source_data/image_ladder_controls",
+      "figure": "methods",
+      "panel": "image dictionary, learning-rate and decoder-control protocols and outcomes",
+      "replication_unit": "paired training seed; development, primary fresh and projected-K1 addendum distinct",
+      "exclude_subdirectories": [
+        "runs",
+        "checkpoints",
+        "checkpoint_archive"
+      ],
+      "excluded_extensions": [
+        ".pt",
+        ".zip",
+        ".tex"
+      ]
     }
   ],
   "excluded_extensions": [
@@ -872,7 +1145,9 @@
     "README.md",
     "REPORT.md",
     "PROTOCOL.md",
-    "EXTENSION_REPORT.md"
+    "EXTENSION_REPORT.md",
+    "METHODS.md",
+    "RESULTS.md"
   ],
   "source_hash_manifests": [
     {
@@ -901,6 +1176,13 @@
     {
       "path": "source_data/physical_depth_budget/canonical/compact_manifest.json",
       "source_base": "source_data/physical_depth_budget/canonical"
+    },
+    {
+      "path": "source_data/shunt_ancestry_gain/figures/normalized_passive_dose_provenance.json"
+    },
+    {
+      "path": "source_data/conductance_credit_demand/opponent/figures/figure_provenance.json",
+      "builder": "scripts/conductance_credit_demand/build_opponent_figure.py"
     }
   ],
   "completion_gates": [
@@ -915,6 +1197,55 @@
       "path": "source_data/physical_depth_budget/canonical/compact_manifest.json",
       "required": {
         "status": "complete"
+      }
+    },
+    {
+      "path": "source_data/conductance_credit_demand/opponent/summaries/audit.json",
+      "required": {
+        "all_development_candidates_retained": true,
+        "all_outcome_hashes_pass": true,
+        "outcome_counts": {
+          "development": 288,
+          "extension": 320,
+          "fresh": 320
+        }
+      }
+    },
+    {
+      "path": "source_data/conductance_credit_demand/opponent/bound_sensitivity/summaries/audit.json",
+      "required": {
+        "n_sensitivity_fits": 640,
+        "maximum_replay_parameter_error": 0.0,
+        "all_files_hash_verified": true
+      }
+    },
+    {
+      "path": "source_data/conductance_credit_demand/opponent/expanded_rates/complete_trigger_review.json",
+      "required": {
+        "n_fits": 288,
+        "trigger_followup": false
+      }
+    },
+    {
+      "path": "source_data/image_ladder_controls/summaries/completeness_audit_six_rules.json",
+      "required": {
+        "complete": true,
+        "total_development_fits": 108,
+        "total_fresh_fits": 190,
+        "total_scientific_fits": 298,
+        "excluded_canaries": 12,
+        "all_epochs180": true,
+        "all_initial_model_pairs_identical": true,
+        "decoder_floor_core_unchanged": true
+      }
+    },
+    {
+      "path": "source_data/image_ladder_controls/summaries/capture_audit.json",
+      "required": {
+        "checkpoints": 40,
+        "probe_examples": 2048,
+        "neurons_per_example": 128,
+        "soma_excluded": true
       }
     }
   ]

@@ -1,0 +1,20 @@
+[
+  {
+    "index": 2,
+    "initial_model_identical": true,
+    "final_core_identical": true,
+    "max_train_loss_difference": 0.0,
+    "max_validation_loss_difference": 0.0,
+    "runtime_files_verified": 502,
+    "executed_runtime_files": 374
+  },
+  {
+    "index": 9,
+    "initial_model_identical": true,
+    "final_core_identical": true,
+    "max_train_loss_difference": 0.0,
+    "max_validation_loss_difference": 0.0,
+    "runtime_files_verified": 502,
+    "executed_runtime_files": 374
+  }
+]

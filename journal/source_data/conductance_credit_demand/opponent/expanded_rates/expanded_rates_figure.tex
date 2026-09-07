@@ -1,0 +1,7 @@
+\begin{figure}[p]
+\centering
+\includegraphics[width=\textwidth]{supplementary/figure_S52_conductance_expanded_rates.pdf}
+\caption{\textbf{A wider learning-rate grid preserves the opposed-task broadcast deficit at the tested budget.}
+\textbf{A,B}, Opposed-tuning task with Adam and SGD, respectively. \textbf{C,D}, The corresponding aligned-tuning control. Each point is the mean minimum validation normalized mean squared error (NMSE) across three original development seeds, selected independently for each fit from the declared checkpoints through 16,384 updates. All four rules received the same six-rate search, including fresh runs of the three original rates at this longer budget; all 288 outcomes are retained. Dotted vertical lines mark the originally selected rates (Adam, 0.03; SGD, 0.3), which were also the original grid's upper edges. Unit and calibrated broadcasts nearly coincide under Adam. Neither the added-rate comparison nor the comparison with the originally selected rate reached the pre-outcome follow-up threshold of both 0.01 NMSE and 10\% improvement. The modest within-grid improvement for unit-broadcast SGD was 0.03348 NMSE (4.46\%), so no additional fresh-block fits were triggered. The screen was specified after the original study and bound-sensitivity results; its protocol, addendum, outcomes and development-only selection are supplied with Source Data.}
+\label{fig:supp-conductance-expanded-rates}
+\end{figure}

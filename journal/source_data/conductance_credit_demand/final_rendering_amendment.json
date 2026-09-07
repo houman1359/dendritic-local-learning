@@ -1,0 +1,136 @@
+{
+  "builders": {
+    "scripts/conductance_credit_demand/report_expanded_rates.py": "44d4978c8819972f1ac037019e6b6525e755dd0cbc9d5dfb58289e16800b6a78",
+    "scripts/figure_canvas.py": "498dec86dcac34c9841538fa7b5bf7b7311d468db8fbe0c7a648fbb9508c5e1f"
+  },
+  "created_utc": "2026-09-07T04:33:31.896004+00:00",
+  "current_inventory_refresh": {
+    "added_paths": [
+      "source_data/conductance_credit_demand/FINAL_RENDERING_AMENDMENT.md",
+      "source_data/conductance_credit_demand/final_rendering_amendment.json",
+      "source_data/conductance_credit_demand/study_source_inventory_pre_final_render_20260907.tsv"
+    ],
+    "expected_entries": 1055,
+    "path": "source_data/conductance_credit_demand/study_source_inventory.tsv",
+    "policy": "Preserve every historical entry, update only the four explicitly recorded presentation identities, and add this amendment, its readable note and the preserved pre-render inventory. No scientific source expectation is rewritten."
+  },
+  "current_render_environment": {
+    "matplotlib": "3.10.6",
+    "numpy": "2.2.6",
+    "outputs": {
+      "figure_expanded_rates.pdf": "85b7d72af8ef157eba3877351cd8856909d3d355c9b6ca6e21ed8462e6d372bd",
+      "figure_expanded_rates.png": "37393f29b72b78a44295f27c4933c5a00520cf3da037cc939339f869e4a60ebc",
+      "figure_expanded_rates_provenance.json": "c42b7663643b2483f2ae192a4eef4eb553e8f69f94343ebc896af63460bfbfc8",
+      "figure_expanded_rates_source.csv": "b4305d4033b54c4db89c8395ca7053a922318ef3460b8cb941d0cd6587f6fade"
+    },
+    "pandas": "2.3.3",
+    "pillow": "11.3.0",
+    "python": "3.10.13 | packaged by conda-forge | (main, Oct 26 2023, 18:07:37) [GCC 12.3.0]",
+    "science_inputs_unchanged": 41
+  },
+  "final_release_scope": "This amendment supplements the historical inventory without replacing its expectations. Final software and Source Data inventories identify actual shipped bytes.",
+  "historical_inventory": {
+    "changed_presentation_entries": 4,
+    "path": "source_data/conductance_credit_demand/study_source_inventory_pre_final_render_20260907.tsv",
+    "preserved_unmodified": true,
+    "rows": 1052,
+    "sha256": "e52a4a4ec2eeada26b2ec9efa30711a211e7694c3a376c8cac011aade6407143",
+    "unchanged_entries_at_check": 1048
+  },
+  "historical_render_environment": {
+    "matplotlib": "3.10.9",
+    "numpy": "1.26.4",
+    "outputs": {
+      "figure_expanded_rates.pdf": "462ff78d08bc5a74abf8eda5a7cfc307a7372af1d6505b628f0fd414b6a0bbb0",
+      "figure_expanded_rates.png": "2b0d551442c658b1b69aa4f637eb2ac2c6b6d70ea118af658984ef5764979519",
+      "figure_expanded_rates_provenance.json": "641a268d535518e8117457e176e563e2d99816ec02829c15fb0a9a37a552e738",
+      "figure_expanded_rates_source.csv": "b4305d4033b54c4db89c8395ca7053a922318ef3460b8cb941d0cd6587f6fade"
+    },
+    "pandas": "2.3.3",
+    "pillow": "12.3.0",
+    "python": "3.10.13 | packaged by conda-forge | (main, Oct 26 2023, 18:07:37) [GCC 12.3.0]",
+    "science_inputs_unchanged": 41
+  },
+  "immutable_science_handoff_inventory": {
+    "path": "source_data/conductance_credit_demand/science_handoff_inventory_20260906.tsv",
+    "preserved_unmodified": true,
+    "sha256": "8f2eda1084dfdddc566bb38fef50c9d10f2811f6302993ce3576a112ffe1059f"
+  },
+  "main_figure_5_provenance_amendment": {
+    "current_builder_matches_historical_inventory": true,
+    "current_builder_sha256": "ca607c17c6b4c6205b2885739f091c76a8eaefa53aa977c27beb9886eb1f03f7",
+    "current_provenance_exactly_reproduced_in_private_render": true,
+    "historical_field_level_difference": "Not established: the original provenance JSON was not retained, although its original checksum is preserved. No hypothesis about its prior metadata contents is asserted.",
+    "historical_provenance_bytes_available": false,
+    "interpretation": "The only changed Figure 5 artifact is its provenance record; the current record accurately identifies the unchanged scientific inputs, builder and plotted outputs.",
+    "nine_scientific_source_hashes_verified_unchanged": {
+      "scripts/conductance_credit_demand/opponent_model.py": "8f37a389400a9ac058b0489dc7ae9167b6350dbbc13f8804a78a44e83cfafc56",
+      "source_data/conductance_credit_demand/opponent/protocol.json": "d5078a89c8100f616631b601e32584692ab363a206aa923756df075e77caa387",
+      "source_data/conductance_credit_demand/opponent/selection_freeze.json": "9436196dedc42145e0024a26a0dbd7eab6ed3996eaeb2fe7b6c79e30f71d33bc",
+      "source_data/conductance_credit_demand/opponent/summaries/all_curves.csv": "3c18428dbd0a8ea0d9f148fac817988316001a2f5bee2f48c9eb1956285c28bb",
+      "source_data/conductance_credit_demand/opponent/summaries/audit.json": "8d5d166be80fa0bfbe14dcd436e25b457862510c71123046d5536ed6a774d532",
+      "source_data/conductance_credit_demand/opponent/summaries/context_gradient_audit.json": "956db3a14c53aa0dc80a84bd8402cb312d15b2a0b2d8562884637bf788b48f44",
+      "source_data/conductance_credit_demand/opponent/summaries/context_gradient_summary.csv": "a3bea23ba12a888eb7fb356b4ac3142bbf240518fa8b3d2a28278d91e1b40486",
+      "source_data/conductance_credit_demand/opponent/summaries/paired_contrasts.csv": "5598849d39f284dddca9e3f39b3d7c7eab2babbb9d3d7ac80c1d33adc2b7a6a4",
+      "source_data/conductance_credit_demand/opponent/summaries/paired_seed_contrasts.csv": "f1916a1b3c99f37b5aba80593f9197d56370f316e4d73b3a4d32fdaebda82ba8"
+    },
+    "unchanged_pdf_png_and_plot_table_identities": {
+      "source_data/conductance_credit_demand/opponent/figures/conductance_opponent_credit_native.pdf": "d03166bc88f97ce3e57b50ea4a723cfad88113ac30004d1b8101dc6d232d5bd4",
+      "source_data/conductance_credit_demand/opponent/figures/conductance_opponent_credit_native.png": "432abab04285371d35a53b8828a33e6b42bfc38488a6e95f769de09ea1124cad",
+      "source_data/conductance_credit_demand/opponent/figures/figure_source.csv": "a45d52f974e5880dcd7d2430c22a0ce4064be617c00aff12a45481e599717645",
+      "source_data/conductance_credit_demand/opponent/figures/nominal_teacher_tuning.csv": "ed0a42a92865ecb83177a62f003e53d8f6f92842bc7921414a4a1901c9d293f0"
+    }
+  },
+  "recommendation": "Retain the current final outputs. Current Figure 5 provenance reproduces exactly from its verified builder and unchanged inputs; S52 visible content is identical across plotting environments.",
+  "rendering_amendments": [
+    {
+      "current_bytes": 26583,
+      "current_sha256": "85b7d72af8ef157eba3877351cd8856909d3d355c9b6ca6e21ed8462e6d372bd",
+      "historical_sha256": "462ff78d08bc5a74abf8eda5a7cfc307a7372af1d6505b628f0fd414b6a0bbb0",
+      "path": "source_data/conductance_credit_demand/opponent/expanded_rates/figure_expanded_rates.pdf"
+    },
+    {
+      "current_bytes": 575337,
+      "current_sha256": "37393f29b72b78a44295f27c4933c5a00520cf3da037cc939339f869e4a60ebc",
+      "historical_sha256": "2b0d551442c658b1b69aa4f637eb2ac2c6b6d70ea118af658984ef5764979519",
+      "path": "source_data/conductance_credit_demand/opponent/expanded_rates/figure_expanded_rates.png"
+    },
+    {
+      "current_bytes": 1283,
+      "current_sha256": "c42b7663643b2483f2ae192a4eef4eb553e8f69f94343ebc896af63460bfbfc8",
+      "historical_sha256": "641a268d535518e8117457e176e563e2d99816ec02829c15fb0a9a37a552e738",
+      "path": "source_data/conductance_credit_demand/opponent/expanded_rates/figure_expanded_rates_provenance.json"
+    },
+    {
+      "current_bytes": 3087,
+      "current_sha256": "46fe20ae3a98166d143e1b6494ca8e7949e0f7ca179c0f320241d77bbcff3a69",
+      "historical_sha256": "694fac55d551d902b6662cd5dc745811b8feb869f0ac9fdea7a4ec1db3832aac",
+      "path": "source_data/conductance_credit_demand/opponent/figures/figure_provenance.json"
+    }
+  ],
+  "reproduction_command": "python scripts/conductance_credit_demand/report_expanded_rates.py --plot-only",
+  "schema": "conductance-rendering-amendment/1",
+  "scope": "Final S52 rendering metadata and main Figure 5 provenance refresh. No scientific sources, protocols, selections, numerical inputs, plotted values or fit outcomes changed.",
+  "verification": {
+    "all_288_retained_endpoints_verified": true,
+    "all_96_plotted_rate_means_recomputed": true,
+    "all_trigger_decisions_preserved": true,
+    "decoded_png_pixels_identical": true,
+    "independent_isolated_renders_reproduce_both_byte_identities": true,
+    "original_source_csv_preserved": true,
+    "pdf_bytes_equal_after_normalizing_only_matplotlib_producer_version": true,
+    "pdf_text_positions_and_styles_identical": true,
+    "pdf_vector_drawing_count": 201,
+    "pdf_vector_drawings_identical": true,
+    "png_max_absolute_channel_difference": 0,
+    "png_shape": [
+      3516,
+      4320,
+      4
+    ],
+    "provenance_only_changed_key": "pdf_sha256",
+    "scientific_inputs_preserved_per_render": 41,
+    "source_csv_sha256": "b4305d4033b54c4db89c8395ca7053a922318ef3460b8cb941d0cd6587f6fade",
+    "visual_inspection": "Four panels remain legible and aligned; labels and legend are readable, with no material overlaps or clipped content."
+  }
+}

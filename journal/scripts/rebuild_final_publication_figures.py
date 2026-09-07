@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Rebuild the credit-first eight main and 47 SI figures from frozen source tables.
+"""Rebuild the declared credit-first figures from frozen source tables.
 
 No experiment runner, model fit, selection, or historical all-analysis pipeline
 is invoked. Unchanged historical vector source components are retained inputs.
@@ -97,6 +97,19 @@ def supplementary():
     run_script('shunt_ancestry_gain/build_figure.py')
     shutil.copyfile(ROOT/'source_data/shunt_ancestry_gain/figures/weak_channel_linearization_check.pdf',
                     SUPP/'figure_shunt_weak_channels.pdf')
+    shutil.copyfile(ROOT/'source_data/shunt_ancestry_gain/figures/normalized_passive_dose.pdf',
+                    SUPP/'figure_S48_normalized_shunt_dose.pdf')
+    run_script('image_ladder_controls/figure.py')
+    shutil.copyfile(ROOT/'source_data/image_ladder_controls/figures/image_ladder_controls_native.pdf',
+                    SUPP/'figure_S49_mnist_dictionary_controls.pdf')
+    run_script('conductance_credit_demand/build_supplementary.py')
+    shutil.copyfile(ROOT/'source_data/conductance_credit_demand/figures/supplement_first_conductance.pdf',
+                    SUPP/'figure_S50_conductance_small_effect.pdf')
+    shutil.copyfile(ROOT/'source_data/conductance_credit_demand/opponent/supplementary_figures/supplement_opponent_controls.pdf',
+                    SUPP/'figure_S51_conductance_robustness.pdf')
+    run_script('conductance_credit_demand/report_expanded_rates.py', ['--plot-only'])
+    shutil.copyfile(ROOT/'source_data/conductance_credit_demand/opponent/expanded_rates/figure_expanded_rates.pdf',
+                    SUPP/'figure_S52_conductance_expanded_rates.pdf')
 
 
 def main():
@@ -109,6 +122,7 @@ def main():
     if not args.supplement_only:
         for name in ["credit_first_figures/build_framework.py", "build_main_figure_04.py",
                      "credit_first_figures/build_ancestry.py", "credit_rule_bridge/build_figure.py",
+                     "conductance_credit_demand/build_opponent_figure.py",
                      "physical_depth_budget/build_main_figure5.py", "credit_first_figures/build_anatomy.py",
                      "shunt_ancestry_gain/build_figure.py", "credit_first_figures/build_measured.py"]:
             run_script(name)
@@ -119,18 +133,21 @@ def main():
             2:"figures/components/main_figure_04_native.pdf",
             3:"figures/components/credit_first_figure_03.pdf",
             4:"source_data/credit_rule_bridge/figures/credit_interaction_bridge_native.pdf",
-            5:"source_data/physical_depth_budget/figure/figure5_physical_depth_budget.pdf",
-            6:"figures/components/credit_first_figure_06.pdf",
-            7:"source_data/shunt_ancestry_gain/figures/shunt_ancestry_gain_native.pdf",
-            8:"figures/components/credit_first_figure_08.pdf",
+            5:"source_data/conductance_credit_demand/opponent/figures/conductance_opponent_credit_native.pdf",
+            6:"source_data/physical_depth_budget/figure/figure5_physical_depth_budget.pdf",
+            7:"figures/components/credit_first_figure_06.pdf",
+            8:"source_data/shunt_ancestry_gain/figures/shunt_ancestry_gain_native.pdf",
+            9:"figures/components/credit_first_figure_08.pdf",
         }
         for number,source in mapping.items():
             shutil.copyfile(ROOT/source, ROOT/f"figures/main/figure_{number:02d}.pdf")
     paths=re.findall(r'\\includegraphics(?:\[[^\]]*\])?\{([^}]+)\}',expanded_tex(ROOT/'supplementary/supplementary.tex'))
     paths=[(ROOT/'figures'/p).resolve() for p in paths if p.startswith('supplementary/figure')]
-    if len(paths)!=47:raise ValueError(f'Expected 47 SI includes, found {len(paths)}')
+    from build_submission_bundle import MAIN_FIGURES, SUPPLEMENTARY_FIGURES
+    expected_si = len(SUPPLEMENTARY_FIGURES)
+    if len(paths)!=expected_si:raise ValueError(f'Expected {expected_si} SI includes, found {len(paths)}')
     missing=[str(p) for p in paths if not p.is_file()]
     if missing:raise FileNotFoundError('\n'.join(missing))
-    print('Final figure assets ready: eight main figures and 47 supplementary figures.',flush=True)
+    print(f'Final figure assets ready: {len(MAIN_FIGURES)} main and {expected_si} supplementary figures.',flush=True)
 
 if __name__=='__main__':main()

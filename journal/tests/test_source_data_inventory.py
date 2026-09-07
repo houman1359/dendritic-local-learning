@@ -31,8 +31,8 @@ def test_source_data_inventory_matches_final_display_numbering() -> None:
         for figure in figures
         if (match := re.fullmatch(r"Supplementary Figure (\d+)", figure))
     }
-    assert main_numbers == set(range(1, 9))  # Figure 1 includes trained dictionary statistics.
-    assert supplementary_numbers == set(range(1, 48))
+    assert main_numbers == set(range(1, len(builder.MAIN_FIGURES) + 1))
+    assert supplementary_numbers == set(range(1, len(builder.SUPPLEMENTARY_FIGURES) + 1))
     prospective = [item for item in builder.FILES if item.figure == "Supplementary Figure 35"]
     assert prospective
     assert all(item.source.startswith("source_data/prospective_morphology_selection/") for item in prospective)
@@ -42,7 +42,7 @@ def test_source_data_inventory_matches_final_display_numbering() -> None:
     assert any("credit_rule_bridge/" in item.source for item in interaction)
     assert any(item.panels == "f" and item.source.endswith("credit_rule_bridge/summaries/all_diagnostics.csv") for item in interaction)
     assert any("credit_resolution_bridge/" in item.source for item in builder.FILES if item.figure == "Methods")
-    anatomy = [item for item in builder.FILES if item.figure == "Figure 6"]
+    anatomy = [item for item in builder.FILES if item.figure == "Figure 7"]
     assert any("anatomy_commonmode/" in item.source for item in anatomy)
     assert not any("morphology_calibration" in item.source for item in anatomy)
     assert any("release_task_identity/task_identity.json" in item.source for item in builder.FILES)
@@ -256,7 +256,7 @@ def test_figure_2_ownership_release_is_the_mnist_d2_d4_subset(
 
 
 def test_current_readmes_follow_manifest_and_archive_keeps_original_hashes(tmp_path: Path) -> None:
-    current = next(item for item in builder.FILES if item.figure == "Figure 6")
+    current = next(item for item in builder.FILES if item.figure == "Figure 7")
     directory = Path(current.destination).parts[0]
     (tmp_path / directory).mkdir()
     builder.write_display_readmes(tmp_path, [{
@@ -265,9 +265,9 @@ def test_current_readmes_follow_manifest_and_archive_keeps_original_hashes(tmp_p
         "status": current.status,
     }])
     text = (tmp_path / directory / "README.md").read_text()
-    assert "Figure 6 source data" in text
+    assert "Figure 7 source data" in text
     assert current.panels in text
-    assert "eight main and 47 supplementary figures" in builder.README
+    assert f"{len(builder.MAIN_FIGURES)} main and {len(builder.SUPPLEMENTARY_FIGURES)} supplementary figures" in builder.README
     assert "initialization selector" not in text
 
 

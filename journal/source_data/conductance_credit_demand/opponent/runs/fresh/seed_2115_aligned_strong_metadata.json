@@ -1,0 +1,115 @@
+{
+  "all_24_conductances_trainable": true,
+  "clean_noise_floor": 0.0,
+  "constructive_forward_nmse": 0.0,
+  "phase": "fresh",
+  "records": [
+    {
+      "common_rate": true,
+      "optimizer": "adam",
+      "rate": 0.03,
+      "rule": "exact",
+      "selected_rate": true
+    },
+    {
+      "common_rate": true,
+      "optimizer": "adam",
+      "rate": 0.03,
+      "rule": "unit_broadcast",
+      "selected_rate": true
+    },
+    {
+      "common_rate": true,
+      "optimizer": "adam",
+      "rate": 0.03,
+      "rule": "calibrated_broadcast",
+      "selected_rate": true
+    },
+    {
+      "common_rate": true,
+      "optimizer": "adam",
+      "rate": 0.03,
+      "rule": "ancestry_three_oracle",
+      "selected_rate": true
+    },
+    {
+      "common_rate": true,
+      "optimizer": "sgd",
+      "rate": 0.3,
+      "rule": "exact",
+      "selected_rate": true
+    },
+    {
+      "common_rate": true,
+      "optimizer": "sgd",
+      "rate": 0.3,
+      "rule": "unit_broadcast",
+      "selected_rate": true
+    },
+    {
+      "common_rate": true,
+      "optimizer": "sgd",
+      "rate": 0.3,
+      "rule": "calibrated_broadcast",
+      "selected_rate": true
+    },
+    {
+      "common_rate": true,
+      "optimizer": "sgd",
+      "rate": 0.3,
+      "rule": "ancestry_three_oracle",
+      "selected_rate": true
+    }
+  ],
+  "seed": 2115,
+  "slurm_job_id": "44918015",
+  "source": "scripts/conductance_credit_demand/opponent_model.py",
+  "task": {
+    "conflict": 0.0,
+    "gate": 10.0,
+    "name": "aligned_strong"
+  },
+  "teacher_geometry": {
+    "credit_ancestry_three_oracle_capture": 0.0,
+    "credit_calibrated_oracle_capture": 0.0,
+    "credit_effective_rank": 0.0,
+    "credit_rank_one_capture": 0.0,
+    "credit_unit_oracle_capture": 0.0,
+    "eligibility_calibrated_oracle_capture": 0.6794561842121845,
+    "loss_eligibility_calibrated_oracle_capture": 1.0,
+    "path_ancestry_three_oracle_capture": 1.0,
+    "path_calibrated_oracle_capture": 0.8788285582896854,
+    "path_effective_rank": 1.26605051025664,
+    "path_rank_one_capture": 0.8806953520288114,
+    "path_unit_oracle_capture": 0.5324837979531236
+  },
+  "teacher_log_conductances": [
+    2.1566000368126055,
+    -1.6475486383722155,
+    -1.3305664173683724,
+    2.1445333730816003,
+    1.8459923717438103,
+    -1.1707948443136016,
+    -1.3226869150152143,
+    2.06344228175513,
+    2.170624727704675,
+    -1.3021918822947869,
+    -1.6245142247807804,
+    1.9707223531933717,
+    1.8697155851331133,
+    -1.6001156475121134,
+    -1.2906218081366008,
+    2.07062467688546,
+    2.703225755974368,
+    2.7733941168958554,
+    2.810905911534686,
+    -1.684915191294436,
+    2.9538914877591256,
+    -1.8738904087360058,
+    1.2829798344936305,
+    1.4640813145045946
+  ],
+  "test_target_variance": 0.023531569687251036,
+  "training_target_variance": 0.024229774712692546,
+  "wall_seconds": 6.767682217992842
+}

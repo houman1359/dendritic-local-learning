@@ -1,7 +1,7 @@
 {
-  "output_sha256": "70669acf931af11f69fd0dded39d1f0b0e2820dbc9e498f2d36e4056659c98aa",
+  "output_sha256": "09896fd814025cdace60931c2a8ab3df661bb6834d25479906da94ae5c77371a",
   "builders_sha256": {
-    "scripts/shunt_ancestry_gain/build_figure.py": "5caa33ac3a372ebcb5d449d021b0100816b5b9319c7d90fc513b18d6ed8dbfe1",
+    "scripts/shunt_ancestry_gain/build_figure.py": "03a99812c64b0ecdc3d2d1c0e2355fa7343240ae2120eda24f491b8358c08c4b",
     "scripts/build_main_figure_08.py": "f9960d1b058bfef5486e436ef511fbcb98e751a3fe515587be6929b1d7305cc5"
   },
   "source_sha256": {
@@ -9,8 +9,12 @@
     "source_data/figure4/focal_localization.csv": "4673a634299e0cdf3b29df3d8686f2fa47e418e92a734c078dded81e2beaab4c",
     "source_data/focal_decomposition/cell_shapley.csv": "46e9e224e59bff91d416b3d4e4f51b8992634badd8b76e7b86576bcbdab187c4",
     "source_data/physical_cable_sensitivity/cell_primary_contrasts.csv": "22a7db680c64680a81695e2df6eea67b3bfcef6dc814fefd06ccfab2495af2a6",
-    "source_data/physical_cable_sensitivity/cell_electrotonic_ratios.csv": "027f6d0f23e201aced4fbbbcef50f74975233f59e895ca001cdee110123c1038"
+    "source_data/physical_cable_sensitivity/cell_electrotonic_ratios.csv": "027f6d0f23e201aced4fbbbcef50f74975233f59e895ca001cdee110123c1038",
+    "source_data/shunt_ancestry_gain/signed_calibration/signed_cohort_summary.csv": "5e3f6a6189f376b376272a8e7c9a004aac0200cd760e0bbbce440f134750f14b",
+    "source_data/shunt_ancestry_gain/signed_calibration/signed_cell_effects.csv": "e4856a6c9c714043e2db1ff19acbe085b5c1bd74025ead88f49274396baa2a90",
+    "source_data/shunt_ancestry_gain/signed_calibration/signed_category_effects.csv": "29e7fcddd506cce21c51a63df784124c5c75e36bb2561ae44b704bbecfa64fc0",
+    "source_data/shunt_ancestry_gain/signed_calibration/validation.json": "58cdb5e0c2c53fbf9b683f0b32cd9fcab100d2bb4788f41b7219737837238eef"
   },
-  "scientific_data": "B\u2013E call the unchanged archived panel functions; same source rows and bootstrap seeds. A illustrates the exact partition corollary without fitted gains.",
-  "changes": "Active-channel check moved out of main figure; physical boundary now spans full width; ancestry identity added."
+  "scientific_data": "B, C and E call the unchanged archived panel functions, source rows and bootstrap seeds. D recovers signed category effects at two frozen physical-calibration endpoints; all 1,344 original absolute focal rows reproduce. A illustrates the exact partition corollary without fitted gains.",
+  "changes": "D separates signed descendant and off-route changes; its previous normalized dose curve is retained as a supplementary asset. Physical boundary remains full width; ancestry identity and other main panels are unchanged."
 }

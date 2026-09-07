@@ -21,7 +21,7 @@ TEXT = {
     480: "Synthetic generators, test scripts and README in prepared reviewer archive.",
     482: "Installation/run instructions in reviewer archive README and experiment READMEs.",
     485: "Not applicable: no externally pretrained models.",
-    126: "Methods; SI S4/S6-S10; Figs. S33-S44: cohort, finite-label, fixed-template and model-class limits.",
+    126: "Methods; SI S4-S10; Figs. S33-S52: cohort, finite-label, fixed-template and model-class limits.",
     130: "Methods and SI S5-S10; executable preprocessing and response-baseline audit.",
     134: "Methods: anatomy/response joins; SI S6, S8 and S10; nested target/scan units.",
     136: "Conductance, linear, multi-affine trees (SI S1/S4/S5).",
@@ -31,7 +31,7 @@ TEXT = {
     156: "Analytic gradients, explicit route dictionaries and controlled ablations; SI S1-S5.",
     160: "Methods and SI: accuracy, loss/NMSE, capture, update match, costed regret, selectivity.",
     166: "MNIST, Fashion-MNIST and CIFAR-10; Methods and SI S5.",
-    170: "Figs. 1-8/S31/S34-S47: broadcast, rank, chance, point/ridge and privileged target-informed references.",
+    170: "Figs. 1-9/S31/S34-S52: broadcast, rank, decoder-only, point/ridge and privileged target-informed references.",
     175: "No state-of-the-art accuracy or deployment claim; comparisons isolate mechanisms, information, optimization and resource constraints.",
     178: "Feedback/topology/optimizer/shunt; input grouping, exact/broadcast credit; cue and mapping controls.",
 }

@@ -26,7 +26,7 @@ submission. Do not infer author-specific declarations from the repository.
 
 ## Author verification of the technical release
 
-- [ ] Review the recorded compilation and layout checks and inspect the compiled main/SI PDFs, including all eight main and 47 supplementary figures.
+- [ ] Review the recorded compilation and layout checks and inspect the compiled main/SI PDFs, including all nine main and 52 supplementary figures.
 - [ ] Review the completed provenance, submission, figure, citation, overlap and test audit records for the exact source version to be submitted.
 - [ ] Review the final Source Data, software, Overleaf and submission archives against their recorded clean source snapshot and build logs. Archive names alone do not identify a version.
 - [ ] Review the automated checks of source-data and script inventories, manifests, snapshot/commit metadata, SHA-256 sidecars, archive integrity and private-path screening. Final build records and fingerprints are retained outside the archives to avoid circular hashes.

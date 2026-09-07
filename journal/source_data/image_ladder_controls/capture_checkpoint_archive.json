@@ -1,0 +1,10 @@
+{
+  "bytes": 302852340,
+  "checkpoint_count": 40,
+  "config_count": 20,
+  "config_transformation": "Onlydata.base_dir,outputs,and_sweep_config_idrelocated; scientificconfigurationhashunchanged",
+  "filename": "MNIST_Capture_Checkpoints.zip",
+  "purpose": "Optional independent replay of the complete exact-checkpoint capture analysis; separate from compactsoftwarearchive",
+  "sha256": "e578fe83129d23d3439780bbb406a3d7faf632b0086c92f85fc0b9630b3dea83",
+  "weights": "Byteidentical copies of initial and validation-selected modelstates"
+}

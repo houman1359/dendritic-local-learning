@@ -1,0 +1,20 @@
+{
+  "completed_utc": "2026-09-07T01:56:10.085509+00:00",
+  "development_freeze_sha256": "9aeda158d0dd186e4405c0b05b1eef5b1e3ee3ef98d3fda07bfbdbc9a23297d5",
+  "files_sha256": {
+    "seed_102_curves.csv": "bfaf94e4acefb7ec4b1a873d60e2065ecd903e53f30aec6a8ab4661b46d67000",
+    "seed_102_diagnostics.csv": "d23f670424f8febe281e0cc5ad3c347564e2a7af93e4cf478a996c7436086ca7",
+    "seed_102_endpoints.csv": "5c866e13a3ebaeeec0ea17b877d4733abec5e56ce808771469fb142a75c115df",
+    "seed_102_gated_conflict_metadata.json": "48060f78e9b850ad466b8f47406bc2a43ac6a7135b578f954a788eb34185ccb2",
+    "seed_102_gated_conflict_states.npz": "64f3baf5feb77ea18f5465b4613cdc807866c7f0a8d35ff17c9b6570360e301f",
+    "seed_102_gated_independent_metadata.json": "3188a14f7ff912c392bd2987dede0fc97eed0f93dae54ebfc0e963cb6011facf",
+    "seed_102_gated_independent_states.npz": "dc5fd2de47856090df0772793cc6947e5f751a9eff72bf318b29f9f7204643c5",
+    "seed_102_moderate_conflict_metadata.json": "f30f286567911903dd11b8b169e3dd5a9603135d09be9c26cfecabc03b7577f8",
+    "seed_102_moderate_conflict_states.npz": "d606f987fca298dae94a3a16141f23a279897bdbe3536b8ba215b8edbbdf07d3",
+    "seed_102_ungated_independent_metadata.json": "f4f39942823a35af4a0a4e5c2dd847a9b9111028b278a71450bf7122d6de4995",
+    "seed_102_ungated_independent_states.npz": "f1b88bcf9d09ae6e869610bd0a19f32ec900f2e6a60ad335d21a36137cf6f9af"
+  },
+  "phase": "development",
+  "seed": 102,
+  "selection_freeze_sha256": null
+}

@@ -8,10 +8,11 @@ JOURNAL = Path(__file__).resolve().parents[1]
 MAIN = JOURNAL / "main.tex"
 
 MAIN_PANEL_INVENTORY = {
-    "fig:framework": "abcdef",
+    "fig:framework": "abcde",
     "fig:branchconflict": "abcdef",
     "fig:subtreefactorial": "abcdef",
     "fig:prospective": "abcdef",
+    "fig:conductancecredit": "abcdef",
     "fig:physicaldepth": "abc",
     "fig:topology": "abcde",
     "fig:focal": "abcde",

@@ -47,7 +47,7 @@ coefficients are least-squares oracles, so the experiment tests capacity and
 sufficiency rather than a biological encoder for the coefficients.
 
 For the direct topology analysis, functional similarity is Pearson
-correlation between vectors of condition-mean raw fluorescence over the 136
+correlation between vectors of condition-mean fluorescence from the supplied traces over the 136
 conditions having at least two trials. Repeat reliability uses alternating
 occurrences of each repeated condition and a Spearman correlation between the
 resulting condition-mean vectors. The controlled ancestry statistic rank

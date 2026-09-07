@@ -183,12 +183,13 @@ def build(*, prepare=False):
         raise ValueError("A retained numerical or SI source disappeared")
     main = {r["figure"] for r in rows if r["record_type"] == "figure_asset" and re.fullmatch(r"fig\d+", r["figure"])}
     supplementary = {f for r in rows if r["record_type"] == "figure_asset" for f in r["figure"].split("/") if re.fullmatch(r"figS\d+", f)}
-    expected_main = {f"fig{k}" for k in range(1, 9)}
-    expected_supplementary = {f"figS{k}" for k in range(1, 48)}
+    from build_submission_bundle import MAIN_FIGURES, SUPPLEMENTARY_FIGURES
+    expected_main = {f"fig{k}" for k in range(1, len(MAIN_FIGURES) + 1)}
+    expected_supplementary = {f"figS{k}" for k in range(1, len(SUPPLEMENTARY_FIGURES) + 1)}
     if not prepare and main != expected_main:
-        raise ValueError(f"Main assets do not match eight-figure layout: {sorted(main)}")
+        raise ValueError(f"Main assets do not match the declared figure layout: {sorted(main)}")
     if supplementary != expected_supplementary:
-        raise ValueError(f"SI assets differ from S1--S47: missing={sorted(expected_supplementary-supplementary)} extra={sorted(supplementary-expected_supplementary)}")
+        raise ValueError(f"SI assets differ from the declared supplementary sequence: missing={sorted(expected_supplementary-supplementary)} extra={sorted(supplementary-expected_supplementary)}")
     for row in rows:
         for f in row["figure"].split("/"):
             if re.fullmatch(r"fig\d+", f) and f not in expected_main:

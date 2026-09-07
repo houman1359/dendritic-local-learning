@@ -1,0 +1,227 @@
+{
+  "all_24_conductances_trainable": true,
+  "clean_noise_floor": 0.0,
+  "constructive_forward_nmse": 0.0,
+  "phase": "development",
+  "records": [
+    {
+      "common_rate": false,
+      "optimizer": "adam",
+      "rate": 0.003,
+      "rule": "exact",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "optimizer": "adam",
+      "rate": 0.01,
+      "rule": "exact",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "optimizer": "adam",
+      "rate": 0.03,
+      "rule": "exact",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "optimizer": "adam",
+      "rate": 0.003,
+      "rule": "unit_broadcast",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "optimizer": "adam",
+      "rate": 0.01,
+      "rule": "unit_broadcast",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "optimizer": "adam",
+      "rate": 0.03,
+      "rule": "unit_broadcast",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "optimizer": "adam",
+      "rate": 0.003,
+      "rule": "calibrated_broadcast",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "optimizer": "adam",
+      "rate": 0.01,
+      "rule": "calibrated_broadcast",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "optimizer": "adam",
+      "rate": 0.03,
+      "rule": "calibrated_broadcast",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "optimizer": "adam",
+      "rate": 0.003,
+      "rule": "ancestry_three_oracle",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "optimizer": "adam",
+      "rate": 0.01,
+      "rule": "ancestry_three_oracle",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "optimizer": "adam",
+      "rate": 0.03,
+      "rule": "ancestry_three_oracle",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "optimizer": "sgd",
+      "rate": 0.03,
+      "rule": "exact",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "optimizer": "sgd",
+      "rate": 0.1,
+      "rule": "exact",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "optimizer": "sgd",
+      "rate": 0.3,
+      "rule": "exact",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "optimizer": "sgd",
+      "rate": 0.03,
+      "rule": "unit_broadcast",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "optimizer": "sgd",
+      "rate": 0.1,
+      "rule": "unit_broadcast",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "optimizer": "sgd",
+      "rate": 0.3,
+      "rule": "unit_broadcast",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "optimizer": "sgd",
+      "rate": 0.03,
+      "rule": "calibrated_broadcast",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "optimizer": "sgd",
+      "rate": 0.1,
+      "rule": "calibrated_broadcast",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "optimizer": "sgd",
+      "rate": 0.3,
+      "rule": "calibrated_broadcast",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "optimizer": "sgd",
+      "rate": 0.03,
+      "rule": "ancestry_three_oracle",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "optimizer": "sgd",
+      "rate": 0.1,
+      "rule": "ancestry_three_oracle",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "optimizer": "sgd",
+      "rate": 0.3,
+      "rule": "ancestry_three_oracle",
+      "selected_rate": false
+    }
+  ],
+  "seed": 201,
+  "slurm_job_id": "44917532",
+  "source": "scripts/conductance_credit_demand/opponent_model.py",
+  "task": {
+    "conflict": 1.0,
+    "gate": 10.0,
+    "name": "opposed_strong"
+  },
+  "teacher_geometry": {
+    "credit_ancestry_three_oracle_capture": 0.0,
+    "credit_calibrated_oracle_capture": 0.0,
+    "credit_effective_rank": 0.0,
+    "credit_rank_one_capture": 0.0,
+    "credit_unit_oracle_capture": 0.0,
+    "eligibility_calibrated_oracle_capture": 0.7302139519897597,
+    "loss_eligibility_calibrated_oracle_capture": 1.0,
+    "path_ancestry_three_oracle_capture": 0.9999999999999998,
+    "path_calibrated_oracle_capture": 0.8863471502528382,
+    "path_effective_rank": 1.2521806723844753,
+    "path_rank_one_capture": 0.8863979814672063,
+    "path_unit_oracle_capture": 0.537649802773648
+  },
+  "teacher_log_conductances": [
+    2.1873911698421327,
+    -1.0658857018984207,
+    -1.361961195490247,
+    1.9649254489027541,
+    2.0452747996922427,
+    -1.5552244789222789,
+    -1.1824145367863899,
+    1.9314691001009399,
+    -1.2530706521234205,
+    2.1940515406819254,
+    2.0336626462475245,
+    -1.643286732604623,
+    -1.5587850015711566,
+    2.227365588713268,
+    2.1991939759020123,
+    -1.4685050874238061,
+    2.472132814800402,
+    2.7410004540881294,
+    2.976208017974741,
+    -1.6481099605357763,
+    3.0112566484049714,
+    -1.5162338536208975,
+    1.3197346585846137,
+    1.5562808779280028
+  ],
+  "test_target_variance": 0.014987611456581403,
+  "training_target_variance": 0.01532796988222469,
+  "wall_seconds": 16.466432106914
+}

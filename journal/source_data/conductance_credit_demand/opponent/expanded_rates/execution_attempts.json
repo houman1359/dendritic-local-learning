@@ -1,0 +1,8 @@
+{
+  "failed_before_fitting": {
+    "job_id": "44924362",
+    "array_tasks": 3,
+    "reason": "Slurm spooled the shell wrapper; BASH_SOURCE-relative working directory resolved outside the journal. Python fit script was never opened."
+  },
+  "correction": "Unfrozen worker uses SLURM_SUBMIT_DIR or explicit CONDUCTANCE_JOURNAL_ROOT; original scientific runner and settings unchanged."
+}

@@ -6,13 +6,17 @@ import json
 from pathlib import Path
 import shutil
 import subprocess
+import sys
 
 JOURNAL = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(JOURNAL / 'scripts'))
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output',type=Path,required=True)
+    parser.add_argument('--implementation-root',type=Path,
+                        help='Use a known committed implementation checkout for this preview.')
     args = parser.parse_args()
     output = args.output.resolve()
     if output.exists():
@@ -24,13 +28,17 @@ def main():
     release = importlib.util.module_from_spec(spec);spec.loader.exec_module(release)
     release.assert_registered_sources_allowlisted(JOURNAL)
     stage = output/'software_release'; stage.mkdir()
-    implementation = release.discover_implementation_root(JOURNAL)
+    implementation = (args.implementation_root.resolve() if args.implementation_root
+                      else release.discover_implementation_root(JOURNAL))
     commit = release.run_git('rev-parse','HEAD',repository_root=implementation).strip()
     paper = JOURNAL.parent
     paper_commit = release.run_git('rev-parse','HEAD',repository_root=paper).strip()
     impl = stage/'dendritic_modeling'
     release.extract_git_head(impl,commit,repository_root=implementation,scope='implementation')
     historical_runtime = release.export_physical_runtime(stage, implementation)
+    image_runtime = release.export_historical_runtime(
+        stage, implementation, release.IMAGE_RUNTIME_COMMIT,
+        release.IMAGE_RUNTIME_DIRECTORY, 'MNIST dictionary and optimization controls runtime')
     # Preview only: copy explicit current article files so integration can be
     # tested before the parent makes the final scientific commit.
     names = release.run_git('ls-files','--cached','--others','--exclude-standard',repository_root=paper).splitlines()
@@ -54,13 +62,17 @@ def main():
             row['origin_repository']='uncommitted_draft_paper'; row['origin_commit']=''
     changes.extend(release.prune_release_entrypoints(impl))
     changes.extend(release.prune_release_entrypoints(stage/release.PHYSICAL_RUNTIME_DIRECTORY, release.PHYSICAL_RUNTIME_DIRECTORY))
-    for part in ('dendritic_modeling','journal_package','article_analysis',release.PHYSICAL_RUNTIME_DIRECTORY):
+    changes.extend(release.prune_release_entrypoints(stage/release.IMAGE_RUNTIME_DIRECTORY, release.IMAGE_RUNTIME_DIRECTORY))
+    for part in ('dendritic_modeling','journal_package','article_analysis',
+                 release.PHYSICAL_RUNTIME_DIRECTORY, release.IMAGE_RUNTIME_DIRECTORY):
         for change in release.sanitize_git_snapshot(stage/part):
             change['path'] = part+'/'+change['path'];changes.append(change)
     release.write_portability_manifest(stage/'PORTABILITY_PATCHES.tsv',changes)
     release.write_released_source_hashes(stage,origins)
     (stage/'README.md').write_text('DRAFT PREVIEW: ARTICLE FILES ARE NOT A COMMITTED RELEASE.\n\n'+release.release_readme(commit,paper_commit))
-    metadata = {'physical_depth_historical_runtime':historical_runtime,'draft_only':True,'working_paper_files_included':True,
+    metadata = {'physical_depth_historical_runtime':historical_runtime,
+                'image_ladder_historical_runtime':image_runtime,
+                'draft_only':True,'working_paper_files_included':True,
                 'implementation_provenance':release.verify_reachable_commit(implementation,commit),
                 'paper_last_commit_not_identity_of_draft':paper_commit,'article_file_counts':counts}
     (stage/'METADATA.json').write_text(json.dumps(metadata,indent=2)+'\n')

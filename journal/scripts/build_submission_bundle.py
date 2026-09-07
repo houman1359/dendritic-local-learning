@@ -35,6 +35,7 @@ MAIN_FIGURES = (
     "main/figure_06.pdf",
     "main/figure_07.pdf",
     "main/figure_08.pdf",
+    "main/figure_09.pdf",
 )
 
 SUPPLEMENTARY_FIGURES = (
@@ -85,6 +86,11 @@ SUPPLEMENTARY_FIGURES = (
     "supplementary/figure_S45_image_diagnostics.pdf",
     "supplementary/figure_S46_utility.pdf",
     "supplementary/figure_shunt_weak_channels.pdf",
+    "supplementary/figure_S48_normalized_shunt_dose.pdf",
+    "supplementary/figure_S49_mnist_dictionary_controls.pdf",
+    "supplementary/figure_S50_conductance_small_effect.pdf",
+    "supplementary/figure_S51_conductance_robustness.pdf",
+    "supplementary/figure_S52_conductance_expanded_rates.pdf",
 )
 
 FIGURES = MAIN_FIGURES + SUPPLEMENTARY_FIGURES
@@ -421,7 +427,7 @@ def write_readme(output_dir: Path, software: Path | None) -> None:
 
 Article: *Dendritic morphology as a dictionary for local credit assignment*
 
-This directory was assembled from an explicit allowlist by `scripts/build_submission_bundle.py`. It contains the compiled and source manuscripts, a combined main-plus-supplementary reading copy, {len(MAIN_FIGURES)} main figure assets across eight numbered figures, {len(SUPPLEMENTARY_FIGURES)} supplementary figure PDFs, references, Source Data, submission documents and provenance manifests. {software_line}
+This directory was assembled from an explicit allowlist by `scripts/build_submission_bundle.py`. It contains the compiled and source manuscripts, a combined main-plus-supplementary reading copy, {len(MAIN_FIGURES)} main figure assets across {len(MAIN_FIGURES)} numbered figures, {len(SUPPLEMENTARY_FIGURES)} supplementary figure PDFs, references, Source Data, submission documents and provenance manifests. {software_line}
 
 `main_with_supplementary.pdf` contains the complete Article followed by the Supplementary Information. The separate `main.pdf` and `supplementary/supplementary.pdf` files are retained because the journal portal may request separate uploads.
 

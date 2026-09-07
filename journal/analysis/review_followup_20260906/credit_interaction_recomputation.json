@@ -1,0 +1,58 @@
+{
+  "status": "independent endpoint recomputation passed",
+  "sources_sha256": {
+    "source_data/credit_rule_bridge/summaries/all_curves.csv": "cfd75001a0c29f91543dd55eff1042784106cdde90b6b33535fc9e518b968321",
+    "source_data/credit_rule_bridge/summaries/paired_contrasts.csv": "b2355b467a7725016fb7e97f258c9d1a663534471ed8cc0d8229d819cad386a7"
+  },
+  "filter": {
+    "step": 1024,
+    "selected_rate": true,
+    "model": "algebraic",
+    "optimizer": "adam",
+    "tasks": [
+      "matching",
+      "quartet"
+    ],
+    "rules": [
+      "exact",
+      "calibrated_broadcast"
+    ]
+  },
+  "formula": "(quartet calibrated_broadcast NMSE - quartet exact NMSE) - (matching calibrated_broadcast NMSE - matching exact NMSE), within seed",
+  "n_endpoint_rows": 80,
+  "n_seeds": 20,
+  "paired_contrasts_csv_line_1based": 51,
+  "mean": 0.8378172815696834,
+  "ci95": [
+    0.7190435929903065,
+    0.9307531820366128
+  ],
+  "positive_seeds": 20,
+  "bootstrap": {
+    "seed": 210999,
+    "whole_seed_draws": 10000,
+    "interval": "descriptive percentile 95%"
+  },
+  "seed_differences": {
+    "211200": 0.8303748023390803,
+    "211201": 1.0055774053915736,
+    "211202": 0.6068091698272311,
+    "211203": 0.6754329572588698,
+    "211204": 0.8736767537411597,
+    "211205": 0.9628983137864114,
+    "211206": 0.9132710673122777,
+    "211207": 0.9590147387043442,
+    "211208": 1.0050834010434517,
+    "211209": 0.004096467175507511,
+    "211210": 1.0864315499937622,
+    "211211": 0.9564881612672271,
+    "211212": 0.9997374844288915,
+    "211213": 0.7955436781934029,
+    "211214": 0.5161765040263326,
+    "211215": 0.9847087211849935,
+    "211216": 1.0094628684048765,
+    "211217": 1.0135462787301313,
+    "211218": 0.7929397651028963,
+    "211219": 0.7650755434812456
+  }
+}

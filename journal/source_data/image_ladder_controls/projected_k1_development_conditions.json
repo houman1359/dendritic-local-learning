@@ -1,0 +1,200 @@
+[
+  {
+    "architecture": "shunting",
+    "arm": "projected_k1",
+    "config": "/n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/dendritic-local-learning/journal/source_data/image_ladder_controls/configs/projected_k1_development/condition_000.yaml",
+    "config_sha256": "f00e99c06d27e0cc2c94d3de9acdf582fe5c8a9a48472a472ec097291ac75e1f",
+    "index": 0,
+    "multiplier": 0.3,
+    "results_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/journal_extension_20260820/sweep_runs/image_ladder_controls_20260906/projected_k1_development/condition_000",
+    "seed": 50200,
+    "stage": "projected_k1_development"
+  },
+  {
+    "architecture": "shunting",
+    "arm": "projected_k1",
+    "config": "/n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/dendritic-local-learning/journal/source_data/image_ladder_controls/configs/projected_k1_development/condition_001.yaml",
+    "config_sha256": "5f239544b13c039173aaeabaf94629163c953c52059b72e3bd8812d1943e202a",
+    "index": 1,
+    "multiplier": 0.3,
+    "results_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/journal_extension_20260820/sweep_runs/image_ladder_controls_20260906/projected_k1_development/condition_001",
+    "seed": 50201,
+    "stage": "projected_k1_development"
+  },
+  {
+    "architecture": "shunting",
+    "arm": "projected_k1",
+    "config": "/n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/dendritic-local-learning/journal/source_data/image_ladder_controls/configs/projected_k1_development/condition_002.yaml",
+    "config_sha256": "d62bc19e8b90d6ba1a06012d3b8ffa53517e1f8d84a9bc9b229e0a0d309cb476",
+    "index": 2,
+    "multiplier": 0.3,
+    "results_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/journal_extension_20260820/sweep_runs/image_ladder_controls_20260906/projected_k1_development/condition_002",
+    "seed": 50202,
+    "stage": "projected_k1_development"
+  },
+  {
+    "architecture": "shunting",
+    "arm": "projected_k1",
+    "config": "/n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/dendritic-local-learning/journal/source_data/image_ladder_controls/configs/projected_k1_development/condition_003.yaml",
+    "config_sha256": "cf9b87c48ecea1df6b5f7f4153043c20e5cc88e1d53458092d4961d861aab13e",
+    "index": 3,
+    "multiplier": 1.0,
+    "results_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/journal_extension_20260820/sweep_runs/image_ladder_controls_20260906/projected_k1_development/condition_003",
+    "seed": 50200,
+    "stage": "projected_k1_development"
+  },
+  {
+    "architecture": "shunting",
+    "arm": "projected_k1",
+    "config": "/n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/dendritic-local-learning/journal/source_data/image_ladder_controls/configs/projected_k1_development/condition_004.yaml",
+    "config_sha256": "fe02302de91c93e539d85f933068e268e8631d0e789ca734621a0dc63b3f8c60",
+    "index": 4,
+    "multiplier": 1.0,
+    "results_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/journal_extension_20260820/sweep_runs/image_ladder_controls_20260906/projected_k1_development/condition_004",
+    "seed": 50201,
+    "stage": "projected_k1_development"
+  },
+  {
+    "architecture": "shunting",
+    "arm": "projected_k1",
+    "config": "/n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/dendritic-local-learning/journal/source_data/image_ladder_controls/configs/projected_k1_development/condition_005.yaml",
+    "config_sha256": "0065be73607fe1cadc34847533f9a5cfd5f8b4b590b73c76e4ff182503281137",
+    "index": 5,
+    "multiplier": 1.0,
+    "results_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/journal_extension_20260820/sweep_runs/image_ladder_controls_20260906/projected_k1_development/condition_005",
+    "seed": 50202,
+    "stage": "projected_k1_development"
+  },
+  {
+    "architecture": "shunting",
+    "arm": "projected_k1",
+    "config": "/n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/dendritic-local-learning/journal/source_data/image_ladder_controls/configs/projected_k1_development/condition_006.yaml",
+    "config_sha256": "cae7ac14577c5b0715272608deaf62994cd82baa9d451e5cfe2bfbd9ba59d244",
+    "index": 6,
+    "multiplier": 3.0,
+    "results_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/journal_extension_20260820/sweep_runs/image_ladder_controls_20260906/projected_k1_development/condition_006",
+    "seed": 50200,
+    "stage": "projected_k1_development"
+  },
+  {
+    "architecture": "shunting",
+    "arm": "projected_k1",
+    "config": "/n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/dendritic-local-learning/journal/source_data/image_ladder_controls/configs/projected_k1_development/condition_007.yaml",
+    "config_sha256": "917cea8651c3ae1b0d34862bc9776d28e3e2e86e8de4aa09e67fe040e38e52d2",
+    "index": 7,
+    "multiplier": 3.0,
+    "results_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/journal_extension_20260820/sweep_runs/image_ladder_controls_20260906/projected_k1_development/condition_007",
+    "seed": 50201,
+    "stage": "projected_k1_development"
+  },
+  {
+    "architecture": "shunting",
+    "arm": "projected_k1",
+    "config": "/n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/dendritic-local-learning/journal/source_data/image_ladder_controls/configs/projected_k1_development/condition_008.yaml",
+    "config_sha256": "42368b70fc2a8a1c28faeec0985d3bf41dcd7038d1544ce14c0433aa1bb319a5",
+    "index": 8,
+    "multiplier": 3.0,
+    "results_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/journal_extension_20260820/sweep_runs/image_ladder_controls_20260906/projected_k1_development/condition_008",
+    "seed": 50202,
+    "stage": "projected_k1_development"
+  },
+  {
+    "architecture": "additive",
+    "arm": "projected_k1",
+    "config": "/n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/dendritic-local-learning/journal/source_data/image_ladder_controls/configs/projected_k1_development/condition_009.yaml",
+    "config_sha256": "e6ccdaf259be8e25d8ec95c61dd3a67793e5ae93996b75922cbda45294cc87bf",
+    "index": 9,
+    "multiplier": 0.3,
+    "results_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/journal_extension_20260820/sweep_runs/image_ladder_controls_20260906/projected_k1_development/condition_009",
+    "seed": 50200,
+    "stage": "projected_k1_development"
+  },
+  {
+    "architecture": "additive",
+    "arm": "projected_k1",
+    "config": "/n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/dendritic-local-learning/journal/source_data/image_ladder_controls/configs/projected_k1_development/condition_010.yaml",
+    "config_sha256": "3c785ccf6e34ca1e1fa0e0e7e3b6d5b8697eb217e78d087c701243380312b4e2",
+    "index": 10,
+    "multiplier": 0.3,
+    "results_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/journal_extension_20260820/sweep_runs/image_ladder_controls_20260906/projected_k1_development/condition_010",
+    "seed": 50201,
+    "stage": "projected_k1_development"
+  },
+  {
+    "architecture": "additive",
+    "arm": "projected_k1",
+    "config": "/n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/dendritic-local-learning/journal/source_data/image_ladder_controls/configs/projected_k1_development/condition_011.yaml",
+    "config_sha256": "cb9b59688e8469213813137fb2df98c00f3bf90b9043f19af871fa2a894205b0",
+    "index": 11,
+    "multiplier": 0.3,
+    "results_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/journal_extension_20260820/sweep_runs/image_ladder_controls_20260906/projected_k1_development/condition_011",
+    "seed": 50202,
+    "stage": "projected_k1_development"
+  },
+  {
+    "architecture": "additive",
+    "arm": "projected_k1",
+    "config": "/n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/dendritic-local-learning/journal/source_data/image_ladder_controls/configs/projected_k1_development/condition_012.yaml",
+    "config_sha256": "73c29f9c6790b56a89250aa8c2804aa64c4b9a5c6da6c60924cadd4fc4c077d4",
+    "index": 12,
+    "multiplier": 1.0,
+    "results_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/journal_extension_20260820/sweep_runs/image_ladder_controls_20260906/projected_k1_development/condition_012",
+    "seed": 50200,
+    "stage": "projected_k1_development"
+  },
+  {
+    "architecture": "additive",
+    "arm": "projected_k1",
+    "config": "/n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/dendritic-local-learning/journal/source_data/image_ladder_controls/configs/projected_k1_development/condition_013.yaml",
+    "config_sha256": "2a694f2f6a9094005fa054d5664fe4112e80f3d27b5e560e29a9878daf3aef1f",
+    "index": 13,
+    "multiplier": 1.0,
+    "results_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/journal_extension_20260820/sweep_runs/image_ladder_controls_20260906/projected_k1_development/condition_013",
+    "seed": 50201,
+    "stage": "projected_k1_development"
+  },
+  {
+    "architecture": "additive",
+    "arm": "projected_k1",
+    "config": "/n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/dendritic-local-learning/journal/source_data/image_ladder_controls/configs/projected_k1_development/condition_014.yaml",
+    "config_sha256": "6e19d46414e1d7a70885a2331375aad8095e0950d0f4e6aae5c26696b51b840f",
+    "index": 14,
+    "multiplier": 1.0,
+    "results_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/journal_extension_20260820/sweep_runs/image_ladder_controls_20260906/projected_k1_development/condition_014",
+    "seed": 50202,
+    "stage": "projected_k1_development"
+  },
+  {
+    "architecture": "additive",
+    "arm": "projected_k1",
+    "config": "/n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/dendritic-local-learning/journal/source_data/image_ladder_controls/configs/projected_k1_development/condition_015.yaml",
+    "config_sha256": "00d4149798ceb33ca08352b54b68e286d9ea925117f71cce444c72dd9ed9cae4",
+    "index": 15,
+    "multiplier": 3.0,
+    "results_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/journal_extension_20260820/sweep_runs/image_ladder_controls_20260906/projected_k1_development/condition_015",
+    "seed": 50200,
+    "stage": "projected_k1_development"
+  },
+  {
+    "architecture": "additive",
+    "arm": "projected_k1",
+    "config": "/n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/dendritic-local-learning/journal/source_data/image_ladder_controls/configs/projected_k1_development/condition_016.yaml",
+    "config_sha256": "52396c98ba3c0e0eb828dfe4f20ee4aa1a5f5a592c31543c39ea7f0311027afe",
+    "index": 16,
+    "multiplier": 3.0,
+    "results_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/journal_extension_20260820/sweep_runs/image_ladder_controls_20260906/projected_k1_development/condition_016",
+    "seed": 50201,
+    "stage": "projected_k1_development"
+  },
+  {
+    "architecture": "additive",
+    "arm": "projected_k1",
+    "config": "/n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/dendritic-local-learning/journal/source_data/image_ladder_controls/configs/projected_k1_development/condition_017.yaml",
+    "config_sha256": "c312d2e8974445fcd0aba367c15516f21dfd2876dbaae3d0786268935a5fa9e5",
+    "index": 17,
+    "multiplier": 3.0,
+    "results_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/journal_extension_20260820/sweep_runs/image_ladder_controls_20260906/projected_k1_development/condition_017",
+    "seed": 50202,
+    "stage": "projected_k1_development"
+  }
+]

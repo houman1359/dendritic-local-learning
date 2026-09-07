@@ -1,0 +1,8 @@
+{
+  "all_files_hash_verified": true,
+  "maximum_replay_parameter_error": 0.0,
+  "n_original_bound_replays": 320,
+  "n_sensitivity_fits": 640,
+  "n_wider_bound_fits": 320,
+  "source_sha256": "b0c8be874c713e6047f886582f099d02255288201e3738a7d534b0ca8b4c9ca1"
+}

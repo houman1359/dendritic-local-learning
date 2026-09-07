@@ -1,0 +1,210 @@
+{
+  "asset_id": "50b43c75-686f-4d06-acf2-cd0b1b42e8be",
+  "asset_api_url": "https://api.dandiarchive.org/api/assets/50b43c75-686f-4d06-acf2-cd0b1b42e8be/",
+  "scope": "Remote HDF5 metadata only; no trace or image arrays downloaded",
+  "records": [
+    {
+      "path": "processing/ophys",
+      "attrs": {
+        "description": "processed 2p data",
+        "namespace": "core",
+        "neurodata_type": "ProcessingModule",
+        "object_id": "38898e64-f602-4968-8355-db3f070392ae"
+      },
+      "children": [
+        "Fluorescence",
+        "ImageSegmentation",
+        "SegmentationImages1",
+        "SegmentationImages2",
+        "SegmentationImages3",
+        "SegmentationImages4",
+        "SegmentationImages5",
+        "SegmentationImages6",
+        "SegmentationImages7",
+        "SegmentationImages8"
+      ]
+    },
+    {
+      "path": "processing/ophys/Fluorescence",
+      "attrs": {
+        "namespace": "core",
+        "neurodata_type": "Fluorescence",
+        "object_id": "9e41c344-97fa-48d7-af06-c7d6759e6470"
+      },
+      "children": [
+        "RoiResponseSeries1",
+        "RoiResponseSeries2",
+        "RoiResponseSeries3",
+        "RoiResponseSeries4",
+        "RoiResponseSeries5",
+        "RoiResponseSeries6",
+        "RoiResponseSeries7",
+        "RoiResponseSeries8"
+      ]
+    },
+    {
+      "path": "/processing/ophys/Fluorescence/RoiResponseSeries1",
+      "attrs": {
+        "comments": "no comments",
+        "description": "The fluorescence traces for field 1",
+        "namespace": "core",
+        "neurodata_type": "RoiResponseSeries",
+        "object_id": "831309b7-09a0-4fa8-95c4-d5aca38c321d"
+      },
+      "data_shape": [
+        40000,
+        1160
+      ],
+      "data_attrs": {
+        "conversion": 1.0,
+        "offset": 0.0,
+        "resolution": -1.0,
+        "unit": "n.a."
+      }
+    },
+    {
+      "path": "/processing/ophys/Fluorescence/RoiResponseSeries2",
+      "attrs": {
+        "comments": "no comments",
+        "description": "The fluorescence traces for field 2",
+        "namespace": "core",
+        "neurodata_type": "RoiResponseSeries",
+        "object_id": "09b7a95e-099c-46e4-84f4-114413b3a233"
+      },
+      "data_shape": [
+        40000,
+        1073
+      ],
+      "data_attrs": {
+        "conversion": 1.0,
+        "offset": 0.0,
+        "resolution": -1.0,
+        "unit": "n.a."
+      }
+    },
+    {
+      "path": "/processing/ophys/Fluorescence/RoiResponseSeries3",
+      "attrs": {
+        "comments": "no comments",
+        "description": "The fluorescence traces for field 3",
+        "namespace": "core",
+        "neurodata_type": "RoiResponseSeries",
+        "object_id": "5bfb5a7d-df75-4496-89ca-f79f125bc566"
+      },
+      "data_shape": [
+        40000,
+        1522
+      ],
+      "data_attrs": {
+        "conversion": 1.0,
+        "offset": 0.0,
+        "resolution": -1.0,
+        "unit": "n.a."
+      }
+    },
+    {
+      "path": "/processing/ophys/Fluorescence/RoiResponseSeries4",
+      "attrs": {
+        "comments": "no comments",
+        "description": "The fluorescence traces for field 4",
+        "namespace": "core",
+        "neurodata_type": "RoiResponseSeries",
+        "object_id": "ae92df93-1cd0-421e-88e8-a84686eff9d7"
+      },
+      "data_shape": [
+        40000,
+        1560
+      ],
+      "data_attrs": {
+        "conversion": 1.0,
+        "offset": 0.0,
+        "resolution": -1.0,
+        "unit": "n.a."
+      }
+    },
+    {
+      "path": "/processing/ophys/Fluorescence/RoiResponseSeries5",
+      "attrs": {
+        "comments": "no comments",
+        "description": "The fluorescence traces for field 5",
+        "namespace": "core",
+        "neurodata_type": "RoiResponseSeries",
+        "object_id": "db7a826d-6032-4a98-b02a-52abf64c3f94"
+      },
+      "data_shape": [
+        40000,
+        1360
+      ],
+      "data_attrs": {
+        "conversion": 1.0,
+        "offset": 0.0,
+        "resolution": -1.0,
+        "unit": "n.a."
+      }
+    },
+    {
+      "path": "/processing/ophys/Fluorescence/RoiResponseSeries6",
+      "attrs": {
+        "comments": "no comments",
+        "description": "The fluorescence traces for field 6",
+        "namespace": "core",
+        "neurodata_type": "RoiResponseSeries",
+        "object_id": "53f218b6-1d73-4273-ac8d-69e1a8594ea4"
+      },
+      "data_shape": [
+        40000,
+        1418
+      ],
+      "data_attrs": {
+        "conversion": 1.0,
+        "offset": 0.0,
+        "resolution": -1.0,
+        "unit": "n.a."
+      }
+    },
+    {
+      "path": "/processing/ophys/Fluorescence/RoiResponseSeries7",
+      "attrs": {
+        "comments": "no comments",
+        "description": "The fluorescence traces for field 7",
+        "namespace": "core",
+        "neurodata_type": "RoiResponseSeries",
+        "object_id": "6eaa4b68-e675-4786-b258-3097875c972b"
+      },
+      "data_shape": [
+        40000,
+        871
+      ],
+      "data_attrs": {
+        "conversion": 1.0,
+        "offset": 0.0,
+        "resolution": -1.0,
+        "unit": "n.a."
+      }
+    },
+    {
+      "path": "/processing/ophys/Fluorescence/RoiResponseSeries8",
+      "attrs": {
+        "comments": "no comments",
+        "description": "The fluorescence traces for field 8",
+        "namespace": "core",
+        "neurodata_type": "RoiResponseSeries",
+        "object_id": "9b87cca8-6cb9-47a0-aa43-2b81fffe1078"
+      },
+      "data_shape": [
+        40000,
+        794
+      ],
+      "data_attrs": {
+        "conversion": 1.0,
+        "offset": 0.0,
+        "resolution": -1.0,
+        "unit": "n.a."
+      }
+    }
+  ],
+  "upstream_declared_asset_sha256": "ea33de99377b1547cffa94900a1f54239ec39d67f3d991ec3afde8da35271ad1",
+  "upstream_declared_asset_size": 70202407493,
+  "inspected_utc": "2026-09-07T03:49:56.003726+00:00",
+  "asset_digest_scope": "Digest declared by the DANDI API; the70GB asset was not downloaded or locally rehashed."
+}

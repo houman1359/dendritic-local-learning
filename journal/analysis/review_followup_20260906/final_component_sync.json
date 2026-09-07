@@ -1,0 +1,9 @@
+[
+  {
+    "figure": "figS47",
+    "canonical": "figures/supplementary/figure_shunt_weak_channels.pdf",
+    "component": "source_data/shunt_ancestry_gain/figures/weak_channel_linearization_check.pdf",
+    "canonical_sha256": "3f51f09ea420f682c1898a9cb85a46f940761163ed99304e2f64e1a0a3f2bc4c",
+    "component_sha256": "275dacbb8cf3eabce35af7a054eb835e2b46a37ef90b51ce81f2b5965e9a727e"
+  }
+]

@@ -1,0 +1,395 @@
+{
+  "all_24_conductances_trainable": true,
+  "clean_noise_floor": 0.0,
+  "constructive_forward_nmse": 0.0,
+  "phase": "development",
+  "records": [
+    {
+      "common_rate": false,
+      "optimizer": "adam",
+      "rate": 0.003,
+      "rule": "exact",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "optimizer": "adam",
+      "rate": 0.01,
+      "rule": "exact",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "optimizer": "adam",
+      "rate": 0.03,
+      "rule": "exact",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "optimizer": "adam",
+      "rate": 0.1,
+      "rule": "exact",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "optimizer": "adam",
+      "rate": 0.3,
+      "rule": "exact",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "optimizer": "adam",
+      "rate": 1.0,
+      "rule": "exact",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "optimizer": "adam",
+      "rate": 0.003,
+      "rule": "unit_broadcast",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "optimizer": "adam",
+      "rate": 0.01,
+      "rule": "unit_broadcast",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "optimizer": "adam",
+      "rate": 0.03,
+      "rule": "unit_broadcast",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "optimizer": "adam",
+      "rate": 0.1,
+      "rule": "unit_broadcast",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "optimizer": "adam",
+      "rate": 0.3,
+      "rule": "unit_broadcast",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "optimizer": "adam",
+      "rate": 1.0,
+      "rule": "unit_broadcast",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "optimizer": "adam",
+      "rate": 0.003,
+      "rule": "calibrated_broadcast",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "optimizer": "adam",
+      "rate": 0.01,
+      "rule": "calibrated_broadcast",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "optimizer": "adam",
+      "rate": 0.03,
+      "rule": "calibrated_broadcast",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "optimizer": "adam",
+      "rate": 0.1,
+      "rule": "calibrated_broadcast",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "optimizer": "adam",
+      "rate": 0.3,
+      "rule": "calibrated_broadcast",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "optimizer": "adam",
+      "rate": 1.0,
+      "rule": "calibrated_broadcast",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "optimizer": "adam",
+      "rate": 0.003,
+      "rule": "ancestry_three_oracle",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "optimizer": "adam",
+      "rate": 0.01,
+      "rule": "ancestry_three_oracle",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "optimizer": "adam",
+      "rate": 0.03,
+      "rule": "ancestry_three_oracle",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "optimizer": "adam",
+      "rate": 0.1,
+      "rule": "ancestry_three_oracle",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "optimizer": "adam",
+      "rate": 0.3,
+      "rule": "ancestry_three_oracle",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "optimizer": "adam",
+      "rate": 1.0,
+      "rule": "ancestry_three_oracle",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "optimizer": "sgd",
+      "rate": 0.03,
+      "rule": "exact",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "optimizer": "sgd",
+      "rate": 0.1,
+      "rule": "exact",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "optimizer": "sgd",
+      "rate": 0.3,
+      "rule": "exact",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "optimizer": "sgd",
+      "rate": 1.0,
+      "rule": "exact",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "optimizer": "sgd",
+      "rate": 3.0,
+      "rule": "exact",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "optimizer": "sgd",
+      "rate": 10.0,
+      "rule": "exact",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "optimizer": "sgd",
+      "rate": 0.03,
+      "rule": "unit_broadcast",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "optimizer": "sgd",
+      "rate": 0.1,
+      "rule": "unit_broadcast",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "optimizer": "sgd",
+      "rate": 0.3,
+      "rule": "unit_broadcast",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "optimizer": "sgd",
+      "rate": 1.0,
+      "rule": "unit_broadcast",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "optimizer": "sgd",
+      "rate": 3.0,
+      "rule": "unit_broadcast",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "optimizer": "sgd",
+      "rate": 10.0,
+      "rule": "unit_broadcast",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "optimizer": "sgd",
+      "rate": 0.03,
+      "rule": "calibrated_broadcast",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "optimizer": "sgd",
+      "rate": 0.1,
+      "rule": "calibrated_broadcast",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "optimizer": "sgd",
+      "rate": 0.3,
+      "rule": "calibrated_broadcast",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "optimizer": "sgd",
+      "rate": 1.0,
+      "rule": "calibrated_broadcast",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "optimizer": "sgd",
+      "rate": 3.0,
+      "rule": "calibrated_broadcast",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "optimizer": "sgd",
+      "rate": 10.0,
+      "rule": "calibrated_broadcast",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "optimizer": "sgd",
+      "rate": 0.03,
+      "rule": "ancestry_three_oracle",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "optimizer": "sgd",
+      "rate": 0.1,
+      "rule": "ancestry_three_oracle",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "optimizer": "sgd",
+      "rate": 0.3,
+      "rule": "ancestry_three_oracle",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "optimizer": "sgd",
+      "rate": 1.0,
+      "rule": "ancestry_three_oracle",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "optimizer": "sgd",
+      "rate": 3.0,
+      "rule": "ancestry_three_oracle",
+      "selected_rate": false
+    },
+    {
+      "common_rate": false,
+      "optimizer": "sgd",
+      "rate": 10.0,
+      "rule": "ancestry_three_oracle",
+      "selected_rate": false
+    }
+  ],
+  "seed": 203,
+  "slurm_job_id": "44925238",
+  "source": "scripts/conductance_credit_demand/opponent_model.py",
+  "task": {
+    "conflict": 0.0,
+    "gate": 10.0,
+    "name": "aligned_strong"
+  },
+  "teacher_geometry": {
+    "credit_ancestry_three_oracle_capture": 0.0,
+    "credit_calibrated_oracle_capture": 0.0,
+    "credit_effective_rank": 0.0,
+    "credit_rank_one_capture": 0.0,
+    "credit_unit_oracle_capture": 0.0,
+    "eligibility_calibrated_oracle_capture": 0.6662132632846961,
+    "loss_eligibility_calibrated_oracle_capture": 1.0,
+    "path_ancestry_three_oracle_capture": 1.0,
+    "path_calibrated_oracle_capture": 0.8767195328335999,
+    "path_effective_rank": 1.2748743125554047,
+    "path_rank_one_capture": 0.8770882187866336,
+    "path_unit_oracle_capture": 0.5352066025369785
+  },
+  "teacher_log_conductances": [
+    1.9103254166764787,
+    -1.5031237938682103,
+    -1.602477601172142,
+    1.970398233980907,
+    2.10759650866658,
+    -1.4639246436318245,
+    -1.5113890034850612,
+    2.2070639460789683,
+    2.34529485529854,
+    -1.6095155702648891,
+    -1.4962675552412246,
+    2.2087159100502265,
+    1.7906563611761033,
+    -0.9881533679535877,
+    -1.4153507737275235,
+    2.0021439531460734,
+    2.922896829018273,
+    2.9222391514957042,
+    2.859338974529719,
+    -1.3963603122114219,
+    3.1829128673473943,
+    -1.8872973438931497,
+    1.3060890311037656,
+    1.2345561775042968
+  ],
+  "test_target_variance": 0.02357601866144033,
+  "training_target_variance": 0.022670082570934155,
+  "wall_seconds": 104.87364958203398
+}

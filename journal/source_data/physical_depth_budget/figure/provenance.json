@@ -1,11 +1,13 @@
 {
-  "builder_sha256": "b39d67c56576cb1e8b785fe025928eb8789f3db657e153be7d11d7d91a850b96",
+  "builder_sha256": "1f623b1bf7f061902c5dc5b456214e675a3c31d868a813882515c79db4ae3b53",
   "inputs": {
     "source_data/physical_depth_budget/canonical/extension_paired_contrasts.csv": "52edceb0a920f6bd3548550deb81bc1b11a065da8d56d0ae7027157ca05e02d1",
     "source_data/physical_depth_budget/canonical/extension_paired_seed_contrasts.csv": "decc42d1770a81fd2cfb9af044524134e65ac6e626abee929eaefb2510f49683",
     "source_data/physical_depth_budget/canonical/extension_validation_trajectories.csv": "8292a09681e7d653410a27a4629460baa704a0696dea0de7906c9e37d43dc193",
     "source_data/point_dendrite_credit_controls/condition_summary.csv": "4e842c5c1a5a9acf06ce5f450eb8da4bc65c0e0578fdc09dbf367396705c158e"
   },
+  "localca_mean_trajectory_max_difference": 0.0009749706697464444,
   "new_fits": 60,
-  "numerical_changes": false
+  "numerical_changes": false,
+  "original_localca_mean_accuracy_max_difference_pp": 0.06299972999998715
 }

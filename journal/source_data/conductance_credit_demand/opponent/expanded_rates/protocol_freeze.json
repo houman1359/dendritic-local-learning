@@ -1,0 +1,59 @@
+{
+  "checkpoints": [
+    0,
+    64,
+    256,
+    1024,
+    2048,
+    4096,
+    8192,
+    12288,
+    16384
+  ],
+  "comparison": "All six original-plus-expanded rates receive the same16384-update budget for every rule, task and optimizer.",
+  "created_utc": "2026-09-07T02:44:00.957980+00:00",
+  "development_seeds": [
+    201,
+    202,
+    203
+  ],
+  "endpoint": "Minimum validation NMSE at the declared checkpoints; retain every fit.",
+  "followup_trigger": "Report every rate. An expanded-rate broadcast improvement is material if mean opposed-task best-validation NMSE improves at least0.01 and at least10% relative to the best original-grid rate at the same budget. Such an improvement triggers a rate selection using development validation alone, followed by a labeled reuse of the20 original fresh blocks; it is not independent confirmation.",
+  "log_conductance_bounds": [
+    -7.0,
+    7.0
+  ],
+  "original_development_freeze_sha256": "094886e8e8031c87db0d448e46866c795fb0e5f8e921b1d6e6159631822415b3",
+  "original_selection_sha256": "9436196dedc42145e0024a26a0dbd7eab6ed3996eaeb2fe7b6c79e30f71d33bc",
+  "rates": {
+    "adam": [
+      0.003,
+      0.01,
+      0.03,
+      0.1,
+      0.3,
+      1.0
+    ],
+    "sgd": [
+      0.03,
+      0.1,
+      0.3,
+      1.0,
+      3.0,
+      10.0
+    ]
+  },
+  "rules": [
+    "exact",
+    "unit_broadcast",
+    "calibrated_broadcast",
+    "ancestry_three_oracle"
+  ],
+  "source_sha256": "3654f9982c7949ca2cd9036e28dd1dfac9f6383d232247d09aa3100a5cc1958f",
+  "status": "Posthoc optimizer-grid boundary check; original and wider-bound outcomes already known. No original source or outcome is changed.",
+  "steps": 16384,
+  "tasks": [
+    "aligned_strong",
+    "opposed_strong"
+  ]
+}

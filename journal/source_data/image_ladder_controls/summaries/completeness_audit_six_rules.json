@@ -1,0 +1,19 @@
+{
+  "addendum_protocol_sha256": "9f7bac321a2d6903c68ef9cf02baeff9188cd52f39a40e41d01f2ee858603f13",
+  "all_epochs180": true,
+  "all_initial_model_pairs_identical": true,
+  "base_development_fits": 90,
+  "base_fresh_fits": 160,
+  "complete": true,
+  "decoder_floor_core_unchanged": true,
+  "excluded_canaries": 12,
+  "fixed_budget": "All180epochsretained; validation-based beststate; no convergence or globaloptimalityclaim",
+  "original_protocol_sha256": "bc4922ede5a74bf2e1edc740d2e6dd0aeb7eb1b750a735bd8a91cd427c64e717",
+  "primary_spatial_contrast": "subtree_k3 minus projected_k1; identical oracle coefficient acquisition apart from fixedprojector",
+  "projected_k1_development_fits": 18,
+  "projected_k1_fresh_fits": 30,
+  "selected_rate_policies": "Each of sixrules separately tuned on threecommon rate multipliers and3developmentseeds; testoutcomes never select",
+  "total_development_fits": 108,
+  "total_fresh_fits": 190,
+  "total_scientific_fits": 298
+}

@@ -1,0 +1,16 @@
+{
+  "all_20_original_seeds": true,
+  "all_original_fresh_conditions": true,
+  "bound_contact": "First update before projection for each parameter; broad log bounds20 span conductances exp(-20) to exp(20).",
+  "bounds": [
+    7.0,
+    20.0
+  ],
+  "created_utc": "2026-09-07T02:13:10.958736+00:00",
+  "initialization": "Restart from original identical initialization and minibatch stream; retain original bounds7 replay to verify identity and record first contact.",
+  "original_selection_sha256": "9436196dedc42145e0024a26a0dbd7eab6ed3996eaeb2fe7b6c79e30f71d33bc",
+  "rate_retuning": false,
+  "source_sha256": "e7f3763b6801172557eb214a9e8eec9276878e21132842036abac37f957b2e3c",
+  "status": "Posthoc sensitivity specified after the frozen fresh and extended results; before any wider-bound outcomes.",
+  "steps": 16384
+}

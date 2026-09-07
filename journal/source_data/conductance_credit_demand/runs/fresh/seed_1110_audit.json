@@ -1,0 +1,16 @@
+{
+  "completed_utc": "2026-09-07T01:58:15.943612+00:00",
+  "development_freeze_sha256": "9aeda158d0dd186e4405c0b05b1eef5b1e3ee3ef98d3fda07bfbdbc9a23297d5",
+  "files_sha256": {
+    "seed_1110_curves.csv": "65c8cd46bcfb929305fa715fa26a6e3d611dae3979c88ff916f174e6eac67c8a",
+    "seed_1110_diagnostics.csv": "ed9f673bbd2ac9ee716e3fa951ded69d90c1d1d40b840b06216570baf7a22e78",
+    "seed_1110_endpoints.csv": "93560b1a91e810d69596d9f6557b9f07bcc4c9454bf7cae37546fa4545f9c9d1",
+    "seed_1110_gated_conflict_metadata.json": "2bceb392087a552d94dc3f195344e2127ab2b9be519710ee70bc2a5c9e579a0e",
+    "seed_1110_gated_conflict_states.npz": "e62efa810d49a420b892babcbc7084e82ddebaa588355c779eb9aabab9469d1e",
+    "seed_1110_ungated_independent_metadata.json": "fcab9efd87d6e1dbb310eac48e19a90a3b3f30adb8acb10d6c614c806a4cbb45",
+    "seed_1110_ungated_independent_states.npz": "b1812866e0e55b5569c596a84e396d01a41a12c24a13a3e4615fe53765dc13d2"
+  },
+  "phase": "fresh",
+  "seed": 1110,
+  "selection_freeze_sha256": "68e711b93692842b0b80776944f6c15f860974301f7c79ca2a54fe529e9e7824"
+}

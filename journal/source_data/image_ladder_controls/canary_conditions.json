@@ -1,0 +1,112 @@
+[
+  {
+    "architecture": "shunting",
+    "arm": "strict_scalar",
+    "config": "/n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/dendritic-local-learning/journal/source_data/image_ladder_controls/configs/canary/condition_000.yaml",
+    "config_sha256": "5db65fc3d778d56a6bb30f93c55f6f956a6a6beed8345d1b8df05790f00bf693",
+    "index": 0,
+    "multiplier": 1.0,
+    "results_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/journal_extension_20260820/sweep_runs/image_ladder_controls_20260906/canary/condition_000",
+    "seed": 50999,
+    "stage": "canary"
+  },
+  {
+    "architecture": "shunting",
+    "arm": "neuron_shared",
+    "config": "/n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/dendritic-local-learning/journal/source_data/image_ladder_controls/configs/canary/condition_001.yaml",
+    "config_sha256": "0612d7b0a1176e8f47c077844728cd20a92866c282f1ad7f450468a713f23870",
+    "index": 1,
+    "multiplier": 1.0,
+    "results_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/journal_extension_20260820/sweep_runs/image_ladder_controls_20260906/canary/condition_001",
+    "seed": 50999,
+    "stage": "canary"
+  },
+  {
+    "architecture": "shunting",
+    "arm": "subtree_k3",
+    "config": "/n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/dendritic-local-learning/journal/source_data/image_ladder_controls/configs/canary/condition_002.yaml",
+    "config_sha256": "64b5a8c7e4c6032ed13a050997839f29c1e70f78221a32f8e4d4aa1428d57de2",
+    "index": 2,
+    "multiplier": 1.0,
+    "results_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/journal_extension_20260820/sweep_runs/image_ladder_controls_20260906/canary/condition_002",
+    "seed": 50999,
+    "stage": "canary"
+  },
+  {
+    "architecture": "shunting",
+    "arm": "exact_path",
+    "config": "/n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/dendritic-local-learning/journal/source_data/image_ladder_controls/configs/canary/condition_003.yaml",
+    "config_sha256": "6072ce956db193c5ed473f234461d4e130030bb39f616c3165a69dafa9aa9a4b",
+    "index": 3,
+    "multiplier": 1.0,
+    "results_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/journal_extension_20260820/sweep_runs/image_ladder_controls_20260906/canary/condition_003",
+    "seed": 50999,
+    "stage": "canary"
+  },
+  {
+    "architecture": "shunting",
+    "arm": "decoder_only",
+    "config": "/n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/dendritic-local-learning/journal/source_data/image_ladder_controls/configs/canary/condition_004.yaml",
+    "config_sha256": "827d3e437ac1aa84a13728881183cf16e60e9beb7acb0060632e23355f115670",
+    "index": 4,
+    "multiplier": 1.0,
+    "results_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/journal_extension_20260820/sweep_runs/image_ladder_controls_20260906/canary/condition_004",
+    "seed": 50999,
+    "stage": "canary"
+  },
+  {
+    "architecture": "additive",
+    "arm": "strict_scalar",
+    "config": "/n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/dendritic-local-learning/journal/source_data/image_ladder_controls/configs/canary/condition_005.yaml",
+    "config_sha256": "657636b957bdfdfeac75960b66c19c240c7a3ede7f8a6b907f9d933edc4078fb",
+    "index": 5,
+    "multiplier": 1.0,
+    "results_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/journal_extension_20260820/sweep_runs/image_ladder_controls_20260906/canary/condition_005",
+    "seed": 50999,
+    "stage": "canary"
+  },
+  {
+    "architecture": "additive",
+    "arm": "neuron_shared",
+    "config": "/n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/dendritic-local-learning/journal/source_data/image_ladder_controls/configs/canary/condition_006.yaml",
+    "config_sha256": "8d659c3690dfd558e5bd120130d6b0416aaa1106ba2ca605a9f5b34b252aeaee",
+    "index": 6,
+    "multiplier": 1.0,
+    "results_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/journal_extension_20260820/sweep_runs/image_ladder_controls_20260906/canary/condition_006",
+    "seed": 50999,
+    "stage": "canary"
+  },
+  {
+    "architecture": "additive",
+    "arm": "subtree_k3",
+    "config": "/n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/dendritic-local-learning/journal/source_data/image_ladder_controls/configs/canary/condition_007.yaml",
+    "config_sha256": "c9414f67499f065693fdf926a0c509c568348b8e178c8282a3a5c11c0d3ab05e",
+    "index": 7,
+    "multiplier": 1.0,
+    "results_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/journal_extension_20260820/sweep_runs/image_ladder_controls_20260906/canary/condition_007",
+    "seed": 50999,
+    "stage": "canary"
+  },
+  {
+    "architecture": "additive",
+    "arm": "exact_path",
+    "config": "/n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/dendritic-local-learning/journal/source_data/image_ladder_controls/configs/canary/condition_008.yaml",
+    "config_sha256": "9d0170de62c4e95ce146ae4c67c1f1b558bedc95546dbb164c841b6a74ed9f3e",
+    "index": 8,
+    "multiplier": 1.0,
+    "results_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/journal_extension_20260820/sweep_runs/image_ladder_controls_20260906/canary/condition_008",
+    "seed": 50999,
+    "stage": "canary"
+  },
+  {
+    "architecture": "additive",
+    "arm": "decoder_only",
+    "config": "/n/holylabs/kempner_dev/Users/hsafaai/Code/dendritic-modeling/drafts/dendritic-local-learning/journal/source_data/image_ladder_controls/configs/canary/condition_009.yaml",
+    "config_sha256": "2c046c68ce24b57017bec1de2413bdb2f064e024199e1a766485808aa3fb4052",
+    "index": 9,
+    "multiplier": 1.0,
+    "results_dir": "/n/holylfs06/LABS/kempner_project_b/Lab/dendritic/HS/LOCAL_LEARNING/journal_extension_20260820/sweep_runs/image_ladder_controls_20260906/canary/condition_009",
+    "seed": 50999,
+    "stage": "canary"
+  }
+]

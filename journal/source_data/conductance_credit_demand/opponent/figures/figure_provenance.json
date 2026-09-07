@@ -1,0 +1,29 @@
+{
+  "figure_sha256": "d03166bc88f97ce3e57b50ea4a723cfad88113ac30004d1b8101dc6d232d5bd4",
+  "builder_sha256": "ca607c17c6b4c6205b2885739f091c76a8eaefa53aa977c27beb9886eb1f03f7",
+  "source_sha256": {
+    "source_data/conductance_credit_demand/opponent/summaries/all_curves.csv": "3c18428dbd0a8ea0d9f148fac817988316001a2f5bee2f48c9eb1956285c28bb",
+    "source_data/conductance_credit_demand/opponent/summaries/paired_contrasts.csv": "5598849d39f284dddca9e3f39b3d7c7eab2babbb9d3d7ac80c1d33adc2b7a6a4",
+    "source_data/conductance_credit_demand/opponent/summaries/paired_seed_contrasts.csv": "f1916a1b3c99f37b5aba80593f9197d56370f316e4d73b3a4d32fdaebda82ba8",
+    "source_data/conductance_credit_demand/opponent/summaries/context_gradient_summary.csv": "a3bea23ba12a888eb7fb356b4ac3142bbf240518fa8b3d2a28278d91e1b40486",
+    "source_data/conductance_credit_demand/opponent/summaries/context_gradient_audit.json": "956db3a14c53aa0dc80a84bd8402cb312d15b2a0b2d8562884637bf788b48f44",
+    "source_data/conductance_credit_demand/opponent/summaries/audit.json": "8d5d166be80fa0bfbe14dcd436e25b457862510c71123046d5536ed6a774d532",
+    "source_data/conductance_credit_demand/opponent/protocol.json": "d5078a89c8100f616631b601e32584692ab363a206aa923756df075e77caa387",
+    "source_data/conductance_credit_demand/opponent/selection_freeze.json": "9436196dedc42145e0024a26a0dbd7eab6ed3996eaeb2fe7b6c79e30f71d33bc",
+    "scripts/conductance_credit_demand/opponent_model.py": "8f37a389400a9ac058b0489dc7ae9167b6350dbbc13f8804a78a44e83cfafc56"
+  },
+  "panels": "A\u2013F",
+  "n_seed_blocks": 20,
+  "native_width_pt": 518.4,
+  "native_height_pt": 490,
+  "learning_curves": "All 20 selected-rate Adam fresh fits plus exact optimizer-state continuations; repeated shared checkpoint retained once after numerical agreement check. Curves show fixed-checkpoint test NMSE, not validation-selected endpoints.",
+  "contrasts": "Calibrated-broadcast minus exact deficit on opposed minus aligned targets, paired within seed. Validation-selected saved states within each budget. Selected and common rate rows are numerically identical and displayed once.",
+  "diagnostic": "Opposed task, distal 16 log-conductance parameters, all evaluated rules at the same calibrated-broadcast parameter state. Retained fraction = norm(sum_c p_c g_c) / sum_c p_c norm(g_c).",
+  "schematic": "B shows nominal unjittered teacher leaf voltage E/(1+E+I), E coefficients (8,.25) and I coefficients (.25,8), exchanged in the right subtree for opposed tuning. Actual seed-specific teachers add the frozen log-conductance jitter.",
+  "broadcast_maximum_paired_curve_absolute_difference": {
+    "aligned_strong": 9.975996181499987e-06,
+    "opposed_strong": 2.6801390464403774e-05
+  },
+  "interpretation": "Three fixed initial-profile patterns with oracle coefficients; binary-context current path rank at most two. No six-independent-errors, reciprocal-cable or quartic-representability claim.",
+  "confidence_intervals": "Descriptive 95% percentile intervals from 20000 paired whole-seed resamples, seed 982211; no new hypothesis test."
+}

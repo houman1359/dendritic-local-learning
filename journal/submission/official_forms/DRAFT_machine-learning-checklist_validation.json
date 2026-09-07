@@ -2,9 +2,9 @@
   "status": "passed_PyMuPDF_reopen_only_not_author_approval",
   "original_unchanged": true,
   "original_sha256": "bf23bd9bffb3b0f5f6650ceaec66c5dd49b59ea105ea96617ad04180d41f4a14",
-  "draft_sha256": "1ef1516f3f26a1079a90ec15ce1e996dd608e57d9386bd8c7bc8a93f044be173",
-  "script_sha256": "e7ac5b4c6e1793baa52ee8ae82ad8475d20da9e9a68081c18228ac24eac2723b",
-  "answer_document_sha256": "5c5c2a3a55bd5587837da16b746c6eacee1074127cea26acca3bae36b703ee99",
+  "draft_sha256": "7dba12c6892b46d097bf9f951054997964b6654e2e45ae0094ffa20c842de616",
+  "script_sha256": "28f90508c64d75695fb521d4c462d0db62a08c4ba9cf3facc14fb325d0eed1f4",
+  "answer_document_sha256": "c87a59caf45ecca4d8d0dea04b3e7d945d90cf6baf3cb6dcde869497d913326a",
   "original_pages": 3,
   "draft_pages": 3,
   "original_widgets": 81,
@@ -141,9 +141,9 @@
       "page": 2,
       "xref": 126,
       "name": "Yes",
-      "expected_value": "Methods; SI S4/S6-S10; Figs. S33-S44: cohort, finite-label, fixed-template and model-class limits.",
+      "expected_value": "Methods; SI S4-S10; Figs. S33-S52: cohort, finite-label, fixed-template and model-class limits.",
       "action": "technical_text",
-      "expected_reopened_value": "Methods; SI S4/S6-S10; Figs. S33-S44: cohort, finite-label, fixed-template and model-class limits.",
+      "expected_reopened_value": "Methods; SI S4-S10; Figs. S33-S52: cohort, finite-label, fixed-template and model-class limits.",
       "reopened_value_matches": true
     },
     {
@@ -432,9 +432,9 @@
       "page": 3,
       "xref": 170,
       "name": "Yes-8",
-      "expected_value": "Figs. 1-8/S31/S34-S47: broadcast, rank, chance, point/ridge and privileged target-informed references.",
+      "expected_value": "Figs. 1-9/S31/S34-S52: broadcast, rank, decoder-only, point/ridge and privileged target-informed references.",
       "action": "technical_text",
-      "expected_reopened_value": "Figs. 1-8/S31/S34-S47: broadcast, rank, chance, point/ridge and privileged target-informed references.",
+      "expected_reopened_value": "Figs. 1-9/S31/S34-S52: broadcast, rank, decoder-only, point/ridge and privileged target-informed references.",
       "reopened_value_matches": true
     },
     {

@@ -1,0 +1,27 @@
+{
+  "output_sha256": "c3c5219825ae01a41174d394649e366e213efc054cef82a02767cec71d2fe7de",
+  "source_sha256": {
+    "source_data/figure4/focal_localization.csv": "4673a634299e0cdf3b29df3d8686f2fa47e418e92a734c078dded81e2beaab4c"
+  },
+  "builders_sha256": {
+    "scripts/shunt_ancestry_gain/build_figure.py": "03a99812c64b0ecdc3d2d1c0e2355fa7343240ae2120eda24f491b8358c08c4b",
+    "scripts/build_main_figure_08.py": "f9960d1b058bfef5486e436ef511fbcb98e751a3fe515587be6929b1d7305cc5",
+    "scripts/build_journal_figures.py": "9e7d368c9d8aa6db88235614d777c4810013a3e62729699b9219b9d006076898"
+  },
+  "panel": "Supplementary Figure S48",
+  "native_width_in": 3.6,
+  "native_height_in": 2.7,
+  "scientific_data": "Unchanged previous main Figure 7C normalized passive-dose curve; no new outcomes or filtering.",
+  "doses": [
+    0.25,
+    0.5,
+    1.0,
+    2.0
+  ],
+  "dose_normalization": "Added shunt conductance / baseline local (leak + excitatory + inhibitory) conductance, excluding axial coupling",
+  "summary_unit": "Focal-site localization averaged within each of eight cells, then equal-weighted cell means",
+  "n_focal_sites": 101,
+  "n_cells": 8,
+  "n_bootstrap": 20000,
+  "bootstrap_seed": "1660 + 10 * perturbation_index + int(dose * 4); matched additive index 0, focal shunt index 1"
+}

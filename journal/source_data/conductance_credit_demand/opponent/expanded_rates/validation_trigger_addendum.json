@@ -1,0 +1,7 @@
+{
+  "created_utc": "2026-09-07T02:45:36.683826+00:00",
+  "timing": "Written before any expanded-grid outcome inspection by the experiment agent; original study outcomes are already known.",
+  "original_grid_protocol_sha256": "81c1840b9fa0a13f2df15d37943f078619a3b1e975e820cc66a30dc4f9867e8d",
+  "additional_trigger": "Also compare the best six-grid development validation result against the actual original selected rate (Adam0.03,SGD0.3) at the matched16384-update budget. A mean opposed-task unit or calibrated broadcast improvement of at least0.01NMSE and at least10% triggers follow-up even if the winning rate is inside the original grid.",
+  "followup_scope": "If either original or added trigger is met, choose rates for allfour rules and bothtasks using developmentvalidationonly and validate allselected conditions on the20 previously used freshseedblocks. This is explicitly a posthoc reuse, not an independent replication."
+}

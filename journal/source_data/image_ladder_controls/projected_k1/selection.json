@@ -1,0 +1,19 @@
+{
+  "created_utc": "2026-09-07T02:42:24.351346+00:00",
+  "criterion": "Onlydevelopmentvalidationloss",
+  "protocol_sha256": "9f7bac321a2d6903c68ef9cf02baeff9188cd52f39a40e41d01f2ee858603f13",
+  "selected": [
+    {
+      "architecture": "shunting",
+      "arm": "projected_k1",
+      "development_validation_loss": 0.09438904760943519,
+      "multiplier": 1.0
+    },
+    {
+      "architecture": "additive",
+      "arm": "projected_k1",
+      "development_validation_loss": 0.0920265082385805,
+      "multiplier": 3.0
+    }
+  ]
+}

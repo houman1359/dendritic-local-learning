@@ -1,11 +1,4 @@
-endpoint,task,source,architecture,label,mean_pp,low_pp,high_pp,n_seeds,source_table,source_contrast
-neuron_identity,MNIST,Readout,shunting,Readout: shunt,11.24866565068562,10.44599969188372,12.03199904163678,15,source_data/mnist_feedback_ladder/paired_contrasts.csv,neuron specific - scalar broadcast
-neuron_identity,MNIST,Readout,additive,Readout: additive,7.809333403905231,7.236649254957831,8.43133331338564,15,source_data/mnist_feedback_ladder/paired_contrasts.csv,neuron specific - scalar broadcast
-neuron_identity,MNIST,DFA,shunting,DFA: shunt,11.03333274523417,10.24800100922584,11.84066455562909,15,source_data/mnist_between_within_factorial/paired_contrasts.csv,dfa within: neuron - scalar
-neuron_identity,MNIST,DFA,additive,DFA: additive,10.796667337417599,9.71800126632054,11.91466689109802,15,source_data/mnist_between_within_factorial/paired_contrasts.csv,dfa within: neuron - scalar
-neuron_identity,CIFAR-10,Readout,additive,CIFAR: additive,16.39299944043159,15.87759245590533,16.90840642495786,20,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv,neuron specific minus strict scalar
-path_resolution,MNIST,Readout,shunting,Readout: shunt,0.04466652870178,-0.01800101002057,0.10200023651123001,15,source_data/mnist_feedback_ladder/paired_contrasts.csv,exact path - neuron specific
-path_resolution,MNIST,Readout,additive,Readout: additive,0.18599907557169001,0.11533180872599,0.2566655476888,15,source_data/mnist_feedback_ladder/paired_contrasts.csv,exact path - neuron specific
-path_resolution,MNIST,DFA,shunting,DFA: shunt,0.028000275293979998,-0.05666693051656001,0.10533254345258,15,source_data/mnist_between_within_factorial/paired_contrasts.csv,dfa within: exact path - neuron
-path_resolution,MNIST,DFA,additive,DFA: additive,0.08666555086771001,0.008665323257446289,0.16866564750670998,15,source_data/mnist_between_within_factorial/paired_contrasts.csv,dfa within: exact path - neuron
-path_resolution,CIFAR-10,Readout,additive,CIFAR: additive,-0.85899904370307,-1.17075984110492,-0.54723824630123,20,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv,exact path minus neuron specific
+task,source,architecture,label,mean_pp,low_pp,high_pp,n_seeds,source_table,source_contrast
+MNIST,DFA,shunting,DFA: shunt,0.028000275293979998,-0.05666693051656001,0.10533254345258,15,source_data/mnist_between_within_factorial/paired_contrasts.csv,dfa within: exact path - neuron
+MNIST,DFA,additive,DFA: additive,0.08666555086771001,0.008665323257446289,0.16866564750670998,15,source_data/mnist_between_within_factorial/paired_contrasts.csv,dfa within: exact path - neuron
+CIFAR-10,Readout,additive,CIFAR: additive,-0.85899904370307,-1.17075984110492,-0.54723824630123,20,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv,exact path minus neuron specific

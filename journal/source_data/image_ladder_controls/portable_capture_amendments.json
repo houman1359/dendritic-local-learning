@@ -1,0 +1,11 @@
+[
+  {
+    "created_utc": "2026-09-07T04:06:57.240256+00:00",
+    "file": "portable_capture.py",
+    "old_sha256": "faf14a0eec76c6b0533570ae18940bddb0086ff3ae5eb5b1a018fdcdd08ba9e3",
+    "new_sha256": "3784bb2713f453362688f10f47d23141aa0e7dd811f387d362a12f675070213f",
+    "reason": "Use the JSON parser for exported JSON checkpoint configs. YAML parsing turns valid JSON exponent tokens into strings and incorrectly failed configuration hashing before any replay capture. Original JSON configurations match their frozen scientific hashes; capture.py and all scientific fits/analyses unchanged.",
+    "failed_replay_job": "44929219",
+    "failed_job_preserved": true
+  }
+]

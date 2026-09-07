@@ -1,0 +1,41 @@
+{
+  "status": "passed portability execution and source/data/configuration checks",
+  "slurm_job": "44926224",
+  "excluded_from_scientific_cohort": true,
+  "environment": "Separate clean CPU replay with NumPy 1.26.4; scientific GPU fits used NumPy 2.2.6. Additive initialization has small calibration differences across environments; no cross-device bitwise endpoint claim.",
+  "runs": [
+    {
+      "architecture": "shunting",
+      "stage": "projected_k1_canary",
+      "epochs": 3,
+      "elapsed_seconds": 134.66450197505765,
+      "runtime_files_verified": 502,
+      "executed_historical_files": 374,
+      "initial_state_matches_original_GPU_canary": true,
+      "initial_parameter_differences_max_absolute": {},
+      "initial_model_sha256": "9fca4093d9ff6cf50a7c3b6cdf19257d4107358b56e2113769bd02228dd5ec0e",
+      "original_initial_model_sha256": "9fca4093d9ff6cf50a7c3b6cdf19257d4107358b56e2113769bd02228dd5ec0e",
+      "python": "3.10.13 | packaged by conda-forge | (main, Oct 26 2023, 18:07:37) [GCC 12.3.0]",
+      "torch": "2.9.1+cpu",
+      "replay_audit_sha256": "029b1f1ce2aa4d6f6fff399942240e5abccc28b0b07b6f8034f6d38b89b6f276"
+    },
+    {
+      "architecture": "additive",
+      "stage": "projected_k1_canary",
+      "epochs": 3,
+      "elapsed_seconds": 160.18804082321003,
+      "runtime_files_verified": 502,
+      "executed_historical_files": 374,
+      "initial_state_matches_original_GPU_canary": false,
+      "initial_parameter_differences_max_absolute": {
+        "core_network.layers.0.excitatory_cells.branch_layers.2.reactivation.log_m": 8.940696716308594e-08,
+        "core_network.layers.0.excitatory_cells.branch_layers.2.reactivation.b": 1.1920928955078125e-07
+      },
+      "initial_model_sha256": "704d1fafb41224f82c39add41fb6416e3a386121cd2cbaa664640c704fc525e4",
+      "original_initial_model_sha256": "9031691d316231fab1398c61da8c6ad96415ebf2be2f064376999546a952e5cb",
+      "python": "3.10.13 | packaged by conda-forge | (main, Oct 26 2023, 18:07:37) [GCC 12.3.0]",
+      "torch": "2.9.1+cpu",
+      "replay_audit_sha256": "8bb78cd41ab3fe0c5e52d2277f20d2c6a488491560049c16d278cfe047a1e5d8"
+    }
+  ]
+}

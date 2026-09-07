@@ -1,0 +1,62 @@
+{
+  "status": "passed",
+  "endpoint_rows": 288,
+  "rate_groups": 96,
+  "maximum_group_mean_discrepancy": 2.220446049250313e-16,
+  "checks": [
+    {
+      "optimizer": "adam",
+      "rule": "unit_broadcast",
+      "best_rate": 0.003,
+      "best_nmse": 0.7197761006794803,
+      "original_selected_nmse": 0.7262471337928588,
+      "absolute_improvement": 0.006471033113378488,
+      "relative_improvement": 0.008910235665348822,
+      "added_rate_improvement": -0.003664921005515409,
+      "original_trigger": false,
+      "selected_rate_trigger": false
+    },
+    {
+      "optimizer": "adam",
+      "rule": "calibrated_broadcast",
+      "best_rate": 0.003,
+      "best_nmse": 0.7197760802405564,
+      "original_selected_nmse": 0.7262469428025041,
+      "absolute_improvement": 0.006470862561947732,
+      "relative_improvement": 0.008910003169138876,
+      "added_rate_improvement": -0.003664978402292518,
+      "original_trigger": false,
+      "selected_rate_trigger": false
+    },
+    {
+      "optimizer": "sgd",
+      "rule": "unit_broadcast",
+      "best_rate": 0.1,
+      "best_nmse": 0.7172426605864177,
+      "original_selected_nmse": 0.7507204378861573,
+      "absolute_improvement": 0.03347777729973955,
+      "relative_improvement": 0.04459419993147473,
+      "added_rate_improvement": -0.08903044272147576,
+      "original_trigger": false,
+      "selected_rate_trigger": false
+    },
+    {
+      "optimizer": "sgd",
+      "rule": "calibrated_broadcast",
+      "best_rate": 0.3,
+      "best_nmse": 0.7699247009779345,
+      "original_selected_nmse": 0.7699247009779345,
+      "absolute_improvement": 0.0,
+      "relative_improvement": 0.0,
+      "added_rate_improvement": -0.0797588001084133,
+      "original_trigger": false,
+      "selected_rate_trigger": false
+    }
+  ],
+  "source_sha256": {
+    "all_endpoints.csv": "71fbf664038341594c5c9c4f8561bcd2a2b96ef451688357a0b6228eb041010f",
+    "rate_comparison.csv": "1b1eaf59ea2f9b6dec085dd8c193def91d8a19bfda19b8700ae080594d8f0f96",
+    "complete_trigger_review.json": "7ae76c26ac75f72118fbac3aa36adaa5fa8b65ea897ad6eb5b79c6cf01cd21c3"
+  },
+  "method": "Independent pandas group means and direct trigger arithmetic; no study/report module imported."
+}

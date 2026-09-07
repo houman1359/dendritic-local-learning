@@ -1,0 +1,20 @@
+panel,source_table,rate_policy,architecture,arm,metric,mean,ci_low,ci_high,n,positive,contrast,task,source,label,mean_pp,low_pp,high_pp,n_seeds,source_contrast
+C,source_data/image_ladder_controls/summaries/condition_summary_six_rules.csv,selected,additive,decoder_only,test_accuracy,0.8956799805164337,0.8933799862861633,0.8979299783706665,10.0,10.0,,,,,,,,,
+C,source_data/image_ladder_controls/summaries/condition_summary_six_rules.csv,selected,additive,exact_path,test_accuracy,0.9729599773883819,0.9723699748516083,0.9735799789428711,10.0,10.0,,,,,,,,,
+C,source_data/image_ladder_controls/summaries/condition_summary_six_rules.csv,selected,additive,neuron_shared,test_accuracy,0.9711399734020233,0.970489711612463,0.9718099713325501,10.0,10.0,,,,,,,,,
+C,source_data/image_ladder_controls/summaries/condition_summary_six_rules.csv,selected,additive,projected_k1,test_accuracy,0.973039972782135,0.972409975528717,0.9736599683761596,10.0,10.0,,,,,,,,,
+C,source_data/image_ladder_controls/summaries/condition_summary_six_rules.csv,selected,additive,strict_scalar,test_accuracy,0.8965799808502197,0.8903799889981747,0.9019799828529358,10.0,10.0,,,,,,,,,
+C,source_data/image_ladder_controls/summaries/condition_summary_six_rules.csv,selected,additive,subtree_k3,test_accuracy,0.9733999788761138,0.9727899849414825,0.973999971151352,10.0,10.0,,,,,,,,,
+C,source_data/image_ladder_controls/summaries/condition_summary_six_rules.csv,selected,shunting,decoder_only,test_accuracy,0.8095599770545959,0.8048499763011933,0.8146699728071689,10.0,10.0,,,,,,,,,
+C,source_data/image_ladder_controls/summaries/condition_summary_six_rules.csv,selected,shunting,exact_path,test_accuracy,0.9713399767875671,0.9705999791622162,0.9720299780368805,10.0,10.0,,,,,,,,,
+C,source_data/image_ladder_controls/summaries/condition_summary_six_rules.csv,selected,shunting,neuron_shared,test_accuracy,0.971239972114563,0.9705399692058563,0.9717899799346924,10.0,10.0,,,,,,,,,
+C,source_data/image_ladder_controls/summaries/condition_summary_six_rules.csv,selected,shunting,projected_k1,test_accuracy,0.9717799723148346,0.9713399827480316,0.9722299754619599,10.0,10.0,,,,,,,,,
+C,source_data/image_ladder_controls/summaries/condition_summary_six_rules.csv,selected,shunting,strict_scalar,test_accuracy,0.8789399802684784,0.8732199788093566,0.8850599765777588,10.0,10.0,,,,,,,,,
+C,source_data/image_ladder_controls/summaries/condition_summary_six_rules.csv,selected,shunting,subtree_k3,test_accuracy,0.9722699761390686,0.9716499805450439,0.9729199707508087,10.0,10.0,,,,,,,,,
+D,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv,selected,shunting,,test_accuracy,0.0004900038242340088,-0.0004802575707435594,0.0014100015163421632,10.0,7.0,subtree_k3_minus_projected_k1,,,,,,,,
+D,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv,selected,shunting,,test_accuracy,-0.0009299993515014648,-0.001949995756149292,9.000897407531738e-05,10.0,3.0,exact_path_minus_subtree_k3,,,,,,,,
+D,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv,selected,additive,,test_accuracy,0.0003600060939788818,-0.0005599856376647949,0.0012200057506561279,10.0,5.0,subtree_k3_minus_projected_k1,,,,,,,,
+D,source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv,selected,additive,,test_accuracy,-0.0004400014877319336,-0.0014300107955932616,0.000580000877380371,10.0,4.0,exact_path_minus_subtree_k3,,,,,,,,
+E,source_data/mnist_between_within_factorial/paired_contrasts.csv,,shunting,,,,,,,,,MNIST,DFA,DFA: shunt,0.028000275293979998,-0.05666693051656001,0.10533254345258,15.0,dfa within: exact path - neuron
+E,source_data/mnist_between_within_factorial/paired_contrasts.csv,,additive,,,,,,,,,MNIST,DFA,DFA: additive,0.08666555086771001,0.008665323257446289,0.16866564750670998,15.0,dfa within: exact path - neuron
+E,source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv,,additive,,,,,,,,,CIFAR-10,Readout,CIFAR: additive,-0.85899904370307,-1.17075984110492,-0.54723824630123,20.0,exact path minus neuron specific

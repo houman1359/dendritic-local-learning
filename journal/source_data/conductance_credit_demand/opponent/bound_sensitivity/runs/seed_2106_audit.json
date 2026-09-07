@@ -1,0 +1,15 @@
+{
+  "completed_utc": "2026-09-07T02:15:06.707319+00:00",
+  "files_sha256": {
+    "seed_2106_aligned_strong_bound_20_states.npz": "cbcfa9fa8ab751998e5a9c89afec021f185f7e116551cbcaf4b31e2fc8c69be4",
+    "seed_2106_aligned_strong_bound_7_states.npz": "229d63df48eb388520e7730fb22c2a7185afbde31307a9d61e259b85986f30d6",
+    "seed_2106_contacts.csv": "8035e8cbd975c52597d5e63412d5c0618d5d5db94bbf38b857eb4ec2d46e0c1e",
+    "seed_2106_curves.csv": "42e59c84fe3fbf2475d4e83a43d8413972fa4cf1bb537500d19d1279f27e552b",
+    "seed_2106_endpoints.csv": "5e31b57e36307cb3693b6a477bf869f548b08e28847192c025ea279924ee8011",
+    "seed_2106_opposed_strong_bound_20_states.npz": "f21311a64e920fb982bffc4ea3effa0e62c1616f22b4bda7aa7ebf655a078b33",
+    "seed_2106_opposed_strong_bound_7_states.npz": "2e2aab099ea3fe82b2b315f2b46806e223169bbc9a770ec2ab958520e114dab2"
+  },
+  "freeze_sha256": "55d2d2dee9d9598dc9d2a9622fcc34ca419b04092f4c66526920dc7e2bb6bb46",
+  "maximum_original_replay_parameter_error": 0.0,
+  "seed": 2106
+}

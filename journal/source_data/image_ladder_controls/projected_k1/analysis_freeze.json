@@ -1,0 +1,11 @@
+{
+  "created_utc": "2026-09-07T02:45:34.038750+00:00",
+  "note": "Sixruleanalysisimplementationfrozenafterdevelopmentselection, beforeanycompletefreshfitoutcomeswereinspected",
+  "sha256": {
+    "analyze_addendum.py": "44abefdb56f7c8c7db33710c00496c672f55978f3590606b82bafca69a8874bc",
+    "figure.py": "a17ec9fc05f3a3253d97fef47eebe4bcc0d4523923a39dcfaca4670bcf752fc4",
+    "export_checkpoints.py": "e06ab660afc5872c25b27b822bdee66cb36d8dbc674b3a79d456306e53595de1",
+    "portable_capture.py": "faf14a0eec76c6b0533570ae18940bddb0086ff3ae5eb5b1a018fdcdd08ba9e3",
+    "test_projected_k1.py": "2806d2c0ce7621cdcc4689433fe8d22d6ec02ea6fa7c320da09398522afe942e"
+  }
+}

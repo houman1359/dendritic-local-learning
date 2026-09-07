@@ -1,0 +1,26 @@
+{
+  "python": "3.10.13",
+  "numpy": "2.2.6",
+  "pandas": "2.3.3",
+  "independent_model_tests": 11,
+  "model_test_result": "passed",
+  "frozen_first_and_opponent_sources_verified": true,
+  "gradient_factorization_checks": 2560,
+  "maximum_gradient_error": 0.0,
+  "original_bound_replay_fits": 320,
+  "maximum_replay_parameter_error": 0.0,
+  "fresh_seed_blocks_per_study": 20,
+  "counts": {
+    "first_development": 216,
+    "first_fresh": 240,
+    "first_continued": 240,
+    "opponent_development": 288,
+    "opponent_fresh": 320,
+    "opponent_continued": 320,
+    "original_bound_replays": 320,
+    "wider_bound_restarts": 320
+  },
+  "all_training_jobs_complete": true,
+  "scheduler_tasks": 106,
+  "aggregate_scheduled_task_seconds": 5198
+}

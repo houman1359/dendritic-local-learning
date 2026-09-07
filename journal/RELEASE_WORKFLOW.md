@@ -24,6 +24,8 @@ This creates a clearly marked draft from the committed implementation and allowl
 
 ## Clean environment and smoke
 
+Keep the checksummed release stage untouched. Extract or copy the software into a separate working directory before running imports, restorations or replays: the historical runtime can create a log beside its sources even with Python bytecode disabled. In the commands below, `SOFTWARE` denotes that disposable working copy. Preserve the original ZIP and verify its checksums separately.
+
 Use a virtual environment without system site-packages. A CPU-only environment avoids downloading unnecessary CUDA libraries:
 
 ```bash
@@ -81,3 +83,27 @@ Run the portable depth launcher in a fresh process and use the same constrained 
 ```
 
 Replace `--verify-only` with `--output-root NEW_OUTPUT_DIR` to rerun the chosen frozen condition. Each output directory must be new. The 600-epoch cap, validation-based checkpoint selection, early-stopping patience, initialization seed and learning rate are retained. `--smoke-epochs 1` is an explicitly excluded short run, useful for checking both the exact-gradient and LocalCA training paths without adding scientific observations. The frozen runner is preserved, including its machine-specific checkout check; the portable launcher instead verifies the historical export's bytes and uses only its verified passive observation helpers. Device and library differences can prevent bitwise trajectory identity, and their versions are recorded. This task generator is synthetic and needs no external data.
+
+
+## MNIST dictionary runtime and conductance reference models
+
+The six-arm MNIST controls use the separate, reachable historical runtime
+`6c1aaa25abd056c417842e1c46378b65d036f6a7`, exported under
+`historical_runtimes/image_ladder_6c1aaa2/`. Its 505 allowlisted source files
+include the 502 Python files required by the frozen trainer. The executed
+scientific environment used NumPy 2.2.6; isolated CPU compatibility checks used
+NumPy 1.26.4. The two environments are recorded separately and are not presented
+as identical installations. Follow `scripts/image_ladder_controls/README.md`
+for byte verification, the automatic original-to-released hash-link helper,
+portable training and checkpoint-based capture. The optional
+`MNIST_Capture_Checkpoints.zip` is a separate artifact rather than part of the
+compact software archive.
+
+The conductance-credit studies under `scripts/conductance_credit_demand/` use
+standalone directed E/I reference equations. Their original model, experiment
+and test files remain frozen. A separate portable launcher verifies those
+identities while recording the replay environment, rather than requiring a
+reviewer's package versions to equal the original execution record. The
+family-specific README distinguishes original fits, same-state continuations,
+parameter-range checks and the expanded-rate follow-up. New replay outputs
+must use a new directory and cannot overwrite retained scientific outcomes.

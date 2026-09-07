@@ -45,6 +45,8 @@ STAGE_NAME = "software_release"
 ARCHIVE_NAME = "Dendritic_credit_assignment_software.zip"
 PHYSICAL_RUNTIME_COMMIT = "a99c3a777f99913e13dfe673a3f3a28bfe3566af"
 PHYSICAL_RUNTIME_DIRECTORY = "historical_runtimes/physical_depth_a99c3a7"
+IMAGE_RUNTIME_COMMIT = "6c1aaa25abd056c417842e1c46378b65d036f6a7"
+IMAGE_RUNTIME_DIRECTORY = "historical_runtimes/image_ladder_6c1aaa2"
 
 # Only the explicitly selected committed package and article sources are retained.  These replacements affect only
 # historical machine-local defaults; each changed file is listed in
@@ -116,6 +118,7 @@ JOURNAL_DIRECTORIES = (
     "scripts/credit_rule_bridge", "scripts/credit_resolution_bridge",
     "scripts/anatomy_commonmode", "scripts/physical_depth_budget",
     "scripts/shunt_ancestry_gain", "scripts/credit_first_figures",
+    "scripts/conductance_credit_demand", "scripts/image_ladder_controls",
 )
 JOURNAL_ANALYSIS_RECORDS = (
     "ANIMAL_DATA_CONTRACT.md",
@@ -528,8 +531,10 @@ def repository_file_allowed(relative: Path, scope: str | None) -> bool:
         return True
     if name.startswith("journal/figures/"):
         canonical = re.fullmatch(r"journal/figures/main/figure_(\d+)\.pdf", name)
-        if canonical and not 1 <= int(canonical[1]) <= 8:
-            return False
+        if canonical:
+            from build_submission_bundle import MAIN_FIGURES
+            if name.removeprefix("journal/figures/") not in MAIN_FIGURES:
+                return False
         return relative.suffix.lower() in {".pdf", ".png", ".svg", ".jpg", ".jpeg", ".eps"}
     if name.startswith("journal/supplementary/"):
         return relative.suffix == ".tex"
@@ -708,18 +713,25 @@ def export_repository_snapshots(
 
 def export_physical_runtime(root: Path, implementation_root: Path) -> dict[str, object]:
     """Export the exact historical source used by the depth budget extension."""
-    provenance = verify_reachable_commit(implementation_root, PHYSICAL_RUNTIME_COMMIT)
-    destination = root / PHYSICAL_RUNTIME_DIRECTORY
-    extract_git_head(destination, PHYSICAL_RUNTIME_COMMIT,
+    return export_historical_runtime(root, implementation_root, PHYSICAL_RUNTIME_COMMIT,
+                                     PHYSICAL_RUNTIME_DIRECTORY, "Physical-depth budget extension runtime")
+
+
+def export_historical_runtime(root: Path, implementation_root: Path, commit: str,
+                              directory: str, role: str) -> dict[str, object]:
+    """Export one reachable cohort-specific runtime through the package allowlist."""
+    provenance = verify_reachable_commit(implementation_root, commit)
+    destination = root / directory
+    extract_git_head(destination, commit,
                      repository_root=implementation_root, scope="implementation")
     original_files = list_files(destination)
     with (destination / "RUNTIME_ORIGINS.tsv").open("w", newline="") as handle:
         writer = csv.writer(handle, delimiter="\t", lineterminator="\n")
         writer.writerow(("path", "original_sha256", "commit"))
-        writer.writerows((p.relative_to(destination).as_posix(), sha256(p), PHYSICAL_RUNTIME_COMMIT)
+        writer.writerows((p.relative_to(destination).as_posix(), sha256(p), commit)
                          for p in original_files)
-    metadata = dict(provenance, role="Physical-depth budget extension runtime",
-                    source_files=len(original_files), export_directory=PHYSICAL_RUNTIME_DIRECTORY,
+    metadata = dict(provenance, role=role,
+                    source_files=len(original_files), export_directory=directory,
                     git_metadata_included=False,
                     identity_check="Original source digests plus declared released-byte transformations; no fabricated Git checkout identity")
     (destination / "RUNTIME_PROVENANCE.json").write_text(json.dumps(metadata, indent=2) + "\n")
@@ -967,6 +979,11 @@ def capture_release_origins(root: Path, implementation_commit: str, paper_commit
             source = relative[len(PHYSICAL_RUNTIME_DIRECTORY) + 1:]
             if source in {"RUNTIME_ORIGINS.tsv", "RUNTIME_PROVENANCE.json"}:
                 repository, commit = "generated", ""
+        elif relative.startswith(IMAGE_RUNTIME_DIRECTORY + "/"):
+            repository, commit = "implementation", IMAGE_RUNTIME_COMMIT
+            source = relative[len(IMAGE_RUNTIME_DIRECTORY) + 1:]
+            if source in {"RUNTIME_ORIGINS.tsv", "RUNTIME_PROVENANCE.json"}:
+                repository, commit = "generated", ""
         elif relative.startswith("journal_package/"):
             repository, commit, source = "paper", paper_commit, relative.split("/", 1)[1]
         elif relative.startswith("article_analysis/"):
@@ -1058,6 +1075,11 @@ configuration, validation, and provenance code from that paper snapshot.
   extension, with per-file original hashes and commit/ref provenance.
   Its Git metadata are not fabricated or included. The portable launcher
   verifies the exported bytes directly.
+- `historical_runtimes/image_ladder_6c1aaa2/`: the exact historical source
+  for the new MNIST dictionary, learning-rate and decoder controls. Original
+  source identities are checked separately from any declared portability edits.
+  Scientific fits recorded NumPy 2.2.6 and PyTorch 2.9.1; separate CPU checks
+  with NumPy 1.26.4 establish portability, not identical numerical outcomes.
 - `PORTABILITY_PATCHES.tsv`: machine-local defaults changed in the release
   copies, with paths relative to this release root. Scientific parameters are
   not modified. Frozen source hashes describe the original source bytes; this
@@ -1141,6 +1163,31 @@ process rather than invoking its machine-specific Git checkout check. This
 establishes source identity, not bitwise equivalence across devices and library
 versions. The synthetic hierarchical task requires no external dataset.
 
+The new conductance-credit studies are standalone directed E/I reference
+models under `article_analysis/scripts/conductance_credit_demand/`. Their
+original 16-conductance construction and the separately frozen 24-conductance
+opponent-tuning construction retain all development, fresh, continuation and
+parameter-bound outcomes. The Source Data protocol and methods distinguish
+these families, and oracle projection coefficients are explicit in both code
+and manuscript. They do not require a current production-package import.
+After restoring the journal and Source Data, run from the restored journal directory:
+
+```bash
+python scripts/conductance_credit_demand/portable_run.py --study-root source_data/conductance_credit_demand --family opponent --phase fresh --seed 2101 --verify-only
+```
+
+Replace `--verify-only` with `--output-root NEW_DIRECTORY` for a full replay.
+Its `PORTABLE_README.md` documents the study-root argument, excluded smoke
+mode, continuation semantics and the distinction between source verification
+and cross-environment numerical identity.
+
+For the MNIST studies, the restored `scripts/image_ladder_controls/README.md`
+provides the complete sequence: verify the upstream data, generate original-to-
+released runtime/adapter links with `prepare_release_links.py`, then replay a
+frozen condition with `portable_run.py`. The optional forty-state checkpoint
+archive enables `portable_capture.py` without repeating model training. The
+new image and conductance replays must write to fresh output directories.
+
 The structure and finite-horizon investigations retain their original analysis
 paths in their frozen runners. Their released numerical copies are under
 `source_data/morphology_structure/` and
@@ -1209,6 +1256,11 @@ asset paths, access requirements, and derived-data provenance are documented
 under `article_analysis/reproducibility/` and in the Source Data archive.
 
 ## Environment
+
+Keep an untouched copy of the ZIP and its checksummed contents. Run the following
+installation, restoration and replay commands from a separate extracted working
+copy: historical runtime imports can create log files beside their sources,
+even when Python bytecode is disabled.
 
 Python 3.10 or 3.11 is recommended. From the extracted release root:
 
@@ -1498,6 +1550,9 @@ def build(force: bool, implementation_root: Path | None = None) -> dict[str, obj
             temporary_stage, implementation_root, commit, journal_commit
         )
         physical_runtime = export_physical_runtime(temporary_stage, implementation_root)
+        image_runtime = export_historical_runtime(
+            temporary_stage, implementation_root, IMAGE_RUNTIME_COMMIT,
+            IMAGE_RUNTIME_DIRECTORY, "MNIST dictionary, learning-rate and decoder-control runtime")
         git_file_count = snapshot_counts["implementation"]
         portability_changes = []
         committed_paper = temporary_stage / "journal_package"
@@ -1509,7 +1564,9 @@ def build(force: bool, implementation_root: Path | None = None) -> dict[str, obj
         portability_changes.extend(prune_release_entrypoints(repository_destination))
         portability_changes.extend(prune_release_entrypoints(
             temporary_stage / PHYSICAL_RUNTIME_DIRECTORY, PHYSICAL_RUNTIME_DIRECTORY))
-        for snapshot_name in ("dendritic_modeling", "journal_package", "article_analysis", PHYSICAL_RUNTIME_DIRECTORY):
+        portability_changes.extend(prune_release_entrypoints(
+            temporary_stage / IMAGE_RUNTIME_DIRECTORY, IMAGE_RUNTIME_DIRECTORY))
+        for snapshot_name in ("dendritic_modeling", "journal_package", "article_analysis", PHYSICAL_RUNTIME_DIRECTORY, IMAGE_RUNTIME_DIRECTORY):
             for change in sanitize_git_snapshot(temporary_stage / snapshot_name):
                 change["path"] = f"{snapshot_name}/{change['path']}"
                 portability_changes.append(change)
@@ -1528,6 +1585,7 @@ def build(force: bool, implementation_root: Path | None = None) -> dict[str, obj
         metadata = {
             "released_source_hash_count": released_source_hash_count,
             "physical_depth_historical_runtime": physical_runtime,
+            "image_ladder_historical_runtime": image_runtime,
             "release": "Dendritic credit-assignment software",
             "release_schema": 3,
             "implementation_repository_commit": commit,

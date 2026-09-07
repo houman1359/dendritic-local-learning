@@ -7,7 +7,7 @@ author-specific action still required. This audit does not replace official form
 ## Structure and editorial scope
 
 - [x] Revised title and a main narrative organized as Introduction, Results, Discussion and Methods.
-- [x] Eight main figures and Supplementary Figures S1–S47; physical depth is promoted to main Figure5 with its full programme retained in S31 and the external six-animal reanalysis is in S17.
+- [x] Nine main figures and Supplementary Figures S1–S52; the conductance credit comparison is main Figure 5 and physical depth is main Figure 6 with its full programme retained in S31 and the external six-animal reanalysis is in S17.
 - [x] Cover letter, editorial summary and overlap statement reflect the dictionary formulation and conditional results.
 - [x] The initial costed selector in a finite linear tree class retains its negative long-horizon result in S35. Main Figure4 links matched pairwise/quartic learning to learned credit geometry; forward construction and noisy-query tree selection remain supporting analyses in the same paper.
 - [ ] Verify current abstract/title/reference/display guidance and decide on length: the author requested 6,000–6,500 main-text words, while the local audit retains approximately 5,000 as advisory journal guidance.
@@ -30,7 +30,7 @@ author-specific action still required. This audit does not replace official form
 - [x] Direct checks reproduce 270 stored gradient moments and verify actual one-step decreases exceed the global bound; all 2,700 denominators are finite and positive.
 - [x] Pooled score correlations use 5,000 whole-seed bootstrap draws; within-family prediction, degeneracy, regret, endpoint baselines and nine distinct nonconstant mean curves are exported.
 - [x] K=4 ancestry effects include individual paired controls, the declared four-control best comparator, bootstrap intervals and separately identified multiplicity-corrected tests. Exact accuracy-count ties are restored before Wilcoxon ranks.
-- [x] Figure8 shows native target-level response correlations, actual input-route supports and separate learning/geometry comparisons.
+- [x] Figure9 shows native target-level response correlations, actual input-route supports and separate learning/geometry comparisons.
 - [x] `analyze_fulltree_within_span_oracle.py` replays 130 exact-learning fits and compares frozen and trial-dependent coefficients within fixed dictionaries at common checkpoints. Three replays drift beyond 1e-5 NMSE; maximum drift is 0.000574, retained without exclusions. No oracle-trained trajectories are inferred.
 - [x] Both analysis folders include source/script hashes, numerical outputs and methodological notes.
 - [x] Completed a prospectively sealed held-out candidate-tree experiment: 20 independent seeds, 12,800 candidate fits, fixed reference spectra under rotation and genuine minibatch updates. The moment selector loses to rank-only and fixed baselines; no general morphology law is claimed.

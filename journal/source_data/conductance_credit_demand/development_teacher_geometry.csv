@@ -1,0 +1,13 @@
+seed,task,teacher_rank_one_capture
+101,ungated_independent,0.9999999999999973
+101,gated_independent,0.8936439530822937
+101,gated_conflict,0.8936439530822937
+101,moderate_conflict,0.9836900670959069
+102,ungated_independent,0.9999999999999996
+102,gated_independent,0.8932457018640367
+102,gated_conflict,0.8932457018640367
+102,moderate_conflict,0.9817791775618488
+103,ungated_independent,1.0
+103,gated_independent,0.8792088338475579
+103,gated_conflict,0.8792088338475579
+103,moderate_conflict,0.9703642298269606

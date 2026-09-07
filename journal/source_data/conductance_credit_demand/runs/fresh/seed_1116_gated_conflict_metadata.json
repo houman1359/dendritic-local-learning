@@ -1,0 +1,91 @@
+{
+  "all_16_conductances_trainable": true,
+  "clean_noise_floor": 0.0,
+  "constructive_forward_nmse": 0.0,
+  "phase": "fresh",
+  "records": [
+    {
+      "common_rate": true,
+      "optimizer": "adam",
+      "rate": 0.03,
+      "rule": "exact",
+      "selected_rate": true
+    },
+    {
+      "common_rate": true,
+      "optimizer": "adam",
+      "rate": 0.03,
+      "rule": "unit_broadcast",
+      "selected_rate": true
+    },
+    {
+      "common_rate": true,
+      "optimizer": "adam",
+      "rate": 0.03,
+      "rule": "calibrated_broadcast",
+      "selected_rate": true
+    },
+    {
+      "common_rate": true,
+      "optimizer": "sgd",
+      "rate": 0.3,
+      "rule": "exact",
+      "selected_rate": true
+    },
+    {
+      "common_rate": true,
+      "optimizer": "sgd",
+      "rate": 0.3,
+      "rule": "unit_broadcast",
+      "selected_rate": true
+    },
+    {
+      "common_rate": true,
+      "optimizer": "sgd",
+      "rate": 0.3,
+      "rule": "calibrated_broadcast",
+      "selected_rate": true
+    }
+  ],
+  "seed": 1116,
+  "slurm_job_id": "44916785",
+  "source": "scripts/morphology_conductance/model.py",
+  "task": {
+    "conflict": 1.0,
+    "gate": 10.0,
+    "name": "gated_conflict"
+  },
+  "teacher_geometry": {
+    "credit_calibrated_oracle_capture": 0.0,
+    "credit_effective_rank": 0.0,
+    "credit_rank_one_capture": 0.0,
+    "credit_unit_oracle_capture": 0.0,
+    "eligibility_calibrated_oracle_capture": 0.9694408969929986,
+    "loss_eligibility_calibrated_oracle_capture": 1.0,
+    "path_calibrated_oracle_capture": 0.8790768774798623,
+    "path_effective_rank": 1.269885721031159,
+    "path_rank_one_capture": 0.8791255954704965,
+    "path_unit_oracle_capture": 0.5352698767033861
+  },
+  "teacher_log_conductances": [
+    -1.4438902309358477,
+    2.044894503873151,
+    -1.3531365618927664,
+    1.7059722182215755,
+    2.0565298531553444,
+    -1.4796035460440617,
+    2.056154669565237,
+    -1.533072724141798,
+    2.7683994775119904,
+    2.69309287914837,
+    2.9492715536533156,
+    -1.6739359648488092,
+    2.564426471584933,
+    -1.2201803138541665,
+    1.5694557212568225,
+    1.6333208228147913
+  ],
+  "test_target_variance": 0.002687116823514981,
+  "training_target_variance": 0.002854777145545182,
+  "wall_seconds": 3.862643809057772
+}

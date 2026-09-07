@@ -1,0 +1,115 @@
+{
+  "actual_environment": {
+    "numpy": "1.26.4",
+    "pandas": "2.3.3",
+    "python": "3.10.13"
+  },
+  "declared_changes": [
+    "relocated study input and new output directories",
+    "actual library environment recorded independently of original",
+    "explicit excluded smoke update budget"
+  ],
+  "elapsed_seconds": 0.2343026038724929,
+  "excluded_from_scientific_results": true,
+  "family": "opponent",
+  "mode": "excluded_smoke",
+  "n_fits": 16,
+  "original_complete_budget": 4096,
+  "original_environment": {
+    "numpy": "2.2.6",
+    "pandas": "2.3.3",
+    "python": "3.10.13"
+  },
+  "original_environment_equality_asserted": false,
+  "original_fit_phase": "fresh",
+  "output_sha256": {
+    "aligned_strong_metadata.json": "8576452cb1e9202d6fee78b5146ef42c0d349ba3bc501fbc0526b16028de6d88",
+    "aligned_strong_states.npz": "e2793c9957e6a029f0d8c377101096f2c775ec426fcdb296e65772684b196087",
+    "curves.csv": "f17d9dd170c63ea469bd14cfc71bd324e9690faf9b7a8163beb2cab554ce02c8",
+    "diagnostics.csv": "29dd0f3a8d87e42dc5308b98697dafcd8341b77f35b7ad538afab06dde46a41f",
+    "endpoints.csv": "37ca41855258aa75c9cb43ec6fc516f46bc9e16d002f9880e2dc17185f080ef0",
+    "opposed_strong_metadata.json": "49c012dd6ad4ddd38412b3b741e97c64f667f245425d81eae25dff84f827df3e",
+    "opposed_strong_states.npz": "894b7b9b6356c27e49d8c1a4c89c86a2a647195232df93cc73b3f0bc6a6e3d53"
+  },
+  "portable_launcher_sha256": "ac0575e4b185bee5ec9c93d11a6c17b2403e159c2bc241fbcc5fb08032e7932e",
+  "reproduction_scope": "Verified scientific source/protocol and original seed; numerical library changes can affect floating-point trajectories. Extended replay restarts the same stream from initialization, rather than claiming to import historical optimizer state.",
+  "requested_phase": "fresh",
+  "science_inventory_original_sha256": "8f2eda1084dfdddc566bb38fef50c9d10f2811f6302993ce3576a112ffe1059f",
+  "seed": 2101,
+  "status": "passed",
+  "steps": 4,
+  "verified_inputs": [
+    {
+      "original_sha256": "8f2eda1084dfdddc566bb38fef50c9d10f2811f6302993ce3576a112ffe1059f",
+      "path": "source_data/conductance_credit_demand/science_handoff_inventory_20260906.tsv",
+      "reason": "original bytes",
+      "released_sha256": "8f2eda1084dfdddc566bb38fef50c9d10f2811f6302993ce3576a112ffe1059f"
+    },
+    {
+      "original_sha256": "094886e8e8031c87db0d448e46866c795fb0e5f8e921b1d6e6159631822415b3",
+      "path": "source_data/conductance_credit_demand/opponent/development_freeze.json",
+      "reason": "original bytes",
+      "released_sha256": "094886e8e8031c87db0d448e46866c795fb0e5f8e921b1d6e6159631822415b3"
+    },
+    {
+      "original_sha256": "d5078a89c8100f616631b601e32584692ab363a206aa923756df075e77caa387",
+      "path": "source_data/conductance_credit_demand/opponent/protocol.json",
+      "reason": "original bytes",
+      "released_sha256": "d5078a89c8100f616631b601e32584692ab363a206aa923756df075e77caa387"
+    },
+    {
+      "original_sha256": "8d29b76eef1a4cf02574f43e80fa0309e62c962ae6e1882dc11eaa6da63f92a7",
+      "path": "scripts/conductance_credit_demand/model.py",
+      "reason": "original bytes",
+      "released_sha256": "8d29b76eef1a4cf02574f43e80fa0309e62c962ae6e1882dc11eaa6da63f92a7"
+    },
+    {
+      "original_sha256": "8f37a389400a9ac058b0489dc7ae9167b6350dbbc13f8804a78a44e83cfafc56",
+      "path": "scripts/conductance_credit_demand/opponent_model.py",
+      "reason": "original bytes",
+      "released_sha256": "8f37a389400a9ac058b0489dc7ae9167b6350dbbc13f8804a78a44e83cfafc56"
+    },
+    {
+      "original_sha256": "6dd0a94a9acb3efc4f8638f4288a4d0624e99eca5633cbcb1e4b1b9c4b2d0ac9",
+      "path": "scripts/conductance_credit_demand/run_opponent.py",
+      "reason": "original bytes",
+      "released_sha256": "6dd0a94a9acb3efc4f8638f4288a4d0624e99eca5633cbcb1e4b1b9c4b2d0ac9"
+    },
+    {
+      "original_sha256": "da9454c135265f6c6ac2a47ba7c0ba7613cc1958d6a5666286e64600697230ef",
+      "path": "scripts/conductance_credit_demand/test_opponent.py",
+      "reason": "original bytes",
+      "released_sha256": "da9454c135265f6c6ac2a47ba7c0ba7613cc1958d6a5666286e64600697230ef"
+    },
+    {
+      "original_sha256": "0319c1cf13ee702eb8ef460937d14c9a7cddb53cfbfc491c2fe60abb889ad706",
+      "path": "scripts/morphology_conductance/model.py",
+      "reason": "original bytes",
+      "released_sha256": "0319c1cf13ee702eb8ef460937d14c9a7cddb53cfbfc491c2fe60abb889ad706"
+    },
+    {
+      "original_sha256": "9436196dedc42145e0024a26a0dbd7eab6ed3996eaeb2fe7b6c79e30f71d33bc",
+      "path": "source_data/conductance_credit_demand/opponent/selection_freeze.json",
+      "reason": "original bytes",
+      "released_sha256": "9436196dedc42145e0024a26a0dbd7eab6ed3996eaeb2fe7b6c79e30f71d33bc"
+    },
+    {
+      "original_sha256": "3de5cff8b08303ea00587a659556b04101f5b7e1b2a7f9e4842a80561267664c",
+      "path": "scripts/conductance_credit_demand/extend_opponent.py",
+      "reason": "original bytes",
+      "released_sha256": "3de5cff8b08303ea00587a659556b04101f5b7e1b2a7f9e4842a80561267664c"
+    },
+    {
+      "original_sha256": "1a0e9680b3ec66763743b8782f2c56805efbd83f334a589e7908991e9bceeac1",
+      "path": "source_data/conductance_credit_demand/opponent/extension_source_freeze.json",
+      "reason": "original bytes",
+      "released_sha256": "1a0e9680b3ec66763743b8782f2c56805efbd83f334a589e7908991e9bceeac1"
+    },
+    {
+      "original_sha256": "3de5cff8b08303ea00587a659556b04101f5b7e1b2a7f9e4842a80561267664c",
+      "path": "scripts/conductance_credit_demand/extend_opponent.py",
+      "reason": "original bytes",
+      "released_sha256": "3de5cff8b08303ea00587a659556b04101f5b7e1b2a7f9e4842a80561267664c"
+    }
+  ]
+}

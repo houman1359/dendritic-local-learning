@@ -1,5 +1,7 @@
 # Credit-first revision, 6 September 2026
 
+This record documents the historical reviewed release `cf9fda8`. The subsequent implementation and current release checks are documented in `CREDIT_FOLLOWUP_IMPLEMENTATION_20260906.md`.
+
 The paper keeps its original question: which spatial distinctions must useful dendritic credit preserve for a task? The retained title is **Dendritic morphology as a dictionary for local credit assignment**. Forward representability is a prerequisite for the learning comparisons; the noisy-query structure estimator remains supplementary evidence within this same Article. It does not replace the task-to-credit argument.
 
 The new evidence supports that decision. It does not restore the failed initialization selector, and it does not establish a universal law from scalar task rank to optimal morphology.
@@ -56,3 +58,12 @@ Final integration commit, test counts, archive names and checksums are recorded 
 The main PDF has 29 pages and the supplement 138 pages (167-page combined reading copy). All eight main figures and 47 supplementary figures are included. Both TeX builds finish without warnings or box/float overflows; the combined PDF preserves all page text, links and bookmarks. The format, citation, overlap, figure-lineage, main/SI provenance, additive-reference and reproducibility checks pass. The final provenance inventory covers 2,785 records and 2,713 distinct files.
 
 The final committed build and archive validation record is written separately to `analysis/CREDIT_FIRST_RELEASE_VALIDATION_20260906.json` so the frozen source does not contain a circular reference to its own commit or archive hashes. Generated ZIPs are excluded from version control and built from the clean, reachable release branch.
+
+The scientific integration is preserved at `3aa6d72b3592e64e439419a86ffb0e10cfcf4036`. Subsequent release checks corrected the figure-count metadata and added ten committed historical generators plus one frozen scientific protocol to the software allowlist. A new preflight checks all 117 registered generator paths and the protocol against that allowlist. The final source is preserved on `credit-first-release-20260906` at `cf9fda8ad31453a7eed0c1e45c8bf420e5b19f7a`.
+
+
+The final release checks are complete. **182 journal tests pass, with one optional historical-run archive check skipped**. The exact exported core installs in a clean environment and passes 16 targeted tests. Both strict restored-manuscript audits verify all 2,785 provenance records with zero errors or warnings. All 3,378 restored software/data hash links verify, and both historical depth launcher conditions verify all 476 runtime files.
+
+The four final archives are installed under `submission/`: `Nature_Communications_Submission.zip`, `Overleaf_Project.zip`, `Source_Data.zip`, and `Dendritic_credit_assignment_software.zip`, each with a SHA-256 file. The cleaned software is 12.31 MB. All archives identify the same clean `cf9fda8` release, and the extracted Overleaf project reproduces every main/SI page in text and rendered appearance. Earlier generated packages were preserved separately under `analysis/previous_generated_release_*`; they are excluded from the submission.
+
+The revision, experiments, figures and local release work are complete. Final author declarations, official-form confirmation, actual concurrent-submission status, immutable deposition identifiers and journal upload remain author submission steps.

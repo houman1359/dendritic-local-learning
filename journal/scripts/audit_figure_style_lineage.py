@@ -45,11 +45,15 @@ NONCANONICAL_WIDTH_RE = re.compile(
 )
 
 # A common main placement preserves the same printed text and line sizes
-# across the eight native-width canvases. Figure heights carry the layout
-# adjustments required for self-contained captions. Supplementary sheets
-# remain full width.
+# across the nine native-width canvases. Figure heights carry the layout
+# adjustments required for self-contained captions. Multi-panel supplementary sheets remain full width. The explicitly listed
+# single-panel dose curve is printed at its native one-column width so its
+# type and line weights match the other figures.
 MAIN_TEXTWIDTH_SCALE = 1.0
 MIN_MAIN_TEXTWIDTH_SCALE = 0.85
+NATIVE_SINGLE_COLUMN_SI = {
+    "supplementary/figure_S48_normalized_shunt_dose.pdf": ("3.6in", 259.2),
+}
 TEXTWIDTH_SCALE_RE = re.compile(
     r"(?P<scale>(?:0(?:\.\d+)?|1(?:\.0+)?))?\\textwidth"
 )
@@ -132,7 +136,18 @@ def main() -> None:
             asset = match.group("asset")
             included_assets.append(asset)
             width_match = TEXTWIDTH_SCALE_RE.fullmatch(width)
-            if width_match is None:
+            native_single = NATIVE_SINGLE_COLUMN_SI.get(asset) if relative != "main.tex" else None
+            if native_single is not None:
+                expected_width, native_points = native_single
+                if width != expected_width:
+                    failures.append(f"single-column asset {asset} uses {width}; expected {expected_width}")
+                import fitz
+                pdf_path = ROOT / "figures" / asset
+                if pdf_path.is_file():
+                    with fitz.open(pdf_path) as document:
+                        if abs(document[0].rect.width - native_points) > 1e-3:
+                            failures.append(f"single-column asset {asset} is not at its declared native width")
+            elif width_match is None:
                 failures.append(
                     f"non-textwidth LaTeX figure scale in {relative}: {asset} uses {width}"
                 )

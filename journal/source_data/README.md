@@ -16,14 +16,19 @@ paired observations, not independent biological or training replicates.
 
 ## Current publication map
 
-Main 1 merges the model and dictionary introduction;2 feedback;3 moment theory;
-4 branch conflict;5 subtree hierarchy;6 interaction structure, calibration and credit;7 anatomy;8 focal
-conductance;9 measured responses. The supplement contains 42 figures, including
-S32 coefficient estimators,S33 morphology/label sensitivity andS34 response baselines.
+The main sequence is: 1 framework and image learning; 2 contextual branch selection;
+3 ancestry at matched bandwidth; 4 interaction order and learned credit geometry;
+5 context-dependent credit in conductance trees; 6 physical depth and training budget;
+7 anatomy beyond broadcast; 8 focal shunting as ancestry gain; and 9 measured responses.
+The supplement retains the complete earlier evidence, the normalized shunt dose
+response, and the new image and conductance controls. Current figure counts and
+exact source assignments are enforced by the release inventory.
 The six-animal signed-coordinate reanalysis is supplementary context only.
 
-## Completed review additions
+## Supporting investigations
 
+- `conductance_credit_demand`: separately frozen monotonic and opponent-tuning studies, complete development and fresh cohorts, extended training, parameter-range sensitivity, an equally budgeted expanded-rate screen, and common-state gradient diagnostics.
+- `image_ladder_controls`: trained one- and three-pattern dictionaries, matched learning-rate selection, frozen-core decoder references, coordinate-specific capture, and portable cohort-specific runtime records.
 - `review_evidence_reanalysis`: deterministic/global-curvature utility, explicit noise comparison, paired ancestry controls, native-unit functional effects and retrospective prediction limits.
 - `fulltree_within_span_oracle`: common-state replay geometry, with numerical drift retained; no oracle-trained performance.
 - `review_curve_lineage`: bounded source/run validity audit. Legacy S1/S3 shunting execution remains unresolved; S8 uses the retained run-level validity classification.
@@ -51,4 +56,4 @@ that the archive matches a newer manuscript revision.
 
 The morphology revision adds `morphology_structure` (exact finite-domain diagnostics and tree/depth construction), `morphology_finite_horizon` (frozen dynamic forecasts and fresh fits), `morphology_calibration` (independent noisy selection and an additional end-to-end gradient-learning bridge), `morphology_credit` (oracle-compatible trees learned under five credit rules), and `morphology_conductance` (positive-conductance grouping, feedback controls and an analytic interaction bound). Their README, protocol, selection seal and numerical validation files specify access to labels, calibration, target-informed references and the comparison unit. The original prospective experiment remains intact in S35; S36–S42 carry the detailed new evidence.
 
-The Boolean extension adds `boolean_theory` (105 exhaustive task–tree cases, 49 exact constructions, canonical derivatives and separately labeled post hoc target projections) and `boolean_morphology` (6,720 fresh fits, 1,680 development fits and 336 excluded smoke fits). Figure 6A uses the exact grouping example; S43–S44 retain complete theory, parameter learning, all rates, classification controls and independent audits. The primary grouping effect passes, whereas the small aligned XOR-of-AND credit effect fails its predeclared 0.01 practical margin; parity credit effects are descriptive. Seven fixed logical templates are repeated across seeds, not sampled as new task families. These cohorts are separate from the earlier morphology bridges.
+The Boolean extension adds `boolean_theory` (105 exhaustive task–tree cases, 49 exact constructions, canonical derivatives and separately labeled post hoc target projections) and `boolean_morphology` (6,720 fresh fits, 1,680 development fits and 336 excluded smoke fits). S43–S44 retain complete theory, parameter learning, all rates, classification controls and independent audits. The primary grouping effect passes, whereas the small aligned XOR-of-AND credit effect fails its predeclared 0.01 practical margin; parity credit effects are descriptive. Seven fixed logical templates are repeated across seeds, not sampled as new task families. These cohorts are separate from the earlier morphology bridges.

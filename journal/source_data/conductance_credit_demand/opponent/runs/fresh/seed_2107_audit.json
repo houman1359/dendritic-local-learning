@@ -1,0 +1,16 @@
+{
+  "completed_utc": "2026-09-07T02:06:26.319596+00:00",
+  "development_freeze_sha256": "094886e8e8031c87db0d448e46866c795fb0e5f8e921b1d6e6159631822415b3",
+  "files_sha256": {
+    "seed_2107_aligned_strong_metadata.json": "67c53161686f5ce82465657a62c5ec54c4147e16992f6865c1b05954b8a1d657",
+    "seed_2107_aligned_strong_states.npz": "387b6f6c20f1324dfe0007b6bc8e07fe7f62f3891ad886006ecf6be83d6b366d",
+    "seed_2107_curves.csv": "2f5b4823eedd86d7df176a8dcccd649af1d1ae84d7788fd273fbe8c6e9508b69",
+    "seed_2107_diagnostics.csv": "b139c2f56ede0501899fdce19cd6a8d2d5d011adf0726399d04e9466b048e8fc",
+    "seed_2107_endpoints.csv": "104665d0519301fe961ff3b80f6d80668bc625e329fb67febe67750346e601b0",
+    "seed_2107_opposed_strong_metadata.json": "43a3d9ef4d457fbe3e86a881807dc40e043a37294f8d65e0c90ce6e8d7a3cbd8",
+    "seed_2107_opposed_strong_states.npz": "054d56da0ab9049d42f6984cf4a31067ce9f47cf39e410b713e416005ca7c4c8"
+  },
+  "phase": "fresh",
+  "seed": 2107,
+  "selection_freeze_sha256": "9436196dedc42145e0024a26a0dbd7eab6ed3996eaeb2fe7b6c79e30f71d33bc"
+}

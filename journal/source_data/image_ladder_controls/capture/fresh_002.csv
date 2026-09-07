@@ -1,0 +1,13 @@
+cohort,architecture,seed,checkpoint,checkpoint_sha256,forward_max_difference,coordinate,basis,n_fields,mean_capture,ensemble_energy_capture
+fresh,additive,50302,initial,f49cbf9fa2a7d74fca9cf251bdf790bb88934ea5eab9d9fbae4878a325330071,0.0,activation,broadcast_k1,262144,0.849381404660151,0.8816621933499356
+fresh,additive,50302,initial,f49cbf9fa2a7d74fca9cf251bdf790bb88934ea5eab9d9fbae4878a325330071,0.0,activation,exact_k12,262144,1.0,1.0
+fresh,additive,50302,initial,f49cbf9fa2a7d74fca9cf251bdf790bb88934ea5eab9d9fbae4878a325330071,0.0,activation,subtrees_k3,262144,0.8914118445851057,0.9171257156846773
+fresh,additive,50302,initial,f49cbf9fa2a7d74fca9cf251bdf790bb88934ea5eab9d9fbae4878a325330071,0.0,voltage,broadcast_k1,262144,0.6458386547068813,0.6870657390428587
+fresh,additive,50302,initial,f49cbf9fa2a7d74fca9cf251bdf790bb88934ea5eab9d9fbae4878a325330071,0.0,voltage,exact_k12,262144,1.0,1.0
+fresh,additive,50302,initial,f49cbf9fa2a7d74fca9cf251bdf790bb88934ea5eab9d9fbae4878a325330071,0.0,voltage,subtrees_k3,262144,0.7687878605930919,0.7811807051008218
+fresh,additive,50302,trained,cbcef333f65ee9cbf847ee385e8349503084ece5142055569b06dbade3fa2f53,0.0,activation,broadcast_k1,262144,0.7662195994631449,0.8513857373889598
+fresh,additive,50302,trained,cbcef333f65ee9cbf847ee385e8349503084ece5142055569b06dbade3fa2f53,0.0,activation,exact_k12,262144,1.0,1.0
+fresh,additive,50302,trained,cbcef333f65ee9cbf847ee385e8349503084ece5142055569b06dbade3fa2f53,0.0,activation,subtrees_k3,262144,0.8576212255284277,0.9433982541730949
+fresh,additive,50302,trained,cbcef333f65ee9cbf847ee385e8349503084ece5142055569b06dbade3fa2f53,0.0,voltage,broadcast_k1,262144,0.5178858689582585,0.5610149665892735
+fresh,additive,50302,trained,cbcef333f65ee9cbf847ee385e8349503084ece5142055569b06dbade3fa2f53,0.0,voltage,exact_k12,262144,1.0,1.0
+fresh,additive,50302,trained,cbcef333f65ee9cbf847ee385e8349503084ece5142055569b06dbade3fa2f53,0.0,voltage,subtrees_k3,262144,0.7140874514048666,0.7236074441058331

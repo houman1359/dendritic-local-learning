@@ -1,0 +1,7 @@
+cohort,architecture,seed,checkpoint,checkpoint_sha256,forward_max_difference,coordinate,basis,n_fields,mean_capture,ensemble_energy_capture
+historical,additive,42,trained,606d29b0097505b9003df6f64214e7a42fd755a6b12ed3da0d6ef98a556cb511,0.0,activation,broadcast_k1,262144,0.7638907138998362,0.8350677505104614
+historical,additive,42,trained,606d29b0097505b9003df6f64214e7a42fd755a6b12ed3da0d6ef98a556cb511,0.0,activation,exact_k12,262144,1.0,1.0
+historical,additive,42,trained,606d29b0097505b9003df6f64214e7a42fd755a6b12ed3da0d6ef98a556cb511,0.0,activation,subtrees_k3,262144,0.8559109681527203,0.9336277988417716
+historical,additive,42,trained,606d29b0097505b9003df6f64214e7a42fd755a6b12ed3da0d6ef98a556cb511,0.0,voltage,broadcast_k1,262144,0.5230402931908513,0.5571317307179039
+historical,additive,42,trained,606d29b0097505b9003df6f64214e7a42fd755a6b12ed3da0d6ef98a556cb511,0.0,voltage,exact_k12,262144,1.0,1.0
+historical,additive,42,trained,606d29b0097505b9003df6f64214e7a42fd755a6b12ed3da0d6ef98a556cb511,0.0,voltage,subtrees_k3,262144,0.7216545120345003,0.7336414420747782

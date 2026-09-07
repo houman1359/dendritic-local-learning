@@ -1,0 +1,25 @@
+{
+  "builder": "scripts/conductance_credit_demand/report_expanded_rates.py",
+  "builder_sha256": "44d4978c8819972f1ac037019e6b6525e755dd0cbc9d5dfb58289e16800b6a78",
+  "figure": "Supplementary Fig. S52",
+  "geometry_points": [
+    518.4,
+    422
+  ],
+  "inputs": {
+    "all_endpoints.csv": "71fbf664038341594c5c9c4f8561bcd2a2b96ef451688357a0b6228eb041010f",
+    "complete_trigger_review.json": "7ae76c26ac75f72118fbac3aa36adaa5fa8b65ea897ad6eb5b79c6cf01cd21c3",
+    "protocol_freeze.json": "81c1840b9fa0a13f2df15d37943f078619a3b1e975e820cc66a30dc4f9867e8d",
+    "rate_comparison.csv": "1b1eaf59ea2f9b6dec085dd8c193def91d8a19bfda19b8700ae080594d8f0f96",
+    "selected_rates.csv": "98d27d9d2b9e103235e87956a1ebf3f5ad89fefa120ce8f9d175c0a9f380cf46",
+    "validation_trigger_addendum.json": "cfb20673afa6989f8a4838874c272c4617da5897c0525cc2ebfa18de7040cf23"
+  },
+  "n_development_seeds": 3,
+  "n_fit_endpoints": 288,
+  "overlap_audit": "See native figure audit; legend occupies the empty central region.",
+  "pdf_sha256": "85b7d72af8ef157eba3877351cd8856909d3d355c9b6ca6e21ed8462e6d372bd",
+  "plot_only": true,
+  "source_csv": "figure_expanded_rates_source.csv",
+  "source_sha256": "b4305d4033b54c4db89c8395ca7053a922318ef3460b8cb941d0cd6587f6fade",
+  "validation_selection_only": true
+}
