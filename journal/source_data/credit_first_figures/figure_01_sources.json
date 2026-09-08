@@ -1,31 +1,48 @@
 {
   "panel_sources": {
-    "A": "Public build_main_figure_01.panel_factorization_readable: directed-tree eligibility and exact path example.",
-    "B": "Actual 12 nonsomatic sites: three proximal sites and nine distal children; soma outside basis. K1/K3 oracle projection in activation coordinates; matrices displayed in subtree order. K12 resolved dictionary spans arbitrary fields and does not imply 12 independently supplied external errors.",
-    "C": "Complete six-arm fresh MNIST selected-rate cohort: 10 paired seeds per architecture; 180 epochs; validation-selected checkpoint. Decoder-only core remains fixed and is separated from credit conditions.",
-    "D": "Fresh paired test-accuracy contrasts K3 minus projected K1 and exact path minus K3, same selected-rate cohort as C.",
-    "E": "Separate legacy MNIST direct-feedback-alignment and flattened CIFAR-10 paired exact-minus-neuron contrasts; source cohorts kept separate from C--D."
+    "A": "Schematic: MNIST inputs at excitatory contacts of 128 trees, readout and loss, neuronal error delta_u returning as the somatic error delta_0 to every soma; eligibility x delivered credit (main.tex Eqs. factorization, dendriticlocalrule). No measured data.",
+    "B": "Schematic: three deliveries on one generic depth-3 tree (layer scalar bus spanning a ghost neighbour, per-neuron bus sourced at the soma, exact path chain with alpha tags; Eq. pathgain). The MNIST model has two path factors. No measured data.",
+    "C": "Actual 12 nonsomatic sites: three proximal sites and nine distal children, soma outside the basis. K1 (ones), K3 (subtree indicators, rows in subtree order), K12 (identity). K1/K3 projected rules take oracle coefficients from the exact field (badge); the per-neuron rule uses the same all-ones profile with delta_u.",
+    "D": "Complete six-arm fresh MNIST selected-rate cohort: 10 paired seeds per architecture; 180 epochs; validation-selected checkpoint. The printed tag is the paired per-neuron minus layer-scalar contrast (shunting / additive). Decoder-only core remains fixed.",
+    "E": "Per-neuron minus scalar (pp) in four separately trained cohorts: fresh MNIST (10 seeds), legacy DFA MNIST (15 seeds), Fashion-MNIST with the matched-width scalar fallback (10 seeds), flattened CIFAR-10 additive [3,3,3,3] (20 seeds). Cohorts are not one ladder.",
+    "F": "Exact path minus per-neuron (pp) in the same four cohorts and rows as E; the printed note gives the fresh-cohort within-tree contrasts K3 minus projected K1 and exact minus K3 (shunting / additive).",
+    "G": "Mean voltage-coordinate capture of D's trained exact-path fields by the K1/K3/K12 dictionaries of C; fresh cohort, trained checkpoints, 10 seeds per architecture."
   },
   "source_sha256": {
-    "scripts/credit_first_figures/build_framework.py": "48b54aec56029cad502a987df28a56b583d11275ddfb18857b82ab897a3ab883",
-    "scripts/build_main_figure_01.py": "125fed573a737382951738db70253f791969a786b1248186b9d338337f87e208",
-    "scripts/figure_canvas.py": "498dec86dcac34c9841538fa7b5bf7b7311d468db8fbe0c7a648fbb9508c5e1f",
-    "scripts/journal_style.py": "32a3272cebb949784b694bc6dbb495cf74f6ba4ddf97d18d44f3ef54e082844e",
+    "scripts/credit_first_figures/build_framework.py": "9731e128e6a6cc55abb1e7ed1369640b3ffbe6f01a6e8262b77a673477340807",
+    "scripts/figure_canvas.py": "d8ce8f435cd727e8860da6d1a554fbfd3e1756a1cb18ea7b3602aa00347f52fd",
+    "scripts/journal_style.py": "d31c604f3d813463784fd1a4aa9ea64b93bd7ca32c1cb43617f031a4d6d2f0e0",
+    "scripts/native_schematics.py": "edd5694b7b530b82ddd33b193b74e4a175846981583ef575355dacff27cfec11",
+    "scripts/credit_tree_schematics.py": "ebd31b5ccc86b00bb27a236af210eb2a1d1820e9fcec27b57283a12224158cbe",
     "source_data/image_ladder_controls/summaries/condition_summary_six_rules.csv": "0259f1306809a5d93eac4a753dcef63712b553b0a639ea4e91d2667eac588bd5",
     "source_data/image_ladder_controls/summaries/fresh_analysis_rows_six_rules.csv": "1d7ea193b17aec9486e89625d71a4078a2ad9b2255d59b5052b618307f61b44c",
     "source_data/image_ladder_controls/summaries/paired_contrasts_six_rules.csv": "ea0566a7a73d05f0bb76e9a0fae3e2399bb7f1852064a37e9d73f7d5215c350a",
+    "source_data/image_ladder_controls/summaries/delivery_coordinate_capture.csv": "e0fbcb494a8187265f2fd98610a589c1fbf8857e3aec8efb28250f8eeff868eb",
+    "source_data/image_ladder_controls/summaries/delivery_coordinate_capture_summary.csv": "6c8edbf855ccbec16dceefd7271d8c5b8b7b7d5ede04f74e645db4f9bbaab050",
     "source_data/mnist_between_within_factorial/paired_contrasts.csv": "6416c2a755041d1f1c29cdc01aef76b265cf177268933e1eaa9ee040852b3c94",
+    "source_data/mnist_between_within_factorial/seed_outcomes.csv": "8172911ea002348bb4e872bd2003f16152b1b5a085b006e5f0444dd8ca063d24",
+    "source_data/fashion_feedback_ladder/paired_contrasts.csv": "aa093c980f42df397b432ec5c3fbe85fe9aed31877ea3b43468ae7f77a076ee2",
+    "source_data/fashion_feedback_ladder/seed_outcomes.csv": "32fc9ae9c5c317a6063140146f55a4557978e03481b528f365ff5033fc77eb4c",
     "source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv": "cc19f7467e39e25c2f708ed7ff99b63c0f02a76ca0c6a85c940827b1a813186d",
+    "source_data/cifar10_additive_feedback_ladder_confirmatory/seed_outcomes.csv": "914982dd63f6dfbe655048629e8fdce0e3733956526372748900d19337e36aad",
     "source_data/image_ladder_controls/protocol.json": "bc4922ede5a74bf2e1edc740d2e6dd0aeb7eb1b750a735bd8a91cd427c64e717",
     "source_data/image_ladder_controls/selection.json": "7a9a172ddb9ac9f561718aeee0c3045fa98b1a5ca319bb7663f310680a185b47",
     "source_data/image_ladder_controls/projected_k1/protocol.json": "9f7bac321a2d6903c68ef9cf02baeff9188cd52f39a40e41d01f2ee858603f13",
     "source_data/image_ladder_controls/projected_k1/selection.json": "87598ced391bc598384f387d2dd64a1f2c3209df9389e5a6b8811a2ac60389b1"
   },
-  "numerical_scope": "No fitting, selection, bootstrap, or source-outcome mutation. Existing 95% bootstrap intervals replayed exactly; seed means and paired contrast means independently recomputed as assertions.",
+  "numerical_scope": "No fitting, selection, bootstrap, or source-outcome mutation. Existing 95% bootstrap intervals replayed exactly; seed means, paired contrast means, cohort seed counts and capture means independently recomputed as assertions.",
   "plot_units": {
-    "C": "Test accuracy (%); source fractions multiplied by 100",
-    "D": "Paired test-accuracy differences (percentage points); source fractions multiplied by 100",
-    "E": "Legacy paired test-accuracy differences (percentage points)"
+    "D": "Test accuracy (%); source fractions multiplied by 100; tag in percentage points",
+    "E": "Paired per-neuron minus scalar test-accuracy differences (percentage points)",
+    "F": "Paired exact-path minus per-neuron test-accuracy differences (percentage points); note in percentage points",
+    "G": "Mean per-field capture (%); source fractions multiplied by 100"
+  },
+  "capture_coordinate": "voltage",
+  "cohort_seed_counts": {
+    "mnist_fresh": 10,
+    "mnist_dfa": 15,
+    "fashion": 10,
+    "cifar10": 20
   },
   "fresh_seed_count_per_architecture": 10,
   "normal_font_minimum_pt": 6.8,

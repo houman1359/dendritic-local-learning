@@ -1,25 +1,139 @@
 {
   "panel_sources": {
-    "A": "Public build_main_figure_05.hierarchical_task; selected stream +1 and fixed negative distractor coefficients",
-    "B": "Algebraic sum from the frozen task configuration and the actual grouped_routes support, verified across all 8 contexts; no new prospective experiment",
-    "C": "Public routing_figure_panels.bandwidth_sweep_compact; original 20-seed accuracies and original mean/interval functions",
-    "D": "Public routing_figure_panels.topology_alignment_compact; original paired matched-versus-rewired statistics and resampling seeds",
-    "E": "Frozen ancestry_k4_control_contrasts primary maximum-over-four comparator, paired points and Holm adjustment across four K budgets",
-    "F": "Same frozen reanalysis: dense rank-4, random sparse and depth-interleaved contrasts; large derangement effect remains visible in C rather than setting F's scale"
+    "A": "Schematic from the frozen task configuration (selected +1; sibling, same-half and opposite-half distractor coefficients) on the shared balanced tree",
+    "B": "Ancestry dictionaries A (8 x K) from grouped_routes(correct_ancestry_subtrees); card footers are the raw group sums of figure_03_coefficient_prediction.csv, verified across all 8 contexts",
+    "C": "condition_summary.csv means/95% intervals (dendritic_tree: correct ancestry, derangement) and the per-seed maximum of four matched controls from seed_outcomes.csv (routing_figure_panels._best_control_by_budget)",
+    "D": "condition_summary.csv means/95% intervals for dendritic_tree versus degree_depth_matched_rewired_tree under correct ancestry; paired differences and seed-bootstrap intervals from seed_outcomes.csv (bootstrap seeds 70000+)",
+    "E": "review_coefficient_encoder and review_coefficient_hard_readout trajectories at calibration 256, noise 0.5, delay 0, epoch 80 (figure_03_coefficient_source.csv); paired contrasts from both paired_contrasts.csv files; hard readout exploratory",
+    "F": "Recipient supports of c3's credit at K = 4 from grouped_routes / random_rank_routes (figure_03_control_supports.csv, rng seed 0 for the random families); correct ancestry delivery drawn on the ghost tree",
+    "G": "Frozen ancestry_k4_control_contrasts primary maximum-over-four comparator and individual controls with paired seed points; Holm adjustment across four budgets"
   },
   "source_sha256": {
-    "scripts/credit_first_figures/build_ancestry.py": "9bc272b82313f47237086e92e8a86f4afd9a530dae8094dde77381a06f56c228",
-    "scripts/build_main_figure_05.py": "27f736bdba3af1562657e77e7a4fcb5cc937f92d43833ee91667b92e1a9e0e3b",
+    "scripts/credit_first_figures/build_ancestry.py": "c0e1bf27819069c24cac371e8dd65df236353b767953c0e27f552194f7ccab7c",
     "scripts/routing_figure_panels.py": "b6a38d2f1329add30c30e3e98317f3d5a3946a2133a75303d458723b32faf521",
     "scripts/run_trained_subtree_address_full_factorial.py": "c5d75b8ea9bc29d7fd24ca53c360c4bbdf825d7fa31f84727af4b7dd47e875dd",
     "configs/trained_subtree_address/full_factorial_confirmatory.json": "8684f7c30886e7aede7eaa71550033ad84605fcfb45220d32a2d91d2627f23b2",
-    "scripts/figure_canvas.py": "498dec86dcac34c9841538fa7b5bf7b7311d468db8fbe0c7a648fbb9508c5e1f",
-    "scripts/journal_style.py": "32a3272cebb949784b694bc6dbb495cf74f6ba4ddf97d18d44f3ef54e082844e",
+    "scripts/figure_canvas.py": "d8ce8f435cd727e8860da6d1a554fbfd3e1756a1cb18ea7b3602aa00347f52fd",
+    "scripts/journal_style.py": "d31c604f3d813463784fd1a4aa9ea64b93bd7ca32c1cb43617f031a4d6d2f0e0",
+    "scripts/native_schematics.py": "edd5694b7b530b82ddd33b193b74e4a175846981583ef575355dacff27cfec11",
+    "scripts/credit_tree_schematics.py": "ebd31b5ccc86b00bb27a236af210eb2a1d1820e9fcec27b57283a12224158cbe",
     "source_data/trained_subtree_address_full_factorial/seed_outcomes.csv": "2f2cc0d6a21fd7bd46a5437e031e69ae31626ef6650c6cced0be1d2a0861303c",
     "source_data/trained_subtree_address_full_factorial/condition_summary.csv": "97358de3f0bfb7a91ba2aa6f164705d1a6e6d5c1b4e35b266c5e5a9fc03afb20",
     "source_data/review_evidence_reanalysis/ancestry_k4_control_contrasts.csv": "aed995858ac591ddea7f8f0314d018e4ad4b51a810a032e99f3f1dff2b131e2a",
-    "source_data/review_evidence_reanalysis/ancestry_control_paired_differences.csv": "3746a2e477c9e6c734ffb8247745b7027288cfed33367cd04887b86457d11b22"
+    "source_data/review_evidence_reanalysis/ancestry_control_paired_differences.csv": "3746a2e477c9e6c734ffb8247745b7027288cfed33367cd04887b86457d11b22",
+    "source_data/review_coefficient_encoder/trajectories.csv": "2c3cb8e8ab35d60f07ca8351741d6f8cabd35c3f96716db52f7a9a10b1a6772f",
+    "source_data/review_coefficient_encoder/paired_contrasts.csv": "b4b7e009e271d9d7a812f9d318f9b20dd5187404bbf388dc5887ffe07904be1f",
+    "source_data/review_coefficient_hard_readout/trajectories.csv": "74e4818f4d8bab92ab7c1e9d6e4fb2817cb432f164c5d0d7f6163ea643219781",
+    "source_data/review_coefficient_hard_readout/paired_contrasts.csv": "46b214de8efef2e8640cce199a1cbb032477ec0e9ec62fdbc727e471705751e1"
   },
   "layout_findings": [],
-  "coefficient_scope": "Raw group sums; implemented route rows divide by sqrt(group size). Signs follow from the generator and are not a newly prospective accuracy prediction."
+  "derived_numbers": {
+    "group_sums": {
+      "1": -3.05,
+      "2": -0.05000000000000004,
+      "4": 0.85,
+      "8": 1.0
+    },
+    "accuracy_by_K": {
+      "ancestry": [
+        0.1866455078,
+        0.4486328125,
+        0.8010498047,
+        0.8100097656
+      ],
+      "best": [
+        0.544970703115,
+        0.6026367187550001,
+        0.78837890625,
+        0.8100097656299999
+      ],
+      "deranged": [
+        0.1866455078,
+        0.1846923828,
+        0.1904785156,
+        0.2512939453
+      ]
+    },
+    "rewiring_pp": {
+      "1": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "2": [
+        23.149414061,
+        21.0229492174875,
+        25.344238280012497
+      ],
+      "4": [
+        5.017089844,
+        4.211425781987501,
+        5.954589844
+      ],
+      "8": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "coefficient_source": {
+      "means": {
+        "oracle": 0.8029052734375,
+        "soft": 0.258251953125,
+        "hard*": 0.6403076171875,
+        "frozen": 0.1866943359375
+      },
+      "soft_minus_oracle": [
+        -54.4653320312,
+        -55.4467773438,
+        -53.5400390625,
+        0.000176898300424
+      ],
+      "soft_minus_frozen": [
+        7.15576171875,
+        6.25732421875,
+        8.06890869141,
+        5.72204589844e-06
+      ],
+      "hard_minus_oracle": [
+        -16.259765625,
+        -17.8295898438,
+        -14.8291015625
+      ]
+    },
+    "k4_contrasts_pp": {
+      "best_matched_nonanatomical_oracle": [
+        1.26708984375,
+        0.59326171875,
+        1.94580078125,
+        15
+      ],
+      "random_rank_k": [
+        2.314453125,
+        1.0009765625,
+        3.90869140625,
+        15
+      ],
+      "random_sparse_matched": [
+        3.76708984375,
+        2.890625,
+        4.74127197266,
+        20
+      ],
+      "depth_interleaved_bins": [
+        7.11181640625,
+        6.1865234375,
+        8.02978515625,
+        20
+      ]
+    }
+  },
+  "coefficient_scope": "Raw group sums; implemented route rows divide by sqrt(group size). Signs follow from the generator and are not a newly prospective accuracy prediction.",
+  "deviations_from_spec": [
+    "canvas 490 pt, rows 122/108/108, vgutter 48 (row-separation audit floor)",
+    "left margin 52 (letter-column audit)",
+    "F drawn as one ghost tree plus a 4 x 8 support table instead of four 38-pt cards",
+    "D difference tags print the mean only; intervals in the caption",
+    "private helpers _badge (ceiling, exploratory) and _subtree_arrow (D7 K-cycle)"
+  ]
 }

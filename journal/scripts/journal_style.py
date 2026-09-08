@@ -48,6 +48,12 @@ _JOURNAL_COLORS = {
     "mute":      "#69707A",
     "edge":      "#55595E",
 }
+# Semantic aliases (no new hue): builders name the MEANING of a glyph so the
+# schematic vocabulary cannot drift.  ``gate`` is the context/gate ring and
+# badge (inhibitory conductance in the model); ``credit_ink`` is the
+# rule-agnostic somatic-error arrow that enters every soma.
+_JOURNAL_COLORS["gate"] = _JOURNAL_COLORS["inh"]
+_JOURNAL_COLORS["credit_ink"] = _JOURNAL_COLORS["ink"]
 COLORS.update(_JOURNAL_COLORS)  # in-place: frozen NeurIPS components see it too
 
 

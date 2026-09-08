@@ -9,8 +9,8 @@
   "source_sha256": {
     "scripts/credit_first_figures/build_anatomy.py": "f75b40c0182cdba3f5f2273dfba7ab1076a14e9720c61ee6c1d6480528565016",
     "scripts/build_main_figure_07.py": "8dd526d60d35b572a17a68c77c1813279756251052d4921471d77c3fb16b885e",
-    "scripts/figure_canvas.py": "498dec86dcac34c9841538fa7b5bf7b7311d468db8fbe0c7a648fbb9508c5e1f",
-    "scripts/journal_style.py": "32a3272cebb949784b694bc6dbb495cf74f6ba4ddf97d18d44f3ef54e082844e",
+    "scripts/figure_canvas.py": "d8ce8f435cd727e8860da6d1a554fbfd3e1756a1cb18ea7b3602aa00347f52fd",
+    "scripts/journal_style.py": "d31c604f3d813463784fd1a4aa9ea64b93bd7ca32c1cb43617f031a4d6d2f0e0",
     "source_data/figure3/segment_metrics.csv": "7829c298c4e5b3209b758fb88b92b55f070420c00b383436e5d4e1601e7ff1cf",
     "source_data/anatomy_commonmode/protocol_freeze.json": "425448bdbecaf9e3c76fabf134a87ba5870d53fd5821c09a4aa7541f53835db0",
     "source_data/anatomy_commonmode/original8/cell_method_summary.csv": "eb899a6833a0783e4b3e171adca3046800e64e6c942a517986395b251cde2880",

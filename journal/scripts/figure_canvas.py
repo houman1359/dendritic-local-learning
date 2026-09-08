@@ -610,6 +610,72 @@ class NativeCanvas:
         for it in group:
             it["art"].set_position((home, it["art"].get_position()[1]))
 
+    def align_letters(self):
+        """Canvas-level letter guarantee, callable by any builder.
+
+        Re-places every panel letter against its panel's final ink (the
+        pass :meth:`save` also runs), pulls the letters of panels that start
+        in the same module column onto one shared x, and measures whether a
+        letter was pushed off the canvas or onto a neighbouring panel by its
+        own panel's ink entering the letter gutter.  Returns the findings as
+        strings (empty when the guarantee holds); the strict audits treat a
+        non-empty result as a layout defect.  Replaces the per-builder
+        hand-alignment loops.
+        """
+        self.fig.canvas.draw()
+        self._sync_letters()
+        col_of = {}
+        for rec in self._records:
+            if rec.get("_letter") and rec["name"] in self.axes:
+                col_of[id(self.axes[rec["name"]])] = int(rec.get("col", 0))
+        groups: dict[int, list] = {}
+        for item in self._letters:
+            col = col_of.get(id(item["ax"]))
+            if col is not None:
+                groups.setdefault(col, []).append(item)
+        for members in groups.values():
+            if len(members) < 2:
+                continue
+            x = min(it["art"].get_position()[0] for it in members)
+            for it in members:
+                it["art"].set_position((x, it["art"].get_position()[1]))
+        self.fig.canvas.draw()
+        findings = []
+        try:
+            renderer = self.fig.canvas.get_renderer()
+        except Exception:
+            return findings
+        scale = 72.0 / self.fig.dpi
+        boxes = {}
+        for rec in self._records:
+            ax = self.axes[rec["name"]]
+            try:
+                boxes[id(ax)] = ax.get_tightbbox(renderer)
+            except Exception:
+                continue
+        for item in self._letters:
+            art, ax = item["art"], item["ax"]
+            try:
+                lb = art.get_window_extent(renderer)
+            except Exception:
+                continue
+            if lb.x0 * scale < 2.0:
+                findings.append(
+                    f"letter {item['letter']!r} pushed to the canvas edge: "
+                    f"its panel's ink enters the {LETTER_DX_PT:.0f} pt letter "
+                    f"gutter")
+            for other_id, ob in boxes.items():
+                if other_id == id(ax) or ob is None:
+                    continue
+                ix = min(lb.x1, ob.x1) - max(lb.x0, ob.x0)
+                iy = min(lb.y1, ob.y1) - max(lb.y0, ob.y0)
+                if ix > 1.0 and iy > 1.0:
+                    findings.append(
+                        f"letter {item['letter']!r} overlaps a neighbouring "
+                        f"panel's ink")
+                    break
+        return findings
+
     # -- column-locked reserves -------------------------------------------
     def _record_for(self, panel):
         """The record behind a panel name or a panel Axes."""
