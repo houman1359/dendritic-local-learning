@@ -6,18 +6,73 @@
   },
   "selection": "Median mapped-input count, identifier ties; no outcome selection",
   "coordinate_definition": "Rows are mapped partner inputs; multiple inputs can share a physical segment. Legacy n_sites and sites_per_route keys count these input coordinates.",
+  "ancestry_placement": {
+    "shared_subtree": [
+      1,
+      3,
+      8
+    ],
+    "own_branch": [
+      2,
+      4,
+      5,
+      6,
+      7,
+      9
+    ],
+    "rule": "deepest shared ancestor of the mapped input segments; schematic placement only"
+  },
   "mean_scan_coverage": 0.47972467452105455,
   "mean_sites_per_route": 1.3076923076923077,
   "all_one_site_scans": 6,
+  "scans_below_four_over_n": 2,
   "n_scans": 13,
   "n_targets": 7,
+  "selected_scan_partners": 69,
+  "partners_per_scan": [
+    5,
+    17
+  ],
+  "detection_threshold_effect": 0.24866696631980761,
+  "observed_selected_scan": {
+    "mean": -0.0694614452169,
+    "ci95_low": -0.250817828682,
+    "ci95_high": 0.105545551658
+  },
+  "ridge_mean_nmse": 0.802816888512,
+  "paired_ridge_contrasts": {
+    "archived_exact compartment error": -0.0151534471795,
+    "archived_random anatomical routes": 0.0305228984501,
+    "archived_site-shuffled routes": 0.0362535166799,
+    "archived_topology-matched routes": 0.0292620284628,
+    "keep_0.25": 0.114075534922,
+    "keep_0.5": 0.0678161252044,
+    "keep_0.75": 0.0290895442079,
+    "manual_only": 0.109209031659,
+    "noise_0.25": 0.00715335285232,
+    "noise_0.5": 0.0220131912106,
+    "noise_1": 0.0659321628785,
+    "ols_all": 0.00416052861561,
+    "ridge_raw": -0.0013914664408,
+    "training_mean": 0.197183111488,
+    "training_reliability_ge_0": 0.00417789890607,
+    "training_reliability_ge_0.1": 0.00780119505979,
+    "training_reliability_ge_0.2": 0.0343236942749
+  },
   "source_sha256": {
-    "scripts/credit_first_figures/build_measured.py": "aae4f65ec5f954d735ec355833118e1f389d0a02dea16d47fbebfb735435614a",
+    "scripts/credit_first_figures/build_measured.py": "22fbae67bc90c858811b5f20233f1f061b67ddc9dec0ecebcf8c14da40d4d0d0",
     "source_data/figure3/segment_metrics.csv": "7829c298c4e5b3209b758fb88b92b55f070420c00b383436e5d4e1601e7ff1cf",
     "source_data/fulltree_boundary/output/dictionary_and_validation_metadata.jsonl": "12bd1392df9c3db14b9746f042786dcabbc9fd7f8acc99926277217b55554c7f",
     "source_data/review_evidence_reanalysis/functional_native_contrasts.csv": "c7352f39853bb27f8dcb19b9b8baec0e3442634998c6abeae7ad0e6398dbf72d",
     "source_data/review_evidence_reanalysis/functional_native_target_effects.csv": "ef15a48beb64b0f20e79990ee354ea3a2206532bc767e3b0ebf7aa8ef63c4af7",
+    "source_data/functional_topology_all_scans/scan_metrics.csv": "b0817d6b33a0af971f8cc6a61533c7830b90d881877293f7d87dfecee6572386",
+    "source_data/functional_topology_all_scans/summary.json": "8f32fddca4017365228ba77599b1a0f9c0b451967717636d9a06be59a3397550",
+    "source_data/figure5/functional_target_metrics.csv": "7ac04ba59e6f948a75eac9c3e82c5e6849fe835352bdca7a3ce0b51a1fdbbb89",
+    "source_data/measured_alignment_power/power_summary.csv": "071538da525eeb31a148ef4d3775fb29003646d4541c26ae82c52afea323e187",
+    "source_data/measured_alignment_power/RESULTS.json": "c4e5d721eabc86c8697e43663ebac9122a3968fd97e9f37f27a4889c6eb53ea9",
     "source_data/review_response_baselines/target_metrics.csv": "b81749a6d252221d7b4e7b1ec7501cdff488858ae0c9ffadbadaf5b8b7d96c62",
+    "source_data/review_response_baselines/condition_summary.csv": "c78f51989ff0867009a9d80b87fee81af402cbfb200b3d0ac7b262429bf47fc9",
+    "source_data/review_response_baselines/paired_ridge_contrasts.csv": "844c7f33642bce3e3cf55daa986903042e495d9941b4f74de10135222716d449",
     "source_data/fulltree_within_span_oracle/cell_metrics.csv": "ea56a91ee61f3e69d28e995dd63e0e3127e7b47f88c01b512da3fed6a7e96c6b",
     "source_data/fulltree_within_span_oracle/condition_summary.csv": "c92b8abfd39e34ffb6adaab8f0bc7e84d504a7aae33de669f8bce9ca4d9380df"
   },

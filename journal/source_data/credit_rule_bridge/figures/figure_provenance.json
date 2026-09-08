@@ -1,8 +1,8 @@
 {
-  "builder_sha256": "ead6e90cf46b790d5607793a99473dbd2b61ceb2d8c7525ab4b0eb6172a8b28e",
-  "field": "Unweighted six-site nonsomatic path field q(x); H: cumulative energy of the best k fitted directions (oracle directions and per-example amplitudes) and the uniform-profile projection; B profile: mean of the 20 fresh seeds' calibrated six-site profiles (initial_profile_source.csv)",
+  "builder_sha256": "6dcbd7c0f655f65fea4de40755cccd819726ae4bcc69f8e2ac9e64dfaa4117bf",
+  "field": "Unweighted six-site nonsomatic path field q(x); H: cumulative energy of the best k fitted directions (oracle directions and per-example amplitudes) and the uniform-profile projection; B drop dots: mean |calibrated weight| per site over the 20 fresh seeds (initial_profile_source.csv; the signed mean is seed noise)",
   "figure": "source_data/credit_rule_bridge/figures/credit_interaction_bridge_native.pdf",
-  "figure_sha256": "6e658af1880f239a1fe18ea1d2255d380e313c3fd94486fd2134658ab68f5627",
+  "figure_sha256": "d9b19fdca249a15e71f335e4a21f4f31cd8a8e20344842257ba98be701716371",
   "layout_notes": [],
   "n_seed_blocks": 20,
   "optimizer": "Adam",

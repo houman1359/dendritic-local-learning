@@ -20,8 +20,9 @@ Every schematic element is drawn with the shared glyph library
 badge, subscript, disc, arrow).  Private helpers (errata #7) cover what the
 library does not draw at this size: the spec's D5 broadcast bus sourced at
 the soma with drops into the six junctions (``Frame.credit_delivery(mode=
-'scalar')`` puts its source dot at the bus end and targets terminals), the
-same bus with weight-encoding drop dots for the fixed profile, the operator
+'scalar')`` puts its source dot at the bus end and targets terminals; here
+the drops are vertical and end on the junction rings), the same bus with
+weight-encoding drop dots for the fixed profile, the operator
 badges on the junction rings (``balanced_tree(badges=...)`` drops them when
 sibling junctions are closer than 9.5 pt, which they always are in a 77-pt
 card), and token-subscript text chains.  Row 2 declares a 10 pt top reserve
@@ -54,12 +55,12 @@ sys.path.insert(0, str(HERE))
 sys.path.insert(0, str(HERE.parent))
 import run  # noqa: E402  (frozen bootstrap, sha, write, OUT, JOURNAL)
 from figure_canvas import (COLORS, LW_DATA, LW_EDGE, LW_ERR, LW_HAIR, LW_REF,  # noqa: E402
-                           MARKER_MS, PT_ANNOT, PT_LABEL, PT_LEGEND, PT_SMALL,
-                           PT_TICK, SEED_ALPHA, SEED_MS, Margins, NativeCanvas,
-                           style_panel)
+                           MARKER_MS, PT_ANNOT, PT_LEGEND, PT_SMALL, SEED_ALPHA,
+                           SEED_MS, Margins, NativeCanvas, style_panel)
 from journal_style import label_color  # noqa: E402
-from credit_tree_schematics import AMBER_TEXT, GHOST, mix  # noqa: E402
-from native_schematics import BADGE_STYLE, Frame, _text_w_pt, reference_line  # noqa: E402
+from credit_tree_schematics import GHOST  # noqa: E402
+from native_schematics import (BADGE_STYLE, JUNCTION_R_PT, Frame, _text_w_pt,  # noqa: E402
+                                reference_line)
 
 INK, MUTE = COLORS["ink"], COLORS["mute"]
 DASH = (0, (2.2, 1.8))
@@ -191,44 +192,44 @@ def chain(f, xy, parts, *, size=PT_ANNOT, color=None, ha="left", va="center", zo
     return total
 
 
-def tree_scale_pt(f, nodes):
-    """Points per library tree unit (T1..T8 span 4.54 units)."""
-    return (nodes["T8"][0] - nodes["T1"][0]) * f.w_pt / 4.54
+DROP_ZORDER = 2.4          # drops pass BEHIND the canopy; only the ring end shows
 
 
-# bus attachment offsets (tree units) so the drops fall through canopy gaps
-BUS_OFFSETS = {"JLL": 0.0, "JLR": 0.0, "JL": -0.23, "JRL": 0.0, "JRR": 0.23, "JR": 0.32}
-
-
-def junction_bus(f, nodes, *, color, radii=None, signs=None):
+def junction_bus(f, nodes, *, color, radii=None):
     """Spec D5 broadcast glyph for the six junction sites.
 
-    Source dot (r 1.6) at the soma, hairline riser up the left of the tree,
-    LW_HAIR bus above the canopy, one hairline drop into every junction (head
-    2.6).  ``radii`` (pt) replaces the arrowheads by drop dots whose radius
-    encodes a fixed weight; ``signs`` < 0 draws that dot open (white face,
-    rule-colour rim).
+    Source dot (r 1.6) on the soma, hairline riser up the trunk line,
+    LW_HAIR bus above the canopy, one VERTICAL hairline drop into
+    every junction (identical to Fig. 1 B's glyph, D5).  Each drop ends on
+    its junction ring: an arrowhead touching the ring (broadcast) or a drop
+    dot centred on it whose radius encodes the fixed weight (``radii``, pt).
+    The drop lines run at a low zorder so a drop that crosses the canopy passes
+    behind the dendrite and its input contact instead of over them.
     """
-    s = tree_scale_pt(f, nodes)
     top = max(nodes[t][1] for t in nodes.terminals) + f.fy(6.0)
-    xs = {j: nodes[j][0] + f.fx(BUS_OFFSETS[j] * s) for j in SITE_JUNCTIONS}
-    x_feed = min(nodes[t][0] for t in nodes.terminals) - f.fx(3.5)
+    xs = {j: nodes[j][0] for j in SITE_JUNCTIONS}          # vertical drops
+    x_lo = min(xs.values()) - f.fx(2.0)
     x_hi = max(xs.values()) + f.fx(2.0)
     sx, sy = nodes.soma
-    src = (sx - f.fx(nodes.soma_r_pt + 0.4), sy)
+    src = (sx, sy + f.fy(nodes.soma_r_pt + 1.0))
     f.disc(src, 1.6, fill=color, zorder=6)
-    f.ax.plot([src[0], x_feed, x_feed, x_hi], [sy, sy, top, top], color=color, lw=f.lw(LW_HAIR),
-              solid_capstyle="round", solid_joinstyle="round", zorder=5)
+    # riser up the (absent) trunk line, so the bus is a candelabra over the
+    # tree and never an L-frame inside the card edge (QA)
+    f.ax.plot([sx, sx], [src[1], top], color=color, lw=f.lw(LW_HAIR), solid_capstyle="round",
+              zorder=DROP_ZORDER)
+    f.ax.plot([x_lo, x_hi], [top, top], color=color, lw=f.lw(LW_HAIR), solid_capstyle="round",
+              zorder=DROP_ZORDER)
     for k, j in enumerate(SITE_JUNCTIONS):
-        p0 = (xs[j], top)
+        x, (jx, jy) = xs[j], nodes[j]
         if radii is None:
-            f.arrow(p0, (nodes[j][0], nodes[j][1] + f.fy(2.8)), color=color, lw=LW_HAIR, head=2.6, zorder=5)
+            f.ax.plot([x, x], [top, jy + f.fy(5.5)], color=color, lw=f.lw(LW_HAIR),
+                      solid_capstyle="round", zorder=DROP_ZORDER)
+            f.arrow((x, jy + f.fy(5.5)), (x, jy + f.fy(JUNCTION_R_PT)), color=color, lw=LW_HAIR,
+                    head=2.6, zorder=6)
         else:
-            end = (nodes[j][0], nodes[j][1] + f.fy(3.4))
-            f.leader(p0, end, color=color, lw=LW_HAIR)
-            open_dot = signs is not None and signs[k] < 0
-            f.disc(end, radii[k], fill="white" if open_dot else color, edge=color if open_dot else "none",
-                   lw=LW_EDGE, zorder=6)
+            f.ax.plot([x, x], [top, jy], color=color, lw=f.lw(LW_HAIR),
+                      solid_capstyle="round", zorder=DROP_ZORDER)
+            f.disc((jx, jy), radii[k], fill=color, zorder=6)
 
 
 def operator_badges(f, nodes, badges, *, r_pt=3.8):
@@ -297,8 +298,10 @@ def panel_rules(ax, profile):
              ("calibrated_broadcast", "fixed at step 0, 256 examples", "control")]
     cores = [f.task_card(cell, title=RULE_NAMES[rule], footer=foot) for cell, (rule, foot, _) in zip(cells, cards)]
     body_h = min(c[3] for c in cores) - f.fy(LIFT_PT)      # identical tree geometry
-    weights = profile.sort_values("site").mean_profile.to_numpy()
-    radii = 1.2 + 1.2 * np.abs(weights) / np.abs(weights).max()
+    # radii encode the mean |calibrated weight| per site over the 20 seeds:
+    # the signed mean is seed noise (|mean| < 0.11 against |w| up to 0.39)
+    weights = profile.sort_values("site").mean_abs_profile.to_numpy()
+    radii = 1.2 + 1.2 * weights / weights.max()
     for cell, core, (rule, _, badge) in zip(cells, cores, cards):
         body = (core[0] + f.fx(2.0), core[1] + core[3] - body_h, core[2] - f.fx(4.0), body_h)
         nodes = f.balanced_tree(body, trunk=False, mode="forward", output=None)
@@ -308,7 +311,7 @@ def panel_rules(ax, profile):
         elif rule == "unit_broadcast":
             junction_bus(f, nodes, color=color)
         else:
-            junction_bus(f, nodes, color=color, radii=radii, signs=np.sign(weights))
+            junction_bus(f, nodes, color=color, radii=radii)
         f.error_in(nodes.soma, side="right")
         f.badge((core[0] + f.fx(4.0), body[1] - f.fy(LIFT_PT - 1.5)), badge, ha="left", va="bottom")
     return ax
@@ -387,9 +390,16 @@ def endpoints(ax, curves_df, floors, *, table):
     log_axis(ax, labels=True)
     ax.set_xticks([1.0, 3.9, 6.3], ["Pairwise", "Quartic", "Nested\n(separate tree)"])
     ax.set_ylabel("NMSE at 1,024 steps")
-    ax.text(-.45, 0.62, f"{stalled[0]} near floor", ha="left", va="center", fontsize=PT_SMALL, color=INK)
-    ax.text(-.45, 0.40, f"{stalled[1]} stalled", ha="left", va="center", fontsize=PT_SMALL, color=INK)
-    ax.plot([1.65, 3.12], [0.40, stalled[2] * 0.92], color=MUTE, lw=LW_HAIR, zorder=3)
+    quartic_exact = end[(end.task == "quartet") & (end.rule == "exact")].test_nmse
+    near_floor = float(quartic_exact[quartic_exact < 2.0 * floors["quartet"]].max())
+    # both lines carry a mute leader into their own cluster (the block sits over
+    # the pairwise column, so an unled line would read as annotating it)
+    x_ann, per_unit = -0.45, ax.get_position().width * ax.figure.get_figwidth() * 72.0 / 8.0
+    for label, y, tip in ((f"{stalled[1]} stalled", 0.62, (3.06, stalled[2] * 0.90)),
+                          (f"{stalled[0]} near floor", 0.40, (3.10, near_floor * 1.16))):
+        ax.text(x_ann, y, label, ha="left", va="center", fontsize=PT_SMALL, color=INK)
+        ax.plot([x_ann + _text_w_pt(ax, label, PT_SMALL) / per_unit + 0.3, tip[0]], [y, tip[1]],
+                color=MUTE, lw=LW_HAIR, zorder=3)
     style_panel(ax, grid="y")
     ax.tick_params(axis="x", pad=2.2)
 
@@ -476,7 +486,7 @@ def capture(ax, ev, cap, spectra, gauge, *, table):
                 assert g.seed.nunique() == 20
                 table.append(dict(panel="caption", task=family, step=int(step), k=name, **run.bootstrap(g.effective_rank)))
     x_sep = 0.5 + KX / 2.0
-    for lo_y, hi_y in ((0.0, 0.31), (0.50, 1.09)):        # hairline skips the 'not fitted' tag
+    for lo_y, hi_y in ((0.0, 0.31), (0.50, 0.96)):        # skips the tag and the badge
         ax.plot([x_sep, x_sep], [lo_y, hi_y], color=MUTE, lw=LW_HAIR, zorder=1)
     ax.text(0, 0.335, "not\nfitted", ha="center", va="bottom", fontsize=PT_SMALL, color=MUTE, linespacing=1.1)
     reference_line(ax, 0.95, axis="y", label=None, span=(x_sep, 6.5 + KX))
@@ -485,12 +495,12 @@ def capture(ax, ev, cap, spectra, gauge, *, table):
            xlabel="Best k fitted directions", ylabel="Energy captured")
     ax.set_xticklabels(["uniform", "1", "2", "3", "4", "5", "6"])
     ax.set_yticklabels(["0", "0.5", "1"])
-    ax.legend(handles=handles, loc="lower right", bbox_to_anchor=(1.03, -0.01), frameon=False, fontsize=PT_LEGEND,
+    ax.legend(handles=handles, loc="lower right", bbox_to_anchor=(1.0, -0.01), frameon=False, fontsize=PT_LEGEND,
               handlelength=1.6, labelspacing=.25, borderaxespad=.1, handletextpad=.5)
     style_panel(ax, grid="y")
     ax.yaxis.labelpad = 1.0
     ax.tick_params(axis="y", pad=1.0, length=2.0)     # keeps H's letter clear of D's axes box
-    badge_on_axes(ax, (1.0 + KX, 0.30), "oracle")
+    badge_on_axes(ax, (-0.60, 1.075), "oracle", va="top")   # panel rule badge, clear of the key
 
 
 # ── assembly ──────────────────────────────────────────────────────────────
@@ -516,9 +526,9 @@ def build():
     common = curves_df[curves_df.common_rate]
     c = canvas.panel("C", 1, 0, 4, title="Pairwise: profile suffices")
     curves(c, selected[selected.task == "matching"], floors["matching"], legend=True, ylabel=True, table=table, panel="C")
-    d = canvas.panel("D", 1, 4, 4, title="Quartic: only exact learns")
+    d = canvas.panel("D", 1, 4, 4, title="Quartic: only exact fits")
     curves(d, selected[selected.task == "quartet"], floors["quartet"], table=table, panel="D")
-    e = canvas.panel("E", 1, 8, 4, title="Common rate: profile ahead")
+    e = canvas.panel("E", 1, 8, 4, title="Common rate: still ahead")
     row = contrasts[(contrasts.sensitivity == "common_rate") & (contrasts.task == "matching")
                     & (contrasts.contrast == "calibrated_broadcast minus exact")].iloc[0]
     lower = int(row.n_seeds - row.positive_seeds)
@@ -528,11 +538,11 @@ def build():
            note=[(f"all rules {COMMON_RATE}", PT_SMALL, MUTE), ("profile − exact", PT_SMALL, INK),
                  (f"{signed(row['mean'])} ({lower}/{int(row.n_seeds)})", PT_ANNOT, INK)])
 
-    fpanel = canvas.panel("F", 2, 0, 4, title="Exact quartic: 17/20 at floor")
+    fpanel = canvas.panel("F", 2, 0, 4, title="Quartic: 17/20 at floor")
     endpoints(fpanel, curves_df, floors, table=table)
-    g = canvas.panel("G", 2, 4, 4, title="Quartic pays a larger deficit")
+    g = canvas.panel("G", 2, 4, 4, title="Larger quartic deficit")
     forest(g, contrasts, seeds, table=table)
-    h = canvas.panel("H", 2, 8, 4, title="One vs four credit directions")
+    h = canvas.panel("H", 2, 8, 4, title="One vs four directions")
     capture(h, ev, cap, spectra, gauge, table=table)
 
     canvas.declare_reserve("F", top=ROW2_RESERVE_PT)      # row 2 letters clear row 1's x labels
@@ -555,8 +565,9 @@ def build():
         figure_sha256=run.sha(path), n_seed_blocks=20, optimizer="Adam", panels="A–H",
         selection="C, D, F use frozen per-rule rates; E the frozen common rate 0.003; G both; H the exact-rule selected rate",
         field="Unweighted six-site nonsomatic path field q(x); H: cumulative energy of the best k fitted directions "
-              "(oracle directions and per-example amplitudes) and the uniform-profile projection; B profile: mean of "
-              "the 20 fresh seeds' calibrated six-site profiles (initial_profile_source.csv)",
+              "(oracle directions and per-example amplitudes) and the uniform-profile projection; B drop dots: "
+              "mean |calibrated weight| per site over the 20 fresh seeds (initial_profile_source.csv; "
+              "the signed mean is seed noise)",
         layout_notes=problems))
     plt.close(canvas.fig)
     MAIN_PDF.parent.mkdir(parents=True, exist_ok=True)

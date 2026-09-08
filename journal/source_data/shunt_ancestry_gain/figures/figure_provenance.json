@@ -1,10 +1,14 @@
 {
-  "output_sha256": "af47cbffaf65685cc7138ea61a8bf4bfab5a4e9f17ab703b7f5ac6326df4c5dc",
+  "output_sha256": "25b6d0ecf1fbca25aac10f7f4f7c1e64f7720786a1cd5f3171842e92735814a9",
+  "main_figure_sha256": "25b6d0ecf1fbca25aac10f7f4f7c1e64f7720786a1cd5f3171842e92735814a9",
   "builders_sha256": {
-    "scripts/shunt_ancestry_gain/build_figure.py": "4262c637b41cfd61a880c4b50cdb750f4dd02a1dd4e902c547a09c8afb956142",
-    "scripts/build_main_figure_08.py": "f9960d1b058bfef5486e436ef511fbcb98e751a3fe515587be6929b1d7305cc5"
+    "scripts/shunt_ancestry_gain/build_figure.py": "ace3791786d34c8b234b46743fd527b0ede99ff262064fd1067dcfd6616a70d0",
+    "scripts/build_main_figure_07.py": "8dd526d60d35b572a17a68c77c1813279756251052d4921471d77c3fb16b885e",
+    "scripts/build_main_figure_08.py": "f9960d1b058bfef5486e436ef511fbcb98e751a3fe515587be6929b1d7305cc5",
+    "scripts/native_schematics.py": "edd5694b7b530b82ddd33b193b74e4a175846981583ef575355dacff27cfec11"
   },
   "source_sha256": {
+    "source_data/figure3/segment_metrics.csv": "7829c298c4e5b3209b758fb88b92b55f070420c00b383436e5d4e1601e7ff1cf",
     "source_data/figure4/category_effects.csv": "fb9167d8d5426a872f768f8381ede9a65edc0277d640fb497bcb90d78195a22c",
     "source_data/figure4/focal_localization.csv": "4673a634299e0cdf3b29df3d8686f2fa47e418e92a734c078dded81e2beaab4c",
     "source_data/focal_decomposition/cell_shapley.csv": "46e9e224e59bff91d416b3d4e4f51b8992634badd8b76e7b86576bcbdab187c4",
@@ -15,6 +19,109 @@
     "source_data/shunt_ancestry_gain/signed_calibration/signed_category_effects.csv": "29e7fcddd506cce21c51a63df784124c5c75e36bb2561ae44b704bbecfa64fc0",
     "source_data/shunt_ancestry_gain/signed_calibration/validation.json": "58cdb5e0c2c53fbf9b683f0b32cd9fcab100d2bb4788f41b7219737837238eef"
   },
-  "scientific_data": "B, C and E call the unchanged archived panel functions, source rows and bootstrap seeds. D recovers signed category effects at two frozen physical-calibration endpoints; all 1,344 original absolute focal rows reproduce. A illustrates the exact partition corollary without fitted gains.",
-  "changes": "D separates signed descendant and off-route changes; its previous normalized dose curve is retained as a supplementary asset. Physical boundary remains full width; ancestry identity and other main panels are unchanged."
+  "panels": {
+    "A": "schematic; no data (main.tex:319-324)",
+    "B": "source_data/figure3/segment_metrics.csv (median cell 864691135409937097, ancestry partition of segment 4227)",
+    "C": "source_data/figure3/segment_metrics.csv + source_data/figure4/focal_localization.csv (unit dose kappa)",
+    "D": "source_data/figure4/category_effects.csv",
+    "E": "source_data/focal_decomposition/cell_shapley.csv",
+    "F": "source_data/figure4/focal_localization.csv",
+    "G": "source_data/physical_cable_sensitivity/cell_primary_contrasts.csv + cell_electrotonic_ratios.csv"
+  },
+  "plotted_numbers": {
+    "ancestry_route": [
+      0,
+      4209,
+      4216,
+      4220,
+      4227
+    ],
+    "focal_segment": 4227,
+    "median_root": "864691135409937097",
+    "n_descendants": 16,
+    "kappa_unit_dose": 0.3897874146964674,
+    "block_gains": {
+      "0": 0.997969825473052,
+      "4209": 0.9940459041056274,
+      "4216": 0.9875404577733838,
+      "4220": 0.9775679439637557,
+      "4227": 0.9583148623463258
+    },
+    "identity_residual": 1.0408340855860843e-17,
+    "relation_descendant_shunt": 0.11008151725848012,
+    "relation_descendant_injection": 0.03517892033180595,
+    "baseline_adjoint_range": [
+      0.0056427076463886,
+      0.0494464893580816
+    ],
+    "full_shunt_range": [
+      0.0346989532009645,
+      0.140195697908413
+    ],
+    "dose_shunt": [
+      0.02763283023963875,
+      0.05425085405248479,
+      0.10433535162782596,
+      0.19365569595448948
+    ],
+    "dose_injection": [
+      0.009275563479342532,
+      0.01815327398224578,
+      0.034913600761563385,
+      0.06536163897831894
+    ],
+    "electrotonic": {
+      "original_eight": [
+        [
+          "Ra150_Rm300",
+          1.3603020165287343,
+          0.06737112231968412
+        ],
+        [
+          "Ra150_Rm1000",
+          4.534340055095781,
+          0.016353887272706785
+        ],
+        [
+          "Ra150_Rm3000",
+          13.603020165287344,
+          0.0010165583961656123
+        ],
+        [
+          "Ra150_Rm5000",
+          22.671700275478898,
+          -0.0011532252435272872
+        ],
+        [
+          "Ra150_Rm15000",
+          68.01510082643671,
+          -0.001945857544076325
+        ],
+        [
+          "Ra150_Rm30000",
+          136.03020165287342,
+          -0.0015539047748715832
+        ]
+      ],
+      "v661_disjoint": [
+        [
+          "Ra150_Rm300",
+          2.659140882597483,
+          0.08076497480246313
+        ],
+        [
+          "Ra150_Rm3000",
+          26.59140882597483,
+          0.0113484758860091
+        ],
+        [
+          "Ra150_Rm15000",
+          132.9570441298741,
+          0.0024153937182409017
+        ]
+      ]
+    }
+  },
+  "scientific_data": "D, E, F and G call the same frozen source rows, estimators and bootstrap seeds as the archived panel functions. B and C are exact consequences of the frozen segment table and the frozen unit dose: the ancestry gains printed in C are computed from the same passive conductance system the Source Data generator builds and the partition identity is asserted at build time (residual 1.04e-17).",
+  "changes": "Rebuilt as seven panels on three rows per the 2026-09-08 design specification: A adds the intervention pair, B the partition on the median reconstruction, C the block-gain dictionary; the signed-calibration panel is demoted to a standalone supplementary asset. Matched current injection is drawn in the point-neuron control hue, cohorts on the ordinal ramp."
 }
