@@ -1,0 +1,42 @@
+\begin{figure}[p]
+\centering
+\includegraphics[width=\textwidth]{supplementary/curated/credit_validation.pdf}
+\caption{\textbf{Local eligibility and exact transport reproduce the learning gradient.} \textbf{A}, Matched shunting backpropagation and local learning on MNIST, Fashion-MNIST and figure-ground MNIST; blue denotes normalized-additive learning. \textbf{B}, Transport, activation and additive-model implementation controls on MNIST. \textbf{C}, Exact-transport-minus-backpropagation accuracy across three-/five-factor and local/backpropagated decoder choices; points are five paired seeds and bars are 95\% paired-seed bootstrap intervals. Exact transport supplies an oracle compartment error. The local three-factor eligibility is sufficient when this error is supplied. Normalized- and raw-additive models are distinct controls; no noise-task shunting aggregate is used here.}
+\label{fig:si_credit_validation}
+\label{fig:inherited_competence}
+\label{fig:inherited_rule_feedback}
+\end{figure}
+
+\begin{figure}[p]
+\centering
+\includegraphics[width=\textwidth]{supplementary/curated/utility_signal_noise.pdf}
+\caption{\textbf{Restricted routes trade signal retention against admitted noise.} \textbf{A}, Fixed-operator version of the one-step utility bound: the delivered update is $M(\bm\mu+\bm\xi)$, with mean gradient $\bm\mu$ and zero-mean noise $\bm\xi$. \textbf{B}, Subtree-minus-random capture across route budget and covariance-mixture coefficient; only the endpoints are isospectral. \textbf{C}, Final quadratic loss when the signal hierarchy and amplified fine-scale noise make an interior route resolution favorable by construction. \textbf{D}, Exact one-step projection boundary: retaining signal fraction $f_{\rm sig}$ and noise fraction $f_{\rm noise}$ changes normalized loss by $(f_{\rm noise}-f_{\rm sig})/2$. The related initialization-utility diagnostic matches 135 of 200 seed--task optima; the remaining cases are retained numerically. Panels B--D use abstract Haar coordinates, not a forward dendritic neuron. The 50 paired seeds per signal--noise screen and all four task depths are retained. The bound concerns local progress; the prospective endpoint-selection failure is reported in Fig.~\ref{fig:si_original_selector}.}
+\label{fig:si_utility_signal_noise}
+\label{fig:supp_utility}
+\end{figure}
+
+\begin{figure}[p]
+\centering
+\includegraphics[width=\textwidth]{supplementary/curated/checkpoint_geometry.pdf}
+\caption{\textbf{Gradient geometry predicts a small matched step under stated conditions.} \textbf{A--C}, Candidate/exact gradient cosine, norm-matched one-step loss decrease and their within-rule association at 120 valid trained checkpoints. Boxes summarize checkpoints; diamonds and intervals show means and 95\% checkpoint-bootstrap intervals. A single held-out batch and relative step $10^{-5}$ are used. \textbf{D}, A separate constructed positive control on eight reconstructed arbors: a field interpolates between the route span and its orthogonal complement, then undergoes twenty projected quadratic steps. Green denotes morphology-selected routes, gray random paths, blue depth bins and pink ancestry-shuffled routes. Symbols show cell means and hierarchical 95\% bootstrap intervals. The imposed alignment and oracle projections explain this conditional relationship; it does not measure biological credit. Neither diagnostic validates a long-horizon initialization selector.}
+\label{fig:si_checkpoint_geometry}
+\label{fig:supp_alignment}
+\label{fig:supp_mechanism}
+\end{figure}
+
+\begin{figure}[p]
+\centering
+\includegraphics[width=\textwidth]{supplementary/curated/reliability_gain.pdf}
+\caption{\textbf{Fixed and estimated reliability gains have bounded learning benefits.} All panels use positive-rate synthetic tasks with eight parallel, nonserial branch blocks. \textbf{A}, A supplied compensating current preserves branch voltage while a positive shunt reduces input resistance and eligibility. \textbf{B}, Paired final-loss contrasts at maximal heterogeneity; fixed aligned shunting has no reliable final advantage over unshunted noisy learning. \textbf{C,D}, Adaptive-rule final loss and paired control-minus-adaptive contrasts. Adaptive local gain beats global/shuffled attenuation but loses to no shunt and the fixed oracle. The point implementation given identical gains agrees numerically. Curves and contrast intervals are means and 95\% paired-seed bootstrap intervals across 50 independent seeds in each study. Supplied state compensation and gradient-moment observations are explicit information resources.}
+\label{fig:si_reliability_gain}
+\label{fig:supp_positive_reliability}
+\label{fig:supp_adaptive_reliability}
+\end{figure}
+
+\begin{figure}[p]
+\centering
+\includegraphics[width=\textwidth]{supplementary/curated/same_span_conditioning.pdf}
+\caption{\textbf{Identical route spans can learn differently through conditioning.} \textbf{A}, Haar, redundant nested and statically scaled nested coordinates parameterize the same rank-eight span in sixteen abstract coefficients. \textbf{B}, Positive Gram eigenvalues; condition numbers are 1, 15 and 388.52. \textbf{C}, Population loss after eighty updates across effective sample size. \textbf{D}, Paired nested-minus-Haar contrasts; negative values favor nested coordinates. Points and bars are means and 95\% paired-seed bootstrap intervals across fifty seeds; dashed curves are the exact finite-time risk. Slow modes reduce variance at low data and retain bias at high data. Gram-preconditioned controls agree to $1.15\times10^{-15}$. This is a coefficient-learning comparison within one span, not a simulation of forward dendritic morphology or a biological implementation of the preconditioner.}
+\label{fig:si_same_span_conditioning}
+\label{fig:supp_same_span_learning}
+\end{figure}

@@ -42,7 +42,6 @@ def inputs() -> dict[Path, Path]:
         ROOT / "figures" / "README.md": Path("figures/README.md"),
         ROOT / "supplementary" / "supplementary.tex": Path("supplementary/supplementary.tex"),
         ROOT / "supplementary" / "supplementary.bbl": Path("supplementary/supplementary.bbl"),
-        ROOT / "supplementary" / "boolean_morphology_methods.tex": Path("supplementary/boolean_morphology_methods.tex"),
     }
     for relative in MAIN_FIGURES + SUPPLEMENTARY_FIGURES:
         files[ROOT / "figures" / relative] = Path("figures") / relative

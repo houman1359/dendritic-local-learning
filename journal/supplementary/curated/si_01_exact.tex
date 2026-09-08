@@ -1,0 +1,1384 @@
+% Curated from paper commit 7ee9157; original equations and protocol identities retained.
+\section{Exact gradients and local learning rules}
+\label{note:exact_rules}
+
+\subsection{Exact gradients in a directed conductance tree}
+\label{note:derivation}
+
+To determine which factors a local learning rule can compute, we first derive
+the exact conductance gradient, following the factorization and LocalCA rule introduced in our predecessor preprint \citep{safaai2026localcredit}. This requires the forward steady state, the
+local synaptic sensitivity and transport of the somatic loss derivative
+through the tree.
+
+\subsection{Steady-state compartment voltage}
+
+Consider a rooted dendritic tree with soma node 0. Let $V_n$ and $C_n$ be
+the voltage and capacitance of compartment $n$, and let $\mathcal C_n$ be
+its set of children. A non-somatic compartment \(n\) receives excitatory contacts \(\mathcal S_n^{\mathrm E}\) and inhibitory
+contacts \(\mathcal S_n^{\mathrm I}\), with
+\(\mathcal S_n=\mathcal S_n^{\mathrm E}\mathbin{\dot\cup}
+\mathcal S_n^{\mathrm I}\). A contact of type
+\(X\in\{\mathrm E,\mathrm I\}\) has nonnegative maximal conductance \(g_i^X\),
+nonnegative presynaptic activity \(x_i^X\), open conductance \(g_i^Xx_i^X\),
+and reversal \(E_X\). We use
+\(E_i^{\mathrm{rev}}=E_{\mathrm E}\) on
+\(\mathcal S_n^{\mathrm E}\) and
+\(E_i^{\mathrm{rev}}=E_{\mathrm I}\) on
+\(\mathcal S_n^{\mathrm I}\); when contact type is not at issue, we write the
+generic \(g_i^{\mathrm{syn}}\), \(x_i\), and \(E_i^{\mathrm{rev}}\).
+Define the aggregate open conductances
+\[
+G_n^{\mathrm E}=\sum_{i\in\mathcal S_n^{\mathrm E}}g_i^{\mathrm E}x_i^{\mathrm E},
+\qquad
+G_n^{\mathrm I}=\sum_{j\in\mathcal S_n^{\mathrm I}}g_j^{\mathrm I}x_j^{\mathrm I}.
+\]
+The compartment also receives child-to-parent coupling conductances
+\(g_{c\to n}^{\mathrm{den}}\), and has leak \(g_n^{\mathrm L}\) with reversal
+\(E_{\mathrm L}\). A child
+transmits $a_c=f_c(V_c)$, where $f_c$ is the branch output nonlinearity
+(named ``reactivation'' in the implementation) and is the identity when that
+mechanism is disabled. Before taking the steady state, the directed
+compartmental dynamics are
+\begin{equation}
+C_n\dot V_n
+=g_n^{\mathrm L}(E_{\mathrm L}-V_n)
++G_n^{\mathrm E}(E_{\mathrm E}-V_n)
++G_n^{\mathrm I}(E_{\mathrm I}-V_n)
++\sum_{c\in\mathcal C_n}g_{c\to n}^{\mathrm{den}}(a_c-V_n).
+\label{eq:s_current_balance}
+\end{equation}
+The total child coupling is
+\(G_n^{\mathrm{child}}=\sum_{c\in\mathcal C_n}g_{c\to n}^{\mathrm{den}}\)
+and its voltage-weighted contribution is
+\(J_n^{\mathrm{child}}=\sum_{c\in\mathcal C_n}g_{c\to n}^{\mathrm{den}}a_c\).
+Setting $\dot V_n=0$ and collecting the coefficients of $V_n$ then gives
+\begin{align}
+g_n^{\mathrm{tot}}
+&=g_n^{\mathrm L}+G_n^{\mathrm E}+G_n^{\mathrm I}
+  +G_n^{\mathrm{child}},\\
+V_n
+&=R_n^{\mathrm{tot}}
+\left(g_n^{\mathrm L}E_{\mathrm L}
++G_n^{\mathrm E}E_{\mathrm E}
++G_n^{\mathrm I}E_{\mathrm I}
++J_n^{\mathrm{child}}\right),
+\qquad R_n^{\mathrm{tot}}=(g_n^{\mathrm{tot}})^{-1}.
+\label{eq:s_voltage}
+\end{align}
+Here $g_n^{\mathrm{tot}}$ and $R_n^{\mathrm{tot}}$ are the total
+conductance and its reciprocal, respectively. The soma obeys the same current balance with $n=0$, including its child
+couplings and any explicitly modeled somatic inputs, but has no parent term.
+The controlled regular-tree architectures used here have no external somatic
+input synapses unless a control is explicitly described otherwise.
+For nonnegative conductances and activities, Eq.~\ref{eq:s_voltage} is a
+conductance-weighted average of leak, synaptic reversal potentials and child
+activities. This boundedness is useful for numerical stability, but is not
+required for the chain-rule factorization below. Both E and I increase
+\(g_n^{\mathrm{tot}}\); they differ through the driving forces
+\(E_{\mathrm E}-V_n\) and \(E_{\mathrm I}-V_n\), not through a signed
+conductance. When \(E_{\mathrm I}<V_n<E_{\mathrm E}\), the former is
+depolarizing and the latter hyperpolarizing. At \(V_n=E_{\mathrm I}\), an
+inhibitory conductance has zero net current but still reduces
+\(R_n^{\mathrm{tot}}\), producing a pure shunt at that operating point.
+
+The directed artificial-tree simulations use the dimensionless convention
+\(g_n^{\mathrm L}=1\), \(E_{\mathrm L}=E_{\mathrm I}=0\), and
+\(E_{\mathrm E}=1\), so inhibition is denominator-only. The reconstructed
+focal-cable analysis uses \(E_{\mathrm E}=1\) and
+\(E_{\mathrm I}=-0.2\), so its inhibitory perturbation is both
+hyperpolarizing and shunting. Neither convention is a fit in millivolts.
+
+\subsection{Local sensitivities and synaptic eligibility}
+
+Writing the numerator of Eq.~\ref{eq:s_voltage} as
+$b_n=g_n^{\mathrm{tot}}V_n$, quotient differentiation gives
+\begin{align}
+\frac{\partial V_n}{\partial g_i^{\mathrm{syn}}}
+&=\frac{x_iE_i^{\mathrm{rev}} g_n^{\mathrm{tot}}-x_i b_n}
+        {(g_n^{\mathrm{tot}})^2}
+=x_iR_n^{\mathrm{tot}}(E_i^{\mathrm{rev}}-V_n),
+\label{eq:s_syn_sensitivity}\\
+\frac{\partial V_n}{\partial V_c}
+&=f_c'(V_c)g_{c\to n}^{\mathrm{den}}R_n^{\mathrm{tot}},
+\label{eq:s_transfer_sensitivity}\\
+\frac{\partial V_n}{\partial g_{c\to n}^{\mathrm{den}}}
+&=R_n^{\mathrm{tot}}(a_c-V_n).
+\label{eq:s_coupling_sensitivity}
+\end{align}
+For a differentiable task loss $\mathcal L$, the exact synaptic
+conductance gradient therefore factors as
+\begin{equation}
+\frac{\partial\mathcal L}{\partial g_i^{\mathrm{syn}}}
+=\underbrace{x_iR_n^{\mathrm{tot}}(E_i^{\mathrm{rev}}-V_n)}_{\text{local eligibility}}
+\underbrace{\frac{\partial\mathcal L}{\partial V_n}}_{\text{compartment error}}.
+\label{eq:s_factorization}
+\end{equation}
+The eligibility contains quantities available at the synapse or its host
+compartment. All remaining task dependence lies in the compartment error. In
+particular, excitatory and inhibitory contacts use
+\(x_i^{\mathrm E}R_n^{\mathrm{tot}}(E_{\mathrm E}-V_n)\) and
+\(x_j^{\mathrm I}R_n^{\mathrm{tot}}(E_{\mathrm I}-V_n)\), respectively.
+Near \(V_n=E_{\mathrm I}\), the inhibitory contact's own gradient can be small
+even though its conductance still reduces \(R_n^{\mathrm{tot}}\) and changes
+the sensitivity of other inputs.
+
+\subsection{Transport of the somatic error}
+
+Suppose the loss depends on the tree through its somatic output. Let $p(n)$
+be the unique parent of non-somatic node $n$, and define the somatic voltage
+error $\delta_0^V=\partial\mathcal L/\partial V_0$. The chain rule gives
+\begin{equation}
+\frac{\partial\mathcal L}{\partial V_n}
+=\frac{\partial\mathcal L}{\partial V_{p(n)}}
+ f_n'(V_n)R_{p(n)}^{\mathrm{tot}}g_{n\to p(n)}^{\mathrm{den}}.
+\label{eq:s_recursion}
+\end{equation}
+Because the graph is a tree, iterating Eq.~\ref{eq:s_recursion} along the
+unique path from $n$ to the soma yields
+\begin{align}
+\widetilde\alpha_n
+&=\prod_{(i\to k)\in\operatorname{path}(n\to0)}
+ f_i'(V_i)R_k^{\mathrm{tot}}g_{i\to k}^{\mathrm{den}},\\
+\frac{\partial\mathcal L}{\partial V_n}
+&=\widetilde\alpha_n\delta_0^V.
+\label{eq:s_path_gain}
+\end{align}
+The effective path gain $\widetilde\alpha_n$ includes every local transfer
+derivative. With identity reactivation, it reduces to the conductance-stage
+gain $\alpha_n^{\mathrm{cond}}$ obtained by removing the $f_i'$ factors.
+Equation~\ref{eq:s_path_gain} is an exact derivative, not a separately fitted
+model parameter.
+
+\subsection{Raw-parameter transforms}
+
+Trainable raw parameters $\theta$ are transformed to nonnegative conductances
+by a monotone map $g=\psi(\theta)$. The optimizer receives
+\begin{equation}
+\frac{\partial\mathcal L}{\partial\theta}
+=\frac{\partial\mathcal L}{\partial g}\psi'(\theta).
+\end{equation}
+Where $\psi'(\theta)>0$, this transform preserves the sign of the
+conductance gradient. Active synapse masks are applied after forming the
+conductance-space gradient. The exact-gradient diagnostics compare gradients
+in the same parameter space and include the transform derivative.
+
+\subsection{General implicit-adjoint form}
+
+The preceding path product is a corollary of a more general steady-state
+identity. Let $\bm V$, $\bm g$ and $\bm x$ collect compartment voltages,
+conductances and inputs. Suppose their steady state is defined by the
+residual equations $\bm F(\bm V,\bm g,\bm x)=\bm 0$, with nonsingular
+voltage Jacobian $J_V=\partial\bm F/\partial\bm V$. Define the adjoint
+$\bm q$ by
+\begin{equation}
+J_V^{\mathsf T}\bm q=\nabla_{\bm V}\mathcal L.
+\label{eq:s_general_adjoint}
+\end{equation}
+The implicit-function theorem gives
+\begin{equation}
+\frac{\partial\mathcal L}{\partial g_i}
+=-\bm q^{\mathsf T}\frac{\partial\bm F}{\partial g_i}.
+\label{eq:s_general_gradient}
+\end{equation}
+For a passive residual $\bm F=G\bm V-\bm b$, let $G$ be the conductance
+matrix, $\bm b$ the vector of imposed current contributions and $\bm e_n$
+the coordinate vector for compartment $n$. A conductance synapse at $n$ has
+$\partial\bm F/\partial g_i=x_i(V_n-E_i^{\mathrm{rev}})\bm e_n$, and therefore
+\begin{equation}
+\frac{\partial\mathcal L}{\partial g_i}
+=x_i(E_i^{\mathrm{rev}}-V_n)q_n.
+\label{eq:s_general_synapse}
+\end{equation}
+Both contact classes add positive diagonal loading to \(G\), while their
+different reversals enter \(\bm b\) and the local driving force in
+Eq.~\ref{eq:s_general_synapse}.
+Equations~\ref{eq:s_general_adjoint}--\ref{eq:s_general_synapse} recover the
+directed path product when $J_V$ is triangular. For the reciprocal passive
+cable, $J_V=G$ is symmetric positive definite, so
+$G^{-\mathsf T}=G^{-1}$. A general nonsymmetric or recurrent operator instead
+requires the inverse transpose. Active steady states enter through their
+Jacobian whenever the required differentiability and nonsingularity conditions
+hold; no passive symmetry is assumed by the general identity.
+
+\subsection{Conductance-specific control of path gain}
+
+Holding coupling conductances and the forward state fixed, add effective
+inhibitory conductance $\Delta G_k^{\mathrm I}\geq0$ at compartment $k$. This
+is an activity-weighted aggregate conductance, not an individual maximal
+synaptic conductance. For a compartment $n$
+whose path crosses $k$,
+\begin{equation}
+\frac{\alpha_n^{\mathrm{cond}}(\Delta G^{\mathrm I})}
+     {\alpha_n^{\mathrm{cond}}(0)}
+=\prod_{k\in\mathcal A(n)}
+ \frac{g_k^{\mathrm{tot}}}{g_k^{\mathrm{tot}}+\Delta G_k^{\mathrm I}},
+\qquad
+\frac{\partial\log\alpha_n^{\mathrm{cond}}}{\partial G_k^{\mathrm I}}
+=\begin{cases}
+-R_k^{\mathrm{tot}}, & k\in\mathcal A(n),\\
+0, & k\notin\mathcal A(n),
+\end{cases}
+\label{eq:s_inhibitory_gain}
+\end{equation}
+where
+$\mathcal A(n)=\{k:(i\to k)\in\operatorname{path}(n\to0)\}$ contains the
+parent endpoints of the path edges: the strict ancestors of $n$, including
+the soma if its conductance is varied. Equation~\ref{eq:s_inhibitory_gain} proves path-selective
+attenuation. It does not prove that attenuation improves optimization.
+No reversal potential appears in Eq.~\ref{eq:s_inhibitory_gain} because this
+calculation retains only the total-conductance denominator while holding the
+forward state fixed. Any positive conductance has the same direct denominator
+effect. It is specifically a shunt when \(E_{\mathrm I}\) is near the local
+voltage, so that its accompanying current is small; the full forward and
+gradient effects retain \(E_{\mathrm I}\).
+
+Let $z_n=\log\alpha_n^{\mathrm{cond}}$ and let $\beta_n$ be the
+accumulated log-gain attenuation along path $n$. The perturbed log gain is
+$z_n'=z_n-\beta_n$. Across any specified ensemble of paths,
+\begin{equation}
+\Var(z')=\Var(z)+\Var(\beta)-2\Cov(z,\beta).
+\label{eq:s_compression}
+\end{equation}
+Shunting narrows this distribution only if
+$\Cov(z,\beta)>\Var(\beta)/2$. Path-gain compression is therefore an
+operating-point-dependent empirical outcome rather than a theorem.
+
+\subsection{Local rules and feedback objects}
+\label{note:rules}
+
+The exact compartment error derived above is generally unavailable to a local
+synapse. We therefore retain the exact local eligibility and ask what
+restricted teaching field can replace the transported error.
+
+\subsection{Three-factor update}
+
+The three-factor rule retains the exact local eligibility and substitutes an
+available voltage-space teaching field $\widehat\delta_n$ for the exact
+compartment error:
+\begin{equation}
+\widehat\nabla_{g_i^{\mathrm{syn}}}\mathcal L
+=\left\langle x_iR_n^{\mathrm{tot}}(E_i^{\mathrm{rev}}-V_n)
+\widehat\delta_n\right\rangle_B,
+\qquad
+\widehat\nabla_{g_{c\to n}^{\mathrm{den}}}\mathcal L
+=\left\langle R_n^{\mathrm{tot}}(a_c-V_n)
+\widehat\delta_n\right\rangle_B,
+\label{eq:s_3f}
+\end{equation}
+where $B$ is the number of examples in a minibatch and
+$\langle\cdot\rangle_B$ denotes their average. Excitatory and
+inhibitory contacts use the same expression; their reversal potentials set the
+sign and magnitude of the driving force.
+
+The four- and five-factor rules multiply Eq.~\ref{eq:s_3f} by slowly varying,
+bounded stage-level scalar reliability estimates. For stage $\ell$, mini-batch $t$, and example
+$b$, the implementation averages the recorded layer voltage and corresponding
+somatic population activity over their feature axes, giving $\bar V_{\ell,b}^{(t)}$ and
+$\bar V_{0,b}^{(t)}$. The runs reported here used an uncentered dot product,
+\begin{align}
+s_{\ell,t}&=\frac{1}{B}\sum_{b=1}^{B}
+ \bar V_{\ell,b}^{(t)}\bar V_{0,b}^{(t)},\\
+m_{\ell,1}&=s_{\ell,1},\qquad
+m_{\ell,t}=0.9m_{\ell,t-1}+0.1s_{\ell,t}\quad(t>1),\\
+r_{\ell,t}^{\mathrm{4F}}&=\operatorname{clip}_{[0.1,2.0]}(m_{\ell,t}).
+\label{eq:s_4f}
+\end{align}
+Thus $r_{\ell,t}^{\mathrm{4F}}$ is one scalar for a recorded stage, not a
+separate branch-wise signal, and is not a centered covariance or a Pearson
+correlation. Recorded voltages are detached from automatic differentiation,
+and the same minibatch supplies $s_{\ell,t}$ and the local update. The positive
+clamp prevents a negative or very small dot product from reversing or
+eliminating the update.
+
+The five-factor rule retains this multiplier and adds a conditional
+variance-ratio factor. Let $Y_\ell^{(t)}$ be the recorded stage voltage and
+$X_\ell^{(t)}$ its source-resolved parent proxy, each centered across mini-batch
+$t$.
+Let $\mathcal E_{0.1}[\cdot]$ denote an exponential moving average (EMA)
+with update rate 0.1. Define
+\begin{align}
+v_{Y,\ell,t}&=\mathcal E_{0.1}[\langle (Y_\ell^{(t)})^2\rangle],&
+v_{X,\ell,t}&=\mathcal E_{0.1}[\langle (X_\ell^{(t)})^2\rangle],&
+c_{YX,\ell,t}&=\mathcal E_{0.1}[\langle Y_\ell^{(t)}X_\ell^{(t)}\rangle],\\
+\beta_{\ell,t}&=\frac{c_{YX,\ell,t}}{v_{X,\ell,t}+10^{-3}},&
+v_{\mathrm{res},\ell,t}&=\max\{v_{Y,\ell,t}-\beta_{\ell,t}c_{YX,\ell,t},10^{-12}\},\\
+\phi_{\ell,t}&=\operatorname{clip}_{[0.25,4.0]}
+ \left(\frac{v_{Y,\ell,t}}{v_{\mathrm{res},\ell,t}}\right),&
+\widehat\nabla^{\mathrm{5F}}
+&=r_{\ell,t}^{\mathrm{4F}}\phi_{\ell,t}\widehat\nabla^{\mathrm{3F}}.
+\label{eq:s_5f}
+\end{align}
+If $v_{X,\ell,t}\leq10^{-12}$, the implementation sets $\phi_{\ell,t}=1$. These factors
+are empirical preconditioners. They
+are neither needed for the exact factorization nor extra task-error channels.
+Under exact transported error, the three-factor rule recovers the exact
+dendritic parameter gradient in the stated steady-state model. This separates
+feedback approximation from the validity of the local eligibility term;
+agreement of trained endpoints with backpropagation is tested empirically
+rather than assumed from the identity.
+
+\subsection{Feedback fields}
+
+For neuron $u$ with $N_u$ routed dendritic compartments, indexed
+$n=1,\ldots,N_u$ while the soma retains index $n=0$, let
+$\bm\delta^V_u=(\delta^V_{1,u},\ldots,\delta^V_{N_u,u})^{\mathsf T}$ collect
+the exact compartment errors and let $\widehat{\bm\delta}^V_u$ collect the
+values available to the local rule. Let
+$\bm c_u=(c_{u,1},\ldots,c_{u,K})^{\mathsf T}$ contain the signed values
+carried by $K$ feedback channels. Let
+$A_u\in\mathbb R^{N_u\times K}$ be their fixed compartmental address matrix:
+column $k$ is the spatial field produced by unit amplitude on channel $k$, and
+$(A_u)_{nk}$ is its delivery weight at compartment $n$. Linear superposition of
+the channel fields gives
+\begin{equation}
+\widehat{\bm\delta}^{V}_u=A_u\bm c_u,
+\qquad
+\widehat\delta^V_{n,u}=\sum_{k=1}^{K}(A_u)_{nk}c_{u,k}.
+\label{eq:s_routed_field}
+\end{equation}
+Equation~\ref{eq:s_routed_field} specifies the allowed feedback routes;
+it is a modeling assumption separate from the membrane current balance. The address matrix specifies where signals can
+be delivered; the coefficient vector specifies the values delivered on the
+current example. The model is exact for $A_u=I$ and
+$\bm c_u=\bm\delta^V_u$. It becomes a neuron-wide broadcast for
+$K=1$ and $A_u=\bm 1_{N_u}$. A binary subtree column is one on descendants of
+its branch point and zero elsewhere. The equation leaves coefficient
+estimation open: projection analyses use best-fitting oracle coefficients to
+measure representational capacity, whereas learning experiments use the
+feedback rule specified for that task.
+
+Here $K$ counts fixed spatial delivery profiles, not an intrinsic number of
+independent external errors. Conditional on the forward state, a directed
+single-output tree has the scalar somatic error multiplied by its
+state-dependent path profile (Eq.~\ref{eq:s_path_gain}). Exact path transport
+uses that scalar together with the sample-specific derivatives and is tested
+as a separate transport resource. A context gate can likewise reside in the
+local eligibility. The dimension of a field ensemble therefore measures the
+demand on a fixed dictionary across states; it does not exclude scalar error
+delivery combined with additional local transport or gating.
+
+Table~\ref{tab:feedback_objects} defines the feedback objects without
+conflating bandwidth with routing. The strict scalar field used for the
+plotted MNIST ladder applies the scalar reduction defined below at every
+local-rule stage. The matched-width scalar-fallback field
+reuses a somatic vector only at a stage of the same width; at wider stages it
+uses the same robust scalar reduction as the strict scalar condition. For an
+$N$-dimensional somatic error vector $\bm\delta_b$ in example $b$, the code
+first computes $\mu_b=N^{-1}\sum_u\delta_{b,u}$. With $\epsilon=10^{-6}$,
+\begin{equation}
+s_b=
+\begin{cases}
+\mu_b, & |\mu_b|>\epsilon,\\
+\delta_{b,u^*},\quad u^*=\arg\max_u|\delta_{b,u}|, & |\mu_b|\leq\epsilon.
+\end{cases}
+\label{eq:s_scalar_reduction}
+\end{equation}
+For a one-dimensional error, the coordinate is retained. Selecting the
+largest-magnitude coordinate when the mean nearly cancels prevents the
+reduction from producing a near-zero teaching signal. The
+replacement count was not recorded in the initial runs and was therefore
+measured directly in the same-seed computational rerun. The matched-width field does not repeat each
+neuron's coordinate over that neuron's descendants. The neuron-specific feedback field
+does exactly that, using one communicated coordinate per neuron and the tree as
+a fixed coordinate-to-arbor map. Exact path transport supplies the entire path derivative and
+is an information upper bound.
+
+In the regular $[3,3]$ networks, the matched-width scalar-fallback field retained the
+128-dimensional somatic vector only at the 128-wide stage. It reduced the
+field to one scalar at the 384- and 1,152-wide stages, so all 2,408,448
+candidate feedforward synaptic parameters (92,160 active contacts) received
+strict scalar feedback. The exception comprised 384 final branch-to-soma
+couplings and 256 somatic gain and threshold parameters: 640 of 2,413,312 core
+parameters (0.027\%). We therefore trained a separate 15-seed strict-scalar
+condition in each architecture, which supplies the scalar rung in the original ladder retained in Supplementary Fig.~\ref{fig:si_mnist_dictionary_geometry}. The fresh six-rule ladder also uses strict scalar feedback.
+Despite its small parameter count, this near-somatic exception affected
+learning. Strict scalar reduced mean
+accuracy relative to matched-width scalar-fallback feedback by 4.859 percentage points in shunting
+networks (95\% paired-seed interval, 3.994--5.669; fallback higher in 15/15
+seeds) and by 2.274 points in raw-additive networks (1.796--2.699; fallback higher
+in 14/15 seeds, one tie). Both intervals lay well outside the prespecified
+$\pm0.5$-point practical-equivalence margin. These results show that a small
+near-somatic parameter group can exert disproportionate control over learning;
+they do not imply that the remaining neurons collapse under strict scalar
+feedback, because their local eligibility traces remain distinct.
+The paired comparison is retained in the Source Data indexed in Table~\ref{tab:source_index}.
+
+\subsection{Conditional gradient alignment}
+
+For one tree and one example, suppose the correct somatic error is available
+but path gain is omitted. Write local eligibility as $e_i$ and let $n(i)$ be
+the host compartment. Then
+\begin{equation}
+g_i^{\mathrm{exact}}=e_i\widetilde\alpha_{n(i)}\delta_0^V,
+\qquad
+g_i^{\mathrm{shared}}=e_i\delta_0^V.
+\end{equation}
+Let $g^{\mathrm{exact}}$ and $g^{\mathrm{shared}}$ collect these synaptic
+components, and let $\mathrm{CV}_w$ denote the weighted coefficient of
+variation defined below. For nonnegative path gains and nonzero gradient vectors,
+\begin{equation}
+\cos(g^{\mathrm{shared}},g^{\mathrm{exact}})
+=\frac{1}{\sqrt{1+\mathrm{CV}_w(\widetilde\alpha)^2}},
+\qquad w_i=(e_i\delta_0^V)^2.
+\label{eq:s_alignment}
+\end{equation}
+Here
+\begin{equation}
+\overline\alpha_w=\frac{\sum_iw_i\widetilde\alpha_{n(i)}}{\sum_iw_i},
+\qquad
+\mathrm{CV}_w(\widetilde\alpha)^2
+=\frac{\sum_iw_i[\widetilde\alpha_{n(i)}-\overline\alpha_w]^2}
+{\overline\alpha_w^2\sum_iw_i},
+\end{equation}
+so $\mathrm{CV}_w$ is the eligibility-energy-weighted coefficient of
+variation of the path gain.
+This identity explains why path-gain dispersion can matter after the correct
+somatic coordinate has been supplied. It does not solve the separate problem
+of supplying the correct coordinate across network layers.
+
+\subsection{Topology-matched credit capacity}
+\label{note:capacity_theory}
+
+A restricted field is useful only if its spatial supports approximate the
+required compartment-level credit. We therefore ask how much of that field can
+be represented by $K$ ancestry-defined routes, and how this compares with a
+point-neuron partition at the same bandwidth.
+
+\subsection{Ancestry dictionary}
+
+Let $A_T$ be the ancestry matrix of tree $T$, with one row per synaptic
+coordinate and one column per candidate route. Let $\bm\beta$ contain the
+state-dependent gains of these routes. A low-bandwidth teaching
+coefficient vector $\bm c\in\mathbb R^K$ generates a synaptic field
+\begin{equation}
+\widehat{\bm g}=\Phi_{T,K}\bm c,
+\qquad \Phi_{T,K}=D_eA_T\operatorname{diag}(\bm\beta)S_K,
+\label{eq:s_dictionary}
+\end{equation}
+where the diagonal matrix $D_e$ holds local eligibility or anatomical weights
+and $S_K$ assigns
+the $K$ communicated channels to route sites. In this dictionary model,
+topology fixes binary support and $\bm\beta$ rescales route columns. Nonzero
+column rescaling preserves their span at a fixed selected route set, although
+it can affect selection, conditioning and coefficient dynamics. The focal
+cable interventions studied below are different: a physical shunt changes
+spatial transfer and local eligibility, and need not be a diagonal gain on
+these fixed columns.
+The compartment-level matrix $A_u$ in Eq.~\ref{eq:s_routed_field} is the
+general address map. Here $A_T$ is its anatomy-specific lift to synapse
+coordinates, and $\Phi_{T,K}$ is the resulting synaptic-update dictionary
+after eligibility, route gain and channel selection are included.
+
+\subsection{Address dimension and the point-neuron resource comparison}
+
+Separate the synapse-local eligibility from the task-dependent target credit
+field and let $\bm t_u\in\mathbb R^{N_u}$ denote the latter for neuron $u$.
+For this comparison, $\Phi$ acts on the chosen task-credit coordinates;
+eligibility-weighted update dictionaries use the same projection construction
+in their own coordinates. Let $W$ be a positive diagonal coordinate-weight
+matrix, and let $\dagger$ denote the Moore--Penrose pseudoinverse. Define
+\begin{equation}
+\lVert\bm v\rVert_W^2=\bm v^{\mathsf T}W\bm v,
+\qquad
+P_{\Phi,W}=\Phi(\Phi^{\mathsf T}W\Phi)^\dagger\Phi^{\mathsf T}W.
+\label{eq:s_weighted_projector}
+\end{equation}
+This is the $W$-orthogonal projector onto $\operatorname{col}(\Phi)$.
+Equivalently, with $\overline\Phi=W^{1/2}\Phi$,
+$\overline P_\Phi=\overline\Phi\,\overline\Phi^\dagger
+=W^{1/2}P_{\Phi,W}W^{-1/2}$ is the ordinary Euclidean projector in the
+transformed coordinates.
+For a prespecified nested family of dictionaries $\Phi_{u,K}$, a residual
+tolerance $0\leq\epsilon<1$ and positive expected target energy, define
+\begin{equation}
+d_{\epsilon,u}=\min\left\{K:
+\frac{\mathbb E\lVert P_{\Phi_{u,K},W}\bm t_u\rVert_W^2}
+{\mathbb E\lVert\bm t_u\rVert_W^2}\geq1-\epsilon\right\}.
+\label{eq:s_address_dimension}
+\end{equation}
+We set $d_{\epsilon,u}=+\infty$ if no tested dictionary attains the threshold. This definition concerns the task-dependent coefficient after eligibility has
+been factored out; heterogeneous presynaptic activity alone is therefore not
+counted as an extra teaching coordinate. It is conditional on the model,
+state ensemble, coordinate metric and dictionary family. It specifies a
+resolution at a stated residual tolerance, rather than an intrinsic task
+complexity or a unique optimal morphology.
+
+For any fixed $\Phi\in\mathbb R^{N_u\times K}$, all fields generated as
+$\Phi\bm c$ lie in $\operatorname{col}(\Phi)$ and hence occupy at most
+$\operatorname{rank}(\Phi)\leq K$ dimensions. Conversely, the weighted
+least-squares field in that space is $P_{\Phi,W}\bm t_u$, and its expected
+weighted residual energy is
+\begin{equation}
+\mathbb E\lVert(I-P_{\Phi,W})\bm t_u\rVert_W^2
+=\operatorname{tr}\!\left[(I-\overline P_\Phi)\overline\Sigma_t\right],
+\qquad
+\overline\Sigma_t=\mathbb E[W^{1/2}\bm t_u\bm t_u^{\mathsf T}W^{1/2}].
+\label{eq:s_address_residual}
+\end{equation}
+Equations~\ref{eq:s_address_dimension}--\ref{eq:s_address_residual} prove the
+fixed-dictionary dimension statement used in the main text;
+$\overline\Sigma_t$ is an uncentered second moment. The ordinary point-neuron local
+rule has $\Phi=\bm 1$ and therefore one task-dependent coefficient per neuron. A
+$K$-route dendritic dictionary can use up to $K$ structured fields inside that
+neuron. A point-neuron network is not mathematically forbidden from matching
+them, but doing so requires $K$ separately routed teaching coefficients, $K$
+gated parameter groups, or an equivalent expansion into additional units.
+Accordingly, the comparison is about where address resources are represented,
+not about an absolute expressive separation between all possible dendritic and
+point-neuron networks.
+
+\subsection{Field capture}
+
+We now measure how much of a target field lies in a dictionary's span. Let
+$\bm g$ denote that field in the coordinates under consideration, and use
+the positive weighting from Eq.~\ref{eq:s_weighted_projector}. Set
+$\overline{\bm g}=W^{1/2}\bm g$,
+$\overline\Phi_{T,K}=W^{1/2}\Phi_{T,K}$, and let
+$\overline P_\Phi$ be the ordinary Euclidean orthogonal projector onto the
+columns of $\overline\Phi_{T,K}$. For a nonzero target field, capture is
+\begin{equation}
+\mathcal C_K(\bm g;\Phi,W)
+=\frac{\lVert\overline P_\Phi\overline{\bm g}\rVert_2^2}
+{\lVert\overline{\bm g}\rVert_2^2}
+=1-\frac{\lVert\overline{\bm g}-\overline P_\Phi\overline{\bm g}\rVert_2^2}
+{\lVert\overline{\bm g}\rVert_2^2}.
+\label{eq:s_capture}
+\end{equation}
+The unweighted case has $W=I$. The MICrONS structural analysis uses summed
+mapped excitatory synaptic area on the diagonal of $W$. For the transformed
+uncentered second moment
+$\overline\Sigma_g=\E[\overline{\bm g}\overline{\bm g}^{T}]$,
+aggregate energy capture for a fixed projector is
+\begin{equation}
+\mathcal C_K(\overline\Sigma_g;\Phi,W)
+=\frac{\operatorname{tr}(\overline P_\Phi\overline\Sigma_g)}
+{\operatorname{tr}(\overline\Sigma_g)}.
+\label{eq:s_covariance_matching}
+\end{equation}
+This is the ratio of expected projected energy to expected total energy. It
+is generally different from the mean per-field fraction
+$\E[\mathcal C_K(\bm g;\Phi,W)]$, which weights nonzero fields equally.
+The two coincide for a fixed field norm, or when the second moment is formed
+after normalizing each field. The MNIST dictionary gallery averages per-field
+fractions; the cable-response operator analysis aggregates energy over its
+columns. The second moment equals a centered covariance only for mean-zero
+fields.
+Equation~\ref{eq:s_covariance_matching} states the topology--task matching
+condition: a sparse anatomical basis is useful only to the extent that task
+credit lies in its span.
+
+\begin{proposition}[Ky--Fan credit-capacity bound]
+Let $\overline\Sigma_g\in\mathbb R^{p\times p}$ be positive semidefinite,
+with eigenvalues satisfying
+$\lambda_1\geq\cdots\geq\lambda_p\geq0$ and
+$\operatorname{tr}(\overline\Sigma_g)>0$. For every rank-$K$ orthogonal
+projector $P$,
+\begin{equation}
+\frac{\operatorname{tr}(P\overline\Sigma_g)}
+{\operatorname{tr}(\overline\Sigma_g)}
+\leq
+\frac{\sum_{j=1}^{K}\lambda_j}{\sum_{j=1}^{p}\lambda_j}.
+\label{eq:s_ky_fan_capture}
+\end{equation}
+Equality is attained by any rank-$K$ projector whose range is a
+Ky--Fan-maximizing invariant subspace: it contains every eigenspace with
+eigenvalue strictly greater than $\lambda_K$ and may choose the remaining
+directions within the eigenspace at $\lambda_K$.
+The difference between the right side and anatomical capture is the
+rank-matched spectral regret.
+\end{proposition}
+
+\noindent\emph{Proof.}
+Ky--Fan's maximum principle \citep{horn2013matrix} gives
+$\max_{\substack{P=P^{\mathsf T}=P^2\\\operatorname{rank}(P)=K}}\operatorname{tr}(P\overline\Sigma_g)
+=\sum_{j=1}^{K}\lambda_j$. Division by the fixed total spectral energy proves
+Eq.~\ref{eq:s_ky_fan_capture}. \hfill$\square$
+
+The spectral screen interpolates between two task-field second moments
+$C_0$ and $C_1$ with equal trace, using
+$C(\rho)=(1-\rho)C_0+\rho C_1$ for $0\leq\rho\leq1$. Thus, for two fixed projectors
+$P$ and $Q$, the normalized capture difference has the sign of
+\begin{equation}
+\Delta(\rho)=\operatorname{tr}[(P-Q)C_0]
++\rho\operatorname{tr}[(P-Q)(C_1-C_0)],
+\end{equation}
+so an interior crossover is determined exactly by its two endpoints. This
+affine result distinguishes alignment from rank: increasing $K$ raises the
+oracle bound, whereas increasing $\rho$ determines whether the anatomical
+subspace approaches it.
+
+\subsection{One-step descent bound}
+
+When the target field is a true loss gradient, capture also determines a
+one-step descent guarantee in the corresponding metric. Let $\bm w$ be
+the parameter vector and $\bm g=\nabla_{\bm w}\mathcal L$. To express
+the weighted calculation as Euclidean descent, define
+\begin{equation}
+\overline{\bm w}=W^{-1/2}\bm w,
+\qquad
+\bm w=W^{1/2}\overline{\bm w},
+\end{equation}
+and define
+$\overline{\mathcal L}(\overline{\bm w})=
+\mathcal L(W^{1/2}\overline{\bm w})$. Then
+$\nabla_{\overline{\bm w}}\overline{\mathcal L}=W^{1/2}\bm g=
+\overline{\bm g}$. If $\overline{\mathcal L}$ has $L_W$-Lipschitz gradients
+and $\eta$ is the step size, the descent lemma gives
+\begin{equation}
+\overline{\mathcal L}(\overline{\bm w}-\eta\overline P_\Phi\overline{\bm g})
+\leq\overline{\mathcal L}(\overline{\bm w})
+-\eta\overline{\bm g}^{T}\overline P_\Phi\overline{\bm g}
++\frac{L_W\eta^2}{2}
+\lVert\overline P_\Phi\overline{\bm g}\rVert_2^2.
+\end{equation}
+Orthogonal projection implies
+$\overline{\bm g}^{T}\overline P_\Phi\overline{\bm g}
+=\lVert\overline P_\Phi\overline{\bm g}\rVert_2^2$, hence
+\begin{equation}
+\overline{\mathcal L}(\overline{\bm w}-\eta\overline P_\Phi\overline{\bm g})
+\leq\overline{\mathcal L}(\overline{\bm w})
+-\eta\left(1-\frac{L_W\eta}{2}\right)
+\lVert\overline P_\Phi\overline{\bm g}\rVert_2^2.
+\label{eq:s_descent}
+\end{equation}
+At $\eta=1/L_W$, the ratio between the projected- and full-gradient guarantees
+is Eq.~\ref{eq:s_capture}. In the original coordinates, the projected step is
+\begin{equation}
+\bm w^+=\bm w-\eta W^{1/2}\overline P_\Phi W^{1/2}\bm g,
+\end{equation}
+which is a particular preconditioned update rather than an ordinary Euclidean
+gradient step in $\bm w$. The implementation was checked on 10,000 random
+positive-definite quadratic losses: there were no bound violations, minimum
+numerical slack was $2.67\times10^{-7}$, and the capture identity agreed to
+$1.89\times10^{-15}$. This numerical test checks the Euclidean projector algebra, which
+also applies after an explicit coordinate transformation; it does not validate
+synaptic-area weighting as a physical parameter metric. The result is a
+one-step guarantee only when the tested field is an exact gradient in the
+stated coordinates. It is not a convergence or generalization theorem and
+does not show that a biological circuit can infer the oracle coefficients.
+
+\subsection{Signal--noise theory of restricted credit routing}
+\label{note:credit_phase_theory}
+
+Capture alone favors increasing route resolution, but a broader operator also
+admits more stochastic error. We next formalize this signal--noise trade-off
+and ask when restricting the communicated credit improves expected progress.
+
+\subsection{Expected descent from routed-update moments}
+
+Let $\mathcal L:\mathbb R^p\rightarrow\mathbb R$ have $L$-Lipschitz gradient,
+with $L>0$, on a neighborhood containing every update segment under consideration. At a fixed
+parameter state, write $\bm g=\nabla\mathcal L(\bm w)$ and let $\bm d$ be a
+routed update estimator with finite second moment. Define
+$\bm m=\E[\bm d]$ and
+$V=\E[(\bm d-\bm m)(\bm d-\bm m)^{\mathsf T}]$. The expectation is over
+the stated sampling or feedback noise, conditional on $\bm w$. The update is
+\begin{equation}
+\bm w^+=\bm w-\eta\bm d.
+\label{eq:s_operator_update}
+\end{equation}
+
+\begin{proposition}[Routed-update moment bound]
+For Eq.~\ref{eq:s_operator_update},
+\begin{equation}
+\E\mathcal L(\bm w^+)\leq\mathcal L(\bm w)
+-\eta\bm g^{\mathsf T}\bm m
++\frac{L\eta^2}{2}\left[
+\lVert\bm m\rVert_2^2+\operatorname{tr}(V)
+\right].
+\label{eq:s_operator_bound}
+\end{equation}
+Write $a=\bm g^{\mathsf T}\bm m$ and
+$b=\lVert\bm m\rVert_2^2+\operatorname{tr}(V)$. For $b>0$, minimizing
+the bound over nonnegative steps gives $\eta^*=[a]_+/(Lb)$. Provided the
+stated smoothness condition holds along the update segments at this step,
+the certified decrease is
+\begin{equation}
+U=\frac{[\bm g^{\mathsf T}\bm m]_+^2}
+{2L\{\lVert\bm m\rVert_2^2+\operatorname{tr}(V)\}},
+\qquad [a]_+=\max(a,0).
+\label{eq:s_operator_utility}
+\end{equation}
+For $b=0$, $\bm d=0$ almost surely and we set $U=0$. A zero score means
+that this bound certifies no positive one-step decrease at the evaluated
+state; it does not establish failure of every later update or learning rule.
+\end{proposition}
+
+\noindent\emph{Proof.}
+Apply the descent lemma \citep{nesterov2004convex} to $-\eta\bm d$, take expectations and use
+$\E\lVert\bm d\rVert_2^2=\lVert\bm m\rVert_2^2+\operatorname{tr}(V)$.
+Minimizing the resulting scalar quadratic over $\eta\geq0$ gives the
+claim. \hfill$\square$
+
+A fixed linear routing operator gives a useful special case. If
+$\bm d=M(\bm g+\bm\xi)$ with deterministic $M\in\mathbb R^{p\times p}$,
+$\E\bm\xi=0$ and $\operatorname{Cov}(\bm\xi)=\Sigma$, then
+$\bm m=M\bm g$ and $V=M\Sigma M^{\mathsf T}$. Equations
+\ref{eq:s_operator_bound}--\ref{eq:s_operator_utility} then recover the
+credit-operator expressions, denoted $U(M)$ below. The identity, orthogonal
+projectors and fixed block-gain screens use this specialization.
+
+The more general moment form is needed for sample-dependent eligibilities
+and gates. In the context-gated task, changing an unselected distractor
+leaves the exact parameter gradient unchanged but changes a shared-feedback
+update through that distractor's eligibility. A fixed matrix of the exact
+parameter gradient therefore cannot represent every routed update. The
+output-error-to-update map remains linear conditional on the complete
+forward state; that conditional map is a different object. The factorial
+reanalysis measures routed means and second moments directly and does not
+require a fixed map from exact parameter gradients to routed updates.
+
+At fixed infinitesimal update norm, $-\bm g$ is the steepest Euclidean descent
+direction by Cauchy--Schwarz. Consequently, no routed local operator provides a
+uniform first-order improvement over exact full-batch backpropagation on the
+same parameters and objective. Equation~\ref{eq:s_operator_utility} instead
+compares restricted or noisy estimators and exposes when rejecting stochastic
+energy compensates for discarded signal.
+
+\begin{corollary}[Projected stochastic crossover]
+Consider the identity-curvature quadratic
+$\mathcal L(\bm w)=\frac12\lVert\bm w-\bm w^*\rVert_2^2$, initialize at
+$\bm w=0$, set $\bm g=-\bm w^*$, use unit step size, and let $P$ be an
+orthogonal projector. The expected post-update losses of the unprojected and
+projected unbiased gradients are
+\begin{align}
+\E\mathcal L[-(\bm g+\bm\xi)]
+&=\tfrac12\operatorname{tr}(\Sigma),\\
+\E\mathcal L[-P(\bm g+\bm\xi)]
+&=\tfrac12\left[
+\lVert(I-P)\bm g\rVert_2^2+\operatorname{tr}(P\Sigma P)
+\right].
+\end{align}
+The projected estimator is better precisely when
+\begin{equation}
+\operatorname{tr}[(I-P)\Sigma]
+>\lVert(I-P)\bm g\rVert_2^2,
+\label{eq:s_projection_crossover}
+\end{equation}
+that is, rejected noise exceeds discarded signal. A local estimator using the
+same $P$ with additional independent, zero-mean coefficient noise cannot
+achieve a lower expected loss than backpropagation followed by $P$.
+\end{corollary}
+
+For completeness, at a common step $0<\eta<2$ the unprojected-minus-projected
+expected loss is
+\begin{equation}
+\frac{\eta}{2}\left\{
+\eta\operatorname{tr}[(I-P)\Sigma]
+-(2-\eta)\lVert(I-P)\bm g\rVert_2^2
+\right\}.
+\end{equation}
+Hence projection is better exactly when
+$\operatorname{tr}[(I-P)\Sigma]>
+[(2-\eta)/\eta]\lVert(I-P)\bm g\rVert_2^2$; the unit-step result above is the
+special case $\eta=1$. Smaller common steps therefore require proportionally
+more rejected noise to compensate for the discarded signal.
+
+\subsection{Interior optimum along the nested route ladder}
+\label{note:interior_optimum}
+
+The scalar, neuron-specific and correctly routed ancestry fields in the
+controlled hierarchy analyses span nested subspaces. Their orthogonal
+projectors form the ladder
+$P_{\mathrm{scalar}}\subset P_{\mathrm{neuron}}\subset
+P_{\mathrm{ancestry},K}\subset I$. Along such a ladder the capture of
+Eq.~\ref{eq:s_capture} is monotone by construction, but the guaranteed
+utility is not. For an orthogonal projector with retained signal energy
+$S=\bm g^{\mathsf T}P\bm g=\lVert P\bm g\rVert_2^2$ and admitted noise
+$N=\operatorname{tr}(P\Sigma P)$, the optimal-step utility of the
+credit-operator bound is
+\begin{equation}
+U(S,N)=\frac{S^2}{2L\,(S+N)} .
+\label{eq:s_projector_utility}
+\end{equation}
+Let one rung up the ladder add marginal signal $\Delta S\geq0$ and marginal
+noise $\Delta N\geq0$. Substituting into Eq.~\ref{eq:s_projector_utility}
+and clearing denominators gives the exact marginal condition
+\begin{equation}
+U(S+\Delta S,\,N+\Delta N)>U(S,N)
+\iff
+\Delta S\left[(S+N)(2S+\Delta S)-S^2\right]>S^2\,\Delta N .
+\label{eq:s_marginal_condition}
+\end{equation}
+The bracket is positive, so for small marginal additions the condition
+reduces to a threshold on the marginal signal-to-noise ratio,
+$\Delta S/\Delta N>S/(S+2N)$: the utility keeps rising while each added
+route scale contributes proportionally more signal than the running
+threshold, and falls once the added scales admit mostly noise. When the
+signal spectrum decays faster than the admitted noise across ladder scales,
+$U$ can attain an interior maximum. On a finite tested ladder, the marginal
+condition must become unfavorable before the last rung; spectral decay alone
+does not guarantee that crossing or a unique optimum. The displayed marginal
+condition assumes $S>0$; if $S=0$, a rung with positive retained signal has
+positive utility whenever its total second moment is finite and nonzero.
+Equations~\ref{eq:s_projector_utility} and
+\ref{eq:s_marginal_condition}, together with the interior-maximum
+construction, are verified numerically in the released test suite
+(\texttt{tests/test\_laminar\_optimality.py}).
+Random, deranged and independently gained route families elsewhere in the
+paper need not lie on this same nested ladder.
+
+Two experiments evaluate this optimum empirically
+(Table~\ref{tab:source_index}; analysis code is included
+in the release). In the hierarchy-depth
+routing experiment the initialization utility of the aligned tree, computed
+per seed and task depth, placed its argmax at the trained loss minimum in
+135 of 200 seed--task pairs, and the group-mean argmax matched the trained
+optimum exactly at $H_{\mathrm c}=1,2,3$; at the full-rank boundary
+$H_{\mathrm c}=4$ the one-step
+bound was conservative and favoured $D_{\mathrm{r}}=2$, reflecting its single-step
+horizon.
+
+The trained subtree factorial provides a second, retrospective test. Its
+full-batch moment score
+uses the global logistic curvature bound and the same four-control comparator
+as the accuracy contrast: deranged, depth-interleaved, random-sparse and
+random-rank routes. The mean ancestry-minus-best-control utility was positive
+at $K=4$, negative at $K=1,2$ and zero at $K=8$. Its contrast-maximizing
+budget was $K=4$ in all 20 seeds, matching the observed accuracy-contrast
+maximum in 13 of 20. Mean accuracy-contrast selection regret was 1.94
+percentage points. Adding the hypothetical minibatch variance made the mean
+$K=4$ utility contrast negative, reduced optimum agreement to 8 of 20 and
+gave mean regret 2.75 points. Thus the score matched to the deterministic
+training recipe recovers the mean intermediate-bandwidth ancestry peak,
+while its seed-level selection remains imperfect. This retrospective result
+is distinct from the raw within-family performance optimum at $K=8$ and
+from prospective morphology selection. The comparator definitions, scores
+and prediction errors are supplied in
+\texttt{source\_data/review\_evidence\_reanalysis/}.
+
+\subsection{Laminar route families and hierarchical task second moments}
+\label{note:laminar_optimality}
+
+The distinction between a point neuron and a dendritic tree can be stated
+as a constraint on the feasible credit operators at fixed rank. A point
+neuron addresses its synapses with the single shared column $\bm 1$: a
+rank-one operator with uniform support. An ancestry dictionary uses structured columns whose supports form a
+\emph{laminar} family: any two
+supports are nested or disjoint. An unconstrained rank-$K$ feedback matrix
+is the comparison class. For the balanced binary tree used in the
+factorial, the span of the $K$-route ancestry dictionary equals the span of
+the $K$ coarsest vectors of the orthonormal tree-Haar basis
+$U=[\bm h_1,\dots,\bm h_n]$ (constant, then sibling-subtree differences,
+coarse to fine) for every admissible budget $K\in\{1,2,4,\dots,n\}$.
+Here $n$ is the number of leaf coordinates. Let $P_{A,K}$ denote the
+orthogonal projector onto the selected ancestry span.
+
+\begin{proposition}[Laminar capture of a hierarchical second moment]
+Let the task-credit second moment be $C=U\Lambda U^{\mathsf T}$ with
+$\Lambda=\operatorname{diag}(\lambda_1,\dots,\lambda_n)$ ordered so that
+$\lambda_1\geq\lambda_2\geq\cdots\geq\lambda_n\geq0$ along the
+coarse-to-fine Haar order, with $\operatorname{tr}(C)>0$. Then for every admissible budget $K$ the
+ancestry dictionary attains the Ky--Fan bound,
+\begin{equation}
+\frac{\operatorname{tr}(P_{A,K}\,C)}{\operatorname{tr}(C)}
+=\frac{\sum_{i\leq K}\lambda_i}{\operatorname{tr}(C)}
+=\max_{\substack{P=P^{\mathsf T}=P^2\\\operatorname{rank}(P)=K}}\frac{\operatorname{tr}(P\,C)}{\operatorname{tr}(C)} .
+\end{equation}
+For a general second moment $C$ with eigenpairs $(\lambda_i,\bm v_i)$ ordered
+by decreasing eigenvalue, the shortfall from the Ky--Fan bound decomposes
+exactly as
+\begin{equation}
+\sum_{i\leq K}\lambda_i-\operatorname{tr}(P_{A,K}C)
+=\sum_{i\leq K}\lambda_i\lVert(I-P_{A,K})\bm v_i\rVert_2^2
+-\sum_{j>K}\lambda_j\lVert P_{A,K}\bm v_j\rVert_2^2 ,
+\end{equation}
+the leading-eigenspace energy outside the laminar span minus the trailing
+energy that the span retains. It is therefore bounded above by the former
+term. The shortfall is zero exactly when $P_{A,K}$ is Ky--Fan maximizing;
+when $K<n$ and $\lambda_K>\lambda_{K+1}$, this is equivalent to the ancestry span
+being the unique leading-$K$ eigenspace.
+\end{proposition}
+
+\begin{proof}
+The ancestry span equals the span of the $K$ coarsest Haar vectors, which
+under the stated ordering are the top-$K$ eigenvectors of $C$; a rank-$K$
+orthogonal projector maximizes $\operatorname{tr}(PC)$ exactly on a top-$K$ eigenspace
+(Ky--Fan). For general $C$, expanding
+$\operatorname{tr}(P_{A,K}C)=\sum_j\lambda_j\lVert P_{A,K}\bm v_j\rVert_2^2$
+and $\lVert P_{A,K}\bm v_i\rVert_2^2=1-\lVert(I-P_{A,K})\bm v_i\rVert_2^2$
+for $i\leq K$ gives the stated decomposition. Ky--Fan's equality condition,
+including arbitrary choices inside a degenerate cutoff eigenspace, gives the
+last statement.
+\end{proof}
+
+This ordered hierarchical second moment is one sufficient class for which
+ancestry attains the rank-$K$ spectral optimum. At a fixed $K$, the equality
+condition is the leading-eigenspace condition in the proposition; it does not
+require the entire second moment to have a Haar eigenbasis and does not
+identify a unique physical tree. Hierarchical organization without the stated
+coarse-to-fine spectral ordering is not sufficient. The
+spectral-alignment experiment realizes both regimes: at full alignment and
+$K=4$ ancestry attained the rank-matched Ky--Fan bound to numerical
+precision, whereas at random alignment its advantage over sampled random
+routes vanished (main text). The attainment, the shortfall identity and
+the failure case with a fine-scale-dominant second moment are verified
+numerically in \texttt{tests/test\_laminar\_optimality.py}.
+
+\subsection{Point-neuron partition residual and route-coefficient error}
+
+Let $t_i$ be the exact task-dependent target remaining after local
+eligibility has been factored out, let $w_i>0$ be coordinate weights, and let
+$\pi(i)$ assign synapse $i$ to a group that must share one teaching
+coefficient. The best allowed field minimizes
+$\sum_iw_i[t_i-c_{\pi(i)}]^2$.
+
+\begin{proposition}[Shared-coefficient residual]
+For every group $G$, the optimum is its weighted mean
+\begin{equation}
+c_G^*=\frac{\sum_{i\in G}w_it_i}{\sum_{i\in G}w_i},
+\end{equation}
+and the irreducible residual is
+\begin{equation}
+\mathcal R(\pi)=\sum_G\sum_{i\in G}w_i(t_i-c_G^*)^2.
+\label{eq:s_partition_variance}
+\end{equation}
+Refining a partition cannot increase $\mathcal R$; it decreases the residual
+only when an old group contains coefficient variation resolved by the new
+groups.
+\end{proposition}
+
+\noindent\emph{Proof.}
+Differentiate the separable weighted least-squares objective with respect to
+each $c_G$. The refinement statement follows because the old solution remains
+feasible when two or more refined coefficients are constrained to be equal.
+\hfill$\square$
+
+The ordinary point-neuron rule has one group per neuron. Dendritic ancestry
+offers a particular nested sequence of refinements, but is helpful only if the
+task coefficient varies across those subtrees. An explicitly grouped point
+model can implement the same partition, which is why the resource-matched
+point controls in the main article coincide with the dendritic implementation.
+
+For a general dictionary $\Phi$ and positive diagonal $W$, let
+$\bm c^*=\arg\min_{\bm c}\lVert\bm t-\Phi\bm c\rVert_W^2$ and let
+$\widehat{\bm c}$ be the coefficients actually supplied by a local circuit.
+Weighted projection orthogonality yields the exact decomposition
+\begin{equation}
+\lVert\bm t-\Phi\widehat{\bm c}\rVert_W^2
+=\underbrace{\lVert\bm t-\Phi\bm c^*\rVert_W^2}_{\text{address / representation error}}
++\underbrace{\lVert \Phi(\widehat{\bm c}-\bm c^*)\rVert_W^2}_{\text{coefficient-estimation error}}.
+\label{eq:s_field_error_decomposition}
+\end{equation}
+If the coefficient error is unbiased with covariance $\Omega_c$, the expected
+second term is
+$\operatorname{tr}(\Phi^{\mathsf T}W\Phi\,\Omega_c)$. The Gram matrix
+$G_\Phi=\Phi^{\mathsf T}W\Phi$ therefore controls how coefficient error is expressed.
+Estimating $\bm c^*$ is sensitive to noise along directions with small
+positive Gram eigenvalues. Correlated route columns can likewise make
+individual coefficients poorly identifiable even when their combined field
+is stable. Address rank alone is
+not a complete learning metric.
+
+\subsection{Static route gains preserve span but can change conditioning}
+
+\begin{proposition}[Route-wise static-gain invariance]
+Let $D_\beta$ be an invertible diagonal matrix of fixed nonzero route gains. Then
+\begin{equation}
+\operatorname{col}(\Phi D_\beta)=\operatorname{col}(\Phi),\qquad
+P_{\Phi D_\beta,W}=P_{\Phi,W}.
+\label{eq:s_static_gain_span}
+\end{equation}
+Thus route-wise static scalar gains cannot change address rank, projection
+residual or spectral capture. They can change the Gram matrix from
+$\Phi^{\mathsf T}W\Phi$ to
+$D_\beta^{\mathsf T}\Phi^{\mathsf T}W\Phi D_\beta$ and hence alter
+conditioning and coefficient dynamics.
+\end{proposition}
+
+This proposition concerns nonzero scalar rescaling of existing route columns.
+Spatially varying row gains, state-dependent gating and gains that reach zero
+can change the effective span or active support; those cases are not covered
+by Eq.~\ref{eq:s_static_gain_span}. Physical shunts also change the cable
+Green's function. For a somatic adjoint source on a passive tree, that change
+has an exact diagonal-gain representation in the baseline-weighted ancestry
+partition associated with the shunt site
+(Corollary~\ref{cor:shunt_ancestry_gain}). Its partition indicators are
+differences of nested subtree indicators. The diagonal form does not extend
+to an arbitrary selected overlapping dictionary, and the local synaptic
+driving force can still vary within each block.
+
+\subsection{Finite-time coefficient learning has a bias--variance crossover}
+
+Equal span need not give equal learning trajectories. Let
+$\bm f_t=\Phi\bm c_t$ be the field produced by coefficients $\bm c_t$
+after update $t$, and let $\lambda_{\max}>0$ be the largest eigenvalue of
+$\Phi\Phi^{\mathsf T}$. Normalizing ordinary coefficient descent by
+this eigenvalue gives $H_\Phi=\Phi\Phi^{\mathsf T}/\lambda_{\max}$.
+For normalized step size $\eta$ and noisy rate-based target estimates
+$\bm g+\bm\xi_t$, with
+$\E\bm\xi_t=0$ and
+$\operatorname{Cov}(\bm\xi_t)=\sigma^2I/n$, where $n$ is the effective
+sample size and $\sigma^2$ the single-observation noise scale, the field
+iteration is
+\begin{equation}
+\bm f_{t+1}=\bm f_t-\eta H_\Phi(\bm f_t-\bm g-\bm\xi_t).
+\label{eq:s_coefficient_field_iteration}
+\end{equation}
+
+\begin{proposition}[Exact finite-time coefficient risk]
+Assume $\bm f_0=0$, $\bm g\in\operatorname{col}(\Phi)$ and let
+$(\mu_j,\bm u_j)$ be the positive eigenpairs of $H_\Phi$, with
+$\theta_j=\bm u_j^{\mathsf T}\bm g$. For independent isotropic noise and a stable step satisfying
+$|1-\eta\mu_j|<1$ for every positive mode, the expected population loss
+after $T$ updates is
+\begin{equation}
+\E\frac{\lVert\bm f_T-\bm g\rVert_2^2}{2}
+=\frac12\sum_j\left[
+(1-\eta\mu_j)^{2T}\theta_j^2
++\frac{\sigma^2}{n}
+\frac{(\eta\mu_j)^2[1-(1-\eta\mu_j)^{2T}]}
+{1-(1-\eta\mu_j)^2}
+\right].
+\label{eq:s_coefficient_finite_risk}
+\end{equation}
+For Gram-preconditioned descent, $H_\Phi=P_\Phi$ and all positive $\mu_j=1$;
+therefore every dictionary with the same projector has the same field
+trajectory under common observations.
+\end{proposition}
+
+\noindent\emph{Proof.}
+Project Eq.~\ref{eq:s_coefficient_field_iteration} onto each eigenvector. The
+deterministic error contracts by $1-\eta\mu_j$ per step. Independent innovations
+have variance $(\eta\mu_j)^2\sigma^2/n$ and accumulate as a finite geometric
+series. Summing half the modal second moments gives
+Eq.~\ref{eq:s_coefficient_finite_risk}. Gram preconditioning replaces
+$\Phi^{\mathsf T}\Phi$ by its pseudoinverse on the positive subspace, so the induced
+field operator is $P_\Phi$. \hfill$\square$
+
+Equation~\ref{eq:s_coefficient_finite_risk} makes the low-data boundary
+explicit. Small $\mu_j$ retain more finite-time bias but admit less estimator
+variance. For two operators with the same span, let $\Delta B$ be the difference in
+the bias term and $\Delta V$ the difference in the coefficient of the
+noise term. Their risk difference is $\Delta B+(\sigma^2/n)\Delta V$. If $\Delta B>0$ and $\Delta V<0$, the
+ordering reverses at
+$n^*=-\sigma^2\Delta V/\Delta B$: slow coordinates can help below $n^*$ by
+implicit noise filtering, whereas well-conditioned coordinates help above it
+by reducing bias. This is a finite-horizon regularization effect, not new
+address capacity and not an unconditional advantage of ill-conditioning.
+
+\subsection{Branch reliability shrinkage}
+
+Partition the parameter coordinates into disjoint branch blocks $b$. Let
+$\bm g_b$ be the clean gradient in block $b$, $\Sigma_b$ its noise
+covariance, and $I_b$ the identity on that block. Define signal and noise
+energies $S_b=\lVert\bm g_b\rVert_2^2$ and
+$N_b=\operatorname{tr}(\Sigma_b)$. With attenuation $a_b$ in each block,
+$M=\operatorname{blockdiag}(a_bI_b)$ and a fixed step $\eta=c/L$ for $c>0$,
+Eq.~\ref{eq:s_operator_bound} guarantees a loss decrease of
+\begin{equation}
+\mathcal G_c(\bm a)=\frac{c}{L}\sum_b
+\left[a_bS_b-\frac{c a_b^2}{2}(S_b+N_b)\right].
+\label{eq:s_branch_guarantee}
+\end{equation}
+
+\begin{proposition}[Fixed-step reliability-optimal attenuation]
+For each block with $S_b+N_b>0$, Eq.~\ref{eq:s_branch_guarantee} is
+maximized independently at
+\begin{equation}
+a_b^*=\min\left\{1,\frac{S_b}{c(S_b+N_b)}\right\},
+\label{eq:s_reliability_gain}
+\end{equation}
+for a physical attenuator constrained to $0\leq a_b\leq1$. A block with
+$S_b=N_b=0$ contributes zero for every gain and can be omitted from the
+ratios below. If at least one block has positive energy, the best common gain is
+$a_{\mathrm g}^*=\min\{1,\sum_bS_b/[c\sum_b(S_b+N_b)]\}$, and the
+branch-specific guarantee is no smaller because its feasible set contains
+every common gain.  At $c=1$, Eq.~\ref{eq:s_reliability_gain} reduces to the
+reliability factor $S_b/(S_b+N_b)$; in that case
+$\mathcal G_{\mathrm{branch}}=(2L)^{-1}\sum_bS_b^2/(S_b+N_b)$ and
+$\mathcal G_{\mathrm{global}}=(2L)^{-1}(\sum_bS_b)^2/
+\sum_b(S_b+N_b)$, with equality when reliability is constant across
+positive-energy blocks. If all blocks have zero energy, every common gain
+is optimal and both guarantees are zero.
+\end{proposition}
+
+\noindent\emph{Proof.}
+Differentiate each concave quadratic in Eq.~\ref{eq:s_branch_guarantee} and
+project its unconstrained maximizer onto $[0,1]$.  Restricting all coordinates
+to a common value gives $a_{\mathrm g}^*$.  The branchwise optimum cannot be
+worse than this restricted solution.  For $c=1$, the closed-form comparison
+also follows from Cauchy--Schwarz applied to
+$S_b/\sqrt{S_b+N_b}$ and $\sqrt{S_b+N_b}$. \hfill$\square$
+
+This optimum assumes access to $S_b$ and $N_b$. A point implementation
+provided with the same branch partition and multiplicative factors produces
+the same update. Its biological relevance depends on whether local conductance can
+estimate or realize those factors.
+
+\subsection{Why depth can help or hurt}
+
+Let $P_1\preceq P_2\preceq\cdots\preceq P_{D_{\mathrm{r}}}$ be nested tree-route
+projectors. Increasing depth reduces the address bias
+$\lVert(I-P_{D_{\mathrm{r}}})\bm g\rVert^2$ but increases admitted noise
+$\operatorname{tr}(P_{D_{\mathrm{r}}}\Sigma P_{D_{\mathrm{r}}})$ whenever the new modes carry stochastic
+energy. These competing terms can therefore produce an interior optimum
+when task signal is concentrated above one hierarchy level and noise
+continues into finer levels; its location depends on their magnitudes, as
+specified by Eq.~\ref{eq:s_projection_crossover}. This is the controlled role isolated by
+the hierarchy-depth routing experiment. It is distinct from nonlinear forward
+composition, which can make deeper dendritic subunits representationally
+useful even when the backward address span is unchanged.
+
+Depth can also impose a transport cost. In an idealized ensemble with equal
+local eligibility, let the route gain be
+$A=\prod_{\ell=1}^{D_{\mathrm{p}}}G_\ell$ and assume independent Gaussian
+log gains, $\log G_\ell\sim\mathcal N(\mu_\ell,\sigma_\ell^2)$. The cosine between a shared
+coefficient and the exact gain-weighted field in the large-route limit is
+\begin{equation}
+\frac{\E A}{\sqrt{\E A^2}}
+=\exp\left(-\frac12\sum_{\ell=1}^{D_{\mathrm{p}}}\sigma_\ell^2\right).
+\label{eq:s_depth_transport_penalty}
+\end{equation}
+Additional levels can therefore add address resolution while simultaneously
+making uncompensated shared feedback less aligned. The balance depends on
+task hierarchy, gain variability, noise and the available coefficient
+estimator; ``more depth'' has no unconditional sign.
+
+\subsection{Controlled signal--noise experiment}
+
+The signal--noise experiment used 16 Euclidean coordinates represented in the
+orthonormal Haar basis of a balanced binary tree, ordered from the global mode
+(level 0) to individual sibling contrasts (level 4). The configuration,
+50 analysis seeds 7000--7049, two preliminary validation seeds and numerical
+tolerances were specified before the analysis outcomes were inspected. The
+preliminary runs verified basis orthogonality, projector idempotence,
+static-gain span invariance and exact agreement with the explicit point-gain
+control. All planned observations were completed: 3,750 spectral, 1,800
+depth, 3,750 projection and 1,500 reliability rows.
+
+In the spectral screen, the task-gradient second moment assigned total energy
+$(0.15,0.35,0.30,0.20,0)$ to tree levels 0--4. An alignment coefficient
+$\rho\in\{0,0.25,0.5,0.75,1\}$ mixed this second moment with an independently
+rotated endpoint having the same eigenvalues. Intermediate mixtures do not
+preserve the spectrum and jointly vary alignment and concentration.
+Ancestry, random rank-matched
+and dense principal-eigenspace projectors were compared at
+$K\in\{1,2,4,8,16\}$. The dense value was also calculated as the Ky--Fan sum
+of the leading $K$ eigenvalues divided by total second-moment energy. Because the
+endpoint second moments had equal trace, ancestry-minus-random capture varied
+affinely with alignment. Endpoint differences therefore gave the exact
+per-seed crossover; seeds already favoring ancestry at zero alignment were
+assigned threshold zero. In these unweighted coordinates, let
+\(\overline\Sigma_g\) denote the uncentered task-gradient second moment; energy-weighted capture was
+$\operatorname{tr}(P\overline\Sigma_g)/\operatorname{tr}(\overline\Sigma_g)$.
+
+The same-span diagnostic compared raw nested indicators, their tree-Haar basis
+and indicators multiplied by fixed nonzero lognormal column gains. Rank,
+coherence, positive-spectrum Gram condition number and capture were calculated
+directly.
+
+In the depth screen, a unit-norm target was sampled from modes at levels
+$0$ through $H_{\mathrm c}$, with $H_{\mathrm c}\in\{1,2,3,4\}$. The
+gradient-noise standard deviation at level $\ell$ was
+$0.65[1+1.5\max(\ell-H_{\mathrm c},0)]$. Starting from zero, 80
+common-noise updates of size 0.12 used the projector onto levels $0$ through
+$D_{\mathrm r}\in\{1,2,3,4\}$. A fixed leaf permutation provided the rewired
+control, and the identity provided stochastic backpropagation.
+
+The projection screen independently set retained signal $r$ and retained noise
+$n$ to $\{0.25,0.5,0.75,0.9,1\}$. It compared an unprojected stochastic
+gradient, backpropagation followed by the same projection, and a routed
+estimator with an added total coefficient-noise fraction of 0.05. For a unit
+step on the identity-curvature quadratic, expected losses were calculated
+analytically and stochastic losses were recorded from paired draws.
+
+In the reliability screen, eight disjoint blocks had signal and noise energies
+proportional to $\exp(hx_b)$ and $\exp(-hx_b)$, respectively, with equally
+spaced $x_b\in[-1,1]$ and heterogeneity
+$h\in\{0,0.5,1,1.5,2\}$. We compared no attenuation, the best common gain,
+$S_b/(S_b+N_b)$, seed-shuffled gains, reversed gains and a point-gain control receiving
+the same branch factors. Intervals used 20,000 resamples of the 50 paired
+seeds, and paired tests were two-sided Wilcoxon signed-rank tests.
+
+The resolved protocol is
+\texttt{configs/\allowbreak credit\_phase\_theory/\allowbreak confirmatory.json}.
+\par\noindent Source tables are in
+\texttt{source\_data/\allowbreak credit\_phase\_theory/}.
+All full-rank projectors agreed to $4.44\times10^{-16}$, route-wise
+static gain rescaling preserved the projector to $1.33\times10^{-15}$, and the
+explicit point-gain control matched reliability-aligned attenuation exactly. This
+fixed-state quadratic experiment validates the signal--noise prediction but does not join
+oracle reliability to learned positive conductances.
+
+\subsection{Initialization score in the trained subtree factorial}
+
+The existing factorial used full-batch gradient descent. Its secondary
+stochastic diagnostic reconstructed the frozen training data, initialization
+and routes, then estimated routed-update variance from 64 hypothetical
+minibatches of 64 examples per seed. The full-data routed mean and that
+variance supplied Eq.~\ref{eq:s_operator_utility}. This variance was not
+noise experienced by the full-batch optimizer and cannot by itself explain
+the trained contrasts. The original released score used the largest logistic
+Hessian eigenvalue at initialization as its curvature scale. The corrected
+analysis uses the global logistic bound
+\[
+L_{\rm glob}=\max_c\lambda_{\max}\!\left(
+\frac{8}{4N}X_c^{\mathsf T}X_c\right),
+\]
+where rows of $X_c$ contain the selected-stream features for examples in
+context $c$, $N$ is
+the total training-set size, and eight is the gradient context-rescaling
+factor. This bound is 1.00083--1.02125 times the initialization Hessian
+maximum across seeds. We scored the deterministic full-batch update with
+$V=0$, the hypothetical minibatch estimator with its estimated $V$, and the
+deterministic bound at the actual training step $\eta=0.3$.
+
+Across 540 tree fits, deterministic utility correlated with norm-matched one-step progress at 0.9509 and final accuracy at 0.9242; hypothetical-minibatch values were 0.9373 and 0.9157. Intervals use 5,000 whole-seed resamples. These are retrospective associations within the factorial, not independent prospective validation.
+
+To characterize the task-coordinate spectrum, the analysis used the
+uncentered second moment of $\delta_i\bm e_{c_i}$, where $\delta_i$ is
+the output error on example $i$ and $\bm e_{c_i}$ is the coordinate vector
+for its context $c_i$. Eight balanced contexts and logits near zero make this spectrum
+nearly isotropic, giving the reported participation rank near eight. This
+value characterizes the chosen coefficient representation at initialization;
+it is not an independent estimate of task complexity or a morphology law.
+The mean within-family utility and accuracy maxima occur at $K=8$ for all
+five nondegenerate route families. Across their 25 implementation--family
+cells, there are nine distinct nonconstant mean utility curves: four
+implementations coincide, whereas leaf rewiring changes four of the five
+family curves; the principal component analysis (PCA) oracle curve is unchanged. In the dendritic-tree implementation,
+deterministic utility selected an accuracy-maximizing bandwidth in 95 of 100
+seed--family curves, the same success count as always choosing the largest
+$K$; the hypothetical-minibatch score matched in 97 of 100. The 20
+derangement curves had zero optimized-step utility throughout and were
+reported as degenerate. Repeated equivalent parameterizations do not
+provide independent tests of endpoint ordering. The distinct
+interior-optimum and ancestry-minus-control analyses, including their
+prediction failures, are reported in Section~\ref{note:interior_optimum}.
+The corrected scores, per-family selection errors and regret are provided in
+\texttt{source\_data/review\_evidence\_reanalysis/}.
+
+
+\subsection{State-matched positive-conductance reliability experiment}
+
+We next tested whether positive conductances could realize the attenuation
+prescribed by Eq.~\ref{eq:s_reliability_gain} in a separate trained branch
+model (Table~\ref{tab:source_index}). Here $b$ indexes branches, $i$ examples and $d$ inputs within a branch. Every
+input rate $x_{bid}$ was nonnegative, and each excitatory conductance was
+parameterized by $g_{bd}=\operatorname{softplus}(q_{bd})$, with trainable
+raw parameter $q_{bd}$. With leak conductance $g^L$, define total unshunted
+conductance and voltage on example $i$
+\begin{equation}
+G_{bi}=g^L+\sum_d x_{bid}g_{bd},\qquad
+V_{bi}=\frac{\sum_d x_{bid}g_{bd}}{G_{bi}}.
+\label{eq:s_positive_branch_voltage}
+\end{equation}
+A fixed shunt $\kappa_b\geq0$ had reversal zero. To isolate its effect on
+input resistance from its effect on the forward feature, an oracle current
+$\kappa_bV_{bi}$ was added on each example. The perturbed state is therefore
+\begin{equation}
+V_{bi}'=\frac{\sum_d x_{bid}g_{bd}+\kappa_bV_{bi}}{G_{bi}+\kappa_b}=V_{bi},
+\qquad
+\frac{\partial V_{bi}'}{\partial q_{bd}}
+=\frac{x_{bid}(1-V_{bi})}{G_{bi}+\kappa_b}\,
+\operatorname{sigmoid}(q_{bd}).
+\label{eq:s_state_matched_shunt}
+\end{equation}
+Relative to the unshunted eligibility, the example-specific physical
+input-resistance factor is $G_{bi}/(G_{bi}+\kappa_b)$. The compensating current was recomputed from the
+pre-shunt state and treated as a clamp, not differentiated as an independently
+learned pathway. Consequently this manipulation deliberately removes forward
+feature suppression while retaining conductance attenuation in the local
+update.
+
+The binary task used eight branches, four inputs per branch, 512 training
+examples and 2,048 held-out examples. Input rates were generated from a
+positive baseline plus a class-dependent branch pattern and clipped at zero.
+Initial full-data gradients supplied
+$S_b=\lVert\bm g_b\rVert_2^2$. Coefficient-noise variance was then scaled so
+that
+\begin{equation}
+N_b=S_b\exp(-2h x_b),\qquad x_b\in[-1,1],
+\end{equation}
+where $x_b$ is the evenly spaced branch-order coordinate and
+$h\in\{0,0.5,1,1.5,2\}$ controls reliability heterogeneity. The statistical reliability was
+$r_b=S_b/(S_b+N_b)$, lower-bounded at 0.03 for numerical stability. Because
+the common step was $\eta=c/L$ with $c=0.5$, the corrected fixed-step target
+was $a_b^*=\min\{1,r_b/c\}$ and the initial shunt was
+$\kappa_b=\overline G_b[(a_b^*)^{-1}-1]$, where $\overline G_b$ is the
+training-example mean of $G_{bi}$ at initialization. Shunts remained fixed during the 40
+updates; the excitatory conductance parameters were trained, and the same
+coefficient-noise realizations were used across matched methods within seed.
+
+Nine conditions separated the relevant alternatives: exact clean
+backpropagation, noisy credit without a shunt, a state-matched
+unattenuated-eligibility control, the step-consistent best single global shunt,
+reliability-aligned, seed-shuffled and anti-aligned shunts, an explicit
+point-gain control receiving the identical branch factors, and aligned
+shunting with clean credit. The point-gain control is a resource
+control, not a biological assertion: because it receives the same branch
+partition and factors, its update must equal Eq.~\ref{eq:s_state_matched_shunt}.
+The clean-backpropagation condition retains the unattenuated exact gradient and
+is the optimization reference.
+
+An initial implementation using $r_b$ despite $c=0.5$ was excluded; the corrected protocol preceded two excluded checks and fifty paired seeds 8100--8149 (2,250 outcomes). State mismatch was below $3\times10^{-16}$; independently computed point-gain and unattenuated controls agreed to $1.4\times10^{-14}$, and fixed-compensating-current finite differences to relative error $3.60\times10^{-8}$.
+
+At heterogeneity two, aligned-minus-best-global one-step test-loss reduction was 0.001817 (95\% paired interval, 0.001618--0.002020; 49/50 positive). Aligned attenuation also improved immediate progress over unshunted learning. After forty updates it remained better than global, shuffled and reversed attenuation, but its loss difference from no shunt was 0.000425 (95\% interval, $-0.002456$ to 0.003071). Clean BP retained the lowest mean loss. Thus the state-clamped oracle factors improve relative placement without establishing sustained superiority to unshunted learning; compact endpoints and all seeds are indexed below.
+
+\subsection{Adaptive local reliability estimation}
+
+The preceding experiment supplied the reliability moments. We next asked
+whether they could be estimated from noisy local observations, specifying
+the adaptive-gain experiment before examining its outcomes
+(Table~\ref{tab:source_index}). At the current parameter
+state, branch $b$ received two conditionally independent noisy local gradient
+observations, $\widehat{\bm g}_{1b}$ and $\widehat{\bm g}_{2b}$, on the same
+examples. It formed
+\begin{equation}
+ \widehat S_b^{\mathrm{obs}}
+ =\langle\widehat{\bm g}_{1b},\widehat{\bm g}_{2b}\rangle,
+ \qquad
+ \widehat N_b^{\mathrm{obs}}
+ =\frac12\lVert\widehat{\bm g}_{1b}-\widehat{\bm g}_{2b}\rVert_2^2.
+\label{eq:s_adaptive_reliability_moments}
+\end{equation}
+For independent zero-mean credit noise, these estimate the squared clean
+branch gradient and the noise energy of one observation. Eight paired
+observations initialized the moments; exponential averages with decay 0.9
+were then updated before each of 40 training steps. Negative finite-sample
+signal estimates and moments below $10^{-12}$ were clipped only when the gain
+was constructed. The step-consistent gain followed
+Eq.~\ref{eq:s_reliability_gain}, was bounded to $[0.03,1]$, and was converted
+to a shunt using the branch's current mean total conductance.
+
+The task and state clamp are unchanged. At heterogeneity 0/1/2, seven rules compare clean BP, noisy no-shunt, fixed initial oracle, adaptive local/global/permuted shunts and the independently computed adaptive point gain. Update and probe noise are paired. Two implementation-check seeds are excluded; fifty paired seeds 8200--8249 supply 1,050 outcomes. State, finite-difference and point-gain checks pass at the stated tolerances.
+
+At heterogeneity two, adaptive local attenuation lowers final loss relative to global and shuffled estimates, yet exceeds no-shunt loss by 0.004250 (95\% interval, 0.002499--0.005975) and fixed-oracle loss by 0.003449 (0.002577--0.004305). Only 26/50 immediate local-versus-shuffled differences favored local, failing the predefined direction criterion. Final gain ordering correlates with the initial oracle at 0.756, with mean absolute error 0.205. The supplied paired probes, optimizer step fraction and exact state clamp remain necessary assumptions; this is not a fully autonomous inhibitory-plasticity mechanism.
+
+\subsection{Same-span noisy coefficient-learning experiment}
+
+To isolate coefficient learning from address capacity, we compared three
+dictionaries with the same span in a rate-based factorial
+(Table~\ref{tab:source_index}). The 16-leaf balanced-tree Haar basis supplied the common
+rank-eight span through depth three. The tested dictionaries were the eight
+orthonormal Haar modes, all 15 nested indicators through depth three, and the
+same nested indicators scaled by positive gains evenly spaced on the log scale
+from $\exp(-3)$ to $\exp(3)$. The dictionaries' projectors agreed to
+$9.44\times10^{-16}$ and their positive-spectrum Gram condition numbers were
+1, 15 and 388.52.
+
+Each independent seed drew a unit-norm target in the common span. At every
+update the estimator observed the target plus isotropic Gaussian noise with
+standard deviation $2/\sqrt{n_{\mathrm{eff}}}$, where
+$n_{\mathrm{eff}}\in\{4,16,64,256\}$. The same 80 observation vectors were
+used for every matched parameterization. Vanilla coefficient descent used
+$0.2/\lambda_{\max}(\Phi^{\mathsf T}\Phi)$; the oracle coordinate control used
+$0.2(\Phi^{\mathsf T}\Phi)^+$. Population field loss was recorded after 1, 5, 20
+and 80 updates. The target address residual was below
+$1.45\times10^{-30}$ in every condition, so all reported loss is within-span
+coefficient-estimation error.
+
+The predictions were specified before two implementation-check seeds, which
+were excluded from inference, and 50 paired seeds (9100--9149). The results contradicted the prediction that Haar coordinates would
+always reduce finite-time error. At $n_{\mathrm{eff}}=4$, raw-minus-Haar
+final loss was $-0.2774$ (95\% paired interval $-0.3260$ to $-0.2313$) and
+scaled-minus-Haar was $-0.1906$ ($-0.2500$ to $-0.1335$): slower modes
+filtered high estimator noise. At $n_{\mathrm{eff}}=256$, the effects reversed
+to 0.02555 (0.02171--0.02952) and 0.17091 (0.14576--0.19686), positive in
+50/50 seeds for both contrasts. Equation~\ref{eq:s_coefficient_finite_risk},
+derived after these outcomes to explain the reversal, predicted median
+crossovers at effective
+sample sizes 38.53 and 8.25. The Gram-preconditioned field trajectories agreed
+across dictionaries to $1.15\times10^{-15}$. Thus static parameterization can
+alter finite-data learning without altering the attainable credit field.

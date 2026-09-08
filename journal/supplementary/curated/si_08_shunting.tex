@@ -1,0 +1,378 @@
+% Curated from paper commit 7ee9157; original equations and protocol identities retained.
+\section{Focal shunting and spatial transport}
+\label{note:shunt_transport}
+
+\subsection{Passive focal shunts attenuate a positive adjoint}
+
+\begin{proposition}[No sign reversal in a passive grounded tree]
+Let $G$ be a symmetric positive-definite nonsingular M-matrix, with
+nonpositive off-diagonal entries. For a nonnegative adjoint source
+$\bm s$, define $\bm q=G^{-1}\bm s$. Adding a
+nonnegative shunt $\kappa$ at compartment $k$ gives
+$G'=G+\kappa\bm e_k\bm e_k^{\mathsf T}$ and
+\begin{equation}
+\bm q'=\bm q-
+\frac{\kappa q_k}{1+\kappa(G^{-1})_{kk}}G^{-1}\bm e_k.
+\label{eq:s_sherman_shunt}
+\end{equation}
+Both $G^{-1}$ and $(G')^{-1}$ are elementwise nonnegative, hence
+$0\leq\bm q'\leq\bm q$ componentwise. A focal passive shunt attenuates but
+cannot reverse a positive adjoint field.
+\end{proposition}
+
+\noindent\emph{Proof.}
+Equation~\ref{eq:s_sherman_shunt} is the Sherman--Morrison identity. A
+nonsingular M-matrix has a nonnegative inverse; adding a nonnegative diagonal
+term preserves the M-matrix property \citep{horn2013matrix}. The subtracted vector is nonnegative,
+and $\bm q'=(G')^{-1}\bm s\geq0$. \hfill$\square$
+
+This ordering does not by itself guarantee descendant selectivity relative to
+a matched current injection; that spatial comparison depends on the Green's
+function, focal site and electrotonic regime and is evaluated numerically in
+the focal experiments.
+
+\begin{corollary}[A focal shunt applies gains to its ancestry partition]
+\label{cor:shunt_ancestry_gain}
+Assume additionally that the nonzero off-diagonal entries of $G$ form a
+connected tree rooted at the soma $s$, and that the adjoint source is
+$\ell\bm e_s$ for a fixed scalar somatic loss derivative $\ell$. Write
+$R=G^{-1}$ and $\bm h=R\bm e_s>0$. For a shunt at $k$, let
+$\mathcal A_k$ be the vertices on the path from $s$ to $k$, including both
+endpoints. For each $a\in\mathcal A_k$, define the disjoint block
+$P_a=\{i:\operatorname{LCA}(i,k)=a\}$, where $\operatorname{LCA}$ is the
+lowest common ancestor. Then
+\begin{equation}
+q'_i=\eta_a q_i\quad(i\in P_a),\qquad
+\eta_a=1-\frac{\kappa R_{ks}R_{ak}}
+{(1+\kappa R_{kk})R_{as}},\qquad
+\eta_k=\frac{1}{1+\kappa R_{kk}}.
+\label{eq:s_shunt_partition_gain}
+\end{equation}
+For finite $\kappa\geq0$, every gain satisfies $0<\eta_a\leq1$.
+Let $B_k$ have columns $\bm 1_{P_a}$ and define the baseline-weighted
+partition dictionary $D_k=\operatorname{diag}(\bm h)B_k$. With
+$\Gamma_k=\operatorname{diag}(\eta_a)$,
+\begin{equation}
+\bm q=\ell D_k\bm 1,\qquad
+\bm q'=\ell D_k\Gamma_k\bm 1.
+\label{eq:s_shunt_partition_dictionary}
+\end{equation}
+Thus the adjoint effect is exactly a diagonal gain in this partition basis.
+\end{corollary}
+
+\noindent\emph{Proof.}
+Removing a vertex $a$ separates a tree into components. If $a$ lies on the
+path from $i$ to $j$, solving the source-free equations in the component
+containing $i$, with boundary voltage at $a$, gives
+$R_{ij}=R_{ia}R_{aj}/R_{aa}$. For
+$a=\operatorname{LCA}(i,k)$, apply this identity to $(i,k)$ and $(i,s)$;
+it also holds when an endpoint equals $a$. Hence
+$R_{ik}/R_{is}=R_{ak}/R_{as}$. Substitution into
+Eq.~\ref{eq:s_sherman_shunt} gives Eq.~\ref{eq:s_shunt_partition_gain}.
+Positivity of both tree inverse matrices gives positive ratios, and the
+preceding proposition bounds them by one. The formula also holds when
+$\ell=0$, when both adjoints vanish. The disjoint blocks partition all
+vertices, yielding Eq.~\ref{eq:s_shunt_partition_dictionary}.
+\hfill$\square$
+
+The block $P_k$ is the whole subtree below the shunt. For an ancestor $a$
+above $k$, $P_a$ contains $a$ and its sister subtrees off the path to $k$.
+If $c$ is the next vertex toward $k$, its indicator is
+$\bm 1_{P_a}=\bm 1_{\mathrm{Desc}(a)}-\bm 1_{\mathrm{Desc}(c)}$,
+whereas $\bm 1_{P_k}=\bm 1_{\mathrm{Desc}(k)}$. The gain field therefore
+lies in the span of nested ancestry indicators. The diagonal form requires
+the disjoint partition basis; an arbitrary selected set of overlapping
+routes need not have diagonal gains. Even for the ancestry chain, a change
+from partition to nested-subtree coordinates generally makes the gain
+matrix non-diagonal, while preserving that full span.
+
+For the synaptic gradient, the local driving force remains a separate factor:
+$\gamma'_i=\eta_a q_i(E_{\mathrm E}-V'_i)$ for $i\in P_a$.
+Its within-block variation is therefore not constrained to a single gain
+relative to $\gamma_i=q_i(E_{\mathrm E}-V_i)$. The corollary describes
+somatic-source adjoint transport on a passive tree, rather than the complete
+synaptic update, a distributed-error source or a nonlinear finite-dose
+response. It connects the morphology-defined dictionary to a conductance
+gain without implying a learning advantage.
+
+\begin{corollary}[Spectral size of a focal passive perturbation]
+Under the preceding assumptions, let $\mathcal R=G^{-1}$ and
+$\mathcal R'=(G+\kappa\bm e_k\bm e_k^{\mathsf T})^{-1}$. The inverse-operator change has
+rank at most one, with rank one for $\kappa>0$, and
+\begin{equation}
+\lVert \mathcal R'-\mathcal R\rVert_2
+=\frac{\kappa\lVert \mathcal R\bm e_k\rVert_2^2}
+{1+\kappa \mathcal R_{kk}}
+\leq
+\frac{\kappa\lVert \mathcal R\rVert_2^2}
+{1+\kappa/\lambda_{\max}(G)}.
+\label{eq:s_focal_inverse_norm}
+\end{equation}
+Consequently, for any adjoint source $\bm s$,
+$\lVert(\mathcal R'-\mathcal R)\bm s\rVert_2\leq
+\lVert \mathcal R'-\mathcal R\rVert_2\lVert\bm s\rVert_2$.
+\end{corollary}
+
+\noindent\emph{Proof.}
+Sherman--Morrison gives
+$\mathcal R'-\mathcal R=-\kappa(\mathcal R\bm e_k)(\mathcal R\bm e_k)^{\mathsf T}/
+(1+\kappa \mathcal R_{kk})$.
+The norm of this symmetric outer-product matrix is its scalar coefficient times
+$\lVert \mathcal R\bm e_k\rVert_2^2$. Use
+$\lVert \mathcal R\bm e_k\rVert_2\leq\lVert \mathcal R\rVert_2$ and
+$\mathcal R_{kk}\geq\lambda_{\min}(\mathcal R)=1/\lambda_{\max}(G)$ for the bound.
+\hfill$\square$
+
+Equation~\ref{eq:s_focal_inverse_norm} provides only a global magnitude ceiling
+on the total adjoint change. It does not predict the localization contrast or
+the observed crossover with membrane conductance. Those spatial effects depend
+on the Green's-function profile and electrotonic length constant of the cable.
+
+\subsection{Focal shunting perturbations}
+\label{note:focal}
+
+Route capacity does not show that conductance can selectively alter transport.
+We therefore compared a focal shunt with a baseline-current-matched injection
+at the same site of each reciprocal reconstructed cable and quantified the
+resulting change in the exact modeled gradient.
+
+\subsection{Adjoint formulation and baseline-current-matched current injection}
+
+For passive conductance matrix $G$ and current-source vector $\bm b$, the
+voltage vector was $\bm V=G^{-1}\bm b$. Let $\bm e_s$ select the somatic
+coordinate and let $w_i$ denote the excitatory conductance at site $i$. For a
+loss depending on somatic voltage, the adjoint error and conductance gradient
+were
+\begin{equation}
+\bm q=G^{-1}\bm e_s\frac{\partial\mathcal L}{\partial V_s},
+\qquad
+\frac{\partial\mathcal L}{\partial w_i}=q_i(E_{\mathrm E}-V_i).
+\end{equation}
+Adding focal inhibitory conductance \(\kappa_k\) at node $k$, selected by
+the coordinate vector $\bm e_k$, gives
+\[
+G'=G+\kappa_k\bm e_k\bm e_k^{\mathsf T},
+\qquad
+\bm b'=\bm b+\kappa_kE_{\mathrm I}\bm e_k .
+\]
+The shunt therefore changes both conductance loading and the forward source.
+Holding the somatic loss derivative fixed, the Sherman--Morrison identity
+gives the transport change
+\begin{equation}
+\bm q'=\bm q-
+\frac{\kappa_kq_k}{1+\kappa_k(G^{-1})_{kk}}G^{-1}\bm e_k.
+\label{eq:s_sherman}
+\end{equation}
+The reversal \(E_{\mathrm I}\) does not appear in
+Eq.~\ref{eq:s_sherman} because the adjoint transport depends on \(G'\), not on
+the forward source \(\bm b'\). It remains in the solved voltage and in every
+inhibitory driving force.
+Corollary~\ref{cor:shunt_ancestry_gain} supplies the exact partition-gain form. The full synaptic gradient additionally changes through its local driving force.
+
+Let $r_k=(G^{-1})_{kk}>0$. Then
+\begin{equation}
+\Delta\bm q=-a_kG^{-1}\bm e_k,
+\qquad
+a_k=\frac{\kappa_kq_k}{1+\kappa_kr_k},
+\qquad
+\frac{\partial |a_k|}{\partial\kappa_k}
+=\frac{|q_k|}{(1+\kappa_kr_k)^2}\geq0.
+\label{eq:s_shunt_amplitude}
+\end{equation}
+The derivative is strictly positive when $q_k\neq0$; if $q_k=0$, the perturbation vanishes. Its amplitude saturates at $|q_k|/r_k$. For a nonzero perturbation, the normalized spatial profile is fixed by the Green's-function column $G^{-1}\bm e_k$ in this linear passive state. For a
+descendant set $D(k)$ and a prespecified matched comparison set $C(k)$, define
+\begin{equation}
+S_k(D,C)=
+\frac{\operatorname{median}_{i\in D(k)}|(G^{-1})_{ik}|}
+{\operatorname{median}_{j\in C(k)}|(G^{-1})_{jk}|}.
+\label{eq:s_electrotonic_selectivity}
+\end{equation}
+For $\kappa_k>0$, $q_k\neq0$ and a positive comparison median, the common amplitude $|a_k|$ cancels. Under these conditions, $S_k>1$ is necessary and sufficient for a positive descendant-minus-comparison contrast in absolute adjoint change at fixed $k$. It is only a transport-level criterion. Relative
+or logarithmic changes additionally divide by the baseline $q_i$, and the full
+synaptic gradient also contains the post-perturbation driving force. This is
+why axial coupling, leak, background conductance and local input resistance
+must be varied explicitly rather than inferred from topology alone.
+The baseline-current-matched current injection applied
+$\kappa_k(E_{\mathrm I}-V_k)$ at the same node without changing $G$. This equals the
+current carried by the added shunt at the unperturbed voltage; its local
+voltage effect matches the shunt only to first order in dose. An independently
+solved state-matching compensatory current injection restored baseline somatic
+voltage after both interventions. This is not a continuously adjusted voltage
+clamp. The somatic scalar error was therefore fixed. Shunting changed adjoint
+transport, whereas the current-injection control left it unchanged. Dendritic voltages
+were not clamped, so both interventions could also change local driving forces.
+
+\subsection{Prespecified endpoint and numerical validation}
+
+Before running the analysis, we fixed the site-selection rule, primary dose,
+comparison groups, and localization endpoint. Focal sites were selected by a
+depth-stratified rule without access to gradient outcomes. A site required at
+least three excitatory descendants and
+three comparison sites. At most 16 eligible sites were sampled per cell across
+quartiles of topological depth. The primary model used excitatory and
+inhibitory synaptic scales of 0.35 and normalized reversal potentials
+$E_{\mathrm E}=1$ and $E_{\mathrm I}=-0.2$. Synapses were classified as descendants, ancestors,
+sister-subtree sites or unrelated sites. Unrelated synapses within each
+template were matched to descendant cable depth. For baseline gradient $g_i$
+and perturbed gradient $g_i'$, we defined
+$m_i=\left|\log[(|g_i'|+\varepsilon)/(|g_i|+\varepsilon)]\right|$, where
+$\varepsilon=10^{-15}\max(1,\max_i|g_i|)$. For each site, the localization
+index was the median $m_i$ among descendants minus the median among
+depth-matched unrelated synapses. Site effects were first averaged within cell.
+
+The somatic loss was one-half the squared difference between somatic voltage
+and a target one normalized unit below its baseline value. Conductance doses
+were 0.25, 0.5, 1, and 2 times the local leak-plus-synaptic conductance. The
+state-matching current was solved after each perturbation and then treated as
+fixed when evaluating the post-intervention conductance gradient. The topology
+control sampled 200 relation templates from other focal sites, stratified by
+focal-site topological-depth quartile when another site was available;
+otherwise it sampled another site in the same cell.
+
+At unit dose, 101 sites in eight cells gave mean localization 0.104 for shunting and 0.035 for current injection. Their paired cell-level contrast was 0.069 log units (95\% interval, 0.053--0.086), positive in all eight cells. True relations also exceeded the depth-stratified relation control. The contrast grew with relative dose; Source Data retain every site, dose and template.
+
+We separated the two factors in the exact gradient algebraically. Writing
+$d_i=E_{\mathrm E}-V_i$ and $d'_i=E_{\mathrm E}-V'_i$, full shunting uses $q'_id'_i$,
+adjoint-only substitution uses $q'_id_i$, and driving-force-only substitution
+uses $q_id'_i$. At unit dose, their mean localization indices were 0.104,
+0.130 and 0.026, respectively, compared with 0.035 for the current-injection
+control. Adjoint-only minus driving-force-only localization was 0.104 (95\%
+interval 0.080--0.125), positive in all eight cells.
+
+Full shunting and the driving-force-only state provide a direct comparison
+of adjoint transport: they share the same post-shunt voltage field and differ
+only in whether the adjoint field is updated. Their localization difference was 0.079 and was positive in all
+eight cells. This is the exact adjoint-replacement contrast plotted in main
+Fig.~8C.
+
+The gradient factors and localization statistic are nonlinear, so these four
+outcomes do not form an additive decomposition. To allocate the
+full-shunt-minus-current-injection contrast, we used two-factor Shapley values.
+For $v_{00}$ equal to current-injection localization, $v_{10}$ adjoint-only,
+$v_{01}$ driving-force-only and $v_{11}$ full-shunt localization,
+\begin{align}
+\phi_q&=\tfrac12[(v_{10}-v_{00})+(v_{11}-v_{01})],\\
+\phi_d&=\tfrac12[(v_{01}-v_{00})+(v_{11}-v_{10})].
+\end{align}
+The allocations sum exactly to the full-shunt-minus-current contrast. Mean adjoint and driving-force allocations were 0.087 and $-0.017$, respectively: driving-force change partly cancelled the adjoint contribution. This is an algebraic allocation of a nonlinear statistic; the current-matched control is not a literal no-factor corner of a physical factorial. Repeating the allocation with the unperturbed field as its reference is retained in Source Data. Factor substitutions are not independent biological interventions.
+
+All conductance matrices in the primary analysis were positive definite. The
+somatic state-matching residual was numerically zero. Analytic adjoint gradients agreed
+with finite differences to a maximum relative error of
+$1.03\times10^{-6}$. The Source Data indexed in Table~\ref{tab:source_index} retain prespecified
+conductance-scale and reversal-potential sensitivity runs. The direction of
+the shunting-minus-current-injection effect was positive in every condition,
+with seven or eight positive cells. These results establish the mechanism in a passive model on measured trees;
+they do not establish endogenous inhibitory teaching signals in vivo.
+
+With proxy-classified contacts removed, the primary
+shunt-minus-current-injection contrast was 0.101 (0.075--0.129) across 55 sites
+and was positive in all eight cells. In the independent, non-overlapping v661
+sample, 45 cells supplied 235 eligible sites. The same contrast was 0.138
+(0.116--0.162), positive in 45/45 cells. Forty cells
+with at least two eligible sites supplied the reassigned-relation control; the
+true relation exceeded this control by 0.118 (0.094--0.144), with
+39 positive cells and one numerical tie (Supplementary
+Fig.~\ref{fig:si_shunt_replication}A,B). Cells, rather than
+sites or relation draws, were the
+units of inference.
+
+To test sensitivity to electrical calibration, we also computed axial and
+leak conductances in physical units from the same compressed geometry. For
+segment radius $r$, length $\ell$, axial resistivity $R_a$ and specific
+membrane resistance $R_m$, a cylindrical non-root segment had axial conductance
+$\pi r^2/(R_a\ell)$ and membrane leak $2\pi r\ell/R_m$; the root was assigned
+spherical area $4\pi r^2$. All conductances were converted to nanosiemens (nS). Because MICrONS
+synapse size is not an electrical conductance, synaptic sizes retained the
+prespecified relative scaling with the median physical leak as reference. We
+varied $R_a$ and $R_m$ while retaining the site-selection rule, relative dose, gradient definition and current-injection control. For each condition and intervention, we re-solved the compensating somatic current to restore that condition's baseline somatic voltage. The Source Data indexed in Table~\ref{tab:source_index} retain this electrotonic dependence. The large contrast observed under the normalized proxy was recovered only in
+low-$R_m$, high-conductance settings; at
+$R_a=150\,\Omega\,\mathrm{cm}$ and
+$R_m=15{,}000\,\Omega\,\mathrm{cm}^2$ it was negligible or small. These are
+sensitivity settings, not fits to the recorded cells, and the model remains
+passive and steady-state.
+
+A broader parameter matrix, specified before numerical validation, tested
+membrane resistance, background conductance and dose definition jointly. It used
+\(R_a=150\,\Omega\,\mathrm{cm}\) and crossed
+\(R_m\in\{300,1000,15{,}000\}\,\Omega\,\mathrm{cm}^2\), distributed leak-like
+background conductance of 0, 1 or 4 times baseline leak, and three dose
+definitions. Relative-local doses were 0.25, 1 and 2 times membrane-plus-
+synaptic conductance; fixed doses were 0.05, 0.5 and 5 nS; input-normalized
+doses were 0.25, 1 and 4 times $[(G^{-1})_{kk}]^{-1}$. The same 101 sites in
+eight cells supplied 16,362 site--condition--intervention rows. Every
+conductance matrix was positive definite (minimum eigenvalue 0.107 nS) and the
+maximum somatic-state residual was $3.33\times10^{-16}$.
+
+At fixed absolute dose, the conductance-specific contrast did not follow the
+raw focal-shunt localization alone. At 0.5 nS, shunt-minus-current-injection
+localization was 0.0104 (0.0080--0.0126), 0.0073 (0.0044--0.0104), and
+$-0.0039$ ($-0.0075$ to $-0.0004$) at $R_m=300$, 1,000 and 15,000,
+respectively. At 5 nS the corresponding values were 0.0974, 0.0741 and 0.0061;
+the last interval included zero. Distributed background conductance restored
+the input-normalized effect in the high-resistance condition: at unit
+input-conductance dose, the contrast changed from $-0.0004$ with no background
+to 0.1210 and 0.2587 at background multipliers one and four. Across all 8,181
+focal-shunt rows, every descendant gradient magnitude was attenuated, none was
+enhanced and no sign flip occurred. The passive mechanism therefore selectively attenuated gradients; sign
+reversal would require dynamics or active conductances absent from this phase (Supplementary Fig.~\ref{fig:si_shunt_sensitivity}).
+
+\subsection{Weak-channel steady-state linearization check}
+
+We checked the local-Jacobian calculation after adding weak
+voltage-dependent currents to the high-conductance cable.
+The physical reconstructed-tree system used
+$R_a=150\,\Omega\,\mathrm{cm}$,
+$R_m=1{,}000\,\Omega\,\mathrm{cm}^2$ and distributed background conductance
+equal to baseline leak. Steady-state sodium (Na), potassium (K), calcium (Ca),
+hyperpolarization-activated cyclic nucleotide-gated (HCN) and
+N-methyl-D-aspartate receptor (NMDA) current families had fixed reversal
+potentials, half-activation voltages, slopes and gate
+powers specified in the predefined parameter file. Global and segment-level
+maximal conductances were drawn independently from prespecified log-normal
+distributions. Median maximal Na, K, Ca and HCN conductances were 0.06,
+0.10, 0.025 and 0.05 times baseline leak, respectively; NMDA conductance was
+0.15 times the excitatory conductance. Gate activation further scales these
+currents. These prespecified weak-channel draws are not cell-specific
+density estimates or a test of strongly regenerative operation.
+
+For each draw, a residual-reducing Newton solve found the nonlinear steady
+state. The predefined acceptance criteria required all voltages to lie in the
+specified range, maximum absolute state residual below $10^{-10}$, and minimum
+eigenvalue of the symmetrized local Jacobian above $10^{-8}$. The implicit-adjoint calculation
+then used the exact inverse of this baseline Jacobian. For channel family $a$, let $\bar g_a$ be maximal conductance, $h_a(V)$ the
+steady-state gating factor and $E_a$ the reversal potential. The current
+$I_a(V)=\bar g_a h_a(V)(V-E_a)$ contributed the diagonal term
+$\bar g_a[h_a(V)+h_a'(V)(V-E_a)]$; thus the baseline Jacobian includes
+voltage-dependent gate derivatives. Focal shunting and a
+baseline-current-matched current injection were evaluated at 0.25, 1 and 4
+times local input conductance within this fixed local linearization.
+Sherman--Morrison updated the Jacobian inverse for the added focal
+conductance, and a compensating somatic current restored baseline somatic
+voltage in that linearized system. The active gates and their derivatives
+were not re-evaluated at a new nonlinear equilibrium after each finite dose.
+Up to 256 attempts were permitted to obtain 64
+accepted draws per cell. All first 64 attempts were accepted in every cell,
+giving 512 equilibria, 101 focal sites and 38,784 site--draw--condition rows.
+All values were finite, the largest equilibrium residual was
+$9.51\times10^{-11}$ and the smallest Jacobian eigenvalue was 1.084.
+
+Channel draws and focal sites were averaged within each of the eight cells
+before inference. At doses 0.25, 1 and 4, mean shunt localization was 0.159,
+0.529 and 1.339, respectively (Table~\ref{tab:source_index}). At unit dose,
+shunting exceeded the current-injection control by 0.382 (95\% cell-bootstrap
+interval 0.356--0.409), positive in 8/8 cells (two-sided Wilcoxon $P=0.0078$).
+Every modeled descendant gradient was attenuated, none was enhanced or changed
+sign, and descendant gradient energy fell to 0.330 of baseline. The dose
+response closely followed the passive response at the same electrical
+calibration. This agreement checks the weak-channel linearization; it does
+not establish robustness to strongly active dendrites, channel kinetics or
+spiking.
+
+\subsection{Driving-force cancellation and the ancestry dependence of passive fields}
+\label{sec:passive_field_diagnostics}
+We reanalyzed the eight original cable operators used for the common-broadcast comparison. For each focal site, the perturbation was the original dose 0.001 with somatic voltage restored. The finite log-gradient difference divided by dose separates into an adjoint term and a driving-force term. Energy uses the original excitatory-area site weights and sums over focal perturbations. The full focal ancestry partition is defined separately for each shunt and is distinct from the seven selected routes in the budgeted anatomical dictionary.
+
+Driving-force energy was 0.990--3.496 times full-field energy across cells; these are ratios of squared magnitudes, not amplitudes. Weighted centered correlations with the adjoint term were $-0.979$ to $-0.913$. The negative cross term explains why large components yield a smaller full response. The full response retained 0.9711--0.9993 of its energy in the focal partition. Reconstruction agrees with the original operators to $10^{-8}$; numerical decomposition closes to rounding error. Cellwise energies, correlations and partition captures are supplied in Source Data.
+
+The passive corollary depends on a tree Green's function, a somatic adjoint source and a diagonal conductance change. Choosing other passive perturbations under the same assumptions does not make the anatomical field ancestry-neutral. The budgeted dictionary comparison measures compression within this response family. In the disjoint 47-cell cohort, actual ancestry exceeds the mean degree--depth surrogate in 38 cells, but in eleven cells more than half of 200 surrogates match or exceed the actual tree. This descriptive count uses tolerance $10^{-12}$ and retains the full within-cell distribution. A different error source, active dynamics or measured fields would be required to test beyond the present structural dependence.

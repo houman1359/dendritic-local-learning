@@ -1,0 +1,116 @@
+{
+  "status": "PASS",
+  "verifier_sha256": "ca1c9c03883c441d4b3d62f2c08087274afdd408265087f4941e7037181cf194",
+  "source_and_builder_hashes_verified": 51,
+  "figures": {
+    "1": {
+      "canonical": "figures/main/figure_01.pdf",
+      "component": "figures/components/restored_main_01.pdf",
+      "sha256": "cd88f03ff4a5f8709eddbc62ee47d9dcdaf34344df2c55055f37a4350870640f",
+      "page_points": [
+        518.4000244140625,
+        493.0
+      ],
+      "panel_letters": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F"
+      ],
+      "min_text_pt": 6.800000190734863,
+      "max_text_pt": 10.5,
+      "outside_page_text": []
+    },
+    "4": {
+      "canonical": "figures/main/figure_04.pdf",
+      "component": "figures/components/restored_main_04.pdf",
+      "sha256": "2436f1299e50d31c4041f1c98595c0f47bfe984ae1ea5978f8d562557768c4e4",
+      "page_points": [
+        518.4000244140625,
+        485.0
+      ],
+      "panel_letters": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F"
+      ],
+      "min_text_pt": 6.800000190734863,
+      "max_text_pt": 10.5,
+      "outside_page_text": []
+    },
+    "6": {
+      "canonical": "figures/main/figure_06.pdf",
+      "component": "figures/components/restored_main_06.pdf",
+      "sha256": "ea6a9f01b5a003ad885190db273714b59f33c537d357c9c81832000d69892692",
+      "page_points": [
+        518.4000244140625,
+        535.0
+      ],
+      "panel_letters": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F"
+      ],
+      "min_text_pt": 6.800000190734863,
+      "max_text_pt": 10.5,
+      "outside_page_text": []
+    },
+    "7": {
+      "canonical": "figures/main/figure_07.pdf",
+      "component": "figures/components/restored_main_07.pdf",
+      "sha256": "34419d9623925d3ef6f0eb521c57e43135f75c7f1989a4651a0ffeeb774d7d4b",
+      "page_points": [
+        518.4000244140625,
+        493.0
+      ],
+      "panel_letters": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F"
+      ],
+      "min_text_pt": 6.800000190734863,
+      "max_text_pt": 10.5,
+      "outside_page_text": []
+    },
+    "9": {
+      "canonical": "figures/main/figure_09.pdf",
+      "component": "figures/components/restored_main_09.pdf",
+      "sha256": "20657f4497eb64f59fa41fe29780b82bc647dccdbcc4fceb0c1880dffdade725",
+      "page_points": [
+        518.4000244140625,
+        365.0
+      ],
+      "panel_letters": [
+        "A",
+        "B",
+        "C"
+      ],
+      "min_text_pt": 6.800000190734863,
+      "max_text_pt": 10.5,
+      "outside_page_text": []
+    }
+  },
+  "checks": [
+    "canonical PDF equals native component",
+    "declared scientific sources and builders match hashes",
+    "single-page vector PDFs and expected panel letters",
+    "no text outside PDF page",
+    "4E retains both 16384 endpoint views exactly",
+    "4F means from all20 exact-rule seeds at0/1024/16384",
+    "6B nine observed cells each10seeds",
+    "7C complete47-cell K1/2/4/8 summaries",
+    "9A/B/C empirical and simulation sample counts"
+  ],
+  "scope": "Rendering and frozen-source integrity; no scientific reruns."
+}

@@ -71,7 +71,8 @@ def test_followups_keep_complete_states_inputs_and_historical_sources(tmp_path):
                                    write_inventory(tmp_path))
     by_source = {row.source: row for row in rows}
     assert set(by_source) == {'source_data/' + s for s in numerical} | {old.source}
-    assert by_source[old.source].figure == 'Supplementary Figure 45'
+    assert by_source[old.source].figure == 'Methods'
+    assert by_source[old.source].destination == 'Methods/retained_evidence/' + old.destination
     assert filters[by_source[old.source].destination] == filters[old.destination]
     assert counts[by_source[old.source].destination] == 5
     for source in numerical:

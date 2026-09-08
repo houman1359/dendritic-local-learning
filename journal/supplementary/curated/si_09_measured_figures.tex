@@ -1,0 +1,23 @@
+\begin{figure}[p]
+\centering
+\includegraphics[width=\textwidth]{supplementary/curated/measured_topology.pdf}
+\caption{\textbf{Measured topology associations have limited target and response reliability.} \textbf{A}, Mapped presynaptic partner counts for seven targets. \textbf{B,C}, Target-level shared-ancestry/response association and alternative path, tree-distance, partial-correlation and same-major-branch measures. Partial correlations control Euclidean separation and soma-to-contact depth differences. The target, not the partner pair, is the inferential unit. \textbf{D}, Calibration of the sensitivity model against measured odd/even-repeat Spearman reliability for 125 partner records. Two negative estimates are assigned zero reliable variance; the identity line is not fitted. One thousand independent calibration datasets estimate model mean reliability. Main Fig.~9 reports alignment and detection sensitivity using all thirteen scans from these seven targets. The detected-effect scale is conditional on this covariance/noise model and sampling, not a universal detectable correlation.}
+\label{fig:si_measured_topology}
+\label{fig:supp_measured_detail}
+\label{fig:supp_measured_alignment_power}
+\end{figure}
+
+\begin{figure}[p]
+\centering
+\includegraphics[width=\textwidth]{supplementary/curated/measured_transfer_geometry.pdf}
+\caption{\textbf{The measured-response learning comparison is limited by transfer geometry.} \textbf{A}, Actual four-route support for the scan selected by median mapped-input count, with identifier tie breaking; rows are input coordinates and columns selected routes. \textbf{B}, Input coverage in all thirteen scans, ordered by input count. The selected supports are mostly single distal sites, rather than illustrative nested bands. \textbf{C}, Response-prediction NMSE for exact learning, treeless ridge and restricted dictionaries; dots are seven target means, diamonds and bars their means and 95\% target-bootstrap intervals. The dotted line marks ridge. \textbf{D}, Common-checkpoint update reconstruction by the unrestricted fixed transfer profile, the restricted ancestry profile and oracle trialwise ancestry amplitudes. The unrestricted fixed profile is nearly sufficient because somatic error mainly scales a stable transfer vector; restricted rules underperform ridge. Scans and splits are averaged within targets before inference. This is an offline passive-tree geometry diagnostic, distinct from the empirical ancestry-response association.}
+\label{fig:si_measured_transfer_geometry}
+\end{figure}
+
+\begin{figure}[p]
+\centering
+\includegraphics[width=\textwidth]{supplementary/curated/measured_predictor_controls.pdf}
+\caption{\textbf{Linear baselines explain most measured-response prediction, and degrading observed inputs worsens performance.} Thirteen scans retain the complete-tree analysis's 130 outer stimulus-identity splits. All preprocessing, reliability masks and ridge tuning use training identities only. \textbf{A}, Training-mean, ordinary least-squares (OLS) and nested ridge-regression baselines against the matched nonlinear fits. Lower normalized MSE is better. Below, paired exact-nonlinear-minus-ridge differences show the small additional nonlinear benefit: mean $-0.0152$ (95\% interval $-0.0271$ to $-0.0042$). \textbf{B}, Ridge prediction when retaining nested random fractions of observed presynaptic inputs; five masks per split are averaged before inference. Manual-only partners are a separate provenance restriction, not a random retention dose. Empty masks use the training mean and remain included. \textbf{C}, Added Gaussian predictor noise in both training and test data, in units of training input standard deviation (SD) after the quantile transform. \textbf{D}, Reliability filtering based only on training repeats; parentheses give mean retained partner counts. Thin traces or dots show seven target means after averaging splits within scan and scans within target. Larger symbols and bars are means and 95\% target-bootstrap intervals (20,000 draws). All targets come from one mouse. Only ridge is refitted under the sensitivity conditions. Removing observed inputs does not recover unknown partners, establish population power or explain away the absence of preferential ancestry alignment.}
+\label{fig:si_measured_predictor_controls}
+\label{fig:supp_response_baselines}
+\end{figure}

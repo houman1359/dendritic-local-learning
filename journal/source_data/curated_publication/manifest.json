@@ -1,0 +1,39 @@
+{
+  "records": [
+    {
+      "figure": 1,
+      "source": "figures/provenance/structure_restoration_20260908/figure_01_plotted.csv",
+      "path": "source_data/curated_publication/figure_01_plotted.csv",
+      "sha256": "6405b0ea55e408bb586f421d4b6306352edc0f98929bc012e4e75792975d057f",
+      "scope": "Display summaries from existing inputs; panel column identifies the selected data. Not an additional experiment."
+    },
+    {
+      "figure": 4,
+      "source": "figures/provenance/structure_restoration_20260908/figure_04_plotted.csv",
+      "path": "source_data/curated_publication/figure_04_plotted.csv",
+      "sha256": "ce9376b0c205f505483cfb35d03935d40cd0465a61a1e26d3ada0678aae0689e",
+      "scope": "Display summaries from existing inputs; panel column identifies the selected data. Not an additional experiment."
+    },
+    {
+      "figure": 6,
+      "source": "figures/provenance/structure_restoration_20260908/figure_06_plotted.csv",
+      "path": "source_data/curated_publication/figure_06_plotted.csv",
+      "sha256": "4d58de568351ca12128c8dcb685eda4605192ba56354b7b3b456ecdc08b392ea",
+      "scope": "Display summaries from existing inputs; panel column identifies the selected data. Not an additional experiment."
+    },
+    {
+      "figure": 7,
+      "source": "figures/provenance/structure_restoration_20260908/figure_07_plotted.csv",
+      "path": "source_data/curated_publication/figure_07_plotted.csv",
+      "sha256": "2711ca17964ce36dbb661e7c6e58e82ce742c8f0f28f50b19314fcb8047e8a32",
+      "scope": "Display summaries from existing inputs; panel column identifies the selected data. Not an additional experiment."
+    },
+    {
+      "figure": 9,
+      "source": "figures/provenance/structure_restoration_20260908/figure_09_plotted.csv",
+      "path": "source_data/curated_publication/figure_09_plotted.csv",
+      "sha256": "d7742b1680aacce728ecc63359d905df1444787827a07aafaa9dd0249c160d57",
+      "scope": "Display summaries from existing inputs; panel column identifies the selected data. Not an additional experiment."
+    }
+  ]
+}

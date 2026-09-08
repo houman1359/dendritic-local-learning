@@ -1,8 +1,8 @@
-"""Assign the retained numerical evidence to the credit-first figure sequence.
+"""Assign numerical evidence to the current, explicitly mapped displays.
 
-Historical display-specific subsets keep their original filtering rules. Only
-S45 is a direct main-to-supplement move; new main panels use the explicit,
-verified panel map. Former main-only evidence remains supporting material.
+Former display-specific subsets keep their original filtering rules and source
+identities under Methods. Current figure associations come from the verified
+panel manifest, never from an obsolete figure number.
 """
 from __future__ import annotations
 import csv
@@ -20,8 +20,8 @@ COMPRESSED_TABLE_SUFFIXES = ('.csv.gz', '.tsv.gz')
 # before a freshly added file has a displayed-panel association.
 FOLLOWUP_ASSIGNMENTS = {
     'conductance_local_gate': ('Figure 5', 'supporting local-gate evidence', '20 paired fresh seed blocks; canaries and historical replay separate'),
-    'credit_rule_extension': ('Supplementary Figure 54', 'supporting balanced-extension evidence', '20 previously observed paired seed blocks; 720 continued trajectories'),
-    'measured_alignment_power': ('Supplementary Figure 56', 'supporting conditional-sensitivity evidence', '4000 global simulated datasets; original 13 scans within 7 target cells'),
+    'credit_rule_extension': ('Figure 4', 'supporting balanced-extension evidence', '20 previously observed paired seed blocks; 720 continued trajectories'),
+    'measured_alignment_power': ('Figure 9', 'supporting conditional-sensitivity evidence', '4000 global simulated datasets; original 13 scans within 7 target cells'),
     'passive_field_diagnostics': ('Figure 7', 'supporting passive-field decomposition', 'reconstructed cell; post-review diagnostic without new learning fits'),
     'physical_depth_followup': ('Figure 6', 'supporting budget-indexed trajectory evidence', '10 paired training seeds; original 60 fits without new training'),
 }
@@ -66,18 +66,10 @@ def current_files(journal, legacy, cls, filters, counts, inventory=None):
         raise FileNotFoundError(f'Finalize the panel provenance before packaging: {inventory}')
     result = []
     for item in legacy:
-        match = re.fullmatch(r'Figure (\d+)', item.figure)
-        if not match:
-            result.append(item)
-            continue
         old = item.destination
-        if match[1] == '2':
-            destination = old.replace('Figure_2/', 'Supplementary_Figure_45/').replace('Fig2', 'SuppFig45')
-            item = replace(item, figure='Supplementary Figure 45', destination=destination)
-        else:
-            item = replace(item, figure='Methods', panels='supporting evidence',
-                destination='Methods/retained_evidence/' + old,
-                notes=item.notes + ' Retained numerical evidence; its former main-panel assignment is superseded.')
+        item = replace(item, figure='Methods', panels='supporting evidence',
+            destination='Methods/retained_evidence/' + old,
+            notes=item.notes + ' Complete supporting evidence with the original display filter; current panel associations are listed separately in the provenance manifest.')
         if old in filters:
             filters[item.destination] = filters[old]
         if old in counts:
@@ -85,6 +77,7 @@ def current_files(journal, legacy, cls, filters, counts, inventory=None):
         result.append(item)
     existing = {(x.figure, x.source) for x in result}
     any_existing = {x.source for x in result}
+    complete_existing = {x.source for x in result if x.destination not in filters}
     additions = {}
     with inventory.open(newline='') as handle:
         rows = list(csv.DictReader(handle, delimiter='\t'))
@@ -108,7 +101,9 @@ def current_files(journal, legacy, cls, filters, counts, inventory=None):
         for k, code in enumerate(codes):
             m = re.fullmatch(r'fig(S?)(\d+)', code)
             figure = ('Supplementary Figure ' if m[1] else 'Figure ') + m[2] if m else 'Methods'
-            if (figure, source) in existing or (figure == 'Methods' and source in any_existing):
+            if (figure, source) in existing and source in complete_existing:
+                continue
+            if figure == 'Methods' and source in complete_existing:
                 continue
             panel = panels[k] if k < len(panels) else row['panel']
             key = (figure, source)

@@ -1,0 +1,36 @@
+{
+  "figure": "Figure 7",
+  "output": "figures/components/restored_main_07.pdf",
+  "output_sha256": "34419d9623925d3ef6f0eb521c57e43135f75c7f1989a4651a0ffeeb774d7d4b",
+  "panel_sources": {
+    "A": "Original median-sized example actual PCA geometry and mapped E/I contacts, unchanged helper.",
+    "B": "Explicitly illustrative ancestry dictionary with constant column; not an inferred measured-support matrix.",
+    "C": "Corrected common-mode residual-capture atK1/2/4/8, the complete47-cell budgets, whole-cell descriptive bootstrap. K16is available only in a cell subset and is not displayed here; original source rows remain untouched.",
+    "D": "Archived paired47-cell K8ancestry residual-capture differences against allfour spatial controls; surrogate first.",
+    "E": "Same47cells,K8:mean residual capture versus actual nonzero density; no claim equalK fixes rank or wiring.",
+    "F": "Original8,disjoint47 and second-mouse8 common+ancestry total/residual capture, archived helper fixed-seed cell bootstrap."
+  },
+  "source_sha256": {
+    "source_data/figure3/segment_metrics.csv": "7829c298c4e5b3209b758fb88b92b55f070420c00b383436e5d4e1601e7ff1cf",
+    "source_data/anatomy_commonmode/protocol_freeze.json": "425448bdbecaf9e3c76fabf134a87ba5870d53fd5821c09a4aa7541f53835db0",
+    "source_data/anatomy_commonmode/original8/cell_method_summary.csv": "eb899a6833a0783e4b3e171adca3046800e64e6c942a517986395b251cde2880",
+    "source_data/anatomy_commonmode/original8/summary.json": "d4579257ab4ddb0a03a32446bc0b0636b15c9c9c3454b58d194d4904dae497dc",
+    "source_data/anatomy_commonmode/v661/cell_method_summary.csv": "c99a3f24cb1d2a6b53455b10496aa03428a9be99beea5fdaf7a5e45da11fa010",
+    "source_data/anatomy_commonmode/v661/summary.json": "209d2273ca480cfaf92be4ed990f0482b056b65118041ef306835696c6269782",
+    "source_data/anatomy_commonmode/pinky/cell_method_summary.csv": "67ed12fde8e4de04ac20e1fd3e6c3677bb2f63129d255ca742e2b891f59dfc48",
+    "source_data/anatomy_commonmode/pinky/summary.json": "85607aa5a4cec1b12a2b213ba0995cfe4c11585e39e292a5aa5e8d8c3a6f0d5b"
+  },
+  "builder_sha256": {
+    "scripts/credit_first_figures/build_restored_main.py": "43d68065dc22e40442e08e9961e95a7fa3b26622938a8aec00ca64fa14aebbea",
+    "scripts/figure_canvas.py": "498dec86dcac34c9841538fa7b5bf7b7311d468db8fbe0c7a648fbb9508c5e1f",
+    "scripts/journal_style.py": "32a3272cebb949784b694bc6dbb495cf74f6ba4ddf97d18d44f3ef54e082844e"
+  },
+  "source_data_immutable": true,
+  "new_experiments": 0,
+  "layout_findings": [],
+  "rendering_scope": "Existing outcomes only; no scientific endpoint or rate selection. Any redraw bootstrap uses whole existing seeds/cells, not independent pairs.",
+  "helper_sha256": {
+    "scripts/build_main_figure_07.py": "8dd526d60d35b572a17a68c77c1813279756251052d4921471d77c3fb16b885e",
+    "scripts/credit_first_figures/build_anatomy.py": "f75b40c0182cdba3f5f2273dfba7ab1076a14e9720c61ee6c1d6480528565016"
+  }
+}

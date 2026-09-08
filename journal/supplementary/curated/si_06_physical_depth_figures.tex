@@ -1,0 +1,24 @@
+\begin{figure}[p]
+\centering
+\includegraphics[width=\textwidth]{supplementary/curated/physical_architecture.pdf}
+\caption{\textbf{Task-matched serial computation differs from grouped and flexible point controls.} \textbf{A}, Serial D3, resource-identical grouped-point and approximately parameter-matched flexible point networks. Only serial/grouped models share modules and contacts. \textbf{B}, Original-budget three-level aligned task across D1--D3 and feedback rules. \textbf{C}, Four-level task across D1--D4 under aligned/reversed sensor placement. \textbf{D}, Serial-minus-grouped accuracy at fixed D3 across nested, flat and local-ratio task families, under exact-path LocalCA. \textbf{E}, Serial-minus-grouped-star effects and their alignment interaction. \textbf{F}, Flexible point controls matched to active or total parameter count. Curves and differences use ten paired seeds per cohort and 95\% paired-seed bootstrap intervals. These task-calibrated, original-budget comparisons establish forward-computation dependence on task/placement, not an optimizer-independent requirement for resolved credit. Main Fig.~6 shows the longer-budget accuracy reversal and cross-entropy trajectory.}
+\label{fig:si_physical_architecture}
+\label{fig:supp_physical_depth_controls}
+\label{fig:physicaldepth}
+\end{figure}
+
+\begin{figure}[p]
+\centering
+\includegraphics[width=\textwidth]{supplementary/curated/physical_calibration.pdf}
+\caption{\textbf{Transparent calibration of the nonlinear physical-depth operating point.} All panels use the three-level hierarchical gain-load task and serial shunting morphologies D1 \([8]\), D2 \([2,3]\) and D3 \([2,1,2]\), each with eight nonsomatic compartments per soma. They test the prerequisite for the main hypothesis: whether the mechanism-matched divisive task is accessible at every depth before comparing depth benefits. \textbf{A}, The original aligned shunting-backpropagation (BP) pilot at signal contrast 0.24 fit the training distribution increasingly with depth but remained at chance under the prespecified severe gain shift (test gain standard deviation (SD) 1.2). Bars are two-seed means and dots are the individual exploratory seeds. \textbf{B}, With training gain SD fixed at 0.25, increasing unseen test gain variation eroded accessibility at every depth. The dotted line marks the matched train/test condition. \textbf{C}, At matched gain and signal contrast 0.24, stronger child coupling selectively made serial D3 computation accessible; the dotted line marks child conductance 16 used subsequently. \textbf{D}, At matched gain and child conductance 16, increasing excitatory signal contrast moved D1--D3 away from chance without saturating D1 or D2. The separately run 0.80 boundary (dotted line) met the predefined accessibility criterion and selected the operating point used for the analysis seeds. Lines show two-seed means; shading spans the two exploratory values and is not a confidence interval. All pilot, ladder and boundary seeds were excluded from the confirmatory contrasts.}
+\label{fig:si_physical_calibration}
+\label{fig:supp_nonlinear_depth_calibration}
+\end{figure}
+
+\begin{figure}[p]
+\centering
+\includegraphics[width=\textwidth]{supplementary/curated/physical_optimizer.pdf}
+\caption{\textbf{Physical-depth conclusions depend on alignment, task hierarchy and optimization.} \textbf{A}, Serial/point contrasts under aligned and reversed placement. \textbf{B}, Separate two-level task: depth-by-alignment interactions for serial/grouped-point backpropagation and shared/exact LocalCA. \textbf{C}, Original-budget D3 optimizer/credit-coordinate contrasts. Under the BP optimizer, full versus soma-broadcast differentiation differs by 0.64 points; under the split LocalCA optimizer, exact versus shared differs by 10.96 points; changing the broadcast optimizer costs 13.47 points. Means and intervals use ten paired seeds and 95\% bootstrap intervals. These earlier recipe-specific effects do not imply a converged credit advantage: at 600 epochs the LocalCA accuracy difference reverses, while exact credit retains lower cross-entropy (main Fig.~6). All D3 continuations hit the cap; D1 usually stops early.}
+\label{fig:si_physical_optimizer}
+\label{fig:supp_physical_depth_diagnostics}
+\end{figure}

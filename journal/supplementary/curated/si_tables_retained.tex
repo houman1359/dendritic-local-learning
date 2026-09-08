@@ -1,0 +1,122 @@
+\begin{table}[tbp]
+\centering
+\caption{Repeated exact-transport/BP outcomes, averaged over four depths within each of ten paired seeds. Accuracy is a percentage and the contrast is percentage points, with a 20,000-draw paired 95\% interval. The full seed contrasts and descriptive tests remain in Source Data.}
+\label{tab:clean_exact_bp}
+\small
+\begin{tabularx}{\textwidth}{p{0.28\textwidth}rrX}
+\toprule
+Task and core & Exact & BP & Exact minus BP (95\% interval) \\
+\midrule
+MNIST, raw additive & 97.013 & 97.008 & $0.005$ ($-0.028$ to $0.041$) \\
+MNIST, shunting & 96.960 & 96.973 & $-0.013$ ($-0.047$ to $0.022$) \\
+Noisy lines, raw additive & 33.378 & 33.490 & $-0.112$ ($-0.465$ to $0.247$) \\
+Noisy lines, shunting (ReLU) & 36.690 & 36.788 & $-0.098$ ($-0.653$ to $0.390$) \\
+\bottomrule
+\end{tabularx}
+
+The 320 runs form 160 method pairs. One depth-averaged MNIST additive seed was tied. Exact transport is an information-oracle implementation control; an interval containing zero is not an equivalence test.
+\end{table}
+
+\begin{table}[ht]
+\centering
+\caption{Outcome-independent conductance-validity accounting for the artificial-tree experiments. ``Included'' counts retained training runs, or checkpoints in the diagnostic row; these unit types are not added together. The entire inhibitory-dose family is excluded because its prespecified endpoint compares against invalid signed-input shunting cells.}
+\label{tab:input_validity}
+\small
+\begin{tabular}{lrrrr}
+\toprule
+Experiment & Planned units & Invalid shunting & Unmatched controls & Included units \\
+\midrule
+Depth by feedback & 640 runs & 160 & 0 & 480 \\
+Matched routing & 160 runs & 40 & 0 & 120 \\
+Inhibitory dose & 400 runs & 200 & 200 & 0 \\
+Spatial topology & 320 runs & 80 & 0 & 240 \\
+Fixed-budget depth & 320 runs & 160 & 0 & 160 \\
+Checkpoint diagnostic & 160 checkpoints & 40 & 0 & 120 \\
+\bottomrule
+\end{tabular}
+
+\vspace{4pt}
+\small The exclusion rule is task plus core plus resolved transfer
+activation; no accuracy or gradient outcome enters it. The complete 1,840-run
+validity table and all included row tables are supplied as Source Data.
+\end{table}
+
+\begin{table}[ht]
+\centering
+\caption{Complete reconstructed-tree learning across all eligible scans. Means average ten held-out-stimulus splits within each of 13 scans, then scans within each of seven target cells. Mean squared error (MSE) is normalized to the training-mean predictor. Each restricted learning rule scales one fixed site profile in a four-route span by scalar prediction error. Common-checkpoint update match is one minus normalized squared update error for that prescribed profile, rather than the best attainable projection into the full span.}
+\label{tab:functional_full_tree}
+\small
+\begin{tabular}{lrrr}
+\toprule
+Teaching field & Normalized held-out MSE & Common-checkpoint update match & Fits \\
+\midrule
+Exact compartment error & 0.7877 & 1.0000 & 130 \\
+Topology routes & 0.8321 & 0.2322 & 130 \\
+Random routes & 0.8333 & 0.3584 & 130 \\
+Site-shuffled routes & 0.8391 & 0.4392 & 130 \\
+\bottomrule
+\end{tabular}
+
+\vspace{4pt}
+\small Positive MSE improvement favors topology. Topology improved over
+site shuffling by 0.0070 (95\% interval $-0.0207$ to 0.0321) and over random
+routes by 0.0013 ($-0.0090$ to 0.0113). All restricted dictionaries had
+identical effective rank within run. None of 520 fits was excluded. A
+separate common-state diagnostic at 130 reexecuted exact-learning checkpoints
+gave per-trial eligibility-weighted within-span oracle captures of 0.2436,
+0.3847 and 0.4677 for ancestry, random and shuffled routes, respectively.
+Those oracle values are geometric upper bounds at the evaluated states;
+no oracle-feedback learning accuracy was measured.
+\end{table}
+
+\begin{table}[ht]
+\centering
+\caption{Retrospective six-animal signed-credit reanalysis of Francioni et al. source sheet ``Ext 13E''. The contrast is error-reduction minus error-increase soma--dendrite residual, in the source z-score units. P+ and P- denote populations with positive and negative causal decoder weights. Directions follow this published mapping; intervals bootstrap paired animal-level contrasts, retaining animals as the inferential unit.}
+\label{tab:animal_credit}
+\small
+\begin{tabular}{lrrr}
+\toprule
+Contrast & Mean & 95\% interval & Ordered animals \\
+\midrule
+P+ & 0.0753 & $[0.0295,0.1214]$ & 5/6 positive \\
+P- & $-0.1498$ & $[-0.2054,-0.0866]$ & 6/6 negative \\
+P+ minus P- & 0.2251 & $[0.1416,0.3108]$ & 6/6 positive \\
+\bottomrule
+\end{tabular}
+
+\vspace{4pt}
+\small Exact one-sided random-sign permutation $P$ values were 0.0313,
+0.0156, and 0.0156. The signed and common modes contained 83.7\% and 16.3\%
+of pooled squared projection energy across the six animal contrast vectors,
+respectively. The pooled fraction is a ratio of summed energies, not the
+mean of animal-level fractions. The signed fraction was 45.8--97.1\% across individual animals,
+with an animal-bootstrap 95\% interval of 60.6--95.7\% for the pooled
+fraction and a leave-one-animal-out range of 76.5--90.2\%. Animal-level values
+are provided in Source Data.
+\end{table}
+
+\begin{table}[tbp]
+\centering
+\small
+\caption{Terminal outcomes in the balanced longer-budget follow-up. Rates are the original development-selected Adam rates. NMSE values are mean (median) across the same twenty previously examined seed blocks. The final column counts exact/profile fits with clean full-domain population NMSE below 0.02; this descriptive threshold was not used for stopping, selection or inference. Complete seedwise outcomes, validation-selected states, common-rate and SGD controls remain in Source Data.}
+\label{tab:credit_rule_extension_endpoints}
+\begin{tabular}{rlccc}
+\toprule
+Updates & Task & Exact NMSE & Initial-profile NMSE & Clean error $<0.02$ \\
+ & & mean (median) & mean (median) & exact/profile counts \\
+\midrule
+1,024 & Pairwise & 0.0317 (0.0231) & 0.0236 (0.0236) & 19/20; 20/20 \\
+1,024 & Quartic & 0.1516 (0.0465) & 0.9813 (1.0277) & 17/20; 0/20 \\
+1,024 & Nested & 0.0230 (0.0229) & 0.7690 (0.7829) & 20/20; 0/20 \\
+4,096 & Pairwise & 0.0232 (0.0231) & 0.0240 (0.0241) & 20/20; 20/20 \\
+4,096 & Quartic & 0.0461 (0.0458) & 0.9624 (1.0205) & 20/20; 0/20 \\
+4,096 & Nested & 0.0233 (0.0232) & 0.7913 (0.7853) & 20/20; 0/20 \\
+8,192 & Pairwise & 0.0231 (0.0231) & 0.0243 (0.0243) & 20/20; 20/20 \\
+8,192 & Quartic & 0.0463 (0.0463) & 0.9811 (1.0353) & 20/20; 0/20 \\
+8,192 & Nested & 0.0233 (0.0233) & 0.8039 (0.7918) & 20/20; 0/20 \\
+16,384 & Pairwise & 0.0232 (0.0232) & 0.0246 (0.0248) & 20/20; 20/20 \\
+16,384 & Quartic & 0.0464 (0.0461) & 0.9994 (1.0769) & 20/20; 0/20 \\
+16,384 & Nested & 0.0232 (0.0232) & 0.7944 (0.7826) & 20/20; 0/20 \\
+\bottomrule
+\end{tabular}
+\end{table}

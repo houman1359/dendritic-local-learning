@@ -1,45 +1,43 @@
-# Figure directory
+# Publication figures
 
 Article: *Dendritic morphology as a dictionary for local credit assignment*.
 
-The main manuscript includes exactly nine publication assets, `main/figure_01.pdf` through `main/figure_09.pdf`. The Supplementary Information includes 56 figures, S1–S56. Native components, generated intermediates and historical assets are inputs or retained outputs, not additional numbered figures.
+The Article contains nine main figures. Its Supplementary Information contains 35 figures organized by scientific question. Only the assets included by the two manuscript sources belong to the publication sequence; other vector files are reproducible rendering inputs.
 
-`../scripts/rebuild_final_publication_figures.py` defines the current main mapping and renders the supplementary sequence. Historical builder numbers differ from publication numbers. Use this entry point for the complete figure build; the older compositor mapping is not the current main sequence.
+## Main sequence
 
-## Main figures
-
-| Figure | Content | Native builder |
+| Figure | Scientific question | Rendering source |
 |---|---|---|
-| 1 | Credit framework, neuronal teaching coordinates and image-task reference | `credit_first_figures/build_framework.py` |
-| 2 | Context-gated branch conflict and the branch-selection boundary | `build_main_figure_04.py` |
-| 3 | Ancestry at matched bandwidth, generator coefficient prediction and paired controls | `credit_first_figures/build_ancestry.py` |
-| 4 | Interaction order, fixed-profile learning and learned credit geometry on matched trees | `credit_rule_bridge/build_figure.py` |
-| 5 | Local inhibitory gating and its controls in conductance trees | `conductance_local_gate/figure.py` |
-| 6 | Physical depth, accuracy and cross-entropy gap trajectories | `physical_depth_followup/figure.py` |
-| 7 | Anatomical dictionaries beyond a shared broadcast | `credit_first_figures/build_anatomy.py` |
-| 8 | Focal shunting as ancestry-partition gain and the electrotonic boundary | `shunt_ancestry_gain/build_figure.py` |
-| 9 | Empirical ancestry–response similarity and a separate transfer-geometry diagnostic | `credit_first_figures/build_measured.py` |
+| 1 | Error source, spatial dictionary, gain, conditional noise filtering and the image reference | `scripts/credit_first_figures/build_restored_main.py` |
+| 2 | Branch selection under contextual conflict | Authenticated native input; `scripts/build_main_figure_04.py` |
+| 3 | Ancestry at matched bandwidth and its coefficient prediction | Authenticated native input; `scripts/credit_first_figures/build_ancestry.py` |
+| 4 | Matched input spectra, extended learning and learned credit geometry | `scripts/credit_first_figures/build_restored_main.py` |
+| 5 | Local inhibitory gating in a conductance tree | Authenticated native input; `scripts/conductance_local_gate/figure.py` |
+| 6 | Task families, serial architecture and budget-dependent credit comparisons | `scripts/credit_first_figures/build_restored_main.py` |
+| 7 | Anatomical columns, capture across budgets and delivery cost | `scripts/credit_first_figures/build_restored_main.py` |
+| 8 | Ancestry-partition gain and its electrical-state dependence | Authenticated native input; `scripts/shunt_ancestry_gain/build_figure.py` |
+| 9 | Measured ancestry alignment and conditional detection sensitivity | `scripts/credit_first_figures/build_restored_main.py` |
 
-All builder paths are relative to `../scripts/`. Figure 3 makes the coefficient-sign prediction explicit rather than presenting its bandwidth profile as an independently discovered optimum. Figure 4 compares pairwise and quartic targets with matched tree, initialization and input streams; it distinguishes a fixed initial profile from a fitted rank-one oracle. Figure 7 gives every dictionary access to the same broadcast component. Figure 8 reserves weak-channel linearization for S47. Figure 9 plots actual selected route support.
+Paths are relative to the journal directory. All main assets are `main/figure_01.pdf` through `main/figure_09.pdf`. The four unchanged native inputs are pinned in `configs/figure_structure/retained_main_inputs.json`. The other five figures have per-panel definitions, plotted tables and input hashes in `figures/provenance/structure_restoration_20260908/`.
 
-## Supplementary figures
+## Supplementary sequence
 
-S1–S17 retain the foundations and initial mechanism/context controls. S18 contains expanded physical controls; S19 within-neuron addressing; S20 anatomy; S21 focal shunting; S22 measured responses; S23 partition residuals; S24 adaptive reliability; S25 irregular-tree wavelets; S26 the 430 H2/H3 physical-depth reruns; S27 second-mouse structural capacity; S28 credit-coordinate comparisons; S29 branch-conflict trajectories; S30 between-neuron by within-arbor feedback; and S31 the earlier physical-depth/optimizer controls.
+The contents and main-figure guide in `supplementary/supplementary.tex` locate the exact rules and theory, image tasks, branch/ancestry controls, interaction and Boolean tasks, conductance learning, physical depth, anatomical dictionaries, shunting, measured responses and structure selection. Captions distinguish primary experiments, subsequent analyses of the same observations, and independent cohorts.
 
-S32 covers local coefficient estimators; S33 label/morphology sensitivity; S34 response baselines; S35 the unsuccessful prospective initialization-based selector; S36–S37 interaction capacity and constructive morphology; S38–S39 finite-horizon forecasts; S40 credit learning; S41 finite calibration and separate end-to-end learning; S42 positive-conductance grouping; S43 Boolean capacities and gate derivatives; and S44 Boolean learning. The separate 320-fit clean exact-transport/BP control is Supplementary Table S18; its noise cohort is the three-class noisy-line task.
+Canonical supplementary assets have semantic filenames under `supplementary/curated/`. `scripts/supplement_consolidation/specification.py` declares the selected panels and captions. `configs/supplement_consolidation/manifest.json` records their source identities, original panel regions and final placements. The immutable vector inputs, source captions and numerical-source associations are authenticated by the registries in `scripts/supplement_consolidation/`. Complete scientific outcomes remain in Source Data even when a repeated graphical view is omitted.
 
-S45 contains expanded image-task/gradient diagnostics (`figure_S45_image_diagnostics.pdf`); S46 contains the one-step utility analysis and designed signal/noise screens (`figure_S46_utility.pdf`); and S47 contains the weak-channel local-linearization check (`figure_shunt_weak_channels.pdf`). S48 retains the normalized shunt dose curve; S49 contains the six-arm MNIST dictionary, rate-selection and decoder controls; S50 retains the first conductance task's small precision effect; S51 reports the opponent-tuning optimization and parameter-range controls; S52 shows the equally budgeted expanded learning-rate grid. Captions and methods fragments are included in the Supplementary Information.
+## Rebuilding and checking
 
-Several older filenames retain panel suffixes from previous layouts. The current TeX legends and actual PDF panel letters define the display, not those historical suffixes. In particular, `figure_S31_panels_A-G.pdf` contains A–H. Rebuilding the final assets does not rename these retained files.
+From the journal directory:
 
-## Numerical sources and figure checks
+```bash
+python scripts/rebuild_final_publication_figures.py
+python scripts/credit_first_figures/verify_restored_main.py
+make combined
+```
 
-The current panel inventory is `../source_data/credit_first_provenance/source_inventory.tsv`. New main evidence is retained in `credit_rule_bridge`, `conductance_credit_demand`, `image_ladder_controls`, `anatomy_commonmode`, `physical_depth_budget` and `shunt_ancestry_gain`, with earlier cohorts preserved in their existing Source Data folders. Development, fresh-test, replay and descriptive scopes are identified by each protocol and caption.
+The figure build uses frozen numerical tables and authenticated vector panels; it runs no training or experimental selection. Generated main display summaries are copied into `source_data/curated_publication/`. The explicit publication provenance is in `configs/credit_first_provenance/panel_sources.json` and `source_data/provenance_manifest.tsv`.
 
-The Source Data package manifest assigns files to current displays while preserving `original_source`. Some former main-only evidence is retained under `Methods/retained_evidence/`; restore it to its original analysis path through the manifest. Display-specific row filters remain explicit. A display subset must not silently replace a complete source table during reconstruction.
+Source and Overleaf bundles include only the current manuscript inputs and displayed assets. The software package also retains the authenticated inputs needed to rebuild them. A source panel's original filename does not identify a current supplementary number: use the current caption, semantic label and manifest.
 
-Final presentation checks should use the actual compiled assets: panel order and callouts, embedded fonts, text size at print scale, alignment, overlaps and clipping. Final PDF page counts come from the compiled manuscripts. Neither an older audit record nor a successfully generated asset establishes that the current complete bundle has passed these checks.
-
-Supplementary Figure S48 is a single-panel dose curve printed at its native 3.6-inch width. This preserves the shared text and line sizes; the other supplementary sheets use the full manuscript width. The style audit checks this explicit native-width placement.
-
-S53 retains all local-gate rules and rates; S54–S55 extend every algebraic credit rule to the longer budgets; S56 quantifies measured-response sensitivity conditional on repeat reliability and the observed sampling. Main Fig. 5 uses twenty new local-gate seed blocks; main Fig. 6 plots accuracy and cross-entropy gaps together with stopping status.
+Inspect final compiled figures at manuscript scale, including lettering, type sizes, axis and legend clipping, intervals and caption agreement. Current page counts must come from the final PDFs.

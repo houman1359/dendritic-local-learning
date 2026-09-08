@@ -149,7 +149,7 @@ def main() -> int:
         "Checked against the official Article guidance retrieved on 5 September 2026.",
         "The narrative count is mechanical and excludes figure/table environments,",
         "inline/displayed mathematics, citations and cross-references; the portal count may differ.",
-        f"The author requested a 6,000–6,500-word working narrative (current target {args.main_word_target}); this does not",
+        f"The author working narrative target is {args.main_word_target} words; this does not",
         "change the journal's approximately 5,000-word guidance.",
         f"Methods prose: {methods_words} words (reported separately from the narrative).",
         f"The {main_figures} numbered figures occupy {figure_environments} figure environments;",

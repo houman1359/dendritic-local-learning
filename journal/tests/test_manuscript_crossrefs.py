@@ -8,15 +8,15 @@ JOURNAL = Path(__file__).resolve().parents[1]
 MAIN = JOURNAL / "main.tex"
 
 MAIN_PANEL_INVENTORY = {
-    "fig:framework": "abcde",
+    "fig:framework": "abcdef",
     "fig:branchconflict": "abcdef",
     "fig:subtreefactorial": "abcdef",
     "fig:prospective": "abcdef",
     "fig:conductancecredit": "abcdef",
-    "fig:physicaldepth": "abcde",
-    "fig:topology": "abcde",
+    "fig:physicaldepth": "abcdef",
+    "fig:topology": "abcdef",
     "fig:focal": "abcde",
-    "fig:boundary": "abcde",
+    "fig:boundary": "abc",
 }
 
 FIGURE_BLOCK = re.compile(

@@ -1,0 +1,33 @@
+{
+  "figure": "Figure 6",
+  "output": "figures/components/restored_main_06.pdf",
+  "output_sha256": "ea6a9f01b5a003ad885190db273714b59f33c537d357c9c81832000d69892692",
+  "panel_sources": {
+    "A": "Restored original main6A/S31A native task-family schematic. Same commutative product in nested/flat families; spatial factor supports differ.",
+    "B": "Restored S31E, exact-BP180-epoch means from clean-source H2/H3 and H4 cohorts; no outcome selection beyond declared conditions. H2D3/H2D4/H3D4 unobserved and blank.",
+    "C": "Restored S31F, paired serial\u2212grouped point BP task-family alignment effects at180epochs. Resource-identical modules/contacts; all10paired seeds.",
+    "D": "Existing followup validation-selected test-accuracy trajectories,10seeds/condition. D1[8],D3[2,1,2];8compartments,64somata,matched contacts.",
+    "E": "Paired exact\u2212shared LocalCA test-accuracy trajectory with archived pointwise intervals.",
+    "F": "Same paired states, test-cross-entropy difference; negative favors exact credit."
+  },
+  "source_sha256": {
+    "source_data/physical_depth_h4_factorial/seed_outcomes.csv": "3096b4ee6ebceb96248d962677ffbf4001d63615e1b296e68a40a7f753a66f55",
+    "source_data/physical_depth_clean_source_replication/seed_outcomes.csv": "57b30cfa714b7ae974a26a66b4e40141b834e2352f065f53ae671f84759c3d22",
+    "source_data/task_family_alignment/architecture_effects.csv": "8fb388c9505f9d646a69db7e283f446a811ca2886fe89bd1a695d2df041550dc",
+    "source_data/physical_depth_followup/condition_trajectory_summary.csv": "8171e8088c37ae607efd3afb8bd58c7544d6e8cfc8a221f329e2b0d7dc0d869f",
+    "source_data/physical_depth_followup/paired_trajectory_summary.csv": "05786841eb50eb631704a0d72374600de8900db6fb61f440b74eecaf810630a0",
+    "source_data/physical_depth_followup/analysis_validation.json": "9efd3952ede79fc983ab7c2e3a895cd9a04fab4f3e2ea04724ba4bc75f7c757d"
+  },
+  "builder_sha256": {
+    "scripts/credit_first_figures/build_restored_main.py": "43d68065dc22e40442e08e9961e95a7fa3b26622938a8aec00ca64fa14aebbea",
+    "scripts/figure_canvas.py": "498dec86dcac34c9841538fa7b5bf7b7311d468db8fbe0c7a648fbb9508c5e1f",
+    "scripts/journal_style.py": "32a3272cebb949784b694bc6dbb495cf74f6ba4ddf97d18d44f3ef54e082844e"
+  },
+  "source_data_immutable": true,
+  "new_experiments": 0,
+  "layout_findings": [],
+  "rendering_scope": "Existing outcomes only; no scientific endpoint or rate selection. Any redraw bootstrap uses whole existing seeds/cells, not independent pairs.",
+  "helper_sha256": {
+    "scripts/build_main_figure_06.py": "a9a0182be4f9f4223151d186ba6d4c8b7b6800ea9874eb4e1d49d076b17d6453"
+  }
+}
