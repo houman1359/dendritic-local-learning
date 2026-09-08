@@ -43,14 +43,18 @@ def release_fixture(destination):
     helper = portable.module('_power_fixture_hashes', destination / 'code/release_noise/release_hashes.py')
     input_path = destination / study / 'input_manifest.json'
     input_origin = sha(input_path)
-    input_path.write_text(input_path.read_text().replace('/n/holylabs/', '$WORKSPACE_ROOT/'))
+    manifest = json.loads(input_path.read_text())
+    # This locator is descriptive provenance, never a numerical input path.
+    # Translate it without embedding any machine-specific source prefix.
+    manifest[0]['source'] = 'fixture-origin://original-observed-pair-table'
+    input_path.write_text(json.dumps(manifest, indent=2) + '\n')
     data_provenance = destination / 'RELEASED_SOURCE_MANIFEST.tsv'
     tsv(data_provenance, [dict(original_source=(study / input_path.name).as_posix(),
         original_sha256=input_origin, sha256=sha(input_path),
-        transformation='Replace private absolute provenance prefix with portable workspace token')])
+        transformation='Translate one provenance-only source locator for the portable verification fixture')])
     data_row = dict(path=(study / input_path.name).as_posix(), kind='source_data',
         origin_sha256=input_origin, release_sha256=sha(input_path),
-        transformation='Replace private absolute provenance prefix with portable workspace token',
+        transformation='Translate one provenance-only source locator for the portable verification fixture',
         provenance_file=data_provenance.name, provenance_sha256=sha(data_provenance))
     worker_relative = Path('scripts/measured_alignment_power/worker.sh')
     worker = destination / worker_relative

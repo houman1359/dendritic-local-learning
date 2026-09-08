@@ -1529,7 +1529,7 @@
       "path": "source_data/passive_field_diagnostics/report.json"
     },
     {
-      "path": "source_data/measured_alignment_power/portable_replay_validation.json"
+      "path": "source_data/measured_alignment_power/fixture_portability_validation.json"
     }
   ],
   "completion_gates": [
