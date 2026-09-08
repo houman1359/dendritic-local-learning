@@ -1,0 +1,12 @@
+{
+  "status": "PASS",
+  "method": "Seven-target untied signed-rank P from the rank1..7subset-sum PMF; positive detection independently checked as negative-rank-sum<=2; scan means reaggregated by exact target IDs.",
+  "n_retained_target_statistics": 1176000,
+  "n_outcome_rows": 42,
+  "max_scan_aggregation_error": 0.0,
+  "max_exact_p_error": 0.0,
+  "max_power_summary_error": 0.0,
+  "max_mean_effect_summary_error": 1.6653345369377348e-16,
+  "n_decision_disagreements": 0,
+  "n_average_rank_tie_patterns": 0
+}

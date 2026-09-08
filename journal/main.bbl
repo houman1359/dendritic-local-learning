@@ -1,4 +1,4 @@
-\begin{thebibliography}{57}
+\begin{thebibliography}{61}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -201,6 +201,36 @@ Matthew Lovett-Barron, Gergely~F. Turi, Patrick Kaifosh, Peter~H. Lee,
   inhibition.
 \newblock \emph{Nature Neuroscience}, 15:\penalty0 423--430, 2012.
 \newblock \doi{10.1038/nn.3024}.
+
+\bibitem[Poirazi and Mel(2001)]{poirazi2001capacity}
+Panayiota Poirazi and Bartlett~W. Mel.
+\newblock Impact of active dendrites and structural plasticity on the memory
+  capacity of neural tissue.
+\newblock \emph{Neuron}, 29\penalty0 (3):\penalty0 779--796, 2001.
+\newblock \doi{10.1016/S0896-6273(01)00252-5}.
+
+\bibitem[Legenstein and Maass(2011)]{legenstein2011branch}
+Robert Legenstein and Wolfgang Maass.
+\newblock Branch-specific plasticity enables self-organization of nonlinear
+  computation in single neurons.
+\newblock \emph{Journal of Neuroscience}, 31\penalty0 (30):\penalty0
+  10787--10802, 2011.
+\newblock \doi{10.1523/JNEUROSCI.5684-10.2011}.
+
+\bibitem[Jones and Kording(2021)]{jones2021successive}
+Ilenna~Simone Jones and Konrad~Paul Kording.
+\newblock Might a single neuron solve interesting machine learning problems
+  through successive computations on its dendritic tree?
+\newblock \emph{Neural Computation}, 33\penalty0 (6):\penalty0 1554--1571,
+  2021.
+\newblock \doi{10.1162/neco_a_01390}.
+
+\bibitem[Beniaguev et~al.(2021)Beniaguev, Segev, and
+  London]{beniaguev2021single}
+David Beniaguev, Idan Segev, and Michael London.
+\newblock Single cortical neurons as deep artificial neural networks.
+\newblock \emph{Neuron}, 109\penalty0 (17):\penalty0 2727--2739.e3, 2021.
+\newblock \doi{10.1016/j.neuron.2021.07.002}.
 
 \bibitem[Urbanczik and Senn(2014)]{urbanczik2014dendritic}
 Robert Urbanczik and Walter Senn.

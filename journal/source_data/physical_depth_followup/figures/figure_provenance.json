@@ -1,0 +1,20 @@
+{
+  "all_original_outcomes_preserved": true,
+  "builder_sha256": "c4f89d0fc4b57a39a65abaef24e24dcc0870664f4e91e0fb9904d1c2ecc68cd2",
+  "figure_sha256": "899a303e5d53eb68b6e6b10c80dc09ca120781382f3965e3bf098237f1fcc561",
+  "new_training_runs": 0,
+  "panel_map": {
+    "A": "Task/input routing schematic:gain groups4/2/1,modules4/2/2;D1[8]versusD3[2,1,2],64somata,eightnonsomatic compartments per soma,matched contacts and trainable resources. Drawings abbreviate contact fields,not exact analytic cancellation.",
+    "B": "Validation-selected testaccuracy trajectories,D1exactBP andD3exactBP/exactLocalCA/sharedLocalCA,with pointwise95percent whole-seed intervals.",
+    "C": "Paired D3exactLocalCA\u2212sharedLocalCA testaccuracy gap in percentage points,pointwise95percent intervals;180/486/600 means marked.",
+    "D": "Allsix condition means of bestvalidationloss;stoppedD1runs carried forward;sharedLocalCA andmatched-broadcastLocalCA drawn separately with jointlegend.",
+    "E": "Paired D3exactLocalCA\u2212sharedLocalCA testcross-entropy gap,pointwise95percent intervals;negative means exact lower loss."
+  },
+  "scope": "Post-review trajectory analysis;10paired seeds,all50D3fitsreach600 and8/10D1stopbefore600. CIs pointwise descriptive,not simultaneous. Original main6 PDF retained in this directory parent; original180plot remainsS31.",
+  "sources_sha256": {
+    "source_data/physical_depth_budget/canonical/extension_protocol.json": "ba1ef873973a13a63bf669cce2949034cbce010c2da810722534f1b2c3520e07",
+    "source_data/physical_depth_followup/analysis_validation.json": "9efd3952ede79fc983ab7c2e3a895cd9a04fab4f3e2ea04724ba4bc75f7c757d",
+    "source_data/physical_depth_followup/condition_trajectory_summary.csv": "8171e8088c37ae607efd3afb8bd58c7544d6e8cfc8a221f329e2b0d7dc0d869f",
+    "source_data/physical_depth_followup/paired_trajectory_summary.csv": "05786841eb50eb631704a0d72374600de8900db6fb61f440b74eecaf810630a0"
+  }
+}

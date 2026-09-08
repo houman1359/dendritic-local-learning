@@ -1,0 +1,11 @@
+{
+  "created_utc": "2026-09-08T03:29:21.732893+00:00",
+  "maximum_nmse_absolute_difference": 0.0,
+  "outcome_rows": 5760,
+  "outcome_rows_reconstructed": 5760,
+  "protocol_sha256": "17db44ba893bb2662fa39d2cb185df374e5cefd50f15626aac310ab534d5eacd",
+  "script_sha256": "a210761997a014a940f14fcf7d7298c62d0784f4d020398b037121fe1923e462",
+  "status": "passed",
+  "test_validation_full_domain_population_predictions_recomputed": true,
+  "validation_only_checkpoint_selections_checked": 2880
+}

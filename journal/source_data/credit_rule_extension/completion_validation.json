@@ -1,0 +1,54 @@
+{
+  "status": "complete",
+  "protocol_sha256": "17db44ba893bb2662fa39d2cb185df374e5cefd50f15626aac310ab534d5eacd",
+  "protocol_commit": "907c6ae",
+  "scientific_array_job": 45288107,
+  "scientific_array_completed_seed_blocks": 20,
+  "unique_trajectories": 720,
+  "updates_per_trajectory": 16384,
+  "retained_observations_per_trajectory": 67,
+  "curve_rows": 48240,
+  "budget_outcome_rows": 5760,
+  "independently_reconstructed_outcome_rows": 5760,
+  "validation_only_selections_checked": 2880,
+  "maximum_nmse_reconstruction_difference": 0.0,
+  "all_original_states_and_metrics_reproduced": true,
+  "worker_seconds_total": 600.1152307412121,
+  "physical_depth_new_training_runs": 0,
+  "physical_depth_original_budget_endpoints_checked": 120,
+  "physical_depth_selected_seed_trajectory_rows": 36000,
+  "portable_relocated_validation": "passed",
+  "figure_design_validation": [
+    {
+      "figure": "credit_rule_extension.pdf",
+      "sha256": "a439aeba06abad479dd47f7c211c4eeb52093bcf41bc3b8c3c7e322004616271",
+      "width_pt": 518.4000244140625,
+      "height_pt": 490.0,
+      "minimum_ordinary_font_pt": 7.400000095367432,
+      "text_outside_canvas": [],
+      "native_audit_violations": 0,
+      "builder_overlap_warnings": 0
+    },
+    {
+      "figure": "credit_rule_extension_controls.pdf",
+      "sha256": "cd20a2e6bc1e96b165e66ddbd4f0805c64f7b90e5edeb9120204c33d70973761",
+      "width_pt": 518.4000244140625,
+      "height_pt": 375.0,
+      "minimum_ordinary_font_pt": 7.400000095367432,
+      "text_outside_canvas": [],
+      "native_audit_violations": 0,
+      "builder_overlap_warnings": 0
+    },
+    {
+      "figure": "physical_depth_followup.pdf",
+      "sha256": "899a303e5d53eb68b6e6b10c80dc09ca120781382f3965e3bf098237f1fcc561",
+      "width_pt": 518.4000244140625,
+      "height_pt": 490.0,
+      "minimum_ordinary_font_pt": 7.199999809265137,
+      "text_outside_canvas": [],
+      "native_audit_violations": 0,
+      "builder_overlap_warnings": 0
+    }
+  ],
+  "scope": "Previously examined seeds extended under a committed fixed protocol; descriptive bounded-budget inference. Physical-depth analyses use existing trajectories and do not establish convergence."
+}

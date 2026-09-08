@@ -25,9 +25,9 @@ SOURCE=JOURNAL / "source_data"
 COMMON=SOURCE / "anatomy_commonmode"
 RECORDS=SOURCE / "credit_first_figures"
 OUT=JOURNAL / "figures/components/credit_first_figure_06.pdf"
-METHODS=["common + ancestry","common + random routes","common + depth bins",
-         "common + shuffled routes","common + surrogate ancestry","common-constrained SVD"]
-LABELS=["Ancestry","Random routes","Depth bins","Shuffled routes","Surrogate tree","SVD oracle"]
+METHODS=["common + ancestry","common + surrogate ancestry","common + depth bins",
+         "common + random routes","common + shuffled routes","common-constrained SVD"]
+LABELS=["Ancestry","Surrogate tree","Depth bins","Random routes","Shuffled routes","SVD oracle"]
 COHORTS=["original8","v661","pinky"]
 
 

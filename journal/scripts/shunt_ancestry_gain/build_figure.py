@@ -60,7 +60,7 @@ def signed_calibration(ax):
     ax.set_xticks([0,1,2.4,3.4],['300','15,000','300','15,000'])
     ax.set_yticks([-.15,-.10,-.05,0],['−0.15','−0.10','−0.05','0'])
     ax.set_xlabel('Membrane resistance (Ω cm²)',fontsize=PT_LABEL)
-    ax.set_ylabel('median Δ log |γ|',fontsize=PT_LABEL)
+    ax.set_ylabel('median Δ log |γ|\nnegative = attenuation',fontsize=PT_LABEL)
     ax.text(.5,.017,'initial 8 cells',ha='center',fontsize=PT_SMALL)
     ax.text(2.9,.017,'disjoint 45 cells',ha='center',fontsize=PT_SMALL)
     ax.text(-.12,-.162,'descendants',color=COLORS['shunting'],fontsize=PT_SMALL,va='bottom')

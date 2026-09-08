@@ -79,6 +79,8 @@ def main():
   v=target[target.method.eq(name)].sort_values('target_root_id').nmse.to_numpy(); assert len(v)==7
   est=summary(v,260906+k);rows.append((label,v,est,color));estimates.append(dict(panel='D',method=name,mean=est[0],ci95_low=est[1],ci95_high=est[2]))
  forest(axd,rows,'Normalized MSE',(.58,1.02));axd.set_xticks([.6,.8,1])
+ ridge_mean=target[target.method.eq('ridge_all')].nmse.mean()
+ axd.axvline(ridge_mean,color=GRAY,lw=LW_REF,ls=':',zorder=0)
  oracle=pd.read_csv(S/'fulltree_within_span_oracle/cell_metrics.csv');osum=pd.read_csv(S/'fulltree_within_span_oracle/condition_summary.csv')
  rows=[]
  for name,mode,label,color in [('unprojected baseline transfer','frozen_baseline','Unrestricted\nfixed profile',GRAY),('topology-matched routes','frozen_baseline','Ancestry\nfixed profile',ROUTE),('topology-matched routes','trialwise_update_oracle','Ancestry\noracle amplitudes',ROUTE)]:

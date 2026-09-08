@@ -2,9 +2,9 @@
 
 This directory contains the canonical manuscript prepared as a *Nature Communications* Article. Its central question is which spatial distinctions a task's learning signals must preserve. The main sequence progresses from neuron identity on image tasks to branch selection under conflict, ancestry grouping under hierarchical distractors, and learned credit geometry under higher-order interactions. Morphology supplies spatial feedback patterns; local conductance can change their gains.
 
-Nine main figures follow this task-to-credit argument. A matched pairwise/quartic comparison tests fixed spatial credit on the same trees, inputs and initializations, and a context-dependent conductance task tests a three-pattern credit dictionary. Physical-depth experiments examine the dependence on optimizer and training budget. Reconstructed arbors test the capacity of anatomy-derived routes beyond a shared broadcast. The final figure separates empirical ancestry–response similarity from an offline transfer-geometry diagnostic. The measured responses do not establish endogenous dendritic credit assignment.
+Nine main figures follow this task-to-credit argument. A matched pairwise/quartic comparison tests fixed spatial credit on the same trees, inputs and initializations, and a context-dependent conductance task tests local inhibitory gating with explicit proximal-credit controls. Physical-depth experiments examine the dependence on optimizer and training budget. Reconstructed arbors test the capacity of anatomy-derived routes beyond a shared broadcast. The final figure separates empirical ancestry–response similarity from an offline transfer-geometry diagnostic. The measured responses do not establish endogenous dendritic credit assignment.
 
-The Supplementary Information contains 52 figures, S1–S52. It retains the representability and morphology-estimation analyses, the unsuccessful prospective initialization-based selector, Boolean controls, alternative optimizers and expanded biological/model diagnostics. These support the credit argument without replacing it with a general morphology-selection claim. The current display map is in [figures/README.md](figures/README.md).
+The Supplementary Information contains 56 figures, S1–S56. It retains the representability and morphology-estimation analyses, the unsuccessful prospective initialization-based selector, Boolean controls, alternative optimizers and expanded biological/model diagnostics. These support the credit argument without replacing it with a general morphology-selection claim. The current display map is in [figures/README.md](figures/README.md).
 
 ## Files and reproducibility
 
@@ -31,7 +31,7 @@ make combined
 make audit
 ```
 
-`rebuild_final_publication_figures.py` renders the current nine main and 52 supplementary figures from retained evidence. Historical builder numbers can differ from publication numbers; running an old compositor directly can restore an obsolete layout. Figure generation uses Python, NumPy, pandas, SciPy, Matplotlib and PyMuPDF. Manuscripts require pdfLaTeX/BibTeX. Biological reanalysis additionally requires the upstream data/cache access documented by each pipeline.
+`rebuild_final_publication_figures.py` renders the current nine main and 56 supplementary figures from retained evidence. Historical builder numbers can differ from publication numbers; running an old compositor directly can restore an obsolete layout. Figure generation uses Python, NumPy, pandas, SciPy, Matplotlib and PyMuPDF. Manuscripts require pdfLaTeX/BibTeX. Biological reanalysis additionally requires the upstream data/cache access documented by each pipeline.
 
 After the text, figures, panel provenance and Source Data are finalized, commit the scientific inputs and rebuild the software and other bundles in dependency order. [RELEASE_WORKFLOW.md](RELEASE_WORKFLOW.md) describes committed-source packaging, the isolated installation smoke and the explicit noise-generator choices. [OVERLEAF_README.md](OVERLEAF_README.md) describes the manuscript project. Existing archives can be stale even when their checksums are valid.
 

@@ -119,6 +119,8 @@ JOURNAL_DIRECTORIES = (
     "scripts/anatomy_commonmode", "scripts/physical_depth_budget",
     "scripts/shunt_ancestry_gain", "scripts/credit_first_figures",
     "scripts/conductance_credit_demand", "scripts/image_ladder_controls",
+    "scripts/conductance_local_gate", "scripts/credit_rule_extension",
+    "scripts/measured_alignment_power", "scripts/physical_depth_followup",
 )
 JOURNAL_ANALYSIS_RECORDS = (
     "ANIMAL_DATA_CONTRACT.md",
@@ -135,6 +137,7 @@ JOURNAL_ANALYSIS_RECORDS = (
     "TRAINED_SUBTREE_ADDRESS_EXPERIMENT_CONTRACT.md",
 )
 JOURNAL_SCRIPTS = (
+    "passive_field_diagnostics.py",
     "aggregate_all_scan_functional_topology.py",
     "analyze_bandwidth_matched_routing.py",
     "analyze_branch_credit_interference.py",

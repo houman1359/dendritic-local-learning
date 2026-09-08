@@ -1,0 +1,20 @@
+{
+  "protocol_commit": "c6d3b2b",
+  "added_transitive_test_dependency_commit": "37dbfe9",
+  "scientific_protocol_changed": false,
+  "short_validation_partition": "test",
+  "scientific_partition": "shared,sapphire,serial_requeue",
+  "account": "kempner_dev",
+  "canary_job": 45289328,
+  "fresh_array": 45289612,
+  "historical_replay_job": 45290256,
+  "fresh_concurrency": 10,
+  "requested_time_limits_minutes": {
+    "canary": 5,
+    "fresh": 45,
+    "historical_replay": 10
+  },
+  "note": "Short validation moved to allowedCPUtestpartition after schedulerprioritywait; no model/data/optimization setting changed. Fresh array depends on passed canary, summaries require passed historicalreplay. FreshCPUarray subsequently allowed on shared as well as serial_requeue, both permitted for kempner_dev account, after prioritywait; numerical configuration unchanged. Added permitted sapphire productionCPU partition and moved finalanalysis/plottingjob to productionpartitions; only excludedtests/replay use test.",
+  "report_job": 45295821,
+  "report_partition": "shared,sapphire,serial_requeue"
+}

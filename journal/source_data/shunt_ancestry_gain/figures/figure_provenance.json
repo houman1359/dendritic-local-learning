@@ -1,7 +1,7 @@
 {
-  "output_sha256": "09896fd814025cdace60931c2a8ab3df661bb6834d25479906da94ae5c77371a",
+  "output_sha256": "af47cbffaf65685cc7138ea61a8bf4bfab5a4e9f17ab703b7f5ac6326df4c5dc",
   "builders_sha256": {
-    "scripts/shunt_ancestry_gain/build_figure.py": "03a99812c64b0ecdc3d2d1c0e2355fa7343240ae2120eda24f491b8358c08c4b",
+    "scripts/shunt_ancestry_gain/build_figure.py": "4262c637b41cfd61a880c4b50cdb750f4dd02a1dd4e902c547a09c8afb956142",
     "scripts/build_main_figure_08.py": "f9960d1b058bfef5486e436ef511fbcb98e751a3fe515587be6929b1d7305cc5"
   },
   "source_sha256": {

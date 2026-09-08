@@ -4,7 +4,7 @@ Article: *Dendritic morphology as a dictionary for local credit assignment*.
 
 For a repository-synchronized Overleaf project, select the root-level `main.tex`, which inputs the canonical journal Article. For the standalone ZIP, select its enclosed `main.tex`, use pdfLaTeX and the included `references.bib`. Build the Supplementary Information from `supplementary/supplementary.tex`. The combined reading copy is `main_with_supplementary.pdf`.
 
-The Article uses nine main assets, `figures/main/figure_01.pdf` through `figure_09.pdf`, and 52 supplementary figures. The sequence runs from the credit framework and image tasks through branch selection, ancestry, interaction order, conductance credit, physical depth, anatomy, shunting and measured responses. The complete display map is `figures/README.md`.
+The Article uses nine main assets, `figures/main/figure_01.pdf` through `figure_09.pdf`, and 56 supplementary figures. The sequence runs from the credit framework and image tasks through branch selection, ancestry, interaction order, conductance credit, physical depth, anatomy, shunting and measured responses. The complete display map is `figures/README.md`.
 
 Keep every local TeX input with its parent document, including the credit bridge, anatomy, historical noise-task identity and weak-channel figure fragments. The package builder resolves actual TeX inputs rather than relying on a fixed old list. S45 contains image diagnostics, S46 update utility and S47 the weak-channel local-linearization check. Historical panel suffixes in some supplementary filenames remain unchanged; current captions define their panels.
 
@@ -17,4 +17,6 @@ make overleaf-bundle
 
 Rebuild after all source and figure changes are complete. Use `submission/Overleaf_Project.zip` for a new standalone project, or replace an older project in full to avoid mixing current sources with superseded assets. The package contains the scientific manuscript and required build materials; internal revision logs are excluded.
 
-Page counts must be read from the final compiled PDFs. Verify the main and supplementary previews after upload, including all nine main and 52 supplementary displays. A local successful build does not submit the paper.
+Page counts must be read from the final compiled PDFs. Verify the main and supplementary previews after upload, including all nine main and 56 supplementary displays. A local successful build does not submit the paper.
+
+S53 retains all local-gate rules and rates; S54–S55 extend every algebraic credit rule to the longer budgets; S56 quantifies measured-response sensitivity conditional on repeat reliability and the observed sampling. Main Fig. 5 uses twenty new local-gate seed blocks; main Fig. 6 plots accuracy and cross-entropy gaps together with stopping status.

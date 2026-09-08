@@ -1,0 +1,14 @@
+{
+  "submitted_utc": "2026-09-08T03:18:03.998251+00:00",
+  "protocol_commit": "37dbfe9",
+  "parent_go_ahead": "Protocol, code and portable inputs committed; proceed with simulation and calibration audit.",
+  "slurm_array_job_id": "45293989",
+  "array": "0-20%10",
+  "scientific_chunks": "0-19",
+  "calibration_audit_task": 20,
+  "resource_request_per_task": {
+    "cpus": 1,
+    "memory_gb": 3,
+    "max_hours": 2
+  }
+}

@@ -47,13 +47,31 @@
 
 The supplement explains how the models compute synaptic credit, how spatially restricted learning signals approximate it, and how those restrictions affect learning. Here \emph{credit} means how a small synaptic change would affect task error. A \emph{route dictionary} is a set of spatial profiles through which learning signals can be distributed. These signals are mathematical quantities used by the learning rules; the biological datasets do not directly measure them.
 
-Sections S1--S2 derive exact gradients and define the available feedback profiles. S3--S4 address what those profiles can represent, how noisy updates affect progress, and how task interactions constrain a tree. S5 gives the artificial learning experiments; S6--S7 describe reconstruction and anatomical dictionaries; S8 covers inhibitory contacts; S9 tests focal changes in modeled transport. Measured responses, imposed alignment and external-data interpretation follow in S10--S12. Statistics and source records are consolidated in S13. The supplementary cohort index indexes experiments, and Table~\ref{tab:claim_boundaries} summarizes what each comparison can establish.
+Sections S1--S2 derive exact gradients and define the available feedback profiles. S3--S4 address what those profiles can represent, how noisy updates affect progress, and how task interactions constrain a tree. S5 gives the artificial learning experiments; S6--S7 describe reconstruction and anatomical dictionaries; S8 covers inhibitory contacts; S9 tests focal changes in modeled transport. Measured responses, imposed alignment and external-data interpretation follow in S10--S12. Statistics and source records are consolidated in S13. Section S14 gives local-gate generation, longer-budget comparisons and measurement sensitivity. The supplementary cohort index (Table~\ref{tab:experiment_cohorts}) indexes experiments, and Table~\ref{tab:claim_boundaries} summarizes what each comparison can establish.
 
 The three uses of a tree should be kept distinct. In a directed artificial neuron, activity travels from terminal compartments toward the soma. An abstract feedback tree can instead specify which coordinates receive a shared learning signal, without adding forward compartments. Reconstructed arbors use reciprocal cable coupling, which allows current flow in both directions. Physical depth $D_{\rm p}$, feedback resolution $D_{\rm r}$, topological depth and electrotonic distance therefore describe different properties. D1--D4 denote stage counts within a stated cohort; their branching vectors are supplied locally.
 
 The independent replicate is a paired training seed, reconstructed cell, postsynaptic target or external animal, depending on the comparison. Synapses, intervention sites, channel draws, scans, data splits and Monte Carlo streams are repeated observations within those units. The initial and disjoint \texttt{minnie65} cohorts come from one mouse; Pinky is a second mouse. Neither provides population-random cell sampling. The six-animal external reanalysis concerns neuronal coordinates rather than within-arbor routing. Structural capacity, modeled transport and visual-response alignment are separate outcomes. We call exact transport, best-fit projection coefficients and supplied reliability moments \emph{oracles} when they provide information unavailable to the restricted rule; their use does not establish a biological mechanism for estimating that information.
 
 Symbols are defined locally because the derivations use several coordinate systems. Bold lower-case symbols generally denote vectors; matrix dimensions are stated when an operator is introduced. Unless a subsection specifies otherwise, the principal indices are $u$ (modeled neuron), $n$ (compartment), $i$ (synapse) and $k$ (feedback route). $H_{\mathrm c}$ denotes task-credit hierarchy in the operator experiment, $H_{\mathrm p}$ latent hierarchy depth in the physical-depth tasks and $K$ the number of fixed spatial delivery profiles, which does not count independent external error signals. Table~\ref{tab:notation} consolidates the notation, while each derivation introduces the symbols needed to follow it.
+
+
+\begin{center}
+\small
+\begin{tabular}{p{0.12\textwidth}p{0.35\textwidth}p{0.42\textwidth}}
+\toprule
+Main figure & Question & Supplementary support \\
+\midrule
+1 & Within-arbor image credit & S5; Figs. S30, S45, S49 \\
+2--3 & Branch selection and ancestry & S3--S5; Figs. S29, S32 \\
+4 & Interactions and credit geometry & S4, S14; Figs. S36--S44, S54--S55 \\
+5 & Local gating in conductance trees & S4, S14; Figs. S50--S53 \\
+6 & Serial depth and training budgets & S5; Figs. S15, S18, S26, S28, S31 \\
+7--8 & Anatomy and shunt transport & S6--S9, S14; Figs. S10--S12, S20--S27, S33, S47--S48 \\
+9 & Response alignment and sensitivity & S10, S14; Figs. S34, S56 \\
+\bottomrule
+\end{tabular}
+\end{center}
 
 \section{Exact gradients in a directed conductance tree}
 \label{note:derivation}
@@ -2449,7 +2467,13 @@ frozen profile. Hard-minus-oracle accuracy remained $-16.26$ percentage
 points (95\% paired-seed interval $-17.83$ to $-14.83$), while hard-minus-
 frozen was 45.36 points (43.69--46.92). At zero noise and 256 calibration
 trials, hard selection equaled the oracle numerically, whereas the soft rule
-reached 79.978\%. Both learned readouts failed when cues were delayed across
+reached 79.978\%. With only 16 noise-free calibration trials, the soft
+encoder already identified every context's route correctly, yet its graded
+output gave 19.392\% task accuracy; selecting its maximum-probability route
+gave the oracle's 80.291\%. This sensitivity isolates leakage into incorrect
+routes from failure to identify the context. All hard-readout intervals and
+unadjusted tests are descriptive; these reused conditions do not define a
+new primary family. Both learned readouts failed when cues were delayed across
 independent contexts. Thus accurate cue identification does not guarantee
 that graded coefficients are suitable for the learning rule: readout and
 timing are separate constraints. All exploratory fits and unchanged encoder
@@ -5052,7 +5076,7 @@ this journal synthesis but was not a population-random sample.
 
 \begin{table}[ht]
 \centering
-\caption{Eight-channel ancestry dictionaries evaluated on an independently generated reciprocal-cable shunt-response operator. Capture is the expected weighted response-energy fraction in the stated subspace, averaged over eight cells. Ancestry difference is ancestry-minus-control capture; ordered cells count positive paired differences. The dense oracle uses singular value decomposition (SVD).}
+\caption{Eight-channel ancestry dictionaries evaluated on a reciprocal-cable shunt-response operator generated without inspecting the selected dictionary. Passive somatic transport favors ancestry by construction. Capture is the expected weighted response-energy fraction in the stated subspace, averaged over eight cells. Ancestry difference is ancestry-minus-control capture; ordered cells count positive paired differences. The dense oracle uses singular value decomposition (SVD).}
 \label{tab:reciprocal_capacity}
 \small
 \begin{tabular}{lrrr}
@@ -5286,17 +5310,18 @@ Actual credit learning & Frozen Adam recipes interact with task family on estima
 Matched credit geometry & Pairwise and quartic targets share input spectra and a compatible tree but develop different credit spectra. Exact credit substantially improves quartic learning over tested fixed profiles in fresh paired fits, including a common-rate comparison. & A task-only initialization spectrum, proof of minimum external feedback rank, or optimizer-independent asymptotic necessity. \\
 Conductance grouping & Fixed physical shape with mismatched input access creates omitted interactions and a population obstruction; exact-gradient grouping effects persist on fresh seeds. & A universal morphology theorem, learned physical-depth optimality, or necessary precise credit under Adam. \\
 Exact-target construction & Complete Fourier access gives bounded-coefficient exact trees and certifies minimum depth within the stated class. & A selector inferred from limited calibration data, a universal task-complexity law, or biological discovery of optimal morphology. \\
-Physical-depth controls & Serial divisive composition helps when task factors match physical order. H4 saturates at D3 under BP; flexible point MLPs beat serial trees. Extending training preserves the depth benefit but reverses the LocalCA accuracy advantage of exact credit, which retains lower cross-entropy. & A dendrite-exclusive expressivity advantage, natural-task prevalence, biological availability of exact path transport or optimizer-independent equivalence of BP and LocalCA. \\
+Physical-depth controls & Serial divisive composition helps when task factors match physical order. H4 saturates at D3 under BP; flexible point MLPs beat serial trees. The depth gain grows from 180 to 600 epochs, while the LocalCA accuracy gap changes sign and exact credit retains lower cross-entropy. D3 fits remain capped and eight of ten D1 references early-stop. & A dendrite-exclusive expressivity advantage, natural-task prevalence, biological availability of exact path transport or optimizer-independent equivalence of BP and LocalCA. \\
 State-matched reliability conductance & Fixed positive shunts approximate the step-consistent oracle reliability ordering and outperform global, shuffled and anti-aligned shunts under heterogeneous branch noise. & Exact block-scalar attenuation, autonomous shunt learning, a dendrite-exclusive operation or sustained final-loss superiority over unshunted noisy learning. \\
 Same-span coefficient learning & Coordinate conditioning creates the finite-data bias--variance crossover predicted by exact linear risk, despite identical route capacity. & A biological Gram preconditioner, unconditional benefit of orthogonal or ill-conditioned coordinates, or new address span. \\
 Conductance-valid artificial-tree analyses & Neuron-specific, assignment, spatial and fixed-budget conclusions persist in the 1,000 included artificial-tree runs; the inhibitory-dose family is excluded. & Any claim derived from signed synthetic inputs driving positive-conductance shunting cells. \\
 Fixed spatial topology & Spatial partitioning improves forward learning and input coverage at fixed contact count. & Task-aligned dendritic credit routing; the effect persists under backpropagation and a randomly projected task. \\
-MICrONS capacity & With a budgeted common broadcast, ancestry captures additional independent modeled response variation; the disjoint 47-cell cohort favors ancestry over depth bins and degree--depth surrogates. Cohort-specific rank and cost differences are retained. & Endogenous task-gradient alignment or learning in the recorded mice; a universal fine-topology advantage independent of field, rank and wiring cost. \\
+MICrONS capacity & Ancestry improves compression of modeled passive fields beyond broadcast and degree--depth surrogates on average; 11 of 47 cells have a majority of surrogates matching or exceeding the real tree. & Endogenous gradient alignment or biological learning; a topology advantage independent of the ancestry-favoring field construction, rank or wiring cost. \\
 Inhibitory census & Inhibitory classes occupy different dendritic scales and repeated contacts are spatially co-targeted; actual-route dictionaries are internally compressible. & Geometry-independent descendant-route organization, inhibitory activity, a teaching signal, or biological selection of leverage-ranked routes; all targets come from one mouse. \\
 Focal perturbation & In the normalized proxy, an adjoint-replacement control attributes descendant localization to changed adjoint transport; physical calibration specifies where the effect is large or small. & That the effect is universal across electrotonic regimes or that inhibitory synapses conveyed teaching signals during the animal's experience. \\
 Weak-channel focal check & Descendant-enriched attenuation persists in the fixed local Jacobian of 512 accepted weak-channel steady states near the passive baseline. & Strongly regenerative operation, channel kinetics, spikes, cell-specific channel fits or independent biological replication by the nested draws. \\
-Measured responses & Ancestry--response similarity shows no preferential alignment in seven targets across thirteen scans. The separate 520-fit learning comparison diagnoses restriction of a nearly fixed transfer profile to incompletely covering routes. & Absence of topology--function organization in cortex, failure of every state-dependent coefficient rule, or generalization to other response windows, coverage and biophysical calibration. \\
-Projection coefficients & Oracle projections measure capacity; a separately calibrated local-context encoder improves learning over a frozen profile when an explicit cue and route-activation targets are supplied. & Autonomous discovery of the cue or target coordinates, or a demonstrated biological circuit implementing oracle coefficients. \\
+Measured responses & Ancestry--response similarity provides no evidence of preferential alignment in seven targets across thirteen scans. The separate 520-fit learning comparison diagnoses restriction of a nearly fixed transfer profile to incompletely covering routes. & Absence of topology--function organization in cortex, failure of every state-dependent coefficient rule, or generalization to other response windows, coverage and biophysical calibration. \\
+Projection coefficients & Oracle projections measure capacity. The soft context encoder improves on frozen coefficients but remains 54.47 points below the oracle in its primary condition; hard readout is exploratory. & Autonomous discovery of cues, or a biological implementation of oracle coefficients. \\
+Local conductance gate & Distal credit gated by imposed proximal inhibition learns opposed tuning close to exact credit in twenty new seeds; unit proximal credit preserves inhibitory plasticity. & Autonomous context or somatic-error generation, or asymptotic equivalence across arbitrary tasks and parameter bounds. \\
 Alignment-controlled optimization & Rotating exact credit into a fixed reconstructed-tree basis changes both capture and loss reduction under matched quadratic objectives. & That the reconstructed cells acquired or used the imposed gradients in vivo. \\
 Signed animal contrast & Known P+/P- causal sign predicts the dominant dendritic population contrast across six animals. & Within-tree routing or a unique conductance/shunting mechanism. \\
 Interference identity & Route overlap and off-route leakage are sufficient to produce exact one-step forgetting in a static quadratic task. & Temporal neural dynamics or a causal explanation of the published motor-learning experiment. \\
@@ -5362,7 +5387,9 @@ Two-branch / eight-context routing & 10 seeds for two branches; 20 seeds and 2,7
 Local context-coefficient encoder & 20 fresh seeds; 2,160 primary fits; paired exploratory hard-readout sensitivity & SI S5, Fig. S32; separate calibration cues; encoder frozen before task learning. \\
 Moment, reliability and coefficient screens & 50 seeds per screen; physical fixed reliability: 2,250 outcomes; adaptive: 1,050; same-span: 4,800 checkpoint rows & SI S4; Tables S3--S6. Seed is the unit; checkpoints remain nested. \\
 Prospective linear selection & Original: 5 development / 20 held-out seeds, 12,800 confirmatory fits; new dynamics: 20 fresh seeds, 25,600 fits & SI S4, Figs. S35, S38--S39; independent calibration and sealed choices. \\
-Conductance context and credit & First study: 216 development and 240 fresh fits; opposed tuning: 288 development and 320 fresh fits; both use 20 fresh seed blocks & SI S4, main Fig.~5 and Figs.~S50--S51. All 560 fresh fits continue to 16,384 updates. Another 640 trajectories test parameter bounds on the same opposed-tuning blocks; 288 additional development fits test an expanded rate grid (Fig.~S52). \\
+Conductance context and credit & First study: 216 development and 240 fresh fits; opposed tuning: 288 development and 320 fresh fits; both use 20 fresh seed blocks & SI S4 and Figs.~S50--S51. All 560 fresh fits continue to 16,384 updates. Another 640 trajectories test parameter bounds on the same opposed-tuning blocks; 288 additional development fits test an expanded rate grid (Fig.~S52). \\
+Local conductance gate & Twenty new paired seeds, nine rules, two tasks and three rates: 1,080 trajectories through 16,384 updates & SI S14, main Fig.~5 and Fig.~S53. Protocol frozen after exploratory panel evidence and before fresh execution; two primary tests, all other comparisons descriptive. \\
+Balanced credit-rule extension & 720 unique algebraic trajectories from the original twenty seeds, extended to 16,384 updates & SI S14, Figs.~S54--S55 and Table~S37. Complete original-checkpoint replay; no rate retuning or new independent seeds. \\
 Matched fixed-profile credit & Three development and twenty fresh paired seeds; 432 development and 1,200 fresh fits & SI S4; saved checkpoints, matched input spectra, calibrated/sign controls and common-rate sensitivity. \\
 Interaction structure & Census of 140 primary and 24 nested targets; 7,872 fits and 164 exact constructions & SI S4, Figs. S36--S37; full-domain capacity analysis, not sampled generalization. \\
 Structure and learning studies & Twenty paired seed blocks each: 2,240 calibration, 3,600 credit and 1,440 conductance fits; 480 further end-to-end fits & SI S4, Figs. S40--S42; frozen choices, full controls and independent test outcomes. \\
@@ -5374,10 +5401,13 @@ Inhibitory census & 20 postsynaptic targets; 92-axon sensitivity aggregation, on
 Passive / weak-channel perturbations & Eight initial cells; 45/47 disjoint cells eligible; weak channels: 64 draws per initial cell & SI S9; Tables S7, S27--S28. Sites and channel draws averaged within cell. \\
 Measured responses & Seven targets, 13 scans, ten splits; complete tree: 520 fits; oracle geometry: 130 exact reexecutions & SI S10; Tables S8--S9, S29--S30. Reexecution discrepancies retained. \\
 Measured-response baselines & Same 130 splits, 13 scans, seven targets; 3,380 new evaluations & SI S10, Fig. S34; nested ridge tuning and training-only masks; draws averaged before targets. \\
+Measured-alignment sensitivity & 4,000 simulated datasets paired across 21 signal fractions and two reliability scenarios; 1,000 calibration datasets & SI S14 and Fig.~S56. Conditional Gaussian response model retains seven-target inference, shared inputs and measured repeats; simulations are not biological replicates. \\
 Imposed alignment / external data & Eight cells with 40 nested streams; six animals in external signed-credit reanalysis & SI S11--S12; Tables S33, S35. External neurons are descriptive. \\
 \bottomrule
 \end{longtable}
 \endgroup
+
+\input{review_followups}
 
 \clearpage
 \bibliographystyle{unsrtnat}

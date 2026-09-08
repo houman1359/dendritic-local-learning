@@ -1,0 +1,142 @@
+{
+  "accuracy_budgets": [
+    {
+      "ci95_high": 11.62099839746952,
+      "ci95_low": 10.146998167037964,
+      "epoch": 180,
+      "mean": 10.863998532295227,
+      "metric": "test_accuracy",
+      "n_seeds": 10,
+      "negative_seeds": 0,
+      "positive_seeds": 10
+    },
+    {
+      "ci95_high": 0.18502588570117914,
+      "ci95_low": -0.6320255696773529,
+      "epoch": 315,
+      "mean": -0.2399998903274536,
+      "metric": "test_accuracy",
+      "n_seeds": 10,
+      "negative_seeds": 8,
+      "positive_seeds": 2
+    },
+    {
+      "ci95_high": -2.5419736504554753,
+      "ci95_low": -3.2999980598688126,
+      "epoch": 486,
+      "mean": -2.9379987716674805,
+      "metric": "test_accuracy",
+      "n_seeds": 10,
+      "negative_seeds": 10,
+      "positive_seeds": 0
+    },
+    {
+      "ci95_high": -2.4550002813339233,
+      "ci95_low": -3.0820262134075165,
+      "epoch": 500,
+      "mean": -2.7810007333755493,
+      "metric": "test_accuracy",
+      "n_seeds": 10,
+      "negative_seeds": 10,
+      "positive_seeds": 0
+    },
+    {
+      "ci95_high": -1.230972528457642,
+      "ci95_low": -1.829999104142189,
+      "epoch": 600,
+      "mean": -1.5209990739822388,
+      "metric": "test_accuracy",
+      "n_seeds": 10,
+      "negative_seeds": 10,
+      "positive_seeds": 0
+    }
+  ],
+  "accuracy_crossing": {
+    "first_negative_after180": 312,
+    "negative_through600_from": 315
+  },
+  "accuracy_most_negative_epoch": 486,
+  "accuracy_most_negative_mean_pp": -2.9379987716674805,
+  "all120_released_budget_endpoints_reproduced": true,
+  "analysis_script_sha256": "d4eb009f381d8534a5b8ed1646341e6183c311c35d473bd82879263bb514b9c0",
+  "cross_entropy_budgets": [
+    {
+      "ci95_high": -0.06655508659780025,
+      "ci95_low": -0.07893735878169537,
+      "epoch": 180,
+      "mean": -0.07287798523902893,
+      "metric": "test_cross_entropy",
+      "n_seeds": 10,
+      "negative_seeds": 10,
+      "positive_seeds": 0
+    },
+    {
+      "ci95_high": -0.04403286911547184,
+      "ci95_low": -0.06045505844056607,
+      "epoch": 315,
+      "mean": -0.05200397372245789,
+      "metric": "test_cross_entropy",
+      "n_seeds": 10,
+      "negative_seeds": 10,
+      "positive_seeds": 0
+    },
+    {
+      "ci95_high": -0.005091863945126534,
+      "ci95_low": -0.02078638777136803,
+      "epoch": 486,
+      "mean": -0.012776422500610351,
+      "metric": "test_cross_entropy",
+      "n_seeds": 10,
+      "negative_seeds": 7,
+      "positive_seeds": 3
+    },
+    {
+      "ci95_high": -0.00386416681110859,
+      "ci95_low": -0.01991387829184532,
+      "epoch": 500,
+      "mean": -0.011768504977226257,
+      "metric": "test_cross_entropy",
+      "n_seeds": 10,
+      "negative_seeds": 7,
+      "positive_seeds": 3
+    },
+    {
+      "ci95_high": -0.011738256327807905,
+      "ci95_low": -0.030950815789401533,
+      "epoch": 600,
+      "mean": -0.02140461951494217,
+      "metric": "test_cross_entropy",
+      "n_seeds": 10,
+      "negative_seeds": 9,
+      "positive_seeds": 1
+    }
+  ],
+  "d1_n": 10,
+  "d1_stopped_before600": 8,
+  "d3_n": 50,
+  "d3_reached_cap600": 50,
+  "exact_lower_mean_cross_entropy_all180_to600": true,
+  "forward_depth_advantage": [
+    {
+      "budget": 180,
+      "ci95_high_pp": 31.251024559140205,
+      "ci95_low_pp": 30.465998649597168,
+      "mean_pp": 30.81999897956848
+    },
+    {
+      "budget": 600,
+      "ci95_high_pp": 38.39200021326542,
+      "ci95_low_pp": 37.97600030899048,
+      "mean_pp": 38.1740003824234
+    }
+  ],
+  "inputs_sha256": {
+    "source_data/physical_depth_budget/canonical/extension_endpoints.csv": "00c2afec2bef483f19d7392bb1a10ecc306a404433d011f376c93ede181c602f",
+    "source_data/physical_depth_budget/canonical/observed_epoch_metrics.csv": "b2deb635af5dfc56ee9a8af24bd9cf8638ad5ea7a44baf4290ed7a60b20d5515",
+    "source_data/physical_depth_budget/canonical/observed_training_histories.csv": "7a3cd0353782bc2ffad0fb1c83f521f4f75570ab9da3e403bb97f08730aeb95b"
+  },
+  "retained_main_figure06_sha256": "b1456a235166f4fb43381b61a9cd75dd15c3a1590fa9db981a8ea7333a26c47d",
+  "scope": "Post-review existing-data analysis of all sixty released restarts; no new training and no test-based checkpoint selection. Pointwise whole-seed intervals,10000 draws,seed601806,are descriptive and not simultaneous confidence bands.",
+  "seed_trajectory_rows": 36000,
+  "status": "passed"
+}

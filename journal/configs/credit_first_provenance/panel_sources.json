@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "layout": "credit_first_followup",
+  "layout": "credit_first_local_gate_and_budget_followup",
   "physical_figure_pending": false,
   "retained_template": "configs/credit_first_provenance/retained_supplementary.tsv",
   "assets": [
@@ -39,18 +39,18 @@
     {
       "figure": "fig5",
       "path": "figures/main/figure_05.pdf",
-      "generator": "scripts/conductance_credit_demand/build_opponent_figure.py",
-      "component": "source_data/conductance_credit_demand/opponent/figures/conductance_opponent_credit_native.pdf",
+      "generator": "scripts/conductance_local_gate/figure.py",
+      "component": "source_data/conductance_local_gate/figures/local_gate_primary.pdf",
       "panel": "a-f",
-      "notes": "Context-dependent opposing branch tuning; all four credit rules and two optimizers retained."
+      "notes": "Fresh local-gate cohort: explicit locally available inhibition, all 24 parameters available, matched-rate control, oracle two-profile comparison and gate-placement controls; original opponent experiments retained as supporting evidence."
     },
     {
       "figure": "fig6",
       "path": "figures/main/figure_06.pdf",
-      "generator": "scripts/physical_depth_budget/build_main_figure5.py",
-      "component": "source_data/physical_depth_budget/figure/figure5_physical_depth_budget.pdf",
-      "panel": "a-c",
-      "notes": "Original optimizer-by-depth reference (A), all 60 extended validation trajectories (B), and three paired credit/optimizer accuracy contrasts at two budgets (C); depth contrast retained in supporting tables"
+      "generator": "scripts/physical_depth_followup/figure.py",
+      "component": "source_data/physical_depth_followup/figures/physical_depth_followup.pdf",
+      "panel": "a-e",
+      "notes": "Same original 60 fits, no new training. Task schematic; depth accuracy trajectories; paired exact-minus-shared accuracy crossing; all validation-loss means; paired cross-entropy trajectory. All 50 D3 fits still reach the 600-epoch cap."
     },
     {
       "figure": "fig7",
@@ -131,6 +131,38 @@
       "component": "source_data/conductance_credit_demand/opponent/expanded_rates/figure_expanded_rates.pdf",
       "panel": "a-d",
       "notes": "Rendering-only command uses --plot-only; complete 288-fit development rate screen at matched 16,384-update budget."
+    },
+    {
+      "figure": "figS53",
+      "path": "figures/supplementary/figure_S53_local_gate_controls.pdf",
+      "generator": "scripts/conductance_local_gate/figure.py",
+      "component": "source_data/conductance_local_gate/figures/local_gate_all_rates.pdf",
+      "panel": "a-e",
+      "notes": "A-D: all nine local-gate rules and three frozen rates, both tasks and budgets. E: retained historical opponent-cohort gradient cancellation; not a fresh-cohort measurement."
+    },
+    {
+      "figure": "figS54",
+      "path": "figures/supplementary/figure_S54_credit_budget_extension.pdf",
+      "generator": "scripts/credit_rule_extension/figure.py",
+      "component": "source_data/credit_rule_extension/figures/credit_rule_extension.pdf",
+      "panel": "a-f",
+      "notes": "Balanced extension of all 720 original algebraic trajectories to 16384 updates; selected/common rates, budget-indexed task-by-credit contrast and every quartic seed."
+    },
+    {
+      "figure": "figS55",
+      "path": "figures/supplementary/figure_S55_credit_budget_controls.pdf",
+      "generator": "scripts/credit_rule_extension/figure.py",
+      "component": "source_data/credit_rule_extension/figures/credit_rule_extension_controls.pdf",
+      "panel": "a-d",
+      "notes": "Nested Adam and pairwise/quartic SGD controls from the same continued seed blocks."
+    },
+    {
+      "figure": "figS56",
+      "path": "figures/supplementary/figure_S56_measured_alignment_power.pdf",
+      "generator": "scripts/measured_alignment_power/report.py",
+      "component": "source_data/measured_alignment_power/figures/measured_alignment_sensitivity.pdf",
+      "panel": "a-c",
+      "notes": "Conditional response-level power simulation preserving 13 scans, seven target cells, shared partners and measured repeat reliability. The effect axis and 80% crossing are model-conditional."
     }
   ],
   "records": [
@@ -846,40 +878,40 @@
       "notes": "Retrospective actual-update utility, not prospective selection"
     },
     {
-      "figure": "fig6",
-      "panel": "a",
+      "figure": "methods",
+      "panel": "retained fig6 evidence",
       "path": "source_data/point_dendrite_credit_controls/condition_summary.csv",
       "role": "numerical source",
       "generator": "",
       "replication_unit": "paired training seed block (10); original and extended budgets kept separate",
-      "notes": "Original depth curves, ten seeds per condition"
+      "notes": "Original depth curves, ten seeds per condition Former main-panel source retained in full; its former display association is superseded by the follow-up figure."
     },
     {
-      "figure": "fig6",
-      "panel": "b",
+      "figure": "methods",
+      "panel": "retained fig6 evidence",
       "path": "source_data/physical_depth_budget/canonical/extension_validation_trajectories.csv",
       "role": "numerical source",
       "generator": "",
       "replication_unit": "paired training seed block (10); original and extended budgets kept separate",
-      "notes": "All 60 new fits; stopped trajectories explicitly carried forward"
+      "notes": "All 60 new fits; stopped trajectories explicitly carried forward Former main-panel source retained in full; its former display association is superseded by the follow-up figure."
     },
     {
-      "figure": "fig6",
-      "panel": "c",
+      "figure": "methods",
+      "panel": "retained fig6 evidence",
       "path": "source_data/physical_depth_budget/canonical/extension_paired_contrasts.csv",
       "role": "numerical source",
       "generator": "",
       "replication_unit": "paired training seed block (10); original and extended budgets kept separate",
-      "notes": "Panel C selects localca_path_minus_shared, bp_exact_minus_broadcast, and broadcast_bp_minus_localca_recipe at budgets 180 and 600; all ten paired seed blocks retained. Depth and secondary loss contrasts are supporting evidence, not additional displayed effects."
+      "notes": "Panel C selects localca_path_minus_shared, bp_exact_minus_broadcast, and broadcast_bp_minus_localca_recipe at budgets 180 and 600; all ten paired seed blocks retained. Depth and secondary loss contrasts are supporting evidence, not additional displayed effects. Former main-panel source retained in full; its former display association is superseded by the follow-up figure."
     },
     {
-      "figure": "fig6",
-      "panel": "c",
+      "figure": "methods",
+      "panel": "retained fig6 evidence",
       "path": "source_data/physical_depth_budget/canonical/extension_paired_seed_contrasts.csv",
       "role": "numerical source",
       "generator": "",
       "replication_unit": "paired training seed block (10); original and extended budgets kept separate",
-      "notes": "Panel C selects localca_path_minus_shared, bp_exact_minus_broadcast, and broadcast_bp_minus_localca_recipe at budgets 180 and 600; all ten paired seed blocks retained. Depth and secondary loss contrasts are supporting evidence, not additional displayed effects."
+      "notes": "Panel C selects localca_path_minus_shared, bp_exact_minus_broadcast, and broadcast_bp_minus_localca_recipe at budgets 180 and 600; all ten paired seed blocks retained. Depth and secondary loss contrasts are supporting evidence, not additional displayed effects. Former main-panel source retained in full; its former display association is superseded by the follow-up figure."
     },
     {
       "figure": "methods",
@@ -945,67 +977,67 @@
       "notes": "Two membrane-resistance endpoints; same archived focal sites; absolute metrics reproduce frozen originals."
     },
     {
-      "figure": "fig5",
-      "panel": "b",
+      "figure": "methods",
+      "panel": "retained fig5 evidence",
       "path": "source_data/conductance_credit_demand/opponent/figures/nominal_teacher_tuning.csv",
       "role": "illustrative nominal teacher curves",
       "generator": "scripts/conductance_credit_demand/build_opponent_figure.py",
       "replication_unit": "20 paired fresh seed blocks; development kept separate",
-      "notes": "Curves are fixed-checkpoint test NMSE; contrasts use validation-selected states within each budget. Oracle three-pattern coefficients access the exact field."
+      "notes": "Curves are fixed-checkpoint test NMSE; contrasts use validation-selected states within each budget. Oracle three-pattern coefficients access the exact field. Former main-panel source retained in full; its former display association is superseded by the follow-up figure."
     },
     {
-      "figure": "fig5",
-      "panel": "c-f",
+      "figure": "methods",
+      "panel": "retained fig5 evidence",
       "path": "source_data/conductance_credit_demand/opponent/figures/figure_source.csv",
       "role": "plotted numerical summaries",
       "generator": "scripts/conductance_credit_demand/build_opponent_figure.py",
       "replication_unit": "20 paired fresh seed blocks; development kept separate",
-      "notes": "Curves are fixed-checkpoint test NMSE; contrasts use validation-selected states within each budget. Oracle three-pattern coefficients access the exact field."
+      "notes": "Curves are fixed-checkpoint test NMSE; contrasts use validation-selected states within each budget. Oracle three-pattern coefficients access the exact field. Former main-panel source retained in full; its former display association is superseded by the follow-up figure."
     },
     {
-      "figure": "fig5",
-      "panel": "c-d",
+      "figure": "methods",
+      "panel": "retained fig5 evidence",
       "path": "source_data/conductance_credit_demand/opponent/summaries/all_curves.csv",
       "role": "all development, fresh and extended checkpoint outcomes",
       "generator": "scripts/conductance_credit_demand/build_opponent_figure.py",
       "replication_unit": "20 paired fresh seed blocks; development kept separate",
-      "notes": "Curves are fixed-checkpoint test NMSE; contrasts use validation-selected states within each budget. Oracle three-pattern coefficients access the exact field."
+      "notes": "Curves are fixed-checkpoint test NMSE; contrasts use validation-selected states within each budget. Oracle three-pattern coefficients access the exact field. Former main-panel source retained in full; its former display association is superseded by the follow-up figure."
     },
     {
-      "figure": "fig5",
-      "panel": "e",
+      "figure": "methods",
+      "panel": "retained fig5 evidence",
       "path": "source_data/conductance_credit_demand/opponent/summaries/paired_contrasts.csv",
       "role": "paired task-by-credit contrasts",
       "generator": "scripts/conductance_credit_demand/build_opponent_figure.py",
       "replication_unit": "20 paired fresh seed blocks; development kept separate",
-      "notes": "Curves are fixed-checkpoint test NMSE; contrasts use validation-selected states within each budget. Oracle three-pattern coefficients access the exact field."
+      "notes": "Curves are fixed-checkpoint test NMSE; contrasts use validation-selected states within each budget. Oracle three-pattern coefficients access the exact field. Former main-panel source retained in full; its former display association is superseded by the follow-up figure."
     },
     {
-      "figure": "fig5",
-      "panel": "e",
+      "figure": "methods",
+      "panel": "retained fig5 evidence",
       "path": "source_data/conductance_credit_demand/opponent/summaries/paired_seed_contrasts.csv",
       "role": "individual paired seed differences",
       "generator": "scripts/conductance_credit_demand/build_opponent_figure.py",
       "replication_unit": "20 paired fresh seed blocks; development kept separate",
-      "notes": "Curves are fixed-checkpoint test NMSE; contrasts use validation-selected states within each budget. Oracle three-pattern coefficients access the exact field."
+      "notes": "Curves are fixed-checkpoint test NMSE; contrasts use validation-selected states within each budget. Oracle three-pattern coefficients access the exact field. Former main-panel source retained in full; its former display association is superseded by the follow-up figure."
     },
     {
-      "figure": "fig5",
-      "panel": "f",
+      "figure": "methods",
+      "panel": "retained fig5 evidence",
       "path": "source_data/conductance_credit_demand/opponent/summaries/context_gradient_summary.csv",
       "role": "common-state conditional-gradient diagnostic",
       "generator": "scripts/conductance_credit_demand/build_opponent_figure.py",
       "replication_unit": "20 paired fresh seed blocks; development kept separate",
-      "notes": "Curves are fixed-checkpoint test NMSE; contrasts use validation-selected states within each budget. Oracle three-pattern coefficients access the exact field."
+      "notes": "Curves are fixed-checkpoint test NMSE; contrasts use validation-selected states within each budget. Oracle three-pattern coefficients access the exact field. Former main-panel source retained in full; its former display association is superseded by the follow-up figure."
     },
     {
-      "figure": "fig5",
-      "panel": "a-b",
+      "figure": "methods",
+      "panel": "retained fig5 evidence",
       "path": "scripts/conductance_credit_demand/opponent_model.py",
       "role": "explicit directed conductance equation and task generator",
       "generator": "",
       "replication_unit": "not applicable",
-      "notes": "Seven compartments and24positiveplasticconductances; nominal diagrams do not show additional experiments."
+      "notes": "Seven compartments and24positiveplasticconductances; nominal diagrams do not show additional experiments. Former main-panel source retained in full; its former display association is superseded by the follow-up figure."
     },
     {
       "figure": "figS50",
@@ -1051,6 +1083,249 @@
       "generator": "",
       "replication_unit": "not applicable; no new independent observations",
       "notes": "Pre-outcome second-study specification for the paired aligned/opposed conductance tasks. The released scientific README refers to this design; its inclusion does not add an independent training cohort."
+    },
+    {
+      "figure": "fig5",
+      "panel": "a-b",
+      "path": "scripts/conductance_local_gate/report.py",
+      "role": "Local gate schematic and nominal teacher equations",
+      "generator": "scripts/conductance_local_gate/figure.py",
+      "replication_unit": "not applicable",
+      "notes": "Panel B is nominal teacher tuning, not a fitted student or an additional experiment."
+    },
+    {
+      "figure": "fig5",
+      "panel": "c-d",
+      "path": "source_data/conductance_local_gate/figures/curve_band_source.csv",
+      "role": "Displayed mean curves and whole-seed intervals",
+      "generator": "scripts/conductance_local_gate/figure.py",
+      "replication_unit": "20 paired fresh seed blocks; historical replay and implementation canaries are separate",
+      "notes": ""
+    },
+    {
+      "figure": "fig5",
+      "panel": "c-d",
+      "path": "source_data/conductance_local_gate/summaries/all_curves.csv",
+      "role": "All rules, rates and seeds at every saved training step",
+      "generator": "scripts/conductance_local_gate/figure.py",
+      "replication_unit": "20 paired fresh seed blocks; historical replay and implementation canaries are separate",
+      "notes": ""
+    },
+    {
+      "figure": "fig5",
+      "panel": "e",
+      "path": "source_data/conductance_local_gate/summaries/paired_contrasts.csv",
+      "role": "Paired opposed-minus-aligned broadcast-minus-local-gate contrast",
+      "generator": "scripts/conductance_local_gate/figure.py",
+      "replication_unit": "20 paired fresh seed blocks; historical replay and implementation canaries are separate",
+      "notes": ""
+    },
+    {
+      "figure": "fig5",
+      "panel": "e",
+      "path": "source_data/conductance_local_gate/summaries/paired_seed_contrasts.csv",
+      "role": "Individual paired seed contrasts",
+      "generator": "scripts/conductance_local_gate/figure.py",
+      "replication_unit": "20 paired fresh seed blocks; historical replay and implementation canaries are separate",
+      "notes": ""
+    },
+    {
+      "figure": "fig5",
+      "panel": "f",
+      "path": "source_data/conductance_local_gate/summaries/all_endpoints.csv",
+      "role": "Validation-selected endpoint outcomes for all placement controls",
+      "generator": "scripts/conductance_local_gate/figure.py",
+      "replication_unit": "20 paired fresh seed blocks; historical replay and implementation canaries are separate",
+      "notes": ""
+    },
+    {
+      "figure": "fig5",
+      "panel": "f",
+      "path": "source_data/conductance_local_gate/summaries/condition_means.csv",
+      "role": "Control means and whole-seed intervals",
+      "generator": "scripts/conductance_local_gate/figure.py",
+      "replication_unit": "20 paired fresh seed blocks; historical replay and implementation canaries are separate",
+      "notes": ""
+    },
+    {
+      "figure": "figS53",
+      "panel": "a-d",
+      "path": "source_data/conductance_local_gate/summaries/condition_means.csv",
+      "role": "All-rule, all-rate task and budget comparison",
+      "generator": "scripts/conductance_local_gate/figure.py",
+      "replication_unit": "20 paired fresh seed blocks; historical replay and implementation canaries are separate",
+      "notes": ""
+    },
+    {
+      "figure": "figS53",
+      "panel": "a-d",
+      "path": "source_data/conductance_local_gate/summaries/all_endpoints.csv",
+      "role": "All-rule, all-rate task and budget comparison",
+      "generator": "scripts/conductance_local_gate/figure.py",
+      "replication_unit": "20 paired fresh seed blocks; historical replay and implementation canaries are separate",
+      "notes": ""
+    },
+    {
+      "figure": "figS53",
+      "panel": "e",
+      "path": "source_data/conductance_credit_demand/opponent/summaries/context_gradient_summary.csv",
+      "role": "Retained historical common-state conditional-gradient diagnostic",
+      "generator": "scripts/conductance_local_gate/figure.py",
+      "replication_unit": "20 original opponent seed blocks 2101-2120; not the fresh local-gate cohort",
+      "notes": ""
+    },
+    {
+      "figure": "fig6",
+      "panel": "b-e",
+      "path": "source_data/physical_depth_followup/figures/figure_source.csv",
+      "role": "Complete displayed trajectory values and pointwise intervals",
+      "generator": "scripts/physical_depth_followup/figure.py",
+      "replication_unit": "10 paired training seeds; post-review analysis of the original 60 fits without new training",
+      "notes": ""
+    },
+    {
+      "figure": "fig6",
+      "panel": "b,d",
+      "path": "source_data/physical_depth_followup/condition_trajectory_summary.csv",
+      "role": "Per-condition trajectory summaries",
+      "generator": "scripts/physical_depth_followup/figure.py",
+      "replication_unit": "10 paired training seeds; post-review analysis of the original 60 fits without new training",
+      "notes": ""
+    },
+    {
+      "figure": "fig6",
+      "panel": "c,e",
+      "path": "source_data/physical_depth_followup/paired_trajectory_summary.csv",
+      "role": "Paired accuracy and cross-entropy trajectory summaries",
+      "generator": "scripts/physical_depth_followup/figure.py",
+      "replication_unit": "10 paired training seeds; post-review analysis of the original 60 fits without new training",
+      "notes": ""
+    },
+    {
+      "figure": "fig6",
+      "panel": "b-e",
+      "path": "source_data/physical_depth_followup/validation_selected_seed_trajectories.csv",
+      "role": "All validation-selected per-seed trajectories",
+      "generator": "scripts/physical_depth_followup/figure.py",
+      "replication_unit": "10 paired training seeds; post-review analysis of the original 60 fits without new training",
+      "notes": ""
+    },
+    {
+      "figure": "fig6",
+      "panel": "c,e",
+      "path": "source_data/physical_depth_followup/paired_seed_trajectories.csv",
+      "role": "Individual paired trajectories",
+      "generator": "scripts/physical_depth_followup/figure.py",
+      "replication_unit": "10 paired training seeds; post-review analysis of the original 60 fits without new training",
+      "notes": ""
+    },
+    {
+      "figure": "fig6",
+      "panel": "b,d",
+      "path": "source_data/physical_depth_followup/stopping_by_seed.csv",
+      "role": "Stopping status, including all 50 D3 fits at the cap",
+      "generator": "scripts/physical_depth_followup/figure.py",
+      "replication_unit": "10 paired training seeds; post-review analysis of the original 60 fits without new training",
+      "notes": ""
+    },
+    {
+      "figure": "figS54",
+      "panel": "a-f",
+      "path": "source_data/credit_rule_extension/figures/figure_source.csv",
+      "role": "Plotted curves, paired contrasts or complete budget-indexed outcomes",
+      "generator": "scripts/credit_rule_extension/figure.py",
+      "replication_unit": "20 previously observed paired seed blocks; all 720 trajectories continued with original rates and bounds",
+      "notes": ""
+    },
+    {
+      "figure": "figS55",
+      "panel": "a-d",
+      "path": "source_data/credit_rule_extension/figures/controls_figure_source.csv",
+      "role": "Plotted curves, paired contrasts or complete budget-indexed outcomes",
+      "generator": "scripts/credit_rule_extension/figure.py",
+      "replication_unit": "20 previously observed paired seed blocks; all 720 trajectories continued with original rates and bounds",
+      "notes": ""
+    },
+    {
+      "figure": "figS54",
+      "panel": "a-d",
+      "path": "source_data/credit_rule_extension/summaries/all_curves.csv",
+      "role": "Plotted curves, paired contrasts or complete budget-indexed outcomes",
+      "generator": "scripts/credit_rule_extension/figure.py",
+      "replication_unit": "20 previously observed paired seed blocks; all 720 trajectories continued with original rates and bounds",
+      "notes": ""
+    },
+    {
+      "figure": "figS54",
+      "panel": "e",
+      "path": "source_data/credit_rule_extension/summaries/paired_contrasts.csv",
+      "role": "Plotted curves, paired contrasts or complete budget-indexed outcomes",
+      "generator": "scripts/credit_rule_extension/figure.py",
+      "replication_unit": "20 previously observed paired seed blocks; all 720 trajectories continued with original rates and bounds",
+      "notes": ""
+    },
+    {
+      "figure": "figS54",
+      "panel": "e-f",
+      "path": "source_data/credit_rule_extension/summaries/all_budget_outcomes.csv",
+      "role": "Plotted curves, paired contrasts or complete budget-indexed outcomes",
+      "generator": "scripts/credit_rule_extension/figure.py",
+      "replication_unit": "20 previously observed paired seed blocks; all 720 trajectories continued with original rates and bounds",
+      "notes": ""
+    },
+    {
+      "figure": "figS56",
+      "panel": "a-b",
+      "path": "source_data/measured_alignment_power/power_summary.csv",
+      "role": "Power, Wilson intervals and model-conditional effect axes",
+      "generator": "scripts/measured_alignment_power/report.py",
+      "replication_unit": "4000 simulated global datasets preserving 13 scans within 7 targets; calibration uses 1000 datasets",
+      "notes": ""
+    },
+    {
+      "figure": "figS56",
+      "panel": "c",
+      "path": "source_data/measured_alignment_power/reliability_calibration_audit.csv",
+      "role": "Measured and simulated split-half rank reliability",
+      "generator": "scripts/measured_alignment_power/report.py",
+      "replication_unit": "4000 simulated global datasets preserving 13 scans within 7 targets; calibration uses 1000 datasets",
+      "notes": ""
+    },
+    {
+      "figure": "figS56",
+      "panel": "a-c",
+      "path": "source_data/measured_alignment_power/protocol_freeze.json",
+      "role": "Prospectively hashed simulation choices; exploratory model",
+      "generator": "scripts/measured_alignment_power/report.py",
+      "replication_unit": "4000 simulated global datasets preserving 13 scans within 7 targets; calibration uses 1000 datasets",
+      "notes": ""
+    },
+    {
+      "figure": "figS56",
+      "panel": "a-c",
+      "path": "source_data/measured_alignment_power/input_manifest.json",
+      "role": "Original-to-portable pair, contact and response input identities",
+      "generator": "scripts/measured_alignment_power/report.py",
+      "replication_unit": "4000 simulated global datasets preserving 13 scans within 7 targets; calibration uses 1000 datasets",
+      "notes": ""
+    },
+    {
+      "figure": "fig7",
+      "panel": "supporting diagnostic",
+      "path": "source_data/passive_field_diagnostics/passive_field_decomposition.csv",
+      "role": "Passive-field ancestry decomposition and surrogate-cell heterogeneity",
+      "generator": "",
+      "replication_unit": "47 reconstructed cells; post-review diagnostic",
+      "notes": "Supports scope and heterogeneity in the anatomical comparison; these rows are not a newly displayed panel."
+    },
+    {
+      "figure": "fig7",
+      "panel": "supporting diagnostic",
+      "path": "source_data/passive_field_diagnostics/surrogate_cell_heterogeneity.csv",
+      "role": "Passive-field ancestry decomposition and surrogate-cell heterogeneity",
+      "generator": "",
+      "replication_unit": "47 reconstructed cells; post-review diagnostic",
+      "notes": "Supports scope and heterogeneity in the anatomical comparison; these rows are not a newly displayed panel."
     }
   ],
   "supporting_groups": [
@@ -1125,6 +1400,56 @@
         ".zip",
         ".tex"
       ]
+    },
+    {
+      "path": "source_data/conductance_local_gate",
+      "figure": "fig5",
+      "panel": "supporting evidence and frozen inputs",
+      "replication_unit": "20 paired fresh seed blocks; canaries and historical replay separate",
+      "excluded_extensions": [
+        ".tex",
+        ".txt"
+      ]
+    },
+    {
+      "path": "source_data/credit_rule_extension",
+      "figure": "figS54",
+      "panel": "supporting evidence and frozen inputs",
+      "replication_unit": "20 original seed blocks, 720 continued trajectories",
+      "excluded_extensions": [
+        ".tex",
+        ".txt"
+      ]
+    },
+    {
+      "path": "source_data/measured_alignment_power",
+      "figure": "figS56",
+      "panel": "supporting evidence and frozen inputs",
+      "replication_unit": "4000 global simulated datasets; observed 13 scans within 7 targets",
+      "excluded_extensions": [
+        ".tex",
+        ".txt"
+      ]
+    },
+    {
+      "path": "source_data/passive_field_diagnostics",
+      "figure": "fig7",
+      "panel": "supporting evidence and frozen inputs",
+      "replication_unit": "47 reconstructed cells; post-review diagnostic",
+      "excluded_extensions": [
+        ".tex",
+        ".txt"
+      ]
+    },
+    {
+      "path": "source_data/physical_depth_followup",
+      "figure": "fig6",
+      "panel": "supporting evidence and frozen inputs",
+      "replication_unit": "10 paired training seeds; original 60 fits without new training",
+      "excluded_extensions": [
+        ".tex",
+        ".txt"
+      ]
     }
   ],
   "excluded_extensions": [
@@ -1137,7 +1462,9 @@
   ],
   "excluded_path_components": [
     "__pycache__",
-    "logs"
+    "logs",
+    "slurm_logs",
+    ".pytest_cache"
   ],
   "scope": "Explicit panel lineage only; other completed new outputs are Methods support. No inherited main-only association is silently renumbered.",
   "original_manifest_sha256": "058bc8a0e482324ee0ebb0a47571e3d688c7eb1ad3a88ef434cc25c350ed49cf",
@@ -1183,6 +1510,26 @@
     {
       "path": "source_data/conductance_credit_demand/opponent/figures/figure_provenance.json",
       "builder": "scripts/conductance_credit_demand/build_opponent_figure.py"
+    },
+    {
+      "path": "source_data/physical_depth_followup/figures/figure_provenance.json",
+      "builder": "scripts/physical_depth_followup/figure.py"
+    },
+    {
+      "path": "source_data/credit_rule_extension/figures/figure_provenance.json",
+      "builder": "scripts/credit_rule_extension/figure.py"
+    },
+    {
+      "path": "source_data/measured_alignment_power/figure_provenance.json"
+    },
+    {
+      "path": "source_data/conductance_local_gate/figure_provenance.json"
+    },
+    {
+      "path": "source_data/passive_field_diagnostics/report.json"
+    },
+    {
+      "path": "source_data/measured_alignment_power/portable_replay_validation.json"
     }
   ],
   "completion_gates": [
@@ -1246,6 +1593,47 @@
         "probe_examples": 2048,
         "neurons_per_example": 128,
         "soma_excluded": true
+      }
+    },
+    {
+      "path": "source_data/physical_depth_followup/analysis_validation.json",
+      "required": {
+        "status": "passed",
+        "all120_released_budget_endpoints_reproduced": true
+      }
+    },
+    {
+      "path": "source_data/measured_alignment_power/independent_arithmetic_audit.json",
+      "required": {
+        "status": "PASS",
+        "n_retained_target_statistics": 1176000,
+        "n_decision_disagreements": 0,
+        "max_exact_p_error": 0.0
+      }
+    },
+    {
+      "path": "source_data/credit_rule_extension/summaries/validation_report.json",
+      "required": {
+        "status": "passed",
+        "unique_trajectories": 720,
+        "updates_per_trajectory": 16384,
+        "all_declared_arms_complete": true,
+        "all_original_states_and_metrics_reproduced": true
+      }
+    },
+    {
+      "path": "source_data/credit_rule_extension/summaries/independent_validation.json",
+      "required": {
+        "status": "passed",
+        "outcome_rows_reconstructed": 5760,
+        "maximum_nmse_absolute_difference": 0.0,
+        "validation_only_checkpoint_selections_checked": 2880
+      }
+    },
+    {
+      "path": "source_data/conductance_local_gate/completion_gate.json",
+      "required": {
+        "status": "PASS"
       }
     }
   ]

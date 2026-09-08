@@ -7,7 +7,7 @@ author-specific action still required. This audit does not replace official form
 ## Structure and editorial scope
 
 - [x] Revised title and a main narrative organized as Introduction, Results, Discussion and Methods.
-- [x] Nine main figures and Supplementary Figures S1–S52; the conductance credit comparison is main Figure 5 and physical depth is main Figure 6 with its full programme retained in S31 and the external six-animal reanalysis is in S17.
+- [x] Nine main figures and Supplementary Figures S1–S56; the conductance credit comparison is main Figure 5 and physical depth is main Figure 6 with its full programme retained in S31 and the external six-animal reanalysis is in S17.
 - [x] Cover letter, editorial summary and overlap statement reflect the dictionary formulation and conditional results.
 - [x] The initial costed selector in a finite linear tree class retains its negative long-horizon result in S35. Main Figure4 links matched pairwise/quartic learning to learned credit geometry; forward construction and noisy-query tree selection remain supporting analyses in the same paper.
 - [ ] Verify current abstract/title/reference/display guidance and decide on length: the author requested 6,000–6,500 main-text words, while the local audit retains approximately 5,000 as advisory journal guidance.

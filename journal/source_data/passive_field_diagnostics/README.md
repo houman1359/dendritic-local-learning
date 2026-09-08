@@ -1,0 +1,3 @@
+# Passive-field and surrogate diagnostics
+
+This post-review reanalysis separates adjoint and driving-force terms in the original eight-cell focal-field construction. Large opposing terms can cancel while the full field remains nearly ancestry-partition constant; a small outside-partition residual does not mean the driving-force contribution is small. Energy ratios, centered weighted correlations and numerical reconstruction checks are supplied for every cell. The second table retains all47 actual-versus-200-surrogate distributions atK8. These are diagnostics of existing arbors and modeled fields, not new biological samples. Inputs and normalization are in report.json; regenerate with scripts/passive_field_diagnostics.py.

@@ -1,0 +1,148 @@
+{
+  "code_sha256": {
+    "scripts/conductance_local_gate/figure.py": "1e53ffc03ebec689fa9284ac1bbaf189773ff90ad4413ce5d49a49437956cbee",
+    "scripts/conductance_local_gate/model.py": "cc2b82f6c486810a43aa885f3ea2dacce54c473f2e2ece6f4cfdb7d88ce6ad39",
+    "scripts/conductance_local_gate/portable_contract.py": "fea35a393f5881dfc60b3dfe810dac64f8c2e6b0d8ba01937f4a42c5ffab3c05",
+    "scripts/conductance_local_gate/report.py": "a96b4b6edd42c0d98de3da44a46c409310b463450369173be7371d503fa6dfef",
+    "scripts/journal_style.py": "32a3272cebb949784b694bc6dbb495cf74f6ba4ddf97d18d44f3ef54e082844e"
+  },
+  "figure_sha256": {
+    "source_data/conductance_local_gate/figures/curve_band_source.csv": "0dd58c44591943c6696bf0e27b0486af240c58acec1d801ef7234c0746b50e1c",
+    "source_data/conductance_local_gate/figures/historical_cancellation_source.csv": "15938898c44c07bbbc5721ee727e9d54199c90e90ab8a298bb7109682dc69814",
+    "source_data/conductance_local_gate/figures/local_gate_all_rates.pdf": "12cae121b5382452de95ca8731cd7c5626183cb7d787d306414b96e74abd84db",
+    "source_data/conductance_local_gate/figures/local_gate_all_rates.png": "27417615ad42cf1a4e594b0be5804a2e91973c4726a7dc429bb609adb74409b8",
+    "source_data/conductance_local_gate/figures/local_gate_primary.pdf": "b363ebc26146fb639ab4d595b6217d6e307793e473756bffcb2316ba792da244",
+    "source_data/conductance_local_gate/figures/local_gate_primary.png": "a95fdfd7491a9e452b90defaf87a228317e7c8ea5dd0419cbaf926004baceac1"
+  },
+  "fresh_seeds": [
+    2026090801,
+    2026090802,
+    2026090803,
+    2026090804,
+    2026090805,
+    2026090806,
+    2026090807,
+    2026090808,
+    2026090809,
+    2026090810,
+    2026090811,
+    2026090812,
+    2026090813,
+    2026090814,
+    2026090815,
+    2026090816,
+    2026090817,
+    2026090818,
+    2026090819,
+    2026090820
+  ],
+  "historical_seeds": [
+    2101,
+    2102,
+    2103,
+    2104,
+    2105,
+    2106,
+    2107,
+    2108,
+    2109,
+    2110,
+    2111,
+    2112,
+    2113,
+    2114,
+    2115,
+    2116,
+    2117,
+    2118,
+    2119,
+    2120
+  ],
+  "input_sha256": {
+    "source_data/conductance_credit_demand/opponent/summaries/context_gradient_summary.csv": "a3bea23ba12a888eb7fb356b4ac3142bbf240518fa8b3d2a28278d91e1b40486",
+    "source_data/conductance_local_gate/protocol.json": "c441998f6f91e1f8782b2918689806e119af567e479bcd5c94069dca837a2413",
+    "source_data/conductance_local_gate/protocol_freeze.json": "81568da7f4350a18c264914d1a86f7307f3809743b8c3113efa4abcc70d3bbdc",
+    "source_data/conductance_local_gate/summaries/all_curves.csv": "4a24ea4aa1046cb638cc47fabc72b71fb3dbc96bbcb9aea6ebef33e79f3ac456",
+    "source_data/conductance_local_gate/summaries/all_diagnostics.csv": "f99ddf08873c5a66d21600a201e5a40ed65527923aea8f2991c287f3c3ec598b",
+    "source_data/conductance_local_gate/summaries/all_endpoints.csv": "7d3f6df93795afe7b752b0b7a239f51dcafe246f851efe158a7b2c3ac30e4d1d",
+    "source_data/conductance_local_gate/summaries/condition_means.csv": "e3ed564e0fd24cb7fee0f1fa6fc337a30fc5481f7b29381419991281829e81a5",
+    "source_data/conductance_local_gate/summaries/paired_contrasts.csv": "5ae6c7a35fd84bd43f49f0eca1c8b7405165bc4e4a568d4c38509ec90ef62beb",
+    "source_data/conductance_local_gate/summaries/paired_seed_contrasts.csv": "07fa32c5b4cc10ea5f47f683662753d22c08f3b17e767d044af4a9e0e2554d22"
+  },
+  "panel_sources": {
+    "main_5A": {
+      "scope": "Local distal selector and unit proximal credit; no experimental outcomes.",
+      "sources": [
+        "scripts/conductance_local_gate/model.py",
+        "scripts/conductance_local_gate/report.py"
+      ],
+      "type": "model schematic"
+    },
+    "main_5B": {
+      "scope": "Nominal unperturbed tuning curves, not fitted student results.",
+      "sources": [
+        "scripts/conductance_local_gate/model.py",
+        "scripts/conductance_local_gate/report.py"
+      ],
+      "type": "nominal teacher tuning"
+    },
+    "main_5C_D": {
+      "scope": "Adam 0.03; four prespecified rules; all twenty fresh seeds. Display ribbons are descriptive 20000-resample seed-bootstrap intervals, separate RNG 2026090830.",
+      "sources": [
+        "source_data/conductance_local_gate/summaries/all_curves.csv",
+        "source_data/conductance_local_gate/figures/curve_band_source.csv"
+      ],
+      "type": "fresh cohort"
+    },
+    "main_5E": {
+      "scope": "Paired task-by-rule interaction at primary and extended validation windows.",
+      "sources": [
+        "source_data/conductance_local_gate/summaries/all_endpoints.csv",
+        "source_data/conductance_local_gate/summaries/paired_contrasts.csv"
+      ],
+      "type": "fresh cohort"
+    },
+    "main_5F": {
+      "scope": "Primary-rate opposed endpoints: exact, local distal gate, swapped gate and proximal-gating failure control.",
+      "sources": [
+        "source_data/conductance_local_gate/summaries/all_endpoints.csv",
+        "source_data/conductance_local_gate/summaries/condition_means.csv"
+      ],
+      "type": "fresh cohort"
+    },
+    "supp_53A_D": {
+      "scope": "All nine rules, three rates, two tasks and two validation windows; 1080 trajectories and 2160 endpoint views.",
+      "sources": [
+        "source_data/conductance_local_gate/summaries/condition_means.csv"
+      ],
+      "type": "fresh cohort"
+    },
+    "supp_53E": {
+      "scope": "Earlier seeds 2101\u20132120; opposed task; calibrated-broadcast source weights; exact and calibrated evaluations; distal parameter gradients at initial and extended-best states. Does not evaluate new local-gate fits.",
+      "sources": [
+        "source_data/conductance_credit_demand/opponent/summaries/context_gradient_summary.csv",
+        "source_data/conductance_local_gate/figures/historical_cancellation_source.csv"
+      ],
+      "type": "historical cohort"
+    }
+  },
+  "protocol_sha256": "c441998f6f91e1f8782b2918689806e119af567e479bcd5c94069dca837a2413",
+  "scope": "Current figure-only rendering; frozen protocol and numerical summary bytes unchanged. Initial numerical audit retains its historical render hashes.",
+  "source_sha256": {
+    "scripts/conductance_local_gate/figure.py": "1e53ffc03ebec689fa9284ac1bbaf189773ff90ad4413ce5d49a49437956cbee",
+    "scripts/conductance_local_gate/model.py": "cc2b82f6c486810a43aa885f3ea2dacce54c473f2e2ece6f4cfdb7d88ce6ad39",
+    "scripts/conductance_local_gate/portable_contract.py": "fea35a393f5881dfc60b3dfe810dac64f8c2e6b0d8ba01937f4a42c5ffab3c05",
+    "scripts/conductance_local_gate/report.py": "a96b4b6edd42c0d98de3da44a46c409310b463450369173be7371d503fa6dfef",
+    "scripts/journal_style.py": "32a3272cebb949784b694bc6dbb495cf74f6ba4ddf97d18d44f3ef54e082844e",
+    "source_data/conductance_credit_demand/opponent/summaries/context_gradient_summary.csv": "a3bea23ba12a888eb7fb356b4ac3142bbf240518fa8b3d2a28278d91e1b40486",
+    "source_data/conductance_local_gate/protocol.json": "c441998f6f91e1f8782b2918689806e119af567e479bcd5c94069dca837a2413",
+    "source_data/conductance_local_gate/protocol_freeze.json": "81568da7f4350a18c264914d1a86f7307f3809743b8c3113efa4abcc70d3bbdc",
+    "source_data/conductance_local_gate/summaries/all_curves.csv": "4a24ea4aa1046cb638cc47fabc72b71fb3dbc96bbcb9aea6ebef33e79f3ac456",
+    "source_data/conductance_local_gate/summaries/all_diagnostics.csv": "f99ddf08873c5a66d21600a201e5a40ed65527923aea8f2991c287f3c3ec598b",
+    "source_data/conductance_local_gate/summaries/all_endpoints.csv": "7d3f6df93795afe7b752b0b7a239f51dcafe246f851efe158a7b2c3ac30e4d1d",
+    "source_data/conductance_local_gate/summaries/condition_means.csv": "e3ed564e0fd24cb7fee0f1fa6fc337a30fc5481f7b29381419991281829e81a5",
+    "source_data/conductance_local_gate/summaries/paired_contrasts.csv": "5ae6c7a35fd84bd43f49f0eca1c8b7405165bc4e4a568d4c38509ec90ef62beb",
+    "source_data/conductance_local_gate/summaries/paired_seed_contrasts.csv": "07fa32c5b4cc10ea5f47f683662753d22c08f3b17e767d044af4a9e0e2554d22"
+  },
+  "status": "PASS"
+}

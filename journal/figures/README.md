@@ -2,7 +2,7 @@
 
 Article: *Dendritic morphology as a dictionary for local credit assignment*.
 
-The main manuscript includes exactly nine publication assets, `main/figure_01.pdf` through `main/figure_09.pdf`. The Supplementary Information includes 52 figures, S1–S52. Native components, generated intermediates and historical assets are inputs or retained outputs, not additional numbered figures.
+The main manuscript includes exactly nine publication assets, `main/figure_01.pdf` through `main/figure_09.pdf`. The Supplementary Information includes 56 figures, S1–S56. Native components, generated intermediates and historical assets are inputs or retained outputs, not additional numbered figures.
 
 `../scripts/rebuild_final_publication_figures.py` defines the current main mapping and renders the supplementary sequence. Historical builder numbers differ from publication numbers. Use this entry point for the complete figure build; the older compositor mapping is not the current main sequence.
 
@@ -14,8 +14,8 @@ The main manuscript includes exactly nine publication assets, `main/figure_01.pd
 | 2 | Context-gated branch conflict and the branch-selection boundary | `build_main_figure_04.py` |
 | 3 | Ancestry at matched bandwidth, generator coefficient prediction and paired controls | `credit_first_figures/build_ancestry.py` |
 | 4 | Interaction order, fixed-profile learning and learned credit geometry on matched trees | `credit_rule_bridge/build_figure.py` |
-| 5 | Context-dependent feature tuning and credit in conductance trees | `conductance_credit_demand/build_opponent_figure.py` |
-| 6 | Physical depth, optimizer dependence and extended training budgets | `physical_depth_budget/build_main_figure5.py` |
+| 5 | Local inhibitory gating and its controls in conductance trees | `conductance_local_gate/figure.py` |
+| 6 | Physical depth, accuracy and cross-entropy gap trajectories | `physical_depth_followup/figure.py` |
 | 7 | Anatomical dictionaries beyond a shared broadcast | `credit_first_figures/build_anatomy.py` |
 | 8 | Focal shunting as ancestry-partition gain and the electrotonic boundary | `shunt_ancestry_gain/build_figure.py` |
 | 9 | Empirical ancestry–response similarity and a separate transfer-geometry diagnostic | `credit_first_figures/build_measured.py` |
@@ -41,3 +41,5 @@ The Source Data package manifest assigns files to current displays while preserv
 Final presentation checks should use the actual compiled assets: panel order and callouts, embedded fonts, text size at print scale, alignment, overlaps and clipping. Final PDF page counts come from the compiled manuscripts. Neither an older audit record nor a successfully generated asset establishes that the current complete bundle has passed these checks.
 
 Supplementary Figure S48 is a single-panel dose curve printed at its native 3.6-inch width. This preserves the shared text and line sizes; the other supplementary sheets use the full manuscript width. The style audit checks this explicit native-width placement.
+
+S53 retains all local-gate rules and rates; S54–S55 extend every algebraic credit rule to the longer budgets; S56 quantifies measured-response sensitivity conditional on repeat reliability and the observed sampling. Main Fig. 5 uses twenty new local-gate seed blocks; main Fig. 6 plots accuracy and cross-entropy gaps together with stopping status.

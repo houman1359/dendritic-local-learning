@@ -1,10 +1,10 @@
 {
-  "output_sha256": "c3c5219825ae01a41174d394649e366e213efc054cef82a02767cec71d2fe7de",
+  "output_sha256": "871ec17220c7326c6878eef078172e7f3b64c1a2caf6cc7c1cbf5d59346e0418",
   "source_sha256": {
     "source_data/figure4/focal_localization.csv": "4673a634299e0cdf3b29df3d8686f2fa47e418e92a734c078dded81e2beaab4c"
   },
   "builders_sha256": {
-    "scripts/shunt_ancestry_gain/build_figure.py": "03a99812c64b0ecdc3d2d1c0e2355fa7343240ae2120eda24f491b8358c08c4b",
+    "scripts/shunt_ancestry_gain/build_figure.py": "4262c637b41cfd61a880c4b50cdb750f4dd02a1dd4e902c547a09c8afb956142",
     "scripts/build_main_figure_08.py": "f9960d1b058bfef5486e436ef511fbcb98e751a3fe515587be6929b1d7305cc5",
     "scripts/build_journal_figures.py": "9e7d368c9d8aa6db88235614d777c4810013a3e62729699b9219b9d006076898"
   },

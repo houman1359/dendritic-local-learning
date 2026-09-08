@@ -1,0 +1,2 @@
+seed,task,budget,rule,rate,optimizer,primary_rate,path_rank,rank_one_capture,three_profile_capture
+2026090801,opposed_strong,4096,hard_distal_unit_proximal,0.03,adam,True,2,0.8815354204292104,0.847377510620774

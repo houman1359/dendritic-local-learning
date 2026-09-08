@@ -110,6 +110,16 @@ def supplementary():
     run_script('conductance_credit_demand/report_expanded_rates.py', ['--plot-only'])
     shutil.copyfile(ROOT/'source_data/conductance_credit_demand/opponent/expanded_rates/figure_expanded_rates.pdf',
                     SUPP/'figure_S52_conductance_expanded_rates.pdf')
+    run_script('conductance_local_gate/figure.py')
+    run_script('credit_rule_extension/figure.py')
+    run_script('measured_alignment_power/report.py')
+    for source, destination in (
+        ('conductance_local_gate/figures/local_gate_all_rates.pdf', 'figure_S53_local_gate_controls.pdf'),
+        ('credit_rule_extension/figures/credit_rule_extension.pdf', 'figure_S54_credit_budget_extension.pdf'),
+        ('credit_rule_extension/figures/credit_rule_extension_controls.pdf', 'figure_S55_credit_budget_controls.pdf'),
+        ('measured_alignment_power/figures/measured_alignment_sensitivity.pdf', 'figure_S56_measured_alignment_power.pdf'),
+    ):
+        shutil.copyfile(ROOT/'source_data'/source, SUPP/destination)
 
 
 def main():
@@ -122,8 +132,8 @@ def main():
     if not args.supplement_only:
         for name in ["credit_first_figures/build_framework.py", "build_main_figure_04.py",
                      "credit_first_figures/build_ancestry.py", "credit_rule_bridge/build_figure.py",
-                     "conductance_credit_demand/build_opponent_figure.py",
-                     "physical_depth_budget/build_main_figure5.py", "credit_first_figures/build_anatomy.py",
+                     "conductance_local_gate/figure.py",
+                     "physical_depth_followup/figure.py", "credit_first_figures/build_anatomy.py",
                      "shunt_ancestry_gain/build_figure.py", "credit_first_figures/build_measured.py"]:
             run_script(name)
     if not args.main_only:supplementary()
@@ -133,8 +143,8 @@ def main():
             2:"figures/components/main_figure_04_native.pdf",
             3:"figures/components/credit_first_figure_03.pdf",
             4:"source_data/credit_rule_bridge/figures/credit_interaction_bridge_native.pdf",
-            5:"source_data/conductance_credit_demand/opponent/figures/conductance_opponent_credit_native.pdf",
-            6:"source_data/physical_depth_budget/figure/figure5_physical_depth_budget.pdf",
+            5:"source_data/conductance_local_gate/figures/local_gate_primary.pdf",
+            6:"source_data/physical_depth_followup/figures/physical_depth_followup.pdf",
             7:"figures/components/credit_first_figure_06.pdf",
             8:"source_data/shunt_ancestry_gain/figures/shunt_ancestry_gain_native.pdf",
             9:"figures/components/credit_first_figure_08.pdf",

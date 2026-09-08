@@ -1,0 +1,31 @@
+{
+  "canary_excluded": false,
+  "completed_utc": "2026-09-08T03:24:24.633328+00:00",
+  "files_sha256": {
+    "seed_2026090803_aligned_strong_config.json": "7f91bb7ab200a24c61db91ee416897549bc31b50e728949b129567239db687ec",
+    "seed_2026090803_aligned_strong_states.npz": "9652bfa463a6942182456e3fde5df17392dc5311829dfd0fec3466e70c158078",
+    "seed_2026090803_curves.csv": "bc902c44f022b8182d83f4d163b46403aa45f524721c244ac25615d50fd4a68d",
+    "seed_2026090803_diagnostics.csv": "df0819278cd68a466e4590d45f23411996fd00a6ab3a142e4c797283072c5e23",
+    "seed_2026090803_endpoints.csv": "3385b771ca4598d71cd77e23f768ca7f3b2a4120fa16099347d57d9dc47b8035",
+    "seed_2026090803_opposed_strong_config.json": "0b4315eeada3fbbdcc7f7c80289137cde35612ee871b925cbdd9d975432cc937",
+    "seed_2026090803_opposed_strong_states.npz": "8abf9654f1c73d06096301255cfcffb8bc51048d8de5be8bbd6e0206824818a8"
+  },
+  "numpy": "2.2.6",
+  "pandas": "2.3.3",
+  "platform": "Linux-4.18.0-553.155.1.el8_10.x86_64-x86_64-with-glibc2.28",
+  "protocol_commit": "c6d3b2b09d24221de87bad18b445f0060a6d238f",
+  "protocol_sha256": "c441998f6f91e1f8782b2918689806e119af567e479bcd5c94069dca837a2413",
+  "python": "3.10.13 | packaged by conda-forge | (main, Oct 26 2023, 18:07:37) [GCC 12.3.0]",
+  "scientific_source_sha256": {
+    "scripts/conductance_credit_demand/model.py": "8d29b76eef1a4cf02574f43e80fa0309e62c962ae6e1882dc11eaa6da63f92a7",
+    "scripts/conductance_credit_demand/opponent_model.py": "8f37a389400a9ac058b0489dc7ae9167b6350dbbc13f8804a78a44e83cfafc56",
+    "scripts/conductance_local_gate/model.py": "cc2b82f6c486810a43aa885f3ea2dacce54c473f2e2ece6f4cfdb7d88ce6ad39",
+    "scripts/conductance_local_gate/run.py": "1b85f99efd4b8c876aaef5d3949e51a85177fc5a5e3a9e3e8a0bbc34ea9183cb",
+    "scripts/conductance_local_gate/test_model.py": "dac618380f053d4c1d5987b4fc6e848bc135bd51f611c8e885d8bcbaf730ecb4",
+    "scripts/conductance_local_gate/worker.sh": "34b624eb213bb69addead0b96a406815f6b204f5ba2dc64496e31e8d14425165",
+    "scripts/morphology_conductance/model.py": "0319c1cf13ee702eb8ef460937d14c9a7cddb53cfbfc491c2fe60abb889ad706"
+  },
+  "seed": 2026090803,
+  "slurm_array_task_id": "2",
+  "slurm_job_id": "45296745"
+}

@@ -1,0 +1,8 @@
+{
+  "scope": "Post-experiment release dependency record, not a modification of the original protocol freeze. Original outcome arrays remain unchanged.",
+  "supporting_source_sha256": {
+    "scripts/morphology_structure/constructive.py": "8259af41912cee139998b84dffef9827d44fe8a175a89e6eb91bb1f534303a46"
+  },
+  "verified_same_bytes_at_actual_launch_commit": "37dbfe907abc2fdd2859e6d2ec58055ec655c7b0",
+  "reason": "constructive_dp_v2 imports prefix_tasks and construct_weights from constructive.py; the top-level historical hash inventory omitted this transitive import."
+}

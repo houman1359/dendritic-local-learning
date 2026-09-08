@@ -91,6 +91,10 @@ SUPPLEMENTARY_FIGURES = (
     "supplementary/figure_S50_conductance_small_effect.pdf",
     "supplementary/figure_S51_conductance_robustness.pdf",
     "supplementary/figure_S52_conductance_expanded_rates.pdf",
+    "supplementary/figure_S53_local_gate_controls.pdf",
+    "supplementary/figure_S54_credit_budget_extension.pdf",
+    "supplementary/figure_S55_credit_budget_controls.pdf",
+    "supplementary/figure_S56_measured_alignment_power.pdf",
 )
 
 FIGURES = MAIN_FIGURES + SUPPLEMENTARY_FIGURES

@@ -14,6 +14,7 @@ import json
 from pathlib import Path
 
 import numpy as np
+import pandas as pd
 
 import run_review_coefficient_encoder as base
 
@@ -36,9 +37,31 @@ def main():
     if args.aggregate:
         base.aggregate(cfg)
         report=json.loads((OUT/"report.json").read_text())
+        # Reusing the soft experiment's condition does not create a new
+        # primary family after the hard-readout choice was made post hoc.
+        contrasts=pd.read_csv(OUT/"paired_contrasts.csv")
+        contrasts=contrasts.drop(columns=["primary_family_holm_p"],errors="ignore")
+        contrasts["analysis_status"]="exploratory_paired_sensitivity"
+        contrasts.to_csv(OUT/"paired_contrasts.csv",index=False,float_format="%.12g")
+        reference=report.pop("primary_contrasts",[])
+        for row in reference:
+            row.pop("primary_family_holm_p",None)
+            row["analysis_status"]="exploratory_paired_sensitivity"
+        report["reference_condition_contrasts"]=reference
+        report["multiplicity_scope"]=("No confirmatory family or Holm-adjusted "
+            "primary P values are assigned to this exploratory readout analysis. "
+            "Unadjusted signed-rank P values and paired intervals are descriptive.")
         report.update(exploratory_after_soft_outcomes=True,readout="maximum_probability_subtree",
                       wrapper_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest())
         (OUT/"report.json").write_text(json.dumps(report,indent=2)+"\n")
+        (OUT/"README.md").write_text("# Exploratory hard selection of learned route coefficients\n\n"+
+            cfg["scope"]+"\n\nThe twenty original seeds and fitted encoders are reused; "
+            "this is a paired sensitivity analysis, not a fresh replication. "
+            "The 256-trial, noise-SD0.5, zero-delay condition is retained as a reference "
+            "to the primary soft experiment, not a new primary family. "
+            "All intervals and unadjusted P values are descriptive; no exploratory "
+            "row is assigned a primary-family Holm adjustment. Numerical learning "
+            "outcomes and the original soft experiment are unchanged.\n")
     else:
         assert args.seed in cfg["seeds"]
         base.run(args.seed,cfg,OUT/"runs")

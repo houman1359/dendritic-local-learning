@@ -1,0 +1,25 @@
+{
+  "all_conditions_retained": true,
+  "checkpoint_count": 67,
+  "completed_utc": "2026-09-08T03:23:50.246993+00:00",
+  "elapsed_seconds": 29.835598825011402,
+  "input_inventory_sha256": "e1c0153f49cb4cc6a972a962972110068429bebb088c95a0dfcd4a229378f8d8",
+  "maximum_steps": 16384,
+  "original_states_and_metrics_reproduced": true,
+  "protocol_sha256": "17db44ba893bb2662fa39d2cb185df374e5cefd50f15626aac310ab534d5eacd",
+  "seed": 211203,
+  "slurm_job_id": "45296869",
+  "source_files_sha256": {
+    "curves.csv": "ac7e78fffd0f029424abd2ac2f0fdc356df66a253c8f961febcb40241b6ec498",
+    "diagnostics.csv": "8a1f315b33104f8c4e3c35778856d9c8d75f8e24f439a9746befde6199a82919",
+    "matching_metadata.json": "c7cf592c5de67c179835fee925b0616108ca96af542f2850b18900c39ca042cf",
+    "matching_states.npz": "ff60b1fb92c29b1ce5f38dfe8b0a97b8a7a256b4d7c1cc1b2be3afc79e34a7d0",
+    "nested_metadata.json": "6d687b8a76b6079180fafd8690f6b8ff4efb2311e8e928e56528b8c10b70de1c",
+    "nested_states.npz": "9959d30c0972607201bfd9bbc33996aa0f0c9c3da205be79dc884125df5a8493",
+    "quartet_metadata.json": "5472c7629d77bea4780527022835cfd93217f74ef50e2df830f051a93b2a88e6",
+    "quartet_states.npz": "855e10805a680746d8b54fd2fe62960d44f23440f4aa34951817e4d18f20e1e8",
+    "replay_validation.json": "11d46572b6814daa8dd89e6c2b0a27d3d63fa8f7be6533d687028194eeddf4d9"
+  },
+  "status": "complete",
+  "unique_trajectories": 36
+}

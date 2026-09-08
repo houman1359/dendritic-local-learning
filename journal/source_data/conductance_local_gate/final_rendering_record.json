@@ -1,0 +1,30 @@
+{
+  "changes": [
+    "Journal fonts and palette; descriptive 95% bootstrap ribbons with separately fixed display seed 2026090830.",
+    "Explicit nonnegative update axis, readable terminal ticks, common physical panel-label gutter, concise interaction-axis label.",
+    "Historical gradient-cancellation diagnostic retained as supplementary panel E and explicitly separated from the new seed cohort.",
+    "Current figure hashes recorded in figure_provenance.json; initial completeness_audit.json preserves historical render hashes."
+  ],
+  "final_figure_entry_sha256": "1e53ffc03ebec689fa9284ac1bbaf189773ff90ad4413ce5d49a49437956cbee",
+  "final_figure_job": 45310711,
+  "final_report_sha256": "a96b4b6edd42c0d98de3da44a46c409310b463450369173be7371d503fa6dfef",
+  "scope": "Post-outcome presentation edits only; all six original numerical summary files retain identical SHA256. No frozen experimental source or protocol changed.",
+  "unchanged_summary_sha256": {
+    "summaries/all_curves.csv": "4a24ea4aa1046cb638cc47fabc72b71fb3dbc96bbcb9aea6ebef33e79f3ac456",
+    "summaries/all_diagnostics.csv": "f99ddf08873c5a66d21600a201e5a40ed65527923aea8f2991c287f3c3ec598b",
+    "summaries/all_endpoints.csv": "7d3f6df93795afe7b752b0b7a239f51dcafe246f851efe158a7b2c3ac30e4d1d",
+    "summaries/condition_means.csv": "e3ed564e0fd24cb7fee0f1fa6fc337a30fc5481f7b29381419991281829e81a5",
+    "summaries/paired_contrasts.csv": "5ae6c7a35fd84bd43f49f0eca1c8b7405165bc4e4a568d4c38509ec90ef62beb",
+    "summaries/paired_seed_contrasts.csv": "07fa32c5b4cc10ea5f47f683662753d22c08f3b17e767d044af4a9e0e2554d22"
+  },
+  "visual_audit": {
+    "all_panel_letters_physically_aligned": true,
+    "main_minimum_superscript_font_pt": 5.32,
+    "minimum_normal_font_pt": 6.8,
+    "native_pages_inspected": [
+      "local_gate_primary.pdf",
+      "local_gate_all_rates.pdf"
+    ],
+    "text_outside_page": 0
+  }
+}

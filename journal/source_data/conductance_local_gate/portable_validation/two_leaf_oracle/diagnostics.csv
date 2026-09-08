@@ -1,0 +1,2 @@
+seed,task,budget,rule,rate,optimizer,primary_rate,path_rank,rank_one_capture,three_profile_capture
+2026090801,opposed_strong,4096,ancestry_two_leaf_oracle_unit_proximal,0.03,adam,True,2,0.8806371201197178,0.8545192352525441

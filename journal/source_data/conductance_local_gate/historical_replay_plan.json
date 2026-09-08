@@ -1,0 +1,26 @@
+{
+  "created_utc": "2026-09-08T03:10:36.165478+00:00",
+  "nmse_tolerance": 1e-09,
+  "optimizer": "adam",
+  "oracle_projection_parameter_tolerance": 1e-07,
+  "other_parameter_tolerance": 1e-12,
+  "rate": 0.03,
+  "reason": "Exact/unit/calibrated formulas preserve arithmetic. Three-profile projection uses independent groupwise formula and may differ by floating-point association.",
+  "rules": [
+    "exact",
+    "unit_broadcast",
+    "calibrated_broadcast",
+    "ancestry_three_oracle"
+  ],
+  "scope": "Root-requested independent4096optimizer/data replay of already viewed historicalseed; excluded from fresh cohort.",
+  "seed": 2101,
+  "source_sha256": {
+    "scripts/conductance_local_gate/validate_replay.py": "f274b3a5c5c6e210a7d39ab8646e2b100e9dfc29cc0217679067ee8c69629a21",
+    "scripts/conductance_local_gate/worker_validation.sh": "1e959a67189e288d93592c36836657b709ccfebc66618f360469d5f94e068a68"
+  },
+  "steps": 4096,
+  "tasks": [
+    "aligned_strong",
+    "opposed_strong"
+  ]
+}

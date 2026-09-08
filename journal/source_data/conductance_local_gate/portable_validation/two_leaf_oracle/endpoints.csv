@@ -1,0 +1,2 @@
+seed,task,budget,rule,rate,optimizer,primary_rate,best_step,validation_nmse,test_nmse,fixed_endpoint_test_nmse,parameters_sha256,n_changed_parameters,g_i0_changed,g_i1_changed
+2026090801,opposed_strong,4096,ancestry_two_leaf_oracle_unit_proximal,0.03,adam,True,4096,3.023005574153903e-05,2.9236753849537138e-05,2.9236753849537138e-05,840b40fd04036a47ffcf3bfca4040c5288f76e55c560370d2605f6771af71b5e,24,True,True

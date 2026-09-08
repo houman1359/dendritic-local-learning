@@ -14,6 +14,42 @@ TEXT_EXTENSIONS = {'.csv', '.tsv', '.json', '.jsonl', '.txt', '.md', '.yaml', '.
 DATA_EXTENSIONS = TEXT_EXTENSIONS | {'.npy', '.npz'}
 COMPRESSED_TABLE_SUFFIXES = ('.csv.gz', '.tsv.gz')
 
+# Complete evidence from the explicitly authorized September follow-ups.  The
+# panel manifest supplies precise displayed associations; the directory fallback
+# keeps unplotted seeds, checkpoints and frozen inputs in the same release even
+# before a freshly added file has a displayed-panel association.
+FOLLOWUP_ASSIGNMENTS = {
+    'conductance_local_gate': ('Figure 5', 'supporting local-gate evidence', '20 paired fresh seed blocks; canaries and historical replay separate'),
+    'credit_rule_extension': ('Supplementary Figure 54', 'supporting balanced-extension evidence', '20 previously observed paired seed blocks; 720 continued trajectories'),
+    'measured_alignment_power': ('Supplementary Figure 56', 'supporting conditional-sensitivity evidence', '4000 global simulated datasets; original 13 scans within 7 target cells'),
+    'passive_field_diagnostics': ('Figure 7', 'supporting passive-field decomposition', 'reconstructed cell; post-review diagnostic without new learning fits'),
+    'physical_depth_followup': ('Figure 6', 'supporting budget-indexed trajectory evidence', '10 paired training seeds; original 60 fits without new training'),
+}
+FOLLOWUP_EXCLUDED_COMPONENTS = {'__pycache__', '.pytest_cache', 'slurm_logs', 'logs'}
+FOLLOWUP_EXCLUDED_NAMES = {
+    'report_execution.txt', 'analysis_output.txt', 'figure_build.txt',
+    'independent_audit_output.txt', 'original_model_tests.txt',
+    'native_audit.txt', 'initial_native_audit.txt',
+    'MANUSCRIPT_SNIPPETS.md', 'RELEASE_GUIDANCE.md',
+    'FIGURE_CAPTION.md', 'CONTROLS_FIGURE_CAPTION.md',
+}
+ARCHIVED_INPUT_CODE = {
+    'source_data/measured_alignment_power/inputs/original_functional_topology_analysis.py',
+    'source_data/measured_alignment_power/inputs/original_target_aggregation.py',
+    'source_data/conductance_local_gate/report_initial_render.py',
+}
+
+
+def releasable_followup(path, source):
+    """Keep numerical/protocol evidence, not scheduler output or draft prose."""
+    return (
+        not FOLLOWUP_EXCLUDED_COMPONENTS.intersection(path.parts)
+        and path.name not in FOLLOWUP_EXCLUDED_NAMES
+        and (path.suffix.lower() in DATA_EXTENSIONS | {'.pt', '.pth'}
+             or source in ARCHIVED_INPUT_CODE
+             or source.lower().endswith(COMPRESSED_TABLE_SUFFIXES))
+    )
+
 def current_files(journal, legacy, cls, filters, counts, inventory=None):
     inventory = inventory or journal / 'source_data/credit_first_provenance/source_inventory.tsv'
     if not inventory.is_file():
@@ -44,7 +80,14 @@ def current_files(journal, legacy, cls, filters, counts, inventory=None):
         rows = list(csv.DictReader(handle, delimiter='\t'))
     for row in rows:
         source = row['source']
-        if not source.startswith('source_data/') or not (Path(source).suffix.lower() in DATA_EXTENSIONS or source.lower().endswith(COMPRESSED_TABLE_SUFFIXES)):
+        if not source.startswith('source_data/'):
+            continue
+        study = Path(source).parts[1] if len(Path(source).parts) > 1 else ''
+        if study in FOLLOWUP_ASSIGNMENTS:
+            accepted = releasable_followup(Path(source), source)
+        else:
+            accepted = Path(source).suffix.lower() in DATA_EXTENSIONS or source.lower().endswith(COMPRESSED_TABLE_SUFFIXES)
+        if not accepted:
             continue
         if row['record_type'] == 'figure_asset':
             continue
@@ -67,6 +110,25 @@ def current_files(journal, legacy, cls, filters, counts, inventory=None):
             destination = directory + '/' + str(Path(source).relative_to('source_data'))
             additions[key] = cls(figure, panel, source, destination, row['record_type'],
                 row['independent_unit'], 'current; see frozen protocol and lineage records', row['notes'])
+    represented = any_existing | {item.source for item in additions.values()}
+    for study, (figure, panel, unit) in FOLLOWUP_ASSIGNMENTS.items():
+        directory = journal / 'source_data' / study
+        if not directory.is_dir():
+            continue
+        for path in sorted(directory.rglob('*')):
+            if not path.is_file():
+                continue
+            source = path.relative_to(journal).as_posix()
+            if source in represented or not releasable_followup(path.relative_to(journal), source):
+                continue
+            destination = figure.replace(' ', '_') + '/' + str(Path(source).relative_to('source_data'))
+            additions[(figure, source)] = cls(
+                figure, panel, source, destination,
+                'complete supporting experimental source or scientific protocol',
+                unit, 'current; see frozen protocol and lineage records',
+                'Retained complete follow-up evidence. This supporting association does not imply that every saved observation is plotted or independently replicated.',
+            )
+            represented.add(source)
     result.extend(additions.values())
     destinations = [x.destination for x in result]
     if len(destinations) != len(set(destinations)):

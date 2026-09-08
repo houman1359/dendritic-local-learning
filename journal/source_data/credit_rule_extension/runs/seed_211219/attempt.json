@@ -1,0 +1,10 @@
+{
+  "git_commit_at_launch": "37dbfe907abc2fdd2859e6d2ec58055ec655c7b0",
+  "numpy": "2.2.6",
+  "pandas": "2.3.3",
+  "protocol_sha256": "17db44ba893bb2662fa39d2cb185df374e5cefd50f15626aac310ab534d5eacd",
+  "python": "3.10.13",
+  "seed": 211219,
+  "slurm_job_id": "45288107",
+  "started_utc": "2026-09-08T03:26:13.484485+00:00"
+}

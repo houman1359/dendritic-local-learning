@@ -1,0 +1,665 @@
+{
+  "checks": [
+    {
+      "all_original_checkpoints_checked": true,
+      "metadata_identical": true,
+      "seed": 211200,
+      "state_arrays_max_abs_difference": 0.0,
+      "task": "matching"
+    },
+    {
+      "all_original_checkpoints_checked": true,
+      "metadata_identical": true,
+      "seed": 211200,
+      "state_arrays_max_abs_difference": 0.0,
+      "task": "quartet"
+    },
+    {
+      "all_original_checkpoints_checked": true,
+      "metadata_identical": true,
+      "seed": 211200,
+      "state_arrays_max_abs_difference": 0.0,
+      "task": "nested"
+    },
+    {
+      "kind": "curves",
+      "maximum_absolute_difference": 0.0,
+      "rows": 252,
+      "seed": 211200
+    },
+    {
+      "kind": "diagnostics",
+      "maximum_absolute_difference": 0.0,
+      "rows": 252,
+      "seed": 211200
+    },
+    {
+      "all_original_checkpoints_checked": true,
+      "metadata_identical": true,
+      "seed": 211201,
+      "state_arrays_max_abs_difference": 0.0,
+      "task": "matching"
+    },
+    {
+      "all_original_checkpoints_checked": true,
+      "metadata_identical": true,
+      "seed": 211201,
+      "state_arrays_max_abs_difference": 0.0,
+      "task": "quartet"
+    },
+    {
+      "all_original_checkpoints_checked": true,
+      "metadata_identical": true,
+      "seed": 211201,
+      "state_arrays_max_abs_difference": 0.0,
+      "task": "nested"
+    },
+    {
+      "kind": "curves",
+      "maximum_absolute_difference": 0.0,
+      "rows": 252,
+      "seed": 211201
+    },
+    {
+      "kind": "diagnostics",
+      "maximum_absolute_difference": 0.0,
+      "rows": 252,
+      "seed": 211201
+    },
+    {
+      "all_original_checkpoints_checked": true,
+      "metadata_identical": true,
+      "seed": 211202,
+      "state_arrays_max_abs_difference": 0.0,
+      "task": "matching"
+    },
+    {
+      "all_original_checkpoints_checked": true,
+      "metadata_identical": true,
+      "seed": 211202,
+      "state_arrays_max_abs_difference": 0.0,
+      "task": "quartet"
+    },
+    {
+      "all_original_checkpoints_checked": true,
+      "metadata_identical": true,
+      "seed": 211202,
+      "state_arrays_max_abs_difference": 0.0,
+      "task": "nested"
+    },
+    {
+      "kind": "curves",
+      "maximum_absolute_difference": 0.0,
+      "rows": 252,
+      "seed": 211202
+    },
+    {
+      "kind": "diagnostics",
+      "maximum_absolute_difference": 0.0,
+      "rows": 252,
+      "seed": 211202
+    },
+    {
+      "all_original_checkpoints_checked": true,
+      "metadata_identical": true,
+      "seed": 211203,
+      "state_arrays_max_abs_difference": 0.0,
+      "task": "matching"
+    },
+    {
+      "all_original_checkpoints_checked": true,
+      "metadata_identical": true,
+      "seed": 211203,
+      "state_arrays_max_abs_difference": 0.0,
+      "task": "quartet"
+    },
+    {
+      "all_original_checkpoints_checked": true,
+      "metadata_identical": true,
+      "seed": 211203,
+      "state_arrays_max_abs_difference": 0.0,
+      "task": "nested"
+    },
+    {
+      "kind": "curves",
+      "maximum_absolute_difference": 0.0,
+      "rows": 252,
+      "seed": 211203
+    },
+    {
+      "kind": "diagnostics",
+      "maximum_absolute_difference": 0.0,
+      "rows": 252,
+      "seed": 211203
+    },
+    {
+      "all_original_checkpoints_checked": true,
+      "metadata_identical": true,
+      "seed": 211204,
+      "state_arrays_max_abs_difference": 0.0,
+      "task": "matching"
+    },
+    {
+      "all_original_checkpoints_checked": true,
+      "metadata_identical": true,
+      "seed": 211204,
+      "state_arrays_max_abs_difference": 0.0,
+      "task": "quartet"
+    },
+    {
+      "all_original_checkpoints_checked": true,
+      "metadata_identical": true,
+      "seed": 211204,
+      "state_arrays_max_abs_difference": 0.0,
+      "task": "nested"
+    },
+    {
+      "kind": "curves",
+      "maximum_absolute_difference": 0.0,
+      "rows": 252,
+      "seed": 211204
+    },
+    {
+      "kind": "diagnostics",
+      "maximum_absolute_difference": 0.0,
+      "rows": 252,
+      "seed": 211204
+    },
+    {
+      "all_original_checkpoints_checked": true,
+      "metadata_identical": true,
+      "seed": 211205,
+      "state_arrays_max_abs_difference": 0.0,
+      "task": "matching"
+    },
+    {
+      "all_original_checkpoints_checked": true,
+      "metadata_identical": true,
+      "seed": 211205,
+      "state_arrays_max_abs_difference": 0.0,
+      "task": "quartet"
+    },
+    {
+      "all_original_checkpoints_checked": true,
+      "metadata_identical": true,
+      "seed": 211205,
+      "state_arrays_max_abs_difference": 0.0,
+      "task": "nested"
+    },
+    {
+      "kind": "curves",
+      "maximum_absolute_difference": 0.0,
+      "rows": 252,
+      "seed": 211205
+    },
+    {
+      "kind": "diagnostics",
+      "maximum_absolute_difference": 0.0,
+      "rows": 252,
+      "seed": 211205
+    },
+    {
+      "all_original_checkpoints_checked": true,
+      "metadata_identical": true,
+      "seed": 211206,
+      "state_arrays_max_abs_difference": 0.0,
+      "task": "matching"
+    },
+    {
+      "all_original_checkpoints_checked": true,
+      "metadata_identical": true,
+      "seed": 211206,
+      "state_arrays_max_abs_difference": 0.0,
+      "task": "quartet"
+    },
+    {
+      "all_original_checkpoints_checked": true,
+      "metadata_identical": true,
+      "seed": 211206,
+      "state_arrays_max_abs_difference": 0.0,
+      "task": "nested"
+    },
+    {
+      "kind": "curves",
+      "maximum_absolute_difference": 0.0,
+      "rows": 252,
+      "seed": 211206
+    },
+    {
+      "kind": "diagnostics",
+      "maximum_absolute_difference": 0.0,
+      "rows": 252,
+      "seed": 211206
+    },
+    {
+      "all_original_checkpoints_checked": true,
+      "metadata_identical": true,
+      "seed": 211207,
+      "state_arrays_max_abs_difference": 0.0,
+      "task": "matching"
+    },
+    {
+      "all_original_checkpoints_checked": true,
+      "metadata_identical": true,
+      "seed": 211207,
+      "state_arrays_max_abs_difference": 0.0,
+      "task": "quartet"
+    },
+    {
+      "all_original_checkpoints_checked": true,
+      "metadata_identical": true,
+      "seed": 211207,
+      "state_arrays_max_abs_difference": 0.0,
+      "task": "nested"
+    },
+    {
+      "kind": "curves",
+      "maximum_absolute_difference": 0.0,
+      "rows": 252,
+      "seed": 211207
+    },
+    {
+      "kind": "diagnostics",
+      "maximum_absolute_difference": 0.0,
+      "rows": 252,
+      "seed": 211207
+    },
+    {
+      "all_original_checkpoints_checked": true,
+      "metadata_identical": true,
+      "seed": 211208,
+      "state_arrays_max_abs_difference": 0.0,
+      "task": "matching"
+    },
+    {
+      "all_original_checkpoints_checked": true,
+      "metadata_identical": true,
+      "seed": 211208,
+      "state_arrays_max_abs_difference": 0.0,
+      "task": "quartet"
+    },
+    {
+      "all_original_checkpoints_checked": true,
+      "metadata_identical": true,
+      "seed": 211208,
+      "state_arrays_max_abs_difference": 0.0,
+      "task": "nested"
+    },
+    {
+      "kind": "curves",
+      "maximum_absolute_difference": 0.0,
+      "rows": 252,
+      "seed": 211208
+    },
+    {
+      "kind": "diagnostics",
+      "maximum_absolute_difference": 0.0,
+      "rows": 252,
+      "seed": 211208
+    },
+    {
+      "all_original_checkpoints_checked": true,
+      "metadata_identical": true,
+      "seed": 211209,
+      "state_arrays_max_abs_difference": 0.0,
+      "task": "matching"
+    },
+    {
+      "all_original_checkpoints_checked": true,
+      "metadata_identical": true,
+      "seed": 211209,
+      "state_arrays_max_abs_difference": 0.0,
+      "task": "quartet"
+    },
+    {
+      "all_original_checkpoints_checked": true,
+      "metadata_identical": true,
+      "seed": 211209,
+      "state_arrays_max_abs_difference": 0.0,
+      "task": "nested"
+    },
+    {
+      "kind": "curves",
+      "maximum_absolute_difference": 0.0,
+      "rows": 252,
+      "seed": 211209
+    },
+    {
+      "kind": "diagnostics",
+      "maximum_absolute_difference": 0.0,
+      "rows": 252,
+      "seed": 211209
+    },
+    {
+      "all_original_checkpoints_checked": true,
+      "metadata_identical": true,
+      "seed": 211210,
+      "state_arrays_max_abs_difference": 0.0,
+      "task": "matching"
+    },
+    {
+      "all_original_checkpoints_checked": true,
+      "metadata_identical": true,
+      "seed": 211210,
+      "state_arrays_max_abs_difference": 0.0,
+      "task": "quartet"
+    },
+    {
+      "all_original_checkpoints_checked": true,
+      "metadata_identical": true,
+      "seed": 211210,
+      "state_arrays_max_abs_difference": 0.0,
+      "task": "nested"
+    },
+    {
+      "kind": "curves",
+      "maximum_absolute_difference": 0.0,
+      "rows": 252,
+      "seed": 211210
+    },
+    {
+      "kind": "diagnostics",
+      "maximum_absolute_difference": 0.0,
+      "rows": 252,
+      "seed": 211210
+    },
+    {
+      "all_original_checkpoints_checked": true,
+      "metadata_identical": true,
+      "seed": 211211,
+      "state_arrays_max_abs_difference": 0.0,
+      "task": "matching"
+    },
+    {
+      "all_original_checkpoints_checked": true,
+      "metadata_identical": true,
+      "seed": 211211,
+      "state_arrays_max_abs_difference": 0.0,
+      "task": "quartet"
+    },
+    {
+      "all_original_checkpoints_checked": true,
+      "metadata_identical": true,
+      "seed": 211211,
+      "state_arrays_max_abs_difference": 0.0,
+      "task": "nested"
+    },
+    {
+      "kind": "curves",
+      "maximum_absolute_difference": 0.0,
+      "rows": 252,
+      "seed": 211211
+    },
+    {
+      "kind": "diagnostics",
+      "maximum_absolute_difference": 0.0,
+      "rows": 252,
+      "seed": 211211
+    },
+    {
+      "all_original_checkpoints_checked": true,
+      "metadata_identical": true,
+      "seed": 211212,
+      "state_arrays_max_abs_difference": 0.0,
+      "task": "matching"
+    },
+    {
+      "all_original_checkpoints_checked": true,
+      "metadata_identical": true,
+      "seed": 211212,
+      "state_arrays_max_abs_difference": 0.0,
+      "task": "quartet"
+    },
+    {
+      "all_original_checkpoints_checked": true,
+      "metadata_identical": true,
+      "seed": 211212,
+      "state_arrays_max_abs_difference": 0.0,
+      "task": "nested"
+    },
+    {
+      "kind": "curves",
+      "maximum_absolute_difference": 0.0,
+      "rows": 252,
+      "seed": 211212
+    },
+    {
+      "kind": "diagnostics",
+      "maximum_absolute_difference": 0.0,
+      "rows": 252,
+      "seed": 211212
+    },
+    {
+      "all_original_checkpoints_checked": true,
+      "metadata_identical": true,
+      "seed": 211213,
+      "state_arrays_max_abs_difference": 0.0,
+      "task": "matching"
+    },
+    {
+      "all_original_checkpoints_checked": true,
+      "metadata_identical": true,
+      "seed": 211213,
+      "state_arrays_max_abs_difference": 0.0,
+      "task": "quartet"
+    },
+    {
+      "all_original_checkpoints_checked": true,
+      "metadata_identical": true,
+      "seed": 211213,
+      "state_arrays_max_abs_difference": 0.0,
+      "task": "nested"
+    },
+    {
+      "kind": "curves",
+      "maximum_absolute_difference": 0.0,
+      "rows": 252,
+      "seed": 211213
+    },
+    {
+      "kind": "diagnostics",
+      "maximum_absolute_difference": 0.0,
+      "rows": 252,
+      "seed": 211213
+    },
+    {
+      "all_original_checkpoints_checked": true,
+      "metadata_identical": true,
+      "seed": 211214,
+      "state_arrays_max_abs_difference": 0.0,
+      "task": "matching"
+    },
+    {
+      "all_original_checkpoints_checked": true,
+      "metadata_identical": true,
+      "seed": 211214,
+      "state_arrays_max_abs_difference": 0.0,
+      "task": "quartet"
+    },
+    {
+      "all_original_checkpoints_checked": true,
+      "metadata_identical": true,
+      "seed": 211214,
+      "state_arrays_max_abs_difference": 0.0,
+      "task": "nested"
+    },
+    {
+      "kind": "curves",
+      "maximum_absolute_difference": 0.0,
+      "rows": 252,
+      "seed": 211214
+    },
+    {
+      "kind": "diagnostics",
+      "maximum_absolute_difference": 0.0,
+      "rows": 252,
+      "seed": 211214
+    },
+    {
+      "all_original_checkpoints_checked": true,
+      "metadata_identical": true,
+      "seed": 211215,
+      "state_arrays_max_abs_difference": 0.0,
+      "task": "matching"
+    },
+    {
+      "all_original_checkpoints_checked": true,
+      "metadata_identical": true,
+      "seed": 211215,
+      "state_arrays_max_abs_difference": 0.0,
+      "task": "quartet"
+    },
+    {
+      "all_original_checkpoints_checked": true,
+      "metadata_identical": true,
+      "seed": 211215,
+      "state_arrays_max_abs_difference": 0.0,
+      "task": "nested"
+    },
+    {
+      "kind": "curves",
+      "maximum_absolute_difference": 0.0,
+      "rows": 252,
+      "seed": 211215
+    },
+    {
+      "kind": "diagnostics",
+      "maximum_absolute_difference": 0.0,
+      "rows": 252,
+      "seed": 211215
+    },
+    {
+      "all_original_checkpoints_checked": true,
+      "metadata_identical": true,
+      "seed": 211216,
+      "state_arrays_max_abs_difference": 0.0,
+      "task": "matching"
+    },
+    {
+      "all_original_checkpoints_checked": true,
+      "metadata_identical": true,
+      "seed": 211216,
+      "state_arrays_max_abs_difference": 0.0,
+      "task": "quartet"
+    },
+    {
+      "all_original_checkpoints_checked": true,
+      "metadata_identical": true,
+      "seed": 211216,
+      "state_arrays_max_abs_difference": 0.0,
+      "task": "nested"
+    },
+    {
+      "kind": "curves",
+      "maximum_absolute_difference": 0.0,
+      "rows": 252,
+      "seed": 211216
+    },
+    {
+      "kind": "diagnostics",
+      "maximum_absolute_difference": 0.0,
+      "rows": 252,
+      "seed": 211216
+    },
+    {
+      "all_original_checkpoints_checked": true,
+      "metadata_identical": true,
+      "seed": 211217,
+      "state_arrays_max_abs_difference": 0.0,
+      "task": "matching"
+    },
+    {
+      "all_original_checkpoints_checked": true,
+      "metadata_identical": true,
+      "seed": 211217,
+      "state_arrays_max_abs_difference": 0.0,
+      "task": "quartet"
+    },
+    {
+      "all_original_checkpoints_checked": true,
+      "metadata_identical": true,
+      "seed": 211217,
+      "state_arrays_max_abs_difference": 0.0,
+      "task": "nested"
+    },
+    {
+      "kind": "curves",
+      "maximum_absolute_difference": 0.0,
+      "rows": 252,
+      "seed": 211217
+    },
+    {
+      "kind": "diagnostics",
+      "maximum_absolute_difference": 0.0,
+      "rows": 252,
+      "seed": 211217
+    },
+    {
+      "all_original_checkpoints_checked": true,
+      "metadata_identical": true,
+      "seed": 211218,
+      "state_arrays_max_abs_difference": 0.0,
+      "task": "matching"
+    },
+    {
+      "all_original_checkpoints_checked": true,
+      "metadata_identical": true,
+      "seed": 211218,
+      "state_arrays_max_abs_difference": 0.0,
+      "task": "quartet"
+    },
+    {
+      "all_original_checkpoints_checked": true,
+      "metadata_identical": true,
+      "seed": 211218,
+      "state_arrays_max_abs_difference": 0.0,
+      "task": "nested"
+    },
+    {
+      "kind": "curves",
+      "maximum_absolute_difference": 0.0,
+      "rows": 252,
+      "seed": 211218
+    },
+    {
+      "kind": "diagnostics",
+      "maximum_absolute_difference": 0.0,
+      "rows": 252,
+      "seed": 211218
+    },
+    {
+      "all_original_checkpoints_checked": true,
+      "metadata_identical": true,
+      "seed": 211219,
+      "state_arrays_max_abs_difference": 0.0,
+      "task": "matching"
+    },
+    {
+      "all_original_checkpoints_checked": true,
+      "metadata_identical": true,
+      "seed": 211219,
+      "state_arrays_max_abs_difference": 0.0,
+      "task": "quartet"
+    },
+    {
+      "all_original_checkpoints_checked": true,
+      "metadata_identical": true,
+      "seed": 211219,
+      "state_arrays_max_abs_difference": 0.0,
+      "task": "nested"
+    },
+    {
+      "kind": "curves",
+      "maximum_absolute_difference": 0.0,
+      "rows": 252,
+      "seed": 211219
+    },
+    {
+      "kind": "diagnostics",
+      "maximum_absolute_difference": 0.0,
+      "rows": 252,
+      "seed": 211219
+    }
+  ],
+  "status": "passed"
+}

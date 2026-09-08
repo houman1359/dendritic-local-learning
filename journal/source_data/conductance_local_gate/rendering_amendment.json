@@ -1,0 +1,15 @@
+{
+  "created_utc": "2026-09-08T03:29:27.569148+00:00",
+  "reason": "Nativevisualinspection found an autoscale artifact: setting symlog after linearautoscale retained negative x range; explicitly display0\u201316384updates. Setfailurepanelrange1e\u22126\u20132(all displayed points withinbounds) to remove empty orders. Addwhitebackgrounds behind proximalcreditlabels to clearforwardlines.",
+  "numerical_analysis_changed": false,
+  "old_report_sha256": "6fc7e940046e64b85db66a856f714f343df33b60778e0af17d8ce79b6a6f0cac",
+  "new_report_sha256": "f15a0d93bd2191bcf659d8130eaffc488203dd52808cfbdcb3f79225dc8dc989",
+  "original_summary_sha256": {
+    "summaries/all_curves.csv": "4a24ea4aa1046cb638cc47fabc72b71fb3dbc96bbcb9aea6ebef33e79f3ac456",
+    "summaries/all_diagnostics.csv": "f99ddf08873c5a66d21600a201e5a40ed65527923aea8f2991c287f3c3ec598b",
+    "summaries/all_endpoints.csv": "7d3f6df93795afe7b752b0b7a239f51dcafe246f851efe158a7b2c3ac30e4d1d",
+    "summaries/condition_means.csv": "e3ed564e0fd24cb7fee0f1fa6fc337a30fc5481f7b29381419991281829e81a5",
+    "summaries/paired_contrasts.csv": "5ae6c7a35fd84bd43f49f0eca1c8b7405165bc4e4a568d4c38509ec90ef62beb",
+    "summaries/paired_seed_contrasts.csv": "07fa32c5b4cc10ea5f47f683662753d22c08f3b17e767d044af4a9e0e2554d22"
+  }
+}

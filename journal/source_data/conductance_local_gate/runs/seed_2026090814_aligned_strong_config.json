@@ -1,0 +1,395 @@
+{
+  "protocol_commit": "c6d3b2b09d24221de87bad18b445f0060a6d238f",
+  "protocol_sha256": "c441998f6f91e1f8782b2918689806e119af567e479bcd5c94069dca837a2413",
+  "resolved_protocol": {
+    "accuracy_interpretation": "Report actual NMSE, all seed values and paired intervals. Prespecified practical precision reference: mean hard-minus-exact NMSE upper95%bootstrap bound below.001 and every opposed hard-gate seed NMSE below.01. These are descriptive practical criteria, not a proof of asymptotic equivalence or biological implementability beyond imposed cue.",
+    "batch_size": 128,
+    "budget_policy": "Every rule/rate/task starts together and continues uninterrupted through16384updates. Primary selected within4096; extended selected within16384; also report fixed-step endpoints. No condition-specific extension or early stopping.",
+    "canary_seeds": [
+      2026090799
+    ],
+    "checkpoints": [
+      0,
+      1,
+      16,
+      64,
+      256,
+      512,
+      1024,
+      2048,
+      4096,
+      8192,
+      12288,
+      16384
+    ],
+    "counts": {
+      "excluded_canary_trajectories": 18,
+      "independent_fresh_seed_blocks": 20,
+      "initialized_trajectories": 1080,
+      "primary_and_extended_endpoint_views": 2160,
+      "primary_rate_trajectories": 360,
+      "secondary_rate_trajectories": 720
+    },
+    "created_utc": "2026-09-08T03:05:26.438055+00:00",
+    "endpoint_budgets": [
+      4096,
+      16384
+    ],
+    "failure_policy": "Retain every outcome. Nonfinite trajectory or infrastructure failure is recorded, diagnosed and rerun only under a separately frozen amendment preserving original outputs and same seed; no seed replacement. Source changes after freeze stop workers. Scientific runs require protocol content present in a reachable git commit.",
+    "fresh_seeds": [
+      2026090801,
+      2026090802,
+      2026090803,
+      2026090804,
+      2026090805,
+      2026090806,
+      2026090807,
+      2026090808,
+      2026090809,
+      2026090810,
+      2026090811,
+      2026090812,
+      2026090813,
+      2026090814,
+      2026090815,
+      2026090816,
+      2026090817,
+      2026090818,
+      2026090819,
+      2026090820
+    ],
+    "gradient_clip": 10.0,
+    "initialization": "Student terminal nominal gains1; other nominal teacher scaffold (proximalI15,daughter20/.2,soma4), with independent GaussianSD.4logperturbations. TeacherSD.15. Matched task/rule/rate streams; teacher tuning alone differs.",
+    "log_conductance_bounds": [
+      -7.0,
+      7.0
+    ],
+    "model": "Independent adapter reproduces released identity-output7compartment E/I equation. Sixteen terminal gains,2proximal inhibitory gains,4daughter couplings,2soma couplings; local gradients use log conductances.",
+    "n_calibration": 512,
+    "n_diagnostic": 1024,
+    "n_test": 4096,
+    "n_train": 2048,
+    "n_validation": 1024,
+    "noise_sd": 0.0,
+    "optimizer": "Adam beta1=.9,beta2=.999,eps1e-8,no decay",
+    "primary_estimands": [
+      "At Adam.03 and4096 validation-selected states, opposed-task unit-minus-hard-gate testNMSE.",
+      "Paired task-by-rule interaction (opposed unit-minus-hard) minus (aligned unit-minus-hard)."
+    ],
+    "primary_rate": 0.03,
+    "prior_exposure": {
+      "excluded_exploratory_numbers": {
+        "gated_proximal_failures_of20": 19,
+        "gated_proximal_nmse": 0.18,
+        "hard_distal_max_nmse": 5.4e-05,
+        "hard_distal_unit_proximal_nmse": 2.4e-05,
+        "opposed_adam_003_4096_n20_exact_nmse": 2e-05,
+        "proportional_five_seed_nmse": 2e-05,
+        "swapped_gate_nmse": 0.97,
+        "unit_calibrated_nmse": 0.66
+      },
+      "other_prior_findings": [
+        "Two leaf columns plus unit proximal credit reportedly learn accurately; no proximal credit freezes six parameters and stalls near .01.",
+        "Reported initial/trained three-column capture1.000/.96; fixed-state full path field has binary-context rank at most2.",
+        "Primary hard gate was selected in response to this prior evidence; fresh seeds validate that specified hypothesis. No previously viewed checkpoint is an inferential unit here."
+      ],
+      "source": "User-supplied panel review, independent scratch response_eval implementation; old seeds and frozen gate choices, not new outcomes"
+    },
+    "provenance": "Resolved config, input/initialization hashes, every saved parameter-state hash, optimizer/checkpoint arrays, source hashes and Slurm job ids per seed; no external submissions.",
+    "rate_policy": "Primary rate .03 frozen from existing task protocol. Rates .01/.1 are symmetric robustness only; no fresh-outcome-based rate selection, seed exclusion or primary switch.",
+    "rates": [
+      0.01,
+      0.03,
+      0.1
+    ],
+    "rule_definitions": {
+      "ancestry_three_oracle": "Three fixed weighted initial-profile columns: leaf0/1, leaf2/3, proximal4/5. Current exact path projected by least squares per example; soma1.",
+      "ancestry_two_leaf_oracle_unit_proximal": "Only the two fixed weighted leaf columns use current exact-field projection coefficients. Proximal q_4=q_5=1,soma1. This is two oracle-controlled distal profiles plus a fixed common proximal rule, not an entirely two-column dictionary over all6sites or a local encoder.",
+      "calibrated_broadcast": "Fixed mean initial exact six-site path profile from512 separate unlabeled samples; soma multiplier1. Calibration is oracle-informed.",
+      "exact": "Current seven-site exact path derivative times scalar soma error; explicit oracle comparator.",
+      "hard_distal_and_proximal": "Hard distal gate also multiplies corresponding proximal q_p. This intentionally flawed control keeps24trainable parameter slots but makes proximal-inhibitory gradients identically zero because their local eligibility requires inhibited activity; it is NOT described as preserving effective plasticity of all24parameters.",
+      "hard_distal_unit_proximal": "Distal q_j=1[a_parent(j)==0], proximal q_4=q_5=1,soma q_6=1. Coefficients use only imposed local inhibitory activity/context, no exact paths or initial profile. All24slots are plastic and proximal inhibition can learn.",
+      "shunt_proportional_unit_proximal": "Secondary supplied local conductance rule: distal q_j=1/(1+g_I,parent*a_parent), proximal and soma1. Leak is1; intentionally omits daughter-coupling denominator, downstream soma gain and exact path. Does not require teacher parameters.",
+      "swapped_distal_unit_proximal": "Distal q_j=1[a_parent(j)>0], proximal and soma1. Same gate bandwidth and eligibility, reversed assignment.",
+      "unit_broadcast": "Unit voltage-credit multiplier at all sites, retaining exact local eligibility."
+    },
+    "rules": [
+      "exact",
+      "unit_broadcast",
+      "calibrated_broadcast",
+      "ancestry_three_oracle",
+      "hard_distal_unit_proximal",
+      "swapped_distal_unit_proximal",
+      "hard_distal_and_proximal",
+      "ancestry_two_leaf_oracle_unit_proximal",
+      "shunt_proportional_unit_proximal"
+    ],
+    "scope": [
+      "This follows exposure to successful exploratory gate numbers and therefore is prospective replication, not blind hypothesis discovery.",
+      "Context is externally supplied; local gates do not discover endogenous teaching errors or context.",
+      "Gate success would establish sufficiency of a supplied local branch selector in this circuit, not general feedback-rank necessity.",
+      "All24parameter slots remain present; gating-proximal control deliberately suppresses2inhibitory-gain gradients.",
+      "No training experiment is launched before root records and commits the protocol."
+    ],
+    "secondary_estimands": [
+      "Hard-minus-exact error on eachtask/budget/rate.",
+      "Hard-versus-swapped, hard-versus-gated-proximal contrasts.",
+      "Two-leaf-oracle-plus-unit-proximal versus3profile/exact/hard, retaining oracle source.",
+      "Proportional local gate outcomes for all20fresh seeds.",
+      "Extended-budget and .01/.1rate robustness for every rule, no selective reruns."
+    ],
+    "seed_audit": "New seed namespace checked against old conductance protocols; canary excluded from every scientific summary.",
+    "statistics": {
+      "bootstrap_draws": 20000,
+      "bootstrap_seed": 2026090800,
+      "inferential_unit": "Whole paired fresh seed block; target families, rules, rates and budgets are withinblock.",
+      "interval": "Paired percentile95% bootstrap intervals; allsecondarygrid summaries descriptive.",
+      "primary_tests": "Exact two-sided sign-flip test across20paired blocks for2primaryestimands, Holm-adjusted across those2. Report all sign counts. Practical precision reference is not an additional significance test."
+    },
+    "status": "Prospective follow-up with explicit prior exploratory outcome exposure; not public preregistration",
+    "steps": 16384,
+    "tasks": [
+      {
+        "conflict": 0.0,
+        "gate": 10.0,
+        "name": "aligned_strong"
+      },
+      {
+        "conflict": 1.0,
+        "gate": 10.0,
+        "name": "opposed_strong"
+      }
+    ],
+    "title": "Prospective supplied-context local-credit follow-up in the opposed-tuning conductance tree",
+    "version": 1
+  },
+  "task_metadata": {
+    "initialization_sha256": "5f487f4ebb513e3a86bd0b8fbaab6d298901e493c9935a1716af74241d312c17",
+    "input_array_sha256": {
+      "calibration": {
+        "context": "9b0afc972a8f0cf711693e11ff8c09f618b280a2ac34bd872fe68e484fc41ff9",
+        "features": "0223582d651c0deac501ee373fbeddc1aea5f5587306fdaa56b41afa368b705e",
+        "targets": "3c210d3fa4f6ab2638a7f3f3f8e2547cc7d526aa779ac48d10530575e5099428"
+      },
+      "diagnostic": {
+        "context": "74cc0be570849c108da3c1f6844040b22af1ad524f23f118fefcf6cd09f5fbb8",
+        "features": "d130500bd0a3a56182ac3748aeb9763693908c9ef699da986142ecb1b8e7558d",
+        "targets": "efba064b6a3f2e1e681e8b8f19ca61e23a651dc6784bb7c19f09e02cb94a9eba"
+      },
+      "test": {
+        "context": "06ad579f50f2d2b840aef6641643250610f12d8ec1c6fd17d03e0ad4e49dd699",
+        "features": "f29db28c13cbc8f4de0ac48f28890967dd69832db117e7fcce13b8f7d0c6b692",
+        "targets": "1544baa59d1ef039f1fce63321c0ac5aa164130b3c852e63db39c9e9288ae71b"
+      },
+      "train": {
+        "context": "311a1a88dc106a8b3ab962ec55a03e95e1e8ef58696d1a5cc87faf56b150b6e9",
+        "features": "70963bf83e545fae8114263670e011a09a8a5b334a5f03ab97b983624d70ead8",
+        "targets": "f5516f46812ee34419d0a3f7fb66818641757eefd280501472edf8c52e36295c"
+      },
+      "validation": {
+        "context": "8ced93448de8f33bdf10c62d58cb3c3c579d6b48e1b83a9a2485ce7e3a909bd3",
+        "features": "4c1355902b0deb8d3ee461c2df5ac8c1352365185103975c83faa6e3465a70c7",
+        "targets": "d4e6a1df951b7894e3934a7008e828d6b05d1ed584bf3064c0bdad5c510a4e2a"
+      }
+    },
+    "records": [
+      {
+        "optimizer": "adam",
+        "primary_rate": false,
+        "rate": 0.01,
+        "rule": "exact"
+      },
+      {
+        "optimizer": "adam",
+        "primary_rate": false,
+        "rate": 0.01,
+        "rule": "unit_broadcast"
+      },
+      {
+        "optimizer": "adam",
+        "primary_rate": false,
+        "rate": 0.01,
+        "rule": "calibrated_broadcast"
+      },
+      {
+        "optimizer": "adam",
+        "primary_rate": false,
+        "rate": 0.01,
+        "rule": "ancestry_three_oracle"
+      },
+      {
+        "optimizer": "adam",
+        "primary_rate": false,
+        "rate": 0.01,
+        "rule": "hard_distal_unit_proximal"
+      },
+      {
+        "optimizer": "adam",
+        "primary_rate": false,
+        "rate": 0.01,
+        "rule": "swapped_distal_unit_proximal"
+      },
+      {
+        "optimizer": "adam",
+        "primary_rate": false,
+        "rate": 0.01,
+        "rule": "hard_distal_and_proximal"
+      },
+      {
+        "optimizer": "adam",
+        "primary_rate": false,
+        "rate": 0.01,
+        "rule": "ancestry_two_leaf_oracle_unit_proximal"
+      },
+      {
+        "optimizer": "adam",
+        "primary_rate": false,
+        "rate": 0.01,
+        "rule": "shunt_proportional_unit_proximal"
+      },
+      {
+        "optimizer": "adam",
+        "primary_rate": true,
+        "rate": 0.03,
+        "rule": "exact"
+      },
+      {
+        "optimizer": "adam",
+        "primary_rate": true,
+        "rate": 0.03,
+        "rule": "unit_broadcast"
+      },
+      {
+        "optimizer": "adam",
+        "primary_rate": true,
+        "rate": 0.03,
+        "rule": "calibrated_broadcast"
+      },
+      {
+        "optimizer": "adam",
+        "primary_rate": true,
+        "rate": 0.03,
+        "rule": "ancestry_three_oracle"
+      },
+      {
+        "optimizer": "adam",
+        "primary_rate": true,
+        "rate": 0.03,
+        "rule": "hard_distal_unit_proximal"
+      },
+      {
+        "optimizer": "adam",
+        "primary_rate": true,
+        "rate": 0.03,
+        "rule": "swapped_distal_unit_proximal"
+      },
+      {
+        "optimizer": "adam",
+        "primary_rate": true,
+        "rate": 0.03,
+        "rule": "hard_distal_and_proximal"
+      },
+      {
+        "optimizer": "adam",
+        "primary_rate": true,
+        "rate": 0.03,
+        "rule": "ancestry_two_leaf_oracle_unit_proximal"
+      },
+      {
+        "optimizer": "adam",
+        "primary_rate": true,
+        "rate": 0.03,
+        "rule": "shunt_proportional_unit_proximal"
+      },
+      {
+        "optimizer": "adam",
+        "primary_rate": false,
+        "rate": 0.1,
+        "rule": "exact"
+      },
+      {
+        "optimizer": "adam",
+        "primary_rate": false,
+        "rate": 0.1,
+        "rule": "unit_broadcast"
+      },
+      {
+        "optimizer": "adam",
+        "primary_rate": false,
+        "rate": 0.1,
+        "rule": "calibrated_broadcast"
+      },
+      {
+        "optimizer": "adam",
+        "primary_rate": false,
+        "rate": 0.1,
+        "rule": "ancestry_three_oracle"
+      },
+      {
+        "optimizer": "adam",
+        "primary_rate": false,
+        "rate": 0.1,
+        "rule": "hard_distal_unit_proximal"
+      },
+      {
+        "optimizer": "adam",
+        "primary_rate": false,
+        "rate": 0.1,
+        "rule": "swapped_distal_unit_proximal"
+      },
+      {
+        "optimizer": "adam",
+        "primary_rate": false,
+        "rate": 0.1,
+        "rule": "hard_distal_and_proximal"
+      },
+      {
+        "optimizer": "adam",
+        "primary_rate": false,
+        "rate": 0.1,
+        "rule": "ancestry_two_leaf_oracle_unit_proximal"
+      },
+      {
+        "optimizer": "adam",
+        "primary_rate": false,
+        "rate": 0.1,
+        "rule": "shunt_proportional_unit_proximal"
+      }
+    ],
+    "seed": 2026090814,
+    "task": {
+      "conflict": 0.0,
+      "gate": 10.0,
+      "name": "aligned_strong"
+    },
+    "teacher_log_conductances": [
+      2.037129949291498,
+      -1.348048229312482,
+      -1.5288261874890012,
+      1.9681478581516794,
+      2.0206445145397978,
+      -1.5762576821562166,
+      -1.49062457798774,
+      2.385191308027537,
+      2.136593863706633,
+      -1.4276035461963335,
+      -1.4675945348224217,
+      2.307588491626443,
+      1.9888504313094348,
+      -1.2201972140501143,
+      -1.2225373652092228,
+      2.0152923211109637,
+      2.558304231424312,
+      2.813745925475543,
+      2.9542697630665256,
+      -1.7924908842598528,
+      3.200631343162465,
+      -1.674789571153428,
+      1.5994972830235348,
+      1.1517286736962349
+    ],
+    "test_target_variance": 0.02686666172179461,
+    "train_target_variance": 0.027240757740266887,
+    "wall_seconds": 43.894379926030524
+  }
+}

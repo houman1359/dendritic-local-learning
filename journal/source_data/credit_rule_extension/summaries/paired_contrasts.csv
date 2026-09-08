@@ -1,0 +1,961 @@
+budget,endpoint,task,optimizer,rate_view,metric,contrast,mean,median,ci95_low,ci95_high,n_seeds,positive_seeds,negative_seeds,zero_seeds
+1024,terminal,matching,adam,selected_rate,test_nmse,unit_broadcast minus exact,-0.006561901264670977,-0.00011332359136666768,-0.02390852787745384,0.0033259118539830683,20,7,13,0
+1024,terminal,matching,adam,selected_rate,test_nmse,calibrated_broadcast minus exact,-0.008150041898870175,0.0003094180621585046,-0.024885802800111382,0.0006914294664872582,20,15,5,0
+1024,terminal,matching,adam,selected_rate,test_nmse,sign_broadcast minus exact,-0.008150038699286394,0.0003094191004231299,-0.02488579938212165,0.0006914330980424955,20,15,5,0
+1024,terminal,matching,adam,selected_rate,test_nmse,unit_broadcast minus calibrated_broadcast,0.0015881406341991973,-0.0004587563435239951,-0.00020193871777186495,0.0036447694063312633,20,6,14,0
+1024,terminal,matching,adam,selected_rate,population_nmse,unit_broadcast minus exact,-0.006455053641763906,-9.643026988279365e-05,-0.02391350985544615,0.003500311187457827,20,7,13,0
+1024,terminal,matching,adam,selected_rate,population_nmse,calibrated_broadcast minus exact,-0.008171330187828195,0.0004244324972470203,-0.024939412534450422,0.0006685897823831829,20,15,5,0
+1024,terminal,matching,adam,selected_rate,population_nmse,sign_broadcast minus exact,-0.008171326889972673,0.0004244329761829636,-0.024939410723812713,0.0006685941941164694,20,15,5,0
+1024,terminal,matching,adam,selected_rate,population_nmse,unit_broadcast minus calibrated_broadcast,0.0017162765460642868,-0.00048532296023116585,-0.00013172140981800872,0.003838500697768072,20,5,15,0
+1024,terminal,matching,sgd,selected_rate,test_nmse,unit_broadcast minus exact,-0.03674405296404204,-0.00011940509562127256,-0.08503712537975394,-0.001306849748610383,20,10,10,0
+1024,terminal,matching,sgd,selected_rate,test_nmse,calibrated_broadcast minus exact,0.23333834363536338,0.1860253230726371,0.14519407429835582,0.32641999426532464,20,19,1,0
+1024,terminal,matching,sgd,selected_rate,test_nmse,sign_broadcast minus exact,-0.041169606775081906,-0.002046269538825569,-0.08963469991355837,-0.005252522366530107,20,6,14,0
+1024,terminal,matching,sgd,selected_rate,test_nmse,unit_broadcast minus calibrated_broadcast,-0.2700823965994054,-0.2165722868613691,-0.363494682074193,-0.17998661929091522,20,0,20,0
+1024,terminal,matching,sgd,selected_rate,population_nmse,unit_broadcast minus exact,-0.03683570666619526,-1.433327459574542e-05,-0.08548774184918237,-0.0012612296070675225,20,10,10,0
+1024,terminal,matching,sgd,selected_rate,population_nmse,calibrated_broadcast minus exact,0.23389382393594635,0.18492425670940743,0.1458023715330825,0.3267746338238093,20,19,1,0
+1024,terminal,matching,sgd,selected_rate,population_nmse,sign_broadcast minus exact,-0.04130879542087433,-0.002032196131987143,-0.09009806201956175,-0.005373795455062301,20,7,13,0
+1024,terminal,matching,sgd,selected_rate,population_nmse,unit_broadcast minus calibrated_broadcast,-0.27072953060214167,-0.21751202334747283,-0.3640880306302639,-0.18065955065798328,20,0,20,0
+1024,terminal,nested,adam,selected_rate,test_nmse,unit_broadcast minus exact,0.7292688666937016,0.7456269538915248,0.7091106589796902,0.7474342918494126,20,20,0,0
+1024,terminal,nested,adam,selected_rate,test_nmse,calibrated_broadcast minus exact,0.7460052200658654,0.7603055988059573,0.7268204392109655,0.7612980028020996,20,20,0,0
+1024,terminal,nested,adam,selected_rate,test_nmse,sign_broadcast minus exact,0.7460048297689096,0.7603055976820803,0.7268196556895525,0.7612980082856567,20,20,0,0
+1024,terminal,nested,adam,selected_rate,test_nmse,unit_broadcast minus calibrated_broadcast,-0.016736353372163816,-0.004125353979596347,-0.03793132224158057,0.003079776570143984,20,7,13,0
+1024,terminal,nested,adam,selected_rate,population_nmse,unit_broadcast minus exact,0.7247299731655678,0.7430759001316101,0.70724556197055,0.7400501311226375,20,20,0,0
+1024,terminal,nested,adam,selected_rate,population_nmse,calibrated_broadcast minus exact,0.7426279690503792,0.7549879613424775,0.7254956848136623,0.7562358019698882,20,20,0,0
+1024,terminal,nested,adam,selected_rate,population_nmse,sign_broadcast minus exact,0.7426275766983567,0.7549879957052011,0.7254953327258409,0.7562358057500699,20,20,0,0
+1024,terminal,nested,adam,selected_rate,population_nmse,unit_broadcast minus calibrated_broadcast,-0.017897995884811467,-0.007825764224965837,-0.04018979732130925,0.0030292612978517156,20,7,13,0
+1024,terminal,nested,sgd,selected_rate,test_nmse,unit_broadcast minus exact,0.500993199939678,0.5551137375301679,0.4008281351212367,0.5997595453977107,20,19,1,0
+1024,terminal,nested,sgd,selected_rate,test_nmse,calibrated_broadcast minus exact,0.5621931826633727,0.6198166076419078,0.4491635354643166,0.6753014483005005,20,20,0,0
+1024,terminal,nested,sgd,selected_rate,test_nmse,sign_broadcast minus exact,0.5099146779732349,0.566880808328668,0.4059889553270972,0.6124308030930435,20,20,0,0
+1024,terminal,nested,sgd,selected_rate,test_nmse,unit_broadcast minus calibrated_broadcast,-0.0611999827236948,-0.01695326183960233,-0.10319643230720761,-0.02404069974378046,20,5,15,0
+1024,terminal,nested,sgd,selected_rate,population_nmse,unit_broadcast minus exact,0.4947212099522783,0.5530333632718439,0.3946145282165471,0.5930307357358839,20,19,1,0
+1024,terminal,nested,sgd,selected_rate,population_nmse,calibrated_broadcast minus exact,0.5559184654298753,0.6239800312222401,0.4439354664855882,0.6668586221315652,20,20,0,0
+1024,terminal,nested,sgd,selected_rate,population_nmse,sign_broadcast minus exact,0.5055631102449276,0.5639240483565485,0.40088802094389514,0.6076674664325425,20,20,0,0
+1024,terminal,nested,sgd,selected_rate,population_nmse,unit_broadcast minus calibrated_broadcast,-0.06119725547759691,-0.019832119933913928,-0.10085721624734223,-0.025464702682820986,20,5,15,0
+1024,terminal,quartet,adam,selected_rate,test_nmse,unit_broadcast minus exact,0.8166088390627104,0.9589322915440504,0.6673057834580798,0.9380310019679023,20,19,1,0
+1024,terminal,quartet,adam,selected_rate,test_nmse,calibrated_broadcast minus exact,0.829667239670813,0.935189032351911,0.7074324116302536,0.9288008414745692,20,20,0,0
+1024,terminal,quartet,adam,selected_rate,test_nmse,sign_broadcast minus exact,0.829667299503881,0.9351890270752543,0.707432575427761,0.9288010564481632,20,20,0,0
+1024,terminal,quartet,adam,selected_rate,test_nmse,unit_broadcast minus calibrated_broadcast,-0.013058400608102694,-0.0100315659567497,-0.07464208958693279,0.0410162061862248,20,8,12,0
+1024,terminal,quartet,adam,selected_rate,population_nmse,unit_broadcast minus exact,0.821071580293587,0.9739007954627736,0.6708980130030513,0.9429792383307244,20,19,1,0
+1024,terminal,quartet,adam,selected_rate,population_nmse,calibrated_broadcast minus exact,0.8323208583707089,0.9341425832246275,0.7082737883120771,0.9326411357164128,20,20,0,0
+1024,terminal,quartet,adam,selected_rate,population_nmse,sign_broadcast minus exact,0.8323209115195453,0.9341425780233859,0.7082738143523363,0.9326413129700493,20,20,0,0
+1024,terminal,quartet,adam,selected_rate,population_nmse,unit_broadcast minus calibrated_broadcast,-0.011249278077121805,-0.008526716643899757,-0.07195942368088332,0.04220101055885999,20,8,12,0
+1024,terminal,quartet,sgd,selected_rate,test_nmse,unit_broadcast minus exact,0.6590026152815303,0.7046526618598881,0.5209772780071514,0.7866134865034806,20,20,0,0
+1024,terminal,quartet,sgd,selected_rate,test_nmse,calibrated_broadcast minus exact,0.6555103902232735,0.7036472697546992,0.5271815831697099,0.7743135523085284,20,20,0,0
+1024,terminal,quartet,sgd,selected_rate,test_nmse,sign_broadcast minus exact,0.7187347025848967,0.8890432884180651,0.574520976038631,0.8494791210790066,20,20,0,0
+1024,terminal,quartet,sgd,selected_rate,test_nmse,unit_broadcast minus calibrated_broadcast,0.0034922250582567816,0.0016970472715112095,-0.04681693172687747,0.058178239069159324,20,10,10,0
+1024,terminal,quartet,sgd,selected_rate,population_nmse,unit_broadcast minus exact,0.6639648621826006,0.7064275028145726,0.5240756329485067,0.7930578033105616,20,19,1,0
+1024,terminal,quartet,sgd,selected_rate,population_nmse,calibrated_broadcast minus exact,0.6587766286982686,0.6995819491176911,0.5299940760855415,0.7794137708065056,20,20,0,0
+1024,terminal,quartet,sgd,selected_rate,population_nmse,sign_broadcast minus exact,0.724381074094138,0.8854273108843583,0.5794868026025634,0.8565901062391202,20,20,0,0
+1024,terminal,quartet,sgd,selected_rate,population_nmse,unit_broadcast minus calibrated_broadcast,0.005188233484332089,0.0021304801732899836,-0.045429111769789525,0.06073361657355486,20,10,10,0
+1024,validation_selected,matching,adam,selected_rate,test_nmse,unit_broadcast minus exact,-0.006454711250448182,4.909042182648857e-06,-0.023817587532141856,0.003453941862401004,20,10,10,0
+1024,validation_selected,matching,adam,selected_rate,test_nmse,calibrated_broadcast minus exact,-0.008567242705401244,4.300216418441291e-05,-0.025211641221188363,0.00019386028789888167,20,11,9,0
+1024,validation_selected,matching,adam,selected_rate,test_nmse,sign_broadcast minus exact,-0.008567242420953513,4.300290704430457e-05,-0.025211641474825713,0.00019386107083063306,20,11,9,0
+1024,validation_selected,matching,adam,selected_rate,test_nmse,unit_broadcast minus calibrated_broadcast,0.00211253145495306,-0.0001492869749786692,0.00033855011866660005,0.004183410514650192,20,8,12,0
+1024,validation_selected,matching,adam,selected_rate,population_nmse,unit_broadcast minus exact,-0.006365465707433182,-1.1351035074167847e-05,-0.023835073648186444,0.003595370189893657,20,10,10,0
+1024,validation_selected,matching,adam,selected_rate,population_nmse,calibrated_broadcast minus exact,-0.008582402359432409,0.00010913096525741343,-0.025300993244545524,0.00020584596611457584,20,14,6,0
+1024,validation_selected,matching,adam,selected_rate,population_nmse,sign_broadcast minus exact,-0.008582401869613916,0.00010913125047953898,-0.025300993125226448,0.00020584675364172943,20,14,6,0
+1024,validation_selected,matching,adam,selected_rate,population_nmse,unit_broadcast minus calibrated_broadcast,0.0022169366519992294,-0.00014881085868837624,0.0003830278408172982,0.004321419205295121,20,7,13,0
+1024,validation_selected,matching,sgd,selected_rate,test_nmse,unit_broadcast minus exact,-0.03674405296404204,-0.00011940509562127256,-0.08503712537975394,-0.001306849748610383,20,10,10,0
+1024,validation_selected,matching,sgd,selected_rate,test_nmse,calibrated_broadcast minus exact,0.22942422446969063,0.1860253230726371,0.14289911129330107,0.32131395464272006,20,19,1,0
+1024,validation_selected,matching,sgd,selected_rate,test_nmse,sign_broadcast minus exact,-0.041169606775081906,-0.002046269538825569,-0.08963469991355837,-0.005252522366530107,20,6,14,0
+1024,validation_selected,matching,sgd,selected_rate,test_nmse,unit_broadcast minus calibrated_broadcast,-0.2661682774337327,-0.2165722868613691,-0.35847759518613387,-0.1779910245919947,20,0,20,0
+1024,validation_selected,matching,sgd,selected_rate,population_nmse,unit_broadcast minus exact,-0.03683570666619526,-1.433327459574542e-05,-0.08548774184918237,-0.0012612296070675225,20,10,10,0
+1024,validation_selected,matching,sgd,selected_rate,population_nmse,calibrated_broadcast minus exact,0.22946728368831168,0.18492425670940743,0.14332177393564158,0.32109360167955786,20,19,1,0
+1024,validation_selected,matching,sgd,selected_rate,population_nmse,sign_broadcast minus exact,-0.04130879542087433,-0.002032196131987143,-0.09009806201956175,-0.005373795455062301,20,7,13,0
+1024,validation_selected,matching,sgd,selected_rate,population_nmse,unit_broadcast minus calibrated_broadcast,-0.266302990354507,-0.21751202334747283,-0.3588857608606579,-0.17835986048381774,20,0,20,0
+1024,validation_selected,nested,adam,selected_rate,test_nmse,unit_broadcast minus exact,0.7230173466053628,0.7456269538915248,0.700301358455284,0.7439692183680991,20,20,0,0
+1024,validation_selected,nested,adam,selected_rate,test_nmse,calibrated_broadcast minus exact,0.7317053615216735,0.7516977672262265,0.7116222016299562,0.7494347017167117,20,20,0,0
+1024,validation_selected,nested,adam,selected_rate,test_nmse,sign_broadcast minus exact,0.7317050206288453,0.7516978053152441,0.7116214700957064,0.7494343671553342,20,20,0,0
+1024,validation_selected,nested,adam,selected_rate,test_nmse,unit_broadcast minus calibrated_broadcast,-0.008688014916310827,0.0003879115202485295,-0.02755810438413092,0.009076072009825381,20,11,9,0
+1024,validation_selected,nested,adam,selected_rate,population_nmse,unit_broadcast minus exact,0.7179597776467121,0.7385665659654569,0.6979605925549274,0.7358462003278688,20,20,0,0
+1024,validation_selected,nested,adam,selected_rate,population_nmse,calibrated_broadcast minus exact,0.7276125803105391,0.7460332400242216,0.7109255629431545,0.7419908392147326,20,20,0,0
+1024,validation_selected,nested,adam,selected_rate,population_nmse,sign_broadcast minus exact,0.7276122422292322,0.7460332955111328,0.7109251389676814,0.7419905266291233,20,20,0,0
+1024,validation_selected,nested,adam,selected_rate,population_nmse,unit_broadcast minus calibrated_broadcast,-0.009652802663827032,-0.0014409705842685083,-0.0297681579449304,0.009285981850254236,20,8,12,0
+1024,validation_selected,nested,sgd,selected_rate,test_nmse,unit_broadcast minus exact,0.49738013174335344,0.5551137375301679,0.39687167094490355,0.5968225606816611,20,19,1,0
+1024,validation_selected,nested,sgd,selected_rate,test_nmse,calibrated_broadcast minus exact,0.5516519061242874,0.6242328703466331,0.4436885526556689,0.6564197391483464,20,20,0,0
+1024,validation_selected,nested,sgd,selected_rate,test_nmse,sign_broadcast minus exact,0.5084461778778356,0.5677846929107226,0.40522166661373227,0.6100574612238081,20,20,0,0
+1024,validation_selected,nested,sgd,selected_rate,test_nmse,unit_broadcast minus calibrated_broadcast,-0.05427177438093393,-0.018630988665600867,-0.08973741004140828,-0.02305227598484962,20,5,15,0
+1024,validation_selected,nested,sgd,selected_rate,population_nmse,unit_broadcast minus exact,0.4913709577009563,0.5530333632718439,0.3908408158667534,0.590691861574426,20,19,1,0
+1024,validation_selected,nested,sgd,selected_rate,population_nmse,calibrated_broadcast minus exact,0.5461577188867626,0.6273600878235381,0.43797576488329404,0.6502155394502643,20,20,0,0
+1024,validation_selected,nested,sgd,selected_rate,population_nmse,sign_broadcast minus exact,0.5040626663133316,0.5645200337990524,0.400086106014094,0.6052929457310245,20,20,0,0
+1024,validation_selected,nested,sgd,selected_rate,population_nmse,unit_broadcast minus calibrated_broadcast,-0.054786761185806235,-0.020376714883834968,-0.08994626371802805,-0.02393517227603385,20,6,14,0
+1024,validation_selected,quartet,adam,selected_rate,test_nmse,unit_broadcast minus exact,0.7776125353628829,0.9076431305323635,0.6310996678839847,0.9013881187039189,20,19,1,0
+1024,validation_selected,quartet,adam,selected_rate,test_nmse,calibrated_broadcast minus exact,0.75752357981205,0.8877121071626806,0.6338659668361329,0.8656321670069718,20,20,0,0
+1024,validation_selected,quartet,adam,selected_rate,test_nmse,sign_broadcast minus exact,0.757523449116311,0.8877113476429426,0.6338659171559394,0.8656320526071272,20,20,0,0
+1024,validation_selected,quartet,adam,selected_rate,test_nmse,unit_broadcast minus calibrated_broadcast,0.020088955550832836,0.005302976817368021,-0.05759530888351396,0.10477720306853858,20,11,9,0
+1024,validation_selected,quartet,adam,selected_rate,population_nmse,unit_broadcast minus exact,0.7802291197861955,0.9187139072967649,0.6330235329589863,0.9060636959547329,20,19,1,0
+1024,validation_selected,quartet,adam,selected_rate,population_nmse,calibrated_broadcast minus exact,0.7608676028367002,0.892520858595705,0.6343630387196391,0.8710527142805709,20,20,0,0
+1024,validation_selected,quartet,adam,selected_rate,population_nmse,sign_broadcast minus exact,0.7608674684213259,0.8925200722030674,0.6343629606423168,0.871052656079582,20,20,0,0
+1024,validation_selected,quartet,adam,selected_rate,population_nmse,unit_broadcast minus calibrated_broadcast,0.019361516949495387,0.0056147260328904824,-0.05704802199366948,0.10056796035135611,20,11,9,0
+1024,validation_selected,quartet,sgd,selected_rate,test_nmse,unit_broadcast minus exact,0.6304632375312074,0.605041760015387,0.498755954339601,0.755597813247571,20,20,0,0
+1024,validation_selected,quartet,sgd,selected_rate,test_nmse,calibrated_broadcast minus exact,0.6471759523403684,0.6883084458837789,0.5192691813591356,0.7651635439384709,20,20,0,0
+1024,validation_selected,quartet,sgd,selected_rate,test_nmse,sign_broadcast minus exact,0.6848959247526013,0.7995420223158225,0.5479010478318393,0.8126383569330908,20,20,0,0
+1024,validation_selected,quartet,sgd,selected_rate,test_nmse,unit_broadcast minus calibrated_broadcast,-0.01671271480916104,3.507223529597425e-05,-0.055699605963125516,0.022506052928936003,20,10,10,0
+1024,validation_selected,quartet,sgd,selected_rate,population_nmse,unit_broadcast minus exact,0.6349851257530442,0.6112334682738594,0.500387976645019,0.7622355642253168,20,19,1,0
+1024,validation_selected,quartet,sgd,selected_rate,population_nmse,calibrated_broadcast minus exact,0.6508867526281586,0.6865011571182054,0.522264624613601,0.771129699896428,20,20,0,0
+1024,validation_selected,quartet,sgd,selected_rate,population_nmse,sign_broadcast minus exact,0.6889197470500326,0.8101516822942314,0.5508918746118153,0.817117960609222,20,20,0,0
+1024,validation_selected,quartet,sgd,selected_rate,population_nmse,unit_broadcast minus calibrated_broadcast,-0.015901626875114473,-0.0024971007258207667,-0.05432061110181342,0.023329079351920967,20,10,10,0
+4096,terminal,matching,adam,selected_rate,test_nmse,unit_broadcast minus exact,-0.00012464921292660268,-5.45888297720995e-05,-0.00024937597935742434,-2.94038854507911e-05,20,5,15,0
+4096,terminal,matching,adam,selected_rate,test_nmse,calibrated_broadcast minus exact,0.0007797686355488897,0.0007736755421725566,0.0005168655854296289,0.0010362189718639287,20,18,2,0
+4096,terminal,matching,adam,selected_rate,test_nmse,sign_broadcast minus exact,0.0007797727622325106,0.0007736770373444092,0.0005168712174190808,0.0010362222491931753,20,18,2,0
+4096,terminal,matching,adam,selected_rate,test_nmse,unit_broadcast minus calibrated_broadcast,-0.0009044178484754924,-0.0008640458410835786,-0.0011242428615058412,-0.0006788204651019545,20,1,19,0
+4096,terminal,matching,adam,selected_rate,population_nmse,unit_broadcast minus exact,-0.0001393560967282899,-4.775182235466747e-05,-0.0003225864749486795,-1.4953817127160998e-05,20,7,13,0
+4096,terminal,matching,adam,selected_rate,population_nmse,calibrated_broadcast minus exact,0.0007499441392283996,0.0008369387500092233,0.0005007874754927185,0.0009884021797104702,20,18,2,0
+4096,terminal,matching,adam,selected_rate,population_nmse,sign_broadcast minus exact,0.0007499483899820919,0.0008369403266595106,0.0005007906650389714,0.0009884053973529935,20,18,2,0
+4096,terminal,matching,adam,selected_rate,population_nmse,unit_broadcast minus calibrated_broadcast,-0.0008893002359566896,-0.0009159919349000635,-0.001088117090911987,-0.0006724940509731965,20,1,19,0
+4096,terminal,matching,sgd,selected_rate,test_nmse,unit_broadcast minus exact,-4.64287832674052e-06,-1.36172448557733e-05,-7.07113126883581e-05,5.914164984374853e-05,20,8,12,0
+4096,terminal,matching,sgd,selected_rate,test_nmse,calibrated_broadcast minus exact,0.09199306163845966,0.061798451462292694,0.04824811750133066,0.14074265699500285,20,15,5,0
+4096,terminal,matching,sgd,selected_rate,test_nmse,sign_broadcast minus exact,-7.033802564109411e-05,-4.59299247792741e-05,-0.00011264497650551046,-3.6796359551577366e-05,20,3,17,0
+4096,terminal,matching,sgd,selected_rate,test_nmse,unit_broadcast minus calibrated_broadcast,-0.09199770451678642,-0.06180572980608634,-0.1408116232797178,-0.04819646533260728,20,5,15,0
+4096,terminal,matching,sgd,selected_rate,population_nmse,unit_broadcast minus exact,-8.175757322039602e-06,-1.086293573033983e-05,-8.042799082542021e-05,5.801207298574441e-05,20,8,12,0
+4096,terminal,matching,sgd,selected_rate,population_nmse,calibrated_broadcast minus exact,0.09172339657516575,0.06168962013807273,0.04825715056750466,0.14020469160234286,20,16,4,0
+4096,terminal,matching,sgd,selected_rate,population_nmse,sign_broadcast minus exact,-6.884648319703192e-05,-3.872375095194606e-05,-0.00012048267961909402,-3.470496404957891e-05,20,1,19,0
+4096,terminal,matching,sgd,selected_rate,population_nmse,unit_broadcast minus calibrated_broadcast,-0.09173157233248778,-0.06168523118417002,-0.1402635034499361,-0.04823789028944843,20,4,16,0
+4096,terminal,nested,adam,selected_rate,test_nmse,unit_broadcast minus exact,0.7403042971546341,0.7537976064152243,0.7227393798380486,0.7556645380170706,20,20,0,0
+4096,terminal,nested,adam,selected_rate,test_nmse,calibrated_broadcast minus exact,0.7680483002187192,0.7619965645034505,0.7434780204346914,0.7940336422169438,20,20,0,0
+4096,terminal,nested,adam,selected_rate,test_nmse,sign_broadcast minus exact,0.7674136462593237,0.7619048993411595,0.7430267864208114,0.7930163033005377,20,20,0,0
+4096,terminal,nested,adam,selected_rate,test_nmse,unit_broadcast minus calibrated_broadcast,-0.027744003064085126,-0.007537377750799934,-0.04865004377617138,-0.00940966028530423,20,7,13,0
+4096,terminal,nested,adam,selected_rate,population_nmse,unit_broadcast minus exact,0.7356621608984034,0.7493742892483088,0.7221914809216824,0.7472328938456237,20,20,0,0
+4096,terminal,nested,adam,selected_rate,population_nmse,calibrated_broadcast minus exact,0.7644896081341394,0.7532189260961406,0.7406895008255705,0.7909340093625286,20,20,0,0
+4096,terminal,nested,adam,selected_rate,population_nmse,sign_broadcast minus exact,0.7638088991626688,0.7532189420961757,0.7403790118388602,0.7898904363157617,20,20,0,0
+4096,terminal,nested,adam,selected_rate,population_nmse,unit_broadcast minus calibrated_broadcast,-0.028827447235735902,-0.0060215547731696795,-0.05176342167020699,-0.00947046292030357,20,5,15,0
+4096,terminal,nested,sgd,selected_rate,test_nmse,unit_broadcast minus exact,0.72821637226608,0.7441524632786247,0.7014487788179824,0.7498732742849907,20,20,0,0
+4096,terminal,nested,sgd,selected_rate,test_nmse,calibrated_broadcast minus exact,0.7475030266398839,0.7571190083039434,0.7295058921258705,0.7648875937677911,20,20,0,0
+4096,terminal,nested,sgd,selected_rate,test_nmse,sign_broadcast minus exact,0.7497792881715308,0.7564785282208115,0.7389792782014412,0.7591719119925932,20,20,0,0
+4096,terminal,nested,sgd,selected_rate,test_nmse,unit_broadcast minus calibrated_broadcast,-0.01928665437380379,-0.006365840885409368,-0.03965363527157591,-0.0004255896031504234,20,5,15,0
+4096,terminal,nested,sgd,selected_rate,population_nmse,unit_broadcast minus exact,0.7243360387111359,0.7468740262547404,0.700109612819694,0.7421666394350086,20,20,0,0
+4096,terminal,nested,sgd,selected_rate,population_nmse,calibrated_broadcast minus exact,0.7420076560542715,0.7506307841265089,0.728019739414566,0.7554519144115365,20,20,0,0
+4096,terminal,nested,sgd,selected_rate,population_nmse,sign_broadcast minus exact,0.7465412110034578,0.7523155945947824,0.7385063472704495,0.7530052225119689,20,20,0,0
+4096,terminal,nested,sgd,selected_rate,population_nmse,unit_broadcast minus calibrated_broadcast,-0.017671617343135458,-0.005708243785492062,-0.03934499812250986,0.0017953649222285787,20,7,13,0
+4096,terminal,quartet,adam,selected_rate,test_nmse,unit_broadcast minus exact,0.9303339451066929,0.9779781128710059,0.8883864572955861,0.9685042346191175,20,20,0,0
+4096,terminal,quartet,adam,selected_rate,test_nmse,calibrated_broadcast minus exact,0.9162433206646909,0.9750414590745439,0.8430940043342912,0.9761364060197896,20,20,0,0
+4096,terminal,quartet,adam,selected_rate,test_nmse,sign_broadcast minus exact,0.916257763941483,0.9750414528345452,0.8431312173376257,0.9761602552923192,20,20,0,0
+4096,terminal,quartet,adam,selected_rate,test_nmse,unit_broadcast minus calibrated_broadcast,0.01409062444200202,-0.008852264339014204,-0.024522428308964513,0.059073766886267,20,7,13,0
+4096,terminal,quartet,adam,selected_rate,population_nmse,unit_broadcast minus exact,0.9296217602926239,0.9814781382920439,0.8884762143358792,0.9668994169758958,20,20,0,0
+4096,terminal,quartet,adam,selected_rate,population_nmse,calibrated_broadcast minus exact,0.9180430326038037,0.993307905395072,0.8454065533623801,0.9771943089139897,20,20,0,0
+4096,terminal,quartet,adam,selected_rate,population_nmse,sign_broadcast minus exact,0.9180541662424044,0.9932507023937485,0.845421369065082,0.9771745655291065,20,20,0,0
+4096,terminal,quartet,adam,selected_rate,population_nmse,unit_broadcast minus calibrated_broadcast,0.011578727688820145,-0.008912650705477532,-0.027138166955003408,0.05624922129008357,20,6,14,0
+4096,terminal,quartet,sgd,selected_rate,test_nmse,unit_broadcast minus exact,0.8860447597644459,0.9628809921062917,0.8109710607674633,0.9480928487141052,20,20,0,0
+4096,terminal,quartet,sgd,selected_rate,test_nmse,calibrated_broadcast minus exact,0.8944353543445105,0.9709294303054682,0.815125802669382,0.9572254171529458,20,20,0,0
+4096,terminal,quartet,sgd,selected_rate,test_nmse,sign_broadcast minus exact,0.9093046384495735,0.9805345874413478,0.8384368618461726,0.9683755655249586,20,20,0,0
+4096,terminal,quartet,sgd,selected_rate,test_nmse,unit_broadcast minus calibrated_broadcast,-0.008390594580064631,-0.002334404837665227,-0.07054417229947917,0.045244652716055,20,10,10,0
+4096,terminal,quartet,sgd,selected_rate,population_nmse,unit_broadcast minus exact,0.8879124864412304,0.9716967329993229,0.8132908767317957,0.9503379958593267,20,20,0,0
+4096,terminal,quartet,sgd,selected_rate,population_nmse,calibrated_broadcast minus exact,0.8962798595314873,0.9865929858129165,0.81585736106641,0.9589668821319975,20,20,0,0
+4096,terminal,quartet,sgd,selected_rate,population_nmse,sign_broadcast minus exact,0.9123978737875837,0.9872041639996298,0.8402382418512442,0.9714663705675914,20,20,0,0
+4096,terminal,quartet,sgd,selected_rate,population_nmse,unit_broadcast minus calibrated_broadcast,-0.008367373090256558,-0.004004553825061319,-0.06801872814971391,0.045241138380035344,20,10,10,0
+4096,validation_selected,matching,adam,selected_rate,test_nmse,unit_broadcast minus exact,-8.57048057502769e-05,-8.207448749486361e-05,-0.00016785436694809032,-1.7072736315779004e-05,20,6,14,0
+4096,validation_selected,matching,adam,selected_rate,test_nmse,calibrated_broadcast minus exact,0.00021819725476951486,0.0002058289278466241,0.00010027005144618226,0.00033932257319527486,20,16,4,0
+4096,validation_selected,matching,adam,selected_rate,test_nmse,sign_broadcast minus exact,0.0002181980840700516,0.0002058291541512866,0.00010026998438583279,0.00033932214195609697,20,16,4,0
+4096,validation_selected,matching,adam,selected_rate,test_nmse,unit_broadcast minus calibrated_broadcast,-0.00030390206051979175,-0.00023137460441233562,-0.0004251213746627946,-0.00018957478730434083,20,2,18,0
+4096,validation_selected,matching,adam,selected_rate,population_nmse,unit_broadcast minus exact,-0.00010225439032883412,-6.801444888687627e-05,-0.00017448893373990957,-4.0241930288129486e-05,20,6,14,0
+4096,validation_selected,matching,adam,selected_rate,population_nmse,calibrated_broadcast minus exact,0.00017905834305117515,0.00020012890707156748,7.946514638660923e-05,0.00027646221514516497,20,17,3,0
+4096,validation_selected,matching,adam,selected_rate,population_nmse,sign_broadcast minus exact,0.00017905910140298152,0.00020013055823921952,7.946689226339353e-05,0.0002764618189504744,20,17,3,0
+4096,validation_selected,matching,adam,selected_rate,population_nmse,unit_broadcast minus calibrated_broadcast,-0.0002813127333800093,-0.00023150603861342154,-0.0003740735712527729,-0.0001915554931681036,20,2,18,0
+4096,validation_selected,matching,sgd,selected_rate,test_nmse,unit_broadcast minus exact,-5.9297500146944515e-06,-1.1526431319394681e-05,-5.5549200961217535e-05,3.904013179893088e-05,20,9,11,0
+4096,validation_selected,matching,sgd,selected_rate,test_nmse,calibrated_broadcast minus exact,0.09208574809366206,0.06199496962821677,0.048342757731732224,0.14085306236967376,20,18,2,0
+4096,validation_selected,matching,sgd,selected_rate,test_nmse,sign_broadcast minus exact,-1.773786729699651e-05,3.808109997392381e-06,-6.736300919308699e-05,1.8366804493965602e-05,20,10,10,0
+4096,validation_selected,matching,sgd,selected_rate,test_nmse,unit_broadcast minus calibrated_broadcast,-0.09209167784367675,-0.061945799074554456,-0.14085104773631682,-0.048317029202146276,20,2,18,0
+4096,validation_selected,matching,sgd,selected_rate,population_nmse,unit_broadcast minus exact,-1.780850400843313e-05,-1.037863310547366e-05,-7.964504954416598e-05,3.310210151540107e-05,20,9,11,0
+4096,validation_selected,matching,sgd,selected_rate,population_nmse,calibrated_broadcast minus exact,0.09178233133775589,0.06178028928291267,0.04832732438369295,0.14025524773898757,20,18,2,0
+4096,validation_selected,matching,sgd,selected_rate,population_nmse,sign_broadcast minus exact,-3.601050214571397e-05,-1.1302352047468469e-05,-0.00010056778719513095,6.906829330006006e-06,20,8,12,0
+4096,validation_selected,matching,sgd,selected_rate,population_nmse,unit_broadcast minus calibrated_broadcast,-0.0918001398417643,-0.06175418623961076,-0.14031196721194514,-0.048326866023856926,20,1,19,0
+4096,validation_selected,nested,adam,selected_rate,test_nmse,unit_broadcast minus exact,0.7012167096235745,0.704940460768796,0.6765605533390165,0.7256299866343596,20,20,0,0
+4096,validation_selected,nested,adam,selected_rate,test_nmse,calibrated_broadcast minus exact,0.7234864551761783,0.7399856706520381,0.7033687916283833,0.7417440923213808,20,20,0,0
+4096,validation_selected,nested,adam,selected_rate,test_nmse,sign_broadcast minus exact,0.7233711114211443,0.7399856599676629,0.7032334477536081,0.7416427087330802,20,20,0,0
+4096,validation_selected,nested,adam,selected_rate,test_nmse,unit_broadcast minus calibrated_broadcast,-0.022269745552603703,-0.0038871404169029677,-0.043367432148254746,-0.004256906641408069,20,9,11,0
+4096,validation_selected,nested,adam,selected_rate,population_nmse,unit_broadcast minus exact,0.6970774421996497,0.6998753162494382,0.6768337500939497,0.7170876111088337,20,20,0,0
+4096,validation_selected,nested,adam,selected_rate,population_nmse,calibrated_broadcast minus exact,0.7185512211720582,0.7368841248194498,0.7015487469832968,0.7336596335008633,20,20,0,0
+4096,validation_selected,nested,adam,selected_rate,population_nmse,sign_broadcast minus exact,0.7184068036733389,0.7368840687241732,0.7012527602692974,0.733636639352729,20,20,0,0
+4096,validation_selected,nested,adam,selected_rate,population_nmse,unit_broadcast minus calibrated_broadcast,-0.02147377897240859,-0.0014409006108413447,-0.04247903568854174,-0.0035209827153583773,20,7,13,0
+4096,validation_selected,nested,sgd,selected_rate,test_nmse,unit_broadcast minus exact,0.7140862581759859,0.7355064753157974,0.6861333185977897,0.7393283775572783,20,20,0,0
+4096,validation_selected,nested,sgd,selected_rate,test_nmse,calibrated_broadcast minus exact,0.7442234385518223,0.7557580181952582,0.724988163006079,0.7625438067118271,20,20,0,0
+4096,validation_selected,nested,sgd,selected_rate,test_nmse,sign_broadcast minus exact,0.7380903949410168,0.7538069527660209,0.7223820265865987,0.7519821249463858,20,20,0,0
+4096,validation_selected,nested,sgd,selected_rate,test_nmse,unit_broadcast minus calibrated_broadcast,-0.03013718037583647,-0.01813211196665765,-0.048858043990322765,-0.013770605567585852,20,4,16,0
+4096,validation_selected,nested,sgd,selected_rate,population_nmse,unit_broadcast minus exact,0.709951219851092,0.7286155421396127,0.6846981913894956,0.7315193160285868,20,20,0,0
+4096,validation_selected,nested,sgd,selected_rate,population_nmse,calibrated_broadcast minus exact,0.7390655466454786,0.7505305499898255,0.7237370683634385,0.7534985520902565,20,20,0,0
+4096,validation_selected,nested,sgd,selected_rate,population_nmse,sign_broadcast minus exact,0.7344916469138638,0.7468805821805717,0.7217456721799637,0.7453265991789298,20,20,0,0
+4096,validation_selected,nested,sgd,selected_rate,population_nmse,unit_broadcast minus calibrated_broadcast,-0.02911432679438682,-0.017260729327100044,-0.048674497372552084,-0.01287667034414282,20,4,16,0
+4096,validation_selected,quartet,adam,selected_rate,test_nmse,unit_broadcast minus exact,0.8477271990999113,0.8994379404442856,0.7718131456915648,0.9151653664990287,20,20,0,0
+4096,validation_selected,quartet,adam,selected_rate,test_nmse,calibrated_broadcast minus exact,0.793891817437791,0.8937859406013579,0.6947389024561438,0.8833407906131566,20,20,0,0
+4096,validation_selected,quartet,adam,selected_rate,test_nmse,sign_broadcast minus exact,0.793891685044503,0.8937851735180995,0.6947385388852977,0.8833405986555406,20,20,0,0
+4096,validation_selected,quartet,adam,selected_rate,test_nmse,unit_broadcast minus calibrated_broadcast,0.05383538166212056,0.028482922687797008,-0.02583992495277873,0.13504039246419974,20,14,6,0
+4096,validation_selected,quartet,adam,selected_rate,population_nmse,unit_broadcast minus exact,0.8476595619203071,0.9053699198064151,0.7720163118840633,0.9143919888896278,20,20,0,0
+4096,validation_selected,quartet,adam,selected_rate,population_nmse,calibrated_broadcast minus exact,0.796074937588281,0.8985752209952134,0.6969949472377266,0.8860454889718474,20,20,0,0
+4096,validation_selected,quartet,adam,selected_rate,population_nmse,sign_broadcast minus exact,0.796074808641575,0.8985744265978693,0.6969947052619081,0.8860454220706273,20,20,0,0
+4096,validation_selected,quartet,adam,selected_rate,population_nmse,unit_broadcast minus calibrated_broadcast,0.05158462433202595,0.028376567054230917,-0.02705489936128194,0.1310308811689213,20,13,7,0
+4096,validation_selected,quartet,sgd,selected_rate,test_nmse,unit_broadcast minus exact,0.8156166503793878,0.8892921791526283,0.7326092893154508,0.8900835731479916,20,20,0,0
+4096,validation_selected,quartet,sgd,selected_rate,test_nmse,calibrated_broadcast minus exact,0.8498736852837689,0.9507004377439278,0.7574997623554502,0.9275490525182087,20,20,0,0
+4096,validation_selected,quartet,sgd,selected_rate,test_nmse,sign_broadcast minus exact,0.8737180492705887,0.9596318052038042,0.7936087800539564,0.9422930043210703,20,20,0,0
+4096,validation_selected,quartet,sgd,selected_rate,test_nmse,unit_broadcast minus calibrated_broadcast,-0.0342570349043811,0.002596646839870209,-0.0978026673552267,0.025079220698573247,20,11,9,0
+4096,validation_selected,quartet,sgd,selected_rate,population_nmse,unit_broadcast minus exact,0.816502253663093,0.894767305607885,0.7333979413890567,0.8921822172448657,20,20,0,0
+4096,validation_selected,quartet,sgd,selected_rate,population_nmse,calibrated_broadcast minus exact,0.85134581334466,0.9512574955027362,0.756764189726846,0.9293085554733163,20,20,0,0
+4096,validation_selected,quartet,sgd,selected_rate,population_nmse,sign_broadcast minus exact,0.8764868754936295,0.9636026587367046,0.7957609773120045,0.9453354731361828,20,20,0,0
+4096,validation_selected,quartet,sgd,selected_rate,population_nmse,unit_broadcast minus calibrated_broadcast,-0.03484355968156685,-0.00019232209473707407,-0.09726661058119289,0.024978205117133386,20,10,10,0
+8192,terminal,matching,adam,selected_rate,test_nmse,unit_broadcast minus exact,-1.7615078271666224e-05,2.7984820364417018e-05,-9.92687493813268e-05,4.9586411294776546e-05,20,11,9,0
+8192,terminal,matching,adam,selected_rate,test_nmse,calibrated_broadcast minus exact,0.0012001308949373525,0.0009122863874212964,0.0007963459308350559,0.0016298745233274067,20,19,1,0
+8192,terminal,matching,adam,selected_rate,test_nmse,sign_broadcast minus exact,0.0012001438539664213,0.0009122851813871628,0.0007963488824456014,0.001629885251049712,20,19,1,0
+8192,terminal,matching,adam,selected_rate,test_nmse,unit_broadcast minus calibrated_broadcast,-0.0012177459732090187,-0.0010160077127566725,-0.0016641337755138167,-0.000792216398808421,20,1,19,0
+8192,terminal,matching,adam,selected_rate,population_nmse,unit_broadcast minus exact,-3.5935887870490062e-06,4.559591884809402e-06,-7.115383114505232e-05,5.6492002605029325e-05,20,10,10,0
+8192,terminal,matching,adam,selected_rate,population_nmse,calibrated_broadcast minus exact,0.0011944618762793947,0.0010052086047066845,0.0008094707993870584,0.0016202736732628862,20,19,1,0
+8192,terminal,matching,adam,selected_rate,population_nmse,sign_broadcast minus exact,0.0011944767992438639,0.0010052044529925627,0.0008094845325495496,0.0016202886100522356,20,19,1,0
+8192,terminal,matching,adam,selected_rate,population_nmse,unit_broadcast minus calibrated_broadcast,-0.001198055465066444,-0.0009644522988384493,-0.001637244907025642,-0.0007984469723736935,20,1,19,0
+8192,terminal,matching,sgd,selected_rate,test_nmse,unit_broadcast minus exact,5.387440623496123e-06,-1.3135134241420987e-05,-3.486798005561201e-05,6.331298918142729e-05,20,8,12,0
+8192,terminal,matching,sgd,selected_rate,test_nmse,calibrated_broadcast minus exact,0.04840081982463155,0.0035367550253266374,0.015455931160469893,0.08810104686195623,20,13,7,0
+8192,terminal,matching,sgd,selected_rate,test_nmse,sign_broadcast minus exact,-4.313203858207111e-05,-3.669417873211275e-05,-6.1761532881259e-05,-2.6276827780829458e-05,20,2,18,0
+8192,terminal,matching,sgd,selected_rate,test_nmse,unit_broadcast minus calibrated_broadcast,-0.04839543238400805,-0.0035686827949166135,-0.08809854117409702,-0.015433229398013197,20,6,14,0
+8192,terminal,matching,sgd,selected_rate,population_nmse,unit_broadcast minus exact,4.098249249574738e-06,-1.8439986896527476e-05,-4.195287676559186e-05,7.358418008555035e-05,20,6,14,0
+8192,terminal,matching,sgd,selected_rate,population_nmse,calibrated_broadcast minus exact,0.04828008441249529,0.0035457368413328817,0.015393584308556729,0.08796462100418728,20,13,7,0
+8192,terminal,matching,sgd,selected_rate,population_nmse,sign_broadcast minus exact,-4.758094150795096e-05,-4.4567284639322416e-05,-6.563019018506986e-05,-2.999400136531673e-05,20,2,18,0
+8192,terminal,matching,sgd,selected_rate,population_nmse,unit_broadcast minus calibrated_broadcast,-0.04827598616324571,-0.003577871710880592,-0.08799263331329134,-0.015387459829613618,20,4,16,0
+8192,terminal,nested,adam,selected_rate,test_nmse,unit_broadcast minus exact,0.7427005790953064,0.7507838240843949,0.7279617581054624,0.755637955410335,20,20,0,0
+8192,terminal,nested,adam,selected_rate,test_nmse,calibrated_broadcast minus exact,0.7805829329337797,0.7692377613924606,0.7546278388146261,0.813184959296413,20,20,0,0
+8192,terminal,nested,adam,selected_rate,test_nmse,sign_broadcast minus exact,0.7791511696391498,0.7692193951605504,0.7543140799369926,0.8098205795100383,20,20,0,0
+8192,terminal,nested,adam,selected_rate,test_nmse,unit_broadcast minus calibrated_broadcast,-0.03788235383847315,-0.024457566644745854,-0.06294482509691188,-0.019198887531466778,20,1,19,0
+8192,terminal,nested,adam,selected_rate,population_nmse,unit_broadcast minus exact,0.7389275511700641,0.7483781498367181,0.727156997307095,0.7492870984755288,20,20,0,0
+8192,terminal,nested,adam,selected_rate,population_nmse,calibrated_broadcast minus exact,0.775287506145198,0.7681085284455726,0.7526876290880867,0.8024134749134497,20,20,0,0
+8192,terminal,nested,adam,selected_rate,population_nmse,sign_broadcast minus exact,0.7740239002847831,0.7675654904749794,0.7522688830403076,0.7995496086383271,20,20,0,0
+8192,terminal,nested,adam,selected_rate,population_nmse,unit_broadcast minus calibrated_broadcast,-0.03635995497513393,-0.025480297822934206,-0.059875034194309194,-0.018070436008824825,20,3,17,0
+8192,terminal,nested,sgd,selected_rate,test_nmse,unit_broadcast minus exact,0.7779932239939626,0.7555857196445572,0.7326855952960054,0.8540960114132533,20,20,0,0
+8192,terminal,nested,sgd,selected_rate,test_nmse,calibrated_broadcast minus exact,0.7466142002732532,0.7552582366819777,0.7336641284350454,0.7577265450639764,20,20,0,0
+8192,terminal,nested,sgd,selected_rate,test_nmse,sign_broadcast minus exact,0.7506947893990537,0.7558941584017075,0.7396380991754725,0.7599337020858701,20,20,0,0
+8192,terminal,nested,sgd,selected_rate,test_nmse,unit_broadcast minus calibrated_broadcast,0.031379023720709304,-0.002172791649760364,-0.011090621438659909,0.1040349081009175,20,9,11,0
+8192,terminal,nested,sgd,selected_rate,population_nmse,unit_broadcast minus exact,0.774985912064217,0.7510482094980757,0.731683066515851,0.8504448671537045,20,20,0,0
+8192,terminal,nested,sgd,selected_rate,population_nmse,calibrated_broadcast minus exact,0.7423072414974796,0.7501529017073454,0.7327041137908686,0.7499514531751927,20,20,0,0
+8192,terminal,nested,sgd,selected_rate,population_nmse,sign_broadcast minus exact,0.7470935111894483,0.7525058361775043,0.7394083053590954,0.7531970860260664,20,20,0,0
+8192,terminal,nested,sgd,selected_rate,population_nmse,unit_broadcast minus calibrated_broadcast,0.0326786705667374,-0.0018956482369216765,-0.010141315510914106,0.10648864828994044,20,7,13,0
+8192,terminal,quartet,adam,selected_rate,test_nmse,unit_broadcast minus exact,0.904774045225442,0.9788751843918315,0.8347690206343773,0.9599361008881988,20,20,0,0
+8192,terminal,quartet,adam,selected_rate,test_nmse,calibrated_broadcast minus exact,0.9348340819210048,0.9904082898323794,0.8653488774878016,0.992001871510978,20,20,0,0
+8192,terminal,quartet,adam,selected_rate,test_nmse,sign_broadcast minus exact,0.9310811012603036,0.9839884797713642,0.8630106848443774,0.9859598896944187,20,20,0,0
+8192,terminal,quartet,adam,selected_rate,test_nmse,unit_broadcast minus calibrated_broadcast,-0.03006003669556274,-0.019784813703768056,-0.06534508183154726,0.003110743094561634,20,6,14,0
+8192,terminal,quartet,adam,selected_rate,population_nmse,unit_broadcast minus exact,0.9072755106481395,0.9820406116380793,0.8376328435012657,0.9623150380761428,20,20,0,0
+8192,terminal,quartet,adam,selected_rate,population_nmse,calibrated_broadcast minus exact,0.9362257171219713,1.0017705807532025,0.8669319768152981,0.9924823880844434,20,20,0,0
+8192,terminal,quartet,adam,selected_rate,population_nmse,sign_broadcast minus exact,0.9327793665356088,0.9938720484002195,0.8647806351322957,0.9873931844957589,20,20,0,0
+8192,terminal,quartet,adam,selected_rate,population_nmse,unit_broadcast minus calibrated_broadcast,-0.028950206473832,-0.020882069706645745,-0.06400484512236182,0.0041153763692355965,20,6,14,0
+8192,terminal,quartet,sgd,selected_rate,test_nmse,unit_broadcast minus exact,0.9102907570584028,0.9623726453213277,0.857857661547154,0.958269173843756,20,20,0,0
+8192,terminal,quartet,sgd,selected_rate,test_nmse,calibrated_broadcast minus exact,0.9278637612735434,0.9722497502721853,0.8757945351581825,0.9716563052876616,20,20,0,0
+8192,terminal,quartet,sgd,selected_rate,test_nmse,sign_broadcast minus exact,0.9341891703896689,0.9799514290009337,0.881511672878839,0.9764115449345616,20,20,0,0
+8192,terminal,quartet,sgd,selected_rate,test_nmse,unit_broadcast minus calibrated_broadcast,-0.01757300421514066,-0.0004795456568951195,-0.07697151347475402,0.03270982336569003,20,10,10,0
+8192,terminal,quartet,sgd,selected_rate,population_nmse,unit_broadcast minus exact,0.9131275704040467,0.9736987974764258,0.8589196416202837,0.9626425549317543,20,20,0,0
+8192,terminal,quartet,sgd,selected_rate,population_nmse,calibrated_broadcast minus exact,0.9301017618636536,0.9792401641303661,0.8783550189217231,0.9731074830984895,20,20,0,0
+8192,terminal,quartet,sgd,selected_rate,population_nmse,sign_broadcast minus exact,0.9380402999076812,0.9906516090737516,0.8836181171824741,0.9815630528837928,20,20,0,0
+8192,terminal,quartet,sgd,selected_rate,population_nmse,unit_broadcast minus calibrated_broadcast,-0.01697419145960667,6.23380118630612e-05,-0.07559834131349027,0.034103413254229865,20,10,10,0
+8192,validation_selected,matching,adam,selected_rate,test_nmse,unit_broadcast minus exact,-6.44989168006746e-05,-7.238422556345159e-05,-0.00011047718256108908,-1.628479101837773e-05,20,4,16,0
+8192,validation_selected,matching,adam,selected_rate,test_nmse,calibrated_broadcast minus exact,0.0002877392815690263,0.00023334249775496495,0.00016233119124915412,0.00041564572387752966,20,19,1,0
+8192,validation_selected,matching,adam,selected_rate,test_nmse,sign_broadcast minus exact,0.0002877443973804881,0.00023337580243327875,0.00016233521288695651,0.0004156498413342255,20,19,1,0
+8192,validation_selected,matching,adam,selected_rate,test_nmse,unit_broadcast minus calibrated_broadcast,-0.0003522381983697009,-0.0002543434743753469,-0.0004879953284731443,-0.00022199021721996462,20,1,19,0
+8192,validation_selected,matching,adam,selected_rate,population_nmse,unit_broadcast minus exact,-6.309075202840417e-05,-6.266024899370063e-05,-0.00010797930520125335,-1.7430675874641384e-05,20,6,14,0
+8192,validation_selected,matching,adam,selected_rate,population_nmse,calibrated_broadcast minus exact,0.00026566873207318315,0.0002223838442005848,0.00015172651591294502,0.0003875784337828373,20,18,2,0
+8192,validation_selected,matching,adam,selected_rate,population_nmse,sign_broadcast minus exact,0.00026567340602158394,0.00022238505313997448,0.00015173517152526769,0.0003875846904372255,20,18,2,0
+8192,validation_selected,matching,adam,selected_rate,population_nmse,unit_broadcast minus calibrated_broadcast,-0.00032875948410158724,-0.0002682741586021752,-0.0004544781987570302,-0.0002121352289955544,20,2,18,0
+8192,validation_selected,matching,sgd,selected_rate,test_nmse,unit_broadcast minus exact,1.3894551352330864e-05,3.689715361823026e-06,-1.95020893658678e-05,4.737112570709401e-05,20,11,9,0
+8192,validation_selected,matching,sgd,selected_rate,test_nmse,calibrated_broadcast minus exact,0.0484519707516735,0.003575457881117381,0.015506467683715,0.08815187336106128,20,15,5,0
+8192,validation_selected,matching,sgd,selected_rate,test_nmse,sign_broadcast minus exact,-2.149083583198631e-05,-1.3149714800002668e-05,-4.631659303852703e-05,2.7100879185897184e-06,20,8,12,0
+8192,validation_selected,matching,sgd,selected_rate,test_nmse,unit_broadcast minus calibrated_broadcast,-0.04843807620032118,-0.0035623432030683303,-0.088144996008487,-0.015477610547049254,20,4,16,0
+8192,validation_selected,matching,sgd,selected_rate,population_nmse,unit_broadcast minus exact,6.38110125947609e-06,-6.801206586940905e-06,-2.889428324584682e-05,4.398906739801182e-05,20,7,13,0
+8192,validation_selected,matching,sgd,selected_rate,population_nmse,calibrated_broadcast minus exact,0.04832982592253965,0.003583941714893833,0.015451910134303434,0.08804212786470984,20,15,5,0
+8192,validation_selected,matching,sgd,selected_rate,population_nmse,sign_broadcast minus exact,-2.617937187340714e-05,-2.3910311219532533e-05,-5.1119190888957916e-05,-1.8993689208666916e-06,20,6,14,0
+8192,validation_selected,matching,sgd,selected_rate,population_nmse,unit_broadcast minus calibrated_broadcast,-0.048323444821280176,-0.0035996151969481084,-0.08803406079273111,-0.01544636529173395,20,4,16,0
+8192,validation_selected,nested,adam,selected_rate,test_nmse,unit_broadcast minus exact,0.6981942181188179,0.7012865672916253,0.6737210812615098,0.7227034471748268,20,20,0,0
+8192,validation_selected,nested,adam,selected_rate,test_nmse,calibrated_broadcast minus exact,0.7193757875185596,0.7310092922771103,0.7001454269738067,0.7375345469452865,20,20,0,0
+8192,validation_selected,nested,adam,selected_rate,test_nmse,sign_broadcast minus exact,0.7192358142303895,0.7310031216285757,0.6999349269189177,0.7374551890351926,20,20,0,0
+8192,validation_selected,nested,adam,selected_rate,test_nmse,unit_broadcast minus calibrated_broadcast,-0.021181569399741685,-0.00502205840098402,-0.04211908867415995,-0.003068277882820302,20,8,12,0
+8192,validation_selected,nested,adam,selected_rate,population_nmse,unit_broadcast minus exact,0.6939469378740615,0.6940797264121217,0.6736979540164866,0.7142672110380377,20,20,0,0
+8192,validation_selected,nested,adam,selected_rate,population_nmse,calibrated_broadcast minus exact,0.7148477245831243,0.7275489048066495,0.6980174375358683,0.7302024628579166,20,20,0,0
+8192,validation_selected,nested,adam,selected_rate,population_nmse,sign_broadcast minus exact,0.7146818843745741,0.7273415606883105,0.6976716142588214,0.7301089987713052,20,20,0,0
+8192,validation_selected,nested,adam,selected_rate,population_nmse,unit_broadcast minus calibrated_broadcast,-0.020900786709062924,-0.003759803417681118,-0.041996364278022676,-0.003130767204282343,20,7,13,0
+8192,validation_selected,nested,sgd,selected_rate,test_nmse,unit_broadcast minus exact,0.7075936043573394,0.7338613614327074,0.6794314097259685,0.7333668834503255,20,20,0,0
+8192,validation_selected,nested,sgd,selected_rate,test_nmse,calibrated_broadcast minus exact,0.7345259260062768,0.7509415444366182,0.7167133770073535,0.7509446531065002,20,20,0,0
+8192,validation_selected,nested,sgd,selected_rate,test_nmse,sign_broadcast minus exact,0.7346280442101703,0.7499219548766808,0.7189392044439071,0.7488423674264519,20,20,0,0
+8192,validation_selected,nested,sgd,selected_rate,test_nmse,unit_broadcast minus calibrated_broadcast,-0.02693232164893746,-0.02251729936272423,-0.04371359402697411,-0.012747991833489085,20,3,17,0
+8192,validation_selected,nested,sgd,selected_rate,population_nmse,unit_broadcast minus exact,0.7031923615874693,0.725409842317154,0.6780358563304271,0.7251225869763014,20,20,0,0
+8192,validation_selected,nested,sgd,selected_rate,population_nmse,calibrated_broadcast minus exact,0.729928020492141,0.7442887777461128,0.7155306191716214,0.7427112688522804,20,20,0,0
+8192,validation_selected,nested,sgd,selected_rate,population_nmse,sign_broadcast minus exact,0.7309557637351349,0.7441058221812065,0.7181951236399942,0.7421441323276007,20,20,0,0
+8192,validation_selected,nested,sgd,selected_rate,population_nmse,unit_broadcast minus calibrated_broadcast,-0.026735658904671666,-0.021095492740364263,-0.04481316192667186,-0.012423379286413077,20,4,16,0
+8192,validation_selected,quartet,adam,selected_rate,test_nmse,unit_broadcast minus exact,0.8247937116271731,0.8994379404442856,0.7429915274599791,0.8988840711126374,20,20,0,0
+8192,validation_selected,quartet,adam,selected_rate,test_nmse,calibrated_broadcast minus exact,0.7940076943275265,0.8937859406013579,0.6948338338568312,0.883689458060215,20,20,0,0
+8192,validation_selected,quartet,adam,selected_rate,test_nmse,sign_broadcast minus exact,0.7940081169994888,0.8937851735180995,0.6948341953809638,0.8836893415323835,20,20,0,0
+8192,validation_selected,quartet,adam,selected_rate,test_nmse,unit_broadcast minus calibrated_broadcast,0.030786017299646473,0.02702762097718947,-0.04475802653225918,0.10872658292403278,20,13,7,0
+8192,validation_selected,quartet,adam,selected_rate,population_nmse,unit_broadcast minus exact,0.8231426755896706,0.9053699198064151,0.7397244034629946,0.8981598240777499,20,20,0,0
+8192,validation_selected,quartet,adam,selected_rate,population_nmse,calibrated_broadcast minus exact,0.7957802634575739,0.8985752209952134,0.6970771712695764,0.885885333615139,20,20,0,0
+8192,validation_selected,quartet,adam,selected_rate,population_nmse,sign_broadcast minus exact,0.7957802851034085,0.8985744265978693,0.6970772291643363,0.8858852706573409,20,20,0,0
+8192,validation_selected,quartet,adam,selected_rate,population_nmse,unit_broadcast minus calibrated_broadcast,0.027362412132096826,0.022293449558999756,-0.04626295634840584,0.10244117708873858,20,13,7,0
+8192,validation_selected,quartet,sgd,selected_rate,test_nmse,unit_broadcast minus exact,0.8255785000302496,0.8651029770013077,0.7476376629236702,0.8950256815904353,20,20,0,0
+8192,validation_selected,quartet,sgd,selected_rate,test_nmse,calibrated_broadcast minus exact,0.866393106204141,0.9479681532717081,0.8015314318243473,0.9250125477343895,20,20,0,0
+8192,validation_selected,quartet,sgd,selected_rate,test_nmse,sign_broadcast minus exact,0.8787732867021392,0.9447259892621969,0.8118107314584627,0.9379930708479614,20,20,0,0
+8192,validation_selected,quartet,sgd,selected_rate,test_nmse,unit_broadcast minus calibrated_broadcast,-0.04081460617389137,-0.001264091363447628,-0.10485178708228755,0.02060256388356709,20,10,10,0
+8192,validation_selected,quartet,sgd,selected_rate,population_nmse,unit_broadcast minus exact,0.826017996577636,0.862917171455767,0.7478445865554897,0.897687716597728,20,20,0,0
+8192,validation_selected,quartet,sgd,selected_rate,population_nmse,calibrated_broadcast minus exact,0.8667044493480083,0.9506157697032165,0.8003670940070979,0.9269171361061788,20,20,0,0
+8192,validation_selected,quartet,sgd,selected_rate,population_nmse,sign_broadcast minus exact,0.8812180856673534,0.9436643416856931,0.8128949258711746,0.9414314429004008,20,20,0,0
+8192,validation_selected,quartet,sgd,selected_rate,population_nmse,unit_broadcast minus calibrated_broadcast,-0.040686452770372625,0.00015216024276076823,-0.10431357703025412,0.021398053753328906,20,10,10,0
+16384,terminal,matching,adam,selected_rate,test_nmse,unit_broadcast minus exact,0.00011317926557933514,7.141095698552993e-05,5.2012252807629576e-05,0.00017987437666972198,20,16,4,0
+16384,terminal,matching,adam,selected_rate,test_nmse,calibrated_broadcast minus exact,0.0014378889349747335,0.0012406478436360092,0.0009330464033381916,0.0019675336444470296,20,18,2,0
+16384,terminal,matching,adam,selected_rate,test_nmse,sign_broadcast minus exact,0.0014378875136734134,0.0012406960417925585,0.0009330478842757431,0.0019675316628814756,20,18,2,0
+16384,terminal,matching,adam,selected_rate,test_nmse,unit_broadcast minus calibrated_broadcast,-0.0013247096693953984,-0.001008572561517717,-0.0018699084697225527,-0.0008009735636444385,20,3,17,0
+16384,terminal,matching,adam,selected_rate,population_nmse,unit_broadcast minus exact,0.00011842587608439794,9.473263532390865e-05,5.4328302174361934e-05,0.00018973100779389317,20,15,5,0
+16384,terminal,matching,adam,selected_rate,population_nmse,calibrated_broadcast minus exact,0.0013886460514839288,0.0011985984547185514,0.0009004476198084081,0.001909428772098089,20,18,2,0
+16384,terminal,matching,adam,selected_rate,population_nmse,sign_broadcast minus exact,0.0013886448984057828,0.0011986466190516522,0.0009004438361585545,0.001909424685605474,20,18,2,0
+16384,terminal,matching,adam,selected_rate,population_nmse,unit_broadcast minus calibrated_broadcast,-0.001270220175399531,-0.0009306508908174552,-0.001803473127053061,-0.0007616803122813055,20,3,17,0
+16384,terminal,matching,sgd,selected_rate,test_nmse,unit_broadcast minus exact,3.4396377786256e-05,-5.423623538100553e-06,-2.9558623345519096e-05,0.00011195318391576064,20,10,10,0
+16384,terminal,matching,sgd,selected_rate,test_nmse,calibrated_broadcast minus exact,0.017017362996481062,-5.2271168312547495e-06,0.004428164702505527,0.032398723671918164,20,9,11,0
+16384,terminal,matching,sgd,selected_rate,test_nmse,sign_broadcast minus exact,-5.0009622699621374e-05,-4.76465847030743e-05,-7.045701937988166e-05,-3.012264580858754e-05,20,3,17,0
+16384,terminal,matching,sgd,selected_rate,test_nmse,unit_broadcast minus calibrated_broadcast,-0.0169829666186948,5.8302375088251784e-06,-0.032371543423572624,-0.004383939010299133,20,10,10,0
+16384,terminal,matching,sgd,selected_rate,population_nmse,unit_broadcast minus exact,2.858066504377076e-05,-1.2274475002909481e-05,-2.7217375974454268e-05,9.367517418323258e-05,20,8,12,0
+16384,terminal,matching,sgd,selected_rate,population_nmse,calibrated_broadcast minus exact,0.016959011726619868,-2.2082052562899464e-05,0.00439031772720404,0.03243303850868751,20,8,12,0
+16384,terminal,matching,sgd,selected_rate,population_nmse,sign_broadcast minus exact,-4.966619445826832e-05,-5.593678376130282e-05,-6.430726239046991e-05,-3.485599597046146e-05,20,2,18,0
+16384,terminal,matching,sgd,selected_rate,population_nmse,unit_broadcast minus calibrated_broadcast,-0.0169304310615761,-4.0302206889386544e-06,-0.032415558895938314,-0.00435036738538009,20,8,12,0
+16384,terminal,nested,adam,selected_rate,test_nmse,unit_broadcast minus exact,0.7497928864163445,0.7499638615571159,0.7383886618082456,0.7605105607026155,20,20,0,0
+16384,terminal,nested,adam,selected_rate,test_nmse,calibrated_broadcast minus exact,0.77120641318763,0.7587016398107698,0.7493599849142654,0.7941685592795855,20,20,0,0
+16384,terminal,nested,adam,selected_rate,test_nmse,sign_broadcast minus exact,0.7728246207539768,0.7594561292879528,0.7495864882213997,0.7977230986813884,20,20,0,0
+16384,terminal,nested,adam,selected_rate,test_nmse,unit_broadcast minus calibrated_broadcast,-0.021413526771285413,-0.007117359265414014,-0.04432255305203552,-0.003503803233601273,20,7,13,0
+16384,terminal,nested,adam,selected_rate,population_nmse,unit_broadcast minus exact,0.7457347433881315,0.7506010384509092,0.7371825072891582,0.7533072000241913,20,20,0,0
+16384,terminal,nested,adam,selected_rate,population_nmse,calibrated_broadcast minus exact,0.7669021156152376,0.7542529396740703,0.7464127460194175,0.7900436402675539,20,20,0,0
+16384,terminal,nested,adam,selected_rate,population_nmse,sign_broadcast minus exact,0.7681638082947726,0.7549492041967731,0.7470962096476992,0.7916951935273572,20,20,0,0
+16384,terminal,nested,adam,selected_rate,population_nmse,unit_broadcast minus calibrated_broadcast,-0.021167372227106195,-0.005488739303804169,-0.044723237212849,-0.003252953193179863,20,5,15,0
+16384,terminal,nested,sgd,selected_rate,test_nmse,unit_broadcast minus exact,0.827989146046721,0.749272954773083,0.7329306072638377,1.0035952826420593,20,20,0,0
+16384,terminal,nested,sgd,selected_rate,test_nmse,calibrated_broadcast minus exact,0.7464137076841463,0.7535191896750058,0.7361028299902338,0.7561525561977194,20,20,0,0
+16384,terminal,nested,sgd,selected_rate,test_nmse,sign_broadcast minus exact,0.7467409901092749,0.7512612737656101,0.7357398126707317,0.7567769836050798,20,20,0,0
+16384,terminal,nested,sgd,selected_rate,test_nmse,unit_broadcast minus calibrated_broadcast,0.08157543836257478,0.0024753400929392044,-0.009287867110265146,0.25259474893388345,20,11,9,0
+16384,terminal,nested,sgd,selected_rate,population_nmse,unit_broadcast minus exact,0.8337347365520837,0.7492683842730853,0.7329862460645324,1.024089951871502,20,20,0,0
+16384,terminal,nested,sgd,selected_rate,population_nmse,calibrated_broadcast minus exact,0.7422721348154242,0.7517899073164244,0.7347527689667721,0.7490519026922354,20,20,0,0
+16384,terminal,nested,sgd,selected_rate,population_nmse,sign_broadcast minus exact,0.7428601688089204,0.7480555633719871,0.7343434002832638,0.7501050482235058,20,20,0,0
+16384,terminal,nested,sgd,selected_rate,population_nmse,unit_broadcast minus calibrated_broadcast,0.09146260173665946,0.0038432989771968185,-0.008248752592688233,0.2799279732278373,20,11,9,0
+16384,terminal,quartet,adam,selected_rate,test_nmse,unit_broadcast minus exact,0.9079544202399031,0.9825280530381727,0.8414964158256876,0.9630085896394611,20,20,0,0
+16384,terminal,quartet,adam,selected_rate,test_nmse,calibrated_broadcast minus exact,0.953064190965736,1.0317885317885966,0.8846203644955166,1.0135339112761643,20,20,0,0
+16384,terminal,quartet,adam,selected_rate,test_nmse,sign_broadcast minus exact,0.9696676246280236,1.023502802196907,0.9038458147266615,1.026876819789463,20,20,0,0
+16384,terminal,quartet,adam,selected_rate,test_nmse,unit_broadcast minus calibrated_broadcast,-0.04510977072583299,-0.04172019720705905,-0.06458165781231072,-0.02450059941904681,20,2,18,0
+16384,terminal,quartet,adam,selected_rate,population_nmse,unit_broadcast minus exact,0.9091905955098631,0.9863201432900008,0.841798902385179,0.9643766047860234,20,20,0,0
+16384,terminal,quartet,adam,selected_rate,population_nmse,calibrated_broadcast minus exact,0.9559830643048327,1.0275903616636435,0.8858636066815764,1.0176471034082482,20,20,0,0
+16384,terminal,quartet,adam,selected_rate,population_nmse,sign_broadcast minus exact,0.975334771358283,1.025248614316899,0.9061495571983791,1.036619540750945,20,20,0,0
+16384,terminal,quartet,adam,selected_rate,population_nmse,unit_broadcast minus calibrated_broadcast,-0.04679246879496956,-0.04626714121327141,-0.06563126480997462,-0.0269456578610356,20,3,17,0
+16384,terminal,quartet,sgd,selected_rate,test_nmse,unit_broadcast minus exact,0.9179129145103463,0.9726499709933543,0.8278829278265272,0.9971217775897534,20,20,0,0
+16384,terminal,quartet,sgd,selected_rate,test_nmse,calibrated_broadcast minus exact,0.9300632061459154,0.9729517416402594,0.888755857865446,0.9670985181463454,20,20,0,0
+16384,terminal,quartet,sgd,selected_rate,test_nmse,sign_broadcast minus exact,0.9373141359766809,0.9832858733554224,0.8880082340688219,0.9779798889844469,20,20,0,0
+16384,terminal,quartet,sgd,selected_rate,test_nmse,unit_broadcast minus calibrated_broadcast,-0.012150291635569183,0.006123043847390153,-0.08601395300096755,0.05688056867056315,20,11,9,0
+16384,terminal,quartet,sgd,selected_rate,population_nmse,unit_broadcast minus exact,0.9192424613494339,0.977536393095167,0.82966041019566,0.99583258258474,20,20,0,0
+16384,terminal,quartet,sgd,selected_rate,population_nmse,calibrated_broadcast minus exact,0.9332892011937002,0.9871335388482854,0.8922207650285486,0.9701608781030238,20,20,0,0
+16384,terminal,quartet,sgd,selected_rate,population_nmse,sign_broadcast minus exact,0.9398468762784921,0.9877545100235161,0.8903993498411522,0.9796195521972088,20,20,0,0
+16384,terminal,quartet,sgd,selected_rate,population_nmse,unit_broadcast minus calibrated_broadcast,-0.014046739844266493,0.005022839129801615,-0.086463223562335,0.0520439358533216,20,10,10,0
+16384,validation_selected,matching,adam,selected_rate,test_nmse,unit_broadcast minus exact,-8.811898007921228e-05,-3.269300743261906e-05,-0.00017226036162056445,-1.4353228018942728e-05,20,6,14,0
+16384,validation_selected,matching,adam,selected_rate,test_nmse,calibrated_broadcast minus exact,0.0001743592129748584,0.00013199859688171542,7.073098002228546e-05,0.0002908975842521322,20,15,5,0
+16384,validation_selected,matching,adam,selected_rate,test_nmse,sign_broadcast minus exact,0.00017436023519111255,0.000131999972794776,7.073241059886871e-05,0.00029089748057198295,20,15,5,0
+16384,validation_selected,matching,adam,selected_rate,test_nmse,unit_broadcast minus calibrated_broadcast,-0.0002624781930540707,-0.0002105339935753181,-0.00039817268204074644,-0.00013905349899689335,20,4,16,0
+16384,validation_selected,matching,adam,selected_rate,population_nmse,unit_broadcast minus exact,-8.58993955435877e-05,-6.266024899370063e-05,-0.00015389778588494347,-2.519056185201983e-05,20,5,15,0
+16384,validation_selected,matching,adam,selected_rate,population_nmse,calibrated_broadcast minus exact,0.00017147866263729727,0.00012249186766042348,6.0814054186761914e-05,0.00029398746248436683,20,15,5,0
+16384,validation_selected,matching,adam,selected_rate,population_nmse,sign_broadcast minus exact,0.0001714825231552112,0.0001225171506270559,6.0815629153757344e-05,0.0002939856871040237,20,15,5,0
+16384,validation_selected,matching,adam,selected_rate,population_nmse,unit_broadcast minus calibrated_broadcast,-0.00025737805818088497,-0.00023082315257923696,-0.0003856645769133164,-0.00014578214051067415,20,3,17,0
+16384,validation_selected,matching,sgd,selected_rate,test_nmse,unit_broadcast minus exact,5.46258066935184e-06,3.0638648355289094e-06,-1.7886965507735676e-05,3.0055977381299127e-05,20,10,10,0
+16384,validation_selected,matching,sgd,selected_rate,test_nmse,calibrated_broadcast minus exact,0.01706895984470667,3.480868219662113e-05,0.004469719627270571,0.03245135912692784,20,14,6,0
+16384,validation_selected,matching,sgd,selected_rate,test_nmse,sign_broadcast minus exact,-2.9279082235125592e-05,-3.232821147954208e-05,-5.08539438386789e-05,-6.76655463954056e-06,20,8,12,0
+16384,validation_selected,matching,sgd,selected_rate,test_nmse,unit_broadcast minus calibrated_broadcast,-0.017063497264037324,-7.096137683428733e-06,-0.03244288231638705,-0.0044692752017991616,20,8,12,0
+16384,validation_selected,matching,sgd,selected_rate,population_nmse,unit_broadcast minus exact,6.089655563712909e-06,-5.132651494160599e-06,-1.5633989704860574e-05,2.8941450898922037e-05,20,9,11,0
+16384,validation_selected,matching,sgd,selected_rate,population_nmse,calibrated_broadcast minus exact,0.017024146395534123,4.4781164523767863e-05,0.004447601677815264,0.032490404587088025,20,14,6,0
+16384,validation_selected,matching,sgd,selected_rate,population_nmse,sign_broadcast minus exact,-1.9502172754173228e-05,-2.17539000130796e-05,-3.956800337591354e-05,1.5910011533990336e-06,20,7,13,0
+16384,validation_selected,matching,sgd,selected_rate,population_nmse,unit_broadcast minus calibrated_broadcast,-0.01701805673997041,-2.136260508274929e-05,-0.032490896669343315,-0.00444274459862183,20,3,17,0
+16384,validation_selected,nested,adam,selected_rate,test_nmse,unit_broadcast minus exact,0.6979473238616111,0.7012865672916253,0.6735376811593203,0.7223709905067337,20,20,0,0
+16384,validation_selected,nested,adam,selected_rate,test_nmse,calibrated_broadcast minus exact,0.7180087732917975,0.7279880004520833,0.6988681473828807,0.7361873931499382,20,20,0,0
+16384,validation_selected,nested,adam,selected_rate,test_nmse,sign_broadcast minus exact,0.7177488782366215,0.7284076675283857,0.6986654870037095,0.7358043691385917,20,20,0,0
+16384,validation_selected,nested,adam,selected_rate,test_nmse,unit_broadcast minus calibrated_broadcast,-0.02006144943018644,-0.00491740918980782,-0.041121051141706055,-0.0018380133483150997,20,7,13,0
+16384,validation_selected,nested,adam,selected_rate,population_nmse,unit_broadcast minus exact,0.6937008183756286,0.6940797264121217,0.6735437999141833,0.7137405127949592,20,20,0,0
+16384,validation_selected,nested,adam,selected_rate,population_nmse,calibrated_broadcast minus exact,0.7136541272594269,0.7235839356593294,0.696929503070951,0.7288503541106819,20,20,0,0
+16384,validation_selected,nested,adam,selected_rate,population_nmse,sign_broadcast minus exact,0.7133931818149541,0.7238618980916137,0.6965593284363998,0.7286163160794573,20,20,0,0
+16384,validation_selected,nested,adam,selected_rate,population_nmse,unit_broadcast minus calibrated_broadcast,-0.01995330888379812,-0.00443516438674485,-0.04095868667897626,-0.0019821806547707754,20,6,14,0
+16384,validation_selected,nested,sgd,selected_rate,test_nmse,unit_broadcast minus exact,0.7055976664130654,0.7229555282352885,0.67792257836535,0.7307549705601418,20,20,0,0
+16384,validation_selected,nested,sgd,selected_rate,test_nmse,calibrated_broadcast minus exact,0.7293023242323111,0.7471754159948197,0.712081632594423,0.7451287037953448,20,20,0,0
+16384,validation_selected,nested,sgd,selected_rate,test_nmse,sign_broadcast minus exact,0.7296169328201576,0.7439237083485641,0.7146258757296355,0.7433956492939002,20,20,0,0
+16384,validation_selected,nested,sgd,selected_rate,test_nmse,unit_broadcast minus calibrated_broadcast,-0.023704657819245644,-0.01785804107226946,-0.040173340974564,-0.00981203365789168,20,4,16,0
+16384,validation_selected,nested,sgd,selected_rate,population_nmse,unit_broadcast minus exact,0.7010996059261958,0.7183722912311643,0.6761283854020396,0.7227495881318075,20,20,0,0
+16384,validation_selected,nested,sgd,selected_rate,population_nmse,calibrated_broadcast minus exact,0.724950076125405,0.7419281400381692,0.711122868534387,0.7373080852510663,20,20,0,0
+16384,validation_selected,nested,sgd,selected_rate,population_nmse,sign_broadcast minus exact,0.7254809106566035,0.7363009376794613,0.7130317015457158,0.7366771546392571,20,20,0,0
+16384,validation_selected,nested,sgd,selected_rate,population_nmse,unit_broadcast minus calibrated_broadcast,-0.023850470199209155,-0.019830625700151483,-0.042236043197064525,-0.009536178566564687,20,5,15,0
+16384,validation_selected,quartet,adam,selected_rate,test_nmse,unit_broadcast minus exact,0.8018589423845868,0.89972875779128,0.7142364405215844,0.8830919810481898,20,20,0,0
+16384,validation_selected,quartet,adam,selected_rate,test_nmse,calibrated_broadcast minus exact,0.7905128594789279,0.8935232620403446,0.6917013551174104,0.8798371171538024,20,20,0,0
+16384,validation_selected,quartet,adam,selected_rate,test_nmse,sign_broadcast minus exact,0.7917502456374612,0.8935224949570861,0.6932834632407063,0.8806101332656805,20,20,0,0
+16384,validation_selected,quartet,adam,selected_rate,test_nmse,unit_broadcast minus calibrated_broadcast,0.011346082905658991,0.007167048200735743,-0.058000536077456165,0.08421473468845726,20,12,8,0
+16384,validation_selected,quartet,adam,selected_rate,population_nmse,unit_broadcast minus exact,0.8005656796341869,0.8983481357592843,0.7126008949398165,0.8825764773000154,20,20,0,0
+16384,validation_selected,quartet,adam,selected_rate,population_nmse,calibrated_broadcast minus exact,0.7925383820552112,0.8983833278103787,0.6936027768598165,0.8824683015279495,20,20,0,0
+16384,validation_selected,quartet,adam,selected_rate,population_nmse,sign_broadcast minus exact,0.7940550784405371,0.8983825334130346,0.6957863317986727,0.8833424193793368,20,20,0,0
+16384,validation_selected,quartet,adam,selected_rate,population_nmse,unit_broadcast minus calibrated_broadcast,0.008027297578975374,0.004971440494823537,-0.05960969121510803,0.0781949787894153,20,12,8,0
+16384,validation_selected,quartet,sgd,selected_rate,test_nmse,unit_broadcast minus exact,0.7970187416560744,0.8288806609292855,0.7079314381318621,0.8775243691826817,20,20,0,0
+16384,validation_selected,quartet,sgd,selected_rate,test_nmse,calibrated_broadcast minus exact,0.8618940888382951,0.9348751794087969,0.7980510857189677,0.9185817647044614,20,20,0,0
+16384,validation_selected,quartet,sgd,selected_rate,test_nmse,sign_broadcast minus exact,0.86243530075559,0.9270753947809037,0.7890872160165988,0.927211168428214,20,20,0,0
+16384,validation_selected,quartet,sgd,selected_rate,test_nmse,unit_broadcast minus calibrated_broadcast,-0.06487534718222074,0.004328422718092251,-0.13989167106867828,0.0022915064593596853,20,11,9,0
+16384,validation_selected,quartet,sgd,selected_rate,population_nmse,unit_broadcast minus exact,0.7968270187716119,0.8335463407102337,0.706359027893586,0.8793006824945698,20,20,0,0
+16384,validation_selected,quartet,sgd,selected_rate,population_nmse,calibrated_broadcast minus exact,0.862340761683271,0.9409176369140214,0.7970178930090623,0.9205997352504685,20,20,0,0
+16384,validation_selected,quartet,sgd,selected_rate,population_nmse,sign_broadcast minus exact,0.8646861216897758,0.9287704135067718,0.7908026304219644,0.9307618653092188,20,20,0,0
+16384,validation_selected,quartet,sgd,selected_rate,population_nmse,unit_broadcast minus calibrated_broadcast,-0.06551374291165912,-0.0024130689554357487,-0.1406797304069159,0.002574795617456087,20,10,10,0
+1024,terminal,quartet_minus_matching,adam,selected_rate,test_nmse,unit_broadcast minus exact interaction,0.8231707403273815,0.958551074676337,0.6774735979210001,0.9406573840620254,20,19,1,0
+1024,terminal,quartet_minus_matching,adam,selected_rate,test_nmse,calibrated_broadcast minus exact interaction,0.8378172815696832,0.9348796142897524,0.7190435929903065,0.9307531820366128,20,20,0,0
+1024,terminal,quartet_minus_matching,adam,selected_rate,test_nmse,sign_broadcast minus exact interaction,0.8378173382031674,0.9348796079748312,0.7190436277678676,0.930753208611177,20,20,0,0
+1024,terminal,quartet_minus_matching,adam,selected_rate,population_nmse,unit_broadcast minus exact interaction,0.8275266339353509,0.9739654735034664,0.6814739398504461,0.9459470538450108,20,19,1,0
+1024,terminal,quartet_minus_matching,adam,selected_rate,population_nmse,calibrated_broadcast minus exact interaction,0.8404921885585372,0.9340348781571726,0.7202425377747793,0.9359490776117906,20,20,0,0
+1024,terminal,quartet_minus_matching,adam,selected_rate,population_nmse,sign_broadcast minus exact interaction,0.8404922384095181,0.9340348685635007,0.7202425581917202,0.9359491455452885,20,20,0,0
+1024,terminal,quartet_minus_matching,sgd,selected_rate,test_nmse,unit_broadcast minus exact interaction,0.6957466682455723,0.7944887497358242,0.5528728930945894,0.8282685806985122,20,19,1,0
+1024,terminal,quartet_minus_matching,sgd,selected_rate,test_nmse,calibrated_broadcast minus exact interaction,0.4221720465879101,0.46686302778515776,0.27227411944195895,0.5655916604589739,20,19,1,0
+1024,terminal,quartet_minus_matching,sgd,selected_rate,test_nmse,sign_broadcast minus exact interaction,0.7599043093599785,0.8932675010003266,0.6159504198034933,0.8899415148336292,20,20,0,0
+1024,terminal,quartet_minus_matching,sgd,selected_rate,population_nmse,unit_broadcast minus exact interaction,0.7008005688487959,0.803367054333288,0.5574813600426475,0.8347348609571562,20,19,1,0
+1024,terminal,quartet_minus_matching,sgd,selected_rate,population_nmse,calibrated_broadcast minus exact interaction,0.4248828047623223,0.4720017178716975,0.2727645458418539,0.5700489566062731,20,19,1,0
+1024,terminal,quartet_minus_matching,sgd,selected_rate,population_nmse,sign_broadcast minus exact interaction,0.7656898695150123,0.8897870811096181,0.6210856144560785,0.895254697050085,20,20,0,0
+1024,validation_selected,quartet_minus_matching,adam,selected_rate,test_nmse,unit_broadcast minus exact interaction,0.784067246613331,0.9003304176484951,0.6412701980428164,0.9051324448255682,20,19,1,0
+1024,validation_selected,quartet_minus_matching,adam,selected_rate,test_nmse,calibrated_broadcast minus exact interaction,0.7660908225174514,0.8877425271103503,0.6457587904687998,0.8704299785690044,20,20,0,0
+1024,validation_selected,quartet_minus_matching,adam,selected_rate,test_nmse,sign_broadcast minus exact interaction,0.7660906915372646,0.8877417664756363,0.6457585988965521,0.8704299125825276,20,20,0,0
+1024,validation_selected,quartet_minus_matching,adam,selected_rate,population_nmse,unit_broadcast minus exact interaction,0.7865945854936286,0.9129613011725006,0.6423491595449747,0.9083812840808759,20,19,1,0
+1024,validation_selected,quartet_minus_matching,adam,selected_rate,population_nmse,calibrated_broadcast minus exact interaction,0.7694500051961324,0.8924875705022735,0.6468978067130291,0.8751031010600001,20,20,0,0
+1024,validation_selected,quartet_minus_matching,adam,selected_rate,population_nmse,sign_broadcast minus exact interaction,0.7694498702909398,0.8924867829352243,0.6468977667392218,0.8751031340797134,20,20,0,0
+1024,validation_selected,quartet_minus_matching,sgd,selected_rate,test_nmse,unit_broadcast minus exact interaction,0.6672072904952494,0.6551198618380529,0.5291176815430841,0.796090686968357,20,19,1,0
+1024,validation_selected,quartet_minus_matching,sgd,selected_rate,test_nmse,calibrated_broadcast minus exact interaction,0.41775172787067777,0.4652095722614973,0.2732000189007755,0.5565094632725724,20,17,3,0
+1024,validation_selected,quartet_minus_matching,sgd,selected_rate,test_nmse,sign_broadcast minus exact interaction,0.7260655315276832,0.8629751926747045,0.5862043712427732,0.8545010249944444,20,20,0,0
+1024,validation_selected,quartet_minus_matching,sgd,selected_rate,population_nmse,unit_broadcast minus exact interaction,0.6718208324192394,0.6573022061220171,0.5319317451573267,0.8021000575402104,20,19,1,0
+1024,validation_selected,quartet_minus_matching,sgd,selected_rate,population_nmse,calibrated_broadcast minus exact interaction,0.421419468939847,0.4706218519535082,0.27541439586060307,0.5625963010166569,20,18,2,0
+1024,validation_selected,quartet_minus_matching,sgd,selected_rate,population_nmse,sign_broadcast minus exact interaction,0.7302285424709067,0.8710628229690744,0.5912963792235162,0.8580895758823037,20,20,0,0
+4096,terminal,quartet_minus_matching,adam,selected_rate,test_nmse,unit_broadcast minus exact interaction,0.9304585943196196,0.9783745888858315,0.8884574332425487,0.9686330262665843,20,20,0,0
+4096,terminal,quartet_minus_matching,adam,selected_rate,test_nmse,calibrated_broadcast minus exact interaction,0.9154635520291418,0.9747071736042535,0.8424221461429245,0.9753669715555157,20,20,0,0
+4096,terminal,quartet_minus_matching,adam,selected_rate,test_nmse,sign_broadcast minus exact interaction,0.9154779911792504,0.9747071527619999,0.8424266008199818,0.9753617226233436,20,20,0,0
+4096,terminal,quartet_minus_matching,adam,selected_rate,population_nmse,unit_broadcast minus exact interaction,0.9297611163893522,0.981843361693753,0.8885729317959272,0.9670983143180959,20,20,0,0
+4096,terminal,quartet_minus_matching,adam,selected_rate,population_nmse,calibrated_broadcast minus exact interaction,0.9172930884645751,0.992328966729384,0.8446859938392964,0.9763645530796436,20,20,0,0
+4096,terminal,quartet_minus_matching,adam,selected_rate,population_nmse,sign_broadcast minus exact interaction,0.9173042178524222,0.9922717656658141,0.8447005301181384,0.9763793673795432,20,20,0,0
+4096,terminal,quartet_minus_matching,sgd,selected_rate,test_nmse,unit_broadcast minus exact interaction,0.8860494026427729,0.9629413550095558,0.8109828599389327,0.9481304270341109,20,20,0,0
+4096,terminal,quartet_minus_matching,sgd,selected_rate,test_nmse,calibrated_broadcast minus exact interaction,0.8024422927060509,0.827107130794371,0.7112498425743535,0.8808857099316498,20,20,0,0
+4096,terminal,quartet_minus_matching,sgd,selected_rate,test_nmse,sign_broadcast minus exact interaction,0.9093749764752148,0.9806126915403834,0.8384968879594749,0.968445881781294,20,20,0,0
+4096,terminal,quartet_minus_matching,sgd,selected_rate,population_nmse,unit_broadcast minus exact interaction,0.8879206621985525,0.971732153615263,0.8133100852672807,0.950427489654997,20,20,0,0
+4096,terminal,quartet_minus_matching,sgd,selected_rate,population_nmse,calibrated_broadcast minus exact interaction,0.8045564629563213,0.8218294624883951,0.7129638023825987,0.8833530644380636,20,20,0,0
+4096,terminal,quartet_minus_matching,sgd,selected_rate,population_nmse,sign_broadcast minus exact interaction,0.912466720270781,0.9872741958980655,0.8402859496771717,0.9715363171860825,20,20,0,0
+4096,validation_selected,quartet_minus_matching,adam,selected_rate,test_nmse,unit_broadcast minus exact interaction,0.8478129039056619,0.8994348741248244,0.7718779720991443,0.9152624609868203,20,20,0,0
+4096,validation_selected,quartet_minus_matching,adam,selected_rate,test_nmse,calibrated_broadcast minus exact interaction,0.7936736201830213,0.8937130836883463,0.6945879448435743,0.8830944142502816,20,20,0,0
+4096,validation_selected,quartet_minus_matching,adam,selected_rate,test_nmse,sign_broadcast minus exact interaction,0.7936734869604329,0.8937123161151332,0.6945875801305665,0.8830942905228841,20,20,0,0
+4096,validation_selected,quartet_minus_matching,adam,selected_rate,population_nmse,unit_broadcast minus exact interaction,0.8477618163106359,0.9053942221423297,0.7720713188157945,0.914526327513775,20,20,0,0
+4096,validation_selected,quartet_minus_matching,adam,selected_rate,population_nmse,calibrated_broadcast minus exact interaction,0.79589587924523,0.8985997842194176,0.6968133154733821,0.885850247464673,20,20,0,0
+4096,validation_selected,quartet_minus_matching,adam,selected_rate,population_nmse,sign_broadcast minus exact interaction,0.795895749540172,0.898598989328386,0.696813070155927,0.8858501224668136,20,20,0,0
+4096,validation_selected,quartet_minus_matching,sgd,selected_rate,test_nmse,unit_broadcast minus exact interaction,0.8156225801294026,0.8892017982530896,0.7326365377829811,0.8900757106863226,20,20,0,0
+4096,validation_selected,quartet_minus_matching,sgd,selected_rate,test_nmse,calibrated_broadcast minus exact interaction,0.7577879371901067,0.7463440693749415,0.6582497010698106,0.846041599564439,20,20,0,0
+4096,validation_selected,quartet_minus_matching,sgd,selected_rate,test_nmse,sign_broadcast minus exact interaction,0.8737357871378858,0.9595602264937461,0.7936422224247829,0.9423105434724668,20,20,0,0
+4096,validation_selected,quartet_minus_matching,sgd,selected_rate,population_nmse,unit_broadcast minus exact interaction,0.8165200621671014,0.8947254776989167,0.7333935706932184,0.8921747046305263,20,20,0,0
+4096,validation_selected,quartet_minus_matching,sgd,selected_rate,population_nmse,calibrated_broadcast minus exact interaction,0.759563482006904,0.7503072170287493,0.6581087412611141,0.8487625713553758,20,20,0,0
+4096,validation_selected,quartet_minus_matching,sgd,selected_rate,population_nmse,sign_broadcast minus exact interaction,0.8765228859957752,0.9638754386597688,0.7957748569113104,0.9453339406750019,20,20,0,0
+8192,terminal,quartet_minus_matching,adam,selected_rate,test_nmse,unit_broadcast minus exact interaction,0.9047916603037137,0.9788628542347613,0.8347396760388055,0.9599068075202042,20,20,0,0
+8192,terminal,quartet_minus_matching,adam,selected_rate,test_nmse,calibrated_broadcast minus exact interaction,0.9336339510260674,0.9896396414391039,0.8639746849622365,0.9907224626948388,20,20,0,0
+8192,terminal,quartet_minus_matching,adam,selected_rate,test_nmse,sign_broadcast minus exact interaction,0.9298809574063371,0.982792521081727,0.8618420777729225,0.9847618916084183,20,20,0,0
+8192,terminal,quartet_minus_matching,adam,selected_rate,population_nmse,unit_broadcast minus exact interaction,0.9072791042369264,0.982056223344122,0.8375895840561465,0.9623406705337156,20,20,0,0
+8192,terminal,quartet_minus_matching,adam,selected_rate,population_nmse,calibrated_broadcast minus exact interaction,0.935031255245692,1.0001674635595352,0.8657175614705004,0.9913188313644039,20,20,0,0
+8192,terminal,quartet_minus_matching,adam,selected_rate,population_nmse,sign_broadcast minus exact interaction,0.9315848897363651,0.9928970041764016,0.8636704906438093,0.9860209735303206,20,20,0,0
+8192,terminal,quartet_minus_matching,sgd,selected_rate,test_nmse,unit_broadcast minus exact interaction,0.9102853696177793,0.9624420816933827,0.8578798006612228,0.9582325269892199,20,20,0,0
+8192,terminal,quartet_minus_matching,sgd,selected_rate,test_nmse,calibrated_broadcast minus exact interaction,0.8794629414489119,0.9355525463594379,0.8205992016911037,0.9348298735591293,20,20,0,0
+8192,terminal,quartet_minus_matching,sgd,selected_rate,test_nmse,sign_broadcast minus exact interaction,0.9342323024282508,0.9799803554500599,0.8815454607671716,0.9764489692139334,20,20,0,0
+8192,terminal,quartet_minus_matching,sgd,selected_rate,population_nmse,unit_broadcast minus exact interaction,0.9131234721547971,0.9737757195302739,0.8589551135427268,0.9626158445793042,20,20,0,0
+8192,terminal,quartet_minus_matching,sgd,selected_rate,population_nmse,calibrated_broadcast minus exact interaction,0.8818216774511581,0.9368920558435521,0.8231566826043303,0.9368616963912806,20,20,0,0
+8192,terminal,quartet_minus_matching,sgd,selected_rate,population_nmse,sign_broadcast minus exact interaction,0.9380878808491891,0.9906984169650164,0.8836854008608089,0.9816207412752057,20,20,0,0
+8192,validation_selected,quartet_minus_matching,adam,selected_rate,test_nmse,unit_broadcast minus exact interaction,0.8248582105439738,0.8994060802150956,0.7430377579846598,0.8989443219873765,20,20,0,0
+8192,validation_selected,quartet_minus_matching,adam,selected_rate,test_nmse,calibrated_broadcast minus exact interaction,0.7937199550459576,0.8933167069620341,0.6946037906454089,0.883323670793137,20,20,0,0
+8192,validation_selected,quartet_minus_matching,adam,selected_rate,test_nmse,sign_broadcast minus exact interaction,0.7937203726021083,0.8933159501004655,0.6946035909869316,0.8833246069942662,20,20,0,0
+8192,validation_selected,quartet_minus_matching,adam,selected_rate,population_nmse,unit_broadcast minus exact interaction,0.8232057663416992,0.9053768878111172,0.7398042545022789,0.8982496629678045,20,20,0,0
+8192,validation_selected,quartet_minus_matching,adam,selected_rate,population_nmse,calibrated_broadcast minus exact interaction,0.7955145947255007,0.8982379899331154,0.6968282808976074,0.8855803628138651,20,20,0,0
+8192,validation_selected,quartet_minus_matching,adam,selected_rate,population_nmse,sign_broadcast minus exact interaction,0.795514611697387,0.8982372047787035,0.6968283349270565,0.8855801764295338,20,20,0,0
+8192,validation_selected,quartet_minus_matching,sgd,selected_rate,test_nmse,unit_broadcast minus exact interaction,0.8255646054788972,0.8650322074261466,0.7476373485672637,0.8950001134540418,20,20,0,0
+8192,validation_selected,quartet_minus_matching,sgd,selected_rate,test_nmse,calibrated_broadcast minus exact interaction,0.8179411354524675,0.7690215437885266,0.7519917602428147,0.882459534449074,20,20,0,0
+8192,validation_selected,quartet_minus_matching,sgd,selected_rate,test_nmse,sign_broadcast minus exact interaction,0.8787947775379712,0.9447147438460727,0.8118397247893802,0.9379979982716743,20,20,0,0
+8192,validation_selected,quartet_minus_matching,sgd,selected_rate,population_nmse,unit_broadcast minus exact interaction,0.8260116154763765,0.8628580721942074,0.7478476273894074,0.897691701380304,20,20,0,0
+8192,validation_selected,quartet_minus_matching,sgd,selected_rate,population_nmse,calibrated_broadcast minus exact interaction,0.8183746234254687,0.7730894315735026,0.7514833761950913,0.8834299269074081,20,20,0,0
+8192,validation_selected,quartet_minus_matching,sgd,selected_rate,population_nmse,sign_broadcast minus exact interaction,0.8812442650392269,0.9436605929141973,0.8129526756077065,0.9414685054406026,20,20,0,0
+16384,terminal,quartet_minus_matching,adam,selected_rate,test_nmse,unit_broadcast minus exact interaction,0.9078412409743238,0.982378937108688,0.8414140091374154,0.9629128577721754,20,20,0,0
+16384,terminal,quartet_minus_matching,adam,selected_rate,test_nmse,calibrated_broadcast minus exact interaction,0.9516263020307612,1.030667862233852,0.8828980226352647,1.0123189023185888,20,20,0,0
+16384,terminal,quartet_minus_matching,adam,selected_rate,test_nmse,sign_broadcast minus exact interaction,0.96822973711435,1.0220962523249086,0.9022414346839438,1.0256673816704351,20,20,0,0
+16384,terminal,quartet_minus_matching,adam,selected_rate,population_nmse,unit_broadcast minus exact interaction,0.9090721696337788,0.9863123926107399,0.8416887539523477,0.9642609706400319,20,20,0,0
+16384,terminal,quartet_minus_matching,adam,selected_rate,population_nmse,calibrated_broadcast minus exact interaction,0.9545944182533489,1.0266510415788974,0.8843622795279031,1.0163258479435646,20,20,0,0
+16384,terminal,quartet_minus_matching,adam,selected_rate,population_nmse,sign_broadcast minus exact interaction,0.9739461264598772,1.0240630423978172,0.9044475927532546,1.0354307689388889,20,20,0,0
+16384,terminal,quartet_minus_matching,sgd,selected_rate,test_nmse,unit_broadcast minus exact interaction,0.9178785181325602,0.9726698433210534,0.8278919558762111,0.9970564239684377,20,20,0,0
+16384,terminal,quartet_minus_matching,sgd,selected_rate,test_nmse,calibrated_broadcast minus exact interaction,0.9130458431494345,0.9374242923189762,0.8741748099746439,0.9504003499485844,20,20,0,0
+16384,terminal,quartet_minus_matching,sgd,selected_rate,test_nmse,sign_broadcast minus exact interaction,0.9373641455993804,0.9833650284190987,0.888065638957748,0.9780269489396883,20,20,0,0
+16384,terminal,quartet_minus_matching,sgd,selected_rate,population_nmse,unit_broadcast minus exact interaction,0.91921388068439,0.9775788032218204,0.8296131061109563,0.9958041483523736,20,20,0,0
+16384,terminal,quartet_minus_matching,sgd,selected_rate,population_nmse,calibrated_broadcast minus exact interaction,0.9163301894670802,0.9428789122680863,0.8776502617679768,0.9532078264299259,20,20,0,0
+16384,terminal,quartet_minus_matching,sgd,selected_rate,population_nmse,sign_broadcast minus exact interaction,0.9398965424729504,0.9878380431346409,0.890443377252401,0.9796705785562664,20,20,0,0
+16384,validation_selected,quartet_minus_matching,adam,selected_rate,test_nmse,unit_broadcast minus exact interaction,0.8019470613646661,0.9000257450392339,0.7142799599169583,0.8831755254055079,20,20,0,0
+16384,validation_selected,quartet_minus_matching,adam,selected_rate,test_nmse,calibrated_broadcast minus exact interaction,0.7903385002659529,0.8933283740123592,0.6914795985783968,0.8797387220987023,20,20,0,0
+16384,validation_selected,quartet_minus_matching,adam,selected_rate,test_nmse,sign_broadcast minus exact interaction,0.7915758854022702,0.8933276171507907,0.6931633404063215,0.8804965213607358,20,20,0,0
+16384,validation_selected,quartet_minus_matching,adam,selected_rate,population_nmse,unit_broadcast minus exact interaction,0.8006515790297304,0.8985090898147727,0.7126537018887967,0.8826161045379018,20,20,0,0
+16384,validation_selected,quartet_minus_matching,adam,selected_rate,population_nmse,calibrated_broadcast minus exact interaction,0.792366903392574,0.8982573188943151,0.6934570676818537,0.8822917112917119,20,20,0,0
+16384,validation_selected,quartet_minus_matching,adam,selected_rate,population_nmse,sign_broadcast minus exact interaction,0.7938835959173819,0.8982565337399033,0.6955497785549062,0.883200841530421,20,20,0,0
+16384,validation_selected,quartet_minus_matching,sgd,selected_rate,test_nmse,unit_broadcast minus exact interaction,0.7970132790754051,0.828896622641519,0.7079146988248092,0.8775080120439587,20,20,0,0
+16384,validation_selected,quartet_minus_matching,sgd,selected_rate,test_nmse,calibrated_broadcast minus exact interaction,0.8448251289935886,0.8726762153995589,0.7830717387430177,0.9010510302261714,20,20,0,0
+16384,validation_selected,quartet_minus_matching,sgd,selected_rate,test_nmse,sign_broadcast minus exact interaction,0.8624645798378253,0.9270478014784211,0.789105426564132,0.9272404398753427,20,20,0,0
+16384,validation_selected,quartet_minus_matching,sgd,selected_rate,population_nmse,unit_broadcast minus exact interaction,0.7968209291160481,0.8335570052263714,0.7063543987780863,0.879288264596174,20,20,0,0
+16384,validation_selected,quartet_minus_matching,sgd,selected_rate,population_nmse,calibrated_broadcast minus exact interaction,0.8453166152877369,0.8882707395788354,0.7824085857292309,0.9025850823891388,20,20,0,0
+16384,validation_selected,quartet_minus_matching,sgd,selected_rate,population_nmse,sign_broadcast minus exact interaction,0.8647056238625301,0.9287758364206664,0.7908138384410331,0.930779289411291,20,20,0,0
+1024,terminal,matching,adam,common_rate,test_nmse,unit_broadcast minus exact,-0.006561901264670977,-0.00011332359136666768,-0.02390852787745384,0.0033259118539830683,20,7,13,0
+1024,terminal,matching,adam,common_rate,test_nmse,calibrated_broadcast minus exact,-0.008883742886426937,-0.00017468862489644806,-0.025531110379059134,-0.00014405511251327875,20,2,18,0
+1024,terminal,matching,adam,common_rate,test_nmse,sign_broadcast minus exact,-0.00888374284513657,-0.00017468842879585743,-0.025531110429733418,-0.00014405521474534214,20,2,18,0
+1024,terminal,matching,adam,common_rate,test_nmse,unit_broadcast minus calibrated_broadcast,0.002321841621755958,3.773487227655588e-05,0.0005888707987054059,0.004341131930041075,20,13,7,0
+1024,terminal,matching,adam,common_rate,population_nmse,unit_broadcast minus exact,-0.006455053641763906,-9.643026988279365e-05,-0.02391350985544615,0.003500311187457827,20,7,13,0
+1024,terminal,matching,adam,common_rate,population_nmse,calibrated_broadcast minus exact,-0.008901850782679193,-0.00013511382114250178,-0.02562605221732577,-0.00012800177729122648,20,1,19,0
+1024,terminal,matching,adam,common_rate,population_nmse,sign_broadcast minus exact,-0.008901850718272195,-0.0001351131866112645,-0.025626052160972083,-0.000128001886619272,20,1,19,0
+1024,terminal,matching,adam,common_rate,population_nmse,unit_broadcast minus calibrated_broadcast,0.0024467971409152865,0.000108866779485021,0.0006452576533794862,0.004527741888114457,20,15,5,0
+1024,terminal,matching,sgd,common_rate,test_nmse,unit_broadcast minus exact,-0.04180822278565734,-0.0030156304295484715,-0.09014387869527044,-0.005744429672181174,20,4,16,0
+1024,terminal,matching,sgd,common_rate,test_nmse,calibrated_broadcast minus exact,0.23333834363536338,0.1860253230726371,0.14519407429835582,0.32641999426532464,20,19,1,0
+1024,terminal,matching,sgd,common_rate,test_nmse,sign_broadcast minus exact,-0.04205367858345142,-0.003076283113342959,-0.09046591152853231,-0.005960400487278327,20,2,18,0
+1024,terminal,matching,sgd,common_rate,test_nmse,unit_broadcast minus calibrated_broadcast,-0.2751465664210207,-0.2189665271699226,-0.36860818673631157,-0.185345569142591,20,0,20,0
+1024,terminal,matching,sgd,common_rate,population_nmse,unit_broadcast minus exact,-0.04196955977903808,-0.0030387064446185208,-0.09057942999056821,-0.005890462521930669,20,3,17,0
+1024,terminal,matching,sgd,common_rate,population_nmse,calibrated_broadcast minus exact,0.23389382393594635,0.18492425670940743,0.1458023715330825,0.3267746338238093,20,19,1,0
+1024,terminal,matching,sgd,common_rate,population_nmse,sign_broadcast minus exact,-0.042198711519814455,-0.003143231193239995,-0.09085155531381889,-0.006071476944847566,20,3,17,0
+1024,terminal,matching,sgd,common_rate,population_nmse,unit_broadcast minus calibrated_broadcast,-0.27586338371498453,-0.21987035436304503,-0.3691406056254161,-0.1861997379672871,20,0,20,0
+1024,terminal,nested,adam,common_rate,test_nmse,unit_broadcast minus exact,0.7292688666937016,0.7456269538915248,0.7091106589796902,0.7474342918494126,20,20,0,0
+1024,terminal,nested,adam,common_rate,test_nmse,calibrated_broadcast minus exact,0.7447957485665881,0.7576585647214045,0.729773168776563,0.7580013032385602,20,20,0,0
+1024,terminal,nested,adam,common_rate,test_nmse,sign_broadcast minus exact,0.7447956283259296,0.7576589304930272,0.7297728013699863,0.7580012946642002,20,20,0,0
+1024,terminal,nested,adam,common_rate,test_nmse,unit_broadcast minus calibrated_broadcast,-0.015526881872886566,-0.006629917427607768,-0.033331408308907066,0.0014203959592377945,20,6,14,0
+1024,terminal,nested,adam,common_rate,population_nmse,unit_broadcast minus exact,0.7247299731655678,0.7430759001316101,0.70724556197055,0.7400501311226375,20,20,0,0
+1024,terminal,nested,adam,common_rate,population_nmse,calibrated_broadcast minus exact,0.7400831664030805,0.7506144504263556,0.7286566108529197,0.7493803730957956,20,20,0,0
+1024,terminal,nested,adam,common_rate,population_nmse,sign_broadcast minus exact,0.7400830510170726,0.7506144778877288,0.728656281430019,0.7493803985479556,20,20,0,0
+1024,terminal,nested,adam,common_rate,population_nmse,unit_broadcast minus calibrated_broadcast,-0.01535319323751253,-0.00604460573919946,-0.03412424799985132,0.002461880741081498,20,7,13,0
+1024,terminal,nested,sgd,common_rate,test_nmse,unit_broadcast minus exact,0.49124864123150525,0.5480961625858598,0.3855645982565158,0.5960757940166465,20,20,0,0
+1024,terminal,nested,sgd,common_rate,test_nmse,calibrated_broadcast minus exact,0.5621931826633727,0.6198166076419078,0.4491635354643166,0.6753014483005005,20,20,0,0
+1024,terminal,nested,sgd,common_rate,test_nmse,sign_broadcast minus exact,0.5132329561092106,0.5660552589435655,0.40438500633778346,0.6177620650796286,20,19,1,0
+1024,terminal,nested,sgd,common_rate,test_nmse,unit_broadcast minus calibrated_broadcast,-0.07094454143186757,-0.008797397188248401,-0.12072249837972601,-0.02554610485734829,20,8,12,0
+1024,terminal,nested,sgd,common_rate,population_nmse,unit_broadcast minus exact,0.4871692623762491,0.5458937815788938,0.38200617327728364,0.5916550218098368,20,20,0,0
+1024,terminal,nested,sgd,common_rate,population_nmse,calibrated_broadcast minus exact,0.5559184654298753,0.6239800312222401,0.4439354664855882,0.6668586221315652,20,20,0,0
+1024,terminal,nested,sgd,common_rate,population_nmse,sign_broadcast minus exact,0.5092640633090026,0.5635793306599262,0.39962794102810284,0.6152461965135796,20,19,1,0
+1024,terminal,nested,sgd,common_rate,population_nmse,unit_broadcast minus calibrated_broadcast,-0.06874920305362611,-0.014966016229181145,-0.1169970864506396,-0.02470268185283871,20,7,13,0
+1024,terminal,quartet,adam,common_rate,test_nmse,unit_broadcast minus exact,0.8166088390627104,0.9589322915440504,0.6673057834580798,0.9380310019679023,20,19,1,0
+1024,terminal,quartet,adam,common_rate,test_nmse,calibrated_broadcast minus exact,0.8346006028319695,0.9424986127745598,0.714744332146229,0.9315525480356774,20,20,0,0
+1024,terminal,quartet,adam,common_rate,test_nmse,sign_broadcast minus exact,0.834600485905123,0.9424986360044029,0.7147441181198676,0.9315523456986214,20,20,0,0
+1024,terminal,quartet,adam,common_rate,test_nmse,unit_broadcast minus calibrated_broadcast,-0.017991763769258918,-0.007120619199982747,-0.0891417693652735,0.049447307707949174,20,7,13,0
+1024,terminal,quartet,adam,common_rate,population_nmse,unit_broadcast minus exact,0.821071580293587,0.9739007954627736,0.6708980130030513,0.9429792383307244,20,19,1,0
+1024,terminal,quartet,adam,common_rate,population_nmse,calibrated_broadcast minus exact,0.8394360825561709,0.9604535733834663,0.7168970162849516,0.9386666782910502,20,20,0,0
+1024,terminal,quartet,adam,common_rate,population_nmse,sign_broadcast minus exact,0.8394359666916238,0.960453590466172,0.7168969809675144,0.9386666333716187,20,20,0,0
+1024,terminal,quartet,adam,common_rate,population_nmse,unit_broadcast minus calibrated_broadcast,-0.018364502262583886,-0.008813936272561884,-0.08746709579081839,0.04802868942063609,20,7,13,0
+1024,terminal,quartet,sgd,common_rate,test_nmse,unit_broadcast minus exact,1.2523071351472377,0.849844000304299,0.6598280507784269,2.1679817103756065,20,20,0,0
+1024,terminal,quartet,sgd,common_rate,test_nmse,calibrated_broadcast minus exact,0.6555103902232735,0.7036472697546992,0.5271815831697099,0.7743135523085284,20,20,0,0
+1024,terminal,quartet,sgd,common_rate,test_nmse,sign_broadcast minus exact,0.6845415439908724,0.7146282602360907,0.5541534357981385,0.8050314832726801,20,20,0,0
+1024,terminal,quartet,sgd,common_rate,test_nmse,unit_broadcast minus calibrated_broadcast,0.5967967449239643,0.017635371572228498,0.009568211832243842,1.5109833788118574,20,12,8,0
+1024,terminal,quartet,sgd,common_rate,population_nmse,unit_broadcast minus exact,1.2517901697076148,0.8670754938746346,0.6636016313358242,2.1468554186748934,20,20,0,0
+1024,terminal,quartet,sgd,common_rate,population_nmse,calibrated_broadcast minus exact,0.6587766286982686,0.6995819491176911,0.5299940760855415,0.7794137708065056,20,20,0,0
+1024,terminal,quartet,sgd,common_rate,population_nmse,sign_broadcast minus exact,0.6887997234579969,0.7089666448683075,0.5564876338526573,0.8114245873106632,20,20,0,0
+1024,terminal,quartet,sgd,common_rate,population_nmse,unit_broadcast minus calibrated_broadcast,0.593013541009346,0.009034455495553706,0.011516711035406038,1.4898298050049747,20,12,8,0
+1024,validation_selected,matching,adam,common_rate,test_nmse,unit_broadcast minus exact,-0.006454711250448182,4.909042182648857e-06,-0.023817587532141856,0.003453941862401004,20,10,10,0
+1024,validation_selected,matching,adam,common_rate,test_nmse,calibrated_broadcast minus exact,-0.008793295431731244,-6.52117477936559e-05,-0.02544977313236744,-4.055074844363516e-05,20,6,14,0
+1024,validation_selected,matching,adam,common_rate,test_nmse,sign_broadcast minus exact,-0.008793295575965272,-6.521181670812379e-05,-0.025449773361050424,-4.0551039336034726e-05,20,6,14,0
+1024,validation_selected,matching,adam,common_rate,test_nmse,unit_broadcast minus calibrated_broadcast,0.00233858418128306,1.9568532718063428e-05,0.0005983472374639247,0.004374119823398539,20,11,9,0
+1024,validation_selected,matching,adam,common_rate,population_nmse,unit_broadcast minus exact,-0.006365465707433182,-1.1351035074167847e-05,-0.023835073648186444,0.003595370189893657,20,10,10,0
+1024,validation_selected,matching,adam,common_rate,population_nmse,calibrated_broadcast minus exact,-0.008823188872096967,-6.573386168857065e-05,-0.025569375952324204,-3.687177683407704e-05,20,7,13,0
+1024,validation_selected,matching,adam,common_rate,population_nmse,sign_broadcast minus exact,-0.00882318905488828,-6.573438887698486e-05,-0.025569376104689442,-3.6871966491126083e-05,20,7,13,0
+1024,validation_selected,matching,adam,common_rate,population_nmse,unit_broadcast minus calibrated_broadcast,0.0024577231646637884,6.783058079554602e-05,0.0006532668131520226,0.004533250699684497,20,15,5,0
+1024,validation_selected,matching,sgd,common_rate,test_nmse,unit_broadcast minus exact,-0.04186174896679763,-0.0029529276705622786,-0.09023791890910933,-0.00582460066038721,20,4,16,0
+1024,validation_selected,matching,sgd,common_rate,test_nmse,calibrated_broadcast minus exact,0.22942422446969063,0.1860253230726371,0.14289911129330107,0.32131395464272006,20,19,1,0
+1024,validation_selected,matching,sgd,common_rate,test_nmse,sign_broadcast minus exact,-0.04207290127321162,-0.0030800044869005137,-0.0904632044528299,-0.005989492241616348,20,1,19,0
+1024,validation_selected,matching,sgd,common_rate,test_nmse,unit_broadcast minus calibrated_broadcast,-0.27128597343648825,-0.2195672488536366,-0.36338959193246884,-0.18345414706418156,20,0,20,0
+1024,validation_selected,matching,sgd,common_rate,population_nmse,unit_broadcast minus exact,-0.042019434610094955,-0.0030412606402643464,-0.09066465310327812,-0.00593549146874266,20,4,16,0
+1024,validation_selected,matching,sgd,common_rate,population_nmse,calibrated_broadcast minus exact,0.22946728368831168,0.18492425670940743,0.14332177393564158,0.32109360167955786,20,19,1,0
+1024,validation_selected,matching,sgd,common_rate,population_nmse,sign_broadcast minus exact,-0.042203774307721834,-0.003078466490139798,-0.09086403195526817,-0.006089149750327117,20,3,17,0
+1024,validation_selected,matching,sgd,common_rate,population_nmse,unit_broadcast minus calibrated_broadcast,-0.27148671829840665,-0.2204154639648396,-0.3633520611101375,-0.1838072348880515,20,0,20,0
+1024,validation_selected,nested,adam,common_rate,test_nmse,unit_broadcast minus exact,0.7230173466053628,0.7456269538915248,0.700301358455284,0.7439692183680991,20,20,0,0
+1024,validation_selected,nested,adam,common_rate,test_nmse,calibrated_broadcast minus exact,0.7370320351624562,0.7510913990407955,0.7199181680902572,0.7524565659955238,20,20,0,0
+1024,validation_selected,nested,adam,common_rate,test_nmse,sign_broadcast minus exact,0.7370318636855573,0.7510914051712345,0.7199178256544714,0.7524564371583524,20,20,0,0
+1024,validation_selected,nested,adam,common_rate,test_nmse,unit_broadcast minus calibrated_broadcast,-0.014014688557093535,-0.00364310715163646,-0.03196059800190453,0.00311237496811104,20,7,13,0
+1024,validation_selected,nested,adam,common_rate,population_nmse,unit_broadcast minus exact,0.7179597776467121,0.7385665659654569,0.6979605925549274,0.7358462003278688,20,20,0,0
+1024,validation_selected,nested,adam,common_rate,population_nmse,calibrated_broadcast minus exact,0.7330537164335588,0.747505464371129,0.719432795301013,0.7448627385604794,20,20,0,0
+1024,validation_selected,nested,adam,common_rate,population_nmse,sign_broadcast minus exact,0.733053550561052,0.7475054526435181,0.7194324865516583,0.7448626707713505,20,20,0,0
+1024,validation_selected,nested,adam,common_rate,population_nmse,unit_broadcast minus calibrated_broadcast,-0.015093938786846567,-0.0045999357811104535,-0.03391901469126545,0.002912514745019594,20,6,14,0
+1024,validation_selected,nested,sgd,common_rate,test_nmse,unit_broadcast minus exact,0.48416675899526956,0.5480961625858598,0.38041003800485496,0.5872674922577354,20,19,1,0
+1024,validation_selected,nested,sgd,common_rate,test_nmse,calibrated_broadcast minus exact,0.5516519061242874,0.6242328703466331,0.4436885526556689,0.6564197391483464,20,20,0,0
+1024,validation_selected,nested,sgd,common_rate,test_nmse,sign_broadcast minus exact,0.5043096756703938,0.5673830349569806,0.39846706605697707,0.6071796209032101,20,19,1,0
+1024,validation_selected,nested,sgd,common_rate,test_nmse,unit_broadcast minus calibrated_broadcast,-0.06748514712901782,-0.025161651852615263,-0.11002672485470257,-0.029521561372152935,20,6,14,0
+1024,validation_selected,nested,sgd,common_rate,population_nmse,unit_broadcast minus exact,0.47933856618391896,0.5458937815788938,0.37628350502529734,0.5812961309435117,20,19,1,0
+1024,validation_selected,nested,sgd,common_rate,population_nmse,calibrated_broadcast minus exact,0.5461577188867626,0.6273600878235381,0.43797576488329404,0.6502155394502643,20,20,0,0
+1024,validation_selected,nested,sgd,common_rate,population_nmse,sign_broadcast minus exact,0.5000460169988883,0.5648764682594983,0.3934741494048136,0.6028774582305487,20,19,1,0
+1024,validation_selected,nested,sgd,common_rate,population_nmse,unit_broadcast minus calibrated_broadcast,-0.06681915270284347,-0.025074815098684256,-0.10899669223432584,-0.02970800267335921,20,5,15,0
+1024,validation_selected,quartet,adam,common_rate,test_nmse,unit_broadcast minus exact,0.7776125353628829,0.9076431305323635,0.6310996678839847,0.9013881187039189,20,19,1,0
+1024,validation_selected,quartet,adam,common_rate,test_nmse,calibrated_broadcast minus exact,0.8112228775267448,0.9078101203282469,0.6933035408892599,0.9050009206680109,20,20,0,0
+1024,validation_selected,quartet,adam,common_rate,test_nmse,sign_broadcast minus exact,0.8112227683381785,0.9078095332665048,0.6933031967903348,0.9050008148115908,20,20,0,0
+1024,validation_selected,quartet,adam,common_rate,test_nmse,unit_broadcast minus calibrated_broadcast,-0.03361034216386187,-0.009376890035239227,-0.10504242267464625,0.03656131953796168,20,8,12,0
+1024,validation_selected,quartet,adam,common_rate,population_nmse,unit_broadcast minus exact,0.7802291197861955,0.9187139072967649,0.6330235329589863,0.9060636959547329,20,19,1,0
+1024,validation_selected,quartet,adam,common_rate,population_nmse,calibrated_broadcast minus exact,0.8150699174487224,0.913322514336198,0.695109034466833,0.9112938875946849,20,20,0,0
+1024,validation_selected,quartet,adam,common_rate,population_nmse,sign_broadcast minus exact,0.8150698086733573,0.9133219282906786,0.6951089153500091,0.911293860255925,20,20,0,0
+1024,validation_selected,quartet,adam,common_rate,population_nmse,unit_broadcast minus calibrated_broadcast,-0.03484079766252693,-0.012584784679924188,-0.10548977658521605,0.03377614738927995,20,8,12,0
+1024,validation_selected,quartet,sgd,common_rate,test_nmse,unit_broadcast minus exact,0.6096347778393633,0.5670874527199907,0.47019554142101433,0.741901791485664,20,19,1,0
+1024,validation_selected,quartet,sgd,common_rate,test_nmse,calibrated_broadcast minus exact,0.6471759523403684,0.6883084458837789,0.5192691813591356,0.7651635439384709,20,20,0,0
+1024,validation_selected,quartet,sgd,common_rate,test_nmse,sign_broadcast minus exact,0.6645966928624243,0.6928673573032549,0.5321121564473031,0.7886466443583747,20,20,0,0
+1024,validation_selected,quartet,sgd,common_rate,test_nmse,unit_broadcast minus calibrated_broadcast,-0.037541174501005095,-0.008563888614471549,-0.095378614791502,0.016165928974912782,20,9,11,0
+1024,validation_selected,quartet,sgd,common_rate,population_nmse,unit_broadcast minus exact,0.6123988984540103,0.5550324748370874,0.47122702664934685,0.7465057432009617,20,19,1,0
+1024,validation_selected,quartet,sgd,common_rate,population_nmse,calibrated_broadcast minus exact,0.6508867526281586,0.6865011571182054,0.522264624613601,0.771129699896428,20,20,0,0
+1024,validation_selected,quartet,sgd,common_rate,population_nmse,sign_broadcast minus exact,0.6698021153130194,0.6798424053015484,0.5363418590457693,0.7950762351119247,20,20,0,0
+1024,validation_selected,quartet,sgd,common_rate,population_nmse,unit_broadcast minus calibrated_broadcast,-0.03848785417414831,-0.015169619248911415,-0.09513109849319312,0.014696756457804801,20,9,11,0
+4096,terminal,matching,adam,common_rate,test_nmse,unit_broadcast minus exact,-0.00012464921292660268,-5.45888297720995e-05,-0.00024937597935742434,-2.94038854507911e-05,20,5,15,0
+4096,terminal,matching,adam,common_rate,test_nmse,calibrated_broadcast minus exact,-9.010885986996051e-05,-3.8963387591645776e-05,-0.00024094443799880114,1.1357753977767808e-05,20,8,12,0
+4096,terminal,matching,adam,common_rate,test_nmse,sign_broadcast minus exact,-9.010687006912166e-05,-3.896321014944075e-05,-0.00024094426919227276,1.1359550769333592e-05,20,8,12,0
+4096,terminal,matching,adam,common_rate,test_nmse,unit_broadcast minus calibrated_broadcast,-3.4540353056642174e-05,1.0421025568689568e-05,-0.0001006643794301946,2.6969396983453254e-05,20,11,9,0
+4096,terminal,matching,adam,common_rate,population_nmse,unit_broadcast minus exact,-0.0001393560967282899,-4.775182235466747e-05,-0.0003225864749486795,-1.4953817127160998e-05,20,7,13,0
+4096,terminal,matching,adam,common_rate,population_nmse,calibrated_broadcast minus exact,-0.00011498019101244315,-3.6701013994065224e-05,-0.00031654502882865897,1.0012201936008092e-05,20,8,12,0
+4096,terminal,matching,adam,common_rate,population_nmse,sign_broadcast minus exact,-0.00011497798864523387,-3.67007111315018e-05,-0.0003165419397888967,1.00151574801964e-05,20,8,12,0
+4096,terminal,matching,adam,common_rate,population_nmse,unit_broadcast minus calibrated_broadcast,-2.4375905715846722e-05,-9.795855210468411e-06,-7.771496432892855e-05,2.596233326057074e-05,20,10,10,0
+4096,terminal,matching,sgd,common_rate,test_nmse,unit_broadcast minus exact,0.0008486159449335057,9.182846526430838e-05,9.191890224681163e-05,0.002089461733176625,20,17,3,0
+4096,terminal,matching,sgd,common_rate,test_nmse,calibrated_broadcast minus exact,0.09199306163845966,0.061798451462292694,0.04824811750133066,0.14074265699500285,20,15,5,0
+4096,terminal,matching,sgd,common_rate,test_nmse,sign_broadcast minus exact,2.417111569056902e-05,4.279769874233376e-05,-2.1376231981244852e-05,5.782791077824795e-05,20,18,2,0
+4096,terminal,matching,sgd,common_rate,test_nmse,unit_broadcast minus calibrated_broadcast,-0.09114444569352617,-0.061620274496325254,-0.14019301453070396,-0.047395842700378804,20,6,14,0
+4096,terminal,matching,sgd,common_rate,population_nmse,unit_broadcast minus exact,0.0008212240280005903,9.375795653310921e-05,8.785139005564086e-05,0.0020284747266219277,20,18,2,0
+4096,terminal,matching,sgd,common_rate,population_nmse,calibrated_broadcast minus exact,0.09172339657516575,0.06168962013807273,0.04825715056750466,0.14020469160234286,20,16,4,0
+4096,terminal,matching,sgd,common_rate,population_nmse,sign_broadcast minus exact,1.920005718290361e-05,3.4950011867505584e-05,-3.3338017844570987e-05,5.3966005583176125e-05,20,17,3,0
+4096,terminal,matching,sgd,common_rate,population_nmse,unit_broadcast minus calibrated_broadcast,-0.09090217254716516,-0.06153192778469635,-0.1397110522980178,-0.04744778967295985,20,5,15,0
+4096,terminal,nested,adam,common_rate,test_nmse,unit_broadcast minus exact,0.7403042971546341,0.7537976064152243,0.7227393798380486,0.7556645380170706,20,20,0,0
+4096,terminal,nested,adam,common_rate,test_nmse,calibrated_broadcast minus exact,0.7434066012934479,0.7542651793568071,0.7293561947604112,0.7558975878135578,20,20,0,0
+4096,terminal,nested,adam,common_rate,test_nmse,sign_broadcast minus exact,0.7434061420028942,0.754265206273124,0.7293544142830144,0.7558971868695344,20,20,0,0
+4096,terminal,nested,adam,common_rate,test_nmse,unit_broadcast minus calibrated_broadcast,-0.003102304138813816,-0.0007754588902265103,-0.011844404629256768,0.0032768915123973686,20,7,13,0
+4096,terminal,nested,adam,common_rate,population_nmse,unit_broadcast minus exact,0.7356621608984034,0.7493742892483088,0.7221914809216824,0.7472328938456237,20,20,0,0
+4096,terminal,nested,adam,common_rate,population_nmse,calibrated_broadcast minus exact,0.7391122247151745,0.7471262684094615,0.7276881005335156,0.7483067688948261,20,20,0,0
+4096,terminal,nested,adam,common_rate,population_nmse,sign_broadcast minus exact,0.7391117879819405,0.7471262727865176,0.7276867567264023,0.7483067855327455,20,20,0,0
+4096,terminal,nested,adam,common_rate,population_nmse,unit_broadcast minus calibrated_broadcast,-0.003450063816771087,-0.0013867974931129345,-0.012296272836442194,0.0029940941571810404,20,8,12,0
+4096,terminal,nested,sgd,common_rate,test_nmse,unit_broadcast minus exact,5.309408069584828,0.7746092725190411,2.2978800936042134,8.765263711152063,20,20,0,0
+4096,terminal,nested,sgd,common_rate,test_nmse,calibrated_broadcast minus exact,0.7475030266398839,0.7571190083039434,0.7295058921258705,0.7648875937677911,20,20,0,0
+4096,terminal,nested,sgd,common_rate,test_nmse,sign_broadcast minus exact,1.3018177459231235,0.7575585346970926,0.7335067202453084,2.4230268651956184,20,20,0,0
+4096,terminal,nested,sgd,common_rate,test_nmse,unit_broadcast minus calibrated_broadcast,4.561905042944944,0.01737129615359151,1.5624701048682648,8.022919968066558,20,12,8,0
+4096,terminal,nested,sgd,common_rate,population_nmse,unit_broadcast minus exact,5.371754520030492,0.7563731336475791,2.332846649026502,8.889613984999503,20,20,0,0
+4096,terminal,nested,sgd,common_rate,population_nmse,calibrated_broadcast minus exact,0.7420076560542715,0.7506307841265089,0.728019739414566,0.7554519144115365,20,20,0,0
+4096,terminal,nested,sgd,common_rate,population_nmse,sign_broadcast minus exact,1.3090877620422543,0.7494572224229612,0.7307413748058198,2.4533430406174404,20,20,0,0
+4096,terminal,nested,sgd,common_rate,population_nmse,unit_broadcast minus calibrated_broadcast,4.629746863976221,0.01291354896366842,1.5969556677620789,8.146438994652167,20,13,7,0
+4096,terminal,quartet,adam,common_rate,test_nmse,unit_broadcast minus exact,0.9303339451066929,0.9779781128710059,0.8883864572955861,0.9685042346191175,20,20,0,0
+4096,terminal,quartet,adam,common_rate,test_nmse,calibrated_broadcast minus exact,0.9024846920350242,0.982096627602596,0.8273127052690507,0.9638808765740623,20,20,0,0
+4096,terminal,quartet,adam,common_rate,test_nmse,sign_broadcast minus exact,0.9024848072967684,0.9820966288825366,0.8273132290791576,0.963880895128266,20,20,0,0
+4096,terminal,quartet,adam,common_rate,test_nmse,unit_broadcast minus calibrated_broadcast,0.0278492530716686,-0.00021348203973337032,-0.023138209270626323,0.09576400465747005,20,10,10,0
+4096,terminal,quartet,adam,common_rate,population_nmse,unit_broadcast minus exact,0.9296217602926239,0.9814781382920439,0.8884762143358792,0.9668994169758958,20,20,0,0
+4096,terminal,quartet,adam,common_rate,population_nmse,calibrated_broadcast minus exact,0.9049753588214766,0.9910738396558835,0.8279677018359612,0.9670593465716525,20,20,0,0
+4096,terminal,quartet,adam,common_rate,population_nmse,sign_broadcast minus exact,0.9049754725042716,0.9910738350372013,0.8279676034800844,0.9670593543353685,20,20,0,0
+4096,terminal,quartet,adam,common_rate,population_nmse,unit_broadcast minus calibrated_broadcast,0.02464640147114707,-0.0007177448843275758,-0.026283497701307442,0.09068261220845525,20,9,11,0
+4096,terminal,quartet,sgd,common_rate,test_nmse,unit_broadcast minus exact,3.662790487146334,0.9934051864084594,1.98426227325695,5.695449486806146,20,20,0,0
+4096,terminal,quartet,sgd,common_rate,test_nmse,calibrated_broadcast minus exact,0.8944353543445105,0.9709294303054682,0.815125802669382,0.9572254171529458,20,20,0,0
+4096,terminal,quartet,sgd,common_rate,test_nmse,sign_broadcast minus exact,0.9307064667521743,0.988338227279469,0.8480974948511215,1.010327192743079,20,20,0,0
+4096,terminal,quartet,sgd,common_rate,test_nmse,unit_broadcast minus calibrated_broadcast,2.768355132801824,0.08274905306656766,1.0874471577739175,4.798920295205624,20,13,7,0
+4096,terminal,quartet,sgd,common_rate,population_nmse,unit_broadcast minus exact,3.610911555535786,1.002374584340712,1.9796186344397786,5.60788601666571,20,20,0,0
+4096,terminal,quartet,sgd,common_rate,population_nmse,calibrated_broadcast minus exact,0.8962798595314873,0.9865929858129165,0.81585736106641,0.9589668821319975,20,20,0,0
+4096,terminal,quartet,sgd,common_rate,population_nmse,sign_broadcast minus exact,0.9333638028364201,0.9962189241935808,0.8498540400986044,1.014120343564519,20,20,0,0
+4096,terminal,quartet,sgd,common_rate,population_nmse,unit_broadcast minus calibrated_broadcast,2.7146316960043007,0.08946531519432233,1.080860864617137,4.707599430270091,20,13,7,0
+4096,validation_selected,matching,adam,common_rate,test_nmse,unit_broadcast minus exact,-8.57048057502769e-05,-8.207448749486361e-05,-0.00016785436694809032,-1.7072736315779004e-05,20,6,14,0
+4096,validation_selected,matching,adam,common_rate,test_nmse,calibrated_broadcast minus exact,-7.246412669752576e-05,-4.3111554463523896e-05,-0.0001574905381395083,-4.888720820522553e-06,20,8,12,0
+4096,validation_selected,matching,adam,common_rate,test_nmse,sign_broadcast minus exact,-7.246390157686095e-05,-4.31112589899009e-05,-0.00015749074037070903,-4.888623545869156e-06,20,8,12,0
+4096,validation_selected,matching,adam,common_rate,test_nmse,unit_broadcast minus calibrated_broadcast,-1.3240679052751134e-05,-7.740081517616446e-06,-5.550444574125514e-05,3.1668113894757634e-05,20,9,11,0
+4096,validation_selected,matching,adam,common_rate,population_nmse,unit_broadcast minus exact,-0.00010225439032883412,-6.801444888687627e-05,-0.00017448893373990957,-4.0241930288129486e-05,20,6,14,0
+4096,validation_selected,matching,adam,common_rate,population_nmse,calibrated_broadcast minus exact,-7.681270045111356e-05,-2.694856882549864e-05,-0.0001490584453943666,-1.959419009425267e-05,20,8,12,0
+4096,validation_selected,matching,adam,common_rate,population_nmse,sign_broadcast minus exact,-7.681243712697375e-05,-2.6948540791328033e-05,-0.0001490582071700258,-1.959424948368645e-05,20,8,12,0
+4096,validation_selected,matching,adam,common_rate,population_nmse,unit_broadcast minus calibrated_broadcast,-2.5441689877720565e-05,-2.5083476335914075e-05,-5.63783004220132e-05,5.9801418736837744e-06,20,6,14,0
+4096,validation_selected,matching,sgd,common_rate,test_nmse,unit_broadcast minus exact,8.476962600436379e-05,8.392167306951921e-05,2.8590813180767273e-05,0.00013809758036782745,20,16,4,0
+4096,validation_selected,matching,sgd,common_rate,test_nmse,calibrated_broadcast minus exact,0.09208574809366206,0.06199496962821677,0.048342757731732224,0.14085306236967376,20,18,2,0
+4096,validation_selected,matching,sgd,common_rate,test_nmse,sign_broadcast minus exact,3.8949358627007535e-05,4.3304540064698777e-05,-6.092360325293784e-06,8.006515239229243e-05,20,16,4,0
+4096,validation_selected,matching,sgd,common_rate,test_nmse,unit_broadcast minus calibrated_broadcast,-0.09200097846765769,-0.06179623900875432,-0.1407932375789732,-0.04821759545553062,20,3,17,0
+4096,validation_selected,matching,sgd,common_rate,population_nmse,unit_broadcast minus exact,4.1123536962902926e-05,4.1149890044831424e-05,-2.381090312640242e-05,9.616558869452124e-05,20,14,6,0
+4096,validation_selected,matching,sgd,common_rate,population_nmse,calibrated_broadcast minus exact,0.09178233133775589,0.06178028928291267,0.04832732438369295,0.14025524773898757,20,18,2,0
+4096,validation_selected,matching,sgd,common_rate,population_nmse,sign_broadcast minus exact,6.309266841806612e-06,2.5306634922386075e-05,-4.7829857181142824e-05,4.310311878370551e-05,20,16,4,0
+4096,validation_selected,matching,sgd,common_rate,population_nmse,unit_broadcast minus calibrated_broadcast,-0.09174120780079296,-0.061583898558565435,-0.1402571991040778,-0.048254458262364255,20,3,17,0
+4096,validation_selected,nested,adam,common_rate,test_nmse,unit_broadcast minus exact,0.7012167096235745,0.704940460768796,0.6765605533390165,0.7256299866343596,20,20,0,0
+4096,validation_selected,nested,adam,common_rate,test_nmse,calibrated_broadcast minus exact,0.7216427919199148,0.7381358233104569,0.7002391162832825,0.7414286943513118,20,20,0,0
+4096,validation_selected,nested,adam,common_rate,test_nmse,sign_broadcast minus exact,0.7216423992669622,0.7381358792473959,0.7002379452016478,0.7414286184914496,20,20,0,0
+4096,validation_selected,nested,adam,common_rate,test_nmse,unit_broadcast minus calibrated_broadcast,-0.020426082296340114,-0.007875658204514635,-0.03706508349279308,-0.005487348722500712,20,6,14,0
+4096,validation_selected,nested,adam,common_rate,population_nmse,unit_broadcast minus exact,0.6970774421996497,0.6998753162494382,0.6768337500939497,0.7170876111088337,20,20,0,0
+4096,validation_selected,nested,adam,common_rate,population_nmse,calibrated_broadcast minus exact,0.7173968501612904,0.731592526566554,0.7001644432767876,0.7329719736257486,20,20,0,0
+4096,validation_selected,nested,adam,common_rate,population_nmse,sign_broadcast minus exact,0.7173964915817777,0.7315925258806588,0.7001634539003033,0.7329719525480483,20,20,0,0
+4096,validation_selected,nested,adam,common_rate,population_nmse,unit_broadcast minus calibrated_broadcast,-0.02031940796164089,-0.011779845549263201,-0.036946972703473996,-0.005332109463017512,20,6,14,0
+4096,validation_selected,nested,sgd,common_rate,test_nmse,unit_broadcast minus exact,0.7065537248552121,0.7246738481372017,0.67764619423768,0.7334836413619717,20,20,0,0
+4096,validation_selected,nested,sgd,common_rate,test_nmse,calibrated_broadcast minus exact,0.7442234385518223,0.7557580181952582,0.724988163006079,0.7625438067118271,20,20,0,0
+4096,validation_selected,nested,sgd,common_rate,test_nmse,sign_broadcast minus exact,0.7305395033101424,0.7479796854118419,0.7127250677186434,0.7471817436646762,20,20,0,0
+4096,validation_selected,nested,sgd,common_rate,test_nmse,unit_broadcast minus calibrated_broadcast,-0.037669713696610096,-0.03581720321056725,-0.05698723329513148,-0.019083940397654403,20,3,17,0
+4096,validation_selected,nested,sgd,common_rate,population_nmse,unit_broadcast minus exact,0.7017269828272971,0.7245470647166268,0.6759544917760845,0.7250209372301698,20,20,0,0
+4096,validation_selected,nested,sgd,common_rate,population_nmse,calibrated_broadcast minus exact,0.7390655466454786,0.7505305499898255,0.7237370683634385,0.7534985520902565,20,20,0,0
+4096,validation_selected,nested,sgd,common_rate,population_nmse,sign_broadcast minus exact,0.7262647249951828,0.7411442582985219,0.7119526944434534,0.7391327911683636,20,20,0,0
+4096,validation_selected,nested,sgd,common_rate,population_nmse,unit_broadcast minus calibrated_broadcast,-0.03733856381818146,-0.03140391161325501,-0.05718589721230121,-0.019088807036637675,20,4,16,0
+4096,validation_selected,quartet,adam,common_rate,test_nmse,unit_broadcast minus exact,0.8477271990999113,0.8994379404442856,0.7718131456915648,0.9151653664990287,20,20,0,0
+4096,validation_selected,quartet,adam,common_rate,test_nmse,calibrated_broadcast minus exact,0.8398490415778881,0.9433902679563917,0.7582406636712147,0.9119931892438932,20,20,0,0
+4096,validation_selected,quartet,adam,common_rate,test_nmse,sign_broadcast minus exact,0.8398488626122056,0.9433902066565483,0.7582403306662953,0.9119931048476136,20,20,0,0
+4096,validation_selected,quartet,adam,common_rate,test_nmse,unit_broadcast minus calibrated_broadcast,0.007878157522023393,0.003660207105109281,-0.07131888113977713,0.09480787641243632,20,11,9,0
+4096,validation_selected,quartet,adam,common_rate,population_nmse,unit_broadcast minus exact,0.8476595619203071,0.9053699198064151,0.7720163118840633,0.9143919888896278,20,20,0,0
+4096,validation_selected,quartet,adam,common_rate,population_nmse,calibrated_broadcast minus exact,0.8420111364452902,0.9409896215531133,0.759050916603508,0.9149539636033548,20,20,0,0
+4096,validation_selected,quartet,adam,common_rate,population_nmse,sign_broadcast minus exact,0.8420109577196847,0.9409895615875113,0.7590507006591419,0.9149538806896268,20,20,0,0
+4096,validation_selected,quartet,adam,common_rate,population_nmse,unit_broadcast minus calibrated_broadcast,0.005648425475016988,0.0033701296419194615,-0.07279380285235935,0.09053824546254981,20,12,8,0
+4096,validation_selected,quartet,sgd,common_rate,test_nmse,unit_broadcast minus exact,0.7943412163229877,0.849678332526437,0.7170495940643872,0.8682701942534892,20,20,0,0
+4096,validation_selected,quartet,sgd,common_rate,test_nmse,calibrated_broadcast minus exact,0.8498736852837689,0.9507004377439278,0.7574997623554502,0.9275490525182087,20,20,0,0
+4096,validation_selected,quartet,sgd,common_rate,test_nmse,sign_broadcast minus exact,0.8238694803665899,0.9287709239838554,0.7432062014124584,0.897584047326779,20,20,0,0
+4096,validation_selected,quartet,sgd,common_rate,test_nmse,unit_broadcast minus calibrated_broadcast,-0.055532468960781234,-0.004342032497222259,-0.12464825267012339,0.008913311078421374,20,7,13,0
+4096,validation_selected,quartet,sgd,common_rate,population_nmse,unit_broadcast minus exact,0.7945326072364949,0.8487414636842767,0.7176541554297263,0.8690507352355298,20,20,0,0
+4096,validation_selected,quartet,sgd,common_rate,population_nmse,calibrated_broadcast minus exact,0.85134581334466,0.9512574955027362,0.756764189726846,0.9293085554733163,20,20,0,0
+4096,validation_selected,quartet,sgd,common_rate,population_nmse,sign_broadcast minus exact,0.8263725790428321,0.926014948581672,0.7443659036391025,0.9011202949006509,20,20,0,0
+4096,validation_selected,quartet,sgd,common_rate,population_nmse,unit_broadcast minus calibrated_broadcast,-0.05681320610816497,-0.01349766502514499,-0.12600044867758084,0.008468210606635457,20,7,13,0
+8192,terminal,matching,adam,common_rate,test_nmse,unit_broadcast minus exact,-1.7615078271666224e-05,2.7984820364417018e-05,-9.92687493813268e-05,4.9586411294776546e-05,20,11,9,0
+8192,terminal,matching,adam,common_rate,test_nmse,calibrated_broadcast minus exact,1.3267322474168862e-05,1.7238663918228703e-05,-2.6493576294911462e-05,5.3382069772542356e-05,20,13,7,0
+8192,terminal,matching,adam,common_rate,test_nmse,sign_broadcast minus exact,1.3270912043373066e-05,1.723812871767816e-05,-2.648856936765049e-05,5.3383476123301254e-05,20,13,7,0
+8192,terminal,matching,adam,common_rate,test_nmse,unit_broadcast minus calibrated_broadcast,-3.088240074583508e-05,7.79648753442691e-07,-8.638199638003889e-05,1.391801240739332e-05,20,11,9,0
+8192,terminal,matching,adam,common_rate,population_nmse,unit_broadcast minus exact,-3.5935887870490062e-06,4.559591884809402e-06,-7.115383114505232e-05,5.6492002605029325e-05,20,10,10,0
+8192,terminal,matching,adam,common_rate,population_nmse,calibrated_broadcast minus exact,2.286514028796423e-05,2.2146867986226393e-05,-1.4452239345461461e-05,6.058056704514465e-05,20,13,7,0
+8192,terminal,matching,adam,common_rate,population_nmse,sign_broadcast minus exact,2.2868815974757857e-05,2.2147552203503467e-05,-1.444722395154795e-05,6.0582593882387194e-05,20,13,7,0
+8192,terminal,matching,adam,common_rate,population_nmse,unit_broadcast minus calibrated_broadcast,-2.6458729075013245e-05,-3.4642488857496894e-06,-7.357551803891943e-05,1.217612849106956e-05,20,9,11,0
+8192,terminal,matching,sgd,common_rate,test_nmse,unit_broadcast minus exact,0.00023295156052955697,9.332183571321082e-05,6.909180311528462e-05,0.0005153662736895626,20,17,3,0
+8192,terminal,matching,sgd,common_rate,test_nmse,calibrated_broadcast minus exact,0.04840081982463155,0.0035367550253266374,0.015455931160469893,0.08810104686195623,20,13,7,0
+8192,terminal,matching,sgd,common_rate,test_nmse,sign_broadcast minus exact,3.318676147490169e-05,2.4041869730982365e-05,1.0503583865099275e-05,5.776003551212143e-05,20,15,5,0
+8192,terminal,matching,sgd,common_rate,test_nmse,unit_broadcast minus calibrated_broadcast,-0.048167868264102,-0.0034735127385380864,-0.08800920627732058,-0.015184015270425191,20,8,12,0
+8192,terminal,matching,sgd,common_rate,population_nmse,unit_broadcast minus exact,0.0002317987100648037,6.687426284681283e-05,6.369725719467385e-05,0.000521527504484735,20,17,3,0
+8192,terminal,matching,sgd,common_rate,population_nmse,calibrated_broadcast minus exact,0.04828008441249529,0.0035457368413328817,0.015393584308556729,0.08796462100418728,20,13,7,0
+8192,terminal,matching,sgd,common_rate,population_nmse,sign_broadcast minus exact,3.1924790526151384e-05,2.5012904682845832e-05,1.2654264119365724e-05,5.295478636009148e-05,20,15,5,0
+8192,terminal,matching,sgd,common_rate,population_nmse,unit_broadcast minus calibrated_broadcast,-0.048048285702430485,-0.0034861251134665084,-0.0877768240077438,-0.015121869804856804,20,9,11,0
+8192,terminal,nested,adam,common_rate,test_nmse,unit_broadcast minus exact,0.7427005790953064,0.7507838240843949,0.7279617581054624,0.755637955410335,20,20,0,0
+8192,terminal,nested,adam,common_rate,test_nmse,calibrated_broadcast minus exact,0.7486681178268373,0.7507716522461497,0.737682475382678,0.7585613358628714,20,20,0,0
+8192,terminal,nested,adam,common_rate,test_nmse,sign_broadcast minus exact,0.7486682917169925,0.7507716595424345,0.7376831375206695,0.7585613350923531,20,20,0,0
+8192,terminal,nested,adam,common_rate,test_nmse,unit_broadcast minus calibrated_broadcast,-0.005967538731530814,-0.0010860400268100645,-0.01443532248428669,0.0008417938454990943,20,5,15,0
+8192,terminal,nested,adam,common_rate,population_nmse,unit_broadcast minus exact,0.7389275511700641,0.7483781498367181,0.727156997307095,0.7492870984755288,20,20,0,0
+8192,terminal,nested,adam,common_rate,population_nmse,calibrated_broadcast minus exact,0.7450123635782102,0.7518869921747684,0.7360513660568921,0.7522941447478976,20,20,0,0
+8192,terminal,nested,adam,common_rate,population_nmse,sign_broadcast minus exact,0.7450125891421943,0.7518869980690726,0.736051608948003,0.7522941537280989,20,20,0,0
+8192,terminal,nested,adam,common_rate,population_nmse,unit_broadcast minus calibrated_broadcast,-0.0060848124081461005,-0.0011693368248928415,-0.014536214241291907,0.0006724474490801218,20,6,14,0
+8192,terminal,nested,sgd,common_rate,test_nmse,unit_broadcast minus exact,14.664147036033176,5.9501018203677845,6.475224643485579,25.14050976698546,20,20,0,0
+8192,terminal,nested,sgd,common_rate,test_nmse,calibrated_broadcast minus exact,0.7466142002732532,0.7552582366819777,0.7336641284350454,0.7577265450639764,20,20,0,0
+8192,terminal,nested,sgd,common_rate,test_nmse,sign_broadcast minus exact,1.8594070795392337,0.7623910303989554,0.7474093588251154,3.563831521641202,20,20,0,0
+8192,terminal,nested,sgd,common_rate,test_nmse,unit_broadcast minus calibrated_broadcast,13.917532835759925,5.214617939635033,5.729646236830282,24.38679694885346,20,14,6,0
+8192,terminal,nested,sgd,common_rate,population_nmse,unit_broadcast minus exact,14.748142211656097,6.017279356254719,6.470091802306494,25.480413817150765,20,20,0,0
+8192,terminal,nested,sgd,common_rate,population_nmse,calibrated_broadcast minus exact,0.7423072414974796,0.7501529017073454,0.7327041137908686,0.7499514531751927,20,20,0,0
+8192,terminal,nested,sgd,common_rate,population_nmse,sign_broadcast minus exact,1.890153162674133,0.7523257277032325,0.743652035582043,3.643386627226182,20,20,0,0
+8192,terminal,nested,sgd,common_rate,population_nmse,unit_broadcast minus calibrated_broadcast,14.00583497015862,5.267294078523149,5.732244212500127,24.74333472141736,20,15,5,0
+8192,terminal,quartet,adam,common_rate,test_nmse,unit_broadcast minus exact,0.904774045225442,0.9788751843918315,0.8347690206343773,0.9599361008881988,20,20,0,0
+8192,terminal,quartet,adam,common_rate,test_nmse,calibrated_broadcast minus exact,0.9088055158856838,0.9722573990822005,0.8414950069755461,0.9621355482347063,20,20,0,0
+8192,terminal,quartet,adam,common_rate,test_nmse,sign_broadcast minus exact,0.9088055779834943,0.9722573972329072,0.8414950228410535,0.9621355404718235,20,20,0,0
+8192,terminal,quartet,adam,common_rate,test_nmse,unit_broadcast minus calibrated_broadcast,-0.004031470660241792,0.0022033510930178912,-0.03737532605563603,0.02262986577211727,20,12,8,0
+8192,terminal,quartet,adam,common_rate,population_nmse,unit_broadcast minus exact,0.9072755106481395,0.9820406116380793,0.8376328435012657,0.9623150380761428,20,20,0,0
+8192,terminal,quartet,adam,common_rate,population_nmse,calibrated_broadcast minus exact,0.9105980898495343,0.9891994331576884,0.8426573100575739,0.9636371312301272,20,20,0,0
+8192,terminal,quartet,adam,common_rate,population_nmse,sign_broadcast minus exact,0.9105981575271166,0.9891994342087019,0.8426573205178265,0.9636372299080587,20,20,0,0
+8192,terminal,quartet,adam,common_rate,population_nmse,unit_broadcast minus calibrated_broadcast,-0.0033225792013948595,0.002601811013701383,-0.03696470348329354,0.02353494334421265,20,13,7,0
+8192,terminal,quartet,sgd,common_rate,test_nmse,unit_broadcast minus exact,7.445764382846041,5.951634768406881,4.263419872224985,11.229157635999115,20,20,0,0
+8192,terminal,quartet,sgd,common_rate,test_nmse,calibrated_broadcast minus exact,0.9278637612735434,0.9722497502721853,0.8757945351581825,0.9716563052876616,20,20,0,0
+8192,terminal,quartet,sgd,common_rate,test_nmse,sign_broadcast minus exact,1.4576972434018352,0.9821363999963602,0.8623665046213479,2.576666655454536,20,20,0,0
+8192,terminal,quartet,sgd,common_rate,test_nmse,unit_broadcast minus calibrated_broadcast,6.517900621572497,5.0223138188712895,3.3169627883512205,10.297762911256008,20,15,5,0
+8192,terminal,quartet,sgd,common_rate,population_nmse,unit_broadcast minus exact,7.466180741194302,6.19193331090594,4.3059822406738935,11.179140886110366,20,20,0,0
+8192,terminal,quartet,sgd,common_rate,population_nmse,calibrated_broadcast minus exact,0.9301017618636536,0.9792401641303661,0.8783550189217231,0.9731074830984895,20,20,0,0
+8192,terminal,quartet,sgd,common_rate,population_nmse,sign_broadcast minus exact,1.4729451616881064,0.9935097868505053,0.8634681163884751,2.61910633967701,20,20,0,0
+8192,terminal,quartet,sgd,common_rate,population_nmse,unit_broadcast minus calibrated_broadcast,6.536078979330649,5.260855920099831,3.368841655984122,10.24494086492324,20,15,5,0
+8192,validation_selected,matching,adam,common_rate,test_nmse,unit_broadcast minus exact,-6.44989168006746e-05,-7.238422556345159e-05,-0.00011047718256108908,-1.628479101837773e-05,20,4,16,0
+8192,validation_selected,matching,adam,common_rate,test_nmse,calibrated_broadcast minus exact,-5.602692280728162e-05,-4.780389330815392e-05,-9.846765731217282e-05,-1.5645548667070605e-05,20,7,13,0
+8192,validation_selected,matching,adam,common_rate,test_nmse,sign_broadcast minus exact,-5.602596471046151e-05,-4.7799440634321844e-05,-9.846559757611508e-05,-1.5644371388702382e-05,20,7,13,0
+8192,validation_selected,matching,adam,common_rate,test_nmse,unit_broadcast minus calibrated_broadcast,-8.471993993392977e-06,-9.667300832402054e-06,-5.7344223037285505e-05,4.713071314350224e-05,20,8,12,0
+8192,validation_selected,matching,adam,common_rate,population_nmse,unit_broadcast minus exact,-6.309075202840417e-05,-6.266024899370063e-05,-0.00010797930520125335,-1.7430675874641384e-05,20,6,14,0
+8192,validation_selected,matching,adam,common_rate,population_nmse,calibrated_broadcast minus exact,-3.843541270911069e-05,-2.5861568231128507e-05,-7.699137170419877e-05,-2.2859813242236635e-06,20,9,11,0
+8192,validation_selected,matching,adam,common_rate,population_nmse,sign_broadcast minus exact,-3.843481744915389e-05,-2.586117468587914e-05,-7.699083866128004e-05,-2.285748641712629e-06,20,9,11,0
+8192,validation_selected,matching,adam,common_rate,population_nmse,unit_broadcast minus calibrated_broadcast,-2.4655339319293475e-05,-2.1771059354113413e-05,-6.465376683003333e-05,1.9715972741308245e-05,20,5,15,0
+8192,validation_selected,matching,sgd,common_rate,test_nmse,unit_broadcast minus exact,7.386863107129299e-05,6.960590741447725e-05,3.804683806372424e-05,0.00011266786942574483,20,16,4,0
+8192,validation_selected,matching,sgd,common_rate,test_nmse,calibrated_broadcast minus exact,0.0484519707516735,0.003575457881117381,0.015506467683715,0.08815187336106128,20,15,5,0
+8192,validation_selected,matching,sgd,common_rate,test_nmse,sign_broadcast minus exact,2.551145455495507e-05,3.527301889121211e-05,2.0629114529405282e-06,4.7674882502592695e-05,20,16,4,0
+8192,validation_selected,matching,sgd,common_rate,test_nmse,unit_broadcast minus calibrated_broadcast,-0.048378102120602194,-0.00350751108142725,-0.08808785021760339,-0.015403226035254163,20,7,13,0
+8192,validation_selected,matching,sgd,common_rate,population_nmse,unit_broadcast minus exact,4.940353782008225e-05,4.109376633793786e-05,1.3393346308707465e-05,8.484471644000483e-05,20,14,6,0
+8192,validation_selected,matching,sgd,common_rate,population_nmse,calibrated_broadcast minus exact,0.04832982592253965,0.003583941714893833,0.015451910134303434,0.08804212786470984,20,15,5,0
+8192,validation_selected,matching,sgd,common_rate,population_nmse,sign_broadcast minus exact,1.625119038282206e-05,2.1774718568672973e-05,-7.541540106060543e-06,3.794815131252813e-05,20,15,5,0
+8192,validation_selected,matching,sgd,common_rate,population_nmse,unit_broadcast minus calibrated_broadcast,-0.048280422384719565,-0.0035626237558479285,-0.08799262736392643,-0.015399416324581167,20,6,14,0
+8192,validation_selected,nested,adam,common_rate,test_nmse,unit_broadcast minus exact,0.6981942181188179,0.7012865672916253,0.6737210812615098,0.7227034471748268,20,20,0,0
+8192,validation_selected,nested,adam,common_rate,test_nmse,calibrated_broadcast minus exact,0.7158888732493239,0.7304771779838752,0.6955234835335803,0.7349054639836242,20,20,0,0
+8192,validation_selected,nested,adam,common_rate,test_nmse,sign_broadcast minus exact,0.715888467665215,0.7304770899418611,0.6955227694041178,0.7349054007837047,20,20,0,0
+8192,validation_selected,nested,adam,common_rate,test_nmse,unit_broadcast minus calibrated_broadcast,-0.017694655130506144,-0.00210973773005968,-0.03467527513449525,-0.0027554452014050893,20,9,11,0
+8192,validation_selected,nested,adam,common_rate,population_nmse,unit_broadcast minus exact,0.6939469378740615,0.6940797264121217,0.6736979540164866,0.7142672110380377,20,20,0,0
+8192,validation_selected,nested,adam,common_rate,population_nmse,calibrated_broadcast minus exact,0.7117646412013474,0.7189068905185538,0.695190469833189,0.7269508713060946,20,20,0,0
+8192,validation_selected,nested,adam,common_rate,population_nmse,sign_broadcast minus exact,0.7117642711499379,0.7189068592866146,0.6951899751218354,0.7269505470287655,20,20,0,0
+8192,validation_selected,nested,adam,common_rate,population_nmse,unit_broadcast minus calibrated_broadcast,-0.017817703327286043,-0.0026836267036343675,-0.03483095135358667,-0.0027349193866005794,20,8,12,0
+8192,validation_selected,nested,sgd,common_rate,test_nmse,unit_broadcast minus exact,0.7018470967554025,0.7102822045783275,0.6734230507724859,0.7287582487068898,20,20,0,0
+8192,validation_selected,nested,sgd,common_rate,test_nmse,calibrated_broadcast minus exact,0.7345259260062768,0.7509415444366182,0.7167133770073535,0.7509446531065002,20,20,0,0
+8192,validation_selected,nested,sgd,common_rate,test_nmse,sign_broadcast minus exact,0.7230721860209709,0.7344542899069383,0.7058456667084329,0.7392074056919732,20,20,0,0
+8192,validation_selected,nested,sgd,common_rate,test_nmse,unit_broadcast minus calibrated_broadcast,-0.032678829250874425,-0.02648250999530488,-0.05160535149779532,-0.015272017052269824,20,3,17,0
+8192,validation_selected,nested,sgd,common_rate,population_nmse,unit_broadcast minus exact,0.6972085776402572,0.7110373948246298,0.6717677734333117,0.7207601558033345,20,20,0,0
+8192,validation_selected,nested,sgd,common_rate,population_nmse,calibrated_broadcast minus exact,0.729928020492141,0.7442887777461128,0.7155306191716214,0.7427112688522804,20,20,0,0
+8192,validation_selected,nested,sgd,common_rate,population_nmse,sign_broadcast minus exact,0.7191474501534406,0.7274629101661949,0.7046101905800908,0.7324539183627454,20,20,0,0
+8192,validation_selected,nested,sgd,common_rate,population_nmse,unit_broadcast minus calibrated_broadcast,-0.03271944285188384,-0.022022006096983182,-0.052619056791480386,-0.015262742920299647,20,4,16,0
+8192,validation_selected,quartet,adam,common_rate,test_nmse,unit_broadcast minus exact,0.8247937116271731,0.8994379404442856,0.7429915274599791,0.8988840711126374,20,20,0,0
+8192,validation_selected,quartet,adam,common_rate,test_nmse,calibrated_broadcast minus exact,0.8175772316361707,0.8724583841688633,0.733906446225681,0.8912165431357514,20,20,0,0
+8192,validation_selected,quartet,adam,common_rate,test_nmse,sign_broadcast minus exact,0.8175772345508617,0.8724577665194604,0.733906588024152,0.8912164452193847,20,20,0,0
+8192,validation_selected,quartet,adam,common_rate,test_nmse,unit_broadcast minus calibrated_broadcast,0.0072164799910024,0.007083494178442784,-0.06703725817855713,0.0902556016925791,20,12,8,0
+8192,validation_selected,quartet,adam,common_rate,population_nmse,unit_broadcast minus exact,0.8231426755896706,0.9053699198064151,0.7397244034629946,0.8981598240777499,20,20,0,0
+8192,validation_selected,quartet,adam,common_rate,population_nmse,calibrated_broadcast minus exact,0.8202318766550137,0.8778699098960725,0.7369630892561945,0.8948222798136345,20,20,0,0
+8192,validation_selected,quartet,adam,common_rate,population_nmse,sign_broadcast minus exact,0.8202318496120089,0.8778692967379684,0.7369631598820917,0.8948221480581129,20,20,0,0
+8192,validation_selected,quartet,adam,common_rate,population_nmse,unit_broadcast minus calibrated_broadcast,0.002910798934657022,0.0037123661755865123,-0.069719777821477,0.08410868104373712,20,11,9,0
+8192,validation_selected,quartet,sgd,common_rate,test_nmse,unit_broadcast minus exact,0.810250429905107,0.9001854928671278,0.7271377141428937,0.8827566941652577,20,20,0,0
+8192,validation_selected,quartet,sgd,common_rate,test_nmse,calibrated_broadcast minus exact,0.866393106204141,0.9479681532717081,0.8015314318243473,0.9250125477343895,20,20,0,0
+8192,validation_selected,quartet,sgd,common_rate,test_nmse,sign_broadcast minus exact,0.817910846443009,0.8877718454179763,0.7320446583954693,0.8928273445802217,20,20,0,0
+8192,validation_selected,quartet,sgd,common_rate,test_nmse,unit_broadcast minus calibrated_broadcast,-0.056142676299034064,-0.0031780472470920307,-0.127400445752978,0.010365644514576207,20,8,12,0
+8192,validation_selected,quartet,sgd,common_rate,population_nmse,unit_broadcast minus exact,0.8083780520149799,0.8941905786917854,0.7236198546683398,0.8822639432215568,20,20,0,0
+8192,validation_selected,quartet,sgd,common_rate,population_nmse,calibrated_broadcast minus exact,0.8667044493480083,0.9506157697032165,0.8003670940070979,0.9269171361061788,20,20,0,0
+8192,validation_selected,quartet,sgd,common_rate,population_nmse,sign_broadcast minus exact,0.8194401552093515,0.8970219080784023,0.7321581403700123,0.8959479979113913,20,20,0,0
+8192,validation_selected,quartet,sgd,common_rate,population_nmse,unit_broadcast minus calibrated_broadcast,-0.05832639733302858,-0.0072550799708422375,-0.13050764450844418,0.009902257652248803,20,8,12,0
+16384,terminal,matching,adam,common_rate,test_nmse,unit_broadcast minus exact,0.00011317926557933514,7.141095698552993e-05,5.2012252807629576e-05,0.00017987437666972198,20,16,4,0
+16384,terminal,matching,adam,common_rate,test_nmse,calibrated_broadcast minus exact,7.120374704746198e-05,2.843576122702092e-05,4.096411440791773e-07,0.00016375478358991713,20,13,7,0
+16384,terminal,matching,adam,common_rate,test_nmse,sign_broadcast minus exact,7.120868846386598e-05,2.8437375649420504e-05,4.1494657086820733e-07,0.0001637598601004444,20,13,7,0
+16384,terminal,matching,adam,common_rate,test_nmse,unit_broadcast minus calibrated_broadcast,4.1975518531873164e-05,2.6929200461205116e-05,-1.8502929753681847e-05,0.0001043770500218478,20,13,7,0
+16384,terminal,matching,adam,common_rate,population_nmse,unit_broadcast minus exact,0.00011842587608439794,9.473263532390865e-05,5.4328302174361934e-05,0.00018973100779389317,20,15,5,0
+16384,terminal,matching,adam,common_rate,population_nmse,calibrated_broadcast minus exact,6.992561841921336e-05,2.932826393763717e-05,9.024239515407899e-06,0.00014504528030812207,20,12,8,0
+16384,terminal,matching,adam,common_rate,population_nmse,sign_broadcast minus exact,6.993087515696315e-05,2.9330444465255987e-05,9.031409872016124e-06,0.0001450520679768375,20,12,8,0
+16384,terminal,matching,adam,common_rate,population_nmse,unit_broadcast minus calibrated_broadcast,4.850025766518457e-05,3.918947704462355e-05,-1.5222338026444362e-05,0.0001188015869554743,20,13,7,0
+16384,terminal,matching,sgd,common_rate,test_nmse,unit_broadcast minus exact,0.31979085519439954,0.00012928291008203197,0.00013877825462113984,0.8277129263756614,20,19,1,0
+16384,terminal,matching,sgd,common_rate,test_nmse,calibrated_broadcast minus exact,0.017017362996481062,-5.2271168312547495e-06,0.004428164702505527,0.032398723671918164,20,9,11,0
+16384,terminal,matching,sgd,common_rate,test_nmse,sign_broadcast minus exact,6.0417500267100424e-05,3.885093550401106e-05,3.576766384807029e-05,8.840762079611366e-05,20,19,1,0
+16384,terminal,matching,sgd,common_rate,test_nmse,unit_broadcast minus calibrated_broadcast,0.30277349219791844,0.00013864518885767403,-0.024986713076871038,0.8187105199296808,20,15,5,0
+16384,terminal,matching,sgd,common_rate,population_nmse,unit_broadcast minus exact,0.32120555534398515,0.0001018523696696913,0.00015158101514870426,0.8431710582340289,20,19,1,0
+16384,terminal,matching,sgd,common_rate,population_nmse,calibrated_broadcast minus exact,0.016959011726619868,-2.2082052562899464e-05,0.00439031772720404,0.03243303850868751,20,8,12,0
+16384,terminal,matching,sgd,common_rate,population_nmse,sign_broadcast minus exact,6.554608764808817e-05,3.7556383296344755e-05,3.834966556635024e-05,9.560689114485464e-05,20,20,0,0
+16384,terminal,matching,sgd,common_rate,population_nmse,unit_broadcast minus calibrated_broadcast,0.30424654361736536,0.00011566125426906601,-0.02486302455669642,0.8298368080666355,20,15,5,0
+16384,terminal,nested,adam,common_rate,test_nmse,unit_broadcast minus exact,0.7497928864163445,0.7499638615571159,0.7383886618082456,0.7605105607026155,20,20,0,0
+16384,terminal,nested,adam,common_rate,test_nmse,calibrated_broadcast minus exact,0.7487608888942126,0.7506241667843627,0.7374698719285221,0.7593003459665411,20,20,0,0
+16384,terminal,nested,adam,common_rate,test_nmse,sign_broadcast minus exact,0.7487608573332417,0.7506241736106547,0.7374697870912009,0.7593003485746807,20,20,0,0
+16384,terminal,nested,adam,common_rate,test_nmse,unit_broadcast minus calibrated_broadcast,0.001031997522131911,-0.0002973030854845904,-0.0004757016079674018,0.002771152849313962,20,7,13,0
+16384,terminal,nested,adam,common_rate,population_nmse,unit_broadcast minus exact,0.7457347433881315,0.7506010384509092,0.7371825072891582,0.7533072000241913,20,20,0,0
+16384,terminal,nested,adam,common_rate,population_nmse,calibrated_broadcast minus exact,0.7445695634527699,0.7511229168725067,0.7360306501732043,0.752013955885663,20,20,0,0
+16384,terminal,nested,adam,common_rate,population_nmse,sign_broadcast minus exact,0.7445695385802162,0.7511229154106553,0.7360305848428018,0.7520139620911691,20,20,0,0
+16384,terminal,nested,adam,common_rate,population_nmse,unit_broadcast minus calibrated_broadcast,0.0011651799353615822,-0.00018577508389860942,-0.00029990574008826915,0.0028809439656131454,20,8,12,0
+16384,terminal,nested,sgd,common_rate,test_nmse,unit_broadcast minus exact,53.59444158951736,28.778901127411352,26.937728427014846,91.24596054195122,20,20,0,0
+16384,terminal,nested,sgd,common_rate,test_nmse,calibrated_broadcast minus exact,0.7464137076841463,0.7535191896750058,0.7361028299902338,0.7561525561977194,20,20,0,0
+16384,terminal,nested,sgd,common_rate,test_nmse,sign_broadcast minus exact,19.088332205637066,5.583697867157657,7.771650994729528,33.57831583657354,20,20,0,0
+16384,terminal,nested,sgd,common_rate,test_nmse,unit_broadcast minus calibrated_broadcast,52.848027881833204,28.04330185532219,26.189372797162388,90.49038558821645,20,17,3,0
+16384,terminal,nested,sgd,common_rate,population_nmse,unit_broadcast minus exact,54.47134647197149,28.968273252487936,27.33076436318766,92.50586333603671,20,20,0,0
+16384,terminal,nested,sgd,common_rate,population_nmse,calibrated_broadcast minus exact,0.7422721348154242,0.7517899073164244,0.7347527689667721,0.7490519026922354,20,20,0,0
+16384,terminal,nested,sgd,common_rate,population_nmse,sign_broadcast minus exact,19.03576316999058,5.6397607790151145,7.90022354162244,33.12197952705437,20,20,0,0
+16384,terminal,nested,sgd,common_rate,population_nmse,unit_broadcast minus calibrated_broadcast,53.72907433715608,28.240250933719963,26.584292591418837,91.75850789274553,20,17,3,0
+16384,terminal,quartet,adam,common_rate,test_nmse,unit_broadcast minus exact,0.9079544202399031,0.9825280530381727,0.8414964158256876,0.9630085896394611,20,20,0,0
+16384,terminal,quartet,adam,common_rate,test_nmse,calibrated_broadcast minus exact,0.9028321250903464,0.979171515291234,0.8372385295255129,0.9579488505664491,20,20,0,0
+16384,terminal,quartet,adam,common_rate,test_nmse,sign_broadcast minus exact,0.902832019668191,0.9791715264554939,0.8372382036110757,0.957948857454368,20,20,0,0
+16384,terminal,quartet,adam,common_rate,test_nmse,unit_broadcast minus calibrated_broadcast,0.005122295149556827,0.00040307979568798835,-0.0014436411683372168,0.012467743969576686,20,12,8,0
+16384,terminal,quartet,adam,common_rate,population_nmse,unit_broadcast minus exact,0.9091905955098631,0.9863201432900008,0.841798902385179,0.9643766047860234,20,20,0,0
+16384,terminal,quartet,adam,common_rate,population_nmse,calibrated_broadcast minus exact,0.9038962621097026,0.9838654499742938,0.8371655169404972,0.9596164352374076,20,20,0,0
+16384,terminal,quartet,adam,common_rate,population_nmse,sign_broadcast minus exact,0.9038961665092856,0.9838654618661271,0.8371652143993299,0.9596164447304645,20,20,0,0
+16384,terminal,quartet,adam,common_rate,population_nmse,unit_broadcast minus calibrated_broadcast,0.005294333400160464,0.0006503935223771129,-0.0010032588909969996,0.012072201525754079,20,13,7,0
+16384,terminal,quartet,sgd,common_rate,test_nmse,unit_broadcast minus exact,26.085542484413935,24.498575479449272,19.113393951864175,33.19495350991263,20,20,0,0
+16384,terminal,quartet,sgd,common_rate,test_nmse,calibrated_broadcast minus exact,0.9300632061459154,0.9729517416402594,0.888755857865446,0.9670985181463454,20,20,0,0
+16384,terminal,quartet,sgd,common_rate,test_nmse,sign_broadcast minus exact,14.947606745946135,12.694725599296373,9.176432150130625,22.54519243674883,20,20,0,0
+16384,terminal,quartet,sgd,common_rate,test_nmse,unit_broadcast minus calibrated_broadcast,25.155479278268018,23.508890060664854,18.208170970377147,32.26082331040973,20,18,2,0
+16384,terminal,quartet,sgd,common_rate,population_nmse,unit_broadcast minus exact,26.277526835012793,25.290448629773444,19.312659096496056,33.375255744475716,20,20,0,0
+16384,terminal,quartet,sgd,common_rate,population_nmse,calibrated_broadcast minus exact,0.9332892011937002,0.9871335388482854,0.8922207650285486,0.9701608781030238,20,20,0,0
+16384,terminal,quartet,sgd,common_rate,population_nmse,sign_broadcast minus exact,15.245476615930722,12.515318193736881,9.304238188189906,23.143438610794576,20,20,0,0
+16384,terminal,quartet,sgd,common_rate,population_nmse,unit_broadcast minus calibrated_broadcast,25.344237633819098,24.29728814231764,18.379136410526428,32.427990239777905,20,18,2,0
+16384,validation_selected,matching,adam,common_rate,test_nmse,unit_broadcast minus exact,-8.811898007921228e-05,-3.269300743261906e-05,-0.00017226036162056445,-1.4353228018942728e-05,20,6,14,0
+16384,validation_selected,matching,adam,common_rate,test_nmse,calibrated_broadcast minus exact,-6.19503167832481e-05,-3.104752339734909e-05,-0.0001122861447290636,-1.7806701668193693e-05,20,6,14,0
+16384,validation_selected,matching,adam,common_rate,test_nmse,sign_broadcast minus exact,-6.19483029925037e-05,-3.104775413501591e-05,-0.00011228419851086143,-1.7805426411674474e-05,20,6,14,0
+16384,validation_selected,matching,adam,common_rate,test_nmse,unit_broadcast minus calibrated_broadcast,-2.6168663295964185e-05,8.747046663787339e-07,-0.00010098941944928343,3.659116232908129e-05,20,10,10,0
+16384,validation_selected,matching,adam,common_rate,population_nmse,unit_broadcast minus exact,-8.58993955435877e-05,-6.266024899370063e-05,-0.00015389778588494347,-2.519056185201983e-05,20,5,15,0
+16384,validation_selected,matching,adam,common_rate,population_nmse,calibrated_broadcast minus exact,-4.6948735741903665e-05,-3.87292060294832e-05,-8.310234660539821e-05,-1.5206645950447648e-05,20,6,14,0
+16384,validation_selected,matching,adam,common_rate,population_nmse,sign_broadcast minus exact,-4.6947324590182535e-05,-3.872621479505232e-05,-8.310115613476862e-05,-1.5206654241967081e-05,20,6,14,0
+16384,validation_selected,matching,adam,common_rate,population_nmse,unit_broadcast minus calibrated_broadcast,-3.895065980168403e-05,-1.047493695219932e-05,-0.00010341195259375647,1.6651667930629287e-05,20,8,12,0
+16384,validation_selected,matching,sgd,common_rate,test_nmse,unit_broadcast minus exact,7.441621498195245e-05,7.962528744646404e-05,2.9646539353497957e-05,0.00011613729359446595,20,17,3,0
+16384,validation_selected,matching,sgd,common_rate,test_nmse,calibrated_broadcast minus exact,0.01706895984470667,3.480868219662113e-05,0.004469719627270571,0.03245135912692784,20,14,6,0
+16384,validation_selected,matching,sgd,common_rate,test_nmse,sign_broadcast minus exact,2.6741333551748813e-05,3.1684361146226345e-05,1.5729663592752543e-05,3.813809021393858e-05,20,16,4,0
+16384,validation_selected,matching,sgd,common_rate,test_nmse,unit_broadcast minus calibrated_broadcast,-0.016994543629724725,2.8199511430428842e-05,-0.03241024312117792,-0.004397221917260758,20,11,9,0
+16384,validation_selected,matching,sgd,common_rate,population_nmse,unit_broadcast minus exact,6.948867952326904e-05,6.923874921182782e-05,3.4096395659570225e-05,0.0001033595721238276,20,17,3,0
+16384,validation_selected,matching,sgd,common_rate,population_nmse,calibrated_broadcast minus exact,0.017024146395534123,4.4781164523767863e-05,0.004447601677815264,0.032490404587088025,20,14,6,0
+16384,validation_selected,matching,sgd,common_rate,population_nmse,sign_broadcast minus exact,2.9230120886996983e-05,3.371968647992219e-05,1.5003802101005153e-05,4.334507538625031e-05,20,17,3,0
+16384,validation_selected,matching,sgd,common_rate,population_nmse,unit_broadcast minus calibrated_broadcast,-0.016954657716010853,8.886353541603161e-06,-0.03242681179927081,-0.004385222861958901,20,11,9,0
+16384,validation_selected,nested,adam,common_rate,test_nmse,unit_broadcast minus exact,0.6979473238616111,0.7012865672916253,0.6735376811593203,0.7223709905067337,20,20,0,0
+16384,validation_selected,nested,adam,common_rate,test_nmse,calibrated_broadcast minus exact,0.7146850155505535,0.7304278742653016,0.6947255324690743,0.7333463371456109,20,20,0,0
+16384,validation_selected,nested,adam,common_rate,test_nmse,sign_broadcast minus exact,0.714684612933278,0.7304278371575402,0.6947250456053605,0.7333463137063841,20,20,0,0
+16384,validation_selected,nested,adam,common_rate,test_nmse,unit_broadcast minus calibrated_broadcast,-0.01673769168894256,0.00031117798842422717,-0.03397756200356234,-0.0016498403946543822,20,10,10,0
+16384,validation_selected,nested,adam,common_rate,population_nmse,unit_broadcast minus exact,0.6937008183756286,0.6940797264121217,0.6735437999141833,0.7137405127949592,20,20,0,0
+16384,validation_selected,nested,adam,common_rate,population_nmse,calibrated_broadcast minus exact,0.7109771212900186,0.7188289878474752,0.6946310414907275,0.7258119552958224,20,20,0,0
+16384,validation_selected,nested,adam,common_rate,population_nmse,sign_broadcast minus exact,0.7109767559332577,0.718828956615536,0.694630270359382,0.7258119548990507,20,20,0,0
+16384,validation_selected,nested,adam,common_rate,population_nmse,unit_broadcast minus calibrated_broadcast,-0.017276302914389856,-0.002626618763967581,-0.03442411837412707,-0.002111961697168751,20,8,12,0
+16384,validation_selected,nested,sgd,common_rate,test_nmse,unit_broadcast minus exact,0.7012235581524928,0.7057323365247781,0.6728396686111168,0.7280595429459982,20,20,0,0
+16384,validation_selected,nested,sgd,common_rate,test_nmse,calibrated_broadcast minus exact,0.7293023242323111,0.7471754159948197,0.712081632594423,0.7451287037953448,20,20,0,0
+16384,validation_selected,nested,sgd,common_rate,test_nmse,sign_broadcast minus exact,0.7206859882088266,0.7304993579319163,0.7028872447955151,0.7375492597800103,20,20,0,0
+16384,validation_selected,nested,sgd,common_rate,test_nmse,unit_broadcast minus calibrated_broadcast,-0.028078766079818285,-0.018257808341379578,-0.04672175388672605,-0.011309205484906578,20,4,16,0
+16384,validation_selected,nested,sgd,common_rate,population_nmse,unit_broadcast minus exact,0.6966398893716723,0.7110409759646923,0.6710099009789501,0.7201591671969682,20,20,0,0
+16384,validation_selected,nested,sgd,common_rate,population_nmse,calibrated_broadcast minus exact,0.724950076125405,0.7419281400381692,0.711122868534387,0.7373080852510663,20,20,0,0
+16384,validation_selected,nested,sgd,common_rate,population_nmse,sign_broadcast minus exact,0.7169998270356108,0.724982944210893,0.701420298911664,0.7313485188421703,20,20,0,0
+16384,validation_selected,nested,sgd,common_rate,population_nmse,unit_broadcast minus calibrated_broadcast,-0.028310186753732702,-0.01323359915483241,-0.04820789656551334,-0.011212192400080371,20,5,15,0
+16384,validation_selected,quartet,adam,common_rate,test_nmse,unit_broadcast minus exact,0.8018589423845868,0.89972875779128,0.7142364405215844,0.8830919810481898,20,20,0,0
+16384,validation_selected,quartet,adam,common_rate,test_nmse,calibrated_broadcast minus exact,0.7951577434283406,0.839943563821043,0.7016766634327354,0.8774648996823913,20,20,0,0
+16384,validation_selected,quartet,adam,common_rate,test_nmse,sign_broadcast minus exact,0.7951577682345206,0.8399430365278884,0.701676798571087,0.8774648660980304,20,20,0,0
+16384,validation_selected,quartet,adam,common_rate,test_nmse,unit_broadcast minus calibrated_broadcast,0.006701198956246252,0.0034731762978940095,-0.0636256433579891,0.08370246417624827,20,12,8,0
+16384,validation_selected,quartet,adam,common_rate,population_nmse,unit_broadcast minus exact,0.8005656796341869,0.8983481357592843,0.7126008949398165,0.8825764773000154,20,20,0,0
+16384,validation_selected,quartet,adam,common_rate,population_nmse,calibrated_broadcast minus exact,0.7966365080621964,0.8388695997337883,0.7027375801689593,0.8800537426343337,20,20,0,0
+16384,validation_selected,quartet,adam,common_rate,population_nmse,sign_broadcast minus exact,0.7966365254577044,0.838869084146797,0.7027377167084933,0.8800536823892443,20,20,0,0
+16384,validation_selected,quartet,adam,common_rate,population_nmse,unit_broadcast minus calibrated_broadcast,0.003929171571990525,-0.0002221551981357872,-0.06470116544698662,0.07863881269617153,20,10,10,0
+16384,validation_selected,quartet,sgd,common_rate,test_nmse,unit_broadcast minus exact,0.8051988353964916,0.900370628560432,0.7159407788291015,0.8832145550659387,20,20,0,0
+16384,validation_selected,quartet,sgd,common_rate,test_nmse,calibrated_broadcast minus exact,0.8618940888382951,0.9348751794087969,0.7980510857189677,0.9185817647044614,20,20,0,0
+16384,validation_selected,quartet,sgd,common_rate,test_nmse,sign_broadcast minus exact,0.8047159608801661,0.8878928323554094,0.7160067152577921,0.8853241523767039,20,20,0,0
+16384,validation_selected,quartet,sgd,common_rate,test_nmse,unit_broadcast minus calibrated_broadcast,-0.056695253441803574,-0.013270657970384014,-0.12977018773286753,0.01044985096553083,20,8,12,0
+16384,validation_selected,quartet,sgd,common_rate,population_nmse,unit_broadcast minus exact,0.8043563757524226,0.8942544726663114,0.7136833910162729,0.8831510930676403,20,20,0,0
+16384,validation_selected,quartet,sgd,common_rate,population_nmse,calibrated_broadcast minus exact,0.862340761683271,0.9409176369140214,0.7970178930090623,0.9205997352504685,20,20,0,0
+16384,validation_selected,quartet,sgd,common_rate,population_nmse,sign_broadcast minus exact,0.8071534073139951,0.8970801181497083,0.7172683441181077,0.888070470236682,20,20,0,0
+16384,validation_selected,quartet,sgd,common_rate,population_nmse,unit_broadcast minus calibrated_broadcast,-0.057984385930848426,-0.026454767783087363,-0.13103425640846103,0.009868613922338704,20,8,12,0
+1024,terminal,quartet_minus_matching,adam,common_rate,test_nmse,unit_broadcast minus exact interaction,0.8231707403273815,0.958551074676337,0.6774735979210001,0.9406573840620254,20,19,1,0
+1024,terminal,quartet_minus_matching,adam,common_rate,test_nmse,calibrated_broadcast minus exact interaction,0.8434843457183965,0.9425152786717144,0.7271907217284305,0.9347230884724235,20,20,0,0
+1024,terminal,quartet_minus_matching,adam,common_rate,test_nmse,sign_broadcast minus exact interaction,0.8434842287502595,0.9425153018274816,0.7271905950508322,0.9347229686920863,20,20,0,0
+1024,terminal,quartet_minus_matching,adam,common_rate,population_nmse,unit_broadcast minus exact interaction,0.8275266339353509,0.9739654735034664,0.6814739398504461,0.9459470538450108,20,19,1,0
+1024,terminal,quartet_minus_matching,adam,common_rate,population_nmse,calibrated_broadcast minus exact interaction,0.8483379333388502,0.9605050125980917,0.7301845418339535,0.942003382014554,20,20,0,0
+1024,terminal,quartet_minus_matching,adam,common_rate,population_nmse,sign_broadcast minus exact interaction,0.8483378174098959,0.9605050295316955,0.7301844852905118,0.9420033597301748,20,20,0,0
+1024,terminal,quartet_minus_matching,sgd,common_rate,test_nmse,unit_broadcast minus exact interaction,1.294115357932895,0.8675507529895259,0.6932219311475382,2.225027008744094,20,20,0,0
+1024,terminal,quartet_minus_matching,sgd,common_rate,test_nmse,calibrated_broadcast minus exact interaction,0.4221720465879101,0.46686302778515776,0.27227411944195895,0.5655916604589739,20,19,1,0
+1024,terminal,quartet_minus_matching,sgd,common_rate,test_nmse,sign_broadcast minus exact interaction,0.7265952225743237,0.7671797048999351,0.5935822762154138,0.8479655379165478,20,20,0,0
+1024,terminal,quartet_minus_matching,sgd,common_rate,population_nmse,unit_broadcast minus exact interaction,1.2937597294866525,0.8727400766781193,0.6978770496397205,2.2048782799628732,20,20,0,0
+1024,terminal,quartet_minus_matching,sgd,common_rate,population_nmse,calibrated_broadcast minus exact interaction,0.4248828047623223,0.4720017178716975,0.2727645458418539,0.5700489566062731,20,19,1,0
+1024,terminal,quartet_minus_matching,sgd,common_rate,population_nmse,sign_broadcast minus exact interaction,0.7309984349778116,0.7467095061601876,0.5977673719524629,0.853857150894711,20,20,0,0
+1024,validation_selected,quartet_minus_matching,adam,common_rate,test_nmse,unit_broadcast minus exact interaction,0.784067246613331,0.9003304176484951,0.6412701980428164,0.9051324448255682,20,19,1,0
+1024,validation_selected,quartet_minus_matching,adam,common_rate,test_nmse,calibrated_broadcast minus exact interaction,0.8200161729584762,0.9078771126977645,0.7062959680785535,0.9083479608963173,20,20,0,0
+1024,validation_selected,quartet_minus_matching,adam,common_rate,test_nmse,sign_broadcast minus exact interaction,0.8200160639141438,0.9078765253982304,0.706295792154727,0.9083477987670582,20,20,0,0
+1024,validation_selected,quartet_minus_matching,adam,common_rate,population_nmse,unit_broadcast minus exact interaction,0.7865945854936286,0.9129613011725006,0.6423491595449747,0.9083812840808759,20,19,1,0
+1024,validation_selected,quartet_minus_matching,adam,common_rate,population_nmse,calibrated_broadcast minus exact interaction,0.8238931063208194,0.9133906468767214,0.7084942122158745,0.9140464340974583,20,20,0,0
+1024,validation_selected,quartet_minus_matching,adam,common_rate,population_nmse,sign_broadcast minus exact interaction,0.8238929977282456,0.913390060534378,0.7084942310948269,0.9140462665707882,20,20,0,0
+1024,validation_selected,quartet_minus_matching,sgd,common_rate,test_nmse,unit_broadcast minus exact interaction,0.651496526806161,0.6475363607834106,0.5052732576389826,0.7877708576758092,20,19,1,0
+1024,validation_selected,quartet_minus_matching,sgd,common_rate,test_nmse,calibrated_broadcast minus exact interaction,0.41775172787067777,0.4652095722614973,0.2732000189007755,0.5565094632725724,20,17,3,0
+1024,validation_selected,quartet_minus_matching,sgd,common_rate,test_nmse,sign_broadcast minus exact interaction,0.7066695941356358,0.7612655593706388,0.570930379234007,0.8310727282462309,20,20,0,0
+1024,validation_selected,quartet_minus_matching,sgd,common_rate,population_nmse,unit_broadcast minus exact interaction,0.6544183330641052,0.6462803311833416,0.5062516759069817,0.7915936559504154,20,19,1,0
+1024,validation_selected,quartet_minus_matching,sgd,common_rate,population_nmse,calibrated_broadcast minus exact interaction,0.421419468939847,0.4706218519535082,0.27541439586060307,0.5625963010166569,20,18,2,0
+1024,validation_selected,quartet_minus_matching,sgd,common_rate,population_nmse,sign_broadcast minus exact interaction,0.7120058896207413,0.7404267510575758,0.5755303319815696,0.8375673674553491,20,20,0,0
+4096,terminal,quartet_minus_matching,adam,common_rate,test_nmse,unit_broadcast minus exact interaction,0.9304585943196196,0.9783745888858315,0.8884574332425487,0.9686330262665843,20,20,0,0
+4096,terminal,quartet_minus_matching,adam,common_rate,test_nmse,calibrated_broadcast minus exact interaction,0.9025748008948943,0.9821835421240479,0.8274611830034176,0.9639169649580157,20,20,0,0
+4096,terminal,quartet_minus_matching,adam,common_rate,test_nmse,sign_broadcast minus exact interaction,0.9025749141668374,0.9821835429337188,0.8274617246879875,0.9639169812435454,20,20,0,0
+4096,terminal,quartet_minus_matching,adam,common_rate,population_nmse,unit_broadcast minus exact interaction,0.9297611163893522,0.981843361693753,0.8885729317959272,0.9670983143180959,20,20,0,0
+4096,terminal,quartet_minus_matching,adam,common_rate,population_nmse,calibrated_broadcast minus exact interaction,0.9050903390124893,0.9910011922944146,0.8280865592506405,0.9670992689451101,20,20,0,0
+4096,terminal,quartet_minus_matching,adam,common_rate,population_nmse,sign_broadcast minus exact interaction,0.9050904504929169,0.9910011865511836,0.8280864739337788,0.9670992786653567,20,20,0,0
+4096,terminal,quartet_minus_matching,sgd,common_rate,test_nmse,unit_broadcast minus exact interaction,3.6619418712014005,0.9925846795738718,1.9835203883991066,5.694479162518873,20,20,0,0
+4096,terminal,quartet_minus_matching,sgd,common_rate,test_nmse,calibrated_broadcast minus exact interaction,0.8024422927060509,0.827107130794371,0.7112498425743535,0.8808857099316498,20,20,0,0
+4096,terminal,quartet_minus_matching,sgd,common_rate,test_nmse,sign_broadcast minus exact interaction,0.9306822956364836,0.9882783244538313,0.8480770970690077,1.0102879220241754,20,20,0,0
+4096,terminal,quartet_minus_matching,sgd,common_rate,population_nmse,unit_broadcast minus exact interaction,3.6100903315077866,1.0015969547948944,1.9792370608127086,5.606943234036131,20,20,0,0
+4096,terminal,quartet_minus_matching,sgd,common_rate,population_nmse,calibrated_broadcast minus exact interaction,0.8045564629563213,0.8218294624883951,0.7129638023825987,0.8833530644380636,20,20,0,0
+4096,terminal,quartet_minus_matching,sgd,common_rate,population_nmse,sign_broadcast minus exact interaction,0.9333446027792369,0.9962073098480962,0.8498872122794486,1.0140606782756145,20,20,0,0
+4096,validation_selected,quartet_minus_matching,adam,common_rate,test_nmse,unit_broadcast minus exact interaction,0.8478129039056619,0.8994348741248244,0.7718779720991443,0.9152624609868203,20,20,0,0
+4096,validation_selected,quartet_minus_matching,adam,common_rate,test_nmse,calibrated_broadcast minus exact interaction,0.8399215057045858,0.9433989377386343,0.7583128272419539,0.9120834988918873,20,20,0,0
+4096,validation_selected,quartet_minus_matching,adam,common_rate,test_nmse,sign_broadcast minus exact interaction,0.8399213265137823,0.9433988757966167,0.7583124939001773,0.9120834141453743,20,20,0,0
+4096,validation_selected,quartet_minus_matching,adam,common_rate,population_nmse,unit_broadcast minus exact interaction,0.8477618163106359,0.9053942221423297,0.7720713188157945,0.914526327513775,20,20,0,0
+4096,validation_selected,quartet_minus_matching,adam,common_rate,population_nmse,calibrated_broadcast minus exact interaction,0.8420879491457413,0.9411319224033144,0.7591757491779505,0.9150067138793269,20,20,0,0
+4096,validation_selected,quartet_minus_matching,adam,common_rate,population_nmse,sign_broadcast minus exact interaction,0.842087770156812,0.9411318619520084,0.7591756656220483,0.9150066309777414,20,20,0,0
+4096,validation_selected,quartet_minus_matching,sgd,common_rate,test_nmse,unit_broadcast minus exact interaction,0.7942564466969835,0.849566790280254,0.716970112253867,0.8681921629974203,20,20,0,0
+4096,validation_selected,quartet_minus_matching,sgd,common_rate,test_nmse,calibrated_broadcast minus exact interaction,0.7577879371901067,0.7463440693749415,0.6582497010698106,0.846041599564439,20,20,0,0
+4096,validation_selected,quartet_minus_matching,sgd,common_rate,test_nmse,sign_broadcast minus exact interaction,0.8238305310079628,0.9285783823566325,0.7431747257254713,0.8975165615479407,20,20,0,0
+4096,validation_selected,quartet_minus_matching,sgd,common_rate,population_nmse,unit_broadcast minus exact interaction,0.794491483699532,0.8487006692110131,0.7175785777641133,0.8690066462881283,20,20,0,0
+4096,validation_selected,quartet_minus_matching,sgd,common_rate,population_nmse,calibrated_broadcast minus exact interaction,0.759563482006904,0.7503072170287493,0.6581087412611141,0.8487625713553758,20,20,0,0
+4096,validation_selected,quartet_minus_matching,sgd,common_rate,population_nmse,sign_broadcast minus exact interaction,0.8263662697759905,0.9259545811658798,0.7443555370804255,0.9011505634174913,20,20,0,0
+8192,terminal,quartet_minus_matching,adam,common_rate,test_nmse,unit_broadcast minus exact interaction,0.9047916603037137,0.9788628542347613,0.8347396760388055,0.9599068075202042,20,20,0,0
+8192,terminal,quartet_minus_matching,adam,common_rate,test_nmse,calibrated_broadcast minus exact interaction,0.9087922485632097,0.9722484614415527,0.8414564668347978,0.9621032842906911,20,20,0,0
+8192,terminal,quartet_minus_matching,adam,common_rate,test_nmse,sign_broadcast minus exact interaction,0.9087923070714512,0.9722484575804861,0.8414564786431595,0.9621032740646168,20,20,0,0
+8192,terminal,quartet_minus_matching,adam,common_rate,population_nmse,unit_broadcast minus exact interaction,0.9072791042369264,0.982056223344122,0.8375895840561465,0.9623406705337156,20,20,0,0
+8192,terminal,quartet_minus_matching,adam,common_rate,population_nmse,calibrated_broadcast minus exact interaction,0.9105752247092465,0.9892451829986773,0.8426685021606971,0.9635915731340753,20,20,0,0
+8192,terminal,quartet_minus_matching,adam,common_rate,population_nmse,sign_broadcast minus exact interaction,0.9105752887111418,0.9892451818337626,0.8426685101642117,0.9635916696031069,20,20,0,0
+8192,terminal,quartet_minus_matching,sgd,common_rate,test_nmse,unit_broadcast minus exact interaction,7.445531431285509,5.951523587363273,4.263226778578016,11.22892140912035,20,20,0,0
+8192,terminal,quartet_minus_matching,sgd,common_rate,test_nmse,calibrated_broadcast minus exact interaction,0.8794629414489119,0.9355525463594379,0.8205992016911037,0.9348298735591293,20,20,0,0
+8192,terminal,quartet_minus_matching,sgd,common_rate,test_nmse,sign_broadcast minus exact interaction,1.4576640566403607,0.9821533912258336,0.8623218674833343,2.57664745645414,20,20,0,0
+8192,terminal,quartet_minus_matching,sgd,common_rate,population_nmse,unit_broadcast minus exact interaction,7.465948942484237,6.191877635560656,4.305878196687327,11.178903228657735,20,20,0,0
+8192,terminal,quartet_minus_matching,sgd,common_rate,population_nmse,calibrated_broadcast minus exact interaction,0.8818216774511581,0.9368920558435521,0.8231566826043303,0.9368616963912806,20,20,0,0
+8192,terminal,quartet_minus_matching,sgd,common_rate,population_nmse,sign_broadcast minus exact interaction,1.4729132368975804,0.9934552451741441,0.8634356049771796,2.619082789419249,20,20,0,0
+8192,validation_selected,quartet_minus_matching,adam,common_rate,test_nmse,unit_broadcast minus exact interaction,0.8248582105439738,0.8994060802150956,0.7430377579846598,0.8989443219873765,20,20,0,0
+8192,validation_selected,quartet_minus_matching,adam,common_rate,test_nmse,calibrated_broadcast minus exact interaction,0.817633258558978,0.8725262134372922,0.7339505739848935,0.8912509947019503,20,20,0,0
+8192,validation_selected,quartet_minus_matching,adam,common_rate,test_nmse,sign_broadcast minus exact interaction,0.8176332605155723,0.8725255936198261,0.733950573201426,0.8912508950396462,20,20,0,0
+8192,validation_selected,quartet_minus_matching,adam,common_rate,population_nmse,unit_broadcast minus exact interaction,0.8232057663416992,0.9053768878111172,0.7398042545022789,0.8982496629678045,20,20,0,0
+8192,validation_selected,quartet_minus_matching,adam,common_rate,population_nmse,calibrated_broadcast minus exact interaction,0.8202703120677228,0.8780243857179397,0.7370294092272553,0.8948549775674216,20,20,0,0
+8192,validation_selected,quartet_minus_matching,adam,common_rate,population_nmse,sign_broadcast minus exact interaction,0.8202702844294582,0.8780237710807853,0.7370294609140897,0.8948549460590421,20,20,0,0
+8192,validation_selected,quartet_minus_matching,sgd,common_rate,test_nmse,unit_broadcast minus exact interaction,0.8101765612740357,0.9000475519335474,0.7270670302773743,0.8826748103563437,20,20,0,0
+8192,validation_selected,quartet_minus_matching,sgd,common_rate,test_nmse,calibrated_broadcast minus exact interaction,0.8179411354524675,0.7690215437885266,0.7519917602428147,0.882459534449074,20,20,0,0
+8192,validation_selected,quartet_minus_matching,sgd,common_rate,test_nmse,sign_broadcast minus exact interaction,0.8178853349884541,0.8877096387447158,0.7320114091573138,0.8928113281134265,20,20,0,0
+8192,validation_selected,quartet_minus_matching,sgd,common_rate,population_nmse,unit_broadcast minus exact interaction,0.8083286484771598,0.894178800940042,0.7235957949092596,0.8821847211275567,20,20,0,0
+8192,validation_selected,quartet_minus_matching,sgd,common_rate,population_nmse,calibrated_broadcast minus exact interaction,0.8183746234254687,0.7730894315735026,0.7514833761950913,0.8834299269074081,20,20,0,0
+8192,validation_selected,quartet_minus_matching,sgd,common_rate,population_nmse,sign_broadcast minus exact interaction,0.8194239040189686,0.8969804044174321,0.732127603331137,0.8959307874813084,20,20,0,0
+16384,terminal,quartet_minus_matching,adam,common_rate,test_nmse,unit_broadcast minus exact interaction,0.9078412409743238,0.982378937108688,0.8414140091374154,0.9629128577721754,20,20,0,0
+16384,terminal,quartet_minus_matching,adam,common_rate,test_nmse,calibrated_broadcast minus exact interaction,0.9027609213432986,0.9790551386218069,0.8371249663207592,0.9579067936958481,20,20,0,0
+16384,terminal,quartet_minus_matching,adam,common_rate,test_nmse,sign_broadcast minus exact interaction,0.902760810979727,0.9790551443646467,0.8371245230407779,0.9579067928707065,20,20,0,0
+16384,terminal,quartet_minus_matching,adam,common_rate,population_nmse,unit_broadcast minus exact interaction,0.9090721696337788,0.9863123926107399,0.8416887539523477,0.9642609706400319,20,20,0,0
+16384,terminal,quartet_minus_matching,adam,common_rate,population_nmse,calibrated_broadcast minus exact interaction,0.9038263364912836,0.98371186248092,0.8371008220699421,0.9595246968500651,20,20,0,0
+16384,terminal,quartet_minus_matching,adam,common_rate,population_nmse,sign_broadcast minus exact interaction,0.9038262356341287,0.9837118712072617,0.8371005152811277,0.9595247012069976,20,20,0,0
+16384,terminal,quartet_minus_matching,sgd,common_rate,test_nmse,unit_broadcast minus exact interaction,25.765751629219533,24.497567368324624,18.8143078581491,32.88012622357121,20,20,0,0
+16384,terminal,quartet_minus_matching,sgd,common_rate,test_nmse,calibrated_broadcast minus exact interaction,0.9130458431494345,0.9374242923189762,0.8741748099746439,0.9504003499485844,20,20,0,0
+16384,terminal,quartet_minus_matching,sgd,common_rate,test_nmse,sign_broadcast minus exact interaction,14.94754632844587,12.694618275303846,9.176386147921951,22.545116668613353,20,20,0,0
+16384,terminal,quartet_minus_matching,sgd,common_rate,population_nmse,unit_broadcast minus exact interaction,25.95632127966881,25.289552372597285,19.014481914998846,33.068056274607315,20,20,0,0
+16384,terminal,quartet_minus_matching,sgd,common_rate,population_nmse,calibrated_broadcast minus exact interaction,0.9163301894670802,0.9428789122680863,0.8776502617679768,0.9532078264299259,20,20,0,0
+16384,terminal,quartet_minus_matching,sgd,common_rate,population_nmse,sign_broadcast minus exact interaction,15.245411069843072,12.515217880054255,9.304183128653728,23.14335528002799,20,20,0,0
+16384,validation_selected,quartet_minus_matching,adam,common_rate,test_nmse,unit_broadcast minus exact interaction,0.8019470613646661,0.9000257450392339,0.7142799599169583,0.8831755254055079,20,20,0,0
+16384,validation_selected,quartet_minus_matching,adam,common_rate,test_nmse,calibrated_broadcast minus exact interaction,0.7952196937451237,0.8400019791140774,0.7017635250694374,0.8775279539673204,20,20,0,0
+16384,validation_selected,quartet_minus_matching,adam,common_rate,test_nmse,sign_broadcast minus exact interaction,0.795219716537513,0.8400014462211647,0.7017636092416744,0.8775279205280125,20,20,0,0
+16384,validation_selected,quartet_minus_matching,adam,common_rate,population_nmse,unit_broadcast minus exact interaction,0.8006515790297304,0.8985090898147727,0.7126537018887967,0.8826161045379018,20,20,0,0
+16384,validation_selected,quartet_minus_matching,adam,common_rate,population_nmse,calibrated_broadcast minus exact interaction,0.7966834567979382,0.8388985184981352,0.7027564941681164,0.8801141753515577,20,20,0,0
+16384,validation_selected,quartet_minus_matching,adam,common_rate,population_nmse,sign_broadcast minus exact interaction,0.7966834727822946,0.8388979973470392,0.702756642438222,0.8801141138860159,20,20,0,0
+16384,validation_selected,quartet_minus_matching,sgd,common_rate,test_nmse,unit_broadcast minus exact interaction,0.8051244191815098,0.9002253734041553,0.715869307530085,0.8830971537253107,20,20,0,0
+16384,validation_selected,quartet_minus_matching,sgd,common_rate,test_nmse,calibrated_broadcast minus exact interaction,0.8448251289935886,0.8726762153995589,0.7830717387430177,0.9010510302261714,20,20,0,0
+16384,validation_selected,quartet_minus_matching,sgd,common_rate,test_nmse,sign_broadcast minus exact interaction,0.8046892195466141,0.8878800669043276,0.7159712145700182,0.885293926623652,20,20,0,0
+16384,validation_selected,quartet_minus_matching,sgd,common_rate,population_nmse,unit_broadcast minus exact interaction,0.8042868870728993,0.8941777455020182,0.7136475066078999,0.8830612223025357,20,20,0,0
+16384,validation_selected,quartet_minus_matching,sgd,common_rate,population_nmse,calibrated_broadcast minus exact interaction,0.8453166152877369,0.8882707395788354,0.7824085857292309,0.9025850823891388,20,20,0,0
+16384,validation_selected,quartet_minus_matching,sgd,common_rate,population_nmse,sign_broadcast minus exact interaction,0.8071241771931079,0.897045273703317,0.7172447174390841,0.8880388034709896,20,20,0,0

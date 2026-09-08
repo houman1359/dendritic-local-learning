@@ -1,0 +1,9 @@
+task,rule,parameter_max_abs_difference,first_moment_max_abs_difference,second_moment_max_abs_difference,all_checkpoint_nmse_max_abs_difference,selected_test_nmse_abs_difference,best_step_match,passed
+aligned_strong,exact,0.0,0.0,0.0,0.0,0.0,True,True
+aligned_strong,unit_broadcast,0.0,0.0,0.0,0.0,0.0,True,True
+aligned_strong,calibrated_broadcast,0.0,0.0,0.0,0.0,0.0,True,True
+aligned_strong,ancestry_three_oracle,3.730349362740526e-14,3.198396408832238e-17,2.4352197233561135e-20,6.938893903907228e-18,4.22500034090445e-18,True,True
+opposed_strong,exact,0.0,0.0,0.0,0.0,0.0,True,True
+opposed_strong,unit_broadcast,0.0,0.0,0.0,0.0,0.0,True,True
+opposed_strong,calibrated_broadcast,0.0,0.0,0.0,0.0,0.0,True,True
+opposed_strong,ancestry_three_oracle,2.1316282072803006e-14,5.015790300461065e-17,2.608861477543245e-19,1.5612511283791264e-17,5.936006894358137e-18,True,True
