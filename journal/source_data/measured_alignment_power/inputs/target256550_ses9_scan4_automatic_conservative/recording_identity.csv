@@ -1,0 +1,14 @@
+partner_index,pre_pt_root_id,recording_id,session,scan_idx,field,unit_id,dandi_asset_id,dandi_path
+0,864691135469501522,ses9_scan4_field2_unit1884,9,4,2,1884,ad27b3c6-baaa-4e60-99b3-bb5463a33ccf,sub-17797/sub-17797_ses-9-scan-4_behavior+image+ophys.nwb
+1,864691136108586969,ses9_scan4_field4_unit4723,9,4,4,4723,ad27b3c6-baaa-4e60-99b3-bb5463a33ccf,sub-17797/sub-17797_ses-9-scan-4_behavior+image+ophys.nwb
+2,864691135429733424,ses9_scan4_field4_unit5218,9,4,4,5218,ad27b3c6-baaa-4e60-99b3-bb5463a33ccf,sub-17797/sub-17797_ses-9-scan-4_behavior+image+ophys.nwb
+3,864691136312150874,ses9_scan4_field4_unit5132,9,4,4,5132,ad27b3c6-baaa-4e60-99b3-bb5463a33ccf,sub-17797/sub-17797_ses-9-scan-4_behavior+image+ophys.nwb
+4,864691135774179147,ses9_scan4_field4_unit4758,9,4,4,4758,ad27b3c6-baaa-4e60-99b3-bb5463a33ccf,sub-17797/sub-17797_ses-9-scan-4_behavior+image+ophys.nwb
+5,864691135577617694,ses9_scan4_field4_unit4719,9,4,4,4719,ad27b3c6-baaa-4e60-99b3-bb5463a33ccf,sub-17797/sub-17797_ses-9-scan-4_behavior+image+ophys.nwb
+6,864691135641008443,ses9_scan4_field4_unit5157,9,4,4,5157,ad27b3c6-baaa-4e60-99b3-bb5463a33ccf,sub-17797/sub-17797_ses-9-scan-4_behavior+image+ophys.nwb
+7,864691135618461289,ses9_scan4_field6_unit7436,9,4,6,7436,ad27b3c6-baaa-4e60-99b3-bb5463a33ccf,sub-17797/sub-17797_ses-9-scan-4_behavior+image+ophys.nwb
+8,864691136914235889,ses9_scan4_field6_unit7460,9,4,6,7460,ad27b3c6-baaa-4e60-99b3-bb5463a33ccf,sub-17797/sub-17797_ses-9-scan-4_behavior+image+ophys.nwb
+9,864691135861093992,ses9_scan4_field4_unit4987,9,4,4,4987,ad27b3c6-baaa-4e60-99b3-bb5463a33ccf,sub-17797/sub-17797_ses-9-scan-4_behavior+image+ophys.nwb
+10,864691135361314119,ses9_scan4_field4_unit4762,9,4,4,4762,ad27b3c6-baaa-4e60-99b3-bb5463a33ccf,sub-17797/sub-17797_ses-9-scan-4_behavior+image+ophys.nwb
+11,864691135571440006,ses9_scan4_field6_unit7562,9,4,6,7562,ad27b3c6-baaa-4e60-99b3-bb5463a33ccf,sub-17797/sub-17797_ses-9-scan-4_behavior+image+ophys.nwb
+12,864691135755033805,ses9_scan4_field6_unit8237,9,4,6,8237,ad27b3c6-baaa-4e60-99b3-bb5463a33ccf,sub-17797/sub-17797_ses-9-scan-4_behavior+image+ophys.nwb

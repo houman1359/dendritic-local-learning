@@ -8,6 +8,7 @@
     "scripts/conductance_local_gate/model.py": "cc2b82f6c486810a43aa885f3ea2dacce54c473f2e2ece6f4cfdb7d88ce6ad39",
     "scripts/conductance_local_gate/run.py": "1b85f99efd4b8c876aaef5d3949e51a85177fc5a5e3a9e3e8a0bbc34ea9183cb",
     "scripts/conductance_local_gate/test_model.py": "dac618380f053d4c1d5987b4fc6e848bc135bd51f611c8e885d8bcbaf730ecb4",
-    "scripts/conductance_local_gate/worker.sh": "34b624eb213bb69addead0b96a406815f6b204f5ba2dc64496e31e8d14425165"
+    "scripts/conductance_local_gate/worker.sh": "34b624eb213bb69addead0b96a406815f6b204f5ba2dc64496e31e8d14425165",
+    "scripts/morphology_conductance/model.py": "0319c1cf13ee702eb8ef460937d14c9a7cddb53cfbfc491c2fe60abb889ad706"
   }
 }

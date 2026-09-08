@@ -1,0 +1,37 @@
+{
+  "all_condition_sensitivity": {
+    "negative_tree_distance_spearman_r": 0.03065134099616858,
+    "shared_path_partial_r": 0.0463362665741427,
+    "shared_path_spearman_r": 0.03247340537065389
+  },
+  "claim_level": "single-target exploratory topology/function screening test",
+  "functional_similarity_definition": "Pearson correlation across condition-mean responses for conditions with at least two repeats",
+  "interpretation": "Screening evidence only: automatic coregistration expansion, one target neuron, incomplete excitatory-input coverage, and pairwise observations are not independent.",
+  "median_repeat_reliability": 0.26111349649348786,
+  "n_manual_partner_subset": 2,
+  "n_pairs": 28,
+  "n_presynaptic_partners": 8,
+  "n_repeated_conditions_for_reliability": 136,
+  "scan_idx": 7,
+  "session": 5,
+  "target_nucleus_id": 256550,
+  "target_root_id": 864691135060651419,
+  "tests": {
+    "negative_tree_distance": {
+      "permutation_p_greater": 0.7586241375862414,
+      "spearman_r": -0.17788724685276408
+    },
+    "same_major_branch": {
+      "mean_similarity_delta": -0.06902488187559747,
+      "permutation_p_greater": 0.6703329667033296
+    },
+    "shared_path_fraction": {
+      "permutation_p_greater": 0.675032496750325,
+      "spearman_r": -0.09190586425656762
+    },
+    "shared_path_partial_euclidean_and_depth": {
+      "partial_rank_r": -0.017111465246561083,
+      "permutation_p_greater": 0.5178482151784821
+    }
+  }
+}

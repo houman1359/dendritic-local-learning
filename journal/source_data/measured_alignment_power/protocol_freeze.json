@@ -1,0 +1,57 @@
+{
+  "study": "Measured ancestry-response conditional sensitivity",
+  "status": "frozen_before_simulated_power_outcomes",
+  "frozen_utc": "2026-09-08T03:14:18.486841+00:00",
+  "paper_base_commit": "c6d3b2b09d24221de87bad18b445f0060a6d238f",
+  "exploratory": true,
+  "protocol_markdown_sha256": "9de8ee47ca8e03665e003d4958f0444e3543b5e122d1bba3b2a32ff3f4970887",
+  "input_manifest_sha256": "2eb7bc6886a6bb090beb543e50a8d89ce153bdcf2f168e50460df35b5402923c",
+  "input_audit_sha256": "13b6f9be0cc091e3d8b629fc496fd157ed1e1ee682ba5eb1b3cb890c848d4cea",
+  "scientific_code_sha256": {
+    "scripts/measured_alignment_power/prepare_inputs.py": "062b276d4bf29d3760c6e6e51c865f7b2acf43209ed20bae515e4e91bd9dc1eb",
+    "scripts/measured_alignment_power/model.py": "6170181a9bd9bf4f3c95e3b63c2c49d5a7a873f418c7483f528e4c080c4b1f9e",
+    "scripts/measured_alignment_power/run.py": "b3eeba4e18548941489880123929bd5fd905175685fac80c51f91629b4a3d8ad",
+    "scripts/measured_alignment_power/test_model.py": "399d4da3b0d9a6c3562a27c7722315a4a3820f329500c3286f9b86e424d6ccb5",
+    "scripts/measured_alignment_power/worker.sh": "e2fe0409ea8c95562f5d08db9299f8bd9914cc4bcfc2e05260a7bc34e552c6c1"
+  },
+  "ancestry_variance_fractions": [
+    0.0,
+    0.05,
+    0.1,
+    0.15,
+    0.2,
+    0.25,
+    0.3,
+    0.35,
+    0.4,
+    0.45,
+    0.5,
+    0.55,
+    0.6,
+    0.65,
+    0.7,
+    0.75,
+    0.8,
+    0.85,
+    0.9,
+    0.95,
+    1.0
+  ],
+  "reliability_scenarios": [
+    "measured",
+    "perfect"
+  ],
+  "n_chunks": 20,
+  "replicates_per_chunk": 200,
+  "n_global_replicates": 4000,
+  "primary_seed_base": 2026090700,
+  "reliability_audit_seed": 2026090799,
+  "reliability_audit_replicates": 1000,
+  "positive_detection": {
+    "two_sided_exact_signed_rank_p_max": 0.05,
+    "mean_target_effect_greater_than": 0
+  },
+  "target_detection_probability": 0.8,
+  "summary_rules": "Wilson95intervals; smallest sustained tested80percent crossing plus grid bracket; optional descriptive linear interpolation; report unreachable if absent. No monotonic fit or model change after outcomes.",
+  "assumption_details": "See hashed PROTOCOL.md; report/figure renderers may be added later but may not change these registered numerical choices."
+}

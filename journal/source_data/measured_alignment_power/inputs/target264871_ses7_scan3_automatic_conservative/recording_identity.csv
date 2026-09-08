@@ -1,0 +1,7 @@
+partner_index,pre_pt_root_id,recording_id,session,scan_idx,field,unit_id,dandi_asset_id,dandi_path
+0,864691135134507936,ses7_scan3_field4_unit5251,7,3,4,5251,67384ebb-72c1-4fd5-8908-612eac6d6e6a,sub-17797/sub-17797_ses-7-scan-3_behavior+image+ophys.nwb
+1,864691135134945184,ses7_scan3_field4_unit5073,7,3,4,5073,67384ebb-72c1-4fd5-8908-612eac6d6e6a,sub-17797/sub-17797_ses-7-scan-3_behavior+image+ophys.nwb
+2,864691135349884119,ses7_scan3_field2_unit1853,7,3,2,1853,67384ebb-72c1-4fd5-8908-612eac6d6e6a,sub-17797/sub-17797_ses-7-scan-3_behavior+image+ophys.nwb
+3,864691136124832806,ses7_scan3_field4_unit4876,7,3,4,4876,67384ebb-72c1-4fd5-8908-612eac6d6e6a,sub-17797/sub-17797_ses-7-scan-3_behavior+image+ophys.nwb
+4,864691136123905062,ses7_scan3_field6_unit7111,7,3,6,7111,67384ebb-72c1-4fd5-8908-612eac6d6e6a,sub-17797/sub-17797_ses-7-scan-3_behavior+image+ophys.nwb
+5,864691136954123487,ses7_scan3_field8_unit8795,7,3,8,8795,67384ebb-72c1-4fd5-8908-612eac6d6e6a,sub-17797/sub-17797_ses-7-scan-3_behavior+image+ophys.nwb
