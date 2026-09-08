@@ -46,3 +46,22 @@ def test_frozen_records_exist_and_stay_site_specific() -> None:
         assert path.is_file(), filename
         text = path.read_text(encoding="utf-8")
         assert "/n/" in text, f"{filename} no longer looks like an execution record"
+
+
+def test_protocol_workers_survive_export_and_explicit_copy_only() -> None:
+    release = _load("_release", JOURNAL / "scripts" / "build_software_release.py")
+    expected_studies = {"conductance_local_gate", "credit_rule_extension", "measured_alignment_power"}
+    assert set(release.FROZEN_WORKER_RECORDS) == {
+        f"scripts/{study}/worker.sh" for study in expected_studies
+    }
+    for name in release.FROZEN_WORKER_RECORDS:
+        assert (JOURNAL / name).is_file()
+        assert release.repository_file_allowed(Path("journal") / name, "paper")
+        # Directory copying filters bare .sh files; the explicit list must then
+        # copy the required worker into both exported journal layouts.
+        assert name.removeprefix("scripts/") in release.JOURNAL_SCRIPTS
+        for prefix in ("article_analysis", "journal_package/journal"):
+            assert not release.excluded(Path(prefix) / name)
+    assert release.excluded(Path("worker.sh"))
+    assert release.excluded(Path("journal/scripts/unrelated/worker.sh"))
+    assert release.excluded(Path("journal/scripts/conductance_local_gate/other.sh"))

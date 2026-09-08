@@ -38,6 +38,15 @@ ARCHIVED_INPUT_CODE = {
     'source_data/measured_alignment_power/inputs/original_target_aggregation.py',
     'source_data/conductance_local_gate/report_initial_render.py',
 }
+# The portable gate verifier authenticates these exact historical evidence and
+# native output bytes. Other scheduler logs and image assets remain excluded.
+VERIFIER_REQUIRED_ARTIFACTS = {
+    'source_data/conductance_local_gate/canary_45289328.log',
+    'source_data/conductance_local_gate/figures/local_gate_primary.pdf',
+    'source_data/conductance_local_gate/figures/local_gate_primary.png',
+    'source_data/conductance_local_gate/figures/local_gate_all_rates.pdf',
+    'source_data/conductance_local_gate/figures/local_gate_all_rates.png',
+}
 
 
 def releasable_followup(path, source):
@@ -47,6 +56,7 @@ def releasable_followup(path, source):
         and path.name not in FOLLOWUP_EXCLUDED_NAMES
         and (path.suffix.lower() in DATA_EXTENSIONS | {'.pt', '.pth'}
              or source in ARCHIVED_INPUT_CODE
+             or source in VERIFIER_REQUIRED_ARTIFACTS
              or source.lower().endswith(COMPRESSED_TABLE_SUFFIXES))
     )
 

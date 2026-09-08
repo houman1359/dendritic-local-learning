@@ -1,4 +1,4 @@
-"""Complete follow-up releases retain inputs and outcomes, without runtime logs."""
+"""Complete releases retain verifier evidence without unrelated runtime logs."""
 from dataclasses import dataclass
 import csv
 import importlib.util
@@ -50,6 +50,7 @@ def test_followups_keep_complete_states_inputs_and_historical_sources(tmp_path):
     ]
     excluded = [
         'conductance_local_gate/worker.log',
+        'conductance_local_gate/figures/unregistered_render.pdf',
         'conductance_local_gate/main_figure_caption.tex',
         'credit_rule_extension/analysis_output.txt',
         'measured_alignment_power/slurm_logs/task_1.out',
@@ -76,6 +77,19 @@ def test_followups_keep_complete_states_inputs_and_historical_sources(tmp_path):
     for source in numerical:
         study = source.split('/')[0]
         assert by_source['source_data/' + source].figure == inventory.FOLLOWUP_ASSIGNMENTS[study][0]
+
+
+def test_exact_gate_validation_artifacts_survive_release_filtering(tmp_path):
+    for source in inventory.VERIFIER_REQUIRED_ARTIFACTS:
+        path = tmp_path / source
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text('retained verifier fixture')
+    rows = inventory.current_files(tmp_path, [], Source, {}, {},
+                                   write_inventory(tmp_path))
+    assert {row.source for row in rows} == inventory.VERIFIER_REQUIRED_ARTIFACTS
+    assert not inventory.releasable_followup(
+        Path('source_data/conductance_local_gate/another_canary.log'),
+        'source_data/conductance_local_gate/another_canary.log')
 
 
 def test_explicit_companion_panel_assignment_precedes_fallback(tmp_path):

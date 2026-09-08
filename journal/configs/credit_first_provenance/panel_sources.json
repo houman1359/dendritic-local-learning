@@ -1326,6 +1326,51 @@
       "generator": "",
       "replication_unit": "47 reconstructed cells; post-review diagnostic",
       "notes": "Supports scope and heterogeneity in the anatomical comparison; these rows are not a newly displayed panel."
+    },
+    {
+      "path": "source_data/conductance_local_gate/canary_45289328.log",
+      "figure": "fig5",
+      "panel": "supporting validation evidence",
+      "role": "Exact historical mechanism-test and excluded implementation-canary record",
+      "generator": "scripts/conductance_local_gate/worker.sh",
+      "replication_unit": "excluded implementation seed 2026090799; no independent scientific observation",
+      "notes": "Ten tests passed; canonical log is read and hash-checked by the portable completion verifier. Other scheduler logs remain excluded."
+    },
+    {
+      "path": "source_data/conductance_local_gate/figures/local_gate_primary.pdf",
+      "figure": "fig5",
+      "panel": "a-f",
+      "role": "Exact native output required by the portable figure and completion verifiers",
+      "generator": "scripts/conductance_local_gate/figure.py",
+      "replication_unit": "derived rendering; same seed observations as the corresponding figure",
+      "notes": "Retained exact output bytes for verification at the original study-relative path; adds no experimental observation. Supplementary panel E uses the explicitly separate historical cohort."
+    },
+    {
+      "path": "source_data/conductance_local_gate/figures/local_gate_primary.png",
+      "figure": "fig5",
+      "panel": "a-f",
+      "role": "Exact native output required by the portable figure and completion verifiers",
+      "generator": "scripts/conductance_local_gate/figure.py",
+      "replication_unit": "derived rendering; same seed observations as the corresponding figure",
+      "notes": "Retained exact output bytes for verification at the original study-relative path; adds no experimental observation. Supplementary panel E uses the explicitly separate historical cohort."
+    },
+    {
+      "path": "source_data/conductance_local_gate/figures/local_gate_all_rates.pdf",
+      "figure": "figS53",
+      "panel": "a-e",
+      "role": "Exact native output required by the portable figure and completion verifiers",
+      "generator": "scripts/conductance_local_gate/figure.py",
+      "replication_unit": "derived rendering; same seed observations as the corresponding figure",
+      "notes": "Retained exact output bytes for verification at the original study-relative path; adds no experimental observation. Supplementary panel E uses the explicitly separate historical cohort."
+    },
+    {
+      "path": "source_data/conductance_local_gate/figures/local_gate_all_rates.png",
+      "figure": "figS53",
+      "panel": "a-e",
+      "role": "Exact native output required by the portable figure and completion verifiers",
+      "generator": "scripts/conductance_local_gate/figure.py",
+      "replication_unit": "derived rendering; same seed observations as the corresponding figure",
+      "notes": "Retained exact output bytes for verification at the original study-relative path; adds no experimental observation. Supplementary panel E uses the explicitly separate historical cohort."
     }
   ],
   "supporting_groups": [

@@ -9,8 +9,9 @@ The release has three deliberately distinct source trees:
 * ``journal_package/`` separately exports the clean paper repository, including
   manuscript sources and historical vector figure components.
 * ``article_analysis/`` contains an explicit allow-list from this journal
-  package.  It includes analysis code and frozen configurations, but no raw
-  data, model checkpoints, scheduler scripts, logs, or caches.
+  package. It includes analysis code, frozen configurations and three worker
+  records required to authenticate the new protocols. Raw data, checkpoints,
+  other scheduler scripts, logs and caches are excluded.
 
 The exported files are deterministic for fixed implementation/paper commits.
 Archive metadata also records the implementation working-tree state at build time.
@@ -303,6 +304,17 @@ JOURNAL_SCRIPTS += (
     'export_morphology_investigation_sources.py',
 )
 
+# Frozen protocols authenticate these execution records during portable replay.
+# Retain exactly these three workers, with declared release-only path changes;
+# they document execution and are not generic reviewer scheduler recipes.
+FROZEN_WORKER_RECORDS = tuple(
+    f"scripts/{study}/worker.sh"
+    for study in (
+        "conductance_local_gate", "credit_rule_extension", "measured_alignment_power"
+    )
+)
+JOURNAL_SCRIPTS += tuple(name.removeprefix("scripts/") for name in FROZEN_WORKER_RECORDS)
+
 ARCHIVED_ANALYSIS_SCRIPTS = (
     (
         Path("neurips/scripts/summarize_init_policy_factorial.py"),
@@ -477,6 +489,8 @@ def excluded(relative: Path) -> bool:
         return True
     if relative.name in FROZEN_EXECUTION_RECORD_FILES:
         return True
+    if "/".join(relative.parts[-3:]) in FROZEN_WORKER_RECORDS:
+        return False
     if relative.suffix.lower() in EXCLUDED_SUFFIXES:
         return True
     if relative.name.startswith("slurm_"):
@@ -1119,6 +1133,10 @@ configuration, validation, and provenance code from that paper snapshot.
   `article_analysis/code/release_noise/release_hashes.py` verifies both identities.
 - `SHA256SUMS.tsv`: SHA-256 digest and size of every other released file.
 
+The three new study directories retain their protocol-authenticated `worker.sh`
+execution records. Reviewer replay uses each study's portable Python launcher;
+the worker records document the original cluster execution and its environment.
+
 Numerical panel data are distributed separately in `Source_Data.zip`; its
 `manifest.tsv` maps each released display file to its original article-relative
 source path. Rebuilding figures requires those inputs at the recorded
@@ -1646,7 +1664,7 @@ def build(force: bool, implementation_root: Path | None = None) -> dict[str, obj
             "excluded_classes": [
                 "raw data and data caches",
                 "model checkpoints",
-                "scheduler scripts and logs",
+                "scheduler scripts and logs except three protocol-authenticated worker records",
                 "temporary results",
                 "Python and test caches",
                 "credential files",

@@ -1,9 +1,9 @@
 {
   "status": "complete",
-  "n_rows": 7383,
-  "n_unique_sources": 7311,
+  "n_rows": 7389,
+  "n_unique_sources": 7317,
   "n_retained_rows": 1560,
-  "n_new_supporting_records": 5656,
+  "n_new_supporting_records": 5657,
   "main_figures": [
     "fig1",
     "fig2",
@@ -370,6 +370,6 @@
       "checkpoint_archive"
     ]
   },
-  "panel_map_sha256": "127a89372447eb52fe6eb17bbc6732bdd668256db01d6999fd3016e1d2cb6876",
+  "panel_map_sha256": "0f85eaf835884fdea96b41e20004cab53583108f8e57d1323917bafcd0c683b6",
   "template_sha256": "a608576eb4b32750942d4c768ebdae7d356708d02cb02e9599efd5cc3ce35147"
 }

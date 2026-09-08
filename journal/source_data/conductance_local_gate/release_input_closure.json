@@ -1,0 +1,2078 @@
+{
+  "missing_paths": [],
+  "n_required_paths": 204,
+  "records": [
+    {
+      "exists": true,
+      "path": "code/release_noise/release_hashes.py",
+      "releasable": true,
+      "required_by": [
+        "import/helper"
+      ],
+      "software_allowlisted": true,
+      "source_data_destination": null
+    },
+    {
+      "exists": true,
+      "path": "scripts/conductance_credit_demand/model.py",
+      "releasable": true,
+      "required_by": [
+        "frozen source"
+      ],
+      "software_allowlisted": true,
+      "source_data_destination": null
+    },
+    {
+      "exists": true,
+      "path": "scripts/conductance_credit_demand/opponent_model.py",
+      "releasable": true,
+      "required_by": [
+        "frozen source"
+      ],
+      "software_allowlisted": true,
+      "source_data_destination": null
+    },
+    {
+      "exists": true,
+      "path": "scripts/conductance_local_gate/figure.py",
+      "releasable": true,
+      "required_by": [
+        "figure_provenance.json source_sha256"
+      ],
+      "software_allowlisted": true,
+      "source_data_destination": null
+    },
+    {
+      "exists": true,
+      "path": "scripts/conductance_local_gate/model.py",
+      "releasable": true,
+      "required_by": [
+        "figure_provenance.json source_sha256",
+        "frozen source",
+        "import/helper"
+      ],
+      "software_allowlisted": true,
+      "source_data_destination": null
+    },
+    {
+      "exists": true,
+      "path": "scripts/conductance_local_gate/portable_contract.py",
+      "releasable": true,
+      "required_by": [
+        "figure_provenance.json source_sha256",
+        "import/helper"
+      ],
+      "software_allowlisted": true,
+      "source_data_destination": null
+    },
+    {
+      "exists": true,
+      "path": "scripts/conductance_local_gate/portable_replay.py",
+      "releasable": true,
+      "required_by": [
+        "import/helper"
+      ],
+      "software_allowlisted": true,
+      "source_data_destination": null
+    },
+    {
+      "exists": true,
+      "path": "scripts/conductance_local_gate/report.py",
+      "releasable": true,
+      "required_by": [
+        "figure_provenance.json source_sha256",
+        "import/helper"
+      ],
+      "software_allowlisted": true,
+      "source_data_destination": null
+    },
+    {
+      "exists": true,
+      "path": "scripts/conductance_local_gate/run.py",
+      "releasable": true,
+      "required_by": [
+        "frozen source",
+        "import/helper"
+      ],
+      "software_allowlisted": true,
+      "source_data_destination": null
+    },
+    {
+      "exists": true,
+      "path": "scripts/conductance_local_gate/test_model.py",
+      "releasable": true,
+      "required_by": [
+        "frozen source"
+      ],
+      "software_allowlisted": true,
+      "source_data_destination": null
+    },
+    {
+      "exists": true,
+      "path": "scripts/conductance_local_gate/validate_completion.py",
+      "releasable": true,
+      "required_by": [
+        "completion_gate.json source_sha256"
+      ],
+      "software_allowlisted": true,
+      "source_data_destination": null
+    },
+    {
+      "exists": true,
+      "path": "scripts/conductance_local_gate/worker.sh",
+      "releasable": true,
+      "required_by": [
+        "frozen source"
+      ],
+      "software_allowlisted": true,
+      "source_data_destination": null
+    },
+    {
+      "exists": true,
+      "path": "scripts/journal_style.py",
+      "releasable": true,
+      "required_by": [
+        "figure_provenance.json source_sha256",
+        "import/helper"
+      ],
+      "software_allowlisted": true,
+      "source_data_destination": null
+    },
+    {
+      "exists": true,
+      "path": "scripts/morphology_conductance/model.py",
+      "releasable": true,
+      "required_by": [
+        "frozen source"
+      ],
+      "software_allowlisted": true,
+      "source_data_destination": null
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_credit_demand/opponent/summaries/context_gradient_summary.csv",
+      "releasable": true,
+      "required_by": [
+        "figure_provenance.json source_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Supplementary_Figure_53/conductance_credit_demand/opponent/summaries/context_gradient_summary.csv"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/canary_45289328.log",
+      "releasable": true,
+      "required_by": [
+        "completion_gate.json source_sha256",
+        "direct verifier read"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/canary_45289328.log"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/completion_gate.json",
+      "releasable": true,
+      "required_by": [
+        "direct verifier read"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/completion_gate.json"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/figure_provenance.json",
+      "releasable": true,
+      "required_by": [
+        "completion_gate.json source_sha256",
+        "direct verifier read"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/figure_provenance.json"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/figures/curve_band_source.csv",
+      "releasable": true,
+      "required_by": [
+        "figure_provenance.json figure_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/figures/curve_band_source.csv"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/figures/historical_cancellation_source.csv",
+      "releasable": true,
+      "required_by": [
+        "figure_provenance.json figure_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/figures/historical_cancellation_source.csv"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/figures/local_gate_all_rates.pdf",
+      "releasable": true,
+      "required_by": [
+        "figure_provenance.json figure_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Supplementary_Figure_53/conductance_local_gate/figures/local_gate_all_rates.pdf"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/figures/local_gate_all_rates.png",
+      "releasable": true,
+      "required_by": [
+        "figure_provenance.json figure_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Supplementary_Figure_53/conductance_local_gate/figures/local_gate_all_rates.png"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/figures/local_gate_primary.pdf",
+      "releasable": true,
+      "required_by": [
+        "figure_provenance.json figure_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/figures/local_gate_primary.pdf"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/figures/local_gate_primary.png",
+      "releasable": true,
+      "required_by": [
+        "figure_provenance.json figure_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/figures/local_gate_primary.png"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/historical_replay/report.json",
+      "releasable": true,
+      "required_by": [
+        "completion_gate.json source_sha256",
+        "direct verifier read"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/historical_replay/report.json"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/portable_validation/hard_distal/curves.csv",
+      "releasable": true,
+      "required_by": [
+        "completion_gate.json source_sha256",
+        "portable evidence"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/portable_validation/hard_distal/curves.csv"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/portable_validation/hard_distal/diagnostics.csv",
+      "releasable": true,
+      "required_by": [
+        "completion_gate.json source_sha256",
+        "portable evidence"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/portable_validation/hard_distal/diagnostics.csv"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/portable_validation/hard_distal/endpoints.csv",
+      "releasable": true,
+      "required_by": [
+        "completion_gate.json source_sha256",
+        "portable evidence"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/portable_validation/hard_distal/endpoints.csv"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/portable_validation/hard_distal/replay_report.json",
+      "releasable": true,
+      "required_by": [
+        "completion_gate.json source_sha256",
+        "portable evidence"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/portable_validation/hard_distal/replay_report.json"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/portable_validation/hard_distal/states.npz",
+      "releasable": true,
+      "required_by": [
+        "completion_gate.json source_sha256",
+        "portable evidence"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/portable_validation/hard_distal/states.npz"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/portable_validation/two_leaf_oracle/curves.csv",
+      "releasable": true,
+      "required_by": [
+        "completion_gate.json source_sha256",
+        "portable evidence"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/portable_validation/two_leaf_oracle/curves.csv"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/portable_validation/two_leaf_oracle/diagnostics.csv",
+      "releasable": true,
+      "required_by": [
+        "completion_gate.json source_sha256",
+        "portable evidence"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/portable_validation/two_leaf_oracle/diagnostics.csv"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/portable_validation/two_leaf_oracle/endpoints.csv",
+      "releasable": true,
+      "required_by": [
+        "completion_gate.json source_sha256",
+        "portable evidence"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/portable_validation/two_leaf_oracle/endpoints.csv"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/portable_validation/two_leaf_oracle/replay_report.json",
+      "releasable": true,
+      "required_by": [
+        "completion_gate.json source_sha256",
+        "portable evidence"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/portable_validation/two_leaf_oracle/replay_report.json"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/portable_validation/two_leaf_oracle/states.npz",
+      "releasable": true,
+      "required_by": [
+        "completion_gate.json source_sha256",
+        "portable evidence"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/portable_validation/two_leaf_oracle/states.npz"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/protocol.json",
+      "releasable": true,
+      "required_by": [
+        "completion_gate.json source_sha256",
+        "direct verifier read",
+        "figure_provenance.json source_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/protocol.json"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/protocol_freeze.json",
+      "releasable": true,
+      "required_by": [
+        "completion_gate.json source_sha256",
+        "direct verifier read",
+        "figure_provenance.json source_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/protocol_freeze.json"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090801_aligned_strong_config.json",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090801_aligned_strong_config.json"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090801_aligned_strong_states.npz",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090801_aligned_strong_states.npz"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090801_audit.json",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090801_audit.json"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090801_curves.csv",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090801_curves.csv"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090801_diagnostics.csv",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090801_diagnostics.csv"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090801_endpoints.csv",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090801_endpoints.csv"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090801_opposed_strong_config.json",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090801_opposed_strong_config.json"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090801_opposed_strong_states.npz",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090801_opposed_strong_states.npz"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090802_aligned_strong_config.json",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090802_aligned_strong_config.json"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090802_aligned_strong_states.npz",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090802_aligned_strong_states.npz"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090802_audit.json",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090802_audit.json"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090802_curves.csv",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090802_curves.csv"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090802_diagnostics.csv",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090802_diagnostics.csv"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090802_endpoints.csv",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090802_endpoints.csv"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090802_opposed_strong_config.json",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090802_opposed_strong_config.json"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090802_opposed_strong_states.npz",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090802_opposed_strong_states.npz"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090803_aligned_strong_config.json",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090803_aligned_strong_config.json"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090803_aligned_strong_states.npz",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090803_aligned_strong_states.npz"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090803_audit.json",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090803_audit.json"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090803_curves.csv",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090803_curves.csv"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090803_diagnostics.csv",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090803_diagnostics.csv"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090803_endpoints.csv",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090803_endpoints.csv"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090803_opposed_strong_config.json",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090803_opposed_strong_config.json"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090803_opposed_strong_states.npz",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090803_opposed_strong_states.npz"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090804_aligned_strong_config.json",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090804_aligned_strong_config.json"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090804_aligned_strong_states.npz",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090804_aligned_strong_states.npz"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090804_audit.json",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090804_audit.json"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090804_curves.csv",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090804_curves.csv"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090804_diagnostics.csv",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090804_diagnostics.csv"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090804_endpoints.csv",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090804_endpoints.csv"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090804_opposed_strong_config.json",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090804_opposed_strong_config.json"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090804_opposed_strong_states.npz",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090804_opposed_strong_states.npz"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090805_aligned_strong_config.json",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090805_aligned_strong_config.json"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090805_aligned_strong_states.npz",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090805_aligned_strong_states.npz"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090805_audit.json",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090805_audit.json"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090805_curves.csv",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090805_curves.csv"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090805_diagnostics.csv",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090805_diagnostics.csv"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090805_endpoints.csv",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090805_endpoints.csv"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090805_opposed_strong_config.json",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090805_opposed_strong_config.json"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090805_opposed_strong_states.npz",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090805_opposed_strong_states.npz"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090806_aligned_strong_config.json",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090806_aligned_strong_config.json"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090806_aligned_strong_states.npz",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090806_aligned_strong_states.npz"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090806_audit.json",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090806_audit.json"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090806_curves.csv",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090806_curves.csv"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090806_diagnostics.csv",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090806_diagnostics.csv"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090806_endpoints.csv",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090806_endpoints.csv"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090806_opposed_strong_config.json",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090806_opposed_strong_config.json"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090806_opposed_strong_states.npz",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090806_opposed_strong_states.npz"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090807_aligned_strong_config.json",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090807_aligned_strong_config.json"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090807_aligned_strong_states.npz",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090807_aligned_strong_states.npz"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090807_audit.json",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090807_audit.json"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090807_curves.csv",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090807_curves.csv"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090807_diagnostics.csv",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090807_diagnostics.csv"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090807_endpoints.csv",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090807_endpoints.csv"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090807_opposed_strong_config.json",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090807_opposed_strong_config.json"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090807_opposed_strong_states.npz",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090807_opposed_strong_states.npz"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090808_aligned_strong_config.json",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090808_aligned_strong_config.json"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090808_aligned_strong_states.npz",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090808_aligned_strong_states.npz"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090808_audit.json",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090808_audit.json"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090808_curves.csv",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090808_curves.csv"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090808_diagnostics.csv",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090808_diagnostics.csv"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090808_endpoints.csv",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090808_endpoints.csv"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090808_opposed_strong_config.json",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090808_opposed_strong_config.json"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090808_opposed_strong_states.npz",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090808_opposed_strong_states.npz"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090809_aligned_strong_config.json",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090809_aligned_strong_config.json"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090809_aligned_strong_states.npz",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090809_aligned_strong_states.npz"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090809_audit.json",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090809_audit.json"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090809_curves.csv",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090809_curves.csv"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090809_diagnostics.csv",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090809_diagnostics.csv"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090809_endpoints.csv",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090809_endpoints.csv"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090809_opposed_strong_config.json",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090809_opposed_strong_config.json"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090809_opposed_strong_states.npz",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090809_opposed_strong_states.npz"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090810_aligned_strong_config.json",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090810_aligned_strong_config.json"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090810_aligned_strong_states.npz",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090810_aligned_strong_states.npz"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090810_audit.json",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090810_audit.json"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090810_curves.csv",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090810_curves.csv"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090810_diagnostics.csv",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090810_diagnostics.csv"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090810_endpoints.csv",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090810_endpoints.csv"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090810_opposed_strong_config.json",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090810_opposed_strong_config.json"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090810_opposed_strong_states.npz",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090810_opposed_strong_states.npz"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090811_aligned_strong_config.json",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090811_aligned_strong_config.json"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090811_aligned_strong_states.npz",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090811_aligned_strong_states.npz"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090811_audit.json",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090811_audit.json"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090811_curves.csv",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090811_curves.csv"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090811_diagnostics.csv",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090811_diagnostics.csv"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090811_endpoints.csv",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090811_endpoints.csv"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090811_opposed_strong_config.json",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090811_opposed_strong_config.json"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090811_opposed_strong_states.npz",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090811_opposed_strong_states.npz"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090812_aligned_strong_config.json",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090812_aligned_strong_config.json"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090812_aligned_strong_states.npz",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090812_aligned_strong_states.npz"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090812_audit.json",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090812_audit.json"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090812_curves.csv",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090812_curves.csv"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090812_diagnostics.csv",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090812_diagnostics.csv"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090812_endpoints.csv",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090812_endpoints.csv"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090812_opposed_strong_config.json",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090812_opposed_strong_config.json"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090812_opposed_strong_states.npz",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090812_opposed_strong_states.npz"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090813_aligned_strong_config.json",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090813_aligned_strong_config.json"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090813_aligned_strong_states.npz",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090813_aligned_strong_states.npz"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090813_audit.json",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090813_audit.json"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090813_curves.csv",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090813_curves.csv"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090813_diagnostics.csv",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090813_diagnostics.csv"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090813_endpoints.csv",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090813_endpoints.csv"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090813_opposed_strong_config.json",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090813_opposed_strong_config.json"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090813_opposed_strong_states.npz",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090813_opposed_strong_states.npz"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090814_aligned_strong_config.json",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090814_aligned_strong_config.json"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090814_aligned_strong_states.npz",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090814_aligned_strong_states.npz"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090814_audit.json",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090814_audit.json"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090814_curves.csv",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090814_curves.csv"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090814_diagnostics.csv",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090814_diagnostics.csv"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090814_endpoints.csv",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090814_endpoints.csv"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090814_opposed_strong_config.json",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090814_opposed_strong_config.json"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090814_opposed_strong_states.npz",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090814_opposed_strong_states.npz"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090815_aligned_strong_config.json",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090815_aligned_strong_config.json"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090815_aligned_strong_states.npz",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090815_aligned_strong_states.npz"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090815_audit.json",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090815_audit.json"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090815_curves.csv",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090815_curves.csv"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090815_diagnostics.csv",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090815_diagnostics.csv"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090815_endpoints.csv",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090815_endpoints.csv"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090815_opposed_strong_config.json",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090815_opposed_strong_config.json"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090815_opposed_strong_states.npz",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090815_opposed_strong_states.npz"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090816_aligned_strong_config.json",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090816_aligned_strong_config.json"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090816_aligned_strong_states.npz",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090816_aligned_strong_states.npz"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090816_audit.json",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090816_audit.json"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090816_curves.csv",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090816_curves.csv"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090816_diagnostics.csv",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090816_diagnostics.csv"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090816_endpoints.csv",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090816_endpoints.csv"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090816_opposed_strong_config.json",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090816_opposed_strong_config.json"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090816_opposed_strong_states.npz",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090816_opposed_strong_states.npz"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090817_aligned_strong_config.json",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090817_aligned_strong_config.json"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090817_aligned_strong_states.npz",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090817_aligned_strong_states.npz"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090817_audit.json",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090817_audit.json"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090817_curves.csv",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090817_curves.csv"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090817_diagnostics.csv",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090817_diagnostics.csv"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090817_endpoints.csv",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090817_endpoints.csv"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090817_opposed_strong_config.json",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090817_opposed_strong_config.json"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090817_opposed_strong_states.npz",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090817_opposed_strong_states.npz"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090818_aligned_strong_config.json",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090818_aligned_strong_config.json"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090818_aligned_strong_states.npz",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090818_aligned_strong_states.npz"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090818_audit.json",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090818_audit.json"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090818_curves.csv",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090818_curves.csv"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090818_diagnostics.csv",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090818_diagnostics.csv"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090818_endpoints.csv",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090818_endpoints.csv"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090818_opposed_strong_config.json",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090818_opposed_strong_config.json"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090818_opposed_strong_states.npz",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090818_opposed_strong_states.npz"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090819_aligned_strong_config.json",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090819_aligned_strong_config.json"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090819_aligned_strong_states.npz",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090819_aligned_strong_states.npz"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090819_audit.json",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090819_audit.json"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090819_curves.csv",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090819_curves.csv"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090819_diagnostics.csv",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090819_diagnostics.csv"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090819_endpoints.csv",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090819_endpoints.csv"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090819_opposed_strong_config.json",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090819_opposed_strong_config.json"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090819_opposed_strong_states.npz",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090819_opposed_strong_states.npz"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090820_aligned_strong_config.json",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090820_aligned_strong_config.json"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090820_aligned_strong_states.npz",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090820_aligned_strong_states.npz"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090820_audit.json",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090820_audit.json"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090820_curves.csv",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090820_curves.csv"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090820_diagnostics.csv",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090820_diagnostics.csv"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090820_endpoints.csv",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090820_endpoints.csv"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090820_opposed_strong_config.json",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090820_opposed_strong_config.json"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/runs/seed_2026090820_opposed_strong_states.npz",
+      "releasable": true,
+      "required_by": [
+        "scientific_input_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/runs/seed_2026090820_opposed_strong_states.npz"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/summaries/all_curves.csv",
+      "releasable": true,
+      "required_by": [
+        "figure_provenance.json source_sha256",
+        "summary_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/summaries/all_curves.csv"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/summaries/all_diagnostics.csv",
+      "releasable": true,
+      "required_by": [
+        "figure_provenance.json source_sha256",
+        "summary_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/summaries/all_diagnostics.csv"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/summaries/all_endpoints.csv",
+      "releasable": true,
+      "required_by": [
+        "figure_provenance.json source_sha256",
+        "summary_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Supplementary_Figure_53/conductance_local_gate/summaries/all_endpoints.csv"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/summaries/completeness_audit.json",
+      "releasable": true,
+      "required_by": [
+        "completion_gate.json source_sha256",
+        "direct verifier read"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/summaries/completeness_audit.json"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/summaries/condition_means.csv",
+      "releasable": true,
+      "required_by": [
+        "figure_provenance.json source_sha256",
+        "summary_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Supplementary_Figure_53/conductance_local_gate/summaries/condition_means.csv"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/summaries/paired_contrasts.csv",
+      "releasable": true,
+      "required_by": [
+        "figure_provenance.json source_sha256",
+        "summary_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/summaries/paired_contrasts.csv"
+    },
+    {
+      "exists": true,
+      "path": "source_data/conductance_local_gate/summaries/paired_seed_contrasts.csv",
+      "releasable": true,
+      "required_by": [
+        "figure_provenance.json source_sha256",
+        "summary_sha256"
+      ],
+      "software_allowlisted": false,
+      "source_data_destination": "Figure_5/conductance_local_gate/summaries/paired_seed_contrasts.csv"
+    }
+  ],
+  "scope": "Input-closure audit of the unchanged gate verifier against the actual Source Data inventory and software allowlist. This verifies selection, not archive restoration or numerical reproduction.",
+  "status": "PASS"
+}
