@@ -22,7 +22,7 @@ submission. Do not infer author-specific declarations from the repository.
 - [ ] Confirm the common-checkpoint oracle reanalysis is described as a replay diagnostic, including its small numerical drift, without claiming newly trained oracle accuracies.
 - [ ] Review historical conductance-input validity labels against resolved run metadata and retain any unresolved lineage explicitly.
 - [ ] Review overlap, citations and source licenses against the disclosed preprints and any conference publication.
-- [ ] Decide whether to shorten the author-requested 6,000–6,500-word main narrative in light of the journal's approximately 5,000-word advisory guidance.
+- [ ] Decide whether to shorten the current approximately 6,500–7,000-word narrative target in light of the journal's approximately 5,000-word advisory guidance.
 
 ## Author verification of the technical release
 

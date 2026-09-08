@@ -1338,7 +1338,11 @@ Figure reconstruction and PDF assembly also require PyMuPDF, which provides the
 python -m pip install -c article_analysis/code/release_noise/constraints.txt PyMuPDF
 ```
 
-The renderer is pinned to the validated PyMuPDF 1.28.2 in that constraint file.
+The CPU replay constraints pin the validated PyMuPDF 1.28.2. The exact package
+versions and font hashes used to render the retained publication figures are
+recorded separately in
+`journal_package/journal/figures/provenance/publication_render_environment.json`;
+that rendering used PyMuPDF 1.28.0. These are distinct environment records.
 `article_analysis/code/release_noise/ENVIRONMENTS.md` maps the scientific
 cohorts to their original source/runtime records and supported replay paths.
 It also documents the fully resolved CPU environment and required external
