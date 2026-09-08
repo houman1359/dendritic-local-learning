@@ -18,6 +18,7 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
+from matplotlib.lines import Line2D
 from matplotlib.patches import FancyBboxPatch
 from matplotlib.ticker import FixedLocator, FixedFormatter
 import numpy as np
@@ -30,6 +31,7 @@ import build_main_figure_07 as anatomy
 import build_framework as framework
 import build_anatomy as commonmode
 import build_measured as measured
+import focused_main_evidence as focused
 from figure_canvas import (NativeCanvas, Margins, COLORS, PT_LABEL, PT_ANNOT,
                            PT_SMALL, PT_LEGEND, LW_DATA, LW_REF, LW_EDGE,
                            LW_ERR, LW_HAIR, MARKER_MS, style_panel)
@@ -80,7 +82,7 @@ def save(canvas, number, sources, panels, caption, rows=(), extra=None):
     findings=canvas.save(path,name=f'restored_main_{number:02d}',dpi=180)
     plt.close(canvas.fig)
     pd.DataFrame(rows).to_csv(REC/f'figure_{number:02d}_plotted.csv',index=False)
-    helpers=[Path(__file__),J/'scripts/figure_canvas.py',J/'scripts/journal_style.py']
+    helpers=[Path(__file__),Path(focused.__file__),J/'scripts/figure_canvas.py',J/'scripts/journal_style.py']
     provenance=dict(figure=f'Figure {number}',output=str(path.relative_to(J)),
         output_sha256=sha(path),panel_sources=panels,
         source_sha256={str((S/p).relative_to(J)):sha(S/p) for p in sources},
@@ -130,8 +132,8 @@ def utility(ax,rows):
 
 def figure1():
     conditions,seeds,paired=framework.read_fresh();rows=[]
-    c=NativeCanvas(493/72,3,row_weights=[135,137,110],hgutter_pt=39,vgutter_pt=45,
-                   margins=Margins(left=43,right=16,top=25,bottom=39))
+    c=NativeCanvas(535/72,4,row_weights=[113,127,108,55],hgutter_pt=39,vgutter_pt=39,
+                   margins=Margins(left=43,right=16,top=24,bottom=35))
     source_address_gain(c.panel('A',0,0,6,schematic=True,title='From a task error to a local update',lock=False))
     framework.dictionaries(c.panel('B',0,6,6,schematic=True,title='Morphology supplies spatial profiles',lock=False))
     utility(c.panel('C',1,0,4,title='Noise and resolution',grid='y'),rows)
@@ -139,20 +141,44 @@ def figure1():
     framework.accuracy(d,conditions,seeds)
     for label in d.get_legend().get_texts(): label.set_fontsize(PT_SMALL)
     framework.resolution(c.panel('E',2,0,6,title='Additional resolution within a neuron'),paired,seeds)
+    capture,individual_capture=focused.activation_capture(
+        read('image_ladder_controls/summaries/delivery_coordinate_capture_summary.csv'),
+        read('image_ladder_controls/summaries/delivery_coordinate_capture.csv'),seeds)
+    f=c.panel('F',2,6,6,title='More profiles capture more credit',grid='y')
+    for architecture,offset in [('shunting',-.035),('additive',.035)]:
+        for basis,marker,ls in [('broadcast_k1','^','-'),('subtrees_k3','D','--')]:
+            values=capture[capture.architecture.eq(architecture)&capture.basis.eq(basis)]
+            values=values.set_index('checkpoint').loc[['initial','trained']]
+            mean=values['mean'].to_numpy();low=values.ci_low.to_numpy();high=values.ci_high.to_numpy()
+            f.errorbar(np.array([0,1])+offset,mean,yerr=[mean-low,high-mean],
+                       color=COLORS[architecture],marker=marker,ls=ls,lw=LW_DATA,
+                       ms=MARKER_MS-1,elinewidth=LW_ERR,capsize=2)
+    f.set(xlim=(-.17,1.17),ylim=(0,1.025),xticks=[0,1],xticklabels=['Initial','Trained'],
+          yticks=[0,.5,1],ylabel='Mean activation-error capture')
+    f.legend(handles=[Line2D([],[],color=COLORS['mute'],marker=marker,ls=ls,
+                            lw=LW_DATA,ms=MARKER_MS-1,label=label)
+                      for marker,ls,label in [('^','-','K = 1'),('D','--','K = 3')]],
+             loc='lower left',ncol=2,frameon=False,fontsize=PT_SMALL,
+             handlelength=1.5,columnspacing=1)
     legacy=framework.legacy_contrasts()
-    framework.legacy_forest(c.panel('F',2,6,6,title='Separate image controls'),legacy)
+    framework.legacy_forest(c.panel('G',3,0,12,title='Separate image controls'),legacy)
     rows.extend(dict(panel='D',**r)for r in conditions.to_dict('records'))
     rows.extend(dict(panel='E',**r)for r in paired.to_dict('records'))
-    rows.extend(dict(panel='F',**r)for r in legacy.to_dict('records'))
+    rows.extend(dict(panel='F',record_type='archived summary',**r)for r in capture.to_dict('records'))
+    rows.extend(dict(panel='F',record_type='underlying seed',**r)for r in individual_capture.to_dict('records'))
+    rows.extend(dict(panel='G',**r)for r in legacy.to_dict('records'))
     sources=['image_ladder_controls/summaries/'+n for n in ('condition_summary_six_rules.csv','fresh_analysis_rows_six_rules.csv','paired_contrasts_six_rules.csv')]
     sources+=['mnist_between_within_factorial/paired_contrasts.csv','cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv']
+    sources+=['image_ladder_controls/summaries/'+n for n in
+              ('delivery_coordinate_capture_summary.csv','delivery_coordinate_capture.csv','capture_audit.json')]
     panels={'A':'Conceptual factorization, not experimental data. Exact readout errors in the image cohort; alternative source is tested separately.',
       'B':'Actual three-proximal/nine-distal projection dictionaries from build_framework.dictionaries; K1/K3 oracle projection.',
       'C':'Illustrative isotropic-noise projection bound q²/(q+Kσ²), equal smoothness L, fixed orthogonal projections; q=.8,K=1 versus q=1,K=2. Plotted value is 2L times the optimized lower bound. No endpoint-selection prediction.',
       'D':'Six-arm fresh MNIST selected-rate cohort; 10 paired seeds per architecture,180 epochs; existing confidence intervals.',
       'E':'Same-cohort paired K3−projectedK1 and exact−K3 test-accuracy differences.',
-      'F':'Separate existing MNIST DFA and flattened CIFAR10 exact−neuron-specific contrasts.'}
-    caption='''**Task-derived credit separates neuronal identity, spatial address and gain. A,** A readout loss supplies a neuron-specific error; a spatial dictionary A, route gains Γ and coefficients c determine the delivered field ε. A synaptic update multiplies this field by local eligibility and the negative learning rate. **B,** The actual twelve nonsomatic sites of the image model: K=1 broadcasts, K=3 groups each proximal site with its three children, and K=12 spans arbitrary site fields. Projected K=1 and K=3 use oracle coefficients and retain exact somatic errors. **C,** An explicitly illustrative one-step tradeoff: a one-dimensional projection captures q=0.8 of unit gradient energy, whereas a two-dimensional projection captures q=1. Under isotropic projected noise of variance σ², optimizing a smoothness-bound learning rate gives a bound proportional to q²/(q+Kσ²); the ordinate is twice the smoothness constant times that bound. This conditional local statement does not predict the best final trained tree. **D,** MNIST in one 128-neuron dendritic layer with a linear readout. The per-neuron condition broadcasts each neuron's exact somatic activation error. Decoder-only freezes dendritic parameters. Thin lines pair ten fresh seeds per architecture; symbols and bars show means and existing 95% intervals. Rates were selected on three separate development seeds; fits use 180 epochs and validation-selected checkpoints. **E,** Additional within-neuron resolution in the same cohort, with individual paired differences and 95% intervals. **F,** Separate historical direct-feedback-alignment (DFA) MNIST cohorts (15 seeds) and flattened CIFAR-10 (20 seeds); colors/shapes match D. pp, percentage points. Detailed one-step derivations, image fields and learning-rate controls remain in the Supplementary Information.'''
+      'F':'Fresh10seed/architecture exact-rule selected-rate checkpoints, initial and validation-selected trained states; activation-space mean captured-energy ratio over2048images×128neurons withinseed, excluding only zero fields. Same cohort/coordinates as D/E. K1/K3 oracle projection; archived whole-seed intervals unchanged.',
+      'G':'Separate existing MNIST DFA and flattened CIFAR10 exact−neuron-specific contrasts.'}
+    caption='''**Task-derived credit separates neuronal identity, spatial address and gain. A,** A readout loss supplies a neuron-specific error; a spatial dictionary A, route gains Γ and coefficients c determine the delivered field ε. A synaptic update multiplies this field by local eligibility and the negative learning rate. **B,** The actual twelve nonsomatic sites of the image model: K=1 broadcasts, K=3 groups each proximal site with its three children, and K=12 spans arbitrary site fields. Projected K=1 and K=3 use oracle coefficients and retain exact somatic errors. **C,** An explicitly illustrative one-step tradeoff: a one-dimensional projection captures q=0.8 of unit gradient energy, whereas a two-dimensional projection captures q=1. Under isotropic projected noise of variance σ², optimizing a smoothness-bound learning rate gives a bound proportional to q²/(q+Kσ²); the ordinate is twice the smoothness constant times that bound. This conditional local statement does not predict the best final trained tree. **D,** MNIST in one 128-neuron dendritic layer with a linear readout. The per-neuron condition broadcasts each neuron's exact somatic activation error. Decoder-only freezes dendritic parameters. Thin lines pair ten fresh seeds per architecture; symbols and bars show means and existing 95% intervals. Rates were selected on three separate development seeds; fits use 180 epochs and validation-selected checkpoints. **E,** Additional within-neuron resolution in the same cohort, with individual paired differences and 95% intervals. **F,** Mean activation-error capture by one or three profiles at the initial and validation-selected exact-rule checkpoints of the same ten fresh seeds per architecture. Each seed averages captured-energy ratios over nonzero fields from 2,048 images and 128 neurons; source intervals are retained. Colors match D; triangles/solid lines denote one profile and diamonds/dashes three profiles. These oracle projections use the same activation coordinates as the tested delivery rules. **G,** Separate historical direct-feedback-alignment (DFA) MNIST cohorts (15 seeds) and flattened CIFAR-10 (20 seeds); colors/shapes match D. pp, percentage points. Detailed one-step derivations, image fields and learning-rate controls remain in the Supplementary Information.'''
     save(c,1,sources,panels,caption,rows,{'helper_sha256':{str(Path(framework.__file__).relative_to(J)):sha(framework.__file__)}})
 
 
@@ -313,6 +339,19 @@ def figure6():
     d.set(xlim=(0,610),ylim=(32,102),xticks=[0,180,400,600],xlabel='Epoch',ylabel='Test accuracy (%)')
     d.axvline(180,color=COLORS['mute'],lw=LW_REF,ls=':')
     d.legend(frameon=False,fontsize=PT_SMALL,ncol=2,loc='lower right',handlelength=1.6,labelspacing=.1)
+    stopping,active=focused.d1_training_counts(
+        read('physical_depth_followup/stopping_by_seed.csv'),
+        read('physical_depth_followup/validation_selected_seed_trajectories.csv'))
+    d.text(.018,.25,'D1 retains early-stopped states',transform=d.transAxes,
+           va='top',fontsize=PT_SMALL,color=COLORS['mute'],
+           bbox=dict(facecolor='white',edgecolor='none',pad=.7))
+    d.text(.018,.105,'Training at 180 / 400 / 600: 7 / 7 / 2 of 10',transform=d.transAxes,
+           va='top',fontsize=PT_SMALL,color=COLORS['mute'],
+           bbox=dict(facecolor='white',edgecolor='none',pad=.7))
+    rows.extend(dict(panel='D',record_type='D1 observed training count',**r)
+                for r in active.to_dict('records'))
+    rows.extend(dict(panel='D',record_type='D1 stopping epoch',**r)
+                for r in stopping.to_dict('records'))
     gaps=read('physical_depth_followup/paired_trajectory_summary.csv')
     for letter,col,metric,title,ylabel in [('E',0,'test_accuracy','Accuracy changes its ordering','Exact − shared accuracy (pp)'),('F',6,'test_cross_entropy','Cross-entropy retains its ordering','Exact − shared cross-entropy')]:
         ax=c.panel(letter,3,col,6,title=title,grid='y');p=gaps[gaps.metric.eq(metric)].sort_values('epoch')
@@ -327,14 +366,15 @@ def figure6():
         else:ax.text(.04,.06,'Negative = lower loss with exact credit',transform=ax.transAxes,fontsize=PT_SMALL)
     sources=['physical_depth_h4_factorial/seed_outcomes.csv','physical_depth_clean_source_replication/seed_outcomes.csv',
              'task_family_alignment/architecture_effects.csv','physical_depth_followup/condition_trajectory_summary.csv',
-             'physical_depth_followup/paired_trajectory_summary.csv','physical_depth_followup/analysis_validation.json']
+             'physical_depth_followup/paired_trajectory_summary.csv','physical_depth_followup/analysis_validation.json',
+             'physical_depth_followup/stopping_by_seed.csv','physical_depth_followup/validation_selected_seed_trajectories.csv']
     panels={'A':'Restored original main6A/S31A native task-family schematic. Same commutative product in nested/flat families; spatial factor supports differ.',
       'B':'Restored S31E, exact-BP180-epoch means from clean-source H2/H3 and H4 cohorts; no outcome selection beyond declared conditions. H2D3/H2D4/H3D4 unobserved and blank.',
       'C':'Restored S31F, paired serial−grouped point BP task-family alignment effects at180epochs. Resource-identical modules/contacts; all10paired seeds.',
-      'D':'Existing followup validation-selected test-accuracy trajectories,10seeds/condition. D1[8],D3[2,1,2];8compartments,64somata,matched contacts.',
+      'D':'Existing followup validation-selected test-accuracy trajectories,10seeds/condition. D1[8],D3[2,1,2];8compartments,64somata,matched contacts. Exact per-seed stopping records give7/7/2 D1 runs observing epochs180/400/600; stopped best states remain in the displayed10-seed mean. No shared stopping cutoff or continued optimization of stopped runs is implied.',
       'E':'Paired exact−shared LocalCA test-accuracy trajectory with archived pointwise intervals.',
       'F':'Same paired states, test-cross-entropy difference; negative favors exact credit.'}
-    caption='''**Task organization determines when serial dendritic computation helps. A,** Nested and flat-factor tasks share a commutative product of a distal class signal and nuisance gains. Nested factors have fine, coarse and global supports; flat factors have equal-resolution supports. Local-ratio tasks expose the relevant division within each module. The drawings describe input access, not exact cancellation. **B,** Mean test accuracy for aligned serial trees with two to four task gain tiers H and tested physical depths D, using exact BP at the original 180-epoch budget. Each entry averages the original seed cohort; outlines mark the largest tested mean in each row. H=2 favors D2, while H=3 and H=4 favor D3 among the tested choices. Only D1–D2 were tested for H=2, D1–D3 for H=3 and D1–D4 for H=4. These are fixed-budget comparisons, not converged optimal-depth estimates. **C,** Paired accuracy advantage of serial over resource-identical grouped-point computation under exact BP, across task families and sensor alignment; means and retained 95% intervals from ten pairs at 180 epochs. **D,** Longer nested-task trajectories for D1 [8] and D3 [2,1,2], with eight nonsomatic compartments per neuron, 64 somata and matched resources. Curves evaluate validation-selected states, carrying stopped states forward. **E,F,** Paired D3 exact-path-minus-shared-soma LocalCA differences in test accuracy and cross-entropy. The accuracy contrast changes from +10.86 percentage points at 180 epochs to −1.52 at 600, whereas exact credit retains lower mean cross-entropy. All fifty D3 fits reach the 600-epoch cap; eight of ten D1 references stop earlier. Shading in D–F shows archived pointwise descriptive 95% whole-seed intervals. The two rules are compared at specified budgets and metrics; neither is established as the converged winner. Architecture, optimizer and reversed-placement controls remain in the Supplementary Information.'''
+    caption='''**Task organization determines when serial dendritic computation helps. A,** Nested and flat-factor tasks share a commutative product of a distal class signal and nuisance gains. Nested factors have fine, coarse and global supports; flat factors have equal-resolution supports. Local-ratio tasks expose the relevant division within each module. The drawings describe input access, not exact cancellation. **B,** Mean test accuracy for aligned serial trees with two to four task gain tiers H and tested physical depths D, using exact BP at the original 180-epoch budget. Each entry averages the original seed cohort; outlines mark the largest tested mean in each row. H=2 favors D2, while H=3 and H=4 favor D3 among the tested choices. Only D1–D2 were tested for H=2, D1–D3 for H=3 and D1–D4 for H=4. These are fixed-budget comparisons, not converged optimal-depth estimates. **C,** Paired accuracy advantage of serial over resource-identical grouped-point computation under exact BP, across task families and sensor alignment; means and retained 95% intervals from ten pairs at 180 epochs. **D,** Longer nested-task trajectories for D1 [8] and D3 [2,1,2], with eight nonsomatic compartments per neuron, 64 somata and matched resources. Curves evaluate validation-selected states, carrying stopped states forward. At epochs 180, 400 and 600, respectively, seven, seven and two of the ten D1 fits were still observing training epochs; the remaining fits contribute their retained best states. The counts come from each actual stopping epoch, not a common inferred cutoff. **E,F,** Paired D3 exact-path-minus-shared-soma LocalCA differences in test accuracy and cross-entropy. The accuracy contrast changes from +10.86 percentage points at 180 epochs to −1.52 at 600, whereas exact credit retains lower mean cross-entropy. All fifty D3 fits reach the 600-epoch cap; eight of ten D1 references stop earlier. Shading in D–F shows archived pointwise descriptive 95% whole-seed intervals. The two rules are compared at specified budgets and metrics; neither is established as the converged winner. Architecture, optimizer and reversed-placement controls remain in the Supplementary Information.'''
     save(c,6,sources,panels,caption,rows,{'helper_sha256':{str(Path(depth.__file__).relative_to(J)):sha(depth.__file__)}})
 
 
@@ -372,6 +412,17 @@ def figure7():
     d=c.panel('D',1,6,6,title='The spatial controls at K = 8')
     contrasts=commonmode.contrast_forest(d,report);d.set_xlabel('Ancestry advantage in residual capture (pp)');d.tick_params(axis='y',labelsize=PT_SMALL)
     rows.extend(dict(panel='D',**r)for r in contrasts.to_dict('records'))
+    surrogate=commonmode.METHODS[1]
+    paired_cells=focused.paired_residual_cells(table,surrogate,
+        contrasts[contrasts.control.eq(surrogate)].iloc[0])
+    jitter=np.random.default_rng(26090847).permutation(np.linspace(-.20,.20,len(paired_cells)))
+    d.scatter(paired_cells.residual_difference_pp,3+jitter,s=8,color=COLORS['shunting'],
+              alpha=.38,linewidths=0,zorder=1)
+    d.set(xlim=(-27,36),xticks=[-20,0,20],ylim=(-.6,3.8))
+    d.text(.99,.99,'Surrogate: 38 / 47 cells positive',transform=d.transAxes,
+           ha='right',va='top',fontsize=PT_SMALL,color=COLORS['mute'])
+    rows.extend(dict(panel='D',record_type='paired surrogate cell',**r)
+                for r in paired_cells.to_dict('records'))
     e=c.panel('E',2,0,6,title='Capture and wiring at K = 8',grid='both')
     focus=table[table.channels.eq(8)].groupby('method').mean(numeric_only=True)
     label_positions={'Ancestry':(31,.64),'Surrogate tree':(40,.51),'Depth bins':(44,.41),
@@ -393,10 +444,10 @@ def figure7():
     panels={'A':'Original median-sized example actual PCA geometry and mapped E/I contacts, unchanged helper.',
       'B':'Explicitly illustrative ancestry dictionary with constant column; not an inferred measured-support matrix.',
       'C':'Corrected common-mode residual-capture atK1/2/4/8, the complete47-cell budgets, whole-cell descriptive bootstrap. K16is available only in a cell subset and is not displayed here; original source rows remain untouched.',
-      'D':'Archived paired47-cell K8ancestry residual-capture differences against allfour spatial controls; surrogate first.',
+      'D':'Archived paired47-cell K8ancestry residual-capture differences against allfour spatial controls; original means and95%intervals unchanged. Small points show each cell for the surrogate comparison (38/47positive) in residual-energy percentage points, not total-energy capture. Other control rows retain summary intervals.',
       'E':'Same47cells,K8:mean residual capture versus actual nonzero density; no claim equalK fixes rank or wiring.',
       'F':'Original8,disjoint47 and second-mouse8 common+ancestry total/residual capture, archived helper fixed-seed cell bootstrap.'}
-    caption='''**Anatomy supplies sparse spatial dictionaries beyond a shared broadcast. A,** A reconstructed arbor from the original eight-cell cohort, chosen by median segment count. Segment color reflects mapped excitatory/inhibitory contact area; line width encodes total contact area, and the scale bar is 50 μm. **B,** An explicitly illustrative dictionary combines a constant profile with ancestry-defined subtree profiles. **C,** Capture of the modeled field remaining after the weighted common projection, across the four complete profile budgets K=1,2,4,8 in 47 disjoint v661 cells. Every dictionary contains the same constant profile. Lines show cell means; shading gives descriptive whole-cell 95% intervals. The common-constrained SVD oracle is a representational ceiling. **D,** At K=8, paired ancestry advantages over surrogate-tree, depth-bin, random-site and shuffled-route controls, with the retained 95% cell-bootstrap intervals. Surrogates preserve segment depth and parent out-degree, providing the closest topology control. **E,** The same K=8 dictionaries compared by average residual capture and nonzero coefficient density relative to dense eight-column wiring. Equal K does not equate rank or wiring; ancestry and its shuffled control have the same nonzero counts. **F,** Common-plus-ancestry total and residual capture across the original eight cells, 47 disjoint cells from the same mouse and eight eligible Pinky cells from a second mouse. Pinky's near-saturation involves only 9–13 excitatory-bearing sites per cell. Fields are modeled responses to focal passive shunts and therefore carry ancestry structure through cable physics; these comparisons establish representational capacity, not independent evidence of endogenous route use.'''
+    caption='''**Anatomy supplies sparse spatial dictionaries beyond a shared broadcast. A,** A reconstructed arbor from the original eight-cell cohort, chosen by median segment count. Segment color reflects mapped excitatory/inhibitory contact area; line width encodes total contact area, and the scale bar is 50 μm. **B,** An explicitly illustrative dictionary combines a constant profile with ancestry-defined subtree profiles. **C,** Capture of the modeled field remaining after the weighted common projection, across the four complete profile budgets K=1,2,4,8 in 47 disjoint v661 cells. Every dictionary contains the same constant profile. Lines show cell means; shading gives descriptive whole-cell 95% intervals. The common-constrained SVD oracle is a representational ceiling. **D,** At K=8, paired ancestry advantages over surrogate-tree, depth-bin, random-site and shuffled-route controls, with the retained 95% cell-bootstrap intervals. Surrogates preserve segment depth and parent out-degree, providing the closest topology control. Small points show all 47 paired cell differences for this comparison in residual-energy coordinates, including nine negative differences; 38 are positive. Other controls retain their original mean intervals. **E,** The same K=8 dictionaries compared by average residual capture and nonzero coefficient density relative to dense eight-column wiring. Equal K does not equate rank or wiring; ancestry and its shuffled control have the same nonzero counts. **F,** Common-plus-ancestry total and residual capture across the original eight cells, 47 disjoint cells from the same mouse and eight eligible Pinky cells from a second mouse. Pinky's near-saturation involves only 9–13 excitatory-bearing sites per cell. Fields are modeled responses to focal passive shunts and therefore carry ancestry structure through cable physics; these comparisons establish representational capacity, not independent evidence of endogenous route use.'''
     save(c,7,sources,panels,caption,rows,{'helper_sha256':{str(Path(p.__file__).relative_to(J)):sha(p.__file__)for p in (anatomy,commonmode)}})
 
 
@@ -421,6 +472,8 @@ def figure9():
     b.axhline(.8,color=COLORS['edge'],lw=LW_REF,ls=':');b.axvspan(.55,.60,ymin=.72,ymax=.82,color=COLORS['shunting'],alpha=.15,lw=0)
     b.set(xlim=(0,1),ylim=(0,1.05),xticks=[0,.5,1],yticks=[0,.5,.8,1],xlabel='Ancestry variance fraction λ (simulated)',ylabel='Positive-alignment detection probability')
     b.legend(frameon=False,fontsize=PT_SMALL,loc='lower right',handlelength=1.5)
+    b.text(.97,.53,'80% detection corresponds to\npartial r ≈ 0.25\nin this simulation model',
+           ha='right',va='center',transform=b.transAxes,fontsize=PT_SMALL,color=COLORS['mute'])
     cc=c.panel('C',1,6,6,title='Repeat reliability of the observed inputs',grid='y')
     reliability=read('measured_alignment_power/reliability_calibration_audit.csv')
     values=reliability.measured_split_half_spearman.to_numpy();assert len(values)==125

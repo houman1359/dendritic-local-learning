@@ -19,7 +19,8 @@
     "source_data/credit_rule_bridge/selection_freeze.json": "c979c9c1bb9264a1d980da8d13c24479967e749f7d6d21212e3a3187268ef2db"
   },
   "builder_sha256": {
-    "scripts/credit_first_figures/build_restored_main.py": "43d68065dc22e40442e08e9961e95a7fa3b26622938a8aec00ca64fa14aebbea",
+    "scripts/credit_first_figures/build_restored_main.py": "730af258411e2b15e6070e00497f93f05bc16580d7e029498515879a36e73edc",
+    "scripts/credit_first_figures/focused_main_evidence.py": "e045f0fc26ce8554af19f7d2b1ee9683ec852899f19e02e76e78163b0d74e773",
     "scripts/figure_canvas.py": "498dec86dcac34c9841538fa7b5bf7b7311d468db8fbe0c7a648fbb9508c5e1f",
     "scripts/journal_style.py": "32a3272cebb949784b694bc6dbb495cf74f6ba4ddf97d18d44f3ef54e082844e"
   },

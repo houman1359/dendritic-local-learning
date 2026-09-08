@@ -8,17 +8,26 @@ The Article contains nine main figures. Its Supplementary Information contains 3
 
 | Figure | Scientific question | Rendering source |
 |---|---|---|
-| 1 | Error source, spatial dictionary, gain, conditional noise filtering and the image reference | `scripts/credit_first_figures/build_restored_main.py` |
+| 1 | Error source, spatial dictionary, gain, conditional noise filtering, image learning and matching-coordinate capture | `scripts/credit_first_figures/build_restored_main.py` |
 | 2 | Branch selection under contextual conflict | Authenticated native input; `scripts/build_main_figure_04.py` |
-| 3 | Ancestry at matched bandwidth and its coefficient prediction | Authenticated native input; `scripts/credit_first_figures/build_ancestry.py` |
+| 3 | Ancestry at matched bandwidth, the coefficient prediction and a separate coefficient-learning test | `scripts/credit_first_figures/build_ancestry_focused.py` |
 | 4 | Matched input spectra, extended learning and learned credit geometry | `scripts/credit_first_figures/build_restored_main.py` |
-| 5 | Local inhibitory gating in a conductance tree | Authenticated native input; `scripts/conductance_local_gate/figure.py` |
+| 5 | Hard and continuous local inhibitory gating in a conductance tree | `scripts/conductance_local_gate/build_focused_main.py` |
 | 6 | Task families, serial architecture and budget-dependent credit comparisons | `scripts/credit_first_figures/build_restored_main.py` |
-| 7 | Anatomical columns, capture across budgets and delivery cost | `scripts/credit_first_figures/build_restored_main.py` |
-| 8 | Ancestry-partition gain and its electrical-state dependence | Authenticated native input; `scripts/shunt_ancestry_gain/build_figure.py` |
+| 7 | Anatomical columns, capture, cell heterogeneity and delivery cost | `scripts/credit_first_figures/build_restored_main.py` |
+| 8 | Ancestry-partition gain and its electrical-state dependence | `scripts/shunt_ancestry_gain/build_focused_main.py` |
 | 9 | Measured ancestry alignment and conditional detection sensitivity | `scripts/credit_first_figures/build_restored_main.py` |
 
-Paths are relative to the journal directory. All main assets are `main/figure_01.pdf` through `main/figure_09.pdf`. The four unchanged native inputs are pinned in `configs/figure_structure/retained_main_inputs.json`. The other five figures have per-panel definitions, plotted tables and input hashes in `figures/provenance/structure_restoration_20260908/`.
+Paths are relative to the journal directory. All main assets are `main/figure_01.pdf` through `main/figure_09.pdf`. Figure 2 is pinned in `configs/figure_structure/retained_main_inputs.json`. The other eight figures have per-panel definitions, plotted tables and input hashes in `figures/provenance/structure_restoration_20260908/` or `figures/provenance/credit_clarity_20260908/`. The latter builders preserve the original authenticated study renderers and their outputs. Actual rendering libraries and font hashes are recorded in `figures/provenance/publication_render_environment.json`.
+
+Figure 1F uses activation-error capture from the same fresh exact-rule cohort as
+the learning comparison; the older voltage-coordinate diagnostics remain
+separate in SI. Figure 1G contains the separate image controls. Figure 3D uses a
+separate coefficient-learning cohort and explicitly distinguishes primary noisy
+soft coefficients from exploratory hard readout and noiseless calibration.
+The matched-versus-rewired comparison remains in Supplementary Section S3 and
+Source Data. Figure 6D identifies retained stopped states; the cell points in
+Figure 7D use the same residual-energy coordinates as its interval.
 
 ## Supplementary sequence
 

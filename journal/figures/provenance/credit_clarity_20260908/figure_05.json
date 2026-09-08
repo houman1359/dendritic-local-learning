@@ -1,0 +1,37 @@
+{
+  "figure": "Figure 5",
+  "output": "figures/components/focused_main_05.pdf",
+  "output_sha256": "5517568e909b27770f2dbc8b68c9e529401bc47b54eac6cc1f4cf6f36c2a2a1f",
+  "plotted_table": "source_data/curated_publication/figure_05_plotted.csv",
+  "plotted_table_sha256": "1460bb34163da8a9b41f1b053fdeec496386eb9de965bcb5df09efb11f013ff9",
+  "panel_sources": {
+    "A": "Unchanged supplied-context distal-gate schematic, with ungated proximal eligibility.",
+    "B": "Unchanged nominal teacher tuning, independently perturbed in every actual teacher.",
+    "C": "Aligned-task four-rule curves at Adam0.03; twenty original fresh seeds and unchanged bootstrap intervals.",
+    "D": "Opposed-task curves under the identical protocol and readout definitions.",
+    "E": "(Broadcast minus hard-gate NMSE on opposed tasks) minus (broadcast minus hard-gate NMSE on aligned tasks), at both validation windows; unchanged paired seed outcomes and intervals.",
+    "F": "Existing primary-rate opposed exact/hard/continuous/swapped/proximal-gated outcomes; no new task or rate selection. All twenty original fresh seeds retained."
+  },
+  "source_sha256": {
+    "source_data/conductance_local_gate/summaries/all_curves.csv": "4a24ea4aa1046cb638cc47fabc72b71fb3dbc96bbcb9aea6ebef33e79f3ac456",
+    "source_data/conductance_local_gate/summaries/all_endpoints.csv": "7d3f6df93795afe7b752b0b7a239f51dcafe246f851efe158a7b2c3ac30e4d1d",
+    "source_data/conductance_local_gate/summaries/condition_means.csv": "e3ed564e0fd24cb7fee0f1fa6fc337a30fc5481f7b29381419991281829e81a5",
+    "source_data/conductance_local_gate/summaries/paired_contrasts.csv": "5ae6c7a35fd84bd43f49f0eca1c8b7405165bc4e4a568d4c38509ec90ef62beb",
+    "source_data/conductance_local_gate/figures/curve_band_source.csv": "0dd58c44591943c6696bf0e27b0486af240c58acec1d801ef7234c0746b50e1c",
+    "source_data/conductance_local_gate/protocol.json": "c441998f6f91e1f8782b2918689806e119af567e479bcd5c94069dca837a2413",
+    "source_data/conductance_local_gate/protocol_freeze.json": "81568da7f4350a18c264914d1a86f7307f3809743b8c3113efa4abcc70d3bbdc",
+    "source_data/conductance_local_gate/summaries/completeness_audit.json": "dc979f55ba19458ea33e12faf7dc152d3b0ea72192835a8cb691bc3791101821"
+  },
+  "builders_sha256": {
+    "scripts/conductance_local_gate/build_focused_main.py": "5a0fd1e5c27eba01f51c36d2e728f9fbf850bfa85aaaa64b8920b60e4af563a1",
+    "scripts/conductance_local_gate/report.py": "a96b4b6edd42c0d98de3da44a46c409310b463450369173be7371d503fa6dfef",
+    "scripts/conductance_local_gate/model.py": "cc2b82f6c486810a43aa885f3ea2dacce54c473f2e2ece6f4cfdb7d88ce6ad39",
+    "scripts/conductance_local_gate/portable_contract.py": "fea35a393f5881dfc60b3dfe810dac64f8c2e6b0d8ba01937f4a42c5ffab3c05",
+    "scripts/journal_style.py": "32a3272cebb949784b694bc6dbb495cf74f6ba4ddf97d18d44f3ef54e082844e",
+    "scripts/credit_first_figures/focused_provenance.py": "b7ade95b88e7d10a43bab01716dee6211bc2f09735b605d489c0012a147ecea7"
+  },
+  "source_data_immutable": true,
+  "new_experiments": 0,
+  "layout_findings": [],
+  "scope": "Editorial promotion of the already tested continuous gate. Existing report.py, experimental summaries, original primary figure, full-rate SI sheet and historical completion gate remain unchanged."
+}

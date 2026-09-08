@@ -1,12 +1,12 @@
 {
   "figure": "Figure 6",
   "output": "figures/components/restored_main_06.pdf",
-  "output_sha256": "ea6a9f01b5a003ad885190db273714b59f33c537d357c9c81832000d69892692",
+  "output_sha256": "51487fc04d57f1068d1b9ede05a7794ab092ae815e0515567f2203cd1410d7ef",
   "panel_sources": {
     "A": "Restored original main6A/S31A native task-family schematic. Same commutative product in nested/flat families; spatial factor supports differ.",
     "B": "Restored S31E, exact-BP180-epoch means from clean-source H2/H3 and H4 cohorts; no outcome selection beyond declared conditions. H2D3/H2D4/H3D4 unobserved and blank.",
     "C": "Restored S31F, paired serial\u2212grouped point BP task-family alignment effects at180epochs. Resource-identical modules/contacts; all10paired seeds.",
-    "D": "Existing followup validation-selected test-accuracy trajectories,10seeds/condition. D1[8],D3[2,1,2];8compartments,64somata,matched contacts.",
+    "D": "Existing followup validation-selected test-accuracy trajectories,10seeds/condition. D1[8],D3[2,1,2];8compartments,64somata,matched contacts. Exact per-seed stopping records give7/7/2 D1 runs observing epochs180/400/600; stopped best states remain in the displayed10-seed mean. No shared stopping cutoff or continued optimization of stopped runs is implied.",
     "E": "Paired exact\u2212shared LocalCA test-accuracy trajectory with archived pointwise intervals.",
     "F": "Same paired states, test-cross-entropy difference; negative favors exact credit."
   },
@@ -16,10 +16,13 @@
     "source_data/task_family_alignment/architecture_effects.csv": "8fb388c9505f9d646a69db7e283f446a811ca2886fe89bd1a695d2df041550dc",
     "source_data/physical_depth_followup/condition_trajectory_summary.csv": "8171e8088c37ae607efd3afb8bd58c7544d6e8cfc8a221f329e2b0d7dc0d869f",
     "source_data/physical_depth_followup/paired_trajectory_summary.csv": "05786841eb50eb631704a0d72374600de8900db6fb61f440b74eecaf810630a0",
-    "source_data/physical_depth_followup/analysis_validation.json": "9efd3952ede79fc983ab7c2e3a895cd9a04fab4f3e2ea04724ba4bc75f7c757d"
+    "source_data/physical_depth_followup/analysis_validation.json": "9efd3952ede79fc983ab7c2e3a895cd9a04fab4f3e2ea04724ba4bc75f7c757d",
+    "source_data/physical_depth_followup/stopping_by_seed.csv": "6acf0fa6798f01167529f7434e1d40b087afbeba518fc6eb58fc73a92a2e3da5",
+    "source_data/physical_depth_followup/validation_selected_seed_trajectories.csv": "d44c6216556425a118f4b0dc22de3dc823345accb18e727b754cca95281392d4"
   },
   "builder_sha256": {
-    "scripts/credit_first_figures/build_restored_main.py": "43d68065dc22e40442e08e9961e95a7fa3b26622938a8aec00ca64fa14aebbea",
+    "scripts/credit_first_figures/build_restored_main.py": "730af258411e2b15e6070e00497f93f05bc16580d7e029498515879a36e73edc",
+    "scripts/credit_first_figures/focused_main_evidence.py": "e045f0fc26ce8554af19f7d2b1ee9683ec852899f19e02e76e78163b0d74e773",
     "scripts/figure_canvas.py": "498dec86dcac34c9841538fa7b5bf7b7311d468db8fbe0c7a648fbb9508c5e1f",
     "scripts/journal_style.py": "32a3272cebb949784b694bc6dbb495cf74f6ba4ddf97d18d44f3ef54e082844e"
   },

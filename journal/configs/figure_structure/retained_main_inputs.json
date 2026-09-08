@@ -6,24 +6,6 @@
       "path": "figures/main/figure_02.pdf",
       "sha256": "2129f4fa043fc537ecaf2e65c3ba2ed42fe4708caca8240bdb9ee69e09a89e3c",
       "scope": "Unchanged native vector publication input; underlying study and rendering code remain available."
-    },
-    {
-      "figure": 3,
-      "path": "figures/main/figure_03.pdf",
-      "sha256": "50d350bbc7d39b781b1bd03a59dc584914ce5b7ea668b159d3f0a67b6d28b563",
-      "scope": "Unchanged native vector publication input; underlying study and rendering code remain available."
-    },
-    {
-      "figure": 5,
-      "path": "figures/main/figure_05.pdf",
-      "sha256": "b363ebc26146fb639ab4d595b6217d6e307793e473756bffcb2316ba792da244",
-      "scope": "Unchanged native vector publication input; underlying study and rendering code remain available."
-    },
-    {
-      "figure": 8,
-      "path": "figures/main/figure_08.pdf",
-      "sha256": "af47cbffaf65685cc7138ea61a8bf4bfab5a4e9f17ab703b7f5ac6326df4c5dc",
-      "scope": "Unchanged native vector publication input; underlying study and rendering code remain available."
     }
   ]
 }

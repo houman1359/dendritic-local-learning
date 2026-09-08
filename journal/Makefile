@@ -98,7 +98,7 @@ software-release:
 	$(PYTHON) scripts/build_software_release.py --force
 
 format-audit:
-	$(PYTHON) scripts/audit_nature_communications_format.py --strict
+	$(PYTHON) scripts/audit_nature_communications_format.py --strict --main-word-target 8000
 
 citation-audit:
 	$(PYTHON) scripts/audit_citations.py --strict

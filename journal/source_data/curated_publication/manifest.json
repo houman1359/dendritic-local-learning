@@ -4,7 +4,14 @@
       "figure": 1,
       "source": "figures/provenance/structure_restoration_20260908/figure_01_plotted.csv",
       "path": "source_data/curated_publication/figure_01_plotted.csv",
-      "sha256": "6405b0ea55e408bb586f421d4b6306352edc0f98929bc012e4e75792975d057f",
+      "sha256": "949336fc97d63fe95a2fc32df290a18f3017d77e25ce32690c00be80acaa8e3b",
+      "scope": "Display summaries from existing inputs; panel column identifies the selected data. Not an additional experiment."
+    },
+    {
+      "figure": 3,
+      "source": "figures/provenance/credit_clarity_20260908/figure_03_plotted.csv",
+      "path": "source_data/curated_publication/figure_03_plotted.csv",
+      "sha256": "0ddb5de4fc2225deb8a5dd006d207c1d91fc25a7913b123bc0937a29018cb8b1",
       "scope": "Display summaries from existing inputs; panel column identifies the selected data. Not an additional experiment."
     },
     {
@@ -15,17 +22,31 @@
       "scope": "Display summaries from existing inputs; panel column identifies the selected data. Not an additional experiment."
     },
     {
+      "figure": 5,
+      "source": "figures/provenance/credit_clarity_20260908/figure_05_plotted.csv",
+      "path": "source_data/curated_publication/figure_05_plotted.csv",
+      "sha256": "1460bb34163da8a9b41f1b053fdeec496386eb9de965bcb5df09efb11f013ff9",
+      "scope": "Display summaries from existing inputs; panel column identifies the selected data. Not an additional experiment."
+    },
+    {
       "figure": 6,
       "source": "figures/provenance/structure_restoration_20260908/figure_06_plotted.csv",
       "path": "source_data/curated_publication/figure_06_plotted.csv",
-      "sha256": "4d58de568351ca12128c8dcb685eda4605192ba56354b7b3b456ecdc08b392ea",
+      "sha256": "987e72ee559d5431f53a39b0cb6afb29a67fbfb72338b5a911ff010660fcffcc",
       "scope": "Display summaries from existing inputs; panel column identifies the selected data. Not an additional experiment."
     },
     {
       "figure": 7,
       "source": "figures/provenance/structure_restoration_20260908/figure_07_plotted.csv",
       "path": "source_data/curated_publication/figure_07_plotted.csv",
-      "sha256": "2711ca17964ce36dbb661e7c6e58e82ce742c8f0f28f50b19314fcb8047e8a32",
+      "sha256": "3795b2d3190096fdcf16d66e0449d526c87bd7aeb050d1cbaaf6c6e104914e1f",
+      "scope": "Display summaries from existing inputs; panel column identifies the selected data. Not an additional experiment."
+    },
+    {
+      "figure": 8,
+      "source": "figures/provenance/credit_clarity_20260908/figure_08_plotted.csv",
+      "path": "source_data/curated_publication/figure_08_plotted.csv",
+      "sha256": "8a2e4d22c2a33d888f06fc414061acb9dfe8585ab2888e8c2b05235fd73deaee",
       "scope": "Display summaries from existing inputs; panel column identifies the selected data. Not an additional experiment."
     },
     {

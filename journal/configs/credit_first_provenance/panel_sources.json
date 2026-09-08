@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "layout": "task_credit_curated_publication",
+  "layout": "Nine credit-first main figures; focused empirical capture, coefficient learning and gate presentation; consolidated35-figure supplement.",
   "physical_figure_pending": false,
   "retained_template": "configs/figure_structure/retained_evidence.tsv",
   "assets": [
@@ -9,7 +9,7 @@
       "path": "figures/main/figure_01.pdf",
       "component": "figures/components/restored_main_01.pdf",
       "generator": "scripts/credit_first_figures/build_restored_main.py",
-      "panel": "a-f",
+      "panel": "a-g",
       "notes": "Native rendering from existing scientific sources. Per-panel definitions and hashes: figures/provenance/structure_restoration_20260908/figure_01.json"
     },
     {
@@ -23,10 +23,10 @@
     {
       "figure": "fig3",
       "path": "figures/main/figure_03.pdf",
-      "generator": "scripts/credit_first_figures/build_ancestry.py",
-      "component": "figures/components/credit_first_figure_03.pdf",
+      "generator": "scripts/credit_first_figures/build_ancestry_focused.py",
+      "component": "figures/components/focused_main_03.pdf",
       "panel": "a-f",
-      "notes": ""
+      "notes": "Focused redraw from completed studies; no new training. Panel definitions and immutable input hashes: figures/provenance/credit_clarity_20260908/figure_03.json"
     },
     {
       "figure": "fig4",
@@ -39,10 +39,10 @@
     {
       "figure": "fig5",
       "path": "figures/main/figure_05.pdf",
-      "generator": "scripts/conductance_local_gate/figure.py",
-      "component": "source_data/conductance_local_gate/figures/local_gate_primary.pdf",
+      "generator": "scripts/conductance_local_gate/build_focused_main.py",
+      "component": "figures/components/focused_main_05.pdf",
       "panel": "a-f",
-      "notes": "Fresh local-gate cohort: explicit locally available inhibition, all 24 parameters available, matched-rate control, oracle two-profile comparison and gate-placement controls; original opponent experiments retained as supporting evidence."
+      "notes": "Focused redraw from completed studies; no new training. Panel definitions and immutable input hashes: figures/provenance/credit_clarity_20260908/figure_05.json"
     },
     {
       "figure": "fig6",
@@ -63,10 +63,10 @@
     {
       "figure": "fig8",
       "path": "figures/main/figure_08.pdf",
-      "generator": "scripts/shunt_ancestry_gain/build_figure.py",
-      "component": "source_data/shunt_ancestry_gain/figures/shunt_ancestry_gain_native.pdf",
+      "generator": "scripts/shunt_ancestry_gain/build_focused_main.py",
+      "component": "figures/components/focused_main_08.pdf",
       "panel": "a-e",
-      "notes": ""
+      "notes": "Focused redraw from completed studies; no new training. Panel definitions and immutable input hashes: figures/provenance/credit_clarity_20260908/figure_08.json"
     },
     {
       "figure": "fig9",
@@ -585,21 +585,21 @@
     },
     {
       "figure": "fig3",
-      "panel": "c-d",
+      "panel": "c",
       "path": "source_data/trained_subtree_address_full_factorial/condition_summary.csv",
       "role": "numerical source",
       "generator": "",
       "replication_unit": "paired training seed (20)",
-      "notes": "C: bandwidth; D: matched-minus-rewired topology"
+      "notes": "Bandwidth comparison; matched-versus-rewired results remain in the supplementary controls."
     },
     {
       "figure": "fig3",
-      "panel": "c-d",
+      "panel": "c",
       "path": "source_data/trained_subtree_address_full_factorial/seed_outcomes.csv",
       "role": "numerical source",
       "generator": "",
       "replication_unit": "paired training seed (20)",
-      "notes": "C: bandwidth; D: matched-minus-rewired topology"
+      "notes": "Bandwidth comparison; matched-versus-rewired results remain in the supplementary controls."
     },
     {
       "figure": "fig3",
@@ -1281,7 +1281,7 @@
       "panel": "a-b",
       "path": "scripts/conductance_local_gate/report.py",
       "role": "Local gate schematic and nominal teacher equations",
-      "generator": "scripts/conductance_local_gate/figure.py",
+      "generator": "scripts/conductance_local_gate/build_focused_main.py",
       "replication_unit": "not applicable",
       "notes": "Panel B is nominal teacher tuning, not a fitted student or an additional experiment."
     },
@@ -1290,7 +1290,7 @@
       "panel": "c-d",
       "path": "source_data/conductance_local_gate/figures/curve_band_source.csv",
       "role": "Displayed mean curves and whole-seed intervals",
-      "generator": "scripts/conductance_local_gate/figure.py",
+      "generator": "scripts/conductance_local_gate/build_focused_main.py",
       "replication_unit": "20 paired fresh seed blocks; historical replay and implementation canaries are separate",
       "notes": ""
     },
@@ -1299,7 +1299,7 @@
       "panel": "c-d",
       "path": "source_data/conductance_local_gate/summaries/all_curves.csv",
       "role": "All rules, rates and seeds at every saved training step",
-      "generator": "scripts/conductance_local_gate/figure.py",
+      "generator": "scripts/conductance_local_gate/build_focused_main.py",
       "replication_unit": "20 paired fresh seed blocks; historical replay and implementation canaries are separate",
       "notes": ""
     },
@@ -1308,7 +1308,7 @@
       "panel": "e",
       "path": "source_data/conductance_local_gate/summaries/paired_contrasts.csv",
       "role": "Paired opposed-minus-aligned broadcast-minus-local-gate contrast",
-      "generator": "scripts/conductance_local_gate/figure.py",
+      "generator": "scripts/conductance_local_gate/build_focused_main.py",
       "replication_unit": "20 paired fresh seed blocks; historical replay and implementation canaries are separate",
       "notes": ""
     },
@@ -1317,7 +1317,7 @@
       "panel": "e",
       "path": "source_data/conductance_local_gate/summaries/paired_seed_contrasts.csv",
       "role": "Individual paired seed contrasts",
-      "generator": "scripts/conductance_local_gate/figure.py",
+      "generator": "scripts/conductance_local_gate/build_focused_main.py",
       "replication_unit": "20 paired fresh seed blocks; historical replay and implementation canaries are separate",
       "notes": ""
     },
@@ -1326,18 +1326,18 @@
       "panel": "f",
       "path": "source_data/conductance_local_gate/summaries/all_endpoints.csv",
       "role": "Validation-selected endpoint outcomes for all placement controls",
-      "generator": "scripts/conductance_local_gate/figure.py",
+      "generator": "scripts/conductance_local_gate/build_focused_main.py",
       "replication_unit": "20 paired fresh seed blocks; historical replay and implementation canaries are separate",
-      "notes": ""
+      "notes": "Primary-rate opposed-task endpoints include the continuous distal gate; existing twenty paired seeds and original endpoint policy."
     },
     {
       "figure": "fig5",
       "panel": "f",
       "path": "source_data/conductance_local_gate/summaries/condition_means.csv",
       "role": "Control means and whole-seed intervals",
-      "generator": "scripts/conductance_local_gate/figure.py",
+      "generator": "scripts/conductance_local_gate/build_focused_main.py",
       "replication_unit": "20 paired fresh seed blocks; historical replay and implementation canaries are separate",
-      "notes": ""
+      "notes": "Primary-rate opposed-task endpoints include the continuous distal gate; existing twenty paired seeds and original endpoint policy."
     },
     {
       "figure": "methods",
@@ -1533,7 +1533,7 @@
       "figure": "fig5",
       "panel": "a-f",
       "role": "Exact native output required by the portable figure and completion verifiers",
-      "generator": "scripts/conductance_local_gate/figure.py",
+      "generator": "scripts/conductance_local_gate/build_focused_main.py",
       "replication_unit": "derived rendering; same seed observations as the corresponding figure",
       "notes": "Retained exact output bytes for verification at the original study-relative path; adds no experimental observation. Supplementary panel E uses the explicitly separate historical cohort."
     },
@@ -1542,7 +1542,7 @@
       "figure": "fig5",
       "panel": "a-f",
       "role": "Exact native output required by the portable figure and completion verifiers",
-      "generator": "scripts/conductance_local_gate/figure.py",
+      "generator": "scripts/conductance_local_gate/build_focused_main.py",
       "replication_unit": "derived rendering; same seed observations as the corresponding figure",
       "notes": "Retained exact output bytes for verification at the original study-relative path; adds no experimental observation. Supplementary panel E uses the explicitly separate historical cohort."
     },
@@ -1674,7 +1674,7 @@
     },
     {
       "figure": "fig1",
-      "panel": "f",
+      "panel": "g",
       "path": "source_data/mnist_between_within_factorial/paired_contrasts.csv",
       "role": "Complete numerical input or panel-indexed display summary",
       "generator": "scripts/credit_first_figures/build_restored_main.py",
@@ -1683,7 +1683,7 @@
     },
     {
       "figure": "fig1",
-      "panel": "f",
+      "panel": "g",
       "path": "source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv",
       "role": "Complete numerical input or panel-indexed display summary",
       "generator": "scripts/credit_first_figures/build_restored_main.py",
@@ -1692,7 +1692,7 @@
     },
     {
       "figure": "fig1",
-      "panel": "f",
+      "panel": "g",
       "path": "scripts/credit_first_figures/build_restored_main.py",
       "role": "Native display definition",
       "generator": "scripts/credit_first_figures/build_restored_main.py",
@@ -1701,7 +1701,7 @@
     },
     {
       "figure": "fig1",
-      "panel": "f",
+      "panel": "g",
       "path": "source_data/curated_publication/figure_01_plotted.csv",
       "role": "Complete numerical input or panel-indexed display summary",
       "generator": "scripts/credit_first_figures/build_restored_main.py",
@@ -76821,6 +76821,141 @@
       "generator": "",
       "replication_unit": "Ten paired training seeds; prior trajectories, no new observations",
       "notes": "Scientific endpoint source linked by configs/supplement_consolidation/publication_curation_map.json."
+    },
+    {
+      "figure": "fig1",
+      "panel": "f",
+      "path": "source_data/curated_publication/figure_01_plotted.csv",
+      "role": "Complete numerical input or panel-indexed display summary",
+      "generator": "scripts/credit_first_figures/build_restored_main.py",
+      "replication_unit": "10 fresh exact-rule seeds per architecture; image/neuron fields nested",
+      "notes": "Activation-error capture matching the trained K1/K3 projections. Separate from the historical voltage-coordinate diagnostics."
+    },
+    {
+      "figure": "fig1",
+      "panel": "f",
+      "path": "scripts/credit_first_figures/build_restored_main.py",
+      "role": "Native display definition",
+      "generator": "scripts/credit_first_figures/build_restored_main.py",
+      "replication_unit": "not applicable",
+      "notes": "Native capture panel definition."
+    },
+    {
+      "figure": "fig3",
+      "panel": "d",
+      "path": "source_data/review_coefficient_encoder/trajectories.csv",
+      "role": "Complete numerical input or panel-indexed display summary",
+      "generator": "scripts/credit_first_figures/build_ancestry_focused.py",
+      "replication_unit": "20 paired coefficient-study seeds; exploratory hard readout reuses the soft-encoder cohort",
+      "notes": "Epoch80, no cue delay; primary256 calibration examples/noiseSD0.5 and separate16 noiseless calibration examples. Supplied cue and target route activation; hard readout exploratory."
+    },
+    {
+      "figure": "fig3",
+      "panel": "d",
+      "path": "source_data/review_coefficient_hard_readout/trajectories.csv",
+      "role": "Complete numerical input or panel-indexed display summary",
+      "generator": "scripts/credit_first_figures/build_ancestry_focused.py",
+      "replication_unit": "20 paired coefficient-study seeds; exploratory hard readout reuses the soft-encoder cohort",
+      "notes": "Epoch80, no cue delay; primary256 calibration examples/noiseSD0.5 and separate16 noiseless calibration examples. Supplied cue and target route activation; hard readout exploratory."
+    },
+    {
+      "figure": "fig3",
+      "panel": "b-f",
+      "path": "source_data/curated_publication/figure_03_plotted.csv",
+      "role": "Complete numerical input or panel-indexed display summary",
+      "generator": "scripts/credit_first_figures/build_ancestry_focused.py",
+      "replication_unit": "See individual panel protocol; rows retain seed/cell and summary roles",
+      "notes": "Display-only values from completed outcomes. The panel and record fields identify plotted observations; full source tables and primary/exploratory scopes remain separate."
+    },
+    {
+      "figure": "fig5",
+      "panel": "b-f",
+      "path": "source_data/curated_publication/figure_05_plotted.csv",
+      "role": "Complete numerical input or panel-indexed display summary",
+      "generator": "scripts/conductance_local_gate/build_focused_main.py",
+      "replication_unit": "See individual panel protocol; rows retain seed/cell and summary roles",
+      "notes": "Display-only values from completed outcomes. The panel and record fields identify plotted observations; full source tables and primary/exploratory scopes remain separate."
+    },
+    {
+      "figure": "fig8",
+      "panel": "b-e",
+      "path": "source_data/curated_publication/figure_08_plotted.csv",
+      "role": "Complete numerical input or panel-indexed display summary",
+      "generator": "scripts/shunt_ancestry_gain/build_focused_main.py",
+      "replication_unit": "See individual panel protocol; rows retain seed/cell and summary roles",
+      "notes": "Display-only values from completed outcomes. The panel and record fields identify plotted observations; full source tables and primary/exploratory scopes remain separate."
+    },
+    {
+      "figure": "fig6",
+      "panel": "d",
+      "path": "source_data/physical_depth_followup/stopping_by_seed.csv",
+      "role": "Complete numerical input or panel-indexed display summary",
+      "generator": "scripts/credit_first_figures/build_restored_main.py",
+      "replication_unit": "10 D1 seeds and50 D3 fits; five D3 conditions",
+      "notes": "Actual per-fit stopping epochs. Carried-forward D1 values are retained states, not additional training."
+    },
+    {
+      "figure": "fig7",
+      "panel": "d",
+      "path": "source_data/anatomy_commonmode/v661/cell_method_summary.csv",
+      "role": "Complete numerical input or panel-indexed display summary",
+      "generator": "scripts/credit_first_figures/build_restored_main.py",
+      "replication_unit": "47 paired reconstructed cells; surrogate draws nested within cell",
+      "notes": "Individual K8 ancestry-minus-control residual-capture differences; same coordinates as the archived paired intervals."
+    },
+    {
+      "figure": "methods",
+      "panel": "rendering",
+      "path": "figures/provenance/publication_render_environment.json",
+      "role": "Rendering environment record",
+      "generator": "scripts/rebuild_final_publication_figures.py",
+      "replication_unit": "not applicable",
+      "notes": "Executed rendering environment only; separate from original scientific runs."
+    },
+    {
+      "figure": "methods",
+      "panel": "display inventory",
+      "path": "source_data/curated_publication/manifest.json",
+      "role": "Display table inventory",
+      "generator": "scripts/rebuild_final_publication_figures.py",
+      "replication_unit": "not applicable",
+      "notes": "Hashes and destinations for current display-only tables."
+    },
+    {
+      "figure": "fig1",
+      "panel": "f",
+      "path": "source_data/image_ladder_controls/summaries/delivery_coordinate_capture_summary.csv",
+      "role": "Complete numerical input or panel-indexed display summary",
+      "generator": "scripts/credit_first_figures/build_restored_main.py",
+      "replication_unit": "10 fresh exact-rule seeds per architecture; image/neuron fields nested",
+      "notes": "Activation-space capture at initial and exact-trained selected checkpoints; same seeds/coordinates as main learning controls."
+    },
+    {
+      "figure": "fig1",
+      "panel": "f",
+      "path": "source_data/image_ladder_controls/summaries/delivery_coordinate_capture.csv",
+      "role": "Complete numerical input or panel-indexed display summary",
+      "generator": "scripts/credit_first_figures/build_restored_main.py",
+      "replication_unit": "10 fresh exact-rule seeds per architecture; image/neuron fields nested",
+      "notes": "Activation-space capture at initial and exact-trained selected checkpoints; same seeds/coordinates as main learning controls."
+    },
+    {
+      "figure": "fig1",
+      "panel": "f",
+      "path": "source_data/image_ladder_controls/summaries/capture_audit.json",
+      "role": "Complete numerical input or panel-indexed display summary",
+      "generator": "scripts/credit_first_figures/build_restored_main.py",
+      "replication_unit": "10 fresh exact-rule seeds per architecture; image/neuron fields nested",
+      "notes": "Activation-space capture at initial and exact-trained selected checkpoints; same seeds/coordinates as main learning controls."
+    },
+    {
+      "figure": "fig6",
+      "panel": "d",
+      "path": "source_data/physical_depth_followup/validation_selected_seed_trajectories.csv",
+      "role": "Complete numerical input or panel-indexed display summary",
+      "generator": "scripts/credit_first_figures/build_restored_main.py",
+      "replication_unit": "10 paired D1 seeds",
+      "notes": "Actual observed_epoch flags distinguish training from retained early-stopped states; counts7/7/2 at180/400/600."
     }
   ],
   "supporting_groups": [
@@ -77049,6 +77184,15 @@
     },
     {
       "path": "configs/figure_structure/table_source_hashes.json"
+    },
+    {
+      "path": "figures/provenance/credit_clarity_20260908/figure_03.json"
+    },
+    {
+      "path": "figures/provenance/credit_clarity_20260908/figure_05.json"
+    },
+    {
+      "path": "figures/provenance/credit_clarity_20260908/figure_08.json"
     }
   ],
   "completion_gates": [

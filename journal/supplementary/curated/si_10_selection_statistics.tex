@@ -5,8 +5,9 @@
 \subsection{Prospective costed selection in tree-constrained linear learning}
 \label{note:prospective_selection}
 
-The prospective experiment separated a valid local descent bound from its
-use to choose a model for later learning. Five explicit 15-node trees supplied
+These secondary studies test structure selection separately from the main
+credit comparisons. The first asks whether an initialization descent bound
+can select a model for later learning. Five explicit 15-node trees supplied
 eight labeled leaves: four balanced hierarchies with distinct leaf orders
 and one contiguous comb. Each supplied orthonormal subtree-cut dictionaries
 at $K=1,2,4,8$, giving 20 candidates per arm. Every candidate retained 64
@@ -18,10 +19,7 @@ conductance was inverse embedded length. Internal nodes were retained.
 For input $\bm x\in\mathbb R^8$, trainable weights
 $W\in\mathbb R^{8\times8}$ and an imposed context decoder
 $\bm a\in\mathbb R^8$, the scalar prediction was
-$\bm a^{\mathsf T}H_TW\bm x$. Here $W$ denotes model weights, rather than
-the coordinate-weight matrix used in the earlier projection theory. This is an explicit passive-tree linear abstraction;
-the readout is not a natural somatic voltage and the model is not the
-nonlinear DendriNet used in the physical-depth experiments.
+$\bm a^{\mathsf T}H_TW\bm x$. Here $W$ denotes model weights. This passive-tree linear abstraction uses an imposed context readout, not a somatic voltage or the nonlinear physical-depth model.
 
 A random orthogonal teacher mapped isotropic Gaussian inputs to labels.
 Context decoders were sampled uniformly from the first $r$ columns of an
@@ -33,10 +31,7 @@ decoder-space credit second moment was
 S_0=(1+\sigma_y^2)Q\operatorname{diag}
 (\underbrace{1/r,\ldots,1/r}_{r},0,\ldots,0)Q^{\mathsf T}.
 \]
-Orthogonal rotation changed orientation while preserving this spectrum
-exactly. The joint arm's
-transfer could change transported-credit and parameter-gradient spectra;
-invariance is claimed only for the stated reference moment. Angle and noise
+Rotation preserves this reference spectrum, but the joint arm's transfer can change transported-credit and parameter-gradient spectra. Angle and noise
 comparisons shared underlying random draws within seed and rank. Five
 development seeds (6100--6104) used angles $0,\pi/4,\pi/2$; 20 separate
 confirmation seeds (7200--7219) used held-out angles $\pi/8,3\pi/8$.
@@ -45,20 +40,13 @@ paired, giving 320 tasks per arm.
 
 For dictionary projector $P$, the actual synaptic descent direction was
 $\bm d_i=P H_T^{\mathsf T}\bm a_i\delta_i\bm x_i^{\mathsf T}$,
-where $\delta_i$ was the scalar prediction error on example $i$. For
-inner products, norms and covariance calculations, the $8\times8$ update
-was identified with its vector of 64 coordinates. Its coefficients used
-the known decoder and transfer, an explicitly prescribed information source.
-They were not learned by a biological local encoder. Each candidate had
+where $\delta_i$ was the scalar prediction error on example $i$. Inner products and covariances use the vectorized 64-coordinate update. Coefficients receive the known decoder and transfer, rather than a learned local encoder. Each candidate had
 64 fixed task-decoder coefficients, $K$ channels, $8K$ possible context-to-
 route encoder coefficients, eight nonzero delivery entries, 15 electrical
 nodes and 14 edges. Let $\ell_T$ be the total cable length in the fixed two-dimensional
 embedding and $\ell_{\max}$ the largest candidate length. The normalized
 geometric cable cost was $\ell_T/\ell_{\max}$; the resource cost was
-$C_T=K/8+0.1\ell_T/\ell_{\max}$. It is a declared proxy, not a measured
-biological wiring or energy cost. Some candidates have identical feedback
-projectors but distinct cable costs; these equivalence classes are retained
-in the candidate manifest and are not independent replicates.
+$C_T=K/8+0.1\ell_T/\ell_{\max}$. This declared cost proxy does not measure biological expenditure. Candidates with identical projectors but different cable costs remain identified as equivalence classes, not replicates.
 
 Independent calibration, training and test sets contained 1,024, 2,048 and
 4,096 examples. Calibration evaluated the actual routed update mean and
@@ -73,19 +61,14 @@ U_T=\eta\bm g^{\mathsf T}\E\bm d_i-
 \left(\|\E\bm d_i\|^2+
 \frac{\operatorname{tr}\operatorname{Cov}(\bm d_i)}{32}\right).
 \]
-Here $L_T^{\mathrm{cal}}$ is the largest Hessian eigenvalue of the finite
-calibration loss, defined as half the mean squared error (MSE), and is global
-in $W$. This is a bound on that
-calibration loss, not on independent-test or population loss. All weights
+Here $L_T^{\mathrm{cal}}$ is the largest Hessian eigenvalue of calibration half mean squared error (MSE), global in $W$. The bound concerns calibration loss, not independent-test or population loss. All weights
 started at zero. Paired candidates received the same iid minibatch stream
 for 256 updates, with checkpoints at 16, 64 and 256. Only the final checkpoint
 defined the primary endpoint, test half-MSE plus $0.08C_T$.
 
-Development's 4,800 fits fixed one nonnegative utility-to-final-loss scale $s\in[0,256]$ per arm, using within-task centered outcomes. The moment policy minimizes $\mathcal L_{\rm cal}(0)-sU_T+0.08C_T$. Development also fixes the constant, maximum-budget and known-rank policies; sampled and exact-expected random choice are references. All 3,200 confirmation choices were hash-sealed before confirmation training and never retuned. The computational protocol was prospective, not publicly preregistered. All 12,800 confirmation fits and 38,400 checkpoint rows remain, with no outcome exclusions.
+Development's 4,800 fits fixed one nonnegative utility-to-final-loss scale $s\in[0,256]$ per arm, using within-task centered outcomes. The moment policy minimizes $\mathcal L_{\rm cal}(0)-sU_T+0.08C_T$. Development also fixes the constant, maximum-budget and known-rank policies; sampled and exact-expected random choice are references. All 3,200 confirmation choices were hash-sealed before training without retuning. The prospective protocol retains all 12,800 confirmation fits and 38,400 checkpoint rows, with no outcome exclusions.
 
-Regret was final costed loss minus the retrospectively best candidate's
-costed loss on the same task. That oracle was unavailable to selection.
-All intervals used 10,000 bootstrap resamples of 20 whole-seed averages.
+Regret subtracts the retrospectively best candidate's costed loss on each task; this oracle is unavailable to selection. Intervals use 10,000 bootstrap draws over 20 whole-seed averages.
 Moment-policy regret was 0.08055 (95\% interval 0.07262--0.08781) for
 feedback-only selection and 0.10404 (0.09975--0.10791) for joint selection.
 Fixed maximum-budget regret was 0.04495 and 0.04269; rank-only regret was
@@ -93,28 +76,26 @@ Fixed maximum-budget regret was 0.04495 and 0.04269; rank-only regret was
 in both arms. Rank-only improved over fixed by 0.03664 (0.03630--0.03697)
 and 0.03448 (0.03427--0.03468). The retrospectively best budget equaled
 the imposed rank on every confirmation task, while the contiguous balanced
-tree won 308/320 feedback-only and 303/320 joint tasks. This supports a
-restricted rank--capacity relation in the constructed task class; it supplies
-little evidence for fine tree selection.
+tree won 308/320 feedback-only and 303/320 joint tasks. Thus the constructed family supports rank-dependent capacity but little fine tree selection.
 
-A post hoc audit separated local prediction from endpoint selection. Exact calibration one-step decrease satisfied the bound in all 12,800 conditions. Initialization utility correlated with actual first-update independent-test decrease at 0.984/0.974 in the two arms, despite the failed final selector. Algebraic, covariance, derivative and source/selection checks passed; 120 independent endpoints replayed within $5.55\times10^{-17}$. Complete matrices, policies, outcomes and audits are in \texttt{source\_data/prospective\_morphology\_selection/}.
+Post hoc checks separate this failure from local prediction: the bound held in all 12,800 calibration conditions, and utility correlated 0.984/0.974 with first-update test improvement. Algebraic, covariance, derivative and source checks passed; 120 independent endpoints replayed within $5.55\times10^{-17}$. Complete matrices, policies and audits are in \texttt{source\_data/prospective\_morphology\_selection/}.
 
 \subsection{Finite, noisy calibration of interaction-based tree selection}
 \label{note:finite_calibration_morphology}
 
-The finite-calibration study uses the eight-input, 28-coefficient multi-affine model and twelve-candidate pool of Section~\ref{note:interaction_structure}. Four equally weighted families are sampled: four disjoint pairs, two complementary quartets, nested products of degrees 2/4/6/8, and a random-interaction control selecting four distinct degree-2--8 monomials. Input permutations, coefficient signs and magnitudes $\mathcal U[0.5,1.5]$ vary by task; coefficients are normalized to unit squared norm. Thus every target has zero mean and variance one on uniform Rademacher inputs, but spectra need not match across this mixture.
+The finite-calibration study uses the eight-input, 28-coefficient model and twelve-candidate pool of Section~\ref{note:interaction_structure}, with four equally weighted families: four disjoint pairs, two complementary quartets, nested products of degrees 2/4/6/8, and a random-interaction control selecting four distinct degree-2--8 monomials. Input permutations, coefficient signs and magnitudes $\mathcal U[0.5,1.5]$ vary by task; coefficients are normalized to unit squared norm. Targets have zero mean and unit variance on uniform Rademacher inputs, without matched spectra across families.
 
 The estimator receives input/output examples and all 255 nonconstant Walsh monomials, without family, planted support, true coefficients or derivatives. Lasso fits an unpenalized intercept and uses penalty $c\operatorname{sd}(y)\sqrt{2\log(256)/n_{\rm fit}}$, cyclic coordinate descent, tolerance $10^{-8}$ and at most 20,000 iterations. Five development blocks select $c$ from 0.15/0.35/0.65, fixing 0.15. Calibration budgets 64/256/1,024 cross Gaussian label-noise SD 0/0.5. The first 75\% of observations fit the estimator and pilots; the final 25\% is a calibration gate. Primary calibration therefore uses 192 fit observations out of 256 queries at SD 0.5.
 
-For each actual candidate cut, the selector removes the constant inside row of the estimated Walsh matrix and measures its squared singular-value tail beyond rank one. It minimizes the maximum normalized cut tail, breaking $10^{-10}$ ties by summed tails and candidate identifier. True-coefficient maximum tails are bounds; noisy estimates and summed-tail tie-breaking are scores. A secondary subset dynamic program searches beyond the fixed pool at the primary calibration condition.
+The selector minimizes the maximum normalized centered-cut tail beyond rank one, breaking $10^{-10}$ ties by summed tails and candidate identifier. Only true-coefficient maximum tails are bounds; estimated tails and summed-tail tie-breaking are scores. Secondary subset dynamic programming searches beyond the pool at the primary condition.
 
 Development fixes a constant candidate and an estimated-rank rule using the rank that explains 99.5\% of estimated input-gradient energy. Both reduce to \texttt{balanced\_p0}; sparse bins use the constant fallback. Other references are fixed shape representatives, exact uniform-random candidate expectation and a two-sweep ALS pilot. The pilot fits every candidate from one fixed initialization on the calibration-fit subset and chooses by gate MSE, then discards all pilot parameters. True-coefficient selectors and the retrospective best-trained candidate are privileged references.
 
-Twenty new seed blocks supply eighty tasks. Every calibration dataset, score, pilot choice and adaptive tree was hash-sealed before final endpoints. Two worker failures preceded fitting; hashed node-decoding and module-dispatch repairs left sealed choices unchanged. Final fitting uses separate 1,024-example training data with noise SD 0.3, 32 ALS sweeps, two paired random restarts and output-preserving gauge normalization. Independent 512-example noisy validation chooses the restart. Twelve fixed candidates, one estimated adaptive tree and one true-coefficient adaptive reference give 2,240 fits; fixed candidate outcomes are reused across calibration conditions.
+Twenty new seed blocks supply eighty tasks; calibration inputs, scores, choices and adaptive trees were sealed before fitting. Pre-fit implementation repairs preserved those choices and are recorded in Source Data. Final fitting uses separate 1,024-example training data with noise SD 0.3, 32 ALS sweeps, two paired random restarts and output-preserving gauge normalization. Independent 512-example noisy validation chooses the restart. Twelve fixed candidates, one estimated adaptive tree and one true-coefficient adaptive reference give 2,240 fits; fixed candidate outcomes are reused across calibration conditions.
 
-Primary evaluation is clean-target MSE on 4,096 independent inputs, normalized by population variance one. Noisy-test and complete 256-pattern errors are secondary. Repeated patterns across streams are allowed, with independent observation identities and noise. Regret is selected error minus the retrospective minimum over validation-selected fixed-pool candidates; adaptive regret can be negative and is retained. Failed/nonfinite fits receive predefined loss $10^6$, with warnings and counts retained.
+Primary evaluation uses clean-target MSE on 4,096 independent inputs and unit population variance; noisy-test and all-256-pattern errors are secondary. Streams can repeat patterns with independent observation identities/noise. Regret subtracts the best validation-selected fixed-pool result, retaining negative adaptive regret. Failed/nonfinite fits receive loss $10^6$, with warnings and counts retained.
 
-Four within-seed family contrasts are averaged before 10,000 whole-seed bootstrap draws. At 256 queries/noise 0.5, the two primary comparisons against development-best fixed and the two-sweep pilot use Bonferroni-adjusted 97.5\% intervals plus a 0.01-NMSE improvement margin. Other budgets, families and adaptive construction are descriptive/secondary. The procedure tests fresh functions within a fixed mixture; its exponential Walsh dictionary and ALS fitter do not establish scalable biological morphology selection. Full calibration and cost outcomes remain in Source Data and Supplementary Fig.~\ref{fig:si_morphology_estimation}.
+The primary 256-query/noise-0.5 comparisons against development-best fixed and the two-sweep pilot use 10,000 whole-seed bootstrap draws, averaging families within seed, Bonferroni-adjusted 97.5\% intervals and a 0.01-NMSE margin. Other comparisons are descriptive. The exponential Walsh dictionary and ALS fitter constrain scalability and biological interpretation. Full outcomes and costs are in Source Data and Supplementary Fig.~\ref{fig:si_morphology_estimation}.
 
 \subsection{Direct confirmation from noisy morphology estimates to gradient learning}
 \label{note:morphology_end_to_end}
@@ -125,24 +106,15 @@ Each of three trees receives exact path credit or unit root broadcast, giving 48
 
 Learning uses 1,024 updates of 64 examples from a 2,048-example cache with label-noise SD 0.15, minimizing half-MSE divided by known target variance. Separate 4,096-example test data use fresh noise. No validation selection, retuning or continuation from calibration fits occurs. Primary noisy-test NMSE has expected floor 0.0225; clean test and all-pattern errors are secondary. Within-seed family-averaged comparisons use 10,000 bootstrap draws, adjusted 97.5\% intervals for the two primary contrasts and the same 0.01 effect margin. Fixed-minus-estimated exact-credit error was 0.45913 $[0.38489,0.53227]$; broadcast-minus-exact on estimated trees was 0.60750 $[0.56916,0.64610]$. Matching, quartet and nested tasks approached the floor with estimated-tree exact credit, while random interactions retained error and broadcast performed slightly better on matching.
 
-Six full-horizon implementation checks (seed 721000) are excluded. A pre-fit interface repair preserved scientific settings and sealed choices. Independent reconstruction reproduced all eighty trees and saved-weight endpoints exactly. All 480 trajectories, states, protocols, repairs and exclusions are in \path{source_data/morphology_calibration/end_to_end}. This is a finite-data construction/learning pipeline within the stated class, not an endpoint-optimal or biological morphology law.
+Six full-horizon checks (seed 721000) are excluded; a documented pre-fit repair preserved settings and choices. Independent reconstruction reproduced all eighty trees and endpoints exactly. All 480 trajectories and validation records are in \path{source_data/morphology_calibration/end_to_end}. The pipeline demonstrates finite-data construction and learning within this class, not endpoint-optimal morphology.
 
 \subsection{Finite-horizon forecasts for the contextual linear learner}
 \label{note:finite_horizon_morphology}
 
-To diagnose the original scalar extrapolation independently of structural
-capacity, we froze a new finite-horizon predictor before fresh calibration
-or training. The candidate pool, learning rate $\eta=0.35$, minibatch size
-$B=32$, 256-update horizon and objective cost remained unchanged. Five
-original development seeds were diagnostic. Twenty new seeds (9300--9319)
+A finite-horizon predictor tests the failed scalar extrapolation while retaining the candidate pool, $\eta=0.35$, minibatch size $B=32$, 256-update horizon and cost. Five original development seeds informed its design; the predictor was frozen before fresh calibration or training. Twenty new seeds (9300--9319)
 crossed four ranks, two noise levels, two held-out angles, both transfer arms
 and both training regimes. Every candidate was trained, yielding 25,600 new
-fits and 76,800 checkpoint outcomes at updates 16, 64 and 256. The new
-non-pilot scores were hash-sealed before each seed's outcomes. No predictor
-hyperparameter was fitted to the new endpoints.
-This separates mode-dependent learning dynamics from a scalar initial slope,
-as motivated by analyses of deep linear learning and task alignment with
-kernel eigenfunctions \citep{lampinen2019generalization,canatar2021spectral}.
+fits and 76,800 checkpoint outcomes at updates 16, 64 and 256. Non-pilot scores were sealed before each seed's outcomes without endpoint tuning. The predictor separates mode-dependent dynamics from a scalar initial slope, motivated by deep linear learning and task alignment with kernel eigenfunctions \citep{lampinen2019generalization,canatar2021spectral}.
 
 To forecast learning, we express the weights in route coordinates. For
 orthonormal routes $\Phi$, the learner stays in $W=\Phi V$. For context
@@ -207,11 +179,7 @@ plus $1/B$ times its conditional variance. Total covariance therefore gives
  \label{eq:s_fresh_sgd_moments}\\
  \E[\mathcal L_T]&=\tfrac12\sum_jp_j[R_j(T)+\sigma_j^2].
 \end{align}
-Thus the forecast updates gradient noise as the residual and weight
-variance change during learning. Gaussian input fourth moments and fresh independent
-minibatches are essential. Noise need only have the stated first two moments.
-This closure is not asserted for nonlinear targets, anisotropic inputs,
-adaptive optimizers or correlated samples.
+The forecast updates noise with the residual and weight variance. It requires Gaussian input fourth moments and fresh independent minibatches; noise needs only the stated first two moments. This closure does not cover nonlinear targets, anisotropic inputs, adaptive optimizers or correlated samples.
 
 The primary plug-in predictor estimates context frequencies, conditional
 coefficient vectors and residual noise variances using 1,024 independent
@@ -223,37 +191,22 @@ true teacher coefficients and noise moments and are labeled privileged.
 The 16-step pilot performs real candidate updates and evaluates on
 calibration observations; its computation is included. An observed-context-
 count baseline chooses the smallest permitted $K$ covering the number of
-distinct observed context vectors, followed by the cheapest tree. This baseline and a conditioning baseline restricted to the same observed
-count were added after inspecting development results, then frozen
-separately before the new outcomes. Context count equals generating
-rank in this constructed family; it is not a general estimator of credit rank.
+distinct observed context vectors, followed by the cheapest tree. This and an observed-count-restricted conditioning baseline were frozen after development inspection, before new outcomes. Context count equals generating rank only in this constructed family.
 
 We ran both fresh-example SGD and minibatches resampled from a fixed
 2,048-example cache, retaining a common 4,096-example test set. Reusing a
 cache makes later weights dependent on those examples and violates the fresh
 recurrence's independence assumption. Population-oracle prediction minus
 exact population loss of the realized weights quantifies that discrepancy.
-All task conditions are averaged within each independent seed before 10,000
-whole-seed bootstrap draws. Intervals are pointwise; the many secondary
-selector, rank and regime comparisons are not interpreted as separately
-confirmed discoveries. No new multiplicity-adjusted significance claim is
-made from these interval plots. Undefined correlations in numerically
-constant cases are retained with explicit defined-task counts rather than
-used to exclude outcomes.
+All conditions are averaged within seed before 10,000 whole-seed bootstrap draws. Pointwise intervals for secondary comparisons carry no multiplicity-adjusted confirmation claim. Numerically constant cases retain undefined correlations with explicit defined-task counts, without outcome exclusions.
 
 Supplementary Fig.~\ref{fig:si_finite_horizon} shows endpoint
 regret and strong baselines; panel D shows the joint-arm cache sensitivity.
 The complete timing and prediction outcomes are in Source Data (Table~\ref{tab:source_index}). The primary forecast reaches mean fixed-cache
 regret $0.000064$ and $0.000042$ in the feedback and joint arms, while the
-cheap observed-count baseline reaches $0.000134$ and $0.000197$. Thus the
-large improvement over the original scalar score does not establish a large
-advantage for fine morphology selection. Focused tests compare singular
-spectral formulas with direct descent, stochastic moments with exact Gaussian
-quadrature, and enforce that predictors cannot request training or test
-observations. Checks of source hashes and pre-outcome selection records passed. Numerical data,
-protocols, complete outcomes and exported source hashes are provided in
-\texttt{source\_data/morphology\_structure/} and
-\texttt{source\_data/morphology\_finite\_horizon/}.
+cheap observed-count baseline reaches $0.000134$ and $0.000197$. The scalar-score improvement therefore does not establish a large fine-selection advantage. Tests verify spectral forecasts against direct descent, stochastic moments against Gaussian quadrature, sealed choices and exclusion of training/test observations from predictors. Complete data, protocols and source hashes are in
+\path{source_data/morphology_structure/} and
+\path{source_data/morphology_finite_horizon/}.
 \subsection{Statistical analysis, reproducibility and interpretation}
 \label{note:statistics}
 
@@ -292,9 +245,7 @@ targets and 20,000 draws. Other parameter
 sweeps and sensitivity analyses received no multiplicity correction, are
 labeled secondary, and are not interpreted as independent confirmation.
 
-For the cross-animal structural check, the mouse is the replication unit.
-Contrasts were first summarized within each volume; no cell-level test was
-used to claim an animal-level $P$ value from two mice. The 12-cell Pinky
+Cross-mouse contrasts are summarized within volume; cell-level tests do not provide an animal-level $P$ value from two mice. The 12-cell Pinky
 cohort was sized to span 12 equal-count spatial strata while keeping complete
 mesh skeletonization and 500-shuffle processing feasible. The task-family
 factorial used ten paired seeds, matching the sample size used for the
@@ -308,14 +259,11 @@ of gradient direction and post hoc comparisons between unmatched training
 cohorts. Table~\ref{tab:claim_boundaries} records the supported
 interpretation and boundary of each evidence class.
 
-Every empirical main panel is accompanied by a machine-readable source table containing
-the plotted values, biological or training unit, nesting variables, seed,
-condition names, and analysis version. Automated reproducibility checks verify
-that figure scripts read these tables rather than duplicating values in plotting code.
+Each empirical main panel has a machine-readable table with values, independent and nested units, seeds, conditions and analysis version. Automated checks verify these figure inputs.
 Authentication tokens, restricted caches, and raw data already hosted by
 MICrONS or DANDI are not redistributed.
 
-Source Data contain resolved configurations, unit-level outcomes, exclusions, frozen selections and source hashes. The software archive includes the numerical reference implementations, data joins and figure builders. Private paths are translated to article-relative paths without changing numerical settings; manifests authenticate original inputs and each portability edit. The source index below maps compact tables to the full endpoint records.
+Source Data retain configurations, outcomes, exclusions, selections and hashes; software contains implementations, joins and figure builders. Manifests authenticate source identities and path translations without changing numerical settings. The source index maps compact tables to complete records.
 
 An exact package lock was not archived for the June exact-transport or
 backpropagation jobs, nor for the measured-response analysis. These versions

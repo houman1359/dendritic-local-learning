@@ -1,0 +1,42 @@
+{
+  "figure": "Figure 3",
+  "output": "figures/components/focused_main_03.pdf",
+  "output_sha256": "9d19ccce13c6116785f1842ab12a7c1a038451e98933a905fdfc5e5ae8008deb",
+  "plotted_table": "source_data/curated_publication/figure_03_plotted.csv",
+  "plotted_table_sha256": "0ddb5de4fc2225deb8a5dd006d207c1d91fc25a7913b123bc0937a29018cb8b1",
+  "panel_sources": {
+    "A": "Unchanged eight-stream task schematic; supplied context and teacher features.",
+    "B": "Raw ancestry-group coefficient sums from the frozen generator; normalization unchanged.",
+    "C": "Original matched-bandwidth accuracy and maximum-over-four-control summaries.",
+    "D": "Separate coefficient-learning cohort, seeds 52000\u201352019, distinct from the ancestry cohort in C/E/F. Paired final accuracy minus oracle at noisy 256-cue and noiseless 16-cue conditions. Soft noisy is primary; hard readout and the noiseless comparison are exploratory; hard/soft reuse the same twenty coefficient-study seeds. Both receive supplied cues and four-route activation targets. Correct identification concerns the route group, not unique identification of every one of the eight contexts. Lines join two specified conditions with different calibration resources, not a continuous noise dose.",
+    "E": "Primary K4 small effect with original intervals and twenty paired points.",
+    "F": "Individual K4 controls on their own wider scale; original endpoints and intervals."
+  },
+  "source_sha256": {
+    "configs/trained_subtree_address/full_factorial_confirmatory.json": "8684f7c30886e7aede7eaa71550033ad84605fcfb45220d32a2d91d2627f23b2",
+    "source_data/trained_subtree_address_full_factorial/seed_outcomes.csv": "2f2cc0d6a21fd7bd46a5437e031e69ae31626ef6650c6cced0be1d2a0861303c",
+    "source_data/trained_subtree_address_full_factorial/condition_summary.csv": "97358de3f0bfb7a91ba2aa6f164705d1a6e6d5c1b4e35b266c5e5a9fc03afb20",
+    "source_data/review_evidence_reanalysis/ancestry_k4_control_contrasts.csv": "aed995858ac591ddea7f8f0314d018e4ad4b51a810a032e99f3f1dff2b131e2a",
+    "source_data/review_evidence_reanalysis/ancestry_control_paired_differences.csv": "3746a2e477c9e6c734ffb8247745b7027288cfed33367cd04887b86457d11b22",
+    "source_data/review_coefficient_encoder/trajectories.csv": "2c3cb8e8ab35d60f07ca8351741d6f8cabd35c3f96716db52f7a9a10b1a6772f",
+    "source_data/review_coefficient_encoder/paired_contrasts.csv": "b4b7e009e271d9d7a812f9d318f9b20dd5187404bbf388dc5887ffe07904be1f",
+    "source_data/review_coefficient_encoder/protocol_freeze.json": "6b710ace300d93a859beb45b911d90857f3615647a0fa210d5b524c610385cbb",
+    "source_data/review_coefficient_hard_readout/trajectories.csv": "74e4818f4d8bab92ab7c1e9d6e4fb2817cb432f164c5d0d7f6163ea643219781",
+    "source_data/review_coefficient_hard_readout/paired_contrasts.csv": "46b214de8efef2e8640cce199a1cbb032477ec0e9ec62fdbc727e471705751e1",
+    "source_data/review_coefficient_hard_readout/protocol_freeze.json": "e0dc68fe975b5b6b576bffd5118c2a0a448732d587eac70bf7e82d62bb16ea78"
+  },
+  "builders_sha256": {
+    "scripts/credit_first_figures/build_ancestry_focused.py": "cca2702efc254df69b784e6fcc5ce111667f82feb47019f0f6c74f107c468329",
+    "scripts/credit_first_figures/build_ancestry.py": "9bc272b82313f47237086e92e8a86f4afd9a530dae8094dde77381a06f56c228",
+    "scripts/build_main_figure_05.py": "27f736bdba3af1562657e77e7a4fcb5cc937f92d43833ee91667b92e1a9e0e3b",
+    "scripts/routing_figure_panels.py": "b6a38d2f1329add30c30e3e98317f3d5a3946a2133a75303d458723b32faf521",
+    "scripts/run_trained_subtree_address_full_factorial.py": "c5d75b8ea9bc29d7fd24ca53c360c4bbdf825d7fa31f84727af4b7dd47e875dd",
+    "scripts/figure_canvas.py": "498dec86dcac34c9841538fa7b5bf7b7311d468db8fbe0c7a648fbb9508c5e1f",
+    "scripts/journal_style.py": "32a3272cebb949784b694bc6dbb495cf74f6ba4ddf97d18d44f3ef54e082844e",
+    "scripts/credit_first_figures/focused_provenance.py": "b7ade95b88e7d10a43bab01716dee6211bc2f09735b605d489c0012a147ecea7"
+  },
+  "source_data_immutable": true,
+  "new_experiments": 0,
+  "layout_findings": [],
+  "scope": "Editorial promotion of retained encoder evidence; no new training, coefficient fit, endpoint selection or bootstrap. Original matched-versus-rewired panel remains in the archived native figure and complete Source Data."
+}

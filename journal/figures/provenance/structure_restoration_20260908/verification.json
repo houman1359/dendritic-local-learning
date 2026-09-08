@@ -1,15 +1,36 @@
 {
   "status": "PASS",
-  "verifier_sha256": "ca1c9c03883c441d4b3d62f2c08087274afdd408265087f4941e7037181cf194",
-  "source_and_builder_hashes_verified": 51,
+  "verifier_sha256": "02bea90e99673271053966e740d102b30dec3dcb51c56aff768c94f418151676",
+  "source_and_builder_hashes_verified": 110,
   "figures": {
     "1": {
       "canonical": "figures/main/figure_01.pdf",
       "component": "figures/components/restored_main_01.pdf",
-      "sha256": "cd88f03ff4a5f8709eddbc62ee47d9dcdaf34344df2c55055f37a4350870640f",
+      "sha256": "e88e727a5bf188200340e0e1526c1fd8e905957d24a27a2e77f073804b9f2340",
       "page_points": [
         518.4000244140625,
-        493.0
+        535.0
+      ],
+      "panel_letters": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "G"
+      ],
+      "min_text_pt": 6.800000190734863,
+      "max_text_pt": 10.5,
+      "outside_page_text": []
+    },
+    "3": {
+      "canonical": "figures/main/figure_03.pdf",
+      "component": "figures/components/focused_main_03.pdf",
+      "sha256": "9d19ccce13c6116785f1842ab12a7c1a038451e98933a905fdfc5e5ae8008deb",
+      "page_points": [
+        518.4000244140625,
+        572.0
       ],
       "panel_letters": [
         "A",
@@ -19,7 +40,7 @@
         "E",
         "F"
       ],
-      "min_text_pt": 6.800000190734863,
+      "min_text_pt": 4.760000228881836,
       "max_text_pt": 10.5,
       "outside_page_text": []
     },
@@ -43,10 +64,30 @@
       "max_text_pt": 10.5,
       "outside_page_text": []
     },
+    "5": {
+      "canonical": "figures/main/figure_05.pdf",
+      "component": "figures/components/focused_main_05.pdf",
+      "sha256": "5517568e909b27770f2dbc8b68c9e529401bc47b54eac6cc1f4cf6f36c2a2a1f",
+      "page_points": [
+        518.4000244140625,
+        532.7999877929688
+      ],
+      "panel_letters": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F"
+      ],
+      "min_text_pt": 5.320000171661377,
+      "max_text_pt": 10.0,
+      "outside_page_text": []
+    },
     "6": {
       "canonical": "figures/main/figure_06.pdf",
       "component": "figures/components/restored_main_06.pdf",
-      "sha256": "ea6a9f01b5a003ad885190db273714b59f33c537d357c9c81832000d69892692",
+      "sha256": "51487fc04d57f1068d1b9ede05a7794ab092ae815e0515567f2203cd1410d7ef",
       "page_points": [
         518.4000244140625,
         535.0
@@ -66,7 +107,7 @@
     "7": {
       "canonical": "figures/main/figure_07.pdf",
       "component": "figures/components/restored_main_07.pdf",
-      "sha256": "34419d9623925d3ef6f0eb521c57e43135f75c7f1989a4651a0ffeeb774d7d4b",
+      "sha256": "05f980389ee115a26ae574aeed36a65b5230c6aaa9ee0cac18cfaadcb9722c02",
       "page_points": [
         518.4000244140625,
         493.0
@@ -83,10 +124,29 @@
       "max_text_pt": 10.5,
       "outside_page_text": []
     },
+    "8": {
+      "canonical": "figures/main/figure_08.pdf",
+      "component": "figures/components/focused_main_08.pdf",
+      "sha256": "bfea404bcb9a833efcb16ba5a3f47cf2593d5d17f503540a35caeb168e91cce0",
+      "page_points": [
+        518.4000244140625,
+        490.0
+      ],
+      "panel_letters": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E"
+      ],
+      "min_text_pt": 6.800000190734863,
+      "max_text_pt": 10.5,
+      "outside_page_text": []
+    },
     "9": {
       "canonical": "figures/main/figure_09.pdf",
       "component": "figures/components/restored_main_09.pdf",
-      "sha256": "20657f4497eb64f59fa41fe29780b82bc647dccdbcc4fceb0c1880dffdade725",
+      "sha256": "a65114dfee3179fe14d818361681a74d86e052b25e2b802a99045ccba7c02ec3",
       "page_points": [
         518.4000244140625,
         365.0
@@ -106,10 +166,15 @@
     "declared scientific sources and builders match hashes",
     "single-page vector PDFs and expected panel letters",
     "no text outside PDF page",
+    "1F matching-coordinate fresh capture,10seeds per architecture",
+    "3D direct paired coefficient outcomes and primary/exploratory separation",
     "4E retains both 16384 endpoint views exactly",
     "4F means from all20 exact-rule seeds at0/1024/16384",
+    "5F all20seeds for each of5controls including continuous gate",
+    "6D training counts from actual stopping epochs",
     "6B nine observed cells each10seeds",
     "7C complete47-cell K1/2/4/8 summaries",
+    "8 unchanged numerical vector geometry",
     "9A/B/C empirical and simulation sample counts"
   ],
   "scope": "Rendering and frozen-source integrity; no scientific reruns."

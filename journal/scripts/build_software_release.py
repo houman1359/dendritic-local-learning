@@ -549,8 +549,11 @@ def repository_file_allowed(relative: Path, scope: str | None) -> bool:
     if name == "journal/configs/supplement_consolidation/contact_sheet.pdf":
         return False
     if name.startswith("journal/figures/"):
-        if name.startswith("journal/figures/provenance/structure_restoration_20260908/"):
+        if name.startswith(("journal/figures/provenance/structure_restoration_20260908/",
+                            "journal/figures/provenance/credit_clarity_20260908/")):
             return relative.suffix.lower() in {".json", ".csv"}
+        if name == "journal/figures/provenance/publication_render_environment.json":
+            return True
         canonical = re.fullmatch(r"journal/figures/main/figure_(\d+)\.pdf", name)
         if canonical:
             from build_submission_bundle import MAIN_FIGURES
@@ -1332,8 +1335,15 @@ Figure reconstruction and PDF assembly also require PyMuPDF, which provides the
 `fitz` module and is not a dependency of the core modeling package:
 
 ```bash
-python -m pip install PyMuPDF
+python -m pip install -c article_analysis/code/release_noise/constraints.txt PyMuPDF
 ```
+
+The renderer is pinned to the validated PyMuPDF 1.28.2 in that constraint file.
+`article_analysis/code/release_noise/ENVIRONMENTS.md` maps the scientific
+cohorts to their original source/runtime records and supported replay paths.
+It also documents the fully resolved CPU environment and required external
+fonts. The NumPy 1.26.4 replay environment is distinct from the NumPy 2.2.6
+scientific executions; compatibility checks do not claim identical trajectories.
 
 The core package dependencies are declared in
 `dendritic_modeling/pyproject.toml`. CAVE and NWB retrieval additionally

@@ -35,6 +35,12 @@ make audit
 
 After the text, figures, panel provenance and Source Data are finalized, commit the scientific inputs and rebuild the software and other bundles in dependency order. [RELEASE_WORKFLOW.md](RELEASE_WORKFLOW.md) describes committed-source packaging, the isolated installation smoke and the explicit noise-generator choices. [OVERLEAF_README.md](OVERLEAF_README.md) describes the manuscript project. Existing archives can be stale even when their checksums are valid.
 
+[The environment guide](code/release_noise/ENVIRONMENTS.md) distinguishes the
+original scientific executions, historical source exports, supported CPU replay
+and publication rendering. It includes a study-to-environment map and the
+resolved CPU installation recipe. Public package CI, figure reconstruction and
+full experimental replay establish different things.
+
 To restore Source Data, use `manifest.tsv`'s `original_source` field, not the display folder name. Supporting evidence now stored under `Methods/retained_evidence/` still belongs at its recorded `source_data/` path for analysis. The software package includes `code/release_noise/restore_source_data.py`, which checks hashes and refuses to substitute display-filtered tables for complete sources.
 
 ## Prior dissemination and author information

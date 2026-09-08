@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 """Build the publication figures from frozen tables and selected vector inputs.
 
-The current entry point renders the restored main figures and the consolidated
-supplement. It does not regenerate a sequence of superseded displays, invoke
-training, or change any experimental outcome. Four unchanged main figures and
-the selected supplementary source panels are authenticated vector inputs.
+The entry point renders the current main figures and consolidated supplement.
+It does not invoke training or change experimental outcomes. Figure 2 and the
+selected supplementary source panels remain authenticated vector inputs.
 """
 from __future__ import annotations
 
 import argparse
 import hashlib
+import importlib.metadata
 import json
 from pathlib import Path
 import shutil
@@ -18,6 +18,11 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 RESTORED_MAIN = (1, 4, 6, 7, 9)
+FOCUSED_MAIN = {
+    3: "credit_first_figures/build_ancestry_focused.py",
+    5: "conductance_local_gate/build_focused_main.py",
+    8: "shunt_ancestry_gain/build_focused_main.py",
+}
 
 
 def sha256(path: Path) -> str:
@@ -43,8 +48,10 @@ def export_display_tables() -> None:
     output = ROOT / "source_data/curated_publication"
     output.mkdir(parents=True, exist_ok=True)
     records = []
-    for number in RESTORED_MAIN:
-        source = ROOT / "figures/provenance/structure_restoration_20260908" / f"figure_{number:02d}_plotted.csv"
+    for number in sorted((*RESTORED_MAIN, *FOCUSED_MAIN)):
+        directory = ("structure_restoration_20260908" if number in RESTORED_MAIN
+                     else "credit_clarity_20260908")
+        source = ROOT / "figures/provenance" / directory / f"figure_{number:02d}_plotted.csv"
         destination = output / source.name
         shutil.copyfile(source, destination)
         if sha256(source) != sha256(destination):
@@ -64,7 +71,25 @@ def export_display_tables() -> None:
         "Rebuild with `python scripts/rebuild_final_publication_figures.py`. "
         "Per-panel input hashes and rendering definitions are in "
         "`figures/provenance/structure_restoration_20260908/` and "
-        "`scripts/credit_first_figures/build_restored_main.py`.\n")
+        "`figures/provenance/credit_clarity_20260908/`. Promoted capture, "
+        "coefficient and continuous-gate panels use already completed studies. "
+        "Exploratory coefficient comparisons remain distinct from primary "
+        "noisy-cue outcomes.\n")
+
+
+def record_render_environment() -> None:
+    """Record the executed rendering environment, separate from training."""
+    versions = {package: importlib.metadata.version(package)
+                for package in ("numpy", "pandas", "scipy", "matplotlib", "PyMuPDF")}
+    fonts = {}
+    for name in ("NimbusSans-Regular.otf", "NimbusSans-Bold.otf"):
+        path = Path("/usr/share/fonts/urw-base35") / name
+        fonts[name] = {"path": str(path), "sha256": sha256(path)}
+    output = ROOT / "figures/provenance/publication_render_environment.json"
+    output.write_text(json.dumps({
+        "python": sys.version, "packages": versions, "fonts": fonts,
+        "scope": "Executed figure rendering only; not an original training environment.",
+    }, indent=2) + "\n")
 
 
 def main() -> None:
@@ -79,9 +104,12 @@ def main() -> None:
     if not args.supplement_only:
         arguments = [] if args.no_emit_main else ["--emit-main"]
         run_script("credit_first_figures/build_restored_main.py", *arguments)
+        for script in FOCUSED_MAIN.values():
+            run_script(script, *arguments)
         export_display_tables()
     if not args.main_only:
         run_script("supplement_consolidation/build.py")
+    record_render_environment()
     from build_submission_bundle import MAIN_FIGURES, SUPPLEMENTARY_FIGURES, verify_figure_allowlist
     verify_figure_allowlist()
     for relative in MAIN_FIGURES + SUPPLEMENTARY_FIGURES:
