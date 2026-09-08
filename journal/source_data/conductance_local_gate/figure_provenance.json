@@ -1,6 +1,6 @@
 {
   "code_sha256": {
-    "scripts/conductance_local_gate/figure.py": "8b49e3d1910de138db4cb89b10f43baf0c68d4c88e2dffddf1acb9c748590990",
+    "scripts/conductance_local_gate/figure.py": "92bee36420eca64b8363f113717fe8a2a37505d8d36ad234af39dfc599fdc350",
     "scripts/conductance_local_gate/model.py": "cc2b82f6c486810a43aa885f3ea2dacce54c473f2e2ece6f4cfdb7d88ce6ad39",
     "scripts/conductance_local_gate/portable_contract.py": "fea35a393f5881dfc60b3dfe810dac64f8c2e6b0d8ba01937f4a42c5ffab3c05",
     "scripts/conductance_local_gate/report.py": "a96b4b6edd42c0d98de3da44a46c409310b463450369173be7371d503fa6dfef",
@@ -14,8 +14,8 @@
     "source_data/conductance_local_gate/figures/historical_cancellation_source.csv": "15938898c44c07bbbc5721ee727e9d54199c90e90ab8a298bb7109682dc69814",
     "source_data/conductance_local_gate/figures/local_gate_all_rates.pdf": "12cae121b5382452de95ca8731cd7c5626183cb7d787d306414b96e74abd84db",
     "source_data/conductance_local_gate/figures/local_gate_all_rates.png": "27417615ad42cf1a4e594b0be5804a2e91973c4726a7dc429bb609adb74409b8",
-    "source_data/conductance_local_gate/figures/local_gate_primary.pdf": "3ac7372158f103635d994902b45d990662dc80b125bfb0b519ea778e33157dcf",
-    "source_data/conductance_local_gate/figures/local_gate_primary.png": "0b0c1fa02880c27c2f9f546d6827e27991c25f5ab20dce15ffb5a270d89f5d30",
+    "source_data/conductance_local_gate/figures/local_gate_primary.pdf": "6cb5f45f465a8180d83a183e74af0bc762973526ef2b156f10488ef08d80b32d",
+    "source_data/conductance_local_gate/figures/local_gate_primary.png": "492ddac002cf373d9dbc28a8982413434253ab59e76189ce0159b046b6710dc2",
     "source_data/conductance_local_gate/figures/teacher_tuning_source.csv": "26b9ebc985bc662465c9a03af5a9197f54d8443383f44090121ddcf24c4c3086"
   },
   "fresh_seeds": [
@@ -74,18 +74,14 @@
     "source_data/conductance_local_gate/summaries/paired_seed_contrasts.csv": "07fa32c5b4cc10ea5f47f683662753d22c08f3b17e767d044af4a9e0e2554d22"
   },
   "native_canvas": {
-    "height_pt": 484,
-    "layout_findings": [
-      "TEXT-ON-DATA 'calibrated\\nbroadcast'"
-    ],
+    "height_pt": 490,
+    "layout_findings": [],
     "rows_pt": [
-      136,
-      112,
-      112
+      134,
+      108,
+      108
     ],
-    "strict_audit_violations": [
-      "[row-alignment] row 1: panels spanning 6 modules differ in axes-box width by 3.5 pt (C=198.7, D=202.2); a width difference must be a whole module span"
-    ]
+    "strict_audit_violations": []
   },
   "panel_sources": {
     "main_5A": {
@@ -240,7 +236,7 @@
   "protocol_sha256": "c441998f6f91e1f8782b2918689806e119af567e479bcd5c94069dca837a2413",
   "scope": "Current figure-only rendering; frozen protocol and numerical summary bytes unchanged. Initial numerical audit retains its historical render hashes.",
   "source_sha256": {
-    "scripts/conductance_local_gate/figure.py": "8b49e3d1910de138db4cb89b10f43baf0c68d4c88e2dffddf1acb9c748590990",
+    "scripts/conductance_local_gate/figure.py": "92bee36420eca64b8363f113717fe8a2a37505d8d36ad234af39dfc599fdc350",
     "scripts/conductance_local_gate/model.py": "cc2b82f6c486810a43aa885f3ea2dacce54c473f2e2ece6f4cfdb7d88ce6ad39",
     "scripts/conductance_local_gate/portable_contract.py": "fea35a393f5881dfc60b3dfe810dac64f8c2e6b0d8ba01937f4a42c5ffab3c05",
     "scripts/conductance_local_gate/report.py": "a96b4b6edd42c0d98de3da44a46c409310b463450369173be7371d503fa6dfef",

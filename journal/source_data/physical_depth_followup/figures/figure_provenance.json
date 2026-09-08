@@ -1,20 +1,129 @@
 {
   "all_original_outcomes_preserved": true,
-  "builder_sha256": "c4f89d0fc4b57a39a65abaef24e24dcc0870664f4e91e0fb9904d1c2ecc68cd2",
-  "figure_sha256": "899a303e5d53eb68b6e6b10c80dc09ca120781382f3965e3bf098237f1fcc561",
+  "builder_sha256": "4963e67396a8e0816e8db4966b57e2b1965c8de072f1d9a559cda850bd7c9620",
+  "figure_sha256": "c296ce3b837e3c8d88d76166c7a25f3d4158cbf581400502a8c090927d59662c",
+  "layout": {
+    "canvas_pt": [
+      518.4,
+      492.0
+    ],
+    "layout_findings": [],
+    "panels": "A3 B4 C5 | D4 E4 F4 | G4 H4 I4",
+    "rows_pt": [
+      117,
+      108,
+      108
+    ]
+  },
   "new_training_runs": 0,
   "panel_map": {
-    "A": "Task/input routing schematic:gain groups4/2/1,modules4/2/2;D1[8]versusD3[2,1,2],64somata,eightnonsomatic compartments per soma,matched contacts and trainable resources. Drawings abbreviate contact fields,not exact analytic cancellation.",
-    "B": "Validation-selected testaccuracy trajectories,D1exactBP andD3exactBP/exactLocalCA/sharedLocalCA,with pointwise95percent whole-seed intervals.",
-    "C": "Paired D3exactLocalCA\u2212sharedLocalCA testaccuracy gap in percentage points,pointwise95percent intervals;180/486/600 means marked.",
-    "D": "Allsix condition means of bestvalidationloss;stoppedD1runs carried forward;sharedLocalCA andmatched-broadcastLocalCA drawn separately with jointlegend.",
-    "E": "Paired D3exactLocalCA\u2212sharedLocalCA testcross-entropy gap,pointwise95percent intervals;negative means exact lower loss."
+    "A": "Schematic (task_card): eight excitatory input slots under three bracket tiers (global x1, coarse x2, fine x4), one inhibitory sensor contact per tier reporting h, alignment alpha badge, x_E = m h_f h_c h_g. No measured data.",
+    "B": "Schematic: D1 [8] one fan versus D3 [2,1,2] three serial stages (hero card), inhibitory sensors on every incoming segment tagged all tiers (D1) and global/coarse/fine per stage (D3), excitatory contacts on the distal compartments, output y, somatic error delta_0; contacts and parameters matched. Masks describe the three-tier cohort of D-I.",
+    "C": "Four-tier factorial (seeds 10400-10409, 180 epochs): 180-epoch test accuracy versus physical depth D1-D4 for aligned exact BP (reference), exact-path LocalCA, shared-soma LocalCA, grouped point, raw additive and reversed placement (Source Data regime rewired_tree); means with 95% bootstrap intervals; printed D4 - D3 exact-BP contrast.",
+    "D": "Alignment dose (three-tier task, seeds 10200-10209, 180 epochs): exact-BP test accuracy versus alpha for D1/D2/D3 with 95% intervals; printed paired D3 - D1 gains (pp) and positive-pair counts from paired_contrasts.csv.",
+    "E": "Validation-selected test accuracy trajectories to 600 epochs: D1 exact BP, D3 exact BP, D3 exact-path LocalCA, D3 shared-soma LocalCA; 12% bands are pointwise 95% whole-seed intervals; the exact-path/shared-soma crossing epoch is marked.",
+    "F": "Validation-selected test accuracy at the 180 and 600 budgets for the six conditions grouped by recipe: seed dots (open = broadcast autograd), white-faced means with 95% intervals, connectors per condition; D1 early-stop count.",
+    "G": "Paired D3 exact-path minus shared-soma test-accuracy gap (pp) with pointwise 95% intervals; marked means at 180, 486 and 600; first negative epoch 312; negative-seed count at 600.",
+    "H": "Paired exact-path minus shared-soma test cross-entropy gap with pointwise 95% intervals; marked means at 180, 315 and 600; negative throughout.",
+    "I": "Best validation loss trajectories for the six conditions (stopped D1 runs carried forward; open markers at the eight D1 stop epochs); recipe clusters bracketed at 600."
   },
-  "scope": "Post-review trajectory analysis;10paired seeds,all50D3fitsreach600 and8/10D1stopbefore600. CIs pointwise descriptive,not simultaneous. Original main6 PDF retained in this directory parent; original180plot remainsS31.",
+  "printed_numbers": {
+    "C": [
+      "D4 \u2212 D3: \u22121.46 pp",
+      "(0/10 positive)"
+    ],
+    "D": [
+      "+0.02",
+      "+0.21",
+      "+0.82",
+      "+3.13",
+      "+30.86"
+    ],
+    "E": {
+      "crossing_epoch": 312,
+      "exact_path_accuracy_at_crossing": 91.3839989900589
+    },
+    "F": {
+      "d1_stopped_before600": 8
+    },
+    "G": {
+      "crossing": 312,
+      "lowest": 486,
+      "marks": {
+        "180": "+10.86",
+        "486": "\u22122.94",
+        "600": "\u22121.52"
+      },
+      "negative_seeds_600": 10
+    },
+    "H": {
+      "180": "\u22120.073",
+      "315": "\u22120.052",
+      "600": "\u22120.021"
+    },
+    "I": {
+      "broadcast_autograd_bp_recipe_D3": 0.1639618492102623,
+      "broadcast_autograd_localca_recipe_D3": 0.27548174900770184,
+      "exact_autograd_bp_recipe_D1": 0.6543575572013854,
+      "exact_autograd_bp_recipe_D3": 0.09220496290683745,
+      "path_transport_D3": 0.25400826455354697,
+      "per_soma_shared_D3": 0.27520343431234356
+    }
+  },
+  "schematics": {
+    "A": {
+      "slots": 8,
+      "tiers": {
+        "coarse": 2,
+        "fine": 4,
+        "global": 1
+      }
+    },
+    "B": {
+      "D1": {
+        "compartments": 8,
+        "height_pt": 40.0,
+        "stages": [
+          8
+        ],
+        "tree_width_pt": 38.0
+      },
+      "D3": {
+        "compartments": 8,
+        "height_pt": 60.0,
+        "stages": [
+          2,
+          1,
+          2
+        ],
+        "tree_width_pt": 26.8
+      }
+    }
+  },
+  "scope": "Figure overhaul 2026-09-08 (DESIGN_SPEC section 6). Nine panels: task and stage schematics (A, B), the four-tier depth factorial at 180 epochs (C), the three-tier alignment dose (D) and the 600-epoch budget follow-up (E-I). No new training; every printed number is replayed from frozen Source Data and re-checked against the independent summary tables. CIs are pointwise descriptive whole-seed bootstrap intervals, not simultaneous bands. Original main6 PDF retained in the parent directory; the 180-epoch plot remains S31.",
   "sources_sha256": {
+    "scripts/credit_tree_schematics.py": "ebd31b5ccc86b00bb27a236af210eb2a1d1820e9fcec27b57283a12224158cbe",
+    "scripts/figure_canvas.py": "d8ce8f435cd727e8860da6d1a554fbfd3e1756a1cb18ea7b3602aa00347f52fd",
+    "scripts/journal_style.py": "d31c604f3d813463784fd1a4aa9ea64b93bd7ca32c1cb43617f031a4d6d2f0e0",
+    "scripts/native_schematics.py": "edd5694b7b530b82ddd33b193b74e4a175846981583ef575355dacff27cfec11",
+    "scripts/physical_depth_followup/figure.py": "4963e67396a8e0816e8db4966b57e2b1965c8de072f1d9a559cda850bd7c9620",
+    "source_data/physical_alignment_dose/audit.json": "1cf3efee200a204c8a95f65246b1787ec33265e76d86a743bc53580036352dab",
+    "source_data/physical_alignment_dose/combined_seed_outcomes.csv": "f1ac65dc5d5ff294e3562636d55092f40b6f26f5e59f98979c339a525a1d032d",
+    "source_data/physical_alignment_dose/condition_summary.csv": "4f158992f3a492951741a06e83dc190600df0ca9da21e883884984e6c210dc78",
+    "source_data/physical_alignment_dose/paired_contrasts.csv": "a0458f1c7160a4e380a026ebbeac8609ab07e39da4853540351b59b6ac6b2a32",
+    "source_data/physical_depth_budget/canonical/extension_endpoints.csv": "00c2afec2bef483f19d7392bb1a10ecc306a404433d011f376c93ede181c602f",
+    "source_data/physical_depth_budget/canonical/extension_loss_contrasts.csv": "4925b04bff049b9fc3971387543a98cef15cb416a2b93086d13bc8b89070760d",
+    "source_data/physical_depth_budget/canonical/extension_paired_seed_contrasts.csv": "decc42d1770a81fd2cfb9af044524134e65ac6e626abee929eaefb2510f49683",
     "source_data/physical_depth_budget/canonical/extension_protocol.json": "ba1ef873973a13a63bf669cce2949034cbce010c2da810722534f1b2c3520e07",
+    "source_data/physical_depth_budget/canonical/extension_summary.csv": "d6cbc16391d10c7edf9bf432946662739b97116819b4c3928b77e52760ee7901",
     "source_data/physical_depth_followup/analysis_validation.json": "9efd3952ede79fc983ab7c2e3a895cd9a04fab4f3e2ea04724ba4bc75f7c757d",
     "source_data/physical_depth_followup/condition_trajectory_summary.csv": "8171e8088c37ae607efd3afb8bd58c7544d6e8cfc8a221f329e2b0d7dc0d869f",
-    "source_data/physical_depth_followup/paired_trajectory_summary.csv": "05786841eb50eb631704a0d72374600de8900db6fb61f440b74eecaf810630a0"
+    "source_data/physical_depth_followup/paired_trajectory_summary.csv": "05786841eb50eb631704a0d72374600de8900db6fb61f440b74eecaf810630a0",
+    "source_data/physical_depth_followup/stopping_by_seed.csv": "6acf0fa6798f01167529f7434e1d40b087afbeba518fc6eb58fc73a92a2e3da5",
+    "source_data/physical_depth_followup/validation_selected_seed_trajectories.csv": "d44c6216556425a118f4b0dc22de3dc823345accb18e727b754cca95281392d4",
+    "source_data/physical_depth_h4_factorial/audit.json": "801df155c8378272a86a1eb1168082073ee894d2aee6124dd75e6e0cbd8741db",
+    "source_data/physical_depth_h4_factorial/condition_summary.csv": "565616a01d0bb8a1856e68b6fee43ed4a878773ea99eecd429739b7ba65d056f",
+    "source_data/physical_depth_h4_factorial/paired_contrasts.csv": "1463906b2633012954a870cf67d41dbdab2e35b6c7513098bc6021fa67750f30",
+    "source_data/physical_depth_h4_factorial/seed_outcomes.csv": "3096b4ee6ebceb96248d962677ffbf4001d63615e1b296e68a40a7f753a66f55"
   }
 }
