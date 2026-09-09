@@ -49,7 +49,8 @@ the nine builders run unchanged; what the names *mean* changed as follows.
    a carmine well clear of ``bp``.  ``ORDINAL_RAMP`` is new and non-grey (the
    grey ramp collided with the grey ``point_mlp`` control series);
    ``K_CYCLE`` names the four-hue subtree-address cycle.
-   :func:`palette_gate` runs at import and raises on a regression;
+   :func:`palette_gate` runs at from pathlib import Path
+import and raises on a regression;
    :func:`palette_report` returns the whole matrix.  The gate passes with no
    exemptions, and the five pairs the review measured as failures now read
    (ΔE·100 normal / worst-CVD): shunting-dend 5.9 -> 17.3 / 10.4, bp-inh
@@ -93,6 +94,46 @@ SANS_PREFERENCE = (
     "FreeSans", "Helvetica LT Std", "Albany AMT",
 )
 FALLBACK_SANS = "DejaVu Sans"
+
+
+#: TrueType conversions of the URW Nimbus Sans faces shipped with the
+#: journal (figures/fonts/*.ttf, made from /usr/share/fonts/urw-base35 with
+#: fontTools cu2qu on 2026-09-09).  The system files are OpenType CFF; with
+#: pdf.fonttype 42 matplotlib then declares a TrueType program but embeds a
+#: CFF one, which poppler reports as "Mismatch between font type and embedded
+#: font file".  Registering these TTFs and hiding the CFF originals gives a
+#: genuine Type 42 embedding with the same metrics and glyph names.
+from pathlib import Path as _Path  # noqa: E402
+REPO_FONT_DIR = _Path(__file__).resolve().parent.parent / "figures" / "fonts"
+
+
+def _register_repo_fonts():
+    """Add the repository TrueType faces and hide their CFF twins."""
+    try:
+        from matplotlib import font_manager
+    except Exception:                                    # pragma: no cover
+        return []
+    added = []
+    for ttf in sorted(REPO_FONT_DIR.glob("*.ttf")):
+        try:
+            font_manager.fontManager.addfont(str(ttf))
+            added.append(str(ttf))
+        except Exception:                                # pragma: no cover
+            continue
+    if added:
+        added_names = {font_manager.FontProperties(fname=f).get_name() for f in added}
+        keep = []
+        for entry in font_manager.fontManager.ttflist:
+            same_family = entry.name in added_names
+            is_cff = entry.fname.lower().endswith((".otf", ".t1", ".pfb", ".afm"))
+            if same_family and is_cff:
+                continue
+            keep.append(entry)
+        font_manager.fontManager.ttflist = keep
+    return added
+
+
+REPO_FONTS = _register_repo_fonts()
 
 
 def _installed_sans():
