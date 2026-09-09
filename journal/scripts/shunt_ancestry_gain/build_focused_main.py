@@ -385,15 +385,16 @@ def panel_interventions(ax):
         core = f.task_card(cell, title=title, footer="soma V restored",
                            emphasis=hero, tone=None if hero else "control")
         body = Frame.inset(core, left=0.07, right=0.07, top=0.02)
-        # 9 pt under the soma for the two arrows, 20 pt over the canopy for
-        # the two-line intervention tag: both cards keep identical geometry.
-        body = (body[0], body[1] + f.fy(9.0), body[2],
-                body[3] - f.fy(9.0 + 20.0))
+        # 12 pt under the soma for the two arrows and the delta0 tag, 20 pt
+        # over the canopy for the two-line intervention tag: both cards keep
+        # identical geometry.
+        body = (body[0], body[1] + f.fy(12.0), body[2],
+                body[3] - f.fy(12.0 + 20.0))
         nodes = f.balanced_tree(body, depth=3, trunk=False, mode="forward",
                                 output="z")
         site = _lerp(nodes["JL"], nodes["JLL"], 0.80)
         tag_y = body[1] + body[3] + f.fy(6.5)
-        line_y = tag_y + f.fy(8.5)
+        line_y = tag_y + f.fy(10.0)
         if hero:
             f.shunt(site, label=None)
             f.subscript((site[0] - f.fx(2.2), site[1] - f.fy(4.2)),
@@ -475,7 +476,7 @@ def panel_gain_dictionary(ax, gains):
     for index, (node, text, hue) in enumerate((
             (order[1], "sister blocks (3)", BLOCK_SIS),
             (path[0], "soma side", BLOCK_SOMA))):
-        y_tag = f.fy(band + key_pt - 5.0 - 9.0 * index)
+        y_tag = f.fy(band + key_pt - 9.5 - 9.0 * index)
         f.text((0.0, y_tag), text, size=PT_BASE, color=label_color(hue),
                ha="left", va="center")
         f.leader((f.fx(58.0), y_tag), (anchors[node][0], anchors[node][1]),
@@ -500,8 +501,8 @@ def panel_gain_dictionary(ax, gains):
     eta = np.asarray([gains["gain"][node] for node in order])
     hues = [BLOCK_DESC, BLOCK_SIS, BLOCK_SIS, BLOCK_SIS, BLOCK_SOMA]
 
-    _formula(f, (0.46, top), ["q\u2032 = diag(h) B \u03b7"], size=PT_BASE,
-             ha="left")
+    _formula(f, (1.0, top), ["q\u2032 = diag(h) B \u03b7"], size=PT_BASE,
+             ha="right")
     f.text((1.0, top - f.fy(9.5)), "h = baseline transfer", size=PT_BASE,
            color=MUTE, ha="right", va="center")
     prod_rect = (0.46, f.fy(band + 20.0), 0.40,
@@ -526,9 +527,9 @@ def panel_gain_dictionary(ax, gains):
     gamma_y = y_top + f.fy(7.0)
     f.subscript((x_right - f.fx(0.5), gamma_y), "\u0393", "u", size=PT_BASE,
                 color=INK, ha="right", va="center")
-    f.text((0.46, y_bottom - f.fy(11.0)),
+    f.text((1.0, y_bottom - f.fy(23.0)),
            f"\u03ba = {gains['kappa']:.3f}; identity residual 1e\u221217",
-           size=PT_BASE, color=MUTE, ha="left", va="top")
+           size=PT_BASE, color=MUTE, ha="right", va="top")
     f.require_soma_lowest()
     f.require_delta0()
     return ax
@@ -666,6 +667,9 @@ def panel_adjoint(ax, shapley):
                                    "′ = post-shunt")):
         ax.text(-0.52, 0.150 - 0.022 * offset, line, fontsize=PT_BASE,
                 color=MUTE, ha="left", va="center", zorder=6)
+    for offset, line in enumerate(("substitution, not", "a decomposition")):
+        ax.text(-0.52, 0.196 - 0.022 * offset, line, fontsize=PT_BASE,
+                color=MUTE, ha="left", va="center", zorder=6)
     ax.text(0.985, 0.008, "shared y with D", transform=ax.transAxes,
             ha="right", va="bottom", fontsize=PT_BASE, color=MUTE, zorder=6)
     return ax
@@ -746,7 +750,7 @@ def panel_state(ax, physical, ranges):
     """Shunt-minus-injection contrast against membrane resistance."""
     ax.set_xscale("log")
     ax.set_xlim(240.0, 40000.0)
-    ax.set_ylim(-0.008, 0.098)
+    ax.set_ylim(-0.030, 0.098)
     drops = {}
     for cohort, label, marker, filled in COHORTS:
         points = physical[cohort]
@@ -762,10 +766,12 @@ def panel_state(ax, physical, ranges):
         by_rm = {int(p[0]): p[1] for p in points}
         drops[cohort] = abs(by_rm[300] / by_rm[15000])
     reference_line(ax, 0.0, axis="y", label=None)
-    ax.text(262.0, -0.0036, "no contrast", fontsize=PT_BASE, color=MUTE,
+    ax.text(262.0, -0.0055, "no contrast", fontsize=PT_BASE, color=MUTE,
             ha="left", va="center", zorder=6)
+    # 10,000 keeps its major tick but loses its label: at 99.8 pt of axes the
+    # "10,000" and "30,000" strings abut (62.1--83.5 pt against 83.5--104.9).
     ax.set_xticks((300, 1000, 3000, 10000, 30000),
-                  ("300", "1,000", "3,000", "10,000", "30,000"))
+                  ("300", "1,000", "3,000", "", "30,000"))
     ax.set_yticks((0.0, 0.02, 0.04, 0.06, 0.08),
                   ("0", "0.02", "0.04", "0.06", "0.08"))
     ax.tick_params(labelsize=PT_BASE, pad=0.8, length=2.0)
@@ -773,25 +779,30 @@ def panel_state(ax, physical, ranges):
     ax.set_xlabel("membrane resistance (\u03a9 cm\u00b2)", fontsize=PT_EMPH,
                   color=INK, labelpad=0.5)
     ax.set_ylabel(CONTRAST_LABEL, fontsize=PT_EMPH, color=INK, labelpad=0.5)
-    ax.text(0.11, 0.882, "Disjoint, 45 cells", transform=ax.transAxes,
-            fontsize=PT_BASE, color=INK, ha="left", va="center", zorder=6)
-    ax.text(0.15, 0.725, "Initial, 8 cells", transform=ax.transAxes,
-            fontsize=PT_BASE, color=INK, ha="left", va="center", zorder=6)
+    # cohort key: shape and fill carry the cohort (DECISIONS, Figure 8), and
+    # each cohort's median axial/leak range rides under its own name so the
+    # ratio is an annotation and never a second abscissa (PLAN 0.6)
+    block = ((COHORTS[1][1], ranges["v661_disjoint"], INK, 0.950, 0.876),
+             (COHORTS[0][1], ranges["original_eight"], INK, 0.796, 0.722))
+    for text, (rlo, rhi), colour, y_name, y_range in block:
+        ax.text(0.995, y_name, text, transform=ax.transAxes, fontsize=PT_BASE,
+                color=colour, ha="right", va="center", zorder=6)
+        ax.text(0.995, y_range, f"axial/leak {rlo:.1f}\u2013{rhi:.0f}",
+                transform=ax.transAxes, fontsize=PT_BASE, color=MUTE,
+                ha="right", va="center", zorder=6)
     smallest = min(drops.values())
-    ax.text(0.99, 0.968, f"\u2265 {np.floor(smallest):.0f}\u00d7 from 300 "
-                         "to 15,000", transform=ax.transAxes,
-            fontsize=PT_BASE, color=INK, ha="right", va="center", zorder=6)
+    ax.text(0.005, 0.045, f"\u2265 {np.floor(smallest):.0f}\u00d7 from 300 "
+                          "to 15,000", transform=ax.transAxes,
+            fontsize=PT_BASE, color=INK, ha="left", va="center", zorder=6)
 
-    inset = ax.inset_axes([0.62, 0.40, 0.36, 0.48])
+    inset = ax.inset_axes([0.60, 0.28, 0.38, 0.30])
     inset.set_xscale("log")
     inset.set_xlim(2400.0, 40000.0)
     inset.set_ylim(-0.0062, 0.0082)
-    for spine in ("top", "right"):
-        inset.spines[spine].set_visible(False)
-    for spine in ("left", "bottom"):
-        inset.spines[spine].set_visible(True)
-        inset.spines[spine].set_linewidth(LW_EDGE)
-        inset.spines[spine].set_color(EDGE)
+    for spine in inset.spines.values():
+        spine.set_visible(True)
+        spine.set_linewidth(LW_EDGE)
+        spine.set_color(EDGE)
     inset.set_facecolor("white")
     inset.patch.set_alpha(1.0)
     for cohort, _label, marker, filled in COHORTS:
@@ -810,11 +821,14 @@ def panel_state(ax, physical, ranges):
     inset.axhline(0.0, color=MUTE, lw=LW_REF, dashes=(2.2, 1.8), zorder=1)
     inset.set_xticks((3000, 30000), ("3,000", "30,000"))
     inset.minorticks_off()
-    inset.set_yticks((-0.005, 0.0, 0.005), ("\u22120.005", "0", "0.005"))
+    # the inset sits over the region it magnifies, so its abscissa labels go
+    # on top: below the frame they would land on the 45-cell 15,000 marker
+    inset.set_yticks((0.0, 0.005), ("0", "0.005"))
     inset.tick_params(labelsize=PT_BASE, pad=1.2, length=1.8,
-                      width=LW_EDGE, color=EDGE, labelcolor=INK)
-    # the inset's source region, marked on the main axes (no crossing leader:
-    # the inset's own x tick labels occupy the diagonal a leader would take)
+                      width=LW_EDGE, color=EDGE, labelcolor=INK,
+                      labelbottom=False, labeltop=True, bottom=False,
+                      top=True)
+    # the magnified window, marked on the main axes directly under the inset
     ax.plot([2400, 40000, 40000, 2400, 2400],
             [-0.0062, -0.0062, 0.0082, 0.0082, -0.0062], color=MUTE,
             lw=LW_HAIR, zorder=1.4, solid_capstyle="butt")
@@ -846,7 +860,7 @@ def panel_background(ax, sel, per_cell):
                 zorder=6)
     ax.set_xticks(x, ("0", "1", "4"))
     ax.set_xlim(-0.5, 2.5)
-    ax.set_ylim(-0.075, 0.325)
+    ax.set_ylim(-0.075, 0.365)
     ax.set_yticks((0.0, 0.1, 0.2, 0.3), ("0", "0.1", "0.2", "0.3"))
     ax.tick_params(labelsize=PT_BASE, pad=0.8, length=2.0)
     ax.set_xlabel("background leak (\u00d7 baseline)", fontsize=PT_EMPH,

@@ -1,7 +1,7 @@
 {
   "figure": "Figure 8",
   "output": "figures/components/focused_main_08.pdf",
-  "output_sha256": "731ffe09359661a639adeec199e19512c544fa1f4948624623e308af82444943",
+  "output_sha256": "4fa76e5668de719b5bc820208c445cdb1f5e4f897a933be06f0a8cd4e0505276",
   "plotted_table": "source_data/curated_publication/figure_08_plotted.csv",
   "plotted_table_sha256": "4d49dfddae3f5e27a390a8afbcfe38d8f75aa6cd8755d6016ebc476365223676",
   "panel_sources": {
@@ -32,7 +32,7 @@
     "source_data/focal_selectivity_phase1/summary.json": "de17bb5e8363ef52ff2be8cf74f150ae9bb1f34026a94afdf624162fa9b88d6c"
   },
   "builders_sha256": {
-    "scripts/shunt_ancestry_gain/build_focused_main.py": "f1a530dddb610de905889c5aad7b2c2f4c136a1ff2482aeda912234832042dd5",
+    "scripts/shunt_ancestry_gain/build_focused_main.py": "7158b2795906ed988e7de891fe348878acb9dd395a9eef41b2a1bd9590a1ad60",
     "scripts/shunt_ancestry_gain/build_figure.py": "ace3791786d34c8b234b46743fd527b0ede99ff262064fd1067dcfd6616a70d0",
     "scripts/build_main_figure_07.py": "8dd526d60d35b572a17a68c77c1813279756251052d4921471d77c3fb16b885e",
     "scripts/build_main_figure_08.py": "f9960d1b058bfef5486e436ef511fbcb98e751a3fe515587be6929b1d7305cc5",

@@ -761,10 +761,27 @@ def panel_c(ax, arb, field, scale):
                 break
             cursor = par
     f.fade(list(faded))
+    # the addressed subtree, marked with the same 16 % shunting capsule A uses
+    # (the FADE tint is LIGHTER than the ghost tree, so attenuation alone
+    # leaves the reader no way to see WHICH descendants the shunt reaches)
+    chain = []
+    for site in support:
+        cursor = int(site)
+        while cursor in xy:
+            chain.append(cursor)
+            if cursor == ROUTE_SITE:
+                break
+            cursor = parent.get(cursor, -1)
+    tint_patch(f.ax, ("ribbon", [[xy[s] for s in sorted(set(chain))]], 6.0),
+               color="shunting", pct=16, radius_pt=2.0, zorder=1.0,
+               clip_on=False)
     shunt_xy = xy[ROUTE_SITE]
     f.shunt(shunt_xy, label=None)
-    badge_xy = (shunt_xy[0] - f.fx(26.0), shunt_xy[1] + f.fy(9.0))
-    f.leader(shunt_xy, (badge_xy[0] + f.fx(12.0), badge_xy[1]))
+    badge_w = text_w_pt(f.ax, "g", PT_BASE) + text_w_pt(f.ax, "shunt", PT_BASE)
+    badge_xy = (max(core[0] + f.fx(1.0), shunt_xy[0] - f.fx(badge_w + 20.0)),
+                shunt_xy[1] + f.fy(13.5))
+    f.leader((badge_xy[0] + f.fx(badge_w + 2.5), badge_xy[1] - f.fy(0.5)),
+             (shunt_xy[0] - f.fx(1.8), shunt_xy[1] + f.fy(1.8)))
     f.subscript((badge_xy[0], badge_xy[1]), "g", "shunt", size=PT_BASE,
                 color=COLORS["inh"], ha="left")
     f.soma(soma, output=8.0, label="z", zorder=6)
@@ -788,9 +805,20 @@ def panel_c(ax, arb, field, scale):
              (sx + (sister + 0.5) * strip_w / 8.0, sy - f.fy(3.5)))
     f.text((sx + strip_w, sy - f.fy(4.5)), "sister block", size=PT_BASE,
            color=COLORS["mute"], ha="right", va="top")
-    f.subscript((core[0] + core[2] / 2.0,
-                 core[1] + f.fy(foot_pt + strip_pt + form_pt * 0.45)),
-                "C = |P t|²", "W", " ÷ |t|²", size=PT_EMPH, ha="center")
+    # C = |P t|^2_W / |t|^2_W -- BOTH norms are W-weighted, so the equation
+    # is set as two chained subscript tokens (Frame.subscript carries one
+    # subscript per call and mathtext is banned by CF-2)
+    eq_y = core[1] + f.fy(foot_pt + strip_pt + form_pt * 0.45)
+    lead, tail = "C = |P t|²", "|t|²"
+    w_lead = (text_w_pt(f.ax, lead, PT_EMPH) + 0.4
+              + text_w_pt(f.ax, "W", PT_BASE) + 0.6
+              + text_w_pt(f.ax, " ÷ ", PT_EMPH))
+    w_tail = text_w_pt(f.ax, tail, PT_EMPH) + 0.4 + text_w_pt(f.ax, "W",
+                                                              PT_BASE)
+    eq_x = core[0] + core[2] / 2.0 - f.fx((w_lead + w_tail) / 2.0)
+    f.subscript((eq_x, eq_y), lead, "W", " ÷ ", size=PT_EMPH, ha="left")
+    f.subscript((eq_x + f.fx(w_lead), eq_y), tail, "W", size=PT_EMPH,
+                ha="left")
     f.note("soma-below", panel="C", below=n_below, segments=len(xy),
            reason="see panel A")
     f.require_soma_lowest()
@@ -1188,7 +1216,8 @@ def panel_h(ax, tables, inclusion):
         f"{len(eligible)} of {int(inclusion.inherited_qc_included.sum())} "
         "cells",
         "one mouse per cohort; n = 8, 47, 8 cells",
-        "random routes outrank depth bins in D",
+        "random routes outrank depth bins in the initial and Pinky "
+        "cohorts (D)",
     ]
     width = ax.get_position().width * 518.4
     block = "\n".join(wrap_pt(ax, line, PT_BASE, width) for line in lines)
