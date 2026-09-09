@@ -1,18 +1,18 @@
 {
   "panel_sources": {
     "A": "Schematic: MNIST inputs at excitatory contacts of 128 trees, readout and loss, neuronal error delta_u returning as the somatic error delta_0 to every soma; eligibility x delivered credit (main.tex Eqs. factorization, dendriticlocalrule). No measured data.",
-    "B": "Schematic: three deliveries on one generic depth-3 tree (layer scalar bus spanning a ghost neighbour, per-neuron bus sourced at the soma, exact path chain with alpha tags; Eq. pathgain). The MNIST model has two path factors. No measured data.",
-    "C": "Actual 12 nonsomatic sites: three proximal sites and nine distal children, soma outside the basis. K1 (ones), K3 (subtree indicators, rows in subtree order), K12 (identity). K1/K3 projected rules take oracle coefficients from the exact field (badge); the per-neuron rule uses the same all-ones profile with delta_u.",
+    "B": "Schematic: three deliveries on one generic depth-3 tree, each card stating the somatic error entry delta_0 (layer scalar bus spanning a ghost neighbour with the source dot outside both trees, per-neuron bus sourced at the soma, exact path chain with alpha tags; Eq. pathgain). The MNIST model has two path factors. No measured data.",
+    "C": "Actual 12 nonsomatic sites: three proximal sites and nine distal children, soma outside the basis (drawn soma-at-left so each site occupies its own matrix row). K1 (ones), K3 (subtree indicators, rows in subtree order), K12 (identity). K1/K3 projected rules take oracle coefficients from the exact field (badge); the per-neuron rule uses the same all-ones profile with delta_u.",
     "D": "Complete six-arm fresh MNIST selected-rate cohort: 10 paired seeds per architecture; 180 epochs; validation-selected checkpoint. The printed tag is the paired per-neuron minus layer-scalar contrast (shunting / additive). Decoder-only core remains fixed.",
-    "E": "Per-neuron minus scalar (pp) in four separately trained cohorts: fresh MNIST (10 seeds), legacy DFA MNIST (15 seeds), Fashion-MNIST with the matched-width scalar fallback (10 seeds), flattened CIFAR-10 additive [3,3,3,3] (20 seeds). Cohorts are not one ladder.",
+    "E": "Per-neuron minus scalar (pp), means with paired 95% bootstrap intervals, in four separately trained cohorts: fresh MNIST (10 seeds), legacy DFA MNIST (15 seeds), Fashion-MNIST with the matched-width scalar fallback (10 seeds), flattened CIFAR-10 additive [3,3,3,3] (20 seeds). Cohorts are not one ladder.",
     "F": "Exact path minus per-neuron (pp) in the same four cohorts and rows as E; the printed note gives the fresh-cohort within-tree contrasts K3 minus projected K1 and exact minus K3 (shunting / additive).",
     "G": "Mean voltage-coordinate capture of D's trained exact-path fields by the K1/K3/K12 dictionaries of C; fresh cohort, trained checkpoints, 10 seeds per architecture."
   },
   "source_sha256": {
-    "scripts/credit_first_figures/build_framework.py": "9731e128e6a6cc55abb1e7ed1369640b3ffbe6f01a6e8262b77a673477340807",
-    "scripts/figure_canvas.py": "d8ce8f435cd727e8860da6d1a554fbfd3e1756a1cb18ea7b3602aa00347f52fd",
-    "scripts/journal_style.py": "d31c604f3d813463784fd1a4aa9ea64b93bd7ca32c1cb43617f031a4d6d2f0e0",
-    "scripts/native_schematics.py": "edd5694b7b530b82ddd33b193b74e4a175846981583ef575355dacff27cfec11",
+    "scripts/credit_first_figures/build_framework.py": "09b08e407544d506d6a3c0520dc2b9026d1260f44a05b3bb6d86e5c109fbded7",
+    "scripts/figure_canvas.py": "de3f566dd08270535deab95eb798b49cc17ccf4dfbb88e7ebdb50860903a6ad1",
+    "scripts/journal_style.py": "35861bf56befbda6ee9e6a59866f3f7b3085959961155a9a10cee0f0fbfa0e38",
+    "scripts/native_schematics.py": "3e74a3b7ccbb993d9c131d6997aba30a1d81be7728f335937e3fa2e14aa754b1",
     "scripts/credit_tree_schematics.py": "ebd31b5ccc86b00bb27a236af210eb2a1d1820e9fcec27b57283a12224158cbe",
     "source_data/image_ladder_controls/summaries/condition_summary_six_rules.csv": "0259f1306809a5d93eac4a753dcef63712b553b0a639ea4e91d2667eac588bd5",
     "source_data/image_ladder_controls/summaries/fresh_analysis_rows_six_rules.csv": "1d7ea193b17aec9486e89625d71a4078a2ad9b2255d59b5052b618307f61b44c",
@@ -45,6 +45,6 @@
     "cifar10": 20
   },
   "fresh_seed_count_per_architecture": 10,
-  "normal_font_minimum_pt": 6.8,
+  "normal_font_minimum_pt": 7.0,
   "layout_findings": []
 }

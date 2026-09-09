@@ -53,12 +53,54 @@ per-figure hand tuning.  It runs automatically inside ``save()``; pass
 Two deliberate exemptions in the audit, both reported in the informational
 buckets rather than silently ignored:
 
-* strokes at least ``DECORATIVE_LW_PT`` (2.5 pt) wide are area marks drawn as
-  fat round-capped strokes (route capsules, bar-like rules), not line weights;
+* a path at least ``DECORATIVE_LW_PT`` (1.35 pt) wide is legal only when it is
+  a CLOSED FILLED path -- an area mark whose boundary happens to be stroked;
+  a fat open stroke is a violation (see the 2026-09-08 note below);
 * math glyphs shrink by 0.7 per sub/superscript level, and stretchy accents
   and delimiters (STIXSize* fonts) are scaled to the expression they cover,
   so ``token * 0.7**k`` sizes and STIXSize spans are legal type, not a second
   type scale.  ``strict=True`` removes the mathtext exemption.
+
+2026-09-08 spec upgrade
+-----------------------
+Implements §5 of ``analysis/figure_overhaul_20260908/review_20260908/
+FIGURE_REVIEW_20260908.md``.  Every public name still imports; the behaviour
+changes are:
+
+1. TYPE.  ``PT_TOKENS`` is now the three-value scale (7.0 / 8.0 / 9.0 bold)
+   that :mod:`journal_style` defines, with a hard 7.0 pt floor.  The audit
+   accepts only those three sizes (tolerance 0.05) and reports anything
+   smaller as ``text-floor`` as well as ``text-size``.  ``enforce_tokens``
+   snaps stray sizes onto the scale, so builders pinned to the old six tokens
+   still emit legal type.
+2. TYPEFACE.  A new ``font-family`` check fails the audit on any embedded
+   DejaVu / Bitstream Vera / STIX face (PyMuPDF ``page.get_fonts()``), which
+   is how a mathtext span or a missing glyph used to smuggle the matplotlib
+   default into a print PDF.
+3. STROKES.  ``DECORATIVE_LW_PT`` drops 2.5 -> 1.35 and the exemption now
+   applies only to closed filled paths, so route capsules and task capsules
+   have to be tint patches (:func:`journal_style.tint_patch`, re-exported
+   here as ``tint_patch``) rather than 6-13 pt strokes.
+4. LETTERS.  A panel letter's x is locked to its MODULE COLUMN origin minus a
+   fixed offset, at figure level, never to its own axes box; ``save()`` calls
+   :meth:`NativeCanvas.align_letters` unconditionally; the manifest carries
+   the letter grid and the audit checks that letters sharing a module column
+   share an x within ``ALIGN_TOL_PT``.
+5. FOREST.  :func:`forest` (also ``NativeCanvas.forest``) is the one idiom for
+   a category-vs-value panel: label centred on its row in a reserved gutter,
+   hairline tick or tint band, the seed fan always drawn, mean + interval,
+   a reference line with a right-aligned label and an n + interval tag.
+6. SCHEMATIC NOTES (added with the glyph-language upgrade of the same date).
+   ``manifest()`` now carries a ``schematic_notes`` list, gathered from the
+   ``_journal_schematic_notes`` a :class:`native_schematics.Frame` leaves on
+   its Axes: a declared δ0 exemption and its reason, a collapsed matrix, a
+   legacy tree orientation.  A rule that a panel is allowed to break has to
+   say so in the artwork's own manifest, so the record travels with the PDF.
+7. AUDITS.  Four new checks: ``letter-grid``, ``text-over-data`` (in-axis text
+   overlapping a data artist by more than ``TEXT_DATA_CLEAR_PT``),
+   ``role-colour`` (two registered role colours in one figure closer than
+   ``ROLE_DE_MIN`` in OKLab) and ``raster-dpi`` (any placed image under
+   ``RASTER_DPI_MIN``).
 """
 
 from __future__ import annotations
@@ -101,15 +143,32 @@ from journal_style import (  # noqa: F401 - re-exported for figure builders
     audit_text_over_data,
     wrap_ticklabels,
 )
+from journal_style import (  # noqa: F401 - 2026-09-08 spec upgrade re-exports
+    FORBIDDEN_FONT_MARKERS,
+    ORDINAL_RAMP,
+    PT_BASE,
+    PT_EMPH,
+    PT_FLOOR,
+    PT_LETTER,
+    SANS_FAMILY,
+    SANS_STACK,
+    TYPE_SCALE,
+    delta_e,
+    palette_report,
+    ribbon_path,
+    tint_patch,
+    tint_pct,
+)
 
 
 # ── the token set (the single source of truth for the audit) ─────────────
 CANVAS_W_PT = 72.0 * FIG_W                       # 518.4 pt, exactly
-PT_TOKENS = (PT_SMALL, PT_ANNOT, PT_LEGEND, PT_TICK, PT_LABEL, PT_TITLE,
-             PANEL_LABEL_PT)                     # 6.8 7.2 7.4 7.6 8.4 8.8 10.5
+PT_TOKENS = TYPE_SCALE                           # 7.0  8.0  9.0 (bold letter)
 LW_TOKENS = (LW_HAIR, LW_EDGE, LW_REF, LW_ERR, LW_DATA)  # .55 .7 .85 .95 1.25
 MODULE_COLS = 12
-DECORATIVE_LW_PT = 2.5      # at or above this a stroke is an area mark
+# 2026-09-08: an area mark is a FILL.  At or above this width a path is legal
+# only if it is closed and filled; a fat open stroke is a violation.
+DECORATIVE_LW_PT = 1.35
 PT_TOL = 0.05               # pt
 LW_TOL = 0.02               # pt
 MATH_SHRINK = 0.7           # matplotlib mathtext sub/superscript factor
@@ -169,11 +228,26 @@ LETTER_CLEAR_PT = 5.4       # letter top above the panel's topmost other ink
 LETTER_GAP_PT = 3.4         # letter right edge to the panel's leftmost ink
 LETTER_CAP_FRAC = 0.72      # cap height of the bold face, as a size fraction
 LETTER_HOME_PT = 6.0        # shared left edge of the row-leading letters
+# 2026-09-08: the letter's x is the MODULE COLUMN origin minus this offset,
+# computed at figure level.  Measuring against the panel's own ink is what
+# made two panels of one column carry letters 13-28 pt apart.
+# 16 pt clears the letter of its own panel's reserve on the right and of the
+# neighbour's slot edge on the left inside the standard 30 pt gutter; a canvas
+# with a narrower gutter gets ``hgutter - 12`` instead, chosen once per figure
+# so every column still uses ONE offset.
+LETTER_COL_DX_PT = 16.0
+LETTER_GUTTER_CLEAR_PT = 12.0
+LETTER_MIN_X_PT = 2.5       # never closer than this to the canvas edge
+
+# ── new-audit thresholds (2026-09-08) ────────────────────────────────────
+TEXT_DATA_CLEAR_PT = 0.3    # in-axis text may not bite this far into a datum
+ROLE_DE_MIN = 15.0          # OKLab ΔE·100 between two role colours in one page
+RASTER_DPI_MIN = 300.0      # placed resolution of any embedded image
 
 
 def snap_font_pt(value: float) -> float:
-    """Snap a font size to the journal type scale (letters included)."""
-    return min(PT_TOKENS, key=lambda t: abs(t - float(value)))
+    """Snap a font size to the three-value journal type scale."""
+    return J.snap_pt(value)
 
 
 def snap_stroke_pt(value: float) -> float:
@@ -260,7 +334,9 @@ def enforce_tokens(fig, *, fonts=True, strokes=True):
 
     Runs immediately before saving, so a builder that inherits a stray
     ``markeredgewidth=0.35`` from a helper library still emits a compliant
-    figure.  Area marks (>= ``DECORATIVE_LW_PT``) keep their width.
+    figure.  Patch and Collection widths at or above ``DECORATIVE_LW_PT`` are
+    left alone (a filled patch's boundary is an area mark); a plain line at
+    that width is snapped down, because a line is never an area.
     """
     from matplotlib.collections import Collection
     from matplotlib.lines import Line2D
@@ -275,7 +351,12 @@ def enforce_tokens(fig, *, fonts=True, strokes=True):
         if not strokes:
             continue
         if isinstance(artist, Line2D):
-            artist.set_linewidth(snap_stroke_pt(artist.get_linewidth()))
+            # 2026-09-08: a Line2D is never an area mark, so a width at or
+            # above DECORATIVE_LW_PT is a mistake, not an exemption -- snap it
+            # onto the weight scale instead of letting the audit fail on it.
+            lw = float(artist.get_linewidth() or 0.0)
+            artist.set_linewidth(LW_DATA if lw >= DECORATIVE_LW_PT
+                                 else snap_stroke_pt(lw))
             mew = artist.get_markeredgewidth()
             if mew:
                 artist.set_markeredgewidth(snap_stroke_pt(mew))
@@ -370,6 +451,9 @@ class NativeCanvas:
         self._letter_i = 0
         self._locks: dict[str, tuple] = {}
         self._locked_once = False
+        # one letter offset for the whole figure (2026-09-08)
+        self.letter_dx = min(LETTER_COL_DX_PT,
+                             max(6.0, self.hgutter - LETTER_GUTTER_CLEAR_PT))
         self.fig.native_canvas = self
 
         usable_w = self.width_pt - self.margins.left - self.margins.right
@@ -491,41 +575,57 @@ class NativeCanvas:
             self.add_letter(letter, ax)
         return ax
 
-    def add_letter(self, letter, ax, *, dx_pt=LETTER_DX_PT,
-                   dy_pt=LETTER_DY_PT):
-        """Panel letter in the fixed gutter: the only bold text on the page."""
+    def letter_x_pt(self, col, dx_pt=None):
+        """x of every letter in module column ``col``, in canvas points.
+
+        2026-09-08: the letter belongs to the GRID, not to the axes box.  A
+        rotated y label, a wide category tick or a centred title moves the
+        axes ink but must not move the letter, or two panels that start in
+        one module column carry letters at different x (measured spreads of
+        13.5-28.7 pt across six of the eighteen figures).
+        """
+        dx_pt = self.letter_dx if dx_pt is None else float(dx_pt)
+        x0 = self.margins.left + int(col) * (self._module_w + self.hgutter)
+        return max(x0 - dx_pt, LETTER_MIN_X_PT)
+
+    def add_letter(self, letter, ax, *, dx_pt=None, dy_pt=LETTER_DY_PT):
+        """Panel letter on the module grid: the only bold text on the page."""
         box = ax.get_position()
-        x = box.x0 * self.width_pt - dx_pt
+        col = 0
+        for rec in self._records:
+            if self.axes.get(rec["name"]) is ax:
+                rec["_letter"] = True
+                col = int(rec.get("col", 0))
+        dx_pt = self.letter_dx if dx_pt is None else float(dx_pt)
+        x = self.letter_x_pt(col, dx_pt)
         y = box.y1 * self.height_pt + dy_pt
         art = self.fig.text(
-            max(x, 2.5) / self.width_pt, y / self.height_pt, str(letter),
+            x / self.width_pt, y / self.height_pt, str(letter),
             fontsize=PANEL_LABEL_PT, fontweight="bold", color=COLORS["ink"],
             ha="left", va="baseline",
         )
         self._letters.append({"letter": str(letter), "art": art, "ax": ax,
-                              "dx_pt": float(dx_pt), "dy_pt": float(dy_pt)})
-        for rec in self._records:
-            if self.axes.get(rec["name"]) is ax:
-                rec["_letter"] = True
+                              "col": col, "dx_pt": float(dx_pt),
+                              "dy_pt": float(dy_pt)})
         return art
 
     def _sync_letters(self):
-        """Place every panel letter above and left of its panel's own ink.
+        """Place every panel letter on its module column, clear of its panel.
 
-        The letter is measured against the panel's tight bounding box -- the
-        axes plus its labels, ticks and title -- so it clears a rotated y
-        label and a centred title rather than a nominal axes corner.  If the
-        measurement is unavailable the fixed offsets still apply.
+        2026-09-08: x comes from the module column and nothing else, so every
+        letter of a column shares one x by construction.  Only the BASELINE is
+        measured, against the panel's tight bounding box, so a letter still
+        clears a rotated y label or a centred title.  If the measurement is
+        unavailable the fixed offset still applies.
         """
         try:
             renderer = self.fig.canvas.get_renderer()
         except Exception:
             renderer = None
-        lead = self._lead_axes()
         for item in self._letters:
             ax = item["ax"]
             box = ax.get_position()
-            x = box.x0 * self.width_pt - item["dx_pt"]
+            x = self.letter_x_pt(item.get("col", 0), item["dx_pt"])
             y = box.y1 * self.height_pt + item["dy_pt"]
             if renderer is not None:
                 try:
@@ -535,19 +635,8 @@ class NativeCanvas:
                     tight = None
                 if tight is not None:
                     cap = LETTER_CAP_FRAC * PANEL_LABEL_PT
-                    left_pt = tight.x0 * 72.0
-                    top_pt = tight.y1 * 72.0
-                    width_pt = _text_width_pt(item["art"], renderer)
-                    clear = left_pt - LETTER_GAP_PT - width_pt
-                    # A row-leading letter is pulled to the shared margin, so
-                    # it takes the leftmost of the two.  Every other letter
-                    # sits as far RIGHT as its own panel allows: the fixed
-                    # offset would push it back into the neighbour on its
-                    # left, which is where letters and neighbours collide.
-                    x = min(x, clear) if id(ax) in lead else clear
-                    y = max(y, top_pt + LETTER_CLEAR_PT - cap)
-            item["art"].set_position((max(x, 2.5) / self.width_pt,
-                                      y / self.height_pt))
+                    y = max(y, tight.y1 * 72.0 + LETTER_CLEAR_PT - cap)
+            item["art"].set_position((x / self.width_pt, y / self.height_pt))
         self._level_letter_rows()
         self._align_lead_letters()
 
@@ -591,6 +680,19 @@ class NativeCanvas:
                 if rec["name"] in self.axes}
 
     def _align_lead_letters(self):
+        """Retired 2026-09-08; kept so the name still imports.
+
+        The row-leading letters used to be dragged onto one hand-set edge
+        (``LETTER_HOME_PT``) because every letter had been placed against its
+        own panel's ink and the left margin came out ragged.  Letters are now
+        placed on the module column itself, so column 0's letters already
+        share the same x (``margins.left - LETTER_COL_DX_PT``) and forcing a
+        second, different edge here would break that lock on any canvas whose
+        margins are not the default.  Does nothing.
+        """
+        return
+
+    def _align_lead_letters_legacy(self):
         """Give the row-leading letters one shared left edge.
 
         Each letter has just been placed against its own panel's ink, so a
@@ -624,23 +726,22 @@ class NativeCanvas:
         """
         self.fig.canvas.draw()
         self._sync_letters()
-        col_of = {}
-        for rec in self._records:
-            if rec.get("_letter") and rec["name"] in self.axes:
-                col_of[id(self.axes[rec["name"]])] = int(rec.get("col", 0))
+        # x is already the module-column origin for every letter; assert it
+        # rather than re-deriving it, so a builder that moved a letter by hand
+        # is reported instead of being silently overwritten.
         groups: dict[int, list] = {}
         for item in self._letters:
-            col = col_of.get(id(item["ax"]))
-            if col is not None:
-                groups.setdefault(col, []).append(item)
-        for members in groups.values():
-            if len(members) < 2:
-                continue
-            x = min(it["art"].get_position()[0] for it in members)
-            for it in members:
-                it["art"].set_position((x, it["art"].get_position()[1]))
+            groups.setdefault(int(item.get("col", 0)), []).append(item)
         self.fig.canvas.draw()
         findings = []
+        for col, members in sorted(groups.items()):
+            xs = [it["art"].get_position()[0] * self.width_pt
+                  for it in members]
+            if len(members) > 1 and max(xs) - min(xs) > ALIGN_TOL_PT:
+                findings.append(
+                    f"letters {[it['letter'] for it in members]} start in "
+                    f"module column {col} but their x spreads "
+                    f"{max(xs) - min(xs):.1f} pt")
         try:
             renderer = self.fig.canvas.get_renderer()
         except Exception:
@@ -972,6 +1073,20 @@ class NativeCanvas:
             rec["h_pt"] = round(box.height * self.height_pt, 3)
             panels.append({k: rec[k] for k in self.PUBLIC_RECORD_KEYS
                            if k in rec})
+        letters = [
+            {"letter": item["letter"], "col": int(item.get("col", 0)),
+             "x_pt": round(item["art"].get_position()[0] * self.width_pt, 3),
+             "y_pt": round(item["art"].get_position()[1] * self.height_pt, 3)}
+            for item in self._letters
+        ]
+        notes = []
+        for rec in self._records:
+            ax = self.axes.get(rec["name"])
+            for note in list(getattr(ax, "_journal_schematic_notes", ()) or ()):
+                try:
+                    notes.append({"panel": rec["name"], **dict(note)})
+                except Exception:
+                    continue
         return {
             "schema": MANIFEST_SCHEMA,
             "width_pt": round(self.width_pt, 3),
@@ -983,18 +1098,37 @@ class NativeCanvas:
             "row_h_pt": [round(h, 3) for h in self._row_h],
             "reserves_locked": bool(self.lock_enabled),
             "panels": panels,
+            "letters": letters,
+            "schematic_notes": notes,
         }
+
+    def forest(self, ax, rows, **kwargs):
+        """:func:`forest` bound to this canvas (declares the label gutter)."""
+        out = forest(ax, rows, **kwargs)
+        if out["gutter_pt"]:
+            try:
+                self.declare_reserve(ax, left=out["gutter_pt"])
+            except KeyError:
+                pass
+        return out
 
     def save(self, path, *, name=None, png=True, dpi=600, quiet=False,
              lock=None):
-        """Lock the reserves, then write the PDF (+PNG).
+        """Lock the reserves, align the letters, then write the PDF (+PNG).
 
         ``lock`` overrides the canvas-wide setting for this one save.
+        2026-09-08: ``align_letters()`` is no longer the builder's job -- six
+        of eighteen figures shipped with letters off the module grid because
+        the builder never called it -- so it runs here, unconditionally, and
+        its findings join the layout problems this returns.
         """
         if self.lock_enabled if lock is None else lock:
             self.lock_reserves()
-        return save_native(self.fig, path, manifest=self.manifest(),
-                           name=name, png=png, dpi=dpi, quiet=quiet)
+        letter_findings = self.align_letters()
+        problems = save_native(self.fig, path, manifest=self.manifest(),
+                               name=name, png=png, dpi=dpi, quiet=quiet)
+        return list(problems) + [f"{name or Path(path).stem}: {f}"
+                                 for f in letter_findings]
 
 
 def native_figure(height_in, layout, **kwargs):
@@ -1138,6 +1272,183 @@ def slim_colorbar(fig, ax, mappable, *, label="", width_pt=4.5, pad_pt=3.0,
     return cbar
 
 
+# ── the forest idiom (one helper, 2026-09-08) ────────────────────────────
+FOREST_GUTTER_PT = 62.0     # default reserved width of the label column
+FOREST_BAND_PCT = 6         # row band tint, in per cent of the row colour
+FOREST_ROW_PITCH = 1.0      # rows are integers on the y axis, top row first
+
+
+def forest(ax, rows, *, value_label="", reference=0.0,
+           reference_label="no effect", gutter_pt=None,
+           band=True, tick=True, tag=None, xlim=None, color=None,
+           marker_size=None, seed_size=None, seed_alpha=None,
+           label_size=PT_BASE, invert=True):
+    """Draw one category-vs-value panel in the journal's single forest idiom.
+
+    The review found the same craft fault in six panels across both figure
+    sets -- "a forest plot whose category labels do not sit on their intervals
+    is misread, not merely untidy" -- plus a missing per-seed fan and missing
+    n / interval tags.  This helper is the fix, and it is the only sanctioned
+    way to draw such a panel.
+
+    Parameters
+    ----------
+    ax
+        The panel axes.  The row labels are drawn as annotations outside the
+        left spine, so the canvas's own column lock measures and reserves the
+        gutter; pass ``gutter_pt`` (and call ``canvas.forest(...)``) only to
+        pin a wider one for the whole module column.
+    rows
+        One entry per category, TOP ROW FIRST, each a mapping with
+
+        ``label``    category name (a ``\\n`` is allowed; it stays centred);
+        ``mean``     the point estimate;
+        ``lo``/``hi`` interval bounds (omit for a bare point);
+        ``seeds``    per-seed values -- when given, the fan is ALWAYS drawn;
+        ``color``    COLORS key or colour (default: the panel ``color``);
+        ``marker``   marker for the mean (default from ``MARKERS``);
+        ``n``        row count, printed in the row tag when ``tag`` is None;
+        ``note``     short right-hand annotation (e.g. "15/20 seeds").
+    value_label
+        x axis label, with its unit.
+    reference
+        x of the reference rule (0 for a difference, 0.5 for chance, ...);
+        ``None`` draws none.  ``reference_label`` is set right-aligned at the
+        top of that rule at ``PT_BASE``.
+    tag
+        Footer string naming n and the interval type; when None it is built
+        from the rows' ``n`` values as ``"n = ... ; mean [95 % CI]"``.
+
+    Returns a dict with ``ax``, ``ypos`` (label y per row), ``gutter_pt`` and
+    ``tag_text``, so a builder can hang extra annotation off the same grid.
+    """
+    import numpy as np
+
+    rows = [dict(r) for r in rows]
+    n_rows = len(rows)
+    base_color = COLORS.get(color, color) if color else COLORS["ink"]
+    marker_size = MARKER_MS if marker_size is None else marker_size
+    seed_size = SEED_MS if seed_size is None else seed_size
+    seed_alpha = SEED_ALPHA if seed_alpha is None else seed_alpha
+    ypos = list(range(n_rows))
+
+    label_artists = []
+    ax.set_ylim(-0.6, n_rows - 0.4)
+    if invert:
+        ax.invert_yaxis()
+    ax.set_yticks([])
+    for spine in ("left", "right", "top"):
+        ax.spines[spine].set_visible(False)
+    ax.spines["bottom"].set_visible(True)
+    ax.spines["bottom"].set_linewidth(LW_EDGE)
+    ax.spines["bottom"].set_color(COLORS["edge"])
+
+    if xlim is not None:
+        ax.set_xlim(*xlim)
+    else:                                   # a sane default from the data
+        vals = []
+        for r in rows:
+            vals += [v for v in (r.get("mean"), r.get("lo"), r.get("hi"))
+                     if v is not None]
+            vals += list(r.get("seeds") or [])
+        if reference is not None:
+            vals.append(reference)
+        if vals:
+            lo, hi = float(min(vals)), float(max(vals))
+            pad = 0.12 * (hi - lo or abs(hi) or 1.0)
+            ax.set_xlim(lo - pad, hi + pad)
+
+    x0, x1 = ax.get_xlim()
+    for i, row in enumerate(rows):
+        y = ypos[i]
+        col = COLORS.get(row.get("color", base_color), row.get("color")) \
+            or base_color
+        if band:                    # 6 % tint band ties the label to the row
+            tint_patch(ax, ("rect", x0, y - 0.42, x1 - x0, 0.84),
+                       color=col, pct=FOREST_BAND_PCT, edge=False,
+                       radius_pt=1.5, zorder=0.2, clip_on=True)
+        if tick:                    # or a hairline tick from the gutter
+            ax.plot([x0, x0], [y - 0.30, y + 0.30], color=COLORS["edge"],
+                    lw=LW_HAIR, clip_on=False, zorder=1.5,
+                    solid_capstyle="butt")
+        seeds = list(row.get("seeds") or [])
+        if seeds:                   # the fan is not optional
+            jitter = np.linspace(-0.16, 0.16, len(seeds)) if len(seeds) > 1 \
+                else np.zeros(1)
+            ax.plot(seeds, y + jitter, linestyle="none", marker="o",
+                    markersize=seed_size, markerfacecolor=col,
+                    markeredgecolor="none", alpha=seed_alpha, zorder=2.0,
+                    clip_on=True)
+        lo, hi = row.get("lo"), row.get("hi")
+        if lo is not None and hi is not None:
+            ax.plot([lo, hi], [y, y], color=col, lw=LW_ERR, zorder=3.0,
+                    solid_capstyle="butt")
+            for xb in (lo, hi):
+                ax.plot([xb, xb], [y - 0.13, y + 0.13], color=col,
+                        lw=LW_ERR, zorder=3.0, solid_capstyle="butt")
+        ax.plot([row["mean"]], [y], linestyle="none",
+                marker=row.get("marker", "o"), markersize=marker_size,
+                markerfacecolor=col, markeredgecolor="white",
+                markeredgewidth=LW_HAIR, zorder=4.0)
+        # the label: centred ON the row, in the reserved gutter
+        label_artists.append(ax.annotate(
+            str(row["label"]), xy=(0.0, y),
+            xycoords=("axes fraction", "data"),
+            xytext=(-4.0, 0.0), textcoords="offset points",
+            ha="right", va="center", fontsize=label_size,
+            color=COLORS["ink"], linespacing=1.15, annotation_clip=False))
+        if row.get("note"):
+            # OUTSIDE the right spine: a per-row note set inside the axes
+            # lands on its own interval (the review found exactly that in
+            # figure 7 G, where the cohort footer crossed the Pinky interval).
+            ax.annotate(str(row["note"]), xy=(1.0, y),
+                        xycoords=("axes fraction", "data"),
+                        xytext=(3.0, 0.0), textcoords="offset points",
+                        ha="left", va="center", fontsize=PT_BASE,
+                        color=COLORS["mute"], annotation_clip=False)
+
+    if reference is not None:
+        ax.axvline(reference, color=COLORS["mute"], lw=LW_REF, zorder=1.0,
+                   dashes=(2.6, 2.0))
+        if reference_label:
+            # above the top spine, right-aligned on the rule: inside the axes
+            # it would sit on whichever row happens to cross the reference.
+            ax.annotate(reference_label, xy=(reference, 1.0),
+                        xycoords=("data", "axes fraction"),
+                        xytext=(-2.5, 1.5), textcoords="offset points",
+                        ha="right", va="bottom", fontsize=PT_BASE,
+                        color=COLORS["mute"], annotation_clip=False)
+    if value_label:
+        ax.set_xlabel(value_label, fontsize=PT_EMPH, color=COLORS["ink"])
+    if tag is None:
+        ns = [r.get("n") for r in rows if r.get("n")]
+        tag = ""
+        if ns:
+            span = (f"n = {ns[0]}" if len(set(ns)) == 1
+                    else f"n = {min(ns)}-{max(ns)}")
+            tag = f"{span} per row; mean [95 % CI]"
+    if tag:
+        ax.annotate(tag, xy=(1.0, 1.0), xycoords="axes fraction",
+                    xytext=(0.0, 2.0), textcoords="offset points",
+                    ha="right", va="bottom", fontsize=PT_BASE,
+                    color=COLORS["mute"], annotation_clip=False)
+    ax.tick_params(axis="y", length=0)
+    # Measure what the labels actually need: the canvas's column lock does not
+    # see an annotation that hangs outside the axes, so an unmeasured gutter
+    # runs the longest category name off the canvas edge.
+    measured = 0.0
+    try:
+        renderer = ax.figure.canvas.get_renderer()
+        ax.figure.canvas.draw()
+        for art in label_artists:
+            measured = max(measured, _text_width_pt(art, renderer))
+    except Exception:
+        measured = 0.0
+    gutter = max(float(gutter_pt or 0.0), measured + 6.0)
+    return {"ax": ax, "ypos": ypos, "gutter_pt": gutter,
+            "label_width_pt": measured, "tag_text": tag}
+
+
 # ── audit ────────────────────────────────────────────────────────────────
 @dataclass
 class Violation:
@@ -1275,6 +1586,20 @@ def audit_native_pdf(path, *, strict=False, page_index=0, report=False,
                     f"{ASPECT_MIN:.2f}-{ASPECT_MAX:.2f} "
                     f"({w:.1f} x {h:.1f} pt)", aspect))
 
+    # 1b. embedded typeface (2026-09-08): a Helvetica/Arial-class face only.
+    for font in page.get_fonts(full=False):
+        name = str(font[3])
+        base = name.split("+")[-1]
+        if any(marker.lower() in base.lower()
+               for marker in FORBIDDEN_FONT_MARKERS):
+            V(Violation("font-family",
+                        f"{base} is embedded: the journal face is "
+                        f"{SANS_FAMILY} (a Helvetica/Arial-class face); "
+                        f"DejaVu and the matplotlib maths fallbacks are the "
+                        f"default look, not a print face"))
+        else:
+            N(f"embedded font {base}")
+
     # 2. type census
     sizes: dict[float, list] = {}
     spans: list[dict] = []
@@ -1292,16 +1617,24 @@ def audit_native_pdf(path, *, strict=False, page_index=0, report=False,
                 sizes.setdefault(round(float(span["size"]), 2), []).append(text)
     for size in sorted(sizes):
         samples = sizes[size]
+        sample = max(samples, key=lambda s: len(s.strip())).strip()
+        if size < PT_FLOOR - PT_TOL:
+            # the floor is absolute: even a legal mathtext shrink may not go
+            # below 7.0 pt at the 518.4 pt authoring width.
+            V(Violation("text-floor",
+                        f"{size:.2f} pt is below the {PT_FLOOR:.1f} pt floor "
+                        f"({len(samples)} spans, e.g. {sample[:40]!r})", size))
+            continue
         if is_token_pt(size):
             continue
         if _mathtext_size_ok(size, strict):
             N(f"mathtext-shrunk type at {size:.2f} pt "
               f"({len(samples)} spans, e.g. {samples[0].strip()!r})")
             continue
-        sample = max(samples, key=lambda s: len(s.strip())).strip()
         V(Violation("text-size",
-                    f"{size:.2f} pt is not a type token "
-                    f"({len(samples)} spans, e.g. {sample[:40]!r})", size))
+                    f"{size:.2f} pt is not one of the three type tokens "
+                    f"{tuple(PT_TOKENS)} ({len(samples)} spans, e.g. "
+                    f"{sample[:40]!r})", size))
 
     # 2b. text piled on text
     #
@@ -1317,25 +1650,53 @@ def audit_native_pdf(path, *, strict=False, page_index=0, report=False,
                     f"{b['text'].strip()[:34]!r}"))
 
     # 3. stroke census
+    #
+    # 2026-09-08: the "area mark" exemption is now 1.35 pt AND closed-filled
+    # only.  A capsule drawn as a 13 pt round-capped stroke outweighs every
+    # data line on the page; drawn as a tint patch it is a fill, and a fill
+    # carries no line weight at all.  Fill-only paths ("f") never reach this
+    # census, which is exactly the intent.
+    drawings = page.get_drawings()
     widths: dict[float, int] = {}
-    for drawing in page.get_drawings():
+    fat_open: dict[float, int] = {}
+    for drawing in drawings:
         if drawing.get("type") not in ("s", "fs"):
             continue
         width = drawing.get("width")
         if width is None:
             continue
-        widths[round(float(width), 3)] = widths.get(round(float(width), 3),
-                                                    0) + 1
+        key = round(float(width), 3)
+        filled_area = (drawing.get("type") == "fs"
+                       and bool(drawing.get("closePath"))
+                       and drawing.get("fill") is not None)
+        if key >= DECORATIVE_LW_PT and not filled_area:
+            fat_open[key] = fat_open.get(key, 0) + 1
+            continue
+        widths[key] = widths.get(key, 0) + 1
     for width in sorted(widths):
         count = widths[width]
         if width <= 0 or is_token_lw(width):
             continue
         if width >= DECORATIVE_LW_PT:
-            N(f"area mark stroked at {width:.2f} pt ({count} paths)")
+            N(f"closed filled area mark, boundary stroked at {width:.2f} pt "
+              f"({count} paths)")
             continue
         V(Violation("stroke-width",
                     f"{width:.3f} pt is not a line-weight token "
                     f"({count} paths)", width))
+    for width in sorted(fat_open):
+        V(Violation("area-stroke",
+                    f"{width:.2f} pt open stroke ({fat_open[width]} paths): "
+                    f"above {DECORATIVE_LW_PT:.2f} pt only a closed filled "
+                    f"path is legal -- draw the area with tint_patch()",
+                    width))
+
+    # 3b. role colours (2026-09-08): two registered roles closer than
+    # ROLE_DE_MIN in OKLab cannot both appear on one page.
+    _audit_role_colours(page, drawings, V, N)
+
+    # 3c. rasters must be at least RASTER_DPI_MIN at their placed size.
+    _audit_raster_dpi(page, V, N)
 
     # 4-6. ink geometry
     ink, zoom = _page_ink(page, dpi=dpi)
@@ -1417,6 +1778,8 @@ def audit_native_pdf(path, *, strict=False, page_index=0, report=False,
                             f"{frac * 100:.0f}% of its cell "
                             f"(need {CELL_FILL_MIN * 100:.0f}%)", frac))
         _audit_layout_contract(manifest, V, N)
+        _audit_letter_grid(manifest, spans, V, N)          # 2026-09-08
+        _audit_text_over_data(page, manifest, drawings, spans, V, N)
     return out if report else out.violations
 
 
@@ -1601,6 +1964,372 @@ def _audit_layout_contract(manifest, V, N):
                     f"{rec['w_pt']:.0f} x {rec['h_pt']:.0f} pt, aspect "
                     f"{aspect:.2f} outside "
                     f"{PANEL_ASPECT_MIN:.2f}-{hi:.2f}", aspect))
+
+
+def _role_registry():
+    """{hex: role-group} for every colour the palette registers by name."""
+    roles: dict[str, set] = {}
+    for register, tag in ((J.SERIES_COLORS, "series"),
+                          (J.ANATOMY_COLORS, "anatomy"),
+                          (J.NEUTRAL_COLORS, "neutral")):
+        for name, hexc in register.items():
+            roles.setdefault(_hex(hexc), set()).add(f"{tag}:{name}")
+    for i, hexc in enumerate(J.ORDINAL_RAMP):
+        roles.setdefault(_hex(hexc), set()).add(f"series:ordinal{i + 1}")
+    return roles
+
+
+def _hex(color):
+    from matplotlib.colors import to_hex
+    return to_hex(color).lower()
+
+
+def _page_colours(drawings):
+    """Every stroke / fill colour on the page, as hex -> path count."""
+    out: dict[str, int] = {}
+    for drawing in drawings:
+        for key in ("color", "fill"):
+            rgb = drawing.get(key)
+            if not rgb:
+                continue
+            hexc = "#%02x%02x%02x" % tuple(
+                max(0, min(255, int(round(float(v) * 255)))) for v in rgb[:3])
+            out[hexc] = out.get(hexc, 0) + 1
+    return out
+
+
+ROLE_UNREGISTERED_MIN_C = 0.06   # below this an off-palette colour is a tint
+ROLE_IDENTITY_DE = 2.0           # below this it is the same colour, rounded
+ROLE_BACKGROUNDS = ("neutral:grid", "neutral:panel_bg")
+ROLE_CMAP_DE = 3.0               # within this of a colormap sample = a ramp
+_CMAP_SAMPLES = None
+
+
+def _cmap_samples():
+    """Every colour the two journal colormaps can emit, as a hex set.
+
+    A heat cell is a ramp sample, not a role: flagging each of 256 of them
+    against the nearest role colour would bury the finding this check exists
+    for.
+    """
+    global _CMAP_SAMPLES
+    if _CMAP_SAMPLES is None:
+        from matplotlib.colors import to_hex
+        out = set()
+        for cmap in (SEQ_CMAP, DIV_CMAP):
+            for i in range(256):
+                out.add(to_hex(cmap(i / 255.0)).lower())
+        _CMAP_SAMPLES = out
+    return _CMAP_SAMPLES
+TINT_RESIDUAL = 0.012            # per-channel fit of "x % of a role colour"
+
+
+def _is_tint_of(hexc, roles):
+    """True when ``hexc`` is a white-mix of a registered role colour.
+
+    A 16 % capsule tint or a 40 % ghost stroke is the role colour, weakened on
+    purpose; it is not a second hue and must not be reported as one.
+    """
+    from matplotlib.colors import to_rgb
+    c = to_rgb(hexc)
+    for role in roles:
+        r = to_rgb(role)
+        num = den = 0.0
+        for i in range(3):
+            d = r[i] - 1.0
+            num += (c[i] - 1.0) * d
+            den += d * d
+        if den <= 1e-9:
+            continue
+        t = max(0.0, min(1.0, num / den))
+        if max(abs(c[i] - (1.0 + t * (to_rgb(role)[i] - 1.0)))
+               for i in range(3)) <= TINT_RESIDUAL:
+            return True
+    return False
+
+
+def _audit_role_colours(page, drawings, V, N):
+    """Two different roles may not sit closer than ROLE_DE_MIN on one page.
+
+    Registered pairs are held to the palette gate's own rule (the strict 15/10
+    inside a hue family, the cross-family floor otherwise), so a legal palette
+    can never fail here; what this catches is (a) a regression in the palette
+    and (b) the real defect the review found -- a builder inventing a hue that
+    is a near-copy of a role colour, e.g. figure 1's 193 paths of #3FA26C
+    beside 92 of #3E8E63, which a reader reads as one colour.
+    """
+    roles = _role_registry()
+    present = _page_colours(drawings)
+    registered = {h: roles[h] for h in present if h in roles}
+    names = sorted(registered)
+    for i in range(len(names)):
+        for j in range(i + 1, len(names)):
+            a, b = names[i], names[j]
+            if registered[a] & registered[b]:
+                continue                     # one hue, several alias names
+            if (all(r.startswith("neutral:") for r in registered[a])
+                    and all(r.startswith("neutral:") for r in registered[b])):
+                # ink / mute / edge / grid / panel_bg are ONE role -- the
+                # achromatic scaffolding -- deliberately built as a lightness
+                # ladder and told apart by weight, area and position, not by
+                # hue.  Every one of them is still checked against every
+                # series and anatomy mark, which is where the review's
+                # point_mlp/mute failure lived.
+                continue
+            family = J.same_hue_family(a, b)
+            need = ROLE_DE_MIN if family else J.DE_CROSS_FAMILY_MIN
+            d = J.delta_e(a, b)
+            if (d < need
+                    and all(r.startswith("series:") for r in registered[a])
+                    and all(r.startswith("series:") for r in registered[b])):
+                # Two SERIES hues.  Their semantics are frozen across the
+                # paper (the palette's own worst internal pair is 8.3), so
+                # this is a standing property of the fixed palette, carried by
+                # marker shape and direct labels, not a defect this figure can
+                # fix.  Reported, never failed.
+                N(f"frozen series pair {a} / {b} at ΔE {d:.1f} "
+                  f"({'/'.join(sorted(registered[a] | registered[b]))}); "
+                  f"separate them by marker shape")
+                continue
+            if d < need:
+                V(Violation("role-colour",
+                            f"{a} ({'/'.join(sorted(registered[a]))}) and "
+                            f"{b} ({'/'.join(sorted(registered[b]))}) are "
+                            f"ΔE {d:.1f} apart on one page "
+                            f"(need {need:.1f})", d))
+    for hexc, count in sorted(present.items()):
+        if hexc in roles or J.ok_chroma(hexc) < ROLE_UNREGISTERED_MIN_C:
+            continue                          # greys and pale tints are fine
+        if _is_tint_of(hexc, roles):
+            continue                          # a weakened role colour
+        if hexc in _cmap_samples() or min(
+                J.delta_e(hexc, c) for c in _cmap_samples()) < ROLE_CMAP_DE:
+            continue                          # a colormap sample
+        near = min(roles, key=lambda r: J.delta_e(hexc, r))
+        d = J.delta_e(hexc, near)
+        if ROLE_IDENTITY_DE <= d < ROLE_DE_MIN:
+            V(Violation("role-colour",
+                        f"{hexc} ({count} paths) is off the palette and only "
+                        f"ΔE {d:.1f} from {near} "
+                        f"({'/'.join(sorted(roles[near]))})", d))
+        elif d < ROLE_IDENTITY_DE:
+            N(f"{hexc} ({count} paths) is {near} to within ΔE {d:.1f}")
+
+
+def _audit_raster_dpi(page, V, N):
+    """Every placed image must resolve at RASTER_DPI_MIN or better."""
+    for info in page.get_image_info(xrefs=False):
+        bbox = info.get("bbox")
+        w_px, h_px = info.get("width", 0), info.get("height", 0)
+        if not bbox or not w_px or not h_px:
+            continue
+        w_pt = max(abs(bbox[2] - bbox[0]), 1e-6)
+        h_pt = max(abs(bbox[3] - bbox[1]), 1e-6)
+        dpi = min(72.0 * w_px / w_pt, 72.0 * h_px / h_pt)
+        if dpi < RASTER_DPI_MIN - 0.5:
+            V(Violation("raster-dpi",
+                        f"image {w_px}x{h_px} px placed at "
+                        f"{w_pt:.1f}x{h_pt:.1f} pt resolves at {dpi:.0f} dpi "
+                        f"(need {RASTER_DPI_MIN:.0f})", dpi))
+        else:
+            N(f"raster {w_px}x{h_px} px at {dpi:.0f} dpi")
+
+
+def _letter_spans(spans):
+    """Bold single-letter panel-letter spans, as {letter: (x0, y0, x1, y1)}."""
+    out = {}
+    for span in spans:
+        text = span.get("text", "").strip()
+        if len(text) != 1 or not text.isalpha() or not text.isupper():
+            continue
+        if abs(float(span.get("size", 0.0)) - PT_LETTER) > PT_TOL:
+            continue
+        flags = int(span.get("flags", 0))
+        bold = bool(flags & 2 ** 4) or "bold" in str(span.get("font",
+                                                              "")).lower()
+        if not bold:
+            continue
+        out.setdefault(text, span["bbox"])
+    return out
+
+
+def _audit_letter_grid(manifest, spans, V, N):
+    """Letters that start in one module column must share x to ALIGN_TOL_PT."""
+    declared = manifest.get("letters") or []
+    if not declared:
+        N("no letter grid in the manifest (built before 2026-09-08)")
+        return
+    found = _letter_spans(spans)
+    cols: dict[int, list] = {}
+    for rec in declared:
+        bbox = found.get(str(rec.get("letter")))
+        if bbox is None:
+            continue
+        cols.setdefault(int(rec.get("col", 0)), []).append(
+            (str(rec["letter"]), float(bbox[0])))
+    for col, members in sorted(cols.items()):
+        if len(members) < 2:
+            continue
+        xs = [x for _, x in members]
+        spread = max(xs) - min(xs)
+        if spread > ALIGN_TOL_PT:
+            names = ", ".join(f"{ltr}@{x:.1f}" for ltr, x in members)
+            V(Violation("letter-grid",
+                        f"module column {col} letters spread {spread:.1f} pt "
+                        f"({names}); the letter belongs to the column, not to "
+                        f"the axes box -- call align_letters()", spread))
+        else:
+            N(f"letter column {col}: {len(members)} letters within "
+              f"{spread:.2f} pt")
+
+
+DECOR_AREA_FRAC = 0.30      # a fill this big is a ground, not a datum
+DECOR_LIGHT_LSTAR = 88.0    # a fill this pale is a tint band or the page
+
+
+def _is_decoration(drawing, rect, tol=1.2):
+    """True for axis furniture: a spine, tick, grid rule, ground or tint band.
+
+    Text is meant to sit on those; a datum is a line, a marker, a bar or an
+    interval.  Four exclusions, each measured rather than assumed: a thin path
+    that spans the panel (spine / grid rule), a fill that covers a large
+    fraction of the panel (the axes background, a row band), a very pale fill
+    (a 6-16 % tint), and anything the colour of the grid token.
+    """
+    d_rect = drawing.get("rect")
+    if d_rect is None:
+        return True
+    x0, y0, x1, y1 = rect
+    dx0, dy0, dx1, dy1 = d_rect
+    thin_h = abs(dy1 - dy0) <= tol
+    thin_v = abs(dx1 - dx0) <= tol
+    spans_w = abs((dx1 - dx0) - (x1 - x0)) <= 2.0
+    spans_h = abs((dy1 - dy0) - (y1 - y0)) <= 2.0
+    if (thin_h and spans_w) or (thin_v and spans_h):
+        return True                      # a spine or a full-width grid rule
+    panel_area = max((x1 - x0) * (y1 - y0), 1e-6)
+    if (dx1 - dx0) * (dy1 - dy0) >= DECOR_AREA_FRAC * panel_area \
+            and drawing.get("fill") is not None:
+        return True                      # the axes ground / a row band
+    for key in ("fill", "color"):
+        colour = drawing.get(key)
+        if not colour:
+            continue
+        hexc = "#%02x%02x%02x" % tuple(
+            max(0, min(255, int(round(float(v) * 255)))) for v in colour[:3])
+        if key == "fill" and J.lightness_star(hexc) >= DECOR_LIGHT_LSTAR:
+            return True                  # a pale tint patch
+        if J.delta_e(hexc, COLORS["grid"]) < 6.0:
+            return True                  # grid tint
+    return False
+
+
+def _seg_hits_rect(p0, p1, rect):
+    """True when the segment p0-p1 enters ``rect`` (Liang-Barsky)."""
+    x0, y0, x1, y1 = rect
+    dx, dy = p1[0] - p0[0], p1[1] - p0[1]
+    t0, t1 = 0.0, 1.0
+    for p, q in ((-dx, p0[0] - x0), (dx, x1 - p0[0]),
+                 (-dy, p0[1] - y0), (dy, y1 - p0[1])):
+        if abs(p) < 1e-12:
+            if q < 0:
+                return False
+            continue
+        r = q / p
+        if p < 0:
+            if r > t1:
+                return False
+            t0 = max(t0, r)
+        else:
+            if r < t0:
+                return False
+            t1 = min(t1, r)
+    return t0 <= t1
+
+
+def _drawing_hits(rect, drawing):
+    """True when a drawing's real geometry enters ``rect``.
+
+    A curve's bounding box is not the curve: a direct label set in the white
+    space inside a rising trace lies inside that trace's bbox and outside the
+    ink.  Segments are tested one by one, cubics on an 8-point polyline.
+    """
+    for item in drawing.get("items", ()):
+        kind = item[0]
+        if kind == "l":
+            if _seg_hits_rect(item[1], item[2], rect):
+                return True
+        elif kind == "c":
+            pts = [item[1], item[2], item[3], item[4]]
+            prev = pts[0]
+            for k in range(1, 9):
+                t = k / 8.0
+                u = 1.0 - t
+                cur = (u ** 3 * pts[0][0] + 3 * u * u * t * pts[1][0]
+                       + 3 * u * t * t * pts[2][0] + t ** 3 * pts[3][0],
+                       u ** 3 * pts[0][1] + 3 * u * u * t * pts[1][1]
+                       + 3 * u * t * t * pts[2][1] + t ** 3 * pts[3][1])
+                if _seg_hits_rect(prev, cur, rect):
+                    return True
+                prev = cur
+        elif kind in ("re", "qu"):
+            box = item[1]
+            try:
+                bx0, by0, bx1, by1 = box.x0, box.y0, box.x1, box.y1
+            except AttributeError:
+                bx0, by0, bx1, by1 = box.rect
+            if (min(rect[2], bx1) - max(rect[0], bx0) > 0
+                    and min(rect[3], by1) - max(rect[1], by0) > 0):
+                return True
+    return False
+
+
+def _audit_text_over_data(page, manifest, drawings, spans, V, N):
+    """In-axis text may not sit on a data artist.
+
+    ``audit_text_over_data`` runs on the live figure and only sees artists a
+    builder registered; this runs on the compiled page, where an annotation
+    leader crossing its own point cloud (figure 4 F, figure 5 E) or a footer
+    lying on an interval (figure 7 G) is a fact.  Axis furniture -- spines,
+    ticks, grid rules and pale tint bands -- is excluded, and text is allowed
+    to touch a datum by up to ``TEXT_DATA_CLEAR_PT``.
+    """
+    height = manifest.get("height_pt", page.rect.height)
+    panels = [rec for rec in manifest.get("panels", [])
+              if not rec.get("schematic")]
+    for rec in panels:
+        x0 = rec["x0_pt"]
+        x1 = rec["x0_pt"] + rec["w_pt"]
+        y1 = height - rec["y0_pt"]
+        y0 = height - rec["y0_pt"] - rec["h_pt"]
+        rect = (x0, y0, x1, y1)
+        inside = [d for d in drawings
+                  if d.get("rect") is not None
+                  and d["rect"][0] >= x0 - 1 and d["rect"][2] <= x1 + 1
+                  and d["rect"][1] >= y0 - 1 and d["rect"][3] <= y1 + 1
+                  and not _is_decoration(d, rect)]
+        if not inside:
+            continue
+        for span in spans:
+            sx0, sy0, sx1, sy1 = span["bbox"]
+            if not (sx0 >= x0 - 1 and sx1 <= x1 + 1
+                    and sy0 >= y0 - 1 and sy1 <= y1 + 1):
+                continue
+            box = (sx0 + TEXT_DATA_CLEAR_PT, sy0 + TEXT_DATA_CLEAR_PT,
+                   sx1 - TEXT_DATA_CLEAR_PT, sy1 - TEXT_DATA_CLEAR_PT)
+            for d in inside:
+                dx0, dy0, dx1, dy1 = d["rect"]
+                if (min(sx1, dx1) - max(sx0, dx0) <= 0
+                        or min(sy1, dy1) - max(sy0, dy0) <= 0):
+                    continue
+                if not _drawing_hits(box, d):
+                    continue          # inside the bbox, clear of the ink
+                V(Violation("text-over-data",
+                            f"panel {rec['name']!r}: "
+                            f"{span['text'].strip()[:34]!r} sits on a data "
+                            f"artist ({d.get('type')}, width "
+                            f"{d.get('width') or 0:.2f} pt)"))
+                break
 
 
 def _cell_fill(page, manifest, ink, zoom):

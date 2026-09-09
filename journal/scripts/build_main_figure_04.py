@@ -23,6 +23,7 @@ binary and this task has B parallel branches.
 
 from __future__ import annotations
 
+import json
 import shutil
 from pathlib import Path
 
@@ -53,7 +54,6 @@ from journal_style import label_color
 from native_schematics import (
     CONTACT_DIA_PT,
     LINE_BAND_PT,
-    SOMA_R_PT,
     Frame,
     Nodes,
     _text_w_pt,
@@ -142,10 +142,60 @@ def _chain_w_pt(ax, base, sub, tail, size=PT_ANNOT):
             + ((0.6 + _text_w_pt(ax, tail, size)) if tail else 0.0))
 
 
+# -- the per-neuron broadcast bus (private; spec D5 geometry) ---------------
+def amber_bus(frame: Frame, nodes: Nodes, targets, *, colour=None,
+              tip_pt=None, bus_pt=8.0, pad_pt=(4.5, 2.0)) -> None:
+    """Spec D5 broadcast glyph: amber bus above the junction row, hairline
+    drops into EVERY junction, source dot at the soma.
+
+    The library's ``Frame.credit_delivery(mode='scalar')`` draws the same
+    bus and drops but (a) defaults its targets to the TERMINALS, which on
+    this fan carry the excitatory contacts, and (b) hard-codes its r 1.6
+    source dot at the far end of the bus, which is the layer-scalar reading
+    (source outside the tree).  D5 wants the drops in the junctions and the
+    per-neuron source at the soma, so the glyph is assembled here from the
+    library's own primitives at the library's own sizes (bus at LW_HAIR,
+    drop heads 2.6 pt, source disc r 1.6) and matches Fig. 1B's per-neuron
+    card, so the two figures share one glyph.
+
+    ``bus_pt`` lifts the bus above the highest target (the library uses 8;
+    this fan needs 14.5 to clear the gate's ``c`` badge).  ``tip_pt`` maps a
+    target name to its drop-tip clearance (default 2.8 pt, just outside a
+    1.6-pt junction ring); the gated junction's double ring is 3.6 pt, so
+    its drop stops higher.  The feed from the soma to the bus is one
+    quadratic hairline bowing outside the leftmost dendrite: an L-shaped
+    feed around a fan this wide reads as a box drawn around the tree.
+    """
+    colour = AMBER if colour is None else colour
+    tips = dict(tip_pt or {})
+    P = [nodes[t] for t in targets]
+    y_bus = max(p[1] for p in P) + frame.fy(bus_pt)
+    x_lo = min(p[0] for p in P) - frame.fx(pad_pt[0])
+    x_hi = max(p[0] for p in P) + frame.fx(pad_pt[1])
+    frame.ax.plot([x_lo, x_hi], [y_bus, y_bus], color=colour,
+                  lw=frame.lw(LW_HAIR), solid_capstyle="round", zorder=5)
+    for name, (px, py) in zip(targets, P, strict=True):
+        frame.arrow((px, y_bus), (px, py + frame.fy(tips.get(name, 2.8))),
+                    color=colour, lw=LW_HAIR, head=2.6, zorder=5)
+    # source at the soma (D5): r 1.6 disc just outside the soma rim, on the
+    # side away from the delta0 arrow, then one bowed hairline to the bus
+    sx, sy = nodes.soma
+    src = (sx - frame.fx(nodes.soma_r_pt + 1.9), sy)
+    frame.disc(src, 1.6, fill=colour, zorder=6)
+    t = np.linspace(0.0, 1.0, 48)[:, None]
+    p0 = np.array([src[0] - frame.fx(1.4), sy])
+    p2 = np.array([x_lo, y_bus])
+    p1 = np.array([x_lo, sy + 0.25 * (y_bus - sy)])
+    curve = (1 - t) ** 2 * p0 + 2 * t * (1 - t) * p1 + t ** 2 * p2
+    frame.ax.plot(curve[:, 0], curve[:, 1], color=colour,
+                  lw=frame.lw(LW_HAIR), solid_capstyle="round", zorder=5)
+
+
 # -- the B-branch fan tree (private; library geometry, library glyphs) ------
 def fan_tree(frame: Frame, rect, *, B=4, selected=1, ghost=False,
              stream_tags=None, gate=True, fade_unselected=False,
-             output="z", delta="δ0", bottom_pt=15.0) -> Nodes:
+             output="z", delta="δ0", bottom_pt=15.0,
+             spread=(0.12, 0.88), badge_offset=(-4.6, 3.4)) -> Nodes:
     """Soma at the bottom, B parallel branches, one junction per branch.
 
     Each branch is a proximal segment soma -> junction (taper level 1) and a
@@ -153,16 +203,18 @@ def fan_tree(frame: Frame, rect, *, B=4, selected=1, ghost=False,
     contact at the terminal.  ``stream_tags`` is a list of (base, sub,
     colour) per terminal; ``gate`` puts the context ring on the selected
     junction; ``fade_unselected`` attenuates the non-selected proximal
-    segments.  Returns a :class:`Nodes` so the library's delivery glyphs can
+    segments; ``spread`` is the fraction of the cell the branch tips
+    occupy and ``badge_offset`` places the gate's ``c`` tag in points
+    from its ring.  Returns a :class:`Nodes` so the library's delivery glyphs can
     address the tree.
     """
     x0, y0, w, h = rect
-    band_pt = LINE_BAND_PT if stream_tags else 0.0
+    band_pt = (LINE_BAND_PT + 3.0) if stream_tags else 0.0
     top_pad = 4.0 + CONTACT_DIA_PT * 0.5 + band_pt
     y_soma = y0 + frame.fy(bottom_pt)
     y_top = y0 + h - frame.fy(top_pad)
     y_junc = y_soma + 0.52 * (y_top - y_soma)
-    xs = np.linspace(x0 + 0.12 * w, x0 + 0.88 * w, B)
+    xs = np.linspace(x0 + spread[0] * w, x0 + spread[1] * w, B)
     soma = (x0 + 0.5 * w, y_soma)
     nodes = Nodes()
     nodes["S"] = soma
@@ -193,12 +245,14 @@ def fan_tree(frame: Frame, rect, *, B=4, selected=1, ghost=False,
     for i in range(B):
         j = f"J{i + 1}"
         if gate and i == selected:
-            frame.gate(nodes[j], badge_offset=(-4.6, 3.4))
+            frame.gate(nodes[j], badge_offset=badge_offset)
         else:
             nodes.rings[j] = frame.junction(nodes[j], ghost=ghost)
         frame.contact(nodes[f"T{i + 1}"], kind="exc")
     if stream_tags:
-        lift = CONTACT_DIA_PT * 0.5 + 2.0
+        # + the subscript drop, so the SUBSCRIPT (not just the base)
+        # clears the contact dot it labels
+        lift = CONTACT_DIA_PT * 0.5 + 6.6
         for i, (base, sub, colour) in enumerate(stream_tags):
             t = nodes[f"T{i + 1}"]
             frame.subscript((t[0], t[1] + frame.fy(lift)), base, sub,
@@ -229,8 +283,10 @@ def branch_conflict_task(ax) -> None:
                 tags.append(("x", "1−y", HIGHLIGHT))
             else:
                 tags.append(("x", "y", MUTE))
+        # the widest stream tag is x with the subscript 1-y, so panel A's
+        # branches sit further apart than panel B's bare fans
         fan_tree(frame, core, B=4, selected=1, stream_tags=tags, gate=True,
-                 fade_unselected=True)
+                 fade_unselected=True, spread=(0.07, 0.93))
 
 
 # -- B: three deliveries of the same error ----------------------------------
@@ -258,20 +314,11 @@ def backward_credit_schematic(ax) -> None:
             frame.credit_delivery(nodes, mode="subtree", targets=["J2"],
                                   rule_color=colour)
         elif mode == "scalar":
-            # D5: amber bus with hairline drops, fed from this soma's own δ0
-            # arrow (the same feed line as Fig. 1B's per-neuron card).
-            frame.credit_delivery(nodes, mode="scalar", rule_color=colour)
-            sx, sy = nodes.soma
-            tail = (sx + frame.fx(SOMA_R_PT + 11.0),
-                    sy - frame.fy(SOMA_R_PT + 7.0))
-            x_bus = nodes["T4"][0] + frame.fx(6.0)
-            y_bus = nodes["T4"][1] + frame.fy(8.0)
-            tag_w = (_text_w_pt(ax, "δ", PT_ANNOT) + 0.4
-                     + _text_w_pt(ax, "0", PT_SMALL) + 1.8)
-            x_from = tail[0] + frame.fx(tag_w + 2.0)
-            ax.plot([x_from, x_bus, x_bus], [tail[1], tail[1], y_bus],
-                    color=colour, lw=frame.lw(LW_HAIR), solid_capstyle="round",
-                    solid_joinstyle="round", zorder=4.8)
+            # D5: one amber bus above the junction row, a hairline drop into
+            # EVERY junction (not the terminals, which carry the excitatory
+            # contacts), and the source dot at this soma.
+            amber_bus(frame, nodes, [f"J{i + 1}" for i in range(4)],
+                      colour=colour, tip_pt={"J2": 4.8}, bus_pt=14.5)
         else:
             # cyclic derangement: the same capsule glyph on branch c + 1 with
             # the entry arrow in the control colour, plus the b -> b + 1 hop
@@ -355,12 +402,26 @@ def alignment_collapse(ax, intervals: pd.DataFrame,
     trained_zero = {}
     for b in BRANCHES:
         colour = RAMP[b]
-        e0 = common[common.branches.eq(b) & common.epoch.eq(0)] \
+        # Beyond chi_c the epoch-0 cosine is already saturated (-0.91 to
+        # -0.99): those markers carry no information, overprint each other
+        # and overprint the epoch-250 curves, so the epoch-0 series stops at
+        # its own boundary dose, which the sweep samples exactly for every B
+        # (chi_c = 1, 2/3, 4/7).  The last kept marker therefore sits on zero
+        # at chi_c, which is the panel's claim.
+        e0 = common[common.branches.eq(b) & common.epoch.eq(0)
+                    & common.conflict_probability.le(CHI_C[b] + 1e-9)] \
             .sort_values("conflict_probability")
+        if len(e0) < 3 or abs(float(e0.conflict_probability.max())
+                              - CHI_C[b]) > 1e-9:
+            raise ValueError(f"B = {b}: the epoch-0 sweep does not sample "
+                             "its own boundary dose")
         e250 = common[common.branches.eq(b) & common.epoch.eq(250)] \
             .sort_values("conflict_probability")
+        # the sweep samples five doses inside chi in [0.5, 0.75], which is
+        # 5.3 pt apart on this axis, so the epoch-0 reference layer is drawn
+        # at MARKER_MS - 1.2; the epoch-250 means keep the token size
         ax.plot(e0.conflict_probability, e0.mean_cosine, linestyle="none",
-                marker=B_MARKER[b], ms=MARKER_MS, markerfacecolor="white",
+                marker=B_MARKER[b], ms=MARKER_MS - 1.2, markerfacecolor="white",
                 markeredgecolor=colour, markeredgewidth=LW_EDGE, zorder=3)
         x = e250.conflict_probability.to_numpy(float)
         ax.fill_between(x, e250.ci95_low, e250.ci95_high, color=colour,
@@ -375,8 +436,8 @@ def alignment_collapse(ax, intervals: pd.DataFrame,
                 markeredgewidth=LW_EDGE, zorder=5)
     ax.plot([0.0, 1.0], [0.0, 0.0], color=MUTE, lw=LW_REF, dashes=DASHES,
             zorder=0, solid_capstyle="butt")
-    ax.text(0.98, 1.11, "epoch 0", fontsize=PT_SMALL, color=MUTE,
-            ha="right", va="bottom")
+    _tag_chain(ax, (0.03, 1.20), 0.0, "epoch 0, to χ", "c", "", color=MUTE,
+               va="bottom")
     # epoch-0 markers fall to -1 beyond chi_c, so the epoch-250 tag sits in
     # the lower-left region every trained curve is still above
     ax.text(0.03, -0.64, "epoch 250", fontsize=PT_SMALL, color=MUTE,
@@ -414,11 +475,13 @@ def boundary_test(ax, crossings: pd.DataFrame,
                    edgecolors="none", zorder=2.5)
         n_missing = int(column.isna().sum())
         if n_missing:
-            ax.scatter(xpos + np.linspace(-0.09, 0.09, n_missing),
+            # the fan is pitched wider than SEED_MS so the five open
+            # triangles read as five markers, not as one zigzag band
+            ax.scatter(xpos + np.linspace(-0.18, 0.18, n_missing),
                        np.full(n_missing, 1.055), marker="^", s=SEED_MS ** 2,
                        facecolors="white", edgecolors=AMBER, lw=LW_EDGE,
                        zorder=5)
-            ax.text(xpos + 0.14, 1.058, f"{n_missing}/{len(column)} > 1",
+            ax.text(xpos + 0.26, 1.058, f"{n_missing}/{len(column)} > 1",
                     fontsize=PT_SMALL, color=AMBER_TEXT, ha="left",
                     va="center")
 
@@ -429,11 +492,11 @@ def boundary_test(ax, crossings: pd.DataFrame,
     ax.plot(x, observed, color=AMBER, lw=LW_DATA, zorder=3)
     ax.plot(x, predicted, linestyle="none", marker="D", ms=MARKER_MS,
             markerfacecolor="white", markeredgecolor=INK,
-            markeredgewidth=LW_EDGE, zorder=4, label="analytic boundary")
+            markeredgewidth=LW_EDGE, zorder=4, label="analytic")
     ax.plot(x, observed, linestyle="none", marker="o", ms=MARKER_MS,
             markerfacecolor=AMBER, markeredgecolor="white",
-            markeredgewidth=LW_EDGE, zorder=5, label="mean-curve crossing")
-    ax.legend(loc="lower left", bbox_to_anchor=(0.0, 0.02), frameon=False,
+            markeredgewidth=LW_EDGE, zorder=5, label="mean curve")
+    ax.legend(loc="lower left", bbox_to_anchor=(0.0, 0.05), frameon=False,
               handlelength=1.5, handletextpad=0.45, borderaxespad=0.0,
               labelspacing=0.3, fontsize=PT_LEGEND)
     ax.set_xlim(-0.35, 2.35)
@@ -485,11 +548,11 @@ def accuracy_facet(ax, summary: pd.DataFrame, branches: int, *,
         # the deranged curve passes (0.55 < chi < 0.75 above the line)
         ax.text(0.76, 0.51, "chance", fontsize=PT_SMALL, color=MUTE,
                 ha="right", va="bottom")
-        ax.text(0.02, 0.815, "branch-specific", fontsize=PT_SMALL,
+        ax.text(0.02, 0.830, "branch-specific", fontsize=PT_SMALL,
                 color=GREEN, ha="left", va="bottom")
         ax.text(0.80, 0.63, "neuron-shared", fontsize=PT_SMALL,
                 color=AMBER, ha="right", va="top")
-        ax.text(0.02, 0.575, "deranged", fontsize=PT_SMALL, color=GRAY,
+        ax.text(0.02, 0.590, "deranged", fontsize=PT_SMALL, color=GRAY,
                 ha="left", va="bottom")
     if note:
         ax.text(*note[0], note[1], fontsize=PT_SMALL, color=MUTE,
@@ -521,8 +584,13 @@ def boundary_tag(ax, branches: int) -> None:
 
 
 def _check_identities(contrasts: pd.DataFrame, interactions: pd.DataFrame,
-                      intervals: pd.DataFrame, trajectories: pd.DataFrame):
+                      intervals: pd.DataFrame, trajectories: pd.DataFrame,
+                      order: dict):
     """Assertions behind the caption's exact claims."""
+    if not (order["accuracy_strict_order_pairs"]
+            == order["accuracy_total_pairs"] == 20):
+        raise ValueError("Fig. 2E caption claims the predicted branch order "
+                         f"in 20/20 seeds; boundary_order.json reports {order}")
     acc = contrasts[contrasts.endpoint.eq("test_accuracy")]
     ties = acc[acc.contrast.isin(["correct - BP", "correct - gated point"])]
     if not (ties.ties.eq(20).all() and np.allclose(ties.mean_difference, 0.0)):
@@ -570,6 +638,9 @@ def _equalize_row_widths(canvas: NativeCanvas, rows) -> None:
     canvas.lock_reserves()
 
 
+LAST_BUILD: dict = {}
+
+
 def build() -> list:
     mpl.rcParams["lines.markeredgewidth"] = LW_EDGE
     summary = pd.read_csv(PATH_NECESSITY / "condition_summary.csv")
@@ -580,7 +651,9 @@ def build() -> list:
     intervals = pd.read_csv(TRAJECTORIES / "figure_S29_gradient_intervals.csv")
     zero_crossings = pd.read_csv(TRAJECTORIES / "zero_alignment_crossings.csv")
     trajectories = pd.read_csv(TRAJECTORIES / "condition_summary.csv")
-    _check_identities(contrasts, interactions, intervals, trajectories)
+    order = json.loads(
+        (PATH_NECESSITY / "boundary_order.json").read_text())
+    _check_identities(contrasts, interactions, intervals, trajectories, order)
     n_pos = int(interactions.set_index("branches").loc[4].positive_pairs)
     n_seeds = int(interactions.set_index("branches").loc[4].n_seeds)
     n_ties = int(contrasts[contrasts.endpoint.eq("test_accuracy")
@@ -591,7 +664,7 @@ def build() -> list:
         hgutter_pt=HGUTTER_PT, vgutter_pt=VGUTTER_PT, margins=MARGINS,
     )
     ax_a = canvas.panel("A", 0, 0, 7, schematic=True, lock=False,
-                        title="Context selects one branch; conflict corrupts the rest")
+                        title="Context gates a branch; conflict corrupts")
     ax_b = canvas.panel("B", 0, 7, 5, schematic=True, lock=False,
                         title="Three ways to deliver the same error")
     ax_c = canvas.panel("C", 1, 0, 4, title="Boundary holds at epoch 0")
@@ -610,7 +683,7 @@ def build() -> list:
     alignment_collapse(ax_d, intervals, zero_crossings)
     boundary_test(ax_e, crossings, seed_boundaries)
     accuracy_facet(ax_f, summary, 2, first=True,
-                   note=((0.06, 0.40), "BP and gated point\n= branch-specific\n"
+                   note=((0.03, 0.40), "BP and gated point\n= branch-specific\n"
                          f"(all {n_ties} pairs tie)", "left", "top"))
     accuracy_facet(ax_g, summary, 4, first=False,
                    note=((0.03, 0.44), "selection ×\nconflict slopes\n"
@@ -623,6 +696,7 @@ def build() -> list:
     for ax, b in ((ax_f, 2), (ax_g, 4), (ax_h, 8)):
         boundary_tag(ax, b)
     findings = canvas.align_letters()
+    LAST_BUILD["canvas"] = canvas        # for the collision probe below
     COMPONENT.parent.mkdir(parents=True, exist_ok=True)
     problems = canvas.save(COMPONENT, name="main_figure_04_native")
     PUBLISHED.parent.mkdir(parents=True, exist_ok=True)

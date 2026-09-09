@@ -94,7 +94,19 @@ CONTROLS_G = (("best matched control", "best_matched_nonanatomical_oracle", "ora
 Y_LIM = (0.10, 0.92)
 
 # D7 K-cycle: four hues that are never data series; 62 % ink mixes for k >= 4.
+# Reserved for B's group identity (and F's partition capsule) alone.
 K_CYCLE = ("dend", "soma", "exc", "mute")
+# D8 ordinal ramp for A's coefficient tiers (|0.15| < |0.45| < |0.75|).
+# journal_style.py does not register ORDINAL_RAMP yet and a per-figure task
+# may not edit it, so this builder defines the same three values locally,
+# exactly as scripts/build_main_figure_04.py (Fig. 2) does.
+ORDINAL_RAMP = (mix("edge", 45), mix("edge", 75), COLORS["edge"])
+CAPSULE_TINT_PCT = 58          # tint of A's ordinal tier band (see _tier_bands)
+TIER_BAND_W_PT = 5.6           # fixed width of an A tier band
+LIFT_PT = 4.2                     # stream-label lift above its terminal (pt)
+# (terminal, sideways nudge in pt): the four streams panel A argues about,
+# each nudged along the canopy so its label hugs its own tip.
+A_STREAM_LABELS = ((0, -2.2), (2, -2.4), (3, 3.6), (7, 2.2))
 
 
 def _k_hue(k):
@@ -220,6 +232,24 @@ def _badge(ax, xy, kind, *, text=None, ha="right", va="top", transform=None,
                              facecolor=face, edgecolor=edge, linewidth=LW_HAIR), **kw)
 
 
+def _tier_bands(frame, nodes, blocks, colors, *, pct=CAPSULE_TINT_PCT,
+                width_pt=TIER_BAND_W_PT):
+    """Frame.partition's capsule geometry at a fixed, narrower width.
+
+    ``Frame.partition`` scales its capsule with the terminal pitch (5.6 pt
+    for one terminal, 10 pt for four), so an ORDINAL_RAMP tint that is
+    legible under the one-terminal sibling band turns the four-terminal
+    other-half band into a grey slab.  Same chains, same zorder, one width.
+    """
+    for block, colour in zip(blocks, colors):
+        members = set(block)
+        chains = [[nodes[nodes.parent[n]], nodes[n]] for n in block
+                  if nodes.parent.get(n) in members]
+        if not chains:
+            chains = [[nodes[block[0]], nodes[block[0]]]]
+        frame._draw_chains(chains, mix(colour, pct), width_pt)
+
+
 def _lerp(a, b, t):
     return (a[0] + t * (b[0] - a[0]), a[1] + t * (b[1] - a[1]))
 
@@ -230,6 +260,28 @@ def _subtree_arrow(frame, nodes, target, color):
     p0 = nodes[par] if par in nodes else nodes.soma
     frame.arrow(_lerp(p0, nodes[target], 0.40), _lerp(p0, nodes[target], 0.80),
                 color=color, lw=LW_EDGE, head=4.0, zorder=4.6)
+
+
+def _gap_span(ax, x, y_lo, y_hi, tag, tag_xy, *, ha="left", dx=0.07, cap=0.06):
+    """Double-headed span between one paired pair, tagged in clear whitespace.
+
+    The Fig. 6 C leader idiom applied to a gap: hairline caps on the two
+    paired markers, a mute double arrow between them and a leader from the
+    middle of that span to the PT_ANNOT tag, so the number annotates the
+    difference and not either marker.
+    """
+    xs = x + dx
+    for y in (y_lo, y_hi):
+        ax.plot([x, xs + cap], [y, y], color=MUTE, lw=LW_HAIR, zorder=1)
+    ax.annotate("", xy=(xs, y_hi), xytext=(xs, y_lo),
+                arrowprops=dict(arrowstyle="<->", color=MUTE, lw=LW_HAIR,
+                                shrinkA=0.0, shrinkB=0.0, mutation_scale=6.0),
+                zorder=1)
+    mid = 0.5 * (y_lo + y_hi)
+    ax.plot([xs + cap, tag_xy[0] - 0.04], [mid, tag_xy[1]], color=MUTE,
+            lw=LW_HAIR, zorder=1)
+    return ax.text(tag_xy[0], tag_xy[1], tag, fontsize=PT_ANNOT, color=INK,
+                   ha=ha, va="center")
 
 
 def _group_root(nodes, K, terminal="T3"):
@@ -282,49 +334,66 @@ def _accuracy_axes(ax, *, ylabel):
 def panel_task(ax, tiers):
     f = Frame(ax)
     W, H = f.w_pt, f.h_pt
-    sub_pt, rows_pt, foot_pt, delta_pt = LINE_BAND_PT, 17.0, LINE_BAND_PT, 12.0
+    sub_pt, rows_pt, foot_pt, delta_pt = LINE_BAND_PT, 19.0, LINE_BAND_PT, 12.0
     f.text((0.5, 1.0 - f.fy(sub_pt * 0.5)), "context selects the +sᵢ stream", size=PT_ANNOT)
     footer = "junctions define feedback supports only"
     if _text_w_pt(ax, footer, PT_SMALL) > W - 4.0:
         footer = "junctions define supports only"
     f.text((0.5, f.fy(foot_pt * 0.5)), footer, size=PT_SMALL, color=MUTE)
+    head_pt = sub_pt + rows_pt + LIFT_PT + 8.0      # key band + label ring
     rect = (0.0, f.fy(foot_pt + delta_pt), 1.0,
-            1.0 - f.fy(sub_pt + rows_pt + foot_pt + delta_pt + LINE_BAND_PT))
+            1.0 - f.fy(head_pt + foot_pt + delta_pt))
     nodes = f.balanced_tree(rect, mode="plain", output="z")
-    # tiers of the cued stream c3: sibling c4, same-half c1 c2, other half c5-c8
-    tier_of = {"T1": "same_half", "T2": "same_half", "T3": "cued", "T4": "sibling",
-               "T5": "other_half", "T6": "other_half", "T7": "other_half", "T8": "other_half"}
-    hue = {"cued": COLORS["exc"], "sibling": COLORS["soma"], "same_half": COLORS["dend"],
-           "other_half": COLORS["mute"]}
-    blocks = [["JLL", "T1", "T2"], ["JLR", "T4"],
+    # The three distractor tiers are ordinal factor levels of one coefficient
+    # (0.15 < 0.45 < 0.75), so they take ORDINAL_RAMP (D8); K_CYCLE stays the
+    # alphabet of B's group identity, one hgutter to the right.
+    blocks = [["JLR", "T4"], ["JLL", "T1", "T2"],
               ["JR", "JRL", "JRR", "T5", "T6", "T7", "T8"]]
-    f.partition(nodes, blocks, colors=("dend", "soma", "mute"))
+    _tier_bands(f, nodes, blocks, ORDINAL_RAMP)
     for a, b in zip(nodes.route("T3"), nodes.route("T3")[1:]):
         if (a, b) in nodes.edges:
             nodes.edges[(a, b)].set_linewidth(f.lw(LW_DATA))
     f.contact(nodes["T3"], kind="exc")
     f.soma(nodes.soma, output=True, label="z")
     f.error_in(nodes.soma, side="right")
-    lift = CONTACT_DIA_PT * 0.5 + 2.0
-    for i, t in enumerate(nodes.terminals):          # one PT_SMALL label per stream
-        f.text(f._off(nodes[t], 0.0, lift), "c" + "₁₂₃₄₅₆₇₈"[i], size=PT_SMALL,
-               color=label_color(hue[tier_of[t]]), va="bottom")
-    # tier key: name row (tier hue) over coefficient row (ink), spread evenly
-    y_name = 1.0 - f.fy(sub_pt + 4.5)
-    y_coef = 1.0 - f.fy(sub_pt + rows_pt - 4.0)
-    entries = [("cued", _signed(tiers["selected"], 0), "cued"),
-               ("sibling", _signed(tiers["sibling"]), "sibling"),
-               ("same half", _signed(tiers["same_half"]), "same_half"),
-               ("other half", _signed(tiers["other_half"]), "other_half")]
-    widths = [max(_text_w_pt(ax, n, PT_SMALL), _text_w_pt(ax, c, PT_SMALL))
-              for n, c, _ in entries]
+    # The terminal pitch (about 10 pt) is below the one-label-per-terminal
+    # floor for PT_SMALL: eight labels clear each other by only 2-4 pt and
+    # read as one cluster.  Label the four streams the panel argues about --
+    # the ends c1 and c8, the cued c3 and its sibling c4 -- with c4 lifted
+    # into the second band so the cued pair parts; the tier key carries the
+    # rest and F names every stream in its table.
+    for i, push in A_STREAM_LABELS:
+        f.text(f._off(nodes[nodes.terminals[i]], push, LIFT_PT),
+               "c" + "₁₂₃₄₅₆₇₈"[i], size=PT_SMALL,
+               color=COLORS["exc"] if i == CUED else INK)
+    # tier key: name over swatch + coefficient; the swatch keys the capsules
+    y_name = 1.0 - f.fy(sub_pt + 5.0)
+    y_coef = 1.0 - f.fy(sub_pt + rows_pt - 5.0)
+    entries = [("cued", _signed(tiers["selected"], 0), COLORS["exc"], "dot"),
+               ("sibling", _signed(tiers["sibling"]), ORDINAL_RAMP[0], "bar"),
+               ("same half", _signed(tiers["same_half"]), ORDINAL_RAMP[1], "bar"),
+               ("other half", _signed(tiers["other_half"]), ORDINAL_RAMP[2], "bar")]
+    sw_pt, sw_gap = 5.0, 2.0
+    widths = [max(_text_w_pt(ax, n, PT_SMALL),
+                  sw_pt + sw_gap + _text_w_pt(ax, c, PT_SMALL))
+              for n, c, _, _ in entries]
     gap = (W - 4.0 - sum(widths)) / (len(entries) - 1)
-    assert gap >= 4.0, gap
+    assert gap >= 3.0, gap
     x = 2.0
-    for (name, coef, key), w in zip(entries, widths):
-        cx = f.fx(x + w / 2.0)
-        f.text((cx, y_name), name, size=PT_SMALL, color=label_color(hue[key]))
-        f.text((cx, y_coef), coef, size=PT_SMALL, color=INK)
+    for (name, coef, colour, kind), w in zip(entries, widths):
+        f.text((f.fx(x + w / 2.0), y_name), name, size=PT_SMALL, color=INK)
+        run = sw_pt + sw_gap + _text_w_pt(ax, coef, PT_SMALL)
+        sx = x + (w - run) / 2.0
+        if kind == "dot":
+            ax.plot([f.fx(sx + sw_pt / 2.0)], [y_coef], ls="none", marker="o",
+                    ms=CONTACT_DIA_PT, mfc=colour, mec="none", zorder=6)
+        else:
+            ax.add_patch(Rectangle((f.fx(sx), y_coef - f.fy(1.7)), f.fx(sw_pt),
+                                   f.fy(3.4), facecolor=mix(colour, CAPSULE_TINT_PCT),
+                                   edgecolor=COLORS["grid"], linewidth=LW_HAIR,
+                                   zorder=6))
+        f.text((f.fx(sx + sw_pt + sw_gap), y_coef), coef, size=PT_SMALL, color=INK,
+               ha="left")
         x += w + gap
     return nodes
 
@@ -333,7 +402,11 @@ def panel_task(ax, tiers):
 def panel_dictionaries(ax, prediction):
     f = Frame(ax)
     sums = prediction.groupby("budget_k").raw_coefficient_sum.mean()
-    cells = f.split(4, axis="x", gap_pt=6.0)
+    cells = f.split(4, axis="x", gap_pt=6.0,
+                    pad_pt=(0.0, 0.0, LINE_BAND_PT, 0.0))
+    f.text((1.0, 1.0 - f.fy(LINE_BAND_PT * 0.5)),
+           "matrix rows = site blocks in tree order", size=PT_SMALL, color=MUTE,
+           ha="right")
     for cell, K in zip(cells, K_TICKS):
         core = f.task_card(cell, title=f"K = {K}", footer=f"group sum {_signed(sums[K])}",
                            emphasis=(K == 4))
@@ -418,13 +491,11 @@ def panel_rewiring(ax, summary, outcomes):
     np.testing.assert_allclose([paired[2][0], paired[4][0]], [23.2, 5.0], atol=0.1)
     _accuracy_axes(ax, ylabel=False)
     reference_line(ax, 0.5, label="chance", span=(-0.18, 3.18))
-    # difference tags in clear whitespace with hairline leaders to the pair
-    ax.text(0.95, 0.66, f"{_signed(paired[2][0])} pp", fontsize=PT_ANNOT, ha="center",
-            va="center")
-    ax.plot([0.97, 0.99], [0.625, 0.478], color=MUTE, lw=LW_HAIR, zorder=1)
-    ax.text(2.0, 0.875, f"{_signed(paired[4][0])} pp", fontsize=PT_ANNOT, ha="center",
-            va="center")
-    ax.plot([2.0, 2.0], [0.845, 0.83], color=MUTE, lw=LW_HAIR, zorder=1)
+    # each tag annotates the vertical gap between the two paired markers
+    _gap_span(ax, 1.0, rewired[1], matched[1], f"{_signed(paired[2][0])} pp",
+              (1.36, 0.305))
+    _gap_span(ax, 2.0, rewired[2], matched[2], f"{_signed(paired[4][0])} pp",
+              (2.32, 0.862))
     ax.text(0.05, 0.865, "matched tree", color=GREEN, fontsize=PT_SMALL, ha="left",
             va="center")
     ax.text(2.1, 0.70, "rewired", color=GREY, fontsize=PT_SMALL, ha="left", va="center")
@@ -455,14 +526,20 @@ def panel_coefficients(ax, source, contrasts_enc, contrasts_hard):
     ax.set_yticks([0.2, 0.5, 0.8])
     ax.tick_params(axis="y", labelleft=False)
     ax.set_xlabel("Coefficient source")
-    reference_line(ax, 0.5, label=None, span=(-0.55, 3.45))
+    reference_line(ax, 0.5, label="chance", span=(-0.55, 3.45))
     _badge(ax, (0.0, 0.875), "oracle", ha="center", va="center")
     _badge(ax, (2.0, 0.765), "exploratory", ha="center", va="center")
-    for y, name, row in ((0.455, "oracle", vs_oracle), (0.395, "frozen", vs_frozen)):
+    # both contrasts are of the soft estimator: they sit in the whitespace
+    # below chance, right-aligned, with one leader onto the soft cluster
+    span_x = ax.get_position().width * 518.4
+    left = 3.42
+    for y, name, row in ((0.445, "oracle", vs_oracle), (0.355, "frozen", vs_frozen)):
         tag = f"soft vs {name} {_signed(row.mean_pp)} pp"
-        if _text_w_pt(ax, tag, PT_ANNOT) > 0.72 * ax.get_position().width * 518.4:
+        if _text_w_pt(ax, tag, PT_ANNOT) > 0.80 * span_x:
             tag = f"vs {name} {_signed(row.mean_pp)} pp"
-        ax.text(0.45, y, tag, fontsize=PT_ANNOT, ha="left", va="center")
+        ax.text(3.42, y, tag, fontsize=PT_ANNOT, color=INK, ha="right", va="center")
+        left = min(left, 3.42 - _text_w_pt(ax, tag, PT_ANNOT) / span_x * 4.0)
+    ax.plot([left - 0.04, 1.02], [0.355, 0.300], color=MUTE, lw=LW_HAIR, zorder=1)
     ax.text(3.4, 0.875, "*outside the Holm family", color=MUTE, fontsize=PT_SMALL,
             ha="right", va="center")
     seeds = source.seed
@@ -513,13 +590,17 @@ def panel_controls(ax, supports):
     my = f.fy((body_pt - (mh * H + head_pt + foot_pt)) / 2.0 + foot_pt)
     A = np.abs(supports[[f"c{i + 1}" for i in range(8)]].to_numpy(float))
     A = A / A.max(axis=1, keepdims=True)
+    A = np.where(A > 0, 0.25 + 0.75 * A, 0.0)   # print floor: graded cells survive
     inner = f.dictionary_matrix((mx, my, mw, mh), A, color="point_mlp", label=None,
                                 row_groups=[1] * n_rows,
                                 yticks=[name for name, _ in CONTROLS_F])
     inner.tick_params(axis="y", labelsize=PT_SMALL, pad=2.0)
-    for j, s in ((0, "c₁"), (CUED, "c₃"), (7, "c₈")):
-        f.text((mx + f.fx(col_pt * (j + 0.5)), my + mh + f.fy(head_pt * 0.5)), s,
-               size=PT_SMALL, color=COLORS["exc"] if j == CUED else INK)
+    for j in range(n_cols):                       # every stream is named
+        f.text((mx + f.fx(col_pt * (j + 0.5)), my + mh + f.fy(head_pt * 0.5)),
+               str(j + 1), size=PT_SMALL,
+               color=COLORS["exc"] if j == CUED else INK)
+    f.text((mx - f.fx(2.0), my + mh + f.fy(head_pt * 0.5)), "c", size=PT_SMALL,
+           color=MUTE, ha="right")
     _badge(ax, (mx - f.fx(label_pt) - f.fx(2.0), my + mh + f.fy(head_pt * 0.5 + 1.0)),
            "control", ha="left", va="center")
     f.text((1.0, f.fy(4.5)), "random, dense: one illustrative draw", size=PT_SMALL,
@@ -556,15 +637,18 @@ def panel_forest(ax, contrasts, pairs):
     ax.text(-0.15, -0.52, "zero", fontsize=PT_SMALL, color=MUTE, rotation=90, ha="right",
             va="bottom")
     ax.text(13.9, 3.58, f"{_signed(hero.mean_difference_pp)} [{hero.ci95_low_pp:.2f}, "
-            f"{hero.ci95_high_pp:.2f}] pp", fontsize=PT_ANNOT, ha="right", va="center")
-    ax.text(13.9, 3.30, f"{int(hero.positive_seeds)}/{int(hero.n_pairs)} seeds, "
+            f"{hero.ci95_high_pp:.2f}] pp", fontsize=PT_ANNOT, color=INK, ha="right",
+            va="center")
+    ax.text(13.9, 3.14, f"{int(hero.positive_seeds)}/{int(hero.n_pairs)} seeds, "
             f"Holm P = {hero.p_holm_four_budgets:.4f}", fontsize=PT_SMALL, color=MUTE,
             ha="right", va="center")
-    _badge(ax, (13.9, 3.0), "ceiling", ha="right", va="center")
+    _badge(ax, (13.9, 2.66), "ceiling", ha="right", va="center")
     ax.text(13.9, -0.40, f"derangement {_signed(derangement.mean_difference_pp, 1)} off scale",
             fontsize=PT_SMALL, color=MUTE, ha="right", va="center")
+    for key, r in rows.items():
+        assert int(r.n_pairs) == 20, (key, r.n_pairs)
     return {k: [float(r.mean_difference_pp), float(r.ci95_low_pp), float(r.ci95_high_pp),
-                int(r.positive_seeds)] for k, r in rows.items()}
+                int(r.positive_seeds), int(r.n_pairs)] for k, r in rows.items()}
 
 
 # ── build ────────────────────────────────────────────────────────────────
@@ -581,6 +665,7 @@ def build():
     contrasts_enc = pd.read_csv(ENCODER / "paired_contrasts.csv")
     contrasts_hard = pd.read_csv(HARD / "paired_contrasts.csv")
     prediction = coefficient_prediction()
+    normalized = prediction.groupby("budget_k").normalized_coefficient_sum.mean()
     tiers = task_tiers()
     supports = control_supports(0)
     source_e = coefficient_source_table(enc, hard)
@@ -609,7 +694,10 @@ def build():
     style_direct_color_labels(canvas.fig)
     canvas.lock_reserves()                 # place G behind its reserve before aligning
     findings = canvas.align_letters()
-    problems = canvas.save(OUT, name="credit_first_figure_03", dpi=180)
+    # lock=False: the reserves are already locked, and a second lock pass would
+    # re-place every letter against its own panel's ink, undoing the shared
+    # module-column x that align_letters gave B and D.
+    problems = canvas.save(OUT, name="credit_first_figure_03", dpi=180, lock=False)
     PUBLISHED.parent.mkdir(parents=True, exist_ok=True)
     shutil.copyfile(OUT, PUBLISHED)
 
@@ -656,6 +744,8 @@ def build():
                        for p in files},
         layout_findings=list(findings) + list(problems),
         derived_numbers=dict(group_sums={int(k): float(v) for k, v in sums.items()},
+                             normalized_group_sums={int(k): float(v) for k, v in
+                                                    normalized.items()},
                              accuracy_by_K=stats_c, rewiring_pp=stats_d, coefficient_source=stats_e,
                              k4_contrasts_pp=stats_g),
         coefficient_scope="Raw group sums; implemented route rows divide by sqrt(group size). "
@@ -665,32 +755,65 @@ def build():
             "canvas 490 pt, rows 122/108/108, vgutter 48 (row-separation audit floor)",
             "left margin 52 (letter-column audit)",
             "F drawn as one ghost tree plus a 4 x 8 support table instead of four 38-pt cards",
-            "D difference tags print the mean only; intervals in the caption",
+            "D difference tags print the mean only (as a span between the paired "
+            "markers); intervals in the caption",
+            "A draws its three tiers as ORDINAL_RAMP bands (D8) at a fixed 5.6 pt width "
+            "(private _tier_bands), not 16 % K-cycle capsules: K_CYCLE is B's alphabet and "
+            "a 16 % tint of an edge mix does not print",
+            "A labels four streams (c1, c3, c4, c8): at the 10 pt terminal pitch eight "
+            "PT_SMALL labels clear each other by 2-4 pt and read as one cluster",
+            "F table cells carry a 0.25 shading floor so sub-maximal supports print",
             "private helpers _badge (ceiling, exploratory) and _subtree_arrow (D7 K-cycle)"])
     (RECORDS / "figure_03_sources.json").write_text(json.dumps(payload, indent=2) + "\n")
+    def _iv(v, digits=2):
+        return f"[{_minus(f'{v[1]:.{digits}f}')}, {_minus(f'{v[2]:.{digits}f}')}]"
+
+    norm_txt = ", ".join(_signed(normalized[k], 3) for k in K_TICKS)
+    raw_txt = ", ".join(_signed(sums[k]) for k in K_TICKS)
+    hero_g = stats_g["best_matched_nonanatomical_oracle"]
+    cnt = {k: f"{v[3]}/{v[4]}" for k, v in stats_g.items()}
+    # the printed seed counts are read off positive_seeds / n_pairs, never typed:
+    # dense rank-4 is 15/20 like the best-matched control, not 20/20
+    assert cnt["random_sparse_matched"] == cnt["depth_interleaved_bins"], cnt
+    ctrl_txt = (f"{_signed(stats_g['random_rank_k'][0])} pp over dense rank-4 "
+                f"({cnt['random_rank_k']} seeds), "
+                f"{_signed(stats_g['random_sparse_matched'][0])} and "
+                f"{_signed(stats_g['depth_interleaved_bins'][0])} pp over random-sparse and "
+                f"depth-interleaved ({cnt['depth_interleaved_bins']} each)")
     caption = (
         "**Hierarchical distractors and ancestry bandwidth.** "
-        "**A**, Eight streams c1–c8 enter the terminals of a balanced feedback tree; the cued "
-        "stream (c3, contact) carries +1·sᵢ, its sibling, same-half and other-half streams carry "
-        "−0.15, −0.45 and −0.75 sᵢ (tinted tiers); output z, somatic error δ0; junctions define "
-        "feedback supports only. **B**, Ancestry dictionaries A (8 × K) with the K subtree "
-        "capsules and the group receiving c3's credit; raw group sums −3.05, −0.05, +0.85, +1.00 "
-        "(implemented rows divide by √group size: −1.08, −0.04, +0.60, +1.00), a design "
-        "consequence, not a discovered optimum. **C**, Held-out accuracy across K: ancestry, "
-        "derangement and the per-seed maximum of four matched controls computed after training "
-        "(ceiling, not a learned selector); means and 95% seed-bootstrap intervals, 20 seeds. "
-        "**D**, Task-matched tree versus degree/depth-matched rewired tree under ancestry "
-        "feedback; paired differences +23.2 [21.0, 25.3] and +5.0 [4.2, 5.9] pp at K = 2, 4; "
-        "exact ties at K = 1, 8. **E**, K = 4 coefficient source in 20 fresh seeds "
-        "(52000–52019): oracle context, learned soft estimator (−54.47 [−55.45, −53.54] pp "
-        "versus oracle, +7.16 [6.26, 8.07] pp versus frozen profile, Holm-adjusted), frozen "
-        "profile, and the exploratory hard readout (hollow seeds; outside the Holm family). "
-        "Seeds as dots, means with 95% intervals. **F**, Recipients of c3's credit at K = 4: "
-        "the ghost tree shows the correct ancestry delivery (c3 + sibling c4); the table shows "
-        "what each rank-matched control delivers instead (random and dense rows are single "
-        "illustrative draws). **G**, Ancestry minus each control at K = 4 (paired seeds, means, "
-        "95% intervals): +1.27 [0.59, 1.95] pp over the best matched control (15/20, Holm "
-        "P = 0.0101); derangement +61.1 pp off scale.\n")
+        "**A**, Eight streams c1–c8 at the terminals of a balanced feedback tree (four "
+        "labelled); the cued stream c3 (blue contact) carries +1 sᵢ, its sibling, same-half "
+        f"and other-half streams {_signed(tiers['sibling'])}, {_signed(tiers['same_half'])} "
+        f"and {_signed(tiers['other_half'])} sᵢ (grey tier bands, darkest most negative). "
+        "Output z, somatic error δ0. "
+        "**B**, Ancestry dictionaries A (8 × K): capsules mark the K subtree groups, the "
+        "arrow the group receiving c3's credit; each drawn row is a site block in tree "
+        f"order. Raw group sums {raw_txt}; implemented rows divide by the square root of "
+        f"group size ({norm_txt}), a design consequence, not a discovered optimum. "
+        "**C**, Held-out accuracy across K for ancestry, route derangement and the per-seed "
+        "maximum of four matched controls taken after training (ceiling, not a learned "
+        "selector). "
+        "**D**, Matched versus degree/depth-matched rewired tree under ancestry feedback; "
+        f"spans give paired differences {_signed(stats_d[2][0])} "
+        f"{_iv(stats_d[2])} and {_signed(stats_d[4][0])} {_iv(stats_d[4])} pp at K = 2, 4; "
+        "exact ties at K = 1, 8. "
+        "**E**, K = 4 coefficient source in 20 fresh seeds (52000–52019): oracle context, "
+        "learned soft estimator, frozen profile and the exploratory hard readout (hollow "
+        f"seeds; outside the Holm family); soft − oracle {_signed(stats_e['soft_minus_oracle'][0])} "
+        f"{_iv(stats_e['soft_minus_oracle'])} pp and soft − frozen "
+        f"{_signed(stats_e['soft_minus_frozen'][0])} {_iv(stats_e['soft_minus_frozen'])} pp, "
+        "Holm-adjusted. "
+        "**F**, Recipients of c3's credit at K = 4: the ghost tree shows the correct ancestry "
+        "delivery (c3 and sibling c4); rows are rank-matched controls, columns the eight "
+        "streams, cell darkness the cued context's absolute delivered support normalised to "
+        "each row's largest cell (random-sparse and dense rows: single draws). "
+        f"**G**, Ancestry minus each control at K = 4: {_signed(hero_g[0])} {_iv(hero_g)} pp "
+        f"over the best matched control ({hero_g[3]}/{hero_g[4]} seeds, Holm "
+        f"P = {float(contrasts[contrasts.control.eq('best_matched_nonanatomical_oracle') & contrasts.budget_k.eq(4)].p_holm_four_budgets.iloc[0]):.4f}), "
+        f"{ctrl_txt}; derangement +61.1 pp off scale. Means with 95% seed-bootstrap "
+        "intervals; seeds as dots (E, G); dashed chance (C–E) and zero (G) lines; C, D, G "
+        "share 20 paired seeds.\n")
     (RECORDS / "figure_03_caption.md").write_text(caption)
     return list(findings) + list(problems), payload
 

@@ -15,6 +15,16 @@ dictionary triplet with a row-aligned site tree; D task cards and badges,
 E teacher / student / chance furniture with the rule key, F a partition
 with the focal shunt, G the local-gate tree; H the stage pair, I the
 operator tree pair, J the measured-response boundary card.
+
+2026-09-08 spec upgrade
+-----------------------
+The gallery now also proves the glyph RULES, not only the glyph shapes.
+Panel C draws the arbor the one way it is ever drawn -- soma lowest, fanning
+upward -- and aligns the dictionary to a :meth:`Frame.site_strip` instead of
+laying the neuron on its side; every panel that draws a neuron carries its
+δ0 arrow and calls ``Frame.require_delta0()``, and the three swatch cards
+(B delivery glyphs, D cards, E furniture) declare the exemption with a
+reason, which the canvas records in the manifest.
 """
 from __future__ import annotations
 
@@ -62,7 +72,7 @@ def panel_primitives(ax):
     ncol, nrow = 3, 4
     cw, ch = w / ncol, h / nrow
     items = [
-        ("soma", lambda c: f.soma(c, output=True, label="z")),
+        ("soma", lambda c: f.soma(c, output=True, label="z", delta0=False)),
         ("junction", lambda c: f.junction(c)),
         ("site disc", lambda c: f.junction(c, r_pt=2.1,
                                            site_color=COLORS["shunting"])),
@@ -100,6 +110,7 @@ def panel_primitives(ax):
             soma = (cx - f.fx(11.0), gy + f.fy(5.0))
             f.soma(soma)
             f.error_in(soma, side="right")
+            # the one soma on this sheet that is a NEURON and not a swatch
         elif draw == "ghost":
             f.dendrite((cx - f.fx(8.0), gy - f.fy(5.0)), (cx, gy), level=1,
                        ghost=True)
@@ -113,6 +124,7 @@ def panel_primitives(ax):
         if ch * f.h_pt >= 26.0:
             f.text((cx, y0 + h - (r + 1) * ch + f.fy(2.0)), caption,
                    size=PT_SMALL, color=COLORS["mute"], va="bottom")
+    f.require_delta0()          # the error-in cell states the rule
     return ax
 
 
@@ -122,8 +134,10 @@ def panel_delivery(ax):
     core = f.task_card((0.0, 0.0, 1.0, 1.0))
     cells = [Frame.inset(c, left=0.02, right=0.02, top=0.02, bottom=0.02)
              for c in _grid(f, core, 2, 2, gap_pt=4.0)]
-    modes = (("scalar", dict(mode="scalar"), "scalar", 11.0, 6.0),
-             ("neuron", dict(mode="neuron"), "neuron", 0.0, 0.0),
+    modes = (("scalar", dict(mode="scalar"), "scalar", 11.0, 8.0),
+             # the per-neuron bus needs the same band above the canopy and a
+             # little more at the right, where its riser leaves the soma
+             ("neuron", dict(mode="neuron"), "neuron", 11.0, 4.0),
              ("subtree", dict(mode="subtree", K=4, alpha_tags=True),
               "K = 4", 9.0, 0.0),
              ("exact", dict(mode="exact", alpha_tags=True), "exact", 0.0, 0.0))
@@ -134,6 +148,11 @@ def panel_delivery(ax):
         f.credit_delivery(nodes, **kw)
         f.text((cell[0] + cell[2] - f.fx(2.0), cell[1] + f.fy(1.0)), tag,
                size=PT_SMALL, color=COLORS["mute"], ha="right", va="bottom")
+    f.require_delta0(
+        allow_no_delta0=True,
+        reason="delivery-glyph swatch: the four spread glyphs are shown on "
+               "one bare tree at thumbnail size; δ0 is drawn in every "
+               "schematic that states a rule (panels A, C, F, G, H, I, J)")
     return ax
 
 
@@ -161,29 +180,23 @@ def panel_dictionary(ax):
         A[[k, 3 + 3 * k, 4 + 3 * k, 5 + 3 * k], k] = 1.0
     order = [0, 3, 4, 5, 1, 6, 7, 8, 2, 9, 10, 11]
     c = np.array([1.0, -1.0, 0.0])
-    # the tree owns the row pitch: 12 rows at <= 8 pt, product rows snap to it
+    # the strip owns the row pitch: 12 rows at <= 8 pt, product rows snap to it
     pitch = min(8.0, (h * f.h_pt - LINE_BAND_PT - 8.0) / 12.0)
-    tree_h = f.fy(12 * pitch)
-    tree_y = y0 + f.fy(LINE_BAND_PT) + (h - f.fy(LINE_BAND_PT) - tree_h) / 2.0
-    tree_rect = (x0 + f.fx(6.0), tree_y, f.fx(50.0), tree_h)
-    nodes = f.site_tree(tree_rect, subtree_colors=subtree_colors,
-                        numbered=True)
-    prod_rect = (x0 + f.fx(60.0), y0, f.fx(66.0), h)
+    strip_h = f.fy(12 * pitch)
+    strip_y = y0 + f.fy(LINE_BAND_PT) + (h - f.fy(LINE_BAND_PT) - strip_h) / 2.0
+    # 2026-09-08: the arbor is drawn the one way it is ever drawn -- soma
+    # lowest, fanning upward -- and the matrix aligns to a SITE STRIP, not to
+    # a tree laid on its side.
+    tree_rect = (x0 + f.fx(3.0), strip_y, f.fx(62.0), strip_h)
+    nodes = f.site_tree(tree_rect, subtree_colors=subtree_colors)
+    f.error_in(nodes.soma, side="right")
+    strip = f.site_strip((x0 + f.fx(68.0), strip_y, f.fx(17.0), strip_h),
+                         subtree_colors=subtree_colors, numbered=True)
+    prod_rect = (x0 + f.fx(90.0), y0, f.fx(66.0), h)
     f.dictionary_product(prod_rect, A[order], c, col_colors=subtree_colors,
-                         row_groups=[4, 4, 4], align_to=nodes)
-    # realized route supports (measured=True) beside the product -- only
-    # when the slot leaves the 38 pt they need (a 5-module slot does)
-    if w * f.w_pt < 60.0 + 66.0 + 12.0 + 26.0 + 6.0:
-        return ax
-    R = np.zeros((12, 4))
-    R[:, 0] = 1.0
-    R[0:4, 1] = 1.0
-    R[4:8, 2] = 1.0
-    R[8:12, 3] = 1.0
-    mx = x0 + f.fx(60.0 + 66.0 + 12.0)
-    my = nodes[nodes.order[-1]][1] - f.fy(pitch / 2.0)
-    f.dictionary_matrix((mx, my, f.fx(4 * 6.5), f.fy(12 * pitch)), R,
-                        measured=True, row_groups=[4, 4, 4], label="R")
+                         row_groups=[4, 4, 4], align_to=strip)
+    f.require_soma_lowest()
+    f.require_delta0()
     return ax
 
 
@@ -202,6 +215,11 @@ def panel_cards(ax):
              bottom[1] + bottom[3] - f.fy(3.5)), "control")
     body = Frame.inset(core, left=0.06, right=0.06, top=0.04, bottom=0.04)
     f.balanced_tree(body, depth=2, trunk=False, mode="inputs", ghost=True)
+    f.require_delta0(
+        allow_no_delta0=True,
+        reason="card swatch: the two cards show the frame, the badge and the "
+               "ghosted background cell at card size; the δ0 arrow belongs "
+               "to the schematic the card carries, not to the card")
     return ax
 
 
@@ -235,7 +253,11 @@ def panel_furniture(ax):
     f.rule_key((x0, y0, w, f.fy(key_pt)),
                [("scalar", "scalar", "scalar"), ("exact", "bp", "exact"),
                 ("subtree", "shunting", "subtree"),
-                ("neuron", "credit_ink", "neuron")])
+                ("neuron", "scalar", "neuron")])
+    f.require_delta0(
+        allow_no_delta0=True,
+        reason="furniture card: teacher/student lines, the chance reference, "
+               "two badges and the rule key — no neuron is drawn here")
     return ax
 
 
@@ -260,6 +282,8 @@ def panel_partition(ax):
     f.subscript((site[0] - f.fx(3.0), site[1] - f.fy(3.0)), "g", "shunt",
                 size=PT_SMALL, color=COLORS["inh"], ha="right", va="top")
     f.error_in(nodes.soma, side="right")
+    f.require_soma_lowest()
+    f.require_delta0()
     return ax
 
 

@@ -10,11 +10,11 @@
     "H": "v661 summary.json residual_capture comparisons (paired means, retained 95 % cell-bootstrap intervals, Holm-adjusted Wilcoxon cells-positive counts); the SVD row is the descriptive per-cell ancestry \u2212 oracle difference from cell_method_summary.csv; wiring column = wiring_density mean of each control at K = 8; sub-line = ancestry wiring_density and dictionary_rank means"
   },
   "source_sha256": {
-    "scripts/credit_first_figures/build_anatomy.py": "14c214836b6794394ad0bca98c50f49bcf9f004d5df25ceb6ea877f65be5acee",
+    "scripts/credit_first_figures/build_anatomy.py": "b441115f99bf64c6afea49a394296fb216972da330abb0e80d74c4f505d88876",
     "scripts/build_main_figure_07.py": "8dd526d60d35b572a17a68c77c1813279756251052d4921471d77c3fb16b885e",
-    "scripts/figure_canvas.py": "d8ce8f435cd727e8860da6d1a554fbfd3e1756a1cb18ea7b3602aa00347f52fd",
-    "scripts/journal_style.py": "d31c604f3d813463784fd1a4aa9ea64b93bd7ca32c1cb43617f031a4d6d2f0e0",
-    "scripts/native_schematics.py": "edd5694b7b530b82ddd33b193b74e4a175846981583ef575355dacff27cfec11",
+    "scripts/figure_canvas.py": "de3f566dd08270535deab95eb798b49cc17ccf4dfbb88e7ebdb50860903a6ad1",
+    "scripts/journal_style.py": "35861bf56befbda6ee9e6a59866f3f7b3085959961155a9a10cee0f0fbfa0e38",
+    "scripts/native_schematics.py": "3e74a3b7ccbb993d9c131d6997aba30a1d81be7728f335937e3fa2e14aa754b1",
     "scripts/anatomy_commonmode/run.py": "69b412551dc87f0c9ecf6221d14981abf282a3d9e0406d676f0f287d8af4aa35",
     "source_data/figure3/segment_metrics.csv": "7829c298c4e5b3209b758fb88b92b55f070420c00b383436e5d4e1601e7ff1cf",
     "source_data/anatomy_commonmode/protocol_freeze.json": "425448bdbecaf9e3c76fabf134a87ba5870d53fd5821c09a4aa7541f53835db0",

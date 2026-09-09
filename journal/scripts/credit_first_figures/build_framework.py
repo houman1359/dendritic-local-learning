@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
 """Credit-first Fig. 1: task-derived credit, neuronal identity versus resolution.
 
-Grid (DESIGN_SPEC §1): ``NativeCanvas`` 490 pt, rows 126 / 114 / 108 pt,
+Grid (DESIGN_SPEC §1): ``NativeCanvas`` 490 pt, rows 130 / 114 / 104 pt,
 hgutter 40, vgutter 40, margins 36 / 12 / 24 / 38 (the spec's 120 / 116 /
 110 split puts the 8-module B at aspect 2.50, above PANEL_ASPECT_MAX 2.40;
-the row weights stay inside D2's 104-136 pt band).  Row 2 declares an 11 pt
-top reserve so its letters clear D's two-line tick labels (row separation
-floor 8.5 pt).  Row 0 is the schematic
-row -- A (4 modules, credit entry) and B (8, three deliveries); row 1 holds
-the dictionary schematic C (5) beside the six-rule MNIST ladder D (7); row 2
-is the cohort family E | F | G (4 modules each).
+the row weights stay inside D2's 104-136 pt band and row 0 carries the
+schematic ladder at aspect 2.31).  Row 2 declares an 11 pt top reserve so
+its letters clear D's two-line tick labels (row separation floor 8.5 pt).
+Row 0 is the schematic row -- A (4 modules, credit entry) and B (8, three
+deliveries); row 1 holds the dictionary schematic C (5) beside the six-rule
+MNIST ladder D (7); row 2 is the cohort family E | F | G (4 modules each).
 
 Waiver (spec D3): E and F are the two halves of one cohort comparison
 (identical cohort rows, identical y limits, column-locked at modules 0 and
@@ -21,9 +21,14 @@ Every schematic element is drawn with the shared glyph library
 (``native_schematics.Frame``).  Private helpers (errata #7) cover what the
 library does not draw: the D5 amber bus fed from the soma's own error
 (``Frame.credit_delivery(mode='neuron')`` still draws the retired barrier
-glyph) and the layer bus spanning a ghost neighbour; token-subscript chains
-for equation lines; and the three-hue K cycle (``journal_style.K_CYCLE`` is
-not defined yet).  This builder performs no fitting, rate selection, or
+glyph) and the layer bus spanning a ghost neighbour; a ghosted background
+tree (``Frame.balanced_tree(ghost=True)`` still draws its soma at full
+strength); the hat of ``δ̂`` (the figure font has no combining circumflex);
+token-subscript chains for equation lines; and the three-hue K cycle
+(``journal_style.K_CYCLE`` is not defined yet).  B's layer-scalar card is
+wider than the other two so the ghost neighbour and the shared source dot
+fit beside an identical hero tree (spec §0.5.5 keeps the tree geometry
+identical, not the card width).  This builder performs no fitting, rate selection, or
 interval fitting: every number is replayed from frozen Source Data and
 re-derived as an assertion.
 """
@@ -36,6 +41,7 @@ import sys
 import matplotlib
 matplotlib.use("Agg")
 from matplotlib.lines import Line2D
+from matplotlib.patches import Ellipse, Rectangle
 import numpy as np
 import pandas as pd
 
@@ -47,7 +53,7 @@ from figure_canvas import (COLORS, LW_DATA, LW_EDGE, LW_ERR, LW_HAIR, LW_REF,
                            PT_TICK, SEED_ALPHA, SEED_MS, Margins, NativeCanvas,
                            style_panel)
 from journal_style import label_color
-from credit_tree_schematics import AMBER_TEXT
+from credit_tree_schematics import AMBER_TEXT, mix
 from native_schematics import CONTACT_DIA_PT, Frame, _text_w_pt
 
 SOURCE = JOURNAL / "source_data"
@@ -137,6 +143,46 @@ def amber_bus(f, points, *, x_lo, x_hi, y, source_at="right", clip=None):
     return arts
 
 
+GHOST_INK = mix("mute", 45)
+GHOST_RIM = mix("mute", 62)
+
+
+def ghost_tree(f, rect, **kw):
+    """A background tree at GHOST strength, soma included (spec §0.2).
+
+    ``Frame.balanced_tree(ghost=True)`` ghosts the strokes and rings but
+    always draws the soma at full soma-fill strength, which reads as a
+    second foreground neuron.  This wrapper restyles the soma disc of the
+    ghost call and returns ``(nodes, artists)`` so the caller can clip the
+    tree to a card.
+    """
+    ax = f.ax
+    n_p, n_l, n_t = len(ax.patches), len(ax.lines), len(ax.texts)
+    nodes = f.balanced_tree(rect, ghost=True, labels=False, **kw)
+    arts = [*ax.patches[n_p:], *ax.lines[n_l:], *ax.texts[n_t:]]
+    for art in arts:
+        if isinstance(art, Ellipse) and abs(art.center[0] - nodes.soma[0]) < 1e-12 \
+                and abs(art.center[1] - nodes.soma[1]) < 1e-12:
+            art.set_facecolor(GHOST_INK)
+            art.set_edgecolor(GHOST_RIM)
+    return nodes, arts
+
+
+def hat(f, xy, w_pt, *, size, color=None):
+    """The circumflex of ``δ̂`` as a LW_HAIR chevron over a glyph of ``w_pt``.
+
+    The figure font carries no combining circumflex (U+0302 drops silently),
+    so the accent is drawn: two round-capped hairlines centred on the base
+    glyph, scaled with the type token.
+    """
+    color = INK if color is None else color
+    cx, half, rise = xy[0] + f.fx(w_pt / 2.0), 0.30 * size, 0.20 * size
+    y0 = xy[1] + f.fy(0.44 * size)
+    f.ax.plot([cx - f.fx(half), cx, cx + f.fx(half)],
+              [y0, y0 + f.fy(rise), y0], color=color, lw=f.lw(LW_HAIR),
+              solid_capstyle="round", solid_joinstyle="round", zorder=6)
+
+
 def card_footer(f, cell, lines, *, band_pt=20.0):
     """PT_SMALL mute footer lines (token subscripts) centred in the card's bottom band.
 
@@ -152,34 +198,50 @@ def card_footer(f, cell, lines, *, band_pt=20.0):
 
 # ── A: credit enters at the soma ──────────────────────────────────────────
 def credit_entry(ax):
+    """The layer, its readout and the return path of each neuron's error.
+
+    Vertical order (points from the axes floor, row 0 = 130 pt): task name
+    115.5, MNIST tile 96-113, the three canopies 86.6 / 95.6 / 104.6, the
+    somata 56.5 / 65.5 / 74.5, readout and loss cards 43.5-69.5, the return
+    line 31 with its δ_u origin tag above it, then the update equation and
+    its two operand lines.  The background trees are staggered up-right and
+    drawn first, so the hero's strokes and the readout card (white face)
+    pass in front of them; their somata are GHOST at 2.2 pt so they read as
+    depth rather than as three somata of one tree.  The return line drops
+    from the loss card's right EDGE so it cannot cross the origin tag --
+    that tag is the figure's only definition of δ_u.
+    """
     f = Frame(ax)
     X, Y = f.fx, f.fy
-    # MNIST tile (top left) and its arrow into the canopy
-    tile = ax.inset_axes((X(1), Y(94), X(18), Y(18)), transform=ax.transData)
+    # MNIST tile with its name above it: the canopy needs the space below
+    tile = ax.inset_axes((X(1), Y(96), X(17), Y(17)), transform=ax.transData)
     tile.imshow(DIGIT, cmap="gray_r", vmin=0, vmax=1, interpolation="nearest")
     tile.set_xticks([]); tile.set_yticks([])
     for spine in tile.spines.values():
         spine.set_color(COLORS["grid"]); spine.set_linewidth(LW_HAIR)
-    f.text((X(10), Y(91.5)), "MNIST", size=PT_SMALL, color=MUTE, va="top")
-    # three [3,3]-style trees: two ghosted behind, the front tree the hero
-    base = (X(22), Y(52), X(46), Y(44))
+    f.text((X(9.5), Y(115.5)), "MNIST", size=PT_SMALL, color=MUTE, va="bottom")
+    # three trees of the layer: the hero in front, two ghosted up-right
+    base = (X(14), Y(52), X(42), Y(44))
     for k in (2, 1):
-        f.balanced_tree((base[0] + X(7.0 * k), base[1] + Y(9.0 * k), base[2], base[3]),
-                        depth=2, mode="plain", ghost=True, labels=False)
+        ghost_tree(f, (base[0] + X(7.0 * k), base[1] + Y(9.0 * k), base[2], base[3]),
+                   depth=2, mode="plain", soma_r_pt=2.2)
     nodes = f.balanced_tree(base, depth=2, mode="inputs", labels=False)
     terms = [nodes[t] for t in nodes.terminals]
     top = max(p[1] for p in terms)
-    left = min(p[0] for p in terms)
-    f.arrow((X(19.5), Y(100)), (left - X(1.0), top + Y(5.0)), color=MUTE, lw=LW_EDGE, head=3.4)
-    f.text((max(p[0] for p in terms) + X(16.0), top + Y(20.0)), "×128", size=PT_SMALL, color=MUTE, ha="left")
-    # one contact tagged e_i (left of the leftmost terminal)
     t1 = nodes["T1"]
+    f.arrow((X(10.0), Y(94.0)), (t1[0] - X(1.4), t1[1] + Y(3.0)), color=MUTE, lw=LW_EDGE, head=3.4)
+    f.text((X(78.0), Y(100.0)), "×128", size=PT_SMALL, color=MUTE, ha="left")
+    # one contact tagged e_i, beside the leftmost terminal
     f.subscript((t1[0] - X(CONTACT_DIA_PT * 0.5 + 1.6), t1[1]), "e", "i", size=PT_SMALL,
                 color=COLORS["exc"], ha="right", va="center")
     # forward path: soma -> readout card -> loss card
     sx, sy = nodes.soma
-    cards = ((73.0, "readout", "ŷ"), (104.0, "loss", "L"))
-    cw, ch = 25.0, 26.0
+    # the cards are as wide as their own header text and are laid out from
+    # the return line's edge, so no header can overrun its card
+    heads = ("readout", "loss")
+    cw = max(_text_w_pt(ax, h, PT_SMALL) for h in heads) + 4.0
+    ch, right_pt = 26.0, 127.0
+    cards = ((right_pt - 2.0 * cw - 5.0, heads[0], "ŷ"), (right_pt - cw, heads[1], "L"))
     for x_pt, head, body in cards:
         core = f.task_card((X(x_pt), sy - Y(ch / 2.0), X(cw), Y(ch)))
         f.text((core[0] + core[2] / 2.0, core[1] + core[3] - Y(3.5)), head, size=PT_SMALL, color=MUTE, va="top")
@@ -189,29 +251,53 @@ def credit_entry(ax):
     f.text(((z0 + X(cards[0][0])) / 2.0, sy + Y(2.6)), "z", size=PT_SMALL, color=INK, va="bottom")
     f.arrow((X(cards[0][0] + cw + 1.0), sy), (X(cards[1][0] - 1.0), sy), color=MUTE, lw=LW_EDGE, head=3.4)
     # the error returns from the loss to every soma: ink hairline loop, then
-    # the rule-agnostic δ0 entry arrow (D9); δ_u is named once on the loop
+    # the rule-agnostic δ0 entry arrow (D9); δ_u is named once above the loop
     tail = (sx + X(nodes.soma_r_pt + 11.0), sy - Y(nodes.soma_r_pt + 7.0))
     loop_y = sy - Y(ch / 2.0 + 12.5)
-    lx = X(cards[1][0] + cw / 2.0)
-    ax.plot([lx, lx, tail[0], tail[0]], [sy - Y(ch / 2.0), loop_y, loop_y, tail[1]],
+    rx = X(cards[1][0] + cw)                 # the loss card's right edge
+    ax.plot([rx, rx, tail[0], tail[0]], [sy - Y(ch / 2.0), loop_y, loop_y, tail[1]],
             color=INK, lw=f.lw(LW_HAIR), solid_capstyle="round", solid_joinstyle="round", zorder=4.8)
     f.error_in(nodes.soma, label="δ0")
-    chain(f, (X(cards[1][0] + cw), loop_y + Y(1.6)), [("δ", "u"), " = ∂L/∂", ("y", "u")],
+    chain(f, (rx - X(5.0), loop_y + Y(1.8)), [("δ", "u"), " = ∂L/∂", ("y", "u")],
           size=PT_ANNOT, color=INK, ha="right", va="bottom")
     # equation line and its operands
-    chain(f, (X(2), Y(23.5)), ["Δ", ("g", "i"), " = −η ", ("e", "i"), " ", ("ε", "n")],
+    chain(f, (X(2), Y(24.5)), ["Δ", ("g", "i"), " = −η ", ("e", "i"), " ", ("ε", "n")],
           size=PT_LABEL, color=INK)
-    chain(f, (X(2), Y(12.5)), [("e", "i"), " = ", ("x", "i"), " ", ("R", "n"), " (", ("E", "i"),
+    chain(f, (X(2), Y(13.5)), [("e", "i"), " = ", ("x", "i"), " ", ("R", "n"), " (", ("E", "i"),
                                " − ", ("V", "n"), ")  local eligibility"], size=PT_SMALL, color=MUTE)
     chain(f, (X(2), Y(3.5)), [("ε", "n"), "  delivered credit"], size=PT_SMALL, color=MUTE)
     return ax
 
 
 # ── B: three ways to spread one error ─────────────────────────────────────
+CARD_TREE_W_PT = 70.0        # identical hero tree in all three cards
+# Card widths (sum + 2 gaps = the 8-module span): the layer-scalar card also
+# holds the ghost neighbour and the shared source dot, and the exact-path
+# card's footer "one ε_n per compartment" is 85 pt of PT_SMALL text.
+CARD_W_PT = (104.0, 83.0, 93.3)
+
+
 def deliveries(ax):
+    """Three deliveries of one error on three copies of one tree.
+
+    Card widths differ (104 / 83 / 93.3 pt): the layer-scalar card carries
+    the hero tree, a ghost neighbour and the shared source dot, and the
+    exact-path card carries the widest footer; the hero tree itself is drawn
+    from the same 70 pt rect in every card (spec §0.5.5 fixes the tree
+    geometry, not the card width).  Each
+    card is banded from the bottom: footer 20 pt, then a 26 pt band that
+    holds the delivery equation on its floor and the δ0 entry arrow above it
+    (so no equation shares a baseline with the δ0 tag), then the tree, then
+    9 pt for the credit bus.
+    """
     f = Frame(ax)
-    cells = f.split(3, axis="x", gap_pt=10.0)
-    foot_pt, eq_pt, bus_pt = 20.0, 12.0, 9.0
+    gap_pt = (f.w_pt - sum(CARD_W_PT)) / 2.0
+    assert 9.0 <= gap_pt <= 12.0, gap_pt          # spec §0.2: 9-12 pt card gap
+    cells, x_pt = [], 0.0
+    for w_pt in CARD_W_PT:
+        cells.append((f.fx(x_pt), 0.0, f.fx(w_pt), 1.0))
+        x_pt += w_pt + gap_pt
+    foot_pt, eq_pt, bus_pt = 20.0, 26.0, 9.0
     specs = (
         ("Layer scalar", False, [("ε", "n"), " = s"], [["one s per layer"]]),
         ("Per neuron", True, [("ε", "n"), " = ", ("δ", "0")],
@@ -221,35 +307,49 @@ def deliveries(ax):
     )
     scalar = COLORS["scalar"]
     for i, (cell, (title, hero, equation, footer)) in enumerate(zip(cells, specs)):
-        patch_before = list(ax.patches)
         core = f.task_card(cell, title=title, emphasis=hero)
-        card = [p for p in ax.patches if p not in patch_before][0]
         card_footer(f, cell, footer, band_pt=foot_pt)
         core = (core[0], core[1] + f.fy(foot_pt), core[2], core[3] - f.fy(foot_pt))
-        # identical tree geometry in every card: same rect offsets
-        rect = (core[0] + f.fx(8.0), core[1] + f.fy(eq_pt), core[2] - f.fx(16.0),
-                core[3] - f.fy(eq_pt + bus_pt))
-        ghost = None
-        if i == 0:
-            # a ghost neighbour behind the hero, entering from the right edge
-            ghost_rect = (rect[0] + f.fx(60.0), rect[1], rect[2], rect[3])
-            n_patches = len(ax.patches)
-            ghost = f.balanced_tree(ghost_rect, depth=3, mode="plain", ghost=True, labels=False)
-            for art in [*ghost.edges.values(), *ghost.rings.values(), *ax.patches[n_patches:]]:
-                art.set_clip_path(card)
-        nodes = f.balanced_tree(rect, depth=3, mode="forward", output="z")
         chain(f, (core[0] + f.fx(5.0), core[1] + f.fy(5.0)), equation, size=PT_ANNOT, color=INK)
+        # identical tree geometry in every card: same rect size and floor
+        rect = (core[0] + f.fx(2.0) if i == 0
+                else core[0] + (core[2] - f.fx(CARD_TREE_W_PT)) / 2.0,
+                core[1] + f.fy(eq_pt), f.fx(CARD_TREE_W_PT),
+                core[3] - f.fy(eq_pt + bus_pt))
+        clip = ghost = None
+        if i == 0:
+            # the neighbour tree continues past the card: clip it 2 pt inside
+            # the card and drop any glyph the cut would halve
+            clip = Rectangle((cell[0] + f.fx(2.0), cell[1] + f.fy(2.0)),
+                             cell[2] - f.fx(4.0), cell[3] - f.fy(4.0),
+                             transform=ax.transData, facecolor="none",
+                             edgecolor="none", zorder=0)
+            ax.add_patch(clip)
+            x_cut = cell[0] + cell[2] - f.fx(2.0)
+            ghost, arts = ghost_tree(f, (rect[0] + f.fx(CARD_TREE_W_PT + 6.0),
+                                         rect[1], rect[2], rect[3]), depth=3, mode="plain")
+            for art in arts:
+                if isinstance(art, Ellipse) and art.center[0] > x_cut - f.fx(2.6):
+                    art.remove()
+                else:
+                    art.set_clip_path(clip)
+        nodes = f.balanced_tree(rect, mode="forward", output="z")
+        f.error_in(nodes.soma, label="δ0")     # every card states the entry
         terms = [nodes[t] for t in nodes.terminals]
         top = max(p[1] for p in terms)
         bus_y = top + f.fy(bus_pt)
         x_left = min(p[0] for p in terms) - f.fx(2.0)
+        x_right = max(p[0] for p in terms) + f.fx(2.0)
         if i == 0:
-            x_hi = cell[0] + cell[2] - f.fx(9.0)
-            visible = [ghost[t] for t in ghost.terminals if ghost[t][0] < x_hi - f.fx(3.0)]
-            amber_bus(f, terms + visible, x_lo=x_left, x_hi=x_hi, y=bus_y, source_at="right", clip=card)
-            f.text((x_hi + f.fx(2.6), bus_y), "s", size=PT_SMALL, color=AMBER_TEXT, ha="left", va="center")
+            ghosted = [ghost[t] for t in ghost.terminals if ghost[t][0] < x_cut - f.fx(2.0)]
+            amber_bus(f, terms + ghosted, x_lo=x_left, x_hi=x_cut, y=bus_y,
+                      source_at=None, clip=clip)
+            # the source is outside both trees: the gap between them
+            src_x = (x_right + min(p[0] for p in ghosted)) / 2.0
+            f.disc((src_x, bus_y), 1.6, fill=scalar, zorder=6)
+            f.text((src_x, bus_y - f.fy(2.4)), "s", size=PT_SMALL, color=AMBER_TEXT,
+                   ha="center", va="top")
         elif i == 1:
-            f.error_in(nodes.soma, label="δ0")
             # source dot at the soma (D5), hairline up the left side to the bus
             sx, sy = nodes.soma
             src = (sx - f.fx(nodes.soma_r_pt + 0.4), sy)
@@ -257,10 +357,8 @@ def deliveries(ax):
             x_feed = x_left - f.fx(3.5)
             ax.plot([src[0], x_feed, x_feed], [sy, sy, bus_y], color=scalar, lw=f.lw(LW_HAIR),
                     solid_capstyle="round", solid_joinstyle="round", zorder=5)
-            amber_bus(f, terms, x_lo=x_feed, x_hi=max(p[0] for p in terms) + f.fx(2.0),
-                      y=bus_y, source_at=None)
+            amber_bus(f, terms, x_lo=x_feed, x_hi=x_right, y=bus_y, source_at=None)
         else:
-            f.error_in(nodes.soma, label="δ0")
             f.credit_delivery(nodes, mode="exact", alpha_tags=True)
     return ax
 
@@ -272,6 +370,11 @@ def dictionaries(ax):
     Native row indices follow the model: 0--2 proximal, 3--11 distal. The
     matrices are displayed in subtree order (each proximal site immediately
     before its three distal children), the order the site tree's rows use.
+
+    The site tree is the library's matrix-aligned orientation (soma at the
+    left, sites stacked top to bottom as the matrix rows) rather than the
+    soma-at-bottom icon of §0.5.1: only this orientation puts each site on
+    its own matrix row, and the caption says so.
     """
     f = Frame(ax)
     X, Y = f.fx, f.fy
@@ -284,7 +387,12 @@ def dictionaries(ax):
     sx, sy = nodes.soma
     f.subscript((sx - X(2.4), sy - Y(nodes.soma_r_pt + 12.0)), "δ", "0", size=PT_ANNOT,
                 color=INK, ha="right", va="center")
-    chain(f, (X(2), Y(y0 + rows_h + 7.0)), ["δ̂ = A c"], size=PT_LABEL, color=INK)
+    # δ̂ = A c: the hat is drawn (no combining circumflex in the font)
+    w_delta = _text_w_pt(ax, "δ", PT_LABEL)
+    f.text((X(2), Y(y0 + rows_h + 7.0)), "δ", size=PT_LABEL, color=INK, ha="left", va="center")
+    hat(f, (X(2), Y(y0 + rows_h + 7.0)), w_delta, size=PT_LABEL)
+    f.text((X(2 + w_delta + 1.6), Y(y0 + rows_h + 7.0)), "= A c", size=PT_LABEL,
+           color=INK, ha="left", va="center")
     order = np.array(nodes.order)
     assert order.tolist() == [0, 3, 4, 5, 1, 6, 7, 8, 2, 9, 10, 11]
     a1 = np.ones((12, 1))
@@ -300,13 +408,15 @@ def dictionaries(ax):
         f.dictionary_matrix(rect, data, row_groups=[4, 4, 4], label=None, **kw)
         hx = X(x + w + 4.0) if ha == "right" else X(x + w / 2.0)
         f.text((hx, Y(y0 + rows_h + 3.0)), header, size=PT_ANNOT, color=INK, ha=ha, va="bottom")
-    # coefficient source per dictionary (one line each; oracle badge on the projected rules)
-    chain(f, (X(2), Y(22.0)), ["K = 1: c = ", ("δ", "u"), " (per neuron)"], size=PT_SMALL, color=INK)
-    chain(f, (X(168), Y(22.0)), ["K = 12: c = ε (exact)"], size=PT_SMALL, color=INK, ha="right")
-    _, x_end, _ = chain(f, (X(2), Y(13.0)), ["K = 1, 3: c = ⟨exact field⟩ (projected)"],
+    # coefficient source per dictionary (one line each; oracle badge on the
+    # projected rules).  11 pt leading keeps the δ_u subscript of the first
+    # line clear of the second line's caps.
+    chain(f, (X(2), Y(23.5)), ["K = 1: c = ", ("δ", "u"), " (per neuron)"], size=PT_SMALL, color=INK)
+    chain(f, (X(168), Y(23.5)), ["K = 12: c = ε (exact)"], size=PT_SMALL, color=INK, ha="right")
+    _, x_end, _ = chain(f, (X(2), Y(12.5)), ["K = 1, 3: c = ⟨exact field⟩ (projected)"],
                         size=PT_SMALL, color=INK)
-    f.badge((x_end + X(4.0), Y(13.0)), "oracle", ha="left", va="center")
-    f.text((X(2), Y(4.0)), "K counts profiles, not external errors", size=PT_SMALL, color=MUTE, ha="left")
+    f.badge((x_end + X(4.0), Y(12.5)), "oracle", ha="left", va="center")
+    f.text((X(2), Y(3.0)), "K counts profiles, not external errors", size=PT_SMALL, color=MUTE, ha="left")
     return dict(broadcast=a1, subtrees=a3, resolved=a12, display_row_order=order)
 
 
@@ -457,8 +567,9 @@ def accuracy(ax, conditions, seeds, paired):
 COHORT_ROWS = (("mnist_fresh", "MNIST", "n = 10, fresh"),
                ("mnist_dfa", "MNIST", "n = 15, DFA"),
                ("fashion", "Fashion-MNIST", "n = 10, † fallback"),
-               ("cifar10", "CIFAR-10", "n = 20, additive [3,3,3,3]"))
+               ("cifar10", "CIFAR-10", "n = 20, additive"))
 FOREST_YLIM = (-0.55, 4.25)     # note band above the MNIST row in F
+LABEL_DY = 0.26                 # row units: 5.6 pt above the row's own centre
 
 
 def cohort_forest(ax, rows, kind, *, xlabel, xlim, xticks, labels, note=None):
@@ -473,13 +584,17 @@ def cohort_forest(ax, rows, kind, *, xlabel, xlim, xticks, labels, note=None):
             ax.errorbar(r.mean_pp, y, xerr=[[r.mean_pp - r.low_pp], [r.high_pp - r.mean_pp]], fmt=marker,
                         color=color, ms=MARKER_MS, mfc="white", mew=LW_ERR, elinewidth=LW_ERR, capsize=2, zorder=3)
     if labels:
+        # the label and its n / protocol tag are anchored on the row's own y
+        # (5.6 pt above the row centre, 1 pt above the shunting marker and
+        # 4.6 pt below the next row's markers) so a row cannot be paired
+        # with the cohort above it
         for cohort, name, tag in COHORT_ROWS:
-            y = ys[cohort] + .40
-            ax.text(xlim[0] + .052 * (xlim[1] - xlim[0]), y, name, ha="left", va="bottom", fontsize=PT_SMALL, color=INK)
+            y = ys[cohort] + LABEL_DY
+            ax.text(xlim[0] + .045 * (xlim[1] - xlim[0]), y, name, ha="left", va="bottom", fontsize=PT_SMALL, color=INK)
             ax.text(xlim[1] - .02 * (xlim[1] - xlim[0]), y, tag, ha="right", va="bottom", fontsize=PT_SMALL, color=MUTE)
     if note:
         for k, line in enumerate(note):
-            ax.text(xlim[0] + .03 * (xlim[1] - xlim[0]), 4.0 - 0.38 * k, line, ha="left", va="center",
+            ax.text(xlim[0] + .03 * (xlim[1] - xlim[0]), 4.02 - 0.40 * k, line, ha="left", va="center",
                     fontsize=PT_SMALL, color=INK)
     ax.set(xlim=xlim, ylim=FOREST_YLIM, xticks=xticks, yticks=[], xlabel=xlabel)
     ax.set_xticklabels([str(t).replace("-", "−") for t in xticks])
@@ -512,7 +627,8 @@ def capture(ax, per_seed, summary, coordinate=CAPTURE_COORDINATE):
                         fmt=marker, color=color, ms=MARKER_MS, mfc="white", mew=LW_ERR, elinewidth=LW_ERR, capsize=2, zorder=4)
         ax.plot(xs + offset, means, color=color, lw=LW_DATA, zorder=3)
         ax.text(lx, ly, architecture.capitalize(), ha="center", va=va, fontsize=PT_LEGEND, color=label_color(color))
-    ax.set(xlim=(-.45, 2.45), ylim=(0, 100), xticks=xs, xticklabels=[lab for _, lab in CAPTURE_BASES],
+    # 0-105 so the K = 12 means (100 %) and their caps clear the top spine
+    ax.set(xlim=(-.45, 2.45), ylim=(0, 105), xticks=xs, xticklabels=[lab for _, lab in CAPTURE_BASES],
            yticks=[0, 25, 50, 75, 100], ylabel="Capture (%)")
     style_panel(ax, grid="y")
     ax.yaxis.labelpad = 0.8
@@ -526,7 +642,7 @@ def main():
     cohorts = cohort_contrasts(paired)
     cap_seed, cap_summary = read_capture()
     RECORDS.mkdir(exist_ok=True)
-    canvas = NativeCanvas(490 / 72, 3, row_weights=[126, 114, 108], hgutter_pt=40, vgutter_pt=40,
+    canvas = NativeCanvas(490 / 72, 3, row_weights=[130, 114, 104], hgutter_pt=40, vgutter_pt=40,
                           margins=Margins(left=36, right=12, top=24, bottom=38))
     a = canvas.panel("A", 0, 0, 4, schematic=True, lock=False, title="Credit enters at the soma")
     b = canvas.panel("B", 0, 4, 8, schematic=True, lock=False, title="Three ways to spread one error")
@@ -534,7 +650,7 @@ def main():
     d = canvas.panel("D", 1, 5, 7, title="Per-neuron credit carries the MNIST gain")
     e = canvas.panel("E", 2, 0, 4, title="Identity gain is large")
     f_ = canvas.panel("F", 2, 4, 4, title="Exact ≤ 0.2 pp; CIFAR −0.9")
-    g = canvas.panel("G", 2, 8, 4, title="Voltage capture rises with K")
+    g = canvas.panel("G", 2, 8, 4, title="Voltage capture rises")
     credit_entry(a)
     deliveries(b)
     matrices = dictionaries(c)
@@ -569,10 +685,10 @@ def main():
              *[SOURCE / "image_ladder_controls" / name for name in ["protocol.json", "selection.json", "projected_k1/protocol.json", "projected_k1/selection.json"]]]
     payload = dict(panel_sources={
         "A": "Schematic: MNIST inputs at excitatory contacts of 128 trees, readout and loss, neuronal error delta_u returning as the somatic error delta_0 to every soma; eligibility x delivered credit (main.tex Eqs. factorization, dendriticlocalrule). No measured data.",
-        "B": "Schematic: three deliveries on one generic depth-3 tree (layer scalar bus spanning a ghost neighbour, per-neuron bus sourced at the soma, exact path chain with alpha tags; Eq. pathgain). The MNIST model has two path factors. No measured data.",
-        "C": "Actual 12 nonsomatic sites: three proximal sites and nine distal children, soma outside the basis. K1 (ones), K3 (subtree indicators, rows in subtree order), K12 (identity). K1/K3 projected rules take oracle coefficients from the exact field (badge); the per-neuron rule uses the same all-ones profile with delta_u.",
+        "B": "Schematic: three deliveries on one generic depth-3 tree, each card stating the somatic error entry delta_0 (layer scalar bus spanning a ghost neighbour with the source dot outside both trees, per-neuron bus sourced at the soma, exact path chain with alpha tags; Eq. pathgain). The MNIST model has two path factors. No measured data.",
+        "C": "Actual 12 nonsomatic sites: three proximal sites and nine distal children, soma outside the basis (drawn soma-at-left so each site occupies its own matrix row). K1 (ones), K3 (subtree indicators, rows in subtree order), K12 (identity). K1/K3 projected rules take oracle coefficients from the exact field (badge); the per-neuron rule uses the same all-ones profile with delta_u.",
         "D": "Complete six-arm fresh MNIST selected-rate cohort: 10 paired seeds per architecture; 180 epochs; validation-selected checkpoint. The printed tag is the paired per-neuron minus layer-scalar contrast (shunting / additive). Decoder-only core remains fixed.",
-        "E": "Per-neuron minus scalar (pp) in four separately trained cohorts: fresh MNIST (10 seeds), legacy DFA MNIST (15 seeds), Fashion-MNIST with the matched-width scalar fallback (10 seeds), flattened CIFAR-10 additive [3,3,3,3] (20 seeds). Cohorts are not one ladder.",
+        "E": "Per-neuron minus scalar (pp), means with paired 95% bootstrap intervals, in four separately trained cohorts: fresh MNIST (10 seeds), legacy DFA MNIST (15 seeds), Fashion-MNIST with the matched-width scalar fallback (10 seeds), flattened CIFAR-10 additive [3,3,3,3] (20 seeds). Cohorts are not one ladder.",
         "F": "Exact path minus per-neuron (pp) in the same four cohorts and rows as E; the printed note gives the fresh-cohort within-tree contrasts K3 minus projected K1 and exact minus K3 (shunting / additive).",
         "G": f"Mean {CAPTURE_COORDINATE}-coordinate capture of D's trained exact-path fields by the K1/K3/K12 dictionaries of C; fresh cohort, trained checkpoints, 10 seeds per architecture."},
         source_sha256={str(p.relative_to(JOURNAL)): hashlib.sha256(p.read_bytes()).hexdigest() for p in files},
@@ -586,14 +702,14 @@ def main():
         fresh_seed_count_per_architecture=10, normal_font_minimum_pt=PT_SMALL, layout_findings=problems)
     (RECORDS / "figure_01_sources.json").write_text(json.dumps(payload, indent=2) + "\n")
     caption = r"""\textbf{Task-derived credit separates neuronal identity from resolution within a dendritic tree.}
-\textbf{A}, MNIST inputs reach excitatory contacts on 128 dendritic trees (two ghosted); readout $\hat y$ and loss $\mathcal L$ return each neuron's error $\delta_u=\partial\mathcal L/\partial y_u$, entering its soma as the somatic error $\delta_0$ (ink arrow). Updates multiply local eligibility $e_i=x_iR_n(E_i-V_n)$ by delivered credit $\varepsilon_n$.
-\textbf{B}, Three deliveries on a generic depth-3 tree (three path factors; the MNIST model has two): a layer scalar $s$ shared with a ghost neighbour (amber bus), one error per neuron spread evenly (bus sourced at the soma), and exact path transport $\varepsilon_n=\alpha_3\alpha_2\alpha_1\delta_0$ (red chain).
-\textbf{C}, Dictionaries over the twelve nonsomatic sites, rows in subtree order (capsules and $K=3$ columns share tints). The per-neuron rule uses the all-ones profile with $\delta_u$; the projected $K=1$ and $K=3$ rules take oracle coefficients from the exact field (badge).
-\textbf{D}, MNIST test accuracy, six rules at selected rates, ten fresh paired seeds per architecture (green circles shunting, blue squares additive; dots seeds, hairlines pair seeds, open symbols means with 95\% bootstrap intervals; tag, per-neuron minus layer-scalar gain, shunting / additive; band, decoder-only reference).
-\textbf{E}, Per-neuron minus scalar (pp) in four cohorts, each row naming its seed count and protocol: fresh MNIST (10 seeds), DFA (15-seed legacy cohort), Fashion-MNIST (\dag, matched-width scalar fallback keeping identity at the somatic stage, 640 of 2,413,312 parameters; 10 seeds), flattened CIFAR-10 (additive $[3,3,3,3]$ tree, 20 seeds); cohorts differ in feedback source, scalar construction and tree.
+\textbf{A}, MNIST inputs reach excitatory contacts on 128 trees (two ghosted); readout $\hat y$ and loss $\mathcal L$ return each neuron's error $\delta_u=\partial\mathcal L/\partial y_u$, entering its soma as the somatic error $\delta_0$ (ink arrow). Updates multiply local eligibility $e_i=x_iR_n(E_i-V_n)$ by delivered credit $\varepsilon_n$.
+\textbf{B}, Three deliveries on one generic depth-3 tree (three path factors; the MNIST model has two), with $\delta_0$ entering the soma in every card: a layer scalar $s$ shared with a ghost neighbour (amber bus), one error per neuron spread evenly (bus sourced at the soma), and exact path transport $\varepsilon_n=\alpha_3\alpha_2\alpha_1\delta_0$ (red chain).
+\textbf{C}, Dictionaries over the twelve nonsomatic sites (soma at left; sites ordered top to bottom as the matrix rows and capsule tints). The per-neuron rule uses the all-ones profile with $\delta_u$; the projected $K=1$ and $K=3$ rules take oracle coefficients from the exact field (badge).
+\textbf{D}, MNIST test accuracy, six rules, ten fresh paired seeds per architecture (circles shunting, squares additive; dots seeds, hairlines pair them, open symbols means with 95\% bootstrap intervals; tag, the per-neuron minus layer-scalar gain; band, decoder-only reference).
+\textbf{E}, Per-neuron minus scalar (pp) in four cohorts, each row naming its seed count and protocol: fresh MNIST (10 seeds), DFA (15-seed legacy cohort), Fashion-MNIST (\dag, matched-width scalar fallback, 640 of 2,413,312 parameters; 10 seeds), flattened CIFAR-10 (additive $[3,3,3,3]$ tree, 20 seeds); the cohorts differ in feedback source, scalar construction and tree.
 \textbf{F}, Exact minus per-neuron (pp) in the rows of \textbf{E}; note, fresh-cohort within-tree contrasts $K=3$ minus projected $K=1$ (+0.05 / +0.04) and exact minus $K=3$ ($-0.09$ / $-0.04$).
-\textbf{G}, Mean voltage-error capture of \textbf{D}'s trained exact-path fields by the dictionaries of \textbf{C} (seeds, means, 95\% intervals; in activation space, the trained coordinate, 0.622$\to$0.655 and 0.764$\to$0.859, Supplementary Fig.~S49F).
-Marks in \textbf{E}--\textbf{G} follow \textbf{D}; intervals are paired 95\% bootstrap intervals; pp, percentage points; rates selected on three development seeds (Supplementary Fig.~S49).
+\textbf{G}, Mean voltage-error capture of \textbf{D}'s trained exact-path fields by the dictionaries of \textbf{C} (seeds, means, 95\% intervals; activation space, the trained coordinate: 0.622$\to$0.655, 0.764$\to$0.859, Supplementary Fig.~S49F).
+Marks follow \textbf{D} throughout; \textbf{E} and \textbf{F} show means with paired 95\% bootstrap intervals; pp, percentage points; rates selected on three development seeds (Supplementary Fig.~S49).
 """
     (RECORDS / "figure_01_caption.tex").write_text(caption)
     (RECORDS / "figure_01_caption.md").write_text(caption)

@@ -1,7 +1,7 @@
 {
   "all_original_outcomes_preserved": true,
-  "builder_sha256": "4963e67396a8e0816e8db4966b57e2b1965c8de072f1d9a559cda850bd7c9620",
-  "figure_sha256": "c296ce3b837e3c8d88d76166c7a25f3d4158cbf581400502a8c090927d59662c",
+  "builder_sha256": "7404ae414ad97fb9b843644cee1b7d07bb6527a4d4ed34c062899794fdee7bfc",
+  "figure_sha256": "244aa79005bf1f532cf1ff9016c302e56976c2391c9c2d7c388f8d4805562267",
   "layout": {
     "canvas_pt": [
       518.4,
@@ -86,7 +86,7 @@
         "stages": [
           8
         ],
-        "tree_width_pt": 38.0
+        "tree_width_pt": 44.0
       },
       "D3": {
         "compartments": 8,
@@ -96,17 +96,17 @@
           1,
           2
         ],
-        "tree_width_pt": 26.8
+        "tree_width_pt": 22.3
       }
     }
   },
   "scope": "Figure overhaul 2026-09-08 (DESIGN_SPEC section 6). Nine panels: task and stage schematics (A, B), the four-tier depth factorial at 180 epochs (C), the three-tier alignment dose (D) and the 600-epoch budget follow-up (E-I). No new training; every printed number is replayed from frozen Source Data and re-checked against the independent summary tables. CIs are pointwise descriptive whole-seed bootstrap intervals, not simultaneous bands. Original main6 PDF retained in the parent directory; the 180-epoch plot remains S31.",
   "sources_sha256": {
     "scripts/credit_tree_schematics.py": "ebd31b5ccc86b00bb27a236af210eb2a1d1820e9fcec27b57283a12224158cbe",
-    "scripts/figure_canvas.py": "d8ce8f435cd727e8860da6d1a554fbfd3e1756a1cb18ea7b3602aa00347f52fd",
-    "scripts/journal_style.py": "d31c604f3d813463784fd1a4aa9ea64b93bd7ca32c1cb43617f031a4d6d2f0e0",
-    "scripts/native_schematics.py": "edd5694b7b530b82ddd33b193b74e4a175846981583ef575355dacff27cfec11",
-    "scripts/physical_depth_followup/figure.py": "4963e67396a8e0816e8db4966b57e2b1965c8de072f1d9a559cda850bd7c9620",
+    "scripts/figure_canvas.py": "de3f566dd08270535deab95eb798b49cc17ccf4dfbb88e7ebdb50860903a6ad1",
+    "scripts/journal_style.py": "35861bf56befbda6ee9e6a59866f3f7b3085959961155a9a10cee0f0fbfa0e38",
+    "scripts/native_schematics.py": "3e74a3b7ccbb993d9c131d6997aba30a1d81be7728f335937e3fa2e14aa754b1",
+    "scripts/physical_depth_followup/figure.py": "7404ae414ad97fb9b843644cee1b7d07bb6527a4d4ed34c062899794fdee7bfc",
     "source_data/physical_alignment_dose/audit.json": "1cf3efee200a204c8a95f65246b1787ec33265e76d86a743bc53580036352dab",
     "source_data/physical_alignment_dose/combined_seed_outcomes.csv": "f1ac65dc5d5ff294e3562636d55092f40b6f26f5e59f98979c339a525a1d032d",
     "source_data/physical_alignment_dose/condition_summary.csv": "4f158992f3a492951741a06e83dc190600df0ca9da21e883884984e6c210dc78",

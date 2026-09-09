@@ -52,6 +52,7 @@ FIXED = COLORS['per_soma']       # unrestricted fixed calibrated profile
 ORACLE = COLORS['oracle']        # oracle comparator
 INK = COLORS['ink']
 REP_TARGET = 864691135810666525  # representative scan, fixed by median rule
+FAN_LANES = (-0.075, 0.0, 0.075)  # deterministic lanes for scan-level circles
 
 
 # ── shared data-panel idiom ───────────────────────────────────────────────
@@ -77,9 +78,20 @@ def forest(ax, rows, xlabel, xlim, *, xticks=None, label_pad_pt=3.0,
                     mfc='white', mew=LW_ERR, lw=LW_ERR, capsize=2, zorder=5)
         if row.get('open') is not None:
             extra = np.asarray(row['open'], float)
-            ax.plot(extra, np.full(len(extra), y - 0.33), 'o', ms=SEED_MS - 0.4,
+            # Scan-level values ride just under their own row (not as a third
+            # row) on a deterministic three-lane fan: consecutive values in
+            # sorted order never share a lane, so near-duplicates separate.
+            order = np.argsort(extra, kind='stable')
+            lane = np.empty(len(extra))
+            lane[order] = np.take(FAN_LANES, np.arange(len(extra)) % len(FAN_LANES))
+            ax.plot(extra, y - 0.24 + lane, 'o', ms=SEED_MS - 0.4,
                     mfc='none', mec=row.get('open_color', GRAY), mew=LW_HAIR,
                     zorder=4)
+            tag = row.get('open_label')
+            if tag:
+                ax.text(float(extra.max()) + span * 0.035, y - 0.24, tag,
+                        fontsize=PT_SMALL, color=row.get('open_color', GRAY),
+                        ha='left', va='center', zorder=6)
         ax.text(xlim[0] + span * (label_pad_pt / 100.0), y + lift, row['label'],
                 fontsize=PT_SMALL, color=label_color(row['color']),
                 ha='left', va='bottom', zorder=6)

@@ -1,21 +1,21 @@
 {
   "code_sha256": {
-    "scripts/conductance_local_gate/figure.py": "92bee36420eca64b8363f113717fe8a2a37505d8d36ad234af39dfc599fdc350",
+    "scripts/conductance_local_gate/figure.py": "015dc37a0d6921f2e262814b8d57103c57ac64648d3486fdded6edf984be8638",
     "scripts/conductance_local_gate/model.py": "cc2b82f6c486810a43aa885f3ea2dacce54c473f2e2ece6f4cfdb7d88ce6ad39",
     "scripts/conductance_local_gate/portable_contract.py": "fea35a393f5881dfc60b3dfe810dac64f8c2e6b0d8ba01937f4a42c5ffab3c05",
     "scripts/conductance_local_gate/report.py": "a96b4b6edd42c0d98de3da44a46c409310b463450369173be7371d503fa6dfef",
     "scripts/credit_tree_schematics.py": "ebd31b5ccc86b00bb27a236af210eb2a1d1820e9fcec27b57283a12224158cbe",
-    "scripts/figure_canvas.py": "d8ce8f435cd727e8860da6d1a554fbfd3e1756a1cb18ea7b3602aa00347f52fd",
-    "scripts/journal_style.py": "d31c604f3d813463784fd1a4aa9ea64b93bd7ca32c1cb43617f031a4d6d2f0e0",
-    "scripts/native_schematics.py": "edd5694b7b530b82ddd33b193b74e4a175846981583ef575355dacff27cfec11"
+    "scripts/figure_canvas.py": "de3f566dd08270535deab95eb798b49cc17ccf4dfbb88e7ebdb50860903a6ad1",
+    "scripts/journal_style.py": "35861bf56befbda6ee9e6a59866f3f7b3085959961155a9a10cee0f0fbfa0e38",
+    "scripts/native_schematics.py": "3e74a3b7ccbb993d9c131d6997aba30a1d81be7728f335937e3fa2e14aa754b1"
   },
   "figure_sha256": {
     "source_data/conductance_local_gate/figures/curve_band_source.csv": "0dd58c44591943c6696bf0e27b0486af240c58acec1d801ef7234c0746b50e1c",
     "source_data/conductance_local_gate/figures/historical_cancellation_source.csv": "15938898c44c07bbbc5721ee727e9d54199c90e90ab8a298bb7109682dc69814",
-    "source_data/conductance_local_gate/figures/local_gate_all_rates.pdf": "12cae121b5382452de95ca8731cd7c5626183cb7d787d306414b96e74abd84db",
-    "source_data/conductance_local_gate/figures/local_gate_all_rates.png": "27417615ad42cf1a4e594b0be5804a2e91973c4726a7dc429bb609adb74409b8",
-    "source_data/conductance_local_gate/figures/local_gate_primary.pdf": "6cb5f45f465a8180d83a183e74af0bc762973526ef2b156f10488ef08d80b32d",
-    "source_data/conductance_local_gate/figures/local_gate_primary.png": "492ddac002cf373d9dbc28a8982413434253ab59e76189ce0159b046b6710dc2",
+    "source_data/conductance_local_gate/figures/local_gate_all_rates.pdf": "ddd618e15450bafc71b2d5aeb6c108ff10383087f2b14202a780ad14d5aa146e",
+    "source_data/conductance_local_gate/figures/local_gate_all_rates.png": "5571bfe8bf60003310d2ccab24784aa68b936dcf6fcd99fc1566d0be76d1731a",
+    "source_data/conductance_local_gate/figures/local_gate_primary.pdf": "098e10a85f5132c1ef1d114e94f535831872a15283493ec522a6e022a358b7d6",
+    "source_data/conductance_local_gate/figures/local_gate_primary.png": "d98305386cc9b76181501fddb3060ff8bed6255fb98f5e6459a828e90a256d44",
     "source_data/conductance_local_gate/figures/teacher_tuning_source.csv": "26b9ebc985bc662465c9a03af5a9197f54d8443383f44090121ddcf24c4c3086"
   },
   "fresh_seeds": [
@@ -77,11 +77,13 @@
     "height_pt": 490,
     "layout_findings": [],
     "rows_pt": [
-      134,
+      136,
       108,
       108
     ],
-    "strict_audit_violations": []
+    "strict_audit_violations": [
+      "[text-over-data] panel 'D': '4,096' sits on a data artist (f, width 0.00 pt)"
+    ]
   },
   "panel_sources": {
     "main_5A": {
@@ -159,6 +161,17 @@
       ]
     },
     "E": {
+      "_callout": {
+        "clearance_pt": {
+          "a_gate_tag_to_inset": 3.5
+        },
+        "leader_x": 3.0,
+        "lowest_seed": 0.007010334124398281,
+        "width_pt": 47.62,
+        "x_right": 3.42,
+        "y_leader": 0.0054680606170306595,
+        "y_text": 0.0016
+      },
       "exact": {
         "both_frozen": 0,
         "ci_high": 2.8332437394057696e-05,
@@ -236,14 +249,14 @@
   "protocol_sha256": "c441998f6f91e1f8782b2918689806e119af567e479bcd5c94069dca837a2413",
   "scope": "Current figure-only rendering; frozen protocol and numerical summary bytes unchanged. Initial numerical audit retains its historical render hashes.",
   "source_sha256": {
-    "scripts/conductance_local_gate/figure.py": "92bee36420eca64b8363f113717fe8a2a37505d8d36ad234af39dfc599fdc350",
+    "scripts/conductance_local_gate/figure.py": "015dc37a0d6921f2e262814b8d57103c57ac64648d3486fdded6edf984be8638",
     "scripts/conductance_local_gate/model.py": "cc2b82f6c486810a43aa885f3ea2dacce54c473f2e2ece6f4cfdb7d88ce6ad39",
     "scripts/conductance_local_gate/portable_contract.py": "fea35a393f5881dfc60b3dfe810dac64f8c2e6b0d8ba01937f4a42c5ffab3c05",
     "scripts/conductance_local_gate/report.py": "a96b4b6edd42c0d98de3da44a46c409310b463450369173be7371d503fa6dfef",
     "scripts/credit_tree_schematics.py": "ebd31b5ccc86b00bb27a236af210eb2a1d1820e9fcec27b57283a12224158cbe",
-    "scripts/figure_canvas.py": "d8ce8f435cd727e8860da6d1a554fbfd3e1756a1cb18ea7b3602aa00347f52fd",
-    "scripts/journal_style.py": "d31c604f3d813463784fd1a4aa9ea64b93bd7ca32c1cb43617f031a4d6d2f0e0",
-    "scripts/native_schematics.py": "edd5694b7b530b82ddd33b193b74e4a175846981583ef575355dacff27cfec11",
+    "scripts/figure_canvas.py": "de3f566dd08270535deab95eb798b49cc17ccf4dfbb88e7ebdb50860903a6ad1",
+    "scripts/journal_style.py": "35861bf56befbda6ee9e6a59866f3f7b3085959961155a9a10cee0f0fbfa0e38",
+    "scripts/native_schematics.py": "3e74a3b7ccbb993d9c131d6997aba30a1d81be7728f335937e3fa2e14aa754b1",
     "source_data/conductance_credit_demand/opponent/summaries/context_gradient_summary.csv": "a3bea23ba12a888eb7fb356b4ac3142bbf240518fa8b3d2a28278d91e1b40486",
     "source_data/conductance_local_gate/protocol.json": "c441998f6f91e1f8782b2918689806e119af567e479bcd5c94069dca837a2413",
     "source_data/conductance_local_gate/protocol_freeze.json": "81568da7f4350a18c264914d1a86f7307f3809743b8c3113efa4abcc70d3bbdc",

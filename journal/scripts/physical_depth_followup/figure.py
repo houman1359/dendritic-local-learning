@@ -43,6 +43,9 @@ Deviations from the spec's panel table (each reported in TEXT.md):
 * Chance / zero is labelled once per shared-axis row (D in row 1), the
   idiom the spec states for Fig. 2 F-H; the dashed reference is drawn in
   every data panel.
+* Row 2 runs to x = 800 but the bottom spine is bounded at 600: the band
+  right of the last epoch is a label rail for the printed values, the
+  crossing tags and the recipe brackets, not plotted axis.
 
 Every printed number is derived from the frozen Source Data named in the
 provenance record and re-checked against the independent summary tables;
@@ -203,7 +206,7 @@ def stage_pair(ax):
     X, Y = f.fx, f.fy
     inh_text = label_color(COLORS["inh"])
     foot = f.footer("contacts and parameters matched")
-    gap_pt, d1_w_pt = 8.0, 50.0
+    gap_pt, d1_w_pt = 8.0, 56.0   # the eight-ring D1 row is the density floor: give it the width
     d3_w_pt = f.w_pt - d1_w_pt - gap_pt
     y0, h = Y(foot), 1.0 - Y(foot)
     cells = [(0.0, y0, X(d1_w_pt), h), (X(d1_w_pt + gap_pt), y0, X(d3_w_pt), h)]
@@ -382,7 +385,7 @@ def depth_ladder(ax, h4, contrast):
     reference_line(ax, 50, label=None, span=(0.6, 4.4))
     ax.text(4.4, 49.2, "chance", ha="right", va="top", fontsize=PT_SMALL, color=MUTE, zorder=5)
     ax.legend(handles=handles, loc="upper left", bbox_to_anchor=(0.0, 0.995), frameon=False, fontsize=PT_LEGEND,
-              handlelength=1.6, handletextpad=0.5, labelspacing=0.12, borderpad=0.1, borderaxespad=0.1)
+              handlelength=1.6, handletextpad=0.5, labelspacing=0.24, borderpad=0.1, borderaxespad=0.1)
     tag = (f"D4 − D3: {signed(contrast['mean_pp'])} pp", f"({contrast['positive_pairs']}/{contrast['n_seeds']} positive)")
     ax.text(4.4, 97.5, tag[0], ha="right", va="center", fontsize=PT_ANNOT, color=INK, zorder=6)
     ax.text(4.4, 93.0, tag[1], ha="right", va="center", fontsize=PT_ANNOT, color=INK, zorder=6)
@@ -454,7 +457,7 @@ def trajectories(ax, s, crossing):
     reference_line(ax, 50, label=None, span=(0, 640))
     # key in the empty band above the flat D1 trajectory (epochs 200-520, 63-76 %)
     ax.legend(handles=handles, loc="lower left", bbox_to_anchor=(200 / 640, 15 / 52), ncol=1, frameon=False,
-              fontsize=PT_LEGEND, handlelength=1.4, handletextpad=0.4, labelspacing=0.15,
+              fontsize=PT_LEGEND, handlelength=1.4, handletextpad=0.4, labelspacing=0.30,
               borderpad=0.1, borderaxespad=0.0)
     return float(y_cross)
 
@@ -515,6 +518,7 @@ def gap_panel(ax, g, metric, *, ylabel, ylim, yticks, yticklabels, xlim):
     ax.set(xlim=xlim, ylim=ylim, xticks=[0, 180, 400, 600], yticks=yticks, xlabel="Epoch", ylabel=ylabel)
     ax.set_yticklabels(yticklabels)
     style_panel(ax, grid="y")
+    ax.spines["bottom"].set_bounds(0, 600)   # right of 600 is a label rail, not axis
     reference_line(ax, 0, label=None, span=xlim)
     return p.set_index("epoch")
 
@@ -585,20 +589,21 @@ def validation_loss(ax, s, stop_pts, xlim):
     ax.set(xlim=xlim, ylim=(0.0, 0.72), xticks=[0, 180, 400, 600], yticks=[0, 0.2, 0.4, 0.6], xlabel="Epoch",
            ylabel="Best validation loss")
     style_panel(ax, grid="y")
+    ax.spines["bottom"].set_bounds(0, 600)   # right of 600 is a label rail, not axis
     return ends
 
 
 CAPTION = r"""\textbf{Physical depth, sensor alignment and training budget.}
 \textbf{A}, Nested gain task: eight excitatory slots (blue) carry the class signal $m$ times one global, two coarse and four fine gains (mute brackets); one inhibitory sensor (red) per tier reports its gain $h$ with alignment $\alpha$, so $x_E = m\,h_{\rm f}h_{\rm c}h_{\rm g}$.
-\textbf{B}, The same eight compartments (rings) as one fan (D1 $[8]$, sensors of all tiers) or three serial stages (D3 $[2,1,2]$, one tier per stage; emphasised card): red, inhibitory sensors; blue, excitatory contacts on the distal compartments; output $y$; somatic error $\delta_0$; contacts and parameters matched. Masks describe the three-tier cohort of \textbf{D}--\textbf{I}.
+\textbf{B}, The same eight compartments (rings) as one fan (D1 $[8]$; sensors of all tiers) or three serial stages (D3 $[2,1,2]$; one tier per stage, emphasised card): red, inhibitory sensors; blue, excitatory contacts on distal compartments; output $y$; somatic error $\delta_0$; contacts and parameters matched. Masks describe the three-tier cohort of \textbf{D}--\textbf{I}.
 \textbf{C}, Four-tier task, ten seeds (10400--10409), 180 epochs: test accuracy versus physical depth D1--D4 for aligned exact BP (black dashed reference), exact-path LocalCA (dark red), shared-soma LocalCA (amber), grouped point (gray), raw additive (blue dotted) and reversed placement (gray dotted; Source Data regime \texttt{rewired\_tree}); tag, paired D4 minus D3 exact-BP contrast.
 \textbf{D}, Three-tier task, ten seeds (10200--10209), 180 epochs: exact-BP accuracy versus $\alpha$ for D1--D3 (light to dark); tags, paired D3 minus D1 gains (pp). The $\alpha=1$ cohort is extended in \textbf{E}--\textbf{I}.
-\textbf{E}, Validation-selected accuracy against epoch; the open circle marks epoch 312, where exact-path LocalCA first falls below shared-soma LocalCA.
-\textbf{F}, Selected states at both budgets, grouped by recipe (small dots, seeds; open dots, broadcast autograd; lines join one condition).
+\textbf{E}, Validation-selected accuracy against epoch; open circle, epoch 312, where exact-path LocalCA first falls below shared soma.
+\textbf{F}, Selected states at both budgets by recipe (small dots, seeds; open dots, broadcast autograd; lines join one condition).
 \textbf{G}, Paired exact-path minus shared-soma accuracy gap (pp), marked at epochs 180, 486 and 600.
 \textbf{H}, The same pairs' cross-entropy gap, negative throughout, marked at 180, 315 and 600.
-\textbf{I}, Best validation loss for the six conditions (open markers, the eight D1 stop epochs; brackets, recipe); D3 losses were still falling at 600, convergence is not established.
-Circles are means of ten paired seeds; error bars and shading (\textbf{E}, \textbf{G}, \textbf{H}) are pointwise 95\% whole-seed bootstrap intervals; dotted verticals mark the 180-epoch budget; dashed lines mark chance (50\%) or zero. Both recipes use Adam at their original rates."""
+\textbf{I}, Best validation loss, six conditions (open markers, the eight D1 stop epochs; brackets, recipe); D3 losses were still falling at 600; convergence is not established.
+Circles are means over ten paired seeds; error bars and shading (\textbf{E}, \textbf{G}, \textbf{H}) are pointwise descriptive 95\% whole-seed bootstrap intervals; dotted verticals mark the 180-epoch budget; dashed lines mark chance (50\%) or zero. Both recipes use Adam at their original rates."""
 
 
 def main():

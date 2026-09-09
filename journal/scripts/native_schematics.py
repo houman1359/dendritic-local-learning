@@ -50,12 +50,71 @@ chance / zero reference, and ``draw_stage_pair``,
 ``draw_measured_boundary`` are the figure-specific compositions
 (``COMPOSITIONS``).  ``scripts/native_schematics_gallery.py`` draws every
 family once and must pass the strict audit.
+
+2026-09-08 spec upgrade
+-----------------------
+``Frame._draw_chains`` -- the one place every capsule, partition band and
+route ribbon is drawn -- now emits a FILLED tint patch
+(:func:`journal_style.tint_patch`) instead of a 2.6-13 pt round-capped
+stroke.  Same geometry, same colours, same call signature; what changes is
+that an area is a fill, which is what the tightened stroke rule in
+``figure_canvas`` (nothing above 1.35 pt unless it is a closed filled path)
+now requires.  Glyph sizes that were tuned against the old 6.8-8.8 pt type
+tokens inherit the new three-value scale (7.0 / 8.0 / 9.0) through the same
+``PT_*`` names.
+
+The same date, the SCHEMATIC LANGUAGE itself became enforceable.  One neuron
+is drawn the same way in every figure, and the library now asserts it rather
+than trusting the builder:
+
+1. ORIENTATION.  Every tree helper fans UPWARD from a soma that is the lowest
+   node of its own drawing.  ``site_tree`` keeps its ``orient`` argument but
+   now defaults to ``'up'`` (it was ``'right'``), and :func:`require_soma_lowest`
+   raises when a caller places a soma above a node of the same tree; the tree
+   helpers call it on themselves.  A matrix whose rows must line up with sites
+   no longer justifies a soma-at-the-left tree: draw the soma-lowest tree and
+   put :meth:`Frame.site_strip` (``orient='vertical'``) -- the site order as a
+   strip, with no soma to mis-orient -- beside the matrix.  ``orient='right'``
+   still draws, for the Fig. 1 builder that has not migrated, but is recorded
+   in ``ORIENTATION_LEGACY`` and is not soma-lowest.
+2. DELTA-0.  Credit arrival is rule-agnostic, so every schematic states it.
+   :meth:`Frame.soma` registers each soma it draws and :meth:`Frame.error_in`
+   registers each arrow; :meth:`Frame.require_delta0` asserts that every
+   non-ghost soma in the panel carries exactly one delta-0 arrow.  A card that
+   genuinely has no soma (a stimulus or dictionary card) declares
+   ``require_delta0(allow_no_delta0=True, reason=...)``; the reason is recorded
+   in ``DELTA0_EXEMPTIONS`` and in the canvas manifest (``schematic_notes``),
+   never assumed.  All four ``COMPOSITIONS`` assert it.
+3. GATES AND SHUNTS are the inhibitory-contact family and nothing else: a
+   CLOSED gate is a filled inh contact inside the gate ring, an OPEN gate is
+   the same contact drawn white with an inh rim, and each carries a 7 pt badge
+   ('c', ``('a', 'p', ' = 10')``, ``('g', 'shunt')``).  Attenuation is never a
+   new mark -- ``closed=True`` fades the descendant subtree through
+   :meth:`Frame.fade` (the same drawing at 38 % tint, hairline).  A red bar or
+   a free red segment now RAISES from :meth:`Frame.dendrite` and
+   :meth:`Frame.rule`.
+4. DELIVERY.  Exactly four glyphs, aliased not extended: ``'scalar'`` (amber
+   bus with its source dot OUTSIDE the trees, tagged s), ``'neuron'`` (the
+   identical amber bus, confined to one tree, source dot AT that soma -- the
+   arrow-plus-barrier-arc drawing is retired), ``'subtree'`` (16 % tint patch
+   over the addressed subtree plus one arrow into its root) and ``'exact'``
+   (alpha-tagged chain along the route).  ``DELIVERY_ALIASES`` maps the older
+   names ('broadcast', 'layer', 'per_neuron', 'ancestry', 'address', 'path')
+   onto them; anything else still raises.
+5. TINTS.  Every area mark -- capsule, partition band, route ribbon, bar --
+   is a :func:`journal_style.tint_patch` fill at 16 % with a 0.55 pt edge.
+6. MATRICES.  :meth:`Frame.dictionary_matrix` and
+   :meth:`Frame.dictionary_product` ASSERT at least ``MIN_CELL_PT`` (6.0) per
+   row and per column and a column header no wider than 1.5 x its column, and
+   offer the collapsed-band mode (``collapse``, with ``row_groups``) that
+   prints "rows collapsed: N per band" instead of drawing sub-6-pt rows.
 """
 
 from __future__ import annotations
 
 import numpy as np
-from matplotlib.colors import LinearSegmentedColormap, ListedColormap, to_rgba
+from matplotlib.colors import (LinearSegmentedColormap, ListedColormap,
+                                to_rgb, to_rgba)
 from matplotlib.lines import Line2D
 from matplotlib.patches import (Arc, Circle, Ellipse, FancyArrowPatch,
                                 FancyBboxPatch)
@@ -63,10 +122,12 @@ from matplotlib.patches import (Arc, Circle, Ellipse, FancyArrowPatch,
 import credit_tree_schematics as _ct
 from credit_tree_schematics import AMBER_TEXT, GHOST, RIM, draw_credit_tree, mix
 from figure_canvas import (enforce_tokens, snap_stroke_pt, style_panel,
-                           token_subscript)
+                           tint_patch, token_subscript)
 from journal_style import (
     COLORS,
     DIV_CMAP,
+    K_CYCLE as ADDRESS_CYCLE,
+    SERIES_COLORS,
     LW_DATA,
     LW_EDGE,
     LW_ERR,
@@ -78,11 +139,16 @@ from journal_style import (
     PT_SMALL,
     PT_TITLE,
     label_color,
+    strengthen,
+    tint_pct,
 )
 
 INK = COLORS["ink"]
 MUTE = COLORS["mute"]
-_SOMA_RIM = mix("ink", 30)
+# 2026-09-08: the soma is a pale yellow in the new anatomy register, so its
+# rim stepped from a 30 % grey (invisible against it) to a 62 % ink.
+_SOMA_RIM = mix("ink", 62)
+_SOMA_RIM_LEGACY = mix("ink", 30)
 GRID = COLORS["grid"]
 GREEN = COLORS["shunting"]
 BLUE = COLORS["additive"]
@@ -154,6 +220,210 @@ BADGE_STYLE = {
 }
 
 
+# ── 2026-09-08 glyph-language rules (assertions, not conventions) ────────
+#: The four delivery glyphs, and only these four.
+DELIVERY_MODES = ("scalar", "neuron", "subtree", "exact")
+
+#: Older / prose names for the same four glyphs.  A builder that says
+#: 'broadcast' means the layer scalar; saying it a fifth way does not make it
+#: a fifth glyph.  Anything outside these two tables still raises.
+DELIVERY_ALIASES = {
+    "layer": "scalar", "broadcast": "scalar", "layer_scalar": "scalar",
+    "shared": "scalar",
+    "per_neuron": "neuron", "neuron_specific": "neuron",
+    "per_soma": "neuron", "coordinate": "neuron",
+    "ancestry": "subtree", "address": "subtree", "capsule": "subtree",
+    "path": "exact", "route": "exact", "exact_path": "exact",
+}
+
+BADGE_PT = PT_SMALL          # every glyph badge is one 7 pt token
+GHOST_PCT = 45               # background / neighbouring cell tint
+FADE_PCT = 38                # attenuated (post-gate, post-shunt) subtree tint
+MIN_CELL_PT = 6.0            # matrix rule: points per row and per column
+HEADER_MAX_RATIO = 1.5       # matrix rule: header width / column width
+SOMA_LOWEST_TOL_PT = 0.75    # a node this far below the soma is a mistake
+DELTA0_TOL_PT = 6.0          # an error_in this far from a soma misses it
+SOURCE_OUT_PT = 9.0          # how far a layer-scalar source sits outside
+
+#: The sanctioned four-hue address cycle, by NAME (``journal_style.K_CYCLE``).
+#: Kept as one object so an address drawn here and one drawn by the palette
+#: module cannot disagree.  ``ADDRESS_TINT_STRICT`` turns the spec's third
+#: glyph rule ("no subtree tint in a series hue") from a note into a raise; it
+#: is off because the frozen cycle in ``journal_style`` is itself built from
+#: series names, so switching it on today would fail the paper's own cycle.
+ADDRESS_TINT_STRICT = False
+ADDRESS_TINT_NOTES = []
+
+#: Every declared delta-0 exemption, and every legacy soma-at-the-left tree,
+#: recorded for the manifest and for the figure report.
+DELTA0_EXEMPTIONS = []
+ORIENTATION_LEGACY = []
+
+
+class SchematicRuleError(ValueError):
+    """A drawing broke one of the glyph rules (orientation, delta-0, family)."""
+
+
+class MatrixTooDense(SchematicRuleError):
+    """A matrix cell, or a column header, is below the legibility floor."""
+
+
+def _frame_h_pt(ref):
+    """Height in points of a Frame / Axes / (w_pt, h_pt) reference."""
+    if ref is None:
+        return None
+    h = getattr(ref, "h_pt", None)
+    if h:
+        return float(h)
+    ax = getattr(ref, "ax", ref)
+    try:
+        fig = ax.get_figure()
+        return ax.get_position().height * fig.get_size_inches()[1] * 72.0
+    except Exception:
+        return None
+
+
+def require_soma_lowest(nodes, rect=None, *, tol_pt=SOMA_LOWEST_TOL_PT,
+                        name=None):
+    """GLYPH RULE (a): the soma is the LOWEST node of its own tree.
+
+    ``nodes`` is a :class:`Nodes` (or any mapping of name -> frame xy with a
+    ``soma`` attribute); ``rect`` is the Frame, Axes or panel the tree was
+    drawn in, used only to read the panel height so ``tol_pt`` means points.
+    Raises :class:`SchematicRuleError` naming the offending nodes -- the five
+    root-at-top trees the 2026-09-08 review found were all of this shape.
+    Returns ``nodes`` so it can wrap a call.
+    """
+    soma = getattr(nodes, "soma", None)
+    if soma is None:
+        soma = nodes.get("S") if hasattr(nodes, "get") else None
+    if soma is None:
+        return nodes
+    h_pt = _frame_h_pt(rect)
+    tol = (tol_pt / h_pt) if h_pt else 1e-4
+    below = [n for n, xy in nodes.items()
+             if isinstance(xy, (tuple, list)) and len(xy) == 2
+             and float(xy[1]) < float(soma[1]) - tol]
+    if below:
+        raise SchematicRuleError(
+            f"{name or 'tree'}: the soma must be the lowest node in the panel "
+            f"(2026-09-08 spec §5, glyph rules); "
+            f"{len(below)} node(s) sit below it: {sorted(map(str, below))[:6]}. "
+            "Draw the tree fanning upward (orient='up').")
+    return nodes
+
+
+def require_address_tint(cname, *, where="capsule", strict=None):
+    """GLYPH RULE (c): a subtree tint is an ADDRESS, never a data series.
+
+    Returns the colour name.  Records a note (or raises, when
+    ``ADDRESS_TINT_STRICT``) if the tint is one of the frozen series hues and
+    is not part of the sanctioned :data:`ADDRESS_CYCLE`.
+    """
+    strict = ADDRESS_TINT_STRICT if strict is None else bool(strict)
+    if cname in ADDRESS_CYCLE:
+        return cname
+    if cname in SERIES_COLORS:
+        note = (f"{where}: subtree tint {cname!r} is a data-series hue; the "
+                f"address cycle is {tuple(ADDRESS_CYCLE)}")
+        if strict:
+            raise SchematicRuleError(note)
+        if note not in ADDRESS_TINT_NOTES:
+            ADDRESS_TINT_NOTES.append(note)
+    return cname
+
+
+def resolve_delivery_mode(mode):
+    """One of :data:`DELIVERY_MODES`, resolving :data:`DELIVERY_ALIASES`."""
+    key = str(mode).strip().lower().replace(" ", "_").replace("-", "_")
+    if key in DELIVERY_MODES:
+        return key
+    if key in DELIVERY_ALIASES:
+        return DELIVERY_ALIASES[key]
+    raise ValueError(
+        f"unknown delivery mode {mode!r}: the schematic language has exactly "
+        f"four delivery glyphs {DELIVERY_MODES} "
+        f"(aliases {sorted(DELIVERY_ALIASES)})")
+
+
+def check_matrix_cells(w_pt, h_pt, n, k, *, where="dictionary_matrix",
+                       min_cell_pt=MIN_CELL_PT, headers=None, ax=None,
+                       header_pt=PT_SMALL):
+    """MATRIX RULE: >= 6 pt per row and column, header <= 1.5 x its column.
+
+    Raises :class:`MatrixTooDense` with the remedy in the message (collapse
+    the rows into bands, group the headers, or move the matrix to a wider
+    module span).  Returns ``(col_pt, row_pt)``.
+    """
+    col_pt = float(w_pt) / max(int(k), 1)
+    row_pt = float(h_pt) / max(int(n), 1)
+    if row_pt < min_cell_pt - 1e-6:
+        raise MatrixTooDense(
+            f"{where}: {n} rows in {h_pt:.1f} pt is {row_pt:.2f} pt per row, "
+            f"below the {min_cell_pt:.0f} pt floor -- pass row_groups=[...] "
+            "(collapse='auto' then prints 'rows collapsed: N per band') or "
+            "give the matrix a taller rect")
+    if col_pt < min_cell_pt - 1e-6:
+        raise MatrixTooDense(
+            f"{where}: {k} columns in {w_pt:.1f} pt is {col_pt:.2f} pt per "
+            f"column, below the {min_cell_pt:.0f} pt floor -- group the "
+            "columns under one header or move the matrix to a wider module "
+            "span")
+    if headers and ax is not None:
+        for j, head in enumerate(headers):
+            if not head:
+                continue
+            wide = _text_w_pt(ax, str(head), header_pt)
+            if wide > HEADER_MAX_RATIO * col_pt + 1e-6:
+                raise MatrixTooDense(
+                    f"{where}: column header {head!r} is {wide:.1f} pt over a "
+                    f"{col_pt:.1f} pt column (limit "
+                    f"{HEADER_MAX_RATIO:g}x = {HEADER_MAX_RATIO * col_pt:.1f} "
+                    "pt) -- shorten it, group the columns, or widen the slot")
+    return col_pt, row_pt
+
+
+def _collapse_rows(A, row_groups):
+    """Band means of ``A`` (and the band sizes), for the collapsed matrix."""
+    A = np.asarray(A, dtype=float)
+    sizes = [int(g) for g in row_groups]
+    out, start = [], 0
+    for g in sizes:
+        out.append(A[start:start + g].mean(axis=0))
+        start += g
+    if start < len(A):                       # trailing rows form one band
+        sizes.append(len(A) - start)
+        out.append(A[start:].mean(axis=0))
+    return np.asarray(out), sizes
+
+
+def collapsed_row_note(sizes):
+    """The printed line for a collapsed matrix: 'rows collapsed: N per band'."""
+    sizes = list(sizes)
+    if len(set(sizes)) == 1:
+        return f"rows collapsed: {sizes[0]} per band"
+    return "rows collapsed: " + "/".join(str(g) for g in sizes) + " per band"
+
+
+def _same_color(a, b):
+    if a is None or b is None:
+        return False
+    try:
+        return all(abs(u - v) < 1e-4 for u, v in zip(to_rgb(a), to_rgb(b)))
+    except Exception:
+        return False
+
+
+def _forbid_inhibitory_bar(color, where):
+    """GLYPH RULE (3): inhibition is a CONTACT, never a bar or a segment."""
+    if _same_color(color, COLORS["inh"]):
+        raise SchematicRuleError(
+            f"{where}: a red bar / free red segment is not a glyph. "
+            "Inhibition, gating and shunting are one contact family -- use "
+            "Frame.contact(kind='inh'), Frame.shunt() or Frame.gate(), and "
+            "show attenuation by fading the real subtree (Frame.fade).")
+
+
 def _lerp(a, b, f):
     return (a[0] + f * (b[0] - a[0]), a[1] + f * (b[1] - a[1]))
 
@@ -203,6 +473,12 @@ class Nodes(dict):
         self.rect = None
         self.rows = {}
         self.order = []
+        # 2026-09-08: which screen axis the dictionary rows run along.  'y'
+        # (a site strip, or the legacy soma-at-the-left tree) is the only one
+        # a matrix can be aligned to; a soma-lowest tree spreads its sites
+        # across 'x' and must be paired with a Frame.site_strip instead.
+        self.row_axis = None
+        self.kind = "tree"
 
     # -- topology ---------------------------------------------------------
     def root(self):
@@ -280,6 +556,15 @@ class Frame:
         ax.set_ylim(0.0, 1.0)
         ax.set_axis_off()
         ax.set_facecolor("none")
+        # 2026-09-08 glyph-rule registries: what this panel drew, so the rules
+        # can be asserted instead of eyeballed.  ``_somata`` is every soma
+        # glyph (ghosts flagged), ``_delta0`` every somatic-error arrow,
+        # ``_trees`` every Nodes drawn here, ``_notes`` the manifest record.
+        self._somata = []
+        self._delta0 = []
+        self._trees = []
+        self._notes = getattr(ax, "_journal_schematic_notes", None) or []
+        ax._journal_schematic_notes = self._notes
 
     # -- unit helpers -----------------------------------------------------
     def fx(self, pt):
@@ -295,6 +580,91 @@ class Frame:
 
     def ms(self, size):
         return size * self.scale
+
+    # -- glyph-rule bookkeeping (2026-09-08) ------------------------------
+    def note(self, kind, **payload):
+        """Record a schematic note on the Axes (picked up by the manifest)."""
+        record = {"kind": str(kind), **payload}
+        self._notes.append(record)
+        return record
+
+    def require_soma_lowest(self, *, name=None):
+        """GLYPH RULE (a) for every tree drawn in this panel.
+
+        Each registered tree is checked against its own soma (a panel may
+        stack two cards, so trees are never compared with each other).
+        """
+        for i, nodes in enumerate(self._trees):
+            require_soma_lowest(nodes, self, name=name or f"tree {i}")
+        return self
+
+    def require_delta0(self, *, allow_no_delta0=False, reason=None):
+        """GLYPH RULE (b): exactly one delta-0 arrow enters every soma.
+
+        The somatic error is the one glyph that is identical in every
+        schematic, so the reader learns that credit ARRIVAL is rule-agnostic
+        before learning that its spatial spread is not.  Called by every
+        composition; the gallery test calls it for all of ``COMPOSITIONS``.
+
+        A card that is a stimulus / dictionary / matrix card and has no soma
+        of its own passes ``allow_no_delta0=True`` with a ``reason``; the
+        reason is recorded (``DELTA0_EXEMPTIONS`` and the canvas manifest),
+        which is what makes an exemption a decision rather than an omission.
+        Returns the tally; raises :class:`SchematicRuleError` otherwise.
+        """
+        live = [rec for rec in self._somata
+                if not rec["ghost"] and rec["delta0"]]
+        tally = {"somata": len(live), "arrows": len(self._delta0)}
+        if allow_no_delta0:
+            text = "" if reason is None else str(reason).strip()
+            if not text:
+                raise SchematicRuleError(
+                    "require_delta0(allow_no_delta0=True) needs a reason "
+                    "string: an exemption is recorded in the manifest, never "
+                    "assumed")
+            record = {"reason": text, **tally}
+            DELTA0_EXEMPTIONS.append(record)
+            self.note("delta0-exemption", **record)
+            return record
+        if not self._delta0:
+            raise SchematicRuleError(
+                "no δ0 arrow in this schematic: every schematic shows the "
+                "somatic error entering the soma (Frame.error_in). A card "
+                "with no soma declares require_delta0(allow_no_delta0=True, "
+                "reason='...').")
+        for arrow in self._delta0:
+            if arrow["soma"] is None:
+                raise SchematicRuleError(
+                    "a δ0 arrow does not land on a soma: error_in() must be "
+                    "given the soma's own xy (nodes.soma)")
+        counts = {}
+        for arrow in self._delta0:
+            counts[arrow["soma"]] = counts.get(arrow["soma"], 0) + 1
+        for idx, rec in enumerate(self._somata):
+            n = counts.get(idx, 0)
+            if rec["ghost"] or not rec["delta0"]:
+                continue
+            if n != 1:
+                raise SchematicRuleError(
+                    f"soma {idx} carries {n} δ0 arrows, not exactly one "
+                    "(ghost / background somata are exempt: draw them with "
+                    "ghost=True, or soma(..., delta0=False) for a swatch)")
+        tally["exempt"] = len(self._somata) - len(live)
+        return tally
+
+    def _register_soma(self, xy, *, ghost=False, delta0=True):
+        self._somata.append({"xy": (float(xy[0]), float(xy[1])),
+                             "ghost": bool(ghost), "delta0": bool(delta0)})
+        return len(self._somata) - 1
+
+    def _nearest_soma(self, xy, *, tol_pt=DELTA0_TOL_PT):
+        best, best_d = None, tol_pt
+        target = self._to_pt(xy)
+        for i, rec in enumerate(self._somata):
+            d = float(np.linalg.norm(self._to_pt(rec["xy"]) - target))
+            if d <= best_d:
+                best, best_d = i, d
+        return best
 
     # -- layout -----------------------------------------------------------
     def split(self, n, *, axis="auto", gap_pt=10.0, pad_pt=(0, 0, 0, 0)):
@@ -467,6 +837,7 @@ class Frame:
                      solid_capstyle="round", zorder=1.5)
 
     def rule(self, y, x0, x1, *, color=None, lw=LW_HAIR, dashed=False):
+        _forbid_inhibitory_bar(color, "Frame.rule")
         line, = self.ax.plot([x0, x1], [y, y], color=MUTE if color is None
                              else color, lw=self.lw(lw), zorder=1.2,
                              solid_capstyle="round")
@@ -670,14 +1041,29 @@ class Frame:
         return base_text
 
     # -- anatomy primitives -------------------------------------------------
-    def soma(self, xy, *, r_pt=SOMA_R_PT, output=None, label=None, zorder=4):
-        """The one soma glyph: soma fill, pale RIM edge at LW_EDGE.
+    def soma(self, xy, *, r_pt=SOMA_R_PT, output=None, label=None, zorder=4,
+             ghost=False, delta0=True):
+        """The one soma glyph: soma fill, ink rim at LW_EDGE.
 
         ``output`` (True or a length in points) adds the mute forward arrow
         leaving to the right, with ``label`` (e.g. 'z') at PT_SMALL.
+
+        2026-09-08: the disc is registered with the frame, so
+        :meth:`require_delta0` can assert that exactly one somatic-error
+        arrow enters it.  ``ghost=True`` draws a background / neighbouring
+        cell's soma at the 45 % tint the rest of a ghost tree uses (it was
+        drawn at full strength, which made a ghost neighbour compete with the
+        cell in front of it) and exempts it from the δ0 rule;
+        ``delta0=False`` exempts a soma drawn as a glyph SWATCH.  The rim
+        moved from ``mix('ink', 30)`` to ``_SOMA_RIM``: the anatomy register
+        moved the soma to a pale yellow, and a 30 % grey rim disappeared
+        around it.
         """
-        patch = self.disc(xy, r_pt, fill=COLORS["soma"], edge=RIM, lw=LW_EDGE,
+        fill = mix("soma", GHOST_PCT) if ghost else COLORS["soma"]
+        patch = self.disc(xy, r_pt, fill=fill,
+                          edge=GHOST if ghost else _SOMA_RIM, lw=LW_EDGE,
                           zorder=zorder)
+        self._register_soma(xy, ghost=ghost, delta0=delta0)
         if output:
             length = 11.0 if output is True else float(output)
             x0 = xy[0] + self.fx(r_pt * self.scale + 1.5)
@@ -708,6 +1094,7 @@ class Frame:
         """One tapered branch segment, level 0 (trunk) .. 3 (terminal)."""
         level = int(min(max(level, 0), 3))
         width = TAPER_LW[level]
+        _forbid_inhibitory_bar(color, "Frame.dendrite")
         if faded:
             color, width = FADED, LW_HAIR
         elif ghost:
@@ -739,29 +1126,54 @@ class Frame:
                         color=color, size=PT_SMALL, ha="left")
         return line
 
-    def shunt(self, xy, *, active=True, label=("g", "shunt")):
-        """Focal shunt: the inhibitory contact with its g_shunt tag."""
-        return self.contact(xy, kind="inh", active=active, label=label)
+    def shunt(self, xy, *, active=True, label=("g", "shunt"), badge=None):
+        """Focal shunt: the inhibitory contact with its 7 pt g_shunt badge.
+
+        Same family as :meth:`contact` and :meth:`gate` (glyph rule 3): a
+        filled inh contact when active, the white-with-inh-rim contact when
+        not.  ``badge`` is an alias for ``label`` so gate and shunt read the
+        same way at the call site.
+        """
+        return self.contact(xy, kind="inh", active=active,
+                            label=badge if badge is not None else label)
 
     def gate(self, xy, *, closed=False, badge="c", descendants=None,
              nodes=None, node=None, incident=None, badge_offset=None,
-             zorder=4.2):
-        """Context / gate double ring (inh) with the 'c' badge.
+             zorder=4.2, badge_size=BADGE_PT):
+        """Context / gate: the inhibitory CONTACT inside a ring, plus a badge.
 
-        The badge sits in the free corner of the junction: upper-left by
-        default, or -- when ``node`` (with ``nodes``) or ``incident``
-        stroke directions are given -- the diagonal farthest from every
-        stroke meeting there, so it never lands on a child branch.
-        ``badge_offset`` (dx, dy in points) forces a position.
+        2026-09-08 glyph rule (3).  A gate is a member of the
+        inhibitory-contact family and is drawn exactly like one: a CLOSED
+        gate (inhibition on) is the filled inh contact inside the gate ring,
+        an OPEN gate is the same contact drawn white with an inh rim -- the
+        contact's own inactive form.  Before this both states drew the same
+        white disc, so an open and a closed gate were indistinguishable
+        except by whatever the caller did to the subtree.  It is never a bar
+        and never a free red segment.
+
+        ``badge`` is the 7 pt tag: a string ('c'), or a (base, sub[, tail])
+        pair such as ``('a', 'p', ' = 10')`` or ``('g', 'shunt')``.  It sits
+        in the free corner of the junction: upper-left by default, or -- when
+        ``node`` (with ``nodes``) or ``incident`` stroke directions are given
+        -- the diagonal farthest from every stroke meeting there, so it never
+        lands on a child branch.  ``badge_offset`` (dx, dy in points) forces a
+        position.
+
         ``closed=True`` attenuates ``descendants``: node names (with
         ``nodes``), ``(p0, p1)`` segments, or Line2D artists -- restyled to
-        FADED at LW_HAIR so the partition is visible on the tree itself.
+        FADED at LW_HAIR so the partition is visible on the tree itself,
+        which is the ONLY way attenuation is ever shown.  With ``nodes`` and
+        ``node`` given, ``descendants`` now defaults to that node's own
+        subtree instead of silently drawing a closed gate over a live tree.
         """
         col = COLORS["gate"]
-        self.disc(xy, GATE_R_PT[0], fill="white", edge=col, lw=LW_HAIR,
-                  zorder=zorder)
+        self.disc(xy, GATE_R_PT[0], fill=col if closed else "white",
+                  edge="none" if closed else col, lw=LW_EDGE, zorder=zorder)
         self.disc(xy, GATE_R_PT[1], fill="none", edge=col, lw=LW_EDGE,
                   zorder=zorder)
+        if closed and descendants is None and nodes is not None \
+                and node is not None:
+            descendants = [node]
         if badge:
             dirs = []
             if node is not None and nodes is not None:
@@ -782,8 +1194,8 @@ class Frame:
                           "bottom" if oy >= 0 else "top")
             else:
                 (ox, oy), ha, va = self._free_corner(dirs)
-            self.text(self._off(xy, ox, oy), badge, size=PT_SMALL,
-                      color=col, ha=ha, va=va, zorder=6)
+            self._label(self._off(xy, ox, oy), badge, size=badge_size,
+                        color=col, ha=ha, va=va, zorder=6)
         if closed and descendants:
             self.fade(descendants, nodes=nodes)
 
@@ -864,6 +1276,11 @@ class Frame:
             arr.set_linestyle((0, (2.2, 1.8)))
         if label:
             self._label(tag_xy, label, color=color, size=PT_ANNOT, ha=ha, va=va)
+        # 2026-09-08: register the arrival so require_delta0() can assert the
+        # rule instead of the builder remembering it.
+        self._delta0.append({"xy": (float(x), float(y)),
+                             "soma": self._nearest_soma((x, y)),
+                             "dashed": bool(dashed), "label": label})
         return arr
 
     # -- trees ------------------------------------------------------------
@@ -975,7 +1392,7 @@ class Frame:
         if mode in ("inputs", "forward"):
             for t in nodes.terminals:
                 self.contact(nodes[t], kind="exc")
-        self.soma(nodes.soma, r_pt=soma_r_pt,
+        self.soma(nodes.soma, r_pt=soma_r_pt, ghost=ghost,
                   output=(mode == "forward"),
                   label=output if (labels and self.labels) else None)
         if want_inputs:
@@ -1000,6 +1417,10 @@ class Frame:
                 self.text(self._off(((nodes[first][0] + nodes[last][0]) / 2.0,
                                      top), 0.0, lift), "…", size=PT_SMALL,
                           color=MUTE, va="bottom")
+        # 2026-09-08 glyph rule (a): assert what the drawing promised.
+        nodes.row_axis = "x"
+        self._trees.append(nodes)
+        require_soma_lowest(nodes, self, name="balanced_tree")
         return nodes
 
     def _badge_room(self, nodes):
@@ -1016,17 +1437,24 @@ class Frame:
                   else PT_SMALL, color=INK, zorder=6, force=True)
 
     def site_tree(self, rect, *, branching=(3, 3), subtree_colors=None,
-                  numbered=False, orient="right", soma_r_pt=SOMA_R_PT):
-        """The [3,3] 12-site arbor whose sites align with dictionary rows.
+                  numbered=False, orient="up", soma_r_pt=SOMA_R_PT):
+        """The [3,3] 12-site arbor, soma at the BOTTOM, sites fanning upward.
 
-        Soma at the LEFT (``orient='right'``, the default) so the proximal
-        site and its distal children occupy consecutive rows top-to-bottom
-        in subtree order -- the order the matrix rows use; ``orient='up'``
-        puts the soma at the bottom with the sites fanning upward.  Site
-        discs are filled with their subtree colour (default shunting).
-        Returns a :class:`Nodes` dict (native site index -> frame xy) with
-        ``rows`` (site -> display row) and ``order`` (native indices in
-        display order) for :meth:`dictionary_matrix` alignment.
+        2026-09-08: ``orient`` now defaults to ``'up'`` (it was ``'right'``).
+        A tree is drawn one way in this paper -- soma lowest -- and a matrix
+        that has to line up with its sites is no longer a reason to lay the
+        neuron on its side: draw the tree upright and put a
+        :meth:`site_strip` (the site order as a vertical strip, with no soma
+        to mis-orient) between the tree and the matrix.
+
+        ``orient='right'`` still draws the legacy soma-at-the-left arbor for
+        the one builder that has not migrated; it is recorded in
+        :data:`ORIENTATION_LEGACY`, is NOT soma-lowest, and is the only
+        orientation :meth:`dictionary_product`'s ``align_to`` accepts from a
+        tree.  Site discs are filled with their subtree colour (default
+        shunting).  Returns a :class:`Nodes` dict (native site index -> frame
+        xy) with ``rows`` (site -> display row) and ``order`` (native indices
+        in display order) for :meth:`dictionary_matrix` alignment.
         """
         b1, b2 = int(branching[0]), int(branching[1])
         n = b1 * (1 + b2)
@@ -1109,6 +1537,131 @@ class Frame:
                     xy = self._off(nodes[k], 2.6 * away, -2.4)
                     self.text(xy, str(k), size=PT_SMALL, color=INK,
                               ha="left" if away > 0 else "right", va="top")
+        nodes.row_axis = "y" if orient == "right" else "x"
+        self._trees.append(nodes)
+        if orient == "right":
+            ORIENTATION_LEGACY.append(
+                {"helper": "site_tree", "orient": "right",
+                 "reason": "legacy soma-at-the-left arbor kept for a builder "
+                           "that aligns a matrix to its rows; migrate to "
+                           "orient='up' + Frame.site_strip"})
+            self.note("orientation-legacy", helper="site_tree", orient="right")
+        else:
+            require_soma_lowest(nodes, self, name="site_tree")
+        return nodes
+
+    def site_strip(self, rect, *, branching=(3, 3), subtree_colors=None,
+                   numbered=False, orient="vertical", band=True,
+                   pct=CAPSULE_PCT, min_cell_pt=MIN_CELL_PT, indent_pt=5.0):
+        """The site ORDER as a strip, for a matrix to align its rows to.
+
+        New on 2026-09-08.  A dictionary's rows have to sit in the arbor's
+        site order, and the only way the library could do that was to draw
+        the arbor on its side (``site_tree(orient='right')``), which broke
+        the one-orientation rule for every figure that carried a dictionary.
+        The strip carries the same information the sideways tree carried --
+        the display order, the subtree blocks and the proximal / distal
+        distinction -- with no soma in it, so nothing can be mis-oriented:
+        the neuron itself is drawn upright next to it.
+
+        Rows run top-to-bottom (``orient='vertical'``, the default) in the
+        same order :meth:`site_tree` uses: each proximal site, then its
+        distal children.  Each block gets a 16 % tint band and a hairline
+        ancestry spine; proximal sites are indented left of their children.
+        Returns a :class:`Nodes` with ``rows``, ``order``, ``pitch_pt`` and
+        ``row_axis='y'``, which is what :meth:`dictionary_product`'s
+        ``align_to`` and :meth:`dictionary_matrix` want.  Raises
+        :class:`MatrixTooDense` below ``min_cell_pt`` per row -- a strip that
+        cannot be read is not an alignment.
+        """
+        if orient not in ("vertical", "horizontal"):
+            raise ValueError("site_strip orient is 'vertical' or 'horizontal'")
+        b1, b2 = int(branching[0]), int(branching[1])
+        n = b1 * (1 + b2)
+        colors = ([COLORS["shunting"]] * b1 if subtree_colors is None
+                  else [COLORS.get(c, c) for c in subtree_colors])
+        x0, y0, w, h = rect
+        w_pt, h_pt = w * self.w_pt, h * self.h_pt
+        span_pt = h_pt if orient == "vertical" else w_pt
+        across_pt = w_pt if orient == "vertical" else h_pt
+        pitch = span_pt / n
+        if pitch < min_cell_pt - 1e-6:
+            raise MatrixTooDense(
+                f"site_strip: {n} rows in {span_pt:.1f} pt is {pitch:.2f} pt "
+                f"per row, below the {min_cell_pt:.0f} pt floor -- give the "
+                "strip a taller rect or collapse the dictionary to bands")
+        nodes = Nodes()
+        nodes.kind = "site_strip"
+        nodes.orient = "up"
+        nodes.row_axis = "y" if orient == "vertical" else "x"
+        nodes.pitch_pt = pitch
+        rows = {}
+        for k in range(b1):
+            rows[k] = k * (b2 + 1)
+            for j in range(b2):
+                rows[b1 + b2 * k + j] = k * (b2 + 1) + 1 + j
+        nodes.rows = rows
+        nodes.order = sorted(rows, key=rows.get)
+        prox_pt = min(indent_pt, max(2.0, across_pt * 0.28))
+        dist_pt = min(across_pt - 2.5, prox_pt + indent_pt)
+
+        def place(across, r):
+            v = span_pt - (r + 0.5) * pitch
+            if orient == "vertical":
+                return (x0 + self.fx(across), y0 + self.fy(v))
+            return (x0 + self.fx(v), y0 + self.fy(across))
+
+        for k in range(b1):
+            colour = colors[k % len(colors)]
+            block = [k] + [b1 + b2 * k + j for j in range(b2)]
+            r_lo = min(rows[i] for i in block)
+            r_hi = max(rows[i] for i in block)
+            if band:
+                top = span_pt - r_lo * pitch
+                bot = span_pt - (r_hi + 1) * pitch
+                if orient == "vertical":
+                    tint_patch(self.ax,
+                               ("rect", x0, y0 + self.fy(bot), w,
+                                self.fy(top - bot)),
+                               color=colour, pct=pct, radius_pt=1.5,
+                               zorder=0.6, clip_on=False)
+                else:
+                    tint_patch(self.ax,
+                               ("rect", x0 + self.fx(bot), y0,
+                                self.fx(top - bot), h),
+                               color=colour, pct=pct, radius_pt=1.5,
+                               zorder=0.6, clip_on=False)
+            nodes[k] = place(prox_pt, rows[k])
+            nodes.parent[k] = "S"
+            nodes.children.setdefault("S", []).append(k)
+            nodes.children[k] = []
+            nodes.level[k] = 0
+            for j in range(b2):
+                site = b1 + b2 * k + j
+                nodes[site] = place(dist_pt, rows[site])
+                nodes.parent[site] = k
+                nodes.children[k].append(site)
+                nodes.children[site] = []
+                nodes.level[site] = 3
+                # the ancestry bracket: a hairline elbow, never a new mark
+                elbow = (nodes[k][0], nodes[site][1]) if orient == "vertical" \
+                    else (nodes[site][0], nodes[k][1])
+                self.dendrite(nodes[k], elbow, level=2)
+                self.dendrite(elbow, nodes[site], level=3)
+            self.junction(nodes[k], r_pt=SITE_R_PT[0], site_color=colour)
+            for j in range(b2):
+                self.terminal(nodes[b1 + b2 * k + j], site_color=colour)
+        nodes.terminals = [s for s in nodes if nodes.level.get(s) == 3]
+        if numbered and self.labels and pitch >= 6.0:
+            for site in nodes.order:
+                lead = nodes.level[site] == 0
+                xy = (self._off(nodes[site], dist_pt - prox_pt + 4.0
+                                if lead else 4.0, 0.0)
+                      if orient == "vertical"
+                      else self._off(nodes[site], 0.0, 4.0))
+                self.text(xy, str(site), size=PT_SMALL, color=INK,
+                          ha="left" if orient == "vertical" else "center",
+                          va="center" if orient == "vertical" else "bottom")
         return nodes
 
     # -- capsules / partitions ----------------------------------------------
@@ -1117,12 +1670,32 @@ class Frame:
         lo, hi = CAPSULE_W_PT
         return float(min(hi, max(lo, factor * nodes.pitch_pt)))
 
-    def _draw_chains(self, chains, color, width_pt, zorder=1.4):
-        for chain in chains:
-            xy = np.array(chain, dtype=float)
-            self.ax.plot(xy[:, 0], xy[:, 1], color=color, lw=width_pt,
-                         solid_capstyle="round", solid_joinstyle="round",
-                         zorder=zorder)
+    def _draw_chains(self, chains, color, width_pt, zorder=1.4,
+                     clip_on=True):
+        """One capsule/ribbon as a FILLED tint patch (2026-09-08 spec §5).
+
+        These used to be round-capped strokes 2.6-13 pt wide: legal only
+        because the audit exempted anything above 2.5 pt as an "area mark", and
+        in print heavier than every data line on the page.  The geometry is
+        unchanged -- the chains are buffered to the same ``width_pt`` with
+        round caps and joins -- but the result is one closed filled path with a
+        ``LW_HAIR`` boundary in the same hue, which is what the tightened
+        stroke rule (nothing above 1.35 pt unless it is a closed filled path)
+        requires.  ``color`` is still the finished tint, so every call site is
+        unchanged.
+        """
+        if width_pt <= LW_DATA:      # already a legal line weight: keep it
+            for chain in chains:
+                xy = np.array(chain, dtype=float)
+                self.ax.plot(xy[:, 0], xy[:, 1], color=color,
+                             lw=self.lw(width_pt), solid_capstyle="round",
+                             solid_joinstyle="round", zorder=zorder,
+                             clip_on=clip_on)
+            return None
+        return tint_patch(self.ax, ("ribbon", chains, width_pt),
+                          color=color, face=color,
+                          edge_color=strengthen(color, 2.4),
+                          lw=LW_HAIR, zorder=zorder, clip_on=clip_on)
 
     def _capsule(self, nodes, root, cname, pct=CAPSULE_PCT, *, entry=True):
         """Pale capsule hugging the subtree rooted at ``root``."""
@@ -1138,6 +1711,7 @@ class Frame:
             if len(pts) == 1:
                 pts = [pts[0], pts[0]]
             chains.append(pts)
+        require_address_tint(cname, where="Frame._capsule")
         self._draw_chains(chains, mix(cname, pct),
                           self._capsule_width(nodes, len(terms)))
 
@@ -1165,6 +1739,7 @@ class Frame:
                 p = nodes[block[0]]
                 chains.append([p, p])
             n_terms = sum(1 for n in block if n in nodes.terminals)
+            require_address_tint(cname, where="Frame.partition")
             self._draw_chains(chains, mix(cname, pct),
                               self._capsule_width(nodes, max(n_terms, 1)))
             label = labels[i] if i < len(labels) else None
@@ -1193,77 +1768,103 @@ class Frame:
 
     # -- credit delivery ----------------------------------------------------
     def credit_delivery(self, nodes, *, mode, rule_color=None, targets=None,
-                        K=None, alpha_tags=False, label=None):
-        """Delivery glyph on a drawn tree, for ``mode`` in
-        {'scalar', 'neuron', 'subtree', 'exact'}.
+                        K=None, alpha_tags=False, label=None, source=None):
+        """One of the FOUR delivery glyphs on a drawn tree -- and only four.
 
-        scalar   one amber bus above the targets (default: every terminal)
-                 with a hairline drop into each -- the same delta everywhere;
-        neuron   one arrow into the trunk just above the soma plus a dashed
-                 mute barrier arc -- which tree, not where;
-        subtree  16 % capsule over each addressed subtree root (``targets``
-                 or the K-cycle for ``K`` in {1, 2, 4, 8}) and an arrowhead
-                 on its entry edge; ``alpha_tags`` adds δ_k tags;
-        exact    arrow chain along the route from the soma to each target
-                 (default the library's T4) with α_k tags at the junctions.
-        ``rule_color`` defaults to the rule family's colour (scalar amber,
-        credit ink, shunting, bp).  ``label`` tags the scalar bus.
+        2026-09-08 glyph rule (4).  Spread is the only thing that separates
+        one credit rule from another, so the library draws it four ways and
+        no other way; ``mode`` is a member of :data:`DELIVERY_MODES` or one
+        of :data:`DELIVERY_ALIASES` ('broadcast', 'per_neuron', 'ancestry',
+        'path', ...), and anything else raises.
+
+        scalar   the layer scalar: one amber bus over the targets (default:
+                 every terminal) with a hairline drop into each, its SOURCE
+                 DOT sitting OUTSIDE the trees and tagged 's' -- the delta
+                 comes from somewhere else and is the same everywhere;
+        neuron   the per-neuron broadcast: the IDENTICAL amber bus, confined
+                 to this tree, with the source dot AT this soma and a
+                 hairline riser from the soma to the bus.  (Before this it
+                 was an arrow into the trunk plus a dashed barrier arc -- a
+                 second vocabulary for the same idea, and unreadable next to
+                 the scalar card.  The arc is retired.)
+        subtree  one 16 % tint patch over each addressed subtree (``targets``
+                 or the K-cycle for ``K`` in {1, 2, 4, 8}) and ONE arrow in
+                 the rule colour into that subtree's root; ``alpha_tags``
+                 adds δ_k tags;
+        exact    the arrow chain soma -> junction -> junction -> site along
+                 the route to each target (default the library's T4) with
+                 α_k tags at the junctions.
+
+        ``rule_color`` defaults to the rule family's colour (amber for both
+        bus glyphs, shunting for the address, bp for the exact path).
+        ``label`` tags the bus ('s' by default for the layer scalar);
+        ``source`` overrides where the bus is sourced ('outside' / 'soma').
         """
-        if mode not in ("scalar", "neuron", "subtree", "exact"):
-            raise ValueError(f"unknown delivery mode {mode!r}")
-        default = {"scalar": COLORS["scalar"], "neuron": COLORS["credit_ink"],
+        mode = resolve_delivery_mode(mode)
+        default = {"scalar": COLORS["scalar"], "neuron": COLORS["scalar"],
                    "subtree": COLORS["shunting"], "exact": COLORS["bp"]}[mode]
         color = default if rule_color is None else COLORS.get(rule_color,
                                                               rule_color)
         along, sidev = nodes.along, nodes.side
-        if mode == "scalar":
+        if mode in ("scalar", "neuron"):
+            source = source or ("outside" if mode == "scalar" else "soma")
             targets = list(targets) if targets else list(nodes.terminals)
             P = [self._to_pt(nodes[t]) for t in targets]
             a_vals = [float(p @ along) for p in P]
             s_vals = [float(p @ sidev) for p in P]
+            S_pt = self._to_pt(nodes.soma)
             bus_a = max(a_vals) + 8.0
             s_lo, s_hi = min(s_vals) - 2.0, max(s_vals) + 6.0
+            if source == "outside":
+                # the source sits OUTSIDE the tree; clamped to the frame so a
+                # narrow slot moves the dot in rather than off the page
+                head_room = float((np.array([self.w_pt, self.h_pt])
+                                   @ np.abs(sidev)) - 3.0)
+                s_hi = min(s_hi + SOURCE_OUT_PT, max(s_hi + 2.0, head_room))
+                if label is None:
+                    label = "s"
+            else:
+                # the riser leaves the soma on the bus's NEAR end, so the far
+                # end stays free for the card's own tag
+                s_lo = min(s_lo, float(S_pt @ sidev) - 6.0)
             p_lo = self._from_pt(bus_a * along + s_lo * sidev)
             p_hi = self._from_pt(bus_a * along + s_hi * sidev)
             self.ax.plot([p_lo[0], p_hi[0]], [p_lo[1], p_hi[1]], color=color,
                          lw=self.lw(LW_HAIR), solid_capstyle="round", zorder=5)
-            self.disc(p_hi, 1.6, fill=color, zorder=6)
             for a, s in zip(a_vals, s_vals):
                 self.arrow(self._from_pt(bus_a * along + s * sidev),
                            self._from_pt((a + 2.8) * along + s * sidev),
                            color=color, lw=LW_HAIR, head=2.6, zorder=5)
+            if source == "soma":
+                # the riser: this soma is where the broadcast comes from
+                r = nodes.soma_r_pt * self.scale
+                foot = S_pt - sidev * (r + 2.2)
+                corner = float(s_lo) * sidev + float(foot @ along) * along
+                chain = [self._from_pt(foot), self._from_pt(corner),
+                         self._from_pt(bus_a * along + s_lo * sidev)]
+                self.ax.plot([p[0] for p in chain], [p[1] for p in chain],
+                             color=color, lw=self.lw(LW_HAIR),
+                             solid_capstyle="round", solid_joinstyle="round",
+                             zorder=5)
+                self.disc(self._from_pt(foot), 1.6, fill=color, zorder=6)
+            else:
+                self.disc(p_hi, 1.6, fill=color, zorder=6)
             if label and self.labels:
-                text_color = AMBER_TEXT if color == COLORS["scalar"] \
+                text_color = AMBER_TEXT if _same_color(color, COLORS["scalar"]) \
                     else label_color(color)
-                if nodes.orient == "up":
-                    if self._fits(label, PT_SMALL, s_hi - s_lo):
-                        self.text(self._from_pt((bus_a + 2.0) * along
-                                                + s_hi * sidev),
-                                  label, size=PT_SMALL, color=text_color,
-                                  ha="right", va="bottom")
-                else:
-                    self.text(self._off(p_hi, 3.0, 0.0), label, size=PT_SMALL,
-                              color=text_color, ha="left")
+                anchor = self._from_pt(bus_a * along + s_hi * sidev) \
+                    if source == "outside" else p_lo
+                tag = (self._off(anchor, 0.0, 3.0) if nodes.orient == "up"
+                       else self._off(anchor, 3.0, 0.0))
+                # a tag that would leave the cell is dropped, never shrunk
+                if 0.01 <= tag[0] <= 0.99 and 0.01 <= tag[1] <= 0.97:
+                    self.text(tag, label, size=PT_SMALL, color=text_color,
+                              ha="center" if nodes.orient == "up" else "left",
+                              va="bottom" if nodes.orient == "up" else "center")
             return None
         S = nodes.soma
         S_pt = self._to_pt(S)
         r = nodes.soma_r_pt * self.scale
-        if mode == "neuron":
-            kids = nodes.children.get("S", [])
-            d = (self._to_pt(nodes[kids[0]]) - S_pt) if kids else along
-            d = d / max(np.linalg.norm(d), 1e-9)
-            tip = S_pt + d * (r + 2.5)
-            tail = tip + sidev * 13.0 + along * 4.0
-            self.arrow(self._from_pt(tail), self._from_pt(tip), color=color,
-                       lw=LW_EDGE, head=4.5, rad=-0.15 if nodes.orient == "up"
-                       else 0.15, zorder=5)
-            R = r + 6.0
-            t1, t2 = (35, 145) if nodes.orient == "up" else (-55, 55)
-            arc = Arc(S, 2 * self.fx(R), 2 * self.fy(R), theta1=t1, theta2=t2,
-                      color=MUTE, lw=self.lw(LW_HAIR), zorder=4.4)
-            arc.set_linestyle((0, (1.5, 1.4)))
-            self.ax.add_patch(arc)
-            return None
         if mode == "subtree":
             if targets is None:
                 K = 4 if K is None else int(K)
@@ -1328,7 +1929,9 @@ class Frame:
 
     def dictionary_matrix(self, rect, A, *, color=None, row_groups=None,
                           col_colors=None, label="A", measured=False,
-                          yticks=None, zorder=3):
+                          yticks=None, zorder=3, col_labels=None,
+                          collapse="auto", collapse_blocks=False,
+                          min_cell_pt=MIN_CELL_PT):
         """Site x profile matrix inset: rule-colour cells on panel_bg zeros.
 
         Hairline separators between ``row_groups`` (block sizes), LW_HAIR
@@ -1336,13 +1939,43 @@ class Frame:
         PT_ANNOT caption ``'A  (N × K)'`` beneath (dropped when the rect
         leaves no room).  ``col_colors`` colours each profile column (the
         K = 3 subtree dictionary); ``measured=True`` draws realized route
-        supports on ListedColormap([panel_bg, shunting]).  Size ``rect`` so
-        a column is at least 6 pt wide and the matrix at least 24 pt.
+        supports on ListedColormap([panel_bg, shunting]).
+
+        2026-09-08 MATRIX RULE, asserted rather than advised: at least
+        ``min_cell_pt`` (6.0) points per row AND per column, and a
+        ``col_labels`` header no wider than 1.5 x its own column -- the
+        review found eight columns in 30 pt under 6.8 pt headers.  A matrix
+        that is too TALL has a remedy and takes it: with ``row_groups`` and
+        ``collapse`` ('auto', the default) the bands are averaged into one
+        row each and the inset prints "rows collapsed: N per band"; a matrix
+        that is too WIDE has none, and raises :class:`MatrixTooDense` telling
+        the caller to group the columns or use a wider module span.
+        ``collapse_blocks=True`` collapses the bands whether or not the rows
+        would have fitted -- the call ``Frame.dictionary_matrix(...,
+        collapse_blocks=True)`` that the Fig. 7 builder's private
+        ``_block_matrix`` was standing in for.
         """
         A = np.asarray(A, dtype=float)
         if A.ndim == 1:
             A = A[:, None]
         n, k = A.shape
+        w_pt, h_pt = rect[2] * self.w_pt, rect[3] * self.h_pt
+        collapsed = None
+        if collapse_blocks and row_groups:
+            collapse = True
+        if collapse and row_groups and (collapse_blocks
+                                        or h_pt / max(n, 1)
+                                        < min_cell_pt - 1e-6):
+            A, sizes = _collapse_rows(A, row_groups)
+            n = A.shape[0]
+            row_groups = None
+            collapsed = collapsed_row_note(sizes)
+            if yticks is not None and len(list(yticks)) != n:
+                yticks = None
+            self.note("matrix-collapsed", text=collapsed, rows=int(n))
+        check_matrix_cells(w_pt, h_pt, n, k, where="dictionary_matrix",
+                           min_cell_pt=min_cell_pt, headers=col_labels,
+                           ax=self.ax)
         rule = COLORS["shunting"] if color is None else COLORS.get(color, color)
         inner = self.ax.inset_axes(rect, transform=self.ax.transData,
                                    zorder=zorder)
@@ -1388,16 +2021,43 @@ class Frame:
             inner.set_yticklabels([str(t) for t in yticks], fontsize=PT_SMALL,
                                   color=INK)
             inner.tick_params(axis="y", length=0, pad=1.5, labelsize=PT_SMALL)
+        if col_labels is not None and self.labels:
+            col_pt = w_pt / max(k, 1)
+            for j, head in enumerate(col_labels[:k]):
+                if not head:
+                    continue
+                self.text((rect[0] + self.fx((j + 0.5) * col_pt),
+                           rect[1] + rect[3] + self.fy(2.0)), str(head),
+                          size=PT_SMALL, color=INK, va="bottom")
+        drop_pt = 6.5
         if label and self.labels and rect[1] * self.h_pt >= 11.0:
             caption = f"{label}  ({n} × {k})"
             if self._fits(caption, PT_ANNOT, rect[2] * self.w_pt + 14.0):
-                self.text((rect[0] + rect[2] / 2.0, rect[1] - self.fy(6.5)),
+                self.text((rect[0] + rect[2] / 2.0, rect[1] - self.fy(drop_pt)),
                           caption, size=PT_ANNOT, color=INK)
+                drop_pt += LINE_BAND_PT
+        if collapsed and self.labels:
+            # the note is a caption, so it may be wider than the matrix; it is
+            # wrapped to the CELL and only dropped if even that cannot hold it
+            collapsed = _wrap_to_width(self.ax, collapsed, PT_SMALL,
+                                       self.w_pt - 4.0)
+        if collapsed and self.labels:
+            # the note goes under the matrix, or over it when the rect sits on
+            # the floor of the cell -- it is never dropped: a collapsed matrix
+            # that does not say so is a matrix with the wrong number of rows
+            if rect[1] * self.h_pt >= drop_pt + 4.0:
+                self.text((rect[0] + rect[2] / 2.0, rect[1] - self.fy(drop_pt)),
+                          collapsed, size=PT_SMALL, color=MUTE)
+            else:
+                self.text((rect[0] + rect[2] / 2.0,
+                           rect[1] + rect[3] + self.fy(2.5)), collapsed,
+                          size=PT_SMALL, color=MUTE, va="bottom")
         return inner
 
     def dictionary_product(self, rect, A, c, *, color=None, numbers=True,
                            cell_pt=8.0, col_colors=None, row_groups=None,
-                           captions=("A", "c", "A c"), align_to=None):
+                           captions=("A", "c", "A c"), align_to=None,
+                           collapse="auto", min_cell_pt=MIN_CELL_PT):
         """``A × c = A c`` as three row-aligned insets inside ``rect``.
 
         Cells are laid out in points (``cell_pt`` for the two columns,
@@ -1405,19 +2065,41 @@ class Frame:
         rect, so the triplet reads identically in a 5- or 7-module slot.
         The coefficient and field columns sit on DIV_CMAP with printed
         PT_ANNOT values; operators are PT_TITLE.  ``align_to`` takes the
-        :class:`Nodes` of a :meth:`site_tree` drawn with ``orient='right'``
-        and snaps the matrix rows onto that tree's site rows (same pitch,
-        same top edge) so row *i* of ``A`` sits beside site row *i*.
+        :class:`Nodes` of a :meth:`site_strip` (or the legacy
+        ``site_tree(orient='right')``) and snaps the matrix rows onto its
+        site rows (same pitch, same top edge) so row *i* of ``A`` sits beside
+        site row *i*; a soma-lowest tree spreads its sites across x and is
+        refused, with the strip named as the remedy.
+
+        2026-09-08: the same MATRIX RULE as :meth:`dictionary_matrix` -- at
+        least ``min_cell_pt`` per row and per column, the triplet must fit
+        the rect, and ``collapse`` with ``row_groups`` averages the bands and
+        prints "rows collapsed: N per band" rather than drawing rows nobody
+        can resolve.
         Returns (A, c, Ac) axes.
         """
         A = np.asarray(A, dtype=float)
         c = np.asarray(c, dtype=float).reshape(-1)
         n, k = A.shape
-        field = A @ c
         x0, y0, w, h = rect
         w_pt, h_pt = w * self.w_pt, h * self.h_pt
         cap_pt = LINE_BAND_PT if (captions and self.labels) else 0.0
+        if align_to is not None and getattr(align_to, "row_axis", "y") == "x":
+            raise SchematicRuleError(
+                "dictionary_product(align_to=...) needs rows that run down "
+                "the page: a soma-lowest tree spreads its sites across x. "
+                "Draw the tree upright and align the matrix to a "
+                "Frame.site_strip(orient='vertical') instead.")
+        collapsed = None
         row = min(cell_pt, (h_pt - cap_pt) / max(n, 1))
+        if collapse and row_groups and row < min_cell_pt - 1e-6:
+            A, sizes = _collapse_rows(A, row_groups)
+            n = A.shape[0]
+            row_groups = None
+            collapsed = collapsed_row_note(sizes)
+            row = min(cell_pt, (h_pt - cap_pt) / max(n, 1))
+            self.note("matrix-collapsed", text=collapsed, rows=int(n))
+        field = A @ c
         if align_to is not None and getattr(align_to, "rows", None):
             row = float(align_to.pitch_pt)
             first = align_to.order[0]
@@ -1430,6 +2112,17 @@ class Frame:
         if total > w_pt:
             col = max(6.0, col - (total - w_pt) / max(k, 1))
             total = k * col + op_pt + cell_pt + op_pt + cell_pt
+        if row < min_cell_pt - 1e-6:
+            raise MatrixTooDense(
+                f"dictionary_product: {n} rows at {row:.2f} pt, below the "
+                f"{min_cell_pt:.0f} pt floor -- pass row_groups=[...] so the "
+                "bands can be collapsed, or give the triplet a taller rect")
+        if col < min_cell_pt - 1e-6 or total > w_pt + 0.5:
+            raise MatrixTooDense(
+                f"dictionary_product: the A × c = Ac triplet needs "
+                f"{total:.1f} pt ({k} columns at {col:.2f} pt) and has "
+                f"{w_pt:.1f} pt -- group the profile columns or move the "
+                "triplet to a wider module span")
         left = (w_pt - total) / 2.0
         top = (h_pt - (h_pt - cap_pt - n * row) / 2.0 if top_pt is None
                else top_pt)
@@ -1482,6 +2175,11 @@ class Frame:
                 if text:
                     self.text((r_[0] + r_[2] / 2.0, yA - self.fy(cap_pt * 0.55)),
                               text, size=PT_ANNOT, color=INK)
+        if collapsed and self.labels:
+            y_note = yA - self.fy(cap_pt + 4.0)
+            if y_note > rect[1] - self.fy(2.0) - self.fy(LINE_BAND_PT):
+                self.text((rect_A[0] + rect_A[2] / 2.0, y_note), collapsed,
+                          size=PT_SMALL, color=MUTE, va="top")
         return ax_A, ax_c, ax_f
 
     # -- cards, badges, keys ------------------------------------------------
@@ -1567,21 +2265,29 @@ class Frame:
         return teacher, student
 
     def _mini_glyph(self, xy, mode, color, *, w_pt=12.0):
-        """Delivery mini-glyph for a rule key entry, ``w_pt`` wide."""
+        """Delivery mini-glyph for a rule key entry, ``w_pt`` wide.
+
+        2026-09-08: the key draws the same four glyphs the schematics draw,
+        so 'scalar' and 'neuron' are one bus differing only in where its
+        source dot sits (outside the tree / at the soma) -- which is the only
+        difference between the two rules on the tree as well.
+        """
+        mode = None if mode is None else (
+            resolve_delivery_mode(mode) if str(mode) not in ("teacher",)
+            else "teacher")
         x, y = xy
         x1 = x + self.fx(w_pt)
-        if mode == "scalar":
+        if mode in ("scalar", "neuron"):
             self.ax.plot([x, x1], [y + self.fy(2.2)] * 2, color=color,
                          lw=self.lw(LW_HAIR), solid_capstyle="round", zorder=5)
-            self.disc((x1, y + self.fy(2.2)), 1.1, fill=color, zorder=6)
+            self.disc((x1 if mode == "scalar" else x, y + self.fy(2.2)), 1.1,
+                      fill=color, zorder=6)
             for f in (0.15, 0.5, 0.85):
                 xx = x + self.fx(w_pt * f)
                 self.arrow((xx, y + self.fy(2.2)), (xx, y - self.fy(2.4)),
                            color=color, lw=LW_HAIR, head=2.2, zorder=5)
-        elif mode == "neuron":
-            self.disc((x + self.fx(2.0), y), 1.7, fill=color, zorder=6)
-            self.arrow((x1, y), (x + self.fx(4.6), y), color=color,
-                       lw=LW_EDGE, head=3.0, zorder=5)
+            if mode == "neuron":       # the source dot is AT the soma
+                self.disc((x, y - self.fy(2.4)), 1.7, fill=color, zorder=6)
         elif mode == "subtree":
             self._draw_chains([[(x + self.fx(1.5), y), (x1 - self.fx(1.5), y)]],
                               mix(color, CAPSULE_PCT), 3.2, zorder=1.4)
@@ -1609,6 +2315,27 @@ class Frame:
         dicts with those keys; ``mode`` is a delivery mode, 'teacher', or
         None for a plain swatch.  Entries wrap onto further lines while
         the rect is tall enough and are dropped otherwise.
+
+        THE FOUR DELIVERY GLYPHS, and the only four the paper draws
+        (:data:`DELIVERY_MODES`; :data:`DELIVERY_ALIASES` maps the older
+        names onto them):
+
+        ``'scalar'``   layer scalar -- an amber bus spanning the tree and its
+                       ghost neighbours, source dot OUTSIDE the trees, tagged
+                       's'.  Same delta everywhere.
+        ``'neuron'``   per-neuron broadcast -- the identical amber bus
+                       confined to ONE tree, source dot AT that soma.  Which
+                       tree, not where in it.
+        ``'subtree'``  subtree / ancestry address -- a 16 % tint patch hugging
+                       the addressed subtree and ONE arrow in the rule colour
+                       into its root; tints come from the four-hue address
+                       cycle, never from a data series.
+        ``'exact'``    exact path -- the arrow chain soma -> junction ->
+                       junction -> site with α tags.
+
+        This key is the one place a figure may state a series before a plot
+        does (spec §5, "legend idiom"): the reader meets the glyph, the name
+        and the badge here, and no data panel carries a key at all.
         """
         if not self.labels:
             return None
@@ -2022,8 +2749,11 @@ def draw_anatomy_pipeline(ax, *, labels=True, scale=1.0):
         y = core_c[1] + core_c[3] * (0.78 - 0.28 * i)
         f.text((x_bar - f.fx(3.0), y), label, size=PT_SMALL, color=color,
                ha="right")
-        ax.plot([x_bar, x_bar + span * frac], [y, y], color=color,
-                lw=3.0, solid_capstyle="round", zorder=3)
+        # 2026-09-08: a bar is an AREA mark, so it is a filled patch, not a
+        # 3 pt stroke (nothing strokes above 1.35 pt any more).
+        tint_patch(ax, ("rect", x_bar, y - f.fy(1.5), span * frac, f.fy(3.0)),
+                   color=color, face=color, edge=False, radius_pt=1.5,
+                   zorder=3, clip_on=False)
     mid = a[1] + a[3] * 0.52
     f.arrow((a[0] + a[2] + f.fx(2.0), mid), (b[0] - f.fx(2.0), mid))
     f.arrow((b[0] + b[2] + f.fx(2.0), mid), (c[0] - f.fx(2.0), mid))
@@ -2197,6 +2927,8 @@ def draw_stage_pair(ax, *, depths=(1, 3), sensors=("fine", "coarse", "global"),
         f.error_in(base, side="right")
     if key_pt:
         f.rule_key((0.0, 0.0, 1.0, f.fy(key_pt)), rules)
+    f.require_soma_lowest()
+    f.require_delta0()          # one δ0 per soma, in every composition
     return ax
 
 
@@ -2230,6 +2962,8 @@ def draw_operator_tree_pair(ax, *, kinds=("pairwise", "quartic"), labels=True):
             body, mode="forward", badges=_OPERATOR_BADGES.get(kind, {}),
             input_labels=[("x", str(i)) for i in range(1, 9)], output="y")
         f.error_in(nodes.soma, side="right")
+    f.require_soma_lowest()
+    f.require_delta0()
     return ax
 
 
@@ -2251,7 +2985,9 @@ def draw_local_gate_tree(ax, *, labels=True):
     f.gate(nodes["JL"], closed=False, nodes=nodes, node="JL")
     f.gate(nodes["JR"], closed=True, descendants=["JR"], nodes=nodes,
            node="JR")
-    f.credit_delivery(nodes, mode="scalar", targets=["JL", "JR"])
+    # the bus is named in the card's own footer ("unit proximal credit"), so
+    # the source tag is suppressed here: two tags in one 21 pt band collide
+    f.credit_delivery(nodes, mode="scalar", targets=["JL", "JR"], label=False)
     f.error_in(nodes.soma, side="right")
     if labels:
         half = nodes.pitch_pt * 2.0
@@ -2263,6 +2999,8 @@ def draw_local_gate_tree(ax, *, labels=True):
                 cx = (nodes[names[0]][0] + nodes[names[1]][0]) / 2.0
                 f.text((cx, top + f.fy(CONTACT_DIA_PT * 0.5 + 2.5)), tag,
                        size=PT_SMALL, color=colour, va="bottom")
+    f.require_soma_lowest()
+    f.require_delta0()
     return ax
 
 
@@ -2302,6 +3040,8 @@ def draw_measured_boundary(ax, *, route_matrix=None, labels=True):
     ry = right[1] + f.fy(12.0) + (right[3] - f.fy(mh + 12.0)) / 2.0
     f.dictionary_matrix((rx, ry, f.fx(mw), f.fy(mh)), A, measured=True,
                         label="A")
+    f.require_soma_lowest()
+    f.require_delta0()
     return ax
 
 

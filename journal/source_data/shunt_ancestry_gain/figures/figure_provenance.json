@@ -1,11 +1,11 @@
 {
-  "output_sha256": "25b6d0ecf1fbca25aac10f7f4f7c1e64f7720786a1cd5f3171842e92735814a9",
-  "main_figure_sha256": "25b6d0ecf1fbca25aac10f7f4f7c1e64f7720786a1cd5f3171842e92735814a9",
+  "output_sha256": "6062d6c292c17a6f9426c70baeaf1abf93aade833738c1c73b7013aec92d7f36",
+  "main_figure_sha256": "6062d6c292c17a6f9426c70baeaf1abf93aade833738c1c73b7013aec92d7f36",
   "builders_sha256": {
     "scripts/shunt_ancestry_gain/build_figure.py": "ace3791786d34c8b234b46743fd527b0ede99ff262064fd1067dcfd6616a70d0",
     "scripts/build_main_figure_07.py": "8dd526d60d35b572a17a68c77c1813279756251052d4921471d77c3fb16b885e",
     "scripts/build_main_figure_08.py": "f9960d1b058bfef5486e436ef511fbcb98e751a3fe515587be6929b1d7305cc5",
-    "scripts/native_schematics.py": "edd5694b7b530b82ddd33b193b74e4a175846981583ef575355dacff27cfec11"
+    "scripts/native_schematics.py": "3e74a3b7ccbb993d9c131d6997aba30a1d81be7728f335937e3fa2e14aa754b1"
   },
   "source_sha256": {
     "source_data/figure3/segment_metrics.csv": "7829c298c4e5b3209b758fb88b92b55f070420c00b383436e5d4e1601e7ff1cf",

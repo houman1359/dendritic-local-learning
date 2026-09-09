@@ -39,6 +39,19 @@ Waivers and local decisions, in one place:
   mean and normalised by max |t| with the sign kept; the blocks are drawn as
   DIV_CMAP squares above the eight terminals rather than as a ninth column,
   which a 4-module cell cannot hold at >= 6 pt.
+* B's broadcast column and its soma source dot are tagged ``s`` (amber), not
+  the specification's ``1``: the seven routes are numbered 1-7 on the arbor,
+  so a ``1`` at the soma would be read as route 1.  C keeps the paper's
+  ``A = [1 | r1 r2 r3]`` notation, where the 1 is the column of ones.
+* B's spec footer ("rows: tree-ordered site blocks, not to scale") is 146 pt
+  at PT_SMALL and a 4-module panel is 124 pt, so it is set in two lines with
+  the matrix caption beside it.
+* G's oracle badge sits inside the axes beside the violet marker it names
+  rather than outside it: a 62 pt category reserve plus a badge in the
+  6-module gutter would push the panel past its column lock.
+* H's x limit runs to 60 pp so the two PT_ANNOT report columns (wiring,
+  cells +) live inside the axes; the ticks still stop at 30 pp, and a mute
+  hairline separates the columns from the data.
 """
 from __future__ import annotations
 
@@ -112,14 +125,14 @@ ROUTE_SITE = 4396          # the route whose response field C illustrates
 
 
 CAPTION = r"""\caption{\textbf{Ancestry routes on reconstructed arbors compress the tree's own focal-shunt response fields.}
-\textbf{A}, Reconstructed MICrONS arbor (root 864691135409937097, the median-sized of the original eight cells; 78 of 616 segments), isotropic principal-plane projection. Hue, mapped $(E-I)/(E+I)$ contact-area balance; width, log mapped area; orange disc, soma; bar, 50~$\mu$m.
-\textbf{B}, The same arbor in grey with its seven $K=8$ ancestry routes in route colors, numbered in tree order; red dots, inhibitory route origins; pale capsules, the two largest supports. Supports nest ($4458\subset4396\subset4209$) and hold 29, 5 and five single sites of the cell's 70 excitatory sites (32 distinct; 38 off-route). Matrix rows, the eight tree-ordered site blocks (counts at right, not to scale); column $s$, the broadcast.
-\textbf{C}, Schematic tree: a focal shunt attenuates its descendants (pale strokes) and creates the field $\bm t$ (squares above the sites, diverging scale; route 4396's measured field in eight blocks). Capture is the $W$-weighted energy of the projection $A\bm c$ of $\bm t$ onto $\mathrm{span}(A)$, $A=[\bm 1\,|\,\bm r_1\bm r_2\bm r_3]$; $\delta_0$, somatic error; $z$, output.
-\textbf{D}, Total capture against column budget, 47 disjoint v661 cells (46 at $K=16$); marker and dash name the family; bands, 95\% cell-bootstrap intervals (20,000 draws) for ancestry and surrogates.
-\textbf{E}, Energy partition at $K=8$ into broadcast, spatial and remainder; families as in \textbf{D}.
-\textbf{F}, Per-cell ancestry capture against that cell's 200-surrogate mean (degree--depth surrogate trees); dashed, equality; open pink, the 11 cells where at least half the surrogates reach the tree; white diamond, cohort mean with 95\% cell-bootstrap intervals.
-\textbf{G}, Residual capture after the broadcast at $K=8$, three cohorts ($n=8$, 47, 8 cells), 95\% cell-bootstrap intervals.
-\textbf{H}, Paired ancestry-minus-control residual capture over 47 cells: means with retained 95\% cell-bootstrap intervals; the mute SVD-gap row is descriptive, outside the Holm family; right columns, each dictionary's wiring density and cells favoring ancestry. Controls average 200 draws per cell; the SVD is an oracle ceiling; fields are modeled, not observed.}"""
+\textbf{A}, Reconstructed MICrONS arbor (root 864691135409937097, median-sized of the original eight cells; 78 of 616 segments), principal-plane projection. Hue, mapped $(E-I)/(E+I)$ contact-area balance; stroke width, log mapped area; orange disc, soma; bar, 50~$\mu$m.
+\textbf{B}, Same arbor in grey with its seven $K=8$ ancestry routes, numbered in tree order and colored by route; red dots, inhibitory origins; pale capsules, the two largest supports. Supports nest ($4458\subset4396\subset4209$) and hold 29, 5 and five single sites, covering 32 of the cell's 70 excitatory sites. Matrix rows, the eight tree-ordered site blocks with counts at right, not to scale; column $s$, the broadcast.
+\textbf{C}, Paper tree: a focal shunt ($g_{\mathrm{shunt}}$) attenuates its descendants (pale strokes), making the field $\bm t$ (squares above the sites, diverging scale; route 4396's measured field, eight blocks). Capsules, the three addressed subtrees, the columns of $A=[\bm 1\,|\,\bm r_1\bm r_2\bm r_3]$; capture is the $W$-weighted energy of the projection $A\bm c$ of $\bm t$. $\delta_0$, somatic error; $z$, output.
+\textbf{D}, Total capture against column budget, 47 disjoint v661 cells (46 at $K=16$); cohort means; family by marker and dash; bands, 95\% cell-bootstrap intervals (20,000 draws) for ancestry and surrogates.
+\textbf{E}, Energy partition at $K=8$: broadcast, spatial, remainder; 47-cell means; families as in \textbf{D}.
+\textbf{F}, Per-cell ancestry capture against its own 200 degree--depth surrogate trees; dashed, equality; open pink, the 11 cells where at least half the surrogates reach it; white diamond, cohort mean with 95\% cell-bootstrap intervals.
+\textbf{G}, Residual capture after the broadcast at $K=8$, three cohorts ($n=8$, 47, 8 cells); means with 95\% cell-bootstrap intervals.
+\textbf{H}, Paired ancestry-minus-control residual capture, 47 cells; means with retained 95\% cell-bootstrap intervals. The mute SVD-gap row is descriptive, outside the Holm family; right columns, each dictionary's wiring density and cells favoring ancestry. Randomized controls average 200 draws/cell; the SVD is an oracle ceiling; fields are modeled, not observed.}"""
 
 
 def k_hue(k):
@@ -255,8 +268,8 @@ def _draw_arbor(f, rect, cell, *, mode="balance", routes=None,
     five stroke tokens as a mapped-area ladder (panel A); ``mode='ghost'``
     draws the whole skeleton in GHOST and then the ``routes`` -- lists of
     segment ids -- in full-strength D7 K-cycle strokes, with 16 % capsules
-    over ``capsules`` (route index, size) pairs.  Returns the placement
-    function and the soma point.
+    over the ``capsules`` (segment ids, tint, stroke width) blocks.  Returns
+    the placement map and the soma point.
     """
     positions, rows, parent, span_um = _arbor_geometry(cell)
     place, _ = _fit_iso(f, rect, np.asarray(list(positions.values()), float))
@@ -292,10 +305,12 @@ def _draw_arbor(f, rect, cell, *, mode="balance", routes=None,
                       alpha=0.45 + 0.55 * weight, solid_capstyle="round",
                       zorder=3.0 if balance_by[seg] >= 0 else 3.6)
     else:
-        for index, size_pt in capsules:
-            tint = mix(hues[index], 16, "white") if hues else mix("dend", 16)
-            for seg in routes[index]:
-                if parent.get(seg) not in rows:
+        # a capsule hugs an addressed SUPPORT (the sites a route owns), the
+        # stroke traces the route itself (origin up to the soma)
+        for members, tint, size_pt in capsules:
+            block = set(members)
+            for seg in members:
+                if parent.get(seg) not in block:
                     continue
                 f.ax.plot([xy[seg][0], xy[parent[seg]][0]],
                           [xy[seg][1], xy[parent[seg]][1]], color=tint,
@@ -426,33 +441,70 @@ def panel_routes(ax, routes):
         out.append(cursor)
         return out
 
+    def support_block(k):
+        """Every segment the route's support spans: its sites and the
+        ancestors joining them, up to the route origin."""
+        origin = int(origins[k])
+        block = {origin}
+        for site, on in zip(e_sites, supports[k]):
+            if not on:
+                continue
+            cursor = int(site)
+            while cursor in ids:
+                block.add(cursor)
+                if cursor == origin:
+                    break
+                cursor = parent.get(cursor, -1)
+        return sorted(block)
+
     route_segments = [chain(o) for o in origins]
     big = sorted(range(n_routes), key=lambda k: -int(supports[k].sum()))[:2]
     matrix_w = 6.0 * (n_routes + 1)
     matrix_h = 6.0 * (n_routes + 1)
-    arbor_rect = (0.0, f.fy(67.0), 1.0, 1.0 - f.fy(69.0))
+    arbor_rect = (0.0, f.fy(71.0), 1.0, 1.0 - f.fy(73.0))
     xy, soma = _draw_arbor(f, arbor_rect, cell, mode="ghost",
                            routes=route_segments,
-                           capsules=[(k, 6.0) for k in big],
+                           capsules=[(support_block(k),
+                                      mix(k_hue(slot[k]), 16, "white"), 6.0)
+                                     for k in big],
                            hues={k: k_hue(slot[k]) for k in range(n_routes)},
                            scale_bar_um=None)
     # the broadcast column is the soma's own scalar: amber tag at the soma
-    f.text((soma[0] + f.fx(4.0), soma[1] - f.fy(1.0)), "s", size=PT_SMALL,
-           color=mix("local", 60, "ink"), ha="left")
-    ceiling = 1.0 - f.fy(6.0)
-    taken = []
+    tag = (soma[0] + f.fx(4.5), soma[1] - f.fy(2.0))
+    f.text(tag, "s", size=PT_SMALL, color=mix("local", 60, "ink"), ha="left")
+    # the digits keep clear of the panel title and of the amber soma tag
+    ceiling_pt = f.h_pt - 1.0
+    floor_pt = 74.0
+    taken = [(tag[0] * f.w_pt, tag[1] * f.h_pt)]
+    # every route is numbered: the digit takes the freest of four diagonal
+    # slots around its origin dot rather than being dropped
     for index, origin in enumerate(origins):
         point = xy[int(origin)]
         f.contact(point, kind="inh", dia_pt=2.9)
-        up = point[1] + f.fy(2.4) < ceiling
-        label_xy = (point[0] + f.fx(3.0),
-                    point[1] + (f.fy(2.4) if up else -f.fy(2.4)))
-        px, py = label_xy[0] * f.w_pt, label_xy[1] * f.h_pt
-        if all((px - qx) ** 2 + (py - qy) ** 2 > 72.0 for qx, qy in taken):
-            taken.append((px, py))
-            f.text(label_xy, str(slot[index] + 1), size=PT_SMALL,
-                   color=k_hue(slot[index]), ha="left",
-                   va="bottom" if up else "top")
+        best = fallback = None
+        for dx, dy, ha, va in ((3.0, 2.4, "left", "bottom"),
+                               (3.0, -2.4, "left", "top"),
+                               (-3.0, 2.4, "right", "bottom"),
+                               (-3.0, -2.4, "right", "top")):
+            px = point[0] * f.w_pt + dx
+            py = point[1] * f.h_pt + dy
+            room = min(((px - qx) ** 2 + (py - qy) ** 2
+                        for qx, qy in taken), default=1e9)
+            item = (room, px, py, ha, va)
+            if fallback is None or room > fallback[0]:
+                fallback = item
+            # the digit must stay inside the arbor band: its own box clear
+            # of the title above and of the matrix column labels below
+            top = py + (9.0 if va == "bottom" else 0.0)
+            bottom = py - (9.0 if va == "top" else 0.0)
+            if top > ceiling_pt or bottom < floor_pt:
+                continue
+            if best is None or room > best[0]:
+                best = item
+        room, px, py, ha, va = best or fallback
+        taken.append((px, py))
+        f.text((px / f.w_pt, py / f.h_pt), str(slot[index] + 1),
+               size=PT_SMALL, color=k_hue(slot[index]), ha=ha, va=va)
     # collapsed dictionary: one row per route support plus the off-route row
     union = np.zeros(len(e_sites), bool)
     for support in supports:
@@ -466,21 +518,24 @@ def panel_routes(ax, routes):
                 A[row, j + 1] = 1.0
         counts.append(int(supports[k].sum()))
     counts.append(int((~union).sum()))
-    _block_matrix(f, (f.fx(2.0), f.fy(11.0), f.fx(matrix_w), f.fy(matrix_h)),
+    _block_matrix(f, (f.fx(2.0), f.fy(21.0), f.fx(matrix_w), f.fy(matrix_h)),
                   A, counts=counts,
                   col_colors=[mix("local", 55)]
                   + [k_hue(slot[k]) for k in order],
                   col_labels=["s"] + [str(slot[k] + 1) for k in order],
                   row_groups=[1] * n_routes,
                   label=None)
-    f.text((1.0, f.fy(11.0 + matrix_h)),
+    f.text((1.0, f.fy(21.0 + matrix_h)),
            f"{int(union.sum())} of {len(e_sites)}\nsites lie\non a route",
            size=PT_SMALL, color=COLORS["mute"], ha="right", va="top")
-    f.text((0.0, f.fy(2.0)),
+    # the spec footer does not fit a 4-module line at PT_SMALL (146 pt), so
+    # it is set left in two lines with the matrix caption on its right
+    f.text((0.0, f.fy(2.0)), "rows: tree-ordered site\nblocks, not to scale",
+           size=PT_SMALL, color=COLORS["mute"], ha="left", va="bottom",
+           linespacing=1.15)
+    f.text((1.0, f.fy(2.0)),
            f"A  ({len(e_sites)} \u00d7 {n_routes + 1})", size=PT_ANNOT,
-           color=COLORS["ink"], ha="left", va="bottom")
-    f.text((1.0, f.fy(2.0)), "blocks, not to scale", size=PT_SMALL,
-           color=COLORS["mute"], ha="right", va="bottom")
+           color=COLORS["ink"], ha="right", va="bottom")
     return ax
 
 
@@ -499,6 +554,14 @@ def panel_field(ax, field):
     f.dendrite(nodes["J1"], nodes["JL"], level=nodes.level["JL"], faded=True)
     f.shunt(site)
     f.error_in(nodes.soma, side="right")
+    # the three ancestry addresses of A, as nested K-cycle capsules on the
+    # same tree, so the reader can read r1, r2, r3 off the drawing
+    f.partition(nodes, [nodes.subtree("JL"), nodes.subtree("JLL"),
+                        nodes.subtree("JRL")],
+                colors=[K_CYCLE_D7[0], K_CYCLE_D7[1], K_CYCLE_D7[2]],
+                labels=None)
+    for name in nodes.terminals:
+        f.contact(nodes[name], kind="exc", dia_pt=2.6)
     # the real field, one DIV_CMAP square per site, above its own terminal
     top = max(nodes[n][1] for n in nodes.terminals)
     scale = mpl.cm.ScalarMappable(mpl.colors.Normalize(-1.0, 1.0), DIV_CMAP)
@@ -514,9 +577,12 @@ def panel_field(ax, field):
            color=COLORS["ink"], ha="right")
     product = (f.fx(59.0), f.fy(49.0), f.fx(65.0), f.fy(71.0))
     f.dictionary_product(product, A, coefficients, cell_pt=7.5, numbers=False,
-                         captions=("A", "c", "A c"))
+                         captions=("A", "c", "A c"),
+                         col_colors=["local"] + K_CYCLE_D7[:3])
     f.text((0.0, f.fy(12.5)),
            f"capture = ||A c||² / ||t||² = {capture:.2f}", size=PT_ANNOT,
+           color=COLORS["ink"], ha="left", va="bottom")
+    f.text((0.0, f.fy(23.0)), "A = [1 | r1 r2 r3]", size=PT_SMALL,
            color=COLORS["ink"], ha="left", va="bottom")
     f.text((0.0, f.fy(2.0)), "W = excitatory contact area", size=PT_SMALL,
            color=COLORS["mute"], ha="left", va="bottom")
@@ -573,7 +639,7 @@ def panel_budget(ax, summaries, tables):
     ax.text(0.015, 0.020, "47 cells; 46 at K = 16", fontsize=PT_SMALL,
             color=COLORS["mute"], ha="left", va="bottom",
             transform=ax.transAxes)
-    ax.legend(loc="upper left", bbox_to_anchor=(-0.02, 1.035), ncol=2,
+    ax.legend(loc="upper left", bbox_to_anchor=(-0.02, 1.002), ncol=2,
               frameon=False, fontsize=PT_LEGEND, handlelength=1.5,
               handletextpad=0.4, columnspacing=0.8, labelspacing=0.28,
               borderaxespad=0.0)
@@ -646,7 +712,8 @@ def panel_cells(ax, pairs):
     ax.text(0.985, 0.030, f"{above} of {len(pairs)} above equality",
             fontsize=PT_SMALL, color=COLORS["mute"], ha="right", va="bottom",
             transform=ax.transAxes)
-    ax.text(0.985, 0.125, f"{int(hard.sum())} open points",
+    ax.text(0.985, 0.125,
+            f"{int(hard.sum())} open: \u2265 half of surrogates tie",
             fontsize=PT_SMALL, color=COLORS["highlight"], ha="right",
             va="bottom", transform=ax.transAxes)
     ax.set_xlim(0.25, 1.02)
