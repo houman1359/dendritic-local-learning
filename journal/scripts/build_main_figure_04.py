@@ -735,13 +735,13 @@ def boundary_order(ax, crossings: pd.DataFrame, seeds: pd.DataFrame,
         missing = int(column.isna().sum())
         if missing:
             ax.plot(xs[i] + np.linspace(-0.16, 0.16, missing),
-                    np.full(missing, 1.190), linestyle="none", marker="^",
+                    np.full(missing, 1.215), linestyle="none", marker="^",
                     ms=MARKER_MS - 0.8, markerfacecolor="white",
                     markeredgecolor=AMBER, markeredgewidth=LW_EDGE, zorder=5)
             # QA 2026-09-09: right of the triangles, inside the axes (the
             # left-of-cluster placement was struck through by the spine)
-            ax.text(xs[i] + 0.24, 1.190, f"{missing}/20", fontsize=PT_BASE,
-                    color=AMBER_TEXT, ha="left", va="center", zorder=6)
+            ax.text(xs[i], 1.150, f"{missing}/20", fontsize=PT_BASE,
+                    color=AMBER_TEXT, ha="center", va="center", zorder=6)
 
     for i in range(3):
         ax.plot([xs[i], xs[i]], [predicted[i], trained[i]], color=INK,
