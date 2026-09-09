@@ -332,16 +332,30 @@ def window_rule(ax, x=PRIMARY['budget'], *, top=REF_TOP, pad_pt=1.4):
 
 
 def axis_break(ax, x, *, size_pt=4.0):
-    """Two hairline slashes on the x spine where the linear join the log part."""
+    """Two hairline slashes on the x spine where the linear part joins the log.
+
+    QA 2026-09-09: the first version converted ``x`` to an axes fraction and
+    then drew it through ``get_xaxis_transform`` (which takes DATA x), so on
+    the symlog axis both slashes collapsed onto the origin.  The slashes are
+    now placed in data x, with their point offsets converted through
+    ``transData`` at the spine.
+    """
     trans = ax.get_xaxis_transform()
-    w = size_pt / axes_w_pt(ax)
-    h = size_pt / axes_h_pt(ax)
-    px = ax.transAxes.inverted().transform(ax.transData.transform((x, 1.0)))[0]
-    for dx in (-0.30 * w, 0.30 * w):
-        ax.plot([px + dx - 0.35 * w, px + dx + 0.35 * w],
-                [-0.6 * h, 0.6 * h], transform=trans, color=COLORS['edge'],
-                lw=LW_HAIR, clip_on=False, zorder=6, solid_capstyle='butt')
-    return px
+    fig = ax.get_figure()
+    k = 72.0 / fig.dpi
+    y_ref = ax.transData.transform((x, LOG_YLIM[0]))[1]
+    x_disp = ax.transData.transform((x, LOG_YLIM[0]))[0]
+    inv = ax.transData.inverted()
+
+    def xd(off_pt):
+        return inv.transform((x_disp + off_pt / k, y_ref))[0]
+
+    h = 0.6 * size_pt / axes_h_pt(ax)
+    for dx in (-0.30 * size_pt, 0.30 * size_pt):
+        ax.plot([xd(dx - 0.35 * size_pt), xd(dx + 0.35 * size_pt)], [-h, h],
+                transform=trans, color=COLORS['edge'], lw=LW_HAIR,
+                clip_on=False, zorder=6, solid_capstyle='butt')
+    return x
 
 
 def badge_at(ax, xy, kind, *, xycoords, offset_pt, ha, va):
@@ -375,8 +389,10 @@ def subtree_delivery(f, nodes, targets, cname, rule_color):
         par = nodes.parent.get(t)
         if par is not None:
             p0 = nodes[par] if par in nodes else nodes.soma
-            f.arrow(_lerp(p0, nodes[t], 0.40), _lerp(p0, nodes[t], 0.80),
-                    color=COLORS[rule_color], lw=LW_EDGE, head=4.0, zorder=4.6)
+            # QA 2026-09-09: at the 34 pt card scale the 0.40-0.80 span was
+            # a head with no shaft; the arrow now runs most of the segment
+            f.arrow(_lerp(p0, nodes[t], 0.16), _lerp(p0, nodes[t], 0.84),
+                    color=COLORS[rule_color], lw=LW_EDGE, head=3.4, zorder=4.6)
 
 
 def axes_w_pt(ax):
@@ -543,7 +559,9 @@ def panel_task(ax, tuning):
     right_w = 66.0                      # the inset column, at the card's right
     tree_rect = (x0 + f.fx(4.0), y0 + f.fy(8.0), f.fx(w_pt - right_w - 10.0),
                  h - f.fy(28.0))
-    nodes = f.balanced_tree(tree_rect, depth=2, trunk=False, mode='forward',
+    # QA 2026-09-09: mode='plain' (no library input dot at the terminals), so
+    # each terminal carries exactly one E and one I contact
+    nodes = f.balanced_tree(tree_rect, depth=2, trunk=False, mode='plain',
                             output='', soma_r_pt=3.0)
     sx, sy = nodes.soma
     # excitatory AND inhibitory drive on every terminal branch: the input
@@ -649,7 +667,10 @@ def card_tree(f, core, *, head_pt=3.0, foot_pt=14.0):
                             ghost=True)
     # the double ring alone marks the closed gate: a 'c' badge lands on the
     # exact card's alpha tag at this pitch
-    f.gate(nodes['JR'], closed=True, descendants=['JR'], nodes=nodes,
+    # QA 2026-09-09: no descendant fade on the 34 pt cards (a 38 % hairline
+    # subtree vanished at print scale); the closed ring and the open head
+    # mark the suppression.
+    f.gate(nodes['JR'], closed=True, descendants=None, nodes=nodes,
            node='JR', badge=None)
     sx, sy = nodes.soma
     x1 = sx + f.fx(nodes.soma_r_pt + 1.5)
@@ -693,8 +714,8 @@ def panel_deliveries(ax):
     # AMENDMENTS B10: the caption's Gamma sentence needs an on-artwork referent
     f.text((core[0] + f.fx(key_x - 5.0), core[1] + core[3] - f.fy(5.0)), 'Γ',
            size=PT_BASE, color=COLORS['gate'], ha='right', va='center')
-    open_head(f, _lerp(nodes.soma, nodes['JR'], 0.40),
-              _lerp(nodes.soma, nodes['JR'], 0.80), shunting)
+    open_head(f, _lerp(nodes.soma, nodes['JR'], 0.16),
+              _lerp(nodes.soma, nodes['JR'], 0.84), shunting)
     key_lines(f, core, key_x, [
         (['distal × 1[', 'a', ('sub', 'p'), ' = 0]'], INK),
         (['proximal, soma × 1'], INK),
@@ -710,8 +731,8 @@ def panel_deliveries(ax):
     # would repaint the whole arbor and lose the ghost comparison geometry.
     f.credit_delivery(nodes, mode='exact', targets=['T2', 'T3'],
                       alpha_tags=True)
-    f.subscript(f._off(nodes['T2'], -1.5, 4.0), 'α', '2', size=PT_BASE,
-                color=COLORS['bp'], ha='center', va='bottom')
+    # QA 2026-09-09: the hand-set alpha-2 tag above T2 ran into the card
+    # title at this pitch; the key line 'distal x alpha1 alpha2' names it.
     # the junction factor by hand as well: credit_delivery drops its own
     # alpha tags below ALPHA_TAG_MIN_PITCH_PT, and this card's terminal pitch
     # is 6.8 pt, so without this the key line 'proximal x a1' has no referent
@@ -855,10 +876,21 @@ def curve_annotations(ax, t, task):
     # rule stops at REF_TOP, just above the highest trace, so it cannot strike
     # through the text band above it (HEAD's and v1's dotted rule ran the full
     # height and crossed four lines of type in each of C and D).
-    ax.annotate('4,096', xy=(PRIMARY['budget'], 1.0),
-                xycoords=('data', 'axes fraction'), xytext=(2.0, 1.5),
+    # QA 2026-09-09: anchored to the TOP OF THE RULE (REF_TOP, data y), not to
+    # the axes top, so the tag sits on the rule it names rather than in the
+    # title band 35-40 pt above it.
+    # The tag sits beside the rule at NMSE 1e-2, the band both panels leave
+    # empty between the broadcast trace above and the trio below; the
+    # axes-top and rule-top placements collided with the stats line.
+    # C: right of the rule at 1e-2 (between the amber trace and the trio);
+    # D: left of the rule at 1e-1 (the right side carries the amber label
+    # and the conductance-bound note).
+    ax.annotate('4,096', xy=(PRIMARY['budget'], 1.0e-2 if aligned else 1.0e-3),
+                xycoords='data',
+                xytext=(2.0, 0.0) if aligned else (-2.0, 0.0),
                 textcoords='offset points', fontsize=PT_BASE, color=MUTE,
-                ha='left', va='bottom', zorder=6, annotation_clip=False)
+                ha='left' if aligned else 'right', va='center',
+                zorder=6, annotation_clip=False)
     w = axes_w_pt(ax) - 4.0
     if aligned:
         lines = ['Adam 0.03 · n = 20 seeds',
@@ -980,7 +1012,7 @@ def interaction(ax, t):
     third = ['sign-flip P = '] + sci_parts(holm) + [' (Holm)']
     if _parts_width(ax, third) > w:          # the plan's ruled fallback
         third = ['P = '] + sci_parts(holm) + [' (Holm)']
-    stack(ax, 0.5, 0.985, lines + [third], ha='center', lead_pt=8.4)
+    stack(ax, 0.5, 0.955, lines + [third], ha='center', lead_pt=8.4)
     printed['holm_p'] = holm
     printed['n_seeds'] = 20
     return printed
@@ -1098,14 +1130,14 @@ def placement(ax, t):
     # under its own rule: set above it the 7-pt label reads at the height of
     # the swapped-gate mean, which it does not name
     ax.annotate(f'unit broadcast {broadcast:.2f}', xy=(-0.42, broadcast),
-                xytext=(3.6, -3.8), textcoords='offset points',
+                xytext=(1.0, -3.8), textcoords='offset points',
                 fontsize=PT_BASE, color=MUTE, ha='left', va='top', zorder=5)
     w = axes_w_pt(ax) - 3.0
     # the two keys, in the band the failure cluster leaves above 1.0
     keys = [['filled: hard 1[', 'a', ('sub', 'p'), ' = 0]'],
             ['open: continuous 1/(1 + g', ('sub', 'I'), ' a', ('sub', 'p'),
              ')']]
-    _, y_next = stack(ax, 0.035, 0.985, keys, color=INK, lead_pt=8.2)
+    _, y_next = stack(ax, 0.035, 0.955, keys, color=INK, lead_pt=8.2)
     stack(ax, 0.035, y_next,
           wrap_lines(ax, 'small open: Adam 0.01 and 0.1 (primary 0.03)', w),
           color=MUTE, lead_pt=8.2)
@@ -1238,7 +1270,7 @@ def cancellation(ax, t):
     for text in ('earlier cohort, n = 20', '(seeds 2101–2120)',
                  'per-example alignment', 'nonnegative in 20/20'):
         lines += wrap_lines(ax, text, w)
-    stack(ax, 0.035, 0.985, lines, lead_pt=8.6)
+    stack(ax, 0.035, 0.955, lines, lead_pt=8.6)
     printed['n_seeds'] = 20
     return printed
 

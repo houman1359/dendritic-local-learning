@@ -1,21 +1,21 @@
 {
   "code_sha256": {
-    "scripts/conductance_local_gate/figure.py": "eb243194761a7c9b7bf730e834e4023e6a095b6e9bde6a755eff848bf8d9ede7",
+    "scripts/conductance_local_gate/figure.py": "a7da23f84add87cfbfa12116e0b493a363f95f9663b719d7c17254c879428d9f",
     "scripts/conductance_local_gate/model.py": "cc2b82f6c486810a43aa885f3ea2dacce54c473f2e2ece6f4cfdb7d88ce6ad39",
     "scripts/conductance_local_gate/portable_contract.py": "fea35a393f5881dfc60b3dfe810dac64f8c2e6b0d8ba01937f4a42c5ffab3c05",
     "scripts/conductance_local_gate/report.py": "a96b4b6edd42c0d98de3da44a46c409310b463450369173be7371d503fa6dfef",
     "scripts/credit_tree_schematics.py": "ebd31b5ccc86b00bb27a236af210eb2a1d1820e9fcec27b57283a12224158cbe",
     "scripts/figure_canvas.py": "de3f566dd08270535deab95eb798b49cc17ccf4dfbb88e7ebdb50860903a6ad1",
     "scripts/journal_style.py": "be8a138f9d9c081237edc616ba52b6769f957d8b8b49e705a92adcb18f475f3c",
-    "scripts/native_schematics.py": "3e74a3b7ccbb993d9c131d6997aba30a1d81be7728f335937e3fa2e14aa754b1"
+    "scripts/native_schematics.py": "68530ec60f85e496b9b0ba7a7ad53510dce2fae91cc38231046c1175e1cb7aeb"
   },
   "figure_sha256": {
     "source_data/conductance_local_gate/figures/curve_band_source.csv": "0dd58c44591943c6696bf0e27b0486af240c58acec1d801ef7234c0746b50e1c",
     "source_data/conductance_local_gate/figures/historical_cancellation_source.csv": "15938898c44c07bbbc5721ee727e9d54199c90e90ab8a298bb7109682dc69814",
     "source_data/conductance_local_gate/figures/local_gate_all_rates.pdf": "9ed32d20fb9af6c078e6cc391a98d9e7a36f27d9b74d9ddee45098ab9ac5ae33",
     "source_data/conductance_local_gate/figures/local_gate_all_rates.png": "26674c42572b6acdea030aa8c925920e239cf58d3f191ef1d995fa20204550ce",
-    "source_data/conductance_local_gate/figures/local_gate_primary.pdf": "651e287b11a5bc2649b813c093681c99e27b847fad9eb35caf0cc72071fd9345",
-    "source_data/conductance_local_gate/figures/local_gate_primary.png": "09bfba2bc6046913f207ad28103a7dbb256e8fbdc219db445fbbc8b4876359e9",
+    "source_data/conductance_local_gate/figures/local_gate_primary.pdf": "e59a93aeaac63691c81c4817c37aa829ed057b57b1bbc4fbdef9d78dfbce0018",
+    "source_data/conductance_local_gate/figures/local_gate_primary.png": "8daacf501e9f4d978cfe04b7b9fd9c338d087ec5d466903c3b04cb2b98dbbf8e",
     "source_data/conductance_local_gate/figures/teacher_tuning_source.csv": "26b9ebc985bc662465c9a03af5a9197f54d8443383f44090121ddcf24c4c3086"
   },
   "fresh_seeds": [
@@ -318,14 +318,14 @@
   "protocol_sha256": "c441998f6f91e1f8782b2918689806e119af567e479bcd5c94069dca837a2413",
   "scope": "Current figure-only rendering; frozen protocol and numerical summary bytes unchanged. Initial numerical audit retains its historical render hashes.",
   "source_sha256": {
-    "scripts/conductance_local_gate/figure.py": "eb243194761a7c9b7bf730e834e4023e6a095b6e9bde6a755eff848bf8d9ede7",
+    "scripts/conductance_local_gate/figure.py": "a7da23f84add87cfbfa12116e0b493a363f95f9663b719d7c17254c879428d9f",
     "scripts/conductance_local_gate/model.py": "cc2b82f6c486810a43aa885f3ea2dacce54c473f2e2ece6f4cfdb7d88ce6ad39",
     "scripts/conductance_local_gate/portable_contract.py": "fea35a393f5881dfc60b3dfe810dac64f8c2e6b0d8ba01937f4a42c5ffab3c05",
     "scripts/conductance_local_gate/report.py": "a96b4b6edd42c0d98de3da44a46c409310b463450369173be7371d503fa6dfef",
     "scripts/credit_tree_schematics.py": "ebd31b5ccc86b00bb27a236af210eb2a1d1820e9fcec27b57283a12224158cbe",
     "scripts/figure_canvas.py": "de3f566dd08270535deab95eb798b49cc17ccf4dfbb88e7ebdb50860903a6ad1",
     "scripts/journal_style.py": "be8a138f9d9c081237edc616ba52b6769f957d8b8b49e705a92adcb18f475f3c",
-    "scripts/native_schematics.py": "3e74a3b7ccbb993d9c131d6997aba30a1d81be7728f335937e3fa2e14aa754b1",
+    "scripts/native_schematics.py": "68530ec60f85e496b9b0ba7a7ad53510dce2fae91cc38231046c1175e1cb7aeb",
     "source_data/conductance_credit_demand/opponent/summaries/context_gradient_summary.csv": "a3bea23ba12a888eb7fb356b4ac3142bbf240518fa8b3d2a28278d91e1b40486",
     "source_data/conductance_local_gate/protocol.json": "c441998f6f91e1f8782b2918689806e119af567e479bcd5c94069dca837a2413",
     "source_data/conductance_local_gate/protocol_freeze.json": "81568da7f4350a18c264914d1a86f7307f3809743b8c3113efa4abcc70d3bbdc",
