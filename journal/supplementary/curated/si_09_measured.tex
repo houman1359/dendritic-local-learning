@@ -1,0 +1,319 @@
+% Curated from paper commit 7ee9157; original equations and protocol identities retained.
+\section{Measured responses, model diagnostics and detection sensitivity}
+\label{note:measured_responses}
+
+\subsection{Functional topology and task-derived credit}
+\label{note:functional}
+
+Anatomical routes can be available without aligning with the credit required
+by a measured task. We therefore used recorded visual responses to define a
+prediction objective on reconstructed target cells. Within each model, we
+changed the backward field while holding the forward morphology fixed.
+
+\subsection{Direct anatomy--function join}
+
+Functionally imaged excitatory partners were linked to anatomical contacts
+through MICrONS/CAVE and DANDI mappings. The analysis contained 69 connected
+presynaptic partners across seven postsynaptic target cells. Automatic
+matches came from
+\texttt{coregistration\_auto\_phase3\_fwd\_apl\_vess\_combined\_v2} in
+materialization 1822. We retained residual at most 10 and score at least zero,
+then deduplicated each presynaptic root by ascending residual and descending
+score. All mapped contacts from a retained presynaptic root contributed to its
+partner-level contact summary. For the one-site-per-partner model, contacts
+were first grouped by postsynaptic segment. The partner was assigned to the
+segment with greatest summed contact size, breaking ties by synapse count, and
+its major branch was the first segment below the soma on that segment's
+ancestry chain. Thus a partner with contacts on several segments supplied one
+activity feature and one modeled learning site; its total contact size and
+synapse count still included all retained contacts.
+
+The target universe was the initial eight-cell morphology convenience sample.
+The analysis plan, specified before outcome inspection, included every target
+in that sample with a DANDI scan and directly connected, functionally imaged
+excitatory partners; seven targets qualified. Predefined inclusion criteria
+required exactly one postsynaptic target in an
+extract, agreement between partner and contact counts, at least five mapped
+partners for the topology screen, at least two sites after any requested task
+filter, and at least one nonempty inhibitory nested-subtree route. The primary
+task analysis applied neither a manual-match restriction nor a repeat-reliability
+threshold. The exact target/session/scan pairs are retained in the source records indexed in Table~\ref{tab:source_index}. The original analysis plan did not record a
+deterministic rule for choosing among multiple eligible scans of the same
+target. We therefore treat these scan choices as part of the initial
+selected-scan sample, not as the output of a coverage-ranking procedure.
+The omitted structural target, root 864691136043380566 (nucleus 292648), had
+one source-data row, for session 8/scan 4, but
+\texttt{has\_dandi\_asset=False} and no DANDI asset identifier or path. No
+additional exclusion reason is inferred.
+
+A deterministic sensitivity retained every automatic-conservative target--session--scan cohort with at least five imaged connected presynaptic roots: thirteen scans across the same seven targets. Statistics were computed within scan, averaged within target and inferred over targets. The mean partial shared-path correlation was $-0.0485$ (95\% target-bootstrap interval, $-0.224$ to 0.118), positive in three targets. The selected-scan and scan-complete analyses therefore both provide no evidence of preferential ancestry alignment. Full topology endpoints are indexed in Supplementary Table~\ref{tab:source_index}.
+
+Each target had 464 trials and 280 unique condition hashes, of which 136 were
+repeated. Trial families comprised 384 Clip, 40 Monet2 and 40 Trippy
+presentations. For each trial and region of interest, the response was the
+mean of the supplied \texttt{RoiResponseSeries} fluorescence trace over samples whose timestamps
+fell from trial start through trial stop, including both endpoints. Start and
+stop offsets were zero. These are the supplied fluorescence traces; our analysis did not deconvolve or apply additional raw-fluorescence preprocessing to them. No trials were dropped; every response used here was
+finite. The records indexed in Table~\ref{tab:source_index} give target-level asset identifiers
+and sample counts.
+
+Functional similarity between two partners was the Pearson correlation of
+their vectors of condition-mean fluorescence over the 136 condition identities with
+at least two trials. Repeat reliability was computed separately for each
+region of interest: successive occurrences of every repeated condition were assigned alternately
+to two groups, responses were averaged within each group,
+and the two vectors of condition means were compared by Spearman correlation.
+No reliability correction was applied, and the primary cohort retained all
+partners regardless of this diagnostic; thresholds of 0.1 and 0.2 were used
+only in sensitivity analyses.
+
+The controlled shared-ancestry statistic was computed separately within each
+target. Functional similarity and shared-path fraction were rank transformed.
+The two controls were $\log(1+d_{\mathrm{Euclidean}})$ and
+$\log(1+|d_{\mathrm{soma},i}-d_{\mathrm{soma},j}|)$, where the second term is
+the absolute difference in soma path length; each control was also rank
+transformed. We regressed each ranked variable on an intercept and the two
+ranked controls by ordinary least squares, then took the Pearson correlation
+between the two residual vectors. The mean target-level partial-rank effect
+was $-0.069$ with a target-bootstrap 95\% interval of $-0.255$ to 0.108;
+three of seven targets had positive effects. Pairwise partner comparisons were
+not treated as independent replicates.
+
+Several features limit the interpretation of this cohort. MICrONS calcium
+imaging measured excitatory neurons, the observed partners cover only a small
+fraction of each target's complete inputs, and response reliability is modest.
+The volume comes from one animal, and the recordings were not made during
+learning.
+
+\subsection{Task-derived branch credit}
+
+A branch model predicted the standardized postsynaptic response from the
+standardized responses of its connected presynaptic partners. Let $x_i$ be the
+response of partner/site $i$, $w_i$ its input weight, and $b(i)$ the dominant
+major branch receiving its contacts. Branch $b$ had summed input $d_b$,
+activity $h_b$ and readout weight $v_b$; $c$ was an output bias. The fitted
+prediction $\widehat y$ was
+\begin{align}
+d_b&=\sum_{i:b(i)=b}x_iw_i,
+&h_b&=\tanh(d_b),
+&\widehat y&=\sum_bv_bh_b+c.
+\label{eq:s_branch_model}
+\end{align}
+For $N$ training trials with target responses $y_t$, the objective was
+\begin{equation}
+\frac{1}{2N}\sum_{t=1}^{N}(\widehat y_t-y_t)^2+
+\frac{\lambda}{2}(\lVert\bm w\rVert_2^2+\lVert\bm v\rVert_2^2),
+\qquad \lambda=10^{-3},
+\label{eq:s_branch_objective}
+\end{equation}
+with no penalty on $c$. The exact voltage-space error at site $i$ was
+$(\widehat y-y)v_{b(i)}[1-\tanh^2(d_{b(i)})]$.
+
+Whole condition-hash stimulus identities, not trials of the same identity,
+were split: 20\% of the 280 identities and all of their trials were held out.
+Input columns and the target were standardized separately using training-set
+means and sample standard deviations ($\mathrm{ddof}=1$); invalid or zero
+scales were replaced by one and remaining nonfinite standardized values by
+zero. A stable \texttt{SeedSequence} combined base seed 20260721, target root,
+stream and replicate. There were ten fixed split and initialization replicates
+per target.
+
+With $n_{\mathrm{site}}$ input sites and $n_{\mathrm{branch}}$ occupied
+branches, input weights were initialized as
+$\mathcal N(0,0.12^2/n_{\mathrm{site}})$, branch readout weights as
+$\mathcal N(0,0.25^2/n_{\mathrm{branch}})$, and $c=0$. Each method used
+1,200 full-batch Adam steps with learning rate 0.015,
+$(\beta_1,\beta_2)=(0.9,0.999)$ and $\epsilon=10^{-8}$. The exact model was
+trained first. Its exact site-error fields on training trials defined the
+dictionaries and its held-out exact field defined reported capture. All
+projected-learning methods then restarted from the identical initial state.
+Only the input-weight error was projected; $\bm v$ and $c$ always received
+their exact gradients.
+
+The primary budget requested four channels, reduced only when a target had
+fewer sites or nonempty candidate routes. Ancestry candidates were columns
+of ancestry multiplied by local inhibitory fraction $g_i/g_{\mathrm{tot}}$;
+routes were ranked by this fraction times their descendant-site fraction.
+Random paths sampled nonempty candidates uniformly without replacement.
+Each ancestry-shuffle column was permuted independently over sites. Depth
+controls were path-length quantile bins, scalar feedback was an all-ones
+column, and the dense oracle used the leading right singular vectors of the
+exact training error. Projectors used relative singular-value tolerance
+$10^{-10}$. No held-out response was used to fit a dictionary.
+
+Held-out normalized MSE divided a method's held-out MSE by the MSE of
+predicting the training mean response. Replicates were averaged within target
+before inference; the seven target cells were the units. Intervals used 20,000
+target bootstrap draws. Paired method comparisons used two-sided Wilcoxon
+tests, and the capture--utility analysis used method-label permutations
+stratified within target.
+
+The four-channel primary outcomes are retained in the Source Data indexed in Table~\ref{tab:source_index}.
+The dense four-dimensional oracle nearly matched exact learning, establishing
+that feedback dimension alone was not limiting in this surrogate. Ancestry routes
+did not reliably outperform ancestry shuffling in capture or learning. The
+within-target association between capture and normalized error was
+$\rho=-0.150$ with a target-stratified method-label permutation $P=0.419$.
+The target-bootstrap 95\% interval for $\rho$ was $-0.449$ to 0.144. The coefficients are
+least-squares oracles and therefore upper bounds on the capacity of each
+feedback family, not biologically implemented encoders.
+
+Sensitivity analyses at one, two and eight channels, with direct manual
+matches, with repeat-reliability thresholds, and with a linear branch model
+did not establish a reliable morphology-specific learning benefit. Some
+subsets improved morphology-specific capture without improving learning. The separation between capture and learning motivates the distinction
+between anatomical route capacity and task alignment.
+
+\subsection{Complete reconstructed-tree learning across all eligible scans}
+
+To retain the complete spatial state, we replaced the major-branch reduction
+with a segment-resolved model. Each complete compressed reconstruction was
+instantiated as a reciprocal passive conductance system. Each imaged partner supplied a trainable
+non-negative excitatory conductance at its dominant mapped segment. For
+trial-specific soma prediction error, the exact input gradient factored into
+the local term $x_i(E_{\mathrm E}-V_i)$ and the exact soma-to-segment adjoint from the
+inverse conductance operator. Readout and bias parameters received exact
+gradients under every method.
+
+Restricted rules received scalar output error, local eligibility and one
+fixed site profile lying in a four-route span. That profile was calibrated before training from
+a conductance-weighted topology dictionary, an equal-rank random selection of
+nonempty anatomical routes, or a column-value-preserving site shuffle. No
+target response entered this calibration. Each trial scaled the same profile
+by the scalar error; the rule did not infer four independent trial-dependent
+coefficients. The comparison therefore tests this frozen-profile rule within
+each dictionary, rather than all estimators its four-route span could support.
+Ten seed-fixed splits per scan held
+out complete stimulus identities. Runs were averaged within scan and then
+within target. The resulting design contained four methods, 13 scans and ten
+splits, for 520 fits. The exclusion criteria were missing routes, rank mismatch, nonfinite values,
+incomplete scan coverage or failed finite-difference validation. None of the
+runs met an exclusion criterion. One exact conductance coordinate per run agreed with finite
+differences to maximum relative error $3.05\times10^{-7}$.
+
+Let $\delta_i^{\rm out}$ be the scalar output error on trial $i$, $\bm v_0$ the baseline soma-to-site transfer profile and $P_D$ the projector into dictionary $D$. The delivered nonsomatic field is
+\begin{equation}
+ \widehat{\bm\delta}^{V}_{i,D}=\delta_i^{\rm out}P_D\bm v_0.
+ \label{eq:micronsrestrictedcredit}
+\end{equation}
+This scalar-times-fixed-profile rule does not estimate four trial-dependent coefficients. Its prescribed updates $U_D$, with rows corresponding to trials and columns to trainable input coordinates, are compared with exact updates $U_{\rm exact}$ by
+\begin{equation}
+ \mathcal M_D=1-\frac{\|U_{\rm exact}-U_D\|_F^2}{\|U_{\rm exact}\|_F^2}.
+ \label{eq:micronsupdatematch}
+\end{equation}
+Because these coefficients are prescribed, $\mathcal M_D$ is normalized update match rather than an optimal projection-capacity bound. Table~\ref{tab:functional_full_tree} retains all primary learning and geometry outcomes. Topology did not reliably improve learning over random or shuffled routes.
+
+A retrospective geometry check separated this coefficient restriction from
+the capacity of the fixed route spans. Full checkpoint states were not
+archived, so we reexecuted the 130 exact-learning fits using their resolved
+settings, stimulus splits and recorded random-route identities. At each
+resulting checkpoint we compared the frozen profile, a trialwise exact-field
+projection, and an eligibility-weighted update oracle. For fixed dictionary $\Phi$ and trial eligibility vector $\bm\ell_i$, define
+$E_i=\operatorname{diag}(\bm\ell_i)$. The update oracle fitted
+\[
+\bm c_i^*=\operatorname*{arg\,min}_{\bm c}
+\lVert\bm u_i-E_i\Phi\bm c\rVert_2^2,
+\qquad \widehat{\bm u}_i=E_i\Phi\bm c_i^* .
+\]
+This is the best attainable per-trial update inside that dictionary's
+eligibility-weighted span. Its normalized update match equals projected
+energy capture. Split-level values were averaged within scan and then within
+target, with 20,000 bootstrap draws over the seven targets.
+
+The update oracle increased ancestry match from 0.2322 to 0.2436, compared with oracle matches 0.3847 for random routes and 0.4677 for shuffling. The unrestricted baseline transfer profile reached 0.9756 (95\% target interval, 0.9641--0.9858). Thus most exact-update geometry was already carried by one nearly fixed profile; restricting it to the selected ancestry supports removed useful coverage. Selected routes covered about 48\% of observed input coordinates, averaging 1.31 inputs per route, with six of thirteen scan dictionaries containing only single-input selected routes. Multiple observed inputs may map to the same physical segment. These geometric restrictions limit what the learning comparison can reveal about anatomical alignment.
+
+Three of 130 replayed exact fits differed from archived NMSE by more than $10^{-5}$ (maximum $5.74\times10^{-4}$); maximum frozen-profile match drift was $2.57\times10^{-4}$. All fits are retained as reexecuted states, not asserted to reproduce every historical checkpoint exactly. \texttt{source\_data/fulltree\_within\_span\_oracle/} contains every geometry estimate and replay discrepancy. These common-state projections were not trained and do not establish eventual oracle-learning accuracy.
+
+\subsection{Nested linear baselines and observed-input sensitivity}
+\label{note:response_baselines}
+
+To establish the predictive difficulty of the measured-response task, we fitted
+an intercept-only training-mean predictor, ordinary least squares and ridge
+regression on the same 130 outer stimulus-identity splits as the complete-tree
+analysis. All 13 scans and seven targets were retained. Three inner folds
+partitioned training stimulus identities; no outer test identity entered
+preprocessing, reliability filtering or penalty selection. The primary linear models used the training-quantile input transform from
+the complete-tree analysis
+(10th and 90th percentiles, clipped at three), followed by column centering and
+standardization using training data. These quantities were refitted inside
+each inner fold. Raw standardized inputs supplied a secondary ridge reference.
+
+Ridge regression minimized mean squared training error plus
+$\lambda\|\bm w\|^2$, with an unpenalized intercept. The penalty grid was
+$\{0,10^{-4},10^{-3},10^{-2},10^{-1},1,10,100\}$; the minimum mean
+inner-fold validation error selected the penalty, with ties resolved toward
+the earlier, smaller penalty. An eigendecomposition solved each fit. The
+selected primary penalties were 0.1 in 90 splits, 1 in 36 and zero in four.
+Held-out normalized MSE used the same training-mean denominator as the
+nonlinear models. Archived nonlinear outcomes were read unchanged and paired
+to the new linear fits; they were not refitted under the sensitivity masks.
+
+Observed-input sensitivity used three explicit restrictions. First, the
+manual-only mask retained partners with archived manual-match provenance.
+Second, repeat reliability was the Spearman correlation between condition
+means formed from alternating repeats; it was recomputed using only inner
+training identities during tuning and only outer training identities for
+the final fit. Partners passing thresholds 0, 0.1 or 0.2 were retained.
+Third, five independent partner orderings per split defined nested masks
+retaining 25\%, 50\% or 75\% of observed inputs, with at least one input.
+Empty manual or reliability masks used the intercept-only model and were
+retained. A separate measurement-noise series added Gaussian predictor noise
+with SD 0.25, 0.5 or 1 in units of the training-standardized input, in both
+training and test examples. The same underlying noise draws were paired
+across doses. Noise was applied after the quantile transform and training
+standardization; the intercept was refitted after perturbation.
+
+The secondary baseline protocol was fixed before its outcomes but was not publicly preregistered. Its 3,380 evaluations are in \texttt{source\_data/review\_response\_baselines/}. Masks were averaged within split, ten splits within scan and scans within target; intervals use 20,000 resamples of seven targets. Input hashes and all reconstructed split counts matched retained records. A held-out-data substitution audit confirmed that tuning, masks and training reliability were unchanged. Historical split arrays were reconstructed with the unchanged helper and seed rule. These are descriptive sensitivities within one mouse.
+
+Mean normalized MSE was 1 for the training mean, 0.807 for least squares and
+0.803 for nested ridge (Supplementary Fig.~\ref{fig:si_measured_predictor_controls}).
+Exact nonlinear learning reached 0.788, a paired nonlinear-minus-ridge
+difference of $-0.0152$ (95\% target-bootstrap interval $-0.0271$ to
+$-0.0042$; six of seven targets lower). The nonlinear model therefore provided a small predictive improvement over
+this linear baseline on the measured task. The corresponding
+subtree-minus-ridge difference was 0.0293 ($-0.0130$ to 0.0736), which
+does not establish a benefit for the frozen subtree rule. Manual-only inputs
+raised ridge MSE to 0.912, with 3.18 retained partners on average compared
+with 8.98 for all inputs. Retaining only 25\% raised MSE to 0.917; adding
+unit-SD predictor noise raised it to 0.869. The strictest reliability mask
+retained 5.63 partners and reached MSE 0.837. These manipulations measure
+sensitivity to degradation of the observed inputs. They neither recover
+unobserved partners nor estimate the power of a complete-population experiment,
+and do not establish that missing inputs explain the absence of preferential
+ancestry alignment.
+
+\subsection{Sensitivity of the measured ancestry-response test}
+\label{note:measured_alignment_power}
+We estimated detection sensitivity conditional on the observed sampling, using a Gaussian response model frozen before simulation. The analysis retained 125 partner observations of 102 presynaptic roots across thirteen scans and seven targets, including twenty target--partner combinations repeated across scans and two roots shared between targets. Each scan contained 136 repeated stimuli: 130 presented twice and six ten times. Original condition hashes identified 316 distinct repeated stimuli across scans. Pair tables, contact geometry, recording identities and the required observed responses are included in Source Data.
+
+For each target arbor, an ancestry covariance was defined by the shared soma-to-common-ancestor path length divided by the geometric mean of the two soma-to-contact lengths. This is a positive-semidefinite Brownian path kernel; zero-depth contacts contributed independent diagonal components. The seven kernels were embedded in common presynaptic-root coordinates, summed and diagonal-normalized, so each shared root had one consistent latent response. Reliable tuning mixed independent Gaussian unit-specific and ancestry-correlated components with variance fractions $1-\lambda$ and $\lambda$, respectively. We tested $\lambda=0,0.05,\ldots,1$, retaining the actual partner sets and stimulus identities.
+
+Measurement noise was calibrated to each recording's odd/even split-half Spearman reliability. Values were clipped to $[0,1]$ and converted to the Gaussian Pearson parameter $r_p=2\sin(\pi r_s/6)$; the two negative estimates remained archived and contributed zero reliable variance. With $h$ the mean inverse half-repeat count, trial responses had reliable variance $r_p$ and noise variance $(1-r_p)/h$. Condition-mean noise was divided by the actual repeat count. This matches the pooled Pearson second moment; its Spearman calibration is approximate because repeat counts vary. An independent 1,000-dataset audit found mean and maximum absolute Spearman discrepancies of 0.0020 and 0.0069, without retuning. A prespecified perfect-reliability comparison removed measurement noise.
+
+In 4,000 simulated complete datasets, all pairwise similarities were computed from joint response matrices. The original partial-rank statistic controlled ranked Euclidean separation and contact-depth difference; scan effects were averaged within target. Positive detection required a positive mean effect and an exact two-sided signed-rank $P\leq0.05$ over the seven targets. All 128 sign assignments were enumerated. For seven nonzero untied effects, the minimum two-sided $P$ is 0.015625, and six of 128 null sign assignments reject at 0.05. This discreteness does not imply a universal power ceiling below one. Gaussian draws were paired across signal fractions and reliability scenarios; Wilson intervals describe Monte Carlo uncertainty.
+
+With measured reliability, the first sustained tested 80\% crossing was $\lambda=0.60$, bracketed by 0.55--0.60. Descriptive interpolation gave $\lambda=0.589$ and a mean simulated target-level partial-rank effect of 0.249. Detection at $\lambda=0.60$ was 80.85\% (95\% Monte Carlo interval, 79.60--82.04\%); the lower interval first exceeded 80\% at $\lambda=0.65$. At maximal specified signal, detection was 96.23\% (95.59--96.77\%). The zero-signal two-sided rejection rate was 4.95\% (4.32--5.67\%). Perfect reliability reduced the interpolated variance fraction to 0.206, with a similar mean partial-rank effect of 0.248 at detection. These sensitivity estimates assume the specified Gaussian ancestry covariance, reliability calibration and known shared-input dependence; they do not exclude weaker effects, other covariance patterns, unknown biological dependence or alignment involving unobserved partners.
+
+\subsection{External signed-credit analysis and task-interference identity}
+\label{note:animal_credit}
+
+At the neuronal level, the framework gives a simpler prediction: when a
+causal task assigns opposite learning signs to two neurons, their measured
+plasticity-related contrasts should separate along the corresponding signed
+coordinate. The following reanalysis tests that prediction but does not
+address dendritic morphology.
+The Francioni et al. workbook was downloaded from the source-data link of the
+published article; file identity was verified by SHA-256
+\texttt{be1b87481d0f1d1bffc85d8a4cabfd37b7055d640306afab5b3622de0ced8264}.
+The animal-level contrasts in sheet ``Ext 13E'' were used directly. The endpoint was the difference in soma--dendrite residual, in z-score units, between error-reduction and error-increase epochs. P+ and P- denote populations assigned opposite causal signs in the source brain--computer-interface mapping. For the source-defined P+ and P- groups, we required the table's
+signed-separation column to equal P+ minus P- to numerical precision. The orthonormal common and signed projections sum exactly to total
+two-coordinate energy. Sheet ``5E'' supplied the four neuron-level
+distributions in the display but was not used to increase the sample size of
+the animal-level test.
+
+For $n=6$ animals, the one-sided exact random-sign test enumerated all $2^6$ sign
+assignments. Bootstrap intervals sampled animals with replacement. The
+directions were fixed by the experimental mapping: P+ positive, P- negative,
+and P+ minus P- positive. This is a retrospective test because the prediction
+was formulated after publication of the experiment, although it was evaluated
+from the numerical source table rather than the displayed figure.

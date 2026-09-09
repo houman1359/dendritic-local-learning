@@ -1,0 +1,84 @@
+% Curated from paper commit 7ee9157; scientific protocols are unchanged.
+\section{Anatomical dictionaries and controlled field alignment}
+\label{note:anatomical_dictionaries}
+
+\subsection{Reconstruction, cohorts and electrical normalization}
+\label{note:microns}
+The initial cohort comprises eight layer 2--5 intratelencephalic cells from MICrONS \citep{microns2025}. Stable nuclei were resolved in \texttt{minnie65\_public} materialization 1822; skeletons came from the MICrONS skeleton service and incoming contacts from \texttt{synapses\_pni\_2}. Degree-two chains were collapsed to branch-to-branch cables. Contacts were assigned to the nearest dendritic node and retained within $5\,\mu$m. Across cells, 28,669 E/I-classified contacts passed, with mean mapping fraction 0.980. Root traversal checked acyclicity and a unique path to the soma. Cell identifiers, contact counts and source assets are indexed in Supplementary Table~\ref{tab:source_index}.
+
+Presynaptic coarse type supplied E/I identity where available. Otherwise the in-development \path{synapse_target_predictions_ssa_v2} table classified high-confidence spine targets as excitatory and shaft/soma targets as inhibitory. This proxy table lacks a stable public release identifier. Direct/proxy agreement was 73.01\% among 2,012 jointly labeled contacts (E/E 489, E/I 84, I/E 459, I/I 980). Principal comparisons were repeated on the 2,077 directly typed contacts. Coverage and error asymmetry are observed properties, not missing-at-random assumptions.
+
+A non-overlapping robustness cohort was defined from a 55-cell convenience export before outcomes, resolved in public v661 and excluding the original eight by stable nucleus. Its 47 retained cells are from the same mouse and an earlier reconstruction release. Direct presynaptic labels were available for 11,024 incoming contacts (4.71\%) before mapping; 10,516 mapped contacts entered analysis. This layer-imbalanced cohort is not a population or independent-animal replication.
+
+The second-animal cohort used published Pinky v185 mesh, soma-valence and dense-synapse data \citep{turner2022neocortex,microns_pinky_v185}. Before mesh or selected-cell contact counts were inspected, 362 excitatory soma rows were ordered along the second volume coordinate and split into twelve equal-count strata. Each stratum contributed the root nearest the global first/third-coordinate medians, with root-ID tie-breaking. This deterministic rule spans the volume while reducing boundary truncation; it is not random sampling. Mesh processing retained the largest face-plus-link-edge component and used meshparty TEASAR with $7.5\,\mu$m soma collapse and $12\,\mu$m invalidation. Radius was half the opposite-surface ray distance at mesh anchors (\texttt{embreex} 2.17.7.post7). Only presynaptic roots labeled in the published soma-valence table supplied E/I identities.
+
+Pinky inherited v661 compression, mapping, normalization, dictionary ranking and 500-shuffle settings. Inclusion required at least twenty mapped typed inputs and three inhibitory inputs. All twelve cells processed; ten qualified, with excluded cells having nineteen and thirteen inputs. Their route-generated $K=4$ ancestry advantages over random routes, depth bins and shuffling agreed in direction with the other mouse. Cell-bootstrap intervals describe stability within each volume; two mice do not support a population-level animal test. In the equal-broadcast analysis below, only eight Pinky cells qualify at $K=8$ and none at $K=16$; lower-budget results retain the other eligible cells.
+
+Raw axial coupling scales as radius squared over length, divided by its within-cell positive median and clipped to 0.05--20. Leak scales as radius times the larger of length and radius, similarly normalized and clipped to 0.1--10. Synaptic areas are divided by the median nonzero total area. These are normalized passive sensitivity weights, not fitted membrane conductances. The reconstructed model uses reciprocal coupling and a symmetric conductance matrix; the directed path product of Eq.~\ref{eq:s_path_gain} applies only to the artificial network.
+
+For excitatory-bearing segment $i$ and inhibitory-bearing route site $k$, define
+\begin{equation}
+ \Gamma_{ik}=A_{ik}\beta_k,
+ \label{eq:s_kernel}
+\end{equation}
+where $A_{ik}$ indicates that $k$ lies on the path from $i$ to soma and $\beta_k$ is its normalized inhibitory fraction. This ancestry kernel approximates route weighting; it is not the reciprocal Green's-function derivative. Excitatory-area-weighted singular values $s_j$ give participation rank $(\sum_js_j^2)^2/\sum_js_j^4$.
+
+\subsection{Mapping, labels and cable compression}
+\label{note:morphology_uncertainty}
+The eight-cell uncertainty analysis crosses mapping thresholds 2, 5 and $10\,\mu$m with direct-only or hybrid labels (proxy probability at least 0.8). Radius factors are $\exp(\sigma_r z-\sigma_r^2/2)$ for independent standard Gaussian $z$, with $\sigma_r=0,0.25,0.5$ and five paired draws at each nonzero dose. Every condition reselects up to four routes by the same leverage. Jaccard overlap measures route changes; capture uses the fixed nominal field, sites and weights, isolating dictionary sensitivity rather than changing both sides of the comparison.
+
+Compression preserves total length and length--radius product to rounding error, but mean-radius resistance $\ell/\bar r^2$ differs from the series sum $\sum_e\ell_e/r_e^2$. Median relative error was $-0.00200$, with minimum $-0.99717$. A second normalization uses inverse series resistance, retaining leak, synapses and clipping; radius perturbations rescale resistance inversely with squared radius. All 1,056 conditions remain. Nominal mean capture was 0.3293 under mean-radius and 0.3375 under series normalization; small mean changes do not negate substantial local resistance errors. Draws were averaged within cell and intervals used 5,000 cell resamples. Audits and cache hashes are in \texttt{source\_data/review\_morphology\_uncertainty/}.
+
+\subsection{Route-generated capacity and spatial scales}
+\label{note:structural_capacity}
+Route-generated fields multiply independent amplitudes by Eq.~\ref{eq:s_kernel}. Dictionaries comprise a dense PCA oracle, selected real ancestry routes, random nonempty routes, cable-depth bins and independently shuffled ancestry columns preserving values and sparsity. Real routes rank by inhibitory fraction times descendant excitatory-area fraction. Fields and dictionaries are both transformed by square-root excitatory area before least squares (Eq.~\ref{eq:s_capture}). Twenty Monte Carlo streams each contain 384 fields and 64 randomized dictionaries per cell and budget; streams are averaged within cell before inference.
+
+At $K=8$, original ancestry capture was 0.487 with 6.92\% dense wiring. The same model-matched construction favored ancestry in the direct-label subset and all 47 non-overlapping cells. These positive controls measure internal compressibility of the route family. The older replication reports one minus residual norm, which differs from squared-energy capture; Source Data retain each endpoint's definition.
+
+A deterministic unbalanced tree-Haar basis tests route scales on all 55 cells, with the 47-cell cohort primary. A region $R$ is split at the descendant subtree closest to half its excitatory weight, giving $A\dot\cup B=R$. For site weights $w_i$ and region sums $W_A,W_B,W_R$,
+\begin{equation}
+ h_{R,i}=\begin{cases}
+ \sqrt{w_i}\sqrt{W_B/(W_AW_R)},&i\in A,\\
+ -\sqrt{w_i}\sqrt{W_A/(W_BW_R)},&i\in B,\\
+ 0,&i\notin R.
+ \end{cases}
+ \label{eq:s_irregular_haar}
+\end{equation}
+With $h_{0,i}=\sqrt{w_i/\sum_jw_j}$ these contrasts form a complete orthonormal basis \citep{gavish2010wavelets}. All bases were full rank, with maximum orthonormality error $4.44\times10^{-16}$. For $W=\operatorname{diag}(w_i)$,
+\begin{equation}
+ \widetilde\Gamma=(I-h_0h_0^{\mathsf T})W^{1/2}\Gamma,
+ \qquad p_r=\frac{\|h_r^{\mathsf T}\widetilde\Gamma\|^2}
+                       {\|\widetilde\Gamma\|_F^2}.
+ \label{eq:s_irregular_wavelet_power}
+\end{equation}
+Coarse supports exceed one quarter of total weight; intermediate supports exceed one sixteenth but not one quarter; others are fine. A scale with $m_s$ of $n-1$ nonconstant dimensions has isotropic reference $m_s/(n-1)$. The anatomy null independently permutes raw route columns before weighting and centering, using 256 draws per cell.
+
+Coarse modes contained 0.4065 of nonconstant energy but 0.1923 of dimensions in the 47-cell cohort. Enrichment over isotropic noise was 2.351 (95\% interval, 1.995--2.880). Actual-minus-permuted coarse energy was 0.0345 ($-0.0025$ to 0.0713), and intermediate/fine permutation contrasts were also null. The original eight-cell positive permutation contrast did not reproduce in the larger cohort. Coarse enrichment therefore does not establish special fine-layout organization.
+
+\subsection{Passive response fields and equal broadcast budgets}
+Separately generated fields use focal shunts at inhibitory-bearing segments of the reciprocal cable. Each dose is 0.001 times local leak-plus-synaptic conductance; a solved compensating current restores baseline somatic voltage. The response matrix $H$ contains finite-difference changes in log absolute excitatory-conductance gradients. The inherited normalized model uses E/I scales 0.35 and reversals 1 and $-0.2$. This generator is separate from Eq.~\ref{eq:s_kernel}, but remains ancestry-dependent through the passive identity in Section~\ref{note:shunt_transport}.
+
+The original dictionaries lacked a common field in selected subtrees while depth bins included it. The correction gives every family one all-site broadcast and $K-1$ spatial columns at $K=1,2,4,8,16$ when permitted. The initial eight cells served as development data; the protocol and inputs were frozen before new passive-field results on the existing 47-cell and Pinky cohorts. This is a frozen follow-up on previously used anatomy, not new animal sampling.
+
+Ancestry retains its outcome-independent leverage order. Random routes sample without replacement; site shuffles preserve each column's values/nonzeros and leave broadcast intact. Two hundred surrogate trees per cell preserve every node depth and parent out-degree by reassigning children among parent slots, keeping attributes with children, then recomputing ancestry and ranking. The depth dictionary uses broadcast plus the first $K-1$ inherited bins, preserving the original $K$-bin span. Equal column counts may have unequal numerical ranks or nonzero counts, which are reported.
+
+For $Y=W^{1/2}H$ and normalized weighted constant $q$, let $R=(I-qq^{\mathsf T})Y$. Total capture is $\|P_DY\|_F^2/\|Y\|_F^2$ and residual capture is $\|P_DR\|_F^2/\|R\|_F^2$. Because every dictionary contains $q$, total capture equals broadcast capture plus one minus broadcast capture times residual capture. The constrained oracle adds the leading $K-1$ left singular vectors of $R$.
+
+Randomized controls are averaged within cell before 20,000-draw bootstrap inference. Holm corrections cover four controls separately for each endpoint/cohort at primary $K=8$; other budgets are descriptive. The 65 operators and 149,331 dictionary evaluations remain in \texttt{source\_data/anatomy\_commonmode/}, including 148,200 randomized realizations. Validation checks weighted identities, ceilings, depth-span equivalence, ranks, common-mode coverage and exact ancestry/shuffle nonzero matching. Small Pinky domains explain near-saturation at eight columns.
+
+\subsection{Observed inhibitory contacts and descendant domains}
+\label{note:inhibitory_census}
+The inhibitory census uses the complete stable-nucleus intersection of v661 and v795: twenty targets, with no outcome selection. An affine raw-to-slanted transform reproduced paired published locations within $10^{-6}\,\mu$m; five cross-release root changes were joined by stable nucleus. Mapping within $5\,\mu$m retained 114,775 of 116,401 inputs and 2,637 of 2,789 known inhibitory contacts, from 114 of 116 inhibitory cells. No unreported proofreading status was inferred.
+
+One largest contact per published axonal clump avoids counting adjacent contacts as independent sites. Within-target/compartment candidate pools match log soma distance. For each site, a descendant-input indicator multiplied by square-root synapse size and normalized gives $r_k$; $r_k^{\mathsf T}r_l$ measures weighted domain overlap, not inhibitory activity correlation. The 402 connections with at least two clumps are nested within targets.
+
+Primary target-level spatial associations were retested by averaging within 92 presynaptic axons and by jointly matching 3D and path distance over 500 assignments. Coarse tree-distance association survived axon aggregation; shared-path and descendant overlap did not. No endpoint survived joint geometry matching. Thus the census establishes spatial co-targeting, not geometry-independent credit organization. Capacity columns use actual inhibitory-bearing segments weighted by contact size, with 200 random/shuffled controls. Their target is the full actual-route matrix, making this another compressibility diagnostic. All primary and sensitivity endpoints are indexed in Supplementary Table~\ref{tab:source_index}.
+
+\subsection{Optimization with explicitly imposed alignment}
+\label{note:alignment_controlled}
+Eight-cell kernels supply eight leverage-selected routes. For their weighted orthonormal basis $Q$, paired unit directions parallel and orthogonal to its span define
+\begin{equation}
+ \bm g(a)=\sqrt a\,\bm u_\parallel+\sqrt{1-a}\,\bm u_\perp,
+ \qquad a=0,0.2,0.4,0.6,0.8,1.
+\end{equation}
+Capture in the chosen span is therefore exactly $a$ by construction. Eight random paths, depth bins and column-wise row shuffles are paired across alignment levels within each of forty streams per cell, each containing 256 fields. A positive diagonal quadratic uses curvature 0.5--1.5, permuted per stream. One-step updates match norm at 0.1 times exact-gradient norm; iterative projected descent uses step 0.25 for twenty steps. Progress is normalized to full-gradient progress. The median within-cell capture/progress correlation was 0.990. This establishes usefulness conditional on imposed alignment and oracle coefficients, not observed biological alignment or autonomous coefficient learning.

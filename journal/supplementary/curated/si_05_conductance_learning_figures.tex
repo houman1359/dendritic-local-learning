@@ -1,0 +1,35 @@
+\begin{figure}[p]
+\centering
+\includegraphics[width=\textwidth]{supplementary/curated/conductance_grouping.pdf}
+\caption{\textbf{Input grouping and restricted feedback in positive-conductance trees.} \textbf{A}, Seven-compartment directed shunting model with the same physical shape, sixteen positive conductances (four excitatory and six inhibitory contacts plus six couplings) and soma-only readout under all three input groupings. Teacher-task permutations preserve the input-gradient spectrum. These are planted mechanistic controls within the stated model class. \textbf{B}, Analytic population lower bound from interactions crossing the student's two proximal input blocks, evaluated by converged quadrature. Dots average the six incompatible task/grouping pairs within each of twenty seeds; the mean bound is 0.013222 population normalized mean squared error (NMSE). This is neither an observed loss nor a certified numerical integration bound. \textbf{C,D}, Final held-out sample NMSE for exact path, fixed calibrated broadcast, one oracle profile and two subtree-profile credit rules under Adam and stochastic gradient descent (SGD), respectively. Circles average three compatible task permutations within seed; open squares also average the two incompatible groupings per task. Rates were selected on development seeds and frozen before fresh outcomes. The fixed broadcast profile is calibrated from initial student path sensitivities; projection coefficients access the current exact field and are oracle controls. \textbf{E}, Paired compatible-tree fixed-broadcast-minus-exact NMSE differences. The Adam interval includes zero; the small SGD effect does not establish a universal need for precise credit. Dots are the twenty independent seed means. Means and whiskers in \textbf{B--E} use 10,000 whole-seed bootstrap draws and pointwise 95\% intervals. Population-normalized bounds in \textbf{B} and split-variance-normalized test errors in \textbf{C--E} have distinct denominators. \textbf{F}, Mean aggregate gradient cosine on 256 calibration examples for compatible Adam models, evaluated at common exact-learning checkpoints; no uncertainty band is shown. All 1,440 fresh fits and 7,200 checkpoint records are retained. The interaction bound relies on independent input blocks, identity somatic activation and no direct somatic synapses; it is separate from the multi-affine cut-rank theorem.}
+\label{fig:si_conductance_grouping}
+\label{fig:supp_morphology_conductance}
+\end{figure}
+
+\begin{figure}[p]
+\centering
+\includegraphics[width=\textwidth]{supplementary/curated/conductance_precision.pdf}
+\caption{\textbf{A first conductance task produces a small precision benefit from exact credit.}
+\textbf{A,B}, Test normalized mean squared error (NMSE) at fixed checkpoints under Adam, for ungated independent inputs and gated conflicting inputs in the 16-conductance model. Curves show means and 95\% paired-seed bootstrap intervals across 20 fresh seeds; the vertical dotted line marks the original 4,096-update budget. All fits continue to 16,384 updates with unchanged optimizer and minibatch state. Unit and calibrated profiles differ here because global gradient clipping can break Adam's invariance to fixed positive coordinate scaling.
+\textbf{C}, Gated-task NMSE differences between the initial calibrated profile and exact credit, evaluated at each fit's best validation checkpoint in the extended window. Points are paired seed differences; symbols and bars show their means and 95\% bootstrap intervals. The Adam gap is $0.000502$ [$0.000267$, $0.000772$], positive in all 20 seeds; under Adam, mean broadcast error nevertheless remains below 0.0006 NMSE.
+\textbf{D}, Diagnostics at the exact-rule best-validation states distinguish the best rank-one capture of the six-compartment path field from capture by each student's fixed initial profile after weighting by local parameter eligibility. Both are squared-energy projection ratios with one freely fitted amplitude per example. High eligibility-weighted capture helps explain the small learning difference. The gated and ungated tasks change both inhibition and distractor dependence, so this first study is a task-family comparison. All 216 development fits, 240 fresh fits and their continuations are retained in Source Data.}
+\label{fig:si_conductance_precision}
+\label{fig:supp-conductance-small-effect}
+\end{figure}
+
+\begin{figure}[p]
+\centering
+\includegraphics[width=\textwidth]{supplementary/curated/conductance_optimization.pdf}
+\caption{\textbf{Parameter-range and rate controls retain the opposed-task broadcast deficit.} \textbf{A}, Task-by-credit interaction under original $[-7,7]$ and wider $[-20,20]$ log-conductance bounds, with Adam and SGD. All fits retain their original initialization/minibatch streams and extend to 16,384 updates; endpoints use validation-selected checkpoints. Dots are twenty paired seeds and intervals are 95\% paired bootstrap intervals. Wider-bound interactions are positive in all seeds. \textbf{B}, Initial-profile-minus-exact NMSE before each calibrated-profile fit's first original bound contact; all twenty differences are already positive. \textbf{C,D}, Equally budgeted six-rate development sweeps for opposed tuning under Adam/SGD; corresponding aligned-task outcomes are included in the full condition table. Each point averages three development seeds; all 288 outcomes are retained. The predefined improvement trigger was not reached, so rates were not retuned on fresh test outcomes. Some broadcast fits also reach wider bounds; these are finite-budget controls, not an asymptotic convergence proof.}
+\label{fig:si_conductance_optimization}
+\label{fig:supp-conductance-robustness}
+\label{fig:supp-conductance-expanded-rates}
+\end{figure}
+
+\begin{figure}[p]
+\centering
+\includegraphics[width=\textwidth]{supplementary/curated/local_gate_controls.pdf}
+\caption{\textbf{Local conductance gating is robust to rate choice but depends on where it is applied.} \textbf{A,B}, Aligned tuning at 4,096 and 16,384 updates. \textbf{C,D}, Opposed tuning at the same budgets. Every rule receives every displayed Adam rate; 0.03 is primary. Entries are mean test NMSE at validation-selected checkpoints across twenty new paired seeds; the color scale shows base-ten logarithm. Exact credit, the three-pattern oracle, the local distal gate and the shunt-proportional gate learn accurately. Swapping the gate fails; extending the gate to proximal compartments leaves a substantial opposed-task deficit. The two leaf patterns with unit proximal feedback isolate this placement effect. These are supplied-context, bounded-conductance experiments; the local gate does not estimate arbitrary route coefficients. All rates, seeds and budgets remain included.}
+\label{fig:si_local_gate_controls}
+\label{fig:supp_local_gate_controls}
+\end{figure}

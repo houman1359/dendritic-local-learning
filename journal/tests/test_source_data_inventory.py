@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import csv
 import importlib.util
+import json
 import re
 import sys
 from pathlib import Path
@@ -19,8 +20,23 @@ sys.modules[SPEC.name] = builder
 SPEC.loader.exec_module(builder)
 
 
+def panel_letters(value: str) -> set[str]:
+    """Normalize combined current associations such as ``b-d, f``."""
+    result = set()
+    for first, last in re.findall(r"\b([a-h])(?:\s*[-–]+\s*([a-h]))?\b", value.lower()):
+        result.update(chr(k) for k in range(ord(first), ord(last or first) + 1))
+    return result
+
+
+def curated_assets() -> list[dict]:
+    return json.loads(
+        (JOURNAL / "configs/supplement_consolidation/manifest.json").read_text()
+    )["assets"]
+
+
 def test_source_data_inventory_matches_final_display_numbering() -> None:
-    figures = {item.figure for item in builder.FILES}
+    files = list(builder.FILES)
+    figures = {item.figure for item in files}
     main_numbers = {
         int(match.group(1))
         for figure in figures
@@ -33,180 +49,137 @@ def test_source_data_inventory_matches_final_display_numbering() -> None:
     }
     assert main_numbers == set(range(1, len(builder.MAIN_FIGURES) + 1))
     assert supplementary_numbers == set(range(1, len(builder.SUPPLEMENTARY_FIGURES) + 1))
-    prospective = [item for item in builder.FILES if item.figure == "Supplementary Figure 35"]
+    selector = next(a for a in curated_assets() if a["id"] == "original_selector")
+    assert selector["figure"] == "S33"
+    prospective = [item for item in files if item.figure == "Supplementary Figure 33"]
     assert prospective
     assert all(item.source.startswith("source_data/prospective_morphology_selection/") for item in prospective)
     assert any(item.source.endswith("/sealed_confirmatory_selections.csv") for item in prospective)
     assert any(item.source.endswith("/candidate_outcomes.csv") for item in prospective)
-    interaction = [item for item in builder.FILES if item.figure == "Figure 4"]
+    interaction = [item for item in files if item.figure == "Figure 4"]
     assert any("credit_rule_bridge/" in item.source for item in interaction)
-    assert any(item.panels == "f" and item.source.endswith("credit_rule_bridge/summaries/all_diagnostics.csv") for item in interaction)
-    assert any("credit_resolution_bridge/" in item.source for item in builder.FILES if item.figure == "Methods")
-    anatomy = [item for item in builder.FILES if item.figure == "Figure 7"]
+    assert any(
+        "f" in panel_letters(item.panels)
+        and item.source.endswith("credit_rule_extension/summaries/all_diagnostics.csv")
+        for item in interaction
+    )
+    assert any("credit_resolution_bridge/" in item.source for item in files if item.figure == "Methods")
+    anatomy = [item for item in files if item.figure == "Figure 7"]
     assert any("anatomy_commonmode/" in item.source for item in anatomy)
     assert not any("morphology_calibration" in item.source for item in anatomy)
-    assert any("release_task_identity/task_identity.json" in item.source for item in builder.FILES)
-
+    assert any("release_task_identity/task_identity.json" in item.source for item in files)
 
 
 def test_source_data_destinations_are_unique_and_sources_exist() -> None:
-    destinations = [item.destination for item in builder.FILES]
+    files = list(builder.FILES)
+    destinations = [item.destination for item in files]
     assert len(destinations) == len(set(destinations))
-    assert not [item.source for item in builder.FILES if not (JOURNAL / item.source).is_file()]
+    assert not [item.source for item in files if not (JOURNAL / item.source).is_file()]
 
 
-def test_supplementary_figure_4_uses_only_current_panel_mapping() -> None:
-    items = [
-        item for item in builder.FILES if item.figure == "Supplementary Figure 4" and item.panels != "archived"
-    ]
-    archived = [item for item in builder.FILES if item.figure == "Supplementary Figure 4" and item.panels == "archived"]
-    assert len(archived) == 9
-    assert {item.panels for item in items} == {"a", "b", "c", "d", "e"}
-    assert all(
-        "SuppFig4a_depth_scaling" in item.destination
-        for item in items
-        if item.panels == "a"
+def test_every_curated_panel_releases_its_declared_numerical_sources() -> None:
+    files = list(builder.FILES)
+    assets = curated_assets()
+    assert len(assets) == len(builder.SUPPLEMENTARY_FIGURES) == 35
+    seen = set()
+    for asset in assets:
+        figure = "Supplementary Figure " + asset["figure"].removeprefix("S")
+        for panel in asset["panels"]:
+            for declared in panel["numerical_source_paths"]:
+                assert "source_data/" in declared, (asset["id"], declared)
+                source = "source_data/" + declared.split("source_data/", 1)[1]
+                matches = [item for item in files if item.figure == figure and item.source == source]
+                assert matches, (asset["id"], panel["panel"], source)
+                assert any(panel["panel"].lower() in panel_letters(item.panels) for item in matches), (
+                    asset["id"], panel["panel"], source, [item.panels for item in matches]
+                )
+                seen.add((figure, panel["panel"], source))
+    assert seen
+
+
+def test_curated_table_destinations_release_complete_hash_pinned_sources() -> None:
+    """Removing a printed endpoint table must not remove its promised records."""
+    curation = json.loads(
+        (JOURNAL / "configs/supplement_consolidation/publication_curation_map.json").read_text()
     )
-    assert all(
-        "SuppFig4b_broadcast_noise" in item.destination
-        for item in items
-        if item.panels == "b"
-    )
-    assert all(
-        "SuppFig4c_cifar10_control" in item.destination
-        for item in items
-        if item.panels == "c"
-    )
-    assert all(
-        "raw_additive" in item.destination for item in items if item.panels == "d"
-    )
-    assert all(
-        item.source.startswith("source_data/fashion_feedback_ladder/")
-        and "SuppFig4e_Fashion_MNIST" in item.destination
-        for item in items
-        if item.panels == "e"
-    )
+    pinned = json.loads(
+        (JOURNAL / "configs/figure_structure/table_source_hashes.json").read_text()
+    )["source_sha256"]
+    declared = {}
+    for table in curation["tables"]:
+        for destination in table["destinations"]:
+            source, expected = destination["path"], destination["sha256"]
+            assert declared.setdefault(source, expected) == expected, source
+    added = {table["source"] for table in curation["new_tables"] if "source" in table}
+    assert declared and set(pinned) == set(declared) | added
+    assert all(pinned[source] == expected for source, expected in declared.items())
+
+    complete = {
+        item.source for item in builder.FILES
+        if item.destination not in builder.DESTINATION_ROW_FILTERS
+    }
+    sys.path.insert(0, str(JOURNAL / "code/release_noise"))
+    from release_hashes import verify_released_file
+
+    for source, expected in pinned.items():
+        assert source in complete, source
+        # A portable archive may translate a historical path in a protocol.
+        # Authenticate that declared transformation against the original pin;
+        # a display-filtered copy can never replace the complete source.
+        verdict = verify_released_file(JOURNAL / source, expected)
+        assert verdict["verified"], (source, verdict)
 
 
-def test_s45_retains_original_image_panel_sources() -> None:
-    by_source = {item.source: item for item in builder.FILES if item.figure.startswith("Supplementary")}
-
-    gradient = by_source["source_data/figure2/feedback_gradient_runs.csv"]
-    assert (gradient.figure, gradient.panels, gradient.destination) == (
-        "Supplementary Figure 45",
-        "c",
-        "Supplementary_Figure_45/SuppFig45c_feedback_gradient_runs.csv",
-    )
-
-    transport = by_source[
-        "source_data/figure2/path_gain_dispersion_ladder_runs.csv"
-    ]
-    assert (transport.figure, transport.panels, transport.destination) == (
-        "Supplementary Figure 45",
-        "d-e",
-        "Supplementary_Figure_45/SuppFig45d-e_path_gain_dispersion_ladder_runs.csv",
-    )
-
-    conductance_only = by_source["source_data/figure2/path_gain_cv_runs.csv"]
-    assert (conductance_only.figure, conductance_only.panels) == (
-        "Supplementary Figure 1",
-        "a",
-    )
-
-    mnist_contrasts = by_source[
-        "source_data/mnist_feedback_ladder/paired_contrasts.csv"
-    ]
-    assert (mnist_contrasts.figure, mnist_contrasts.panels) == ("Supplementary Figure 45", "g")
-
+def test_original_image_evidence_is_retained_without_obsolete_display_claims() -> None:
+    files = list(builder.FILES)
+    retained = [item for item in files if item.destination.startswith("Methods/retained_evidence/")]
     for source in (
+        "source_data/figure2/feedback_gradient_runs.csv",
+        "source_data/figure2/path_gain_dispersion_ladder_runs.csv",
+        "source_data/figure2/path_gain_cv_runs.csv",
+        "source_data/mnist_feedback_ladder/paired_contrasts.csv",
         "source_data/prospective_input_validity/followup_publication_seed_outcomes.csv",
         "source_data/prospective_input_validity/routing_valid_paired_contrasts.csv",
     ):
-        assert any(
-            item.source == source
-            and (item.figure, item.panels) == ("Supplementary Figure 45", "g")
-            for item in builder.FILES
-        )
-
-    central = [
-        item
-        for item in builder.FILES
-        if item.source.startswith(
-            "source_data/prospective_input_validity/central_valid_"
-        )
-    ]
+        matches = [item for item in retained if item.source == source]
+        assert matches, source
+        assert all((item.figure, item.panels) == ("Methods", "supporting evidence") for item in matches)
+    central = [item for item in retained if item.source.startswith("source_data/prospective_input_validity/central_valid_")]
     assert len(central) == 3
-    assert all(
-        (item.figure, item.panels) == ("Supplementary Figure 19", "text")
-        and item.destination.startswith(
-            "Supplementary_Figure_19/SuppFig19a-c_"
-        )
-        for item in central
-    )
-
-    fashion = [
-        item
-        for item in builder.FILES
-        if item.source.startswith("source_data/fashion_feedback_ladder/")
-    ]
+    fashion = [item for item in retained if item.source.startswith("source_data/fashion_feedback_ladder/")]
     assert len(fashion) == 4
-    assert all(
-        (item.figure, item.panels) == ("Supplementary Figure 4", "e")
-        for item in fashion
-    )
-    assert not any(
-        item.destination == "Supplementary_Figure_45/SuppFig45g_seed_outcomes.csv"
-        for item in builder.FILES
-    )
+    # Displayed image panels now use the semantic consolidated manifest.
+    image_geometry = next(a for a in curated_assets() if a["id"] == "mnist_dictionary_geometry")
+    assert image_geometry["figure"] == "S7"
+    for source in (
+        "source_data/figure2/feedback_gradient_runs.csv",
+        "source_data/figure2/path_gain_dispersion_ladder_runs.csv",
+    ):
+        assert any(item.figure == "Supplementary Figure 7" and item.source == source for item in files)
 
 
-def test_s45_image_and_s4_provenance_preserve_source_lineage() -> None:
-    manifest = JOURNAL / "source_data" / "provenance_manifest.tsv"
-    with manifest.open(newline="", encoding="utf-8") as handle:
-        rows = {
-            row["entry_id"]: row
-            for row in csv.DictReader(handle, delimiter="\t")
-        }
-
+def test_curated_image_provenance_preserves_original_source_lineage() -> None:
+    with (JOURNAL / "source_data/provenance_manifest.tsv").open(newline="", encoding="utf-8") as handle:
+        rows = {row["entry_id"]: row for row in csv.DictReader(handle, delimiter="\t")}
     transport = rows["fig2.path_gain_dispersion"]
-    assert (transport["figure"], transport["panel"]) == ("figS45", "d-e")
-    assert transport["source_path"].endswith(
-        "/source_data/figure2/path_gain_dispersion_ladder_runs.csv"
-    )
-    assert transport["sha256"] == (
-        "fecb52eb239fd9584899ea4c280eac1f6ec07716d09cadfe1eed88120b135d14"
-    )
-
-    old_path_gain = rows["fig2.path_gain"]
-    assert (old_path_gain["figure"], old_path_gain["panel"]) == ("figS1", "a")
-    assert (rows["fig2.c"]["figure"], rows["fig2.c"]["panel"]) == (
-        "figS45",
-        "c",
-    )
-    assert (
-        rows["mnist.ladder.contrasts"]["figure"],
-        rows["mnist.ladder.contrasts"]["panel"],
-    ) == ("figS45", "g")
-    for entry_id in ("prospective.routing.runs", "prospective.routing.contrasts"):
-        assert (rows[entry_id]["figure"], rows[entry_id]["panel"]) == (
-            "figS45/figS19",
-            "g/text",
-        )
-
+    assert transport["source_path"].endswith("/source_data/figure2/path_gain_dispersion_ladder_runs.csv")
+    assert transport["sha256"] == "fecb52eb239fd9584899ea4c280eac1f6ec07716d09cadfe1eed88120b135d14"
     for entry_id in (
-        "fashion.asset",
-        "fashion.outcomes",
-        "fashion.conditions",
-        "fashion.contrasts",
-        "fashion.audit",
+        "fig2.path_gain_dispersion", "fig2.path_gain", "fig2.c", "mnist.ladder.contrasts",
+        "prospective.routing.runs", "prospective.routing.contrasts", "fashion.asset",
+        "fashion.outcomes", "fashion.conditions", "fashion.contrasts", "fashion.audit",
     ):
         assert (rows[entry_id]["figure"], rows[entry_id]["panel"]) == (
-            "figS4",
-            "e",
+            "methods", "retained scientific evidence",
         )
-    assert rows["fashion.asset"]["source_path"].endswith(
-        "/figures/supplementary/figure_S04_panels_A-E.pdf"
-    )
+    assert rows["fashion.asset"]["source_path"].endswith("/figures/supplementary/figure_S04_panels_A-E.pdf")
+    # Retaining historical IDs does not substitute for explicit current associations.
+    for source_suffix in (
+        "/source_data/figure2/path_gain_dispersion_ladder_runs.csv",
+        "/source_data/figure2/feedback_gradient_runs.csv",
+    ):
+        assert any(row["figure"] == "figS7" and row["source_path"].endswith(source_suffix)
+                   for row in rows.values())
 
 
 def test_figure_2_ownership_release_is_the_mnist_d2_d4_subset(
@@ -214,27 +187,27 @@ def test_figure_2_ownership_release_is_the_mnist_d2_d4_subset(
 ) -> None:
     expected = (
         (
-            "Supplementary_Figure_45/SuppFig45g_ownership_run_outcomes.csv",
+            "Methods/retained_evidence/Figure_2/Fig2g_ownership_run_outcomes.csv",
             80,
             {"family": {"routing"}, "task": {"mnist"}, "depth": {"2", "4"}},
         ),
         (
-            "Supplementary_Figure_45/SuppFig45g_ownership_contrasts.csv",
+            "Methods/retained_evidence/Figure_2/Fig2g_ownership_contrasts.csv",
             4,
             {"task": {"mnist"}, "depth": {"2", "4"}},
         ),
         (
-            "Supplementary_Figure_19/SuppFig19d_ownership_run_outcomes.csv",
+            "Methods/retained_evidence/Supplementary_Figure_19/SuppFig19d_ownership_run_outcomes.csv",
             120,
             {"family": {"routing"}},
         ),
         (
-            "Supplementary_Figure_19/SuppFig19d_ownership_contrasts.csv",
+            "Methods/retained_evidence/Supplementary_Figure_19/SuppFig19d_ownership_contrasts.csv",
             6,
             {},
         ),
         (
-            "Supplementary_Figure_8/SuppFig8a-i_seed_outcomes.csv",
+            "Methods/retained_evidence/Supplementary_Figure_8/SuppFig8a-i_seed_outcomes.csv",
             160,
             {"family": {"fixed_budget"}},
         ),
@@ -248,11 +221,37 @@ def test_figure_2_ownership_release_is_the_mnist_d2_d4_subset(
         assert len(rows) == expected_rows
         for field, values in expected_values.items():
             assert {row[field] for row in rows} == values
-        if destination.startswith("Supplementary_Figure_45/"):
+        if destination.startswith("Methods/retained_evidence/Figure_2/"):
             assert {row["core"] for row in rows} == {
                 "dendritic_additive",
                 "dendritic_shunting",
             }
+
+
+
+def test_filtered_subsets_also_release_complete_original_source_tables(tmp_path: Path) -> None:
+    files = list(builder.FILES)
+    filtered_sources = {item.source for item in files if item.destination in builder.DESTINATION_ROW_FILTERS}
+    assert filtered_sources == {
+        "source_data/prospective_input_validity/followup_publication_seed_outcomes.csv",
+        "source_data/prospective_input_validity/routing_valid_paired_contrasts.csv",
+    }
+    for index, source in enumerate(sorted(filtered_sources)):
+        complete = [item for item in files if item.source == source
+                    and item.destination not in builder.DESTINATION_ROW_FILTERS]
+        assert complete, source
+        output = tmp_path / f"complete_{index}.csv"
+        builder.copy_source_file(complete[0], JOURNAL / source, output)
+        with (JOURNAL / source).open(newline="") as handle:
+            original = list(csv.DictReader(handle))
+        with output.open(newline="") as handle:
+            released = list(csv.DictReader(handle))
+        assert len(released) == len(original)
+        drop = builder.SANITIZED_DROP_COLUMNS.get(source, set())
+        assert released == [{key: value for key, value in row.items() if key not in drop}
+                            for row in original]
+        if not drop:
+            assert output.read_bytes() == (JOURNAL / source).read_bytes()
 
 
 def test_current_readmes_follow_manifest_and_archive_keeps_original_hashes(tmp_path: Path) -> None:

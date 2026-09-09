@@ -1,0 +1,171 @@
+% Compact tables; repeated endpoint grids are available in the indexed Source Data.
+\subsection*{Reference tables and source-data index}
+
+\begin{table}[tbp]
+\centering
+\caption{Core notation. Symbols are defined at first use; this index distinguishes quantities that recur in different coordinate systems.}
+\label{tab:notation}
+\small
+\begin{tabularx}{\textwidth}{p{0.24\textwidth}X}
+\toprule
+Symbol & Meaning \\
+\midrule
+$V_n$, $a_n=f_n(V_n)$ & Compartment voltage and transmitted activity. \\
+$g_i,x_i,g_ix_i$; $E_i^{\rm rev}$ & Maximal conductance, presynaptic activity, open conductance and reversal potential; E/I polarity does not require signed conductances. \\
+$G_n^{\rm tot},R_n^{\rm tot}$ & Total open conductance and its reciprocal input resistance. \\
+$\delta^V_n$, $\delta^a_n$; $q_n$ & Errors in voltage/activity coordinates; root-to-unit output derivative. In reciprocal cables, $\bm q$ denotes the current-source adjoint. \\
+$\Phi$, $K$, $\bm c$ & Spatial-profile dictionary, column budget and delivered coefficients. Rank can be smaller than column count. \\
+$\Gamma$ & Route-gain matrix in the delivery equation; the rectangular anatomical kernel of Eq.~\ref{eq:s_kernel} is separately defined. \\
+$W$, $P_{\Phi,W}$; $\mathcal C_K$ & Positive coordinate weights, weighted projector and explicitly specified per-field or aggregate energy capture. \\
+$\bm g$, $\bm d$, $\bm m$, $V$ & Exact gradient, routed-update estimator, its conditional mean and covariance. \\
+$M$, $\Sigma$, $U$ & Fixed routing operator, estimator-noise covariance and one-step moment bound. \\
+$H_{\rm c},D_{\rm r}$; $H_{\rm p},D_{\rm p}$ & Task-credit hierarchy/routed resolution, and latent task hierarchy/physical stage count. \\
+$\chi$, $\alpha$, $a$ & Branch conflict, physical-task sensor alignment and imposed route-span energy fraction, respectively. \\
+$G$, $R_a$, $R_m$, $\kappa$ & Reciprocal conductance matrix, axial resistivity, specific membrane resistance and focal shunt dose. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{table}[tbp]
+\centering
+\caption{Delivery profiles and coefficient sources. A useful span and an implementable coefficient rule are separate requirements.}
+\label{tab:feedback_objects}
+\small
+\begin{tabularx}{\textwidth}{p{0.23\textwidth}X}
+\toprule
+Comparison & Field, information source and model \\
+\midrule
+Images & Twelve nonsomatic activation coordinates per $[3,3]$ tree. Neuron-specific error is supplied by the exact linear readout; $K=1/K=3$ coefficients project the exact activation field. Local output derivatives remain in eligibility. \\
+Quadratic screens & Sixteen abstract parameter coordinates; exact/noisy projections and supplied or paired-probe reliability estimates. No forward neuron is simulated in the Haar screens. \\
+Context and ancestry & Eight terminal blocks receive $\delta_i\Phi_{c_i,:}$. Context is supplied; the separate cue encoder learns coefficients before task training. \\
+Multi-affine trees & Six nonroot unit errors receive exact paths, a unit or initial signed profile, or oracle-projected coefficients. Best-rank-one capture is a separate common-state diagnostic. \\
+Conductance learning & Six nonsomatic voltages. Three-profile coefficients use current exact paths. Two leaf profiles plus unit proximal credit retain oracle amplitudes. The hard local rule instead gates distal somatic error by parent inhibition, retaining unit proximal credit; all 24 conductances learn. \\
+Reconstructed arbors & Weighted input sites; broadcast plus ancestry supports. Free projection coefficients measure capacity for modeled passive fields. No encoder or biological learning is measured. \\
+Measured-response models & Four-route spans contain one frozen baseline-transfer profile scaled by output error. Trialwise field/update oracles are geometry diagnostics and are not trained. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{table}[tbp]
+\centering
+\caption{Regular-tree execution records. Missing historical software versions are not inferred from a current environment. Complete configurations, manifests and exclusion ledgers accompany Source Data.}
+\label{tab:regular_archive}
+\small
+\begin{tabularx}{\textwidth}{p{0.26\textwidth}X}
+\toprule
+Cohort & Retained provenance \\
+\midrule
+120 MNIST feedback runs & Configurations, checkpoints, logs and hashes; Python 3.10.13; source identities \texttt{6c1aaa25}/\texttt{bd5f905e}. Scientific signatures and executable sources match across fields within architecture. Heterogeneous NVIDIA devices. \\
+60 gradient-diagnostic runs & Same records; Python 3.10.13, source \texttt{4ba38bde} with archived tracked modifications and explicit source hashes; H200, 4.006 summed GPU-hours. \\
+640 depth-feedback runs & 480 conductance-valid retained; configurations, curves, resource records and the complete validity ledger. Later inactive-source edits were checked for numerical equivalence. Heterogeneous NVIDIA devices, 73.29 summed GPU-hours. \\
+160 diagnostic checkpoints & 120 valid; five fields/four step sizes per checkpoint, paired/clustered analysis and complete exclusions. No new training. \\
+320 exact/BP repeats & Unmodified root \texttt{74792ca}, nested generator \texttt{4f3612a5}, configurations, seeds, checkpoints and scheduler records; H200. Signed additive and ReLU shunting inputs remain distinct. \\
+20 exact-factorial / five BP references & Configurations, checkpoints, logs and grouped outcomes on A100-SXM4-40GB; 2.953/0.474 summed GPU-hours. Exact commit, Python and package versions were not recorded. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\input{curated/si_tables_retained}
+
+\begin{table}[tbp]
+\centering
+\caption{Same-seed physical-depth reproducibility. All 430 repeated fits used versioned source \texttt{a99c3a7} and passed completeness, finite-metric and resource checks. Accuracy differences are percentage points. This is computational repetition of existing seeds.}
+\label{tab:physical_reproducibility}
+\small
+\begin{tabular}{lr}
+\toprule
+Measure & Value \\
+\midrule
+Repeated H2/grouped-point and principal H3 fits & 220 + 210 \\
+Median absolute original/repeated accuracy difference & 0.030 \\
+Mean absolute difference & 0.154 \\
+Maximum absolute difference (raw-additive control) & 15.01 \\
+Pairs within 0.1 points & 357/430 \\
+Repeated H2/H3 aligned serial-BP depth effects & 30.84 / 30.86 \\
+Repeated H2/H3 architecture-by-placement interactions & 32.43 / 31.27 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[tbp]
+\centering
+\caption{Claim and evidence index. Each row identifies the question answered by the corresponding controlled comparison; scope and inferential details are stated once in its methods.}
+\label{tab:claim_boundaries}
+\small
+\begin{tabularx}{\textwidth}{p{0.22\textwidth}X}
+\toprule
+Question & Evidence and interpretation \\
+\midrule
+Which spatial distinctions matter? & Image, conflict and ancestry comparisons hold the forward model fixed while changing delivery. Their scope is within-arbor credit with the stated somatic signal. \\
+Can the tree represent the task? & Centered-cut theorem and Boolean constructions characterize the scalar multi-affine class; they do not prove optimizer convergence. \\
+Does a fixed profile learn? & Matched algebraic tasks and longer budgets separate learned credit geometry and finite-training performance. Oracle capture is distinct from a trained rule. \\
+Can a local rule supply selection? & Fresh conductance gates use parent inhibition and somatic error without exact paths. Both signals are supplied; autonomous error generation is unresolved. \\
+Does physical depth help? & Serial/divisive controls support task-dependent forward benefit. Longer training reverses the LocalCA accuracy effect and retains metric dependence. \\
+What does anatomy supply? & Budgeted broadcast-plus-ancestry dictionaries compress modeled passive responses; topology-preserving surrogates test finer structure. \\
+Can conductance change route gain? & The passive partition identity and reconstructed-cable interventions establish modeled transport; the weak-channel ensemble checks a local linearization. \\
+Are the routes used in measured responses? & Seven-target analyses provide no evidence of preferential alignment. Simulated sensitivity is conditional on recorded coverage/reliability and the specified Gaussian model. \\
+Can an initial score choose morphology? & The original scalar selector lost to a fixed tree. Finite-horizon and interaction estimators answer narrower selection questions under their declared priors. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\clearpage
+\begin{longtable}{p{0.23\textwidth}p{0.35\textwidth}p{0.32\textwidth}}
+\caption{Cohort and protocol index. Counts refer to runs within a study, not sums of independent replications. Detailed seed ranges, pairing, stopping and selection are given in the cited sections and source configurations.}\label{tab:experiment_cohorts}\\
+\toprule
+Question & Units and retained design & Protocol section \\
+\midrule
+\endfirsthead
+\toprule Question & Units and retained design & Protocol section \\
+\midrule
+\endhead
+Exact/rule screens & Fifty seeds per screen; fixed/adaptive conductance reliability 2,250/1,050 outcomes; same-span 4,800 checkpoint rows & \ref{note:exact_rules}; probes/checkpoints nested within seeds. \\
+Images & Original MNIST/Fashion/CIFAR: 15/10/20 seeds, 90/60/80 fits; random feedback 120 new fits; fresh dictionary 108 development and 190 fresh fits & \ref{note:credit_images}; twelve short dictionary checks excluded. \\
+Depth/input controls & 480/640 depth, 120/160 ownership, 240/320 spatial and 160/320 fixed-budget fits valid; separate 320-run exact/BP repeat & \ref{note:credit_images}; Table~\ref{tab:input_validity}. \\
+Branch/ancestry & Twenty conflict seeds; ten two-branch seeds; twenty eight-context seeds and 2,700 fits; cue encoder 2,160 fits & \ref{note:conflict_ancestry}; hard cue readout exploratory. \\
+Interaction/Boolean capacity & Census of 140 primary +24 nested targets; 164 constructions. Boolean: seven templates, fifteen trees and 49 exact constructions & \ref{note:interactions_boolean}; complete-domain analyses. \\
+Algebraic learning & Twenty fresh seed blocks each: 3,600 restricted-credit and 1,200 matched-profile fits; Boolean 6,720 fits. Extension reuses 720 original algebraic trajectories & \ref{note:interactions_boolean}; no extension retuning/new seeds. \\
+Conductance learning & Grouping 1,440 fits; first context study 240 fresh; opposed tuning 320 fresh; wider bounds 640 same-seed trajectories; added-rate development 288 fits & \ref{note:conductance_learning}; distinct models/cohorts. \\
+Local conductance gate & Twenty new seeds, nine rules, two tasks, three rates: 1,080 trajectories to 16,384 updates & \ref{sec:local_conductance_gate}; protocol frozen after prior exploratory exposure. \\
+Physical composition & Ten seeds per cohort; H3 270, point/optimizer 200, dose 90, grouped H3/H2 220, H4 360, task families 360; same-seed repeat 430 and budget extension sixty & \ref{note:depth}; finite budgets and metric dependence retained. \\
+Anatomy & Eight initial +47 disjoint cells in one mouse; twelve selected/ten eligible Pinky cells in a second. Equal-broadcast: 65 operators, 149,331 dictionary evaluations & \ref{note:anatomical_dictionaries}; separate cohort inference. \\
+Inhibitory contacts/shunts & Census twenty targets, 92-axon sensitivity. Focal studies: eight initial cells, 45/47 disjoint cells eligible; 64 weak-channel draws per initial cell & \ref{note:inhibitory_census}, \ref{note:shunt_transport}; draws/sites nested in cells. \\
+Measured responses & Seven targets/thirteen scans; ten splits, 520 full-tree fits, 130 geometry replays and 3,380 baseline evaluations & \ref{note:measured_responses}; target is inferential unit. \\
+Detection sensitivity & 4,000 complete simulated datasets across 21 signal levels/two reliability scenarios; 1,000 repeat-calibration datasets & \ref{note:measured_alignment_power}; simulations are not biological replicates. \\
+Structure selection & Original scalar 12,800 confirmation fits; finite-horizon 25,600 fresh fits; noisy calibration 2,240 and end-to-end 480 fits & \ref{note:selection_statistics}; sealed choices and independent observations. \\
+Imposed/external controls & Eight arbors with forty streams each; six external animals & \ref{note:alignment_controlled}, \ref{note:animal_credit}; imposed and retrospective outcomes. \\
+\bottomrule
+\end{longtable}
+
+\begin{longtable}{p{0.25\textwidth}p{0.67\textwidth}}
+\caption{Source index for endpoint grids and metadata. All paths are relative to the released \texttt{source\_data/} directory. These records retain the complete per-unit outcomes, contrasts and exclusions behind condensed or omitted print tables; figure-source mappings provide the individual panel joins.}\label{tab:source_index}\\
+\toprule
+Evidence & Machine-readable record \\
+\midrule
+\endfirsthead
+\toprule Evidence & Machine-readable record \\
+\midrule
+\endhead
+Two-branch controls & \path{trained_subtree_address/condition_summary.csv}; \path{trained_subtree_address/paired_contrasts.csv} \\
+Ancestry budgets & \path{trained_subtree_address_full_factorial/condition_summary.csv}; \path{review_evidence_reanalysis/ancestry_control_contrasts.csv} \\
+Moment bound/reanalysis & \path{credit_phase_theory/primary_contrasts.csv}; \path{review_evidence_reanalysis/pooled_correlations.csv}; \path{review_evidence_reanalysis/moment_scores.csv} \\
+Fixed/adaptive reliability & \path{positive_conductance_reliability_step_consistent/paired_contrasts.csv}; \path{adaptive_conductance_reliability/paired_contrasts.csv} \\
+Same-span learning & \path{same_span_coefficient_learning/paired_contrasts.csv}; \path{same_span_coefficient_learning/condition_summary.csv} \\
+Original image outcomes & \path{mnist_feedback_ladder/condition_summary.csv}; \path{figure2/feedback_gradient_runs.csv}; \path{figure2/exact_transport_and_backprop_runs.csv} \\
+Strict scalar audit & \path{mnist_feedback_ladder/strict_scalar_implementation_audit.csv}; \path{mnist_feedback_ladder/strict_scalar_paired_contrasts.csv} \\
+Valid depth/ownership & \path{prospective_input_validity/central_valid_condition_summary.csv}; \path{prospective_input_validity/routing_valid_paired_contrasts.csv} \\
+Spatial coverage & \path{spatial_topology_audit/owner_metrics.csv}; \path{spatial_topology_audit/summary.csv} \\
+Fixed-checkpoint step & \path{prospective_input_validity/mechanism_feedback_summary_valid.csv}; \path{prospective_input_validity/mechanism_paired_contrasts_valid.csv} \\
+Operating-regime grids & \path{regular_tree_regimes/competence_summary.csv}; \path{regular_tree_regimes/depth_scaling_summary.csv}; \path{regular_tree_regimes/broadcast_noise_summary.csv} \\
+Morphology inputs/positive controls & \path{figure3/cell_metrics.csv}; \path{figure3/routing_capacity_summary.json}; \path{figure3/typed_only_compression_curves.csv} \\
+Passive-field controls & \path{reciprocal_routing/cell_method_capture.csv}; \path{reciprocal_routing/summary.json}; \path{anatomy_commonmode/} \\
+Focal scale/reversal sensitivity & \path{figure4/summary.json}; \path{figure4/scale0p1_summary.json}; \path{figure4/scale1p0_summary.json}; \path{figure4/irev0_summary.json}; \path{figure4/irevm0p5_summary.json} \\
+Physical/weak-channel shunts & \path{physical_cable_sensitivity/cell_primary_contrasts.csv}; \path{focal_selectivity_active_ensemble/condition_summary.csv} \\
+Measured target/scan metadata & \path{figure5/functional_target_metrics.csv}; \path{figure5/functional_summary.json}; \path{functional_topology_all_scans/cell_metrics.csv} \\
+Branch-model restricted credit & \path{figure5/task_target_method_means_ch4.csv}; \path{figure5/task_summary_ch4.json} \\
+Inhibitory census controls & \path{microns_inhibitory_routes/target_metrics.csv}; \path{microns_inhibitory_routes/inhibitory_axon_metrics.csv}; \path{microns_inhibitory_routes/inhibitory_3d_matched_target_metrics.csv} \\
+Imposed alignment & \path{alignment_controlled/cell_alignment_metrics.csv}; \path{alignment_controlled/cell_paired_contrasts.csv} \\
+Physical rerun outliers & \path{physical_depth_clean_source_replication/historical_concordance.csv}; \path{physical_depth_clean_source_replication/seed_outcomes.csv} \\
+Algebraic budget endpoints & \path{credit_rule_extension/summaries/all_budget_outcomes.csv}; \path{credit_rule_extension/summaries/compact_terminal_table.csv} \\
+\bottomrule
+\end{longtable}

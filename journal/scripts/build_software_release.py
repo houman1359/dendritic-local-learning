@@ -122,6 +122,7 @@ JOURNAL_DIRECTORIES = (
     "scripts/conductance_credit_demand", "scripts/image_ladder_controls",
     "scripts/conductance_local_gate", "scripts/credit_rule_extension",
     "scripts/measured_alignment_power", "scripts/physical_depth_followup",
+    "scripts/supplement_consolidation",
 )
 JOURNAL_ANALYSIS_RECORDS = (
     "ANIMAL_DATA_CONTRACT.md",
@@ -542,11 +543,17 @@ def repository_file_allowed(relative: Path, scope: str | None) -> bool:
         "journal/pytest.ini", "journal/RELEASE_WORKFLOW.md",
         "journal/README.md", "journal/OVERLEAF_README.md",
         "journal/figures/README.md",
-        "journal/credit_first_framework_figure.tex",
-        "journal/source_data/README.md", "journal/source_data/provenance_manifest.tsv",
+                "journal/source_data/README.md", "journal/source_data/provenance_manifest.tsv",
     }:
         return True
+    if name == "journal/configs/supplement_consolidation/contact_sheet.pdf":
+        return False
     if name.startswith("journal/figures/"):
+        if name.startswith(("journal/figures/provenance/structure_restoration_20260908/",
+                            "journal/figures/provenance/credit_clarity_20260908/")):
+            return relative.suffix.lower() in {".json", ".csv"}
+        if name == "journal/figures/provenance/publication_render_environment.json":
+            return True
         canonical = re.fullmatch(r"journal/figures/main/figure_(\d+)\.pdf", name)
         if canonical:
             from build_submission_bundle import MAIN_FIGURES
@@ -554,7 +561,7 @@ def repository_file_allowed(relative: Path, scope: str | None) -> bool:
                 return False
         return relative.suffix.lower() in {".pdf", ".png", ".svg", ".jpg", ".jpeg", ".eps"}
     if name.startswith("journal/supplementary/"):
-        return relative.suffix == ".tex"
+        return name == "journal/supplementary/supplementary.tex" or (name.startswith("journal/supplementary/curated/") and relative.suffix == ".tex")
     if name.startswith("journal/source_data/release_task_identity/"):
         return relative.suffix in {".json", ".csv", ".md"}
     if name.startswith("journal/scripts/inherited_neurips/"):
@@ -589,7 +596,9 @@ def required_article_input_paths(source_root: Path) -> set[str]:
     for directory in JOURNAL_DIRECTORIES:
         for path in (source_root / directory).rglob("*"):
             if path.is_file() and not path.is_symlink() and not excluded(path.relative_to(source_root / directory)):
-                selected.add("journal/" + path.relative_to(source_root).as_posix())
+                relative = Path("journal") / path.relative_to(source_root)
+                if repository_file_allowed(relative, "paper"):
+                    selected.add(relative.as_posix())
     selected.update("journal/scripts/" + name for name in JOURNAL_SCRIPTS)
     selected.update("journal/analysis/" + name for name in JOURNAL_ANALYSIS_RECORDS)
     selected.update(path.as_posix() for path, _ in ARCHIVED_ANALYSIS_SCRIPTS)
@@ -1095,7 +1104,9 @@ configuration, validation, and provenance code from that paper snapshot.
   excluded. Uncommitted files are excluded.
 - `journal_package/`: a separate export of the clean paper repository Git HEAD.
   `journal_package/journal/main.tex` is the article source, and
-  `journal_package/journal/figures/` contains its historical vector components.
+  `journal_package/journal/figures/` contains the current figures and authenticated
+  vector inputs needed to rebuild them. Only the current supplementary TeX
+  modules are included; retired drafts and review contact sheets are excluded.
   This directory is a paper package, not the installable Python implementation.
 - `article_analysis/code/`: standalone regular-tree checks, reconstructed-tree
   analyses, and the portable CAVE/DANDI measured-response pipeline.
@@ -1324,8 +1335,19 @@ Figure reconstruction and PDF assembly also require PyMuPDF, which provides the
 `fitz` module and is not a dependency of the core modeling package:
 
 ```bash
-python -m pip install PyMuPDF
+python -m pip install -c article_analysis/code/release_noise/constraints.txt PyMuPDF
 ```
+
+The CPU replay constraints pin the validated PyMuPDF 1.28.2. The exact package
+versions and font hashes used to render the retained publication figures are
+recorded separately in
+`journal_package/journal/figures/provenance/publication_render_environment.json`;
+that rendering used PyMuPDF 1.28.0. These are distinct environment records.
+`article_analysis/code/release_noise/ENVIRONMENTS.md` maps the scientific
+cohorts to their original source/runtime records and supported replay paths.
+It also documents the fully resolved CPU environment and required external
+fonts. The NumPy 1.26.4 replay environment is distinct from the NumPy 2.2.6
+scientific executions; compatibility checks do not claim identical trajectories.
 
 The core package dependencies are declared in
 `dendritic_modeling/pyproject.toml`. CAVE and NWB retrieval additionally

@@ -297,7 +297,9 @@ def audit_manuscript(
         if r"\ContinuedFloat" not in body:
             figure_number += 1
         labels_in_body = FIGURE_LABEL_RE.findall(body)
-        if len(labels_in_body) != 1:
+        # Multiple unique labels can name the same TeX counter (semantic aliases).
+        # They must not create additional figure/provenance numbers.
+        if not labels_in_body or len(set(labels_in_body)) != len(labels_in_body):
             findings.append(
                 Finding(
                     "error",
@@ -320,6 +322,12 @@ def audit_manuscript(
         for index, label in enumerate(orphan_labels, start=1):
             raw_graphic = orphan_graphics[index - 1] if index <= len(orphan_graphics) else None
             figure_environments.append((index, label, raw_graphic))
+    all_figure_labels = FIGURE_LABEL_RE.findall(text)
+    duplicate_labels = sorted({label for label in all_figure_labels
+                               if all_figure_labels.count(label) > 1})
+    for label in duplicate_labels:
+        findings.append(Finding("error", "figure.duplicate_label",
+                                f"Figure label fig:{label} is defined more than once"))
     labels = [label for _, label, _ in figure_environments]
     references = FIGURE_REF_RE.findall(text)
     supplementary_numbering = (

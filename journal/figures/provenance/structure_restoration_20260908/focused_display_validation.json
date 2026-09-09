@@ -1,0 +1,192 @@
+{
+  "status": "PASS",
+  "created_utc": "2026-09-08T18:50:54.589739+00:00",
+  "new_experiments": 0,
+  "source_and_builder_hash_checks": 51,
+  "figures": [
+    {
+      "figure": 1,
+      "canonical_sha256": "e88e727a5bf188200340e0e1526c1fd8e905957d24a27a2e77f073804b9f2340",
+      "width_pt": 518.4000244140625,
+      "height_pt": 535.0,
+      "panel_letters": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "G"
+      ],
+      "canonical_equals_component": true,
+      "outside_text": [],
+      "layout_findings": []
+    },
+    {
+      "figure": 6,
+      "canonical_sha256": "51487fc04d57f1068d1b9ede05a7794ab092ae815e0515567f2203cd1410d7ef",
+      "width_pt": 518.4000244140625,
+      "height_pt": 535.0,
+      "panel_letters": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F"
+      ],
+      "canonical_equals_component": true,
+      "outside_text": [],
+      "layout_findings": []
+    },
+    {
+      "figure": 7,
+      "canonical_sha256": "05f980389ee115a26ae574aeed36a65b5230c6aaa9ee0cac18cfaadcb9722c02",
+      "width_pt": 518.4000244140625,
+      "height_pt": 493.0,
+      "panel_letters": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F"
+      ],
+      "canonical_equals_component": true,
+      "outside_text": [],
+      "layout_findings": []
+    },
+    {
+      "figure": 9,
+      "canonical_sha256": "a65114dfee3179fe14d818361681a74d86e052b25e2b802a99045ccba7c02ec3",
+      "width_pt": 518.4000244140625,
+      "height_pt": 365.0,
+      "panel_letters": [
+        "A",
+        "B",
+        "C"
+      ],
+      "canonical_equals_component": true,
+      "outside_text": [],
+      "layout_findings": []
+    }
+  ],
+  "unchanged_historical_plot_values": [
+    {
+      "figure": 1,
+      "old_panel": "D",
+      "new_panel": "D",
+      "rows": 12,
+      "columns": 24
+    },
+    {
+      "figure": 1,
+      "old_panel": "E",
+      "new_panel": "E",
+      "rows": 4,
+      "columns": 24
+    },
+    {
+      "figure": 1,
+      "old_panel": "F",
+      "new_panel": "G",
+      "rows": 3,
+      "columns": 24
+    },
+    {
+      "figure": 6,
+      "old_panel": "B",
+      "new_panel": "B",
+      "rows": 9,
+      "columns": 21
+    },
+    {
+      "figure": 6,
+      "old_panel": "C",
+      "new_panel": "C",
+      "rows": 9,
+      "columns": 21
+    },
+    {
+      "figure": 6,
+      "old_panel": "D",
+      "new_panel": "D",
+      "rows": 2400,
+      "columns": 21
+    },
+    {
+      "figure": 6,
+      "old_panel": "E",
+      "new_panel": "E",
+      "rows": 600,
+      "columns": 21
+    },
+    {
+      "figure": 6,
+      "old_panel": "F",
+      "new_panel": "F",
+      "rows": 600,
+      "columns": 21
+    },
+    {
+      "figure": 7,
+      "old_panel": "C",
+      "new_panel": "C",
+      "rows": 16,
+      "columns": 24
+    },
+    {
+      "figure": 7,
+      "old_panel": "D",
+      "new_panel": "D",
+      "rows": 4,
+      "columns": 24
+    },
+    {
+      "figure": 7,
+      "old_panel": "E",
+      "new_panel": "E",
+      "rows": 6,
+      "columns": 24
+    },
+    {
+      "figure": 7,
+      "old_panel": "F",
+      "new_panel": "F",
+      "rows": 6,
+      "columns": 24
+    },
+    {
+      "figure": 9,
+      "old_panel": "A",
+      "new_panel": "A",
+      "rows": 2,
+      "columns": 32
+    },
+    {
+      "figure": 9,
+      "old_panel": "B",
+      "new_panel": "B",
+      "rows": 42,
+      "columns": 32
+    },
+    {
+      "figure": 9,
+      "old_panel": "C",
+      "new_panel": "C",
+      "rows": 125,
+      "columns": 32
+    }
+  ],
+  "capture_new_summary_rows": 8,
+  "capture_underlying_seed_rows": 80,
+  "d1_active_counts": {
+    "180": 7,
+    "400": 7,
+    "600": 2
+  },
+  "surrogate_residual_cells": 47,
+  "surrogate_positive_cells": 38,
+  "root_identifiers_preserved_as_decimal_strings": true,
+  "scope": "Deterministic display selection and recorded-epoch counts; original outcomes and confidence intervals retained. Existing panels compared against HEAD with absolute tolerance1e-12."
+}

@@ -320,3 +320,26 @@ def test_repository_manifest_has_no_missing_or_changed_ready_sources() -> None:
     }
     failures = [finding for finding in findings if finding.code in fatal_codes]
     assert not failures
+
+
+def test_semantic_figure_aliases_keep_one_provenance_number(tmp_path: Path) -> None:
+    graphic = tmp_path / "figure.pdf"
+    graphic.write_bytes(b"fixture")
+    source = tmp_path / "data.csv"
+    source.write_text("x,y\n1,2\n")
+    manifest = tmp_path / "manifest.tsv"
+    _write_manifest(manifest, [
+        _ready_row(source),
+        _ready_row(graphic, entry_id="fig1.asset", record_type="figure_asset", panel="all"),
+    ])
+    manuscript = tmp_path / "main.tex"
+    manuscript.write_text(
+        r"\begin{figure}\includegraphics{" + str(graphic) + "}"
+        r"\caption{One display}\label{fig:current}\label{fig:comparison}\end{figure}"
+        r"See Fig.~\ref{fig:current}."
+    )
+    findings, counts = audit.run_audit(manifest, manuscript, strict_pending=False, check_fonts=False)
+    assert counts["errors"] == 0, findings
+    manuscript.write_text(manuscript.read_text() + r"\label{fig:comparison}")
+    findings, _ = audit.run_audit(manifest, manuscript, strict_pending=False, check_fonts=False)
+    assert "figure.duplicate_label" in {finding.code for finding in findings}

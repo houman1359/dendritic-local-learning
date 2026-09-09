@@ -104,13 +104,26 @@ def build(*, prepare=False):
     for item in layout.get("source_hash_manifests", []):
         saved = json.loads((JOURNAL_ROOT / item["path"]).read_text())
         source_base = JOURNAL_ROOT / item.get("source_base", "")
-        for key in ("source_sha256", "sources_sha256", "builders_sha256", "inputs", "files"):
+        for key in ("source_sha256", "sources_sha256", "builders_sha256", "helper_sha256", "inputs", "files"):
             for source, expected in saved.get(key, {}).items():
                 if sha256(source_base / source) != expected:
                     raise ValueError(f"Source differs from recorded manifest {item['path']}: {source}")
-        if item.get("builder") and saved.get("builder_sha256"):
-            if sha256(JOURNAL_ROOT / item["builder"]) != saved["builder_sha256"]:
+        builder_hashes = saved.get("builder_sha256")
+        if isinstance(builder_hashes, dict):
+            for source, expected in builder_hashes.items():
+                if sha256(JOURNAL_ROOT / source) != expected:
+                    raise ValueError(f"Figure builder changed since recorded rendering: {source}")
+        elif item.get("builder") and builder_hashes:
+            if sha256(JOURNAL_ROOT / item["builder"]) != builder_hashes:
                 raise ValueError(f"Figure builder changed since recorded rendering: {item['builder']}")
+    if layout.get("curation_manifest"):
+        curated = json.loads((JOURNAL_ROOT / layout["curation_manifest"]).read_text())
+        for asset in curated["assets"]:
+            if sha256(JOURNAL_ROOT / asset["path"]) != asset["sha256"]:
+                raise ValueError(f"Curated figure differs from rendering: {asset['path']}")
+            for panel in asset["panels"]:
+                if sha256(JOURNAL_ROOT / panel["source_asset"]) != panel["source_sha256"]:
+                    raise ValueError(f"Curated input panel changed: {panel['source_asset']}")
     for gate in layout.get("completion_gates", []):
         observed = json.loads((JOURNAL_ROOT / gate["path"]).read_text())
         for key, expected in gate["required"].items():

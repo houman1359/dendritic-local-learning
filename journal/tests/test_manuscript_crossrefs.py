@@ -8,15 +8,17 @@ JOURNAL = Path(__file__).resolve().parents[1]
 MAIN = JOURNAL / "main.tex"
 
 MAIN_PANEL_INVENTORY = {
-    "fig:framework": "abcde",
+    "fig:framework": "abcdefg",
     "fig:branchconflict": "abcdef",
-    "fig:subtreefactorial": "abcdef",
+    # Explain the matched-bandwidth effects together, then the separate
+    # coefficient-learning cohort shown in panel D.
+    "fig:subtreefactorial": "abcefd",
     "fig:prospective": "abcdef",
     "fig:conductancecredit": "abcdef",
-    "fig:physicaldepth": "abcde",
-    "fig:topology": "abcde",
+    "fig:physicaldepth": "abcdef",
+    "fig:topology": "abcdef",
     "fig:focal": "abcde",
-    "fig:boundary": "abcde",
+    "fig:boundary": "abc",
 }
 
 FIGURE_BLOCK = re.compile(

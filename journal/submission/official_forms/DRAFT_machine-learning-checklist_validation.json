@@ -2,9 +2,9 @@
   "status": "passed_PyMuPDF_reopen_only_not_author_approval",
   "original_unchanged": true,
   "original_sha256": "bf23bd9bffb3b0f5f6650ceaec66c5dd49b59ea105ea96617ad04180d41f4a14",
-  "draft_sha256": "7dba12c6892b46d097bf9f951054997964b6654e2e45ae0094ffa20c842de616",
-  "script_sha256": "28f90508c64d75695fb521d4c462d0db62a08c4ba9cf3facc14fb325d0eed1f4",
-  "answer_document_sha256": "c87a59caf45ecca4d8d0dea04b3e7d945d90cf6baf3cb6dcde869497d913326a",
+  "draft_sha256": "7d2e8d4fbfd3fcc5232c72edff8e01364d57cabf770cfad9617a85fb27fafb00",
+  "script_sha256": "ad9c2ec8332c919b5c8d97ecfd1ee32bf08cd71a4eb9aff6c46f352013417e9a",
+  "answer_document_sha256": "86eaee25b1e6a96020b45937c8a49981e4a1bacb06056267d17e9de406dcc1e7",
   "original_pages": 3,
   "draft_pages": 3,
   "original_widgets": 81,
@@ -141,9 +141,9 @@
       "page": 2,
       "xref": 126,
       "name": "Yes",
-      "expected_value": "Methods; SI S4-S10; Figs. S33-S52: cohort, finite-label, fixed-template and model-class limits.",
+      "expected_value": "Methods; SI Sections S2-S10: cohort, finite-label, fixed-template and model-class limits.",
       "action": "technical_text",
-      "expected_reopened_value": "Methods; SI S4-S10; Figs. S33-S52: cohort, finite-label, fixed-template and model-class limits.",
+      "expected_reopened_value": "Methods; SI Sections S2-S10: cohort, finite-label, fixed-template and model-class limits.",
       "reopened_value_matches": true
     },
     {
@@ -169,9 +169,9 @@
       "page": 2,
       "xref": 130,
       "name": "Yes-0",
-      "expected_value": "Methods and SI S5-S10; executable preprocessing and response-baseline audit.",
+      "expected_value": "Methods; SI Sections S2/S7-S9: executable preprocessing and response-baseline audit.",
       "action": "technical_text",
-      "expected_reopened_value": "Methods and SI S5-S10; executable preprocessing and response-baseline audit.",
+      "expected_reopened_value": "Methods; SI Sections S2/S7-S9: executable preprocessing and response-baseline audit.",
       "reopened_value_matches": true
     },
     {
@@ -197,9 +197,9 @@
       "page": 2,
       "xref": 134,
       "name": "Yes-1",
-      "expected_value": "Methods: anatomy/response joins; SI S6, S8 and S10; nested target/scan units.",
+      "expected_value": "Methods: anatomy/response joins; SI Sections S7/S9; nested target/scan units.",
       "action": "technical_text",
-      "expected_reopened_value": "Methods: anatomy/response joins; SI S6, S8 and S10; nested target/scan units.",
+      "expected_reopened_value": "Methods: anatomy/response joins; SI Sections S7/S9; nested target/scan units.",
       "reopened_value_matches": true
     },
     {
@@ -254,9 +254,9 @@
       "page": 2,
       "xref": 144,
       "name": "Yes-2",
-      "expected_value": "Methods; SI S4/S5/S10: separate task seeds, calibration and stimulus identities.",
+      "expected_value": "Methods; SI Sections S4/S5/S9/S10: separate task seeds, calibration and stimulus identities.",
       "action": "technical_text",
-      "expected_reopened_value": "Methods; SI S4/S5/S10: separate task seeds, calibration and stimulus identities.",
+      "expected_reopened_value": "Methods; SI Sections S4/S5/S9/S10: separate task seeds, calibration and stimulus identities.",
       "reopened_value_matches": true
     },
     {
@@ -310,9 +310,9 @@
       "page": 2,
       "xref": 152,
       "name": "Yes-4",
-      "expected_value": "SI S4: sealed selections; SI S10: nested training-only tuning and leakage audit.",
+      "expected_value": "SI Sections S4/S5/S10: sealed selections; S2/S9: training-only tuning and leakage audit.",
       "action": "technical_text",
-      "expected_reopened_value": "SI S4: sealed selections; SI S10: nested training-only tuning and leakage audit.",
+      "expected_reopened_value": "SI Sections S4/S5/S10: sealed selections; S2/S9: training-only tuning and leakage audit.",
       "reopened_value_matches": true
     },
     {
@@ -404,9 +404,9 @@
       "page": 3,
       "xref": 166,
       "name": "Yes-7",
-      "expected_value": "MNIST, Fashion-MNIST and CIFAR-10; Methods and SI S5.",
+      "expected_value": "MNIST, Fashion-MNIST and CIFAR-10; Methods and SI Section S2.",
       "action": "technical_text",
-      "expected_reopened_value": "MNIST, Fashion-MNIST and CIFAR-10; Methods and SI S5.",
+      "expected_reopened_value": "MNIST, Fashion-MNIST and CIFAR-10; Methods and SI Section S2.",
       "reopened_value_matches": true
     },
     {
@@ -432,9 +432,9 @@
       "page": 3,
       "xref": 170,
       "name": "Yes-8",
-      "expected_value": "Figs. 1-9/S31/S34-S52: broadcast, rank, decoder-only, point/ridge and privileged target-informed references.",
+      "expected_value": "Figs. 1-9; SI S2-S6/S9-S10: broadcast, rank, decoder-only, point/ridge and target-informed oracles.",
       "action": "technical_text",
-      "expected_reopened_value": "Figs. 1-9/S31/S34-S52: broadcast, rank, decoder-only, point/ridge and privileged target-informed references.",
+      "expected_reopened_value": "Figs. 1-9; SI S2-S6/S9-S10: broadcast, rank, decoder-only, point/ridge and target-informed oracles.",
       "reopened_value_matches": true
     },
     {

@@ -1,0 +1,462 @@
+% Curated from paper commit 7ee9157; original equations and protocol identities retained.
+\section{Interaction structure, compatible trees and spatial credit}
+\label{note:interactions_boolean}
+
+\subsection{Interaction structure at fixed input-sensitivity rank}
+\label{note:interaction_structure}
+
+A tree constrains representation only if its units have restricted input access. A dense trainable leaf-input map can compensate for generic route rotations: if $W=\Phi V$, with orthonormal $K$-column routes $\Phi$, and $Q_r^{\mathsf T}H_T\Phi$ has row rank $r$, a suitable $V$ reproduces every noiseless context in the linear task of Section~\ref{note:prospective_selection}. The algebraic study below instead fixes each input to one named leaf. Its exhaustive capacity analysis was formulated after the prospective-selector outcomes and is a population diagnostic.
+
+To impose local input access, we placed eight independent Rademacher inputs
+(each equally likely to be $-1$ or $+1$) at named leaves of a binary tree.
+For internal node $v$, let $u_{\mathrm L}$ and $u_{\mathrm R}$ be its
+child outputs and let $a_v,b_v,c_v,d_v$ be its four trainable coefficients.
+Each of the seven internal nodes computes
+\begin{equation}
+ u_v=a_v+b_vu_{\mathrm L}+c_vu_{\mathrm R}
+       +d_vu_{\mathrm L}u_{\mathrm R}.
+ \label{eq:s_multiaffine_node}
+\end{equation}
+Only the root is read out. Every candidate has 28 free coefficients and 14
+edges, with no dense input mixing, intermediate readout or access to inputs
+outside a node's subtree.
+The fixed pool combines three shapes---a balanced tree, a comb and a tree
+with a $3+5$ root split---with the same four predetermined leaf permutations,
+giving twelve candidates. Equal edge
+and coefficient counts do not imply equal cable length, latency or biological
+energy cost. These signed algebraic nodes are not conductance compartments.
+
+The primary target census contains all 105 perfect matchings $M$ and all
+35 unordered four-plus-four partitions $A$ of the eight inputs:
+\begin{equation}
+ f_M(\bm x)=\tfrac12\sum_{(i,j)\in M}x_ix_j,
+ \qquad
+ f_A(\bm x)=\tfrac12\left(\prod_{i\in A}x_i+
+                              \prod_{i\notin A}x_i\right).
+ \label{eq:s_interaction_targets}
+\end{equation}
+The targets are enumerated independently of the candidate trees. Evaluating
+all $2^8=256$ equally weighted inputs gives target variances 1 and $1/2$,
+respectively. For the continuous derivative of each target's unique
+multilinear extension,
+\begin{equation}
+ \E[\nabla_{\bm x}f\,\nabla_{\bm x}f^{\mathsf T}]=I_8/4.
+ \label{eq:s_equal_input_sensitivity}
+\end{equation}
+Thus both algebraic and participation-ratio effective rank are eight, and
+the complete input-sensitivity spectrum agrees. This is a property of the
+target, not equality of changing model parameter-gradient or synaptic-credit
+moments. Normalized MSE (NMSE) divides population squared error by the stated
+target variance.
+
+Interaction-tensor descriptions have previously been used to analyze
+structured neural function classes \citep{cohen2016tensor}. The centered
+constant-feature criterion below is derived for the specific local model in
+Eq.~\ref{eq:s_multiaffine_node}.
+
+\subsection{A necessary and sufficient centered-cut condition}
+\label{note:centered_cut_theorem}
+
+For each subset $U$ of input indices, define the Walsh function
+$\chi_U(\bm x)=\prod_{i\in U}x_i$, with $\chi_\emptyset=1$. These
+functions form an orthonormal basis under the uniform input distribution.
+Writing $c_U$ for the coefficient of $\chi_U$ gives
+$f=\sum_U c_U\chi_U$. If $\bm c_f$ and $\bm c_g$ collect the
+coefficients of two functions $f$ and $g$, Parseval's identity gives
+$\E[(f-g)^2]=\|\bm c_f-\bm c_g\|^2$. For the leaf set $S$ of an actual
+subtree, reshape the target coefficients into $C_S$, with row index a subset
+of $S$ and column index a subset of its complement $\bar S$. Let $C_S^\circ$ denote
+this matrix after removing the row for the empty subset of $S$.
+
+\begin{proposition}[Exact representation by a scalar multi-affine tree]
+\label{prop:s_centered_tree_iff}
+For a fixed binary tree with one named Rademacher input at each leaf, a target
+is represented exactly by Eq.~\ref{eq:s_multiaffine_node} and a root-only
+output if and only if $\operatorname{rank}(C_S^\circ)\leq1$ at every proper
+subtree cut.
+\end{proposition}
+
+\begin{proof}
+Every ancestor is affine in a particular child's output, and sibling inputs
+are disjoint. Consequently a represented function can be written
+$g=A(\bm x_{\bar S})+h_S(\bm x_S)B(\bm x_{\bar S})$. Its full cut matrix
+has rank at most two; removing the empty-$S$ row leaves rank at most one.
+This proves necessity.
+
+For sufficiency, call a cut active when $C_S^\circ\ne0$. At each active
+cut, choose a centered function $h_S$ whose
+Fourier coefficients span the column space of $C_S^\circ$, and define
+$V_S=\operatorname{span}\{1,h_S\}$. If $C_S^\circ=0$, take $h_S=0$ and
+$V_S=\operatorname{span}\{1\}$. At a leaf use
+$V_i=\operatorname{span}\{1,x_i\}$. The condition implies
+$f\in V_S\otimes\mathcal H_{\bar S}$, where $\mathcal H$ is the complete
+finite-dimensional function space on the indicated inputs.
+
+For sibling leaf sets $L$ and $R$, the orthogonal projections onto $V_L$
+and $V_R$ commute because
+they act on disjoint input factors. Hence
+$f\in V_L\otimes V_R\otimes\mathcal H_{\overline{L\cup R}}$.
+For a non-root parent $P=L\cup R$ with nonzero centered component, write
+$f=1_P\otimes A+h_P\otimes B$, with $B\ne0$. Contracting the outside
+factor against a linear functional that maps $B$ to one gives
+$h_P+c1_P\in V_L\otimes V_R$, where $c$ is a scalar contributed by $A$. Since the constant function also belongs to
+this product space, so does $h_P$. It is therefore a linear combination of
+$1,h_L,h_R,h_Lh_R$, exactly the four allowed features. Inactive parent
+features are zero and cause no exception. At the root, the complete target
+itself belongs to the product of its children's spaces. Induction supplies
+all local coefficients and proves sufficiency.
+\end{proof}
+
+Retaining the constant feature in every subtree makes this criterion
+stronger than an uncentered rank-two constraint. Let
+$\mathcal T_{\rm proper}$ be the leaf sets of the tree's proper subtrees,
+and let $\sigma_j(C_S^\circ)$ be the singular values in decreasing
+order. The optimal low-rank approximation identity and Parseval then give
+\begin{equation}
+ \operatorname{MSE}(f,g)\geq
+ \max_{S\in\mathcal T_{\rm proper}}
+       \sum_{j\geq2}\sigma_j(C_S^\circ)^2.
+ \label{eq:s_centered_cut_bound}
+\end{equation}
+Taking the maximum preserves a lower bound. Summing tails from overlapping
+cuts instead gives a heuristic score, without the same guarantee. A positive maximum-cut bound need not equal the true optimum.
+The condition applies to actual subtree cuts; the complement of a subtree
+need not itself be a subtree. For the matching $(12)(34)(56)(78)$, an
+even--odd root split has centered tail $0.75$, whereas the full rank-two tail
+is $0.5$. For the two-quartet target with supports $1234$ and $5678$, a
+five-leaf subtree $12345$ has centered tail $0.25$ despite a zero full
+rank-two tail. Supplementary Fig.~\ref{fig:si_scalar_tree_capacity}
+compares both bounds with fitted population error.
+
+The proof requires ancestors to be affine in each child's output. A general
+nonlinear scalar ancestor can generate higher cut rank from one scalar
+feature. Neither the necessity condition nor Eq.~\ref{eq:s_centered_cut_bound}
+therefore applies automatically to a tanh tree or a conductance model.
+
+\subsection{Population fitting, complete-tree construction and depth}
+\label{note:constructive_morphology}
+
+All twelve candidates were fitted to every primary target by 32 alternating
+least-squares (ALS) sweeps with four fixed random restarts. Conditional on the
+other nodes, the design for one node is
+$q(\bm x)[1,u_L,u_R,u_Lu_R]$, where $q$ is the derivative of the root with
+respect to that node's output. The offset is the current root output minus
+$q u_v$. Sweeps alternate postorder and preorder. Hidden mean/scale gauges
+are normalized with exact parent compensation. Every restart and checkpoints
+at 0, 2, 8 and 32 sweeps are retained: 6,720 fits and 26,880 checkpoint rows.
+The endpoint is the smallest achieved NMSE among the four restarts. The difference between this endpoint and
+Eq.~\ref{eq:s_centered_cut_bound} can reflect both incomplete optimization
+and a loose bound, so it is not a certified optimization gap. Full-domain fitting
+has no held-out generalization interpretation.
+
+For score-based selection among the twelve fixed candidates, values within
+$10^{-10}$ are treated as ties and resolved by lexicographic candidate
+identifier. A separately retained summary applies this tolerance to the raw
+floating-point minima without changing any fit.
+The two-sweep pilot fits every candidate; the best-fixed baseline chooses a
+single candidate per family in hindsight. The uniform-random baseline is its
+exact candidate expectation. Family averages and paired shape/assignment
+counts are descriptive censuses, with error comparisons at tolerance
+$10^{-7}$ and no sampling confidence intervals over the enumerated tasks.
+The lower bound is attained within this tolerance in 1,407/1,680 endpoints.
+Although some restarts develop large cancelling coefficients, every case
+selected by a deterministic policy has an existing equivalent restart within
+$10^{-7}$ NMSE whose coefficient norm is at most 2.645752. All original fits,
+including the remaining poorly conditioned case, remain included.
+
+To search beyond the fixed pool, we used an exploratory dynamic program
+over all input subsets. Let $c(S)$ be the normalized cut tail from
+Eq.~\ref{eq:s_centered_cut_bound}, with zero cost at the root and leaves.
+Let $b(S)$ be the smallest achievable maximum cut cost for a subtree on
+leaf set $S$, with base case $b(\{i\})=0$. Then
+\begin{equation}
+ b(S)=\max\left\{c(S),\min_{L\dot\cup R=S}
+                            \max[b(L),b(R)]\right\}.
+ \label{eq:s_tree_minimax_dp}
+\end{equation}
+Every binary tree decomposes into one root split and two independent
+children, so this recurrence covers all trees. A second pass restricts every
+cut to the globally minimal threshold, then minimizes total tail, depth and
+deterministic split ties. Costs are rounded to 12 decimals for numerical
+ties. This corrected two-pass version is retained separately from the first
+exploratory construction and agrees with exhaustive enumeration of all 945
+six-input trees on four random cost tables. At a zero threshold, the theorem
+makes the minimum-depth solution the shallowest exact tree in this class;
+for a positive threshold only the cut score, not fitted error, is optimized.
+
+Dominant left singular vectors of the centered cut matrices define local
+scalar features, and four-feature least squares recovers each node's
+coefficients. All 105 matching and 35 quartic targets reconstruct at minimum
+depth three. A separate positive control uses 24 unique seeded permutations
+$\pi$ of the nested target
+\begin{equation}
+ f_\pi(\bm x)=\tfrac12\sum_{k\in\{2,4,6,8\}}
+                         \prod_{j=1}^k x_{\pi(j)}.
+\end{equation}
+Its rank is eight but its spectrum
+$(1/4,1/4,1/2,1/2,3/4,3/4,1,1)$ differs from the primary families; it is
+constant only within this control family. Every nested target requires
+depth four. An independent depth-constrained recurrence gives minimum
+centered-cut NMSE bound 0.146446609407 at depth at most three and zero at
+depth four. All 164 constructions have NMSE below $7\times10^{-30}$ and
+maximum absolute coefficient one up to rounding
+(Supplementary Fig.~\ref{fig:si_scalar_tree_capacity}). The algorithm
+uses the complete target Fourier tensor: these are exact-target capacity
+certificates, not predictions from limited calibration data.
+
+\subsection{Boolean interactions, scalar tree structure and conditional credit}
+\label{note:boolean_morphology}
+
+We used four-input Boolean functions to make the structural and credit
+questions explicit. The complete domain comprises sixteen equally weighted
+patterns. Writing $b_i=(x_i+1)/2$ for Rademacher inputs $x_i\in\{-1,1\}$, the
+raw labels $y\in\{0,1\}$ are defined below. The symbols $\land$,
+$\lor$ and $\oplus$ denote AND, OR and exclusive OR (XOR), respectively:
+\begin{align}
+ y_{\rm AND}&=b_1\land b_2\land b_3\land b_4,\qquad
+ y_{\rm OR}=b_1\lor b_2\lor b_3\lor b_4,\\
+ y_{\rm parity}&=b_1\oplus b_2\oplus b_3\oplus b_4,\\
+ y_{\rm OR(AND)}&=(b_1\land b_2)\lor(b_3\land b_4),\\
+ y_{\rm XOR(AND)}&=(b_1\land b_2)\oplus(b_3\land b_4),\\
+ y_{\rm AND(XOR)}&=(b_1\oplus b_2)\land(b_3\oplus b_4),\\
+ y_{\rm nested}&=b_1\land\bigl[b_2\lor(b_3\land b_4)\bigr].
+\end{align}
+These are specified mechanistic examples rather than a representative
+sample of natural tasks. The associative AND, OR and parity families control
+for claims that greater depth or a particular input grouping is inherently
+necessary. Task permutations preserve a family's truth-table distribution;
+comparisons between families need not preserve its input-gradient spectrum.
+
+Every candidate has three scalar internal units, twelve trainable
+coefficients and six edges. For child outputs $\ell,r$ and trainable coefficients $a,b,c,d$, each
+unit computes $u=a+b\ell+cr+d\ell r$. Only the root supplies the output. All local coefficients can change during learning. There is no
+additional dense decoder or access to inputs outside a unit's descendant
+subtree. This is the multi-affine algebraic class of
+Proposition~\ref{prop:s_centered_tree_iff}, not a positive-conductance neuron.
+An independent enumeration of all fifteen unordered, rooted, full binary
+trees on four labeled inputs supplies the structural analysis: three balanced
+trees have depth two, and twelve comb trees have depth three. An actual subtree
+cut is evaluated by removing the Fourier row for the constant function
+inside that subtree and retaining the singular-value tail beyond rank one. The maximum cut tail is a lower bound
+on regression MSE for the entire tree; zero tails on every actual cut are
+necessary and sufficient for exact representation in this class. These
+capacity statements do not by themselves establish convergence of a
+particular optimizer or attainability under an additional parameter box.
+
+We distinguish exact truth-value regression from threshold classification.
+Let $\mu_y=\E[y]$ and $\sigma_y=\sqrt{\Var(y)}$ be the mean and
+standard deviation over all sixteen patterns. Training targets are
+$t=(y-\mu_y)/\sigma_y$. Mean squared error on $t$ therefore equals raw-output MSE
+divided by $\operatorname{Var}(y)$. A predicted normalized output $\hat t$
+corresponds to the raw Boolean decision
+$\hat t\geq(0.5-\mu_y)/\sigma_y$. High classification accuracy does not imply
+small regression error, and a positive regression lower bound does not
+establish a classification impossibility. AND and OR are imbalanced: a
+constant majority prediction has accuracy $15/16$. Balanced accuracy averages the true-positive rate (TPR) and true-negative
+rate (TNR), $(\mathrm{TPR}+\mathrm{TNR})/2$, and distinguishes this trivial result from
+accurate decisions on both classes. All sixteen truth patterns contribute
+to each reported population endpoint; they are not independent biological
+replicates.
+
+\begin{proposition}[An explicit Boolean grouping obstruction]
+\label{prop:boolean_xor_and}
+Let $f=(b_1\land b_2)\mathbin{\mathrm{XOR}}(b_3\land b_4)$ on uniform
+independent bits, and let $z=(f-3/8)/\sqrt{15/64}$. A scalar multi-affine
+balanced tree grouped as $(b_1,b_3)\mid(b_2,b_4)$ or
+$(b_1,b_4)\mid(b_2,b_3)$ has population NMSE at least $8/15$ for every
+choice of its coefficients. The aligned grouping
+$(b_1,b_2)\mid(b_3,b_4)$ represents $z$ exactly with coefficients in
+$[-2,2]$.
+\end{proposition}
+\begin{proof}
+For the crossed cut $b_1b_3\mid b_2b_4$, the raw-target centered Walsh matrix,
+with nonconstant inside rows ordered as $x_1,x_3,x_1x_3$, is
+\[
+ C=\frac18\begin{pmatrix}
+ 1&1&-1&-1\\
+ 1&-1&1&-1\\
+ -1&-1&-1&-1
+ \end{pmatrix}.
+\]
+The columns correspond to $1,x_2,x_4,x_2x_4$. Its three orthogonal rows each
+have squared norm $1/16$, so the rank-one tail is exactly $1/8$.
+Dividing by $\operatorname{Var}(f)=15/64$ gives $8/15$; the other crossed
+pairing is symmetric. For the aligned tree, set
+\[
+ u=2b_1b_2-1=\frac{-1+x_1+x_2+x_1x_2}{2},\qquad
+ v=2b_3b_4-1=\frac{-1+x_3+x_4+x_3x_4}{2},\qquad
+ z=\frac{1-4uv}{\sqrt{15}}.
+\]
+The largest absolute coefficient is $4/\sqrt{15}<2$.
+\end{proof}
+
+Exact rational Walsh coefficients were checked for all 105 family--tree pairs. All 49 zero-bound cases were reconstructed by signed Boolean slices and four-corner interpolation: AND, OR and parity admit all fifteen trees; each mixed-gate target admits one. Every normalized construction lies within $[-2,2]$, with maximum absolute coefficient $4/\sqrt{15}$. This verifies existence within the experimental box, independently of optimization.
+
+The OR-of-AND target and the nested target each use two AND gates and one OR
+gate, yet their minimum exact depths are two and three. For the nested
+function, the smallest lower bound among all three balanced trees is
+$(22-2\sqrt{57})/55\simeq0.12546$ NMSE; the stated comb tree is exact.
+All seven functions have input-gradient rank four, but their full spectra
+generally differ. This is a rank-versus-interaction example, not an
+isospectral comparison between the mixed-gate families. The maximum over
+cuts remains a lower bound; we do not assume every incompatible whole tree
+attains it.
+
+\paragraph{Gate coordinates illustrate conditional derivatives.}
+The elementary gates can also illustrate how another branch affects a
+local derivative. In raw Boolean branch-output coordinates
+$u,v\in\{0,1\}$, their multilinear extensions are
+\begin{align}
+ F_{\rm AND}(u,v)&=uv,&\quad \partial_uF_{\rm AND}&=v,\\
+ F_{\rm OR}(u,v)&=u+v-uv,& \partial_uF_{\rm OR}&=1-v,\\
+ F_{\rm XOR}(u,v)&=u+v-2uv,& \partial_uF_{\rm XOR}&=1-2v.
+\end{align}
+The other branch thus gates a derivative's magnitude or sign in these
+canonical coordinates. The XOR-of-AND diagram illustrates this dependence
+and a specific input-grouping constraint. Its gate labels are explanatory;
+the learned units are not constrained to remain Boolean gates or to preserve
+that representation. A broadcast learner can change internal coordinates,
+so the derivative diagram is not a proof that broadcast cannot learn the
+task. Positive affine normalization of the raw target changes derivative
+scale but not these signs. Actual learned update fields and finite-training
+outcomes require the separate experimental comparisons below.
+
+\paragraph{Frozen learning comparisons.}
+Four candidate trees were tested: the three balanced pairings and the comb
+$b_1\mid[b_2\mid(b_3,b_4)]$. These are four of the fifteen trees in the independent
+capacity analysis. Each seed applied one common physical input permutation
+to both the semantic task variables and candidate leaves. Per-family streams
+supplied initialization, a 256-observation training cache, 1,024 independent
+test observations and minibatch indices. All paired tree, optimizer, credit
+and rate conditions shared these streams within family. Data were drawn
+uniformly with replacement from the sixteen patterns; training and test
+labels received independent Gaussian noise of SD 0.15 in normalized-target
+units. Independent draws could repeat the same input pattern.
+
+Every coefficient began from an independent mean-zero Gaussian with SD 0.5,
+except zero biases; no target gates, coefficients or exact-construction
+weights were used. Initial weights and every subsequent update were clipped
+to $[-2,2]$. Training used 2,048 updates, minibatches of 32, and gradient norm
+clipping at ten. Exact credit multiplied each local eligibility by the
+current complete path derivative. Broadcast set the two nonroot internal
+sensitivities to one; root sensitivity remained one under both rules. All
+twelve coefficients were trainable. Stochastic gradient descent (SGD) and Adam were tested separately;
+Adam used $(\beta_1,\beta_2)=(0.9,0.999)$ and $\epsilon=10^{-8}$.
+
+Five development seeds (2026110--2026114) selected a rate separately for each
+optimizer and rule from 0.003, 0.01 and 0.03, minimizing mean final clean
+population NMSE over all seven families and four trees. Ties within
+$10^{-12}$ selected the smaller rate. Adam selected 0.003 for exact credit
+and 0.01 for broadcast; SGD selected 0.03 and 0.01, respectively. These choices were recorded with cryptographic hashes before twenty new
+seeds (2026210--2026229), which
+retained all three rates. The resulting 6,720 fresh fits supplied 53,760
+records at updates 0, 1, 16, 64, 256, 512, 1,024 and 2,048. An implementation check using seed 2026000 exercised all 336 conditions
+and was excluded from inference. These seeds vary initialization,
+permutation and sampled noisy data for seven fixed logical templates;
+they do not sample new Boolean function families.
+
+The primary endpoint was clean population NMSE evaluated on all sixteen
+patterns. No sampled test variance or observed class-frequency denominator
+entered this endpoint. Noisy-test NMSE, raw threshold accuracy and balanced
+accuracy were secondary. Gradient cosines compare the delivered and exact
+aggregate clean-population gradients at each learner's own trained state,
+before clipping or optimizer transformation; they are not mean per-example
+cosines or common-state comparisons between separately trained rules.
+
+Two primary Adam contrasts concerned XOR-of-AND: the mean of the two crossed
+balanced-tree errors minus aligned-tree exact-credit error, and broadcast
+minus exact error on the aligned tree. The latter compares the
+prespecified development-selected recipes, not identical learning rates.
+Ten thousand resamples of twenty paired seed blocks supplied two-sided
+Bonferroni-adjusted 97.5\% intervals for these two contrasts. A positive
+adjusted lower limit and mean improvement of at least 0.01 NMSE were both
+required. Other task, optimizer and common-rate contrasts have descriptive
+pointwise 95\% intervals.
+
+The grouping improvement was 0.56317 NMSE $[0.54914,0.58275]$, satisfying both
+primary criteria. The credit difference was 0.002507
+$[0.001780,0.003318]$: its adjusted interval excluded zero, but it did not
+meet the prespecified 0.01-NMSE mean-effect margin. Both recipes learned the
+aligned XOR-of-AND task well and classified all sixteen patterns correctly
+in every fresh seed. All three same-rate Adam credit differences
+were also below 0.003 NMSE. The low-rate SGD contrast had a wide interval and
+is retained. The larger parity credit differences are descriptive outcomes
+of a prespecified control task, not primary discoveries. Neither the gate
+illustration nor these observations establish an impossibility theorem for
+broadcast learning, or show that a particular change of internal coordinates
+caused its success. Full-rate outcomes, constant-mean and random-candidate
+references, clipping records, weights and source/selection hashes are retained
+under \texttt{source\_data/boolean\_morphology}.
+
+% Explicitly post hoc, specified after reviewing the fresh Boolean results.
+\paragraph{Post hoc diagnostic of local target information.}
+After examining the fresh learning outcomes, we asked how much target
+information was available within each proper input subset $S$. In this
+diagnostic, $f$ denotes a raw Boolean target, $z=(f-\E[f])/\sqrt{\Var(f)}$
+its normalized version, and $\widehat f_U$ its Walsh coefficient on input
+subset $U$. The squared $L^2$ norm below averages over the uniform input
+distribution. We defined
+\[
+ P_S=\big\|\mathbb E[z\mid x_S]\big\|_{L^2}^2
+ =\frac{1}{\operatorname{Var}(f)}
+   \sum_{\emptyset\ne U\subseteq S}\widehat f_U^{\,2}.
+\]
+We cross-checked all ninety-eight task--subset values by exact rational
+evaluation of conditional means on the full truth table. Parity4 has $P_S=0$
+for every proper subset. XOR-of-ANDs instead has $P_S=1/5$ for every two-input
+subset, including compatible and crossed pairs. Thus this diagnostic quantifies
+accessible lower-order target information rather than grouping compatibility.
+
+Let $F$ denote the model's normalized prediction. At fixed parameters, a
+local eligibility $e_S(x_S)$ at a nonroot subtree is a
+function only of that subtree's inputs. Conditional expectation gives
+$\mathbb E[ze_S]=\mathbb E[\mathbb E[z\mid x_S]e_S]$; when $P_S=0$, the direct
+target contribution to the population broadcast update
+$\mathbb E[(F-z)e_S]$ vanishes. This identity does not imply an inability to
+learn: label-dependent changes in root coefficients can subsequently affect
+$F$, and finite training samples and stochastic updates need not exhibit exact
+population cancellation. The diagnostic was added after observing the learning
+results and did not change the training protocol or its predeclared criteria.
+\subsection{Learning compatible trees with exact and restricted credit}
+\label{note:morphology_credit_learning}
+
+To separate credit assignment from uncertainty in structure estimation, this experiment supplied a tree compatible with the full target. Three development seeds and twenty fresh seeds generated independent signed and permuted matching, quartet and nested-interaction targets. The complete target Fourier tensor supplied a compatible tree through the preceding dynamic program; no target-derived coefficients initialize learning. An independent permutation of leaf labels preserved the exact shape, 28 coefficients and 14 edges. Chance compatible permutations were retained. The primary matching and quartet families retained identical input-sensitivity spectra, while the nested family had the previously stated anisotropic spectrum.
+
+All seven internal units initialized their non-bias coefficients independently from $\mathcal N(0,0.5^2)$, with zero biases. The same initial coefficients, training cache and minibatch draws were used across paired assignments, credit rules and optimizers. Local features were $(1,u_L,u_R,u_Lu_R)$ and the exact path derivative $q_v=\partial u_{\rm root}/\partial u_v$ supplied credit. Exact gradients agreed with central finite differences for every coefficient in all three families. Root sensitivity was one under every rule. The six nonroot internal units received either the exact field, a unit root broadcast, the orthogonal projection onto a single constant profile, or the projection onto two proximal-subtree indicator profiles. A size-matched permutation of the latter profiles served as a control. All projected coefficients were computed from the current exact field and are therefore oracle coefficients; the experiment did not learn a circuit estimator for them.
+
+Training used 2,048 independently sampled Rademacher examples with output noise SD~0.15 and 1,024 minibatch updates of size~64. The gradient corresponded to half-MSE divided by the known clean target variance. Stochastic gradient descent (SGD) and Adam ($\beta_1=0.9,\beta_2=0.999$, $\epsilon=10^{-8}$) each tested learning rates 0.003, 0.01 and 0.03. Update gradients were clipped at norm~10 and parameters projected to $[-2,2]$, which contains all exact constructions. Every clipping/projection count was recorded. These are constrained finite-horizon training results, not estimates of unrestricted optimization optima.
+
+A separate learning rate for each optimizer and rule minimized mean development population NMSE over all families and both assignments. A common rate per optimizer was also selected on development. All choices were recorded with cryptographic hashes before any fresh fit; all three rates remain in the released outcomes. Every SGD rule selected the upper tested rate, so the grid does not establish its best attainable optimizer setting. The independent test set contained 4,096 examples with fresh SD~0.15 output noise. Test NMSE, normalized by the clean target variance, was primary; noiseless population NMSE on all 256 inputs was secondary. Evaluation at steps 0, 1, 16, 64, 256 and 1,024 retained 21,600 checkpoint rows from 3,600 fresh fits. The endpoints at the development-selected rates contained 1,200 fits. No run was excluded. Ten thousand bootstrap samples of twenty whole paired seed blocks were drawn for pointwise 95\% intervals, averaging families within seed for pooled contrasts. Multiple subgroup intervals are descriptive, not separately multiplicity-adjusted discoveries.
+
+Exact credit strongly improves learning of compatible quartet and nested targets under both frozen optimizer recipes. Broadcast is already effective for matching targets and outperforms exact credit there under SGD. Restricted two-subtree projections help in some Adam conditions but do not consistently beat shuffled profiles, and have essentially no pooled advantage over broadcast under SGD. For compatible trees trained with exact credit and Adam, mean test NMSE was 0.0329; permuting the input labels increased it to 0.6080. At the common Adam rate 0.01, the compatible exact/broadcast averages remain 0.0329/0.5973. Supplementary Fig.~\ref{fig:si_oracle_profile_credit} reports the full family, optimizer, profile, assignment and rate controls. Numerical outcomes and source/selection hashes are in \texttt{source\_data/morphology\_credit/}.
+\subsection{Matched fixed-profile learning and credit-field geometry}
+
+This experiment separates forward compatibility, spatial profile calibration and learning. This matched cohort retains the seven-unit model, 28 coefficients and compatible constructions above, specializing hierarchical tensor representations to scalar messages \citep{hackbusch2009tensor,grasedyck2010hierarchical}. Pairwise and quartic targets share a balanced tree and seed-specific leaf permutation. Independent coefficient signs have magnitude one-half; both input moments equal $I_8/4$, while target variances are one and one-half. The nested target uses its separate compatible tree and anisotropic spectrum.
+
+Let $q_n(x)=\partial u_0/\partial u_n$ be the exact path derivative for unit $n$, and let $\delta(x)$ be the scalar derivative of normalized half-squared error with respect to root output. Local coefficient eligibilities are $1,u_L,u_R,u_Lu_R$. Exact credit multiplies these by $\delta q_n$. Unit broadcast replaces $q_n$ by one. An initially calibrated profile uses $a_n=256^{-1}\sum_x q_n(x)$ over 256 unlabeled initialization examples, then keeps $a_n$ fixed. The sign control retains only $\operatorname{sign}(a_n)$. Profiles require no target labels. Learning-rate choices are separate from the profile calculation. Fixed positive coordinate scaling largely cancels under Adam, so calibrated and sign-only Adam trajectories are expected to be nearly identical; they are not independent mechanistic confirmations.
+
+The protocol preceded three disjoint development seeds, with the same rate grid for each rule and optimizer. Separate rule-specific and common rates minimized final validation NMSE across families and were sealed before twenty paired fresh seeds. Matching/quartic conditions share initialization, calibration, examples, noise and minibatches. The Adam primary contrast is the quartic-minus-pairwise difference in initial-profile-minus-exact held-out error. All selected/common-rate unions are retained: 432 development, 1,200 fresh fits, and 48 excluded short checks.
+
+Algebraic train/validation/test sizes are 2,048/1,024/4,096; minibatches have 64 examples. Nonbias coefficients initialize independently with Gaussian SD 0.5 and biases zero. Both SGD and Adam test 0.003/0.01/0.03; Adam uses $(0.9,0.999)$ and $\epsilon=10^{-8}$. Fits retain norm clipping ten, box $[-2,2]$, all contacts and steps 0, 1, 16, 64, 256, 512 and 1,024. Label-noise SD 0.15 gives NMSE floors 0.0225 for matching/nested and 0.045 for quartic; normalized half-MSE uses each family's clean variance. All poorly fitted exact endpoints remain. Pointwise intervals use 10,000 whole-seed draws.
+
+The separate positive-conductance comparison uses the compatible sixteen-parameter teacher of Section~\ref{sec:conductance_grouping_bridge}, not the algebraic quartic target. Data sizes are 1,024/1,024/4,096 without label noise, box $[-5,5]$, SGD rates 0.001/0.003/0.01 and Adam rates 0.003/0.01/0.03.
+
+For each saved state, let $Q$ have one row per evaluation example and six columns containing $q_n$. For a dictionary $A$, energy capture is $\|QP_A\|_F^2/\|Q\|_F^2$, where $P_A$ is its orthogonal projector. The best fixed rank-one profile is the leading right singular vector of $Q$, with capture $\sigma_1(Q)^2/\sum_j\sigma_j(Q)^2$. Its profile and per-example amplitudes are oracle fits. The uncentered second moment is $C=Q^{\mathsf T}Q/N$, and participation-ratio effective rank is $(\operatorname{tr}C)^2/\operatorname{tr}(C^2)$. We additionally evaluated unit broadcast, the fixed initial profile, ancestry spans, full-rank capture, and loss-error-weighted fields $\operatorname{diag}(\delta)Q$. The latter has its own optimal profile; applying the path-optimal profile after error weighting answers a different question.
+
+Eligibility-weighted reconstruction multiplies exact and projected path fields by their local coefficient features before comparing parameter updates. Site-normalized spectra divide each path coordinate by its root-mean-square magnitude, exposing sensitivity to fixed coordinate scaling. Raw capture energies are not invariant to arbitrary hidden-unit rescaling. At identical weights and inputs, $Q$ is independent of the target; a scalar residual also cancels from normalized per-example projection capture whenever it is nonzero. Eighty common-state relabeling controls verify that identity. These diagnostics characterize learned-state geometry, rather than infer a task-only credit rank at initialization.
+
+An independent saved-state audit checked 20,160 metrics and 120 matching--quartic pairing identities. For the earlier cohort whose states had not been stored, replay reconstructed 3,600 checkpoints and matched 28,800 archived metrics within $9\times10^{-16}$. These are reconstructed states, distinguished from the directly archived matched-cohort checkpoints. Source Data retain the complete numerical audit.
+
+The positive-conductance comparison uses the prior compatible teacher across three paired input permutations and the same credit definitions. It does not implement the algebraic quartic target. All four rules learn it accurately with Adam; exact credit has mean NMSE $9.39\times10^{-6}$, compared with $1.35\times10^{-6}$ for the fixed-profile controls. Positive path derivatives make sign and unit broadcasting identical. Both models' local updates were independently checked by finite differences. Protocols, selections, checkpoints, full trajectories, numerical audits and scripts are supplied in \texttt{source\_data/credit\_rule\_bridge/}, \texttt{source\_data/credit\_resolution\_bridge/} and their corresponding script directories.
+\subsection{Balanced extension of the matched credit-rule comparison}
+\label{sec:credit_rule_extension}
+
+After examining the released 1,024-update outcomes, we froze and committed a longer-budget protocol before running any extended trajectories. This is a protocol-led extension of previously observed seed blocks, not a fresh confirmatory cohort. All 720 algebraic trajectories were retained: twenty seed blocks, three task families, four delivery rules, Adam and SGD, and the union of the original development-selected and common rates. Matching and quartic targets retain the same balanced tree, initialization and example streams; nested targets retain their separately compatible trees. No rates were retuned.
+
+Every trajectory was replayed from initialization and run for exactly 16,384 updates, preserving examples, minibatches, local rules, gradient clipping and coefficient bounds $[-2,2]$. All original checkpoint arrays, numerical curves and diagnostics through 1,024 updates reproduced. Additional observations occurred every 256 updates after 1,024. Terminal outcomes at 1,024, 4,096, 8,192 and 16,384 updates preserve the original endpoint definition. Secondary states minimized validation NMSE over the declared observations within each budget, with ties assigned to the earlier checkpoint. Test and full-domain population errors were used only for reporting. Independent recomputation of all 5,760 budget-outcome rows from saved weights reproduced test, validation and population NMSE exactly; all 2,880 validation-only selections were checked.
+
+All twenty selected-rate Adam exact quartic fits reached the test noise floor by 4,096 updates, resolving three slow 1,024-update outcomes. By that budget exact pairwise credit also had slightly lower mean error than the initial profile, with eighteen of twenty exact wins. The original pairwise mean ordering reflected slow exact seeds, despite exact credit winning fifteen of twenty initial pairs. Compact endpoints are in Supplementary Table~\ref{tab:credit_rule_extension_endpoints}.
+
+At 16,384 updates, the selected-rate calibrated-minus-exact quartic-minus-pairwise interaction was 0.9516 (95\% paired interval, 0.8829--1.0123) for terminal states and 0.7903 (0.6915--0.8797) for validation-selected states. Corresponding common-rate effects were 0.9028 and 0.7952. All four contrasts were positive in every seed. Intervals use 10,000 whole-seed bootstrap draws and are descriptive because the original outcomes were already known.
+
+The comparisons remain constrained by time, parameter bounds and historical rates. Every selected-rate Adam initial-profile trajectory had contacted a coefficient bound by 16,384, whereas none of the corresponding exact trajectories had. Validation-selected initial-profile states still had substantial quartic and nested error, and the full record retains clipping and bound events. Extended exact-trained path fields remained almost one-dimensional for pairwise targets but multidirectional for quartic and nested targets; the original main-figure capture analysis is retained unchanged. These results strengthen the fixed-budget contrast and explain the slow exact runs, without proving that a bounded fixed profile fails under every optimizer or that full compartment resolution is uniquely necessary.

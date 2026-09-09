@@ -1,0 +1,95 @@
+% Curated from paper commit 7ee9157; generators and exclusions retained.
+\section{Image benchmarks and feedback controls}
+\label{note:credit_images}
+\label{note:artificial}
+
+\subsection{Shared architecture, data and local optimization}
+
+The MNIST core contains one dendritic population of 128 neurons, with no separate inhibitory-cell population. Each neuron has a soma, three proximal compartments and nine distal compartments, denoted $[3,3]$. Separate TopK arrays select 40 excitatory and 20 inhibitory contacts from the 784 pixels at each nonsomatic compartment. There are no somatic input synapses: 92,160 active contacts are selected from 2,408,448 candidate synaptic parameters. Inactive local weights are not updated. Softplus transforms enforce nonnegative synaptic and coupling parameters. A linear $128\times10$ decoder gives ten class scores. The complete network has 2,414,602 parameter slots, including 1,290 decoder parameters.
+
+Pixels are divided by 255 and flattened without additional normalization or augmentation. Each seed divides the 60,000 official training images into 48,000 fitting and 12,000 validation examples; the official 10,000-image test set is held out. The shared MNIST recipe uses three-factor local eligibility, batches of 256, 180 epochs and Adam with $(\beta_1,\beta_2,\epsilon)=(0.9,0.999,10^{-8})$, without weight decay or mixed precision. After minibatch averaging, input, coupling, reactivation and decoder gradients are clipped elementwise to $[-5,5]$. Their original learning rates are $1.5\times10^{-3}$, $7\times10^{-4}$, $5\times10^{-4}$ and $1.5\times10^{-3}$, respectively. Early stopping is disabled and minimum validation loss selects the retained checkpoint. Deterministic PyTorch settings disable TF32 and cuDNN benchmarking and use the highest float32 matrix-multiplication precision.
+
+Every compartment uses the learned output nonlinearity
+\begin{equation}
+f_n(V)=\frac{\tanh[m_n(V-b_n)]+1}{2},\qquad
+f_n'(V)=\frac{m_n}{2}\{1-\tanh^2[m_n(V-b_n)]\},
+\label{eq:s_parametric_tanh}
+\end{equation}
+where $m_n$ and $b_n$ are slope and midpoint. Shunting trees use analytical initialization. Raw-additive trees use the prespecified occupancy-quantile policy: empirical voltage quantiles 0.1 and 0.9 map to outputs 0.1 and 0.9, with minimum quantile width $10^{-3}$, maximum slope 50 and reversion on an invalid fit. The comparisons therefore retain the architecture-specific initialization policies, not identical initial voltage scales.
+
+\subsection{Additive controls and gradient coordinates}
+
+The raw-additive alias \texttt{dendritic\_additive} disables both shunting and additive normalization. Its current sums and local derivatives are
+\begin{align}
+J_n^{\mathrm E,\mathrm{add}}&=\sum_{i\in\mathcal S_n^{\mathrm E}}g_i^{\mathrm E}x_i^{\mathrm E},&
+J_n^{\mathrm I,\mathrm{add}}&=\sum_{j\in\mathcal S_n^{\mathrm I}}g_j^{\mathrm I}x_j^{\mathrm I},\\
+J_n^{\mathrm{child},\mathrm{add}}&=\sum_{c\in\mathcal C_n}g_{c\to n}^{\mathrm{den}}a_c,&
+V_n^{\mathrm{add}}&=J_n^{\mathrm E,\mathrm{add}}-J_n^{\mathrm I,\mathrm{add}}+J_n^{\mathrm{child},\mathrm{add}},
+\label{eq:s_additive_forward}
+\end{align}
+with $a_n=f_n(V_n^{\mathrm{add}})$, and
+\begin{equation}
+\frac{\partial V_n^{\mathrm{add}}}{\partial g_i^{\mathrm E}}=x_i^{\mathrm E},\quad
+\frac{\partial V_n^{\mathrm{add}}}{\partial g_j^{\mathrm I}}=-x_j^{\mathrm I},\quad
+\frac{\partial V_n^{\mathrm{add}}}{\partial g_{c\to n}^{\mathrm{den}}}=a_c,\quad
+\delta_c^V=\delta_n^Vg_{c\to n}^{\mathrm{den}}f_c'(V_c).
+\label{eq:s_additive_derivatives}
+\end{equation}
+Inhibition contributes a subtractive current, not a negative conductance. Raw-parameter gradients include the softplus derivative. The inherited normalized-additive control instead standardizes each example across a stage's output coordinates. With $Z_{sn}=J_{sn}^{\mathrm E,\mathrm{add}}-J_{sn}^{\mathrm I,\mathrm{add}}+J_{sn}^{\mathrm{child},\mathrm{add}}$, it uses
+\begin{equation}
+V_{sn}^{\mathrm{norm}}=\frac{Z_{sn}-\langle Z_{s\cdot}\rangle_n}{\operatorname{sd}_n(Z_{s\cdot})+\epsilon},
+\qquad a_{sn}=\frac{\tanh(0.1V_{sn}^{\mathrm{norm}})+1}{2}.
+\label{eq:s_historical_normalized_additive}
+\end{equation}
+Its fixed slope and midpoint are 0.1 and zero. Because this changes forward computation, its outcomes are not pooled with raw-additive results.
+
+The fresh dictionary experiment routes errors of compartment output activation; $f'_n$ remains in local eligibility, including gate-parameter derivatives. Neuron-specific feedback repeats each exact somatic error within that tree. The projected $K=1$ rule averages exact activation errors over all twelve nonsomatic compartments; $K=3$ averages them separately within each proximal compartment and its three children. Both acquire coefficients from the same exact field and preserve its common mean at identical weights, but need not preserve equal field norms. Their somatic error remains exact. Strict scalar instead reduces the neuronal error vector at every core stage, including the soma, using Eq.~\ref{eq:s_scalar_reduction}. Exact transport retains every compartment error. The linear decoder receives exact gradients in all arms. Decoder-only learning suppresses core and gate gradient writeback; initial/final core hashes verify the intended freeze. These projected comparisons test delivery capacity with oracle coefficients.
+
+\subsection{Fresh dictionary controls and retained image cohorts}
+
+The six-rule MNIST experiment compares common rate multipliers $0.3,1,3$. Three development seeds per architecture, rule and multiplier give 108 fits. A separately frozen addendum specified projected $K=1$ before fresh outcomes, with the same tuning procedure. Mean minimum validation loss selects each rule's multiplier. Ten new paired seeds per architecture and rule then test the selected rate and, when different, the original multiplier one. Coincident conditions reuse a fit, giving 190 unique fresh fits; twelve three-epoch canaries are excluded. Pairing covers initialization, contacts, splits and minibatches. Descriptive intervals use 50,000 whole-seed bootstrap draws. Full configurations and seed endpoints are in \texttt{source\_data/image\_ladder\_controls/}.
+
+Capture was measured at initial and exact-trained checkpoints on the first 2,048 official test images. For each example/neuron, the field comprises twelve nonsomatic errors. The primary endpoint averages nonzero field-wise squared-energy ratios; aggregate energy capture is also retained. Activation-space capture matches the trained projections, while voltage-space capture preserves the earlier diagnostic coordinate. Two historical checkpoints reproduced their recorded voltage captures to numerical precision; instrumentation left outputs unchanged. In the earlier fifteen-seed cohort, moving from one to three profiles increased mean voltage-credit capture from 0.480 to 0.625 in shunting trees and from 0.519 to 0.718 in additive trees. These values describe a separate cohort and coordinate from the activation-error capture in main Fig.~1F.
+
+The original MNIST ladder uses seeds 42--56: strict scalar, neuron-specific and exact credit in both architectures give 90 fits; matched-width scalar fallback adds 30. The latter differs from strict scalar in a small near-somatic parameter group, as quantified in Section~\ref{note:rules}. These consistently executed runs replace the superseded mixed-source set; the replacement decision preceded outcome inspection. The independent direct-feedback-alignment factorial uses fifteen paired seeds per dynamics and 120 new fits with frozen exact-readout references. A seed-fixed Gaussian output-to-neuron matrix, scaled by inverse square root of output dimension, replaces the decoder derivative. Ownership controls permute neuronal recipients without changing values or bandwidth.
+
+Fashion-MNIST retains the MNIST architecture, contacts, optimizer, initialization and 180-epoch budget without retuning. Seeds 10200--10209 pair 48,000/12,000 fitting/validation images and the 10,000-image official test set. Sixty fits cross two architectures with matched-width scalar fallback, neuron-specific and exact fields. Neuron-specific-minus-fallback accuracy is 4.46 percentage points (95\% interval 4.09--4.88) for shunting and 3.78 (3.43--4.14) for additive trees; all ten differences are positive in each. Exact-minus-neuron-specific differences are $-0.11$ ($-0.21$ to $-0.01$; 2/10 positive) and 0.13 ($-0.08$ to 0.35; 8/10). The prespecified neuronal-identity criterion required at least 8/10 positive differences and an interval above zero in each architecture. All sixty fits were complete and finite without feedback fallbacks. Full means and tests remain in \texttt{source\_data/fashion\_feedback\_ladder/}.
+
+\subsection{CIFAR-10 and exact-gradient validation}
+
+The raw-additive CIFAR-10 cohort uses flattened images, no augmentation or normalization, a 90:10 training/validation split, one 20-soma $[3,3,3,3]$ population, 25 contacts of each sign per branch and a 20--32--16--10 decoder. The realized \texttt{input\_mode=1} model has direct excitatory/inhibitory inputs and no inhibitory-cell population. A validation-only BP screen jointly selected adaptive initialization and empirical stage calibration from three batches; it cannot attribute their benefit separately. A provisional configuration with mean BP accuracy 38.98\% was excluded for an inadequate operating point. The selected three-seed calibration reached 49.960\% validation and 49.723\% test accuracy. A separate five-seed check reproduced normalized-additive and shunting reference endpoints to within 0.026 percentage points.
+
+All four fresh rules use Adam at $10^{-3}$, batch size 256, at most 200 epochs, patience 40 and the validation-best checkpoint. Weight decay is zero; the separate 0.01 configuration field controls sparse-weight maintenance. Seeds 10800--10819 give eighty finite, complete fits. Mean accuracies are 0.34472 (strict scalar), 0.50865 (neuron-specific), 0.50006 (exact path) and 0.50122 (matched BP). The exact-minus-neuron-specific difference is $-0.00859$ (95\% interval $-0.01171$ to $-0.00547$; 2/20 positive), so the exact-path superiority criteria fail. Exact-minus-BP is $-0.00115$ ($-0.00457$ to 0.00226), with two one-sided tests supporting equivalence within $\pm0.01$ (90\% interval $-0.00398$ to 0.00167; $P=1.58\times10^{-5}$). This is a compact transfer assay, not a competitive vision benchmark.
+
+A separate five-seed exact-transport factorial (42--46) crosses three-/five-factor rules with local/BP decoder updates over 200 epochs and a ReLU core output. Local rates for input, coupling, reactivation and decoder are $1.5\times10^{-3},7\times10^{-4},5\times10^{-4},1.5\times10^{-3}$; matched BP uses $10^{-3},5\times10^{-4},5\times10^{-4},10^{-3}$. Analytic and automatic gradients were compared in 100 diagnostic runs: median relative error $7.43\times10^{-8}$, maximum $1.88\times10^{-7}$, with parameter tensors as diagnostic units. The architectures and method-specific rates above distinguish these protocols.
+
+\subsection{Depth, ownership and input-map controls}
+
+The original depth-by-feedback factorial crosses two tasks, two cores, stages D1--D4, three local fields plus BP and ten seeds: 640 planned fits. Completeness requires the specified seed/configuration, checkpoint and full curves, expected stages, nondegenerate couplings, finite metrics and no transport-shape fallback. All completed, but a later outcome-independent validity check excludes 160 synthetic-noise shunting fits with signed conductance drive. The retained 480 fits contain both cores on MNIST and additive noise-task models. Depth changes compartment and parameter count. The ownership comparison at D2/D4 retains 120/160 fits after the same exclusion. A 400-fit inhibitory-dose family is entirely excluded from inference because its primary shunting contrast uses invalid signed input, although configurations and exclusion records remain available.
+
+The clean exact/BP rerun instead uses valid inputs: two tasks, two cores, four depths, two methods and seeds 42--51 give 320 fits. Shunting uses explicit ReLU transfer; additive noise inputs remain signed. Source commits are \texttt{74792ca9} for implementation and \texttt{4f3612a5} for the nested generator. All 320 fits are finite and complete; 42 use streaming evaluation of a terminal metric. Failed attempts with missing generator code, insufficient memory or rejected signed shunting have no included endpoint. Re-executed configurations retain their scientific settings. Comparisons first average four depths within each seed, then use 20,000 paired bootstrap draws and descriptive Wilcoxon tests. Across all 160 method pairs, mean exact-minus-BP accuracy is $-0.0545$ points; the largest absolute pair difference is 5.90 points. This does not establish pointwise equality.
+
+The spatial-input control uses depth four, 21 contacts per distal branch and 320 planned fits. Spatial branches recursively partition the $28\times28$ feature plane into sixteen disjoint regions; random branches sample all 784 coordinates. The 240 conductance-valid fits cross maps, methods, cores and tasks; the noise task retains only additive models. Persistence under BP and random task projection identifies a forward input-coverage effect. A separate 320-fit noise comparison holds sixteen terminal branches and 960, 960, 968 or 960 active contacts per soma across D1--D4; it retains 160 additive fits. Compartments, couplings and reactivation parameters still increase with depth.
+
+At 120 valid BP checkpoints, a fixed held-out batch compares scalar fallback, neuron-specific and exact fields using nonsomatic stages and trainable branch parameters only. Outcomes are optimally scaled field capture, eligibility-weighted gradient capture/cosine and norm-matched loss change. Relative step $10^{-5}$ is primary; $10^{-6},10^{-4},10^{-3}$ are sensitivity values. Checkpoints are neither updated nor selected by this diagnostic, and bootstrap resampling preserves paired fields. Complete controls and validity accounting accompany the figure-linked Source Data.
+
+\subsection{Identity of the historical noise tasks}
+
+The key \texttt{noise\_resilience} named two generators. The clean rerun's recovered source, commit \texttt{4f3612a5}, draws class $y$ uniformly from $\{0,1,2\}$ and constructs a square image $L_y$: blank, a uniformly selected horizontal row of ones, or a uniformly selected vertical column of ones. It returns
+\begin{equation}
+x=\operatorname{vec}(L_y+0.2\varepsilon),\qquad
+\varepsilon_{ab}\overset{\mathrm{iid}}{\sim}\mathcal N(0,1).
+\label{eq:legacy_noisy_lines}
+\end{equation}
+The executed dispatcher's default side length is 784, giving 614,656 inputs, independently confirmed by checkpoint sizes. Its 10,000 unnormalized, unclipped examples split into 8,000/1,000/1,000 fitting/validation/test samples using run-seeded generators. Projected-noise fields in launch configurations were ignored. Thus these rows test implementation agreement on three classes, not corrupted-MNIST robustness.
+
+The documented prospective depth/routing/dose/fixed-budget protocol instead perturbs MNIST digits as
+\begin{equation}
+\widetilde x=\operatorname{clip}_{[0,1]}(x+1.5Pz),\qquad z\sim\mathcal N(0,I_{50}),
+\label{eq:projected_noise_mnist}
+\end{equation}
+where $x\in[0,1]^{784}$, $P\in\mathbb R^{784\times50}$ has independent normal entries and unit-norm columns, and digit labels are unchanged. Projection seed is zero; training/validation/test latent-noise seeds are 1/2/3. The intended splits are 48,000/12,000/10,000 without further gain or normalization. Frozen configurations and model sizes support this intended protocol, but no hash of the executed nested generator survives. The fixed-budget outcome/validity join also lacks raw resolved configurations and does not close that gap.
+
+Inherited aggregate feedback/gradient panels lack a complete run-to-generator join. Twenty-six historical shunting points remain unresolved and are excluded from conductance-valid figures and inference; neither generator is assigned to them retrospectively. The fixed-budget audit retains 160 additive and excludes 160 signed-shunting outcomes. The release exposes \texttt{legacy\_noisy\_lines} and \texttt{projected\_noise\_mnist} separately and rejects the ambiguous key without explicit choice. The latter is a frozen implementation of the documented protocol, not recovered historical execution. See \texttt{source\_data/release\_task\_identity/task\_identity.json} and \texttt{source\_data/review\_curve\_lineage/}.
+
+Inherited regime sweeps use five seeds per condition; Gaussian broadcast noise is scaled relative to the original teaching signal, and depth varies at fixed somatic width. Their normalized-additive, raw-additive and shunting variants remain separate. They test operating regimes, not isolated backward effects of inhibition.

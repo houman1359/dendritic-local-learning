@@ -26,6 +26,13 @@ Yurii Nesterov.
 \newblock Springer, 2004.
 \newblock \doi{10.1007/978-1-4419-8853-9}.
 
+\bibitem[Cichon and Gan(2015)]{cichon2015branch}
+Joseph Cichon and Wen-Biao Gan.
+\newblock Branch-specific dendritic ca2+ spikes cause persistent synaptic
+  plasticity.
+\newblock \emph{Nature}, 520:\penalty0 180--185, 2015.
+\newblock \doi{10.1038/nature14251}.
+
 \bibitem[Cohen et~al.(2016)Cohen, Sharir, and Shashua]{cohen2016tensor}
 Nadav Cohen, Or~Sharir, and Amnon Shashua.
 \newblock On the expressive power of deep learning: A tensor analysis.
@@ -33,21 +40,6 @@ Nadav Cohen, Or~Sharir, and Amnon Shashua.
   volume~49 of \emph{Proceedings of Machine Learning Research}, pages 698--728,
   2016.
 \newblock URL \url{https://proceedings.mlr.press/v49/cohen16.html}.
-
-\bibitem[Lampinen and Ganguli(2019)]{lampinen2019generalization}
-Andrew~K. Lampinen and Surya Ganguli.
-\newblock An analytic theory of generalization dynamics and transfer learning
-  in deep linear networks.
-\newblock In \emph{International Conference on Learning Representations}, 2019.
-\newblock URL \url{https://openreview.net/forum?id=ryfMLoCqtQ}.
-
-\bibitem[Canatar et~al.(2021)Canatar, Bordelon, and
-  Pehlevan]{canatar2021spectral}
-Abdulkadir Canatar, Blake Bordelon, and Cengiz Pehlevan.
-\newblock Spectral bias and task-model alignment explain generalization in
-  kernel regression and infinitely wide neural networks.
-\newblock \emph{Nature Communications}, 12:\penalty0 2914, 2021.
-\newblock \doi{10.1038/s41467-021-23103-1}.
 
 \bibitem[Hackbusch and K{\"u}hn(2009)]{hackbusch2009tensor}
 Wolfgang Hackbusch and Stefan K{\"u}hn.
@@ -93,11 +85,19 @@ Matan Gavish, Boaz Nadler, and Ronald~R. Coifman.
   Learning}, 2010.
 \newblock URL \url{https://icml.cc/Conferences/2010/papers/137.pdf}.
 
-\bibitem[Cichon and Gan(2015)]{cichon2015branch}
-Joseph Cichon and Wen-Biao Gan.
-\newblock Branch-specific dendritic ca2+ spikes cause persistent synaptic
-  plasticity.
-\newblock \emph{Nature}, 520:\penalty0 180--185, 2015.
-\newblock \doi{10.1038/nature14251}.
+\bibitem[Lampinen and Ganguli(2019)]{lampinen2019generalization}
+Andrew~K. Lampinen and Surya Ganguli.
+\newblock An analytic theory of generalization dynamics and transfer learning
+  in deep linear networks.
+\newblock In \emph{International Conference on Learning Representations}, 2019.
+\newblock URL \url{https://openreview.net/forum?id=ryfMLoCqtQ}.
+
+\bibitem[Canatar et~al.(2021)Canatar, Bordelon, and
+  Pehlevan]{canatar2021spectral}
+Abdulkadir Canatar, Blake Bordelon, and Cengiz Pehlevan.
+\newblock Spectral bias and task-model alignment explain generalization in
+  kernel regression and infinitely wide neural networks.
+\newblock \emph{Nature Communications}, 12:\penalty0 2914, 2021.
+\newblock \doi{10.1038/s41467-021-23103-1}.
 
 \end{thebibliography}

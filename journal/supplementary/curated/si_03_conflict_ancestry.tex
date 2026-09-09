@@ -1,0 +1,307 @@
+% Curated from paper commit 7ee9157; original equations and protocol identities retained.
+\section{Branch conflict, ancestry routing and coefficient learning}
+\label{note:conflict_ancestry}
+
+\subsection{Context-gated Fashion-MNIST protocol}
+
+The context-gated task used Fashion-MNIST classes 0 and 6. Inputs were
+average-pooled to $7\times7$, standardized using training data and augmented
+with a constant coordinate. Each seed used
+8,192 training and 2,000 test draws with replacement from the official binary
+splits, balanced across context and label. Branch counts were $B=2,4,8$;
+conflict doses were $0,0.25,0.5,4/7,0.6,2/3,0.75,1$. Thresholding one
+underlying uniform mask made conflict nested across doses. Correct, shared,
+cyclically deranged, BP and gated-point rules reused inputs and initialization.
+Full-batch descent used 250 updates at step 0.04 and an initial weight
+standard deviation (SD) of 0.01.
+Three exploratory seeds (100--102) selected a stable setting; an additional
+implementation-check seed was also excluded. Analysis seeds 11000--11019
+were fixed before outcomes, with no outcome-dependent stopping.
+
+The primary estimand was each seed's least-squares slope of
+correct-minus-shared accuracy on conflict, separately for each $B$.
+Prespecified criteria required positive slopes in at least 16/20 seeds,
+at least ten percentage points of separation at full conflict, less than
+two points at zero conflict, correct routing above derangement and exact
+BP/gated-point agreement. All criteria passed. The maximum analytic-versus-
+autodifferentiation discrepancy was $3.43\times10^{-7}$; equivalent-rule
+accuracy differences were zero. Intervals used 20,000 paired-seed bootstrap
+draws; tests were two-sided Wilcoxon tests. Mean-field assumptions and empirical
+chance crossings are distinguished below.
+
+The same twenty seeds were replayed for post hoc gradient diagnostics at epochs 0, 1, 10, 50, 100 and 250, comparing both each method's own state and a common exact-rule state. Official input-file checksums were verified; the input manifest and all 28,800 rows are retained in \texttt{source\_data/review\_branch\_trajectories/}. Endpoint drift was below $5\times10^{-9}$ in loss. At conflict 0.5, common-state shared-gradient cosine fell from 0.987 to $-0.519$ for four branches and from 0.952 to $-0.701$ for eight branches by epoch 250 (Supplementary Fig.~\ref{fig:si_branch_conflict_controls}). The initialization boundary below was retained without refitting; trained gradient direction and trained accuracy crossing are separate endpoints.
+
+\subsection{Mean-field boundary for context-gated branch selection}
+
+The Fashion-MNIST conflict experiment selects one branch $c$ uniformly from
+$B$ branches. Only $\bm w_c^{\mathsf T}\bm x_c$ enters the logit, so the
+exact derivative of every unselected branch is zero. Shared feedback omits
+that selector and updates every active eligibility. For the centered
+mean-field prediction, assume balanced class signs $s\in\{-1,1\}$,
+class means $\E[\bm x\mid s]=s\bm v$, and zero logits, so the logistic
+error is $\delta=-s/2$. An unselected input copies the selected image with
+probability $1-\chi$ and is independently drawn from the opposite class
+with probability $\chi$. Its mean class evidence relative to the selected
+view is therefore $1-2\chi$. The resulting compatibility matrix is
+\[
+C_\chi=(1-2\chi)\bm 1\bm 1^{\mathsf T}+2\chi I.
+\]
+Its shared-mode eigenvalue is $B-2\chi(B-1)$, which vanishes at
+$\chi_c=B/[2(B-1)]$. Under these population and initialization assumptions,
+the expected shared update loses positive alignment with the exact update
+at that boundary. Logistic derivatives and class-conditional moments need
+not preserve this relation as weights change. The empirical trained
+chance crossing is consequently a separate descriptive endpoint, not a
+theorem about the entire optimization trajectory. The missing branch
+selector may be supplied in feedback or in local eligibility; it is not
+evidence that the unselected branches require opposite exact errors.
+
+\subsection{Two-branch subtree-address experiment}
+
+The minimal two-sibling experiment used ten paired seeds (4100--4109), following an excluded numerical-check seed 4099. The check verified nondegenerate shared capture, exact-route capture one and analytic exact/BP agreement. The subsequent eight-stream factorial varied route budget.
+
+For seed-specific unit vectors $\bm u_A$ and $\bm u_B$, binary label sign
+$y\in\{-1,1\}$ and context $c\in\{0,1\}$, the two input means were
+\begin{align}
+\mathbb E[\bm x_A\mid y,c]
+&=y\,[\mathbb 1(c=0)-0.75\mathbb 1(c=1)]\bm u_A,\\
+\mathbb E[\bm x_B\mid y,c]
+&=y\,[\mathbb 1(c=1)-0.75\mathbb 1(c=0)]\bm u_B.
+\label{eq:s_credit_reversal_task}
+\end{align}
+Each stream had 12 coordinates and independent Gaussian noise with standard
+deviation 1.15. The 2,048-example train and test splits contained exactly 512
+examples in each context--label cell. The somatic logit selected branch $A$
+when $c=0$ and branch $B$ when $c=1$. Both inputs nevertheless remained
+active, preventing the one-coordinate rule from acquiring branch specificity
+through a zero eligibility on the distractor.
+
+For somatic logit $z$ and logistic sigmoid $\sigma$, let
+$\delta=\sigma(z)-\mathbb 1(y=1)$ and
+$\bm r(c)=(\mathbb 1[c=0],\mathbb 1[c=1])$. Exact and correct-subtree
+coefficients were $\delta\bm r(c)$; within-neuron derangement reversed the
+two entries, giving $\delta\bm r(c)_{::-1}$; the shared neuronal and same-depth controls used
+$\delta(1,1)$; and the random rank-two control used
+$\delta\bm r(c)R_s^{\mathsf T}$ for a seed-fixed orthogonal rotation $R_s$.
+The gated point emulation used one somatic coefficient together with the
+context-gated features $(\mathbb 1[c=0]\bm x_A,
+\mathbb 1[c=1]\bm x_B)$, making its alternative address resource explicit.
+All conditions had 24 trainable weights and the same paired initialization and
+batch order. The random dense control had four routing nonzeros; the sparse
+two-route conditions had two.
+
+Training used mini-batch stochastic gradient descent (SGD), learning rate 0.3,
+batch size 64 and 60 epochs.
+The switch endpoint applied another 12 epochs to 1,024 context-1 examples with
+balanced labels and measured the change in context-0 accuracy. For gradient
+geometry, exact and candidate per-example gradients were concatenated over
+both branches. Scaled capture was squared cosine after optimal scalar
+rescaling. The one-step candidate was normalized to the exact batch-gradient
+norm and evaluated at step 0.25. The Source Data indexed in Table~\ref{tab:source_index} retain every
+tested condition; no condition was removed on the basis of its outcome.
+
+All controls, including poor deranged and variable random-map outcomes, are retained. Correct routing, exact transport, BP and gated-point emulation coincide because the exact path coefficient is the binary selector. Thus this experiment isolates the supplied address resource; the gated-point control reproduces it.
+
+\subsection{Subtree-address bandwidth and architecture factorial}
+
+To vary feedback bandwidth, the complete factorial extended the two-sibling
+task to eight context-selected streams arranged in a balanced binary hierarchy. Context and binary
+label were exactly balanced in train and test sets, every stream remained
+active on every example, and the sign of the task signal reversed outside the
+selected context. Thus a shared coefficient could not recover the required address simply
+because off-route eligibilities were zero. The prespecified feedback budgets
+were $K\in\{1,2,4,8\}$ nested routes. Twenty paired analysis seeds
+(4200--4219) crossed five representations and 27 method--budget combinations,
+giving 135 fits per seed and 2,700 fits in total.
+
+The dendritic tree, explicitly gated point model, flat-compartment model and
+grouped-point model were implementation-equivalent controls: each contained 64
+trainable weights, 64 active input contacts and one output nonlinearity, and
+each received the same routed coefficient field. The fifth representation was
+a degree- and depth-matched rewired tree. Its resource counts were unchanged,
+but its ancestry groups were permuted relative to the task hierarchy. Feedback
+families comprised correct ancestry, fixed within-neuron derangement,
+depth-interleaved groups, random sparse groups, a seed-fixed random rank-$K$
+map, and a task-fitted rank-$K$ upper bound. Neuron-shared, exact-transport and
+analytic-backpropagation references completed the design. Route fields were
+unit-normalized per example. Data, initialization and every
+stochastic control map were keyed to seed, method family and $K$, so matched
+representations saw identical stochastic realizations.
+
+Pre-analysis checks required balanced labels and contexts, nonzero activity in every stream, shared capture below 0.2, exact capture one, analytic exact/BP equality and no fallback. An initial 2,700-fit cohort used stochastic maps unpaired across representation labels and was excluded. Only the complete repeat with paired maps and cross-representation equivalence checks enters inference.
+
+The primary bandwidth contrasts are retained in the Source Data indexed in Table~\ref{tab:source_index}.
+Correct nested-subtree routing strongly exceeded route derangement at $K=2$ and $K=4$, but
+its comparison with the best matched non-anatomical control was deliberately
+more stringent: ancestry lost at $K=1$ and $K=2$, won by 0.0127 accuracy at
+$K=4$ (95\% paired seed-bootstrap interval 0.00593--0.01946; 15/20 seeds;
+paired Wilcoxon signed-rank Holm-adjusted $P=0.0101$ across the four budgets;
+the Source Data retain the paired mean-sign-flip sensitivity test), and tied at full rank. Correct routing on the
+task-matched tree exceeded the rewired tree at $K=2$ and $K=4$ in all 20
+seeds. The four matched representations were exactly equal in every condition
+(maximum held-out-accuracy difference zero). The experiment therefore supports
+an intermediate-bandwidth advantage for a task-aligned nested address, while
+showing that an explicitly routed point implementation can reproduce it.
+
+\subsection{Trained partition-residual reconstruction}
+
+Using the saved configurations and outputs, we quantified irreducible address
+error in a post hoc diagnostic of the complete factorial. For example $b$, let
+$c_b$ denote context, $\delta_b$ the somatic error, $e_{c_b,i}$ the indicator
+selecting leaf $i$, and $\bm x_{bi}$ its input vector. We defined the exact
+coefficient field $c_{bi}=\delta_b e_{c_b,i}$, coordinate weight
+$w_{bi}=\lVert\bm x_{bi}\rVert_2^2$, and active route field $\phi_{bi}$.
+Allowing the best single coefficient for that route on each example gives
+\begin{equation}
+ z_b^*=\frac{\sum_i w_{bi}\phi_{bi}c_{bi}}
+ {\sum_iw_{bi}\phi_{bi}^2},\qquad
+ \mathcal C_{\mathrm{part}}=1-
+ \frac{\sum_{b,i}w_{bi}(c_{bi}-z_b^*\phi_{bi})^2}
+ {\sum_{b,i}w_{bi}c_{bi}^2}.
+\label{eq:s_trained_partition_capture}
+\end{equation}
+This is the normalized complement of the shared-coefficient residual in
+Eq.~\ref{eq:s_partition_variance}. It grants an optimal route coefficient and
+therefore isolates address/support error from the coefficient scale actually
+used during training.
+
+All 20 seeds and 135 conditions per seed were reconstructed at initialization
+and after 80 training epochs. Reconstructed losses agreed with the recorded
+values within $4.97\times10^{-9}$ and accuracies within $5.01\times10^{-11}$,
+the precision of the saved decimal tables; the address-plus-coefficient Pythagorean
+decomposition closed within $7.28\times10^{-12}$. On the dendritic-tree
+representation, trained correct-ancestry capture was 0.162, 0.315, 0.547 and
+1.000 at $K=1,2,4,8$. Fixed coordinate-to-arbor derangement had the common scalar value
+at $K=1$ and zero capture at $K=2,4,8$, because its active support excluded the
+target leaf (Supplementary Fig.~\ref{fig:si_ancestry_coefficients}A).
+
+For each seed we averaged implementation-equivalent representations within
+feedback family and budget, then correlated trained capture with held-out
+accuracy across conditions. The mean within-seed Spearman correlation was
+0.824 (95\% seed-bootstrap interval 0.810--0.838; 20/20 positive; two-sided
+Wilcoxon $P=1.91\times10^{-6}$). Restricting the analysis to the six route
+families and $K<8$ removed the exact full-rank boundary and gave 0.639
+(0.610--0.665; 20/20 positive; $P=1.91\times10^{-6}$; Source Data, Table~\ref{tab:source_index}). This association is descriptive
+and post hoc. In particular, ancestry, depth-interleaved and random sparse
+partitions had similar address capture at matched $K$, so the residual does
+not explain the small trained ancestry advantage at $K=4$.
+
+\subsection{Learning coefficients from an explicit local context cue}
+\label{note:local_context_encoder}
+
+To test whether coefficients could be learned from a supplied cue, we used a
+four-route dictionary on fresh versions of the balanced eight-context task.
+We retained its 64 forward weights, paired initialization,
+2,048-example train and test sets, and 80 full-batch task-training updates.
+The dictionary was fixed before task training:
+$\Phi_{bk}=\mathbf{1}[k=\lfloor b/2\rfloor]/\sqrt2$ for zero-indexed
+blocks $b=0,\ldots,7$ and routes $k=0,\ldots,3$.
+For trial $i$ with context $c_i$, the supplied local cue was
+$\bm h_i=\bm e_{c_i}+\sigma_h\bm\epsilon_i$, with
+$\bm\epsilon_i\sim\mathcal N(0,I_8)$. Here $\bm e_{c_i}$ is the one-hot
+context vector and $\sigma_h$ is cue-noise SD. The cue is an additional
+information resource; the experiment does not infer a biological signal.
+
+Separate balanced calibration trials supplied the target route-activation
+vector $\bm e_{\lfloor c_i/2\rfloor}$. A four-output softmax encoder with
+an intercept learned this mapping by minibatch delta-rule updates. Weights
+started at zero; calibration used 30 epochs, batch size 16, step 0.2 and
+weight decay 0.001 on non-bias weights. Calibration sets of 16, 64 and 256
+trials were nested within each cue-noise condition. Because epoch count was
+fixed, increasing sample count also increased the number of encoder updates.
+This axis therefore changes both calibration data and computation.
+No task labels, exact task gradients or held-out task outcomes entered encoder
+training. Its parameters were frozen before the classification weights were
+trained.
+
+At cue delays $d=0,1,4$ trials, the encoder received the cue array circularly
+shifted by $d$. Predicted coefficients $\bm c_i$ produced the normalized
+field $\Phi\bm c_i/\|\Phi\bm c_i\|$. Delay is a mismatch between the
+current eligibility and an earlier independent context; it is not a calibrated
+physiological time constant. Controls used exact one-hot route selection,
+a uniform frozen profile, or a cyclic permutation of the learned coefficient
+coordinates. Exact and frozen controls repeated across nuisance conditions
+are algebraic repetitions rather than independent evidence. Task updates used
+the original factor-eight context rescaling and step 0.3.
+
+Twenty analysis seeds (52000--52019) followed the excluded implementation-check
+seed 51999.
+Crossing three calibration sizes, cue-noise SDs $0,0.5,1$, delays and four
+rules produced 2,160 task fits and 10,800 checkpoint rows. At task epochs
+0, 1, 10, 40 and 80, we recorded held-out accuracy/loss and delivered-versus-
+exact gradient cosine at each method's own state. Held-out cue classification,
+coefficient mean squared error (MSE) and route-norm errors supplied separate
+encoder diagnostics.
+The protocol, fixed before new outcomes but not publicly preregistered, is
+\texttt{configs/review\_completion/coefficient\_encoder.json}.
+
+The primary condition used 256 calibration trials, cue-noise SD 0.5 and no
+delay. Learned coefficients improved accuracy over the frozen profile by
+7.16 percentage points (95\% paired-seed bootstrap interval 6.26--8.07;
+20/20 positive) and over mismatched coefficients by 7.10 points
+(6.19--7.99; 20/20). They remained 54.47 points below exact route selection
+(53.54--55.45; 20/20 lower). Two-sided Wilcoxon tests restored the exact
+$1/2048$ accuracy-count grid before ranking and used Holm correction across
+these three primary contrasts. Adjusted $P$ values were
+$5.72\times10^{-6}$ versus the frozen rule and
+$1.77\times10^{-4}$ versus each other control. Intervals used 20,000
+paired-seed draws; other grid contrasts are descriptive sensitivities.
+All fits were finite. Learning from the supplied cue improved performance
+relative to fixed or misassigned coefficients, but left a large gap to the
+oracle. The experiment does not establish autonomous discovery of credit
+coordinates in a biological neuron. The complete outputs are in
+\texttt{source\_data/review\_coefficient\_encoder/}.
+
+An exploratory follow-up was specified after observing the soft-encoder
+outcomes. The same trained encoder, original paired seeds and task data were
+retained, but its maximum-probability route was delivered as a one-hot vector.
+No encoder parameter was refitted and no hyperparameter was selected from
+the task outcomes. This hard readout is a paired sensitivity, not a new
+independent replication or a replacement for the primary soft rule
+(Supplementary Fig.~\ref{fig:si_ancestry_coefficients}). At the primary
+noise SD 0.5, mean accuracy was 25.825\% for soft coefficients, 64.031\%
+for hard selection, 80.291\% for exact selection and 18.669\% for the
+frozen profile. Hard-minus-oracle accuracy remained $-16.26$ percentage
+points (95\% paired-seed interval $-17.83$ to $-14.83$), while hard-minus-
+frozen was 45.36 points (43.69--46.92). At zero noise and 256 calibration
+trials, hard selection equaled the oracle numerically, whereas the soft rule
+reached 79.978\%. With only 16 noise-free calibration trials, the soft
+encoder already identified every context's route correctly, yet its graded
+output gave 19.392\% task accuracy; selecting its maximum-probability route
+gave the oracle's 80.291\%. This sensitivity isolates leakage into incorrect
+routes from failure to identify the correct route. All hard-readout intervals and
+unadjusted tests are descriptive; these reused conditions do not define a
+new primary family. Both learned readouts failed when cues were delayed across
+independent contexts. Thus accurate route identification does not guarantee
+that graded coefficients are suitable for the learning rule: readout and
+timing are separate constraints. All exploratory fits and unchanged encoder
+settings are in \texttt{source\_data/review\_coefficient\_hard\_readout/}.
+
+\subsection{Route overlap and task interference}
+
+We finally examined how overlap between addressed regions and leakage outside
+an intended route determine interference with an already learned task.
+Branch-specific plasticity during motor learning suggests that different
+tasks can recruit different dendritic regions \citep{cichon2015branch}. Let
+$\bm w_A$ be an optimum of a quadratic Task-A objective with Hessian $H_A$,
+and let an approximate Task-B teaching field produce update
+$-\eta M_B\bm g_B$, where $\eta$ is the step size, $\bm g_B$ is the Task-B
+gradient and $M_B$ is its routing operator. Expansion about the Task-A optimum removes the first-order
+term, leaving the exact loss increase
+\begin{equation}
+\mathcal L_A(\bm w_A-\eta M_B\bm g_B)-\mathcal L_A(\bm w_A)
+=\frac{\eta^2}{2}\bm g_B^\mathsf{T}M_B^\mathsf{T}H_AM_B\bm g_B.
+\label{eq:supp_interference}
+\end{equation}
+In the equal-route example, opposing updates on the shared fraction $\omega$
+have magnitude two, whereas leakage onto the Task-A-only fraction has
+magnitude $\lambda$. Dividing by route size gives
+$\eta^2[4\omega+\lambda^2(1-\omega)]/2$. Numerical vector updates matched this
+identity to $4.2\times10^{-17}$ absolute error
+(Eq.~\ref{eq:supp_interference}). Separated routes therefore
+protect a learned task only when both anatomical overlap and teaching-field
+leakage are small. The published somatostatin (SST) perturbation is consistent with the
+resulting prediction that loss of branch-selective inhibition increases
+effective leakage and cross-task interference \citep{cichon2015branch}, but it
+does not uniquely identify the credit-routing mechanism. This static identity
+does not model dendritic calcium, spikes, eligibility timing or the SST intervention.

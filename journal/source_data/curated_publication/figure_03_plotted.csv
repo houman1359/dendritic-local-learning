@@ -1,0 +1,213 @@
+panel,record,budget_k,context,group_size,raw_coefficient_sum,normalized_coefficient_sum,normalization,architecture,feedback_family,n_seeds,mean_heldout_accuracy,ci95_low_heldout_accuracy,ci95_high_heldout_accuracy,mean_heldout_loss,ci95_low_heldout_loss,ci95_high_heldout_loss,mean_retained_context_forgetting,ci95_low_retained_context_forgetting,ci95_high_retained_context_forgetting,mean_initial_gradient_capture,ci95_low_initial_gradient_capture,ci95_high_initial_gradient_capture,mean_initial_gradient_cosine,ci95_low_initial_gradient_cosine,ci95_high_initial_gradient_cosine,mean_norm_matched_one_step_progress,ci95_low_norm_matched_one_step_progress,ci95_high_norm_matched_one_step_progress,readout,calibration_samples,cue_noise_sd,cue_delay_trials,mean_pp,ci95_low_pp,ci95_high_pp,analysis_status,seed,accuracy_difference_pp,control,n_pairs,mean_difference_pp,positive_seeds,tied_seeds,p_two_sided_wilcoxon,p_exact_two_sided_mean_signflip,p_holm_four_budgets,p_holm_four_individual_controls_at_k4,p_exact_mean_signflip_holm_four_budgets,p_exact_mean_signflip_holm_four_individual_controls_at_k4,comparator_families
+B,design prediction,1.0,0.0,8.0,-3.05,-1.0783378413094848,unit Euclidean norm per route row,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+B,design prediction,1.0,1.0,8.0,-3.05,-1.0783378413094848,unit Euclidean norm per route row,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+B,design prediction,1.0,2.0,8.0,-3.05,-1.0783378413094848,unit Euclidean norm per route row,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+B,design prediction,1.0,3.0,8.0,-3.05,-1.0783378413094848,unit Euclidean norm per route row,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+B,design prediction,1.0,4.0,8.0,-3.05,-1.0783378413094848,unit Euclidean norm per route row,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+B,design prediction,1.0,5.0,8.0,-3.05,-1.0783378413094848,unit Euclidean norm per route row,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+B,design prediction,1.0,6.0,8.0,-3.05,-1.0783378413094846,unit Euclidean norm per route row,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+B,design prediction,1.0,7.0,8.0,-3.05,-1.0783378413094846,unit Euclidean norm per route row,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+B,design prediction,2.0,0.0,4.0,-0.050000000000000044,-0.025000000000000022,unit Euclidean norm per route row,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+B,design prediction,2.0,1.0,4.0,-0.050000000000000044,-0.025000000000000022,unit Euclidean norm per route row,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+B,design prediction,2.0,2.0,4.0,-0.05000000000000002,-0.02500000000000001,unit Euclidean norm per route row,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+B,design prediction,2.0,3.0,4.0,-0.050000000000000044,-0.025000000000000022,unit Euclidean norm per route row,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+B,design prediction,2.0,4.0,4.0,-0.050000000000000044,-0.025000000000000022,unit Euclidean norm per route row,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+B,design prediction,2.0,5.0,4.0,-0.050000000000000044,-0.025000000000000022,unit Euclidean norm per route row,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+B,design prediction,2.0,6.0,4.0,-0.05000000000000002,-0.02500000000000001,unit Euclidean norm per route row,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+B,design prediction,2.0,7.0,4.0,-0.050000000000000044,-0.025000000000000022,unit Euclidean norm per route row,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+B,design prediction,4.0,0.0,2.0,0.85,0.6010407640085653,unit Euclidean norm per route row,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+B,design prediction,4.0,1.0,2.0,0.85,0.6010407640085653,unit Euclidean norm per route row,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+B,design prediction,4.0,2.0,2.0,0.85,0.6010407640085653,unit Euclidean norm per route row,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+B,design prediction,4.0,3.0,2.0,0.85,0.6010407640085653,unit Euclidean norm per route row,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+B,design prediction,4.0,4.0,2.0,0.85,0.6010407640085653,unit Euclidean norm per route row,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+B,design prediction,4.0,5.0,2.0,0.85,0.6010407640085653,unit Euclidean norm per route row,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+B,design prediction,4.0,6.0,2.0,0.85,0.6010407640085653,unit Euclidean norm per route row,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+B,design prediction,4.0,7.0,2.0,0.85,0.6010407640085653,unit Euclidean norm per route row,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+B,design prediction,8.0,0.0,1.0,1.0,1.0,unit Euclidean norm per route row,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+B,design prediction,8.0,1.0,1.0,1.0,1.0,unit Euclidean norm per route row,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+B,design prediction,8.0,2.0,1.0,1.0,1.0,unit Euclidean norm per route row,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+B,design prediction,8.0,3.0,1.0,1.0,1.0,unit Euclidean norm per route row,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+B,design prediction,8.0,4.0,1.0,1.0,1.0,unit Euclidean norm per route row,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+B,design prediction,8.0,5.0,1.0,1.0,1.0,unit Euclidean norm per route row,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+B,design prediction,8.0,6.0,1.0,1.0,1.0,unit Euclidean norm per route row,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+B,design prediction,8.0,7.0,1.0,1.0,1.0,unit Euclidean norm per route row,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+C,condition_mean,1.0,,,,,,dendritic_tree,correct_ancestry_subtrees,20.0,0.1866455078,0.1827148437,0.1907226563,19.87260017,19.58235723,20.19455524,0.0015625,-0.000390625,0.003369140625,0.1312853816,0.1306428169,0.1319110322,0.3623277802,0.3614446927,0.363180812,-1.097266085,-1.101635403,-1.092769521,,,,,,,,,,,,,,,,,,,,,,
+C,condition_mean,2.0,,,,,,dendritic_tree,correct_ancestry_subtrees,20.0,0.4486328125,0.4288574219,0.4686523437,0.8416249512,0.8125954238,0.8717139489,0.0,0.0,0.0,0.2651939017,0.2641764421,0.2662309986,0.5149647929,0.5139844596,0.5159777259,-0.08484231529,-0.1569119101,-0.01520106749,,,,,,,,,,,,,,,,,,,,,,
+C,condition_mean,4.0,,,,,,dendritic_tree,correct_ancestry_subtrees,20.0,0.8010498047,0.7955322266,0.8069580078,0.4310751209,0.4252759054,0.4368151509,0.0,0.0,0.0,0.5228728922,0.5211219456,0.5245891547,0.7230943012,0.7218954126,0.7242696325,0.9759261825,0.9740182588,0.9777057459,,,,,,,,,,,,,,,,,,,,,,
+C,condition_mean,8.0,,,,,,dendritic_tree,correct_ancestry_subtrees,20.0,0.8100097656,0.8052246094,0.8149658203,0.4138553991,0.4072494535,0.4206493983,0.0,0.0,0.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,,,,,,,,,,,,,,,,,,,,,,
+C,condition_mean,1.0,,,,,,dendritic_tree,within_neuron_route_derangement,20.0,0.1866455078,0.1826904297,0.1907226563,19.87260017,19.57720528,20.20226469,0.0015625,-0.000439453125,0.0033203125,0.1312853816,0.1306528889,0.1319037135,0.3623277802,0.3614424698,0.3631795485,-1.097266085,-1.101669794,-1.09267101,,,,,,,,,,,,,,,,,,,,,,
+C,condition_mean,2.0,,,,,,dendritic_tree,within_neuron_route_derangement,20.0,0.1846923828,0.1805908203,0.1887695313,31.54877673,31.06853756,32.04380451,0.001220703125,-0.0001953125,0.00263671875,0.0,0.0,0.0,0.0,0.0,0.0,-1.118474582,-1.121901269,-1.115079651,,,,,,,,,,,,,,,,,,,,,,
+C,condition_mean,4.0,,,,,,dendritic_tree,within_neuron_route_derangement,20.0,0.1904785156,0.1864501953,0.1944335937,17.67565771,17.36332667,18.00859898,0.00048828125,-0.000732421875,0.001708984375,0.0,0.0,0.0,0.0,0.0,0.0,-1.069668828,-1.076473685,-1.063270919,,,,,,,,,,,,,,,,,,,,,,
+C,condition_mean,8.0,,,,,,dendritic_tree,within_neuron_route_derangement,20.0,0.2512939453,0.2431152344,0.260010376,7.039099034,6.771945606,7.308644593,0.001220703125,0.000341796875,0.0021484375,0.0,0.0,0.0,0.0,0.0,0.0,-0.8780041035,-0.8932592901,-0.8625079038,,,,,,,,,,,,,,,,,,,,,,
+C,condition_mean,1.0,,,,,,,best_matched_control,,0.544970703115,0.46237670896725,0.6279064941278748,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+C,condition_mean,2.0,,,,,,,best_matched_control,,0.6026367187550001,0.5326885986358749,0.6724127197214999,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+C,condition_mean,4.0,,,,,,,best_matched_control,,0.78837890625,0.779516601564875,0.797558593745,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+C,condition_mean,8.0,,,,,,,best_matched_control,,0.8100097656299999,0.805126953135,0.814941406250125,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+D,mean_contrast,,,,,,,,,20.0,,,,,,,,,,,,,,,,,,,Soft,256.0,0.5,0.0,-54.4653320312,-55.4467773438,-53.5400390625,primary,,,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Soft,256.0,0.5,0.0,,,,primary,52000.0,-56.396484375,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Soft,256.0,0.5,0.0,,,,primary,52001.0,-55.859375,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Soft,256.0,0.5,0.0,,,,primary,52002.0,-55.419921875,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Soft,256.0,0.5,0.0,,,,primary,52003.0,-53.22265625,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Soft,256.0,0.5,0.0,,,,primary,52004.0,-54.736328125,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Soft,256.0,0.5,0.0,,,,primary,52005.0,-53.369140625,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Soft,256.0,0.5,0.0,,,,primary,52006.0,-59.47265625,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Soft,256.0,0.5,0.0,,,,primary,52007.0,-56.8359375,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Soft,256.0,0.5,0.0,,,,primary,52008.0,-54.248046875,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Soft,256.0,0.5,0.0,,,,primary,52009.0,-51.26953125,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Soft,256.0,0.5,0.0,,,,primary,52010.0,-55.615234375,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Soft,256.0,0.5,0.0,,,,primary,52011.0,-53.369140625,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Soft,256.0,0.5,0.0,,,,primary,52012.0,-54.19921875,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Soft,256.0,0.5,0.0,,,,primary,52013.0,-51.7578125,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Soft,256.0,0.5,0.0,,,,primary,52014.0,-52.685546875,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Soft,256.0,0.5,0.0,,,,primary,52015.0,-52.1484375,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Soft,256.0,0.5,0.0,,,,primary,52016.0,-57.958984375,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Soft,256.0,0.5,0.0,,,,primary,52017.0,-52.24609375,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Soft,256.0,0.5,0.0,,,,primary,52018.0,-56.494140625,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Soft,256.0,0.5,0.0,,,,primary,52019.0,-52.001953125,,,,,,,,,,,,
+D,mean_contrast,,,,,,,,,20.0,,,,,,,,,,,,,,,,,,,Soft,16.0,0.0,0.0,-60.8984375,-61.6088867188,-60.1953125,exploratory sensitivity,,,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Soft,16.0,0.0,0.0,,,,exploratory sensitivity,52000.0,-60.44921875,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Soft,16.0,0.0,0.0,,,,exploratory sensitivity,52001.0,-61.474609375,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Soft,16.0,0.0,0.0,,,,exploratory sensitivity,52002.0,-61.5234375,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Soft,16.0,0.0,0.0,,,,exploratory sensitivity,52003.0,-60.05859375,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Soft,16.0,0.0,0.0,,,,exploratory sensitivity,52004.0,-60.302734375,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Soft,16.0,0.0,0.0,,,,exploratory sensitivity,52005.0,-61.083984375,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Soft,16.0,0.0,0.0,,,,exploratory sensitivity,52006.0,-64.6484375,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Soft,16.0,0.0,0.0,,,,exploratory sensitivity,52007.0,-60.83984375,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Soft,16.0,0.0,0.0,,,,exploratory sensitivity,52008.0,-59.5703125,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Soft,16.0,0.0,0.0,,,,exploratory sensitivity,52009.0,-59.08203125,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Soft,16.0,0.0,0.0,,,,exploratory sensitivity,52010.0,-60.546875,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Soft,16.0,0.0,0.0,,,,exploratory sensitivity,52011.0,-63.28125,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Soft,16.0,0.0,0.0,,,,exploratory sensitivity,52012.0,-62.158203125,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Soft,16.0,0.0,0.0,,,,exploratory sensitivity,52013.0,-59.619140625,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Soft,16.0,0.0,0.0,,,,exploratory sensitivity,52014.0,-61.5234375,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Soft,16.0,0.0,0.0,,,,exploratory sensitivity,52015.0,-59.66796875,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Soft,16.0,0.0,0.0,,,,exploratory sensitivity,52016.0,-62.841796875,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Soft,16.0,0.0,0.0,,,,exploratory sensitivity,52017.0,-62.01171875,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Soft,16.0,0.0,0.0,,,,exploratory sensitivity,52018.0,-59.9609375,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Soft,16.0,0.0,0.0,,,,exploratory sensitivity,52019.0,-57.32421875,,,,,,,,,,,,
+D,mean_contrast,,,,,,,,,20.0,,,,,,,,,,,,,,,,,,,Hard,256.0,0.5,0.0,-16.259765625,-17.8295898438,-14.8291015625,exploratory sensitivity,,,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Hard,256.0,0.5,0.0,,,,exploratory sensitivity,52000.0,-22.607421875,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Hard,256.0,0.5,0.0,,,,exploratory sensitivity,52001.0,-20.703125,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Hard,256.0,0.5,0.0,,,,exploratory sensitivity,52002.0,-19.091796875,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Hard,256.0,0.5,0.0,,,,exploratory sensitivity,52003.0,-14.84375,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Hard,256.0,0.5,0.0,,,,exploratory sensitivity,52004.0,-15.283203125,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Hard,256.0,0.5,0.0,,,,exploratory sensitivity,52005.0,-11.962890625,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Hard,256.0,0.5,0.0,,,,exploratory sensitivity,52006.0,-20.80078125,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Hard,256.0,0.5,0.0,,,,exploratory sensitivity,52007.0,-23.33984375,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Hard,256.0,0.5,0.0,,,,exploratory sensitivity,52008.0,-14.16015625,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Hard,256.0,0.5,0.0,,,,exploratory sensitivity,52009.0,-15.52734375,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Hard,256.0,0.5,0.0,,,,exploratory sensitivity,52010.0,-16.30859375,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Hard,256.0,0.5,0.0,,,,exploratory sensitivity,52011.0,-12.59765625,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Hard,256.0,0.5,0.0,,,,exploratory sensitivity,52012.0,-16.50390625,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Hard,256.0,0.5,0.0,,,,exploratory sensitivity,52013.0,-12.98828125,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Hard,256.0,0.5,0.0,,,,exploratory sensitivity,52014.0,-14.697265625,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Hard,256.0,0.5,0.0,,,,exploratory sensitivity,52015.0,-11.669921875,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Hard,256.0,0.5,0.0,,,,exploratory sensitivity,52016.0,-16.162109375,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Hard,256.0,0.5,0.0,,,,exploratory sensitivity,52017.0,-14.208984375,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Hard,256.0,0.5,0.0,,,,exploratory sensitivity,52018.0,-12.939453125,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Hard,256.0,0.5,0.0,,,,exploratory sensitivity,52019.0,-18.798828125,,,,,,,,,,,,
+D,mean_contrast,,,,,,,,,20.0,,,,,,,,,,,,,,,,,,,Hard,16.0,0.0,0.0,0.0,0.0,0.0,exploratory sensitivity,,,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Hard,16.0,0.0,0.0,,,,exploratory sensitivity,52000.0,0.0,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Hard,16.0,0.0,0.0,,,,exploratory sensitivity,52001.0,0.0,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Hard,16.0,0.0,0.0,,,,exploratory sensitivity,52002.0,0.0,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Hard,16.0,0.0,0.0,,,,exploratory sensitivity,52003.0,0.0,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Hard,16.0,0.0,0.0,,,,exploratory sensitivity,52004.0,0.0,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Hard,16.0,0.0,0.0,,,,exploratory sensitivity,52005.0,0.0,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Hard,16.0,0.0,0.0,,,,exploratory sensitivity,52006.0,0.0,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Hard,16.0,0.0,0.0,,,,exploratory sensitivity,52007.0,0.0,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Hard,16.0,0.0,0.0,,,,exploratory sensitivity,52008.0,0.0,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Hard,16.0,0.0,0.0,,,,exploratory sensitivity,52009.0,0.0,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Hard,16.0,0.0,0.0,,,,exploratory sensitivity,52010.0,0.0,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Hard,16.0,0.0,0.0,,,,exploratory sensitivity,52011.0,0.0,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Hard,16.0,0.0,0.0,,,,exploratory sensitivity,52012.0,0.0,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Hard,16.0,0.0,0.0,,,,exploratory sensitivity,52013.0,0.0,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Hard,16.0,0.0,0.0,,,,exploratory sensitivity,52014.0,0.0,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Hard,16.0,0.0,0.0,,,,exploratory sensitivity,52015.0,0.0,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Hard,16.0,0.0,0.0,,,,exploratory sensitivity,52016.0,0.0,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Hard,16.0,0.0,0.0,,,,exploratory sensitivity,52017.0,0.0,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Hard,16.0,0.0,0.0,,,,exploratory sensitivity,52018.0,0.0,,,,,,,,,,,,
+D,paired_seed,,,,,,,,,,,,,,,,,,,,,,,,,,,,Hard,16.0,0.0,0.0,,,,exploratory sensitivity,52019.0,0.0,,,,,,,,,,,,
+E,mean_contrast,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,0.59326171875,1.94580078125,,,,best_matched_nonanatomical_oracle,20.0,1.26708984375,15.0,0.0,0.00481942159963,0.00259399414062,0.0101404298927,,0.00518798828125,,
+E,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4200.0,-1.318359375,best_matched_nonanatomical_oracle,,,,,,,,,,,within_neuron_route_derangement;depth_interleaved_bins;random_sparse_matched;random_rank_k
+E,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4201.0,-0.537109375,best_matched_nonanatomical_oracle,,,,,,,,,,,within_neuron_route_derangement;depth_interleaved_bins;random_sparse_matched;random_rank_k
+E,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4202.0,3.369140625,best_matched_nonanatomical_oracle,,,,,,,,,,,within_neuron_route_derangement;depth_interleaved_bins;random_sparse_matched;random_rank_k
+E,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4203.0,0.732421875,best_matched_nonanatomical_oracle,,,,,,,,,,,within_neuron_route_derangement;depth_interleaved_bins;random_sparse_matched;random_rank_k
+E,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4204.0,3.41796875,best_matched_nonanatomical_oracle,,,,,,,,,,,within_neuron_route_derangement;depth_interleaved_bins;random_sparse_matched;random_rank_k
+E,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4205.0,-0.146484375,best_matched_nonanatomical_oracle,,,,,,,,,,,within_neuron_route_derangement;depth_interleaved_bins;random_sparse_matched;random_rank_k
+E,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4206.0,1.806640625,best_matched_nonanatomical_oracle,,,,,,,,,,,within_neuron_route_derangement;depth_interleaved_bins;random_sparse_matched;random_rank_k
+E,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4207.0,3.7109375,best_matched_nonanatomical_oracle,,,,,,,,,,,within_neuron_route_derangement;depth_interleaved_bins;random_sparse_matched;random_rank_k
+E,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4208.0,0.78125,best_matched_nonanatomical_oracle,,,,,,,,,,,within_neuron_route_derangement;depth_interleaved_bins;random_sparse_matched;random_rank_k
+E,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4209.0,0.5859375,best_matched_nonanatomical_oracle,,,,,,,,,,,within_neuron_route_derangement;depth_interleaved_bins;random_sparse_matched;random_rank_k
+E,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4210.0,-0.830078125,best_matched_nonanatomical_oracle,,,,,,,,,,,within_neuron_route_derangement;depth_interleaved_bins;random_sparse_matched;random_rank_k
+E,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4211.0,0.146484375,best_matched_nonanatomical_oracle,,,,,,,,,,,within_neuron_route_derangement;depth_interleaved_bins;random_sparse_matched;random_rank_k
+E,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4212.0,3.759765625,best_matched_nonanatomical_oracle,,,,,,,,,,,within_neuron_route_derangement;depth_interleaved_bins;random_sparse_matched;random_rank_k
+E,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4213.0,1.611328125,best_matched_nonanatomical_oracle,,,,,,,,,,,within_neuron_route_derangement;depth_interleaved_bins;random_sparse_matched;random_rank_k
+E,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4214.0,3.02734375,best_matched_nonanatomical_oracle,,,,,,,,,,,within_neuron_route_derangement;depth_interleaved_bins;random_sparse_matched;random_rank_k
+E,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4215.0,-0.9765625,best_matched_nonanatomical_oracle,,,,,,,,,,,within_neuron_route_derangement;depth_interleaved_bins;random_sparse_matched;random_rank_k
+E,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4216.0,1.07421875,best_matched_nonanatomical_oracle,,,,,,,,,,,within_neuron_route_derangement;depth_interleaved_bins;random_sparse_matched;random_rank_k
+E,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4217.0,1.7578125,best_matched_nonanatomical_oracle,,,,,,,,,,,within_neuron_route_derangement;depth_interleaved_bins;random_sparse_matched;random_rank_k
+E,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4218.0,1.3671875,best_matched_nonanatomical_oracle,,,,,,,,,,,within_neuron_route_derangement;depth_interleaved_bins;random_sparse_matched;random_rank_k
+E,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4219.0,2.001953125,best_matched_nonanatomical_oracle,,,,,,,,,,,within_neuron_route_derangement;depth_interleaved_bins;random_sparse_matched;random_rank_k
+F,mean_contrast,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,6.1865234375,8.02978515625,,,,depth_interleaved_bins,20.0,7.11181640625,20.0,0.0,1.90734863281e-06,1.90734863281e-06,7.62939453125e-06,7.62939453125e-06,7.62939453125e-06,7.62939453125e-06,
+F,mean_contrast,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,1.0009765625,3.90869140625,,,,random_rank_k,20.0,2.314453125,15.0,0.0,0.00338014329755,0.00145530700684,0.0101404298927,0.00338014329755,0.00436592102051,0.00145530700684,
+F,mean_contrast,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,2.890625,4.74127197266,,,,random_sparse_matched,20.0,3.76708984375,20.0,0.0,8.83238586308e-05,1.90734863281e-06,0.000353295434523,0.000176647717262,7.62939453125e-06,7.62939453125e-06,
+F,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4200.0,6.93359375,depth_interleaved_bins,,,,,,,,,,,depth_interleaved_bins
+F,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4201.0,6.298828125,depth_interleaved_bins,,,,,,,,,,,depth_interleaved_bins
+F,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4202.0,9.228515625,depth_interleaved_bins,,,,,,,,,,,depth_interleaved_bins
+F,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4203.0,4.736328125,depth_interleaved_bins,,,,,,,,,,,depth_interleaved_bins
+F,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4204.0,8.349609375,depth_interleaved_bins,,,,,,,,,,,depth_interleaved_bins
+F,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4205.0,9.912109375,depth_interleaved_bins,,,,,,,,,,,depth_interleaved_bins
+F,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4206.0,5.126953125,depth_interleaved_bins,,,,,,,,,,,depth_interleaved_bins
+F,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4207.0,7.177734375,depth_interleaved_bins,,,,,,,,,,,depth_interleaved_bins
+F,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4208.0,10.15625,depth_interleaved_bins,,,,,,,,,,,depth_interleaved_bins
+F,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4209.0,6.0546875,depth_interleaved_bins,,,,,,,,,,,depth_interleaved_bins
+F,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4210.0,4.345703125,depth_interleaved_bins,,,,,,,,,,,depth_interleaved_bins
+F,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4211.0,7.71484375,depth_interleaved_bins,,,,,,,,,,,depth_interleaved_bins
+F,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4212.0,4.6875,depth_interleaved_bins,,,,,,,,,,,depth_interleaved_bins
+F,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4213.0,5.810546875,depth_interleaved_bins,,,,,,,,,,,depth_interleaved_bins
+F,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4214.0,6.201171875,depth_interleaved_bins,,,,,,,,,,,depth_interleaved_bins
+F,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4215.0,2.734375,depth_interleaved_bins,,,,,,,,,,,depth_interleaved_bins
+F,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4216.0,8.447265625,depth_interleaved_bins,,,,,,,,,,,depth_interleaved_bins
+F,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4217.0,8.59375,depth_interleaved_bins,,,,,,,,,,,depth_interleaved_bins
+F,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4218.0,9.27734375,depth_interleaved_bins,,,,,,,,,,,depth_interleaved_bins
+F,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4219.0,10.44921875,depth_interleaved_bins,,,,,,,,,,,depth_interleaved_bins
+F,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4200.0,3.076171875,random_sparse_matched,,,,,,,,,,,random_sparse_matched
+F,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4201.0,5.56640625,random_sparse_matched,,,,,,,,,,,random_sparse_matched
+F,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4202.0,4.98046875,random_sparse_matched,,,,,,,,,,,random_sparse_matched
+F,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4203.0,3.90625,random_sparse_matched,,,,,,,,,,,random_sparse_matched
+F,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4204.0,4.1015625,random_sparse_matched,,,,,,,,,,,random_sparse_matched
+F,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4205.0,9.912109375,random_sparse_matched,,,,,,,,,,,random_sparse_matched
+F,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4206.0,4.1015625,random_sparse_matched,,,,,,,,,,,random_sparse_matched
+F,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4207.0,3.7109375,random_sparse_matched,,,,,,,,,,,random_sparse_matched
+F,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4208.0,0.78125,random_sparse_matched,,,,,,,,,,,random_sparse_matched
+F,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4209.0,4.58984375,random_sparse_matched,,,,,,,,,,,random_sparse_matched
+F,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4210.0,0.5859375,random_sparse_matched,,,,,,,,,,,random_sparse_matched
+F,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4211.0,3.3203125,random_sparse_matched,,,,,,,,,,,random_sparse_matched
+F,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4212.0,4.8828125,random_sparse_matched,,,,,,,,,,,random_sparse_matched
+F,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4213.0,1.904296875,random_sparse_matched,,,,,,,,,,,random_sparse_matched
+F,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4214.0,3.02734375,random_sparse_matched,,,,,,,,,,,random_sparse_matched
+F,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4215.0,1.220703125,random_sparse_matched,,,,,,,,,,,random_sparse_matched
+F,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4216.0,3.7109375,random_sparse_matched,,,,,,,,,,,random_sparse_matched
+F,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4217.0,6.591796875,random_sparse_matched,,,,,,,,,,,random_sparse_matched
+F,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4218.0,1.3671875,random_sparse_matched,,,,,,,,,,,random_sparse_matched
+F,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4219.0,4.00390625,random_sparse_matched,,,,,,,,,,,random_sparse_matched
+F,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4200.0,-1.318359375,random_rank_k,,,,,,,,,,,random_rank_k
+F,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4201.0,-0.537109375,random_rank_k,,,,,,,,,,,random_rank_k
+F,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4202.0,3.369140625,random_rank_k,,,,,,,,,,,random_rank_k
+F,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4203.0,0.732421875,random_rank_k,,,,,,,,,,,random_rank_k
+F,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4204.0,3.41796875,random_rank_k,,,,,,,,,,,random_rank_k
+F,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4205.0,-0.146484375,random_rank_k,,,,,,,,,,,random_rank_k
+F,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4206.0,1.806640625,random_rank_k,,,,,,,,,,,random_rank_k
+F,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4207.0,6.73828125,random_rank_k,,,,,,,,,,,random_rank_k
+F,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4208.0,3.173828125,random_rank_k,,,,,,,,,,,random_rank_k
+F,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4209.0,0.5859375,random_rank_k,,,,,,,,,,,random_rank_k
+F,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4210.0,-0.830078125,random_rank_k,,,,,,,,,,,random_rank_k
+F,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4211.0,0.146484375,random_rank_k,,,,,,,,,,,random_rank_k
+F,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4212.0,3.759765625,random_rank_k,,,,,,,,,,,random_rank_k
+F,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4213.0,1.611328125,random_rank_k,,,,,,,,,,,random_rank_k
+F,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4214.0,6.787109375,random_rank_k,,,,,,,,,,,random_rank_k
+F,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4215.0,-0.9765625,random_rank_k,,,,,,,,,,,random_rank_k
+F,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4216.0,1.07421875,random_rank_k,,,,,,,,,,,random_rank_k
+F,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4217.0,1.7578125,random_rank_k,,,,,,,,,,,random_rank_k
+F,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4218.0,13.134765625,random_rank_k,,,,,,,,,,,random_rank_k
+F,paired_seed,4.0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,4219.0,2.001953125,random_rank_k,,,,,,,,,,,random_rank_k
