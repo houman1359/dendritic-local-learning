@@ -191,7 +191,7 @@ ORDINAL_RAMP = ("#6FE0D8", "#22C2C4", "#10908C", "#0E6C70")
 ANATOMY_COLORS = {
     # dendrite: achromatic warm grey.  The tapered arbor is scaffolding, so it
     # must not read as any series; being achromatic is what buys that.
-    "dend":      "#ACA8A1",
+    "dend":      "#A9ABB1",
     # soma: the single warm accent, and the only yellow on the page.
     "soma":      "#F2EC30",
     # contacts: filled blue (excitatory) / filled carmine (inhibitory).
