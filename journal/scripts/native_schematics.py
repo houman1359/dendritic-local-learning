@@ -191,6 +191,7 @@ GATE_R_PT = (1.9, 3.6)           # inner white ring / outer open ring
 CAPSULE_PCT = 16                 # addressed-subtree capsule tint
 CAPSULE_W_PT = (2.6, 13.0)       # capsule stroke width floor / ceiling
 ALPHA_TAG_MIN_PITCH_PT = 8.5     # terminal pitch below which route tags drop
+EXACT_CHAIN_SMALL_PITCH_PT = 14.0  # below this pitch the exact chain is drawn light
 INPUT_LABEL_MIN_PITCH_PT = 11.0  # terminal pitch below which x-labels drop
 
 # The addressed-subtree tint cycle is the one credit_tree_schematics already
@@ -1895,14 +1896,27 @@ class Frame:
         # exact path
         if targets is None:
             targets = [nodes.terminals[min(3, len(nodes.terminals) - 1)]]
+        # 2026-09-09 spec upgrade: in small cards (terminal pitch < 14 pt) the
+        # tapered re-stroke plus 4.5 pt heads fused into one dark mass (QA on
+        # Figs 4B and 5B).  Below that pitch the route is a plain LW_EDGE line
+        # and the heads scale with the pitch, so the chain stays a chain.
+        small = nodes.pitch_pt < EXACT_CHAIN_SMALL_PITCH_PT
+        head = 4.5 if not small else max(
+            2.4, 4.5 * nodes.pitch_pt / EXACT_CHAIN_SMALL_PITCH_PT)
         for t in targets:
             route = nodes.route(t)
             for a, b in zip(route, route[1:]):
                 pa = nodes[a] if a in nodes else nodes.soma
-                self.dendrite(pa, nodes[b], level=nodes.level[b], color=color,
-                              zorder=2.4)
+                if small:
+                    self.ax.plot([pa[0], nodes[b][0]], [pa[1], nodes[b][1]],
+                                 color=color, lw=self.lw(LW_EDGE),
+                                 solid_capstyle="round", zorder=2.4)
+                else:
+                    self.dendrite(pa, nodes[b], level=nodes.level[b],
+                                  color=color, zorder=2.4)
                 self.arrow(_lerp(pa, nodes[b], 0.34), _lerp(pa, nodes[b], 0.60),
-                           color=color, lw=LW_EDGE, head=4.5, zorder=4.6)
+                           color=color, lw=LW_HAIR if small else LW_EDGE,
+                           head=head, zorder=4.6)
             for j, (n, nxt) in enumerate(zip(route[1:-1], route[2:]), 1):
                 self.disc(nodes[n], JUNCTION_R_PT, fill="white", edge=color,
                           lw=LW_EDGE, zorder=4.4)
