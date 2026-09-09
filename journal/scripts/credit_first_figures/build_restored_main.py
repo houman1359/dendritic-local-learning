@@ -36,6 +36,7 @@ from figure_canvas import (NativeCanvas, Margins, COLORS, PT_LABEL, PT_ANNOT,
                            PT_SMALL, PT_LEGEND, LW_DATA, LW_REF, LW_EDGE,
                            LW_ERR, LW_HAIR, MARKER_MS, style_panel)
 from journal_style import style_direct_color_labels
+from journal_style import SEED_MS  # QA 2026-09-09: seed-fan marker size in panel F
 
 S=J/'source_data'
 OUT=J/'figures/components'
@@ -251,8 +252,9 @@ def f4_targets_panel(ax):
     from journal_style import PT_BASE
     from native_schematics import Frame
     f = Frame(ax)
-    f.text((.5, 1.0), 'same tree, weights and examples; I8/4; signs ±0.5',
-           size=PT_BASE, color=COLORS['mute'], ha='center', va='top')
+    f.subscript((.5, 1.0 - f.fy(4.0)), 'same tree, weights and examples; I',
+                '8', '/4; signs ±0.5', size=PT_BASE, color=COLORS['mute'],
+                ha='center', va='top')
     f.text((.5, .0), '× product     + sum     root sums at the soma',
            size=PT_BASE, color=COLORS['mute'], ha='center', va='bottom')
     cells = f.split(2, axis='x', gap_pt=10.0)
@@ -266,6 +268,14 @@ def f4_targets_panel(ax):
             core, depth=3, mode='forward', trunk=True, output='y',
             input_labels=[('x', str(i + 1)) for i in range(8)])
         f4_operator_badges(f, nodes, FIG4_BADGES[kind])
+        # QA 2026-09-09: the 74 pt card is below the library's per-terminal
+        # label pitch, so the two outer inputs are named beside their
+        # contacts (x1 left, x8 right); the caption says 'outer two labelled'.
+        t_first, t_last = nodes.terminals[0], nodes.terminals[-1]
+        f.subscript((nodes[t_first][0] - f.fx(3.2), nodes[t_first][1]), 'x', '1',
+                    size=PT_BASE, color=COLORS['mute'], ha='right', va='center')
+        f.subscript((nodes[t_last][0] + f.fx(3.2), nodes[t_last][1]), 'x', '8',
+                    size=PT_BASE, color=COLORS['mute'], ha='left', va='center')
         f.error_in(nodes.soma, side='right', label='δ0')
     f.require_soma_lowest()
     f.require_delta0()
@@ -292,8 +302,8 @@ def f4_delivery_panel(ax, radii):
     f = Frame(ax)
     cells = f.split(3, axis='x', gap_pt=9.0)
     y0, hh = f.fy(13.0), 1.0 - f.fy(13.0)
-    spec = [('Exact path', 'per-site q(x)'),
-            ('Unit broadcast', 'same drop, six sites'),
+    spec = [('Exact\npath', 'per-site q(x)'),
+            ('Unit\nbroadcast', 'same drop, six sites'),
             ('Calibrated\nbroadcast', 'step 0, 256 examples')]
     for i, (cell, (title, foot)) in enumerate(zip(cells, spec)):
         cell = (cell[0], y0, cell[2], hh)
@@ -306,6 +316,11 @@ def f4_delivery_panel(ax, radii):
         elif i == 1:
             f.credit_delivery(nodes, mode='neuron', targets=list(FIG4_SITES),
                               rule_color='scalar', label=None)
+            # QA 2026-09-09: the bus drops stop above the rings; an equal
+            # drop disc on every site makes the six recipients countable and
+            # leaves card 3 differing only by its weighted radii.
+            for site in FIG4_SITES:
+                f.disc(nodes[site], 1.3, fill=COLORS['scalar'], zorder=6.2)
         else:
             f4_profile_bus(f, nodes, radii)
         f.error_in(nodes.soma, side='right', label='δ0')
@@ -524,7 +539,7 @@ def f4_deficit(ax, contrast, seeds, rows):
         assert len(draw) == 20
         entries.append(dict(label=f'{budget:,}', mean=float(end['mean']),
                             lo=float(end.ci95_low), hi=float(end.ci95_high),
-                            seeds=list(map(float, draw)), n=20, marker='D'))
+                            n=20, marker='D', fan=list(map(float, draw))))
         second.append((float(val['mean']), float(val.ci95_low),
                        float(val.ci95_high)))
         for state, rec in (('endpoint state', end),
@@ -542,6 +557,19 @@ def f4_deficit(ax, contrast, seeds, rows):
                       '(calibrated − exact NMSE)', reference=0.0,
                       reference_label='no deficit', color='bp',
                       xlim=(-.06, 1.56), tag='')
+    # QA 2026-09-09: the twenty-seed fan sits 0.22 rows BELOW the row (the
+    # validation-selected arm is 0.22 above), and the endpoint interval gets
+    # a white casing over the fan, so both intervals stay readable.
+    rng = np.random.default_rng(4)
+    for y, entry in zip(out['ypos'], entries):
+        fan = np.asarray(entry['fan'])
+        ax.plot(fan, y - .22 + rng.uniform(-.05, .05, len(fan)), ls='none',
+                marker='o', ms=SEED_MS, mfc=COLORS['mute'], mec='none',
+                alpha=.55, zorder=2.0)
+        ax.plot([entry['lo'], entry['hi']], [y, y], color='white',
+                lw=LW_ERR + 1.6, zorder=3.3, solid_capstyle='butt')
+        ax.plot([entry['lo'], entry['hi']], [y, y], color=COLORS['bp'],
+                lw=LW_ERR, zorder=3.4, solid_capstyle='butt')
     for y, (m, lo, hi) in zip(out['ypos'], second):
         yy = y + .22
         ax.plot([lo, hi], [yy, yy], color=COLORS['bp'], lw=LW_ERR, zorder=3.0,
@@ -634,6 +662,12 @@ def f4_energy(ax, eigen, diag, rows, ramp):
     for task, y in (('matching', .70), ('quartet', .59), ('nested', .48)):
         ax.annotate(FIG4_NAME[task], xy=(5.95, y), ha='right', va='center',
                     fontsize=PT_BASE, color=ramp[task])
+        # QA 2026-09-09: the two darker teals are dE 11 apart, so the
+        # marker glyph carries the identity beside each label
+        marker, filled = style[task]
+        ax.plot([6.25], [y], marker=marker, ms=MARKER_MS - 1.2, ls='none',
+                mfc=ramp[task] if filled else 'white', mec=ramp[task],
+                mew=LW_HAIR, zorder=4.0, clip_on=False)
     ax.annotate('dashed grey: initial (shared)\n'
                 '16,384 updates: k = 1 gives\n1.00 / 0.40 / 0.40',
                 xy=(.62, .40), ha='left', va='top', fontsize=PT_BASE,
