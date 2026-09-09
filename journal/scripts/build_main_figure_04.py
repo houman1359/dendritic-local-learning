@@ -621,6 +621,10 @@ def initial_utility(ax, summary: pd.DataFrame) -> dict:
                 zorder=6)
     reference_line(ax, 0.0, axis="y", label=None, color=MUTE, zorder=0,
                    span=(C_XLIM[0], 1.0))
+    # CF-7 exception (recorded in the deviation list): the right end of the
+    # zero rule carries the three chi_c diamonds and the 'B = 2' direct
+    # label, so the reference label sits right-aligned at chi = 0.52 below
+    # the rule instead of at its right end.
     ax.annotate("zero utility", xy=(0.52, 0.0), xytext=(0.0, -1.8),
                 textcoords="offset points", fontsize=PT_BASE, color=MUTE,
                 ha="right", va="top", zorder=6, annotation_clip=False)
@@ -700,7 +704,7 @@ def boundary_order(ax, crossings: pd.DataFrame, seeds: pd.DataFrame,
                 [D_BREAK + dy - 0.012, D_BREAK + dy + 0.012],
                 color=EDGE, lw=LW_HAIR, clip_on=False, zorder=6,
                 solid_capstyle="butt")
-    _corner_lines(ax, ("no crossing within", "the sweep (χ ≤ 1)"),
+    _corner_lines(ax, ("no crossing (χ ≤ 1)",),
                   corner=(1.0, 1.0), x_pt=-2.0, y_pt=-2.0, ha="right")
 
     for i, b in enumerate(BRANCHES):
@@ -734,12 +738,14 @@ def boundary_order(ax, crossings: pd.DataFrame, seeds: pd.DataFrame,
                     np.full(missing, 1.190), linestyle="none", marker="^",
                     ms=MARKER_MS - 0.8, markerfacecolor="white",
                     markeredgecolor=AMBER, markeredgewidth=LW_EDGE, zorder=5)
-            ax.text(xs[i] - 0.34, 1.190, f"{missing}/20", fontsize=PT_BASE,
-                    color=AMBER_TEXT, ha="right", va="center", zorder=6)
+            # QA 2026-09-09: right of the triangles, inside the axes (the
+            # left-of-cluster placement was struck through by the spine)
+            ax.text(xs[i] + 0.24, 1.190, f"{missing}/20", fontsize=PT_BASE,
+                    color=AMBER_TEXT, ha="left", va="center", zorder=6)
 
     for i in range(3):
         ax.plot([xs[i], xs[i]], [predicted[i], trained[i]], color=INK,
-                lw=LW_REF, dashes=DASHES, zorder=1.6, solid_capstyle="butt")
+                lw=LW_REF, dashes=DASHES, zorder=3.0, solid_capstyle="butt")
     ax.plot(xs, predicted, linestyle="none", marker="D", ms=MARKER_MS,
             markerfacecolor="white", markeredgecolor=INK,
             markeredgewidth=LW_EDGE, zorder=4)
@@ -749,9 +755,10 @@ def boundary_order(ax, crossings: pd.DataFrame, seeds: pd.DataFrame,
     # the printed pair per branch count, direct-labelled once at B = 2 and
     # then given as bare values, so the two series keep their identity
     # without a legend and without a footer table
-    ax.text(0.44, predicted[0] + 0.010, "analytic", fontsize=PT_BASE,
-            color=INK, ha="left", va="bottom", zorder=6)
-    ax.text(0.44, trained[0] - 0.010, "trained", fontsize=PT_BASE,
+    token_subscript(ax, 0.44, predicted[0] + 0.010, "analytic χ", "c", "",
+                    size=PT_BASE, sub_size=PT_BASE, color=INK, ha="left",
+                    va="bottom")
+    ax.text(0.44, trained[0] - 0.010, "trained crossing", fontsize=PT_BASE,
             color=AMBER_TEXT, ha="left", va="top", zorder=6)
     # the three printed pairs, colour-keyed to the two direct labels above;
     # per-cluster tags do not fit -- the x axis is 3.2 categorical units on
@@ -818,9 +825,15 @@ def forgetting_forest(canvas: NativeCanvas, ax, summary: pd.DataFrame,
     # a right-aligned value column: a per-row note set inside the axes lands
     # on its own interval, and outside the right spine it would leave the
     # page (E is the last module column)
-    values = [_minus(r["mean"]) for r in rows]
+    # QA 2026-09-09: the three near-zero rows carry their intervals in the
+    # column (they have the room); the top row's 55.7 [53.8, 57.6] is drawn
+    # as its bar and printed in the caption, because a 60 pt string would
+    # run back over the marker at 55.7 on this 93 pt axis.
+    values = [_minus(rows[0]["mean"])] + [
+        f'{_minus(r["mean"])} [{_minus(r["lo"])}, {_minus(r["hi"])}]'
+        for r in rows[1:]]
     ties = int((np.asarray(rows[1]["seeds"]) == 0.0).sum())
-    values[1] = f'{values[1]} ({ties}/{len(rows[1]["seeds"])})'
+    values[1] = f'{_minus(rows[1]["mean"])} ({ties}/{len(rows[1]["seeds"])})'
     for y, text in zip(out["ypos"], values):
         ax.annotate(text, xy=(1.0, y), xycoords=("axes fraction", "data"),
                     xytext=(7.0, 0.0), textcoords="offset points",
