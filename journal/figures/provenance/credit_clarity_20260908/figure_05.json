@@ -1,37 +1,88 @@
 {
   "figure": "Figure 5",
-  "output": "figures/components/focused_main_05.pdf",
-  "output_sha256": "5517568e909b27770f2dbc8b68c9e529401bc47b54eac6cc1f4cf6f36c2a2a1f",
+  "output": "source_data/conductance_local_gate/figures/local_gate_primary.pdf",
+  "output_sha256": "651e287b11a5bc2649b813c093681c99e27b847fad9eb35caf0cc72071fd9345",
   "plotted_table": "source_data/curated_publication/figure_05_plotted.csv",
-  "plotted_table_sha256": "1460bb34163da8a9b41f1b053fdeec496386eb9de965bcb5df09efb11f013ff9",
+  "plotted_table_sha256": "a708e5edb519fe4da1e887043b3a10c1ea0676cc731ab7fb745eef90564fef70",
   "panel_sources": {
-    "A": "Unchanged supplied-context distal-gate schematic, with ungated proximal eligibility.",
-    "B": "Unchanged nominal teacher tuning, independently perturbed in every actual teacher.",
-    "C": "Aligned-task four-rule curves at Adam0.03; twenty original fresh seeds and unchanged bootstrap intervals.",
-    "D": "Opposed-task curves under the identical protocol and readout definitions.",
-    "E": "(Broadcast minus hard-gate NMSE on opposed tasks) minus (broadcast minus hard-gate NMSE on aligned tasks), at both validation windows; unchanged paired seed outcomes and intervals.",
-    "F": "Existing primary-rate opposed exact/hard/continuous/swapped/proximal-gated outcomes; no new task or rate selection. All twenty original fresh seeds retained."
+    "main_5A": {
+      "sources": [
+        "scripts/conductance_local_gate/model.py",
+        "source_data/conductance_local_gate/METHODS.md",
+        "source_data/conductance_local_gate/figures/teacher_tuning_source.csv"
+      ],
+      "scope": "Seven-compartment circuit, E/I contacts, the context gate and the local distal gate\u2019s addressed subtree; inset: nominal unperturbed teacher terminal voltage against the latent feature. Schematic, no data."
+    },
+    "main_5B": {
+      "sources": [
+        "scripts/conductance_local_gate/model.py",
+        "source_data/conductance_local_gate/METHODS.md"
+      ],
+      "scope": "The four deliveries of the somatic error defined by model.delivered (local distal gate, exact path, unit broadcast, two-profile oracle). Schematic, no data."
+    },
+    "main_5C": {
+      "sources": [
+        "source_data/conductance_local_gate/figures/curve_band_source.csv",
+        "source_data/conductance_local_gate/summaries/all_curves.csv"
+      ],
+      "scope": "Aligned targets, Adam 0.03, four prespecified rules, 20 paired simulation seeds; means with 95 % pointwise whole-seed bootstrap bands at 12 fixed checkpoints."
+    },
+    "main_5D": {
+      "sources": [
+        "source_data/conductance_local_gate/figures/curve_band_source.csv",
+        "source_data/conductance_local_gate/summaries/all_curves.csv",
+        "source_data/conductance_local_gate/summaries/condition_means.csv"
+      ],
+      "scope": "Opposed targets, same cohort and readout as C; bound-contact mark from all_curves.first_bound_step; validation-selected broadcast mean from condition_means."
+    },
+    "main_5E": {
+      "sources": [
+        "source_data/conductance_local_gate/summaries/paired_contrasts.csv",
+        "source_data/conductance_local_gate/summaries/paired_seed_contrasts.csv",
+        "source_data/conductance_local_gate/summaries/completeness_audit.json"
+      ],
+      "scope": "Opposed-minus-aligned difference of broadcast-minus-gate NMSE at both windows, validation-selected states, 20 paired seeds joined across windows; prespecified sign-flip test, Holm-adjusted."
+    },
+    "main_5F": {
+      "sources": [
+        "source_data/conductance_local_gate/summaries/all_endpoints.csv",
+        "source_data/conductance_local_gate/summaries/condition_means.csv"
+      ],
+      "scope": "Opposed NMSE at validation-selected states within the 4,096-update window: exact path, the local distal gate in its hard and continuous shapes, the swapped gate and the gate-also-proximal control, at all three Adam rates."
+    },
+    "main_5G": {
+      "sources": [
+        "source_data/conductance_local_gate/figures/historical_cancellation_source.csv",
+        "source_data/conductance_credit_demand/opponent/summaries/context_gradient_summary.csv"
+      ],
+      "scope": "Earlier cohort seeds 2101\u20132120; fraction of the distal-parameter gradient retained after context averaging at matched initial and broadcast-trained weight states."
+    }
   },
   "source_sha256": {
+    "scripts/conductance_local_gate/model.py": "cc2b82f6c486810a43aa885f3ea2dacce54c473f2e2ece6f4cfdb7d88ce6ad39",
+    "source_data/conductance_credit_demand/opponent/summaries/context_gradient_summary.csv": "a3bea23ba12a888eb7fb356b4ac3142bbf240518fa8b3d2a28278d91e1b40486",
+    "source_data/conductance_local_gate/METHODS.md": "62a713d2c9e60b46fdeaa1d65ce6c93688e30f9f0ce2e3f3251834ec1386f543",
+    "source_data/conductance_local_gate/figures/curve_band_source.csv": "0dd58c44591943c6696bf0e27b0486af240c58acec1d801ef7234c0746b50e1c",
+    "source_data/conductance_local_gate/figures/historical_cancellation_source.csv": "15938898c44c07bbbc5721ee727e9d54199c90e90ab8a298bb7109682dc69814",
+    "source_data/conductance_local_gate/figures/teacher_tuning_source.csv": "26b9ebc985bc662465c9a03af5a9197f54d8443383f44090121ddcf24c4c3086",
     "source_data/conductance_local_gate/summaries/all_curves.csv": "4a24ea4aa1046cb638cc47fabc72b71fb3dbc96bbcb9aea6ebef33e79f3ac456",
     "source_data/conductance_local_gate/summaries/all_endpoints.csv": "7d3f6df93795afe7b752b0b7a239f51dcafe246f851efe158a7b2c3ac30e4d1d",
+    "source_data/conductance_local_gate/summaries/completeness_audit.json": "dc979f55ba19458ea33e12faf7dc152d3b0ea72192835a8cb691bc3791101821",
     "source_data/conductance_local_gate/summaries/condition_means.csv": "e3ed564e0fd24cb7fee0f1fa6fc337a30fc5481f7b29381419991281829e81a5",
     "source_data/conductance_local_gate/summaries/paired_contrasts.csv": "5ae6c7a35fd84bd43f49f0eca1c8b7405165bc4e4a568d4c38509ec90ef62beb",
-    "source_data/conductance_local_gate/figures/curve_band_source.csv": "0dd58c44591943c6696bf0e27b0486af240c58acec1d801ef7234c0746b50e1c",
-    "source_data/conductance_local_gate/protocol.json": "c441998f6f91e1f8782b2918689806e119af567e479bcd5c94069dca837a2413",
-    "source_data/conductance_local_gate/protocol_freeze.json": "81568da7f4350a18c264914d1a86f7307f3809743b8c3113efa4abcc70d3bbdc",
-    "source_data/conductance_local_gate/summaries/completeness_audit.json": "dc979f55ba19458ea33e12faf7dc152d3b0ea72192835a8cb691bc3791101821"
+    "source_data/conductance_local_gate/summaries/paired_seed_contrasts.csv": "07fa32c5b4cc10ea5f47f683662753d22c08f3b17e767d044af4a9e0e2554d22"
   },
   "builders_sha256": {
-    "scripts/conductance_local_gate/build_focused_main.py": "5a0fd1e5c27eba01f51c36d2e728f9fbf850bfa85aaaa64b8920b60e4af563a1",
+    "scripts/conductance_local_gate/figure.py": "eb243194761a7c9b7bf730e834e4023e6a095b6e9bde6a755eff848bf8d9ede7",
     "scripts/conductance_local_gate/report.py": "a96b4b6edd42c0d98de3da44a46c409310b463450369173be7371d503fa6dfef",
     "scripts/conductance_local_gate/model.py": "cc2b82f6c486810a43aa885f3ea2dacce54c473f2e2ece6f4cfdb7d88ce6ad39",
-    "scripts/conductance_local_gate/portable_contract.py": "fea35a393f5881dfc60b3dfe810dac64f8c2e6b0d8ba01937f4a42c5ffab3c05",
-    "scripts/journal_style.py": "32a3272cebb949784b694bc6dbb495cf74f6ba4ddf97d18d44f3ef54e082844e",
+    "scripts/figure_canvas.py": "de3f566dd08270535deab95eb798b49cc17ccf4dfbb88e7ebdb50860903a6ad1",
+    "scripts/native_schematics.py": "3e74a3b7ccbb993d9c131d6997aba30a1d81be7728f335937e3fa2e14aa754b1",
+    "scripts/journal_style.py": "be8a138f9d9c081237edc616ba52b6769f957d8b8b49e705a92adcb18f475f3c",
     "scripts/credit_first_figures/focused_provenance.py": "b7ade95b88e7d10a43bab01716dee6211bc2f09735b605d489c0012a147ecea7"
   },
   "source_data_immutable": true,
   "new_experiments": 0,
   "layout_findings": [],
-  "scope": "Editorial promotion of the already tested continuous gate. Existing report.py, experimental summaries, original primary figure, full-rate SI sheet and historical completion gate remain unchanged."
+  "scope": "Main Figure 5 (fig:conductancecredit), overhaul v2. DECISIONS G4 schematic-area waiver for Fig 5, restated at the AMENDMENTS B12 / CF-10 value 22.7 % (sum of schematic slot areas over the live canvas 450.4 x 436 pt). Recorded, not exercised: the figure is inside the 30 % cap and no relaxation of PANEL_ASPECT_MAX or of the cap is requested. CF-5: the frameless four-entry rule key inside panel C is the single sanctioned in-axes key in the nine-figure set; C and D share four series across two panels."
 }

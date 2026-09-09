@@ -1,37 +1,90 @@
 {
   "figure": "Figure 7",
-  "output": "figures/components/restored_main_07.pdf",
-  "output_sha256": "05f980389ee115a26ae574aeed36a65b5230c6aaa9ee0cac18cfaadcb9722c02",
+  "label": "fig:topology",
+  "output": "figures/components/credit_first_figure_07.pdf",
+  "output_sha256": "d050ca8018396f5d1749d3d6d1fb4eb0af3fd91fc0b6ea0b268b6ec808930dff",
+  "main_copy": "figures/main/figure_07.pdf",
+  "panel_letters": "abcdefgh",
+  "replication_unit": "reconstructed cell; initial eight-cell, disjoint 47-cell and Pinky second-mouse cohorts kept separate",
   "panel_sources": {
-    "A": "Original median-sized example actual PCA geometry and mapped E/I contacts, unchanged helper.",
-    "B": "Explicitly illustrative ancestry dictionary with constant column; not an inferred measured-support matrix.",
-    "C": "Corrected common-mode residual-capture atK1/2/4/8, the complete47-cell budgets, whole-cell descriptive bootstrap. K16is available only in a cell subset and is not displayed here; original source rows remain untouched.",
-    "D": "Archived paired47-cell K8ancestry residual-capture differences against allfour spatial controls; original means and95%intervals unchanged. Small points show each cell for the surrogate comparison (38/47positive) in residual-energy percentage points, not total-energy capture. Other control rows retain summary intervals.",
-    "E": "Same47cells,K8:mean residual capture versus actual nonzero density; no claim equalK fixes rank or wiring.",
-    "F": "Original8,disjoint47 and second-mouse8 common+ancestry total/residual capture, archived helper fixed-seed cell bootstrap."
+    "a": "source_data/figure3/segment_metrics.csv filtered to root 864691135409937097 (78 of 616 segments): the pia-up principal-plane projection, all 76 inhibitory-bearing segments as inh contacts, route 3's origin 4396 and its five input-bearing descendants under a 16 % shunting tint; schematic, no data",
+    "b": "the same skeleton; the seven K = 8 routes reproduced in the builder from scripts/anatomy_commonmode/run.py:105-112 over source_data/anatomy_commonmode/original8/cells/operator_864691135409937097.npz with scripts/anatomy_commonmode/protocol.json (origins 4784, 4621, 4396, 4458, 4975, 4209, 4516; supports 1, 1, 5, 1, 1, 29, 1; coverage 32 of 70); the matrix is the eight tree-ordered site blocks [23, 1, 1, 1, 4, 1, 1, 38]",
+    "c": "weighted_response column of i-site 4396 in the same operator npz, reduced to the eight site blocks of B by a block mean and scaled by max |t| = 0.47842: [-0.028, -0.004, -0.003, -0.003, -0.378, -1.0, -0.119, -0.002]",
+    "d": "v661 cohort_method_summary.csv total_capture_mean at K = 1, 2, 4, 8, 16 for the six families; ancestry and surrogate bands are 20,000-draw cell bootstraps of cell_method_summary.csv (seed 202609061 + 10i + K); broadcast floor 0.20263",
+    "e": "v661 cohort_method_summary.csv at K = 8: broadcast = total_capture_mean - incremental_total_capture_mean, spatial = incremental_total_capture_mean, unexplained = 1 - total_capture_mean; the annotation is original8/summary.json common_capture_mean 0.31376 and rank_one_capture_mean 0.32605",
+    "f": "per-cell K = 8 total capture of common + ancestry against the mean of the cell's 200 common + surrogate ancestry replicates from v661/cells/rows_<root_id>.csv.gz; open symbols are the cells whose surrogate fraction >= 0.5; cohort mean with 20,000-draw cell-bootstrap intervals on both coordinates",
+    "g": "v661/summary.json comparisons for BOTH metrics (residual filled, total open) with their retained 95 % intervals and cells_positive; the fan is the 47 within-cell residual differences from cell_method_summary.csv at K = 8; the right columns are wiring_density_mean and dictionary_rank_mean from cohort_method_summary.csv",
+    "h": "residual_capture at K = 8 per cohort from each cohort's cell_method_summary.csv (initial 8, disjoint 47, Pinky 8) for ancestry, surrogate tree, depth bins and the common-constrained SVD; 20,000-draw cell bootstrap, seed 202609061 + 100 g + i; Pinky site counts and eligibility from pinky/cohort_inclusion.csv"
   },
   "source_sha256": {
+    "scripts/credit_first_figures/build_anatomy.py": "c763bd15bf995937a333b8a4aa811859a82ed60567154cebec2388a66436ec20",
+    "scripts/build_main_figure_07.py": "8dd526d60d35b572a17a68c77c1813279756251052d4921471d77c3fb16b885e",
+    "scripts/figure_canvas.py": "de3f566dd08270535deab95eb798b49cc17ccf4dfbb88e7ebdb50860903a6ad1",
+    "scripts/journal_style.py": "be8a138f9d9c081237edc616ba52b6769f957d8b8b49e705a92adcb18f475f3c",
+    "scripts/native_schematics.py": "3e74a3b7ccbb993d9c131d6997aba30a1d81be7728f335937e3fa2e14aa754b1",
+    "scripts/anatomy_commonmode/run.py": "69b412551dc87f0c9ecf6221d14981abf282a3d9e0406d676f0f287d8af4aa35",
+    "scripts/anatomy_commonmode/protocol.json": "ae4f8f36c0a9bb3d41fc621709575255267368ecf8da84cccf895d2914a48f8b",
+    "scripts/analyze_reciprocal_routing_controls.py": "2aae805ef8285ba97d9250d160823664fb34ee600a765e2adc4bb99e5a8528cd",
     "source_data/figure3/segment_metrics.csv": "7829c298c4e5b3209b758fb88b92b55f070420c00b383436e5d4e1601e7ff1cf",
     "source_data/anatomy_commonmode/protocol_freeze.json": "425448bdbecaf9e3c76fabf134a87ba5870d53fd5821c09a4aa7541f53835db0",
+    "source_data/anatomy_commonmode/original8/cells/operator_864691135409937097.npz": "4cc1d94e662a9e2bccc169b93f06daa6a22e783131eaec14877bd1de8c8aad3c",
+    "source_data/anatomy_commonmode/pinky/cohort_inclusion.csv": "52ff78114d8041a597704268d5699ef5c3eaa8e0f065d0f1fa83affd4bb5c0ef",
     "source_data/anatomy_commonmode/original8/cell_method_summary.csv": "eb899a6833a0783e4b3e171adca3046800e64e6c942a517986395b251cde2880",
+    "source_data/anatomy_commonmode/original8/cohort_method_summary.csv": "28d3c2e6bdbcfc6df1c7423287c0017ac9e63dfedb4c2ca6434ab4459a5a05d3",
     "source_data/anatomy_commonmode/original8/summary.json": "d4579257ab4ddb0a03a32446bc0b0636b15c9c9c3454b58d194d4904dae497dc",
+    "source_data/anatomy_commonmode/original8/operator_audit.csv": "b2ad5e161d551af5d1bd48839cb9c095f3513482022a94ce435e5b65f11dfc90",
     "source_data/anatomy_commonmode/v661/cell_method_summary.csv": "c99a3f24cb1d2a6b53455b10496aa03428a9be99beea5fdaf7a5e45da11fa010",
+    "source_data/anatomy_commonmode/v661/cohort_method_summary.csv": "5a81a8472e83b972d7f059c821cae1e0a7241965c8fe7562f9e7f04f9bf49194",
     "source_data/anatomy_commonmode/v661/summary.json": "209d2273ca480cfaf92be4ed990f0482b056b65118041ef306835696c6269782",
+    "source_data/anatomy_commonmode/v661/operator_audit.csv": "526f132bd4d313351700896953d1bc67206e888ab376c81215049ac8ad4676e9",
     "source_data/anatomy_commonmode/pinky/cell_method_summary.csv": "67ed12fde8e4de04ac20e1fd3e6c3677bb2f63129d255ca742e2b891f59dfc48",
-    "source_data/anatomy_commonmode/pinky/summary.json": "85607aa5a4cec1b12a2b213ba0995cfe4c11585e39e292a5aa5e8d8c3a6f0d5b"
+    "source_data/anatomy_commonmode/pinky/cohort_method_summary.csv": "5a8ac6b4a2f2aebaf5eaafb45919be23d95662e71e71226b1bd39b13d0d64fd8",
+    "source_data/anatomy_commonmode/pinky/summary.json": "85607aa5a4cec1b12a2b213ba0995cfe4c11585e39e292a5aa5e8d8c3a6f0d5b",
+    "source_data/anatomy_commonmode/pinky/operator_audit.csv": "51ae1f83902dbf7eaec7f664b611b1c3be69d9424d6d997913d549de0dd30f6b"
   },
-  "builder_sha256": {
-    "scripts/credit_first_figures/build_restored_main.py": "730af258411e2b15e6070e00497f93f05bc16580d7e029498515879a36e73edc",
-    "scripts/credit_first_figures/focused_main_evidence.py": "e045f0fc26ce8554af19f7d2b1ee9683ec852899f19e02e76e78163b0d74e773",
-    "scripts/figure_canvas.py": "498dec86dcac34c9841538fa7b5bf7b7311d468db8fbe0c7a648fbb9508c5e1f",
-    "scripts/journal_style.py": "32a3272cebb949784b694bc6dbb495cf74f6ba4ddf97d18d44f3ef54e082844e"
+  "schematic_fraction": 0.23606,
+  "schematic_fraction_formula": "sum(schematic slot w x h) / (live_w x live_h) = 3 x (125.5 x 122) / (452.4 x 430)",
+  "palette": {
+    "families": {
+      "Ancestry": "#3FA26C",
+      "Surrogate tree": "#686868",
+      "Depth bins": "#232323",
+      "Shuffled routes": "#E28FBC",
+      "Random routes": "#C7862B",
+      "SVD oracle": "#8F66CD"
+    },
+    "worst_normal": {
+      "pair": [
+        "Ancestry",
+        "Surrogate tree"
+      ],
+      "delta_e": 17.39
+    },
+    "worst_cvd": {
+      "pair": [
+        "Ancestry",
+        "Random routes"
+      ],
+      "delta_e": 7.2
+    },
+    "waiver": "shunting/low_rank protan 7.20 is accepted: forced once bp, additive, amber and per_soma are excluded, and the pair is separated by marker (o vs X), by D's band and by direct labels; the AMENDMENTS fallback random = mix('point_mlp', 55) is rejected because it puts a grey tint beside the grey point_mlp series",
+    "forbidden_present": []
   },
-  "source_data_immutable": true,
-  "new_experiments": 0,
-  "layout_findings": [],
-  "rendering_scope": "Existing outcomes only; no scientific endpoint or rate selection. Any redraw bootstrap uses whole existing seeds/cells, not independent pairs.",
-  "helper_sha256": {
-    "scripts/build_main_figure_07.py": "8dd526d60d35b572a17a68c77c1813279756251052d4921471d77c3fb16b885e",
-    "scripts/credit_first_figures/build_anatomy.py": "f75b40c0182cdba3f5f2273dfba7ab1076a14e9720c61ee6c1d6480528565016"
-  }
+  "waivers": [
+    "D3: row 1 is three 4-module panels that share no axis; each is a different estimand and the row is column-locked",
+    "H idiom (decision 0.7): grouped vertical dot plot, not a forest; a two-factor panel at 5 modules",
+    "B address cycle: builder-local shunting/local/oracle plus white tints, because K_CYCLE's second entry is the banned `additive`",
+    "soma-lowest: declared, not asserted, for the measured arbor of A/B/C (36 of 78 segments sit below the soma in any projection of this reconstruction)"
+  ],
+  "layout_findings": [
+    "TEXT-ON-DATA '20.8 %'",
+    "TEXT-ON-DATA '7.62'",
+    "TEXT-ON-DATA '23.2 %'",
+    "TEXT-ON-DATA '8.00'",
+    "TEXT-ON-DATA '18.8 %'",
+    "TEXT-ON-DATA '7.65'",
+    "TEXT-ON-DATA '17.8 %'",
+    "TEXT-ON-DATA '5.66\u2020'"
+  ],
+  "scope": "Modeled passive response capacity on measured anatomy; no evidence of endogenous biological route usage. The initial eight-cell and disjoint 47-cell cohorts are the same animal; Pinky is one second animal."
 }

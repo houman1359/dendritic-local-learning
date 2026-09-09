@@ -71,10 +71,10 @@
     {
       "figure": "fig9",
       "path": "figures/main/figure_09.pdf",
-      "component": "figures/components/restored_main_09.pdf",
-      "generator": "scripts/credit_first_figures/build_restored_main.py",
-      "panel": "a-c",
-      "notes": "Native rendering from existing scientific sources. Per-panel definitions and hashes: figures/provenance/structure_restoration_20260908/figure_09.json"
+      "component": "figures/components/credit_first_figure_08.pdf",
+      "generator": "scripts/credit_first_figures/build_measured.py",
+      "panel": "a-f",
+      "notes": "Native rebuild of main Fig. 9 on the shared canvas/glyph library; per-panel definitions and immutable input hashes: source_data/credit_first_figures/figure_08_sources.json"
     },
     {
       "figure": "figS1",
@@ -2152,83 +2152,218 @@
     {
       "figure": "fig9",
       "panel": "a",
-      "path": "source_data/review_evidence_reanalysis/functional_native_contrasts.csv",
-      "role": "Complete numerical input or panel-indexed display summary",
-      "generator": "scripts/credit_first_figures/build_restored_main.py",
-      "replication_unit": "seven targets with13scans;4000joint simulation datasets;125partner-scan reliability observations",
-      "notes": "Original empirical7target partial-rank estimates; selected/all-eligible scan policies, originalCI. Full input tables may contain other conditions; use the builder filters and the panel column in the display summary."
+      "path": "scripts/credit_first_figures/build_measured.py",
+      "role": "Native display definition",
+      "generator": "scripts/credit_first_figures/build_measured.py",
+      "replication_unit": "not applicable",
+      "notes": "Main Fig. 9 (fig:boundary), six panels a-f. Full input tables may contain other conditions; use the builder filters and the panel column in the display summary."
     },
     {
       "figure": "fig9",
       "panel": "a",
+      "path": "source_data/figure5/functional_target_metrics.csv",
+      "role": "Complete numerical input or panel-indexed display summary",
+      "generator": "scripts/credit_first_figures/build_measured.py",
+      "replication_unit": "7 target cells (13 scans); 4,000 simulated datasets per power point; 125 partner-scan reliability records",
+      "notes": "Main Fig. 9 (fig:boundary), six panels a-f. Full input tables may contain other conditions; use the builder filters and the panel column in the display summary."
+    },
+    {
+      "figure": "fig9",
+      "panel": "a",
+      "path": "source_data/functional_topology_all_scans/scan_metrics.csv",
+      "role": "Complete numerical input or panel-indexed display summary",
+      "generator": "scripts/credit_first_figures/build_measured.py",
+      "replication_unit": "7 target cells (13 scans); 4,000 simulated datasets per power point; 125 partner-scan reliability records",
+      "notes": "Main Fig. 9 (fig:boundary), six panels a-f. Full input tables may contain other conditions; use the builder filters and the panel column in the display summary."
+    },
+    {
+      "figure": "fig9",
+      "panel": "a",
+      "path": "source_data/functional_topology_all_scans/summary.json",
+      "role": "Complete numerical input or panel-indexed display summary",
+      "generator": "scripts/credit_first_figures/build_measured.py",
+      "replication_unit": "7 target cells (13 scans); 4,000 simulated datasets per power point; 125 partner-scan reliability records",
+      "notes": "Main Fig. 9 (fig:boundary), six panels a-f. Full input tables may contain other conditions; use the builder filters and the panel column in the display summary."
+    },
+    {
+      "figure": "fig9",
+      "panel": "b",
+      "path": "scripts/credit_first_figures/build_measured.py",
+      "role": "Native display definition",
+      "generator": "scripts/credit_first_figures/build_measured.py",
+      "replication_unit": "not applicable",
+      "notes": "Main Fig. 9 (fig:boundary), six panels a-f. Full input tables may contain other conditions; use the builder filters and the panel column in the display summary."
+    },
+    {
+      "figure": "fig9",
+      "panel": "b",
+      "path": "source_data/curated_publication/figure_09_plotted.csv",
+      "role": "Complete numerical input or panel-indexed display summary",
+      "generator": "scripts/credit_first_figures/build_measured.py",
+      "replication_unit": "7 target cells (13 scans); 4,000 simulated datasets per power point; 125 partner-scan reliability records",
+      "notes": "Main Fig. 9 (fig:boundary), six panels a-f. Full input tables may contain other conditions; use the builder filters and the panel column in the display summary."
+    },
+    {
+      "figure": "fig9",
+      "panel": "b",
       "path": "source_data/review_evidence_reanalysis/functional_native_target_effects.csv",
       "role": "Complete numerical input or panel-indexed display summary",
-      "generator": "scripts/credit_first_figures/build_restored_main.py",
-      "replication_unit": "seven targets with13scans;4000joint simulation datasets;125partner-scan reliability observations",
-      "notes": "Original empirical7target partial-rank estimates; selected/all-eligible scan policies, originalCI. Full input tables may contain other conditions; use the builder filters and the panel column in the display summary."
-    },
-    {
-      "figure": "fig9",
-      "panel": "a",
-      "path": "scripts/credit_first_figures/build_restored_main.py",
-      "role": "Native display definition",
-      "generator": "scripts/credit_first_figures/build_restored_main.py",
-      "replication_unit": "not applicable",
-      "notes": "Original empirical7target partial-rank estimates; selected/all-eligible scan policies, originalCI. Full input tables may contain other conditions; use the builder filters and the panel column in the display summary."
-    },
-    {
-      "figure": "fig9",
-      "panel": "a",
-      "path": "source_data/curated_publication/figure_09_plotted.csv",
-      "role": "Complete numerical input or panel-indexed display summary",
-      "generator": "scripts/credit_first_figures/build_restored_main.py",
-      "replication_unit": "seven targets with13scans;4000joint simulation datasets;125partner-scan reliability observations",
-      "notes": "Original empirical7target partial-rank estimates; selected/all-eligible scan policies, originalCI. Full input tables may contain other conditions; use the builder filters and the panel column in the display summary."
+      "generator": "scripts/credit_first_figures/build_measured.py",
+      "replication_unit": "7 target cells (13 scans); 4,000 simulated datasets per power point; 125 partner-scan reliability records",
+      "notes": "Main Fig. 9 (fig:boundary), six panels a-f. Full input tables may contain other conditions; use the builder filters and the panel column in the display summary."
     },
     {
       "figure": "fig9",
       "panel": "b",
+      "path": "source_data/functional_topology_all_scans/scan_metrics.csv",
+      "role": "Complete numerical input or panel-indexed display summary",
+      "generator": "scripts/credit_first_figures/build_measured.py",
+      "replication_unit": "7 target cells (13 scans); 4,000 simulated datasets per power point; 125 partner-scan reliability records",
+      "notes": "Main Fig. 9 (fig:boundary), six panels a-f. Full input tables may contain other conditions; use the builder filters and the panel column in the display summary."
+    },
+    {
+      "figure": "fig9",
+      "panel": "c",
+      "path": "scripts/credit_first_figures/build_measured.py",
+      "role": "Native display definition",
+      "generator": "scripts/credit_first_figures/build_measured.py",
+      "replication_unit": "not applicable",
+      "notes": "Main Fig. 9 (fig:boundary), six panels a-f. Full input tables may contain other conditions; use the builder filters and the panel column in the display summary."
+    },
+    {
+      "figure": "fig9",
+      "panel": "c",
+      "path": "source_data/functional_topology_all_scans/summary.json",
+      "role": "Complete numerical input or panel-indexed display summary",
+      "generator": "scripts/credit_first_figures/build_measured.py",
+      "replication_unit": "7 target cells (13 scans); 4,000 simulated datasets per power point; 125 partner-scan reliability records",
+      "notes": "Main Fig. 9 (fig:boundary), six panels a-f. Full input tables may contain other conditions; use the builder filters and the panel column in the display summary."
+    },
+    {
+      "figure": "fig9",
+      "panel": "c",
+      "path": "source_data/functional_topology_all_scans/cell_metrics.csv",
+      "role": "Complete numerical input or panel-indexed display summary",
+      "generator": "scripts/credit_first_figures/build_measured.py",
+      "replication_unit": "7 target cells (13 scans); 4,000 simulated datasets per power point; 125 partner-scan reliability records",
+      "notes": "Main Fig. 9 (fig:boundary), six panels a-f. Full input tables may contain other conditions; use the builder filters and the panel column in the display summary."
+    },
+    {
+      "figure": "fig9",
+      "panel": "d",
+      "path": "scripts/credit_first_figures/build_measured.py",
+      "role": "Native display definition",
+      "generator": "scripts/credit_first_figures/build_measured.py",
+      "replication_unit": "not applicable",
+      "notes": "Main Fig. 9 (fig:boundary), six panels a-f. Full input tables may contain other conditions; use the builder filters and the panel column in the display summary."
+    },
+    {
+      "figure": "fig9",
+      "panel": "d",
       "path": "source_data/measured_alignment_power/power_summary.csv",
       "role": "Complete numerical input or panel-indexed display summary",
-      "generator": "scripts/credit_first_figures/build_restored_main.py",
-      "replication_unit": "seven targets with13scans;4000joint simulation datasets;125partner-scan reliability observations",
-      "notes": "Completed4000joint-dataset simulation; observed partners/shared-pair dependencies,13scans7targets,exact two-sided n7signrank plus positive effect; measured/perfect reliability. Full input tables may contain other conditions; use the builder filters and the panel column in the display summary."
+      "generator": "scripts/credit_first_figures/build_measured.py",
+      "replication_unit": "7 target cells (13 scans); 4,000 simulated datasets per power point; 125 partner-scan reliability records",
+      "notes": "Main Fig. 9 (fig:boundary), six panels a-f. Full input tables may contain other conditions; use the builder filters and the panel column in the display summary."
     },
     {
       "figure": "fig9",
-      "panel": "b",
-      "path": "scripts/credit_first_figures/build_restored_main.py",
-      "role": "Native display definition",
-      "generator": "scripts/credit_first_figures/build_restored_main.py",
-      "replication_unit": "not applicable",
-      "notes": "Completed4000joint-dataset simulation; observed partners/shared-pair dependencies,13scans7targets,exact two-sided n7signrank plus positive effect; measured/perfect reliability. Full input tables may contain other conditions; use the builder filters and the panel column in the display summary."
-    },
-    {
-      "figure": "fig9",
-      "panel": "c",
-      "path": "source_data/measured_alignment_power/reliability_calibration_audit.csv",
+      "panel": "d",
+      "path": "source_data/measured_alignment_power/RESULTS.json",
       "role": "Complete numerical input or panel-indexed display summary",
-      "generator": "scripts/credit_first_figures/build_restored_main.py",
-      "replication_unit": "seven targets with13scans;4000joint simulation datasets;125partner-scan reliability observations",
-      "notes": "Measured repeat Spearman reliabilities for all125partner-recording observations (102unique partners); no simulation outcomes in histogram. No independent-observation test. Full input tables may contain other conditions; use the builder filters and the panel column in the display summary."
+      "generator": "scripts/credit_first_figures/build_measured.py",
+      "replication_unit": "7 target cells (13 scans); 4,000 simulated datasets per power point; 125 partner-scan reliability records",
+      "notes": "Main Fig. 9 (fig:boundary), six panels a-f. Full input tables may contain other conditions; use the builder filters and the panel column in the display summary."
     },
     {
       "figure": "fig9",
-      "panel": "c",
-      "path": "scripts/credit_first_figures/build_restored_main.py",
-      "role": "Native display definition",
-      "generator": "scripts/credit_first_figures/build_restored_main.py",
-      "replication_unit": "not applicable",
-      "notes": "Measured repeat Spearman reliabilities for all125partner-recording observations (102unique partners); no simulation outcomes in histogram. No independent-observation test. Full input tables may contain other conditions; use the builder filters and the panel column in the display summary."
+      "panel": "d",
+      "path": "source_data/measured_alignment_power/inputs/partner_index.csv",
+      "role": "Complete numerical input or panel-indexed display summary",
+      "generator": "scripts/credit_first_figures/build_measured.py",
+      "replication_unit": "7 target cells (13 scans); 4,000 simulated datasets per power point; 125 partner-scan reliability records",
+      "notes": "Main Fig. 9 (fig:boundary), six panels a-f. Full input tables may contain other conditions; use the builder filters and the panel column in the display summary."
     },
     {
       "figure": "fig9",
-      "panel": "c",
+      "panel": "d",
       "path": "source_data/curated_publication/figure_09_plotted.csv",
       "role": "Complete numerical input or panel-indexed display summary",
-      "generator": "scripts/credit_first_figures/build_restored_main.py",
-      "replication_unit": "seven targets with13scans;4000joint simulation datasets;125partner-scan reliability observations",
-      "notes": "Measured repeat Spearman reliabilities for all125partner-recording observations (102unique partners); no simulation outcomes in histogram. No independent-observation test. Full input tables may contain other conditions; use the builder filters and the panel column in the display summary."
+      "generator": "scripts/credit_first_figures/build_measured.py",
+      "replication_unit": "7 target cells (13 scans); 4,000 simulated datasets per power point; 125 partner-scan reliability records",
+      "notes": "Main Fig. 9 (fig:boundary), six panels a-f. Full input tables may contain other conditions; use the builder filters and the panel column in the display summary."
+    },
+    {
+      "figure": "fig9",
+      "panel": "e",
+      "path": "scripts/credit_first_figures/build_measured.py",
+      "role": "Native display definition",
+      "generator": "scripts/credit_first_figures/build_measured.py",
+      "replication_unit": "not applicable",
+      "notes": "Main Fig. 9 (fig:boundary), six panels a-f. Full input tables may contain other conditions; use the builder filters and the panel column in the display summary."
+    },
+    {
+      "figure": "fig9",
+      "panel": "e",
+      "path": "source_data/credit_first_figures/figure_08_actual_support.npz",
+      "role": "Complete numerical input or panel-indexed display summary",
+      "generator": "scripts/credit_first_figures/build_measured.py",
+      "replication_unit": "7 target cells (13 scans); 4,000 simulated datasets per power point; 125 partner-scan reliability records",
+      "notes": "Main Fig. 9 (fig:boundary), six panels a-f. Full input tables may contain other conditions; use the builder filters and the panel column in the display summary."
+    },
+    {
+      "figure": "fig9",
+      "panel": "e",
+      "path": "source_data/fulltree_boundary/output/dictionary_and_validation_metadata.jsonl",
+      "role": "Complete numerical input or panel-indexed display summary",
+      "generator": "scripts/credit_first_figures/build_measured.py",
+      "replication_unit": "7 target cells (13 scans); 4,000 simulated datasets per power point; 125 partner-scan reliability records",
+      "notes": "Main Fig. 9 (fig:boundary), six panels a-f. Full input tables may contain other conditions; use the builder filters and the panel column in the display summary."
+    },
+    {
+      "figure": "fig9",
+      "panel": "e",
+      "path": "source_data/figure3/segment_metrics.csv",
+      "role": "Complete numerical input or panel-indexed display summary",
+      "generator": "scripts/credit_first_figures/build_measured.py",
+      "replication_unit": "7 target cells (13 scans); 4,000 simulated datasets per power point; 125 partner-scan reliability records",
+      "notes": "Main Fig. 9 (fig:boundary), six panels a-f. Full input tables may contain other conditions; use the builder filters and the panel column in the display summary."
+    },
+    {
+      "figure": "fig9",
+      "panel": "e",
+      "path": "source_data/credit_first_figures/figure_08_support.csv",
+      "role": "Complete numerical input or panel-indexed display summary",
+      "generator": "scripts/credit_first_figures/build_measured.py",
+      "replication_unit": "7 target cells (13 scans); 4,000 simulated datasets per power point; 125 partner-scan reliability records",
+      "notes": "Main Fig. 9 (fig:boundary), six panels a-f. Full input tables may contain other conditions; use the builder filters and the panel column in the display summary."
+    },
+    {
+      "figure": "fig9",
+      "panel": "f",
+      "path": "scripts/credit_first_figures/build_measured.py",
+      "role": "Native display definition",
+      "generator": "scripts/credit_first_figures/build_measured.py",
+      "replication_unit": "not applicable",
+      "notes": "Main Fig. 9 (fig:boundary), six panels a-f. Full input tables may contain other conditions; use the builder filters and the panel column in the display summary."
+    },
+    {
+      "figure": "fig9",
+      "panel": "f",
+      "path": "source_data/credit_first_figures/figure_08_support.csv",
+      "role": "Complete numerical input or panel-indexed display summary",
+      "generator": "scripts/credit_first_figures/build_measured.py",
+      "replication_unit": "7 target cells (13 scans); 4,000 simulated datasets per power point; 125 partner-scan reliability records",
+      "notes": "Main Fig. 9 (fig:boundary), six panels a-f. Full input tables may contain other conditions; use the builder filters and the panel column in the display summary."
+    },
+    {
+      "figure": "fig9",
+      "panel": "f",
+      "path": "source_data/credit_first_figures/figure_08_sources.json",
+      "role": "Complete numerical input or panel-indexed display summary",
+      "generator": "scripts/credit_first_figures/build_measured.py",
+      "replication_unit": "7 target cells (13 scans); 4,000 simulated datasets per power point; 125 partner-scan reliability records",
+      "notes": "Main Fig. 9 (fig:boundary), six panels a-f. Full input tables may contain other conditions; use the builder filters and the panel column in the display summary."
     },
     {
       "figure": "figS1",

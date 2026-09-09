@@ -1,43 +1,125 @@
 #!/usr/bin/env python3
-"""Main Fig. 3 (fig:subtreefactorial): hierarchical distractors and ancestry bandwidth.
+"""Main Fig. 3 (fig:subtreefactorial): ancestry routes, matched controls, cues.
 
-Rebuilt 2026-09-08 on the NativeCanvas per analysis/figure_overhaul_20260908/
-DESIGN_SPEC.md §3 (labels per SPEC_ERRATA.md).  Three rows, seven panels:
+Rebuilt 2026-09-09 on the NativeCanvas per
+``analysis/figure_overhaul_20260908/v2/fig3/PLAN.md`` as amended by
+``v2/AMENDMENTS.md`` and ruled by ``v2/DECISIONS.md``.  Three rows, six
+panels, letters in citation order and in row-major order:
 
-    row 0  A  eight-stream task (4 modules)      B  dictionary ladder K = 1..8 (8)
-    row 1  C  accuracy across K (4)  D  rewiring (4, sharey)  E  coefficient source (4, sharey)
-    row 2  F  matched controls at K = 4 (5, schematic)   G  K = 4 forest (7, 62-pt reserve)
+    row 0  A  eight-stream task tree (4 mod)   B  ancestry + control
+                                                   dictionaries (8 mod)
+    row 1  C  accuracy across K (6 mod)        D  rewiring control (6 mod)
+    row 2  E  K = 4 forest (7 mod)             F  cue cohort grid (5 mod)
 
-Recorded deviations from the specification (each with its reason):
+Cross-figure rules binding on this build (AMENDMENTS §3), reproduced here
+because they are set-wide:
 
-* Canvas 490 pt, rows 122/108/108, vgutter 48 (spec: 492, 124/116/116, 40).
-  audit_row_separation.py needs >= 8.5 pt of blank band between rows; the
-  x tick labels + x label of row 1 (about 25 pt) and the letter + title of
-  row 2 (about 17 pt) leave < 3 pt at a 40-pt gutter.  Fig. 2 met the floor
-  with the same 48-pt gutter, so this figure uses it too.  Row 0 keeps B
-  inside the 2.40 panel-aspect ceiling (290 x 122 pt = 2.38).
-* Left margin 52 (spec 46): with 46 the y label of C entered the 16.8-pt
-  letter column that audit_letter_alignment.py protects.
-* F is one ghost tree carrying the correct-ancestry delivery plus a
-  4 x 8 measured-support table (rows = the four controls, columns = the
-  eight streams) instead of four 38-pt cards.  A 38-pt card cannot hold a
-  control name at PT_SMALL ("depth-interleaved" is 41 pt wrapped) beside
-  an eight-terminal tree with a legible pitch; the support strips the
-  spec asked for under each card are the table's rows.
-* D prints the short paired-difference tags "+23.2 pp" / "+5.0 pp"; the
-  95% intervals are in the caption (a 20-character interval tag has no
-  clear whitespace inside a 4-module accuracy panel).
-* Private helpers (helpers not present in scripts/native_schematics.py):
-  ``_badge`` adds the ``ceiling`` and ``exploratory`` badge kinds with the
-  library's badge geometry; ``_subtree_arrow`` draws the addressed-subtree
-  entry arrow with ``Frame.credit_delivery``'s geometry but on capsules
-  tinted from the D7 K-cycle (dend / soma / exc / mute) rather than the
-  library's legacy shunting / additive / local / oracle cycle.
+* CF-1  518.4 pt wide; height on the 340/415/490 ladder only (490 here,
+  aspect 1.058 >= ASPECT_MIN 1.05).
+* CF-2  exactly three type sizes 7.0 / 8.0 / 9.0-bold, nothing below 7.0,
+  no DejaVu, subscripts via Frame.subscript / token_subscript, never
+  mathtext.
+* CF-3  stroke widths only from {0.55, 0.70, 0.85, 0.95, 1.25} pt; every
+  area mark a 16 % tint_patch with a 0.55 pt edge; no open stroke at or
+  above DECORATIVE_LW_PT 1.35.
+* CF-4  glyph register: soma filled and lowest, tapered dend canopy with
+  open white junction rings, exc/inh filled contacts at 3.6 pt, gate /
+  shunt / inhibition one family, ghosts at GHOST_PCT 45, one ink delta-0
+  arrow per soma.  Fig 3 declares NO DELTA0_EXEMPTIONS entry.
+* CF-5  zero legend artists; the only sanctioned key in the nine-figure
+  set is the frameless four-entry rule key inside Fig 5C.
+* CF-6  the forest idiom for category-vs-value panels (here: E), set-wide
+  second-arm offset +0.22 rows with an open marker if one is ever added.
+* CF-7  every reference line dashed ``mute`` at LW_REF with its label
+  right-aligned on the line; zero drawn once, never as grid + rule.
+* CF-8  caption rules, word band 220-320 with macros stripped and each
+  inline math group counted as one word.
+* CF-9  titles in sentence case, no terminal period, a finding phrase,
+  <= 26 characters at <= 4 modules and <= 42 above.
+* CF-10 the single schematic-area formula of AMENDMENTS §1 B12.
+* CF-11 check_matrix_cells >= 6.0 pt per row and per column, column
+  headers <= 1.5x the column width, no raster below 300 dpi.
+* CF-12 9 pt bold letters, canvas.align_letters() unconditional, no hand
+  placement, <= 0.5 pt spread per module column.
 
-Column-lock waiver (D3): row 1 is three 4-module panels sharing the
-held-out-accuracy axis (C carries the label, D and E hide their tick labels).
+Schematic area on the B12 / CF-10 formula
+``sum(schematic slot w_pt x h_pt) / (live_w_pt x live_h_pt)`` with
+``live = (518.4 - 44 - 12) x (490 - 20 - 32) = 462.4 x 438``:
+``(128.8 + 295.6) x 128 = 54 323.2`` of ``202 531.2`` = **26.8 %**, inside
+the 30 % cap.  G4 waiver recorded for Fig 3 at the superseded 31.6 %
+measure; on the B12 formula the figure is 26.8 % and the waiver is
+dormant.  PANEL_ASPECT_MAX is not relaxed.
+
+Recorded deviations from the plan (each with its reason; the full list is
+also written into ``figure_03_sources.json``):
+
+* Row weights 128/107/107 with a 48 pt vertical gutter and margins
+  44/12/20/32, not the plan's 112/121/121 at 42 pt with margins 52/14.  Panel B is eight
+  modules wide (288.9 pt); at a 112 pt row its axes box is 2.58 wide,
+  above ``PANEL_ASPECT_MAX`` 2.40, which DECISIONS G4 forbids relaxing.
+  128 pt clears the cap (2.31); the 48 pt
+  gutter is what audit_row_separation.py's 8.5 pt floor needs between the
+  x labels of row 1 and the letters of row 2, and it leaves the two data
+  rows at 107 pt.  The left margin is 44 rather than 52 so that the
+  figure fills 92 % of the canvas width, which the strict audit requires.
+  The AMENDMENTS Fig 3 item 5 "tighten to 106/124/124" instruction is
+  therefore not taken: it would put B at 2.73.
+* E is placed with ``lock=False`` and a private measured left inset
+  instead of ``declare_reserve('E', left=66)``.  A declared reserve is
+  locked per GRID COLUMN, and C starts in the same column 0, so the
+  declaration would also carve 66 pt off C and leave C and D -- both six
+  modules of row 1 -- with different axes widths, which the layout
+  contract rejects as ``row-alignment``.  The inset is measured from the
+  row labels and capped at 62 pt so the ``panel-emphasis`` slot-fill ratio
+  stays under EMPHASIS_MAX_RATIO 1.35.
+* E's per-row wins / Holm notes are drawn INSIDE the axes, above each
+  row's seed fan, not through ``forest(note=...)``.  ``forest`` sets a
+  note outside the right spine, which here is the 38 pt gutter shared
+  with panel F's y axis.
+* E prints Holm P values in decimal (0.00018, 0.0000076) rather than
+  1.8 x 10^-4 / 7.6 x 10^-6: Nimbus Sans has no U+207B superscript minus
+  and CF-2 forbids mathtext.  The caption keeps the scientific form.
+* A's coefficient tier labels are set in a two-row keyed band rather than
+  over their own blocks: at the 12-16 pt terminal pitch a 17.6 pt
+  coefficient string cannot sit over a one-terminal block without
+  colliding with its neighbour.  The swatches key the tints, so the band
+  is the partition label.
+* A drops the panel footer "junctions define feedback supports only" into
+  the caption -- the plan's own stated fallback -- because the subtitle,
+  the two-row tier key, the eight input labels and the 15 pt delta-0
+  reserve leave no 12 pt band.
+* B's cards carry no tree, so ``credit_delivery`` (which needs a drawn
+  ``Nodes``) cannot draw the subtree entry arrow; a private
+  ``_delivery_arrow`` draws the same arrowhead in the same rule colour
+  into the addressed column.  Panel B therefore draws no soma and
+  ``require_delta0()`` passes with no exemption, as the plan states.
+* B's control-support row labels are single-line and the support table is
+  4 x 10 pt rows by 8 x 7 pt columns (not 6 x 6 pt): a two-line 7 pt row
+  label cannot sit on a 6 pt row.
+* D's paired intervals are computed with a fixed 20 000-draw bootstrap
+  seeded 70000; K = 2 comes out [21.03, 25.32] against the plan's quoted
+  [21.05, 25.32] (same estimator, different draw).  The printed tags carry
+  the means only.
+* C and F carry the plan's long annotations in shortened form; the full
+  wording is in the caption.  A 166 pt panel cannot hold a 295 pt line.
+  C prints the two tie tags verbatim but at 18.66 %, the value the frozen
+  ``condition_summary.csv`` carries for both arms at K = 1.
+* E runs to xlim (-2, 14) rather than the plan's (-2, 11), so the +13.13
+  dense rank-4 seed is drawn instead of clipped.
+* F does not repeat 256 / 64 / 16 on the dashed hard-readout lines: they
+  carry the same ORDINAL_RAMP hues as the labelled solid lines and the
+  noise-0.5 points have no clearance for three more labels.  Its
+  noise-free annotation names both oracle gaps on one line.
+* B's control-table headers are the digits 1..8 under one ``b_i`` tag and
+  its |A| key is plain text: Nimbus Sans has no Unicode subscript block
+  and CF-2 bans mathtext.
+* Private helpers (not in scripts/native_schematics.py, G5): ``_badge``
+  (adds the ``ceiling`` and ``exploratory`` badge kinds with the library's
+  badge geometry), ``_delivery_arrow`` (the subtree entry arrowhead
+  without a tree), ``_gap_span`` (the paired-difference span tag in D).
 """
 from __future__ import annotations
+import argparse
 import hashlib
 import json
 from pathlib import Path
@@ -47,20 +129,22 @@ import sys
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib as mpl
-from matplotlib.patches import Rectangle
 import numpy as np
 import pandas as pd
 
 HERE = Path(__file__).resolve().parent
 JOURNAL = HERE.parents[1]
 sys.path.insert(0, str(JOURNAL / "scripts"))
-import routing_figure_panels as routing                       # noqa: E402
-import run_trained_subtree_address_full_factorial as experiment  # noqa: E402
-from figure_canvas import (COLORS, LW_DATA, LW_EDGE, LW_ERR, LW_HAIR, LW_REF,  # noqa: E402
-                           MARKER_MS, PT_ANNOT, PT_LABEL, PT_SMALL, PT_TICK,
-                           Margins, NativeCanvas)
-from journal_style import (ERR_CAPSIZE, SEED_ALPHA, SEED_MS, label_color,  # noqa: E402
-                           style_direct_color_labels, wrap_ticklabels)
+sys.path.insert(0, str(HERE))
+import routing_figure_panels as routing                            # noqa: E402
+import run_trained_subtree_address_full_factorial as experiment    # noqa: E402
+from focused_provenance import publish                             # noqa: E402
+from figure_canvas import (COLORS, LW_DATA, LW_EDGE, LW_ERR, LW_HAIR,  # noqa: E402
+                           LW_REF, MARKER_MS, PT_ANNOT, PT_LABEL, PT_SMALL,
+                           Margins, NativeCanvas, forest)
+from journal_style import (ERR_CAPSIZE, ORDINAL_RAMP, SEED_ALPHA,   # noqa: E402
+                           SEED_MS, label_color, style_direct_color_labels,
+                           tint_patch)
 from native_schematics import (BADGE_STYLE, CONTACT_DIA_PT, Frame,  # noqa: E402
                                LINE_BAND_PT, _text_w_pt, mix, reference_line)
 
@@ -71,47 +155,66 @@ ENCODER = SOURCE / "review_coefficient_encoder"
 HARD = SOURCE / "review_coefficient_hard_readout"
 RECORDS = SOURCE / "credit_first_figures"
 CONFIG = JOURNAL / "configs/trained_subtree_address/full_factorial_confirmatory.json"
+ENCODER_CONFIG = JOURNAL / "configs/review_completion/coefficient_encoder.json"
 OUT = JOURNAL / "figures/components/credit_first_figure_03.pdf"
 PUBLISHED = JOURNAL / "figures/main/figure_03.pdf"
 
-INK, MUTE, GREEN, PURPLE = COLORS["ink"], COLORS["mute"], COLORS["shunting"], COLORS["oracle"]
-GREY = COLORS["point_mlp"]
+INK, MUTE, GREY = COLORS["ink"], COLORS["mute"], COLORS["point_mlp"]
+GREEN, PURPLE, ROSE = COLORS["shunting"], COLORS["oracle"], COLORS["highlight"]
+EXC = COLORS["exc"]
 K_TICKS = (1, 2, 4, 8)
-CUED = 2                       # zero-based index of the cued stream c3
-E_CELL = dict(calibration_samples=256, cue_noise_sd=0.5, cue_delay_trials=0, epoch=80)
-E_ORDER = (("oracle", "oracle_context", "enc", "oracle"),
-           ("soft", "learned_local_cue", "enc", "shunting"),
-           ("hard*", "learned_local_cue", "hard", "shunting"),
-           ("frozen", "frozen_profile", "enc", "per_soma"))
-CONTROLS_F = (("deranged", "within_neuron_route_derangement"),
-              ("depth-\ninterleaved", "depth_interleaved_bins"),
-              ("random sparse", "random_sparse_matched"),
-              ("dense rank-4", "random_rank_k"))
-CONTROLS_G = (("best matched control", "best_matched_nonanatomical_oracle", "oracle"),
-              ("dense rank-4", "random_rank_k", "shunting"),
-              ("random sparse", "random_sparse_matched", "shunting"),
-              ("depth interleaved", "depth_interleaved_bins", "shunting"))
-Y_LIM = (0.10, 0.92)
+CUED = 2                      # zero-based index of the cued stream b3
+BOOT_SEED = 70_000            # D's paired seed bootstrap (20,000 draws)
 
-# D7 K-cycle: four hues that are never data series; 62 % ink mixes for k >= 4.
-# Reserved for B's group identity (and F's partition capsule) alone.
-K_CYCLE = ("dend", "soma", "exc", "mute")
-# D8 ordinal ramp for A's coefficient tiers (|0.15| < |0.45| < |0.75|).
-# journal_style.py does not register ORDINAL_RAMP yet and a per-figure task
-# may not edit it, so this builder defines the same three values locally,
-# exactly as scripts/build_main_figure_04.py (Fig. 2) does.
-ORDINAL_RAMP = (mix("edge", 45), mix("edge", 75), COLORS["edge"])
-CAPSULE_TINT_PCT = 58          # tint of A's ordinal tier band (see _tier_bands)
-TIER_BAND_W_PT = 5.6           # fixed width of an A tier band
-LIFT_PT = 4.2                     # stream-label lift above its terminal (pt)
-# (terminal, sideways nudge in pt): the four streams panel A argues about,
-# each nudged along the canopy so its label hugs its own tip.
-A_STREAM_LABELS = ((0, -2.2), (2, -2.4), (3, 3.6), (7, 2.2))
+# AMENDMENTS §5 role table, restated for this figure:
+#   shunting = ancestry / task-matched tree, oracle = the best matched
+#   ceiling, point_mlp = derangement and the neutral controls, highlight =
+#   the rewired tree.  bp and additive appear nowhere in this figure.
+#   ORDINAL_RAMP is an ordinal position within THIS figure's own lists
+#   (A's coefficient tier, F's calibration size), never a shared identity.
+TIER_RAMP = (ORDINAL_RAMP[0], ORDINAL_RAMP[1], ORDINAL_RAMP[2], ORDINAL_RAMP[3])
+CAL_RAMP = {16: ORDINAL_RAMP[1], 64: ORDINAL_RAMP[2], 256: ORDINAL_RAMP[3]}
+
+CONTROL_ROWS = (("deranged", "within_neuron_route_derangement"),
+                ("depth-interleaved", "depth_interleaved_bins"),
+                ("random-sparse", "random_sparse_matched"),
+                ("dense rank-4", "random_rank_k"))
+FOREST_ROWS = (("best matched\ncontrol", "best_matched_nonanatomical_oracle",
+                "oracle", "p_holm_four_budgets", "four budgets"),
+               ("dense rank-4", "random_rank_k",
+                "point_mlp", "p_holm_four_individual_controls_at_k4",
+                "four controls"),
+               ("random-sparse", "random_sparse_matched",
+                "point_mlp", "p_holm_four_individual_controls_at_k4", None),
+               ("depth-\ninterleaved", "depth_interleaved_bins",
+                "point_mlp", "p_holm_four_individual_controls_at_k4", None))
+Y_LIM_C = (-20.0, 100.0)
+
+#: The shipped caption (analysis/figure_overhaul_20260908/v2/fig3/TEXT.md).
+#: Counted under CF-8 by :func:`caption_words` and recorded in the manifest.
+CAPTION = r"""\caption{\textbf{Ancestry routes help only where the tree's partition matches the task, and only when the coefficients are supplied.}
+\textbf{A}, Schematic, no data: eight streams enter the terminals $b_1$--$b_8$ of a balanced tree; context $c$ selects $b_3$, whose block alone sets the logit $z$, the somatic error $\delta_0$ enters the soma, and the $K=4$ ancestry capsule delivers it to $b_3$ and sibling $b_4$. Junctions define feedback supports only; teal tints give each stream's class coefficient ($+1.00$ cued, $-0.15$ sibling, $-0.45$ same-half nonsibling, $-0.75$ other half).
+\textbf{B}, Schematic, no data: ancestry dictionaries $A$ ($8\times K$), the channel carrying $b_3$'s credit shaded, over raw class-signal sums ($-3.05$, $-0.05$, $+0.85$, $+1.00$; unit-row normalization preserves the signs, giving $-1.08$, $-0.03$, $+0.60$, $+1.00$), beside the delivered support of $b_3$'s credit under the four matched controls at $K=4$ (random-sparse and dense rows, one draw).
+\textbf{C}, Held-out accuracy across budgets for the ancestry route, the deranged route and the best matched control (the per-seed maximum over the four controls, a ceiling); 20 paired seeds, per cent, means with 95\% seed-bootstrap intervals at epoch 80.
+\textbf{D}, Task-matched versus degree- and depth-matched rewired tree under ancestry feedback: paired $+23.15$ [$21.03$, $25.32$] and $+5.02$ [$4.19$, $5.94$] percentage points at $K=2,4$, exact ties at $K=1,8$; 20 paired seeds, 95\% paired seed-bootstrap intervals at epoch 80.
+\textbf{E}, Ancestry minus each control at $K=4$, intervals from \texttt{review\_evidence\_reanalysis/ancestry\_k4\_control\_contrasts.csv}, Holm-adjusted $P$ across four budgets (top row) or four controls; 20 paired seeds, percentage points, means with 95\% seed-bootstrap intervals at epoch 80.
+\textbf{F}, Coefficient source across the calibration $\times$ cue-noise grid, soft readout solid, exploratory hard readout dashed, against the oracle ceiling and the frozen-profile floor, printed noise-free values being oracle gaps; 20 fresh seeds (52000--52019), per cent, means with 95\% seed-bootstrap bands at epoch 80.
+Teal ramps in \textbf{A} and \textbf{F} are ordinal within this figure's own lists, not shared identities.
+Source Data: \texttt{source\_data/curated\_publication/figure\_03\_plotted.csv}.}"""
 
 
-def _k_hue(k):
-    key = K_CYCLE[k % 4]
-    return COLORS[key] if k < 4 else mix(key, 62, "ink")
+
+
+def caption_words(text=None):
+    """CF-8 word count: macros stripped, each inline math group one word."""
+    import re
+    t = (CAPTION if text is None else text).strip()
+    t = t[len("\\caption{"):-1]
+    t = re.sub(r"\$[^$]*\$", " MATH ", t)
+    t = re.sub(r"\\text(bf|tt)\{([^}]*)\}", r" \2 ", t)
+    t = re.sub(r"\\[a-zA-Z]+", " ", t)
+    t = t.replace("\\%", "%").replace("--", " ")
+    return len([w for w in re.split(r"\s+", t) if w.strip(" .,;:()[]{}")])
 
 
 def _signed(v, digits=2):
@@ -122,44 +225,63 @@ def _minus(s):
     return str(s).replace("-", "−")
 
 
-# ── data ─────────────────────────────────────────────────────────────────
+def _p_text(p):
+    """Holm P at two significant digits, without a superscript minus.
+
+    Nimbus Sans has no U+207B, and CF-2 forbids mathtext, so the panel
+    prints the decimal form and the caption keeps 1.8 x 10^-4 / 7.6 x 10^-6.
+    """
+    if p >= 1e-3:
+        return f"{p:.4f}"
+    digits = int(np.floor(np.log10(p)))
+    return f"{p:.{1 - digits}f}"
+
+
+# ---------------------------------------------------------------- data ----
 def coefficient_prediction():
+    """Raw and unit-row-normalised class-signal sums per budget (all 8 contexts)."""
     cfg = json.loads(CONFIG.read_text())["task"]
     n = cfg["contexts"]
     rows = []
     for k in K_TICKS:
-        routes = experiment.grouped_routes(np.arange(n), k, "correct_ancestry_subtrees",
+        routes = experiment.grouped_routes(np.arange(n), k,
+                                           "correct_ancestry_subtrees",
                                            np.random.default_rng(0))
         for context in range(n):
-            amplitudes = np.array([cfg["selected_signal"] if stream == context else
-                                   -cfg["distractor_signal_by_tree_distance"][
-                                       experiment.tree_relation(stream, context)]
-                                   for stream in range(n)])
+            amplitudes = np.array([
+                cfg["selected_signal"] if stream == context else
+                -cfg["distractor_signal_by_tree_distance"][
+                    experiment.tree_relation(stream, context)]
+                for stream in range(n)])
             mask = routes[context] > 0
             raw = float(amplitudes[mask].sum())
             delivered = float(routes[context] @ amplitudes)
-            np.testing.assert_allclose(delivered, raw / np.sqrt(mask.sum()), atol=1e-14)
-            rows.append(dict(budget_k=k, context=context, group_size=int(mask.sum()),
-                             raw_coefficient_sum=raw, normalized_coefficient_sum=delivered,
+            np.testing.assert_allclose(delivered, raw / np.sqrt(mask.sum()),
+                                       atol=1e-14)
+            rows.append(dict(budget_k=k, context=context,
+                             group_size=int(mask.sum()),
+                             raw_coefficient_sum=raw,
+                             normalized_coefficient_sum=delivered,
                              normalization="unit Euclidean norm per route row"))
     table = pd.DataFrame(rows)
     assert table.groupby("budget_k").raw_coefficient_sum.std().max() < 1e-14
     np.testing.assert_allclose(table.groupby("budget_k").raw_coefficient_sum.mean(),
-                               [-3.05, -.05, .85, 1.0], atol=1e-14)
+                               [-3.05, -0.05, 0.85, 1.0], atol=1e-14)
     return table
 
 
 def task_tiers():
-    """Per-tier class coefficients of the frozen task configuration."""
     cfg = json.loads(CONFIG.read_text())["task"]
     d = cfg["distractor_signal_by_tree_distance"]
-    return dict(selected=float(cfg["selected_signal"]), sibling=-float(d["sibling"]),
-                same_half=-float(d["same_half"]), other_half=-float(d["opposite_half"]))
+    return dict(selected=float(cfg["selected_signal"]),
+                sibling=-float(d["sibling"]), same_half=-float(d["same_half"]),
+                other_half=-float(d["opposite_half"]))
 
 
 def ancestry_dictionary(K):
-    """A (8 x K): the K distinct unit-norm route rows of the correct ancestry field."""
-    routes = experiment.grouped_routes(np.arange(8), K, "correct_ancestry_subtrees",
+    """A (8 x K): the K distinct unit-norm route rows of the ancestry field."""
+    routes = experiment.grouped_routes(np.arange(8), K,
+                                       "correct_ancestry_subtrees",
                                        np.random.default_rng(0))
     columns = []
     for row in routes:
@@ -171,487 +293,591 @@ def ancestry_dictionary(K):
 
 
 def control_supports(rng_seed=0):
-    """What each K = 4 control delivers when c3 is cued: one draw per random family."""
+    """Delivered support of b3's credit under each K = 4 control (one draw)."""
     rng = np.random.default_rng(rng_seed)
     rows = []
-    for name, mode in CONTROLS_F:
+    for _, mode in CONTROL_ROWS:
         if mode == "random_rank_k":
             field = experiment.random_rank_routes(np.arange(8), 4, rng)
         else:
             field = experiment.grouped_routes(np.arange(8), 4, mode, rng)
         rows.append(field[CUED])
-    table = pd.DataFrame(np.array(rows), columns=[f"c{i + 1}" for i in range(8)])
-    table.insert(0, "control", [m for _, m in CONTROLS_F])
-    table.insert(1, "cued_stream", "c3")
+    table = pd.DataFrame(np.array(rows), columns=[f"b{i + 1}" for i in range(8)])
+    table.insert(0, "control", [m for _, m in CONTROL_ROWS])
+    table.insert(1, "cued_stream", "b3")
     return table
 
 
-def coefficient_source_table(enc, hard):
-    """Per-seed held-out accuracy of the four K = 4 coefficient sources (fresh cohort)."""
-    out = []
-    for label, method, which, colour in E_ORDER:
-        t = enc if which == "enc" else hard
-        sel = t[(t.method.eq(method))
-                & np.all([t[k].eq(v) for k, v in E_CELL.items()], axis=0)]
-        assert len(sel) == 20, (label, len(sel))
-        for _, r in sel.sort_values("seed").iterrows():
-            out.append(dict(source=label.rstrip("*"), method=method,
-                            experiment="review_coefficient_hard_readout" if which == "hard"
-                            else "review_coefficient_encoder", seed=int(r.seed),
-                            heldout_accuracy=float(r.heldout_accuracy), **E_CELL))
-    return pd.DataFrame(out)
+def rewiring_pairs(outcomes):
+    """Paired task-matched minus rewired differences, in percentage points."""
+    correct = outcomes[outcomes.feedback_family.eq("correct_ancestry_subtrees")]
+    out = {}
+    for K in K_TICKS:
+        a = correct[correct.architecture.eq("dendritic_tree")
+                    & correct.budget_k.eq(K)].set_index("seed").heldout_accuracy
+        b = correct[correct.architecture.eq("degree_depth_matched_rewired_tree")
+                    & correct.budget_k.eq(K)].set_index("seed").heldout_accuracy
+        diff = (a - b).to_numpy(float)
+        assert len(diff) == 20
+        mean, low, high = routing.bootstrap(diff, BOOT_SEED)
+        out[K] = (100 * mean, 100 * low, 100 * high, int((diff > 0).sum()),
+                  bool(np.all(diff == 0)))
+    assert out[1][4] and out[8][4], "K = 1 and K = 8 must tie exactly"
+    np.testing.assert_allclose([out[2][0], out[4][0]], [23.15, 5.02], atol=0.02)
+    assert out[2][3] == out[4][3] == 20
+    return out
 
 
-def contrast_row(table, control):
-    sel = table[table.control.eq(control)
-                & np.all([table[k].eq(v) for k, v in E_CELL.items() if k != "epoch"], axis=0)]
+def cue_grid():
+    """Panel F: the 3 x 3 calibration x cue-noise grid for both readouts."""
+    grid = {}
+    for readout, folder in (("soft", ENCODER), ("hard", HARD)):
+        summary = pd.read_csv(folder / "condition_summary.csv")
+        summary = summary[summary.cue_delay_trials.eq(0)]
+        traj = pd.read_csv(folder / "trajectories.csv")
+        traj = traj[traj.epoch.eq(80) & traj.cue_delay_trials.eq(0)
+                    & traj.method.eq("learned_local_cue")]
+        for size in (16, 64, 256):
+            means, lows, highs = [], [], []
+            for j, noise in enumerate((0.0, 0.5, 1.0)):
+                cell = summary[summary.calibration_samples.eq(size)
+                               & summary.cue_noise_sd.eq(noise)
+                               & summary.method.eq("learned_local_cue")]
+                assert len(cell) == 1 and int(cell.n_seeds.iloc[0]) == 20
+                values = traj[traj.calibration_samples.eq(size)
+                              & traj.cue_noise_sd.eq(noise)] \
+                    .sort_values("seed").heldout_accuracy.to_numpy(float)
+                assert len(values) == 20
+                boot = routing.bootstrap(values, 53_000 + 10 * j + size)
+                np.testing.assert_allclose(boot[0],
+                                           float(cell.mean_accuracy.iloc[0]),
+                                           atol=1e-9)
+                means.append(100 * boot[0])
+                lows.append(100 * boot[1])
+                highs.append(100 * boot[2])
+            grid[(readout, size)] = (np.array(means), np.array(lows),
+                                     np.array(highs))
+    enc = pd.read_csv(ENCODER / "condition_summary.csv")
+    enc = enc[enc.cue_delay_trials.eq(0)]
+    oracle = enc[enc.method.eq("oracle_context")].mean_accuracy.unique()
+    frozen = enc[enc.method.eq("frozen_profile")].mean_accuracy.unique()
+    mism = enc[enc.method.eq("mismatched_encoder")].mean_accuracy
+    assert len(oracle) == 1 and len(frozen) == 1
+    coefficient = enc[enc.method.eq("learned_local_cue")
+                      & enc.cue_noise_sd.eq(0.0)].mean_coefficient_accuracy
+    assert np.allclose(coefficient.to_numpy(float), 1.0)
+    return grid, 100 * float(oracle[0]), 100 * float(frozen[0]), \
+        (100 * float(mism.min()), 100 * float(mism.max()))
+
+
+def encoder_contrast(table, size, noise, control):
+    sel = table[table.calibration_samples.eq(size) & table.cue_noise_sd.eq(noise)
+                & table.cue_delay_trials.eq(0) & table.control.eq(control)]
     assert len(sel) == 1
-    return sel.iloc[0]
+    row = sel.iloc[0]
+    return float(row.mean_pp), float(row.ci95_low_pp), float(row.ci95_high_pp)
 
 
-# ── private glyph helpers (geometry copied from native_schematics) ────────
+# ------------------------------------------- private glyph helpers (G5) ----
 _EXTRA_BADGES = {
     "ceiling": ("oracle", mix("oracle", 8), mix("oracle", 45)),
     "exploratory": ("mute", COLORS["panel_bg"], COLORS["grid"]),
 }
 
 
-def _badge(ax, xy, kind, *, text=None, ha="right", va="top", transform=None,
-           zorder=7):
-    """Frame.badge geometry for every kind, plus D6 'ceiling' and 'exploratory'."""
+def _badge(ax, xy, kind, *, text=None, ha="right", va="top", zorder=7):
+    """Frame.badge geometry for every kind, plus 'ceiling' and 'exploratory'."""
     key, face, edge = {**BADGE_STYLE, **_EXTRA_BADGES}[kind]
     colour = COLORS[key]
     try:
         colour = label_color(colour, background=face)
     except ValueError:
         pass
-    kw = {} if transform is None else {"transform": transform}
-    return ax.text(xy[0], xy[1], kind if text is None else text, fontsize=PT_SMALL,
-                   color=colour, ha=ha, va=va, zorder=zorder,
-                   bbox=dict(boxstyle=f"round,pad=0.28,rounding_size={2.0 / PT_SMALL:.3f}",
-                             facecolor=face, edgecolor=edge, linewidth=LW_HAIR), **kw)
+    return ax.text(xy[0], xy[1], kind if text is None else text,
+                   fontsize=PT_SMALL, color=colour, ha=ha, va=va, zorder=zorder,
+                   bbox=dict(boxstyle=f"round,pad=0.28,"
+                                      f"rounding_size={2.0 / PT_SMALL:.3f}",
+                             facecolor=face, edgecolor=edge, linewidth=LW_HAIR))
 
 
-def _tier_bands(frame, nodes, blocks, colors, *, pct=CAPSULE_TINT_PCT,
-                width_pt=TIER_BAND_W_PT):
-    """Frame.partition's capsule geometry at a fixed, narrower width.
-
-    ``Frame.partition`` scales its capsule with the terminal pitch (5.6 pt
-    for one terminal, 10 pt for four), so an ORDINAL_RAMP tint that is
-    legible under the one-terminal sibling band turns the four-terminal
-    other-half band into a grey slab.  Same chains, same zorder, one width.
-    """
-    for block, colour in zip(blocks, colors):
-        members = set(block)
-        chains = [[nodes[nodes.parent[n]], nodes[n]] for n in block
-                  if nodes.parent.get(n) in members]
-        if not chains:
-            chains = [[nodes[block[0]], nodes[block[0]]]]
-        frame._draw_chains(chains, mix(colour, pct), width_pt)
+def _delivery_arrow(frame, xy, *, color=GREEN, length_pt=7.0):
+    """credit_delivery(mode='subtree') entry arrowhead, without a drawn tree."""
+    frame.arrow((xy[0], xy[1] + frame.fy(length_pt)), xy, color=color,
+                lw=LW_EDGE, head=4.0, zorder=4.6)
 
 
-def _lerp(a, b, t):
-    return (a[0] + t * (b[0] - a[0]), a[1] + t * (b[1] - a[1]))
-
-
-def _subtree_arrow(frame, nodes, target, color):
-    """Entry arrow into the addressed subtree root (credit_delivery geometry)."""
-    par = nodes.parent.get(target)
-    p0 = nodes[par] if par in nodes else nodes.soma
-    frame.arrow(_lerp(p0, nodes[target], 0.40), _lerp(p0, nodes[target], 0.80),
-                color=color, lw=LW_EDGE, head=4.0, zorder=4.6)
-
-
-def _gap_span(ax, x, y_lo, y_hi, tag, tag_xy, *, ha="left", dx=0.07, cap=0.06):
+def _gap_span(ax, x, y_lo, y_hi, tag, tag_xy, *, dx=0.09, cap=0.05):
     """Double-headed span between one paired pair, tagged in clear whitespace.
 
-    The Fig. 6 C leader idiom applied to a gap: hairline caps on the two
-    paired markers, a mute double arrow between them and a leader from the
-    middle of that span to the PT_ANNOT tag, so the number annotates the
-    difference and not either marker.
+    ``dx`` < 0 puts the span and its tag on the left of the pair.
     """
+    side = 1.0 if dx >= 0 else -1.0
     xs = x + dx
     for y in (y_lo, y_hi):
-        ax.plot([x, xs + cap], [y, y], color=MUTE, lw=LW_HAIR, zorder=1)
+        ax.plot([x, xs + side * cap], [y, y], color=MUTE, lw=LW_HAIR, zorder=1)
     ax.annotate("", xy=(xs, y_hi), xytext=(xs, y_lo),
                 arrowprops=dict(arrowstyle="<->", color=MUTE, lw=LW_HAIR,
                                 shrinkA=0.0, shrinkB=0.0, mutation_scale=6.0),
                 zorder=1)
     mid = 0.5 * (y_lo + y_hi)
-    ax.plot([xs + cap, tag_xy[0] - 0.04], [mid, tag_xy[1]], color=MUTE,
-            lw=LW_HAIR, zorder=1)
+    ax.plot([xs + side * cap, tag_xy[0] - side * 0.03], [mid, tag_xy[1]],
+            color=MUTE, lw=LW_HAIR, zorder=1)
     return ax.text(tag_xy[0], tag_xy[1], tag, fontsize=PT_ANNOT, color=INK,
-                   ha=ha, va="center")
+                   ha="left" if side > 0 else "right", va="center")
 
 
 def _group_root(nodes, K, terminal="T3"):
-    """Root of the K-partition block that contains ``terminal``."""
     for root in nodes.at_depth(K):
         if terminal in nodes.terminals_under(root):
             return root
     raise KeyError(terminal)
 
 
-def _fan(n, width=0.36, seed=7):
-    return np.random.default_rng(seed).permutation(np.linspace(-width / 2, width / 2, n))
-
-
-def _mean_marker(ax, x, values, color, marker="o", seed=0, ms=MARKER_MS, hollow_seeds=False,
-                 fan_width=0.36):
-    mean, low, high = routing.bootstrap(np.asarray(values, float), seed)
-    ax.plot(x + _fan(len(values), fan_width, seed + 1), values, ls="none", marker="o",
-            ms=SEED_MS, mfc="none" if hollow_seeds else color, mec=color if hollow_seeds
-            else "none", mew=LW_EDGE if hollow_seeds else 0.0, alpha=SEED_ALPHA, zorder=2)
-    ax.errorbar([x], [mean], yerr=[[mean - low], [high - mean]], fmt=marker, color=color,
-                mfc="white", mec=color, mew=LW_EDGE, ms=ms, elinewidth=LW_ERR,
-                capsize=ERR_CAPSIZE, capthick=LW_ERR, zorder=4)
-    return mean, low, high
-
-
-def _series(ax, x, part, color, marker, ms, zorder):
-    mean = part.mean_heldout_accuracy.to_numpy(float)
-    low = part.ci95_low_heldout_accuracy.to_numpy(float)
-    high = part.ci95_high_heldout_accuracy.to_numpy(float)
-    ax.errorbar(x, mean, yerr=[mean - low, high - mean], color=color, marker=marker,
-                mfc="white", mec=color, mew=LW_EDGE, ms=ms, lw=LW_DATA, elinewidth=LW_ERR,
+def _series(ax, x, part, color, marker, ms, zorder, *, filled=True):
+    mean = part.mean_heldout_accuracy.to_numpy(float) * 100.0
+    low = part.ci95_low_heldout_accuracy.to_numpy(float) * 100.0
+    high = part.ci95_high_heldout_accuracy.to_numpy(float) * 100.0
+    ax.errorbar(x, mean, yerr=[mean - low, high - mean], color=color,
+                marker=marker, mfc=color if filled else "white", mec=color,
+                mew=LW_EDGE, ms=ms, lw=LW_DATA, elinewidth=LW_ERR,
                 capsize=ERR_CAPSIZE, capthick=LW_ERR, zorder=zorder)
     return mean
 
 
 def _accuracy_axes(ax, *, ylabel):
-    ax.set_xlim(-0.18, 3.18)
-    ax.set_ylim(*Y_LIM)
+    ax.set_xlim(-0.20, 3.20)
+    ax.set_ylim(*Y_LIM_C)
     ax.set_xticks(range(4), [str(k) for k in K_TICKS])
-    ax.set_yticks([0.2, 0.5, 0.8])
+    ax.set_yticks([20, 40, 60, 80])
+    ax.spines["left"].set_bounds(20, 80)
+    ax.spines["bottom"].set_bounds(0, 3)
     ax.set_xlabel("Channels, K")
     if ylabel:
-        ax.set_ylabel("Held-out accuracy")
+        ax.set_ylabel("Held-out accuracy (%)")
     else:
         ax.tick_params(axis="y", labelleft=False)
 
 
-# ── A: eight-stream hierarchical task ────────────────────────────────────
+# ----------------------------------------------- A: eight-stream task ----
 def panel_task(ax, tiers):
     f = Frame(ax)
     W, H = f.w_pt, f.h_pt
-    sub_pt, rows_pt, foot_pt, delta_pt = LINE_BAND_PT, 19.0, LINE_BAND_PT, 12.0
-    f.text((0.5, 1.0 - f.fy(sub_pt * 0.5)), "context selects the +sᵢ stream", size=PT_ANNOT)
-    footer = "junctions define feedback supports only"
-    if _text_w_pt(ax, footer, PT_SMALL) > W - 4.0:
-        footer = "junctions define supports only"
-    f.text((0.5, f.fy(foot_pt * 0.5)), footer, size=PT_SMALL, color=MUTE)
-    head_pt = sub_pt + rows_pt + LIFT_PT + 8.0      # key band + label ring
-    rect = (0.0, f.fy(foot_pt + delta_pt), 1.0,
-            1.0 - f.fy(head_pt + foot_pt + delta_pt))
-    nodes = f.balanced_tree(rect, mode="plain", output="z")
-    # The three distractor tiers are ordinal factor levels of one coefficient
-    # (0.15 < 0.45 < 0.75), so they take ORDINAL_RAMP (D8); K_CYCLE stays the
-    # alphabet of B's group identity, one hgutter to the right.
-    blocks = [["JLR", "T4"], ["JLL", "T1", "T2"],
+    sub_pt, key_pt, delta_pt = LINE_BAND_PT, 19.5, 12.0
+    # sub-title: the cued stream, and the rule under test on it
+    f.subscript((f.fx(1.0), 1.0 - f.fy(sub_pt * 0.5)), "context c selects b", "3",
+                size=PT_SMALL, color=INK, ha="left")
+    f.text((1.0 - f.fx(1.0), 1.0 - f.fy(sub_pt * 0.5)), "K = 4 route",
+           size=PT_SMALL, color=GREEN, ha="right")
+    rect = (0.0, f.fy(delta_pt), 1.0, 1.0 - f.fy(sub_pt + key_pt + delta_pt))
+    nodes = f.balanced_tree(rect, depth=3, mode="forward", trunk=True,
+                            labels=True, output="z", soma_r_pt=3.0,
+                            input_labels=[("b", str(i + 1)) for i in range(8)])
+    # coefficient tiers: an ORDINAL distance ladder, so ORDINAL_RAMP and not
+    # K_CYCLE (which is the ADDRESS alphabet).  Recorded in the manifest.
+    f.note("address_tint",
+           reason="coefficient tier by tree distance, not an address")
+    # each block carries the junction that joins it, so Frame.partition has a
+    # chain to buffer into a tint patch (a bare terminal collapses to a dot)
+    blocks = [["JLR", "T3"], ["JLR", "T4"], ["JLL", "T1", "T2"],
               ["JR", "JRL", "JRR", "T5", "T6", "T7", "T8"]]
-    _tier_bands(f, nodes, blocks, ORDINAL_RAMP)
+    f.partition(nodes, blocks, colors=list(TIER_RAMP), pct=16)
+    # the forward route of the cued stream is the one ink-weight path
     for a, b in zip(nodes.route("T3"), nodes.route("T3")[1:]):
         if (a, b) in nodes.edges:
             nodes.edges[(a, b)].set_linewidth(f.lw(LW_DATA))
-    f.contact(nodes["T3"], kind="exc")
-    f.soma(nodes.soma, output=True, label="z")
-    f.error_in(nodes.soma, side="right")
-    # The terminal pitch (about 10 pt) is below the one-label-per-terminal
-    # floor for PT_SMALL: eight labels clear each other by only 2-4 pt and
-    # read as one cluster.  Label the four streams the panel argues about --
-    # the ends c1 and c8, the cued c3 and its sibling c4 -- with c4 lifted
-    # into the second band so the cued pair parts; the tier key carries the
-    # rest and F names every stream in its table.
-    for i, push in A_STREAM_LABELS:
-        f.text(f._off(nodes[nodes.terminals[i]], push, LIFT_PT),
-               "c" + "₁₂₃₄₅₆₇₈"[i], size=PT_SMALL,
-               color=COLORS["exc"] if i == CUED else INK)
-    # tier key: name over swatch + coefficient; the swatch keys the capsules
-    y_name = 1.0 - f.fy(sub_pt + 5.0)
-    y_coef = 1.0 - f.fy(sub_pt + rows_pt - 5.0)
-    entries = [("cued", _signed(tiers["selected"], 0), COLORS["exc"], "dot"),
-               ("sibling", _signed(tiers["sibling"]), ORDINAL_RAMP[0], "bar"),
-               ("same half", _signed(tiers["same_half"]), ORDINAL_RAMP[1], "bar"),
-               ("other half", _signed(tiers["other_half"]), ORDINAL_RAMP[2], "bar")]
-    sw_pt, sw_gap = 5.0, 2.0
-    widths = [max(_text_w_pt(ax, n, PT_SMALL),
-                  sw_pt + sw_gap + _text_w_pt(ax, c, PT_SMALL))
-              for n, c, _, _ in entries]
-    gap = (W - 4.0 - sum(widths)) / (len(entries) - 1)
-    assert gap >= 3.0, gap
-    x = 2.0
-    for (name, coef, colour, kind), w in zip(entries, widths):
-        f.text((f.fx(x + w / 2.0), y_name), name, size=PT_SMALL, color=INK)
-        run = sw_pt + sw_gap + _text_w_pt(ax, coef, PT_SMALL)
-        sx = x + (w - run) / 2.0
-        if kind == "dot":
-            ax.plot([f.fx(sx + sw_pt / 2.0)], [y_coef], ls="none", marker="o",
-                    ms=CONTACT_DIA_PT, mfc=colour, mec="none", zorder=6)
-        else:
-            ax.add_patch(Rectangle((f.fx(sx), y_coef - f.fy(1.7)), f.fx(sw_pt),
-                                   f.fy(3.4), facecolor=mix(colour, CAPSULE_TINT_PCT),
-                                   edgecolor=COLORS["grid"], linewidth=LW_HAIR,
-                                   zorder=6))
-        f.text((f.fx(sx + sw_pt + sw_gap), y_coef), coef, size=PT_SMALL, color=INK,
-               ha="left")
-        x += w + gap
+            nodes.edges[(a, b)].set_color(INK)
+    # context selection: the inhibitory-family double ring with a 'c' badge
+    f.gate(nodes["T3"], closed=False, badge="c", nodes=nodes, node="T3",
+           badge_offset=(-5.6, -3.6))
+    # the one delivery glyph in this panel: K = 4 ancestry capsule + entry arrow
+    f.credit_delivery(nodes, mode="subtree", targets=[_group_root(nodes, 4)],
+                      rule_color="shunting")
+    f.error_in(nodes.soma, label="δ0", side="right")
+    # tier key: two rows of two entries, swatch + name + coefficient.  The
+    # swatches key the tints on the tree, so this band IS the partition label.
+    entries = [("cued", _signed(tiers["selected"], 2), TIER_RAMP[0]),
+               ("sibling", _signed(tiers["sibling"]), TIER_RAMP[1]),
+               ("same half", _signed(tiers["same_half"]), TIER_RAMP[2]),
+               ("other half", _signed(tiers["other_half"]), TIER_RAMP[3])]
+    sw_pt, sw_gap = 5.4, 2.4
+    y_rows = (1.0 - f.fy(sub_pt + 5.0), 1.0 - f.fy(sub_pt + 14.8))
+    for i, (name, coef, colour) in enumerate(entries):
+        row, col = divmod(i, 2)
+        run = sw_pt + sw_gap + _text_w_pt(ax, f"{name} {coef}", PT_SMALL)
+        x = 1.0 + col * ((W - 2.0) / 2.0)
+        y = y_rows[row]
+        tint_patch(ax, ("rect", f.fx(x), y - f.fy(1.9), f.fx(sw_pt), f.fy(3.8)),
+                   color=colour, pct=16, radius_pt=0.6, zorder=6, clip_on=False)
+        f.text((f.fx(x + sw_pt + sw_gap), y), f"{name} {coef}", size=PT_SMALL,
+               color=INK, ha="left")
+        assert run <= (W - 2.0) / 2.0 - 2.0, (name, run)
+    f.require_soma_lowest()
+    f.require_delta0()
     return nodes
 
 
-# ── B: ancestry dictionaries K = 1 .. 8 ──────────────────────────────────
-def panel_dictionaries(ax, prediction):
+# --------------------------------- B: ancestry and control dictionaries ----
+def panel_dictionaries(ax, prediction, supports):
     f = Frame(ax)
-    sums = prediction.groupby("budget_k").raw_coefficient_sum.mean()
-    cells = f.split(4, axis="x", gap_pt=6.0,
-                    pad_pt=(0.0, 0.0, LINE_BAND_PT, 0.0))
-    f.text((1.0, 1.0 - f.fy(LINE_BAND_PT * 0.5)),
-           "matrix rows = site blocks in tree order", size=PT_SMALL, color=MUTE,
-           ha="right")
-    for cell, K in zip(cells, K_TICKS):
-        core = f.task_card(cell, title=f"K = {K}", footer=f"group sum {_signed(sums[K])}",
+    W, H = f.w_pt, f.h_pt
+    raw = prediction.groupby("budget_k").raw_coefficient_sum.mean()
+    split_pt = 168.0
+    ax.plot([f.fx(split_pt), f.fx(split_pt)], [f.fy(6.0), 1.0 - f.fy(4.0)],
+            color=COLORS["grid"], lw=LW_HAIR, zorder=0.5)
+
+    # ---- left block: the ancestry ladder ---------------------------------
+    left_w = split_pt - 8.0
+    f.text((f.fx(left_w / 2.0), 1.0 - f.fy(LINE_BAND_PT * 0.5)),
+           "ancestry dictionaries A (8 × K)", size=PT_SMALL, color=INK)
+    f.text((f.fx(left_w / 2.0), f.fy(LINE_BAND_PT * 0.5)),
+           "group sum of the class signal", size=PT_SMALL, color=MUTE)
+    gap_pt = 6.0
+    card_w = (left_w - 3 * gap_pt) / 4.0
+    card_y0 = f.fy(LINE_BAND_PT + 2.0)
+    card_h = 1.0 - f.fy(LINE_BAND_PT * 2 + 6.0)
+    cells = []
+    for i, K in enumerate(K_TICKS):
+        x0 = f.fx(i * (card_w + gap_pt))
+        core = f.task_card((x0, card_y0, f.fx(card_w), card_h),
+                           title=f"K = {K}", footer=_signed(raw[K]),
                            emphasis=(K == 4))
-        x0, y0, w, h = core
-        mat_pt = 48.0
-        tree_rect = (x0, y0 + f.fy(mat_pt + 4.0), w, h - f.fy(mat_pt + 4.0))
-        site_colors = [_k_hue(k) for k in range(8)] if K == 8 else None
-        nodes = f.balanced_tree(tree_rect, mode="plain", labels=False,
-                                site_colors=site_colors)
-        if K < 8:
-            roots = nodes.at_depth(K)
-            f.partition(nodes, [nodes.subtree(r) for r in roots],
-                        colors=[K_CYCLE[k % 4] for k in range(len(roots))])
-        _subtree_arrow(f, nodes, _group_root(nodes, K), GREEN)
-        f.contact(nodes["T3"], kind="exc")
-        mx, my = x0 + f.fx(6.0), y0 + f.fy(2.0)
+        cells.append((K, core))
+    mat_pt = 48.0
+    for K, core in cells:
+        cx0, cy0, cw, ch = core
+        my = cy0 + f.fy(4.0)
         if K < 8:
             A = ancestry_dictionary(K)
-            rect = (mx, my, f.fx(6.0 * K), f.fy(mat_pt))
-            f.dictionary_matrix(rect, A, color="shunting", label=None,
-                                row_groups=[8 // K] * K if K > 1 else None)
-            for j in range(K):                       # column-header swatches
-                ax.add_patch(Rectangle((mx + f.fx(6.0 * j + 1.0), my + f.fy(mat_pt + 1.2)),
-                                       f.fx(4.0), f.fy(2.0), facecolor=_k_hue(j),
-                                       edgecolor="none", zorder=3))
-            tx = mx + f.fx(6.0 * K + 5.0)
-            f.text((tx, my + f.fy(mat_pt * 0.5 + 4.5)), "A", size=PT_ANNOT, ha="left")
-            f.text((tx, my + f.fy(mat_pt * 0.5 - 4.5)), f"(8 × {K})", size=PT_SMALL,
-                   ha="left")
+            column = int(np.argmax(A[CUED] > 0))
+            mw = f.fx(6.0 * K)
+            mx = cx0 + (cw - mw) / 2.0
+            col_colors = [GREEN if j == column else COLORS["dend"]
+                          for j in range(K)]
+            f.dictionary_matrix((mx, my, mw, f.fy(mat_pt)), A, label=None,
+                                col_colors=col_colors,
+                                row_groups=[8 // K] * K, min_cell_pt=6.0)
+            _delivery_arrow(f, (mx + f.fx(6.0 * (column + 0.5)),
+                                my + f.fy(mat_pt + 1.5)))
         else:
-            f.text((x0 + w / 2.0, my + f.fy(mat_pt * 0.5 + 4.5)), "A = I", size=PT_ANNOT)
-            f.text((x0 + w / 2.0, my + f.fy(mat_pt * 0.5 - 4.5)), "(8 × 8)", size=PT_SMALL)
-    return sums
+            mx = cx0 + cw * 0.66
+            for r in range(8):
+                yy = my + f.fy(mat_pt - 3.0 - 6.0 * r)
+                f.disc((mx, yy), 1.55, fill=GREEN if r == CUED
+                       else COLORS["dend"], zorder=3.4)
+            _delivery_arrow(f, (mx, my + f.fy(mat_pt + 1.5)))
+            f.text((cx0 + cw * 0.26, my + f.fy(mat_pt * 0.5)), "A = I",
+                   size=PT_ANNOT, color=INK)
+        # the cued row, named once on the first card and ticked on all four
+        ytick = my + f.fy(mat_pt - 3.0 - 6.0 * CUED)
+        left = mx if K == 8 else (cx0 + (cw - f.fx(6.0 * K)) / 2.0)
+        f.leader((left - f.fx(4.6), ytick), (left - f.fx(1.4), ytick),
+                 color=EXC)
+        if K == 1:
+            f.subscript((left - f.fx(5.4), ytick), "b", "3", size=PT_SMALL,
+                        color=EXC, ha="right")
+
+    # ---- right block: the four matched controls at K = 4 -----------------
+    # The reference drawing at the top of this block carries the panel's one
+    # soma and its one delta-0 arrow, so B declares no DELTA0_EXEMPTIONS entry.
+    rx0 = split_pt + 6.0
+    right_w = W - rx0 - 1.0
+    tree_w = 46.0
+    tree_rect = (f.fx(rx0), 1.0 - f.fy(36.0), f.fx(tree_w), f.fy(36.0))
+    ref = f.balanced_tree(tree_rect, depth=3, mode="forward", labels=False,
+                          output=None, soma_r_pt=2.6)
+    f.credit_delivery(ref, mode="subtree", targets=[_group_root(ref, 4)],
+                      rule_color="shunting")
+    f.contact(ref["T3"], kind="exc", dia_pt=3.0)
+    f.error_in(ref.soma, label="δ0", side="right", r_pt=2.6)
+    for i, line in enumerate(("correct ancestry", "at K = 4 delivers",
+                              "the cued pair")):
+        f.text((f.fx(rx0 + tree_w + 5.0), 1.0 - f.fy(8.0 + 9.5 * i)), line,
+               size=PT_SMALL, color=INK, ha="left")
+    lab_pt, col_pt, row_pt = 56.0, 7.0, 10.0
+    mw, mh = f.fx(col_pt * 8), f.fy(row_pt * 4)
+    mx = f.fx(rx0 + lab_pt)
+    my = f.fy(26.0)
+    S = np.abs(supports[[f"b{i + 1}" for i in range(8)]].to_numpy(float))
+    S = S / S.max(axis=1, keepdims=True)
+    inner = f.dictionary_matrix((mx, my, mw, mh), S, color="point_mlp",
+                                label=None, row_groups=[1] * 4,
+                                col_labels=[str(i + 1) for i in range(8)],
+                                yticks=[name for name, _ in CONTROL_ROWS],
+                                min_cell_pt=6.0)
+    inner.tick_params(axis="y", labelsize=PT_SMALL, pad=2.0)
+    f.subscript((mx - f.fx(2.0), my + mh + f.fy(2.4)), "b", "i",
+                size=PT_SMALL, color=MUTE, ha="right")
+    # 3-stop key for the grey levels of the dense rank-4 row
+    bar_y, bar_w = f.fy(17.0), f.fx(9.0)
+    f.text((mx - f.fx(1.5), bar_y + f.fy(2.7)), "|A|", size=PT_SMALL,
+           color=MUTE, ha="right")
+    for j, level in enumerate((0.0, 0.5, 1.0)):
+        bx = mx + f.fx(3.0) + j * (bar_w + f.fx(15.0))
+        tint_patch(ax, ("rect", bx, bar_y, bar_w, f.fy(5.4)), color="point_mlp",
+                   pct=int(round(8 + 84 * level)), radius_pt=0.4, zorder=3,
+                   clip_on=False)
+        f.text((bx + bar_w + f.fx(2.0), bar_y + f.fy(2.7)), f"{level:g}",
+               size=PT_SMALL, color=MUTE, ha="left")
+    for i, line in enumerate(("random-sparse and dense rows are",
+                              "one illustrative draw (rng seed 0)")):
+        f.text((f.fx(rx0), f.fy(8.0 - 8.0 * i)), line, size=PT_SMALL,
+               color=MUTE, ha="left")
+    f.require_soma_lowest()
+    f.require_delta0()
+    assert right_w >= lab_pt + col_pt * 8, right_w
+    return raw
 
 
-# ── C: held-out accuracy across K ────────────────────────────────────────
+# --------------------------------------- C: held-out accuracy across K ----
 def panel_bandwidth(ax, summary, outcomes):
     x = np.arange(4, dtype=float)
     dend = summary[summary.architecture.eq("dendritic_tree")]
-    best = routing._best_control_by_budget(outcomes)          # per-seed max of 4 controls
-    part = lambda fam: dend[dend.feedback_family.eq(fam)].set_index("budget_k").loc[list(K_TICKS)]
-    deranged = _series(ax, x, part("within_neuron_route_derangement"), GREY, "v",
-                       MARKER_MS + 1.2, 3)
-    ax.errorbar(x, best[:, 1], yerr=[best[:, 1] - best[:, 2], best[:, 3] - best[:, 1]],
-                color=PURPLE, marker="^", mfc="white", mec=PURPLE, mew=LW_EDGE,
-                ms=MARKER_MS + 1.6, lw=LW_DATA, elinewidth=LW_ERR, capsize=ERR_CAPSIZE,
-                capthick=LW_ERR, zorder=2)
+    best = routing._best_control_by_budget(outcomes) * 100.0
+    part = (lambda fam: dend[dend.feedback_family.eq(fam)]
+            .set_index("budget_k").loc[list(K_TICKS)])
+    deranged = _series(ax, x, part("within_neuron_route_derangement"), GREY,
+                       "s", MARKER_MS + 0.6, 3)
+    ax.errorbar(x, best[:, 1], yerr=[best[:, 1] - best[:, 2],
+                                     best[:, 3] - best[:, 1]],
+                color=PURPLE, marker="D", mfc=PURPLE, mec=PURPLE, mew=LW_EDGE,
+                ms=MARKER_MS + 0.9, lw=LW_DATA, elinewidth=LW_ERR,
+                capsize=ERR_CAPSIZE, capthick=LW_ERR, zorder=4)
     ancestry = _series(ax, x, part("correct_ancestry_subtrees"), GREEN, "o",
-                       MARKER_MS - 0.3, 5)
-    np.testing.assert_allclose(ancestry, [0.187, 0.449, 0.801, 0.810], atol=2e-3)
-    np.testing.assert_allclose(best[:, 1], [0.545, 0.603, 0.788, 0.810], atol=2e-3)
-    np.testing.assert_allclose(deranged, [0.187, 0.185, 0.191, 0.251], atol=2e-3)
+                       MARKER_MS - 1.6, 6)
+    np.testing.assert_allclose(ancestry, [18.67, 44.86, 80.11, 81.00], atol=2e-2)
+    np.testing.assert_allclose(best[:, 1], [54.50, 60.26, 78.84, 81.00],
+                               atol=2e-2)
+    np.testing.assert_allclose(deranged, [18.66, 18.47, 19.05, 25.13], atol=2e-2)
     _accuracy_axes(ax, ylabel=True)
-    reference_line(ax, 0.5, label="chance", span=(-0.18, 3.18))
-    ax.text(2.1, 0.86, "ancestry", color=GREEN, fontsize=PT_SMALL, ha="left", va="bottom")
-    ax.text(0.02, 0.735, "best control", color=PURPLE, fontsize=PT_SMALL, ha="left",
-            va="bottom")
-    _badge(ax, (0.02, 0.86), "ceiling", ha="left", va="center")
-    ax.text(3.05, 0.29, "deranged", color=GREY, fontsize=PT_SMALL, ha="right", va="bottom")
-    return dict(ancestry=ancestry.tolist(), best=best[:, 1].tolist(), deranged=deranged.tolist())
+    reference_line(ax, 50.0, label="chance", span=(-0.20, 3.20))
+    # direct labels (no legend artists anywhere in this figure)
+    ax.text(0.02, 84.0, "best matched control", color=PURPLE,
+            fontsize=PT_SMALL, ha="left", va="center")
+    _badge(ax, (1.24, 84.0), "ceiling", ha="left", va="center")
+    ax.text(0.72, 30.0, "ancestry", color=GREEN, fontsize=PT_SMALL, ha="left",
+            va="center")
+    ax.text(2.20, 31.0, "deranged", color=GREY, fontsize=PT_SMALL, ha="left",
+            va="center")
+    ax.text(3.16, 95.0, "n = 20 paired seeds; mean [95 % bootstrap]; epoch 80",
+            fontsize=PT_SMALL, color=MUTE, ha="right", va="center")
+    # the two concentric ties, named verbatim, and the sub-chance cause,
+    # set under the data (plan §4 C)
+    ax.text(-0.16, 8.0, f"K = 1: ancestry = deranged, {ancestry[0]:.2f} %",
+            fontsize=PT_SMALL, color=MUTE, ha="left", va="center")
+    ax.text(-0.16, -2.0, f"K = 8: all families tie, {ancestry[3]:.2f} %",
+            fontsize=PT_SMALL, color=MUTE, ha="left", va="center")
+    ax.text(-0.16, -12.0,
+            "below chance: pooled class signal is sign-reversed (B)",
+            fontsize=PT_SMALL, color=MUTE, ha="left", va="center")
+    return dict(ancestry=ancestry.tolist(), best=best[:, 1].tolist(),
+                deranged=deranged.tolist())
 
 
-# ── D: rewiring at K = 2, 4 ──────────────────────────────────────────────
-def panel_rewiring(ax, summary, outcomes):
+# ------------------------------------------ D: the rewiring alignment ----
+def panel_rewiring(ax, summary, paired):
     x = np.arange(4, dtype=float)
     fam = summary[summary.feedback_family.eq("correct_ancestry_subtrees")]
-    part = lambda arch: fam[fam.architecture.eq(arch)].set_index("budget_k").loc[list(K_TICKS)]
-    rewired = _series(ax, x, part("degree_depth_matched_rewired_tree"), GREY, "^",
-                      MARKER_MS + 1.4, 3)
-    matched = _series(ax, x, part("dendritic_tree"), GREEN, "o", MARKER_MS - 0.3, 5)
-    correct = outcomes[outcomes.feedback_family.eq("correct_ancestry_subtrees")]
-    paired = {}
-    for index, K in enumerate(K_TICKS):
-        a = correct[correct.architecture.eq("dendritic_tree") & correct.budget_k.eq(K)] \
-            .set_index("seed").heldout_accuracy
-        b = correct[correct.architecture.eq("degree_depth_matched_rewired_tree")
-                    & correct.budget_k.eq(K)].set_index("seed").heldout_accuracy
-        diff = (a - b).to_numpy(float)
-        mean, low, high = routing.bootstrap(diff, 70_000 + index)
-        paired[K] = (100 * mean, 100 * low, 100 * high, bool(np.all(diff == 0)))
-    assert paired[1][3] and paired[8][3], "K = 1 and K = 8 must tie exactly"
-    np.testing.assert_allclose([paired[2][0], paired[4][0]], [23.2, 5.0], atol=0.1)
+    part = (lambda arch: fam[fam.architecture.eq(arch)]
+            .set_index("budget_k").loc[list(K_TICKS)])
+    rewired = _series(ax, x, part("degree_depth_matched_rewired_tree"), ROSE,
+                      "^", MARKER_MS + 0.6, 3)
+    matched = _series(ax, x, part("dendritic_tree"), GREEN, "o",
+                      MARKER_MS - 1.6, 6)
+    np.testing.assert_allclose(rewired, [18.67, 21.71, 75.09, 81.00], atol=2e-2)
     _accuracy_axes(ax, ylabel=False)
-    reference_line(ax, 0.5, label="chance", span=(-0.18, 3.18))
-    # each tag annotates the vertical gap between the two paired markers
-    _gap_span(ax, 1.0, rewired[1], matched[1], f"{_signed(paired[2][0])} pp",
-              (1.36, 0.305))
-    _gap_span(ax, 2.0, rewired[2], matched[2], f"{_signed(paired[4][0])} pp",
-              (2.32, 0.862))
-    ax.text(0.05, 0.865, "matched tree", color=GREEN, fontsize=PT_SMALL, ha="left",
-            va="center")
-    ax.text(2.1, 0.70, "rewired", color=GREY, fontsize=PT_SMALL, ha="left", va="center")
-    _badge(ax, (2.1, 0.625), "control", ha="left", va="center")
-    ax.text(3.12, 0.13, "ties at K = 1, 8", color=MUTE, fontsize=PT_SMALL, ha="right",
-            va="bottom")
-    return {K: v[:3] for K, v in paired.items()}
-
-
-# ── E: coefficient source at K = 4 (fresh cohort) ────────────────────────
-def panel_coefficients(ax, source, contrasts_enc, contrasts_hard):
-    stats = {}
-    for i, (label, method, which, colour) in enumerate(E_ORDER):
-        vals = source[source.source.eq(label.rstrip("*"))].sort_values("seed") \
-            .heldout_accuracy.to_numpy(float)
-        stats[label] = _mean_marker(ax, i, vals, COLORS[colour], seed=90_000 + i,
-                                    hollow_seeds=(which == "hard"))
-    np.testing.assert_allclose([stats[k][0] for k in ("oracle", "soft", "hard*", "frozen")],
-                               [0.803, 0.258, 0.640, 0.187], atol=2e-3)
-    vs_oracle = contrast_row(contrasts_enc, "oracle_context")
-    vs_frozen = contrast_row(contrasts_enc, "frozen_profile")
-    hard_vs_oracle = contrast_row(contrasts_hard, "oracle_context")
-    assert pd.isna(hard_vs_oracle.get("primary_family_holm_p", np.nan)) or \
-        "analysis_status" in contrasts_hard.columns
-    ax.set_xlim(-0.55, 3.45)
-    ax.set_ylim(*Y_LIM)
-    ax.set_xticks(range(4), [e[0] for e in E_ORDER])
-    ax.set_yticks([0.2, 0.5, 0.8])
-    ax.tick_params(axis="y", labelleft=False)
-    ax.set_xlabel("Coefficient source")
-    reference_line(ax, 0.5, label="chance", span=(-0.55, 3.45))
-    _badge(ax, (0.0, 0.875), "oracle", ha="center", va="center")
-    _badge(ax, (2.0, 0.765), "exploratory", ha="center", va="center")
-    # both contrasts are of the soft estimator: they sit in the whitespace
-    # below chance, right-aligned, with one leader onto the soft cluster
-    span_x = ax.get_position().width * 518.4
-    left = 3.42
-    for y, name, row in ((0.445, "oracle", vs_oracle), (0.355, "frozen", vs_frozen)):
-        tag = f"soft vs {name} {_signed(row.mean_pp)} pp"
-        if _text_w_pt(ax, tag, PT_ANNOT) > 0.80 * span_x:
-            tag = f"vs {name} {_signed(row.mean_pp)} pp"
-        ax.text(3.42, y, tag, fontsize=PT_ANNOT, color=INK, ha="right", va="center")
-        left = min(left, 3.42 - _text_w_pt(ax, tag, PT_ANNOT) / span_x * 4.0)
-    ax.plot([left - 0.04, 1.02], [0.355, 0.300], color=MUTE, lw=LW_HAIR, zorder=1)
-    ax.text(3.4, 0.875, "*outside the Holm family", color=MUTE, fontsize=PT_SMALL,
-            ha="right", va="center")
-    seeds = source.seed
-    ax.text(3.4, 0.125, f"20 fresh seeds {seeds.min()}–{seeds.max()}", color=MUTE,
-            fontsize=PT_SMALL, ha="right", va="center")
-    return dict(means={k: v[0] for k, v in stats.items()},
-                soft_minus_oracle=[float(vs_oracle.mean_pp), float(vs_oracle.ci95_low_pp),
-                                   float(vs_oracle.ci95_high_pp),
-                                   float(vs_oracle.primary_family_holm_p)],
-                soft_minus_frozen=[float(vs_frozen.mean_pp), float(vs_frozen.ci95_low_pp),
-                                   float(vs_frozen.ci95_high_pp),
-                                   float(vs_frozen.primary_family_holm_p)],
-                hard_minus_oracle=[float(hard_vs_oracle.mean_pp),
-                                   float(hard_vs_oracle.ci95_low_pp),
-                                   float(hard_vs_oracle.ci95_high_pp)])
-
-
-# ── F: matched controls at K = 4 ─────────────────────────────────────────
-def panel_controls(ax, supports):
-    f = Frame(ax)
-    W, H = f.w_pt, f.h_pt
-    sub_pt = LINE_BAND_PT
-    f.text((0.0, 1.0 - f.fy(sub_pt * 0.5)), "correct ancestry delivers c₃ + sibling c₄",
-           size=PT_ANNOT, ha="left")
-    body_top = 1.0 - f.fy(sub_pt + 2.0)
-    # left: the ghost tree with the correct K = 4 delivery to c3's group
-    tree_w = 54.0
-    tree_rect = (0.0, f.fy(30.0), f.fx(tree_w), body_top - f.fy(30.0))
-    nodes = f.balanced_tree(tree_rect, mode="plain", ghost=True, output="z",
-                            input_labels=[("c", str(i + 1)) for i in range(8)])
-    root = _group_root(nodes, 4)
-    f.partition(nodes, [nodes.subtree(root)], colors=("soma",))
-    _subtree_arrow(f, nodes, root, GREEN)
-    for t in nodes.terminals_under(root):
-        f.terminal(nodes[t], site_color=GREEN)
-    f.contact(nodes["T3"], kind="exc")
-    f.soma(nodes.soma, output=True, label="z")
-    f.error_in(nodes.soma, side="right")
-    # right: 4 x 8 support table, rows = controls, columns = streams
-    n_rows, n_cols = len(CONTROLS_F), 8
-    row_pt, col_pt = 15.0, 7.0
-    label_pt = 46.0
-    mx = f.fx(tree_w + 6.0 + label_pt)
-    assert (tree_w + 8.0 + label_pt + col_pt * n_cols) <= W - 2.0
-    mw, mh = f.fx(col_pt * n_cols), f.fy(row_pt * n_rows)
-    head_pt, foot_pt = 10.0, 10.0
-    body_pt = (body_top - 0.0) * H
-    my = f.fy((body_pt - (mh * H + head_pt + foot_pt)) / 2.0 + foot_pt)
-    A = np.abs(supports[[f"c{i + 1}" for i in range(8)]].to_numpy(float))
-    A = A / A.max(axis=1, keepdims=True)
-    A = np.where(A > 0, 0.25 + 0.75 * A, 0.0)   # print floor: graded cells survive
-    inner = f.dictionary_matrix((mx, my, mw, mh), A, color="point_mlp", label=None,
-                                row_groups=[1] * n_rows,
-                                yticks=[name for name, _ in CONTROLS_F])
-    inner.tick_params(axis="y", labelsize=PT_SMALL, pad=2.0)
-    for j in range(n_cols):                       # every stream is named
-        f.text((mx + f.fx(col_pt * (j + 0.5)), my + mh + f.fy(head_pt * 0.5)),
-               str(j + 1), size=PT_SMALL,
-               color=COLORS["exc"] if j == CUED else INK)
-    f.text((mx - f.fx(2.0), my + mh + f.fy(head_pt * 0.5)), "c", size=PT_SMALL,
-           color=MUTE, ha="right")
-    _badge(ax, (mx - f.fx(label_pt) - f.fx(2.0), my + mh + f.fy(head_pt * 0.5 + 1.0)),
-           "control", ha="left", va="center")
-    f.text((1.0, f.fy(4.5)), "random, dense: one illustrative draw", size=PT_SMALL,
-           color=MUTE, ha="right")
-    return nodes
-
-
-# ── G: K = 4 forest ──────────────────────────────────────────────────────
-def panel_forest(ax, contrasts, pairs):
-    rows = {}
-    for y, (label, key, colour) in zip([3, 2, 1, 0], CONTROLS_G):
-        row = contrasts[contrasts.control.eq(key)].iloc[0]
-        values = pairs[pairs.control.eq(key)].accuracy_difference_pp.to_numpy(float)
-        assert len(values) == 20
-        c = COLORS[colour]
-        ax.plot(values, y + _fan(len(values), 0.30, 11 + y), ls="none", marker="o",
-                ms=SEED_MS, mfc=c, mec="none", alpha=SEED_ALPHA, zorder=2)
-        ax.errorbar([row.mean_difference_pp], [y],
-                    xerr=[[row.mean_difference_pp - row.ci95_low_pp],
-                          [row.ci95_high_pp - row.mean_difference_pp]],
-                    fmt="D", color=c, mfc="white", mec=c, mew=LW_EDGE, ms=MARKER_MS,
-                    elinewidth=LW_ERR, capsize=ERR_CAPSIZE, capthick=LW_ERR, zorder=4)
-        rows[key] = row
-    hero = rows["best_matched_nonanatomical_oracle"]
-    derangement = contrasts[contrasts.control.eq("within_neuron_route_derangement")].iloc[0]
-    ax.set_xlim(-2.0, 14.0)
-    ax.set_ylim(-0.55, 3.75)
-    ax.set_xticks([0, 4, 8, 12])
-    ax.set_yticks([3, 2, 1, 0], wrap_ticklabels([c[0] for c in CONTROLS_G], width=12))
-    ax.tick_params(axis="y", length=0, labelsize=PT_SMALL)
-    ax.spines["left"].set_visible(False)
-    ax.set_xlabel("Ancestry − control (percentage points)")
-    reference_line(ax, 0.0, axis="x", label=None, span=(-0.55, 3.2))
-    ax.text(-0.15, -0.52, "zero", fontsize=PT_SMALL, color=MUTE, rotation=90, ha="right",
-            va="bottom")
-    ax.text(13.9, 3.58, f"{_signed(hero.mean_difference_pp)} [{hero.ci95_low_pp:.2f}, "
-            f"{hero.ci95_high_pp:.2f}] pp", fontsize=PT_ANNOT, color=INK, ha="right",
-            va="center")
-    ax.text(13.9, 3.14, f"{int(hero.positive_seeds)}/{int(hero.n_pairs)} seeds, "
-            f"Holm P = {hero.p_holm_four_budgets:.4f}", fontsize=PT_SMALL, color=MUTE,
-            ha="right", va="center")
-    _badge(ax, (13.9, 2.66), "ceiling", ha="right", va="center")
-    ax.text(13.9, -0.40, f"derangement {_signed(derangement.mean_difference_pp, 1)} off scale",
+    reference_line(ax, 50.0, label="chance", span=(-0.20, 3.20))
+    _gap_span(ax, 1.0, rewired[1], matched[1],
+              f"{_signed(paired[2][0])} pp", (1.42, 33.0))
+    _gap_span(ax, 2.0, rewired[2], matched[2],
+              f"{_signed(paired[4][0])} pp", (1.62, 74.0), dx=-0.09)
+    _badge(ax, (-0.16, 85.0), "control", ha="left", va="center")
+    ax.text(-0.16, 76.0, "degree- and depth-", color=ROSE, fontsize=PT_SMALL,
+            ha="left", va="center")
+    ax.text(-0.16, 69.0, "matched rewiring", color=ROSE, fontsize=PT_SMALL,
+            ha="left", va="center")
+    ax.text(2.05, 62.0, "task-matched tree", color=GREEN, fontsize=PT_SMALL,
+            ha="left", va="center")
+    ax.text(-0.16, 8.0, "exact tie at K = 1 and at K = 8", color=MUTE,
+            fontsize=PT_SMALL, ha="left", va="center")
+    ax.text(3.16, 95.0, "n = 20 paired seeds; mean [95 % bootstrap]; epoch 80",
             fontsize=PT_SMALL, color=MUTE, ha="right", va="center")
-    for key, r in rows.items():
-        assert int(r.n_pairs) == 20, (key, r.n_pairs)
-    return {k: [float(r.mean_difference_pp), float(r.ci95_low_pp), float(r.ci95_high_pp),
-                int(r.positive_seeds), int(r.n_pairs)] for k, r in rows.items()}
+    return {K: list(v[:3]) for K, v in paired.items()}
 
 
-# ── build ────────────────────────────────────────────────────────────────
+# --------------------------------------------------- E: the K = 4 forest ----
+def panel_forest(canvas, ax, contrasts, pairs, *, cap_pt=62.0):
+    rows, stats = [], {}
+    for label, key, colour, holm, family in FOREST_ROWS:
+        row = contrasts[contrasts.control.eq(key) & contrasts.budget_k.eq(4)]
+        assert len(row) == 1
+        row = row.iloc[0]
+        seeds = pairs[pairs.control.eq(key)].accuracy_difference_pp \
+            .to_numpy(float)
+        assert len(seeds) == 20 and int(row.n_pairs) == 20
+        note = (f"{int(row.positive_seeds)}/20, Holm P = "
+                f"{_p_text(float(row[holm]))}")
+        if family:
+            note += f" ({family})"
+        rows.append(dict(label=label, mean=float(row.mean_difference_pp),
+                         lo=float(row.ci95_low_pp), hi=float(row.ci95_high_pp),
+                         seeds=list(seeds), color=colour, n=20, note=note))
+        stats[key] = [float(row.mean_difference_pp), float(row.ci95_low_pp),
+                      float(row.ci95_high_pp), int(row.positive_seeds), 20,
+                      float(row[holm])]
+    assert stats["random_rank_k"][3] == 15, "dense rank-4 is 15/20, not 20/20"
+    assert stats["best_matched_nonanatomical_oracle"][3] == 15
+    assert stats["random_sparse_matched"][3] == 20
+    assert stats["depth_interleaved_bins"][3] == 20
+    np.testing.assert_allclose(
+        [stats[k][0] for k in ("best_matched_nonanatomical_oracle",
+                               "random_rank_k", "random_sparse_matched",
+                               "depth_interleaved_bins")],
+        [1.27, 2.31, 3.77, 7.11], atol=6e-3)
+    np.testing.assert_allclose(
+        [stats[k][1] for k in ("best_matched_nonanatomical_oracle",
+                               "random_rank_k", "random_sparse_matched",
+                               "depth_interleaved_bins")],
+        [0.59, 1.00, 2.89, 6.19], atol=6e-3)
+    np.testing.assert_allclose(
+        [stats[k][2] for k in ("best_matched_nonanatomical_oracle",
+                               "random_rank_k", "random_sparse_matched",
+                               "depth_interleaved_bins")],
+        [1.95, 3.91, 4.74, 8.03], atol=6e-3)
+    np.testing.assert_allclose(
+        [stats[k][5] for k in ("best_matched_nonanatomical_oracle",
+                               "random_rank_k", "random_sparse_matched",
+                               "depth_interleaved_bins")],
+        [0.010140, 0.003380, 1.766e-4, 7.629e-6], rtol=2e-3)
+    # the label gutter is measured, then applied as a PRIVATE inset (see the
+    # module docstring): a declared reserve is locked per grid column and C
+    # starts in the same column.
+    widest = max(_text_w_pt(ax, line, PT_SMALL)
+                 for r in rows for line in str(r["label"]).split("\n"))
+    gutter = min(widest + 7.0, cap_pt)
+    # the lock pass re-places the panel from its slot, so only the record is
+    # touched here: calling ax.set_position() as well would be captured as a
+    # manual nudge and applied twice.
+    record = canvas._record_for("E")
+    record["inset_pt"] = (gutter, 0.0, 0.0, 0.0)
+    notes = [r.pop("note") for r in rows]
+    # CF-6 allows a 0.55 pt row tick OR a 6 % band; the tick is used because a
+    # band patch leaves no clear strip for the per-row note.
+    out = forest(ax, rows, value_label="Ancestry − control (pp)",
+                 reference=0.0, reference_label="no difference",
+                 xlim=(-2.0, 14.0), tag="", seed_alpha=0.45, band=False,
+                 tick=True)
+    ax.set_ylim(4.62, -0.60)
+    for y, note in zip(out["ypos"], notes):
+        ax.text(13.7, y - 0.52, note, fontsize=PT_SMALL, color=MUTE,
+                ha="right", va="center")
+    _badge(ax, (13.7, 0.0), "ceiling", ha="right", va="center")
+    derange = contrasts[contrasts.control.eq("within_neuron_route_derangement")
+                        & contrasts.budget_k.eq(4)].iloc[0]
+    ax.text(-1.9, 3.85,
+            f"off scale: derangement {_signed(derange.mean_difference_pp)} "
+            f"[{derange.ci95_low_pp:.2f}, {derange.ci95_high_pp:.2f}] pp "
+            f"(20/20)", fontsize=PT_SMALL, color=MUTE, ha="left", va="center")
+    ax.text(13.7, 4.30,
+            "n = 20 paired seeds; mean [95 % seed bootstrap]; epoch 80",
+            fontsize=PT_SMALL, color=MUTE, ha="right", va="center")
+    for line in ax.lines:                 # CF-7: zero drawn once, and only
+        xd = list(line.get_xdata())       # over the rows it refers to
+        if len(xd) == 2 and xd[0] == xd[1] == 0.0:
+            line.set_ydata([0.20, 1.0])
+    ax.set_xticks([0, 4, 8, 12])
+    ax.spines["bottom"].set_bounds(0, 12)
+    return stats, gutter
+
+
+# ------------------------------------------------- F: the cue cohort ----
+def panel_cues(ax, grid, oracle, frozen, mismatched, enc_c, hard_c):
+    xs = np.array([0.0, 0.5, 1.0])
+    ax.set_xlim(-0.30, 1.16)
+    ax.set_ylim(-14.0, 112.0)
+    for readout, dashes in (("soft", None), ("hard", (2.4, 1.8))):
+        for size in (16, 64, 256):
+            mean, lo, hi = grid[(readout, size)]
+            colour = CAL_RAMP[size]
+            ax.fill_between(xs, lo, hi, color=colour, alpha=0.22, lw=0.0,
+                            zorder=1.6)
+            line, = ax.plot(xs, mean, color=colour,
+                            lw=LW_DATA if readout == "soft" else LW_ERR,
+                            solid_capstyle="round", zorder=3.0)
+            if dashes:
+                line.set_dashes(dashes)
+    # the eighteen printed grid means, the three reference rules and the
+    # four contrast tags are all asserted (plan §9 item 9)
+    for key, want in ((("soft", 16), [19.39, 19.16, 19.07]),
+                      (("soft", 64), [75.06, 21.39, 19.30]),
+                      (("soft", 256), [79.98, 25.83, 19.27]),
+                      (("hard", 16), [80.29, 32.41, 20.81]),
+                      (("hard", 64), [80.29, 54.22, 22.30]),
+                      (("hard", 256), [80.29, 64.03, 23.44])):
+        np.testing.assert_allclose(grid[key][0], want, atol=2e-2)
+    np.testing.assert_allclose([oracle, frozen], [80.29, 18.67], atol=2e-2)
+    np.testing.assert_allclose(mismatched, [18.58, 18.89], atol=2e-2)
+    reference_line(ax, oracle, label=f"oracle {oracle:.1f} %",
+                   color=PURPLE, span=(-0.30, 1.16))
+    reference_line(ax, 50.0, label="chance", span=(-0.30, 1.16))
+    ax.plot([-0.30, 1.16], [frozen, frozen], color=MUTE, lw=LW_HAIR,
+            zorder=1.2)
+    # which family is which, and the calibration ramp keyed on the left ends
+    ax.text(-0.28, 106.0, "soft readout, calibration cues (solid)",
+            fontsize=PT_SMALL, color=INK, ha="left", va="center")
+    ax.text(-0.28, 96.0, "hard readout, exploratory (dashed)",
+            fontsize=PT_SMALL, color=MUTE, ha="left", va="center")
+    _badge(ax, (1.16, 106.0), "exploratory", ha="right", va="center")
+    v256 = encoder_contrast(enc_c, 256, 0.0, "oracle_context")
+    v16 = encoder_contrast(enc_c, 16, 0.0, "oracle_context")
+    prim = encoder_contrast(enc_c, 256, 0.5, "oracle_context")
+    froz = encoder_contrast(enc_c, 256, 0.5, "frozen_profile")
+    hard = encoder_contrast(hard_c, 256, 0.5, "oracle_context")
+    np.testing.assert_allclose([v256[0], v16[0], prim[0], froz[0], hard[0]],
+                               [-0.31, -60.90, -54.47, 7.16, -16.26],
+                               atol=2e-2)
+    # both noise-free oracle gaps: leakage is a small-calibration effect.
+    # The line is capped at 120 pt so it clears the right-aligned
+    # 'oracle 80.3 %' rule label 4 units below it.
+    ax.text(-0.28, 86.0,
+            f"noise 0: {_signed(v256[0])} pp (256), {_signed(v16[0])} (16)",
+            fontsize=PT_SMALL, color=INK, ha="left", va="center")
+    for size, y_tag, y_line in ((256, 73.0, 79.98), (64, 63.0, 75.06),
+                                (16, 27.0, 19.39)):
+        ax.text(-0.05, y_tag, str(size), color=CAL_RAMP[size],
+                fontsize=PT_SMALL, ha="right", va="center")
+        ax.plot([-0.04, 0.0], [y_tag, y_line], color=CAL_RAMP[size],
+                lw=LW_HAIR, zorder=1)
+    ax.text(1.16, 72.0, f"{_signed(prim[0])} pp vs oracle", fontsize=PT_SMALL,
+            color=INK, ha="right", va="center")
+    ax.text(1.16, 64.0, f"{_signed(froz[0])} pp vs frozen", fontsize=PT_SMALL,
+            color=INK, ha="right", va="center")
+    ax.plot([0.60, 0.53], [62.0, 29.0], color=MUTE, lw=LW_HAIR, zorder=1)
+    ax.text(-0.28, 12.0, f"frozen {frozen:.1f} %; mismatched "
+                         f"{mismatched[0]:.1f}–{mismatched[1]:.1f} %",
+            fontsize=PT_SMALL, color=MUTE, ha="left", va="center")
+    ax.set_xticks([0.0, 0.5, 1.0], ["0", "0.5", "1"])
+    ax.set_yticks([20, 40, 60, 80])
+    ax.spines["left"].set_bounds(20, 80)
+    ax.spines["bottom"].set_bounds(0.0, 1.0)
+    ax.set_xlabel("Cue noise SD")
+    ax.set_ylabel("Held-out accuracy (%)")
+    ax.text(1.16, 1.0, "n = 20 fresh seeds (52000–52019);",
+            fontsize=PT_SMALL, color=MUTE, ha="right", va="center")
+    ax.text(1.16, -8.5, "mean [95 % bootstrap]; epoch 80; cue delay 0",
+            fontsize=PT_SMALL, color=MUTE, ha="right", va="center")
+    return dict(soft={str(k): list(np.round(v[0], 4))
+                      for k, v in grid.items() if k[0] == "soft"},
+                hard={str(k): list(np.round(v[0], 4))
+                      for k, v in grid.items() if k[0] == "hard"},
+                oracle=oracle, frozen=frozen, mismatched=list(mismatched),
+                soft_256_noise0_vs_oracle=list(v256),
+                soft_16_noise0_vs_oracle=list(v16),
+                soft_256_noise05_vs_oracle=list(prim),
+                soft_256_noise05_vs_frozen=list(froz),
+                hard_256_noise05_vs_oracle=list(hard))
+
+
+# ------------------------------------------------------------- build ----
 def build():
     mpl.rcParams["lines.markeredgewidth"] = LW_EDGE
     RECORDS.mkdir(exist_ok=True)
@@ -659,170 +885,261 @@ def build():
     summary = pd.read_csv(DATA / "condition_summary.csv")
     contrasts = pd.read_csv(REVIEW / "ancestry_k4_control_contrasts.csv")
     pairs = pd.read_csv(REVIEW / "ancestry_control_paired_differences.csv")
-    pairs = pairs[pairs.budget_k.eq(4)]
-    enc = pd.read_csv(ENCODER / "trajectories.csv")
-    hard = pd.read_csv(HARD / "trajectories.csv")
-    contrasts_enc = pd.read_csv(ENCODER / "paired_contrasts.csv")
-    contrasts_hard = pd.read_csv(HARD / "paired_contrasts.csv")
+    pairs4 = pairs[pairs.budget_k.eq(4)]
+    enc_c = pd.read_csv(ENCODER / "paired_contrasts.csv")
+    hard_c = pd.read_csv(HARD / "paired_contrasts.csv")
+    assert set(hard_c.analysis_status.unique()) == {
+        "exploratory_paired_sensitivity"}
     prediction = coefficient_prediction()
     normalized = prediction.groupby("budget_k").normalized_coefficient_sum.mean()
+    np.testing.assert_allclose(normalized.loc[list(K_TICKS)].to_numpy(float),
+                               [-1.08, -0.03, 0.60, 1.00], atol=5e-3)
     tiers = task_tiers()
     supports = control_supports(0)
-    source_e = coefficient_source_table(enc, hard)
+    paired = rewiring_pairs(outcomes)
+    grid, oracle, frozen, mismatched = cue_grid()
+    # the factorial's own second bootstrap of the SAME contrast must still
+    # agree on the mean; its ci95_high (1.97) is never printed (plan §4 E)
+    second = pd.read_csv(DATA / "paired_contrasts.csv")
+    hero = second[second.contrast.str.contains("best_matched", na=False)
+                  & second.budget_k.eq(4)]
+    if len(hero):
+        np.testing.assert_allclose(float(hero.mean_difference.iloc[0]),
+                                   0.012670898, atol=1e-6)
 
-    canvas = NativeCanvas(490 / 72, 3, row_weights=[122, 108, 108], hgutter_pt=38,
-                          vgutter_pt=48, margins=Margins(left=52, right=14, top=22, bottom=34))
-    a = canvas.panel("A", 0, 0, 4, title="Eight-stream hierarchical task", schematic=True,
+    canvas = NativeCanvas(490 / 72, 3, row_weights=[128, 107, 107],
+                          hgutter_pt=38, vgutter_pt=48,
+                          margins=Margins(left=44, right=12, top=20, bottom=32))
+    a = canvas.panel("A", 0, 0, 4, title="Eight-stream task tree",
+                     schematic=True, lock=False)
+    b = canvas.panel("B", 0, 4, 8, title="Ancestry and control dictionaries",
+                     schematic=True, lock=False)
+    c = canvas.panel("C", 1, 0, 6, title="Ancestry wins only at K = 4")
+    d = canvas.panel("D", 1, 6, 6, title="Rewiring removes the K = 2, 4 gain",
+                     sharey=c)
+    e = canvas.panel("E", 2, 0, 7, title="Ancestry minus each control, K = 4",
                      lock=False)
-    b = canvas.panel("B", 0, 4, 8, title="Ancestry dictionaries, K = 1 to 8", schematic=True,
-                     lock=False)
-    c = canvas.panel("C", 1, 0, 4, title="Ancestry wins only at K = 4")
-    d = canvas.panel("D", 1, 4, 4, title="Rewiring costs at K = 2, 4", sharey=c)
-    e = canvas.panel("E", 1, 8, 4, title="Learned cues fall short", sharey=c)
-    fpan = canvas.panel("F", 2, 0, 5, title="Matched controls at K = 4", schematic=True,
+    fpan = canvas.panel("F", 2, 7, 5, title="Learned cues fall short of oracle",
                         lock=False)
-    g = canvas.panel("G", 2, 5, 7, title="K = 4: ancestry exceeds each control")
+
+    # 20 pt of declared left reserve on BOTH six-module panels of row 1:
+    # audit_letter_alignment.py protects the 45.9 pt letter column, and C's
+    # rotated y label reaches 22 pt left of its axes.  Declaring it on D as
+    # well keeps the two six-module panels the same width, which the layout
+    # contract requires.
+    canvas.declare_reserve("C", left=20)
+    canvas.declare_reserve("D", left=20)
 
     panel_task(a, tiers)
-    sums = panel_dictionaries(b, prediction)
+    raw = panel_dictionaries(b, prediction, supports)
     stats_c = panel_bandwidth(c, summary, outcomes)
-    stats_d = panel_rewiring(d, summary, outcomes)
-    stats_e = panel_coefficients(e, source_e, contrasts_enc, contrasts_hard)
-    panel_controls(fpan, supports)
-    stats_g = panel_forest(g, contrasts, pairs)
-    canvas.declare_reserve("G", left=62)
+    stats_d = panel_rewiring(d, summary, paired)
+    stats_e, gutter = panel_forest(canvas, e, contrasts, pairs4)
+    stats_f = panel_cues(fpan, grid, oracle, frozen, mismatched, enc_c, hard_c)
+
     style_direct_color_labels(canvas.fig)
-    canvas.lock_reserves()                 # place G behind its reserve before aligning
+    canvas.lock_reserves()
     findings = canvas.align_letters()
-    # lock=False: the reserves are already locked, and a second lock pass would
-    # re-place every letter against its own panel's ink, undoing the shared
-    # module-column x that align_letters gave B and D.
-    problems = canvas.save(OUT, name="credit_first_figure_03", dpi=180, lock=False)
+    problems = canvas.save(OUT, name="credit_first_figure_03", dpi=180,
+                           lock=False)
     PUBLISHED.parent.mkdir(parents=True, exist_ok=True)
     shutil.copyfile(OUT, PUBLISHED)
 
-    # records and provenance
-    prediction.to_csv(RECORDS / "figure_03_coefficient_prediction.csv", index=False)
-    contrasts[contrasts.control.isin(["best_matched_nonanatomical_oracle", "random_rank_k",
-                                      "random_sparse_matched", "depth_interleaved_bins"])] \
-        .to_csv(RECORDS / "figure_03_k4_contrasts.csv", index=False)
+    # ---- render-time records ------------------------------------------
+    prediction.to_csv(RECORDS / "figure_03_coefficient_prediction.csv",
+                      index=False)
     supports.to_csv(RECORDS / "figure_03_control_supports.csv", index=False)
-    source_e.to_csv(RECORDS / "figure_03_coefficient_source.csv", index=False)
-    files = [Path(__file__), Path(routing.__file__), Path(experiment.__file__), CONFIG,
-             JOURNAL / "scripts/figure_canvas.py", JOURNAL / "scripts/journal_style.py",
-             JOURNAL / "scripts/native_schematics.py",
-             JOURNAL / "scripts/credit_tree_schematics.py",
-             DATA / "seed_outcomes.csv", DATA / "condition_summary.csv",
-             REVIEW / "ancestry_k4_control_contrasts.csv",
-             REVIEW / "ancestry_control_paired_differences.csv",
-             ENCODER / "trajectories.csv", ENCODER / "paired_contrasts.csv",
-             HARD / "trajectories.csv", HARD / "paired_contrasts.csv"]
-    mapping = {
-        "A": "Schematic from the frozen task configuration (selected +1; sibling, same-half "
-             "and opposite-half distractor coefficients) on the shared balanced tree",
-        "B": "Ancestry dictionaries A (8 x K) from grouped_routes(correct_ancestry_subtrees); "
-             "card footers are the raw group sums of figure_03_coefficient_prediction.csv, "
-             "verified across all 8 contexts",
-        "C": "condition_summary.csv means/95% intervals (dendritic_tree: correct ancestry, "
-             "derangement) and the per-seed maximum of four matched controls from "
-             "seed_outcomes.csv (routing_figure_panels._best_control_by_budget)",
-        "D": "condition_summary.csv means/95% intervals for dendritic_tree versus "
-             "degree_depth_matched_rewired_tree under correct ancestry; paired differences "
-             "and seed-bootstrap intervals from seed_outcomes.csv (bootstrap seeds 70000+)",
-        "E": "review_coefficient_encoder and review_coefficient_hard_readout trajectories at "
-             "calibration 256, noise 0.5, delay 0, epoch 80 (figure_03_coefficient_source.csv); "
-             "paired contrasts from both paired_contrasts.csv files; hard readout exploratory",
-        "F": "Recipient supports of c3's credit at K = 4 from grouped_routes / "
-             "random_rank_routes (figure_03_control_supports.csv, rng seed 0 for the random "
-             "families); correct ancestry delivery drawn on the ghost tree",
-        "G": "Frozen ancestry_k4_control_contrasts primary maximum-over-four comparator and "
-             "individual controls with paired seed points; Holm adjustment across four budgets",
-    }
-    payload = dict(
-        panel_sources=mapping,
-        source_sha256={str(p.relative_to(JOURNAL)): hashlib.sha256(p.read_bytes()).hexdigest()
-                       for p in files},
-        layout_findings=list(findings) + list(problems),
-        derived_numbers=dict(group_sums={int(k): float(v) for k, v in sums.items()},
-                             normalized_group_sums={int(k): float(v) for k, v in
-                                                    normalized.items()},
-                             accuracy_by_K=stats_c, rewiring_pp=stats_d, coefficient_source=stats_e,
-                             k4_contrasts_pp=stats_g),
-        coefficient_scope="Raw group sums; implemented route rows divide by sqrt(group size). "
-                          "Signs follow from the generator and are not a newly prospective "
-                          "accuracy prediction.",
-        deviations_from_spec=[
-            "canvas 490 pt, rows 122/108/108, vgutter 48 (row-separation audit floor)",
-            "left margin 52 (letter-column audit)",
-            "F drawn as one ghost tree plus a 4 x 8 support table instead of four 38-pt cards",
-            "D difference tags print the mean only (as a span between the paired "
-            "markers); intervals in the caption",
-            "A draws its three tiers as ORDINAL_RAMP bands (D8) at a fixed 5.6 pt width "
-            "(private _tier_bands), not 16 % K-cycle capsules: K_CYCLE is B's alphabet and "
-            "a 16 % tint of an edge mix does not print",
-            "A labels four streams (c1, c3, c4, c8): at the 10 pt terminal pitch eight "
-            "PT_SMALL labels clear each other by 2-4 pt and read as one cluster",
-            "F table cells carry a 0.25 shading floor so sub-maximal supports print",
-            "private helpers _badge (ceiling, exploratory) and _subtree_arrow (D7 K-cycle)"])
-    (RECORDS / "figure_03_sources.json").write_text(json.dumps(payload, indent=2) + "\n")
-    def _iv(v, digits=2):
-        return f"[{_minus(f'{v[1]:.{digits}f}')}, {_minus(f'{v[2]:.{digits}f}')}]"
+    contrasts[contrasts.control.isin([k for _, k, _, _, _ in FOREST_ROWS])] \
+        .to_csv(RECORDS / "figure_03_k4_contrasts.csv", index=False)
+    source_f = []
+    for (readout, size), (mean, lo, hi) in grid.items():
+        for j, noise in enumerate((0.0, 0.5, 1.0)):
+            source_f.append(dict(readout=readout, calibration_samples=size,
+                                 cue_noise_sd=noise, cue_delay_trials=0,
+                                 epoch=80, n_seeds=20,
+                                 mean_accuracy_pct=float(mean[j]),
+                                 ci95_low_pct=float(lo[j]),
+                                 ci95_high_pct=float(hi[j])))
+    pd.DataFrame(source_f).to_csv(
+        RECORDS / "figure_03_coefficient_source.csv", index=False)
 
-    norm_txt = ", ".join(_signed(normalized[k], 3) for k in K_TICKS)
-    raw_txt = ", ".join(_signed(sums[k]) for k in K_TICKS)
-    hero_g = stats_g["best_matched_nonanatomical_oracle"]
-    cnt = {k: f"{v[3]}/{v[4]}" for k, v in stats_g.items()}
-    # the printed seed counts are read off positive_seeds / n_pairs, never typed:
-    # dense rank-4 is 15/20 like the best-matched control, not 20/20
-    assert cnt["random_sparse_matched"] == cnt["depth_interleaved_bins"], cnt
-    ctrl_txt = (f"{_signed(stats_g['random_rank_k'][0])} pp over dense rank-4 "
-                f"({cnt['random_rank_k']} seeds), "
-                f"{_signed(stats_g['random_sparse_matched'][0])} and "
-                f"{_signed(stats_g['depth_interleaved_bins'][0])} pp over random-sparse and "
-                f"depth-interleaved ({cnt['depth_interleaved_bins']} each)")
-    caption = (
-        "**Hierarchical distractors and ancestry bandwidth.** "
-        "**A**, Eight streams c1–c8 at the terminals of a balanced feedback tree (four "
-        "labelled); the cued stream c3 (blue contact) carries +1 sᵢ, its sibling, same-half "
-        f"and other-half streams {_signed(tiers['sibling'])}, {_signed(tiers['same_half'])} "
-        f"and {_signed(tiers['other_half'])} sᵢ (grey tier bands, darkest most negative). "
-        "Output z, somatic error δ0. "
-        "**B**, Ancestry dictionaries A (8 × K): capsules mark the K subtree groups, the "
-        "arrow the group receiving c3's credit; each drawn row is a site block in tree "
-        f"order. Raw group sums {raw_txt}; implemented rows divide by the square root of "
-        f"group size ({norm_txt}), a design consequence, not a discovered optimum. "
-        "**C**, Held-out accuracy across K for ancestry, route derangement and the per-seed "
-        "maximum of four matched controls taken after training (ceiling, not a learned "
-        "selector). "
-        "**D**, Matched versus degree/depth-matched rewired tree under ancestry feedback; "
-        f"spans give paired differences {_signed(stats_d[2][0])} "
-        f"{_iv(stats_d[2])} and {_signed(stats_d[4][0])} {_iv(stats_d[4])} pp at K = 2, 4; "
-        "exact ties at K = 1, 8. "
-        "**E**, K = 4 coefficient source in 20 fresh seeds (52000–52019): oracle context, "
-        "learned soft estimator, frozen profile and the exploratory hard readout (hollow "
-        f"seeds; outside the Holm family); soft − oracle {_signed(stats_e['soft_minus_oracle'][0])} "
-        f"{_iv(stats_e['soft_minus_oracle'])} pp and soft − frozen "
-        f"{_signed(stats_e['soft_minus_frozen'][0])} {_iv(stats_e['soft_minus_frozen'])} pp, "
-        "Holm-adjusted. "
-        "**F**, Recipients of c3's credit at K = 4: the ghost tree shows the correct ancestry "
-        "delivery (c3 and sibling c4); rows are rank-matched controls, columns the eight "
-        "streams, cell darkness the cued context's absolute delivered support normalised to "
-        "each row's largest cell (random-sparse and dense rows: single draws). "
-        f"**G**, Ancestry minus each control at K = 4: {_signed(hero_g[0])} {_iv(hero_g)} pp "
-        f"over the best matched control ({hero_g[3]}/{hero_g[4]} seeds, Holm "
-        f"P = {float(contrasts[contrasts.control.eq('best_matched_nonanatomical_oracle') & contrasts.budget_k.eq(4)].p_holm_four_budgets.iloc[0]):.4f}), "
-        f"{ctrl_txt}; derangement +61.1 pp off scale. Means with 95% seed-bootstrap "
-        "intervals; seeds as dots (E, G); dashed chance (C–E) and zero (G) lines; C, D, G "
-        "share 20 paired seeds.\n")
-    (RECORDS / "figure_03_caption.md").write_text(caption)
+    # ---- the curated display table (panel meanings B..F) ---------------
+    display = []
+    display += [dict(panel="B", record="design prediction", **r)
+                for r in prediction.to_dict("records")]
+    display += [dict(panel="B", record="control support", **r)
+                for r in supports.to_dict("records")]
+    dend = summary[summary.architecture.eq("dendritic_tree")]
+    for family in ("correct_ancestry_subtrees", "within_neuron_route_derangement"):
+        display += [dict(panel="C", record="condition_mean", **r)
+                    for r in dend[dend.feedback_family.eq(family)]
+                    .to_dict("records")]
+    for k, mean, low, high in routing._best_control_by_budget(outcomes):
+        display.append(dict(panel="C", record="condition_mean",
+                            feedback_family="best_matched_control",
+                            budget_k=int(k), mean_heldout_accuracy=mean,
+                            ci95_low_heldout_accuracy=low,
+                            ci95_high_heldout_accuracy=high))
+    rew = summary[summary.feedback_family.eq("correct_ancestry_subtrees")
+                  & summary.architecture.isin(["dendritic_tree",
+                                               "degree_depth_matched_rewired_tree"])]
+    display += [dict(panel="D", record="condition_mean", **r)
+                for r in rew.to_dict("records")]
+    for K, v in paired.items():
+        display.append(dict(panel="D", record="paired_contrast", budget_k=K,
+                            n_pairs=20, mean_difference_pp=v[0],
+                            ci95_low_pp=v[1], ci95_high_pp=v[2],
+                            positive_seeds=v[3]))
+    keys = [k for _, k, _, _, _ in FOREST_ROWS] + \
+        ["within_neuron_route_derangement"]
+    display += [dict(panel="E", record="mean_contrast", **r)
+                for r in contrasts[contrasts.control.isin(keys)
+                                   & contrasts.budget_k.eq(4)].to_dict("records")]
+    display += [dict(panel="E", record="paired_seed", **r)
+                for r in pairs4[pairs4.control.isin(keys)].to_dict("records")]
+    display += [dict(panel="F", record="grid_mean", **r) for r in source_f]
+    display += [dict(panel="F", record="paired_contrast", readout="soft", **r)
+                for r in enc_c[enc_c.cue_delay_trials.eq(0)].to_dict("records")]
+    display += [dict(panel="F", record="paired_contrast", readout="hard", **r)
+                for r in hard_c[hard_c.cue_delay_trials.eq(0)].to_dict("records")]
+
+    sources = [CONFIG, ENCODER_CONFIG,
+               DATA / "seed_outcomes.csv", DATA / "condition_summary.csv",
+               DATA / "paired_contrasts.csv",
+               REVIEW / "ancestry_k4_control_contrasts.csv",
+               REVIEW / "ancestry_control_paired_differences.csv",
+               ENCODER / "condition_summary.csv", ENCODER / "trajectories.csv",
+               ENCODER / "paired_contrasts.csv",
+               HARD / "condition_summary.csv", HARD / "trajectories.csv",
+               HARD / "paired_contrasts.csv"]
+    builders = [Path(__file__), Path(routing.__file__),
+                Path(experiment.__file__), JOURNAL / "scripts/figure_canvas.py",
+                JOURNAL / "scripts/journal_style.py",
+                JOURNAL / "scripts/native_schematics.py"]
+    panels = {
+        "A": "Schematic, no data: the frozen task configuration "
+             "(configs/trained_subtree_address/full_factorial_confirmatory.json) "
+             "drawn on the shared balanced feedback tree; selected +1.00 and "
+             "sibling / same-half / opposite-half distractor coefficients.",
+        "B": "Schematic, no data: ancestry dictionaries A (8 x K) from "
+             "grouped_routes(correct_ancestry_subtrees) with the card footers "
+             "the raw group sums of figure_03_coefficient_prediction.csv, and "
+             "the delivered support of b3's credit under the four matched "
+             "controls at K = 4 (figure_03_control_supports.csv, rng seed 0).",
+        "C": "condition_summary.csv means with 95% seed-bootstrap intervals "
+             "(dendritic_tree under correct ancestry and under derangement) "
+             "and the per-seed post-training maximum over the four matched "
+             "controls from seed_outcomes.csv.",
+        "D": "condition_summary.csv means with 95% intervals for "
+             "dendritic_tree versus degree_depth_matched_rewired_tree under "
+             "ancestry feedback; paired differences and 20,000-draw seed "
+             "bootstrap (seed 70000) from seed_outcomes.csv.",
+        "E": "review_evidence_reanalysis/ancestry_k4_control_contrasts.csv "
+             "means, 95% intervals, positive-seed counts and Holm-adjusted P; "
+             "the seed fan is ancestry_control_paired_differences.csv at K = 4.",
+        "F": "review_coefficient_encoder and review_coefficient_hard_readout "
+             "condition_summary.csv over the calibration x cue-noise grid at "
+             "cue delay 0, with render-time 95% seed-bootstrap bands from "
+             "trajectories.csv at epoch 80; contrasts from both "
+             "paired_contrasts.csv (the hard readout is exploratory).",
+    }
+    deviations = [
+        "row weights 128/107/107 at a 48 pt vertical gutter and margins "
+        "44/12/20/32, not 112/121/121 at 42 pt with margins 52/14 "
+        "at 42 pt: at a 112 pt row 0 the eight-module panel B has axes aspect "
+        "2.58, above PANEL_ASPECT_MAX 2.40, which DECISIONS G4 forbids "
+        "relaxing, and a 42 pt gutter leaves only 6.5 pt between rows 1 and 2 "
+        "against audit_row_separation.py's 8.5 pt floor",
+        "E uses lock=False plus a measured private left inset instead of "
+        "declare_reserve(left=66): a declared reserve locks the whole grid "
+        "column and C starts in column 0, so C and D would differ in width",
+        "E draws its per-row wins / Holm notes inside the axes above each "
+        "seed fan; forest(note=...) writes into the gutter shared with F",
+        "E prints Holm P in decimal (Nimbus Sans has no superscript minus and "
+        "CF-2 forbids mathtext); the caption keeps the scientific form",
+        "A sets the four coefficient tier labels in a keyed two-row band, not "
+        "over their own blocks (a 17.6 pt coefficient string cannot sit over "
+        "a one-terminal block at the terminal pitch)",
+        "A drops the 'junctions define feedback supports only' footer into "
+        "the caption -- the plan's stated fallback",
+        "B draws no tree in the ancestry cards, so the subtree entry arrow "
+        "comes from the private _delivery_arrow rather than credit_delivery",
+        "B's control support table is 4 x 10 pt rows by 8 x 7 pt columns, not "
+        "6 x 6 pt: a 7 pt row label cannot sit on a 6 pt row",
+        "D's paired intervals use one 20,000-draw bootstrap seeded 70000; "
+        "K = 2 gives [21.03, 25.32] against the plan's quoted [21.05, 25.32]",
+        "C and F carry shortened forms of the plan's long annotations; the "
+        "full wording is in the caption",
+        "C's tie tags print 18.66 %, not the plan's 18.67 %: the frozen "
+        "condition_summary gives 18.6646 % for both arms at K = 1, which is "
+        "also what the plan's own deranged row rounds to",
+        "E runs to xlim (-2, 14) instead of (-2, 11) so the +13.13 dense "
+        "rank-4 seed is drawn rather than clipped; the off-scale note "
+        "therefore names only the derangement contrast",
+        "F does not repeat 256 / 64 / 16 on the dashed hard-readout lines: "
+        "they carry the same three ORDINAL_RAMP hues as the labelled solid "
+        "lines, and the noise-0.5 points have no 12 pt clearance for three "
+        "more labels without a text-over-data collision",
+        "F's noise-free annotation is one line, capped at 120 pt so it "
+        "clears the right-aligned 'oracle 80.3 %' rule label four units "
+        "below it; the caption says the printed values are oracle gaps",
+        "B's control-table column headers are the digits 1..8 under one b_i "
+        "tag, not eight subscripted b_j strings: a literal Unicode subscript "
+        "is not in Nimbus Sans and mathtext is banned by CF-2",
+        "B's |A| scale-bar tag is plain text, not Frame.subscript",
+        "F's oracle rule is labelled 'oracle 80.3 %' with no 'oracle' badge "
+        "(the panel already carries the 'exploratory' badge; a second chip "
+        "on the same rule would sit on the dashed hard-readout curves)",
+        "private helpers _badge (ceiling, exploratory), _delivery_arrow, "
+        "_gap_span",
+    ]
+    schematic_fraction = (128.8 + 295.6) * 128.0 / (462.4 * 438.0)
+    payload = dict(
+        panel_sources=panels,
+        source_sha256={str(p.relative_to(JOURNAL)):
+                       hashlib.sha256(p.read_bytes()).hexdigest()
+                       for p in sources},
+        layout_findings=list(findings) + list(problems),
+        forest_gutter_pt=round(gutter, 2),
+        schematic_area_fraction=round(schematic_fraction, 4),
+        g4_waiver="G4 waiver recorded for Fig 3 at the superseded 31.6 % "
+                  "measure; on the B12 formula the figure is "
+                  f"{100 * schematic_fraction:.1f} % and the waiver is dormant",
+        derived_numbers=dict(
+            group_sums={int(k): float(v) for k, v in raw.items()},
+            normalized_group_sums={int(k): float(v)
+                                   for k, v in normalized.items()},
+            accuracy_by_K=stats_c, rewiring_pp=stats_d,
+            k4_contrasts_pp=stats_e, cue_grid=stats_f),
+        coefficient_scope="Raw group sums; implemented route rows divide by "
+                          "sqrt(group size). Signs follow from the generator "
+                          "and are not a new prospective prediction.",
+        caption_word_count=caption_words(),
+        deviations_from_plan=deviations)
+    assert 220 <= payload["caption_word_count"] <= 320, \
+        payload["caption_word_count"]
+    (RECORDS / "figure_03_caption.tex").write_text(CAPTION + "\n")
+    (RECORDS / "figure_03_sources.json").write_text(
+        json.dumps(payload, indent=2, default=float) + "\n")
+    publish(3, OUT, display, sources, builders, panels, emit_main=False,
+            layout_findings=list(findings) + list(problems),
+            notes="Overhaul rebuild of main Fig 3 (v2 plan, 2026-09-09). No "
+                  "new training, fit, endpoint selection or reseeding; every "
+                  "value is re-read from the frozen Source Data.")
     return list(findings) + list(problems), payload
 
 
-def main():
+def main(argv=None):
+    # rebuild_final_publication_figures.py passes --emit-main (or nothing);
+    # this builder always writes figures/main/figure_03.pdf, so the flag is
+    # accepted and recorded rather than acted on.
+    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    parser.add_argument("--emit-main", action="store_true")
+    parser.parse_args(argv)
     problems, payload = build()
     for p in problems:
         print(f"  {p}")
-    print(json.dumps(payload["derived_numbers"], indent=1))
+    print(json.dumps(payload["derived_numbers"], indent=1, default=float))
 
 
 if __name__ == "__main__":

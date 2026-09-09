@@ -1,21 +1,21 @@
 {
   "code_sha256": {
-    "scripts/conductance_local_gate/figure.py": "015dc37a0d6921f2e262814b8d57103c57ac64648d3486fdded6edf984be8638",
+    "scripts/conductance_local_gate/figure.py": "eb243194761a7c9b7bf730e834e4023e6a095b6e9bde6a755eff848bf8d9ede7",
     "scripts/conductance_local_gate/model.py": "cc2b82f6c486810a43aa885f3ea2dacce54c473f2e2ece6f4cfdb7d88ce6ad39",
     "scripts/conductance_local_gate/portable_contract.py": "fea35a393f5881dfc60b3dfe810dac64f8c2e6b0d8ba01937f4a42c5ffab3c05",
     "scripts/conductance_local_gate/report.py": "a96b4b6edd42c0d98de3da44a46c409310b463450369173be7371d503fa6dfef",
     "scripts/credit_tree_schematics.py": "ebd31b5ccc86b00bb27a236af210eb2a1d1820e9fcec27b57283a12224158cbe",
     "scripts/figure_canvas.py": "de3f566dd08270535deab95eb798b49cc17ccf4dfbb88e7ebdb50860903a6ad1",
-    "scripts/journal_style.py": "35861bf56befbda6ee9e6a59866f3f7b3085959961155a9a10cee0f0fbfa0e38",
+    "scripts/journal_style.py": "be8a138f9d9c081237edc616ba52b6769f957d8b8b49e705a92adcb18f475f3c",
     "scripts/native_schematics.py": "3e74a3b7ccbb993d9c131d6997aba30a1d81be7728f335937e3fa2e14aa754b1"
   },
   "figure_sha256": {
     "source_data/conductance_local_gate/figures/curve_band_source.csv": "0dd58c44591943c6696bf0e27b0486af240c58acec1d801ef7234c0746b50e1c",
     "source_data/conductance_local_gate/figures/historical_cancellation_source.csv": "15938898c44c07bbbc5721ee727e9d54199c90e90ab8a298bb7109682dc69814",
-    "source_data/conductance_local_gate/figures/local_gate_all_rates.pdf": "ddd618e15450bafc71b2d5aeb6c108ff10383087f2b14202a780ad14d5aa146e",
-    "source_data/conductance_local_gate/figures/local_gate_all_rates.png": "5571bfe8bf60003310d2ccab24784aa68b936dcf6fcd99fc1566d0be76d1731a",
-    "source_data/conductance_local_gate/figures/local_gate_primary.pdf": "098e10a85f5132c1ef1d114e94f535831872a15283493ec522a6e022a358b7d6",
-    "source_data/conductance_local_gate/figures/local_gate_primary.png": "d98305386cc9b76181501fddb3060ff8bed6255fb98f5e6459a828e90a256d44",
+    "source_data/conductance_local_gate/figures/local_gate_all_rates.pdf": "9ed32d20fb9af6c078e6cc391a98d9e7a36f27d9b74d9ddee45098ab9ac5ae33",
+    "source_data/conductance_local_gate/figures/local_gate_all_rates.png": "26674c42572b6acdea030aa8c925920e239cf58d3f191ef1d995fa20204550ce",
+    "source_data/conductance_local_gate/figures/local_gate_primary.pdf": "651e287b11a5bc2649b813c093681c99e27b847fad9eb35caf0cc72071fd9345",
+    "source_data/conductance_local_gate/figures/local_gate_primary.png": "09bfba2bc6046913f207ad28103a7dbb256e8fbdc219db445fbbc8b4876359e9",
     "source_data/conductance_local_gate/figures/teacher_tuning_source.csv": "26b9ebc985bc662465c9a03af5a9197f54d8443383f44090121ddcf24c4c3086"
   },
   "fresh_seeds": [
@@ -74,188 +74,257 @@
     "source_data/conductance_local_gate/summaries/paired_seed_contrasts.csv": "07fa32c5b4cc10ea5f47f683662753d22c08f3b17e767d044af4a9e0e2554d22"
   },
   "native_canvas": {
+    "g4_waiver": "DECISIONS G4 schematic-area waiver for Fig 5, restated at the AMENDMENTS B12 / CF-10 value 22.7 % (sum of schematic slot areas over the live canvas 450.4 x 436 pt). Recorded, not exercised: the figure is inside the 30 % cap and no relaxation of PANEL_ASPECT_MAX or of the cap is requested.",
     "height_pt": 490,
+    "in_axes_key_exception": "CF-5: the frameless four-entry rule key inside panel C is the single sanctioned in-axes key in the nine-figure set; C and D share four series across two panels.",
     "layout_findings": [],
     "rows_pt": [
-      136,
       108,
-      108
+      122,
+      122
     ],
-    "strict_audit_violations": [
-      "[text-over-data] panel 'D': '4,096' sits on a data artist (f, width 0.00 pt)"
-    ]
+    "schematic_fraction_b12": 0.2268,
+    "strict_audit_violations": []
   },
   "panel_sources": {
     "main_5A": {
-      "scope": "Seven-compartment tree, context gate, local distal gate vocabulary; inset: nominal unperturbed teacher terminal voltage against the latent feature (model.forward on model.teacher gains with zero perturbation), not fitted student results.",
+      "scope": "Seven-compartment circuit, E/I contacts, the context gate and the local distal gate\u2019s addressed subtree; inset: nominal unperturbed teacher terminal voltage against the latent feature. Schematic, no data.",
       "sources": [
         "scripts/conductance_local_gate/model.py",
+        "source_data/conductance_local_gate/METHODS.md",
         "source_data/conductance_local_gate/figures/teacher_tuning_source.csv"
       ],
-      "type": "model schematic with nominal teacher tuning"
+      "type": "schematic"
     },
     "main_5B": {
-      "scope": "Delivered-credit multipliers of model.delivered for the local distal gate, exact path, unit broadcast and two-leaf oracle; no experimental outcomes.",
+      "scope": "The four deliveries of the somatic error defined by model.delivered (local distal gate, exact path, unit broadcast, two-profile oracle). Schematic, no data.",
       "sources": [
         "scripts/conductance_local_gate/model.py",
         "source_data/conductance_local_gate/METHODS.md"
       ],
-      "type": "rule schematic"
+      "type": "schematic"
     },
-    "main_5C_D": {
-      "scope": "Adam 0.03; four prespecified rules; all twenty fresh seeds; aligned (C) and opposed (D) targets. Display ribbons are descriptive 20000-resample seed-bootstrap intervals, separate RNG 2026090830; D direct labels from condition_means at the 4,096-update window.",
+    "main_5C": {
+      "scope": "Aligned targets, Adam 0.03, four prespecified rules, 20 paired simulation seeds; means with 95 % pointwise whole-seed bootstrap bands at 12 fixed checkpoints.",
       "sources": [
-        "source_data/conductance_local_gate/summaries/all_curves.csv",
         "source_data/conductance_local_gate/figures/curve_band_source.csv",
+        "source_data/conductance_local_gate/summaries/all_curves.csv"
+      ],
+      "type": "fresh cohort"
+    },
+    "main_5D": {
+      "scope": "Opposed targets, same cohort and readout as C; bound-contact mark from all_curves.first_bound_step; validation-selected broadcast mean from condition_means.",
+      "sources": [
+        "source_data/conductance_local_gate/figures/curve_band_source.csv",
+        "source_data/conductance_local_gate/summaries/all_curves.csv",
         "source_data/conductance_local_gate/summaries/condition_means.csv"
       ],
       "type": "fresh cohort"
     },
     "main_5E": {
-      "scope": "Primary-rate opposed endpoints at the 4,096-update window: exact, local distal gate, swapped gate and proximal-gating failure control; inhibitory-gain change counts from all_endpoints; broadcast mean as the dashed reference.",
+      "scope": "Opposed-minus-aligned difference of broadcast-minus-gate NMSE at both windows, validation-selected states, 20 paired seeds joined across windows; prespecified sign-flip test, Holm-adjusted.",
+      "sources": [
+        "source_data/conductance_local_gate/summaries/paired_contrasts.csv",
+        "source_data/conductance_local_gate/summaries/paired_seed_contrasts.csv",
+        "source_data/conductance_local_gate/summaries/completeness_audit.json"
+      ],
+      "type": "fresh cohort"
+    },
+    "main_5F": {
+      "scope": "Opposed NMSE at validation-selected states within the 4,096-update window: exact path, the local distal gate in its hard and continuous shapes, the swapped gate and the gate-also-proximal control, at all three Adam rates.",
       "sources": [
         "source_data/conductance_local_gate/summaries/all_endpoints.csv",
         "source_data/conductance_local_gate/summaries/condition_means.csv"
       ],
       "type": "fresh cohort"
     },
-    "main_5F": {
-      "scope": "Paired task-by-rule interaction (opposed minus aligned difference of broadcast minus local-gate NMSE) at the primary and extended validation windows.",
-      "sources": [
-        "source_data/conductance_local_gate/summaries/paired_seed_contrasts.csv",
-        "source_data/conductance_local_gate/summaries/paired_contrasts.csv"
-      ],
-      "type": "fresh cohort"
-    },
     "main_5G": {
-      "scope": "Earlier seeds 2101\u20132120; opposed task; calibrated-broadcast source weights; exact and calibrated evaluations; fraction of the distal parameter gradient retained after context averaging at initial and extended-best states. Copy of Supplementary Fig. S53E; does not evaluate new local-gate fits.",
+      "scope": "Earlier cohort seeds 2101\u20132120; fraction of the distal-parameter gradient retained after context averaging at matched initial and broadcast-trained weight states.",
       "sources": [
-        "source_data/conductance_credit_demand/opponent/summaries/context_gradient_summary.csv",
-        "source_data/conductance_local_gate/figures/historical_cancellation_source.csv"
-      ],
-      "type": "historical cohort"
-    },
-    "supp_53A_D": {
-      "scope": "All nine rules, three rates, two tasks and two validation windows; 1080 trajectories and 2160 endpoint views.",
-      "sources": [
-        "source_data/conductance_local_gate/summaries/condition_means.csv"
-      ],
-      "type": "fresh cohort"
-    },
-    "supp_53E": {
-      "scope": "Earlier seeds 2101\u20132120; opposed task; calibrated-broadcast source weights; exact and calibrated evaluations; distal parameter gradients at initial and extended-best states. Does not evaluate new local-gate fits.",
-      "sources": [
-        "source_data/conductance_credit_demand/opponent/summaries/context_gradient_summary.csv",
-        "source_data/conductance_local_gate/figures/historical_cancellation_source.csv"
+        "source_data/conductance_local_gate/figures/historical_cancellation_source.csv",
+        "source_data/conductance_credit_demand/opponent/summaries/context_gradient_summary.csv"
       ],
       "type": "historical cohort"
     }
   },
   "printed_numbers": {
+    "A": {
+      "gate_tag_to_inset_pt": 11.7,
+      "perturbation_line": false
+    },
+    "C": {
+      "annotation_lines": [
+        "Adam 0.03 \u00b7 n = 20 seeds",
+        "mean \u00b1 95 % pointwise seed bootstrap",
+        "12 saved checkpoints;",
+        "segments are interpolation"
+      ],
+      "broadcast": 0.0005665631591551175,
+      "trio": [
+        7.5315087317338315e-06,
+        1.0553726591188192e-05,
+        9.072781017205191e-06
+      ],
+      "trio_mean": 9.052672113375738e-06,
+      "window_rule_segments": 2
+    },
     "D": {
-      "broadcast": 0.4873967422593606,
+      "annotation_lines": [
+        "fixed checkpoint at each saved step;",
+        "validation-selected broadcast 0.49 (E, F)",
+        "Adam 0.03 \u00b7 n = 20 seeds"
+      ],
+      "bound_by_16384": 20,
+      "bound_by_4096": 18,
+      "bound_median_step": 717,
+      "bound_y": 0.5977050344757058,
+      "broadcast": 0.5219101527896643,
       "trio": [
         2.1789327728583418e-05,
         2.3277881252926438e-05,
         2.2799115087624316e-05
-      ]
+      ],
+      "trio_mean": 2.262210802304472e-05,
+      "window_rule_segments": 3
     },
     "E": {
-      "_callout": {
-        "clearance_pt": {
-          "a_gate_tag_to_inset": 3.5
-        },
-        "leader_x": 3.0,
-        "lowest_seed": 0.007010334124398281,
-        "width_pt": 47.62,
-        "x_right": 3.42,
-        "y_leader": 0.0054680606170306595,
-        "y_text": 0.0016
-      },
-      "exact": {
-        "both_frozen": 0,
-        "ci_high": 2.8332437394057696e-05,
-        "ci_low": 1.6312586424307594e-05,
-        "g_i0_changed": 20,
-        "g_i1_changed": 20,
-        "mean": 2.1789327728583418e-05,
-        "n": 20
-      },
-      "hard_distal_and_proximal": {
-        "both_frozen": 20,
-        "ci_high": 0.17165194347488943,
-        "ci_low": 0.0827359979786501,
-        "g_i0_changed": 0,
-        "g_i1_changed": 0,
-        "mean": 0.12320418075834902,
-        "n": 20
-      },
-      "hard_distal_unit_proximal": {
-        "both_frozen": 0,
-        "ci_high": 2.8283011421770922e-05,
-        "ci_low": 1.8824434507693807e-05,
-        "g_i0_changed": 20,
-        "g_i1_changed": 20,
-        "mean": 2.3277881252926438e-05,
-        "n": 20
-      },
-      "swapped_distal_unit_proximal": {
-        "both_frozen": 4,
-        "ci_high": 0.9808855238160828,
-        "ci_low": 0.9073341012153855,
-        "g_i0_changed": 16,
-        "g_i1_changed": 16,
-        "mean": 0.9492566528665053,
-        "n": 20
-      }
-    },
-    "F": {
       "16384": {
         "ci_high": 0.6039171463216332,
         "ci_low": 0.3320658584541424,
         "mean": 0.468146457837583,
+        "n": 20,
         "positive": 20
       },
       "4096": {
         "ci_high": 0.6147537960280535,
         "ci_low": 0.3602674981433242,
         "mean": 0.4868306482800614,
+        "n": 20,
         "positive": 20
-      }
+      },
+      "holm_p": 3.814697265625e-06,
+      "n_seeds": 20
+    },
+    "F": {
+      "_min_mark_separation_pt": 11.95,
+      "_rate_categories": [
+        "exact",
+        "hard_distal_unit_proximal",
+        "swapped_distal_unit_proximal",
+        "hard_distal_and_proximal"
+      ],
+      "exact": {
+        "best_step_zero": 0,
+        "both_gains_frozen": 0,
+        "ci_high": 2.8332437394057696e-05,
+        "ci_low": 1.6312586424307594e-05,
+        "max_best_step": 4096,
+        "mean": 2.1789327728583418e-05,
+        "mean_fixed_endpoint": 2.1789327728583418e-05,
+        "min_changed_parameters": 24,
+        "n": 20,
+        "rate_0.01": 7.938110108016121e-05,
+        "rate_0.1": 7.027732818055902e-06
+      },
+      "hard_distal_and_proximal": {
+        "best_step_zero": 0,
+        "both_gains_frozen": 20,
+        "ci_high": 0.17165194347488943,
+        "ci_low": 0.0827359979786501,
+        "max_best_step": 256,
+        "mean": 0.12320418075834902,
+        "mean_fixed_endpoint": 0.5532362451549744,
+        "min_changed_parameters": 22,
+        "n": 20,
+        "rate_0.01": 0.13352886175368145,
+        "rate_0.1": 0.1275353576825913
+      },
+      "hard_distal_unit_proximal": {
+        "best_step_zero": 0,
+        "both_gains_frozen": 0,
+        "ci_high": 2.8283011421770922e-05,
+        "ci_low": 1.8824434507693807e-05,
+        "max_best_step": 4096,
+        "mean": 2.3277881252926438e-05,
+        "mean_fixed_endpoint": 2.3277881252926438e-05,
+        "min_changed_parameters": 24,
+        "n": 20,
+        "rate_0.01": 7.846897963650498e-05,
+        "rate_0.1": 9.067936575704701e-06
+      },
+      "shunt_proportional_unit_proximal": {
+        "ci_high": 2.829864144049637e-05,
+        "ci_low": 1.8810103857548607e-05,
+        "mean": 2.3219281009844032e-05,
+        "n": 20,
+        "rate_0.01": 7.831625555638211e-05,
+        "rate_0.1": 4.817728558829415e-06
+      },
+      "swapped_distal_unit_proximal": {
+        "best_step_zero": 4,
+        "both_gains_frozen": 4,
+        "ci_high": 0.9808855238160828,
+        "ci_low": 0.9073341012153855,
+        "max_best_step": 4096,
+        "mean": 0.9492566528665053,
+        "mean_fixed_endpoint": 0.984200043901333,
+        "min_changed_parameters": 0,
+        "n": 20,
+        "rate_0.01": 0.9502625256920725,
+        "rate_0.1": 0.9493398852463452
+      },
+      "unit_broadcast_reference": 0.4873967422593606
     },
     "G": {
       "calibrated_broadcast_extended_best": {
         "ci_high": 0.2703467952861032,
         "ci_low": 0.09462337045658427,
-        "mean": 0.17223117567053414
+        "mean": 0.17223117567053414,
+        "n": 20
       },
       "calibrated_broadcast_initial": {
         "ci_high": 0.39716624578749066,
         "ci_low": 0.2638097579347741,
-        "mean": 0.3296798033948814
+        "mean": 0.3296798033948814,
+        "n": 20
       },
       "exact_extended_best": {
         "ci_high": 0.7771112901657731,
         "ci_low": 0.48306351792258895,
-        "mean": 0.6365432046386197
+        "mean": 0.6365432046386197,
+        "n": 20
       },
       "exact_initial": {
         "ci_high": 0.6660758273115185,
         "ci_low": 0.6056808024310846,
-        "mean": 0.6363992139433748
-      }
+        "mean": 0.6363992139433748,
+        "n": 20
+      },
+      "min_example_inner_product": 2.2214679716355545e-11,
+      "n_seeds": 20
+    },
+    "_geometry": {
+      "g4_waiver": "DECISIONS G4 schematic-area waiver for Fig 5, restated at the AMENDMENTS B12 / CF-10 value 22.7 % (sum of schematic slot areas over the live canvas 450.4 x 436 pt). Recorded, not exercised: the figure is inside the 30 % cap and no relaxation of PANEL_ASPECT_MAX or of the cap is requested.",
+      "height_pt": 490,
+      "in_axes_key_exception": "CF-5: the frameless four-entry rule key inside panel C is the single sanctioned in-axes key in the nine-figure set; C and D share four series across two panels.",
+      "rows_pt": [
+        108,
+        122,
+        122
+      ],
+      "schematic_fraction_b12": 0.2268
     }
   },
   "protocol_sha256": "c441998f6f91e1f8782b2918689806e119af567e479bcd5c94069dca837a2413",
   "scope": "Current figure-only rendering; frozen protocol and numerical summary bytes unchanged. Initial numerical audit retains its historical render hashes.",
   "source_sha256": {
-    "scripts/conductance_local_gate/figure.py": "015dc37a0d6921f2e262814b8d57103c57ac64648d3486fdded6edf984be8638",
+    "scripts/conductance_local_gate/figure.py": "eb243194761a7c9b7bf730e834e4023e6a095b6e9bde6a755eff848bf8d9ede7",
     "scripts/conductance_local_gate/model.py": "cc2b82f6c486810a43aa885f3ea2dacce54c473f2e2ece6f4cfdb7d88ce6ad39",
     "scripts/conductance_local_gate/portable_contract.py": "fea35a393f5881dfc60b3dfe810dac64f8c2e6b0d8ba01937f4a42c5ffab3c05",
     "scripts/conductance_local_gate/report.py": "a96b4b6edd42c0d98de3da44a46c409310b463450369173be7371d503fa6dfef",
     "scripts/credit_tree_schematics.py": "ebd31b5ccc86b00bb27a236af210eb2a1d1820e9fcec27b57283a12224158cbe",
     "scripts/figure_canvas.py": "de3f566dd08270535deab95eb798b49cc17ccf4dfbb88e7ebdb50860903a6ad1",
-    "scripts/journal_style.py": "35861bf56befbda6ee9e6a59866f3f7b3085959961155a9a10cee0f0fbfa0e38",
+    "scripts/journal_style.py": "be8a138f9d9c081237edc616ba52b6769f957d8b8b49e705a92adcb18f475f3c",
     "scripts/native_schematics.py": "3e74a3b7ccbb993d9c131d6997aba30a1d81be7728f335937e3fa2e14aa754b1",
     "source_data/conductance_credit_demand/opponent/summaries/context_gradient_summary.csv": "a3bea23ba12a888eb7fb356b4ac3142bbf240518fa8b3d2a28278d91e1b40486",
     "source_data/conductance_local_gate/protocol.json": "c441998f6f91e1f8782b2918689806e119af567e479bcd5c94069dca837a2413",

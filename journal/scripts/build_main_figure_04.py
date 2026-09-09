@@ -3,26 +3,103 @@
 
 Component ``figures/components/main_figure_04_native.pdf`` (the historical
 component name is kept so ``rebuild_final_publication_figures.py`` and the
-provenance map stay valid).  Eight panels on one ``NativeCanvas``:
+provenance map stay valid), copied to ``figures/main/figure_02.pdf``.
+Eight panels on one :class:`figure_canvas.NativeCanvas`, in reading order:
 
-  row 0  A task cards (compatible / conflicting)      B three deliveries
-  row 1  C initial signed utility vs dose             D cosine vs dose
-         E analytic vs trained chance crossings
+  row 0  A context selects one of B branches   B three ways to deliver δ0
+  row 1  C predicted and measured              D trained order as predicted
+         E only shared credit forgets
   row 2  F/G/H held-out accuracy vs dose, one facet per branch count
 
-Waiver (design spec D3): row 1 places the 4-module crossings panel E
-(x = branches) beside the column-locked shared-x pair C/D (x = dose); the
-three panels share one width, so the letters C/D/E align with F/G/H.
+Built to ``analysis/figure_overhaul_20260908/v2/fig2/PLAN.md`` as amended by
+``v2/AMENDMENTS.md`` and ruled by ``v2/DECISIONS.md``.
 
-Every schematic element comes from the shared glyph library
-(:mod:`native_schematics`); the only private drawing is the B-branch fan
-tree, assembled from ``Frame.dendrite`` / ``junction`` / ``contact`` /
-``gate`` / ``soma`` / ``error_in`` because the library's balanced tree is
-binary and this task has B parallel branches.
+Cross-figure rules carried by this builder (AMENDMENTS §3)
+----------------------------------------------------------
+CF-1 canvas 518.4 x 490.0 pt, on the 340/415/490 ladder, aspect 1.058.
+CF-2 exactly three type sizes 7.0 / 8.0 / 9.0-bold; nothing below 7.0; no
+     DejaVu; subscripts via ``Frame.subscript`` / ``token_subscript``.
+CF-3 strokes only 0.55 / 0.70 / 0.85 / 0.95 / 1.25 pt; every area mark is a
+     16 % ``tint_patch`` with a 0.55 pt edge.
+CF-4 the glyph family of ``native_schematics``; four delivery modes only
+     (``subtree``, ``neuron``, ``subtree`` here); no ``DELTA0_EXEMPTIONS``
+     entry for this figure.
+CF-5 zero legend boxes and zero figure-level legends.  Panel A's footer glyph
+     key is an in-panel schematic key, not a legend box, and sits in no data
+     axes; the set's one sanctioned in-axes key is Fig 5C.
+CF-6 the forest idiom for E.
+CF-7 every reference line dashed ``mute`` at ``LW_REF`` with its label on the
+     line; zero drawn once.
+CF-8 caption contract (main.tex, applied by the integrator).
+CF-9 titles sentence case, no terminal period.
+CF-10 schematic area on the B12 formula (below).
+CF-11 no raster below 300 dpi (this figure places no raster at all).
+CF-12 letters 9 pt bold via ``align_letters()``.
+
+Schematic area (AMENDMENTS B12 / CF-10), the one common formula
+---------------------------------------------------------------
+``schematic_fraction = Σ(schematic panel slot w_pt × h_pt)
+                       / (live_w_pt × live_h_pt)``
+with ``live_w_pt = 518.4 − 51.0 − 13.0 = 454.4`` and
+``live_h_pt = 490 − 16 − 26 = 448.0``::
+
+    A slot 250.9 × 116.0 = 29,104.4 pt²
+    B slot 169.5 × 116.0 = 19,662.0 pt²
+    Σ schematic slots     = 48,766.4 pt²
+    live canvas           = 454.4 × 448.0 = 203,571.2 pt²
+    schematic_fraction    = 48,766.4 / 203,571.2 = 0.2396 → 24.0 %
+
+24.0 % (≤ 30 %); Figure 2 claims no DECISIONS G4 schematic-area waiver.  The
+plan's 24.6 % was computed with margins 22/32; the row-separation audit needs
+a 46 pt vertical gutter (see below), which moves 12 pt of outer margin into
+the two gutters and moves the fraction by 0.6 points.  The superseded value
+26.6 % must not reappear.
+
+Waiver (DESIGN_SPEC D3), the figure's only waiver
+-------------------------------------------------
+Row 1 places three 4-module data panels that do not share one axis: C (x = χ)
+and D (y = χ, x = B) are locked on the same χ scale 0-1.1; E is the
+SI-promoted forgetting forest and is the row's one recorded exception.
+Rows 1 and 2 share one axes width via ``_equalize_row_widths``.
+
+Private helpers (DECISIONS G5; report them for later promotion)
+---------------------------------------------------------------
+``fan_tree``        a B-branch parallel fan: the library's ``balanced_tree``
+                    is binary and this task has B parallel branches.  Built
+                    from ``Frame.dendrite / junction / contact / gate / fade /
+                    soma / error_in`` at the library's own sizes, and
+                    registered on the frame so ``require_soma_lowest()``
+                    actually inspects it.  It splays the terminals wider than
+                    the junctions, keeps an open junction ring under every
+                    gate (panel A's glyph key names the junction, so one has
+                    to be visible) and can lift the gate onto the distal
+                    segment above its junction.
+``_error_in_compact``  ``Frame.error_in`` re-seated on a shorter diagonal.
+                    The library reaches 11 pt out and 7 pt down from the soma
+                    rim and hangs the tag at the tail, i.e. about 13 pt of
+                    clear space under every soma; panel B has under 10 pt per
+                    card.  The library still draws and registers the arrow,
+                    so ``require_delta0()`` is unaffected.
+``_minus`` / ``_signed``  numbers with the typographic minus U+2212 the tick
+                    labels already use (Python's format gives a hyphen).
+``_corner_lines`` / ``_lines`` / ``_rug`` / ``_exponent``  point-anchored
+                    annotation stacks, the sampled-dose rug, and a 7 pt
+                    raised exponent (Nimbus Sans has no U+207B and CF-2 bans
+                    mathtext).
+``_recolour_last_capsule``  ``Frame.credit_delivery(mode='subtree')`` paints
+                    its capsule from the frozen K-cycle, whose first entry is
+                    ``shunting``; in this figure ``shunting`` is reserved for
+                    the branch-specific arm (AMENDMENTS §5), so the deranged
+                    row's capsule is repainted as a 16 % ``point_mlp`` tint
+                    after the library call.
+``_glyph_key``      panel A's footer key: the library has no mini-glyph strip
+                    that is not a rule key (a legend), and CF-5 bans keys.
+``_equalize_row_widths``  one axes width for every 4-module panel of a row.
 """
 
 from __future__ import annotations
 
+import hashlib
 import json
 import shutil
 from pathlib import Path
@@ -43,186 +120,157 @@ from figure_canvas import (
     LW_HAIR,
     LW_REF,
     MARKER_MS,
-    PT_ANNOT,
-    PT_LEGEND,
-    PT_SMALL,
+    ORDINAL_RAMP,
+    PT_BASE,
+    PT_EMPH,
     SEED_MS,
     Margins,
     NativeCanvas,
+    tint_patch,
+    token_subscript,
 )
-from journal_style import label_color
+from journal_style import label_color, style_direct_color_labels
 from native_schematics import (
     CONTACT_DIA_PT,
-    LINE_BAND_PT,
+    FADED_RING,
     Frame,
     Nodes,
     _text_w_pt,
 )
+from native_schematics import reference_line
 from routing_figure_panels import PATH_NECESSITY
 
 
 ROOT = Path(__file__).resolve().parents[1]
 COMPONENT = ROOT / "figures" / "components" / "main_figure_04_native.pdf"
 PUBLISHED = ROOT / "figures" / "main" / "figure_02.pdf"
-TRAJECTORIES = ROOT / "source_data" / "review_branch_trajectories"
+SUBTREE = ROOT / "source_data" / "trained_subtree_address"
+CURATED = ROOT / "source_data" / "curated_publication" / "figure_02_plotted.csv"
 
-# Grid.  The design spec asks for 484 pt with a 40-pt vertical gutter; the
-# row-separation audit needs 8.5 pt of clear ink between row 1's x labels
-# (22.6 pt of tick + label) and row 2's title band (13 pt), which a 40-42 pt
-# gutter cannot give (46 pt measured 8.2), so the gutter is 48 pt and the
-# rows are trimmed in the spec's proportions:
-# 22 + 110 + 48 + 110 + 48 + 116 + 32 = 486 (in the 484-492 band).
-CANVAS_H_PT = 486.0
+# ── canvas (CF-1) ─────────────────────────────────────────────────────────
+# 16 + 116 + 46 + 116 + 46 + 124 + 26 = 490.  The plan's 22/40/32 split gives
+# a measured row-1|row-2 ink separation of 6.7 pt, under the 8.5 pt (3 mm)
+# floor of ``audit_row_separation.py``; 12 pt of outer margin moved into the
+# two vertical gutters buys the clearance without touching the row heights,
+# the canvas height or the module grid.
+CANVAS_H_PT = 490.0
 HEIGHT_IN = CANVAS_H_PT / 72.0
-ROW_PT = [110.0, 110.0, 116.0]
+ROW_PT = [116.0, 116.0, 124.0]
 HGUTTER_PT = 34.0
-VGUTTER_PT = 48.0
-MARGINS = Margins(left=51.0, right=13.0, top=22.0, bottom=32.0)
+VGUTTER_PT = 46.0
+MARGINS = Margins(left=51.0, right=13.0, top=16.0, bottom=26.0)
+# One in-slot left reserve for every data column: the forest's row-label
+# gutter in E sets it, and the row-alignment contract makes every 4-module
+# panel of a row share it.  It is also what keeps column 0's y label out of
+# the 9 pt panel-letter column (audit_letter_alignment.py).
+DATA_LEFT_PT = 33.0
 
 INK = COLORS["ink"]
 MUTE = COLORS["mute"]
-GREEN = COLORS["shunting"]
-AMBER = COLORS["scalar"]
-GRAY = COLORS["point_mlp"]
-HIGHLIGHT = COLORS["highlight"]
+EDGE = COLORS["edge"]
+GREEN = COLORS["shunting"]          # branch-specific (AMENDMENTS §5)
+AMBER = COLORS["scalar"]            # neuron-shared / broadcast
+GRAY = COLORS["point_mlp"]          # the neutral control series
+GREEN_TEXT = label_color(GREEN)
+GRAY_TEXT = label_color(GRAY)
 
 BRANCHES = (2, 4, 8)
-# The paper's one ordinal ramp (spec D8).  ``journal_style`` does not yet
-# register ORDINAL_RAMP and per-figure tasks may not edit it, so the same
-# definition lives here until the library owner absorbs it.
-ORDINAL_RAMP = [mix("edge", 45), mix("edge", 75), COLORS["edge"]]
-RAMP = dict(zip(BRANCHES, ORDINAL_RAMP))
+# ORDINAL_RAMP entries 0, 2, 3: an ordinal position within THIS figure's own
+# list (branch count), never a fixed task identity (AMENDMENTS B14.2).
+RAMP = {2: ORDINAL_RAMP[0], 4: ORDINAL_RAMP[2], 8: ORDINAL_RAMP[3]}
 RAMP_TEXT = {b: label_color(to_hex(c)) for b, c in RAMP.items()}
 B_MARKER = {2: "o", 4: "s", 8: "^"}
 CHI_C = {b: b / (2.0 * (b - 1)) for b in BRANCHES}
-DOSE_TICKS = ([0.0, 0.5, 1.0], ["0", "0.5", "1"])
-# C/D share this x range: the data end at chi = 1 and the band beyond it
-# carries the direct series labels (inside the axes, never in the gutter).
-XLIM_DOSE = (-0.02, 1.27)
-LABEL_X = 1.045
+DOSES = (0.0, 0.25, 0.5, 4.0 / 7.0, 0.6, 2.0 / 3.0, 0.75, 1.0)
 DASHES = (2.2, 1.8)
 
+SERIES = (
+    ("correct_path", GREEN, "o", "branch-specific"),
+    ("neuron_shared_k1", AMBER, "s", "neuron-shared"),
+    ("within_neuron_deranged", GRAY, "^", "deranged route"),
+)
 
-def _pt_to_data_x(ax, pt):
-    """Points -> data units along x, at the axes' CURRENT box."""
+
+# ── private helpers ───────────────────────────────────────────────────────
+MINUS = "\u2212"
+
+
+def _minus(value, digits=1):
+    """A number with the typographic minus the tick labels already use."""
+    return f"{value:.{digits}f}".replace("-", MINUS)
+
+
+def _signed(value, digits=1):
+    """A signed number with a real plus and a typographic minus."""
+    return f"{value:+.{digits}f}".replace("-", MINUS)
+
+
+def _rug(ax, doses, y0=None, length_pt=2.6):
+    """Sampled-dose rug on the bottom spine, at LW_HAIR."""
+    lo, hi = ax.get_ylim()
     fig = ax.get_figure()
-    w_pt = ax.get_position().width * fig.get_size_inches()[0] * 72.0
-    lo, hi = ax.get_xlim()
-    return pt * (hi - lo) / w_pt
+    h_pt = ax.get_position().height * fig.get_size_inches()[1] * 72.0
+    dy = length_pt * (hi - lo) / max(h_pt, 1e-6)
+    y0 = lo if y0 is None else y0
+    for d in doses:
+        ax.plot([d, d], [y0, y0 + dy], color=EDGE, lw=LW_HAIR,
+                solid_capstyle="butt", zorder=2, clip_on=False)
 
 
-def _tag_chain(ax, xy, dx_pt, base, sub, tail, *, color, size=PT_ANNOT,
-               va="top", zorder=5):
-    """``base``+subscript+``tail`` anchored ``dx_pt`` points from a data point.
+def _lines(ax, xy, rows, *, ha="left", va="top", step_pt=8.8, color=None,
+           size=PT_BASE, colors=None):
+    """A short stack of 7 pt annotation lines anchored in data coordinates."""
+    fig = ax.get_figure()
+    h_pt = ax.get_position().height * fig.get_size_inches()[1] * 72.0
+    lo, hi = ax.get_ylim()
+    step = step_pt * abs(hi - lo) / max(h_pt, 1e-6)
+    if ax.yaxis_inverted():
+        step = -step
+    x, y = xy
+    out = []
+    for i, text in enumerate(rows):
+        col = (colors[i] if colors else None) or color or MUTE
+        out.append(ax.text(x, y - i * step, text, fontsize=size, color=col,
+                           ha=ha, va=va, zorder=6))
+    return out
 
-    The base is an annotation offset in POINTS from ``xy``, so the tag keeps
-    its distance from the mark it labels when the reserve lock moves the
-    axes box; the subscript and tail chain on the base exactly as
-    :func:`figure_canvas.token_subscript` does (sub at PT_SMALL dropped
-    1.6 pt; tail back on the base line).
+
+def fan_tree(frame: Frame, *, origin, xs_pt, y_soma_pt, y_junc_pt,
+             y_tip_pt, tip_xs_pt=None, contact_pt=None, ghost=False,
+             selected=0, output=None, delta="δ0", delta_side="right",
+             delta_compact=None, soma_r_pt=3.0, gate_badge="c", labels=None,
+             label_lift_pt=3.0, gate_unselected=True, gate_lift_pt=0.0,
+             gate_badge_offset=(-4.8, -3.4)) -> Nodes:
+    """PRIVATE (G5): the B-branch parallel fan, soma lowest.
+
+    ``origin`` is the (x, y) of the drawing core in points inside the frame;
+    every other coordinate is in points relative to it.  One proximal segment
+    soma -> junction (taper level 1) and one distal segment junction -> tip
+    (level 3) per branch, an open white junction ring at every junction, an
+    ``exc`` contact on each distal segment, the open context gate on
+    ``selected`` and closed gates (with the branch attenuated) on the rest.
+    ``tip_xs_pt`` splays the tips wider than the junctions so the fan reads
+    as a fan; ``gate_lift_pt`` puts the gate that far up the distal segment
+    so the junction ring it would otherwise cover stays visible (panel A's
+    glyph key names the junction, so one must be on the artwork).  Returns a
+    :class:`Nodes` and registers it on the frame so
+    :meth:`Frame.require_soma_lowest` inspects a real tree.
     """
-    base_text = ax.annotate(base, xy=xy, xytext=(dx_pt, 0.0),
-                            textcoords="offset points", fontsize=size,
-                            color=color, ha="left", va=va, zorder=zorder,
-                            annotation_clip=False)
-    sub_text = ax.annotate(sub, xy=(1.0, 0.0), xycoords=base_text,
-                           xytext=(0.4, -1.6), textcoords="offset points",
-                           fontsize=PT_SMALL, color=color, ha="left",
-                           va="bottom", zorder=zorder, annotation_clip=False)
-    if tail:
-        ax.annotate(tail, xy=(1.0, 0.0), xycoords=(sub_text, base_text),
-                    xytext=(0.6, 0.0), textcoords="offset points",
-                    fontsize=size, color=color, ha="left", va="bottom",
-                    zorder=zorder, annotation_clip=False)
-    return base_text
+    ox, oy = origin
+    tip_xs_pt = list(xs_pt) if tip_xs_pt is None else list(tip_xs_pt)
 
+    def P(x_pt, y_pt):
+        return (ox + frame.fx(x_pt), oy + frame.fy(y_pt))
 
-def _chain_w_pt(ax, base, sub, tail, size=PT_ANNOT):
-    return (_text_w_pt(ax, base, size) + 0.4 + _text_w_pt(ax, sub, PT_SMALL)
-            + ((0.6 + _text_w_pt(ax, tail, size)) if tail else 0.0))
-
-
-# -- the per-neuron broadcast bus (private; spec D5 geometry) ---------------
-def amber_bus(frame: Frame, nodes: Nodes, targets, *, colour=None,
-              tip_pt=None, bus_pt=8.0, pad_pt=(4.5, 2.0)) -> None:
-    """Spec D5 broadcast glyph: amber bus above the junction row, hairline
-    drops into EVERY junction, source dot at the soma.
-
-    The library's ``Frame.credit_delivery(mode='scalar')`` draws the same
-    bus and drops but (a) defaults its targets to the TERMINALS, which on
-    this fan carry the excitatory contacts, and (b) hard-codes its r 1.6
-    source dot at the far end of the bus, which is the layer-scalar reading
-    (source outside the tree).  D5 wants the drops in the junctions and the
-    per-neuron source at the soma, so the glyph is assembled here from the
-    library's own primitives at the library's own sizes (bus at LW_HAIR,
-    drop heads 2.6 pt, source disc r 1.6) and matches Fig. 1B's per-neuron
-    card, so the two figures share one glyph.
-
-    ``bus_pt`` lifts the bus above the highest target (the library uses 8;
-    this fan needs 14.5 to clear the gate's ``c`` badge).  ``tip_pt`` maps a
-    target name to its drop-tip clearance (default 2.8 pt, just outside a
-    1.6-pt junction ring); the gated junction's double ring is 3.6 pt, so
-    its drop stops higher.  The feed from the soma to the bus is one
-    quadratic hairline bowing outside the leftmost dendrite: an L-shaped
-    feed around a fan this wide reads as a box drawn around the tree.
-    """
-    colour = AMBER if colour is None else colour
-    tips = dict(tip_pt or {})
-    P = [nodes[t] for t in targets]
-    y_bus = max(p[1] for p in P) + frame.fy(bus_pt)
-    x_lo = min(p[0] for p in P) - frame.fx(pad_pt[0])
-    x_hi = max(p[0] for p in P) + frame.fx(pad_pt[1])
-    frame.ax.plot([x_lo, x_hi], [y_bus, y_bus], color=colour,
-                  lw=frame.lw(LW_HAIR), solid_capstyle="round", zorder=5)
-    for name, (px, py) in zip(targets, P, strict=True):
-        frame.arrow((px, y_bus), (px, py + frame.fy(tips.get(name, 2.8))),
-                    color=colour, lw=LW_HAIR, head=2.6, zorder=5)
-    # source at the soma (D5): r 1.6 disc just outside the soma rim, on the
-    # side away from the delta0 arrow, then one bowed hairline to the bus
-    sx, sy = nodes.soma
-    src = (sx - frame.fx(nodes.soma_r_pt + 1.9), sy)
-    frame.disc(src, 1.6, fill=colour, zorder=6)
-    t = np.linspace(0.0, 1.0, 48)[:, None]
-    p0 = np.array([src[0] - frame.fx(1.4), sy])
-    p2 = np.array([x_lo, y_bus])
-    p1 = np.array([x_lo, sy + 0.25 * (y_bus - sy)])
-    curve = (1 - t) ** 2 * p0 + 2 * t * (1 - t) * p1 + t ** 2 * p2
-    frame.ax.plot(curve[:, 0], curve[:, 1], color=colour,
-                  lw=frame.lw(LW_HAIR), solid_capstyle="round", zorder=5)
-
-
-# -- the B-branch fan tree (private; library geometry, library glyphs) ------
-def fan_tree(frame: Frame, rect, *, B=4, selected=1, ghost=False,
-             stream_tags=None, gate=True, fade_unselected=False,
-             output="z", delta="δ0", bottom_pt=15.0,
-             spread=(0.12, 0.88), badge_offset=(-4.6, 3.4)) -> Nodes:
-    """Soma at the bottom, B parallel branches, one junction per branch.
-
-    Each branch is a proximal segment soma -> junction (taper level 1) and a
-    vertical distal segment junction -> terminal (level 3) with an exc
-    contact at the terminal.  ``stream_tags`` is a list of (base, sub,
-    colour) per terminal; ``gate`` puts the context ring on the selected
-    junction; ``fade_unselected`` attenuates the non-selected proximal
-    segments; ``spread`` is the fraction of the cell the branch tips
-    occupy and ``badge_offset`` places the gate's ``c`` tag in points
-    from its ring.  Returns a :class:`Nodes` so the library's delivery glyphs can
-    address the tree.
-    """
-    x0, y0, w, h = rect
-    band_pt = (LINE_BAND_PT + 3.0) if stream_tags else 0.0
-    top_pad = 4.0 + CONTACT_DIA_PT * 0.5 + band_pt
-    y_soma = y0 + frame.fy(bottom_pt)
-    y_top = y0 + h - frame.fy(top_pad)
-    y_junc = y_soma + 0.52 * (y_top - y_soma)
-    xs = np.linspace(x0 + spread[0] * w, x0 + spread[1] * w, B)
-    soma = (x0 + 0.5 * w, y_soma)
+    B = len(xs_pt)
     nodes = Nodes()
+    soma = (ox + frame.fx(0.5 * (xs_pt[0] + xs_pt[-1])), oy + frame.fy(y_soma_pt))
     nodes["S"] = soma
     nodes.children["S"] = []
-    for i, x in enumerate(xs):
+    for i, x in enumerate(xs_pt):
         j, t = f"J{i + 1}", f"T{i + 1}"
-        nodes[j] = (float(x), y_junc)
-        nodes[t] = (float(x), y_top)
+        nodes[j] = P(x, y_junc_pt)
+        nodes[t] = P(tip_xs_pt[i], y_tip_pt)
         nodes.parent[j] = "S"
         nodes.parent[t] = j
         nodes.children["S"].append(j)
@@ -232,365 +280,687 @@ def fan_tree(frame: Frame, rect, *, B=4, selected=1, ghost=False,
         nodes.level[t] = 3
     nodes.terminals = [f"T{i + 1}" for i in range(B)]
     nodes.soma = soma
+    nodes.soma_r_pt = soma_r_pt
     nodes.orient = "up"
-    nodes.pitch_pt = float((xs[1] - xs[0]) * frame.w_pt) if B > 1 else 20.0
-    nodes.rect = rect
+    nodes.pitch_pt = float(xs_pt[1] - xs_pt[0]) if B > 1 else 20.0
     for name, par in nodes.parent.items():
         p0 = nodes[par]
         nodes.edges[(par, name)] = frame.dendrite(
             p0, nodes[name], level=nodes.level[name], ghost=ghost)
-    if fade_unselected:
-        frame.fade([nodes.edges[("S", f"J{i + 1}")]
-                    for i in range(B) if i != selected])
     for i in range(B):
-        j = f"J{i + 1}"
-        if gate and i == selected:
-            frame.gate(nodes[j], badge_offset=badge_offset)
-        else:
-            nodes.rings[j] = frame.junction(nodes[j], ghost=ghost)
-        frame.contact(nodes[f"T{i + 1}"], kind="exc")
-    if stream_tags:
-        # + the subscript drop, so the SUBSCRIPT (not just the base)
-        # clears the contact dot it labels
-        lift = CONTACT_DIA_PT * 0.5 + 6.6
-        for i, (base, sub, colour) in enumerate(stream_tags):
-            t = nodes[f"T{i + 1}"]
-            frame.subscript((t[0], t[1] + frame.fy(lift)), base, sub,
-                            size=PT_SMALL, color=colour, ha="center",
+        nodes.rings[f"J{i + 1}"] = frame.junction(nodes[f"J{i + 1}"],
+                                                  ghost=ghost)
+    span = max(y_tip_pt - y_junc_pt, 1e-6)
+    for i in range(B):
+        j, t = f"J{i + 1}", f"T{i + 1}"
+        f_up = min(max(gate_lift_pt / span, 0.0), 0.9)
+        gxy = (nodes[j][0] + (nodes[t][0] - nodes[j][0]) * f_up,
+               nodes[j][1] + (nodes[t][1] - nodes[j][1]) * f_up)
+        if i == selected:
+            frame.gate(gxy, closed=False, badge=gate_badge,
+                       badge_offset=gate_badge_offset)
+        elif gate_unselected:
+            frame.gate(gxy, closed=True, badge=None)
+            frame.fade([nodes.edges[("S", j)]])
+            nodes.rings[j].set_edgecolor(FADED_RING)
+        contact_at = y_tip_pt - 6.0 if contact_pt is None else contact_pt
+        f_c = min(max((contact_at - y_junc_pt) / span, 0.0), 1.0)
+        frame.contact((nodes[j][0] + (nodes[t][0] - nodes[j][0]) * f_c,
+                       nodes[j][1] + (nodes[t][1] - nodes[j][1]) * f_c),
+                      kind="exc")
+    if labels:
+        for i, (base, sub) in enumerate(labels):
+            frame.subscript(P(tip_xs_pt[i], y_tip_pt + label_lift_pt),
+                            base, sub, size=PT_BASE, color=INK, ha="center",
                             va="bottom")
-    frame.soma(soma, output=bool(output), label=output)
+    frame.soma(soma, r_pt=soma_r_pt, output=output, label=output and "z")
     if delta:
-        frame.error_in(soma, label=delta)
+        if delta_compact is None:
+            frame.error_in(soma, label=delta, side=delta_side, r_pt=soma_r_pt)
+        else:
+            _error_in_compact(frame, soma, label=delta, r_pt=soma_r_pt,
+                              reach_pt=delta_compact[0],
+                              drop_pt=delta_compact[1])
+    frame._trees.append(nodes)
     return nodes
 
 
-# -- A: the task ------------------------------------------------------------
-def branch_conflict_task(ax) -> None:
-    """Compatible (χ = 0) and conflicting (χ = 1) endpoints, identical cards."""
-    frame = Frame(ax)
-    band = frame.footer("0 < χ < 1: each nonselected view flips "
-                        "independently with probability χ")
-    cells = frame.split(2, axis="x", gap_pt=9.0, pad_pt=(0, 0, 0, band))
-    for cell, conflict in zip(cells, (False, True)):
-        core = frame.task_card(cell, title="conflicting, χ = 1" if conflict
-                               else "compatible, χ = 0")
-        core = Frame.inset(core, left=0.03, right=0.03, bottom=0.02)
-        tags = []
-        for i in range(4):
-            if i == 1:
-                tags.append(("x", "y", INK))
-            elif conflict:
-                tags.append(("x", "1−y", HIGHLIGHT))
-            else:
-                tags.append(("x", "y", MUTE))
-        # the widest stream tag is x with the subscript 1-y, so panel A's
-        # branches sit further apart than panel B's bare fans
-        fan_tree(frame, core, B=4, selected=1, stream_tags=tags, gate=True,
-                 fade_unselected=True, spread=(0.07, 0.93))
+def _error_in_compact(frame: Frame, soma_xy, *, label="δ0", r_pt=2.4,
+                      reach_pt=9.5, drop_pt=5.5):
+    """PRIVATE (G5): ``Frame.error_in`` on a short leash.
 
-
-# -- B: three deliveries of the same error ----------------------------------
-def backward_credit_schematic(ax) -> None:
-    """Branch-specific, neuron-shared and deranged delivery on ghost fans.
-
-    Three fans side by side over a three-line key.  The spec's stacked rows
-    would give each fan 32 pt, which cannot hold a soma-at-bottom tree plus
-    the δ0 arrow (15 pt below the soma); columns keep every glyph at the
-    library's size and the key lines carry name, equation and badge.
+    The library's somatic-error arrow reaches 11 pt out and 7 pt down from
+    the soma rim and hangs its 7 pt tag at the tail, so it needs about 13 pt
+    of clear space under every soma.  Panel B stacks three cards in 85 pt,
+    which leaves under 10 pt.  The arrow is drawn by the library (so
+    ``require_delta0`` still sees a registered arrival, and the ink, weight
+    and 4.5 pt head are the library's) and then re-seated on a shorter
+    diagonal, tag and all.
     """
+    n_before = len(frame.ax.texts)
+    arr = frame.error_in(soma_xy, label=label, side="right", r_pt=r_pt)
+    x, y = soma_xy
+    r = r_pt * frame.scale
+    tip = (x + frame.fx(0.72 * r + 0.9), y - frame.fy(0.72 * r + 0.9))
+    tail = (x + frame.fx(reach_pt), y - frame.fy(drop_pt))
+    arr.set_positions(tail, tip)
+    for text in frame.ax.texts[n_before:n_before + 1]:
+        text.set_position((tail[0] + frame.fx(1.8), tail[1]))
+    return arr
+
+
+def _recolour_last_capsule(frame: Frame, before: int, cname: str,
+                           pct: int = 16) -> None:
+    """PRIVATE (G5): repaint the capsule ``credit_delivery`` just drew.
+
+    ``Frame.credit_delivery(mode='subtree')`` takes its capsule tint from the
+    frozen K-cycle, whose first entry is ``shunting``.  ``shunting`` is the
+    branch-specific arm in this figure and may carry no second role
+    (AMENDMENTS §5), so the deranged row's capsule is repainted here rather
+    than by editing the library.
+    """
+    from journal_style import strengthen, tint_pct
+    face = tint_pct(COLORS[cname], pct)
+    for patch in frame.ax.patches[before:]:
+        patch.set_facecolor(face)
+        patch.set_edgecolor(strengthen(face, 2.4))
+
+
+def _glyph_key(frame: Frame, *, y_pt, x0_pt, width_pt):
+    """PRIVATE (G5): panel A's footer glyph key.
+
+    Five mini glyphs at their true sizes with a 7 pt tag each, laid out left
+    to right across ``width_pt``.  This is an in-panel schematic key, not a
+    legend box (CF-5): it carries no data series, sits in no data axes and has
+    no frame.  Returns the number of rows it used.
+    """
+    ax = frame.ax
+    items = [("soma", "soma"), ("junction", "junction"),
+             ("contact", "excitatory contact"), ("gate", "context gate c"),
+             ("error", "somatic error δ0")]
+    glyph_pt = {"soma": 8.0, "junction": 7.0, "contact": 7.0, "gate": 10.0,
+                "error": 13.0}
+    widths = [glyph_pt[k] + 2.6 + _text_w_pt(ax, s, PT_BASE) for k, s in items]
+    gap = (width_pt - sum(widths)) / (len(items) - 1)
+    rows = 1
+    if gap < 3.0:                       # two rows rather than sub-7 pt type
+        rows = 2
+        split = 3
+        groups = [items[:split], items[split:]]
+        gws = [widths[:split], widths[split:]]
+        ys = [y_pt + 5.0, y_pt - 5.0]
+    else:
+        groups, gws, ys = [items], [widths], [y_pt]
+    for group, gw, yy in zip(groups, gws, ys):
+        g = ((width_pt - sum(gw)) / (len(group) - 1)) if len(group) > 1 else 0.0
+        g = min(g, 26.0)
+        x = x0_pt
+        for (kind, text), w in zip(group, gw):
+            cx = x + glyph_pt[kind] * 0.5
+            p = (frame.fx(cx), frame.fy(yy))
+            if kind == "soma":
+                frame.disc(p, 3.0, fill=COLORS["soma"],
+                           edge=mix("ink", 62), lw=LW_EDGE, zorder=4)
+            elif kind == "junction":
+                frame.junction(p)
+            elif kind == "contact":
+                frame.contact(p, kind="exc")
+            elif kind == "gate":
+                frame.disc(p, 1.9, fill="white", edge=COLORS["gate"],
+                           lw=LW_EDGE, zorder=4.2)
+                frame.disc(p, 3.6, fill="none", edge=COLORS["gate"],
+                           lw=LW_EDGE, zorder=4.2)
+            else:
+                frame.arrow((frame.fx(x), frame.fy(yy - 2.0)),
+                            (frame.fx(x + 11.0), frame.fy(yy + 2.0)),
+                            color=INK, lw=LW_EDGE, head=4.5)
+            frame.text((frame.fx(x + glyph_pt[kind] + 2.6), frame.fy(yy)),
+                       text, size=PT_BASE, color=MUTE, ha="left", va="center")
+            x += w + g
+    return rows
+
+
+# ── A: the task ───────────────────────────────────────────────────────────
+A_TITLE = "Context selects one of B branches"
+A_FOOT_PT = 22.0
+
+
+def branch_conflict_task(ax) -> Frame:
+    """One tree with a context gate, and the two conflict states as tiles."""
     frame = Frame(ax)
-    key_pt = 3 * LINE_BAND_PT + 2.0
-    cols = frame.split(3, axis="x", gap_pt=4.0, pad_pt=(0, 0, 2.0, key_pt))
+    core = frame.cell_text((0.0, 0.0, 1.0, 1.0), title=A_TITLE)
+    core = (core[0], core[1] + frame.fy(A_FOOT_PT), core[2],
+            core[3] - frame.fy(A_FOOT_PT))
+    ox, oy = core[0], core[1]
+    core_w = core[2] * frame.w_pt
+
+    def P(x_pt, y_pt):
+        return (ox + frame.fx(x_pt), oy + frame.fy(y_pt))
+
+    # -- the tree -----------------------------------------------------------
+    xs = [46.0, 68.0, 90.0, 112.0]
+    tips = [41.0, 66.0, 92.0, 117.0]
+    nodes = fan_tree(frame, origin=(ox, oy), xs_pt=xs, tip_xs_pt=tips,
+                     y_soma_pt=13.0, y_junc_pt=36.0, y_tip_pt=66.0,
+                     contact_pt=56.0, gate_lift_pt=7.0,
+                     gate_badge_offset=(5.2, 0.6),
+                     selected=0, output=11.0,
+                     labels=[("x", "1"), ("x", "2"), ("x", "3"), ("x", "4")])
+    # context input: its own carmine arrow and tag, in the free lane left of
+    # the selected (leftmost) branch -- the review's required separate glyph.
+    frame.arrow(P(34.0, 52.0), P(41.6, 45.4), color=COLORS["inh"],
+                lw=LW_EDGE, head=4.5, zorder=5)
+    frame.text(P(1.0, 56.5), "context c", size=PT_BASE,
+               color=label_color(COLORS["inh"]), ha="left", va="center")
+
+    # -- the conflict-state tiles -------------------------------------------
+    tx0, tw, tgap = 130.0, 27.0, 4.0
+    rows = ((76.0, 53.0, "χ = 0  compatible", False),
+            (49.0, 26.0, "χ = 1  conflicting", True))
+    for y_label, y_tile, label, conflict in rows:
+        frame.text(P(tx0, y_label), label, size=PT_BASE, color=INK,
+                   ha="left", va="top")
+        for i in range(4):
+            x = tx0 + i * (tw + tgap)
+            selected = (i == 0)
+            if conflict and not selected:
+                tint_patch(ax, ("rect", ox + frame.fx(x),
+                                oy + frame.fy(y_tile),
+                                frame.fx(tw), frame.fy(13.0)),
+                           color="mute", pct=16, edge=True, lw=LW_HAIR,
+                           radius_pt=1.5, zorder=1.0)
+            else:
+                tint_patch(ax, ("rect", ox + frame.fx(x),
+                                oy + frame.fy(y_tile),
+                                frame.fx(tw), frame.fy(13.0)),
+                           color="mute", pct=0, face="white",
+                           edge_color=INK if selected else COLORS["grid"],
+                           edge=True, lw=LW_EDGE if selected else LW_HAIR,
+                           radius_pt=1.5, zorder=1.0)
+            sub = "1−y" if (conflict and not selected) else "y"
+            frame.subscript(P(x + tw * 0.5, y_tile + 6.5), "x", sub,
+                            size=PT_BASE, color=INK, ha="center", va="center")
+
+    # -- footer: the intermediate-dose rule, then the glyph key -------------
+    frame.text((0.5, frame.fy(A_FOOT_PT - 4.0)),
+               "0 < χ < 1: each nonselected view is replaced independently",
+               size=PT_BASE, color=MUTE, ha="center", va="center")
+    _glyph_key(frame, y_pt=6.0, x0_pt=1.0, width_pt=frame.w_pt - 2.0)
+    return frame
+
+
+# ── B: three deliveries of the same error ─────────────────────────────────
+# The three cards are stacked in 85 pt of core, which is 28.3 pt each on an
+# even split.  A card has to hold, bottom to top, the somatic-error tag, the
+# soma, the junction row, the terminal row and -- for the neuron-shared card
+# only -- the amber bus the library seats 8 pt above the terminals.  An even
+# split leaves the tree about 7 pt tall, which is not a tree; the split below
+# gives the bus card its 6 pt of extra head-room and keeps the FAN GEOMETRY
+# IDENTICAL in all three, which is what the comparison-card rule asks for.
+B_TITLE = "Three ways to deliver the same error"
+B_FOOT_PT = 12.0
+B_CARDS = ((56.0, 29.0), (25.0, 31.0), (0.0, 25.0))     # top card first
+B_JUNC_X = (12.0, 22.0, 32.0, 42.0)
+B_TIP_X = (7.0, 20.0, 34.0, 47.0)
+B_TEXT_X = 58.0
+
+
+def backward_credit_schematic(ax) -> Frame:
+    """The same δ0 delivered three ways on three identical ghost fans."""
+    frame = Frame(ax)
+    core = frame.cell_text((0.0, 0.0, 1.0, 1.0), title=B_TITLE)
+    core = (core[0], core[1] + frame.fy(B_FOOT_PT), core[2],
+            core[3] - frame.fy(B_FOOT_PT))
+    ox0, oy0 = core[0], core[1]
+
     specs = (
-        ("branch-specific", GREEN, "subtree", "exact"),
-        ("neuron-shared", AMBER, "scalar", None),
-        ("deranged", GRAY, "deranged", "control"),
+        ("branch-specific", GREEN_TEXT, "exact", "subtree", "J1",
+         ("δ", "b", " = δ 1[b = b*]"), "= BP = gated point"),
+        ("neuron-shared", AMBER_TEXT, "local rule", "neuron", None,
+         ("δ", "b", " = δ / B"), None),
+        ("deranged route", GRAY_TEXT, "control", "subtree", "J2",
+         ("δ", "b", " = δ 1[b = b* + 1]"), None),
     )
-    for cell, (name, colour, mode, badge) in zip(cols, specs):
-        nodes = fan_tree(frame, cell, B=4, selected=1, ghost=True,
-                         gate=True, output="z")
-        if mode == "subtree":
-            # K_CYCLE capsule on the selected branch, shunting entry arrow
-            frame.credit_delivery(nodes, mode="subtree", targets=["J2"],
-                                  rule_color=colour)
-        elif mode == "scalar":
-            # D5: one amber bus above the junction row, a hairline drop into
-            # EVERY junction (not the terminals, which carry the excitatory
-            # contacts), and the source dot at this soma.
-            amber_bus(frame, nodes, [f"J{i + 1}" for i in range(4)],
-                      colour=colour, tip_pt={"J2": 4.8}, bus_pt=14.5)
+    for (y0, h), (name, text_col, badge, mode, target, formula, tail) \
+            in zip(B_CARDS, specs):
+        oy = oy0 + frame.fy(y0)
+        nodes = fan_tree(frame, origin=(ox0, oy), xs_pt=B_JUNC_X,
+                         tip_xs_pt=B_TIP_X, y_soma_pt=9.5, y_junc_pt=15.5,
+                         y_tip_pt=21.0, contact_pt=21.0, ghost=True,
+                         selected=0, soma_r_pt=2.4, delta_compact=(10.5, 6.0),
+                         gate_badge_offset=(-4.8, -3.2), gate_unselected=False)
+        before = len(ax.patches)
+        if mode == "neuron":
+            frame.credit_delivery(nodes, mode="neuron", rule_color=AMBER)
         else:
-            # cyclic derangement: the same capsule glyph on branch c + 1 with
-            # the entry arrow in the control colour, plus the b -> b + 1 hop
-            frame.credit_delivery(nodes, mode="subtree", targets=["J3"],
-                                  rule_color=colour)
-            j2, j3 = nodes["J2"], nodes["J3"]
-            frame.arrow((j2[0] + frame.fx(4.0), j2[1] + frame.fy(4.0)),
-                        (j3[0] - frame.fx(4.0), j3[1] + frame.fy(4.0)),
-                        color=MUTE, lw=LW_HAIR, head=3.0, rad=-0.45,
-                        zorder=4.6)
-    # key lines: name (rule colour), equation, badge
-    x_left = frame.fx(3.0)
-    y = frame.fy(key_pt - LINE_BAND_PT * 0.5)
-    equations = (("δ", "b", " = δ · 1[b = c]"),
-                 ("δ", "b", " = δ / B"),
-                 ("δ", "b", " = δ · 1[b = c + 1]"))
-    # The spec's badge text "= BP = gated point" does not fit the 169-pt
-    # key line beside the name and equation; the tie is stated in panel F
-    # and the caption, and the badge keeps its one-word kind.
-    for (name, colour, _mode, badge), (base, sub, tail) in zip(specs, equations):
-        text_colour = AMBER_TEXT if colour == AMBER else label_color(colour)
-        frame.text((x_left, y), name, size=PT_SMALL, color=text_colour,
-                   ha="left")
-        w_name = _text_w_pt(ax, name, PT_SMALL)
-        x_eq = x_left + frame.fx(w_name + 7.0)
-        frame.subscript((x_eq, y), base, sub, tail, size=PT_ANNOT, ha="left")
-        if badge:
-            x_badge = x_eq + frame.fx(_chain_w_pt(ax, base, sub, tail) + 8.0)
-            frame.badge((x_badge, y), badge, ha="left", va="center")
-        y -= frame.fy(LINE_BAND_PT)
+            frame.credit_delivery(nodes, mode="subtree", targets=[target],
+                                  rule_color=GREEN if target == "J1" else GRAY)
+            if target != "J1":
+                _recolour_last_capsule(frame, before, "point_mlp")
+                j1, j2 = nodes["J1"], nodes["J2"]
+                frame.arrow((j1[0], j1[1] + frame.fy(5.4)),
+                            (j2[0], j2[1] + frame.fy(5.4)),
+                            color=GRAY, lw=LW_HAIR, head=3.2, rad=-0.55,
+                            zorder=4.6)
+        tx = ox0 + frame.fx(B_TEXT_X)
+        ytop = oy + frame.fy(24.0)
+        frame.text((tx, ytop), name, size=PT_BASE, color=text_col,
+                   ha="left", va="top")
+        frame.subscript((tx, ytop - frame.fy(9.6)), formula[0], formula[1],
+                        formula[2], size=PT_BASE, color=INK, ha="left",
+                        va="top")
+        if tail:
+            frame.text((tx, ytop - frame.fy(19.2)), tail, size=PT_BASE,
+                       color=MUTE, ha="left", va="top")
+        # every badge uses the neutral 'control' face: BADGE_STYLE's 'exact'
+        # is drawn in ``bp`` and its 'local rule' in ``shunting``, and both
+        # hues are barred / reserved in this figure (AMENDMENTS §5)
+        frame.badge((core[0] + core[2], oy + frame.fy(25.0)), "control",
+                    text=badge, ha="right", va="top")
+    # Γ footer token (AMENDMENTS B10): a printed symbol, not a new glyph.
+    frame.text((frame.fx(1.0), frame.fy(5.0)),
+               "Γ ∈ {0,1}:  1[b = b*]   1/B   permuted",
+               size=PT_BASE, color=MUTE, ha="left", va="center")
+    return frame
 
 
-# -- C: initial signed utility against the mean-field line ------------------
-def initial_utility_boundary(ax, summary: pd.DataFrame) -> None:
-    chi = np.linspace(0.0, 1.0, 301)
+# ── C: predicted and measured ─────────────────────────────────────────────
+# The panel is 97 pt wide (the plan's own accepted forest-gutter cost), so the
+# statements the plan puts on this panel are set in the two wedges the fan of
+# analytic lines leaves empty: above the B = 2 line at the top right, and
+# below the B = 8 line at the bottom left.  Every annotation is anchored in
+# POINTS off an axes corner, so it keeps its clearance after the reserve lock
+# moves the axes box.  xlim reaches 1.30 so the three direct labels sit past
+# the data at their own line ends instead of on top of each other at chi = 0.
+C_XLIM = (-0.03, 1.30)
+C_YLIM = (-1.35, 1.05)
+C_LABEL_X = 1.06
+
+
+def _corner_lines(ax, texts, *, corner=(0.0, 0.0), x_pt=1.0, y_pt=0.0,
+                  step_pt=9.0, ha="left", va="top", color=None,
+                  colors=None, size=PT_BASE):
+    """A stack of 7 pt lines anchored in points off an axes corner."""
+    out = []
+    for i, text in enumerate(texts):
+        col = (colors[i] if colors else None) or color or MUTE
+        out.append(ax.annotate(
+            text, xy=corner, xycoords="axes fraction",
+            xytext=(x_pt, y_pt - i * step_pt), textcoords="offset points",
+            fontsize=size, color=col, ha=ha, va=va, zorder=6,
+            annotation_clip=False))
+    return out
+
+
+def initial_utility(ax, summary: pd.DataFrame) -> dict:
+    """Analytic s(χ) against the neuron-shared rule's measured utility."""
     shared = summary[summary.condition.eq("neuron_shared_k1")]
+    chi = np.linspace(0.0, 1.0, 301)
+    excluded, max_dev = 0, 0.0
+    ax.set_xlim(*C_XLIM)
+    ax.set_ylim(*C_YLIM)
     for b in BRANCHES:
         colour = RAMP[b]
         ax.plot(chi, 1.0 - 2.0 * (b - 1) * chi / b, color=colour, lw=LW_DATA,
-                zorder=2)
+                zorder=2, solid_capstyle="round")
         part = shared[shared.branches.eq(b)].sort_values("conflict_probability")
         x = part.conflict_probability.to_numpy(float)
         m = part.mean_initial_signed_utility.to_numpy(float)
         lo = part.ci95_low_initial_signed_utility.to_numpy(float)
         hi = part.ci95_high_initial_signed_utility.to_numpy(float)
-        if np.max(np.abs(m - (1.0 - 2.0 * (b - 1) * x / b))) > 0.02:
-            raise ValueError(f"B = {b}: initial signed utility departs from "
-                             "the mean-field line by more than 0.02")
+        pred = 1.0 - 2.0 * (b - 1) * x / b
+        max_dev = max(max_dev, float(np.max(np.abs(m - pred))))
+        excluded += int(np.sum((hi < pred - 1e-12) | (lo > pred + 1e-12)))
         ax.errorbar(x, m, yerr=[m - lo, hi - m], linestyle="none",
                     marker=B_MARKER[b], ms=MARKER_MS, markerfacecolor="white",
                     markeredgecolor=colour, markeredgewidth=LW_EDGE,
                     ecolor=colour, elinewidth=LW_ERR, capsize=ERR_CAPSIZE,
                     capthick=LW_ERR, zorder=4)
-        ax.text(LABEL_X, 1.0 - 2.0 * (b - 1) / b, f"B = {b}",
-                fontsize=PT_SMALL, color=RAMP_TEXT[b], ha="left", va="center")
-        ax.plot([CHI_C[b]], [0.0], linestyle="none", marker="D",
-                ms=MARKER_MS, markerfacecolor="white", markeredgecolor=INK,
-                markeredgewidth=LW_EDGE, zorder=5)
-    ax.plot([0.0, 1.0], [0.0, 0.0], color=MUTE, lw=LW_REF, dashes=DASHES,
-            zorder=0, solid_capstyle="butt")
-    # the right end of the zero line carries the B = 2 crossing diamond, so
-    # the reference label sits at the free left end
-    ax.text(0.02, 0.035, "zero", fontsize=PT_SMALL, color=MUTE,
-            ha="left", va="bottom")
-    ax.text(0.025, 0.05, "s(χ) = 1 − 2χ(B − 1)/B", transform=ax.transAxes,
-            fontsize=PT_ANNOT, color=INK, ha="left", va="bottom")
-    ax.set_xlim(*XLIM_DOSE)
-    ax.set_ylim(-0.86, 1.10)
-    ax.set_xticks(*DOSE_TICKS)
-    ax.set_yticks([-0.5, 0.0, 0.5, 1.0], ["−0.5", "0", "0.5", "1"])
-    ax.set_xlabel("conflict dose χ")
-    ax.set_ylabel("initial signed utility")
-
-
-# -- D: cosine with the exact update, epoch 0 and epoch 250 -----------------
-def alignment_collapse(ax, intervals: pd.DataFrame,
-                       crossings: pd.DataFrame) -> dict:
-    common = intervals[intervals.state_comparison.eq("common_exact_state")]
-    zero = crossings[crossings.state_comparison.eq("common_exact_state")
-                     & crossings.epoch.eq(250)]
-    trained_zero = {}
+        ax.text(C_LABEL_X, 1.0 - 2.0 * (b - 1) / b, f"B = {b}",
+                fontsize=PT_BASE, color=RAMP_TEXT[b], ha="left", va="center",
+                zorder=6)
+    reference_line(ax, 0.0, axis="y", label=None, color=MUTE, zorder=0,
+                   span=(C_XLIM[0], 1.0))
+    ax.annotate("zero utility", xy=(0.52, 0.0), xytext=(0.0, -1.8),
+                textcoords="offset points", fontsize=PT_BASE, color=MUTE,
+                ha="right", va="top", zorder=6, annotation_clip=False)
     for b in BRANCHES:
-        colour = RAMP[b]
-        # Beyond chi_c the epoch-0 cosine is already saturated (-0.91 to
-        # -0.99): those markers carry no information, overprint each other
-        # and overprint the epoch-250 curves, so the epoch-0 series stops at
-        # its own boundary dose, which the sweep samples exactly for every B
-        # (chi_c = 1, 2/3, 4/7).  The last kept marker therefore sits on zero
-        # at chi_c, which is the panel's claim.
-        e0 = common[common.branches.eq(b) & common.epoch.eq(0)
-                    & common.conflict_probability.le(CHI_C[b] + 1e-9)] \
-            .sort_values("conflict_probability")
-        if len(e0) < 3 or abs(float(e0.conflict_probability.max())
-                              - CHI_C[b]) > 1e-9:
-            raise ValueError(f"B = {b}: the epoch-0 sweep does not sample "
-                             "its own boundary dose")
-        e250 = common[common.branches.eq(b) & common.epoch.eq(250)] \
-            .sort_values("conflict_probability")
-        # the sweep samples five doses inside chi in [0.5, 0.75], which is
-        # 5.3 pt apart on this axis, so the epoch-0 reference layer is drawn
-        # at MARKER_MS - 1.2; the epoch-250 means keep the token size
-        ax.plot(e0.conflict_probability, e0.mean_cosine, linestyle="none",
-                marker=B_MARKER[b], ms=MARKER_MS - 1.2, markerfacecolor="white",
-                markeredgecolor=colour, markeredgewidth=LW_EDGE, zorder=3)
-        x = e250.conflict_probability.to_numpy(float)
-        ax.fill_between(x, e250.ci95_low, e250.ci95_high, color=colour,
-                        alpha=0.13, linewidth=0, zorder=1)
-        ax.plot(x, e250.mean_cosine, color=colour, lw=LW_DATA, zorder=4)
-        dose = float(zero[zero.branches.eq(b)].interpolated_zero_alignment.mean())
-        trained_zero[b] = dose
-        ax.plot([dose], [0.0], linestyle="none", marker="|", ms=7.0,
-                markeredgecolor=colour, markeredgewidth=LW_ERR, zorder=5)
         ax.plot([CHI_C[b]], [0.0], linestyle="none", marker="D",
                 ms=MARKER_MS, markerfacecolor="white", markeredgecolor=INK,
                 markeredgewidth=LW_EDGE, zorder=5)
-    ax.plot([0.0, 1.0], [0.0, 0.0], color=MUTE, lw=LW_REF, dashes=DASHES,
-            zorder=0, solid_capstyle="butt")
-    _tag_chain(ax, (0.03, 1.20), 0.0, "epoch 0, to χ", "c", "", color=MUTE,
-               va="bottom")
-    # epoch-0 markers fall to -1 beyond chi_c, so the epoch-250 tag sits in
-    # the lower-left region every trained curve is still above
-    ax.text(0.03, -0.64, "epoch 250", fontsize=PT_SMALL, color=MUTE,
-            ha="left", va="top")
-    # the one sub-title line: which state the two updates are compared at
-    ax.text(0.0, -1.23, "common exact-rule state", fontsize=PT_SMALL,
-            color=MUTE, ha="left", va="bottom")
-    ax.set_xlim(*XLIM_DOSE)
-    ax.set_ylim(-1.25, 1.40)
-    ax.set_xticks(*DOSE_TICKS)
-    ax.set_yticks([-1.0, 0.0, 1.0], ["−1", "0", "1"])
+    _corner_lines(ax, ("s(χ) = 1 − 2χ(B − 1)/B",), corner=(1.0, 1.0),
+                  x_pt=-1.0, y_pt=-1.0, ha="right", color=INK)
+    token_subscript(ax, 0.50, 0.86, "χ", "c", " = B/[2(B − 1)]",
+                    size=PT_BASE, sub_size=PT_BASE, color=MUTE, ha="left",
+                    va="top")
+    # four lines in the wedge the B = 8 line leaves empty; the top line is
+    # the short one because that is where the wedge is narrowest
+    _corner_lines(ax, (
+        f"max deviation {max_dev:.3f}",
+        f"{excluded} of {len(shared)} intervals exclude",
+        "the line. n = 20 seeds; mean",
+        "and 95 % bootstrap, epoch 0",
+    ), corner=(0.0, 0.0), x_pt=1.0, y_pt=36.0, step_pt=8.6)
+    ax.set_xticks([0.0, 0.25, 0.5, 0.75, 1.0],
+                  ["0", "0.25", "0.5", "0.75", "1"])
+    ax.set_yticks([-0.75, -0.5, -0.25, 0.0, 0.5, 1.0],
+                  ["−0.75", "−0.5", "−0.25", "0", "0.5", "1"])
     ax.set_xlabel("conflict dose χ")
-    ax.set_ylabel("cosine with exact update")
-    return trained_zero
+    ax.set_ylabel("initial signed utility s(χ)")
+    _rug(ax, DOSES, y0=C_YLIM[0])
+    return {"max_dev": max_dev, "excluded": excluded}
 
 
-# -- E: analytic boundary versus trained chance crossing --------------------
-def boundary_test(ax, crossings: pd.DataFrame,
-                  seed_boundaries: pd.DataFrame) -> None:
-    """Observed chance crossing against the analytic boundary, per B."""
+# ── D: trained order as predicted ─────────────────────────────────────────
+D_XLIM = (-0.66, 2.56)
+D_YLIM = (0.18, 1.26)
+D_BREAK = 1.09
+D_STRIP = (1.12, 1.26)
+
+
+def _exponent(ax, corner, x_pt, y_pt, base, exp, tail="", *, color):
+    """PRIVATE (G5): ``10⁻⁶`` as base + raised exponent, both at 7 pt.
+
+    Nimbus Sans has no U+207B and CF-2 bans mathtext, so the exponent is a
+    second 7 pt token raised off the base line, exactly as
+    ``token_subscript`` drops a subscript.
+    """
+    art = ax.annotate(base, xy=corner, xycoords="axes fraction",
+                      xytext=(x_pt, y_pt), textcoords="offset points",
+                      fontsize=PT_BASE, color=color, ha="left", va="top",
+                      zorder=6, annotation_clip=False)
+    sup = ax.annotate(exp, xy=(1.0, 1.0), xycoords=art, xytext=(0.3, 2.0),
+                      textcoords="offset points", fontsize=PT_BASE,
+                      color=color, ha="left", va="top", zorder=6,
+                      annotation_clip=False)
+    if tail:
+        ax.annotate(tail, xy=(1.0, 0.0), xycoords=(sup, art),
+                    xytext=(0.6, 0.0), textcoords="offset points",
+                    fontsize=PT_BASE, color=color, ha="left", va="bottom",
+                    zorder=6, annotation_clip=False)
+    return art
+
+
+def boundary_order(ax, crossings: pd.DataFrame, seeds: pd.DataFrame,
+                   order: dict) -> None:
+    """Analytic χ_c against the trained crossing and each seed's own dose."""
     crossings = crossings.sort_values("branches")
-    branches = crossings.branches.to_numpy(int)
-    x = np.arange(len(branches), dtype=float)
+    xs = np.arange(3, dtype=float)
     predicted = crossings.predicted_boundary.to_numpy(float)
-    observed = crossings.trained_mean_curve_chance_crossing.to_numpy(float)
+    trained = crossings.trained_mean_curve_chance_crossing.to_numpy(float)
 
-    rng = np.random.default_rng(41)
-    for xpos, branch in zip(x, branches, strict=True):
-        column = seed_boundaries[seed_boundaries.branches.eq(branch)] \
-            .first_at_or_below_chance_accuracy_dose
-        doses = column.dropna().to_numpy(float)
-        ax.scatter(np.full(doses.size, xpos)
-                   + rng.uniform(-0.10, 0.10, doses.size), doses,
-                   s=SEED_MS ** 2, color=MUTE, alpha=0.35,
-                   edgecolors="none", zorder=2.5)
-        n_missing = int(column.isna().sum())
-        if n_missing:
-            # the fan is pitched wider than SEED_MS so the five open
-            # triangles read as five markers, not as one zigzag band
-            ax.scatter(xpos + np.linspace(-0.18, 0.18, n_missing),
-                       np.full(n_missing, 1.055), marker="^", s=SEED_MS ** 2,
-                       facecolors="white", edgecolors=AMBER, lw=LW_EDGE,
-                       zorder=5)
-            ax.text(xpos + 0.26, 1.058, f"{n_missing}/{len(column)} > 1",
-                    fontsize=PT_SMALL, color=AMBER_TEXT, ha="left",
-                    va="center")
+    ax.set_xlim(*D_XLIM)
+    ax.set_ylim(*D_YLIM)
+    tint_patch(ax, ("rect", D_XLIM[0], D_STRIP[0], D_XLIM[1] - D_XLIM[0],
+                    D_STRIP[1] - D_STRIP[0]),
+               color="mute", pct=6, edge=False, radius_pt=1.5, zorder=0.2,
+               clip_on=True)
+    for dy in (-0.013, 0.013):
+        ax.plot([D_XLIM[0] - 0.05, D_XLIM[0] + 0.07],
+                [D_BREAK + dy - 0.012, D_BREAK + dy + 0.012],
+                color=EDGE, lw=LW_HAIR, clip_on=False, zorder=6,
+                solid_capstyle="butt")
+    _corner_lines(ax, ("no crossing within", "the sweep (χ ≤ 1)"),
+                  corner=(1.0, 1.0), x_pt=-2.0, y_pt=-2.0, ha="right")
 
-    for xpos, theory, trained in zip(x, predicted, observed, strict=True):
-        ax.plot([xpos, xpos], [theory, trained], color=MUTE, lw=LW_HAIR,
-                alpha=0.7, zorder=1)
-    ax.plot(x, predicted, color=INK, lw=LW_REF, dashes=DASHES, zorder=2)
-    ax.plot(x, observed, color=AMBER, lw=LW_DATA, zorder=3)
-    ax.plot(x, predicted, linestyle="none", marker="D", ms=MARKER_MS,
+    for i, b in enumerate(BRANCHES):
+        column = seeds[seeds.branches.eq(b)].first_at_or_below_chance_accuracy_dose
+        values = column.dropna().to_numpy(float)
+        levels = sorted(set(values))
+        for k, level in enumerate(levels):
+            n = int(np.sum(values == level))
+            jitter = np.linspace(-0.30, 0.30, n)
+            ax.plot(xs[i] + jitter, np.full(n, level), linestyle="none",
+                    marker="o", ms=SEED_MS, markerfacecolor="none",
+                    markeredgecolor=EDGE, markeredgewidth=LW_HAIR,
+                    alpha=0.85, zorder=2.2)
+            # the count sits above the top cluster and below the bottom one:
+            # beside it, a 15-seed row at 0.60 module-widths of jitter runs
+            # into the axis break on the left and the direct labels on the
+            # right
+            top = (k == len(levels) - 1)
+            if top:
+                ax.annotate(f"×{n}", xy=(xs[i], level), xytext=(0.0, 5.0),
+                            textcoords="offset points", fontsize=PT_BASE,
+                            color=MUTE, ha="center", va="bottom", zorder=6)
+            else:
+                ax.annotate(f"×{n}", xy=(xs[i] - 0.36, level),
+                            xytext=(-1.0, 0.0), textcoords="offset points",
+                            fontsize=PT_BASE, color=MUTE, ha="right",
+                            va="center", zorder=6)
+        missing = int(column.isna().sum())
+        if missing:
+            ax.plot(xs[i] + np.linspace(-0.16, 0.16, missing),
+                    np.full(missing, 1.190), linestyle="none", marker="^",
+                    ms=MARKER_MS - 0.8, markerfacecolor="white",
+                    markeredgecolor=AMBER, markeredgewidth=LW_EDGE, zorder=5)
+            ax.text(xs[i] - 0.34, 1.190, f"{missing}/20", fontsize=PT_BASE,
+                    color=AMBER_TEXT, ha="right", va="center", zorder=6)
+
+    for i in range(3):
+        ax.plot([xs[i], xs[i]], [predicted[i], trained[i]], color=INK,
+                lw=LW_REF, dashes=DASHES, zorder=1.6, solid_capstyle="butt")
+    ax.plot(xs, predicted, linestyle="none", marker="D", ms=MARKER_MS,
             markerfacecolor="white", markeredgecolor=INK,
-            markeredgewidth=LW_EDGE, zorder=4, label="analytic")
-    ax.plot(x, observed, linestyle="none", marker="o", ms=MARKER_MS,
+            markeredgewidth=LW_EDGE, zorder=4)
+    ax.plot(xs, trained, linestyle="none", marker="o", ms=MARKER_MS,
             markerfacecolor=AMBER, markeredgecolor="white",
-            markeredgewidth=LW_EDGE, zorder=5, label="mean curve")
-    ax.legend(loc="lower left", bbox_to_anchor=(0.0, 0.05), frameon=False,
-              handlelength=1.5, handletextpad=0.45, borderaxespad=0.0,
-              labelspacing=0.3, fontsize=PT_LEGEND)
-    ax.set_xlim(-0.35, 2.35)
-    ax.set_ylim(0.50, 1.105)
-    ax.set_xticks(x, [str(branch) for branch in branches])
-    ax.set_yticks([0.50, 0.75, 1.00], ["0.50", "0.75", "1.00"])
+            markeredgewidth=LW_HAIR, zorder=5)
+    # the printed pair per branch count, direct-labelled once at B = 2 and
+    # then given as bare values, so the two series keep their identity
+    # without a legend and without a footer table
+    ax.text(0.44, predicted[0] + 0.010, "analytic", fontsize=PT_BASE,
+            color=INK, ha="left", va="bottom", zorder=6)
+    ax.text(0.44, trained[0] - 0.010, "trained", fontsize=PT_BASE,
+            color=AMBER_TEXT, ha="left", va="top", zorder=6)
+    # the three printed pairs, colour-keyed to the two direct labels above;
+    # per-cluster tags do not fit -- the x axis is 3.2 categorical units on
+    # 93 pt, so a 46 pt value pair is half the panel wide
+    analytic = ", ".join(f"{v:.3f}" for v in predicted)
+    measured = ", ".join(f"{v:.3f}" for v in trained)
+    _corner_lines(ax, (f"analytic {analytic}",), corner=(0.0, 0.0),
+                  x_pt=1.0, y_pt=34.0, color=INK)
+    _corner_lines(ax, (f"trained {measured}",), corner=(0.0, 0.0),
+                  x_pt=1.0, y_pt=25.4, color=AMBER_TEXT)
+    _corner_lines(ax, (
+        f"B = 8 < 4 < 2 in "
+        f"{order['accuracy_strict_order_pairs']}/"
+        f"{order['accuracy_total_pairs']} seeds",
+    ), corner=(0.0, 0.0), x_pt=1.0, y_pt=16.8)
+    _exponent(ax, (0.0, 0.0), 1.0, 8.2, "P = 1.9 × 10", "−6",
+              "; n = 20 per B", color=MUTE)
+    ax.set_xticks(xs, [str(b) for b in BRANCHES])
+    ax.set_yticks([0.6, 0.8, 1.0], ["0.6", "0.8", "1.0"])
     ax.set_xlabel("branches B")
-    # "chance-crossing dose χ_c": the subscript chains on the rotated label
-    # (glyph-down is +x in display space for a 90-degree label).
     ax.set_ylabel("chance-crossing dose χ")
-    ax.annotate("c", xy=(1.0, 1.0), xycoords=ax.yaxis.label,
-                xytext=(-0.2, 0.4), textcoords="offset points",
-                fontsize=PT_SMALL, color=INK, rotation=90,
-                rotation_mode="anchor", ha="left", va="baseline",
-                annotation_clip=False, zorder=5)
 
 
-# -- F/G/H: accuracy facets -------------------------------------------------
-SERIES = (
-    ("correct_path", GREEN, "o"),
-    ("neuron_shared_k1", AMBER, "s"),
-    ("within_neuron_deranged", GRAY, "v"),
+# ── E: only shared credit forgets (the forest idiom) ──────────────────────
+E_ROWS = (
+    ("neuron-\nshared", "neuron_shared_k1", "scalar", "s"),
+    ("branch-\nspecific", "correct_subtree_k2", "shunting", "o"),
+    ("deranged", "within_neuron_deranged_k2", "point_mlp", "^"),
+    ("random\nrank-2", "random_dense_rank2", "point_mlp", "^"),
 )
-BAND_ALPHA = 0.13
-YLIM_ACC = (0.16, 0.92)
-DASH_TOP = 0.845          # the boundary dash stops under its own tag
+E_XLIM = (-8.0, 86.0)
 
 
-def accuracy_facet(ax, summary: pd.DataFrame, branches: int, *,
-                   first: bool, note=None) -> None:
-    for condition, colour, marker in SERIES:
+def forgetting_forest(canvas: NativeCanvas, ax, summary: pd.DataFrame,
+                      seeds: pd.DataFrame, contrasts: pd.DataFrame) -> None:
+    """Context-0 accuracy lost after a context switch, four credit routes."""
+    rows = []
+    for label, condition, colour, marker in E_ROWS:
+        s = summary[summary.condition.eq(condition)].iloc[0]
+        rows.append({
+            "label": label,
+            "mean": 100.0 * float(s.mean_context_switch_forgetting),
+            "lo": 100.0 * float(s.ci95_low_context_switch_forgetting),
+            "hi": 100.0 * float(s.ci95_high_context_switch_forgetting),
+            "seeds": list(100.0 * seeds[seeds.condition.eq(condition)]
+                          .context_switch_forgetting.to_numpy(float)),
+            "color": colour, "marker": marker, "n": int(s.n_seeds),
+        })
+    out = canvas.forest(
+        ax, rows, value_label="context-0 accuracy lost (pp)",
+        reference=0.0, reference_label=None, xlim=E_XLIM, tag="",
+        label_size=PT_BASE, band=False)
+    # The four rows keep the top 4.04 row-units; the strip below them carries
+    # the reference label and the n / interval / endpoint tag, because the
+    # forest's own right-aligned tag above the top spine lands on this
+    # panel's title at 93 pt of width.
+    ax.set_ylim(5.30, -0.62)
+    for line in list(ax.lines):
+        xd = list(line.get_xdata())
+        if len(xd) == 2 and xd[0] == xd[1] == 0.0 and line.get_linestyle() != "-":
+            line.remove()
+    ax.plot([0.0, 0.0], [-0.55, 3.45], color=MUTE, lw=LW_REF, zorder=1.0,
+            dashes=(2.6, 2.0), solid_capstyle="butt")
+    # a right-aligned value column: a per-row note set inside the axes lands
+    # on its own interval, and outside the right spine it would leave the
+    # page (E is the last module column)
+    values = [_minus(r["mean"]) for r in rows]
+    ties = int((np.asarray(rows[1]["seeds"]) == 0.0).sum())
+    values[1] = f'{values[1]} ({ties}/{len(rows[1]["seeds"])})'
+    for y, text in zip(out["ypos"], values):
+        ax.annotate(text, xy=(1.0, y), xycoords=("axes fraction", "data"),
+                    xytext=(7.0, 0.0), textcoords="offset points",
+                    ha="right", va="center", fontsize=PT_BASE, color=MUTE,
+                    zorder=6, annotation_clip=False)
+    # CF-7: right-aligned at the TOP of the rule (the forest's own placement
+    # is above the top spine, which is this panel's title band)
+    # CF-7 asks for the label right-aligned at the top of the rule; the rule
+    # is 8 pp from the left spine here, which is narrower than the label, so
+    # it is set immediately to the RIGHT of the rule instead of running out
+    # of the axes and over the top row's tick
+    ax.annotate("no forgetting", xy=(0.0, -0.42), xycoords=("data", "data"),
+                xytext=(2.5, 0.0), textcoords="offset points",
+                fontsize=PT_BASE, color=MUTE, ha="left", va="center",
+                zorder=6, annotation_clip=False)
+    c = contrasts[contrasts.contrast.eq("correct - neuron shared")
+                  & contrasts.endpoint.eq("context_switch_forgetting")].iloc[0]
+    # anchored at the panel's own left edge, not the axes' -- below the rows
+    # the row-label gutter is free, so the footer gets the full 126 pt
+    _corner_lines(ax, (
+        "branch-specific − neuron-shared:",
+        f"{_signed(100.0 * float(c.mean_difference))} pp "
+        f"[{_minus(100.0 * float(c.ci95_low))}, "
+        f"{_minus(100.0 * float(c.ci95_high))}], "
+        f"P = {float(c.wilcoxon_p_two_sided):.3f}",
+        "n = 10 paired seeds; mean and 95 %",
+        "bootstrap, after 20 switch epochs",
+    ), corner=(0.0, 0.0), x_pt=-DATA_LEFT_PT, y_pt=33.0, step_pt=8.6)
+    ax.set_xticks([0, 20, 40, 60])
+    return out
+
+
+# ── F/G/H: dose facets ────────────────────────────────────────────────────
+F_XLIM = (-0.03, 1.06)
+F_YLIM = (0.0, 102.0)
+BAND_ALPHA = 0.22
+# per facet: the height of the chi = 1 shared-deficit tag, chosen so the tag
+# sits in the band its own facet's steep amber segment leaves empty
+# per facet: (x, y) of the chi = 1 shared-deficit tag and of the chi = 0
+# deranged-deficit tag, each chosen to sit in the wedge its own facet's
+# curves leave empty (the amber step moves left as B grows)
+FULL_TAG = {2: (0.80, 66.0, "right"), 4: (0.72, 55.0, "left"),
+            8: (0.98, 41.0, "right")}
+ZERO_TAG = {2: (0.03, 64.0), 4: (0.03, 65.0), 8: (0.03, 73.5)}
+
+
+def accuracy_facet(ax, summary: pd.DataFrame, seeds: pd.DataFrame,
+                   contrasts: pd.DataFrame, branches: int, *, first: bool,
+                   notes) -> None:
+    ax.set_xlim(*F_XLIM)
+    ax.set_ylim(*F_YLIM)
+    reference_line(ax, 50.0, axis="y", label=None, color=MUTE, zorder=0)
+    boundary = CHI_C[branches]
+    ax.plot([boundary, boundary], [22.0, 80.5], color=MUTE, lw=LW_REF,
+            dashes=DASHES, zorder=0.5, solid_capstyle="butt")
+    rng = np.random.default_rng(2026)
+    for condition, colour, marker, _name in SERIES:
         part = summary[summary.condition.eq(condition)
                        & summary.branches.eq(branches)] \
             .sort_values("conflict_probability")
         x = part.conflict_probability.to_numpy(float)
-        m = part.mean_test_accuracy.to_numpy(float)
-        ax.fill_between(x, part.ci95_low_test_accuracy,
-                        part.ci95_high_test_accuracy, color=colour,
+        m = 100.0 * part.mean_test_accuracy.to_numpy(float)
+        ax.fill_between(x, 100.0 * part.ci95_low_test_accuracy,
+                        100.0 * part.ci95_high_test_accuracy, color=colour,
                         alpha=BAND_ALPHA, linewidth=0, zorder=1)
         ax.plot(x, m, color=colour, lw=LW_DATA, marker=marker,
                 ms=MARKER_MS - 0.8, markerfacecolor="white",
-                markeredgecolor=colour, markeredgewidth=LW_EDGE, zorder=3)
-    boundary = CHI_C[branches]
-    ax.plot([boundary, boundary], [YLIM_ACC[0], DASH_TOP], color=MUTE,
-            lw=LW_REF, dashes=DASHES, zorder=0, solid_capstyle="butt")
-    ax.axhline(0.5, color=MUTE, lw=LW_REF, dashes=DASHES, zorder=0)
+                markeredgecolor=colour, markeredgewidth=LW_EDGE,
+                zorder=3 if condition == "within_neuron_deranged"
+                else (3.5 if condition == "neuron_shared_k1" else 4.0))
+        swarm = 100.0 * seeds[seeds.condition.eq(condition)
+                              & seeds.branches.eq(branches)
+                              & seeds.conflict_probability.eq(1.0)] \
+            .test_accuracy.to_numpy(float)
+        ax.plot(1.0 + rng.uniform(-0.018, 0.018, swarm.size), swarm,
+                linestyle="none", marker="o", ms=SEED_MS,
+                markerfacecolor=colour, markeredgecolor="none", alpha=0.55,
+                zorder=2.5)
+    _rug(ax, DOSES, y0=F_YLIM[0])
+    # token_subscript grows to the RIGHT of its base, so the chain is placed
+    # by its measured width immediately left of the rule; anchored on the
+    # rule it would run past the right spine at B = 2 and be clipped
+    chain = _text_w_pt(ax, f"χc = {boundary:.2f}", PT_BASE) + 1.2
+    per_unit = 93.16 / (F_XLIM[1] - F_XLIM[0])
+    token_subscript(ax, boundary - 0.035 - chain / per_unit, 100.0, "χ", "c",
+                    f" = {boundary:.2f}", size=PT_BASE, sub_size=PT_BASE,
+                    color=MUTE, ha="left", va="top")
+    zero = contrasts[contrasts.contrast.eq("correct - deranged")
+                     & contrasts.branches.eq(branches)
+                     & contrasts.endpoint.eq("test_accuracy")
+                     & contrasts.conflict_probability.eq(0.0)].iloc[0]
+    full = contrasts[contrasts.contrast.eq("correct - shared")
+                     & contrasts.branches.eq(branches)
+                     & contrasts.endpoint.eq("test_accuracy")
+                     & contrasts.conflict_probability.eq(1.0)].iloc[0]
+    y_grey0 = 100.0 * float(summary[summary.condition.eq("within_neuron_deranged")
+                                    & summary.branches.eq(branches)
+                                    & summary.conflict_probability.eq(0.0)]
+                            .mean_test_accuracy.iloc[0])
+    zx, zy = ZERO_TAG[branches]
+    ax.text(zx, zy, f"{_signed(-100.0 * float(zero.mean_difference))} pp",
+            fontsize=PT_BASE, color=GRAY_TEXT, ha="left", va="center",
+            zorder=6)
+    ax.plot([zx + 0.02, 0.012], [zy - 3.8, y_grey0 + 1.6], color=GRAY,
+            lw=LW_HAIR, zorder=1.5, solid_capstyle="round")
+    fx, fy, fha = FULL_TAG[branches]
+    ax.text(fx, fy, f"{_signed(100.0 * float(full.mean_difference))} pp",
+            fontsize=PT_BASE, color=AMBER_TEXT, ha=fha, va="center",
+            zorder=6)
     if first:
-        # the chance label sits where neither the falling shared curve nor
-        # the deranged curve passes (0.55 < chi < 0.75 above the line)
-        ax.text(0.76, 0.51, "chance", fontsize=PT_SMALL, color=MUTE,
-                ha="right", va="bottom")
-        ax.text(0.02, 0.830, "branch-specific", fontsize=PT_SMALL,
-                color=GREEN, ha="left", va="bottom")
-        ax.text(0.80, 0.63, "neuron-shared", fontsize=PT_SMALL,
-                color=AMBER, ha="right", va="top")
-        ax.text(0.02, 0.590, "deranged", fontsize=PT_SMALL, color=GRAY,
-                ha="left", va="bottom")
-    if note:
-        ax.text(*note[0], note[1], fontsize=PT_SMALL, color=MUTE,
-                ha=note[2], va=note[3], linespacing=1.15)
-    ax.set_xlim(-0.03, 1.03)
-    ax.set_ylim(*YLIM_ACC)
-    ax.set_xticks(*DOSE_TICKS)
-    ax.set_yticks([0.2, 0.5, 0.8])
+        ax.text(0.03, 84.0, "branch-specific", fontsize=PT_BASE,
+                color=GREEN_TEXT, ha="left", va="bottom", zorder=6)
+        ax.text(0.03, 76.0, "neuron-shared", fontsize=PT_BASE,
+                color=AMBER_TEXT, ha="left", va="top", zorder=6)
+        ax.plot([0.20, 0.20], [76.4, 79.2], color=AMBER, lw=LW_HAIR,
+                zorder=1.5, solid_capstyle="round")
+        ax.text(0.03, 31.0, "deranged route", fontsize=PT_BASE,
+                color=GRAY_TEXT, ha="left", va="center", zorder=6)
+        ax.annotate("chance", xy=(0.90, 50.0), xytext=(0.0, 1.8),
+                    textcoords="offset points", fontsize=PT_BASE, color=MUTE,
+                    ha="right", va="bottom", zorder=6)
+        ax.set_ylabel("held-out accuracy (%)")
+    for i, note in enumerate(notes):
+        ax.annotate(note, xy=(0.0, 0.0), xycoords="axes fraction",
+                    xytext=(1.0, 3.0 + 8.0 * (len(notes) - 1 - i)),
+                    textcoords="offset points", fontsize=PT_BASE, color=MUTE,
+                    ha="left", va="bottom", zorder=6, annotation_clip=False)
+    ax.set_xticks([0.0, 0.5, 1.0], ["0", "0.5", "1"])
+    ax.set_yticks([20, 50, 80])
     if not first:
         ax.tick_params(axis="y", labelleft=False)
-    else:
-        ax.set_ylabel("held-out accuracy")
     ax.set_xlabel("conflict dose χ")
 
 
-def boundary_tag(ax, branches: int) -> None:
-    """``χ_c = value`` beside the boundary dash, placed after the reserve
-    lock so its point offsets are final; B = 2's dash sits on the right
-    spine, so that tag hangs to the LEFT of its line."""
-    boundary = CHI_C[branches]
-    tail = f" = {boundary:.2f}"
-    y = DASH_TOP + 0.012
-    if boundary > 0.85:
-        dx = -(_chain_w_pt(ax, "χ", "c", tail) + 2.5)
-    else:
-        dx = 2.5
-    _tag_chain(ax, (boundary, y), dx, "χ", "c", tail, color=MUTE,
-               va="bottom")
-
-
-def _check_identities(contrasts: pd.DataFrame, interactions: pd.DataFrame,
-                      intervals: pd.DataFrame, trajectories: pd.DataFrame,
-                      order: dict):
-    """Assertions behind the caption's exact claims."""
+# ── checks, curated table, layout ─────────────────────────────────────────
+def _check_identities(contrasts, interactions, order) -> dict:
     if not (order["accuracy_strict_order_pairs"]
             == order["accuracy_total_pairs"] == 20):
-        raise ValueError("Fig. 2E caption claims the predicted branch order "
-                         f"in 20/20 seeds; boundary_order.json reports {order}")
+        raise ValueError("Fig. 2D claims the predicted branch order in 20/20 "
+                         f"seeds; boundary_order.json reports {order}")
     acc = contrasts[contrasts.endpoint.eq("test_accuracy")]
     ties = acc[acc.contrast.isin(["correct - BP", "correct - gated point"])]
     if not (ties.ties.eq(20).all() and np.allclose(ties.mean_difference, 0.0)):
@@ -599,34 +969,134 @@ def _check_identities(contrasts: pd.DataFrame, interactions: pd.DataFrame,
     positive = interactions.set_index("branches").loc[list(BRANCHES)] \
         .positive_pairs
     if not np.all(positive.to_numpy(int) == 20):
-        raise ValueError("Fig. 2 caption claims 20/20 positive interaction "
-                         f"slopes at each B; source reports {positive.to_dict()}")
-    # The S29 intervals file carries no ``condition`` column; pin it to the
-    # neuron-shared rule against the per-condition trajectory summary.
-    ref = trajectories[trajectories.condition.eq("neuron_shared_k1")
-                       & trajectories.state_comparison.eq("common_exact_state")
-                       & trajectories.epoch.isin([0, 250])]
-    got = intervals[intervals.state_comparison.eq("common_exact_state")
-                    & intervals.epoch.isin([0, 250])]
-    keys = ["branches", "epoch", "conflict_probability"]
-    merged = got.merge(ref, on=keys, suffixes=("", "_ref"))
-    if len(merged) != len(got) or not np.allclose(
-            merged.mean_cosine, merged.mean_cosine_ref, atol=1e-6):
-        raise ValueError("figure_S29_gradient_intervals.csv does not match "
-                         "the neuron_shared_k1 trajectory summary")
+        raise ValueError("Fig. 2G claims 20/20 positive interaction slopes at "
+                         f"each B; source reports {positive.to_dict()}")
+    return {"ties": int(ties.ties.min()),
+            "positive_pairs": int(positive.min())}
+
+
+CURATED_COLUMNS = [
+    "panel", "record", "branches", "conflict_probability", "condition",
+    "n_seeds", "mean_test_accuracy", "ci95_low_test_accuracy",
+    "ci95_high_test_accuracy", "mean_initial_signed_utility",
+    "ci95_low_initial_signed_utility", "ci95_high_initial_signed_utility",
+    "predicted_boundary", "trained_mean_curve_chance_crossing",
+    "first_at_or_below_chance_accuracy_dose", "mean_context_switch_forgetting",
+    "ci95_low_context_switch_forgetting", "ci95_high_context_switch_forgetting",
+    "contrast", "mean_difference", "ci95_low", "ci95_high", "positive_pairs",
+    "ties", "wilcoxon_p_two_sided",
+]
+
+
+def write_curated(summary, crossings, seed_boundaries, contrasts,
+                  sub_summary, sub_contrasts) -> Path:
+    """Emit ``source_data/curated_publication/figure_02_plotted.csv``."""
+    rows = []
+    shared = summary[summary.condition.eq("neuron_shared_k1")]
+    for _, r in shared.sort_values(["branches", "conflict_probability"]).iterrows():
+        rows.append({
+            "panel": "C", "record": "measured initial signed utility",
+            "branches": r.branches, "conflict_probability": r.conflict_probability,
+            "condition": r.condition, "n_seeds": r.n_seeds,
+            "mean_initial_signed_utility": r.mean_initial_signed_utility,
+            "ci95_low_initial_signed_utility": r.ci95_low_initial_signed_utility,
+            "ci95_high_initial_signed_utility": r.ci95_high_initial_signed_utility,
+            "predicted_boundary": 1.0 - 2.0 * (r.branches - 1)
+            * r.conflict_probability / r.branches,
+        })
+    for _, r in crossings.sort_values("branches").iterrows():
+        rows.append({
+            "panel": "D", "record": "analytic and trained crossing",
+            "branches": r.branches, "predicted_boundary": r.predicted_boundary,
+            "trained_mean_curve_chance_crossing":
+                r.trained_mean_curve_chance_crossing, "n_seeds": 20,
+        })
+    for _, r in seed_boundaries.sort_values(["branches", "seed"]).iterrows():
+        rows.append({
+            "panel": "D", "record": f"seed {int(r.seed)} crossing",
+            "branches": r.branches,
+            "first_at_or_below_chance_accuracy_dose":
+                r.first_at_or_below_chance_accuracy_dose,
+        })
+    for _, r in sub_summary.iterrows():
+        rows.append({
+            "panel": "E", "record": "context-switch forgetting",
+            "condition": r.condition, "n_seeds": r.n_seeds,
+            "mean_context_switch_forgetting": r.mean_context_switch_forgetting,
+            "ci95_low_context_switch_forgetting":
+                r.ci95_low_context_switch_forgetting,
+            "ci95_high_context_switch_forgetting":
+                r.ci95_high_context_switch_forgetting,
+        })
+    sc = sub_contrasts[sub_contrasts.endpoint.eq("context_switch_forgetting")]
+    for _, r in sc.iterrows():
+        rows.append({
+            "panel": "E", "record": "paired contrast", "contrast": r.contrast,
+            "n_seeds": r.n_pairs, "mean_difference": r.mean_difference,
+            "ci95_low": r.ci95_low, "ci95_high": r.ci95_high,
+            "positive_pairs": r.wins, "ties": r.ties,
+            "wilcoxon_p_two_sided": r.wilcoxon_p_two_sided,
+        })
+    facet = {2: "F", 4: "G", 8: "H"}
+    keep = [c for c, _, _, _ in SERIES]
+    part = summary[summary.condition.isin(keep)]
+    for _, r in part.sort_values(["branches", "condition",
+                                  "conflict_probability"]).iterrows():
+        rows.append({
+            "panel": facet[int(r.branches)], "record": "held-out accuracy",
+            "branches": r.branches, "conflict_probability": r.conflict_probability,
+            "condition": r.condition, "n_seeds": r.n_seeds,
+            "mean_test_accuracy": r.mean_test_accuracy,
+            "ci95_low_test_accuracy": r.ci95_low_test_accuracy,
+            "ci95_high_test_accuracy": r.ci95_high_test_accuracy,
+        })
+    ac = contrasts[contrasts.endpoint.eq("test_accuracy")
+                   & contrasts.conflict_probability.isin([0.0, 1.0])]
+    for _, r in ac.sort_values(["branches", "contrast",
+                               "conflict_probability"]).iterrows():
+        rows.append({
+            "panel": facet[int(r.branches)], "record": "paired contrast",
+            "branches": r.branches, "conflict_probability": r.conflict_probability,
+            "contrast": r.contrast, "n_seeds": r.n_pairs,
+            "mean_difference": r.mean_difference, "ci95_low": r.ci95_low,
+            "ci95_high": r.ci95_high, "positive_pairs": r.positive_pairs,
+            "ties": r.ties, "wilcoxon_p_two_sided": r.wilcoxon_p_two_sided,
+        })
+    frame = pd.DataFrame(rows, columns=CURATED_COLUMNS)
+    CURATED.parent.mkdir(parents=True, exist_ok=True)
+    frame.to_csv(CURATED, index=False)
+    return CURATED
+
+
+def register_curated(path: Path) -> None:
+    """Add / refresh the figure-2 record in ``curated_publication``."""
+    manifest = path.parent / "manifest.json"
+    data = json.loads(manifest.read_text())
+    digest = hashlib.sha256(path.read_bytes()).hexdigest()
+    record = {
+        "figure": 2,
+        "source": "scripts/build_main_figure_04.py",
+        "path": "source_data/curated_publication/figure_02_plotted.csv",
+        "sha256": digest,
+        "scope": ("Display summaries from existing inputs; panel column "
+                  "identifies the selected data. Not an additional "
+                  "experiment."),
+    }
+    records = [r for r in data["records"] if r.get("figure") != 2]
+    records.append(record)
+    data["records"] = sorted(records, key=lambda r: r.get("figure", 0))
+    manifest.write_text(json.dumps(data, indent=2) + "\n")
+    readme = path.parent / "README.md"
+    line = ("Figure 2 panels C-H are emitted by `scripts/build_main_figure_04.py` "
+            "from `source_data/path_necessity_fashion/` and "
+            "`source_data/trained_subtree_address/`.")
+    text = readme.read_text()
+    if line not in text:
+        readme.write_text(text.rstrip("\n") + "\n\n" + line + "\n")
 
 
 def _equalize_row_widths(canvas: NativeCanvas, rows) -> None:
-    """One axes width for every 4-module panel of a row (audit L2).
-
-    The column lock carves each panel's left and right reserves separately
-    (a y label on the left, a neighbour's y label eating the shared gutter
-    on the right), so the three panels of a row can end up a few points
-    apart.  Declare the row's largest left + right total as extra RIGHT
-    reserve on the narrower columns so every panel yields the same width;
-    the declared reserve is keyed by grid column, so rows 1 and 2 stay
-    identical too.
-    """
+    """One axes width for every 4-module panel of a row (audit L2)."""
     locks = canvas.lock_reserves()
     for names in rows:
         totals = {n: locks[n][0] + locks[n][1] for n in names}
@@ -644,63 +1114,78 @@ LAST_BUILD: dict = {}
 def build() -> list:
     mpl.rcParams["lines.markeredgewidth"] = LW_EDGE
     summary = pd.read_csv(PATH_NECESSITY / "condition_summary.csv")
+    seed_outcomes = pd.read_csv(PATH_NECESSITY / "seed_outcomes.csv")
     crossings = pd.read_csv(PATH_NECESSITY / "plotted_crossings.csv")
     seed_boundaries = pd.read_csv(PATH_NECESSITY / "boundary_by_seed.csv")
     contrasts = pd.read_csv(PATH_NECESSITY / "paired_contrasts.csv")
     interactions = pd.read_csv(PATH_NECESSITY / "interaction_summary.csv")
-    intervals = pd.read_csv(TRAJECTORIES / "figure_S29_gradient_intervals.csv")
-    zero_crossings = pd.read_csv(TRAJECTORIES / "zero_alignment_crossings.csv")
-    trajectories = pd.read_csv(TRAJECTORIES / "condition_summary.csv")
-    order = json.loads(
-        (PATH_NECESSITY / "boundary_order.json").read_text())
-    _check_identities(contrasts, interactions, intervals, trajectories, order)
-    n_pos = int(interactions.set_index("branches").loc[4].positive_pairs)
-    n_seeds = int(interactions.set_index("branches").loc[4].n_seeds)
-    n_ties = int(contrasts[contrasts.endpoint.eq("test_accuracy")
-                           & contrasts.contrast.eq("correct - BP")].ties.min())
+    order = json.loads((PATH_NECESSITY / "boundary_order.json").read_text())
+    sub_summary = pd.read_csv(SUBTREE / "condition_summary.csv")
+    sub_seeds = pd.read_csv(SUBTREE / "seed_outcomes.csv")
+    sub_contrasts = pd.read_csv(SUBTREE / "paired_contrasts.csv")
+    facts = _check_identities(contrasts, interactions, order)
 
     canvas = NativeCanvas(
         HEIGHT_IN, 3, row_weights=ROW_PT,
         hgutter_pt=HGUTTER_PT, vgutter_pt=VGUTTER_PT, margins=MARGINS,
     )
+    # the 5 pt bottom inset keeps the module-normalised slot fill of the two
+    # schematics within EMPHASIS_MAX_RATIO of the data panels, whose own slot
+    # fill is capped by the shared 33 pt forest gutter.
     ax_a = canvas.panel("A", 0, 0, 7, schematic=True, lock=False,
-                        title="Context gates a branch; conflict corrupts")
+                        inset_pt=(0.0, 0.0, 0.0, 6.0))
     ax_b = canvas.panel("B", 0, 7, 5, schematic=True, lock=False,
-                        title="Three ways to deliver the same error")
-    ax_c = canvas.panel("C", 1, 0, 4, title="Boundary holds at epoch 0")
-    ax_d = canvas.panel("D", 1, 4, 4, title="Alignment lost in training",
-                        sharex=ax_c)
-    ax_e = canvas.panel("E", 1, 8, 4, title="Trained order as predicted")
+                        inset_pt=(0.0, 0.0, 0.0, 6.0))
+    ax_c = canvas.panel("C", 1, 0, 4, title="Predicted and measured")
+    ax_d = canvas.panel("D", 1, 4, 4, title="Trained order as predicted")
+    ax_e = canvas.panel("E", 1, 8, 4, title="Only shared credit forgets")
     ax_f = canvas.panel("F", 2, 0, 4, title="B = 2: shared still learns")
     ax_g = canvas.panel("G", 2, 4, 4, title="B = 4: boundary moves left",
                         sharey=ax_f)
     ax_h = canvas.panel("H", 2, 8, 4, title="B = 8: earliest collapse",
                         sharey=ax_f)
 
-    branch_conflict_task(ax_a)
-    backward_credit_schematic(ax_b)
-    initial_utility_boundary(ax_c, summary)
-    alignment_collapse(ax_d, intervals, zero_crossings)
-    boundary_test(ax_e, crossings, seed_boundaries)
-    accuracy_facet(ax_f, summary, 2, first=True,
-                   note=((0.03, 0.40), "BP and gated point\n= branch-specific\n"
-                         f"(all {n_ties} pairs tie)", "left", "top"))
-    accuracy_facet(ax_g, summary, 4, first=False,
-                   note=((0.03, 0.44), "selection ×\nconflict slopes\n"
-                         f"positive {n_pos}/{n_seeds}", "left", "top"))
-    accuracy_facet(ax_h, summary, 8, first=False)
+    frame_a = branch_conflict_task(ax_a)
+    frame_b = backward_credit_schematic(ax_b)
+    for frame in (frame_a, frame_b):
+        frame.require_soma_lowest()
+        frame.require_delta0()
 
-    from journal_style import style_direct_color_labels
+    stats_c = initial_utility(ax_c, summary)
+    boundary_order(ax_d, crossings, seed_boundaries, order)
+    for name in ("C", "D", "E", "F", "G", "H"):
+        canvas.declare_reserve(name, left=DATA_LEFT_PT)
+    forgetting_forest(canvas, ax_e, sub_summary, sub_seeds, sub_contrasts)
+    canvas.declare_reserve("E", left=DATA_LEFT_PT)
+
+    sub = summary[summary.branches.eq(8)
+                  & summary.conflict_probability.eq(1.0)]
+    shared8 = 100.0 * float(
+        sub[sub.condition.eq("neuron_shared_k1")].mean_test_accuracy.iloc[0])
+    der8 = 100.0 * float(
+        sub[sub.condition.eq("within_neuron_deranged")].mean_test_accuracy.iloc[0])
+    accuracy_facet(ax_f, summary, seed_outcomes, contrasts, 2, first=True,
+                   notes=("n = 20 seeds; mean and",
+                          "95 % bootstrap",
+                          f"BP = gated point tie {facts['ties']}/20"))
+    accuracy_facet(ax_g, summary, seed_outcomes, contrasts, 4, first=False,
+                   notes=("selection × conflict slope",
+                          f"> 0 in {facts['positive_pairs']}/20 seeds (each B)"))
+    accuracy_facet(ax_h, summary, seed_outcomes, contrasts, 8, first=False,
+                   notes=("shared and deranged fall",
+                          f"below chance ({shared8:.1f} %, {der8:.1f} %)"))
+
     style_direct_color_labels(canvas.fig)
     _equalize_row_widths(canvas, (("C", "D", "E"), ("F", "G", "H")))
-    for ax, b in ((ax_f, 2), (ax_g, 4), (ax_h, 8)):
-        boundary_tag(ax, b)
     findings = canvas.align_letters()
-    LAST_BUILD["canvas"] = canvas        # for the collision probe below
+    LAST_BUILD.update({"canvas": canvas, "stats_c": stats_c, "facts": facts})
     COMPONENT.parent.mkdir(parents=True, exist_ok=True)
     problems = canvas.save(COMPONENT, name="main_figure_04_native")
     PUBLISHED.parent.mkdir(parents=True, exist_ok=True)
     shutil.copyfile(COMPONENT, PUBLISHED)
+    path = write_curated(summary, crossings, seed_boundaries, contrasts,
+                         sub_summary, sub_contrasts)
+    register_curated(path)
     return list(findings) + list(problems)
 
 
@@ -708,7 +1193,11 @@ def main() -> None:
     problems = build()
     for problem in problems:
         print(f"  {problem}")
-    print(f"  canvas width {FIG_W * 72:.1f} pt, height {CANVAS_H_PT:.1f} pt")
+    live_h = CANVAS_H_PT - MARGINS.top - MARGINS.bottom
+    live_w = 518.4 - MARGINS.left - MARGINS.right
+    frac = (250.9 * ROW_PT[0] + 169.5 * ROW_PT[0]) / (live_w * live_h)
+    print(f"  canvas {FIG_W * 72:.1f} x {CANVAS_H_PT:.1f} pt, "
+          f"schematic fraction {frac * 100:.1f} %")
 
 
 if __name__ == "__main__":

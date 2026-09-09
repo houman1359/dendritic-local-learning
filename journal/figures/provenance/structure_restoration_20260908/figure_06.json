@@ -1,36 +1,53 @@
 {
   "figure": "Figure 6",
   "output": "figures/components/restored_main_06.pdf",
-  "output_sha256": "51487fc04d57f1068d1b9ede05a7794ab092ae815e0515567f2203cd1410d7ef",
+  "output_sha256": "cde571234de4c13578b16a3ea6ee343e2f37996ca7c3d23679f34ae34505ba16",
   "panel_sources": {
-    "A": "Restored original main6A/S31A native task-family schematic. Same commutative product in nested/flat families; spatial factor supports differ.",
-    "B": "Restored S31E, exact-BP180-epoch means from clean-source H2/H3 and H4 cohorts; no outcome selection beyond declared conditions. H2D3/H2D4/H3D4 unobserved and blank.",
-    "C": "Restored S31F, paired serial\u2212grouped point BP task-family alignment effects at180epochs. Resource-identical modules/contacts; all10paired seeds.",
-    "D": "Existing followup validation-selected test-accuracy trajectories,10seeds/condition. D1[8],D3[2,1,2];8compartments,64somata,matched contacts. Exact per-seed stopping records give7/7/2 D1 runs observing epochs180/400/600; stopped best states remain in the displayed10-seed mean. No shared stopping cutoff or continued optimization of stopped runs is implied.",
-    "E": "Paired exact\u2212shared LocalCA test-accuracy trajectory with archived pointwise intervals.",
-    "F": "Same paired states, test-cross-entropy difference; negative favors exact credit."
+    "A": "Native architecture schematic (no data): D1 [8] and D3 [2,1,2] over the same eight nonsomatic compartments, the grouped-point control swatch, and the shared inventory printed from physical_depth_h4_factorial/seed_outcomes.csv (66,178 trainable parameters, 14,336 active synapses).",
+    "B": "Native generative-model schematic (no data): tier supports and family strips from configs/nonlinear_physical_depth/confirmatory/aligned_shunting_bp.yaml (n_levels 3, hierarchy_branching 2, n_flat_groups 8, e_signal_delta 0.8) and supplementary/curated/si_06_physical_depth.tex Eq. S1-S2.",
+    "C": "Frozen serial-minus-grouped-point effects under exact BP at 180 epochs, seeds 10500-10509; per-seed fan at alpha = 1 from the same cohort. No re-estimation.",
+    "D": "Frozen three-tier condition summaries, seeds 10200-10209, 180 epochs, with the parameter-matched point network and the four-tier D4-D3 paired contrast (seeds 10400-10409).",
+    "E": "Frozen 600-epoch restart trajectories for six arms, ten seeds each, with the archived pointwise intervals and the exact per-seed stopping records.",
+    "F": "Same restarts, best validation loss, with the eight exact-BP D1 stopping epochs marked; all fifty D3 fits reach the cap.",
+    "G": "Frozen paired exact-path-minus-shared-soma accuracy trajectory with archived pointwise intervals and sign counts.",
+    "H": "Same paired states, test cross-entropy difference, with the two absolute 600-epoch levels printed."
   },
   "source_sha256": {
-    "source_data/physical_depth_h4_factorial/seed_outcomes.csv": "3096b4ee6ebceb96248d962677ffbf4001d63615e1b296e68a40a7f753a66f55",
-    "source_data/physical_depth_clean_source_replication/seed_outcomes.csv": "57b30cfa714b7ae974a26a66b4e40141b834e2352f065f53ae671f84759c3d22",
     "source_data/task_family_alignment/architecture_effects.csv": "8fb388c9505f9d646a69db7e283f446a811ca2886fe89bd1a695d2df041550dc",
+    "source_data/task_family_alignment/seed_outcomes.csv": "e24a03ab82a70183ae3d5a3d7ae644b68a67c926fc0bfa39ab48189c6d26f76f",
+    "source_data/nonlinear_physical_depth_confirmatory/condition_summary.csv": "a312fadcec1b5440d6fc6e05f4694f2bd65c73d6b25b578cea9d1f7fa314ee0f",
+    "source_data/remaining_physical_experiments/condition_summary.csv": "4f2ba4a83884392bc0931ed16c71d4ac98d2e0ca2ffa8a00882107e65a6336a1",
+    "source_data/point_dendrite_credit_controls/condition_summary.csv": "4e842c5c1a5a9acf06ce5f450eb8da4bc65c0e0578fdc09dbf367396705c158e",
+    "source_data/physical_depth_h4_factorial/paired_contrasts.csv": "1463906b2633012954a870cf67d41dbdab2e35b6c7513098bc6021fa67750f30",
+    "source_data/physical_depth_h4_factorial/seed_outcomes.csv": "3096b4ee6ebceb96248d962677ffbf4001d63615e1b296e68a40a7f753a66f55",
     "source_data/physical_depth_followup/condition_trajectory_summary.csv": "8171e8088c37ae607efd3afb8bd58c7544d6e8cfc8a221f329e2b0d7dc0d869f",
-    "source_data/physical_depth_followup/paired_trajectory_summary.csv": "05786841eb50eb631704a0d72374600de8900db6fb61f440b74eecaf810630a0",
-    "source_data/physical_depth_followup/analysis_validation.json": "9efd3952ede79fc983ab7c2e3a895cd9a04fab4f3e2ea04724ba4bc75f7c757d",
+    "source_data/physical_depth_followup/validation_selected_seed_trajectories.csv": "d44c6216556425a118f4b0dc22de3dc823345accb18e727b754cca95281392d4",
     "source_data/physical_depth_followup/stopping_by_seed.csv": "6acf0fa6798f01167529f7434e1d40b087afbeba518fc6eb58fc73a92a2e3da5",
-    "source_data/physical_depth_followup/validation_selected_seed_trajectories.csv": "d44c6216556425a118f4b0dc22de3dc823345accb18e727b754cca95281392d4"
+    "source_data/physical_depth_followup/paired_trajectory_summary.csv": "05786841eb50eb631704a0d72374600de8900db6fb61f440b74eecaf810630a0",
+    "source_data/physical_depth_budget/canonical/extension_paired_contrasts.csv": "52edceb0a920f6bd3548550deb81bc1b11a065da8d56d0ae7027157ca05e02d1"
   },
   "builder_sha256": {
-    "scripts/credit_first_figures/build_restored_main.py": "730af258411e2b15e6070e00497f93f05bc16580d7e029498515879a36e73edc",
+    "scripts/credit_first_figures/build_restored_main.py": "80ddf49b2caf76014872b5b47b26cb7bf0cd39f23ed5a3b2a7919bdff503297d",
     "scripts/credit_first_figures/focused_main_evidence.py": "e045f0fc26ce8554af19f7d2b1ee9683ec852899f19e02e76e78163b0d74e773",
-    "scripts/figure_canvas.py": "498dec86dcac34c9841538fa7b5bf7b7311d468db8fbe0c7a648fbb9508c5e1f",
-    "scripts/journal_style.py": "32a3272cebb949784b694bc6dbb495cf74f6ba4ddf97d18d44f3ef54e082844e"
+    "scripts/figure_canvas.py": "de3f566dd08270535deab95eb798b49cc17ccf4dfbb88e7ebdb50860903a6ad1",
+    "scripts/journal_style.py": "be8a138f9d9c081237edc616ba52b6769f957d8b8b49e705a92adcb18f475f3c"
   },
   "source_data_immutable": true,
   "new_experiments": 0,
-  "layout_findings": [],
+  "layout_findings": [
+    "TEXT-ON-DATA 'D3 \u2212 D1: +30.82 pp at 180, +38.17 at 600'",
+    "TEXT-ON-DATA 'the cap, loss still falling; n = 10'",
+    "TEXT-ON-DATA 'at 180: +10.86 pp'",
+    "TEXT-ON-DATA '10 of 10 seeds positive'",
+    "TEXT-ON-DATA 'at 486: \u22122.94 pp'",
+    "TEXT-ON-DATA 'crossing not resolved (300\u2013330)'"
+  ],
   "rendering_scope": "Existing outcomes only; no scientific endpoint or rate selection. Any redraw bootstrap uses whole existing seeds/cells, not independent pairs.",
   "helper_sha256": {
     "scripts/build_main_figure_06.py": "a9a0182be4f9f4223151d186ba6d4c8b7b6800ea9874eb4e1d49d076b17d6453"
-  }
+  },
+  "schematic_fraction_percent": 14.9,
+  "schematic_fraction_formula": "sum(schematic slot w_pt*h_pt) / (live_w_pt*live_h_pt) = 2*134.47*116 / (477.4*438)",
+  "no_forest": "CF-6: Fig 6 uses no forest panel (recorded)",
+  "in_axes_key_count": 0
 }

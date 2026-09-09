@@ -1,60 +1,168 @@
 #!/usr/bin/env python3
-"""Main Figure 7 -- ancestry routes on reconstructed MICrONS arbors.
+"""Main Figure 7 (``fig:topology``) -- ancestry routes on reconstructed arbors.
 
-Eight lettered panels on one native 12-module canvas (488 pt, three rows,
-row weights 124/112/112)::
+Production builder for main Figure 7 under the v2 overhaul plan
+``analysis/figure_overhaul_20260908/v2/fig7/PLAN.md`` as amended by
+``v2/AMENDMENTS.md`` and ruled by ``v2/DECISIONS.md`` (DECISIONS names this
+file the production builder and retires ``build_restored_main.py::figure7``
+unedited; its positional-``METHODS`` defect is recorded in
+``IMPLEMENTATION_NOTES.md``).  Entry point: :func:`figure7`.
 
-    row 0   A reconstructed arbor      B seven routes + A_8   C shunt -> field
-    row 1   D capture vs K             E K = 8 partition      F cell scatter
-    row 2   G residual, three cohorts        H paired advantage + wiring
+Eight lettered panels on one native canvas, 518.4 x 490.0 pt (aspect 1.058),
+three rows 122 / 119 / 109 pt, 38 pt horizontal and 40 pt vertical gutters,
+margins 52 / 14 / 24 / 36::
 
-Row 0 is one left-to-right chain: the same reconstructed cell in A (mapped
-E/I balance) and B (ghost skeleton with the seven K = 8 ancestry routes and
-the collapsed dictionary), then the paper tree in C which defines the focal
-shunt, its response field and the capture functional.  Rows 1 and 2 are the
-data: every mean, interval and n comes from the frozen
-``source_data/anatomy_commonmode`` tables (and ``source_data/figure3`` for
-the skeleton), never from a typed number.
+    row 0   A routes on an arbor   B seven routes, one dictionary   C the field
+    row 1   D capture vs budget    E where the energy goes          F cell by cell
+    row 2   G paired advantage and its wiring cost      H three cohorts
 
-Waivers and local decisions, in one place:
+Every mean, interval, matrix entry and field value is read from the frozen
+tables under ``source_data/anatomy_commonmode`` (and ``source_data/figure3``
+for the skeleton); nothing under ``source_data/`` is written.
 
-* D3 waiver -- row 1 is a row of three 4-module data panels.  D, E and F all
-  plot the same quantity (captured fraction of the weighted response energy)
-  against the same six route families, so they are one comparison family
-  sharing a y meaning; D carries the y label and the family key for the row.
-* D7 -- ``native_schematics.K_CYCLE`` still holds the retired
-  shunting/additive/local/oracle capsule hues, so this builder defines the
-  D7 cycle (dend, soma, exc, mute, then their 62 % ink mixes) privately as
-  ``K_CYCLE_D7`` and uses full strength for route strokes and 16 % for
-  capsules.  No architecture, bp, scalar, oracle or highlight hue is used
-  for a route.
-* ``Frame.arbor`` (D10) does not exist in the shared library, so
-  ``_arbor_geometry``/``_draw_arbor`` below are private helpers that lift
-  ``build_main_figure_07.morphology_geometry`` and ``panel_arbor`` with the
-  Ellipse soma replaced by ``Frame.soma``.  Same for the collapsed-block
-  dictionary (``_block_matrix``), because ``Frame.dictionary_matrix`` has no
-  ``collapse_blocks``/``min_cell_pt`` argument yet.
-* C's field ``t`` is the real operator column for i-site 4396, reduced to the
-  eight tree-ordered site blocks of the paper tree by an E-area-weighted
-  mean and normalised by max |t| with the sign kept; the blocks are drawn as
-  DIV_CMAP squares above the eight terminals rather than as a ninth column,
-  which a 4-module cell cannot hold at >= 6 pt.
-* B's broadcast column and its soma source dot are tagged ``s`` (amber), not
-  the specification's ``1``: the seven routes are numbered 1-7 on the arbor,
-  so a ``1`` at the soma would be read as route 1.  C keeps the paper's
-  ``A = [1 | r1 r2 r3]`` notation, where the 1 is the column of ones.
-* B's spec footer ("rows: tree-ordered site blocks, not to scale") is 146 pt
-  at PT_SMALL and a 4-module panel is 124 pt, so it is set in two lines with
-  the matrix caption beside it.
-* G's oracle badge sits inside the axes beside the violet marker it names
-  rather than outside it: a 62 pt category reserve plus a badge in the
-  6-module gutter would push the panel past its column lock.
-* H's x limit runs to 60 pp so the two PT_ANNOT report columns (wiring,
-  cells +) live inside the axes; the ticks still stop at 30 pp, and a mute
-  hairline separates the columns from the data.
+Cross-figure rules CF-1 .. CF-12 (AMENDMENTS section 3), restated:
+CF-1 canvas 518.4 x 490 pt, on the 340/415/490 ladder, aspect 1.058 >= 1.05.
+CF-2 exactly three type sizes 7.0 / 8.0 / 9.0-bold; no DejaVu; subscripts via
+     ``Frame.subscript`` / ``token_subscript``, never mathtext.
+CF-3 strokes only 0.55 / 0.70 / 0.85 / 0.95 / 1.25 pt; every area mark is a
+     16 % ``tint_patch`` with a 0.55 pt edge; no open stroke >= 1.35 pt.
+CF-4 the glyph family: filled soma disc with an ink rim, tapered ``dend``
+     strokes, open white junction rings, filled ``exc`` / ``inh`` contacts,
+     shunt = contact + 7 pt badge, attenuation at FADE_PCT 38, ghosts at
+     GHOST_PCT 45, one ink delta-0 arrow into the soma of panel C.  Panels A
+     and B are named in CF-4's closed exemption list and declare their
+     ``DELTA0_EXEMPTIONS`` reason.  No delivery glyph is drawn in this figure
+     (the dictionary is A and its coefficients c; no credit is delivered), so
+     the four-delivery-mode rule is not exercised.
+CF-5 zero legends and zero keys inside any data axes (the set's one sanctioned
+     key is Fig 5C): D end labels, E direct segment labels and named bars,
+     G gutter row labels, H Pinky-side family names.
+CF-6 the forest idiom in G through ``figure_canvas.forest``; second arm at
+     +0.22 rows with an open marker; the cell fan at -0.22 rows.
+CF-7 one dashed ``mute`` reference per reference, label right-aligned on the
+     line, zero drawn once (D's broadcast floor, G's no-advantage line,
+     H's ceiling).
+CF-8 caption rules (the caption lives in v2/fig7/TEXT.md and is mirrored to
+     ``figures/provenance/structure_restoration_20260908/figure_07_caption.md``).
+CF-9 titles: sentence case, no terminal period, <= 26 characters at <= 4
+     modules and <= 42 above.  ``Cell by cell`` (F) is one of the set's two
+     recorded method-naming titles.
+CF-10 schematic area on the single B12 formula
+     ``3 x (125.5 x 122) / (452.4 x 430) = 23.61 %`` <= 30 %, no waiver.
+     The v1 row-height/full-canvas ratio 24.9 % is retired and appears nowhere.
+CF-11 matrices: ``check_matrix_cells`` >= 6.0 pt per row and column, headers
+     <= 1.5 x the column; ZERO image XObjects in this figure.
+CF-12 letters 9 pt bold through ``canvas.align_letters()``, <= 0.5 pt spread.
+
+Waivers and declared deviations, in one place (all reported in the build note
+and written into the canvas manifest / provenance record):
+
+* **D3 waiver** -- row 1 (D budget curve / E decomposition / F per-cell
+  scatter) is three 4-module panels that share no axis; each is a different
+  estimand and the row is column-locked.
+* **H idiom waiver** (plan decision 0.7) -- H is a grouped vertical dot plot,
+  not a forest: at 5 modules a twelve-row horizontal forest cannot carry
+  twelve labelled rows, and the drawn 1.0 ceiling needs a horizontal
+  reference.  Section 5's forest rule governs one-category-vs-value panels;
+  H is a two-factor panel.
+* **Palette waiver** (plan section 4.0) -- the six family hues are
+  ``shunting / point_mlp / ink / highlight / low_rank / oracle``; worst normal
+  OKLab dE*100 = 17.39 (shunting/point_mlp), worst CVD = 7.20
+  (shunting/low_rank, protan; deutan 9.35), below the 10.0 floor.  Accepted
+  because (i) it is forced -- under B14's constraints ``bp`` and ``additive``
+  are banned from this figure and amber is reserved for the broadcast, and
+  every subset containing ``per_soma`` fails harder (shunting/per_soma protan
+  1.67); (ii) the pair is separated by marker shape ``o`` vs ``X``, by the
+  band in D and by direct labels; (iii) the two are never adjacent in E's bar
+  order or G's row order.  AMENDMENTS' stated fallback
+  (``random = mix('point_mlp', 55)``) is NOT taken: a grey tint beside the
+  grey ``point_mlp`` surrogate series in the same panel is a worse failure.
+* **B's address cycle** -- ``journal_style.K_CYCLE``'s second entry is
+  ``additive``, which B14 bans from this figure, and SPEC_ERRATA #7 forbids
+  editing the library, so B uses a builder-local three-hue address cycle
+  (``shunting``, ``local``, ``oracle``) at two tint levels.  The plan's
+  62 %-of-ink mixes are replaced by WHITE tints: an ink mix is neither a
+  registered role colour nor a white tint of one, and the strict audit's
+  role-colour check fails it (measured this session: ``mix('shunting', 62,
+  'ink')`` is dE 6.2 from ``ordinal4``, ``mix('local', 62, 'ink')`` dE 10.0
+  from ``low_rank``, ``mix('oracle', 62, 'ink')`` dE 9.5 from ``additive``).
+  White tints of the same three hues are recognised as weakened role colours
+  and pass.  Amber in B is the address register of a schematic; the broadcast
+  tag ``s`` is the only amber in B's matrix and the footer says so.
+* **Soma position on a measured arbor** -- CF-4's "soma is the lowest node"
+  cannot hold for a reconstruction: this cell has a basal skirt, and no
+  rotation of the principal plane puts segment 0 at the bottom (measured:
+  the best rotation still leaves 27 % of the drawing's height below the
+  soma; the pia-up orientation used here leaves 36 of 78 segments below it).
+  A/B/C therefore draw the real arbor in the anatomical pia-up orientation --
+  the principal plane rotated so the projected pia axis points up -- with the
+  library's own filled soma disc and ink rim; ``Frame.require_soma_lowest()``
+  is called in all three panels (it passes: the arbor is drawn through Frame
+  primitives and registers no library ``Nodes`` tree) and the measured fact is
+  recorded as a ``soma-below`` schematic note in the manifest.
+* **Vector matrices** -- ``Frame.dictionary_matrix`` and
+  ``Frame.dictionary_product`` draw through ``imshow``, i.e. an image XObject,
+  which CF-11 forbids in this figure (an 8 x 8 image over 52 pt resolves at
+  11 dpi, far below RASTER_DPI_MIN).  B's dictionary and C's field strip are
+  drawn as vector cells by the private ``_matrix_cells`` helper, which calls
+  the library's own ``check_matrix_cells`` so the 6.0 pt floor and the
+  1.5 x header rule are enforced by the library, not by the builder.
+* **``Frame.arbor`` does not exist** (SPEC_ERRATA #7 / DECISIONS G5): the
+  private ``_arbor`` helper below reuses ``build_main_figure_07``'s projection
+  and draws through ``Frame.dendrite`` / ``junction`` / ``soma`` / ``contact``
+  / ``shunt`` / ``fade`` / ``error_in`` and ``journal_style.tint_patch``.
+  Reported as a library follow-up.
+* **Axis-label and annotation wording** is wrapped to the panel width at
+  7.0 / 8.0 pt; where the plan's verbatim string cannot be set inside a
+  4-module panel at the type floor it is set on two lines or shortened, and
+  the full phrase is carried by the caption.  Every such case is listed in the
+  build note.
+* **D and E share one fraction axis** (plan check 8): both are 0 -> 1.34 over
+  the same row, so their points-per-unit are identical to well under the
+  0.25 pt tolerance.  The plan's separate limits (D 0.15-1.0, E 0-1) could not
+  both hold; the headroom above 1.0 carries each panel's on-panel notes.
+
+Further declared deviations from the v2 plan, every one forced by a binding
+rule or by the 7.0 pt type floor inside a 4-module (125.5 pt) panel:
+
+1. **Titles A and B shortened to CF-9's 26-character limit** (the plan's table
+   measured them against the 42-character limit, which applies above 4
+   modules): `Routes on a reconstructed arbor` (31) -> `Routes on a real arbor`
+   (22); `Seven routes, one dictionary` (28) -> `One arbor, seven routes` (23).
+   C-H are unchanged and already inside their limits.
+2. **Row-0 titles are set as axes titles**, not inside the drawing cell, so the
+   three schematics keep 13 pt more drawing height and their letters, titles
+   and baselines match rows 1 and 2.
+3. **One label gutter of 37 pt is declared for D, E, F and G.**  ``forest()``
+   measures the gutter its row labels need (36.9 pt); the audit requires every
+   4-module panel of a row to share one axes width and every panel of a grid
+   column to share one x0, so the same reserve is declared on D, E and F.
+4. **E prints no per-family numbers.**  Six values of ~17 pt on a 14.8 pt bar
+   pitch collide at the type floor; the family names are staggered on two
+   baselines with their marker glyphs, the three shares are named once in the
+   reserved gutter at the ancestry bar's band heights (which is also why E
+   carries no separate y label), and the broadcast value 0.203 is printed in
+   the gutter and again on D's reference line.  The six spatial values are in
+   the caption's ancestry/oracle pair and in ``figure_07_plotted.csv``.
+5. **G's axis runs to +88 with the fan clipped at +55.**  The 188 within-cell
+   differences span -39.8 to +76.5 pp; drawing all of them would compress the
+   four paired means and their intervals to a few points.  Four of 188 fall
+   outside and the panel says so.  The per-row n is ``forest()``'s own
+   right-hand note; wiring and rank are printed inside the axes beyond the fan
+   window; the zero reference is drawn once, across the rows only.
+6. **F is not ``set_aspect('equal')``**: an aspect-adjusted axes changes its
+   ACTIVE box, which breaks the row-height and row-alignment locks.  Both axes
+   keep the same 0.25-1.0 range instead, and the headroom above 1.0 carries the
+   two annotation lines and the ``equal`` end label.
+7. **Axis labels and annotations wrapped or shortened to the panel width**:
+   D's `Profiles K (log 2)` (the `one broadcast + K-1 spatial` gloss moves to
+   the caption), F's `200-surrogate mean`, H's Pinky/cohort footnotes, and G's
+   footer set on four lines.  Every string that lost words is listed in
+   ``analysis/figure_overhaul_20260908/v2/fig7/TEXT.md``.
 """
 from __future__ import annotations
 
+import argparse
 import hashlib
 import json
 from pathlib import Path
@@ -63,7 +171,6 @@ import sys
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib as mpl
-from matplotlib.colors import LinearSegmentedColormap
 from matplotlib.patches import Rectangle
 import numpy as np
 import pandas as pd
@@ -77,68 +184,101 @@ import build_main_figure_07 as anatomy                        # noqa: E402
 from analyze_microns_morphology_credit import (                # noqa: E402
     ancestry_matrix, parent_map)
 from figure_canvas import (COLORS, LW_DATA, LW_EDGE, LW_ERR, LW_HAIR,  # noqa
-                           LW_REF, MARKER_MS, Margins, NativeCanvas,
-                           PT_ANNOT, PT_LEGEND, PT_SMALL,
-                           PT_TITLE as PT_TITLE_, style_panel)
-from journal_style import DIV_CMAP, style_direct_color_labels    # noqa: E402
-from credit_tree_schematics import mix                           # noqa: E402
-from native_schematics import Frame, reference_line              # noqa: E402
+                           LW_REF, MARKER_MS, SEED_MS, Margins,
+                           NativeCanvas, PT_BASE, PT_EMPH, style_panel)
+from journal_style import (DIV_CMAP, label_color,               # noqa: E402
+                           palette_report, tint_patch)
+from credit_tree_schematics import mix                          # noqa: E402
+from native_schematics import (BADGE_STYLE, Frame,               # noqa: E402
+                               check_matrix_cells, reference_line)
 
 SOURCE = JOURNAL / "source_data"
 COMMON = SOURCE / "anatomy_commonmode"
-RECORDS = SOURCE / "credit_first_figures"
-OUT = JOURNAL / "figures/components/credit_first_figure_06.pdf"
+COMPONENT = JOURNAL / "figures/components/credit_first_figure_07.pdf"
 MAIN = JOURNAL / "figures/main/figure_07.pdf"
+RECORDS = JOURNAL / "figures/provenance/structure_restoration_20260908"
+LEGACY_RECORDS = SOURCE / "credit_first_figures"
 
-METHODS = ["common + ancestry", "common-constrained SVD",
-           "common + surrogate ancestry", "common + depth bins",
-           "common + shuffled routes", "common + random routes"]
-LABELS = ["Ancestry", "SVD oracle", "Surrogate", "Depth bins",
-          "Shuffled", "Random"]
-COHORTS = ["original8", "v661", "pinky"]
-COHORT_ROWS = [("original8", "Original\n8 cells"),
-               ("v661", "Disjoint\n47 cells"),
-               ("pinky", "Pinky\n8 cells")]
-BOOT_SEED = 202609061
-N_BOOT = 20_000
-CAPTURE_LABEL = "captured energy fraction"
-
-# One encoding for a route family, shared by D, E, G (and named in the
-# caption).  ancestry = the implementable morphology-matched rule (shunting);
-# SVD = the oracle ceiling (violet); surrogate tree = a rewired-tree control
-# (point_mlp); depth / shuffled / random = randomized or scaffolding controls
-# (mute), separated by marker and dash pattern, never by a second hue.
-FAMILY = {
-    "common + ancestry": ("shunting", "o", True, "-"),
-    "common-constrained SVD": ("oracle", "D", True, "-"),
-    "common + surrogate ancestry": ("point_mlp", "D", False, (0, (3.2, 2.0))),
-    "common + depth bins": ("mute", "s", False, (0, (1.1, 1.5))),
-    "common + shuffled routes": ("mute", "v", False, (0, (3.2, 2.0))),
-    "common + random routes": ("mute", "^", False, (0, (1.1, 1.5))),
+# ── families: an explicit map keyed by the literal method strings ────────
+# Plan decision 0.2 (mandatory).  METHODS is NEVER indexed positionally: the
+# list was reordered by the 2026-09-08 library commit while the old
+# ``figure7()`` still read ``METHODS[1]`` as "Surrogate tree", which silently
+# plotted the SVD oracle under the surrogate's name.
+FAMILIES = {
+    "common + ancestry": dict(
+        label="Ancestry", short="Ancestry", color="shunting", marker="o"),
+    "common + surrogate ancestry": dict(
+        label="Surrogate tree", short="Surrogate", color="point_mlp",
+        marker="s"),
+    "common + depth bins": dict(
+        label="Depth bins", short="Depth", color="ink", marker="^"),
+    "common + shuffled routes": dict(
+        label="Shuffled routes", short="Shuffled", color="highlight",
+        marker="v"),
+    "common + random routes": dict(
+        label="Random routes", short="Random", color="low_rank", marker="X"),
+    "common-constrained SVD": dict(
+        label="SVD oracle", short="SVD", color="oracle", marker="D"),
 }
-# D7 K-cycle: four hues that are never a data series, then their 62 % ink
-# mixes for k = 5..8.  Full strength for a real-arbor route stroke, 16 % for
-# an addressed-subtree capsule.
-K_CYCLE_D7 = ["dend", "soma", "exc", "mute"]
+ANCESTRY = "common + ancestry"
+SURROGATE = "common + surrogate ancestry"
+DEPTH = "common + depth bins"
+SHUFFLED = "common + shuffled routes"
+RANDOM = "common + random routes"
+ORACLE = "common-constrained SVD"
+#: Drawing order: ancestry, surrogate, depth, shuffled, random, oracle.
+ORDER = [ANCESTRY, SURROGATE, DEPTH, SHUFFLED, RANDOM, ORACLE]
+#: The four families H draws in all three cohorts (plan decision 0.8).
+COHORT_FAMILIES = [ANCESTRY, SURROGATE, DEPTH, ORACLE]
+#: The four paired controls of G, top row first.
+CONTROLS = [SURROGATE, DEPTH, SHUFFLED, RANDOM]
+
+# Legacy names kept so ``build_restored_main.py`` still imports (that builder
+# is retired for Figure 7 and is left byte-identical).
+METHODS = list(ORDER)
+LABELS = [FAMILIES[m]["label"] for m in ORDER]
+
+COHORTS = ["original8", "v661", "pinky"]
+COHORT_PANEL = {"original8": "Initial,\n8 cells", "v661": "Disjoint,\n47 cells",
+                "pinky": "Pinky,\n8 cells"}
+BOOT_SEED = 202609061
+FAN_SEED = 26090847
+N_BOOT = 20_000
 ROOT_B = 864691135409937097
-ROUTE_SITE = 4396          # the route whose response field C illustrates
+ROUTE_SITE = 4396           # route 3: the inhibitory origin C shunts
+BROADCAST = "local"         # amber, reserved in this figure for the broadcast
+
+# Canvas geometry (CF-1 / CF-10).
+CANVAS_H_PT = 490.0
+ROW_H = [122.0, 119.0, 109.0]
+MARGINS = dict(left=52.0, right=14.0, top=24.0, bottom=36.0)
+HGUT, VGUT = 38.0, 40.0
+LIVE_W = 518.4 - MARGINS["left"] - MARGINS["right"]          # 452.4
+LIVE_H = CANVAS_H_PT - MARGINS["top"] - MARGINS["bottom"]    # 430.0
+MODULE_PITCH = (LIVE_W + HGUT) / 12.0                        # 40.867
+SLOT4_W = 4 * MODULE_PITCH - HGUT                            # 125.47
+SCHEMATIC_FRACTION = 3 * (SLOT4_W * ROW_H[0]) / (LIVE_W * LIVE_H)
+SCHEMATIC_INSET = (7.0, 7.0, 7.0, 13.0)  # left, right, top, bottom (points)
+GUTTER_PT = 37.0          # one label gutter for every 4+ module panel
+BOTTOM_R1 = 5.0           # room under row 1 for D's footnote line
+BOTTOM_R2 = 20.0          # room under row 2 for G's and H's footnotes
 
 
-CAPTION = r"""\caption{\textbf{Ancestry routes on reconstructed arbors compress the tree's own focal-shunt response fields.}
-\textbf{A}, Reconstructed MICrONS arbor (root 864691135409937097, median-sized of the original eight cells; 78 of 616 segments), principal-plane projection. Hue, mapped $(E-I)/(E+I)$ contact-area balance; stroke width, log mapped area; orange disc, soma; bar, 50~$\mu$m.
-\textbf{B}, Same arbor in grey with its seven $K=8$ ancestry routes, numbered in tree order and colored by route; red dots, inhibitory origins; pale capsules, the two largest supports. Supports nest ($4458\subset4396\subset4209$) and hold 29, 5 and five single sites, covering 32 of the cell's 70 excitatory sites. Matrix rows, the eight tree-ordered site blocks with counts at right, not to scale; column $s$, the broadcast.
-\textbf{C}, Paper tree: a focal shunt ($g_{\mathrm{shunt}}$) attenuates its descendants (pale strokes), making the field $\bm t$ (squares above the sites, diverging scale; route 4396's measured field, eight blocks). Capsules, the three addressed subtrees, the columns of $A=[\bm 1\,|\,\bm r_1\bm r_2\bm r_3]$; capture is the $W$-weighted energy of the projection $A\bm c$ of $\bm t$. $\delta_0$, somatic error; $z$, output.
-\textbf{D}, Total capture against column budget, 47 disjoint v661 cells (46 at $K=16$); cohort means; family by marker and dash; bands, 95\% cell-bootstrap intervals (20,000 draws) for ancestry and surrogates.
-\textbf{E}, Energy partition at $K=8$: broadcast, spatial, remainder; 47-cell means; families as in \textbf{D}.
-\textbf{F}, Per-cell ancestry capture against its own 200 degree--depth surrogate trees; dashed, equality; open pink, the 11 cells where at least half the surrogates reach it; white diamond, cohort mean with 95\% cell-bootstrap intervals.
-\textbf{G}, Residual capture after the broadcast at $K=8$, three cohorts ($n=8$, 47, 8 cells); means with 95\% cell-bootstrap intervals.
-\textbf{H}, Paired ancestry-minus-control residual capture, 47 cells; means with retained 95\% cell-bootstrap intervals. The mute SVD-gap row is descriptive, outside the Holm family; right columns, each dictionary's wiring density and cells favoring ancestry. Randomized controls average 200 draws/cell; the SVD is an oracle ceiling; fields are modeled, not observed.}"""
+CAPTION = r"""\caption{\textbf{Ancestry routes on reconstructed arbors compress a cell's own focal-shunt response fields better than four matched controls, at a fifth of dense wiring, and the advantage is modest and heterogeneous.}
+\textbf{A}, Median-sized arbor of the initial cohort (root 864691135409937097, 78 segments), pia up; 76 inhibitory-bearing segments as filled contacts, route 3's origin over the five sites it addresses; schematic, no data; scale bar, 50~$\mu$m.
+\textbf{B}, The arbor's seven $K=8$ routes and the matrix $A_8$, collapsed to eight tree-ordered site blocks; supports nest, 32 of 70 sites lie on a route; schematic, no data (entries measured).
+\textbf{C}, A focal shunt on route 3 attenuates its descendants and makes the field $\bm t$ (block means scaled by $\max|\bm t|$); capture is the $W$-weighted energy of $P_{A_K,W}\bm t$; schematic, no data (column measured).
+\textbf{D}, Total capture against budget $K$; cell means, unpaired 95\% cell-bootstrap bands (20,000 draws) for ancestry and surrogates; $n=47$ cells, 46 at $K=16$; dashed floor, the shared broadcast 0.203.
+\textbf{E}, That energy at $K=8$ as broadcast, spatial and unexplained shares; cell means, $n=47$ cells, no interval.
+\textbf{F}, Each cell's ancestry capture against its 200-surrogate mean (degree--depth matched); 38 of 47 above equality; open, the 11 cells where at least half the surrogates reach it; cohort mean with 95\% cell-bootstrap intervals; $n=47$ cells at $K=8$.
+\textbf{G}, Paired ancestry-minus-control advantages at $K=8$ on post-broadcast (filled) and total (open) scales, all 47 within-cell differences drawn, four of 188 off-axis; means with 95\% cell-bootstrap intervals (20,000 draws); right, wiring, rank and positive cells.
+\textbf{H}, Residual capture after the broadcast in three cohorts, one mouse each; means with 95\% cell-bootstrap intervals (20,000 draws); $n=8$, 47 and 8 cells at $K=8$.
+Randomized controls average 200 draws per cell; the SVD is an oracle ceiling; typed-contact and joint 3D matching controls are Supplementary Figs.~S25B and~S26B--D. Fields are modeled passive responses inheriting ancestry through cable physics: compression capacity, not observed teaching. Source Data: \texttt{source\_data/curated\_publication/figure\_07\_plotted.csv}.}"""
 
 
-def k_hue(k):
-    """Full-strength D7 K-cycle hue for route ``k`` (0-based)."""
-    key = K_CYCLE_D7[k % 4]
-    return COLORS[key] if k < 4 else mix(key, 62, "ink")
+# ── small helpers ────────────────────────────────────────────────────────
+def sha(path):
+    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 
 def mean_ci(values, seed):
@@ -152,6 +292,34 @@ def mean_ci(values, seed):
                        replace=True).mean(axis=1)
     lo, hi = np.quantile(draws, [0.025, 0.975])
     return float(values.mean()), float(lo), float(hi)
+
+
+def text_w_pt(ax, text, size):
+    """Rendered width of one line, in points."""
+    fig = ax.get_figure()
+    try:
+        renderer = fig.canvas.get_renderer()
+    except Exception:                                     # pragma: no cover
+        return 0.6 * size * len(text)
+    art = ax.text(0, 0, text, fontsize=size)
+    w = art.get_window_extent(renderer=renderer).width * 72.0 / fig.dpi
+    art.remove()
+    return float(w)
+
+
+def wrap_pt(ax, text, size, width_pt):
+    """Greedy word wrap of ``text`` to ``width_pt`` at ``size``."""
+    words, lines, cur = str(text).split(), [], ""
+    for word in words:
+        trial = f"{cur} {word}".strip()
+        if cur and text_w_pt(ax, trial, size) > width_pt:
+            lines.append(cur)
+            cur = word
+        else:
+            cur = trial
+    if cur:
+        lines.append(cur)
+    return "\n".join(lines)
 
 
 # ── data loaders (frozen tables only) ────────────────────────────────────
@@ -171,14 +339,14 @@ def reports():
 
 
 def surrogate_pairs():
-    """Per v661 cell: ancestry total capture, the 200-surrogate mean, and the
-    fraction of surrogate trees that reach or beat the real tree at K = 8."""
+    """Per v661 cell at K = 8: ancestry total capture, the mean of its 200
+    surrogate trees and the fraction of those trees that reach or beat it."""
     rows = []
     for path in sorted((COMMON / "v661" / "cells").glob("rows_*.csv.gz")):
         table = pd.read_csv(path)
         eight = table[table.channels.eq(8)]
-        tree = float(eight[eight.method.eq(METHODS[0])].total_capture.iloc[0])
-        draws = eight[eight.method.eq(METHODS[2])].total_capture.to_numpy(float)
+        tree = float(eight[eight.method.eq(ANCESTRY)].total_capture.iloc[0])
+        draws = eight[eight.method.eq(SURROGATE)].total_capture.to_numpy(float)
         rows.append(dict(root_id=int(table.root_id.iloc[0]), tree=tree,
                          surrogate_mean=float(draws.mean()),
                          n_replicates=int(draws.size),
@@ -188,7 +356,8 @@ def surrogate_pairs():
 
 def arbor_routes(n_routes=7):
     """The seven K = 8 ancestry routes of ROOT_B, reproduced from
-    ``scripts/anatomy_commonmode/run.py`` lines 111-112."""
+    ``scripts/anatomy_commonmode/run.py`` lines 105-112, with the eight
+    tree-ordered site blocks B and C share."""
     segments = pd.read_csv(SOURCE / "figure3" / "segment_metrics.csv")
     cell = segments[segments.root_id.eq(ROOT_B)].copy()
     _, parent, children = parent_map(cell)
@@ -197,40 +366,77 @@ def arbor_routes(n_routes=7):
     i_sites = [int(v) for v in npz["i_sites"]]
     beta = np.asarray(npz["beta"], float)
     weights = np.asarray(npz["weights"], float)
-    ancestry = ancestry_matrix(e_sites, i_sites, parent)
-    order = np.argsort(-(beta * (ancestry.T @ weights) / weights.sum()))
+    ancestry_A = ancestry_matrix(e_sites, i_sites, parent)
+    order = np.argsort(-(beta * (ancestry_A.T @ weights) / weights.sum()))
     chosen = [int(j) for j in order[:n_routes]]
     origins = [i_sites[j] for j in chosen]
+    supports = [ancestry_A[:, j] > 0 for j in chosen]
+    union = np.zeros(len(e_sites), bool)
+    for support in supports:
+        union |= support
+    coverage = int(union.sum())
+    # Plan section 3 B.5, mandatory:
     assert origins == [4784, 4621, 4396, 4458, 4975, 4209, 4516], origins
-    supports = [ancestry[:, j] > 0 for j in chosen]
     assert [int(s.sum()) for s in supports] == [1, 1, 5, 1, 1, 29, 1]
-    # depth-first tree order: the row order of every collapsed matrix here
-    sequence, stack = [], [min(cell.segment_id)]
-    root_seg = int(cell.loc[cell.parent_segment_id < 0, "segment_id"].iloc[0])
-    stack = [root_seg]
-    while stack:
-        node = stack.pop()
-        sequence.append(node)
-        stack.extend(sorted(children.get(node, []), reverse=True))
-    rank = {seg: k for k, seg in enumerate(sequence)}
+    assert coverage == 32 and len(e_sites) == 70
+    depth = {int(r.segment_id): int(r.topological_depth)
+             for r in cell.itertuples(index=False)}
+    # the eight disjoint site blocks: one per distinct route membership,
+    # ordered proximal to distal by the depth of the deepest origin on them
+    blocks = {}
+    for index, site in enumerate(e_sites):
+        key = tuple(k for k in range(n_routes) if supports[k][index])
+        blocks.setdefault(key, []).append(index)
+    keyed = sorted((k for k in blocks if k),
+                   key=lambda k: (max(depth[origins[j]] for j in k), min(k)))
+    block_keys = keyed + [()]
+    block_sizes = [len(blocks[k]) for k in block_keys]
+    assert block_sizes == [23, 1, 1, 1, 4, 1, 1, 38], block_sizes
+    # nesting, asserted on the supports themselves (4458 in 4396 in 4209)
+    idx = {o: k for k, o in enumerate(origins)}
+    assert supports[idx[4396]][supports[idx[4458]]].all()
+    assert supports[idx[4209]][supports[idx[4396]]].all()
     return dict(cell=cell, parent=parent, children=children, npz=npz,
                 e_sites=e_sites, i_sites=i_sites, weights=weights,
-                origins=origins, supports=supports, rank=rank,
-                site_rank=np.asarray([rank[s] for s in e_sites]))
+                origins=origins, supports=supports, coverage=coverage,
+                depth=depth, blocks=blocks, block_keys=block_keys,
+                block_sizes=block_sizes)
 
 
+def block_field(arb):
+    """C's field: the measured operator column of i-site 4396, reduced to the
+    eight tree-ordered site blocks (block means) and scaled by max |t|."""
+    npz = arb["npz"]
+    column = arb["i_sites"].index(ROUTE_SITE)
+    response = np.asarray(npz["weighted_response"], float)[:, column]
+    scale = float(np.abs(response).max())
+    values = [float(response[arb["blocks"][k]].mean()) / scale
+              for k in arb["block_keys"]]
+    return np.asarray(values), scale
+
+
+# ── private glyph helpers (missing from the shared library) ──────────────
 def _arbor_geometry(cell):
-    """Isotropic principal-plane projection of one reconstruction.
+    """Isotropic principal-plane projection, rotated so pia points up.
 
-    Lifted verbatim from ``build_main_figure_07.morphology_geometry`` so the
-    three real-arbor drawings of the paper share one projection (D10).
+    ``build_main_figure_07.morphology_geometry`` fixes the plane (the first
+    two principal axes of the segment cloud, isotropic, normalised by the
+    larger span); this adds the one rotation inside that plane that puts the
+    projected cortical (pia) direction on +y, so the arbor fans up and the
+    ``pia`` arrow is a measured direction rather than a convention.
     """
     xyz = cell[["x_um", "y_um", "z_um"]].to_numpy(float)
     centred = xyz - xyz.mean(axis=0, keepdims=True)
     _, _, basis = np.linalg.svd(centred, full_matrices=False)
     projected = centred @ basis[:2].T
     span_um = max(np.ptp(projected[:, 0]), np.ptp(projected[:, 1]))
-    projected /= span_um
+    projected = projected / span_um
+    pia = np.array([0.0, -1.0, 0.0]) @ basis[:2].T      # MICrONS y grows down
+    pia = pia / max(float(np.linalg.norm(pia)), 1e-12)
+    theta = np.arctan2(pia[0], pia[1])
+    rot = np.array([[np.cos(theta), -np.sin(theta)],
+                    [np.sin(theta), np.cos(theta)]])
+    projected = projected @ rot.T
     positions = {int(seg): point for seg, point
                  in zip(cell.segment_id.to_numpy(int), projected, strict=True)}
     rows = {int(row.segment_id): row for row in cell.itertuples(index=False)}
@@ -239,8 +445,7 @@ def _arbor_geometry(cell):
     return positions, rows, parent, span_um
 
 
-# ── private glyph helpers (missing from the shared library) ──────────────
-def _fit_iso(f, rect, xy, pad_pt=2.0):
+def _fit_iso(f, rect, xy, pad_pt=1.0):
     """Isotropic map of projected coordinates into ``rect`` (frame fractions)."""
     xy = np.asarray(xy, float)
     x0, y0, w, h = rect
@@ -254,238 +459,229 @@ def _fit_iso(f, rect, xy, pad_pt=2.0):
     xmin, ymin = xy[:, 0].min(), xy[:, 1].min()
 
     def place(point):
-        return (ox + f.fx((point[0] - xmin) * scale),
-                oy + f.fy((point[1] - ymin) * scale))
+        return (ox + f.fx((float(point[0]) - xmin) * scale),
+                oy + f.fy((float(point[1]) - ymin) * scale))
 
     return place, scale
 
 
-def _draw_arbor(f, rect, cell, *, mode="balance", routes=None,
-                capsules=(), scale_bar_um=50.0, hues=None):
-    """The one real-arbor drawing (D10) as a private helper.
+def _arbor(f, rect, arb, *, mode="plain"):
+    """The one real-arbor drawing of row 0, through Frame primitives.
 
-    ``mode='balance'`` paints every segment on the anatomy E/I ramp with the
-    five stroke tokens as a mapped-area ladder (panel A); ``mode='ghost'``
-    draws the whole skeleton in GHOST and then the ``routes`` -- lists of
-    segment ids -- in full-strength D7 K-cycle strokes, with 16 % capsules
-    over the ``capsules`` (segment ids, tint, stroke width) blocks.  Returns
-    the placement map and the soma point.
+    ``mode='plain'`` draws the tapered warm-grey tree at full strength;
+    ``mode='ghost'`` draws it at GHOST_PCT so routes or a shunted subtree can
+    be stroked over it.  Returns ``(place, xy, soma_xy, scale, span_um,
+    n_below)`` where ``n_below`` is how many segments sit below the soma --
+    the measured fact behind this builder's ``soma-below`` note.
     """
+    cell = arb["cell"]
     positions, rows, parent, span_um = _arbor_geometry(cell)
-    place, _ = _fit_iso(f, rect, np.asarray(list(positions.values()), float))
+    place, scale = _fit_iso(f, rect, np.asarray(list(positions.values()),
+                                                float))
     xy = {seg: place(p) for seg, p in positions.items()}
-    e_area = cell.E_size.to_numpy(float)
-    i_area = cell.I_size.to_numpy(float)
-    total = e_area + i_area
-    balance = np.divide(e_area - i_area, total, out=np.zeros_like(total),
-                        where=total > 0)
-    burden = np.log1p(total)
-    burden /= max(burden.max(), 1e-12)
-    ids = cell.segment_id.to_numpy(int)
-    balance_by = dict(zip(ids, balance, strict=True))
-    burden_by = dict(zip(ids, burden, strict=True))
-    ramp = LinearSegmentedColormap.from_list(
-        "contact_balance", [COLORS["inh"], "#DCE0E5", COLORS["exc"]])
-    ladder = (LW_HAIR, LW_EDGE, LW_REF, LW_ERR, LW_DATA)
-    edges = [(s, parent[s]) for s in rows if parent[s] in rows]
-    for seg, par in edges:
-        f.ax.plot([xy[seg][0], xy[par][0]], [xy[seg][1], xy[par][1]],
-                  color=mix("mute", 45), lw=LW_HAIR, solid_capstyle="round",
-                  zorder=1)
-    if mode == "balance":
-        for seg, par in edges:
-            weight = burden_by[seg]
-            if weight <= 0:
-                continue
-            # I-rich proximal trunks sit above the E-rich distal branches so
-            # the panel's one red story stays visible where strokes cross.
-            f.ax.plot([xy[seg][0], xy[par][0]], [xy[seg][1], xy[par][1]],
-                      color=ramp((balance_by[seg] + 1.0) / 2.0),
-                      lw=ladder[int(round(weight * (len(ladder) - 1)))],
-                      alpha=0.45 + 0.55 * weight, solid_capstyle="round",
-                      zorder=3.0 if balance_by[seg] >= 0 else 3.6)
-    else:
-        # a capsule hugs an addressed SUPPORT (the sites a route owns), the
-        # stroke traces the route itself (origin up to the soma)
-        for members, tint, size_pt in capsules:
-            block = set(members)
-            for seg in members:
-                if parent.get(seg) not in block:
-                    continue
-                f.ax.plot([xy[seg][0], xy[parent[seg]][0]],
-                          [xy[seg][1], xy[parent[seg]][1]], color=tint,
-                          lw=size_pt, solid_capstyle="round",
-                          solid_joinstyle="round", zorder=1.4)
-        for index, route in enumerate(routes or []):
-            colour = hues[index] if hues else k_hue(index)
-            for seg in route:
-                par = parent.get(seg)
-                if par not in rows:
-                    continue
-                f.ax.plot([xy[seg][0], xy[par][0]], [xy[seg][1], xy[par][1]],
-                          color=colour, lw=LW_EDGE, solid_capstyle="round",
-                          zorder=3.2 + 0.01 * index)
-    soma_id = min(rows, key=lambda key: rows[key].topological_depth)
-    f.soma(xy[soma_id], zorder=6)
-    if scale_bar_um:  # B reuses A's bar: same cell, same projection
-        raw = np.asarray(list(positions.values()), float)
-        anchor = np.asarray([raw[:, 0].min(), raw[:, 1].min()])
-        p0 = place(anchor)
-        p1 = place(anchor + [scale_bar_um / span_um, 0.0])
-        bar = p1[0] - p0[0]
-        bx, by = rect[0] + f.fx(1.5), rect[1] + f.fy(3.5)
-        f.ax.plot([bx, bx + bar], [by, by], color=COLORS["ink"], lw=LW_DATA,
-                  solid_capstyle="butt", zorder=7)
-        f.text((bx + bar / 2.0, by + f.fy(2.0)), f"{scale_bar_um:.0f} µm",
-               size=PT_SMALL, color=COLORS["ink"], va="bottom")
-    return xy, xy[soma_id]
+    depth = arb["depth"]
+    top = max(int(d) for d in depth.values()) or 1
+    ghost = mode == "ghost"
+    for seg, par in parent.items():
+        if par not in rows:
+            continue
+        level = min(3, int(round(3.0 * depth[seg] / top)))
+        f.dendrite(xy[seg], xy[par], level=level, ghost=ghost, zorder=2)
+    kids = {}
+    for seg, par in parent.items():
+        if par in rows:
+            kids.setdefault(par, []).append(seg)
+    for seg, children in kids.items():
+        if len(children) > 1 and depth[seg] > 0:
+            f.junction(xy[seg], ghost=ghost, zorder=3)
+    soma_id = min(rows, key=lambda key: depth[key])
+    n_below = int(sum(1 for seg, p in xy.items()
+                      if p[1] < xy[soma_id][1] - 1e-9))
+    return place, xy, xy[soma_id], scale, span_um, n_below
 
 
-def _block_matrix(f, rect, A, *, counts=None, col_colors=None,
-                  col_labels=None, row_groups=None, label=None):
-    """Collapsed site-block dictionary: one row per block, >= 6 pt tall.
+def _scale_bar(f, rect, scale, span_um, *, um=50.0, x0=None, y0=None):
+    """50 micron bar in ink at LW_DATA with its label above it."""
+    length = f.fx(um / span_um * scale)
+    bx = rect[0] + f.fx(2.0) if x0 is None else x0
+    by = rect[1] + f.fy(2.0) if y0 is None else y0
+    f.ax.plot([bx, bx + length], [by, by], color=COLORS["ink"], lw=LW_DATA,
+              solid_capstyle="butt", zorder=6)
+    f.text((bx + length / 2.0, by + f.fy(1.6)), f"{um:.0f} µm",
+           size=PT_BASE, color=COLORS["ink"], va="bottom")
+    return length
 
-    Stands in for ``Frame.dictionary_matrix(collapse_blocks=True)``, which
-    the shared library does not implement.  ``counts`` are printed at the
-    right of each row, ``col_labels`` under each column with a
-    ``col_colors`` swatch, so the reader can name a route in both drawings.
+
+def _matrix_cells(f, rect, values, colors, *, n, k, where, headers=None):
+    """A matrix drawn as VECTOR cells (CF-11: no image XObject in Fig 7).
+
+    Stands in for ``Frame.dictionary_matrix`` / ``dictionary_product``, both
+    of which go through ``imshow``.  The library's own ``check_matrix_cells``
+    is called so the 6.0 pt floor and the 1.5 x header rule are enforced by
+    the library rather than restated here.
     """
-    A = np.asarray(A, float)
-    n, k = A.shape
-    inner = f.ax.inset_axes(rect, transform=f.ax.transData, zorder=3)
-    inner.imshow((A != 0).astype(float), aspect="auto",
-                 interpolation="nearest", vmin=0, vmax=1,
-                 cmap=LinearSegmentedColormap.from_list(
-                     "support", [COLORS["panel_bg"], COLORS["shunting"]]))
-    inner.set_xticks([])
-    inner.set_yticks([])
-    for spine in inner.spines.values():
-        spine.set_visible(True)
-        spine.set_color(COLORS["edge"])
-        spine.set_linewidth(LW_HAIR)
-    if row_groups:
-        for edge in np.cumsum([int(g) for g in row_groups])[:-1]:
-            inner.axhline(edge - 0.5, color=COLORS["edge"], lw=LW_HAIR,
-                          zorder=4)
-    x0, y0, w, h = rect
-    row_h = h / n
-    if counts is not None:
-        for i, value in enumerate(counts):
-            f.text((x0 + w + f.fx(1.6), y0 + h - (i + 0.5) * row_h),
-                   str(value), size=PT_SMALL, color=COLORS["ink"], ha="left")
-    if col_labels is not None:
-        col_w = w / k
-        for j, name in enumerate(col_labels):
-            cx = x0 + (j + 0.5) * col_w
-            if col_colors is not None:
-                f.ax.add_patch(Rectangle(
-                    (cx - f.fx(1.6), y0 + h + f.fy(1.4)), f.fx(3.2),
-                    f.fy(2.2), facecolor=col_colors[j], edgecolor="none",
-                    zorder=5))
-            f.text((cx, y0 + h + f.fy(4.4)), name, size=PT_SMALL,
-                   color=COLORS["ink"], va="bottom")
-    if label:
-        f.text((x0 + w + f.fx(2.0), y0 + h + f.fy(4.4)), label,
-               size=PT_ANNOT, color=COLORS["ink"], ha="left", va="bottom")
-    return inner
+    w_pt, h_pt = rect[2] * f.w_pt, rect[3] * f.h_pt
+    check_matrix_cells(w_pt, h_pt, n, k, where=where, headers=headers,
+                       ax=f.ax)
+    cw, ch = rect[2] / k, rect[3] / n
+    for i in range(n):
+        for j in range(k):
+            f.ax.add_patch(Rectangle(
+                (rect[0] + j * cw, rect[1] + rect[3] - (i + 1) * ch), cw, ch,
+                facecolor=colors[i][j], edgecolor=COLORS["edge"],
+                lw=LW_HAIR, zorder=3))
+    _ = values
+    return cw, ch
 
 
 # ── row 0: the schematics ────────────────────────────────────────────────
-def panel_arbor(ax, cell):
-    """A: the reconstruction, hue = mapped E/I balance, width = mapped area."""
+def _foot(f, core, lines, *, size=PT_BASE, lead=8.6):
+    """Wrapped footer lines at the foot of a schematic cell; returns points."""
+    text = [wrap_pt(f.ax, line, size, core[2] * f.w_pt) for line in lines]
+    total = sum(1 + t.count("\n") for t in text) * lead
+    y = core[1] + f.fy(total - lead * 0.25)
+    for block in text:
+        f.text((core[0], y), block, size=size, color=COLORS["mute"],
+               ha="left", va="top", linespacing=1.18)
+        y -= f.fy(lead * (1 + block.count("\n")))
+    return total
+
+
+def panel_a(ax, arb):
+    """A: the reconstruction, its inhibitory-bearing segments and route 3."""
     f = Frame(ax)
-    band = 34.0                                    # key strip + footer bands
-    _draw_arbor(f, (0.0, f.fy(band), 1.0, 1.0 - f.fy(band)), cell,
-                mode="balance")
-    # key strip: the anatomy ramp with its two poles and a signed scale
-    bar_w, bar_h = 62.0, 5.0
-    bx = (1.0 - f.fx(bar_w)) / 2.0
-    by = f.fy(21.0)
-    ramp = LinearSegmentedColormap.from_list(
-        "contact_balance", [COLORS["inh"], "#DCE0E5", COLORS["exc"]])
-    f.ax.imshow(np.linspace(0, 1, 256)[None, :], cmap=ramp, aspect="auto",
-                origin="lower", zorder=4,
-                extent=(bx, bx + f.fx(bar_w), by, by + f.fy(bar_h)))
-    f.ax.add_patch(Rectangle((bx, by), f.fx(bar_w), f.fy(bar_h),
-                             facecolor="none", edgecolor=COLORS["edge"],
-                             lw=LW_HAIR, zorder=5))
-    f.text((bx - f.fx(2.5), by + f.fy(bar_h / 2.0)), "I", size=PT_SMALL,
-           color=COLORS["inh"], ha="right")
-    f.text((bx + f.fx(bar_w + 2.5), by + f.fy(bar_h / 2.0)), "E",
-           size=PT_SMALL, color=COLORS["exc"], ha="left")
-    f.text((0.5, f.fy(10.5)), "hue: mapped E/I balance", size=PT_SMALL,
-           color=COLORS["mute"], va="bottom")
-    f.text((0.5, f.fy(1.5)), "stroke width: mapped contact area",
-           size=PT_SMALL, color=COLORS["mute"], va="bottom")
-    return ax
+    core = (0.0, 0.0, 1.0, 1.0)
+    foot_pt = _foot(f, core, [f"root {ROOT_B}"])
+    key_pt = 18.0
+    draw = (core[0], core[1] + f.fy(foot_pt + key_pt), core[2],
+            core[3] - f.fy(foot_pt + key_pt))
+    place, xy, soma, scale, span_um, n_below = _arbor(f, draw, arb,
+                                                      mode="plain")
+    cell = arb["cell"]
+    i_bearing = [int(r.segment_id) for r in cell.itertuples(index=False)
+                 if float(r.I_size) > 0]
+    for seg in i_bearing:
+        f.contact(xy[seg], kind="inh", dia_pt=2.4, zorder=4.4)
+    # route 3: its inhibitory origin, its five input-bearing descendants and
+    # a 16 % shunting tint capsule over the support they form
+    idx = arb["origins"].index(ROUTE_SITE)
+    support = [site for site, on in zip(arb["e_sites"], arb["supports"][idx])
+               if on]
+    chain, parent = [], arb["parent"]
+    for site in support:
+        cursor = int(site)
+        while cursor in xy:
+            chain.append(cursor)
+            if cursor == ROUTE_SITE:
+                break
+            cursor = parent.get(cursor, -1)
+    tint_patch(f.ax, ("ribbon", [[xy[s] for s in sorted(set(chain))]], 7.0),
+               color="shunting", pct=16, radius_pt=2.0, zorder=1.0,
+               clip_on=False)
+    f.contact(xy[ROUTE_SITE], kind="inh", dia_pt=3.6, zorder=5)
+    for site in support:
+        f.contact(xy[site], kind="exc", dia_pt=3.0, zorder=5)
+    f.soma(soma, zorder=6)
+    # pia arrow: the projected cortical axis, which this projection puts on +y
+    px = draw[0] + f.fx(3.0)
+    py = draw[1] + draw[3]
+    f.arrow((px, py - f.fy(12.0)), (px, py - f.fy(1.0)), color=COLORS["mute"],
+            lw=LW_EDGE, head=4.0, zorder=5)
+    f.text((px + f.fx(2.0), py - f.fy(6.0)), "pia", size=PT_BASE,
+           color=COLORS["mute"], ha="left")
+    tag = (xy[ROUTE_SITE][0] + f.fx(9.0), xy[ROUTE_SITE][1] + f.fy(10.0))
+    f.leader(xy[ROUTE_SITE], tag)
+    f.text((tag[0] + f.fx(1.0), tag[1]), "route 3", size=PT_BASE,
+           color=COLORS["shunting"], ha="left")
+    _scale_bar(f, draw, scale, span_um,
+               x0=draw[0] + draw[2] - f.fx(50.0 / span_um * scale + 1.0),
+               y0=draw[1] + f.fy(3.0))
+    for row, (kind, text) in enumerate((
+            ("inh", f"inhibitory-bearing ({len(i_bearing)})"),
+            ("exc", f"route-3 sites ({len(support)} of "
+                    f"{len(arb['e_sites'])})"))):
+        y = core[1] + f.fy(foot_pt + key_pt - 5.0 - row * 8.6)
+        f.contact((core[0] + f.fx(2.0), y), kind=kind, dia_pt=3.0, zorder=5)
+        f.text((core[0] + f.fx(6.0), y), text, size=PT_BASE,
+               color=COLORS["ink"], ha="left")
+    f.note("soma-below", panel="A", below=n_below, segments=len(xy),
+           reason=("a measured pyramidal arbor has a basal skirt: no rotation "
+                   "of the principal plane makes the soma the lowest node, so "
+                   "CF-4's soma-lowest rule is declared, not asserted"))
+    f.require_soma_lowest()
+    f.require_delta0(allow_no_delta0=True, reason=(
+        "panel A/B are the anatomical construction; the somatic error enters "
+        "in panel C of the same row"))
+    return dict(inhibitory=len(i_bearing), route3=len(support),
+                below_soma=n_below)
 
 
-def panel_routes(ax, routes):
-    """B: the same arbor in ghost with seven ancestry routes and A_8."""
+def _route_hues():
+    """Builder-local three-hue address cycle for B's seven routes.
+
+    ``journal_style.K_CYCLE`` is (shunting, additive, local, oracle) and B14
+    bans ``additive`` from this figure; SPEC_ERRATA #7 forbids editing the
+    library.  Three admissible hues at two tint levels, WHITE tints (an ink
+    mix is neither a role colour nor a recognised tint of one and fails the
+    strict audit's role-colour check).
+    """
+    base = ["shunting", BROADCAST, "oracle"]
+    hues = [COLORS[base[k]] for k in range(3)]
+    hues += [mix(base[k], 72, "white") for k in range(3)]
+    hues += [mix(base[0], 48, "white")]
+    return hues
+
+
+def panel_b(ax, arb):
+    """B: the same arbor's seven routes and the collapsed dictionary A8."""
     f = Frame(ax)
-    cell, parent = routes["cell"], routes["parent"]
-    e_sites, supports = routes["e_sites"], routes["supports"]
-    origins, rank = routes["origins"], routes["rank"]
-    n_routes = len(origins)
-    ids = set(cell.segment_id.to_numpy(int))
-    # routes are numbered 1..7 in tree order, so the arbor dots, the matrix
-    # columns and the caption all name a route by the same digit
-    order = sorted(range(n_routes), key=lambda k: rank[origins[k]])
-    slot = {k: i for i, k in enumerate(order)}
-
-    def chain(origin):
-        out, cursor = [], int(origin)
-        while cursor in parent and parent[cursor] in ids:
-            out.append(cursor)
-            cursor = parent[cursor]
-        out.append(cursor)
-        return out
-
-    def support_block(k):
-        """Every segment the route's support spans: its sites and the
-        ancestors joining them, up to the route origin."""
-        origin = int(origins[k])
-        block = {origin}
-        for site, on in zip(e_sites, supports[k]):
-            if not on:
-                continue
-            cursor = int(site)
-            while cursor in ids:
-                block.add(cursor)
-                if cursor == origin:
-                    break
-                cursor = parent.get(cursor, -1)
-        return sorted(block)
-
-    route_segments = [chain(o) for o in origins]
-    big = sorted(range(n_routes), key=lambda k: -int(supports[k].sum()))[:2]
-    matrix_w = 6.0 * (n_routes + 1)
-    matrix_h = 6.0 * (n_routes + 1)
-    arbor_rect = (0.0, f.fy(71.0), 1.0, 1.0 - f.fy(73.0))
-    xy, soma = _draw_arbor(f, arbor_rect, cell, mode="ghost",
-                           routes=route_segments,
-                           capsules=[(support_block(k),
-                                      mix(k_hue(slot[k]), 16, "white"), 6.0)
-                                     for k in big],
-                           hues={k: k_hue(slot[k]) for k in range(n_routes)},
-                           scale_bar_um=None)
-    # the broadcast column is the soma's own scalar: amber tag at the soma
-    tag = (soma[0] + f.fx(4.5), soma[1] - f.fy(2.0))
-    f.text(tag, "s", size=PT_SMALL, color=mix("local", 60, "ink"), ha="left")
-    # the digits keep clear of the panel title and of the amber soma tag
-    ceiling_pt = f.h_pt - 1.0
-    floor_pt = 74.0
-    taken = [(tag[0] * f.w_pt, tag[1] * f.h_pt)]
-    # every route is numbered: the digit takes the freest of four diagonal
-    # slots around its origin dot rather than being dropped
-    for index, origin in enumerate(origins):
+    core = (0.0, 0.0, 1.0, 1.0)
+    foot_pt = _foot(f, core, [
+        "rows: eight tree-ordered site blocks",
+        f"{arb['coverage']} of {len(arb['e_sites'])} sites lie on a route; "
+        "supports nest (4 ⊂ 3 ⊂ 6)"])
+    sub_pt = 10.0
+    f.text((core[0] + core[2] / 2.0, core[1] + core[3] - f.fy(sub_pt * 0.4)),
+           "A8 = [ s | r1 ... r7 ]", size=PT_BASE, color=COLORS["ink"])
+    body = (core[0], core[1] + f.fy(foot_pt + 4.0), core[2],
+            core[3] - f.fy(foot_pt + 4.0 + sub_pt))
+    cell_pt = 6.4
+    matrix_w = f.fx(8 * cell_pt)
+    counts_w = f.fx(11.0)
+    arbor_rect = (body[0], body[1], body[2] - matrix_w - counts_w - f.fx(4.0),
+                  body[3])
+    place, xy, soma, scale, span_um, n_below = _arbor(f, arbor_rect, arb,
+                                                      mode="ghost")
+    parent, origins = arb["parent"], arb["origins"]
+    hues = _route_hues()
+    for k, origin in enumerate(origins):
+        cursor = int(origin)
+        while cursor in xy:
+            par = parent.get(cursor, -1)
+            if par not in xy:
+                break
+            f.ax.plot([xy[cursor][0], xy[par][0]], [xy[cursor][1], xy[par][1]],
+                      color=hues[k], lw=LW_EDGE, solid_capstyle="round",
+                      zorder=3.0 + 0.01 * k)
+            cursor = par
+    f.soma(soma, zorder=6)
+    f.text((soma[0] + f.fx(4.0), soma[1] - f.fy(3.4)), "s", size=PT_BASE,
+           color=COLORS[BROADCAST], ha="left")
+    taken = [(soma[0] * f.w_pt + 4.0, soma[1] * f.h_pt - 3.4)]
+    floor_pt = arbor_rect[1] * f.h_pt
+    ceiling_pt = (arbor_rect[1] + arbor_rect[3]) * f.h_pt - 3.0
+    right_pt = (arbor_rect[0] + arbor_rect[2]) * f.w_pt - 1.0
+    left_pt = arbor_rect[0] * f.w_pt + 1.0
+    for k, origin in enumerate(origins):
         point = xy[int(origin)]
-        f.contact(point, kind="inh", dia_pt=2.9)
+        f.contact(point, kind="inh", dia_pt=2.9, zorder=5)
         best = fallback = None
-        for dx, dy, ha, va in ((3.0, 2.4, "left", "bottom"),
-                               (3.0, -2.4, "left", "top"),
-                               (-3.0, 2.4, "right", "bottom"),
-                               (-3.0, -2.4, "right", "top")):
+        for dx, dy, ha, va in ((3.4, 2.8, "left", "bottom"),
+                               (3.4, -2.8, "left", "top"),
+                               (-3.4, 2.8, "right", "bottom"),
+                               (-3.4, -2.8, "right", "top"),
+                               (6.6, 0.0, "left", "center"),
+                               (-6.6, 0.0, "right", "center")):
             px = point[0] * f.w_pt + dx
             py = point[1] * f.h_pt + dy
             room = min(((px - qx) ** 2 + (py - qy) ** 2
@@ -493,114 +689,151 @@ def panel_routes(ax, routes):
             item = (room, px, py, ha, va)
             if fallback is None or room > fallback[0]:
                 fallback = item
-            # the digit must stay inside the arbor band: its own box clear
-            # of the title above and of the matrix column labels below
-            top = py + (9.0 if va == "bottom" else 0.0)
-            bottom = py - (9.0 if va == "top" else 0.0)
+            top = py + (8.0 if va == "bottom" else 4.0)
+            bottom = py - (8.0 if va == "top" else 4.0)
+            edge = px + (4.5 if ha == "left" else -4.5)
             if top > ceiling_pt or bottom < floor_pt:
+                continue
+            if edge > right_pt or edge < left_pt:
                 continue
             if best is None or room > best[0]:
                 best = item
-        room, px, py, ha, va = best or fallback
+        _, px, py, ha, va = best or fallback
         taken.append((px, py))
-        f.text((px / f.w_pt, py / f.h_pt), str(slot[index] + 1),
-               size=PT_SMALL, color=k_hue(slot[index]), ha=ha, va=va)
-    # collapsed dictionary: one row per route support plus the off-route row
-    union = np.zeros(len(e_sites), bool)
-    for support in supports:
-        union |= support
-    A = np.zeros((n_routes + 1, n_routes + 1))
-    A[:, 0] = 1.0
-    counts = []
-    for row, k in enumerate(order):
-        for j, other in enumerate(order):
-            if supports[other][supports[k]].all():
-                A[row, j + 1] = 1.0
-        counts.append(int(supports[k].sum()))
-    counts.append(int((~union).sum()))
-    _block_matrix(f, (f.fx(2.0), f.fy(21.0), f.fx(matrix_w), f.fy(matrix_h)),
-                  A, counts=counts,
-                  col_colors=[mix("local", 55)]
-                  + [k_hue(slot[k]) for k in order],
-                  col_labels=["s"] + [str(slot[k] + 1) for k in order],
-                  row_groups=[1] * n_routes,
-                  label=None)
-    f.text((1.0, f.fy(21.0 + matrix_h)),
-           f"{int(union.sum())} of {len(e_sites)}\nsites lie\non a route",
-           size=PT_SMALL, color=COLORS["mute"], ha="right", va="top")
-    # the spec footer does not fit a 4-module line at PT_SMALL (146 pt), so
-    # it is set left in two lines with the matrix caption on its right
-    f.text((0.0, f.fy(2.0)), "rows: tree-ordered site\nblocks, not to scale",
-           size=PT_SMALL, color=COLORS["mute"], ha="left", va="bottom",
-           linespacing=1.15)
-    f.text((1.0, f.fy(2.0)),
-           f"A  ({len(e_sites)} \u00d7 {n_routes + 1})", size=PT_ANNOT,
-           color=COLORS["ink"], ha="right", va="bottom")
-    return ax
+        f.text((px / f.w_pt, py / f.h_pt), str(k + 1), size=PT_BASE,
+               color=label_color(hues[k]), ha=ha, va=va)
+    # the collapsed dictionary, drawn as vector cells (CF-11)
+    keys, sizes = arb["block_keys"], arb["block_sizes"]
+    colors = [[COLORS[BROADCAST]]
+              + [COLORS["shunting"] if k in key else COLORS["panel_bg"]
+                 for k in range(7)] for key in keys]
+    m_h = f.fy(8 * cell_pt)
+    m_rect = (body[0] + body[2] - matrix_w - counts_w,
+              body[1] + body[3] - m_h - f.fy(9.5), matrix_w, m_h)
+    headers = ["s"] + [str(k + 1) for k in range(7)]
+    _matrix_cells(f, m_rect, None, colors, n=8, k=8,
+                  where="figure 7B dictionary", headers=headers)
+    cw, ch = m_rect[2] / 8.0, m_rect[3] / 8.0
+    for j, head in enumerate(headers):
+        f.text((m_rect[0] + (j + 0.5) * cw,
+                m_rect[1] + m_rect[3] + f.fy(1.5)), head, size=PT_BASE,
+               color=COLORS["ink"] if j else COLORS[BROADCAST], va="bottom")
+    for i, size in enumerate(sizes):
+        f.text((m_rect[0] + m_rect[2] + f.fx(1.5),
+                m_rect[1] + m_rect[3] - (i + 0.5) * ch), str(size),
+               size=PT_BASE, color=COLORS["mute"], ha="left")
+    f.note("address-cycle", panel="B",
+           cycle="shunting / local / oracle at two white-tint levels",
+           reason="K_CYCLE's second entry is `additive`, which AMENDMENTS B14 "
+                  "bans from Figure 7")
+    f.note("soma-below", panel="B", below=n_below, segments=len(xy),
+           reason="see panel A")
+    f.require_soma_lowest()
+    f.require_delta0(allow_no_delta0=True, reason=(
+        "panel A/B are the anatomical construction; the somatic error enters "
+        "in panel C of the same row"))
+    return dict(block_sizes=sizes, coverage=arb["coverage"])
 
 
-def panel_field(ax, field):
-    """C: a focal shunt makes a field; capture is its energy in span(A)."""
+def panel_c(ax, arb, field, scale):
+    """C: a focal shunt on route 3 makes the field t; capture is its energy."""
     f = Frame(ax)
-    t, A, coefficients, capture = (field["t"], field["A"], field["c"],
-                                   field["capture"])
-    tree_rect = (0.0, f.fy(74.0), f.fx(56.0), f.fy(46.0))
-    nodes = f.balanced_tree(tree_rect, depth=3, mode="forward", output="z")
-    # the focal shunt sits on the trunk of the left subtree; its descendants
-    # are the sites the field lives on, so they are the faded partition
-    site = ((nodes["J1"][0] + nodes["JL"][0]) / 2.0,
-            (nodes["J1"][1] + nodes["JL"][1]) / 2.0)
-    f.fade(["JL"], nodes=nodes)
-    f.dendrite(nodes["J1"], nodes["JL"], level=nodes.level["JL"], faded=True)
-    f.shunt(site)
-    f.error_in(nodes.soma, side="right")
-    # the three ancestry addresses of A, as nested K-cycle capsules on the
-    # same tree, so the reader can read r1, r2, r3 off the drawing
-    f.partition(nodes, [nodes.subtree("JL"), nodes.subtree("JLL"),
-                        nodes.subtree("JRL")],
-                colors=[K_CYCLE_D7[0], K_CYCLE_D7[1], K_CYCLE_D7[2]],
-                labels=None)
-    for name in nodes.terminals:
-        f.contact(nodes[name], kind="exc", dia_pt=2.6)
-    # the real field, one DIV_CMAP square per site, above its own terminal
-    top = max(nodes[n][1] for n in nodes.terminals)
-    scale = mpl.cm.ScalarMappable(mpl.colors.Normalize(-1.0, 1.0), DIV_CMAP)
-    for index, name in enumerate(sorted(nodes.terminals,
-                                        key=lambda n: nodes[n][0])):
-        x = nodes[name][0]
-        f.ax.add_patch(Rectangle((x - f.fx(2.2), top + f.fy(3.0)),
-                                 f.fx(4.4), f.fy(4.4), lw=LW_HAIR,
-                                 facecolor=scale.to_rgba(t[index]),
-                                 edgecolor=COLORS["edge"], zorder=5))
-    f.text((nodes[min(nodes.terminals, key=lambda n: nodes[n][0])][0]
-            - f.fx(4.0), top + f.fy(5.2)), "t", size=PT_ANNOT,
+    core = (0.0, 0.0, 1.0, 1.0)
+    foot_pt = _foot(f, core, [
+        "W = excitatory contact area",
+        f"measured field column for route 3, scaled by max |t| = {scale:.3f}"])
+    strip_pt, form_pt = 22.0, 12.0
+    top = (core[0], core[1] + f.fy(foot_pt + strip_pt + form_pt), core[2],
+           core[3] - f.fy(foot_pt + strip_pt + form_pt))
+    place, xy, soma, iso, span_um, n_below = _arbor(f, top, arb, mode="ghost")
+    parent = arb["parent"]
+    idx = arb["origins"].index(ROUTE_SITE)
+    support = [site for site, flag in zip(arb["e_sites"], arb["supports"][idx])
+               if flag]
+    faded = set()
+    for site in support:
+        cursor = int(site)
+        while cursor in xy:
+            par = parent.get(cursor, -1)
+            if par in xy:
+                faded.add((xy[cursor], xy[par]))
+            if cursor == ROUTE_SITE or par not in xy:
+                break
+            cursor = par
+    f.fade(list(faded))
+    shunt_xy = xy[ROUTE_SITE]
+    f.shunt(shunt_xy, label=None)
+    badge_xy = (shunt_xy[0] - f.fx(26.0), shunt_xy[1] + f.fy(9.0))
+    f.leader(shunt_xy, (badge_xy[0] + f.fx(12.0), badge_xy[1]))
+    f.subscript((badge_xy[0], badge_xy[1]), "g", "shunt", size=PT_BASE,
+                color=COLORS["inh"], ha="left")
+    f.soma(soma, output=8.0, label="z", zorder=6)
+    f.error_in(soma, label="δ0", side="left")
+    # the measured field, one signed cell per site block, aligned with B
+    cell_pt = 8.0
+    strip_w = f.fx(8 * cell_pt)
+    strip_h = f.fy(cell_pt)
+    sx = core[0] + f.fx(10.0)
+    sy = core[1] + f.fy(foot_pt + 9.0)
+    norm = mpl.colors.Normalize(-1.0, 1.0)
+    _matrix_cells(f, (sx, sy, strip_w, strip_h), None,
+                  [[DIV_CMAP(norm(v)) for v in field]], n=1, k=8,
+                  where="figure 7C field strip")
+    f.text((sx - f.fx(2.5), sy + strip_h / 2.0), "t", size=PT_EMPH,
            color=COLORS["ink"], ha="right")
-    product = (f.fx(59.0), f.fy(49.0), f.fx(65.0), f.fy(71.0))
-    f.dictionary_product(product, A, coefficients, cell_pt=7.5, numbers=False,
-                         captions=("A", "c", "A c"),
-                         col_colors=["local"] + K_CYCLE_D7[:3])
-    f.text((0.0, f.fy(12.5)),
-           f"capture = ||A c||² / ||t||² = {capture:.2f}", size=PT_ANNOT,
-           color=COLORS["ink"], ha="left", va="bottom")
-    f.text((0.0, f.fy(23.0)), "A = [1 | r1 r2 r3]", size=PT_SMALL,
-           color=COLORS["ink"], ha="left", va="bottom")
-    f.text((0.0, f.fy(2.0)), "W = excitatory contact area", size=PT_SMALL,
-           color=COLORS["mute"], ha="left", va="bottom")
-    return ax
+    f.text((sx + strip_w + f.fx(3.0), sy + strip_h / 2.0), "→ A c",
+           size=PT_EMPH, color=COLORS["ink"], ha="left")
+    sister = 6                       # row 7: the sister block on the path
+    f.leader((sx + (sister + 0.5) * strip_w / 8.0, sy),
+             (sx + (sister + 0.5) * strip_w / 8.0, sy - f.fy(3.5)))
+    f.text((sx + strip_w, sy - f.fy(4.5)), "sister block", size=PT_BASE,
+           color=COLORS["mute"], ha="right", va="top")
+    f.subscript((core[0] + core[2] / 2.0,
+                 core[1] + f.fy(foot_pt + strip_pt + form_pt * 0.45)),
+                "C = |P t|²", "W", " ÷ |t|²", size=PT_EMPH, ha="center")
+    f.note("soma-below", panel="C", below=n_below, segments=len(xy),
+           reason="see panel A")
+    f.require_soma_lowest()
+    f.require_delta0()
+    return dict(field=list(map(float, field)), scale=float(scale))
 
 
-# ── row 1: the budget, the partition and the per-cell test ───────────────
-def panel_budget(ax, summaries, tables):
+# ── row 1 ────────────────────────────────────────────────────────────────
+#: D and E share one fraction axis: identical points-per-unit (plan check 8).
+Y_TOP = 1.34
+Y_TICKS = [0.0, 0.25, 0.5, 0.75, 1.0]
+D_XMAX = 108.0             # 16 -> 87 reserves the direct-label band at the right
+
+
+def _badge(ax, x, y, kind, *, ha="left", va="bottom"):
+    """``Frame.badge`` for a DATA axes (constructing a Frame resets limits)."""
+    key, face, edge = BADGE_STYLE[kind]
+    return ax.text(x, y, kind, fontsize=PT_BASE, color=COLORS[key], ha=ha,
+                   va=va, zorder=7,
+                   bbox=dict(boxstyle="round,pad=0.28,rounding_size=0.28",
+                             facecolor=face, edgecolor=edge, linewidth=LW_HAIR))
+
+
+def _leader(ax, p0, p1, color=None):
+    """A hairline leader drawn as data, so no text sits on its own arrow."""
+    ax.plot([p0[0], p1[0]], [p0[1], p1[1]],
+            color=COLORS["mute"] if color is None else color, lw=LW_HAIR,
+            solid_capstyle="butt", zorder=1.6, clip_on=False)
+
+
+def panel_d(ax, summaries, tables, floor):
     """D: total capture against the column budget K, six families."""
     table = summaries["v661"]
     cells = tables["v661"]
     rows = []
-    for index, method in enumerate(METHODS):
-        colour, marker, filled, dashes = FAMILY[method]
+    for index, method in enumerate(ORDER):
+        spec = FAMILIES[method]
+        colour = COLORS[spec["color"]]
         part = table[table.method.eq(method)].sort_values("channels")
         x = part.channels.to_numpy(float)
         mean = part.total_capture_mean.to_numpy(float)
-        if method in (METHODS[0], METHODS[2]):
+        lo = hi = [np.nan] * len(x)
+        if method in (ANCESTRY, SURROGATE):
             lo, hi = [], []
             for k in x:
                 subset = cells[cells.channels.eq(int(k))
@@ -609,428 +842,595 @@ def panel_budget(ax, summaries, tables):
                                   BOOT_SEED + 10 * index + int(k))
                 lo.append(a)
                 hi.append(b)
-            ax.fill_between(x, lo, hi, color=COLORS[colour], alpha=0.12,
-                            linewidth=0, zorder=1.2)
-        else:
-            lo = hi = [np.nan] * len(x)
-        line, = ax.plot(x, mean, color=COLORS[colour], lw=LW_DATA,
-                        marker=marker, ms=MARKER_MS,
-                        mfc=COLORS[colour] if filled else "white",
-                        mec=COLORS[colour], mew=LW_EDGE, zorder=2 + index * .01,
-                        label=LABELS[index], solid_capstyle="round")
-        if dashes != "-":
-            line.set_dashes(dashes[1])
+            ax.fill_between(x, lo, hi, color=colour, alpha=0.11, linewidth=0,
+                            zorder=1.2)
+        ax.plot(x, mean, color=colour, lw=LW_DATA, marker=spec["marker"],
+                ms=MARKER_MS - 0.8, mfc=colour, mec="white", mew=LW_HAIR,
+                zorder=2 + 0.01 * index, solid_capstyle="round")
         for k, m, a, b in zip(x, mean, lo, hi):
-            rows.append(dict(panel="D", method=method, channels=int(k),
-                             total_capture=m, low=a, high=b))
+            rows.append(dict(panel="D", method=method, series=spec["label"],
+                             channels=int(k), total_capture_mean=float(m),
+                             ci95_low=float(a), ci95_high=float(b),
+                             n_cells=int(part[part.channels.eq(k)]
+                                         .total_capture_count.iloc[0])))
     ax.set_xscale("log", base=2)
-    ax.set_xlim(0.86, 18.6)
+    ax.set_xlim(0.85, D_XMAX)
     ax.set_xticks([1, 2, 4, 8, 16])
     ax.xaxis.set_major_formatter(mpl.ticker.ScalarFormatter())
     ax.xaxis.set_minor_locator(mpl.ticker.NullLocator())
-    ax.set_ylim(0.0, 1.38)
-    ax.set_yticks([0, 0.2, 0.4, 0.6, 0.8, 1.0])
-    ax.set_xlabel("dictionary columns K")
-    ax.set_ylabel(CAPTURE_LABEL)
-    ax.plot([8, 8], [0.0, 1.0], color=COLORS["mute"], lw=LW_REF, zorder=0.5,
-            dashes=(2.2, 1.8), solid_capstyle="butt")
-    ax.text(8.35, 0.035, "K = 8", fontsize=PT_SMALL, color=COLORS["mute"],
+    ax.set_ylim(0.0, Y_TOP)
+    ax.set_yticks(Y_TICKS)
+    ax.set_xlabel("Profiles K (log 2)")
+    ax.set_ylabel("Total field energy\ncaptured")
+    style_panel(ax, grid="y")
+    # direct labels, de-collided, in the reserved band at the right (CF-5)
+    ends = sorted(((float(table[table.method.eq(m)
+                                & table.channels.eq(16)]
+                          .total_capture_mean.iloc[0]), m) for m in ORDER),
+                  reverse=True)
+    step = 0.098
+    placed, last = [], None
+    for value, method in ends:
+        y = value if last is None else min(value, last - step)
+        placed.append((y, value, method))
+        last = y
+    for y, value, method in placed:
+        spec = FAMILIES[method]
+        _leader(ax, (16.6, value), (19.8, y), COLORS["mute"])
+        ax.text(21.0, y, spec["short"], fontsize=PT_BASE,
+                color=COLORS[spec["color"]], ha="left", va="center",
+                zorder=5)
+    reference_line(ax, floor, axis="y", label="broadcast",
+                   span=(0.85, D_XMAX))
+    ax.annotate(f"{floor:.3f}", xy=(D_XMAX, floor), xytext=(0.0, -1.6),
+                textcoords="offset points", fontsize=PT_BASE,
+                color=COLORS["mute"], ha="right", va="top")
+    ax.plot([8, 8], [0.0, 1.0], color=COLORS["edge"], lw=LW_REF,
+            dashes=(2.2, 1.8), zorder=0.6, solid_capstyle="butt")
+    ax.text(8.0, 1.010, "analysed budget", fontsize=PT_BASE,
+            color=COLORS["mute"], ha="center", va="bottom")
+    ax.text(0.02, 0.995, "bands: unpaired 95 % cell\nbootstrap; paired test in G",
+            transform=ax.transAxes, fontsize=PT_BASE, color=COLORS["mute"],
+            ha="left", va="top", linespacing=1.2)
+    ax.text(0.02, 0.012, "47 disjoint cells (46 at K = 16)",
+            transform=ax.transAxes, fontsize=PT_BASE, color=COLORS["mute"],
             ha="left", va="bottom")
-    ax.text(0.015, 0.020, "47 cells; 46 at K = 16", fontsize=PT_SMALL,
-            color=COLORS["mute"], ha="left", va="bottom",
-            transform=ax.transAxes)
-    ax.legend(loc="upper left", bbox_to_anchor=(-0.02, 1.002), ncol=2,
-              frameon=False, fontsize=PT_LEGEND, handlelength=1.5,
-              handletextpad=0.4, columnspacing=0.8, labelspacing=0.28,
-              borderaxespad=0.0)
-    style_panel(ax)
     return pd.DataFrame(rows)
 
 
-def panel_partition(ax, summaries):
-    """E: at K = 8 the broadcast is shared; the routes add the rest."""
-    table = summaries["v661"]
-    eight = table[table.channels.eq(8)].set_index("method")
+def panel_e(ax, summaries, initial, floor):
+    """E: where the energy goes at K = 8 -- broadcast, spatial, unexplained."""
+    eight = summaries["v661"][summaries["v661"].channels.eq(8)] \
+        .set_index("method")
     rows = []
-    for index, method in enumerate(METHODS):
-        colour, marker, filled, _ = FAMILY[method]
+    for index, method in enumerate(ORDER):
+        spec = FAMILIES[method]
         spatial = float(eight.loc[method, "incremental_total_capture_mean"])
         total = float(eight.loc[method, "total_capture_mean"])
         common = total - spatial
-        ax.bar(index, common, width=0.62, color=COLORS["scalar"],
+        ax.bar(index, common, width=0.62, color=COLORS[BROADCAST],
                edgecolor="white", lw=LW_HAIR, zorder=2)
         ax.bar(index, spatial, bottom=common, width=0.62,
-               color=COLORS[colour], edgecolor="white", lw=LW_HAIR, zorder=2)
+               color=COLORS[spec["color"]], edgecolor="white", lw=LW_HAIR,
+               zorder=2)
         ax.bar(index, 1.0 - total, bottom=total, width=0.62,
                color=COLORS["grid"], edgecolor="white", lw=LW_HAIR, zorder=2)
-        ax.plot([index], [-0.055], marker=marker, ms=MARKER_MS,
-                mfc=COLORS[colour] if filled else "white",
-                mec=COLORS[colour], mew=LW_EDGE, ls="none", clip_on=False,
-                zorder=3)
-        rows.append(dict(panel="E", method=method, common=common,
-                         spatial=spatial, uncaptured=1.0 - total))
-    # three-swatch key in the band above the bars (no rotated type, no
-    # second hue: the family colour is the middle segment of its own bar)
-    keys = [(-0.34, "scalar", "common"), (1.62, "shunting", "spatial"),
-            (3.50, "grid", "rest")]
-    for x, key, name in keys:
-        ax.add_patch(Rectangle((x, 1.19), 0.30, 0.085,
-                               facecolor=COLORS[key], edgecolor="white",
-                               lw=LW_HAIR, clip_on=False, zorder=3))
-        ax.text(x + 0.40, 1.232, name, fontsize=PT_SMALL,
-                color=COLORS["ink"], ha="left", va="center", zorder=3)
-    ax.set_xlim(-0.62, 5.62)
-    ax.set_ylim(0.0, 1.38)
-    ax.set_yticks([0, 0.2, 0.4, 0.6, 0.8, 1.0])
-    ax.set_xticks([])
-    ax.tick_params(axis="y", labelleft=False)
-    ax.text(2.5, 1.055, "families as in D", fontsize=PT_SMALL,
-            color=COLORS["mute"], ha="center", va="bottom", zorder=3)
-    style_panel(ax, spines=("left", "bottom"))
+        rows.append(dict(panel="E", method=method, series=spec["label"],
+                         broadcast=common, spatial=spatial,
+                         unexplained=1.0 - total, n_cells=47))
+    ax.set_xlim(-0.5, 5.5)
+    ax.set_ylim(0.0, Y_TOP)
+    ax.set_yticks(Y_TICKS)
+    style_panel(ax, grid="y")
+    # family names on two levels, each with its marker glyph (CF-5): six
+    # names cannot share one baseline in a 4-module panel at the 7 pt floor
+    evens = [i for i in range(6) if i % 2 == 0]
+    odds = [i for i in range(6) if i % 2 == 1]
+    ax.set_xticks(evens, [FAMILIES[ORDER[i]]["short"] for i in evens])
+    ax.set_xticks(odds, [FAMILIES[ORDER[i]]["short"] for i in odds],
+                  minor=True)
+    ax.tick_params(axis="x", which="major", length=0, pad=6.0,
+                   labelsize=PT_BASE)
+    ax.tick_params(axis="x", which="minor", length=0, pad=19.0,
+                   labelsize=PT_BASE)
+    for index, method in enumerate(ORDER):
+        spec = FAMILIES[method]
+        drop = -0.035 if index % 2 == 0 else -0.188
+        ax.plot([index], [drop], marker=spec["marker"], ms=MARKER_MS - 0.8,
+                mfc=COLORS[spec["color"]], mec="white", mew=LW_HAIR,
+                ls="none", clip_on=False, zorder=3)
+    # the three shares, named once, in the reserved gutter at the band heights
+    # of the ancestry bar; these names carry the axis meaning, so E has no
+    # separate y label (CF-5: a name, not a key).
+    total_a = float(eight.loc[ANCESTRY, "total_capture_mean"])
+    spatial_a = float(eight.loc[ANCESTRY, "incremental_total_capture_mean"])
+    marks = [(f"broadcast\n{floor:.3f}", (total_a - spatial_a) / 2.0),
+             ("spatial", total_a - spatial_a / 2.0),
+             ("unexplained", (1.0 + total_a) / 2.0)]
+    for name, y in marks:
+        ax.annotate(name, xy=(0.0, y), xycoords=("axes fraction", "data"),
+                    xytext=(-22.0, 0.0), textcoords="offset points",
+                    fontsize=PT_BASE, color=COLORS["mute"], ha="right",
+                    va="center", annotation_clip=False, linespacing=1.2)
+    width = ax.get_position().width * 518.4 - 2.0
+    ax.text(0.02, 0.995, wrap_pt(
+        ax, "initial eight-cell cohort: broadcast "
+            f"{initial['common']:.3f}, ceiling {initial['rank_one']:.3f}",
+        PT_BASE, width),
+        transform=ax.transAxes, fontsize=PT_BASE, color=COLORS["mute"],
+        ha="left", va="top", linespacing=1.2)
     return pd.DataFrame(rows)
 
 
-def panel_cells(ax, pairs):
-    """F: per-cell ancestry capture against its own surrogate trees."""
-    hard = pairs.fraction_ge >= 0.5
-    ax.plot([0.25, 1.02], [0.25, 1.02], color=COLORS["mute"], lw=LW_REF,
+def panel_f(ax, pairs):
+    """F: each cell's ancestry capture against its own 200 surrogate trees."""
+    tie = pairs.fraction_ge >= 0.5
+    above = int((pairs.tree > pairs.surrogate_mean).sum())
+    width = ax.get_position().width * 518.4 - 4.0
+    block = wrap_pt(ax, f"{above} of {len(pairs)} cells above equality; open, "
+                    f"the {int(tie.sum())} cells where at least half of the "
+                    "200 surrogates reach the tree", PT_BASE, width)
+    lines = 1 + block.count("\n") + 1          # + the 'equal' line
+    h_pt = ax.get_position().height * 490.0
+    head_pt = 8.8 * lines
+    ymax = 1.0 + 0.75 * head_pt / max(h_pt - head_pt, 1.0)
+    ax.plot([0.25, 1.0], [0.25, 1.0], color=COLORS["mute"], lw=LW_REF,
             dashes=(2.2, 1.8), zorder=1, solid_capstyle="butt")
-    ax.plot(pairs.surrogate_mean[~hard], pairs.tree[~hard], marker="o",
-            ls="none", ms=MARKER_MS - 1.0, mfc=COLORS["shunting"],
-            mec="white", mew=LW_HAIR, alpha=0.85, zorder=2)
-    ax.plot(pairs.surrogate_mean[hard], pairs.tree[hard], marker="o",
-            ls="none", ms=MARKER_MS, mfc="white", mec=COLORS["highlight"],
-            mew=LW_ERR, zorder=3)
+    ax.text(1.0, 1.008, "equal", fontsize=PT_BASE, color=COLORS["mute"],
+            ha="right", va="bottom")
+    ax.plot(pairs.surrogate_mean[~tie], pairs.tree[~tie], marker="o",
+            ls="none", ms=4.2, mfc=COLORS["shunting"], mec="none",
+            alpha=0.75, zorder=2)
+    ax.plot(pairs.surrogate_mean[tie], pairs.tree[tie], marker="o", ls="none",
+            ms=4.2, mfc="white", mec=COLORS["shunting"], mew=LW_EDGE,
+            zorder=3)
     mx, mlo, mhi = mean_ci(pairs.surrogate_mean.to_numpy(float), BOOT_SEED + 1)
     my, ylo, yhi = mean_ci(pairs.tree.to_numpy(float), BOOT_SEED + 2)
     ax.errorbar([mx], [my], xerr=[[mx - mlo], [mhi - mx]],
                 yerr=[[my - ylo], [yhi - my]], fmt="D",
-                color=COLORS["shunting"], mfc="white", mec=COLORS["shunting"],
-                mew=LW_ERR, ms=MARKER_MS, elinewidth=LW_ERR, capsize=2,
-                zorder=4)
-    above = int((pairs.tree > pairs.surrogate_mean).sum())
-    ax.text(0.985, 0.030, f"{above} of {len(pairs)} above equality",
-            fontsize=PT_SMALL, color=COLORS["mute"], ha="right", va="bottom",
-            transform=ax.transAxes)
-    ax.text(0.985, 0.125,
-            f"{int(hard.sum())} open: \u2265 half of surrogates tie",
-            fontsize=PT_SMALL, color=COLORS["highlight"], ha="right",
-            va="bottom", transform=ax.transAxes)
-    ax.set_xlim(0.25, 1.02)
-    ax.set_ylim(0.25, 1.02)
-    ax.set_xticks([0.4, 0.6, 0.8, 1.0])
-    ax.set_yticks([0.4, 0.6, 0.8, 1.0])
-    ax.set_xlabel("surrogate-tree mean")
-    ax.set_ylabel("ancestry capture", labelpad=0.5)
+                color=COLORS["shunting"], mfc="white",
+                mec=COLORS["shunting"], mew=LW_ERR, ms=MARKER_MS,
+                elinewidth=LW_ERR, capsize=2.0, zorder=4)
+    _leader(ax, (mx + 0.020, my - 0.020), (0.735, 0.405))
+    ax.text(0.750, 0.405, "cohort mean", fontsize=PT_BASE, color=COLORS["ink"],
+            ha="left", va="center")
+    ax.text(0.25, ymax * 0.999, block, fontsize=PT_BASE, color=COLORS["mute"],
+            ha="left", va="top", linespacing=1.2)
+    ax.text(0.995, 0.262, "cell is the unit; n = 47",
+            fontsize=PT_BASE, color=COLORS["mute"], ha="right", va="bottom")
+    ax.set_xlim(0.25, 1.0)
+    ax.set_ylim(0.25, ymax)
+    ax.set_xticks([0.25, 0.5, 0.75, 1.0])
+    ax.set_yticks([0.25, 0.5, 0.75, 1.0])
+    ax.set_xlabel("200-surrogate mean")
+    ax.set_ylabel("Ancestry capture")
     style_panel(ax)
-    return pd.DataFrame(dict(root_id=pairs.root_id, tree=pairs.tree,
+    return pd.DataFrame(dict(panel="F", root_id=pairs.root_id,
+                             ancestry_total_capture=pairs.tree,
                              surrogate_mean=pairs.surrogate_mean,
                              fraction_surrogates_ge=pairs.fraction_ge,
                              n_replicates=pairs.n_replicates))
 
 
-# ── row 2: cohorts and the paired advantage ──────────────────────────────
-def panel_cohorts(ax, tables):
-    """G: residual capture at K = 8 in three cohorts, four families."""
-    shown = [METHODS[0], METHODS[2], METHODS[3], METHODS[1]]
-    offsets = [0.255, 0.085, -0.085, -0.255]
-    rows = []
-    for row, (cohort, _) in enumerate(COHORT_ROWS):
-        y = len(COHORT_ROWS) - 1 - row
-        table = tables[cohort]
-        eight = table[table.channels.eq(8)]
-        for index, method in enumerate(shown):
-            colour, marker, filled, _ = FAMILY[method]
+# ── row 2 ────────────────────────────────────────────────────────────────
+G_XLIM = (-25.0, 88.0)      # data to +55, then the three printed columns
+G_FAN_MAX = 55.0
+G_COLS = ((74.0, "wiring"), (87.0, "rank"))
+G_RIGHT = 20.0            # keeps the 7-module panel inside the aspect band
+
+
+def panel_g(canvas, ax, report, tables, summaries):
+    """G: the paired advantage on both scales, with its wiring cost."""
+    cells = tables["v661"][tables["v661"].channels.eq(8)]
+    eight = summaries["v661"][summaries["v661"].channels.eq(8)] \
+        .set_index("method")
+    pivot = cells.pivot_table(index="root_id", columns="method",
+                              values="residual_capture")
+    rows, second, extra = [], [], []
+    for method in CONTROLS:
+        spec = FAMILIES[method]
+        res = next(c for c in report["comparisons"]
+                   if c["metric"] == "residual_capture"
+                   and c["control"] == method)
+        tot = next(c for c in report["comparisons"]
+                   if c["metric"] == "total_capture"
+                   and c["control"] == method)
+        seeds = 100.0 * (pivot[ANCESTRY] - pivot[method]).to_numpy(float)
+        rows.append(dict(label=spec["label"].replace(" ", "\n"),
+                         mean=100.0 * res["mean_difference"],
+                         lo=100.0 * res["ci95"][0], hi=100.0 * res["ci95"][1],
+                         color="shunting", marker="o", n=int(res["n_cells"]),
+                         note=f"{int(res['cells_positive'])}/"
+                              f"{int(res['n_cells'])}"))
+        second.append((100.0 * tot["mean_difference"],
+                       100.0 * tot["ci95"][0], 100.0 * tot["ci95"][1]))
+        extra.append(dict(
+            seeds=seeds, positive=int(res["cells_positive"]),
+            n=int(res["n_cells"]),
+            wiring=100.0 * float(eight.loc[method, "wiring_density_mean"]),
+            rank=float(eight.loc[method, "dictionary_rank_mean"])))
+    out = canvas.forest(
+        ax, rows, value_label="Ancestry advantage (percentage points)",
+        reference=None, band=True, tick=True,
+        tag="", xlim=G_XLIM, color="shunting", marker_size=MARKER_MS,
+        gutter_pt=GUTTER_PT)
+    ypos = out["ypos"]
+    ax.set_ylim(3.62, -1.42)            # strips for the sub-title and headers
+    rng = np.random.default_rng(FAN_SEED)
+    beyond = 0
+    for i, item in enumerate(extra):
+        jitter = rng.uniform(-0.14, 0.14, size=item["seeds"].size)
+        inside = (item["seeds"] >= G_XLIM[0]) & (item["seeds"] <= G_FAN_MAX)
+        beyond += int((~inside).sum())
+        ax.plot(item["seeds"][inside], ypos[i] - 0.22 + jitter[inside],
+                ls="none", marker="o", ms=SEED_MS, mfc=COLORS["shunting"],
+                mec="none", alpha=0.30, zorder=2.0, clip_on=True)
+    for i, (mean, lo, hi) in enumerate(second):
+        y = ypos[i] + 0.22
+        ax.plot([lo, hi], [y, y], color=COLORS["shunting"], lw=LW_ERR,
+                zorder=3.0, solid_capstyle="butt")
+        for bound in (lo, hi):
+            ax.plot([bound, bound], [y - 0.09, y + 0.09],
+                    color=COLORS["shunting"], lw=LW_ERR, zorder=3.0,
+                    solid_capstyle="butt")
+        ax.plot([mean], [y], ls="none", marker="o", ms=MARKER_MS,
+                mfc="white", mec=COLORS["shunting"], mew=LW_ERR, zorder=4.0)
+    zero, = ax.plot([0.0, 0.0], [-0.46, 3.46], color=COLORS["mute"],
+                    lw=LW_REF, zorder=1.0, solid_capstyle="butt")
+    zero.set_dashes((2.6, 2.0))
+    ax.text(1.6, -0.70, "no advantage", fontsize=PT_BASE,
+            color=COLORS["mute"], ha="left", va="center", zorder=5)
+    # the three printed columns, inside the axes, clear of every interval
+    ax.plot([G_FAN_MAX + 1.5, G_FAN_MAX + 1.5], [-0.60, 3.45],
+            color=COLORS["grid"], lw=LW_HAIR, zorder=0.5)
+    for x, head in G_COLS:
+        ax.text(x, -0.70, head, fontsize=PT_BASE, color=COLORS["ink"],
+                ha="right", va="center", zorder=5)
+    for i, item in enumerate(extra):
+        dagger = "\u2020" if CONTROLS[i] == RANDOM else ""
+        for x, value in zip([c[0] for c in G_COLS],
+                            (f"{item['wiring']:.1f} %",
+                             f"{item['rank']:.2f}{dagger}")):
+            ax.text(x, ypos[i], value, fontsize=PT_BASE, color=COLORS["ink"],
+                    ha="right", va="center", zorder=5)
+    ax.set_xticks([-20, 0, 20, 40])
+    ancestry = eight.loc[ANCESTRY]
+    ax.text(G_XLIM[0] + 1.0, -1.20,
+            f"ancestry: {100 * float(ancestry['wiring_density_mean']):.1f} % "
+            f"of dense wiring, rank "
+            f"{float(ancestry['dictionary_rank_mean']):.2f}",
+            fontsize=PT_BASE, color=COLORS["mute"], ha="left", va="center",
+            zorder=5)
+    nonzero = float(eight.loc[ANCESTRY, "nonzero_coefficients_mean"])
+    assert abs(nonzero
+               - float(eight.loc[SHUFFLED, "nonzero_coefficients_mean"])) < 1e-6
+    below = [
+        "filled: post-broadcast scale; open: total-energy scale",
+        f"ancestry and shuffled routes: identical {nonzero:.1f} nonzero "
+        "entries",
+        f"† rank-limited (5.66 of 8); {beyond} of "
+        f"{sum(len(i['seeds']) for i in extra)} differences beyond the axis",
+    ]
+    for row, line in enumerate(below):
+        ax.annotate(line, xy=(0.0, 0.0), xycoords="axes fraction",
+                    xytext=(0.0, -21.0 - 8.6 * row), textcoords="offset points",
+                    fontsize=PT_BASE, color=COLORS["mute"], ha="left",
+                    va="top")
+    ax.annotate("n = 47 cells per row; mean [95 % cell bootstrap, "
+                "20,000 draws]; K = 8", xy=(1.0, 0.0),
+                xycoords="axes fraction", xytext=(0.0, -46.8),
+                textcoords="offset points", fontsize=PT_BASE,
+                color=COLORS["mute"], ha="right", va="top")
+    frame = []
+    for i, method in enumerate(CONTROLS):
+        frame.append(dict(panel="G", control=method,
+                          series=FAMILIES[method]["label"],
+                          residual_pp=rows[i]["mean"],
+                          residual_lo=rows[i]["lo"], residual_hi=rows[i]["hi"],
+                          total_pp=second[i][0], total_lo=second[i][1],
+                          total_hi=second[i][2],
+                          cells_positive=extra[i]["positive"],
+                          n_cells=extra[i]["n"], wiring_pct=extra[i]["wiring"],
+                          dictionary_rank=extra[i]["rank"]))
+    return pd.DataFrame(frame), out
+
+
+def panel_h(ax, tables, inclusion):
+    """H: residual capture at K = 8, four families in three cohorts."""
+    offsets = [-0.24, -0.08, 0.08, 0.24]
+    rows, pinky = [], {}
+    for group, cohort in enumerate(COHORTS):
+        eight = tables[cohort][tables[cohort].channels.eq(8)]
+        for index, method in enumerate(COHORT_FAMILIES):
+            spec = FAMILIES[method]
             values = eight.loc[eight.method.eq(method),
                                "residual_capture"].to_numpy(float)
-            mean, lo, hi = mean_ci(values, BOOT_SEED + 100 * row + index)
-            ax.errorbar([mean], [y + offsets[index]],
-                        xerr=[[mean - lo], [hi - mean]], fmt=marker,
-                        color=COLORS[colour],
-                        mfc=COLORS[colour] if filled else "white",
-                        mec=COLORS[colour], mew=LW_ERR, ms=MARKER_MS,
-                        elinewidth=LW_ERR, capsize=2, zorder=3)
-            rows.append(dict(panel="G", cohort=cohort, method=method,
-                             residual_capture=mean, low=lo, high=hi,
+            mean, lo, hi = mean_ci(values, BOOT_SEED + 100 * group + index)
+            x = group + offsets[index]
+            ax.errorbar([x], [mean], yerr=[[mean - lo], [hi - mean]],
+                        fmt=spec["marker"], color=COLORS[spec["color"]],
+                        mfc=COLORS[spec["color"]], mec="white", mew=LW_HAIR,
+                        ms=MARKER_MS - 0.8, elinewidth=LW_ERR, capsize=1.8,
+                        zorder=3)
+            rows.append(dict(panel="H", cohort=cohort, method=method,
+                             series=spec["label"], residual_capture=mean,
+                             ci95_low=lo, ci95_high=hi,
                              n_cells=int(values.size)))
-    ax.set_yticks(range(len(COHORT_ROWS)),
-                  [label for _, label in reversed(COHORT_ROWS)])
-    ax.set_ylim(-0.55, len(COHORT_ROWS) - 0.35)
-    ax.set_xlim(0.0, 1.10)
-    ax.set_xticks([0, 0.25, 0.5, 0.75, 1.0])
-    ax.set_xlabel("residual capture after the broadcast")
-    style_panel(ax, grid="x")
-    ax.tick_params(axis="y", length=0, labelsize=PT_SMALL)
-    ax.spines["left"].set_visible(False)
-    ax.text(0.700, 1.745, "oracle", fontsize=PT_SMALL,
-            color=COLORS["oracle"], ha="left", va="center",
-            bbox=dict(boxstyle="round,pad=0.28,rounding_size=0.294",
-                      facecolor=mix("oracle", 8), edgecolor=mix("oracle", 45),
-                      linewidth=LW_HAIR))
-    ax.text(0.02, 0.045, "Pinky: 9–13 excitatory sites per cell",
-            fontsize=PT_SMALL, color=COLORS["mute"], ha="left", va="bottom",
-            transform=ax.transAxes)
-    ax.text(0.0, -0.235, "families as in D; 20,000-draw cell bootstrap",
-            fontsize=PT_SMALL, color=COLORS["mute"], ha="left", va="top",
-            transform=ax.transAxes)
+            if cohort == "pinky":
+                pinky[method] = (x, mean)
+    ax.set_xlim(-0.55, 3.55)
+    ax.set_ylim(0.0, 1.16)
+    ax.set_yticks([0.0, 0.25, 0.5, 0.75, 1.0])
+    ax.set_xticks(range(len(COHORTS)), [COHORT_PANEL[c] for c in COHORTS])
+    ax.set_ylabel("Residual capture\nafter the broadcast")
+    style_panel(ax, grid="y")
+    ax.plot([-0.55, 3.55], [1.0, 1.0], color=COLORS["mute"], lw=LW_REF,
+            zorder=1.0, solid_capstyle="butt")
+    ax.text(3.53, 1.012, "ceiling", fontsize=PT_BASE, color=COLORS["mute"],
+            ha="right", va="bottom")
+    # the four family names, once, beside the Pinky group (CF-5)
+    order = sorted(pinky, key=lambda m: -pinky[m][1])
+    step, last = 0.125, 0.930
+    for method in order:
+        x, mean = pinky[method]
+        y = min(mean, last)
+        last = y - step
+        _leader(ax, (x + 0.06, mean), (2.62, y))
+        ax.annotate(FAMILIES[method]["short"], xy=(1.0, y),
+                    xycoords=("axes fraction", "data"), xytext=(8.4, 0.0),
+                    textcoords="offset points", fontsize=PT_BASE,
+                    color=COLORS[FAMILIES[method]["color"]], ha="right",
+                    va="center", annotation_clip=False)
+    eligible = inclusion[inclusion.focus_budget_eligible]
+    lines = [
+        f"Pinky: {int(eligible.n_e_sites.min())}–"
+        f"{int(eligible.n_e_sites.max())} sites per cell, "
+        f"{len(eligible)} of {int(inclusion.inherited_qc_included.sum())} "
+        "cells",
+        "one mouse per cohort; n = 8, 47, 8 cells",
+        "random routes outrank depth bins in D",
+    ]
+    width = ax.get_position().width * 518.4
+    block = "\n".join(wrap_pt(ax, line, PT_BASE, width) for line in lines)
+    ax.annotate(block, xy=(0.0, 0.0), xycoords="axes fraction",
+                xytext=(0.0, -21.0), textcoords="offset points",
+                fontsize=PT_BASE, color=COLORS["mute"], ha="left", va="top",
+                linespacing=1.2)
+    oracle_mean = float(np.mean(
+        tables["original8"].loc[tables["original8"].channels.eq(8)
+                                & tables["original8"].method.eq(ORACLE),
+                                "residual_capture"]))
+    _badge(ax, 0.24, oracle_mean + 0.13, "oracle", ha="center")
     return pd.DataFrame(rows)
-
-
-def panel_advantage(ax, report, tables):
-    """H: paired ancestry advantage, its wiring cost and the oracle gap."""
-    controls = [("common + surrogate ancestry", "Surrogate"),
-                ("common + depth bins", "Depth bins"),
-                ("common + shuffled routes", "Shuffled"),
-                ("common + random routes", "Random")]
-    eight = tables["v661"][tables["v661"].channels.eq(8)]
-    wiring = eight.groupby("method").wiring_density.mean()
-    rows, labels = [], []
-    for index, (method, label) in enumerate(controls):
-        y = len(controls) - index
-        item = next(v for v in report["comparisons"]
-                    if v["metric"] == "residual_capture"
-                    and v["control"] == method)
-        mean = 100.0 * item["mean_difference"]
-        lo, hi = 100.0 * np.asarray(item["ci95"], float)
-        ax.errorbar([mean], [y], xerr=[[mean - lo], [hi - mean]], fmt="D",
-                    color=COLORS["shunting"], mfc=COLORS["shunting"],
-                    mec=COLORS["shunting"], mew=LW_EDGE, ms=MARKER_MS,
-                    elinewidth=LW_ERR, capsize=2, zorder=3)
-        labels.append((y, label, COLORS["ink"]))
-        rows.append(dict(panel="H", control=method, mean_pp=mean, low_pp=lo,
-                         high_pp=hi, n_cells=item["n_cells"],
-                         positive_cells=item["cells_positive"],
-                         wiring_pct=100.0 * float(wiring.loc[method]),
-                         family="Holm"))
-    # the oracle gap is descriptive: hairline interval, mute ink, its own tag
-    gap = eight.pivot_table(index="root_id", columns="method",
-                            values="residual_capture")
-    delta = 100.0 * (gap[METHODS[0]] - gap[METHODS[1]]).to_numpy(float)
-    mean, lo, hi = mean_ci(delta, BOOT_SEED + 7)
-    ax.errorbar([mean], [0], xerr=[[mean - lo], [hi - mean]], fmt="D",
-                color=COLORS["mute"], mfc="white", mec=COLORS["mute"],
-                mew=LW_HAIR, ms=MARKER_MS, elinewidth=LW_HAIR, capsize=2,
-                zorder=3)
-    labels.append((0, "SVD gap", COLORS["mute"]))
-    rows.append(dict(panel="H", control=METHODS[1], mean_pp=mean, low_pp=lo,
-                     high_pp=hi, n_cells=int(delta.size),
-                     positive_cells=int((delta > 0).sum()),
-                     wiring_pct=100.0 * float(wiring.loc[METHODS[1]]),
-                     family="descriptive"))
-    ax.set_xlim(-21.0, 60.5)
-    ax.set_ylim(-1.40, 5.05)
-    ax.set_xticks([-20, -10, 0, 10, 20, 30])
-    ax.set_yticks([])
-    ax.set_xlabel("ancestry − control, residual capture (pp)")
-    style_panel(ax, spines=("bottom",), grid="x")
-    reference_line(ax, 0.0, axis="x", label=None, span=(-0.22, 4.35))
-    ax.text(0.8, 4.78, "no advantage", fontsize=PT_SMALL,
-            color=COLORS["mute"], ha="left", va="center")
-    for y, label, colour in labels:
-        ax.text(-20.2, y + 0.30, label, fontsize=PT_SMALL, color=colour,
-                ha="left", va="bottom")
-    ax.text(-20.2, -0.75, "descriptive, not in the Holm family",
-            fontsize=PT_SMALL, color=COLORS["mute"], ha="left", va="bottom")
-    # the two right-hand columns, inside the axes behind a mute rule
-    ax.plot([36.0, 36.0], [-0.22, 4.95], color=COLORS["grid"], lw=LW_HAIR,
-            zorder=0.4)
-    ax.text(48.0, 4.62, "wiring", fontsize=PT_ANNOT, color=COLORS["ink"],
-            ha="right", va="center")
-    ax.text(59.5, 4.62, "cells", fontsize=PT_ANNOT, color=COLORS["ink"],
-            ha="right", va="center")
-    for row, (y, _, colour) in zip(rows, labels):
-        ax.text(48.0, y, f"{row['wiring_pct']:.1f} %", fontsize=PT_ANNOT,
-                color=colour, ha="right", va="center")
-        cells = ("—" if row["family"] == "descriptive"
-                 else f"{row['positive_cells']}/{row['n_cells']}")
-        ax.text(59.5, y, cells, fontsize=PT_ANNOT, color=colour,
-                ha="right", va="center")
-    ancestry = eight[eight.method.eq(METHODS[0])]
-    ax.text(-20.2, -1.36, f"Ancestry: {100 * ancestry.wiring_density.mean():.1f} "
-            f"% of dense wiring, rank {ancestry.dictionary_rank.mean():.2f}",
-            fontsize=PT_ANNOT, color=COLORS["mute"], ha="left", va="bottom")
-    return pd.DataFrame(rows)
-
-
-# ── panel C's illustrative field, derived from the real operator ─────────
-def field_from_operator(routes):
-    """The paper tree's eight-site field, A and c, from the real operator.
-
-    ``t`` is the weighted response to the focal shunt at i-site
-    ``ROUTE_SITE``, reduced to the eight tree-ordered site blocks of the
-    depth-3 balanced tree by an E-area-weighted mean and normalised by
-    max |t| (sign kept).  ``A`` is that tree's broadcast plus three ancestry
-    indicators; ``c`` is the W-weighted least-squares coefficient vector, so
-    ``A c`` is the projection of ``t`` onto span(A) and the capture is its
-    weighted energy share.
-    """
-    npz = routes["npz"]
-    column = routes["i_sites"].index(ROUTE_SITE)
-    response = np.asarray(npz["weighted_response"], float)[:, column]
-    weights = routes["weights"]
-    order = np.argsort(routes["site_rank"])
-    blocks = np.array_split(order, 8)
-    t = np.array([float((response[b] * weights[b]).sum() / weights[b].sum())
-                  for b in blocks])
-    w = np.array([float(weights[b].sum()) for b in blocks])
-    t = t / max(float(np.abs(t).max()), 1e-30)
-    w = w / w.max()
-    A = np.zeros((8, 4))
-    A[:, 0] = 1.0                 # broadcast
-    A[0:4, 1] = 1.0               # r1: the shunted subtree
-    A[0:2, 2] = 1.0               # r2: its proximal half
-    A[4:6, 3] = 1.0               # r3: a sister subtree
-    root = np.sqrt(w)
-    coefficients, *_ = np.linalg.lstsq(A * root[:, None], t * root, rcond=None)
-    fit = A @ coefficients
-    capture = float((w * fit ** 2).sum() / (w * t ** 2).sum())
-    return dict(t=t, w=w, A=A, c=coefficients, capture=capture)
 
 
 # ── the canvas ───────────────────────────────────────────────────────────
-def build(out=OUT, *, png=True, dpi=180, quiet=False):
-    RECORDS.mkdir(parents=True, exist_ok=True)
+def figure7(*, out=COMPONENT, png=True, dpi=200, quiet=False):
+    """Build main Figure 7 and write its component, main copy and record."""
     tables = cohort_tables()
     summaries = cohort_summaries()
     report = reports()
-    routes = arbor_routes()
-    field = field_from_operator(routes)
+    inclusion = pd.read_csv(COMMON / "pinky" / "cohort_inclusion.csv")
+    arb = arbor_routes()
+    field, field_scale = block_field(arb)
     pairs = surrogate_pairs()
-    assert int(pairs.n_replicates.min()) == 200
-    assert len(pairs) == 47
+    assert int(pairs.n_replicates.min()) == 200 and len(pairs) == 47
+    # decision 0.2: the family map is keyed by the literal method strings
+    assert set(FAMILIES) == set(tables["v661"].method.unique())
+    assert FAMILIES[DEPTH]["label"] == "Depth bins"
+    assert FAMILIES[ORACLE]["label"] == "SVD oracle"
+    floor = float(summaries["v661"]
+                  .loc[summaries["v661"].channels.eq(1),
+                       "total_capture_mean"].unique()[0])
+    initial = dict(common=float(report["original8"]["common_capture_mean"]),
+                   rank_one=float(report["original8"]["rank_one_capture_mean"]))
 
     canvas = NativeCanvas(
-        488.0 / 72.0, 3, row_weights=[124, 112, 112], hgutter_pt=38.0,
-        vgutter_pt=44.0,
-        margins=Margins(left=56.0, right=14.0, top=24.0, bottom=36.0))
+        CANVAS_H_PT / 72.0, 3, row_weights=ROW_H, hgutter_pt=HGUT,
+        vgutter_pt=VGUT, margins=Margins(**MARGINS))
     a = canvas.panel("A", 0, 0, 4, schematic=True, lock=False,
-                     title="Mapped E/I on one arbor")
+                     inset_pt=SCHEMATIC_INSET, title="Routes on a real arbor")
     b = canvas.panel("B", 0, 4, 4, schematic=True, lock=False,
-                     title="Seven ancestry routes")
+                     inset_pt=SCHEMATIC_INSET, title="One arbor, seven routes")
     c = canvas.panel("C", 0, 8, 4, schematic=True, lock=False,
-                     title="A shunt makes a field")
-    d = canvas.panel("D", 1, 0, 4, title="Ancestry tracks the oracle")
-    e = canvas.panel("E", 1, 4, 4, title="K = 8: broadcast is shared")
-    g = canvas.panel("F", 1, 8, 4, title="Ancestry beats surrogates")
-    h = canvas.panel("G", 2, 0, 6,
-                     title="Residual capture in three cohorts")
-    i = canvas.panel("H", 2, 6, 6,
-                     title="Paired advantage and wiring cost")
+                     inset_pt=SCHEMATIC_INSET, title="A shunt makes the field")
+    d = canvas.panel("D", 1, 0, 4, title="Capture rises with budget")
+    e = canvas.panel("E", 1, 4, 4, title="Where the energy goes")
+    fx = canvas.panel("F", 1, 8, 4, title="Cell by cell")
+    g = canvas.panel("G", 2, 0, 7,
+                     title="Paired advantage and its wiring cost")
+    h = canvas.panel("H", 2, 7, 5, title="Three cohorts, one ordering")
+    for name in ("D", "E", "F"):
+        canvas.declare_reserve(name, left=GUTTER_PT, bottom=BOTTOM_R1)
+    canvas.declare_reserve("G", left=GUTTER_PT, right=G_RIGHT,
+                           bottom=BOTTOM_R2)
+    canvas.declare_reserve("H", left=20.0, bottom=BOTTOM_R2)
+    # place the panels once before drawing: every wrap width and every Frame
+    # geometry below is measured from the FINAL axes box
+    canvas.lock_reserves()
 
-    for ax_ in (h, i):
-        ax_.set_title(ax_.get_title(), fontsize=PT_TITLE_, pad=1.0,
-                      color=COLORS["ink"], fontweight="normal")
-    panel_arbor(a, routes["cell"])
-    panel_routes(b, routes)
-    panel_field(c, field)
-    budget = panel_budget(d, summaries, tables)
-    partition = panel_partition(e, summaries)
-    cells = panel_cells(g, pairs)
-    cohorts = panel_cohorts(h, tables)
-    advantage = panel_advantage(i, report["v661"], tables)
-    for ax_ in (d, e, g):
-        ax_.xaxis.labelpad = 0.8
-        ax_.tick_params(axis="x", pad=1.0)
+    schem_a = panel_a(a, arb)
+    schem_b = panel_b(b, arb)
+    schem_c = panel_c(c, arb, field, field_scale)
+    rows_d = panel_d(d, summaries, tables, floor)
+    rows_e = panel_e(e, summaries, initial, floor)
+    rows_f = panel_f(fx, pairs)
+    rows_g, forest_out = panel_g(canvas, g, report["v661"], tables, summaries)
+    rows_h = panel_h(h, tables, inclusion)
 
-    style_direct_color_labels(canvas.fig)
-    # lock first: ``lock_reserves`` re-syncs every letter, which would undo
-    # the canvas-level column alignment if it ran afterwards.
     canvas.lock_reserves()
     findings = canvas.align_letters()
-    problems = canvas.save(Path(out), name="credit_first_figure_06", png=png,
+    problems = canvas.save(Path(out), name="credit_first_figure_07", png=png,
                            dpi=dpi, quiet=quiet, lock=False)
     layout = list(findings) + list(problems)
+    MAIN.parent.mkdir(parents=True, exist_ok=True)
+    MAIN.write_bytes(Path(out).read_bytes())
 
-    # ── render-time source tables and the provenance record ─────────────
-    budget.to_csv(RECORDS / "figure_06_primary_means.csv", index=False)
-    partition.to_csv(RECORDS / "figure_06_energy_partition.csv", index=False)
-    cells.to_csv(RECORDS / "figure_06_cell_surrogates.csv", index=False)
-    cohorts.to_csv(RECORDS / "figure_06_cohort_points.csv", index=False)
-    advantage.to_csv(RECORDS / "figure_06_residual_contrasts.csv", index=False)
-    pd.DataFrame(dict(site_block=np.arange(1, 9), field_t=field["t"],
-                      weight_W=field["w"],
-                      projection=field["A"] @ field["c"])).to_csv(
-        RECORDS / "figure_06_illustrative_field.csv", index=False)
-
+    # ── the plotted table and the provenance record ─────────────────────
+    RECORDS.mkdir(parents=True, exist_ok=True)
+    rows_b = pd.DataFrame([
+        dict(panel="B", block=i + 1, route_columns="+".join(
+            str(k + 1) for k in key) or "broadcast only",
+             site_count=int(size), field_t=float(value))
+        for i, (key, size, value) in enumerate(
+            zip(arb["block_keys"], arb["block_sizes"], field))])
+    rows_c = pd.DataFrame([
+        dict(panel="C", route=k + 1, origin_segment=int(origin),
+             support_sites=int(support.sum()))
+        for k, (origin, support) in enumerate(zip(arb["origins"],
+                                                  arb["supports"]))])
+    plotted = pd.concat([rows_b, rows_c, rows_d, rows_e, rows_f, rows_g,
+                         rows_h], ignore_index=True)
+    plotted.to_csv(RECORDS / "figure_07_plotted.csv", index=False)
+    palette = palette_report(
+        series={FAMILIES[m]["label"]: COLORS[FAMILIES[m]["color"]]
+                for m in ORDER},
+        anatomy={FAMILIES[m]["label"]: COLORS[FAMILIES[m]["color"]]
+                 for m in ORDER})
+    worst_normal = min((r for r in palette["rows"]
+                        if r["series"] != r["anatomy"]),
+                       key=lambda r: r["normal"])
+    worst_cvd = min((r for r in palette["rows"]
+                     if r["series"] != r["anatomy"]),
+                    key=lambda r: r["cvd"])
     files = [Path(__file__), Path(anatomy.__file__),
              JOURNAL / "scripts/figure_canvas.py",
              JOURNAL / "scripts/journal_style.py",
              JOURNAL / "scripts/native_schematics.py",
              JOURNAL / "scripts/anatomy_commonmode/run.py",
+             JOURNAL / "scripts/anatomy_commonmode/protocol.json",
+             JOURNAL / "scripts/analyze_reciprocal_routing_controls.py",
              SOURCE / "figure3/segment_metrics.csv",
              COMMON / "protocol_freeze.json",
-             COMMON / "original8/cells" / f"operator_{ROOT_B}.npz"]
+             COMMON / "original8/cells" / f"operator_{ROOT_B}.npz",
+             COMMON / "pinky/cohort_inclusion.csv"]
     files += [COMMON / cohort / name for cohort in COHORTS
               for name in ("cell_method_summary.csv",
-                           "cohort_method_summary.csv", "summary.json")]
-    mapping = {
-        "A": (f"Reconstructed arbor of root {ROOT_B} (78 segments), the "
-              "median-sized cell of the original eight, from "
-              "source_data/figure3/segment_metrics.csv; hue = mapped "
-              "(E − I)/(E + I) contact area, stroke width = log mapped area "
-              "in the five journal weights; isotropic principal-plane "
-              "projection, 50 µm bar"),
-        "B": ("Same arbor in ghost with the seven K = 8 ancestry routes "
-              "reproduced from scripts/anatomy_commonmode/run.py:111-112 on "
-              f"source_data/anatomy_commonmode/original8/cells/operator_{ROOT_B}.npz "
-              "(origins 4784, 4621, 4396, 4458, 4975, 4209, 4516; supports "
-              "1, 1, 5, 1, 1, 29, 1); the matrix collapses the 70 sites to "
-              "eight tree-ordered blocks"),
-        "C": ("Paper tree; the illustrative field is the weighted_response "
-              f"column of i-site {ROUTE_SITE} in the same operator npz, "
-              "reduced to eight tree-ordered site blocks by an E-area "
-              "weighted mean and normalised by max |t|; A, c and the "
-              "capture value are computed in the builder"),
-        "D": ("v661 cohort_method_summary.csv total_capture_mean at K = "
-              "1, 2, 4, 8, 16 for the six families; ancestry and surrogate "
-              "bands are 20,000-draw cell bootstraps of "
-              "cell_method_summary.csv (seed 202609061 + 10i + K); 47 cells, "
-              "46 at K = 16"),
-        "E": ("v661 cohort_method_summary.csv at K = 8: common = "
-              "total_capture_mean − incremental_total_capture_mean, spatial "
-              "= incremental_total_capture_mean, rest = 1 − "
-              "total_capture_mean"),
-        "F": ("Per-cell K = 8 total capture of common + ancestry against "
-              "the mean of the 200 degree-depth surrogate trees, from "
-              "source_data/anatomy_commonmode/v661/cells/rows_<root>.csv.gz; "
-              "open points are the cells where at least half the surrogates "
-              "reach the real tree; cohort mean with 20,000-draw cell "
-              "bootstrap intervals"),
-        "G": ("residual_capture at K = 8 per cohort from each cohort's "
-              "cell_method_summary.csv (original8 8 cells, v661 47, Pinky 8) "
-              "for ancestry, surrogate tree, depth bins and the "
-              "common-constrained SVD; 20,000-draw cell bootstrap, seed "
-              "202609061 + 100r + i"),
-        "H": ("v661 summary.json residual_capture comparisons (paired means, "
-              "retained 95 % cell-bootstrap intervals, Holm-adjusted "
-              "Wilcoxon cells-positive counts); the SVD row is the "
-              "descriptive per-cell ancestry − oracle difference from "
-              "cell_method_summary.csv; wiring column = wiring_density mean "
-              "of each control at K = 8; sub-line = ancestry wiring_density "
-              "and dictionary_rank means"),
+                           "cohort_method_summary.csv", "summary.json",
+                           "operator_audit.csv")]
+    panels = {
+        "a": ("source_data/figure3/segment_metrics.csv filtered to root "
+              f"{ROOT_B} (78 of 616 segments): the pia-up principal-plane "
+              "projection, all "
+              f"{schem_a['inhibitory']} inhibitory-bearing segments as inh "
+              "contacts, route 3's origin 4396 and its five input-bearing "
+              "descendants under a 16 % shunting tint; schematic, no data"),
+        "b": ("the same skeleton; the seven K = 8 routes reproduced in the "
+              "builder from scripts/anatomy_commonmode/run.py:105-112 over "
+              f"source_data/anatomy_commonmode/original8/cells/operator_{ROOT_B}"
+              ".npz with scripts/anatomy_commonmode/protocol.json (origins "
+              "4784, 4621, 4396, 4458, 4975, 4209, 4516; supports 1, 1, 5, 1, "
+              "1, 29, 1; coverage 32 of 70); the matrix is the eight "
+              f"tree-ordered site blocks {schem_b['block_sizes']}"),
+        "c": ("weighted_response column of i-site 4396 in the same operator "
+              "npz, reduced to the eight site blocks of B by a block mean and "
+              f"scaled by max |t| = {schem_c['scale']:.5f}: "
+              f"{[round(v, 3) for v in schem_c['field']]}"),
+        "d": ("v661 cohort_method_summary.csv total_capture_mean at K = 1, 2, "
+              "4, 8, 16 for the six families; ancestry and surrogate bands "
+              "are 20,000-draw cell bootstraps of cell_method_summary.csv "
+              f"(seed {BOOT_SEED} + 10i + K); broadcast floor {floor:.5f}"),
+        "e": ("v661 cohort_method_summary.csv at K = 8: broadcast = "
+              "total_capture_mean - incremental_total_capture_mean, spatial = "
+              "incremental_total_capture_mean, unexplained = 1 - "
+              "total_capture_mean; the annotation is original8/summary.json "
+              f"common_capture_mean {initial['common']:.5f} and "
+              f"rank_one_capture_mean {initial['rank_one']:.5f}"),
+        "f": ("per-cell K = 8 total capture of common + ancestry against the "
+              "mean of the cell's 200 common + surrogate ancestry replicates "
+              "from v661/cells/rows_<root_id>.csv.gz; open symbols are the "
+              "cells whose surrogate fraction >= 0.5; cohort mean with "
+              "20,000-draw cell-bootstrap intervals on both coordinates"),
+        "g": ("v661/summary.json comparisons for BOTH metrics (residual "
+              "filled, total open) with their retained 95 % intervals and "
+              "cells_positive; the fan is the 47 within-cell residual "
+              "differences from cell_method_summary.csv at K = 8; the right "
+              "columns are wiring_density_mean and dictionary_rank_mean from "
+              "cohort_method_summary.csv"),
+        "h": ("residual_capture at K = 8 per cohort from each cohort's "
+              "cell_method_summary.csv (initial 8, disjoint 47, Pinky 8) for "
+              "ancestry, surrogate tree, depth bins and the "
+              f"common-constrained SVD; 20,000-draw cell bootstrap, seed "
+              f"{BOOT_SEED} + 100 g + i; Pinky site counts and eligibility "
+              "from pinky/cohort_inclusion.csv"),
     }
     payload = dict(
-        panel_sources=mapping,
-        source_sha256={str(p.relative_to(JOURNAL)):
-                       hashlib.sha256(p.read_bytes()).hexdigest()
-                       for p in files},
+        figure="Figure 7",
+        label="fig:topology",
+        output=str(Path(out).relative_to(JOURNAL)),
+        output_sha256=sha(out),
+        main_copy=str(MAIN.relative_to(JOURNAL)),
+        panel_letters="abcdefgh",
+        replication_unit=("reconstructed cell; initial eight-cell, disjoint "
+                          "47-cell and Pinky second-mouse cohorts kept "
+                          "separate"),
+        panel_sources=panels,
+        source_sha256={str(p.relative_to(JOURNAL)): sha(p) for p in files},
+        schematic_fraction=round(SCHEMATIC_FRACTION, 5),
+        schematic_fraction_formula=("sum(schematic slot w x h) / (live_w x "
+                                    "live_h) = 3 x (125.5 x 122) / (452.4 x "
+                                    "430)"),
+        palette=dict(
+            families={FAMILIES[m]["label"]: COLORS[FAMILIES[m]["color"]]
+                      for m in ORDER},
+            worst_normal=dict(pair=[worst_normal["series"],
+                                    worst_normal["anatomy"]],
+                              delta_e=round(worst_normal["normal"], 2)),
+            worst_cvd=dict(pair=[worst_cvd["series"], worst_cvd["anatomy"]],
+                           delta_e=round(worst_cvd["cvd"], 2)),
+            waiver=("shunting/low_rank protan 7.20 is accepted: forced once "
+                    "bp, additive, amber and per_soma are excluded, and the "
+                    "pair is separated by marker (o vs X), by D's band and by "
+                    "direct labels; the AMENDMENTS fallback "
+                    "random = mix('point_mlp', 55) is rejected because it "
+                    "puts a grey tint beside the grey point_mlp series"),
+            forbidden_present=[key for key in ("bp", "additive")
+                               if key in [FAMILIES[m]["color"]
+                                          for m in ORDER]]),
+        waivers=[
+            "D3: row 1 is three 4-module panels that share no axis; each is a "
+            "different estimand and the row is column-locked",
+            "H idiom (decision 0.7): grouped vertical dot plot, not a forest; "
+            "a two-factor panel at 5 modules",
+            "B address cycle: builder-local shunting/local/oracle plus white "
+            "tints, because K_CYCLE's second entry is the banned `additive`",
+            "soma-lowest: declared, not asserted, for the measured arbor of "
+            f"A/B/C ({schem_a['below_soma']} of {len(arb['cell'])} segments "
+            "sit below the soma in any projection of this reconstruction)",
+        ],
         layout_findings=layout,
-        scope=("Modeled response capacity on measured anatomy; no evidence of "
-               "endogenous biological route usage. Original8/v661 are the "
-               "same animal; Pinky is one second animal."))
-    (RECORDS / "figure_06_sources.json").write_text(
-        json.dumps(payload, indent=2) + "\n")
-    # the caption stays in the record set beside the numbers it quotes; the
-    # authoritative copy for main.tex lives in
-    # analysis/figure_overhaul_20260908/fig7/TEXT.md
-    (RECORDS / "figure_06_caption.md").write_text(CAPTION + "\n")
-    MAIN.parent.mkdir(parents=True, exist_ok=True)
-    MAIN.write_bytes(Path(out).read_bytes())
+        scope=("Modeled passive response capacity on measured anatomy; no "
+               "evidence of endogenous biological route usage. The initial "
+               "eight-cell and disjoint 47-cell cohorts are the same animal; "
+               "Pinky is one second animal."))
+    (RECORDS / "figure_07.json").write_text(json.dumps(payload, indent=2)
+                                            + "\n")
+    # the caption travels with the artwork so main.tex and the record cannot
+    # drift; the authoritative copy is v2/fig7/TEXT.md
+    (RECORDS / "figure_07_caption.md").write_text(CAPTION + "\n")
     if not quiet:
-        print(json.dumps({"capture_C": field["capture"],
-                          "layout": layout}, indent=2))
+        print(json.dumps({"layout": layout,
+                          "schematic_fraction": round(SCHEMATIC_FRACTION, 4),
+                          "worst_normal": round(worst_normal["normal"], 2),
+                          "worst_cvd": round(worst_cvd["cvd"], 2)}, indent=2))
     return layout
 
 
+def build(out=COMPONENT, **kwargs):
+    """Legacy entry point; Figure 7 is built by :func:`figure7`."""
+    return figure7(out=out, **kwargs)
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--emit-main", action="store_true",
+                        help="also copy the component to figures/main "
+                             "(always done)")
+    parser.add_argument("--quiet", action="store_true")
+    args = parser.parse_args(argv)
+    figure7(quiet=args.quiet)
+    return 0
+
+
 if __name__ == "__main__":
-    build()
+    raise SystemExit(main())

@@ -1,32 +1,31 @@
 {
   "panel_sources": {
-    "A": "Schematic from the frozen task configuration (selected +1; sibling, same-half and opposite-half distractor coefficients) on the shared balanced tree",
-    "B": "Ancestry dictionaries A (8 x K) from grouped_routes(correct_ancestry_subtrees); card footers are the raw group sums of figure_03_coefficient_prediction.csv, verified across all 8 contexts",
-    "C": "condition_summary.csv means/95% intervals (dendritic_tree: correct ancestry, derangement) and the per-seed maximum of four matched controls from seed_outcomes.csv (routing_figure_panels._best_control_by_budget)",
-    "D": "condition_summary.csv means/95% intervals for dendritic_tree versus degree_depth_matched_rewired_tree under correct ancestry; paired differences and seed-bootstrap intervals from seed_outcomes.csv (bootstrap seeds 70000+)",
-    "E": "review_coefficient_encoder and review_coefficient_hard_readout trajectories at calibration 256, noise 0.5, delay 0, epoch 80 (figure_03_coefficient_source.csv); paired contrasts from both paired_contrasts.csv files; hard readout exploratory",
-    "F": "Recipient supports of c3's credit at K = 4 from grouped_routes / random_rank_routes (figure_03_control_supports.csv, rng seed 0 for the random families); correct ancestry delivery drawn on the ghost tree",
-    "G": "Frozen ancestry_k4_control_contrasts primary maximum-over-four comparator and individual controls with paired seed points; Holm adjustment across four budgets"
+    "A": "Schematic, no data: the frozen task configuration (configs/trained_subtree_address/full_factorial_confirmatory.json) drawn on the shared balanced feedback tree; selected +1.00 and sibling / same-half / opposite-half distractor coefficients.",
+    "B": "Schematic, no data: ancestry dictionaries A (8 x K) from grouped_routes(correct_ancestry_subtrees) with the card footers the raw group sums of figure_03_coefficient_prediction.csv, and the delivered support of b3's credit under the four matched controls at K = 4 (figure_03_control_supports.csv, rng seed 0).",
+    "C": "condition_summary.csv means with 95% seed-bootstrap intervals (dendritic_tree under correct ancestry and under derangement) and the per-seed post-training maximum over the four matched controls from seed_outcomes.csv.",
+    "D": "condition_summary.csv means with 95% intervals for dendritic_tree versus degree_depth_matched_rewired_tree under ancestry feedback; paired differences and 20,000-draw seed bootstrap (seed 70000) from seed_outcomes.csv.",
+    "E": "review_evidence_reanalysis/ancestry_k4_control_contrasts.csv means, 95% intervals, positive-seed counts and Holm-adjusted P; the seed fan is ancestry_control_paired_differences.csv at K = 4.",
+    "F": "review_coefficient_encoder and review_coefficient_hard_readout condition_summary.csv over the calibration x cue-noise grid at cue delay 0, with render-time 95% seed-bootstrap bands from trajectories.csv at epoch 80; contrasts from both paired_contrasts.csv (the hard readout is exploratory)."
   },
   "source_sha256": {
-    "scripts/credit_first_figures/build_ancestry.py": "51d3482e48a48b701e4cbd81d5333184431d5b76def77b6c3b767fc4e1fd3d84",
-    "scripts/routing_figure_panels.py": "b6a38d2f1329add30c30e3e98317f3d5a3946a2133a75303d458723b32faf521",
-    "scripts/run_trained_subtree_address_full_factorial.py": "c5d75b8ea9bc29d7fd24ca53c360c4bbdf825d7fa31f84727af4b7dd47e875dd",
     "configs/trained_subtree_address/full_factorial_confirmatory.json": "8684f7c30886e7aede7eaa71550033ad84605fcfb45220d32a2d91d2627f23b2",
-    "scripts/figure_canvas.py": "de3f566dd08270535deab95eb798b49cc17ccf4dfbb88e7ebdb50860903a6ad1",
-    "scripts/journal_style.py": "35861bf56befbda6ee9e6a59866f3f7b3085959961155a9a10cee0f0fbfa0e38",
-    "scripts/native_schematics.py": "3e74a3b7ccbb993d9c131d6997aba30a1d81be7728f335937e3fa2e14aa754b1",
-    "scripts/credit_tree_schematics.py": "ebd31b5ccc86b00bb27a236af210eb2a1d1820e9fcec27b57283a12224158cbe",
+    "configs/review_completion/coefficient_encoder.json": "dd3042208dda2e8b656be4c59b71914a9588d7d61f35a85ffc06a49f6da0b252",
     "source_data/trained_subtree_address_full_factorial/seed_outcomes.csv": "2f2cc0d6a21fd7bd46a5437e031e69ae31626ef6650c6cced0be1d2a0861303c",
     "source_data/trained_subtree_address_full_factorial/condition_summary.csv": "97358de3f0bfb7a91ba2aa6f164705d1a6e6d5c1b4e35b266c5e5a9fc03afb20",
+    "source_data/trained_subtree_address_full_factorial/paired_contrasts.csv": "442cf50ee7019ab0ccb8126fff2d0378dc3c88ff323ff863c045caa607793755",
     "source_data/review_evidence_reanalysis/ancestry_k4_control_contrasts.csv": "aed995858ac591ddea7f8f0314d018e4ad4b51a810a032e99f3f1dff2b131e2a",
     "source_data/review_evidence_reanalysis/ancestry_control_paired_differences.csv": "3746a2e477c9e6c734ffb8247745b7027288cfed33367cd04887b86457d11b22",
+    "source_data/review_coefficient_encoder/condition_summary.csv": "2a1f9a8d771e1dedd3eed0879b1baae3ae0504d7d9742fa12c587dfdd425fda3",
     "source_data/review_coefficient_encoder/trajectories.csv": "2c3cb8e8ab35d60f07ca8351741d6f8cabd35c3f96716db52f7a9a10b1a6772f",
     "source_data/review_coefficient_encoder/paired_contrasts.csv": "b4b7e009e271d9d7a812f9d318f9b20dd5187404bbf388dc5887ffe07904be1f",
+    "source_data/review_coefficient_hard_readout/condition_summary.csv": "6cdc699bbf1faafeb719e45d0b75ecfa0b2fc897c49747a22a5370d5eaf37b36",
     "source_data/review_coefficient_hard_readout/trajectories.csv": "74e4818f4d8bab92ab7c1e9d6e4fb2817cb432f164c5d0d7f6163ea643219781",
     "source_data/review_coefficient_hard_readout/paired_contrasts.csv": "46b214de8efef2e8640cce199a1cbb032477ec0e9ec62fdbc727e471705751e1"
   },
   "layout_findings": [],
+  "forest_gutter_pt": 54.04,
+  "schematic_area_fraction": 0.2682,
+  "g4_waiver": "G4 waiver recorded for Fig 3 at the superseded 31.6 % measure; on the B12 formula the figure is 26.8 % and the waiver is dormant",
   "derived_numbers": {
     "group_sums": {
       "1": -3.05,
@@ -42,22 +41,22 @@
     },
     "accuracy_by_K": {
       "ancestry": [
-        0.1866455078,
-        0.4486328125,
-        0.8010498047,
-        0.8100097656
+        18.66455078,
+        44.86328125,
+        80.10498047,
+        81.00097656
       ],
       "best": [
-        0.544970703115,
-        0.6026367187550001,
-        0.78837890625,
-        0.8100097656299999
+        54.497070311499996,
+        60.263671875500016,
+        78.837890625,
+        81.000976563
       ],
       "deranged": [
-        0.1866455078,
-        0.1846923828,
-        0.1904785156,
-        0.2512939453
+        18.66455078,
+        18.46923828,
+        19.04785156,
+        25.12939453
       ]
     },
     "rewiring_pp": {
@@ -68,43 +67,18 @@
       ],
       "2": [
         23.149414061,
-        21.0229492174875,
-        25.344238280012497
+        21.032653804412497,
+        25.317382811025002
       ],
       "4": [
         5.017089844,
-        4.211425781987501,
-        5.954589844
+        4.1894531255,
+        5.935058593012499
       ],
       "8": [
         0.0,
         0.0,
         0.0
-      ]
-    },
-    "coefficient_source": {
-      "means": {
-        "oracle": 0.8029052734375,
-        "soft": 0.258251953125,
-        "hard*": 0.6403076171875,
-        "frozen": 0.1866943359375
-      },
-      "soft_minus_oracle": [
-        -54.4653320312,
-        -55.4467773438,
-        -53.5400390625,
-        0.000176898300424
-      ],
-      "soft_minus_frozen": [
-        7.15576171875,
-        6.25732421875,
-        8.06890869141,
-        5.72204589844e-06
-      ],
-      "hard_minus_oracle": [
-        -16.259765625,
-        -17.8295898438,
-        -14.8291015625
       ]
     },
     "k4_contrasts_pp": {
@@ -113,40 +87,122 @@
         0.59326171875,
         1.94580078125,
         15,
-        20
+        20,
+        0.0101404298927
       ],
       "random_rank_k": [
         2.314453125,
         1.0009765625,
         3.90869140625,
         15,
-        20
+        20,
+        0.00338014329755
       ],
       "random_sparse_matched": [
         3.76708984375,
         2.890625,
         4.74127197266,
         20,
-        20
+        20,
+        0.000176647717262
       ],
       "depth_interleaved_bins": [
         7.11181640625,
         6.1865234375,
         8.02978515625,
         20,
-        20
+        20,
+        7.62939453125e-06
+      ]
+    },
+    "cue_grid": {
+      "soft": {
+        "('soft', 16)": [
+          19.3921,
+          19.1553,
+          19.0674
+        ],
+        "('soft', 64)": [
+          75.061,
+          21.3892,
+          19.2993
+        ],
+        "('soft', 256)": [
+          79.978,
+          25.8252,
+          19.27
+        ]
+      },
+      "hard": {
+        "('hard', 16)": [
+          80.2905,
+          32.4072,
+          20.8105
+        ],
+        "('hard', 64)": [
+          80.2905,
+          54.2236,
+          22.2974
+        ],
+        "('hard', 256)": [
+          80.2905,
+          64.0308,
+          23.4399
+        ]
+      },
+      "oracle": 80.2905273437,
+      "frozen": 18.6694335938,
+      "mismatched": [
+        18.5791015625,
+        18.8916015625
+      ],
+      "soft_256_noise0_vs_oracle": [
+        -0.3125,
+        -0.42236328125,
+        -0.1953125
+      ],
+      "soft_16_noise0_vs_oracle": [
+        -60.8984375,
+        -61.6088867188,
+        -60.1953125
+      ],
+      "soft_256_noise05_vs_oracle": [
+        -54.4653320312,
+        -55.4467773438,
+        -53.5400390625
+      ],
+      "soft_256_noise05_vs_frozen": [
+        7.15576171875,
+        6.25732421875,
+        8.06890869141
+      ],
+      "hard_256_noise05_vs_oracle": [
+        -16.259765625,
+        -17.8295898438,
+        -14.8291015625
       ]
     }
   },
-  "coefficient_scope": "Raw group sums; implemented route rows divide by sqrt(group size). Signs follow from the generator and are not a newly prospective accuracy prediction.",
-  "deviations_from_spec": [
-    "canvas 490 pt, rows 122/108/108, vgutter 48 (row-separation audit floor)",
-    "left margin 52 (letter-column audit)",
-    "F drawn as one ghost tree plus a 4 x 8 support table instead of four 38-pt cards",
-    "D difference tags print the mean only (as a span between the paired markers); intervals in the caption",
-    "A draws its three tiers as ORDINAL_RAMP bands (D8) at a fixed 5.6 pt width (private _tier_bands), not 16 % K-cycle capsules: K_CYCLE is B's alphabet and a 16 % tint of an edge mix does not print",
-    "A labels four streams (c1, c3, c4, c8): at the 10 pt terminal pitch eight PT_SMALL labels clear each other by 2-4 pt and read as one cluster",
-    "F table cells carry a 0.25 shading floor so sub-maximal supports print",
-    "private helpers _badge (ceiling, exploratory) and _subtree_arrow (D7 K-cycle)"
+  "coefficient_scope": "Raw group sums; implemented route rows divide by sqrt(group size). Signs follow from the generator and are not a new prospective prediction.",
+  "caption_word_count": 312,
+  "deviations_from_plan": [
+    "row weights 128/107/107 at a 48 pt vertical gutter and margins 44/12/20/32, not 112/121/121 at 42 pt with margins 52/14 at 42 pt: at a 112 pt row 0 the eight-module panel B has axes aspect 2.58, above PANEL_ASPECT_MAX 2.40, which DECISIONS G4 forbids relaxing, and a 42 pt gutter leaves only 6.5 pt between rows 1 and 2 against audit_row_separation.py's 8.5 pt floor",
+    "E uses lock=False plus a measured private left inset instead of declare_reserve(left=66): a declared reserve locks the whole grid column and C starts in column 0, so C and D would differ in width",
+    "E draws its per-row wins / Holm notes inside the axes above each seed fan; forest(note=...) writes into the gutter shared with F",
+    "E prints Holm P in decimal (Nimbus Sans has no superscript minus and CF-2 forbids mathtext); the caption keeps the scientific form",
+    "A sets the four coefficient tier labels in a keyed two-row band, not over their own blocks (a 17.6 pt coefficient string cannot sit over a one-terminal block at the terminal pitch)",
+    "A drops the 'junctions define feedback supports only' footer into the caption -- the plan's stated fallback",
+    "B draws no tree in the ancestry cards, so the subtree entry arrow comes from the private _delivery_arrow rather than credit_delivery",
+    "B's control support table is 4 x 10 pt rows by 8 x 7 pt columns, not 6 x 6 pt: a 7 pt row label cannot sit on a 6 pt row",
+    "D's paired intervals use one 20,000-draw bootstrap seeded 70000; K = 2 gives [21.03, 25.32] against the plan's quoted [21.05, 25.32]",
+    "C and F carry shortened forms of the plan's long annotations; the full wording is in the caption",
+    "C's tie tags print 18.66 %, not the plan's 18.67 %: the frozen condition_summary gives 18.6646 % for both arms at K = 1, which is also what the plan's own deranged row rounds to",
+    "E runs to xlim (-2, 14) instead of (-2, 11) so the +13.13 dense rank-4 seed is drawn rather than clipped; the off-scale note therefore names only the derangement contrast",
+    "F does not repeat 256 / 64 / 16 on the dashed hard-readout lines: they carry the same three ORDINAL_RAMP hues as the labelled solid lines, and the noise-0.5 points have no 12 pt clearance for three more labels without a text-over-data collision",
+    "F's noise-free annotation is one line, capped at 120 pt so it clears the right-aligned 'oracle 80.3 %' rule label four units below it; the caption says the printed values are oracle gaps",
+    "B's control-table column headers are the digits 1..8 under one b_i tag, not eight subscripted b_j strings: a literal Unicode subscript is not in Nimbus Sans and mathtext is banned by CF-2",
+    "B's |A| scale-bar tag is plain text, not Frame.subscript",
+    "F's oracle rule is labelled 'oracle 80.3 %' with no 'oracle' badge (the panel already carries the 'exploratory' badge; a second chip on the same rule would sit on the dashed hard-readout curves)",
+    "private helpers _badge (ceiling, exploratory), _delivery_arrow, _gap_span"
   ]
 }

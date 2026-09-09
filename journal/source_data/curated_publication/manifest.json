@@ -2,9 +2,16 @@
   "records": [
     {
       "figure": 1,
-      "source": "figures/provenance/structure_restoration_20260908/figure_01_plotted.csv",
+      "source": "scripts/credit_first_figures/build_framework.py",
       "path": "source_data/curated_publication/figure_01_plotted.csv",
-      "sha256": "949336fc97d63fe95a2fc32df290a18f3017d77e25ce32690c00be80acaa8e3b",
+      "sha256": "1f1a3a79ce88d5feb49af91360d43e3a191fccbe20bd1df200a8f444377f4362",
+      "scope": "Display summaries from existing inputs; panel column identifies the selected data. One record per drawn mark. Panels A and B are schematics and contribute no rows. Not an additional experiment."
+    },
+    {
+      "figure": 2,
+      "source": "scripts/build_main_figure_04.py",
+      "path": "source_data/curated_publication/figure_02_plotted.csv",
+      "sha256": "36958ed17fdb2a4b52149abe10b564240d1f32424e892462d76f42e5ecebcff9",
       "scope": "Display summaries from existing inputs; panel column identifies the selected data. Not an additional experiment."
     },
     {
@@ -18,7 +25,7 @@
       "figure": 4,
       "source": "figures/provenance/structure_restoration_20260908/figure_04_plotted.csv",
       "path": "source_data/curated_publication/figure_04_plotted.csv",
-      "sha256": "ce9376b0c205f505483cfb35d03935d40cd0465a61a1e26d3ada0678aae0689e",
+      "sha256": "c2ae71648b76fe5baec7095338fbc5a90dc417680309d804847d3d61f0fcc001",
       "scope": "Display summaries from existing inputs; panel column identifies the selected data. Not an additional experiment."
     },
     {

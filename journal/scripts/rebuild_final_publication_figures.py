@@ -19,8 +19,8 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 RESTORED_MAIN = (1, 4, 6, 7, 9)
 FOCUSED_MAIN = {
-    3: "credit_first_figures/build_ancestry_focused.py",
-    5: "conductance_local_gate/build_focused_main.py",
+    3: "credit_first_figures/build_ancestry.py",
+    5: "conductance_local_gate/figure.py",
     8: "shunt_ancestry_gain/build_focused_main.py",
 }
 

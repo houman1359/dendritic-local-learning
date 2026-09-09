@@ -1,27 +1,60 @@
 #!/usr/bin/env python3
-"""Main figure 9: measured responses and the realized-route boundary.
+"""Main figure 9 (``fig:boundary``): measured responses bound the anatomical
+alignment proposal.
 
-Frozen-data reanalysis only.  Eight lettered panels on one native canvas:
-three schematics (A the passive-tree learner and its two credit deliveries,
-B the structure-function question, E the realized route dictionary of the
-representative scan) and five data panels (C observed alignment, D the
-simulated detection curve, F route coverage, G held-out prediction,
-H update reconstruction).
+Six lettered panels on one native canvas, three rows of 5 + 7 modules:
 
-The representative route matrix is selected by median mapped-input count,
-with target/session/scan identifiers as deterministic ties.  All 13 scan
-supports and all seven target outcomes are retained as Source Data.
+    A  schematic  Shared path vs similarity          (r0 c0-4, 124 pt)
+    B  data       No ancestry alignment in either cohort (r0 c5-11)
+    C  data       All four measures null              (r1 c0-4, 114 pt)
+    D  data       Observed effect below the detection point (r1 c5-11)
+    E  schematic  One input per route                 (r2 c0-4, 108 pt)
+    F  data       Routes reach half the mapped inputs (r2 c5-11)
 
-Waivers against the shared layout rule (D3, three 4-module panels per row):
-row 1 is C (data) + D (data) + E (schematic) and row 2 is F + G + H; C and D
-do not share an axis, and F does not share G/H's forest idiom.  Both rows are
-column-locked so the letters align, and every panel in a row keeps one axes
-height, which is what the rule protects.
+Canvas 518.4 x 490.0 pt (aspect 1.058, on the sanctioned 340/415/490 ladder,
+CF-1).  Schematic area on the B12 / CF-10 formula
+``sum(schematic slot w_pt * h_pt) / (live_w_pt * live_h_pt)``
+= (176.8*124 + 176.8*108) / (464.4 * 434) = 41,017.6 / 201,549.6 = **20.4 %**
+(cap 30 %; no waiver -- the three G4 waivers are Figs 1, 3 and 5).  The v1
+draft's 16.6 % used the full canvas as the denominator and is withdrawn.
 
-Every printed number is derived here from the Source Data files recorded in
+Glyph-rule notes carried into the manifest:
+
+* Panel A declares the set-wide CF-4 delta-0 exemption with the reason
+  ``stimulus recording; no credit is delivered in this experiment``; panel E
+  carries the figure's one delta-0, dashed because the field is imposed.
+* Panel B's thirteen descriptive scan circles ride 0.45 row-units below the
+  second row.  That is NOT the CF-6 ``+0.22`` second-arm offset -- it is a
+  within-row distribution rug (AMENDMENTS rejudge item 1), and it is recorded
+  here so QA does not read 0.45 as a violation.
+* B and C are two of the set's nine ``figure_canvas.forest()`` panels (CF-6).
+* Fig 9 uses no in-axes key (CF-5: the set's only sanctioned key is Fig 5C),
+  no ``ORDINAL_RAMP`` entry, and neither ``bp`` nor ``additive`` (B14).
+  ``shunting`` is the ancestry statistic under test in B, C, D and F.
+
+Private helpers beyond the shared library (DECISIONS G5, reported in
+IMPLEMENTATION_NOTES.md under "library follow-ups"):
+``_delta_hat`` (a hatted delta token: Nimbus Sans has no U+0302 and no
+precomposed delta-with-circumflex, so the caret is a second 7.0 pt glyph),
+``_data_inset`` (``Frame.axes_inset`` needs a Frame, and D is a data panel),
+and ``_wrapped`` (pre-broken footer lines: ``Frame.footer`` wraps to the frame
+width, and the two schematic footers must break at the phrase, not the word).
+
+Deviations from ``v2/fig9/PLAN.md`` §2, and why (all recorded in TEXT.md too):
+row weights and the vertical gutter are **[124, 114, 108] with vgutter 44**, not
+[126, 116, 112] with 40.  At 40 pt the 41 pt band between rows holds one row's
+x tick labels plus x label and the next row's letter band, and
+``audit_row_separation.py`` measured 6.5 / 6.7 pt against its 8.5 pt (3 mm)
+floor; 44 pt gives 9.6 / 9.6 pt.  Canvas height, margins, module split and
+letter columns are unchanged (22 + 124 + 44 + 114 + 44 + 108 + 34 = 490), so
+``live_h_pt`` is still 434 and the CF-10 schematic fraction is 20.4 %, not the
+plan's 20.9 %.
+
+Every printed number is read here from the Source Data files recorded in
 ``figure_08_sources.json``; nothing is typed in.
 """
 from pathlib import Path
+import argparse
 import sys
 import json
 import hashlib
@@ -33,11 +66,11 @@ J = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(J / 'scripts'))
 sys.path.insert(0, str(J / 'code/reconstructed_tree'))
 
-from figure_canvas import (NativeCanvas, Margins, COLORS, PT_SMALL, PT_ANNOT,
-                           PT_LABEL, PT_TICK, LW_HAIR, LW_EDGE, LW_ERR, LW_REF,
-                           LW_DATA, MARKER_MS, SEED_MS, SEED_ALPHA, style_panel)
-from journal_style import label_color, style_direct_color_labels
-from native_schematics import BADGE_STYLE, Frame, mix
+from figure_canvas import (NativeCanvas, Margins, COLORS, PT_BASE, PT_EMPH,
+                           LW_HAIR, LW_ERR, LW_REF, LW_DATA,
+                           MARKER_MS, SEED_MS, style_panel)
+from journal_style import label_color, style_direct_color_labels, tint_pct
+from native_schematics import Frame
 from analyze_microns_morphology_credit import ancestry_matrix, parent_map
 
 S = J / 'source_data'
@@ -45,225 +78,141 @@ OUT = J / 'figures/components/credit_first_figure_08.pdf'
 MAIN = J / 'figures/main/figure_09.pdf'
 REC = S / 'credit_first_figures'
 
-ROUTE = COLORS['shunting']       # morphology-matched implementable rule
-EXACT = COLORS['bp']             # exact-path credit
-GRAY = COLORS['mute']            # random / shuffled / ridge controls
-FIXED = COLORS['per_soma']       # unrestricted fixed calibrated profile
-ORACLE = COLORS['oracle']        # oracle comparator
+ROUTE = COLORS['shunting']    # the ancestry statistic under test (B14 role)
+CEIL = COLORS['oracle']       # the perfect-reliability ceiling comparator
+GRAY = COLORS['mute']         # scaffolding and non-ancestry comparators
 INK = COLORS['ink']
-REP_TARGET = 864691135810666525  # representative scan, fixed by median rule
-FAN_LANES = (-0.075, 0.0, 0.075)  # deterministic lanes for scan-level circles
+REP_TARGET = 864691135810666525   # representative scan, fixed by median rule
+DELTA0_REASON = ('stimulus recording; no credit is delivered in '
+                 'this experiment')
 
 
-# ── shared data-panel idiom ───────────────────────────────────────────────
-def forest(ax, rows, xlabel, xlim, *, xticks=None, label_pad_pt=3.0,
-           lift=0.24):
-    """Row-per-condition dot-and-interval forest with IN-AXIS row labels.
+# ── private helpers (DECISIONS G5) ───────────────────────────────────────
+def _delta_hat(f, xy, tail=' = A c', *, size=PT_BASE, color=INK):
+    """``δ̂`` + ``tail`` anchored at ``xy`` (left edge of the delta).
 
-    The row label is set inside the axes above its own marker, so no ink
-    enters the 28-pt panel-letter gutter (spec 0.4.4) and no column has to
-    carve a category-label reserve out of its slot.
+    Nimbus Sans carries neither U+0302 (combining circumflex) nor a
+    precomposed delta-with-hat, so the hat is drawn as a second glyph at the
+    same type size rather than as mathtext (CF-2 forbids mathtext).
     """
-    n = len(rows)
-    span = xlim[1] - xlim[0]
-    for k, row in enumerate(rows):
-        y = n - 1 - k
-        values = np.asarray(row['values'], float)
-        ax.scatter(values, y + np.linspace(-.13, .13, len(values)),
-                   s=SEED_MS ** 2, color=row['color'], alpha=SEED_ALPHA,
-                   edgecolors='none', zorder=3)
-        ax.errorbar(row['mean'], y,
-                    xerr=[[row['mean'] - row['lo']], [row['hi'] - row['mean']]],
-                    fmt=row.get('marker', 'o'), ms=MARKER_MS, color=row['color'],
-                    mfc='white', mew=LW_ERR, lw=LW_ERR, capsize=2, zorder=5)
-        if row.get('open') is not None:
-            extra = np.asarray(row['open'], float)
-            # Scan-level values ride just under their own row (not as a third
-            # row) on a deterministic three-lane fan: consecutive values in
-            # sorted order never share a lane, so near-duplicates separate.
-            order = np.argsort(extra, kind='stable')
-            lane = np.empty(len(extra))
-            lane[order] = np.take(FAN_LANES, np.arange(len(extra)) % len(FAN_LANES))
-            ax.plot(extra, y - 0.24 + lane, 'o', ms=SEED_MS - 0.4,
-                    mfc='none', mec=row.get('open_color', GRAY), mew=LW_HAIR,
-                    zorder=4)
-            tag = row.get('open_label')
-            if tag:
-                ax.text(float(extra.max()) + span * 0.035, y - 0.24, tag,
-                        fontsize=PT_SMALL, color=row.get('open_color', GRAY),
-                        ha='left', va='center', zorder=6)
-        ax.text(xlim[0] + span * (label_pad_pt / 100.0), y + lift, row['label'],
-                fontsize=PT_SMALL, color=label_color(row['color']),
-                ha='left', va='bottom', zorder=6)
-    ax.set_yticks([])
-    ax.set_ylim(-0.62, n - 0.36)
-    ax.set_xlim(*xlim)
-    if xticks is not None:
-        ax.set_xticks(xticks)
-    ax.set_xlabel(xlabel)
-    style_panel(ax, grid='x')
-    ax.spines['left'].set_visible(False)
-    return ax
+    f.text(xy, 'δ', size=size, color=color, ha='left', va='center')
+    f.text(f._off(xy, 1.7, 2.2), '^', size=size, color=color, ha='center',
+           va='center')
+    f.text(f._off(xy, 4.4, 0.0), tail, size=size, color=color, ha='left',
+           va='center')
 
 
-def _badge_on(ax, x, y, kind, *, ha='left'):
-    """Frame.badge on a DATA axes: the library helper needs a Frame, which
-    rescales its host to 0-1, so the same rounded PT_SMALL tag is drawn here
-    from BADGE_STYLE (reported as a private helper)."""
-    key, face, edge = BADGE_STYLE[kind]
-    colour = COLORS[key]
-    try:
-        colour = label_color(colour, background=face)
-    except ValueError:
-        pass
-    return ax.text(x, y, kind, fontsize=PT_SMALL, color=colour, ha=ha,
-                   va='center', zorder=7,
-                   bbox=dict(boxstyle='round,pad=0.28,rounding_size=0.294',
-                             facecolor=face, edgecolor=edge,
-                             linewidth=LW_HAIR))
-
-
-def cohort_note(ax, text, *, x=0.99, y=0.015):
-    """PT_SMALL mute in-panel cohort declaration (spec 0.4.11)."""
-    return ax.text(x, y, text, transform=ax.transAxes, fontsize=PT_SMALL,
-                   color=GRAY, ha='right', va='bottom', zorder=6)
-
-
-def mini_tuning(f, rect_pt, phase):
-    """A 24 x 15 pt pair of condition-mean response curves (schematic)."""
-    inner = f.axes_inset(rect_pt)
-    t = np.linspace(0, 1, 60)
-    for shift, lw in ((0.0, LW_EDGE), (phase, LW_EDGE)):
-        inner.plot(t, 0.5 + 0.42 * np.sin(2 * np.pi * (t + shift)),
-                   color=COLORS['exc'], lw=lw, solid_capstyle='round')
-    inner.set_xticks([])
-    inner.set_yticks([])
-    inner.set_ylim(-0.05, 1.05)
-    for name, spine in inner.spines.items():
-        spine.set_visible(name in ('left', 'bottom'))
-        spine.set_linewidth(LW_HAIR)
-        spine.set_color(COLORS['edge'])
+def _data_inset(ax, rect, *, grid='none'):
+    """A styled inset on a DATA axes (``Frame.axes_inset`` needs a Frame)."""
+    inner = ax.inset_axes(rect, transform=ax.transData)
+    inner.set_facecolor('white')
+    style_panel(inner, grid=grid)
     return inner
 
 
-# ── panel A: the learner and its two credit deliveries ────────────────────
-def panel_learner(f, header, footer):
-    """Two stations: the passive-tree learner, then its two credit deliveries."""
-    band = f.footer(footer, band_pt=11.0)
-    top = 1.0 - f.fy(1.0)
-    gap = f.fx(14.0)
-    left = (0.0, f.fy(band), 0.46 * (1.0 - gap), top - f.fy(band))
-    right = (left[0] + left[2] + gap, left[1], (1.0 - gap) - left[2], left[3])
+def _wrapped(lines):
+    """Join pre-broken footer lines (the break points are chosen by phrase)."""
+    return '\n'.join(lines)
 
-    # station 1: condition-mean partner responses drive a passive tree
-    core = f.task_card(left, title=header)
-    tree_w, tree_h = 0.54 * core[2], f.fy(56.0)
-    tree_rect = (core[0], core[1] + f.fy(11.0), tree_w, tree_h)
-    nodes = f.balanced_tree(tree_rect, depth=3, mode='plain', labels=False)
-    for name in ('T1', 'T3', 'T4', 'T6', 'T8'):
-        f.contact(nodes[name], kind='exc')
+
+# ── panel A: the statistic, on one arbor ─────────────────────────────────
+def panel_statistic(f, subtitle_lines):
+    """Two contact pairs on one arbor; one shares a soma-to-ancestor path."""
+    band = f.footer(_wrapped([
+        'partial rank r | Euclidean separation,',
+        'soma-to-contact path-length difference',
+        'recorded during stimuli, not learning']),
+        band_pt=10.5, min_frame_pt=60.0)
+    sub_pt = 10.5 * len(subtitle_lines)
+    top = 1.0 - f.fy(sub_pt)
+    for i, line in enumerate(subtitle_lines):
+        f.text((0.5, 1.0 - f.fy(10.5 * i + 5.2)), line, size=PT_BASE,
+               color=GRAY, ha='center', va='center')
+
+    core_y0, core_h = f.fy(band), top - f.fy(band)
+    core_pt = core_h * f.h_pt
+    foot_pt, head_pt = 11.0, 9.0        # tag strip under the soma / over the canopy
+    tree_w_pt = min(74.0, 0.55 * f.w_pt)
+    nodes = f.balanced_tree((0.0, core_y0 + f.fy(foot_pt), f.fx(tree_w_pt),
+                             f.fy(core_pt - foot_pt - head_pt)),
+                            depth=3, mode='forward', labels=True, trunk=True,
+                            output='y')
     canopy = max(nodes[t][1] for t in nodes.terminals)
-    f.text((core[0] + core[2] / 2.0, core[1] + core[3] - f.fy(1.0)),
-           'condition-mean partner responses', size=PT_SMALL, color=INK,
-           ha='center', va='top')
-    tag = (core[0] + tree_w + f.fx(5.0), canopy)
-    f.leader(f._off(nodes['T8'], 1.6, 1.6), f._off(tag, -1.5, 0.0))
-    f.text(tag, 'g ≥ 0', size=PT_SMALL, color=COLORS['exc'], ha='left',
-           va='center')
 
-    card_w, card_h = 50.0, 26.0
-    sx, sy = nodes.soma
-    read = (core[0] + tree_w + f.fx(8.0), sy - f.fy(card_h / 2.0),
-            f.fx(card_w), f.fy(card_h))
-    f.soma(nodes.soma, output=(read[0] - sx) * f.w_pt - 4.5)
-    f.error_in(nodes.soma, side='right')
-    f.group(read, tint='white', edge=COLORS['grid'], lw=LW_HAIR)
-    f.text((read[0] + read[2] / 2.0, sy), 'linear\nreadout ŷ', size=PT_SMALL,
-           linespacing=1.15)
-    cx, y_top = read[0] + read[2] / 2.0, read[1] + read[3]
-    f.arrow((cx, y_top + f.fy(12.0)), (cx, y_top + f.fy(1.5)), color=INK,
-            lw=LW_EDGE, head=3.4).set_linestyle((0, (2.2, 1.8)))
-    f.text((cx + f.fx(2.5), y_top + f.fy(12.5)), 'y', size=PT_SMALL,
-           color=INK, ha='left', va='bottom')
-    f.subscript((read[0] + f.fx(1.5), read[1] + read[3] + f.fy(2.0)),
-                'δ', 'out', size=PT_ANNOT, color=INK, ha='left', va='bottom')
-
-    # station 2: exact transport versus the realized-route restriction
-    core = f.task_card(right, title='credit delivery into the tree')
-    for i, (cell, mode, kind) in enumerate(
-            zip(_split_rect(f, core, 2, gap_pt=8.0),
-                ('exact', 'subtree'), ('exact', 'local rule'))):
-        cell = Frame.inset(cell, left=0.02, right=0.02)
-        rect = (cell[0], cell[1] + f.fy(31.0), cell[2], f.fy(56.0))
-        gn = f.balanced_tree(rect, depth=3, mode='plain', ghost=True,
-                             labels=False)
-        if mode == 'exact':
-            f.credit_delivery(gn, mode='exact', targets=['T6'])
-        else:
-            f.credit_delivery(gn, mode='subtree',
-                              targets=['T1', 'T4', 'T6', 'T8'],
-                              rule_color='shunting')
-        f.error_in(gn.soma, side='right', label=None)
-        f.badge((cell[0] + cell[2] / 2.0, cell[1] + f.fy(15.0)), kind,
-                ha='center', va='bottom')
-        if mode == 'subtree':
-            f.text((cell[0] + cell[2] / 2.0, cell[1] + f.fy(1.0)), 'δ = A c',
-                   size=PT_ANNOT, color=INK, ha='center', va='bottom')
-    return nodes
-
-
-def _split_rect(f, rect, n, *, gap_pt=8.0):
-    """``n`` equal columns inside ``rect`` (Frame.split works on the frame)."""
-    gap = f.fx(gap_pt)
-    w = (rect[2] - (n - 1) * gap) / n
-    return [(rect[0] + i * (w + gap), rect[1], w, rect[3]) for i in range(n)]
-
-
-# ── panel B: the structure-function question ──────────────────────────────
-def panel_question(f):
-    band = f.footer('partial rank r | distance, depth\n'
-                    'recorded during stimuli', band_pt=11.0)
-    core = (0.0, f.fy(band), 1.0, 1.0 - f.fy(band))
-    tree_rect = (core[0], core[1] + f.fy(11.0), core[2] * 0.58,
-                 core[3] * 0.74)
-    nodes = f.balanced_tree(tree_rect, depth=3, mode='plain', labels=False)
-    f.partition(nodes, [['S', 'J1', 'JL', 'JLL']], colors=('shunting',),
-                labels=None)
-    for name in ('T1', 'T2', 'T5', 'T8'):
+    # pair 1 -- shares a soma-to-ancestor path (both contacts inside one patch)
+    f.partition(nodes, [['S', 'J1', 'JL', 'JLL', 'T1', 'T2']],
+                colors=['shunting'], labels=None, pct=16)
+    for name in ('T1', 'T2'):
         f.contact(nodes[name], kind='exc')
-    f.soma(nodes.soma, output=9.0)
-    f.error_in(nodes.soma, side='right', label=None, dashed=True)
-    f.text(f._off(nodes['JL'], -4.0, 0.0), 'shared\npath', size=PT_SMALL,
-           color=label_color(ROUTE), ha='right', va='center', linespacing=1.15)
-    mid = ((nodes['T5'][0] + nodes['T8'][0]) / 2.0,
-           max(nodes['T5'][1], nodes['T8'][1]))
-    f.text(f._off(mid, 0.0, 4.5), 'none', size=PT_SMALL, color=GRAY,
-           ha='center', va='bottom')
+    pair1_x = (nodes['T1'][0] + nodes['T2'][0]) / 2.0
+    tag1 = (pair1_x, core_y0 + core_h - f.fy(7.0))
+    f.text(tag1, 'shared path', size=PT_BASE, color=label_color(ROUTE),
+           ha='center', va='center')
 
-    # the two tuning comparisons span the cell's full height so the panel's
-    # ink reaches its own frame (the strict audit's cell-fill check)
-    col_x = core[0] + core[2] * 0.63
-    w_pt, h_pt = 26.0, 16.0
-    top = core[1] + core[3]
-    for i, (phase, tag, tone) in enumerate(
-            ((0.10, 'shared path', label_color(ROUTE)),
-             (0.42, 'none', GRAY))):
-        y = (top - f.fy(h_pt + 9.0)) if i == 0 else (core[1] + f.fy(3.0))
-        f.text((col_x, y + f.fy(h_pt + 1.5)), tag, size=PT_SMALL, color=tone,
+    # pair 2 -- one contact in each half-tree, no shared path above the soma
+    for name in ('T3', 'T7'):
+        f.contact(nodes[name], kind='exc')
+        f.leader(nodes[name], nodes.soma)
+    f.text((nodes.soma[0], core_y0 + f.fy(1.5)), 'no shared path',
+           size=PT_BASE, color=GRAY, ha='center', va='bottom')
+
+    # the E/I register: partners are not all excitatory
+    f.contact(nodes['T5'], kind='inh', active=False)
+
+    # tuning sketches, one per pair, with a leader back to the pair
+    col_x = f.fx(tree_w_pt + 14.0)
+    w = 1.0 - col_x
+    h_pt = 18.0
+    bots = (core_y0 + f.fy(core_pt - h_pt - 11.0),
+            core_y0 + f.fy(foot_pt + 0.5))
+    anchors = ((pair1_x + f.fx(17.0), tag1[1]),
+               f._off(nodes['T7'], 2.6, 0.0))
+    for i, (title, phase) in enumerate((('pair 1', 0.06), ('pair 2', 0.46))):
+        y0 = bots[i]
+        f.text((col_x, y0 + f.fy(h_pt + 1.5)), title, size=PT_BASE, color=INK,
                ha='left', va='bottom')
-        mini_tuning(f, (col_x, y, f.fx(w_pt), f.fy(h_pt)), phase)
+        inner = f.axes_inset((col_x, y0, w, f.fy(h_pt)))
+        t = np.linspace(0.0, 1.0, 80)
+        for shift, colour in ((0.0, INK), (phase, GRAY)):
+            inner.plot(t, 0.5 + 0.40 * np.sin(2 * np.pi * (t + shift)),
+                       color=colour, lw=LW_REF, solid_capstyle='round')
+        inner.set(xticks=[], yticks=[], xlim=(0, 1), ylim=(-0.05, 1.05))
+        for name, spine in inner.spines.items():
+            spine.set_visible(name in ('left', 'bottom'))
+            spine.set_linewidth(LW_HAIR)
+            spine.set_color(COLORS['edge'])
+        f.leader(anchors[i], (col_x - f.fx(2.0), y0 + f.fy(h_pt / 2.0)))
+    f.text((col_x - f.fx(4.5), bots[1] + f.fy(h_pt / 2.0)), 'response',
+           size=PT_BASE, color=GRAY, ha='center', va='center', rotation=90)
+    f.text((col_x + w / 2.0, bots[1] - f.fy(1.5)), 'condition',
+           size=PT_BASE, color=GRAY, ha='center', va='top')
+
+    f.require_soma_lowest()
+    f.require_delta0(allow_no_delta0=True, reason=DELTA0_REASON)
     return nodes
 
 
-# ── panel E: the realized route dictionary ────────────────────────────────
-def panel_routes(f, matrix, groups, n_routes):
-    """Balanced-tree icon with the mapped inputs placed by ancestry, beside
-    the realized input-by-route support matrix (rows in input order)."""
+# ── panel E: the realized route dictionary ───────────────────────────────
+def panel_routes(f, matrix, groups, n_routes, subtitle_lines):
+    """Nine mapped inputs placed by ancestry beside the realized 9 x 4
+    support; the delivered field is imposed, not observed."""
     n = matrix.shape[0]
-    tree_rect = (0.0, f.fy(10.0), 0.56, 0.62)
-    nodes = f.balanced_tree(tree_rect, depth=3, mode='plain', labels=False)
-    # ancestry placement: the shared-subtree group on one depth-2 subtree,
-    # every other mapped input on its own branch.
+    band = f.footer(_wrapped([
+        'schematic placement by ancestry;',
+        'the field is imposed, not observed']),
+        band_pt=10.5, min_frame_pt=60.0)
+    sub_pt = 10.5 * len(subtitle_lines)
+    for i, line in enumerate(subtitle_lines):
+        f.text((0.5, 1.0 - f.fy(10.5 * i + 5.2)), line, size=PT_BASE,
+               color=GRAY, ha='center', va='center')
+    core_y0 = f.fy(band)
+    core_h = 1.0 - f.fy(band + sub_pt)
+
+    tree_w_pt = min(70.0, 0.52 * f.w_pt)
+    nodes = f.balanced_tree((0.0, core_y0 + f.fy(13.0), f.fx(tree_w_pt),
+                             core_h - f.fy(13.0)),
+                            depth=3, mode='forward', labels=True,
+                            output='ŷ')
     shared, singles = groups
     seats = {shared[0]: ('T1', 0.0), shared[1]: ('T2', 0.0),
              shared[2]: ('T2', 5.2)}
@@ -272,30 +221,28 @@ def panel_routes(f, matrix, groups, n_routes):
     reached = [i + 1 for i in range(n) if matrix[i].any()]
     f.credit_delivery(nodes, mode='subtree',
                       targets=[seats[i][0] for i in reached],
-                      rule_color='shunting')
-    # numbers alternate between two lanes above the canopy so neighbouring
-    # single digits keep their own air at a 7-pt terminal pitch
+                      rule_color='shunting', alpha_tags=False)
     for label, (seat, drop) in seats.items():
         par = nodes.parent[seat]
         xy = nodes[seat] if drop == 0.0 else _toward(f, nodes[seat],
                                                      nodes[par], drop)
         f.contact(xy, kind='exc')
-        if drop:
-            f.text(f._off(xy, -3.0, 0.0), str(label), size=PT_SMALL,
-                   color=INK, ha='right', va='center')
-            continue
-        lane = 3.0 if int(seat[1:]) % 2 else 10.0
-        f.text(f._off(xy, 0.0, lane), str(label), size=PT_SMALL, color=INK,
-               ha='center', va='bottom')
-    f.soma(nodes.soma, output=8.0)
-    f.error_in(nodes.soma, side='right', label=None, dashed=True)
+    f.error_in(nodes.soma, side='right', dashed=True)
+    f.badge((f.fx(tree_w_pt + 4.0), core_y0 + core_h - f.fy(4.0)),
+            'local rule', ha='right', va='top')
 
-    mat = (0.645, f.fy(17.0), 0.335, 1.0 - f.fy(30.0))
-    f.dictionary_matrix(mat, matrix, measured=True,
-                        yticks=list(range(1, n + 1)), label='A')
-    f.text((mat[0] + mat[2] / 2.0, mat[1] + mat[3] + f.fy(2.5)),
-           f'routes 1–{n_routes}', size=PT_SMALL, color=INK, ha='center',
-           va='bottom')
+    mat_w = 44.0
+    mat_h = min(56.0, core_h * f.h_pt - 20.0)
+    mat_x = 1.0 - f.fx(mat_w)
+    mat_y = core_y0 + f.fy(13.0)
+    f.dictionary_matrix((mat_x, mat_y, f.fx(mat_w), f.fy(mat_h)), matrix,
+                        measured=True, yticks=list(range(1, n + 1)),
+                        col_labels=[f'r{i + 1}' for i in range(n_routes)],
+                        label='A', min_cell_pt=6.0)
+    _delta_hat(f, (f.fx(6.0), core_y0 + f.fy(4.5)), tail=' = A c')
+
+    f.require_soma_lowest()
+    f.require_delta0()
     return nodes
 
 
@@ -307,11 +254,17 @@ def _toward(f, a, b, pt):
     return f._from_pt(A + d * pt)
 
 
-# ── build ─────────────────────────────────────────────────────────────────
+# ── build ────────────────────────────────────────────────────────────────
 def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--emit-main', action='store_true',
+                        help='also write figures/main/figure_09.pdf')
+    parser.add_argument('--no-emit-main', action='store_true')
+    args, _ = parser.parse_known_args()
+    emit_main = not args.no_emit_main
     REC.mkdir(exist_ok=True)
 
-    # -- realized route supports, all 13 scans ----------------------------
+    # -- realized route supports, all 13 scans (panels E, F) --------------
     seg = pd.read_csv(S / 'figure3/segment_metrics.csv')
     metadata = [json.loads(x) for x in
                 (S / 'fulltree_boundary/output/dictionary_and_validation_metadata.jsonl'
@@ -338,9 +291,7 @@ def main():
     key = tuple(int(rep[k]) for k in ['target_root_id', 'session', 'scan_idx'])
     a, meta = matrices[key]
     assert key[0] == REP_TARGET, key
-    # Ancestor supports contain actual zeros; no decorative nested bands.
 
-    # -- ancestry groups of the representative scan's mapped inputs -------
     _, parents, _ = parent_map(seg[seg.root_id.eq(key[0])])
     sites = list(meta['site_segment_ids'])
 
@@ -359,215 +310,331 @@ def main():
     singles = sorted(l for l in routes_up if l not in shared)
     assert len(shared) == 3 and len(singles) == 6, (shared, singles)
 
-    # -- observed structure-function alignment (panel C) ------------------
-    contrasts = pd.read_csv(S / 'review_evidence_reanalysis/functional_native_contrasts.csv')
-    effects = pd.read_csv(S / 'review_evidence_reanalysis/functional_native_target_effects.csv')
+    # -- cohort accounting (panel A sub-title) ----------------------------
+    plotted = pd.read_csv(S / 'curated_publication/figure_09_plotted.csv')
+    effects = pd.read_csv(S / 'review_evidence_reanalysis/'
+                              'functional_native_target_effects.csv')
     scan_metrics = pd.read_csv(S / 'functional_topology_all_scans/scan_metrics.csv')
-    all_scans = json.loads((S / 'functional_topology_all_scans/summary.json').read_text())
+    all_scans = json.loads((S / 'functional_topology_all_scans/summary.json'
+                            ).read_text())
+    cell_metrics = pd.read_csv(S / 'functional_topology_all_scans/cell_metrics.csv')
     selected = pd.read_csv(S / 'figure5/functional_target_metrics.csv')
-    align_rows = []
+    n_targets = int(all_scans['n_target_cells'])
+    n_scans = int(all_scans['n_scans'])
+    n_partners = int(selected.n_partners.sum())
+    p_lo = int(scan_metrics.n_presynaptic_partners.min())
+    p_hi = int(scan_metrics.n_presynaptic_partners.max())
+    subtitle_a = [f'{n_targets} targets, {n_partners} partners,',
+                  f'{n_scans} scans ({p_lo}–{p_hi} per scan)']
+
+    # -- B: the two cohorts ------------------------------------------------
+    pa = plotted[plotted.panel.eq('A')].set_index('comparison')
+    b_rows = []
     for mode, label in (('selected_scans', 'Selected scans'),
-                        ('scan_complete', f"All {all_scans['n_scans']} scans")):
-        r = contrasts[contrasts.endpoint.eq('structure_function_partial_r')
-                      & contrasts.comparison.eq(mode)].iloc[0]
+                        ('scan_complete', f'All {n_scans} scans')):
+        r = pa.loc[mode]
         v = effects[effects.endpoint.eq('structure_function_partial_r')
                     & effects.comparison.eq(mode)].effect.to_numpy()
-        assert len(v) == 7
-        align_rows.append(dict(label=label, values=v, mean=r['mean'],
-                               lo=r.ci95_low, hi=r.ci95_high, color=ROUTE,
-                               marker='o',
-                               open=(scan_metrics.shared_path_partial_r.to_numpy()
-                                     if mode == 'scan_complete' else None)))
+        assert len(v) == 7, mode
+        b_rows.append(dict(label=label, mean=float(r['mean']),
+                           lo=float(r.ci95_low), hi=float(r.ci95_high),
+                           seeds=list(map(float, v)), color='shunting',
+                           marker='D', n=int(r.n_targets),
+                           note=f'{int(r.positive_targets)}/{len(v)} +'))
+    scan_values = scan_metrics.shared_path_partial_r.to_numpy()
+    assert len(scan_values) == n_scans
 
-    # -- simulated detection curve (panel D) ------------------------------
+    # -- C: four topology measures ----------------------------------------
+    measures = (('shared_path_partial_r', 'Partial\nrank r', 'shunting'),
+                ('shared_path_spearman_r', 'Shared\npath r', 'mute'),
+                ('negative_tree_distance_spearman_r', 'Tree\ndistance r', 'mute'),
+                ('same_major_branch_delta', 'Same major\nbranch Δ', 'mute'))
+    c_rows = []
+    for column, label, colour in measures:
+        m = all_scans['metrics'][column]
+        v = cell_metrics[column].to_numpy()
+        assert len(v) == 7, column
+        c_rows.append(dict(label=label, mean=float(m['mean']),
+                           lo=float(m['target_bootstrap_ci95'][0]),
+                           hi=float(m['target_bootstrap_ci95'][1]),
+                           seeds=list(map(float, v)), color=colour,
+                           marker='D', n=len(v),
+                           note=f"{int(m['positive_targets'])}/{len(v)} +"))
+
+    # -- D: detection curves ----------------------------------------------
     power = pd.read_csv(S / 'measured_alignment_power/power_summary.csv')
-    power = power[power.reliability.eq('measured')].sort_values('mean_target_effect')
+    curves = {rel: power[power.reliability.eq(rel)].sort_values('mean_target_effect')
+              for rel in ('measured', 'perfect')}
     thresholds = json.loads((S / 'measured_alignment_power/RESULTS.json').read_text())
-    cut = float(thresholds['thresholds']['measured']
-                ['descriptive_mean_partial_rank_at_interpolation'])
-    obs = contrasts[contrasts.endpoint.eq('structure_function_partial_r')
-                    & contrasts.comparison.eq('selected_scans')].iloc[0]
+    cut_m = float(thresholds['thresholds']['measured']
+                  ['descriptive_mean_partial_rank_at_interpolation'])
+    cut_p = float(thresholds['thresholds']['perfect']
+                  ['descriptive_mean_partial_rank_at_interpolation'])
+    lam = float(thresholds['thresholds']['measured']
+                ['smallest_lambda_lower_mc_bound_ge_80'])
+    floor = float(thresholds['null_calibration']['measured']
+                  ['positive_direction_false_detection'])
+    mc_hw = float(max(((d.power_ci95_high - d.power_ci95_low) / 2.0).max()
+                      for d in curves.values()))
+    obs = pa.loc['selected_scans']
+    reliab = plotted[plotted.panel.eq('C')].measured_split_half_spearman.to_numpy()
+    partner_index = pd.read_csv(S / 'measured_alignment_power/inputs/partner_index.csv')
+    n_records = int(len(reliab))
+    n_partners_unique = int(partner_index.pre_pt_root_id.nunique())
+    assert n_records == len(partner_index) == 125
+    hist_edges = np.linspace(-0.2, 0.6, 9)
+    hist_counts, _ = np.histogram(reliab, bins=hist_edges)
+    assert int(hist_counts.sum()) == n_records
 
-    # -- held-out response prediction (panel G) ---------------------------
-    target = pd.read_csv(S / 'review_response_baselines/target_metrics.csv')
-    csum = pd.read_csv(S / 'review_response_baselines/condition_summary.csv')
-    ridge_contrasts = pd.read_csv(S / 'review_response_baselines/paired_ridge_contrasts.csv')
-    predict_rows, estimates = [], []
-    for name, label, colour, marker in (
-            ('archived_exact compartment error', 'Exact', EXACT, 'o'),
-            ('ridge_all', 'Ridge', GRAY, '^'),
-            ('archived_topology-matched routes', 'Ancestry', ROUTE, 'o'),
-            ('archived_random anatomical routes', 'Random', GRAY, 'v'),
-            ('archived_site-shuffled routes', 'Shuffled', GRAY, 'v')):
-        v = target[target.method.eq(name)].sort_values('target_root_id').nmse.to_numpy()
-        assert len(v) == 7
-        r = csum[csum.method.eq(name)].iloc[0]
-        predict_rows.append(dict(label=label, values=v, mean=r.mean_nmse,
-                                 lo=r.ci95_low, hi=r.ci95_high, color=colour,
-                                 marker=marker))
-        estimates.append(dict(panel='G', method=name, mean=r.mean_nmse,
-                              ci95_low=r.ci95_low, ci95_high=r.ci95_high))
-    ridge_mean = float(csum[csum.method.eq('ridge_all')].mean_nmse.iloc[0])
-
-    # -- update reconstruction (panel H) ----------------------------------
-    cells = pd.read_csv(S / 'fulltree_within_span_oracle/cell_metrics.csv')
-    osum = pd.read_csv(S / 'fulltree_within_span_oracle/condition_summary.csv')
-    span_rows = []
-    for name, mode, label, colour, marker in (
-            ('unprojected baseline transfer', 'frozen_baseline',
-             'Unrestricted / fixed', FIXED, 'o'),
-            ('topology-matched routes', 'frozen_baseline',
-             'Ancestry / fixed', ROUTE, 'o'),
-            ('topology-matched routes', 'trialwise_update_oracle',
-             'Ancestry / oracle', ROUTE, 'D'),
-            ('random anatomical routes', 'trialwise_update_oracle',
-             'Random / oracle', GRAY, 'D'),
-            ('site-shuffled routes', 'trialwise_update_oracle',
-             'Shuffled / oracle', GRAY, 'D')):
-        r = osum[osum.method.eq(name) & osum['mode'].eq(mode)].iloc[0]
-        v = cells[cells.method.eq(name) & cells['mode'].eq(mode)].sort_values(
-            'target_root_id').update_match.to_numpy()
-        assert len(v) == 7
-        span_rows.append(dict(label=label, values=v, mean=r.mean_update_match,
-                              lo=r.ci95_low, hi=r.ci95_high, color=colour,
-                              marker=marker))
-        estimates.append(dict(panel='H', method=f'{name} | {mode}',
-                              mean=r.mean_update_match, ci95_low=r.ci95_low,
-                              ci95_high=r.ci95_high))
+    # -- F: coverage across the thirteen scans ----------------------------
+    n_in = support.n_sites.to_numpy(float)
+    cov = support.coverage.to_numpy(float) * 100.0
+    single = support.one_site_routes.to_numpy(bool)
+    k_routes = int(support.n_routes.max())
+    mean_cov = float(support.coverage.mean()) * 100.0
+    below = support[support.coverage < support.n_routes / support.n_sites - 1e-9]
 
     # -- canvas -----------------------------------------------------------
-    canvas = NativeCanvas(485 / 72, 3, row_weights=[122, 100, 104],
-                          hgutter_pt=40, vgutter_pt=48,
-                          margins=Margins(left=52, right=14, top=25, bottom=38))
-    ax_a = canvas.panel('A', 0, 0, 8, schematic=True,
-                        title='Partner responses drive a passive tree')
-    ax_b = canvas.panel('B', 0, 8, 4, schematic=True,
+    canvas = NativeCanvas(490 / 72, 3, row_weights=[124, 114, 108],
+                          hgutter_pt=40, vgutter_pt=44,
+                          margins=Margins(left=40, right=14, top=22, bottom=34))
+    ax_a = canvas.panel('A', 0, 0, 5, schematic=True,
                         title='Shared path vs similarity')
-    ax_c = canvas.panel('C', 1, 0, 4, title='Alignment near zero')
-    ax_d = canvas.panel('D', 1, 4, 4, title='Below the detection point')
-    ax_e = canvas.panel('E', 1, 8, 4, schematic=True,
+    ax_b = canvas.panel('B', 0, 5, 7,
+                        title='No ancestry alignment in either cohort')
+    ax_c = canvas.panel('C', 1, 0, 5, title='All four measures null')
+    ax_d = canvas.panel('D', 1, 5, 7,
+                        title='Observed effect below the detection point')
+    ax_e = canvas.panel('E', 2, 0, 5, schematic=True,
                         title='One input per route')
-    ax_f = canvas.panel('F', 2, 0, 4, title='Coverage falls with inputs')
-    ax_g = canvas.panel('G', 2, 4, 4, title='No gain over ridge')
-    ax_h = canvas.panel('H', 2, 8, 4, title='Span, not c, is the limit')
+    ax_f = canvas.panel('F', 2, 5, 7,
+                        title='Routes reach half the mapped inputs')
 
-    # -- C: observed alignment --------------------------------------------
-    forest(ax_c, align_rows, 'Partial rank correlation', (-0.74, 0.62),
-           xticks=[-0.5, -0.25, 0, 0.25, 0.5])
-    ax_c.axvline(0, color=GRAY, lw=LW_REF, ls='--', zorder=1)
-    ax_c.text(0.03, 1.42, 'chance', fontsize=PT_SMALL, color=GRAY, ha='left',
-              va='center')
-    ax_c.text(-0.72, -0.33, 'scans', fontsize=PT_SMALL, color=GRAY,
-              ha='left', va='center')
+    # -- B ----------------------------------------------------------------
+    out_b = canvas.forest(
+        ax_b, [dict(r, note=None) for r in b_rows],
+        value_label='Ancestry–response partial rank correlation',
+        xlim=(-0.5, 0.5), reference=0.0, reference_label='', tag='')
+    ax_b.set_xticks([-0.5, -0.25, 0.0, 0.25, 0.5])
+    ax_b.set_xticklabels(['−0.5', '−0.25', '0', '0.25', '0.5'])
+    for row, y in zip(b_rows, out_b['ypos']):
+        ax_b.text(0.49, y, row['note'], fontsize=PT_BASE, color=GRAY,
+                  ha='right', va='center', zorder=6)
+    y_rug = out_b['ypos'][-1] + 0.45
+    ax_b.plot(scan_values, np.full(len(scan_values), y_rug), linestyle='none',
+              marker='o', markersize=SEED_MS, markerfacecolor='none',
+              markeredgecolor=GRAY, markeredgewidth=LW_HAIR, zorder=3.5)
+    ax_b.set_ylim(2.62, -0.62)
+    ax_b.text(-0.012, -0.52, 'no alignment', fontsize=PT_BASE,
+              color=GRAY, ha='right', va='center', zorder=6)
+    ax_b.text(-0.49, y_rug + 0.33, f'{n_scans} scan values (descriptive)',
+              fontsize=PT_BASE, color=GRAY, ha='left', va='center', zorder=6)
+    ax_b.text(0.49, y_rug + 0.61, 'positive = ancestry alignment →',
+              fontsize=PT_BASE, color=GRAY, ha='right', va='center', zorder=6)
+    ax_b.text(-0.49, y_rug + 0.89,
+              f'n = {n_targets} target cells; 95 % target bootstrap, '
+              f'20,000 draws', fontsize=PT_BASE, color=GRAY, ha='left',
+              va='center', zorder=6)
+    # cohort bracket: the two rows are the same seven targets
+    bx = -0.478
+    ax_b.plot([bx, bx], [-0.16, 1.16], color=GRAY, lw=LW_HAIR, zorder=3)
+    for yb in (-0.16, 1.16):
+        ax_b.plot([bx, bx + 0.013], [yb, yb], color=GRAY, lw=LW_HAIR, zorder=3)
+    ax_b.text(-0.458, 0.5, 'same seven targets, re-analysed', fontsize=PT_BASE,
+              color=GRAY, ha='left', va='center', zorder=6)
 
-    # -- D: simulated detection curve -------------------------------------
-    x = power.mean_target_effect.to_numpy()
-    ax_d.fill_between(x, power.power_ci95_low, power.power_ci95_high,
-                      color=mix('shunting', 16), lw=0, zorder=2)
-    ax_d.plot(x, power.power, color=ROUTE, lw=LW_DATA, zorder=3,
-              solid_capstyle='round')
-    ax_d.axhline(0.80, color=GRAY, lw=LW_REF, ls='--', zorder=1)
-    ax_d.plot([cut, cut], [0, 0.80], color=GRAY, lw=LW_HAIR, ls='--', zorder=1)
-    ax_d.text(cut + 0.012, 0.80, f'80 %\nat {cut:.3f}', fontsize=PT_SMALL,
-              color=GRAY, ha='left', va='top', linespacing=1.15)
-    ax_d.errorbar(obs['mean'], 0.055,
-                  xerr=[[obs['mean'] - obs.ci95_low],
-                        [obs.ci95_high - obs['mean']]],
-                  fmt='D', ms=MARKER_MS, color=INK, mfc='white', mew=LW_ERR,
-                  lw=LW_ERR, capsize=2, zorder=6)
-    ax_d.text(obs.ci95_high + 0.015, 0.055, 'observed', fontsize=PT_SMALL,
-              color=INK, ha='left', va='center')
-    ax_d.set(xlim=(-0.30, 0.375), ylim=(-0.02, 1.03),
-             yticks=[0, 0.5, 1.0],
-             xlabel='Mean simulated effect', ylabel='Detection probability')
-    ax_d.set_xticks([-0.2, 0, 0.2])
-    style_panel(ax_d, grid='y')
-    # keep D's y decoration narrow: its panel letter shares the 40-pt gutter
-    # with C's right edge (canvas.align_letters measures the collision).
-    ax_d.yaxis.labelpad = 1.0
+    # -- C ----------------------------------------------------------------
+    canvas.forest(ax_c, c_rows, value_label='Target-level association',
+                  xlim=(-0.5, 0.5), reference=0.0, reference_label='', tag='')
+    ax_c.set_xticks([-0.5, -0.25, 0.0, 0.25, 0.5])
+    ax_c.set_xticklabels(['−0.5', '−0.25', '0', '0.25', '0.5'])
+    ax_c.set_ylim(4.82, -0.66)
+    ax_c.text(-0.012, -0.56, 'no alignment', fontsize=PT_BASE, color=GRAY,
+              ha='right', va='center', zorder=6)
+    ax_c.text(-0.49, 3.62, 'tree distance sign-flipped: + = closer',
+              fontsize=PT_BASE, color=GRAY, ha='left', va='center', zorder=6)
+    ax_c.text(-0.49, 4.05, f'all {n_scans} scans; n = {n_targets} target cells',
+              fontsize=PT_BASE, color=GRAY, ha='left', va='center', zorder=6)
+    ax_c.text(-0.49, 4.48, '95 % target bootstrap, 20,000 draws',
+              fontsize=PT_BASE, color=GRAY, ha='left', va='center', zorder=6)
 
-    # -- F: route coverage ------------------------------------------------
-    single = support.one_site_routes.to_numpy()
-    n_in = support.n_sites.to_numpy()
-    cov = support.coverage.to_numpy() * 100.0
-    grid_n = np.arange(n_in.min(), n_in.max() + 1)
-    ax_f.plot(grid_n, 100.0 * support.n_routes.max() / grid_n, color=GRAY,
-              lw=LW_REF, ls='--', zorder=2)
-    ax_f.text(grid_n[-1] - 0.3, 100.0 * support.n_routes.max() / grid_n[-1] + 4,
-              '4/n', fontsize=PT_SMALL, color=GRAY, ha='right', va='bottom')
-    ax_f.plot(n_in[~single], cov[~single], 'o', ms=MARKER_MS - 0.6, color=ROUTE,
-              mfc=ROUTE, mew=0, zorder=4)
-    ax_f.plot(n_in[single], cov[single], 'o', ms=MARKER_MS - 0.6, color=ROUTE,
-              mfc='white', mew=LW_ERR, zorder=5)
-    ax_f.axhline(100, color=GRAY, lw=LW_REF, ls='--', zorder=1)
-    ax_f.text(n_in.max(), 100.5, 'all inputs', fontsize=PT_SMALL, color=GRAY,
-              ha='right', va='bottom')
-    ax_f.set(xlim=(3.6, 18.4), ylim=(0, 108), xticks=[5, 9, 13, 17],
-             yticks=[0, 25, 50, 75, 100],
-             xlabel='Mapped inputs per scan', ylabel='Inputs reached (%)')
+    # -- D ----------------------------------------------------------------
+    for rel, colour, name in (('perfect', CEIL, 'perfect reliability'),
+                              ('measured', ROUTE, 'measured reliability')):
+        d = curves[rel]
+        ax_d.fill_between(d.mean_target_effect, d.power_ci95_low,
+                          d.power_ci95_high, color=tint_pct(colour, 16),
+                          lw=0, zorder=2 if rel == 'perfect' else 2.4)
+        ax_d.plot(d.mean_target_effect, d.power, color=colour, lw=LW_DATA,
+                  solid_capstyle='round', zorder=3 if rel == 'perfect' else 3.4)
+    ax_d.axhline(0.80, color=GRAY, lw=LW_REF, dashes=(2.6, 2.0), zorder=1)
+    # the false-positive floor is drawn only left of the inset, so the inset's
+    # own tick labels never sit on a reference rule (CF-7 keeps the label
+    # right-aligned ON the line)
+    ax_d.plot([-0.30, 0.235], [floor, floor], color=GRAY, lw=LW_REF,
+              dashes=(2.6, 2.0), zorder=1)
+    ax_d.axvline(0.0, color=GRAY, lw=LW_HAIR, dashes=(2.6, 2.0), zorder=1)
+    ax_d.plot([cut_m, cut_m], [0.72, 0.80], color=GRAY, lw=LW_HAIR,
+              dashes=(2.6, 2.0), zorder=1.5)
+    ax_d.set(xlim=(-0.30, 0.55), ylim=(-0.32, 1.16))
+    ax_d.set_xticks([-0.25, 0.0, 0.25, 0.50])
+    ax_d.set_xticklabels(['−0.25', '0', '0.25', '0.50'])
+    ax_d.set_yticks([0, 0.25, 0.50, 0.75, 1.00])
+    ax_d.set_xlabel('Mean simulated partial rank correlation', fontsize=PT_EMPH)
+    ax_d.set_ylabel('Detection probability', fontsize=PT_EMPH)
+    style_panel(ax_d, grid='none')
+    ax_d.spines['left'].set_bounds(0.0, 1.0)
+    ax_d.spines['bottom'].set_bounds(-0.30, 0.55)
+    ax_d.text(0.545, 0.815, '80 % detection', fontsize=PT_BASE, color=GRAY,
+              ha='right', va='bottom', zorder=6)
+    ax_d.text(-0.020, floor + 0.075, f'false-positive rate {floor:.3f}',
+              fontsize=PT_BASE, color=GRAY, ha='right', va='center', zorder=6)
+    ax_d.text(-0.008, 0.42, 'no alignment', fontsize=PT_BASE, color=GRAY,
+              ha='right', va='center', zorder=6)
+    ax_d.text(0.190, 0.95, f'{cut_m:.3f} measured', fontsize=PT_BASE,
+              color=GRAY, ha='right', va='center', zorder=6)
+    ax_d.text(0.190, 0.86, f'{cut_p:.3f} perfect', fontsize=PT_BASE,
+              color=GRAY, ha='right', va='center', zorder=6)
+    ax_d.plot([0.200, 0.2445], [0.895, 0.815], color=GRAY, lw=LW_HAIR,
+              zorder=2)
+    ax_d.text(-0.295, 1.09, f'λ = {lam:.2f} respecting the MC band',
+              fontsize=PT_BASE, color=INK, ha='left', va='center', zorder=6)
+    ax_d.text(0.545, 1.09, 'perfect reliability', fontsize=PT_BASE,
+              color=label_color(CEIL), ha='right', va='center', zorder=6)
+    ax_d.plot([0.42, 0.42], [1.055, 1.00], color=GRAY, lw=LW_HAIR, zorder=2)
+    ax_d.text(0.545, 0.72, 'measured reliability', fontsize=PT_BASE,
+              color=label_color(ROUTE), ha='right', va='center', zorder=6)
+    ax_d.plot([0.250, 0.223], [0.725, 0.742], color=GRAY, lw=LW_HAIR, zorder=2)
+    # observed rug -- the estimate located on this axis, not a power estimate
+    y_obs = -0.14
+    ax_d.plot([-0.30, 0.55], [y_obs, y_obs], color=GRAY, lw=LW_HAIR, zorder=1)
+    ax_d.plot([float(obs.ci95_low), float(obs.ci95_high)], [y_obs, y_obs],
+              color=ROUTE, lw=LW_ERR, solid_capstyle='butt', zorder=4)
+    ax_d.plot([float(obs['mean'])], [y_obs], marker='D', markersize=MARKER_MS,
+              markerfacecolor='white', markeredgecolor=ROUTE,
+              markeredgewidth=LW_ERR, linestyle='none', zorder=5)
+    ax_d.text(0.135, y_obs - 0.10, 'observed (selected scans)',
+              fontsize=PT_BASE, color=label_color(ROUTE), ha='left',
+              va='center', zorder=6)
+    # inset: measured split-half reliability, the calibration of the curves
+    ax_d.text(0.255, 0.600, 'Repeat reliability', fontsize=PT_BASE,
+              color=GRAY, ha='left', va='center', zorder=6)
+    inset = _data_inset(ax_d, (0.255, 0.12, 0.290, 0.42))
+    for lo, hi, count in zip(hist_edges[:-1], hist_edges[1:], hist_counts):
+        negative = hi <= 0.0
+        inset.bar(lo, count, width=hi - lo, align='edge',
+                  facecolor='none' if negative else tint_pct(ROUTE, 40),
+                  edgecolor=GRAY if negative else ROUTE, linewidth=LW_HAIR,
+                  zorder=3)
+    inset.set(xlim=(-0.2, 0.6), ylim=(0, 46))
+    inset.set_xticks([-0.2, 0.2, 0.6])
+    inset.set_xticklabels(['−0.2', '0.2', '0.6'])
+    inset.set_yticks([0, 20, 40])
+    inset.set_xlabel('split-half r', fontsize=PT_BASE, labelpad=1.0)
+    inset.set_ylabel('records', fontsize=PT_BASE, labelpad=1.0)
+
+    # -- F ----------------------------------------------------------------
+    grid_n = np.linspace(4.0, 18.6, 200)
+    ax_f.plot(grid_n, 100.0 * k_routes / grid_n, color=GRAY, lw=LW_REF,
+              dashes=(2.6, 2.0), zorder=2)
+    ax_f.text(6.1, 100.0 * k_routes / 6.1 + 4.0, f'{k_routes}/n',
+              fontsize=PT_BASE, color=GRAY, ha='left', va='bottom', zorder=6)
+    ax_f.axhline(100.0, color=GRAY, lw=LW_REF, dashes=(2.6, 2.0), zorder=1)
+    ax_f.text(18.5, 102.0, 'all inputs', fontsize=PT_BASE, color=GRAY,
+              ha='right', va='bottom', zorder=6)
+    ax_f.axhline(mean_cov, color=ROUTE, lw=LW_REF, dashes=(5.0, 1.6, 1.2, 1.6),
+                 zorder=1.5)
+    ax_f.text(18.5, mean_cov + 2.5, f'mean {mean_cov:.1f} %', fontsize=PT_BASE,
+              color=label_color(ROUTE), ha='right', va='bottom', zorder=6)
+    ax_f.plot(n_in[~single], cov[~single], linestyle='none', marker='o',
+              markersize=MARKER_MS, markerfacecolor=ROUTE,
+              markeredgecolor=ROUTE, markeredgewidth=0, zorder=4)
+    ax_f.plot(n_in[single], cov[single], linestyle='none', marker='o',
+              markersize=MARKER_MS, markerfacecolor='white',
+              markeredgecolor=ROUTE, markeredgewidth=LW_ERR, zorder=5)
+    ax_f.set(xlim=(4.0, 18.6), ylim=(-6.0, 134.0))
+    ax_f.set_xticks([5, 8, 11, 14, 17])
+    ax_f.set_yticks([0, 25, 50, 75, 100])
+    ax_f.set_xlabel('Mapped inputs in the scan', fontsize=PT_EMPH)
+    ax_f.set_ylabel('Mapped inputs reached (%)', fontsize=PT_EMPH)
     style_panel(ax_f, grid='y')
-    ax_f.text(0.03, 0.03, f'open: all routes single-input '
-                           f'({int(single.sum())}/13)',
-              transform=ax_f.transAxes, fontsize=PT_SMALL, color=GRAY,
-              ha='left', va='bottom', zorder=6)
+    ax_f.spines['left'].set_bounds(0.0, 100.0)
+    ax_f.text(18.5, 129.0,
+              f'open: four single-input routes ({int(single.sum())} of '
+              f'{n_scans} scans)', fontsize=PT_BASE, color=GRAY, ha='right',
+              va='center', zorder=6)
+    ax_f.text(18.5, 118.0,
+              f'{len(below)} scans fall below {k_routes}/n: routes can repeat '
+              f'an input', fontsize=PT_BASE, color=GRAY, ha='right',
+              va='center', zorder=6)
+    ax_f.text(18.5, 72.0,
+              f'n = {n_scans} scans from {n_targets} target cells;',
+              fontsize=PT_BASE, color=GRAY, ha='right', va='center', zorder=6)
+    ax_f.text(18.5, 62.0, 'descriptive, no interval', fontsize=PT_BASE,
+              color=GRAY, ha='right', va='center', zorder=6)
 
-    # -- G: held-out prediction -------------------------------------------
-    forest(ax_g, predict_rows, 'Held-out NMSE', (0.58, 1.02),
-           xticks=[0.6, 0.7, 0.8, 0.9])
-    ax_g.axvline(ridge_mean, color=GRAY, lw=LW_REF, ls=':', zorder=1)
-    _badge_on(ax_g, 1.01, 4.28, 'exact', ha='right')
-
-    # -- H: update reconstruction -----------------------------------------
-    forest(ax_h, span_rows, 'Update reconstruction', (-0.06, 1.20),
-           xticks=[0, 0.5, 1.0])
-    ax_h.axvline(1.0, color=GRAY, lw=LW_REF, ls='--', zorder=1)
-    ax_h.text(1.02, 3.66, 'exact', fontsize=PT_SMALL, color=GRAY, ha='left',
-              va='center')
-    _badge_on(ax_h, 0.62, 2.28, 'oracle')
+    # Tighten the tick / label pads on every data axes: the 40 pt vertical
+    # gutter has to hold one row's x labels and the next row's letter band,
+    # and the default pads leave the row-separation audit under its 8.5 pt
+    # floor.  The type size is untouched (CF-2).
+    for ax in (ax_b, ax_c, ax_d, ax_f):
+        ax.tick_params(axis='both', pad=1.6)
+        ax.xaxis.labelpad = 1.2
+        ax.yaxis.labelpad = 1.2
 
     # -- lock the grid, then draw the schematics at their final sizes -----
     style_direct_color_labels(canvas.fig)
     canvas.lock_reserves()
 
-    header = (f"{all_scans['n_target_cells']} targets, {all_scans['n_scans']} "
-              f"scans, {int(scan_metrics.n_presynaptic_partners.min())}–"
-              f"{int(scan_metrics.n_presynaptic_partners.max())} partners per "
-              f"scan ({int(selected.n_partners.sum())} selected)")
-    panel_learner(Frame(ax_a), header,
-                  'A = realized routes; c fixed or oracle; '
-                  'readout and bias exact, stimuli held out')
-    panel_question(Frame(ax_b))
-    panel_routes(Frame(ax_e), a, (shared, singles), int(a.shape[1]))
+    panel_statistic(Frame(ax_a), subtitle_a)
+    panel_routes(Frame(ax_e), a, (shared, singles), int(a.shape[1]),
+                 [f'{len(a)} mapped inputs, {a.shape[1]} routes'])
 
-    findings = list(canvas.align_letters())
-    problems = canvas.save(OUT, name='credit_first_figure_08', dpi=180,
-                           lock=False)
-    MAIN.parent.mkdir(parents=True, exist_ok=True)
-    MAIN.write_bytes(OUT.read_bytes())
+    problems = canvas.save(OUT, name='credit_first_figure_08', dpi=180)
+    if emit_main:
+        MAIN.parent.mkdir(parents=True, exist_ok=True)
+        MAIN.write_bytes(OUT.read_bytes())
 
     # -- render-time Source Data and provenance ---------------------------
     support.to_csv(REC / 'figure_08_support.csv', index=False)
-    pd.DataFrame(estimates).to_csv(REC / 'figure_08_prediction_summary.csv',
-                                   index=False)
     np.savez_compressed(REC / 'figure_08_actual_support.npz', matrix=a,
                         site_ids=np.array(meta['site_segment_ids']),
                         route_ids=np.array(meta['selected_route_segments']))
+    reliability_rows = plotted[plotted.panel.eq('C')][
+        ['scan', 'partner_index', 'measured_split_half_spearman']].copy()
+    reliability_rows = reliability_rows.merge(
+        partner_index[['scan', 'partner_index', 'pre_pt_root_id',
+                       'repeat_reliability']],
+        on=['scan', 'partner_index'], how='left')
+    assert len(reliability_rows) == n_records
+    assert reliability_rows.pre_pt_root_id.nunique() == n_partners_unique
+    reliability_rows.to_csv(REC / 'figure_09_reliability_source.csv',
+                            index=False)
+
     files = [Path(__file__),
              S / 'figure3/segment_metrics.csv',
              S / 'fulltree_boundary/output/dictionary_and_validation_metadata.jsonl',
-             S / 'review_evidence_reanalysis/functional_native_contrasts.csv',
+             S / 'curated_publication/figure_09_plotted.csv',
              S / 'review_evidence_reanalysis/functional_native_target_effects.csv',
              S / 'functional_topology_all_scans/scan_metrics.csv',
+             S / 'functional_topology_all_scans/cell_metrics.csv',
              S / 'functional_topology_all_scans/summary.json',
              S / 'figure5/functional_target_metrics.csv',
              S / 'measured_alignment_power/power_summary.csv',
              S / 'measured_alignment_power/RESULTS.json',
-             S / 'review_response_baselines/target_metrics.csv',
-             S / 'review_response_baselines/condition_summary.csv',
-             S / 'review_response_baselines/paired_ridge_contrasts.csv',
-             S / 'fulltree_within_span_oracle/cell_metrics.csv',
-             S / 'fulltree_within_span_oracle/condition_summary.csv']
+             S / 'measured_alignment_power/inputs/partner_index.csv']
     payload = dict(
+        figure='fig9', label='fig:boundary', panels='a-f',
+        canvas=dict(width_pt=518.4, height_pt=490.0,
+                    schematic_fraction=round(
+                        (176.8 * 124 + 176.8 * 108) / (464.4 * 434), 4),
+                    schematic_formula=('sum(schematic slot w_pt * h_pt) / '
+                                       '(live_w_pt * live_h_pt)')),
+        delta0_exemption=dict(panel='A', reason=DELTA0_REASON),
+        forest_panels=['B', 'C'],
+        scan_rug_offset_rows=0.45,
+        scan_rug_note=('descriptive within-row distribution rug, not the '
+                       'CF-6 +0.22 second-arm offset'),
         representative=dict(zip(['target_root_id', 'session', 'scan_idx'], key)),
         selection='Median mapped-input count, identifier ties; no outcome selection',
         coordinate_definition=(
@@ -577,28 +644,39 @@ def main():
         ancestry_placement=dict(shared_subtree=shared, own_branch=singles,
                                 rule='deepest shared ancestor of the mapped '
                                      'input segments; schematic placement only'),
-        mean_scan_coverage=float(support.coverage.mean()),
-        mean_sites_per_route=float(support.sites_per_route.mean()),
-        all_one_site_scans=int(support.one_site_routes.sum()),
-        scans_below_four_over_n=int((support.coverage
-                                     < support.n_routes / support.n_sites
-                                     - 1e-9).sum()),
-        n_scans=13, n_targets=7,
-        selected_scan_partners=int(selected.n_partners.sum()),
-        partners_per_scan=[int(scan_metrics.n_presynaptic_partners.min()),
-                           int(scan_metrics.n_presynaptic_partners.max())],
-        detection_threshold_effect=cut,
+        n_targets=n_targets, n_scans=n_scans,
+        selected_scan_partners=n_partners,
+        partners_per_scan=[p_lo, p_hi],
+        panel_b={r['label']: dict(mean=r['mean'], ci95=[r['lo'], r['hi']],
+                                  note=r['note']) for r in b_rows},
+        panel_c={r['label'].replace('\n', ' '):
+                 dict(mean=r['mean'], ci95=[r['lo'], r['hi']], note=r['note'])
+                 for r in c_rows},
+        panel_d=dict(threshold_measured=cut_m, threshold_perfect=cut_p,
+                     lambda_mc_respecting=lam, false_detection=floor,
+                     mc_halfwidth_max=mc_hw,
+                     n_replicates=int(curves['measured'].n_replicates.max()),
+                     inset_bins=[int(v) for v in hist_counts],
+                     inset_records=n_records,
+                     inset_partners=n_partners_unique),
+        panel_f=dict(mean_coverage_pct=mean_cov,
+                     all_one_site_scans=int(single.sum()),
+                     scans_below_k_over_n=int(len(below)),
+                     below_rows=[dict(target_root_id=int(r.target_root_id),
+                                      session=int(r.session),
+                                      scan_idx=int(r.scan_idx),
+                                      n_sites=int(r.n_sites),
+                                      coverage_pct=round(float(r.coverage) * 100, 1))
+                                 for r in below.itertuples()]),
         observed_selected_scan=dict(mean=float(obs['mean']),
                                     ci95_low=float(obs.ci95_low),
                                     ci95_high=float(obs.ci95_high)),
-        ridge_mean_nmse=ridge_mean,
-        paired_ridge_contrasts={r.comparator: float(r.other_minus_allridge_mean_nmse)
-                                for r in ridge_contrasts.itertuples()},
         source_sha256={str(p.relative_to(J)): hashlib.sha256(p.read_bytes()).hexdigest()
                        for p in files},
-        layout_findings=list(problems) + findings)
+        layout_findings=list(problems))
     (REC / 'figure_08_sources.json').write_text(json.dumps(payload, indent=2) + '\n')
-    print(json.dumps({k: v for k, v in payload.items() if k != 'source_sha256'},
+    print(json.dumps({k: v for k, v in payload.items()
+                      if k not in ('source_sha256', 'ancestry_placement')},
                      indent=2))
 
 
