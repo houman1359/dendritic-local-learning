@@ -394,3 +394,48 @@ PANEL_CONTENT = {
                    reason='Copy kept: printed here as S13C and reproduced at the main-text type scale as Fig. 4H.',
                    numbers_at='source_data/morphology_credit/'),
 }
+
+# Figures whose frozen panel inventory cannot be pasted at PASTE_SCALE = 1.0
+# inside the 540 pt sheet cap (SI_PLAN 5.1/5.2, DECISIONS Q5).  Each entry is
+# a work queue item, not a waiver: it names the native re-render or legacy
+# port that removes the exemption, and the reason the crop cannot.  build.py
+# asserts that every below-target figure appears here and writes the table
+# into configs/supplement_consolidation/audit_report.json.
+SCALE_EXEMPTIONS = {
+ 'scalar_tree_capacity': dict(
+   figure='S12', native_order='legacy port',
+   builder='scripts/build_morphology_followup_figures.py',
+   reason=('Six frozen panels plus the Q6 legend strip need 573.7 pt of panel band at 1.0; '
+           'the widest row (old S36A,B,D) is 606.1 pt against 498.4 pt of usable width. '
+           'The R6/R8 restorations are cleaner re-rendered than cropped.')),
+ 'conductance_optimization': dict(
+   figure='S20', native_order='N4',
+   builder=('scripts/conductance_credit_demand/build_supplementary.py + '
+            'scripts/conductance_credit_demand/report_expanded_rates.py'),
+   reason=('Five panels of about 196 pt each need three rows: 587.1 pt of panel band at 1.0 '
+           'against 471 pt available under the cap. Both sources are native.')),
+ 'physical_architecture': dict(
+   figure='S22', native_order='N6 (mandatory, SI_NUMBERING S22 height note)',
+   builder=('scripts/build_supplementary_figures_s17_s20_native.py + '
+            'scripts/build_main_figure_06.py'),
+   reason=('AMENDMENTS B6 keeps eight panels (three copies kept plus R16, R17); four rows of '
+           'about 149 pt need 595 pt of panel band at 1.0 against 448 pt available.')),
+ 'shunt_sensitivity': dict(
+   figure='S29', native_order='N7',
+   builder=('scripts/build_supplementary_figure_s21_native.py + '
+            'scripts/build_focal_selectivity_figure.py (legacy port for old S11)'),
+   reason=('The frozen six-panel order of AMENDMENTS B8 with Q3 needs 558.9 pt of panel band '
+           'at 1.0. Old S21 is native; old S11A--C is legacy and must be ported.')),
+ 'measured_transfer_geometry': dict(
+   figure='S31', native_order='N8',
+   builder=('scripts/build_journal_figures.py + scripts/credit_first_figures/build_measured.py '
+            '+ scripts/measured_alignment_power/report.py'),
+   reason=('Closest to target: 562.8 pt at 1.0, 22.8 pt over the cap, because old S56C is a '
+           '496.4 pt full-width panel that must hold its own row. All three sources are native.')),
+ 'finite_horizon': dict(
+   figure='S35', native_order='legacy port',
+   builder='scripts/build_morphology_followup_figures.py',
+   reason=('Q4 fallback puts R10, R11 and R13 on this sheet; three rows of tall dot plots need '
+           '546.2 pt of panel band at 1.0. This is also the port that would make the DECISIONS '
+           'Q4 merge feasible.')),
+}

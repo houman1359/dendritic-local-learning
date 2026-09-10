@@ -30,7 +30,7 @@ from specification import (FIGURES, REMOVED_SHARED_REGIONS, SHARED_LEGENDS, WHOL
  PANEL_BOUNDS, PANEL_REDACTIONS, PANEL_PATCHES, PANEL_TEXT, NATIVE_LEGENDS,
  EXPLICIT_NUMERICAL_SOURCES, EXTRA_ASSETS, CAPTION_APPEND, ALIAS_EXTRA,
  ALIAS_BLACKLIST, PANEL_CONTENT, PANEL_REASONS, SOURCE_DATA_DIRS,
- ASSET_PATH_OVERRIDES)
+ ASSET_PATH_OVERRIDES, SCALE_EXEMPTIONS)
 from tex_sources import expanded_tex
 import journal_style as JS
 OUT=J/'figures/supplementary/curated'; CFG=J/'configs/supplement_consolidation'; TEX=J/'supplementary/curated'
@@ -301,8 +301,16 @@ def main():
 \end{figure}
 ''')
   (TEX/(module+'_figures.tex')).write_text('\n'.join(text))
+ below={k:v for k,v in scales.items() if v<PASTE_SCALE-1e-9}
+ # An exemption is a work queue entry, not a waiver: every figure that cannot
+ # be pasted at 1.0 must name the builder that would remove the exemption.
+ missing=sorted(set(below)-set(SCALE_EXEMPTIONS))
+ if missing:raise AssertionError('below PASTE_SCALE with no SCALE_EXEMPTIONS entry: '+', '.join(missing))
+ stale=sorted(set(SCALE_EXEMPTIONS)-set(below))
  report={'paste_scale_target':PASTE_SCALE,'height_cap_pt':HEIGHT_CAP,'scales':scales,
-         'below_target_scale':{k:v for k,v in scales.items() if v<PASTE_SCALE-1e-9},
+         'below_target_scale':below,
+         'scale_exemptions':{k:dict(SCALE_EXEMPTIONS[k],paste_scale=below[k]) for k in below},
+         'cleared_scale_exemptions':stale,
          'over_height_cap':{a['id']:a['height_pt'] for a in assets if a['height_pt']>HEIGHT_CAP+.5}}
  if not args.no_audit:
   from figure_canvas import audit_native_pdf
