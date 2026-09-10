@@ -472,15 +472,30 @@ def panel_task(ax, tiers):
     nodes = f.balanced_tree(rect, depth=3, mode="forward", trunk=True,
                             labels=True, output="z", soma_r_pt=3.0,
                             input_labels=[("b", str(i + 1)) for i in range(8)])
-    # coefficient tiers: an ORDINAL distance ladder, so ORDINAL_RAMP and not
-    # K_CYCLE (which is the ADDRESS alphabet).  Recorded in the manifest.
+    # coefficient tiers (QA 2026-09-09): NOT drawn as tints on the tree,
+    # where they merged with each other and with the K = 4 delivery capsule.
+    # Each tier is a 16 % ORDINAL_RAMP band in the key row above its own
+    # leaves, carrying its coefficient, so tier and delivery never share a fill.
     f.note("address_tint",
            reason="coefficient tier by tree distance, not an address")
-    # each block carries the junction that joins it, so Frame.partition has a
-    # chain to buffer into a tint patch (a bare terminal collapses to a dot)
-    blocks = [["JLR", "T3"], ["JLR", "T4"], ["JLL", "T1", "T2"],
-              ["JR", "JRL", "JRR", "T5", "T6", "T7", "T8"]]
-    f.partition(nodes, blocks, colors=list(TIER_RAMP), pct=16)
+    # the two single-leaf bands (b3, b4) are staggered by 5.5 pt, because a
+    # 7 pt coefficient is as wide as one leaf pitch
+    blocks = [(["T3"], tiers["selected"], TIER_RAMP[0], 2, 5.5),
+              (["T4"], tiers["sibling"], TIER_RAMP[1], 2, 0.0),
+              (["T1", "T2"], tiers["same_half"], TIER_RAMP[2], 2, 0.0),
+              (["T5", "T6", "T7", "T8"], tiers["other_half"], TIER_RAMP[3], 2,
+               0.0)]
+    band_y = 1.0 - f.fy(sub_pt + 14.0)
+    half = f.fx(nodes.pitch_pt / 2.0 - 1.2)      # 2.4 pt between bands
+    for leaves, coef, colour, digits, dy in blocks:
+        xs = [nodes[t][0] for t in leaves]
+        x0, x1 = min(xs) - half, max(xs) + half
+        yb = band_y + f.fy(dy)
+        tint_patch(ax, ("rect", x0, yb - f.fy(4.6), x1 - x0, f.fy(9.2)),
+                   color=colour, pct=16, radius_pt=1.0, zorder=1.0,
+                   clip_on=False)
+        f.text(((x0 + x1) / 2.0, yb), _signed(coef, digits), size=PT_SMALL,
+               color=INK)
     # the forward route of the cued stream is the one ink-weight path
     for a, b in zip(nodes.route("T3"), nodes.route("T3")[1:]):
         if (a, b) in nodes.edges:
@@ -493,24 +508,6 @@ def panel_task(ax, tiers):
     f.credit_delivery(nodes, mode="subtree", targets=[_group_root(nodes, 4)],
                       rule_color="shunting")
     f.error_in(nodes.soma, label="δ0", side="right")
-    # tier key: two rows of two entries, swatch + name + coefficient.  The
-    # swatches key the tints on the tree, so this band IS the partition label.
-    entries = [("cued", _signed(tiers["selected"], 2), TIER_RAMP[0]),
-               ("sibling", _signed(tiers["sibling"]), TIER_RAMP[1]),
-               ("same half", _signed(tiers["same_half"]), TIER_RAMP[2]),
-               ("other half", _signed(tiers["other_half"]), TIER_RAMP[3])]
-    sw_pt, sw_gap = 5.4, 2.4
-    y_rows = (1.0 - f.fy(sub_pt + 5.0), 1.0 - f.fy(sub_pt + 14.8))
-    for i, (name, coef, colour) in enumerate(entries):
-        row, col = divmod(i, 2)
-        run = sw_pt + sw_gap + _text_w_pt(ax, f"{name} {coef}", PT_SMALL)
-        x = 1.0 + col * ((W - 2.0) / 2.0)
-        y = y_rows[row]
-        tint_patch(ax, ("rect", f.fx(x), y - f.fy(1.9), f.fx(sw_pt), f.fy(3.8)),
-                   color=colour, pct=16, radius_pt=0.6, zorder=6, clip_on=False)
-        f.text((f.fx(x + sw_pt + sw_gap), y), f"{name} {coef}", size=PT_SMALL,
-               color=INK, ha="left")
-        assert run <= (W - 2.0) / 2.0 - 2.0, (name, run)
     f.require_soma_lowest()
     f.require_delta0()
     return nodes
@@ -556,6 +553,9 @@ def panel_dictionaries(ax, prediction, supports):
             f.dictionary_matrix((mx, my, mw, f.fy(mat_pt)), A, label=None,
                                 col_colors=col_colors,
                                 row_groups=[8 // K] * K, min_cell_pt=6.0)
+            for r in range(1, 8):            # the eight rows are countable
+                f.rule(my + f.fy(6.0 * r), mx, mx + mw, color=COLORS["grid"],
+                       lw=LW_HAIR)
             _delivery_arrow(f, (mx + f.fx(6.0 * (column + 0.5)),
                                 my + f.fy(mat_pt + 1.5)))
         else:
@@ -656,6 +656,11 @@ def panel_bandwidth(ax, summary, outcomes):
     _badge(ax, (1.24, 84.0), "ceiling", ha="left", va="center")
     ax.text(0.72, 30.0, "ancestry", color=GREEN, fontsize=PT_SMALL, ha="left",
             va="center")
+    # the K = 4 pair (80.1 vs 78.8) is not a tie: name the gap (QA 2026-09-09)
+    ax.annotate("+1.27 pp (E)", xy=(2.06, 79.6), xytext=(2.30, 68.0),
+                fontsize=PT_SMALL, color=INK, ha="left", va="center",
+                arrowprops=dict(arrowstyle="-", color=MUTE, lw=LW_HAIR,
+                                shrinkA=0, shrinkB=1.5), zorder=6)
     ax.text(2.20, 31.0, "deranged", color=GREY, fontsize=PT_SMALL, ha="left",
             va="center")
     ax.text(3.16, 95.0, "n = 20 paired seeds; mean [95 % bootstrap]; epoch 80",
@@ -690,7 +695,7 @@ def panel_rewiring(ax, summary, paired):
               f"{_signed(paired[2][0])} pp", (1.42, 33.0))
     _gap_span(ax, 2.0, rewired[2], matched[2],
               f"{_signed(paired[4][0])} pp", (1.62, 74.0), dx=-0.09)
-    _badge(ax, (-0.16, 85.0), "control", ha="left", va="center")
+    _badge(ax, (-0.05, 85.0), "control", ha="left", va="center")
     ax.text(-0.16, 76.0, "degree- and depth-", color=ROSE, fontsize=PT_SMALL,
             ha="left", va="center")
     ax.text(-0.16, 69.0, "matched rewiring", color=ROSE, fontsize=PT_SMALL,
@@ -767,8 +772,10 @@ def panel_forest(canvas, ax, contrasts, pairs, *, cap_pt=62.0):
                  xlim=(-2.0, 14.0), tag="", seed_alpha=0.45, band=False,
                  tick=True)
     ax.set_ylim(4.62, -0.60)
+    # QA 2026-09-09: 0.38 rows above the row it annotates (7.8 pt above its
+    # marker, 12.7 pt below the previous row), so attribution is unambiguous
     for y, note in zip(out["ypos"], notes):
-        ax.text(13.7, y - 0.52, note, fontsize=PT_SMALL, color=MUTE,
+        ax.text(13.7, y - 0.42, note, fontsize=PT_SMALL, color=MUTE,
                 ha="right", va="center")
     _badge(ax, (13.7, 0.0), "ceiling", ha="right", va="center")
     derange = contrasts[contrasts.control.eq("within_neuron_route_derangement")
@@ -818,7 +825,12 @@ def panel_cues(ax, grid, oracle, frozen, mismatched, enc_c, hard_c):
     np.testing.assert_allclose(mismatched, [18.58, 18.89], atol=2e-2)
     reference_line(ax, oracle, label=f"oracle {oracle:.1f} %",
                    color=PURPLE, span=(-0.30, 1.16))
-    reference_line(ax, 50.0, label="chance", span=(-0.30, 1.16))
+    # CF-7 exception (recorded): the chance label sits at the LEFT end of
+    # its rule, because the right end carries the two-line oracle-gap block
+    # and the two would read as one stack (QA 2026-09-09)
+    reference_line(ax, 50.0, label=None, span=(-0.30, 1.16))
+    ax.text(-0.28, 52.0, "chance", fontsize=PT_SMALL, color=MUTE, ha="left",
+            va="bottom", zorder=5)
     ax.plot([-0.30, 1.16], [frozen, frozen], color=MUTE, lw=LW_HAIR,
             zorder=1.2)
     # which family is which, and the calibration ramp keyed on the left ends
@@ -847,11 +859,15 @@ def panel_cues(ax, grid, oracle, frozen, mismatched, enc_c, hard_c):
                 fontsize=PT_SMALL, ha="right", va="center")
         ax.plot([-0.04, 0.0], [y_tag, y_line], color=CAL_RAMP[size],
                 lw=LW_HAIR, zorder=1)
+    # the block sits left of the right edge and 4 pt above the chance label
+    # so the two never read as one stack (QA 2026-09-09)
     ax.text(1.16, 72.0, f"{_signed(prim[0])} pp vs oracle", fontsize=PT_SMALL,
             color=INK, ha="right", va="center")
     ax.text(1.16, 64.0, f"{_signed(froz[0])} pp vs frozen", fontsize=PT_SMALL,
             color=INK, ha="right", va="center")
-    ax.plot([0.60, 0.53], [62.0, 29.0], color=MUTE, lw=LW_HAIR, zorder=1)
+    # leader from the annotation block to the soft 256-cue vertex at noise
+    # 0.5 (25.8 %), approaching from above-right (QA 2026-09-09)
+    ax.plot([0.62, 0.515], [61.0, 28.6], color=MUTE, lw=LW_HAIR, zorder=1)
     ax.text(-0.28, 12.0, f"frozen {frozen:.1f} %; mismatched "
                          f"{mismatched[0]:.1f}–{mismatched[1]:.1f} %",
             fontsize=PT_SMALL, color=MUTE, ha="left", va="center")
