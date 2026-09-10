@@ -147,7 +147,7 @@
     "ci95_high": 0.105545551658
   },
   "source_sha256": {
-    "scripts/credit_first_figures/build_measured.py": "fb31c3c023acf5d5496e5c1ea5578b0cb2734d50f711caedb649e63d6e72b88f",
+    "scripts/credit_first_figures/build_measured.py": "30bb19fc9c527c05d5eeb35be25bd162b02d39fead5f8eaa6c5a7944dc040aaa",
     "source_data/figure3/segment_metrics.csv": "7829c298c4e5b3209b758fb88b92b55f070420c00b383436e5d4e1601e7ff1cf",
     "source_data/fulltree_boundary/output/dictionary_and_validation_metadata.jsonl": "12bd1392df9c3db14b9746f042786dcabbc9fd7f8acc99926277217b55554c7f",
     "source_data/curated_publication/figure_09_plotted.csv": "d7742b1680aacce728ecc63359d905df1444787827a07aafaa9dd0249c160d57",

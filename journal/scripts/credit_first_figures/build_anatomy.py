@@ -299,6 +299,8 @@ CONTROLS = [SURROGATE, DEPTH, SHUFFLED, RANDOM]
 METHODS = list(ORDER)
 LABELS = [FAMILIES[m]["label"] for m in ORDER]
 
+H_GRID_XMAX = 2.75         # the y grid stops before the direct-label band
+H_BADGE_W = 0.66           # `oracle` badge width in x data units (23.0 pt)
 COHORTS = ["original8", "v661", "pinky"]
 COHORT_PANEL = {"original8": "Initial,\n8 cells", "v661": "Disjoint,\n47 cells",
                 "pinky": "Pinky,\n8 cells"}
@@ -683,6 +685,18 @@ def panel_a(ax, arb):
                 below_soma=n_below)
 
 
+def _knockout():
+    """The `panel_bg` pad every route tag of panel B carries.
+
+    Placement alone cannot free all seven numerals on a real arbor -- the
+    canopy leaves no 4.4 x 6.4 pt hole near some origins -- so the tags carry
+    one uniform pad, sized at the glyph.  Uniform, because a pad on five of
+    seven reads as a second encoding.
+    """
+    return dict(bbox=dict(boxstyle="square,pad=0.14",
+                          facecolor=COLORS["panel_bg"], edgecolor="none"))
+
+
 def _route_hues():
     """Builder-local three-hue address cycle for B's seven routes.
 
@@ -743,8 +757,37 @@ def panel_b(ax, arb):
     ceiling_pt = (arbor_rect[1] + arbor_rect[3]) * f.h_pt - 3.0
     right_pt = (arbor_rect[0] + arbor_rect[2]) * f.w_pt - 1.0
     left_pt = arbor_rect[0] * f.w_pt + 1.0
+    # every drawn dendrite segment, in points: a numeral must clear the
+    # STROKES, not merely its neighbouring numerals.  QA round 3 measured
+    # 0.95 pt branches through `2`, `5` and the broadcast tag `s`, which at
+    # 7 pt costs a digit one of its strokes.
+    strokes = [((xy[seg][0] * f.w_pt, xy[seg][1] * f.h_pt),
+                (xy[par][0] * f.w_pt, xy[par][1] * f.h_pt))
+               for seg, par in parent.items() if seg in xy and par in xy]
+
+    def _crossed(px, py, ha, va, *, w=4.4, h=6.4, pad=0.9):
+        """Does any dendrite stroke enter this label's glyph box?"""
+        x0 = px if ha == "left" else px - w if ha == "right" else px - w / 2.0
+        y0 = py if va == "bottom" else py - h if va == "top" else py - h / 2.0
+        x0, y0 = x0 - pad, y0 - pad
+        x1, y1 = x0 + w + 2.0 * pad, y0 + h + 2.0 * pad
+        for (sx0, sy0), (sx1, sy1) in strokes:
+            steps = max(2, int(max(abs(sx1 - sx0), abs(sy1 - sy0)) / 0.4) + 1)
+            for i in range(steps + 1):
+                t = i / steps
+                if (x0 <= sx0 + t * (sx1 - sx0) <= x1
+                        and y0 <= sy0 + t * (sy1 - sy0) <= y1):
+                    return True
+        return False
+
     def _place(point, reach=1.0):
-        """Freest of six offsets around ``point`` that stays in the cell."""
+        """Freest of six offsets around ``point`` that stays in the cell.
+
+        Candidates that clear every dendrite stroke are preferred over
+        candidates that are merely far from the other numerals; among equals
+        the freest wins; whether the winner is clear is returned so the
+        builder can assert how many tags the pad is actually carrying.
+        """
         best = fallback = None
         for dx, dy, ha, va in ((3.4, 2.8, "left", "bottom"),
                                (3.4, -2.8, "left", "top"),
@@ -756,8 +799,9 @@ def panel_b(ax, arb):
             py = point[1] * f.h_pt + reach * dy
             room = min(((px - qx) ** 2 + (py - qy) ** 2
                         for qx, qy in taken), default=1e9)
-            item = (room, px, py, ha, va)
-            if fallback is None or room > fallback[0]:
+            clear = not _crossed(px, py, ha, va)
+            item = (clear, room, px, py, ha, va)
+            if fallback is None or item[:2] > fallback[:2]:
                 fallback = item
             top = py + (8.0 if va == "bottom" else 4.0)
             bottom = py - (8.0 if va == "top" else 4.0)
@@ -766,24 +810,30 @@ def panel_b(ax, arb):
                 continue
             if edge > right_pt or edge < left_pt:
                 continue
-            if best is None or room > best[0]:
+            if best is None or item[:2] > best[:2]:
                 best = item
-        _, px, py, ha, va = best or fallback
+        clear, _, px, py, ha, va = best or fallback
         taken.append((px, py))
-        return px / f.w_pt, py / f.h_pt, ha, va
+        return px / f.w_pt, py / f.h_pt, ha, va, clear
 
     # the broadcast tag sits under the soma disc, on the basal side where no
     # route leaves it (every route climbs to the canopy); it is reserved
     # before the numerals so none of them lands on it
     taken.append((soma[0] * f.w_pt, soma[1] * f.h_pt - 6.0))
     f.text((soma[0], soma[1] - f.fy(6.0)), "s", size=PT_BASE,
-           color=COLORS[BROADCAST], ha="center", va="top")
+           color=COLORS[BROADCAST], ha="center", va="top",
+           **_knockout())
+    crossed = 0
     for k, origin in enumerate(origins):
         point = xy[int(origin)]
         f.contact(point, kind="inh", dia_pt=2.9, zorder=5)
-        px, py, ha, va = _place(point)
+        px, py, ha, va, clear = _place(point)
+        crossed += int(not clear)
         f.text((px, py), str(k + 1), size=PT_BASE, color=label_color(hues[k]),
-               ha=ha, va=va)
+               ha=ha, va=va, **_knockout())
+    f.note("route-tag-pad", panel="B", crossed=crossed, tags=len(origins),
+           reason="route numerals carry a uniform panel_bg pad: on a real "
+                  "canopy no offset frees every tag from the 0.95 pt strokes")
     # the collapsed dictionary, drawn as vector cells (CF-11)
     keys, sizes = arb["block_keys"], arb["block_sizes"]
     colors = [[COLORS[BROADCAST]]
@@ -924,6 +974,24 @@ def panel_c(ax, arb, field, scale):
 Y_TOP = 1.34
 Y_TICKS = [0.0, 0.25, 0.5, 0.75, 1.0]
 D_XMAX = 108.0             # 16 -> 87 reserves the direct-label band at the right
+D_GRID_XMAX = 16.6         # the grid stops at the data; the label band is clean
+D_BUDGET_Y0 = 0.32         # the K = 8 rule stops above the floor label
+
+
+def _clip_grid(ax, x0, x1):
+    """Stop the library's y grid at the data, leaving the label band clean.
+
+    The grid stays `style_panel`'s own artist (weight, colour, alpha and
+    z-order unchanged); only its span is clipped, because a row run to the
+    axes edge strikes through the direct end labels that sit in the reserved
+    band at the right (`Surrogate`, `Shuffled` and `shared broadcast` in D,
+    `Depth` in H -- QA round 3).
+    """
+    y0, y1 = ax.get_ylim()
+    box = Rectangle((x0, y0), x1 - x0, y1 - y0, transform=ax.transData)
+    for line in ax.get_ygridlines():
+        line.set_clip_path(box)
+    return box
 
 
 def _badge(ax, x, y, kind, *, ha="left", va="bottom"):
@@ -984,6 +1052,7 @@ def panel_d(ax, summaries, tables, floor):
     ax.set_xlabel("Profiles K (log 2)")
     ax.set_ylabel("Total field energy\ncaptured")
     style_panel(ax, grid="y")
+    _clip_grid(ax, 0.85, D_GRID_XMAX)
     # direct labels, de-collided, in the reserved band at the right (CF-5)
     ends = sorted(((float(table[table.method.eq(m)
                                 & table.channels.eq(16)]
@@ -1006,7 +1075,11 @@ def panel_d(ax, summaries, tables, floor):
     # string twice across one panel gap was read as two different data
     reference_line(ax, floor, axis="y", label="shared broadcast",
                    span=(0.85, D_XMAX))
-    ax.plot([8, 8], [0.0, 1.0], color=COLORS["edge"], lw=LW_REF,
+    # clipped to the band that carries no text: drawn to y = 0 the dashes
+    # ran through the floor label `shared broadcast` (y 0.21-0.31) and the
+    # footer `47 disjoint cells` (QA round 3).  The lowest K = 8 datum is
+    # 0.404, so no data lies under the removed stretch.
+    ax.plot([8, 8], [D_BUDGET_Y0, 1.0], color=COLORS["edge"], lw=LW_REF,
             dashes=(2.2, 1.8), zorder=0.6, solid_capstyle="butt")
     ax.text(8.0, 1.010, "analysed budget", fontsize=PT_BASE,
             color=COLORS["mute"], ha="center", va="bottom")
@@ -1120,16 +1193,36 @@ def panel_f(ax, pairs):
     # free for the cohort-mean label, and the equality line is NOT at 45 deg
     # -- the row height is locked and the head room stretches y, so
     # set_aspect("equal") is dropped and the panel declares it.
-    block = "\n".join(wrap_pt(ax, line, PT_BASE, width) for line in (
-        f"{above} of {len(pairs)} cells above equality",
-        f"open: the {int(tie.sum())} cells where at least half of the 200 "
-        "surrogates reach the tree",
-        "axes are not isometric",
-        f"cell is the unit; n = {len(pairs)}"))
-    lines = 1 + block.count("\n") + 1          # + the 'equal' line
     h_pt = ax.get_position().height * 490.0
-    head_pt = 8.8 * lines
-    ymax = 1.0 + 0.75 * head_pt / max(h_pt - head_pt, 1.0)
+
+    def _compose(ratio):
+        """The annotation block, and the ymax its head room implies."""
+        text = "\n".join(wrap_pt(ax, line, PT_BASE, width) for line in (
+            f"{above} of {len(pairs)} cells above equality",
+            f"open: the {int(tie.sum())} cells where at least half of the 200 "
+            "surrogates reach the tree",
+            f"cell is the unit; n = {len(pairs)}; "
+            f"axes x : y = {ratio:.1f} : 1"))
+        rows = 1 + text.count("\n") + 1        # + the 'equal' line
+        head = 8.8 * rows
+        return text, head, 1.0 + 0.75 * head / max(h_pt - head, 1.0)
+
+    # the flattening is MEASURED and printed, not merely disclaimed (QA round
+    # 3): the equality reference is drawn at 26 deg, so the reader is told the
+    # x : y scale ratio under which it is drawn.  The ratio rides on the
+    # footer line rather than on a line of its own -- a ninth head line costs
+    # 8.8 pt of head room, which flattens y further (measured: the ratio goes
+    # 2.0 -> 2.5) and pushes `equal` onto the top right cell.  Two passes,
+    # because the printed ratio depends on ymax and ymax on the line count;
+    # the assert pins that the second pass did not move the count.
+    def _ratio(top):
+        return ((width + 4.0) / 0.75) / (h_pt / (top - 0.25))
+
+    block, head_pt, ymax = _compose(2.0)
+    block, head_pt, ymax = _compose(_ratio(ymax))
+    again = _compose(_ratio(ymax))
+    assert again[0].count("\n") == block.count("\n"), \
+        "figure 7F: the printed aspect ratio changed the annotation depth"
     ax.plot([0.25, 1.0], [0.25, 1.0], color=COLORS["mute"], lw=LW_REF,
             dashes=(2.2, 1.8), zorder=1, solid_capstyle="butt")
     ax.text(1.0, 1.008, "equal", fontsize=PT_BASE, color=COLORS["mute"],
@@ -1149,9 +1242,12 @@ def panel_f(ax, pairs):
                 elinewidth=LW_ERR, capsize=2.0, zorder=4)
     # anchored on the diamond CENTRE (the 0.020-unit setback landed the
     # tip nearer an open tie-cell marker than the diamond it names)
-    _leader(ax, (mx, my), (0.800, 0.487))
-    ax.text(0.998, 0.360, "cohort mean,\n95 % CI", fontsize=PT_BASE,
-            color=COLORS["ink"], ha="right", va="center", linespacing=1.2)
+    # ONE line, in the band the cells leave empty: two lines need 14.7 pt and
+    # the free strip under the lowest right-hand cell (0.704, 0.515) is
+    # 13.3 pt, so the second line straddled the bottom spine (QA round 3).
+    _leader(ax, (mx, my), (0.720, 0.427))
+    ax.text(0.998, 0.335, "cohort mean, 95 % CI", fontsize=PT_BASE,
+            color=COLORS["ink"], ha="right", va="center")
     # inset 3.5 pt from the left spine: set AT x = 0.25 the spine stroke
     # ran through the first character of every line
     ax.annotate(block, xy=(0.25, ymax * 0.999), xytext=(3.5, 0.0),
@@ -1263,6 +1359,14 @@ def panel_g(canvas, ax, report, tables, summaries):
     for x, head in G_COLS:
         ax.text(x, -0.70, head, fontsize=PT_BASE, color=COLORS["ink"],
                 ha="right", va="center", zorder=5)
+    # the third printed column is forest()'s own per-row note, set outside the
+    # right spine; it carried no header, so the caption named three columns
+    # and the artwork two (QA round 3).  Same baseline, same offset as the
+    # notes it heads.
+    ax.annotate("cells +", xy=(1.0, -0.70), xycoords=("axes fraction", "data"),
+                xytext=(3.0, 0.0), textcoords="offset points", ha="left",
+                va="center", fontsize=PT_BASE, color=COLORS["ink"],
+                annotation_clip=False, zorder=5)
     for i, item in enumerate(extra):
         dagger = "\u2020" if CONTROLS[i] == RANDOM else ""
         for x, value in zip([c[0] for c in G_COLS],
@@ -1350,6 +1454,7 @@ def panel_h(ax, tables, inclusion):
     ax.set_xticks(range(len(COHORTS)), [COHORT_PANEL[c] for c in COHORTS])
     ax.set_ylabel("Residual capture\nafter the broadcast")
     style_panel(ax, grid="y")
+    _clip_grid(ax, -0.55, H_GRID_XMAX)
     ax.plot([-0.55, 3.55], [1.0, 1.0], color=COLORS["mute"], lw=LW_REF,
             zorder=1.0, solid_capstyle="butt")
     ax.text(3.53, 1.012, "ceiling", fontsize=PT_BASE, color=COLORS["mute"],
@@ -1394,7 +1499,17 @@ def panel_h(ax, tables, inclusion):
     y_badge = 0.5 * (top + 1.0)
     assert y_badge - 0.080 > top and y_badge + 0.080 < 1.0, (
         "figure 7H: the oracle badge does not clear the drawn intervals")
-    _badge(ax, -0.50, y_badge, "oracle", ha="left", va="center")
+    badge = _badge(ax, -0.50, y_badge, "oracle", ha="left", va="center")
+    # ... and a hairline leader to the marker it names: unanchored, the badge
+    # read as a label for the two nearest intervals (QA round 3).  It runs
+    # from the badge's right edge to just short of the initial cohort's
+    # oracle diamond, over empty paper (every interval of that group tops out
+    # below 0.72 and the leader stays above 0.79 until x = 0.18).
+    oracle_x = 0.0 + offsets[COHORT_FAMILIES.index(ORACLE)]
+    oracle_hi = next(r["ci95_high"] for r in initial
+                     if r["method"] == ORACLE)
+    _leader(ax, (-0.50 + H_BADGE_W, y_badge - 0.050),
+            (oracle_x - 0.030, oracle_hi + 0.045))
     return pd.DataFrame(rows)
 
 

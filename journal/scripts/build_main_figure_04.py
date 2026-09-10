@@ -320,13 +320,13 @@ def fan_tree(frame: Frame, *, origin, xs_pt, y_soma_pt, y_junc_pt,
         else:
             _error_in_compact(frame, soma, label=delta, r_pt=soma_r_pt,
                               reach_pt=delta_compact[0],
-                              drop_pt=delta_compact[1])
+                              drop_pt=delta_compact[1], side=delta_side)
     frame._trees.append(nodes)
     return nodes
 
 
 def _error_in_compact(frame: Frame, soma_xy, *, label="δ0", r_pt=2.4,
-                      reach_pt=9.5, drop_pt=5.5):
+                      reach_pt=9.5, drop_pt=5.5, side="right"):
     """PRIVATE (G5): ``Frame.error_in`` on a short leash.
 
     The library's somatic-error arrow reaches 11 pt out and 7 pt down from
@@ -338,14 +338,19 @@ def _error_in_compact(frame: Frame, soma_xy, *, label="δ0", r_pt=2.4,
     diagonal, tag and all.
     """
     n_before = len(frame.ax.texts)
-    arr = frame.error_in(soma_xy, label=label, side="right", r_pt=r_pt)
+    arr = frame.error_in(soma_xy, label=label, side=side, r_pt=r_pt)
     x, y = soma_xy
     r = r_pt * frame.scale
-    tip = (x + frame.fx(0.72 * r + 0.9), y - frame.fy(0.72 * r + 0.9))
-    tail = (x + frame.fx(reach_pt), y - frame.fy(drop_pt))
+    sgn = -1.0 if side == "left" else 1.0
+    tail0 = (x + sgn * frame.fx(r + 11.0), y - frame.fy(r + 7.0))
+    tip = (x + sgn * frame.fx(0.72 * r + 0.9), y - frame.fy(0.72 * r + 0.9))
+    tail = (x + sgn * frame.fx(reach_pt), y - frame.fy(drop_pt))
     arr.set_positions(tail, tip)
+    # the tag is carried by the same offset the library gave it, so a
+    # right-anchored ('left' side) tag stays right-anchored on the new tail
     for text in frame.ax.texts[n_before:n_before + 1]:
-        text.set_position((tail[0] + frame.fx(1.8), tail[1]))
+        tx, ty = text.get_position()
+        text.set_position((tail[0] + (tx - tail0[0]), tail[1]))
     return arr
 
 
@@ -391,7 +396,7 @@ def _glyph_key(frame: Frame, *, y_pt, x0_pt, width_pt):
         split = 3
         groups = [items[:split], items[split:]]
         gws = [widths[:split], widths[split:]]
-        ys = [y_pt + 5.0, y_pt - 5.0]
+        ys = [y_pt + 4.3, y_pt - 4.3]
     else:
         groups, gws, ys = [items], [widths], [y_pt]
     for group, gw, yy in zip(groups, gws, ys):
@@ -454,6 +459,7 @@ def branch_conflict_task(ax) -> Frame:
                      contact_pt=56.0, gate_lift_pt=7.0,
                      gate_badge_offset=(5.2, 0.6),
                      selected=0, output=11.0,
+                     delta_side="left", delta_compact=(12.0, 7.0),
                      labels=[("x", "1"), ("x", "2"), ("x", "3"), ("x", "4")])
     # context input: its own carmine arrow and tag, in the free lane left of
     # the selected (leftmost) branch -- the review's required separate glyph.
@@ -491,10 +497,14 @@ def branch_conflict_task(ax) -> Frame:
                             size=PT_BASE, color=INK, ha="center", va="center")
 
     # -- footer: the intermediate-dose rule, then the glyph key -------------
-    frame.text((0.5, frame.fy(A_FOOT_PT - 4.0)),
+    # QA 2026-09-10: the somatic-error tag now hangs on the soma's LEFT (the
+    # forward 'z' tag owns the right at soma height) and on a 7 pt leash, so
+    # it clears the footer band; the three footer baselines are then set on a
+    # uniform 8.6 pt pitch instead of the 7.0 pt slab the previous build had.
+    frame.text((0.5, frame.fy(A_FOOT_PT - 6.0)),
                "0 < χ < 1: each nonselected view is replaced independently",
                size=PT_BASE, color=MUTE, ha="center", va="center")
-    _glyph_key(frame, y_pt=6.0, x0_pt=1.0, width_pt=frame.w_pt - 2.0)
+    _glyph_key(frame, y_pt=3.1, x0_pt=1.0, width_pt=frame.w_pt - 2.0)
     return frame
 
 
@@ -509,9 +519,55 @@ def branch_conflict_task(ax) -> Frame:
 B_TITLE = "Three ways to deliver the same error"
 B_FOOT_PT = 12.0
 B_CARDS = ((56.0, 29.0), (25.0, 31.0), (0.0, 25.0))     # top card first
-B_JUNC_X = (12.0, 22.0, 32.0, 42.0)
-B_TIP_X = (7.0, 20.0, 34.0, 47.0)
+# QA 2026-09-10: the fan sits 4 pt further right and splays 5-6 pt wider than
+# it did, and the contacts step back off the tips (19.4 of the 15.5 -> 20.0
+# distal run).  Both moves are for the neuron-shared card: the amber bus drops
+# vertically onto the JUNCTIONS, so the drop lines pass the contacts, and at
+# the old +/-2 pt splay the 2.6 pt heads landed on the blue discs and the
+# glyph read as one drop per excitatory contact.  The wider splay buys every
+# drop >= 4.3 pt of lateral clearance; the extra 4 pt of left margin is where
+# the bus riser now stands (``B_RISER_X``), clear of the 'c' badge and of the
+# carmine gate ring the library's own s_lo ran through.
+B_JUNC_X = (16.0, 26.0, 36.0, 46.0)
+B_TIP_X = (10.0, 21.0, 41.0, 52.0)
+B_CONTACT_PT = 19.4
+B_RISER_X = 2.0
+B_RIM_PT = 1.9          # drop head on the junction ring rim (r 1.6 pt)
 B_TEXT_X = 58.0
+
+
+def _seat_neuron_bus(frame: Frame, nodes, *, n_lines, n_patches,
+                     riser_x_pt=B_RISER_X, rim_pt=B_RIM_PT):
+    """PRIVATE (G5): re-seat the artists ``credit_delivery('neuron')`` drew.
+
+    Two things the library fixes by construction do not survive a four-branch
+    fan this narrow, and both are placement, not vocabulary, so they are
+    repaired here rather than by editing the library (the same treatment
+    ``_error_in_compact`` and ``_recolour_last_capsule`` get):
+
+    * each drop stops 2.8 pt short of its target so a *terminal* dot is not
+      overprinted; the targets here are junction RINGS (r 1.6 pt), so the
+      head is brought in to the rim and the drop visibly lands on the ring;
+    * the riser stands 2 pt outside the leftmost target, which on this tree
+      is the selected branch -- i.e. straight through its open gate ring and
+      its 'c' badge.  It is moved out to ``riser_x_pt``, and the bus's low
+      end travels with it so the two still meet.
+
+    Nothing else moves: rail height, drop count, fan and source dot are the
+    library's, so the three ghost fans stay identical.
+    """
+    ax = frame.ax
+    bus, riser = ax.lines[n_lines], ax.lines[n_lines + 1]
+    drops = ax.patches[n_patches:n_patches + len(nodes.terminals)]
+    x_riser = frame.fx(riser_x_pt)
+    bx, by = [list(v) for v in (bus.get_xdata(), bus.get_ydata())]
+    bus.set_data([x_riser, max(bx)], [by[0], by[0]])
+    rx, ry = [list(v) for v in (riser.get_xdata(), riser.get_ydata())]
+    riser.set_data([rx[0], x_riser, x_riser], ry)
+    for i, drop in enumerate(drops):
+        jx, jy = nodes[f"J{i + 1}"]
+        drop.set_positions((jx, by[0]), (jx, jy + frame.fy(rim_pt)))
+    return drops
 
 
 def backward_credit_schematic(ax) -> Frame:
@@ -528,17 +584,18 @@ def backward_credit_schematic(ax) -> Frame:
         ("neuron-shared", AMBER_TEXT, "local rule", "neuron", None,
          ("δ", "b", " = δ / B"), None),
         ("deranged route", GRAY_TEXT, "control", "subtree", "J2",
-         ("δ", "b", " = δ 1[b = b* + 1]"), None),
+         ("δ", "b", " = δ 1[b = b* + 1]"), "b → b + 1"),
     )
     for (y0, h), (name, text_col, badge, mode, target, formula, tail) \
             in zip(B_CARDS, specs):
         oy = oy0 + frame.fy(y0)
         nodes = fan_tree(frame, origin=(ox0, oy), xs_pt=B_JUNC_X,
                          tip_xs_pt=B_TIP_X, y_soma_pt=9.5, y_junc_pt=15.5,
-                         y_tip_pt=20.0, contact_pt=20.0, ghost=True,
+                         y_tip_pt=20.0, contact_pt=B_CONTACT_PT, ghost=True,
                          selected=0, soma_r_pt=2.4, delta_compact=(10.5, 6.0),
                          gate_badge_offset=(-6.8, -3.2), gate_unselected=False)
         before = len(ax.patches)
+        n_lines = len(ax.lines)
         if mode == "neuron":
             # QA 2026-09-09: the bus is seated on the JUNCTIONS (the plan's
             # "one drop per junction"), which drops its rail 5.5 pt into
@@ -547,15 +604,18 @@ def backward_credit_schematic(ax) -> Frame:
             # 5 pt right of the row's 'c' badge.
             frame.credit_delivery(nodes, mode="neuron", rule_color=AMBER,
                                   targets=[f"J{i + 1}" for i in range(4)])
+            _seat_neuron_bus(frame, nodes, n_lines=n_lines, n_patches=before)
         else:
             frame.credit_delivery(nodes, mode="subtree", targets=[target],
                                   rule_color=GREEN if target == "J1" else GRAY)
             if target != "J1":
                 _recolour_last_capsule(frame, before, "point_mlp")
                 j1, j2 = nodes["J1"], nodes["J2"]
+                # QA 2026-09-10: the arc bows UP, over the contacts, where
+                # the old downward bow passed through the b3 contact disc
                 frame.arrow((j1[0], j1[1] + frame.fy(5.4)),
                             (j2[0], j2[1] + frame.fy(5.4)),
-                            color=GRAY, lw=LW_HAIR, head=3.2, rad=-0.55,
+                            color=GRAY, lw=LW_HAIR, head=3.2, rad=0.50,
                             zorder=4.6)
         tx = ox0 + frame.fx(B_TEXT_X)
         ytop = oy + frame.fy(24.0)
@@ -675,6 +735,23 @@ D_XLIM = (-0.66, 2.56)
 D_YLIM = (0.18, 1.31)
 D_BREAK = 1.09
 D_STRIP = (1.11, 1.31)
+# QA 2026-09-10: the per-seed dose values are sweep LEVELS, so at three of
+# the five levels the whole seed row sits on the same y as the analytic
+# diamond and the trained circle.  A plain +/-0.30 jitter therefore threaded
+# the string through both summary markers.  The string keeps its width and
+# its honest y, and opens a clear lane of +/-D_SEED_GAP around the category
+# centre -- 4.9 pt, i.e. half a 4.6 pt summary marker plus half a 2.9 pt seed
+# dot plus 0.75 pt -- so the two marks stand beside the cloud, not inside it.
+D_SEED_GAP = 0.17
+D_SEED_STEP = 0.032
+
+
+def _seed_lane(n):
+    """PRIVATE (G5): symmetric x-jitter with a clear lane at the centre."""
+    hi = (n + 1) // 2
+    left = [-(D_SEED_GAP + k * D_SEED_STEP) for k in range(hi)]
+    right = [D_SEED_GAP + k * D_SEED_STEP for k in range(n - hi)]
+    return np.array(sorted(left + right)), D_SEED_GAP + (hi - 1) * D_SEED_STEP
 
 
 def _exponent(ax, corner, x_pt, y_pt, base, exp, tail="", *, color):
@@ -732,7 +809,7 @@ def boundary_order(ax, crossings: pd.DataFrame, seeds: pd.DataFrame,
         levels = sorted(set(values))
         for k, level in enumerate(levels):
             n = int(np.sum(values == level))
-            jitter = np.linspace(-0.30, 0.30, n)
+            jitter, reach = _seed_lane(n)
             ax.plot(xs[i] + jitter, np.full(n, level), linestyle="none",
                     marker="o", ms=SEED_MS, markerfacecolor="none",
                     markeredgecolor=EDGE, markeredgewidth=LW_HAIR,
@@ -747,7 +824,7 @@ def boundary_order(ax, crossings: pd.DataFrame, seeds: pd.DataFrame,
                             textcoords="offset points", fontsize=PT_BASE,
                             color=MUTE, ha="center", va="bottom", zorder=6)
             else:
-                ax.annotate(f"×{n}", xy=(xs[i] - 0.36, level),
+                ax.annotate(f"×{n}", xy=(xs[i] - reach - 0.13, level),
                             xytext=(-1.0, 0.0), textcoords="offset points",
                             fontsize=PT_BASE, color=MUTE, ha="right",
                             va="center", zorder=6)

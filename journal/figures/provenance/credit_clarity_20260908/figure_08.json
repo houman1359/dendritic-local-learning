@@ -1,7 +1,7 @@
 {
   "figure": "Figure 8",
   "output": "figures/components/focused_main_08.pdf",
-  "output_sha256": "ae6831e4e02c792855e809ce46f9f8e78c381c1dc4d7190af403b5fb3fa5d6fa",
+  "output_sha256": "185cb58f2b5f5ce6dd60135e569b53e34cca66ba64a8cf99395f8c24012de191",
   "plotted_table": "source_data/curated_publication/figure_08_plotted.csv",
   "plotted_table_sha256": "4d49dfddae3f5e27a390a8afbcfe38d8f75aa6cd8755d6016ebc476365223676",
   "panel_sources": {
@@ -32,7 +32,7 @@
     "source_data/focal_selectivity_phase1/summary.json": "de17bb5e8363ef52ff2be8cf74f150ae9bb1f34026a94afdf624162fa9b88d6c"
   },
   "builders_sha256": {
-    "scripts/shunt_ancestry_gain/build_focused_main.py": "5bc920744f587e9ccbac0eb7d3a46daf27442f68ba2638d83f78be1db1499773",
+    "scripts/shunt_ancestry_gain/build_focused_main.py": "7b26aed2a01b80bbb826503f0c9d28a1034cd99521a08feb203956b426df3de5",
     "scripts/shunt_ancestry_gain/build_figure.py": "ace3791786d34c8b234b46743fd527b0ede99ff262064fd1067dcfd6616a70d0",
     "scripts/build_main_figure_07.py": "8dd526d60d35b572a17a68c77c1813279756251052d4921471d77c3fb16b885e",
     "scripts/build_main_figure_08.py": "f9960d1b058bfef5486e436ef511fbcb98e751a3fe515587be6929b1d7305cc5",
@@ -45,7 +45,6 @@
   "source_data_immutable": true,
   "new_experiments": 0,
   "layout_findings": [
-    "TEXT-ON-DATA 'no change'",
     "TEXT-ON-DATA 'focal shunt'",
     "TEXT-ON-DATA 'matched injection'",
     "TEXT-ON-DATA 'shunt 3.1\u00d7 injection'",
@@ -55,7 +54,7 @@
     "TEXT-ON-DATA 'injection off-route:'",
     "TEXT-ON-DATA 'zero by construction'",
     "TEXT-ON-DATA '45/45 cells positive,'",
-    "TEXT-ON-DATA 'disjoint 45-cell cohort'",
+    "TEXT-ON-DATA 'Disjoint, 45 cells'",
     "TEXT-ON-DATA 'Supplementary Fig. S30A'",
     "TEXT-ON-DATA 'shunt attenuates;'",
     "TEXT-ON-DATA 'injection enhances'",
@@ -65,5 +64,5 @@
     "TEXT-ON-DATA 'mean [95 % CI]'",
     "TEXT-ON-DATA 'no change'"
   ],
-  "scope": "Eight-panel v2 rebuild of main Figure 8 on one NativeCanvas (518.4 x 490 pt, rows 128/116/116, schematic fraction 26.6 % of the live canvas on the AMENDMENTS B12 formula, 457.4 x 442 pt; the plan's 27.2 % assumed a 35 pt bottom margin, this build uses 25 pt with a 41 pt vertical gutter so the r1|r2 boundary clears the 8.5 pt floor). No new experiments and no change to any frozen source table: every estimate reuses the archived rows, estimators and bootstrap seeds. Panel D is the old S48 / S28D normalized-dose sheet promoted into the main figure, printed as equal-weighted cell means (dose 2 = 0.194, not the 0.203 pooled-site mean). Panel H is new artwork over the frozen focal_selectivity_phase1 table. Cohorts are encoded by marker shape and fill, not by ORDINAL_RAMP (DECISIONS, Figure 8). 2026-09-10 fix round: D and E share one y ticker, so E hides its own tick labels instead of blanking the pair's; panel B's five block gains lose their mute leaders (each read as a minus sign) and its two value columns leave DIV_CMAP's bp red for an achromatic edge ramp; panel C names the disjoint 45-cell cohort beside its 45/45 sign count; panel G draws each cohort's marker glyph before its direct label; panel A's active shunt keeps the inhibitory rim and a leader to its badge; panel F's key sentences are two adjacent line pairs and its rows carry a chained R_m. Visual-QA round (2026-09-10, second pass): A's g_shunt badge moved inside the hero card with a full-length leader; B's g_shunt badge moved to the clear band up-left of the focal contact (its box seeded into the leader obstacle set so no block tag's leader crosses it, and its own leader no longer passes under the soma); C's reference label right-aligned on the rule; E's corner stack split into the plan's three items (badge top-right, contrast centred over q'/q'd', key over the inject and d' columns); F restores the verbatim depth-matched off-route key and colours its two sentence lines by perturbation; G drops the inset's tick labels and replaces the closed source-region box with an open mute bracket under the window; H's sentence drops clear of the title and is reworded, its x label is pulled inside the live right edge, and its footer names the input-conductance normalization. Slot-fill slot-fill balance: {'left_reserve_pt': 28.0, 'slot_fill_spread': np.float64(1.117), 'slot_fill': {'A': np.float64(0.867), 'B': np.float64(0.867), 'C': np.float64(0.781), 'D': np.float64(0.781), 'E': np.float64(0.781), 'F': np.float64(0.776), 'G': np.float64(0.776), 'H': np.float64(0.776)}}. Contrast drop from R_m 300 to 15,000: {'original_eight': 34.62284406419092, 'v661_disjoint': 33.43760240516116}."
+  "scope": "Eight-panel v2 rebuild of main Figure 8 on one NativeCanvas (518.4 x 490 pt, rows 128/116/116, schematic fraction 26.6 % of the live canvas on the AMENDMENTS B12 formula, 457.4 x 442 pt; the plan's 27.2 % assumed a 35 pt bottom margin, this build uses 25 pt with a 41 pt vertical gutter so the r1|r2 boundary clears the 8.5 pt floor). No new experiments and no change to any frozen source table: every estimate reuses the archived rows, estimators and bootstrap seeds. Panel D is the old S48 / S28D normalized-dose sheet promoted into the main figure, printed as equal-weighted cell means (dose 2 = 0.194, not the 0.203 pooled-site mean). Panel H is new artwork over the frozen focal_selectivity_phase1 table. Cohorts are encoded by marker shape and fill, not by ORDINAL_RAMP (DECISIONS, Figure 8). 2026-09-10 fix round: D and E share one y ticker, so E hides its own tick labels instead of blanking the pair's; panel B's five block gains lose their mute leaders (each read as a minus sign) and its two value columns leave DIV_CMAP's bp red for an achromatic edge ramp; panel C names the disjoint 45-cell cohort beside its 45/45 sign count; panel G draws each cohort's marker glyph before its direct label; panel A's active shunt keeps the inhibitory rim and a leader to its badge; panel F's key sentences are two adjacent line pairs and its rows carry a chained R_m. Visual-QA round (2026-09-10, second pass): A's g_shunt badge moved inside the hero card with a full-length leader; B's g_shunt badge moved to the clear band up-left of the focal contact (its box seeded into the leader obstacle set so no block tag's leader crosses it, and its own leader no longer passes under the soma); C's reference label right-aligned on the rule; E's corner stack split into the plan's three items (badge top-right, contrast centred over q'/q'd', key over the inject and d' columns); F restores the verbatim depth-matched off-route key and colours its two sentence lines by perturbation; G drops the inset's tick labels and replaces the closed source-region box with an open mute bracket under the window; H's sentence drops clear of the title and is reworded, its x label is pulled inside the live right edge, and its footer names the input-conductance normalization. Residual round (2026-09-10, third pass): B's three block tags gain an elbow leader that starts at each tag's OWN right edge; C's `no change` moves to the bottom of the zero rule (ordinate extended to 4.92) out of the row-label gutter and its sign count names the cohort by the AMENDMENTS 4c panel form `Disjoint, 45 cells`; E's printed contrast is centred at 2.00 so both lines end inside the 506.4 pt live right edge; G drops the unlabelled 10,000 major tick, labels its inset's zero rule and ties the source-region bracket to the inset's lower corners with the plan's LW_HAIR mute connectors; H's ylim falls to -0.150 and its three footer lines rise 0.049 of the axes off the bottom spine. Slot-fill slot-fill balance: {'left_reserve_pt': 28.0, 'slot_fill_spread': np.float64(1.117), 'slot_fill': {'A': np.float64(0.867), 'B': np.float64(0.867), 'C': np.float64(0.781), 'D': np.float64(0.781), 'E': np.float64(0.781), 'F': np.float64(0.776), 'G': np.float64(0.776), 'H': np.float64(0.776)}}. Contrast drop from R_m 300 to 15,000: {'original_eight': 34.62284406419092, 'v661_disjoint': 33.43760240516116}."
 }

@@ -538,15 +538,24 @@ def credit_entry(ax):
           ha="center")
     f.text((X(card_x + card_w), Y(loss_y + loss_h + 14.0)), "×128",
            size=PT_BASE, color=MUTE, ha="right")
-    # forward: one mute HORIZONTAL arrow, soma height, no canopy crossed
+    # forward: one mute HORIZONTAL arrow, soma height, no canopy crossed.
+    # QA 2026-09-10: mute #363B41 and ink #232323 are within 0.08 in grey
+    # value, so at print the forward shaft and the delta-0 shaft read as the
+    # same stroke and the forward/error contrast rests on direction alone.
+    # The forward arrow is therefore DASHED (the figure's own reference-line
+    # dash) and dropped to LW_HAIR; delta-0 keeps its solid ink shaft and its
+    # 4.5 pt head.  No new colour is spent.
     fwd_y = sy
-    f.arrow((sx + X(nodes.soma_r_pt + 2.0), fwd_y), (X(card_x - 1.2), fwd_y),
-            color=MUTE, lw=LW_EDGE, head=3.4)
+    fwd = f.arrow((sx + X(nodes.soma_r_pt + 2.0), fwd_y), (X(card_x - 1.2), fwd_y),
+                  color=MUTE, lw=LW_HAIR, head=3.4)
+    fwd.set_linestyle(DASH)
     f.text(((sx + X(nodes.soma_r_pt + 2.0) + X(card_x - 1.2)) / 2.0,
             fwd_y + Y(3.0)), "z", size=PT_BASE, color=INK, va="bottom")
-    f.arrow((X(card_x + card_w / 2.0), Y(read_y + read_h + 0.8)),
-            (X(card_x + card_w / 2.0), Y(loss_y - 1.0)), color=MUTE,
-            lw=LW_EDGE, head=3.4)
+    # the second leg of the same forward path: one idiom, so it is dashed too
+    up = f.arrow((X(card_x + card_w / 2.0), Y(read_y + read_h + 0.8)),
+                 (X(card_x + card_w / 2.0), Y(loss_y - 1.0)), color=MUTE,
+                 lw=LW_HAIR, head=3.4)
+    up.set_linestyle(DASH)
     tail = (sx + X(nodes.soma_r_pt + 11.0), sy - Y(nodes.soma_r_pt + 7.0))
     # the return leaves the loss card's RIGHT edge, drops outside both cards
     # and runs left along the delta-0 shaft, 3.5 pt below the tag's baseline
@@ -605,6 +614,15 @@ def deliveries(ax):
             cut = ghost_clip(f, cell, new_artists(ax, mark))
         nodes = f.balanced_tree(rect, depth=3, labels=False)
         f.error_in(nodes.soma, label="δ0")
+        # QA 2026-09-10, declined: re-pointing the amber drops at the junction
+        # rings.  Measured on the built page, every drop in cards 1 and 2 ends
+        # 3.33 pt above its OWN terminal tip (hero and ghost alike; twelve
+        # drops checked in card 1, nine in card 2), i.e. on the canopy, not in
+        # mid-air and never over empty space.  The 8-12 pt figure is the
+        # distance to the nearest JUNCTION ring, and the drop endpoint
+        # (target + 2.8 pt along the tree axis) and the terminal target set are
+        # both owned by Frame.credit_delivery, which this build may not edit.
+        # Library request: credit_delivery(drop_clearance_pt=..., to='junction').
         if i == 0:
             keep = [t for t in ghost.terminals if ghost[t][0] < cut - X(16.0)]
             for j, t in enumerate(keep):
@@ -661,13 +679,45 @@ def dictionaries(ax):
     # QA 2026-09-09: the arbor's subtrees run left-to-right in the same
     # order as the strip's bands run top-to-bottom
     arbor_colors = address[::-1]
-    nodes = f.site_tree((X(1.0), Y(y0), X(0.33 * W), Y(rows_h)),
+    # QA 2026-09-10 (blocker): site_tree spreads its twelve display rows over
+    # the rect's WIDTH, so the arbor's terminal pitch is rect_w / 12.  At the
+    # old 0.33 W rect that pitch was 2.53 pt against a 3.30 pt disc: adjacent
+    # terminals overlapped by 0.77 pt and each subtree's three sites fused
+    # into one lozenge, so the 3 proximal + 9 distal = 12 correspondence the
+    # panel exists to establish could not be counted.  The right-hand block
+    # (strip, gap, K = 1, gap, K = 3) is now laid out from its own minimum
+    # widths and the arbor takes every point that is left.
+    strip_w, m1_w, m2_w = 11.0, 6.2, 18.6       # matrix cells 6.2 pt >= 6.0
+    gap_arbor, gap_strip, gap_mat, pad_r = 2.5, 3.0, 5.5, 2.5
+    right_block = (gap_arbor + strip_w + gap_strip + m1_w + gap_mat + m2_w
+                   + pad_r)
+    arbor_x = 0.5
+    arbor_w = W - right_block - arbor_x
+    assert arbor_w / 12.0 >= 3.2, arbor_w        # pitch floor
+    nodes = f.site_tree((X(arbor_x), Y(y0), X(arbor_w), Y(rows_h)),
                         branching=(3, 3), subtree_colors=arbor_colors,
                         orient="up")
+    # QA 2026-09-10: the site discs were painted at full shunting / additive /
+    # scalar saturation, i.e. the three series hues D-G use for architecture
+    # and delivery, which gives green and blue a second meaning inside one
+    # figure.  Section 0.4 sanctions K_CYCLE only as 16 % address tints in the
+    # anatomy register, so the discs are redrawn as 16 % faces on a dend edge;
+    # the capsules and the strip bands stay the carriers of the address code.
+    # The distal discs also drop from r 1.65 to 1.1 pt so that the sibling
+    # clearance at the new pitch is a full point.
+    for site, ring in nodes.rings.items():
+        colour = arbor_colors[(site if site < 3 else (site - 3) // 3)
+                              % len(arbor_colors)]
+        ring.set_facecolor(mix(colour, 16))
+        ring.set_edgecolor(COLORS["dend"])
+        ring.set_linewidth(f.lw(LW_HAIR))
+        if nodes.level[site] == 3:
+            ring.set_width(2 * X(1.1 * f.scale))
+            ring.set_height(2 * Y(1.1 * f.scale))
     f.partition(nodes, [nodes.subtree(k) for k in range(3)],
                 colors=arbor_colors, pct=16)
     f.error_in(nodes.soma, label="δ0")
-    strip_x, strip_w = 0.42 * W, 0.145 * W
+    strip_x = arbor_x + arbor_w + gap_arbor
     f.site_strip((X(strip_x), Y(y0), X(strip_w), Y(rows_h)), branching=(3, 3),
                  subtree_colors=address, band=True, pct=16)
     f.text((X(strip_x + strip_w / 2.0), Y(y0 + rows_h + 1.5)), "K = 12: A = I",
@@ -679,8 +729,10 @@ def dictionaries(ax):
     for k in range(3):
         a3[[k, 3 + 3 * k, 4 + 3 * k, 5 + 3 * k], k] = 1.0
     a12 = np.eye(12)
-    boxes = ((0.615 * W, 0.075 * W, a1[order], "K = 1", "right"),
-             (0.745 * W, 0.225 * W, a3[order], "K = 3", "left"))
+    m1_x = strip_x + strip_w + gap_strip
+    m2_x = m1_x + m1_w + gap_mat
+    boxes = ((m1_x, m1_w, a1[order], "K = 1", "right"),
+             (m2_x, m2_w, a3[order], "K = 3", "left"))
     for x_pt, w_pt, data, name, ha in boxes:
         # QA 2026-09-09: COLORS['mute'] #363B41 is near-black at 4 modules --
         # the two matrices became the heaviest ink on the page and swallowed
@@ -798,7 +850,7 @@ def _units_per_pt(ax, xlim):
     return (xlim[1] - xlim[0]) / w_pt
 
 
-def row_tag(ax, y, text, span_lo, span_hi, xlim, side, *, pad_pt=4.0):
+def row_tag(ax, y, text, span_lo, span_hi, xlim, side, *, pad_pt=5.6):
     """A per-row tag centred ON its own row, hung off the end of that row.
 
     QA 2026-09-09: the tags used to sit 0.45 rows above their rows, i.e. in the
@@ -806,6 +858,13 @@ def row_tag(ax, y, text, span_lo, span_hi, xlim, side, *, pad_pt=4.0):
     rule now governs every row of both panels: the tag sits on the row's own
     baseline and hangs just outside the row's own marks, on whichever end of
     that row has room (``side`` is decided per row from the data spans).
+
+    QA 2026-09-10: ``pad_pt`` is measured from the row's data span, but the
+    span's extreme mark is a seed dot with its own radius, so the old 4.0 pt
+    pad left only 1.38-1.43 pt of white between the tag box and the nearest
+    dot (about 0.5 mm at print).  The pad is 5.6 pt, which puts every tag in
+    both panels at >= 2.5 pt of measured clearance; the x-limit headroom for
+    it already existed (E draws to 20.2 with the widest fan at 19.22).
     """
     upp = _units_per_pt(ax, xlim)
     pad = pad_pt * upp
@@ -1156,6 +1215,13 @@ def main():
     # tag_sides: the end of each row that its own marks leave free (see
     # row_tag).  E rows 1, 2 and 4 hang left, row 3 right; F rows 1-3 hang
     # left and the CIFAR row right.
+    # QA 2026-09-10, declined: flipping E's row 3 to the left to make the rule
+    # one-side-per-panel.  Measured on the built page, row 3's leftmost mark is
+    # at x = 85.59 pt and the 'Fashion-MNIST' row label ends at x = 70.0 pt, so
+    # a left-hung '10/10' (17.5 pt wide plus the 5.6 pt pad) would start at
+    # x = 62.5 pt and overlap its own row label by 7.5 pt.  That trades a
+    # non-overlap for a real collision; the tag stays on the row's own baseline
+    # with its 0.55 pt row tick, a full 17.6 pt row below row 2's marks.
     out_e = cohort_forest(canvas, e, cohorts, "identity",
                           value_label="Per neuron − strict scalar (pp)",
                           xlim=(0.0, 20.2), xticks=[0, 5, 10, 15, 20],

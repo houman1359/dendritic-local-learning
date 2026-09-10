@@ -52,7 +52,8 @@ Two further QA repairs (2026-09-09) that are geometry, not content:
   four single-input routes, and ``(9, 0.4444)`` twice -- so the raw scatter
   drew only eleven countable markers.  ``_split_duplicates`` spreads the
   members of each duplicate group symmetrically on x in steps of
-  ``DUP_OFFSET`` = 0.26 mapped inputs (+/-0.13 for a pair), ordered by
+  ``DUP_OFFSET`` = 0.40 mapped inputs (+/-0.20 for a pair, just over one
+  ``MARKER_MS`` 4.6 diameter on this axis), ordered by
   ``(target_root_id, session, scan_idx)`` so the displacement is
   deterministic; y (the claim) is never moved, and the filled series is now
   drawn LAST so no marker can be covered.
@@ -94,8 +95,45 @@ placement already ran 4.7 pt off-canvas in B), so there is no right gutter to
 print into; set inside the axes at 7 pt, ``-0.069 [-0.251, 0.106]`` is ~79 pt
 wide = 0.45 of B's 1.0 data range and would be right-aligned across the
 positive dots and the upper interval whisker in both panels.  The numbers are
-carried by the caption and by the body at L377 instead; the graphical
+carried by the body sentence at L377 and, since 2026-09-10, by B's own
+caption sentence (the earlier claim that "the caption carries them" was
+false: the caption printed no estimate for B or C at all); the graphical
 diamond + interval + the on-panel ``3/7 +`` / ``4/7 +`` counts remain.
+
+Four QA repairs (2026-09-10, third pass -- the residual-review round):
+
+* **Panel E's route capsules leave ``K_CYCLE``** (deviation 23).  The library
+  colours a ``mode='subtree'`` delivery from ``journal_style.K_CYCLE`` =
+  (shunting, additive, local, oracle), so the card printed a 16 % tint of
+  ``additive`` #20509E and one of the ``local``/``scalar`` amber #E2A23F --
+  the two hues PLAN section 4 (B14) bars from this figure, and the reason its
+  own acceptance check 6 failed.  Following the AMENDMENTS item-27 precedent
+  for Fig 7B, ``_retint_capsules`` re-tints the four patches the library just
+  added with ``CAPSULE_CYCLE`` = (shunting, oracle, shunting, oracle): the two
+  hues check 6 admits, alternating in target order so the sibling capsules on
+  ``T7`` and ``T8`` (whose entry stubs overlap at their shared junction) never
+  share a tint.  The library is NOT edited (SPEC_ERRATA #7); geometry, count,
+  16 % strength and the 0.55 pt edge are unchanged.
+* **Panel D names lambda and lengthens the 80 % drop** (deviation 24).  The
+  annotation is two ``PT_BASE`` lines, ``ancestry variance lambda = 0.65`` /
+  ``respecting the MC band`` -- lambda is the simulated fraction of reliable
+  tuning variance assigned to the ancestry kernel (``PROTOCOL.md``), and the
+  symbol was previously undefined anywhere on the figure.  The single drop at
+  the crossing now runs 0.80 -> 0.56 instead of 0.80 -> 0.72; it stops at the
+  top of the reliability inset because the corridor below is occupied by that
+  inset's own ``records`` axis label and 0 / 20 / 40 tick labels, and below
+  those by the observed rug and its in-axis label.  The inset title moves to
+  x = 0.285 so it clears the drop by ~8 pt, and the ``measured reliability``
+  leader starts at x = 0.288 so the drop crosses its middle rather than
+  landing on its endpoint.
+* **Panel F duplicate separation raised to 0.40** (deviation 14).  At 0.26
+  mapped inputs the pair members were ~3.3 pt apart against ``MARKER_MS``
+  4.6, so the ``(10, 40.0 %)`` ring and disc still fused at print scale.
+* **Panel A's shared inset axis labels** (deviation 25).  ``response`` is one
+  rotated ``PT_BASE`` label shared by both tuning insets, now centred between
+  their two centres, and each leader lands on the far half of its inset's
+  left edge (85 % for pair 1, 15 % for pair 2) so neither terminates inside
+  the label's ~28 pt box.
 
 Every printed number is read here from the Source Data files recorded in
 ``figure_08_sources.json``; nothing is typed in.
@@ -116,7 +154,8 @@ sys.path.insert(0, str(J / 'code/reconstructed_tree'))
 from figure_canvas import (NativeCanvas, Margins, COLORS, PT_BASE, PT_EMPH,
                            LW_HAIR, LW_ERR, LW_REF, LW_DATA,
                            MARKER_MS, SEED_MS, style_panel)
-from journal_style import label_color, style_direct_color_labels, tint_pct
+from journal_style import (label_color, strengthen,
+                           style_direct_color_labels, tint_pct)
 from native_schematics import Frame
 from analyze_microns_morphology_credit import ancestry_matrix, parent_map
 
@@ -132,7 +171,16 @@ INK = COLORS['ink']
 REP_TARGET = 864691135810666525   # representative scan, fixed by median rule
 DELTA0_REASON = ('stimulus recording; no credit is delivered in '
                  'this experiment')
-DUP_OFFSET = 0.26     # mapped inputs; +/-0.13 for a coincident pair (panel F)
+DUP_OFFSET = 0.40     # mapped inputs; +/-0.20 for a coincident pair (panel F)
+# Builder-local address cycle for panel E's four route capsules (deviation 23).
+# ``journal_style.K_CYCLE`` is (shunting, additive, local, oracle) and PLAN
+# section 4 / AMENDMENTS B14 bar BOTH ``additive`` and ``local`` from this
+# figure; SPEC_ERRATA #7 forbids editing the library, so the capsules
+# ``credit_delivery`` draws are re-tinted here with the only two hues the
+# plan's acceptance check 6 admits, alternating in target order so the two
+# sibling capsules (T7, T8) never share a tint.
+CAPSULE_CYCLE = ('shunting', 'oracle', 'shunting', 'oracle')
+CAPSULE_PCT = 16
 _WORDS = ('no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven',
           'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen')
 
@@ -253,9 +301,17 @@ def panel_statistic(f, subtitle_lines):
             spine.set_visible(name in ('left', 'bottom'))
             spine.set_linewidth(LW_HAIR)
             spine.set_color(COLORS['edge'])
-        f.leader(anchors[i], (col_x - f.fx(2.0), y0 + f.fy(h_pt / 2.0)))
-    f.text((col_x - f.fx(4.5), bots[1] + f.fy(h_pt / 2.0)), 'response',
-           size=PT_BASE, color=GRAY, ha='center', va='center', rotation=90)
+        # the leaders land on the FAR half of each inset's left edge, away
+        # from the shared rotated 'response' label that sits between them
+        # (deviation 25): the label is ~28 pt long at PT_BASE and the two
+        # inset centres are only ~29 pt apart, so a terminus on either centre
+        # sits inside it.
+        f.leader(anchors[i],
+                 (col_x - f.fx(2.0),
+                  y0 + f.fy(h_pt * (0.85 if i == 0 else 0.15))))
+    f.text((col_x - f.fx(4.5), (bots[0] + bots[1]) / 2.0 + f.fy(h_pt / 2.0)),
+           'response', size=PT_BASE, color=GRAY, ha='center', va='center',
+           rotation=90)
     f.text((col_x + w / 2.0, bots[1] - f.fy(1.5)), 'condition',
            size=PT_BASE, color=GRAY, ha='center', va='top')
 
@@ -300,6 +356,7 @@ def panel_routes(f, matrix, groups, n_routes, subtitle_lines):
     f.credit_delivery(nodes, mode='subtree',
                       targets=[seats[i][0] for i in reached],
                       rule_color='shunting', alpha_tags=False)
+    _retint_capsules(f, f.ax.patches[before:])
     _seat_arrows(f, f.ax.patches[before:], list(placed.values()))
     for label in seats:
         f.contact(placed[label], kind='exc')
@@ -350,6 +407,31 @@ def _split_duplicates(support, x, offset_pt=DUP_OFFSET):
         for j, i in enumerate(idx):
             x[i] += (j - (len(idx) - 1) / 2.0) * offset_pt
     return x
+
+
+def _retint_capsules(f, patches, cycle=CAPSULE_CYCLE, pct=CAPSULE_PCT):
+    """Re-tint the four route capsules ``credit_delivery`` just drew.
+
+    ``Frame.credit_delivery(mode='subtree')`` colours its capsules from
+    ``journal_style.K_CYCLE`` = (shunting, additive, local, oracle).  Two of
+    those four hues -- ``additive`` #20509E and the ``local``/``scalar`` amber
+    #E2A23F -- are barred from this figure by PLAN section 4 (B14) and by the
+    plan's own acceptance check 6, which admits only ``shunting``, ``oracle``
+    and the anatomy register as saturated hues here.  SPEC_ERRATA #7 forbids
+    editing the library, so this follows the AMENDMENTS item-27 precedent set
+    for Fig 7B: the patches the library just added are re-tinted in place with
+    a builder-local address cycle drawn from the admissible hues, alternating
+    in target order so the two sibling capsules (T7 and T8, whose entry stubs
+    overlap at their shared junction) never carry the same tint.  Geometry,
+    count, tint strength (16 %) and the 0.55 pt edge are untouched; the
+    delivery arrows (``FancyArrowPatch``) are left alone.
+    """
+    caps = [q for q in patches if getattr(q, '_posA_posB', None) is None]
+    for i, patch in enumerate(caps):
+        face = tint_pct(COLORS[cycle[i % len(cycle)]], pct)
+        patch.set_facecolor(face)
+        patch.set_edgecolor(strengthen(face, 2.4))
+    return [cycle[i % len(cycle)] for i in range(len(caps))]
 
 
 def _seat_arrows(f, patches, contacts, clearance_pt=3.4):
@@ -624,7 +706,9 @@ def main():
     # bounded, not an axvline: the padded y limits carry the lambda annotation
     ax_d.plot([0.0, 0.0], [-0.32, 0.80], color=GRAY, lw=LW_HAIR,
               dashes=(2.6, 2.0), zorder=1, solid_capstyle='butt')
-    ax_d.plot([cut_m, cut_m], [0.72, 0.80], color=GRAY, lw=LW_HAIR,
+    # one drop from the 80 % crossing (deviation 6), run down to the top of
+    # the inset -- as far as the corridor at this x is free (deviation 24)
+    ax_d.plot([cut_m, cut_m], [0.56, 0.80], color=GRAY, lw=LW_HAIR,
               dashes=(2.6, 2.0), zorder=1.5)
     ax_d.set(xlim=(-0.30, 0.55), ylim=(-0.32, 1.16))
     ax_d.set_xticks([-0.25, 0.0, 0.25, 0.50])
@@ -647,14 +731,16 @@ def main():
               color=GRAY, ha='right', va='center', zorder=6)
     ax_d.plot([0.200, 0.2445], [0.895, 0.815], color=GRAY, lw=LW_HAIR,
               zorder=2)
-    ax_d.text(-0.295, 1.09, f'λ = {lam:.2f} respecting the MC band',
+    ax_d.text(-0.295, 1.10, f'ancestry variance λ = {lam:.2f}',
               fontsize=PT_BASE, color=INK, ha='left', va='center', zorder=6)
+    ax_d.text(-0.295, 1.01, 'respecting the MC band', fontsize=PT_BASE,
+              color=INK, ha='left', va='center', zorder=6)
     ax_d.text(0.545, 1.09, 'perfect reliability', fontsize=PT_BASE,
               color=label_color(CEIL), ha='right', va='center', zorder=6)
     ax_d.plot([0.42, 0.42], [1.055, 1.00], color=GRAY, lw=LW_HAIR, zorder=2)
     ax_d.text(0.545, 0.72, 'measured reliability', fontsize=PT_BASE,
               color=label_color(ROUTE), ha='right', va='center', zorder=6)
-    ax_d.plot([0.250, 0.223], [0.725, 0.742], color=GRAY, lw=LW_HAIR, zorder=2)
+    ax_d.plot([0.288, 0.223], [0.712, 0.742], color=GRAY, lw=LW_HAIR, zorder=2)
     # observed rug -- the estimate located on this axis, not a power estimate
     y_obs = -0.14
     ax_d.plot([-0.30, 0.55], [y_obs, y_obs], color=GRAY, lw=LW_HAIR, zorder=1)
@@ -667,7 +753,8 @@ def main():
               fontsize=PT_BASE, color=label_color(ROUTE), ha='left',
               va='center', zorder=6)
     # inset: measured split-half reliability, the calibration of the curves
-    ax_d.text(0.255, 0.600, 'Repeat reliability', fontsize=PT_BASE,
+    # the inset title starts 8 pt right of the 0.249 drop (deviation 24)
+    ax_d.text(0.285, 0.600, 'Repeat reliability', fontsize=PT_BASE,
               color=GRAY, ha='left', va='center', zorder=6)
     inset = _data_inset(ax_d, (0.255, 0.12, 0.290, 0.42))
     for lo, hi, count in zip(hist_edges[:-1], hist_edges[1:], hist_counts):

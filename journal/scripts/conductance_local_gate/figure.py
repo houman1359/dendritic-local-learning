@@ -581,6 +581,13 @@ def panel_task(ax, tuning):
     f.note('address_tint',
            reason='the addressed subtree is the local rule’s own target; '
                   'its tint is the rule colour at 16 %')
+    # QA 2026-09-10: the mute output arrow, drawn exactly as the four B cards
+    # draw it (mode='forward' would add the library's own terminal contacts on
+    # top of the hand-placed exc/inh pairs).  Without it 'V_s' hung off the
+    # black delta-0 arrow, and A was the only tree in the figure with no output.
+    f.arrow((sx + f.fx(nodes.soma_r_pt + 1.5), sy),
+            (sx + f.fx(nodes.soma_r_pt + 1.5 + 11.0), sy),
+            color=MUTE, lw=LW_EDGE, head=3.4, zorder=4.5)
     f.subscript((sx + f.fx(nodes.soma_r_pt + 1.5 + 11.0 + 2.5), sy), 'V', 's',
                 ha='left')
     f.error_in(nodes.soma, label='δ0', side='right')
@@ -667,16 +674,27 @@ def panel_task(ax, tuning):
 
 
 # ── B: the four deliveries of the somatic error ───────────────────────────
-def card_tree(f, core, *, head_pt=3.0, foot_pt=14.0):
+def card_tree(f, core, *, head_pt=3.0, foot_pt=10.0):
     """Ghost copy of A's tree with the closed gate at J2 and its own delta-0.
 
     ``foot_pt`` lifts the soma clear of the card's own bottom edge: the
     library's error_in tail sits (r + 7) pt below the soma, and task_card's
     core reaches the card edge, so a tree drawn on the floor of the core puts
     the delta-0 tag outside the card it belongs to.
+
+    QA 2026-09-10: the rect is the plan's ``(f.fx(2), f.fx(46))`` again.  The
+    46-pt width is not what sets the drawing: ``_fit_tree`` is aspect-true and
+    on a 38-pt card core the tree is height-bound (measured s = 12.5 pt of
+    tree height against 26 pt of free width at the old 34-pt rect), so the
+    lever is the foot.  ``foot_pt`` 14 -> 10 is the smallest that keeps the
+    delta-0 tag inside the card (tag centre lands 4.5 pt above the core floor,
+    box floor 2.7 pt) and takes the tree from 18.0 x 12.5 pt to 23.7 x 16.5 pt,
+    pitch 6.0 -> 7.9 pt, so the terminals and junction rings read at print
+    scale.  The canopy top is unchanged at (core_h - head_pt - 4) pt, so the
+    broadcast card's bus rail does not move.
     """
     x0, y0, w, h = core
-    rect = (x0 + f.fx(12.0), y0 + f.fy(foot_pt), f.fx(34.0),
+    rect = (x0 + f.fx(2.0), y0 + f.fy(foot_pt), f.fx(46.0),
             h - f.fy(foot_pt + head_pt))
     nodes = f.balanced_tree(rect, depth=2, trunk=False, mode='plain',
                             ghost=True)
@@ -765,7 +783,11 @@ def panel_deliveries(ax):
     # both sit beside it: alpha_1 takes the proximal segment (above) and
     # alpha_2 is set over its own terminal, 3.7 pt above T2 -- 2.4 pt under
     # the card title and 2.1 pt over alpha_1's box.
-    f.subscript((nodes['T2'][0], nodes['T2'][1] + f.fy(3.7)), 'α', '2',
+    # QA 2026-09-10: 4.8 pt, not 3.7 -- the tag is set va='center', so at 3.7
+    # its descender box sat on the 1.6-pt terminal disc (JUNCTION_R_PT + the
+    # glyph's 2.5-pt half-height + 0.7 pt of air = 4.8), and T2 is the canopy
+    # top, whose height does not move with the foot.
+    f.subscript((nodes['T2'][0], nodes['T2'][1] + f.fy(4.8)), 'α', '2',
                 size=PT_BASE, color=COLORS['bp'], ha='center', va='center')
     key_lines(f, core, key_x, [
         (['distal × ', 'α', ('sub', '1'), 'α', ('sub', '2')], INK),
@@ -775,8 +797,23 @@ def panel_deliveries(ax):
     cell = cells['broadcast']
     core = f.task_card(cell, title='Unit broadcast')
     nodes = card_tree(f, core)
-    f.credit_delivery(nodes, mode='neuron',
-                      targets=nodes.terminals + ['JL', 'JR'])
+    bus_targets = nodes.terminals + ['JL', 'JR']
+    seen = set(map(id, ax.patches))
+    f.credit_delivery(nodes, mode='neuron', targets=bus_targets)
+    # QA 2026-09-10: the library ends every drop 2.8 pt short of its site.  On
+    # the two junctions that standoff is right (the gate ring is 3.4 pt across,
+    # so a longer drop would spear it), but on a bare terminal it reads as a bus
+    # hovering over the canopy rather than delivering into it.  The glyph stays
+    # the library's (rail, riser, source dot, heads); only the four terminal
+    # tips are carried 1.6 pt further down, to the same 1.2-pt standoff the
+    # subtree arrows on cards 1 and 4 keep from their roots.
+    drops = [a for a in ax.patches
+             if id(a) not in seen and isinstance(a, FancyArrowPatch)]
+    for target, art in zip(bus_targets, drops):
+        if target not in nodes.terminals:
+            continue
+        (ax0, ay0), (ax1, ay1) = art._posA_posB
+        art.set_positions((ax0, ay0), (ax1, ay1 - f.fy(1.6)))
     key_lines(f, core, key_x, [
         (['all six sites × 1'], INK),
         (['soma × 1'], INK),
@@ -1205,6 +1242,15 @@ def placement(ax, t):
               f"endpoint {also['mean_fixed_endpoint']:.2f}"]
     stack(ax, x_frac(ax, 3.48), 0.300, frozen, ha='right', lead_pt=8.6)
     tie_leader(ax, 3.0, 0.300, seeds['hard_distal_and_proximal'].min())
+    # PLAN section 2 (F, 'Printed on panel'): the equality the panel title
+    # asserts is said in words, not left to the two coincident diamonds.  The
+    # between-cluster band is spent on the swapped-gate tie, so the line takes
+    # the free band directly under the Distal gate pair (lowest mark there is
+    # 4.8e-6, y frac 0.176; this line is centred at 0.085).
+    assert abs(printed['hard_distal_unit_proximal']['mean']
+               - cont['mean']) / cont['mean'] < 0.02
+    stack(ax, x_frac(ax, 1.0), 0.085, ['hard = continuous'], ha='center',
+          color=COLORS['shunting'])
     printed['unit_broadcast_reference'] = float(broadcast)
     printed['_min_mark_separation_pt'] = round(separation, 2)
     printed['_rate_categories'] = [F_ORDER[i] for i in rate_categories]

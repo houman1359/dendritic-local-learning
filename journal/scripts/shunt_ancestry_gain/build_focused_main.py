@@ -623,13 +623,22 @@ def panel_gain_dictionary(ax, gains):
                         color=label_color(hue), ha="left", va="center")
         placed.append((artist, y_tag, nodes))
     ax.figure.canvas.draw()
-    # ONE start x for all three leaders (the right edge of the longest tag):
-    # leaving each leader to start at its own tag's edge ran the shorter
-    # tags' leaders straight through the longer tags' text
-    start_x = max(a.get_window_extent().transformed(ax.transData.inverted()).x1
-                  for a, _y, _n in placed) + f.fx(4.0)
-    for _artist, y_tag, nodes in placed:
-        start = (start_x, y_tag)
+    # ONE turn x for all three leaders (the right edge of the longest tag):
+    # letting each diagonal start at its own tag's edge ran the shorter tags'
+    # leaders straight through the longer tags' text.  Each leader is
+    # therefore an ELBOW -- a horizontal stub along its own tag's baseline out
+    # to the shared turn, then the diagonal into the block.  Without the stub
+    # the two shorter tags' leaders began 9.1 pt and 26.2 pt clear of their
+    # own labels and read as two more arbor strokes hanging in the white
+    # space under the canopy.
+    turn_x = max(a.get_window_extent().transformed(ax.transData.inverted()).x1
+                 for a, _y, _n in placed) + f.fx(4.0)
+    for artist, y_tag, nodes in placed:
+        own_x = artist.get_window_extent() \
+            .transformed(ax.transData.inverted()).x1 + f.fx(2.0)
+        start = (turn_x, y_tag)
+        if own_x < turn_x - f.fx(0.4):
+            f.leader((own_x, y_tag), start, color=MUTE)
         f.leader(start, _nearest(nodes, start), color=MUTE)
 
     # scale bar at the lower LEFT of the projection (PLAN section 3 B)
@@ -731,13 +740,17 @@ def panel_relations(canvas, ax, category):
     out = forest(ax, rows, value_label="|Δ log |γ|| (log units)",
                  reference=0.0, reference_label="", color="shunting",
                  xlim=(-0.006, 0.158), tag="")
-    # CF-7 wants the reference label ON its line: at the BOTTOM of the rule
-    # its first glyph sat 2 pt from the unrelated row's injection square and
-    # read as that square's label, so it moves to the top (as in F and H).
-    # CF-7: right-aligned so the label ENDS on the rule (F and H already do).
-    # The rule is 2.6 pt from the left spine here, so the label runs back into
-    # the row-label gutter; at this y the gutter carries no row label.
-    ax.text(-0.0016, -0.44, "no change", fontsize=PT_BASE, color=MUTE,
+    # CF-7 wants the reference label right-aligned ON its line.  The rule is
+    # 3.6 pt from the left spine, so the label necessarily runs back into the
+    # row-label gutter; at the TOP of the rule it landed 2.8 pt above
+    # `descendant` and the gutter read as a six-item stack whose first entry
+    # was `no change`.  It moves to the BOTTOM of the rule instead, hard
+    # against the abscissa as in G and H, where the nearest row label is
+    # 13 pt away and the x tick row reads it as the axis annotation it is.
+    # The 0.32 of extra ordinate below the last row is what opens that strip;
+    # it costs 0.3 pt of the +0.22 overplot offset and nothing else.
+    ax.set_ylim(4.92, -0.6)
+    ax.text(-0.0016, 4.62, "no change", fontsize=PT_BASE, color=MUTE,
             ha="right", va="center", zorder=6)
     ax.tick_params(axis="x", labelsize=PT_BASE, pad=0.8, length=2.0)
     ax.xaxis.labelpad = 0.5
@@ -781,8 +794,15 @@ def panel_relations(canvas, ax, category):
             solid_capstyle="round", zorder=1.6)
     # the sign count keeps its COHORT on the artwork: an unattributed 45/45
     # inside a panel tagged n = 8 cells is not readable as a control
+    # AMENDMENTS section 4c: `disjoint 45-cell calibration cohort` is the PROSE and
+    # CAPTION name; the sanctioned PANEL form is `Disjoint, 45 cells`, which
+    # is what F's row labels and G's direct labels already print, so the
+    # cohort is named identically across the three panels that use it.  The
+    # prose form sets 99.3 pt at 7.0 pt type in a 99.8 pt axes: it can only be
+    # printed flush across the whole panel, where it crosses the near-zero
+    # marks of every row.
     for offset, text in enumerate(("45/45 cells positive,",
-                                   "disjoint 45-cell cohort",
+                                   "Disjoint, 45 cells",
                                    "Supplementary Fig. S30A")):
         ax.text(0.156, 3.68 + 0.34 * offset, text, fontsize=PT_BASE,
                 color=MUTE, ha="right", va="center", zorder=6)
@@ -864,12 +884,15 @@ def panel_adjoint(ax, shapley):
     for offset, line in enumerate(("substitution, not", "a decomposition")):
         ax.text(3.53, 0.240 - 0.029 * offset, line, fontsize=PT_BASE,
                 color=MUTE, ha="right", va="center", zorder=6)
-    # (ii) the printed contrast, centred over the q′ / q′d′ columns
+    # (ii) the printed contrast, centred over the q′ / q′d′ columns.  2.00,
+    # not 2.15: at 2.15 the second line ended 1.7 pt and the first 1.1 pt
+    # PAST the 506.4 pt live right edge, the same overhang already corrected
+    # in H's x label.
     for offset, line in enumerate(
             (f"q′ replacement: +{mean:.3f}",
              f"[{lo:.3f}, {hi:.3f}], "
              f"{shapley['replacement_positive']}/8 cells")):
-        ax.text(2.15, 0.305 - 0.029 * offset, line, fontsize=PT_BASE,
+        ax.text(2.00, 0.305 - 0.029 * offset, line, fontsize=PT_BASE,
                 color=INK, ha="center", va="center", zorder=6)
     # (iii) the key, in the clear band over the inject and d′ columns, 4 pt
     # clear of the left spine
@@ -1005,10 +1028,13 @@ def panel_state(ax, physical, ranges):
     reference_line(ax, 0.0, axis="y", label=None)
     ax.text(262.0, -0.0055, "no contrast", fontsize=PT_BASE, color=MUTE,
             ha="left", va="center", zorder=6)
-    # 10,000 keeps its major tick but loses its label: at 99.8 pt of axes the
-    # "10,000" and "30,000" strings abut (62.1--83.5 pt against 83.5--104.9).
-    ax.set_xticks((300, 1000, 3000, 10000, 30000),
-                  ("300", "1,000", "3,000", "", "30,000"))
+    # 10,000 loses its major TICK as well as its label.  At 99.8 pt of axes
+    # the "10,000" and "30,000" strings abut exactly (62.1--83.5 pt against
+    # 83.5--104.9) and cannot both be set; keeping the bare tick left one
+    # unlabelled major on a log abscissa, which is worse than four labelled
+    # decades. 10,000 stays on the axis as a log minor tick.
+    ax.set_xticks((300, 1000, 3000, 30000),
+                  ("300", "1,000", "3,000", "30,000"))
     ax.set_yticks((0.0, 0.02, 0.04, 0.06, 0.08),
                   ("0", "0.02", "0.04", "0.06", "0.08"))
     ax.tick_params(labelsize=PT_BASE, pad=0.8, length=2.0)
@@ -1076,6 +1102,20 @@ def panel_state(ax, physical, ranges):
     inset.set_xticks(())
     inset.set_yticks(())
     inset.minorticks_off()
+    # ...except ONE numeral.  Without it the frame's internal zero rule sits
+    # where the PARENT ordinate reads 0.025, and the magnified marks read as
+    # genuine positive contrasts of about 0.02.  "0" is set right-aligned
+    # 2 pt outside the inset's left spine at the height of its own dashed
+    # rule (CF-7), i.e. exactly where that inset's y tick label would be, so
+    # it is read as the inset's and not as a free-floating parent numeral.
+    # It is the only numeral the 38 x 31 pt frame has room for: the 3,000
+    # whisker spans -0.0043 to +0.0068 and occupies the whole interior left
+    # edge, so the half-range stays on the "inset +- 0.005" line above.
+    inset.annotate("0", xy=(0.0, 0.0),
+                   xycoords=("axes fraction", "data"), xytext=(-2.0, 0.0),
+                   textcoords="offset points", ha="right", va="center",
+                   fontsize=PT_BASE, color=MUTE, annotation_clip=False,
+                   zorder=6)
     ax.text(0.600, 0.625, "inset ± 0.005", transform=ax.transAxes,
             fontsize=PT_BASE, color=MUTE, ha="left", va="center", zorder=6)
     # The magnified window used to be a closed rectangle: every edge of a box
@@ -1089,6 +1129,17 @@ def panel_state(ax, physical, ranges):
     for x_end in (2400.0, 40000.0):
         ax.plot([x_end, x_end], [bracket_y, bracket_y + 0.0028], color=MUTE,
                 lw=LW_HAIR, zorder=1.4, solid_capstyle="butt")
+    # PLAN section 4 G: "a LW_HAIR mute connector marks the inset's source region on
+    # the main axes".  The bracket alone left the reader to guess that the
+    # window under the abscissa and the frame at the upper right were the
+    # same object, so the two ends of the bracket are tied to the two lower
+    # corners of the frame.  zorder 0.9 puts both under the reference rule
+    # and under every mark, so they read as background tie-lines.
+    to_axes = ax.transData + ax.transAxes.inverted()
+    for x_end, corner in ((2400.0, 0.60), (40000.0, 0.98)):
+        x_frac, y_frac = to_axes.transform((x_end, bracket_y))
+        ax.plot([x_frac, corner], [y_frac, 0.31], transform=ax.transAxes,
+                color=MUTE, lw=LW_HAIR, zorder=0.9, solid_capstyle="butt")
 
     def place_cohort_markers():
         """Set each key marker 3.4 pt left of its own label.
@@ -1137,7 +1188,12 @@ def panel_background(ax, sel, per_cell):
     ax.set_xlim(-0.5, 2.5)
     # 0.45, not 0.365: the in-panel sentence needs a band that clears the
     # 8/8 sign count over the 4x column AND leaves 6 pt under the title
-    ax.set_ylim(-0.100, 0.45)
+    # -0.150, not -0.100: at -0.100 the footer's last line sat ON the bottom
+    # spine (its baseline 0.3 pt below the 0.70 pt rule, which read as a
+    # strike-through under the words).  The extra 0.05 of ordinate lifts the
+    # zero rule to 0.25 of the axes and opens a 3-line footer strip that
+    # clears both the spine below and `no contrast` above.
+    ax.set_ylim(-0.150, 0.45)
     ax.set_yticks((0.0, 0.1, 0.2, 0.3), ("0", "0.1", "0.2", "0.3"))
     ax.tick_params(labelsize=PT_BASE, pad=0.8, length=2.0)
     ax.set_xlabel("background leak (\u00d7 baseline)", fontsize=PT_EMPH,
@@ -1158,7 +1214,7 @@ def panel_background(ax, sel, per_cell):
     # the reserve lock that resizes this axes after the panel is drawn;
     # token_subscript's own ``tail`` anchors on the subscript's layout box
     # (which carries the font descent) and prints ~1.5 pt low.
-    rest = ax.text(0.985, 0.135, "= 15,000 \u03a9 cm\u00b2", fontsize=PT_BASE,
+    rest = ax.text(0.985, 0.184, "= 15,000 \u03a9 cm\u00b2", fontsize=PT_BASE,
                    color=MUTE, ha="right", va="center", zorder=6,
                    transform=ax.transAxes)
     sub = ax.annotate("m", xy=(0.0, 0.5), xycoords=rest, xytext=(-3.4, -1.6),
@@ -1171,9 +1227,9 @@ def panel_background(ax, sel, per_cell):
     # the dose scheme is named in full on the panel: "normalized dose 1"
     # alone did not say WHICH normalization distinguishes the two rows of
     # paired_contrasts.csv
-    ax.text(0.985, 0.078, "input-conductance-", transform=ax.transAxes,
+    ax.text(0.985, 0.127, "input-conductance-", transform=ax.transAxes,
             fontsize=PT_BASE, color=MUTE, ha="right", va="center", zorder=6)
-    ax.text(0.985, 0.021, "normalized dose 1", transform=ax.transAxes,
+    ax.text(0.985, 0.070, "normalized dose 1", transform=ax.transAxes,
             fontsize=PT_BASE, color=MUTE, ha="right", va="center", zorder=6)
     return ax
 
@@ -1432,7 +1488,18 @@ def build(emit_main=True):
         "closed source-region box with an open mute bracket under the "
         "window; H's sentence drops clear of the title and is reworded, its "
         "x label is pulled inside the live right edge, and its footer names "
-        "the input-conductance normalization. Slot-fill "
+        "the input-conductance normalization. Residual round (2026-09-10, "
+        "third pass): B's three block tags gain an elbow leader that starts "
+        "at each tag's OWN right edge; C's `no change` moves to the bottom of "
+        "the zero rule (ordinate extended to 4.92) out of the row-label "
+        "gutter and its sign count names the cohort by the AMENDMENTS 4c "
+        "panel form `Disjoint, 45 cells`; E's printed contrast is centred at "
+        "2.00 so both lines end inside the 506.4 pt live right edge; G drops "
+        "the unlabelled 10,000 major tick, labels its inset's zero rule and "
+        "ties the source-region bracket to the inset's lower corners with the "
+        "plan's LW_HAIR mute connectors; H's ylim falls to -0.150 and its "
+        "three footer lines rise 0.049 of the axes off the bottom spine. "
+        "Slot-fill "
         f"slot-fill balance: {balance}. Contrast drop from "
         f"R_m 300 to 15,000: {drops}.")
     record = publish(8, output, display_rows(category, dose, shapley,

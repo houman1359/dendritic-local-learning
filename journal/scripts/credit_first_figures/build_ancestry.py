@@ -97,7 +97,12 @@ also written into ``figure_03_sources.json``):
   block widened to hold its own 7 pt coefficient and its own 7 pt tier
   name and tied to its terminal group by a hairline connector; the tint
   per cent rises 13/22/34/46 with tree distance so the ORDINAL_RAMP
-  reads as light-to-dark in print.  A block cannot be exactly centred on
+  reads as light-to-dark in print.  This is a CF-3 exception (CF-3 fixes
+  every area mark at a flat 16 % tint) and since 2026-09-10 it is recorded
+  in the CANVAS MANIFEST as the ``cf3_tint_exception`` schematic note, not
+  only here: at a flat 16 % the four ramp teals collapse to within a few
+  per cent of the same paper-white value and the ordinal reading is lost.
+  A block cannot be exactly centred on
   a single terminal (a 19.5 pt coefficient against a 12.5 pt terminal
   pitch), so the band is a partition with connectors rather than four
   terminal-aligned patches, and the tier gloss is the spatial order
@@ -123,6 +128,20 @@ also written into ``figure_03_sources.json``):
   builder actually computes.  DELIBERATE, SOURCED: the plan's endpoint is
   not reproducible without its unrecorded RNG state, and printing a
   number the builder did not compute would break the §9 assertion chain.
+* C and D size EVERY series from one ink area, MARKER_AREA_PT2 = 20 pt2
+  (``marker_ms``): matplotlib sizes a marker by its bounding box, so the
+  same ``ms`` is a different quantity of ink per shape (at ms = 10 a
+  circle inks 78.5 pt2, a square 100.0, a diamond 100.2, a triangle 50.0)
+  and the unsized build made the post-hoc ceiling control the heaviest
+  mark and the ancestry route the faintest.  Shipped: square 4.47,
+  diamond 4.47, triangle 6.32, circle 5.05 pt.  The nested ancestry
+  circle is reduced to TIE_MS 2.8 pt at K = 1 and K = 8 ONLY, where the
+  families tie exactly; elsewhere it carries a white rim so the K = 4
+  pair (80.11 vs 78.84 %) still reads as two marks.
+* C's `K = 1:` tie tag carries a hairline leader to its concentric
+  marker; the `K = 8:` tag does not, because that marker pair sits at the
+  panel's top right and any leader would be an ~80 pt rule crossing all
+  three series.  DELIBERATE, DECLARED (plan section 4 C asks for both).
 * C and F carry the plan's long annotations in shortened form; the full
   wording is in the caption.  A 166 pt panel cannot hold a 295 pt line.
   C prints the two tie tags verbatim but at 18.66 %, the value the frozen
@@ -279,11 +298,35 @@ def _data_dx(ax, w_pt):
     return float(inv.transform((px, 0.0))[0] - inv.transform((0.0, 0.0))[0])
 
 
-def _p_draw(ax, x, y, prefix, p, tail, *, color=MUTE):
+def _text_descent_pt(ax, size):
+    """Points between a span's baseline and the bottom of its drawn box.
+
+    ``token_subscript`` offsets the raised span from the base span's BOX,
+    not from its baseline, so the descent has to be subtracted before a
+    raise in points can be requested.  Measured, never assumed: a hidden
+    probe is drawn on its baseline and its own box is read back.
+    """
+    probe = ax.text(0.0, 0.0, "0", fontsize=size, va="baseline",
+                    transform=ax.transAxes, alpha=0.0)
+    ax.figure.canvas.draw()
+    box = probe.get_window_extent()
+    base_y = ax.transAxes.transform((0.0, 0.0))[1]
+    probe.remove()
+    return float(base_y - box.y0) * 72.0 / ax.figure.dpi
+
+
+def _p_draw(ax, x, y, prefix, p, tail, *, color=MUTE, raise_pt=2.8):
     """``<prefix>Holm P = 1.8 x 10^-4 (tail)``, right-anchored at ``x``.
 
     The exponent is a real 7.0 pt span raised by ``token_subscript`` at a
     negative drop, so CF-2's three-size rule holds and no mathtext is used.
+    QA 2026-09-10 (major): the shipped drop lifted the exponent 0.77 pt on a
+    7 pt glyph, which prints as ``10-4``, i.e. ten MINUS four -- two
+    inferential values misstated.  The raise is now measured from the base
+    span's BASELINE (``_text_descent_pt``) and set to ``raise_pt`` = 2.8 pt,
+    so the exponent's foot clears the base cap height; the trailing span is
+    then re-hung on the base baseline instead of inheriting the same
+    (now much larger) negative drop from the raised span's box.
     """
     body, expo = _p_text(p)
     head = f"{prefix}Holm P = {body}"
@@ -293,11 +336,19 @@ def _p_draw(ax, x, y, prefix, p, tail, *, color=MUTE):
     w = (_text_w_pt(ax, head, PT_SMALL) + 0.4
          + _text_w_pt(ax, expo, PT_SMALL) + 0.6
          + _text_w_pt(ax, tail, PT_SMALL))
+    descent = _text_descent_pt(ax, PT_SMALL)
     before = list(ax.texts)
-    base = token_subscript(ax, x - _data_dx(ax, w), y, head, expo, tail=tail,
+    base = token_subscript(ax, x - _data_dx(ax, w), y, head, expo, tail="",
                            size=PT_SMALL, sub_size=PT_SMALL, color=color,
-                           ha="left", va="center", drop_pt=-2.3,
-                           clip_on=False)
+                           ha="left", va="center",
+                           drop_pt=-(descent + raise_pt), clip_on=False)
+    if tail:
+        sub = [t for t in ax.texts if t not in before and t is not base][-1]
+        ax.annotate(tail, xy=(1.0, 0.0), xycoords=sub,
+                    xytext=(0.6, descent - raise_pt),
+                    textcoords="offset points", fontsize=PT_SMALL,
+                    color=color, ha="left", va="baseline", zorder=5,
+                    annotation_clip=False)
     # the chained spans are annotations on ``base``, so measuring the drawn
     # group and translating the base right-aligns the whole chain exactly --
     # a width estimate is 10-15 pt short once the raised exponent is added.
@@ -507,14 +558,51 @@ def _group_root(nodes, K, terminal="T3"):
     raise KeyError(terminal)
 
 
-def _series(ax, x, part, color, marker, ms, zorder, *, filled=True):
+# ---- equal-area markers (QA 2026-09-10, plan section 4 C "all markers
+# ~4.5 pt") --------------------------------------------------------------
+# matplotlib sizes a marker by the side of its bounding box, so the same
+# ``ms`` is a different quantity of ink per shape: measured at ms = 10,
+# a circle inks 78.5 pt2, a square 100.0, a diamond 100.2 and a triangle
+# 50.0.  Every series in C and D is therefore sized from ONE ink area,
+# MARKER_AREA_PT2 = 20 pt2 (a 4.47 pt square, a 5.05 pt circle), so the
+# ceiling control no longer outweighs the ancestry route it is compared to.
+MARKER_AREA_PT2 = 20.0
+_MARKER_AREA_FRAC = {"o": 0.7855, "s": 1.0, "D": 1.0, "^": 0.5}
+# the concentric-tie idiom: at an exact tie the ancestry circle is drawn
+# INSIDE the other family's mark, so it is reduced there and only there
+# (a 4.47 pt square and a 4.47 pt diamond both inscribe a 4.47 pt circle).
+TIE_MS = 2.8
+
+
+def marker_ms(marker, area=MARKER_AREA_PT2):
+    """Markersize in points that inks ``area`` pt2 for this marker shape."""
+    return float(np.sqrt(area / _MARKER_AREA_FRAC[marker]))
+
+
+def _series(ax, x, part, color, marker, ms, zorder, *, filled=True,
+            tie_at=(), edge=None):
     mean = part.mean_heldout_accuracy.to_numpy(float) * 100.0
     low = part.ci95_low_heldout_accuracy.to_numpy(float) * 100.0
     high = part.ci95_high_heldout_accuracy.to_numpy(float) * 100.0
+    mec = color if edge is None else edge
     ax.errorbar(x, mean, yerr=[mean - low, high - mean], color=color,
-                marker=marker, mfc=color if filled else "white", mec=color,
+                marker="none" if tie_at else marker,
+                mfc=color if filled else "white", mec=mec,
                 mew=LW_EDGE, ms=ms, lw=LW_DATA, elinewidth=LW_ERR,
                 capsize=ERR_CAPSIZE, capthick=LW_ERR, zorder=zorder)
+    if tie_at:
+        full = [i for i in range(len(mean)) if i not in tie_at]
+        # the reduced inner mark keeps its OWN edge colour: a white rim at
+        # 2.8 pt is most of the glyph and prints as an open marker inside
+        # the enclosing square/diamond (QA 2026-09-10)
+        for idx, size, rim, wid in ((full, ms, mec, LW_EDGE),
+                                    (list(tie_at), TIE_MS, color, LW_HAIR)):
+            if not idx:
+                continue
+            ax.plot(np.asarray(x)[idx], mean[idx], linestyle="none",
+                    marker=marker, ms=size,
+                    mfc=color if filled else "white", mec=rim, mew=wid,
+                    zorder=zorder)
     return mean
 
 
@@ -555,6 +643,20 @@ def panel_task(ax, tiers):
     # rises with tree distance so the ordinal ramp is visible in print.
     f.note("address_tint",
            reason="coefficient tier by tree distance, not an address")
+    # CF-3 exception, recorded in the canvas manifest and not only in the
+    # docstring (QA 2026-09-10, minor).  CF-3 fixes every area mark at a
+    # 16 % tint; the four tier blocks keep the ORDINAL_RAMP hues AND a
+    # graded 13/22/34/46 % tint, because at a flat 16 % the four ramp teals
+    # (#6FE0D8 -> #0E6C70) collapse to within a few per cent of the same
+    # paper-white value and the ordinal reading -- the whole point of the
+    # band -- is lost in CMYK print.  Every block still carries the 0.55 pt
+    # tint edge and no other area mark in this figure varies from 16 %.
+    f.note("cf3_tint_exception",
+           reason="coefficient tier band: ORDINAL_RAMP hues at a graded "
+                  "13/22/34/46 % tint instead of the CF-3 flat 16 %, so the "
+                  "four ordinal tiers stay separable in print; 0.55 pt tint "
+                  "edge kept, and this is the only CF-3 tint variance in "
+                  "figure 3")
     order = [(["T1", "T2"], tiers["same_half"], TIER_RAMP[2], 34, "same half"),
              (["T3"], tiers["selected"], TIER_RAMP[0], 13, "cued"),
              (["T4"], tiers["sibling"], TIER_RAMP[1], 22, "sibling"),
@@ -738,14 +840,17 @@ def panel_bandwidth(ax, summary, outcomes):
     part = (lambda fam: dend[dend.feedback_family.eq(fam)]
             .set_index("budget_k").loc[list(K_TICKS)])
     deranged = _series(ax, x, part("within_neuron_route_derangement"), GREY,
-                       "s", MARKER_MS + 0.6, 3)
+                       "s", marker_ms("s"), 3)
     ax.errorbar(x, best[:, 1], yerr=[best[:, 1] - best[:, 2],
                                      best[:, 3] - best[:, 1]],
                 color=PURPLE, marker="D", mfc=PURPLE, mec=PURPLE, mew=LW_EDGE,
-                ms=MARKER_MS + 0.9, lw=LW_DATA, elinewidth=LW_ERR,
+                ms=marker_ms("D"), lw=LW_DATA, elinewidth=LW_ERR,
                 capsize=ERR_CAPSIZE, capthick=LW_ERR, zorder=4)
+    # equal ink area with the other two series (QA 2026-09-10), a white rim
+    # so the K = 4 pair (80.11 vs 78.84 %) still reads as two marks, and the
+    # concentric idiom kept at the two exact ties only
     ancestry = _series(ax, x, part("correct_ancestry_subtrees"), GREEN, "o",
-                       MARKER_MS - 1.6, 6)
+                       marker_ms("o"), 6, tie_at=(0, 3), edge="white")
     np.testing.assert_allclose(ancestry, [18.67, 44.86, 80.11, 81.00], atol=2e-2)
     np.testing.assert_allclose(best[:, 1], [54.50, 60.26, 78.84, 81.00],
                                atol=2e-2)
@@ -771,6 +876,14 @@ def panel_bandwidth(ax, summary, outcomes):
     # set under the data (plan §4 C)
     ax.text(-0.16, 8.0, f"K = 1: ancestry = deranged, {ancestry[0]:.2f} %",
             fontsize=PT_SMALL, color=MUTE, ha="left", va="center")
+    # plan section 4 C asks for LEADER-labelled tie tags (QA 2026-09-10).  The
+    # K = 1 pair sits directly above its tag, so the leader is a 9 pt hairline
+    # rising left of the K = 1 tick to the concentric marker.  The K = 8 pair
+    # is at the panel's top right, 73 accuracy units from the tag band: any
+    # leader to it would be an ~80 pt rule crossing the three series, so that
+    # tag stays unleadered (declared here, not silently).
+    ax.plot([-0.108, -0.026], [12.9, 17.6], color=MUTE,
+            lw=LW_HAIR, zorder=1, clip_on=False, solid_capstyle="butt")
     # QA 2026-09-09 (blocker): the deranged square sits at 25.13 % at K = 8,
     # so "all families tie" is contradicted by the panel's own mark.  Name
     # the two families that do tie.
@@ -791,9 +904,9 @@ def panel_rewiring(ax, summary, paired):
     part = (lambda arch: fam[fam.architecture.eq(arch)]
             .set_index("budget_k").loc[list(K_TICKS)])
     rewired = _series(ax, x, part("degree_depth_matched_rewired_tree"), ROSE,
-                      "^", MARKER_MS + 0.6, 3)
+                      "^", marker_ms("^"), 3)
     matched = _series(ax, x, part("dendritic_tree"), GREEN, "o",
-                      MARKER_MS - 1.6, 6)
+                      marker_ms("o"), 6, tie_at=(0, 3), edge="white")
     np.testing.assert_allclose(rewired, [18.67, 21.71, 75.09, 81.00], atol=2e-2)
     _accuracy_axes(ax, ylabel=False)
     reference_line(ax, 50.0, label="chance", span=(-0.20, 3.20))
@@ -900,10 +1013,18 @@ def panel_forest(canvas, ax, contrasts, pairs, *, cap_pt=62.0):
     ax.text(12.85, 4.56,
             "n = 20 paired seeds; mean [95 % seed bootstrap]; epoch 80",
             fontsize=PT_SMALL, color=MUTE, ha="right", va="center")
-    for line in ax.lines:                 # CF-7: zero drawn once, and only
-        xd = list(line.get_xdata())       # over the rows it refers to
+    # CF-7: zero drawn once, and only over the rows it refers to.  The rule
+    # is an axvline, so its y data are AXES FRACTIONS: the shipped
+    # [0.20, 1.0] put its bottom dash at data row 3.80, on the 'off scale'
+    # note (QA 2026-09-10, minor).  Clip it to the row band -- half a row
+    # above the top row and half a row below 'depth-interleaved'.
+    lo_row, hi_row = min(out["ypos"]) - 0.45, max(out["ypos"]) + 0.50
+    y0, y1 = ax.get_ylim()                # inverted: y0 is the bottom
+    frac = lambda v: (v - y0) / (y1 - y0)
+    for line in ax.lines:
+        xd = list(line.get_xdata())
         if len(xd) == 2 and xd[0] == xd[1] == 0.0:
-            line.set_ydata([0.20, 1.0])
+            line.set_ydata([frac(hi_row), frac(lo_row)])
     ax.set_xticks([0, 4, 8, 12])
     ax.spines["bottom"].set_bounds(0, 12)
     return stats, gutter
@@ -939,9 +1060,9 @@ def panel_cues(ax, grid, oracle, frozen, mismatched, enc_c, hard_c):
     # the three rules span only the plotted doses, leaving a clear 0.20-unit
     # strip at the far left for the solid series' direct labels
     reference_line(ax, oracle, label=f"oracle {oracle:.1f} %",
-                   color=PURPLE, span=(-0.10, 1.16))
-    reference_line(ax, 50.0, label="chance", span=(-0.10, 1.16))
-    ax.plot([-0.10, 1.16], [frozen, frozen], color=MUTE, lw=LW_HAIR,
+                   color=PURPLE, span=(-0.10, 1.0))
+    reference_line(ax, 50.0, label="chance", span=(-0.10, 1.0))
+    ax.plot([-0.10, 1.0], [frozen, frozen], color=MUTE, lw=LW_HAIR,
             zorder=1.2)
     v256 = encoder_contrast(enc_c, 256, 0.0, "oracle_context")
     v16 = encoder_contrast(enc_c, 16, 0.0, "oracle_context")
@@ -988,9 +1109,16 @@ def panel_cues(ax, grid, oracle, frozen, mismatched, enc_c, hard_c):
         ax.text(-0.28, y, line, fontsize=PT_SMALL, color=INK, ha="left",
                 va="center")
     ax.plot([0.34, 0.47], [25.3, 25.7], color=MUTE, lw=LW_HAIR, zorder=1)
-    ax.text(1.16, 14.0, f"frozen {frozen:.1f} %; mismatched "
-                        f"{mismatched[0]:.1f}–{mismatched[1]:.1f} %",
-            fontsize=PT_SMALL, color=MUTE, ha="right", va="center")
+    # CF-7: right-aligned ON its rule, exactly like 'oracle 80.3 %' and
+    # 'chance' (QA 2026-09-10, minor -- it was floating below the rule at the
+    # axes' right edge, a second convention for a third reference line).  It
+    # hangs UNDER the rule because the soft 16-cue curve runs 0.4-0.7 pp
+    # above it across the whole panel; the strip below 18.67 % is empty.
+    ax.annotate(f"frozen {frozen:.1f} %; mismatched "
+                f"{mismatched[0]:.1f}–{mismatched[1]:.1f} %",
+                xy=(1.0, frozen), xytext=(0.0, -1.6),
+                textcoords="offset points", fontsize=PT_SMALL, color=MUTE,
+                ha="right", va="top", annotation_clip=False)
     ax.set_xticks([0.0, 0.5, 1.0], ["0", "0.5", "1"])
     ax.set_yticks([20, 40, 60, 80])
     ax.spines["left"].set_bounds(20, 80)
