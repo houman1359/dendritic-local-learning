@@ -39,7 +39,7 @@
       "figure": 6,
       "source": "figures/provenance/structure_restoration_20260908/figure_06_plotted.csv",
       "path": "source_data/curated_publication/figure_06_plotted.csv",
-      "sha256": "987e72ee559d5431f53a39b0cb6afb29a67fbfb72338b5a911ff010660fcffcc",
+      "sha256": "b621acb7c1a435fb7d516f5afb46e2f0779c07e81603a8abfd62d01b630d2e86",
       "scope": "Display summaries from existing inputs; panel column identifies the selected data. Not an additional experiment."
     },
     {

@@ -45,25 +45,42 @@ because they are set-wide:
 Schematic area on the B12 / CF-10 formula
 ``sum(schematic slot w_pt x h_pt) / (live_w_pt x live_h_pt)`` with
 ``live = (518.4 - 44 - 12) x (490 - 20 - 32) = 462.4 x 438``:
-``(128.8 + 295.6) x 128 = 54 323.2`` of ``202 531.2`` = **26.8 %**, inside
+``(128.8 + 295.6) x 124 = 52 625.6`` of ``202 531.2`` = **26.0 %**, inside
 the 30 % cap.  G4 waiver recorded for Fig 3 at the superseded 31.6 %
-measure; on the B12 formula the figure is 26.8 % and the waiver is
+measure; on the B12 formula the figure is 26.0 % and the waiver is
 dormant.  PANEL_ASPECT_MAX is not relaxed.
 
 Recorded deviations from the plan (each with its reason; the full list is
 also written into ``figure_03_sources.json``):
 
-* Row weights 128/107/107 with a 48 pt vertical gutter and margins
-  44/12/20/32, not the plan's 112/121/121 at 42 pt with margins 52/14.  Panel B is eight
-  modules wide (288.9 pt); at a 112 pt row its axes box is 2.58 wide,
-  above ``PANEL_ASPECT_MAX`` 2.40, which DECISIONS G4 forbids relaxing.
-  128 pt clears the cap (2.31); the 48 pt
-  gutter is what audit_row_separation.py's 8.5 pt floor needs between the
-  x labels of row 1 and the letters of row 2, and it leaves the two data
-  rows at 107 pt.  The left margin is 44 rather than 52 so that the
-  figure fills 92 % of the canvas width, which the strict audit requires.
-  The AMENDMENTS Fig 3 item 5 "tighten to 106/124/124" instruction is
-  therefore not taken: it would put B at 2.73.
+* Row weights 124/113/113 with a 44 pt vertical gutter and margins
+  44/12/20/32, not the plan's 112/121/121 at 42 pt with margins 52/14.
+  Three independent constraints fix this (all re-verified 2026-09-09
+  against the built PDF):
+  (i) MARGINS.  ``FILL_W_MIN`` is 0.92, so the drawn ink must span at
+  least 476.9 pt of the 518.4 pt page.  The leftmost ink is the letter
+  column at ``margins.left - LETTER_COL_DX_PT`` = left - 16, the
+  rightmost is the right-hand panel edge at 518.4 - right, so the strict
+  audit is satisfiable only while ``left + right <= 57.5``.  The plan's
+  52 + 14 = 66 gives 90.3 % and fails ``fill-width``; 44 + 12 = 56 gives
+  92.3 %.  The plan's stated reason for left = 52 (keeping C's y label
+  out of the protected letter column) is met instead by
+  ``declare_reserve('C'/'D', left=20)``, and audit_letter_alignment.py
+  passes.
+  (ii) ROW 0.  Panel B spans eight modules = 295.6 pt at these margins;
+  at a 112 pt row its axes box aspect is 2.64, above
+  ``PANEL_ASPECT_MAX`` 2.40, which DECISIONS G4 forbids relaxing.  124 pt
+  is the shortest row 0 that clears the cap (2.38), so the AMENDMENTS
+  Fig 3 item 5 "tighten to 106/124/124" instruction is not taken -- it
+  would put B at 2.79.
+  (iii) VERTICAL GUTTER.  The panel titles and x labels overflow their
+  slots by about 35 pt between rows 1 and 2, so a 42 pt gutter leaves
+  7.2 pt against audit_row_separation.py's 8.5 pt floor; 44 pt measures
+  9.4 pt.
+  The two data rows therefore stand at 113 pt, 6 pt taller than the
+  build the reviewer saw, and the schematic fraction falls from 26.8 %
+  to 26.0 % (the plan's 23.4 % is computed on the plan's own 452.4 x 438
+  live box, which fails (i)).
 * E is placed with ``lock=False`` and a private measured left inset
   instead of ``declare_reserve('E', left=66)``.  A declared reserve is
   locked per GRID COLUMN, and C starts in the same column 0, so the
@@ -76,14 +93,16 @@ also written into ``figure_03_sources.json``):
   row's seed fan, not through ``forest(note=...)``.  ``forest`` sets a
   note outside the right spine, which here is the 38 pt gutter shared
   with panel F's y axis.
-* E prints Holm P values in decimal (0.00018, 0.0000076) rather than
-  1.8 x 10^-4 / 7.6 x 10^-6: Nimbus Sans has no U+207B superscript minus
-  and CF-2 forbids mathtext.  The caption keeps the scientific form.
-* A's coefficient tier labels are set in a two-row keyed band rather than
-  over their own blocks: at the 12-16 pt terminal pitch a 17.6 pt
-  coefficient string cannot sit over a one-terminal block without
-  colliding with its neighbour.  The swatches key the tints, so the band
-  is the partition label.
+* A's coefficient tiers are ONE contiguous band, in spatial order, each
+  block widened to hold its own 7 pt coefficient and its own 7 pt tier
+  name and tied to its terminal group by a hairline connector; the tint
+  per cent rises 13/22/34/46 with tree distance so the ORDINAL_RAMP
+  reads as light-to-dark in print.  A block cannot be exactly centred on
+  a single terminal (a 19.5 pt coefficient against a 12.5 pt terminal
+  pitch), so the band is a partition with connectors rather than four
+  terminal-aligned patches, and the tier gloss is the spatial order
+  (same half / cued / sibling / other half) rather than the plan's
+  ordinal string, from which "nonsibling" is dropped for width.
 * A drops the panel footer "junctions define feedback supports only" into
   the caption -- the plan's own stated fallback -- because the subtitle,
   the two-row tier key, the eight input labels and the 15 pt delta-0
@@ -97,19 +116,34 @@ also written into ``figure_03_sources.json``):
   4 x 10 pt rows by 8 x 7 pt columns (not 6 x 6 pt): a two-line 7 pt row
   label cannot sit on a 6 pt row.
 * D's paired intervals are computed with a fixed 20 000-draw bootstrap
-  seeded 70000; K = 2 comes out [21.03, 25.32] against the plan's quoted
-  [21.05, 25.32] (same estimator, different draw).  The printed tags carry
-  the means only.
+  seeded 70000 over the frozen seed_outcomes.csv; K = 2 comes out
+  [21.03, 25.32] against the plan's quoted [21.05, 25.32].  The estimator,
+  the data and the mean (+23.149 pp = 44.8633 - 21.7139) all agree; only
+  the resampling draw differs, and the caption prints the endpoint this
+  builder actually computes.  DELIBERATE, SOURCED: the plan's endpoint is
+  not reproducible without its unrecorded RNG state, and printing a
+  number the builder did not compute would break the §9 assertion chain.
 * C and F carry the plan's long annotations in shortened form; the full
   wording is in the caption.  A 166 pt panel cannot hold a 295 pt line.
   C prints the two tie tags verbatim but at 18.66 %, the value the frozen
   ``condition_summary.csv`` carries for both arms at K = 1.
 * E runs to xlim (-2, 14) rather than the plan's (-2, 11), so the +13.13
   dense rank-4 seed is drawn instead of clipped.
-* F does not repeat 256 / 64 / 16 on the dashed hard-readout lines: they
-  carry the same ORDINAL_RAMP hues as the labelled solid lines and the
-  noise-0.5 points have no clearance for three more labels.  Its
-  noise-free annotation names both oracle gaps on one line.
+* F is drawn on the plan's ylim (10, 90) with ticks 20/40/60/80, so the
+  frozen-profile floor at 18.67 % stands 11 pt clear of the bottom spine.
+  The window costs the panel its text margin: at 170.5 x 113 pt the only
+  mark-free bands are y 81-90 (one line), the left wedge above the soft
+  curves, and y 10-17 below the floor.  Three consequences.  (a) The
+  three dashed hard-readout curves ARE now direct-labelled 256 / 64 / 16
+  in their ORDINAL_RAMP hues, with leaders to their noise-0.5 vertices
+  (64.03 / 54.22 / 32.41 %), under a `hard readout` tag and the
+  `exploratory` badge -- the reviewer's blocker on the unreadable dashed
+  family.  (b) The plan's three long annotations are condensed to four
+  7 pt lines in the left wedge (noise-0 oracle gaps -0.31 / -60.90 pp and
+  the primary noise-0.5 gap -54.47 pp).  (c) The `+7.16 pp vs frozen`
+  contrast and the footer's cohort range and cue-delay clause do not fit
+  and are carried by the caption; the on-panel footer keeps n, the
+  interval type and the endpoint.
 * B's control-table headers are the digits 1..8 under one ``b_i`` tag and
   its |A| key is plain text: Nimbus Sans has no Unicode subscript block
   and CF-2 bans mathtext.
@@ -141,7 +175,7 @@ import run_trained_subtree_address_full_factorial as experiment    # noqa: E402
 from focused_provenance import publish                             # noqa: E402
 from figure_canvas import (COLORS, LW_DATA, LW_EDGE, LW_ERR, LW_HAIR,  # noqa: E402
                            LW_REF, MARKER_MS, PT_ANNOT, PT_LABEL, PT_SMALL,
-                           Margins, NativeCanvas, forest)
+                           Margins, NativeCanvas, forest, token_subscript)
 from journal_style import (ERR_CAPSIZE, ORDINAL_RAMP, SEED_ALPHA,   # noqa: E402
                            SEED_MS, label_color, style_direct_color_labels,
                            tint_patch)
@@ -193,13 +227,13 @@ Y_LIM_C = (-20.0, 100.0)
 #: The shipped caption (analysis/figure_overhaul_20260908/v2/fig3/TEXT.md).
 #: Counted under CF-8 by :func:`caption_words` and recorded in the manifest.
 CAPTION = r"""\caption{\textbf{Ancestry routes help only where the tree's partition matches the task, and only when the coefficients are supplied.}
-\textbf{A}, Schematic, no data: eight streams enter the terminals $b_1$--$b_8$ of a balanced tree; context $c$ selects $b_3$, whose block alone sets the logit $z$, the somatic error $\delta_0$ enters the soma, and the $K=4$ ancestry capsule delivers it to $b_3$ and sibling $b_4$. Junctions define feedback supports only; teal tints give each stream's class coefficient ($+1.00$ cued, $-0.15$ sibling, $-0.45$ same-half nonsibling, $-0.75$ other half).
-\textbf{B}, Schematic, no data: ancestry dictionaries $A$ ($8\times K$), the channel carrying $b_3$'s credit shaded, over raw class-signal sums ($-3.05$, $-0.05$, $+0.85$, $+1.00$; unit-row normalization preserves the signs, giving $-1.08$, $-0.03$, $+0.60$, $+1.00$), beside the delivered support of $b_3$'s credit under the four matched controls at $K=4$ (random-sparse and dense rows, one draw).
+\textbf{A}, Eight streams enter the terminals $b_1$--$b_8$ of a balanced tree; context $c$ selects $b_3$, whose block sets the logit $z$, $\delta_0$ enters the soma, and the $K=4$ capsule delivers it to $b_3$ and sibling $b_4$. Junctions define feedback supports only; the tinted band gives each tier's coefficient by tree distance ($+1.00$ cued, $-0.15$ sibling, $-0.45$ same-half nonsibling, $-0.75$ other half).
+\textbf{B}, Ancestry dictionaries $A$ ($8\times K$), the channel carrying $b_3$'s credit shaded, over raw class-signal sums ($-3.05$, $-0.05$, $+0.85$, $+1.00$; unit-row normalization preserves the signs: $-1.08$, $-0.03$, $+0.60$, $+1.00$), beside $b_3$'s delivered support under the four matched controls at $K=4$ (random-sparse and dense rows, one draw).
 \textbf{C}, Held-out accuracy across budgets for the ancestry route, the deranged route and the best matched control (the per-seed maximum over the four controls, a ceiling); 20 paired seeds, per cent, means with 95\% seed-bootstrap intervals at epoch 80.
 \textbf{D}, Task-matched versus degree- and depth-matched rewired tree under ancestry feedback: paired $+23.15$ [$21.03$, $25.32$] and $+5.02$ [$4.19$, $5.94$] percentage points at $K=2,4$, exact ties at $K=1,8$; 20 paired seeds, 95\% paired seed-bootstrap intervals at epoch 80.
 \textbf{E}, Ancestry minus each control at $K=4$, intervals from \texttt{review\_evidence\_reanalysis/ancestry\_k4\_control\_contrasts.csv}, Holm-adjusted $P$ across four budgets (top row) or four controls; 20 paired seeds, percentage points, means with 95\% seed-bootstrap intervals at epoch 80.
-\textbf{F}, Coefficient source across the calibration $\times$ cue-noise grid, soft readout solid, exploratory hard readout dashed, against the oracle ceiling and the frozen-profile floor, printed noise-free values being oracle gaps; 20 fresh seeds (52000--52019), per cent, means with 95\% seed-bootstrap bands at epoch 80.
-Teal ramps in \textbf{A} and \textbf{F} are ordinal within this figure's own lists, not shared identities.
+\textbf{F}, Coefficient source across the calibration $\times$ cue-noise grid at zero cue delay: soft solid, exploratory hard dashed, labelled by calibration size, against the oracle ceiling and frozen-profile floor. At 256 cues and noise 0.5 the soft readout is $-54.47$ [$-55.45$, $-53.54$] percentage points below oracle and $+7.16$ [$6.26$, $8.07$] above that floor; 20 fresh seeds (52000--52019), per cent, means with 95\% seed-bootstrap bands at epoch 80.
+Teal ramps in \textbf{A} and \textbf{F} are ordinal within this figure alone.
 Source Data: \texttt{source\_data/curated\_publication/figure\_03\_plotted.csv}.}"""
 
 
@@ -226,15 +260,55 @@ def _minus(s):
 
 
 def _p_text(p):
-    """Holm P at two significant digits, without a superscript minus.
+    """Holm P at two significant digits: decimal, or (mantissa, exponent).
 
-    Nimbus Sans has no U+207B, and CF-2 forbids mathtext, so the panel
-    prints the decimal form and the caption keeps 1.8 x 10^-4 / 7.6 x 10^-6.
+    Nimbus Sans has no U+207B, and CF-2 forbids mathtext, so a small P is
+    returned as the pair that :func:`_p_draw` sets with ``token_subscript``
+    at a NEGATIVE drop -- a real 7.0 pt raised span, never a shrunken one.
     """
     if p >= 1e-3:
-        return f"{p:.4f}"
+        return f"{p:.4f}", None
     digits = int(np.floor(np.log10(p)))
-    return f"{p:.{1 - digits}f}"
+    return f"{p / 10 ** digits:.1f} × 10", f"−{-digits}"
+
+
+def _data_dx(ax, w_pt):
+    """``w_pt`` points expressed in the axes' own x data units."""
+    inv = ax.transData.inverted()
+    px = w_pt * ax.figure.dpi / 72.0
+    return float(inv.transform((px, 0.0))[0] - inv.transform((0.0, 0.0))[0])
+
+
+def _p_draw(ax, x, y, prefix, p, tail, *, color=MUTE):
+    """``<prefix>Holm P = 1.8 x 10^-4 (tail)``, right-anchored at ``x``.
+
+    The exponent is a real 7.0 pt span raised by ``token_subscript`` at a
+    negative drop, so CF-2's three-size rule holds and no mathtext is used.
+    """
+    body, expo = _p_text(p)
+    head = f"{prefix}Holm P = {body}"
+    if expo is None:
+        return ax.text(x, y, head + tail, fontsize=PT_SMALL, color=color,
+                       ha="right", va="center")
+    w = (_text_w_pt(ax, head, PT_SMALL) + 0.4
+         + _text_w_pt(ax, expo, PT_SMALL) + 0.6
+         + _text_w_pt(ax, tail, PT_SMALL))
+    before = list(ax.texts)
+    base = token_subscript(ax, x - _data_dx(ax, w), y, head, expo, tail=tail,
+                           size=PT_SMALL, sub_size=PT_SMALL, color=color,
+                           ha="left", va="center", drop_pt=-2.3,
+                           clip_on=False)
+    # the chained spans are annotations on ``base``, so measuring the drawn
+    # group and translating the base right-aligns the whole chain exactly --
+    # a width estimate is 10-15 pt short once the raised exponent is added.
+    group = [t for t in ax.texts if t not in before]
+    ax.figure.canvas.draw()
+    inv = ax.transData.inverted()
+    right = max(t.get_window_extent().x1 for t in group)
+    base.set_x(base.get_position()[0]
+               - (inv.transform((right, 0.0))[0]
+                  - inv.transform((ax.transData.transform((x, y))[0], 0.0))[0]))
+    return base
 
 
 # ---------------------------------------------------------------- data ----
@@ -462,7 +536,7 @@ def _accuracy_axes(ax, *, ylabel):
 def panel_task(ax, tiers):
     f = Frame(ax)
     W, H = f.w_pt, f.h_pt
-    sub_pt, key_pt, delta_pt = LINE_BAND_PT, 19.5, 12.0
+    sub_pt, key_pt, delta_pt = LINE_BAND_PT, 22.0, 12.0
     # sub-title: the cued stream, and the rule under test on it
     f.subscript((f.fx(1.0), 1.0 - f.fy(sub_pt * 0.5)), "context c selects b", "3",
                 size=PT_SMALL, color=INK, ha="left")
@@ -472,38 +546,66 @@ def panel_task(ax, tiers):
     nodes = f.balanced_tree(rect, depth=3, mode="forward", trunk=True,
                             labels=True, output="z", soma_r_pt=3.0,
                             input_labels=[("b", str(i + 1)) for i in range(8)])
-    # coefficient tiers (QA 2026-09-09): NOT drawn as tints on the tree,
-    # where they merged with each other and with the K = 4 delivery capsule.
-    # Each tier is a 16 % ORDINAL_RAMP band in the key row above its own
-    # leaves, carrying its coefficient, so tier and delivery never share a fill.
+    # coefficient tiers (QA 2026-09-09, revised 2026-09-09 after review):
+    # NOT drawn as tints on the tree, where they merged with each other and
+    # with the K = 4 delivery capsule.  One CONTIGUOUS band above the canopy
+    # partitions the eight streams in spatial order, every block wide enough
+    # for its own 7 pt coefficient and its own 7 pt tier name, each block
+    # tied to its terminal group by a hairline connector.  The tint per cent
+    # rises with tree distance so the ordinal ramp is visible in print.
     f.note("address_tint",
            reason="coefficient tier by tree distance, not an address")
-    # the two single-leaf bands (b3, b4) are staggered by 5.5 pt, because a
-    # 7 pt coefficient is as wide as one leaf pitch
-    blocks = [(["T3"], tiers["selected"], TIER_RAMP[0], 2, 5.5),
-              (["T4"], tiers["sibling"], TIER_RAMP[1], 2, 0.0),
-              (["T1", "T2"], tiers["same_half"], TIER_RAMP[2], 2, 0.0),
-              (["T5", "T6", "T7", "T8"], tiers["other_half"], TIER_RAMP[3], 2,
-               0.0)]
-    band_y = 1.0 - f.fy(sub_pt + 14.0)
-    half = f.fx(nodes.pitch_pt / 2.0 - 1.2)      # 2.4 pt between bands
-    for leaves, coef, colour, digits, dy in blocks:
-        xs = [nodes[t][0] for t in leaves]
-        x0, x1 = min(xs) - half, max(xs) + half
-        yb = band_y + f.fy(dy)
-        tint_patch(ax, ("rect", x0, yb - f.fy(4.6), x1 - x0, f.fy(9.2)),
-                   color=colour, pct=16, radius_pt=1.0, zorder=1.0,
-                   clip_on=False)
-        f.text(((x0 + x1) / 2.0, yb), _signed(coef, digits), size=PT_SMALL,
-               color=INK)
+    order = [(["T1", "T2"], tiers["same_half"], TIER_RAMP[2], 34, "same half"),
+             (["T3"], tiers["selected"], TIER_RAMP[0], 13, "cued"),
+             (["T4"], tiers["sibling"], TIER_RAMP[1], 22, "sibling"),
+             (["T5", "T6", "T7", "T8"], tiers["other_half"], TIER_RAMP[3], 46,
+              "other half")]
+    pitch = nodes.pitch_pt
+    spans, need = [], []
+    for leaves, coef, _colour, _pct, gloss in order:
+        lo = min(nodes[t][0] for t in leaves) * W - pitch / 2.0
+        hi = max(nodes[t][0] for t in leaves) * W + pitch / 2.0
+        spans.append((lo, hi))
+        need.append(max(_text_w_pt(ax, _signed(coef), PT_SMALL),
+                        _text_w_pt(ax, gloss, PT_SMALL)) + 4.4)
+    nat = [hi - lo for lo, hi in spans]
+    widths = [max(n, d) for n, d in zip(nat, need)]
+    avail = W - 1.6
+    if sum(widths) > avail:                      # shrink only where there is
+        slack = [w - d for w, d in zip(widths, need)]          # real slack
+        over, tot = sum(widths) - avail, sum(slack) or 1.0
+        widths = [w - over * s / tot for w, s in zip(widths, slack)]
+    extra = avail - sum(widths)
+    if extra > 0:
+        widths = [w + extra * n / sum(nat) for w, n in zip(widths, nat)]
+    band_h, gloss_h, tick_h = 8.6, 8.6, 3.4
+    band_top = 1.0 - f.fy(sub_pt + 1.0)
+    cursor = 0.8
+    for (leaves, coef, colour, pct, gloss), w, (lo, hi) in zip(order, widths,
+                                                               spans):
+        cx = cursor + w / 2.0
+        tint_patch(ax, ("rect", f.fx(cursor + 1.2), band_top - f.fy(band_h),
+                        f.fx(w - 2.4), f.fy(band_h)), color=colour, pct=pct,
+                   radius_pt=1.0, zorder=1.0, clip_on=False)
+        f.text((f.fx(cx), band_top - f.fy(band_h / 2.0)), _signed(coef),
+               size=PT_SMALL, color=INK)
+        f.text((f.fx(cx), band_top - f.fy(band_h + gloss_h / 2.0 + 0.6)),
+               gloss, size=PT_SMALL, color=MUTE)
+        f.leader((f.fx(cx), band_top - f.fy(band_h + gloss_h + 1.2)),
+                 (f.fx((lo + hi) / 2.0),
+                  band_top - f.fy(band_h + gloss_h + 1.2 + tick_h)),
+                 color=COLORS["grid"])
+        cursor += w
     # the forward route of the cued stream is the one ink-weight path
     for a, b in zip(nodes.route("T3"), nodes.route("T3")[1:]):
         if (a, b) in nodes.edges:
             nodes.edges[(a, b)].set_linewidth(f.lw(LW_DATA))
             nodes.edges[(a, b)].set_color(INK)
-    # context selection: the inhibitory-family double ring with a 'c' badge
-    f.gate(nodes["T3"], closed=False, badge="c", nodes=nodes, node="T3",
-           badge_offset=(-5.6, -3.6))
+    # context selection: the inhibitory-family double ring with a 'c' badge.
+    # Dropped 4.6 pt down its own branch so the ring rim and the b3 terminal
+    # label clear each other at print scale (QA 2026-09-09).
+    f.gate((nodes["T3"][0], nodes["T3"][1] - f.fy(4.6)), closed=False,
+           badge="c", nodes=nodes, node="T3", badge_offset=(-5.6, -3.0))
     # the one delivery glyph in this panel: K = 4 ancestry capsule + entry arrow
     f.credit_delivery(nodes, mode="subtree", targets=[_group_root(nodes, 4)],
                       rule_color="shunting")
@@ -669,7 +771,11 @@ def panel_bandwidth(ax, summary, outcomes):
     # set under the data (plan §4 C)
     ax.text(-0.16, 8.0, f"K = 1: ancestry = deranged, {ancestry[0]:.2f} %",
             fontsize=PT_SMALL, color=MUTE, ha="left", va="center")
-    ax.text(-0.16, -2.0, f"K = 8: all families tie, {ancestry[3]:.2f} %",
+    # QA 2026-09-09 (blocker): the deranged square sits at 25.13 % at K = 8,
+    # so "all families tie" is contradicted by the panel's own mark.  Name
+    # the two families that do tie.
+    ax.text(-0.16, -2.0,
+            f"K = 8: ancestry = best matched control, {ancestry[3]:.2f} %",
             fontsize=PT_SMALL, color=MUTE, ha="left", va="center")
     ax.text(-0.16, -12.0,
             "below chance: pooled class signal is sign-reversed (B)",
@@ -695,15 +801,20 @@ def panel_rewiring(ax, summary, paired):
               f"{_signed(paired[2][0])} pp", (1.42, 33.0))
     _gap_span(ax, 2.0, rewired[2], matched[2],
               f"{_signed(paired[4][0])} pp", (1.62, 74.0), dx=-0.09)
-    _badge(ax, (-0.05, 85.0), "control", ha="left", va="center")
-    ax.text(-0.16, 76.0, "degree- and depth-", color=ROSE, fontsize=PT_SMALL,
+    # QA 2026-09-09: the rewired label is direct-labelled ON its own series,
+    # under the K = 1-2 segment (18.67 -> 21.71 %), with the badge inline --
+    # the same treatment 'task-matched tree' gets on the green curve.
+    ax.text(-0.02, 10.0, "degree- and depth-", color=ROSE, fontsize=PT_SMALL,
             ha="left", va="center")
-    ax.text(-0.16, 69.0, "matched rewiring", color=ROSE, fontsize=PT_SMALL,
-            ha="left", va="center")
+    lab = ax.text(-0.02, 2.0, "matched rewiring", color=ROSE,
+                  fontsize=PT_SMALL, ha="left", va="center")
+    _badge(ax, (0.98, 2.0), "control", ha="left", va="center")
+    ax.plot([0.32, 0.44], [17.0, 19.2], color=ROSE, lw=LW_HAIR, zorder=1)
     ax.text(2.05, 62.0, "task-matched tree", color=GREEN, fontsize=PT_SMALL,
             ha="left", va="center")
-    ax.text(-0.16, 8.0, "exact tie at K = 1 and at K = 8", color=MUTE,
+    ax.text(-0.16, 84.0, "exact tie at K = 1 and at K = 8", color=MUTE,
             fontsize=PT_SMALL, ha="left", va="center")
+    del lab
     ax.text(3.16, 95.0, "n = 20 paired seeds; mean [95 % bootstrap]; epoch 80",
             fontsize=PT_SMALL, color=MUTE, ha="right", va="center")
     return {K: list(v[:3]) for K, v in paired.items()}
@@ -719,10 +830,8 @@ def panel_forest(canvas, ax, contrasts, pairs, *, cap_pt=62.0):
         seeds = pairs[pairs.control.eq(key)].accuracy_difference_pp \
             .to_numpy(float)
         assert len(seeds) == 20 and int(row.n_pairs) == 20
-        note = (f"{int(row.positive_seeds)}/20, Holm P = "
-                f"{_p_text(float(row[holm]))}")
-        if family:
-            note += f" ({family})"
+        note = (f"{int(row.positive_seeds)}/20, ", float(row[holm]),
+                f" ({family})" if family else "")
         rows.append(dict(label=label, mean=float(row.mean_difference_pp),
                          lo=float(row.ci95_low_pp), hi=float(row.ci95_high_pp),
                          seeds=list(seeds), color=colour, n=20, note=note))
@@ -771,20 +880,24 @@ def panel_forest(canvas, ax, contrasts, pairs, *, cap_pt=62.0):
                  reference=0.0, reference_label="no difference",
                  xlim=(-2.0, 14.0), tag="", seed_alpha=0.45, band=False,
                  tick=True)
-    ax.set_ylim(4.62, -0.60)
+    ax.set_ylim(4.90, -0.60)
     # QA 2026-09-09: 0.38 rows above the row it annotates (7.8 pt above its
     # marker, 12.7 pt below the previous row), so attribution is unambiguous
-    for y, note in zip(out["ypos"], notes):
-        ax.text(13.7, y - 0.42, note, fontsize=PT_SMALL, color=MUTE,
-                ha="right", va="center")
-    _badge(ax, (13.7, 0.0), "ceiling", ha="right", va="center")
+    for y, (prefix, holm_p, tail) in zip(out["ypos"], notes):
+        _p_draw(ax, 12.85, y - 0.42, prefix, holm_p, tail)
+    _badge(ax, (12.85, 0.0), "ceiling", ha="right", va="center")
     derange = contrasts[contrasts.control.eq("within_neuron_route_derangement")
                         & contrasts.budget_k.eq(4)].iloc[0]
-    ax.text(-1.9, 3.85,
+    dense = float(pairs[pairs.control.eq("random_rank_k")]
+                  .accuracy_difference_pp.max())
+    ax.text(-1.9, 3.82,
             f"off scale: derangement {_signed(derange.mean_difference_pp)} "
-            f"[{derange.ci95_low_pp:.2f}, {derange.ci95_high_pp:.2f}] pp "
-            f"(20/20)", fontsize=PT_SMALL, color=MUTE, ha="left", va="center")
-    ax.text(13.7, 4.30,
+            f"[{derange.ci95_low_pp:.2f}, {derange.ci95_high_pp:.2f}] pp",
+            fontsize=PT_SMALL, color=MUTE, ha="left", va="center")
+    ax.text(-1.9, 4.18,
+            f"(20/20); one dense rank-4 seed at {_signed(dense, 1)}",
+            fontsize=PT_SMALL, color=MUTE, ha="left", va="center")
+    ax.text(12.85, 4.56,
             "n = 20 paired seeds; mean [95 % seed bootstrap]; epoch 80",
             fontsize=PT_SMALL, color=MUTE, ha="right", va="center")
     for line in ax.lines:                 # CF-7: zero drawn once, and only
@@ -800,7 +913,7 @@ def panel_forest(canvas, ax, contrasts, pairs, *, cap_pt=62.0):
 def panel_cues(ax, grid, oracle, frozen, mismatched, enc_c, hard_c):
     xs = np.array([0.0, 0.5, 1.0])
     ax.set_xlim(-0.30, 1.16)
-    ax.set_ylim(-14.0, 112.0)
+    ax.set_ylim(10.0, 90.0)               # plan §4 F, restored 2026-09-09
     for readout, dashes in (("soft", None), ("hard", (2.4, 1.8))):
         for size in (16, 64, 256):
             mean, lo, hi = grid[(readout, size)]
@@ -823,22 +936,13 @@ def panel_cues(ax, grid, oracle, frozen, mismatched, enc_c, hard_c):
         np.testing.assert_allclose(grid[key][0], want, atol=2e-2)
     np.testing.assert_allclose([oracle, frozen], [80.29, 18.67], atol=2e-2)
     np.testing.assert_allclose(mismatched, [18.58, 18.89], atol=2e-2)
+    # the three rules span only the plotted doses, leaving a clear 0.20-unit
+    # strip at the far left for the solid series' direct labels
     reference_line(ax, oracle, label=f"oracle {oracle:.1f} %",
-                   color=PURPLE, span=(-0.30, 1.16))
-    # CF-7 exception (recorded): the chance label sits at the LEFT end of
-    # its rule, because the right end carries the two-line oracle-gap block
-    # and the two would read as one stack (QA 2026-09-09)
-    reference_line(ax, 50.0, label=None, span=(-0.30, 1.16))
-    ax.text(-0.28, 52.0, "chance", fontsize=PT_SMALL, color=MUTE, ha="left",
-            va="bottom", zorder=5)
-    ax.plot([-0.30, 1.16], [frozen, frozen], color=MUTE, lw=LW_HAIR,
+                   color=PURPLE, span=(-0.10, 1.16))
+    reference_line(ax, 50.0, label="chance", span=(-0.10, 1.16))
+    ax.plot([-0.10, 1.16], [frozen, frozen], color=MUTE, lw=LW_HAIR,
             zorder=1.2)
-    # which family is which, and the calibration ramp keyed on the left ends
-    ax.text(-0.28, 106.0, "soft readout, calibration cues (solid)",
-            fontsize=PT_SMALL, color=INK, ha="left", va="center")
-    ax.text(-0.28, 96.0, "hard readout, exploratory (dashed)",
-            fontsize=PT_SMALL, color=MUTE, ha="left", va="center")
-    _badge(ax, (1.16, 106.0), "exploratory", ha="right", va="center")
     v256 = encoder_contrast(enc_c, 256, 0.0, "oracle_context")
     v16 = encoder_contrast(enc_c, 16, 0.0, "oracle_context")
     prim = encoder_contrast(enc_c, 256, 0.5, "oracle_context")
@@ -847,40 +951,53 @@ def panel_cues(ax, grid, oracle, frozen, mismatched, enc_c, hard_c):
     np.testing.assert_allclose([v256[0], v16[0], prim[0], froz[0], hard[0]],
                                [-0.31, -60.90, -54.47, 7.16, -16.26],
                                atol=2e-2)
-    # both noise-free oracle gaps: leakage is a small-calibration effect.
-    # The line is capped at 120 pt so it clears the right-aligned
-    # 'oracle 80.3 %' rule label 4 units below it.
-    ax.text(-0.28, 86.0,
-            f"noise 0: {_signed(v256[0])} pp (256), {_signed(v16[0])} (16)",
-            fontsize=PT_SMALL, color=INK, ha="left", va="center")
-    for size, y_tag, y_line in ((256, 73.0, 79.98), (64, 63.0, 75.06),
-                                (16, 27.0, 19.39)):
-        ax.text(-0.05, y_tag, str(size), color=CAL_RAMP[size],
-                fontsize=PT_SMALL, ha="right", va="center")
-        ax.plot([-0.04, 0.0], [y_tag, y_line], color=CAL_RAMP[size],
+    # direct labels on the SOLID soft lines, at their maximally separated
+    # noise-0 endpoints, in the far-left strip the rules leave clear
+    for size, y_tag, y_line in ((256, 83.0, 79.98), (64, 72.0, 75.06),
+                                (16, 19.39, 19.39)):
+        ax.text(-0.17, y_tag, str(size), color=CAL_RAMP[size],
+                fontsize=PT_SMALL, ha="center", va="center")
+        ax.plot([-0.085, -0.008], [y_tag, y_line], color=CAL_RAMP[size],
                 lw=LW_HAIR, zorder=1)
-    # the block sits left of the right edge and 4 pt above the chance label
-    # so the two never read as one stack (QA 2026-09-09)
-    ax.text(1.16, 72.0, f"{_signed(prim[0])} pp vs oracle", fontsize=PT_SMALL,
-            color=INK, ha="right", va="center")
-    ax.text(1.16, 64.0, f"{_signed(froz[0])} pp vs frozen", fontsize=PT_SMALL,
-            color=INK, ha="right", va="center")
-    # leader from the annotation block to the soft 256-cue vertex at noise
-    # 0.5 (25.8 %), approaching from above-right (QA 2026-09-09)
-    ax.plot([0.62, 0.515], [61.0, 28.6], color=MUTE, lw=LW_HAIR, zorder=1)
-    ax.text(-0.28, 12.0, f"frozen {frozen:.1f} %; mismatched "
-                         f"{mismatched[0]:.1f}–{mismatched[1]:.1f} %",
-            fontsize=PT_SMALL, color=MUTE, ha="left", va="center")
+    ax.text(0.02, 86.5, "soft readout, calibration cues", fontsize=PT_SMALL,
+            color=INK, ha="left", va="center")
+    # direct labels on the DASHED exploratory hard lines at noise 0.5
+    # (64.03 / 54.22 / 32.41 %) -- QA 2026-09-09: without them the three
+    # coincident noise-0 dashed curves cannot be mapped to a cue count
+    for size, y_tag, y_leader in ((256, 70.0, 69.0), (64, 45.0, 45.5),
+                                  (16, 38.5, 38.0)):
+        y_line = grid[("hard", size)][0][1]
+        ax.text(0.535, y_tag, str(size), color=CAL_RAMP[size],
+                fontsize=PT_SMALL, ha="left", va="center")
+        ax.plot([0.525, 0.505], [y_leader, y_line], color=CAL_RAMP[size],
+                lw=LW_HAIR, zorder=1)
+    ax.text(1.16, 76.0, "n = 20 seeds; 95 % CI; epoch 80",
+            fontsize=PT_SMALL, color=MUTE, ha="right", va="center")
+    ax.text(1.16, 68.0, "hard readout", fontsize=PT_SMALL, color=MUTE,
+            ha="right", va="center")
+    # 59 %, not 57: the badge chip is 9 pt tall and the right-aligned
+    # 'chance' rule label sits just above 50 (QA 2026-09-09)
+    _badge(ax, (1.16, 61.5), "exploratory", ha="right", va="center")
+    # the noise-free gaps (leakage is a small-calibration effect) and the
+    # primary noisy-cue contrast, in the one text-free pocket the 10-90
+    # window leaves, with a leader to the soft 256-cue vertex at noise 0.5
+    for y, line in ((46.5, "noise 0 vs oracle:"),
+                    (39.5, f"{_signed(v256[0])} pp (256)"),
+                    (32.5, f"{_signed(v16[0])} pp (16)"),
+                    (25.5, f"noise 0.5: {_signed(prim[0])} pp")):
+        ax.text(-0.28, y, line, fontsize=PT_SMALL, color=INK, ha="left",
+                va="center")
+    ax.plot([0.34, 0.47], [25.3, 25.7], color=MUTE, lw=LW_HAIR, zorder=1)
+    ax.text(1.16, 14.0, f"frozen {frozen:.1f} %; mismatched "
+                        f"{mismatched[0]:.1f}–{mismatched[1]:.1f} %",
+            fontsize=PT_SMALL, color=MUTE, ha="right", va="center")
     ax.set_xticks([0.0, 0.5, 1.0], ["0", "0.5", "1"])
     ax.set_yticks([20, 40, 60, 80])
     ax.spines["left"].set_bounds(20, 80)
     ax.spines["bottom"].set_bounds(0.0, 1.0)
     ax.set_xlabel("Cue noise SD")
     ax.set_ylabel("Held-out accuracy (%)")
-    ax.text(1.16, 1.0, "n = 20 fresh seeds (52000–52019);",
-            fontsize=PT_SMALL, color=MUTE, ha="right", va="center")
-    ax.text(1.16, -8.5, "mean [95 % bootstrap]; epoch 80; cue delay 0",
-            fontsize=PT_SMALL, color=MUTE, ha="right", va="center")
+
     return dict(soft={str(k): list(np.round(v[0], 4))
                       for k, v in grid.items() if k[0] == "soft"},
                 hard={str(k): list(np.round(v[0], 4))
@@ -923,8 +1040,8 @@ def build():
         np.testing.assert_allclose(float(hero.mean_difference.iloc[0]),
                                    0.012670898, atol=1e-6)
 
-    canvas = NativeCanvas(490 / 72, 3, row_weights=[128, 107, 107],
-                          hgutter_pt=38, vgutter_pt=48,
+    canvas = NativeCanvas(490 / 72, 3, row_weights=[124, 113, 113],
+                          hgutter_pt=38, vgutter_pt=44,
                           margins=Margins(left=44, right=12, top=20, bottom=32))
     a = canvas.panel("A", 0, 0, 4, title="Eight-stream task tree",
                      schematic=True, lock=False)
@@ -1060,45 +1177,72 @@ def build():
              "paired_contrasts.csv (the hard readout is exploratory).",
     }
     deviations = [
-        "row weights 128/107/107 at a 48 pt vertical gutter and margins "
-        "44/12/20/32, not 112/121/121 at 42 pt with margins 52/14 "
-        "at 42 pt: at a 112 pt row 0 the eight-module panel B has axes aspect "
-        "2.58, above PANEL_ASPECT_MAX 2.40, which DECISIONS G4 forbids "
-        "relaxing, and a 42 pt gutter leaves only 6.5 pt between rows 1 and 2 "
-        "against audit_row_separation.py's 8.5 pt floor",
+        "row weights 124/113/113 at a 44 pt vertical gutter and margins "
+        "44/12/20/32, not the plan's 112/121/121 at 42 pt with margins "
+        "52/14.  FILL_W_MIN 0.92 makes left + right <= 57.5 pt a hard "
+        "constraint (52 + 14 fills only 90.3 % of the page width and fails "
+        "the strict audit's fill-width check); at a 112 pt row 0 the "
+        "eight-module panel B has axes aspect 2.64, above PANEL_ASPECT_MAX "
+        "2.40, which DECISIONS G4 forbids relaxing, and 124 pt is the "
+        "shortest row 0 that clears it; a 42 pt gutter leaves 7.2 pt between "
+        "rows 1 and 2 against audit_row_separation.py's 8.5 pt floor, 44 pt "
+        "measures 9.4 pt.  The two data rows gain 6 pt against the previous "
+        "build and the schematic fraction falls to 26.0 %",
         "E uses lock=False plus a measured private left inset instead of "
         "declare_reserve(left=66): a declared reserve locks the whole grid "
         "column and C starts in column 0, so C and D would differ in width",
         "E draws its per-row wins / Holm notes inside the axes above each "
         "seed fan; forest(note=...) writes into the gutter shared with F",
-        "E prints Holm P in decimal (Nimbus Sans has no superscript minus and "
-        "CF-2 forbids mathtext); the caption keeps the scientific form",
-        "A sets the four coefficient tier labels in a keyed two-row band, not "
-        "over their own blocks (a 17.6 pt coefficient string cannot sit over "
-        "a one-terminal block at the terminal pitch)",
+        "E prints Holm P as 1.8 x 10^-4 / 7.6 x 10^-6 with the exponent set "
+        "by token_subscript at a NEGATIVE drop, i.e. a real 7.0 pt raised "
+        "span: Nimbus Sans has no U+207B and CF-2 forbids mathtext, so the "
+        "raised group is right-aligned by measuring the drawn chain",
+        "A's four coefficient tiers are one contiguous band in spatial order "
+        "with per-block tier names and hairline connectors to their terminal "
+        "groups, and tint per cent 13/22/34/46 so the ORDINAL_RAMP reads "
+        "light-to-dark: a 19.5 pt coefficient cannot be centred on a 12.5 pt "
+        "terminal pitch, so the band is a partition, not four terminal-"
+        "aligned patches; the tier gloss is the spatial order and drops "
+        "'nonsibling' for width",
         "A drops the 'junctions define feedback supports only' footer into "
         "the caption -- the plan's stated fallback",
         "B draws no tree in the ancestry cards, so the subtree entry arrow "
         "comes from the private _delivery_arrow rather than credit_delivery",
         "B's control support table is 4 x 10 pt rows by 8 x 7 pt columns, not "
         "6 x 6 pt: a 7 pt row label cannot sit on a 6 pt row",
-        "D's paired intervals use one 20,000-draw bootstrap seeded 70000; "
-        "K = 2 gives [21.03, 25.32] against the plan's quoted [21.05, 25.32]",
+        "DELIBERATE, SOURCED: D's paired intervals use one 20,000-draw "
+        "bootstrap seeded 70000 over the frozen seed_outcomes.csv; K = 2 "
+        "gives [21.03, 25.32] against the plan's quoted [21.05, 25.32].  "
+        "Same estimator, same data, same mean (+23.149 pp); only the "
+        "resampling draw differs and the plan's RNG state is unrecorded, so "
+        "the caption prints the endpoint this builder computes",
         "C and F carry shortened forms of the plan's long annotations; the "
         "full wording is in the caption",
+        "D's rewired label is direct-labelled on its own series under the "
+        "K = 1-2 segment with the 'control' badge inline, not parked over "
+        "the y-tick cluster",
+        "A's context double ring is dropped 4.6 pt down its own branch so "
+        "the ring rim and the b3 terminal label clear each other",
+        "C's K = 8 tie tag names the two families that actually tie "
+        "(ancestry = best matched control, 81.00 %): the deranged square is "
+        "at 25.13 % at K = 8, so the plan's 'all families tie' is false",
         "C's tie tags print 18.66 %, not the plan's 18.67 %: the frozen "
         "condition_summary gives 18.6646 % for both arms at K = 1, which is "
         "also what the plan's own deranged row rounds to",
         "E runs to xlim (-2, 14) instead of (-2, 11) so the +13.13 dense "
-        "rank-4 seed is drawn rather than clipped; the off-scale note "
-        "therefore names only the derangement contrast",
-        "F does not repeat 256 / 64 / 16 on the dashed hard-readout lines: "
-        "they carry the same three ORDINAL_RAMP hues as the labelled solid "
-        "lines, and the noise-0.5 points have no 12 pt clearance for three "
-        "more labels without a text-over-data collision",
-        "F's noise-free annotation is one line, capped at 120 pt so it "
-        "clears the right-aligned 'oracle 80.3 %' rule label four units "
-        "below it; the caption says the printed values are oracle gaps",
+        "rank-4 seed is drawn rather than clipped, and the off-scale note "
+        "names it in its planned second clause; the note is set on two "
+        "lines and the right-aligned column moved from x = 13.7 to 12.85 to "
+        "keep audit_panel_gaps.py's 6 pt floor against F",
+        "F now direct-labels the three dashed hard-readout curves 256 / 64 / "
+        "16 at their noise-0.5 vertices (64.03 / 54.22 / 32.41 %) with a "
+        "'hard readout' tag and the 'exploratory' badge, and runs on the "
+        "plan's ylim (10, 90) so the 18.67 % frozen floor clears the bottom "
+        "spine by 11 pt; the plan's three long annotations are condensed to "
+        "four 7 pt lines in the one mark-free wedge",
+        "F carries the plan's ylim (10, 90); the +7.16 pp vs frozen "
+        "contrast, the seed range 52000-52019 and the cue-delay clause "
+        "move to the caption because the window leaves no band for them",
         "B's control-table column headers are the digits 1..8 under one b_i "
         "tag, not eight subscripted b_j strings: a literal Unicode subscript "
         "is not in Nimbus Sans and mathtext is banned by CF-2",
@@ -1109,7 +1253,7 @@ def build():
         "private helpers _badge (ceiling, exploratory), _delivery_arrow, "
         "_gap_span",
     ]
-    schematic_fraction = (128.8 + 295.6) * 128.0 / (462.4 * 438.0)
+    schematic_fraction = (128.8 + 295.6) * 124.0 / (462.4 * 438.0)
     payload = dict(
         panel_sources=panels,
         source_sha256={str(p.relative_to(JOURNAL)):

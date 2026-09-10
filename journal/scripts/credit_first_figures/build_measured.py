@@ -63,8 +63,10 @@ Two further QA repairs (2026-09-09) that are geometry, not content:
   CF-7 dashed ``mute`` ``LW_REF`` zero rule here, bounded to the row bands
   plus (in B) the scan rug and skipping the inter-row band that carries B's
   cohort-bracket label; D's ``x = 0`` rule is a bounded segment that stops at
-  ``y = 1.0``, below the lambda annotation.  The right-aligned
-  ``no alignment`` label stays on each line.
+  ``y = 0.80``, below BOTH the lambda annotation and the two-line
+  ``0.249 measured`` / ``0.248 perfect`` readout -- at ``y = 1.0`` the dashes
+  still ran through the decimal point of ``0.249`` (QA 2026-09-09).  The
+  right-aligned ``no alignment`` label stays on each line.
 
 Deviations from ``v2/fig9/PLAN.md`` §2, and why (all recorded in TEXT.md too):
 row weights and the vertical gutter are **[124, 114, 108] with vgutter 44**, not
@@ -75,6 +77,25 @@ floor; 44 pt gives 9.6 / 9.6 pt.  Canvas height, margins, module split and
 letter columns are unchanged (22 + 124 + 44 + 114 + 44 + 108 + 34 = 490), so
 ``live_h_pt`` is still 434 and the CF-10 schematic fraction is 20.4 %, not the
 plan's 20.9 %.
+
+Two further QA repairs (2026-09-09, second pass):
+
+* **Panel A's pair-1 leader** starts from the MEASURED right edge of the
+  green ``shared path`` label plus 3 pt, not from a nominal ``+17 pt``
+  offset, which put the hairline on the final ``h``.
+* **Panel D's false-positive rule** ends at ``x = 0.205``, not 0.235, so a
+  clear ~4 pt gap separates its last dash from the inset's ``-0.2`` tick
+  label; and D's ``x = 0`` rule stops at ``y = 0.80`` (see above).
+
+**Deviation: the plan's §2 panel table lists B's two means and C's four means
+with their intervals as printed on-panel; they are NOT drawn.** Both forests
+run to the canvas right margin (deviation 4: the library's outside-spine note
+placement already ran 4.7 pt off-canvas in B), so there is no right gutter to
+print into; set inside the axes at 7 pt, ``-0.069 [-0.251, 0.106]`` is ~79 pt
+wide = 0.45 of B's 1.0 data range and would be right-aligned across the
+positive dots and the upper interval whisker in both panels.  The numbers are
+carried by the caption and by the body at L377 instead; the graphical
+diamond + interval + the on-panel ``3/7 +`` / ``4/7 +`` counts remain.
 
 Every printed number is read here from the Source Data files recorded in
 ``figure_08_sources.json``; nothing is typed in.
@@ -190,8 +211,8 @@ def panel_statistic(f, subtitle_lines):
         f.contact(nodes[name], kind='exc')
     pair1_x = (nodes['T1'][0] + nodes['T2'][0]) / 2.0
     tag1 = (pair1_x, core_y0 + core_h - f.fy(7.0))
-    f.text(tag1, 'shared path', size=PT_BASE, color=label_color(ROUTE),
-           ha='center', va='center')
+    lab1 = f.text(tag1, 'shared path', size=PT_BASE, color=label_color(ROUTE),
+                  ha='center', va='center')
 
     # pair 2 -- one contact in each half-tree, no shared path above the soma
     for name in ('T3', 'T7'):
@@ -209,7 +230,14 @@ def panel_statistic(f, subtitle_lines):
     h_pt = 20.0
     bots = (core_y0 + f.fy(core_pt - h_pt - 11.0),
             core_y0 + f.fy(foot_pt + 0.5))
-    anchors = ((pair1_x + f.fx(17.0), tag1[1]),
+    # the pair-1 leader starts clear of the 'shared path' label's own box:
+    # a nominal +17 pt offset put the hairline on the final 'h' (QA
+    # 2026-09-09), so the box is measured and the leader starts 3 pt right of it
+    f.ax.figure.canvas.draw()
+    _bb1 = lab1.get_window_extent(
+        renderer=f.ax.figure.canvas.get_renderer()).transformed(
+        f.ax.transData.inverted())
+    anchors = ((_bb1.x1 + f.fx(3.0), tag1[1]),
                f._off(nodes['T7'], 2.6, 0.0))
     for i, (title, phase) in enumerate((('pair 1', 0.06), ('pair 2', 0.46))):
         y0 = bots[i]
@@ -591,11 +619,11 @@ def main():
     # the false-positive floor is drawn only left of the inset, so the inset's
     # own tick labels never sit on a reference rule (CF-7 keeps the label
     # right-aligned ON the line)
-    ax_d.plot([-0.30, 0.235], [floor, floor], color=GRAY, lw=LW_REF,
+    ax_d.plot([-0.30, 0.205], [floor, floor], color=GRAY, lw=LW_REF,
               dashes=(2.6, 2.0), zorder=1)
     # bounded, not an axvline: the padded y limits carry the lambda annotation
-    ax_d.plot([0.0, 0.0], [-0.32, 1.0], color=GRAY, lw=LW_HAIR, dashes=(2.6, 2.0),
-              zorder=1, solid_capstyle='butt')
+    ax_d.plot([0.0, 0.0], [-0.32, 0.80], color=GRAY, lw=LW_HAIR,
+              dashes=(2.6, 2.0), zorder=1, solid_capstyle='butt')
     ax_d.plot([cut_m, cut_m], [0.72, 0.80], color=GRAY, lw=LW_HAIR,
               dashes=(2.6, 2.0), zorder=1.5)
     ax_d.set(xlim=(-0.30, 0.55), ylim=(-0.32, 1.16))

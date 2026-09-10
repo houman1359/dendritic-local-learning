@@ -60,7 +60,10 @@ journal_style.py, figure_canvas.py or native_schematics.py):
                  (proposed: native_schematics.Frame.gain_dial).
 * overlay_arm()  the additive arm at +0.22 rows with an open marker
                  (proposed: figure_canvas.forest(row_offset=, jitter_rows=)).
-* row_note()     a per-row tag placed on the emptier side of its own row.
+* row_tag()      a per-row tag centred ON its own row and hung just outside
+                 that row's own marks (proposed: figure_canvas.forest(
+                 row_tags=)), with _units_per_pt() for the data-per-point
+                 conversion it needs.
 * ghost_clip()   clips a ghost neighbour to its card and drops the glyphs the
                  cut would halve.
 * _fade_ghost()  re-tints a ghost arbor's strokes and junction rings to
@@ -488,15 +491,15 @@ def credit_entry(ax):
                          size=PT_BASE, color=MUTE)
     hat(f, starts[0], Y(2.0), w_delta, color=MUTE)
     # -- the neuron and its one ghosted neighbour -------------------------
-    tree_w, tree_h, tree_y = 40.0, 46.0, 44.0
+    tree_w, tree_h, tree_y = 44.0, 52.0, 44.0
     base = (X(0.5), Y(tree_y), X(tree_w), Y(tree_h))
-    # the ghost is offset (26, 14) pt -- 29.5 pt from the hero -- and drawn at
-    # 0.88 scale, so its own soma sits clear of the hero canopy (which ends at
-    # x = 40.5 pt) instead of reading as a second hero soma inside it.
-    _fade_ghost(f.balanced_tree(
-        (base[0] + X(26.0), base[1] + Y(14.0), X(0.88 * tree_w),
-         Y(0.88 * tree_h)),
-        depth=2, ghost=True, labels=False, soma_r_pt=2.4))
+    # QA 2026-09-09: no ghost neighbour in A.  A 92 pt panel that also holds
+    # two task cards leaves a 7.5 pt window in which a ghost soma is both
+    # clear of the hero canopy (which ends at x = 40.5 pt) and clear of the
+    # cards (x >= 48 pt); at every offset that fits, the ghost's own soma
+    # reads as a second hero soma inside the hero's branches.  The population
+    # is stated by the x128 tag, and the ghost NEIGHBOUR is drawn where it
+    # carries the argument -- B card 1, the strict scalar shared across cells.
     nodes = f.balanced_tree(base, depth=2, mode="plain", labels=False)
     sx, sy = nodes.soma
     exc = nodes["T1"]
@@ -509,7 +512,7 @@ def credit_entry(ax):
     f.text(f._off(inh, 2.6, 0.8), "I", size=PT_BASE, color=COLORS["inh"],
            ha="left")
     # -- stimulus: drawn, never a sub-300 dpi raster (DECISIONS Fig 1) -----
-    tile = (X(1.0), Y(105.0), X(15.0), Y(15.0))
+    tile = (X(1.0), Y(102.0), X(15.0), Y(15.0))
     tint_patch(ax, ("rect", *tile), color="grid", pct=70, edge=True,
                lw=LW_HAIR, radius_pt=1.0, zorder=1.0)
     for k in (1, 2, 3):
@@ -873,7 +876,7 @@ def cohort_forest(canvas, ax, cohorts, kind, *, value_label, xlim, xticks,
         # below the open arm that hangs 0.22 rows under it.
         edge = xlim[1] - 4.0 * _units_per_pt(ax, xlim)
         for name, key, dy in (("shunting", "shunting", -0.42),
-                              ("additive", "additive", 0.62)):
+                              ("additive", "additive", 0.30)):
             ax.text(edge, out["ypos"][0] + dy, name, ha="right", va="center",
                     fontsize=PT_BASE, color=label_color(COLORS[key]), zorder=6)
     ax.annotate("mean [95 % CI]", xy=(1.0, 0.0), xycoords="axes fraction",
@@ -888,7 +891,13 @@ def capture(ax, per_seed, summary):
     xs = np.arange(3.0)
     xlo = -1.55                        # the direct-label gutter (QA 2026-09-09)
     ax.axhline(1.0, color=MUTE, lw=LW_REF, dashes=(2.6, 2.0), zorder=1.0)
-    ax.text(xlo + 0.06, 1.045, "exact field (A = I)", ha="left", va="center",
+    # the plan's mute sub-title, scoping the title: it is set on the panel's
+    # top line, immediately under the title.  Between the title box and the
+    # axes there are only 7.2 pt, and buying more moves the 9 pt letter up
+    # into D's two-line category ticks (audit_row_separation floor 8.5 pt).
+    ax.text(xlo + 0.06, 1.180, "filled, trained; open, initial", ha="left",
+            va="center", fontsize=PT_BASE, color=MUTE, zorder=6)
+    ax.text(xlo + 0.06, 1.070, "exact field (A = I)", ha="left", va="center",
             fontsize=PT_BASE, color=MUTE, zorder=6)
     printed = {}
     for architecture, offset, marker in (("shunting", -0.06, "o"),
@@ -939,9 +948,9 @@ def capture(ax, per_seed, summary):
                 ha="right", va="center", fontsize=PT_BASE,
                 color=label_color(COLORS[architecture]), zorder=6)
     for k, line in enumerate(("10 seeds per point,", "activation coordinate")):
-        ax.text(xlo + 0.06, 0.135 - 0.085 * k, line, ha="left", va="center",
+        ax.text(xlo + 0.06, 0.145 - 0.092 * k, line, ha="left", va="center",
                 fontsize=PT_BASE, color=MUTE, zorder=6)
-    ax.set(xlim=(xlo, 2.45), ylim=(0.0, 1.10), xticks=xs,
+    ax.set(xlim=(xlo, 2.45), ylim=(0.0, 1.20), xticks=xs,
            xticklabels=[lab for _, lab in CAPTURE_BASES],
            yticks=[0, 0.25, 0.50, 0.75, 1.00], xlabel="Profiles K",
            ylabel="Mean capture (fraction)")
@@ -1136,10 +1145,6 @@ def main():
         canvas.declare_reserve(ax, left=FOREST_GUTTER_PT, top=8.0)
         ax.set_title(ax.get_title(), fontsize=PT_EMPH, color=COLORS["ink"],
                      pad=9.0, fontweight="normal")
-    g.annotate("trained checkpoint; open, initial", xy=(0.0, 1.0),
-               xycoords="axes fraction", xytext=(0.0, 1.0),
-               textcoords="offset points", ha="left", va="bottom",
-               fontsize=PT_BASE, color=MUTE, annotation_clip=False)
 
     within = {}
     for label, key in (("K = 3 − K = 1", "subtree_k3_minus_projected_k1"),

@@ -67,6 +67,36 @@ deviation from specification D8: ``ORDINAL_RAMP`` is NOT used for the cohorts.
 that cohorts are encoded by marker shape and fill -- filled diamond = initial
 eight-cell cohort, open triangle = disjoint 45-cell calibration cohort.
 
+deviation from PLAN section 4 F (2026-09-10 fix round): the two in-panel key
+sentences of panel F are printed as ``shunt attenuates;`` / ``injection
+enhances`` and ``filled = descendants,`` / ``open = off-route``, two adjacent
+line pairs rather than the plan's ``shunt attenuates; matched injection
+enhances``.  At 7.0 pt the full string is 86.8 pt wide in a 99.8 pt axes and
+crosses the dashed zero rule and the near-zero marks of every row; the panel
+names the injection in full nowhere else, and the caption's F sentence carries
+``matched current injection``.  The row labels drop the plan's ``R_m 300``
+string from the gutter text and set a chained ``R``+``m`` span per row instead
+(the gutter cannot host mathtext and ``Rm`` beside panel H's ``R_m`` read as a
+typo).  ``forest(tick=False)`` for F: the 6 % band already ties each label to
+its row, and the alternative gutter hairline is drawn ON the left spine, where
+it is the one data artist the grouped key block cannot clear.
+
+deviation from PLAN section 3 B (2026-09-10 fix round): the five block gains
+are set against the five bands of the ``q'/q`` column with NO leader.  A
+3.2 pt mute hairline abutting a numeral at x-height is a minus sign at print
+scale, so every attenuating positive multiplier read as a negative number.
+The two value columns of ``dictionary_product`` are also recoloured off
+``DIV_CMAP`` -- whose positive end is ``bp`` #932F1E, the exact-path/backprop
+role colour -- onto an achromatic ``edge`` ramp, because no learning rule
+appears in this figure and the gains are all positive.
+
+deviation from PLAN section 3 B: the arbor is a real bipolar reconstruction,
+so a few basal strokes fall below the soma disc; the in-plane rotation that
+minimises that excursion is recorded as the ``arbor-orientation`` schematic
+note.  The strokes are NOT clipped: the panel's claim is the exact ancestry
+partition of this cell, and deleting members of the soma-side block to satisfy
+a reading convention would misstate it.
+
 deviation from ``journal_style.K_CYCLE`` for panel B's partition blocks:
 ``pathway`` (descendants) and ``local`` (sister blocks) are declared through
 ``require_address_tint`` so the reason is recorded in the canvas manifest.
@@ -79,6 +109,15 @@ Private helpers (library frozen for per-figure work, errata 7; DECISIONS G5)
                       the reconstruction allows.
 ``_formula``          a multi-subscript chain (``Frame.subscript`` carries one
                       subscript per call).
+``_tint``             ``pct`` % of a colour over white; the library exports no
+                      mix helper.
+``_crosses``/``_nearest``  leader anchoring for panel B's three block tags:
+                      the landing point is the member of the tagged block
+                      whose straight leader crosses the fewest strokes of
+                      other blocks and lands farthest from them.
+``place_cohort_markers``  panel G's cohort key glyph, deferred until after
+                      ``lock_reserves()`` because the axes is resized between
+                      the panel draw and the save.
 ``_balance_slot_fill``  declares the per-column reserves that keep the
                       ``panel-emphasis`` slot-fill spread inside 1.35x once the
                       two forest panels have claimed their row-label gutter.
@@ -110,9 +149,10 @@ from figure_canvas import (NativeCanvas, Margins, COLORS, PT_BASE, PT_EMPH,   # 
                            MARKER_MS, SEED_MS, SEED_ALPHA, ERR_CAPSIZE,
                            token_subscript, forest)
 from journal_style import (style_direct_color_labels, label_color)  # noqa: E402
+from matplotlib.colors import LinearSegmentedColormap, to_rgb  # noqa: E402
 from native_schematics import (Frame, reference_line, check_matrix_cells,     # noqa: E402
                                collapsed_row_note, require_address_tint,
-                               _text_w_pt)
+                               CONTACT_DIA_PT, _text_w_pt)
 from build_journal_figures import mean_ci             # noqa: E402
 import build_main_figure_07 as f7                     # noqa: E402
 
@@ -141,7 +181,7 @@ CATEGORIES = ("descendant", "sister", "ancestor", "depth-matched unrelated",
 CATEGORY_LABELS = ("descendant", "sister", "ancestor", "depth-\nmatched",
                    "unrelated")
 
-LOCAL_YLIM = (-0.020, 0.248)
+LOCAL_YLIM = (-0.020, 0.335)
 LOCAL_YTICKS = (0.0, 0.05, 0.10, 0.15, 0.20)
 LOCAL_TICKLABELS = ("0", "0.05", "0.10", "0.15", "0.20")
 LOCAL_LABEL = "localization index (log units)"
@@ -151,6 +191,13 @@ COHORTS = (("original_eight", "Initial, 8 cells", M_INITIAL, True),
            ("v661_disjoint", "Disjoint, 45 cells", M_DISJOINT, False))
 RM_ORDER = ("Ra150_Rm300", "Ra150_Rm1000", "Ra150_Rm3000", "Ra150_Rm5000",
             "Ra150_Rm15000", "Ra150_Rm30000")
+
+
+def _tint(color, pct):
+    """``pct`` % of ``color`` over white (private: the library has no mix)."""
+    r, g, b = to_rgb(color)
+    k = pct / 100.0
+    return (1.0 - k + k * r, 1.0 - k + k * g, 1.0 - k + k * b)
 
 
 def sha(path):
@@ -361,12 +408,14 @@ def _arbor_blocks(f, rect, gains, colours, weights):
     to_axes = f7.fit_isotropic(xy, rect, f.w_pt, f.h_pt, pad_pt=2.0)
     place = {key: tuple(to_axes(point)[0]) for key, point in positions.items()}
     order = list(reversed(path))                 # focal .. soma
+    strokes = []
     for segment in rows:
         parent_id = parent[segment]
         if parent_id not in rows:
             continue
         home = block[segment]
         start, end = place[segment], place[parent_id]
+        strokes.append((home, start, end))
         f.ax.plot([start[0], end[0]], [start[1], end[1]],
                   color=colours[home], lw=weights[home],
                   solid_capstyle="round", zorder=2.4)
@@ -381,7 +430,7 @@ def _arbor_blocks(f, rect, gains, colours, weights):
                          float(pts[:, 1].max()))
     bar = to_axes(np.vstack([xy.min(axis=0),
                              xy.min(axis=0) + [50.0 / span_um, 0.0]]))
-    return place, anchors, float(bar[1, 0] - bar[0, 0]), soma_id
+    return place, anchors, float(bar[1, 0] - bar[0, 0]), soma_id, strokes
 
 
 # ── panel A: the two state-matched interventions ─────────────────────────
@@ -408,9 +457,22 @@ def panel_interventions(ax):
         line_y = tag_y + f.fy(10.0)
         if hero:
             f.shunt(site, label=None)
-            f.subscript((site[0] - f.fx(2.2), site[1] - f.fy(4.2)),
-                        "g", "shunt", size=PT_BASE, color=COLORS["inh"],
-                        ha="right", va="top")
+            # the ACTIVE shunt contact keeps the inhibitory rim: a bare
+            # filled disc is the excitatory glyph at 3.6 pt, so at print
+            # scale the shunt site was indistinguishable from a synapse
+            f.ax.plot([site[0]], [site[1]], marker="o", linestyle="none",
+                      ms=f.ms(CONTACT_DIA_PT * 2.05), mfc="none",
+                      mec=COLORS["inh"], mew=f.lw(LW_HAIR), zorder=4.6)
+            # the badge sits INSIDE the card, in the clear band between the
+            # shunted branch and the trunk (right-aligned off the contact it
+            # ran 8 pt past the card's left frame and printed its "g" in the
+            # panel gutter), and its leader runs the whole way from the
+            # contact rim to the label's top edge
+            tag = (body[0], site[1] - f.fy(11.0))
+            f.subscript(tag, "g", "shunt", size=PT_BASE,
+                        color=COLORS["inh"], ha="left", va="top")
+            f.leader((site[0], site[1] - f.fy(3.9)),
+                     (site[0] - f.fx(1.0), tag[1] + f.fy(0.8)), color=MUTE)
             f.fade(["JLL"], nodes=nodes)
             f.fade([(nodes["JL"], nodes["JLL"])])
             f.text((body[0], line_y), "descendants attenuated",
@@ -471,10 +533,28 @@ def panel_gain_dictionary(ax, gains):
     key_pt = 21.0
     arbor_rect = (0.0, f.fy(band + key_pt), 0.43,
                   1.0 - f.fy(band + key_pt + 24.0))
-    place, anchors, bar_w, soma_id = _arbor_blocks(f, arbor_rect, gains,
-                                                   colours, weights)
+    place, anchors, bar_w, soma_id, strokes = _arbor_blocks(
+        f, arbor_rect, gains, colours, weights)
     f.text((0.0, top), f"root {MEDIAN_ROOT}", size=PT_BASE, color=MUTE,
            ha="left", va="center")
+
+    # the g_shunt badge is set FIRST, in the clear whitespace up-left of the
+    # focal contact.  At the lower right it was 6 pt below the soma disc, so
+    # its leader crossed the disc and read as naming the soma, and the sister
+    # tag's leader ran through the label itself.  Its box is seeded into
+    # ``drawn`` so every later leader treats it as ink and routes around it.
+    drawn = []
+    focal = place[FOCAL_SEGMENT]
+    shunt_tag = (focal[0] - f.fx(15.6), focal[1] - f.fy(4.6))
+    f.leader((shunt_tag[0] + f.fx(1.0), shunt_tag[1]),
+             (focal[0] - f.fx(2.0), focal[1] - f.fy(0.5)), color=MUTE)
+    f.subscript(shunt_tag, "g", "shunt", size=PT_BASE,
+                color=COLORS["inh"], ha="right", va="center")
+    _bx0, _bx1 = shunt_tag[0] - f.fx(22.5), shunt_tag[0] + f.fx(1.0)
+    _by0, _by1 = shunt_tag[1] - f.fy(5.5), shunt_tag[1] + f.fy(5.5)
+    _corners = ((_bx0, _by0), (_bx1, _by0), (_bx1, _by1), (_bx0, _by1))
+    for _i in range(4):
+        drawn.append((_corners[_i], _corners[(_i + 1) % 4]))
 
     # block tags: each one is set OUTSIDE the canopy and joined to the
     # NEAREST member of its own block, so no leader crosses the arbor (v1
@@ -485,42 +565,80 @@ def panel_gain_dictionary(ax, gains):
     for segment in gains["ids"]:
         members.setdefault(block_of[segment], []).append(place[segment])
 
+    def _crosses(p0, p1, q0, q1):
+        """True when the open segments p0p1 and q0q1 intersect."""
+        def side(a, b, c):
+            return ((b[0] - a[0]) * (c[1] - a[1])
+                    - (b[1] - a[1]) * (c[0] - a[0]))
+        d1, d2 = side(q0, q1, p0), side(q0, q1, p1)
+        d3, d4 = side(p0, p1, q0), side(p0, p1, q1)
+        return (d1 * d2 < 0.0) and (d3 * d4 < 0.0)
+
     def _nearest(nodes, origin):
-        pts = np.asarray([p for node in nodes for p in members[node]],
-                         dtype=float)
-        d = np.hypot((pts[:, 0] - origin[0]) * f.w_pt,
-                     (pts[:, 1] - origin[1]) * f.h_pt)
-        return tuple(pts[int(d.argmin())])
+        """The block member a straight leader reaches WITHOUT crossing ink.
+
+        Nearest-member re-anchoring alone (v1's fix for the crossed leaders)
+        landed two of the three tags inside the dense grey/orange tangle
+        beside the soma, where no single member is identified.  The candidate
+        is now scored by how many strokes of OTHER blocks its leader would
+        cross, with length only as the tie-break, so each tag ends on a
+        member of its own block that is isolated from the tag's point of
+        view -- the plan's "enter each block from outside the canopy".
+        """
+        keep = set(nodes)
+        foreign = [(a, b) for home, a, b in strokes if home not in keep] \
+            + drawn
+        best = None
+        for node in nodes:
+            for point in members[node]:
+                shrunk = (origin[0] + 0.90 * (point[0] - origin[0]),
+                          origin[1] + 0.90 * (point[1] - origin[1]))
+                hits = sum(1 for a, b in foreign
+                           if _crosses(origin, shrunk, a, b))
+                length = np.hypot((point[0] - origin[0]) * f.w_pt,
+                                  (point[1] - origin[1]) * f.h_pt)
+                # how ISOLATED the landing point is: a tag that ends inside
+                # the grey/orange tangle beside the soma identifies nothing
+                clear = min([np.hypot((point[0] - q[0]) * f.w_pt,
+                                      (point[1] - q[1]) * f.h_pt)
+                             for a, b in foreign for q in (a, b)] or [20.0])
+                score = 240.0 * hits + length - 6.0 * min(clear, 14.0)
+                if best is None or score < best[0]:
+                    best = (score, point)
+        drawn.append((origin, tuple(best[1])))
+        return tuple(best[1])
 
     desc_y = top - f.fy(9.5)
+    # sister blocks ABOVE soma side: their landing points sit that way round,
+    # so the reversed tag order made the two leaders cross each other
     tags = ((f"descendants ({gains['n_descendants']})", BLOCK_DESC,
              desc_y, [order[0]]),
-            ("soma side", BLOCK_SOMA,
-             f.fy(band + key_pt - 9.5), [path[0]]),
             ("sister blocks (3)", BLOCK_SIS,
-             f.fy(band + key_pt - 18.5), list(order[1:4])))
+             f.fy(band + key_pt - 9.5), list(order[1:4])),
+            ("soma side", BLOCK_SOMA,
+             f.fy(band + key_pt - 18.5), [path[0]]))
+    placed = []
     for text, hue, y_tag, nodes in tags:
         artist = f.text((0.0, y_tag), text, size=PT_BASE,
                         color=label_color(hue), ha="left", va="center")
-        ax.figure.canvas.draw()
-        box = artist.get_window_extent().transformed(ax.transData.inverted())
-        start = (box.x1 + f.fx(4.0), y_tag)
+        placed.append((artist, y_tag, nodes))
+    ax.figure.canvas.draw()
+    # ONE start x for all three leaders (the right edge of the longest tag):
+    # leaving each leader to start at its own tag's edge ran the shorter
+    # tags' leaders straight through the longer tags' text
+    start_x = max(a.get_window_extent().transformed(ax.transData.inverted()).x1
+                  for a, _y, _n in placed) + f.fx(4.0)
+    for _artist, y_tag, nodes in placed:
+        start = (start_x, y_tag)
         f.leader(start, _nearest(nodes, start), color=MUTE)
 
-    # scale bar at the lower LEFT of the projection (PLAN section 3 B); the
-    # lower right is where the shunt tag is led out to clear whitespace
+    # scale bar at the lower LEFT of the projection (PLAN section 3 B)
     x_bar = arbor_rect[0] + f.fx(1.0)
     y_bar = arbor_rect[1] + f.fy(2.0)
     f.ax.plot([x_bar, x_bar + bar_w], [y_bar, y_bar], color=INK, lw=LW_DATA,
               solid_capstyle="butt", zorder=7)
     f.text((x_bar + bar_w / 2.0, y_bar + f.fy(2.0)), "50 µm", size=PT_BASE,
            color=INK, va="bottom")
-    shunt_tag = (arbor_rect[0] + arbor_rect[2] - f.fx(23.0),
-                 arbor_rect[1] + f.fy(9.0))
-    f.leader((shunt_tag[0] - f.fx(2.0), shunt_tag[1] + f.fy(1.0)),
-             place[FOCAL_SEGMENT], color=MUTE)
-    f.subscript(shunt_tag, "g", "shunt", size=PT_BASE,
-                color=COLORS["inh"], ha="left", va="center")
 
     # the gain product: B (78 x 5 indicators) x eta = q'/q
     ids = gains["ids"]
@@ -547,6 +665,18 @@ def panel_gain_dictionary(ax, gains):
                                 col_colors=hues, row_groups=groups,
                                 captions=("B", "\u03b7", "q\u2032/q"),
                                 numbers=False, collapse="auto")
+    # The library defaults the two value columns to DIV_CMAP, whose positive
+    # end is `bp` #932F1E -- the backprop / exact-path role colour, which has
+    # no meaning in a passive-cable schematic.  Every gain here is a positive
+    # multiplier in [0.958, 0.998], so a diverging map is wrong twice over.
+    # Both columns are recoloured onto an achromatic edge ramp (private to
+    # this builder; the library is not edited, errata #7).
+    gain_cmap = LinearSegmentedColormap.from_list(
+        "fig8_gain", ["white", _tint(COLORS["edge"], 55), COLORS["edge"]])
+    for inner in axes[1:]:
+        for image in inner.images:
+            image.set_cmap(gain_cmap)
+            image.set_clim(0.94, 1.005)
     # the library centres its collapse note on the B matrix; at 6 modules a
     # 37-character line centred there runs left over the arbor and the scale
     # bar, so it is re-anchored right, under the product (the string itself
@@ -560,19 +690,28 @@ def panel_gain_dictionary(ax, gains):
     x_right = (box.x1 - host.x0) / host.width
     y_top = (box.y1 - host.y0) / host.height
     y_bottom = (box.y0 - host.y0) / host.height
+    # NO leaders: a 3.2 pt mute hairline abutting a numeral at x-height is a
+    # minus sign at print scale, and every one of the five attenuating gains
+    # read as negative.  The five bands of the q'/q column are already
+    # vertically registered, so the values are simply set against them.
     for j in range(5):
         y = y_top - (j + 0.5) / 5.0 * (y_top - y_bottom)
-        f.leader((x_right + f.fx(0.8), y), (x_right + f.fx(4.0), y),
-                 color=MUTE)
-        f.text((x_right + f.fx(5.2), y), f"{eta[j]:.3f}", size=PT_BASE,
+        f.text((x_right + f.fx(2.8), y), f"{eta[j]:.3f}", size=PT_BASE,
                color=INK, ha="left", va="center")
     # Gamma_u printed on the gain column (AMENDMENTS B10)
     gamma_y = y_top + f.fy(7.0)
     f.subscript((x_right - f.fx(0.5), gamma_y), "\u0393", "u", size=PT_BASE,
                 color=INK, ha="right", va="center")
-    f.text((1.0, y_bottom - f.fy(23.0)),
-           f"\u03ba = {gains['kappa']:.3f}; identity residual 1e\u221217",
-           size=PT_BASE, color=MUTE, ha="right", va="top")
+    # "1e-17" is calculator notation; mathtext is banned (CF-2), so the
+    # exponent is a second span chained RIGHT to LEFT off a right-aligned
+    # tail, the same construction panel H uses for R_m.
+    exponent = ax.text(1.0, y_bottom - f.fy(23.0), "\u221217", fontsize=PT_BASE,
+                       color=MUTE, ha="right", va="top", zorder=6)
+    ax.annotate(f"\u03ba = {gains['kappa']:.3f}; identity residual "
+                "1 \u00d7 10", xy=(0.0, 0.0), xycoords=exponent,
+                xytext=(-0.4, -2.0), textcoords="offset points",
+                fontsize=PT_BASE, color=MUTE, ha="right", va="bottom",
+                zorder=6, annotation_clip=False)
     f.require_soma_lowest()
     f.require_delta0()
     return ax
@@ -592,8 +731,14 @@ def panel_relations(canvas, ax, category):
     out = forest(ax, rows, value_label="|Δ log |γ|| (log units)",
                  reference=0.0, reference_label="", color="shunting",
                  xlim=(-0.006, 0.158), tag="")
-    ax.text(0.0075, 4.37, "no change", fontsize=PT_BASE, color=MUTE,
-            ha="left", va="center", zorder=6)
+    # CF-7 wants the reference label ON its line: at the BOTTOM of the rule
+    # its first glyph sat 2 pt from the unrelated row's injection square and
+    # read as that square's label, so it moves to the top (as in F and H).
+    # CF-7: right-aligned so the label ENDS on the rule (F and H already do).
+    # The rule is 2.6 pt from the left spine here, so the label runs back into
+    # the row-label gutter; at this y the gutter carries no row label.
+    ax.text(-0.0016, -0.44, "no change", fontsize=PT_BASE, color=MUTE,
+            ha="right", va="center", zorder=6)
     ax.tick_params(axis="x", labelsize=PT_BASE, pad=0.8, length=2.0)
     ax.xaxis.labelpad = 0.5
     ypos = out["ypos"]
@@ -613,8 +758,6 @@ def panel_relations(canvas, ax, category):
                 markeredgecolor=INJECT, markeredgewidth=LW_ERR, zorder=4.0)
     shunt_d = category[("focal shunt", "descendant")][1][0]
     inject_d = category[("matched additive", "descendant")][1][0]
-    ax.text(-0.005, -0.44, f"shunt {shunt_d / inject_d:.1f}\u00d7 injection",
-            fontsize=PT_BASE, color=INK, ha="left", va="center", zorder=6)
     ax.text(0.156, -0.44, "focal shunt", fontsize=PT_BASE, color=SHUNT,
             ha="right", va="center", zorder=6)
     ax.annotate("matched injection", xy=(inject_d + 0.004, 0.28),
@@ -622,20 +765,27 @@ def panel_relations(canvas, ax, category):
                 color=INJECT, ha="right", va="center", zorder=6,
                 arrowprops=dict(arrowstyle="-", lw=LW_HAIR, color=MUTE,
                                 shrinkA=1.5, shrinkB=1.5))
+    # the descendant contrast, moved off the zero rule (the dashed rule ran
+    # through the "s" of "shunt") and set between the two descendant arms
+    ax.text(0.156, 1.02, f"shunt {shunt_d / inject_d:.1f}\u00d7 injection",
+            fontsize=PT_BASE, color=INK, ha="right", va="center", zorder=6)
     for offset, text in enumerate(("n = 8 cells", "101 focal sites",
                                    "mean [95 % CI]")):
-        ax.text(0.156, 1.00 + 0.33 * offset, text, fontsize=PT_BASE,
+        ax.text(0.156, 1.56 + 0.33 * offset, text, fontsize=PT_BASE,
                 color=MUTE, ha="right", va="center", zorder=6)
-    ax.text(0.156, 2.86, "injection off-route:", fontsize=PT_BASE, color=MUTE,
+    ax.text(0.156, 2.75, "injection off-route:", fontsize=PT_BASE, color=MUTE,
             ha="right", va="center", zorder=6)
-    ax.text(0.156, 3.19, "zero by construction", fontsize=PT_BASE, color=MUTE,
+    ax.text(0.156, 3.08, "zero by construction", fontsize=PT_BASE, color=MUTE,
             ha="right", va="center", zorder=6)
-    ax.plot([0.040, 0.0055], [3.19, 3.22], color=MUTE, lw=LW_HAIR,
+    ax.plot([0.040, 0.0055], [3.08, 3.22], color=MUTE, lw=LW_HAIR,
             solid_capstyle="round", zorder=1.6)
-    ax.text(0.156, 3.72, "45/45 cells positive,", fontsize=PT_BASE, color=MUTE,
-            ha="right", va="center", zorder=6)
-    ax.text(0.156, 4.05, "Supplementary Fig. S30A", fontsize=PT_BASE,
-            color=MUTE, ha="right", va="center", zorder=6)
+    # the sign count keeps its COHORT on the artwork: an unattributed 45/45
+    # inside a panel tagged n = 8 cells is not readable as a control
+    for offset, text in enumerate(("45/45 cells positive,",
+                                   "disjoint 45-cell cohort",
+                                   "Supplementary Fig. S30A")):
+        ax.text(0.156, 3.68 + 0.34 * offset, text, fontsize=PT_BASE,
+                color=MUTE, ha="right", va="center", zorder=6)
     return out
 
 
@@ -700,25 +850,32 @@ def panel_adjoint(ax, shapley):
     ax.set_xticks(range(4), ("inject", "d′", "q′", "q′d′"))
     ax.set_xlim(-0.6, 3.6)
     ax.set_ylim(*LOCAL_YLIM)
-    ax.set_yticks(LOCAL_YTICKS, [""] * len(LOCAL_YTICKS))
-    ax.tick_params(labelsize=PT_BASE, pad=0.8, length=2.0)
+    # D and E share one y axis, which means they share ONE major ticker: a
+    # set_yticks(labels) here silently blanked D's tick labels too, so the
+    # whole pair shipped with a bare axis.  E hides its own labels instead.
+    ax.tick_params(labelsize=PT_BASE, pad=0.8, length=2.0, labelleft=False)
     ax.set_xlabel("substituted factor", fontsize=PT_EMPH, color=INK,
                   labelpad=0.5)
     mean, lo, hi = shapley["replacement"]
-    # left-aligned with the key block below it: centred under the panel title
-    # the first line read as a subtitle and the second overhung the left spine
-    ax.text(-0.52, 0.238, "q′ replacement", fontsize=PT_BASE, color=INK,
-            ha="left", va="center", zorder=6)
-    ax.text(-0.52, 0.214,
-            f"+{mean:.3f} [{lo:.3f}, {hi:.3f}], "
-            f"{shapley['replacement_positive']}/8 cells",
-            fontsize=PT_BASE, color=INK, ha="left", va="center", zorder=6)
+    # PLAN section 4 E asks for three SEPARATE items.  They were collapsed into one
+    # seven-line stack in the top-left corner, which squeezed the four
+    # columns right; each now sits where the plan puts it.
+    # (i) the badge text, top-right, clear of the q′ column (max 0.190)
+    for offset, line in enumerate(("substitution, not", "a decomposition")):
+        ax.text(3.53, 0.240 - 0.029 * offset, line, fontsize=PT_BASE,
+                color=MUTE, ha="right", va="center", zorder=6)
+    # (ii) the printed contrast, centred over the q′ / q′d′ columns
+    for offset, line in enumerate(
+            (f"q′ replacement: +{mean:.3f}",
+             f"[{lo:.3f}, {hi:.3f}], "
+             f"{shapley['replacement_positive']}/8 cells")):
+        ax.text(2.15, 0.305 - 0.029 * offset, line, fontsize=PT_BASE,
+                color=INK, ha="center", va="center", zorder=6)
+    # (iii) the key, in the clear band over the inject and d′ columns, 4 pt
+    # clear of the left spine
     for offset, line in enumerate(("q adjoint,", "d driving force;",
                                    "′ = post-shunt")):
-        ax.text(-0.52, 0.150 - 0.022 * offset, line, fontsize=PT_BASE,
-                color=MUTE, ha="left", va="center", zorder=6)
-    for offset, line in enumerate(("substitution, not", "a decomposition")):
-        ax.text(-0.52, 0.196 - 0.022 * offset, line, fontsize=PT_BASE,
+        ax.text(-0.47, 0.182 - 0.029 * offset, line, fontsize=PT_BASE,
                 color=MUTE, ha="left", va="center", zorder=6)
     ax.text(0.985, 0.008, "shared y with D", transform=ax.transAxes,
             ha="right", va="bottom", fontsize=PT_BASE, color=MUTE, zorder=6)
@@ -726,12 +883,16 @@ def panel_adjoint(ax, shapley):
 
 
 # ── panel F: signed change forest ────────────────────────────────────────
-SIGNED_ROWS = (("original_eight", "Ra150_Rm300", "Initial,\n8 cells\nRm 300"),
-               ("original_eight", "Ra150_Rm15000",
-                "Initial,\n8 cells\nRm 15,000"),
-               ("v661_disjoint", "Ra150_Rm300", "Disjoint,\n45 cells\nRm 300"),
-               ("v661_disjoint", "Ra150_Rm15000",
-                "Disjoint,\n45 cells\nRm 15,000"))
+# "Rm 300" printed an unsubscripted R_m beside panel H's properly chained
+# one; the gutter is 28 pt wide and cannot host a chained span, so the row
+# labels name the manipulation in words and the in-panel line below says
+# which quantity the numbers are.
+SIGNED_ROWS = (("original_eight", "Ra150_Rm300", "Initial,\n8 cells", "300"),
+               ("original_eight", "Ra150_Rm15000", "Initial,\n8 cells",
+                "15,000"),
+               ("v661_disjoint", "Ra150_Rm300", "Disjoint,\n45 cells", "300"),
+               ("v661_disjoint", "Ra150_Rm15000", "Disjoint,\n45 cells",
+                "15,000"))
 
 
 def panel_signed(canvas, ax, summary, cells):
@@ -746,7 +907,7 @@ def panel_signed(canvas, ax, summary, cells):
                 float(row.ci95_high), int(row.n_cells))
 
     rows = []
-    for cohort, regime, label in SIGNED_ROWS:
+    for cohort, regime, label, _rm in SIGNED_ROWS:
         mean, lo, hi, n = pick(cohort, regime, "focal shunt", "descendant")
         seeds = cells[cells.cohort.eq(cohort) & cells.regime.eq(regime)
                       & cells.perturbation.eq("focal shunt")
@@ -755,10 +916,13 @@ def panel_signed(canvas, ax, summary, cells):
         assert seeds.size == n, (cohort, regime, seeds.size, n)
         rows.append(dict(label=label, mean=mean, lo=lo, hi=hi,
                          seeds=list(seeds), n=n))
+    # tick=False: the 6 % band already ties each label to its row, and the
+    # library draws the alternative gutter hairline ON the left spine, where
+    # it is the one data artist the grouped key block cannot avoid.
     out = forest(ax, rows,
                  value_label="signed \u0394 log |\u03b3| (log units)",
                  reference=0.0, reference_label="", color="shunting",
-                 xlim=(-0.262, 0.098), tag="")
+                 xlim=(-0.262, 0.098), tag="", tick=False)
     ax.tick_params(axis="x", labelsize=PT_BASE, pad=0.8, length=2.0)
     ax.xaxis.labelpad = 0.5
     ypos = out["ypos"]
@@ -768,7 +932,7 @@ def panel_signed(canvas, ax, summary, cells):
              INJECT),
             ("matched additive", "depth-matched unrelated", 0.42, INJECT,
              M_INJECT, "none"))
-    for index, (cohort, regime, _label) in enumerate(SIGNED_ROWS):
+    for index, (cohort, regime, _label, _rm) in enumerate(SIGNED_ROWS):
         for perturbation, category, dy, colour, marker, face in arms:
             mean, lo, hi, _n = pick(cohort, regime, perturbation, category)
             y = ypos[index] + dy
@@ -780,16 +944,39 @@ def panel_signed(canvas, ax, summary, cells):
                     zorder=4.0)
     ax.plot([-0.262, 0.098], [1.58, 1.58], color=EDGE, lw=LW_HAIR,
             zorder=1.2, solid_capstyle="butt")
-    ax.text(-0.258, 0.38, "mean [95 % CI]", fontsize=PT_BASE, color=MUTE,
-            ha="left", va="center", zorder=6)
-    ax.text(-0.258, 0.68, "shunt attenuates;", fontsize=PT_BASE, color=INK,
-            ha="left", va="center", zorder=6)
-    ax.text(-0.258, 1.35, "injection enhances", fontsize=PT_BASE, color=INK,
-            ha="left", va="center", zorder=6)
-    ax.text(-0.258, 2.62, "filled = descendants", fontsize=PT_BASE, color=INK,
-            ha="left", va="center", zorder=6)
-    ax.text(-0.258, 3.30, "open = off-route", fontsize=PT_BASE, color=INK,
-            ha="left", va="center", zorder=6)
+    # each key sentence as one ADJACENT pair of lines in a clear strip; the
+    # four clauses used to sit one per forest row, so neither sentence read
+    # as a statement.  Both pairs stop short of the dashed zero rule.
+    # the two sentence lines carry the perturbation key: the shunt clause is
+    # set in the shunt hue and the injection clause in the injection hue, so
+    # green circle and grey square are named on the panel without a legend.
+    # "open = depth-matched off-route" is 98.3 pt and the clear strip left of
+    # the zero rule is 73 pt, so the verbatim string wraps at its own hyphen
+    # over three lines; the tie to panel C's `depth-matched` row is kept.
+    for y_line, text, colour in ((0.40, "shunt attenuates;", SHUNT),
+                                 (0.68, "injection enhances", INJECT),
+                                 (2.34, "filled = descendants,", INK),
+                                 (2.62, "open = depth-", INK),
+                                 (2.90, "matched off-route", INK),
+                                 (3.30, "mean [95 % CI]", MUTE)):
+        # 3.5 pt clear of the row tick hairline that rides on the left spine
+        ax.text(-0.249, y_line, text, fontsize=PT_BASE, color=colour,
+                ha="left", va="center", zorder=6)
+    # the third label line is a properly chained R_m (the gutter cannot host
+    # a mathtext span, and "Rm" beside panel H's R_m read as a typo)
+    for index, (_cohort, _regime, _label, rm_value) in enumerate(SIGNED_ROWS):
+        tail = ax.annotate(f" {rm_value}", xy=(0.0, ypos[index]),
+                           xycoords=("axes fraction", "data"),
+                           xytext=(-4.0, -8.6), textcoords="offset points",
+                           ha="right", va="center", fontsize=PT_BASE,
+                           color=INK, annotation_clip=False)
+        sub = ax.annotate("m", xy=(0.0, 0.5), xycoords=tail,
+                          xytext=(0.0, -1.6), textcoords="offset points",
+                          ha="right", va="center", fontsize=PT_BASE,
+                          color=INK, annotation_clip=False)
+        ax.annotate("R", xy=(0.0, 0.5), xycoords=sub, xytext=(0.0, 1.6),
+                    textcoords="offset points", ha="right", va="center",
+                    fontsize=PT_BASE, color=INK, annotation_clip=False)
     ax.text(-0.006, -0.46, "no change", fontsize=PT_BASE, color=MUTE,
             ha="right", va="center", zorder=6)
     return out
@@ -828,18 +1015,26 @@ def panel_state(ax, physical, ranges):
     ax.tick_params(axis="x", which="minor", length=1.2)
     ax.set_xlabel("membrane resistance (\u03a9 cm\u00b2)", fontsize=PT_EMPH,
                   color=INK, labelpad=0.5)
-    ax.set_ylabel(CONTRAST_LABEL, fontsize=PT_EMPH, color=INK, labelpad=0.5)
+    # 2.6 pt of labelpad: at 0.5 the "(log units)" parentheses touched the
+    # "0.08" tick numeral (0.1 pt of clearance at print scale)
+    ax.set_ylabel(CONTRAST_LABEL, fontsize=PT_EMPH, color=INK, labelpad=2.6)
     # cohort key: shape and fill carry the cohort (DECISIONS, Figure 8), and
     # each cohort's median axial/leak range rides under its own name so the
     # ratio is an annotation and never a second abscissa (PLAN 0.6)
-    block = ((COHORTS[1][1], ranges["v661_disjoint"], INK, 0.950, 0.876),
-             (COHORTS[0][1], ranges["original_eight"], INK, 0.796, 0.722))
-    for text, (rlo, rhi), colour, y_name, y_range in block:
-        ax.text(0.995, y_name, text, transform=ax.transAxes, fontsize=PT_BASE,
-                color=colour, ha="right", va="center", zorder=6)
+    # each cohort name carries ITS OWN marker glyph immediately before it:
+    # without one, nothing on the page or in the caption said which series
+    # was the filled diamond and which the open triangle.
+    block = ((COHORTS[1], ranges["v661_disjoint"], 0.950, 0.876),
+             (COHORTS[0], ranges["original_eight"], 0.796, 0.722))
+    keyed = []
+    for (_key, text, marker, filled), (rlo, rhi), y_name, y_range in block:
+        name = ax.text(0.995, y_name, text, transform=ax.transAxes,
+                       fontsize=PT_BASE, color=INK, ha="right", va="center",
+                       zorder=6)
         ax.text(0.995, y_range, f"axial/leak {rlo:.1f}\u2013{rhi:.0f}",
                 transform=ax.transAxes, fontsize=PT_BASE, color=MUTE,
                 ha="right", va="center", zorder=6)
+        keyed.append((name, marker, filled, y_name))
     smallest = min(drops.values())
     ax.text(0.005, 0.045, f"\u2265 {np.floor(smallest):.0f}\u00d7 from 300 "
                           "to 15,000", transform=ax.transAxes,
@@ -871,20 +1066,48 @@ def panel_state(ax, physical, ranges):
                        markeredgecolor=INK, markeredgewidth=LW_ERR,
                        elinewidth=LW_ERR, capsize=1.4, zorder=3)
     inset.axhline(0.0, color=MUTE, lw=LW_REF, dashes=(2.2, 1.8), zorder=1)
-    inset.set_xticks((3000, 30000), ("3,000", "30,000"))
+    # The inset frame is ~38 x 31 pt: no 7 pt numeral row fits inside it, and
+    # outside it the labels floated in the PARENT axes, where "0.005" sat
+    # where the main ordinate reads 0.037 -- exactly the free-floating
+    # interior numeral row PLAN section 0.6 exists to remove.  The inset therefore
+    # keeps its zero rule and its marks and carries NO tick labels; its
+    # window and its two values are stated in the caption, and one mute line
+    # above the frame gives the ordinate half-range.
+    inset.set_xticks(())
+    inset.set_yticks(())
     inset.minorticks_off()
-    # the inset sits over the region it magnifies, so its abscissa labels go
-    # on top: below the frame they would land on the 45-cell 15,000 marker
-    inset.set_yticks((0.0, 0.005), ("0", "0.005"))
-    inset.tick_params(labelsize=PT_BASE, pad=1.2, length=1.8,
-                      width=LW_EDGE, color=EDGE, labelcolor=INK,
-                      labelbottom=False, labeltop=True, bottom=False,
-                      top=True)
-    # the magnified window, marked on the main axes directly under the inset
-    ax.plot([2400, 40000, 40000, 2400, 2400],
-            [-0.0062, -0.0062, 0.0082, 0.0082, -0.0062], color=MUTE,
+    ax.text(0.600, 0.625, "inset ± 0.005", transform=ax.transAxes,
+            fontsize=PT_BASE, color=MUTE, ha="left", va="center", zorder=6)
+    # The magnified window used to be a closed rectangle: every edge of a box
+    # that CONTAINS the points it magnifies must cross them, and it cut both
+    # cohort lines and the 8-cell whisker caps.  It is replaced by an open
+    # LW_HAIR mute bracket under the window, below all ink in it, with 2.5 pt
+    # end ticks turned up towards the region.
+    bracket_y = -0.0175
+    ax.plot([2400.0, 40000.0], [bracket_y, bracket_y], color=MUTE,
             lw=LW_HAIR, zorder=1.4, solid_capstyle="butt")
-    return drops
+    for x_end in (2400.0, 40000.0):
+        ax.plot([x_end, x_end], [bracket_y, bracket_y + 0.0028], color=MUTE,
+                lw=LW_HAIR, zorder=1.4, solid_capstyle="butt")
+
+    def place_cohort_markers():
+        """Set each key marker 3.4 pt left of its own label.
+
+        Deferred to after ``lock_reserves()`` / ``match_row_heights()``: the
+        axes is resized between the panel draw and the save, so the label's
+        width in axes fractions is only known at the end.
+        """
+        renderer = ax.figure.canvas.get_renderer()
+        width_pt = ax.get_window_extent(renderer).width / ax.figure.dpi * 72.0
+        for name, marker, filled, y_name in keyed:
+            box = name.get_window_extent(renderer) \
+                .transformed(ax.transAxes.inverted())
+            ax.plot([box.x0 - 4.6 / width_pt], [y_name], marker=marker,
+                    linestyle="none", transform=ax.transAxes, ms=MARKER_MS,
+                    markerfacecolor=INK if filled else "white",
+                    markeredgecolor=INK, markeredgewidth=LW_ERR,
+                    clip_on=False, zorder=6)
+    return drops, place_cohort_markers
 
 
 # ── panel H: background-conductance rescue ───────────────────────────────
@@ -912,22 +1135,30 @@ def panel_background(ax, sel, per_cell):
                 zorder=6)
     ax.set_xticks(x, ("0", "1", "4"))
     ax.set_xlim(-0.5, 2.5)
-    ax.set_ylim(-0.075, 0.365)
+    # 0.45, not 0.365: the in-panel sentence needs a band that clears the
+    # 8/8 sign count over the 4x column AND leaves 6 pt under the title
+    ax.set_ylim(-0.100, 0.45)
     ax.set_yticks((0.0, 0.1, 0.2, 0.3), ("0", "0.1", "0.2", "0.3"))
     ax.tick_params(labelsize=PT_BASE, pad=0.8, length=2.0)
     ax.set_xlabel("background leak (\u00d7 baseline)", fontsize=PT_EMPH,
                   color=INK, labelpad=0.5)
-    ax.set_ylabel(CONTRAST_LABEL, fontsize=PT_EMPH, color=INK, labelpad=0.5)
-    ax.text(0.02, 0.968, "background conductance", transform=ax.transAxes,
-            fontsize=PT_BASE, color=INK, ha="left", va="center", zorder=6)
-    ax.text(0.02, 0.902, "restores the contrast", transform=ax.transAxes,
-            fontsize=PT_BASE, color=INK, ha="left", va="center", zorder=6)
+    # 103.7 pt of label centred on a ~99 pt axes overhung the 506.4 pt live
+    # right edge by 1.5 pt; 0.478 pulls its right edge back inside
+    ax.xaxis.label.set_x(0.478)
+    ax.set_ylabel(CONTRAST_LABEL, fontsize=PT_EMPH, color=INK, labelpad=2.6)
+    # the sentence no longer restates the title ("Background restores it")
+    # and it drops clear of it: at 0.968 its ascenders met the title's
+    # descenders with zero clearance
+    ax.text(-0.45, 0.398, "contrast restored at the", fontsize=PT_BASE,
+            color=INK, ha="left", va="center", zorder=6)
+    ax.text(-0.45, 0.366, "standard calibration", fontsize=PT_BASE,
+            color=INK, ha="left", va="center", zorder=6)
     # R_m without mathtext (CF-2).  The three spans are chained RIGHT to
     # LEFT in offset points off a right-aligned tail, so the group survives
     # the reserve lock that resizes this axes after the panel is drawn;
     # token_subscript's own ``tail`` anchors on the subscript's layout box
     # (which carries the font descent) and prints ~1.5 pt low.
-    rest = ax.text(0.985, 0.118, "= 15,000 \u03a9 cm\u00b2", fontsize=PT_BASE,
+    rest = ax.text(0.985, 0.135, "= 15,000 \u03a9 cm\u00b2", fontsize=PT_BASE,
                    color=MUTE, ha="right", va="center", zorder=6,
                    transform=ax.transAxes)
     sub = ax.annotate("m", xy=(0.0, 0.5), xycoords=rest, xytext=(-3.4, -1.6),
@@ -937,7 +1168,12 @@ def panel_background(ax, sel, per_cell):
     ax.annotate("R", xy=(0.0, 0.5), xycoords=sub, xytext=(-0.4, 1.6),
                 textcoords="offset points", fontsize=PT_BASE, color=MUTE,
                 ha="right", va="center", zorder=6, annotation_clip=False)
-    ax.text(0.985, 0.030, "normalized dose 1", transform=ax.transAxes,
+    # the dose scheme is named in full on the panel: "normalized dose 1"
+    # alone did not say WHICH normalization distinguishes the two rows of
+    # paired_contrasts.csv
+    ax.text(0.985, 0.078, "input-conductance-", transform=ax.transAxes,
+            fontsize=PT_BASE, color=MUTE, ha="right", va="center", zorder=6)
+    ax.text(0.985, 0.021, "normalized dose 1", transform=ax.transAxes,
             fontsize=PT_BASE, color=MUTE, ha="right", va="center", zorder=6)
     return ax
 
@@ -1098,7 +1334,7 @@ def build(emit_main=True):
     panel_dose(d, dose)
     panel_adjoint(e, shapley)
     panel_signed(canvas, g_f, signed_summary, signed_cells)
-    drops = panel_state(g, physical, ratio_ranges)
+    drops, place_cohort_markers = panel_state(g, physical, ratio_ranges)
     panel_background(h, sel, per_cell)
     canvas.lock_reserves()
     balance = _balance_slot_fill(canvas)
@@ -1106,6 +1342,7 @@ def build(emit_main=True):
     canvas.match_row_heights(2)
     canvas.lock_reserves()
     canvas.fig.canvas.draw()
+    place_cohort_markers()
 
     panel_interventions(a)
     panel_gain_dictionary(b, gains)
@@ -1172,7 +1409,30 @@ def build(emit_main=True):
         "equal-weighted cell means (dose 2 = 0.194, not the 0.203 pooled-site "
         "mean). Panel H is new artwork over the frozen "
         "focal_selectivity_phase1 table. Cohorts are encoded by marker shape "
-        "and fill, not by ORDINAL_RAMP (DECISIONS, Figure 8). Slot-fill "
+        "and fill, not by ORDINAL_RAMP (DECISIONS, Figure 8). 2026-09-10 "
+        "fix round: D and E share one y ticker, so E hides its own tick "
+        "labels instead of blanking the pair's; panel B's five block gains "
+        "lose their mute leaders (each read as a minus sign) and its two "
+        "value columns leave DIV_CMAP's bp red for an achromatic edge ramp; "
+        "panel C names the disjoint 45-cell cohort beside its 45/45 sign "
+        "count; panel G draws each cohort's marker glyph before its direct "
+        "label; panel A's active shunt keeps the inhibitory rim and a leader "
+        "to its badge; panel F's key sentences are two adjacent line pairs "
+        "and its rows carry a chained R_m. Visual-QA round (2026-09-10, "
+        "second pass): A's g_shunt badge moved inside the hero card with a "
+        "full-length leader; B's g_shunt badge moved to the clear band "
+        "up-left of the focal contact (its box seeded into the leader "
+        "obstacle set so no block tag's leader crosses it, and its own "
+        "leader no longer passes under the soma); C's reference label "
+        "right-aligned on the rule; E's corner stack split into the plan's "
+        "three items (badge top-right, contrast centred over q'/q'd', key "
+        "over the inject and d' columns); F restores the verbatim "
+        "depth-matched off-route key and colours its two sentence lines by "
+        "perturbation; G drops the inset's tick labels and replaces the "
+        "closed source-region box with an open mute bracket under the "
+        "window; H's sentence drops clear of the title and is reworded, its "
+        "x label is pulled inside the live right edge, and its footer names "
+        "the input-conductance normalization. Slot-fill "
         f"slot-fill balance: {balance}. Contrast drop from "
         f"R_m 300 to 15,000: {drops}.")
     record = publish(8, output, display_rows(category, dose, shapley,

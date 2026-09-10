@@ -293,7 +293,10 @@ def f4_profile_bus(f, nodes, radii):
     f.credit_delivery(nodes, mode='neuron', targets=list(radii),
                       rule_color='additive', label=None)
     for site, r_pt in radii.items():
-        f.disc(nodes[site], r_pt, fill=COLORS['additive'], zorder=6.2)
+        # QA 2026-09-09 (minor): a 0.55 pt white keyline, so the additive-blue
+        # drop discs separate from the exc-blue anatomy contacts they pass.
+        f.disc(nodes[site], r_pt, fill=COLORS['additive'], edge='white',
+               lw=LW_HAIR, zorder=6.2)
 
 
 def f4_delivery_panel(ax, radii):
@@ -320,7 +323,8 @@ def f4_delivery_panel(ax, radii):
             # drop disc on every site makes the six recipients countable and
             # leaves card 3 differing only by its weighted radii.
             for site in FIG4_SITES:
-                f.disc(nodes[site], 1.3, fill=COLORS['scalar'], zorder=6.2)
+                f.disc(nodes[site], 1.3, fill=COLORS['scalar'], edge='white',
+                       lw=LW_HAIR, zorder=6.2)
         else:
             f4_profile_bus(f, nodes, radii)
         f.error_in(nodes.soma, side='right', label='δ0')
@@ -605,9 +609,15 @@ def f4_energy(ax, eigen, diag, rows, ramp):
         mean, lo, hi = boot(cum)
         f4_band(ax, kk, lo, hi, colour)
         marker, filled = style[task]
-        ax.plot(kk, mean, color=colour, lw=LW_DATA, marker=marker,
-                ms=MARKER_MS - 1.2, mfc=colour if filled else 'white',
-                mec=colour, mew=LW_HAIR, zorder=3.0)
+        curve, = ax.plot(kk, mean, color=colour, lw=LW_DATA, marker=marker,
+                         ms=MARKER_MS - 1.2, mfc=colour if filled else 'white',
+                         mec=colour, mew=LW_HAIR, zorder=3.0)
+        if task == 'nested':
+            # QA 2026-09-09 (minor): quartic #10908C and nested #0E6C70 are
+            # adjacent ORDINAL_RAMP entries and their curves differ by under
+            # 0.03 at every k, so nested is separated by STROKE as well as by
+            # marker -- the same dash idiom unit broadcast uses in C-E.
+            curve.set_dashes((2.6, 1.6))
         uni = diag[diag.task.eq(task) & diag.step.eq(1024)]
         assert len(uni) == 20
         um, ul, uh = boot(uni.path_uniform_oracle_capture.to_numpy(), 771009)
@@ -659,11 +669,24 @@ def f4_energy(ax, eigen, diag, rows, ramp):
     ax.plot([0.0, 0.0], [0, 1.16], color=COLORS['grid'], lw=LW_HAIR,
             zorder=.9, solid_capstyle='butt')
     f4_reference(ax, .95, axis='y', label='0.95')
-    for task, y in (('matching', .70), ('quartet', .59), ('nested', .48)):
+    # QA 2026-09-09 (minor, ratification requested): these three are direct
+    # labels (annotation artists; no legend frame, no handles, no legend
+    # artist) set at the right end of the curve bundle, each in its own
+    # series colour, with its marker glyph on the curve side.  They are not
+    # placed ON their own curves because the quartic and nested cumulative
+    # means differ by at most 0.03 at every k (0.013 at k = 1), so no
+    # position and no leader can separate them: identity is carried by the
+    # marker shape and, since this build, by the nested dash pattern.  Under
+    # CF-5 this is the figure's only key-shaped object outside B's sanctioned
+    # footer strip and is recorded as such in TEXT.md section 4.
+    # Pairwise is a true on-curve direct label: its mean is flat at 1.00 and
+    # the band above it is empty, so the word sits over its own curve with no
+    # marker token.  Only the two overlapping teals keep a marker.
+    ax.annotate(FIG4_NAME['matching'], xy=(1.12, 1.035), ha='left',
+                va='bottom', fontsize=PT_BASE, color=ramp['matching'])
+    for task, y in (('quartet', .62), ('nested', .50)):
         ax.annotate(FIG4_NAME[task], xy=(5.95, y), ha='right', va='center',
                     fontsize=PT_BASE, color=ramp[task])
-        # QA 2026-09-09: the two darker teals are dE 11 apart, so the
-        # marker glyph carries the identity beside each label
         marker, filled = style[task]
         ax.plot([6.25], [y], marker=marker, ms=MARKER_MS - 1.2, ls='none',
                 mfc=ramp[task] if filled else 'white', mec=ramp[task],
@@ -708,9 +731,15 @@ def f4_shuffle(ax, contrast, endpoints, rows, ramp):
         rec = rec.iloc[0]
         assert int(rec.positive_seeds) == 20 and int(rec.n_seeds) == 20
         assert abs(float(rec['mean']) - float(fans[family].mean())) < 1e-9
+        # QA 2026-09-09 (major): the fan is NOT handed to forest(), which
+        # would draw it in the row's own ORDINAL_RAMP hue at nearly the mean
+        # marker's size and hide the estimand (the Quartic interval is only
+        # 0.010 wide).  It is drawn below, in COLORS['mute'], exactly as
+        # panel F draws its own fan.
         entries.append(dict(label=label, mean=float(rec['mean']),
                             lo=float(rec.ci95_low), hi=float(rec.ci95_high),
-                            seeds=list(map(float, fans[family])), n=20,
+                            fan=list(map(float, fans[family])), n=20,
+                            marker='D' if family == 'all' else 'o',
                             color=ramp.get(family, COLORS['mute'])))
         rows.append(dict(panel='H', task=label,
                          series='shuffled minus compatible, exact path',
@@ -724,6 +753,26 @@ def f4_shuffle(ax, contrast, endpoints, rows, ramp):
                       value_label='Shuffled − compatible\nexact NMSE',
                       reference=0.0, reference_label='no cost',
                       xlim=(-.04, 1.05), tag='')
+    # QA 2026-09-09 (major): the twenty-seed fan in COLORS['mute'] 0.22 rows
+    # BELOW its row and the interval bar re-drawn over a white casing, so the
+    # row-coloured mean marker is the only saturated mark on the row -- the
+    # same construction panel F uses.
+    rng = np.random.default_rng(11)
+    for y, entry in zip(out['ypos'], entries):
+        fan = np.asarray(entry['fan'])
+        ax.plot(fan, y - .25 + rng.uniform(-.04, .04, len(fan)), ls='none',
+                marker='o', ms=SEED_MS, mfc=COLORS['mute'], mec='none',
+                alpha=.45, zorder=2.0, clip_on=True)
+        col = entry['color']
+        ax.plot([entry['lo'], entry['hi']], [y, y], color='white',
+                lw=LW_ERR + 1.6, zorder=3.3, solid_capstyle='butt')
+        ax.plot([entry['lo'], entry['hi']], [y, y], color=col, lw=LW_ERR,
+                zorder=3.4, solid_capstyle='butt')
+        for xb in (entry['lo'], entry['hi']):
+            ax.plot([xb, xb], [y - .13, y + .13], color=col, lw=LW_ERR,
+                    zorder=3.4, solid_capstyle='butt')
+        ax.plot([entry['mean']], [y], ls='none', marker=entry['marker'],
+                ms=MARKER_MS, mfc=col, mec='white', mew=LW_HAIR, zorder=4.2)
     ax.plot([-.04, 1.05], [2.5, 2.5], color=COLORS['grid'], lw=LW_HAIR,
             zorder=1.2, solid_capstyle='butt')
     f4_row_counts(ax, out['ypos'])
@@ -732,14 +781,14 @@ def f4_shuffle(ax, contrast, endpoints, rows, ramp):
 
 
 FIG4_CAPTION = r"""\caption{\textbf{Input-spectrum-matched targets develop different credit geometry and different tolerance of calibrated broadcast credit.}
-\textbf{A}, Pairwise and quartic targets on one shared balanced tree: soma lowest, inputs $x_1$--$x_8$, student output $y$, somatic error $\delta_0$, and only the junction badges differing; tree, initialization, examples and input-sensitivity second moment $I_8/4$ are shared. Schematic, no data.
-\textbf{B}, The three credit rules over the six nonsomatic sites: exact path (per-site $\bm q(x)$), unit broadcast (amber bus) and calibrated broadcast (blue bus; drop-dot radii are the mean absolute calibrated weight over the twenty seeds, $0.133$--$0.386$, signs mixed, set at step $0$ from 256 unlabeled examples). Schematic, no data.
+\textbf{A}, Pairwise and quartic targets on one shared balanced tree: soma lowest, inputs $x_1$--$x_8$ (outer two labelled), student output $y$, somatic error $\delta_0$, and only the junction badges differing; tree, initialization, examples and input-sensitivity second moment $I_8/4$ are shared. Schematic, no data.
+\textbf{B}, The three credit rules over the six nonsomatic sites: exact path (per-site $\bm q(x)$), unit broadcast (amber bus) and calibrated broadcast (blue bus; drop-dot radii are the mean absolute calibrated weight, $0.133$--$0.386$, signs mixed, set at step $0$ from 256 unlabeled examples). Schematic, no data.
 \textbf{C}, Held-out NMSE against updates on the pairwise target at the frozen rule-specific rates; label-noise floor dashed ($n=20$ paired seeds, 95\% percentile bootstrap bands, fixed checkpoints).
 \textbf{D}, As \textbf{C} for the quartic target, all twenty exact trajectories drawn: three stall past the primary checkpoint and reach the floor by 4,096 updates ($n=20$ seeds, 95\% bands, fixed checkpoints).
 \textbf{E}, A depth-four nested control on its own tree, not sharing $I_8/4$ ($n=20$ seeds, 95\% bands, fixed checkpoints); \textbf{C}--\textbf{E} denominators are the clean target variances ($1.0$, $0.5$, $1.0$), so panel heights are not comparable, and the teal ramp orders targets within this figure only.
 \textbf{F}, Quartic minus pairwise difference in calibrated-broadcast minus exact NMSE at four budgets; dots the paired seeds, filled diamonds endpoint states, open diamonds validation-selected states ($n=20$ seeds, 95\% paired percentile intervals, 20 of 20 positive at every budget).
-\textbf{G}, Cumulative exact-trained path-field energy captured by the best $k$ oracle directions, the uniform profile a separate unfitted category ($n=20$ seeds, 95\% percentile intervals, fixed checkpoint at 1,024 updates).
-\textbf{H}, Exact-path NMSE rises when leaf input assignments are shuffled at fixed tree shape and parameter count ($n=20$ seeds per target, 95\% paired percentile intervals, 20 of 20 positive, endpoint state at 1,024 updates; copy in Supplementary Fig.~S13C).
+\textbf{G}, Cumulative exact-trained path-field energy captured by the best $k$ oracle directions, the uniform profile a separate unfitted category and the nested mean dashed ($n=20$ seeds, 95\% percentile intervals, fixed checkpoint at 1,024 updates).
+\textbf{H}, Exact-path NMSE rises when leaf input assignments are shuffled at fixed tree shape and parameter count; grey dots the paired seeds ($n=20$ seeds per target, 95\% paired percentile intervals, 20 of 20 positive, endpoint state at 1,024 updates; copy in Supplementary Fig.~S13C).
 Source Data: \texttt{source\_data/curated\_publication/figure\_04\_plotted.csv}.}"""
 
 
@@ -759,7 +808,27 @@ def figure4():
     rule key inside Fig 5C, and B's rule-key strip is a schematic panel's
     footer, not an in-axes key.  CF-4 DELTA0_EXEMPTIONS: one, panel E's
     morphology icon ("morphology icon in a data panel; credit delivery is
-    drawn in panel B").  Private helpers under DECISIONS G5 (library
+    drawn in panel B").
+    CF-7 waiver (QA 2026-09-09): the five horizontal reference labels --
+    'noise 0.0225' (C, E), 'noise 0.045' (D), '0.95' (G), 'no deficit' (F)
+    and 'no cost' (H) -- are set at the FREE (left) end of their own rule
+    instead of right-aligned on it, because the right-hand end of C-E and G
+    carries the 16,384 tick, the 'Exact path' direct label and the task
+    labels; the vertical 1,024 rule carries no label because the major x
+    tick already prints 1,024.
+    CF-5 ratification requested for G's three-token direct-label block (word
+    + series marker, annotation artists only): the quartic and nested
+    cumulative means differ by at most 0.03 at every k, so no on-curve
+    position or leader can separate them and identity is carried by marker
+    shape plus the nested dash pattern added in this build.
+    Panel B rail clearance is left as a G5 library follow-up: the 'neuron'
+    bus of Frame.credit_delivery sits 8 pt above the highest TARGET junction
+    (unit y 2.32) while the terminals reach unit y 3.06, so at this card's
+    fitted scale (about 14.5 pt per unit) the rail can clear the excitatory
+    contact row only below 6.8 pt per unit -- unreachable in a 74 pt card
+    without editing the library.  Every drop disc instead gets a 0.55 pt
+    white keyline so the rule register separates from the anatomy contacts.
+    Private helpers under DECISIONS G5 (library
     follow-ups): f4_card, f4_operator_badges, f4_profile_bus, f4_badge,
     f4_title, f4_reference, f4_forest_tag, f4_row_counts.
     """
@@ -872,7 +941,12 @@ def figure4():
                fontsize=PT_BASE, color=COLORS['bp'])
     e = curve_axes['nested']
     f4_badge(e, .965, .965, 'control')
-    icon = e.inset_axes([.50, .255, .275, .400])
+    # QA 2026-09-09 (minor, recorded deviation): the plan's upper-left inset
+    # [0.03, 0.62, 0.20, 0.34] is occupied -- both broadcast means sit at
+    # NMSE ~ 1 across the whole top of E -- so the icon takes the free field
+    # right of the 1,024 rule (which falls at axes x = 0.491); the left edge
+    # moves 0.50 -> 0.555 so no branch touches that rule.
+    icon = e.inset_axes([.555, .255, .275, .400])
     fi = Frame(icon, labels=True)
     fi.text((.5, .02), 'depth 4', size=PT_BASE, color=COLORS['mute'],
             ha='center', va='bottom')
@@ -981,7 +1055,35 @@ def figure4():
                      'is three 4-module panels that share no axis; each is a '
                      'different estimand and the row is column-locked',
         'CF-5 legends': 'zero legend artists; B rule-key strip is a schematic '
-                        'footer, not an in-axes key',
+                        'footer, not an in-axes key; G carries a three-token '
+                        'direct-label block (word + series marker) whose '
+                        'markers are required because quartic and nested '
+                        'differ by at most 0.03 at every k -- ratification '
+                        'requested',
+        'CF-7 waiver': 'the five horizontal reference labels (noise 0.0225 in '
+                       'C and E, noise 0.045 in D, 0.95 in G, no deficit in F, '
+                       'no cost in H) are set at the free left end of their '
+                       'own rule, not right-aligned on it: the right-hand end '
+                       'of C-E and G is occupied by the 16,384 tick, the '
+                       'Exact path direct label and the task labels; the '
+                       'vertical 1,024 rule is unlabelled because the major x '
+                       'tick prints 1,024',
+        'G5 library follow-up (panel B)':
+            "Frame.credit_delivery mode='neuron' puts the bus 8 pt above the "
+            'highest TARGET junction (unit y 2.32) while terminals reach unit '
+            'y 3.06, so the rail crosses the excitatory contact row at any '
+            'card scale above 6.8 pt per unit; a bus_lift_pt keyword is '
+            'recommended upstream. Mitigated here with 0.55 pt white keylines '
+            'on the drop discs',
+        'panel E icon': 'the depth-4 morphology icon sits at inset '
+                        '[0.555, 0.255, 0.275, 0.400], not the plan\'s '
+                        'upper-left [0.03, 0.62, 0.20, 0.34]: both broadcast '
+                        'means occupy NMSE ~ 1 across the top of E; the left '
+                        'edge clears the 1,024 rule at axes x = 0.491',
+        'panel H fan': "drawn by the builder in COLORS['mute'] 0.22 rows below "
+                       'each row (not handed to forest(), which would draw it '
+                       'in the row hue), so the ORDINAL_RAMP mean marker and '
+                       'its LW_ERR interval are the only saturated marks',
         'CF-4 delta0 exemptions': ['panel E morphology icon in a data panel; '
                                    'credit delivery is drawn in panel B'],
         'G5 private helpers': ['f4_card', 'f4_operator_badges',
@@ -1053,14 +1155,26 @@ def f6_stage_card(f, cell, depth, stages, title, foot, tiers, hero):
                         width=core[2] * 0.62, rings=True)
     lowest = min(p[1] for stage in tree for p in stage)
     assert lowest > base[1], 'glyph rule (a): the soma is not the lowest node'
-    for px, py in tree[-1]:                       # class-bearing distal input
-        f.contact((px, py + f.fy(3.2)), kind='exc')
+    # QA 2026-09-10: eight class-bearing contacts on EVERY card.  One
+    # contact per last-stage compartment gave D1 eight and D3 four, which
+    # contradicts the card footer, the title and panel B's eight-slot rail;
+    # the eight inputs are now distributed over the distal compartments
+    # (two per leaf on D3) at the same 4.4 pt pitch the D1 row uses.
+    leaves = tree[-1]
+    per = max(1, 8 // max(len(leaves), 1))
+    for px, py in leaves:
+        offs = [0.0] if per == 1 else [(k - (per - 1) / 2.0) * 4.4
+                                       for k in range(per)]
+        for o in offs:
+            f.contact((px + f.fx(o), py + f.fy(3.2)), kind='exc')
     right = core[0] + core[2]
     if depth == 1:
         px, py = tree[0][1]
         f.contact((base[0] + (px - base[0]) * 0.5,
                    base[1] + (py - base[1]) * 0.5), kind='inh')
-        f.text((right, base[1] + f.fy(5.0)), 'all tiers', size=PT_BASE,
+        # QA 2026-09-10: +9.0 pt, not +5.0: at +5.0 the tag's box overlapped
+        # the output arrow's `y` label by 1.9 x 2.0 pt.
+        f.text((right, base[1] + f.fy(9.0)), 'all tiers', size=PT_BASE,
                color=COLORS['inh'], ha='right')
     else:
         for s, comps in enumerate(tree):
@@ -1168,16 +1282,20 @@ def f6_task_model(ax):
     f6_formula(f, (f.fx(1.0), y_eq),
                [('x', 0.0), ('E', -1.7), (' = (b', 0.0), ('E', -1.7),
                 (' + y Δ + ε', 0.0), ('E', -1.7), (')', 0.0)])
-    f6_formula(f, (f.fx(1.0), y_eq - f.fy(8.6)),
+    # QA 2026-09-10: the equation pitch opens from 8.6 to 10.4 pt and the
+    # squaring exponent drops from a 3.0 to a 2.2 pt raise, so the raised
+    # token clears the band of the line above by 1.4 pt and reads as an
+    # exponent of its own line rather than as a stray full-size factor.
+    f6_formula(f, (f.fx(1.0), y_eq - f.fy(10.4)),
                [('× exp(Σ σ', 0.0), ('ℓ', -1.7), (' z', 0.0), ('ℓ', -1.7),
-                (' − ½ Σ σ', 0.0), ('ℓ', -1.7), ('2', 3.0), ('),  Δ = 0.80,',
+                (' − ½ Σ σ', 0.0), ('ℓ', -1.7), ('2', 2.2), ('),  Δ = 0.80,',
                                                              0.0)])
-    f6_formula(f, (f.fx(1.0), y_eq - f.fy(17.2)),
+    f6_formula(f, (f.fx(1.0), y_eq - f.fy(20.8)),
                [('σ', 0.0), ('ℓ', -1.7), (' = 0.25', 0.0)])
     fam = (('nested', ORDINAL_RAMP[3], 'nested'),
            ('flat', ORDINAL_RAMP[2], 'flat'),
            ('local ratio', ORDINAL_RAMP[1], 'ratio'))
-    strip_top = y_eq - f.fy(23.0)
+    strip_top = y_eq - f.fy(26.6)
     row_pt = 10.4
     check_matrix_cells((rail_x1 - rail_x0) * f.w_pt, 3 * row_pt, 3, n,
                        where='fig 6B family strip')
@@ -1248,7 +1366,8 @@ def f6_note_data(ax, x, y, lines, *, color=None, ha='left', dy_pt=7.4,
             for i, line in enumerate(lines)]
 
 
-def f6_sign_legend(ax, top, bottom, *, top_color, bottom_color):
+def f6_sign_legend(ax, top, bottom, *, top_color, bottom_color, top_frac=1.0,
+                   top_x=1.0, top_ha='right'):
     """The paired panels' sign key, at the two ends of the y range.
 
     Plan §4 G: the sign of the difference is named on the panel, not by a
@@ -1258,8 +1377,8 @@ def f6_sign_legend(ax, top, bottom, *, top_color, bottom_color):
     the bottom of the panel's own right edge, outside every annotation block.
     """
     from journal_style import PT_BASE
-    ax.text(1.0, 1.0, top, transform=ax.transAxes, fontsize=PT_BASE,
-            color=top_color, ha='right', va='top', zorder=6, clip_on=False)
+    ax.text(top_x, top_frac, top, transform=ax.transAxes, fontsize=PT_BASE,
+            color=top_color, ha=top_ha, va='top', zorder=6, clip_on=False)
     ax.text(1.0, 0.0, bottom, transform=ax.transAxes, fontsize=PT_BASE,
             color=bottom_color, ha='right', va='bottom', zorder=6,
             clip_on=False)
@@ -1386,7 +1505,7 @@ def f6_family_dose(ax, effects, seeds, rows):
     return ax
 
 
-F6_ACC_YLIM = (22.0, 110.0)
+F6_ACC_YLIM = (18.0, 110.0)
 
 
 def f6_num(value, places=2, *, signed=False):
@@ -1489,9 +1608,14 @@ def f6_depth_ladder(ax, conf, remaining, ceiling, contrast, rows):
     rows.append(dict(panel='D', arm='point network ceiling', depth=0,
                      mean_test_accuracy_pp=100 * float(top.mean_test_accuracy),
                      ci95_low_pp=lo, ci95_high_pp=hi, n_seeds=10))
+    # QA 2026-09-10: the lower three seats are re-pitched to an even
+    # 7.2 accuracy points (9.2 pt on the page, one label band plus 2.2 pt)
+    # and `reversed` sits on its own series level (60.67 %) with `additive`
+    # 1.2 points above its own (51.90 %), clear of the 50 % chance rule; the
+    # old 3.0-point gap between the two overlapped by 3.2 pt on the page.
     for name, y in (('exact BP', 91.0), ('exact path', 85.6),
-                    ('shared soma', 77.8), ('grouped', 64.6),
-                    ('reversed', 57.6), ('additive', 54.6)):
+                    ('shared soma', 77.8), ('grouped', 67.6),
+                    ('reversed', 60.4), ('additive', 53.1)):
         value, colour = label_y[name]
         ax.text(3.16, y, name, fontsize=PT_BASE, color=colour, ha='left',
                 va='center', zorder=6, clip_on=False)
@@ -1504,7 +1628,7 @@ def f6_depth_ladder(ax, conf, remaining, ceiling, contrast, rows):
     # the panel cannot drift from paired_contrasts.csv (the previous build
     # hard-coded '[-1.74, -1.17]' against a file that gives -1.164998), and
     # the count carries its predicate (decision 0.11).
-    f6_note_data(ax, 0.85, 49.4,
+    f6_note_data(ax, 0.85, 47.2,
                  ('four-tier cohort:',
                   'D4 − D3 = %s pp' % f6_num(row.mean_pp),
                   '[%s, %s], negative in %d of %d seeds'
@@ -1534,7 +1658,8 @@ F6_ARMS = (
 )
 F6_DASH = {'solid': '-', 'dashed': (0, (4.2, 2.0)), 'dotted': (0, (1.2, 1.6))}
 F6_XLIM = (0.0, 1071.0)
-F6_XLAB = 622.0
+F6_XLAB = 712.0     # E's label column (QA 2026-09-10: room for the elbow)
+F6_XLAB_F = 655.0   # F's column: the right margin caps the run at 5.9 pt
 
 
 def f6_trajectories(ax, curves, metric, scale, panel, rows, *, split=None):
@@ -1577,16 +1702,35 @@ def f6_trajectories(ax, curves, metric, scale, panel, rows, *, split=None):
 
 
 def f6_direct_ends(ax, ends, places, x, *, lead_from=None):
-    """Direct labels in the panel's own right-hand label column, with leaders."""
-    from journal_style import PT_BASE, LW_HAIR
-    from credit_tree_schematics import mix
+    """Direct labels in the panel's own right-hand label column, with leaders.
+
+    QA 2026-09-10: the leaders used to start exactly on each curve's last
+    datum and were drawn in a tint of the series hue, so at print scale they
+    were continuous with the stroke and read as four trajectories plunging at
+    the last epoch.  A leader now (i) is mute, never a series hue, (ii) starts
+    a clear 2.2 pt to the right of the endpoint marker, and (iii) is an elbow
+    -- a short horizontal jog at the datum's own level before it turns toward
+    the label -- so it cannot be mistaken for data.  A seat within 1.2 pt of
+    its own endpoint gets no leader at all.
+    """
+    from journal_style import COLORS, PT_BASE, LW_HAIR
+    x0, x1 = ax.get_xlim()
+    w_pt = ax.get_window_extent().width * 72.0 / ax.figure.dpi
+    per_pt = (x1 - x0) / w_pt                      # data units per point
+    lo, hi = ax.get_ylim()
+    h_pt = ax.get_window_extent().height * 72.0 / ax.figure.dpi
+    y_per_pt = (hi - lo) / h_pt
     for label, y in places.items():
         value, colour = ends[label]
         ax.text(x, y, label, fontsize=PT_BASE, color=colour, ha='left',
                 va='center', zorder=6, clip_on=False)
-        if lead_from is not None and abs(y - value) > 1e-9:
-            ax.plot([lead_from, x - (x - lead_from) * 0.30], [value, y],
-                    color=mix(colour, 55), lw=LW_HAIR, zorder=1.8)
+        if lead_from is None or abs(y - value) <= 1.2 * y_per_pt:
+            continue
+        start = lead_from + 2.2 * per_pt
+        jog = lead_from + 3.6 * per_pt
+        end = x - 1.8 * per_pt
+        ax.plot([start, jog, end], [value, value, y], color=COLORS['mute'],
+                lw=LW_HAIR, zorder=1.6, solid_capstyle='round')
 
 
 def f6_accuracy_budget(ax, curves, stopping, budget, rows):
@@ -1607,9 +1751,9 @@ def f6_accuracy_budget(ax, curves, stopping, budget, rows):
     # '[0.40, 0.55], 10 of 10 seeds  chance').
     f6_ref(ax, 50.0, 'chance', at=1065.0, dy=0.7, va='bottom', span=F6_XLIM)
     f6_budget_rule(ax, (50.0, 100.0))
-    f6_direct_ends(ax, ends, {'exact BP (D3)': 99.4, 'broadcast (BP)': 93.8,
-                              'shared soma': 88.2, 'broadcast (local)': 82.6,
-                              'exact path': 77.0, 'exact BP (D1)': 61.2},
+    f6_direct_ends(ax, ends, {'exact BP (D3)': 99.4, 'broadcast (BP)': 92.9,
+                              'shared soma': 86.4, 'broadcast (local)': 79.9,
+                              'exact path': 73.4, 'exact BP (D1)': 61.2},
                    F6_XLAB, lead_from=600.0)
     gain180 = budget[budget.budget.eq(180)
                      & budget.contrast.eq('depth_gain_exact_bp')].iloc[0]
@@ -1623,9 +1767,13 @@ def f6_accuracy_budget(ax, curves, stopping, budget, rows):
     # gutter below the 50 % floor, where no rule, curve, direct label or
     # reference label crosses it.  The condition sub-title takes the empty
     # band above the data instead.
+    # QA 2026-09-10: shortened from `600-epoch restarts of the same seeds`.
+    # At 141 pt the sub-title pushed panel E's tight bounding box under
+    # panel F's letter (the canvas letter check flagged it); the caption
+    # carries the full sentence.
     f6_note_data(ax, 8.0, 109.0,
-                 ('600-epoch restarts of the same seeds; n = 10',))
-    f6_note_data(ax, 8.0, 49.4,
+                 ('600-epoch restarts, same seeds; n = 10',))
+    f6_note_data(ax, 8.0, 47.2,
                  ('D3 − D1: %s pp at 180, %s at 600'
                   % (f6_num(gain180['mean'], signed=True),
                      f6_num(gain600['mean'], signed=True)),
@@ -1672,8 +1820,8 @@ def f6_validation_loss(ax, curves, stopping, rows):
     rows.extend(dict(panel='F', arm='exact_autograd_bp_recipe', depth=1,
                      metric='stopping_epoch', epoch=int(e),
                      mean=float(track.loc[e]), n_seeds=10) for e in stops)
-    f6_direct_ends(ax, ends, {'exact BP (D3)': 0.108, 'exact path': 0.214,
-                              'shared soma': 0.320}, F6_XLAB, lead_from=600.0)
+    f6_direct_ends(ax, ends, {'exact BP (D3)': 0.120, 'exact path': 0.214,
+                              'shared soma': 0.320}, F6_XLAB_F, lead_from=600.0)
     f6_note_data(ax, 40.0, 0.856,
                  ('open circles: the eight D1 stopping',
                   'epochs, %d–%d; all 50 D3 fits reach' % (stops[0],
@@ -1681,14 +1829,17 @@ def f6_validation_loss(ax, curves, stopping, rows):
                   'the cap, loss still falling; n = 10'))
     # The y range gains 0.035 of headroom at the foot so this tag clears the
     # bottom spine by 2.8 pt; the previous build printed it across the spine.
-    f6_note_data(ax, 1065.0, 0.088, ('convergence not established',),
-                 ha='right')
+    # QA 2026-09-10: the caveat applies to all six arms, so it moves out of
+    # the right-hand label column (where it shared a baseline band with
+    # `exact BP (D3)` and read as that curve's second line) into the empty
+    # lower-left gutter under the 0.1 spine bound.
+    f6_note_data(ax, 12.0, 0.062, ('convergence not established',))
     return ax
 
 
 def f6_paired(ax, paired, metric, rows, *, ylim, yticks, ylabel, marks,
               notes, sign, rule_span, band=None, zero_dy=0.0, zero_at=612.0,
-              zero_va='bottom', zero_ha='right'):
+              zero_va='bottom', zero_ha='right', sign_top=(1.0, 1.0, 'right')):
     """Fig 6G,H: one paired exact-path-minus-shared-soma difference curve."""
     from journal_style import (COLORS, LW_DATA, LW_HAIR, MARKER_MS, LW_EDGE,
                                tint_patch)
@@ -1709,15 +1860,19 @@ def f6_paired(ax, paired, metric, rows, *, ylim, yticks, ylabel, marks,
            va=zero_va, ha=zero_ha)
     f6_budget_rule(ax, rule_span)
     f6_sign_legend(ax, sign[0], sign[1], top_color=COLORS['bp'],
-                   bottom_color=AMBER_TEXT)
+                   bottom_color=AMBER_TEXT, top_x=sign_top[0],
+                   top_frac=sign_top[1], top_ha=sign_top[2])
     at = p.set_index('epoch')
     for epoch, tx, ty, ha, lines, leader in marks:
         value = float(at.loc[epoch, 'mean'])
         ax.plot([epoch], [value], marker='o', ms=MARKER_MS, mfc=COLORS['bp'],
                 mec='white', mew=LW_EDGE, ls='none', zorder=3.4)
         if leader is not None:
+            # QA 2026-09-10: mute, not the series hue -- a full-saturation
+            # vertical carmine hairline at epoch 600 crossing the zero rule
+            # read as an error bar or a spike in the difference curve.
             (lx0, ly0), (lx1, ly1) = leader
-            ax.plot([lx0, lx1], [ly0, ly1], color=COLORS['bp'], lw=LW_HAIR,
+            ax.plot([lx0, lx1], [ly0, ly1], color=COLORS['mute'], lw=LW_HAIR,
                     zorder=1.8)
         f6_note_data(ax, tx, ty, lines, color=COLORS['ink'], ha=ha)
     for x, y, ha, lines in notes:
@@ -1735,11 +1890,11 @@ def f6_paired(ax, paired, metric, rows, *, ylim, yticks, ylabel, marks,
 
 
 F6_CAPTION = r'''\caption{\textbf{Task organization sets the forward benefit of serial dendrites, and the training budget sets the credit-rule ranking.}
-\textbf{A}, The same eight nonsomatic compartments per soma in one stage (D1 $[8]$) or three (D3 $[2,1,2]$): blue, excitatory class-bearing contacts; carmine, inhibitory sensors, all tiers in D1, one tier per stage in D3; somatic error $\delta_0$; footer, the resource-identical grouped-point control. D2 $[2,3]$ and D4 $[1,1,2,2]$ keep that inventory: 66,178 parameters, 14,336 active synapses. Schematic, no data.
-\textbf{B}, Generative model: nested gains act on 4, 2 and 1 blocks of the input stream, flat gains on eight blocks each, and local-ratio inputs carry the ratio inside every module (frozen task configuration, Methods); sensors report tier $\ell$ with fidelity $\alpha$. Schematic, no data.
+\textbf{A}, The same eight nonsomatic compartments per soma in one stage (D1 $[8]$) or three (D3 $[2,1,2]$): blue, eight excitatory class-bearing contacts; carmine, inhibitory sensors, all tiers in D1, one tier per stage in D3; somatic error $\delta_0$; footer, the resource-identical grouped-point control. D2 $[2,3]$ and D4 $[1,1,2,2]$ keep that inventory: 66,178 parameters, 14,336 active synapses. Schematic, no data.
+\textbf{B}, Generative model: nested gains act on 4, 2 and 1 blocks of the input stream, flat gains on eight blocks each, and local-ratio inputs carry it inside every module (frozen task configuration, Methods); sensors report tier $\ell$ with fidelity $\alpha$. Schematic, no data.
 \textbf{C}, Serial-minus-grouped-point test accuracy at fixed D3 under exact BP, by task family and fidelity (family colours are ordinal within this panel only); the local-ratio value at $\alpha=1$ is an exact tie in all ten pairs, not a sampled null (exact-path LocalCA counterpart, Supplementary Fig.~S22D).
-\textbf{D}, Three-tier task: accuracy against serial depth for four credit arms, two resource-matched controls and the point-network ceiling, with the four-tier D4-minus-D3 contrast annotated; raw-additive means vary by up to 1.6 points across re-runs.
-\textbf{E}, Validation-selected accuracy for six 600-epoch restarts of the same seeds, dotted for the autograd-broadcast variant of each rule; these are restarts, not checkpoint continuations, so the 180-epoch D3-minus-D1 gain reads 30.82 points here and 30.86 in the original budget. Counts of fits still training use $\text{epochs\_run}\ge$ epoch.
+\textbf{D}, Three-tier task: accuracy against serial depth for four credit arms, two resource-matched controls and the point-network ceiling, with the four-tier D4-minus-D3 contrast; raw-additive means vary by up to 1.6 points across re-runs.
+\textbf{E}, Validation-selected accuracy for six 600-epoch restarts of the same seeds, dotted for the autograd-broadcast variant of each rule; these are restarts, not continuations, so the 180-epoch D3-minus-D1 gain reads 30.82 points here and 30.86 in the original budget. Counts of fits still training use $\text{epochs\_run}\ge$ epoch.
 \textbf{F}, Best validation loss for the same six arms; open markers, the eight D1 stopping epochs.
 \textbf{G,H}, Paired exact-path-minus-shared-soma differences in accuracy and cross-entropy; the band in \textbf{G} is where the pointwise interval straddles zero; the dotted rule in \textbf{E}--\textbf{H} marks the 180-epoch budget.
 Points are means over ten paired training seeds; bars and shading are descriptive 95\% paired-seed bootstrap intervals, pointwise in \textbf{E}--\textbf{H}; accuracy endpoints are validation-selected states. Source Data: \texttt{source\_data/curated\_publication/figure\_06\_plotted.csv}.}'''
@@ -1785,6 +1940,69 @@ def figure6():
 
     Gamma (B10): Fig 6 is not one of the four Gamma-thread figures (1, 2, 5,
     8); no Gamma token appears in the artwork or the caption.
+
+    Deviations from the plan, recorded (fix round 2026-09-09):
+
+    1. Panel C's `no advantage` label stays at the LEFT end of the zero rule
+       instead of the CF-7 right end.  Measured: the alpha = 1 end of that
+       rule carries the open exact-tie marker at exactly 0.00, its hairline
+       leader at x 2.05-2.11, the ten-seed fan at x 1.90-2.10 and the two-line
+       tie note below; the nested and flat connectors cross y 2.8-5.5 at
+       x 1.07-1.21, so no 42 pt label fits above or below the rule right of
+       x = 1 without striking one of them.  Every other reference label in the
+       figure is right-aligned on its rule.
+    2. Panels D and E share y = (18, 110) rather than the plan's (48, 101).
+       The spine is still bounded to 50-100 (`f6_trim`), so the drawn axis is
+       the plan's; the extra range is the detached annotation gutter that
+       seats E's five mandated on-panel facts (sub-title, D3-D1 contrast,
+       exact-minus-broadcast contrast with its interval and sign count, and
+       the D1 still-training counts) and D's five, none of which may cross the
+       180-epoch rule, the curves or a reference label.
+    3. Panel D's four-tier contrast is printed in that gutter under the axis
+       instead of on a leader into the whitespace under the ceiling: at the
+       shared y scale the four-line block reaches the exact-BP and exact-path
+       curves between D2 and D3.  D's cohort footer merges into the same block.
+    4. The `180-epoch budget` label asked for on E's dotted rule is OMITTED.
+       Seats tried and rejected by measurement: E's top band is taken by the
+       sub-title and the label cannot be right-aligned on a rule 19 pt from
+       the axis origin; G's top band is crossed by the paired curve's 13.15 pp
+       maximum at epoch 147; F's top band carries the stopping-epoch note; H's
+       upper band is fully dealt to four one-per-baseline items.  The rule is
+       named by the major x tick at 180 that sits under it in all four panels
+       and by the caption's closing clause.
+    5. Panel H prints the endpoint tag on one line
+       (`... 9 of 10; decays 3.4x`); the plan's second line
+       `ordering does not reverse` is dropped because it restates the panel
+       title verbatim, and the band above the curve holds one line only (the
+       curve rises to -0.0157 at epoch ~510).
+    6. Panel D palette: see `f6_depth_ladder` -- `highlight` for reversed
+       placement and a second `point_mlp` mark for the point-network ceiling
+       are outside the AMENDMENTS section 5 role table's listed figures; the
+       hues are kept and the table rows need Fig 6 added (integrator).
+    7. Panel B's squaring exponent is set through the same baseline-shifted
+       token path as the subscripts, at the one permitted size, raised 2.2 pt
+       over a 10.4 pt equation pitch (`f6_formula`); no mathtext, no fourth
+       type size.  The 7.0 pt text floor forbids a smaller glyph, so the
+       clearance is bought with pitch, not with type size.
+    8. Panels E and F seat their direct labels in a right-hand label column
+       and connect each seat to its endpoint with a MUTE LW_HAIR elbow that
+       starts 2.2 pt clear of the endpoint marker (`f6_direct_ends`); the
+       plan's plain leader from the datum in a tint of the series hue read as
+       the curve itself plunging at the last epoch.  E's column moves from
+       2.4 to 10.6 pt right of epoch 600 so the elbow has a horizontal run;
+       F's column stays at 5.9 pt because the right margin caps it there.
+    9. The 600-epoch marks in G and H carry NO leader: any hairline from the
+       note down to the endpoint marker is a 28 pt near-vertical at x = 600
+       that crosses the zero rule and reads as an error bar.  Both notes name
+       their own epoch (`at 600: ...`) and 600 carries the panel's only mark
+       there, so the leader is redundant.
+   10. Panel F's `convergence not established` caveat sits in the lower-left
+       gutter under the 0.1 spine bound, not in the right-hand label column:
+       it applies to all six arms, and on the column's baseline band it read
+       as a second line of the `exact BP (D3)` label.
+   11. Panel E's sub-title reads `600-epoch restarts, same seeds; n = 10`:
+       the longer wording pushed E's tight bounding box under panel F's
+       letter (canvas letter check).  The caption keeps the full sentence.
     """
     import build_main_figure_06 as depth
     from figure_canvas import enforce_tokens
@@ -1833,18 +2051,25 @@ def figure6():
               yticks=[-5, 0, 5, 10],
               ylabel='Exact path − shared soma (pp)', band=(300, 330),
               sign=('exact path ahead', 'shared soma ahead'),
+              # QA 2026-09-10: 0.982, not the default 1.0 -- at the axes top
+              # the key's box grazed the panel title by 0.4 pt.
+              sign_top=(1.0, 0.982, 'right'),
               rule_span=(-1.2, 13.5), zero_dy=0.45, zero_at=612.0,
               marks=((180, 205.0, 13.3, 'left',
                       ('at 180: +10.86 pp', '10 of 10 seeds positive'),
                       ((186.0, 11.5), (203.0, 12.6))),
                      (486, 300.0, -3.0, 'left', ('at 486: −2.94 pp',),
                       ((464.0, -3.6), (483.0, -3.05))),
+                     # QA 2026-09-10: no leader on the 600-epoch mark.  A
+                     # 28 pt hairline at exactly x = 600 crossing the zero
+                     # rule read as an error bar on the endpoint whatever its
+                     # hue; the note names its own epoch and 600 carries the
+                     # panel's only marker there.
                      (600, 612.0, 6.5, 'right',
                       ('at 600: −1.52 pp', '[−1.83, −1.23], 10 of 10'),
-                      ((600.0, 3.8), (600.0, -1.1)))),
+                      None)),
               notes=((250.0, 9.5, 'left',
                       ('crossing not resolved (300–330)',)),
-                     (178.0, 13.4, 'right', ('180-epoch budget',)),
                      (8.0, -1.6, 'left', ('n = 10 paired seeds;',
                                           'pointwise 95 % bootstrap;',
                                           'validation-selected states'))))
@@ -1856,19 +2081,22 @@ def figure6():
               ylabel='Exact path − shared soma (nats)',
               sign=('exact path ahead', 'shared soma ahead'),
               rule_span=(-0.0775, 0.0010),
-              zero_dy=-0.0020, zero_at=612.0, zero_va='top',
+              # The four items above the zero rule are dealt one per baseline:
+              # the sign note keeps the top line, the endpoint tag folds to a
+              # single line on the second, and the positive-sign key takes the
+              # third, immediately above the rule it refers to.  The previous
+              # build put the note and the key 5 pt apart on one baseline, so
+              # they read as a run-on string.
+              sign_top=(0.21, 0.8684, 'left'),
+              zero_dy=-0.0035, zero_at=380.0, zero_va='top',
               marks=((180, 15.0, -0.0785, 'left',
                       ('−0.073 nats at 180, 10 of 10 seeds',),
                       ((180.0, -0.0757), (180.0, -0.0782))),
-                     (600, 612.0, 0.0170, 'right',
-                      ('−0.021 nats at 600 (0.254 vs 0.276), 9 of 10',
-                       'advantage decays 3.4×; ordering does not reverse'),
-                      ((600.0, 0.0010), (600.0, -0.0196)))),
-              # The sign note drops off the sign legend's baseline and sits
-              # under the zero rule, in the clear band above the curve; the
-              # zero label moves to the true right end of its rule so the two
-              # do not meet.
-              notes=((15.0, -0.0070, 'left',
+                     (600, 612.0, 0.01759, 'right',
+                      ('−0.021 nats at 600 (0.254 vs 0.276), 9 of 10; '
+                       'decays 3.4×',),
+                      None)),
+              notes=((15.0, 0.0255, 'left',
                       ('below zero: lower loss with exact-path credit',)),
                      (15.0, -0.0862, 'left',
                       ('n = 10 paired seeds; 95 % bootstrap',))))

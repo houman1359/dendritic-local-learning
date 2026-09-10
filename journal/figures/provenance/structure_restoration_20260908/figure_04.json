@@ -1,7 +1,7 @@
 {
   "figure": "Figure 4",
   "output": "figures/components/restored_main_04.pdf",
-  "output_sha256": "55c14905cd811d2451060ef58fe0719a07f666020a684385de4fae125be63a26",
+  "output_sha256": "050b5df7b7503eb323c1b1963439f15bdda668eef030d9a895539ee0ae305ccf",
   "panel_sources": {
     "A": "Schematic. credit_rule_bridge/protocol_freeze.json (protocol.algebraic, protocol.fresh_seeds): the two targets, the shared balanced tree and the twenty fresh paired seeds. No measured series.",
     "B": "Schematic. credit_rule_bridge/figures/initial_profile_source.csv (site, junction, mean_profile, mean_abs_profile, n_seeds) sets the six drop-dot radii; figures/figure_provenance.json and protocol_freeze.json fix the calibration protocol (256 unlabeled examples at step 0).",
@@ -31,7 +31,7 @@
     "source_data/credit_rule_bridge/summaries/all_diagnostics.csv": "a11538ed5d5e95c11863bdd0b8b1b89dbc4ed5819d307f17d8e39e2a766af562"
   },
   "builder_sha256": {
-    "scripts/credit_first_figures/build_restored_main.py": "46e49b230bdfd600e2674b798373b380337992b8209b6c8119a94f918c086536",
+    "scripts/credit_first_figures/build_restored_main.py": "ff961999682c8d7eee9772e5a7927e48e0f12b4044ddcc5d1e7932e169e34c82",
     "scripts/credit_first_figures/focused_main_evidence.py": "e045f0fc26ce8554af19f7d2b1ee9683ec852899f19e02e76e78163b0d74e773",
     "scripts/figure_canvas.py": "de3f566dd08270535deab95eb798b49cc17ccf4dfbb88e7ebdb50860903a6ad1",
     "scripts/journal_style.py": "be8a138f9d9c081237edc616ba52b6769f957d8b8b49e705a92adcb18f475f3c"
@@ -44,7 +44,6 @@
     "TEXT-ON-DATA 'n = 20'",
     "TEXT-ON-DATA 'n = 20'",
     "TEXT-ON-DATA 'n = 20'",
-    "TEXT-ON-DATA 'Pairwise'",
     "TEXT-ON-DATA 'Quartic'",
     "TEXT-ON-DATA 'Nested'",
     "TEXT-ON-DATA 'n = 20'",
@@ -61,7 +60,11 @@
     "CF-10 schematic_fraction": "25.3 % on the AMENDMENTS B12 formula (A 171.5 + B 254.9 pt over 118 pt, live area 463.4 x 430 pt); waiver: none",
     "margin deviation": "left margin 40 pt, not the plan's 58 pt: at 58 pt the strict audit fails fill-width (90.7 % of the canvas width, gate 92 %)",
     "waiver D3": "row 2 (F seed strip / G energy curve / H shuffle forest) is three 4-module panels that share no axis; each is a different estimand and the row is column-locked",
-    "CF-5 legends": "zero legend artists; B rule-key strip is a schematic footer, not an in-axes key",
+    "CF-5 legends": "zero legend artists; B rule-key strip is a schematic footer, not an in-axes key; G carries a three-token direct-label block (word + series marker) whose markers are required because quartic and nested differ by at most 0.03 at every k -- ratification requested",
+    "CF-7 waiver": "the five horizontal reference labels (noise 0.0225 in C and E, noise 0.045 in D, 0.95 in G, no deficit in F, no cost in H) are set at the free left end of their own rule, not right-aligned on it: the right-hand end of C-E and G is occupied by the 16,384 tick, the Exact path direct label and the task labels; the vertical 1,024 rule is unlabelled because the major x tick prints 1,024",
+    "G5 library follow-up (panel B)": "Frame.credit_delivery mode='neuron' puts the bus 8 pt above the highest TARGET junction (unit y 2.32) while terminals reach unit y 3.06, so the rail crosses the excitatory contact row at any card scale above 6.8 pt per unit; a bus_lift_pt keyword is recommended upstream. Mitigated here with 0.55 pt white keylines on the drop discs",
+    "panel E icon": "the depth-4 morphology icon sits at inset [0.555, 0.255, 0.275, 0.400], not the plan's upper-left [0.03, 0.62, 0.20, 0.34]: both broadcast means occupy NMSE ~ 1 across the top of E; the left edge clears the 1,024 rule at axes x = 0.491",
+    "panel H fan": "drawn by the builder in COLORS['mute'] 0.22 rows below each row (not handed to forest(), which would draw it in the row hue), so the ORDINAL_RAMP mean marker and its LW_ERR interval are the only saturated marks",
     "CF-4 delta0 exemptions": [
       "panel E morphology icon in a data panel; credit delivery is drawn in panel B"
     ],

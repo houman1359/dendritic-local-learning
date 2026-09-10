@@ -632,19 +632,28 @@ def panel_task(ax, tuning):
     # label cannot be set between the curves; it is set in the free band under
     # the inset, on its curve's own side, and tied to the curve it names by a
     # hairline leader that ends 1.6 pt short of the trace.
-    ix, iy, iw, ih = rect
-    for dashed, lines, z_at, ha, y_top in (
-            (False, ('aligned:', 'both subtrees'), -1.64, 'left', 38.0),
-            (True, ('opposed:', 'subtree 2'), 1.64, 'right', 19.0)):
+    for dashed, lines, ha in (
+            (False, ('aligned:', 'both', 'subtrees'), 'left'),
+            (True, ('opposed:', 'subtree 2'), 'right')):
         series = tuning.v_decreasing if dashed else tuning.v_increasing
-        v_at = float(np.interp(z_at, tuning.z, series))
-        lx = ix + iw * (z_at + 2.0) / 4.0
-        ly = iy + ih * v_at
-        anchor = col_x if ha == 'left' else col_x + iw
-        y = y0 + f.fy(y_top)
-        f.text((anchor, y), lines[0], size=PT_BASE, ha=ha)
-        f.text((anchor, y - f.fy(8.5)), lines[1], size=PT_BASE, ha=ha)
-        ax.plot([lx, lx], [y0 + f.fy(y_top + 3.6), ly - f.fy(1.6)],
+        # the leader touches its own curve at V = 0.28: the two contact points
+        # are then 16 pt apart, 6 pt of each leader falls inside the inset,
+        # and nothing lies between a label and the trace it names
+        v_at = 0.28
+        z_at = float(np.interp(v_at, series[::-1] if dashed else series,
+                               tuning.z[::-1] if dashed else tuning.z))
+        # through the inset's OWN transform: axes_inset reserves its tick
+        # band inside ``rect``, so the rect corners are not the data corners
+        lx, ly = ax.transData.inverted().transform(
+            inner.transData.transform((z_at, v_at)))
+        anchor = col_x if ha == 'left' else col_x + rect[2]
+        y = y0 + f.fy(30.0)
+        for line in lines:
+            f.text((anchor, y), line, size=PT_BASE, ha=ha)
+            y -= f.fy(8.5)
+        # the leader is set one third in from the inset's own spine, so it
+        # reads as a leader to its curve and not as a second axis rule
+        ax.plot([lx, lx], [y0 + f.fy(33.6), ly - f.fy(1.8)],
                 color=MUTE, lw=LW_HAIR, zorder=2, solid_capstyle='butt')
     perturbation = f.room(core, 30.0) and (
         _text_w_pt(ax, PERTURB_A, PT_BASE) <= w_pt - 6.0)
@@ -743,12 +752,21 @@ def panel_deliveries(ax):
     # well: credit_delivery drops its own
     # alpha tags below ALPHA_TAG_MIN_PITCH_PT, and this card's terminal pitch
     # is 6.8 pt, so without this the key line 'proximal x a1' has no referent
-    f.subscript(f._off(nodes['JL'], -3.6, -0.6), 'α', '1', size=PT_BASE,
+    # QA 2026-09-09 (2): the junction factor is set beside the PROXIMAL
+    # segment it multiplies (mid soma->JL) rather than at JL itself: the
+    # JL->T2 route is only 7.6 pt long, so two tags anchored at its two ends
+    # share a line, and the proximal midpoint drops this one 7.2 pt clear.
+    _p1 = _lerp(nodes.soma, nodes['JL'], 0.5)
+    f.subscript((_p1[0] - f.fx(2.6), _p1[1]), 'α', '1', size=PT_BASE,
                 color=COLORS['bp'], ha='right', va='center')
-    _t2 = 'T2'
-    _mid = _lerp(nodes[nodes.parent[_t2]], nodes[_t2], 0.55)
-    f.subscript((_mid[0] + f.fx(1.6), _mid[1]), 'α', '2', size=PT_BASE,
-                color=COLORS['bp'], ha='left', va='center')
+    # the distal factor, set by hand: the library tags only the junction
+    # factor on a depth-2 route.  This card's whole tree is 23.2 x 12.5 pt and
+    # the JL->T2 route is 4.3 pt long, so the two 8.3 x 10.1 pt tags cannot
+    # both sit beside it: alpha_1 takes the proximal segment (above) and
+    # alpha_2 is set over its own terminal, 3.7 pt above T2 -- 2.4 pt under
+    # the card title and 2.1 pt over alpha_1's box.
+    f.subscript((nodes['T2'][0], nodes['T2'][1] + f.fy(3.7)), 'α', '2',
+                size=PT_BASE, color=COLORS['bp'], ha='center', va='center')
     key_lines(f, core, key_x, [
         (['distal × ', 'α', ('sub', '1'), 'α', ('sub', '2')], INK),
         (['proximal × ', 'α', ('sub', '1')], INK),

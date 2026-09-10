@@ -860,7 +860,7 @@ def forgetting_forest(canvas: NativeCanvas, ax, summary: pd.DataFrame,
                     xytext=(7.0, 0.0), textcoords="offset points",
                     ha="right", va="center", fontsize=PT_BASE, color=MUTE,
                     zorder=6, annotation_clip=False)
-    ax.annotate("[" + head[1], xy=(1.0, out["ypos"][0] + 0.52),
+    ax.annotate("[" + head[1], xy=(1.0, out["ypos"][0] + 0.42),
                 xycoords=("axes fraction", "data"), xytext=(7.0, 0.0),
                 textcoords="offset points", ha="right", va="center",
                 fontsize=PT_BASE, color=MUTE, zorder=6, annotation_clip=False)
@@ -983,7 +983,7 @@ def accuracy_facet(ax, summary: pd.DataFrame, seeds: pd.DataFrame,
         # CF-7: right-aligned at the right end of the rule, just left of the
         # chi = 1 swarm; below the rule, because the amber curve's steep
         # segment occupies the band immediately above it from chi = 0.91.
-        ax.annotate("chance", xy=(0.955, 50.0), xytext=(0.0, -1.8),
+        ax.annotate("chance", xy=(0.930, 50.0), xytext=(0.0, -1.8),
                     textcoords="offset points", fontsize=PT_BASE, color=MUTE,
                     ha="right", va="top", zorder=6)
         ax.set_ylabel("held-out accuracy (%)")

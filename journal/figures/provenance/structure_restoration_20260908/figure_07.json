@@ -2,7 +2,7 @@
   "figure": "Figure 7",
   "label": "fig:topology",
   "output": "figures/components/credit_first_figure_07.pdf",
-  "output_sha256": "9d17ba402c5d21b6ac00bb20deefd45793293e4f71f86096ab00a15d4ae63163",
+  "output_sha256": "054b8881dba0d15cd53124b324d34361f8e22c03b5dd5a58452d5d69d63abc6a",
   "main_copy": "figures/main/figure_07.pdf",
   "panel_letters": "abcdefgh",
   "replication_unit": "reconstructed cell; initial eight-cell, disjoint 47-cell and Pinky second-mouse cohorts kept separate",
@@ -17,7 +17,7 @@
     "h": "residual_capture at K = 8 per cohort from each cohort's cell_method_summary.csv (initial 8, disjoint 47, Pinky 8) for ancestry, surrogate tree, depth bins and the common-constrained SVD; 20,000-draw cell bootstrap, seed 202609061 + 100 g + i; Pinky site counts and eligibility from pinky/cohort_inclusion.csv"
   },
   "source_sha256": {
-    "scripts/credit_first_figures/build_anatomy.py": "aecf199c39e48e3c1974dca3f67953cf73d6f48aabd1848b68817a8d79a2232a",
+    "scripts/credit_first_figures/build_anatomy.py": "af05433bc352d890e5e661e4296905c127e7425e642c54aecd4f7d923b04fb1f",
     "scripts/build_main_figure_07.py": "8dd526d60d35b572a17a68c77c1813279756251052d4921471d77c3fb16b885e",
     "scripts/figure_canvas.py": "de3f566dd08270535deab95eb798b49cc17ccf4dfbb88e7ebdb50860903a6ad1",
     "scripts/journal_style.py": "be8a138f9d9c081237edc616ba52b6769f957d8b8b49e705a92adcb18f475f3c",
@@ -77,6 +77,10 @@
     "soma-lowest: declared, not asserted, for the measured arbor of A/B/C (36 of 78 segments sit below the soma in any projection of this reconstruction)",
     "G band: forest()'s 6 % row band is trimmed to the fan window so the printed wiring / rank columns sit on paper, not on an area mark (eight TEXT-ON-DATA findings otherwise)",
     "E badge: no `oracle` badge; the strip above E's bars carries the initial-cohort annotation and the panel's n and endpoint, and H carries the badge",
+    "E y label on the right: the 37 pt gutter is spent by the three share names (`unexplained 0.381` alone is 40 pt) and D's end labels close the panel gap at 9.7 pt, so `Share of field energy` is set rotated 5.5 pt outside E's RIGHT spine, 40 pt clear of panel F",
+    "E x names: `Surrogate` is set `Surr.` on the staggered lower level; at 7 pt the 29.5 pt pitch leaves it 1.2 pt of air beside `Shuffled`, and the plan's two-line stacks fix nothing (the crowding is horizontal) while costing 8.2 pt of depth, which breaks the 8.5 pt row-separation floor",
+    "G spine: the drawn bottom spine is bounded at the column rule (+56.5 pp) although the data range runs to +88, so the reserved column band is not read as plotted space",
+    "A junction rings: drawn through `Frame.junction` but covered by the `inh` contacts of 76 of the cell's 78 segments; the CF-4 rings read in B and C, where the tree is a ghost",
     "right overhang: H's four family names are set 10 pt beyond their spine because a 452.4 pt live area cannot meet FILL_W_MIN 92 % of 518.4 pt on its own"
   ],
   "layout_findings": [],
