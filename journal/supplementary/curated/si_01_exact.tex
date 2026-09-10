@@ -1344,7 +1344,7 @@ to a shunt using the branch's current mean total conductance.
 
 The task and state clamp are unchanged. At heterogeneity 0/1/2, seven rules compare clean BP, noisy no-shunt, fixed initial oracle, adaptive local/global/permuted shunts and the independently computed adaptive point gain. Update and probe noise are paired. Two implementation-check seeds are excluded; fifty paired seeds 8200--8249 supply 1,050 outcomes. State, finite-difference and point-gain checks pass at the stated tolerances.
 
-At heterogeneity two, adaptive local attenuation lowers final loss relative to global and shuffled estimates, yet exceeds no-shunt loss by 0.004250 (95\% interval, 0.002499--0.005975) and fixed-oracle loss by 0.003449 (0.002577--0.004305). Only 26/50 immediate local-versus-shuffled differences favored local, failing the predefined direction criterion. Final gain ordering correlates with the initial oracle at 0.756, with mean absolute error 0.205. The supplied paired probes, optimizer step fraction and exact state clamp remain necessary assumptions; this is not a fully autonomous inhibitory-plasticity mechanism.
+At heterogeneity two, adaptive local attenuation lowers final loss relative to global and shuffled estimates, yet exceeds no-shunt loss by 0.004250 (95\% interval, 0.002499--0.005975) and fixed-oracle loss by 0.003449 (0.002577--0.004305). Only 26/50 immediate local-versus-shuffled differences favored local, failing the predefined direction criterion. Final gain ordering correlates with the initial oracle at 0.756, with mean absolute error 0.205. The supplied paired probes, optimizer step fraction and exact state clamp remain necessary assumptions; this is not a fully autonomous inhibitory-plasticity mechanism (Supplementary Fig.~\ref{fig:si_reliability_gain}).
 
 \subsection{Same-span noisy coefficient-learning experiment}
 
@@ -1356,7 +1356,7 @@ orthonormal Haar modes, all 15 nested indicators through depth three, and the
 same nested indicators scaled by positive gains evenly spaced on the log scale
 from $\exp(-3)$ to $\exp(3)$. The dictionaries' projectors agreed to
 $9.44\times10^{-16}$ and their positive-spectrum Gram condition numbers were
-1, 15 and 388.52.
+1, 15 and 388.52 (Supplementary Fig.~\ref{fig:si_same_span_conditioning}).
 
 Each independent seed drew a unit-norm target in the common span. At every
 update the estimator observed the target plus isotropic Gaussian noise with

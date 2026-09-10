@@ -9,16 +9,14 @@ MAIN = JOURNAL / "main.tex"
 
 MAIN_PANEL_INVENTORY = {
     "fig:framework": "abcdefg",
-    "fig:branchconflict": "abcdef",
-    # Explain the matched-bandwidth effects together, then the separate
-    # coefficient-learning cohort shown in panel D.
-    "fig:subtreefactorial": "abcefd",
-    "fig:prospective": "abcdef",
-    "fig:conductancecredit": "abcdef",
-    "fig:physicaldepth": "abcdef",
-    "fig:topology": "abcdef",
-    "fig:focal": "abcde",
-    "fig:boundary": "abc",
+    "fig:branchconflict": "abcdefgh",
+    "fig:subtreefactorial": "abcdef",
+    "fig:prospective": "abcdefgh",
+    "fig:conductancecredit": "abcdefg",
+    "fig:physicaldepth": "abcdefgh",
+    "fig:topology": "abcdefgh",
+    "fig:focal": "abcdefgh",
+    "fig:boundary": "abcdef",
 }
 
 FIGURE_BLOCK = re.compile(
@@ -85,3 +83,81 @@ def test_equations_are_not_referenced_before_their_display() -> None:
         if label in label_positions and match.start() < label_positions[label]:
             premature.append(label)
     assert not premature, f"equations referenced before display: {premature}"
+
+
+# ---------------------------------------------------------------------------
+# DECISIONS G1: literal supplementary citations, both directions.
+# ---------------------------------------------------------------------------
+
+SUPPLEMENT_AUX = JOURNAL / "supplementary" / "supplementary.aux"
+SUPPLEMENT_SPEC = JOURNAL / "scripts" / "supplement_consolidation" / "specification.py"
+
+SI_LABEL = re.compile(r"\\newlabel\{(?P<label>fig:si_[^}]+)\}\{\{S(?P<number>\d+)\}")
+CITE_HEAD = re.compile(r"Figs?\.~")
+CITE_FIRST = re.compile(r"S(\d+)(?:[A-H](?:,\s*[A-H])*)?(?:--[A-H])?")
+CITE_RANGE = re.compile(r"--S(\d+)")
+CITE_SEP = re.compile(r"(?:,\s*|[\s~]+and[\s~]+)(?=S\d)")
+
+
+def _supplement_figure_numbers() -> set[int]:
+    """Figure numbers that exist in the compiled supplement."""
+    if SUPPLEMENT_AUX.is_file():
+        aux = SUPPLEMENT_AUX.read_text(encoding="utf-8", errors="replace")
+        numbers = {int(m.group("number")) for m in SI_LABEL.finditer(aux)}
+        if numbers:
+            return numbers
+    # Fall back on the registry the supplement is built from.
+    spec = SUPPLEMENT_SPEC.read_text(encoding="utf-8")
+    count = len(re.findall(r"^\s{4}FigureSpec\(", spec, re.MULTILINE))
+    assert count, "cannot determine the supplement's figure inventory"
+    return set(range(1, count + 1))
+
+
+def _cited_supplementary_figures(text: str) -> set[int]:
+    """Every SI figure number cited literally from ``text``."""
+    cited: set[int] = set()
+    for head in CITE_HEAD.finditer(text):
+        index = head.end()
+        while True:
+            first = CITE_FIRST.match(text, index)
+            if first is None:
+                break
+            number = int(first.group(1))
+            cited.add(number)
+            index = first.end()
+            span = CITE_RANGE.match(text, index)
+            if span is not None:
+                cited.update(range(number, int(span.group(1)) + 1))
+                index = span.end()
+            separator = CITE_SEP.match(text, index)
+            if separator is None:
+                break
+            index = separator.end()
+    return cited
+
+
+def test_every_cited_supplementary_figure_exists() -> None:
+    cited = _cited_supplementary_figures(MAIN.read_text(encoding="utf-8"))
+    available = _supplement_figure_numbers()
+    missing = sorted(cited - available)
+    assert not missing, (
+        f"main.tex cites supplementary figures that the supplement does not "
+        f"contain: {['S%d' % n for n in missing]}"
+    )
+
+
+def test_every_supplementary_figure_is_cited_from_main() -> None:
+    cited = _cited_supplementary_figures(MAIN.read_text(encoding="utf-8"))
+    available = _supplement_figure_numbers()
+    uncited = sorted(available - cited)
+    assert not uncited, (
+        f"supplementary figures never cited by number from main.tex: "
+        f"{['S%d' % n for n in uncited]}"
+    )
+
+
+def test_main_uses_only_literal_supplementary_citations() -> None:
+    """G1 bans xr-style cross-document references in ``main.tex``."""
+    source = MAIN.read_text(encoding="utf-8")
+    assert r"\ref{SI-fig:" not in source
+    assert r"\ref{fig:si_" not in source
