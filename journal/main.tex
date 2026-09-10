@@ -519,7 +519,7 @@ The new MNIST ladder uses 128-soma $[3,3]$ shunting and raw-additive networks, w
 
 The projected $K=1,3$ rules average exact activation errors over the supports in Fig.~\ref{fig:framework}C, preserving the field mean but not necessarily its norm. Both retain exact somatic errors and local derivatives. Decoder-only learning freezes the initialized core, verified by its hash. Three development seeds compare rate multipliers 0.3, 1 and 3 for every rule and architecture, giving 108 fits. Validation alone selects rates. Ten fresh paired seeds per architecture and rule give 120 selected-rate and 120 original-common-rate outcomes from 190 unique fits; 50 fits serve both policies. The projected-$K=1$ addendum was frozen before fresh outcomes. Complete protocols, clipping and excluded implementation checks are in Supplementary Section~S2.
 
-Supplementary Section~S2 gives the original fifteen-seed MNIST ladder, ten-seed Fashion-MNIST and twenty-seed raw-additive CIFAR-10 protocols; CIFAR uses a 20-soma $[3,3,3,3]$ tree. Original gradient diagnostics appear in Fig.~S8A--C. The fifteen-seed direct-feedback-alignment factorial replaces the decoder derivative by a fixed Gaussian matrix scaled by inverse square root of output dimension, paired with exact-readout references. Recipient permutations preserve coordinate values and bandwidth.
+Supplementary Section~S2 gives the original fifteen-seed MNIST \citep{lecun1998mnist} ladder, ten-seed Fashion-MNIST \citep{xiao2017fashionmnist} and twenty-seed raw-additive CIFAR-10 \citep{krizhevsky2009cifar} protocols; CIFAR uses a 20-soma $[3,3,3,3]$ tree. Original gradient diagnostics appear in Fig.~S8A--C. The fifteen-seed direct-feedback-alignment factorial replaces the decoder derivative by a fixed Gaussian matrix scaled by inverse square root of output dimension, paired with exact-readout references. Recipient permutations preserve coordinate values and bandwidth.
 
 Common-checkpoint diagnostics compare rules at identical weights and states. Exact path transport is checked against automatic differentiation. New capture measurements use 2,048 held-out images at initial and exact-trained states; activation- and voltage-space metrics are kept separate. Gradient cosine, error magnitude by depth and mean-subtracted path energy are distinct summaries; none alone certifies learning performance, and their joint behaviour at 120 valid trained checkpoints is in Supplementary Fig.~S3E. Historical depth and noise cohorts, including their task-identity and conductance-validity records, are specified in Supplementary Section~S2.
 
@@ -634,7 +634,7 @@ DANDI:000402. The supplied manifest records the exact asset and table
 identifiers, and the source publication describes the full data release
 \citep{microns2025}.
 
-Public benchmark datasets are available from their original repositories.
+Public benchmark datasets are available from their original repositories \citep{lecun1998mnist,xiao2017fashionmnist,krizhevsky2009cifar}.
 The inhibitory-census tables and SWCs are available with the source record for
 Schneider-Mizell et al. \citep{schneidermizell2025inhibitory}. The Francioni
 et al. workbook is available through the Source Data link associated with the
