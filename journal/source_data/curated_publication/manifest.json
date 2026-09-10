@@ -62,6 +62,258 @@
       "path": "source_data/curated_publication/figure_09_plotted.csv",
       "sha256": "d7742b1680aacce728ecc63359d905df1444787827a07aafaa9dd0249c160d57",
       "scope": "Display summaries from existing inputs; panel column identifies the selected data. Not an additional experiment."
+    },
+    {
+      "figure": "S1",
+      "source": "scripts/build_supplementary_source_data.py",
+      "path": "source_data/curated_publication/si_S01_plotted.csv",
+      "sha256": "950b614c47ba195ef406aed909709fa4ba150ffba4a4326dcf1e5d4d8e9e1e45",
+      "scope": "Supplementary figure Source Data. record_type=plotted rows are drawn values; record_type=source_index rows name the frozen numerical source of a pasted panel. No plotted number is re-derived."
+    },
+    {
+      "figure": "S2",
+      "source": "scripts/build_supplementary_source_data.py",
+      "path": "source_data/curated_publication/si_S02_plotted.csv",
+      "sha256": "dd763cc571ecb047a610564e6e0af1cc25854fe88e399e264a44a102fad6c334",
+      "scope": "Supplementary figure Source Data. record_type=plotted rows are drawn values; record_type=source_index rows name the frozen numerical source of a pasted panel. No plotted number is re-derived."
+    },
+    {
+      "figure": "S3",
+      "source": "scripts/build_supplementary_source_data.py",
+      "path": "source_data/curated_publication/si_S03_plotted.csv",
+      "sha256": "9c7f5c59663d948b71e9ff997be51aaae9568e0dde1641e05d627564928f2a55",
+      "scope": "Supplementary figure Source Data. record_type=plotted rows are drawn values; record_type=source_index rows name the frozen numerical source of a pasted panel. No plotted number is re-derived."
+    },
+    {
+      "figure": "S4",
+      "source": "scripts/build_supplementary_source_data.py",
+      "path": "source_data/curated_publication/si_S04_plotted.csv",
+      "sha256": "4a46041c92e181b020b81053314647da0a305a411d8f3bd6e21201937565470c",
+      "scope": "Supplementary figure Source Data. record_type=plotted rows are drawn values; record_type=source_index rows name the frozen numerical source of a pasted panel. No plotted number is re-derived."
+    },
+    {
+      "figure": "S5",
+      "source": "scripts/build_supplementary_source_data.py",
+      "path": "source_data/curated_publication/si_S05_plotted.csv",
+      "sha256": "478b6227c55dfaecc2dea80d0fab39a940ccaf0adbb004dbcc5008f07aa89e83",
+      "scope": "Supplementary figure Source Data. record_type=plotted rows are drawn values; record_type=source_index rows name the frozen numerical source of a pasted panel. No plotted number is re-derived."
+    },
+    {
+      "figure": "S6",
+      "source": "scripts/build_supplementary_source_data.py",
+      "path": "source_data/curated_publication/si_S06_plotted.csv",
+      "sha256": "a21f81e041b701d4ac351efa95f09b5ca722f39431768093abc6c76d9d095d81",
+      "scope": "Supplementary figure Source Data. record_type=plotted rows are drawn values; record_type=source_index rows name the frozen numerical source of a pasted panel. No plotted number is re-derived."
+    },
+    {
+      "figure": "S7",
+      "source": "scripts/build_supplementary_source_data.py",
+      "path": "source_data/curated_publication/si_S07_plotted.csv",
+      "sha256": "daa9fbcccf5fe2f09e2925b42a3733c53957ceba4ab697221d5ee1b0487e5ec7",
+      "scope": "Supplementary figure Source Data. record_type=plotted rows are drawn values; record_type=source_index rows name the frozen numerical source of a pasted panel. No plotted number is re-derived."
+    },
+    {
+      "figure": "S8",
+      "source": "scripts/build_supplementary_source_data.py",
+      "path": "source_data/curated_publication/si_S08_plotted.csv",
+      "sha256": "e24006bcf382fd995e92dfcd5c9b3bcddf6f9126d4ad86f262d8bc65f22d79d2",
+      "scope": "Supplementary figure Source Data. record_type=plotted rows are drawn values; record_type=source_index rows name the frozen numerical source of a pasted panel. No plotted number is re-derived."
+    },
+    {
+      "figure": "S9",
+      "source": "scripts/build_supplementary_source_data.py",
+      "path": "source_data/curated_publication/si_S09_plotted.csv",
+      "sha256": "e35418bf9b3b85a88cd22b1bdfdc9be6f8b7c942864f81c0855feab77738a024",
+      "scope": "Supplementary figure Source Data. record_type=plotted rows are drawn values; record_type=source_index rows name the frozen numerical source of a pasted panel. No plotted number is re-derived."
+    },
+    {
+      "figure": "S10",
+      "source": "scripts/build_supplementary_source_data.py",
+      "path": "source_data/curated_publication/si_S10_plotted.csv",
+      "sha256": "36062d06eaed96a0af478b07ed44d089c7d0de5c9280b404610b96be9d45e729",
+      "scope": "Supplementary figure Source Data. record_type=plotted rows are drawn values; record_type=source_index rows name the frozen numerical source of a pasted panel. No plotted number is re-derived."
+    },
+    {
+      "figure": "S11",
+      "source": "scripts/build_supplementary_source_data.py",
+      "path": "source_data/curated_publication/si_S11_plotted.csv",
+      "sha256": "de408a784ac9847dc19c038839883a07a80996a097ce50c864f98383b849305b",
+      "scope": "Supplementary figure Source Data. record_type=plotted rows are drawn values; record_type=source_index rows name the frozen numerical source of a pasted panel. No plotted number is re-derived."
+    },
+    {
+      "figure": "S12",
+      "source": "scripts/build_supplementary_source_data.py",
+      "path": "source_data/curated_publication/si_S12_plotted.csv",
+      "sha256": "599d5535138685f9175bc17662a424b5e4705c3130cc91e95ecc9179a8fdfa09",
+      "scope": "Supplementary figure Source Data. record_type=plotted rows are drawn values; record_type=source_index rows name the frozen numerical source of a pasted panel. No plotted number is re-derived."
+    },
+    {
+      "figure": "S13",
+      "source": "scripts/build_supplementary_source_data.py",
+      "path": "source_data/curated_publication/si_S13_plotted.csv",
+      "sha256": "ce993d99bbdc4cd25fc649b084aa4c76254ddc877587ca3a63b3e83b4452d944",
+      "scope": "Supplementary figure Source Data. record_type=plotted rows are drawn values; record_type=source_index rows name the frozen numerical source of a pasted panel. No plotted number is re-derived."
+    },
+    {
+      "figure": "S14",
+      "source": "scripts/build_supplementary_source_data.py",
+      "path": "source_data/curated_publication/si_S14_plotted.csv",
+      "sha256": "dededbf35dda63f9c99f3f0d5a51502f8c656bfda49e4bd4996be35e1afb3dee",
+      "scope": "Supplementary figure Source Data. record_type=plotted rows are drawn values; record_type=source_index rows name the frozen numerical source of a pasted panel. No plotted number is re-derived."
+    },
+    {
+      "figure": "S15",
+      "source": "scripts/build_supplementary_source_data.py",
+      "path": "source_data/curated_publication/si_S15_plotted.csv",
+      "sha256": "c6ef42ed0d8b4aa31945b54a2e978afe265238b95cd9e836e05fedc51196a3d8",
+      "scope": "Supplementary figure Source Data. record_type=plotted rows are drawn values; record_type=source_index rows name the frozen numerical source of a pasted panel. No plotted number is re-derived."
+    },
+    {
+      "figure": "S16",
+      "source": "scripts/build_supplementary_source_data.py",
+      "path": "source_data/curated_publication/si_S16_plotted.csv",
+      "sha256": "9d14f7bd0a2d7e0e1d10050a35eca254ce522e824fec632c152594e28541e594",
+      "scope": "Supplementary figure Source Data. record_type=plotted rows are drawn values; record_type=source_index rows name the frozen numerical source of a pasted panel. No plotted number is re-derived."
+    },
+    {
+      "figure": "S17",
+      "source": "scripts/build_supplementary_source_data.py",
+      "path": "source_data/curated_publication/si_S17_plotted.csv",
+      "sha256": "a84c47aac473faaaa8a1fe0ef8def6b3b61a73a5c28b264c5f0233b8b73b5bc0",
+      "scope": "Supplementary figure Source Data. record_type=plotted rows are drawn values; record_type=source_index rows name the frozen numerical source of a pasted panel. No plotted number is re-derived."
+    },
+    {
+      "figure": "S18",
+      "source": "scripts/build_supplementary_source_data.py",
+      "path": "source_data/curated_publication/si_S18_plotted.csv",
+      "sha256": "4440212d342f32ea8df177a9e4227723b2b02541f9db6bfc73b0adf76c87ad8c",
+      "scope": "Supplementary figure Source Data. record_type=plotted rows are drawn values; record_type=source_index rows name the frozen numerical source of a pasted panel. No plotted number is re-derived."
+    },
+    {
+      "figure": "S19",
+      "source": "scripts/build_supplementary_source_data.py",
+      "path": "source_data/curated_publication/si_S19_plotted.csv",
+      "sha256": "af7f34bf9cd944bf15f86278fbb19797ec10d59f467c207c7fea7e7e0f3bb355",
+      "scope": "Supplementary figure Source Data. record_type=plotted rows are drawn values; record_type=source_index rows name the frozen numerical source of a pasted panel. No plotted number is re-derived."
+    },
+    {
+      "figure": "S20",
+      "source": "scripts/build_supplementary_source_data.py",
+      "path": "source_data/curated_publication/si_S20_plotted.csv",
+      "sha256": "754e1e0cc46a9ec7b5bd1e753e0cadbb5b80cf31cfc5ac7441ac8a5053ee64fb",
+      "scope": "Supplementary figure Source Data. record_type=plotted rows are drawn values; record_type=source_index rows name the frozen numerical source of a pasted panel. No plotted number is re-derived."
+    },
+    {
+      "figure": "S21",
+      "source": "scripts/build_supplementary_source_data.py",
+      "path": "source_data/curated_publication/si_S21_plotted.csv",
+      "sha256": "8ade0ed22b5e6372680f134252ebcaee0a45c5ae90d721429c4f9bbdc28cb76c",
+      "scope": "Supplementary figure Source Data. record_type=plotted rows are drawn values; record_type=source_index rows name the frozen numerical source of a pasted panel. No plotted number is re-derived."
+    },
+    {
+      "figure": "S22",
+      "source": "scripts/build_supplementary_source_data.py",
+      "path": "source_data/curated_publication/si_S22_plotted.csv",
+      "sha256": "40c7e3600d2324a46094c071a4584af60e85a4a98740d181f49337251d38bd4a",
+      "scope": "Supplementary figure Source Data. record_type=plotted rows are drawn values; record_type=source_index rows name the frozen numerical source of a pasted panel. No plotted number is re-derived."
+    },
+    {
+      "figure": "S23",
+      "source": "scripts/build_supplementary_source_data.py",
+      "path": "source_data/curated_publication/si_S23_plotted.csv",
+      "sha256": "d773c4a7aa5c69057828cfefcbba24ea07e5c5796a289133ffa6f6a0297d41a1",
+      "scope": "Supplementary figure Source Data. record_type=plotted rows are drawn values; record_type=source_index rows name the frozen numerical source of a pasted panel. No plotted number is re-derived."
+    },
+    {
+      "figure": "S24",
+      "source": "scripts/build_supplementary_source_data.py",
+      "path": "source_data/curated_publication/si_S24_plotted.csv",
+      "sha256": "e0bd504bf8bd3ea9b7526babc09a6d7015a8f6a64c72e4c5ba591265ead5aaf9",
+      "scope": "Supplementary figure Source Data. record_type=plotted rows are drawn values; record_type=source_index rows name the frozen numerical source of a pasted panel. No plotted number is re-derived."
+    },
+    {
+      "figure": "S25",
+      "source": "scripts/build_supplementary_source_data.py",
+      "path": "source_data/curated_publication/si_S25_plotted.csv",
+      "sha256": "90d5c157415271f12225b26cff74a16ad8429ccb4be99d44fa906d0db942b0cc",
+      "scope": "Supplementary figure Source Data. record_type=plotted rows are drawn values; record_type=source_index rows name the frozen numerical source of a pasted panel. No plotted number is re-derived."
+    },
+    {
+      "figure": "S26",
+      "source": "scripts/build_supplementary_source_data.py",
+      "path": "source_data/curated_publication/si_S26_plotted.csv",
+      "sha256": "24255e1279422988e1eca360cbe272c19d2dc7cc83f813d625b538fc2802b4ba",
+      "scope": "Supplementary figure Source Data. record_type=plotted rows are drawn values; record_type=source_index rows name the frozen numerical source of a pasted panel. No plotted number is re-derived."
+    },
+    {
+      "figure": "S27",
+      "source": "scripts/build_supplementary_source_data.py",
+      "path": "source_data/curated_publication/si_S27_plotted.csv",
+      "sha256": "8e3474ce51847b969b201914486f717ca892822a7aa2232a9b7716323d005acf",
+      "scope": "Supplementary figure Source Data. record_type=plotted rows are drawn values; record_type=source_index rows name the frozen numerical source of a pasted panel. No plotted number is re-derived."
+    },
+    {
+      "figure": "S28",
+      "source": "scripts/build_supplementary_source_data.py",
+      "path": "source_data/curated_publication/si_S28_plotted.csv",
+      "sha256": "1721e3bf013654a795d292c4ca53c80b06c10b0cc6c6dd91c9a0046eaa0d74d5",
+      "scope": "Supplementary figure Source Data. record_type=plotted rows are drawn values; record_type=source_index rows name the frozen numerical source of a pasted panel. No plotted number is re-derived."
+    },
+    {
+      "figure": "S29",
+      "source": "scripts/build_supplementary_source_data.py",
+      "path": "source_data/curated_publication/si_S29_plotted.csv",
+      "sha256": "5d3b51106b55497505c881f0262422dba8a9987bab0ad194ab17741f1a0d626b",
+      "scope": "Supplementary figure Source Data. record_type=plotted rows are drawn values; record_type=source_index rows name the frozen numerical source of a pasted panel. No plotted number is re-derived."
+    },
+    {
+      "figure": "S30",
+      "source": "scripts/build_supplementary_source_data.py",
+      "path": "source_data/curated_publication/si_S30_plotted.csv",
+      "sha256": "24be609d91b5f2e3eab9d23be95303b1a8561b7be9444a38ddc0036d811e336c",
+      "scope": "Supplementary figure Source Data. record_type=plotted rows are drawn values; record_type=source_index rows name the frozen numerical source of a pasted panel. No plotted number is re-derived."
+    },
+    {
+      "figure": "S31",
+      "source": "scripts/build_supplementary_source_data.py",
+      "path": "source_data/curated_publication/si_S31_plotted.csv",
+      "sha256": "f1f75695b6f413e2ffe2259ef05485b569117b96e83b2faf38d184c4ad027518",
+      "scope": "Supplementary figure Source Data. record_type=plotted rows are drawn values; record_type=source_index rows name the frozen numerical source of a pasted panel. No plotted number is re-derived."
+    },
+    {
+      "figure": "S32",
+      "source": "scripts/build_supplementary_source_data.py",
+      "path": "source_data/curated_publication/si_S32_plotted.csv",
+      "sha256": "e2e0a0e6a9c26b3423d1236c62c92c9d3b4754fd8e521f1ff05507216d3a1886",
+      "scope": "Supplementary figure Source Data. record_type=plotted rows are drawn values; record_type=source_index rows name the frozen numerical source of a pasted panel. No plotted number is re-derived."
+    },
+    {
+      "figure": "S33",
+      "source": "scripts/build_supplementary_source_data.py",
+      "path": "source_data/curated_publication/si_S33_plotted.csv",
+      "sha256": "a2babff25b0dd6763b6a8a452c6d7aea67fd7b3e08723e7cfba53d82b52ce3ed",
+      "scope": "Supplementary figure Source Data. record_type=plotted rows are drawn values; record_type=source_index rows name the frozen numerical source of a pasted panel. No plotted number is re-derived."
+    },
+    {
+      "figure": "S34",
+      "source": "scripts/build_supplementary_source_data.py",
+      "path": "source_data/curated_publication/si_S34_plotted.csv",
+      "sha256": "1857448540bfbd945f328b120eb250f59b5543b7a21903962ebcbe8b4d1c9d5d",
+      "scope": "Supplementary figure Source Data. record_type=plotted rows are drawn values; record_type=source_index rows name the frozen numerical source of a pasted panel. No plotted number is re-derived."
+    },
+    {
+      "figure": "S35",
+      "source": "scripts/build_supplementary_source_data.py",
+      "path": "source_data/curated_publication/si_S35_plotted.csv",
+      "sha256": "2c6a908bb4d4dd98fa6280ec849729165cad0d7b22492b9c83cc1eefea14c3d1",
+      "scope": "Supplementary figure Source Data. record_type=plotted rows are drawn values; record_type=source_index rows name the frozen numerical source of a pasted panel. No plotted number is re-derived."
+    },
+    {
+      "figure": "S36",
+      "source": "scripts/build_supplementary_source_data.py",
+      "path": "source_data/curated_publication/si_S36_plotted.csv",
+      "sha256": "ba18d312b2618643d3b8b89519e65ac856c6997a7d5690286847f8e3cf192c20",
+      "scope": "Supplementary figure Source Data. record_type=plotted rows are drawn values; record_type=source_index rows name the frozen numerical source of a pasted panel. No plotted number is re-derived."
     }
   ]
 }

@@ -1,0 +1,610 @@
+{
+  "paste_scale_target": 1.0,
+  "height_cap_pt": 540.0,
+  "scales": {
+    "mechanistic_chain": 1.0,
+    "credit_validation": 1.0,
+    "utility_signal_noise": 1.0,
+    "reliability_gain": 1.0,
+    "same_span_conditioning": 1.0,
+    "image_generalization": 1.0,
+    "mnist_dictionary_geometry": 1.0,
+    "error_field_geometry": 1.0,
+    "input_coverage_depth": 1.0,
+    "branch_conflict_controls": 1.0,
+    "ancestry_coefficients": 1.0,
+    "scalar_tree_capacity": 0.8224,
+    "oracle_profile_credit": 1.0,
+    "boolean_capacity": 1.0,
+    "boolean_learning": 1.0,
+    "fixed_profile_budget": 1.0,
+    "credit_optimizer_controls": 1.0,
+    "conductance_grouping": 1.0,
+    "conductance_precision": 1.0,
+    "conductance_optimization": 0.8024,
+    "local_gate_controls": 1.0,
+    "physical_architecture": 0.7684,
+    "physical_calibration": 1.0,
+    "physical_optimizer": 1.0,
+    "anatomy_capacity_controls": 1.0,
+    "inhibitory_spatial_controls": 1.0,
+    "coarse_energy": 1.0,
+    "anatomy_preprocessing": 1.0,
+    "shunt_sensitivity": 0.8427,
+    "shunt_replication": 1.0,
+    "measured_transfer_geometry": 0.9539,
+    "measured_predictor_controls": 1.0,
+    "animal_credit_reanalysis": 1.0,
+    "original_selector": 1.0,
+    "finite_horizon": 0.8623,
+    "morphology_estimation": 1.0
+  },
+  "below_target_scale": {
+    "scalar_tree_capacity": 0.8224,
+    "conductance_optimization": 0.8024,
+    "physical_architecture": 0.7684,
+    "shunt_sensitivity": 0.8427,
+    "measured_transfer_geometry": 0.9539,
+    "finite_horizon": 0.8623
+  },
+  "over_height_cap": {},
+  "strict_audit": {
+    "mechanistic_chain": {
+      "figure": "S1",
+      "violations": 11,
+      "by_kind": {
+        "font-family": 2,
+        "text-floor": 1,
+        "text-size": 6,
+        "role-colour": 1,
+        "manifest-missing": 1
+      },
+      "text_floor_examples": [
+        "6.80 pt is below the 7.0 pt floor (6 spans, e.g. 'normalized')"
+      ]
+    },
+    "credit_validation": {
+      "figure": "S2",
+      "violations": 13,
+      "by_kind": {
+        "font-family": 2,
+        "text-floor": 1,
+        "text-size": 5,
+        "stroke-width": 1,
+        "role-colour": 3,
+        "manifest-missing": 1
+      },
+      "text_floor_examples": [
+        "6.80 pt is below the 7.0 pt floor (8 spans, e.g. '5 paired seeds / 95% bootstrap CI')"
+      ]
+    },
+    "utility_signal_noise": {
+      "figure": "S3",
+      "violations": 35,
+      "by_kind": {
+        "canvas-aspect": 1,
+        "font-family": 8,
+        "text-floor": 5,
+        "text-size": 5,
+        "text-collision": 4,
+        "stroke-width": 3,
+        "area-stroke": 6,
+        "role-colour": 2,
+        "manifest-missing": 1
+      },
+      "text_floor_examples": [
+        "4.90 pt is below the 7.0 pt floor (2 spans, e.g. '\u22125')",
+        "5.18 pt is below the 7.0 pt floor (4 spans, e.g. 'c')"
+      ]
+    },
+    "reliability_gain": {
+      "figure": "S4",
+      "violations": 24,
+      "by_kind": {
+        "font-family": 9,
+        "text-floor": 3,
+        "text-size": 4,
+        "stroke-width": 4,
+        "role-colour": 1,
+        "fill-width": 1,
+        "blank-band": 1,
+        "manifest-missing": 1
+      },
+      "text_floor_examples": [
+        "5.04 pt is below the 7.0 pt floor (4 spans, e.g. 'b')",
+        "6.60 pt is below the 7.0 pt floor (5 spans, e.g. 'adaptive shuffled')"
+      ]
+    },
+    "same_span_conditioning": {
+      "figure": "S5",
+      "violations": 16,
+      "by_kind": {
+        "font-family": 2,
+        "text-floor": 3,
+        "text-size": 4,
+        "stroke-width": 3,
+        "role-colour": 2,
+        "fill-width": 1,
+        "manifest-missing": 1
+      },
+      "text_floor_examples": [
+        "5.04 pt is below the 7.0 pt floor (2 spans, e.g. '\u03a6')",
+        "5.32 pt is below the 7.0 pt floor (3 spans, e.g. '\u22122')"
+      ]
+    },
+    "image_generalization": {
+      "figure": "S6",
+      "violations": 9,
+      "by_kind": {
+        "font-family": 2,
+        "text-floor": 1,
+        "text-size": 4,
+        "stroke-width": 1,
+        "manifest-missing": 1
+      },
+      "text_floor_examples": [
+        "6.80 pt is below the 7.0 pt floor (16 spans, e.g. 'DFA within: neuron \u2212 scalar')"
+      ]
+    },
+    "mnist_dictionary_geometry": {
+      "figure": "S7",
+      "violations": 13,
+      "by_kind": {
+        "font-family": 2,
+        "text-floor": 1,
+        "text-size": 3,
+        "stroke-width": 5,
+        "area-stroke": 1,
+        "manifest-missing": 1
+      },
+      "text_floor_examples": [
+        "6.80 pt is below the 7.0 pt floor (6 spans, e.g. 'Original common rate')"
+      ]
+    },
+    "error_field_geometry": {
+      "figure": "S8",
+      "violations": 15,
+      "by_kind": {
+        "canvas-aspect": 1,
+        "font-family": 1,
+        "text-floor": 1,
+        "text-size": 3,
+        "text-collision": 3,
+        "stroke-width": 1,
+        "area-stroke": 1,
+        "role-colour": 2,
+        "fill-width": 1,
+        "manifest-missing": 1
+      },
+      "text_floor_examples": [
+        "6.80 pt is below the 7.0 pt floor (12 spans, e.g. 'soma-normalized')"
+      ]
+    },
+    "input_coverage_depth": {
+      "figure": "S9",
+      "violations": 15,
+      "by_kind": {
+        "font-family": 2,
+        "text-floor": 1,
+        "text-size": 3,
+        "text-collision": 2,
+        "stroke-width": 3,
+        "area-stroke": 1,
+        "role-colour": 1,
+        "fill-width": 1,
+        "manifest-missing": 1
+      },
+      "text_floor_examples": [
+        "6.80 pt is below the 7.0 pt floor (2 spans, e.g. 'Noise task')"
+      ]
+    },
+    "branch_conflict_controls": {
+      "figure": "S10",
+      "violations": 11,
+      "by_kind": {
+        "font-family": 2,
+        "text-floor": 1,
+        "text-size": 3,
+        "stroke-width": 1,
+        "role-colour": 2,
+        "fill-width": 1,
+        "manifest-missing": 1
+      },
+      "text_floor_examples": [
+        "6.80 pt is below the 7.0 pt floor (4 spans, e.g. 'own state, 250')"
+      ]
+    },
+    "ancestry_coefficients": {
+      "figure": "S11",
+      "violations": 20,
+      "by_kind": {
+        "font-family": 4,
+        "text-floor": 1,
+        "text-size": 4,
+        "stroke-width": 4,
+        "area-stroke": 1,
+        "role-colour": 4,
+        "fill-width": 1,
+        "manifest-missing": 1
+      },
+      "text_floor_examples": [
+        "6.40 pt is below the 7.0 pt floor (6 spans, e.g. 'ancestry, depth and random')"
+      ]
+    },
+    "scalar_tree_capacity": {
+      "figure": "S12",
+      "violations": 22,
+      "by_kind": {
+        "canvas-aspect": 1,
+        "font-family": 8,
+        "text-floor": 6,
+        "text-size": 1,
+        "stroke-width": 5,
+        "manifest-missing": 1
+      },
+      "text_floor_examples": [
+        "3.91 pt is below the 7.0 pt floor (16 spans, e.g. '1')",
+        "4.14 pt is below the 7.0 pt floor (4 spans, e.g. 'x')"
+      ]
+    },
+    "oracle_profile_credit": {
+      "figure": "S13",
+      "violations": 10,
+      "by_kind": {
+        "font-family": 2,
+        "text-floor": 1,
+        "text-size": 3,
+        "stroke-width": 3,
+        "manifest-missing": 1
+      },
+      "text_floor_examples": [
+        "6.80 pt is below the 7.0 pt floor (56 spans, e.g. 'two shuffled profiles')"
+      ]
+    },
+    "boolean_capacity": {
+      "figure": "S14",
+      "violations": 16,
+      "by_kind": {
+        "font-family": 3,
+        "text-floor": 1,
+        "text-size": 3,
+        "stroke-width": 4,
+        "role-colour": 3,
+        "blank-band": 1,
+        "manifest-missing": 1
+      },
+      "text_floor_examples": [
+        "6.80 pt is below the 7.0 pt floor (102 spans, e.g. '3 balanced | 12 comb; dots: exact possib')"
+      ]
+    },
+    "boolean_learning": {
+      "figure": "S15",
+      "violations": 13,
+      "by_kind": {
+        "font-family": 2,
+        "text-floor": 2,
+        "text-size": 2,
+        "stroke-width": 3,
+        "role-colour": 3,
+        "manifest-missing": 1
+      },
+      "text_floor_examples": [
+        "4.76 pt is below the 7.0 pt floor (10 spans, e.g. '\u22124')",
+        "6.80 pt is below the 7.0 pt floor (109 spans, e.g. 'broadcast \u2212 exact NMSE')"
+      ]
+    },
+    "fixed_profile_budget": {
+      "figure": "S16",
+      "violations": 8,
+      "by_kind": {
+        "font-family": 2,
+        "text-size": 5,
+        "manifest-missing": 1
+      },
+      "text_floor_examples": []
+    },
+    "credit_optimizer_controls": {
+      "figure": "S17",
+      "violations": 8,
+      "by_kind": {
+        "font-family": 2,
+        "text-size": 5,
+        "manifest-missing": 1
+      },
+      "text_floor_examples": []
+    },
+    "conductance_grouping": {
+      "figure": "S18",
+      "violations": 11,
+      "by_kind": {
+        "font-family": 2,
+        "text-floor": 2,
+        "text-size": 3,
+        "stroke-width": 3,
+        "manifest-missing": 1
+      },
+      "text_floor_examples": [
+        "4.76 pt is below the 7.0 pt floor (8 spans, e.g. '\u22124')",
+        "6.80 pt is below the 7.0 pt floor (51 spans, e.g. '4 E + 6 I contacts; 6 couplings; 16 cond')"
+      ]
+    },
+    "conductance_precision": {
+      "figure": "S19",
+      "violations": 9,
+      "by_kind": {
+        "font-family": 2,
+        "text-size": 6,
+        "manifest-missing": 1
+      },
+      "text_floor_examples": []
+    },
+    "conductance_optimization": {
+      "figure": "S20",
+      "violations": 15,
+      "by_kind": {
+        "canvas-aspect": 1,
+        "font-family": 3,
+        "text-floor": 5,
+        "text-size": 1,
+        "stroke-width": 3,
+        "fill-width": 1,
+        "manifest-missing": 1
+      },
+      "text_floor_examples": [
+        "4.27 pt is below the 7.0 pt floor (6 spans, e.g. '\u22125')",
+        "5.78 pt is below the 7.0 pt floor (2 spans, e.g. 'Log-conductance bounds')"
+      ]
+    },
+    "local_gate_controls": {
+      "figure": "S21",
+      "violations": 9,
+      "by_kind": {
+        "font-family": 2,
+        "text-floor": 1,
+        "text-size": 4,
+        "stroke-width": 1,
+        "manifest-missing": 1
+      },
+      "text_floor_examples": [
+        "6.80 pt is below the 7.0 pt floor (126 spans, e.g. 'Two leaf patterns + unit proximal')"
+      ]
+    },
+    "physical_architecture": {
+      "figure": "S22",
+      "violations": 23,
+      "by_kind": {
+        "canvas-aspect": 1,
+        "font-family": 8,
+        "text-floor": 7,
+        "stroke-width": 4,
+        "role-colour": 2,
+        "manifest-missing": 1
+      },
+      "text_floor_examples": [
+        "5.23 pt is below the 7.0 pt floor (81 spans, e.g. 'same modules and contacts')",
+        "5.53 pt is below the 7.0 pt floor (5 spans, e.g. 'reversed tier placement')"
+      ]
+    },
+    "physical_calibration": {
+      "figure": "S23",
+      "violations": 13,
+      "by_kind": {
+        "font-family": 3,
+        "text-floor": 1,
+        "text-size": 5,
+        "stroke-width": 3,
+        "manifest-missing": 1
+      },
+      "text_floor_examples": [
+        "5.88 pt is below the 7.0 pt floor (1 spans, e.g. 'p')"
+      ]
+    },
+    "physical_optimizer": {
+      "figure": "S24",
+      "violations": 9,
+      "by_kind": {
+        "font-family": 3,
+        "text-floor": 1,
+        "text-size": 3,
+        "stroke-width": 1,
+        "manifest-missing": 1
+      },
+      "text_floor_examples": [
+        "6.80 pt is below the 7.0 pt floor (5 spans, e.g. 'Soma-broadcast autograd \u2212 shared-soma Lo')"
+      ]
+    },
+    "anatomy_capacity_controls": {
+      "figure": "S25",
+      "violations": 19,
+      "by_kind": {
+        "font-family": 4,
+        "text-floor": 1,
+        "text-size": 3,
+        "stroke-width": 7,
+        "role-colour": 3,
+        "manifest-missing": 1
+      },
+      "text_floor_examples": [
+        "6.80 pt is below the 7.0 pt floor (17 spans, e.g. '78\u2013114 reconstructed segments / tree')"
+      ]
+    },
+    "inhibitory_spatial_controls": {
+      "figure": "S26",
+      "violations": 20,
+      "by_kind": {
+        "font-family": 6,
+        "text-floor": 3,
+        "text-size": 4,
+        "stroke-width": 4,
+        "role-colour": 1,
+        "fill-width": 1,
+        "manifest-missing": 1
+      },
+      "text_floor_examples": [
+        "5.32 pt is below the 7.0 pt floor (2 spans, e.g. '\u22122')",
+        "5.80 pt is below the 7.0 pt floor (6 spans, e.g. '50 \u00b5m')"
+      ]
+    },
+    "coarse_energy": {
+      "figure": "S27",
+      "violations": 20,
+      "by_kind": {
+        "canvas-aspect": 1,
+        "font-family": 3,
+        "text-floor": 1,
+        "text-size": 5,
+        "stroke-width": 4,
+        "area-stroke": 4,
+        "role-colour": 1,
+        "manifest-missing": 1
+      },
+      "text_floor_examples": [
+        "6.70 pt is below the 7.0 pt floor (3 spans, e.g. 'permuted ancestry')"
+      ]
+    },
+    "anatomy_preprocessing": {
+      "figure": "S28",
+      "violations": 12,
+      "by_kind": {
+        "canvas-aspect": 1,
+        "font-family": 2,
+        "text-size": 2,
+        "stroke-width": 3,
+        "role-colour": 2,
+        "blank-band": 1,
+        "manifest-missing": 1
+      },
+      "text_floor_examples": []
+    },
+    "shunt_sensitivity": {
+      "figure": "S29",
+      "violations": 20,
+      "by_kind": {
+        "canvas-aspect": 1,
+        "font-family": 3,
+        "text-floor": 6,
+        "text-size": 2,
+        "stroke-width": 6,
+        "fill-width": 1,
+        "manifest-missing": 1
+      },
+      "text_floor_examples": [
+        "4.13 pt is below the 7.0 pt floor (3 spans, e.g. 'm')",
+        "4.48 pt is below the 7.0 pt floor (4 spans, e.g. '\u22121')"
+      ]
+    },
+    "shunt_replication": {
+      "figure": "S30",
+      "violations": 19,
+      "by_kind": {
+        "canvas-aspect": 1,
+        "font-family": 2,
+        "text-floor": 1,
+        "text-size": 4,
+        "stroke-width": 7,
+        "role-colour": 2,
+        "fill-width": 1,
+        "manifest-missing": 1
+      },
+      "text_floor_examples": [
+        "6.80 pt is below the 7.0 pt floor (10 spans, e.g. '39 positive, 1 tie / 40 cells')"
+      ]
+    },
+    "measured_transfer_geometry": {
+      "figure": "S31",
+      "violations": 15,
+      "by_kind": {
+        "canvas-aspect": 1,
+        "font-family": 4,
+        "text-floor": 1,
+        "text-size": 2,
+        "stroke-width": 5,
+        "fill-width": 1,
+        "manifest-missing": 1
+      },
+      "text_floor_examples": [
+        "6.49 pt is below the 7.0 pt floor (25 spans, e.g. '125 partner records; negative estimates ')"
+      ]
+    },
+    "measured_predictor_controls": {
+      "figure": "S32",
+      "violations": 17,
+      "by_kind": {
+        "font-family": 2,
+        "text-floor": 1,
+        "text-size": 6,
+        "stroke-width": 6,
+        "role-colour": 1,
+        "manifest-missing": 1
+      },
+      "text_floor_examples": [
+        "6.80 pt is below the 7.0 pt floor (7 spans, e.g. 'Subtree nonlinear')"
+      ]
+    },
+    "animal_credit_reanalysis": {
+      "figure": "S33",
+      "violations": 13,
+      "by_kind": {
+        "canvas-aspect": 1,
+        "font-family": 2,
+        "text-floor": 1,
+        "text-size": 5,
+        "fill-width": 1,
+        "fill-height": 1,
+        "blank-band": 1,
+        "manifest-missing": 1
+      },
+      "text_floor_examples": [
+        "6.80 pt is below the 7.0 pt floor (6 spans, e.g. 'predicted contrast')"
+      ]
+    },
+    "original_selector": {
+      "figure": "S34",
+      "violations": 11,
+      "by_kind": {
+        "font-family": 2,
+        "text-floor": 1,
+        "text-size": 5,
+        "role-colour": 1,
+        "edge-clearance": 1,
+        "manifest-missing": 1
+      },
+      "text_floor_examples": [
+        "6.80 pt is below the 7.0 pt floor (5 spans, e.g. 'dashed: retrospective best')"
+      ]
+    },
+    "finite_horizon": {
+      "figure": "S35",
+      "violations": 99,
+      "by_kind": {
+        "canvas-aspect": 1,
+        "font-family": 2,
+        "text-floor": 3,
+        "text-size": 2,
+        "stroke-width": 5,
+        "role-colour": 84,
+        "fill-width": 1,
+        "manifest-missing": 1
+      },
+      "text_floor_examples": [
+        "4.10 pt is below the 7.0 pt floor (3 spans, e.g. '\u22123')",
+        "5.07 pt is below the 7.0 pt floor (1 spans, e.g. '\u22123')"
+      ]
+    },
+    "morphology_estimation": {
+      "figure": "S36",
+      "violations": 10,
+      "by_kind": {
+        "font-family": 2,
+        "text-floor": 2,
+        "text-size": 3,
+        "stroke-width": 2,
+        "manifest-missing": 1
+      },
+      "text_floor_examples": [
+        "4.76 pt is below the 7.0 pt floor (4 spans, e.g. '\u22123')",
+        "6.80 pt is below the 7.0 pt floor (73 spans, e.g. 'Estimate interactions OR fit twelve pilo')"
+      ]
+    }
+  }
+}

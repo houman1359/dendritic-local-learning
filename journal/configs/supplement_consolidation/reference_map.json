@@ -1,2412 +1,2271 @@
 {
   "S1": {
     "old_label": "fig:inherited_mechanistic",
-    "primary_destination": {
-      "kind": "section",
-      "label": "note:derivation",
-      "note": "Exact-gradient derivation; original numerical panels remain in the source archive."
-    },
-    "panels": {
-      "A": [],
-      "B": [],
-      "C": [],
-      "D": [],
-      "E": []
-    },
     "original_asset": "figures/supplementary/figure_S01_panels_A-E.pdf",
     "original_sha256": "d35198c769fdd0972476955ea40af5a82562c4f92385ea8bba2148c4ae8dd90f",
-    "omitted_panel_status": "Redundant printed view omitted; original scientific source and outcomes retained. Read caption/scientific section rather than transferring a panel suffix to the primary destination."
+    "primary_destination": "S1",
+    "panels": {
+      "A": {
+        "figure": "S1",
+        "panel": "A",
+        "path": "figures/supplementary/curated/mechanistic_chain.pdf"
+      },
+      "B": {
+        "figure": "S1",
+        "panel": "B",
+        "path": "figures/supplementary/curated/mechanistic_chain.pdf"
+      },
+      "C": {
+        "figure": "S1",
+        "panel": "C",
+        "path": "figures/supplementary/curated/mechanistic_chain.pdf"
+      },
+      "D": {
+        "figure": "S1",
+        "panel": "D",
+        "path": "figures/supplementary/curated/mechanistic_chain.pdf"
+      },
+      "E": {
+        "figure": "S1",
+        "panel": "E",
+        "path": "figures/supplementary/curated/mechanistic_chain.pdf"
+      }
+    },
+    "omitted_panel_status": {}
   },
   "S2": {
     "old_label": "fig:inherited_competence",
-    "primary_destination": {
-      "figure": "S1",
-      "label": "fig:si_credit_validation",
-      "panel": "A",
-      "source_panel": "A",
-      "path": "figures/supplementary/curated/credit_validation.pdf"
-    },
-    "panels": {
-      "A": [
-        {
-          "figure": "S1",
-          "label": "fig:si_credit_validation",
-          "panel": "A",
-          "source_panel": "A",
-          "path": "figures/supplementary/curated/credit_validation.pdf"
-        }
-      ],
-      "B": [],
-      "C": [],
-      "D": [
-        {
-          "figure": "S1",
-          "label": "fig:si_credit_validation",
-          "panel": "B",
-          "source_panel": "D",
-          "path": "figures/supplementary/curated/credit_validation.pdf"
-        }
-      ],
-      "E": []
-    },
     "original_asset": "figures/supplementary/figure_S02_panels_A-E.pdf",
     "original_sha256": "9399ed38020e7e310b7a17f09caa49aabb4b7145ddf1ed4d1ab1fc2e38e3abe2",
-    "omitted_panel_status": "Redundant printed view omitted; original scientific source and outcomes retained. Read caption/scientific section rather than transferring a panel suffix to the primary destination."
+    "primary_destination": "S2",
+    "panels": {
+      "A": {
+        "figure": "S2",
+        "panel": "A",
+        "path": "figures/supplementary/curated/credit_validation.pdf"
+      },
+      "D": {
+        "figure": "S2",
+        "panel": "B",
+        "path": "figures/supplementary/curated/credit_validation.pdf"
+      }
+    },
+    "omitted_panel_status": {
+      "B": {
+        "content": "Inhibitory dose-response for both MNIST dynamics and the raw-additive noise task; noise-task shunting is excluded.",
+        "reason": "Omitted from the curated supplement; the measurement is retained in Source Data and in the section that cites it.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/figure2/feedback_accuracy_runs.csv"
+        ]
+      },
+      "C": {
+        "content": "Shunting-minus-normalized-additive accuracy in percentage points (pp) across two-stage \\([2,2]\\), \\([3,3]\\), \\([4,4]\\) and three-stage \\([2,2,2]\\), \\([3,3,3]\\) directed trees. Curves pool the listed morphologies within each stage count; standard deviations span the retained paired morphology--seed differences. This panel changes both stage count and terminal count and is an operating-regime screen rather than a resource-matched depth test.",
+        "reason": "Omitted from the curated supplement; the measurement is retained in Source Data and in the section that cites it.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/figure2/feedback_accuracy_runs.csv"
+        ]
+      },
+      "E": {
+        "content": "Legacy fifteen-seed comparison in regular \\([3,3]\\) MNIST trees of matched-width scalar-fallback and neuron-specific feedback: the gain from preserving one soma teaching coordinate for every compartment of the corresponding modeled neuron, measured against the fallback field. Main Fig.~1 uses strict scalar feedback and provides the primary scalar-to-neuron-specific comparison. The additive series in panel",
+        "reason": "Omitted from the curated supplement; the measurement is retained in Source Data and in the section that cites it.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/figure2/feedback_accuracy_runs.csv"
+        ]
+      }
+    }
   },
   "S3": {
     "old_label": "fig:inherited_rule_feedback",
-    "primary_destination": {
-      "figure": "S1",
-      "label": "fig:si_credit_validation",
-      "panel": "C",
-      "source_panel": "C",
-      "path": "figures/supplementary/curated/credit_validation.pdf"
-    },
-    "panels": {
-      "A": [],
-      "B": [],
-      "C": [
-        {
-          "figure": "S1",
-          "label": "fig:si_credit_validation",
-          "panel": "C",
-          "source_panel": "C",
-          "path": "figures/supplementary/curated/credit_validation.pdf"
-        }
-      ]
-    },
     "original_asset": "figures/supplementary/figure_S03_panels_A-D.pdf",
     "original_sha256": "4eb902deb3e7c36a9b358a041897167b7e62b1a1d4f56359da99b245cb463a9a",
-    "omitted_panel_status": "Redundant printed view omitted; original scientific source and outcomes retained. Read caption/scientific section rather than transferring a panel suffix to the primary destination."
+    "primary_destination": "S2",
+    "panels": {
+      "C": {
+        "figure": "S2",
+        "panel": "C",
+        "path": "figures/supplementary/curated/credit_validation.pdf"
+      }
+    },
+    "omitted_panel_status": {
+      "A": {
+        "content": "Three-, four- and five-factor (3F, 4F, 5F) rules in the shunting model, with 4F and 5F adding bounded stage-level reliability multipliers to the 3F eligibility update: means and standard deviations from three seeds. Only aggregate means and standard deviations were retained, so individual values are not reconstructed.",
+        "reason": "Omitted from the curated supplement; the measurement is retained in Source Data and in the section that cites it.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/figure2/backprop_summary.csv",
+          "drafts/dendritic-local-learning/journal/source_data/figure2/exact_transport_and_backprop_runs.csv",
+          "drafts/dendritic-local-learning/journal/source_data/figure2/exact_transport_factorial_summary.csv"
+        ]
+      },
+      "B": {
+        "content": "Somatic teaching error versus an unmatched compartment-local quantity, with all three retained seeds per condition; the blue series is the normalized-additive model.",
+        "reason": "Omitted from the curated supplement; the measurement is retained in Source Data and in the section that cites it.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/figure2/backprop_summary.csv",
+          "drafts/dendritic-local-learning/journal/source_data/figure2/exact_transport_and_backprop_runs.csv",
+          "drafts/dendritic-local-learning/journal/source_data/figure2/exact_transport_factorial_summary.csv"
+        ]
+      }
+    }
   },
   "S4": {
     "old_label": "fig:regular_regimes",
-    "primary_destination": {
-      "figure": "S6",
-      "label": "fig:si_image_generalization",
-      "panel": "A",
-      "source_panel": "C",
-      "path": "figures/supplementary/curated/image_generalization.pdf"
-    },
-    "panels": {
-      "A": [],
-      "B": [],
-      "C": [
-        {
-          "figure": "S6",
-          "label": "fig:si_image_generalization",
-          "panel": "A",
-          "source_panel": "C",
-          "path": "figures/supplementary/curated/image_generalization.pdf"
-        }
-      ],
-      "D": [
-        {
-          "figure": "S6",
-          "label": "fig:si_image_generalization",
-          "panel": "B",
-          "source_panel": "D",
-          "path": "figures/supplementary/curated/image_generalization.pdf"
-        }
-      ],
-      "E": [
-        {
-          "figure": "S6",
-          "label": "fig:si_image_generalization",
-          "panel": "C",
-          "source_panel": "E",
-          "path": "figures/supplementary/curated/image_generalization.pdf"
-        }
-      ]
-    },
     "original_asset": "figures/supplementary/figure_S04_panels_A-E.pdf",
     "original_sha256": "099440ac84a38ad019a34b27da87be9ae759cedfdf275440df3366ab8baecce9",
-    "omitted_panel_status": "Redundant printed view omitted; original scientific source and outcomes retained. Read caption/scientific section rather than transferring a panel suffix to the primary destination."
+    "primary_destination": "S6",
+    "panels": {
+      "C": {
+        "figure": "S6",
+        "panel": "A",
+        "path": "figures/supplementary/curated/image_generalization.pdf"
+      },
+      "D": {
+        "figure": "S6",
+        "panel": "B",
+        "path": "figures/supplementary/curated/image_generalization.pdf"
+      },
+      "E": {
+        "figure": "S6",
+        "panel": "C",
+        "path": "figures/supplementary/curated/image_generalization.pdf"
+      }
+    },
+    "omitted_panel_status": {
+      "A": {
+        "content": "Accuracy as nominal dendritic depth increases across \\([9]\\), \\([3,3]\\), \\([3,3,3]\\) and \\([3,3,3,3]\\) trees. This screen changes terminal, compartment and parameter counts with stage count and therefore does not isolate depth at fixed resources. Solid lines are local learning and faint dashed lines are matched backpropagation (BP); colour denotes shunting or normalized-additive architecture. Accuracy generally declines with depth in this screen; the resource-matched, task-aligned experiments of Supplementary Fig.~S31 ask the narrower question this boundary motivates.",
+        "reason": "Omitted from the curated supplement; the measurement is retained in Source Data and in the section that cites it.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/cifar10_additive_feedback_ladder_confirmatory/condition_summary.csv",
+          "drafts/dendritic-local-learning/journal/source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv",
+          "drafts/dendritic-local-learning/journal/source_data/cifar10_additive_feedback_ladder_confirmatory/seed_outcomes.csv",
+          "drafts/dendritic-local-learning/journal/source_data/cifar10_additive_feedback_ladder_confirmatory/summary.json"
+        ]
+      },
+      "B": {
+        "content": "Accuracy after adding zero-mean Gaussian noise with standard deviation $\\sigma$ to the broadcast teaching signal. This stress test is an empirical precursor of the admitted-noise term of the credit-operator theory, not a quantitative validation of it: it does not separately estimate the route operator, signal covariance, or forward-state effects.",
+        "reason": "Omitted from the curated supplement; the measurement is retained in Source Data and in the section that cites it.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/cifar10_additive_feedback_ladder_confirmatory/condition_summary.csv",
+          "drafts/dendritic-local-learning/journal/source_data/cifar10_additive_feedback_ladder_confirmatory/paired_contrasts.csv",
+          "drafts/dendritic-local-learning/journal/source_data/cifar10_additive_feedback_ladder_confirmatory/seed_outcomes.csv",
+          "drafts/dendritic-local-learning/journal/source_data/cifar10_additive_feedback_ladder_confirmatory/summary.json"
+        ]
+      }
+    }
   },
   "S5": {
     "old_label": "fig:supp_alignment",
-    "primary_destination": {
-      "figure": "S3",
-      "label": "fig:si_checkpoint_geometry",
-      "panel": "D",
-      "source_panel": "E",
-      "path": "figures/supplementary/curated/checkpoint_geometry.pdf"
-    },
-    "panels": {
-      "A": [],
-      "B": [],
-      "C": [],
-      "D": [],
-      "E": [
-        {
-          "figure": "S3",
-          "label": "fig:si_checkpoint_geometry",
-          "panel": "D",
-          "source_panel": "E",
-          "path": "figures/supplementary/curated/checkpoint_geometry.pdf"
-        }
-      ],
-      "F": [],
-      "G": [],
-      "H": []
-    },
     "original_asset": "figures/supplementary/figure_S05_panels_A-H.pdf",
     "original_sha256": "c2c79a27e0cfa2a40cdaea956db33e0abe1060efe7e73e31f98ea35795a6572a",
-    "omitted_panel_status": "Redundant printed view omitted; original scientific source and outcomes retained. Read caption/scientific section rather than transferring a panel suffix to the primary destination."
+    "primary_destination": "S3",
+    "panels": {
+      "E": {
+        "figure": "S3",
+        "panel": "F",
+        "path": "figures/supplementary/curated/utility_signal_noise.pdf"
+      }
+    },
+    "omitted_panel_status": {
+      "A": {
+        "content": "A fixed eight-route dictionary on a reconstructed tree.",
+        "reason": "Omitted from the curated supplement; the measurement is retained in Source Data and in the section that cites it.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/alignment_controlled/alignment_controlled_curves.csv",
+          "drafts/dendritic-local-learning/journal/source_data/alignment_controlled/cell_alignment_metrics.csv",
+          "drafts/dendritic-local-learning/journal/source_data/alignment_controlled/cell_paired_contrasts.csv",
+          "drafts/dendritic-local-learning/journal/source_data/alignment_controlled/dictionary_audit.csv"
+        ]
+      },
+      "B": {
+        "content": "Unit-energy fields \\(\\bm g(a)=\\sqrt a\\,\\bm g_\\parallel+\\sqrt{1-a}\\,\\bm g_\\perp\\) interpolate between its span and orthogonal complement; \\(a\\) is aligned energy.",
+        "reason": "Omitted from the curated supplement; the measurement is retained in Source Data and in the section that cites it.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/alignment_controlled/alignment_controlled_curves.csv",
+          "drafts/dendritic-local-learning/journal/source_data/alignment_controlled/cell_alignment_metrics.csv",
+          "drafts/dendritic-local-learning/journal/source_data/alignment_controlled/cell_paired_contrasts.csv",
+          "drafts/dendritic-local-learning/journal/source_data/alignment_controlled/dictionary_audit.csv"
+        ]
+      },
+      "C": {
+        "content": "Capture across imposed alignment levels.",
+        "reason": "Omitted from the curated supplement; the measurement is retained in Source Data and in the section that cites it.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/alignment_controlled/alignment_controlled_curves.csv",
+          "drafts/dendritic-local-learning/journal/source_data/alignment_controlled/cell_alignment_metrics.csv",
+          "drafts/dendritic-local-learning/journal/source_data/alignment_controlled/cell_paired_contrasts.csv",
+          "drafts/dendritic-local-learning/journal/source_data/alignment_controlled/dictionary_audit.csv"
+        ]
+      },
+      "D": {
+        "content": "Loss reduction from one norm-matched projected-gradient step, relative to the full-gradient step.",
+        "reason": "Omitted from the curated supplement; the measurement is retained in Source Data and in the section that cites it.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/alignment_controlled/alignment_controlled_curves.csv",
+          "drafts/dendritic-local-learning/journal/source_data/alignment_controlled/cell_alignment_metrics.csv",
+          "drafts/dendritic-local-learning/journal/source_data/alignment_controlled/cell_paired_contrasts.csv",
+          "drafts/dendritic-local-learning/journal/source_data/alignment_controlled/dictionary_audit.csv"
+        ]
+      },
+      "F": {
+        "content": "Ancestry-route capture relative to random paths, depth bins and ancestry shuffling.",
+        "reason": "Omitted from the curated supplement; the measurement is retained in Source Data and in the section that cites it.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/alignment_controlled/alignment_controlled_curves.csv",
+          "drafts/dendritic-local-learning/journal/source_data/alignment_controlled/cell_alignment_metrics.csv",
+          "drafts/dendritic-local-learning/journal/source_data/alignment_controlled/cell_paired_contrasts.csv",
+          "drafts/dendritic-local-learning/journal/source_data/alignment_controlled/dictionary_audit.csv"
+        ]
+      },
+      "G": {
+        "content": "Initial capture versus one-and 20-step progress; across the control dictionaries the median within-cell rank correlation between initial capture and 20-step progress is \\(\\rho_s=0.99\\). Means in",
+        "reason": "Omitted from the curated supplement; the measurement is retained in Source Data and in the section that cites it.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/alignment_controlled/alignment_controlled_curves.csv",
+          "drafts/dendritic-local-learning/journal/source_data/alignment_controlled/cell_alignment_metrics.csv",
+          "drafts/dendritic-local-learning/journal/source_data/alignment_controlled/cell_paired_contrasts.csv",
+          "drafts/dendritic-local-learning/journal/source_data/alignment_controlled/dictionary_audit.csv"
+        ]
+      },
+      "H": {
+        "content": "Initial capture versus one-and 20-step progress; across the control dictionaries the median within-cell rank correlation between initial capture and 20-step progress is \\(\\rho_s=0.99\\). Means in",
+        "reason": "Omitted from the curated supplement; the measurement is retained in Source Data and in the section that cites it.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/alignment_controlled/alignment_controlled_curves.csv",
+          "drafts/dendritic-local-learning/journal/source_data/alignment_controlled/cell_alignment_metrics.csv",
+          "drafts/dendritic-local-learning/journal/source_data/alignment_controlled/cell_paired_contrasts.csv",
+          "drafts/dendritic-local-learning/journal/source_data/alignment_controlled/dictionary_audit.csv"
+        ]
+      }
+    }
   },
   "S6": {
     "old_label": "fig:supp_interference",
-    "primary_destination": {
-      "kind": "section",
-      "label": "note:conflict_ancestry",
-      "note": "Static quadratic interference remains in the derivation; the original numerical illustration is archived."
-    },
-    "panels": {
-      "A": [],
-      "B": [],
-      "C": [],
-      "D": []
-    },
     "original_asset": "figures/supplementary/figure_S06_panels_A-D.pdf",
     "original_sha256": "4fd825c4ad49248801fe1553f16da173f62509436ca18ee648b4916c57ab6b3e",
-    "omitted_panel_status": "Redundant printed view omitted; original scientific source and outcomes retained. Read caption/scientific section rather than transferring a panel suffix to the primary destination."
+    "primary_destination": "note:conflict_ancestry",
+    "panels": {},
+    "omitted_panel_status": {
+      "A": {
+        "content": "Two tasks address partly separated dendritic routes; an approximate teaching field can also leak onto the other route.",
+        "reason": "Whole figure omitted; the exact static quadratic result is derived in Supplementary Section S3 and drawn in main Fig. 2C.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/branch_interference/interference_surface.csv"
+        ]
+      },
+      "B": {
+        "content": "Exact Task-A loss increase after one Task-B update across route overlap and off-route leakage.",
+        "reason": "Whole figure omitted; the exact static quadratic result is derived in Supplementary Section S3 and drawn in main Fig. 2C.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/branch_interference/interference_surface.csv"
+        ]
+      },
+      "C": {
+        "content": "Slices at step size 0.2 for leakage 0, 0.25, 0.5 and 1; colors identify leakage levels.",
+        "reason": "Whole figure omitted; the exact static quadratic result is derived in Supplementary Section S3 and drawn in main Fig. 2C.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/branch_interference/interference_surface.csv"
+        ]
+      },
+      "D": {
+        "content": "Published branch-specific events and spine changes motivate the prediction that loss of selective inhibition increases leakage and interference. Panels",
+        "reason": "Whole figure omitted; the exact static quadratic result is derived in Supplementary Section S3 and drawn in main Fig. 2C.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/branch_interference/interference_surface.csv"
+        ]
+      }
+    }
   },
   "S7": {
     "old_label": "fig:supp_spatial_audit",
-    "primary_destination": {
-      "figure": "S8",
-      "label": "fig:si_input_coverage_depth",
-      "panel": "A",
-      "source_panel": "A",
-      "path": "figures/supplementary/curated/input_coverage_depth.pdf"
-    },
-    "panels": {
-      "A": [
-        {
-          "figure": "S8",
-          "label": "fig:si_input_coverage_depth",
-          "panel": "A",
-          "source_panel": "A",
-          "path": "figures/supplementary/curated/input_coverage_depth.pdf"
-        }
-      ],
-      "B": [
-        {
-          "figure": "S8",
-          "label": "fig:si_input_coverage_depth",
-          "panel": "B",
-          "source_panel": "B",
-          "path": "figures/supplementary/curated/input_coverage_depth.pdf"
-        }
-      ],
-      "C": [
-        {
-          "figure": "S8",
-          "label": "fig:si_input_coverage_depth",
-          "panel": "C",
-          "source_panel": "C",
-          "path": "figures/supplementary/curated/input_coverage_depth.pdf"
-        }
-      ],
-      "D": [
-        {
-          "figure": "S8",
-          "label": "fig:si_input_coverage_depth",
-          "panel": "D",
-          "source_panel": "D",
-          "path": "figures/supplementary/curated/input_coverage_depth.pdf"
-        }
-      ]
-    },
     "original_asset": "figures/supplementary/figure_S07_panels_A-D.pdf",
     "original_sha256": "ba47673c38f942c6ed1e600b6d929ca7219f1798f96ded12fca7cb5a4c70ca4a",
-    "omitted_panel_status": "Redundant printed view omitted; original scientific source and outcomes retained. Read caption/scientific section rather than transferring a panel suffix to the primary destination."
+    "primary_destination": "S9",
+    "panels": {
+      "A": {
+        "figure": "S9",
+        "panel": "A",
+        "path": "figures/supplementary/curated/input_coverage_depth.pdf"
+      },
+      "B": {
+        "figure": "S9",
+        "panel": "B",
+        "path": "figures/supplementary/curated/input_coverage_depth.pdf"
+      },
+      "C": {
+        "figure": "S9",
+        "panel": "C",
+        "path": "figures/supplementary/curated/input_coverage_depth.pdf"
+      },
+      "D": {
+        "figure": "S9",
+        "panel": "D",
+        "path": "figures/supplementary/curated/input_coverage_depth.pdf"
+      }
+    },
+    "omitted_panel_status": {}
   },
   "S8": {
     "old_label": "fig:supp_fixed_budget",
-    "primary_destination": {
-      "figure": "S8",
-      "label": "fig:si_input_coverage_depth",
-      "panel": "E",
-      "source_panel": "E",
-      "path": "figures/supplementary/curated/input_coverage_depth.pdf"
-    },
-    "panels": {
-      "A": [],
-      "B": [],
-      "C": [],
-      "D": [],
-      "E": [
-        {
-          "figure": "S8",
-          "label": "fig:si_input_coverage_depth",
-          "panel": "E",
-          "source_panel": "E",
-          "path": "figures/supplementary/curated/input_coverage_depth.pdf"
-        }
-      ],
-      "F": [],
-      "G": [
-        {
-          "figure": "S8",
-          "label": "fig:si_input_coverage_depth",
-          "panel": "F",
-          "source_panel": "G",
-          "path": "figures/supplementary/curated/input_coverage_depth.pdf"
-        }
-      ],
-      "H": [],
-      "I": []
-    },
     "original_asset": "figures/supplementary/figure_S08_panels_A-I.pdf",
     "original_sha256": "45cc1376b7c1b688e9b1cd4f0a541a36cba2f00f322edfc5ee2ca9707365b297",
-    "omitted_panel_status": "Redundant printed view omitted; original scientific source and outcomes retained. Read caption/scientific section rather than transferring a panel suffix to the primary destination."
+    "primary_destination": "S9",
+    "panels": {
+      "E": {
+        "figure": "S9",
+        "panel": "E",
+        "path": "figures/supplementary/curated/input_coverage_depth.pdf"
+      },
+      "G": {
+        "figure": "S9",
+        "panel": "F",
+        "path": "figures/supplementary/curated/input_coverage_depth.pdf"
+      }
+    },
+    "omitted_panel_status": {
+      "A": {
+        "content": "Held-out accuracy under matched-width scalar-fallback, neuron-specific, exact-path and backpropagated learning, respectively.",
+        "reason": "Omitted from the curated supplement; the measurement is retained in Source Data and in the section that cites it.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/prospective_input_validity/followup_publication_condition_summary.csv",
+          "drafts/dendritic-local-learning/journal/source_data/prospective_input_validity/followup_publication_paired_contrasts.csv",
+          "drafts/dendritic-local-learning/journal/source_data/prospective_input_validity/followup_publication_seed_outcomes.csv"
+        ]
+      },
+      "B": {
+        "content": "Held-out accuracy under matched-width scalar-fallback, neuron-specific, exact-path and backpropagated learning, respectively.",
+        "reason": "Omitted from the curated supplement; the measurement is retained in Source Data and in the section that cites it.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/prospective_input_validity/followup_publication_condition_summary.csv",
+          "drafts/dendritic-local-learning/journal/source_data/prospective_input_validity/followup_publication_paired_contrasts.csv",
+          "drafts/dendritic-local-learning/journal/source_data/prospective_input_validity/followup_publication_seed_outcomes.csv"
+        ]
+      },
+      "C": {
+        "content": "Held-out accuracy under matched-width scalar-fallback, neuron-specific, exact-path and backpropagated learning, respectively.",
+        "reason": "Omitted from the curated supplement; the measurement is retained in Source Data and in the section that cites it.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/prospective_input_validity/followup_publication_condition_summary.csv",
+          "drafts/dendritic-local-learning/journal/source_data/prospective_input_validity/followup_publication_paired_contrasts.csv",
+          "drafts/dendritic-local-learning/journal/source_data/prospective_input_validity/followup_publication_seed_outcomes.csv"
+        ]
+      },
+      "D": {
+        "content": "Held-out accuracy under matched-width scalar-fallback, neuron-specific, exact-path and backpropagated learning, respectively.",
+        "reason": "Omitted from the curated supplement; the measurement is retained in Source Data and in the section that cites it.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/prospective_input_validity/followup_publication_condition_summary.csv",
+          "drafts/dendritic-local-learning/journal/source_data/prospective_input_validity/followup_publication_paired_contrasts.csv",
+          "drafts/dendritic-local-learning/journal/source_data/prospective_input_validity/followup_publication_seed_outcomes.csv"
+        ]
+      },
+      "F": {
+        "content": "Local-minus-backpropagated (BP) accuracy in pp; line styles identify the three local fields.",
+        "reason": "Omitted from the curated supplement; the measurement is retained in Source Data and in the section that cites it.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/prospective_input_validity/followup_publication_condition_summary.csv",
+          "drafts/dendritic-local-learning/journal/source_data/prospective_input_validity/followup_publication_paired_contrasts.csv",
+          "drafts/dendritic-local-learning/journal/source_data/prospective_input_validity/followup_publication_seed_outcomes.csv"
+        ]
+      },
+      "H": {
+        "content": "Runtime in minutes for the historical noise-resilience depth cohort.",
+        "reason": "Omitted; the resource controls that bear on the depth claim are the contact and parameter counts printed as S9F.",
+        "numbers_at": "source_data/prospective_input_validity/"
+      },
+      "I": {
+        "content": "Peak memory in mebibytes for the same cohort.",
+        "reason": "Omitted; retained with the runtime record in Source Data.",
+        "numbers_at": "source_data/prospective_input_validity/"
+      }
+    }
   },
   "S9": {
     "old_label": "fig:supp_mechanism",
-    "primary_destination": {
-      "figure": "S3",
-      "label": "fig:si_checkpoint_geometry",
-      "panel": "A",
-      "source_panel": "A",
-      "path": "figures/supplementary/curated/checkpoint_geometry.pdf"
-    },
-    "panels": {
-      "A": [
-        {
-          "figure": "S3",
-          "label": "fig:si_checkpoint_geometry",
-          "panel": "A",
-          "source_panel": "A",
-          "path": "figures/supplementary/curated/checkpoint_geometry.pdf"
-        }
-      ],
-      "B": [],
-      "C": [
-        {
-          "figure": "S3",
-          "label": "fig:si_checkpoint_geometry",
-          "panel": "B",
-          "source_panel": "C",
-          "path": "figures/supplementary/curated/checkpoint_geometry.pdf"
-        }
-      ],
-      "D": [
-        {
-          "figure": "S3",
-          "label": "fig:si_checkpoint_geometry",
-          "panel": "C",
-          "source_panel": "D",
-          "path": "figures/supplementary/curated/checkpoint_geometry.pdf"
-        }
-      ]
-    },
     "original_asset": "figures/supplementary/figure_S09_panels_A-D.pdf",
     "original_sha256": "3cca7fab86d97ea582f77afee3bce7e1f6edd4f87a44daa4c1fbca8285aa34c3",
-    "omitted_panel_status": "Redundant printed view omitted; original scientific source and outcomes retained. Read caption/scientific section rather than transferring a panel suffix to the primary destination."
+    "primary_destination": "fig:si_utility_signal_noise",
+    "panels": {},
+    "omitted_panel_status": {
+      "A": {
+        "content": "Candidate/exact gradient cosine at 120 valid trained checkpoints, by delivery rule.",
+        "reason": "Re-rendered natively, together with old S9C, as the single merged axis S3E (SI_PLAN M1); no crop of this panel is pasted.",
+        "numbers_at": "source_data/prospective_input_validity/mechanism_checkpoint_rows_valid.csv"
+      },
+      "B": {
+        "content": "Scaled gradient capture at the same 120 checkpoints.",
+        "reason": "Omitted; direction and one-step progress are the two quantities the merged S3E carries, and capture is retained in Source Data.",
+        "numbers_at": "source_data/prospective_input_validity/mechanism_checkpoint_rows_valid.csv"
+      },
+      "C": {
+        "content": "Norm-matched one-step loss decrease as a fraction of the exact step, at the same 120 checkpoints.",
+        "reason": "Re-rendered natively, together with old S9A, as the single merged axis S3E (SI_PLAN M1).",
+        "numbers_at": "source_data/prospective_input_validity/mechanism_checkpoint_rows_valid.csv"
+      },
+      "D": {
+        "content": "Within-rule association between candidate/exact gradient cosine and norm-matched one-step progress, as a scatter over the same 120 checkpoints.",
+        "reason": "Deleted in the M1 merge: the two box panels state the association, and this panel printed the placeholder string \"legend: within-rule association\" inside its axes.",
+        "numbers_at": "source_data/prospective_input_validity/mechanism_checkpoint_rows_valid.csv"
+      }
+    }
   },
   "S10": {
     "old_label": "fig:supp_v661",
-    "primary_destination": {
-      "figure": "S24",
-      "label": "fig:si_anatomy_capacity_controls",
-      "panel": "A",
-      "source_panel": "B",
-      "path": "figures/supplementary/curated/anatomy_capacity_controls.pdf"
-    },
-    "panels": {
-      "A": [],
-      "B": [
-        {
-          "figure": "S24",
-          "label": "fig:si_anatomy_capacity_controls",
-          "panel": "A",
-          "source_panel": "B",
-          "path": "figures/supplementary/curated/anatomy_capacity_controls.pdf"
-        }
-      ],
-      "C": [],
-      "D": [],
-      "E": [],
-      "F": [
-        {
-          "figure": "S29",
-          "label": "fig:si_shunt_replication",
-          "panel": "A",
-          "source_panel": "F",
-          "path": "figures/supplementary/curated/shunt_replication.pdf"
-        }
-      ],
-      "G": [
-        {
-          "figure": "S29",
-          "label": "fig:si_shunt_replication",
-          "panel": "B",
-          "source_panel": "G",
-          "path": "figures/supplementary/curated/shunt_replication.pdf"
-        }
-      ],
-      "H": [
-        {
-          "figure": "S29",
-          "label": "fig:si_shunt_replication",
-          "panel": "C",
-          "source_panel": "H",
-          "path": "figures/supplementary/curated/shunt_replication.pdf"
-        }
-      ]
-    },
     "original_asset": "figures/supplementary/figure_S10_panels_A-H.pdf",
     "original_sha256": "123bcf43dbf1b85ab53e1b5a618f7dde0077ec77c81ee4ddac3bc3bf7a0c91f2",
-    "omitted_panel_status": "Redundant printed view omitted; original scientific source and outcomes retained. Read caption/scientific section rather than transferring a panel suffix to the primary destination."
+    "primary_destination": "S25",
+    "panels": {
+      "B": {
+        "figure": "S25",
+        "panel": "A",
+        "path": "figures/supplementary/curated/anatomy_capacity_controls.pdf"
+      },
+      "F": {
+        "figure": "S30",
+        "panel": "A",
+        "path": "figures/supplementary/curated/shunt_replication.pdf"
+      },
+      "G": {
+        "figure": "S30",
+        "panel": "B",
+        "path": "figures/supplementary/curated/shunt_replication.pdf"
+      },
+      "H": {
+        "figure": "S30",
+        "panel": "C",
+        "path": "figures/supplementary/curated/shunt_replication.pdf"
+      }
+    },
+    "omitted_panel_status": {
+      "A": {
+        "content": "Composition of the 47-cell sample by excitatory cell class (L, cortical layer; IT, intratelencephalic; ET, extratelencephalic).",
+        "reason": "Omitted from the curated supplement; the measurement is retained in Source Data and in the section that cites it.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/microns_v661_replication/cohort_manifest.csv",
+          "drafts/dendritic-local-learning/journal/source_data/microns_v661_replication/replication_summary.json",
+          "drafts/dendritic-local-learning/journal/source_data/microns_v661_replication/supp_figure_focal_cells.csv",
+          "drafts/dendritic-local-learning/journal/source_data/microns_v661_replication/supp_figure_routing_curves.csv"
+        ]
+      },
+      "C": {
+        "content": "Cell-level capture at eight channels, using the dictionaries in",
+        "reason": "Omitted from the curated supplement; the measurement is retained in Source Data and in the section that cites it.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/microns_v661_replication/cohort_manifest.csv",
+          "drafts/dendritic-local-learning/journal/source_data/microns_v661_replication/replication_summary.json",
+          "drafts/dendritic-local-learning/journal/source_data/microns_v661_replication/supp_figure_focal_cells.csv",
+          "drafts/dendritic-local-learning/journal/source_data/microns_v661_replication/supp_figure_routing_curves.csv"
+        ]
+      },
+      "D": {
+        "content": "Eight-channel wiring-capture trade-off; morphology paths used 8.1\\% of dense-feedback wiring.",
+        "reason": "Omitted from the curated supplement; the measurement is retained in Source Data and in the section that cites it.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/microns_v661_replication/cohort_manifest.csv",
+          "drafts/dendritic-local-learning/journal/source_data/microns_v661_replication/replication_summary.json",
+          "drafts/dendritic-local-learning/journal/source_data/microns_v661_replication/supp_figure_focal_cells.csv",
+          "drafts/dendritic-local-learning/journal/source_data/microns_v661_replication/supp_figure_routing_curves.csv"
+        ]
+      },
+      "E": {
+        "content": "Within-cell morphology-minus-control capture for random paths, depth bins, and ancestry shuffles; all three contrasts were positive in 47/47 cells.",
+        "reason": "Omitted from the curated supplement; the measurement is retained in Source Data and in the section that cites it.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/microns_v661_replication/cohort_manifest.csv",
+          "drafts/dendritic-local-learning/journal/source_data/microns_v661_replication/replication_summary.json",
+          "drafts/dendritic-local-learning/journal/source_data/microns_v661_replication/supp_figure_focal_cells.csv",
+          "drafts/dendritic-local-learning/journal/source_data/microns_v661_replication/supp_figure_routing_curves.csv"
+        ]
+      }
+    }
   },
   "S11": {
     "old_label": "fig:supp_focal_matrix",
-    "primary_destination": {
-      "figure": "S28",
-      "label": "fig:si_shunt_sensitivity",
-      "panel": "A",
-      "source_panel": "A",
-      "path": "figures/supplementary/curated/shunt_sensitivity.pdf"
-    },
-    "panels": {
-      "A": [
-        {
-          "figure": "S28",
-          "label": "fig:si_shunt_sensitivity",
-          "panel": "A",
-          "source_panel": "A",
-          "path": "figures/supplementary/curated/shunt_sensitivity.pdf"
-        }
-      ],
-      "B": [],
-      "C": []
-    },
     "original_asset": "figures/supplementary/figure_S11_panels_A-C.pdf",
     "original_sha256": "79b8b946b969939a71e4f64d1b8e3e0cb58f2a298114b1b6d2f6a644b296c100",
-    "omitted_panel_status": "Redundant printed view omitted; original scientific source and outcomes retained. Read caption/scientific section rather than transferring a panel suffix to the primary destination."
+    "primary_destination": "S29",
+    "panels": {
+      "A": {
+        "figure": "S29",
+        "panel": "A",
+        "path": "figures/supplementary/curated/shunt_sensitivity.pdf"
+      },
+      "B": {
+        "figure": "S29",
+        "panel": "C",
+        "path": "figures/supplementary/curated/shunt_sensitivity.pdf"
+      },
+      "C": {
+        "figure": "S29",
+        "panel": "D",
+        "path": "figures/supplementary/curated/shunt_sensitivity.pdf"
+      }
+    },
+    "omitted_panel_status": {}
   },
   "S12": {
     "old_label": "fig:supp_inhibitory",
-    "primary_destination": {
-      "figure": "S25",
-      "label": "fig:si_inhibitory_spatial_controls",
-      "panel": "A",
-      "source_panel": "B",
-      "path": "figures/supplementary/curated/inhibitory_spatial_controls.pdf"
-    },
-    "panels": {
-      "A": [],
-      "B": [
-        {
-          "figure": "S25",
-          "label": "fig:si_inhibitory_spatial_controls",
-          "panel": "A",
-          "source_panel": "B",
-          "path": "figures/supplementary/curated/inhibitory_spatial_controls.pdf"
-        }
-      ],
-      "C": [],
-      "D": [
-        {
-          "figure": "S25",
-          "label": "fig:si_inhibitory_spatial_controls",
-          "panel": "B",
-          "source_panel": "D",
-          "path": "figures/supplementary/curated/inhibitory_spatial_controls.pdf"
-        }
-      ],
-      "E": [
-        {
-          "figure": "S25",
-          "label": "fig:si_inhibitory_spatial_controls",
-          "panel": "C",
-          "source_panel": "E",
-          "path": "figures/supplementary/curated/inhibitory_spatial_controls.pdf"
-        }
-      ],
-      "F": [
-        {
-          "figure": "S25",
-          "label": "fig:si_inhibitory_spatial_controls",
-          "panel": "D",
-          "source_panel": "F",
-          "path": "figures/supplementary/curated/inhibitory_spatial_controls.pdf"
-        }
-      ],
-      "G": [
-        {
-          "figure": "S25",
-          "label": "fig:si_inhibitory_spatial_controls",
-          "panel": "E",
-          "source_panel": "G",
-          "path": "figures/supplementary/curated/inhibitory_spatial_controls.pdf"
-        }
-      ],
-      "H": [
-        {
-          "figure": "S25",
-          "label": "fig:si_inhibitory_spatial_controls",
-          "panel": "F",
-          "source_panel": "H",
-          "path": "figures/supplementary/curated/inhibitory_spatial_controls.pdf"
-        }
-      ],
-      "I": [],
-      "J": []
-    },
     "original_asset": "figures/supplementary/figure_S12_panels_A-J.pdf",
     "original_sha256": "20fae4305da8049789fab4d9c90a4348673387f275335a891fc3c8ac4ee7761b",
-    "omitted_panel_status": "Redundant printed view omitted; original scientific source and outcomes retained. Read caption/scientific section rather than transferring a panel suffix to the primary destination."
+    "primary_destination": "S26",
+    "panels": {
+      "B": {
+        "figure": "S26",
+        "panel": "A",
+        "path": "figures/supplementary/curated/inhibitory_spatial_controls.pdf"
+      },
+      "D": {
+        "figure": "S26",
+        "panel": "B",
+        "path": "figures/supplementary/curated/inhibitory_spatial_controls.pdf"
+      },
+      "E": {
+        "figure": "S26",
+        "panel": "C",
+        "path": "figures/supplementary/curated/inhibitory_spatial_controls.pdf"
+      },
+      "F": {
+        "figure": "S26",
+        "panel": "D",
+        "path": "figures/supplementary/curated/inhibitory_spatial_controls.pdf"
+      },
+      "G": {
+        "figure": "S26",
+        "panel": "E",
+        "path": "figures/supplementary/curated/inhibitory_spatial_controls.pdf"
+      },
+      "H": {
+        "figure": "S26",
+        "panel": "F",
+        "path": "figures/supplementary/curated/inhibitory_spatial_controls.pdf"
+      }
+    },
+    "omitted_panel_status": {
+      "A": {
+        "content": "Schematic of the inhibitory-route matching design.",
+        "reason": "Omitted; the matched-null design is described in Supplementary Section S7.",
+        "numbers_at": "source_data/microns_inhibitory_routes/"
+      },
+      "C": {
+        "content": "Contact counts per target for the twenty-target inhibitory analysis.",
+        "reason": "Omitted; the counts are tabulated in Supplementary Table S6.",
+        "numbers_at": "source_data/microns_inhibitory_routes/"
+      },
+      "I": {
+        "content": "Weighted modeled-field capture versus site budget for the dense oracle, anatomically selected inhibitory routes, random sites, depth bins and shuffled routes.",
+        "reason": "Omitted; the same capacity comparison is drawn for the route cohorts in main Fig. 7C,D and in S25.",
+        "numbers_at": "source_data/microns_inhibitory_routes/"
+      },
+      "J": {
+        "content": "Eight-site capture within each of twenty targets.",
+        "reason": "Omitted; the per-target values are retained in Source Data and summarized by S12I's omitted record.",
+        "numbers_at": "source_data/microns_inhibitory_routes/"
+      }
+    }
   },
   "S13": {
     "old_label": "fig:supp_positive_reliability",
-    "primary_destination": {
-      "figure": "S4",
-      "label": "fig:si_reliability_gain",
-      "panel": "A",
-      "source_panel": "A",
-      "path": "figures/supplementary/curated/reliability_gain.pdf"
-    },
-    "panels": {
-      "A": [
-        {
-          "figure": "S4",
-          "label": "fig:si_reliability_gain",
-          "panel": "A",
-          "source_panel": "A",
-          "path": "figures/supplementary/curated/reliability_gain.pdf"
-        }
-      ],
-      "B": [],
-      "C": [],
-      "D": [],
-      "E": [],
-      "F": [
-        {
-          "figure": "S4",
-          "label": "fig:si_reliability_gain",
-          "panel": "B",
-          "source_panel": "F",
-          "path": "figures/supplementary/curated/reliability_gain.pdf"
-        }
-      ]
-    },
     "original_asset": "figures/supplementary/figure_S13_panels_A-F.pdf",
     "original_sha256": "47e790a96daf408e8baee4dd1c7c8764d679f3de0aed232365f5e8763a4039e9",
-    "omitted_panel_status": "Redundant printed view omitted; original scientific source and outcomes retained. Read caption/scientific section rather than transferring a panel suffix to the primary destination."
+    "primary_destination": "S4",
+    "panels": {
+      "A": {
+        "figure": "S4",
+        "panel": "A",
+        "path": "figures/supplementary/curated/reliability_gain.pdf"
+      },
+      "F": {
+        "figure": "S4",
+        "panel": "B",
+        "path": "figures/supplementary/curated/reliability_gain.pdf"
+      }
+    },
+    "omitted_panel_status": {
+      "B": {
+        "content": "Prescribed reliability profile $\\min\\{1,S_b/[c(S_b+N_b)]\\}$ at maximum heterogeneity with $c=0.5$; \\(S_b\\) and \\(N_b\\) are branch signal and noise energies. SNR denotes signal-to-noise ratio.",
+        "reason": "Omitted from the curated supplement; the measurement is retained in Source Data and in the section that cites it.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/positive_conductance_reliability_step_consistent/branch_reliability.csv",
+          "drafts/dendritic-local-learning/journal/source_data/positive_conductance_reliability_step_consistent/condition_summary.csv",
+          "drafts/dendritic-local-learning/journal/source_data/positive_conductance_reliability_step_consistent/extended_contrasts.csv",
+          "drafts/dendritic-local-learning/journal/source_data/positive_conductance_reliability_step_consistent/seed_outcomes.csv"
+        ]
+      },
+      "C": {
+        "content": "Mean one-step held-out loss decrease across 50 paired seeds for aligned, global, shuffled, anti-aligned, unshunted and exact clean-backpropagation (BP) rules. Lines and shading show seed means and 95\\% paired-seed bootstrap intervals.",
+        "reason": "Omitted from the curated supplement; the measurement is retained in Source Data and in the section that cites it.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/positive_conductance_reliability_step_consistent/branch_reliability.csv",
+          "drafts/dendritic-local-learning/journal/source_data/positive_conductance_reliability_step_consistent/condition_summary.csv",
+          "drafts/dendritic-local-learning/journal/source_data/positive_conductance_reliability_step_consistent/extended_contrasts.csv",
+          "drafts/dendritic-local-learning/journal/source_data/positive_conductance_reliability_step_consistent/seed_outcomes.csv"
+        ]
+      },
+      "D": {
+        "content": "Aligned-minus-global and aligned-minus-no-shunt one-step contrasts. At heterogeneity two, the former is positive in 49/50 seeds; the latter has a positive mean interval, is positive in 33/50 seeds and has two-sided Wilcoxon $P=0.0030$.",
+        "reason": "Omitted from the curated supplement; the measurement is retained in Source Data and in the section that cites it.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/positive_conductance_reliability_step_consistent/branch_reliability.csv",
+          "drafts/dendritic-local-learning/journal/source_data/positive_conductance_reliability_step_consistent/condition_summary.csv",
+          "drafts/dendritic-local-learning/journal/source_data/positive_conductance_reliability_step_consistent/extended_contrasts.csv",
+          "drafts/dendritic-local-learning/journal/source_data/positive_conductance_reliability_step_consistent/seed_outcomes.csv"
+        ]
+      },
+      "E": {
+        "content": "Held-out loss after 40 updates. Exact clean backpropagation is the unattenuated optimization reference.",
+        "reason": "Omitted from the curated supplement; the measurement is retained in Source Data and in the section that cites it.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/positive_conductance_reliability_step_consistent/branch_reliability.csv",
+          "drafts/dendritic-local-learning/journal/source_data/positive_conductance_reliability_step_consistent/condition_summary.csv",
+          "drafts/dendritic-local-learning/journal/source_data/positive_conductance_reliability_step_consistent/extended_contrasts.csv",
+          "drafts/dendritic-local-learning/journal/source_data/positive_conductance_reliability_step_consistent/seed_outcomes.csv"
+        ]
+      }
+    }
   },
   "S14": {
     "old_label": "fig:supp_same_span_learning",
-    "primary_destination": {
-      "figure": "S5",
-      "label": "fig:si_same_span_conditioning",
-      "panel": "A",
-      "source_panel": "A",
-      "path": "figures/supplementary/curated/same_span_conditioning.pdf"
-    },
-    "panels": {
-      "A": [
-        {
-          "figure": "S5",
-          "label": "fig:si_same_span_conditioning",
-          "panel": "A",
-          "source_panel": "A",
-          "path": "figures/supplementary/curated/same_span_conditioning.pdf"
-        }
-      ],
-      "B": [
-        {
-          "figure": "S5",
-          "label": "fig:si_same_span_conditioning",
-          "panel": "B",
-          "source_panel": "B",
-          "path": "figures/supplementary/curated/same_span_conditioning.pdf"
-        }
-      ],
-      "C": [],
-      "D": [],
-      "E": [
-        {
-          "figure": "S5",
-          "label": "fig:si_same_span_conditioning",
-          "panel": "C",
-          "source_panel": "E",
-          "path": "figures/supplementary/curated/same_span_conditioning.pdf"
-        }
-      ],
-      "F": [
-        {
-          "figure": "S5",
-          "label": "fig:si_same_span_conditioning",
-          "panel": "D",
-          "source_panel": "F",
-          "path": "figures/supplementary/curated/same_span_conditioning.pdf"
-        }
-      ]
-    },
     "original_asset": "figures/supplementary/figure_S14_panels_A-F.pdf",
     "original_sha256": "965e80575a09910f57d0d5a1c4b2073b04ea57b589802dfdd37fe1da95240bf6",
-    "omitted_panel_status": "Redundant printed view omitted; original scientific source and outcomes retained. Read caption/scientific section rather than transferring a panel suffix to the primary destination."
+    "primary_destination": "S5",
+    "panels": {
+      "A": {
+        "figure": "S5",
+        "panel": "A",
+        "path": "figures/supplementary/curated/same_span_conditioning.pdf"
+      },
+      "B": {
+        "figure": "S5",
+        "panel": "B",
+        "path": "figures/supplementary/curated/same_span_conditioning.pdf"
+      },
+      "E": {
+        "figure": "S5",
+        "panel": "C",
+        "path": "figures/supplementary/curated/same_span_conditioning.pdf"
+      },
+      "F": {
+        "figure": "S5",
+        "panel": "D",
+        "path": "figures/supplementary/curated/same_span_conditioning.pdf"
+      }
+    },
+    "omitted_panel_status": {
+      "C": {
+        "content": "Mean population-loss trajectories under common noisy local target estimates at effective sample sizes 4 and 256. Shading shows 95\\% paired-seed bootstrap intervals across 50 seeds. At low data, slow nested modes filter variance; at high data, their retained bias dominates.",
+        "reason": "Omitted from the curated supplement; the measurement is retained in Source Data and in the section that cites it.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/same_span_coefficient_learning/paired_contrasts.csv",
+          "drafts/dendritic-local-learning/journal/source_data/same_span_coefficient_learning/predicted_sample_crossovers.csv",
+          "drafts/dendritic-local-learning/journal/source_data/same_span_coefficient_learning/seed_trajectories.csv",
+          "drafts/dendritic-local-learning/journal/source_data/same_span_coefficient_learning/summary.json"
+        ]
+      },
+      "D": {
+        "content": "Mean population-loss trajectories under common noisy local target estimates at effective sample sizes 4 and 256. Shading shows 95\\% paired-seed bootstrap intervals across 50 seeds. At low data, slow nested modes filter variance; at high data, their retained bias dominates.",
+        "reason": "Omitted from the curated supplement; the measurement is retained in Source Data and in the section that cites it.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/same_span_coefficient_learning/paired_contrasts.csv",
+          "drafts/dendritic-local-learning/journal/source_data/same_span_coefficient_learning/predicted_sample_crossovers.csv",
+          "drafts/dendritic-local-learning/journal/source_data/same_span_coefficient_learning/seed_trajectories.csv",
+          "drafts/dendritic-local-learning/journal/source_data/same_span_coefficient_learning/summary.json"
+        ]
+      }
+    }
   },
   "S15": {
     "old_label": "fig:supp_nonlinear_depth_calibration",
-    "primary_destination": {
-      "figure": "S22",
-      "label": "fig:si_physical_calibration",
-      "panel": "A",
-      "source_panel": "A",
-      "path": "figures/supplementary/curated/physical_calibration.pdf"
-    },
-    "panels": {
-      "A": [
-        {
-          "figure": "S22",
-          "label": "fig:si_physical_calibration",
-          "panel": "A",
-          "source_panel": "A",
-          "path": "figures/supplementary/curated/physical_calibration.pdf"
-        }
-      ],
-      "B": [
-        {
-          "figure": "S22",
-          "label": "fig:si_physical_calibration",
-          "panel": "B",
-          "source_panel": "B",
-          "path": "figures/supplementary/curated/physical_calibration.pdf"
-        }
-      ],
-      "C": [
-        {
-          "figure": "S22",
-          "label": "fig:si_physical_calibration",
-          "panel": "C",
-          "source_panel": "C",
-          "path": "figures/supplementary/curated/physical_calibration.pdf"
-        }
-      ],
-      "D": [
-        {
-          "figure": "S22",
-          "label": "fig:si_physical_calibration",
-          "panel": "D",
-          "source_panel": "D",
-          "path": "figures/supplementary/curated/physical_calibration.pdf"
-        }
-      ]
-    },
     "original_asset": "figures/supplementary/figure_S15_panels_A-D.pdf",
     "original_sha256": "9bf874b4ff48aed0477e74e9be607e601537597c8f0f610f446c75610b729331",
-    "omitted_panel_status": "Redundant printed view omitted; original scientific source and outcomes retained. Read caption/scientific section rather than transferring a panel suffix to the primary destination."
+    "primary_destination": "S23",
+    "panels": {
+      "A": {
+        "figure": "S23",
+        "panel": "A",
+        "path": "figures/supplementary/curated/physical_calibration.pdf"
+      },
+      "B": {
+        "figure": "S23",
+        "panel": "B",
+        "path": "figures/supplementary/curated/physical_calibration.pdf"
+      },
+      "C": {
+        "figure": "S23",
+        "panel": "C",
+        "path": "figures/supplementary/curated/physical_calibration.pdf"
+      },
+      "D": {
+        "figure": "S23",
+        "panel": "D",
+        "path": "figures/supplementary/curated/physical_calibration.pdf"
+      }
+    },
+    "omitted_panel_status": {}
   },
   "S16": {
     "old_label": "fig:supp_interior_optimum",
-    "primary_destination": {
-      "kind": "section",
-      "label": "note:interior_optimum",
-      "note": "Designed and retrospective optimum comparisons remain numerically in the operator-theory note; the full diagnostic is archived."
-    },
-    "panels": {
-      "A": [],
-      "B": [],
-      "C": [],
-      "D": []
-    },
     "original_asset": "figures/supplementary/figure_S16_panels_A-D.pdf",
     "original_sha256": "a2aae93ddd4ce11e7716884db9612278ab298ebb12468f01ad62e14f5bc43959",
-    "omitted_panel_status": "Redundant printed view omitted; original scientific source and outcomes retained. Read caption/scientific section rather than transferring a panel suffix to the primary destination."
+    "primary_destination": "note:interior_optimum",
+    "panels": {},
+    "omitted_panel_status": {
+      "A": {
+        "content": "use the abstract 16-coordinate balanced-tree credit-operator experiment; the tree indexes Haar credit modes and is not a forward dendritic morphology. Panel",
+        "reason": "Whole figure omitted; Supplementary Section S1 retains the 135/200 seed-task optima and the 13/20 and 8/20 seed-level counts in prose.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/interior_optimum/depth_agreement_seed.csv",
+          "drafts/dendritic-local-learning/journal/source_data/interior_optimum/depth_curves.csv",
+          "drafts/dendritic-local-learning/journal/source_data/interior_optimum/factorial_contrast_seed.csv",
+          "drafts/dendritic-local-learning/journal/source_data/interior_optimum/factorial_peak_seed.csv"
+        ]
+      },
+      "B": {
+        "content": "use the abstract 16-coordinate balanced-tree credit-operator experiment; the tree indexes Haar credit modes and is not a forward dendritic morphology. Panel",
+        "reason": "Whole figure omitted; Supplementary Section S1 retains the 135/200 seed-task optima and the 13/20 and 8/20 seed-level counts in prose.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/interior_optimum/depth_agreement_seed.csv",
+          "drafts/dendritic-local-learning/journal/source_data/interior_optimum/depth_curves.csv",
+          "drafts/dendritic-local-learning/journal/source_data/interior_optimum/factorial_contrast_seed.csv",
+          "drafts/dendritic-local-learning/journal/source_data/interior_optimum/factorial_peak_seed.csv"
+        ]
+      },
+      "C": {
+        "content": "use the abstract 16-coordinate balanced-tree credit-operator experiment; the tree indexes Haar credit modes and is not a forward dendritic morphology. Panel",
+        "reason": "Whole figure omitted; Supplementary Section S1 retains the 135/200 seed-task optima and the 13/20 and 8/20 seed-level counts in prose.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/interior_optimum/depth_agreement_seed.csv",
+          "drafts/dendritic-local-learning/journal/source_data/interior_optimum/depth_curves.csv",
+          "drafts/dendritic-local-learning/journal/source_data/interior_optimum/factorial_contrast_seed.csv",
+          "drafts/dendritic-local-learning/journal/source_data/interior_optimum/factorial_peak_seed.csv"
+        ]
+      },
+      "D": {
+        "content": "is a separate reanalysis of the trained eight-stream subtree-address factorial from main Fig.~3.",
+        "reason": "Whole figure omitted; Supplementary Section S1 retains the 135/200 seed-task optima and the 13/20 and 8/20 seed-level counts in prose.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/interior_optimum/depth_agreement_seed.csv",
+          "drafts/dendritic-local-learning/journal/source_data/interior_optimum/depth_curves.csv",
+          "drafts/dendritic-local-learning/journal/source_data/interior_optimum/factorial_contrast_seed.csv",
+          "drafts/dendritic-local-learning/journal/source_data/interior_optimum/factorial_peak_seed.csv"
+        ]
+      }
+    }
   },
   "S17": {
     "old_label": "fig:supp_animal_credit",
-    "primary_destination": {
-      "kind": "table",
-      "label": "tab:animal_credit",
-      "note": "External signed neuron-level result remains tabulated."
-    },
-    "panels": {
-      "A": [],
-      "B": []
-    },
     "original_asset": "figures/supplementary/figure_S17_panels_A-B.pdf",
     "original_sha256": "cd7de316fd16b3108f466b3a6bf83469763914651eae007ae6b23ec697b8a1e7",
-    "omitted_panel_status": "Redundant printed view omitted; original scientific source and outcomes retained. Read caption/scientific section rather than transferring a panel suffix to the primary destination."
+    "primary_destination": "S33",
+    "panels": {
+      "A": {
+        "figure": "S33",
+        "panel": "A",
+        "path": "figures/supplementary/curated/animal_credit_reanalysis.pdf"
+      },
+      "B": {
+        "figure": "S33",
+        "panel": "B",
+        "path": "figures/supplementary/curated/animal_credit_reanalysis.pdf"
+      }
+    },
+    "omitted_panel_status": {}
   },
   "S18": {
     "old_label": "fig:supp_physical_depth_controls",
-    "primary_destination": {
-      "figure": "S21",
-      "label": "fig:si_physical_architecture",
-      "panel": "E",
-      "source_panel": "A",
-      "path": "figures/supplementary/curated/physical_architecture.pdf"
-    },
-    "panels": {
-      "A": [
-        {
-          "figure": "S21",
-          "label": "fig:si_physical_architecture",
-          "panel": "E",
-          "source_panel": "A",
-          "path": "figures/supplementary/curated/physical_architecture.pdf"
-        }
-      ],
-      "B": [
-        {
-          "figure": "S21",
-          "label": "fig:si_physical_architecture",
-          "panel": "F",
-          "source_panel": "B",
-          "path": "figures/supplementary/curated/physical_architecture.pdf"
-        }
-      ],
-      "C": [],
-      "D": [],
-      "E": [
-        {
-          "figure": "S23",
-          "label": "fig:si_physical_optimizer",
-          "panel": "A",
-          "source_panel": "E",
-          "path": "figures/supplementary/curated/physical_optimizer.pdf"
-        }
-      ],
-      "F": [
-        {
-          "figure": "S23",
-          "label": "fig:si_physical_optimizer",
-          "panel": "B",
-          "source_panel": "F",
-          "path": "figures/supplementary/curated/physical_optimizer.pdf"
-        }
-      ]
-    },
     "original_asset": "figures/supplementary/figure_S18_panels_A-K.pdf",
     "original_sha256": "6142329415ae95a05a7f78ed1a8c6d0c5073300143af9f6a50e60e921c29b8d1",
-    "omitted_panel_status": "Redundant printed view omitted; original scientific source and outcomes retained. Read caption/scientific section rather than transferring a panel suffix to the primary destination."
+    "primary_destination": "S22",
+    "panels": {
+      "A": {
+        "figure": "S22",
+        "panel": "E",
+        "path": "figures/supplementary/curated/physical_architecture.pdf"
+      },
+      "B": {
+        "figure": "S22",
+        "panel": "F",
+        "path": "figures/supplementary/curated/physical_architecture.pdf"
+      },
+      "C": {
+        "figure": "S22",
+        "panel": "G",
+        "path": "figures/supplementary/curated/physical_architecture.pdf"
+      },
+      "D": {
+        "figure": "S22",
+        "panel": "H",
+        "path": "figures/supplementary/curated/physical_architecture.pdf"
+      },
+      "E": {
+        "figure": "S24",
+        "panel": "A",
+        "path": "figures/supplementary/curated/physical_optimizer.pdf"
+      },
+      "F": {
+        "figure": "S24",
+        "panel": "B",
+        "path": "figures/supplementary/curated/physical_optimizer.pdf"
+      }
+    },
+    "omitted_panel_status": {}
   },
   "S19": {
     "old_label": "fig:supp_prospective_diagnostics",
-    "primary_destination": {
-      "figure": "S9",
-      "label": "fig:si_branch_conflict_controls",
-      "panel": "A",
-      "source_panel": "A",
-      "path": "figures/supplementary/curated/branch_conflict_controls.pdf"
-    },
-    "panels": {
-      "A": [
-        {
-          "figure": "S9",
-          "label": "fig:si_branch_conflict_controls",
-          "panel": "A",
-          "source_panel": "A",
-          "path": "figures/supplementary/curated/branch_conflict_controls.pdf"
-        }
-      ],
-      "B": [
-        {
-          "figure": "S9",
-          "label": "fig:si_branch_conflict_controls",
-          "panel": "B",
-          "source_panel": "B",
-          "path": "figures/supplementary/curated/branch_conflict_controls.pdf"
-        }
-      ]
-    },
     "original_asset": "figures/supplementary/figure_S19_panels_A-I.pdf",
     "original_sha256": "7d1983b490bf1df0d0993661d8e6c7b1b0547a03943263874b6417d6c88841e3",
-    "omitted_panel_status": "Redundant printed view omitted; original scientific source and outcomes retained. Read caption/scientific section rather than transferring a panel suffix to the primary destination."
+    "primary_destination": "S10",
+    "panels": {
+      "A": {
+        "figure": "S10",
+        "panel": "A",
+        "path": "figures/supplementary/curated/branch_conflict_controls.pdf"
+      }
+    },
+    "omitted_panel_status": {
+      "B": {
+        "content": "Context-0 forgetting after training on context 1, ten paired seeds, for the six delivery rules.",
+        "reason": "Promoted to main Fig. 2E; removed from the supplement, no copy kept.",
+        "numbers_at": "source_data/review_branch_trajectories/"
+      }
+    }
   },
   "S20": {
     "old_label": "fig:supp_morphology_detail",
-    "primary_destination": {
-      "figure": "S24",
-      "label": "fig:si_anatomy_capacity_controls",
-      "panel": "B",
-      "source_panel": "B",
-      "path": "figures/supplementary/curated/anatomy_capacity_controls.pdf"
-    },
-    "panels": {
-      "A": [],
-      "B": [
-        {
-          "figure": "S24",
-          "label": "fig:si_anatomy_capacity_controls",
-          "panel": "B",
-          "source_panel": "B",
-          "path": "figures/supplementary/curated/anatomy_capacity_controls.pdf"
-        }
-      ]
-    },
     "original_asset": "figures/supplementary/figure_S20_panels_A-B.pdf",
     "original_sha256": "2b23c7b2f374d64e376bda7f80f4b45b7a37ca581edf0d65c2a17ab05d83b2a6",
-    "omitted_panel_status": "Redundant printed view omitted; original scientific source and outcomes retained. Read caption/scientific section rather than transferring a panel suffix to the primary destination."
+    "primary_destination": "S25",
+    "panels": {
+      "B": {
+        "figure": "S25",
+        "panel": "B",
+        "path": "figures/supplementary/curated/anatomy_capacity_controls.pdf"
+      }
+    },
+    "omitted_panel_status": {
+      "A": {
+        "content": "Mean ancestry-domain support fraction within topological-depth bins; a domain comprises the input-bearing descendants of a route origin.",
+        "reason": "Omitted from the curated supplement; the measurement is retained in Source Data and in the section that cites it.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/figure3/typed_only_compression_curves.csv"
+        ]
+      }
+    }
   },
   "S21": {
     "old_label": "fig:supp_focal_detail",
-    "primary_destination": {
-      "figure": "S28",
-      "label": "fig:si_shunt_sensitivity",
-      "panel": "B",
-      "source_panel": "D",
-      "path": "figures/supplementary/curated/shunt_sensitivity.pdf"
-    },
-    "panels": {
-      "A": [],
-      "B": [],
-      "C": [
-        {
-          "figure": "S28",
-          "label": "fig:si_shunt_sensitivity",
-          "panel": "C",
-          "source_panel": "C",
-          "path": "figures/supplementary/curated/shunt_sensitivity.pdf"
-        }
-      ],
-      "D": [
-        {
-          "figure": "S28",
-          "label": "fig:si_shunt_sensitivity",
-          "panel": "B",
-          "source_panel": "D",
-          "path": "figures/supplementary/curated/shunt_sensitivity.pdf"
-        }
-      ]
-    },
     "original_asset": "figures/supplementary/figure_S21_panels_A-D.pdf",
     "original_sha256": "15d9d1a278be75310d780e7d06a0d56ee8e75548fa9ce7d934c4d2ebb54c3cdb",
-    "omitted_panel_status": "Redundant printed view omitted; original scientific source and outcomes retained. Read caption/scientific section rather than transferring a panel suffix to the primary destination."
+    "primary_destination": "S29",
+    "panels": {
+      "A": {
+        "figure": "S29",
+        "panel": "B",
+        "path": "figures/supplementary/curated/shunt_sensitivity.pdf"
+      },
+      "D": {
+        "figure": "S29",
+        "panel": "E",
+        "path": "figures/supplementary/curated/shunt_sensitivity.pdf"
+      },
+      "C": {
+        "figure": "S29",
+        "panel": "F",
+        "path": "figures/supplementary/curated/shunt_sensitivity.pdf"
+      }
+    },
+    "omitted_panel_status": {
+      "B": {
+        "content": "Cell means and 95\\% cell-bootstrap intervals within focal-site depths 2/3/4/5/6/7/8/9/13, with 8/8/8/7/5/4/5/3/1 eligible cells. No curve connects means from changing cell sets.",
+        "reason": "Omitted from the curated supplement; the measurement is retained in Source Data and in the section that cites it.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/figure4/direct_typed_category_effects.csv",
+          "drafts/dendritic-local-learning/journal/source_data/figure4/direct_typed_cell_primary_contrasts.csv",
+          "drafts/dendritic-local-learning/journal/source_data/figure4/direct_typed_focal_localization.csv",
+          "drafts/dendritic-local-learning/journal/source_data/figure4/direct_typed_summary.json"
+        ]
+      }
+    }
   },
   "S22": {
     "old_label": "fig:supp_measured_detail",
-    "primary_destination": {
-      "figure": "S30",
-      "label": "fig:si_measured_topology",
-      "panel": "A",
-      "source_panel": "A",
-      "path": "figures/supplementary/curated/measured_topology.pdf"
-    },
-    "panels": {
-      "A": [
-        {
-          "figure": "S30",
-          "label": "fig:si_measured_topology",
-          "panel": "A",
-          "source_panel": "A",
-          "path": "figures/supplementary/curated/measured_topology.pdf"
-        }
-      ],
-      "B": [
-        {
-          "figure": "S30",
-          "label": "fig:si_measured_topology",
-          "panel": "B",
-          "source_panel": "B",
-          "path": "figures/supplementary/curated/measured_topology.pdf"
-        }
-      ],
-      "C": [
-        {
-          "figure": "S30",
-          "label": "fig:si_measured_topology",
-          "panel": "C",
-          "source_panel": "C",
-          "path": "figures/supplementary/curated/measured_topology.pdf"
-        }
-      ],
-      "D": [],
-      "E": [],
-      "F": [],
-      "G": [],
-      "H": []
-    },
     "original_asset": "figures/supplementary/figure_S22_panels_A-J.pdf",
     "original_sha256": "298b669dde6a2f35b5531889b56cc52f8f884c5fe39a40d9c73f5992084630f2",
-    "omitted_panel_status": "Redundant printed view omitted; original scientific source and outcomes retained. Read caption/scientific section rather than transferring a panel suffix to the primary destination."
+    "primary_destination": "S31",
+    "panels": {
+      "A": {
+        "figure": "S31",
+        "panel": "A",
+        "path": "figures/supplementary/curated/measured_transfer_geometry.pdf"
+      }
+    },
+    "omitted_panel_status": {
+      "B": {
+        "content": "Shared-ancestry/response rank correlation after controlling Euclidean separation and soma-to-contact depth differences.",
+        "reason": "Deleted in the M2 merge: it duplicates main Fig. 9A,B.",
+        "numbers_at": "source_data/fulltree_boundary/"
+      },
+      "C": {
+        "content": "Target-specific associations for shared-path, negative-tree-distance, partial-correlation and same-major-branch measures.",
+        "reason": "Promoted to main Fig. 9C.",
+        "numbers_at": "source_data/fulltree_boundary/"
+      },
+      "D": {
+        "content": "Four-channel exact-field capture and held-out normalized MSE for exact errors, the dense principal-component oracle, ancestry routes, random routes, depth bins, shuffled ancestry and scalar broadcast. Projection coefficients are per-trial oracles; exact and dense capture approach the ceiling.",
+        "reason": "Omitted from the curated supplement; the measurement is retained in Source Data and in the section that cites it.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/figure5/task_summary_ch1.json",
+          "drafts/dendritic-local-learning/journal/source_data/figure5/task_summary_ch2.json",
+          "drafts/dendritic-local-learning/journal/source_data/figure5/task_summary_ch4.json",
+          "drafts/dendritic-local-learning/journal/source_data/figure5/task_summary_ch8.json"
+        ]
+      },
+      "E": {
+        "content": "Four-channel exact-field capture and held-out normalized MSE for exact errors, the dense principal-component oracle, ancestry routes, random routes, depth bins, shuffled ancestry and scalar broadcast. Projection coefficients are per-trial oracles; exact and dense capture approach the ceiling.",
+        "reason": "Omitted from the curated supplement; the measurement is retained in Source Data and in the section that cites it.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/figure5/task_summary_ch1.json",
+          "drafts/dendritic-local-learning/journal/source_data/figure5/task_summary_ch2.json",
+          "drafts/dendritic-local-learning/journal/source_data/figure5/task_summary_ch4.json",
+          "drafts/dendritic-local-learning/journal/source_data/figure5/task_summary_ch8.json"
+        ]
+      },
+      "F": {
+        "content": "Target-level contrasts: ancestry-minus-shuffle capture and shuffle-minus-ancestry normalized MSE, so positive values on either axis favor ancestry.",
+        "reason": "Omitted from the curated supplement; the measurement is retained in Source Data and in the section that cites it.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/figure5/task_summary_ch1.json",
+          "drafts/dendritic-local-learning/journal/source_data/figure5/task_summary_ch2.json",
+          "drafts/dendritic-local-learning/journal/source_data/figure5/task_summary_ch4.json",
+          "drafts/dendritic-local-learning/journal/source_data/figure5/task_summary_ch8.json"
+        ]
+      },
+      "G": {
+        "content": "Capture versus normalized mean squared error (MSE), each centered by its target-specific mean across the five restricted dictionaries.",
+        "reason": "Omitted from the curated supplement; the measurement is retained in Source Data and in the section that cites it.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/figure5/task_summary_ch1.json",
+          "drafts/dendritic-local-learning/journal/source_data/figure5/task_summary_ch2.json",
+          "drafts/dendritic-local-learning/journal/source_data/figure5/task_summary_ch4.json",
+          "drafts/dendritic-local-learning/journal/source_data/figure5/task_summary_ch8.json"
+        ]
+      },
+      "H": {
+        "content": "Ancestry-minus-shuffle capture (green) and shuffle-minus-ancestry normalized MSE (pink) across bandwidth; both are positive when ancestry improves the endpoint. Points in",
+        "reason": "Omitted from the curated supplement; the measurement is retained in Source Data and in the section that cites it.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/figure5/task_summary_ch1.json",
+          "drafts/dendritic-local-learning/journal/source_data/figure5/task_summary_ch2.json",
+          "drafts/dendritic-local-learning/journal/source_data/figure5/task_summary_ch4.json",
+          "drafts/dendritic-local-learning/journal/source_data/figure5/task_summary_ch8.json"
+        ]
+      }
+    }
   },
   "S23": {
     "old_label": "fig:supp_partition_residual",
-    "primary_destination": {
-      "figure": "S10",
-      "label": "fig:si_ancestry_coefficients",
-      "panel": "A",
-      "source_panel": "A",
-      "path": "figures/supplementary/curated/ancestry_coefficients.pdf"
-    },
-    "panels": {
-      "A": [
-        {
-          "figure": "S10",
-          "label": "fig:si_ancestry_coefficients",
-          "panel": "A",
-          "source_panel": "A",
-          "path": "figures/supplementary/curated/ancestry_coefficients.pdf"
-        }
-      ],
-      "B": [],
-      "C": []
-    },
     "original_asset": "figures/supplementary/figure_S23_panels_A-C.pdf",
     "original_sha256": "62ac43d3d238e9461e9127fbc84fee6c247d7218ee41fe85f863f66504e37b37",
-    "omitted_panel_status": "Redundant printed view omitted; original scientific source and outcomes retained. Read caption/scientific section rather than transferring a panel suffix to the primary destination."
+    "primary_destination": "S11",
+    "panels": {
+      "A": {
+        "figure": "S11",
+        "panel": "A",
+        "path": "figures/supplementary/curated/ancestry_coefficients.pdf"
+      }
+    },
+    "omitted_panel_status": {
+      "B": {
+        "content": "Trained address capture versus held-out accuracy for the six restricted route families at K<8.",
+        "reason": "Omitted; capture alone does not predict utility and the caption of S11A now states the within-seed Spearman correlations (about 0.82 over all budgets, 0.64 for K<8).",
+        "numbers_at": "source_data/trained_subtree_address/"
+      },
+      "C": {
+        "content": "Within-seed Spearman correlations between capture and accuracy for all route conditions and after excluding K=8.",
+        "reason": "Omitted; the same two coefficients are stated in the caption of S11A.",
+        "numbers_at": "source_data/trained_subtree_address/"
+      }
+    }
   },
   "S24": {
     "old_label": "fig:supp_adaptive_reliability",
-    "primary_destination": {
-      "figure": "S4",
-      "label": "fig:si_reliability_gain",
-      "panel": "C",
-      "source_panel": "C",
-      "path": "figures/supplementary/curated/reliability_gain.pdf"
-    },
-    "panels": {
-      "A": [],
-      "B": [],
-      "C": [
-        {
-          "figure": "S4",
-          "label": "fig:si_reliability_gain",
-          "panel": "C",
-          "source_panel": "C",
-          "path": "figures/supplementary/curated/reliability_gain.pdf"
-        }
-      ],
-      "D": [
-        {
-          "figure": "S4",
-          "label": "fig:si_reliability_gain",
-          "panel": "D",
-          "source_panel": "D",
-          "path": "figures/supplementary/curated/reliability_gain.pdf"
-        }
-      ]
-    },
     "original_asset": "figures/supplementary/figure_S24_panels_A-D.pdf",
     "original_sha256": "1e84d56a1ab8e85f66a2077f1425c93e81b7bec3922edc3b4d5ae2539bdaa232",
-    "omitted_panel_status": "Redundant printed view omitted; original scientific source and outcomes retained. Read caption/scientific section rather than transferring a panel suffix to the primary destination."
+    "primary_destination": "S4",
+    "panels": {
+      "C": {
+        "figure": "S4",
+        "panel": "C",
+        "path": "figures/supplementary/curated/reliability_gain.pdf"
+      },
+      "D": {
+        "figure": "S4",
+        "panel": "D",
+        "path": "figures/supplementary/curated/reliability_gain.pdf"
+      }
+    },
+    "omitted_panel_status": {
+      "A": {
+        "content": "Two independent noisy local gradient observations estimate branch signal and noise moments, \\(\\widehat S_b\\) and \\(\\widehat N_b\\), which set gain \\(a_b\\) and nonnegative shunt \\(\\kappa_b\\) for branch \\(b\\); \\(c\\) is the fixed step fraction.",
+        "reason": "Omitted from the curated supplement; the measurement is retained in Source Data and in the section that cites it.",
+        "numbers_at": "source archive"
+      },
+      "B": {
+        "content": "Fixed initial-oracle and final adaptive attenuation profiles at maximum heterogeneity; adaptive points show mean $\\pm$ s.d. over 50 independent seeds.",
+        "reason": "Omitted from the curated supplement; the measurement is retained in Source Data and in the section that cites it.",
+        "numbers_at": "source archive"
+      }
+    }
   },
   "S25": {
     "old_label": "fig:supp_irregular_wavelets",
-    "primary_destination": {
-      "figure": "S26",
-      "label": "fig:si_coarse_energy",
-      "panel": "A",
-      "source_panel": "A",
-      "path": "figures/supplementary/curated/coarse_energy.pdf"
-    },
-    "panels": {
-      "A": [
-        {
-          "figure": "S26",
-          "label": "fig:si_coarse_energy",
-          "panel": "A",
-          "source_panel": "A",
-          "path": "figures/supplementary/curated/coarse_energy.pdf"
-        }
-      ],
-      "B": [
-        {
-          "figure": "S26",
-          "label": "fig:si_coarse_energy",
-          "panel": "B",
-          "source_panel": "B",
-          "path": "figures/supplementary/curated/coarse_energy.pdf"
-        }
-      ],
-      "C": [
-        {
-          "figure": "S26",
-          "label": "fig:si_coarse_energy",
-          "panel": "C",
-          "source_panel": "C",
-          "path": "figures/supplementary/curated/coarse_energy.pdf"
-        }
-      ],
-      "D": [
-        {
-          "figure": "S26",
-          "label": "fig:si_coarse_energy",
-          "panel": "D",
-          "source_panel": "D",
-          "path": "figures/supplementary/curated/coarse_energy.pdf"
-        }
-      ]
-    },
     "original_asset": "figures/supplementary/figure_S25_panels_A-D.pdf",
     "original_sha256": "ee14aeb02b937f9636d87b63454dea80cf3d76fc088a923432a60e67ba5de39a",
-    "omitted_panel_status": "Redundant printed view omitted; original scientific source and outcomes retained. Read caption/scientific section rather than transferring a panel suffix to the primary destination."
+    "primary_destination": "S27",
+    "panels": {
+      "A": {
+        "figure": "S27",
+        "panel": "A",
+        "path": "figures/supplementary/curated/coarse_energy.pdf"
+      },
+      "B": {
+        "figure": "S27",
+        "panel": "B",
+        "path": "figures/supplementary/curated/coarse_energy.pdf"
+      },
+      "C": {
+        "figure": "S27",
+        "panel": "C",
+        "path": "figures/supplementary/curated/coarse_energy.pdf"
+      },
+      "D": {
+        "figure": "S27",
+        "panel": "D",
+        "path": "figures/supplementary/curated/coarse_energy.pdf"
+      }
+    },
+    "omitted_panel_status": {}
   },
   "S26": {
     "old_label": "fig:supp_clean_source",
-    "primary_destination": {
-      "kind": "table",
-      "label": "tab:physical_reproducibility",
-      "note": "Same-seed rerun outcomes and outliers remain in the physical-depth reproducibility table."
-    },
-    "panels": {
-      "A": [],
-      "B": [],
-      "C": [],
-      "D": []
-    },
     "original_asset": "figures/supplementary/figure_S26_panels_A-D.pdf",
     "original_sha256": "2b38b5387b0958496f7dce0b3b54303b5df1df2cfd4eb3caee51c45b2ad60782",
-    "omitted_panel_status": "Redundant printed view omitted; original scientific source and outcomes retained. Read caption/scientific section rather than transferring a panel suffix to the primary destination."
+    "primary_destination": "tab:physical_reproducibility",
+    "panels": {},
+    "omitted_panel_status": {
+      "A": {
+        "content": "Held-out accuracy in the repeated analysis versus the original analysis for each of 430 same-seed fit pairs. The dashed line is identity.",
+        "reason": "Whole figure omitted; the same-seed rerun outcomes and the two overflow pairs remain in Table S10 (physical-depth reproducibility).",
+        "numbers_at": "source archive"
+      },
+      "B": {
+        "content": "Distribution of paired repeated-minus-original accuracy differences in percentage points (pp); overflow triangles retain two of 430 pairs outside the displayed \\(\\pm5\\)-point range.",
+        "reason": "Whole figure omitted; the same-seed rerun outcomes and the two overflow pairs remain in Table S10 (physical-depth reproducibility).",
+        "numbers_at": "source archive"
+      },
+      "C": {
+        "content": "H2 and H3 accuracy in the repeated analysis for serial backpropagation (BP), literal grouped-point BP, shared-soma local credit assignment (LocalCA), exact-path LocalCA and the H3 raw-additive control. Lines and intervals are paired-seed means and 95\\% seed-bootstrap intervals ($n=10$). The H2/H3 depth, placement, point-control and local-credit conclusions were unchanged within the original training budget. These same-seed reruns test computational reproducibility, not independent scientific replication.",
+        "reason": "Whole figure omitted; the same-seed rerun outcomes and the two overflow pairs remain in Table S10 (physical-depth reproducibility).",
+        "numbers_at": "source archive"
+      },
+      "D": {
+        "content": "H2 and H3 accuracy in the repeated analysis for serial backpropagation (BP), literal grouped-point BP, shared-soma local credit assignment (LocalCA), exact-path LocalCA and the H3 raw-additive control. Lines and intervals are paired-seed means and 95\\% seed-bootstrap intervals ($n=10$). The H2/H3 depth, placement, point-control and local-credit conclusions were unchanged within the original training budget. These same-seed reruns test computational reproducibility, not independent scientific replication.",
+        "reason": "Whole figure omitted; the same-seed rerun outcomes and the two overflow pairs remain in Table S10 (physical-depth reproducibility).",
+        "numbers_at": "source archive"
+      }
+    }
   },
   "S27": {
     "old_label": "fig:supp_pinky",
-    "primary_destination": {
-      "figure": "S24",
-      "label": "fig:si_anatomy_capacity_controls",
-      "panel": "C",
-      "source_panel": "B",
-      "path": "figures/supplementary/curated/anatomy_capacity_controls.pdf"
-    },
-    "panels": {
-      "A": [],
-      "B": [
-        {
-          "figure": "S24",
-          "label": "fig:si_anatomy_capacity_controls",
-          "panel": "C",
-          "source_panel": "B",
-          "path": "figures/supplementary/curated/anatomy_capacity_controls.pdf"
-        }
-      ],
-      "C": [],
-      "D": [
-        {
-          "figure": "S24",
-          "label": "fig:si_anatomy_capacity_controls",
-          "panel": "D",
-          "source_panel": "D",
-          "path": "figures/supplementary/curated/anatomy_capacity_controls.pdf"
-        }
-      ]
-    },
     "original_asset": "figures/supplementary/figure_S27_panels_A-C.pdf",
     "original_sha256": "b6255b0658a7a2de4890255096b35757dde9322fb406745981ba777203c821ed",
-    "omitted_panel_status": "Redundant printed view omitted; original scientific source and outcomes retained. Read caption/scientific section rather than transferring a panel suffix to the primary destination."
+    "primary_destination": "S25",
+    "panels": {
+      "B": {
+        "figure": "S25",
+        "panel": "C",
+        "path": "figures/supplementary/curated/anatomy_capacity_controls.pdf"
+      },
+      "D": {
+        "figure": "S25",
+        "panel": "D",
+        "path": "figures/supplementary/curated/anatomy_capacity_controls.pdf"
+      }
+    },
+    "omitted_panel_status": {
+      "A": {
+        "content": "Outcome-independent 12-cell Pinky v185 sample across the public volume; green cells meet and gray cells fail the predefined criteria. Numbers give selection order.",
+        "reason": "Omitted from the curated supplement; the measurement is retained in Source Data and in the section that cites it.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/pinky_v185_replication/cohort_manifest.csv",
+          "drafts/dendritic-local-learning/journal/source_data/pinky_v185_replication/routing/feedback_compression_curves.csv",
+          "drafts/dendritic-local-learning/journal/source_data/pinky_v185_replication/routing/k4_cross_animal_contrasts.csv",
+          "drafts/dendritic-local-learning/journal/source_data/pinky_v185_replication/routing/summary.json"
+        ]
+      },
+      "C": {
+        "content": "Four-channel one-minus-weighted-residual-norm score per 1,000 nonzero delivery coefficients; this is not squared-energy capture. Points are cells; larger symbols and bars are means and 95\\% cell-bootstrap intervals (50,000 draws).",
+        "reason": "Omitted from the curated supplement; the measurement is retained in Source Data and in the section that cites it.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/pinky_v185_replication/cohort_manifest.csv",
+          "drafts/dendritic-local-learning/journal/source_data/pinky_v185_replication/routing/feedback_compression_curves.csv",
+          "drafts/dendritic-local-learning/journal/source_data/pinky_v185_replication/routing/k4_cross_animal_contrasts.csv",
+          "drafts/dendritic-local-learning/journal/source_data/pinky_v185_replication/routing/summary.json"
+        ]
+      }
+    }
   },
   "S28": {
     "old_label": "fig:supp_physical_depth_diagnostics",
-    "primary_destination": {
-      "figure": "S23",
-      "label": "fig:si_physical_optimizer",
-      "panel": "C",
-      "source_panel": "B",
-      "path": "figures/supplementary/curated/physical_optimizer.pdf"
-    },
-    "panels": {
-      "A": [],
-      "B": [
-        {
-          "figure": "S23",
-          "label": "fig:si_physical_optimizer",
-          "panel": "C",
-          "source_panel": "B",
-          "path": "figures/supplementary/curated/physical_optimizer.pdf"
-        }
-      ]
-    },
     "original_asset": "figures/supplementary/figure_S28_panels_A-B.pdf",
     "original_sha256": "a8ea7b5b2c84c81ade5e78d92f49c4e777df0785cec37f6f02ba3a60b30dc3a0",
-    "omitted_panel_status": "Redundant printed view omitted; original scientific source and outcomes retained. Read caption/scientific section rather than transferring a panel suffix to the primary destination."
+    "primary_destination": "S24",
+    "panels": {
+      "B": {
+        "figure": "S24",
+        "panel": "C",
+        "path": "figures/supplementary/curated/physical_optimizer.pdf"
+      }
+    },
+    "omitted_panel_status": {
+      "A": {
+        "content": "compares D1--D3; panel",
+        "reason": "Omitted from the curated supplement; the measurement is retained in Source Data and in the section that cites it.",
+        "numbers_at": "source archive"
+      }
+    }
   },
   "S29": {
     "old_label": "fig:supp_path_demand",
-    "primary_destination": {
-      "figure": "S9",
-      "label": "fig:si_branch_conflict_controls",
-      "panel": "C",
-      "source_panel": "D",
-      "path": "figures/supplementary/curated/branch_conflict_controls.pdf"
-    },
-    "panels": {
-      "C": [],
-      "D": [
-        {
-          "figure": "S9",
-          "label": "fig:si_branch_conflict_controls",
-          "panel": "C",
-          "source_panel": "D",
-          "path": "figures/supplementary/curated/branch_conflict_controls.pdf"
-        }
-      ],
-      "E": [
-        {
-          "figure": "S9",
-          "label": "fig:si_branch_conflict_controls",
-          "panel": "D",
-          "source_panel": "E",
-          "path": "figures/supplementary/curated/branch_conflict_controls.pdf"
-        }
-      ],
-      "F": [
-        {
-          "figure": "S9",
-          "label": "fig:si_branch_conflict_controls",
-          "panel": "E",
-          "source_panel": "F",
-          "path": "figures/supplementary/curated/branch_conflict_controls.pdf"
-        }
-      ],
-      "A": [],
-      "B": []
-    },
     "original_asset": "figures/supplementary/figure_S29_panels_A-C.pdf",
     "original_sha256": "8a6e97122edf51747ec1b669ca6e59c177da174a10633187f68318d24c9a50bf",
-    "omitted_panel_status": "Redundant printed view omitted; original scientific source and outcomes retained. Read caption/scientific section rather than transferring a panel suffix to the primary destination."
+    "primary_destination": "S10",
+    "panels": {
+      "D": {
+        "figure": "S10",
+        "panel": "B",
+        "path": "figures/supplementary/curated/branch_conflict_controls.pdf"
+      },
+      "E": {
+        "figure": "S10",
+        "panel": "C",
+        "path": "figures/supplementary/curated/branch_conflict_controls.pdf"
+      },
+      "F": {
+        "figure": "S10",
+        "panel": "D",
+        "path": "figures/supplementary/curated/branch_conflict_controls.pdf"
+      }
+    },
+    "omitted_panel_status": {
+      "C": {
+        "content": "Analytic boundaries versus crossings interpolated from mean trained accuracy. Interpolation is descriptive. Open overflow triangles retain five of twenty \\(B=2\\) seeds without a crossing in the tested range. Analytic backpropagation (BP) and the equivalent gated-point implementation coincide with exact routing (main Fig.~2D,E).",
+        "reason": "Omitted from the curated supplement; the measurement is retained in Source Data and in the section that cites it.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/path_necessity_fashion/boundary_by_seed.csv",
+          "drafts/dendritic-local-learning/journal/source_data/path_necessity_fashion/boundary_order.json",
+          "drafts/dendritic-local-learning/journal/source_data/path_necessity_fashion/boundary_summary.csv",
+          "drafts/dendritic-local-learning/journal/source_data/path_necessity_fashion/condition_summary.csv"
+        ]
+      },
+      "A": {
+        "content": "Context selects one branch's contribution to the logit, while all branches form active eligibilities. At conflict dose $\\chi=0$, nonselected images copy the selected view; at $\\chi=1$, they come from the opposite class. Exact feedback is $\\delta\\mathbf{1}[b=c]$; shared feedback is $\\delta/B$, where \\(\\delta\\) is output error, \\(b\\) branch and \\(c\\) selected context.",
+        "reason": "Omitted from the curated supplement; the measurement is retained in Source Data and in the section that cites it.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/path_necessity_fashion/boundary_by_seed.csv",
+          "drafts/dendritic-local-learning/journal/source_data/path_necessity_fashion/boundary_order.json",
+          "drafts/dendritic-local-learning/journal/source_data/path_necessity_fashion/boundary_summary.csv",
+          "drafts/dendritic-local-learning/journal/source_data/path_necessity_fashion/condition_summary.csv"
+        ]
+      },
+      "B": {
+        "content": "Held-out accuracy across conflict dose. The green band encloses nearly coincident exact-route curves for $B=2,4,8$; colored curves use shared feedback. Triangles mark the centered mean-field boundary $\\chi_c=B/[2(B-1)]$.",
+        "reason": "Omitted from the curated supplement; the measurement is retained in Source Data and in the section that cites it.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/path_necessity_fashion/boundary_by_seed.csv",
+          "drafts/dendritic-local-learning/journal/source_data/path_necessity_fashion/boundary_order.json",
+          "drafts/dendritic-local-learning/journal/source_data/path_necessity_fashion/boundary_summary.csv",
+          "drafts/dendritic-local-learning/journal/source_data/path_necessity_fashion/condition_summary.csv"
+        ]
+      }
+    }
   },
   "S30": {
     "old_label": "fig:supp_between_within_factorial",
-    "primary_destination": {
-      "figure": "S6",
-      "label": "fig:si_image_generalization",
-      "panel": "D",
-      "source_panel": "C",
-      "path": "figures/supplementary/curated/image_generalization.pdf"
-    },
-    "panels": {
-      "A": [],
-      "B": [],
-      "C": [
-        {
-          "figure": "S6",
-          "label": "fig:si_image_generalization",
-          "panel": "D",
-          "source_panel": "C",
-          "path": "figures/supplementary/curated/image_generalization.pdf"
-        }
-      ],
-      "D": [
-        {
-          "figure": "S6",
-          "label": "fig:si_image_generalization",
-          "panel": "E",
-          "source_panel": "D",
-          "path": "figures/supplementary/curated/image_generalization.pdf"
-        }
-      ]
-    },
     "original_asset": "figures/supplementary/figure_S30_panels_A-D.pdf",
     "original_sha256": "29d5869976aac6aca9c3542c25f5518f6b7e6f5e2cc1475598780f75a3b04f2e",
-    "omitted_panel_status": "Redundant printed view omitted; original scientific source and outcomes retained. Read caption/scientific section rather than transferring a panel suffix to the primary destination."
+    "primary_destination": "S6",
+    "panels": {
+      "C": {
+        "figure": "S6",
+        "panel": "D",
+        "path": "figures/supplementary/curated/image_generalization.pdf"
+      },
+      "D": {
+        "figure": "S6",
+        "panel": "E",
+        "path": "figures/supplementary/curated/image_generalization.pdf"
+      }
+    },
+    "omitted_panel_status": {
+      "A": {
+        "content": "Held-out accuracy under both signal sources for raw-additive and shunting trees, respectively. The within-neuron conditions are strict scalar, neuron-specific, exact-path and exact automatic-differentiation (autograd) feedback.",
+        "reason": "Omitted from the curated supplement; the measurement is retained in Source Data and in the section that cites it.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/mnist_between_within_factorial/audit.json",
+          "drafts/dendritic-local-learning/journal/source_data/mnist_between_within_factorial/condition_summary.csv"
+        ]
+      },
+      "B": {
+        "content": "Held-out accuracy under both signal sources for raw-additive and shunting trees, respectively. The within-neuron conditions are strict scalar, neuron-specific, exact-path and exact automatic-differentiation (autograd) feedback.",
+        "reason": "Omitted from the curated supplement; the measurement is retained in Source Data and in the section that cites it.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/mnist_between_within_factorial/audit.json",
+          "drafts/dendritic-local-learning/journal/source_data/mnist_between_within_factorial/condition_summary.csv"
+        ]
+      }
+    }
   },
   "S31": {
     "old_label": "fig:physicaldepth",
-    "primary_destination": {
-      "figure": "S21",
-      "label": "fig:si_physical_architecture",
-      "panel": "A",
-      "source_panel": "B",
-      "path": "figures/supplementary/curated/physical_architecture.pdf"
-    },
-    "panels": {
-      "A": [],
-      "B": [
-        {
-          "figure": "S21",
-          "label": "fig:si_physical_architecture",
-          "panel": "A",
-          "source_panel": "B",
-          "path": "figures/supplementary/curated/physical_architecture.pdf"
-        }
-      ],
-      "C": [
-        {
-          "figure": "S21",
-          "label": "fig:si_physical_architecture",
-          "panel": "B",
-          "source_panel": "C",
-          "path": "figures/supplementary/curated/physical_architecture.pdf"
-        }
-      ],
-      "D": [
-        {
-          "figure": "S21",
-          "label": "fig:si_physical_architecture",
-          "panel": "C",
-          "source_panel": "D",
-          "path": "figures/supplementary/curated/physical_architecture.pdf"
-        }
-      ],
-      "E": [],
-      "F": [],
-      "G": [
-        {
-          "figure": "S21",
-          "label": "fig:si_physical_architecture",
-          "panel": "D",
-          "source_panel": "G",
-          "path": "figures/supplementary/curated/physical_architecture.pdf"
-        }
-      ],
-      "H": []
-    },
     "original_asset": "figures/supplementary/figure_S31_panels_A-G.pdf",
     "original_sha256": "9bc3a51813bead71578fdc6a7ee00a6ee92395323e8f88c1f13cb32482939819",
-    "omitted_panel_status": "Redundant printed view omitted; original scientific source and outcomes retained. Read caption/scientific section rather than transferring a panel suffix to the primary destination."
+    "primary_destination": "S22",
+    "panels": {
+      "B": {
+        "figure": "S22",
+        "panel": "A",
+        "path": "figures/supplementary/curated/physical_architecture.pdf"
+      },
+      "C": {
+        "figure": "S22",
+        "panel": "B",
+        "path": "figures/supplementary/curated/physical_architecture.pdf"
+      },
+      "D": {
+        "figure": "S22",
+        "panel": "C",
+        "path": "figures/supplementary/curated/physical_architecture.pdf"
+      },
+      "G": {
+        "figure": "S22",
+        "panel": "D",
+        "path": "figures/supplementary/curated/physical_architecture.pdf"
+      }
+    },
+    "omitted_panel_status": {
+      "A": {
+        "content": "Nested factors use 4/2/1 spatial groups; independent flat factors share an eight-group partition; \\(h_\\ell\\) are gain factors and \\(m_i\\) the class-dependent signal; local excitatory/inhibitory (E/I) ratios \\(R_\\ell=x_\\ell^{\\rm E}/x_\\ell^{\\rm I}\\) allow cancellation within modules. \\(\\alpha\\) is factor--sensor correlation.",
+        "reason": "Omitted from the curated supplement; the measurement is retained in Source Data and in the section that cites it.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/nonlinear_physical_depth_confirmatory/audit.json",
+          "drafts/dendritic-local-learning/journal/source_data/nonlinear_physical_depth_confirmatory/condition_summary.csv",
+          "drafts/dendritic-local-learning/journal/source_data/nonlinear_physical_depth_confirmatory/mechanism_audit.json",
+          "drafts/dendritic-local-learning/journal/source_data/nonlinear_physical_depth_confirmatory/mechanism_gradient_summary.csv"
+        ]
+      },
+      "E": {
+        "content": "Descriptive depth optima across independent two-, three- and four-level cohorts.",
+        "reason": "Omitted; the underlying grids are covered by S22B,C and S24B and all cell values remain in Source Data.",
+        "numbers_at": "source_data/nonlinear_physical_depth_confirmatory/"
+      },
+      "F": {
+        "content": "Serial-minus-grouped accuracy at fixed D3 across task family and alignment under backpropagation (BP) and exact-path local credit assignment (LocalCA), respectively.",
+        "reason": "Omitted from the curated supplement; the measurement is retained in Source Data and in the section that cites it.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/nonlinear_physical_depth_confirmatory/audit.json",
+          "drafts/dendritic-local-learning/journal/source_data/nonlinear_physical_depth_confirmatory/condition_summary.csv",
+          "drafts/dendritic-local-learning/journal/source_data/nonlinear_physical_depth_confirmatory/mechanism_audit.json",
+          "drafts/dendritic-local-learning/journal/source_data/nonlinear_physical_depth_confirmatory/mechanism_gradient_summary.csv"
+        ]
+      },
+      "H": {
+        "content": "Credit-resolution effects: BP minus soma-broadcast, and exact-path minus shared-soma under LocalCA.",
+        "reason": "Omitted; the same two contrasts are drawn in S24C with their intervals.",
+        "numbers_at": "source_data/remaining_physical_experiments/"
+      }
+    }
   },
   "S32": {
     "old_label": "fig:supp_local_context_encoder",
-    "primary_destination": {
-      "figure": "S10",
-      "label": "fig:si_ancestry_coefficients",
-      "panel": "B",
-      "source_panel": "A",
-      "path": "figures/supplementary/curated/ancestry_coefficients.pdf"
-    },
-    "panels": {
-      "A": [
-        {
-          "figure": "S10",
-          "label": "fig:si_ancestry_coefficients",
-          "panel": "B",
-          "source_panel": "A",
-          "path": "figures/supplementary/curated/ancestry_coefficients.pdf"
-        }
-      ],
-      "B": [
-        {
-          "figure": "S10",
-          "label": "fig:si_ancestry_coefficients",
-          "panel": "C",
-          "source_panel": "B",
-          "path": "figures/supplementary/curated/ancestry_coefficients.pdf"
-        }
-      ],
-      "C": [],
-      "D": [],
-      "E": [],
-      "F": [
-        {
-          "figure": "S10",
-          "label": "fig:si_ancestry_coefficients",
-          "panel": "D",
-          "source_panel": "F",
-          "path": "figures/supplementary/curated/ancestry_coefficients.pdf"
-        }
-      ]
-    },
     "original_asset": "figures/supplementary/figure_S32_panels_A-F.pdf",
     "original_sha256": "32b0f84cc39087f5564ff228c0c3c650381a0018a24a912a8eb8ff589110b280",
-    "omitted_panel_status": "Redundant printed view omitted; original scientific source and outcomes retained. Read caption/scientific section rather than transferring a panel suffix to the primary destination."
+    "primary_destination": "S11",
+    "panels": {
+      "C": {
+        "figure": "S11",
+        "panel": "B",
+        "path": "figures/supplementary/curated/ancestry_coefficients.pdf"
+      },
+      "D": {
+        "figure": "S11",
+        "panel": "C",
+        "path": "figures/supplementary/curated/ancestry_coefficients.pdf"
+      }
+    },
+    "omitted_panel_status": {
+      "A": {
+        "content": "Protocol box: separate calibration cues and local route-activation targets train a four-output softmax encoder, frozen during task learning.",
+        "reason": "Deleted (AMENDMENTS B4): the protocol is stated in Supplementary Section S3 and in Methods.",
+        "numbers_at": "source_data/review_coefficient_encoder/"
+      },
+      "B": {
+        "content": "Held-out accuracy versus cue-noise standard deviation at 256 calibration trials and zero delay.",
+        "reason": "Promoted to main Fig. 3F; removed from the supplement, no copy kept.",
+        "numbers_at": "source_data/review_coefficient_encoder/condition_summary.csv"
+      },
+      "E": {
+        "content": "Task-learning trajectories in the primary cue condition.",
+        "reason": "Omitted; the endpoint contrasts it summarizes are drawn in main Fig. 3F and Supplementary Fig. S11B,C.",
+        "numbers_at": "source_data/review_coefficient_encoder/"
+      },
+      "F": {
+        "content": "Primary soft-encoder-minus-control accuracy differences relative to oracle, frozen and mismatched coefficients, twenty paired seeds.",
+        "reason": "Deleted (AMENDMENTS B4): it duplicates the contrast drawn in main Fig. 3D and carried a truncated y-axis label.",
+        "numbers_at": "source_data/review_coefficient_encoder/"
+      }
+    }
   },
   "S33": {
     "old_label": "fig:supp_morphology_uncertainty",
-    "primary_destination": {
-      "figure": "S27",
-      "label": "fig:si_anatomy_preprocessing",
-      "panel": "A",
-      "source_panel": "A",
-      "path": "figures/supplementary/curated/anatomy_preprocessing.pdf"
-    },
-    "panels": {
-      "A": [
-        {
-          "figure": "S27",
-          "label": "fig:si_anatomy_preprocessing",
-          "panel": "A",
-          "source_panel": "A",
-          "path": "figures/supplementary/curated/anatomy_preprocessing.pdf"
-        }
-      ],
-      "B": [
-        {
-          "figure": "S27",
-          "label": "fig:si_anatomy_preprocessing",
-          "panel": "B",
-          "source_panel": "B",
-          "path": "figures/supplementary/curated/anatomy_preprocessing.pdf"
-        }
-      ],
-      "C": [
-        {
-          "figure": "S27",
-          "label": "fig:si_anatomy_preprocessing",
-          "panel": "C",
-          "source_panel": "C",
-          "path": "figures/supplementary/curated/anatomy_preprocessing.pdf"
-        }
-      ],
-      "D": [
-        {
-          "figure": "S27",
-          "label": "fig:si_anatomy_preprocessing",
-          "panel": "D",
-          "source_panel": "D",
-          "path": "figures/supplementary/curated/anatomy_preprocessing.pdf"
-        }
-      ],
-      "E": [
-        {
-          "figure": "S27",
-          "label": "fig:si_anatomy_preprocessing",
-          "panel": "E",
-          "source_panel": "E",
-          "path": "figures/supplementary/curated/anatomy_preprocessing.pdf"
-        }
-      ],
-      "F": [
-        {
-          "figure": "S27",
-          "label": "fig:si_anatomy_preprocessing",
-          "panel": "F",
-          "source_panel": "F",
-          "path": "figures/supplementary/curated/anatomy_preprocessing.pdf"
-        }
-      ]
-    },
     "original_asset": "figures/supplementary/figure_S33_panels_A-F.pdf",
     "original_sha256": "badc40b9759632f588148965dbde82f594d9f2b4b7405d03c92146eb0c19258d",
-    "omitted_panel_status": "Redundant printed view omitted; original scientific source and outcomes retained. Read caption/scientific section rather than transferring a panel suffix to the primary destination."
+    "primary_destination": "S28",
+    "panels": {
+      "A": {
+        "figure": "S28",
+        "panel": "A",
+        "path": "figures/supplementary/curated/anatomy_preprocessing.pdf"
+      },
+      "B": {
+        "figure": "S28",
+        "panel": "B",
+        "path": "figures/supplementary/curated/anatomy_preprocessing.pdf"
+      },
+      "C": {
+        "figure": "S28",
+        "panel": "C",
+        "path": "figures/supplementary/curated/anatomy_preprocessing.pdf"
+      },
+      "D": {
+        "figure": "S28",
+        "panel": "D",
+        "path": "figures/supplementary/curated/anatomy_preprocessing.pdf"
+      },
+      "E": {
+        "figure": "S28",
+        "panel": "E",
+        "path": "figures/supplementary/curated/anatomy_preprocessing.pdf"
+      },
+      "F": {
+        "figure": "S28",
+        "panel": "F",
+        "path": "figures/supplementary/curated/anatomy_preprocessing.pdf"
+      }
+    },
+    "omitted_panel_status": {}
   },
   "S34": {
     "old_label": "fig:supp_response_baselines",
-    "primary_destination": {
-      "figure": "S32",
-      "label": "fig:si_measured_predictor_controls",
-      "panel": "A",
-      "source_panel": "A",
-      "path": "figures/supplementary/curated/measured_predictor_controls.pdf"
-    },
-    "panels": {
-      "A": [
-        {
-          "figure": "S32",
-          "label": "fig:si_measured_predictor_controls",
-          "panel": "A",
-          "source_panel": "A",
-          "path": "figures/supplementary/curated/measured_predictor_controls.pdf"
-        }
-      ],
-      "B": [
-        {
-          "figure": "S32",
-          "label": "fig:si_measured_predictor_controls",
-          "panel": "B",
-          "source_panel": "B",
-          "path": "figures/supplementary/curated/measured_predictor_controls.pdf"
-        }
-      ],
-      "C": [
-        {
-          "figure": "S32",
-          "label": "fig:si_measured_predictor_controls",
-          "panel": "C",
-          "source_panel": "C",
-          "path": "figures/supplementary/curated/measured_predictor_controls.pdf"
-        }
-      ],
-      "D": [
-        {
-          "figure": "S32",
-          "label": "fig:si_measured_predictor_controls",
-          "panel": "D",
-          "source_panel": "D",
-          "path": "figures/supplementary/curated/measured_predictor_controls.pdf"
-        }
-      ]
-    },
     "original_asset": "figures/supplementary/figure_S34_panels_A-D.pdf",
     "original_sha256": "e628d9d34929eedf607f07441cf5f19f7d2a8347a4cd7d6fe2b27d6fff658fb9",
-    "omitted_panel_status": "Redundant printed view omitted; original scientific source and outcomes retained. Read caption/scientific section rather than transferring a panel suffix to the primary destination."
+    "primary_destination": "S32",
+    "panels": {
+      "A": {
+        "figure": "S32",
+        "panel": "A",
+        "path": "figures/supplementary/curated/measured_predictor_controls.pdf"
+      },
+      "B": {
+        "figure": "S32",
+        "panel": "B",
+        "path": "figures/supplementary/curated/measured_predictor_controls.pdf"
+      },
+      "C": {
+        "figure": "S32",
+        "panel": "C",
+        "path": "figures/supplementary/curated/measured_predictor_controls.pdf"
+      },
+      "D": {
+        "figure": "S32",
+        "panel": "D",
+        "path": "figures/supplementary/curated/measured_predictor_controls.pdf"
+      }
+    },
+    "omitted_panel_status": {}
   },
   "S35": {
     "old_label": "fig:supp_original_prospective_selection",
-    "primary_destination": {
-      "figure": "S33",
-      "label": "fig:si_original_selector",
-      "panel": "A",
-      "source_panel": "A",
-      "path": "figures/supplementary/curated/original_selector.pdf"
-    },
-    "panels": {
-      "A": [
-        {
-          "figure": "S33",
-          "label": "fig:si_original_selector",
-          "panel": "A",
-          "source_panel": "A",
-          "path": "figures/supplementary/curated/original_selector.pdf"
-        }
-      ],
-      "B": [
-        {
-          "figure": "S33",
-          "label": "fig:si_original_selector",
-          "panel": "B",
-          "source_panel": "B",
-          "path": "figures/supplementary/curated/original_selector.pdf"
-        }
-      ],
-      "C": [
-        {
-          "figure": "S33",
-          "label": "fig:si_original_selector",
-          "panel": "C",
-          "source_panel": "C",
-          "path": "figures/supplementary/curated/original_selector.pdf"
-        }
-      ],
-      "D": [
-        {
-          "figure": "S33",
-          "label": "fig:si_original_selector",
-          "panel": "D",
-          "source_panel": "D",
-          "path": "figures/supplementary/curated/original_selector.pdf"
-        }
-      ],
-      "E": [
-        {
-          "figure": "S33",
-          "label": "fig:si_original_selector",
-          "panel": "E",
-          "source_panel": "E",
-          "path": "figures/supplementary/curated/original_selector.pdf"
-        }
-      ],
-      "F": [
-        {
-          "figure": "S33",
-          "label": "fig:si_original_selector",
-          "panel": "F",
-          "source_panel": "F",
-          "path": "figures/supplementary/curated/original_selector.pdf"
-        }
-      ]
-    },
     "original_asset": "figures/supplementary/figure_S35_panels_A-F.pdf",
     "original_sha256": "e8bcbef0166c37aa82b9551938883c23287630f2e981f14db3f6e545e5258f51",
-    "omitted_panel_status": "Redundant printed view omitted; original scientific source and outcomes retained. Read caption/scientific section rather than transferring a panel suffix to the primary destination."
+    "primary_destination": "S34",
+    "panels": {
+      "A": {
+        "figure": "S34",
+        "panel": "A",
+        "path": "figures/supplementary/curated/original_selector.pdf"
+      },
+      "B": {
+        "figure": "S34",
+        "panel": "B",
+        "path": "figures/supplementary/curated/original_selector.pdf"
+      },
+      "C": {
+        "figure": "S34",
+        "panel": "C",
+        "path": "figures/supplementary/curated/original_selector.pdf"
+      },
+      "D": {
+        "figure": "S34",
+        "panel": "D",
+        "path": "figures/supplementary/curated/original_selector.pdf"
+      },
+      "E": {
+        "figure": "S34",
+        "panel": "E",
+        "path": "figures/supplementary/curated/original_selector.pdf"
+      },
+      "F": {
+        "figure": "S34",
+        "panel": "F",
+        "path": "figures/supplementary/curated/original_selector.pdf"
+      }
+    },
+    "omitted_panel_status": {}
   },
   "S36": {
     "old_label": "fig:supp_interaction_structure",
-    "primary_destination": {
-      "figure": "S11",
-      "label": "fig:si_scalar_tree_capacity",
-      "panel": "A",
-      "source_panel": "A",
-      "path": "figures/supplementary/curated/scalar_tree_capacity.pdf"
-    },
-    "panels": {
-      "A": [
-        {
-          "figure": "S11",
-          "label": "fig:si_scalar_tree_capacity",
-          "panel": "A",
-          "source_panel": "A",
-          "path": "figures/supplementary/curated/scalar_tree_capacity.pdf"
-        }
-      ],
-      "B": [
-        {
-          "figure": "S11",
-          "label": "fig:si_scalar_tree_capacity",
-          "panel": "B",
-          "source_panel": "B",
-          "path": "figures/supplementary/curated/scalar_tree_capacity.pdf"
-        }
-      ],
-      "C": [],
-      "D": []
-    },
     "original_asset": "figures/supplementary/figure_S36_panels_A-D.pdf",
     "original_sha256": "b57518a96bde1b8562fd237beb415d24be4682bd0b2b87ce74083f6fa930be8b",
-    "omitted_panel_status": "Redundant printed view omitted; original scientific source and outcomes retained. Read caption/scientific section rather than transferring a panel suffix to the primary destination."
+    "primary_destination": "S12",
+    "panels": {
+      "A": {
+        "figure": "S12",
+        "panel": "A",
+        "path": "figures/supplementary/curated/scalar_tree_capacity.pdf"
+      },
+      "B": {
+        "figure": "S12",
+        "panel": "B",
+        "path": "figures/supplementary/curated/scalar_tree_capacity.pdf"
+      },
+      "D": {
+        "figure": "S12",
+        "panel": "C",
+        "path": "figures/supplementary/curated/scalar_tree_capacity.pdf"
+      }
+    },
+    "omitted_panel_status": {
+      "C": {
+        "content": "Family means across the same four leaf assignments for each shape. White diamonds mark mean centered-cut bounds.",
+        "reason": "Omitted from the curated supplement; the measurement is retained in Source Data and in the section that cites it.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/morphology_structure/all_trajectories.csv",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_structure/audit_assignment_summary.csv",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_structure/audit_matched_assignment_shape_contrasts.csv",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_structure/audit_matched_shape_summary.csv"
+        ]
+      }
+    }
   },
   "S37": {
     "old_label": "fig:supp_constructive_morphology",
-    "primary_destination": {
-      "figure": "S11",
-      "label": "fig:si_scalar_tree_capacity",
-      "panel": "C",
-      "source_panel": "B",
-      "path": "figures/supplementary/curated/scalar_tree_capacity.pdf"
-    },
-    "panels": {
-      "A": [],
-      "B": [
-        {
-          "figure": "S11",
-          "label": "fig:si_scalar_tree_capacity",
-          "panel": "C",
-          "source_panel": "B",
-          "path": "figures/supplementary/curated/scalar_tree_capacity.pdf"
-        }
-      ],
-      "C": [
-        {
-          "figure": "S11",
-          "label": "fig:si_scalar_tree_capacity",
-          "panel": "D",
-          "source_panel": "C",
-          "path": "figures/supplementary/curated/scalar_tree_capacity.pdf"
-        }
-      ],
-      "D": []
-    },
     "original_asset": "figures/supplementary/figure_S37_panels_A-D.pdf",
     "original_sha256": "aa549c15b751e2101fab18eeea85fc275c23d629860c52d495c3de7b9f8907dd",
-    "omitted_panel_status": "Redundant printed view omitted; original scientific source and outcomes retained. Read caption/scientific section rather than transferring a panel suffix to the primary destination."
+    "primary_destination": "S12",
+    "panels": {
+      "A": {
+        "figure": "S12",
+        "panel": "D",
+        "path": "figures/supplementary/curated/scalar_tree_capacity.pdf"
+      },
+      "B": {
+        "figure": "S12",
+        "panel": "E",
+        "path": "figures/supplementary/curated/scalar_tree_capacity.pdf"
+      },
+      "C": {
+        "figure": "S12",
+        "panel": "F",
+        "path": "figures/supplementary/curated/scalar_tree_capacity.pdf"
+      }
+    },
+    "omitted_panel_status": {
+      "D": {
+        "content": "Counts, minimum exact depths, reconstruction error and coefficient magnitude of the 105 matching, 35 quartic and 24 nested targets.",
+        "reason": "Registered as the shared legend strip of S12 (DECISIONS Q6): the three-family key is printed below the panels and its prose is in the caption.",
+        "numbers_at": "source_data/morphology_structure/"
+      }
+    }
   },
   "S38": {
     "old_label": "fig:supp_finite_horizon_selection",
-    "primary_destination": {
-      "figure": "S34",
-      "label": "fig:si_finite_horizon",
-      "panel": "A",
-      "source_panel": "A",
-      "path": "figures/supplementary/curated/finite_horizon.pdf"
-    },
-    "panels": {
-      "A": [
-        {
-          "figure": "S34",
-          "label": "fig:si_finite_horizon",
-          "panel": "A",
-          "source_panel": "A",
-          "path": "figures/supplementary/curated/finite_horizon.pdf"
-        }
-      ],
-      "B": [
-        {
-          "figure": "S34",
-          "label": "fig:si_finite_horizon",
-          "panel": "B",
-          "source_panel": "B",
-          "path": "figures/supplementary/curated/finite_horizon.pdf"
-        }
-      ],
-      "C": [
-        {
-          "figure": "S34",
-          "label": "fig:si_finite_horizon",
-          "panel": "C",
-          "source_panel": "C",
-          "path": "figures/supplementary/curated/finite_horizon.pdf"
-        }
-      ],
-      "D": []
-    },
     "original_asset": "figures/supplementary/figure_S38_panels_A-D.pdf",
     "original_sha256": "1e397b124d3cf87ab817cc3f49e090807307caa2abc685f23b53a3fd6df4bff2",
-    "omitted_panel_status": "Redundant printed view omitted; original scientific source and outcomes retained. Read caption/scientific section rather than transferring a panel suffix to the primary destination."
+    "primary_destination": "S35",
+    "panels": {
+      "A": {
+        "figure": "S35",
+        "panel": "A",
+        "path": "figures/supplementary/curated/finite_horizon.pdf"
+      },
+      "B": {
+        "figure": "S35",
+        "panel": "B",
+        "path": "figures/supplementary/curated/finite_horizon.pdf"
+      },
+      "C": {
+        "figure": "S35",
+        "panel": "C",
+        "path": "figures/supplementary/curated/finite_horizon.pdf"
+      },
+      "D": {
+        "figure": "S35",
+        "panel": "D",
+        "path": "figures/supplementary/curated/finite_horizon.pdf"
+      }
+    },
+    "omitted_panel_status": {}
   },
   "S39": {
     "old_label": "fig:supp_finite_horizon_prediction",
-    "primary_destination": {
-      "figure": "S34",
-      "label": "fig:si_finite_horizon",
-      "panel": "D",
-      "source_panel": "F",
-      "path": "figures/supplementary/curated/finite_horizon.pdf"
-    },
-    "panels": {
-      "A": [],
-      "C": [],
-      "E": [],
-      "B": [],
-      "D": [],
-      "F": [
-        {
-          "figure": "S34",
-          "label": "fig:si_finite_horizon",
-          "panel": "D",
-          "source_panel": "F",
-          "path": "figures/supplementary/curated/finite_horizon.pdf"
-        }
-      ]
-    },
     "original_asset": "figures/supplementary/figure_S39_panels_A-F.pdf",
     "original_sha256": "9d725299a84e3da21a44ef2cd09a63d1d8f6d93575ac867140d3301a90cb2bc7",
-    "omitted_panel_status": "Redundant printed view omitted; original scientific source and outcomes retained. Read caption/scientific section rather than transferring a panel suffix to the primary destination."
+    "primary_destination": "S35",
+    "panels": {
+      "A": {
+        "figure": "S35",
+        "panel": "E",
+        "path": "figures/supplementary/curated/finite_horizon.pdf"
+      },
+      "C": {
+        "figure": "S35",
+        "panel": "F",
+        "path": "figures/supplementary/curated/finite_horizon.pdf"
+      }
+    },
+    "omitted_panel_status": {
+      "E": {
+        "content": "Population-oracle predicted minus exact population loss under fresh examples, at label-noise SD 0.75 and update 256.",
+        "reason": "Not printed; the forecast-bias result is stated in the caption of S35 and retained in Source Data.",
+        "numbers_at": "source_data/morphology_finite_horizon/"
+      },
+      "B": {
+        "content": "Original scalar forecast versus final test half-MSE in the joint-transfer arm.",
+        "reason": "Not restored; the caption of S35 states that the joint arm reproduces the feedback-only hexbins, whose rows are retained in Source Data.",
+        "numbers_at": "source_data/morphology_finite_horizon/runs/*/seed_*_predictions.csv"
+      },
+      "D": {
+        "content": "Calibration-derived Gaussian SGD forecast versus final test half-MSE in the joint-transfer arm.",
+        "reason": "Not restored; the caption of S35 states that the joint arm reproduces the feedback-only hexbins.",
+        "numbers_at": "source_data/morphology_finite_horizon/runs/*/seed_*_predictions.csv"
+      },
+      "F": {
+        "content": "Population-oracle predicted minus exact population loss under reused finite-cache minibatches.",
+        "reason": "Not printed as a panel: SI_NUMBERING keeps it as an inset of S35F, which is not constructible from a crop at paste scale 1.0; the result is stated in the S35 caption and retained in Source Data.",
+        "numbers_at": "source_data/morphology_finite_horizon/"
+      }
+    }
   },
   "S40": {
     "old_label": "fig:supp_morphology_credit",
-    "primary_destination": {
-      "figure": "S12",
-      "label": "fig:si_oracle_profile_credit",
-      "panel": "A",
-      "source_panel": "A",
-      "path": "figures/supplementary/curated/oracle_profile_credit.pdf"
-    },
-    "panels": {
-      "A": [
-        {
-          "figure": "S12",
-          "label": "fig:si_oracle_profile_credit",
-          "panel": "A",
-          "source_panel": "A",
-          "path": "figures/supplementary/curated/oracle_profile_credit.pdf"
-        }
-      ],
-      "B": [
-        {
-          "figure": "S12",
-          "label": "fig:si_oracle_profile_credit",
-          "panel": "B",
-          "source_panel": "B",
-          "path": "figures/supplementary/curated/oracle_profile_credit.pdf"
-        }
-      ],
-      "C": [
-        {
-          "figure": "S12",
-          "label": "fig:si_oracle_profile_credit",
-          "panel": "C",
-          "source_panel": "C",
-          "path": "figures/supplementary/curated/oracle_profile_credit.pdf"
-        }
-      ],
-      "D": [
-        {
-          "figure": "S12",
-          "label": "fig:si_oracle_profile_credit",
-          "panel": "D",
-          "source_panel": "D",
-          "path": "figures/supplementary/curated/oracle_profile_credit.pdf"
-        }
-      ],
-      "E": [
-        {
-          "figure": "S12",
-          "label": "fig:si_oracle_profile_credit",
-          "panel": "E",
-          "source_panel": "E",
-          "path": "figures/supplementary/curated/oracle_profile_credit.pdf"
-        }
-      ],
-      "F": [
-        {
-          "figure": "S12",
-          "label": "fig:si_oracle_profile_credit",
-          "panel": "F",
-          "source_panel": "F",
-          "path": "figures/supplementary/curated/oracle_profile_credit.pdf"
-        }
-      ]
-    },
     "original_asset": "figures/supplementary/figure_S40_panels_A-F.pdf",
     "original_sha256": "fff876119351940631a1b3449759172daec8e9e24cdea0906836ab44c802fd65",
-    "omitted_panel_status": "Redundant printed view omitted; original scientific source and outcomes retained. Read caption/scientific section rather than transferring a panel suffix to the primary destination."
+    "primary_destination": "S13",
+    "panels": {
+      "A": {
+        "figure": "S13",
+        "panel": "A",
+        "path": "figures/supplementary/curated/oracle_profile_credit.pdf"
+      },
+      "B": {
+        "figure": "S13",
+        "panel": "B",
+        "path": "figures/supplementary/curated/oracle_profile_credit.pdf"
+      },
+      "C": {
+        "figure": "S13",
+        "panel": "C",
+        "path": "figures/supplementary/curated/oracle_profile_credit.pdf"
+      },
+      "D": {
+        "figure": "S13",
+        "panel": "D",
+        "path": "figures/supplementary/curated/oracle_profile_credit.pdf"
+      },
+      "E": {
+        "figure": "S13",
+        "panel": "E",
+        "path": "figures/supplementary/curated/oracle_profile_credit.pdf"
+      },
+      "F": {
+        "figure": "S13",
+        "panel": "F",
+        "path": "figures/supplementary/curated/oracle_profile_credit.pdf"
+      }
+    },
+    "omitted_panel_status": {}
   },
   "S41": {
     "old_label": "fig:supp_morphology_calibration",
-    "primary_destination": {
-      "figure": "S35",
-      "label": "fig:si_morphology_estimation",
-      "panel": "A",
-      "source_panel": "A",
-      "path": "figures/supplementary/curated/morphology_estimation.pdf"
-    },
-    "panels": {
-      "A": [
-        {
-          "figure": "S35",
-          "label": "fig:si_morphology_estimation",
-          "panel": "A",
-          "source_panel": "A",
-          "path": "figures/supplementary/curated/morphology_estimation.pdf"
-        }
-      ],
-      "B": [
-        {
-          "figure": "S35",
-          "label": "fig:si_morphology_estimation",
-          "panel": "B",
-          "source_panel": "B",
-          "path": "figures/supplementary/curated/morphology_estimation.pdf"
-        }
-      ],
-      "C": [
-        {
-          "figure": "S35",
-          "label": "fig:si_morphology_estimation",
-          "panel": "C",
-          "source_panel": "C",
-          "path": "figures/supplementary/curated/morphology_estimation.pdf"
-        }
-      ],
-      "D": [
-        {
-          "figure": "S35",
-          "label": "fig:si_morphology_estimation",
-          "panel": "D",
-          "source_panel": "D",
-          "path": "figures/supplementary/curated/morphology_estimation.pdf"
-        }
-      ],
-      "E": [
-        {
-          "figure": "S35",
-          "label": "fig:si_morphology_estimation",
-          "panel": "E",
-          "source_panel": "E",
-          "path": "figures/supplementary/curated/morphology_estimation.pdf"
-        }
-      ],
-      "F": [
-        {
-          "figure": "S35",
-          "label": "fig:si_morphology_estimation",
-          "panel": "F",
-          "source_panel": "F",
-          "path": "figures/supplementary/curated/morphology_estimation.pdf"
-        }
-      ],
-      "G": [
-        {
-          "figure": "S35",
-          "label": "fig:si_morphology_estimation",
-          "panel": "G",
-          "source_panel": "G",
-          "path": "figures/supplementary/curated/morphology_estimation.pdf"
-        }
-      ],
-      "H": [
-        {
-          "figure": "S35",
-          "label": "fig:si_morphology_estimation",
-          "panel": "H",
-          "source_panel": "H",
-          "path": "figures/supplementary/curated/morphology_estimation.pdf"
-        }
-      ]
-    },
     "original_asset": "figures/supplementary/figure_S41_panels_A-H.pdf",
     "original_sha256": "ecde63eabc4482b79e3712fa1ebfc764fd13e4b29fac2818650d3cbcf3691417",
-    "omitted_panel_status": "Redundant printed view omitted; original scientific source and outcomes retained. Read caption/scientific section rather than transferring a panel suffix to the primary destination."
+    "primary_destination": "S36",
+    "panels": {
+      "A": {
+        "figure": "S36",
+        "panel": "A",
+        "path": "figures/supplementary/curated/morphology_estimation.pdf"
+      },
+      "B": {
+        "figure": "S36",
+        "panel": "B",
+        "path": "figures/supplementary/curated/morphology_estimation.pdf"
+      },
+      "C": {
+        "figure": "S36",
+        "panel": "C",
+        "path": "figures/supplementary/curated/morphology_estimation.pdf"
+      },
+      "D": {
+        "figure": "S36",
+        "panel": "D",
+        "path": "figures/supplementary/curated/morphology_estimation.pdf"
+      },
+      "E": {
+        "figure": "S36",
+        "panel": "E",
+        "path": "figures/supplementary/curated/morphology_estimation.pdf"
+      },
+      "F": {
+        "figure": "S36",
+        "panel": "F",
+        "path": "figures/supplementary/curated/morphology_estimation.pdf"
+      },
+      "G": {
+        "figure": "S36",
+        "panel": "G",
+        "path": "figures/supplementary/curated/morphology_estimation.pdf"
+      },
+      "H": {
+        "figure": "S36",
+        "panel": "H",
+        "path": "figures/supplementary/curated/morphology_estimation.pdf"
+      }
+    },
+    "omitted_panel_status": {}
   },
   "S42": {
     "old_label": "fig:supp_morphology_conductance",
-    "primary_destination": {
-      "figure": "S17",
-      "label": "fig:si_conductance_grouping",
-      "panel": "A",
-      "source_panel": "A",
-      "path": "figures/supplementary/curated/conductance_grouping.pdf"
-    },
-    "panels": {
-      "A": [
-        {
-          "figure": "S17",
-          "label": "fig:si_conductance_grouping",
-          "panel": "A",
-          "source_panel": "A",
-          "path": "figures/supplementary/curated/conductance_grouping.pdf"
-        }
-      ],
-      "B": [
-        {
-          "figure": "S17",
-          "label": "fig:si_conductance_grouping",
-          "panel": "B",
-          "source_panel": "B",
-          "path": "figures/supplementary/curated/conductance_grouping.pdf"
-        }
-      ],
-      "C": [
-        {
-          "figure": "S17",
-          "label": "fig:si_conductance_grouping",
-          "panel": "C",
-          "source_panel": "C",
-          "path": "figures/supplementary/curated/conductance_grouping.pdf"
-        }
-      ],
-      "D": [
-        {
-          "figure": "S17",
-          "label": "fig:si_conductance_grouping",
-          "panel": "D",
-          "source_panel": "D",
-          "path": "figures/supplementary/curated/conductance_grouping.pdf"
-        }
-      ],
-      "E": [
-        {
-          "figure": "S17",
-          "label": "fig:si_conductance_grouping",
-          "panel": "E",
-          "source_panel": "E",
-          "path": "figures/supplementary/curated/conductance_grouping.pdf"
-        }
-      ],
-      "F": [
-        {
-          "figure": "S17",
-          "label": "fig:si_conductance_grouping",
-          "panel": "F",
-          "source_panel": "F",
-          "path": "figures/supplementary/curated/conductance_grouping.pdf"
-        }
-      ]
-    },
     "original_asset": "figures/supplementary/figure_S42_panels_A-F.pdf",
     "original_sha256": "548de23a1a5fccc5b12f819d6bd33b8de3689c13cd4ac9d4ed00231200593351",
-    "omitted_panel_status": "Redundant printed view omitted; original scientific source and outcomes retained. Read caption/scientific section rather than transferring a panel suffix to the primary destination."
+    "primary_destination": "S18",
+    "panels": {
+      "A": {
+        "figure": "S18",
+        "panel": "A",
+        "path": "figures/supplementary/curated/conductance_grouping.pdf"
+      },
+      "B": {
+        "figure": "S18",
+        "panel": "B",
+        "path": "figures/supplementary/curated/conductance_grouping.pdf"
+      },
+      "C": {
+        "figure": "S18",
+        "panel": "C",
+        "path": "figures/supplementary/curated/conductance_grouping.pdf"
+      },
+      "D": {
+        "figure": "S18",
+        "panel": "D",
+        "path": "figures/supplementary/curated/conductance_grouping.pdf"
+      },
+      "E": {
+        "figure": "S18",
+        "panel": "E",
+        "path": "figures/supplementary/curated/conductance_grouping.pdf"
+      },
+      "F": {
+        "figure": "S18",
+        "panel": "F",
+        "path": "figures/supplementary/curated/conductance_grouping.pdf"
+      }
+    },
+    "omitted_panel_status": {}
   },
   "S43": {
     "old_label": "fig:supp_boolean_theory",
-    "primary_destination": {
-      "figure": "S13",
-      "label": "fig:si_boolean_capacity",
-      "panel": "A",
-      "source_panel": "A",
-      "path": "figures/supplementary/curated/boolean_capacity.pdf"
-    },
-    "panels": {
-      "A": [
-        {
-          "figure": "S13",
-          "label": "fig:si_boolean_capacity",
-          "panel": "A",
-          "source_panel": "A",
-          "path": "figures/supplementary/curated/boolean_capacity.pdf"
-        }
-      ],
-      "B": [
-        {
-          "figure": "S13",
-          "label": "fig:si_boolean_capacity",
-          "panel": "B",
-          "source_panel": "B",
-          "path": "figures/supplementary/curated/boolean_capacity.pdf"
-        }
-      ],
-      "C": [
-        {
-          "figure": "S13",
-          "label": "fig:si_boolean_capacity",
-          "panel": "C",
-          "source_panel": "C",
-          "path": "figures/supplementary/curated/boolean_capacity.pdf"
-        }
-      ],
-      "D": [
-        {
-          "figure": "S13",
-          "label": "fig:si_boolean_capacity",
-          "panel": "D",
-          "source_panel": "D",
-          "path": "figures/supplementary/curated/boolean_capacity.pdf"
-        }
-      ],
-      "E": [
-        {
-          "figure": "S13",
-          "label": "fig:si_boolean_capacity",
-          "panel": "E",
-          "source_panel": "E",
-          "path": "figures/supplementary/curated/boolean_capacity.pdf"
-        }
-      ],
-      "F": [
-        {
-          "figure": "S13",
-          "label": "fig:si_boolean_capacity",
-          "panel": "F",
-          "source_panel": "F",
-          "path": "figures/supplementary/curated/boolean_capacity.pdf"
-        }
-      ]
-    },
     "original_asset": "figures/supplementary/figure_S43_panels_A-F.pdf",
     "original_sha256": "42874aabef684e4d5dbbad3dafe68207dd798b04a7c3c8d50fac61d9ac83470c",
-    "omitted_panel_status": "Redundant printed view omitted; original scientific source and outcomes retained. Read caption/scientific section rather than transferring a panel suffix to the primary destination."
+    "primary_destination": "S14",
+    "panels": {
+      "A": {
+        "figure": "S14",
+        "panel": "A",
+        "path": "figures/supplementary/curated/boolean_capacity.pdf"
+      },
+      "B": {
+        "figure": "S14",
+        "panel": "B",
+        "path": "figures/supplementary/curated/boolean_capacity.pdf"
+      },
+      "C": {
+        "figure": "S14",
+        "panel": "C",
+        "path": "figures/supplementary/curated/boolean_capacity.pdf"
+      },
+      "D": {
+        "figure": "S14",
+        "panel": "D",
+        "path": "figures/supplementary/curated/boolean_capacity.pdf"
+      },
+      "E": {
+        "figure": "S14",
+        "panel": "E",
+        "path": "figures/supplementary/curated/boolean_capacity.pdf"
+      },
+      "F": {
+        "figure": "S14",
+        "panel": "F",
+        "path": "figures/supplementary/curated/boolean_capacity.pdf"
+      }
+    },
+    "omitted_panel_status": {}
   },
   "S44": {
     "old_label": "fig:supp_boolean_learning",
-    "primary_destination": {
-      "figure": "S14",
-      "label": "fig:si_boolean_learning",
-      "panel": "A",
-      "source_panel": "A",
-      "path": "figures/supplementary/curated/boolean_learning.pdf"
-    },
-    "panels": {
-      "A": [
-        {
-          "figure": "S14",
-          "label": "fig:si_boolean_learning",
-          "panel": "A",
-          "source_panel": "A",
-          "path": "figures/supplementary/curated/boolean_learning.pdf"
-        }
-      ],
-      "B": [
-        {
-          "figure": "S14",
-          "label": "fig:si_boolean_learning",
-          "panel": "B",
-          "source_panel": "B",
-          "path": "figures/supplementary/curated/boolean_learning.pdf"
-        }
-      ],
-      "C": [
-        {
-          "figure": "S14",
-          "label": "fig:si_boolean_learning",
-          "panel": "C",
-          "source_panel": "C",
-          "path": "figures/supplementary/curated/boolean_learning.pdf"
-        }
-      ],
-      "D": [
-        {
-          "figure": "S14",
-          "label": "fig:si_boolean_learning",
-          "panel": "D",
-          "source_panel": "D",
-          "path": "figures/supplementary/curated/boolean_learning.pdf"
-        }
-      ],
-      "E": [
-        {
-          "figure": "S14",
-          "label": "fig:si_boolean_learning",
-          "panel": "E",
-          "source_panel": "E",
-          "path": "figures/supplementary/curated/boolean_learning.pdf"
-        }
-      ],
-      "F": [
-        {
-          "figure": "S14",
-          "label": "fig:si_boolean_learning",
-          "panel": "F",
-          "source_panel": "F",
-          "path": "figures/supplementary/curated/boolean_learning.pdf"
-        }
-      ],
-      "G": [
-        {
-          "figure": "S14",
-          "label": "fig:si_boolean_learning",
-          "panel": "G",
-          "source_panel": "G",
-          "path": "figures/supplementary/curated/boolean_learning.pdf"
-        }
-      ],
-      "H": [
-        {
-          "figure": "S14",
-          "label": "fig:si_boolean_learning",
-          "panel": "H",
-          "source_panel": "H",
-          "path": "figures/supplementary/curated/boolean_learning.pdf"
-        }
-      ]
-    },
     "original_asset": "figures/supplementary/figure_S44_panels_A-H.pdf",
     "original_sha256": "a3ec9fb8b0577c4f710cef2de979cbdb3258e047008bded99e98b9f7ca0444d7",
-    "omitted_panel_status": "Redundant printed view omitted; original scientific source and outcomes retained. Read caption/scientific section rather than transferring a panel suffix to the primary destination."
+    "primary_destination": "S15",
+    "panels": {
+      "A": {
+        "figure": "S15",
+        "panel": "A",
+        "path": "figures/supplementary/curated/boolean_learning.pdf"
+      },
+      "B": {
+        "figure": "S15",
+        "panel": "B",
+        "path": "figures/supplementary/curated/boolean_learning.pdf"
+      },
+      "C": {
+        "figure": "S15",
+        "panel": "C",
+        "path": "figures/supplementary/curated/boolean_learning.pdf"
+      },
+      "D": {
+        "figure": "S15",
+        "panel": "D",
+        "path": "figures/supplementary/curated/boolean_learning.pdf"
+      },
+      "E": {
+        "figure": "S15",
+        "panel": "E",
+        "path": "figures/supplementary/curated/boolean_learning.pdf"
+      },
+      "F": {
+        "figure": "S15",
+        "panel": "F",
+        "path": "figures/supplementary/curated/boolean_learning.pdf"
+      },
+      "G": {
+        "figure": "S15",
+        "panel": "G",
+        "path": "figures/supplementary/curated/boolean_learning.pdf"
+      },
+      "H": {
+        "figure": "S15",
+        "panel": "H",
+        "path": "figures/supplementary/curated/boolean_learning.pdf"
+      }
+    },
+    "omitted_panel_status": {}
   },
   "S45": {
     "old_label": "fig:supp_image_diagnostics",
-    "primary_destination": {
-      "figure": "S7",
-      "label": "fig:si_mnist_dictionary_geometry",
-      "panel": "E",
-      "source_panel": "C",
-      "path": "figures/supplementary/curated/mnist_dictionary_geometry.pdf"
-    },
-    "panels": {
-      "B": [],
-      "A": [],
-      "C": [
-        {
-          "figure": "S7",
-          "label": "fig:si_mnist_dictionary_geometry",
-          "panel": "E",
-          "source_panel": "C",
-          "path": "figures/supplementary/curated/mnist_dictionary_geometry.pdf"
-        }
-      ],
-      "D": [
-        {
-          "figure": "S7",
-          "label": "fig:si_mnist_dictionary_geometry",
-          "panel": "F",
-          "source_panel": "D",
-          "path": "figures/supplementary/curated/mnist_dictionary_geometry.pdf"
-        }
-      ],
-      "E": [
-        {
-          "figure": "S7",
-          "label": "fig:si_mnist_dictionary_geometry",
-          "panel": "G",
-          "source_panel": "E",
-          "path": "figures/supplementary/curated/mnist_dictionary_geometry.pdf"
-        }
-      ],
-      "F": [],
-      "G": []
-    },
     "original_asset": "figures/supplementary/figure_S45_image_diagnostics.pdf",
     "original_sha256": "46a37b5af6d4e86c007c219b04aac995065877de0762204872f5717cb77a5557",
-    "omitted_panel_status": "Redundant printed view omitted; original scientific source and outcomes retained. Read caption/scientific section rather than transferring a panel suffix to the primary destination."
+    "primary_destination": "S8",
+    "panels": {
+      "C": {
+        "figure": "S8",
+        "panel": "A",
+        "path": "figures/supplementary/curated/error_field_geometry.pdf"
+      },
+      "D": {
+        "figure": "S8",
+        "panel": "B",
+        "path": "figures/supplementary/curated/error_field_geometry.pdf"
+      },
+      "E": {
+        "figure": "S8",
+        "panel": "C",
+        "path": "figures/supplementary/curated/error_field_geometry.pdf"
+      }
+    },
+    "omitted_panel_status": {
+      "B": {
+        "content": "and upper",
+        "reason": "Omitted from the curated supplement; the measurement is retained in Source Data and in the section that cites it.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/figure2/feedback_gradient_runs.csv",
+          "drafts/dendritic-local-learning/journal/source_data/figure2/path_gain_dispersion_ladder_runs.csv",
+          "drafts/dendritic-local-learning/journal/source_data/mnist_feedback_ladder/audit.json",
+          "drafts/dendritic-local-learning/journal/source_data/mnist_feedback_ladder/condition_summary.csv"
+        ]
+      },
+      "A": {
+        "content": "and upper",
+        "reason": "Omitted from the curated supplement; the measurement is retained in Source Data and in the section that cites it.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/figure2/feedback_gradient_runs.csv",
+          "drafts/dendritic-local-learning/journal/source_data/figure2/path_gain_dispersion_ladder_runs.csv",
+          "drafts/dendritic-local-learning/journal/source_data/mnist_feedback_ladder/audit.json",
+          "drafts/dendritic-local-learning/journal/source_data/mnist_feedback_ladder/condition_summary.csv"
+        ]
+      },
+      "F": {
+        "content": "distinguish concepts.",
+        "reason": "Omitted from the curated supplement; the measurement is retained in Source Data and in the section that cites it.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/figure2/feedback_gradient_runs.csv",
+          "drafts/dendritic-local-learning/journal/source_data/figure2/path_gain_dispersion_ladder_runs.csv",
+          "drafts/dendritic-local-learning/journal/source_data/mnist_feedback_ladder/audit.json",
+          "drafts/dendritic-local-learning/journal/source_data/mnist_feedback_ladder/condition_summary.csv"
+        ]
+      },
+      "G": {
+        "content": "Per-neuron-minus-strict-scalar and exact-path-minus-per-neuron effects, the DFA neuron-identity contrast and the ownership derangement strips.",
+        "reason": "Omitted from the split figure; the same contrasts are drawn in main Fig. 1E,F and in S6D,E.",
+        "numbers_at": "source_data/figure2/"
+      }
+    }
   },
   "S46": {
     "old_label": "fig:supp_utility",
-    "primary_destination": {
-      "figure": "S2",
-      "label": "fig:si_utility_signal_noise",
-      "panel": "A",
-      "source_panel": "A",
-      "path": "figures/supplementary/curated/utility_signal_noise.pdf"
-    },
-    "panels": {
-      "A": [
-        {
-          "figure": "S2",
-          "label": "fig:si_utility_signal_noise",
-          "panel": "A",
-          "source_panel": "A",
-          "path": "figures/supplementary/curated/utility_signal_noise.pdf"
-        }
-      ],
-      "B": [],
-      "C": [
-        {
-          "figure": "S2",
-          "label": "fig:si_utility_signal_noise",
-          "panel": "B",
-          "source_panel": "C",
-          "path": "figures/supplementary/curated/utility_signal_noise.pdf"
-        }
-      ],
-      "D": [
-        {
-          "figure": "S2",
-          "label": "fig:si_utility_signal_noise",
-          "panel": "C",
-          "source_panel": "D",
-          "path": "figures/supplementary/curated/utility_signal_noise.pdf"
-        }
-      ],
-      "E": [
-        {
-          "figure": "S2",
-          "label": "fig:si_utility_signal_noise",
-          "panel": "D",
-          "source_panel": "E",
-          "path": "figures/supplementary/curated/utility_signal_noise.pdf"
-        }
-      ],
-      "F": [],
-      "G": []
-    },
     "original_asset": "figures/supplementary/figure_S46_utility.pdf",
     "original_sha256": "f2b1ba4df968472dd841f7a8835b49fb02a6244581068ff2f5e8f3e98cbbfdb1",
-    "omitted_panel_status": "Redundant printed view omitted; original scientific source and outcomes retained. Read caption/scientific section rather than transferring a panel suffix to the primary destination."
+    "primary_destination": "S3",
+    "panels": {
+      "A": {
+        "figure": "S3",
+        "panel": "A",
+        "path": "figures/supplementary/curated/utility_signal_noise.pdf"
+      },
+      "C": {
+        "figure": "S3",
+        "panel": "B",
+        "path": "figures/supplementary/curated/utility_signal_noise.pdf"
+      },
+      "D": {
+        "figure": "S3",
+        "panel": "C",
+        "path": "figures/supplementary/curated/utility_signal_noise.pdf"
+      },
+      "E": {
+        "figure": "S3",
+        "panel": "D",
+        "path": "figures/supplementary/curated/utility_signal_noise.pdf"
+      }
+    },
+    "omitted_panel_status": {
+      "B": {
+        "content": "Eight-terminal illustration of signal hierarchy \\(H_{\\rm c}\\) and feedback resolution \\(D_{\\rm r}\\). Quantitative screens use 16 Haar coordinates and no forward neuron.",
+        "reason": "Omitted from the curated supplement; the measurement is retained in Source Data and in the section that cites it.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/credit_phase_theory/depth_training_seed.csv",
+          "drafts/dendritic-local-learning/journal/source_data/credit_phase_theory/depth_training_summary.csv",
+          "drafts/dendritic-local-learning/journal/source_data/credit_phase_theory/projection_phase_seed.csv",
+          "drafts/dendritic-local-learning/journal/source_data/credit_phase_theory/projection_phase_summary.csv"
+        ]
+      },
+      "F": {
+        "content": "Gains matched to signal-to-noise ratio (SNR), a common global gain, shuffled gains and reversed gains over eight blocks; a point implementation supplied with identical gains matches.",
+        "reason": "Omitted from the curated supplement; the measurement is retained in Source Data and in the section that cites it.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/credit_phase_theory/depth_training_seed.csv",
+          "drafts/dendritic-local-learning/journal/source_data/credit_phase_theory/depth_training_summary.csv",
+          "drafts/dendritic-local-learning/journal/source_data/credit_phase_theory/projection_phase_seed.csv",
+          "drafts/dendritic-local-learning/journal/source_data/credit_phase_theory/projection_phase_summary.csv"
+        ]
+      },
+      "G": {
+        "content": "Retrospective full-batch analysis of 540 fits (27 conditions, 20 paired seeds; main Fig.~3). Deterministic moment utility with global logistic curvature correlates with norm-matched one-step progress (\\(P_1\\)) at Spearman \\(\\rho=0.951\\), 95\\% seed-block interval 0.949--0.954. Nonpositive alignment gives zero utility in 214 fits. Panels",
+        "reason": "Omitted from the curated supplement; the measurement is retained in Source Data and in the section that cites it.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/credit_phase_theory/depth_training_seed.csv",
+          "drafts/dendritic-local-learning/journal/source_data/credit_phase_theory/depth_training_summary.csv",
+          "drafts/dendritic-local-learning/journal/source_data/credit_phase_theory/projection_phase_seed.csv",
+          "drafts/dendritic-local-learning/journal/source_data/credit_phase_theory/projection_phase_summary.csv"
+        ]
+      }
+    }
   },
   "S47": {
     "old_label": "fig:supp_weak_channel_linearization",
-    "primary_destination": {
-      "figure": "S29",
-      "label": "fig:si_shunt_replication",
-      "panel": "D",
-      "source_panel": "A",
-      "path": "figures/supplementary/curated/shunt_replication.pdf"
-    },
-    "panels": {
-      "A": [
-        {
-          "figure": "S29",
-          "label": "fig:si_shunt_replication",
-          "panel": "D",
-          "source_panel": "A",
-          "path": "figures/supplementary/curated/shunt_replication.pdf"
-        }
-      ],
-      "B": [
-        {
-          "figure": "S29",
-          "label": "fig:si_shunt_replication",
-          "panel": "E",
-          "source_panel": "B",
-          "path": "figures/supplementary/curated/shunt_replication.pdf"
-        }
-      ]
-    },
     "original_asset": "figures/supplementary/figure_shunt_weak_channels.pdf",
     "original_sha256": "a1bd1b48ad19ed673aab157fcbc44ac5cc2d167a39a87a9c21a6cd739f231417",
-    "omitted_panel_status": "Redundant printed view omitted; original scientific source and outcomes retained. Read caption/scientific section rather than transferring a panel suffix to the primary destination."
+    "primary_destination": "S30",
+    "panels": {
+      "A": {
+        "figure": "S30",
+        "panel": "D",
+        "path": "figures/supplementary/curated/shunt_replication.pdf"
+      },
+      "B": {
+        "figure": "S30",
+        "panel": "E",
+        "path": "figures/supplementary/curated/shunt_replication.pdf"
+      }
+    },
+    "omitted_panel_status": {}
   },
   "S48": {
     "old_label": "fig:supp_normalized_shunt_dose",
-    "primary_destination": {
-      "figure": "S28",
-      "label": "fig:si_shunt_sensitivity",
-      "panel": "D",
-      "source_panel": "*",
-      "path": "figures/supplementary/curated/shunt_sensitivity.pdf"
-    },
-    "panels": {},
     "original_asset": "figures/supplementary/figure_S48_normalized_shunt_dose.pdf",
     "original_sha256": "871ec17220c7326c6878eef078172e7f3b64c1a2caf6cc7c1cbf5d59346e0418",
-    "omitted_panel_status": "Redundant printed view omitted; original scientific source and outcomes retained. Read caption/scientific section rather than transferring a panel suffix to the primary destination."
+    "primary_destination": "fig:focal",
+    "panels": {},
+    "omitted_panel_status": {
+      "*": {
+        "content": "Focal-shunt localization versus input-conductance-normalized dose, against baseline-current-matched injection, 101 sites in eight cells.",
+        "reason": "Promoted to main Fig. 8D; no copy is kept in the supplement.",
+        "numbers_at": "source_data/focal_selectivity_phase1/"
+      }
+    }
   },
   "S49": {
     "old_label": "fig:supp-image-ladder-controls",
-    "primary_destination": {
-      "figure": "S7",
-      "label": "fig:si_mnist_dictionary_geometry",
-      "panel": "A",
-      "source_panel": "C",
-      "path": "figures/supplementary/curated/mnist_dictionary_geometry.pdf"
-    },
-    "panels": {
-      "A": [],
-      "B": [],
-      "C": [
-        {
-          "figure": "S7",
-          "label": "fig:si_mnist_dictionary_geometry",
-          "panel": "A",
-          "source_panel": "C",
-          "path": "figures/supplementary/curated/mnist_dictionary_geometry.pdf"
-        }
-      ],
-      "D": [
-        {
-          "figure": "S7",
-          "label": "fig:si_mnist_dictionary_geometry",
-          "panel": "B",
-          "source_panel": "D",
-          "path": "figures/supplementary/curated/mnist_dictionary_geometry.pdf"
-        }
-      ],
-      "E": [
-        {
-          "figure": "S7",
-          "label": "fig:si_mnist_dictionary_geometry",
-          "panel": "C",
-          "source_panel": "E",
-          "path": "figures/supplementary/curated/mnist_dictionary_geometry.pdf"
-        }
-      ],
-      "F": [
-        {
-          "figure": "S7",
-          "label": "fig:si_mnist_dictionary_geometry",
-          "panel": "D",
-          "source_panel": "F",
-          "path": "figures/supplementary/curated/mnist_dictionary_geometry.pdf"
-        }
-      ]
-    },
     "original_asset": "figures/supplementary/figure_S49_mnist_dictionary_controls.pdf",
     "original_sha256": "0533af574d595749e9cf19fe637a8f7494d591bae9314376ac239df607769f83",
-    "omitted_panel_status": "Redundant printed view omitted; original scientific source and outcomes retained. Read caption/scientific section rather than transferring a panel suffix to the primary destination."
+    "primary_destination": "S7",
+    "panels": {
+      "C": {
+        "figure": "S7",
+        "panel": "A",
+        "path": "figures/supplementary/curated/mnist_dictionary_geometry.pdf"
+      },
+      "D": {
+        "figure": "S7",
+        "panel": "B",
+        "path": "figures/supplementary/curated/mnist_dictionary_geometry.pdf"
+      },
+      "E": {
+        "figure": "S7",
+        "panel": "C",
+        "path": "figures/supplementary/curated/mnist_dictionary_geometry.pdf"
+      },
+      "F": {
+        "figure": "S7",
+        "panel": "D",
+        "path": "figures/supplementary/curated/mnist_dictionary_geometry.pdf"
+      }
+    },
+    "omitted_panel_status": {
+      "A": {
+        "content": "Development validation cross-entropy at three common multipliers of the original Adam parameter-group rates. Three development seeds per architecture, rule and multiplier give 108 fits; minimum mean validation loss selects each rule's rate.",
+        "reason": "Omitted from the curated supplement; the measurement is retained in Source Data and in the section that cites it.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/image_ladder_controls/figures/figure_source.csv"
+        ]
+      },
+      "B": {
+        "content": "Development validation cross-entropy at three common multipliers of the original Adam parameter-group rates. Three development seeds per architecture, rule and multiplier give 108 fits; minimum mean validation loss selects each rule's rate.",
+        "reason": "Omitted from the curated supplement; the measurement is retained in Source Data and in the section that cites it.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/image_ladder_controls/figures/figure_source.csv"
+        ]
+      }
+    }
   },
   "S50": {
     "old_label": "fig:supp-conductance-small-effect",
-    "primary_destination": {
-      "figure": "S18",
-      "label": "fig:si_conductance_precision",
-      "panel": "A",
-      "source_panel": "A",
-      "path": "figures/supplementary/curated/conductance_precision.pdf"
-    },
-    "panels": {
-      "A": [
-        {
-          "figure": "S18",
-          "label": "fig:si_conductance_precision",
-          "panel": "A",
-          "source_panel": "A",
-          "path": "figures/supplementary/curated/conductance_precision.pdf"
-        }
-      ],
-      "B": [
-        {
-          "figure": "S18",
-          "label": "fig:si_conductance_precision",
-          "panel": "B",
-          "source_panel": "B",
-          "path": "figures/supplementary/curated/conductance_precision.pdf"
-        }
-      ],
-      "C": [
-        {
-          "figure": "S18",
-          "label": "fig:si_conductance_precision",
-          "panel": "C",
-          "source_panel": "C",
-          "path": "figures/supplementary/curated/conductance_precision.pdf"
-        }
-      ],
-      "D": [
-        {
-          "figure": "S18",
-          "label": "fig:si_conductance_precision",
-          "panel": "D",
-          "source_panel": "D",
-          "path": "figures/supplementary/curated/conductance_precision.pdf"
-        }
-      ]
-    },
     "original_asset": "figures/supplementary/figure_S50_conductance_small_effect.pdf",
     "original_sha256": "8f1b4a4001b7255c082dbce70822fbb2e2ddab663aa536a78aeb1163bc3f7fe2",
-    "omitted_panel_status": "Redundant printed view omitted; original scientific source and outcomes retained. Read caption/scientific section rather than transferring a panel suffix to the primary destination."
+    "primary_destination": "S19",
+    "panels": {
+      "A": {
+        "figure": "S19",
+        "panel": "A",
+        "path": "figures/supplementary/curated/conductance_precision.pdf"
+      },
+      "B": {
+        "figure": "S19",
+        "panel": "B",
+        "path": "figures/supplementary/curated/conductance_precision.pdf"
+      },
+      "C": {
+        "figure": "S19",
+        "panel": "C",
+        "path": "figures/supplementary/curated/conductance_precision.pdf"
+      },
+      "D": {
+        "figure": "S19",
+        "panel": "D",
+        "path": "figures/supplementary/curated/conductance_precision.pdf"
+      }
+    },
+    "omitted_panel_status": {}
   },
   "S51": {
     "old_label": "fig:supp-conductance-robustness",
-    "primary_destination": {
-      "figure": "S19",
-      "label": "fig:si_conductance_optimization",
-      "panel": "A",
-      "source_panel": "B",
-      "path": "figures/supplementary/curated/conductance_optimization.pdf"
-    },
-    "panels": {
-      "A": [],
-      "B": [
-        {
-          "figure": "S19",
-          "label": "fig:si_conductance_optimization",
-          "panel": "A",
-          "source_panel": "B",
-          "path": "figures/supplementary/curated/conductance_optimization.pdf"
-        }
-      ],
-      "C": [
-        {
-          "figure": "S19",
-          "label": "fig:si_conductance_optimization",
-          "panel": "B",
-          "source_panel": "C",
-          "path": "figures/supplementary/curated/conductance_optimization.pdf"
-        }
-      ],
-      "D": []
-    },
     "original_asset": "figures/supplementary/figure_S51_conductance_robustness.pdf",
     "original_sha256": "9d027f904b0665d514eff0fb94aa6b4bb5c0db22acf573ed4b1741a201115861",
-    "omitted_panel_status": "Redundant printed view omitted; original scientific source and outcomes retained. Read caption/scientific section rather than transferring a panel suffix to the primary destination."
+    "primary_destination": "S20",
+    "panels": {
+      "B": {
+        "figure": "S20",
+        "panel": "A",
+        "path": "figures/supplementary/curated/conductance_optimization.pdf"
+      },
+      "C": {
+        "figure": "S20",
+        "panel": "B",
+        "path": "figures/supplementary/curated/conductance_optimization.pdf"
+      },
+      "D": {
+        "figure": "S20",
+        "panel": "C",
+        "path": "figures/supplementary/curated/conductance_optimization.pdf"
+      }
+    },
+    "omitted_panel_status": {
+      "A": {
+        "content": "Fixed-checkpoint test NMSE under SGD for the opposed-tuning task, showing the four credit rules, including the explicit three-profile oracle. Curves and shading are means and 95\\% bootstrap intervals over 20 fresh seeds; the dotted line marks 4,096 updates.",
+        "reason": "Omitted from the curated supplement; the measurement is retained in Source Data and in the section that cites it.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/conductance_credit_demand/opponent/supplementary_figures/supplement_opponent_controls_source.csv"
+        ]
+      }
+    }
   },
   "S52": {
     "old_label": "fig:supp-conductance-expanded-rates",
-    "primary_destination": {
-      "figure": "S19",
-      "label": "fig:si_conductance_optimization",
-      "panel": "C",
-      "source_panel": "A",
-      "path": "figures/supplementary/curated/conductance_optimization.pdf"
-    },
-    "panels": {
-      "A": [
-        {
-          "figure": "S19",
-          "label": "fig:si_conductance_optimization",
-          "panel": "C",
-          "source_panel": "A",
-          "path": "figures/supplementary/curated/conductance_optimization.pdf"
-        }
-      ],
-      "B": [
-        {
-          "figure": "S19",
-          "label": "fig:si_conductance_optimization",
-          "panel": "D",
-          "source_panel": "B",
-          "path": "figures/supplementary/curated/conductance_optimization.pdf"
-        }
-      ],
-      "C": [],
-      "D": []
-    },
     "original_asset": "figures/supplementary/figure_S52_conductance_expanded_rates.pdf",
     "original_sha256": "85b7d72af8ef157eba3877351cd8856909d3d355c9b6ca6e21ed8462e6d372bd",
-    "omitted_panel_status": "Redundant printed view omitted; original scientific source and outcomes retained. Read caption/scientific section rather than transferring a panel suffix to the primary destination."
+    "primary_destination": "S20",
+    "panels": {
+      "A": {
+        "figure": "S20",
+        "panel": "D",
+        "path": "figures/supplementary/curated/conductance_optimization.pdf"
+      },
+      "B": {
+        "figure": "S20",
+        "panel": "E",
+        "path": "figures/supplementary/curated/conductance_optimization.pdf"
+      }
+    },
+    "omitted_panel_status": {
+      "C": {
+        "content": "Aligned-tuning control of the wider six-rate development sweep under Adam.",
+        "reason": "Omitted; all 288 outcomes are retained in the condition table and Source Data, and the S20 caption says so.",
+        "numbers_at": "source_data/conductance_credit_demand/"
+      },
+      "D": {
+        "content": "Aligned-tuning control of the wider six-rate development sweep under SGD.",
+        "reason": "Omitted; all 288 outcomes are retained in the condition table and Source Data.",
+        "numbers_at": "source_data/conductance_credit_demand/"
+      }
+    }
   },
   "S53": {
     "old_label": "fig:supp_local_gate_controls",
-    "primary_destination": {
-      "figure": "S20",
-      "label": "fig:si_local_gate_controls",
-      "panel": "A",
-      "source_panel": "A",
-      "path": "figures/supplementary/curated/local_gate_controls.pdf"
-    },
-    "panels": {
-      "A": [
-        {
-          "figure": "S20",
-          "label": "fig:si_local_gate_controls",
-          "panel": "A",
-          "source_panel": "A",
-          "path": "figures/supplementary/curated/local_gate_controls.pdf"
-        }
-      ],
-      "B": [
-        {
-          "figure": "S20",
-          "label": "fig:si_local_gate_controls",
-          "panel": "B",
-          "source_panel": "B",
-          "path": "figures/supplementary/curated/local_gate_controls.pdf"
-        }
-      ],
-      "C": [
-        {
-          "figure": "S20",
-          "label": "fig:si_local_gate_controls",
-          "panel": "C",
-          "source_panel": "C",
-          "path": "figures/supplementary/curated/local_gate_controls.pdf"
-        }
-      ],
-      "D": [
-        {
-          "figure": "S20",
-          "label": "fig:si_local_gate_controls",
-          "panel": "D",
-          "source_panel": "D",
-          "path": "figures/supplementary/curated/local_gate_controls.pdf"
-        }
-      ],
-      "E": []
-    },
     "original_asset": "figures/supplementary/figure_S53_local_gate_controls.pdf",
     "original_sha256": "12cae121b5382452de95ca8731cd7c5626183cb7d787d306414b96e74abd84db",
-    "omitted_panel_status": "Redundant printed view omitted; original scientific source and outcomes retained. Read caption/scientific section rather than transferring a panel suffix to the primary destination."
+    "primary_destination": "S21",
+    "panels": {
+      "A": {
+        "figure": "S21",
+        "panel": "A",
+        "path": "figures/supplementary/curated/local_gate_controls.pdf"
+      },
+      "B": {
+        "figure": "S21",
+        "panel": "B",
+        "path": "figures/supplementary/curated/local_gate_controls.pdf"
+      },
+      "C": {
+        "figure": "S21",
+        "panel": "C",
+        "path": "figures/supplementary/curated/local_gate_controls.pdf"
+      },
+      "D": {
+        "figure": "S21",
+        "panel": "D",
+        "path": "figures/supplementary/curated/local_gate_controls.pdf"
+      }
+    },
+    "omitted_panel_status": {
+      "E": {
+        "content": "Historical twenty-seed cancellation cohort (2101-2120): the norm of mixed context-conditional distal gradients divided by the mixture of their norms.",
+        "reason": "Promoted to main Fig. 5G and re-rendered natively there (DECISIONS Q7); it leaves the supplement, and the curated crop never contained it.",
+        "numbers_at": "source_data/conductance_credit_demand/opponent/summaries/context_gradient_summary.csv"
+      }
+    }
   },
   "S54": {
     "old_label": "fig:supp_credit_rule_extension",
-    "primary_destination": {
-      "figure": "S15",
-      "label": "fig:si_fixed_profile_budget",
-      "panel": "A",
-      "source_panel": "B",
-      "path": "figures/supplementary/curated/fixed_profile_budget.pdf"
-    },
-    "panels": {
-      "A": [],
-      "B": [
-        {
-          "figure": "S15",
-          "label": "fig:si_fixed_profile_budget",
-          "panel": "A",
-          "source_panel": "B",
-          "path": "figures/supplementary/curated/fixed_profile_budget.pdf"
-        }
-      ],
-      "C": [],
-      "D": [
-        {
-          "figure": "S15",
-          "label": "fig:si_fixed_profile_budget",
-          "panel": "B",
-          "source_panel": "D",
-          "path": "figures/supplementary/curated/fixed_profile_budget.pdf"
-        }
-      ],
-      "E": [
-        {
-          "figure": "S15",
-          "label": "fig:si_fixed_profile_budget",
-          "panel": "C",
-          "source_panel": "E",
-          "path": "figures/supplementary/curated/fixed_profile_budget.pdf"
-        }
-      ],
-      "F": [
-        {
-          "figure": "S15",
-          "label": "fig:si_fixed_profile_budget",
-          "panel": "D",
-          "source_panel": "F",
-          "path": "figures/supplementary/curated/fixed_profile_budget.pdf"
-        }
-      ]
-    },
     "original_asset": "figures/supplementary/figure_S54_credit_budget_extension.pdf",
     "original_sha256": "a439aeba06abad479dd47f7c211c4eeb52093bcf41bc3b8c3c7e322004616271",
-    "omitted_panel_status": "Redundant printed view omitted; original scientific source and outcomes retained. Read caption/scientific section rather than transferring a panel suffix to the primary destination."
+    "primary_destination": "S16",
+    "panels": {
+      "A": {
+        "figure": "S16",
+        "panel": "A",
+        "path": "figures/supplementary/curated/fixed_profile_budget.pdf"
+      },
+      "B": {
+        "figure": "S16",
+        "panel": "B",
+        "path": "figures/supplementary/curated/fixed_profile_budget.pdf"
+      },
+      "C": {
+        "figure": "S16",
+        "panel": "C",
+        "path": "figures/supplementary/curated/fixed_profile_budget.pdf"
+      },
+      "D": {
+        "figure": "S16",
+        "panel": "D",
+        "path": "figures/supplementary/curated/fixed_profile_budget.pdf"
+      },
+      "E": {
+        "figure": "S16",
+        "panel": "E",
+        "path": "figures/supplementary/curated/fixed_profile_budget.pdf"
+      },
+      "F": {
+        "figure": "S16",
+        "panel": "F",
+        "path": "figures/supplementary/curated/fixed_profile_budget.pdf"
+      }
+    },
+    "omitted_panel_status": {}
   },
   "S55": {
     "old_label": "fig:supp_credit_rule_extension_controls",
-    "primary_destination": {
-      "figure": "S16",
-      "label": "fig:si_credit_optimizer_controls",
-      "panel": "A",
-      "source_panel": "A",
-      "path": "figures/supplementary/curated/credit_optimizer_controls.pdf"
-    },
-    "panels": {
-      "A": [
-        {
-          "figure": "S16",
-          "label": "fig:si_credit_optimizer_controls",
-          "panel": "A",
-          "source_panel": "A",
-          "path": "figures/supplementary/curated/credit_optimizer_controls.pdf"
-        }
-      ],
-      "B": [
-        {
-          "figure": "S16",
-          "label": "fig:si_credit_optimizer_controls",
-          "panel": "B",
-          "source_panel": "B",
-          "path": "figures/supplementary/curated/credit_optimizer_controls.pdf"
-        }
-      ],
-      "C": [
-        {
-          "figure": "S16",
-          "label": "fig:si_credit_optimizer_controls",
-          "panel": "C",
-          "source_panel": "C",
-          "path": "figures/supplementary/curated/credit_optimizer_controls.pdf"
-        }
-      ],
-      "D": [
-        {
-          "figure": "S16",
-          "label": "fig:si_credit_optimizer_controls",
-          "panel": "D",
-          "source_panel": "D",
-          "path": "figures/supplementary/curated/credit_optimizer_controls.pdf"
-        }
-      ]
-    },
     "original_asset": "figures/supplementary/figure_S55_credit_budget_controls.pdf",
     "original_sha256": "cd20a2e6bc1e96b165e66ddbd4f0805c64f7b90e5edeb9120204c33d70973761",
-    "omitted_panel_status": "Redundant printed view omitted; original scientific source and outcomes retained. Read caption/scientific section rather than transferring a panel suffix to the primary destination."
+    "primary_destination": "S17",
+    "panels": {
+      "A": {
+        "figure": "S17",
+        "panel": "A",
+        "path": "figures/supplementary/curated/credit_optimizer_controls.pdf"
+      },
+      "B": {
+        "figure": "S17",
+        "panel": "B",
+        "path": "figures/supplementary/curated/credit_optimizer_controls.pdf"
+      },
+      "C": {
+        "figure": "S17",
+        "panel": "C",
+        "path": "figures/supplementary/curated/credit_optimizer_controls.pdf"
+      },
+      "D": {
+        "figure": "S17",
+        "panel": "D",
+        "path": "figures/supplementary/curated/credit_optimizer_controls.pdf"
+      }
+    },
+    "omitted_panel_status": {}
   },
   "S56": {
     "old_label": "fig:supp_measured_alignment_power",
-    "primary_destination": {
-      "figure": "S30",
-      "label": "fig:si_measured_topology",
-      "panel": "D",
-      "source_panel": "C",
-      "path": "figures/supplementary/curated/measured_topology.pdf"
-    },
-    "panels": {
-      "A": [],
-      "B": [],
-      "C": [
-        {
-          "figure": "S30",
-          "label": "fig:si_measured_topology",
-          "panel": "D",
-          "source_panel": "C",
-          "path": "figures/supplementary/curated/measured_topology.pdf"
-        }
-      ]
-    },
     "original_asset": "figures/supplementary/figure_S56_measured_alignment_power.pdf",
     "original_sha256": "a76a96a1ae5520b906700a788786bc13e99545f055c2bf2e95fa29c2a5caec2b",
-    "omitted_panel_status": "Redundant printed view omitted; original scientific source and outcomes retained. Read caption/scientific section rather than transferring a panel suffix to the primary destination."
+    "primary_destination": "S31",
+    "panels": {
+      "C": {
+        "figure": "S31",
+        "panel": "E",
+        "path": "figures/supplementary/curated/measured_transfer_geometry.pdf"
+      }
+    },
+    "omitted_panel_status": {
+      "A": {
+        "content": "Detection of positive alignment as the fraction of reliable tuning variance carried by a shared-path covariance increases. Every simulated dataset preserves the thirteen scans, seven targets, observed partners, stimulus identities and repeats. Green uses measured repeat reliabilities; gray removes measurement noise.",
+        "reason": "Omitted from the curated supplement; the measurement is retained in Source Data and in the section that cites it.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/PROTOCOL.md",
+          "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/README.md",
+          "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/RESULTS.json",
+          "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/RESULTS.md"
+        ]
+      },
+      "B": {
+        "content": "The same detection probabilities versus the mean simulated seven-target partial-rank effect. This is a model-conditional effect axis, not a universal detectable correlation. The dashed line in",
+        "reason": "Omitted from the curated supplement; the measurement is retained in Source Data and in the section that cites it.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/PROTOCOL.md",
+          "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/README.md",
+          "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/RESULTS.json",
+          "drafts/dendritic-local-learning/journal/source_data/measured_alignment_power/RESULTS.md"
+        ]
+      }
+    }
+  },
+  "M9": {
+    "old_label": "fig:measured",
+    "original_asset": "figures/supplementary/frozen/credit_first_figure_08_M9.pdf",
+    "original_sha256": "131b9b04b89c29f711b83a4121efa03e97f76dff6629ea5fb0e4e17002b61bb7",
+    "primary_destination": "S31",
+    "panels": {
+      "B": {
+        "figure": "S31",
+        "panel": "B",
+        "path": "figures/supplementary/curated/measured_transfer_geometry.pdf"
+      },
+      "D": {
+        "figure": "S31",
+        "panel": "C",
+        "path": "figures/supplementary/curated/measured_transfer_geometry.pdf"
+      },
+      "E": {
+        "figure": "S31",
+        "panel": "D",
+        "path": "figures/supplementary/curated/measured_transfer_geometry.pdf"
+      }
+    },
+    "omitted_panel_status": {
+      "A": {
+        "content": "Schematic of the measured-response prediction model on a reconstructed target.",
+        "reason": "Omitted; the same construction is drawn at the main-text type scale in main Fig. 9.",
+        "numbers_at": "source_data/credit_first_figures/"
+      },
+      "C": {
+        "content": "Input coverage in all thirteen scans, ordered by input count (48.0% of mapped inputs reached).",
+        "reason": "Promoted to main Fig. 9F.",
+        "numbers_at": "source_data/credit_first_figures/"
+      }
+    }
+  },
+  "X1": {
+    "old_label": "fig:si_checkpoint_merged_panel",
+    "original_asset": "figures/supplementary/components/si_checkpoint_merged.pdf",
+    "original_sha256": "765e0e2710e8fb42de730bb4e2f855246f9a883dc3cab30b49a4d24a72bc5bf7",
+    "primary_destination": "S3",
+    "panels": {
+      "*": {
+        "figure": "S3",
+        "panel": "E",
+        "path": "figures/supplementary/curated/utility_signal_noise.pdf"
+      }
+    },
+    "omitted_panel_status": {}
+  },
+  "X2": {
+    "old_label": "fig:si_utility_bound_panel",
+    "original_asset": "figures/supplementary/components/si_utility_bound.pdf",
+    "original_sha256": "823b1878bbeaf8adc97027419ad3dab2b76ccb6535512d9bf6a3be12e0dab963",
+    "primary_destination": "S3",
+    "panels": {
+      "*": {
+        "figure": "S3",
+        "panel": "G",
+        "path": "figures/supplementary/curated/utility_signal_noise.pdf"
+      }
+    },
+    "omitted_panel_status": {}
   }
 }
