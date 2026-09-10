@@ -50,8 +50,8 @@ def test_source_data_inventory_matches_final_display_numbering() -> None:
     assert main_numbers == set(range(1, len(builder.MAIN_FIGURES) + 1))
     assert supplementary_numbers == set(range(1, len(builder.SUPPLEMENTARY_FIGURES) + 1))
     selector = next(a for a in curated_assets() if a["id"] == "original_selector")
-    assert selector["figure"] == "S33"
-    prospective = [item for item in files if item.figure == "Supplementary Figure 33"]
+    assert selector["figure"] == "S34"
+    prospective = [item for item in files if item.figure == "Supplementary Figure 34"]
     assert prospective
     assert all(item.source.startswith("source_data/prospective_morphology_selection/") for item in prospective)
     assert any(item.source.endswith("/sealed_confirmatory_selections.csv") for item in prospective)
@@ -80,7 +80,7 @@ def test_source_data_destinations_are_unique_and_sources_exist() -> None:
 def test_every_curated_panel_releases_its_declared_numerical_sources() -> None:
     files = list(builder.FILES)
     assets = curated_assets()
-    assert len(assets) == len(builder.SUPPLEMENTARY_FIGURES) == 35
+    assert len(assets) == len(builder.SUPPLEMENTARY_FIGURES) == 36
     seen = set()
     for asset in assets:
         figure = "Supplementary Figure " + asset["figure"].removeprefix("S")
@@ -151,11 +151,15 @@ def test_original_image_evidence_is_retained_without_obsolete_display_claims() -
     # Displayed image panels now use the semantic consolidated manifest.
     image_geometry = next(a for a in curated_assets() if a["id"] == "mnist_dictionary_geometry")
     assert image_geometry["figure"] == "S7"
+    # The feedback-gradient panels left the image sheet for their own
+    # error-field sheet; the release follows the panel, not the old number.
+    error_field = next(a for a in curated_assets() if a["id"] == "error_field_geometry")
+    assert error_field["figure"] == "S8"
     for source in (
         "source_data/figure2/feedback_gradient_runs.csv",
         "source_data/figure2/path_gain_dispersion_ladder_runs.csv",
     ):
-        assert any(item.figure == "Supplementary Figure 7" and item.source == source for item in files)
+        assert any(item.figure == "Supplementary Figure 8" and item.source == source for item in files)
 
 
 def test_curated_image_provenance_preserves_original_source_lineage() -> None:
@@ -178,7 +182,7 @@ def test_curated_image_provenance_preserves_original_source_lineage() -> None:
         "/source_data/figure2/path_gain_dispersion_ladder_runs.csv",
         "/source_data/figure2/feedback_gradient_runs.csv",
     ):
-        assert any(row["figure"] == "figS7" and row["source_path"].endswith(source_suffix)
+        assert any(row["figure"] == "figS8" and row["source_path"].endswith(source_suffix)
                    for row in rows.values())
 
 
