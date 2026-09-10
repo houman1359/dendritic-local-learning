@@ -35,10 +35,36 @@ Glyph-rule notes carried into the manifest:
 Private helpers beyond the shared library (DECISIONS G5, reported in
 IMPLEMENTATION_NOTES.md under "library follow-ups"):
 ``_delta_hat`` (a hatted delta token: Nimbus Sans has no U+0302 and no
-precomposed delta-with-circumflex, so the caret is a second 7.0 pt glyph),
-``_data_inset`` (``Frame.axes_inset`` needs a Frame, and D is a data panel),
-and ``_wrapped`` (pre-broken footer lines: ``Frame.footer`` wraps to the frame
-width, and the two schematic footers must break at the phrase, not the word).
+precomposed delta-with-circumflex and mathtext is forbidden, so the hat is
+DRAWN as a two-segment polyline centred on the delta's measured advance
+width, apex 0.5 pt above its measured cap height -- the v1 second ``^`` glyph
+read as a stray superscript at 800 dpi), ``_split_duplicates`` (panel F's
+duplicate separation, below), ``_seat_arrows`` (panel E's delivery-arrow
+re-seating, below), ``_data_inset`` (``Frame.axes_inset`` needs a Frame, and D
+is a data panel), and ``_wrapped`` (pre-broken footer lines: ``Frame.footer``
+wraps to the frame width, and the two schematic footers must break at the
+phrase, not the word).
+
+Two further QA repairs (2026-09-09) that are geometry, not content:
+
+* **Panel F duplicate separation.** Two of the thirteen scans share an exact
+  ``(n_sites, coverage)`` pair -- ``(10, 0.40)`` once with and once without
+  four single-input routes, and ``(9, 0.4444)`` twice -- so the raw scatter
+  drew only eleven countable markers.  ``_split_duplicates`` spreads the
+  members of each duplicate group symmetrically on x in steps of
+  ``DUP_OFFSET`` = 0.26 mapped inputs (+/-0.13 for a pair), ordered by
+  ``(target_root_id, session, scan_idx)`` so the displacement is
+  deterministic; y (the claim) is never moved, and the filled series is now
+  drawn LAST so no marker can be covered.
+* **Panels B, C and D reference rules.**  The y limits of B and C are padded
+  to carry their annotation blocks, so ``forest()``'s full-height reference
+  ``axvline`` ran through seven lines of 7 pt text and read as a
+  strike-through.  Both call ``forest(..., reference=None)`` and draw the
+  CF-7 dashed ``mute`` ``LW_REF`` zero rule here, bounded to the row bands
+  plus (in B) the scan rug and skipping the inter-row band that carries B's
+  cohort-bracket label; D's ``x = 0`` rule is a bounded segment that stops at
+  ``y = 1.0``, below the lambda annotation.  The right-aligned
+  ``no alignment`` label stays on each line.
 
 Deviations from ``v2/fig9/PLAN.md`` §2, and why (all recorded in TEXT.md too):
 row weights and the vertical gutter are **[124, 114, 108] with vgutter 44**, not
@@ -85,6 +111,9 @@ INK = COLORS['ink']
 REP_TARGET = 864691135810666525   # representative scan, fixed by median rule
 DELTA0_REASON = ('stimulus recording; no credit is delivered in '
                  'this experiment')
+DUP_OFFSET = 0.26     # mapped inputs; +/-0.13 for a coincident pair (panel F)
+_WORDS = ('no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven',
+          'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen')
 
 
 # ── private helpers (DECISIONS G5) ───────────────────────────────────────
@@ -92,14 +121,29 @@ def _delta_hat(f, xy, tail=' = A c', *, size=PT_BASE, color=INK):
     """``δ̂`` + ``tail`` anchored at ``xy`` (left edge of the delta).
 
     Nimbus Sans carries neither U+0302 (combining circumflex) nor a
-    precomposed delta-with-hat, so the hat is drawn as a second glyph at the
-    same type size rather than as mathtext (CF-2 forbids mathtext).
+    precomposed delta-with-hat, and mathtext is forbidden (CF-2).  The v1
+    build set a second ``^`` glyph above the delta; at 800 dpi that caret was
+    a detached mark a full x-height clear of the letter and offset left of
+    its centre, so it read as a stray superscript rather than a hat (QA
+    2026-09-09).  The hat is therefore DRAWN: a two-segment polyline at the
+    stroke weight of the type, centred on the delta's measured advance width
+    and with its apex 0.5 pt above the delta's measured cap height.
     """
-    f.text(xy, 'δ', size=size, color=color, ha='left', va='center')
-    f.text(f._off(xy, 1.7, 2.2), '^', size=size, color=color, ha='center',
-           va='center')
-    f.text(f._off(xy, 4.4, 0.0), tail, size=size, color=color, ha='left',
-           va='center')
+    base = f.text(xy, 'δ', size=size, color=color, ha='left', va='center')
+    f.ax.figure.canvas.draw()
+    r = f.ax.figure.canvas.get_renderer()
+    bb = base.get_window_extent(renderer=r).transformed(
+        f.ax.transData.inverted())
+    w_pt = (bb.x1 - bb.x0) * f.w_pt
+    x_mid = (bb.x0 + bb.x1) / 2.0
+    apex = bb.y1 + f.fy(0.5)
+    half = f.fx(min(2.1, 0.42 * w_pt))
+    f.ax.plot([x_mid - half, x_mid, x_mid + half],
+              [apex - f.fy(1.5), apex, apex - f.fy(1.5)],
+              color=color, lw=f.lw(LW_HAIR), solid_capstyle='round',
+              solid_joinstyle='miter', zorder=6, clip_on=False)
+    f.text((bb.x1 + f.fx(0.8), xy[1]), tail.lstrip(), size=size, color=color,
+           ha='left', va='center')
 
 
 def _data_inset(ax, rect, *, grid='none'):
@@ -132,7 +176,7 @@ def panel_statistic(f, subtitle_lines):
     core_y0, core_h = f.fy(band), top - f.fy(band)
     core_pt = core_h * f.h_pt
     foot_pt, head_pt = 11.0, 9.0        # tag strip under the soma / over the canopy
-    tree_w_pt = min(74.0, 0.55 * f.w_pt)
+    tree_w_pt = min(80.0, 0.58 * f.w_pt)   # +8 %: the slot was under-filled
     nodes = f.balanced_tree((0.0, core_y0 + f.fy(foot_pt), f.fx(tree_w_pt),
                              f.fy(core_pt - foot_pt - head_pt)),
                             depth=3, mode='forward', labels=True, trunk=True,
@@ -162,7 +206,7 @@ def panel_statistic(f, subtitle_lines):
     # tuning sketches, one per pair, with a leader back to the pair
     col_x = f.fx(tree_w_pt + 14.0)
     w = 1.0 - col_x
-    h_pt = 18.0
+    h_pt = 20.0
     bots = (core_y0 + f.fy(core_pt - h_pt - 11.0),
             core_y0 + f.fy(foot_pt + 0.5))
     anchors = ((pair1_x + f.fx(17.0), tag1[1]),
@@ -219,14 +263,18 @@ def panel_routes(f, matrix, groups, n_routes, subtitle_lines):
     for i, label in enumerate(singles):
         seats[label] = (f'T{i + 3}', 0.0)
     reached = [i + 1 for i in range(n) if matrix[i].any()]
+    placed = {}
+    for label, (seat, drop) in seats.items():
+        par = nodes.parent[seat]
+        placed[label] = (nodes[seat] if drop == 0.0
+                         else _toward(f, nodes[seat], nodes[par], drop))
+    before = len(f.ax.patches)
     f.credit_delivery(nodes, mode='subtree',
                       targets=[seats[i][0] for i in reached],
                       rule_color='shunting', alpha_tags=False)
-    for label, (seat, drop) in seats.items():
-        par = nodes.parent[seat]
-        xy = nodes[seat] if drop == 0.0 else _toward(f, nodes[seat],
-                                                     nodes[par], drop)
-        f.contact(xy, kind='exc')
+    _seat_arrows(f, f.ax.patches[before:], list(placed.values()))
+    for label in seats:
+        f.contact(placed[label], kind='exc')
     f.error_in(nodes.soma, side='right', dashed=True)
     f.badge((f.fx(tree_w_pt + 4.0), core_y0 + core_h - f.fy(4.0)),
             'local rule', ha='right', va='top')
@@ -244,6 +292,66 @@ def panel_routes(f, matrix, groups, n_routes, subtitle_lines):
     f.require_soma_lowest()
     f.require_delta0()
     return nodes
+
+
+def _split_duplicates(support, x, offset_pt=DUP_OFFSET):
+    """Separate scans that share an exact ``(n_sites, coverage)`` pair.
+
+    Two of the thirteen scans are exactly coincident in panel F --
+    ``(10, 0.40)`` once with and once without four single-input routes, and
+    ``(9, 0.4444)`` twice -- so an unjittered scatter drew eleven countable
+    markers where the panel, its tag and the caption all say thirteen (QA
+    2026-09-09).  Members of a duplicate group are spread symmetrically on
+    the x axis in steps of ``offset_pt`` mapped inputs (+/-0.13 for a pair),
+    ordered by ``(target_root_id, session, scan_idx)`` so the displacement is
+    deterministic and reproducible.  y is never moved.
+    """
+    x = np.asarray(x, dtype=float).copy()
+    order = np.lexsort((support.scan_idx.to_numpy(),
+                        support.session.to_numpy(),
+                        support.target_root_id.to_numpy()))
+    rank = np.empty(len(support), dtype=int)
+    rank[order] = np.arange(len(support))
+    keys = list(zip(support.n_sites.to_numpy(),
+                    np.round(support.coverage.to_numpy(float), 9)))
+    for key in sorted(set(keys)):
+        idx = sorted((i for i, k in enumerate(keys) if k == key),
+                     key=lambda i: rank[i])
+        if len(idx) < 2:
+            continue
+        for j, i in enumerate(idx):
+            x[i] += (j - (len(idx) - 1) / 2.0) * offset_pt
+    return x
+
+
+def _seat_arrows(f, patches, contacts, clearance_pt=3.4):
+    """Pull each subtree-delivery arrow tip clear of the contact it addresses.
+
+    ``Frame.credit_delivery(mode='subtree')`` lands its arrow at 80 % of the
+    parent->terminal segment.  In this 5-module card the terminal pitch is
+    small enough that the head crossed the ``exc`` disc it points at and the
+    contact stopped being countable at print scale (QA 2026-09-09).  The
+    library is not edited: the arrows it just added are re-seated here so the
+    tip stops ``clearance_pt`` points short of the nearest contact centre,
+    along the same parent direction.
+    """
+    C = [f._to_pt(c) for c in contacts]
+    for patch in patches:
+        pos = getattr(patch, '_posA_posB', None)
+        if pos is None:
+            continue
+        A, B = f._to_pt(pos[0]), f._to_pt(pos[1])
+        u = B - A
+        L = float(np.linalg.norm(u))
+        if L < 1e-9:
+            continue
+        u = u / L
+        d = min(float(np.linalg.norm(B - c)) for c in C)
+        pull = max(0.0, clearance_pt - d)
+        pull = min(pull, max(0.0, L - 3.0))
+        if pull <= 0.0:
+            continue
+        patch.set_positions(f._from_pt(A), f._from_pt(B - u * pull))
 
 
 def _toward(f, a, b, pt):
@@ -390,6 +498,7 @@ def main():
     n_in = support.n_sites.to_numpy(float)
     cov = support.coverage.to_numpy(float) * 100.0
     single = support.one_site_routes.to_numpy(bool)
+    n_in = _split_duplicates(support, n_in)
     k_routes = int(support.n_routes.max())
     mean_cov = float(support.coverage.mean()) * 100.0
     below = support[support.coverage < support.n_routes / support.n_sites - 1e-9]
@@ -414,7 +523,7 @@ def main():
     out_b = canvas.forest(
         ax_b, [dict(r, note=None) for r in b_rows],
         value_label='Ancestry–response partial rank correlation',
-        xlim=(-0.5, 0.5), reference=0.0, reference_label='', tag='')
+        xlim=(-0.5, 0.5), reference=None, reference_label='', tag='')
     ax_b.set_xticks([-0.5, -0.25, 0.0, 0.25, 0.5])
     ax_b.set_xticklabels(['−0.5', '−0.25', '0', '0.25', '0.5'])
     for row, y in zip(b_rows, out_b['ypos']):
@@ -425,6 +534,15 @@ def main():
               marker='o', markersize=SEED_MS, markerfacecolor='none',
               markeredgecolor=GRAY, markeredgewidth=LW_HAIR, zorder=3.5)
     ax_b.set_ylim(2.62, -0.62)
+    # CF-7 zero rule, CLIPPED to the row bands plus the scan rug.  forest()'s
+    # own reference is a full-height axvline; with the y limits padded to
+    # carry the annotation block it ran down through four lines of 7 pt text
+    # and read as a strike-through (QA 2026-09-09), so the rule is drawn here
+    # instead: it stops above the annotation block and skips the inter-row
+    # band that carries the cohort bracket's label.
+    for y0, y1 in ((-0.45, 0.35), (0.65, y_rug + 0.17)):
+        ax_b.plot([0.0, 0.0], [y0, y1], color=GRAY, lw=LW_REF,
+                  dashes=(2.6, 2.0), zorder=1.0, solid_capstyle='butt')
     ax_b.text(-0.012, -0.52, 'no alignment', fontsize=PT_BASE,
               color=GRAY, ha='right', va='center', zorder=6)
     ax_b.text(-0.49, y_rug + 0.33, f'{n_scans} scan values (descriptive)',
@@ -445,10 +563,12 @@ def main():
 
     # -- C ----------------------------------------------------------------
     canvas.forest(ax_c, c_rows, value_label='Target-level association',
-                  xlim=(-0.5, 0.5), reference=0.0, reference_label='', tag='')
+                  xlim=(-0.5, 0.5), reference=None, reference_label='', tag='')
     ax_c.set_xticks([-0.5, -0.25, 0.0, 0.25, 0.5])
     ax_c.set_xticklabels(['−0.5', '−0.25', '0', '0.25', '0.5'])
     ax_c.set_ylim(4.82, -0.66)
+    ax_c.plot([0.0, 0.0], [-0.45, len(c_rows) - 0.55], color=GRAY, lw=LW_REF,
+              dashes=(2.6, 2.0), zorder=1.0, solid_capstyle='butt')
     ax_c.text(-0.012, -0.56, 'no alignment', fontsize=PT_BASE, color=GRAY,
               ha='right', va='center', zorder=6)
     ax_c.text(-0.49, 3.62, 'tree distance sign-flipped: + = closer',
@@ -473,7 +593,9 @@ def main():
     # right-aligned ON the line)
     ax_d.plot([-0.30, 0.235], [floor, floor], color=GRAY, lw=LW_REF,
               dashes=(2.6, 2.0), zorder=1)
-    ax_d.axvline(0.0, color=GRAY, lw=LW_HAIR, dashes=(2.6, 2.0), zorder=1)
+    # bounded, not an axvline: the padded y limits carry the lambda annotation
+    ax_d.plot([0.0, 0.0], [-0.32, 1.0], color=GRAY, lw=LW_HAIR, dashes=(2.6, 2.0),
+              zorder=1, solid_capstyle='butt')
     ax_d.plot([cut_m, cut_m], [0.72, 0.80], color=GRAY, lw=LW_HAIR,
               dashes=(2.6, 2.0), zorder=1.5)
     ax_d.set(xlim=(-0.30, 0.55), ylim=(-0.32, 1.16))
@@ -546,12 +668,13 @@ def main():
                  zorder=1.5)
     ax_f.text(18.5, mean_cov + 2.5, f'mean {mean_cov:.1f} %', fontsize=PT_BASE,
               color=label_color(ROUTE), ha='right', va='bottom', zorder=6)
-    ax_f.plot(n_in[~single], cov[~single], linestyle='none', marker='o',
-              markersize=MARKER_MS, markerfacecolor=ROUTE,
-              markeredgecolor=ROUTE, markeredgewidth=0, zorder=4)
+    # open first, filled last: nothing of the thirteen may be covered
     ax_f.plot(n_in[single], cov[single], linestyle='none', marker='o',
               markersize=MARKER_MS, markerfacecolor='white',
-              markeredgecolor=ROUTE, markeredgewidth=LW_ERR, zorder=5)
+              markeredgecolor=ROUTE, markeredgewidth=LW_ERR, zorder=4)
+    ax_f.plot(n_in[~single], cov[~single], linestyle='none', marker='o',
+              markersize=MARKER_MS, markerfacecolor=ROUTE,
+              markeredgecolor=ROUTE, markeredgewidth=0, zorder=5)
     ax_f.set(xlim=(4.0, 18.6), ylim=(-6.0, 134.0))
     ax_f.set_xticks([5, 8, 11, 14, 17])
     ax_f.set_yticks([0, 25, 50, 75, 100])
@@ -564,8 +687,8 @@ def main():
               f'{n_scans} scans)', fontsize=PT_BASE, color=GRAY, ha='right',
               va='center', zorder=6)
     ax_f.text(18.5, 118.0,
-              f'{len(below)} scans fall below {k_routes}/n: routes can repeat '
-              f'an input', fontsize=PT_BASE, color=GRAY, ha='right',
+              f'{_WORDS[len(below)]} scans fall below {k_routes}/n: routes can '
+              f'repeat an input', fontsize=PT_BASE, color=GRAY, ha='right',
               va='center', zorder=6)
     ax_f.text(18.5, 72.0,
               f'n = {n_scans} scans from {n_targets} target cells;',

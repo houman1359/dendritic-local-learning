@@ -1,6 +1,6 @@
 {
   "code_sha256": {
-    "scripts/conductance_local_gate/figure.py": "a7da23f84add87cfbfa12116e0b493a363f95f9663b719d7c17254c879428d9f",
+    "scripts/conductance_local_gate/figure.py": "a79079bcb6bf037ef60a6331845486393c30dd522a2a934cff8bf5902803255e",
     "scripts/conductance_local_gate/model.py": "cc2b82f6c486810a43aa885f3ea2dacce54c473f2e2ece6f4cfdb7d88ce6ad39",
     "scripts/conductance_local_gate/portable_contract.py": "fea35a393f5881dfc60b3dfe810dac64f8c2e6b0d8ba01937f4a42c5ffab3c05",
     "scripts/conductance_local_gate/report.py": "a96b4b6edd42c0d98de3da44a46c409310b463450369173be7371d503fa6dfef",
@@ -14,8 +14,8 @@
     "source_data/conductance_local_gate/figures/historical_cancellation_source.csv": "15938898c44c07bbbc5721ee727e9d54199c90e90ab8a298bb7109682dc69814",
     "source_data/conductance_local_gate/figures/local_gate_all_rates.pdf": "9ed32d20fb9af6c078e6cc391a98d9e7a36f27d9b74d9ddee45098ab9ac5ae33",
     "source_data/conductance_local_gate/figures/local_gate_all_rates.png": "26674c42572b6acdea030aa8c925920e239cf58d3f191ef1d995fa20204550ce",
-    "source_data/conductance_local_gate/figures/local_gate_primary.pdf": "e59a93aeaac63691c81c4817c37aa829ed057b57b1bbc4fbdef9d78dfbce0018",
-    "source_data/conductance_local_gate/figures/local_gate_primary.png": "8daacf501e9f4d978cfe04b7b9fd9c338d087ec5d466903c3b04cb2b98dbbf8e",
+    "source_data/conductance_local_gate/figures/local_gate_primary.pdf": "e7f53d5cf367f6755d42ec3de96efcc8ae07f8b735dec5a726e105b81adc8f99",
+    "source_data/conductance_local_gate/figures/local_gate_primary.png": "409f963d0ed6a6a04b2ae55e7ddb54acbd2c314f1ea45bbad624271a3545a64c",
     "source_data/conductance_local_gate/figures/teacher_tuning_source.csv": "26b9ebc985bc662465c9a03af5a9197f54d8443383f44090121ddcf24c4c3086"
   },
   "fresh_seeds": [
@@ -84,7 +84,11 @@
       122
     ],
     "schematic_fraction_b12": 0.2268,
-    "strict_audit_violations": []
+    "strict_audit_violations": [
+      "[text-collision] 'Unit broadcast' overlaps 'Adam 0.03 \u00b7 n = 20 seeds'",
+      "[text-collision] 'Two-profile oracle' overlaps 'mean \u00b1 95 % pointwise seed bootstr'",
+      "[text-collision] 'mean \u00b1 95 % pointwise seed bootstr' overlaps 'oracle'"
+    ]
   },
   "panel_sources": {
     "main_5A": {
@@ -318,7 +322,7 @@
   "protocol_sha256": "c441998f6f91e1f8782b2918689806e119af567e479bcd5c94069dca837a2413",
   "scope": "Current figure-only rendering; frozen protocol and numerical summary bytes unchanged. Initial numerical audit retains its historical render hashes.",
   "source_sha256": {
-    "scripts/conductance_local_gate/figure.py": "a7da23f84add87cfbfa12116e0b493a363f95f9663b719d7c17254c879428d9f",
+    "scripts/conductance_local_gate/figure.py": "a79079bcb6bf037ef60a6331845486393c30dd522a2a934cff8bf5902803255e",
     "scripts/conductance_local_gate/model.py": "cc2b82f6c486810a43aa885f3ea2dacce54c473f2e2ece6f4cfdb7d88ce6ad39",
     "scripts/conductance_local_gate/portable_contract.py": "fea35a393f5881dfc60b3dfe810dac64f8c2e6b0d8ba01937f4a42c5ffab3c05",
     "scripts/conductance_local_gate/report.py": "a96b4b6edd42c0d98de3da44a46c409310b463450369173be7371d503fa6dfef",

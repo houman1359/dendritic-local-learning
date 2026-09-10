@@ -104,6 +104,11 @@ def main() -> None:
     if not args.supplement_only:
         arguments = [] if args.no_emit_main else ["--emit-main"]
         run_script("credit_first_figures/build_restored_main.py", *arguments)
+        # Figure 7's production builder is build_anatomy.py (v2 DECISIONS
+        # section "Figure 7"): build_restored_main.py is retired for this
+        # figure and left unedited, so the overhaul build runs after it and
+        # replaces both the component and figures/main/figure_07.pdf.
+        run_script("credit_first_figures/build_anatomy.py", *arguments)
         for script in FOCUSED_MAIN.values():
             run_script(script, *arguments)
         export_display_tables()

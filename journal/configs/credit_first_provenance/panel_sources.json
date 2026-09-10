@@ -55,9 +55,9 @@
     {
       "figure": "fig7",
       "path": "figures/main/figure_07.pdf",
-      "component": "figures/components/restored_main_07.pdf",
-      "generator": "scripts/credit_first_figures/build_restored_main.py",
-      "panel": "a-f",
+      "component": "figures/components/credit_first_figure_07.pdf",
+      "generator": "scripts/credit_first_figures/build_anatomy.py",
+      "panel": "a-h",
       "notes": "Native rendering from existing scientific sources. Per-panel definitions and hashes: figures/provenance/structure_restoration_20260908/figure_07.json"
     },
     {
@@ -65,7 +65,7 @@
       "path": "figures/main/figure_08.pdf",
       "generator": "scripts/shunt_ancestry_gain/build_focused_main.py",
       "component": "figures/components/focused_main_08.pdf",
-      "panel": "a-e",
+      "panel": "a-h",
       "notes": "Focused redraw from completed studies; no new training. Panel definitions and immutable input hashes: figures/provenance/credit_clarity_20260908/figure_08.json"
     },
     {
@@ -77013,7 +77013,7 @@
     },
     {
       "figure": "fig8",
-      "panel": "b-e",
+      "panel": "b-h",
       "path": "source_data/curated_publication/figure_08_plotted.csv",
       "role": "Complete numerical input or panel-indexed display summary",
       "generator": "scripts/shunt_ancestry_gain/build_focused_main.py",

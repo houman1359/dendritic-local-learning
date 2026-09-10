@@ -1,5 +1,5 @@
 {
-  "main_figure_sha256": "4fa76e5668de719b5bc820208c445cdb1f5e4f897a933be06f0a8cd4e0505276",
+  "main_figure_sha256": "68f7e43e1a1a22c6987e34c63c33681599f74bda5861c1d51164198d6daaab5d",
   "slot_fill_balance": {
     "left_reserve_pt": 28.0,
     "slot_fill_spread": 1.117,
@@ -14,6 +14,7 @@
       "H": 0.776
     }
   },
+  "schematic_fraction": 0.2662,
   "contrast_drop": {
     "original_eight": 34.62284406419092,
     "v661_disjoint": 33.43760240516116

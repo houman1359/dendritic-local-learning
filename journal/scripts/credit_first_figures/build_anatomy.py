@@ -156,9 +156,28 @@ rule or by the 7.0 pt type floor inside a 4-module (125.5 pt) panel:
    two annotation lines and the ``equal`` end label.
 7. **Axis labels and annotations wrapped or shortened to the panel width**:
    D's `Profiles K (log 2)` (the `one broadcast + K-1 spatial` gloss moves to
-   the caption), F's `200-surrogate mean`, H's Pinky/cohort footnotes, and G's
-   footer set on four lines.  Every string that lost words is listed in
+   the caption), F's `200-surrogate mean at K = 8`, H's Pinky/cohort footnotes,
+   and G's footer set on four lines.  Every string that lost words is listed in
    ``analysis/figure_overhaul_20260908/v2/fig7/TEXT.md``.
+8. **G's 6 % row band is trimmed to the fan window** (it ends at the column
+   rule, +56.5 pp) instead of spanning the whole x range as ``forest()`` draws
+   it.  A band is a row cue, not a datum, and with the full-width band the
+   three printed columns sat on an area mark -- eight TEXT-ON-DATA findings
+   from ``audit_text_over_data``.  CF-6's band is still drawn on every row.
+9. **E carries no `oracle` badge** (plan section 4 E).  The only free paper in
+   E is the 21 pt strip above the bars, and it carries the initial-cohort
+   annotation plus this panel's ``n = 47 cells at K = 8``, which a data panel
+   needs more than a badge.  The sixth bar is named ``SVD`` under its diamond
+   marker and the badge is drawn in H.
+10. **The right-hand overhang is deliberate.**  ``FILL_W_MIN`` asks for ink
+   across >= 92 % of 518.4 pt, and this plan's margins (52 / 14) leave a live
+   area of 452.4 pt = 87.3 %: 16 pt come free from the panel letters on the
+   left, so ~9 pt must overhang on the right.  H's four family names carry it
+   (right-aligned 10 pt beyond the spine, beside their leaders); every other
+   label stays inside its axes.
+11. **Single bars in C's capture formula.**  Nimbus Sans has no U+2016 DOUBLE
+   VERTICAL LINE (checked: matplotlib falls back to DejaVu, which CF-2 bans),
+   so the norms are set as ``|P t|`` and ``|t|`` with W subscripts.
 """
 from __future__ import annotations
 
@@ -265,15 +284,15 @@ BOTTOM_R2 = 20.0          # room under row 2 for G's and H's footnotes
 
 
 CAPTION = r"""\caption{\textbf{Ancestry routes on reconstructed arbors compress a cell's own focal-shunt response fields better than four matched controls, at a fifth of dense wiring, and the advantage is modest and heterogeneous.}
-\textbf{A}, Median-sized arbor of the initial cohort (root 864691135409937097, 78 segments), pia up; 76 inhibitory-bearing segments as filled contacts, route 3's origin over the five sites it addresses; schematic, no data; scale bar, 50~$\mu$m.
-\textbf{B}, The arbor's seven $K=8$ routes and the matrix $A_8$, collapsed to eight tree-ordered site blocks; supports nest, 32 of 70 sites lie on a route; schematic, no data (entries measured).
-\textbf{C}, A focal shunt on route 3 attenuates its descendants and makes the field $\bm t$ (block means scaled by $\max|\bm t|$); capture is the $W$-weighted energy of $P_{A_K,W}\bm t$; schematic, no data (column measured).
-\textbf{D}, Total capture against budget $K$; cell means, unpaired 95\% cell-bootstrap bands (20,000 draws) for ancestry and surrogates; $n=47$ cells, 46 at $K=16$; dashed floor, the shared broadcast 0.203.
-\textbf{E}, That energy at $K=8$ as broadcast, spatial and unexplained shares; cell means, $n=47$ cells, no interval.
-\textbf{F}, Each cell's ancestry capture against its 200-surrogate mean (degree--depth matched); 38 of 47 above equality; open, the 11 cells where at least half the surrogates reach it; cohort mean with 95\% cell-bootstrap intervals; $n=47$ cells at $K=8$.
-\textbf{G}, Paired ancestry-minus-control advantages at $K=8$ on post-broadcast (filled) and total (open) scales, all 47 within-cell differences drawn, four of 188 off-axis; means with 95\% cell-bootstrap intervals (20,000 draws); right, wiring, rank and positive cells.
-\textbf{H}, Residual capture after the broadcast in three cohorts, one mouse each; means with 95\% cell-bootstrap intervals (20,000 draws); $n=8$, 47 and 8 cells at $K=8$.
-Randomized controls average 200 draws per cell; the SVD is an oracle ceiling; typed-contact and joint 3D matching controls are Supplementary Figs.~S25B and~S26B--D. Fields are modeled passive responses inheriting ancestry through cable physics: compression capacity, not observed teaching. Source Data: \texttt{source\_data/curated\_publication/figure\_07\_plotted.csv}.}"""
+\textbf{A}, Median-sized arbor of the initial eight-cell cohort (root 864691135409937097, 78 segments): its 76 inhibitory-bearing segments and route 3 over the five sites it addresses; schematic, no data; scale bar, 50~$\mu$m.
+\textbf{B}, The same arbor's seven $K=8$ routes and the matrix $A_8$, collapsed to eight tree-ordered site blocks; supports nest and 32 of 70 sites lie on a route; schematic, no data (entries measured).
+\textbf{C}, A focal shunt on route 3 attenuates its descendants and makes the field $\bm t$ (block means); capture is the $W$-weighted energy of $P_{A_K,W}\bm t$; schematic, no data (field column measured).
+\textbf{D}, Total captured energy against budget $K$; cell means with unpaired 95\% cell-bootstrap bands (20,000 draws) for ancestry and surrogates; dashed floor, the shared broadcast 0.203; $n=47$ cells, 46 at $K=16$.
+\textbf{E}, That energy at $K=8$ as broadcast, spatial and unexplained shares; cell means, no interval; $n=47$ cells.
+\textbf{F}, Each cell's ancestry capture against its own 200-surrogate mean; 38 of 47 lie above equality, open symbols the 11 cells whose surrogates match it at least half the time; cohort mean with 95\% cell-bootstrap intervals; $n=47$ cells at $K=8$.
+\textbf{G}, Paired ancestry-minus-control advantages at $K=8$ on post-broadcast (filled) and total (open) scales, with all 47 within-cell differences; means and 95\% cell-bootstrap intervals; right: wiring, rank, positive cells.
+\textbf{H}, Residual capture after the broadcast in three cohorts, one mouse each; means with 95\% cell-bootstrap intervals at $K=8$; $n=8$, 47 and 8 cells.
+Randomized controls average 200 draws; the SVD is an oracle ceiling; typed-contact and joint 3D matching controls are in Supplementary Figs.~S25B and~S26B--D. Fields are modeled passive responses: compression capacity, not observed teaching. Source Data: \texttt{source\_data/curated\_publication/figure\_07\_plotted.csv}.}"""
 
 
 # ── small helpers ────────────────────────────────────────────────────────
@@ -597,7 +616,7 @@ def panel_a(ax, arb):
                x0=draw[0] + draw[2] - f.fx(50.0 / span_um * scale + 1.0),
                y0=draw[1] + f.fy(3.0))
     for row, (kind, text) in enumerate((
-            ("inh", f"inhibitory-bearing ({len(i_bearing)})"),
+            ("inh", f"inhibitory-bearing ({len(i_bearing)} of {len(cell)})"),
             ("exc", f"route-3 sites ({len(support)} of "
                     f"{len(arb['e_sites'])})"))):
         y = core[1] + f.fy(foot_pt + key_pt - 5.0 - row * 8.6)
@@ -665,16 +684,13 @@ def panel_b(ax, arb):
                       zorder=3.0 + 0.01 * k)
             cursor = par
     f.soma(soma, zorder=6)
-    f.text((soma[0] + f.fx(4.0), soma[1] - f.fy(3.4)), "s", size=PT_BASE,
-           color=COLORS[BROADCAST], ha="left")
-    taken = [(soma[0] * f.w_pt + 4.0, soma[1] * f.h_pt - 3.4)]
+    taken = []
     floor_pt = arbor_rect[1] * f.h_pt
     ceiling_pt = (arbor_rect[1] + arbor_rect[3]) * f.h_pt - 3.0
     right_pt = (arbor_rect[0] + arbor_rect[2]) * f.w_pt - 1.0
     left_pt = arbor_rect[0] * f.w_pt + 1.0
-    for k, origin in enumerate(origins):
-        point = xy[int(origin)]
-        f.contact(point, kind="inh", dia_pt=2.9, zorder=5)
+    def _place(point, reach=1.0):
+        """Freest of six offsets around ``point`` that stays in the cell."""
         best = fallback = None
         for dx, dy, ha, va in ((3.4, 2.8, "left", "bottom"),
                                (3.4, -2.8, "left", "top"),
@@ -682,8 +698,8 @@ def panel_b(ax, arb):
                                (-3.4, -2.8, "right", "top"),
                                (6.6, 0.0, "left", "center"),
                                (-6.6, 0.0, "right", "center")):
-            px = point[0] * f.w_pt + dx
-            py = point[1] * f.h_pt + dy
+            px = point[0] * f.w_pt + reach * dx
+            py = point[1] * f.h_pt + reach * dy
             room = min(((px - qx) ** 2 + (py - qy) ** 2
                         for qx, qy in taken), default=1e9)
             item = (room, px, py, ha, va)
@@ -700,8 +716,20 @@ def panel_b(ax, arb):
                 best = item
         _, px, py, ha, va = best or fallback
         taken.append((px, py))
-        f.text((px / f.w_pt, py / f.h_pt), str(k + 1), size=PT_BASE,
-               color=label_color(hues[k]), ha=ha, va=va)
+        return px / f.w_pt, py / f.h_pt, ha, va
+
+    # the broadcast tag sits under the soma disc, on the basal side where no
+    # route leaves it (every route climbs to the canopy); it is reserved
+    # before the numerals so none of them lands on it
+    taken.append((soma[0] * f.w_pt, soma[1] * f.h_pt - 6.0))
+    f.text((soma[0], soma[1] - f.fy(6.0)), "s", size=PT_BASE,
+           color=COLORS[BROADCAST], ha="center", va="top")
+    for k, origin in enumerate(origins):
+        point = xy[int(origin)]
+        f.contact(point, kind="inh", dia_pt=2.9, zorder=5)
+        px, py, ha, va = _place(point)
+        f.text((px, py), str(k + 1), size=PT_BASE, color=label_color(hues[k]),
+               ha=ha, va=va)
     # the collapsed dictionary, drawn as vector cells (CF-11)
     keys, sizes = arb["block_keys"], arb["block_sizes"]
     colors = [[COLORS[BROADCAST]]
@@ -980,10 +1008,16 @@ def panel_e(ax, summaries, initial, floor):
                     xytext=(-22.0, 0.0), textcoords="offset points",
                     fontsize=PT_BASE, color=COLORS["mute"], ha="right",
                     va="center", annotation_clip=False, linespacing=1.2)
+    # No `oracle` badge here (plan section 4 E): the only free paper in E is
+    # the 21 pt strip above the bars, and it carries the initial-cohort
+    # annotation and this panel's n / endpoint line, which a data panel needs
+    # more than a badge.  The sixth bar is named `SVD` under its diamond and
+    # the badge is drawn in H.  Declared deviation.
     width = ax.get_position().width * 518.4 - 2.0
     ax.text(0.02, 0.995, wrap_pt(
         ax, "initial eight-cell cohort: broadcast "
-            f"{initial['common']:.3f}, ceiling {initial['rank_one']:.3f}",
+            f"{initial['common']:.3f}, ceiling {initial['rank_one']:.3f}; "
+            f"n = {int(rows[0]['n_cells'])} cells at K = 8",
         PT_BASE, width),
         transform=ax.transAxes, fontsize=PT_BASE, color=COLORS["mute"],
         ha="left", va="top", linespacing=1.2)
@@ -1019,9 +1053,9 @@ def panel_f(ax, pairs):
                 color=COLORS["shunting"], mfc="white",
                 mec=COLORS["shunting"], mew=LW_ERR, ms=MARKER_MS,
                 elinewidth=LW_ERR, capsize=2.0, zorder=4)
-    _leader(ax, (mx + 0.020, my - 0.020), (0.735, 0.405))
-    ax.text(0.750, 0.405, "cohort mean", fontsize=PT_BASE, color=COLORS["ink"],
-            ha="left", va="center")
+    _leader(ax, (mx + 0.020, my - 0.020), (0.628, 0.425))
+    ax.text(0.998, 0.425, "cohort mean,\n95 % CI", fontsize=PT_BASE,
+            color=COLORS["ink"], ha="right", va="center", linespacing=1.2)
     ax.text(0.25, ymax * 0.999, block, fontsize=PT_BASE, color=COLORS["mute"],
             ha="left", va="top", linespacing=1.2)
     ax.text(0.995, 0.262, "cell is the unit; n = 47",
@@ -1030,7 +1064,7 @@ def panel_f(ax, pairs):
     ax.set_ylim(0.25, ymax)
     ax.set_xticks([0.25, 0.5, 0.75, 1.0])
     ax.set_yticks([0.25, 0.5, 0.75, 1.0])
-    ax.set_xlabel("200-surrogate mean")
+    ax.set_xlabel("200-surrogate mean at K = 8")
     ax.set_ylabel("Ancestry capture")
     style_panel(ax)
     return pd.DataFrame(dict(panel="F", root_id=pairs.root_id,
@@ -1084,6 +1118,16 @@ def panel_g(canvas, ax, report, tables, summaries):
         gutter_pt=GUTTER_PT)
     ypos = out["ypos"]
     ax.set_ylim(3.62, -1.42)            # strips for the sub-title and headers
+    # forest() spans its 6 % row band across the whole x range; the three
+    # printed columns then sit ON an area mark, which the overlap audit
+    # reports as TEXT-ON-DATA (eight findings).  The band is a row cue, not a
+    # datum, so it is trimmed to the fan window and the columns keep white
+    # paper.  Declared deviation from CF-6's band, recorded in the docstring.
+    for patch in ax.patches:
+        if abs(patch.get_width() - (G_XLIM[1] - G_XLIM[0])) < 1e-6:
+            patch.set_bounds(patch.get_x(), patch.get_y(),
+                             G_FAN_MAX + 1.5 - patch.get_x(),
+                             patch.get_height())
     rng = np.random.default_rng(FAN_SEED)
     beyond = 0
     for i, item in enumerate(extra):
@@ -1141,12 +1185,12 @@ def panel_g(canvas, ax, report, tables, summaries):
     ]
     for row, line in enumerate(below):
         ax.annotate(line, xy=(0.0, 0.0), xycoords="axes fraction",
-                    xytext=(0.0, -21.0 - 8.6 * row), textcoords="offset points",
+                    xytext=(0.0, -19.4 - 8.2 * row), textcoords="offset points",
                     fontsize=PT_BASE, color=COLORS["mute"], ha="left",
                     va="top")
     ax.annotate("n = 47 cells per row; mean [95 % cell bootstrap, "
                 "20,000 draws]; K = 8", xy=(1.0, 0.0),
-                xycoords="axes fraction", xytext=(0.0, -46.8),
+                xycoords="axes fraction", xytext=(0.0, -44.0),
                 textcoords="offset points", fontsize=PT_BASE,
                 color=COLORS["mute"], ha="right", va="top")
     frame = []
@@ -1196,6 +1240,8 @@ def panel_h(ax, tables, inclusion):
             zorder=1.0, solid_capstyle="butt")
     ax.text(3.53, 1.012, "ceiling", fontsize=PT_BASE, color=COLORS["mute"],
             ha="right", va="bottom")
+    ax.text(-0.50, 1.155, "mean [95 % cell bootstrap]; K = 8", fontsize=PT_BASE,
+            color=COLORS["mute"], ha="left", va="top")
     # the four family names, once, beside the Pinky group (CF-5)
     order = sorted(pinky, key=lambda m: -pinky[m][1])
     step, last = 0.125, 0.930
@@ -1205,7 +1251,7 @@ def panel_h(ax, tables, inclusion):
         last = y - step
         _leader(ax, (x + 0.06, mean), (2.62, y))
         ax.annotate(FAMILIES[method]["short"], xy=(1.0, y),
-                    xycoords=("axes fraction", "data"), xytext=(8.4, 0.0),
+                    xycoords=("axes fraction", "data"), xytext=(10.0, 0.0),
                     textcoords="offset points", fontsize=PT_BASE,
                     color=COLORS[FAMILIES[method]["color"]], ha="right",
                     va="center", annotation_clip=False)
@@ -1426,6 +1472,15 @@ def figure7(*, out=COMPONENT, png=True, dpi=200, quiet=False):
             "soma-lowest: declared, not asserted, for the measured arbor of "
             f"A/B/C ({schem_a['below_soma']} of {len(arb['cell'])} segments "
             "sit below the soma in any projection of this reconstruction)",
+            "G band: forest()'s 6 % row band is trimmed to the fan window so "
+            "the printed wiring / rank columns sit on paper, not on an area "
+            "mark (eight TEXT-ON-DATA findings otherwise)",
+            "E badge: no `oracle` badge; the strip above E's bars carries the "
+            "initial-cohort annotation and the panel's n and endpoint, and H "
+            "carries the badge",
+            "right overhang: H's four family names are set 10 pt beyond their "
+            "spine because a 452.4 pt live area cannot meet FILL_W_MIN 92 % "
+            "of 518.4 pt on its own",
         ],
         layout_findings=layout,
         scope=("Modeled passive response capacity on measured anatomy; no "

@@ -9,7 +9,7 @@
     "G": "Mean activation-error capture of D's exact-path fields by C's dictionaries at K = 1, 3, 12; fresh cohort, 10 seeds per architecture, trained (filled) and initial (open) checkpoints."
   },
   "source_sha256": {
-    "scripts/credit_first_figures/build_framework.py": "939e402932ada036e49027b32dae8c987b46b07b501bfe9b36f2a2570be11c71",
+    "scripts/credit_first_figures/build_framework.py": "f2902038247f19971c39df06ce46f989c63ba96a7ac1327b06226bd0309bb727",
     "scripts/figure_canvas.py": "de3f566dd08270535deab95eb798b49cc17ccf4dfbb88e7ebdb50860903a6ad1",
     "scripts/journal_style.py": "be8a138f9d9c081237edc616ba52b6769f957d8b8b49e705a92adcb18f475f3c",
     "scripts/native_schematics.py": "68530ec60f85e496b9b0ba7a7ad53510dce2fae91cc38231046c1175e1cb7aeb",
@@ -63,7 +63,10 @@
   "layout_findings": [
     "TEXT-ON-DATA 'decoder only: frozen core'",
     "TEXT-ON-DATA 'no effect'",
-    "TEXT-ON-DATA '5/10 \u00b7 10/10'",
+    "TEXT-ON-DATA '5/10'",
+    "TEXT-ON-DATA '9/15'",
+    "TEXT-ON-DATA '2/10'",
+    "TEXT-ON-DATA '2/20'",
     "TEXT-ON-DATA '\u00b11 pp equivalence vs BP'"
   ],
   "layout_findings_note": "save_native's live audit_text_over_data compares bounding boxes and flags every tag that shares a box with a mark; the compiled-page check (figure_canvas.py --audit --strict, which tests real path geometry and excludes tint bands) reports 0 violations for this figure."

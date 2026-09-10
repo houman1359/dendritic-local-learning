@@ -1,7 +1,7 @@
 {
   "figure": "Figure 8",
   "output": "figures/components/focused_main_08.pdf",
-  "output_sha256": "4fa76e5668de719b5bc820208c445cdb1f5e4f897a933be06f0a8cd4e0505276",
+  "output_sha256": "68f7e43e1a1a22c6987e34c63c33681599f74bda5861c1d51164198d6daaab5d",
   "plotted_table": "source_data/curated_publication/figure_08_plotted.csv",
   "plotted_table_sha256": "4d49dfddae3f5e27a390a8afbcfe38d8f75aa6cd8755d6016ebc476365223676",
   "panel_sources": {
@@ -32,19 +32,20 @@
     "source_data/focal_selectivity_phase1/summary.json": "de17bb5e8363ef52ff2be8cf74f150ae9bb1f34026a94afdf624162fa9b88d6c"
   },
   "builders_sha256": {
-    "scripts/shunt_ancestry_gain/build_focused_main.py": "7158b2795906ed988e7de891fe348878acb9dd395a9eef41b2a1bd9590a1ad60",
+    "scripts/shunt_ancestry_gain/build_focused_main.py": "2a7b94663439dfa0ddae9d1c1e71e33b54801e8d10bf8ee78d33946471409fe6",
     "scripts/shunt_ancestry_gain/build_figure.py": "ace3791786d34c8b234b46743fd527b0ede99ff262064fd1067dcfd6616a70d0",
     "scripts/build_main_figure_07.py": "8dd526d60d35b572a17a68c77c1813279756251052d4921471d77c3fb16b885e",
     "scripts/build_main_figure_08.py": "f9960d1b058bfef5486e436ef511fbcb98e751a3fe515587be6929b1d7305cc5",
     "scripts/build_journal_figures.py": "9e7d368c9d8aa6db88235614d777c4810013a3e62729699b9219b9d006076898",
     "scripts/figure_canvas.py": "de3f566dd08270535deab95eb798b49cc17ccf4dfbb88e7ebdb50860903a6ad1",
     "scripts/journal_style.py": "be8a138f9d9c081237edc616ba52b6769f957d8b8b49e705a92adcb18f475f3c",
-    "scripts/native_schematics.py": "3e74a3b7ccbb993d9c131d6997aba30a1d81be7728f335937e3fa2e14aa754b1",
+    "scripts/native_schematics.py": "68530ec60f85e496b9b0ba7a7ad53510dce2fae91cc38231046c1175e1cb7aeb",
     "scripts/credit_first_figures/focused_provenance.py": "b7ade95b88e7d10a43bab01716dee6211bc2f09735b605d489c0012a147ecea7"
   },
   "source_data_immutable": true,
   "new_experiments": 0,
   "layout_findings": [
+    "TEXT-ON-DATA 'no change'",
     "TEXT-ON-DATA 'shunt 3.1\u00d7 injection'",
     "TEXT-ON-DATA 'focal shunt'",
     "TEXT-ON-DATA 'matched injection'",
@@ -62,5 +63,5 @@
     "TEXT-ON-DATA 'open = off-route'",
     "TEXT-ON-DATA 'no change'"
   ],
-  "scope": "Eight-panel v2 rebuild of main Figure 8 on one NativeCanvas (518.4 x 490 pt, rows 128/116/116, schematic fraction 27.2 % of the live canvas on the AMENDMENTS B12 formula; the 29.6 % row basis is the conservative bound). No new experiments and no change to any frozen source table: every estimate reuses the archived rows, estimators and bootstrap seeds. Panel D is the old S48 / S28D normalized-dose sheet promoted into the main figure, printed as equal-weighted cell means (dose 2 = 0.194, not the 0.203 pooled-site mean). Panel H is new artwork over the frozen focal_selectivity_phase1 table. Cohorts are encoded by marker shape and fill, not by ORDINAL_RAMP (DECISIONS, Figure 8). Slot-fill slot-fill balance: {'left_reserve_pt': 28.0, 'slot_fill_spread': np.float64(1.117), 'slot_fill': {'A': np.float64(0.867), 'B': np.float64(0.867), 'C': np.float64(0.781), 'D': np.float64(0.781), 'E': np.float64(0.781), 'F': np.float64(0.776), 'G': np.float64(0.776), 'H': np.float64(0.776)}}. Contrast drop from R_m 300 to 15,000: {'original_eight': 34.62284406419092, 'v661_disjoint': 33.43760240516116}."
+  "scope": "Eight-panel v2 rebuild of main Figure 8 on one NativeCanvas (518.4 x 490 pt, rows 128/116/116, schematic fraction 26.6 % of the live canvas on the AMENDMENTS B12 formula, 457.4 x 442 pt; the plan's 27.2 % assumed a 35 pt bottom margin, this build uses 25 pt with a 41 pt vertical gutter so the r1|r2 boundary clears the 8.5 pt floor). No new experiments and no change to any frozen source table: every estimate reuses the archived rows, estimators and bootstrap seeds. Panel D is the old S48 / S28D normalized-dose sheet promoted into the main figure, printed as equal-weighted cell means (dose 2 = 0.194, not the 0.203 pooled-site mean). Panel H is new artwork over the frozen focal_selectivity_phase1 table. Cohorts are encoded by marker shape and fill, not by ORDINAL_RAMP (DECISIONS, Figure 8). Slot-fill slot-fill balance: {'left_reserve_pt': 28.0, 'slot_fill_spread': np.float64(1.117), 'slot_fill': {'A': np.float64(0.867), 'B': np.float64(0.867), 'C': np.float64(0.781), 'D': np.float64(0.781), 'E': np.float64(0.781), 'F': np.float64(0.776), 'G': np.float64(0.776), 'H': np.float64(0.776)}}. Contrast drop from R_m 300 to 15,000: {'original_eight': 34.62284406419092, 'v661_disjoint': 33.43760240516116}."
 }

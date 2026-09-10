@@ -2,7 +2,7 @@
   "figure": "Figure 7",
   "label": "fig:topology",
   "output": "figures/components/credit_first_figure_07.pdf",
-  "output_sha256": "53c3838268625624fac8c4deb2e797ee4b3c2ca3dfbfb7ae000960bea736dcdf",
+  "output_sha256": "9d17ba402c5d21b6ac00bb20deefd45793293e4f71f86096ab00a15d4ae63163",
   "main_copy": "figures/main/figure_07.pdf",
   "panel_letters": "abcdefgh",
   "replication_unit": "reconstructed cell; initial eight-cell, disjoint 47-cell and Pinky second-mouse cohorts kept separate",
@@ -17,11 +17,11 @@
     "h": "residual_capture at K = 8 per cohort from each cohort's cell_method_summary.csv (initial 8, disjoint 47, Pinky 8) for ancestry, surrogate tree, depth bins and the common-constrained SVD; 20,000-draw cell bootstrap, seed 202609061 + 100 g + i; Pinky site counts and eligibility from pinky/cohort_inclusion.csv"
   },
   "source_sha256": {
-    "scripts/credit_first_figures/build_anatomy.py": "9d969250f2e4f0700129672bba2c88287ed7978996e530e1aeecffd6b223aa7e",
+    "scripts/credit_first_figures/build_anatomy.py": "aecf199c39e48e3c1974dca3f67953cf73d6f48aabd1848b68817a8d79a2232a",
     "scripts/build_main_figure_07.py": "8dd526d60d35b572a17a68c77c1813279756251052d4921471d77c3fb16b885e",
     "scripts/figure_canvas.py": "de3f566dd08270535deab95eb798b49cc17ccf4dfbb88e7ebdb50860903a6ad1",
     "scripts/journal_style.py": "be8a138f9d9c081237edc616ba52b6769f957d8b8b49e705a92adcb18f475f3c",
-    "scripts/native_schematics.py": "3e74a3b7ccbb993d9c131d6997aba30a1d81be7728f335937e3fa2e14aa754b1",
+    "scripts/native_schematics.py": "68530ec60f85e496b9b0ba7a7ad53510dce2fae91cc38231046c1175e1cb7aeb",
     "scripts/anatomy_commonmode/run.py": "69b412551dc87f0c9ecf6221d14981abf282a3d9e0406d676f0f287d8af4aa35",
     "scripts/anatomy_commonmode/protocol.json": "ae4f8f36c0a9bb3d41fc621709575255267368ecf8da84cccf895d2914a48f8b",
     "scripts/analyze_reciprocal_routing_controls.py": "2aae805ef8285ba97d9250d160823664fb34ee600a765e2adc4bb99e5a8528cd",
@@ -74,17 +74,11 @@
     "D3: row 1 is three 4-module panels that share no axis; each is a different estimand and the row is column-locked",
     "H idiom (decision 0.7): grouped vertical dot plot, not a forest; a two-factor panel at 5 modules",
     "B address cycle: builder-local shunting/local/oracle plus white tints, because K_CYCLE's second entry is the banned `additive`",
-    "soma-lowest: declared, not asserted, for the measured arbor of A/B/C (36 of 78 segments sit below the soma in any projection of this reconstruction)"
+    "soma-lowest: declared, not asserted, for the measured arbor of A/B/C (36 of 78 segments sit below the soma in any projection of this reconstruction)",
+    "G band: forest()'s 6 % row band is trimmed to the fan window so the printed wiring / rank columns sit on paper, not on an area mark (eight TEXT-ON-DATA findings otherwise)",
+    "E badge: no `oracle` badge; the strip above E's bars carries the initial-cohort annotation and the panel's n and endpoint, and H carries the badge",
+    "right overhang: H's four family names are set 10 pt beyond their spine because a 452.4 pt live area cannot meet FILL_W_MIN 92 % of 518.4 pt on its own"
   ],
-  "layout_findings": [
-    "TEXT-ON-DATA '20.8 %'",
-    "TEXT-ON-DATA '7.62'",
-    "TEXT-ON-DATA '23.2 %'",
-    "TEXT-ON-DATA '8.00'",
-    "TEXT-ON-DATA '18.8 %'",
-    "TEXT-ON-DATA '7.65'",
-    "TEXT-ON-DATA '17.8 %'",
-    "TEXT-ON-DATA '5.66\u2020'"
-  ],
+  "layout_findings": [],
   "scope": "Modeled passive response capacity on measured anatomy; no evidence of endogenous biological route usage. The initial eight-cell and disjoint 47-cell cohorts are the same animal; Pinky is one second animal."
 }

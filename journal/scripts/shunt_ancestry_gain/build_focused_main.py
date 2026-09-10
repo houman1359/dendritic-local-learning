@@ -37,14 +37,25 @@ CF-7  reference lines are dashed ``mute`` at LW_REF with the label
 CF-8  caption rules; the caption ships in v2/fig8/TEXT.md.
 CF-9  sentence-case finding titles; ``Adjoint replacement`` (E) is one of the
       set's two recorded method-naming titles (the other is Fig 7F).
-CF-10 schematic area = (210.2 + 210.2) x 128 / (457.4 x 432) = 27.2 %, cap
-      30 %, no waiver (the 29.6 % row-basis figure is the conservative bound).
+CF-10 schematic area = (210.2 + 210.2) x 128 / (457.4 x 442) = 26.6 %, cap
+      30 %, no waiver.  The PLAN quotes 27.2 % on a 432 pt live height, i.e.
+      on its bottom margin of 35 pt; this build carries bottom = 25 pt and
+      vgutter = 41 pt instead (see the layout deviation below), so the live
+      height is 442 pt and the fraction falls to 26.6 %.  The 29.6 % row
+      basis stays the conservative bound.
 CF-11 ``check_matrix_cells`` >= 6.0 pt for panel B's dictionary product.
 CF-12 ``canvas.align_letters()`` is called unconditionally before ``save()``;
       no letter is hand-placed and no hand alignment loop exists.
 
 Recorded waivers and deviations
 -------------------------------
+layout deviation from PLAN section "Canvas": the vertical gutter is 41 pt
+and the bottom margin 25 pt, not 36 / 35.  The total is unchanged
+(23 + 128 + 41 + 116 + 41 + 116 + 25 = 490) and every row height is the
+plan's, but at vgutter 36 the r1|r2 boundary measures about 5 pt, below
+``audit_row_separation``'s 8.5 pt (3 mm) floor, because rows 1 and 2 both
+carry an x label under a 4-module axes.  At 41 pt it measures 10.1 pt.
+
 waiver D3: row 2 (F signed forest / G state curve / H background rescue) is
 three 4-module panels that share no axis; F is a signed log change, G and H a
 shunt-minus-injection contrast on different manipulations, and the row is
@@ -410,14 +421,17 @@ def panel_interventions(ax):
                       ("V", "i"), ")"], size=PT_BASE, color=INK, ha="left")
         else:
             f.contact(site, kind="inh", active=False)
-            width = _formula(f, (body[0], line_y),
+            # the two card-2 tag lines are ordered like card 1's: the prose
+            # line above, the formula below, so the arrow into the contact
+            # leaves the LOWER line and no longer crosses the prose
+            f.text((body[0], line_y), "no conductance change", size=PT_BASE,
+                   color=MUTE, ha="left", va="center")
+            width = _formula(f, (body[0], tag_y),
                              ["κ(", ("E", "I"), " − ", ("V", "k"), ")"],
                              size=PT_BASE, color=MUTE, ha="left")
-            f.arrow((body[0] + f.fx(width + 3.0), line_y),
+            f.arrow((body[0] + f.fx(width + 3.0), tag_y),
                     (site[0] - f.fx(1.6), site[1] + f.fy(2.2)),
                     color=MUTE, lw=LW_EDGE, head=3.4, rad=-0.18)
-            f.text((body[0], tag_y), "no conductance change", size=PT_BASE,
-                   color=MUTE, ha="left", va="center")
             f.badge((cell[0] + cell[2] - f.fx(2.0),
                      cell[1] + cell[3] - f.fy(1.5)), "control")
         f.error_in(nodes.soma, side="right")
@@ -461,32 +475,52 @@ def panel_gain_dictionary(ax, gains):
                                                    colours, weights)
     f.text((0.0, top), f"root {MEDIAN_ROOT}", size=PT_BASE, color=MUTE,
            ha="left", va="center")
-    f.subscript((place[FOCAL_SEGMENT][0] + f.fx(3.0),
-                 place[FOCAL_SEGMENT][1] + f.fy(3.5)), "g", "shunt",
-                size=PT_BASE, color=COLORS["inh"], ha="left", va="center")
 
-    # block tags: the descendant tuft is named above the canopy, the two
-    # proximal blocks below it, so no leader crosses the arbor
+    # block tags: each one is set OUTSIDE the canopy and joined to the
+    # NEAREST member of its own block, so no leader crosses the arbor (v1
+    # led every tag to the block's median-x / minimum-y member, which drew
+    # two diagonals across the whole projection and over the scale bar)
+    block_of = gains["block"]
+    members = {}
+    for segment in gains["ids"]:
+        members.setdefault(block_of[segment], []).append(place[segment])
+
+    def _nearest(nodes, origin):
+        pts = np.asarray([p for node in nodes for p in members[node]],
+                         dtype=float)
+        d = np.hypot((pts[:, 0] - origin[0]) * f.w_pt,
+                     (pts[:, 1] - origin[1]) * f.h_pt)
+        return tuple(pts[int(d.argmin())])
+
     desc_y = top - f.fy(9.5)
-    f.text((0.0, desc_y), f"descendants ({gains['n_descendants']})",
-           size=PT_BASE, color=label_color(BLOCK_DESC), ha="left",
-           va="center")
-    f.leader((f.fx(58.0), desc_y),
-             (anchors[order[0]][0], anchors[order[0]][2]), color=MUTE)
-    for index, (node, text, hue) in enumerate((
-            (order[1], "sister blocks (3)", BLOCK_SIS),
-            (path[0], "soma side", BLOCK_SOMA))):
-        y_tag = f.fy(band + key_pt - 9.5 - 9.0 * index)
-        f.text((0.0, y_tag), text, size=PT_BASE, color=label_color(hue),
-               ha="left", va="center")
-        f.leader((f.fx(58.0), y_tag), (anchors[node][0], anchors[node][1]),
-                 color=MUTE)
-    x_bar = arbor_rect[0] + arbor_rect[2] - f.fx(2.0) - bar_w
+    tags = ((f"descendants ({gains['n_descendants']})", BLOCK_DESC,
+             desc_y, [order[0]]),
+            ("soma side", BLOCK_SOMA,
+             f.fy(band + key_pt - 9.5), [path[0]]),
+            ("sister blocks (3)", BLOCK_SIS,
+             f.fy(band + key_pt - 18.5), list(order[1:4])))
+    for text, hue, y_tag, nodes in tags:
+        artist = f.text((0.0, y_tag), text, size=PT_BASE,
+                        color=label_color(hue), ha="left", va="center")
+        ax.figure.canvas.draw()
+        box = artist.get_window_extent().transformed(ax.transData.inverted())
+        start = (box.x1 + f.fx(4.0), y_tag)
+        f.leader(start, _nearest(nodes, start), color=MUTE)
+
+    # scale bar at the lower LEFT of the projection (PLAN section 3 B); the
+    # lower right is where the shunt tag is led out to clear whitespace
+    x_bar = arbor_rect[0] + f.fx(1.0)
     y_bar = arbor_rect[1] + f.fy(2.0)
     f.ax.plot([x_bar, x_bar + bar_w], [y_bar, y_bar], color=INK, lw=LW_DATA,
               solid_capstyle="butt", zorder=7)
     f.text((x_bar + bar_w / 2.0, y_bar + f.fy(2.0)), "50 µm", size=PT_BASE,
            color=INK, va="bottom")
+    shunt_tag = (arbor_rect[0] + arbor_rect[2] - f.fx(23.0),
+                 arbor_rect[1] + f.fy(9.0))
+    f.leader((shunt_tag[0] - f.fx(2.0), shunt_tag[1] + f.fy(1.0)),
+             place[FOCAL_SEGMENT], color=MUTE)
+    f.subscript(shunt_tag, "g", "shunt", size=PT_BASE,
+                color=COLORS["inh"], ha="left", va="center")
 
     # the gain product: B (78 x 5 indicators) x eta = q'/q
     ids = gains["ids"]
@@ -513,6 +547,15 @@ def panel_gain_dictionary(ax, gains):
                                 col_colors=hues, row_groups=groups,
                                 captions=("B", "\u03b7", "q\u2032/q"),
                                 numbers=False, collapse="auto")
+    # the library centres its collapse note on the B matrix; at 6 modules a
+    # 37-character line centred there runs left over the arbor and the scale
+    # bar, so it is re-anchored right, under the product (the string itself
+    # is the library's, ``collapsed_row_note([17, 5, 4, 6, 46])``)
+    expected = collapsed_row_note(groups)
+    for artist in ax.texts:
+        if artist.get_text() == expected:
+            artist.set_position((1.0, artist.get_position()[1]))
+            artist.set_ha("right")
     host, box = ax.get_position(), axes[2].get_position()
     x_right = (box.x1 - host.x0) / host.width
     y_top = (box.y1 - host.y0) / host.height
@@ -543,9 +586,14 @@ def panel_relations(canvas, ax, category):
         values, (mean, lo, hi) = category[("focal shunt", relation)]
         rows.append(dict(label=label, mean=mean, lo=lo, hi=hi,
                          seeds=list(values), n=8))
+    # the reference label is drawn here, not by forest(): right-aligned above
+    # the top spine it lands on the panel title, because the zero rule sits
+    # 4 pt from the left edge and the centred title starts 8 pt from it
     out = forest(ax, rows, value_label="|Δ log |γ|| (log units)",
-                 reference=0.0, reference_label="no change", color="shunting",
+                 reference=0.0, reference_label="", color="shunting",
                  xlim=(-0.006, 0.158), tag="")
+    ax.text(0.0075, 4.37, "no change", fontsize=PT_BASE, color=MUTE,
+            ha="left", va="center", zorder=6)
     ax.tick_params(axis="x", labelsize=PT_BASE, pad=0.8, length=2.0)
     ax.xaxis.labelpad = 0.5
     ypos = out["ypos"]
@@ -657,12 +705,14 @@ def panel_adjoint(ax, shapley):
     ax.set_xlabel("substituted factor", fontsize=PT_EMPH, color=INK,
                   labelpad=0.5)
     mean, lo, hi = shapley["replacement"]
-    ax.text(1.5, 0.238, "q′ replacement", fontsize=PT_BASE, color=INK,
-            ha="center", va="center", zorder=6)
-    ax.text(1.5, 0.214,
+    # left-aligned with the key block below it: centred under the panel title
+    # the first line read as a subtitle and the second overhung the left spine
+    ax.text(-0.52, 0.238, "q′ replacement", fontsize=PT_BASE, color=INK,
+            ha="left", va="center", zorder=6)
+    ax.text(-0.52, 0.214,
             f"+{mean:.3f} [{lo:.3f}, {hi:.3f}], "
             f"{shapley['replacement_positive']}/8 cells",
-            fontsize=PT_BASE, color=INK, ha="center", va="center", zorder=6)
+            fontsize=PT_BASE, color=INK, ha="left", va="center", zorder=6)
     for offset, line in enumerate(("q adjoint,", "d driving force;",
                                    "′ = post-shunt")):
         ax.text(-0.52, 0.150 - 0.022 * offset, line, fontsize=PT_BASE,
@@ -795,7 +845,9 @@ def panel_state(ax, physical, ranges):
                           "to 15,000", transform=ax.transAxes,
             fontsize=PT_BASE, color=INK, ha="left", va="center", zorder=6)
 
-    inset = ax.inset_axes([0.60, 0.28, 0.38, 0.30])
+    # 0.31 (not 0.28) lifts the inset clear of the source-region box it
+    # magnifies: at 0.28 the frame overlapped the box by 0.0024 log units
+    inset = ax.inset_axes([0.60, 0.31, 0.38, 0.27])
     inset.set_xscale("log")
     inset.set_xlim(2400.0, 40000.0)
     inset.set_ylim(-0.0062, 0.0082)
@@ -870,8 +922,21 @@ def panel_background(ax, sel, per_cell):
             fontsize=PT_BASE, color=INK, ha="left", va="center", zorder=6)
     ax.text(0.02, 0.902, "restores the contrast", transform=ax.transAxes,
             fontsize=PT_BASE, color=INK, ha="left", va="center", zorder=6)
-    ax.text(0.985, 0.095, "R = 15,000 \u03a9 cm\u00b2", transform=ax.transAxes,
-            fontsize=PT_BASE, color=MUTE, ha="right", va="center", zorder=6)
+    # R_m without mathtext (CF-2).  The three spans are chained RIGHT to
+    # LEFT in offset points off a right-aligned tail, so the group survives
+    # the reserve lock that resizes this axes after the panel is drawn;
+    # token_subscript's own ``tail`` anchors on the subscript's layout box
+    # (which carries the font descent) and prints ~1.5 pt low.
+    rest = ax.text(0.985, 0.118, "= 15,000 \u03a9 cm\u00b2", fontsize=PT_BASE,
+                   color=MUTE, ha="right", va="center", zorder=6,
+                   transform=ax.transAxes)
+    sub = ax.annotate("m", xy=(0.0, 0.5), xycoords=rest, xytext=(-3.4, -1.6),
+                      textcoords="offset points", fontsize=PT_BASE,
+                      color=MUTE, ha="right", va="center", zorder=6,
+                      annotation_clip=False)
+    ax.annotate("R", xy=(0.0, 0.5), xycoords=sub, xytext=(-0.4, 1.6),
+                textcoords="offset points", fontsize=PT_BASE, color=MUTE,
+                ha="right", va="center", zorder=6, annotation_clip=False)
     ax.text(0.985, 0.030, "normalized dose 1", transform=ax.transAxes,
             fontsize=PT_BASE, color=MUTE, ha="right", va="center", zorder=6)
     return ax
@@ -1097,9 +1162,10 @@ def build(emit_main=True):
              "calibration; new main panel."}
     notes = (
         "Eight-panel v2 rebuild of main Figure 8 on one NativeCanvas "
-        "(518.4 x 490 pt, rows 128/116/116, schematic fraction 27.2 % of the "
-        "live canvas on the AMENDMENTS B12 formula; the 29.6 % row basis is "
-        "the conservative bound). No new experiments and no change to any "
+        "(518.4 x 490 pt, rows 128/116/116, schematic fraction 26.6 % of the "
+        "live canvas on the AMENDMENTS B12 formula, 457.4 x 442 pt; the plan's "
+        "27.2 % assumed a 35 pt bottom margin, this build uses 25 pt with a "
+        "41 pt vertical gutter so the r1|r2 boundary clears the 8.5 pt floor). No new experiments and no change to any "
         "frozen source table: every estimate reuses the archived rows, "
         "estimators and bootstrap seeds. Panel D is the old S48 / S28D "
         "normalized-dose sheet promoted into the main figure, printed as "
@@ -1117,6 +1183,7 @@ def build(emit_main=True):
     (J / "figures/provenance/credit_clarity_20260908"
      / "figure_08_layout.json").write_text(json.dumps(
          {"main_figure_sha256": sha(main), "slot_fill_balance": balance,
+          "schematic_fraction": round(2 * 210.2 * 128.0 / (457.4 * 442.0), 4),
           "contrast_drop": {k: float(v) for k, v in drops.items()},
           "kappa_unit_dose": gains["kappa"],
           "identity_residual": gains["residual"],

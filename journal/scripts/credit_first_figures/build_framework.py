@@ -459,12 +459,17 @@ def read_capture(coordinate=CAPTURE_COORDINATE):
 def credit_entry(ax):
     """One arbor of 128, its readout, its loss and the return of its error.
 
-    Bands from the cell floor: the update rule and its two operands (0-27 pt),
-    the somatic-error shaft carrying the Gamma gain dial (~41 pt), the neuron
-    with two ghosted neighbours behind it (46-92), the stimulus tile (103-118).
-    The two ghosts are offset up and to the right so the forward path leaves
-    the hero soma into clear space; the error returns from the RIGHT edge of
-    the loss card, so it never crosses the tag that defines delta_u.
+    Bands from the cell floor: the update rule and its two operands (0-28 pt),
+    the somatic-error shaft carrying the Gamma gain dial (32.5 pt), the hero
+    neuron with ONE ghosted neighbour behind it (44-90 pt), and the stimulus
+    tile (105-120 pt).
+
+    QA 2026-09-09: the forward path is a mute HORIZONTAL arrow that leaves the
+    soma rightward at soma height into the clear strip under the readout card
+    (the previous riser turned up through the canopy and crossed a junction
+    ring), the readout card is therefore the LOWER of the two cards, and the
+    single ghost is offset (16, 20) pt -- 25.6 pt away, so the hero arbor, its
+    two contacts and the z tag sit on clean ground.
     """
     f = Frame(ax)
     X, Y = f.fx, f.fy
@@ -482,12 +487,12 @@ def credit_entry(ax):
                          ["δ", " = A c,   c = Γ ", ("c", "source")],
                          size=PT_BASE, color=MUTE)
     hat(f, starts[0], Y(2.0), w_delta, color=MUTE)
-    # -- the neuron and its two ghosted neighbours ------------------------
-    base = (X(0.5), Y(46.0), X(0.50 * W), Y(46.0))
-    for k in (2, 1):
-        _fade_ghost(f.balanced_tree(
-            (base[0] + X(8.5 * k), base[1] + Y(6.0 * k), base[2], base[3]),
-            depth=2, ghost=True, labels=False, soma_r_pt=2.4))
+    # -- the neuron and its one ghosted neighbour -------------------------
+    tree_w, tree_h, tree_y = 40.0, 46.0, 44.0
+    base = (X(0.5), Y(tree_y), X(tree_w), Y(tree_h))
+    _fade_ghost(f.balanced_tree(
+        (base[0] + X(16.0), base[1] + Y(20.0), base[2], base[3]),
+        depth=2, ghost=True, labels=False, soma_r_pt=2.4))
     nodes = f.balanced_tree(base, depth=2, mode="plain", labels=False)
     sx, sy = nodes.soma
     exc = nodes["T1"]
@@ -499,9 +504,8 @@ def credit_entry(ax):
            ha="right", va="bottom")
     f.text(f._off(inh, 2.6, 0.8), "I", size=PT_BASE, color=COLORS["inh"],
            ha="left")
-    f.text((X(W - 1.0), Y(97.0)), "×128", size=PT_BASE, color=MUTE, ha="right")
     # -- stimulus: drawn, never a sub-300 dpi raster (DECISIONS Fig 1) -----
-    tile = (X(1.0), Y(103.0), X(15.0), Y(15.0))
+    tile = (X(1.0), Y(105.0), X(15.0), Y(15.0))
     tint_patch(ax, ("rect", *tile), color="grid", pct=70, edge=True,
                lw=LW_HAIR, radius_pt=1.0, zorder=1.0)
     for k in (1, 2, 3):
@@ -513,38 +517,39 @@ def credit_entry(ax):
     f.leader((tile[0] + tile[2] / 2.0, tile[1] - Y(0.5)),
              (exc[0], exc[1] + Y(3.2)), color=MUTE)
     # -- readout, loss, and the error that returns to this soma -----------
-    card_w, card_x = 0.455 * W, W - 0.455 * W - 1.0
-    read_y, loss_y = 76.0, 46.0
-    f.task_card((X(card_x), Y(read_y), X(card_w), Y(16.0)))
-    f.task_card((X(card_x), Y(loss_y), X(card_w), Y(24.0)))
-    f.text((X(card_x + card_w / 2.0), Y(read_y + 8.0)), "ŷ = W z + b",
+    card_x, card_w = 50.0, 38.0
+    read_y, read_h = 38.0, 16.0             # centred on the soma (y = 46)
+    loss_y, loss_h = 62.0, 18.0
+    f.task_card((X(card_x), Y(read_y), X(card_w), Y(read_h)))
+    f.task_card((X(card_x), Y(loss_y), X(card_w), Y(loss_h)))
+    f.text((X(card_x + card_w / 2.0), Y(read_y + read_h / 2.0)), "ŷ = Wz + b",
            size=PT_BASE, color=INK)
-    f.text((X(card_x + card_w / 2.0), Y(loss_y + 17.0)), "loss L",
+    f.text((X(card_x + card_w / 2.0), Y(loss_y + 12.0)), "loss L",
            size=PT_BASE, color=INK)
-    chain(f, (X(card_x + card_w / 2.0), Y(loss_y + 7.0)),
+    chain(f, (X(card_x + card_w / 2.0), Y(loss_y + 4.5)),
           [("δ", "u"), " = ∂L/∂", ("y", "u")], size=PT_BASE, color=INK,
           ha="center")
-    riser_x = X(card_x - 2.5)
-    ax.plot([sx + X(nodes.soma_r_pt + 1.5), riser_x, riser_x],
-            [sy, sy, Y(read_y + 8.0)], color=MUTE, lw=f.lw(LW_EDGE),
-            solid_capstyle="round", solid_joinstyle="round", zorder=3)
-    f.arrow((riser_x, Y(read_y + 8.0)), (X(card_x + 0.4), Y(read_y + 8.0)),
+    f.text((X(card_x + card_w), Y(loss_y + loss_h + 14.0)), "×128",
+           size=PT_BASE, color=MUTE, ha="right")
+    # forward: one mute HORIZONTAL arrow, soma height, no canopy crossed
+    fwd_y = sy
+    f.arrow((sx + X(nodes.soma_r_pt + 2.0), fwd_y), (X(card_x - 1.2), fwd_y),
             color=MUTE, lw=LW_EDGE, head=3.4)
-    f.text((riser_x - X(1.5), sy + Y(2.4)), "z", size=PT_BASE, color=INK,
-           ha="right", va="bottom")
-    f.arrow((X(card_x + card_w / 2.0), Y(read_y - 1.0)),
-            (X(card_x + card_w / 2.0), Y(loss_y + 25.0)), color=MUTE,
+    f.text(((sx + X(nodes.soma_r_pt + 2.0) + X(card_x - 1.2)) / 2.0,
+            fwd_y + Y(3.0)), "z", size=PT_BASE, color=INK, va="bottom")
+    f.arrow((X(card_x + card_w / 2.0), Y(read_y + read_h + 0.8)),
+            (X(card_x + card_w / 2.0), Y(loss_y - 1.0)), color=MUTE,
             lw=LW_EDGE, head=3.4)
     tail = (sx + X(nodes.soma_r_pt + 11.0), sy - Y(nodes.soma_r_pt + 7.0))
-    # QA 2026-09-09: the return shaft runs 3.5 pt below the delta-0 tag's
-    # baseline and rises into the arrow tail, so it never cuts the tag
-    shaft_y, right = tail[1] - Y(3.5), X(card_x + card_w)
-    ax.plot([right, right, tail[0], tail[0]],
-            [Y(loss_y), shaft_y, shaft_y, tail[1]], color=INK,
-            lw=f.lw(LW_HAIR), solid_capstyle="round", solid_joinstyle="round",
-            zorder=4.8)
+    # the return leaves the loss card's RIGHT edge, drops outside both cards
+    # and runs left along the delta-0 shaft, 3.5 pt below the tag's baseline
+    shaft_y, right = tail[1] - Y(3.5), X(card_x + card_w + 2.0)
+    ax.plot([X(card_x + card_w), right, right, tail[0], tail[0]],
+            [Y(loss_y + 6.0), Y(loss_y + 6.0), shaft_y, shaft_y, tail[1]],
+            color=INK, lw=f.lw(LW_HAIR), solid_capstyle="round",
+            solid_joinstyle="round", zorder=4.8)
     f.error_in(nodes.soma, label="δ0")
-    gain_dial(f, (X(0.72 * W), shaft_y))
+    gain_dial(f, (X(0.62 * W), shaft_y))
     f.require_soma_lowest()
     f.require_delta0()
     return ax
@@ -641,7 +646,10 @@ def dictionaries(ax):
     f = Frame(ax)
     X, Y = f.fx, f.fy
     W = f.w_pt
-    rows_h, y0 = 78.0, 38.0             # 12 rows at 6.5 pt
+    # QA 2026-09-09: the stack keeps its top (117.5 pt, 2.7 pt under the
+    # title) and its floor rises 3 pt, so the delta-0 tag clears the
+    # matrix-name row and the coefficient band under it.
+    rows_h, y0 = 75.0, 41.0             # 12 rows at 6.25 pt
     address = list(K_CYCLE[:3])
     # QA 2026-09-09: the arbor's subtrees run left-to-right in the same
     # order as the strip's bands run top-to-bottom
@@ -667,9 +675,13 @@ def dictionaries(ax):
     boxes = ((0.615 * W, 0.075 * W, a1[order], "K = 1", "right"),
              (0.745 * W, 0.225 * W, a3[order], "K = 3", "left"))
     for x_pt, w_pt, data, name, ha in boxes:
+        # QA 2026-09-09: COLORS['mute'] #363B41 is near-black at 4 modules --
+        # the two matrices became the heaviest ink on the page and swallowed
+        # their own hairline block separators.  A 62 % mute keeps the single
+        # neutral encoding the plan mandates and lets the separators read.
         f.dictionary_matrix((X(x_pt), Y(y0), X(w_pt), Y(rows_h)), data,
-                            color="mute", row_groups=[4, 4, 4], label=None,
-                            col_labels=None)
+                            color=mix("mute", 62), row_groups=[4, 4, 4],
+                            label=None, col_labels=None)
         f.text((X(x_pt + w_pt) if ha == "right" else X(x_pt), Y(y0 - 8.0)),
                name, size=PT_BASE, color=INK, ha=ha, va="center")
     chain(f, (X(1.5), Y(24.0)), ["per neuron: c = ", ("δ", "u")], size=PT_BASE)
@@ -721,7 +733,7 @@ def accuracy(ax, conditions, seeds, paired, within):
                         mew=LW_HAIR if face == "fill" else LW_ERR,
                         elinewidth=LW_ERR, capsize=2, zorder=4)
             printed[(architecture, arm)] = 100 * row["mean"]
-        ax.text(5.58, 100 * conditions[conditions.architecture.eq(architecture)
+        ax.text(5.52, 100 * conditions[conditions.architecture.eq(architecture)
                                        & conditions.arm.eq("decoder_only")].iloc[0]["mean"],
                 architecture.capitalize(), ha="left", va="center",
                 fontsize=PT_BASE, color=label_color(color), zorder=6)
@@ -772,28 +784,35 @@ def overlay_arm(ax, y, row, color, *, offset=ARM_OFFSET_ROWS):
             mfc="white", mec=color, mew=LW_ERR, zorder=4.0)
 
 
-def row_note(ax, y, text, lo, hi, xlim, *, pad=0.03, side="right",
-             below=False):
-    """A per-row tag set ABOVE its row, right-aligned inside the right spine.
+def _units_per_pt(ax, xlim):
+    """Data units per point on ``ax``'s x axis (the axes box is already locked)."""
+    box = ax.get_window_extent()
+    w_pt = box.width / ax.figure.dpi * 72.0
+    return (xlim[1] - xlim[0]) / w_pt
 
-    QA 2026-09-09: rows 1 and 2 of E have no empty side (fans span 7-13 pp on
-    a 0-20 axis), so an in-row tag always landed on a mark.  The tag now sits
-    0.40 rows above the row (between rows; the second arm is 0.22 rows below
-    the row), where no mark of any row lies.
+
+def row_tag(ax, y, text, span_lo, span_hi, xlim, side, *, pad_pt=4.0):
+    """A per-row tag centred ON its own row, hung off the end of that row.
+
+    QA 2026-09-09: the tags used to sit 0.45 rows above their rows, i.e. in the
+    inter-row gutter, where a reader cannot tell which row they belong to.  One
+    rule now governs every row of both panels: the tag sits on the row's own
+    baseline and hangs just outside the row's own marks, on whichever end of
+    that row has room (``side`` is decided per row from the data spans).
     """
-    span = xlim[1] - xlim[0]
-    yy = y + 0.42 if below else y - 0.45     # last row: below (nothing there)
+    upp = _units_per_pt(ax, xlim)
+    pad = pad_pt * upp
     if side == "right":
-        ax.text(xlim[1] - pad * span, yy, text, ha="right", va="center",
+        ax.text(span_hi + pad, y, text, ha="left", va="center",
                 fontsize=PT_BASE, color=MUTE, zorder=6)
-    else:                       # F: the right edge lies inside the band
-        ax.text(xlim[0] + pad * span, yy, text, ha="left", va="center",
+    else:
+        ax.text(span_lo - pad, y, text, ha="right", va="center",
                 fontsize=PT_BASE, color=MUTE, zorder=6)
     return _text_w_pt(ax, text, PT_BASE)
 
 
 def cohort_forest(canvas, ax, cohorts, kind, *, value_label, xlim, xticks,
-                  arch_code=False):
+                  tag_sides, arch_code=False):
     """One half of the cohort comparison, through figure_canvas.forest()."""
     rows, extras = [], []
     for cohort, label in COHORT_ROWS:
@@ -807,18 +826,15 @@ def cohort_forest(canvas, ax, cohorts, kind, *, value_label, xlim, xticks,
                          color="shunting" if len(shunt) else "additive",
                          marker="o" if len(shunt) else "s"))
         second = add.iloc[0] if (len(shunt) and len(add)) else None
-        # one form for every row: a two-arm row always prints both arms'
-        # positive-seed counts, so only the genuinely single-arm CIFAR-10 row
-        # carries one token (never a collapsed pair that reads as one arm).
+        # the plan's own row note: positive seeds out of the row's seed total,
+        # for the arm the row label sits on; the single-arm CIFAR row says so
+        # once, in E.
         note = f"{int(lead.positive_seeds)}/{int(lead.n_seeds)}"
-        if second is not None:
-            pair = f"{int(second.positive_seeds)}/{int(second.n_seeds)}"
-            # 'both 10/10' where the two arms agree: the shorter tag clears
-            # the fan on the 0-20 axis (QA 2026-09-09)
-            note = f"both {note}" if pair == note else f"{note} · {pair}"
+        if second is None and kind == "identity":
+            note += ", additive only"
         extras.append((second, note))
-    # QA 2026-09-09: no row bands (the per-row tags sit between rows, and
-    # the bands hid F's equivalence corridor); the tick still ties label to row
+    # QA 2026-09-09: no row bands (they hid F's equivalence corridor); the
+    # 0.55 pt row tick still ties the label to its row
     out = canvas.forest(ax, rows, value_label=value_label, reference=0.0,
                         reference_label="", xlim=xlim, tag="", band=False,
                         tick=True, gutter_pt=FOREST_GUTTER_PT)
@@ -828,11 +844,13 @@ def cohort_forest(canvas, ax, cohorts, kind, *, value_label, xlim, xticks,
     ax.set_ylim(lo + 0.35, hi - 0.55)            # bands above row 0 and below
                                                  # the last row for the two
                                                  # reference labels
-    ax.annotate("no effect", xy=(0.0, hi - 0.50), xycoords=("data", "data"),
+    # QA 2026-09-09: 2 pt lower than the top of the rule, so the mute label
+    # clears the panel title box instead of crowding it
+    ax.annotate("no effect", xy=(0.0, hi - 0.36), xycoords=("data", "data"),
                 xytext=(2.5, 0.0), textcoords="offset points", ha="left",
                 va="center", fontsize=PT_BASE, color=MUTE, zorder=6)
-    last = out["ypos"][-1]
-    for y, row, (second, note) in zip(out["ypos"], rows, extras):
+    for i, (y, row, (second, note)) in enumerate(zip(out["ypos"], rows,
+                                                     extras)):
         span_lo, span_hi = row["lo"], row["hi"]
         if row["seeds"]:
             span_lo = min(span_lo, min(row["seeds"]))
@@ -844,13 +862,17 @@ def cohort_forest(canvas, ax, cohorts, kind, *, value_label, xlim, xticks,
                         COLORS["additive"])
             span_lo = min(span_lo, second.low_pp, min(second.seed_pp))
             span_hi = max(span_hi, second.high_pp, max(second.seed_pp))
-        row_note(ax, y, note, span_lo, span_hi, xlim,
-                 side="left" if kind == "exact" else "right",
-                 below=(y == last))
-    # the arm key lives in the footnote (an in-row key collided with the
-    # per-row tags): filled circle shunting, open square additive
-    foot = "mean [95 % CI]" + ("; ● shunting, □ additive" if arch_code else "")
-    ax.annotate(foot, xy=(1.0, 0.0), xycoords="axes fraction",
+        row_tag(ax, y, note, span_lo, span_hi, xlim, tag_sides[i])
+    if arch_code:
+        # CF-5: the architecture code is stated ONCE, as two direct labels in
+        # the series hues on row 1 -- shunting above the row line, additive
+        # below the open arm that hangs 0.22 rows under it.
+        edge = xlim[1] - 4.0 * _units_per_pt(ax, xlim)
+        for name, key, dy in (("shunting", "shunting", -0.42),
+                              ("additive", "additive", 0.62)):
+            ax.text(edge, out["ypos"][0] + dy, name, ha="right", va="center",
+                    fontsize=PT_BASE, color=label_color(COLORS[key]), zorder=6)
+    ax.annotate("mean [95 % CI]", xy=(1.0, 0.0), xycoords="axes fraction",
                 xytext=(0.0, -25.0), textcoords="offset points", ha="right",
                 va="top", fontsize=PT_BASE, color=MUTE, annotation_clip=False)
     return out
@@ -860,8 +882,9 @@ def cohort_forest(canvas, ax, cohorts, kind, *, value_label, xlim, xticks,
 def capture(ax, per_seed, summary):
     """Mean capture of D's exact-path fields by C's dictionaries, over K."""
     xs = np.arange(3.0)
+    xlo = -1.55                        # the direct-label gutter (QA 2026-09-09)
     ax.axhline(1.0, color=MUTE, lw=LW_REF, dashes=(2.6, 2.0), zorder=1.0)
-    ax.text(-0.42, 1.045, "exact field (A = I)", ha="left", va="center",
+    ax.text(xlo + 0.06, 1.045, "exact field (A = I)", ha="left", va="center",
             fontsize=PT_BASE, color=MUTE, zorder=6)
     printed = {}
     for architecture, offset, marker in (("shunting", -0.06, "o"),
@@ -899,19 +922,22 @@ def capture(ax, per_seed, summary):
                 line, = ax.plot(xs + offset, means, color=color, lw=LW_HAIR,
                                 zorder=2.6)
                 line.set_dashes((2.2, 1.8))
-    # direct labels right of the K = 12 markers, stacked (both arms reach
-    # 1.0 there); the K = 3 side is crossed by the rising trained lines
-    # colour-keyed names head the lower-left key block: every other placement
-    # crossed a trained line or the canvas edge (QA 2026-09-09)
-    ax.text(-0.42, 0.445, "Additive", ha="left", va="center", fontsize=PT_BASE,
-            color=label_color(COLORS["additive"]), zorder=6)
-    ax.text(-0.42, 0.375, "Shunting", ha="left", va="center", fontsize=PT_BASE,
-            color=label_color(COLORS["shunting"]), zorder=6)
-    for k, line in enumerate(("filled: trained", "open: initial",
-                              "10 seeds per point", "activation coordinate")):
-        ax.text(-0.42, 0.30 - 0.075 * k, line, ha="left", va="center",
+    # QA 2026-09-09: true direct labels.  Every point right of K = 1 is
+    # crossed by one of the four rising series, so the two hue names are set
+    # in a label gutter at the LEFT of the axes, each on its own arm's trained
+    # K = 1 level -- the reader's nearest curve is now the labelled one.  The
+    # trained/initial code is in G's mute sub-title, not in a corner block.
+    for architecture in ARCHITECTURES:
+        row = summary[summary.architecture.eq(architecture)
+                      & summary.basis.eq("broadcast_k1")
+                      & summary.checkpoint.eq("trained")].iloc[0]
+        ax.text(-0.24, float(row["mean"]), architecture.capitalize(),
+                ha="right", va="center", fontsize=PT_BASE,
+                color=label_color(COLORS[architecture]), zorder=6)
+    for k, line in enumerate(("10 seeds per point,", "activation coordinate")):
+        ax.text(xlo + 0.06, 0.135 - 0.085 * k, line, ha="left", va="center",
                 fontsize=PT_BASE, color=MUTE, zorder=6)
-    ax.set(xlim=(-0.5, 2.5), ylim=(0.0, 1.10), xticks=xs,
+    ax.set(xlim=(xlo, 2.45), ylim=(0.0, 1.10), xticks=xs,
            xticklabels=[lab for _, lab in CAPTURE_BASES],
            yticks=[0, 0.25, 0.50, 0.75, 1.00], xlabel="Profiles K",
            ylabel="Mean capture (fraction)")
@@ -1097,10 +1123,19 @@ def main():
     f_ = canvas.panel("F", 2, 4, 4, title="Resolution: ≤ 0.2 pp")
     g = canvas.panel("G", 2, 8, 4, title="Capture rises with K")
     for ax in (e, f_, g):
-        # left: the forest label gutter (W3).  top: 4 pt so row 2's titles and
-        # letters clear D's two-line category ticks (audit_row_separation.py
-        # floor 8.5 pt; 7.0 pt without it).
-        canvas.declare_reserve(ax, left=FOREST_GUTTER_PT, top=4.0)
+        # left: the forest label gutter (W3).  top: 8 pt (was 4) so G can
+        # carry the plan's mute sub-title BETWEEN its title and its axes, and
+        # so E's and F's 'no effect' labels clear their title boxes.  The
+        # reserve is locked per ROW, so all three titles keep one baseline;
+        # each title's pad is raised to match.  8 pt is the ceiling: at 14 pt
+        # the slot-fill spread reaches 1.44x (panel-emphasis allows 1.35x).
+        canvas.declare_reserve(ax, left=FOREST_GUTTER_PT, top=8.0)
+        ax.set_title(ax.get_title(), fontsize=PT_EMPH, color=COLORS["ink"],
+                     pad=9.0, fontweight="normal")
+    g.annotate("trained checkpoint; open, initial", xy=(0.0, 1.0),
+               xycoords="axes fraction", xytext=(0.0, 1.0),
+               textcoords="offset points", ha="left", va="bottom",
+               fontsize=PT_BASE, color=MUTE, annotation_clip=False)
 
     within = {}
     for label, key in (("K = 3 − K = 1", "subtree_k3_minus_projected_k1"),
@@ -1109,19 +1144,27 @@ def main():
                                       & paired.contrast.eq(key)].iloc[0]["mean"]
                          for a_ in ARCHITECTURES]
     printed_d, spread = accuracy(d, conditions, seeds, paired, within)
+    # tag_sides: the end of each row that its own marks leave free (see
+    # row_tag).  E rows 1, 2 and 4 hang left, row 3 right; F rows 1-3 hang
+    # left and the CIFAR row right.
     out_e = cohort_forest(canvas, e, cohorts, "identity",
                           value_label="Per neuron − strict scalar (pp)",
                           xlim=(0.0, 20.2), xticks=[0, 5, 10, 15, 20],
+                          tag_sides=("left", "left", "right", "left"),
                           arch_code=True)
     out_f = cohort_forest(canvas, f_, cohorts, "exact",
                           value_label="Exact path − per neuron (pp)",
-                          xlim=(-2.35, 1.05), xticks=[-2, -1, 0, 1])
-    # F carries the prespecified equivalence margin and names its referent
+                          xlim=(-2.35, 1.05), xticks=[-2, -1, 0, 1],
+                          tag_sides=("left", "left", "left", "right"))
+    # F carries the prespecified equivalence margin and names its referent.
+    # QA 2026-09-09 (blocker): the band is painted UNDER the zero rule
+    # (zorder 0.12 < forest()'s axvline at 1.0), so the panel's load-bearing
+    # anchor stays visible across the full row span, exactly as in E.
     tint_patch(f_, ("rect", -equivalence["margin_pp"], f_.get_ylim()[1],
                     2 * equivalence["margin_pp"],
                     f_.get_ylim()[0] - f_.get_ylim()[1]), color="mute", pct=10,
-               edge=True, lw=LW_HAIR, radius_pt=1.5, zorder=1.6, clip_on=True)
-    f_.text(1.0, f_.get_ylim()[0] - 0.30, "±1 pp equivalence vs BP",
+               edge=True, lw=LW_HAIR, radius_pt=1.5, zorder=0.12, clip_on=True)
+    f_.text(1.0, f_.get_ylim()[0] - 0.32, "±1 pp equivalence vs BP",
             ha="right", va="center", fontsize=PT_BASE, color=MUTE, zorder=6)
     printed_g = capture(g, cap_seed, cap_summary)
 

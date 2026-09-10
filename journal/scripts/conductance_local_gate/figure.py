@@ -625,21 +625,27 @@ def panel_task(ax, tuning):
                va='bottom')
     f.text((col_x, y0 + f.fy(83.5)), 'teacher V', size=PT_BASE, ha='left',
            va='center')
-    # the two teacher curves, named under their own inset with the library's
-    # own line samples.  A 7-pt label spans 1.6 z of this 4-z axis and both
-    # logistics sweep the full height, so an in-situ label inside the inset
-    # would sit on a curve wherever it were put (recorded deviation).
-    y = y0 + f.fy(38.0)
-    for dashed, lines in ((False, ('aligned:', 'both subtrees')),
-                          (True, ('opposed:', 'subtree 2'))):
-        sample, = ax.plot([col_x, col_x + f.fx(9.0)], [y, y], color=INK,
-                          lw=LW_REF, solid_capstyle='butt', zorder=5)
-        if dashed:
-            sample.set_dashes(DASH[1])
-        f.text((col_x + f.fx(12.0), y), lines[0], size=PT_BASE, ha='left')
-        y -= f.fy(8.5)
-        f.text((col_x + f.fx(12.0), y), lines[1], size=PT_BASE, ha='left')
-        y -= f.fy(8.5)
+    # QA 2026-09-09 (2): the two line samples are deleted -- Fig 5 carries
+    # exactly one key (panel C; PLAN section 4 C, AMENDMENTS CF-5) -- and each
+    # teacher curve is named by its own direct label.  'both subtrees' is
+    # 40 pt of a 66 pt inset whose two logistics sweep its full height, so the
+    # label cannot be set between the curves; it is set in the free band under
+    # the inset, on its curve's own side, and tied to the curve it names by a
+    # hairline leader that ends 1.6 pt short of the trace.
+    ix, iy, iw, ih = rect
+    for dashed, lines, z_at, ha, y_top in (
+            (False, ('aligned:', 'both subtrees'), -1.64, 'left', 38.0),
+            (True, ('opposed:', 'subtree 2'), 1.64, 'right', 19.0)):
+        series = tuning.v_decreasing if dashed else tuning.v_increasing
+        v_at = float(np.interp(z_at, tuning.z, series))
+        lx = ix + iw * (z_at + 2.0) / 4.0
+        ly = iy + ih * v_at
+        anchor = col_x if ha == 'left' else col_x + iw
+        y = y0 + f.fy(y_top)
+        f.text((anchor, y), lines[0], size=PT_BASE, ha=ha)
+        f.text((anchor, y - f.fy(8.5)), lines[1], size=PT_BASE, ha=ha)
+        ax.plot([lx, lx], [y0 + f.fy(y_top + 3.6), ly - f.fy(1.6)],
+                color=MUTE, lw=LW_HAIR, zorder=2, solid_capstyle='butt')
     perturbation = f.room(core, 30.0) and (
         _text_w_pt(ax, PERTURB_A, PT_BASE) <= w_pt - 6.0)
     if perturbation:
@@ -731,13 +737,18 @@ def panel_deliveries(ax):
     # would repaint the whole arbor and lose the ghost comparison geometry.
     f.credit_delivery(nodes, mode='exact', targets=['T2', 'T3'],
                       alpha_tags=True)
-    # QA 2026-09-09: the hand-set alpha-2 tag above T2 ran into the card
-    # title at this pitch; the key line 'distal x alpha1 alpha2' names it.
-    # the junction factor by hand as well: credit_delivery drops its own
+    # QA 2026-09-09 (2): the hand-set alpha-2 tag is restored, on the DISTAL
+    # segment of the route (mid JL->T2) rather than above the terminal, where
+    # it ran into the card title.  The junction factor is set by hand as
+    # well: credit_delivery drops its own
     # alpha tags below ALPHA_TAG_MIN_PITCH_PT, and this card's terminal pitch
     # is 6.8 pt, so without this the key line 'proximal x a1' has no referent
     f.subscript(f._off(nodes['JL'], -3.6, -0.6), 'α', '1', size=PT_BASE,
                 color=COLORS['bp'], ha='right', va='center')
+    _t2 = 'T2'
+    _mid = _lerp(nodes[nodes.parent[_t2]], nodes[_t2], 0.55)
+    f.subscript((_mid[0] + f.fx(1.6), _mid[1]), 'α', '2', size=PT_BASE,
+                color=COLORS['bp'], ha='left', va='center')
     key_lines(f, core, key_x, [
         (['distal × ', 'α', ('sub', '1'), 'α', ('sub', '2')], INK),
         (['proximal × ', 'α', ('sub', '1')], INK),
@@ -882,14 +893,17 @@ def curve_annotations(ax, t, task):
     # The tag sits beside the rule at NMSE 1e-2, the band both panels leave
     # empty between the broadcast trace above and the trio below; the
     # axes-top and rule-top placements collided with the stats line.
-    # C: right of the rule at 1e-2 (between the amber trace and the trio);
-    # D: left of the rule at 1e-1 (the right side carries the amber label
-    # and the conductance-bound note).
-    ax.annotate('4,096', xy=(PRIMARY['budget'], 1.0e-2 if aligned else 1.0e-3),
-                xycoords='data',
-                xytext=(2.0, 0.0) if aligned else (-2.0, 0.0),
+    # QA 2026-09-09 (2): C and D now set the tag identically -- right of the
+    # rule at NMSE 1e-2, ha='left' -- so the C/D symmetry the plan asks for
+    # holds; D's bound-contact tag is moved down out of that band below.
+    # both panels set it at the TOP OF THE RULE (REF_TOP, where window_rule
+    # stops), ha='left' -- the C/D symmetry the plan asks for, and the only
+    # height in D that is clear of both the broadcast trace and the
+    # conductance-bound tag.
+    ax.annotate('4,096', xy=(PRIMARY['budget'], REF_TOP), xycoords='data',
+                xytext=(2.0, 0.0),
                 textcoords='offset points', fontsize=PT_BASE, color=MUTE,
-                ha='left' if aligned else 'right', va='center',
+                ha='left', va='center',
                 zorder=6, annotation_clip=False)
     w = axes_w_pt(ax) - 4.0
     if aligned:
@@ -901,7 +915,9 @@ def curve_annotations(ax, t, task):
         # curves' own starting point
         note = ['12 saved checkpoints;', 'segments are interpolation']
         printed['annotation_lines'] = lines + note
-        stack(ax, TEXT_RIGHT, 0.782, lines, ha='right', lead_pt=8.0)
+        # 0.955, not 0.782: the '4,096' tag now sits on the top of the rule
+        # at 0.717 and the second statistics line crossed it there
+        stack(ax, TEXT_RIGHT, 0.955, lines, ha='right', lead_pt=8.0)
         stack(ax, 0.02, 0.155, note, ha='left', lead_pt=8.0)
         printed['window_rule_segments'] = len(window_rule(ax))
     else:
@@ -944,8 +960,13 @@ def bound_contact(ax, t):
             lw=LW_ERR, zorder=6, solid_capstyle='butt')
     lines = ['broadcast reaches a conductance',
              f'bound in {by_4096}/20 fits by 4,096']
-    stack(ax, 0.47, y_frac(0.012), lines)
-    ax.plot([step, step], [y_data(0.525), y_data(0.635)], color=MUTE,
+    # QA 2026-09-09 (2): the tag is set at 1e-2, level with the '4,096'
+    # reference tag but 11 pt clear of it horizontally (the reference tag
+    # hangs on the rule at the right edge); its second line then sits at
+    # 2e-3, half a decade above the trio's highest CI edge over this x span
+    # (max ci_high 3.9e-4 for steps >= 256), so no line crosses a trace.
+    stack(ax, 0.99, y_frac(1.0e-2), lines, ha='right', lead_pt=8.5)
+    ax.plot([step, step], [y_data(0.505), y_data(0.635)], color=MUTE,
             lw=LW_HAIR, zorder=2)
     return dict(bound_median_step=step, bound_by_4096=by_4096,
                 bound_by_16384=by_16384, bound_y=y_here)
@@ -1012,7 +1033,9 @@ def interaction(ax, t):
     third = ['sign-flip P = '] + sci_parts(holm) + [' (Holm)']
     if _parts_width(ax, third) > w:          # the plan's ruled fallback
         third = ['P = '] + sci_parts(holm) + [' (Holm)']
-    stack(ax, 0.5, 0.955, lines + [third], ha='center', lead_pt=8.4)
+    # QA 2026-09-09 (2): 9.6 pt, not 8.4 -- the raised exponent of the Holm
+    # P value rises above its own line box and touched 'windows' above it.
+    stack(ax, 0.5, 0.955, lines + [third], ha='center', lead_pt=9.6)
     printed['holm_p'] = holm
     printed['n_seeds'] = 20
     return printed
@@ -1135,9 +1158,13 @@ def placement(ax, t):
     w = axes_w_pt(ax) - 3.0
     # the two keys, in the band the failure cluster leaves above 1.0
     keys = [['filled: hard 1[', 'a', ('sub', 'p'), ' = 0]'],
-            ['open: continuous 1/(1 + g', ('sub', 'I'), ' a', ('sub', 'p'),
-             ')']]
-    _, y_next = stack(ax, 0.035, 0.955, keys, color=INK, lead_pt=8.2)
+            ['open: continuous 1/(1 + g', ('sub', 'p'), ('sup', 'I'),
+             ' a', ('sub', 'p'), ')']]
+    # QA 2026-09-09 (2): the key block keeps the free band above the failure
+    # cluster (this builder's LOG_YLIM tops out at 1e3, so that band is the
+    # 0.5-decade headroom the plan's between-clusters band was meant to be)
+    # and drops to 0.92 so the first line clears the panel title by 6.6 pt.
+    _, y_next = stack(ax, 0.035, 0.920, keys, color=INK, lead_pt=8.2)
     stack(ax, 0.035, y_next,
           wrap_lines(ax, 'small open: Adam 0.01 and 0.1 (primary 0.03)', w),
           color=MUTE, lead_pt=8.2)
@@ -1150,9 +1177,12 @@ def placement(ax, t):
     also = printed['hard_distal_and_proximal']
     # three short right-aligned lines, not one full-width line: set as one
     # line it runs the whole axes width and abuts the 10^-4 tick label
-    frozen = [f"best ≤ {also['max_best_step']} updates;",
-              f"endpoint {also['mean_fixed_endpoint']:.2f}",
-              ['g', ('sub', 'I'), f" frozen {also['both_gains_frozen']}/20"]]
+    # QA 2026-09-09 (2): the plan's line order restored -- the frozen-gain
+    # line first, then the two-line endpoint qualification (one line is
+    # 109 pt against a 96 pt axes width, so it stays wrapped).
+    frozen = [['g', ('sub', 'I'), f" frozen {also['both_gains_frozen']}/20"],
+              f"best ≤ {also['max_best_step']} updates;",
+              f"endpoint {also['mean_fixed_endpoint']:.2f}"]
     stack(ax, x_frac(ax, 3.48), 0.300, frozen, ha='right', lead_pt=8.6)
     tie_leader(ax, 3.0, 0.300, seeds['hard_distal_and_proximal'].min())
     printed['unit_broadcast_reference'] = float(broadcast)
@@ -1261,10 +1291,12 @@ def cancellation(ax, t):
     # direct labels in the corridor the two seed columns leave open
     ax.text(-0.03, 0.78, 'exact credit', ha='left', va='center',
             fontsize=PT_BASE, color=COLORS['bp'], zorder=6)
-    ax.text(0.44, -0.04, 'calibrated', ha='center', va='center',
-            fontsize=PT_BASE, color=AMBER_TEXT, zorder=6)
-    ax.text(0.44, -0.14, 'broadcast', ha='center', va='center',
-            fontsize=PT_BASE, color=AMBER_TEXT, zorder=6)
+    # QA 2026-09-09 (2): set through stack() at the figure's 8.6 pt leading
+    # (the hand-placed data-unit pair was 6.0 pt and the boxes overlapped)
+    lo_y, hi_y = UNIT_YLIM
+    stack(ax, (0.44 + 0.5) / 2.0, (-0.025 - lo_y) / (hi_y - lo_y),
+          ['calibrated', 'broadcast'], ha='center', color=AMBER_TEXT,
+          lead_pt=8.2)
     w = axes_w_pt(ax) - 3.0
     lines = []
     for text in ('earlier cohort, n = 20', '(seeds 2101–2120)',

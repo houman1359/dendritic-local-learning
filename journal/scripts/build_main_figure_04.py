@@ -378,6 +378,9 @@ def _glyph_key(frame: Frame, *, y_pt, x0_pt, width_pt):
     items = [("soma", "soma"), ("junction", "junction"),
              ("contact", "excitatory contact"), ("gate", "context gate c"),
              ("error", "somatic error δ0")]
+    # QA 2026-09-09: the key's own token is set with Frame.subscript so it
+    # reads δ₀ exactly like the tag on the tree beside it (CF-2).
+    subs = {"somatic error δ0": ("somatic error δ", "0")}
     glyph_pt = {"soma": 8.0, "junction": 7.0, "contact": 7.0, "gate": 10.0,
                 "error": 13.0}
     widths = [glyph_pt[k] + 2.6 + _text_w_pt(ax, s, PT_BASE) for k, s in items]
@@ -414,8 +417,14 @@ def _glyph_key(frame: Frame, *, y_pt, x0_pt, width_pt):
                 frame.arrow((frame.fx(x), frame.fy(yy - 2.0)),
                             (frame.fx(x + 11.0), frame.fy(yy + 2.0)),
                             color=INK, lw=LW_EDGE, head=4.5)
-            frame.text((frame.fx(x + glyph_pt[kind] + 2.6), frame.fy(yy)),
-                       text, size=PT_BASE, color=MUTE, ha="left", va="center")
+            anchor = (frame.fx(x + glyph_pt[kind] + 2.6), frame.fy(yy))
+            if text in subs:
+                base, sub = subs[text]
+                frame.subscript(anchor, base, sub, size=PT_BASE,
+                                color=MUTE, ha="left", va="center")
+            else:
+                frame.text(anchor, text, size=PT_BASE, color=MUTE,
+                           ha="left", va="center")
             x += w + g
     return rows
 
@@ -526,12 +535,18 @@ def backward_credit_schematic(ax) -> Frame:
         oy = oy0 + frame.fy(y0)
         nodes = fan_tree(frame, origin=(ox0, oy), xs_pt=B_JUNC_X,
                          tip_xs_pt=B_TIP_X, y_soma_pt=9.5, y_junc_pt=15.5,
-                         y_tip_pt=21.0, contact_pt=21.0, ghost=True,
+                         y_tip_pt=20.0, contact_pt=20.0, ghost=True,
                          selected=0, soma_r_pt=2.4, delta_compact=(10.5, 6.0),
-                         gate_badge_offset=(-4.8, -3.2), gate_unselected=False)
+                         gate_badge_offset=(-6.8, -3.2), gate_unselected=False)
         before = len(ax.patches)
         if mode == "neuron":
-            frame.credit_delivery(nodes, mode="neuron", rule_color=AMBER)
+            # QA 2026-09-09: the bus is seated on the JUNCTIONS (the plan's
+            # "one drop per junction"), which drops its rail 5.5 pt into
+            # row 2's own cell instead of leaving it in the inter-row gap
+            # where it read as the hairline §3 deletes, and moves the riser
+            # 5 pt right of the row's 'c' badge.
+            frame.credit_delivery(nodes, mode="neuron", rule_color=AMBER,
+                                  targets=[f"J{i + 1}" for i in range(4)])
         else:
             frame.credit_delivery(nodes, mode="subtree", targets=[target],
                                   rule_color=GREEN if target == "J1" else GRAY)
@@ -657,9 +672,9 @@ def initial_utility(ax, summary: pd.DataFrame) -> dict:
 
 # ── D: trained order as predicted ─────────────────────────────────────────
 D_XLIM = (-0.66, 2.56)
-D_YLIM = (0.18, 1.26)
+D_YLIM = (0.18, 1.31)
 D_BREAK = 1.09
-D_STRIP = (1.12, 1.26)
+D_STRIP = (1.11, 1.31)
 
 
 def _exponent(ax, corner, x_pt, y_pt, base, exp, tail="", *, color):
@@ -704,8 +719,12 @@ def boundary_order(ax, crossings: pd.DataFrame, seeds: pd.DataFrame,
                 [D_BREAK + dy - 0.012, D_BREAK + dy + 0.012],
                 color=EDGE, lw=LW_HAIR, clip_on=False, zorder=6,
                 solid_capstyle="butt")
-    _corner_lines(ax, ("no crossing (χ ≤ 1)",),
-                  corner=(1.0, 1.0), x_pt=-2.0, y_pt=-2.0, ha="right")
+    # QA 2026-09-09: the plan's verbatim strip label is 131 pt at 7 pt and
+    # the axes are 93.2 pt, so it is set on two right-aligned lines inside a
+    # strip deepened from 0.14 to 0.20 data units (20.5 pt) to hold them.
+    _corner_lines(ax, ("no crossing within", "the sweep (χ ≤ 1)"),
+                  corner=(1.0, 1.0), x_pt=-2.0, y_pt=-2.0, step_pt=8.0,
+                  ha="right")
 
     for i, b in enumerate(BRANCHES):
         column = seeds[seeds.branches.eq(b)].first_at_or_below_chance_accuracy_dose
@@ -735,12 +754,12 @@ def boundary_order(ax, crossings: pd.DataFrame, seeds: pd.DataFrame,
         missing = int(column.isna().sum())
         if missing:
             ax.plot(xs[i] + np.linspace(-0.16, 0.16, missing),
-                    np.full(missing, 1.215), linestyle="none", marker="^",
+                    np.full(missing, 1.250), linestyle="none", marker="^",
                     ms=MARKER_MS - 0.8, markerfacecolor="white",
                     markeredgecolor=AMBER, markeredgewidth=LW_EDGE, zorder=5)
             # QA 2026-09-09: right of the triangles, inside the axes (the
             # left-of-cluster placement was struck through by the spine)
-            ax.text(xs[i], 1.150, f"{missing}/20", fontsize=PT_BASE,
+            ax.text(xs[i], 1.165, f"{missing}/20", fontsize=PT_BASE,
                     color=AMBER_TEXT, ha="center", va="center", zorder=6)
 
     for i in range(3):
@@ -825,20 +844,26 @@ def forgetting_forest(canvas: NativeCanvas, ax, summary: pd.DataFrame,
     # a right-aligned value column: a per-row note set inside the axes lands
     # on its own interval, and outside the right spine it would leave the
     # page (E is the last module column)
-    # QA 2026-09-09: the three near-zero rows carry their intervals in the
-    # column (they have the room); the top row's 55.7 [53.8, 57.6] is drawn
-    # as its bar and printed in the caption, because a 60 pt string would
-    # run back over the marker at 55.7 on this 93 pt axis.
-    values = [_minus(rows[0]["mean"])] + [
-        f'{_minus(r["mean"])} [{_minus(r["lo"])}, {_minus(r["hi"])}]'
-        for r in rows[1:]]
+    # QA 2026-09-09: every row now carries its interval.  The headline row's
+    # `55.7 [53.8, 57.6]` is 61.9 pt at 7 pt and its own seed fan already
+    # reaches 68.9 pt of the 93.2 pt axis, so the interval is set on a second
+    # right-aligned line half a row below the value, clear of the fan and of
+    # the branch-specific row's own tag.
+    values = [f'{_minus(r["mean"])} [{_minus(r["lo"])}, {_minus(r["hi"])}]'
+              for r in rows]
     ties = int((np.asarray(rows[1]["seeds"]) == 0.0).sum())
     values[1] = f'{_minus(rows[1]["mean"])} ({ties}/{len(rows[1]["seeds"])})'
+    head = values[0].split(" [")
+    values[0] = head[0]
     for y, text in zip(out["ypos"], values):
         ax.annotate(text, xy=(1.0, y), xycoords=("axes fraction", "data"),
                     xytext=(7.0, 0.0), textcoords="offset points",
                     ha="right", va="center", fontsize=PT_BASE, color=MUTE,
                     zorder=6, annotation_clip=False)
+    ax.annotate("[" + head[1], xy=(1.0, out["ypos"][0] + 0.52),
+                xycoords=("axes fraction", "data"), xytext=(7.0, 0.0),
+                textcoords="offset points", ha="right", va="center",
+                fontsize=PT_BASE, color=MUTE, zorder=6, annotation_clip=False)
     # CF-7: right-aligned at the TOP of the rule (the forest's own placement
     # is above the top spine, which is this panel's title band)
     # CF-7 asks for the label right-aligned at the top of the rule; the rule
@@ -861,7 +886,9 @@ def forgetting_forest(canvas: NativeCanvas, ax, summary: pd.DataFrame,
         f"P = {float(c.wilcoxon_p_two_sided):.3f}",
         "n = 10 paired seeds; mean and 95 %",
         "bootstrap, after 20 switch epochs",
-    ), corner=(0.0, 0.0), x_pt=-DATA_LEFT_PT, y_pt=33.0, step_pt=8.6)
+    # QA 2026-09-09: lifted 5 pt so the last baseline clears the x-axis
+    # spine by 5.2 pt, matching the clearance C and D keep.
+    ), corner=(0.0, 0.0), x_pt=-DATA_LEFT_PT, y_pt=38.0, step_pt=8.6)
     ax.set_xticks([0, 20, 40, 60])
     return out
 
@@ -952,13 +979,21 @@ def accuracy_facet(ax, summary: pd.DataFrame, seeds: pd.DataFrame,
                 zorder=1.5, solid_capstyle="round")
         ax.text(0.03, 31.0, "deranged route", fontsize=PT_BASE,
                 color=GRAY_TEXT, ha="left", va="center", zorder=6)
-        ax.annotate("chance", xy=(0.90, 50.0), xytext=(0.0, 1.8),
+        # CF-7: right-aligned at the right end of the rule, just left of the
+        # chi = 1 swarm; below the rule, because the amber curve's steep
+        # segment occupies the band immediately above it from chi = 0.91.
+        ax.annotate("chance", xy=(0.955, 50.0), xytext=(0.0, -1.8),
                     textcoords="offset points", fontsize=PT_BASE, color=MUTE,
-                    ha="right", va="bottom", zorder=6)
+                    ha="right", va="top", zorder=6)
         ax.set_ylabel("held-out accuracy (%)")
+    # QA 2026-09-09: a note may be given as (text, x_pt).  F's block is
+    # re-split so its short top line starts 12 pt inside the axes and sits
+    # 5 pt below the '20' y tick, which it previously shared a baseline with.
+    base = 0.0 if first else 3.0
     for i, note in enumerate(notes):
-        ax.annotate(note, xy=(0.0, 0.0), xycoords="axes fraction",
-                    xytext=(1.0, 3.0 + 8.0 * (len(notes) - 1 - i)),
+        text, x_pt = note if isinstance(note, tuple) else (note, 1.0)
+        ax.annotate(text, xy=(0.0, 0.0), xycoords="axes fraction",
+                    xytext=(x_pt, base + 8.0 * (len(notes) - 1 - i)),
                     textcoords="offset points", fontsize=PT_BASE, color=MUTE,
                     ha="left", va="bottom", zorder=6, annotation_clip=False)
     ax.set_xticks([0.0, 0.5, 1.0], ["0", "0.5", "1"])
@@ -1178,9 +1213,9 @@ def build() -> list:
     der8 = 100.0 * float(
         sub[sub.condition.eq("within_neuron_deranged")].mean_test_accuracy.iloc[0])
     accuracy_facet(ax_f, summary, seed_outcomes, contrasts, 2, first=True,
-                   notes=("n = 20 seeds; mean and",
-                          "95 % bootstrap",
-                          f"BP = gated point tie {facts['ties']}/20"))
+                   notes=(("n = 20 seeds;", 12.0),
+                          ("mean and 95 % bootstrap", 1.0),
+                          (f"BP = gated point tie {facts['ties']}/20", 1.0)))
     accuracy_facet(ax_g, summary, seed_outcomes, contrasts, 4, first=False,
                    notes=("selection × conflict slope",
                           f"> 0 in {facts['positive_pairs']}/20 seeds (each B)"))
