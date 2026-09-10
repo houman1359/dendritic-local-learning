@@ -7,10 +7,10 @@
     {
       "figure": "fig1",
       "path": "figures/main/figure_01.pdf",
-      "component": "figures/components/restored_main_01.pdf",
-      "generator": "scripts/credit_first_figures/build_restored_main.py",
+      "component": "figures/components/credit_first_figure_01.pdf",
+      "generator": "scripts/credit_first_figures/build_framework.py",
       "panel": "a-g",
-      "notes": "Native rendering from existing scientific sources. Per-panel definitions and hashes: figures/provenance/structure_restoration_20260908/figure_01.json"
+      "notes": "Native rendering from existing scientific sources. Per-panel definitions and hashes: figures/provenance/structure_restoration_20260908/figure_01.json 2026-09-10: rebuilt by the v2 overhaul builder."
     },
     {
       "figure": "fig2",
@@ -23,10 +23,10 @@
     {
       "figure": "fig3",
       "path": "figures/main/figure_03.pdf",
-      "generator": "scripts/credit_first_figures/build_ancestry_focused.py",
-      "component": "figures/components/focused_main_03.pdf",
+      "generator": "scripts/credit_first_figures/build_ancestry.py",
+      "component": "figures/components/credit_first_figure_03.pdf",
       "panel": "a-f",
-      "notes": "Focused redraw from completed studies; no new training. Panel definitions and immutable input hashes: figures/provenance/credit_clarity_20260908/figure_03.json"
+      "notes": "Focused redraw from completed studies; no new training. Panel definitions and immutable input hashes: figures/provenance/credit_clarity_20260908/figure_03.json 2026-09-10: rebuilt by the v2 overhaul builder."
     },
     {
       "figure": "fig4",
@@ -39,10 +39,10 @@
     {
       "figure": "fig5",
       "path": "figures/main/figure_05.pdf",
-      "generator": "scripts/conductance_local_gate/build_focused_main.py",
-      "component": "figures/components/focused_main_05.pdf",
+      "generator": "scripts/conductance_local_gate/figure.py",
+      "component": "source_data/conductance_local_gate/figures/local_gate_primary.pdf",
       "panel": "a-f",
-      "notes": "Focused redraw from completed studies; no new training. Panel definitions and immutable input hashes: figures/provenance/credit_clarity_20260908/figure_05.json"
+      "notes": "Focused redraw from completed studies; no new training. Panel definitions and immutable input hashes: figures/provenance/credit_clarity_20260908/figure_05.json 2026-09-10: rebuilt by the v2 overhaul builder."
     },
     {
       "figure": "fig6",
@@ -78,283 +78,291 @@
     },
     {
       "figure": "figS1",
+      "path": "figures/supplementary/curated/mechanistic_chain.pdf",
+      "component": "figures/supplementary/curated/mechanistic_chain.pdf",
+      "generator": "scripts/supplement_consolidation/build.py",
+      "panel": "a-c",
+      "notes": "Curated supplementary sheet, frozen numbering of 2026-09-10 (SI_NUMBERING)."
+    },
+    {
+      "figure": "figS2",
       "path": "figures/supplementary/curated/credit_validation.pdf",
       "component": "figures/supplementary/curated/credit_validation.pdf",
       "generator": "scripts/supplement_consolidation/build.py",
       "panel": "a-c",
-      "notes": "Selected vector panels; exact sources and crop bounds in configs/supplement_consolidation/manifest.json."
-    },
-    {
-      "figure": "figS2",
-      "path": "figures/supplementary/curated/utility_signal_noise.pdf",
-      "component": "figures/supplementary/curated/utility_signal_noise.pdf",
-      "generator": "scripts/supplement_consolidation/build.py",
-      "panel": "a-d",
-      "notes": "Selected vector panels; exact sources and crop bounds in configs/supplement_consolidation/manifest.json."
+      "notes": "Curated supplementary sheet, frozen numbering of 2026-09-10 (SI_NUMBERING)."
     },
     {
       "figure": "figS3",
-      "path": "figures/supplementary/curated/checkpoint_geometry.pdf",
-      "component": "figures/supplementary/curated/checkpoint_geometry.pdf",
+      "path": "figures/supplementary/curated/utility_signal_noise.pdf",
+      "component": "figures/supplementary/curated/utility_signal_noise.pdf",
       "generator": "scripts/supplement_consolidation/build.py",
-      "panel": "a-d",
-      "notes": "Selected vector panels; exact sources and crop bounds in configs/supplement_consolidation/manifest.json."
+      "panel": "a-c",
+      "notes": "Curated supplementary sheet, frozen numbering of 2026-09-10 (SI_NUMBERING)."
     },
     {
       "figure": "figS4",
       "path": "figures/supplementary/curated/reliability_gain.pdf",
       "component": "figures/supplementary/curated/reliability_gain.pdf",
       "generator": "scripts/supplement_consolidation/build.py",
-      "panel": "a-d",
-      "notes": "Selected vector panels; exact sources and crop bounds in configs/supplement_consolidation/manifest.json."
+      "panel": "a-c",
+      "notes": "Curated supplementary sheet, frozen numbering of 2026-09-10 (SI_NUMBERING)."
     },
     {
       "figure": "figS5",
       "path": "figures/supplementary/curated/same_span_conditioning.pdf",
       "component": "figures/supplementary/curated/same_span_conditioning.pdf",
       "generator": "scripts/supplement_consolidation/build.py",
-      "panel": "a-d",
-      "notes": "Selected vector panels; exact sources and crop bounds in configs/supplement_consolidation/manifest.json."
+      "panel": "a-c",
+      "notes": "Curated supplementary sheet, frozen numbering of 2026-09-10 (SI_NUMBERING)."
     },
     {
       "figure": "figS6",
       "path": "figures/supplementary/curated/image_generalization.pdf",
       "component": "figures/supplementary/curated/image_generalization.pdf",
       "generator": "scripts/supplement_consolidation/build.py",
-      "panel": "a-e",
-      "notes": "Selected vector panels; exact sources and crop bounds in configs/supplement_consolidation/manifest.json."
+      "panel": "a-c",
+      "notes": "Curated supplementary sheet, frozen numbering of 2026-09-10 (SI_NUMBERING)."
     },
     {
       "figure": "figS7",
       "path": "figures/supplementary/curated/mnist_dictionary_geometry.pdf",
       "component": "figures/supplementary/curated/mnist_dictionary_geometry.pdf",
       "generator": "scripts/supplement_consolidation/build.py",
-      "panel": "a-g",
-      "notes": "Selected vector panels; exact sources and crop bounds in configs/supplement_consolidation/manifest.json."
+      "panel": "a-c",
+      "notes": "Curated supplementary sheet, frozen numbering of 2026-09-10 (SI_NUMBERING)."
     },
     {
       "figure": "figS8",
-      "path": "figures/supplementary/curated/input_coverage_depth.pdf",
-      "component": "figures/supplementary/curated/input_coverage_depth.pdf",
+      "path": "figures/supplementary/curated/error_field_geometry.pdf",
+      "component": "figures/supplementary/curated/error_field_geometry.pdf",
       "generator": "scripts/supplement_consolidation/build.py",
-      "panel": "a-f",
-      "notes": "Selected vector panels; exact sources and crop bounds in configs/supplement_consolidation/manifest.json."
+      "panel": "a-c",
+      "notes": "Curated supplementary sheet, frozen numbering of 2026-09-10 (SI_NUMBERING)."
     },
     {
       "figure": "figS9",
-      "path": "figures/supplementary/curated/branch_conflict_controls.pdf",
-      "component": "figures/supplementary/curated/branch_conflict_controls.pdf",
+      "path": "figures/supplementary/curated/input_coverage_depth.pdf",
+      "component": "figures/supplementary/curated/input_coverage_depth.pdf",
       "generator": "scripts/supplement_consolidation/build.py",
-      "panel": "a-e",
-      "notes": "Selected vector panels; exact sources and crop bounds in configs/supplement_consolidation/manifest.json."
+      "panel": "a-c",
+      "notes": "Curated supplementary sheet, frozen numbering of 2026-09-10 (SI_NUMBERING)."
     },
     {
       "figure": "figS10",
-      "path": "figures/supplementary/curated/ancestry_coefficients.pdf",
-      "component": "figures/supplementary/curated/ancestry_coefficients.pdf",
+      "path": "figures/supplementary/curated/branch_conflict_controls.pdf",
+      "component": "figures/supplementary/curated/branch_conflict_controls.pdf",
       "generator": "scripts/supplement_consolidation/build.py",
-      "panel": "a-d",
-      "notes": "Selected vector panels; exact sources and crop bounds in configs/supplement_consolidation/manifest.json."
+      "panel": "a-c",
+      "notes": "Curated supplementary sheet, frozen numbering of 2026-09-10 (SI_NUMBERING)."
     },
     {
       "figure": "figS11",
-      "path": "figures/supplementary/curated/scalar_tree_capacity.pdf",
-      "component": "figures/supplementary/curated/scalar_tree_capacity.pdf",
+      "path": "figures/supplementary/curated/ancestry_coefficients.pdf",
+      "component": "figures/supplementary/curated/ancestry_coefficients.pdf",
       "generator": "scripts/supplement_consolidation/build.py",
-      "panel": "a-d",
-      "notes": "Selected vector panels; exact sources and crop bounds in configs/supplement_consolidation/manifest.json."
+      "panel": "a-c",
+      "notes": "Curated supplementary sheet, frozen numbering of 2026-09-10 (SI_NUMBERING)."
     },
     {
       "figure": "figS12",
-      "path": "figures/supplementary/curated/oracle_profile_credit.pdf",
-      "component": "figures/supplementary/curated/oracle_profile_credit.pdf",
+      "path": "figures/supplementary/curated/scalar_tree_capacity.pdf",
+      "component": "figures/supplementary/curated/scalar_tree_capacity.pdf",
       "generator": "scripts/supplement_consolidation/build.py",
-      "panel": "a-f",
-      "notes": "Selected vector panels; exact sources and crop bounds in configs/supplement_consolidation/manifest.json."
+      "panel": "a-c",
+      "notes": "Curated supplementary sheet, frozen numbering of 2026-09-10 (SI_NUMBERING)."
     },
     {
       "figure": "figS13",
-      "path": "figures/supplementary/curated/boolean_capacity.pdf",
-      "component": "figures/supplementary/curated/boolean_capacity.pdf",
+      "path": "figures/supplementary/curated/oracle_profile_credit.pdf",
+      "component": "figures/supplementary/curated/oracle_profile_credit.pdf",
       "generator": "scripts/supplement_consolidation/build.py",
-      "panel": "a-f",
-      "notes": "Selected vector panels; exact sources and crop bounds in configs/supplement_consolidation/manifest.json."
+      "panel": "a-c",
+      "notes": "Curated supplementary sheet, frozen numbering of 2026-09-10 (SI_NUMBERING)."
     },
     {
       "figure": "figS14",
-      "path": "figures/supplementary/curated/boolean_learning.pdf",
-      "component": "figures/supplementary/curated/boolean_learning.pdf",
+      "path": "figures/supplementary/curated/boolean_capacity.pdf",
+      "component": "figures/supplementary/curated/boolean_capacity.pdf",
       "generator": "scripts/supplement_consolidation/build.py",
-      "panel": "a-h",
-      "notes": "Selected vector panels; exact sources and crop bounds in configs/supplement_consolidation/manifest.json."
+      "panel": "a-c",
+      "notes": "Curated supplementary sheet, frozen numbering of 2026-09-10 (SI_NUMBERING)."
     },
     {
       "figure": "figS15",
-      "path": "figures/supplementary/curated/fixed_profile_budget.pdf",
-      "component": "figures/supplementary/curated/fixed_profile_budget.pdf",
+      "path": "figures/supplementary/curated/boolean_learning.pdf",
+      "component": "figures/supplementary/curated/boolean_learning.pdf",
       "generator": "scripts/supplement_consolidation/build.py",
-      "panel": "a-d",
-      "notes": "Selected vector panels; exact sources and crop bounds in configs/supplement_consolidation/manifest.json."
+      "panel": "a-c",
+      "notes": "Curated supplementary sheet, frozen numbering of 2026-09-10 (SI_NUMBERING)."
     },
     {
       "figure": "figS16",
-      "path": "figures/supplementary/curated/credit_optimizer_controls.pdf",
-      "component": "figures/supplementary/curated/credit_optimizer_controls.pdf",
+      "path": "figures/supplementary/curated/fixed_profile_budget.pdf",
+      "component": "figures/supplementary/curated/fixed_profile_budget.pdf",
       "generator": "scripts/supplement_consolidation/build.py",
-      "panel": "a-d",
-      "notes": "Selected vector panels; exact sources and crop bounds in configs/supplement_consolidation/manifest.json."
+      "panel": "a-c",
+      "notes": "Curated supplementary sheet, frozen numbering of 2026-09-10 (SI_NUMBERING)."
     },
     {
       "figure": "figS17",
-      "path": "figures/supplementary/curated/conductance_grouping.pdf",
-      "component": "figures/supplementary/curated/conductance_grouping.pdf",
+      "path": "figures/supplementary/curated/credit_optimizer_controls.pdf",
+      "component": "figures/supplementary/curated/credit_optimizer_controls.pdf",
       "generator": "scripts/supplement_consolidation/build.py",
-      "panel": "a-f",
-      "notes": "Selected vector panels; exact sources and crop bounds in configs/supplement_consolidation/manifest.json."
+      "panel": "a-c",
+      "notes": "Curated supplementary sheet, frozen numbering of 2026-09-10 (SI_NUMBERING)."
     },
     {
       "figure": "figS18",
-      "path": "figures/supplementary/curated/conductance_precision.pdf",
-      "component": "figures/supplementary/curated/conductance_precision.pdf",
+      "path": "figures/supplementary/curated/conductance_grouping.pdf",
+      "component": "figures/supplementary/curated/conductance_grouping.pdf",
       "generator": "scripts/supplement_consolidation/build.py",
-      "panel": "a-d",
-      "notes": "Selected vector panels; exact sources and crop bounds in configs/supplement_consolidation/manifest.json."
+      "panel": "a-c",
+      "notes": "Curated supplementary sheet, frozen numbering of 2026-09-10 (SI_NUMBERING)."
     },
     {
       "figure": "figS19",
-      "path": "figures/supplementary/curated/conductance_optimization.pdf",
-      "component": "figures/supplementary/curated/conductance_optimization.pdf",
+      "path": "figures/supplementary/curated/conductance_precision.pdf",
+      "component": "figures/supplementary/curated/conductance_precision.pdf",
       "generator": "scripts/supplement_consolidation/build.py",
-      "panel": "a-d",
-      "notes": "Selected vector panels; exact sources and crop bounds in configs/supplement_consolidation/manifest.json."
+      "panel": "a-c",
+      "notes": "Curated supplementary sheet, frozen numbering of 2026-09-10 (SI_NUMBERING)."
     },
     {
       "figure": "figS20",
-      "path": "figures/supplementary/curated/local_gate_controls.pdf",
-      "component": "figures/supplementary/curated/local_gate_controls.pdf",
+      "path": "figures/supplementary/curated/conductance_optimization.pdf",
+      "component": "figures/supplementary/curated/conductance_optimization.pdf",
       "generator": "scripts/supplement_consolidation/build.py",
-      "panel": "a-d",
-      "notes": "Selected vector panels; exact sources and crop bounds in configs/supplement_consolidation/manifest.json."
+      "panel": "a-c",
+      "notes": "Curated supplementary sheet, frozen numbering of 2026-09-10 (SI_NUMBERING)."
     },
     {
       "figure": "figS21",
-      "path": "figures/supplementary/curated/physical_architecture.pdf",
-      "component": "figures/supplementary/curated/physical_architecture.pdf",
+      "path": "figures/supplementary/curated/local_gate_controls.pdf",
+      "component": "figures/supplementary/curated/local_gate_controls.pdf",
       "generator": "scripts/supplement_consolidation/build.py",
-      "panel": "a-f",
-      "notes": "Selected vector panels; exact sources and crop bounds in configs/supplement_consolidation/manifest.json."
+      "panel": "a-c",
+      "notes": "Curated supplementary sheet, frozen numbering of 2026-09-10 (SI_NUMBERING)."
     },
     {
       "figure": "figS22",
-      "path": "figures/supplementary/curated/physical_calibration.pdf",
-      "component": "figures/supplementary/curated/physical_calibration.pdf",
+      "path": "figures/supplementary/curated/physical_architecture.pdf",
+      "component": "figures/supplementary/curated/physical_architecture.pdf",
       "generator": "scripts/supplement_consolidation/build.py",
-      "panel": "a-d",
-      "notes": "Selected vector panels; exact sources and crop bounds in configs/supplement_consolidation/manifest.json."
+      "panel": "a-c",
+      "notes": "Curated supplementary sheet, frozen numbering of 2026-09-10 (SI_NUMBERING)."
     },
     {
       "figure": "figS23",
+      "path": "figures/supplementary/curated/physical_calibration.pdf",
+      "component": "figures/supplementary/curated/physical_calibration.pdf",
+      "generator": "scripts/supplement_consolidation/build.py",
+      "panel": "a-c",
+      "notes": "Curated supplementary sheet, frozen numbering of 2026-09-10 (SI_NUMBERING)."
+    },
+    {
+      "figure": "figS24",
       "path": "figures/supplementary/curated/physical_optimizer.pdf",
       "component": "figures/supplementary/curated/physical_optimizer.pdf",
       "generator": "scripts/supplement_consolidation/build.py",
       "panel": "a-c",
-      "notes": "Selected vector panels; exact sources and crop bounds in configs/supplement_consolidation/manifest.json."
-    },
-    {
-      "figure": "figS24",
-      "path": "figures/supplementary/curated/anatomy_capacity_controls.pdf",
-      "component": "figures/supplementary/curated/anatomy_capacity_controls.pdf",
-      "generator": "scripts/supplement_consolidation/build.py",
-      "panel": "a-d",
-      "notes": "Selected vector panels; exact sources and crop bounds in configs/supplement_consolidation/manifest.json."
+      "notes": "Curated supplementary sheet, frozen numbering of 2026-09-10 (SI_NUMBERING)."
     },
     {
       "figure": "figS25",
-      "path": "figures/supplementary/curated/inhibitory_spatial_controls.pdf",
-      "component": "figures/supplementary/curated/inhibitory_spatial_controls.pdf",
+      "path": "figures/supplementary/curated/anatomy_capacity_controls.pdf",
+      "component": "figures/supplementary/curated/anatomy_capacity_controls.pdf",
       "generator": "scripts/supplement_consolidation/build.py",
-      "panel": "a-f",
-      "notes": "Selected vector panels; exact sources and crop bounds in configs/supplement_consolidation/manifest.json."
+      "panel": "a-c",
+      "notes": "Curated supplementary sheet, frozen numbering of 2026-09-10 (SI_NUMBERING)."
     },
     {
       "figure": "figS26",
-      "path": "figures/supplementary/curated/coarse_energy.pdf",
-      "component": "figures/supplementary/curated/coarse_energy.pdf",
+      "path": "figures/supplementary/curated/inhibitory_spatial_controls.pdf",
+      "component": "figures/supplementary/curated/inhibitory_spatial_controls.pdf",
       "generator": "scripts/supplement_consolidation/build.py",
-      "panel": "a-d",
-      "notes": "Selected vector panels; exact sources and crop bounds in configs/supplement_consolidation/manifest.json."
+      "panel": "a-c",
+      "notes": "Curated supplementary sheet, frozen numbering of 2026-09-10 (SI_NUMBERING)."
     },
     {
       "figure": "figS27",
-      "path": "figures/supplementary/curated/anatomy_preprocessing.pdf",
-      "component": "figures/supplementary/curated/anatomy_preprocessing.pdf",
+      "path": "figures/supplementary/curated/coarse_energy.pdf",
+      "component": "figures/supplementary/curated/coarse_energy.pdf",
       "generator": "scripts/supplement_consolidation/build.py",
-      "panel": "a-f",
-      "notes": "Selected vector panels; exact sources and crop bounds in configs/supplement_consolidation/manifest.json."
+      "panel": "a-c",
+      "notes": "Curated supplementary sheet, frozen numbering of 2026-09-10 (SI_NUMBERING)."
     },
     {
       "figure": "figS28",
-      "path": "figures/supplementary/curated/shunt_sensitivity.pdf",
-      "component": "figures/supplementary/curated/shunt_sensitivity.pdf",
+      "path": "figures/supplementary/curated/anatomy_preprocessing.pdf",
+      "component": "figures/supplementary/curated/anatomy_preprocessing.pdf",
       "generator": "scripts/supplement_consolidation/build.py",
-      "panel": "a-d",
-      "notes": "Selected vector panels; exact sources and crop bounds in configs/supplement_consolidation/manifest.json."
+      "panel": "a-c",
+      "notes": "Curated supplementary sheet, frozen numbering of 2026-09-10 (SI_NUMBERING)."
     },
     {
       "figure": "figS29",
-      "path": "figures/supplementary/curated/shunt_replication.pdf",
-      "component": "figures/supplementary/curated/shunt_replication.pdf",
+      "path": "figures/supplementary/curated/shunt_sensitivity.pdf",
+      "component": "figures/supplementary/curated/shunt_sensitivity.pdf",
       "generator": "scripts/supplement_consolidation/build.py",
-      "panel": "a-e",
-      "notes": "Selected vector panels; exact sources and crop bounds in configs/supplement_consolidation/manifest.json."
+      "panel": "a-c",
+      "notes": "Curated supplementary sheet, frozen numbering of 2026-09-10 (SI_NUMBERING)."
     },
     {
       "figure": "figS30",
-      "path": "figures/supplementary/curated/measured_topology.pdf",
-      "component": "figures/supplementary/curated/measured_topology.pdf",
+      "path": "figures/supplementary/curated/shunt_replication.pdf",
+      "component": "figures/supplementary/curated/shunt_replication.pdf",
       "generator": "scripts/supplement_consolidation/build.py",
-      "panel": "a-d",
-      "notes": "Selected vector panels; exact sources and crop bounds in configs/supplement_consolidation/manifest.json."
+      "panel": "a-c",
+      "notes": "Curated supplementary sheet, frozen numbering of 2026-09-10 (SI_NUMBERING)."
     },
     {
       "figure": "figS31",
       "path": "figures/supplementary/curated/measured_transfer_geometry.pdf",
       "component": "figures/supplementary/curated/measured_transfer_geometry.pdf",
       "generator": "scripts/supplement_consolidation/build.py",
-      "panel": "a-d",
-      "notes": "Selected vector panels; exact sources and crop bounds in configs/supplement_consolidation/manifest.json."
+      "panel": "a-c",
+      "notes": "Curated supplementary sheet, frozen numbering of 2026-09-10 (SI_NUMBERING)."
     },
     {
       "figure": "figS32",
       "path": "figures/supplementary/curated/measured_predictor_controls.pdf",
       "component": "figures/supplementary/curated/measured_predictor_controls.pdf",
       "generator": "scripts/supplement_consolidation/build.py",
-      "panel": "a-d",
-      "notes": "Selected vector panels; exact sources and crop bounds in configs/supplement_consolidation/manifest.json."
+      "panel": "a-c",
+      "notes": "Curated supplementary sheet, frozen numbering of 2026-09-10 (SI_NUMBERING)."
     },
     {
       "figure": "figS33",
-      "path": "figures/supplementary/curated/original_selector.pdf",
-      "component": "figures/supplementary/curated/original_selector.pdf",
+      "path": "figures/supplementary/curated/animal_credit_reanalysis.pdf",
+      "component": "figures/supplementary/curated/animal_credit_reanalysis.pdf",
       "generator": "scripts/supplement_consolidation/build.py",
-      "panel": "a-f",
-      "notes": "Selected vector panels; exact sources and crop bounds in configs/supplement_consolidation/manifest.json."
+      "panel": "a-c",
+      "notes": "Curated supplementary sheet, frozen numbering of 2026-09-10 (SI_NUMBERING)."
     },
     {
       "figure": "figS34",
-      "path": "figures/supplementary/curated/finite_horizon.pdf",
-      "component": "figures/supplementary/curated/finite_horizon.pdf",
+      "path": "figures/supplementary/curated/original_selector.pdf",
+      "component": "figures/supplementary/curated/original_selector.pdf",
       "generator": "scripts/supplement_consolidation/build.py",
-      "panel": "a-d",
-      "notes": "Selected vector panels; exact sources and crop bounds in configs/supplement_consolidation/manifest.json."
+      "panel": "a-c",
+      "notes": "Curated supplementary sheet, frozen numbering of 2026-09-10 (SI_NUMBERING)."
     },
     {
       "figure": "figS35",
+      "path": "figures/supplementary/curated/finite_horizon.pdf",
+      "component": "figures/supplementary/curated/finite_horizon.pdf",
+      "generator": "scripts/supplement_consolidation/build.py",
+      "panel": "a-c",
+      "notes": "Curated supplementary sheet, frozen numbering of 2026-09-10 (SI_NUMBERING)."
+    },
+    {
+      "figure": "figS36",
       "path": "figures/supplementary/curated/morphology_estimation.pdf",
       "component": "figures/supplementary/curated/morphology_estimation.pdf",
       "generator": "scripts/supplement_consolidation/build.py",
-      "panel": "a-h",
-      "notes": "Selected vector panels; exact sources and crop bounds in configs/supplement_consolidation/manifest.json."
+      "panel": "a-c",
+      "notes": "Curated supplementary sheet, frozen numbering of 2026-09-10 (SI_NUMBERING)."
     }
   ],
   "records": [
@@ -77255,7 +77263,7 @@
       "path": "source_data/credit_first_figures/figure_03_sources.json"
     },
     {
-      "path": "source_data/credit_first_figures/figure_06_sources.json"
+      "path": "figures/provenance/structure_restoration_20260908/figure_07.json"
     },
     {
       "path": "source_data/credit_first_figures/figure_08_sources.json"
@@ -77263,9 +77271,6 @@
     {
       "path": "source_data/credit_rule_bridge/figures/figure_provenance.json",
       "builder": "scripts/credit_rule_bridge/build_figure.py"
-    },
-    {
-      "path": "source_data/shunt_ancestry_gain/figures/figure_provenance.json"
     },
     {
       "path": "source_data/physical_depth_budget/figure/provenance.json",
@@ -77281,10 +77286,6 @@
     {
       "path": "source_data/conductance_credit_demand/opponent/figures/figure_provenance.json",
       "builder": "scripts/conductance_credit_demand/build_opponent_figure.py"
-    },
-    {
-      "path": "source_data/physical_depth_followup/figures/figure_provenance.json",
-      "builder": "scripts/physical_depth_followup/figure.py"
     },
     {
       "path": "source_data/credit_rule_extension/figures/figure_provenance.json",
@@ -77303,9 +77304,6 @@
       "path": "source_data/measured_alignment_power/fixture_portability_validation.json"
     },
     {
-      "path": "figures/provenance/structure_restoration_20260908/figure_01.json"
-    },
-    {
       "path": "figures/provenance/structure_restoration_20260908/figure_04.json"
     },
     {
@@ -77313,9 +77311,6 @@
     },
     {
       "path": "figures/provenance/structure_restoration_20260908/figure_07.json"
-    },
-    {
-      "path": "figures/provenance/structure_restoration_20260908/figure_09.json"
     },
     {
       "path": "configs/figure_structure/table_source_hashes.json"
@@ -77435,5 +77430,24 @@
       }
     }
   ],
-  "curation_manifest": "configs/supplement_consolidation/manifest.json"
+  "curation_manifest": "configs/supplement_consolidation/manifest.json",
+  "source_hash_manifest_note": "2026-09-10: main Figure 7 is built by scripts/credit_first_figures/build_anatomy.py, which records its sources in figures/provenance/structure_restoration_20260908/figure_07.json. The retired source_data/credit_first_figures/figure_06_sources.json is no longer maintained.",
+  "retired_source_hash_manifests": [
+    {
+      "path": "source_data/shunt_ancestry_gain/figures/figure_provenance.json",
+      "superseded_by": "main Fig 8 is built by scripts/shunt_ancestry_gain/build_focused_main.py; its live record is figures/provenance/credit_clarity_20260908/figure_08.json"
+    },
+    {
+      "path": "source_data/physical_depth_followup/figures/figure_provenance.json",
+      "superseded_by": "main Fig 6 is built by scripts/credit_first_figures/build_restored_main.py; its live record is figures/provenance/structure_restoration_20260908/figure_06.json"
+    },
+    {
+      "path": "figures/provenance/structure_restoration_20260908/figure_01.json",
+      "superseded_by": "main Fig 1 is built by scripts/credit_first_figures/build_framework.py; its live record is source_data/credit_first_figures/figure_01_sources.json"
+    },
+    {
+      "path": "figures/provenance/structure_restoration_20260908/figure_09.json",
+      "superseded_by": "main Fig 9 is built by scripts/credit_first_figures/build_measured.py; its live record is source_data/credit_first_figures/figure_08_sources.json"
+    }
+  ]
 }
