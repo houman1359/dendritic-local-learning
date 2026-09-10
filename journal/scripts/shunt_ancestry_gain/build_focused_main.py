@@ -990,7 +990,7 @@ def panel_signed(canvas, ax, summary, cells):
     for index, (_cohort, _regime, _label, rm_value) in enumerate(SIGNED_ROWS):
         tail = ax.annotate(f" {rm_value}", xy=(0.0, ypos[index]),
                            xycoords=("axes fraction", "data"),
-                           xytext=(-4.0, -8.6), textcoords="offset points",
+                           xytext=(-4.0, -11.1), textcoords="offset points",
                            ha="right", va="center", fontsize=PT_BASE,
                            color=INK, annotation_clip=False)
         sub = ax.annotate("m", xy=(0.0, 0.5), xycoords=tail,
