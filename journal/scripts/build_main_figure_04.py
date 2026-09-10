@@ -593,7 +593,9 @@ def backward_credit_schematic(ax) -> Frame:
                          tip_xs_pt=B_TIP_X, y_soma_pt=9.5, y_junc_pt=15.5,
                          y_tip_pt=20.0, contact_pt=B_CONTACT_PT, ghost=True,
                          selected=0, soma_r_pt=2.4, delta_compact=(10.5, 6.0),
-                         gate_badge_offset=(-6.8, -3.2), gate_unselected=False)
+                         gate_badge_offset=((6.6, -3.2) if mode == "neuron"
+                                            else (-6.8, -3.2)),
+                         gate_unselected=False)
         before = len(ax.patches)
         n_lines = len(ax.lines)
         if mode == "neuron":
@@ -613,9 +615,11 @@ def backward_credit_schematic(ax) -> Frame:
                 j1, j2 = nodes["J1"], nodes["J2"]
                 # QA 2026-09-10: the arc bows UP, over the contacts, where
                 # the old downward bow passed through the b3 contact disc
-                frame.arrow((j1[0], j1[1] + frame.fy(5.4)),
-                            (j2[0], j2[1] + frame.fy(5.4)),
-                            color=GRAY, lw=LW_HAIR, head=3.2, rad=0.50,
+                # QA 2026-09-10: a flatter bow from ring rim to ring rim
+                # passes above the b1 contact and lands on the b2 ring
+                frame.arrow((j1[0], j1[1] + frame.fy(3.0)),
+                            (j2[0], j2[1] + frame.fy(3.0)),
+                            color=GRAY, lw=LW_HAIR, head=3.2, rad=0.28,
                             zorder=4.6)
         tx = ox0 + frame.fx(B_TEXT_X)
         ytop = oy + frame.fy(24.0)

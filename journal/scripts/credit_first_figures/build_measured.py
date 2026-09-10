@@ -731,9 +731,9 @@ def main():
               color=GRAY, ha='right', va='center', zorder=6)
     ax_d.plot([0.200, 0.2445], [0.895, 0.815], color=GRAY, lw=LW_HAIR,
               zorder=2)
-    ax_d.text(-0.295, 1.10, f'ancestry variance λ = {lam:.2f}',
+    ax_d.text(-0.295, 1.125, f'ancestry variance λ = {lam:.2f}',
               fontsize=PT_BASE, color=INK, ha='left', va='center', zorder=6)
-    ax_d.text(-0.295, 1.01, 'respecting the MC band', fontsize=PT_BASE,
+    ax_d.text(-0.295, 1.045, 'respecting the MC band', fontsize=PT_BASE,
               color=INK, ha='left', va='center', zorder=6)
     ax_d.text(0.545, 1.09, 'perfect reliability', fontsize=PT_BASE,
               color=label_color(CEIL), ha='right', va='center', zorder=6)
