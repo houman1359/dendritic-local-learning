@@ -103,7 +103,7 @@ E,,,,,,,,10.0,,exact_autograd_bp_recipe,1.0,,test_accuracy,600.0,0.6119299948215
 E,,,,,,,,10.0,,depth_gain_exact_bp 180,,,paired_contrast_pp,,30.81999897956848,30.465998649597168,31.251024559140205,10.0,,
 E,,,,,,,,10.0,,depth_gain_exact_bp 600,,,paired_contrast_pp,,38.1740003824234,37.97600030899048,38.39200021326542,10.0,,
 E,,,,,,,,10.0,,bp_exact_minus_broadcast 600,,,paired_contrast_pp,,0.4780006408691406,0.40400028228759766,0.5490023046731949,10.0,,
-E,,,,,,,,10.0,,D1 fits still training,,,epochs_run >= epoch,,141.0,,,,7 / 7 / 2,
+E,,,,,,,,10.0,,D1 fits still training,,,epochs_run >= epoch,,141.0,,,,7/7/2,
 F,,,,,,,,10.0,,exact_autograd_bp_recipe,3.0,,best_validation_loss,1.0,0.6920391272926331,0.6914556791017056,0.6925951751499178,,,
 F,,,,,,,,10.0,,exact_autograd_bp_recipe,3.0,,best_validation_loss,60.0,0.5739440562486648,0.5684160793924332,0.5794992756999731,,,
 F,,,,,,,,10.0,,exact_autograd_bp_recipe,3.0,,best_validation_loss,180.0,0.36668223232269287,0.359098165293932,0.3745733163160086,,,

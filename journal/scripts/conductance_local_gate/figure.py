@@ -915,9 +915,11 @@ def curve_annotations(ax, t, task):
         # curves' own starting point
         note = ['12 saved checkpoints;', 'segments are interpolation']
         printed['annotation_lines'] = lines + note
-        # 0.955, not 0.782: the '4,096' tag now sits on the top of the rule
-        # at 0.717 and the second statistics line crossed it there
-        stack(ax, TEXT_RIGHT, 0.955, lines, ha='right', lead_pt=8.0)
+        # right-aligned at 0.80, not TEXT_RIGHT: the '4,096' tag now sits on
+        # the top of the rule (x 0.82-0.92 of the axes) at this height, so the
+        # block is pulled 6.5 pt clear of its left edge.  The height itself is
+        # unchanged -- under the key, three decades over the nearest trace.
+        stack(ax, 0.80, 0.782, lines, ha='right', lead_pt=8.0)
         stack(ax, 0.02, 0.155, note, ha='left', lead_pt=8.0)
         printed['window_rule_segments'] = len(window_rule(ax))
     else:

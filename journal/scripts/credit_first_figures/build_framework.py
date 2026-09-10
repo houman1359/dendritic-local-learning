@@ -490,8 +490,12 @@ def credit_entry(ax):
     # -- the neuron and its one ghosted neighbour -------------------------
     tree_w, tree_h, tree_y = 40.0, 46.0, 44.0
     base = (X(0.5), Y(tree_y), X(tree_w), Y(tree_h))
+    # the ghost is offset (26, 14) pt -- 29.5 pt from the hero -- and drawn at
+    # 0.88 scale, so its own soma sits clear of the hero canopy (which ends at
+    # x = 40.5 pt) instead of reading as a second hero soma inside it.
     _fade_ghost(f.balanced_tree(
-        (base[0] + X(16.0), base[1] + Y(20.0), base[2], base[3]),
+        (base[0] + X(26.0), base[1] + Y(14.0), X(0.88 * tree_w),
+         Y(0.88 * tree_h)),
         depth=2, ghost=True, labels=False, soma_r_pt=2.4))
     nodes = f.balanced_tree(base, depth=2, mode="plain", labels=False)
     sx, sy = nodes.soma
@@ -517,7 +521,7 @@ def credit_entry(ax):
     f.leader((tile[0] + tile[2] / 2.0, tile[1] - Y(0.5)),
              (exc[0], exc[1] + Y(3.2)), color=MUTE)
     # -- readout, loss, and the error that returns to this soma -----------
-    card_x, card_w = 50.0, 38.0
+    card_x, card_w = 48.0, 42.0
     read_y, read_h = 38.0, 16.0             # centred on the soma (y = 46)
     loss_y, loss_h = 62.0, 18.0
     f.task_card((X(card_x), Y(read_y), X(card_w), Y(read_h)))
@@ -543,7 +547,7 @@ def credit_entry(ax):
     tail = (sx + X(nodes.soma_r_pt + 11.0), sy - Y(nodes.soma_r_pt + 7.0))
     # the return leaves the loss card's RIGHT edge, drops outside both cards
     # and runs left along the delta-0 shaft, 3.5 pt below the tag's baseline
-    shaft_y, right = tail[1] - Y(3.5), X(card_x + card_w + 2.0)
+    shaft_y, right = tail[1] - Y(3.5), X(card_x + card_w + 1.6)
     ax.plot([X(card_x + card_w), right, right, tail[0], tail[0]],
             [Y(loss_y + 6.0), Y(loss_y + 6.0), shaft_y, shaft_y, tail[1]],
             color=INK, lw=f.lw(LW_HAIR), solid_capstyle="round",

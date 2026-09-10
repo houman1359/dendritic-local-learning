@@ -1004,8 +1004,18 @@ def f6_formula(f, xy, parts, *, size=None, color=None):
     lays them out in DATA units, which only works on an axes whose data
     coordinates are points; a `Frame` is a 0-1 frame, so the same idea is
     re-expressed here with annotation chaining (x from the previous run, y
-    always from the first run) so no baseline drifts and no mathtext is
-    emitted.  Recommended upstream as a `Frame.formula` method.
+    always from the frame ordinate of the first run) so no baseline drifts
+    and no mathtext is emitted.  Recommended upstream as a `Frame.formula`
+    method.
+
+    Fix round 2026-09-09: the y anchor used to be the *bounding box* of the
+    previous run, so every run after the first subscript sat 1.5 pt below the
+    opening baseline and the squaring exponent, raised 2.2 pt from that drifted
+    baseline, printed only 0.7 pt above the true one and read as a full-size
+    factor.  The ordinate is now taken from the axes fraction of the first
+    run, which is fixed, and the superscript offset is 3.0 pt against the
+    subscript's -1.7 pt.  Type stays at the one size the token path allows
+    (CF-2: 7.0 / 8.0 / 9.0 only); no mathtext.
     """
     from journal_style import COLORS, PT_BASE
     size = PT_BASE if size is None else size
@@ -1015,7 +1025,8 @@ def f6_formula(f, xy, parts, *, size=None, color=None):
                    ha='left', va='baseline', zorder=6)
     prev = base
     for text, dy in parts[1:]:
-        prev = ax.annotate(text, xy=(1.0, 0.0), xycoords=(prev, base),
+        prev = ax.annotate(text, xy=(1.0, xy[1]),
+                           xycoords=(prev, 'axes fraction'),
                            xytext=(0.2, dy), textcoords='offset points',
                            fontsize=size, color=color, ha='left',
                            va='baseline', zorder=6, annotation_clip=False)
@@ -1159,7 +1170,7 @@ def f6_task_model(ax):
                 (' + y Δ + ε', 0.0), ('E', -1.7), (')', 0.0)])
     f6_formula(f, (f.fx(1.0), y_eq - f.fy(8.6)),
                [('× exp(Σ σ', 0.0), ('ℓ', -1.7), (' z', 0.0), ('ℓ', -1.7),
-                (' − ½ Σ σ', 0.0), ('ℓ', -1.7), ('2', 2.2), ('),  Δ = 0.80,',
+                (' − ½ Σ σ', 0.0), ('ℓ', -1.7), ('2', 3.0), ('),  Δ = 0.80,',
                                                              0.0)])
     f6_formula(f, (f.fx(1.0), y_eq - f.fy(17.2)),
                [('σ', 0.0), ('ℓ', -1.7), (' = 0.25', 0.0)])
@@ -1375,8 +1386,30 @@ def f6_family_dose(ax, effects, seeds, rows):
     return ax
 
 
+F6_ACC_YLIM = (22.0, 110.0)
+
+
+def f6_num(value, places=2, *, signed=False):
+    """A frozen table value as on-panel text, with a typographic minus."""
+    text = '%.*f' % (places, float(value))
+    if signed and not text.startswith('-'):
+        text = '+' + text
+    return text.replace('-', '−')
+
+
 def f6_depth_ladder(ax, conf, remaining, ceiling, contrast, rows):
-    """Fig 6D: the three-tier depth ladder with its two controls."""
+    """Fig 6D: the three-tier depth ladder with its two controls.
+
+    Palette deviation (recorded, AMENDMENTS section 5 role table): the
+    reversed-placement control is drawn in `highlight` and the point-network
+    ceiling shares `point_mlp` with the grouped-point arm.  Plan section 4 D
+    names `mute` for reversed placement, which the role table bans as a data
+    series; `highlight` is the table's declared "second control in a figure
+    that has already spent point_mlp", and both grey marks are point-network
+    controls, so the hues are semantically right.  The role table's `highlight`
+    and `point_mlp` rows do not yet list Fig 6 -- an integrator edit, not a
+    build change.
+    """
     from journal_style import (COLORS, PT_BASE, MARKER_MS, LW_ERR, LW_EDGE,
                                LW_DATA, LW_REF, LW_HAIR, tint_patch)
     from figure_canvas import token_subscript
@@ -1392,7 +1425,7 @@ def f6_depth_ladder(ax, conf, remaining, ceiling, contrast, rows):
         ('additive', COLORS['additive'], 'X', False, (0, (1.2, 1.6)),
          dict(regime='aligned', mechanism='additive', method='bp')),
     )
-    ax.set(xlim=(0.80, 4.42), ylim=(32.0, 104.0), xticks=[1, 2, 3],
+    ax.set(xlim=(0.80, 4.42), ylim=F6_ACC_YLIM, xticks=[1, 2, 3],
            yticks=[50, 60, 70, 80, 90, 100], ylabel='Test accuracy (%)')
     ax.set_xticklabels(['D1', 'D2', 'D3'])
     f6_trim(ax, x=(1, 3), y=(50, 100))
@@ -1467,11 +1500,18 @@ def f6_depth_ladder(ax, conf, remaining, ceiling, contrast, rows):
                     zorder=1.8)
     row = contrast[contrast.contrast.eq(
         'depth__serial_bp__aligned__d4_d3')].iloc[0]
-    f6_note_data(ax, 0.85, 97.5, ('four-tier cohort:', 'D4 − D3 = −1.46 pp',
-                                  '[−1.74, −1.17],', '0 of 10 seeds'))
-    f6_note_data(ax, 0.85, 47.5, ('n = 10 paired seeds;',
-                                  '95 % bootstrap; 180 epochs',
-                                  'seeds 10200–10209'))
+    # Every printed literal is formatted from the row that was just read, so
+    # the panel cannot drift from paired_contrasts.csv (the previous build
+    # hard-coded '[-1.74, -1.17]' against a file that gives -1.164998), and
+    # the count carries its predicate (decision 0.11).
+    f6_note_data(ax, 0.85, 49.4,
+                 ('four-tier cohort:',
+                  'D4 − D3 = %s pp' % f6_num(row.mean_pp),
+                  '[%s, %s], negative in %d of %d seeds'
+                  % (f6_num(row.ci_low_pp), f6_num(row.ci_high_pp),
+                     int(row.negative_pairs), int(row.n_seeds)),
+                  'n = 10 paired seeds, 10200–10209',
+                  '95 % bootstrap; 180 epochs'))
     rows.append(dict(panel='D', arm='four-tier D4 − D3', depth=4,
                      mean_test_accuracy_pp=float(row.mean_pp),
                      ci95_low_pp=float(row.ci_low_pp),
@@ -1551,7 +1591,7 @@ def f6_direct_ends(ax, ends, places, x, *, lead_from=None):
 
 def f6_accuracy_budget(ax, curves, stopping, budget, rows):
     """Fig 6E: validation-selected accuracy over the 600-epoch restarts."""
-    ax.set(xlim=F6_XLIM, ylim=(32.0, 104.0), xticks=[0, 180, 400, 600],
+    ax.set(xlim=F6_XLIM, ylim=F6_ACC_YLIM, xticks=[0, 180, 400, 600],
            yticks=[50, 60, 70, 80, 90, 100], xlabel='Epoch')
     ax.tick_params(labelleft=False)
     f6_trim(ax, x=(0, 600), y=(50, 100))
@@ -1561,8 +1601,12 @@ def f6_accuracy_budget(ax, curves, stopping, budget, rows):
     split = max(e for e in runs if sum(r >= e for r in runs) >= 8)
     ends = f6_trajectories(ax, curves, 'test_accuracy', 100.0, 'E', rows,
                            split=split)
-    f6_ref(ax, 50.0, 'chance', at=1065.0, dy=-0.7, va='top', span=F6_XLIM)
-    f6_budget_rule(ax, (50.0, 104.0))
+    # CF-7 keeps the reference label right-aligned on its rule; it moves to
+    # the upper side of the 50 % rule so that no annotation line shares a
+    # baseline with it (the previous build read as
+    # '[0.40, 0.55], 10 of 10 seeds  chance').
+    f6_ref(ax, 50.0, 'chance', at=1065.0, dy=0.7, va='bottom', span=F6_XLIM)
+    f6_budget_rule(ax, (50.0, 100.0))
     f6_direct_ends(ax, ends, {'exact BP (D3)': 99.4, 'broadcast (BP)': 93.8,
                               'shared soma': 88.2, 'broadcast (local)': 82.6,
                               'exact path': 77.0, 'exact BP (D1)': 61.2},
@@ -1573,14 +1617,24 @@ def f6_accuracy_budget(ax, curves, stopping, budget, rows):
                      & budget.contrast.eq('depth_gain_exact_bp')].iloc[0]
     bcast = budget[budget.budget.eq(600)
                    & budget.contrast.eq('bp_exact_minus_broadcast')].iloc[0]
-    counts = ' / '.join(str(sum(r >= e for r in runs)) for e in (180, 400, 600))
-    f6_note_data(ax, 10.0, 59.6,
-                 ('D3 − D1: +30.82 pp at 180, +38.17 at 600',
-                  'exact − broadcast (BP) at 600: +0.48 pp'))
-    f6_note_data(ax, 10.0, 48.8,
-                 ('[0.40, 0.55], 10 of 10 seeds',
-                  'D1 fits still training at 180 / 400 / 600:',
-                  '%s of 10;  n = 10 paired seeds' % counts))
+    counts = '/'.join(str(sum(r >= e for r in runs)) for e in (180, 400, 600))
+    # The tag block leaves the swept region entirely: the 180-epoch rule now
+    # stops at the 100 % gridline and every tag line sits in the detached
+    # gutter below the 50 % floor, where no rule, curve, direct label or
+    # reference label crosses it.  The condition sub-title takes the empty
+    # band above the data instead.
+    f6_note_data(ax, 8.0, 109.0,
+                 ('600-epoch restarts of the same seeds; n = 10',))
+    f6_note_data(ax, 8.0, 49.4,
+                 ('D3 − D1: %s pp at 180, %s at 600'
+                  % (f6_num(gain180['mean'], signed=True),
+                     f6_num(gain600['mean'], signed=True)),
+                  'exact − broadcast (BP) at 600: %s pp'
+                  % f6_num(bcast['mean'], signed=True),
+                  '[%s, %s], positive in %d of 10 seeds'
+                  % (f6_num(bcast.ci95_low), f6_num(bcast.ci95_high),
+                     int(bcast.positive_seeds)),
+                  'D1 still training, 180/400/600: %s of 10' % counts))
     for tag, row in (('depth_gain_exact_bp 180', gain180),
                      ('depth_gain_exact_bp 600', gain600),
                      ('bp_exact_minus_broadcast 600', bcast)):
@@ -1597,7 +1651,7 @@ def f6_accuracy_budget(ax, curves, stopping, budget, rows):
 def f6_validation_loss(ax, curves, stopping, rows):
     """Fig 6F: best validation loss for the same six arms."""
     from journal_style import COLORS, MARKER_MS, LW_EDGE, LW_HAIR
-    ax.set(xlim=F6_XLIM, ylim=(0.045, 0.84), xticks=[0, 180, 400, 600],
+    ax.set(xlim=F6_XLIM, ylim=(0.010, 0.86), xticks=[0, 180, 400, 600],
            yticks=[0.1, 0.3, 0.5, 0.7], xlabel='Epoch',
            ylabel='Best validation loss')
     f6_trim(ax, x=(0, 600), y=(0.1, 0.7))
@@ -1620,12 +1674,14 @@ def f6_validation_loss(ax, curves, stopping, rows):
                      mean=float(track.loc[e]), n_seeds=10) for e in stops)
     f6_direct_ends(ax, ends, {'exact BP (D3)': 0.108, 'exact path': 0.214,
                               'shared soma': 0.320}, F6_XLAB, lead_from=600.0)
-    f6_note_data(ax, 40.0, 0.835,
+    f6_note_data(ax, 40.0, 0.856,
                  ('open circles: the eight D1 stopping',
                   'epochs, %d–%d; all 50 D3 fits reach' % (stops[0],
                                                            stops[-1]),
                   'the cap, loss still falling; n = 10'))
-    f6_note_data(ax, 1065.0, 0.084, ('convergence not established',),
+    # The y range gains 0.035 of headroom at the foot so this tag clears the
+    # bottom spine by 2.8 pt; the previous build printed it across the spine.
+    f6_note_data(ax, 1065.0, 0.088, ('convergence not established',),
                  ha='right')
     return ax
 
@@ -1788,6 +1844,7 @@ def figure6():
                       ((600.0, 3.8), (600.0, -1.1)))),
               notes=((250.0, 9.5, 'left',
                       ('crossing not resolved (300–330)',)),
+                     (178.0, 13.4, 'right', ('180-epoch budget',)),
                      (8.0, -1.6, 'left', ('n = 10 paired seeds;',
                                           'pointwise 95 % bootstrap;',
                                           'validation-selected states'))))
@@ -1799,7 +1856,7 @@ def figure6():
               ylabel='Exact path − shared soma (nats)',
               sign=('exact path ahead', 'shared soma ahead'),
               rule_span=(-0.0775, 0.0010),
-              zero_dy=-0.0020, zero_at=470.0, zero_va='top',
+              zero_dy=-0.0020, zero_at=612.0, zero_va='top',
               marks=((180, 15.0, -0.0785, 'left',
                       ('−0.073 nats at 180, 10 of 10 seeds',),
                       ((180.0, -0.0757), (180.0, -0.0782))),
@@ -1807,7 +1864,11 @@ def figure6():
                       ('−0.021 nats at 600 (0.254 vs 0.276), 9 of 10',
                        'advantage decays 3.4×; ordering does not reverse'),
                       ((600.0, 0.0010), (600.0, -0.0196)))),
-              notes=((15.0, 0.0255, 'left',
+              # The sign note drops off the sign legend's baseline and sits
+              # under the zero rule, in the clear band above the curve; the
+              # zero label moves to the true right end of its rule so the two
+              # do not meet.
+              notes=((15.0, -0.0070, 'left',
                       ('below zero: lower loss with exact-path credit',)),
                      (15.0, -0.0862, 'left',
                       ('n = 10 paired seeds; 95 % bootstrap',))))

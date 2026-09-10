@@ -839,7 +839,7 @@ def forgetting_forest(canvas: NativeCanvas, ax, summary: pd.DataFrame,
         xd = list(line.get_xdata())
         if len(xd) == 2 and xd[0] == xd[1] == 0.0 and line.get_linestyle() != "-":
             line.remove()
-    ax.plot([0.0, 0.0], [-0.55, 3.45], color=MUTE, lw=LW_REF, zorder=1.0,
+    ax.plot([0.0, 0.0], [-0.55, 3.30], color=MUTE, lw=LW_REF, zorder=1.0,
             dashes=(2.6, 2.0), solid_capstyle="butt")
     # a right-aligned value column: a per-row note set inside the axes lands
     # on its own interval, and outside the right spine it would leave the
@@ -886,9 +886,10 @@ def forgetting_forest(canvas: NativeCanvas, ax, summary: pd.DataFrame,
         f"P = {float(c.wilcoxon_p_two_sided):.3f}",
         "n = 10 paired seeds; mean and 95 %",
         "bootstrap, after 20 switch epochs",
-    # QA 2026-09-09: lifted 5 pt so the last baseline clears the x-axis
-    # spine by 5.2 pt, matching the clearance C and D keep.
-    ), corner=(0.0, 0.0), x_pt=-DATA_LEFT_PT, y_pt=38.0, step_pt=8.6)
+    # QA 2026-09-09: lifted 3 pt so the last baseline clears the x-axis
+    # spine by 3.2 pt (it stood 0.2 pt off it), while the zero rule is
+    # shortened to y = 3.30 so the first footer line still clears its foot.
+    ), corner=(0.0, 0.0), x_pt=-DATA_LEFT_PT, y_pt=36.0, step_pt=8.6)
     ax.set_xticks([0, 20, 40, 60])
     return out
 
@@ -989,11 +990,10 @@ def accuracy_facet(ax, summary: pd.DataFrame, seeds: pd.DataFrame,
     # QA 2026-09-09: a note may be given as (text, x_pt).  F's block is
     # re-split so its short top line starts 12 pt inside the axes and sits
     # 5 pt below the '20' y tick, which it previously shared a baseline with.
-    base = 0.0 if first else 3.0
     for i, note in enumerate(notes):
         text, x_pt = note if isinstance(note, tuple) else (note, 1.0)
         ax.annotate(text, xy=(0.0, 0.0), xycoords="axes fraction",
-                    xytext=(x_pt, base + 8.0 * (len(notes) - 1 - i)),
+                    xytext=(x_pt, 3.0 + 8.0 * (len(notes) - 1 - i)),
                     textcoords="offset points", fontsize=PT_BASE, color=MUTE,
                     ha="left", va="bottom", zorder=6, annotation_clip=False)
     ax.set_xticks([0.0, 0.5, 1.0], ["0", "0.5", "1"])

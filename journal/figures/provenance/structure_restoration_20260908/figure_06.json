@@ -1,7 +1,7 @@
 {
   "figure": "Figure 6",
   "output": "figures/components/restored_main_06.pdf",
-  "output_sha256": "cde571234de4c13578b16a3ea6ee343e2f37996ca7c3d23679f34ae34505ba16",
+  "output_sha256": "84f9fe54404b29672e3f268a0bb01e6d406740a4a7aa931dee04ba25fb1a0053",
   "panel_sources": {
     "A": "Native architecture schematic (no data): D1 [8] and D3 [2,1,2] over the same eight nonsomatic compartments, the grouped-point control swatch, and the shared inventory printed from physical_depth_h4_factorial/seed_outcomes.csv (66,178 trainable parameters, 14,336 active synapses).",
     "B": "Native generative-model schematic (no data): tier supports and family strips from configs/nonlinear_physical_depth/confirmatory/aligned_shunting_bp.yaml (n_levels 3, hierarchy_branching 2, n_flat_groups 8, e_signal_delta 0.8) and supplementary/curated/si_06_physical_depth.tex Eq. S1-S2.",
@@ -27,7 +27,7 @@
     "source_data/physical_depth_budget/canonical/extension_paired_contrasts.csv": "52edceb0a920f6bd3548550deb81bc1b11a065da8d56d0ae7027157ca05e02d1"
   },
   "builder_sha256": {
-    "scripts/credit_first_figures/build_restored_main.py": "80ddf49b2caf76014872b5b47b26cb7bf0cd39f23ed5a3b2a7919bdff503297d",
+    "scripts/credit_first_figures/build_restored_main.py": "906bd387cddfa9f0beb4d61f82d2dda0582e698a21473bb788031d84b89c2b23",
     "scripts/credit_first_figures/focused_main_evidence.py": "e045f0fc26ce8554af19f7d2b1ee9683ec852899f19e02e76e78163b0d74e773",
     "scripts/figure_canvas.py": "de3f566dd08270535deab95eb798b49cc17ccf4dfbb88e7ebdb50860903a6ad1",
     "scripts/journal_style.py": "be8a138f9d9c081237edc616ba52b6769f957d8b8b49e705a92adcb18f475f3c"
@@ -35,12 +35,13 @@
   "source_data_immutable": true,
   "new_experiments": 0,
   "layout_findings": [
-    "TEXT-ON-DATA 'D3 \u2212 D1: +30.82 pp at 180, +38.17 at 600'",
-    "TEXT-ON-DATA 'the cap, loss still falling; n = 10'",
     "TEXT-ON-DATA 'at 180: +10.86 pp'",
     "TEXT-ON-DATA '10 of 10 seeds positive'",
     "TEXT-ON-DATA 'at 486: \u22122.94 pp'",
-    "TEXT-ON-DATA 'crossing not resolved (300\u2013330)'"
+    "TEXT-ON-DATA 'crossing not resolved (300\u2013330)'",
+    "TEXT-ON-DATA '180-epoch budget'",
+    "TEXT-ON-DATA 'below zero: lower loss with exact-path credit'",
+    "restored_main_06: letter 'F' overlaps a neighbouring panel's ink"
   ],
   "rendering_scope": "Existing outcomes only; no scientific endpoint or rate selection. Any redraw bootstrap uses whole existing seeds/cells, not independent pairs.",
   "helper_sha256": {
