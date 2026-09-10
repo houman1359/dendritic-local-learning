@@ -34,6 +34,14 @@ FROZEN_HASHES = {
     "figures/supplementary/inherited/figure_S03_panels_A-D.pdf": "b51c005792b7165a94f02d661820e1ae7df104304be440d21e1e3e59258431fc",
 }
 
+# ``NativeCanvas`` is width-locked to the 518.4 pt full canvas, so a generator
+# that draws one sub-panel to be pasted into a consolidated sheet at scale 1.0
+# cannot use it (DECISIONS G5).  These generators are still held to the shared
+# style tokens and to the forbidden-layout-token rules above.
+CANVAS_WIDTH_EXEMPT = {
+    "build_si_restored_panels.py",
+}
+
 FORBIDDEN_PRODUCTION_TOKENS = (
     "savefig.bbox",
     "bbox_inches=",
@@ -108,9 +116,12 @@ def main() -> None:
         }:
             continue
         production.append(path)
+        # Accept both spellings of a shared-style import: ``from journal_style
+        # import ...`` and ``import journal_style as js``.
         if not any(
             token in text
-            for token in ("neurips_style import", "journal_style import", "figure_canvas import")
+            for token in ("neurips_style import", "journal_style import", "figure_canvas import",
+                          "import neurips_style", "import journal_style", "import figure_canvas")
         ):
             failures.append(f"production generator does not import shared style: {path.name}")
         for token in FORBIDDEN_PRODUCTION_TOKENS:
@@ -120,7 +131,9 @@ def main() -> None:
             failures.append(
                 f"production generator hard-codes a noncanonical figure width: {path.name}"
             )
-        if not any(token in text for token in ("FIG_W", "MAIN_W", "grid_figure(", "NativeCanvas(")):
+        if (path.name not in CANVAS_WIDTH_EXEMPT
+                and not any(token in text for token in
+                            ("FIG_W", "MAIN_W", "grid_figure(", "NativeCanvas("))):
             failures.append(
                 f"production generator does not use the canonical NeurIPS canvas: {path.name}"
             )
