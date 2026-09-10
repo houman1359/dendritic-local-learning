@@ -315,6 +315,37 @@ def _text_descent_pt(ax, size):
     return float(base_y - box.y0) * 72.0 / ax.figure.dpi
 
 
+FOREST_X_MAX = 12.0                     # E's bottom spine is bounded 0-12
+_RIGHT_ALIGN = []                       # (ax, base, group, x), see _realign
+
+
+def _realign():
+    """Right-align every chained P group again, after the layout is locked.
+
+    QA 2026-09-10 (major): ``_p_draw`` measures the drawn group in pixels and
+    corrects the base in DATA units.  Panel E is built with ``lock=False`` and
+    is re-placed by ``lock_reserves`` afterwards, so the same text then spans a
+    different number of data units and the correction no longer lands: the two
+    exponent lines finished 1.52 pp right of the two plain ones and ran 3.9 pt
+    past the axes.  Redoing the measurement after the lock fixes both.
+    """
+    for ax, base, group, x in _RIGHT_ALIGN:
+        ax.figure.canvas.draw()
+        inv = ax.transData.inverted()
+        right = max(t.get_window_extent().x1 for t in group)
+        target = ax.transData.transform((x, 0.0))[0]
+        base.set_x(base.get_position()[0]
+                   - (inv.transform((right, 0.0))[0]
+                      - inv.transform((target, 0.0))[0]))
+    if _RIGHT_ALIGN:
+        ax = _RIGHT_ALIGN[0][0]
+        ax.figure.canvas.draw()
+        edges = [max(t.get_window_extent().x1 for t in g)
+                 for _, _, g, _ in _RIGHT_ALIGN]
+        assert max(edges) - min(edges) < 1.0, (
+            f"P groups are not right-aligned: {max(edges) - min(edges):.2f} px")
+
+
 def _p_draw(ax, x, y, prefix, p, tail, *, color=MUTE, raise_pt=2.8):
     """``<prefix>Holm P = 1.8 x 10^-4 (tail)``, right-anchored at ``x``.
 
@@ -331,8 +362,10 @@ def _p_draw(ax, x, y, prefix, p, tail, *, color=MUTE, raise_pt=2.8):
     body, expo = _p_text(p)
     head = f"{prefix}Holm P = {body}"
     if expo is None:
-        return ax.text(x, y, head + tail, fontsize=PT_SMALL, color=color,
-                       ha="right", va="center")
+        plain = ax.text(x, y, head + tail, fontsize=PT_SMALL, color=color,
+                        ha="right", va="center")
+        _RIGHT_ALIGN.append((ax, plain, [plain], x))
+        return plain
     w = (_text_w_pt(ax, head, PT_SMALL) + 0.4
          + _text_w_pt(ax, expo, PT_SMALL) + 0.6
          + _text_w_pt(ax, tail, PT_SMALL))
@@ -359,6 +392,7 @@ def _p_draw(ax, x, y, prefix, p, tail, *, color=MUTE, raise_pt=2.8):
     base.set_x(base.get_position()[0]
                - (inv.transform((right, 0.0))[0]
                   - inv.transform((ax.transData.transform((x, y))[0], 0.0))[0]))
+    _RIGHT_ALIGN.append((ax, base, group, x))
     return base
 
 
@@ -943,11 +977,16 @@ def panel_forest(canvas, ax, contrasts, pairs, *, cap_pt=62.0):
         seeds = pairs[pairs.control.eq(key)].accuracy_difference_pp \
             .to_numpy(float)
         assert len(seeds) == 20 and int(row.n_pairs) == 20
+        # QA 2026-09-10 (major): the bottom spine is bounded 0-12, so a seed
+        # past 12 printed in unaxised space with no tick to read it against,
+        # and the panel's own note already calls it off scale.  Drawn seeds are
+        # clipped to the axised range; the note carries the excluded value.
+        drawn_seeds = [v for v in seeds if v <= FOREST_X_MAX]
         note = (f"{int(row.positive_seeds)}/20, ", float(row[holm]),
                 f" ({family})" if family else "")
         rows.append(dict(label=label, mean=float(row.mean_difference_pp),
                          lo=float(row.ci95_low_pp), hi=float(row.ci95_high_pp),
-                         seeds=list(seeds), color=colour, n=20, note=note))
+                         seeds=drawn_seeds, color=colour, n=20, note=note))
         stats[key] = [float(row.mean_difference_pp), float(row.ci95_low_pp),
                       float(row.ci95_high_pp), int(row.positive_seeds), 20,
                       float(row[holm])]
@@ -998,7 +1037,11 @@ def panel_forest(canvas, ax, contrasts, pairs, *, cap_pt=62.0):
     # marker, 12.7 pt below the previous row), so attribution is unambiguous
     for y, (prefix, holm_p, tail) in zip(out["ypos"], notes):
         _p_draw(ax, 12.85, y - 0.42, prefix, holm_p, tail)
-    _badge(ax, (12.85, 0.0), "ceiling", ha="right", va="center")
+    # QA 2026-09-10: the badge was right-anchored at the stats column, 145 pt
+    # from the row it qualifies.  It now sits just right of that row's own
+    # marker, and E's caption states what the ceiling row is.
+    _badge(ax, (max(rows[0]["seeds"]) + 0.45, 0.0), "ceiling", ha="left",
+           va="center")
     derange = contrasts[contrasts.control.eq("within_neuron_route_derangement")
                         & contrasts.budget_k.eq(4)].iloc[0]
     dense = float(pairs[pairs.control.eq("random_rank_k")]
@@ -1010,9 +1053,8 @@ def panel_forest(canvas, ax, contrasts, pairs, *, cap_pt=62.0):
     ax.text(-1.9, 4.18,
             f"(20/20); one dense rank-4 seed at {_signed(dense, 1)}",
             fontsize=PT_SMALL, color=MUTE, ha="left", va="center")
-    ax.text(12.85, 4.56,
-            "n = 20 paired seeds; mean [95 % seed bootstrap]; epoch 80",
-            fontsize=PT_SMALL, color=MUTE, ha="right", va="center")
+    # QA 2026-09-10: the n / interval / epoch line was a verbatim duplicate of
+    # the caption and cost 7.2 pt of a box that was already 44 % prose.
     # CF-7: zero drawn once, and only over the rows it refers to.  The rule
     # is an axvline, so its y data are AXES FRACTIONS: the shipped
     # [0.20, 1.0] put its bottom dash at data row 3.80, on the 'off scale'
@@ -1200,6 +1242,7 @@ def build():
 
     style_direct_color_labels(canvas.fig)
     canvas.lock_reserves()
+    _realign()                          # after the lock: see _realign
     findings = canvas.align_letters()
     problems = canvas.save(OUT, name="credit_first_figure_03", dpi=180,
                            lock=False)

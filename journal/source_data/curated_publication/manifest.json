@@ -1,6 +1,13 @@
 {
   "records": [
     {
+      "figure": 1,
+      "source": "scripts/credit_first_figures/build_framework.py",
+      "path": "source_data/curated_publication/figure_01_plotted.csv",
+      "sha256": "1f1a3a79ce88d5feb49af91360d43e3a191fccbe20bd1df200a8f444377f4362",
+      "scope": "Display summaries from existing inputs; panel column identifies the selected data. One record per drawn mark. Panels A and B are schematics and contribute no rows. Not an additional experiment."
+    },
+    {
       "figure": 4,
       "source": "figures/provenance/structure_restoration_20260908/figure_04_plotted.csv",
       "path": "source_data/curated_publication/figure_04_plotted.csv",

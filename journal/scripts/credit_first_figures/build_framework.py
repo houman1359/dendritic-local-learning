@@ -129,6 +129,8 @@ CONTRASTS = ("neuron_shared_minus_strict_scalar", "subtree_k3_minus_projected_k1
 CAPTURE_COORDINATE = "activation"      # D-1: the coordinate L134 publishes
 CAPTURE_BASES = (("broadcast_k1", "1"), ("subtrees_k3", "3"),
                  ("exact_k12", "12"))
+# G draws the first two; the identity is the labelled rule (QA 2026-09-10).
+CAPTURE_SEED_MS = 2.0                  # under the 2.9 pt panel default
 COHORT_ROWS = (("mnist_fresh", "MNIST\nfresh"), ("mnist_dfa", "MNIST\nDFA"),
                ("fashion", "Fashion-\nMNIST"), ("cifar10", "CIFAR-10"))
 ARM_OFFSET_ROWS = 0.22                 # CF-6: the one second-arm offset
@@ -947,25 +949,46 @@ def cohort_forest(canvas, ax, cohorts, kind, *, value_label, xlim, xticks,
 
 # ── G: dictionary capture of the trained field ────────────────────────────
 def capture(ax, per_seed, summary):
-    """Mean capture of D's exact-path fields by C's dictionaries, over K."""
-    xs = np.arange(3.0)
-    xlo = -1.55                        # the direct-label gutter (QA 2026-09-09)
+    """Mean capture of D's exact-path fields by C's dictionaries, over K.
+
+    QA 2026-09-10 (blocking): the K = 12 column was a constant.  Every one of
+    its forty per-seed values is exactly 1.0 and its interval has zero width,
+    because that dictionary is the identity.  Drawn as a third marker column it
+    carried the panel's largest movement -- 25.9 pt for shunting against the
+    2.49 pt of the only measured change -- and stacked 28 marks on top of the
+    reference rule that already states the same fact.  It is now the labelled
+    rule alone, and the panel draws the two budgets that were measured.
+    """
+    xs = np.arange(2.0)
+    drawn = CAPTURE_BASES[:2]
+    xlo, xhi = -0.78, 1.22             # the direct-label gutter (QA 2026-09-09)
     ax.axhline(1.0, color=MUTE, lw=LW_REF, dashes=(2.6, 2.0), zorder=1.0)
-    # the plan's mute sub-title, scoping the title: it is set on the panel's
-    # top line, immediately under the title.  Between the title box and the
-    # axes there are only 7.2 pt, and buying more moves the 9 pt letter up
-    # into D's two-line category ticks (audit_row_separation floor 8.5 pt).
-    ax.text(xlo + 0.06, 1.180, "filled, trained; open, initial", ha="left",
-            va="center", fontsize=PT_BASE, color=MUTE, zorder=6)
-    ax.text(xlo + 0.06, 1.070, "exact field (A = I)", ha="left", va="center",
+    # right-aligned under the rule: at 7 pt the long form overran the 92 pt
+    # box and struck the y-axis label, so the "by construction" wording moves
+    # to the caption and the rule carries only its identity.
+    ax.text(xhi - 0.02, 0.986, "identity, K = 12", ha="right", va="top",
             fontsize=PT_BASE, color=MUTE, zorder=6)
+    # The rule stands for the identity column, so its level is read back from
+    # the same table the markers use and asserted with them, not hard-coded.
+    identity = {}
+    for architecture in ARCHITECTURES:
+        for checkpoint in ("initial", "trained"):
+            row = summary[summary.architecture.eq(architecture)
+                          & summary.basis.eq("exact_k12")
+                          & summary.checkpoint.eq(checkpoint)].iloc[0]
+            identity[(architecture, checkpoint, "exact_k12")] = float(row["mean"])
+    assert set(identity.values()) == {1.0}, identity
+    # QA 2026-09-10: the four mute lines that used to sit inside these axes
+    # were verbatim duplicates of the caption six lines below the figure, and
+    # they held the y range open so that data filled only 44 % of it.  They are
+    # deleted; the caption carries them.
     printed = {}
     for architecture, offset, marker in (("shunting", -0.06, "o"),
                                          ("additive", 0.06, "s")):
         color = COLORS[architecture]
         for checkpoint in ("initial", "trained"):
             means = []
-            for x, (basis, _) in zip(xs, CAPTURE_BASES):
+            for x, (basis, _) in zip(xs, drawn):
                 row = summary[summary.architecture.eq(architecture)
                               & summary.basis.eq(basis)
                               & summary.checkpoint.eq(checkpoint)].iloc[0]
@@ -975,16 +998,22 @@ def capture(ax, per_seed, summary):
                     s = per_seed[per_seed.architecture.eq(architecture)
                                  & per_seed.basis.eq(basis)
                                  & per_seed.checkpoint.eq(checkpoint)].sort_values("seed")
-                    ax.plot(x + offset + np.linspace(-0.05, 0.05, len(s)),
+                    # QA 2026-09-10: the fan was +-0.05 ordinal units = 2.31 pt
+                    # for ten 2.9 pt dots, an elevenfold overlap that printed as
+                    # one smear.  Widened, and the dot is smaller than the
+                    # panel default so the ten separate.
+                    ax.plot(x + offset + np.linspace(-0.13, 0.13, len(s)),
                             s.mean_capture.to_numpy(), ls="none", marker="o",
-                            ms=SEED_MS, mfc=color, mec="none",
+                            ms=CAPTURE_SEED_MS, mfc=color, mec="none",
                             alpha=SEED_ALPHA, zorder=2)
-                    ax.errorbar(x + offset, float(row["mean"]),
-                                yerr=[[float(row["mean"] - row.ci_low)],
-                                      [float(row.ci_high - row["mean"])]],
-                                fmt=marker, color=color, ms=MARKER_MS,
-                                mfc=color, mec="white", mew=LW_HAIR,
-                                elinewidth=LW_ERR, capsize=2, zorder=4)
+                    # QA 2026-09-10: no yerr.  The widest 95 % interval here
+                    # is 0.007 capture units = 0.52 pt, 11 % of the 4.6 pt
+                    # marker, and the caption already states that the intervals
+                    # are below symbol size.  A drawn mark the caption calls
+                    # invisible is worse than none.
+                    ax.plot([x + offset], [float(row["mean"])], ls="none",
+                            marker=marker, ms=MARKER_MS, mfc=color,
+                            mec="white", mew=LW_HAIR, zorder=4)
                 else:
                     ax.plot([x + offset], [float(row["mean"])], ls="none",
                             marker=marker, ms=MARKER_MS, mfc="white",
@@ -1007,12 +1036,10 @@ def capture(ax, per_seed, summary):
         ax.text(-0.24, float(row["mean"]), architecture.capitalize(),
                 ha="right", va="center", fontsize=PT_BASE,
                 color=label_color(COLORS[architecture]), zorder=6)
-    for k, line in enumerate(("10 seeds per point,", "activation coordinate")):
-        ax.text(xlo + 0.06, 0.145 - 0.092 * k, line, ha="left", va="center",
-                fontsize=PT_BASE, color=MUTE, zorder=6)
-    ax.set(xlim=(xlo, 2.45), ylim=(0.0, 1.20), xticks=xs,
-           xticklabels=[lab for _, lab in CAPTURE_BASES],
-           yticks=[0, 0.25, 0.50, 0.75, 1.00], xlabel="Profiles K",
+    printed.update(identity)
+    ax.set(xlim=(xlo, xhi), ylim=(0.45, 1.07), xticks=xs,
+           xticklabels=[lab for _, lab in drawn],
+           yticks=[0.50, 0.75, 1.00], xlabel="Profiles K",
            ylabel="Mean capture (fraction)")
     style_panel(ax, grid="y")
     ax.tick_params(axis="both", labelsize=PT_BASE, pad=1.4, length=2.0)
@@ -1201,7 +1228,8 @@ def main():
     d = canvas.panel("D", 1, 4, 8, title="Per-neuron credit carries the MNIST gain")
     e = canvas.panel("E", 2, 0, 4, title="Identity: +4 to +16 pp")
     f_ = canvas.panel("F", 2, 4, 4, title="Resolution: ≤ 0.2 pp")
-    g = canvas.panel("G", 2, 8, 4, title="Capture rises with K")
+    g = canvas.panel("G", 2, 8, 4,
+                     title="Training splits the two arms")
     for ax in (e, f_, g):
         # left: the forest label gutter (W3).  top: 8 pt (was 4) so G can
         # carry the plan's mute sub-title BETWEEN its title and its axes, and
@@ -1365,9 +1393,11 @@ def main():
              "notes, the CIFAR exact-minus-backprop contrast with its TOST "
              "result and the fresh-cohort within-tree contrasts.",
         "G": f"Mean {CAPTURE_COORDINATE}-error capture of D's exact-path "
-             "fields by C's dictionaries at K = 1, 3, 12; fresh cohort, 10 "
+             "fields by C's dictionaries at K = 1 and K = 3; fresh cohort, 10 "
              "seeds per architecture, trained (filled) and initial (open) "
-             "checkpoints."},
+             "checkpoints. K = 12 is the identity dictionary and reproduces "
+             "the field exactly, so it is the reference line at 1 and not a "
+             "drawn column; intervals are at most 0.007 and are not drawn."},
         source_sha256={str(p.relative_to(JOURNAL)):
                        hashlib.sha256(p.read_bytes()).hexdigest() for p in files},
         numerical_scope="No fitting, selection, bootstrap or source-outcome "
