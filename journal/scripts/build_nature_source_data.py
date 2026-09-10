@@ -4148,7 +4148,8 @@ routes beyond broadcast; shunting as ancestry gain; and measured responses.
 `manifest.tsv` records current display homes, replication units, original
 source paths, original and released SHA-256 digests, and any transformations.
 Current main-panel assignments come from an explicit verified panel map. The
-former image diagnostic sheet is retained as Supplementary Figure45. Former
+error-field panels of the former image diagnostic sheet are Supplementary
+Figure 8; its remaining panels are retained under Methods/retained_evidence. Former
 main-only numerical evidence remains under Methods/retained_evidence; its old
 panel identity is not presented as a current result. All existing supplementary
 cohorts, including unsuccessful prospective selection, remain available.

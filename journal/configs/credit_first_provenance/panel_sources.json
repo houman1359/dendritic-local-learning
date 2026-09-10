@@ -81,7 +81,7 @@
       "path": "figures/supplementary/curated/mechanistic_chain.pdf",
       "component": "figures/supplementary/curated/mechanistic_chain.pdf",
       "generator": "scripts/supplement_consolidation/build.py",
-      "panel": "a-c",
+      "panel": "a-e",
       "notes": "Curated supplementary sheet, frozen numbering of 2026-09-10 (SI_NUMBERING)."
     },
     {
@@ -97,7 +97,7 @@
       "path": "figures/supplementary/curated/utility_signal_noise.pdf",
       "component": "figures/supplementary/curated/utility_signal_noise.pdf",
       "generator": "scripts/supplement_consolidation/build.py",
-      "panel": "a-c",
+      "panel": "a-g",
       "notes": "Curated supplementary sheet, frozen numbering of 2026-09-10 (SI_NUMBERING)."
     },
     {
@@ -105,7 +105,7 @@
       "path": "figures/supplementary/curated/reliability_gain.pdf",
       "component": "figures/supplementary/curated/reliability_gain.pdf",
       "generator": "scripts/supplement_consolidation/build.py",
-      "panel": "a-c",
+      "panel": "a-d",
       "notes": "Curated supplementary sheet, frozen numbering of 2026-09-10 (SI_NUMBERING)."
     },
     {
@@ -113,7 +113,7 @@
       "path": "figures/supplementary/curated/same_span_conditioning.pdf",
       "component": "figures/supplementary/curated/same_span_conditioning.pdf",
       "generator": "scripts/supplement_consolidation/build.py",
-      "panel": "a-c",
+      "panel": "a-d",
       "notes": "Curated supplementary sheet, frozen numbering of 2026-09-10 (SI_NUMBERING)."
     },
     {
@@ -121,7 +121,7 @@
       "path": "figures/supplementary/curated/image_generalization.pdf",
       "component": "figures/supplementary/curated/image_generalization.pdf",
       "generator": "scripts/supplement_consolidation/build.py",
-      "panel": "a-c",
+      "panel": "a-e",
       "notes": "Curated supplementary sheet, frozen numbering of 2026-09-10 (SI_NUMBERING)."
     },
     {
@@ -129,7 +129,7 @@
       "path": "figures/supplementary/curated/mnist_dictionary_geometry.pdf",
       "component": "figures/supplementary/curated/mnist_dictionary_geometry.pdf",
       "generator": "scripts/supplement_consolidation/build.py",
-      "panel": "a-c",
+      "panel": "a-d",
       "notes": "Curated supplementary sheet, frozen numbering of 2026-09-10 (SI_NUMBERING)."
     },
     {
@@ -145,7 +145,7 @@
       "path": "figures/supplementary/curated/input_coverage_depth.pdf",
       "component": "figures/supplementary/curated/input_coverage_depth.pdf",
       "generator": "scripts/supplement_consolidation/build.py",
-      "panel": "a-c",
+      "panel": "a-f",
       "notes": "Curated supplementary sheet, frozen numbering of 2026-09-10 (SI_NUMBERING)."
     },
     {
@@ -153,7 +153,7 @@
       "path": "figures/supplementary/curated/branch_conflict_controls.pdf",
       "component": "figures/supplementary/curated/branch_conflict_controls.pdf",
       "generator": "scripts/supplement_consolidation/build.py",
-      "panel": "a-c",
+      "panel": "a-d",
       "notes": "Curated supplementary sheet, frozen numbering of 2026-09-10 (SI_NUMBERING)."
     },
     {
@@ -169,7 +169,7 @@
       "path": "figures/supplementary/curated/scalar_tree_capacity.pdf",
       "component": "figures/supplementary/curated/scalar_tree_capacity.pdf",
       "generator": "scripts/supplement_consolidation/build.py",
-      "panel": "a-c",
+      "panel": "a-f",
       "notes": "Curated supplementary sheet, frozen numbering of 2026-09-10 (SI_NUMBERING)."
     },
     {
@@ -177,7 +177,7 @@
       "path": "figures/supplementary/curated/oracle_profile_credit.pdf",
       "component": "figures/supplementary/curated/oracle_profile_credit.pdf",
       "generator": "scripts/supplement_consolidation/build.py",
-      "panel": "a-c",
+      "panel": "a-f",
       "notes": "Curated supplementary sheet, frozen numbering of 2026-09-10 (SI_NUMBERING)."
     },
     {
@@ -185,7 +185,7 @@
       "path": "figures/supplementary/curated/boolean_capacity.pdf",
       "component": "figures/supplementary/curated/boolean_capacity.pdf",
       "generator": "scripts/supplement_consolidation/build.py",
-      "panel": "a-c",
+      "panel": "a-f",
       "notes": "Curated supplementary sheet, frozen numbering of 2026-09-10 (SI_NUMBERING)."
     },
     {
@@ -193,7 +193,7 @@
       "path": "figures/supplementary/curated/boolean_learning.pdf",
       "component": "figures/supplementary/curated/boolean_learning.pdf",
       "generator": "scripts/supplement_consolidation/build.py",
-      "panel": "a-c",
+      "panel": "a-h",
       "notes": "Curated supplementary sheet, frozen numbering of 2026-09-10 (SI_NUMBERING)."
     },
     {
@@ -201,7 +201,7 @@
       "path": "figures/supplementary/curated/fixed_profile_budget.pdf",
       "component": "figures/supplementary/curated/fixed_profile_budget.pdf",
       "generator": "scripts/supplement_consolidation/build.py",
-      "panel": "a-c",
+      "panel": "a-f",
       "notes": "Curated supplementary sheet, frozen numbering of 2026-09-10 (SI_NUMBERING)."
     },
     {
@@ -209,7 +209,7 @@
       "path": "figures/supplementary/curated/credit_optimizer_controls.pdf",
       "component": "figures/supplementary/curated/credit_optimizer_controls.pdf",
       "generator": "scripts/supplement_consolidation/build.py",
-      "panel": "a-c",
+      "panel": "a-d",
       "notes": "Curated supplementary sheet, frozen numbering of 2026-09-10 (SI_NUMBERING)."
     },
     {
@@ -217,7 +217,7 @@
       "path": "figures/supplementary/curated/conductance_grouping.pdf",
       "component": "figures/supplementary/curated/conductance_grouping.pdf",
       "generator": "scripts/supplement_consolidation/build.py",
-      "panel": "a-c",
+      "panel": "a-f",
       "notes": "Curated supplementary sheet, frozen numbering of 2026-09-10 (SI_NUMBERING)."
     },
     {
@@ -225,7 +225,7 @@
       "path": "figures/supplementary/curated/conductance_precision.pdf",
       "component": "figures/supplementary/curated/conductance_precision.pdf",
       "generator": "scripts/supplement_consolidation/build.py",
-      "panel": "a-c",
+      "panel": "a-d",
       "notes": "Curated supplementary sheet, frozen numbering of 2026-09-10 (SI_NUMBERING)."
     },
     {
@@ -233,7 +233,7 @@
       "path": "figures/supplementary/curated/conductance_optimization.pdf",
       "component": "figures/supplementary/curated/conductance_optimization.pdf",
       "generator": "scripts/supplement_consolidation/build.py",
-      "panel": "a-c",
+      "panel": "a-e",
       "notes": "Curated supplementary sheet, frozen numbering of 2026-09-10 (SI_NUMBERING)."
     },
     {
@@ -241,7 +241,7 @@
       "path": "figures/supplementary/curated/local_gate_controls.pdf",
       "component": "figures/supplementary/curated/local_gate_controls.pdf",
       "generator": "scripts/supplement_consolidation/build.py",
-      "panel": "a-c",
+      "panel": "a-d",
       "notes": "Curated supplementary sheet, frozen numbering of 2026-09-10 (SI_NUMBERING)."
     },
     {
@@ -249,7 +249,7 @@
       "path": "figures/supplementary/curated/physical_architecture.pdf",
       "component": "figures/supplementary/curated/physical_architecture.pdf",
       "generator": "scripts/supplement_consolidation/build.py",
-      "panel": "a-c",
+      "panel": "a-h",
       "notes": "Curated supplementary sheet, frozen numbering of 2026-09-10 (SI_NUMBERING)."
     },
     {
@@ -257,7 +257,7 @@
       "path": "figures/supplementary/curated/physical_calibration.pdf",
       "component": "figures/supplementary/curated/physical_calibration.pdf",
       "generator": "scripts/supplement_consolidation/build.py",
-      "panel": "a-c",
+      "panel": "a-d",
       "notes": "Curated supplementary sheet, frozen numbering of 2026-09-10 (SI_NUMBERING)."
     },
     {
@@ -273,7 +273,7 @@
       "path": "figures/supplementary/curated/anatomy_capacity_controls.pdf",
       "component": "figures/supplementary/curated/anatomy_capacity_controls.pdf",
       "generator": "scripts/supplement_consolidation/build.py",
-      "panel": "a-c",
+      "panel": "a-d",
       "notes": "Curated supplementary sheet, frozen numbering of 2026-09-10 (SI_NUMBERING)."
     },
     {
@@ -281,7 +281,7 @@
       "path": "figures/supplementary/curated/inhibitory_spatial_controls.pdf",
       "component": "figures/supplementary/curated/inhibitory_spatial_controls.pdf",
       "generator": "scripts/supplement_consolidation/build.py",
-      "panel": "a-c",
+      "panel": "a-f",
       "notes": "Curated supplementary sheet, frozen numbering of 2026-09-10 (SI_NUMBERING)."
     },
     {
@@ -289,7 +289,7 @@
       "path": "figures/supplementary/curated/coarse_energy.pdf",
       "component": "figures/supplementary/curated/coarse_energy.pdf",
       "generator": "scripts/supplement_consolidation/build.py",
-      "panel": "a-c",
+      "panel": "a-d",
       "notes": "Curated supplementary sheet, frozen numbering of 2026-09-10 (SI_NUMBERING)."
     },
     {
@@ -297,7 +297,7 @@
       "path": "figures/supplementary/curated/anatomy_preprocessing.pdf",
       "component": "figures/supplementary/curated/anatomy_preprocessing.pdf",
       "generator": "scripts/supplement_consolidation/build.py",
-      "panel": "a-c",
+      "panel": "a-f",
       "notes": "Curated supplementary sheet, frozen numbering of 2026-09-10 (SI_NUMBERING)."
     },
     {
@@ -305,7 +305,7 @@
       "path": "figures/supplementary/curated/shunt_sensitivity.pdf",
       "component": "figures/supplementary/curated/shunt_sensitivity.pdf",
       "generator": "scripts/supplement_consolidation/build.py",
-      "panel": "a-c",
+      "panel": "a-f",
       "notes": "Curated supplementary sheet, frozen numbering of 2026-09-10 (SI_NUMBERING)."
     },
     {
@@ -313,7 +313,7 @@
       "path": "figures/supplementary/curated/shunt_replication.pdf",
       "component": "figures/supplementary/curated/shunt_replication.pdf",
       "generator": "scripts/supplement_consolidation/build.py",
-      "panel": "a-c",
+      "panel": "a-e",
       "notes": "Curated supplementary sheet, frozen numbering of 2026-09-10 (SI_NUMBERING)."
     },
     {
@@ -321,7 +321,7 @@
       "path": "figures/supplementary/curated/measured_transfer_geometry.pdf",
       "component": "figures/supplementary/curated/measured_transfer_geometry.pdf",
       "generator": "scripts/supplement_consolidation/build.py",
-      "panel": "a-c",
+      "panel": "a-e",
       "notes": "Curated supplementary sheet, frozen numbering of 2026-09-10 (SI_NUMBERING)."
     },
     {
@@ -329,7 +329,7 @@
       "path": "figures/supplementary/curated/measured_predictor_controls.pdf",
       "component": "figures/supplementary/curated/measured_predictor_controls.pdf",
       "generator": "scripts/supplement_consolidation/build.py",
-      "panel": "a-c",
+      "panel": "a-d",
       "notes": "Curated supplementary sheet, frozen numbering of 2026-09-10 (SI_NUMBERING)."
     },
     {
@@ -337,7 +337,7 @@
       "path": "figures/supplementary/curated/animal_credit_reanalysis.pdf",
       "component": "figures/supplementary/curated/animal_credit_reanalysis.pdf",
       "generator": "scripts/supplement_consolidation/build.py",
-      "panel": "a-c",
+      "panel": "a-b",
       "notes": "Curated supplementary sheet, frozen numbering of 2026-09-10 (SI_NUMBERING)."
     },
     {
@@ -345,7 +345,7 @@
       "path": "figures/supplementary/curated/original_selector.pdf",
       "component": "figures/supplementary/curated/original_selector.pdf",
       "generator": "scripts/supplement_consolidation/build.py",
-      "panel": "a-c",
+      "panel": "a-f",
       "notes": "Curated supplementary sheet, frozen numbering of 2026-09-10 (SI_NUMBERING)."
     },
     {
@@ -353,7 +353,7 @@
       "path": "figures/supplementary/curated/finite_horizon.pdf",
       "component": "figures/supplementary/curated/finite_horizon.pdf",
       "generator": "scripts/supplement_consolidation/build.py",
-      "panel": "a-c",
+      "panel": "a-f",
       "notes": "Curated supplementary sheet, frozen numbering of 2026-09-10 (SI_NUMBERING)."
     },
     {
@@ -361,7 +361,7 @@
       "path": "figures/supplementary/curated/morphology_estimation.pdf",
       "component": "figures/supplementary/curated/morphology_estimation.pdf",
       "generator": "scripts/supplement_consolidation/build.py",
-      "panel": "a-c",
+      "panel": "a-h",
       "notes": "Curated supplementary sheet, frozen numbering of 2026-09-10 (SI_NUMBERING)."
     }
   ],
@@ -809,7 +809,7 @@
     },
     {
       "figure": "methods",
-      "panel": "supporting figS48/plot",
+      "panel": "supporting; previous display figS48/plot",
       "path": "source_data/figure4/focal_localization.csv",
       "role": "numerical source",
       "generator": "",
@@ -935,7 +935,7 @@
     },
     {
       "figure": "methods",
-      "panel": "supporting figS45/a",
+      "panel": "supporting; previous display figS45/a",
       "path": "scripts/build_main_figure_02.py",
       "role": "schematic source",
       "generator": "",
@@ -944,7 +944,7 @@
     },
     {
       "figure": "methods",
-      "panel": "supporting figS47/a",
+      "panel": "supporting; previous display figS47/a",
       "path": "source_data/focal_selectivity_active_ensemble/condition_summary.csv",
       "role": "numerical source",
       "generator": "",
@@ -953,7 +953,7 @@
     },
     {
       "figure": "methods",
-      "panel": "supporting figS47/a",
+      "panel": "supporting; previous display figS47/a",
       "path": "source_data/focal_selectivity_phase1/condition_summary.csv",
       "role": "numerical source",
       "generator": "",
@@ -962,7 +962,7 @@
     },
     {
       "figure": "methods",
-      "panel": "supporting figS47/b",
+      "panel": "supporting; previous display figS47/b",
       "path": "source_data/focal_selectivity_active_ensemble/paired_contrasts.csv",
       "role": "numerical source",
       "generator": "",
@@ -971,7 +971,7 @@
     },
     {
       "figure": "methods",
-      "panel": "supporting figS47/b",
+      "panel": "supporting; previous display figS47/b",
       "path": "source_data/focal_selectivity_active_ensemble/cell_condition_metrics.csv",
       "role": "numerical source",
       "generator": "",
@@ -980,7 +980,7 @@
     },
     {
       "figure": "methods",
-      "panel": "supporting figS46/a-b",
+      "panel": "supporting; previous display figS46/a-b",
       "path": "scripts/build_utility_supplement.py",
       "role": "schematic source",
       "generator": "",
@@ -989,7 +989,7 @@
     },
     {
       "figure": "methods",
-      "panel": "supporting figS46/a",
+      "panel": "supporting; previous display figS46/a",
       "path": "code/theory/credit_phase.py",
       "role": "analytic source",
       "generator": "",
@@ -998,7 +998,7 @@
     },
     {
       "figure": "methods",
-      "panel": "supporting figS46/c",
+      "panel": "supporting; previous display figS46/c",
       "path": "source_data/credit_phase_theory/spectral_phase_seed.csv",
       "role": "numerical source",
       "generator": "",
@@ -1007,7 +1007,7 @@
     },
     {
       "figure": "methods",
-      "panel": "supporting figS46/c",
+      "panel": "supporting; previous display figS46/c",
       "path": "source_data/credit_phase_theory/spectral_phase_summary.csv",
       "role": "numerical source",
       "generator": "",
@@ -1016,7 +1016,7 @@
     },
     {
       "figure": "methods",
-      "panel": "supporting figS46/d",
+      "panel": "supporting; previous display figS46/d",
       "path": "source_data/credit_phase_theory/depth_training_seed.csv",
       "role": "numerical source",
       "generator": "",
@@ -1025,7 +1025,7 @@
     },
     {
       "figure": "methods",
-      "panel": "supporting figS46/d",
+      "panel": "supporting; previous display figS46/d",
       "path": "source_data/credit_phase_theory/depth_training_summary.csv",
       "role": "numerical source",
       "generator": "",
@@ -1034,7 +1034,7 @@
     },
     {
       "figure": "methods",
-      "panel": "supporting figS46/e",
+      "panel": "supporting; previous display figS46/e",
       "path": "source_data/credit_phase_theory/projection_phase_seed.csv",
       "role": "numerical source",
       "generator": "",
@@ -1043,7 +1043,7 @@
     },
     {
       "figure": "methods",
-      "panel": "supporting figS46/e",
+      "panel": "supporting; previous display figS46/e",
       "path": "source_data/credit_phase_theory/projection_phase_summary.csv",
       "role": "numerical source",
       "generator": "",
@@ -1052,7 +1052,7 @@
     },
     {
       "figure": "methods",
-      "panel": "supporting figS46/f",
+      "panel": "supporting; previous display figS46/f",
       "path": "source_data/credit_phase_theory/reliability_phase_seed.csv",
       "role": "numerical source",
       "generator": "",
@@ -1061,7 +1061,7 @@
     },
     {
       "figure": "methods",
-      "panel": "supporting figS46/f",
+      "panel": "supporting; previous display figS46/f",
       "path": "source_data/credit_phase_theory/reliability_phase_summary.csv",
       "role": "numerical source",
       "generator": "",
@@ -1070,7 +1070,7 @@
     },
     {
       "figure": "methods",
-      "panel": "supporting figS46/g",
+      "panel": "supporting; previous display figS46/g",
       "path": "source_data/review_evidence_reanalysis/moment_scores.csv",
       "role": "numerical source",
       "generator": "",
@@ -1241,7 +1241,7 @@
     },
     {
       "figure": "methods",
-      "panel": "supporting figS50/a-d",
+      "panel": "supporting; previous display figS50/a-d",
       "path": "source_data/conductance_credit_demand/figures/supplement_first_conductance_source.csv",
       "role": "plotted supplementary numerical outcomes",
       "generator": "scripts/conductance_credit_demand/build_supplementary.py",
@@ -1250,7 +1250,7 @@
     },
     {
       "figure": "methods",
-      "panel": "supporting figS51/a-d",
+      "panel": "supporting; previous display figS51/a-d",
       "path": "source_data/conductance_credit_demand/opponent/supplementary_figures/supplement_opponent_controls_source.csv",
       "role": "plotted supplementary numerical outcomes",
       "generator": "scripts/conductance_credit_demand/build_supplementary.py",
@@ -1259,7 +1259,7 @@
     },
     {
       "figure": "methods",
-      "panel": "supporting figS49/a-f",
+      "panel": "supporting; previous display figS49/a-f",
       "path": "source_data/image_ladder_controls/figures/figure_source.csv",
       "role": "plotted supplementary numerical outcomes",
       "generator": "scripts/image_ladder_controls/figure.py",
@@ -1268,7 +1268,7 @@
     },
     {
       "figure": "methods",
-      "panel": "supporting figS52/a-d",
+      "panel": "supporting; previous display figS52/a-d",
       "path": "source_data/conductance_credit_demand/opponent/expanded_rates/figure_expanded_rates_source.csv",
       "role": "plotted supplementary numerical outcomes",
       "generator": "scripts/conductance_credit_demand/report_expanded_rates.py",
@@ -1349,7 +1349,7 @@
     },
     {
       "figure": "methods",
-      "panel": "supporting figS53/a-d",
+      "panel": "supporting; previous display figS53/a-d",
       "path": "source_data/conductance_local_gate/summaries/condition_means.csv",
       "role": "All-rule, all-rate task and budget comparison",
       "generator": "scripts/conductance_local_gate/figure.py",
@@ -1358,7 +1358,7 @@
     },
     {
       "figure": "methods",
-      "panel": "supporting figS53/a-d",
+      "panel": "supporting; previous display figS53/a-d",
       "path": "source_data/conductance_local_gate/summaries/all_endpoints.csv",
       "role": "All-rule, all-rate task and budget comparison",
       "generator": "scripts/conductance_local_gate/figure.py",
@@ -1367,7 +1367,7 @@
     },
     {
       "figure": "methods",
-      "panel": "supporting figS53/e",
+      "panel": "supporting; previous display figS53/e",
       "path": "source_data/conductance_credit_demand/opponent/summaries/context_gradient_summary.csv",
       "role": "Retained historical common-state conditional-gradient diagnostic",
       "generator": "scripts/conductance_local_gate/figure.py",
@@ -1430,7 +1430,7 @@
     },
     {
       "figure": "methods",
-      "panel": "supporting figS54/a-f",
+      "panel": "supporting; previous display figS54/a-f",
       "path": "source_data/credit_rule_extension/figures/figure_source.csv",
       "role": "Plotted curves, paired contrasts or complete budget-indexed outcomes",
       "generator": "scripts/credit_rule_extension/figure.py",
@@ -1439,7 +1439,7 @@
     },
     {
       "figure": "methods",
-      "panel": "supporting figS55/a-d",
+      "panel": "supporting; previous display figS55/a-d",
       "path": "source_data/credit_rule_extension/figures/controls_figure_source.csv",
       "role": "Plotted curves, paired contrasts or complete budget-indexed outcomes",
       "generator": "scripts/credit_rule_extension/figure.py",
@@ -1448,7 +1448,7 @@
     },
     {
       "figure": "methods",
-      "panel": "supporting figS54/a-d",
+      "panel": "supporting; previous display figS54/a-d",
       "path": "source_data/credit_rule_extension/summaries/all_curves.csv",
       "role": "Plotted curves, paired contrasts or complete budget-indexed outcomes",
       "generator": "scripts/credit_rule_extension/figure.py",
@@ -1457,7 +1457,7 @@
     },
     {
       "figure": "methods",
-      "panel": "supporting figS54/e",
+      "panel": "supporting; previous display figS54/e",
       "path": "source_data/credit_rule_extension/summaries/paired_contrasts.csv",
       "role": "Plotted curves, paired contrasts or complete budget-indexed outcomes",
       "generator": "scripts/credit_rule_extension/figure.py",
@@ -1466,7 +1466,7 @@
     },
     {
       "figure": "methods",
-      "panel": "supporting figS54/e-f",
+      "panel": "supporting; previous display figS54/e-f",
       "path": "source_data/credit_rule_extension/summaries/all_budget_outcomes.csv",
       "role": "Plotted curves, paired contrasts or complete budget-indexed outcomes",
       "generator": "scripts/credit_rule_extension/figure.py",
@@ -1475,7 +1475,7 @@
     },
     {
       "figure": "methods",
-      "panel": "supporting figS56/a-b",
+      "panel": "supporting; previous display figS56/a-b",
       "path": "source_data/measured_alignment_power/power_summary.csv",
       "role": "Power, Wilson intervals and model-conditional effect axes",
       "generator": "scripts/measured_alignment_power/report.py",
@@ -1484,7 +1484,7 @@
     },
     {
       "figure": "methods",
-      "panel": "supporting figS56/c",
+      "panel": "supporting; previous display figS56/c",
       "path": "source_data/measured_alignment_power/reliability_calibration_audit.csv",
       "role": "Measured and simulated split-half rank reliability",
       "generator": "scripts/measured_alignment_power/report.py",
@@ -1493,7 +1493,7 @@
     },
     {
       "figure": "methods",
-      "panel": "supporting figS56/a-c",
+      "panel": "supporting; previous display figS56/a-c",
       "path": "source_data/measured_alignment_power/protocol_freeze.json",
       "role": "Prospectively hashed simulation choices; exploratory model",
       "generator": "scripts/measured_alignment_power/report.py",
@@ -1502,7 +1502,7 @@
     },
     {
       "figure": "methods",
-      "panel": "supporting figS56/a-c",
+      "panel": "supporting; previous display figS56/a-c",
       "path": "source_data/measured_alignment_power/input_manifest.json",
       "role": "Original-to-portable pair, contact and response input identities",
       "generator": "scripts/measured_alignment_power/report.py",
@@ -1557,7 +1557,7 @@
     {
       "path": "source_data/conductance_local_gate/figures/local_gate_all_rates.pdf",
       "figure": "methods",
-      "panel": "supporting figS53/a-e",
+      "panel": "supporting; previous display figS53/a-e",
       "role": "Exact native output required by the portable figure and completion verifiers",
       "generator": "scripts/conductance_local_gate/figure.py",
       "replication_unit": "derived rendering; same seed observations as the corresponding figure",
@@ -1566,7 +1566,7 @@
     {
       "path": "source_data/conductance_local_gate/figures/local_gate_all_rates.png",
       "figure": "methods",
-      "panel": "supporting figS53/a-e",
+      "panel": "supporting; previous display figS53/a-e",
       "role": "Exact native output required by the portable figure and completion verifiers",
       "generator": "scripts/conductance_local_gate/figure.py",
       "replication_unit": "derived rendering; same seed observations as the corresponding figure",
@@ -4162,7 +4162,7 @@
       "role": "Authenticated vector rendering input",
       "generator": "scripts/supplement_consolidation/build.py",
       "replication_unit": "independent training seed; paired trained checkpoint / seed (n=15 per architecture); paired independent training seed (n=15 per architecture); complete 120-fit current-cohort audit; training run (n=1,840); historical prospective programme",
-      "notes": "Selected S45 panel C. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
+      "notes": "Selected S45 panel D. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
     },
     {
       "figure": "figS8",
@@ -4171,7 +4171,7 @@
       "role": "Authenticated vector rendering input",
       "generator": "scripts/supplement_consolidation/build.py",
       "replication_unit": "independent training seed; paired trained checkpoint / seed (n=15 per architecture); paired independent training seed (n=15 per architecture); complete 120-fit current-cohort audit; training run (n=1,840); historical prospective programme",
-      "notes": "Selected S45 panel C. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
+      "notes": "Selected S45 panel E. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
     },
     {
       "figure": "figS9",
@@ -6569,7 +6569,7 @@
     },
     {
       "figure": "figS10",
-      "panel": "c",
+      "panel": "b",
       "path": "figures/supplementary/figure_S29_panels_A-C.pdf",
       "role": "Authenticated vector rendering input",
       "generator": "scripts/supplement_consolidation/build.py",
@@ -6578,7 +6578,7 @@
     },
     {
       "figure": "figS10",
-      "panel": "d",
+      "panel": "c",
       "path": "figures/supplementary/figure_S29_panels_A-C.pdf",
       "role": "Authenticated vector rendering input",
       "generator": "scripts/supplement_consolidation/build.py",
@@ -6587,7 +6587,7 @@
     },
     {
       "figure": "figS10",
-      "panel": "b",
+      "panel": "d",
       "path": "figures/supplementary/figure_S29_panels_A-C.pdf",
       "role": "Authenticated vector rendering input",
       "generator": "scripts/supplement_consolidation/build.py",
@@ -10331,15 +10331,6 @@
     },
     {
       "figure": "figS12",
-      "panel": "d",
-      "path": "figures/supplementary/figure_S37_panels_A-D.pdf",
-      "role": "Authenticated vector rendering input",
-      "generator": "scripts/supplement_consolidation/build.py",
-      "replication_unit": "exhaustive finite target families; optimizer restarts are algorithmic",
-      "notes": "Selected S37 panel B. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
-    },
-    {
-      "figure": "figS12",
       "panel": "e",
       "path": "figures/supplementary/figure_S37_panels_A-D.pdf",
       "role": "Authenticated vector rendering input",
@@ -10354,7 +10345,7 @@
       "role": "Authenticated vector rendering input",
       "generator": "scripts/supplement_consolidation/build.py",
       "replication_unit": "exhaustive finite target families; optimizer restarts are algorithmic",
-      "notes": "Selected S37 panel B. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
+      "notes": "Selected S37 panel C. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
     },
     {
       "figure": "figS13",
@@ -36242,7 +36233,7 @@
     },
     {
       "figure": "figS16",
-      "panel": "a",
+      "panel": "b",
       "path": "figures/supplementary/figure_S54_credit_budget_extension.pdf",
       "role": "Authenticated vector rendering input",
       "generator": "scripts/supplement_consolidation/build.py",
@@ -36251,7 +36242,7 @@
     },
     {
       "figure": "figS16",
-      "panel": "b",
+      "panel": "d",
       "path": "figures/supplementary/figure_S54_credit_budget_extension.pdf",
       "role": "Authenticated vector rendering input",
       "generator": "scripts/supplement_consolidation/build.py",
@@ -36260,7 +36251,7 @@
     },
     {
       "figure": "figS16",
-      "panel": "c",
+      "panel": "e",
       "path": "figures/supplementary/figure_S54_credit_budget_extension.pdf",
       "role": "Authenticated vector rendering input",
       "generator": "scripts/supplement_consolidation/build.py",
@@ -36269,7 +36260,7 @@
     },
     {
       "figure": "figS16",
-      "panel": "d",
+      "panel": "f",
       "path": "figures/supplementary/figure_S54_credit_budget_extension.pdf",
       "role": "Authenticated vector rendering input",
       "generator": "scripts/supplement_consolidation/build.py",
@@ -44221,7 +44212,7 @@
       "role": "Authenticated vector rendering input",
       "generator": "scripts/supplement_consolidation/build.py",
       "replication_unit": "three reused original development seeds, 288 matched-budget fits",
-      "notes": "Selected S52 panel A. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
+      "notes": "Selected S52 panel B. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
     },
     {
       "figure": "figS21",
@@ -47141,7 +47132,7 @@
     },
     {
       "figure": "figS29",
-      "panel": "b",
+      "panel": "e",
       "path": "figures/supplementary/figure_S21_panels_A-D.pdf",
       "role": "Authenticated vector rendering input",
       "generator": "scripts/supplement_consolidation/build.py",
@@ -47150,75 +47141,12 @@
     },
     {
       "figure": "figS29",
-      "panel": "e",
-      "path": "figures/supplementary/figure_S21_panels_A-D.pdf",
-      "role": "Authenticated vector rendering input",
-      "generator": "scripts/supplement_consolidation/build.py",
-      "replication_unit": "cells within one mouse; varying count by depth; biological cell (n=8); reconstructed cell (n=8; one animal); reconstructed cell; 55 focal sites nested within 8 cells from one animal",
-      "notes": "Selected S21 panel C. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
-    },
-    {
-      "figure": "figS29",
       "panel": "f",
       "path": "figures/supplementary/figure_S21_panels_A-D.pdf",
       "role": "Authenticated vector rendering input",
       "generator": "scripts/supplement_consolidation/build.py",
       "replication_unit": "cells within one mouse; varying count by depth; biological cell (n=8); reconstructed cell (n=8; one animal); reconstructed cell; 55 focal sites nested within 8 cells from one animal",
       "notes": "Selected S21 panel C. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
-    },
-    {
-      "figure": "figS29",
-      "panel": "b",
-      "path": "source_data/figure4/focal_localization.csv",
-      "role": "Complete numerical source of selected input panel",
-      "generator": "scripts/supplement_consolidation/build.py",
-      "replication_unit": "reconstructed cell (8); sites nested",
-      "notes": "Selected S48 panel *. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
-    },
-    {
-      "figure": "figS29",
-      "panel": "e",
-      "path": "source_data/figure4/focal_localization.csv",
-      "role": "Complete numerical source of selected input panel",
-      "generator": "scripts/supplement_consolidation/build.py",
-      "replication_unit": "reconstructed cell (8); sites nested",
-      "notes": "Selected S48 panel *. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
-    },
-    {
-      "figure": "figS29",
-      "panel": "f",
-      "path": "source_data/figure4/focal_localization.csv",
-      "role": "Complete numerical source of selected input panel",
-      "generator": "scripts/supplement_consolidation/build.py",
-      "replication_unit": "reconstructed cell (8); sites nested",
-      "notes": "Selected S48 panel *. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
-    },
-    {
-      "figure": "figS29",
-      "panel": "b",
-      "path": "figures/supplementary/figure_S48_normalized_shunt_dose.pdf",
-      "role": "Authenticated vector rendering input",
-      "generator": "scripts/supplement_consolidation/build.py",
-      "replication_unit": "reconstructed cell (8); sites nested",
-      "notes": "Selected S48 panel *. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
-    },
-    {
-      "figure": "figS29",
-      "panel": "e",
-      "path": "figures/supplementary/figure_S48_normalized_shunt_dose.pdf",
-      "role": "Authenticated vector rendering input",
-      "generator": "scripts/supplement_consolidation/build.py",
-      "replication_unit": "reconstructed cell (8); sites nested",
-      "notes": "Selected S48 panel *. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
-    },
-    {
-      "figure": "figS29",
-      "panel": "f",
-      "path": "figures/supplementary/figure_S48_normalized_shunt_dose.pdf",
-      "role": "Authenticated vector rendering input",
-      "generator": "scripts/supplement_consolidation/build.py",
-      "replication_unit": "reconstructed cell (8); sites nested",
-      "notes": "Selected S48 panel *. Exact crop and source hashes in curation manifest. Complete tables can contain other panels/conditions; no additional replication is implied."
     },
     {
       "figure": "figS30",

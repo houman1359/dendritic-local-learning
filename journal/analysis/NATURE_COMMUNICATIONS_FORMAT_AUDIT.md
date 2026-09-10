@@ -14,8 +14,8 @@ There are 0 main tables, including Methods tables; total display items: 9.
 |---|---:|---:|---|
 | Title | 9 words | 15 | PASS |
 | Abstract | 161 words | 200 | PASS |
-| Introduction + Results + Discussion | 7963 approximate words | 5000 | ADVISORY |
-| Author working narrative target | 7963 approximate words | 8000 | PASS |
+| Introduction + Results + Discussion | 7979 approximate words | 5000 | ADVISORY |
+| Author working narrative target | 7979 approximate words | 8000 | PASS |
 | Main display items | 9 figures and tables | 10 | PASS |
 | References | 61 entries (general guide) | 70 | PASS |
 | Figure 1 legend | 305 words | 350 | PASS |
@@ -26,7 +26,7 @@ There are 0 main tables, including Methods tables; total display items: 9.
 | Figure 6 legend | 325 words | 350 | PASS |
 | Figure 7 legend | 298 words | 350 | PASS |
 | Figure 8 legend | 317 words | 350 | PASS |
-| Figure 9 legend | 318 words | 350 | PASS |
+| Figure 9 legend | 334 words | 350 | PASS |
 
 Official guidance:
 

@@ -18,7 +18,13 @@ Panel letters of a source that the curation manifest actually declares are
 taken from that manifest, which is authoritative for the displayed panels; the
 lineage table only places supporting inputs that the manifest does not name.
 Sources for the two genuinely new sheets, S1 and S33, have no predecessor and
-are declared explicitly in `NEW_FIGURE_RECORDS`.
+are declared explicitly in `NEW_FIGURE_RECORDS`.  One earlier panel has no
+supplementary successor at all and is listed in `RETIRED_PANELS`.
+
+The same pass restates two other things the consolidation left behind: each
+supplementary asset row's panel range, which had become a uniform `a-c`
+placeholder, and the historical display labels that still named sheets above
+S36 without saying they were historical.
 
 Run with --check to verify the config without rewriting it.
 """
@@ -27,6 +33,7 @@ from __future__ import annotations
 import argparse
 import collections
 import json
+import re
 from pathlib import Path
 
 JOURNAL = Path(__file__).resolve().parents[2]
@@ -42,39 +49,64 @@ FIGURE_LINEAGE = {
 }
 
 # (earlier figure, earlier panel) -> [(current figure, current panel), ...].
-# Panels absent here keep their letter under FIGURE_LINEAGE.
+# Panels absent here keep their letter under FIGURE_LINEAGE.  Every entry below
+# is the crop record the curation manifest keeps for the current panel
+# (`source_asset` and `source_panel`), so the table states which earlier panel
+# each current panel was cut from rather than inferring it.  The handful of
+# current panels that were re-cropped from the original frozen sheet instead of
+# from the consolidated one carry no such record; those earlier panels are
+# placed by their declared sources.
 PANEL_LINEAGE = {
-    # Checkpoint geometry is absorbed by the utility sheet: its three
-    # mechanism panels become one checkpoint panel, its alignment panel one
+    # Checkpoint geometry is absorbed by the utility sheet: its three mechanism
+    # panels become one merged checkpoint panel, its alignment panel one
     # alignment panel.
     (3, "a"): [(3, "e")],
     (3, "b"): [(3, "e")],
     (3, "c"): [(3, "e")],
     (3, "d"): [(3, "f")],
     # The error-field panels of the earlier image sheet become their own sheet.
-    (7, "e"): [(8, "a"), (8, "b"), (8, "c")],
-    (7, "f"): [(8, "a"), (8, "b"), (8, "c")],
-    (7, "g"): [(8, "a"), (8, "b"), (8, "c")],
-    # Branch-conflict controls lose one panel: the two coverage panels merge
-    # and the three conflict panels are redrawn as three.
+    (7, "e"): [(8, "a")],
+    (7, "f"): [(8, "b")],
+    (7, "g"): [(8, "c")],
+    # Branch-conflict controls lose a panel: the two coverage panels merge and
+    # the three conflict panels shift up one letter.
     (9, "b"): [(10, "a")],
-    (9, "e"): [(10, "b"), (10, "c"), (10, "d")],
-    # Ancestry coefficients lose one panel.
+    (9, "c"): [(10, "b")],
+    (9, "d"): [(10, "c")],
+    (9, "e"): [(10, "d")],
+    # Ancestry coefficients lose a panel; its last two are re-cropped from the
+    # original sheet, so the crop record names no predecessor for them.
     (10, "d"): [(11, "b"), (11, "c")],
-    # Scalar-tree capacity gains panels; the earlier depth panel is redrawn.
-    (11, "c"): [(12, "d"), (12, "e"), (12, "f")],
-    # Conductance optimization gains one rate panel.
-    (19, "c"): [(20, "d"), (20, "e")],
-    # Shunt sensitivity gains two panels drawn from the typed-direct cohort.
-    (28, "c"): [(29, "b"), (29, "e"), (29, "f")],
-    (28, "d"): [(29, "b"), (29, "e"), (29, "f")],
+    # Scalar-tree capacity gains two restored panels ahead of these two.
+    (11, "c"): [(12, "e")],
+    (11, "d"): [(12, "f")],
+    # Fixed-profile budget interleaves two restored extension panels.
+    (15, "a"): [(16, "b")],
+    (15, "b"): [(16, "d")],
+    (15, "c"): [(16, "e")],
+    (15, "d"): [(16, "f")],
+    # Conductance optimization gains a restored robustness panel at c.
+    (19, "c"): [(20, "d")],
+    (19, "d"): [(20, "e")],
+    # Shunt sensitivity gains two restored panels at b-d, so the typed-direct
+    # panels move to e and f.
+    (28, "b"): [(29, "e")],
+    (28, "c"): [(29, "f")],
     # Measured topology is absorbed by the transfer-geometry sheet.
     (30, "b"): [(31, "a")],
     (30, "c"): [(31, "a")],
     (30, "d"): [(31, "e")],
     (31, "a"): [(31, "b"), (31, "c"), (31, "d")],
-    # Finite horizon gains one prediction panel.
+    # Finite horizon gains a restored prediction panel at d.
     (34, "d"): [(35, "e"), (35, "f")],
+}
+
+# Earlier panels with no supplementary successor.  Old S28 panel D was the
+# normalized-dose comparison, which the consolidation promoted into main
+# Figure 8D; releasing its table under S29 would claim a panel that sheet does
+# not draw.  Its records stay under Methods, where the complete table already is.
+RETIRED_PANELS = {
+    (28, "d"),
 }
 
 _CURATED_ROLE = "Complete numerical source of selected input panel"
@@ -123,6 +155,8 @@ def declared_panels(curation):
 def targets(figure, panel, path, declared):
     """Current (figure, panel) homes of one earlier panel record."""
     number = int(figure.removeprefix("figS"))
+    if (number, panel) in RETIRED_PANELS:
+        return
     lineage = PANEL_LINEAGE.get((number, panel), [(FIGURE_LINEAGE[number], panel)])
     grouped = collections.defaultdict(list)
     for new_figure, new_panel in lineage:
@@ -157,6 +191,41 @@ def renumbered_records(records, declared):
     return result
 
 
+def panel_range(asset):
+    """The asset's own panel letters, as the `a-h` range the ledger prints."""
+    letters = [panel["panel"].lower() for panel in asset["panels"]]
+    expected = [chr(ord(letters[0]) + k) for k in range(len(letters))]
+    if letters != expected:
+        raise SystemExit(f"{asset['id']} panel letters are not contiguous: {letters}")
+    return letters[0] if len(letters) == 1 else f"{letters[0]}-{letters[-1]}"
+
+
+def restated_assets(assets, curation):
+    """Give every supplementary asset row the panel range its sheet draws."""
+    ranges = {asset["figure"].replace("S", "figS", 1): panel_range(asset)
+              for asset in curation["assets"]}
+    return [dict(asset, panel=ranges[asset["figure"]])
+            if asset["figure"] in ranges else asset
+            for asset in assets]
+
+
+def restated_history(records):
+    """Say that a display label naming a retired sheet is historical.
+
+    These rows are Methods-associated; their panel column records where the
+    source used to be displayed, under a supplementary sequence that no longer
+    reaches those numbers.
+    """
+    result = []
+    for record in records:
+        panel = record["panel"]
+        if (record["figure"] == "methods" and panel.startswith("supporting figS")
+                and int(re.search(r"figS(\d+)", panel).group(1)) > 36):
+            panel = "supporting; previous display " + panel.removeprefix("supporting ")
+        result.append(dict(record, panel=panel))
+    return result
+
+
 def verify(records, curation, declared):
     numbers = {int(r["figure"].removeprefix("figS"))
                for r in records if r["figure"].startswith("figS")}
@@ -164,6 +233,11 @@ def verify(records, curation, declared):
     if numbers != expected:
         raise SystemExit(f"supplementary records are not 1..{len(expected)}: "
                          f"missing={sorted(expected - numbers)} extra={sorted(numbers - expected)}")
+    stale = [r["panel"] for r in records
+             if r["panel"].startswith("supporting figS")
+             and int(re.search(r"figS(\d+)", r["panel"]).group(1)) > 36]
+    if stale:
+        raise SystemExit(f"{len(stale)} display labels still name a retired sheet, e.g. {stale[:3]}")
     present = {(r["figure"], r["panel"], r["path"]) for r in records}
     missing = [(f"figS{number}", letter, source)
                for (number, source), letters in declared.items()
@@ -185,11 +259,14 @@ def main() -> None:
     declared = declared_panels(curation)
     if args.check:
         verify(layout["records"], curation, declared)
+        if layout["assets"] != restated_assets(layout["assets"], curation):
+            raise SystemExit("supplementary asset panel ranges do not match the curation manifest")
         print(json.dumps({"status": "current", "records": len(layout["records"])}, indent=2))
         return
     before = len(layout["records"])
-    records = renumbered_records(layout["records"], declared)
+    records = restated_history(renumbered_records(layout["records"], declared))
     figures = verify(records, curation, declared)
+    layout["assets"] = restated_assets(layout["assets"], curation)
     layout["records"] = records
     layout["layout"] = LAYOUT
     MAP_PATH.write_text(json.dumps(layout, indent=2) + "\n")
