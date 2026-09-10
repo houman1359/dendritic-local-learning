@@ -486,7 +486,7 @@ def credit_entry(ax):
     base = (X(0.5), Y(46.0), X(0.50 * W), Y(46.0))
     for k in (2, 1):
         _fade_ghost(f.balanced_tree(
-            (base[0] + X(4.0 * k), base[1] + Y(3.0 * k), base[2], base[3]),
+            (base[0] + X(8.5 * k), base[1] + Y(6.0 * k), base[2], base[3]),
             depth=2, ghost=True, labels=False, soma_r_pt=2.4))
     nodes = f.balanced_tree(base, depth=2, mode="plain", labels=False)
     sx, sy = nodes.soma
@@ -528,7 +528,7 @@ def credit_entry(ax):
     ax.plot([sx + X(nodes.soma_r_pt + 1.5), riser_x, riser_x],
             [sy, sy, Y(read_y + 8.0)], color=MUTE, lw=f.lw(LW_EDGE),
             solid_capstyle="round", solid_joinstyle="round", zorder=3)
-    f.arrow((riser_x, Y(read_y + 8.0)), (X(card_x - 1.0), Y(read_y + 8.0)),
+    f.arrow((riser_x, Y(read_y + 8.0)), (X(card_x + 0.4), Y(read_y + 8.0)),
             color=MUTE, lw=LW_EDGE, head=3.4)
     f.text((riser_x - X(1.5), sy + Y(2.4)), "z", size=PT_BASE, color=INK,
            ha="right", va="bottom")
@@ -536,8 +536,11 @@ def credit_entry(ax):
             (X(card_x + card_w / 2.0), Y(loss_y + 25.0)), color=MUTE,
             lw=LW_EDGE, head=3.4)
     tail = (sx + X(nodes.soma_r_pt + 11.0), sy - Y(nodes.soma_r_pt + 7.0))
-    shaft_y, right = tail[1], X(card_x + card_w)
-    ax.plot([right, right, tail[0]], [Y(loss_y), shaft_y, shaft_y], color=INK,
+    # QA 2026-09-09: the return shaft runs 3.5 pt below the delta-0 tag's
+    # baseline and rises into the arrow tail, so it never cuts the tag
+    shaft_y, right = tail[1] - Y(3.5), X(card_x + card_w)
+    ax.plot([right, right, tail[0], tail[0]],
+            [Y(loss_y), shaft_y, shaft_y, tail[1]], color=INK,
             lw=f.lw(LW_HAIR), solid_capstyle="round", solid_joinstyle="round",
             zorder=4.8)
     f.error_in(nodes.soma, label="δ0")
@@ -559,8 +562,7 @@ def deliveries(ax):
     f = Frame(ax)
     X, Y = f.fx, f.fy
     foot_pt = f.footer("projected K = 1, 3: oracle coefficients on C's "
-                       "dictionaries\ndecoder only (D): the dendritic core "
-                       "stays frozen", size=PT_BASE, band_pt=10.5, color=MUTE)
+                       "dictionaries\ndecoder only: frozen core (D)", size=PT_BASE, band_pt=10.5, color=MUTE)
     gap_pt, share = 5.0, np.array([104.0, 88.0, 98.0])
     widths = share / share.sum() * (f.w_pt - 2 * gap_pt)
     cells, x_pt = [], 0.0
@@ -641,10 +643,14 @@ def dictionaries(ax):
     W = f.w_pt
     rows_h, y0 = 78.0, 38.0             # 12 rows at 6.5 pt
     address = list(K_CYCLE[:3])
+    # QA 2026-09-09: the arbor's subtrees run left-to-right in the same
+    # order as the strip's bands run top-to-bottom
+    arbor_colors = address[::-1]
     nodes = f.site_tree((X(1.0), Y(y0), X(0.33 * W), Y(rows_h)),
-                        branching=(3, 3), subtree_colors=address, orient="up")
-    f.partition(nodes, [nodes.subtree(k) for k in range(3)], colors=address,
-                pct=16)
+                        branching=(3, 3), subtree_colors=arbor_colors,
+                        orient="up")
+    f.partition(nodes, [nodes.subtree(k) for k in range(3)],
+                colors=arbor_colors, pct=16)
     f.error_in(nodes.soma, label="δ0")
     strip_x, strip_w = 0.42 * W, 0.145 * W
     f.site_strip((X(strip_x), Y(y0), X(strip_w), Y(rows_h)), branching=(3, 3),
@@ -727,7 +733,7 @@ def accuracy(ax, conditions, seeds, paired, within):
     # slash order is stated because the two hue labels sit at the far right.
     ax.text(1.28, 93.6, " / ".join(signed(v) for v in gains) + " pp",
             ha="left", va="center", fontsize=PT_BASE, color=INK, zorder=6)
-    ax.text(1.28, 92.23, "per neuron − strict scalar (shunting / additive)",
+    ax.text(1.28, 92.23, "per neuron − strict scalar",
             ha="left", va="center", fontsize=PT_BASE, color=MUTE, zorder=6)
     credit = [100 * conditions[conditions.architecture.eq(a) & conditions.arm.eq(arm)].iloc[0]["mean"]
               for a in ARCHITECTURES for arm in ARMS[1:5]]
@@ -766,19 +772,24 @@ def overlay_arm(ax, y, row, color, *, offset=ARM_OFFSET_ROWS):
             mfc="white", mec=color, mew=LW_ERR, zorder=4.0)
 
 
-def row_note(ax, y, text, lo, hi, xlim, *, pad=0.06):
-    """A per-row tag on the emptier side of its own row, clear of the marks."""
+def row_note(ax, y, text, lo, hi, xlim, *, pad=0.03, side="right",
+             below=False):
+    """A per-row tag set ABOVE its row, right-aligned inside the right spine.
+
+    QA 2026-09-09: rows 1 and 2 of E have no empty side (fans span 7-13 pp on
+    a 0-20 axis), so an in-row tag always landed on a mark.  The tag now sits
+    0.40 rows above the row (between rows; the second arm is 0.22 rows below
+    the row), where no mark of any row lies.
+    """
     span = xlim[1] - xlim[0]
-    width = _text_w_pt(ax, text, PT_BASE) / ax.get_window_extent().width \
-        * ax.figure.dpi / 72.0 * span
-    left_room, right_room = lo - xlim[0], xlim[1] - hi
-    if right_room >= left_room:
-        ax.text(xlim[1] - pad * span, y, text, ha="right", va="center",
+    yy = y + 0.42 if below else y - 0.45     # last row: below (nothing there)
+    if side == "right":
+        ax.text(xlim[1] - pad * span, yy, text, ha="right", va="center",
                 fontsize=PT_BASE, color=MUTE, zorder=6)
-    else:
-        ax.text(xlim[0] + pad * span, y, text, ha="left", va="center",
+    else:                       # F: the right edge lies inside the band
+        ax.text(xlim[0] + pad * span, yy, text, ha="left", va="center",
                 fontsize=PT_BASE, color=MUTE, zorder=6)
-    return width
+    return _text_w_pt(ax, text, PT_BASE)
 
 
 def cohort_forest(canvas, ax, cohorts, kind, *, value_label, xlim, xticks,
@@ -801,10 +812,15 @@ def cohort_forest(canvas, ax, cohorts, kind, *, value_label, xlim, xticks,
         # carries one token (never a collapsed pair that reads as one arm).
         note = f"{int(lead.positive_seeds)}/{int(lead.n_seeds)}"
         if second is not None:
-            note = f"{note} · {int(second.positive_seeds)}/{int(second.n_seeds)}"
+            pair = f"{int(second.positive_seeds)}/{int(second.n_seeds)}"
+            # 'both 10/10' where the two arms agree: the shorter tag clears
+            # the fan on the 0-20 axis (QA 2026-09-09)
+            note = f"both {note}" if pair == note else f"{note} · {pair}"
         extras.append((second, note))
+    # QA 2026-09-09: no row bands (the per-row tags sit between rows, and
+    # the bands hid F's equivalence corridor); the tick still ties label to row
     out = canvas.forest(ax, rows, value_label=value_label, reference=0.0,
-                        reference_label="", xlim=xlim, tag="", band=True,
+                        reference_label="", xlim=xlim, tag="", band=False,
                         tick=True, gutter_pt=FOREST_GUTTER_PT)
     ax.set_xticks(xticks)
     ax.set_xticklabels([minus(t) for t in xticks], fontsize=PT_BASE)
@@ -813,8 +829,9 @@ def cohort_forest(canvas, ax, cohorts, kind, *, value_label, xlim, xticks,
                                                  # the last row for the two
                                                  # reference labels
     ax.annotate("no effect", xy=(0.0, hi - 0.50), xycoords=("data", "data"),
-                xytext=(-2.5, 0.0), textcoords="offset points", ha="right",
+                xytext=(2.5, 0.0), textcoords="offset points", ha="left",
                 va="center", fontsize=PT_BASE, color=MUTE, zorder=6)
+    last = out["ypos"][-1]
     for y, row, (second, note) in zip(out["ypos"], rows, extras):
         span_lo, span_hi = row["lo"], row["hi"]
         if row["seeds"]:
@@ -827,16 +844,13 @@ def cohort_forest(canvas, ax, cohorts, kind, *, value_label, xlim, xticks,
                         COLORS["additive"])
             span_lo = min(span_lo, second.low_pp, min(second.seed_pp))
             span_hi = max(span_hi, second.high_pp, max(second.seed_pp))
-        row_note(ax, y + 0.5 * ARM_OFFSET_ROWS, note, span_lo, span_hi, xlim)
-    if arch_code:
-        y = out["ypos"][0]
-        ax.text(xlim[1] - 0.03 * (xlim[1] - xlim[0]), y - 0.32, "shunting",
-                ha="right", va="center", fontsize=PT_BASE,
-                color=label_color(COLORS["shunting"]), zorder=6)
-        ax.text(xlim[1] - 0.03 * (xlim[1] - xlim[0]), y + 0.52, "additive",
-                ha="right", va="center", fontsize=PT_BASE,
-                color=label_color(COLORS["additive"]), zorder=6)
-    ax.annotate("mean [95 % CI]", xy=(1.0, 0.0), xycoords="axes fraction",
+        row_note(ax, y, note, span_lo, span_hi, xlim,
+                 side="left" if kind == "exact" else "right",
+                 below=(y == last))
+    # the arm key lives in the footnote (an in-row key collided with the
+    # per-row tags): filled circle shunting, open square additive
+    foot = "mean [95 % CI]" + ("; ● shunting, □ additive" if arch_code else "")
+    ax.annotate(foot, xy=(1.0, 0.0), xycoords="axes fraction",
                 xytext=(0.0, -25.0), textcoords="offset points", ha="right",
                 va="top", fontsize=PT_BASE, color=MUTE, annotation_clip=False)
     return out
@@ -885,10 +899,14 @@ def capture(ax, per_seed, summary):
                 line, = ax.plot(xs + offset, means, color=color, lw=LW_HAIR,
                                 zorder=2.6)
                 line.set_dashes((2.2, 1.8))
-    ax.text(-0.42, 0.44, "Shunting", ha="left", va="center", fontsize=PT_BASE,
-            color=label_color(COLORS["shunting"]), zorder=6)
-    ax.text(-0.42, 0.945, "Additive", ha="left", va="center", fontsize=PT_BASE,
+    # direct labels right of the K = 12 markers, stacked (both arms reach
+    # 1.0 there); the K = 3 side is crossed by the rising trained lines
+    # colour-keyed names head the lower-left key block: every other placement
+    # crossed a trained line or the canvas edge (QA 2026-09-09)
+    ax.text(-0.42, 0.445, "Additive", ha="left", va="center", fontsize=PT_BASE,
             color=label_color(COLORS["additive"]), zorder=6)
+    ax.text(-0.42, 0.375, "Shunting", ha="left", va="center", fontsize=PT_BASE,
+            color=label_color(COLORS["shunting"]), zorder=6)
     for k, line in enumerate(("filled: trained", "open: initial",
                               "10 seeds per point", "activation coordinate")):
         ax.text(-0.42, 0.30 - 0.075 * k, line, ha="left", va="center",
@@ -1102,7 +1120,7 @@ def main():
     tint_patch(f_, ("rect", -equivalence["margin_pp"], f_.get_ylim()[1],
                     2 * equivalence["margin_pp"],
                     f_.get_ylim()[0] - f_.get_ylim()[1]), color="mute", pct=10,
-               edge=True, lw=LW_HAIR, radius_pt=1.5, zorder=0.15, clip_on=True)
+               edge=True, lw=LW_HAIR, radius_pt=1.5, zorder=1.6, clip_on=True)
     f_.text(1.0, f_.get_ylim()[0] - 0.30, "±1 pp equivalence vs BP",
             ha="right", va="center", fontsize=PT_BASE, color=MUTE, zorder=6)
     printed_g = capture(g, cap_seed, cap_summary)
