@@ -17,11 +17,33 @@ import subprocess
 import sys
 
 ROOT = Path(__file__).resolve().parents[1]
-RESTORED_MAIN = (1, 4, 6, 7, 9)
+# The v2 overhaul (2026-09-10) production builders, one per main figure.
+# build_restored_main.py keeps only Figures 4 and 6; Figures 1, 7 and 9 moved to
+# their own builders and Figure 2 is no longer a retained input.
+RESTORED_MAIN = (4, 6)
 FOCUSED_MAIN = {
+    1: "credit_first_figures/build_framework.py",
+    2: "build_main_figure_04.py",
     3: "credit_first_figures/build_ancestry.py",
     5: "conductance_local_gate/figure.py",
+    7: "credit_first_figures/build_anatomy.py",
     8: "shunt_ancestry_gain/build_focused_main.py",
+    9: "credit_first_figures/build_measured.py",
+}
+#: Builders with no --emit-main flag: the component they write is copied here.
+COMPONENT_OUTPUT = {
+    1: "figures/components/credit_first_figure_01.pdf",
+    2: "figures/components/main_figure_04_native.pdf",
+}
+#: Figures whose builder writes its display table into figures/provenance/;
+#: the emission step copies those into source_data/curated_publication/.
+#: Figures 1, 2, 3, 5 and 9 write that file directly and are not copied here
+#: (copying the stale provenance twin would overwrite the fresh table).
+PROVENANCE_DIR = {
+    4: "structure_restoration_20260908",
+    6: "structure_restoration_20260908",
+    7: "structure_restoration_20260908",
+    8: "credit_clarity_20260908",
 }
 
 
@@ -48,9 +70,8 @@ def export_display_tables() -> None:
     output = ROOT / "source_data/curated_publication"
     output.mkdir(parents=True, exist_ok=True)
     records = []
-    for number in sorted((*RESTORED_MAIN, *FOCUSED_MAIN)):
-        directory = ("structure_restoration_20260908" if number in RESTORED_MAIN
-                     else "credit_clarity_20260908")
+    for number in sorted(PROVENANCE_DIR):
+        directory = PROVENANCE_DIR[number]
         source = ROOT / "figures/provenance" / directory / f"figure_{number:02d}_plotted.csv"
         destination = output / source.name
         shutil.copyfile(source, destination)
@@ -103,14 +124,15 @@ def main() -> None:
     verify_retained_main()
     if not args.supplement_only:
         arguments = [] if args.no_emit_main else ["--emit-main"]
-        run_script("credit_first_figures/build_restored_main.py", *arguments)
-        # Figure 7's production builder is build_anatomy.py (v2 DECISIONS
-        # section "Figure 7"): build_restored_main.py is retired for this
-        # figure and left unedited, so the overhaul build runs after it and
-        # replaces both the component and figures/main/figure_07.pdf.
-        run_script("credit_first_figures/build_anatomy.py", *arguments)
-        for script in FOCUSED_MAIN.values():
-            run_script(script, *arguments)
+        run_script("credit_first_figures/build_restored_main.py",
+                   "--figures", "4", "6", *arguments)
+        for number, script in sorted(FOCUSED_MAIN.items()):
+            run_script(script, *([] if number in COMPONENT_OUTPUT else arguments))
+        if not args.no_emit_main:
+            for number, component in sorted(COMPONENT_OUTPUT.items()):
+                destination = ROOT / f"figures/main/figure_{number:02d}.pdf"
+                shutil.copyfile(ROOT / component, destination)
+                print(f"Emitted figure_{number:02d}.pdf from {component}", flush=True)
         export_display_tables()
     if not args.main_only:
         run_script("supplement_consolidation/build.py")
