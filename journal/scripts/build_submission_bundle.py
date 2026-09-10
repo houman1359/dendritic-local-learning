@@ -39,13 +39,14 @@ MAIN_FIGURES = (
 )
 
 SUPPLEMENTARY_FIGURES = (
+    'supplementary/curated/mechanistic_chain.pdf',
     'supplementary/curated/credit_validation.pdf',
     'supplementary/curated/utility_signal_noise.pdf',
-    'supplementary/curated/checkpoint_geometry.pdf',
     'supplementary/curated/reliability_gain.pdf',
     'supplementary/curated/same_span_conditioning.pdf',
     'supplementary/curated/image_generalization.pdf',
     'supplementary/curated/mnist_dictionary_geometry.pdf',
+    'supplementary/curated/error_field_geometry.pdf',
     'supplementary/curated/input_coverage_depth.pdf',
     'supplementary/curated/branch_conflict_controls.pdf',
     'supplementary/curated/ancestry_coefficients.pdf',
@@ -68,9 +69,9 @@ SUPPLEMENTARY_FIGURES = (
     'supplementary/curated/anatomy_preprocessing.pdf',
     'supplementary/curated/shunt_sensitivity.pdf',
     'supplementary/curated/shunt_replication.pdf',
-    'supplementary/curated/measured_topology.pdf',
     'supplementary/curated/measured_transfer_geometry.pdf',
     'supplementary/curated/measured_predictor_controls.pdf',
+    'supplementary/curated/animal_credit_reanalysis.pdf',
     'supplementary/curated/original_selector.pdf',
     'supplementary/curated/finite_horizon.pdf',
     'supplementary/curated/morphology_estimation.pdf',

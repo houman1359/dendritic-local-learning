@@ -31,7 +31,7 @@
     "source_data/credit_rule_bridge/summaries/all_diagnostics.csv": "a11538ed5d5e95c11863bdd0b8b1b89dbc4ed5819d307f17d8e39e2a766af562"
   },
   "builder_sha256": {
-    "scripts/credit_first_figures/build_restored_main.py": "33d5f7297f309ebbf48f72e323f76672d4fc37142825936e1b261008123ecee3",
+    "scripts/credit_first_figures/build_restored_main.py": "9cb1175dd5df20b3e8678a3a6c0aea704751700a7a219eea0269517c4ebe842c",
     "scripts/credit_first_figures/focused_main_evidence.py": "e045f0fc26ce8554af19f7d2b1ee9683ec852899f19e02e76e78163b0d74e773",
     "scripts/figure_canvas.py": "de3f566dd08270535deab95eb798b49cc17ccf4dfbb88e7ebdb50860903a6ad1",
     "scripts/journal_style.py": "be8a138f9d9c081237edc616ba52b6769f957d8b8b49e705a92adcb18f475f3c"

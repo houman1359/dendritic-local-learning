@@ -90,6 +90,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -1162,7 +1163,14 @@ def register_curated(path):
               "scope": CURATED_SCOPE}
     records = [r for r in data["records"] if r.get("figure") != 1]
     records.append(record)
-    data["records"] = sorted(records, key=lambda r: r.get("figure", 0))
+    # 2026-09-10: the manifest now also carries the supplement's "S1".."S36"
+    # records, so sort main figures first by number and SI figures after.
+    def _order(record):
+        value = str(record.get("figure", ""))
+        digits = re.sub(r"\D", "", value)
+        return (value.upper().startswith("S"), int(digits) if digits else 0, value)
+
+    data["records"] = sorted(records, key=_order)
     manifest.write_text(json.dumps(data, indent=2) + "\n")
     readme = path.parent / "README.md"
     line = ("Figure 1 panels C-G are emitted by "
