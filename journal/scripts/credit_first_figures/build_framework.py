@@ -559,7 +559,7 @@ def credit_entry(ax):
     tail = (sx + X(nodes.soma_r_pt + 11.0), sy - Y(nodes.soma_r_pt + 7.0))
     # the return leaves the loss card's RIGHT edge, drops outside both cards
     # and runs left along the delta-0 shaft, 3.5 pt below the tag's baseline
-    shaft_y, right = tail[1] - Y(3.5), X(card_x + card_w + 1.6)
+    shaft_y, right = tail[1] - Y(7.5), X(card_x + card_w + 1.6)   # clear of the delta-0 subscript
     ax.plot([X(card_x + card_w), right, right, tail[0], tail[0]],
             [Y(loss_y + 6.0), Y(loss_y + 6.0), shaft_y, shaft_y, tail[1]],
             color=INK, lw=f.lw(LW_HAIR), solid_capstyle="round",
@@ -1239,8 +1239,9 @@ def main():
                     2 * equivalence["margin_pp"],
                     f_.get_ylim()[0] - f_.get_ylim()[1]), color="mute", pct=10,
                edge=True, lw=LW_HAIR, radius_pt=1.5, zorder=0.12, clip_on=True)
-    f_.text(1.0, f_.get_ylim()[0] - 0.32, "±1 pp equivalence vs BP",
-            ha="right", va="center", fontsize=PT_BASE, color=MUTE, zorder=6)
+    # left of the zero rule, so the dashed rule never crosses the words
+    f_.text(-2.28, f_.get_ylim()[0] - 0.32, "±1 pp equivalence vs BP",
+            ha="left", va="center", fontsize=PT_BASE, color=MUTE, zorder=6)
     printed_g = capture(g, cap_seed, cap_summary)
 
     canvas.lock_reserves()          # settle the boxes before drawing in points
