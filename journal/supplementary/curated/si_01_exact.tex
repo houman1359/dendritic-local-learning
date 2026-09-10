@@ -1176,8 +1176,9 @@ common-noise updates of size 0.12 used the projector onto levels $0$ through
 $D_{\mathrm r}\in\{1,2,3,4\}$. A fixed leaf permutation provided the rewired
 control, and the identity provided stochastic backpropagation.
 
-The projection screen independently set retained signal $r$ and retained noise
-$n$ to $\{0.25,0.5,0.75,0.9,1\}$. It compared an unprojected stochastic
+The projection screen set retained signal and retained noise
+independently, with $r\in\{0.25,0.5,0.75,0.9,1\}$
+and $n\in\{0.1,0.25,0.5,0.75,1\}$. It compared an unprojected stochastic
 gradient, backpropagation followed by the same projection, and a routed
 estimator with an added total coefficient-noise fraction of 0.05. For a unit
 step on the identity-curvature quadratic, expected losses were calculated
