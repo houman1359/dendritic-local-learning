@@ -1067,7 +1067,17 @@ def bound_contact(ax, t):
     lines = ['broadcast reaches a conductance',
              f'bound in {by_4096}/20 fits by 4,096;',
              f'tick: median {step}']
-    stack(ax, 0.99, 0.63, lines, ha='right', lead_pt=8.5)
+    # QA 2026-09-11 (regression check): the 3-pt premise did not hold -- on
+    # the page the tag's top line sat 8 pt under the tick and 21 pt to its
+    # right, with the labelled 4,096 rule between them as a competing
+    # referent, so 'tick: median 717' had nothing on the page to point at.
+    # The tag drops 3.7 pt (0.63 -> 0.60; the trio and its label stay two
+    # decades below) and the mute hairline is back: it rises from the top
+    # line, which spans the tick's x, to 2.2 pt under the tick's foot, the
+    # same y_text < y_lead < datum rule as F's column ties.
+    tag_top = 0.60
+    stack(ax, 0.99, tag_top, lines, ha='right', lead_pt=8.5)
+    tie_leader(ax, step, tag_top, y_here * 0.72)
     return dict(bound_median_step=step, bound_by_4096=by_4096,
                 bound_by_16384=by_16384, bound_y=y_here)
 
@@ -1289,7 +1299,18 @@ def placement(ax, t):
     frozen = [['g', ('sub', 'I'), f" frozen {also['both_gains_frozen']}/20"],
               f"best step ≤ {also['max_best_step']}, "
               f"endpoint {also['mean_fixed_endpoint']:.2f}"]
-    stack(ax, 0.99, 0.955, frozen, ha='right', lead_pt=8.6)
+    _, below = stack(ax, 0.99, 0.955, frozen, ha='right', lead_pt=8.6)
+    # QA 2026-09-11 (regression check): both column tags are right-edge
+    # blocks now, and only the swapped one kept a leader when the frozen
+    # block moved up from 0.300 (its old upward tie at x = 3.0 went with the
+    # move), so its attribution rested on also-proximal being the rightmost
+    # category.  The tie is back, running DOWN from the block's bottom line
+    # to 2.2 pt over the highest mark in the column it names.
+    also_sel = f_seeds(t, 'hard_distal_and_proximal')
+    also_m = cond(t, 'opposed_strong', 'hard_distal_and_proximal')
+    tie_leader(ax, 3.0, below + 8.6 / axes_h_pt(ax),
+               max(float(also_sel.test_nmse.max()), float(also_m.ci_high)),
+               above=True)
     # PLAN section 2 (F, 'Printed on panel'): the equality the panel title
     # asserts is said in words, not left to the two coincident diamonds.  The
     # between-cluster band is spent on the swapped-gate tie, so the line takes
@@ -1305,16 +1326,23 @@ def placement(ax, t):
     return printed
 
 
-def tie_leader(ax, x, y_top_frac, lowest, *, gap_pt=2.2):
-    """Hairline from just above a tied annotation to just below its cluster.
+def tie_leader(ax, x, y_edge_frac, datum, *, gap_pt=2.2, above=False):
+    """Hairline from just outside a tied annotation to just short of its cluster.
 
     The plan's rule is ``y_text < y_lead < lowest``: the leader starts at the
     text box, not inside it, and stops short of the lowest datum of the
-    column it names.
+    column it names.  ``above=True`` is the mirror case (QA 2026-09-11): the
+    tag sits over its column, ``y_edge_frac`` is its BOTTOM line and
+    ``datum`` the highest mark, and the leader runs down to it.
     """
     h = axes_h_pt(ax)
-    y0 = y_top_frac + (0.5 * PT_BASE + gap_pt) / h
-    y1 = y_frac(float(lowest)) - gap_pt / h
+    if above:
+        y0 = y_edge_frac - (0.5 * PT_BASE + gap_pt) / h
+        y1 = y_frac(float(datum)) + gap_pt / h
+        y0, y1 = y1, y0
+    else:
+        y0 = y_edge_frac + (0.5 * PT_BASE + gap_pt) / h
+        y1 = y_frac(float(datum)) - gap_pt / h
     if y1 - y0 < 1.5 / h:
         return None
     line, = ax.plot([x, x], [y_data(y0), y_data(y1)], color=MUTE,
@@ -1418,11 +1446,19 @@ def cancellation(ax, t):
     ax.set_ylabel('Distal gradient retained')
     style_panel(ax)
     # direct labels in the corridor the two seed columns leave open
-    ax.text(1.5, 1.07, 'exact credit', ha='right', va='center',
-            fontsize=PT_BASE, color=COLORS['bp'], zorder=6)
+    # QA 2026-09-11 (regression check): 'exact credit' used to sit ABOVE the
+    # rule at (1.5, 1.07), flush with the right spine (0.1 pt) and reading as
+    # a retained-fraction claim for a series whose trained mean is 0.63.  It
+    # cannot go under the rule over the trained column either: five trained
+    # seeds lie at 0.92-0.98 and the amber seed at 0.81 leaves no 7-pt line
+    # to their right.  So it is set like the amber label -- two lines under
+    # its own initial cloud (lowest seed 0.494, top edge here 0.428), left of
+    # the amber initial seeds (x >= 0.071) by 4 pt.
+    lo_y, hi_y = UNIT_YLIM
+    stack(ax, (-0.19 + 0.5) / 2.0, (0.39 - lo_y) / (hi_y - lo_y),
+          ['exact', 'credit'], ha='center', color=COLORS['bp'], lead_pt=8.2)
     # QA 2026-09-09 (2): set through stack() at the figure's 8.6 pt leading
     # (the hand-placed data-unit pair was 6.0 pt and the boxes overlapped)
-    lo_y, hi_y = UNIT_YLIM
     stack(ax, (0.44 + 0.5) / 2.0, (-0.025 - lo_y) / (hi_y - lo_y),
           ['calibrated', 'broadcast'], ha='center', color=AMBER_TEXT,
           lead_pt=8.2)

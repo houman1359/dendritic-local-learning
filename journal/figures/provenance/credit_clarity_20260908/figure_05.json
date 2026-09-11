@@ -1,7 +1,7 @@
 {
   "figure": "Figure 5",
   "output": "source_data/conductance_local_gate/figures/local_gate_primary.pdf",
-  "output_sha256": "7b7f77ab15179f35ea5a63263b8abf18595c8912ce32a03239b35027a18cdb92",
+  "output_sha256": "a9d77a30ed31cc721ac7b192ca04afe8a37fd0690c1ef84163c91edfee80f8d6",
   "plotted_table": "source_data/curated_publication/figure_05_plotted.csv",
   "plotted_table_sha256": "a708e5edb519fe4da1e887043b3a10c1ea0676cc731ab7fb745eef90564fef70",
   "panel_sources": {
@@ -73,12 +73,12 @@
     "source_data/conductance_local_gate/summaries/paired_seed_contrasts.csv": "07fa32c5b4cc10ea5f47f683662753d22c08f3b17e767d044af4a9e0e2554d22"
   },
   "builders_sha256": {
-    "scripts/conductance_local_gate/figure.py": "f17d1dd9a5911f5f921f2df928e4332a9022a3045520f85b943ba004e7661f28",
+    "scripts/conductance_local_gate/figure.py": "e780dda97d9c9dbb9342cd2607b6cd4470160974a2c2948525e7a9cd6dd7b0de",
     "scripts/conductance_local_gate/report.py": "a96b4b6edd42c0d98de3da44a46c409310b463450369173be7371d503fa6dfef",
     "scripts/conductance_local_gate/model.py": "cc2b82f6c486810a43aa885f3ea2dacce54c473f2e2ece6f4cfdb7d88ce6ad39",
     "scripts/figure_canvas.py": "0a0d01607cc3589a44075b6ccd7c2867dcf7d8a31f88ca1565dade247f4bcb48",
     "scripts/native_schematics.py": "68530ec60f85e496b9b0ba7a7ad53510dce2fae91cc38231046c1175e1cb7aeb",
-    "scripts/journal_style.py": "be8a138f9d9c081237edc616ba52b6769f957d8b8b49e705a92adcb18f475f3c",
+    "scripts/journal_style.py": "47ee5c9366c7bd3e59b8074513debe260e707b2d7d0ea1ac9c82c1e1a924895a",
     "scripts/credit_first_figures/focused_provenance.py": "b7ade95b88e7d10a43bab01716dee6211bc2f09735b605d489c0012a147ecea7"
   },
   "source_data_immutable": true,

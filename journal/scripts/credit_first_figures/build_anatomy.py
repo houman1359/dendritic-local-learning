@@ -1138,8 +1138,17 @@ def panel_d(ax, summaries, tables, floor):
     # the K = 1 column is the broadcast itself, so all six families share this
     # one value to sixteen digits; the reference line says so rather than
     # leaving six coincident markers to be read as a measured agreement
-    reference_line(ax, floor, axis="y", label="shared broadcast",
-                   span=(0.85, D_XMAX))
+    # Regression repair 2026-09-11: the dashes stop where the drawn abscissa
+    # and the grid stop (K = 16.6); drawn to D_XMAX they ran 40 % past the
+    # bounded bottom spine, the geometry QA round 4 removed from the axis
+    # rule.  The tag keeps its place in the direct-label band, right-aligned
+    # at the axes edge like the panel's own end labels: set right-aligned at
+    # K = 16.6 it would span K = 1.9 -> 16.6 and strike the K = 2 markers.
+    reference_line(ax, floor, axis="y", label="", span=(0.85, D_GRID_XMAX))
+    ax.annotate("shared broadcast", xy=(D_XMAX, floor), xytext=(0.0, 1.4),
+                textcoords="offset points", fontsize=PT_BASE,
+                color=COLORS["mute"], ha="right", va="bottom", zorder=5,
+                annotation_clip=False)
     # clipped to the band that carries no text: drawn to y = 0 the dashes
     # ran through the floor label `shared broadcast` (y 0.21-0.31) and the
     # footer `47 disjoint cells` (QA round 3).  The lowest K = 8 datum is
@@ -1196,7 +1205,20 @@ def panel_e(ax, summaries, floor):
     # rather than as 20 % of every bar (CF-7).  Its tag is set by hand in the
     # head strip: reference_line puts the tag at the end of the span, which on
     # this inverted ordinate is under the panel, in row 2's paper.
-    reference_line(ax, floor, axis="x", label="", span=(-0.62, 5.55))
+    # Regression repair 2026-09-11: drawn at the library's default zorder 1
+    # the dashes sat UNDER the zorder-2 bars and survived only in the white
+    # gaps between them, so the one comparison this panel makes (and the one
+    # fact worth reading, Random's 0.201 just below the 0.203 broadcast) was
+    # invisible across every bar.  The reference is drawn above the bars and
+    # their edges, still one dashed mute rule (CF-7).
+    # A white halo (LW_DATA, the widest sanctioned stroke) sits under the
+    # dashes so they also read across the ink-coloured Depth bar, where mute
+    # on ink is a 1-step contrast; on paper the halo is invisible.
+    halo, = ax.plot([floor, floor], [-0.62, 5.55], color="white",
+                    lw=LW_DATA, zorder=3.8, solid_capstyle="butt")
+    halo.set_dashes((2.2 * LW_REF / LW_DATA, 1.8 * LW_REF / LW_DATA))
+    reference_line(ax, floor, axis="x", label="", span=(-0.62, 5.55),
+                   zorder=4)
     ax.text(floor - 0.012, -0.72, f"broadcast {floor:.3f}", fontsize=PT_BASE,
             color=COLORS["mute"], ha="right", va="center")
     return pd.DataFrame(rows)
@@ -1240,8 +1262,18 @@ def panel_f(ax, pairs):
                 color=COLORS["ink"], mfc="white", mec=COLORS["ink"],
                 mew=LW_ERR, ms=MARKER_MS * 1.5, elinewidth=LW_ERR,
                 capsize=2.2, zorder=5)
-    _leader(ax, (mx, my), (0.505, -0.078), COLORS["ink"])
-    ax.text(0.262, -0.115, "cohort mean,\n95 % CI", fontsize=PT_BASE,
+    # Regression repair 2026-09-11: the leader ends ON the label (its top
+    # edge, 1 pt above the ascenders) instead of 26 pt short of it in blank
+    # paper.  The cloud leaves no straight path from the mean with more than
+    # a hairline's clearance (the open cells at (0.497, -0.022) and
+    # (0.549, -0.021) are 0.7 pt apart); the endpoint is the one that
+    # threads that gap at its centre, measured against every cell's drawn
+    # radius.  The label sits below the -0.1 gridline and 4 pt off the left
+    # spine so it no longer reads as `-0.1 cohort mean,`; the band it
+    # occupies (x 0.285-0.665, y -0.118 to -0.182) holds no cell: the
+    # nearest are (0.653, -0.089) above and (0.712, -0.132) to the right.
+    _leader(ax, (mx, my), (0.442, -0.113), COLORS["ink"])
+    ax.text(0.285, -0.150, "cohort mean,\n95 % CI", fontsize=PT_BASE,
             color=COLORS["ink"], ha="left", va="center", linespacing=1.2)
     ax.set_xlim(0.25, 1.0)
     ax.set_ylim(F_Y0, F_Y1)
@@ -1395,10 +1427,17 @@ def panel_g(canvas, ax, report, tables, summaries):
     # rank columns is not read as 60-88 pp of plotted space
     ax.spines["bottom"].set_bounds(G_XLIM[0], G_FAN_MAX + 1.5)
     ax.xaxis.labelpad = 2.5
-    ax.text(G_XLIM[0] + 1.0, 4.20,
-            f"\u2020 rank-limited (5.66 of 8); {beyond} of "
-            f"{sum(len(i['seeds']) for i in extra)} differences beyond the "
-            "axis",
+    # Regression repair 2026-09-11: on the 4.20 baseline the descenders
+    # cleared the bottom spine by 1 pt and the note read as underlined by
+    # the axis; it now has its own baseline 4 pt above the rule, below the
+    # Random row's band (2.58-3.42).  Wording shortened (133 pt, measured) so
+    # the note ends 3 pt before the spine's bounded right end at
+    # G_FAN_MAX + 1.5 instead of 40 pt past it, in the printed-column band:
+    # the rank column prints 5.66\u2020 on the row itself, and the count is
+    # set in the `cells +` column's own n/N notation.
+    ax.text(G_XLIM[0] + 0.5, 4.04,
+            f"\u2020 rank-limited (of 8); {beyond}/"
+            f"{sum(len(i['seeds']) for i in extra)} beyond the axis",
             fontsize=PT_BASE, color=COLORS["mute"], ha="left", va="bottom",
             zorder=5)
     ancestry = eight.loc[ANCESTRY]
@@ -1525,11 +1564,19 @@ def panel_h(ax, tables, inclusion):
     # leader travels the shortest way to its own mark and the fan crosses the
     # Pinky intervals as little as the value order permits
     step, last = 0.115, 0.950
+    # Regression repair 2026-09-11: started on its own marker, a leader had to
+    # cross the Pinky columns to its right -- Ancestry's ran over the
+    # Surrogate upper cap and the Random interval, Surrogate's over the
+    # Random interval.  Each leader now starts in clear paper just past the
+    # group's rightmost drawn mark (Depth at +0.30, its jitter and marker
+    # radius), at its family's mean height; the marker keeps its identity by
+    # shape and colour, and the leader carries only the height.
+    x_start = max(x for x, _ in pinky.values()) + 0.10
     for method in order:
         x, mean = pinky[method]
         y = min(mean, last)
         last = y - step
-        _leader(ax, (x + 0.06, mean), (2.62, y))
+        _leader(ax, (x_start, mean), (2.62, y))
         ax.annotate(FAMILIES[method]["short"], xy=(1.0, y),
                     xycoords=("axes fraction", "data"), xytext=(10.0, 0.0),
                     textcoords="offset points", fontsize=PT_BASE,
