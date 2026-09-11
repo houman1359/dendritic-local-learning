@@ -199,8 +199,14 @@ def gain_dial(f, xy, *, r_pt=3.2, label="Γ"):
     f.ax.plot([xy[0], xy[0] + f.fx(r_pt * 0.95 * np.cos(ang))],
               [xy[1], xy[1] + f.fy(r_pt * 0.95 * np.sin(ang))], color=MUTE,
               lw=f.lw(LW_HAIR), solid_capstyle="round", zorder=5.6)
-    f.text((xy[0], xy[1] - f.fy(r_pt + 3.4)), label, size=PT_BASE, color=MUTE,
-           va="top")
+    # QA 2026-09-10: hung 3.4 pt UNDER the ring, the label landed on the same
+    # baseline, at the same size and in the same face as the update rule
+    # immediately to its left, so it read as a trailing factor of that
+    # equation rather than as the name of the dial above it.  It now sits
+    # against the ring's own upper right shoulder, 8 pt off the equation
+    # baseline and touching nothing else.
+    f.text((xy[0] + f.fx(r_pt + 1.2), xy[1] + f.fy(1.4)), label, size=PT_BASE,
+           color=MUTE, ha="left", va="bottom")
 
 
 def _fade_ghost(nodes):
@@ -585,8 +591,13 @@ def deliveries(ax):
     """
     f = Frame(ax)
     X, Y = f.fx, f.fy
-    foot_pt = f.footer("projected K = 1, 3: oracle coefficients on C's "
-                       "dictionaries\ndecoder only: frozen core (D)", size=PT_BASE, band_pt=10.5, color=MUTE)
+    # QA 2026-09-10: the two-line footer is deleted.  "projected K = 1, 3:
+    # oracle coefficients on C's dictionaries" is C's own in-panel line, set
+    # 250 pt below it in the same column pair, and "decoder only: frozen core"
+    # is D's band key -- so both definitions were printed twice inside one
+    # figure.  Each is now stated once, beside the thing it defines, and B's
+    # three cards take the 21 pt the footer band held.
+    foot_pt = 0.0
     gap_pt, share = 5.0, np.array([104.0, 88.0, 98.0])
     widths = share / share.sum() * (f.w_pt - 2 * gap_pt)
     cells, x_pt = [], 0.0
@@ -723,8 +734,16 @@ def dictionaries(ax):
     strip_x = arbor_x + arbor_w + gap_arbor
     f.site_strip((X(strip_x), Y(y0), X(strip_w), Y(rows_h)), branching=(3, 3),
                  subtree_colors=address, band=True, pct=16)
-    f.text((X(strip_x + strip_w / 2.0), Y(y0 + rows_h + 1.5)), "K = 12: A = I",
-           size=PT_BASE, color=MUTE, va="bottom")
+    # QA 2026-09-10: the strip's name used to be a 48 pt mute line reaching
+    # from over the arbor to over the K = 1 column, so it read as a title over
+    # all three dictionaries rather than as the third dictionary's own label.
+    # It is now the bare budget, in the same ink and the same words as "K = 1"
+    # and "K = 3", and it is narrow enough to sit on the strip it names; that
+    # A = I is the identity is the caption's sentence.  It cannot join the
+    # other two on the y0 - 8 baseline: strip + matrices are 44.3 pt of ruler
+    # and three such labels need 62 pt.
+    f.text((X(strip_x + strip_w / 2.0), Y(y0 + rows_h + 1.5)), "K = 12",
+           size=PT_BASE, color=INK, va="bottom")
     order = np.array(nodes.order)
     assert order.tolist() == [0, 3, 4, 5, 1, 6, 7, 8, 2, 9, 10, 11]
     a1 = np.ones((12, 1))
@@ -758,14 +777,67 @@ def dictionaries(ax):
 
 
 # ── D: six rules on fresh MNIST ───────────────────────────────────────────
+def plateau_inset(ax, conditions, seeds):
+    """The four credit rules again, y-magnified, in D's own empty floor.
+
+    QA 2026-09-10 (major): the four middle arms span 97.113-97.340 = 0.227 pp,
+    which is 1.1 % of D's 20.5 pp axis and 3 pt on the page, so the panel that
+    exists to show the collapse could not show how flat the collapse is, could
+    not show the ten seeds inside it (fan 0.1 pp = 1.4 pt, entirely under the
+    mean symbol) and could not show the intervals.  The emptied floor now
+    carries a y-magnified copy of columns 2-5: the x mapping is D's own, so
+    each pair sits directly under the column it repeats, and no x axis is
+    spent restating labels the panel already prints.  Nothing is added to the
+    record -- every mark here is a mark of the main panel.
+    """
+    x0, x1, y0, y1 = 0.70, 4.50, 78.9, 86.2       # in D's own data coordinates
+    box = ax.inset_axes([(x0 + 0.5) / 6.8, (y0 - 78.0) / 20.5,
+                         (x1 - x0) / 6.8, (y1 - y0) / 20.5])
+    box.set_zorder(5.0)
+    box.set_facecolor("white")
+    arms = ARMS[1:5]
+    xs = np.arange(1.0, 5.0)
+    for architecture, offset, marker, face in (
+            ("shunting", -0.10, "o", "fill"), ("additive", 0.10, "s", "open")):
+        color = COLORS[architecture]
+        group = seeds[seeds.architecture.eq(architecture)]
+        for x, arm in zip(xs, arms):
+            values = 100 * group[group.arm.eq(arm)].sort_values("seed").test_accuracy.to_numpy()
+            box.plot(x + offset + np.linspace(-0.05, 0.05, 10), values,
+                     ls="none", marker="o", ms=SEED_MS, mfc=color, mec="none",
+                     alpha=SEED_ALPHA, zorder=2)
+            row = conditions[conditions.architecture.eq(architecture)
+                             & conditions.arm.eq(arm)].iloc[0]
+            box.errorbar(x + offset, 100 * row["mean"],
+                         yerr=[[100 * (row["mean"] - row.ci_low)],
+                               [100 * (row.ci_high - row["mean"])]],
+                         fmt=marker, color=color, ms=MARKER_MS,
+                         mfc=color if face == "fill" else "white",
+                         mec="white" if face == "fill" else color,
+                         mew=LW_HAIR if face == "fill" else LW_ERR,
+                         elinewidth=LW_ERR, capsize=2, zorder=4)
+    box.set(xlim=(x0, x1), ylim=(96.78, 97.58), xticks=[],
+            yticks=[97.0, 97.2, 97.4])
+    box.set_yticks(np.arange(96.8, 97.58, 0.05), minor=True)
+    style_panel(box, grid="y")
+    box.tick_params(axis="y", labelsize=PT_BASE, pad=1.4, length=2.0)
+    box.tick_params(axis="x", length=0.0)
+    return box
+
+
 def accuracy(ax, conditions, seeds, paired, within):
     """Test accuracy for the six rules, ten fresh paired seeds per architecture."""
     xs = np.arange(6.0)
     tint_patch(ax, ("rect", 4.55, 78.0, 0.9, 20.5), color="mute", pct=10,
                edge=True, lw=LW_HAIR, radius_pt=1.5, zorder=0.15,
                clip_on=True)
-    ax.text(5.42, 79.1, "decoder only: frozen core", ha="right", va="center",
-            fontsize=PT_BASE, color=MUTE, zorder=6)
+    # QA 2026-09-10: the band's key used to be one 25-character line whose left
+    # half lay outside the band, on white ground over the exact-path column, so
+    # it read as another line of body text rather than as the band's label.  The
+    # x tick under the band already says "Decoder only"; the band adds only what
+    # was frozen, set in two short lines that fit inside the band's own width.
+    ax.text(5.0, 97.9, "frozen\ncore", ha="center", va="top",
+            fontsize=PT_BASE, color=MUTE, zorder=6, linespacing=1.35)
     printed = {}
     # Fill means ARCHITECTURE in D, E and F (filled shunting circle, open
     # additive square); only G re-uses open, for its initial checkpoint, and
@@ -799,26 +871,29 @@ def accuracy(ax, conditions, seeds, paired, within):
                                        & conditions.arm.eq("decoder_only")].iloc[0]["mean"],
                 architecture.capitalize(), ha="left", va="center",
                 fontsize=PT_BASE, color=label_color(color), zorder=6)
-    gains = [100 * paired[paired.architecture.eq(a)
-                          & paired.contrast.eq("neuron_shared_minus_strict_scalar")].iloc[0]["mean"]
-             for a in ARCHITECTURES]
-    # one block on PT_BASE leading (1.37 data units = 9.0 pt on this
-    # y-scale), so the number and its name read as one tagged contrast; the
-    # slash order is stated because the two hue labels sit at the far right.
-    ax.text(1.28, 93.6, " / ".join(signed(v) for v in gains) + " pp",
-            ha="left", va="center", fontsize=PT_BASE, color=INK, zorder=6)
-    ax.text(1.28, 92.23, "per neuron − strict scalar",
-            ha="left", va="center", fontsize=PT_BASE, color=MUTE, zorder=6)
+    # QA 2026-09-10 (major): the identity-gain block that used to sit here,
+    # "+9.23 / +7.46 pp / per neuron - strict scalar", is deleted.  Both
+    # numbers are E's own MNIST-fresh row (9.230 and 7.456), drawn there with
+    # their intervals and their ten seeds, so the block was a verbatim second
+    # printing of another panel of this figure inside D's emptied floor.
     credit = [100 * conditions[conditions.architecture.eq(a) & conditions.arm.eq(arm)].iloc[0]["mean"]
               for a in ARCHITECTURES for arm in ARMS[1:5]]
     spread = max(credit) - min(credit)
-    ax.text(0.62, 81.8, f"four credit rules within {spread:.2f} pp — see E, F",
+    # the within-tree contrasts are printed nowhere else in the figure (F plots
+    # exact path - per neuron, a different pair), so they stay -- but as an
+    # aligned two-column table on one leading, name at x = 1.15 and the
+    # shunting / additive pair at a single x = 2.72, not as ragged prose.
+    ax.text(1.15, 93.2, "within tree, fresh cohort:", ha="left", va="center",
+            fontsize=PT_BASE, color=MUTE, zorder=6)
+    for i, (name, values) in enumerate(within.items()):
+        ax.text(1.15, 91.8 - 1.37 * i, name, ha="left", va="center",
+                fontsize=PT_BASE, color=MUTE, zorder=6)
+        ax.text(2.72, 91.8 - 1.37 * i,
+                f"{signed(values[0])} / {signed(values[1])}", ha="left",
+                va="center", fontsize=PT_BASE, color=MUTE, zorder=6)
+    ax.text(0.70, 88.2, f"four credit rules within {spread:.2f} pp — see E, F",
             ha="left", va="center", fontsize=PT_BASE, color=MUTE, zorder=6)
-    ax.text(0.62, 89.0, "within tree, fresh cohort:\n"
-            + "\n".join(f"{k}  {signed(v[0])} / {signed(v[1])}"
-                        for k, v in within.items()),
-            ha="left", va="top", fontsize=PT_BASE, color=MUTE, zorder=6,
-            linespacing=1.35)
+    plateau_inset(ax, conditions, seeds)
     ax.set(xlim=(-0.5, 6.3), ylim=(78, 98.5), xticks=xs, xticklabels=ARM_LABELS,
            yticks=[80, 85, 90, 95], ylabel="Test accuracy (%)")
     ax.set_yticks(np.arange(79, 98.5, 1.0), minor=True)
@@ -967,12 +1042,22 @@ def capture(ax, per_seed, summary):
     """
     xs = np.arange(2.0)
     drawn = CAPTURE_BASES[:2]
-    xlo, xhi = -0.78, 1.22             # the direct-label gutter (QA 2026-09-09)
+    # QA 2026-09-10 (major): the axis used to run -0.78 to 1.22 so that the two
+    # hue labels could hang in a left gutter.  Measured on the built page that
+    # gutter was 39 % of the 73.8 pt plot width, all of it at profile counts
+    # K <= 0, which cannot exist -- and it still was not wide enough: the
+    # y spine struck the "S" of "Shunting" and the 0.75 rule ran through
+    # "Additive".  The label column moves to the RIGHT of the K = 3 marks,
+    # where each name sits on the end of its own trained arm, and the left pad
+    # shrinks to the 0.07 profile units the seed fan needs.  The K = 12
+    # identity stays the labelled rule (QA 2026-09-10, blocking): it is a
+    # constant by construction and is not drawn as a third marker column.
+    xlo, xhi = -0.26, 2.32
+    label_x, jitter = 1.30, 0.17       # the fan is rescaled with the axis
     ax.axhline(1.0, color=MUTE, lw=LW_REF, dashes=(2.6, 2.0), zorder=1.0)
-    # right-aligned under the rule: at 7 pt the long form overran the 92 pt
-    # box and struck the y-axis label, so the "by construction" wording moves
-    # to the caption and the rule carries only its identity.
-    ax.text(xhi - 0.02, 0.986, "identity, K = 12", ha="right", va="top",
+    # on TOP of its own rule, right-aligned: below the rule the label would
+    # now sit on the additive initial marker at K = 3.
+    ax.text(xhi - 0.02, 1.012, "identity, K = 12", ha="right", va="bottom",
             fontsize=PT_BASE, color=MUTE, zorder=6)
     # The rule stands for the identity column, so its level is read back from
     # the same table the markers use and asserted with them, not hard-coded.
@@ -1008,7 +1093,7 @@ def capture(ax, per_seed, summary):
                     # for ten 2.9 pt dots, an elevenfold overlap that printed as
                     # one smear.  Widened, and the dot is smaller than the
                     # panel default so the ten separate.
-                    ax.plot(x + offset + np.linspace(-0.13, 0.13, len(s)),
+                    ax.plot(x + offset + np.linspace(-jitter, jitter, len(s)),
                             s.mean_capture.to_numpy(), ls="none", marker="o",
                             ms=CAPTURE_SEED_MS, mfc=color, mec="none",
                             alpha=SEED_ALPHA, zorder=2)
@@ -1030,20 +1115,18 @@ def capture(ax, per_seed, summary):
                 line, = ax.plot(xs + offset, means, color=color, lw=LW_HAIR,
                                 zorder=2.6)
                 line.set_dashes((2.2, 1.8))
-    # QA 2026-09-09: true direct labels.  Every point right of K = 1 is
-    # crossed by one of the four rising series, so the two hue names are set
-    # in a label gutter at the LEFT of the axes, each on its own arm's trained
-    # K = 1 level -- the reader's nearest curve is now the labelled one.  The
-    # trained/initial code is in G's mute sub-title, not in a corner block.
+    # true direct labels: each name is set at the END of its own trained arm,
+    # inside the box and past the K = 3 seed fan, so the nearest mark to a
+    # label is the series it names and no label crosses a spine or a rule.
     for architecture in ARCHITECTURES:
         row = summary[summary.architecture.eq(architecture)
-                      & summary.basis.eq("broadcast_k1")
+                      & summary.basis.eq("subtrees_k3")
                       & summary.checkpoint.eq("trained")].iloc[0]
-        ax.text(-0.24, float(row["mean"]), architecture.capitalize(),
-                ha="right", va="center", fontsize=PT_BASE,
+        ax.text(label_x, float(row["mean"]), architecture.capitalize(),
+                ha="left", va="center", fontsize=PT_BASE,
                 color=label_color(COLORS[architecture]), zorder=6)
     printed.update(identity)
-    ax.set(xlim=(xlo, xhi), ylim=(0.45, 1.07), xticks=xs,
+    ax.set(xlim=(xlo, xhi), ylim=(0.45, 1.10), xticks=xs,
            xticklabels=[lab for _, lab in drawn],
            yticks=[0.50, 0.75, 1.00], xlabel="Profiles K",
            ylabel="Mean capture (fraction)")
@@ -1273,6 +1356,12 @@ def main():
                           value_label="Exact path − per neuron (pp)",
                           xlim=(-2.35, 1.05), xticks=[-2, -1, 0, 1],
                           tag_sides=("left", "left", "left", "right"))
+    # QA 2026-09-10: F's title claims a resolution of 0.2 pp and its coarsest
+    # tick was 1 pp, so the three near-zero rows could not be read against any
+    # gradation finer than the effect being claimed.  Unlabelled 0.25 pp minor
+    # ticks; the axis is NOT broken -- the CIFAR seed cloud reaches -2.11 and
+    # legitimately needs the range.
+    f_.set_xticks(np.arange(-2.25, 1.01, 0.25), minor=True)
     # F carries the prespecified equivalence margin and names its referent.
     # QA 2026-09-09 (blocker): the band is painted UNDER the zero rule
     # (zorder 0.12 < forest()'s axvline at 1.0), so the panel's load-bearing

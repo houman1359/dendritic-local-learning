@@ -125,24 +125,44 @@ RULES = {
 }
 CURVE_RULES = ('exact', 'hard_distal_unit_proximal', 'unit_broadcast',
                'ancestry_two_leaf_oracle_unit_proximal')
+# QA 2026-09-10 (visual review).  Exact path, gate and oracle agree to within
+# a tenth of a decade -- three points of line -- from step 256 on, so drawn
+# as three opaque solids stacked in z order the last one painted hid the other
+# two: a pixel census of the v1 render found no carmine at all in the left
+# 64 % of C.  The panels' finding is that agreement, so the three are keyed by
+# dash and the coincidence is shown: exact path solid on top, the gate dashed
+# under it, the oracle finely dashed at the bottom.  Unit broadcast, which
+# never coincides with them, stays solid.  Mute reference rules keep their own
+# dash at LW_REF (CF-7) and no data line is drawn in mute.
+CURVE_DASH = {'hard_distal_unit_proximal': (3.4, 1.7),
+              'ancestry_two_leaf_oracle_unit_proximal': (1.2, 1.5)}
+CURVE_Z = {'ancestry_two_leaf_oracle_unit_proximal': 3.0,
+           'hard_distal_unit_proximal': 3.1, 'unit_broadcast': 3.2,
+           'exact': 3.3}
 PRIMARY = dict(rate=0.03, budget=4096)
 RATES = (0.01, 0.03, 0.10)
 LOG_TICKS = (1e-6, 1e-4, 1e-2, 1.0)
 # The aligned bands reach 3.5e-7, so the floor drops half a decade below the
-# lowest printed tick.  The head is 1e3, not the plan's 2.0: every on-panel
-# note the plan mandates for C, D and F (the interval sentence, the readout
-# note, the bound-contact tag, the two shape/rate keys) has to live inside the
-# axes, and at a 2.0 head the curves reach 1.44 and leave 4 pt of clear band.
+# lowest printed tick.  The head was 1e3 because every on-panel note the plan
+# mandates for C, D and F had to live inside the axes above the traces.
+# QA 2026-09-10 (visual review): the notes that only repeated the caption
+# (optimiser, n, bootstrap, seed range, P) are deleted and F's two shape keys
+# move to the caption, so a decade of that head goes back to the data.  The
+# head cannot fall further without moving C's sanctioned four-entry key (CF-5)
+# out of the band above the traces: the highest datum is 1.27 and the key,
+# D's two-line readout note and F's two column tags need ~20 pt above it.
 # The tick set is unchanged, so C, D and F still share one ladder.
-LOG_YLIM = (3e-7, 1e3)
+LOG_YLIM = (3e-7, 1e2)
 # the window rule stops here, just above the highest trace, and every C/D text
 # block is right-aligned at TEXT_RIGHT so nothing is struck through by it.
 REF_TOP = 2.0
 TEXT_RIGHT = 0.98
-# E and G: v1's head, restored.  The plan's 1.15 leaves 12 pt above 1.0 while
-# its own panel briefs put a three-line note (E) and a two-line cohort tag (G)
-# in exactly that band.
-UNIT_YLIM = (-0.22, 1.70)
+# E and G: the plan's head, now that the three-line note (E) and the two-line
+# cohort tag (G) that filled the band above 1.0 are gone -- both only repeated
+# the caption.  1.15 leaves 10 pt over the unit rule for G's 'no cancellation'
+# label and E's single 'opposed - aligned' qualifier; the foot stays at -0.22,
+# which is G's two-line 'calibrated broadcast' label, not empty axis.
+UNIT_YLIM = (-0.22, 1.15)
 HIST_SEED = 982211                      # descriptive bootstrap RNG, as report.py
 ROWS_PT = [108, 122, 122]
 VGUTTER_PT = 42
@@ -154,7 +174,11 @@ LETTER_DX_PT = 26.0
 # against the axes box, so the box has to be final first.  LEFT clears the
 # letter column with the y-label stack inside the slot (audit_letter_align-
 # ment); ROW2_TOP keeps the row-2 letters 8.5 pt below row 1's x labels.
-LEFT_RESERVE_PT = 17.0
+# QA 2026-09-10 (visual review): 18.5, not 17.0 -- E's y label is two
+# lines now that it names the double difference it plots, and the rotated
+# stack needs 1.1 pt more than the old single line.  Declared for every
+# data panel alike, so C = D and E = F = G stay exact.
+LEFT_RESERVE_PT = 18.5
 RIGHT_RESERVE_PT = 4.0
 ROW2_TOP_PT = 5.7
 HEIGHT_PT = MARGINS['top'] + sum(ROWS_PT) + 2 * VGUTTER_PT + MARGINS['bottom']
@@ -856,16 +880,18 @@ def y_data(frac, ylim=None):
     return 10.0 ** (math.log10(lo) + frac * (math.log10(hi) - math.log10(lo)))
 
 
-def curves(ax, t, task, *, legend=False, shared=False):
+def curves(ax, t, task, *, legend=False):
     band = t['band']
-    for rule in CURVE_RULES:
+    for rule in sorted(CURVE_RULES, key=lambda r: CURVE_Z[r]):
         b = band[(band.task == task) & (band.rule == rule)
                  & (band.rate == PRIMARY['rate'])].sort_values('step')
         color = rc(rule)
         ax.fill_between(b.step, b.ci_low, b.ci_high, color=color, alpha=.14,
                         lw=0, zorder=1)
-        ax.plot(b.step, b['mean'], color=color, lw=LW_DATA, zorder=3,
-                label=RULES[rule][0])
+        line, = ax.plot(b.step, b['mean'], color=color, lw=LW_DATA,
+                        zorder=CURVE_Z[rule], label=RULES[rule][0])
+        if rule in CURVE_DASH:
+            line.set_dashes(CURVE_DASH[rule])
     ax.set_xscale('symlog', linthresh=64)
     ax.set_xlim(0, 16384)
     ax.set_xticks([0, 64, 1024, 16384], ['0', '64', '1,024', '16,384'])
@@ -878,16 +904,15 @@ def curves(ax, t, task, *, legend=False, shared=False):
     plain_log_ticks(ax)          # after style_panel: it resets the tick pad
     ax.tick_params(axis='x', pad=2.0)
     ax.get_xticklabels()[-1].set_ha('right')
-    if shared:
-        ax.tick_params(axis='y', labelleft=False)
-        for lab in ax.get_yticklabels():
-            lab.set_visible(False)
-        for art in list(ax.texts):          # the raised exponents belong to C
-            art.remove()
-    else:
-        ax.set_ylabel('Held-out NMSE')
+    # QA 2026-09-10 (visual review): D labels its own ladder.  It used to
+    # borrow C's, but the panels are separately lettered and 38 pt apart --
+    # wider than C's own tick pitch -- so nothing marked the scale as shared
+    # and D's letter floated in an empty 38 pt gutter.  The left reserve is
+    # declared for every data panel alike, so the labels cost no width.
+    ax.set_ylabel('Held-out NMSE')
     if legend:
-        handles = [Line2D([], [], color=rc(r), lw=LW_DATA, label=RULES[r][0])
+        handles = [Line2D([], [], color=rc(r), lw=LW_DATA, label=RULES[r][0],
+                          dashes=CURVE_DASH.get(r, (1e6, 1.0)))
                    for r in CURVE_RULES]
         # two columns in the band above 10^0.  The plan asks for the lower
         # left; measured on this ladder the lower left is where the trio's
@@ -922,7 +947,11 @@ def curve_annotations(ax, t, task):
     # the amber curve's own label, hung clear of its band
     amber_parts = ['unit broadcast '] + (sci_parts(broadcast)
                                          if aligned else [f'{broadcast:.2f}'])
-    chain_data(ax, (0.98, y_frac(4.0e-2 if aligned else 0.115)), amber_parts,
+    # QA 2026-09-10 (visual review): the label hangs within half a decade of
+    # its own trace now that the head is a decade lower, and in D it stops at
+    # 0.55 of the width -- right of that the bound-contact tick hangs off the
+    # broadcast curve at this height and would strike the text.
+    chain_data(ax, (0.98, y_frac(4.0e-2) if aligned else 0.86), amber_parts,
                color=AMBER_TEXT, ha='right', transform=ax.transAxes)
     # the three coincident rules, named once, with a hairline leader that
     # stops short of the trio's own band
@@ -932,8 +961,12 @@ def curve_annotations(ax, t, task):
                            ha='left', transform=ax.transAxes)
     band_low = band[(band.task == task) & (band.rule != 'unit_broadcast')
                     ].groupby('step').ci_low.min()
-    x_lead = 1024.0
-    y_lead = float(np.interp(x_lead, band_low.index, band_low.values)) / 1.7
+    # QA 2026-09-10 (visual review): the leader ends under the bundle AT THE
+    # 4,096 checkpoint, which is the step the printed value belongs to.  It
+    # used to stop at 1,024, an order of magnitude above that value, and read
+    # as a fifth trace hanging in clear space.
+    x_lead = float(PRIMARY['budget'])
+    y_lead = float(np.interp(x_lead, band_low.index, band_low.values)) * 0.75
     x_start = 0.02 + (trio_w + 6.0) / axes_w_pt(ax)
     ax.plot([x_data(ax, x_start), x_lead],
             [y_data(y_frac(6.0e-5) - 0.018), y_lead],
@@ -962,25 +995,23 @@ def curve_annotations(ax, t, task):
                 zorder=6, annotation_clip=False)
     w = axes_w_pt(ax) - 4.0
     if aligned:
-        lines = ['Adam 0.03 · n = 20 seeds',
-                 'mean ± 95 % pointwise seed bootstrap']
-        # the sparse-checkpoint note is set in the free corner under the
-        # trio's own label: the band above 10^0 holds the four-entry key and
-        # two statistics lines, and a third line there would touch the
-        # curves' own starting point
+        # QA 2026-09-10 (visual review): 'Adam 0.03 . n = 20 seeds' and
+        # 'mean +- 95 % pointwise seed bootstrap' are the caption's own words
+        # ('means of 20 paired simulation seeds at Adam 0.03 with 95 %
+        # pointwise whole-seed bootstrap bands'), so they leave the axes with
+        # the decade of head that held them.  Only the interpolation caveat,
+        # which the caption does not carry, stays on the panel, in the free
+        # corner under the trio's own label.
         note = ['12 saved checkpoints;', 'segments are interpolation']
-        printed['annotation_lines'] = lines + note
-        # right-aligned at 0.80, not TEXT_RIGHT: the '4,096' tag now sits on
-        # the top of the rule (x 0.82-0.92 of the axes) at this height, so the
-        # block is pulled 6.5 pt clear of its left edge.  The height itself is
-        # unchanged -- under the key, three decades over the nearest trace.
-        stack(ax, 0.80, 0.782, lines, ha='right', lead_pt=8.0)
+        printed['annotation_lines'] = list(note)
         stack(ax, 0.02, 0.155, note, ha='left', lead_pt=8.0)
-        printed['window_rule_segments'] = len(window_rule(ax))
     else:
-        lines = ['fixed checkpoint at each saved step;',
-                 'validation-selected broadcast 0.49 (E, F)',
-                 'Adam 0.03 · n = 20 seeds']
+        # the optimiser and n line goes with C's: it is the same caption
+        # sentence, and so is 'fixed checkpoint at each saved step', which C
+        # already carries as '12 saved checkpoints'.  What is left is the one
+        # line that separates this panel's endpoint from E's and F's readout,
+        # and the band it leaves under it is the broadcast label's.
+        lines = ['validation-selected broadcast 0.49 (E, F)']
         printed['annotation_lines'] = lines
         stack(ax, TEXT_RIGHT, 0.950, lines, ha='right', lead_pt=8.5)
         printed.update(bound_contact(ax, t))
@@ -1015,16 +1046,16 @@ def bound_contact(ax, t):
     # tick is an annotation mark rather than a second broadcast series
     ax.plot([step, step], [y_here * 0.72, y_here * 1.42], color=MUTE,
             lw=LW_ERR, zorder=6, solid_capstyle='butt')
+    # QA 2026-09-10 (visual review): the tick is named.  It used to be an
+    # unlabelled black bar 18 pt left of the labelled '4,096' rule, which a
+    # reader takes for part of that annotation; its value lived only in the
+    # caption.  The tag now sits in the band the broadcast trace and the trio
+    # leave open, with its top line 3 pt under the tick itself, so the old
+    # hairline leader up to the tick is gone with it.
     lines = ['broadcast reaches a conductance',
-             f'bound in {by_4096}/20 fits by 4,096']
-    # QA 2026-09-09 (2): the tag is set at 1e-2, level with the '4,096'
-    # reference tag but 11 pt clear of it horizontally (the reference tag
-    # hangs on the rule at the right edge); its second line then sits at
-    # 2e-3, half a decade above the trio's highest CI edge over this x span
-    # (max ci_high 3.9e-4 for steps >= 256), so no line crosses a trace.
-    stack(ax, 0.99, y_frac(1.0e-2), lines, ha='right', lead_pt=8.5)
-    ax.plot([step, step], [y_data(0.505), y_data(0.635)], color=MUTE,
-            lw=LW_HAIR, zorder=2)
+             f'bound in {by_4096}/20 fits by 4,096;',
+             f'tick: median {step}']
+    stack(ax, 0.99, 0.63, lines, ha='right', lead_pt=8.5)
     return dict(bound_median_step=step, bound_by_4096=by_4096,
                 bound_by_16384=by_16384, bound_y=y_here)
 
@@ -1074,25 +1105,21 @@ def interaction(ax, t):
                 textcoords='offset points', fontsize=PT_BASE, color=MUTE,
                 ha='right', va='top', zorder=5)
     ax.set_xlabel('Window (updates)')
-    ax.set_ylabel('Broadcast − gate NMSE')
+    ax.set_ylabel('(Broadcast − gate) NMSE:\nopposed − aligned')
     style_panel(ax)
     holm = float(t['audit']['primary_tests'][1]['holm_p'])
     assert abs(holm - 3.814697265625e-06) < 1e-15
     assert t['audit']['primary_tests'][1]['task'] == 'opposed_minus_aligned'
-    w = axes_w_pt(ax) - 2.0
-    # every line is wrapped to the axes width, never dropped: the count of
-    # positive seeds is this panel's n and its endpoint statement
-    lines = []
-    for text in ('opposed − aligned',
-                 f"{printed['4096']['positive']}/{printed['4096']['n']} seeds "
-                 'positive', 'at both windows'):
-        lines += wrap_lines(ax, text, w)
-    third = ['sign-flip P = '] + sci_parts(holm) + [' (Holm)']
-    if _parts_width(ax, third) > w:          # the plan's ruled fallback
-        third = ['P = '] + sci_parts(holm) + [' (Holm)']
-    # QA 2026-09-09 (2): 9.6 pt, not 8.4 -- the raised exponent of the Holm
-    # P value rises above its own line box and touched 'windows' above it.
-    stack(ax, 0.5, 0.955, lines + [third], ha='center', lead_pt=9.6)
+    # QA 2026-09-10 (visual review): the four-line block is deleted.  The
+    # seed count and the Holm P value are the caption's own words ('n = 20
+    # paired seeds ... prespecified sign-flip P = 3.8e-6 (Holm)') and the body
+    # text's ('positive in all twenty seeds'), and 'opposed - aligned' now
+    # names the plotted quantity where it belongs, on the y axis: the label
+    # used to give the INNER difference only, so stripped of the in-plot line
+    # the axis read as broadcast-minus-gate NMSE, which is 0.487 on opposed
+    # targets alone and coincides with the plotted double difference only by
+    # accident.  The head of the shared unit ladder drops to 1.15 with it.
+    printed['annotation_lines'] = []
     printed['holm_p'] = holm
     printed['n_seeds'] = 20
     return printed
@@ -1103,6 +1130,18 @@ F_ORDER = ('exact', 'hard_distal_unit_proximal',
            'swapped_distal_unit_proximal', 'hard_distal_and_proximal')
 F_LONG = ('Exact\npath', 'Distal\ngate', 'Swapped\ngate', 'Gate also\nproximal')
 F_SHORT = ('Exact\npath', 'Distal\ngate', 'Swapped\ngate', 'Also\nproximal')
+# QA 2026-09-10 (visual review).  The two gate SHAPES are dodged inside the
+# distal-gate tick and the secondary-rate circles now hang off the TICK, one
+# pair per category, instead of off each mark: dodged off both shapes they
+# landed at -0.18 and +0.18, inside the other shape's cloud, and the open
+# continuous diamond at +0.16 with a circle beyond it read as a fifth,
+# unlabelled x position.  The continuous shape's own two rate means stay in
+# the printed record and in Supplementary Fig. S21.
+F_DODGE = 0.15          # the two gate shapes, either side of their own tick
+F_RATE_DX = 0.40        # the secondary-rate circles, from the tick itself
+F_FAN = 0.09            # per-seed cloud half-width
+F_XLIM = (-0.55, 3.55)  # 0.15 wider than the outermost circle, which used to
+                        # sit 1.7 pt inside the y spine and overlap it
 
 
 def f_labels(ax):
@@ -1112,47 +1151,54 @@ def f_labels(ax):
     return F_LONG if fits else F_SHORT
 
 
+def f_seeds(t, rule):
+    ep = t['endpoints']
+    return ep[(ep.task == 'opposed_strong') & (ep.rate == PRIMARY['rate'])
+              & (ep.budget == PRIMARY['budget'])
+              & (ep.rule == rule)].sort_values('seed')
+
+
+def f_offset(rule):
+    return {'hard_distal_unit_proximal': -F_DODGE,
+            'shunt_proportional_unit_proximal': F_DODGE}.get(rule, 0.0)
+
+
 def planned_marks(t):
     """Every mark F will draw, as (category index, x, value)."""
-    ep, marks = t['endpoints'], []
+    marks = []
     for i, rule in enumerate(F_ORDER):
-        offset = -0.16 if rule == 'hard_distal_unit_proximal' else 0.0
-        sel = ep[(ep.task == 'opposed_strong') & (ep.rate == PRIMARY['rate'])
-                 & (ep.budget == PRIMARY['budget']) & (ep.rule == rule)]
-        fan = np.linspace(-0.09, 0.09, len(sel))
-        marks += [(i, i + offset + dx, v)
-                  for dx, v in zip(fan, sel.sort_values('seed').test_nmse)]
+        offset = f_offset(rule)
+        sel = f_seeds(t, rule)
+        fan = np.linspace(-F_FAN, F_FAN, len(sel))
+        marks += [(i, i + offset + dx, v) for dx, v in zip(fan, sel.test_nmse)]
         marks.append((i, i + offset, float(cond(t, 'opposed_strong', rule)['mean'])))
         for rate in (0.01, 0.10):
-            marks.append((i, i + offset + (-0.34 if rate == 0.01 else 0.34),
+            marks.append((i, i + (-F_RATE_DX if rate == 0.01 else F_RATE_DX),
                           float(cond(t, 'opposed_strong', rule, rate=rate)['mean'])))
     cont = 'shunt_proportional_unit_proximal'
-    marks.append((1, 1 + 0.16, float(cond(t, 'opposed_strong', cont)['mean'])))
-    for rate in (0.01, 0.10):
-        marks.append((1, 1 + 0.16 + (-0.34 if rate == 0.01 else 0.34),
-                      float(cond(t, 'opposed_strong', cont, rate=rate)['mean'])))
+    sel = f_seeds(t, cont)
+    fan = np.linspace(-F_FAN, F_FAN, len(sel))
+    marks += [(1, 1 + F_DODGE + dx, v) for dx, v in zip(fan, sel.test_nmse)]
+    marks.append((1, 1 + F_DODGE, float(cond(t, 'opposed_strong', cont)['mean'])))
     return marks
 
 
 def placement(ax, t):
-    ep = t['endpoints']
     printed = {}
     seeds = {}
     # DECISIONS (Fig 5) rules the rate marks as a build-time branch, not a
     # question: keep the three Adam rates everywhere unless adjacent
     # categories' marks come within 1.5 pt, and in that case keep them on the
     # exact-path and distal-gate categories only.
-    ax.set_xlim(-0.42, 3.5)
+    ax.set_xlim(*F_XLIM)
     separation = cluster_separation(ax, planned_marks(t))
     rate_categories = (0, 1, 2, 3) if separation >= 1.5 else (0, 1)
     for i, rule in enumerate(F_ORDER):
-        sel = ep[(ep.task == 'opposed_strong') & (ep.rate == PRIMARY['rate'])
-                 & (ep.budget == PRIMARY['budget'])
-                 & (ep.rule == rule)].sort_values('seed')
+        sel = f_seeds(t, rule)
         m = cond(t, 'opposed_strong', rule)
-        offset = -0.16 if rule == 'hard_distal_unit_proximal' else 0.0
+        offset = f_offset(rule)
         seeds_and_mean(ax, i + offset, sel.test_nmse, m['mean'], m.ci_low,
-                       m.ci_high, rc(rule))
+                       m.ci_high, rc(rule), fan=F_FAN)
         seeds[rule] = sel.test_nmse.to_numpy()
         printed[rule] = dict(mean=float(m['mean']), ci_low=float(m.ci_low),
                              ci_high=float(m.ci_high), n=int(m.n),
@@ -1166,21 +1212,19 @@ def placement(ax, t):
         for rate in (0.01, 0.10):
             mm = cond(t, 'opposed_strong', rule, rate=rate)
             if i in rate_categories:
-                ax.plot([i + offset + (-0.34 if rate == 0.01 else 0.34)],
+                ax.plot([i + (-F_RATE_DX if rate == 0.01 else F_RATE_DX)],
                         [mm['mean']], marker='o', ms=3.0, mfc='white',
                         mec=rc(rule), mew=LW_EDGE, ls='none', zorder=3.5)
             printed[rule][f'rate_{rate}'] = float(mm['mean'])
-    # the continuous SHAPE of the same rule, paired inside the Distal gate tick
+    # the continuous SHAPE of the same rule, paired inside the Distal gate
+    # tick.  QA 2026-09-10 (visual review): its twenty seeds are drawn.  The
+    # table holds them and the panel used to plot the mean alone, so one of
+    # the two shapes the panel equates showed a cloud and the other did not.
+    cont_sel = f_seeds(t, 'shunt_proportional_unit_proximal')
     cont = cond(t, 'opposed_strong', 'shunt_proportional_unit_proximal')
-    seeds_and_mean(ax, 1 + 0.16, [], cont['mean'], cont.ci_low, cont.ci_high,
-                   COLORS['shunting'], mfc='white', mec=COLORS['shunting'],
-                   mew=LW_ERR)
-    for rate in (0.01, 0.10):
-        mm = cond(t, 'opposed_strong', 'shunt_proportional_unit_proximal',
-                  rate=rate)
-        ax.plot([1 + 0.16 + (-0.34 if rate == 0.01 else 0.34)], [mm['mean']],
-                marker='o', ms=3.0, mfc='white', mec=COLORS['shunting'],
-                mew=LW_EDGE, ls='none', zorder=3.5)
+    seeds_and_mean(ax, 1 + F_DODGE, cont_sel.test_nmse, cont['mean'],
+                   cont.ci_low, cont.ci_high, COLORS['shunting'], fan=F_FAN,
+                   mfc='white', mec=COLORS['shunting'], mew=LW_ERR)
     printed['shunt_proportional_unit_proximal'] = {
         'mean': float(cont['mean']), 'ci_low': float(cont.ci_low),
         'ci_high': float(cont.ci_high), 'n': int(cont.n),
@@ -1198,7 +1242,7 @@ def placement(ax, t):
         assert printed[rule]['min_changed_parameters'] == 24
     broadcast = cond(t, 'opposed_strong', 'unit_broadcast')['mean']
     assert abs(broadcast - 0.48740) < 5e-5
-    ax.set_xlim(-0.42, 3.5)
+    ax.set_xlim(*F_XLIM)
     ax.set_yscale('log')
     ax.set_ylim(*LOG_YLIM)
     ax.set_xticks(range(4), f_labels(ax))
@@ -1209,39 +1253,31 @@ def placement(ax, t):
     reference_line(ax, broadcast, label=None)
     # under its own rule: set above it the 7-pt label reads at the height of
     # the swapped-gate mean, which it does not name
-    ax.annotate(f'unit broadcast {broadcast:.2f}', xy=(-0.42, broadcast),
+    ax.annotate(f'unit broadcast {broadcast:.2f}', xy=(F_XLIM[0], broadcast),
                 xytext=(1.0, -3.8), textcoords='offset points',
                 fontsize=PT_BASE, color=MUTE, ha='left', va='top', zorder=5)
-    w = axes_w_pt(ax) - 3.0
-    # the two keys, in the band the failure cluster leaves above 1.0
-    keys = [['filled: hard 1[', 'a', ('sub', 'p'), ' = 0]'],
-            ['open: continuous 1/(1 + g', ('sub', 'p'), ('sup', 'I'),
-             ' a', ('sub', 'p'), ')']]
-    # QA 2026-09-09 (2): the key block keeps the free band above the failure
-    # cluster (this builder's LOG_YLIM tops out at 1e3, so that band is the
-    # 0.5-decade headroom the plan's between-clusters band was meant to be)
-    # and drops to 0.92 so the first line clears the panel title by 6.6 pt.
-    _, y_next = stack(ax, 0.035, 0.920, keys, color=INK, lead_pt=8.2)
-    stack(ax, 0.035, y_next,
-          wrap_lines(ax, 'small open: Adam 0.01 and 0.1 (primary 0.03)', w),
-          color=MUTE, lead_pt=8.2)
-    # the two qualifications a referee finds first, each tied to its column
+    # QA 2026-09-10 (visual review): the three key lines are deleted.  CF-5
+    # sanctions exactly ONE in-axes key in the nine-figure set (C's four-entry
+    # rule key), these were a second, and they held three decades of empty
+    # head over the data.  The filled/open shape pair is named in the caption
+    # and the pair itself carries the panel's own 'hard = continuous' label.
+    # The two column qualifications stay, each in a band no mark enters.
+    # QA 2026-09-10 (visual review): the swapped mean is printed with the
+    # qualification.  It sits 0.29 decade over the unit-broadcast rule -- four
+    # points at this scale, less than the diamond's own half-height -- so a
+    # near-twofold difference in failure reads off the panel as coincidence.
     swapped = printed['swapped_distal_unit_proximal']
-    stack(ax, x_frac(ax, 2.58), 0.495,
-          wrap_lines(ax, f"{swapped['best_step_zero']}/20 unchanged from "
-                         f"initialization", 62.0), ha='right', lead_pt=8.6)
-    tie_leader(ax, 2.0, 0.495, seeds['swapped_distal_unit_proximal'].min())
+    stack(ax, 0.99, 0.44,
+          [f"{swapped['mean']:.2f}; {swapped['best_step_zero']}/20 unchanged",
+           'from initialization'], ha='right', lead_pt=8.6)
+    tie_leader(ax, 2.0, 0.44, seeds['swapped_distal_unit_proximal'].min())
     also = printed['hard_distal_and_proximal']
-    # three short right-aligned lines, not one full-width line: set as one
-    # line it runs the whole axes width and abuts the 10^-4 tick label
-    # QA 2026-09-09 (2): the plan's line order restored -- the frozen-gain
-    # line first, then the two-line endpoint qualification (one line is
-    # 109 pt against a 96 pt axes width, so it stays wrapped).
+    # two right-aligned lines over the column they name, in the band the
+    # failure cluster leaves under the panel title
     frozen = [['g', ('sub', 'I'), f" frozen {also['both_gains_frozen']}/20"],
-              f"best ≤ {also['max_best_step']} updates;",
+              f"best step ≤ {also['max_best_step']}, "
               f"endpoint {also['mean_fixed_endpoint']:.2f}"]
-    stack(ax, x_frac(ax, 3.48), 0.300, frozen, ha='right', lead_pt=8.6)
-    tie_leader(ax, 3.0, 0.300, seeds['hard_distal_and_proximal'].min())
+    stack(ax, 0.99, 0.955, frozen, ha='right', lead_pt=8.6)
     # PLAN section 2 (F, 'Printed on panel'): the equality the panel title
     # asserts is said in words, not left to the two coincident diamonds.  The
     # between-cluster band is spent on the swapped-gate tie, so the line takes
@@ -1249,7 +1285,7 @@ def placement(ax, t):
     # 4.8e-6, y frac 0.176; this line is centred at 0.085).
     assert abs(printed['hard_distal_unit_proximal']['mean']
                - cont['mean']) / cont['mean'] < 0.02
-    stack(ax, x_frac(ax, 1.0), 0.085, ['hard = continuous'], ha='center',
+    stack(ax, x_frac(ax, 1.0), 0.075, ['hard = continuous'], ha='center',
           color=COLORS['shunting'])
     printed['unit_broadcast_reference'] = float(broadcast)
     printed['_min_mark_separation_pt'] = round(separation, 2)
@@ -1309,11 +1345,12 @@ def cancellation(ax, t):
     assert len(h) == 80 and set(h.historical_seed) == set(range(2101, 2121))
     rng = np.random.default_rng(HIST_SEED)
     printed = {}
+    fan = np.linspace(-.055, .055, 20)
     for rule, offset, marker, ckey, mfc in (
             ('exact', -.14, 'o', 'bp', None),
             ('calibrated_broadcast', .14, 's', 'scalar', 'white')):
         color = COLORS[ckey]
-        means = []
+        paired = {}
         for i, state in enumerate(('initial', 'extended_best')):
             part = h[(h.state == state) & (h.evaluated_rule == rule)
                      & (h.source_rule == 'calibrated_broadcast')
@@ -1326,11 +1363,19 @@ def cancellation(ax, t):
                            mfc='white' if mfc else color,
                            mec=color if mfc else 'white',
                            mew=LW_ERR if mfc else LW_HAIR)
-            means.append(float(vals.mean()))
+            paired[state] = vals
             printed[f'{rule}_{state}'] = dict(mean=float(vals.mean()),
                                               ci_low=float(lo),
                                               ci_high=float(hi), n=len(vals))
-        ax.plot([offset, 1 + offset], means, color=color, lw=LW_HAIR, zorder=3)
+        # QA 2026-09-10 (visual review): the states are paired within a seed,
+        # so they are joined seed by seed as in E.  The mean-to-mean rule this
+        # replaces ran flat for exact credit (0.6364 to 0.6365) and read as
+        # 'nothing moved', while five of the twenty seeds fall below 0.17 at
+        # the trained state -- the split the hairlines now show.
+        for k in range(20):
+            ax.plot([offset + fan[k], 1 + offset + fan[k]],
+                    [paired['initial'][k], paired['extended_best'][k]],
+                    color=color, lw=LW_HAIR, alpha=0.32, zorder=1.5)
     assert abs(printed['exact_initial']['mean'] - 0.636) < 2e-3
     assert abs(printed['exact_extended_best']['mean'] - 0.637) < 2e-3
     assert abs(printed['calibrated_broadcast_initial']['mean'] - 0.330) < 2e-3
@@ -1351,11 +1396,17 @@ def cancellation(ax, t):
     ax.set_yticks([0, .5, 1], ['0', '0.5', '1'])
     ax.set_xticks([0, 1], ['Initial', 'Trained'])
     ax.tick_params(axis='x', labelsize=PT_BASE, pad=2.0)
-    reference_line(ax, 1.0, label='no cancellation')
+    # QA 2026-09-10 (visual review): the rule's own label is set under its
+    # LEFT end, the only place in this panel no seed and no hairline reaches,
+    # which frees the band over the trained column for the exact-credit label.
+    reference_line(ax, 1.0, label=None)
+    ax.annotate('no cancellation', xy=(-0.5, 1.0), xytext=(1.0, -1.4),
+                textcoords='offset points', fontsize=PT_BASE, color=MUTE,
+                ha='left', va='top', zorder=5)
     ax.set_ylabel('Distal gradient retained')
     style_panel(ax)
     # direct labels in the corridor the two seed columns leave open
-    ax.text(-0.03, 0.78, 'exact credit', ha='left', va='center',
+    ax.text(1.5, 1.07, 'exact credit', ha='right', va='center',
             fontsize=PT_BASE, color=COLORS['bp'], zorder=6)
     # QA 2026-09-09 (2): set through stack() at the figure's 8.6 pt leading
     # (the hand-placed data-unit pair was 6.0 pt and the boxes overlapped)
@@ -1363,12 +1414,11 @@ def cancellation(ax, t):
     stack(ax, (0.44 + 0.5) / 2.0, (-0.025 - lo_y) / (hi_y - lo_y),
           ['calibrated', 'broadcast'], ha='center', color=AMBER_TEXT,
           lead_pt=8.2)
-    w = axes_w_pt(ax) - 3.0
-    lines = []
-    for text in ('earlier cohort, n = 20', '(seeds 2101–2120)',
-                 'per-example alignment', 'nonnegative in 20/20'):
-        lines += wrap_lines(ax, text, w)
-    stack(ax, 0.035, 0.955, lines, lead_pt=8.6)
+    # QA 2026-09-10 (visual review): the four-line tag is deleted.  'earlier
+    # cohort, n = 20 (seeds 2101-2120)' is the caption's own words and the
+    # nonnegative per-example alignment is the body text's ('a nonnegative
+    # per-example inner product with the exact gradient in every seed'); the
+    # band it occupied above 1.0 was half this panel's empty height.
     printed['n_seeds'] = 20
     return printed
 
@@ -1400,7 +1450,7 @@ def build(cfg, tables, tuning):
     task = panel_task(a, tuning)
     panel_deliveries(b)
     curves(c, tables, 'aligned_strong', legend=True)
-    curves(d, tables, 'opposed_strong', shared=True)
+    curves(d, tables, 'opposed_strong')
     printed = dict(A=dict(perturbation_line=task['perturbation']),
                    C=curve_annotations(c, tables, 'aligned_strong'),
                    D=curve_annotations(d, tables, 'opposed_strong'),

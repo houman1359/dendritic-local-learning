@@ -1,11 +1,11 @@
 {
   "code_sha256": {
-    "scripts/conductance_local_gate/figure.py": "ccf2f218e6326ba9538628f0feb02dbf0ef34b9b3853f95203a36e5af3af99c3",
+    "scripts/conductance_local_gate/figure.py": "0ffc2bc94debe72eaba0583eca9f34b699d0384b85347083289e9f782dbdf066",
     "scripts/conductance_local_gate/model.py": "cc2b82f6c486810a43aa885f3ea2dacce54c473f2e2ece6f4cfdb7d88ce6ad39",
     "scripts/conductance_local_gate/portable_contract.py": "fea35a393f5881dfc60b3dfe810dac64f8c2e6b0d8ba01937f4a42c5ffab3c05",
     "scripts/conductance_local_gate/report.py": "a96b4b6edd42c0d98de3da44a46c409310b463450369173be7371d503fa6dfef",
     "scripts/credit_tree_schematics.py": "ebd31b5ccc86b00bb27a236af210eb2a1d1820e9fcec27b57283a12224158cbe",
-    "scripts/figure_canvas.py": "de3f566dd08270535deab95eb798b49cc17ccf4dfbb88e7ebdb50860903a6ad1",
+    "scripts/figure_canvas.py": "0a0d01607cc3589a44075b6ccd7c2867dcf7d8a31f88ca1565dade247f4bcb48",
     "scripts/journal_style.py": "be8a138f9d9c081237edc616ba52b6769f957d8b8b49e705a92adcb18f475f3c",
     "scripts/native_schematics.py": "68530ec60f85e496b9b0ba7a7ad53510dce2fae91cc38231046c1175e1cb7aeb"
   },
@@ -14,8 +14,8 @@
     "source_data/conductance_local_gate/figures/historical_cancellation_source.csv": "15938898c44c07bbbc5721ee727e9d54199c90e90ab8a298bb7109682dc69814",
     "source_data/conductance_local_gate/figures/local_gate_all_rates.pdf": "9ed32d20fb9af6c078e6cc391a98d9e7a36f27d9b74d9ddee45098ab9ac5ae33",
     "source_data/conductance_local_gate/figures/local_gate_all_rates.png": "26674c42572b6acdea030aa8c925920e239cf58d3f191ef1d995fa20204550ce",
-    "source_data/conductance_local_gate/figures/local_gate_primary.pdf": "0ce973fbe44f701e5563ed8b7b8c957aaa55c0796d24d689cbfa467a9ef5ad96",
-    "source_data/conductance_local_gate/figures/local_gate_primary.png": "8e740f02c4c830769408b94f6846c4cb17802dbc2a5afcd8b0f2265126d09cf5",
+    "source_data/conductance_local_gate/figures/local_gate_primary.pdf": "ca336e0afa0b702b1536982208a7bea23b83e75e18988b5cc8e391bc286909ca",
+    "source_data/conductance_local_gate/figures/local_gate_primary.png": "b7b6f08995cebd41d8ac6e1bc2f8d70246736322a9cf01de366fb77f8b76136e",
     "source_data/conductance_local_gate/figures/teacher_tuning_source.csv": "26b9ebc985bc662465c9a03af5a9197f54d8443383f44090121ddcf24c4c3086"
   },
   "fresh_seeds": [
@@ -154,8 +154,6 @@
     },
     "C": {
       "annotation_lines": [
-        "Adam 0.03 \u00b7 n = 20 seeds",
-        "mean \u00b1 95 % pointwise seed bootstrap",
         "12 saved checkpoints;",
         "segments are interpolation"
       ],
@@ -170,9 +168,7 @@
     },
     "D": {
       "annotation_lines": [
-        "fixed checkpoint at each saved step;",
-        "validation-selected broadcast 0.49 (E, F)",
-        "Adam 0.03 \u00b7 n = 20 seeds"
+        "validation-selected broadcast 0.49 (E, F)"
       ],
       "bound_by_16384": 20,
       "bound_by_4096": 18,
@@ -185,7 +181,7 @@
         2.2799115087624316e-05
       ],
       "trio_mean": 2.262210802304472e-05,
-      "window_rule_segments": 3
+      "window_rule_segments": 2
     },
     "E": {
       "16384": {
@@ -202,11 +198,12 @@
         "n": 20,
         "positive": 20
       },
+      "annotation_lines": [],
       "holm_p": 3.814697265625e-06,
       "n_seeds": 20
     },
     "F": {
-      "_min_mark_separation_pt": 11.95,
+      "_min_mark_separation_pt": 11.22,
       "_rate_categories": [
         "exact",
         "hard_distal_unit_proximal",
@@ -318,12 +315,12 @@
   "protocol_sha256": "c441998f6f91e1f8782b2918689806e119af567e479bcd5c94069dca837a2413",
   "scope": "Current figure-only rendering; frozen protocol and numerical summary bytes unchanged. Initial numerical audit retains its historical render hashes.",
   "source_sha256": {
-    "scripts/conductance_local_gate/figure.py": "ccf2f218e6326ba9538628f0feb02dbf0ef34b9b3853f95203a36e5af3af99c3",
+    "scripts/conductance_local_gate/figure.py": "0ffc2bc94debe72eaba0583eca9f34b699d0384b85347083289e9f782dbdf066",
     "scripts/conductance_local_gate/model.py": "cc2b82f6c486810a43aa885f3ea2dacce54c473f2e2ece6f4cfdb7d88ce6ad39",
     "scripts/conductance_local_gate/portable_contract.py": "fea35a393f5881dfc60b3dfe810dac64f8c2e6b0d8ba01937f4a42c5ffab3c05",
     "scripts/conductance_local_gate/report.py": "a96b4b6edd42c0d98de3da44a46c409310b463450369173be7371d503fa6dfef",
     "scripts/credit_tree_schematics.py": "ebd31b5ccc86b00bb27a236af210eb2a1d1820e9fcec27b57283a12224158cbe",
-    "scripts/figure_canvas.py": "de3f566dd08270535deab95eb798b49cc17ccf4dfbb88e7ebdb50860903a6ad1",
+    "scripts/figure_canvas.py": "0a0d01607cc3589a44075b6ccd7c2867dcf7d8a31f88ca1565dade247f4bcb48",
     "scripts/journal_style.py": "be8a138f9d9c081237edc616ba52b6769f957d8b8b49e705a92adcb18f475f3c",
     "scripts/native_schematics.py": "68530ec60f85e496b9b0ba7a7ad53510dce2fae91cc38231046c1175e1cb7aeb",
     "source_data/conductance_credit_demand/opponent/summaries/context_gradient_summary.csv": "a3bea23ba12a888eb7fb356b4ac3142bbf240518fa8b3d2a28278d91e1b40486",

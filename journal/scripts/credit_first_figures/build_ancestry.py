@@ -146,6 +146,26 @@ also written into ``figure_03_sources.json``):
   wording is in the caption.  A 166 pt panel cannot hold a 295 pt line.
   C prints the two tie tags verbatim but at 18.66 %, the value the frozen
   ``condition_summary.csv`` carries for both arms at K = 1.
+* VISUAL REVIEW 2026-09-10.  ``Y_LIM_C`` is (-4, 100), not (-20, 100): the
+  lowest datum is 18.47 % and the old window left 38 % of C's and D's plot
+  height below every mark, filled with three lines of caption prose.  C's
+  third line ("below chance: pooled class signal is sign-reversed (B)") is
+  deleted -- the drawn chance rule, panel B and the running text all carry
+  it -- and the two tie tags are re-hung inside the tightened band; D's
+  rewired direct label is now ONE line with the badge inline, which is all
+  the band it needs.  D also labels its own y ticks and repeats
+  ``Held-out accuracy (%)`` (it repeated the x axis in full but carried no
+  readable y scale, 55 pt of blank gutter away from C's data; the gutter is
+  now 35.7 pt and audit_panel_gaps still passes), is retitled to the two
+  magnitudes it actually draws, and drops the K = 4 span, whose arrowheads
+  had 1.7 mm to print in and whose leader crossed the ancestry curve.  F
+  drops its n / interval / epoch line and three of its four contrast lines
+  (all duplicates of the caption or of the running text), marks each of the
+  three sampled cue-noise doses (filled soft, open hard), draws the frozen
+  floor in the same dashed LW_REF grammar as the two rules above it, and
+  gives up the violet oracle rule for CF-7 mute, so violet means the best
+  matched control and nothing else in this figure.  B lists its four
+  controls in E's order, with the rng draw order unchanged.
 * E runs to xlim (-2, 14) rather than the plan's (-2, 11), so the +13.13
   dense rank-4 seed is drawn instead of clipped.
 * F is drawn on the plan's ylim (10, 90) with ticks 20/40/60/80, so the
@@ -157,12 +177,12 @@ also written into ``figure_03_sources.json``):
   in their ORDINAL_RAMP hues, with leaders to their noise-0.5 vertices
   (64.03 / 54.22 / 32.41 %), under a `hard readout` tag and the
   `exploratory` badge -- the reviewer's blocker on the unreadable dashed
-  family.  (b) The plan's three long annotations are condensed to four
-  7 pt lines in the left wedge (noise-0 oracle gaps -0.31 / -60.90 pp and
-  the primary noise-0.5 gap -54.47 pp).  (c) The `+7.16 pp vs frozen`
-  contrast and the footer's cohort range and cue-delay clause do not fit
-  and are carried by the caption; the on-panel footer keeps n, the
-  interval type and the endpoint.
+  family.  (b) The plan's three long annotations are reduced to the
+  panel's own claim, the -54.47 pp gap at noise 0.5, on two 7 pt lines in
+  the left wedge (2026-09-10; the noise-0 gaps -0.31 / -60.90 pp restated
+  the running text verbatim).  (c) The `+7.16 pp vs frozen` contrast, the
+  n / interval / epoch statement and the footer's cohort range and
+  cue-delay clause do not fit and are carried by the caption.
 * B's control-table headers are the digits 1..8 under one ``b_i`` tag and
   its |A| key is plain text: Nimbus Sans has no Unicode subscript block
   and CF-2 bans mathtext.
@@ -228,10 +248,18 @@ BOOT_SEED = 70_000            # D's paired seed bootstrap (20,000 draws)
 TIER_RAMP = (ORDINAL_RAMP[0], ORDINAL_RAMP[1], ORDINAL_RAMP[2], ORDINAL_RAMP[3])
 CAL_RAMP = {16: ORDINAL_RAMP[1], 64: ORDINAL_RAMP[2], 256: ORDINAL_RAMP[3]}
 
-CONTROL_ROWS = (("deranged", "within_neuron_route_derangement"),
-                ("depth-interleaved", "depth_interleaved_bins"),
-                ("random-sparse", "random_sparse_matched"),
-                ("dense rank-4", "random_rank_k"))
+# QA 2026-09-10 (minor): B listed its four controls in the exact reverse of
+# E's forest rows, so a control's delivered support and its contrast could not
+# be read at the same vertical position.  B now displays E's order (dense
+# rank-4, random-sparse, depth-interleaved, then the off-scale deranged row).
+# The rng draw order is NOT reordered with it: one generator is consumed in
+# sequence across the four controls, so _DRAW_ORDER keeps the shipped draw and
+# every plotted support value is unchanged.
+_DRAW_ORDER = (("deranged", "within_neuron_route_derangement"),
+               ("depth-interleaved", "depth_interleaved_bins"),
+               ("random-sparse", "random_sparse_matched"),
+               ("dense rank-4", "random_rank_k"))
+CONTROL_ROWS = tuple(reversed(_DRAW_ORDER))
 FOREST_ROWS = (("best matched\ncontrol", "best_matched_nonanatomical_oracle",
                 "oracle", "p_holm_four_budgets", "four budgets"),
                ("dense rank-4", "random_rank_k",
@@ -241,7 +269,11 @@ FOREST_ROWS = (("best matched\ncontrol", "best_matched_nonanatomical_oracle",
                 "point_mlp", "p_holm_four_individual_controls_at_k4", None),
                ("depth-\ninterleaved", "depth_interleaved_bins",
                 "point_mlp", "p_holm_four_individual_controls_at_k4", None))
-Y_LIM_C = (-20.0, 100.0)
+# QA 2026-09-10 (major): the window ran to -20 with the lowest datum at
+# 18.47 %, so 38 % of C's and D's plot height lay below every mark and held
+# three lines of caption prose.  The window now stops at -4, which leaves the
+# two tie tags (C) and the rewired direct label (D) one band each.
+Y_LIM_C = (-4.0, 100.0)
 
 #: The shipped caption (analysis/figure_overhaul_20260908/v2/fig3/TEXT.md).
 #: Counted under CF-8 by :func:`caption_words` and recorded in the manifest.
@@ -454,15 +486,17 @@ def ancestry_dictionary(K):
 def control_supports(rng_seed=0):
     """Delivered support of b3's credit under each K = 4 control (one draw)."""
     rng = np.random.default_rng(rng_seed)
-    rows = []
-    for _, mode in CONTROL_ROWS:
+    rows = {}
+    for _, mode in _DRAW_ORDER:                 # draw order fixed: see above
         if mode == "random_rank_k":
             field = experiment.random_rank_routes(np.arange(8), 4, rng)
         else:
             field = experiment.grouped_routes(np.arange(8), 4, mode, rng)
-        rows.append(field[CUED])
-    table = pd.DataFrame(np.array(rows), columns=[f"b{i + 1}" for i in range(8)])
-    table.insert(0, "control", [m for _, m in CONTROL_ROWS])
+        rows[mode] = field[CUED]
+    order = [m for _, m in CONTROL_ROWS]        # display order = E's rows
+    table = pd.DataFrame(np.array([rows[m] for m in order]),
+                         columns=[f"b{i + 1}" for i in range(8)])
+    table.insert(0, "control", order)
     table.insert(1, "cued_stream", "b3")
     return table
 
@@ -906,9 +940,13 @@ def panel_bandwidth(ax, summary, outcomes):
             va="center")
     ax.text(3.16, 95.0, "n = 20 paired seeds; mean [95 % bootstrap]; epoch 80",
             fontsize=PT_SMALL, color=MUTE, ha="right", va="center")
-    # the two concentric ties, named verbatim, and the sub-chance cause,
-    # set under the data (plan §4 C)
-    ax.text(-0.16, 8.0, f"K = 1: ancestry = deranged, {ancestry[0]:.2f} %",
+    # the two concentric ties, named verbatim, under the data (plan §4 C).
+    # QA 2026-09-10 (major): the third line here ("below chance: pooled class
+    # signal is sign-reversed (B)") was a verbatim restatement of the running
+    # text and of panel B's own footer, and it was the line that forced the
+    # window down to -20.  It is deleted and the two tie tags are re-hung in
+    # the -4 window.
+    ax.text(-0.16, 11.4, f"K = 1: ancestry = deranged, {ancestry[0]:.2f} %",
             fontsize=PT_SMALL, color=MUTE, ha="left", va="center")
     # plan section 4 C asks for LEADER-labelled tie tags (QA 2026-09-10).  The
     # K = 1 pair sits directly above its tag, so the leader is a 9 pt hairline
@@ -916,16 +954,13 @@ def panel_bandwidth(ax, summary, outcomes):
     # is at the panel's top right, 73 accuracy units from the tag band: any
     # leader to it would be an ~80 pt rule crossing the three series, so that
     # tag stays unleadered (declared here, not silently).
-    ax.plot([-0.108, -0.026], [12.9, 17.6], color=MUTE,
+    ax.plot([-0.112, -0.026], [15.9, 17.6], color=MUTE,
             lw=LW_HAIR, zorder=1, clip_on=False, solid_capstyle="butt")
     # QA 2026-09-09 (blocker): the deranged square sits at 25.13 % at K = 8,
     # so "all families tie" is contradicted by the panel's own mark.  Name
     # the two families that do tie.
-    ax.text(-0.16, -2.0,
+    ax.text(-0.16, 1.5,
             f"K = 8: ancestry = best matched control, {ancestry[3]:.2f} %",
-            fontsize=PT_SMALL, color=MUTE, ha="left", va="center")
-    ax.text(-0.16, -12.0,
-            "below chance: pooled class signal is sign-reversed (B)",
             fontsize=PT_SMALL, color=MUTE, ha="left", va="center")
     return dict(ancestry=ancestry.tolist(), best=best[:, 1].tolist(),
                 deranged=deranged.tolist())
@@ -942,21 +977,26 @@ def panel_rewiring(ax, summary, paired):
     matched = _series(ax, x, part("dendritic_tree"), GREEN, "o",
                       marker_ms("o"), 6, tie_at=(0, 3), edge="white")
     np.testing.assert_allclose(rewired, [18.67, 21.71, 75.09, 81.00], atol=2e-2)
-    _accuracy_axes(ax, ylabel=False)
+    # QA 2026-09-10 (minor): D repeated C's x axis in full but carried no y
+    # tick labels and no y title, 55 pt of blank gutter away from C's data, so
+    # the pair did not read as a shared-axis panel and nothing in D could be
+    # read as a number.  D now labels its own ticks and repeats the y title.
+    _accuracy_axes(ax, ylabel=True)
     reference_line(ax, 50.0, label="chance", span=(-0.20, 3.20))
     _gap_span(ax, 1.0, rewired[1], matched[1],
               f"{_signed(paired[2][0])} pp", (1.42, 33.0))
-    _gap_span(ax, 2.0, rewired[2], matched[2],
-              f"{_signed(paired[4][0])} pp", (1.62, 74.0), dx=-0.09)
+    # QA 2026-09-10 (minor): the K = 4 pair is 5.02 pp apart, 1.7 mm at the
+    # 7.2 in print width, so the double-headed span there printed as one blob
+    # and its leader ran across the green ancestry curve.  The magnitude is
+    # carried by the panel title instead; the K = 2 span (23.15 pp, 8 mm)
+    # stays, where the arrowheads are readable.
     # QA 2026-09-09: the rewired label is direct-labelled ON its own series,
     # under the K = 1-2 segment (18.67 -> 21.71 %), with the badge inline --
     # the same treatment 'task-matched tree' gets on the green curve.
-    ax.text(-0.02, 10.0, "degree- and depth-", color=ROSE, fontsize=PT_SMALL,
-            ha="left", va="center")
-    lab = ax.text(-0.02, 2.0, "matched rewiring", color=ROSE,
+    lab = ax.text(-0.16, 6.0, "degree- and depth-matched rewiring", color=ROSE,
                   fontsize=PT_SMALL, ha="left", va="center")
-    _badge(ax, (0.98, 2.0), "control", ha="left", va="center")
-    ax.plot([0.32, 0.44], [17.0, 19.2], color=ROSE, lw=LW_HAIR, zorder=1)
+    _badge(ax, (1.94, 6.0), "control", ha="left", va="center")
+    ax.plot([0.30, 0.42], [10.0, 17.4], color=ROSE, lw=LW_HAIR, zorder=1)
     ax.text(2.05, 62.0, "task-matched tree", color=GREEN, fontsize=PT_SMALL,
             ha="left", va="center")
     ax.text(-0.16, 84.0, "exact tie at K = 1 and at K = 8", color=MUTE,
@@ -1083,8 +1123,17 @@ def panel_cues(ax, grid, oracle, frozen, mismatched, enc_c, hard_c):
             colour = CAL_RAMP[size]
             ax.fill_between(xs, lo, hi, color=colour, alpha=0.22, lw=0.0,
                             zorder=1.6)
+            # QA 2026-09-10 (minor): only three doses were run, and the drawn
+            # polylines carried no mark at any sampled abscissa, so the
+            # straight segments read as a continuous dose-response.  Every
+            # measured cell now carries a mark, filled for the soft readout
+            # and open for the exploratory hard one -- a second channel for
+            # the soft/hard split beyond the dash pattern.
             line, = ax.plot(xs, mean, color=colour,
                             lw=LW_DATA if readout == "soft" else LW_ERR,
+                            marker="o", ms=3.1,
+                            mfc=colour if readout == "soft" else "white",
+                            mec=colour, mew=LW_EDGE,
                             solid_capstyle="round", zorder=3.0)
             if dashes:
                 line.set_dashes(dashes)
@@ -1101,11 +1150,21 @@ def panel_cues(ax, grid, oracle, frozen, mismatched, enc_c, hard_c):
     np.testing.assert_allclose(mismatched, [18.58, 18.89], atol=2e-2)
     # the three rules span only the plotted doses, leaving a clear 0.20-unit
     # strip at the far left for the solid series' direct labels
+    # QA 2026-09-10 (minor): the oracle rule was drawn in the same violet as
+    # C's and E's best-matched-control series, 0.7 pp from that series' own
+    # ceiling value, so one colour carried two different ceilings in one
+    # figure.  The rule is now CF-7 plain: dashed mute at LW_REF, like chance
+    # and like the floor below, and violet is left to the matched control.
     reference_line(ax, oracle, label=f"oracle {oracle:.1f} %",
-                   color=PURPLE, span=(-0.10, 1.0))
+                   span=(-0.10, 1.0))
     reference_line(ax, 50.0, label="chance", span=(-0.10, 1.0))
-    ax.plot([-0.10, 1.0], [frozen, frozen], color=MUTE, lw=LW_HAIR,
-            zorder=1.2)
+    # QA 2026-09-10 (minor): the floor was a solid hairline while the two
+    # rules above it were dashed at LW_REF, and it ran 0.4 pp under the soft
+    # 16-cue series, so the two fused into one band and the first reviewer
+    # read the floor as undrawn.  It is now the same dashed LW_REF grammar.
+    floor, = ax.plot([-0.10, 1.0], [frozen, frozen], color=MUTE, lw=LW_REF,
+                     zorder=1.2, solid_capstyle="butt")
+    floor.set_dashes((2.2, 1.8))
     v256 = encoder_contrast(enc_c, 256, 0.0, "oracle_context")
     v16 = encoder_contrast(enc_c, 16, 0.0, "oracle_context")
     prim = encoder_contrast(enc_c, 256, 0.5, "oracle_context")
@@ -1122,7 +1181,12 @@ def panel_cues(ax, grid, oracle, frozen, mismatched, enc_c, hard_c):
                 fontsize=PT_SMALL, ha="center", va="center")
         ax.plot([-0.085, -0.008], [y_tag, y_line], color=CAL_RAMP[size],
                 lw=LW_HAIR, zorder=1)
-    ax.text(0.02, 86.5, "soft readout, calibration cues", fontsize=PT_SMALL,
+    # QA 2026-09-10: "soft readout, calibration cues" ran into the oracle
+    # rule's right-aligned label in the one mark-free band at the top of the
+    # panel.  Violet no longer separates them (the rule is mute now), so the
+    # tag is cut to the "hard readout" counterpart; the caption already says
+    # the curves are "labelled by calibration size".
+    ax.text(0.02, 86.5, "soft readout", fontsize=PT_SMALL,
             color=INK, ha="left", va="center")
     # direct labels on the DASHED exploratory hard lines at noise 0.5
     # (64.03 / 54.22 / 32.41 %) -- QA 2026-09-09: without them the three
@@ -1134,9 +1198,10 @@ def panel_cues(ax, grid, oracle, frozen, mismatched, enc_c, hard_c):
                 fontsize=PT_SMALL, ha="left", va="center")
         ax.plot([0.525, 0.505], [y_leader, y_line], color=CAL_RAMP[size],
                 lw=LW_HAIR, zorder=1)
-    ax.text(1.16, 76.0, "n = 20 seeds; 95 % CI; epoch 80",
-            fontsize=PT_SMALL, color=MUTE, ha="right", va="center")
-    ax.text(1.16, 68.0, "hard readout", fontsize=PT_SMALL, color=MUTE,
+    # QA 2026-09-10 (minor): the n / interval / epoch line was a methods
+    # statement set inside the axes and a verbatim duplicate of the caption's
+    # own "20 fresh seeds ... 95 % seed-bootstrap bands at epoch 80"; deleted.
+    ax.text(1.16, 72.0, "hard readout", fontsize=PT_SMALL, color=MUTE,
             ha="right", va="center")
     # 59 %, not 57: the badge chip is 9 pt tall and the right-aligned
     # 'chance' rule label sits just above 50 (QA 2026-09-09)
@@ -1144,13 +1209,15 @@ def panel_cues(ax, grid, oracle, frozen, mismatched, enc_c, hard_c):
     # the noise-free gaps (leakage is a small-calibration effect) and the
     # primary noisy-cue contrast, in the one text-free pocket the 10-90
     # window leaves, with a leader to the soft 256-cue vertex at noise 0.5
-    for y, line in ((46.5, "noise 0 vs oracle:"),
-                    (39.5, f"{_signed(v256[0])} pp (256)"),
-                    (32.5, f"{_signed(v16[0])} pp (16)"),
-                    (25.5, f"noise 0.5: {_signed(prim[0])} pp")):
+    # QA 2026-09-10 (minor): four contrast lines stood in this wedge, three of
+    # them restating the running text ("lost 60.90 points with sixteen cues but
+    # only 0.31 points with 256").  Only the panel's own claim is kept -- the
+    # primary noisy-cue gap -- with its leader to the soft 256-cue vertex.
+    for y, line in ((32.5, "256 cues, noise 0.5:"),
+                    (25.5, f"{_signed(prim[0])} pp vs oracle")):
         ax.text(-0.28, y, line, fontsize=PT_SMALL, color=INK, ha="left",
                 va="center")
-    ax.plot([0.34, 0.47], [25.3, 25.7], color=MUTE, lw=LW_HAIR, zorder=1)
+    ax.plot([0.41, 0.48], [25.4, 25.7], color=MUTE, lw=LW_HAIR, zorder=1)
     # CF-7: right-aligned ON its rule, exactly like 'oracle 80.3 %' and
     # 'chance' (QA 2026-09-10, minor -- it was floating below the rule at the
     # axes' right edge, a second convention for a third reference line).  It
@@ -1218,7 +1285,11 @@ def build():
     b = canvas.panel("B", 0, 4, 8, title="Ancestry and control dictionaries",
                      schematic=True, lock=False)
     c = canvas.panel("C", 1, 0, 6, title="Ancestry wins only at K = 4")
-    d = canvas.panel("D", 1, 6, 6, title="Rewiring removes the K = 2, 4 gain",
+    # QA 2026-09-10 (minor): "removes the K = 2, 4 gain" is contradicted by the
+    # panel's own marks -- at K = 4 the rewired tree keeps 75.09 of 80.10 %, a
+    # 5.02 pp cost, and the two markers nearly touch.  The title now states the
+    # two magnitudes, which is also how the running text puts it.
+    d = canvas.panel("D", 1, 6, 6, title="Rewiring costs 23 and 5 pp at K = 2, 4",
                      sharey=c)
     e = canvas.panel("E", 2, 0, 7, title="Ancestry minus each control, K = 4",
                      lock=False)
@@ -1405,15 +1476,28 @@ def build():
         "names it in its planned second clause; the note is set on two "
         "lines and the right-aligned column moved from x = 13.7 to 12.85 to "
         "keep audit_panel_gaps.py's 6 pt floor against F",
-        "F now direct-labels the three dashed hard-readout curves 256 / 64 / "
+        "VISUAL REVIEW 2026-09-10: C and D run on ylim (-4, 100), not "
+        "(-20, 100); C drops its 'below chance' line; D carries y tick "
+        "labels and the y title, a one-line rewired label, the title "
+        "'Rewiring costs 23 and 5 pp at K = 2, 4' and no K = 4 span; F "
+        "drops its n line and three of four contrast lines, marks the "
+        "three sampled doses (filled soft, open hard), draws the frozen "
+        "floor dashed at LW_REF and its oracle rule in CF-7 mute rather "
+        "than violet; B lists its controls in E's order (dense rank-4, "
+        "random-sparse, depth-interleaved, deranged) while the rng draw "
+        "order is unchanged, so every support value is the shipped one",
+        "F direct-labels the three dashed hard-readout curves 256 / 64 / "
         "16 at their noise-0.5 vertices (64.03 / 54.22 / 32.41 %) with a "
         "'hard readout' tag and the 'exploratory' badge, and runs on the "
         "plan's ylim (10, 90) so the 18.67 % frozen floor clears the bottom "
-        "spine by 11 pt; the plan's three long annotations are condensed to "
-        "four 7 pt lines in the one mark-free wedge",
+        "spine by 11 pt; the plan's three long annotations are reduced to "
+        "the panel's own claim, the -54.47 pp gap at noise 0.5, on two "
+        "7 pt lines in the one mark-free wedge",
         "F carries the plan's ylim (10, 90); the +7.16 pp vs frozen "
-        "contrast, the seed range 52000-52019 and the cue-delay clause "
-        "move to the caption because the window leaves no band for them",
+        "contrast, the noise-0 gaps (-0.31 / -60.90 pp), the n / interval / "
+        "epoch statement, the seed range 52000-52019 and the cue-delay "
+        "clause are carried by the caption and the running text because the "
+        "window leaves no band for them",
         "B's control-table column headers are the digits 1..8 under one b_i "
         "tag, not eight subscripted b_j strings: a literal Unicode subscript "
         "is not in Nimbus Sans and mathtext is banned by CF-2",

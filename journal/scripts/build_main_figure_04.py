@@ -82,10 +82,11 @@ Private helpers (DECISIONS G5; report them for later promotion)
                     so ``require_delta0()`` is unaffected.
 ``_minus`` / ``_signed``  numbers with the typographic minus U+2212 the tick
                     labels already use (Python's format gives a hyphen).
-``_corner_lines`` / ``_lines`` / ``_rug`` / ``_exponent``  point-anchored
-                    annotation stacks, the sampled-dose rug, and a 7 pt
-                    raised exponent (Nimbus Sans has no U+207B and CF-2 bans
-                    mathtext).
+``_corner_lines`` / ``_lines``  point-anchored annotation stacks.
+``_residual_strip``  C's (measured − analytic) strip: an inset axes over the
+                    band of C's own box that no datum reaches, drawn because
+                    the slot-fill contract forbids shrinking a panel box to
+                    stack a second one under it.
 ``_recolour_last_capsule``  ``Frame.credit_delivery(mode='subtree')`` paints
                     its capsule from the frozen K-cycle, whose first entry is
                     ``shunting``; in this figure ``shunting`` is reserved for
@@ -127,6 +128,7 @@ from figure_canvas import (
     SEED_MS,
     Margins,
     NativeCanvas,
+    style_panel,
     tint_patch,
     token_subscript,
 )
@@ -206,16 +208,11 @@ def _signed(value, digits=1):
     return f"{value:+.{digits}f}".replace("-", MINUS)
 
 
-def _rug(ax, doses, y0=None, length_pt=2.6):
-    """Sampled-dose rug on the bottom spine, at LW_HAIR."""
-    lo, hi = ax.get_ylim()
-    fig = ax.get_figure()
-    h_pt = ax.get_position().height * fig.get_size_inches()[1] * 72.0
-    dy = length_pt * (hi - lo) / max(h_pt, 1e-6)
-    y0 = lo if y0 is None else y0
-    for d in doses:
-        ax.plot([d, d], [y0, y0 + dy], color=EDGE, lw=LW_HAIR,
-                solid_capstyle="butt", zorder=2, clip_on=False)
+# QA 2026-09-10: the sampled-dose rug is deleted, not restyled.  It drew a
+# hairline at every dose on the bottom spine of C and of F-H, at the colour
+# and weight of a major tick and only 0.2 pt shorter, so between the labelled
+# 0.5 and 0.75 ticks the axis read as irregularly ticked -- and it was
+# redundant, since every sampled dose already carries a plotted marker.
 
 
 def _lines(ax, xy, rows, *, ha="left", va="top", step_pt=8.8, color=None,
@@ -381,8 +378,13 @@ def _glyph_key(frame: Frame, *, y_pt, x0_pt, width_pt):
     no frame.  Returns the number of rows it used.
     """
     ax = frame.ax
+    # QA 2026-09-10: the gate entry says which of the two gate glyphs it is.
+    # Panel A draws the selected branch's gate open (a hollow double ring)
+    # and the three nonselected ones closed (a filled carmine centre); the
+    # key showed one glyph and named neither state.
     items = [("soma", "soma"), ("junction", "junction"),
-             ("contact", "excitatory contact"), ("gate", "context gate c"),
+             ("contact", "excitatory contact"),
+             ("gate", "context gate c, open = selected"),
              ("error", "somatic error δ0")]
     # QA 2026-09-09: the key's own token is set with Frame.subscript so it
     # reads δ₀ exactly like the tag on the tree beside it (CF-2).
@@ -400,6 +402,12 @@ def _glyph_key(frame: Frame, *, y_pt, x0_pt, width_pt):
         ys = [y_pt + 4.3, y_pt - 4.3]
     else:
         groups, gws, ys = [items], [widths], [y_pt]
+    # QA 2026-09-10: the key needs two rows, and the lower row's baseline
+    # falls below the panel's own axes box, so the gate ring printed as a
+    # bare upper arc and the δ0 arrow as a headless wedge.  The glyphs are
+    # drawn at their true sizes and then unclipped, which is the only way to
+    # show the whole mark without shrinking the tree above it.
+    n_patches, n_lines = len(ax.patches), len(ax.lines)
     for group, gw, yy in zip(groups, gws, ys):
         g = ((width_pt - sum(gw)) / (len(group) - 1)) if len(group) > 1 else 0.0
         g = min(g, 26.0)
@@ -432,6 +440,8 @@ def _glyph_key(frame: Frame, *, y_pt, x0_pt, width_pt):
                 frame.text(anchor, text, size=PT_BASE, color=MUTE,
                            ha="left", va="center")
             x += w + g
+    for art in list(ax.patches[n_patches:]) + list(ax.lines[n_lines:]):
+        art.set_clip_on(False)
     return rows
 
 
@@ -594,8 +604,24 @@ def backward_credit_schematic(ax) -> Frame:
                          tip_xs_pt=B_TIP_X, y_soma_pt=9.5, y_junc_pt=15.5,
                          y_tip_pt=20.0, contact_pt=B_CONTACT_PT, ghost=True,
                          selected=0, soma_r_pt=2.4, delta_compact=(10.5, 6.0),
-                         gate_badge_offset=((6.6, -3.2) if mode == "neuron"
-                                            else (-6.8, -3.2)),
+                         # QA 2026-09-10: one badge offset for all three
+                         # cards.  The neuron-shared card used to swing its
+                         # 'c' to the RIGHT of the gate, where it landed on
+                         # the soma and under the amber bus source dot, so
+                         # the same label pointed at a different object in
+                         # the middle row; at the common offset it sits
+                         # beside its own gate and above the bus riser --
+                         # the badge sits level with the gate rather than
+                         # below it, which is the one height that clears the
+                         # amber riser the neuron-shared card runs along the
+                         # soma line -- that card keeps the same side and
+                         # the same lane, 1.8 pt higher, which is what buys
+                         # the badge its clearance: the lane between that
+                         # riser and the branch-1 contact above it is barely
+                         # a badge tall, so the neuron card's 'c' stands 2.7
+                         # pt further out, where the riser is the only ink.
+                         gate_badge_offset=((-9.5, 0.4) if mode == "neuron"
+                                            else (-6.8, -0.8)),
                          gate_unselected=False)
         before = len(ax.patches)
         n_lines = len(ax.lines)
@@ -638,9 +664,19 @@ def backward_credit_schematic(ax) -> Frame:
         frame.badge((core[0] + core[2], oy + frame.fy(25.0)), "control",
                     text=badge, ha="right", va="top")
     # Γ footer token (AMENDMENTS B10): a printed symbol, not a new glyph.
-    frame.text((frame.fx(1.0), frame.fy(5.0)),
-               "Γ ∈ {0,1}:  1[b = b*]   1/B   permuted",
-               size=PT_BASE, color=MUTE, ha="left", va="center")
+    # QA 2026-09-10: the header used to read "Γ ∈ {0,1}", which the second
+    # entry (1/B) contradicts for every B > 1, and the three entries were an
+    # unkeyed left-to-right list under three top-to-bottom cards.  The claim
+    # is dropped and each entry now carries its own card's text colour, so
+    # the mapping is read off the key the cards already establish.
+    x_pt = 1.0
+    for text, colour in (("Γ diagonal:", MUTE),
+                         ("1[b = b*]", GREEN_TEXT),
+                         ("1/B", AMBER_TEXT),
+                         ("permuted", GRAY_TEXT)):
+        frame.text((frame.fx(x_pt), frame.fy(5.0)), text, size=PT_BASE,
+                   color=colour, ha="left", va="center")
+        x_pt += _text_w_pt(ax, text, PT_BASE) + 5.0
     return frame
 
 
@@ -650,11 +686,24 @@ def backward_credit_schematic(ax) -> Frame:
 # analytic lines leaves empty: above the B = 2 line at the top right, and
 # below the B = 8 line at the bottom left.  Every annotation is anchored in
 # POINTS off an axes corner, so it keeps its clearance after the reserve lock
-# moves the axes box.  xlim reaches 1.30 so the three direct labels sit past
-# the data at their own line ends instead of on top of each other at chi = 0.
-C_XLIM = (-0.03, 1.30)
+# moves the axes box.
+#
+# QA 2026-09-10, three faults answered together:
+#   * the 95 % intervals are 0.004-0.015 wide on a 48 pt-per-unit axis, i.e.
+#     under 1 pt, so the panel's own "11 of 24 intervals exclude the line"
+#     was a claim with no ink behind it.  The band below all data now carries
+#     a residual strip -- (measured − analytic) against χ on its own ±0.026
+#     scale, where the same intervals are 3-8 pt wide and an interval that
+#     clears zero is visible as a ribbon clear of the rule.
+#   * χ cannot exceed 1, so the axis no longer runs to 1.30: the three direct
+#     labels sit just OUTSIDE the right spine at their own line ends.
+#   * the four-line methods note that used to fill the empty lower-left wedge
+#     is gone (caption contract CF-8 carries n, the interval and epoch 0).
+C_XLIM = (-0.02, 1.03)
 C_YLIM = (-1.35, 1.05)
-C_LABEL_X = 1.06
+C_LABEL_X = 1.05
+C_STRIP_TOP = -0.88             # data y of the residual strip's top edge
+C_STRIP_YLIM = (-0.026, 0.026)  # holds every residual interval end
 
 
 def _corner_lines(ax, texts, *, corner=(0.0, 0.0), x_pt=1.0, y_pt=0.0,
@@ -672,6 +721,29 @@ def _corner_lines(ax, texts, *, corner=(0.0, 0.0), x_pt=1.0, y_pt=0.0,
     return out
 
 
+def _residual_strip(ax):
+    """PRIVATE (G5): the (measured − analytic) strip in C's empty lower band.
+
+    An inset axes, not a panel: the canvas's slot-fill contract holds every
+    data panel within ``EMPHASIS_MAX_RATIO`` of every other, so C's axes box
+    may not shrink to make room for a second box.  The strip therefore sits
+    inside C's own box, over the band no datum reaches, and the main left
+    spine is cut back to its own data range so the two scales never share a
+    run of spine.  It borrows C's bottom spine, x scale and x tick labels.
+    """
+    frac = (C_STRIP_TOP - C_YLIM[0]) / (C_YLIM[1] - C_YLIM[0])
+    strip = ax.inset_axes([0.0, 0.0, 1.0, frac])
+    strip.patch.set_visible(False)
+    style_panel(strip, spines=("left",))
+    strip.set_xlim(*C_XLIM)
+    strip.set_ylim(*C_STRIP_YLIM)
+    strip.set_xticks([])
+    strip.set_yticks([-0.02, 0.0, 0.02], ["−0.02", "0", "0.02"])
+    strip.plot(list(C_XLIM), [0.0, 0.0], color=MUTE, lw=LW_REF,
+               dashes=(2.6, 2.0), zorder=1.0, solid_capstyle="butt")
+    return strip
+
+
 def initial_utility(ax, summary: pd.DataFrame) -> dict:
     """Analytic s(χ) against the neuron-shared rule's measured utility."""
     shared = summary[summary.condition.eq("neuron_shared_k1")]
@@ -679,6 +751,7 @@ def initial_utility(ax, summary: pd.DataFrame) -> dict:
     excluded, max_dev = 0, 0.0
     ax.set_xlim(*C_XLIM)
     ax.set_ylim(*C_YLIM)
+    strip = _residual_strip(ax)
     for b in BRANCHES:
         colour = RAMP[b]
         ax.plot(chi, 1.0 - 2.0 * (b - 1) * chi / b, color=colour, lw=LW_DATA,
@@ -696,50 +769,74 @@ def initial_utility(ax, summary: pd.DataFrame) -> dict:
                     markeredgecolor=colour, markeredgewidth=LW_EDGE,
                     ecolor=colour, elinewidth=LW_ERR, capsize=ERR_CAPSIZE,
                     capthick=LW_ERR, zorder=4)
+        # the same three numbers in the strip, where the interval is 3-8 pt
+        # wide: a ribbon between the interval ends and the residual itself.
+        # Ribbons, not markers: five of the eight doses fall in χ ∈ [0.5,
+        # 0.75], which is 21 pt of strip, and three series of markers there
+        # would collide exactly as they do on the main axes.
+        strip.fill_between(x, lo - pred, hi - pred, color=colour, alpha=0.22,
+                           linewidth=0, zorder=2)
+        strip.plot(x, m - pred, color=colour, lw=LW_HAIR, zorder=3,
+                   solid_capstyle="round")
         ax.text(C_LABEL_X, 1.0 - 2.0 * (b - 1) / b, f"B = {b}",
                 fontsize=PT_BASE, color=RAMP_TEXT[b], ha="left", va="center",
-                zorder=6)
+                zorder=6, clip_on=False)
     reference_line(ax, 0.0, axis="y", label=None, color=MUTE, zorder=0,
                    span=(C_XLIM[0], 1.0))
     # CF-7 exception (recorded in the deviation list): the right end of the
-    # zero rule carries the three chi_c diamonds and the 'B = 2' direct
-    # label, so the reference label sits right-aligned at chi = 0.52 below
-    # the rule instead of at its right end.
+    # zero rule is where the B = 2 line lands and where the B = 4 and B = 8
+    # lines cross it, so the reference label sits right-aligned at chi = 0.52
+    # below the rule instead of at its right end.
     ax.annotate("zero utility", xy=(0.52, 0.0), xytext=(0.0, -1.8),
                 textcoords="offset points", fontsize=PT_BASE, color=MUTE,
                 ha="right", va="top", zorder=6, annotation_clip=False)
-    for b in BRANCHES:
-        ax.plot([CHI_C[b]], [0.0], linestyle="none", marker="D",
-                ms=MARKER_MS, markerfacecolor="white", markeredgecolor=INK,
-                markeredgewidth=LW_EDGE, zorder=5)
+    # QA 2026-09-10: the three χ_c diamonds are gone.  They sat ON the zero
+    # rule at 0.571, 0.667 and 1.0, i.e. exactly on the measured markers the
+    # analytic line already crosses there, so the one region the panel exists
+    # to show was a knot of two open teal marks and a black diamond; and the
+    # same three values are plotted against B, with their trained partners,
+    # in panel D.  The crossing is now read off the line and the rule.
     _corner_lines(ax, ("s(χ) = 1 − 2χ(B − 1)/B",), corner=(1.0, 1.0),
                   x_pt=-1.0, y_pt=-1.0, ha="right", color=INK)
-    token_subscript(ax, 0.50, 0.86, "χ", "c", " = B/[2(B − 1)]",
-                    size=PT_BASE, sub_size=PT_BASE, color=MUTE, ha="left",
-                    va="top")
-    # four lines in the wedge the B = 8 line leaves empty; the top line is
-    # the short one because that is where the wedge is narrowest
-    _corner_lines(ax, (
-        f"max deviation {max_dev:.3f}",
-        f"{excluded} of {len(shared)} intervals exclude",
-        "the line. n = 20 seeds; mean",
-        "and 95 % bootstrap, epoch 0",
-    ), corner=(0.0, 0.0), x_pt=1.0, y_pt=36.0, step_pt=8.6)
+    # C plots ONE rule -- neuron-shared -- in an ordinal ramp keyed to B, so
+    # the panel says so in the amber the rest of the figure gives that rule.
+    # It sits in the wedge the B = 8 line leaves empty, where the four-line
+    # methods note used to start; under the formula it would cross the B = 2
+    # line now that the axis stops at χ = 1.
+    _corner_lines(ax, ("markers: neuron-shared",), corner=(0.0, 0.0),
+                  x_pt=1.0, y_pt=36.0, color=AMBER_TEXT)
+    # QA 2026-09-10: the χ_c definition is not set here any more.  With the
+    # three diamonds gone C marks no χ_c, so the token named a symbol the
+    # panel no longer draws; it is defined in the caption, printed per facet
+    # in F-H and plotted against B in D, where its trained partner sits.
+    ax.text(C_XLIM[0] + 0.035, C_STRIP_TOP + 0.025, "measured − analytic",
+            fontsize=PT_BASE, color=MUTE, ha="left", va="bottom", zorder=6)
     ax.set_xticks([0.0, 0.25, 0.5, 0.75, 1.0],
                   ["0", "0.25", "0.5", "0.75", "1"])
-    ax.set_yticks([-0.75, -0.5, -0.25, 0.0, 0.5, 1.0],
-                  ["−0.75", "−0.5", "−0.25", "0", "0.5", "1"])
+    # QA 2026-09-10: one tick interval for the whole axis (it stepped by 0.5
+    # above zero and by 0.25 below it, which reads as a broken scale), and
+    # the spine is cut to the range the labelled ticks cover so it does not
+    # run down the side of the residual strip's own scale.
+    ax.set_yticks([-0.5, 0.0, 0.5, 1.0], ["−0.5", "0", "0.5", "1"])
+    ax.set_yticks([-0.75, -0.25, 0.25, 0.75], minor=True)
+    ax.spines["left"].set_bounds(-0.80, C_YLIM[1])
     ax.set_xlabel("conflict dose χ")
-    ax.set_ylabel("initial signed utility s(χ)")
-    _rug(ax, DOSES, y0=C_YLIM[0])
+    ax.set_ylabel("initial signed utility s(χ)", y=0.62)
     return {"max_dev": max_dev, "excluded": excluded}
 
 
 # ── D: trained order as predicted ─────────────────────────────────────────
-D_XLIM = (-0.66, 2.56)
-D_YLIM = (0.18, 1.31)
+# QA 2026-09-10: the lowest datum is 0.5714 and the axis used to start at
+# 0.18, so 44 % of the main axis stood empty under the data and carried a
+# four-line statistics block instead (the values it printed are in the
+# caption contract now).  The floor comes up to 0.52, the strip is re-cut to
+# the 21 pt its two lines need at the new scale, and the right edge carries
+# the per-stack seed counts that used to sit wherever there was room.
+D_XLIM = (-0.66, 2.95)
+D_YLIM = (0.52, 1.25)
 D_BREAK = 1.09
-D_STRIP = (1.11, 1.31)
+D_STRIP = (1.118, 1.25)
+D_COUNT_GAP = 0.052     # least y separation of two count labels, data units
 # QA 2026-09-10: the per-seed dose values are sweep LEVELS, so at three of
 # the five levels the whole seed row sits on the same y as the analytic
 # diamond and the trained circle.  A plain +/-0.30 jitter therefore threaded
@@ -759,29 +856,6 @@ def _seed_lane(n):
     return np.array(sorted(left + right)), D_SEED_GAP + (hi - 1) * D_SEED_STEP
 
 
-def _exponent(ax, corner, x_pt, y_pt, base, exp, tail="", *, color):
-    """PRIVATE (G5): ``10⁻⁶`` as base + raised exponent, both at 7 pt.
-
-    Nimbus Sans has no U+207B and CF-2 bans mathtext, so the exponent is a
-    second 7 pt token raised off the base line, exactly as
-    ``token_subscript`` drops a subscript.
-    """
-    art = ax.annotate(base, xy=corner, xycoords="axes fraction",
-                      xytext=(x_pt, y_pt), textcoords="offset points",
-                      fontsize=PT_BASE, color=color, ha="left", va="top",
-                      zorder=6, annotation_clip=False)
-    sup = ax.annotate(exp, xy=(1.0, 1.0), xycoords=art, xytext=(0.3, 2.0),
-                      textcoords="offset points", fontsize=PT_BASE,
-                      color=color, ha="left", va="top", zorder=6,
-                      annotation_clip=False)
-    if tail:
-        ax.annotate(tail, xy=(1.0, 0.0), xycoords=(sup, art),
-                    xytext=(0.6, 0.0), textcoords="offset points",
-                    fontsize=PT_BASE, color=color, ha="left", va="bottom",
-                    zorder=6, annotation_clip=False)
-    return art
-
-
 def boundary_order(ax, crossings: pd.DataFrame, seeds: pd.DataFrame,
                    order: dict) -> None:
     """Analytic χ_c against the trained crossing and each seed's own dose."""
@@ -796,9 +870,9 @@ def boundary_order(ax, crossings: pd.DataFrame, seeds: pd.DataFrame,
                     D_STRIP[1] - D_STRIP[0]),
                color="mute", pct=6, edge=False, radius_pt=1.5, zorder=0.2,
                clip_on=True)
-    for dy in (-0.013, 0.013):
+    for dy in (-0.0084, 0.0084):        # 2.7 pt apart at the panel's scale
         ax.plot([D_XLIM[0] - 0.05, D_XLIM[0] + 0.07],
-                [D_BREAK + dy - 0.012, D_BREAK + dy + 0.012],
+                [D_BREAK + dy - 0.0078, D_BREAK + dy + 0.0078],
                 color=EDGE, lw=LW_HAIR, clip_on=False, zorder=6,
                 solid_capstyle="butt")
     # QA 2026-09-09: the plan's verbatim strip label is 131 pt at 7 pt and
@@ -812,6 +886,22 @@ def boundary_order(ax, crossings: pd.DataFrame, seeds: pd.DataFrame,
         column = seeds[seeds.branches.eq(b)].first_at_or_below_chance_accuracy_dose
         values = column.dropna().to_numpy(float)
         levels = sorted(set(values))
+        # QA 2026-09-10: every count now sits immediately to the RIGHT of the
+        # stack it counts, at that stack's own y, in one column per branch
+        # count.  The old rule (above the top stack, left of the others) put
+        # the B = 8 '×13' four times closer to the group it did not describe
+        # than to its own.  Where two sweep levels are closer than one line
+        # of type -- 0.5714 and 0.6 at B = 8 -- the pair is spread
+        # symmetrically about its own midpoint so the labels stay legible
+        # and stay in level order.
+        label_y = list(levels)
+        for k in range(len(label_y) - 1):
+            short = D_COUNT_GAP - (label_y[k + 1] - label_y[k])
+            if short > 0:
+                label_y[k] -= 0.5 * short
+                label_y[k + 1] += 0.5 * short
+        reaches = [_seed_lane(int(np.sum(values == lv)))[1] for lv in levels]
+        x_label = xs[i] + max(reaches) + 0.10
         for k, level in enumerate(levels):
             n = int(np.sum(values == level))
             jitter, reach = _seed_lane(n)
@@ -819,29 +909,19 @@ def boundary_order(ax, crossings: pd.DataFrame, seeds: pd.DataFrame,
                     marker="o", ms=SEED_MS, markerfacecolor="none",
                     markeredgecolor=EDGE, markeredgewidth=LW_HAIR,
                     alpha=0.85, zorder=2.2)
-            # the count sits above the top cluster and below the bottom one:
-            # beside it, a 15-seed row at 0.60 module-widths of jitter runs
-            # into the axis break on the left and the direct labels on the
-            # right
-            top = (k == len(levels) - 1)
-            if top:
-                ax.annotate(f"×{n}", xy=(xs[i], level), xytext=(0.0, 5.0),
-                            textcoords="offset points", fontsize=PT_BASE,
-                            color=MUTE, ha="center", va="bottom", zorder=6)
-            else:
-                ax.annotate(f"×{n}", xy=(xs[i] - reach - 0.13, level),
-                            xytext=(-1.0, 0.0), textcoords="offset points",
-                            fontsize=PT_BASE, color=MUTE, ha="right",
-                            va="center", zorder=6)
+            ax.annotate(f"×{n}", xy=(x_label, label_y[k]),
+                        xytext=(1.0, 0.0), textcoords="offset points",
+                        fontsize=PT_BASE, color=MUTE, ha="left",
+                        va="center", zorder=6, annotation_clip=False)
         missing = int(column.isna().sum())
         if missing:
             ax.plot(xs[i] + np.linspace(-0.16, 0.16, missing),
-                    np.full(missing, 1.250), linestyle="none", marker="^",
+                    np.full(missing, 1.234), linestyle="none", marker="^",
                     ms=MARKER_MS - 0.8, markerfacecolor="white",
                     markeredgecolor=AMBER, markeredgewidth=LW_EDGE, zorder=5)
             # QA 2026-09-09: right of the triangles, inside the axes (the
             # left-of-cluster placement was struck through by the spine)
-            ax.text(xs[i], 1.165, f"{missing}/20", fontsize=PT_BASE,
+            ax.text(xs[i], 1.152, f"{missing}/20", fontsize=PT_BASE,
                     color=AMBER_TEXT, ha="center", va="center", zorder=6)
 
     for i in range(3):
@@ -853,30 +933,17 @@ def boundary_order(ax, crossings: pd.DataFrame, seeds: pd.DataFrame,
     ax.plot(xs, trained, linestyle="none", marker="o", ms=MARKER_MS,
             markerfacecolor=AMBER, markeredgecolor="white",
             markeredgewidth=LW_HAIR, zorder=5)
-    # the printed pair per branch count, direct-labelled once at B = 2 and
-    # then given as bare values, so the two series keep their identity
-    # without a legend and without a footer table
-    token_subscript(ax, 0.44, predicted[0] + 0.010, "analytic χ", "c", "",
-                    size=PT_BASE, sub_size=PT_BASE, color=INK, ha="left",
-                    va="bottom")
-    ax.text(0.44, trained[0] - 0.010, "trained crossing", fontsize=PT_BASE,
-            color=AMBER_TEXT, ha="left", va="top", zorder=6)
-    # the three printed pairs, colour-keyed to the two direct labels above;
-    # per-cluster tags do not fit -- the x axis is 3.2 categorical units on
-    # 93 pt, so a 46 pt value pair is half the panel wide
-    analytic = ", ".join(f"{v:.3f}" for v in predicted)
-    measured = ", ".join(f"{v:.3f}" for v in trained)
-    _corner_lines(ax, (f"analytic {analytic}",), corner=(0.0, 0.0),
-                  x_pt=1.0, y_pt=34.0, color=INK)
-    _corner_lines(ax, (f"trained {measured}",), corner=(0.0, 0.0),
-                  x_pt=1.0, y_pt=25.4, color=AMBER_TEXT)
-    _corner_lines(ax, (
-        f"B = 8 < 4 < 2 in "
-        f"{order['accuracy_strict_order_pairs']}/"
-        f"{order['accuracy_total_pairs']} seeds",
-    ), corner=(0.0, 0.0), x_pt=1.0, y_pt=16.8)
-    _exponent(ax, (0.0, 0.0), 1.0, 8.2, "P = 1.9 × 10", "−6",
-              "; n = 20 per B", color=MUTE)
+    # the two series are direct-labelled once, on the B = 2 pair they name:
+    # the analytic diamond from above, the trained circle from below.  The
+    # three printed value pairs, the order claim and its P are in the caption
+    # contract -- they were four lines of prose filling the empty floor the
+    # tightened y limit removes, and the marks they repeat are plotted here.
+    token_subscript(ax, D_XLIM[0] + 0.11, predicted[0] + 0.035,
+                    "analytic χ", "c", "", size=PT_BASE, sub_size=PT_BASE,
+                    color=INK, ha="left", va="bottom")
+    ax.text(D_XLIM[0] + 0.11, trained[0] - 0.030, "trained crossing",
+            fontsize=PT_BASE, color=AMBER_TEXT, ha="left", va="top",
+            zorder=6)
     ax.set_xticks(xs, [str(b) for b in BRANCHES])
     ax.set_yticks([0.6, 0.8, 1.0], ["0.6", "0.8", "1.0"])
     ax.set_xlabel("branches B")
@@ -884,11 +951,17 @@ def boundary_order(ax, crossings: pd.DataFrame, seeds: pd.DataFrame,
 
 
 # ── E: only shared credit forgets (the forest idiom) ──────────────────────
+# (label, condition, colour, marker, hollow).  QA 2026-09-10: the deranged
+# route and the random rank-2 field used to share one glyph -- the same grey
+# filled triangle, with the same grey seed cloud -- and that glyph is the
+# deranged route's mark in F-H as well, so one mark carried two meanings
+# inside one figure.  The filled grey triangle stays with the derangement;
+# random rank-2 takes an open grey diamond, which nothing else uses.
 E_ROWS = (
-    ("neuron-\nshared", "neuron_shared_k1", "scalar", "s"),
-    ("branch-\nspecific", "correct_subtree_k2", "shunting", "o"),
-    ("deranged", "within_neuron_deranged_k2", "point_mlp", "^"),
-    ("random\nrank-2", "random_dense_rank2", "point_mlp", "^"),
+    ("neuron-\nshared", "neuron_shared_k1", "scalar", "s", False),
+    ("branch-\nspecific", "correct_subtree_k2", "shunting", "o", False),
+    ("deranged", "within_neuron_deranged_k2", "point_mlp", "^", False),
+    ("random\nrank-2", "random_dense_rank2", "point_mlp", "D", True),
 )
 E_XLIM = (-8.0, 86.0)
 
@@ -897,7 +970,7 @@ def forgetting_forest(canvas: NativeCanvas, ax, summary: pd.DataFrame,
                       seeds: pd.DataFrame, contrasts: pd.DataFrame) -> None:
     """Context-0 accuracy lost after a context switch, four credit routes."""
     rows = []
-    for label, condition, colour, marker in E_ROWS:
+    for label, condition, colour, marker, hollow in E_ROWS:
         s = summary[summary.condition.eq(condition)].iloc[0]
         rows.append({
             "label": label,
@@ -906,7 +979,9 @@ def forgetting_forest(canvas: NativeCanvas, ax, summary: pd.DataFrame,
             "hi": 100.0 * float(s.ci95_high_context_switch_forgetting),
             "seeds": list(100.0 * seeds[seeds.condition.eq(condition)]
                           .context_switch_forgetting.to_numpy(float)),
-            "color": colour, "marker": marker, "n": int(s.n_seeds),
+            "color": colour, "marker": marker, "hollow": hollow,
+            "n": int(s.n_seeds),
+            "accuracy": 100.0 * float(s.mean_test_accuracy),
         })
     out = canvas.forest(
         ax, rows, value_label="context-0 accuracy lost (pp)",
@@ -946,6 +1021,15 @@ def forgetting_forest(canvas: NativeCanvas, ax, summary: pd.DataFrame,
                 xycoords=("axes fraction", "data"), xytext=(7.0, 0.0),
                 textcoords="offset points", ha="right", va="center",
                 fontsize=PT_BASE, color=MUTE, zorder=6, annotation_clip=False)
+    # QA 2026-09-10: the deranged route sits on the 'no forgetting' rule
+    # because it never acquired context 0 (19.6 % held-out, i.e. chance), so
+    # its 0.1 pp is undefined rather than protective.  The panel says so on
+    # the row itself; the disclosure used to be in the caption alone.
+    ax.annotate(f'never learned ({rows[2]["accuracy"]:.1f} %)',
+                xy=(1.0, out["ypos"][2] + 0.42),
+                xycoords=("axes fraction", "data"), xytext=(7.0, 0.0),
+                textcoords="offset points", ha="right", va="center",
+                fontsize=PT_BASE, color=MUTE, zorder=6, annotation_clip=False)
     # CF-7: right-aligned at the TOP of the rule (the forest's own placement
     # is above the top spine, which is this panel's title band)
     # CF-7 asks for the label right-aligned at the top of the rule; the rule
@@ -978,8 +1062,14 @@ def forgetting_forest(canvas: NativeCanvas, ax, summary: pd.DataFrame,
 
 # ── F/G/H: dose facets ────────────────────────────────────────────────────
 F_XLIM = (-0.03, 1.06)
-F_YLIM = (0.0, 102.0)
+# QA 2026-09-10: the axis ran 0-102 %, i.e. past a possible accuracy at the
+# top and 21 points below the lowest seed at the bottom, and the two empty
+# bands held the three in-panel note blocks (all three now in the caption
+# contract).  17-90 keeps every seed, the chance rule and the two direct
+# labels, and spends 87 % of the height on data.
+F_YLIM = (17.0, 95.0)
 BAND_ALPHA = 0.22
+SEED_JITTER = 0.008         # χ units; the two closest doses are 0.029 apart
 # per facet: the height of the chi = 1 shared-deficit tag, chosen so the tag
 # sits in the band its own facet's steep amber segment leaves empty
 # per facet: (x, y) of the chi = 1 shared-deficit tag and of the chi = 0
@@ -987,12 +1077,27 @@ BAND_ALPHA = 0.22
 # curves leave empty (the amber step moves left as B grows)
 FULL_TAG = {2: (0.80, 66.0, "right"), 4: (0.72, 55.0, "left"),
             8: (0.98, 41.0, "right")}
-ZERO_TAG = {2: (0.03, 64.0), 4: (0.03, 65.0), 8: (0.03, 73.5)}
+# QA 2026-09-10: one position for the χ = 0 deranged-deficit tag in all three
+# facets (it stood at three different heights, each chosen against a wedge
+# that the per-dose seed fans have since filled), and no leader: the fans put
+# seeds within a marker's width of every route the leader could take to the
+# χ = 0 triangle, and the tag's own grey keys it to that series already.
+ZERO_TAG = (0.03, 41.0)
 
 
 def accuracy_facet(ax, summary: pd.DataFrame, seeds: pd.DataFrame,
-                   contrasts: pd.DataFrame, branches: int, *, first: bool,
-                   notes) -> None:
+                   contrasts: pd.DataFrame, branches: int, *,
+                   first: bool) -> None:
+    """Held-out accuracy against the conflict dose, one branch count.
+
+    QA 2026-09-10: the three in-panel note blocks are gone.  They were
+    heterogeneous (F carried shared methods plus a claim about two series F
+    does not draw, G a statement about all three branch counts parked in the
+    middle facet, H a restatement of a body-text sentence), and all three sat
+    in the empty band below 20 %, which no datum reaches.  n, the bootstrap
+    definition, the BP = gated-point tie and the per-seed slope claim are in
+    the caption contract and the body text.
+    """
     ax.set_xlim(*F_XLIM)
     ax.set_ylim(*F_YLIM)
     reference_line(ax, 50.0, axis="y", label=None, color=MUTE, zorder=0)
@@ -1006,31 +1111,58 @@ def accuracy_facet(ax, summary: pd.DataFrame, seeds: pd.DataFrame,
             .sort_values("conflict_probability")
         x = part.conflict_probability.to_numpy(float)
         m = 100.0 * part.mean_test_accuracy.to_numpy(float)
-        ax.fill_between(x, 100.0 * part.ci95_low_test_accuracy,
-                        100.0 * part.ci95_high_test_accuracy, color=colour,
-                        alpha=BAND_ALPHA, linewidth=0, zorder=1)
-        ax.plot(x, m, color=colour, lw=LW_DATA, marker=marker,
-                ms=MARKER_MS - 0.8, markerfacecolor="white",
-                markeredgecolor=colour, markeredgewidth=LW_EDGE,
-                zorder=3 if condition == "within_neuron_deranged"
-                else (3.5 if condition == "neuron_shared_k1" else 4.0))
-        swarm = 100.0 * seeds[seeds.condition.eq(condition)
-                              & seeds.branches.eq(branches)
-                              & seeds.conflict_probability.eq(1.0)] \
-            .test_accuracy.to_numpy(float)
-        ax.plot(1.0 + rng.uniform(-0.018, 0.018, swarm.size), swarm,
-                linestyle="none", marker="o", ms=SEED_MS,
-                markerfacecolor=colour, markeredgecolor="none", alpha=0.55,
-                zorder=2.5)
-    _rug(ax, DOSES, y0=F_YLIM[0])
+        rows = seeds[seeds.condition.eq(condition)
+                     & seeds.branches.eq(branches)]
+        if condition == "correct_path":
+            # χ never enters the branch-specific arm: the same twenty seed
+            # values are tabulated at all eight doses, so the mean is
+            # byte-identical across the sweep and only the fourth decimal of
+            # the bootstrap bounds moves.  Eight markers and eight bands
+            # would read as eight independent measurements of one number;
+            # the arm is drawn as ONE line, ONE band and one seed fan.
+            if not np.allclose(m, m[0], atol=1e-9):
+                raise ValueError(
+                    "Fig. 2F-H draw the branch-specific arm as one "
+                    f"χ-invariant line; B = {branches} now varies across "
+                    f"the sweep: {m}")
+            lo = 100.0 * float(part.ci95_low_test_accuracy.iloc[0])
+            hi = 100.0 * float(part.ci95_high_test_accuracy.iloc[0])
+            ax.fill_between([0.0, 1.0], [lo, lo], [hi, hi], color=colour,
+                            alpha=BAND_ALPHA, linewidth=0, zorder=1)
+            ax.plot([0.0, 1.0], [m[0], m[0]], color=colour, lw=LW_DATA,
+                    zorder=4.0, solid_capstyle="butt")
+            doses = [1.0]
+        else:
+            ax.fill_between(x, 100.0 * part.ci95_low_test_accuracy,
+                            100.0 * part.ci95_high_test_accuracy,
+                            color=colour, alpha=BAND_ALPHA, linewidth=0,
+                            zorder=1)
+            ax.plot(x, m, color=colour, lw=LW_DATA, marker=marker,
+                    ms=MARKER_MS - 0.8, markerfacecolor="white",
+                    markeredgecolor=colour, markeredgewidth=LW_EDGE,
+                    zorder=3 if condition == "within_neuron_deranged"
+                    else 3.5)
+            doses = list(x)
+        # the seed fan at EVERY sampled dose of the two arms that vary: the
+        # bootstrap band is 0.8-1.7 pp wide, thinner than its own marker, so
+        # a fan drawn only at χ = 1 left the crossing region -- where χ_c is
+        # claimed -- with no spread at all.
+        for dose in doses:
+            values = 100.0 * rows[rows.conflict_probability.eq(dose)] \
+                .test_accuracy.to_numpy(float)
+            ax.plot(dose + rng.uniform(-SEED_JITTER, SEED_JITTER,
+                                       values.size),
+                    values, linestyle="none", marker="o", ms=SEED_MS - 0.7,
+                    markerfacecolor=colour, markeredgecolor="none",
+                    alpha=0.45, zorder=2.5)
     # token_subscript grows to the RIGHT of its base, so the chain is placed
     # by its measured width immediately left of the rule; anchored on the
     # rule it would run past the right spine at B = 2 and be clipped
     chain = _text_w_pt(ax, f"χc = {boundary:.2f}", PT_BASE) + 1.2
     per_unit = 93.16 / (F_XLIM[1] - F_XLIM[0])
-    token_subscript(ax, boundary - 0.035 - chain / per_unit, 100.0, "χ", "c",
-                    f" = {boundary:.2f}", size=PT_BASE, sub_size=PT_BASE,
-                    color=MUTE, ha="left", va="top")
+    token_subscript(ax, boundary - 0.035 - chain / per_unit, F_YLIM[1] - 0.5,
+                    "χ", "c", f" = {boundary:.2f}", size=PT_BASE,
+                    sub_size=PT_BASE, color=MUTE, ha="left", va="top")
     zero = contrasts[contrasts.contrast.eq("correct - deranged")
                      & contrasts.branches.eq(branches)
                      & contrasts.endpoint.eq("test_accuracy")
@@ -1039,45 +1171,32 @@ def accuracy_facet(ax, summary: pd.DataFrame, seeds: pd.DataFrame,
                      & contrasts.branches.eq(branches)
                      & contrasts.endpoint.eq("test_accuracy")
                      & contrasts.conflict_probability.eq(1.0)].iloc[0]
-    y_grey0 = 100.0 * float(summary[summary.condition.eq("within_neuron_deranged")
-                                    & summary.branches.eq(branches)
-                                    & summary.conflict_probability.eq(0.0)]
-                            .mean_test_accuracy.iloc[0])
-    zx, zy = ZERO_TAG[branches]
+    zx, zy = ZERO_TAG
     ax.text(zx, zy, f"{_signed(-100.0 * float(zero.mean_difference))} pp",
             fontsize=PT_BASE, color=GRAY_TEXT, ha="left", va="center",
             zorder=6)
-    ax.plot([zx + 0.02, 0.012], [zy - 3.8, y_grey0 + 1.6], color=GRAY,
-            lw=LW_HAIR, zorder=1.5, solid_capstyle="round")
     fx, fy, fha = FULL_TAG[branches]
     ax.text(fx, fy, f"{_signed(100.0 * float(full.mean_difference))} pp",
             fontsize=PT_BASE, color=AMBER_TEXT, ha=fha, va="center",
             zorder=6)
     if first:
-        ax.text(0.03, 84.0, "branch-specific", fontsize=PT_BASE,
-                color=GREEN_TEXT, ha="left", va="bottom", zorder=6)
+        ax.text(0.03, 89.5, "branch-specific", fontsize=PT_BASE,
+                color=GREEN_TEXT, ha="left", va="top", zorder=6)
         ax.text(0.03, 76.0, "neuron-shared", fontsize=PT_BASE,
                 color=AMBER_TEXT, ha="left", va="top", zorder=6)
         ax.plot([0.20, 0.20], [76.4, 79.2], color=AMBER, lw=LW_HAIR,
                 zorder=1.5, solid_capstyle="round")
         ax.text(0.03, 31.0, "deranged route", fontsize=PT_BASE,
                 color=GRAY_TEXT, ha="left", va="center", zorder=6)
-        # CF-7: right-aligned at the right end of the rule, just left of the
-        # chi = 1 swarm; below the rule, because the amber curve's steep
-        # segment occupies the band immediately above it from chi = 0.91.
-        ax.annotate("chance", xy=(0.930, 50.0), xytext=(0.0, -1.8),
+        # CF-7: right-aligned at the right end of the rule, and ABOVE it --
+        # below the rule the deranged fan crosses from χ = 0.6 and the χ = 1
+        # neuron-shared fan reaches 24 %, while the band just above the rule
+        # is empty in this facet until the neuron-shared segment falls into
+        # it at χ = 0.88.
+        ax.annotate("chance", xy=(0.860, 50.0), xytext=(0.0, 1.8),
                     textcoords="offset points", fontsize=PT_BASE, color=MUTE,
-                    ha="right", va="top", zorder=6)
+                    ha="right", va="bottom", zorder=6)
         ax.set_ylabel("held-out accuracy (%)")
-    # QA 2026-09-09: a note may be given as (text, x_pt).  F's block is
-    # re-split so its short top line starts 12 pt inside the axes and sits
-    # 5 pt below the '20' y tick, which it previously shared a baseline with.
-    for i, note in enumerate(notes):
-        text, x_pt = note if isinstance(note, tuple) else (note, 1.0)
-        ax.annotate(text, xy=(0.0, 0.0), xycoords="axes fraction",
-                    xytext=(x_pt, 3.0 + 8.0 * (len(notes) - 1 - i)),
-                    textcoords="offset points", fontsize=PT_BASE, color=MUTE,
-                    ha="left", va="bottom", zorder=6, annotation_clip=False)
     ax.set_xticks([0.0, 0.5, 1.0], ["0", "0.5", "1"])
     ax.set_yticks([20, 50, 80])
     if not first:
@@ -1276,7 +1395,11 @@ def build() -> list:
     ax_c = canvas.panel("C", 1, 0, 4, title="Predicted and measured")
     ax_d = canvas.panel("D", 1, 4, 4, title="Trained order as predicted")
     ax_e = canvas.panel("E", 1, 8, 4, title="Only shared credit forgets")
-    ax_f = canvas.panel("F", 2, 0, 4, title="B = 2: shared still learns")
+    # QA 2026-09-10: "shared still learns" was contradicted by the panel's
+    # own endpoint -- the amber χ = 1 mean is 45.1 %, drawn below the chance
+    # rule directly under the title.  The three facet titles now read as one
+    # ordered statement about where the collapse falls.
+    ax_f = canvas.panel("F", 2, 0, 4, title="B = 2: latest collapse")
     ax_g = canvas.panel("G", 2, 4, 4, title="B = 4: boundary moves left",
                         sharey=ax_f)
     ax_h = canvas.panel("H", 2, 8, 4, title="B = 8: earliest collapse",
@@ -1295,22 +1418,9 @@ def build() -> list:
     forgetting_forest(canvas, ax_e, sub_summary, sub_seeds, sub_contrasts)
     canvas.declare_reserve("E", left=DATA_LEFT_PT)
 
-    sub = summary[summary.branches.eq(8)
-                  & summary.conflict_probability.eq(1.0)]
-    shared8 = 100.0 * float(
-        sub[sub.condition.eq("neuron_shared_k1")].mean_test_accuracy.iloc[0])
-    der8 = 100.0 * float(
-        sub[sub.condition.eq("within_neuron_deranged")].mean_test_accuracy.iloc[0])
-    accuracy_facet(ax_f, summary, seed_outcomes, contrasts, 2, first=True,
-                   notes=(("n = 20 seeds;", 12.0),
-                          ("mean and 95 % bootstrap", 1.0),
-                          (f"BP = gated point tie {facts['ties']}/20", 1.0)))
-    accuracy_facet(ax_g, summary, seed_outcomes, contrasts, 4, first=False,
-                   notes=("selection × conflict slope",
-                          f"> 0 in {facts['positive_pairs']}/20 seeds (each B)"))
-    accuracy_facet(ax_h, summary, seed_outcomes, contrasts, 8, first=False,
-                   notes=("shared and deranged fall",
-                          f"below chance ({shared8:.1f} %, {der8:.1f} %)"))
+    accuracy_facet(ax_f, summary, seed_outcomes, contrasts, 2, first=True)
+    accuracy_facet(ax_g, summary, seed_outcomes, contrasts, 4, first=False)
+    accuracy_facet(ax_h, summary, seed_outcomes, contrasts, 8, first=False)
 
     style_direct_color_labels(canvas.fig)
     _equalize_row_widths(canvas, (("C", "D", "E"), ("F", "G", "H")))

@@ -324,6 +324,7 @@ SCHEMATIC_FRACTION = 3 * (SLOT4_W * ROW_H[0]) / (LIVE_W * LIVE_H)
 SCHEMATIC_INSET = (7.0, 7.0, 7.0, 13.0)  # left, right, top, bottom (points)
 GUTTER_PT = 37.0          # one label gutter for every 4+ module panel
 BOTTOM_R1 = 5.0           # room under row 1 for D's footnote line
+RIGHT_R1 = 8.0            # one declared right reserve for D, E and F
 BOTTOM_R2 = 20.0          # room under row 2 for G's and H's footnotes
 
 
@@ -972,7 +973,10 @@ def panel_c(ax, arb, field, scale):
 # ── row 1 ────────────────────────────────────────────────────────────────
 #: D and E share one fraction axis: identical points-per-unit (plan check 8).
 Y_TOP = 1.34
-Y_TICKS = [0.0, 0.25, 0.5, 0.75, 1.0]
+Y_TICKS = [0.25, 0.5, 0.75, 1.0]
+D_Y0, D_Y_TOP = 0.15, 1.11   # the data (0.203-0.926) plus the budget tag
+E_XMAX = 0.60                # E's spatial shares run 0.201 (random) to 0.540
+F_Y0, F_Y1 = -0.225, 0.245   # F's differences run -0.188 to +0.214
 D_XMAX = 108.0             # 16 -> 87 reserves the direct-label band at the right
 D_GRID_XMAX = 16.6         # the grid stops at the data; the label band is clean
 D_BUDGET_Y0 = 0.32         # the K = 8 rule stops above the floor label
@@ -1047,11 +1051,20 @@ def panel_d(ax, summaries, tables, floor):
     ax.set_xticks([1, 2, 4, 8, 16])
     ax.xaxis.set_major_formatter(mpl.ticker.ScalarFormatter())
     ax.xaxis.set_minor_locator(mpl.ticker.NullLocator())
-    ax.set_ylim(0.0, Y_TOP)
+    # the ordinate is bounded by the data (0.203 at K = 1 to 0.926 at K = 16)
+    # plus the head room the `analysed budget` tag needs; drawn 0 -> 1.34 the
+    # panel spent 46 % of its height on paper no curve reaches (QA round 4)
+    ax.set_ylim(D_Y0, D_Y_TOP)
     ax.set_yticks(Y_TICKS)
     ax.set_xlabel("Profiles K (log 2)")
     ax.set_ylabel("Total field energy\ncaptured")
     style_panel(ax, grid="y")
+    # the two rules are bounded by their ticks: drawn to the axes corners the
+    # left rule ran a quarter of its length above the 1.00 tick and the bottom
+    # rule 39 % of its length past K = 16, under the direct-label band, so
+    # both read as axis that carries no value (QA round 4)
+    ax.spines["left"].set_bounds(D_Y0, 1.0)
+    ax.spines["bottom"].set_bounds(1.0, 16.0)
     _clip_grid(ax, 0.85, D_GRID_XMAX)
     # direct labels, de-collided, in the reserved band at the right (CF-5)
     ends = sorted(((float(table[table.method.eq(m)
@@ -1073,6 +1086,9 @@ def panel_d(ax, summaries, tables, floor):
     # PLAN section 4 D's wording, and the numeral is NOT repeated here: E
     # prints `broadcast 0.203` on the ancestry bar 22 pt away, and the same
     # string twice across one panel gap was read as two different data
+    # the K = 1 column is the broadcast itself, so all six families share this
+    # one value to sixteen digits; the reference line says so rather than
+    # leaving six coincident markers to be read as a measured agreement
     reference_line(ax, floor, axis="y", label="shared broadcast",
                    span=(0.85, D_XMAX))
     # clipped to the band that carries no text: drawn to y = 0 the dashes
@@ -1081,19 +1097,30 @@ def panel_d(ax, summaries, tables, floor):
     # 0.404, so no data lies under the removed stretch.
     ax.plot([8, 8], [D_BUDGET_Y0, 1.0], color=COLORS["edge"], lw=LW_REF,
             dashes=(2.2, 1.8), zorder=0.6, solid_capstyle="butt")
-    ax.text(8.0, 1.010, "analysed budget", fontsize=PT_BASE,
+    ax.text(8.0, 1.012, "analysed budget", fontsize=PT_BASE,
             color=COLORS["mute"], ha="center", va="bottom")
-    ax.text(0.02, 0.995, "bands: unpaired 95 % cell\nbootstrap; paired test in G",
-            transform=ax.transAxes, fontsize=PT_BASE, color=COLORS["mute"],
-            ha="left", va="top", linespacing=1.2)
-    ax.text(0.02, 0.012, "47 disjoint cells (46 at K = 16)",
-            transform=ax.transAxes, fontsize=PT_BASE, color=COLORS["mute"],
-            ha="left", va="bottom")
+    # the two prose lines this panel used to carry -- the band's meaning and
+    # `47 disjoint cells (46 at K = 16)` -- are the caption's own words and
+    # are set there only (QA round 4)
     return pd.DataFrame(rows)
 
 
-def panel_e(ax, summaries, initial, floor):
-    """E: where the energy goes at K = 8 -- broadcast, spatial, unexplained."""
+def panel_e(ax, summaries, floor):
+    """E: the spatial share of the field energy at K = 8, six families.
+
+    QA round 4.  The panel used to stack three shares per family: a broadcast
+    base identical (0.20263) in all six bars and a grey cap that is the
+    arithmetic complement of the coloured part, so five sixths of every bar
+    was fixed by construction and only the spatial share carried a
+    comparison.  It now draws that one free quantity, as horizontal bars on a
+    0 -> 0.60 scale with the shared broadcast as the dashed reference, which
+    also (i) retires the amber broadcast fill that carried a second meaning
+    beside the amber `Random routes` series, (ii) puts all six family names on
+    one axis in reading order in the 37 pt gutter, so the staggered two-level
+    tick rows, their duplicate marker glyphs and the abbreviation `Surr.` go,
+    and (iii) returns the axis title to the same side as its scale.  The
+    broadcast and unexplained shares are unchanged in the plotted table.
+    """
     eight = summaries["v661"][summaries["v661"].channels.eq(8)] \
         .set_index("method")
     rows = []
@@ -1102,168 +1129,82 @@ def panel_e(ax, summaries, initial, floor):
         spatial = float(eight.loc[method, "incremental_total_capture_mean"])
         total = float(eight.loc[method, "total_capture_mean"])
         common = total - spatial
-        ax.bar(index, common, width=0.62, color=COLORS[BROADCAST],
-               edgecolor="white", lw=LW_HAIR, zorder=2)
-        ax.bar(index, spatial, bottom=common, width=0.62,
-               color=COLORS[spec["color"]], edgecolor="white", lw=LW_HAIR,
-               zorder=2)
-        ax.bar(index, 1.0 - total, bottom=total, width=0.62,
-               color=COLORS["grid"], edgecolor="white", lw=LW_HAIR, zorder=2)
+        ax.barh(index, spatial, height=0.62, color=COLORS[spec["color"]],
+                edgecolor="white", lw=LW_HAIR, zorder=2)
         rows.append(dict(panel="E", method=method, series=spec["label"],
                          broadcast=common, spatial=spatial,
                          unexplained=1.0 - total, n_cells=47))
-    ax.set_xlim(-0.5, 5.5)
-    ax.set_ylim(0.0, Y_TOP)
-    ax.set_yticks(Y_TICKS)
-    style_panel(ax, grid="y")
-    # family names on two levels, each with its marker glyph (CF-5): six
-    # names cannot share one baseline in a 4-module panel at the 7 pt floor.
-    # On the lower level the bar pitch is 29.5 pt and `Surrogate` (30.8 pt)
-    # would leave `Shuffled` 1.2 pt of air, so it alone is set `Surr.`
-    evens = [i for i in range(6) if i % 2 == 0]
-    odds = [i for i in range(6) if i % 2 == 1]
-    ax.set_xticks(evens, [FAMILIES[ORDER[i]]["tick"] for i in evens])
-    ax.set_xticks(odds, [FAMILIES[ORDER[i]]["tick"] for i in odds],
-                  minor=True)
-    ax.tick_params(axis="x", which="major", length=0, pad=6.0,
-                   labelsize=PT_BASE)
-    ax.tick_params(axis="x", which="minor", length=0, pad=19.0,
-                   labelsize=PT_BASE)
-    for index, method in enumerate(ORDER):
-        spec = FAMILIES[method]
-        drop = -0.035 if index % 2 == 0 else -0.188
-        ax.plot([index], [drop], marker=spec["marker"], ms=MARKER_MS - 0.8,
-                mfc=COLORS[spec["color"]], mec="white", mew=LW_HAIR,
-                ls="none", clip_on=False, zorder=3)
-    # the three shares, named once in the reserved gutter at the band heights
-    # of the ancestry bar and carrying that bar's own values, so the panel
-    # prints a magnitude for every segment it names (PLAN section 4 E).  The
-    # y axis is named on the RIGHT of E: the gutter is 37 pt and these three
-    # names spend all of it, while the 22 pt between E's right spine and
-    # panel F's letter takes a 7 pt rotated label with 10 pt to spare.
-    total_a = float(eight.loc[ANCESTRY, "total_capture_mean"])
-    spatial_a = float(eight.loc[ANCESTRY, "incremental_total_capture_mean"])
-    common_a = total_a - spatial_a
-    marks = [(f"broadcast\n{common_a:.3f}", common_a / 2.0),
-             (f"spatial\n{spatial_a:.3f}", total_a - spatial_a / 2.0),
-             (f"unexplained\n{1.0 - total_a:.3f}", (1.0 + total_a) / 2.0)]
-    # each name carries a LW_HAIR leader that ends INSIDE the segment it
-    # names on the ancestry bar, so the three numbers cannot be read as a
-    # second y axis; the leaders cross the tick column in the clear windows
-    # between the tick numerals (asserted below).
-    span = ax.get_xlim()[1] - ax.get_xlim()[0]
-    pt_per_unit = ax.get_position().width * 518.4 / span
-    x_gap = -0.5 - 20.5 / pt_per_unit            # leader starts 1.5 pt in
-    for name, y in marks:
-        ax.annotate(name, xy=(0.0, y), xycoords=("axes fraction", "data"),
-                    xytext=(-22.0, 0.0), textcoords="offset points",
-                    fontsize=PT_BASE, color=COLORS["mute"], ha="right",
-                    va="center", annotation_clip=False, linespacing=1.2)
-        ax.plot([x_gap, -0.10], [y, y], color=COLORS["mute"], lw=LW_HAIR,
-                solid_capstyle="butt", zorder=1.4, clip_on=False)
-    ax.annotate("Share of field energy", xy=(1.0, 0.5),
-                xycoords="axes fraction", xytext=(5.5, 0.0),
-                textcoords="offset points", fontsize=PT_BASE,
-                color=COLORS["ink"], ha="center", va="center", rotation=90,
-                annotation_clip=False)
-    # No `oracle` badge here (plan section 4 E): the only free paper in E is
-    # the 21 pt strip above the bars, and it carries the initial-cohort
-    # annotation and this panel's n / endpoint line, which a data panel needs
-    # more than a badge.  The sixth bar is named `SVD` under its diamond and
-    # the badge is drawn in H.  Declared deviation.
-    width = ax.get_position().width * 518.4 - 2.0
-    ax.text(0.02, 0.995, wrap_pt(
-        ax, "initial eight-cell cohort: broadcast "
-            f"{initial['common']:.3f}, ceiling {initial['rank_one']:.3f}; "
-            f"n = {int(rows[0]['n_cells'])} cells at K = 8",
-        PT_BASE, width),
-        transform=ax.transAxes, fontsize=PT_BASE, color=COLORS["mute"],
-        ha="left", va="top", linespacing=1.2)
+    ax.set_xlim(0.0, E_XMAX)
+    ax.set_ylim(5.6, -0.95)
+    ax.set_xticks([0.0, 0.2, 0.4, 0.6])
+    ax.set_yticks(range(6), [FAMILIES[m]["short"] for m in ORDER])
+    ax.tick_params(axis="y", which="major", length=0, pad=3.0)
+    ax.set_xlabel("Spatial share of field energy")
+    style_panel(ax, grid="x")
+    ax.spines["bottom"].set_bounds(0.0, E_XMAX)
+    ax.spines["left"].set_bounds(-0.45, 5.45)
+    # the constant the bars are measured against, drawn once, as a reference
+    # rather than as 20 % of every bar (CF-7).  Its tag is set by hand in the
+    # head strip: reference_line puts the tag at the end of the span, which on
+    # this inverted ordinate is under the panel, in row 2's paper.
+    reference_line(ax, floor, axis="x", label="", span=(-0.62, 5.55))
+    ax.text(floor - 0.012, -0.72, f"broadcast {floor:.3f}", fontsize=PT_BASE,
+            color=COLORS["mute"], ha="right", va="center")
     return pd.DataFrame(rows)
 
 
 def panel_f(ax, pairs):
-    """F: each cell's ancestry capture against its own 200 surrogate trees."""
+    """F: each cell's ancestry advantage over its own 200 surrogate trees.
+
+    QA round 4.  Drawn as ancestry against surrogate on a shared 0.25 -> 1.0
+    scale the panel needed an isometric box it cannot have (an
+    ``set_aspect('equal')`` axes changes its ACTIVE box and breaks the row
+    height and column locks), so the equality reference came out at 26 deg
+    and the vertical departure the panel exists to show was drawn half the
+    size of the same number measured along x.  The quantity is now on the
+    ordinate: each cell's ancestry minus its own surrogate mean, against that
+    surrogate mean, with the equality reference at zero.  No aspect
+    disclosure is needed, the full ordinate carries the difference, and the
+    head block -- six lines, three of them the caption's own words -- is gone.
+    """
     tie = pairs.fraction_ge >= 0.5
-    above = int((pairs.tree > pairs.surrogate_mean).sum())
-    width = ax.get_position().width * 518.4 - 4.0
-    # PLAN section 4 F's own two lines (the single run-on sentence of the
-    # previous build wrapped to five, and every head line stretches y).  The
-    # panel's n / unit line joins the block so the whole lower right stays
-    # free for the cohort-mean label, and the equality line is NOT at 45 deg
-    # -- the row height is locked and the head room stretches y, so
-    # set_aspect("equal") is dropped and the panel declares it.
-    h_pt = ax.get_position().height * 490.0
-
-    def _compose(ratio):
-        """The annotation block, and the ymax its head room implies."""
-        text = "\n".join(wrap_pt(ax, line, PT_BASE, width) for line in (
-            f"{above} of {len(pairs)} cells above equality",
-            f"open: the {int(tie.sum())} cells where at least half of the 200 "
-            "surrogates reach the tree",
-            f"cell is the unit; n = {len(pairs)}; "
-            f"axes x : y = {ratio:.1f} : 1"))
-        rows = 1 + text.count("\n") + 1        # + the 'equal' line
-        head = 8.8 * rows
-        return text, head, 1.0 + 0.75 * head / max(h_pt - head, 1.0)
-
-    # the flattening is MEASURED and printed, not merely disclaimed (QA round
-    # 3): the equality reference is drawn at 26 deg, so the reader is told the
-    # x : y scale ratio under which it is drawn.  The ratio rides on the
-    # footer line rather than on a line of its own -- a ninth head line costs
-    # 8.8 pt of head room, which flattens y further (measured: the ratio goes
-    # 2.0 -> 2.5) and pushes `equal` onto the top right cell.  Two passes,
-    # because the printed ratio depends on ymax and ymax on the line count;
-    # the assert pins that the second pass did not move the count.
-    def _ratio(top):
-        return ((width + 4.0) / 0.75) / (h_pt / (top - 0.25))
-
-    block, head_pt, ymax = _compose(2.0)
-    block, head_pt, ymax = _compose(_ratio(ymax))
-    again = _compose(_ratio(ymax))
-    assert again[0].count("\n") == block.count("\n"), \
-        "figure 7F: the printed aspect ratio changed the annotation depth"
-    ax.plot([0.25, 1.0], [0.25, 1.0], color=COLORS["mute"], lw=LW_REF,
-            dashes=(2.2, 1.8), zorder=1, solid_capstyle="butt")
-    ax.text(1.0, 1.008, "equal", fontsize=PT_BASE, color=COLORS["mute"],
-            ha="right", va="bottom")
-    ax.plot(pairs.surrogate_mean[~tie], pairs.tree[~tie], marker="o",
+    delta = (pairs.tree - pairs.surrogate_mean).to_numpy(float)
+    ax.plot([0.25, 1.0], [0.0, 0.0], color=COLORS["mute"], lw=LW_REF,
+            zorder=1, solid_capstyle="butt", dashes=(2.2, 1.8))
+    ax.text(0.255, 0.032, "equal", fontsize=PT_BASE, color=COLORS["mute"],
+            ha="left", va="bottom")
+    ax.plot(pairs.surrogate_mean[~tie], delta[~tie.to_numpy()], marker="o",
             ls="none", ms=4.2, mfc=COLORS["shunting"], mec="none",
             alpha=0.75, zorder=2)
-    ax.plot(pairs.surrogate_mean[tie], pairs.tree[tie], marker="o", ls="none",
-            ms=4.2, mfc="white", mec=COLORS["shunting"], mew=LW_EDGE,
-            zorder=3)
+    ax.plot(pairs.surrogate_mean[tie], delta[tie.to_numpy()], marker="o",
+            ls="none", ms=4.2, mfc="white", mec=COLORS["shunting"],
+            mew=LW_EDGE, zorder=3)
     mx, mlo, mhi = mean_ci(pairs.surrogate_mean.to_numpy(float), BOOT_SEED + 1)
-    my, ylo, yhi = mean_ci(pairs.tree.to_numpy(float), BOOT_SEED + 2)
+    my, ylo, yhi = mean_ci(delta, BOOT_SEED + 2)
+    # the cohort mean is drawn in the ink neutral at 1.5 x the data marker and
+    # on top of the cloud: as a green diamond barely larger than the cells it
+    # sat in the densest clump of its own series (QA round 4)
     ax.errorbar([mx], [my], xerr=[[mx - mlo], [mhi - mx]],
                 yerr=[[my - ylo], [yhi - my]], fmt="D",
-                color=COLORS["shunting"], mfc="white",
-                mec=COLORS["shunting"], mew=LW_ERR, ms=MARKER_MS,
-                elinewidth=LW_ERR, capsize=2.0, zorder=4)
-    # anchored on the diamond CENTRE (the 0.020-unit setback landed the
-    # tip nearer an open tie-cell marker than the diamond it names)
-    # ONE line, in the band the cells leave empty: two lines need 14.7 pt and
-    # the free strip under the lowest right-hand cell (0.704, 0.515) is
-    # 13.3 pt, so the second line straddled the bottom spine (QA round 3).
-    _leader(ax, (mx, my), (0.720, 0.427))
-    ax.text(0.998, 0.335, "cohort mean, 95 % CI", fontsize=PT_BASE,
-            color=COLORS["ink"], ha="right", va="center")
-    # inset 3.5 pt from the left spine: set AT x = 0.25 the spine stroke
-    # ran through the first character of every line
-    ax.annotate(block, xy=(0.25, ymax * 0.999), xytext=(3.5, 0.0),
-                textcoords="offset points", fontsize=PT_BASE,
-                color=COLORS["mute"], ha="left", va="top",
-                linespacing=1.2)
+                color=COLORS["ink"], mfc="white", mec=COLORS["ink"],
+                mew=LW_ERR, ms=MARKER_MS * 1.5, elinewidth=LW_ERR,
+                capsize=2.2, zorder=5)
+    _leader(ax, (mx, my), (0.505, -0.078), COLORS["ink"])
+    ax.text(0.262, -0.115, "cohort mean,\n95 % CI", fontsize=PT_BASE,
+            color=COLORS["ink"], ha="left", va="center", linespacing=1.2)
     ax.set_xlim(0.25, 1.0)
-    ax.set_ylim(0.25, ymax)
+    ax.set_ylim(F_Y0, F_Y1)
     ax.set_xticks([0.25, 0.5, 0.75, 1.0])
-    ax.set_yticks([0.25, 0.5, 0.75, 1.0])
+    ax.set_yticks([-0.2, -0.1, 0.0, 0.1, 0.2])
     ax.set_xlabel("200-surrogate mean at K = 8")
-    ax.set_ylabel("Ancestry capture")
-    style_panel(ax)
+    ax.set_ylabel("Ancestry minus\nsurrogate capture")
+    style_panel(ax, grid="y")
+    ax.spines["left"].set_bounds(-0.2, 0.2)
+    ax.spines["bottom"].set_bounds(0.25, 1.0)
     return pd.DataFrame(dict(panel="F", root_id=pairs.root_id,
                              ancestry_total_capture=pairs.tree,
                              surrogate_mean=pairs.surrogate_mean,
+                             ancestry_minus_surrogate=delta,
                              fraction_surrogates_ge=pairs.fraction_ge,
                              n_replicates=pairs.n_replicates))
 
@@ -1544,12 +1485,16 @@ def figure7(*, out=COMPONENT, png=True, dpi=200, quiet=False):
     c = canvas.panel("C", 0, 8, 4, schematic=True, lock=False,
                      inset_pt=SCHEMATIC_INSET, title="A shunt makes the field")
     d = canvas.panel("D", 1, 0, 4, title="Capture rises with budget")
-    e = canvas.panel("E", 1, 4, 4, title="Where the energy goes")
+    e = canvas.panel("E", 1, 4, 4, title="The spatial share at K = 8")
     fx = canvas.panel("F", 1, 8, 4, title="Cell by cell")
     g = canvas.panel("G", 2, 0, 7,
                      title="Paired advantage and its wiring cost")
     h = canvas.panel("H", 2, 7, 5, title="Three cohorts, one ordering")
     for name in ("D", "E", "F"):
+        # the right reserve is declared, not measured: D's direct end labels
+        # and E's last x tick overhang by different amounts, and an unequal
+        # measured overhang gives the three panels three axes widths, which
+        # the row-alignment contract forbids
         canvas.declare_reserve(name, left=GUTTER_PT, bottom=BOTTOM_R1)
     canvas.declare_reserve("G", left=GUTTER_PT, right=G_RIGHT,
                            bottom=BOTTOM_R2)
@@ -1562,12 +1507,18 @@ def figure7(*, out=COMPONENT, png=True, dpi=200, quiet=False):
     schem_b = panel_b(b, arb)
     schem_c = panel_c(c, arb, field, field_scale)
     rows_d = panel_d(d, summaries, tables, floor)
-    rows_e = panel_e(e, summaries, initial, floor)
+    rows_e = panel_e(e, summaries, floor)
     rows_f = panel_f(fx, pairs)
     rows_g, forest_out = panel_g(canvas, g, report["v661"], tables, summaries)
     rows_h = panel_h(h, tables, inclusion)
 
     canvas.lock_reserves()
+    import os
+    if os.environ.get("FIG7_DEBUG"):
+        needs = canvas._measure_needs()
+        for k in ("D", "E", "F", "G", "H"):
+            print("NEED", k, [round(v, 2) for v in needs[k]],
+                  "LOCK", [round(v, 2) for v in canvas._locks[k]])
     findings = canvas.align_letters()
     problems = canvas.save(Path(out), name="credit_first_figure_07", png=png,
                            dpi=dpi, quiet=quiet, lock=False)

@@ -537,20 +537,11 @@ def f4_forest_strip(ax, *, extra_rows, n_rows, key=()):
         y = n_rows - .4 + pitch * (.85 + i)
         x = x0 + .02 * (x1 - x0)
         ax.plot([x], [y], marker='D', ms=MARKER_MS - .8, mfc=mfc,
-                mec=COLORS['bp'] if mfc == 'white' else 'white',
+                mec=COLORS['ink'] if mfc == 'white' else 'white',
                 mew=LW_HAIR, ls='none', zorder=4.0, clip_on=False)
         ax.annotate(name, xy=(x, y), xycoords=('data', 'data'),
                     xytext=(4.5, 0.0), textcoords='offset points',
                     ha='left', va='center', fontsize=PT_BASE,
-                    color=COLORS['mute'], annotation_clip=False)
-
-
-def f4_row_counts(ax, ypos, label='n = 20'):
-    """CF-6's right-aligned per-row n, set inside the axes."""
-    from journal_style import PT_BASE
-    for y in ypos:
-        ax.annotate(label, xy=(.985, y), xycoords=('axes fraction', 'data'),
-                    ha='right', va='center', fontsize=PT_BASE,
                     color=COLORS['mute'], annotation_clip=False)
 
 
@@ -594,10 +585,15 @@ def f4_deficit(ax, contrast, seeds, rows):
                              ci95_high=float(rec.ci95_high), n_seeds=20,
                              positive_seeds=int(rec.positive_seeds),
                              interval='95 % paired percentile bootstrap'))
+    # QA 2026-09-10 (minor): carmine is the figure's 'exact path' rule colour
+    # (panel B's key); F's marks are an endpoint STATE, not a rule, so they
+    # are drawn in neutral ink and the three rule hues keep one meaning.
+    # The upper bound drops 1.56 -> 1.22: the widest drawn value is the
+    # 1.116 seed, so a third of the old axis carried nothing.
     out = forest_rows(ax, entries, value_label='Quartic − pairwise deficit\n'
                       '(calibrated − exact NMSE)', reference=0.0,
-                      reference_label='no deficit', color='bp',
-                      xlim=(-.06, 1.56), tag='')
+                      reference_label='no deficit', color='ink',
+                      xlim=(-.06, 1.22), tag='')
     # QA 2026-09-09: the twenty-seed fan sits 0.22 rows BELOW the row (the
     # validation-selected arm is 0.22 above), and the endpoint interval gets
     # a white casing over the fan, so both intervals stay readable.
@@ -609,20 +605,21 @@ def f4_deficit(ax, contrast, seeds, rows):
                 alpha=.55, zorder=2.0)
         ax.plot([entry['lo'], entry['hi']], [y, y], color='white',
                 lw=LW_ERR + 1.6, zorder=3.3, solid_capstyle='butt')
-        ax.plot([entry['lo'], entry['hi']], [y, y], color=COLORS['bp'],
+        ax.plot([entry['lo'], entry['hi']], [y, y], color=COLORS['ink'],
                 lw=LW_ERR, zorder=3.4, solid_capstyle='butt')
     for y, (m, lo, hi) in zip(out['ypos'], second):
         yy = y + .22
-        ax.plot([lo, hi], [yy, yy], color=COLORS['bp'], lw=LW_ERR, zorder=3.0,
+        ax.plot([lo, hi], [yy, yy], color=COLORS['ink'], lw=LW_ERR, zorder=3.0,
                 solid_capstyle='butt')
         for xb in (lo, hi):
-            ax.plot([xb, xb], [yy - .09, yy + .09], color=COLORS['bp'],
+            ax.plot([xb, xb], [yy - .09, yy + .09], color=COLORS['ink'],
                     lw=LW_ERR, zorder=3.0, solid_capstyle='butt')
         ax.plot([m], [yy], marker='D', ms=MARKER_MS - .8, mfc='white',
-                mec=COLORS['bp'], mew=LW_HAIR, ls='none', zorder=4.0)
-    f4_row_counts(ax, out['ypos'])
+                mec=COLORS['ink'], mew=LW_HAIR, ls='none', zorder=4.0)
+    # QA 2026-09-10 (minor): the four per-row 'n = 20' tags are dropped; the
+    # count is printed once, in the panel's own right sub-title.
     f4_forest_strip(ax, extra_rows=1.15, n_rows=len(entries),
-                    key=((COLORS['bp'], 'endpoint'),
+                    key=((COLORS['ink'], 'endpoint'),
                          ('white', 'validation-selected')))
     return out
 
@@ -637,16 +634,24 @@ def f4_energy(ax, eigen, diag, rows, ramp):
     style = {'matching': ('o', True), 'quartet': ('s', False),
              'nested': ('^', True)}
     uni_x = -0.95                 # the 'uniform' tick is 30 pt wide: at
-    ax.set(xlim=(-1.62, 6.55), ylim=(0, 1.16))   # x = 0 it ran into '1'
+    ax.set(xlim=(-1.50, 6.55), ylim=(0, 1.16))   # x = 0 it ran into '1'
+    # QA 2026-09-10 (major): quartic and nested cumulative means differ by at
+    # most 0.030 at every k, so at a shared abscissa the two markers, their
+    # bands and their curves print as one ribbon.  Every series is dodged by
+    # a fifth of the k spacing -- inside the uniform category too, where the
+    # three collapsed onto one blob -- so all three are separately countable.
+    dodge = {'matching': -0.20, 'quartet': 0.0, 'nested': 0.20}
+    uni_dodge = {'matching': -0.30, 'quartet': 0.0, 'nested': 0.30}
     for task, colour in ramp.items():
         cut = field[field.family.eq(task) & field.step.eq(1024)]
         w = cut.pivot_table(index='seed', columns='index', values='fraction')
         assert len(w) == 20
         cum = w.cumsum(axis=1).to_numpy()[:, :6]
         mean, lo, hi = boot(cum)
-        f4_band(ax, kk, lo, hi, colour)
+        kx = kk + dodge[task]
+        f4_band(ax, kx, lo, hi, colour)
         marker, filled = style[task]
-        curve, = ax.plot(kk, mean, color=colour, lw=LW_DATA, marker=marker,
+        curve, = ax.plot(kx, mean, color=colour, lw=LW_DATA, marker=marker,
                          ms=MARKER_MS - 1.2, mfc=colour if filled else 'white',
                          mec=colour, mew=LW_HAIR, zorder=3.0)
         if task == 'nested':
@@ -658,7 +663,9 @@ def f4_energy(ax, eigen, diag, rows, ramp):
         uni = diag[diag.task.eq(task) & diag.step.eq(1024)]
         assert len(uni) == 20
         um, ul, uh = boot(uni.path_uniform_oracle_capture.to_numpy(), 771009)
-        ax.errorbar([uni_x], [um], yerr=[[um - ul], [uh - um]], color=colour,
+        ax.errorbar([uni_x + uni_dodge[task]], [um],
+                    yerr=[[um - ul], [uh - um]],
+                    color=colour,
                     marker=marker, ms=MARKER_MS - 1.2, lw=0.0,
                     elinewidth=LW_ERR, capsize=2.0, capthick=LW_ERR,
                     mfc=colour if filled else 'white', mec=colour,
@@ -728,10 +735,14 @@ def f4_energy(ax, eigen, diag, rows, ramp):
         ax.plot([6.25], [y], marker=marker, ms=MARKER_MS - 1.2, ls='none',
                 mfc=ramp[task] if filled else 'white', mec=ramp[task],
                 mew=LW_HAIR, zorder=4.0, clip_on=False)
-    ax.annotate('dashed grey: initial (shared)\n'
-                '16,384 updates: k = 1 gives\n1.00 / 0.40 / 0.40',
-                xy=(.62, .40), ha='left', va='top', fontsize=PT_BASE,
-                color=COLORS['mute'], linespacing=1.3)
+    # QA 2026-09-10 (minor): the two lines that printed the 16,384-update
+    # k = 1 captures (1.00 / 0.40 / 0.40) are deleted -- they were plotted
+    # VALUES set as prose inside the plot box, and they are carried by the
+    # caption and by figure_04_plotted.csv instead.  Only the identification
+    # of the grey dashed reference stays on the panel.
+    ax.annotate('dashed grey: initial (shared)',
+                xy=(.55, .33), ha='left', va='top', fontsize=PT_BASE,
+                color=COLORS['mute'])
     for task in ('matching', 'quartet', 'nested'):
         late = diag[diag.task.eq(task) & diag.step.eq(16384)]
         rows.append(dict(panel='G', task=FIG4_NAME[task],
@@ -796,11 +807,19 @@ def f4_shuffle(ax, contrast, endpoints, rows, ramp):
     # same construction panel F uses.
     from journal_style import PT_BASE
     rng = np.random.default_rng(11)
-    xlo, xhi = ax.get_xlim()
-    axes_w_pt = ax.get_position().width * ax.figure.get_size_inches()[0] * 72.0
     for y, entry in zip(out['ypos'], entries):
         fan = np.asarray(entry['fan'])
-        ax.plot(fan, y - .25 + rng.uniform(-.04, .04, len(fan)), ls='none',
+        # QA 2026-09-10 (major): +-0.04 rows of random jitter left the twenty
+        # paired seeds printing as about five resolvable disks.  The seeds are
+        # now ranked and dealt onto five fixed levels spanning 0.32 rows, so
+        # value-neighbours never share a level and all twenty are countable;
+        # the small random component only breaks ties within a level.
+        order = np.argsort(fan, kind='stable')
+        cycle = np.array([2.0, 0.0, 4.0, 1.0, 3.0])   # not 0,1,2,3,4: a
+        level = np.empty(len(fan))                    # monotone cycle draws
+        level[order] = cycle[np.arange(len(fan)) % 5]  # a false diagonal
+        ax.plot(fan, y - .25 + (level - 2.0) * .08
+                + rng.uniform(-.012, .012, len(fan)), ls='none',
                 marker='o', ms=SEED_MS, mfc=COLORS['mute'], mec='none',
                 alpha=.45, zorder=2.0, clip_on=True)
         col = entry['color']
@@ -818,14 +837,17 @@ def f4_shuffle(ax, contrast, endpoints, rows, ramp):
         # bare dot while the other three show bars and could be misread as
         # carrying no interval.  Any row whose bar is shorter than the marker
         # prints its interval directly under the marker instead.
-        span_pt = ((entry['hi'] - entry['lo']) / (xhi - xlo)) * axes_w_pt
-        if span_pt < MARKER_MS * .5:
-            ax.annotate(f"[{entry['lo']:.3f}, {entry['hi']:.3f}]",
-                        xy=(entry['mean'], y + .30), ha='center', va='center',
-                        fontsize=PT_BASE, color=COLORS['mute'], zorder=4.2)
+        # QA 2026-09-10 (minor): the Quartic interval is 0.010 wide, narrower
+        # than its own mean marker, so that row used to be the ONLY one
+        # carrying a printed interval and it sat at its own height.  Every
+        # row now prints its interval on the same seat, 0.30 rows under its
+        # marker, so the four rows read as one column and the four redundant
+        # 'n = 20' tags (the count is in the panel's right sub-title) go.
+        ax.annotate(f"[{entry['lo']:.3f}, {entry['hi']:.3f}]",
+                    xy=(entry['mean'], y + .32), ha='center', va='center',
+                    fontsize=PT_BASE, color=COLORS['mute'], zorder=4.2)
     ax.plot([-.04, 1.05], [2.5, 2.5], color=COLORS['grid'], lw=LW_HAIR,
             zorder=1.2, solid_capstyle='butt')
-    f4_row_counts(ax, out['ypos'])
     f4_forest_strip(ax, extra_rows=.22, n_rows=len(entries))
     return out
 
@@ -889,7 +911,7 @@ def figure4():
     drop_radii keywords on credit_delivery remain the upstream follow-up.
     Private helpers under DECISIONS G5 (library
     follow-ups): f4_card, f4_operator_badges, f4_bus, f4_badge,
-    f4_title, f4_reference, f4_forest_tag, f4_row_counts.
+    f4_title, f4_reference, f4_forest_tag.
     """
     from journal_style import PT_BASE, ORDINAL_RAMP, tint_patch
     from native_schematics import Frame
@@ -994,11 +1016,13 @@ def figure4():
         f4_curve(ax, data, task, letter, rows, seed_layer=(task == 'quartet'))
         f4_title(ax, spec[task][0], accent=ramp[task], sub=spec[task][1],
                  right_sub=spec[task][2], pad=34.0)
+        # QA 2026-09-10 (major): C, D and E share one log NMSE axis, so D and
+        # E now carry the same three tick labels; without them no value could
+        # be read off either panel.  The rotated 'Test NMSE' title stays on C
+        # alone (the axis is shared and the row is column-locked).
+        ax.set_yticklabels(['0.02', '0.1', '1'])
         if letter == 'C':
             ax.set_ylabel('Test NMSE', fontsize=PT_LABEL, color=COLORS['ink'])
-            ax.set_yticklabels(['0.02', '0.1', '1'])
-        else:
-            ax.set_yticklabels([])
     d = curve_axes['quartet']
     d.yaxis.set_minor_locator(FixedLocator([.045]))
     # QA 2026-09-10 (minor, CF-7): the right end of the floor rule now
@@ -1148,9 +1172,25 @@ def figure4():
             'and drop_radii keywords recommended upstream',
         'row 1 seed count': "'n = 20 paired seeds' is printed once in row 1 "
                             "(panel C); E's second copy was dropped",
-        'panel H interval': 'the Quartic row prints [0.507, 0.517] under its '
-                            'marker because that interval (0.010 wide) is '
-                            'narrower than the mean marker',
+        'panel H intervals (QA 2026-09-10)':
+            'every row prints its 95 % interval on one seat 0.32 rows under '
+            'its own marker, and the four per-row `n = 20` tags are dropped '
+            '(the count is in the panel sub-title).  Previously only the '
+            'Quartic row printed one, because that interval (0.010 wide) is '
+            'narrower than the mean marker, so the panel showed one printed '
+            'interval at its own height and three unprinted ones',
+        'panel G dodge (QA 2026-09-10)':
+            'quartic and nested differ by at most 0.030 at every k and by '
+            'under 0.01 in the uniform category, so the three series are '
+            'dodged by 0.20 k (0.30 k inside the uniform category); plotted '
+            'values are unchanged, only their abscissa on the page',
+        'panel F axis (QA 2026-09-10)':
+            'upper bound 1.56 -> 1.22 (widest drawn value 1.116) and the '
+            'marks move from carmine to neutral ink, so the three rule hues '
+            'of panel B keep one meaning across the figure',
+        'panels D and E ticks (QA 2026-09-10)':
+            'C, D and E share one log NMSE axis; D and E now carry the same '
+            '0.02 / 0.1 / 1 tick labels (the rotated title stays on C)',
         'panel E icon': 'the depth-4 morphology icon sits at inset '
                         '[0.555, 0.255, 0.275, 0.400], not the plan\'s '
                         'upper-left [0.03, 0.62, 0.20, 0.34]: both broadcast '
@@ -1164,8 +1204,7 @@ def figure4():
                                    'credit delivery is drawn in panel B'],
         'G5 private helpers': ['f4_card', 'f4_operator_badges',
                                'f4_bus', 'f4_badge', 'f4_title',
-                               'f4_reference', 'f4_forest_tag',
-                               'f4_row_counts'],
+                               'f4_reference', 'f4_forest_tag'],
         'rank95_at_1024': {k: round(float(v), 2) for k, v in rank95.items()}}
     save(c, 4, sources, panels, FIG4_CAPTION, rows,
          {'original_capture_rows_joined': len(joined),
@@ -1588,14 +1627,20 @@ def f6_family_dose(ax, effects, seeds, rows):
     f6_note_data(ax, 2.85, -2.6, ('exact tie at α = 1:',
                                   'all ten pairs identical'),
                  color=ORDINAL_RAMP[1], ha='right')
-    f6_note_data(ax, -0.15, 36.5, ('fixed D3, exact BP,', '180 epochs',
-                                   'n = 10 paired seeds',
-                                   '95 % paired bootstrap',
-                                   'intervals < markers'))
+    # QA 2026-09-10 (minor): four of the five lines (fixed D3, exact BP, the
+    # seed count and the bootstrap) are already in caption C and in the
+    # caption footer, so only the panel-specific caveat stays on the panel.
+    f6_note_data(ax, -0.15, 36.5, ('intervals < markers',))
     return ax
 
 
-F6_ACC_YLIM = (18.0, 110.0)
+# QA 2026-09-10 (major): 18.0 -> 43.0.  The 32-point band under the 50 %
+# chance rule existed only to seat D's and E's multi-line statistics blocks,
+# which together took 39 % of both panels' height, detached the x axis from
+# the data and duplicated the caption.  Both blocks are deleted and the band
+# with them; the drawn axis is still 50-100 (`f6_trim`) and the remaining
+# 7 points hold the `chance` reference label.
+F6_ACC_YLIM = (43.0, 110.0)
 
 
 def f6_num(value, places=2, *, signed=False):
@@ -1659,15 +1704,20 @@ def f6_depth_ladder(ax, conf, remaining, ceiling, contrast, rows):
                          mean_test_accuracy_pp=float(a), ci95_low_pp=float(b),
                          ci95_high_pp=float(c), n_seeds=10)
                     for d, a, b, c in zip(x, m, lo, hi))
-    for name, colour, marker, dash, regime, arch in (
+    # QA 2026-09-10 (minor): the two resource-matched controls agree within
+    # 0.4 points at every depth, so at a shared abscissa they printed as one
+    # series carrying two labels.  Each is dodged 0.08 depth units off the
+    # tick (about 5 pt apart on the page) so both marker sets are visible;
+    # the plotted values are unchanged.
+    for name, colour, marker, dash, regime, arch, dx in (
             ('grouped', COLORS['point_mlp'], 'D', (0, (4.2, 2.0)), 'aligned',
-             'grouped_point'),
+             'grouped_point', -0.08),
             ('reversed', COLORS['highlight'], 'v', (0, (1.2, 1.6)),
-             'rewired_tree', 'serial_tree')):
+             'rewired_tree', 'serial_tree', 0.08)):
         sub = remaining[remaining.hierarchy.eq(3) & remaining.regime.eq(regime)
                         & remaining.architecture.eq(arch)
                         & remaining.credit.eq('full_bp')].sort_values('depth')
-        x = sub.depth.to_numpy(float)
+        x = sub.depth.to_numpy(float) + dx
         m = 100 * sub.mean_test_accuracy.to_numpy(float)
         lo = 100 * sub.ci_low.to_numpy(float)
         hi = 100 * sub.ci_high.to_numpy(float)
@@ -1677,7 +1727,7 @@ def f6_depth_ladder(ax, conf, remaining, ceiling, contrast, rows):
                     mfc='white', mec=colour, mew=LW_EDGE, ecolor=colour,
                     elinewidth=LW_ERR, capsize=2.0, zorder=3.0)
         label_y[name] = (float(m[-1]), colour)
-        rows.extend(dict(panel='D', arm=name, depth=int(d),
+        rows.extend(dict(panel='D', arm=name, depth=int(round(d - dx)),
                          mean_test_accuracy_pp=float(a), ci95_low_pp=float(b),
                          ci95_high_pp=float(c), n_seeds=10)
                     for d, a, b, c in zip(x, m, lo, hi))
@@ -1714,18 +1764,12 @@ def f6_depth_ladder(ax, conf, remaining, ceiling, contrast, rows):
                     zorder=1.8)
     row = contrast[contrast.contrast.eq(
         'depth__serial_bp__aligned__d4_d3')].iloc[0]
-    # Every printed literal is formatted from the row that was just read, so
-    # the panel cannot drift from paired_contrasts.csv (the previous build
-    # hard-coded '[-1.74, -1.17]' against a file that gives -1.164998), and
-    # the count carries its predicate (decision 0.11).
-    f6_note_data(ax, 0.85, 47.2,
-                 ('four-tier cohort:',
-                  'D4 − D3 = %s pp' % f6_num(row.mean_pp),
-                  '[%s, %s], negative in %d of %d seeds'
-                  % (f6_num(row.ci_low_pp), f6_num(row.ci_high_pp),
-                     int(row.negative_pairs), int(row.n_seeds)),
-                  'n = 10 paired seeds, 10200–10209',
-                  '95 % bootstrap; 180 epochs'))
+    # QA 2026-09-10 (major/minor): the five-line four-tier block is DELETED.
+    # It was the largest text element in the panel and it reported a D4-minus-
+    # D3 contrast that is drawn nowhere in the figure (there is no D4 tick),
+    # while two of its lines repeated the caption footer.  The contrast stays
+    # in figure_06_plotted.csv and moves to the caption; the space it held
+    # goes back to the data (see F6_ACC_YLIM).
     rows.append(dict(panel='D', arm='four-tier D4 − D3', depth=4,
                      mean_test_accuracy_pp=float(row.mean_pp),
                      ci95_low_pp=float(row.ci_low_pp),
@@ -1744,9 +1788,16 @@ F6_ARMS = (
     ('per_soma_shared', 3, 'scalar', 'solid', 'shared soma', True),
     ('broadcast_autograd_localca_recipe', 3, 'scalar', 'dotted',
      'broadcast (local)', False),
-    ('exact_autograd_bp_recipe', 1, 'ink', 'dashed', 'exact BP (D1)', True),
+    # QA 2026-09-10 (major): the D1 reference was DASHED in F and, because of
+    # E's stopping split, SOLID-then-DOTTED in E, so a dotted curve in E was
+    # not a broadcast arm and the same arm changed style between the two
+    # panels.  It now has one dedicated style in both -- thin solid grey
+    # ('thin': LW_REF, ls '-') -- and dotted is reserved for the two
+    # autograd-broadcast variants, exactly as the caption key states.
+    ('exact_autograd_bp_recipe', 1, 'ink', 'thin', 'exact BP (D1)', True),
 )
-F6_DASH = {'solid': '-', 'dashed': (0, (4.2, 2.0)), 'dotted': (0, (1.2, 1.6))}
+F6_DASH = {'solid': '-', 'dashed': (0, (4.2, 2.0)), 'dotted': (0, (1.2, 1.6)),
+           'thin': '-'}
 F6_XLIM = (0.0, 1071.0)
 F6_XLAB = 712.0     # E's label column (QA 2026-09-10: room for the elbow)
 F6_XLAB_F = 655.0   # F's column: the right margin caps the run at 5.9 pt
@@ -1773,11 +1824,15 @@ def f6_trajectories(ax, curves, metric, scale, panel, rows, *, split=None):
         x = p.epoch.to_numpy(float)
         y = scale * p['mean'].to_numpy(float)
         if split is not None and depth == 1:
+            # QA 2026-09-10: the carried-forward segment (past the epoch where
+            # fewer than eight of the ten D1 fits are still running) is marked
+            # by a lighter alpha, NOT by dots -- dotted means the
+            # autograd-broadcast variant everywhere else in E and F.
             keep = x <= split
             ax.plot(x[keep], y[keep], color=colour, lw=lw, ls='-', zorder=2.4,
                     solid_capstyle='round')
-            ax.plot(x[~keep], y[~keep], color=colour, lw=lw,
-                    ls=F6_DASH['dotted'], zorder=2.4, solid_capstyle='round')
+            ax.plot(x[~keep], y[~keep], color=colour, lw=lw, ls='-',
+                    alpha=0.45, zorder=2.4, solid_capstyle='round')
         else:
             ax.plot(x, y, color=colour, lw=lw, ls=F6_DASH[style], zorder=2.4,
                     solid_capstyle='round')
@@ -1839,9 +1894,12 @@ def f6_direct_ends(ax, ends, places, x, *, lead_from=None):
 
 def f6_accuracy_budget(ax, curves, stopping, budget, rows):
     """Fig 6E: validation-selected accuracy over the 600-epoch restarts."""
+    # QA 2026-09-10 (major): E used to carry neither y tick labels nor a y
+    # title, so no accuracy in it could be read; the shared axis is now
+    # labelled on E as it is on D.
     ax.set(xlim=F6_XLIM, ylim=F6_ACC_YLIM, xticks=[0, 180, 400, 600],
-           yticks=[50, 60, 70, 80, 90, 100], xlabel='Epoch')
-    ax.tick_params(labelleft=False)
+           yticks=[50, 60, 70, 80, 90, 100], xlabel='Epoch',
+           ylabel='Test accuracy (%)')
     f6_trim(ax, x=(0, 600), y=(50, 100))
     d1 = stopping[stopping.arm.eq('exact_autograd_bp_recipe')
                   & stopping.depth.eq(1)]
@@ -1879,18 +1937,12 @@ def f6_accuracy_budget(ax, curves, stopping, budget, rows):
     # At 141 pt the sub-title pushed panel E's tight bounding box under
     # panel F's letter (the canvas letter check flagged it); the caption
     # carries the full sentence.
-    f6_note_data(ax, 8.0, 109.0,
-                 ('600-epoch restarts, same seeds; n = 10',))
-    f6_note_data(ax, 8.0, 47.2,
-                 ('D3 − D1: %s pp at 180, %s at 600'
-                  % (f6_num(gain180['mean'], signed=True),
-                     f6_num(gain600['mean'], signed=True)),
-                  'exact − broadcast (BP) at 600: %s pp'
-                  % f6_num(bcast['mean'], signed=True),
-                  '[%s, %s], positive in %d of 10 seeds'
-                  % (f6_num(bcast.ci95_low), f6_num(bcast.ci95_high),
-                     int(bcast.positive_seeds)),
-                  'D1 still training, 180/400/600: %s of 10' % counts))
+    f6_note_data(ax, 8.0, 109.0, ('600-epoch restarts, same seeds',))
+    # QA 2026-09-10 (major): the four-line contrast block is DELETED.  It sat
+    # between the curves and the x axis, took 39 % of the panel's height and
+    # detached the axis from the data; every number in it is a paired
+    # contrast that belongs in the caption and in figure_06_plotted.csv,
+    # where all four now live.
     for tag, row in (('depth_gain_exact_bp 180', gain180),
                      ('depth_gain_exact_bp 600', gain600),
                      ('bp_exact_minus_broadcast 600', bcast)):
@@ -1934,7 +1986,7 @@ def f6_validation_loss(ax, curves, stopping, rows):
                  ('open circles: the eight D1 stopping',
                   'epochs, %d–%d; all 50 D3 fits reach' % (stops[0],
                                                            stops[-1]),
-                  'the cap, loss still falling; n = 10'))
+                  'the cap, loss still falling'))
     # The y range gains 0.035 of headroom at the foot so this tag clears the
     # bottom spine by 2.8 pt; the previous build printed it across the spine.
     # QA 2026-09-10: the caveat applies to all six arms, so it moves out of
@@ -1942,6 +1994,12 @@ def f6_validation_loss(ax, curves, stopping, rows):
     # `exact BP (D3)` and read as that curve's second line) into the empty
     # lower-left gutter under the 0.1 spine bound.
     f6_note_data(ax, 12.0, 0.062, ('convergence not established',))
+    # QA 2026-09-10 (minor): F draws all six arms but seats only three direct
+    # labels (the other three end inside the bundle, where a fourth seat
+    # cannot be separated from `exact BP (D3)` at 8.3 pt of pitch), so the
+    # panel says once, in the free band between the D1 reference and the
+    # falling bundle, that the arm-to-style mapping is E's.
+    f6_note_data(ax, 250.0, 0.600, ('arms and styles as in E',))
     return ax
 
 
@@ -2062,17 +2120,19 @@ def figure6():
        x 1.07-1.21, so no 42 pt label fits above or below the rule right of
        x = 1 without striking one of them.  Every other reference label in the
        figure is right-aligned on its rule.
-    2. Panels D and E share y = (18, 110) rather than the plan's (48, 101).
-       The spine is still bounded to 50-100 (`f6_trim`), so the drawn axis is
-       the plan's; the extra range is the detached annotation gutter that
-       seats E's five mandated on-panel facts (sub-title, D3-D1 contrast,
-       exact-minus-broadcast contrast with its interval and sign count, and
-       the D1 still-training counts) and D's five, none of which may cross the
-       180-epoch rule, the curves or a reference label.
-    3. Panel D's four-tier contrast is printed in that gutter under the axis
-       instead of on a leader into the whitespace under the ceiling: at the
-       shared y scale the four-line block reaches the exact-BP and exact-path
-       curves between D2 and D3.  D's cohort footer merges into the same block.
+    2. WITHDRAWN by the 2026-09-10 visual review (major).  D and E shared
+       y = (18, 110); the 32-point band under the 50 % chance rule existed
+       only to seat D's five-line and E's four-line statistics blocks, which
+       took 39 % of both panels' height and detached the x axis from the
+       data.  Both blocks are deleted and the shared range is now
+       (43, 110): the drawn axis is still the plan's 50-100 (`f6_trim`) and
+       the remaining 7 points hold the `chance` reference label.  Every fact
+       the blocks carried is in the caption and in figure_06_plotted.csv.
+    3. WITHDRAWN with deviation 2.  Panel D's four-tier D4-minus-D3 contrast
+       was the largest text element in the panel and reported a contrast
+       drawn nowhere in the figure (there is no D4 abscissa); it is deleted
+       from the artwork, stays in figure_06_plotted.csv, and moves to the
+       caption.
     4. The `180-epoch budget` label asked for on E's dotted rule is OMITTED.
        Seats tried and rejected by measurement: E's top band is taken by the
        sub-title and the label cannot be right-aligned on a rule 19 pt from
@@ -2111,9 +2171,35 @@ def figure6():
        gutter under the 0.1 spine bound, not in the right-hand label column:
        it applies to all six arms, and on the column's baseline band it read
        as a second line of the `exact BP (D3)` label.
-   11. Panel E's sub-title reads `600-epoch restarts, same seeds; n = 10`:
-       the longer wording pushed E's tight bounding box under panel F's
-       letter (canvas letter check).  The caption keeps the full sentence.
+   11. Panel E's sub-title reads `600-epoch restarts, same seeds`: the
+       longer wording pushed E's tight bounding box under panel F's letter
+       (canvas letter check), and the `n = 10` clause was dropped on
+       2026-09-10 with every other per-panel repeat of the caption footer.
+       The caption keeps the full sentence.
+
+    Visual-review round 2026-09-10 (main06.json):
+
+   17. Panel E carries y tick labels and the rotated `Test accuracy (%)`
+       title.  It previously carried neither, so no accuracy in it could be
+       read; D and E share the axis and both now name it.
+   18. The D1 reference has ONE dedicated style in E and F: thin solid grey
+       (`'thin'`, LW_REF at ls '-'), the carried-forward segment past the
+       stopping split marked by alpha 0.45.  It used to be dashed in F and
+       solid-then-DOTTED in E, so a dotted curve in E was not a broadcast
+       arm and the same arm changed style between panels; dotted now means
+       the autograd-broadcast variant everywhere, as the caption key says.
+   19. Panel G's three-line cohort footer (`n = 10 paired seeds; pointwise
+       95 % bootstrap; validation-selected states`) is deleted: it repeated
+       the caption footer verbatim and was the largest of the eight
+       annotation elements filling a third of a data-free plot box.  The
+       same duplicated clauses are stripped from C (four of five lines), F
+       (`; n = 10`) and H (a whole note).  C keeps `intervals < markers`.
+   20. Panel D's two resource-matched controls are dodged +-0.08 depth units
+       off the tick: they agree within 0.4 points at every depth and printed
+       as one series carrying two labels.  Plotted values are unchanged.
+   21. Panel F states `arms and styles as in E` in the free band between the
+       D1 reference and the falling bundle: F draws six arms but can seat
+       only three direct labels.
 
     Residual-QA round 2026-09-10 (TEXT.md section 4, deviations 16-21):
 
@@ -2222,14 +2308,14 @@ def figure6():
                       ('at 600: −1.52 pp [−1.83, −1.23],',
                        '10 of 10 seeds negative'),
                       ((513.0, -4.27), (585.0, -2.01)))),
+              # QA 2026-09-10 (major): the three-line cohort footer is
+              # DELETED.  It repeated the caption footer verbatim ('Points
+              # are means over ten paired seeds; ... pointwise in E-H;
+              # accuracy endpoints are validation-selected states') and was
+              # the largest of the eight annotation elements that filled a
+              # third of this data-free plot box.
               notes=((250.0, 9.5, 'left',
-                      ('crossing not resolved (300–330)',)),
-                     # The cohort footer takes the empty band right of the
-                     # crossing and above the zero rule (the curve is negative
-                     # for every epoch drawn there).
-                     (612.0, 7.36, 'right', ('n = 10 paired seeds;',
-                                             'pointwise 95 % bootstrap;',
-                                             'validation-selected states'))))
+                      ('crossing not resolved (300–330)',)),))
     h = c.panel('H', 2, 6, 6, title='Cross-entropy ordering does not flip',
                 sharex=g)
     f6_style(h, 'Cross-entropy ordering does not flip')
@@ -2261,8 +2347,7 @@ def figure6():
                       None)),
               notes=((15.0, 0.0255, 'left',
                       ('below zero: lower loss with exact-path credit',)),
-                     (15.0, -0.0862, 'left',
-                      ('n = 10 paired seeds; 95 % bootstrap',))))
+                     ))
 
     for name in ('C', 'D', 'E', 'F', 'G', 'H'):
         c.declare_reserve(name, left=20.0)

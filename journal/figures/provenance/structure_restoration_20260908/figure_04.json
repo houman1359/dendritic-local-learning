@@ -1,7 +1,7 @@
 {
   "figure": "Figure 4",
   "output": "figures/components/restored_main_04.pdf",
-  "output_sha256": "7e927f663cde02cfc30444d85b1cb497eaf44ae1a7aba9354b35bc0a31001204",
+  "output_sha256": "72d42fca118c4c046b7414e7e92eb3e3b5f00d3af510fbebd341bad9b95acd5a",
   "panel_sources": {
     "A": "Schematic. credit_rule_bridge/protocol_freeze.json (protocol.algebraic, protocol.fresh_seeds): the two targets, the shared balanced tree and the twenty fresh paired seeds. No measured series.",
     "B": "Schematic. credit_rule_bridge/figures/initial_profile_source.csv (site, junction, mean_profile, mean_abs_profile, n_seeds) sets the six drop-dot radii; figures/figure_provenance.json and protocol_freeze.json fix the calibration protocol (256 unlabeled examples at step 0).",
@@ -31,27 +31,22 @@
     "source_data/credit_rule_bridge/summaries/all_diagnostics.csv": "a11538ed5d5e95c11863bdd0b8b1b89dbc4ed5819d307f17d8e39e2a766af562"
   },
   "builder_sha256": {
-    "scripts/credit_first_figures/build_restored_main.py": "9cb1175dd5df20b3e8678a3a6c0aea704751700a7a219eea0269517c4ebe842c",
+    "scripts/credit_first_figures/build_restored_main.py": "2f40c0a9ddb6992ba40a53f2b55d4f2ee239e2daeb1f94e05fcc7905c6922cdd",
     "scripts/credit_first_figures/focused_main_evidence.py": "e045f0fc26ce8554af19f7d2b1ee9683ec852899f19e02e76e78163b0d74e773",
-    "scripts/figure_canvas.py": "de3f566dd08270535deab95eb798b49cc17ccf4dfbb88e7ebdb50860903a6ad1",
+    "scripts/figure_canvas.py": "0a0d01607cc3589a44075b6ccd7c2867dcf7d8a31f88ca1565dade247f4bcb48",
     "scripts/journal_style.py": "be8a138f9d9c081237edc616ba52b6769f957d8b8b49e705a92adcb18f475f3c"
   },
   "source_data_immutable": true,
   "new_experiments": 0,
   "layout_findings": [
     "TEXT-ON-DATA 'noise 0.0225'",
-    "TEXT-ON-DATA 'n = 20'",
-    "TEXT-ON-DATA 'n = 20'",
-    "TEXT-ON-DATA 'n = 20'",
-    "TEXT-ON-DATA 'n = 20'",
     "TEXT-ON-DATA '0.95'",
     "TEXT-ON-DATA 'Quartic'",
     "TEXT-ON-DATA 'Nested'",
+    "TEXT-ON-DATA '[0.520, 0.607]'",
     "TEXT-ON-DATA '[0.507, 0.517]'",
-    "TEXT-ON-DATA 'n = 20'",
-    "TEXT-ON-DATA 'n = 20'",
-    "TEXT-ON-DATA 'n = 20'",
-    "TEXT-ON-DATA 'n = 20'"
+    "TEXT-ON-DATA '[0.602, 0.707]'",
+    "TEXT-ON-DATA '[0.557, 0.592]'"
   ],
   "rendering_scope": "Existing outcomes only; no scientific endpoint or rate selection. Any redraw bootstrap uses whole existing seeds/cells, not independent pairs.",
   "original_capture_rows_joined": 120,
@@ -66,7 +61,10 @@
     "CF-7 references": "no waiver: noise 0.0225 (C, E), noise 0.045 (D) and 0.95 (G) are right-aligned ON their own rule, set below it; D's Exact path direct label moved above the red curve to free that end; F and H reference labels are placed by figure_canvas.forest; the vertical 1,024 rule is unlabelled because the major x tick prints 1,024",
     "panel B bus (QA 2026-09-10)": "Frame.credit_delivery mode='neuron' puts the bus 8 pt above the highest TARGET junction (unit y 2.32) while terminals reach unit y 3.06, so the rail crossed the excitatory contact row and its riser the outermost leaf branch. Cards 2 and 3 now use the private f4_bus: rail above the canopy (highest contact + one contact radius + 1.6 pt), riser outside the leftmost contact, rail/riser/drops at zorder 1.55 behind the anatomy. bus_lift_pt and drop_radii keywords recommended upstream",
     "row 1 seed count": "'n = 20 paired seeds' is printed once in row 1 (panel C); E's second copy was dropped",
-    "panel H interval": "the Quartic row prints [0.507, 0.517] under its marker because that interval (0.010 wide) is narrower than the mean marker",
+    "panel H intervals (QA 2026-09-10)": "every row prints its 95 % interval on one seat 0.32 rows under its own marker, and the four per-row `n = 20` tags are dropped (the count is in the panel sub-title).  Previously only the Quartic row printed one, because that interval (0.010 wide) is narrower than the mean marker, so the panel showed one printed interval at its own height and three unprinted ones",
+    "panel G dodge (QA 2026-09-10)": "quartic and nested differ by at most 0.030 at every k and by under 0.01 in the uniform category, so the three series are dodged by 0.20 k (0.30 k inside the uniform category); plotted values are unchanged, only their abscissa on the page",
+    "panel F axis (QA 2026-09-10)": "upper bound 1.56 -> 1.22 (widest drawn value 1.116) and the marks move from carmine to neutral ink, so the three rule hues of panel B keep one meaning across the figure",
+    "panels D and E ticks (QA 2026-09-10)": "C, D and E share one log NMSE axis; D and E now carry the same 0.02 / 0.1 / 1 tick labels (the rotated title stays on C)",
     "panel E icon": "the depth-4 morphology icon sits at inset [0.555, 0.255, 0.275, 0.400], not the plan's upper-left [0.03, 0.62, 0.20, 0.34]: both broadcast means occupy NMSE ~ 1 across the top of E; the left edge clears the 1,024 rule at axes x = 0.491",
     "panel H fan": "drawn by the builder in COLORS['mute'] 0.22 rows below each row (not handed to forest(), which would draw it in the row hue), so the ORDINAL_RAMP mean marker and its LW_ERR interval are the only saturated marks",
     "CF-4 delta0 exemptions": [
@@ -79,8 +77,7 @@
       "f4_badge",
       "f4_title",
       "f4_reference",
-      "f4_forest_tag",
-      "f4_row_counts"
+      "f4_forest_tag"
     ],
     "rank95_at_1024": {
       "matching": 1.0,
