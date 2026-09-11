@@ -263,7 +263,7 @@ def panel_statistic(f, subtitle_lines):
     # pair 2 -- one contact in each half-tree, no shared path above the soma
     for name in ('T3', 'T7'):
         f.contact(nodes[name], kind='exc')
-        f.leader(nodes[name], nodes.soma)
+        _annotation_leader(f, nodes[name], nodes.soma)
     f.text((nodes.soma[0], core_y0 + f.fy(1.5)), 'no shared path',
            size=PT_BASE, color=GRAY, ha='center', va='bottom')
 
@@ -485,6 +485,31 @@ def _seat_arrows(f, patches, contacts, clearance_pt=3.4):
         if pull <= 0.0:
             continue
         patch.set_positions(f._from_pt(A), f._from_pt(B - u * pull))
+
+
+def _annotation_leader(f, a, b, *, start_pt=2.6, stop_pt=5.5, color=GRAY):
+    """A DASHED annotation leader from ``a`` toward ``b`` (panel A).
+
+    ``Frame.leader`` draws a SOLID ``mute`` hairline with no dash option.
+    Panel A's two pair-2 connectors are annotation, not anatomy: drawn solid
+    they cut straight across the grey arbor and converged on the yellow soma
+    at the same point as the real trunk, so at a glance they read as two
+    extra branches rather than as the link between a contact pair and the
+    soma it does not share a path above (visual review 2026-09-10).  They are
+    drawn here instead -- same hue and hairline weight, dashed, starting
+    clear of the contact disc and stopping ``stop_pt`` short of the soma
+    centre so no annotation touches the soma marker.  The library is NOT
+    edited (SPEC_ERRATA #7).
+    """
+    A, B = f._to_pt(a), f._to_pt(b)
+    u = B - A
+    L = float(np.linalg.norm(u))
+    if L < start_pt + stop_pt + 2.0:
+        return
+    u = u / L
+    p0, p1 = f._from_pt(A + u * start_pt), f._from_pt(B - u * stop_pt)
+    f.ax.plot([p0[0], p1[0]], [p0[1], p1[1]], color=color, lw=f.lw(LW_HAIR),
+              dashes=(2.0, 1.7), zorder=1.5, solid_capstyle='butt')
 
 
 def _toward(f, a, b, pt):
@@ -711,7 +736,7 @@ def main():
                   xlim=(-0.5, 0.5), reference=None, reference_label='', tag='')
     ax_c.set_xticks([-0.5, -0.25, 0.0, 0.25, 0.5])
     ax_c.set_xticklabels(['−0.5', '−0.25', '0', '0.25', '0.5'])
-    ax_c.set_ylim(4.52, -0.66)
+    ax_c.set_ylim(4.30, -0.66)
     ax_c.plot([0.0, 0.0], [-0.45, len(c_rows) - 0.55], color=GRAY, lw=LW_REF,
               dashes=(2.6, 2.0), zorder=1.0, solid_capstyle='butt')
     ax_c.text(-0.012, -0.56, 'no alignment', fontsize=PT_BASE, color=GRAY,
@@ -723,9 +748,15 @@ def main():
     # rank correlations above; the caption names the change of quantity.
     ax_c.plot([-0.5, 0.5], [2.54, 2.54], color=COLORS['edge'], lw=LW_HAIR,
               zorder=1.2, solid_capstyle='butt')
-    ax_c.text(-0.49, 3.62, 'tree distance sign-flipped: + = closer',
-              fontsize=PT_BASE, color=GRAY, ha='left', va='center', zorder=6)
-    ax_c.text(-0.49, 4.05, f'all {n_scans} scans; n = {n_targets} target cells',
+    # The tree-distance sign key rides ON its own row, in the empty left half
+    # of that band (its leftmost target value is -0.200), instead of as a
+    # third line of prose below the fourth band: it keys one row, not the
+    # panel (visual review 2026-09-10).  The row label cannot carry it --
+    # '(+ = closer)' is ~40 pt at PT_BASE against a 46 pt label column and a
+    # third label line overruns the 22 pt row pitch.
+    ax_c.text(-0.49, 2.0, '+ = closer', fontsize=PT_BASE, color=GRAY,
+              ha='left', va='center', zorder=6)
+    ax_c.text(-0.49, 3.85, f'all {n_scans} scans; n = {n_targets} target cells',
               fontsize=PT_BASE, color=GRAY, ha='left', va='center', zorder=6)
 
     # -- D ----------------------------------------------------------------
@@ -850,16 +881,29 @@ def main():
     style_panel(ax_f, grid='y')
     ax_f.spines['left'].set_bounds(0.0, 100.0)
     ax_f.text(18.5, 129.0,
-              f'open: four single-input routes ({int(single.sum())} of '
+              f'open: one input per route ({int(single.sum())} of '
               f'{n_scans} scans)', fontsize=PT_BASE, color=GRAY, ha='right',
               va='center', zorder=6)
     # 4/n is NOT a ceiling: three of the thirteen scans plot above it because
-    # a route can reach more than one input, and the old note explained only
-    # the downward direction (visual review 2026-09-10).  The curve is
-    # relabelled for what it is -- the one-distinct-input-per-route locus --
-    # and the caption now names both directions.
-    ax_f.text(18.5, 118.0, f'dashed: {k_routes}/n, one input per route',
+    # a route can reach more than one input (``sites_per_route`` runs to 2.0),
+    # and the old note explained only the downward direction (visual review
+    # 2026-09-10).  The curve is relabelled for what it actually is -- the
+    # level a scan reaches when the four routes cover four DISTINCT inputs --
+    # so a mark above it reads as a route that reached more than one input and
+    # a mark below it as routes that repeated one.  The six open scans, whose
+    # routes each reach a single input, are exactly the ones 4/n bounds; the
+    # caption names both directions.
+    ax_f.text(18.5, 118.0,
+              f'dashed: {k_routes}/n, {_WORDS[k_routes]} distinct inputs',
               fontsize=PT_BASE, color=GRAY, ha='right', va='center', zorder=6)
+    # Two pairs of scans are exactly coincident in (inputs, coverage) and are
+    # separated on x by ``_split_duplicates``; neither the panel nor the
+    # caption said so, and an undisclosed offset on an integer count reads as
+    # a fractional input (visual review 2026-09-10).  The claim (y) is never
+    # moved, so the disclosure names the x offset only.
+    ax_f.text(4.25, 13.0,
+              f'coincident scans offset ±{DUP_OFFSET / 2:.1f} on x',
+              fontsize=PT_BASE, color=GRAY, ha='left', va='center', zorder=6)
 
     # Tighten the tick / label pads on every data axes: the 40 pt vertical
     # gutter has to hold one row's x labels and the next row's letter band,
