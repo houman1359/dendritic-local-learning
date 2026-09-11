@@ -967,7 +967,7 @@ def forgetting_forest(canvas: NativeCanvas, ax, summary: pd.DataFrame,
         f"{_minus(100.0 * float(c.ci95_high))}], "
         f"P = {float(c.wilcoxon_p_two_sided):.3f}",
         "n = 10 paired seeds; mean and 95 %",
-        "bootstrap, after 20 switch epochs",
+        "bootstrap, after 12 switch epochs",
     # QA 2026-09-09: lifted 3 pt so the last baseline clears the x-axis
     # spine by 3.2 pt (it stood 0.2 pt off it), while the zero rule is
     # shortened to y = 3.30 so the first footer line still clears its foot.

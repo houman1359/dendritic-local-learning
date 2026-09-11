@@ -893,7 +893,13 @@ def cohort_forest(canvas, ax, cohorts, kind, *, value_label, xlim, xticks,
                          hi=lead.high_pp, seeds=list(lead.seed_pp),
                          n=int(lead.n_seeds),
                          color="shunting" if len(shunt) else "additive",
-                         marker="o" if len(shunt) else "s"))
+                         marker="o" if len(shunt) else "s",
+                         # QA 2026-09-10: the additive arm is open in every
+                         # row that has both arms, so the additive-only row
+                         # must be open too.  Fill otherwise carried two
+                         # meanings inside one figure: arm here, and
+                         # trained-versus-initial in G.
+                         hollow=not len(shunt)))
         second = add.iloc[0] if (len(shunt) and len(add)) else None
         # the plan's own row note: positive seeds out of the row's seed total,
         # for the arm the row label sits on; the single-arm CIFAR row says so
@@ -1270,14 +1276,26 @@ def main():
     # F carries the prespecified equivalence margin and names its referent.
     # QA 2026-09-09 (blocker): the band is painted UNDER the zero rule
     # (zorder 0.12 < forest()'s axvline at 1.0), so the panel's load-bearing
-    # anchor stays visible across the full row span, exactly as in E.
-    tint_patch(f_, ("rect", -equivalence["margin_pp"], f_.get_ylim()[1],
-                    2 * equivalence["margin_pp"],
-                    f_.get_ylim()[0] - f_.get_ylim()[1]), color="mute", pct=10,
+    # anchor stays visible.
+    # QA 2026-09-10 (major): the margin is the CIFAR-10 exact-path-MINUS-BP
+    # contrast, and only that cohort has a BP arm at all.  Painted across all
+    # four rows it certified three cohorts against a test never run on them,
+    # on an axis that plots a different contrast.  It is now confined to the
+    # CIFAR-10 row, with that contrast drawn inside it as its own mark.
+    cifar_y = out_f["ypos"][-1]
+    # a slim strip under the CIFAR row, so the row's own marks and its seed
+    # tag stay outside the margin that does not apply to them
+    tint_patch(f_, ("rect", -equivalence["margin_pp"], cifar_y + 0.04,
+                    2 * equivalence["margin_pp"], 0.52), color="mute", pct=10,
                edge=True, lw=LW_HAIR, radius_pt=1.5, zorder=0.12, clip_on=True)
-    # left of the zero rule, so the dashed rule never crosses the words
-    f_.text(-2.28, f_.get_ylim()[0] - 0.32, "±1 pp equivalence vs BP",
-            ha="left", va="center", fontsize=PT_BASE, color=MUTE, zorder=6)
+    f_.plot([equivalence["mean_pp"]], [cifar_y + 0.30], linestyle="none",
+            marker="D", ms=MARKER_MS - 1.0, mfc="white",
+            mec=COLORS["bp"], mew=LW_ERR, zorder=4.2)
+    f_.plot([equivalence["low_pp"], equivalence["high_pp"]],
+            [cifar_y + 0.30] * 2, color=COLORS["bp"], lw=LW_ERR, zorder=4.0,
+            solid_capstyle="butt")
+    f_.text(equivalence["margin_pp"] - 0.08, cifar_y + 0.30, "vs BP",
+            ha="right", va="center", fontsize=PT_BASE, color=MUTE, zorder=6)
     printed_g = capture(g, cap_seed, cap_summary)
 
     canvas.lock_reserves()          # settle the boxes before drawing in points

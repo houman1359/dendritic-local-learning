@@ -1308,7 +1308,9 @@ def forest(ax, rows, *, value_label="", reference=0.0,
         ``color``    COLORS key or colour (default: the panel ``color``);
         ``marker``   marker for the mean (default from ``MARKERS``);
         ``n``        row count, printed in the row tag when ``tag`` is None;
-        ``note``     short right-hand annotation (e.g. "15/20 seeds").
+        ``note``     short right-hand annotation (e.g. "15/20 seeds");
+        ``hollow``   draw the mean open, for a row whose series is drawn open
+                     elsewhere in the same panel.
     value_label
         x axis label, with its unit.
     reference
@@ -1388,8 +1390,10 @@ def forest(ax, rows, *, value_label="", reference=0.0,
                         lw=LW_ERR, zorder=3.0, solid_capstyle="butt")
         ax.plot([row["mean"]], [y], linestyle="none",
                 marker=row.get("marker", "o"), markersize=marker_size,
-                markerfacecolor=col, markeredgecolor="white",
-                markeredgewidth=LW_HAIR, zorder=4.0)
+                markerfacecolor=("white" if row.get("hollow") else col),
+                markeredgecolor=(col if row.get("hollow") else "white"),
+                markeredgewidth=(LW_ERR if row.get("hollow") else LW_HAIR),
+                zorder=4.0)
         # the label: centred ON the row, in the reserved gutter
         label_artists.append(ax.annotate(
             str(row["label"]), xy=(0.0, y),
