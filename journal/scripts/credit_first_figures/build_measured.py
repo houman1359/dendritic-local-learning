@@ -232,8 +232,6 @@ def _wrapped(lines):
 def panel_statistic(f, subtitle_lines):
     """Two contact pairs on one arbor; one shares a soma-to-ancestor path."""
     band = f.footer(_wrapped([
-        'partial rank r | Euclidean separation,',
-        'soma-to-contact path-length difference',
         'recorded during stimuli, not learning']),
         band_pt=10.5, min_frame_pt=60.0)
     sub_pt = 10.5 * len(subtitle_lines)
@@ -245,7 +243,7 @@ def panel_statistic(f, subtitle_lines):
     core_y0, core_h = f.fy(band), top - f.fy(band)
     core_pt = core_h * f.h_pt
     foot_pt, head_pt = 11.0, 9.0        # tag strip under the soma / over the canopy
-    tree_w_pt = min(80.0, 0.58 * f.w_pt)   # +8 %: the slot was under-filled
+    tree_w_pt = min(80.0, 0.64 * f.w_pt)   # the slot was under-filled
     nodes = f.balanced_tree((0.0, core_y0 + f.fy(foot_pt), f.fx(tree_w_pt),
                              f.fy(core_pt - foot_pt - head_pt)),
                             depth=3, mode='forward', labels=True, trunk=True,
@@ -273,9 +271,9 @@ def panel_statistic(f, subtitle_lines):
     f.contact(nodes['T5'], kind='inh', active=False)
 
     # tuning sketches, one per pair, with a leader back to the pair
-    col_x = f.fx(tree_w_pt + 14.0)
+    col_x = f.fx(tree_w_pt + 10.0)
     w = 1.0 - col_x
-    h_pt = 20.0
+    h_pt = 29.0
     bots = (core_y0 + f.fy(core_pt - h_pt - 11.0),
             core_y0 + f.fy(foot_pt + 0.5))
     # the pair-1 leader starts clear of the 'shared path' label's own box:
@@ -326,8 +324,7 @@ def panel_routes(f, matrix, groups, n_routes, subtitle_lines):
     support; the delivered field is imposed, not observed."""
     n = matrix.shape[0]
     band = f.footer(_wrapped([
-        'schematic placement by ancestry;',
-        'the field is imposed, not observed']),
+        'schematic placement by ancestry']),
         band_pt=10.5, min_frame_pt=60.0)
     sub_pt = 10.5 * len(subtitle_lines)
     for i, line in enumerate(subtitle_lines):
@@ -336,6 +333,10 @@ def panel_routes(f, matrix, groups, n_routes, subtitle_lines):
     core_y0 = f.fy(band)
     core_h = 1.0 - f.fy(band + sub_pt)
 
+    # E's arbor keeps its width: the 'local rule' badge is anchored at
+    # ``tree_w_pt + 4`` and a wider arbor walks it into the matrix row
+    # labels (1.2 pt clear at 72 pt against 7.4 pt here).  E's freed height
+    # goes to the realized-support matrix instead.
     tree_w_pt = min(70.0, 0.52 * f.w_pt)
     nodes = f.balanced_tree((0.0, core_y0 + f.fy(13.0), f.fx(tree_w_pt),
                              core_h - f.fy(13.0)),
@@ -365,7 +366,7 @@ def panel_routes(f, matrix, groups, n_routes, subtitle_lines):
             'local rule', ha='right', va='top')
 
     mat_w = 44.0
-    mat_h = min(56.0, core_h * f.h_pt - 20.0)
+    mat_h = min(68.0, core_h * f.h_pt - 20.0)
     mat_x = 1.0 - f.fx(mat_w)
     mat_y = core_y0 + f.fy(13.0)
     f.dictionary_matrix((mat_x, mat_y, f.fx(mat_w), f.fy(mat_h)), matrix,
@@ -377,6 +378,28 @@ def panel_routes(f, matrix, groups, n_routes, subtitle_lines):
     f.require_soma_lowest()
     f.require_delta0()
     return nodes
+
+
+def _dot_column(values, min_sep, step):
+    """Level index per value so a rug reads as a countable dot column.
+
+    Panel B's rug carries the thirteen per-scan values, whose adjacent gaps
+    fall to 0.0028 -- 0.5 pt on this axis against a ``SEED_MS`` 2.9 pt ring,
+    so the flat rug printed about eleven countable marks where the panel's
+    own tag says thirteen (visual review 2026-09-10).  Values closer than
+    ``min_sep`` are stacked on successive levels ``step`` apart instead.
+    The VALUE is never moved: only the rug's meaningless y is assigned.
+    """
+    values = np.asarray(values, dtype=float)
+    level = np.zeros(len(values), dtype=float)
+    taken = []
+    for i in np.argsort(values, kind='stable'):
+        k = 0
+        while any(abs(values[i] - vx) < min_sep and kx == k for vx, kx in taken):
+            k += 1
+        taken.append((float(values[i]), k))
+        level[i] = k * step
+    return level
 
 
 def _split_duplicates(support, x, offset_pt=DUP_OFFSET):
@@ -603,6 +626,14 @@ def main():
     hist_edges = np.linspace(-0.2, 0.6, 9)
     hist_counts, _ = np.histogram(reliab, bins=hist_edges)
     assert int(hist_counts.sum()) == n_records
+    # the inset axis starts at 0: the two records with r < 0 are one count
+    # each and print as a 0.5 pt slab indistinguishable from the axis line,
+    # so a quarter of the inset width was held open for marks no reader can
+    # see or count (visual review 2026-09-10).  The two are not deleted from
+    # the accounting -- they are named in the caption and recorded below.
+    n_negative = int(hist_counts[hist_edges[1:] <= 0.0].sum())
+    keep = hist_edges[1:] > 0.0
+    assert n_negative == 2 and int(hist_counts[keep].sum()) == n_records - 2
 
     # -- F: coverage across the thirteen scans ----------------------------
     n_in = support.n_sites.to_numpy(float)
@@ -612,6 +643,7 @@ def main():
     k_routes = int(support.n_routes.max())
     mean_cov = float(support.coverage.mean()) * 100.0
     below = support[support.coverage < support.n_routes / support.n_sites - 1e-9]
+    above = support[support.coverage > support.n_routes / support.n_sites + 1e-9]
 
     # -- canvas -----------------------------------------------------------
     canvas = NativeCanvas(490 / 72, 3, row_weights=[124, 114, 108],
@@ -620,8 +652,9 @@ def main():
     ax_a = canvas.panel('A', 0, 0, 5, schematic=True,
                         title='Shared path vs similarity')
     ax_b = canvas.panel('B', 0, 5, 7,
-                        title='No ancestry alignment in either cohort')
-    ax_c = canvas.panel('C', 1, 0, 5, title='All four measures null')
+                        title='No detected alignment in the selected scans')
+    ax_c = canvas.panel('C', 1, 0, 5,
+                        title='All four measures consistent with zero')
     ax_d = canvas.panel('D', 1, 5, 7,
                         title='Observed effect below the detection point')
     ax_e = canvas.panel('E', 2, 0, 5, schematic=True,
@@ -630,62 +663,69 @@ def main():
                         title='Routes reach half the mapped inputs')
 
     # -- B ----------------------------------------------------------------
+    # Only the SELECTED-SCAN cohort is drawn here.  The all-thirteen-scan
+    # partial rank correlation was drawn twice in this one figure -- as B's
+    # second forest row and again as C's green top row, the same estimate on
+    # two axes 1.62x apart in width (visual review 2026-09-10) -- so B keeps
+    # the selected-scan estimate and the thirteen per-scan values, and C's
+    # green row is now the figure's single drawing of the all-scan estimate.
+    # ``b_rows`` still carries both cohorts: the second is recorded in the
+    # provenance payload, it is simply no longer redrawn.
+    b_plot = b_rows[:1]
     out_b = canvas.forest(
-        ax_b, [dict(r, note=None) for r in b_rows],
+        ax_b, [dict(r, note=None) for r in b_plot],
         value_label='Ancestry–response partial rank correlation',
         xlim=(-0.5, 0.5), reference=None, reference_label='', tag='')
     ax_b.set_xticks([-0.5, -0.25, 0.0, 0.25, 0.5])
     ax_b.set_xticklabels(['−0.5', '−0.25', '0', '0.25', '0.5'])
-    for row, y in zip(b_rows, out_b['ypos']):
+    for row, y in zip(b_plot, out_b['ypos']):
         ax_b.text(0.49, y, row['note'], fontsize=PT_BASE, color=GRAY,
                   ha='right', va='center', zorder=6)
-    y_rug = out_b['ypos'][-1] + 0.45
-    ax_b.plot(scan_values, np.full(len(scan_values), y_rug), linestyle='none',
-              marker='o', markersize=SEED_MS, markerfacecolor='none',
+    # the rug is a dot column, not a flat row: four of the thirteen adjacent
+    # gaps are under one ring diameter on this axis and the flat rug printed
+    # about eleven countable marks against its own '13 scan values' tag.
+    y_rug = out_b['ypos'][-1] + 0.62
+    rug_y = y_rug + _dot_column(scan_values, 0.024, 0.155)
+    ax_b.plot(scan_values, rug_y, linestyle='none',
+              marker='o', markersize=SEED_MS, markerfacecolor='white',
               markeredgecolor=GRAY, markeredgewidth=LW_HAIR, zorder=3.5)
-    ax_b.set_ylim(2.62, -0.62)
-    # CF-7 zero rule, CLIPPED to the row bands plus the scan rug.  forest()'s
+    rug_bot = float(rug_y.max())
+    ax_b.set_ylim(rug_bot + 0.80, -0.70)
+    # CF-7 zero rule, CLIPPED to the row band plus the scan rug.  forest()'s
     # own reference is a full-height axvline; with the y limits padded to
-    # carry the annotation block it ran down through four lines of 7 pt text
-    # and read as a strike-through (QA 2026-09-09), so the rule is drawn here
-    # instead: it stops above the annotation block and skips the inter-row
-    # band that carries the cohort bracket's label.
-    for y0, y1 in ((-0.45, 0.35), (0.65, y_rug + 0.17)):
-        ax_b.plot([0.0, 0.0], [y0, y1], color=GRAY, lw=LW_REF,
-                  dashes=(2.6, 2.0), zorder=1.0, solid_capstyle='butt')
+    # carry the annotation block it ran down through the annotation text and
+    # read as a strike-through (QA 2026-09-09), so the rule is drawn here
+    # instead and stops above the annotation block.  The rug rings are filled
+    # white so the rule cannot print through a mark.
+    ax_b.plot([0.0, 0.0], [-0.45, rug_bot + 0.17], color=GRAY, lw=LW_REF,
+              dashes=(2.6, 2.0), zorder=1.0, solid_capstyle='butt')
     ax_b.text(-0.012, -0.52, 'no alignment', fontsize=PT_BASE,
               color=GRAY, ha='right', va='center', zorder=6)
-    ax_b.text(-0.49, y_rug + 0.33, f'{n_scans} scan values (descriptive)',
+    ax_b.text(-0.49, rug_bot + 0.31, f'{n_scans} scan values (descriptive)',
               fontsize=PT_BASE, color=GRAY, ha='left', va='center', zorder=6)
-    ax_b.text(0.49, y_rug + 0.61, 'positive = ancestry alignment →',
+    ax_b.text(0.49, rug_bot + 0.59, 'positive = ancestry alignment →',
               fontsize=PT_BASE, color=GRAY, ha='right', va='center', zorder=6)
-    ax_b.text(-0.49, y_rug + 0.89,
-              f'n = {n_targets} target cells; 95 % target bootstrap, '
-              f'20,000 draws', fontsize=PT_BASE, color=GRAY, ha='left',
-              va='center', zorder=6)
-    # cohort bracket: the two rows are the same seven targets
-    bx = -0.478
-    ax_b.plot([bx, bx], [-0.16, 1.16], color=GRAY, lw=LW_HAIR, zorder=3)
-    for yb in (-0.16, 1.16):
-        ax_b.plot([bx, bx + 0.013], [yb, yb], color=GRAY, lw=LW_HAIR, zorder=3)
-    ax_b.text(-0.458, 0.5, 'same seven targets, re-analysed', fontsize=PT_BASE,
-              color=GRAY, ha='left', va='center', zorder=6)
 
     # -- C ----------------------------------------------------------------
     canvas.forest(ax_c, c_rows, value_label='Target-level association',
                   xlim=(-0.5, 0.5), reference=None, reference_label='', tag='')
     ax_c.set_xticks([-0.5, -0.25, 0.0, 0.25, 0.5])
     ax_c.set_xticklabels(['−0.5', '−0.25', '0', '0.25', '0.5'])
-    ax_c.set_ylim(4.82, -0.66)
+    ax_c.set_ylim(4.52, -0.66)
     ax_c.plot([0.0, 0.0], [-0.45, len(c_rows) - 0.55], color=GRAY, lw=LW_REF,
               dashes=(2.6, 2.0), zorder=1.0, solid_capstyle='butt')
     ax_c.text(-0.012, -0.56, 'no alignment', fontsize=PT_BASE, color=GRAY,
               ha='right', va='center', zorder=6)
+    # Row 4 is not a correlation: it is a difference in mean similarity
+    # between same-branch and different-branch pairs, so its interval is the
+    # narrowest in the panel for a reason that is NOT greater precision
+    # (visual review 2026-09-10).  A hairline separates it from the three
+    # rank correlations above; the caption names the change of quantity.
+    ax_c.plot([-0.5, 0.5], [2.54, 2.54], color=COLORS['edge'], lw=LW_HAIR,
+              zorder=1.2, solid_capstyle='butt')
     ax_c.text(-0.49, 3.62, 'tree distance sign-flipped: + = closer',
               fontsize=PT_BASE, color=GRAY, ha='left', va='center', zorder=6)
     ax_c.text(-0.49, 4.05, f'all {n_scans} scans; n = {n_targets} target cells',
-              fontsize=PT_BASE, color=GRAY, ha='left', va='center', zorder=6)
-    ax_c.text(-0.49, 4.48, '95 % target bootstrap, 20,000 draws',
               fontsize=PT_BASE, color=GRAY, ha='left', va='center', zorder=6)
 
     # -- D ----------------------------------------------------------------
@@ -721,9 +761,16 @@ def main():
     ax_d.spines['bottom'].set_bounds(-0.30, 0.55)
     ax_d.text(0.545, 0.815, '80 % detection', fontsize=PT_BASE, color=GRAY,
               ha='right', va='bottom', zorder=6)
-    ax_d.text(-0.020, floor + 0.075, f'false-positive rate {floor:.3f}',
-              fontsize=PT_BASE, color=GRAY, ha='right', va='center', zorder=6)
-    ax_d.text(-0.008, 0.42, 'no alignment', fontsize=PT_BASE, color=GRAY,
+    # The false-detection label is set INSIDE the axes on the same left edge
+    # as the lambda note.  Right-aligned at x = -0.020 it overhung the left
+    # spine by ~14 pt and the spine printed straight through the word
+    # (visual review 2026-09-10); a single line long enough to carry the
+    # phrase would instead cross the x = 0 rule, so it breaks after the noun.
+    ax_d.text(-0.295, 0.240, 'false-detection', fontsize=PT_BASE,
+              color=GRAY, ha='left', va='center', zorder=6)
+    ax_d.text(-0.295, 0.145, f'rate {floor:.3f}', fontsize=PT_BASE,
+              color=GRAY, ha='left', va='center', zorder=6)
+    ax_d.text(-0.008, 0.645, 'no alignment', fontsize=PT_BASE, color=GRAY,
               ha='right', va='center', zorder=6)
     ax_d.text(0.190, 0.95, f'{cut_m:.3f} measured', fontsize=PT_BASE,
               color=GRAY, ha='right', va='center', zorder=6)
@@ -758,14 +805,14 @@ def main():
               color=GRAY, ha='left', va='center', zorder=6)
     inset = _data_inset(ax_d, (0.255, 0.12, 0.290, 0.42))
     for lo, hi, count in zip(hist_edges[:-1], hist_edges[1:], hist_counts):
-        negative = hi <= 0.0
+        if hi <= 0.0:          # drawn nowhere: see n_negative above
+            continue
         inset.bar(lo, count, width=hi - lo, align='edge',
-                  facecolor='none' if negative else tint_pct(ROUTE, 40),
-                  edgecolor=GRAY if negative else ROUTE, linewidth=LW_HAIR,
-                  zorder=3)
-    inset.set(xlim=(-0.2, 0.6), ylim=(0, 46))
-    inset.set_xticks([-0.2, 0.2, 0.6])
-    inset.set_xticklabels(['−0.2', '0.2', '0.6'])
+                  facecolor=tint_pct(ROUTE, 40), edgecolor=ROUTE,
+                  linewidth=LW_HAIR, zorder=3)
+    inset.set(xlim=(0.0, 0.6), ylim=(0, 46))
+    inset.set_xticks([0.0, 0.2, 0.4, 0.6])
+    inset.set_xticklabels(['0', '0.2', '0.4', '0.6'])
     inset.set_yticks([0, 20, 40])
     inset.set_xlabel('split-half r', fontsize=PT_BASE, labelpad=1.0)
     inset.set_ylabel('records', fontsize=PT_BASE, labelpad=1.0)
@@ -776,13 +823,18 @@ def main():
               dashes=(2.6, 2.0), zorder=2)
     ax_f.text(6.1, 100.0 * k_routes / 6.1 + 4.0, f'{k_routes}/n',
               fontsize=PT_BASE, color=GRAY, ha='left', va='bottom', zorder=6)
-    ax_f.axhline(100.0, color=GRAY, lw=LW_REF, dashes=(2.6, 2.0), zorder=1)
+    # the two black references meant different things in one dash pattern:
+    # 'all inputs' is dotted, the 4/n curve stays dashed.  The mean rule is
+    # grey, not green -- drawn in the data hue at the data's own weight it
+    # ran through five of the thirteen markers and they read as ornaments on
+    # the reference rather than as measurements (visual review 2026-09-10).
+    ax_f.axhline(100.0, color=GRAY, lw=LW_REF, dashes=(0.9, 1.7), zorder=1)
     ax_f.text(18.5, 102.0, 'all inputs', fontsize=PT_BASE, color=GRAY,
               ha='right', va='bottom', zorder=6)
-    ax_f.axhline(mean_cov, color=ROUTE, lw=LW_REF, dashes=(5.0, 1.6, 1.2, 1.6),
+    ax_f.axhline(mean_cov, color=GRAY, lw=LW_REF, dashes=(5.0, 1.6, 1.2, 1.6),
                  zorder=1.5)
     ax_f.text(18.5, mean_cov + 2.5, f'mean {mean_cov:.1f} %', fontsize=PT_BASE,
-              color=label_color(ROUTE), ha='right', va='bottom', zorder=6)
+              color=GRAY, ha='right', va='bottom', zorder=6)
     # open first, filled last: nothing of the thirteen may be covered
     ax_f.plot(n_in[single], cov[single], linestyle='none', marker='o',
               markersize=MARKER_MS, markerfacecolor='white',
@@ -801,15 +853,13 @@ def main():
               f'open: four single-input routes ({int(single.sum())} of '
               f'{n_scans} scans)', fontsize=PT_BASE, color=GRAY, ha='right',
               va='center', zorder=6)
-    ax_f.text(18.5, 118.0,
-              f'{_WORDS[len(below)]} scans fall below {k_routes}/n: routes can '
-              f'repeat an input', fontsize=PT_BASE, color=GRAY, ha='right',
-              va='center', zorder=6)
-    ax_f.text(18.5, 72.0,
-              f'n = {n_scans} scans from {n_targets} target cells;',
+    # 4/n is NOT a ceiling: three of the thirteen scans plot above it because
+    # a route can reach more than one input, and the old note explained only
+    # the downward direction (visual review 2026-09-10).  The curve is
+    # relabelled for what it is -- the one-distinct-input-per-route locus --
+    # and the caption now names both directions.
+    ax_f.text(18.5, 118.0, f'dashed: {k_routes}/n, one input per route',
               fontsize=PT_BASE, color=GRAY, ha='right', va='center', zorder=6)
-    ax_f.text(18.5, 62.0, 'descriptive, no interval', fontsize=PT_BASE,
-              color=GRAY, ha='right', va='center', zorder=6)
 
     # Tighten the tick / label pads on every data axes: the 40 pt vertical
     # gutter has to hold one row's x labels and the next row's letter band,
@@ -887,6 +937,10 @@ def main():
         partners_per_scan=[p_lo, p_hi],
         panel_b={r['label']: dict(mean=r['mean'], ci95=[r['lo'], r['hi']],
                                   note=r['note']) for r in b_rows},
+        panel_b_drawn=[b_rows[0]['label']],
+        panel_b_note=('the all-scan cohort is computed and recorded here but '
+                      'no longer redrawn in B: the same estimate is drawn '
+                      'once, as C\'s green top row'),
         panel_c={r['label'].replace('\n', ' '):
                  dict(mean=r['mean'], ci95=[r['lo'], r['hi']], note=r['note'])
                  for r in c_rows},
@@ -895,11 +949,22 @@ def main():
                      mc_halfwidth_max=mc_hw,
                      n_replicates=int(curves['measured'].n_replicates.max()),
                      inset_bins=[int(v) for v in hist_counts],
+                     inset_bin_edges=[float(v) for v in hist_edges],
                      inset_records=n_records,
+                     inset_records_drawn=n_records - n_negative,
+                     inset_negative_records=n_negative,
                      inset_partners=n_partners_unique),
         panel_f=dict(mean_coverage_pct=mean_cov,
                      all_one_site_scans=int(single.sum()),
                      scans_below_k_over_n=int(len(below)),
+                     scans_above_k_over_n=int(len(above)),
+                     above_rows=[dict(target_root_id=int(r.target_root_id),
+                                      session=int(r.session),
+                                      scan_idx=int(r.scan_idx),
+                                      n_sites=int(r.n_sites),
+                                      sites_per_route=round(float(r.sites_per_route), 4),
+                                      coverage_pct=round(float(r.coverage) * 100, 1))
+                                 for r in above.itertuples()],
                      below_rows=[dict(target_root_id=int(r.target_root_id),
                                       session=int(r.session),
                                       scan_idx=int(r.scan_idx),

@@ -35,8 +35,8 @@ CF-4 the glyph family: filled soma disc with an ink rim, tapered ``dend``
      (the dictionary is A and its coefficients c; no credit is delivered), so
      the four-delivery-mode rule is not exercised.
 CF-5 zero legends and zero keys inside any data axes (the set's one sanctioned
-     key is Fig 5C): D end labels, E direct segment labels and named bars,
-     G gutter row labels, H Pinky-side family names.
+     key is Fig 5C): D end labels, E's named bars on the ordinate, G gutter
+     row labels, H Pinky-side family names.
 CF-6 the forest idiom in G through ``figure_canvas.forest``; second arm at
      +0.22 rows with an open marker; the cell fan at -0.22 rows.
 CF-7 one dashed ``mute`` reference per reference, label right-aligned on the
@@ -61,8 +61,8 @@ and written into the canvas manifest / provenance record):
   scatter) is three 4-module panels that share no axis; each is a different
   estimand and the row is column-locked.
 * **H idiom waiver** (plan decision 0.7) -- H is a grouped vertical dot plot,
-  not a forest: at 5 modules a twelve-row horizontal forest cannot carry
-  twelve labelled rows, and the drawn 1.0 ceiling needs a horizontal
+  not a forest: at 5 modules a fifteen-row horizontal forest cannot carry
+  fifteen labelled rows, and the drawn 1.0 ceiling needs a horizontal
   reference.  Section 5's forest rule governs one-category-vs-value panels;
   H is a two-factor panel.
 * **Palette waiver** (plan section 4.0) -- the six family hues are
@@ -137,39 +137,40 @@ rule or by the 7.0 pt type floor inside a 4-module (125.5 pt) panel:
    measures the gutter its row labels need (36.9 pt); the audit requires every
    4-module panel of a row to share one axes width and every panel of a grid
    column to share one x0, so the same reserve is declared on D, E and F.
-4. **E prints no per-family numbers.**  Six values of ~17 pt on a 14.8 pt bar
-   pitch collide at the type floor; the family names are staggered on two
-   baselines with their marker glyphs, and the three shares are named once in
-   the reserved gutter at the ancestry bar's band heights (which is also why E
-   carries no separate y label).  **Each of the three names carries a
-   ``LW_HAIR`` leader that ends INSIDE the segment it names on the ancestry
-   bar** -- set without leaders they read as a second y axis on E's own tick
-   column -- and the leaders cross that column in the clear windows between
-   the tick numerals.  The plan's placement (the three names on the SVD bar,
-   leaders into whitespace at the right of the panel) is not available: the
-   bar pitch is 14.75 pt and E has no free paper to the right of bar 6.
-   ``broadcast 0.203`` is now printed ONCE, here; D's reference line carries
-   the words ``shared broadcast`` and no numeral, because the same string
-   twice across a 9.7 pt panel gap was read as two different data.  The six
-   spatial values are in the caption's ancestry/oracle pair and in
-   ``figure_07_plotted.csv``.
+4. **E draws the spatial share alone** (QA round 4).  The stacked form --
+   a broadcast base identical in all six bars and a grey cap that is the
+   arithmetic complement of the coloured part -- spent two thirds of the
+   ordinate on quantities fixed by construction, so the panel now draws the
+   one free share as horizontal bars on a 0 -> 0.60 scale, with the shared
+   broadcast as the dashed reference and ``broadcast 0.203`` printed once
+   beside it.  The family names sit on the ordinate in reading order, which
+   retires the staggered two-level tick rows, their duplicate marker glyphs
+   and the abbreviation ``Surr.``; the axis title is back on the side its
+   scale is on.  The broadcast and unexplained shares are unchanged in
+   ``figure_07_plotted.csv``, and D's reference line still carries the words
+   ``shared broadcast`` and no numeral.
 5. **G's axis runs to +88 with the fan clipped at +55.**  The 188 within-cell
    differences span -39.8 to +76.5 pp; drawing all of them would compress the
    four paired means and their intervals to a few points.  Four of 188 fall
-   outside and the panel says so.  The per-row n is ``forest()``'s own
+   outside; each is drawn as a CHEVRON on the limit it exceeds, at its own
+   row and colour, and the panel counts them in its footnote (QA round 5:
+   dropped silently, the panel showed 184 of 188 marks under a caption that
+   claims all 47 per row).  The per-row n is ``forest()``'s own
    right-hand note; wiring and rank are printed inside the axes beyond the fan
    window; the zero reference is drawn once, across the rows only.
-6. **F is not ``set_aspect('equal')``**: an aspect-adjusted axes changes its
-   ACTIVE box, which breaks the row-height and row-alignment locks.  x keeps
-   0.25-1.0 and y is stretched by the head room the annotation block needs, so
-   the equality reference is drawn at about 38 deg, not 45.  The panel now
-   **says so on-panel** (``axes are not isometric``) in the head block, which
-   also carries the panel's ``cell is the unit; n = 47`` line so that the whole
-   lower-right box (x >= 0.72, y <= 0.74 -- measured empty of all 47 points)
-   is free for the ``cohort mean, 95 % CI`` label.  That label's leader is
-   anchored on the diamond CENTRE and ends on the label's top edge.  The head
-   block is inset 3.5 pt from the left spine: set at x = 0.25 the spine stroke
-   ran through the first character of every line.
+6. **F draws the difference, not the pair** (QA round 4).  As ancestry
+   against surrogate on a shared 0.25 -> 1.0 scale the panel needed an
+   isometric box it cannot have -- ``set_aspect('equal')`` changes an axes'
+   ACTIVE box and breaks the row-height and column locks -- so the equality
+   line came out at 26 deg and the vertical departure the panel exists to
+   show was drawn half the size of the same number measured along x.  The
+   ordinate now carries each cell's ancestry minus its own surrogate mean
+   against that surrogate mean, with the equality reference at zero: no
+   aspect disclosure is needed, the full ordinate carries the difference,
+   and the six-line head block (three of its lines the caption's own words)
+   is gone.  The cohort mean is drawn in the ink neutral at 1.5 x the data
+   marker, on top of the cloud, with capped intervals on both coordinates
+   and its leader anchored on the diamond centre.
 7. **Axis labels and annotations wrapped or shortened to the panel width**:
    D's `Profiles K (log 2)` (the `one broadcast + K-1 spatial` gloss moves to
    the caption), F's `200-surrogate mean at K = 8`, H's Pinky/cohort footnotes,
@@ -180,11 +181,13 @@ rule or by the 7.0 pt type floor inside a 4-module (125.5 pt) panel:
    it.  A band is a row cue, not a datum, and with the full-width band the
    three printed columns sat on an area mark -- eight TEXT-ON-DATA findings
    from ``audit_text_over_data``.  CF-6's band is still drawn on every row.
-9. **E carries no `oracle` badge** (plan section 4 E).  The only free paper in
-   E is the 21 pt strip above the bars, and it carries the initial-cohort
-   annotation plus this panel's ``n = 47 cells at K = 8``, which a data panel
-   needs more than a badge.  The sixth bar is named ``SVD`` under its diamond
-   marker and the badge is drawn in H.
+9. **E carries no `oracle` badge** (plan section 4 E).  E's free paper is
+   spent on the six family names, which sit on the ordinate; the SVD bar is
+   named there and the badge is drawn in H.  The initial-cohort annotation
+   that used to head the panel is gone with the stacked bars (QA round 4):
+   it quoted that cohort's broadcast 0.314 and ceiling 0.326 directly above
+   bars measured against the disjoint cohort's 0.203, and neither numeral
+   was in the declared Source Data.  Both are in the Results text.
 10. **The right-hand overhang is deliberate.**  ``FILL_W_MIN`` asks for ink
    across >= 92 % of 518.4 pt, and this plan's margins (52 / 14) leave a live
    area of 452.4 pt = 87.3 %: 16 pt come free from the panel letters on the
@@ -212,7 +215,14 @@ rule or by the 7.0 pt type floor inside a 4-module (125.5 pt) panel:
 14. **G's ``no advantage`` is right-aligned ON the zero line** (CF-7).  Set to
    the RIGHT of the line, under the ancestry sub-title, it read as a third
    title line.  Its y is the top of the first row band, clear of both the
-   0.42-unit band and the row-0 seed fan.
+   0.42-unit band and the row-0 seed fan.  QA round 5: it had that baseline
+   to itself only in principle -- the three printed column heads shared it
+   and the two read as one header row -- so the heads move up to -1.05 with
+   their rule, and the ancestry reference line that used to head the panel
+   joins the footer, where it sits with the other ancestry fact.  The two
+   footer lines that were the caption's own words (`filled: post-broadcast
+   scale; open: total-energy scale` and the n / bootstrap line) are set in
+   the caption only.
 15. **Single bars in C's capture formula.**  Nimbus Sans has no U+2016 DOUBLE
    VERTICAL LINE (checked: matplotlib falls back to DejaVu, which CF-2 bans),
    so the norms are set as ``|P t|`` and ``|t|`` with W subscripts.
@@ -289,8 +299,12 @@ ORDER = [ANCESTRY, SURROGATE, DEPTH, SHUFFLED, RANDOM, ORACLE]
 # one (panel E's staggered lower level has a 29.5 pt pitch).
 for _spec in FAMILIES.values():
     _spec.setdefault("tick", _spec["short"])
-#: The four families H draws in all three cohorts (plan decision 0.8).
-COHORT_FAMILIES = [ANCESTRY, SURROGATE, DEPTH, ORACLE]
+#: The families H draws in all three cohorts.  Plan decision 0.8 named four
+#: (ancestry, surrogate, depth, oracle); ``Random routes`` is the declared
+#: fifth, added in QA round 5 because the panel's footnote asserted a
+#: random-vs-depth rank exchange in the two eight-cell cohorts that no drawn
+#: panel and no Source Data row carried (see ``panel_h``).
+COHORT_FAMILIES = [ANCESTRY, SURROGATE, DEPTH, RANDOM, ORACLE]
 #: The four paired controls of G, top row first.
 CONTROLS = [SURROGATE, DEPTH, SHUFFLED, RANDOM]
 
@@ -660,10 +674,14 @@ def panel_a(ax, arb):
     _scale_bar(f, draw, scale, span_um,
                x0=draw[0] + draw[2] - f.fx(50.0 / span_um * scale + 1.0),
                y0=draw[1] + f.fy(3.0))
+    # both counts name their unit: 78 is the segment count and 70 the site
+    # count, and set as bare fractions on two consecutive lines they read as
+    # one denominator mistyped (QA round 5)
     for row, (kind, text) in enumerate((
-            ("inh", f"inhibitory-bearing ({len(i_bearing)} of {len(cell)})"),
+            ("inh", f"inhibitory-bearing ({len(i_bearing)} of {len(cell)} "
+                    "segments)"),
             ("exc", f"route-3 sites ({len(support)} of "
-                    f"{len(arb['e_sites'])})"))):
+                    f"{len(arb['e_sites'])} sites)"))):
         y = core[1] + f.fy(foot_pt + key_pt - 5.0 - row * 8.6)
         f.contact((core[0] + f.fx(2.0), y), kind=kind, dia_pt=3.0, zorder=5)
         f.text((core[0] + f.fx(6.0), y), text, size=PT_BASE,
@@ -851,6 +869,12 @@ def panel_b(ax, arb):
         f.text((m_rect[0] + (j + 0.5) * cw,
                 m_rect[1] + m_rect[3] + f.fy(1.5)), head, size=PT_BASE,
                color=COLORS["ink"] if j else COLORS[BROADCAST], va="bottom")
+    # the column of per-block site counts, headed like the matrix's own
+    # columns: unheaded, the reader had to reverse-engineer 23+1+1+1+4+1+1+38
+    # against the footer's `32 of 70 sites` (QA round 5)
+    f.text((m_rect[0] + m_rect[2] + f.fx(1.5),
+            m_rect[1] + m_rect[3] + f.fy(1.5)), "sites", size=PT_BASE,
+           color=COLORS["mute"], ha="left", va="bottom")
     for i, size in enumerate(sizes):
         f.text((m_rect[0] + m_rect[2] + f.fx(1.5),
                 m_rect[1] + m_rect[3] - (i + 0.5) * ch), str(size),
@@ -872,12 +896,17 @@ def panel_c(ax, arb, field, scale):
     """C: a focal shunt on route 3 makes the field t; capture is its energy."""
     f = Frame(ax)
     core = (0.0, 0.0, 1.0, 1.0)
+    # QA round 5: the strip is the one measured element of C and it carried
+    # no key at all -- to read any cell but the annotated one the reader had
+    # to combine two prose clauses (`cells span -1.00 to 0` and `strip scaled
+    # by max |t| = ...`).  The span clause is now the scale bar's own end
+    # labels; the scale factor stays in words because it is the only route
+    # back to absolute units.
     foot_pt = _foot(f, core, [
         "W = excitatory contact area",
-        f"measured column for route 3; cells span "
-        f"{min(field):.2f} to 0".replace("-", "\u2212")
-        + f"; strip scaled by max |t| = {scale:.3f}"])
-    strip_pt, form_pt = 22.0, 12.0
+        f"measured column for route 3; strip scaled by "
+        f"max |t| = {scale:.3f}"])
+    strip_pt, form_pt, bar_pt = 34.0, 12.0, 12.0
     top = (core[0], core[1] + f.fy(foot_pt + strip_pt + form_pt), core[2],
            core[3] - f.fy(foot_pt + strip_pt + form_pt))
     place, xy, soma, iso, span_um, n_below = _arbor(f, top, arb, mode="ghost")
@@ -926,11 +955,31 @@ def panel_c(ax, arb, field, scale):
     strip_w = f.fx(8 * cell_pt)
     strip_h = f.fy(cell_pt)
     sx = core[0] + f.fx(10.0)
-    sy = core[1] + f.fy(foot_pt + 9.0)
+    sy = core[1] + f.fy(foot_pt + 9.0 + bar_pt)
     norm = mpl.colors.Normalize(-1.0, 1.0)
     _matrix_cells(f, (sx, sy, strip_w, strip_h), None,
                   [[DIV_CMAP(norm(v)) for v in field]], n=1, k=8,
                   where="figure 7C field strip")
+    # the strip's scale, drawn once: a 34 pt ramp over the half of DIV_CMAP
+    # the field uses, with its two ends labelled.  Vector slices, not an
+    # image (CF-11), and a single hairline frame so it is one area mark.
+    bar_x0, bar_w = sx + f.fx(13.0), f.fx(34.0)
+    bar_y, bar_h = core[1] + f.fy(foot_pt + 2.2), f.fy(3.6)
+    lo = float(min(field))
+    slices = 26
+    for i in range(slices):
+        t = (i + 0.5) / slices
+        f.ax.add_patch(Rectangle(
+            (bar_x0 + i * bar_w / slices, bar_y), bar_w / slices + 1e-4,
+            bar_h, facecolor=DIV_CMAP(norm(lo * (1.0 - t))),
+            edgecolor="none", zorder=3))
+    f.ax.add_patch(Rectangle((bar_x0, bar_y), bar_w, bar_h, facecolor="none",
+                             edgecolor=COLORS["edge"], lw=LW_HAIR, zorder=3.1))
+    f.text((bar_x0 - f.fx(2.0), bar_y + bar_h / 2.0),
+           f"{lo:.2f}".replace("-", "\u2212"), size=PT_BASE,
+           color=COLORS["mute"], ha="right", va="center")
+    f.text((bar_x0 + bar_w + f.fx(2.5), bar_y + bar_h / 2.0), "0",
+           size=PT_BASE, color=COLORS["mute"], ha="left", va="center")
     f.text((sx - f.fx(2.5), sy + strip_h / 2.0), "t", size=PT_EMPH,
            color=COLORS["ink"], ha="right")
     f.text((sx + strip_w + f.fx(3.0), sy + strip_h / 2.0), "→ A c",
@@ -1235,10 +1284,14 @@ def panel_g(canvas, ax, report, tables, summaries):
                    if c["metric"] == "total_capture"
                    and c["control"] == method)
         seeds = 100.0 * (pivot[ANCESTRY] - pivot[method]).to_numpy(float)
+        # one row, one control colour: G drew all four rows in the ancestry
+        # green and so threw away the per-control key D, E and H all use
+        # (QA round 5).  Green stays the ancestry reference at zero.
         rows.append(dict(label=spec["label"].replace(" ", "\n"),
                          mean=100.0 * res["mean_difference"],
                          lo=100.0 * res["ci95"][0], hi=100.0 * res["ci95"][1],
-                         color="shunting", marker="o", n=int(res["n_cells"]),
+                         color=spec["color"], marker=spec["marker"],
+                         n=int(res["n_cells"]),
                          note=f"{int(res['cells_positive'])}/"
                               f"{int(res['n_cells'])}"))
         second.append((100.0 * tot["mean_difference"],
@@ -1271,42 +1324,61 @@ def panel_g(canvas, ax, report, tables, summaries):
     rng = np.random.default_rng(FAN_SEED)
     beyond = 0
     for i, item in enumerate(extra):
+        colour = COLORS[FAMILIES[CONTROLS[i]]["color"]]
         jitter = rng.uniform(-0.14, 0.14, size=item["seeds"].size)
         inside = (item["seeds"] >= G_XLIM[0]) & (item["seeds"] <= G_FAN_MAX)
         beyond += int((~inside).sum())
         ax.plot(item["seeds"][inside], ypos[i] - 0.22 + jitter[inside],
-                ls="none", marker="o", ms=SEED_MS, mfc=COLORS["shunting"],
+                ls="none", marker="o", ms=SEED_MS, mfc=colour,
                 mec="none", alpha=0.30, zorder=2.0, clip_on=True)
+        # QA round 5: the cells outside the fan window were simply dropped,
+        # with a count in the footnote and no mark on the page, so the panel
+        # silently showed 184 of 188 differences.  Each one is now a chevron
+        # ON the limit it exceeds, at the fan's own row and colour.
+        for side, over in ((-1, item["seeds"] < G_XLIM[0]),
+                           (1, item["seeds"] > G_FAN_MAX)):
+            if not over.any():
+                continue
+            edge = G_XLIM[0] + 1.6 if side < 0 else G_FAN_MAX - 1.6
+            ax.plot(np.full(int(over.sum()), edge),
+                    ypos[i] - 0.22 + jitter[over], ls="none",
+                    marker="<" if side < 0 else ">", ms=SEED_MS + 0.8,
+                    mfc=colour, mec="none", alpha=0.75, zorder=2.4,
+                    clip_on=True)
     for i, (mean, lo, hi) in enumerate(second):
+        colour = COLORS[FAMILIES[CONTROLS[i]]["color"]]
         y = ypos[i] + 0.22
-        ax.plot([lo, hi], [y, y], color=COLORS["shunting"], lw=LW_ERR,
+        ax.plot([lo, hi], [y, y], color=colour, lw=LW_ERR,
                 zorder=3.0, solid_capstyle="butt")
         for bound in (lo, hi):
             ax.plot([bound, bound], [y - 0.09, y + 0.09],
-                    color=COLORS["shunting"], lw=LW_ERR, zorder=3.0,
+                    color=colour, lw=LW_ERR, zorder=3.0,
                     solid_capstyle="butt")
-        ax.plot([mean], [y], ls="none", marker="o", ms=MARKER_MS,
-                mfc="white", mec=COLORS["shunting"], mew=LW_ERR, zorder=4.0)
+        ax.plot([mean], [y], ls="none", marker=FAMILIES[CONTROLS[i]]["marker"],
+                ms=MARKER_MS, mfc="white", mec=colour, mew=LW_ERR, zorder=4.0)
     zero, = ax.plot([0.0, 0.0], [-0.36, 3.40], color=COLORS["mute"],
                     lw=LW_REF, zorder=1.0, solid_capstyle="butt")
     zero.set_dashes((2.6, 2.0))
-    # CF-7: right-aligned ON the dashed zero line, at the top of the first
-    # row band.  Set to the RIGHT of the line it was read as a third title
-    # line under the ancestry sub-title.  y stays clear of the 0.42-unit
-    # row band so the string never sits on a tint patch.
+    # CF-7: right-aligned ON the dashed zero line, on a baseline of its own
+    # directly above the rule's upper end.  Set to the RIGHT of the line it
+    # was read as a third title line (QA round 3); left on the -0.70 baseline
+    # it shares with the printed column headers the two read as one header
+    # row (QA round 5), so the headers move up to -1.20 and this keeps
+    # -0.70.  y stays clear of the 0.42-unit row band and of the row-0 fan.
     ax.text(-1.0, -0.70, "no advantage", fontsize=PT_BASE,
             color=COLORS["mute"], ha="right", va="center", zorder=5)
-    # the three printed columns, inside the axes, clear of every interval
-    ax.plot([G_FAN_MAX + 1.5, G_FAN_MAX + 1.5], [-0.60, 3.40],
+    # the three printed columns, inside the axes, clear of every interval;
+    # the rule runs up to the header baseline so the heads read as theirs
+    ax.plot([G_FAN_MAX + 1.5, G_FAN_MAX + 1.5], [-1.05, 3.40],
             color=COLORS["grid"], lw=LW_HAIR, zorder=0.5)
     for x, head in G_COLS:
-        ax.text(x, -0.70, head, fontsize=PT_BASE, color=COLORS["ink"],
+        ax.text(x, -1.05, head, fontsize=PT_BASE, color=COLORS["ink"],
                 ha="right", va="center", zorder=5)
     # the third printed column is forest()'s own per-row note, set outside the
     # right spine; it carried no header, so the caption named three columns
     # and the artwork two (QA round 3).  Same baseline, same offset as the
     # notes it heads.
-    ax.annotate("cells +", xy=(1.0, -0.70), xycoords=("axes fraction", "data"),
+    ax.annotate("cells +", xy=(1.0, -1.05), xycoords=("axes fraction", "data"),
                 xytext=(3.0, 0.0), textcoords="offset points", ha="left",
                 va="center", fontsize=PT_BASE, color=COLORS["ink"],
                 annotation_clip=False, zorder=5)
@@ -1330,17 +1402,20 @@ def panel_g(canvas, ax, report, tables, summaries):
             fontsize=PT_BASE, color=COLORS["mute"], ha="left", va="bottom",
             zorder=5)
     ancestry = eight.loc[ANCESTRY]
-    ax.text(G_XLIM[0] + 1.0, -1.20,
-            f"ancestry: {100 * float(ancestry['wiring_density_mean']):.1f} % "
-            f"of dense wiring, rank "
-            f"{float(ancestry['dictionary_rank_mean']):.2f}",
-            fontsize=PT_BASE, color=COLORS["mute"], ha="left", va="center",
-            zorder=5)
     nonzero = float(eight.loc[ANCESTRY, "nonzero_coefficients_mean"])
     assert abs(nonzero
                - float(eight.loc[SHUFFLED, "nonzero_coefficients_mean"])) < 1e-6
+    # QA round 5: the two lines this block carried that were the caption's own
+    # words -- `filled: post-broadcast scale; open: total-energy scale` and
+    # `n = 47 cells per row; mean [95 % cell bootstrap, 20,000 draws]; K = 8`
+    # -- are set in the caption only.  What is left is the ancestry reference
+    # for the two printed columns (moved off the head, where it shared its
+    # baseline with nothing and pushed the column heads down) and the one fact
+    # the caption does not carry.
     below = [
-        "filled: post-broadcast scale; open: total-energy scale",
+        f"ancestry: {100 * float(ancestry['wiring_density_mean']):.1f} % "
+        f"of dense wiring, rank "
+        f"{float(ancestry['dictionary_rank_mean']):.2f}",
         f"ancestry and shuffled routes: identical {nonzero:.1f} nonzero "
         "entries",
     ]
@@ -1349,11 +1424,6 @@ def panel_g(canvas, ax, report, tables, summaries):
                     xytext=(0.0, -24.0 - 8.2 * row), textcoords="offset points",
                     fontsize=PT_BASE, color=COLORS["mute"], ha="left",
                     va="top")
-    ax.annotate("n = 47 cells per row; mean [95 % cell bootstrap, "
-                "20,000 draws]; K = 8", xy=(1.0, 0.0),
-                xycoords="axes fraction", xytext=(0.0, -40.4),
-                textcoords="offset points", fontsize=PT_BASE,
-                color=COLORS["mute"], ha="right", va="top")
     frame = []
     for i, method in enumerate(CONTROLS):
         frame.append(dict(panel="G", control=method,
@@ -1365,21 +1435,51 @@ def panel_g(canvas, ax, report, tables, summaries):
                           cells_positive=extra[i]["positive"],
                           n_cells=extra[i]["n"], wiring_pct=extra[i]["wiring"],
                           dictionary_rank=extra[i]["rank"]))
+        # the fan itself: the panel draws 47 within-cell differences per row
+        # and the Source Data carried only the four summaries (QA round 5)
+        for root_id, value in zip(pivot.index.to_numpy(), extra[i]["seeds"]):
+            frame.append(dict(panel="G", control=method,
+                              series=FAMILIES[method]["label"],
+                              root_id=int(root_id),
+                              cell_difference_pp=float(value)))
     return pd.DataFrame(frame), out
 
 
 def panel_h(ax, tables, inclusion):
-    """H: residual capture at K = 8, four families in three cohorts."""
-    offsets = [-0.24, -0.08, 0.08, 0.24]
+    """H: residual capture at K = 8, five families in three cohorts.
+
+    QA round 5.  Two changes, both forced by the visual review:
+
+    * ``Random routes`` joins the four families of plan decision 0.8.  The
+      panel's own footnote asserted that random routes outrank depth bins in
+      the initial and the Pinky cohorts and cited D and the Source Data for
+      it, and NEITHER carries those two cohorts' random-route values (D is
+      the disjoint cohort alone).  A drawn series is the only honest form of
+      that claim, so the deviation from decision 0.8 is taken here and the
+      footnote clause -- caption prose set inside the axes -- is deleted.
+    * the per-cell values are drawn.  Two of the three cohorts are n = 8 and
+      the panel showed twelve means and no cells, while F draws all 47 and G
+      all 188; whether Pinky's 0.970 ancestry is uniform or carried by a
+      subset could not be read.  The fan sits behind its mean at 25 %
+      (v661, 47 cells) or 45 % (the two n = 8 cohorts).
+    """
+    offsets = [-0.30, -0.15, 0.0, 0.15, 0.30]
+    jitter_rng = np.random.default_rng(FAN_SEED + 7)
     rows, pinky = [], {}
     for group, cohort in enumerate(COHORTS):
         eight = tables[cohort][tables[cohort].channels.eq(8)]
         for index, method in enumerate(COHORT_FAMILIES):
             spec = FAMILIES[method]
-            values = eight.loc[eight.method.eq(method),
-                               "residual_capture"].to_numpy(float)
+            part = eight.loc[eight.method.eq(method)]
+            values = part["residual_capture"].to_numpy(float)
             mean, lo, hi = mean_ci(values, BOOT_SEED + 100 * group + index)
             x = group + offsets[index]
+            # the cells themselves, behind the mean: at n = 8 a mean with an
+            # interval and no points is not readable as a distribution
+            jitter = jitter_rng.uniform(-0.028, 0.028, size=values.size)
+            ax.plot(x + jitter, values, ls="none", marker="o", ms=2.1,
+                    mfc=COLORS[spec["color"]], mec="none",
+                    alpha=0.25 if values.size > 20 else 0.45, zorder=2.0)
             ax.errorbar([x], [mean], yerr=[[mean - lo], [hi - mean]],
                         fmt=spec["marker"], color=COLORS[spec["color"]],
                         mfc=COLORS[spec["color"]], mec="white", mew=LW_HAIR,
@@ -1389,6 +1489,12 @@ def panel_h(ax, tables, inclusion):
                              series=spec["label"], residual_capture=mean,
                              ci95_low=lo, ci95_high=hi,
                              n_cells=int(values.size)))
+            # the drawn cells, one row each, so the Source Data carries every
+            # mark in the panel and not only its twelve summaries
+            for root_id, value in zip(part["root_id"].to_numpy(), values):
+                rows.append(dict(panel="H", cohort=cohort, method=method,
+                                 series=spec["label"], root_id=int(root_id),
+                                 cell_residual_capture=float(value)))
             if cohort == "pinky":
                 pinky[method] = (x, mean)
     ax.set_xlim(-0.55, 3.55)
@@ -1397,7 +1503,15 @@ def panel_h(ax, tables, inclusion):
     ax.set_xticks(range(len(COHORTS)), [COHORT_PANEL[c] for c in COHORTS])
     ax.set_ylabel("Residual capture\nafter the broadcast")
     style_panel(ax, grid="y")
+    # the rule is bounded by its ticks: drawn to the axes top it ran an
+    # eighth of its length above the 1.00 tick, under the panel's own note
+    ax.spines["left"].set_bounds(0.0, 1.0)
     _clip_grid(ax, -0.55, H_GRID_XMAX)
+    # CF-7's ceiling, drawn once, with its label right-aligned on the rule's
+    # own end.  QA round 5 tried clipping it to the data at H_GRID_XMAX, as
+    # the grid is clipped: the label then landed on the panel's `mean [95 %
+    # cell bootstrap]` note, and the rule is a reference for all three
+    # cohorts, not a row cue, so the full span stays.
     ax.plot([-0.55, 3.55], [1.0, 1.0], color=COLORS["mute"], lw=LW_REF,
             zorder=1.0, solid_capstyle="butt")
     ax.text(3.53, 1.012, "ceiling", fontsize=PT_BASE, color=COLORS["mute"],
@@ -1406,7 +1520,11 @@ def panel_h(ax, tables, inclusion):
             color=COLORS["mute"], ha="left", va="top")
     # the four family names, once, beside the Pinky group (CF-5)
     order = sorted(pinky, key=lambda m: -pinky[m][1])
-    step, last = 0.125, 0.930
+    # five names, not four (QA round 5): the step is the tightest the 7 pt
+    # type allows (0.115 units = 8.8 pt at this panel's scale) so that each
+    # leader travels the shortest way to its own mark and the fan crosses the
+    # Pinky intervals as little as the value order permits
+    step, last = 0.115, 0.950
     for method in order:
         x, mean = pinky[method]
         y = min(mean, last)
@@ -1424,8 +1542,6 @@ def panel_h(ax, tables, inclusion):
         f"{len(eligible)} of {int(inclusion.inherited_qc_included.sum())} "
         "cells",
         "one mouse per cohort; n = 8, 47, 8 cells",
-        "random routes outrank depth bins in the initial and Pinky "
-        "cohorts (D, Source Data)",
     ]
     width = ax.get_position().width * 518.4
     block = "\n".join(wrap_pt(ax, line, PT_BASE, width) for line in lines)
@@ -1437,7 +1553,8 @@ def panel_h(ax, tables, inclusion):
     # initial cohort's tallest interval CAP, at the left edge of the axes:
     # placed over the oracle marker it covered that interval's upper cap and
     # the bar appeared to run on to ~0.72 instead of stopping at 0.678.
-    initial = [r for r in rows if r["cohort"] == "original8"]
+    initial = [r for r in rows if r["cohort"] == "original8"
+               and "ci95_high" in r]
     top = max(r["ci95_high"] for r in initial)
     y_badge = 0.5 * (top + 1.0)
     assert y_badge - 0.080 > top and y_badge + 0.080 < 1.0, (
@@ -1474,9 +1591,6 @@ def figure7(*, out=COMPONENT, png=True, dpi=200, quiet=False):
     floor = float(summaries["v661"]
                   .loc[summaries["v661"].channels.eq(1),
                        "total_capture_mean"].unique()[0])
-    initial = dict(common=float(report["original8"]["common_capture_mean"]),
-                   rank_one=float(report["original8"]["rank_one_capture_mean"]))
-
     canvas = NativeCanvas(
         CANVAS_H_PT / 72.0, 3, row_weights=ROW_H, hgutter_pt=HGUT,
         vgutter_pt=VGUT, margins=Margins(**MARGINS))
@@ -1522,12 +1636,6 @@ def figure7(*, out=COMPONENT, png=True, dpi=200, quiet=False):
     rows_h = panel_h(h, tables, inclusion)
 
     canvas.lock_reserves()
-    import os
-    if os.environ.get("FIG7_DEBUG"):
-        needs = canvas._measure_needs()
-        for k in ("D", "E", "F", "G", "H"):
-            print("NEED", k, [round(v, 2) for v in needs[k]],
-                  "LOCK", [round(v, 2) for v in canvas._locks[k]])
     findings = canvas.align_letters()
     problems = canvas.save(Path(out), name="credit_first_figure_07", png=png,
                            dpi=dpi, quiet=quiet, lock=False)
@@ -1599,12 +1707,12 @@ def figure7(*, out=COMPONENT, png=True, dpi=200, quiet=False):
               "4, 8, 16 for the six families; ancestry and surrogate bands "
               "are 20,000-draw cell bootstraps of cell_method_summary.csv "
               f"(seed {BOOT_SEED} + 10i + K); broadcast floor {floor:.5f}"),
-        "e": ("v661 cohort_method_summary.csv at K = 8: broadcast = "
-              "total_capture_mean - incremental_total_capture_mean, spatial = "
-              "incremental_total_capture_mean, unexplained = 1 - "
-              "total_capture_mean; the annotation is original8/summary.json "
-              f"common_capture_mean {initial['common']:.5f} and "
-              f"rank_one_capture_mean {initial['rank_one']:.5f}"),
+        "e": ("v661 cohort_method_summary.csv at K = 8; the DRAWN quantity is "
+              "spatial = incremental_total_capture_mean, the one share that "
+              "is not fixed by construction, against the shared broadcast "
+              f"{floor:.5f} as its reference; broadcast = total_capture_mean "
+              "- incremental_total_capture_mean and unexplained = 1 - "
+              "total_capture_mean are carried by the plotted table"),
         "f": ("per-cell K = 8 total capture of common + ancestry against the "
               "mean of the cell's 200 common + surrogate ancestry replicates "
               "from v661/cells/rows_<root_id>.csv.gz; open symbols are the "
@@ -1613,13 +1721,17 @@ def figure7(*, out=COMPONENT, png=True, dpi=200, quiet=False):
         "g": ("v661/summary.json comparisons for BOTH metrics (residual "
               "filled, total open) with their retained 95 % intervals and "
               "cells_positive; the fan is the 47 within-cell residual "
-              "differences from cell_method_summary.csv at K = 8; the right "
-              "columns are wiring_density_mean and dictionary_rank_mean from "
-              "cohort_method_summary.csv"),
+              "differences from cell_method_summary.csv at K = 8, each of "
+              "the four outside the fan window drawn as a chevron ON the "
+              "limit it exceeds; the right columns are wiring_density_mean "
+              "and dictionary_rank_mean from cohort_method_summary.csv; "
+              "every drawn difference is a row of figure_07_plotted.csv"),
         "h": ("residual_capture at K = 8 per cohort from each cohort's "
               "cell_method_summary.csv (initial 8, disjoint 47, Pinky 8) for "
-              "ancestry, surrogate tree, depth bins and the "
-              f"common-constrained SVD; 20,000-draw cell bootstrap, seed "
+              "ancestry, surrogate tree, depth bins, random routes and the "
+              f"common-constrained SVD; the cells themselves are drawn "
+              f"behind each mean and are rows of figure_07_plotted.csv; "
+              f"20,000-draw cell bootstrap, seed "
               f"{BOOT_SEED} + 100 g + i; Pinky site counts and eligibility "
               "from pinky/cohort_inclusion.csv"),
     }
@@ -1669,19 +1781,17 @@ def figure7(*, out=COMPONENT, png=True, dpi=200, quiet=False):
             "G band: forest()'s 6 % row band is trimmed to the fan window so "
             "the printed wiring / rank columns sit on paper, not on an area "
             "mark (eight TEXT-ON-DATA findings otherwise)",
-            "E badge: no `oracle` badge; the strip above E's bars carries the "
-            "initial-cohort annotation and the panel's n and endpoint, and H "
-            "carries the badge",
-            "E y label on the right: the 37 pt gutter is spent by the three "
-            "share names (`unexplained 0.381` alone is 40 pt) and D's end "
-            "labels close the panel gap at 9.7 pt, so `Share of field energy` "
-            "is set rotated 5.5 pt outside E's RIGHT spine, 40 pt clear of "
-            "panel F",
-            "E x names: `Surrogate` is set `Surr.` on the staggered lower "
-            "level; at 7 pt the 29.5 pt pitch leaves it 1.2 pt of air beside "
-            "`Shuffled`, and the plan's two-line stacks fix nothing (the "
-            "crowding is horizontal) while costing 8.2 pt of depth, which "
-            "breaks the 8.5 pt row-separation floor",
+            "E badge: no `oracle` badge; H carries it, and E's free paper is "
+            "spent on the six family names, which sit on the ordinate",
+            "E draws one share, not three (QA round 4): the broadcast base "
+            "was identical in all six bars and the grey cap their arithmetic "
+            "complement, so the bars are the spatial share alone on a "
+            "0 -> 0.60 scale with the broadcast as the dashed reference",
+            "H families (QA round 5): five, not plan decision 0.8's four -- "
+            "`Random routes` is drawn because the panel's footnote asserted "
+            "a random-vs-depth rank exchange in the two eight-cell cohorts "
+            "that neither D nor any Source Data row carried; the footnote "
+            "clause is deleted and the series is drawn instead",
             "G spine: the drawn bottom spine is bounded at the column rule "
             "(+56.5 pp) although the data range runs to +88, so the reserved "
             "column band is not read as plotted space",

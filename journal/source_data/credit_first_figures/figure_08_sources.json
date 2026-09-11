@@ -66,6 +66,10 @@
       "note": "3/7 +"
     }
   },
+  "panel_b_drawn": [
+    "Selected scans"
+  ],
+  "panel_b_note": "the all-scan cohort is computed and recorded here but no longer redrawn in B: the same estimate is drawn once, as C's green top row",
   "panel_c": {
     "Partial rank r": {
       "mean": -0.04849701761886205,
@@ -117,13 +121,53 @@
       9,
       2
     ],
+    "inset_bin_edges": [
+      -0.2,
+      -0.1,
+      0.0,
+      0.10000000000000003,
+      0.2,
+      0.3,
+      0.4000000000000001,
+      0.5,
+      0.6
+    ],
     "inset_records": 125,
+    "inset_records_drawn": 123,
+    "inset_negative_records": 2,
     "inset_partners": 102
   },
   "panel_f": {
     "mean_coverage_pct": 47.972467452105455,
     "all_one_site_scans": 6,
     "scans_below_k_over_n": 2,
+    "scans_above_k_over_n": 3,
+    "above_rows": [
+      {
+        "target_root_id": 864691135739661169,
+        "session": 7,
+        "scan_idx": 3,
+        "n_sites": 6,
+        "sites_per_route": 1.75,
+        "coverage_pct": 83.3
+      },
+      {
+        "target_root_id": 864691135196576298,
+        "session": 7,
+        "scan_idx": 3,
+        "n_sites": 9,
+        "sites_per_route": 2.0,
+        "coverage_pct": 66.7
+      },
+      {
+        "target_root_id": 864691135810666525,
+        "session": 7,
+        "scan_idx": 4,
+        "n_sites": 11,
+        "sites_per_route": 1.25,
+        "coverage_pct": 45.5
+      }
+    ],
     "below_rows": [
       {
         "target_root_id": 864691135810666525,
@@ -147,7 +191,7 @@
     "ci95_high": 0.105545551658
   },
   "source_sha256": {
-    "scripts/credit_first_figures/build_measured.py": "ea89bb512b03989d690cd17fc510b8221b9b704e7dbf8e670459458eddf20c80",
+    "scripts/credit_first_figures/build_measured.py": "395e4307156ef7e20ea9a69e3d27f4dc4c8f8e51d82f5183e5b6a93331e27fef",
     "source_data/figure3/segment_metrics.csv": "7829c298c4e5b3209b758fb88b92b55f070420c00b383436e5d4e1601e7ff1cf",
     "source_data/fulltree_boundary/output/dictionary_and_validation_metadata.jsonl": "12bd1392df9c3db14b9746f042786dcabbc9fd7f8acc99926277217b55554c7f",
     "source_data/curated_publication/figure_09_plotted.csv": "d7742b1680aacce728ecc63359d905df1444787827a07aafaa9dd0249c160d57",
@@ -161,7 +205,6 @@
     "source_data/measured_alignment_power/inputs/partner_index.csv": "27a73c097eb017f4f9e3d9839c0d27b3e487fa235fd4f978c43b4fd1415f8775"
   },
   "layout_findings": [
-    "TEXT-ON-DATA '3/7 +'",
     "TEXT-ON-DATA '3/7 +'",
     "TEXT-ON-DATA 'perfect reliability'"
   ]

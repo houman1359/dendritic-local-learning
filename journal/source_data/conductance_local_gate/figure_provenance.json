@@ -1,6 +1,6 @@
 {
   "code_sha256": {
-    "scripts/conductance_local_gate/figure.py": "0ffc2bc94debe72eaba0583eca9f34b699d0384b85347083289e9f782dbdf066",
+    "scripts/conductance_local_gate/figure.py": "f17d1dd9a5911f5f921f2df928e4332a9022a3045520f85b943ba004e7661f28",
     "scripts/conductance_local_gate/model.py": "cc2b82f6c486810a43aa885f3ea2dacce54c473f2e2ece6f4cfdb7d88ce6ad39",
     "scripts/conductance_local_gate/portable_contract.py": "fea35a393f5881dfc60b3dfe810dac64f8c2e6b0d8ba01937f4a42c5ffab3c05",
     "scripts/conductance_local_gate/report.py": "a96b4b6edd42c0d98de3da44a46c409310b463450369173be7371d503fa6dfef",
@@ -14,8 +14,8 @@
     "source_data/conductance_local_gate/figures/historical_cancellation_source.csv": "15938898c44c07bbbc5721ee727e9d54199c90e90ab8a298bb7109682dc69814",
     "source_data/conductance_local_gate/figures/local_gate_all_rates.pdf": "9ed32d20fb9af6c078e6cc391a98d9e7a36f27d9b74d9ddee45098ab9ac5ae33",
     "source_data/conductance_local_gate/figures/local_gate_all_rates.png": "26674c42572b6acdea030aa8c925920e239cf58d3f191ef1d995fa20204550ce",
-    "source_data/conductance_local_gate/figures/local_gate_primary.pdf": "ca336e0afa0b702b1536982208a7bea23b83e75e18988b5cc8e391bc286909ca",
-    "source_data/conductance_local_gate/figures/local_gate_primary.png": "b7b6f08995cebd41d8ac6e1bc2f8d70246736322a9cf01de366fb77f8b76136e",
+    "source_data/conductance_local_gate/figures/local_gate_primary.pdf": "7b7f77ab15179f35ea5a63263b8abf18595c8912ce32a03239b35027a18cdb92",
+    "source_data/conductance_local_gate/figures/local_gate_primary.png": "89519ecb1ee12a9a5f4348b7687b9d7382e0e268ef7145d88389d574556f6ab4",
     "source_data/conductance_local_gate/figures/teacher_tuning_source.csv": "26b9ebc985bc662465c9a03af5a9197f54d8443383f44090121ddcf24c4c3086"
   },
   "fresh_seeds": [
@@ -315,7 +315,7 @@
   "protocol_sha256": "c441998f6f91e1f8782b2918689806e119af567e479bcd5c94069dca837a2413",
   "scope": "Current figure-only rendering; frozen protocol and numerical summary bytes unchanged. Initial numerical audit retains its historical render hashes.",
   "source_sha256": {
-    "scripts/conductance_local_gate/figure.py": "0ffc2bc94debe72eaba0583eca9f34b699d0384b85347083289e9f782dbdf066",
+    "scripts/conductance_local_gate/figure.py": "f17d1dd9a5911f5f921f2df928e4332a9022a3045520f85b943ba004e7661f28",
     "scripts/conductance_local_gate/model.py": "cc2b82f6c486810a43aa885f3ea2dacce54c473f2e2ece6f4cfdb7d88ce6ad39",
     "scripts/conductance_local_gate/portable_contract.py": "fea35a393f5881dfc60b3dfe810dac64f8c2e6b0d8ba01937f4a42c5ffab3c05",
     "scripts/conductance_local_gate/report.py": "a96b4b6edd42c0d98de3da44a46c409310b463450369173be7371d503fa6dfef",

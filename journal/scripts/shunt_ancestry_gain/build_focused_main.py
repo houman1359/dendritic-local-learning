@@ -118,6 +118,12 @@ Private helpers (library frozen for per-figure work, errata 7; DECISIONS G5)
 ``place_cohort_markers``  panel G's cohort key glyph, deferred until after
                       ``lock_reserves()`` because the axes is resized between
                       the panel draw and the save.
+``panel_adjoint`` bracket  the +0.079 paired contrast is q\u2032d\u2032
+                      minus d\u2032; it is drawn as a bracket over exactly
+                      those two columns because the number, printed loose,
+                      read as the q\u2032 column (0.130) or as
+                      q\u2032 minus inject (0.095, also the printed bound).
+
 ``_balance_slot_fill``  declares the per-column reserves that keep the
                       ``panel-emphasis`` slot-fill spread inside 1.35x once the
                       two forest panels have claimed their row-label gutter.
@@ -181,9 +187,13 @@ CATEGORIES = ("descendant", "sister", "ancestor", "depth-matched unrelated",
 CATEGORY_LABELS = ("descendant", "sister", "ancestor", "depth-\nmatched",
                    "unrelated")
 
-LOCAL_YLIM = (-0.020, 0.335)
-LOCAL_YTICKS = (0.0, 0.05, 0.10, 0.15, 0.20)
-LOCAL_TICKLABELS = ("0", "0.05", "0.10", "0.15", "0.20")
+# 2026-09-11 fix round: the pair used to run to 0.335 with D's highest drawn
+# point at 0.230 and E's at 0.190, i.e. 30 % / 41 % of the ordinate empty and
+# filled with prose.  The top now clears D's highest PER-CELL point (0.2572,
+# drawn from this round on) and E's paired-contrast bracket, and nothing else.
+LOCAL_YLIM = (-0.014, 0.286)
+LOCAL_YTICKS = (0.0, 0.05, 0.10, 0.15, 0.20, 0.25)
+LOCAL_TICKLABELS = ("0", "0.05", "0.10", "0.15", "0.20", "0.25")
 LOCAL_LABEL = "localization index (log units)"
 CONTRAST_LABEL = "shunt − injection (log units)"
 
@@ -252,7 +262,7 @@ def load_dose():
             assert values.size == 8, (perturbation, dose, values.size)
             rows.append((float(dose),
                          *mean_ci(values, seed=1660 + 10 * pindex
-                                  + int(dose * 4))))
+                                  + int(dose * 4)), values))
         out[perturbation] = sorted(rows)
     return out
 
@@ -750,8 +760,11 @@ def panel_relations(canvas, ax, category):
     # The 0.32 of extra ordinate below the last row is what opens that strip;
     # it costs 0.3 pt of the +0.22 overplot offset and nothing else.
     ax.set_ylim(4.92, -0.6)
-    ax.text(-0.0016, 4.62, "no change", fontsize=PT_BASE, color=MUTE,
-            ha="right", va="center", zorder=6)
+    # ... and INSIDE the axes, right of the rule, as F, G and H set theirs.
+    # Right-aligned in the gutter it was set in the same face and tone as
+    # `unrelated` directly above it and read as a sixth, empty relation row.
+    ax.text(0.0036, 4.62, "no change", fontsize=PT_BASE, color=MUTE,
+            ha="left", va="center", zorder=6)
     ax.tick_params(axis="x", labelsize=PT_BASE, pad=0.8, length=2.0)
     ax.xaxis.labelpad = 0.5
     ypos = out["ypos"]
@@ -782,30 +795,18 @@ def panel_relations(canvas, ax, category):
     # through the "s" of "shunt") and set between the two descendant arms
     ax.text(0.156, 1.02, f"shunt {shunt_d / inject_d:.1f}\u00d7 injection",
             fontsize=PT_BASE, color=INK, ha="right", va="center", zorder=6)
-    for offset, text in enumerate(("n = 8 cells", "101 focal sites",
-                                   "mean [95 % CI]")):
-        ax.text(0.156, 1.56 + 0.33 * offset, text, fontsize=PT_BASE,
-                color=MUTE, ha="right", va="center", zorder=6)
-    ax.text(0.156, 2.75, "injection off-route:", fontsize=PT_BASE, color=MUTE,
-            ha="right", va="center", zorder=6)
-    ax.text(0.156, 3.08, "zero by construction", fontsize=PT_BASE, color=MUTE,
-            ha="right", va="center", zorder=6)
-    ax.plot([0.040, 0.0055], [3.08, 3.22], color=MUTE, lw=LW_HAIR,
-            solid_capstyle="round", zorder=1.6)
-    # the sign count keeps its COHORT on the artwork: an unattributed 45/45
-    # inside a panel tagged n = 8 cells is not readable as a control
-    # AMENDMENTS section 4c: `disjoint 45-cell calibration cohort` is the PROSE and
-    # CAPTION name; the sanctioned PANEL form is `Disjoint, 45 cells`, which
-    # is what F's row labels and G's direct labels already print, so the
-    # cohort is named identically across the three panels that use it.  The
-    # prose form sets 99.3 pt at 7.0 pt type in a 99.8 pt axes: it can only be
-    # printed flush across the whole panel, where it crosses the near-zero
-    # marks of every row.
-    for offset, text in enumerate(("45/45 cells positive,",
-                                   "Disjoint, 45 cells",
-                                   "Supplementary Fig. S30A")):
-        ax.text(0.156, 3.68 + 0.34 * offset, text, fontsize=PT_BASE,
-                color=MUTE, ha="right", va="center", zorder=6)
+    # 2026-09-11 fix round: EIGHT further lines of prose stood here -- the
+    # three-line stat block (`n = 8 cells` / `101 focal sites` /
+    # `mean [95 % CI]`), the two-line `injection off-route: zero by
+    # construction` tag with its leader, and the three-line `45/45 cells
+    # positive, Disjoint, 45 cells, Supplementary Fig. S30A` sign count.  The
+    # first three are the caption's C--H tail verbatim; the leader of the
+    # fourth landed on the DEPTH-MATCHED row, whose injection interval
+    # [5.9e-5, 5.1e-4] excludes zero (only `unrelated` is zero by
+    # construction, and the caption already says so); the last three describe
+    # the 45-cell cohort, of which this panel plots no row at all.  Deleting
+    # them is the whole of the fix: every remaining string here is a direct
+    # series label or the panel's own finding.
     return out
 
 
@@ -819,6 +820,15 @@ def panel_dose(ax, dose):
         mean = np.asarray([r[1] for r in rows])
         lo = np.asarray([r[2] for r in rows])
         hi = np.asarray([r[3] for r in rows])
+        # per-cell points (2026-09-11): the caption's C--H tail promises
+        # `dots, cells` and D drew none, while the eight cell means per dose
+        # sat unused in the Source Data table.  The fan is geometric in the
+        # log2 abscissa so the jitter is the same width at every dose.
+        for value, _m, _lo, _hi, cells in rows:
+            ax.plot(value * 2.0 ** np.linspace(-0.075, 0.075, cells.size),
+                    cells, linestyle="none", marker="o", ms=SEED_MS,
+                    markerfacecolor=colour, markeredgecolor="none",
+                    alpha=SEED_ALPHA, zorder=2.0)
         ax.errorbar(x, mean, yerr=[mean - lo, hi - mean], marker=marker,
                     ms=MEAN_MS, lw=LW_DATA, color=colour,
                     markerfacecolor="white", markeredgecolor=colour,
@@ -838,9 +848,9 @@ def panel_dose(ax, dose):
             transform=ax.transAxes, ha="left", va="top", zorder=6)
     ax.text(0.03, 0.880, "matched injection", color=INJECT, fontsize=PT_BASE,
             transform=ax.transAxes, ha="left", va="top", zorder=6)
-    ax.text(0.03, 0.735, "permissive normalized\npassive parameters",
-            transform=ax.transAxes, ha="left", va="top", fontsize=PT_BASE,
-            color=MUTE, linespacing=1.15, zorder=6)
+    # `permissive normalized / passive parameters` stood here; it is the
+    # caption's C sentence verbatim, and it occupied ordinate that now
+    # carries the per-cell fan.
     return ax
 
 
@@ -873,26 +883,42 @@ def panel_adjoint(ax, shapley):
     # D and E share one y axis, which means they share ONE major ticker: a
     # set_yticks(labels) here silently blanked D's tick labels too, so the
     # whole pair shipped with a bare axis.  E hides its own labels instead.
-    ax.tick_params(labelsize=PT_BASE, pad=0.8, length=2.0, labelleft=False)
+    # ...but E still has to PRINT them: with labelleft=False the panel
+    # shipped with no numeral and no ordinate title at all, and its values
+    # could only be read by counting unlabelled gridlines across D.  Sharing
+    # the ticker is what forbids a second set_yticks here, not a second set
+    # of tick LABELS, so the labels (and the shared axis title) come back.
+    ax.tick_params(labelsize=PT_BASE, pad=0.8, length=2.0, labelleft=True)
+    ax.set_ylabel(LOCAL_LABEL, fontsize=PT_EMPH, color=INK, labelpad=0.5)
     ax.set_xlabel("substituted factor", fontsize=PT_EMPH, color=INK,
                   labelpad=0.5)
     mean, lo, hi = shapley["replacement"]
     # PLAN section 4 E asks for three SEPARATE items.  They were collapsed into one
     # seven-line stack in the top-left corner, which squeezed the four
     # columns right; each now sits where the plan puts it.
-    # (i) the badge text, top-right, clear of the q′ column (max 0.190)
-    for offset, line in enumerate(("substitution, not", "a decomposition")):
-        ax.text(3.53, 0.240 - 0.029 * offset, line, fontsize=PT_BASE,
-                color=MUTE, ha="right", va="center", zorder=6)
-    # (ii) the printed contrast, centred over the q′ / q′d′ columns.  2.00,
-    # not 2.15: at 2.15 the second line ended 1.7 pt and the first 1.1 pt
-    # PAST the 506.4 pt live right edge, the same overhang already corrected
-    # in H's x label.
+    # (i) `substitution, not / a decomposition` stood top-right: a methods
+    # note, deleted 2026-09-11 with the rest of this panel's dead-band prose.
+    # (ii) the printed contrast is now DRAWN, not merely printed.  +0.079 is
+    # q′d′ minus d′ -- the paired grey lines already span exactly that pair,
+    # straight across the q′ column -- but nothing said so, and beside a
+    # panel whose q′ mean is 0.130 the number read as the q′ column itself
+    # or as q′ minus inject (0.095, which is also the printed upper bound).
+    # A paired-difference bracket over the two columns it spans fixes the
+    # identification and keeps the statistic on the artwork.
+    bracket_y = 0.209
+    ax.plot([1, 3], [bracket_y, bracket_y], color=INK, lw=LW_HAIR,
+            solid_capstyle="butt", zorder=6)
+    for x_end in (1, 3):
+        ax.plot([x_end, x_end], [bracket_y - 0.009, bracket_y], color=INK,
+                lw=LW_HAIR, solid_capstyle="butt", zorder=6)
+    # 2.00, not 2.15: at 2.15 the second line ended 1.7 pt and the first
+    # 1.1 pt PAST the 506.4 pt live right edge, the same overhang already
+    # corrected in H's x label.  2.00 is also the bracket's midpoint.
     for offset, line in enumerate(
-            (f"q′ replacement: +{mean:.3f}",
+            (f"q′d′ − d′ = +{mean:.3f}",
              f"[{lo:.3f}, {hi:.3f}], "
              f"{shapley['replacement_positive']}/8 cells")):
-        ax.text(2.00, 0.305 - 0.029 * offset, line, fontsize=PT_BASE,
+        ax.text(2.00, 0.265 - 0.029 * offset, line, fontsize=PT_BASE,
                 color=INK, ha="center", va="center", zorder=6)
     # (iii) the key, in the clear band over the inject and d′ columns, 4 pt
     # clear of the left spine
@@ -900,8 +926,9 @@ def panel_adjoint(ax, shapley):
                                    "′ = post-shunt")):
         ax.text(-0.47, 0.182 - 0.029 * offset, line, fontsize=PT_BASE,
                 color=MUTE, ha="left", va="center", zorder=6)
-    ax.text(0.985, 0.008, "shared y with D", transform=ax.transAxes,
-            ha="right", va="bottom", fontsize=PT_BASE, color=MUTE, zorder=6)
+    # `shared y with D` stood at the lower right, inside the paired-line
+    # bundle that is the densest ink in the panel.  E prints its own tick
+    # labels now, so the note has nothing left to excuse.
     return ax
 
 
@@ -980,8 +1007,7 @@ def panel_signed(canvas, ax, summary, cells):
                                  (0.68, "injection enhances", INJECT),
                                  (2.34, "filled = descendants,", INK),
                                  (2.62, "open = depth-", INK),
-                                 (2.90, "matched off-route", INK),
-                                 (3.30, "mean [95 % CI]", MUTE)):
+                                 (2.90, "matched off-route", INK)):
         # 3.5 pt clear of the row tick hairline that rides on the left spine
         ax.text(-0.249, y_line, text, fontsize=PT_BASE, color=colour,
                 ha="left", va="center", zorder=6)
@@ -1033,8 +1059,13 @@ def panel_state(ax, physical, ranges):
     # 83.5--104.9) and cannot both be set; keeping the bare tick left one
     # unlabelled major on a log abscissa, which is worse than four labelled
     # decades. 10,000 stays on the axis as a log minor tick.
-    ax.set_xticks((300, 1000, 3000, 30000),
-                  ("300", "1,000", "3,000", "30,000"))
+    # 2026-09-11: the labelled major moves from 30,000 to 15,000.  The whole
+    # decade 3,000--30,000 carried no labelled tick, and 15,000 -- the
+    # calibration the inset, the caption, the main text and the whole of
+    # panel H rest on -- had no tick at all, major or minor (a log minor
+    # falls at 2,3..9 x a decade, never at 1.5).  30,000 keeps its minor.
+    ax.set_xticks((300, 1000, 3000, 15000),
+                  ("300", "1,000", "3,000", "15,000"))
     ax.set_yticks((0.0, 0.02, 0.04, 0.06, 0.08),
                   ("0", "0.02", "0.04", "0.06", "0.08"))
     ax.tick_params(labelsize=PT_BASE, pad=0.8, length=2.0)
@@ -1062,7 +1093,8 @@ def panel_state(ax, physical, ranges):
                 ha="right", va="center", zorder=6)
         keyed.append((name, marker, filled, y_name))
     smallest = min(drops.values())
-    ax.text(0.005, 0.045, f"\u2265 {np.floor(smallest):.0f}\u00d7 from 300 "
+    # 0.022, not 0.005: the leading `>=` glyph straddled the left spine
+    ax.text(0.022, 0.045, f"\u2265 {np.floor(smallest):.0f}\u00d7 from 300 "
                           "to 15,000", transform=ax.transAxes,
             fontsize=PT_BASE, color=INK, ha="left", va="center", zorder=6)
 
@@ -1087,10 +1119,22 @@ def panel_state(ax, physical, ranges):
         lo = np.asarray([p[2] for p in points])
         hi = np.asarray([p[3] for p in points])
         inset.errorbar(x, mean, yerr=[mean - lo, hi - mean], marker=marker,
-                       ms=MARKER_MS, lw=LW_HAIR, color=INK,
+                       ms=MARKER_MS - 1.6, lw=LW_HAIR, color=INK,
                        markerfacecolor=INK if filled else "white",
                        markeredgecolor=INK, markeredgewidth=LW_ERR,
                        elinewidth=LW_ERR, capsize=1.4, zorder=3)
+        # ...and the intervals again ON TOP of the marks.  At 7,300 px per
+        # log unit the disjoint interval at R_m 15,000 is 1.2e-3 tall, i.e.
+        # smaller than the open triangle that carries its mean, so the panel
+        # asserted an interval excluding zero that the reader could not see.
+        # The caption's opposite-sign sentence rests on exactly this pair.
+        for xv, l, h in zip(x, lo, hi):
+            inset.plot([xv, xv], [l, h], color=INK, lw=LW_ERR, zorder=6,
+                       solid_capstyle="butt")
+            for bound in (l, h):
+                inset.plot([xv], [bound], marker="_", markersize=2.6,
+                           markeredgecolor=INK, markeredgewidth=LW_ERR,
+                           linestyle="none", zorder=6)
     inset.axhline(0.0, color=MUTE, lw=LW_REF, dashes=(2.2, 1.8), zorder=1)
     # The inset frame is ~38 x 31 pt: no 7 pt numeral row fits inside it, and
     # outside it the labels floated in the PARENT axes, where "0.005" sat
@@ -1100,7 +1144,6 @@ def panel_state(ax, physical, ranges):
     # window and its two values are stated in the caption, and one mute line
     # above the frame gives the ordinate half-range.
     inset.set_xticks(())
-    inset.set_yticks(())
     inset.minorticks_off()
     # ...except ONE numeral.  Without it the frame's internal zero rule sits
     # where the PARENT ordinate reads 0.025, and the magnified marks read as
@@ -1111,11 +1154,12 @@ def panel_state(ax, physical, ranges):
     # It is the only numeral the 38 x 31 pt frame has room for: the 3,000
     # whisker spans -0.0043 to +0.0068 and occupies the whole interior left
     # edge, so the half-range stays on the "inset +- 0.005" line above.
-    inset.annotate("0", xy=(0.0, 0.0),
-                   xycoords=("axes fraction", "data"), xytext=(-2.0, 0.0),
-                   textcoords="offset points", ha="right", va="center",
-                   fontsize=PT_BASE, color=MUTE, annotation_clip=False,
-                   zorder=6)
+    # ...set as a REAL tick of the inset rather than a free annotation.  As
+    # an annotation the numeral had no tick mark to own it and floated in the
+    # parent axes, where the parent ordinate reads about 0.028.
+    inset.set_yticks((0.0,), ("0",))
+    inset.tick_params(axis="y", labelsize=PT_BASE, pad=1.0, length=1.6,
+                      width=LW_HAIR, colors=MUTE)
     ax.text(0.600, 0.625, "inset ± 0.005", transform=ax.transAxes,
             fontsize=PT_BASE, color=MUTE, ha="left", va="center", zorder=6)
     # The magnified window used to be a closed rectangle: every edge of a box
@@ -1135,11 +1179,17 @@ def panel_state(ax, physical, ranges):
     # same object, so the two ends of the bracket are tied to the two lower
     # corners of the frame.  zorder 0.9 puts both under the reference rule
     # and under every mark, so they read as background tie-lines.
+    # ...from the RIGHT end only (2026-09-11).  The left connector ran from
+    # the 2,400 end of the bracket to the inset's lower-left corner, which
+    # put it straight through the 3,000 and 5,000 marks and their whiskers --
+    # the one stretch of the abscissa where every mark of both cohorts is
+    # within 0.002 of the rule.  The right connector rises at the far edge of
+    # the axes, past the last sampled resistance, and crosses nothing; with
+    # the bracket's two end ticks it still ties window to frame.
     to_axes = ax.transData + ax.transAxes.inverted()
-    for x_end, corner in ((2400.0, 0.60), (40000.0, 0.98)):
-        x_frac, y_frac = to_axes.transform((x_end, bracket_y))
-        ax.plot([x_frac, corner], [y_frac, 0.31], transform=ax.transAxes,
-                color=MUTE, lw=LW_HAIR, zorder=0.9, solid_capstyle="butt")
+    x_frac, y_frac = to_axes.transform((40000.0, bracket_y))
+    ax.plot([x_frac, 0.98], [y_frac, 0.31], transform=ax.transAxes,
+            color=MUTE, lw=LW_HAIR, zorder=0.9, solid_capstyle="butt")
 
     def place_cohort_markers():
         """Set each key marker 3.4 pt left of its own label.
@@ -1174,8 +1224,13 @@ def panel_background(ax, sel, per_cell):
         jitter = np.linspace(-0.16, 0.16, values.size)
         ax.plot(index + jitter, values, linestyle="none", marker="o",
                 ms=SEED_MS, mfc=INK, mec="none", alpha=SEED_ALPHA, zorder=2.4)
+    # NO segment between the three means (2026-09-11).  The abscissa is
+    # ordinal -- 0, 1 and 4 drawn at equal spacing under a quantitative axis
+    # title -- so a joining line turned a 2.6-fold saturation (0.121 per leak
+    # unit from 0 to 1, 0.046 per unit from 1 to 4) into a straight ramp.
     ax.errorbar(x, mean, yerr=[mean - lo, hi - mean], marker=M_INITIAL,
-                ms=MEAN_MS, lw=LW_DATA, color=INK, markerfacecolor=INK,
+                ms=MEAN_MS, lw=LW_DATA, linestyle="none", color=INK,
+                markerfacecolor=INK,
                 markeredgecolor=INK, markeredgewidth=LW_ERR,
                 elinewidth=LW_ERR, capsize=ERR_CAPSIZE, zorder=5)
     reference_line(ax, 0.0, axis="y", label="no contrast")
@@ -1186,14 +1241,11 @@ def panel_background(ax, sel, per_cell):
                 zorder=6)
     ax.set_xticks(x, ("0", "1", "4"))
     ax.set_xlim(-0.5, 2.5)
-    # 0.45, not 0.365: the in-panel sentence needs a band that clears the
-    # 8/8 sign count over the 4x column AND leaves 6 pt under the title
-    # -0.150, not -0.100: at -0.100 the footer's last line sat ON the bottom
-    # spine (its baseline 0.3 pt below the 0.70 pt rule, which read as a
-    # strike-through under the words).  The extra 0.05 of ordinate lifts the
-    # zero rule to 0.25 of the axes and opens a 3-line footer strip that
-    # clears both the spine below and `no contrast` above.
-    ax.set_ylim(-0.150, 0.45)
+    # 2026-09-11: the -0.150 / 0.45 window existed to open a three-line
+    # footer strip and a two-line sentence band.  Both blocks are gone (see
+    # below), so the window closes onto the data: the lowest cell value is
+    # -0.0445 and the highest sign-count label tops out at 0.309.
+    ax.set_ylim(-0.062, 0.325)
     ax.set_yticks((0.0, 0.1, 0.2, 0.3), ("0", "0.1", "0.2", "0.3"))
     ax.tick_params(labelsize=PT_BASE, pad=0.8, length=2.0)
     ax.set_xlabel("background leak (\u00d7 baseline)", fontsize=PT_EMPH,
@@ -1202,35 +1254,13 @@ def panel_background(ax, sel, per_cell):
     # right edge by 1.5 pt; 0.478 pulls its right edge back inside
     ax.xaxis.label.set_x(0.478)
     ax.set_ylabel(CONTRAST_LABEL, fontsize=PT_EMPH, color=INK, labelpad=2.6)
-    # the sentence no longer restates the title ("Background restores it")
-    # and it drops clear of it: at 0.968 its ascenders met the title's
-    # descenders with zero clearance
-    ax.text(-0.45, 0.398, "contrast restored at the", fontsize=PT_BASE,
-            color=INK, ha="left", va="center", zorder=6)
-    ax.text(-0.45, 0.366, "standard calibration", fontsize=PT_BASE,
-            color=INK, ha="left", va="center", zorder=6)
-    # R_m without mathtext (CF-2).  The three spans are chained RIGHT to
-    # LEFT in offset points off a right-aligned tail, so the group survives
-    # the reserve lock that resizes this axes after the panel is drawn;
-    # token_subscript's own ``tail`` anchors on the subscript's layout box
-    # (which carries the font descent) and prints ~1.5 pt low.
-    rest = ax.text(0.985, 0.184, "= 15,000 \u03a9 cm\u00b2", fontsize=PT_BASE,
-                   color=MUTE, ha="right", va="center", zorder=6,
-                   transform=ax.transAxes)
-    sub = ax.annotate("m", xy=(0.0, 0.5), xycoords=rest, xytext=(-3.4, -1.6),
-                      textcoords="offset points", fontsize=PT_BASE,
-                      color=MUTE, ha="right", va="center", zorder=6,
-                      annotation_clip=False)
-    ax.annotate("R", xy=(0.0, 0.5), xycoords=sub, xytext=(-0.4, 1.6),
-                textcoords="offset points", fontsize=PT_BASE, color=MUTE,
-                ha="right", va="center", zorder=6, annotation_clip=False)
-    # the dose scheme is named in full on the panel: "normalized dose 1"
-    # alone did not say WHICH normalization distinguishes the two rows of
-    # paired_contrasts.csv
-    ax.text(0.985, 0.127, "input-conductance-", transform=ax.transAxes,
-            fontsize=PT_BASE, color=MUTE, ha="right", va="center", zorder=6)
-    ax.text(0.985, 0.070, "normalized dose 1", transform=ax.transAxes,
-            fontsize=PT_BASE, color=MUTE, ha="right", va="center", zorder=6)
+    # Five lines of prose stood here and are all deleted (2026-09-11).  The
+    # two-line sentence `contrast restored at the / standard calibration` and
+    # the three-line footer `R_m = 15,000 Omega cm^2 / input-conductance- /
+    # normalized dose 1` are together the caption's H sentence verbatim, and
+    # the footer's chained subscript descended into the ascenders of the line
+    # under it.  Between them they were the only reason this panel needed
+    # 46 % of its ordinate empty.
     return ax
 
 
@@ -1284,8 +1314,8 @@ def _balance_slot_fill(canvas, target=1.35):
 
 
 # ── the render-time display table ────────────────────────────────────────
-def display_rows(category, dose, shapley, signed_summary, physical, sel,
-                 gains):
+def display_rows(category, dose, shapley, signed_summary, signed_cells,
+                 physical, sel, per_cell, gains):
     rows = []
     for node, size, gain in zip(reversed(gains["path"]), [17, 5, 4, 6, 46],
                                 [gains["gain"][n]
@@ -1303,10 +1333,17 @@ def display_rows(category, dose, shapley, signed_summary, physical, sel,
                          perturbation=perturbation, category=relation,
                          value=float(v)) for v in values)
     for perturbation, points in dose.items():
-        for value, mean, lo, hi in points:
+        for value, mean, lo, hi, cells in points:
             rows.append(dict(panel="D", record="cohort_mean",
                              perturbation=perturbation, dose=value, mean=mean,
                              ci95_low=lo, ci95_high=hi, n_cells=8))
+            # Source Data completeness (2026-09-11): D, F and H drew marks,
+            # fans or both whose per-cell values appeared in no row of
+            # figure_08_plotted.csv, the file the caption names as the
+            # figure's Source Data.  Every drawn point is now a row.
+            rows.extend(dict(panel="D", record="cell_value",
+                             perturbation=perturbation, dose=value,
+                             value=float(v)) for v in cells)
     for column, (mean, lo, hi) in shapley["stats"].items():
         rows.append(dict(panel="E", record="cohort_mean", condition=column,
                          mean=mean, ci95_low=lo, ci95_high=hi, n_cells=8))
@@ -1321,6 +1358,23 @@ def display_rows(category, dose, shapley, signed_summary, physical, sel,
     assert len(signed_summary) == 16, len(signed_summary)
     rows.extend(dict(panel="F", record="cohort_mean", **r)
                 for r in signed_summary.to_dict("records"))
+    drawn = {(c, r) for c, r, _l, _v in SIGNED_ROWS}
+    arms = (("focal shunt", "descendant"),
+            ("focal shunt", "depth-matched unrelated"),
+            ("matched additive", "descendant"),
+            ("matched additive", "depth-matched unrelated"))
+    for cohort, regime in sorted(drawn):
+        for perturbation, relation in arms:
+            subset = signed_cells[
+                signed_cells.cohort.eq(cohort) & signed_cells.regime.eq(regime)
+                & signed_cells.perturbation.eq(perturbation)
+                & signed_cells.category.eq(relation)]
+            assert not subset.empty, (cohort, regime, perturbation, relation)
+            rows.extend(dict(panel="F", record="cell_value", cohort=cohort,
+                             regime=regime, perturbation=perturbation,
+                             category=relation, root_id=int(r.root_id),
+                             value=float(r.signed_log_change))
+                        for r in subset.itertuples())
     for cohort, _label, _marker, _filled in COHORTS:
         for rm, mean, lo, hi, n, values in physical[cohort]:
             rows.append(dict(panel="G", record="cohort_mean", cohort=cohort,
@@ -1338,6 +1392,10 @@ def display_rows(category, dose, shapley, signed_summary, physical, sel,
                          ci95_high=record["ci95_high"],
                          n_cells=record["n_cells"],
                          cells_positive=record["cells_positive"]))
+    for multiplier, values in sorted(per_cell.items()):
+        rows.extend(dict(panel="H", record="cell_value",
+                         background_leak_multiplier=int(multiplier),
+                         value=float(v)) for v in values)
     return rows
 
 
@@ -1355,8 +1413,8 @@ def build(emit_main=True):
     sel, per_cell = load_background()
 
     # cross-panel identity: D(dose 1) == E(full shunt) and E(inject)
-    d_shunt = dict((v, m) for v, m, _lo, _hi in dose["focal shunt"])
-    d_inject = dict((v, m) for v, m, _lo, _hi in dose["matched additive"])
+    d_shunt = dict((r[0], r[1]) for r in dose["focal shunt"])
+    d_inject = dict((r[0], r[1]) for r in dose["matched additive"])
     assert abs(d_shunt[1.0]
                - shapley["full_shunt_localization"].mean()) < 1e-12
     assert abs(d_inject[1.0]
@@ -1499,12 +1557,40 @@ def build(emit_main=True):
         "ties the source-region bracket to the inset's lower corners with the "
         "plan's LW_HAIR mute connectors; H's ylim falls to -0.150 and its "
         "three footer lines rise 0.049 of the axes off the bottom spine. "
+        "Visual-review round (2026-09-11, fourth pass): the figure loses "
+        "sixteen lines of in-axes prose, every one of them either the "
+        "caption verbatim or a description of a cohort the panel does not "
+        "plot -- C's three-line stat block, its mis-anchored `injection "
+        "off-route: zero by construction` tag (whose leader landed on the "
+        "depth-matched row, whose injection interval excludes zero) and its "
+        "three-line 45-cell sign count; D's `permissive normalized passive "
+        "parameters`; E's `substitution, not a decomposition` and `shared y "
+        "with D`; F's second `mean [95 % CI]`; H's two-line sentence and "
+        "three-line footer. The ordinate then closes onto the data: D and E "
+        "run to 0.286 instead of 0.335 (and D draws its eight per-cell "
+        "points per dose, whose 0.2572 maximum sets the new top), H to "
+        "-0.062/0.325 instead of -0.150/0.450. E prints its own y tick "
+        "labels and axis title -- sharing D's ticker forbids a second "
+        "set_yticks, not a second set of tick labels -- and its +0.079 is "
+        "drawn as a paired-difference bracket over the d\u2032 and "
+        "q\u2032d\u2032 columns it actually spans, the same pair the grey "
+        "paired lines already join. H drops the segment joining its three "
+        "means (the abscissa is ordinal, so the line hid a 2.6-fold "
+        "saturation). G labels 15,000 instead of 30,000 (the calibration the "
+        "inset, the caption and all of panel H rest on had no tick at all, "
+        "major or minor), keeps only the right-hand inset connector (the "
+        "left one crossed the 3,000 and 5,000 marks), shrinks the inset "
+        "markers clear of the frame and redraws the inset intervals ON TOP "
+        "of them, and sets the inset's zero as a real tick. Source Data "
+        "completeness: every drawn per-cell point of D, F and H is now a "
+        "cell_value row of figure_08_plotted.csv (D 64, F 424, H 24); G's "
+        "183 were already there. "
         "Slot-fill "
         f"slot-fill balance: {balance}. Contrast drop from "
         f"R_m 300 to 15,000: {drops}.")
     record = publish(8, output, display_rows(category, dose, shapley,
-                                             signed_summary, physical, sel,
-                                             gains),
+                                             signed_summary, signed_cells,
+                                             physical, sel, per_cell, gains),
                      sources, builders, panels, emit_main=emit_main,
                      layout_findings=[str(x) for x in findings], notes=notes)
     (J / "figures/provenance/credit_clarity_20260908"

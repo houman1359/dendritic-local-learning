@@ -130,15 +130,27 @@ CURVE_RULES = ('exact', 'hard_distal_unit_proximal', 'unit_broadcast',
 # as three opaque solids stacked in z order the last one painted hid the other
 # two: a pixel census of the v1 render found no carmine at all in the left
 # 64 % of C.  The panels' finding is that agreement, so the three are keyed by
-# dash and the coincidence is shown: exact path solid on top, the gate dashed
-# under it, the oracle finely dashed at the bottom.  Unit broadcast, which
-# never coincides with them, stays solid.  Mute reference rules keep their own
-# dash at LW_REF (CF-7) and no data line is drawn in mute.
+# dash and the coincidence is shown.  QA 2026-09-11 (second visual pass): the
+# painting order is inverted from the first fix.  Keying by dash is not enough
+# on its own while the one OPAQUE SOLID of the trio is painted last: a census
+# of that render still found the oracle's colour in only 37 of C's 410 columns
+# and 6 of D's, because a solid carmine line covers a dotted line that lies
+# inside its own width.  The solid goes to the BOTTOM instead -- exact path
+# first, the gate's long dash over it, the oracle's fine dash on top -- so
+# each of the three shows through the gaps of the ones above it and all three
+# read wherever they coincide.  The dash key and the legend are unchanged; only
+# the paint order moves, and no plotted value is touched.  Unit broadcast stays
+# solid and goes to the very bottom: over the first two decades of C all FOUR
+# rules coincide, so whichever solid is painted last owns that stretch, and put
+# on top the amber one hid the trio there exactly as the carmine one had.  It
+# has its own direct label and it separates from the trio well before the
+# window, which is where its being read matters.  Mute reference rules keep
+# their own dash at LW_REF (CF-7) and no data line is drawn in mute.
 CURVE_DASH = {'hard_distal_unit_proximal': (3.4, 1.7),
               'ancestry_two_leaf_oracle_unit_proximal': (1.2, 1.5)}
-CURVE_Z = {'ancestry_two_leaf_oracle_unit_proximal': 3.0,
-           'hard_distal_unit_proximal': 3.1, 'unit_broadcast': 3.2,
-           'exact': 3.3}
+CURVE_Z = {'unit_broadcast': 2.9, 'exact': 3.0,
+           'hard_distal_unit_proximal': 3.1,
+           'ancestry_two_leaf_oracle_unit_proximal': 3.2}
 PRIMARY = dict(rate=0.03, budget=4096)
 RATES = (0.01, 0.03, 0.10)
 LOG_TICKS = (1e-6, 1e-4, 1e-2, 1.0)
