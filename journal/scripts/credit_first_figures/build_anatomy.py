@@ -1171,8 +1171,10 @@ def panel_f(ax, pairs):
     delta = (pairs.tree - pairs.surrogate_mean).to_numpy(float)
     ax.plot([0.25, 1.0], [0.0, 0.0], color=COLORS["mute"], lw=LW_REF,
             zorder=1, solid_capstyle="butt", dashes=(2.2, 1.8))
-    ax.text(0.255, 0.032, "equal", fontsize=PT_BASE, color=COLORS["mute"],
-            ha="left", va="bottom")
+    # right-aligned on the reference (CF-7), in the band the cells leave
+    # empty: the only two cells right of x = 0.85 sit within 0.011 of zero
+    ax.text(1.0, 0.046, "equal", fontsize=PT_BASE, color=COLORS["mute"],
+            ha="right", va="bottom")
     ax.plot(pairs.surrogate_mean[~tie], delta[~tie.to_numpy()], marker="o",
             ls="none", ms=4.2, mfc=COLORS["shunting"], mec="none",
             alpha=0.75, zorder=2)
@@ -1490,12 +1492,19 @@ def figure7(*, out=COMPONENT, png=True, dpi=200, quiet=False):
     g = canvas.panel("G", 2, 0, 7,
                      title="Paired advantage and its wiring cost")
     h = canvas.panel("H", 2, 7, 5, title="Three cohorts, one ordering")
-    for name in ("D", "E", "F"):
-        # the right reserve is declared, not measured: D's direct end labels
-        # and E's last x tick overhang by different amounts, and an unequal
-        # measured overhang gives the three panels three axes widths, which
-        # the row-alignment contract forbids
-        canvas.declare_reserve(name, left=GUTTER_PT, bottom=BOTTOM_R1)
+    # One axes width for the whole of row 1, declared rather than measured.
+    # D's direct end labels and E's last x tick claim different shares of
+    # their gutters, so the measured locks came out 83.0 / 81.4 / 88.5 pt and
+    # the row-alignment contract failed.  D and E declare the right reserve;
+    # F, whose right boundary is the canvas edge it SHARES with H, takes the
+    # same 8 pt on its LEFT instead -- a declared right reserve there would
+    # pull H's four family names in with it and drop the page below
+    # FILL_W_MIN (measured: 90.8 %).
+    canvas.declare_reserve("D", left=GUTTER_PT, right=RIGHT_R1,
+                           bottom=BOTTOM_R1)
+    canvas.declare_reserve("E", left=GUTTER_PT, right=RIGHT_R1,
+                           bottom=BOTTOM_R1)
+    canvas.declare_reserve("F", left=GUTTER_PT + RIGHT_R1, bottom=BOTTOM_R1)
     canvas.declare_reserve("G", left=GUTTER_PT, right=G_RIGHT,
                            bottom=BOTTOM_R2)
     canvas.declare_reserve("H", left=20.0, bottom=BOTTOM_R2)
