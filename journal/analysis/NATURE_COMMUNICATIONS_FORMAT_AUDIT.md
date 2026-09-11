@@ -14,19 +14,19 @@ There are 0 main tables, including Methods tables; total display items: 9.
 |---|---:|---:|---|
 | Title | 9 words | 15 | PASS |
 | Abstract | 161 words | 200 | PASS |
-| Introduction + Results + Discussion | 7984 approximate words | 5000 | ADVISORY |
-| Author working narrative target | 7984 approximate words | 8000 | PASS |
+| Introduction + Results + Discussion | 7990 approximate words | 5000 | ADVISORY |
+| Author working narrative target | 7990 approximate words | 8000 | PASS |
 | Main display items | 9 figures and tables | 10 | PASS |
 | References | 64 entries (general guide) | 70 | PASS |
-| Figure 1 legend | 316 words | 350 | PASS |
-| Figure 2 legend | 303 words | 350 | PASS |
-| Figure 3 legend | 291 words | 350 | PASS |
-| Figure 4 legend | 310 words | 350 | PASS |
-| Figure 5 legend | 311 words | 350 | PASS |
-| Figure 6 legend | 325 words | 350 | PASS |
-| Figure 7 legend | 298 words | 350 | PASS |
-| Figure 8 legend | 317 words | 350 | PASS |
-| Figure 9 legend | 334 words | 350 | PASS |
+| Figure 1 legend | 333 words | 350 | PASS |
+| Figure 2 legend | 346 words | 350 | PASS |
+| Figure 3 legend | 341 words | 350 | PASS |
+| Figure 4 legend | 338 words | 350 | PASS |
+| Figure 5 legend | 344 words | 350 | PASS |
+| Figure 6 legend | 347 words | 350 | PASS |
+| Figure 7 legend | 302 words | 350 | PASS |
+| Figure 8 legend | 346 words | 350 | PASS |
+| Figure 9 legend | 346 words | 350 | PASS |
 
 Official guidance:
 

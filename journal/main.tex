@@ -142,13 +142,13 @@ Thus finer delivery need not improve learning even when the error field has spat
 \includegraphics[width=\textwidth]{main/figure_01.pdf}
 \captionsetup{skip=7pt}
 \caption{\textbf{Neuronal identity, not finer spatial address, carries the image-learning benefit.}
-\textbf{A}, MNIST input reaches excitatory (blue) and inhibitory (carmine) contacts on one of 128 trees (the $\times128$ tag); readout $\hat y$ and loss $\mathcal L$ return that neuron's error $\delta_u$ into its soma as $\delta_0$ (ink arrow) through the diagonal gain $\Gamma$ (dial), $\bm c=\Gamma\bm c^{\rm source}$; schematic, no data.
-\textbf{B}, Three deliveries of one somatic error on a generic depth-three tree: a strict scalar $s$ shared with a ghosted neighbour, one signal per neuron spread evenly, and the exact path $\widehat\delta_n=\alpha_3\alpha_2\alpha_1\delta_0$; the footer maps \textbf{D}'s two remaining rules; schematic, no data.
-\textbf{C}, Dictionaries over the twelve nonsomatic sites: the tinted site strip is itself the $K=12$ identity, beside $K=1$ all-ones and $K=3$ proximal subtrees; columns are indicator supports averaged by the projected rules (oracle badge); schematic, no data.
-\textbf{D}, MNIST test accuracy for six rules at selected rates; circles shunting, squares additive, dots seeds paired by hairlines; tag, identity gain; band, decoder only; means with 95\% seed-bootstrap intervals over ten fresh paired seeds per architecture at the validation-selected state, smaller than the symbol for the credit rules.
-\textbf{E}, Per neuron minus each cohort's scalar baseline, strict scalar except the matched-width scalar fallback for Fashion-MNIST, in four cohorts, shunting on the row and additive open 0.22 rows below it, each row tagged with its shunting positive seeds out of the seed total (fresh MNIST 10; MNIST DFA 15; Fashion-MNIST 10; flattened CIFAR-10, additive only, 20); means with paired 95\% seed-bootstrap intervals in percentage points at each cohort's selected checkpoint.
-\textbf{F}, Exact path minus per neuron in the same rows, marks and interval type; band, the prespecified $\pm1$ percentage-point equivalence margin against backpropagation (CIFAR-10 exact path minus BP $-0.115$ $[-0.457, 0.226]$ pp, TOST $P=1.6\times10^{-5}$, twenty seeds).
-\textbf{G}, Mean activation-error capture of \textbf{D}'s trained exact-path fields by \textbf{C}'s dictionaries at $K=1$ and $K=3$, activation coordinate; filled, trained; open, initialization; ten seeds per point. The $K=12$ identity dictionary reproduces the field exactly, so it is the reference line at 1 rather than a third column. Training raises shunting capture and lowers additive capture at both budgets. All 95\% seed-bootstrap intervals are at most 0.007 capture units, below symbol size, and are not drawn. pp, percentage points. Source Data: \texttt{source\_data/curated\_publication/figure\_01\_plotted.csv}.}
+\textbf{A}, MNIST input reaches excitatory (blue) and inhibitory (carmine) contacts on one of 128 trees (the $\times128$ tag); readout $\hat y$ and loss $\mathcal L$ return $\delta_u$ into the soma as $\delta_0$ (ink arrow) through the diagonal gain $\Gamma$ (dial), $\bm c=\Gamma\bm c^{\rm source}$; schematic, no data.
+\textbf{B}, Three deliveries of one somatic error on a generic depth-three tree: a strict scalar $s$ shared with a ghosted neighbour, one signal per neuron spread evenly, and the exact path $\widehat\delta_n=\alpha_3\alpha_2\alpha_1\delta_0$; schematic, no data.
+\textbf{C}, Dictionaries over the twelve nonsomatic sites: the tinted site strip is the $K=12$ identity, beside $K=1$ all-ones and $K=3$ proximal subtrees; columns are indicator supports averaged by the projected rules (oracle badge); schematic, no data.
+\textbf{D}, Test accuracy for six rules at selected rates; circles shunting, squares additive, dots seeds paired by hairlines; band, decoder only (frozen core); note, the fresh-cohort within-tree contrasts; means with 95\% seed-bootstrap intervals over ten fresh paired seeds per architecture, smaller than the symbol for the credit rules. Inset, those four credit-rule columns at the same $x$ positions and marks, rescaled until their intervals and ten seeds resolve.
+\textbf{E}, Per neuron minus each cohort's scalar baseline---the strict scalar, except the matched-width fallback for Fashion-MNIST---with shunting on the row and additive open below it, each row tagged with shunting positive seeds out of the total (fresh MNIST 10; MNIST DFA 15; Fashion-MNIST 10; flattened CIFAR-10, additive only, 20); means with paired 95\% seed-bootstrap intervals in percentage points, several narrower than the symbol and hidden by it.
+\textbf{F}, Exact path minus per neuron in the same rows, marks and interval type; band, the prespecified $\pm1$ percentage-point equivalence margin against backpropagation.
+\textbf{G}, Mean activation-error capture of \textbf{D}'s trained exact-path fields by \textbf{C}'s dictionaries at $K=1,3$, activation coordinate; filled, trained; open, initialization; ten seeds per point; reference line at 1, the $K=12$ identity, which reproduces the field exactly. All 95\% seed-bootstrap intervals are at most 0.007 capture units, below symbol size and not drawn. pp, percentage points. Source Data: \texttt{source\_data/curated\_publication/figure\_01\_plotted.csv}.}
 \label{fig:framework}
 \end{figure}
 
@@ -182,35 +182,37 @@ The neuron-shared rule reached chance at lower conflict as branch count increase
 \begin{figure}[tbp]
 \centering
 \includegraphics[width=\textwidth]{main/figure_02.pdf}
+\captionsetup{skip=4pt}
 \caption{\textbf{Credit reaching an unselected branch is harmless until its input conflicts.}
-One logistic output combines $B$ parallel branch weight vectors, with no forward compartment
-or conductance nonlinearity.
 \textbf{A}, Context-gated Fashion-MNIST task; schematic, no data. Carmine ring tagged $c$, the
-context gate on the selected branch; closed gates and faded segments elsewhere; ink arrow,
-somatic error $\delta_0$; glyphs keyed in the panel footer. Tile rows, conflict dose $\chi=0$ and
-$\chi=1$; intermediate $\chi$ replaces each nonselected view independently.
+context gate on the selected branch, drawn open; closed gates filled, segments elsewhere faded;
+ink arrow, somatic error $\delta_0$. Tile rows, conflict dose $\chi=0$ and $\chi=1$.
 \textbf{B}, The same $\delta_0$ delivered three ways on one fan; schematic, no data:
 branch-specific $\delta\mathbf{1}[b=b^\star]$ (green capsule, identical to BP and to a gated
 point), neuron-shared $\delta/B$ (amber bus from the soma, one drop per junction) and a deranged
 route $\delta\mathbf{1}[b=b^\star+1]$ (grey capsule on the neighbouring branch).
-Branch selection is a binary diagonal gain $\Gamma\in\{0,1\}$ on the per-branch profiles of
-Eq.~\ref{eq:routedfield}: the branch-specific rule sets one entry to one, the neuron-shared rule
-sets every entry to $1/B$, and the derangement permutes them.
-\textbf{C}, Analytic $s(\chi)=1-2\chi(B-1)/B$ (lines; the teal ramp is ordinal) against the
-neuron-shared rule's measured initial signed utility (open markers); ink diamonds,
-$\chi_c=B/[2(B-1)]$; $n=20$ seeds per cell, mean and 95\% seed-bootstrap interval at
-initialization.
-\textbf{D}, Analytic $\chi_c$ (ink diamonds) against the first chance crossing of the trained mean
-neuron-shared curve (amber) and each seed's first at-or-below-chance dose; the strip above the axis
-break holds five $B=2$ non-crossing seeds; $n=20$ seeds, sweep levels without intervals, at the
-endpoint state.
-\textbf{E}, Context-0 accuracy lost (percentage points) after a context switch in the two-stream
-task; the derangement never learned context 0 (held-out 19.6\%) and depth-shared equalled
-neuron-shared in every seed; $n=10$ paired training seeds, mean and 95\% seed-bootstrap
-interval, after twelve switch epochs.
-\textbf{F--H}, Held-out accuracy against $\chi$ at $B=2$, $4$ and $8$ for the three deliveries of
-\textbf{B}; dashed vertical, $\chi_c$; dashed horizontal, chance; $n=20$ paired seeds, mean and
-95\% seed-bootstrap band over 2{,}000 held-out examples at the endpoint state.
+Branch selection is a diagonal gain $\Gamma$ (Eq.~\ref{eq:routedfield}).
+\textbf{C}, Analytic $s(\chi)=1-2\chi(B-1)/B$ (lines; the teal ramp is ordinal in $B$) against the
+neuron-shared rule's measured initial signed utility (open markers). Lower strip, the same twenty-four cells as residuals (measured $-$ analytic) on
+a $\pm0.026$ scale, where the intervals are legible. $n=20$ seeds per cell,
+mean and 95\% seed-bootstrap interval at initialization.
+\textbf{D}, Analytic $\chi_c=B/[2(B-1)]$ (ink diamonds) against the trained mean neuron-shared
+curve's first chance crossing (amber) and each seed's first at-or-below-chance dose ($\times n$,
+seeds at that level); trained crossings 0.964, 0.668 and 0.573 (paired Wilcoxon on the predicted
+order, $P=1.9\times10^{-6}$). The strip above the axis break holds five $B=2$ non-crossing seeds;
+$n=20$ seeds per $B$, sweep levels without intervals, endpoint state.
+\textbf{E}, Context-0 accuracy lost after a context switch in the two-stream task, for four
+routes: neuron-shared (amber square), branch-specific (green circle), deranged (grey filled
+triangle) and a random dense rank-2 field (grey open diamond), matched in rank but not a routing
+rule. The deranged route never learned context 0 (held-out 19.6\%), so its loss is undefined, not
+protective. Depth-shared equalled neuron-shared in every seed and is not drawn. $n=10$ paired
+training seeds, mean and 95\% seed-bootstrap interval.
+\textbf{F--H}, Held-out accuracy against $\chi$ at $B=2$, $4$ and $8$ for \textbf{B}'s three
+deliveries; dashed vertical, $\chi_c$; dashed horizontal, chance; faint dots, individual seeds.
+The branch-specific arm is $\chi$-invariant by construction and is drawn as one line, band and
+seed fan. Grey tags, the branch-specific $-$ deranged difference at $\chi=0$; amber tags,
+branch-specific $-$ neuron-shared at $\chi=1$. $n=20$
+paired seeds, mean and 95\% seed-bootstrap band at the endpoint state.
 Source Data: \texttt{source\_data/curated\_publication/figure\_02\_plotted.csv}.}
 \label{fig:branchconflict}
 \end{figure}
@@ -236,13 +238,13 @@ A separate twenty-seed cohort tested how supplied context cues could set the coe
 \includegraphics[width=\textwidth]{main/figure_03.pdf}
 \captionsetup{skip=7pt}
 \caption{\textbf{Ancestry routes help only where the tree's partition matches the task, and only when the coefficients are supplied.}
-\textbf{A}, Eight streams enter the terminals $b_1$--$b_8$ of a balanced tree; context $c$ selects $b_3$, whose block sets the logit $z$, $\delta_0$ enters the soma, and the $K=4$ capsule delivers it to $b_3$ and sibling $b_4$. Junctions define feedback supports only; the tinted band gives each tier's coefficient by tree distance ($+1.00$ cued, $-0.15$ sibling, $-0.45$ same-half nonsibling, $-0.75$ other half).
-\textbf{B}, Ancestry dictionaries $A$ ($8\times K$), the channel carrying $b_3$'s credit shaded, over raw class-signal sums ($-3.05$, $-0.05$, $+0.85$, $+1.00$; unit-row normalization preserves the signs: $-1.08$, $-0.03$, $+0.60$, $+1.00$), beside $b_3$'s delivered support under the four matched controls at $K=4$ (random-sparse and dense rows, one draw).
-\textbf{C}, Held-out accuracy across budgets for the ancestry route, the deranged route and the best matched control (the per-seed maximum over the four controls, a ceiling); 20 paired seeds, per cent, means with 95\% seed-bootstrap intervals at epoch 80.
-\textbf{D}, Task-matched versus degree- and depth-matched rewired tree under ancestry feedback: paired $+23.15$ [$21.03$, $25.32$] and $+5.02$ [$4.19$, $5.94$] percentage points at $K=2,4$, exact ties at $K=1,8$; 20 paired seeds, 95\% paired seed-bootstrap intervals at epoch 80.
-\textbf{E}, Ancestry minus each control at $K=4$; the top row is the per-seed best of the four controls below it, so its seeds are the same observations, intervals from \texttt{review\_evidence\_reanalysis/ancestry\_k4\_control\_contrasts.csv}, Holm-adjusted $P$ across four budgets (top row) or four controls; 20 paired seeds, percentage points, means with 95\% seed-bootstrap intervals at epoch 80.
-\textbf{F}, Coefficient source across the calibration $\times$ cue-noise grid at zero cue delay: soft solid, exploratory hard dashed, labelled by calibration size, against the oracle ceiling and frozen-profile floor. At 256 cues and noise 0.5 the soft readout is $-54.47$ [$-55.45$, $-53.54$] percentage points below oracle and $+7.16$ [$6.26$, $8.07$] above that floor; 20 fresh seeds (52000--52019), per cent, means with 95\% seed-bootstrap bands at epoch 80.
-Teal ramps in \textbf{A} and \textbf{F} are ordinal within this figure alone.
+\textbf{A}, Eight streams enter the terminals $b_1$--$b_8$ of a balanced tree; context $c$ selects $b_3$, whose block sets the logit $z$, $\delta_0$ enters the soma, and the $K=4$ capsule delivers it to $b_3$ and sibling $b_4$. Junctions define feedback supports only; the tinted band gives each tier's coefficient by tree distance.
+\textbf{B}, Ancestry dictionaries $A$ ($8\times K$), drawn as $K$ columns of $8/K$ terminals each with the channel carrying $b_3$'s credit shaded ($K=8$ is the identity, drawn as its diagonal), over raw class-signal sums ($-3.05$, $-0.05$, $+0.85$, $+1.00$; unit-row normalization preserves the signs: $-1.08$, $-0.03$, $+0.60$, $+1.00$), beside $b_3$'s delivered support under the four matched controls at $K=4$ (random-sparse and dense rows, one draw).
+\textbf{C}, Held-out accuracy across budgets for the ancestry route, the deranged route and the best matched control (the per-seed maximum over the four controls, a ceiling); 20 paired seeds, per cent, means with 95\% seed-bootstrap intervals; intervals are smaller than the markers where no bar is visible.
+\textbf{D}, Task-matched versus degree- and depth-matched rewired tree under ancestry feedback: paired $+23.15$ [$21.03$, $25.32$] and $+5.02$ [$4.19$, $5.94$] percentage points at $K=2,4$, exact ties at $K=1,8$; 20 paired seeds, 95\% paired seed-bootstrap intervals.
+\textbf{E}, Ancestry minus each control at $K=4$; the top row is the per-seed best of the four controls, the three drawn below it plus the deranged control whose contrast is off scale, so its seeds are the same observations, intervals from \texttt{review\_evidence\_reanalysis/ancestry\_k4\_control\_contrasts.csv}, Holm-adjusted $P$ across four budgets (top row) or four controls; 20 paired seeds, percentage points, means with 95\% seed-bootstrap intervals.
+\textbf{F}, Coefficient source across the calibration $\times$ cue-noise grid at zero cue delay: soft solid with filled marks, exploratory hard dashed with open marks at the three sampled noise levels, labelled by calibration size, against the oracle ceiling and frozen-profile floor. At 256 cues and noise 0.5, soft is $-54.47$ [$-55.45$, $-53.54$] below oracle and $+7.16$ [$6.26$, $8.07$] above the floor; 20 fresh seeds, per cent, means with 95\% seed-bootstrap bands.
+Teal ramps in \textbf{A} and \textbf{F} are ordinal within this figure alone; all panels report epoch 80.
 Source Data: \texttt{source\_data/curated\_publication/figure\_03\_plotted.csv}.}
 \label{fig:subtreefactorial}
 \end{figure}
@@ -274,14 +276,14 @@ Additional controls delimit the result. Morphology also matters within a fixed r
 \centering
 \includegraphics[width=\textwidth]{main/figure_04.pdf}
 \caption{\textbf{Input-spectrum-matched targets develop different credit geometry and different tolerance of calibrated broadcast credit.}
-\textbf{A}, Pairwise and quartic targets on one shared balanced tree: soma lowest, inputs $x_1$--$x_8$ (outer two labelled), student output $y$, somatic error $\delta_0$, only the junction badges differing; tree, initialization, examples and input-sensitivity second moment $I_8/4$ are shared. Schematic, no data.
-\textbf{B}, The three credit rules over the six nonsomatic sites: exact path (per-site $\bm q(x)$), unit broadcast (amber bus) and calibrated broadcast (blue bus; drop-dot radii are the mean absolute calibrated weight, $0.133$--$0.386$, signs mixed, set at step $0$ from 256 unlabeled examples). Schematic, no data.
-\textbf{C}, Held-out NMSE against updates on the pairwise target at the frozen rule-specific rates; label-noise floor dashed ($n=20$ paired seeds, 95\% percentile bootstrap bands, fixed checkpoints).
-\textbf{D}, As \textbf{C} for the quartic target, all twenty exact trajectories drawn: three stall past the primary checkpoint and reach the floor by 4,096 updates ($n=20$ seeds, 95\% bands, fixed checkpoints).
-\textbf{E}, A depth-four nested control on its own tree, not sharing $I_8/4$ ($n=20$ seeds, 95\% bands, fixed checkpoints); \textbf{C}--\textbf{E} denominators are the clean target variances ($1.0$, $0.5$, $1.0$), so heights are not comparable, and the teal ramp orders targets within this figure only.
-\textbf{F}, Quartic minus pairwise difference in calibrated-broadcast minus exact NMSE at four budgets; dots the paired seeds, filled diamonds endpoint states, open diamonds validation-selected states ($n=20$ seeds, 95\% paired percentile intervals, 20 of 20 positive at every budget).
-\textbf{G}, Cumulative exact-trained path-field energy captured by the best $k$ oracle directions, the uniform profile a separate unfitted category and the nested mean dashed ($n=20$ seeds, 95\% percentile intervals, fixed checkpoint at 1,024 updates).
-\textbf{H}, Exact-path NMSE rises when leaf input assignments are shuffled at fixed shape and parameter count; grey dots the paired seeds ($n=20$ seeds per target, 95\% paired percentile intervals, 20 of 20 positive, endpoint state at 1,024 updates; copy in Supplementary Fig.~S13C).
+\textbf{A}, Pairwise and quartic targets on one shared balanced tree: soma lowest, inputs $x_1$--$x_8$ (outer two labelled), student output $y$, somatic error $\delta_0$, only the junction badges differing. Schematic, no data.
+\textbf{B}, The three credit rules over the six nonsomatic sites: exact path (per-site $\bm q(x)$), unit broadcast (amber bus) and calibrated broadcast (blue bus; drop-dot radii are the mean absolute calibrated weight, $0.133$--$0.386$, signs mixed). Schematic, except those radii.
+\textbf{C}, Held-out NMSE against updates on the pairwise target at the frozen rule-specific rates; label-noise floor dashed; the vertical dashed line in \textbf{C}--\textbf{E} is the 1,024-update primary checkpoint used in \textbf{G} and \textbf{H} ($n=20$ paired seeds, 95\% percentile bootstrap bands, fixed checkpoints).
+\textbf{D}, As \textbf{C} for the quartic target, all twenty exact trajectories drawn ($n=20$ seeds, 95\% bands, fixed checkpoints).
+\textbf{E}, A depth-four nested control on its own tree, not sharing $I_8/4$ ($n=20$ seeds, 95\% bands, fixed checkpoints); \textbf{C}--\textbf{E} share one axis, but their NMSE denominators are the clean target variances ($1.0$, $0.5$, $1.0$), so floor and curve heights are not comparable between panels; the teal ramp orders targets within this figure only.
+\textbf{F}, Quartic minus pairwise difference in calibrated-broadcast minus exact NMSE at four budgets; dots the paired seeds, filled diamonds endpoint states, open diamonds validation-selected states ($n=20$ seeds, 95\% paired percentile intervals).
+\textbf{G}, Cumulative exact-trained path-field energy captured by the best $k$ oracle directions, the uniform profile a separate unfitted category; the three series are dodged in $k$ against overprinting. Grey dashed, the shared step-0 initial spectrum; horizontal dashed, the $0.95$ capture threshold; the nested mean is dashed ($n=20$ seeds, 95\% percentile intervals, at that checkpoint).
+\textbf{H}, Exact-path NMSE after shuffling leaf input assignments at fixed shape and parameter count; circles, one task family each; black diamond, pooled over the three families ($0.575$ $[0.557, 0.592]$). Grey dots the paired seeds, whose per-family distributions are bimodal, so the mean is not a typical seed; each row prints its own interval under its marker ($n=20$ seeds per target, 95\% paired percentile intervals, endpoint state).
 Source Data: \texttt{source\_data/curated\_publication/figure\_04\_plotted.csv}.}
 \label{fig:prospective}
 \end{figure}
@@ -305,14 +307,15 @@ The gate coarsens the exact rule's strong context-dependent gain ratio. At match
 \begin{figure}[tbp]
 \centering
 \includegraphics[width=\textwidth]{main/figure_05.pdf}
+\captionsetup{skip=4pt}
 \caption{\textbf{A local inhibitory gate delivers branch-selective credit that matches exact path credit in a conductance tree.}
-\textbf{A}, Seven-compartment circuit: four terminals with excitatory and inhibitory contacts driven by $\exp(\pm z_j)$ feed two junctions (subtrees 1, 2) and a soma with output $V_{\rm s}$ that the somatic error $\delta_0$ enters. Binary context, redrawn each example, raises one junction's inhibitory conductance ($a_p=10$, closed with attenuated descendants); all 24 conductances are plastic. Inset, nominal teacher voltage against the latent feature: increasing in both subtrees (aligned), decreasing in subtree 2 (opposed, dashed); every fitted teacher is independently perturbed (SD 0.15 in log conductance). Schematic, no data.
-\textbf{B}, Four deliveries of $\delta_0$ on identical trees: local distal gate ($\times\,\mathbb{1}[a_p=0]$ at terminals, unit at junctions and soma; context and local eligibility only), exact path ($\alpha$ factors), unit broadcast and two-profile oracle. The hard and continuous gates are the diagonal gain $\Gamma$ of Eq.~\ref{eq:routedfield} restricted to $\{0,1\}$ and to $(0,1]$ on the two distal profiles. Schematic, no data.
-\textbf{C},\textbf{D}, Held-out NMSE against updates (linear to 64, then logarithmic) for aligned and opposed targets; means of 20 paired simulation seeds at Adam 0.03 with 95\% pointwise whole-seed bootstrap bands at 12 fixed checkpoints; rule key in \textbf{C}, tick in \textbf{D} at the median first bound contact, 717 updates.
-\textbf{E}, Opposed-minus-aligned difference in broadcast-minus-gate NMSE at both windows (0.487, 0.468), hairlines joining seeds; $n=20$ paired seeds, 95\% paired whole-seed bootstrap intervals at validation-selected states, prespecified sign-flip $P=3.8\times10^{-6}$ (Holm).
-\textbf{F}, Opposed NMSE within the 4,096-update window: gate shape (hard $2.33\times10^{-5}$, continuous $2.32\times10^{-5}$, exact path $2.18\times10^{-5}$; hard minus exact path $1.5\times10^{-6}$) and placement (swapped 0.949, gate also proximal 0.123); $n=20$ seeds per condition and rate, 95\% whole-seed bootstrap intervals, validation-selected states.
-\textbf{G}, Earlier cohort: distal gradient retained after context averaging at matched initial and broadcast-trained weight states; $n=20$ seeds (2101--2120), 95\% whole-seed bootstrap intervals.
-Wider-bound and all-rate controls: Supplementary Figs.~S20 and S21. Source Data: \texttt{source\_data/curated\_publication/figure\_05\_plotted.csv}.}
+\textbf{A}, Seven-compartment circuit: four terminals driven by $\exp(\pm z_j)$ feed two junctions and a soma that $\delta_0$ enters; binary context raises one junction's inhibitory conductance ($a_p=10$; closed, descendants attenuated). Inset, nominal teacher voltage against the latent feature, aligned solid and opposed dashed; fitted teachers are independently perturbed. Blue, excitatory contacts; magenta, inhibitory contacts and the context gate. Schematic, except the inset curves.
+\textbf{B}, Four deliveries of $\delta_0$ on identical trees: local distal gate ($\times\,\mathbb{1}[a_p=0]$ at terminals, unit above), exact path ($\alpha$ factors), unit broadcast and two-profile oracle. The card draws the hard gate; both gates restrict $\Gamma$ (Eq.~\ref{eq:routedfield}) to $\{0,1\}$ and $(0,1]$ and both appear in \textbf{F}. Schematic, no data.
+\textbf{C},\textbf{D}, Held-out NMSE for aligned and opposed targets; means of 20 paired seeds with 95\% pointwise whole-seed bootstrap bands; rule key in \textbf{C} (exact path solid, local distal gate dashed, two-profile oracle dotted, unit broadcast solid), tick in \textbf{D} at the median first bound contact, 717 updates. Exact path, gate and oracle coincide within the line width from 256 updates.
+\textbf{E}, Opposed-minus-aligned difference in broadcast-minus-gate NMSE at both windows, hairlines joining seeds; dashed rule, zero interaction; $n=20$ paired seeds, 95\% paired whole-seed bootstrap intervals at validation-selected states, prespecified sign-flip $P=3.8\times10^{-6}$ (Holm).
+\textbf{F}, Opposed NMSE within the 4,096-update window by gate shape and placement; filled marks, the hard gate $\mathbb{1}[a_p=0]$; open marks, the continuous gate $1/(1+g^{\rm I}_p a_p)$; small open circles, the same condition at Adam 0.01 (left) and 0.1 (right); dashed rule, unit broadcast. At the swapped gate and both gate shapes, spread and intervals are narrower than the markers. $n=20$ seeds per condition and rate, 95\% whole-seed bootstrap intervals, validation-selected states.
+\textbf{G}, Earlier cohort: distal gradient retained after context averaging at initial and broadcast-trained weights, hairlines joining each seed across states; dashed rule at 1, no context cancellation. Exact-credit means coincide at the two states but the trained distribution splits, five of twenty seeds below 0.17. $n=20$ seeds, 95\% whole-seed bootstrap intervals, narrower than the markers at the initial state.
+Source Data: \texttt{source\_data/curated\_publication/figure\_05\_plotted.csv}.}
 \label{fig:conductancecredit}
 \end{figure}
 
@@ -334,13 +337,13 @@ Within D3, the LocalCA exact-path-minus-shared-soma accuracy gap changed from $+
 \centering
 \includegraphics[width=\textwidth]{main/figure_06.pdf}
 \caption{\textbf{Task organization sets the forward benefit of serial dendrites, and the training budget sets the credit-rule ranking.}
-\textbf{A}, The same eight nonsomatic compartments per soma in one stage (D1 $[8]$) or three (D3 $[2,1,2]$): blue, eight excitatory class-bearing contacts; carmine, inhibitory sensors, all tiers in D1, one tier per stage in D3; somatic error $\delta_0$; footer, the resource-identical grouped-point control. D2 $[2,3]$ and D4 $[1,1,2,2]$ keep that inventory: 66,178 parameters, 14,336 active synapses. Schematic, no data.
-\textbf{B}, Generative model: nested gains act on 4, 2 and 1 blocks of the input stream, flat gains on eight blocks each, and local-ratio inputs carry it inside every module (frozen task configuration, Methods); sensors report tier $\ell$ with fidelity $\alpha$. Schematic, no data.
-\textbf{C}, Serial-minus-grouped-point test accuracy at fixed D3 under exact BP, by task family and fidelity (colours ordinal within this panel); the local-ratio value at $\alpha=1$ is an exact tie in all ten pairs, not a sampled null (exact-path LocalCA counterpart, Supplementary Fig.~S22D).
-\textbf{D}, Three-tier task: accuracy against serial depth for four credit arms, two resource-matched controls and the point-network ceiling, with the four-tier D4-minus-D3 contrast; raw-additive means vary by up to 1.6 points across re-runs.
-\textbf{E}, Validation-selected accuracy for six 600-epoch restarts of the same seeds, dotted, the autograd-broadcast variant of each rule; paired labels name arms whose 600-epoch ends differ by 0.48 and 0.02 points. Restarts, not continuations: the 180-epoch D3-minus-D1 gain reads 30.82 points here, 30.86 originally; counts of still-training fits use $\text{epochs\_run}\ge$ epoch.
+\textbf{A}, The same eight nonsomatic compartments per soma in one stage (D1 $[8]$) or three (D3 $[2,1,2]$): blue, eight excitatory class-bearing contacts; carmine, inhibitory sensors, all tiers in D1, one tier per stage in D3; somatic error $\delta_0$; footer, the resource-identical grouped-point control. D2 $[2,3]$ and D4 $[1,1,2,2]$ keep that inventory. Schematic, no data.
+\textbf{B}, Generative model: nested gains act on 4, 2 and 1 blocks of the input stream, flat gains on eight blocks each, and local-ratio inputs inside every module; sensors report tier $\ell$ with fidelity $\alpha$. Schematic, no data.
+\textbf{C}, Serial-minus-grouped-point test accuracy at fixed D3 under exact BP, by task family and fidelity (colours ordinal within this panel); the local-ratio value at $\alpha=1$ is an exact tie, not a sampled null (exact-path LocalCA counterpart, Supplementary Fig.~S22D).
+\textbf{D}, Three-tier task: accuracy against serial depth for four credit arms, two resource-matched controls (grouped and reversed, dodged in depth, agreeing within 0.4 points) and the point-network ceiling; intervals are smaller than the markers except for the additive arm. The four-tier cohort is not drawn here: it is a different cohort from the ladder. Raw-additive means vary by up to 1.6 points across re-runs.
+\textbf{E}, Validation-selected accuracy for six 600-epoch restarts of the same seeds; dotted, the autograd-broadcast variant of each rule; thin grey, the D1 reference, lightened once fewer than eight of its ten fits are still running; bands are narrower than the line width. Paired labels name arms whose 600-epoch ends differ by 0.48 and 0.02 points. Restarts, not continuations.
 \textbf{F}, Best validation loss for the same arms; open markers, the eight D1 stopping epochs.
-\textbf{G,H}, Paired exact-path-minus-shared-soma differences in accuracy and cross-entropy; the band in \textbf{G} is where the pointwise interval straddles zero; the dotted rule in \textbf{E}--\textbf{H} marks the 180-epoch budget.
+\textbf{G,H}, Paired exact-path-minus-shared-soma differences in accuracy and cross-entropy; the band in \textbf{G} marks the unresolved sign change, epochs 300--330; the dotted rule in \textbf{E}--\textbf{H} marks the 180-epoch budget.
 Points are means over ten paired seeds; bars and shading are descriptive 95\% paired-seed bootstrap intervals, pointwise in \textbf{E}--\textbf{H}; accuracy endpoints are validation-selected states. Source Data: \texttt{source\_data/curated\_publication/figure\_06\_plotted.csv}.}
 \label{fig:physicaldepth}
 \end{figure}
@@ -359,7 +362,7 @@ For an ensemble of perturbations, numerator and denominator sum over field colum
 
 Small focal shunts in reciprocal cables generated gradient-change fields without inspecting the selected dictionary. These fields nevertheless favor ancestry by construction under a somatic loss, as derived below. The test asks how a small dictionary compresses the tree's own passive responses. In the initial eight-cell cohort, broadcast captured 31.4\% of field energy, near the 32.6\% rank-one ceiling (Source Data). Every dictionary therefore contained one common broadcast and $K-1$ spatial profiles, with the protocol fixed before evaluation in 47 disjoint cells from the same mouse and a reconstructed second mouse.
 
-Varying $K$ separates the common signal from the additional spatial information each dictionary can capture (Fig.~\ref{fig:topology}D). At eight columns in the disjoint 47-cell cohort a shared broadcast captured 0.203 of total energy and broadcast-plus-ancestry 0.619, against 0.578 for degree--depth matched surrogate trees, 0.511 for depth bins and 0.436 for shuffled routes (Fig.~\ref{fig:topology}E). Cell by cell, ancestry exceeded its own surrogate mean in 38 of 47 cells, but in 11 cells at least half of the 200 surrogate trees matched or exceeded the actual tree (Fig.~\ref{fig:topology}F). The paired ancestry-minus-surrogate advantage was 0.041 of total energy (95\% cell-bootstrap interval, 0.020--0.062) and 5.08 percentage points of post-broadcast energy (2.44--7.68); against depth bins it was 0.108 (0.077--0.135) and 13.51 points (9.86--16.84), positive in 45 cells, with shuffled and random routes at 23.06 and 27.17 points (Fig.~\ref{fig:topology}G). Actual ancestry improves average compression within this passive response family, while coarse geometry explains much of the capacity.
+Varying $K$ separates the common signal from the additional spatial information each dictionary can capture (Fig.~\ref{fig:topology}D). At eight columns in the disjoint 47-cell cohort a shared broadcast captured 0.203 of total energy and broadcast-plus-ancestry 0.619, against 0.578 for degree--depth matched surrogate trees, 0.511 for depth bins and 0.436 for shuffled routes (Fig.~\ref{fig:topology}D). Cell by cell, ancestry exceeded its own surrogate mean in 38 of 47 cells, but in 11 cells at least half of the 200 surrogate trees matched or exceeded the actual tree (Fig.~\ref{fig:topology}F). The paired ancestry-minus-surrogate advantage was 0.041 of total energy (95\% cell-bootstrap interval, 0.020--0.062) and 5.08 percentage points of post-broadcast energy (2.44--7.68); against depth bins it was 0.108 (0.077--0.135) and 13.51 points (9.86--16.84), positive in 45 cells, with shuffled and random routes at 23.06 and 27.17 points (Fig.~\ref{fig:topology}G). Actual ancestry improves average compression within this passive response family, while coarse geometry explains much of the capacity.
 
 Capture and delivery cost are separate constraints (Fig.~\ref{fig:topology}G, right columns). The eight-column ancestry dictionary used 18.75\% of the entries of a fully dense dictionary on average---12.5\% for the always-dense broadcast column and 6.25\% for the seven route columns---and its shuffled-routes control preserved exactly the same nonzero count at much lower capture. Equal column count does not ensure equal rank, and nonzero entries are a delivery-cost proxy rather than feedback synapses or metabolic expenditure.
 
@@ -370,14 +373,14 @@ The ancestry-over-surrogate-over-depth ordering held in the initial eight-cell c
 \includegraphics[width=\textwidth]{main/figure_07.pdf}
 \caption{\textbf{Ancestry routes on reconstructed arbors compress a cell's own focal-shunt response fields better than four matched controls, at a fifth of dense wiring, and the advantage is modest and heterogeneous.}
 \textbf{A}, Median-sized arbor of the initial eight-cell cohort (root 864691135409937097, 78 segments): its 76 inhibitory-bearing segments and route 3 over the five sites it addresses; schematic, no data; scale bar, 50~$\mu$m.
-\textbf{B}, The same arbor's seven $K=8$ routes and the matrix $A_8$, collapsed to eight tree-ordered site blocks; supports nest and 32 of 70 sites lie on a route; schematic, no data (entries measured).
+\textbf{B}, The same arbor's seven $K=8$ routes and the matrix $A_8$, collapsed to eight tree-ordered site blocks; supports nest; schematic, no data (entries measured).
 \textbf{C}, A focal shunt on route 3 attenuates its descendants and makes the field $\bm t$ (block means); capture is the $W$-weighted energy of $P_{A_K,W}\bm t$; schematic, no data (field column measured).
-\textbf{D}, Total captured energy against budget $K$; cell means with unpaired 95\% cell-bootstrap bands (20,000 draws) for ancestry and surrogates; dashed floor, the shared broadcast 0.203; $n=47$ cells, 46 at $K=16$.
-\textbf{E}, That energy at $K=8$ as broadcast, spatial and unexplained shares; cell means, no interval; $n=47$ cells.
-\textbf{F}, Each cell's ancestry capture against its own 200-surrogate mean; 38 of 47 lie above equality, open symbols the 11 cells whose surrogates match it at least half the time; cohort mean with 95\% cell-bootstrap intervals; $n=47$ cells at $K=8$.
+\textbf{D}, Total captured energy against budget $K$; cell means with unpaired 95\% cell-bootstrap bands for ancestry and surrogates; dashed floor, the shared broadcast 0.203; $n=47$ cells, 46 at $K=16$.
+\textbf{E}, The spatial share of that energy at $K=8$, i.e. capture beyond the shared broadcast, for the six dictionaries; dashed line, the shared broadcast 0.203, which every dictionary carries; cell means, no interval; $n=47$ cells.
+\textbf{F}, Each cell's ancestry capture minus its own 200-surrogate mean, against that surrogate mean; dashed line, zero difference; open symbols, the 11 cells whose surrogates match the actual tree at least half the time; cohort mean with 95\% cell-bootstrap intervals on both coordinates; $n=47$ cells at $K=8$.
 \textbf{G}, Paired ancestry-minus-control advantages at $K=8$ on post-broadcast (filled) and total (open) scales, with all 47 within-cell differences; means and 95\% cell-bootstrap intervals; right: wiring, rank, positive cells.
 \textbf{H}, Residual capture after the broadcast in three cohorts, one mouse each; means with 95\% cell-bootstrap intervals at $K=8$; $n=8$, 47 and 8 cells.
-Randomized controls average 200 draws; the SVD is an oracle ceiling; typed-contact and joint 3D matching controls are in Supplementary Figs.~S25B and~S26B--D. Fields are modeled passive responses: compression capacity, not observed teaching. Source Data: \texttt{source\_data/curated\_publication/figure\_07\_plotted.csv}.}
+Typed-contact and joint 3D matching controls are in Supplementary Figs.~S25B and~S26B--D. Fields are modeled passive responses: compression capacity, not observed teaching. Source Data: \texttt{source\_data/curated\_publication/figure\_07\_plotted.csv}.}
 \label{fig:topology}
 \end{figure}
 
@@ -397,7 +400,7 @@ In the small-perturbation fields used for Fig.~\ref{fig:topology}, the driving-f
 We compared descendants \(D(k)\) with depth-matched off-route sites \(C(k)\); Supplementary Section~S8 gives a kernel criterion for stronger absolute adjoint changes below a shunt, with the within-cell control in Supplementary Fig.~S29B and the contact-label and reversal-potential controls in Supplementary Fig.~S29E,F.
 The analyzed gradient was sensitivity to open excitatory conductance, \(\gamma_i=q_i(E_{\rm E}-V_i)\). The local driving force \(E_{\rm E}-V_i\) can change differently within each block, so the complete synaptic gradient need not share a single block gain. With primes denoting post-intervention values and \(\epsilon_\gamma\) a numerical floor defined in Methods, we measured absolute log change, \(m_i=|\log[(|\gamma_i'|+\epsilon_\gamma)/(|\gamma_i|+\epsilon_\gamma)]|\), and localization \(\Lambda_k=\operatorname{median}_{D(k)}m_i-\operatorname{median}_{C(k)}m_i\). Positive localization means a larger gradient change below the shunt.
 
-In the permissive normalized model, shunts changed descendant gradients more strongly than depth-matched off-route gradients, with increasing localization at higher dose (Fig.~\ref{fig:focal}C,D). Current injection changed descendant gradients roughly threefold less. Its off-route changes were zero by construction under the soma-restoring control; this is not a general claim that current injection cannot change a gradient. Holding the post-shunt voltage but replacing its adjoint with the baseline adjoint removed most localization, supporting a transport contribution beyond the voltage change alone (Fig.~\ref{fig:focal}E). Substituting the post-shunt adjoint alone added 0.079 log units of localization, positive in all eight cells, while substituting the driving force alone left 0.026 against 0.104 for the full shunt.
+In the permissive normalized model, shunts changed descendant gradients more strongly than depth-matched off-route gradients, with increasing localization at higher dose (Fig.~\ref{fig:focal}C,D). Current injection changed descendant gradients roughly threefold less. Its off-route changes were zero by construction under the soma-restoring control; this is not a general claim that current injection cannot change a gradient. Holding the post-shunt voltage but replacing its adjoint with the baseline adjoint removed most localization, supporting a transport contribution beyond the voltage change alone (Fig.~\ref{fig:focal}E). Adding the post-shunt adjoint on top of the substituted driving force (\(q'd'-d'\)) added 0.079 log units of localization, positive in all eight cells, while substituting the driving force alone left 0.026 against 0.104 for the full shunt.
 
 Physical calibration constrained the spatial selectivity of the gradient change. At axial resistivity \(R_a=150\,\Omega\,\mathrm{cm}\) and specific membrane resistance \(R_m=15{,}000\,\Omega\,\mathrm{cm}^2\), mean shunt-minus-current localization was small and opposite-signed in the initial eight cells and a disjoint 45-cell cohort from the same mouse: \(-0.0019\) and \(+0.0024\), respectively. Signed changes showed attenuation of both descendant and off-route gradients at high resistance; lowering resistance primarily increased descendant attenuation (Fig.~\ref{fig:focal}F), whereas the matched injection enhanced them (\(+0.0099\) at \(R_m=15{,}000\), \(+0.043\) at \(R_m=300\), initial eight cells). This increased the localization contrast by more than an order of magnitude (Fig.~\ref{fig:focal}G). Distributed background conductance produced the same qualitative recovery at fixed high membrane resistance (Fig.~\ref{fig:focal}H; \(-0.0004\), \(+0.121\) and \(+0.259\) at background leak zero, one and four times baseline, positive in eight of eight cells at one and four), consistent with a dependence on electrotonic state \citep{chance2002gain,destexhe2003highconductance}.
 
@@ -409,15 +412,15 @@ The partition identity and electrical calibration connect anatomical dictionarie
 \centering
 \includegraphics[width=\textwidth]{main/figure_08.pdf}
 \caption{\textbf{In a passive model, focal shunts apply ancestry-defined gains whose spatial selectivity is set by electrotonic state.}
-\textbf{A}, Two state-matched interventions: a focal inhibitory shunt (\(g_{\rm shunt}\), ringed contact; descendants faded) and a matched current injection \(\kappa(E_{\rm I}-V_k)\) (open contact); \(I_{\rm soma}\) restores baseline somatic voltage in both. Blue, excitatory contacts. Schematic, no data.
-\textbf{B}, Exact ancestry partition of the median reconstructed cell (root 864691135409937097, as in Fig.~\ref{fig:topology}A) shunted at segment 4227: the site, sixteen descendants, three sister blocks, soma side. Block indicators times one gain per block (\(\eta=0.958\)--\(0.998\), \(\kappa=0.390\)) give the adjoint ratio exactly, a physical instance of the diagonal gain \(\Gamma_u\) of Eq.~\ref{eq:routedfield}: one exact multiplier per ancestry block. Scale bar, 50~\(\mu\)m. Schematic, no data.
-\textbf{C}, Absolute log change in excitatory-conductance gradient magnitude by relation to the site; unit dose, permissive normalized passive parameters; off-route injection zeros are by construction.
-\textbf{D}, The same index against dose normalized to the local leak plus synaptic conductance.
-\textbf{E}, Factor substitution in the exact gradient: injection, post-shunt driving force (\(d'\)), post-shunt adjoint (\(q'\)), both. Substituting the post-shunt adjoint adds 0.079 log units [0.060, 0.095] in eight of eight cells.
+\textbf{A}, Two state-matched interventions: a focal inhibitory shunt (\(g_{\rm shunt}\), ringed contact; descendants faded) and a matched current injection \(\kappa(E_{\rm I}-V_k)\) (open contact); \(I_{\rm soma}\) restores baseline somatic voltage. Blue, excitatory contacts. Schematic, no data.
+\textbf{B}, Exact ancestry partition of the median reconstructed cell (as in Fig.~\ref{fig:topology}A) shunted at segment 4227: the site, sixteen descendants, three sister blocks, soma side. Block indicators times one gain per block (\(\eta=0.958\)--\(0.998\), \(\kappa=0.390\)) give the adjoint ratio exactly: a physical instance of \(\Gamma_u\) (Eq.~\ref{eq:routedfield}). Scale bar, 50~\(\mu\)m. Anatomical schematic; block sizes and gains are derived (Source Data).
+\textbf{C}, Absolute log change in gradient magnitude by relation to the site; unit dose, permissive normalized passive parameters; off-route injection changes are at most \(3\times10^{-4}\), zero for unrelated sites by construction.
+\textbf{D}, The same index against dose normalized to local leak plus synaptic conductance.
+\textbf{E}, Factor substitution in the exact gradient: injection, driving force (\(d'\)), adjoint (\(q'\)), both (\(q'd'\)). Green, conditions carrying the post-shunt adjoint \(q'\); grey, the baseline adjoint \(q\). Thin grey lines join the same cell across \(d'\) and \(q'd'\); the bracket is their paired difference. Adding the post-shunt adjoint on top of the substituted driving force (\(q'd'-d'\)) adds 0.079 log units [0.060, 0.095].
 \textbf{F}, Signed log change at two membrane resistances; green circles, focal shunt (attenuates); grey squares, matched current injection (enhances); filled, descendants; open, depth-matched off-route sites.
-\textbf{G}, Shunt-minus-injection localization against membrane resistance; filled diamonds, initial eight-cell cohort; open triangles, disjoint 45-cell calibration cohort. Inset, bracketed window \(R_m\) 2,400--40,000, \(\pm0.005\) ordinate: opposite signs at \(R_m=15{,}000\), \(-0.0019\) against \(+0.0024\).
+\textbf{G}, Shunt-minus-injection localization against membrane resistance; filled diamonds, initial eight-cell cohort; open triangles, disjoint 45-cell calibration cohort. Inset, the bracketed window: opposite cohort signs at \(R_m=15{,}000\).
 \textbf{H}, Distributed background conductance restores that contrast at \(R_m=15{,}000\,\Omega\,\mathrm{cm}^2\), input-conductance-normalized dose one.
-\textbf{C}--\textbf{H}, unit, a reconstructed cell (sites averaged within cell); symbols and whiskers, cohort means and 95\% cell-bootstrap intervals (20,000 resamples); dots, cells; endpoint, the post-intervention steady state, somatic voltage restored. \(n=8\) cells (101 focal sites), initial eight-cell cohort, one MICrONS mouse; \textbf{F} and \textbf{G} add the disjoint 45-cell calibration cohort (235 sites). These perturbations measure modeled transport, not learning benefit. Source Data: \texttt{source\_data/curated\_publication/figure\_08\_plotted.csv}.}
+\textbf{C}--\textbf{H}, unit, a reconstructed cell (sites averaged within cell); symbols and whiskers, cohort means and 95\% cell-bootstrap intervals; dots, cells (\textbf{F}, shunt-descendant series only; omitted in \textbf{G}); endpoint, the post-intervention steady state, somatic voltage restored. Fill is panel-local and keyed in each panel; in \textbf{C} and \textbf{E} it repeats colour. \(n=8\) cells (101 focal sites), initial eight-cell cohort, one MICrONS mouse; \textbf{F} and \textbf{G} add the disjoint 45-cell calibration cohort (235 sites). Source Data: \texttt{source\_data/curated\_publication/figure\_08\_plotted.csv}.}
 \label{fig:focal}
 \end{figure}
 
@@ -434,36 +437,36 @@ A separate passive-tree model predicted each target's responses from its recorde
 \begin{figure}[tbp]
 \centering
 \includegraphics[width=\textwidth]{main/figure_09.pdf}
-\captionsetup{skip=7pt}
+\captionsetup{skip=4pt}
 \caption{\textbf{Recorded partner responses show no dendritic-ancestry alignment, and this
 sample detects only effects above a partial rank correlation of about 0.25.}
-\textbf{A}, The statistic: the partial rank correlation between shared ancestry and
-response similarity, controlling Euclidean separation and soma-to-contact path-length
-difference. Two contact pairs on one arbor, one sharing a soma-to-ancestor path (green patch);
-insets sketch their response comparison (schematic, no data). No $\delta_0$ is drawn:
-these are stimulus recordings.
-\textbf{B}, Ancestry--response partial rank correlation for the selected-scan and
-all-eligible-scan cohorts (same seven targets); dots, target values; open circles, thirteen
-scan values (descriptive); diamonds, means with 95\% target-bootstrap intervals
-($n=7$ target cells, 20,000 draws): $-0.069\,[-0.251, 0.106]$ selected,
-$-0.048\,[-0.224, 0.118]$ all scans.
-\textbf{C}, Same inference, four topology measures, all thirteen scans; means and
-95\% target-bootstrap intervals ($n=7$ target cells, 20,000 draws).
-\textbf{D}, Detection probability of positive alignment against the mean simulated
-partial rank correlation of the frozen Gaussian model; 4,000 datasets per point,
-shaded 95\% Wilson Monte Carlo intervals (half-width $\leq0.016$, narrower than the stroke).
-Measured reliability reaches 80\% at 0.249 (ancestry variance fraction $\lambda=0.65$ once
-that interval is respected), perfect reliability at 0.248, so the limit is the seven-target sample, not noise; the intercept is the
-false-detection rate, 0.025. The rug locates the observed estimate ($n=7$ target cells, 95\%
-target bootstrap), not a power estimate. Inset, split-half repeat reliability, 125
-partner--scan records, 102 partners (descriptive).
-\textbf{E}, Representative scan (session 4, scan 10 of target 864691135810666525; median
-mapped-input count, no outcome selection): nine mapped inputs placed by ancestry beside the
-realized $9\times4$ support; each route reached one input, and
-$\widehat{\bm\delta}=A\bm c$ is imposed, not observed (schematic, no data; dashed $\delta_0$).
-\textbf{F}, Mapped inputs reached per scan against mapped-input count; open, six scans
-whose four routes each reached one input; dashed, the $4/n$ ceiling, which two scans fall
-below; mean coverage 48.0\%; $n=13$ scans from seven target cells, descriptive, no interval.
+\textbf{A}, The statistic: two contact pairs on one arbor, one sharing a soma-to-ancestor path
+(green patch), the other linked to the soma by dashed hairlines; filled blue discs, excitatory
+contacts; open magenta ring, an inhibitory partner; insets, their response comparison. No data; no $\delta_0$, these are stimulus recordings.
+\textbf{B}, Ancestry--response partial rank correlation, selected-scan cohort; dots, the seven
+target values; open circles, the thirteen all-eligible-scan values (same seven
+targets, stacked where they coincide); diamond, mean with 95\% target-bootstrap interval
+($n=7$ target cells): $-0.069\,[-0.251, 0.106]$.
+\textbf{C}, Same inference, four topology measures, all thirteen scans; means and 95\%
+target-bootstrap intervals ($n=7$ target cells). Top row, the all-eligible-scan partial rank
+correlation, $-0.048\,[-0.224, 0.118]$. Tree distance is sign-flipped, so positive means closer. Below the rule, same-major-branch $\Delta$ is a difference in mean
+similarity, not a correlation: its narrower interval reflects smaller units, not greater
+precision.
+\textbf{D}, Detection probability against the frozen model's mean simulated partial rank
+correlation; shaded 95\% Wilson Monte Carlo intervals (half-width $\leq0.016$, narrower
+than the stroke); the intercept is the false-detection rate, 0.025. The rug locates the observed
+estimate ($n=7$ target cells, 95\% target bootstrap), not a power estimate. Inset, split-half repeat
+reliability, 123 of 125 partner--scan records (102 partners), the two with negative $r$
+omitted.
+\textbf{E}, Representative scan (median mapped-input count, no outcome selection): nine mapped
+inputs placed by ancestry beside the realized $9\times4$ support, with
+$\widehat{\bm\delta}=A\bm c$ imposed, not observed (schematic; dashed $\delta_0$).
+Route-capsule tints aid separability only; the \emph{local rule} badge applies to the whole
+card. Neither encodes a per-route property.
+\textbf{F}, Mapped inputs reached per scan; open, the six scans whose four routes each reached
+one input; dashed, $4/n$, coverage when four routes reach four distinct inputs. Not a
+ceiling: two scans fall below (repeated inputs), three above (multi-input routes).
+Coincident scans are offset $\pm0.2$ horizontally; $n=13$ scans from seven target cells, descriptive, no interval.
 No measured positive control exists.
 Source Data: \texttt{source\_data/curated\_publication/figure\_09\_plotted.csv}, \texttt{source\_data/functional\_topology\_all\_scans/} and \texttt{source\_data/credit\_first\_figures/figure\_08\_sources.json}.}
 \label{fig:boundary}
