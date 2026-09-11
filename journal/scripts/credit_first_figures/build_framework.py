@@ -106,7 +106,7 @@ sys.path.insert(0, str(JOURNAL / "scripts"))
 from figure_canvas import (COLORS, LW_DATA, LW_EDGE, LW_ERR, LW_HAIR, LW_REF,
                            MARKER_MS, PT_BASE, PT_EMPH, SEED_ALPHA, SEED_MS,
                            Margins, NativeCanvas, style_panel, tint_patch)
-from journal_style import K_CYCLE, label_color
+from journal_style import ADDRESS_RAMP, K_CYCLE, label_color
 from credit_tree_schematics import AMBER_TEXT, mix
 from native_schematics import (CONTACT_DIA_PT, GHOST_PCT, Frame,
                                _text_w_pt)
@@ -689,7 +689,13 @@ def dictionaries(ax):
     # title) and its floor rises 3 pt, so the delta-0 tag clears the
     # matrix-name row and the coefficient band under it.
     rows_h, y0 = 75.0, 41.0             # 12 rows at 6.25 pt
-    address = list(K_CYCLE[:3])
+    # QA 2026-09-11 (major): these were K_CYCLE[:3], i.e. the shunting,
+    # additive and scalar inks, so C's three subtree tints came out
+    # pixel-identical to the architecture series drawn in D-G and to B's
+    # delivered-scalar arrow.  One hue then meant "which subtree" here and
+    # "which architecture" two panels away.  Structure now uses the neutral
+    # address ladder, which claims no series hue.
+    address = list(ADDRESS_RAMP)
     # QA 2026-09-09: the arbor's subtrees run left-to-right in the same
     # order as the strip's bands run top-to-bottom
     arbor_colors = address[::-1]

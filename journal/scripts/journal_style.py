@@ -217,6 +217,17 @@ SERIES_COLORS = {
     "pathway":   "#8F66CD",
 }
 
+#: Neutral ladder for structural address, used where a panel must say WHICH
+#: subtree without claiming a series hue.  ``K_CYCLE`` deliberately reuses the
+#: series inks so it adds nothing to the gate matrix, but that makes one hue
+#: carry two meanings whenever an address panel sits beside a series panel in
+#: the same figure: measured in Figure 1, C's three subtree tints were
+#: pixel-identical to the shunting, additive and scalar inks used in D-G.
+#: These are literals, not register names, so they never enter the series x
+#: anatomy gate; they are a lightness ladder in one cool neutral, which reads
+#: as structure rather than as a fifth series.
+ADDRESS_RAMP = ("#3C4350", "#78818F", "#B4BCC6")
+
 #: Four-hue cycle for subtree ADDRESS identity (K = 2/4/8 capsules and the
 #: dictionary blocks).  Names, not literals, so an address drawn by
 #: ``native_schematics`` and one drawn by ``credit_tree_schematics`` cannot
