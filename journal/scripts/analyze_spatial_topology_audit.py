@@ -64,9 +64,9 @@ SEED_OUTCOMES = (
 # three per row at scale 1.0) and one common axes height for every plot panel
 # so the pasted rows share a baseline.
 FIG_H = 4.55
-AX_W = 118.0
+AX_W = 130.0
 AX_H = 96.0
-COL_X0 = (42.0, 218.0, 394.0)
+COL_X0 = (40.0, 212.0, 384.0)
 ROW_Y_TOP = (38.0, 200.0)
 
 N_OWNERS = 128

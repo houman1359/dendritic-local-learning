@@ -1144,8 +1144,8 @@ def plot_fixed_budget(
             "right": 512.0 / 518.4,
             "bottom": 36.0 / 500.4,
             "top": 1.0 - 38.0 / 500.4,
-            "wspace": 58.0 / 118.0,
-            "hspace": 66.0 / 96.0,
+            "wspace": 40.0 / 130.0,
+            "hspace": 69.2 / 96.0,   # 3 x 96 pt axes + 2 gaps in 426.4 pt
         },
     )
     letters = iter("ABCDEFGHI")
@@ -1246,12 +1246,13 @@ def plot_fixed_budget(
             )
         ):
             ax.text(
-                0.97, 0.36,
-                f"BP and exact path\nidentical in {int(bp.n_pairs)}/{int(bp.n_pairs)} seeds",
-                transform=ax.transAxes, ha="right", va="top",
+                0.98, 0.50,
+                f"BP and exact path\nidentical in\n{int(bp.n_pairs)}/{int(bp.n_pairs)} seeds",
+                transform=ax.transAxes, ha="right", va="center",
                 fontsize=PT_SMALL, color=COLORS["mute"], style="italic",
             )
     ax.set_xlim(-0.6, 3.6)
+    ax.set_ylim(-11.6, 1.0)
     ax.set_xticks(np.arange(4), ["BP", "MW\nscalar", "Neuron", "Exact\npath"])
     ax.set_xlabel("feedback rule")
     ax.set_ylabel("D4 - D1 (pp)")
@@ -1328,8 +1329,8 @@ def plot_fixed_budget(
     parameters = resource.total_parameters.to_numpy()
     ax.legend(
         handles,
-        [f"active contacts ({contacts.min() / 1e3:.1f}-{contacts.max() / 1e3:.1f}k)",
-         f"parameters ({parameters.min() / 1e3:.1f}-{parameters.max() / 1e3:.1f}k)"],
+        [f"active contacts ({contacts.min() / 1e3:.1f}\u2013{contacts.max() / 1e3:.1f}k)",
+         f"parameters ({parameters.min() / 1e3:.1f}\u2013{parameters.max() / 1e3:.1f}k)"],
         loc="center", bbox_to_anchor=(0.5, 0.43), fontsize=PT_SMALL, frameon=False,
         handlelength=1.2, handletextpad=0.4,
     )

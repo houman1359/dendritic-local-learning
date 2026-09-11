@@ -13,6 +13,7 @@ from journal_style import (
     COLORS,
     FIG_W,
     LW_DATA,
+    LW_ERR,
     LW_REF,
     PT_LEGEND,
     SEED_ALPHA,
@@ -30,15 +31,6 @@ ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "source_data" / "trained_partition_residual"
 FIGURE = ROOT / "figures" / "generated" / "fig_trained_partition_residual.pdf"
 
-FAMILIES = [
-    ("correct_ancestry_subtrees", "ancestry routes", COLORS["dend"], "o"),
-    ("depth_interleaved_bins", "depth bins", COLORS["additive"], "s"),
-    # Controls are grays.  These two previously wore the reserved
-    # oracle violet and backprop red-brown, so a cross-figure reader
-    # met an "oracle ceiling" and a "BP" curve that were neither.
-    ("random_sparse_matched", "random sparse", COLORS["point_mlp"], "^"),
-    ("within_neuron_route_derangement", "deranged ownership", COLORS["mute"], "D"),
-]
 RESTRICTED = [
     "correct_ancestry_subtrees",
     "within_neuron_route_derangement",
@@ -49,69 +41,159 @@ RESTRICTED = [
 ]
 
 
+# Panel geometry in points.  Panel A is the one this figure contributes to
+# the consolidated supplement (a two-row sheet whose second row holds two
+# 226-pt panels), so it is authored ~300 pt wide with an ordinal budget axis
+# and a difference inset; B and C share the second row.
+FIG_H = 5.3
+AX_H = 96.0
+AX_H_A = 120.0
+ROW_Y_TOP = (36.0, 224.0)
+PANEL_A = (42.0, 340.0)      # x0, width
+PANEL_B = (42.0, 160.0)
+PANEL_C = (262.0, 160.0)
+BUDGETS = [1, 2, 4, 8]
+# Matched-bandwidth partition families drawn in the difference inset: one
+# neutral lightness ladder and three marker shapes, so the blue/teal series
+# hues stay reserved for the coefficient-encoder panels of the same sheet.
+PARTITIONS = [
+    ("correct_ancestry_subtrees", "ancestry", "#232323", "o"),
+    ("depth_interleaved_bins", "depth bins", "#78818F", "s"),
+    ("random_sparse_matched", "random sparse", "#A9AFB8", "^"),
+]
+
+
+def _panel_a(ax, dendritic: pd.DataFrame) -> None:
+    from matplotlib.lines import Line2D
+
+    position = {k: i for i, k in enumerate(BUDGETS)}
+
+    def series(family: str) -> pd.DataFrame:
+        part = dendritic[dendritic.feedback_family.eq(family)].sort_values("budget_k")
+        if list(part.budget_k) != BUDGETS:
+            raise ValueError(f"{family}: expected budgets {BUDGETS}")
+        return part
+
+    families = {family: series(family) for family, *_ in PARTITIONS}
+    ancestry = families["correct_ancestry_subtrees"]
+    # The three matched-bandwidth partitions differ by < 0.005 capture at
+    # every budget (checked here, resolved in the inset), so one stroke
+    # carries them on the main axes.
+    for family, part in families.items():
+        gap = np.abs(part.mean_address_capture.to_numpy() - ancestry.mean_address_capture.to_numpy())
+        if gap.max() >= 0.006:
+            raise ValueError(f"{family} departs from ancestry by {gap.max():.4f}; draw it separately")
+    x = [position[k] for k in ancestry.budget_k]
+    ax.fill_between(
+        x,
+        ancestry.ci95_low_address_capture,
+        ancestry.ci95_high_address_capture,
+        color=COLORS["ink"],
+        alpha=0.12,
+        linewidth=0,
+    )
+    ax.plot(
+        x,
+        ancestry.mean_address_capture,
+        color=COLORS["ink"],
+        marker="o",
+        ms=3.8,
+        lw=LW_DATA,
+        label="matched-bandwidth partitions\n(ancestry, depth bins, random sparse)",
+        zorder=3,
+    )
+    deranged = series("within_neuron_route_derangement")
+    ax.fill_between(
+        x,
+        deranged.ci95_low_address_capture,
+        deranged.ci95_high_address_capture,
+        color=COLORS["mute"],
+        alpha=0.12,
+        linewidth=0,
+    )
+    ax.plot(
+        x,
+        deranged.mean_address_capture,
+        color=COLORS["mute"],
+        marker="D",
+        ms=3.4,
+        ls="--",
+        lw=LW_DATA,
+        label="deranged ownership",
+        zorder=3,
+    )
+    ax.set_xlim(-0.35, 3.35)
+    ax.set_xticks(list(position.values()), [str(k) for k in BUDGETS])
+    ax.set_ylim(-0.04, 1.04)
+    ax.set_xlabel("teaching-route budget $K$ (ordinal axis)")
+    ax.set_ylabel("exact-field capture")
+    panel_title(ax, "A", "Capture by route budget")
+    style_axis(ax, grid="y")
+    clean_legend(ax, fontsize=PT_LEGEND, loc="lower right",
+                 bbox_to_anchor=(1.0, 0.07), handlelength=1.6)
+
+    # Inset: the between-partition differences, re-centred on the ancestry
+    # mean, at the two budgets where the families are not tied by
+    # construction.  Bars are each family's own 95% interval.
+    inset = ax.inset_axes([0.14, 0.50, 0.36, 0.46])
+    offsets = np.linspace(-0.22, 0.22, len(PARTITIONS))
+    handles = []
+    for offset, (family, label, color, marker) in zip(offsets, PARTITIONS):
+        part = families[family].set_index("budget_k")
+        centre = ancestry.set_index("budget_k").mean_address_capture
+        for slot, budget in enumerate((2, 4)):
+            mean = part.loc[budget, "mean_address_capture"] - centre.loc[budget]
+            low = part.loc[budget, "ci95_low_address_capture"] - centre.loc[budget]
+            high = part.loc[budget, "ci95_high_address_capture"] - centre.loc[budget]
+            inset.errorbar(
+                slot + offset,
+                100 * mean,
+                yerr=[[100 * (mean - low)], [100 * (high - mean)]],
+                fmt=marker,
+                ms=3.2,
+                color=color,
+                lw=LW_ERR,
+                capsize=1.5,
+                capthick=LW_ERR,
+                zorder=3,
+            )
+        handles.append(Line2D([], [], marker=marker, color=color, ls="none", ms=3.2, label=label))
+    inset.axhline(0, color=COLORS["grid"], lw=LW_REF, zorder=1)
+    inset.set_xlim(-0.6, 1.6)
+    inset.set_xticks([0, 1], ["$K=2$", "$K=4$"])
+    inset.set_ylim(-0.65, 0.65)
+    inset.set_yticks([-0.5, 0, 0.5])
+    inset.set_ylabel("capture \u2212 ancestry (pp)", fontsize=PT_LEGEND, labelpad=1.5)
+    inset.tick_params(labelsize=PT_LEGEND, length=2.4, pad=1.5)
+    for spine in ("top", "right"):
+        inset.spines[spine].set_visible(False)
+    # Family key to the right of the inset, in the empty upper-middle of the
+    # main axes (the partition stroke passes well below it there).
+    inset.legend(handles=handles, loc="upper left", fontsize=PT_LEGEND, frameon=False,
+                 handlelength=0.8, handletextpad=0.3, borderaxespad=0.0, labelspacing=0.15,
+                 bbox_to_anchor=(1.03, 1.0))
+
+
 def main() -> None:
     apply_neurips_style()
     summary = pd.read_csv(SOURCE / "condition_summary.csv")
     outcomes = pd.read_csv(SOURCE / "seed_state_residuals.csv")
     correlations = pd.read_csv(SOURCE / "seed_level_associations.csv")
 
-    fig, axes = plt.subplots(
-        1,
-        3,
-        figsize=(FIG_W, 2.55),
-        gridspec_kw={
-            "left": 0.095,
-            "right": 0.985,
-            "bottom": 0.30,
-            "top": 0.82,
-            "wspace": 0.62,
-        },
-    )
-    ax_a, ax_b, ax_c = axes
+    fig = plt.figure(figsize=(FIG_W, FIG_H))
+    fw, fh = FIG_W * 72.0, FIG_H * 72.0
+
+    def axes_pt(x0, y_top, width, height):
+        return fig.add_axes([x0 / fw, (fh - y_top - height) / fh, width / fw, height / fh])
+
+    ax_a = axes_pt(PANEL_A[0], ROW_Y_TOP[0], PANEL_A[1], AX_H_A)
+    ax_b = axes_pt(PANEL_B[0], ROW_Y_TOP[1], PANEL_B[1], AX_H)
+    ax_c = axes_pt(PANEL_C[0], ROW_Y_TOP[1], PANEL_C[1], AX_H)
 
     dendritic = summary[
         summary.architecture.eq("dendritic_tree") & summary.state.eq("trained")
     ]
-    for family, label, color, marker in FAMILIES:
-        part = dendritic[dendritic.feedback_family.eq(family)].sort_values("budget_k")
-        ax_a.plot(
-            part.budget_k,
-            part.mean_address_capture,
-            color=color,
-            marker=marker,
-            ms=3.5,
-            lw=LW_DATA,
-            label=label,
-        )
-        ax_a.fill_between(
-            part.budget_k,
-            part.ci95_low_address_capture,
-            part.ci95_high_address_capture,
-            color=color,
-            alpha=0.09,
-            linewidth=0,
-        )
-    ax_a.set_xticks([1, 2, 4, 8])
-    ax_a.set_ylim(-0.04, 1.04)
-    ax_a.set_xlabel("teaching-route budget $K$")
-    ax_a.set_ylabel("exact-field capture")
-    panel_title(ax_a, "A", "Capture by route budget")
-    style_axis(ax_a, grid="y")
-    clean_legend(ax_a, fontsize=PT_LEGEND - 1.0, loc="upper left")
-    # Honest coincidence note (the convention used figure-wide): the ancestry,
-    # depth-bin and random-sparse curves overlap almost exactly, so the green
-    # series is otherwise invisible beneath its two controls.
-    ax_a.text(
-        0.97,
-        0.06,
-        "ancestry, depth and random\ncurves coincide",
-        transform=ax_a.transAxes,
-        ha="right",
-        va="bottom",
-        fontsize=PT_LEGEND - 1.0,
-        style="italic",
-        color=COLORS["mute"],
-    )
+    _panel_a(ax_a, dendritic)
 
     trained = outcomes[
         outcomes.state.eq("trained")
@@ -162,7 +244,7 @@ def main() -> None:
     style_axis(ax_b, grid="both")
     clean_legend(
         ax_b,
-        fontsize=PT_LEGEND - 0.9,
+        fontsize=PT_LEGEND,
         loc="upper center",
         bbox_to_anchor=(0.5, -0.30),
         ncol=3,

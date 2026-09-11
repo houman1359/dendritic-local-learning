@@ -7,6 +7,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from matplotlib.patches import FancyArrowPatch
+from matplotlib.lines import Line2D
 from journal_style import apply_neurips_style
 from neurips_style import FIG_W
 
@@ -20,14 +21,15 @@ LABELS={"oracle_context":"Oracle context","learned_local_cue":"Learned, soft",
 
 def style():
     apply_neurips_style()
-    plt.rcParams.update({"font.family":"DejaVu Sans","font.size":8,"axes.titlesize":9,
-        "axes.labelsize":8,"xtick.labelsize":7.5,"ytick.labelsize":7.5,"legend.fontsize":7,
+    # Journal face and the three-token type scale (7 / 8 / 9 pt).
+    plt.rcParams.update({"font.size":8,"axes.titlesize":8,
+        "axes.labelsize":8,"xtick.labelsize":7,"ytick.labelsize":7,"legend.fontsize":7,
         "pdf.fonttype":42,"ps.fonttype":42,"axes.spines.top":False,"axes.spines.right":False})
 
 
-def panel(ax,letter,title):
+def panel(ax,letter,title,x=-.16):
     ax.set_title(title,loc="left",pad=10)
-    ax.text(-.16,1.09,letter,transform=ax.transAxes,fontweight="bold",fontsize=11)
+    ax.text(x,1.09,letter,transform=ax.transAxes,fontweight="bold",fontsize=9)
 
 
 def interval(v):
@@ -42,6 +44,48 @@ def curve(ax,frame,x,metric,color,label,marker="o",ls="-"):
     values=np.asarray(values)
     ax.errorbar(values[:,0],values[:,1],yerr=np.stack([values[:,1]-values[:,2],values[:,3]-values[:,1]]),
                 color=color,label=label,marker=marker,ms=3.5,lw=1.25,capsize=2,ls=ls)
+
+
+SEED_JITTER=np.random.default_rng(4471)
+MARKER={"learned_local_cue":"o","mismatched_encoder":"o","hard":"s"}
+REFERENCE={"oracle_context":"-.","frozen_profile":":"}
+
+
+def seeded_curve(ax,frame,x,metric,color,label,marker="o",ls="-",positions=None,dodge=0.,jitter=.03):
+    """Mean curve with 95% paired-seed bootstrap bars and every seed drawn behind it.
+
+    ``positions`` maps the factor levels to ordinal x positions (a handful of
+    levels is drawn at equal spacing); ``dodge`` separates series whose means
+    coincide at the marker scale.
+    """
+    xpos=(lambda v:positions[v]) if positions else (lambda v:v)
+    values=[]
+    for at,g in frame.groupby(x):
+        seeds=g[metric].to_numpy(float)
+        ax.scatter(xpos(at)+dodge+SEED_JITTER.normal(0,jitter,len(seeds)),seeds,s=7,marker=marker,
+                   color=color,alpha=.3,edgecolors="none",zorder=2)
+        values.append((xpos(at),*interval(seeds)))
+    values=np.asarray(values)
+    ax.errorbar(values[:,0]+dodge,values[:,1],yerr=np.stack([values[:,1]-values[:,2],values[:,3]-values[:,1]]),
+                color=color,label=label,marker=marker,ms=3.5,lw=1.25,capsize=2,ls=ls,
+                markeredgecolor="white",markeredgewidth=.5,zorder=4)
+
+
+def reference_line(ax,frame,metric,color,label,ls,note_x,va="bottom"):
+    """A condition-invariant control drawn as one labelled reference line.
+
+    The mean is required to be identical at every level of the panel factor
+    (it is, per seed, by construction); the band is its 95% seed interval.
+    """
+    per_level=frame.groupby(["calibration_samples","cue_noise_sd","cue_delay_trials"])[metric].mean()
+    if not np.allclose(per_level.to_numpy(),per_level.iloc[0]):
+        raise ValueError(f"{label} varies across the panel factor; draw it as a series")
+    seeds=frame.groupby("seed")[metric].mean().to_numpy(float)
+    m,lo,hi=interval(seeds)
+    ax.axhspan(lo,hi,color=color,alpha=.12,lw=0,zorder=1)
+    ax.axhline(m,color=color,ls=ls,lw=1.0,zorder=3,label=label)
+    ax.text(note_x,m+(1.2 if va=="bottom" else -1.2),f"{label} {m:.1f}%",ha="center",va=va,
+            fontsize=7,color=color,zorder=5)
 
 
 def encoder():
@@ -61,27 +105,52 @@ def encoder():
     ax.text(.5,-.04,"Soft coefficients → four subtree profiles\nMultiply by scalar error and local eligibility",ha="center",va="center",transform=ax.transAxes,fontsize=8)
     ax=axs[0,1];panel(ax,"B","Cue noise limits learning")
     f=final[final.calibration_samples.eq(256)&final.cue_delay_trials.eq(0)]
-    for method in LABELS:curve(ax,f[f.method.eq(method)],"cue_noise_sd","accuracy_percent",COLORS[method],LABELS[method])
+    for method in LABELS:curve(ax,f[f.method.eq(method)],"cue_noise_sd","accuracy_percent",COLORS[method],LABELS[method],ls=REFERENCE.get(method,"-"))
     h=hfinal[hfinal.calibration_samples.eq(256)&hfinal.cue_delay_trials.eq(0)&hfinal.method.eq("learned_local_cue")]
     curve(ax,h,"cue_noise_sd","accuracy_percent",COLORS["hard"],"Learned, hard*",marker="s",ls="--")
     ax.set(xlabel="Cue noise SD",ylabel="Held-out accuracy (%)",ylim=(10,90))
-    handles,labels=ax.get_legend_handles_labels()
-    fig.legend(handles,labels,frameon=False,loc="upper center",bbox_to_anchor=(.54,.995),ncol=3,columnspacing=1.5,handlelength=1.5)
+    # Shared key with the real plot glyphs of panels C and D (reference lines
+    # for the two condition-invariant controls, square + dashed for the
+    # exploratory hard readout), plus the asterisk footnote beneath it.
+    key=[Line2D([],[],color=COLORS["oracle_context"],ls=REFERENCE["oracle_context"],lw=1.0,label="Oracle context"),
+         Line2D([],[],color=COLORS["learned_local_cue"],marker="o",ms=3.5,lw=1.25,label="Learned, soft"),
+         Line2D([],[],color=COLORS["frozen_profile"],ls=REFERENCE["frozen_profile"],lw=1.0,label="Frozen profile"),
+         Line2D([],[],color=COLORS["mismatched_encoder"],marker="o",ms=3.5,lw=1.25,label="Mismatched"),
+         Line2D([],[],color=COLORS["hard"],marker="s",ms=3.5,lw=1.25,ls="--",label="Learned, hard*")]
+    fig.legend(handles=key,frameon=False,loc="upper center",bbox_to_anchor=(.54,.995),ncol=3,columnspacing=1.5,handlelength=1.8)
+    fig.text(.54,.947,"* maximum-probability route selection by the same frozen encoder (exploratory paired sensitivity)",
+             ha="center",va="top",fontsize=7,color="#555555")
+    # Row 2 is the pair the consolidated supplement reproduces: equal axes
+    # widths, one shared accuracy axis, every seed drawn, ordinal x axes.
+    row_y=axs[1,0].get_position().y0;row_h=axs[1,0].get_position().height
+    axs[1,0].set_position([42/518.4,row_y,220/518.4,row_h]);axs[1,1].set_position([282/518.4,row_y,220/518.4,row_h])
     ax=axs[1,0];panel(ax,"C","Calibration data and computation")
     f=final[final.cue_noise_sd.eq(.5)&final.cue_delay_trials.eq(0)]
-    for method in LABELS:curve(ax,f[f.method.eq(method)],"calibration_samples","accuracy_percent",COLORS[method],LABELS[method])
+    positions={16:0,64:1,256:2}
+    reference_line(ax,f[f.method.eq("oracle_context")],"accuracy_percent",COLORS["oracle_context"],"oracle",REFERENCE["oracle_context"],0.5,va="bottom")
+    reference_line(ax,f[f.method.eq("frozen_profile")],"accuracy_percent",COLORS["frozen_profile"],"frozen",REFERENCE["frozen_profile"],0.5,va="top")
+    seeded_curve(ax,f[f.method.eq("mismatched_encoder")],"calibration_samples","accuracy_percent",COLORS["mismatched_encoder"],LABELS["mismatched_encoder"],positions=positions,dodge=.07)
+    seeded_curve(ax,f[f.method.eq("learned_local_cue")],"calibration_samples","accuracy_percent",COLORS["learned_local_cue"],LABELS["learned_local_cue"],positions=positions,dodge=-.07)
     h=hfinal[hfinal.cue_noise_sd.eq(.5)&hfinal.cue_delay_trials.eq(0)&hfinal.method.eq("learned_local_cue")]
-    curve(ax,h,"calibration_samples","accuracy_percent",COLORS["hard"],"Learned, hard*",marker="s",ls="--")
-    ax.set(xscale="log",xlabel="Calibration examples (30 epochs)",ylabel="Held-out accuracy (%)",ylim=(10,90));ax.set_xticks([16,64,256],["16","64","256"])
-    ax=axs[1,1];panel(ax,"D","Cue / eligibility timing mismatch")
+    seeded_curve(ax,h,"calibration_samples","accuracy_percent",COLORS["hard"],"Learned, hard*",marker="s",ls="--",positions=positions)
+    ax.set(xlabel="Calibration examples (30 epochs)",ylabel="Held-out accuracy (%)",ylim=(13,87),xlim=(-.45,2.45))
+    ax.set_xticks([0,1,2],["16","64","256"]);ax.set_yticks([20,40,60,80])
+    # D shares C's accuracy axis, so its letter sits just left of its spine.
+    ax=axs[1,1];panel(ax,"D","Cue / eligibility timing mismatch",x=-.055)
     f=final[final.calibration_samples.eq(256)&final.cue_noise_sd.eq(.5)]
-    for method in LABELS:curve(ax,f[f.method.eq(method)],"cue_delay_trials","accuracy_percent",COLORS[method],LABELS[method])
+    positions={0:0,1:1,4:2}
+    reference_line(ax,f[f.method.eq("oracle_context")],"accuracy_percent",COLORS["oracle_context"],"oracle",REFERENCE["oracle_context"],0.5,va="bottom")
+    reference_line(ax,f[f.method.eq("frozen_profile")],"accuracy_percent",COLORS["frozen_profile"],"frozen",REFERENCE["frozen_profile"],0.5,va="top")
+    seeded_curve(ax,f[f.method.eq("mismatched_encoder")],"cue_delay_trials","accuracy_percent",COLORS["mismatched_encoder"],LABELS["mismatched_encoder"],positions=positions,dodge=.07)
+    seeded_curve(ax,f[f.method.eq("learned_local_cue")],"cue_delay_trials","accuracy_percent",COLORS["learned_local_cue"],LABELS["learned_local_cue"],positions=positions,dodge=-.07)
     h=hfinal[hfinal.calibration_samples.eq(256)&hfinal.cue_noise_sd.eq(.5)&hfinal.method.eq("learned_local_cue")]
-    curve(ax,h,"cue_delay_trials","accuracy_percent",COLORS["hard"],"Learned, hard*",marker="s",ls="--")
-    ax.set(xlabel="Cue delay (independent trials)",ylabel="Held-out accuracy (%)",ylim=(10,90),xticks=[0,1,4])
+    seeded_curve(ax,h,"cue_delay_trials","accuracy_percent",COLORS["hard"],"Learned, hard*",marker="s",ls="--",positions=positions)
+    ax.text(1.5,50,"soft, hard and mismatched\ncoincide at delays 1 and 4\n(within 1 pp)",ha="center",va="center",fontsize=7,color="#555555",style="italic")
+    ax.set(xlabel="Cue delay (independent trials)",ylim=(13,87),xlim=(-.45,2.45))
+    ax.set_xticks([0,1,2],["0","1","4"]);ax.set_yticks([20,40,60,80]);ax.tick_params(axis="y",labelleft=False)
     ax=axs[2,0];panel(ax,"E","Task-learning trajectories")
     f=soft[soft.calibration_samples.eq(256)&soft.cue_noise_sd.eq(.5)&soft.cue_delay_trials.eq(0)]
-    for method in LABELS:curve(ax,f[f.method.eq(method)],"epoch","accuracy_percent",COLORS[method],LABELS[method])
+    for method in LABELS:curve(ax,f[f.method.eq(method)],"epoch","accuracy_percent",COLORS[method],LABELS[method],ls=REFERENCE.get(method,"-"))
     h=hard[hard.calibration_samples.eq(256)&hard.cue_noise_sd.eq(.5)&hard.cue_delay_trials.eq(0)&hard.method.eq("learned_local_cue")]
     curve(ax,h,"epoch","accuracy_percent",COLORS["hard"],"Learned, hard*",marker="s",ls="--")
     ax.set(xlabel="Task epoch",ylabel="Held-out accuracy (%)",ylim=(10,90))

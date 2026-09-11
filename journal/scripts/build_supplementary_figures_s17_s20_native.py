@@ -3,7 +3,8 @@
 
 No fitting or new inference is performed. S17 reuses the original violin and
 schematic functions. S18 replays retained summary intervals; S19/S20 reproduce
-the historical bootstrap seeds, draws, ordering and jitter exactly. The optional
+the historical bootstrap seeds, draws and jitter exactly (S19 A regroups its
+rows on a broken axis but keys every bootstrap draw by condition). The optional
 companion validator compares plotted numerical artists with the original source
 renderers, independently of the new layout.
 """
@@ -131,26 +132,106 @@ def build_s18():
     return cv
 
 
+def _broken_x_segments(ax, segments, *, gap_frac=0.035):
+    """Split one panel box into abutting x-axis segments (an axis break).
+
+    The host panel keeps its slot, title and manifest record; each returned
+    inset owns one contiguous data range, so interior spans that hold no
+    point are removed from the page instead of taking three quarters of the
+    width. Widths are proportional to the data ranges, so every segment
+    keeps the same scale.
+    """
+    for spine in ax.spines.values():
+        spine.set_visible(False)
+    ax.set_xticks([]);ax.set_yticks([]);ax.grid(False)
+    spans=[hi-lo for lo,hi in segments]
+    usable=1.0-gap_frac*(len(segments)-1)
+    insets=[];x=0.0
+    for k,((lo,hi),span) in enumerate(zip(segments,spans)):
+        w=usable*span/sum(spans)
+        ins=ax.inset_axes([x,0.0,w,1.0])
+        ins.set_xlim(lo,hi)
+        style_axis(ins,grid='x')
+        ins.spines['top'].set_visible(False);ins.spines['right'].set_visible(False)
+        if k>0:
+            ins.spines['left'].set_visible(False);ins.tick_params(axis='y',left=False,labelleft=False)
+        insets.append(ins);x+=w+gap_frac
+    # Conventional paired slashes mark every break on the bottom spine.
+    mark=dict(marker=[(-1,-.5),(1,.5)],markersize=6,linestyle='none',
+              color=COLORS['edge'],mec=COLORS['edge'],mew=.8,clip_on=False,zorder=6)
+    for left,right in zip(insets[:-1],insets[1:]):
+        left.plot([1],[0],transform=left.transAxes,**mark)
+        right.plot([0],[0],transform=right.transAxes,**mark)
+    return insets
+
+
 def build_s19():
     from analyze_prospective_learning_results import bootstrap_ci
     frame = read('trained_subtree_address','seed_outcomes.csv')
     names=['neuron_shared_k1','correct_subtree_k2','within_neuron_deranged_k2','random_dense_rank2','exact_transport','gated_point_emulation']
     labels=['neuron-shared','correct ancestry','route derangement','random rank-2','exact','gated point']
     colors=[COLORS[k] for k in ('low_rank','shunting','highlight','additive','bp','point_mlp')]
+    # Historical bootstrap seed of every condition, keyed by name so the
+    # replayed intervals do not depend on the row order drawn below.
+    seed_of={name:42000+i for i,name in enumerate(names)}
     cv=NativeCanvas(250/72,1,hgutter_pt=32,margins=Margins(left=95,right=17,top=27,bottom=38))
-    a=cv.panel('A',0,0,6,title='Two-stream learning',grid='x')
+    a=cv.panel('A',0,0,6,title='Two-branch learning',grid='none')
     b=cv.panel('B',0,6,6,title='Context forgetting',grid='x')
-    for ax,metric,count,seedbase in [(a,'test_accuracy',6,42000),(b,'context_switch_forgetting',4,43000)]:
-        for index,(name,color) in enumerate(zip(names[:count],colors[:count])):
-            values=frame[frame.condition.eq(name)][metric].to_numpy(float)
-            assert len(values)==10
-            ordered=np.sort(values)
-            ax.scatter(ordered,index-.40+np.linspace(-.08,.08,len(values)),s=SEED_MS**2,color=color,alpha=SEED_ALPHA,edgecolors='none',zorder=3)
-            m,lo,hi=bootstrap_ci(values,seed=seedbase+index)
-            ax.errorbar(m,index,xerr=[[m-lo],[hi-m]],color=color,marker='D',markerfacecolor='white',
+    # A: exact_transport, correct_subtree_k2 and gated_point_emulation give
+    # bitwise-identical accuracy in all ten seeds (also backpropagation), so
+    # one row carries the three; the identical group leads, the live contrast
+    # (neuron-shared) follows, and the two failure controls close the panel.
+    rows_a=[('exact_transport','exact = correct ancestry\n= gated point',COLORS['bp']),
+            ('neuron_shared_k1','neuron-shared',COLORS['low_rank']),
+            ('random_dense_rank2','random rank-2',COLORS['additive']),
+            ('within_neuron_deranged_k2','route derangement',COLORS['highlight'])]
+    for name in ('correct_subtree_k2','gated_point_emulation','backpropagation'):
+        assert np.array_equal(np.sort(frame[frame.condition.eq(name)].test_accuracy.to_numpy(float)),
+                              np.sort(frame[frame.condition.eq('exact_transport')].test_accuracy.to_numpy(float)))
+    # Axis break: no seed lies in 0.21-0.48 or 0.56-0.72, so those spans are
+    # removed and every segment keeps one common scale.
+    segs=_broken_x_segments(a,[(0.165,0.225),(0.465,0.585),(0.725,0.845)])
+    STRIP=-.32
+    def seg_for(x):
+        return next(s for s in segs if s.get_xlim()[0]<=x<=s.get_xlim()[1])
+    for index,(name,label,color) in enumerate(rows_a):
+        values=frame[frame.condition.eq(name)].test_accuracy.to_numpy(float)
+        assert len(values)==10
+        ordered=np.sort(values)
+        ys=index+STRIP+np.linspace(-.08,.08,len(values))
+        for s in segs:
+            s.scatter(ordered,ys,s=SEED_MS**2,color=color,alpha=SEED_ALPHA,edgecolors='none',zorder=3)
+        if name=='random_dense_rank2':
+            # Bimodal across seeds (7 collapsed at chance, 3 recovered): a
+            # mean and its interval would sit in the empty gap between the
+            # modes, so the row shows the median and the two modal counts.
+            med=float(np.median(values))
+            lowmode=int((values<0.6).sum());highmode=len(values)-lowmode
+            assert (lowmode,highmode)==(7,3)
+            seg_for(med).plot([med],[index],marker='|',ms=MARKER_MS+4.5,mew=LW_DATA,color=color,ls='none',zorder=5)
+            seg_for(med).text(med+.013,index,f'{lowmode} at chance',ha='left',va='center',fontsize=PT_SMALL,color=label_color(color))
+            segs[2].text(.727,index,f'{highmode} recovered',ha='left',va='center',fontsize=PT_SMALL,color=label_color(color))
+        else:
+            m,lo,hi=bootstrap_ci(values,seed=seed_of[name])
+            seg_for(m).errorbar(m,index,xerr=[[m-lo],[hi-m]],color=color,marker='D',markerfacecolor='white',
                         ms=MARKER_MS+1.2,lw=LW_ERR,elinewidth=LW_ERR,capsize=ERR_CAPSIZE,zorder=5)
-        ax.set_yticks(range(count),labels[:count]);ax.set_ylim(count-.45,-.80)
-    a.set_xlim(.10,.90);a.set_xticks([.2,.4,.6,.8]);a.set_xlabel('held-out accuracy')
+    # Balanced binary task: chance is 0.5.
+    segs[1].axvline(.5,color=COLORS['mute'],ls='--',lw=LW_REF,zorder=1)
+    segs[1].text(.507,-.52,'chance',ha='left',va='center',fontsize=PT_SMALL,color=COLORS['mute'])
+    for s in segs:
+        s.set_ylim(len(rows_a)-.45,-.80)
+    segs[0].set_yticks(range(len(rows_a)),[r[1] for r in rows_a])
+    segs[0].set_xticks([.2]);segs[1].set_xticks([.5]);segs[2].set_xticks([.75,.8])
+    segs[1].set_xlabel('Held-out accuracy')
+    for index,(name,color) in enumerate(zip(names[:4],colors[:4])):
+        values=frame[frame.condition.eq(name)].context_switch_forgetting.to_numpy(float)
+        assert len(values)==10
+        ordered=np.sort(values)
+        b.scatter(ordered,index-.40+np.linspace(-.08,.08,len(values)),s=SEED_MS**2,color=color,alpha=SEED_ALPHA,edgecolors='none',zorder=3)
+        m,lo,hi=bootstrap_ci(values,seed=43000+index)
+        b.errorbar(m,index,xerr=[[m-lo],[hi-m]],color=color,marker='D',markerfacecolor='white',
+                    ms=MARKER_MS+1.2,lw=LW_ERR,elinewidth=LW_ERR,capsize=ERR_CAPSIZE,zorder=5)
+    b.set_yticks(range(4),labels[:4]);b.set_ylim(4-.45,-.80)
     b.axvline(0,color=COLORS['mute'],ls='--',lw=LW_REF)
     b.set_xlim(-.06,.68);b.set_xticks([0,.2,.4,.6]);b.set_xlabel('context-0 forgetting')
     cv.fig.text(.57,.045,'Small dots: seeds; diamonds: mean ± 95% CI',ha='center',fontsize=PT_SMALL,color=COLORS['mute'])

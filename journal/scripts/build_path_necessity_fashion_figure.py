@@ -47,6 +47,7 @@ from figure_canvas import (
     PT_LABEL,
     PT_LEGEND,
     PT_SMALL,
+    SEED_MS,
     Margins,
     NativeCanvas,
 )
@@ -245,6 +246,76 @@ def _boundary_panel(ax, crossings: pd.DataFrame) -> None:
     ax.set_ylabel("conflict threshold")
 
 
+def _boundary_test(ax, crossings: pd.DataFrame,
+                   seed_boundaries: pd.DataFrame) -> None:
+    """Observed chance crossing against the analytic boundary, per B.
+
+    Local copy of the ``boundary_test`` panel this render was registered
+    with (commit e30b10b of build_main_figure_04.py); the main-figure module
+    since replaced it with ``boundary_order``, which has another signature
+    and look, so the import it used to satisfy no longer exists.
+    """
+    crossings = crossings.sort_values("branches")
+    branches = crossings.branches.to_numpy(int)
+    x = np.arange(len(branches), dtype=float)
+    predicted = crossings.predicted_boundary.to_numpy(float)
+    observed = crossings.trained_mean_curve_chance_crossing.to_numpy(float)
+
+    # Per-seed crossings, grid-quantized by the dose sweep: with them the
+    # agreement stops being two coincident means and becomes visible mass on
+    # the boundary-adjacent doses.  Seeds that never reached chance inside
+    # the sweep (5/20 at B = 2) are absent by construction.
+    rng = np.random.default_rng(41)
+    for xpos, branch in zip(x, branches, strict=True):
+        doses = (seed_boundaries[seed_boundaries.branches.eq(branch)]
+                 .first_at_or_below_chance_accuracy_dose.dropna()
+                 .to_numpy(float))
+        ax.scatter(np.full(doses.size, xpos)
+                   + rng.uniform(-0.10, 0.10, doses.size), doses,
+                   s=SEED_MS ** 2, color=AMBER, alpha=0.35,
+                   edgecolors="none", zorder=2.5)
+        n_missing = int(seed_boundaries[seed_boundaries.branches.eq(branch)]
+                        .first_at_or_below_chance_accuracy_dose.isna().sum())
+        if n_missing:
+            ax.scatter(xpos + np.linspace(-.09,.09,n_missing),
+                       np.full(n_missing,1.055),marker="^",s=SEED_MS**2,
+                       facecolors="white",edgecolors=AMBER,lw=LW_EDGE,zorder=5)
+            ax.text(xpos+.12,1.075,f"{n_missing}/20 > 1",fontsize=PT_SMALL,
+                    color=AMBER,ha="left",va="center")
+
+    for xpos, theory, trained in zip(x, predicted, observed, strict=True):
+        ax.plot([xpos, xpos], [theory, trained], color=MUTE, lw=LW_HAIR,
+                alpha=0.7, zorder=1)
+    ax.plot(x, predicted, color=INK, lw=LW_REF, dashes=(2.4, 1.8), zorder=2)
+    ax.plot(x, observed, color=AMBER, lw=LW_DATA, zorder=3)
+    ax.plot(x, predicted, linestyle="none", marker="D", ms=MARKER_MS,
+            markerfacecolor="white", markeredgecolor=INK,
+            markeredgewidth=LW_EDGE, zorder=4, label="analytic boundary")
+    ax.plot(x, observed, linestyle="none", marker="o", ms=MARKER_MS,
+            markerfacecolor=AMBER, markeredgecolor="white",
+            markeredgewidth=LW_EDGE, zorder=5,
+            label="mean-curve crossing")
+    ax.legend(loc="lower left", bbox_to_anchor=(0.0, 0.02), frameon=False,
+              handlelength=1.5, handletextpad=0.45, borderaxespad=0.0,
+              fontsize=PT_SMALL)
+    ax.set_xlim(-0.35, 2.35)
+    ax.set_ylim(0.50, 1.105)
+    ax.set_xticks(x, [str(branch) for branch in branches])
+    ax.set_yticks([0.50, 0.75, 1.00])
+    ax.set_xlabel("branches B")
+    # One name for the one variable: C and D call the x quantity "conflict
+    # dose", so this axis reports the chance-crossing dose, with the same
+    # subscripted boundary symbol the other panels tag.  The subscript chains
+    # on the rotated label: for a 90-degree label the glyph-down (drop)
+    # direction is +x in display space and the advance direction is +y.
+    ax.set_ylabel("chance-crossing dose χ")
+    ax.annotate("c", xy=(1.0, 1.0), xycoords=ax.yaxis.label,
+                xytext=(-0.2, 0.4), textcoords="offset points",
+                fontsize=PT_SMALL, color=INK, rotation=90,
+                rotation_mode="anchor", ha="left", va="baseline",
+                annotation_clip=False, zorder=5)
+
+
 def build() -> list:
     """Write the publication PDF and its 600-dpi review PNG."""
     mpl.rcParams["lines.markeredgewidth"] = LW_EDGE
@@ -281,16 +352,22 @@ def build() -> list:
 
     path_task_schematic(ax_a)
     _accuracy_panel(ax_b, summary)
-    from build_main_figure_04 import boundary_test
-    boundary_test(ax_c,crossings,seed_boundaries)
+    _boundary_test(ax_c,crossings,seed_boundaries)
 
     interval_rows=[]
-    specs=[("common_exact_state",0,"#9AA5B4","-","epoch 0"),
-           ("common_exact_state",50,"#5F6B7E","-","epoch 50"),
-           ("common_exact_state",250,"#202936","-","epoch 250"),
-           ("own_state",250,AMBER,"--","own state, 250")]
+    specs=[("common_exact_state",0,"#9AA5B4","-","common state, epoch 0"),
+           ("common_exact_state",50,"#5F6B7E","-","common state, epoch 50"),
+           ("common_exact_state",250,"#202936","-","common state, epoch 250"),
+           ("own_state",250,AMBER,"--","own state, epoch 250")]
+    # The eight sampled doses are drawn at equal spacing (an ordinal dose
+    # axis) with chi as the tick label: on a linear axis five of them fall in
+    # [0.5, 0.75] and their markers merge, while [0.75, 1] holds no sample.
+    dose_levels=np.sort(trajectories.conflict_probability.unique().astype(float))
+    dose_labels=["0","0.25","0.5","4/7","0.6","2/3","0.75","1"]
+    assert np.allclose(dose_levels,[0,.25,.5,4/7,.6,2/3,.75,1],atol=1e-6)
+    BOUNDARY=COLORS["oracle"]
     for col,branch,letter in [(0,2,"D"),(4,4,"E"),(8,8,"F")]:
-        ax=canvas.panel(letter,2,col,4,grid="y",title=f"Update alignment, B={branch}")
+        ax=canvas.panel(letter,2,col,4,grid="y",title=f"Update alignment, {branch} branches")
         for state,epoch,color,ls,label in specs:
             part=trajectories[trajectories.branches.eq(branch)&trajectories.condition.eq("neuron_shared_k1")
                               &trajectories.state_comparison.eq(state)&trajectories.epoch.eq(epoch)]
@@ -302,15 +379,33 @@ def build() -> list:
                 xx.append(dose);means.append(vals.mean());low.append(lo);high.append(hi)
                 interval_rows.append(dict(branches=branch,epoch=epoch,state_comparison=state,
                                           conflict_probability=dose,mean_cosine=vals.mean(),ci95_low=lo,ci95_high=hi,n_seeds=20))
-            ax.plot(xx,means,color=color,ls=ls,marker="o",ms=2.8,lw=LW_DATA,label=label)
-            ax.fill_between(xx,low,high,color=color,alpha=.10,lw=0)
+            pos=np.interp(xx,dose_levels,np.arange(len(dose_levels)))
+            assert np.allclose(pos,np.round(pos))
+            ax.plot(pos,means,color=color,ls=ls,marker="o",ms=2.8,lw=LW_DATA,label=label)
+            ax.fill_between(pos,low,high,color=color,alpha=.10,lw=0)
+        # Mean-field boundary chi_c = B / (2 (B - 1)) = 1, 2/3, 4/7: the odd
+        # doses 4/7 and 2/3 were sampled to bracket it, so it is a tick.
+        boundary=branch/(2.0*(branch-1))
+        bpos=float(np.interp(boundary,dose_levels,np.arange(len(dose_levels))))
+        assert np.isclose(bpos,round(bpos))
+        ax.axvline(bpos,color=BOUNDARY,lw=LW_REF,dashes=(2.4,2.0),zorder=0,
+                   label="mean-field boundary χc" if letter=="D" else None)
         ax.axhline(0,color=MUTE,lw=LW_REF,ls=":")
-        ax.set_ylim(-1.05,1.08);ax.set_xticks([0,.5,1]);ax.set_yticks([-1,0,1])
-        ax.set_xlabel("credit conflict χ")
+        ax.set_ylim(-1.05,1.08);ax.set_yticks([-1,0,1])
+        ax.set_xlim(-0.4,len(dose_levels)-0.6)
+        ax.set_xticks(np.arange(len(dose_levels)),dose_labels)
+        ax.tick_params(axis="x",labelsize=PT_SMALL)
+        ax.set_xlabel("credit conflict χ (sampled doses)")
         if letter=="D":
             ax.set_ylabel("cosine with exact update")
             ax.legend(loc="lower left",frameon=False,fontsize=PT_SMALL,
-                       handlelength=1.2,labelspacing=.2)
+                       handlelength=1.2,labelspacing=.12,borderaxespad=.15,
+                       handletextpad=.5)
+        # Tag sits inside the axes beside the rule, on the side away from
+        # the nearer x limit, where no curve reaches the top band.
+        right=bpos<len(dose_levels)/2
+        ax.text(bpos+(.14 if right else -.14),1.0,"χc",ha="left" if right else "right",
+                va="top",fontsize=PT_SMALL,color=BOUNDARY)
         canvas.add_letter(letter,ax)
     pd.DataFrame(interval_rows).to_csv(ROOT/"source_data/review_branch_trajectories/figure_S29_gradient_intervals.csv",index=False)
 
