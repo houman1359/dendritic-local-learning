@@ -1128,11 +1128,17 @@ def panel_state(ax, physical, ranges):
         # smaller than the open triangle that carries its mean, so the panel
         # asserted an interval excluding zero that the reader could not see.
         # The caption's opposite-sign sentence rests on exactly this pair.
+        # QA 2026-09-11 (major): with the stroke at zorder 6 the disjoint
+        # cohort's open triangle came out SOLID, because its 3.0 pt marker has
+        # a ~1 pt interior and the 2.6 pt interval plus its two caps covered
+        # all of it -- a fifth, unkeyed marker in the one window the caption's
+        # opposite-sign claim rests on.  The stroke now sits under the marker;
+        # only the caps ride on top, wide enough to show past its edges.
         for xv, l, h in zip(x, lo, hi):
-            inset.plot([xv, xv], [l, h], color=INK, lw=LW_ERR, zorder=6,
+            inset.plot([xv, xv], [l, h], color=INK, lw=LW_ERR, zorder=2.5,
                        solid_capstyle="butt")
             for bound in (l, h):
-                inset.plot([xv], [bound], marker="_", markersize=2.6,
+                inset.plot([xv], [bound], marker="_", markersize=4.6,
                            markeredgecolor=INK, markeredgewidth=LW_ERR,
                            linestyle="none", zorder=6)
     inset.axhline(0.0, color=MUTE, lw=LW_REF, dashes=(2.2, 1.8), zorder=1)

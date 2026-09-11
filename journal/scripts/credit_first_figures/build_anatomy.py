@@ -1565,18 +1565,15 @@ def panel_h(ax, tables, inclusion):
     # Pinky intervals as little as the value order permits
     step, last = 0.115, 0.950
     # Regression repair 2026-09-11: started on its own marker, a leader had to
-    # cross the Pinky columns to its right -- Ancestry's ran over the
-    # Surrogate upper cap and the Random interval, Surrogate's over the
-    # Random interval.  Each leader now starts in clear paper just past the
-    # group's rightmost drawn mark (Depth at +0.30, its jitter and marker
-    # radius), at its family's mean height; the marker keeps its identity by
-    # shape and colour, and the leader carries only the height.
-    x_start = max(x for x, _ in pinky.values()) + 0.10
+    # cross the Pinky columns to its right; started in clear paper it was a
+    # stroke attached to nothing at either end (checked at 600 dpi: 9-14 pt
+    # from its own mark, 12-29 pt from its label).  The leaders are gone.  The
+    # ladder is colour-matched to the marks and ordered by value, exactly as
+    # D's direct labels are, so shape and colour carry the identity alone.
     for method in order:
         x, mean = pinky[method]
         y = min(mean, last)
         last = y - step
-        _leader(ax, (x_start, mean), (2.62, y))
         ax.annotate(FAMILIES[method]["short"], xy=(1.0, y),
                     xycoords=("axes fraction", "data"), xytext=(10.0, 0.0),
                     textcoords="offset points", fontsize=PT_BASE,
