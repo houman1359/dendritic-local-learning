@@ -12,6 +12,8 @@ Both are written as small stand-alone panel PDFs under
   one axis is exact; the frozen source table is the same
   ``mechanism_checkpoint_rows_valid.csv`` that
   ``build_supplementary_figure_s09_native.py`` reads.  No number changes.
+  The exact-path family (both quantities 1 by construction) is a labelled
+  reference line rather than two degenerate box slots.
 * ``si_utility_bound.pdf`` -- the panel demoted out of main Fig. 1 (AMENDMENTS
   B3), new Supplementary Fig. S3G: the analytic rank/noise trade-off
   ``q^2 / (q + K sigma^2)``.  Analytic, no data.
@@ -40,10 +42,28 @@ import journal_style as js  # noqa: E402
 
 OUT = ROOT / "figures/supplementary/components"
 SOURCE = ROOT / "source_data/prospective_input_validity"
-FAMILIES = ["global_scalar_available", "ancestry_available", "exact_transport"]
-LABELS = ["strict scalar", "per-neuron", "exact path"]
-TONES = [js.SERIES_COLORS["scalar"], js.SERIES_COLORS["per_soma"],
-         js.SERIES_COLORS["oracle"]]
+# 2026-09-11: the exact-path family is no longer drawn.  Both of its
+# quantities are 1 by construction (cosine of the exact gradient with itself;
+# the exact step's fraction of its own progress), so its two slots were a
+# bare diamond on a zero-height box and cost a third of the panel; unity is
+# now one labelled reference line.  The strip of 120 checkpoint values is
+# drawn behind each box, and the mean with its 95% bootstrap interval sits
+# beside the box instead of on top of it, where the 0.02-0.03 half-widths
+# were hidden under the marker and read as the whiskers.
+FAMILIES = ["global_scalar_available", "ancestry_available"]
+LABELS = ["strict\nscalar", "per\nneuron"]
+TONES = [js.SERIES_COLORS["scalar"], js.SERIES_COLORS["per_soma"]]
+N_CHECKPOINTS = 120
+
+# Page geometry shared by both components: the same 163 x 137.2 pt page and
+# the same axes box (28.8 pt title band above, 25.1 pt tick-and-label band
+# below) as the frozen figure_S05 panel E crop they flank in Supplementary
+# Fig. S3, so the three plot boxes of that row share one height and one
+# baseline.  Points, measured on the frozen S05 crop.
+PANEL_W_PT = 163.0
+PANEL_H_PT = 137.2
+PANEL_TOP_PT = 28.8
+PANEL_BOTTOM_PT = 25.1
 
 
 def _panel(width_pt, height_pt, *, left, right, top, bottom):
@@ -57,6 +77,10 @@ def _panel(width_pt, height_pt, *, left, right, top, bottom):
                        1.0 - (top + bottom) / height_pt])
     for side in ("top", "right"):
         ax.spines[side].set_visible(False)
+    # token line weights for the frame and ticks (the style default is 0.8)
+    for spine in ax.spines.values():
+        spine.set_linewidth(js.LW_EDGE)
+    ax.tick_params(width=js.LW_EDGE)
     return fig, ax
 
 
@@ -75,46 +99,78 @@ def checkpoint_merged(dest=OUT / "si_checkpoint_merged.pdf"):
     data = pd.read_csv(SOURCE / "mechanism_checkpoint_rows_valid.csv")
     data = data[np.isclose(data.relative_step, 1e-5)
                 & data.feedback_family.isin(FAMILIES)]
-    fig, ax = _panel(163.0, 148.0, left=34, right=9, top=26, bottom=30)
-    metrics = [("gradient_cosine", "cosine with exact gradient"),
-               ("norm_matched_fraction_of_exact", "fraction of exact progress")]
+    fig, ax = _panel(PANEL_W_PT, PANEL_H_PT, left=34, right=6,
+                     top=PANEL_TOP_PT, bottom=PANEL_BOTTOM_PT)
+    metrics = ["gradient_cosine", "norm_matched_fraction_of_exact"]
+    # Slot layout: two families per metric, a 1.6-unit gap between the two
+    # metric groups; the mean/CI marker sits 0.42 right of its box.
+    slot_x = {(0, 0): 0.0, (0, 1): 1.0, (1, 0): 2.6, (1, 1): 3.6}
+    ci_dx = 0.42
+    y_lo, y_hi = -0.8, 1.28
     positions = []
-    for mi, (metric, _) in enumerate(metrics):
+    rng = np.random.default_rng(700)
+    clipped = []
+    for mi, metric in enumerate(metrics):
         for fi, family in enumerate(FAMILIES):
-            vals = data[data.feedback_family.eq(metric and family)][metric]
-            vals = vals.to_numpy()
-            assert len(vals) == 120, (metric, family, len(vals))
-            x = mi * 3.6 + fi
+            vals = data[data.feedback_family.eq(family)][metric].to_numpy()
+            assert len(vals) == N_CHECKPOINTS, (metric, family, len(vals))
+            x = slot_x[(mi, fi)]
             positions.append(x)
-            box = ax.boxplot([vals], positions=[x], widths=0.62,
+            tone = TONES[fi]
+            # every checkpoint, jittered inside the box width; values below
+            # the axis floor are drawn at the floor as open triangles and
+            # listed beside them (2 of the 480 values, both strict-scalar
+            # one-step progress)
+            jitter = rng.uniform(-0.16, 0.16, size=len(vals))
+            inside = vals >= y_lo
+            ax.plot(x + jitter[inside], vals[inside], ls="none", marker="o",
+                    ms=1.5, mfc=tone, mec="none", alpha=0.45, zorder=2)
+            if (~inside).any():
+                low = np.sort(vals[~inside])
+                ax.plot(x + jitter[~inside], np.full((~inside).sum(), y_lo),
+                        ls="none", marker="v", ms=3.0, mfc="white", mec=tone,
+                        mew=js.LW_EDGE, zorder=3.5, clip_on=False)
+                clipped.append((x, low))
+            box = ax.boxplot([vals], positions=[x], widths=0.5,
                              patch_artist=True, showfliers=False,
-                             medianprops={"color": "white", "linewidth": 1.0})
-            box["boxes"][0].set_facecolor(TONES[fi])
-            box["boxes"][0].set_alpha(0.6)
-            box["boxes"][0].set_linewidth(js.LW_EDGE)
-            for key in ("whiskers", "caps"):
-                for art in box[key]:
-                    art.set_linewidth(js.LW_EDGE)
+                             whis=1.5, zorder=3,
+                             boxprops={"facecolor": "none", "edgecolor": tone,
+                                       "linewidth": js.LW_ERR},
+                             medianprops={"color": tone,
+                                          "linewidth": js.LW_ERR},
+                             whiskerprops={"color": tone,
+                                           "linewidth": js.LW_EDGE},
+                             capprops={"color": tone,
+                                       "linewidth": js.LW_EDGE})
             mean, lo, hi = _bootstrap_ci(vals, seed=700 + mi * 10 + fi)
-            ax.errorbar(x, mean, yerr=[[mean - lo], [hi - mean]], fmt="D",
-                        mfc="white", color=js.COLORS["ink"], ms=2.6,
-                        lw=js.LW_ERR, capsize=1.6)
-    ax.axhline(0, color=js.COLORS["mute"], ls="--", lw=js.LW_REF)
+            ax.errorbar(x + ci_dx, mean, yerr=[[mean - lo], [hi - mean]],
+                        fmt="D", mfc="white", mec=js.COLORS["ink"],
+                        ecolor=js.COLORS["ink"], ms=2.6, mew=js.LW_EDGE,
+                        lw=js.LW_ERR, capsize=1.6, zorder=4)
+    for x, low in clipped:
+        ax.text(x + 0.26, y_lo + 0.02,
+                ", ".join(f"{v:.2f}".replace("-", "−") for v in low),
+                ha="left", va="bottom", fontsize=js.PT_BASE,
+                color=js.COLORS["mute"])
+    ax.axhline(0, color=js.COLORS["mute"], ls="--", lw=js.LW_REF, zorder=1)
+    # unity: the exact-path value of both quantities, by construction
+    ax.axhline(1.0, color=js.COLORS["mute"], ls=":", lw=js.LW_REF, zorder=1)
+    ax.text(-0.42, 0.985, "exact path = 1", ha="left", va="top",
+            fontsize=js.PT_BASE, color=js.COLORS["mute"])
     ax.set_xticks(positions)
-    ax.set_xticklabels(LABELS * 2, rotation=38, ha="right",
-                       fontsize=js.PT_BASE)
+    ax.set_xticklabels(LABELS * 2, fontsize=js.PT_BASE, linespacing=1.05)
+    ax.set_yticks([-0.5, 0.0, 0.5, 1.0])
     ax.set_ylabel("dimensionless value", fontsize=js.PT_EMPH)
-    ax.set_ylim(-0.62, 1.32)
-    ax.set_xlim(-0.75, 5.75)
-    ax.text(0.24, 0.985, "gradient cosine", ha="center", va="top",
-            transform=ax.transAxes, fontsize=js.PT_BASE,
-            color=js.COLORS["ink"])
-    ax.text(0.76, 0.985, "one-step progress", ha="center", va="top",
-            transform=ax.transAxes, fontsize=js.PT_BASE,
-            color=js.COLORS["ink"])
-    ax.axvline(2.3, color=js.COLORS["grid"], lw=js.LW_HAIR)
+    ax.set_ylim(y_lo, y_hi)
+    ax.set_xlim(-0.45, 4.25)
+    for x, label in ((0.5 + 0.5 * ci_dx, "gradient cosine"),
+                     (3.1 + 0.5 * ci_dx, "one-step progress")):
+        ax.text(x, y_hi - 0.02, label, ha="center", va="top",
+                fontsize=js.PT_BASE, color=js.COLORS["ink"])
+    ax.axvline(1.8 + 0.5 * ci_dx, color=js.COLORS["grid"], lw=js.LW_HAIR)
     ax.tick_params(labelsize=js.PT_BASE)
-    fig.text(0.5, 0.985, "120 trained checkpoints, relative step $10^{-5}$",
+    ax.tick_params(axis="x", length=0.0, pad=2.0)
+    fig.text(0.5, 0.98, "120 trained checkpoints, one held-out batch",
              ha="center", va="top", fontsize=js.PT_BASE,
              color=js.COLORS["mute"])
     dest.parent.mkdir(parents=True, exist_ok=True)
@@ -124,33 +180,48 @@ def checkpoint_merged(dest=OUT / "si_checkpoint_merged.pdf"):
 
 
 def utility_bound(dest=OUT / "si_utility_bound.pdf"):
-    """The one-step smoothness bound demoted out of main Fig. 1 (new S3G)."""
-    fig, ax = _panel(163.0, 148.0, left=36, right=6, top=22, bottom=32)
+    """The one-step smoothness bound demoted out of main Fig. 1 (new S3G).
+
+    2026-09-11: the two analytic curves are ink (solid) and grey (dashed)
+    rather than the route green and the additive navy, which on the S3 sheet
+    carry the route-class meanings of the neighbouring panel F; the dashed
+    crossing rule is gone (the annotation's leader marks the crossing once)
+    and the annotation sits clear of the curves, below the legend.
+    """
+    fig, ax = _panel(PANEL_W_PT, PANEL_H_PT, left=36, right=8,
+                     top=PANEL_TOP_PT, bottom=PANEL_BOTTOM_PT)
     sigma2 = np.linspace(0.0, 2.0, 400)
-    curves = [(1, 0.8, js.SERIES_COLORS["shunting"], "$K = 1$, $q = 0.8$"),
-              (2, 1.0, js.SERIES_COLORS["additive"], "$K = 2$, $q = 1$")]
+    curves = [(1, 0.8, js.COLORS["ink"], "-", "$K = 1$, $q = 0.8$"),
+              (2, 1.0, js.COLORS["point_mlp"], (0, (3.2, 1.6)),
+               "$K = 2$, $q = 1$")]
     values = []
-    for rank, q, color, label in curves:
+    for rank, q, color, ls, label in curves:
         y = q ** 2 / (q + rank * sigma2)
         values.append(y)
-        ax.plot(sigma2, y, color=color, lw=js.LW_DATA, label=label)
+        ax.plot(sigma2, y, color=color, lw=js.LW_DATA, ls=ls, label=label,
+                zorder=3)
     cross = 4.0 / 7.0
     lo, hi = values
-    ax.fill_between(sigma2, lo, hi, color=js.COLORS["grid"], alpha=0.85, lw=0)
-    ax.axvline(cross, color=js.COLORS["mute"], ls="--", lw=js.LW_REF)
-    ax.annotate("sign change at\n$\\sigma^2 = 4/7 \\approx 0.571$",
-                xy=(cross, q ** 2 / (q + 2 * cross)), xytext=(0.09, 0.10),
-                fontsize=js.PT_BASE, color=js.COLORS["ink"],
+    ax.fill_between(sigma2, lo, hi, color=js.COLORS["grid"], alpha=0.85, lw=0,
+                    zorder=1)
+    ax.annotate("sign change at\nσ² = 4/7 ≈ 0.571",
+                xy=(cross, 1.0 / (1.0 + 2 * cross)), xytext=(1.18, 0.66),
+                ha="center", va="center", fontsize=js.PT_BASE,
+                color=js.COLORS["ink"], linespacing=1.25,
                 arrowprops=dict(arrowstyle="-", lw=js.LW_HAIR,
-                                color=js.COLORS["mute"]))
-    ax.set_xlabel("noise variance $\\sigma^2$ (arbitrary units)",
+                                color=js.COLORS["mute"],
+                                shrinkA=1.0, shrinkB=2.0))
+    ax.set_xlabel("noise variance σ² (arbitrary units)",
                   fontsize=js.PT_EMPH)
-    ax.set_ylabel("$2L\\times$ optimized one-step bound", fontsize=js.PT_EMPH)
+    ax.set_ylabel("2L × optimized one-step bound", fontsize=js.PT_EMPH)
     ax.tick_params(labelsize=js.PT_BASE)
     ax.set_xlim(0, 2.0)
     ax.set_ylim(0, 1.05)
     ax.legend(frameon=False, fontsize=js.PT_BASE, loc="upper right",
-              handlelength=1.4, borderpad=0.1, labelspacing=0.25)
+              handlelength=1.8, borderpad=0.1, labelspacing=0.25)
+    fig.text(0.5, 0.98, "analytic bound q² / (q + Kσ²), no data",
+             ha="center", va="top", fontsize=js.PT_BASE,
+             color=js.COLORS["mute"])
     dest.parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(dest)
     plt.close(fig)

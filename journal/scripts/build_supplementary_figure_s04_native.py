@@ -162,14 +162,25 @@ def panel_noise(ax):
 # The ladder keeps the manuscript-wide condition hues: amber scalar, control
 # gray for the random rank field, oracle violet for exact transport and the
 # red-brown backpropagation reference.
+# Tick wording matches panel E ("matched-width fallback") for the one
+# condition the two panels share; marker shapes match panel D for exact path
+# and BP.
 CIFAR_SPECS = (
-    ("cifar10_shunting_5f_per_soma_learned_i", "width-\nmatched\nfallback", COLORS["local"]),
+    ("cifar10_shunting_5f_per_soma_learned_i", "matched-\nwidth\nfallback",
+     COLORS["local"], "o"),
     ("cifar10_shunting_5f_low_rank4_learned_i", "random\nrank 4",
-     COLORS["point_mlp"]),
+     COLORS["point_mlp"], "o"),
     ("cifar10_shunting_5f_path_transport_learned_i", "exact\npath",
-     COLORS["oracle"]),
-    ("cifar10_shunting_standard_learned_i", "BP", COLORS["bp"]),
+     COLORS["oracle"], "^"),
+    ("cifar10_shunting_standard_learned_i", "BP", COLORS["bp"], "D"),
 )
+# Panels C and D draw the same quantity (CIFAR-10 test accuracy) and share
+# one y window and tick set; every seed of both panels lies inside it
+# (2026-09-11 visual review: C ran 0-56% and D 0-60% with the payload in an
+# 11 px ribbon).  The window is asserted against the data, never widened
+# silently.
+CIFAR_Y_WINDOW = (0.245, 0.545)
+CIFAR_Y_TICKS = (0.25, 0.30, 0.35, 0.40, 0.45, 0.50)
 
 CONFIRMATORY_SPECS = (
     ("strict scalar", "strict\nscalar", COLORS["scalar"], "o"),
@@ -185,29 +196,48 @@ CONFIRMATORY_CONTRASTS = {
 EXPECTED_CONFIRMATORY_SEEDS = set(range(10800, 10820))
 
 
+def _assert_in_window(values, where):
+    low, high = CIFAR_Y_WINDOW
+    if values.min() < low or values.max() > high:
+        raise RuntimeError(
+            f"{where}: seed accuracies {values.min():.4f}..{values.max():.4f} "
+            f"leave the shared CIFAR window {CIFAR_Y_WINDOW}")
+
+
+def _shared_cifar_axis(ax):
+    ax.set_ylim(*CIFAR_Y_WINDOW)
+    ax.set_yticks(list(CIFAR_Y_TICKS))
+    ax.yaxis.set_major_formatter(PercentFormatter(1.0, decimals=0))
+
+
 def panel_cifar(ax):
-    """Flattened CIFAR-10 ladder; per-run dots, mean bar, +-1 s.d."""
+    """Flattened CIFAR-10 ladder: filled mean, +-1 s.d. bar, five open
+    seed marks jittered across the category (same values as the archived
+    bar chart; the bar fill is gone so the panel can share D's window)."""
     frame = pd.read_csv(CIFAR_CSV)
-    for index, (condition, _label, color) in enumerate(CIFAR_SPECS):
+    for index, (condition, _label, color, marker) in enumerate(CIFAR_SPECS):
         values = frame[frame["condition"].eq(condition)
                        ]["test_accuracy"].to_numpy(float)
         mean = values.mean()
         std = values.std(ddof=1)
         print(f"  C {condition}: mean {mean:.5f} sd {std:.5f} n {values.size}")
-        ax.bar(index, mean, color=color, width=0.62, zorder=2)
-        ax.errorbar(index, mean, yerr=std, color=INK, lw=LW_ERR,
-                    elinewidth=LW_ERR, capsize=ERR_CAPSIZE, zorder=5)
+        _assert_in_window(values, f"C {condition}")
+        # Five seeds in a column to the right of the mean and its bar, so
+        # every seed stays countable and none hides behind the mean mark.
         ax.scatter(np.full(values.size, index)
-                   + np.linspace(-0.10, 0.10, values.size), values,
-                   s=7.0, facecolor="white", edgecolor=color,
-                   linewidth=0.55, zorder=4)
+                   + np.linspace(0.08, 0.30, values.size), values,
+                   s=8.0, facecolor="white", edgecolor=color,
+                   linewidth=0.55, alpha=0.78, zorder=3)
+        ax.errorbar(index - 0.12, mean, yerr=std, color=color, marker=marker,
+                    markerfacecolor=color, markeredgecolor="white",
+                    markeredgewidth=0.45, ms=MARKER_MS + 0.5,
+                    lw=LW_DATA, elinewidth=LW_ERR, capsize=ERR_CAPSIZE,
+                    zorder=5)
     ax.set_xticks(range(len(CIFAR_SPECS)))
-    ax.set_xticklabels([label for _, label, _ in CIFAR_SPECS], fontsize=PT_SMALL)
+    ax.set_xticklabels([label for _, label, *_ in CIFAR_SPECS], fontsize=PT_SMALL)
     ax.set_xlim(-0.62, len(CIFAR_SPECS) - 0.38)
-    ax.set_ylim(0.0, 0.56)
-    ax.set_yticks([0.0, 0.2, 0.4])
+    _shared_cifar_axis(ax)
     ax.set_ylabel("CIFAR-10 accuracy")
-    ax.yaxis.set_major_formatter(PercentFormatter(1.0, decimals=0))
     return ax
 
 
@@ -356,14 +386,17 @@ def panel_confirmatory_cifar(ax, outcomes: pd.DataFrame):
     ax.set_xticks(x)
     ax.set_xticklabels([label for _, label, *_ in CONFIRMATORY_SPECS])
     ax.set_xlim(-0.42, len(order) - 0.58)
-    upper = max(0.60, float(np.ceil((wide.to_numpy().max() + 0.02) * 20.0) / 20.0))
-    ax.set_ylim(0.0, upper)
-    ax.set_ylabel("CIFAR-10 accuracy")
-    ax.yaxis.set_major_formatter(PercentFormatter(1.0, decimals=0))
-    bp_mean=float(wide.iloc[:,-1].mean())
-    ax.axhspan(bp_mean-.01,bp_mean+.01,color=MUTE,alpha=.12,zorder=0)
-    ax.text(.04,.08,"BP equivalence: ±1 pp\n20 seeds; 95% t intervals",
-            transform=ax.transAxes,fontsize=PT_SMALL,color=MUTE,va="bottom")
+    _assert_in_window(wide.to_numpy(float), "D")
+    _shared_cifar_axis(ax)
+    # C, directly to the left, carries the one y-axis title for the pair;
+    # D keeps the shared tick labels.
+    bp_mean = float(wide.iloc[:, -1].mean())
+    ax.axhspan(bp_mean - .01, bp_mean + .01, color=MUTE, alpha=.12, zorder=0)
+    # The prespecified +-1 pp BP equivalence band is keyed by one short
+    # label on the band's empty left end (the strict-scalar column sits
+    # 15 pp below it); the seed count and the interval are in the caption.
+    ax.text(-0.36, bp_mean + 0.0125, "BP ±1 pp", ha="left", va="bottom",
+            fontsize=PT_SMALL, color=MUTE, zorder=2)
     return ax
 
 
@@ -485,11 +518,12 @@ def panel_fashion(ax, outcomes: pd.DataFrame, summary: pd.DataFrame):
             mean - part["ci95_low"].to_numpy(float),
             part["ci95_high"].to_numpy(float) - mean,
         ])
+        # Filled = cohort mean, small open = seed, as in panels C and D.
         ax.errorbar(
             x_base + offsets[architecture], mean, yerr=interval,
             color=colors[architecture], marker=markers[architecture],
-            markerfacecolor="white", markeredgecolor=colors[architecture],
-            markeredgewidth=LW_ERR, ms=MARKER_MS, lw=LW_DATA,
+            markerfacecolor=colors[architecture], markeredgecolor="white",
+            markeredgewidth=0.45, ms=MARKER_MS + 0.5, lw=LW_DATA,
             elinewidth=LW_ERR, capsize=ERR_CAPSIZE, zorder=5,
         )
         print(
@@ -521,10 +555,18 @@ def build(path=None, *, confirmatory_analysis_dir=None):
             Path(confirmatory_analysis_dir)
         )
     fashion_outcomes, fashion_summary = load_fashion_ladder()
+    # A 38 pt gutter holds every y tick column plus its label outright, so
+    # no column lock is carved and the middle panel of row 1 keeps the same
+    # width as its neighbours (a 32 pt gutter left it 4.5 pt narrower).
     canvas = NativeCanvas(CANVAS_H_PT / 72.0, 2, row_weights=[1.0, 1.0],
-                          hgutter_pt=32.0, vgutter_pt=30.0,
+                          hgutter_pt=38.0, vgutter_pt=30.0,
                           margins=Margins(left=46.0, right=12.0, top=14.0,
                                           bottom=26.0))
+    # With no lock carved, a y tick column plus its rotated title reaches
+    # 28.5 pt left of the axes; one figure-wide 30 pt letter offset keeps
+    # every letter the leftmost mark of its own panel, which the supplement
+    # paste step relies on to partition the row at each letter.
+    canvas.letter_dx = 30.0
     ax_a = canvas.panel("depth", 0, 0, 6, grid="y", title="Depth stress")
     ax_b = canvas.panel("noise", 0, 6, 6, grid="y",
                         title="Noisy teaching signal")

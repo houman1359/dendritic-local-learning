@@ -27,8 +27,10 @@ of the generator's own computation (line references in the panel functions):
 * D  ``revision_exact_transport_bp_grouped.csv`` /
      ``revision_exact_transport_factorial_grouped.csv`` /
      ``revision_reactivation_identity_grouped.csv`` /
-     ``revision_additive_gain_norm_grouped.csv`` -- the seven mechanism
-     controls;
+     ``revision_additive_gain_norm_grouped.csv`` -- the mechanism controls:
+     transport (2), activation (2) and, since 2026-09-11, the COMPLETE
+     normalized/raw x gain-mode factorial of the additive table (8 cells
+     as four paired rows) instead of three hand-picked cells;
 * E  ``feedback_definition_details.csv`` -- the fifteen-seed legacy
      matched-width/scalar-fallback cohort, paired per seed, with the BP and
      path-transport reference lines from the panel-D tables.  (The manifest's
@@ -39,7 +41,9 @@ of the generator's own computation (line references in the panel functions):
 Restyling only: house palette semantics (shunting green o, additive blue s,
 red-brown backprop, violet path-transport oracle), direct colour-word keys
 instead of boxed legends, token type/strokes, and a 3+2 panel grid replacing
-the 2.63-aspect strip.
+the 2.63-aspect strip.  In D the colour names the architecture exactly as
+in A and the marker the variant inside it (house o / s = the configuration
+A draws, triangle = the ablated variant: identity activation, raw additive).
 """
 
 from __future__ import annotations
@@ -49,7 +53,6 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
-from matplotlib.colors import to_rgb
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 if str(SCRIPT_DIR) not in sys.path:
@@ -83,18 +86,15 @@ MUTE = COLORS["mute"]
 INK = COLORS["ink"]
 
 # The morphology panel contrasts two tree depths, not two mechanisms, so it
-# borrows the two house hues with no series semantics of their own on this
-# sheet (violet = depth 2 as in the archived panel, orange = depth 3).
-DEPTH_COLORS = {2: COLORS["oracle"], 3: COLORS["soma"]}
+# borrows two house hues with no series semantics of their own on this
+# sheet (violet = depth 2 as in the archived panel, amber = depth 3).
+# 2026-09-11: ``COLORS["soma"]`` became the schematic yellow (#F2EC30), which
+# printed depth 3 as a yellow line on white; the amber ``scalar`` slot is the
+# violet/amber pair every other sheet already separates.
+DEPTH_COLORS = {2: COLORS["oracle"], 3: COLORS["scalar"]}
 DEPTH_MARKERS = {2: "o", 3: "^"}
 
 XLABEL_NI = "inhibitory synapses per branch"
-
-
-def _tint(color, frac):
-    """Blend ``color`` toward white by ``frac`` (lightness ladder for D)."""
-    r, g, b = to_rgb(color)
-    return (r + (1 - r) * frac, g + (1 - g) * frac, b + (1 - b) * frac)
 
 
 def _read(name):
@@ -149,20 +149,46 @@ def panel_tasks(ax, report):
                f"add {ad_v * 100:.4f}+-{ad_e * 100:.4f}")
 
     ax.set_xticks(range(len(datasets_info)))
-    ax.set_xticklabels({"MNIST": "MN", "F-MNIST": "FMN",
-                        "FG-MNIST": "FG"}[d[0]] for d in datasets_info)
+    ax.set_xticklabels([d[0] for d in datasets_info])
     ax.set_xlim(-0.62, len(datasets_info) - 1 + 0.62)
-    ax.set_ylim(0, 114)
+    # Accuracy cannot exceed 100 %, so the axis stops there; the key no
+    # longer lives inside the axes (it used to need 14 pp of headroom).
+    ax.set_ylim(0, 100)
     ax.set_yticks([0, 20, 40, 60, 80, 100])
     ax.set_ylabel("test accuracy (%)")
-    # Direct colour-word key, the sheet's palette definition (no legend box).
-    ax.text(-0.55, 106.5, "backprop", color=BP, fontsize=PT_LEGEND,
-            ha="left", va="center")
-    ax.text(1.0, 106.5, "shunting", color=SHUNT, fontsize=PT_LEGEND,
-            ha="center", va="center")
-    ax.text(2.55, 109.0, "normalized\nadditive", color=ADD,
-            fontsize=PT_LEGEND, ha="right", va="center", linespacing=0.95)
+    # Direct colour-word key ABOVE the axes, on one left edge and one
+    # line pitch, naming BOTH factors of every series: the red bar is the
+    # same shunting architecture as the green bar, trained by
+    # backpropagation instead of the local rule; blue changes the
+    # architecture at the fixed local rule.  The band is reserved through
+    # ``declare_reserve`` in :func:`build` so the row lock keeps A, B and C
+    # on one axes top.
+    # Bottom-up: the n / interval statement nearest the axes (the bars
+    # leave no data-free room inside a 0-100 % axis), then the three series
+    # in the left-to-right order of the bars, reading top-down.
+    for k, (words, color) in enumerate([
+            ("mean ± s.d., 5 seeds", MUTE),
+            ("normalized additive, local rule", ADD),
+            ("shunting, local rule", SHUNT),
+            ("shunting, backprop", BP)]):
+        ax.text(0.0, 1.0, words, color=color, fontsize=PT_LEGEND,
+                ha="left", va="bottom",
+                transform=ax.transAxes
+                + _pt_offset(ax, 0.0, KEY_PAD_PT + k * KEY_PITCH_PT))
     return ax
+
+
+KEY_PAD_PT = 3.0        # first key line sits this far above the axes top
+KEY_PITCH_PT = 8.6      # line pitch of the stacked key (7 pt type)
+KEY_LINES = 4
+KEY_RESERVE_PT = KEY_PAD_PT + KEY_LINES * KEY_PITCH_PT + 2.0
+
+
+def _pt_offset(ax, dx_pt, dy_pt):
+    """A translation of ``(dx, dy)`` points in the axes' figure."""
+    from matplotlib.transforms import ScaledTranslation
+    return ScaledTranslation(dx_pt / 72.0, dy_pt / 72.0,
+                             ax.figure.dpi_scale_trans)
 
 
 # ── panel B: inhibitory dose-response (generator 1184-1231) ──────────────
@@ -246,12 +272,16 @@ def panel_morphology(ax, report):
     ax.set_yticks([0, 10, 20])
     ax.set_xlabel(XLABEL_NI)
     ax.set_ylabel("shunting − normalized additive (pp)")
-    ax.text(41.0, 5.2, "depth 2", color=DEPTH_COLORS[2], fontsize=PT_LEGEND,
-            ha="right", va="center")
-    ax.text(41.0, 17.6, "depth 3", color=DEPTH_COLORS[3], fontsize=PT_LEGEND,
-            ha="right", va="center")
-    ax.text(.03, .96, "depth and resources change", transform=ax.transAxes,
-            fontsize=PT_SMALL, color=MUTE, va="top")
+    # Colour words between the x=20 and x=40 whiskers, one under the violet
+    # segment and one over the amber segment; the footnote sits in the
+    # data-free lower right (2026-09-11: the shorter row put the old
+    # positions on the whiskers).
+    ax.text(30.0, 5.6, "depth 2", color=DEPTH_COLORS[2], fontsize=PT_LEGEND,
+            ha="center", va="center")
+    ax.text(30.0, 19.8, "depth 3", color=DEPTH_COLORS[3], fontsize=PT_LEGEND,
+            ha="center", va="center")
+    ax.text(.98, .04, "depth and resources change", transform=ax.transAxes,
+            fontsize=PT_SMALL, color=MUTE, ha="right", va="bottom")
     return ax
 
 
@@ -280,55 +310,97 @@ def panel_controls(ax, report):
         revision_reactivation,
         revision_reactivation["reactivation_enabled"] == True,  # noqa: E712
     )
-    add_none = _one(
-        revision_additive,
-        (revision_additive["core"] == "additive")
-        & (revision_additive["additive_gain_mode"] == "none"),
-    )
-    gain = revision_additive[
-        (revision_additive["core"] == "additive")
-        & (revision_additive["additive_gain_mode"] != "none")
-    ].sort_values("test_acc_mean", ascending=False)
-    norm = revision_additive[
-        revision_additive["core"] == "normalized_additive"
-    ].sort_values("test_acc_mean", ascending=False)
 
-    grouped = [
-        (2.0, "Transport", [("BP", bp, BP), ("exact path", transport, ORACLE)]),
-        (1.0, "Activation", [("identity", identity, _tint(SHUNT, 0.45)),
-                             ("tanh", tanh, SHUNT)]),
-        (0.0, "Additive models", [("raw", add_none, ADD),
-                           ("gain-modified", None if gain.empty else gain.iloc[0],
-                            _tint(ADD, 0.30)),
-                           ("normalized", None if norm.empty else norm.iloc[0],
-                            _tint(ADD, 0.55))]),
+    # Colour names the architecture / reference exactly as panel A does
+    # (red-brown backprop, green shunting, blue additive, violet exact
+    # path); the marker names the variant inside a family: the house marker
+    # (shunting o, additive s) is the configuration panel A also draws, a
+    # triangle is the ablated variant (identity activation; raw additive
+    # without normalization).  Every row label is set in ink as a y tick.
+    # 2026-09-11: the additive group draws the COMPLETE 2 x 4 (normalized /
+    # raw x gain mode) factorial of the source table as four paired rows,
+    # instead of three hand-picked cells whose gain modes differed.
+    GAIN_LABELS = [("none", "no gain"),
+                   ("learned_gain", "learned gain"),
+                   ("input_dependent", "input-dependent"),
+                   ("running_stats", "running stats")]
+
+    def _cell(core, mode):
+        return _one(revision_additive,
+                    (revision_additive["core"] == core)
+                    & (revision_additive["additive_gain_mode"] == mode))
+
+    # (kind, label, entries); entries = (name, row, colour, marker, dodge)
+    lines = [
+        ("hdr", "Transport", []),
+        ("row", "exact path", [("exact path", transport, ORACLE, "o", 0.0)]),
+        ("row", "BP", [("BP", bp, BP, "o", 0.0)]),
+        ("gap", "", []),
+        ("hdr", "Activation (shunting)", []),
+        ("row", "tanh", [("tanh", tanh, SHUNT, "o", 0.0)]),
+        ("row", "identity", [("identity", identity, SHUNT, "^", 0.0)]),
+        ("gap", "", []),
+        ("hdr", "Additive models, by gain mode", []),
     ]
-    height = 0.18
-    x_base = 87.0
-    for center, group_label, entries in grouped:
-        entries = [(lab, row, col) for lab, row, col in entries
-                   if row is not None]
-        offsets = (np.arange(len(entries))
-                   - (len(entries) - 1) / 2.0) * (height * 1.25)
-        for offset, (label, row, color) in zip(offsets, entries):
+    for mode, label in GAIN_LABELS:
+        lines.append(("row", label, [
+            (f"normalized/{mode}", _cell("normalized_additive", mode), ADD,
+             "s", -0.15),
+            (f"raw/{mode}", _cell("additive", mode), ADD, "^", 0.15)]))
+
+    y = 0.0
+    tick_pos, tick_lab = [], []
+    for kind, label, entries in lines:
+        if kind == "gap":
+            y += 0.45
+            continue
+        if kind == "hdr":
+            ax.text(0.01, y, label, transform=ax.get_yaxis_transform(),
+                    ha="left", va="center", fontsize=PT_ANNOT, color=MUTE)
+            y += 1.0
+            continue
+        tick_pos.append(y)
+        tick_lab.append(label)
+        for name, row, color, marker, dodge in entries:
+            if row is None:
+                continue
             mean = float(row["test_acc_mean"]) * 100.0
             std = float(row["test_acc_std"]) * 100.0
-            ypos = center + offset
-            ax.errorbar(mean,ypos,xerr=std,fmt="o",ms=3.5,color=color,
-                        lw=LW_ERR,capsize=ERR_CAPSIZE)
-            ax.text(x_base+.08,ypos,label,ha="left",va="center",
-                    fontsize=PT_SMALL,color=color,zorder=6)
-            report(f"D {label}: {mean:.4f}+-{std:.4f}")
-        ax.text(0.015, center + 0.32, group_label,
-                transform=ax.get_yaxis_transform(), ha="left", va="bottom",
-                fontsize=PT_ANNOT, color=MUTE)
-    ax.set_yticks([])
-    ax.spines["left"].set_visible(False)
-    ax.set_xlim(87.0, 98.25)
+            ax.errorbar(mean, y + dodge, xerr=std, fmt=marker, ms=3.5,
+                        color=color, lw=LW_ERR, capsize=ERR_CAPSIZE,
+                        zorder=4)
+            report(f"D {name}: {mean:.4f}+-{std:.4f}")
+        y += 1.0
+    n_lines = y
+    ax.set_yticks(tick_pos)
+    ax.set_yticklabels(tick_lab)
+    ax.tick_params(axis="y", length=0)
+    ax.set_ylim(n_lines - 0.3, -0.55)          # first line at the top
+    # Marker key for the paired additive rows, on the group's header line
+    # (no data on that line), and the sheet's n / interval statement.
+    hdr_y = [yy for (k, lab, _), yy in zip(
+        lines, _line_positions(lines)) if lab.startswith("Additive")][0]
+    for xf, marker, words in ((0.60, "s", "normalized"),
+                              (0.86, "^", "raw")):
+        ax.plot([xf], [hdr_y], marker=marker, ms=3.5, color=ADD, ls="none",
+                transform=ax.get_yaxis_transform(), clip_on=False, zorder=4)
+        ax.text(xf + 0.03, hdr_y, words, transform=ax.get_yaxis_transform(),
+                ha="left", va="center", fontsize=PT_ANNOT, color=INK)
+    ax.text(0.99, 0.03, "mean ± s.d., 5 seeds", transform=ax.transAxes,
+            ha="right", va="bottom", fontsize=PT_SMALL, color=MUTE)
+    ax.set_xlim(86.2, 97.9)
     ax.set_xticks([88, 92, 96])
-    ax.set_ylim(-0.55, 2.75)
     ax.set_xlabel("MNIST test accuracy (%)")
     return ax
+
+
+def _line_positions(lines):
+    """The y of every entry of a ``lines`` list, mirroring the loop above."""
+    out, y = [], 0.0
+    for kind, _, _ in lines:
+        out.append(y)
+        y += 0.45 if kind == "gap" else 1.0
+    return out
 
 
 # ── panel E: neuron-specific feedback definition (generator 1394-1487) ───
@@ -412,13 +484,16 @@ def build(path=TARGET):
 
     canvas = NativeCanvas(CANVAS_H_PT / 72.0, 2, hgutter_pt=32.0,
                           vgutter_pt=38.0,
-                          margins=Margins(left=40.0, right=12.0, top=16.0,
+                          margins=Margins(left=62.0, right=12.0, top=16.0,
                                           bottom=26.0))
-    ax_a = canvas.panel("tasks", 0, 0, 4, title="Tasks")
+    # A and D carry no title: "Tasks" only restated the tick labels and
+    # "Controls" the caption, and A's title band now holds its colour key.
+    ax_a = canvas.panel("tasks", 0, 0, 4)
     ax_b = canvas.panel("inhibition", 0, 4, 4, title="Inhibition")
     ax_c = canvas.panel("morphology", 0, 8, 4, title="Morphology")
-    ax_d = canvas.panel("controls", 1, 0, 6, title="Controls")
+    ax_d = canvas.panel("controls", 1, 0, 6)
     ax_e = canvas.panel("feedback", 1, 6, 6, title="Feedback")
+    canvas.declare_reserve("tasks", top=KEY_RESERVE_PT)
 
     panel_tasks(ax_a, report)
     panel_inhibition(ax_b, report)

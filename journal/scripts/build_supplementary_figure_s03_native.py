@@ -29,10 +29,10 @@ wording change:
   The shunting noise-task cells keep the excluded signed-input convention on
   display, exactly as the archived asset does; the caption carries the caveat.
 
-House palette semantics: rule hues keep their dedicated ``rule_3f/4f/5f``
-slots; shunting is green and additive blue as in every main figure; the
-exact-transport family wears the oracle violet (two lightness steps for the
-two decoders); matched backpropagation is the red-brown ``bp`` reference;
+House palette semantics: the 3F/4F/5F factor count is an ordinal position
+and takes three steps of the house ordinal ramp; shunting is green and
+additive blue as in every main figure; the exact-transport family wears the
+oracle violet (a printable lightness step apart for the two decoders); matched backpropagation is the red-brown ``bp`` reference;
 the matched-width scalar-fallback field is amber; the random low-rank
 fields are gray controls at three lightness steps.
 
@@ -59,6 +59,7 @@ from figure_canvas import (  # noqa: E402
     LW_EDGE,
     LW_HAIR,
     LW_REF,
+    ORDINAL_RAMP,
     PT_ANNOT,
     PT_LEGEND,
     PT_SMALL,
@@ -90,7 +91,10 @@ def _lighten(hex_color: str, amount: float) -> str:
 
 
 ORACLE = COLORS["oracle"]                 # exact transport = the oracle violet
-ORACLE_LIGHT = _lighten(ORACLE, 0.45)     # its local-decoder lightness step
+# Its local-decoder step.  2026-09-11: 0.45 toward white gave 2.1:1 against
+# the page for 1 pt interval rules and 9 pt labels; 0.22 keeps the step
+# visible beside the full violet while the marks stay above 3:1.
+ORACLE_LIGHT = _lighten(ORACLE, 0.22)
 GRAY_RAMP = ("#A9A9A9", "#8A8A8A", COLORS["point_mlp"])  # K2, K4, K8 controls
 
 BAR_KW = dict(edgecolor="white", lw=LW_HAIR, zorder=3)
@@ -218,7 +222,10 @@ def panel_rule_family(ax):
     """A -- 3F/4F/5F rules, archived three-seed within-shunting cohort."""
     data, errors = submitted_matched_rule_values()
     rules = ["3F", "4F", "5F"]
-    colors = [COLORS["rule_3f"], COLORS["rule_4f"], COLORS["rule_5f"]]
+    # The factor count is an ordinal position, so it takes the house
+    # ordinal ramp (2026-09-11: the NeurIPS ``rule_3f/4f`` hues are no
+    # longer in the journal registry and audited as off-palette).
+    colors = [ORDINAL_RAMP[1], ORDINAL_RAMP[2], ORDINAL_RAMP[3]]
     x = np.arange(len(rules), dtype=float)
     vals = [data[r] for r in rules]
     errs = [errors[r] for r in rules]
@@ -324,11 +331,20 @@ def panel_exact_transport(ax):
         draws=rng.choice(paired,(20000,len(paired)),replace=True).mean(axis=1)
         lo,hi=np.quantile(draws,[.025,.975]);mean=paired.mean()
         color=ORACLE if decoder=="backprop" else ORACLE_LIGHT
-        ax.scatter(paired,y+np.linspace(-.09,.09,len(paired)),s=16,
+        # Seeds alternate above / below the row centre in rank order, so
+        # no seed sits on the mean diamond and neighbours in value never
+        # share a line (2026-09-11: the centre seed used to fuse with the
+        # diamond and two near-equal seeds with each other).
+        order=np.argsort(paired)
+        jitter=np.empty(len(paired))
+        jitter[order]=[SEED_DY*(-1)**k for k in range(len(paired))]
+        ax.scatter(paired,y+jitter,s=16,
                    facecolors="white",edgecolors=color,lw=LW_EDGE,zorder=4)
         ax.errorbar(mean,y,xerr=[[mean-lo],[hi-mean]],fmt="D",ms=3.5,
                     color=color,capsize=ERR_CAPSIZE,lw=LW_ERR,zorder=5)
         labels.append(f"{rule.upper()}, {'BP' if decoder=='backprop' else 'local'} decoder")
+        print(f"  [C] {rule}/{decoder}: seeds={np.round(paired,4).tolist()} "
+              f"mean={mean:.4f} ci=({lo:.4f}, {hi:.4f})")
     ax.axvline(0,color=COLORS["bp"],ls="--",lw=LW_REF)
     ax.set_yticks(range(4),labels);ax.invert_yaxis()
     ax.set_xlabel("exact transport − matched BP accuracy (pp)")
@@ -336,6 +352,9 @@ def panel_exact_transport(ax):
     ax.text(.99,.03,"5 paired seeds / 95% bootstrap CI",ha="right",
             transform=ax.transAxes,fontsize=PT_SMALL,color=COLORS["mute"])
     return ax
+
+
+SEED_DY = 0.24     # seed offset from the row centre, in row units
 
 
 def panel_feedback_ladder(ax):
@@ -356,11 +375,16 @@ def panel_feedback_ladder(ax):
 
 
 # ── the canvas ────────────────────────────────────────────────────────────
-CANVAS_H_PT = 380.0                       # 518.4 / 380 = 1.36, in the band
+# 2026-09-11: the four-row forest plot C no longer takes half the sheet;
+# its row is weighted so its axes come out near 120 pt (about 27 pt per
+# row, the pitch of the other dot plots on its curated sheet) and the
+# canvas is shortened accordingly (518.4 / 350 = 1.48, in the band).
+CANVAS_H_PT = 350.0
+ROW_WEIGHTS = (150.0, 126.0)
 
 
 def build(path: Path | str = TARGET):
-    canvas = NativeCanvas(CANVAS_H_PT / 72.0, 2,
+    canvas = NativeCanvas(CANVAS_H_PT / 72.0, 2, row_weights=ROW_WEIGHTS,
                           margins=Margins(left=36.5, right=12.0, top=16.0,
                                           bottom=26.0))
     ax_a = canvas.panel("rule_family", 0, 0, 5,
@@ -368,7 +392,7 @@ def build(path: Path | str = TARGET):
     ax_b = canvas.panel("error_source", 0, 5, 7,
                         title="Error source", grid="y")
     ax_c = canvas.panel("exact_transport", 1, 0, 12,
-                        title="Exact-path-transport factorial (MNIST)", grid="x")
+                        title="Exact-path-transport factorial (MNIST)")
 
     print(f"Building {Path(path).name}")
     panel_rule_family(ax_a)

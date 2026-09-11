@@ -36,9 +36,11 @@ from journal_style import (  # noqa: E402
     ERR_CAPSIZE,
     FIG_W,
     LW_ERR,
+    LW_HAIR,
     LW_REF,
     PT_LEGEND,
     PT_SMALL,
+    SEED_MS,
     apply_neurips_style,
     audit_layout,
     audit_text_over_data,
@@ -51,6 +53,21 @@ from journal_style import (  # noqa: E402
 OUT = ROOT / "source_data" / "spatial_topology_audit"
 FIGURES = ROOT / "figures" / "generated"
 FOLLOWUP = ROOT / "source_data" / "prospective_followup"
+# Published per-seed outcomes of the same input-valid spatial cohort; the
+# plotted means are reproduced from it before any seed point is drawn.
+SEED_OUTCOMES = (
+    ROOT / "source_data" / "prospective_input_validity"
+    / "followup_publication_seed_outcomes.csv"
+)
+
+# Panel geometry in points: three 160-pt panel columns (the supplement pastes
+# three per row at scale 1.0) and one common axes height for every plot panel
+# so the pasted rows share a baseline.
+FIG_H = 4.55
+AX_W = 118.0
+AX_H = 96.0
+COL_X0 = (42.0, 218.0, 394.0)
+ROW_Y_TOP = (38.0, 200.0)
 
 N_OWNERS = 128
 BRANCH_FACTORS = (2, 2, 2, 2)
@@ -211,68 +228,111 @@ def task_feedback_effects() -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
-def plot(owner: pd.DataFrame, performance: pd.DataFrame) -> None:
-    fig, axes = plt.subplots(
-        1,
-        4,
-        figsize=(FIG_W, 2.45),
-        gridspec_kw={
-            "left": 0.075,
-            "right": 0.985,
-            "bottom": 0.25,
-            "top": 0.74,
-            "wspace": 0.63,
-        },
-    )
-    colors = {"random": COLORS["mute"], "spatial": COLORS["highlight"]}
-    labels = {"random": "Random", "spatial": "Spatial"}
+def _seed_task_differences() -> pd.DataFrame:
+    """Per-seed spatial-minus-random differences behind ``task_feedback_effects``.
 
-    # One owner's contacts, aggregated over the 28 x 28 feature plane.
-    ax = axes[0]
-    example = _indices(SEEDS[0], "spatial").reshape(
+    Read from the published seed-outcome table; the MNIST value of a seed is
+    the within-seed mean over its two cores, exactly as the summary table
+    averages it, and the noise-task value is the raw-additive core alone.
+    """
+    runs = pd.read_csv(SEED_OUTCOMES)
+    part = runs[runs.family.eq("spatial")]
+    part = part[~(part.task.eq("noise_resilience") & part.core.eq("dendritic_shunting"))]
+    wide = part.pivot(
+        index=["task", "core", "strategy", "feedback", "seed"],
+        columns="topology",
+        values="test_accuracy",
+    ).reset_index()
+    wide["difference"] = wide.spatial - wide.random
+    return wide.groupby(["task", "strategy", "feedback", "seed"], as_index=False).difference.mean()
+
+
+def _branch_map(seed: int, topology: str) -> np.ndarray:
+    """Image with pixel value = branch index + 1 (0 = uncontacted)."""
+    example = _indices(seed, topology).reshape(
         N_OWNERS, BRANCHES_PER_OWNER, CONTACTS_PER_BRANCH
     )[0]
     image = np.zeros((28, 28), dtype=float)
     for branch, values in enumerate(example):
         image.flat[values.numpy()] = branch + 1
-    # The integer values name distinct branches; they are not an ordered
-    # measurement. Retain the sampled input map and use a categorical key.
-    from matplotlib.colors import ListedColormap
-    branch_colors = plt.get_cmap("tab20")(np.arange(BRANCHES_PER_OWNER))
-    ax.imshow(image, cmap=ListedColormap(["#F4F6F7", *branch_colors]),
-              vmin=0, vmax=BRANCHES_PER_OWNER, interpolation="nearest")
-    ax.set_anchor("N")
-    ax.set_xticks([])
-    ax.set_yticks([])
-    panel_title(ax, "A", "Disjoint spatial\nregions")
+    return image
 
-    for ax, letter, metric, title, ylabel in [
-        (
-            axes[1],
-            "B",
-            "unique_input_features",
-            "Unique input\ncoverage",
-            "features per neuron",
-        ),
-        (
-            axes[2],
-            "C",
-            "mean_pairwise_branch_jaccard",
-            "Cross-branch\ncollision",
-            "mean branch Jaccard",
-        ),
+
+# Bayer-ordered lightness levels for the 4 x 4 block partition: horizontally
+# and vertically adjacent blocks always differ by at least four of sixteen
+# steps, so region boundaries stay visible in one neutral hue.
+_BAYER_4 = np.array([[0, 8, 2, 10], [12, 4, 14, 6], [3, 11, 1, 9], [15, 7, 13, 5]])
+
+
+def _branch_levels(spatial_image: np.ndarray) -> np.ndarray:
+    """Lightness level (0..15) of every branch, from its 7 x 7 block."""
+    levels = np.zeros(BRANCHES_PER_OWNER, dtype=int)
+    block = 28 // 4
+    for branch in range(BRANCHES_PER_OWNER):
+        rows, cols = np.nonzero(spatial_image == branch + 1)
+        cell_r, cell_c = rows // block, cols // block
+        if cell_r.min() != cell_r.max() or cell_c.min() != cell_c.max():
+            raise ValueError("Spatial branch is not confined to one 7 x 7 block")
+        levels[branch] = _BAYER_4[cell_r[0], cell_c[0]]
+    return levels
+
+
+def plot(owner: pd.DataFrame, performance: pd.DataFrame) -> None:
+    from matplotlib.colors import ListedColormap, to_rgb
+
+    fig = plt.figure(figsize=(FIG_W, FIG_H))
+    pt = 72.0
+    fw, fh = FIG_W * pt, FIG_H * pt
+
+    def axes_pt(x0, y_top, width, height):
+        return fig.add_axes([x0 / fw, (fh - y_top - height) / fh, width / fw, height / fh])
+
+    colors = {"random": COLORS["mute"], "spatial": COLORS["highlight"]}
+    labels = {"random": "Random", "spatial": "Spatial"}
+
+    # Panel A: one neuron's sixteen branches on the 28 x 28 plane, spatial
+    # sampler beside the matched random sampler of the same seed.
+    spatial_image = _branch_map(SEEDS[0], "spatial")
+    random_image = _branch_map(SEEDS[0], "random")
+    levels = _branch_levels(spatial_image)
+    dark, light = np.array(to_rgb("#232B36")), np.array(to_rgb("#A8B0BB"))
+    ramp = [tuple(dark + (light - dark) * t) for t in np.linspace(0, 1, BRANCHES_PER_OWNER)]
+    cmap = ListedColormap(["#F4F6F7", *[ramp[levels[b]] for b in range(BRANCHES_PER_OWNER)]])
+    map_w = 62.0
+    ax_a = axes_pt(COL_X0[0] - 4, ROW_Y_TOP[0], map_w, map_w)
+    ax_a2 = axes_pt(COL_X0[0] - 4 + map_w + 6, ROW_Y_TOP[0], map_w, map_w)
+    for ax, image, sub in [(ax_a, spatial_image, "spatial"), (ax_a2, random_image, "random")]:
+        ax.imshow(image, cmap=cmap, vmin=-0.5, vmax=BRANCHES_PER_OWNER + 0.5,
+                  interpolation="nearest")
+        ax.set_xticks([])
+        ax.set_yticks([])
+        for spine in ax.spines.values():
+            spine.set_linewidth(LW_HAIR)
+            spine.set_color(COLORS["edge"])
+        ax.text(0.5, -0.06, sub, transform=ax.transAxes, ha="center", va="top",
+                fontsize=PT_SMALL, color=COLORS["ink"])
+    for edge in (6.5, 13.5, 20.5):
+        ax_a.axhline(edge, color=COLORS["edge"], lw=LW_HAIR)
+        ax_a.axvline(edge, color=COLORS["edge"], lw=LW_HAIR)
+    panel_title(ax_a, "A", "Branch input maps")
+
+    # Panels B and C: every owner map (128 neurons x 10 seeds per topology).
+    for col, letter, metric, title, ylabel in [
+        (1, "B", "unique_input_features", "Unique input coverage", "features per neuron"),
+        (2, "C", "mean_pairwise_branch_jaccard", "Cross-branch collision", "mean branch Jaccard"),
     ]:
+        ax = axes_pt(COL_X0[col], ROW_Y_TOP[0], AX_W, AX_H)
         for x, topology in enumerate(("random", "spatial")):
             values = owner.loc[owner.topology == topology, metric].to_numpy(float)
             rng = np.random.default_rng(100 + x)
-            take = rng.choice(len(values), size=min(250, len(values)), replace=False)
             ax.scatter(
-                x + rng.normal(0, 0.035, len(take)),
-                values[take],
-                s=5,
-                alpha=0.18,
+                x + rng.normal(0, 0.05, len(values)),
+                values,
+                s=4,
+                alpha=0.10,
                 color=colors[topology],
                 edgecolors="none",
+                zorder=2,
             )
             ax.errorbar(
                 x,
@@ -282,20 +342,55 @@ def plot(owner: pd.DataFrame, performance: pd.DataFrame) -> None:
                 color=colors[topology],
                 ms=4.8,
                 capsize=ERR_CAPSIZE,
+                capthick=LW_ERR,
                 lw=LW_ERR,
                 zorder=5,
             )
+        ax.set_xlim(-0.55, 1.55)
         ax.set_xticks([0, 1], [labels["random"], labels["spatial"]])
         ax.set_ylabel(ylabel)
+        ax.set_xlabel("contact map")
+        if metric == "unique_input_features":
+            ax.set_yticks([260, 280, 300, 320, 340])
+            ax.set_ylim(252, 344)
+            full = owner.loc[owner.topology == "spatial", metric].to_numpy(float)
+            ax.annotate(
+                f"{full.mean():.0f}/{full.mean():.0f}" if np.allclose(full, full[0]) else f"{full.mean():.0f}",
+                xy=(1, full.mean()), xytext=(0.78, full.mean()),
+                textcoords="data", ha="right", va="center",
+                fontsize=PT_SMALL, color=COLORS["ink"],
+            )
         panel_title(ax, letter, title)
         style_axis(ax)
 
-    ax = axes[3]
+    # Panel D: paired spatial-minus-random effect, seeds behind the means.
+    ax = axes_pt(COL_X0[0], ROW_Y_TOP[1], AX_W, AX_H)
     order = ["backprop", "per_soma", "per_soma_shared", "path_transport"]
     x = np.arange(len(order))
-    for task, marker, offset in [("mnist", "o", -0.09), ("noise_resilience", "s", 0.09)]:
+    seeds = _seed_task_differences()
+    series = [
+        ("mnist", "o", COLORS["ink"], -0.16, "MNIST"),
+        ("noise_resilience", "s", COLORS["additive"], 0.16, "Noise task"),
+    ]
+    for task, marker, color, offset, label in series:
         part = performance[performance.task == task].set_index("feedback").loc[order]
         y = 100 * part.mean_difference.to_numpy()
+        rng = np.random.default_rng(11 if task == "mnist" else 12)
+        for position, feedback in enumerate(order):
+            values = seeds[(seeds.task == task) & (seeds.feedback == feedback)]
+            points = 100 * values.difference.to_numpy(float)
+            if len(points) != int(part.loc[feedback, "n_paired_seeds"]) or not np.isclose(points.mean(), y[position]):
+                raise ValueError(f"Seed table does not reproduce the {task}/{feedback} mean")
+            ax.scatter(
+                position + offset + rng.normal(0, 0.045, len(points)),
+                points,
+                s=SEED_MS**2,
+                marker=marker,
+                color=color,
+                alpha=0.35,
+                edgecolors="none",
+                zorder=2,
+            )
         ax.errorbar(
             x + offset,
             y,
@@ -307,17 +402,23 @@ def plot(owner: pd.DataFrame, performance: pd.DataFrame) -> None:
             ),
             fmt=marker,
             ms=4.5,
-            color=COLORS["shunting"] if task == "mnist" else COLORS["additive"],
+            color=color,
+            markeredgecolor="white",
+            markeredgewidth=0.5,
             lw=LW_ERR,
             capsize=ERR_CAPSIZE,
-            label="MNIST" if task == "mnist" else "Noise task",
+            capthick=LW_ERR,
+            label=label,
+            zorder=5,
         )
-    ax.axhline(0, color=COLORS["mute"], ls="--", lw=LW_REF)
-    ax.set_xticks(x, ["BP", "MW scalar", "Neuron", "Exact path"],
-                  rotation=30, ha="right")
+    ax.axhline(0, color=COLORS["mute"], ls="--", lw=LW_REF, zorder=1)
+    ax.set_xlim(-0.6, 3.6)
+    ax.set_ylim(-2.8, 8.2)
+    ax.set_xticks(x, ["BP", "MW\nscalar", "Neuron", "Exact\npath"])
+    ax.set_xlabel("feedback rule")
     ax.set_ylabel("spatial - random (pp)")
-    panel_title(ax, "D", "Forward\neffect")
-    clean_legend(ax, fontsize=PT_SMALL, loc="upper right",
+    panel_title(ax, "D", "Forward effect")
+    clean_legend(ax, fontsize=PT_SMALL, loc="lower right",
                  handlelength=0.7, handletextpad=0.3, borderaxespad=0.15)
     style_axis(ax)
 

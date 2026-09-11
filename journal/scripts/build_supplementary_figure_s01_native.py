@@ -14,23 +14,41 @@ numbers) onto a two-row 12-module :class:`figure_canvas.NativeCanvas`:
   compartments; C the post-training inhibition interventions;
 * row 1 -- D feedback fidelity and E learning on the noise-resilience task
   (solid = matched-width/scalar-fallback feedback, dashed = exact transported
-  error; whiskers are +-1 s.d., exactly the statistic the archived generator
-  shaded as a band).
+  error; shaded bands are +-1 s.d., exactly the statistic the archived
+  generator shaded as a band).
 
 Every plotted number is the archived one: the aggregations below are ported
 verbatim from the frozen generator (same CSVs, same filters, same groupbys,
 same ddof), and the build prints the endpoint values it draws so they can be
 diffed against the frozen tables.  Only layout, palette mapping and label
-wording are native:
+wording are native.
 
-* shunting keeps the house green circle and additive the house blue square in
-  every panel; linestyle (solid/dashed) carries the feedback condition in
-  D/E, exactly as the caption reads the figure;
-* the panel-A path colormap is the house sequential ramp instead of viridis,
-  over the identical data-derived normalisation;
-* panel C drops its legend box for direct per-bar labels on the MNIST group
-  (the Noise group repeats the same five interventions in the same order);
-* no mathtext: subscripts are unicode so the strict type audit passes.
+2026-09-11 visual-review fixes (analysis/figure_visual_review_20260910/si01):
+
+* A is drawn with the shared credit-tree vocabulary of main Fig. 1B: the
+  same two-stage balanced tree from :meth:`native_schematics.Frame.
+  balanced_tree`, the soma glyph, the rule-agnostic delta-0 arrow and ONE
+  highlighted root-to-leaf route carrying alpha_1, alpha_2, alpha_3 in
+  series (the serial product of Fig. 1B), so the alpha symbols mean the same
+  thing in both figures.  The path-gain FIELD is carried by the distal
+  sites: each terminal branch and site is tinted by its illustrative path
+  gain, on the model's own hue (a white-tint ladder of the additive blue on
+  the left, of the shunting green on the right), so the shunting tree is no
+  longer drawn in the additive blue.  The header no longer repeats the two
+  CV numerals the inset draws; the inset axis is 0-1.3 with three ticks.
+* B opens its y axis below zero so the distal additive whisker is no longer
+  cut at the floor, draws a zero reference and overlays the five
+  per-checkpoint cosines as the same open circles C uses.
+* C keeps its bars on a 0-100 % axis with horizontal category labels, the
+  per-run points and a dashed chance rule: no rotated in-bar labels, no
+  140 % ceiling, no single-group 'MNIST' tick.
+* D and E share one dose geometry (0-42 with all five sampled doses ticked),
+  E's axis is trimmed to its data, D's stops at cosine 1, the stray
+  'additive' tag is gone and +-1 s.d. is a shaded band along every line so
+  the intervals at doses 5-40 are visible instead of hiding under a marker.
+* The row gutter is opened to match the column gutters.
+* No mathtext: subscripts go through the token-subscript helper so the
+  strict type audit passes.
 """
 
 from __future__ import annotations
@@ -38,9 +56,9 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
-import matplotlib.colors as mcolors
 import numpy as np
 import pandas as pd
+from matplotlib.colors import LinearSegmentedColormap, Normalize
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 if str(SCRIPT_DIR) not in sys.path:
@@ -57,10 +75,15 @@ from figure_canvas import (  # noqa: E402
     PT_ANNOT,
     PT_LEGEND,
     PT_SMALL,
-    PT_TICK,
-    SEQ_CMAP,
+    Margins,
     NativeCanvas,
     style_panel,
+)
+from credit_tree_schematics import mix  # noqa: E402
+from native_schematics import (  # noqa: E402
+    JUNCTION_R_PT,
+    Frame,
+    reference_line,
 )
 
 ROOT = SCRIPT_DIR.parent
@@ -77,19 +100,21 @@ SHUNT = COLORS["shunting"]
 ADD = COLORS["additive"]
 INK = COLORS["ink"]
 MUTE = COLORS["mute"]
+EXACT = COLORS["bp"]        # the exact transported path, as in main Fig. 1B
 
 CORE_MARKER = {"dendritic_shunting": "o", "dendritic_additive": "s"}
 CORE_COLOR = {"dendritic_shunting": SHUNT, "dendritic_additive": ADD}
-CORE_WORD = {
-    "dendritic_shunting": "shunting",
-    "dendritic_additive": "normalized additive",
-}
 
-# Shared axes for the two noise-resilience sweeps (D, E): identical x
-# geometry so the reader carries the N_I positions across the pair.
-IE_TICKS = [0, 20, 40]
-IE_XLIM = (-2.0, 56.0)
+# Shared axes for the two noise-resilience sweeps (D, E): one dose geometry,
+# every sampled dose ticked, the axis stopping just past the last dose.
+IE_TICKS = [0, 5, 10, 20, 40]
+IE_XLIM = (-2.0, 42.5)
 IE_XLABEL = "inhibitory synapses per branch"
+BAND_ALPHA = 0.18           # +-1 s.d. band along a sweep line
+
+# Panel-C run points and panel-B checkpoint points share one mark.
+RUN_POINT = dict(s=4.5, color="white", edgecolor=INK, linewidth=LW_HAIR,
+                 zorder=5)
 
 
 def _csv(path: Path) -> pd.DataFrame:
@@ -99,37 +124,57 @@ def _csv(path: Path) -> pd.DataFrame:
 
 
 # ── panel A: conductance-stage path-gain field ───────────────────────────
-def _path_cmap(t: float):
-    """House sequential ramp, clipped away from its near-white foot so the
-    lowest-gain path still prints as a visible stroke."""
-    return SEQ_CMAP(0.30 + 0.68 * float(t))
+# The three frozen representative gains (1 - CV/3, 1, 1 + CV) are laid over
+# the eight distal sites of the balanced tree in one fixed pattern, so the
+# additive tree shows a dispersed field and the shunting tree a near-uniform
+# one from the SAME two data-derived CVs the inset plots.
+SITE_PATTERN = (2, 0, 1, 2, 1, 0, 2, 1)      # index into (low, mid, high)
+TINT_LO, TINT_HI = 22.0, 100.0               # white-tint ladder, per cent
+ROUTE_TARGET = "T4"                          # the library's default route
 
 
-def _draw_gain_tree(ax, *, x0, name, cv, gains, tone, norm, label_soma):
-    """Compact three-path tree colored by log path gain (frozen geometry)."""
-    soma = (x0 + 0.32, 0.52)
-    branch_x = x0 + 0.15
-    leaf_x = x0 + 0.02
-    ys = [0.78, 0.52, 0.26]
-    for idx, y in enumerate(ys):
-        log_gain = np.log10(max(gains[idx], 1e-5))
-        line_color = _path_cmap(norm(log_gain))
-        ax.plot([leaf_x, branch_x, soma[0]], [y, y, soma[1]],
-                color=line_color, linewidth=LW_DATA,
-                solid_capstyle="round", zorder=2)
-        ax.scatter([leaf_x], [y], s=16.0, facecolor=line_color,
-                   edgecolor="white", linewidth=LW_HAIR, zorder=4)
-        ax.text(leaf_x - 0.025, y, f"α{chr(0x2081 + idx)}", ha="right",
-                va="center", fontsize=PT_TICK, color=INK, zorder=6,
-                bbox={"facecolor": "white", "edgecolor": "none",
-                      "pad": 0.6, "alpha": 0.88})
-    ax.scatter([soma[0]], [soma[1]], s=52.0, facecolor=COLORS["soma"],
-               edgecolor=COLORS["edge"], linewidth=LW_EDGE, zorder=5)
-    if label_soma:
-        ax.text(soma[0] + 0.015, soma[1] + 0.085, "δ₀", ha="left",
-                va="bottom", fontsize=PT_TICK, color=INK, zorder=6)
-    ax.text(x0 + 0.17, 0.905, f"{name}\n{cv:.2f}", ha="center", va="center",
-            fontsize=PT_LEGEND, color=tone, linespacing=1.0)
+def _tint_ramp(key):
+    """White-tint ladder of one role hue: pale = low gain, full = high."""
+    base = COLORS[key]
+    return LinearSegmentedColormap.from_list(
+        f"tint_{key}", [mix(base, TINT_LO), mix(base, 0.5 * (TINT_LO + TINT_HI)),
+                        mix(base, TINT_HI)])
+
+
+def _draw_field_tree(f, rect, *, gains, ramp, norm):
+    """One two-stage tree with its sites tinted by path gain and the exact
+    route soma -> alpha_1 -> alpha_2 -> alpha_3 -> site (Fig. 1B idiom)."""
+    nodes = f.balanced_tree(rect, depth=3, labels=False)
+    # the field: terminal branch + site disc in the site's gain tint
+    for i, t in enumerate(nodes.terminals):
+        g = gains[SITE_PATTERN[i % len(SITE_PATTERN)]]
+        colour = ramp(float(norm(np.log10(max(g, 1e-5)))))
+        nodes.edges[(nodes.parent[t], t)].set_color(colour)
+        f.disc(nodes[t], 2.2, fill=colour, edge="white", lw=LW_HAIR,
+               zorder=4.2)
+    # the exact route with its serial gains, drawn as the library's small
+    # exact chain (plain LW_EDGE stroke, scaled heads, rings, alpha tags)
+    route = nodes.route(ROUTE_TARGET)
+    head = max(2.4, 4.5 * nodes.pitch_pt / 14.0)
+    for a, b in zip(route, route[1:]):
+        pa = nodes[a] if a in nodes else nodes.soma
+        f.ax.plot([pa[0], nodes[b][0]], [pa[1], nodes[b][1]], color=EXACT,
+                  lw=f.lw(LW_EDGE), solid_capstyle="round", zorder=2.4)
+        f.arrow(_lerp(pa, nodes[b], 0.34), _lerp(pa, nodes[b], 0.60),
+                color=EXACT, lw=LW_HAIR, head=head, zorder=4.6)
+    for j, (n, nxt) in enumerate(zip(route[1:-1], route[2:]), 1):
+        f.disc(nodes[n], JUNCTION_R_PT, fill="white", edge=EXACT,
+               lw=LW_EDGE, zorder=4.4)
+        outward = 1.0 if nodes[nxt][0] <= nodes[n][0] else -1.0
+        f.subscript(f._off(nodes[n], outward * 4.2, -2.0), "α", str(j),
+                    size=PT_ANNOT, color=EXACT,
+                    ha="left" if outward > 0 else "right", va="center")
+    f.error_in(nodes.soma, label="δ0")
+    return nodes
+
+
+def _lerp(p, q, t):
+    return (p[0] + t * (q[0] - p[0]), p[1] + t * (q[1] - p[1]))
 
 
 def panel_path_gains(ax, summary, path_gain_seed):
@@ -139,8 +184,9 @@ def panel_path_gains(ax, summary, path_gain_seed):
     seed-level pivot, the bar means and the ddof=1 s.d. are ported verbatim
     from ``_plot_path_gain_map`` in the frozen generator.
     """
-    ax.set_xlim(0, 1.0)
-    ax.set_ylim(0, 1.0)
+    f = Frame(ax)
+    X, Y = f.fx, f.fy
+    W, H = f.w_pt, f.h_pt
 
     mnist = summary[summary["dataset"] == "mnist"].copy()
     add_cv = float(
@@ -154,13 +200,29 @@ def panel_path_gains(ax, summary, path_gain_seed):
     add_gains = [1.0 - add_cv / 3.0, 1.0, 1.0 + add_cv]
     shunt_gains = [1.0 - shunt_cv / 3.0, 1.0, 1.0 + shunt_cv]
     all_logs = np.log10(np.clip(add_gains + shunt_gains, 1e-5, None))
-    norm = mcolors.Normalize(vmin=float(all_logs.min()),
-                             vmax=float(all_logs.max()))
+    norm = Normalize(vmin=float(all_logs.min()), vmax=float(all_logs.max()))
 
-    _draw_gain_tree(ax, x0=0.03, name="normalized additive", cv=add_cv, gains=add_gains,
-                    tone=ADD, norm=norm, label_soma=False)
-    _draw_gain_tree(ax, x0=0.60, name="shunting", cv=shunt_cv,
-                    gains=shunt_gains, tone=SHUNT, norm=norm, label_soma=True)
+    # -- layout in points from the top: header, trees + delta-0, key, inset
+    gap = 6.0
+    cell_w = (W - gap) / 2.0
+    head_pt = 18.0
+    tree_pt = 50.0
+    delta_pt = 14.0
+    key_y = H - head_pt - tree_pt - delta_pt - 5.0
+    for i, (name, tone, gains, key) in enumerate((
+            ("normalized\nadditive", ADD, add_gains, "additive"),
+            ("shunting", SHUNT, shunt_gains, "shunting"))):
+        x0 = i * (cell_w + gap)
+        cx = X(x0 + cell_w / 2.0)
+        f.text((cx, 1.0 - Y(1.5)), name, size=PT_LEGEND, color=tone,
+               va="top", linespacing=1.0)
+        rect = (X(x0), 1.0 - Y(head_pt + tree_pt), X(cell_w), Y(tree_pt))
+        _draw_field_tree(f, rect, gains=gains, ramp=_tint_ramp(key),
+                         norm=norm)
+    f.text((0.5, Y(key_y)), "darker site = larger path gain", size=PT_SMALL,
+           color=MUTE)
+    f.require_soma_lowest()
+    f.require_delta0()
 
     # Paired seed-level result under the schematic (frozen aggregation).
     paired = path_gain_seed.copy()
@@ -177,28 +239,26 @@ def panel_path_gains(ax, summary, path_gain_seed):
     sds = [float(np.std(add_vals, ddof=1)) if len(add_vals) > 1 else 0.0,
            float(np.std(shunt_vals, ddof=1)) if len(shunt_vals) > 1 else 0.0]
 
-    inset = ax.inset_axes([0.12, 0.0, 0.76, 0.20])
-    style_panel(inset)
+    inset_top = key_y - 7.0
+    inset_bottom = 20.0                      # two-line tick labels + ticks
+    inset = f.axes_inset((X(24.0), Y(inset_bottom), 1.0 - X(28.0),
+                          Y(inset_top - inset_bottom)), grid="y")
     inset.bar([0, 1], means, 0.56, yerr=sds, color=[ADD, SHUNT],
               edgecolor="white", linewidth=LW_HAIR,
-              error_kw={"lw": LW_EDGE, "capthick": LW_EDGE}, capsize=2.0,
-              zorder=2)
+              error_kw={"lw": LW_ERR, "capthick": LW_ERR, "ecolor": INK},
+              capsize=ERR_CAPSIZE, zorder=2)
     for x, vals in ((0, add_vals), (1, shunt_vals)):
         if len(vals):
             jitter = np.linspace(-0.13, 0.13, len(vals))
-            inset.scatter(np.full(len(vals), x) + jitter, vals, s=5.0,
-                          facecolors="white", edgecolors=COLORS["edge"],
-                          linewidths=LW_HAIR, zorder=3)
+            inset.scatter(np.full(len(vals), x) + jitter, vals, **RUN_POINT)
     inset.set_xlim(-0.55, 1.55)
-    inset.set_ylim(0.0, 1.36)
+    inset.set_ylim(0.0, 1.3)
     inset.set_xticks([0, 1])
-    inset.set_xticklabels(["normalized\nadditive", "shunting"], fontsize=PT_SMALL)
-    inset.set_yticks([0, 1])
-    inset.set_yticklabels(["0", "1"], fontsize=PT_SMALL)
-    inset.tick_params(length=1.8, width=LW_HAIR, pad=0.8)
-    for spine in inset.spines.values():
-        spine.set_linewidth(LW_HAIR)
-    inset.set_ylabel("CV", fontsize=PT_SMALL, labelpad=1.0)
+    inset.set_xticklabels(["normalized\nadditive", "shunting"],
+                          fontsize=PT_SMALL)
+    inset.set_yticks([0.0, 0.5, 1.0])
+    inset.set_yticklabels(["0", "0.5", "1.0"], fontsize=PT_SMALL)
+    inset.set_ylabel("CV", fontsize=PT_SMALL, labelpad=1.5)
 
     print(f"[A] aggregate CV: additive={add_cv:.6f} shunting={shunt_cv:.6f}")
     print(f"[A] paired-seed CV (n={len(pivot)}): additive {means[0]:.6f}"
@@ -208,7 +268,7 @@ def panel_path_gains(ax, summary, path_gain_seed):
 
 # ── panel B: stage-resolved submitted-field cosine ───────────────────────
 def panel_field_cosine(ax, decomposition_runs):
-    """B: MW-field cosine on distal/proximal stages (frozen aggregation).
+    """B: matched-width-field cosine on distal/proximal stages.
 
     Filters, the checkpoint-first mean and the five-value assertion are
     ported verbatim from ``_plot_dendritic_feedback_fidelity``; the somatic
@@ -239,10 +299,10 @@ def panel_field_cosine(ax, decomposition_runs):
     cores = [("dendritic_additive", ADD), ("dendritic_shunting", SHUNT)]
     x = np.arange(len(stages), dtype=float)
     width = 0.34
-    tops = {}
+    lowest = 0.0
     for offset, (core, color) in zip([-width / 2, width / 2], cores):
         means, stds = [], []
-        for stage in stages:
+        for si, stage in enumerate(stages):
             values = per_checkpoint[
                 (per_checkpoint["network_type"] == core)
                 & (per_checkpoint["stage_role"] == stage)]["cosine"]
@@ -252,104 +312,102 @@ def panel_field_cosine(ax, decomposition_runs):
                     f"got {len(values)}")
             means.append(float(values.mean()))
             stds.append(float(values.std(ddof=1)))
+            vals = values.to_numpy(dtype=float)
+            jitter = np.linspace(-0.10, 0.10, vals.size)
+            ax.scatter(np.full(vals.size, x[si] + offset) + jitter, vals,
+                       **RUN_POINT)
+            lowest = min(lowest, float(vals.min()), means[-1] - stds[-1])
         ax.bar(x + offset, means, width, yerr=stds, color=color,
                edgecolor="white", linewidth=LW_EDGE, capsize=ERR_CAPSIZE,
                error_kw={"lw": LW_ERR, "capthick": LW_ERR,
                          "ecolor": INK}, zorder=3)
-        tops[core] = [m + s for m, s in zip(means, stds)]
         print(f"[B] {core}: distal {means[0]:.6f} +- {stds[0]:.6f}; "
               f"proximal {means[1]:.6f} +- {stds[1]:.6f}")
 
     # Direct color key in the data-free upper-left corner (no legend box).
-    ax.text(-0.50, 0.288, "shunting", ha="left", va="top",
+    ax.text(-0.50, 0.255, "shunting", ha="left", va="top",
             fontsize=PT_LEGEND, color=SHUNT)
-    ax.text(-0.50, 0.257, "normalized\nadditive", ha="left", va="top",
+    ax.text(-0.50, 0.226, "normalized\nadditive", ha="left", va="top",
             fontsize=PT_LEGEND, color=ADD)
 
     ax.set_xticks(x)
     ax.set_xticklabels(stages)
     ax.set_xlim(-0.60, 1.60)
-    ax.set_ylim(0.0, 0.30)
-    ax.set_yticks([0.0, 0.1, 0.2, 0.3])
-    ax.set_ylabel("MW-field cosine")
+    y_lo = -0.05 if lowest >= -0.04 else float(np.floor(lowest * 20) / 20)
+    ax.set_ylim(y_lo, 0.26)
+    ax.set_yticks([0.0, 0.1, 0.2])
+    reference_line(ax, 0.0, label="", span=(-0.60, 1.60), zorder=2.5)
+    ax.set_ylabel("matched-width-field cosine")
 
 
 # ── panel C: post-training inhibition interventions ──────────────────────
 INTERVENTION_ORDER = ["original", "zero_i", "shuffle_i", "mean_clamp_i",
                       "uniform_matched_i"]
+# Category names as the caption spells them (zero, sample shuffle, batch
+# mean, uniform matched mean), short enough to stay horizontal at 26 pt pitch.
 INTERVENTION_LABEL = {
     "original": "learned",
-    "zero_i": "zeroed",
-    "shuffle_i": "shuffled",
-    "mean_clamp_i": "batch mean",
+    "zero_i": "zero",
+    "shuffle_i": "shuffle",
+    "mean_clamp_i": "batch\nmean",
     "uniform_matched_i": "uniform",
 }
-# Same house-palette keys the archived generator drew from: the learned
-# model keeps the shunting green; the four ablations keep their distinct
-# muted house tones so a bar can be traced across the two task groups.
+# The learned model is the shunting model (same green as A, B); the four
+# post-training ablations are controls and share the one grey control tone,
+# told apart by their category labels.
 INTERVENTION_COLOR = {
     "original": COLORS["shunting"],
-    "zero_i": COLORS["mute"],
-    "shuffle_i": COLORS["low_rank"],
-    "mean_clamp_i": COLORS["per_soma"],
-    "uniform_matched_i": COLORS["oracle"],
+    "zero_i": COLORS["point_mlp"],
+    "shuffle_i": COLORS["point_mlp"],
+    "mean_clamp_i": COLORS["point_mlp"],
+    "uniform_matched_i": COLORS["point_mlp"],
 }
-DATASET_ORDER = [("mnist", "MNIST")]
+CHANCE_PCT = 10.0           # ten MNIST classes
+C_XLIM = (-0.6, 4.6)
 
 
 def panel_inhibition(ax, causal):
-    """C: intervention accuracies (frozen aggregation and bar geometry)."""
-    order = INTERVENTION_ORDER
-    group_gap = 0.70
-    width = 0.205
+    """C: intervention accuracies (frozen aggregation), 0-100 % axis."""
+    sub = causal[causal["dataset"] == "mnist"].copy()
+    stats = (sub.groupby("intervention")["accuracy"]
+             .agg(["mean", "std"]).reindex(INTERVENTION_ORDER))
+    for i, intervention in enumerate(INTERVENTION_ORDER):
+        mean = 100.0 * float(stats.loc[intervention, "mean"])
+        sd = 100.0 * float(stats.loc[intervention, "std"])
+        ax.bar([i], [mean], 0.72, yerr=[sd],
+               color=INTERVENTION_COLOR[intervention], edgecolor="white",
+               linewidth=LW_HAIR, capsize=ERR_CAPSIZE,
+               error_kw={"lw": LW_ERR, "capthick": LW_ERR, "ecolor": INK},
+               zorder=3)
+        vals = 100.0 * sub[sub["intervention"] == intervention][
+            "accuracy"].to_numpy(dtype=float)
+        if vals.size:
+            jitter = np.linspace(-0.20, 0.20, vals.size)
+            ax.scatter(np.full(vals.size, float(i)) + jitter, vals,
+                       **RUN_POINT)
+        print(f"[C] mnist/{intervention}: {mean:.2f} +- {sd:.2f} % "
+              f"(n={vals.size})")
 
-    centers = []
-    for gi, (dataset, _label) in enumerate(DATASET_ORDER):
-        center = gi * (len(order) * width + group_gap)
-        centers.append(center)
-        sub = causal[causal["dataset"] == dataset].copy()
-        stats = (sub.groupby("intervention")["accuracy"]
-                 .agg(["mean", "std"]).reindex(order))
-        for ji, intervention in enumerate(order):
-            xpos = center + (ji - (len(order) - 1) / 2) * width
-            mean = 100.0 * float(stats.loc[intervention, "mean"])
-            sd = 100.0 * float(stats.loc[intervention, "std"])
-            ax.bar([xpos], [mean], width * 0.88, yerr=[sd],
-                   color=INTERVENTION_COLOR[intervention],
-                   edgecolor="white", linewidth=LW_HAIR, capsize=1.8,
-                   error_kw={"lw": LW_ERR, "capthick": LW_ERR,
-                             "ecolor": INK}, zorder=3)
-            vals = 100.0 * sub[sub["intervention"] == intervention][
-                "accuracy"].to_numpy(dtype=float)
-            if vals.size:
-                jitter = np.linspace(-0.062, 0.062, vals.size)
-                ax.scatter(np.full(vals.size, xpos) + jitter, vals, s=4.5,
-                           color="white", edgecolor=INK,
-                           linewidth=LW_HAIR, zorder=5)
-            if dataset == "mnist":
-                # Direct per-bar labels replace the legend box; the noise
-                # group repeats the same five interventions in this order.
-                y_text = max(mean + sd, float(vals.max()) if vals.size
-                             else 0.0) + 3.5
-                ax.text(xpos, y_text, INTERVENTION_LABEL[intervention],
-                        rotation=90, ha="center", va="bottom",
-                        fontsize=PT_ANNOT,
-                        color=INTERVENTION_COLOR[intervention], zorder=6)
-            print(f"[C] {dataset}/{intervention}: {mean:.2f} +- {sd:.2f} % "
-                  f"(n={vals.size})")
-
-    ax.set_xticks(centers)
-    ax.set_xticklabels([label for _dataset, label in DATASET_ORDER])
-    ax.set_xlim(centers[0] - 0.66, centers[-1] + 0.66)
-    ax.set_ylim(0, 140)
-    ax.set_yticks([0, 50, 100])
+    ax.set_xticks(np.arange(len(INTERVENTION_ORDER)))
+    ax.set_xticklabels([INTERVENTION_LABEL[k] for k in INTERVENTION_ORDER])
+    ax.set_xlim(*C_XLIM)
+    ax.set_ylim(0.0, 100.0)                  # accuracy is bounded
+    ax.set_yticks([0, 25, 50, 75, 100])
     ax.set_ylabel("accuracy (%)")
     ax.tick_params(axis="x", length=0)
+    # Chance for ten classes: a dashed ink rule across the bars, named once
+    # in the tick column so the label never sits on a bar.
+    reference_line(ax, CHANCE_PCT, label="", color="ink", span=C_XLIM,
+                   zorder=4.5)
+    ax.annotate("chance", xy=(0.0, CHANCE_PCT),
+                xycoords=("axes fraction", "data"), xytext=(-3.0, 0.0),
+                textcoords="offset points", ha="right", va="center",
+                fontsize=PT_SMALL, color=MUTE, annotation_clip=False)
 
 
 # ── panels D, E: noise-resilience fidelity and learning sweeps ───────────
 def _sweep(ax, frame, mean_col, std_col, *, linestyle, scale=1.0):
-    """One core's line on an N_I sweep, mean +- 1 s.d. as whiskers."""
+    """One core's line on an N_I sweep, mean +- 1 s.d. as a shaded band."""
     # The inherited noise/shunting aggregate has no resolved execution
     # lineage. Retain the additive data; unresolved rows stay in Source Data.
     for core in ("dendritic_additive",):
@@ -357,22 +415,21 @@ def _sweep(ax, frame, mean_col, std_col, *, linestyle, scale=1.0):
         x = pd.to_numeric(sub["ie_value"], errors="coerce").to_numpy(float)
         y = scale * sub[mean_col].to_numpy(dtype=float)
         err = scale * sub[std_col].fillna(0.0).to_numpy(dtype=float)
-        ax.errorbar(x, y, yerr=err, color=CORE_COLOR[core],
-                    marker=CORE_MARKER[core], markerfacecolor="white",
-                    markeredgecolor=CORE_COLOR[core], markeredgewidth=LW_ERR,
-                    ms=MARKER_MS, lw=LW_DATA, linestyle=linestyle,
-                    elinewidth=LW_ERR, capsize=ERR_CAPSIZE, zorder=4)
+        ax.fill_between(x, y - err, y + err, color=CORE_COLOR[core],
+                        alpha=BAND_ALPHA, lw=0.0, zorder=2)
+        ax.plot(x, y, color=CORE_COLOR[core], marker=CORE_MARKER[core],
+                markerfacecolor="white", markeredgecolor=CORE_COLOR[core],
+                markeredgewidth=LW_ERR, ms=MARKER_MS, lw=LW_DATA,
+                linestyle=linestyle, zorder=4, clip_on=False)
         yield core, x, y, err
 
 
 def panel_fidelity(ax, summary):
     """D: submitted-field vs exact-transport cosine (frozen columns)."""
     noise = summary[summary["dataset"] == "noise_resilience"].copy()
-    ends = {}
     for core, x, y, err in _sweep(ax, noise, "per_soma_weighted_cosine_mean",
                                   "per_soma_weighted_cosine_std",
                                   linestyle="-"):
-        ends[core] = y[-1]
         print(f"[D] {core} MW cosine: ie0 {y[0]:.6f} +- {err[0]:.6f}; "
               f"ie40 {y[-1]:.6f} +- {err[-1]:.6f}")
     for core, x, y, err in _sweep(ax, noise,
@@ -382,18 +439,16 @@ def panel_fidelity(ax, summary):
         print(f"[D] {core} exact-transport cosine: ie0 {y[0]:.6f} "
               f"+- {err[0]:.6f}; ie40 {y[-1]:.6f} +- {err[-1]:.6f}")
 
-    # Condition annotations (linestyle key) and the figure's color/marker
-    # key at the separated solid endpoints -- no legend box.
-    ax.text(21.0, 0.88, "exact path", ha="center", va="top",
+    # Condition annotations (linestyle key) -- no legend box; the panel
+    # title already names the additive model.
+    ax.text(22.0, 0.88, "exact path", ha="center", va="top",
             fontsize=PT_ANNOT, color=INK)
-    ax.text(21.0, 0.33, "matched-width\nfallback", ha="center", va="bottom",
+    ax.text(22.0, 0.33, "matched-width\nfallback", ha="center", va="bottom",
             fontsize=PT_ANNOT, color=INK)
-    ax.text(42.5, ends["dendritic_additive"], "additive", ha="left",
-            va="center", fontsize=PT_LEGEND, color=ADD)
 
     ax.set_xticks(IE_TICKS)
     ax.set_xlim(*IE_XLIM)
-    ax.set_ylim(-0.10, 1.14)
+    ax.set_ylim(-0.10, 1.0)                  # a cosine cannot exceed 1
     ax.set_yticks([0.0, 0.5, 1.0])
     ax.set_xlabel(IE_XLABEL)
     ax.set_ylabel("cosine")
@@ -415,21 +470,25 @@ def panel_learning(ax, summary, oracle_summary):
         print(f"[E] {core} exact-transport accuracy: ie0 {y[0]:.3f} "
               f"+- {err[0]:.3f}; ie40 {y[-1]:.3f} +- {err[-1]:.3f} %")
 
-    ax.text(24.0, 96.6, "exact path", ha="center", va="bottom",
+    ax.text(24.0, 91.0, "exact path", ha="center", va="top",
             fontsize=PT_ANNOT, color=INK)
-    ax.text(24.0, 77.5, "matched-width\nfallback", ha="center", va="top",
+    ax.text(24.0, 80.0, "matched-width\nfallback", ha="center", va="top",
             fontsize=PT_ANNOT, color=INK)
 
     ax.set_xticks(IE_TICKS)
     ax.set_xlim(*IE_XLIM)
-    ax.set_ylim(44.0, 103.0)
-    ax.set_yticks([50, 75, 100])
+    ax.set_ylim(62.0, 96.0)
+    ax.set_yticks([65, 75, 85, 95])
     ax.set_xlabel(IE_XLABEL)
     ax.set_ylabel("test accuracy (%)")
 
 
 # ── the canvas ───────────────────────────────────────────────────────────
-CANVAS_H_PT = 380.0
+CANVAS_H_PT = 420.0
+ROW_PT = [165.0, 153.0]     # A needs headers + two trees + key + inset
+HGUTTER_PT = 36.0           # holds every y-label column without a lock
+VGUTTER_PT = 48.0           # row-0 tick labels + row-1 letter band
+MARGINS = Margins(left=44.0, right=12.0, top=22.0, bottom=32.0)
 
 
 def build(path: Path = OUT):
@@ -439,7 +498,9 @@ def build(path: Path = OUT):
     decomposition_runs = _csv(DECOMPOSITION_RUNS_CSV)
     causal = _csv(INHIBITION_CAUSALITY_CSV)
 
-    canvas = NativeCanvas(CANVAS_H_PT / 72.0, 2)
+    canvas = NativeCanvas(CANVAS_H_PT / 72.0, 2, row_weights=ROW_PT,
+                          hgutter_pt=HGUTTER_PT, vgutter_pt=VGUTTER_PT,
+                          margins=MARGINS)
     ax_a = canvas.panel("path_gains", 0, 0, 4, schematic=True,
                         title="Path-gain field")
     ax_b = canvas.panel("field_cosine", 0, 4, 4, grid="y",
@@ -451,25 +512,19 @@ def build(path: Path = OUT):
     ax_e = canvas.panel("learning", 1, 6, 6, grid="y",
                         title="Noise-task learning (additive)")
 
-    panel_path_gains(ax_a, summary, path_gain_seed)
+    # D's exact-path markers sit at cosine 1, the axis top: lift the row-1
+    # titles clear of them (one pad for the whole row keeps the lock uniform).
+    for ax in (ax_d, ax_e):
+        ax.set_title(ax.get_title(), fontsize=ax.title.get_fontsize(),
+                     color=INK, pad=7.0, fontweight="normal")
+
+    # Data panels first: their decorations set the column and row locks.
     panel_field_cosine(ax_b, decomposition_runs)
     panel_inhibition(ax_c, causal)
     panel_fidelity(ax_d, summary)
     panel_learning(ax_e, summary, oracle_summary)
-
-    # Row 0 starts in three different grid columns, and the schematic panel
-    # hangs no y decorations, so the measured column locks leave it a point
-    # or two wider than its row-mates.  Measure after the first lock and top
-    # the wide panels up with a declared right reserve so the row is exact.
-    canvas.lock_reserves()
-    row0 = ("path_gains", "field_cosine", "inhibition")
-    widths = {name: canvas.axes[name].get_position().width * canvas.width_pt
-              for name in row0}
-    target = min(widths.values())
-    for name in row0:
-        extra = widths[name] - target
-        if extra > 0.05:
-            canvas.declare_reserve(name, right=extra)
+    canvas.lock_reserves()          # settle the boxes before drawing in points
+    panel_path_gains(ax_a, summary, path_gain_seed)
 
     problems = canvas.save(path, name="figure_S01_panels_A-E")
     for problem in problems:

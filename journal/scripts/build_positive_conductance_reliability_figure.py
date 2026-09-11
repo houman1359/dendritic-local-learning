@@ -19,6 +19,8 @@ from journal_style import (
     PT_ANNOT,
     PT_LEGEND,
     PT_SMALL,
+    SEED_ALPHA,
+    SEED_MS,
     apply_neurips_style,
     audit_layout,
     audit_text_over_data,
@@ -46,30 +48,43 @@ def schematic(ax: plt.Axes) -> None:
     ax.set_xlim(0, 1)
     ax.set_ylim(0, 1)
     ax.axis("off")
-    panel_title(ax, "A", "Oracle state clamp")
+    # The caption names the mechanism as a supplied compensating current; the
+    # same name is used here so the sheet has one word for it.
+    panel_title(ax, "A", "Supplied state clamp")
+    # Three boxes with a gap wide enough for an arrow that touches neither
+    # stroke nor glyph; text sits inside with its own padding.
+    # The chain spans 0.896 of the axes so the schematic's crop is as wide as
+    # the adaptive study's panel C on the consolidated sheet.
+    span = 0.896
+    width, gap, y0, height = 0.27 * span, 0.095 * span, 0.52, 0.40
     boxes = [
-        (0.00, 0.50, 0.29, 0.40, "positive\ninput\nrates\n$x\\geq0$", COLORS["dend"]),
-        (0.355, 0.50, 0.29, 0.40, "branch\nvoltage $V$", COLORS["oracle"]),
-        (0.71, 0.50, 0.29, 0.40, "local\neligibility", COLORS["shunting"]),
+        ("positive\ninput rates\n$x\\geq0$", COLORS["dend"]),
+        ("branch\nvoltage $V$", COLORS["oracle"]),
+        ("local\neligibility", COLORS["shunting"]),
     ]
-    for x, y, width, height, label, color in boxes:
+    x = 0.0
+    for label, color in boxes:
         ax.add_patch(
             FancyBboxPatch(
-                (x, y), width, height, boxstyle="round,pad=0.018",
-                facecolor="white", edgecolor=color, lw=LW_DATA, clip_on=False,
+                (x + 0.012, y0), width - 0.024, height,
+                boxstyle="round,pad=0.012", facecolor="white", edgecolor=color,
+                lw=LW_DATA, clip_on=False,
             )
         )
-        ax.text(x + width / 2, y + height / 2, label, ha="center", va="center",
+        ax.text(x + width / 2, y0 + height / 2, label, ha="center", va="center",
                 fontsize=PT_SMALL, color=color, linespacing=1.25)
-    for left, right in ((0.29, 0.355), (0.645, 0.71)):
-        ax.add_patch(FancyArrowPatch((left, 0.685), (right, 0.685), arrowstyle="-|>",
-                                     mutation_scale=8, lw=LW_REF, color=COLORS["mute"]))
-    ax.text(0.50, 0.42, r"shunt $\kappa_b\geq0$  +  clamp current $\kappa_bV$",
+        x += width + gap
+    y_arrow = y0 + height / 2
+    for start in (width, 2 * width + gap):
+        ax.add_patch(FancyArrowPatch((start + 0.016, y_arrow),
+                                     (start + gap - 0.016, y_arrow),
+                                     arrowstyle="-|>", mutation_scale=8,
+                                     lw=LW_REF, color=COLORS["mute"], clip_on=False))
+    centre = (3 * width + 2 * gap) / 2
+    ax.text(centre, 0.34, r"shunt $\kappa_b\geq0$  +  clamp current $\kappa_bV$",
             ha="center", va="center", fontsize=PT_ANNOT, color=COLORS["ink"])
-    ax.text(0.50, 0.28, r"$V'=V$   but   eligibility $\times\;G/(G+\kappa_b)$",
+    ax.text(centre, 0.16, r"$V'=V$   but   eligibility $\times\;G/(G+\kappa_b)$",
             ha="center", va="center", fontsize=PT_ANNOT, color=COLORS["shunting"])
-    ax.text(0.50, 0.10, "isolates physical input-resistance attenuation",
-            ha="center", va="center", fontsize=PT_SMALL, color=COLORS["mute"])
 
 
 def line_with_interval(
@@ -96,20 +111,24 @@ def main() -> None:
     summary = pd.read_csv(SOURCE / "condition_summary.csv")
     contrasts = pd.read_csv(SOURCE / "extended_contrasts.csv")
 
-    fig, axes = plt.subplots(
-        2,
-        3,
-        figsize=(FIG_W, 4.95),
-        gridspec_kw={
-            "left": 0.105,
-            "right": 0.985,
-            "bottom": 0.135,
-            "top": 0.90,
-            "wspace": 0.68,
-            "hspace": 0.82,
-        },
+    # Four column units: the schematic (A) and the paired endpoint panel (F)
+    # each take two so their crops match the width of a half-page panel in
+    # the consolidated supplement; B-E are single-unit line plots.
+    fig = plt.figure(figsize=(FIG_W, 4.95))
+    grid = fig.add_gridspec(
+        2, 4, left=0.092, right=0.985, bottom=0.115, top=0.90,
+        wspace=0.62, hspace=0.95,
     )
-    ax_a, ax_b, ax_c, ax_d, ax_e, ax_f = axes.ravel()
+    ax_a = fig.add_subplot(grid[0, 0:2])
+    ax_b = fig.add_subplot(grid[0, 2])
+    ax_c = fig.add_subplot(grid[0, 3])
+    ax_d = fig.add_subplot(grid[1, 0])
+    ax_e = fig.add_subplot(grid[1, 1])
+    ax_f = fig.add_subplot(grid[1, 2:4])
+    # F is trimmed by 12.7 pt so its crop is as wide as the adaptive study's
+    # panel D on the consolidated sheet (the two are pasted as twins).
+    pos = ax_f.get_position()
+    ax_f.set_position([pos.x0, pos.y0, pos.width - 12.7 / (FIG_W * 72.0), pos.height])
     schematic(ax_a)
 
     high = branch[np.isclose(branch.reliability_heterogeneity, 2.0)]
@@ -175,25 +194,29 @@ def main() -> None:
     panel_title(ax_e, "E", "Training horizon")
     style_axis(ax_e)
     handles, labels = ax_e.get_legend_handles_labels()
+    # The shared key sits between the rows under C and F, to the right of the
+    # schematic column, so that the schematic's own crop is not widened by it.
     fig.legend(
         handles,
         labels,
         loc="center",
-        bbox_to_anchor=(0.54, 0.505),
-        ncol=6,
+        bbox_to_anchor=(0.745, 0.505),
+        ncol=3,
         frameon=False,
         fontsize=PT_LEGEND - 1.0,
         handlelength=1.3,
         handletextpad=0.35,
-        columnspacing=0.75,
+        columnspacing=0.9,
     )
 
+    # The explicit point-gate control ties the aligned conductance rule to
+    # machine precision in every seed (final loss difference 0, 50/50 ties); it
+    # is reported as a number rather than a zero-spread column.
     controls = [
         ("best_global_shunt", "global", COLORS["per_soma"]),
         ("shuffled_shunt", "shuffled", COLORS["mute"]),
-        ("anti_aligned_shunt", "anti", COLORS["additive"]),
+        ("anti_aligned_shunt", "anti-aligned", COLORS["additive"]),
         ("noisy_no_shunt", "no shunt", COLORS["ink"]),
-        ("explicit_point_gate", "point gain", COLORS["dend"]),
     ]
     values, lows, highs = [], [], []
     for control, _, _ in controls:
@@ -213,21 +236,29 @@ def main() -> None:
     values = np.asarray(values)
     lows = np.asarray(lows)
     highs = np.asarray(highs)
-    seed_rows=pd.read_csv(SOURCE/"seed_outcomes.csv")
-    high=seed_rows[np.isclose(seed_rows.reliability_heterogeneity,2)]
-    wide=high.pivot(index="seed",columns="method",values="final_test_loss")
-    for i,(control,label,color) in enumerate(controls):
-        paired=(wide[control]-wide["reliability_aligned_shunt"]).dropna().to_numpy()
-        ax_f.scatter(i+np.linspace(-.13,.13,len(paired)),paired,s=6,color=color,alpha=.35,zorder=2)
-        ax_f.errorbar(i,values[i],yerr=[[values[i]-lows[i]],[highs[i]-values[i]]],
-                      color=color,fmt="D",ms=3.6,elinewidth=.8,capsize=1.8,zorder=4)
+    seed_rows = pd.read_csv(SOURCE / "seed_outcomes.csv")
+    high = seed_rows[np.isclose(seed_rows.reliability_heterogeneity, 2)]
+    wide = high.pivot(index="seed", columns="method", values="final_test_loss")
+    point_gate = (wide["explicit_point_gate"] - wide["reliability_aligned_shunt"]).dropna()
+    assert len(point_gate) == 50 and float(np.abs(point_gate).max()) == 0.0
+    for i, (control, label, color) in enumerate(controls):
+        paired = (wide[control] - wide["reliability_aligned_shunt"]).dropna().to_numpy()
+        # Translucent seed dots under a white-edged mean diamond, the same
+        # grammar as the adaptive study's paired-contrast panel.
+        ax_f.scatter(i + np.linspace(-.13, .13, len(paired)), paired,
+                     s=SEED_MS**2, color=color, alpha=SEED_ALPHA * 0.72,
+                     edgecolors="none", zorder=1)
+        ax_f.errorbar(i, values[i], yerr=[[values[i] - lows[i]], [highs[i] - values[i]]],
+                      color=color, fmt="D", ms=4.0, markeredgecolor="white",
+                      markeredgewidth=0.45, elinewidth=0.8, capsize=2.0, zorder=3)
     ax_f.axhline(0, color=COLORS["mute"], ls="--", lw=LW_REF)
-    # Five multi-word labels in a third-width panel overprinted at
-    # 24 deg ("global" ran into "shuffled", "no shunt" into "point
-    # gate"); a steeper angle separates them.
-    ax_f.set_xticks(x, [entry[1] for entry in controls],
-                    rotation=45, ha="right", rotation_mode="anchor",
-                    fontsize=PT_SMALL)
+    # Name the zero reference in a short right-hand margin, clear of the last
+    # column's seed dots.
+    ax_f.set_xlim(-0.5, len(controls) - 0.5 + 0.62)
+    ax_f.text(len(controls) - 0.5 + 0.58, 0, "aligned", ha="right", va="bottom",
+              fontsize=PT_SMALL, color=COLORS["mute"])
+    ax_f.set_xticks(x, [entry[1] for entry in controls])
+    ax_f.tick_params(axis="x", labelsize=PT_SMALL, pad=2.0)
     ax_f.set_ylabel("control loss $-$ aligned loss")
     panel_title(ax_f, "F", "Paired endpoint effects")
     style_axis(ax_f, grid="y")

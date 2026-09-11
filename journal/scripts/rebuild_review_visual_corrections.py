@@ -33,6 +33,7 @@ def rebuild_valid_fixed_budget() -> None:
     plot_fixed_budget(
         summary,
         pd.read_csv(source / "followup_publication_paired_contrasts.csv"),
+        pd.read_csv(source / "followup_publication_seed_outcomes.csv"),
     )
 
 

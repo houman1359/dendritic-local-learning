@@ -1100,29 +1100,52 @@ def plot_topology(summary: pd.DataFrame, contrasts: pd.DataFrame) -> None:
     plt.close(fig)
 
 
-def plot_fixed_budget(summary: pd.DataFrame, contrasts: pd.DataFrame) -> None:
+def _depth_seed_differences(outcomes: pd.DataFrame) -> pd.DataFrame:
+    """Per-seed depth-4-minus-depth-1 accuracy behind the paired contrasts."""
+    part = outcomes[outcomes.family.eq("fixed_budget")]
+    wide = part.pivot(
+        index=["core", "strategy", "feedback", "seed"],
+        columns="depth",
+        values="test_accuracy",
+    ).reset_index()
+    wide["difference"] = wide[4] - wide[1]
+    return wide
+
+
+def plot_fixed_budget(
+    summary: pd.DataFrame,
+    contrasts: pd.DataFrame,
+    outcomes: pd.DataFrame | None = None,
+) -> None:
     # Journal typography is local to this rendering-only entry point.
     from journal_style import (COLORS, LW_DATA, LW_ERR, LW_REF, PT_LEGEND,
-                               apply_neurips_style, panel_title, style_axis,
+                               PT_SMALL, SEED_MS, apply_neurips_style,
+                               panel_title, style_axis,
                                style_direct_color_labels)
     apply_neurips_style()
     core_colors = {"dendritic_additive": COLORS["additive"],
                    "dendritic_shunting": COLORS["shunting"]}
+    # Sheet-wide glyph convention: green circles are shunting trees and blue
+    # squares raw-additive trees.
+    core_markers = {"dendritic_additive": "s", "dendritic_shunting": "o"}
     data = summary[summary.family == "fixed_budget"]
     valid_cores = [core for core in CORE_ORDER if core in set(data.core)]
     if not valid_cores:
         raise ValueError("No input-valid fixed-budget conditions")
+    # Panel columns are 160 pt wide with a 96 pt axes height so that the
+    # supplement can paste three per row at scale 1.0 on a common baseline
+    # with the spatial-audit panels.
     fig, axes = plt.subplots(
         3,
         3,
-        figsize=(FIG_W, 7.25),
+        figsize=(FIG_W, 6.95),
         gridspec_kw={
-            "left": 0.10,
-            "right": 0.94,
-            "bottom": 0.08,
-            "top": 0.90,
-            "wspace": 0.78,
-            "hspace": 0.68,
+            "left": 42.0 / 518.4,
+            "right": 512.0 / 518.4,
+            "bottom": 36.0 / 500.4,
+            "top": 1.0 - 38.0 / 500.4,
+            "wspace": 58.0 / 118.0,
+            "hspace": 66.0 / 96.0,
         },
     )
     letters = iter("ABCDEFGHI")
@@ -1165,9 +1188,30 @@ def plot_fixed_budget(summary: pd.DataFrame, contrasts: pd.DataFrame) -> None:
         & (contrasts.contrast == "depth 4 - depth 1")
     ]
     order = ["backprop", *FEEDBACK_ORDER]
-    offsets = (0.0,) if len(valid_cores) == 1 else (-0.08, 0.08)
+    offsets = (0.0,) if len(valid_cores) == 1 else (-0.16, 0.16)
+    seed_differences = None if outcomes is None else _depth_seed_differences(outcomes)
     for core, offset in zip(valid_cores, offsets):
         part = depth_effect[depth_effect.core == core].set_index("feedback").loc[order]
+        if seed_differences is not None:
+            rng = np.random.default_rng(21)
+            for position, feedback in enumerate(order):
+                points = 100 * seed_differences[
+                    seed_differences.core.eq(core) & seed_differences.feedback.eq(feedback)
+                ].difference.to_numpy(dtype=float)
+                if len(points) != int(part.loc[feedback, "n_pairs"]) or not np.isclose(
+                    points.mean(), 100 * part.loc[feedback, "mean_difference"]
+                ):
+                    raise ValueError(f"Seed table does not reproduce the {feedback} depth contrast")
+                ax.scatter(
+                    position + offset + rng.normal(0, 0.045, len(points)),
+                    points,
+                    s=SEED_MS**2,
+                    marker=core_markers[core],
+                    color=core_colors[core],
+                    alpha=0.35,
+                    edgecolors="none",
+                    zorder=2,
+                )
         ax.errorbar(
             np.arange(4) + offset,
             100 * part.mean_difference,
@@ -1177,14 +1221,39 @@ def plot_fixed_budget(summary: pd.DataFrame, contrasts: pd.DataFrame) -> None:
                     100 * (part.ci95_high - part.mean_difference),
                 ]
             ),
-            fmt="o",
+            fmt=core_markers[core],
+            ms=4.5,
             color=core_colors[core],
+            markeredgecolor="white",
+            markeredgewidth=0.5,
             lw=LW_ERR,
             capsize=ERR_CAPSIZE,
+            capthick=LW_ERR,
             label=CORE_LABEL[core],
+            zorder=5,
         )
-    ax.axhline(0, color=COLORS["mute"], lw=LW_REF, ls="--")
+    ax.axhline(0, color=COLORS["mute"], lw=LW_REF, ls="--", zorder=1)
+    identical = depth_effect.set_index(["core", "feedback"])
+    for core in valid_cores:
+        bp, exact = identical.loc[(core, "backprop")], identical.loc[(core, "path_transport")]
+        if np.isclose(bp.mean_difference, exact.mean_difference) and (
+            seed_differences is None
+            or np.array_equal(
+                seed_differences[seed_differences.core.eq(core) & seed_differences.feedback.eq("backprop")]
+                .sort_values("seed").difference.to_numpy(),
+                seed_differences[seed_differences.core.eq(core) & seed_differences.feedback.eq("path_transport")]
+                .sort_values("seed").difference.to_numpy(),
+            )
+        ):
+            ax.text(
+                0.97, 0.36,
+                f"BP and exact path\nidentical in {int(bp.n_pairs)}/{int(bp.n_pairs)} seeds",
+                transform=ax.transAxes, ha="right", va="top",
+                fontsize=PT_SMALL, color=COLORS["mute"], style="italic",
+            )
+    ax.set_xlim(-0.6, 3.6)
     ax.set_xticks(np.arange(4), ["BP", "MW\nscalar", "Neuron", "Exact\npath"])
+    ax.set_xlabel("feedback rule")
     ax.set_ylabel("D4 - D1 (pp)")
     panel_title(ax, next(letters), "Fixed-contact depth")
     style_axis(ax)
@@ -1227,30 +1296,43 @@ def plot_fixed_budget(summary: pd.DataFrame, contrasts: pd.DataFrame) -> None:
     resource = data[
         (data.strategy == "standard") & (data.core == valid_cores[0])
     ].sort_values("depth")
+    # Resource counts are neither architecture nor rule, so they take neutral
+    # inks; the axis is in thousands so five-digit counts read directly.
     ax.plot(
         resource.depth,
-        resource.active_synapses / 1e6,
-        color=COLORS["dend"],
+        resource.active_synapses / 1e3,
+        color=COLORS["point_mlp"],
         marker="o",
+        ms=4.0,
         lw=LW_DATA,
         label="active synapses",
     )
     ax.plot(
         resource.depth,
-        resource.total_parameters / 1e6,
-        color=COLORS["oracle"],
+        resource.total_parameters / 1e3,
+        color=COLORS["ink"],
         marker="s",
+        ms=4.0,
         lw=LW_DATA,
         label="trainable parameters",
     )
     ax.set_xticks([1, 2, 3, 4], ["D1", "D2", "D3", "D4"])
     ax.set_xlabel("physical depth")
-    ax.set_ylabel("count (millions)")
+    ax.set_ylabel("count (thousands)")
+    ax.set_ylim(118, 139)
+    ax.set_yticks([120, 125, 130, 135])
     panel_title(ax, next(letters), "Matched input budget")
     style_axis(ax)
     handles, _ = ax.get_legend_handles_labels()
-    ax.legend(handles, ["active contacts", "parameters"], loc="center",
-              bbox_to_anchor=(0.56, 0.43), fontsize=7, frameon=False)
+    contacts = resource.active_synapses.to_numpy()
+    parameters = resource.total_parameters.to_numpy()
+    ax.legend(
+        handles,
+        [f"active contacts ({contacts.min() / 1e3:.1f}-{contacts.max() / 1e3:.1f}k)",
+         f"parameters ({parameters.min() / 1e3:.1f}-{parameters.max() / 1e3:.1f}k)"],
+        loc="center", bbox_to_anchor=(0.5, 0.43), fontsize=PT_SMALL, frameon=False,
+        handlelength=1.2, handletextpad=0.4,
+    )
 
     ax = axes[2, 1]
     for core in valid_cores:
