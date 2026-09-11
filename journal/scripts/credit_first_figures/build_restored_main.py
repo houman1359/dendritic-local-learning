@@ -535,7 +535,10 @@ def f4_forest_strip(ax, *, extra_rows, n_rows, key=()):
     x0, x1 = ax.get_xlim()
     for i, (mfc, name) in enumerate(key):
         y = n_rows - .4 + pitch * (.85 + i)
-        x = x0 + .02 * (x1 - x0)
+        # QA 2026-09-11 (minor): at x0 + 0.02 the ink key diamond abutted the
+        # dashed 0.0 reference rule (0.3 pt clear) and read as a bullet on
+        # the rule.  The tokens now sit on the rule's right, ~4 pt clear.
+        x = x0 + .12 * (x1 - x0)
         ax.plot([x], [y], marker='D', ms=MARKER_MS - .8, mfc=mfc,
                 mec=COLORS['ink'] if mfc == 'white' else 'white',
                 mew=LW_HAIR, ls='none', zorder=4.0, clip_on=False)
@@ -624,6 +627,9 @@ def f4_deficit(ax, contrast, seeds, rows):
     return out
 
 
+F4_G_YTOP = 1.24   # panel G ylim top; see the QA 2026-09-11 note in f4_energy
+
+
 def f4_energy(ax, eigen, diag, rows, ramp):
     """Panel G — cumulative captured path-field energy against k."""
     from journal_style import PT_BASE
@@ -633,8 +639,14 @@ def f4_energy(ax, eigen, diag, rows, ramp):
     kk = np.arange(1, 7, dtype=float)
     style = {'matching': ('o', True), 'quartet': ('s', False),
              'nested': ('^', True)}
-    uni_x = -0.95                 # the 'uniform' tick is 30 pt wide: at
-    ax.set(xlim=(-1.50, 6.55), ylim=(0, 1.16))   # x = 0 it ran into '1'
+    uni_x = -0.92                 # the 'uniform' tick is 30 pt wide: at
+    # QA 2026-09-11 (minor): xlim left -1.50 -> -1.58 and the category tick
+    # -0.95 -> -0.92 so the 'uniform' tick label keeps ~2.8 pt from the '0'
+    # y-tick label (it had 1.2 pt; the leftmost uniform cap stays ~3 pt
+    # inside the spine).  ylim top 1.16 -> 1.24 so the opaque 'oracle' badge
+    # on its top-right seat clears the dodged k = 5 and k = 6 marks instead
+    # of covering four of them.
+    ax.set(xlim=(-1.58, 6.55), ylim=(0, F4_G_YTOP))   # x = 0 it ran into '1'
     # QA 2026-09-10 (major): quartic and nested cumulative means differ by at
     # most 0.030 at every k, so at a shared abscissa the two markers, their
     # bands and their curves print as one ribbon.  Every series is dodged by
@@ -710,7 +722,7 @@ def f4_energy(ax, eigen, diag, rows, ramp):
     ax.set_xticklabels(['uniform\nnot fitted', '1', '2', '3', '4', '5', '6'])
     ax.yaxis.set_major_locator(FixedLocator([0, .5, 1]))
     ax.set_yticklabels(['0', '0.5', '1.0'])
-    ax.plot([0.0, 0.0], [0, 1.16], color=COLORS['grid'], lw=LW_HAIR,
+    ax.plot([0.0, 0.0], [0, F4_G_YTOP], color=COLORS['grid'], lw=LW_HAIR,
             zorder=.9, solid_capstyle='butt')
     f4_reference(ax, .95, axis='y', label='0.95')
     # QA 2026-09-09 (minor, ratification requested): these three are direct
@@ -787,7 +799,13 @@ def f4_shuffle(ax, contrast, endpoints, rows, ramp):
         entries.append(dict(label=label, mean=float(rec['mean']),
                             lo=float(rec.ci95_low), hi=float(rec.ci95_high),
                             fan=list(map(float, fans[family])), n=20,
-                            marker='D' if family == 'all' else 'o',
+                            # QA 2026-09-11 (minor): the pooled row was a
+                            # filled dark diamond, the same glyph as F's
+                            # (now ink) 'endpoint' marker one panel to the
+                            # left; a hollow diamond would repeat F's open
+                            # 'validation-selected' token instead.  The pool
+                            # is a filled plus, a glyph no other panel uses.
+                            marker='P' if family == 'all' else 'o',
                             color=ramp.get(family, COLORS['mute'])))
         rows.append(dict(panel='H', task=label,
                          series='shuffled minus compatible, exact path',
@@ -830,8 +848,14 @@ def f4_shuffle(ax, contrast, endpoints, rows, ramp):
         for xb in (entry['lo'], entry['hi']):
             ax.plot([xb, xb], [y - .13, y + .13], color=col, lw=LW_ERR,
                     zorder=3.4, solid_capstyle='butt')
+        # QA 2026-09-11: the pooled plus is drawn 1.6 pt larger and without
+        # the white casing edge -- at 4.6 pt a plus's arms are 1.5 pt wide
+        # and a white hairline edge left them printing as a broken cross.
+        plus = entry['marker'] == 'P'
         ax.plot([entry['mean']], [y], ls='none', marker=entry['marker'],
-                ms=MARKER_MS, mfc=col, mec='white', mew=LW_HAIR, zorder=4.2)
+                ms=MARKER_MS + (1.6 if plus else 0.0), mfc=col,
+                mec=col if plus else 'white', mew=0.0 if plus else LW_HAIR,
+                zorder=4.2)
         # QA 2026-09-10 (minor): the Quartic interval is 0.010 wide, which at
         # this axes is narrower than the mean marker, so that row would show a
         # bare dot while the other three show bars and could be misread as

@@ -954,7 +954,12 @@ def panel_bandwidth(ax, summary, outcomes):
     # is at the panel's top right, 73 accuracy units from the tag band: any
     # leader to it would be an ~80 pt rule crossing the three series, so that
     # tag stays unleadered (declared here, not silently).
-    ax.plot([-0.112, -0.026], [15.9, 17.6], color=MUTE,
+    # Regression 2026-09-11 (minor): after the tag was re-hung at y = 11.4 the
+    # leader's lower end (-0.112, 15.9) hung 4.5 units above the tag and its
+    # extension missed the tag box to the left, so it read as a stray tick
+    # on the marker.  The lower end now sits just above the "K = 1" glyphs
+    # and the segment's extension enters the tag box.
+    ax.plot([-0.115, -0.026], [15.1, 17.6], color=MUTE,
             lw=LW_HAIR, zorder=1, clip_on=False, solid_capstyle="butt")
     # QA 2026-09-09 (blocker): the deranged square sits at 25.13 % at K = 8,
     # so "all families tie" is contradicted by the panel's own mark.  Name
@@ -1129,12 +1134,23 @@ def panel_cues(ax, grid, oracle, frozen, mismatched, enc_c, hard_c):
             # measured cell now carries a mark, filled for the soft readout
             # and open for the exploratory hard one -- a second channel for
             # the soft/hard split beyond the dash pattern.
+            # Regression 2026-09-11 (major): at noise 0 the hard-256 mark
+            # (80.29 %) sits 0.44 pt above soft-256 (79.98 %), inside one
+            # marker radius, and a white-filled hard mark drawn after the
+            # soft one painted the "-0.31 pp below oracle" datum out of the
+            # panel.  Hard marks are therefore hollow (no fill) and the soft
+            # series is layered above the hard one, so the filled soft disc
+            # stays visible inside the open ring and the "256" leader lands
+            # on it.  (A wider hard ring was tried and rejected: at a 0.44 pt
+            # offset it shows only as a hairline crescent unless it is twice
+            # the disc's size, so both marks keep the same 3.1 pt diameter.)
             line, = ax.plot(xs, mean, color=colour,
                             lw=LW_DATA if readout == "soft" else LW_ERR,
                             marker="o", ms=3.1,
-                            mfc=colour if readout == "soft" else "white",
+                            mfc=colour if readout == "soft" else "none",
                             mec=colour, mew=LW_EDGE,
-                            solid_capstyle="round", zorder=3.0)
+                            solid_capstyle="round",
+                            zorder=3.4 if readout == "soft" else 3.0)
             if dashes:
                 line.set_dashes(dashes)
     # the eighteen printed grid means, the three reference rules and the

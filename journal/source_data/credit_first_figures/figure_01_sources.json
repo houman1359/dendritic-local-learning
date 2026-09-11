@@ -9,7 +9,7 @@
     "G": "Mean activation-error capture of D's exact-path fields by C's dictionaries at K = 1 and K = 3; fresh cohort, 10 seeds per architecture, trained (filled) and initial (open) checkpoints. K = 12 is the identity dictionary and reproduces the field exactly, so it is the reference line at 1 and not a drawn column; intervals are at most 0.007 and are not drawn."
   },
   "source_sha256": {
-    "scripts/credit_first_figures/build_framework.py": "c627cc5b6457d3ec363a5ae653c31249fa85dc0e68b93383a501deb8f85a4755",
+    "scripts/credit_first_figures/build_framework.py": "e3de8d243bcd871de00f1e5b88de35cba54534b19c7ffe321d73d71d0feebd9e",
     "scripts/figure_canvas.py": "0a0d01607cc3589a44075b6ccd7c2867dcf7d8a31f88ca1565dade247f4bcb48",
     "scripts/journal_style.py": "47ee5c9366c7bd3e59b8074513debe260e707b2d7d0ea1ac9c82c1e1a924895a",
     "scripts/native_schematics.py": "68530ec60f85e496b9b0ba7a7ad53510dce2fae91cc38231046c1175e1cb7aeb",

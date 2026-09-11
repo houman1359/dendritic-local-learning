@@ -1,7 +1,7 @@
 {
   "figure": "Figure 3",
   "output": "figures/components/credit_first_figure_03.pdf",
-  "output_sha256": "3f0b73f85f4b34e5f3b97e5eeaec95853ab796639949c329669ff132d8770d9c",
+  "output_sha256": "2253294d00549b4c94900dcc3f9a32c0bbed4af9aa55c4f93f1f7314a452feee",
   "plotted_table": "source_data/curated_publication/figure_03_plotted.csv",
   "plotted_table_sha256": "f6d11bb66255bcf46a0f4774ceacd578a10982f54acf8ae452f2071ad3cfcf8c",
   "panel_sources": {
@@ -28,11 +28,11 @@
     "source_data/review_coefficient_hard_readout/paired_contrasts.csv": "46b214de8efef2e8640cce199a1cbb032477ec0e9ec62fdbc727e471705751e1"
   },
   "builders_sha256": {
-    "scripts/credit_first_figures/build_ancestry.py": "fba9e7ec85055020f5b9fd11d9ae47d8a01b268dd7bacf8f940dbe724c591199",
+    "scripts/credit_first_figures/build_ancestry.py": "f0ea981d8dbb24c5384a7a758b4444d07d3a8410b9e02ae60aba143b132df220",
     "scripts/routing_figure_panels.py": "b6a38d2f1329add30c30e3e98317f3d5a3946a2133a75303d458723b32faf521",
     "scripts/run_trained_subtree_address_full_factorial.py": "c5d75b8ea9bc29d7fd24ca53c360c4bbdf825d7fa31f84727af4b7dd47e875dd",
     "scripts/figure_canvas.py": "0a0d01607cc3589a44075b6ccd7c2867dcf7d8a31f88ca1565dade247f4bcb48",
-    "scripts/journal_style.py": "be8a138f9d9c081237edc616ba52b6769f957d8b8b49e705a92adcb18f475f3c",
+    "scripts/journal_style.py": "47ee5c9366c7bd3e59b8074513debe260e707b2d7d0ea1ac9c82c1e1a924895a",
     "scripts/native_schematics.py": "68530ec60f85e496b9b0ba7a7ad53510dce2fae91cc38231046c1175e1cb7aeb",
     "scripts/credit_first_figures/focused_provenance.py": "b7ade95b88e7d10a43bab01716dee6211bc2f09735b605d489c0012a147ecea7"
   },

@@ -1058,7 +1058,14 @@ def capture(ax, per_seed, summary):
     # shrinks to the 0.07 profile units the seed fan needs.  The K = 12
     # identity stays the labelled rule (QA 2026-09-10, blocking): it is a
     # constant by construction and is not drawn as a third marker column.
-    xlo, xhi = -0.26, 2.32
+    # QA 2026-09-11 (regression repair, two entries): the -0.26 left pad clipped
+    # the outermost K = 1 shunting seed (fan edge at -0.23, dot radius 1 pt)
+    # a third of the way under the y spine, and the 2.32 right edge left ~22 %
+    # of the axis as bare rule past "Shunting" (which ends at x = 1.98).  The
+    # left pad widens to -0.34 (~1.5 pt of white between dot and spine) and
+    # the right edge tightens to 2.05, keeping label_x and jitter as measured
+    # on 2026-09-10; the fan itself is not narrowed.
+    xlo, xhi = -0.34, 2.05
     label_x, jitter = 1.30, 0.17       # the fan is rescaled with the axis
     ax.axhline(1.0, color=MUTE, lw=LW_REF, dashes=(2.6, 2.0), zorder=1.0)
     # on TOP of its own rule, right-aligned: below the rule the label would

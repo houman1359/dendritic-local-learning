@@ -803,8 +803,15 @@ def initial_utility(ax, summary: pd.DataFrame) -> dict:
     # It sits in the wedge the B = 8 line leaves empty, where the four-line
     # methods note used to start; under the formula it would cross the B = 2
     # line now that the axis stops at χ = 1.
+    # QA 2026-09-11: 40.5 pt, not 36.  At 36 pt the amber cue's type box sat
+    # 1.6 pt into the strip caption "measured − analytic" below it, so the
+    # two lines read as one paragraph although one names the main axes'
+    # markers and the other names the strip.  The wedge has ~5 pt of slack:
+    # the B = 8 line passes 3 pt above the cue's last ascender at 40.5 pt
+    # (at 43 pt it touches, at 46 pt it cuts through), and the two baselines
+    # are now 10 pt apart, i.e. two lines, not one paragraph.
     _corner_lines(ax, ("markers: neuron-shared",), corner=(0.0, 0.0),
-                  x_pt=1.0, y_pt=36.0, color=AMBER_TEXT)
+                  x_pt=1.0, y_pt=40.5, color=AMBER_TEXT)
     # QA 2026-09-10: the χ_c definition is not set here any more.  With the
     # three diamonds gone C marks no χ_c, so the token named a symbol the
     # panel no longer draws; it is defined in the caption, printed per facet
@@ -938,10 +945,19 @@ def boundary_order(ax, crossings: pd.DataFrame, seeds: pd.DataFrame,
     # three printed value pairs, the order claim and its P are in the caption
     # contract -- they were four lines of prose filling the empty floor the
     # tightened y limit removes, and the marks they repeat are plotted here.
-    token_subscript(ax, D_XLIM[0] + 0.11, predicted[0] + 0.035,
+    # QA 2026-09-11: the label sits 0.068 above the diamond, not 0.035.  At
+    # 0.035 its subscript c ran into the cap height of the "×15" count that
+    # sits right of the same B = 2 stack, and the two set as one token
+    # "χ_c ×15".  The slot between the strip floor and that count is 15 pt
+    # for a 10 pt label (χ plus subscript): 0.068 leaves 3.7 pt between the
+    # subscript and the count's cap and 1.5 pt under the strip tint (0.075
+    # put the ascenders ON the tint).  Both direct labels also start 0.16
+    # right of the spine, not 0.11, so the upper one clears the axis-break
+    # hairlines by 2.3 pt instead of 1 pt while the pair stays aligned.
+    token_subscript(ax, D_XLIM[0] + 0.16, predicted[0] + 0.068,
                     "analytic χ", "c", "", size=PT_BASE, sub_size=PT_BASE,
                     color=INK, ha="left", va="bottom")
-    ax.text(D_XLIM[0] + 0.11, trained[0] - 0.030, "trained crossing",
+    ax.text(D_XLIM[0] + 0.16, trained[0] - 0.030, "trained crossing",
             fontsize=PT_BASE, color=AMBER_TEXT, ha="left", va="top",
             zorder=6)
     ax.set_xticks(xs, [str(b) for b in BRANCHES])
