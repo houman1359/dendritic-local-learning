@@ -26,9 +26,11 @@ import sys
 import zipfile
 
 import matplotlib
+import matplotlib.ticker
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+from matplotlib.collections import LineCollection
 from matplotlib.lines import Line2D
 import numpy as np
 import pandas as pd
@@ -61,6 +63,7 @@ from journal_style import (  # noqa: E402
     audit_layout,
     audit_text_over_data,
     clean_legend,
+    label_color,
     panel_title,
     style_axis,
 )
@@ -543,52 +546,110 @@ def aggregate_digital_twin(digital: pd.DataFrame) -> pd.DataFrame:
 
 
 def plot_examples(ax: plt.Axes, example_payloads: list[dict]) -> None:
+    """Six example arbors in one row: skeleton edges, contacts, a bar per cell.
+
+    Each cell is scaled independently (aspect preserved, pia up) so that every
+    arbor fills its own box; the 50 µm bar inside each cell is the physical
+    reference.  The arbor is drawn as the compressed skeleton's parent-child
+    edges (straight segment-to-segment links) rather than sub-pixel node dots
+    so it survives print contrast.
+    """
     ax.axis("off")
-    # Keep this heading compact: panel A is narrow and its title sits directly
-    # to the left at manuscript scale.
-    panel_title(ax, "B", "Inhibitory contacts: x–y projections")
-    slots = [(0.02, 0.68), (0.52, 0.68), (0.02, 0.36), (0.52, 0.36), (0.02, 0.04), (0.52, 0.04)]
-    for payload, (x0, y0) in zip(example_payloads[:6], slots):
-        nodes = payload["nodes"]
+    panel_title(ax, "B", "Inhibitory contacts on reconstructed arbors")
+    arbor = "#5A5F66"  # dark grey, >7:1 on white
+    fig = ax.figure
+    fig.canvas.draw()
+    box = ax.get_position()
+    n_cells = min(6, len(example_payloads))
+    gap = 0.012
+    head = 0.14  # strip under the panel title for the cell labels
+    cell_w = (box.width - gap * (n_cells - 1)) / n_cells
+    cell_h = box.height * (1.0 - head)
+    fig_w_pt = fig.get_figwidth() * 72.0
+    fig_h_pt = fig.get_figheight() * 72.0
+    for slot, payload in enumerate(example_payloads[:n_cells]):
+        cell = fig.add_axes([box.x0 + slot * (cell_w + gap), box.y0, cell_w, cell_h])
+        cell.axis("off")
+        nodes = payload["nodes"].reset_index(drop=True)
         contacts = payload["contacts"]
         x = nodes["x"].to_numpy(dtype=float)
         y = nodes["y"].to_numpy(dtype=float)
-        x_mid = 0.5 * (np.nanmin(x) + np.nanmax(x))
-        y_mid = 0.5 * (np.nanmin(y) + np.nanmax(y))
-        scale = min(
-            0.42 / max(np.nanmax(x) - np.nanmin(x), 1e-9),
-            0.22 / max(np.nanmax(y) - np.nanmin(y), 1e-9),
+        # Parent-child edges of the skeleton (root has parent -1).  The frozen
+        # source table carries the compressed segments; the live analysis path
+        # carries the full SWC nodes.  Both draw the same way.
+        id_pair = next(
+            (pair for pair in (("segment_id", "parent_segment_id"), ("id", "parent")) if pair[0] in nodes and pair[1] in nodes),
+            None,
         )
-        x_plot = x0 + 0.22 + scale * (x - x_mid)
-        y_plot = y0 + 0.12 + scale * (y - y_mid)
-        ax.scatter(x_plot, y_plot, s=0.20, color="#8FBFA5", alpha=0.52, rasterized=True)
+        if id_pair is not None:
+            index = {int(q): i for i, q in enumerate(nodes[id_pair[0]].to_numpy())}
+            child = np.arange(len(nodes))
+            par = np.array(
+                [index.get(int(q), -1) for q in nodes[id_pair[1]].to_numpy()], dtype=int
+            )
+            keep = par >= 0
+            segs = np.stack(
+                [
+                    np.column_stack([x[par[keep]], y[par[keep]]]),
+                    np.column_stack([x[child[keep]], y[child[keep]]]),
+                ],
+                axis=1,
+            )
+            cell.add_collection(
+                LineCollection(segs, colors=arbor, linewidths=LW_HAIR, alpha=0.9, zorder=1)
+            )
+        else:
+            cell.scatter(x, y, s=0.6, color=arbor, linewidth=0, rasterized=True, zorder=1)
         cx = contacts["x_um"].to_numpy(dtype=float)
         cy = contacts["y_um"].to_numpy(dtype=float)
-        ax.scatter(
-            x0 + 0.22 + scale * (cx - x_mid),
-            y0 + 0.12 + scale * (cy - y_mid),
-            s=2.4,
-            color=INH,
-            alpha=0.72,
-            linewidth=0,
-            rasterized=True,
+        cell.scatter(cx, cy, s=2.2, color=INH, alpha=0.75, linewidth=0, rasterized=True, zorder=2)
+        # Equal aspect: expand the data box to the cell's physical aspect.
+        # y is cortical depth, so the y axis is inverted (pia up).
+        bar_um = 50.0
+        x0, x1 = float(np.nanmin(x)), float(np.nanmax(x))
+        y0, y1 = float(np.nanmin(y)), float(np.nanmax(y))
+        pad = 0.03 * max(x1 - x0, y1 - y0)
+        strip = 22.0  # µm-equivalent reserved under the arbor for the bar; rescaled below
+        w_pt = cell_w * fig_w_pt
+        h_pt = cell_h * fig_h_pt
+        rx = (x1 - x0) + 2 * pad
+        ry = (y1 - y0) + 2 * pad
+        bar_pt, head_pt = 14.0, 11.0  # reserved strips: bar below, label above
+        scale = min(w_pt / rx, (h_pt - bar_pt - head_pt) / ry)  # pt per µm
+        span_x = w_pt / scale
+        span_y = h_pt / scale
+        strip = bar_pt / scale
+        xc = 0.5 * (x0 + x1)
+        cell.set_xlim(xc - span_x / 2, xc + span_x / 2)
+        top = y0 - pad - head_pt / scale - max(0.0, span_y - ry - strip - head_pt / scale) / 2
+        cell.set_ylim(top + span_y, top)
+        cell.text(
+            0.5, 0.995, f"{payload['m_type']}  n={len(contacts)}",
+            transform=cell.transAxes, ha="center", va="top", fontsize=PT_SMALL,
+            color=COLORS["ink"],
         )
-        # Each tree is scaled independently; retain a physical reference.
-        bar_um = 20.0 if scale*50 > .16 else 50.0
-        bx, by = x0+.02, y0+.245
-        ax.plot([bx,bx+scale*bar_um],[by,by],color=COLORS["ink"],lw=1.0)
-        ax.text(bx+scale*bar_um/2,by+.010,f"{bar_um:g} µm",
-                ha="center",va="bottom",fontsize=PT_SMALL-1)
-        ax.text(
-            x0 + 0.22,
-            y0 - 0.005,
-            f"{payload['m_type']} | n={len(contacts)}",
-            ha="center",
-            va="top",
-            fontsize=PT_SMALL,
-        )
-    ax.set_xlim(-0.01, 1.01)
-    ax.set_ylim(-0.02, 1.02)
+        # Physical reference inside the cell, bottom-left, under the arbor.
+        by = y1 + pad + 0.6 * strip
+        bx = max(x0, xc - span_x / 2 + 0.02 * span_x)
+        cell.plot([bx, bx + bar_um], [by, by], color=COLORS["ink"], lw=1.0, solid_capstyle="butt")
+        cell.text(bx, by - 0.08 * strip, f"{bar_um:g} µm", ha="left", va="bottom", fontsize=PT_SMALL)
+    handles = [
+        Line2D([0], [0], color=arbor, lw=1.0, label="arbor skeleton"),
+        Line2D([0], [0], marker="o", ms=3.5, color=INH, lw=0, label="inhibitory contact"),
+    ]
+    ax.legend(
+        handles=handles,
+        loc="lower right",
+        bbox_to_anchor=(1.0, 1.0),
+        ncol=2,
+        frameon=False,
+        fontsize=PT_LEGEND,
+        handlelength=1.4,
+        handletextpad=0.4,
+        columnspacing=1.0,
+        borderaxespad=0.0,
+        borderpad=0.0,
+    )
 
 
 def make_figure(
@@ -600,34 +661,33 @@ def make_figure(
     route: pd.DataFrame,
     example_payloads: list[dict],
     stem: Path,
+    tests: dict | None = None,
 ) -> None:
     apply_neurips_style()
     # Keep all ten endpoints in one readable, page-safe figure.  The broad
     # reconstruction panel spans three columns; the quantitative panels then
     # form two compact rows.  This avoids shrinking a five-row portrait figure
     # to the point that labels and example morphologies become unreadable.
-    fig = plt.figure(figsize=(FIG_W, 6.35))
-    gs = fig.add_gridspec(
-        3,
-        4,
-        left=0.075,
-        right=0.985,
-        bottom=0.08,
-        top=0.915,
-        wspace=0.78,
-        hspace=0.72,
-        height_ratios=[0.86, 1.0, 1.0],
+    # Each row is its own gridspec so the bottom row can give the paired
+    # placement control (H) the width its delta column needs.
+    fig = plt.figure(figsize=(FIG_W, 6.8))
+    shared = dict(left=0.075, right=0.985, wspace=0.72)
+    gs_top = fig.add_gridspec(1, 4, bottom=0.73, top=0.935, **shared)
+    gs_mid = fig.add_gridspec(1, 4, bottom=0.40, top=0.615, **shared)
+    gs_bot = fig.add_gridspec(
+        1, 4, bottom=0.075, top=0.29, width_ratios=[1.0, 1.3, 1.0, 0.85], **shared
     )
-    ax_a = fig.add_subplot(gs[0, 0])
-    ax_b = fig.add_subplot(gs[0, 1:])
-    ax_c = fig.add_subplot(gs[1, 0])
-    ax_d = fig.add_subplot(gs[1, 1])
-    ax_e = fig.add_subplot(gs[1, 2])
-    ax_f = fig.add_subplot(gs[1, 3])
-    ax_g = fig.add_subplot(gs[2, 0])
-    ax_h = fig.add_subplot(gs[2, 1])
-    ax_i = fig.add_subplot(gs[2, 2])
-    ax_j = fig.add_subplot(gs[2, 3])
+    ax_a = fig.add_subplot(gs_top[0, 0])
+    ax_b = fig.add_subplot(gs_top[0, 1:])
+    ax_c = fig.add_subplot(gs_mid[0, 0])
+    ax_d = fig.add_subplot(gs_mid[0, 1])
+    ax_e = fig.add_subplot(gs_mid[0, 2])
+    ax_f = fig.add_subplot(gs_mid[0, 3])
+    ax_g = fig.add_subplot(gs_bot[0, 0])
+    ax_h = fig.add_subplot(gs_bot[0, 1])
+    ax_i = fig.add_subplot(gs_bot[0, 2])
+    ax_j = fig.add_subplot(gs_bot[0, 3])
+    tests = tests or {}
 
     panel_title(ax_a, "A", "Cohort overlap")
     counts = [47, len(cohort), int(cohort["has_digital_twin"].sum())]
@@ -665,23 +725,63 @@ def make_figure(
         }
     )
 
-    def contrast_panel(ax, letter: str, title: str, column: str, ylabel: str, seed: int) -> None:
+    def contrast_panel(
+        ax,
+        letter: str,
+        title: str,
+        column: str,
+        ylabel: str,
+        seed: int,
+        *,
+        test_keys: tuple[str, str, str],
+        ylim: tuple[float, float] | None = None,
+        yticks: list[float] | None = None,
+        clip_abs: float | None = None,
+        direction_cue: str | None = None,
+    ) -> None:
         frames = [primary_sensitivity, axon, spatial_target]
         colors = [INH, COLORS["additive"], COLORS["oracle"]]
+        names = ["target", "axon", "3D"]
         rng = np.random.default_rng(seed)
-        for index, (frame, color) in enumerate(zip(frames, colors, strict=True)):
+        ticklabels = []
+        for index, (frame, color, name, key) in enumerate(
+            zip(frames, colors, names, test_keys, strict=True)
+        ):
             values = frame[column].dropna().to_numpy(dtype=float)
-            x = index + rng.uniform(-0.055, 0.055, size=len(values))
-            ax.scatter(x, values, s=8, color=color, alpha=0.35, edgecolor="none", rasterized=True)
+            # Per-unit points to the left of the summary so the interval whiskers
+            # are not hidden behind the cloud or the marker.
+            x = index - 0.12 + rng.uniform(-0.09, 0.09, size=len(values))
+            shown = values
+            if clip_abs is not None:
+                beyond = np.abs(values) > clip_abs
+                shown = values[~beyond]
+                x_shown = x[~beyond]
+                for xv, v in zip(x[beyond], values[beyond]):
+                    # Off-scale points drawn as open triangles at the frame and
+                    # labelled with their value; they remain in every statistic.
+                    edge = np.sign(v) * clip_abs
+                    ax.scatter(
+                        [xv], [edge], marker="^" if v > 0 else "v", s=14,
+                        facecolor="white", edgecolor=color, linewidth=0.7,
+                        zorder=4, clip_on=False,
+                    )
+                    ax.annotate(
+                        f"{v:+.0f}".replace("-", "\u2212"), xy=(xv, edge), xytext=(3.5, 0),
+                        textcoords="offset points", ha="left", va="center",
+                        fontsize=PT_SMALL, color=color,
+                    )
+            else:
+                x_shown = x
+            ax.scatter(x_shown, shown, s=8, color=color, alpha=0.35, edgecolor="none", rasterized=True)
             draws = rng.choice(values, size=(10_000, len(values)), replace=True).mean(axis=1)
             lo, hi = np.quantile(draws, [0.025, 0.975])
             mean = float(values.mean())
             ax.errorbar(
-                index,
+                index + 0.22,
                 mean,
                 yerr=[[mean - lo], [hi - mean]],
                 fmt="D",
-                ms=4.3,
+                ms=3.0,
                 color=color,
                 mec="white",
                 mew=0.4,
@@ -689,8 +789,28 @@ def make_figure(
                 lw=LW_ERR,
                 zorder=5,
             )
+            # Frozen one-sided Wilcoxon p for this inferential unit (summary.json).
+            p_value = tests.get(key, {}).get("wilcoxon_p")
+            if p_value is None:
+                ticklabels.append(name)
+            else:
+                text = f"{p_value:.2f}" if p_value >= 0.01 else f"{p_value:.2g}"
+                text = text[1:] if text.startswith("0.") else text
+                ticklabels.append(f"{name}\n{text}")
         ax.axhline(0, color=COLORS["mute"], ls="--", lw=LW_REF)
-        ax.set_xticks([0, 1, 2], ["target", "axon", "3D"])
+        ax.set_xticks([0, 1, 2], ticklabels)
+        ax.set_xlim(-0.55, 2.55)
+        if any("\n" in q for q in ticklabels):
+            ax.set_xlabel("one-sided Wilcoxon p")
+        if ylim is not None:
+            ax.set_ylim(*ylim)
+        if yticks is not None:
+            ax.set_yticks(yticks)
+        if direction_cue:
+            ax.annotate(
+                direction_cue, xy=(0.02, 0.03), xycoords="axes fraction",
+                ha="left", va="bottom", fontsize=PT_SMALL, color=COLORS["mute"],
+            )
         ax.set_ylabel(ylabel)
         panel_title(ax, letter, title)
         style_axis(ax, grid="y")
@@ -698,44 +818,98 @@ def make_figure(
     contrast_panel(
         ax_d,
         "D",
-        "Tree proximity",
+        "Tree distance",
         "tree_distance_delta_um",
-        "observed - matched (µm)",
+        "observed \u2212 matched (µm)",
         202608041,
+        test_keys=(
+            "connection_tree_distance",
+            "axon_clustered_connection_tree_distance",
+            "spatially_matched_connection_tree_distance",
+        ),
+        ylim=(-115, 115),
+        yticks=[-100, -50, 0, 50, 100],
+        clip_abs=105.0,
+        direction_cue="\u2193 closer",
     )
     contrast_panel(
         ax_e,
         "E",
-        "Path overlap",
+        "Shared-path fraction",
         "shared_path_delta",
-        "observed - matched",
+        "observed \u2212 matched",
         202608042,
+        test_keys=(
+            "connection_shared_path",
+            "axon_clustered_connection_shared_path",
+            "spatially_matched_connection_shared_path",
+        ),
+        ylim=(-0.3, 0.42),
+        yticks=[-0.2, 0.0, 0.2, 0.4],
     )
     contrast_panel(
         ax_f,
         "F",
-        "Domain match",
+        "Domain overlap",
         "route_overlap_delta",
-        "observed - matched",
+        "observed \u2212 matched",
         202608043,
+        test_keys=(
+            "connection_route_overlap",
+            "axon_clustered_connection_route_overlap",
+            "spatially_matched_connection_route_overlap",
+        ),
+        ylim=(-0.3, 0.42),
+        yticks=[-0.2, 0.0, 0.2, 0.4],
     )
     panel_title(ax_g, "G", "Class-specific domains")
+    # Hues reserved: magenta/blue/violet are the D-F matching stages, so the
+    # two interneuron classes use the green/amber pair with distinct dashes.
+    class_style = {
+        "DTC": (COLORS["shunting"], "-", "distal-targeting (DTC)"),
+        "PTC": (COLORS["local"], "--", "perisomatic-targeting (PTC)"),
+    }
     representative = contacts["is_clump_representative"].fillna(False).astype(bool)
-    for mtype, color in [("DTC", INH), ("PTC", COLORS["additive"])]:
-        x = contacts.loc[
-            contacts.mapping_pass & representative & contacts.m_type_pre.eq(mtype),
-            "descendant_input_fraction",
-        ].clip(lower=1e-4).to_numpy(dtype=float)
+    pooled = contacts[contacts.mapping_pass & representative]
+    for mtype, (color, dash, label) in class_style.items():
+        subset = pooled[pooled.m_type_pre.eq(mtype)]
+        # Faint per-target curves show the cell-level unit behind the pooled CDF.
+        for _, per_cell in subset.groupby("post_soma_id"):
+            x_cell = np.sort(per_cell["descendant_input_fraction"].clip(lower=1e-4).to_numpy(dtype=float))
+            ax_g.plot(
+                x_cell, np.arange(1, len(x_cell) + 1) / len(x_cell),
+                color=color, lw=LW_HAIR, alpha=0.16, rasterized=True, zorder=1,
+            )
+        x = subset["descendant_input_fraction"].clip(lower=1e-4).to_numpy(dtype=float)
         if len(x):
             ordered = np.sort(x)
-            ax_g.plot(ordered, np.arange(1, len(ordered) + 1) / len(ordered), color=color, lw=LW_DATA, label=mtype)
+            ax_g.plot(
+                ordered, np.arange(1, len(ordered) + 1) / len(ordered),
+                color=color, lw=LW_DATA, ls=dash, label=f"{label}, n={len(x)}", zorder=3,
+            )
     ax_g.set_xscale("log")
-    ax_g.set_xlabel("descendant input fraction")
+    ax_g.set_xlim(3e-3, 1.15)
+    ax_g.set_xticks([1e-2, 1e-1, 1e0], ["0.01", "0.1", "1"])
+    ax_g.xaxis.set_minor_locator(matplotlib.ticker.LogLocator(base=10, subs=np.arange(2, 10), numticks=12))
+    ax_g.xaxis.set_minor_formatter(matplotlib.ticker.NullFormatter())
+    ax_g.set_yticks([0, 0.5, 1.0])
+    ax_g.set_xlabel("descendant-input fraction")
     ax_g.set_ylabel("cumulative fraction")
-    clean_legend(ax_g, loc="upper left", fontsize=PT_LEGEND)
+    # Direct labels in the empty corners (the pooled curves rise between
+    # 0.01 and 0.1); the class definitions and n are in the caption.
+    ax_g.annotate(
+        "distal-\ntargeting\n(DTC)", xy=(0.03, 0.97), xycoords="axes fraction",
+        ha="left", va="top", fontsize=PT_LEGEND, color=label_color(class_style["DTC"][0]),
+    )
+    ax_g.annotate(
+        "perisomatic-\ntargeting\n(PTC)", xy=(0.97, 0.04), xycoords="axes fraction",
+        ha="right", va="bottom", fontsize=PT_LEGEND, color=label_color(class_style["PTC"][0]),
+    )
     style_axis(ax_g, grid="x")
 
     panel_title(ax_h, "H", "Placement control")
+    # Neutral versus accent: matched locations grey, observed contacts ink.
+    obs_color = COLORS["ink"]
     for row in target.itertuples(index=False):
         ax_h.plot(
             [0, 1],
@@ -748,12 +922,39 @@ def make_figure(
             [0, 1],
             [row.matched_contact_descendant_fraction, row.actual_contact_descendant_fraction],
             s=12,
-            color=[GENERIC, INH],
+            color=[GENERIC, obs_color],
             zorder=3,
         )
-    ax_h.set_xticks([0, 1], ["matched", "obs."])
-    ax_h.set_ylabel("domain fraction")
+    ax_h.set_xticks([0, 1, 2], ["matched", "observed", "difference"])
+    ax_h.set_xlim(-0.45, 2.55)
+    ax_h.set_ylabel("descendant-input fraction")
     style_axis(ax_h, grid="y")
+    # Delta column on its own scale: per-target observed - matched, with the
+    # mean and its 95% target-bootstrap interval, so the null reads directly.
+    ax_h2 = ax_h.twinx()
+    delta = target["contact_descendant_fraction_delta"].dropna().to_numpy(dtype=float)
+    rng_h = np.random.default_rng(202608044)
+    ax_h2.scatter(
+        2 - 0.16 + rng_h.uniform(-0.08, 0.08, size=len(delta)), delta,
+        s=8, color=obs_color, alpha=0.35, edgecolor="none", zorder=3, rasterized=True,
+    )
+    draws = rng_h.choice(delta, size=(10_000, len(delta)), replace=True).mean(axis=1)
+    lo, hi = np.quantile(draws, [0.025, 0.975])
+    mean = float(delta.mean())
+    ax_h2.errorbar(
+        2 + 0.2, mean, yerr=[[mean - lo], [hi - mean]], fmt="D", ms=3.0,
+        color=obs_color, mec="white", mew=0.4, capsize=ERR_CAPSIZE, lw=LW_ERR, zorder=5,
+    )
+    ax_h2.plot([1.55, 2.55], [0, 0], color=COLORS["mute"], ls="--", lw=LW_REF, zorder=1)
+    ax_h2.set_ylim(-0.03, 0.03)
+    ax_h2.set_yticks([-0.02, 0, 0.02])
+    ax_h2.tick_params(direction="out", length=3.0, width=0.8)
+    for spine in ("top", "left", "bottom"):
+        ax_h2.spines[spine].set_visible(False)
+    ax_h2.spines["right"].set_linewidth(0.8)
+    ax_h2.spines["right"].set_color(COLORS["edge"])
+    ax_h2.spines["right"].set_bounds(-0.03, 0.03)
+    ax_h2.grid(False)
 
     panel_title(ax_i, "I", "Route capacity")
     method_style = {
@@ -1142,6 +1343,7 @@ def main() -> None:
             routes,
             examples,
             args.figure_stem,
+            tests=json.loads((args.outdir / "summary.json").read_text(encoding="utf-8")).get("tests", {}),
         )
         return
 
@@ -1406,6 +1608,7 @@ def main() -> None:
         routes,
         examples,
         args.figure_stem,
+        tests=tests,
     )
     print(json.dumps(summary, indent=2, sort_keys=True))
 

@@ -23,6 +23,7 @@ from journal_style import (
     COLORS as NEURIPS_COLORS,
     ERR_CAPSIZE,
     FIG_W,
+    ORDINAL_RAMP,
     LW_DATA,
     LW_ERR,
     LW_HAIR,
@@ -59,6 +60,10 @@ METHOD_COLORS = {
     "depth-only bins": COLORS["depth"],
     "shuffled ancestry": COLORS["shuffle"],
 }
+# Line style and marker per arm, shared with the Pinky replication panels so
+# the consolidated anatomy sheet reads every panel through one key.
+from analyze_pinky_v185_replication import METHOD_STYLE as METHOD_LINE_STYLE  # noqa: E402
+
 METHOD_LABELS = {
     "dense PCA oracle": "dense\noracle",
     "morphology-aware paths": "morphology\npaths",
@@ -263,14 +268,18 @@ def plot_pair(
 def render(curves: pd.DataFrame, focal: pd.DataFrame, summary: dict) -> None:
     apply_neurips_style()
     fig = plt.figure(figsize=(FIG_W, 6.10))
+    # A twelve-module grid: the capacity curves (B) take five modules and the
+    # cell-count bars (A) three, while rows 1-2 are three equal four-module
+    # panels, so the paired plots F and G (and the coverage panel H) share
+    # one axes width and one label geometry.
     grid = fig.add_gridspec(
-        3, 6, left=0.088, right=0.965, bottom=0.075, top=0.90,
-        wspace=1.00, hspace=0.92,
+        3, 12, left=0.088, right=0.965, bottom=0.075, top=0.90,
+        wspace=2.20, hspace=0.92,
     )
     spans = [
-        (0, slice(0, 2)), (0, slice(2, 4)), (0, slice(4, 6)),
-        (1, slice(0, 2)), (1, slice(2, 4)), (1, slice(4, 6)),
-        (2, slice(0, 3)), (2, slice(3, 6)),
+        (0, slice(0, 3)), (0, slice(3, 8)), (0, slice(8, 12)),
+        (1, slice(0, 4)), (1, slice(4, 8)), (1, slice(8, 12)),
+        (2, slice(0, 4)), (2, slice(4, 8)),
     ]
     ax_a, ax_b, ax_c, ax_d, ax_e, ax_f, ax_g, ax_h = [
         fig.add_subplot(grid[row, cols]) for row, cols in spans
@@ -313,18 +322,22 @@ def render(curves: pd.DataFrame, focal: pd.DataFrame, summary: dict) -> None:
         low = np.asarray(lows)[order]
         high = np.asarray(highs)[order]
         color = METHOD_COLORS[method]
-        ax_b.plot(x, y, marker="o", ms=3.0, lw=LW_DATA, color=color, label=method.replace("-aware", ""))
+        # Dash pattern and marker per arm follow the anatomy sheets' shared
+        # key (the Pinky replication styles), so one key reads every panel
+        # of the consolidated sheet; the two nulls are told apart by marker.
+        _, linestyle, marker = METHOD_LINE_STYLE[method]
+        ax_b.plot(x, y, marker=marker, ms=3.0, lw=LW_DATA, ls=linestyle,
+                  color=color, label=method.replace("-aware", ""))
         ax_b.fill_between(x, low, high, color=color, alpha=0.10, linewidth=0)
     ax_b.set_xscale("log", base=2)
     ax_b.set_xticks([1, 2, 4, 8, 16])
     ax_b.get_xaxis().set_major_formatter(mpl.ticker.ScalarFormatter())
     ax_b.set_ylim(0, 1.0)
+    ax_b.set_yticks([0, 0.2, 0.4, 0.6, 0.8, 1.0])
     ax_b.set_xlabel("feedback channels")
     ax_b.set_ylabel("modeled field capture")
     panel_title(ax_b, "B", "Route capacity")
-    ax_b.text(.02,.96,"constructed target fields",transform=ax_b.transAxes,
-              va="top",fontsize=PT_SMALL,color=NEURIPS_COLORS["mute"])
-    style_axis(ax_b)
+    style_axis(ax_b, grid="y")
 
     focus = curves[curves["channels"].eq(8)]
     rng = np.random.default_rng(20260731)
@@ -416,7 +429,7 @@ def render(curves: pd.DataFrame, focal: pd.DataFrame, summary: dict) -> None:
         focal,
         "shunt_depth_shuffled_localization",
         "focal_shunt_localization",
-        ("reassigned\nrelation", "true descendant\nrelation"),
+        ("reassigned\nrelation", "true\nrelation"),
         (COLORS["shuffle"], COLORS["shunting"]),
         4000,
     )
@@ -437,18 +450,29 @@ def render(curves: pd.DataFrame, focal: pd.DataFrame, summary: dict) -> None:
     included_h = included.copy()
     included_h["direct_type_coverage"] = pd.to_numeric(included_h["direct_type_coverage"], errors="coerce")
     included_h["n_selected_focal_sites"] = pd.to_numeric(included_h["n_selected_focal_sites"], errors="coerce")
-    type_colors = {"L2IT": NEURIPS_COLORS["exc"], "L3IT": NEURIPS_COLORS["rule_3f"],
-                   "L4IT": NEURIPS_COLORS["pathway"], "L5IT": NEURIPS_COLORS["soma"],
-                   "L5ET": NEURIPS_COLORS["inh"]}
-    for cell_type, group in included_h.groupby("cell_type"):
+    # Cell classes take the ordinal ramp and distinct markers: blue and green
+    # stay reserved for current injection and focal shunt on this sheet.
+    type_style = {"L2IT": (ORDINAL_RAMP[1], "o"), "L3IT": (ORDINAL_RAMP[2], "s"),
+                  "L4IT": (ORDINAL_RAMP[3], "^"), "L5IT": (NEURIPS_COLORS["mute"], "v"),
+                  "L5ET": (NEURIPS_COLORS["ink"], "D")}
+    for cell_type in ["L2IT", "L3IT", "L4IT", "L5IT", "L5ET"]:
+        group = included_h[included_h.cell_type.eq(cell_type)]
+        if group.empty:
+            continue
+        color, marker = type_style[cell_type]
         ax_h.scatter(100 * group.direct_type_coverage, group.n_selected_focal_sites,
-                     s=18, color=type_colors.get(cell_type, NEURIPS_COLORS["mute"]),
-                     alpha=0.65, label=cell_type, edgecolor="white", linewidth=0.25)
-    ax_h.set_xlabel("direct E/I labels (% inputs)"); ax_h.set_ylabel("eligible focal sites")
+                     s=18, color=color, marker=marker, alpha=0.85,
+                     label=f"{cell_type} ({len(group)})", edgecolor="white", linewidth=0.25)
+    ax_h.set_xlabel("direct E/I labels (% inputs)")
+    ax_h.set_ylabel("selected focal sites (max 16)")
+    # Head room above the 16-site cap keeps the key off the data.
+    ax_h.set_ylim(-1, 24.0)
+    ax_h.set_yticks([0, 5, 10, 15])
     panel_title(ax_h, "H", "Direct-label coverage")
     style_axis(ax_h)
-    ax_h.legend(frameon=False, ncol=3, loc="upper right", fontsize=PT_SMALL,
-                handlelength=0.8, handletextpad=0.2, columnspacing=0.5)
+    ax_h.legend(frameon=False, ncol=2, loc="upper right", fontsize=PT_SMALL,
+                handlelength=0.8, handletextpad=0.3, columnspacing=0.8,
+                labelspacing=0.25, borderaxespad=0.2)
 
     FIGURES.mkdir(parents=True, exist_ok=True)
     style_direct_color_labels(fig)

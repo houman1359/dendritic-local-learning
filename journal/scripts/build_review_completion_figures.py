@@ -166,6 +166,69 @@ def encoder():
     fig.savefig(OUT/"figure_S32_panels_A-F.pdf");plt.close(fig)
 
 
+def cell_dots(ax,x,values,color,marker="o",step=.05,s=9,open_=False,zorder=2):
+    """Every cell as a small point; tied values are spread evenly side by side."""
+    v=np.asarray(values,float);offs=np.zeros(len(v))
+    for val in np.unique(np.round(v,9)):
+        idx=np.where(np.isclose(v,val,atol=1e-9))[0];k=len(idx)
+        offs[idx]=(np.arange(k)-(k-1)/2)*step
+    if open_:ax.scatter(x+offs,v,s=s,marker=marker,facecolors="white",edgecolors=color,linewidths=.7,alpha=.8,zorder=zorder)
+    else:ax.scatter(x+offs,v,s=s,marker=marker,color=color,alpha=.5,edgecolors="none",zorder=zorder)
+
+
+def cell_series(ax,frame,x,metric,color,label,positions,dodge=0.,paired_lines=False,connect=False,reference=None):
+    """Means with 95% cell-bootstrap bars, every cell drawn behind them.
+
+    ``positions`` maps the factor levels to ordinal x positions. With
+    ``paired_lines`` the eight cells are joined across levels (a within-cell
+    manipulation). ``reference`` names a level whose value is definitional
+    (the nominal dictionary compared with itself); it is drawn as an open
+    symbol without a bar and is asserted to equal one for every cell.
+    """
+    values=[];levels=sorted(frame[x].unique())
+    wide=frame.pivot(index="root_id",columns=x,values=metric)
+    if paired_lines:
+        for _,row in wide.iterrows():
+            ax.plot([positions[l]+dodge for l in levels],[row[l] for l in levels],color=color,alpha=.3,lw=.7,zorder=2)
+    for at in levels:
+        seeds=wide[at].to_numpy(float);is_ref=(reference is not None and at==reference)
+        if is_ref and not np.all(seeds==1):raise ValueError(f"{label} reference level {at} is not identically one")
+        cell_dots(ax,positions[at]+dodge,seeds,color,open_=is_ref,zorder=3)
+        values.append((positions[at]+dodge,*interval(seeds)))
+    values=np.asarray(values)
+    ref=np.array([reference is not None and at==reference for at in levels])
+    ax.errorbar(values[~ref,0],values[~ref,1],yerr=np.stack([values[~ref,1]-values[~ref,2],values[~ref,3]-values[~ref,1]]),
+                color=color,label=label,marker="o",ms=3.5,lw=1.25,capsize=2,ls="-" if connect else "none",
+                markeredgecolor="white",markeredgewidth=.55,zorder=5)
+    if ref.any():ax.scatter(values[ref,0],values[ref,1],s=26,facecolors="white",edgecolors=color,linewidths=1.25,zorder=5)
+
+
+def centre_grid(fig,axs,margin_pt=6.):
+    """Equal outer margins and equal row gutters, measured on the drawn ink.
+
+    The sheet is pasted whole, so its own margins are the page margins: the
+    ink is centred left-right, and the rows are re-spaced so that the white
+    band between every pair of rows is the same height.
+    """
+    fw,fh=fig.get_size_inches();margin=margin_pt/72
+    for _ in range(3):
+        fig.canvas.draw();r=fig.canvas.get_renderer();dpi=fig.dpi
+        bb=fig.get_tightbbox(r);dx=((fw-bb.x1)-bb.x0)/2/fw
+        rows=[]
+        for row in axs:
+            centre=np.mean([a.get_position().y0+a.get_position().height/2 for a in row])
+            members=[a for a in fig.axes if abs(a.get_position().y0+a.get_position().height/2-centre)<.1]
+            boxes=[a.get_tightbbox(r) for a in members]
+            rows.append((members,min(b.y0 for b in boxes)/dpi,max(b.y1 for b in boxes)/dpi))
+        heights=[y1-y0 for _,y0,y1 in rows];gap=(fh-2*margin-sum(heights))/(len(rows)-1)
+        top=fh-margin
+        for (members,y0,y1),h in zip(rows,heights):
+            dy=(top-y1)/fh
+            for a in members:
+                pos=a.get_position();a.set_position([pos.x0+dx,pos.y0+dy,pos.width,pos.height])
+            top-=h+gap
+
+
 def morphology():
     source=ROOT/"source_data/review_morphology_uncertainty"
     confusion=pd.read_csv(source/"confusion_pooled.csv").pivot(index="direct_class",columns="proxy_class",values="n_contacts").reindex(index=["E","I"],columns=["E","I"]).fillna(0)
@@ -176,38 +239,63 @@ def morphology():
     fig.subplots_adjust(left=.115,right=.98,bottom=.075,top=.94,wspace=.38,hspace=.68)
     ax=axs[0,0];panel(ax,"A","Direct / proxy label disagreement")
     fraction=confusion.to_numpy()/confusion.sum(axis=1).to_numpy()[:,None]
-    ax.imshow(fraction,vmin=0,vmax=1,cmap="Blues",aspect="auto")
+    im=ax.imshow(100*fraction,vmin=0,vmax=100,cmap="Blues",aspect="auto")
     for i in range(2):
         for j in range(2):ax.text(j,i,f"{int(confusion.iloc[i,j]):,}\n({fraction[i,j]*100:.1f}%)",ha="center",va="center",color="white" if fraction[i,j]>.6 else "black")
-    ax.set(xticks=[0,1],xticklabels=["E proxy","I proxy"],yticks=[0,1],yticklabels=["E direct","I direct"])
+    ax.set(xticks=[0,1],xticklabels=["E","I"],yticks=[0,1],yticklabels=["E","I"],xlabel="Target-proxy label",ylabel="Direct label")
+    cb=fig.colorbar(im,ax=ax,fraction=.06,pad=.05,ticks=[0,50,100]);cb.set_label("Row (%)");cb.outline.set_visible(False)
     ax=axs[0,1];panel(ax,"B","Direct-label coverage is uneven")
-    f=missing[missing.grouping.eq("compartment")]
+    f=missing[missing.grouping.eq("compartment")];labels=[]
     for i,name in enumerate(["soma","internal","terminal"]):
-        v=100*f[f.stratum.eq(name)].direct_fraction.to_numpy();m,lo,hi=interval(v)
+        g=f[f.stratum.eq(name)];v=100*g.direct_fraction.to_numpy();m,lo,hi=interval(v)
         ax.scatter(np.linspace(-.1,.1,len(v))+i,v,s=14,color="#16817a",alpha=.65)
         ax.errorbar(i,m,yerr=[[m-lo],[hi-m]],fmt="D",color="#333333",capsize=3,ms=4)
-    ax.set(xticks=[0,1,2],xticklabels=["Soma","Internal","Terminal"],ylabel="Directly typed contacts (%)")
+        labels.append(f"{name.capitalize()}\n$n$ = {int(g.n_contacts.sum()):,}")
+    ax.set(xticks=[0,1,2],xticklabels=labels,ylabel="Directly typed contacts (%)",xlabel="Compartment (pooled contacts)")
     ax=axs[1,0];panel(ax,"C","Mapping and label choices alter routes")
-    for mode,color in [("hybrid","#16817a"),("direct_only","#a57422")]:
+    positions={2:0,5:1,10:2}
+    for mode,color,dodge in [("hybrid","#16817a",-.17),("direct_only","#a57422",.17)]:
         f=cell[cell.label_mode.eq(mode)&cell.radius_log_sd.eq(0)&cell.axial_mode.eq("mean_radius")]
-        curve(ax,f,"mapping_threshold_um","selected_nominal_jaccard",color,mode.replace("_"," "))
-    ax.set(xlabel="Maximum mapping distance (µm)",ylabel="Selected-route Jaccard",ylim=(-.05,1.05),xticks=[2,5,10]);ax.legend(frameon=False,loc="best")
+        cell_series(ax,f,"mapping_threshold_um","selected_nominal_jaccard",color,mode.replace("_"," "),positions,dodge=dodge,
+                    reference=5 if mode=="hybrid" else None)
+    ax.annotate("reference dictionary\n(Jaccard = 1 by definition)",xy=(1-.17,1),xytext=(1.05,.72),ha="center",va="top",fontsize=7,color="#555555",
+                arrowprops={"arrowstyle":"-","color":"#999999","lw":.55,"shrinkB":4})
+    ax.set(xlabel="Maximum mapping distance (µm)",ylabel="Selected-route Jaccard",ylim=(-.05,1.05),xlim=(-.5,2.5))
+    ax.set_xticks([0,1,2],["2","5","10"]);ax.legend(frameon=False,loc="center",bbox_to_anchor=(.5,.42))
     ax=axs[1,1];panel(ax,"D","Radius sensitivity on a fixed probe")
-    for mode,color in [("hybrid","#16817a"),("direct_only","#a57422")]:
+    positions={0:0,.25:1,.5:2}
+    for mode,color,dodge in [("hybrid","#16817a",-.06),("direct_only","#a57422",.06)]:
         f=cell[cell.label_mode.eq(mode)&cell.mapping_threshold_um.eq(5)&cell.axial_mode.eq("mean_radius")]
-        curve(ax,f,"radius_log_sd","fixed_nominal_field_capture",color,mode.replace("_"," "))
-    ax.set(xlabel="Log-radius perturbation SD",ylabel="Nominal-field capture",ylim=(0,1.05),xticks=[0,.25,.5])
+        cell_series(ax,f,"radius_log_sd","fixed_nominal_field_capture",color,mode.replace("_"," "),positions,dodge=dodge,paired_lines=True)
+    ax.set(xlabel="Log-radius perturbation SD",ylabel="Nominal-field capture",ylim=(.05,.6),xlim=(-.5,2.5))
+    ax.set_xticks([0,1,2],["0","0.25","0.5"]);ax.legend(frameon=False,loc="upper right")
     ax=axs[2,0];panel(ax,"E","Axial resistance after compression")
-    ratio=1+comp.relative_axial_resistance_error
-    ax.hist(np.log10(ratio.clip(lower=1e-6)),bins=25,color="#808080",edgecolor="white")
-    ax.axvline(0,color="#222222",lw=1)
-    ax.set(xlabel="log₁₀(compressed / series resistance)",ylabel="Cable segments")
+    # Ratio on a log x axis (0.1-log-unit bins) and a log count axis: the
+    # dominant equal-resistance bin no longer hides the 0.003-0.9 tail.
+    ratio=np.log10((1+comp.relative_axial_resistance_error).clip(lower=1e-6))
+    if ratio.max()>1e-9:raise ValueError("a compressed segment exceeds its series resistance; the annotation assumes none does")
+    edges=np.arange(np.floor(ratio.min()*10)/10,.1+1e-9,.1)
+    ax.hist(10**ratio,bins=10**edges,color="#808080",edgecolor="white",lw=.55)
+    ax.set_xscale("log");ax.set_yscale("log");ax.set_ylim(.7,1500);ax.set_xlim(10**(edges[0]-.05),10**(edges[-1]+.05))
+    ax.set_xticks([1e-3,1e-2,1e-1,1],["0.001","0.01","0.1","1"]);ax.set_yticks([1,10,100,1000],["1","10","100","1,000"])
+    ax.tick_params(which="minor",width=.55,length=1.8)
+    tail=int((ratio<-.05).sum())
+    ax.text(.03,.95,f"{tail} of {len(ratio)} segments ({comp.root_id.nunique()} cells)\nbelow 0.89 (0.05 log units);\nworst case {10**ratio.min():.3f}",
+            transform=ax.transAxes,ha="left",va="top",fontsize=7,color="#555555")
+    ax.set(xlabel="Compressed / series axial resistance",ylabel="Cable segments")
     ax=axs[2,1];panel(ax,"F","Series-resistance sensitivity")
     f=cell[cell.label_mode.eq("hybrid")&cell.mapping_threshold_um.eq(5)&cell.radius_log_sd.eq(0)]
     wide=f.pivot(index="root_id",columns="axial_mode",values="fixed_nominal_field_capture")
-    ax.plot([0,1],[0,1],color="#999999",ls="--",lw=.8)
-    ax.scatter(wide.mean_radius,wide.series_resistance,s=23,color="#16817a",edgecolor="white",linewidth=.4)
-    ax.set(xlabel="Mean-radius field capture",ylabel="Series-resistance\nfield capture",xlim=(0,1),ylim=(0,1))
+    diff=wide.series_resistance-wide.mean_radius;mean=(wide.series_resistance+wide.mean_radius)/2
+    ax.axhline(0,color="#999999",ls="--",lw=.85,zorder=1)
+    ax.scatter(mean,diff,s=23,color="#16817a",edgecolor="white",linewidth=.55,zorder=3)
+    same=int(np.isclose(diff,0,atol=1e-9).sum())
+    for x_,d_ in zip(mean[~np.isclose(diff,0,atol=1e-9)],diff[~np.isclose(diff,0,atol=1e-9)]):
+        ax.annotate(f"{d_:+.3f}",xy=(x_,d_),xytext=(4,0),textcoords="offset points",ha="left",va="center",fontsize=7,color="#555555")
+    ax.text(.03,.05,f"{same} of {len(diff)} cells identical",transform=ax.transAxes,ha="left",va="bottom",fontsize=7,color="#555555")
+    ax.set(xlabel="Mean of the two captures",ylabel="Series-resistance minus\nmean-radius capture",xlim=(.1,.6),ylim=(-.06,.06))
+    ax.set_yticks([-.06,-.03,0,.03,.06])
+    centre_grid(fig,axs,margin_pt=6.)
     fig.savefig(OUT/"figure_S33_panels_A-F.pdf");plt.close(fig)
 
 

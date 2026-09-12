@@ -1833,7 +1833,7 @@ def _figure5_final_supplement() -> list[str]:
     canvas = NativeCanvas(440 / 72, 3, hgutter_pt=39, vgutter_pt=58,
                           margins=Margins(left=48, right=16, top=24, bottom=36))
     fig = canvas.fig
-    ax_a = canvas.panel("partners", 0, 0, 4, title="Mapped partner coverage", grid="x")
+    ax_a = canvas.panel("partners", 0, 0, 4, title="Measured cohort", grid="x")
     ax_b = canvas.panel("alignment", 0, 4, 4, title="Measured alignment", grid="x")
     ax_c = canvas.panel("metrics", 0, 8, 4, title="Topology associations")
     ax_d = canvas.panel("capture", 1, 0, 4, title="Surrogate capture", grid="x")
@@ -1843,10 +1843,74 @@ def _figure5_final_supplement() -> list[str]:
     ax_h = canvas.panel("budget", 2, 6, 6, title="Route-budget effects")
     functional = pd.read_csv(DATA / "figure5" / "functional_target_metrics.csv")
     y = np.arange(len(functional))
-    ax_a.barh(y, functional.n_partners, color=MORPH, alpha=0.82)
-    ax_a.set_yticks(y); ax_a.set_yticklabels([f"target {i + 1}" for i in y])
-    ax_a.invert_yaxis(); ax_a.set_xlabel("presynaptic partners")
-    style_axis(ax_a, grid="x")
+    # Panel A (2026-09-11, S31 review): the seven mapped-partner counts alone
+    # duplicate the x coordinates of main Fig. 9F, so the panel now carries
+    # the three per-target columns of the same table -- mapped partners,
+    # the manually curated subset, and the median split-half reliability of
+    # the partner responses -- as one dot chart on a shared target axis.
+    # The per-partner reliability records behind each median are the same
+    # 69 records the calibration audit (S31E) plots, read from that table
+    # for the scan the target row names; nothing is typed in.
+    audit = pd.read_csv(DATA / "measured_alignment_power"
+                        / "reliability_calibration_audit.csv")
+    n_mapped = functional.n_partners.to_numpy(float)
+    n_manual = functional.n_manual_subset.to_numpy(float)
+    medians = functional.median_repeat_reliability.to_numpy(float)
+    records = []
+    for row in functional.itertuples(index=False):
+        key = (f"target{row.target_nucleus_id}_ses{row.session}"
+               f"_scan{row.scan_idx}_automatic_conservative")
+        vals = audit.loc[audit.scan.eq(key), "measured_split_half_spearman"]
+        vals = vals.to_numpy(float)
+        assert vals.size == int(row.n_partners), (key, vals.size, row.n_partners)
+        assert abs(float(np.median(vals)) - float(row.median_repeat_reliability)) < 1e-9
+        records.append(vals)
+    # Split the slot into two sub-axes on one target axis.  The host panel
+    # keeps the whole slot (so the grid audit sees one 4-module panel) and
+    # only carries the title; two satellites -- counts on the left, the
+    # reliability records on the right -- follow it through the lock pass.
+    box = ax_a.get_position()
+    gap = 13.0 / canvas.width_pt
+    w_left = (box.width - gap) * 0.48
+    w_right = box.width - gap - w_left
+    ax_a.set_axis_off()
+    ax_a.patch.set_visible(False)
+    ax_a1 = fig.add_axes([box.x0, box.y0, w_left, box.height])
+    ax_a2 = fig.add_axes([box.x0 + w_left + gap, box.y0, w_right, box.height])
+    canvas.bind_satellite(ax_a1, ax_a)
+    canvas.bind_satellite(ax_a2, ax_a)
+    # Two rows of headroom hold each sub-axes' own key, so no key sits on
+    # the seven target rows.
+    ylim = (len(y) - 0.4, -2.7)
+    for yi, (lo, hi) in enumerate(zip(n_manual, n_mapped)):
+        ax_a1.plot([lo, hi], [yi, yi], color=COLORS["mute"], lw=LW_HAIR, zorder=2)
+    ax_a1.scatter(n_mapped, y, s=MARKER_MS ** 2, color=MORPH, zorder=4,
+                  edgecolor="white", linewidth=0.3, label="mapped")
+    ax_a1.scatter(n_manual, y, s=MARKER_MS ** 2, facecolor="white",
+                  edgecolor=MORPH, linewidth=LW_EDGE, zorder=4,
+                  label="manual")
+    ax_a1.set_yticks(y); ax_a1.set_yticklabels([f"target {i + 1}" for i in y])
+    ax_a1.set_ylim(*ylim)
+    ax_a1.set_xlim(0, 20); ax_a1.set_xticks([0, 10, 20])
+    ax_a1.set_xlabel("partners")
+    style_axis(ax_a1, grid="x")
+    clean_legend(ax_a1, loc="upper left", fontsize=PT_SMALL, handlelength=1.0,
+                 handletextpad=0.4, borderaxespad=0.2, labelspacing=0.25)
+    for yi, vals in enumerate(records):
+        ax_a2.scatter(vals, yi + jitter(vals.size, 700 + yi, 0.10),
+                      s=SEED_MS ** 2 * 0.8, color=MORPH, alpha=0.45,
+                      edgecolor="none", zorder=3, label="partner" if yi == 0 else None)
+    ax_a2.scatter(medians, y, marker="|", s=48, color=MORPH,
+                  linewidth=LW_ERR + 0.25, zorder=5, label="median")
+    ax_a2.set_yticks(y); ax_a2.set_yticklabels([])
+    ax_a2.tick_params(axis="y", length=0.0)
+    ax_a2.set_ylim(*ylim)
+    ax_a2.set_xlim(0, 0.6); ax_a2.set_xticks([0, 0.3, 0.6])
+    ax_a2.set_xticklabels(["0", "0.3", "0.6"])
+    ax_a2.set_xlabel("split-half r")
+    style_axis(ax_a2, grid="x")
+    clean_legend(ax_a2, loc="upper left", fontsize=PT_SMALL, handlelength=1.0,
+                 handletextpad=0.4, borderaxespad=0.2, labelspacing=0.25)
 
     vals = functional.partial_shared_path_r.to_numpy(float)
     ax_b.scatter(vals, y, s=SEED_MS ** 2 * 1.4, color=MORPH, alpha=0.78,
