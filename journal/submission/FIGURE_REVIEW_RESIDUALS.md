@@ -12,7 +12,7 @@ deferral reasons are under `analysis/figure_visual_review_20260910/`.
 |---|---:|---:|---:|---:|
 | Nine main figures | 157 | 114 | 67 | 0 |
 | Supplement, 22 rebuildable sheets | 320 | 230 | 77 | 0 |
-| Supplement, 14 frozen sheets | 197 | 201 paste and caption changes | 0 | 107 |
+| Supplement, 14 frozen sheets, rebuilt natively | 197 | 201 paste and caption changes, then 195 in-panel fixes | 38 | 0 |
 | Cross-figure | 35 | absorbed into captions as colour keys | | |
 
 The 114 main-figure fixes include 18 repairs of regressions that the first
@@ -50,36 +50,34 @@ These changed what the paper claims, not how it looks.
   finite-difference maximum, a source-directory attribution and a panel
   letter in the supplement prose were wrong and are corrected.
 
-## What cannot be fixed without new builders
+## The fourteen frozen sheets, rebuilt
 
-Fourteen sheets (S7, S8, S12 to S21, S35, S36) are pasted from twenty upstream
-renders that have no generator anywhere in the repository. Their panels are
-immutable ink. The paste layer reached 201 of their findings: prose redacted
-out of plot boxes, dead margins cut, shared legends re-measured, mislabelled
-axes re-set, and every encoding the panels rely on written into the captions,
-including a colour key on each sheet stating what dark red, amber and blue
-mean there, because the supplement's colour conventions differ from the main
-figures'.
+Fourteen sheets (S7, S8, S12 to S21, S35, S36) were pasted from twenty upstream
+renders that had no generator anywhere in the repository. On 2026-09-12 each
+was given a native builder, `scripts/build_supplementary_figure_<ident>_native.py`,
+that reads only the study's frozen tables under `source_data/`, draws the sheet
+on the paper's canvas, and asserts every plotted number against the table it
+comes from. Each new render was checked by an independent agent that recomputed
+every value from the tables without trusting the builder, read the old and new
+sheets side by side, and ran the strict audit. Three were rejected on first
+check and repaired; all fourteen were then accepted.
 
-The 107 findings that remain are inside the panels: 1 blocking, 58 major, 48
-minor. They are listed with a one-sentence reason each in
-`analysis/figure_visual_review_20260910/frozen_cannot_fix.json`. The
-recurring kinds are
+| | count |
+|---|---:|
+| Value mismatches against the frozen tables, across all 14 | 0 |
+| In-panel findings fixed that the paste layer could not reach | 195 |
+| Findings the builders declined, with a reason each | 38 |
 
-- a linear axis for geometrically spaced checkpoints or budgets;
-- per-seed values present in the released table but not drawn;
-- intervals narrower than their markers, undisclosed on the sheet;
-- a series colour that means one thing in one panel and another elsewhere on
-  the same sheet.
-
-The one blocking item is **S15E**: the 0.01 practical margin is drawn
-indistinguishably on top of the zero spine and the Bonferroni interval sits
-inside its own marker. Its caption now says so. Fixing it means recreating
-that render from `source_data/boolean_morphology/` with a new builder.
-
-Reconstructing the twenty frozen renders from their source data would let
-every one of the 107 be fixed. It is the one piece of this review I would
-not estimate in hours.
+The old frozen renders remain in the registry for provenance and every old
+cross-reference label survives as an alias. The 38 declined items are in
+`analysis/figure_visual_review_20260910/native_not_fixed.json`. Most are
+deliberate: the builders were told to keep each sheet's panel letters and
+plotted content, so findings that asked to delete a panel, merge two panels,
+or drop a series were not taken; a few ask for per-seed values that no table
+records; several are cross-figure restructures beyond one sheet. Two are
+genuine limits of the data: S15G and S35A,B carry intervals narrower than
+their markers at any scale that keeps the fans visible, and their captions
+say so.
 
 ## Deferred with a reason
 
@@ -97,6 +95,7 @@ and `supplement_wave*_reports.json` files.
 
 `make audit` passes end to end on the committed tree: 215 tests, the LaTeX
 layout, figure-lineage, citation, format and submission audits, and provenance.
-Every main figure passes the strict canvas audit and the three layout audits
-with zero violations. All nine main-figure legends are at or under the
+Every main figure and every native supplementary render passes the strict
+canvas audit with zero violations, and the main figures pass the three layout
+audits. All nine main-figure legends are at or under the
 350-word guidance. The combined PDF is rebuilt from this state.
