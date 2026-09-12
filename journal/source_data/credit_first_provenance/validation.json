@@ -1,6 +1,6 @@
 {
   "status": "complete",
-  "n_rows": 16144,
+  "n_rows": 16147,
   "n_unique_sources": 7428,
   "n_retained_rows": 1560,
   "n_new_supporting_records": 5331,
@@ -139,6 +139,6 @@
       "checkpoint_archive"
     ]
   },
-  "panel_map_sha256": "321b1a9a12f43b43cf317acc249ed774db9a00e66c196967df9ef14455507559",
+  "panel_map_sha256": "5fc01867884d22abafe064aceb50a285b88fc3acf59090c392ea3bf9193b136d",
   "template_sha256": "60d0c03cc1700c557725354cc48a02537fbf1a67746f6b18dd8147f628dde94e"
 }

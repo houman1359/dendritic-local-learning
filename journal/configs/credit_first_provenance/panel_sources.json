@@ -337,7 +337,7 @@
       "path": "figures/supplementary/curated/animal_credit_reanalysis.pdf",
       "component": "figures/supplementary/curated/animal_credit_reanalysis.pdf",
       "generator": "scripts/supplement_consolidation/build.py",
-      "panel": "a-b",
+      "panel": "a-c",
       "notes": "Curated supplementary sheet, frozen numbering of 2026-09-10 (SI_NUMBERING)."
     },
     {
@@ -345,7 +345,7 @@
       "path": "figures/supplementary/curated/original_selector.pdf",
       "component": "figures/supplementary/curated/original_selector.pdf",
       "generator": "scripts/supplement_consolidation/build.py",
-      "panel": "a-f",
+      "panel": "a-e",
       "notes": "Curated supplementary sheet, frozen numbering of 2026-09-10 (SI_NUMBERING)."
     },
     {
@@ -83124,6 +83124,33 @@
     {
       "figure": "figS33",
       "panel": "b",
+      "path": "source_data/animal_learning_francioni/neuron_sd_residual_distributions.csv",
+      "role": "Complete numerical source of selected input panel",
+      "generator": "scripts/supplement_consolidation/build.py",
+      "replication_unit": "neuron nested within published condition; descriptive only",
+      "notes": "Reanalysis of published recordings; no new animal experiment. Complete table; it can contain other conditions and implies no additional replication."
+    },
+    {
+      "figure": "figS33",
+      "panel": "c",
+      "path": "source_data/animal_learning_francioni/animal_common_signed_modes.csv",
+      "role": "Complete numerical source of selected input panel",
+      "generator": "scripts/supplement_consolidation/build.py",
+      "replication_unit": "animal (n=6)",
+      "notes": "Reanalysis of published recordings; no new animal experiment. Complete table; it can contain other conditions and implies no additional replication."
+    },
+    {
+      "figure": "figS33",
+      "panel": "c",
+      "path": "source_data/animal_learning_francioni/animal_signed_contrasts.csv",
+      "role": "Complete numerical source of selected input panel",
+      "generator": "scripts/supplement_consolidation/build.py",
+      "replication_unit": "animal (n=6)",
+      "notes": "Reanalysis of published recordings; no new animal experiment. Complete table; it can contain other conditions and implies no additional replication."
+    },
+    {
+      "figure": "figS33",
+      "panel": "c",
       "path": "source_data/animal_learning_francioni/neuron_sd_residual_distributions.csv",
       "role": "Complete numerical source of selected input panel",
       "generator": "scripts/supplement_consolidation/build.py",

@@ -36,7 +36,7 @@
     "scripts/shunt_ancestry_gain/build_figure.py": "ace3791786d34c8b234b46743fd527b0ede99ff262064fd1067dcfd6616a70d0",
     "scripts/build_main_figure_07.py": "8dd526d60d35b572a17a68c77c1813279756251052d4921471d77c3fb16b885e",
     "scripts/build_main_figure_08.py": "f9960d1b058bfef5486e436ef511fbcb98e751a3fe515587be6929b1d7305cc5",
-    "scripts/build_journal_figures.py": "9e7d368c9d8aa6db88235614d777c4810013a3e62729699b9219b9d006076898",
+    "scripts/build_journal_figures.py": "d70f2db5c2f585752a23fa9bbf428715abd7635e1ec9743a31f55adf0af8a1a5",
     "scripts/figure_canvas.py": "0a0d01607cc3589a44075b6ccd7c2867dcf7d8a31f88ca1565dade247f4bcb48",
     "scripts/journal_style.py": "47ee5c9366c7bd3e59b8074513debe260e707b2d7d0ea1ac9c82c1e1a924895a",
     "scripts/native_schematics.py": "68530ec60f85e496b9b0ba7a7ad53510dce2fae91cc38231046c1175e1cb7aeb",

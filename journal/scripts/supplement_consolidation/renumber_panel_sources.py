@@ -119,17 +119,17 @@ NEW_FIGURE_RECORDS = (
      "Mechanistic chain sheet, frozen numbering of 2026-09-10 (SI_NUMBERING)."
      " Complete table; it can contain other conditions and implies no"
      " additional replication."),
-    ("figS33", "ab", "source_data/animal_learning_francioni/animal_common_signed_modes.csv",
+    ("figS33", "abc", "source_data/animal_learning_francioni/animal_common_signed_modes.csv",
      "animal (n=6)",
      "Reanalysis of published recordings; no new animal experiment."
      " Complete table; it can contain other conditions and implies no"
      " additional replication."),
-    ("figS33", "ab", "source_data/animal_learning_francioni/animal_signed_contrasts.csv",
+    ("figS33", "abc", "source_data/animal_learning_francioni/animal_signed_contrasts.csv",
      "animal (n=6)",
      "Reanalysis of published recordings; no new animal experiment."
      " Complete table; it can contain other conditions and implies no"
      " additional replication."),
-    ("figS33", "ab", "source_data/animal_learning_francioni/neuron_sd_residual_distributions.csv",
+    ("figS33", "abc", "source_data/animal_learning_francioni/neuron_sd_residual_distributions.csv",
      "neuron nested within published condition; descriptive only",
      "Reanalysis of published recordings; no new animal experiment."
      " Complete table; it can contain other conditions and implies no"
