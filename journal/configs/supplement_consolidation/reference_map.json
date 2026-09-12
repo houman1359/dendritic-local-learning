@@ -1641,128 +1641,228 @@
     "old_label": "fig:supp_morphology_conductance",
     "original_asset": "figures/supplementary/figure_S42_panels_A-F.pdf",
     "original_sha256": "548de23a1a5fccc5b12f819d6bd33b8de3689c13cd4ac9d4ed00231200593351",
-    "primary_destination": "S18",
-    "panels": {
+    "primary_destination": "fig:si_conductance_grouping",
+    "panels": {},
+    "omitted_panel_status": {
       "A": {
-        "figure": "S18",
-        "panel": "A",
-        "path": "figures/supplementary/curated/conductance_grouping.pdf"
+        "content": "Seven-compartment directed shunting model with the same physical shape, sixteen positive conductances (four excitatory and six inhibitory contacts plus six couplings) and soma-only readout under all three input groupings. Teacher-task permutations preserve the input-gradient spectrum. These are planted mechanistic controls within the stated model class.",
+        "reason": "Replaced by the native render N18 (scripts/build_supplementary_figure_conductance_grouping_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S18; no crop of this frozen render is used.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/morphology_conductance/README.md",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_conductance/development_learning_rate_selection.csv",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_conductance/development_protocol.json",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_conductance/development_sgd_bracket_protocol.json"
+        ]
       },
       "B": {
-        "figure": "S18",
-        "panel": "B",
-        "path": "figures/supplementary/curated/conductance_grouping.pdf"
+        "content": "Analytic population lower bound from interactions crossing the student's two proximal input blocks, evaluated by converged quadrature. Dots average the six incompatible task/grouping pairs within each of twenty seeds; the mean bound is 0.013222 population normalized mean squared error (NMSE). This is neither an observed loss nor a certified numerical integration bound.",
+        "reason": "Replaced by the native render N18 (scripts/build_supplementary_figure_conductance_grouping_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S18; no crop of this frozen render is used.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/morphology_conductance/README.md",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_conductance/development_learning_rate_selection.csv",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_conductance/development_protocol.json",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_conductance/development_sgd_bracket_protocol.json"
+        ]
       },
       "C": {
-        "figure": "S18",
-        "panel": "C",
-        "path": "figures/supplementary/curated/conductance_grouping.pdf"
+        "content": "Final held-out sample NMSE for exact path, fixed calibrated broadcast, one oracle profile and two subtree-profile credit rules under Adam and stochastic gradient descent (SGD), respectively. Circles average three compatible task permutations within seed; open squares also average the two incompatible groupings per task. Rates were selected on development seeds and frozen before fresh outcomes. The fixed broadcast profile is calibrated from initial student path sensitivities; projection coefficients access the current exact field and are oracle controls.",
+        "reason": "Replaced by the native render N18 (scripts/build_supplementary_figure_conductance_grouping_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S18; no crop of this frozen render is used.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/morphology_conductance/README.md",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_conductance/development_learning_rate_selection.csv",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_conductance/development_protocol.json",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_conductance/development_sgd_bracket_protocol.json"
+        ]
       },
       "D": {
-        "figure": "S18",
-        "panel": "D",
-        "path": "figures/supplementary/curated/conductance_grouping.pdf"
+        "content": "Final held-out sample NMSE for exact path, fixed calibrated broadcast, one oracle profile and two subtree-profile credit rules under Adam and stochastic gradient descent (SGD), respectively. Circles average three compatible task permutations within seed; open squares also average the two incompatible groupings per task. Rates were selected on development seeds and frozen before fresh outcomes. The fixed broadcast profile is calibrated from initial student path sensitivities; projection coefficients access the current exact field and are oracle controls.",
+        "reason": "Replaced by the native render N18 (scripts/build_supplementary_figure_conductance_grouping_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S18; no crop of this frozen render is used.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/morphology_conductance/README.md",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_conductance/development_learning_rate_selection.csv",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_conductance/development_protocol.json",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_conductance/development_sgd_bracket_protocol.json"
+        ]
       },
       "E": {
-        "figure": "S18",
-        "panel": "E",
-        "path": "figures/supplementary/curated/conductance_grouping.pdf"
+        "content": "Paired compatible-tree fixed-broadcast-minus-exact NMSE differences. The Adam interval includes zero; the small SGD effect does not establish a universal need for precise credit. Dots are the twenty independent seed means. Means and whiskers in",
+        "reason": "Replaced by the native render N18 (scripts/build_supplementary_figure_conductance_grouping_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S18; no crop of this frozen render is used.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/morphology_conductance/README.md",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_conductance/development_learning_rate_selection.csv",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_conductance/development_protocol.json",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_conductance/development_sgd_bracket_protocol.json"
+        ]
       },
       "F": {
-        "figure": "S18",
-        "panel": "F",
-        "path": "figures/supplementary/curated/conductance_grouping.pdf"
+        "content": "Mean aggregate gradient cosine on 256 calibration examples for compatible Adam models, evaluated at common exact-learning checkpoints; no uncertainty band is shown. All 1,440 fresh fits and 7,200 checkpoint records are retained. The interaction bound relies on independent input blocks, identity somatic activation and no direct somatic synapses; it is separate from the multi-affine cut-rank theorem.",
+        "reason": "Replaced by the native render N18 (scripts/build_supplementary_figure_conductance_grouping_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S18; no crop of this frozen render is used.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/morphology_conductance/README.md",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_conductance/development_learning_rate_selection.csv",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_conductance/development_protocol.json",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_conductance/development_sgd_bracket_protocol.json"
+        ]
       }
-    },
-    "omitted_panel_status": {}
+    }
   },
   "S43": {
     "old_label": "fig:supp_boolean_theory",
     "original_asset": "figures/supplementary/figure_S43_panels_A-F.pdf",
     "original_sha256": "42874aabef684e4d5dbbad3dafe68207dd798b04a7c3c8d50fac61d9ac83470c",
-    "primary_destination": "S14",
-    "panels": {
+    "primary_destination": "fig:si_boolean_capacity",
+    "panels": {},
+    "omitted_panel_status": {
       "A": {
-        "figure": "S14",
-        "panel": "A",
-        "path": "figures/supplementary/curated/boolean_capacity.pdf"
+        "content": "Complete truth tables of seven four-input templates, with sixteen equally weighted patterns (white, 0; green, 1). Mixed targets are \\((a\\land b)\\lor(c\\land d)\\), \\((a\\land b)\\mathbin{\\mathrm{XOR}}(c\\land d)\\), \\((a\\mathbin{\\mathrm{XOR}}b)\\land(c\\mathbin{\\mathrm{XOR}}d)\\), and nested \\(a\\land[b\\lor(c\\land d)]\\).",
+        "reason": "Replaced by the native render N14 (scripts/build_supplementary_figure_boolean_capacity_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S14; no crop of this frozen render is used.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/boolean_theory/README.md",
+          "drafts/dendritic-local-learning/journal/source_data/boolean_theory/all_cuts.csv",
+          "drafts/dendritic-local-learning/journal/source_data/boolean_theory/canonical_root_credit_by_pattern.csv",
+          "drafts/dendritic-local-learning/journal/source_data/boolean_theory/depth_summary.csv"
+        ]
       },
       "B": {
-        "figure": "S14",
-        "panel": "B",
-        "path": "figures/supplementary/curated/boolean_capacity.pdf"
+        "content": "Centered-cut normalized-mean-squared-error (NMSE) regression lower bounds for all fifteen labeled binary trees. Green dots mark 49 exactly representable family--tree pairs, independently certified with coefficients in $[-2,2]$. The largest coefficient magnitude in these constructions is $4/\\sqrt{15}$. All trees have twelve coefficients and six edges; T identifiers and cut sets are supplied in Source Data. A positive bound concerns truth-value regression, not threshold classification.",
+        "reason": "Replaced by the native render N14 (scripts/build_supplementary_figure_boolean_capacity_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S14; no crop of this frozen render is used.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/boolean_theory/README.md",
+          "drafts/dendritic-local-learning/journal/source_data/boolean_theory/all_cuts.csv",
+          "drafts/dendritic-local-learning/journal/source_data/boolean_theory/canonical_root_credit_by_pattern.csv",
+          "drafts/dendritic-local-learning/journal/source_data/boolean_theory/depth_summary.csv"
+        ]
       },
       "C": {
-        "figure": "S14",
-        "panel": "C",
-        "path": "figures/supplementary/curated/boolean_capacity.pdf"
+        "content": "OR-of-AND and the nested function each use two AND gates and one OR gate, but require minimum exact depths two and three.",
+        "reason": "Replaced by the native render N14 (scripts/build_supplementary_figure_boolean_capacity_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S14; no crop of this frozen render is used.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/boolean_theory/README.md",
+          "drafts/dendritic-local-learning/journal/source_data/boolean_theory/all_cuts.csv",
+          "drafts/dendritic-local-learning/journal/source_data/boolean_theory/canonical_root_credit_by_pattern.csv",
+          "drafts/dendritic-local-learning/journal/source_data/boolean_theory/depth_summary.csv"
+        ]
       },
       "D": {
-        "figure": "S14",
-        "panel": "D",
-        "path": "figures/supplementary/curated/boolean_capacity.pdf"
+        "content": "Minimum exact depth and compatible-tree counts. AND, OR and parity admit all fifteen trees; each mixed-gate target admits one. All seven input-sensitivity matrices have rank four, but their spectra generally differ.",
+        "reason": "Replaced by the native render N14 (scripts/build_supplementary_figure_boolean_capacity_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S14; no crop of this frozen render is used.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/boolean_theory/README.md",
+          "drafts/dendritic-local-learning/journal/source_data/boolean_theory/all_cuts.csv",
+          "drafts/dendritic-local-learning/journal/source_data/boolean_theory/canonical_root_credit_by_pattern.csv",
+          "drafts/dendritic-local-learning/journal/source_data/boolean_theory/depth_summary.csv"
+        ]
       },
       "E": {
-        "figure": "S14",
-        "panel": "E",
-        "path": "figures/supplementary/curated/boolean_capacity.pdf"
+        "content": "Explicitly post hoc target-projection energy $\\|\\mathbb E[z\\mid x_S]\\|^2$ for all six two-input subsets, with normalized target $z$. Parity has zero energy on every proper subset; XOR-of-AND has energy $1/5$ on every pair, including crossed pairs. This describes local target information and does not predict grouping compatibility or prove broadcast-learning failure.",
+        "reason": "Replaced by the native render N14 (scripts/build_supplementary_figure_boolean_capacity_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S14; no crop of this frozen render is used.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/boolean_theory/README.md",
+          "drafts/dendritic-local-learning/journal/source_data/boolean_theory/all_cuts.csv",
+          "drafts/dendritic-local-learning/journal/source_data/boolean_theory/canonical_root_credit_by_pattern.csv",
+          "drafts/dendritic-local-learning/journal/source_data/boolean_theory/depth_summary.csv"
+        ]
       },
       "F": {
-        "figure": "S14",
-        "panel": "F",
-        "path": "figures/supplementary/curated/boolean_capacity.pdf"
+        "content": "Canonical derivatives \\(\\partial F/\\partial u\\) with respect to left-branch output \\(u\\), versus right-branch output \\(v\\): AND, \\(v\\); OR, \\(1-v\\); XOR, \\(1-2v\\). These raw Boolean coordinates are illustrative; training can change every coefficient and need not preserve them. No learning outcome is inferred from a derivative sign alone. Panels are exhaustive analytic diagnostics, with no sampling error bars; the multi-affine and independent-input assumptions are explicit in Supplementary Note~\\ref{note:boolean_morphology}.",
+        "reason": "Replaced by the native render N14 (scripts/build_supplementary_figure_boolean_capacity_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S14; no crop of this frozen render is used.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/boolean_theory/README.md",
+          "drafts/dendritic-local-learning/journal/source_data/boolean_theory/all_cuts.csv",
+          "drafts/dendritic-local-learning/journal/source_data/boolean_theory/canonical_root_credit_by_pattern.csv",
+          "drafts/dendritic-local-learning/journal/source_data/boolean_theory/depth_summary.csv"
+        ]
       }
-    },
-    "omitted_panel_status": {}
+    }
   },
   "S44": {
     "old_label": "fig:supp_boolean_learning",
     "original_asset": "figures/supplementary/figure_S44_panels_A-H.pdf",
     "original_sha256": "a3ec9fb8b0577c4f710cef2de979cbdb3258e047008bded99e98b9f7ca0444d7",
-    "primary_destination": "S15",
-    "panels": {
+    "primary_destination": "fig:si_boolean_learning",
+    "panels": {},
+    "omitted_panel_status": {
       "A": {
-        "figure": "S15",
-        "panel": "A",
-        "path": "figures/supplementary/curated/boolean_learning.pdf"
+        "content": "Clean population normalized mean squared error (NMSE), averaged over twenty fresh seeds: Adam exact (",
+        "reason": "Replaced by the native render N15 (scripts/build_supplementary_figure_boolean_learning_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S15; no crop of this frozen render is used.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/boolean_morphology/HANDOFF.md",
+          "drafts/dendritic-local-learning/journal/source_data/boolean_morphology/METHODS.md",
+          "drafts/dendritic-local-learning/journal/source_data/boolean_morphology/README.md",
+          "drafts/dendritic-local-learning/journal/source_data/boolean_morphology/RESULTS.md"
+        ]
       },
       "B": {
-        "figure": "S15",
-        "panel": "B",
-        "path": "figures/supplementary/curated/boolean_learning.pdf"
+        "content": "Clean population normalized mean squared error (NMSE), averaged over twenty fresh seeds: Adam exact (",
+        "reason": "Replaced by the native render N15 (scripts/build_supplementary_figure_boolean_learning_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S15; no crop of this frozen render is used.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/boolean_morphology/HANDOFF.md",
+          "drafts/dendritic-local-learning/journal/source_data/boolean_morphology/METHODS.md",
+          "drafts/dendritic-local-learning/journal/source_data/boolean_morphology/README.md",
+          "drafts/dendritic-local-learning/journal/source_data/boolean_morphology/RESULTS.md"
+        ]
       },
       "C": {
-        "figure": "S15",
-        "panel": "C",
-        "path": "figures/supplementary/curated/boolean_learning.pdf"
+        "content": "Clean population normalized mean squared error (NMSE), averaged over twenty fresh seeds: Adam exact (",
+        "reason": "Replaced by the native render N15 (scripts/build_supplementary_figure_boolean_learning_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S15; no crop of this frozen render is used.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/boolean_morphology/HANDOFF.md",
+          "drafts/dendritic-local-learning/journal/source_data/boolean_morphology/METHODS.md",
+          "drafts/dendritic-local-learning/journal/source_data/boolean_morphology/README.md",
+          "drafts/dendritic-local-learning/journal/source_data/boolean_morphology/RESULTS.md"
+        ]
       },
       "D": {
-        "figure": "S15",
-        "panel": "D",
-        "path": "figures/supplementary/curated/boolean_learning.pdf"
+        "content": "Clean population normalized mean squared error (NMSE), averaged over twenty fresh seeds: Adam exact (",
+        "reason": "Replaced by the native render N15 (scripts/build_supplementary_figure_boolean_learning_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S15; no crop of this frozen render is used.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/boolean_morphology/HANDOFF.md",
+          "drafts/dendritic-local-learning/journal/source_data/boolean_morphology/METHODS.md",
+          "drafts/dendritic-local-learning/journal/source_data/boolean_morphology/README.md",
+          "drafts/dendritic-local-learning/journal/source_data/boolean_morphology/RESULTS.md"
+        ]
       },
       "E": {
-        "figure": "S15",
-        "panel": "E",
-        "path": "figures/supplementary/curated/boolean_learning.pdf"
+        "content": "Prespecified Adam XOR-of-AND contrasts: mean crossed-minus-aligned exact-credit error and aligned broadcast-minus-exact error. Dots, twenty paired seed differences; diamonds/whiskers, means and Bonferroni-adjusted 97.5\\% intervals (10,000 seed-bootstrap draws). Dotted lines: 0.01-NMSE mean-effect margin. Grouping passes both criteria; the positive credit difference is below the margin. Both compatible rules classify all sixteen patterns perfectly in every seed. The two axes have different ranges.",
+        "reason": "Replaced by the native render N15 (scripts/build_supplementary_figure_boolean_learning_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S15; no crop of this frozen render is used.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/boolean_morphology/HANDOFF.md",
+          "drafts/dendritic-local-learning/journal/source_data/boolean_morphology/METHODS.md",
+          "drafts/dendritic-local-learning/journal/source_data/boolean_morphology/README.md",
+          "drafts/dendritic-local-learning/journal/source_data/boolean_morphology/RESULTS.md"
+        ]
       },
       "F": {
-        "figure": "S15",
-        "panel": "F",
-        "path": "figures/supplementary/curated/boolean_learning.pdf"
+        "content": "Accuracy (gray) and balanced accuracy (green) versus NMSE for 112 condition means. Raw-output classification threshold: 0.5. Orange stars show the AND/OR constant-majority references: NMSE one, accuracy $15/16$ and balanced accuracy $1/2$.",
+        "reason": "Replaced by the native render N15 (scripts/build_supplementary_figure_boolean_learning_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S15; no crop of this frozen render is used.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/boolean_morphology/HANDOFF.md",
+          "drafts/dendritic-local-learning/journal/source_data/boolean_morphology/METHODS.md",
+          "drafts/dendritic-local-learning/journal/source_data/boolean_morphology/README.md",
+          "drafts/dendritic-local-learning/journal/source_data/boolean_morphology/RESULTS.md"
+        ]
       },
       "G": {
-        "figure": "S15",
-        "panel": "G",
-        "path": "figures/supplementary/curated/boolean_learning.pdf"
+        "content": "Same-rate credit contrasts on aligned XOR-of-AND trees, with descriptive 95\\% intervals; Adam and SGD axes have different ranges. The uncertain low-rate SGD result is retained.",
+        "reason": "Replaced by the native render N15 (scripts/build_supplementary_figure_boolean_learning_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S15; no crop of this frozen render is used.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/boolean_morphology/HANDOFF.md",
+          "drafts/dendritic-local-learning/journal/source_data/boolean_morphology/METHODS.md",
+          "drafts/dendritic-local-learning/journal/source_data/boolean_morphology/README.md",
+          "drafts/dendritic-local-learning/journal/source_data/boolean_morphology/RESULTS.md"
+        ]
       },
       "H": {
-        "figure": "S15",
-        "panel": "H",
-        "path": "figures/supplementary/curated/boolean_learning.pdf"
+        "content": "Broadcast gradient cosine on the aligned balanced tree for XOR-of-AND (green) and parity (purple), with solid Adam and dashed SGD curves, evaluated on all sixteen clean patterns at each learner's own state, before clipping or optimizer transformation. Bands are pointwise 95\\% seed-bootstrap intervals. The large parity credit effect is descriptive. All rates, 6,720 fresh fits and 53,760 checkpoints are retained; statistical scopes were fixed before training.",
+        "reason": "Replaced by the native render N15 (scripts/build_supplementary_figure_boolean_learning_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S15; no crop of this frozen render is used.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/boolean_morphology/HANDOFF.md",
+          "drafts/dendritic-local-learning/journal/source_data/boolean_morphology/METHODS.md",
+          "drafts/dendritic-local-learning/journal/source_data/boolean_morphology/README.md",
+          "drafts/dendritic-local-learning/journal/source_data/boolean_morphology/RESULTS.md"
+        ]
       }
-    },
-    "omitted_panel_status": {}
+    }
   },
   "S45": {
     "old_label": "fig:supp_image_diagnostics",
@@ -2224,6 +2324,133 @@
         "numbers_at": "source_data/credit_first_figures/"
       }
     }
+  },
+  "N14": {
+    "old_label": "fig:si_boolean_capacity",
+    "original_asset": "figures/supplementary/figure_boolean_capacity_native.pdf",
+    "original_sha256": "693e3361c1c217bdb9dd5c8984afebbf302fea694ee6d5884171e278953784ee",
+    "primary_destination": "S14",
+    "panels": {
+      "A": {
+        "figure": "S14",
+        "panel": "A",
+        "path": "figures/supplementary/curated/boolean_capacity.pdf"
+      },
+      "B": {
+        "figure": "S14",
+        "panel": "B",
+        "path": "figures/supplementary/curated/boolean_capacity.pdf"
+      },
+      "C": {
+        "figure": "S14",
+        "panel": "C",
+        "path": "figures/supplementary/curated/boolean_capacity.pdf"
+      },
+      "D": {
+        "figure": "S14",
+        "panel": "D",
+        "path": "figures/supplementary/curated/boolean_capacity.pdf"
+      },
+      "E": {
+        "figure": "S14",
+        "panel": "E",
+        "path": "figures/supplementary/curated/boolean_capacity.pdf"
+      },
+      "F": {
+        "figure": "S14",
+        "panel": "F",
+        "path": "figures/supplementary/curated/boolean_capacity.pdf"
+      }
+    },
+    "omitted_panel_status": {}
+  },
+  "N15": {
+    "old_label": "fig:si_boolean_learning",
+    "original_asset": "figures/supplementary/figure_boolean_learning_native.pdf",
+    "original_sha256": "8a234b9ccab1a368d66d7df583b517a74a9a1594203730f7b63e17609514dccd",
+    "primary_destination": "S15",
+    "panels": {
+      "A": {
+        "figure": "S15",
+        "panel": "A",
+        "path": "figures/supplementary/curated/boolean_learning.pdf"
+      },
+      "B": {
+        "figure": "S15",
+        "panel": "B",
+        "path": "figures/supplementary/curated/boolean_learning.pdf"
+      },
+      "C": {
+        "figure": "S15",
+        "panel": "C",
+        "path": "figures/supplementary/curated/boolean_learning.pdf"
+      },
+      "D": {
+        "figure": "S15",
+        "panel": "D",
+        "path": "figures/supplementary/curated/boolean_learning.pdf"
+      },
+      "E": {
+        "figure": "S15",
+        "panel": "E",
+        "path": "figures/supplementary/curated/boolean_learning.pdf"
+      },
+      "F": {
+        "figure": "S15",
+        "panel": "F",
+        "path": "figures/supplementary/curated/boolean_learning.pdf"
+      },
+      "G": {
+        "figure": "S15",
+        "panel": "G",
+        "path": "figures/supplementary/curated/boolean_learning.pdf"
+      },
+      "H": {
+        "figure": "S15",
+        "panel": "H",
+        "path": "figures/supplementary/curated/boolean_learning.pdf"
+      }
+    },
+    "omitted_panel_status": {}
+  },
+  "N18": {
+    "old_label": "fig:si_conductance_grouping",
+    "original_asset": "figures/supplementary/figure_conductance_grouping_native.pdf",
+    "original_sha256": "5b12f26e4f81dde27fe8645f7c474de8a6039ae673a9d6d51536edee7b447914",
+    "primary_destination": "S18",
+    "panels": {
+      "A": {
+        "figure": "S18",
+        "panel": "A",
+        "path": "figures/supplementary/curated/conductance_grouping.pdf"
+      },
+      "B": {
+        "figure": "S18",
+        "panel": "B",
+        "path": "figures/supplementary/curated/conductance_grouping.pdf"
+      },
+      "C": {
+        "figure": "S18",
+        "panel": "C",
+        "path": "figures/supplementary/curated/conductance_grouping.pdf"
+      },
+      "D": {
+        "figure": "S18",
+        "panel": "D",
+        "path": "figures/supplementary/curated/conductance_grouping.pdf"
+      },
+      "E": {
+        "figure": "S18",
+        "panel": "E",
+        "path": "figures/supplementary/curated/conductance_grouping.pdf"
+      },
+      "F": {
+        "figure": "S18",
+        "panel": "F",
+        "path": "figures/supplementary/curated/conductance_grouping.pdf"
+      }
+    },
+    "omitted_panel_status": {}
   },
   "X1": {
     "old_label": "fig:si_checkpoint_merged_panel",

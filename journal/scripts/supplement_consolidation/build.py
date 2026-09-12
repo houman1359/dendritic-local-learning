@@ -273,7 +273,11 @@ def main():
              'S6':('note:conflict_ancestry','Static quadratic interference remains in the derivation; the original numerical illustration is archived.'),
              'S16':('note:interior_optimum','Designed and retrospective optimum comparisons remain numerically in the operator-theory note; the full diagnostic is archived.'),
              'S26':('tab:physical_reproducibility','Same-seed rerun outcomes and outliers remain in the physical-depth reproducibility table.'),
-             'S48':('fig:focal','The normalized-dose comparison is promoted to main Fig. 8D and is not duplicated in the supplement.')}.get(key)
+             'S48':('fig:focal','The normalized-dose comparison is promoted to main Fig. 8D and is not duplicated in the supplement.'),
+             # 2026-09-12: frozen sheets replaced by native renders (N14, N15, N18) pasted whole; kept in the registry for provenance.
+             'S43':('fig:si_boolean_capacity','Replaced by the native render N14, drawn from the same source tables and pasted whole as Supplementary Fig. S14.'),
+             'S44':('fig:si_boolean_learning','Replaced by the native render N15, drawn from the same source tables and pasted whole as Supplementary Fig. S15.'),
+             'S42':('fig:si_conductance_grouping','Replaced by the native render N18, drawn from the same source tables and pasted whole as Supplementary Fig. S18.')}.get(key)
    if not fallback:raise ValueError('No destination: '+key)
    mapping[key]=[{'kind':'table' if key in ['S26'] else 'section','label':fallback[0],'note':fallback[1]}]
  manifest={'schema':'supplement-consolidation/1','selection_is_editorial':True,'numerical_results_changed':False,'builder':'scripts/supplement_consolidation/build.py','specification':'scripts/supplement_consolidation/specification.py','source_registry':'scripts/supplement_consolidation/original_assets.json','frozen_input_hashes':{str(p.relative_to(J)):sha(p) for p in [HERE/'original_assets.json',HERE/'original_captions.json',HERE/'original_provenance.json']},'paste_scale_target':PASTE_SCALE,'height_cap_pt':HEIGHT_CAP,'assets':assets,'old_to_new':mapping}

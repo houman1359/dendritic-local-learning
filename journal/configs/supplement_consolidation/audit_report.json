@@ -256,36 +256,19 @@
     },
     "boolean_capacity": {
       "figure": "S14",
-      "violations": 22,
+      "violations": 1,
       "by_kind": {
-        "font-family": 10,
-        "text-floor": 1,
-        "text-size": 2,
-        "stroke-width": 4,
-        "role-colour": 3,
-        "fill-width": 1,
         "manifest-missing": 1
       },
-      "text_floor_examples": [
-        "6.80 pt is below the 7.0 pt floor (98 spans, e.g. 'minimum depth 2')"
-      ]
+      "text_floor_examples": []
     },
     "boolean_learning": {
       "figure": "S15",
-      "violations": 14,
+      "violations": 1,
       "by_kind": {
-        "canvas-aspect": 1,
-        "font-family": 3,
-        "text-floor": 2,
-        "text-size": 1,
-        "stroke-width": 3,
-        "role-colour": 3,
         "manifest-missing": 1
       },
-      "text_floor_examples": [
-        "4.76 pt is below the 7.0 pt floor (10 spans, e.g. '\u22124')",
-        "6.80 pt is below the 7.0 pt floor (97 spans, e.g. 'broadcast \u2212 exact NMSE')"
-      ]
+      "text_floor_examples": []
     },
     "fixed_profile_budget": {
       "figure": "S16",
@@ -312,19 +295,11 @@
     },
     "conductance_grouping": {
       "figure": "S18",
-      "violations": 14,
+      "violations": 1,
       "by_kind": {
-        "font-family": 5,
-        "text-floor": 2,
-        "text-size": 2,
-        "stroke-width": 3,
-        "fill-width": 1,
         "manifest-missing": 1
       },
-      "text_floor_examples": [
-        "4.76 pt is below the 7.0 pt floor (8 spans, e.g. '\u22124')",
-        "6.80 pt is below the 7.0 pt floor (46 spans, e.g. 'fixed calibrated broadcast')"
-      ]
+      "text_floor_examples": []
     },
     "conductance_precision": {
       "figure": "S19",

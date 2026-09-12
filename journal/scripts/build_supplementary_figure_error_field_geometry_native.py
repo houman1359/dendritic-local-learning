@@ -330,10 +330,10 @@ def panel_path_specific_energy(ax, disp):
 # The canvas audit admits only a 1.05-1.55 page aspect, so the three ladders
 # share a 2 x 2 module grid: A and B on the top row, C and the sheet's key
 # (with the cohort statement) on the bottom row.
-CANVAS_H_PT = 352.0
+CANVAS_H_PT = 364.0
 HGUTTER_PT = 30.0
-VGUTTER_PT = 40.0
-MARGINS = Margins(left=44.0, right=8.0, top=18.0, bottom=38.0)
+VGUTTER_PT = 54.0
+MARGINS = Margins(left=44.0, right=8.0, top=21.0, bottom=38.0)
 
 
 def build(path: Path = OUT):
