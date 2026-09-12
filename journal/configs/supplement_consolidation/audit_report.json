@@ -13,7 +13,7 @@
     "input_coverage_depth": 1.0,
     "branch_conflict_controls": 1.0,
     "ancestry_coefficients": 1.0,
-    "scalar_tree_capacity": 0.8442,
+    "scalar_tree_capacity": 1.0,
     "oracle_profile_credit": 1.0,
     "boolean_capacity": 1.0,
     "boolean_learning": 1.0,
@@ -21,7 +21,7 @@
     "credit_optimizer_controls": 1.0,
     "conductance_grouping": 1.0,
     "conductance_precision": 1.0,
-    "conductance_optimization": 0.8272,
+    "conductance_optimization": 1.0,
     "local_gate_controls": 1.0,
     "physical_architecture": 0.7809,
     "physical_calibration": 1.0,
@@ -36,32 +36,15 @@
     "measured_predictor_controls": 1.0,
     "animal_credit_reanalysis": 1.0,
     "original_selector": 1.0,
-    "finite_horizon": 0.8932,
+    "finite_horizon": 1.0,
     "morphology_estimation": 1.0
   },
   "below_target_scale": {
-    "scalar_tree_capacity": 0.8442,
-    "conductance_optimization": 0.8272,
     "physical_architecture": 0.7809,
     "shunt_sensitivity": 0.9119,
-    "measured_transfer_geometry": 0.9658,
-    "finite_horizon": 0.8932
+    "measured_transfer_geometry": 0.9658
   },
   "scale_exemptions": {
-    "scalar_tree_capacity": {
-      "figure": "S12",
-      "native_order": "legacy port",
-      "builder": "scripts/build_morphology_followup_figures.py",
-      "reason": "Six frozen panels plus the Q6 legend strip need 573.7 pt of panel band at 1.0; the widest row (old S36A,B,D) is 606.1 pt against 498.4 pt of usable width. The R6/R8 restorations are cleaner re-rendered than cropped.",
-      "paste_scale": 0.8442
-    },
-    "conductance_optimization": {
-      "figure": "S20",
-      "native_order": "N4",
-      "builder": "scripts/conductance_credit_demand/build_supplementary.py + scripts/conductance_credit_demand/report_expanded_rates.py",
-      "reason": "Five panels of about 196 pt each need three rows: 587.1 pt of panel band at 1.0 against 471 pt available under the cap. Both sources are native.",
-      "paste_scale": 0.8272
-    },
     "physical_architecture": {
       "figure": "S22",
       "native_order": "N6 (mandatory, SI_NUMBERING S22 height note)",
@@ -82,13 +65,6 @@
       "builder": "scripts/build_journal_figures.py + scripts/credit_first_figures/build_measured.py + scripts/measured_alignment_power/report.py",
       "reason": "Closest to target: 562.8 pt at 1.0, 22.8 pt over the cap, because old S56C is a 496.4 pt full-width panel that must hold its own row. All three sources are native.",
       "paste_scale": 0.9658
-    },
-    "finite_horizon": {
-      "figure": "S35",
-      "native_order": "legacy port",
-      "builder": "scripts/build_morphology_followup_figures.py",
-      "reason": "Q4 fallback puts R10, R11 and R13 on this sheet; three rows of tall dot plots need 546.2 pt of panel band at 1.0. This is also the port that would make the DECISIONS Q4 merge feasible.",
-      "paste_scale": 0.8932
     }
   },
   "cleared_scale_exemptions": [],
@@ -159,37 +135,19 @@
     },
     "mnist_dictionary_geometry": {
       "figure": "S7",
-      "violations": 14,
+      "violations": 1,
       "by_kind": {
-        "font-family": 3,
-        "text-floor": 1,
-        "text-size": 3,
-        "stroke-width": 5,
-        "area-stroke": 1,
         "manifest-missing": 1
       },
-      "text_floor_examples": [
-        "6.80 pt is below the 7.0 pt floor (6 spans, e.g. 'Original common rate')"
-      ]
+      "text_floor_examples": []
     },
     "error_field_geometry": {
       "figure": "S8",
-      "violations": 16,
+      "violations": 1,
       "by_kind": {
-        "canvas-aspect": 1,
-        "font-family": 3,
-        "text-floor": 1,
-        "text-size": 3,
-        "text-collision": 2,
-        "stroke-width": 1,
-        "area-stroke": 1,
-        "role-colour": 2,
-        "fill-width": 1,
         "manifest-missing": 1
       },
-      "text_floor_examples": [
-        "6.80 pt is below the 7.0 pt floor (6 spans, e.g. 'matched-width')"
-      ]
+      "text_floor_examples": []
     },
     "input_coverage_depth": {
       "figure": "S9",
@@ -225,34 +183,19 @@
     },
     "scalar_tree_capacity": {
       "figure": "S12",
-      "violations": 23,
+      "violations": 1,
       "by_kind": {
-        "font-family": 12,
-        "text-floor": 4,
-        "text-size": 2,
-        "stroke-width": 4,
         "manifest-missing": 1
       },
-      "text_floor_examples": [
-        "4.02 pt is below the 7.0 pt floor (16 spans, e.g. '1')",
-        "4.96 pt is below the 7.0 pt floor (22 spans, e.g. ') \u2208')"
-      ]
+      "text_floor_examples": []
     },
     "oracle_profile_credit": {
       "figure": "S13",
-      "violations": 14,
+      "violations": 1,
       "by_kind": {
-        "canvas-aspect": 1,
-        "font-family": 4,
-        "text-floor": 1,
-        "text-size": 2,
-        "stroke-width": 4,
-        "fill-width": 1,
         "manifest-missing": 1
       },
-      "text_floor_examples": [
-        "6.80 pt is below the 7.0 pt floor (50 spans, e.g. 'two shuffled profiles')"
-      ]
+      "text_floor_examples": []
     },
     "boolean_capacity": {
       "figure": "S14",
@@ -272,23 +215,16 @@
     },
     "fixed_profile_budget": {
       "figure": "S16",
-      "violations": 9,
+      "violations": 1,
       "by_kind": {
-        "canvas-aspect": 1,
-        "font-family": 2,
-        "text-size": 4,
-        "stroke-width": 1,
         "manifest-missing": 1
       },
       "text_floor_examples": []
     },
     "credit_optimizer_controls": {
       "figure": "S17",
-      "violations": 7,
+      "violations": 1,
       "by_kind": {
-        "font-family": 1,
-        "text-size": 4,
-        "stroke-width": 1,
         "manifest-missing": 1
       },
       "text_floor_examples": []
@@ -303,45 +239,27 @@
     },
     "conductance_precision": {
       "figure": "S19",
-      "violations": 9,
+      "violations": 1,
       "by_kind": {
-        "font-family": 3,
-        "text-size": 4,
-        "stroke-width": 1,
         "manifest-missing": 1
       },
       "text_floor_examples": []
     },
     "conductance_optimization": {
       "figure": "S20",
-      "violations": 16,
+      "violations": 1,
       "by_kind": {
-        "canvas-aspect": 1,
-        "font-family": 3,
-        "text-floor": 5,
-        "text-size": 1,
-        "stroke-width": 4,
-        "fill-width": 1,
         "manifest-missing": 1
       },
-      "text_floor_examples": [
-        "4.40 pt is below the 7.0 pt floor (6 spans, e.g. '\u22125')",
-        "5.79 pt is below the 7.0 pt floor (3 spans, e.g. '16,384-update budget')"
-      ]
+      "text_floor_examples": []
     },
     "local_gate_controls": {
       "figure": "S21",
-      "violations": 9,
+      "violations": 1,
       "by_kind": {
-        "font-family": 2,
-        "text-floor": 1,
-        "text-size": 4,
-        "stroke-width": 1,
         "manifest-missing": 1
       },
-      "text_floor_examples": [
-        "6.80 pt is below the 7.0 pt floor (126 spans, e.g. 'Two leaf patterns + unit proximal')"
-      ]
+      "text_floor_examples": []
     },
     "physical_architecture": {
       "figure": "S22",
@@ -491,36 +409,19 @@
     },
     "finite_horizon": {
       "figure": "S35",
-      "violations": 102,
+      "violations": 1,
       "by_kind": {
-        "canvas-aspect": 1,
-        "font-family": 3,
-        "text-floor": 4,
-        "text-size": 3,
-        "stroke-width": 5,
-        "role-colour": 84,
-        "fill-width": 1,
         "manifest-missing": 1
       },
-      "text_floor_examples": [
-        "4.25 pt is below the 7.0 pt floor (7 spans, e.g. '\u22123')",
-        "5.25 pt is below the 7.0 pt floor (1 spans, e.g. '\u22123')"
-      ]
+      "text_floor_examples": []
     },
     "morphology_estimation": {
       "figure": "S36",
-      "violations": 10,
+      "violations": 1,
       "by_kind": {
-        "font-family": 2,
-        "text-floor": 2,
-        "text-size": 3,
-        "stroke-width": 2,
         "manifest-missing": 1
       },
-      "text_floor_examples": [
-        "4.76 pt is below the 7.0 pt floor (4 spans, e.g. '\u22123')",
-        "6.80 pt is below the 7.0 pt floor (73 spans, e.g. 'Estimate interactions OR fit twelve pilo')"
-      ]
+      "text_floor_examples": []
     }
   }
 }

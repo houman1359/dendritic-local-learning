@@ -1419,28 +1419,42 @@
     "old_label": "fig:supp_interaction_structure",
     "original_asset": "figures/supplementary/figure_S36_panels_A-D.pdf",
     "original_sha256": "b57518a96bde1b8562fd237beb415d24be4682bd0b2b87ce74083f6fa930be8b",
-    "primary_destination": "S12",
-    "panels": {
+    "primary_destination": "fig:si_scalar_tree_capacity",
+    "panels": {},
+    "omitted_panel_status": {
       "A": {
-        "figure": "S12",
-        "panel": "A",
-        "path": "figures/supplementary/curated/scalar_tree_capacity.pdf"
+        "content": "All 105 perfect matchings and 35 four-plus-four partitions of eight independent inputs \\(x_i\\in\\{-1,1\\}\\), with target \\(f\\) and common input-gradient second moment \\(I_8/4\\). This moment is not a model's changing parameter-gradient covariance. Every tree has one named input per leaf, seven scalar multi-affine nodes, 28 coefficients and fourteen edges, with only the root read out.",
+        "reason": "Replaced by the native render N12 (scripts/build_supplementary_figure_scalar_tree_capacity_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S12; no crop of this frozen render is used.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/morphology_structure/all_trajectories.csv",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_structure/audit_assignment_summary.csv",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_structure/audit_matched_assignment_shape_contrasts.csv",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_structure/audit_matched_shape_summary.csv"
+        ]
       },
       "B": {
-        "figure": "S12",
-        "panel": "B",
-        "path": "figures/supplementary/curated/scalar_tree_capacity.pdf"
+        "content": "Maximum cut-tail bounds from the full rank-two matrix (left) and centered rank-one matrix (right), versus the smallest achieved population normalized mean squared error (NMSE) over four alternating-least-squares (ALS) restarts. Points aggregate coincident task--candidate cases; size indicates multiplicity. Dashed lines show equality.",
+        "reason": "Replaced by the native render N12 (scripts/build_supplementary_figure_scalar_tree_capacity_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S12; no crop of this frozen render is used.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/morphology_structure/all_trajectories.csv",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_structure/audit_assignment_summary.csv",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_structure/audit_matched_assignment_shape_contrasts.csv",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_structure/audit_matched_shape_summary.csv"
+        ]
       },
-      "D": {
-        "figure": "S12",
-        "panel": "C",
-        "path": "figures/supplementary/curated/scalar_tree_capacity.pdf"
-      }
-    },
-    "omitted_panel_status": {
       "C": {
         "content": "Family means across the same four leaf assignments for each shape. White diamonds mark mean centered-cut bounds.",
-        "reason": "Omitted from the curated supplement; the measurement is retained in Source Data and in the section that cites it.",
+        "reason": "Replaced by the native render N12 (scripts/build_supplementary_figure_scalar_tree_capacity_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S12; no crop of this frozen render is used.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/morphology_structure/all_trajectories.csv",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_structure/audit_assignment_summary.csv",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_structure/audit_matched_assignment_shape_contrasts.csv",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_structure/audit_matched_shape_summary.csv"
+        ]
+      },
+      "D": {
+        "content": "Mean excess NMSE above the best fitted candidate in the fixed pool of twelve. Score ties use tolerance $10^{-10}$ and lexicographic candidate ID. The sum of tails is a heuristic, and the two-sweep pilot already fits each candidate. Best-fixed selection uses family outcomes in hindsight; random expectation averages uniformly over candidates. All 140 targets, twelve candidates, four restarts and 32-sweep fits are retained. The task sets are exhaustive finite families, so no sampling confidence intervals are drawn. A positive fit-to-bound gap may reflect optimization error, bound looseness or both. The bound and exact representation theorem apply specifically to nodes affine in each child.",
+        "reason": "Replaced by the native render N12 (scripts/build_supplementary_figure_scalar_tree_capacity_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S12; no crop of this frozen render is used.",
         "numbers_at": [
           "drafts/dendritic-local-learning/journal/source_data/morphology_structure/all_trajectories.csv",
           "drafts/dendritic-local-learning/journal/source_data/morphology_structure/audit_assignment_summary.csv",
@@ -1454,28 +1468,42 @@
     "old_label": "fig:supp_constructive_morphology",
     "original_asset": "figures/supplementary/figure_S37_panels_A-D.pdf",
     "original_sha256": "aa549c15b751e2101fab18eeea85fc275c23d629860c52d495c3de7b9f8907dd",
-    "primary_destination": "S12",
-    "panels": {
+    "primary_destination": "fig:si_scalar_tree_capacity",
+    "panels": {},
+    "omitted_panel_status": {
       "A": {
-        "figure": "S12",
-        "panel": "D",
-        "path": "figures/supplementary/curated/scalar_tree_capacity.pdf"
+        "content": "Actual trees returned for the first enumerated matching and first seeded nested-prefix control, selected by enumeration order. Leaves access the indicated input only; internal nodes implement Eq.~\\ref{eq:s_multiaffine_node}.",
+        "reason": "Replaced by the native render N12 (scripts/build_supplementary_figure_scalar_tree_capacity_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S12; no crop of this frozen render is used.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/morphology_structure/constructive/adaptive_constructions.csv",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_structure/constructive/constructed_trees.json",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_structure/constructive/freeze.json",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_structure/constructive/prefix_candidate_fits.csv"
+        ]
       },
       "B": {
-        "figure": "S12",
-        "panel": "E",
-        "path": "figures/supplementary/curated/scalar_tree_capacity.pdf"
+        "content": "Actual trees returned for the first enumerated matching and first seeded nested-prefix control, selected by enumeration order. Leaves access the indicated input only; internal nodes implement Eq.~\\ref{eq:s_multiaffine_node}.",
+        "reason": "Replaced by the native render N12 (scripts/build_supplementary_figure_scalar_tree_capacity_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S12; no crop of this frozen render is used.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/morphology_structure/constructive/adaptive_constructions.csv",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_structure/constructive/constructed_trees.json",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_structure/constructive/freeze.json",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_structure/constructive/prefix_candidate_fits.csv"
+        ]
       },
       "C": {
-        "figure": "S12",
-        "panel": "F",
-        "path": "figures/supplementary/curated/scalar_tree_capacity.pdf"
-      }
-    },
-    "omitted_panel_status": {
+        "content": "Minimum possible maximum centered-cut bound over all labeled binary trees at each depth limit, calculated separately for every target. Curves coincide within family. Every depth-three tree incurs normalized mean squared error (NMSE) at least 0.146446609407 on each nested control; a zero-bound tree exists at depth four. Both primary families admit zero-bound trees at depth three. Proposition~\\ref{prop:s_centered_tree_iff} establishes the equivalence between zero centered tails and exact representation in this class.",
+        "reason": "Replaced by the native render N12 (scripts/build_supplementary_figure_scalar_tree_capacity_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S12; no crop of this frozen render is used.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/morphology_structure/constructive/adaptive_constructions.csv",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_structure/constructive/constructed_trees.json",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_structure/constructive/freeze.json",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_structure/constructive/prefix_candidate_fits.csv"
+        ]
+      },
       "D": {
         "content": "Counts, minimum exact depths, reconstruction error and coefficient magnitude of the 105 matching, 35 quartic and 24 nested targets.",
-        "reason": "Registered as the shared legend strip of S12 (DECISIONS Q6): the three-family key is printed below the panels and its prose is in the caption.",
+        "reason": "No longer pasted (it was the DECISIONS Q6 legend strip of S12 until 2026-09-12): the native render N12 fixes the three-family key in its panel A and the target counts are in the S12 caption.",
         "numbers_at": "source_data/morphology_structure/"
       }
     }
@@ -1484,49 +1512,78 @@
     "old_label": "fig:supp_finite_horizon_selection",
     "original_asset": "figures/supplementary/figure_S38_panels_A-D.pdf",
     "original_sha256": "1e397b124d3cf87ab817cc3f49e090807307caa2abc685f23b53a3fd6df4bff2",
-    "primary_destination": "S35",
-    "panels": {
+    "primary_destination": "fig:si_finite_horizon",
+    "panels": {},
+    "omitted_panel_status": {
       "A": {
-        "figure": "S35",
-        "panel": "A",
-        "path": "figures/supplementary/curated/finite_horizon.pdf"
+        "content": "Final costed-test-loss regret for the feedback-only and joint-transfer fixed-cache learners, respectively; regret is excess above the best trained candidate. All candidate outcomes are retained; generating-rank and population-oracle policies receive explicitly privileged information. The primary forecast estimates its model from independent calibration observations. The observed-context-count baseline and its conditioning variant were added after development inspection and separately frozen before fresh outcomes.",
+        "reason": "Replaced by the native render N35 (scripts/build_supplementary_figure_finite_horizon_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S35; no crop of this frozen render is used.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/morphology_finite_horizon/DERIVATION.md",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_finite_horizon/README.md",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_finite_horizon/REPORT.md",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_finite_horizon/dependency_versions.json"
+        ]
       },
       "B": {
-        "figure": "S35",
-        "panel": "B",
-        "path": "figures/supplementary/curated/finite_horizon.pdf"
+        "content": "Final costed-test-loss regret for the feedback-only and joint-transfer fixed-cache learners, respectively; regret is excess above the best trained candidate. All candidate outcomes are retained; generating-rank and population-oracle policies receive explicitly privileged information. The primary forecast estimates its model from independent calibration observations. The observed-context-count baseline and its conditioning variant were added after development inspection and separately frozen before fresh outcomes.",
+        "reason": "Replaced by the native render N35 (scripts/build_supplementary_figure_finite_horizon_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S35; no crop of this frozen render is used.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/morphology_finite_horizon/DERIVATION.md",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_finite_horizon/README.md",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_finite_horizon/REPORT.md",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_finite_horizon/dependency_versions.json"
+        ]
       },
       "C": {
-        "figure": "S35",
-        "panel": "C",
-        "path": "figures/supplementary/curated/finite_horizon.pdf"
+        "content": "Differences among strong selectors at each rank in the joint arm. The full-batch and count-only baselines remain competitive. Curves and whiskers in",
+        "reason": "Replaced by the native render N35 (scripts/build_supplementary_figure_finite_horizon_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S35; no crop of this frozen render is used.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/morphology_finite_horizon/DERIVATION.md",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_finite_horizon/README.md",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_finite_horizon/REPORT.md",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_finite_horizon/dependency_versions.json"
+        ]
       },
       "D": {
-        "figure": "S35",
-        "panel": "D",
-        "path": "figures/supplementary/curated/finite_horizon.pdf"
+        "content": "Median measured elapsed time on one CPU per twenty-candidate decision. Plug-in timings include calibration-model preparation; count-only time excludes shared calibration generation; the pilot includes sixteen candidate updates and calibration evaluation. Times measure these implementations, not hardware-independent algorithmic complexity. All finite-horizon methods choose feedback budget $K=r$, the generating task rank, on all fixed-cache tasks. The large improvement over the original scalar score therefore does not establish a large practical advantage for fine morphology selection in this linear family.",
+        "reason": "Replaced by the native render N35 (scripts/build_supplementary_figure_finite_horizon_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S35; no crop of this frozen render is used.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/morphology_finite_horizon/DERIVATION.md",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_finite_horizon/README.md",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_finite_horizon/REPORT.md",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_finite_horizon/dependency_versions.json"
+        ]
       }
-    },
-    "omitted_panel_status": {}
+    }
   },
   "S39": {
     "old_label": "fig:supp_finite_horizon_prediction",
     "original_asset": "figures/supplementary/figure_S39_panels_A-F.pdf",
     "original_sha256": "9d725299a84e3da21a44ef2cd09a63d1d8f6d93575ac867140d3301a90cb2bc7",
-    "primary_destination": "S35",
-    "panels": {
+    "primary_destination": "fig:si_finite_horizon",
+    "panels": {},
+    "omitted_panel_status": {
       "A": {
-        "figure": "S35",
-        "panel": "E",
-        "path": "figures/supplementary/curated/finite_horizon.pdf"
+        "content": "Original scalar forecasts versus final test half-mean-squared-error (MSE) in the feedback-only and joint arms of the new fixed-cache cohort.",
+        "reason": "Replaced by the native render N35 (scripts/build_supplementary_figure_finite_horizon_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S35; no crop of this frozen render is used.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/morphology_finite_horizon/runs/development/seed_6100_audit.json",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_finite_horizon/runs/development/seed_6100_outcomes.csv",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_finite_horizon/runs/development/seed_6100_pilot.csv",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_finite_horizon/runs/development/seed_6100_predictions.csv"
+        ]
       },
       "C": {
-        "figure": "S35",
-        "panel": "F",
-        "path": "figures/supplementary/curated/finite_horizon.pdf"
-      }
-    },
-    "omitted_panel_status": {
+        "content": "The calibration-derived Gaussian stochastic-gradient-descent (SGD) forecast on the same 6,400 candidate--task cases per arm. Hexagons encode counts on a common logarithmic color scale; dashed lines mark equality.",
+        "reason": "Replaced by the native render N35 (scripts/build_supplementary_figure_finite_horizon_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S35; no crop of this frozen render is used.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/morphology_finite_horizon/runs/development/seed_6100_audit.json",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_finite_horizon/runs/development/seed_6100_outcomes.csv",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_finite_horizon/runs/development/seed_6100_pilot.csv",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_finite_horizon/runs/development/seed_6100_predictions.csv"
+        ]
+      },
       "E": {
         "content": "Population-oracle predicted minus exact population loss under fresh examples, at label-noise SD 0.75 and update 256.",
         "reason": "Not printed; the forecast-bias result is stated in the caption of S35 and retained in Source Data.",
@@ -1544,7 +1601,7 @@
       },
       "F": {
         "content": "Population-oracle predicted minus exact population loss under reused finite-cache minibatches.",
-        "reason": "Not printed as a panel: SI_NUMBERING keeps it as an inset of S35F, which is not constructible from a crop at paste scale 1.0; the result is stated in the S35 caption and retained in Source Data.",
+        "reason": "Not printed as a panel: the native render N35 draws S35F without the SI_NUMBERING inset; the result is stated in the S35 caption and retained in Source Data.",
         "numbers_at": "source_data/morphology_finite_horizon/"
       }
     }
@@ -1553,89 +1610,154 @@
     "old_label": "fig:supp_morphology_credit",
     "original_asset": "figures/supplementary/figure_S40_panels_A-F.pdf",
     "original_sha256": "fff876119351940631a1b3449759172daec8e9e24cdea0906836ab44c802fd65",
-    "primary_destination": "S13",
-    "panels": {
+    "primary_destination": "fig:si_oracle_profile_credit",
+    "panels": {},
+    "omitted_panel_status": {
       "A": {
-        "figure": "S13",
-        "panel": "A",
-        "path": "figures/supplementary/curated/oracle_profile_credit.pdf"
+        "content": "Final test normalized mean squared error (NMSE) on oracle-compatible trees under Adam and stochastic gradient descent (SGD), respectively. Exact path, root broadcast, one oracle profile, two subtree profiles and two shuffled profiles share the forward model, initialization, examples and minibatches. Dotted segments mark known label-noise floors: 0.0225 for matching/nested tasks and 0.045 for quartic tasks. Projection coefficients access the exact current path field and are oracle diagnostics; root broadcast supplies the same scalar error to each internal node.",
+        "reason": "Replaced by the native render N13 (scripts/build_supplementary_figure_oracle_profile_credit_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S13; no crop of this frozen render is used.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/morphology_credit/README.md",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_credit/development_fit.json",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_credit/figure_condition_summary.csv",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_credit/figure_gradient_summary.csv"
+        ]
       },
       "B": {
-        "figure": "S13",
-        "panel": "B",
-        "path": "figures/supplementary/curated/oracle_profile_credit.pdf"
+        "content": "Final test normalized mean squared error (NMSE) on oracle-compatible trees under Adam and stochastic gradient descent (SGD), respectively. Exact path, root broadcast, one oracle profile, two subtree profiles and two shuffled profiles share the forward model, initialization, examples and minibatches. Dotted segments mark known label-noise floors: 0.0225 for matching/nested tasks and 0.045 for quartic tasks. Projection coefficients access the exact current path field and are oracle diagnostics; root broadcast supplies the same scalar error to each internal node.",
+        "reason": "Replaced by the native render N13 (scripts/build_supplementary_figure_oracle_profile_credit_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S13; no crop of this frozen render is used.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/morphology_credit/README.md",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_credit/development_fit.json",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_credit/figure_condition_summary.csv",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_credit/figure_gradient_summary.csv"
+        ]
       },
       "C": {
-        "figure": "S13",
-        "panel": "C",
-        "path": "figures/supplementary/curated/oracle_profile_credit.pdf"
+        "content": "Paired exact-credit NMSE increase after shuffling leaf input assignments at fixed tree shape and parameter count.",
+        "reason": "Replaced by panel C of the native render N13, drawn from the same paired-contrast table and printed as S13C; the Adam strips are reproduced at the main-text type scale as Fig. 4H.",
+        "numbers_at": "source_data/morphology_credit/"
       },
       "D": {
-        "figure": "S13",
-        "panel": "D",
-        "path": "figures/supplementary/curated/oracle_profile_credit.pdf"
+        "content": "Adam gradient cosine between the exact and delivered aggregate clean-population updates, evaluated at each rule's own trained state. Each seed averages the three task families before aggregation; these are not comparisons at a common model state or mean per-example cosines. Points and whiskers in",
+        "reason": "Replaced by the native render N13 (scripts/build_supplementary_figure_oracle_profile_credit_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S13; no crop of this frozen render is used.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/morphology_credit/README.md",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_credit/development_fit.json",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_credit/figure_condition_summary.csv",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_credit/figure_gradient_summary.csv"
+        ]
       },
       "E": {
-        "figure": "S13",
-        "panel": "E",
-        "path": "figures/supplementary/curated/oracle_profile_credit.pdf"
+        "content": "Final NMSE at all three learning rates, averaged over both compatible and shuffled assignments and all three families. Stars mark rates selected separately for each rule and optimizer using only development seeds. These means therefore differ from compatible-only panels",
+        "reason": "Replaced by the native render N13 (scripts/build_supplementary_figure_oracle_profile_credit_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S13; no crop of this frozen render is used.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/morphology_credit/README.md",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_credit/development_fit.json",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_credit/figure_condition_summary.csv",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_credit/figure_gradient_summary.csv"
+        ]
       },
       "F": {
-        "figure": "S13",
-        "panel": "F",
-        "path": "figures/supplementary/curated/oracle_profile_credit.pdf"
+        "content": "Final NMSE at all three learning rates, averaged over both compatible and shuffled assignments and all three families. Stars mark rates selected separately for each rule and optimizer using only development seeds. These means therefore differ from compatible-only panels",
+        "reason": "Replaced by the native render N13 (scripts/build_supplementary_figure_oracle_profile_credit_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S13; no crop of this frozen render is used.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/morphology_credit/README.md",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_credit/development_fit.json",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_credit/figure_condition_summary.csv",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_credit/figure_gradient_summary.csv"
+        ]
       }
-    },
-    "omitted_panel_status": {}
+    }
   },
   "S41": {
     "old_label": "fig:supp_morphology_calibration",
     "original_asset": "figures/supplementary/figure_S41_panels_A-H.pdf",
     "original_sha256": "ecde63eabc4482b79e3712fa1ebfc764fd13e4b29fac2818650d3cbcf3691417",
-    "primary_destination": "S36",
-    "panels": {
+    "primary_destination": "fig:si_morphology_estimation",
+    "panels": {},
+    "omitted_panel_status": {
       "A": {
-        "figure": "S36",
-        "panel": "A",
-        "path": "figures/supplementary/curated/morphology_estimation.pdf"
+        "content": "Primary calibration: 256 labels, noise standard deviation (SD) 0.5; 192 observations for estimation/pilot fitting and 64 for pilot gating. The 255-term Walsh estimator receives no family labels, true support or coefficients. The pilot fits all twelve candidates for two sweeps. Choices are sealed; training restarts independently.",
+        "reason": "Replaced by the native render N36 (scripts/build_supplementary_figure_morphology_estimation_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S36; no crop of this frozen render is used.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/morphology_calibration/HANDOFF.md",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_calibration/METHODS.md",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_calibration/README.md",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_calibration/RESULTS.md"
+        ]
       },
       "B": {
-        "figure": "S36",
-        "panel": "B",
-        "path": "figures/supplementary/curated/morphology_estimation.pdf"
+        "content": "Prespecified pooled fixed-baseline-minus-estimated and pilot-minus-estimated normalized mean squared error (NMSE). Whiskers are Bonferroni-adjusted 97.5\\% paired bootstrap intervals; the dotted line marks the 0.01-NMSE meaningful-improvement margin.",
+        "reason": "Replaced by the native render N36 (scripts/build_supplementary_figure_morphology_estimation_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S36; no crop of this frozen render is used.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/morphology_calibration/HANDOFF.md",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_calibration/METHODS.md",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_calibration/README.md",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_calibration/RESULTS.md"
+        ]
       },
       "C": {
-        "figure": "S36",
-        "panel": "C",
-        "path": "figures/supplementary/curated/morphology_estimation.pdf"
+        "content": "Excess clean-test NMSE above the best trained candidate across calibration sizes; solid curves use noise SD 0.5 and dashed curves no noise.",
+        "reason": "Replaced by the native render N36 (scripts/build_supplementary_figure_morphology_estimation_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S36; no crop of this frozen render is used.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/morphology_calibration/HANDOFF.md",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_calibration/METHODS.md",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_calibration/README.md",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_calibration/RESULTS.md"
+        ]
       },
       "D": {
-        "figure": "S36",
-        "panel": "D",
-        "path": "figures/supplementary/curated/morphology_estimation.pdf"
+        "content": "Family-specific primary regret for estimated interactions, the development-fixed/estimated-rank baseline and the fitting pilot; pooled superiority is not uniform across families.",
+        "reason": "Replaced by the native render N36 (scripts/build_supplementary_figure_morphology_estimation_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S36; no crop of this frozen render is used.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/morphology_calibration/HANDOFF.md",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_calibration/METHODS.md",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_calibration/README.md",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_calibration/RESULTS.md"
+        ]
       },
       "E": {
-        "figure": "S36",
-        "panel": "E",
-        "path": "figures/supplementary/curated/morphology_estimation.pdf"
+        "content": "Secondary adaptive trees trained with alternating least squares (ALS), versus the best trained twelve-candidate menu and a full-target construction oracle. Random-interaction errors remain.",
+        "reason": "Replaced by the native render N36 (scripts/build_supplementary_figure_morphology_estimation_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S36; no crop of this frozen render is used.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/morphology_calibration/HANDOFF.md",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_calibration/METHODS.md",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_calibration/README.md",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_calibration/RESULTS.md"
+        ]
       },
       "F": {
-        "figure": "S36",
-        "panel": "F",
-        "path": "figures/supplementary/curated/morphology_estimation.pdf"
+        "content": "Elapsed time (median and interquartile range) on one CPU for eighty tasks: estimation/scoring of twelve trees versus pilot fitting/gating, excluding final training. All 2,240 ALS fits are retained.",
+        "reason": "Replaced by the native render N36 (scripts/build_supplementary_figure_morphology_estimation_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S36; no crop of this frozen render is used.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/morphology_calibration/HANDOFF.md",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_calibration/METHODS.md",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_calibration/README.md",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_calibration/RESULTS.md"
+        ]
       },
       "G": {
-        "figure": "S36",
-        "panel": "G",
-        "path": "figures/supplementary/curated/morphology_estimation.pdf"
+        "content": "Independent twenty-seed Adam cohort.",
+        "reason": "Replaced by the native render N36 (scripts/build_supplementary_figure_morphology_estimation_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S36; no crop of this frozen render is used.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/morphology_calibration/HANDOFF.md",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_calibration/METHODS.md",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_calibration/README.md",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_calibration/RESULTS.md"
+        ]
       },
       "H": {
-        "figure": "S36",
-        "panel": "H",
-        "path": "figures/supplementary/curated/morphology_estimation.pdf"
+        "content": "Independent twenty-seed Adam cohort.",
+        "reason": "Replaced by the native render N36 (scripts/build_supplementary_figure_morphology_estimation_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S36; no crop of this frozen render is used.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/morphology_calibration/HANDOFF.md",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_calibration/METHODS.md",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_calibration/README.md",
+          "drafts/dendritic-local-learning/journal/source_data/morphology_calibration/RESULTS.md"
+        ]
       }
-    },
-    "omitted_panel_status": {}
+    }
   },
   "S42": {
     "old_label": "fig:supp_morphology_conductance",
@@ -1868,28 +1990,12 @@
     "old_label": "fig:supp_image_diagnostics",
     "original_asset": "figures/supplementary/figure_S45_image_diagnostics.pdf",
     "original_sha256": "46a37b5af6d4e86c007c219b04aac995065877de0762204872f5717cb77a5557",
-    "primary_destination": "S8",
-    "panels": {
-      "C": {
-        "figure": "S8",
-        "panel": "A",
-        "path": "figures/supplementary/curated/error_field_geometry.pdf"
-      },
-      "D": {
-        "figure": "S8",
-        "panel": "B",
-        "path": "figures/supplementary/curated/error_field_geometry.pdf"
-      },
-      "E": {
-        "figure": "S8",
-        "panel": "C",
-        "path": "figures/supplementary/curated/error_field_geometry.pdf"
-      }
-    },
+    "primary_destination": "fig:si_error_field_geometry",
+    "panels": {},
     "omitted_panel_status": {
       "B": {
         "content": "and upper",
-        "reason": "Omitted from the curated supplement; the measurement is retained in Source Data and in the section that cites it.",
+        "reason": "Replaced by the native render N8 (scripts/build_supplementary_figure_error_field_geometry_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S8; no crop of this frozen render is used.",
         "numbers_at": [
           "drafts/dendritic-local-learning/journal/source_data/figure2/feedback_gradient_runs.csv",
           "drafts/dendritic-local-learning/journal/source_data/figure2/path_gain_dispersion_ladder_runs.csv",
@@ -1899,7 +2005,37 @@
       },
       "A": {
         "content": "and upper",
-        "reason": "Omitted from the curated supplement; the measurement is retained in Source Data and in the section that cites it.",
+        "reason": "Replaced by the native render N8 (scripts/build_supplementary_figure_error_field_geometry_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S8; no crop of this frozen render is used.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/figure2/feedback_gradient_runs.csv",
+          "drafts/dendritic-local-learning/journal/source_data/figure2/path_gain_dispersion_ladder_runs.csv",
+          "drafts/dendritic-local-learning/journal/source_data/mnist_feedback_ladder/audit.json",
+          "drafts/dendritic-local-learning/journal/source_data/mnist_feedback_ladder/condition_summary.csv"
+        ]
+      },
+      "C": {
+        "content": "and upper",
+        "reason": "Replaced by the native render N8 (scripts/build_supplementary_figure_error_field_geometry_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S8; no crop of this frozen render is used.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/figure2/feedback_gradient_runs.csv",
+          "drafts/dendritic-local-learning/journal/source_data/figure2/path_gain_dispersion_ladder_runs.csv",
+          "drafts/dendritic-local-learning/journal/source_data/mnist_feedback_ladder/audit.json",
+          "drafts/dendritic-local-learning/journal/source_data/mnist_feedback_ladder/condition_summary.csv"
+        ]
+      },
+      "D": {
+        "content": "and upper",
+        "reason": "Replaced by the native render N8 (scripts/build_supplementary_figure_error_field_geometry_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S8; no crop of this frozen render is used.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/figure2/feedback_gradient_runs.csv",
+          "drafts/dendritic-local-learning/journal/source_data/figure2/path_gain_dispersion_ladder_runs.csv",
+          "drafts/dendritic-local-learning/journal/source_data/mnist_feedback_ladder/audit.json",
+          "drafts/dendritic-local-learning/journal/source_data/mnist_feedback_ladder/condition_summary.csv"
+        ]
+      },
+      "E": {
+        "content": "and upper",
+        "reason": "Replaced by the native render N8 (scripts/build_supplementary_figure_error_field_geometry_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S8; no crop of this frozen render is used.",
         "numbers_at": [
           "drafts/dendritic-local-learning/journal/source_data/figure2/feedback_gradient_runs.csv",
           "drafts/dendritic-local-learning/journal/source_data/figure2/path_gain_dispersion_ladder_runs.csv",
@@ -1909,7 +2045,7 @@
       },
       "F": {
         "content": "distinguish concepts.",
-        "reason": "Omitted from the curated supplement; the measurement is retained in Source Data and in the section that cites it.",
+        "reason": "Replaced by the native render N8 (scripts/build_supplementary_figure_error_field_geometry_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S8; no crop of this frozen render is used.",
         "numbers_at": [
           "drafts/dendritic-local-learning/journal/source_data/figure2/feedback_gradient_runs.csv",
           "drafts/dendritic-local-learning/journal/source_data/figure2/path_gain_dispersion_ladder_runs.csv",
@@ -2021,40 +2157,47 @@
     "old_label": "fig:supp-image-ladder-controls",
     "original_asset": "figures/supplementary/figure_S49_mnist_dictionary_controls.pdf",
     "original_sha256": "0533af574d595749e9cf19fe637a8f7494d591bae9314376ac239df607769f83",
-    "primary_destination": "S7",
-    "panels": {
-      "C": {
-        "figure": "S7",
-        "panel": "A",
-        "path": "figures/supplementary/curated/mnist_dictionary_geometry.pdf"
-      },
-      "D": {
-        "figure": "S7",
-        "panel": "B",
-        "path": "figures/supplementary/curated/mnist_dictionary_geometry.pdf"
-      },
-      "E": {
-        "figure": "S7",
-        "panel": "C",
-        "path": "figures/supplementary/curated/mnist_dictionary_geometry.pdf"
-      },
-      "F": {
-        "figure": "S7",
-        "panel": "D",
-        "path": "figures/supplementary/curated/mnist_dictionary_geometry.pdf"
-      }
-    },
+    "primary_destination": "fig:si_mnist_dictionary_geometry",
+    "panels": {},
     "omitted_panel_status": {
       "A": {
         "content": "Development validation cross-entropy at three common multipliers of the original Adam parameter-group rates. Three development seeds per architecture, rule and multiplier give 108 fits; minimum mean validation loss selects each rule's rate.",
-        "reason": "Omitted from the curated supplement; the measurement is retained in Source Data and in the section that cites it.",
+        "reason": "Replaced by the native render N7 (scripts/build_supplementary_figure_mnist_dictionary_geometry_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S7; no crop of this frozen render is used.",
         "numbers_at": [
           "drafts/dendritic-local-learning/journal/source_data/image_ladder_controls/figures/figure_source.csv"
         ]
       },
       "B": {
         "content": "Development validation cross-entropy at three common multipliers of the original Adam parameter-group rates. Three development seeds per architecture, rule and multiplier give 108 fits; minimum mean validation loss selects each rule's rate.",
-        "reason": "Omitted from the curated supplement; the measurement is retained in Source Data and in the section that cites it.",
+        "reason": "Replaced by the native render N7 (scripts/build_supplementary_figure_mnist_dictionary_geometry_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S7; no crop of this frozen render is used.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/image_ladder_controls/figures/figure_source.csv"
+        ]
+      },
+      "C": {
+        "content": "Test accuracy of ten fresh paired seeds per architecture and rule. Filled circles use selected rates; open squares use the original common rate. Small points retain all seeds; coincident rate conditions reuse one fit. The decoder-only reference trains the linear readout while preserving the initialized core.",
+        "reason": "Replaced by the native render N7 (scripts/build_supplementary_figure_mnist_dictionary_geometry_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S7; no crop of this frozen render is used.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/image_ladder_controls/figures/figure_source.csv"
+        ]
+      },
+      "D": {
+        "content": "Test accuracy of ten fresh paired seeds per architecture and rule. Filled circles use selected rates; open squares use the original common rate. Small points retain all seeds; coincident rate conditions reuse one fit. The decoder-only reference trains the linear readout while preserving the initialized core.",
+        "reason": "Replaced by the native render N7 (scripts/build_supplementary_figure_mnist_dictionary_geometry_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S7; no crop of this frozen render is used.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/image_ladder_controls/figures/figure_source.csv"
+        ]
+      },
+      "E": {
+        "content": "Paired accuracy differences from retaining three profiles instead of one, and from adding exact path resolution to the three-profile dictionary. Both projected rules acquire coefficients from the exact activation-error field, preserving the same common-mode mean at identical parameters; their field norms need not match. Green and blue identify shunting and additive networks.",
+        "reason": "Replaced by the native render N7 (scripts/build_supplementary_figure_mnist_dictionary_geometry_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S7; no crop of this frozen render is used.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/image_ladder_controls/figures/figure_source.csv"
+        ]
+      },
+      "F": {
+        "content": "Mean field-energy capture by uniform $K=1$ or subtree $K=3$ profiles, before and after exact-credit training. The three-profile dictionary groups each proximal compartment with its three distal children; the one-profile control averages all 12 nonsomatic errors. Capture averages nonzero example--neuron ratios on 2,048 held-out images within each of ten seeds. Voltage-space capture is retained separately in Source Data. Symbols and bars summarize seed means and descriptive 95\\% bootstrap intervals. All scientific fits retain the complete MNIST protocol and 180-epoch budget, with validation-based checkpoint selection. Vertical scales differ across panels.",
+        "reason": "Replaced by the native render N7 (scripts/build_supplementary_figure_mnist_dictionary_geometry_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S7; no crop of this frozen render is used.",
         "numbers_at": [
           "drafts/dendritic-local-learning/journal/source_data/image_ladder_controls/figures/figure_source.csv"
         ]
@@ -2065,57 +2208,70 @@
     "old_label": "fig:supp-conductance-small-effect",
     "original_asset": "figures/supplementary/figure_S50_conductance_small_effect.pdf",
     "original_sha256": "8f1b4a4001b7255c082dbce70822fbb2e2ddab663aa536a78aeb1163bc3f7fe2",
-    "primary_destination": "S19",
-    "panels": {
+    "primary_destination": "fig:si_conductance_precision",
+    "panels": {},
+    "omitted_panel_status": {
       "A": {
-        "figure": "S19",
-        "panel": "A",
-        "path": "figures/supplementary/curated/conductance_precision.pdf"
+        "content": "Test normalized mean squared error (NMSE) at fixed checkpoints under Adam, for ungated independent inputs and gated conflicting inputs in the original 16-conductance model. Curves show means and 95\\% paired-seed bootstrap intervals across 20 fresh seeds; the vertical dotted line marks the original 4,096-update budget. All fits continue to 16,384 updates with unchanged optimizer and minibatch state. Unit and calibrated profiles differ here because global gradient clipping can break Adam's invariance to fixed positive coordinate scaling.",
+        "reason": "Replaced by the native render N19 (scripts/build_supplementary_figure_conductance_precision_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S19; no crop of this frozen render is used.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/conductance_credit_demand/figures/supplement_first_conductance_source.csv"
+        ]
       },
       "B": {
-        "figure": "S19",
-        "panel": "B",
-        "path": "figures/supplementary/curated/conductance_precision.pdf"
+        "content": "Test normalized mean squared error (NMSE) at fixed checkpoints under Adam, for ungated independent inputs and gated conflicting inputs in the original 16-conductance model. Curves show means and 95\\% paired-seed bootstrap intervals across 20 fresh seeds; the vertical dotted line marks the original 4,096-update budget. All fits continue to 16,384 updates with unchanged optimizer and minibatch state. Unit and calibrated profiles differ here because global gradient clipping can break Adam's invariance to fixed positive coordinate scaling.",
+        "reason": "Replaced by the native render N19 (scripts/build_supplementary_figure_conductance_precision_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S19; no crop of this frozen render is used.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/conductance_credit_demand/figures/supplement_first_conductance_source.csv"
+        ]
       },
       "C": {
-        "figure": "S19",
-        "panel": "C",
-        "path": "figures/supplementary/curated/conductance_precision.pdf"
+        "content": "Gated-task NMSE differences between the initial calibrated profile and exact credit, evaluated at each fit's best validation checkpoint in the extended window. Points are paired seed differences; symbols and bars show their means and 95\\% bootstrap intervals. The Adam gap is $0.000502$ [$0.000267$, $0.000772$], positive in all 20 seeds; under Adam, mean broadcast error nevertheless remains below 0.0006 NMSE.",
+        "reason": "Replaced by the native render N19 (scripts/build_supplementary_figure_conductance_precision_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S19; no crop of this frozen render is used.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/conductance_credit_demand/figures/supplement_first_conductance_source.csv"
+        ]
       },
       "D": {
-        "figure": "S19",
-        "panel": "D",
-        "path": "figures/supplementary/curated/conductance_precision.pdf"
+        "content": "Diagnostics at the exact-rule best-validation states distinguish the best rank-one capture of the six-compartment path field from capture by each student's fixed initial profile after weighting by local parameter eligibility. Both are squared-energy projection ratios with one freely fitted amplitude per example. High eligibility-weighted capture helps explain the small learning difference. The gated and ungated tasks change both inhibition and distractor dependence, so this first study is a task-family comparison. All 216 development fits, 240 fresh fits and their continuations are retained in Source Data.",
+        "reason": "Replaced by the native render N19 (scripts/build_supplementary_figure_conductance_precision_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S19; no crop of this frozen render is used.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/conductance_credit_demand/figures/supplement_first_conductance_source.csv"
+        ]
       }
-    },
-    "omitted_panel_status": {}
+    }
   },
   "S51": {
     "old_label": "fig:supp-conductance-robustness",
     "original_asset": "figures/supplementary/figure_S51_conductance_robustness.pdf",
     "original_sha256": "9d027f904b0665d514eff0fb94aa6b4bb5c0db22acf573ed4b1741a201115861",
-    "primary_destination": "S20",
-    "panels": {
-      "B": {
-        "figure": "S20",
-        "panel": "A",
-        "path": "figures/supplementary/curated/conductance_optimization.pdf"
-      },
-      "C": {
-        "figure": "S20",
-        "panel": "B",
-        "path": "figures/supplementary/curated/conductance_optimization.pdf"
-      },
-      "D": {
-        "figure": "S20",
-        "panel": "C",
-        "path": "figures/supplementary/curated/conductance_optimization.pdf"
-      }
-    },
+    "primary_destination": "fig:si_conductance_optimization",
+    "panels": {},
     "omitted_panel_status": {
       "A": {
         "content": "Fixed-checkpoint test NMSE under SGD for the opposed-tuning task, showing the four credit rules, including the explicit three-profile oracle. Curves and shading are means and 95\\% bootstrap intervals over 20 fresh seeds; the dotted line marks 4,096 updates.",
-        "reason": "Omitted from the curated supplement; the measurement is retained in Source Data and in the section that cites it.",
+        "reason": "Replaced by the native render N20 (scripts/build_supplementary_figure_conductance_optimization_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S20; no crop of this frozen render is used.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/conductance_credit_demand/opponent/supplementary_figures/supplement_opponent_controls_source.csv"
+        ]
+      },
+      "B": {
+        "content": "Paired task-by-credit interactions, defined as the calibrated-minus-exact NMSE gap for opposed tuning minus the corresponding gap for aligned tuning. All 320 fresh conditions were restarted from their original initial parameters and minibatch streams for 16,384 updates with either the original log-conductance bounds $[-7,7]$ or wider bounds $[-20,20]$. Rates were not retuned. Endpoints use the best validation checkpoint in the same window. The 320 original-bound replays reproduce every final parameter exactly. Wider-bound Adam and SGD interactions are $0.626180$ [$0.462459$, $0.773066$] and $0.714963$ [$0.584518$, $0.837830$], respectively, each positive in all 20 seeds. Symbols and bars show means and 95\\% paired bootstrap intervals. Some broadcast parameters also reach the wider bounds; these are finite-budget robustness comparisons.",
+        "reason": "Replaced by the native render N20 (scripts/build_supplementary_figure_conductance_optimization_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S20; no crop of this frozen render is used.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/conductance_credit_demand/opponent/supplementary_figures/supplement_opponent_controls_source.csv"
+        ]
+      },
+      "C": {
+        "content": "At each seed's last saved checkpoint before any parameter of the opposed-task calibrated Adam fit first reaches an original bound, the calibrated-minus-exact NMSE gap is already positive. Both rules are evaluated at that same checkpoint; all 20 seeds are shown. First bound contacts occur between updates 384 and 8,326 and involve proximal inhibitory gains or daughter couplings. Exact and three-profile oracle fits never reach the parameter bounds. Parameter projection is distinct from gradient-norm clipping, which occurs in none of the fresh or wider-bound fits.",
+        "reason": "Replaced by the native render N20 (scripts/build_supplementary_figure_conductance_optimization_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S20; no crop of this frozen render is used.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/conductance_credit_demand/opponent/supplementary_figures/supplement_opponent_controls_source.csv"
+        ]
+      },
+      "D": {
+        "content": "All four retained development regimes under Adam, using each rule's lowest mean validation NMSE among its three equally budgeted learning rates. These are development summaries over three seeds, not additional confirmatory seed blocks. Strong and moderate gating use inactive-parent inhibitory activities of 10 and 1, respectively; ungated uses zero. The strong opposed regime was selected using teacher geometry and exact-rule learnability, without selecting on the broadcast gap.",
+        "reason": "Replaced by the native render N20 (scripts/build_supplementary_figure_conductance_optimization_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S20; no crop of this frozen render is used.",
         "numbers_at": [
           "drafts/dendritic-local-learning/journal/source_data/conductance_credit_demand/opponent/supplementary_figures/supplement_opponent_controls_source.csv"
         ]
@@ -2126,20 +2282,23 @@
     "old_label": "fig:supp-conductance-expanded-rates",
     "original_asset": "figures/supplementary/figure_S52_conductance_expanded_rates.pdf",
     "original_sha256": "85b7d72af8ef157eba3877351cd8856909d3d355c9b6ca6e21ed8462e6d372bd",
-    "primary_destination": "S20",
-    "panels": {
+    "primary_destination": "fig:si_conductance_optimization",
+    "panels": {},
+    "omitted_panel_status": {
       "A": {
-        "figure": "S20",
-        "panel": "D",
-        "path": "figures/supplementary/curated/conductance_optimization.pdf"
+        "content": "Opposed-tuning task with Adam and SGD, respectively.",
+        "reason": "Replaced by the native render N20 (scripts/build_supplementary_figure_conductance_optimization_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S20; no crop of this frozen render is used.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/conductance_credit_demand/opponent/expanded_rates/figure_expanded_rates_source.csv"
+        ]
       },
       "B": {
-        "figure": "S20",
-        "panel": "E",
-        "path": "figures/supplementary/curated/conductance_optimization.pdf"
-      }
-    },
-    "omitted_panel_status": {
+        "content": "Opposed-tuning task with Adam and SGD, respectively.",
+        "reason": "Replaced by the native render N20 (scripts/build_supplementary_figure_conductance_optimization_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S20; no crop of this frozen render is used.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/conductance_credit_demand/opponent/expanded_rates/figure_expanded_rates_source.csv"
+        ]
+      },
       "C": {
         "content": "Aligned-tuning control of the wider six-rate development sweep under Adam.",
         "reason": "Omitted; all 288 outcomes are retained in the condition table and Source Data, and the S20 caption says so.",
@@ -2156,33 +2315,52 @@
     "old_label": "fig:supp_local_gate_controls",
     "original_asset": "figures/supplementary/figure_S53_local_gate_controls.pdf",
     "original_sha256": "12cae121b5382452de95ca8731cd7c5626183cb7d787d306414b96e74abd84db",
-    "primary_destination": "S21",
-    "panels": {
+    "primary_destination": "fig:si_local_gate_controls",
+    "panels": {},
+    "omitted_panel_status": {
       "A": {
-        "figure": "S21",
-        "panel": "A",
-        "path": "figures/supplementary/curated/local_gate_controls.pdf"
+        "content": "Aligned targets within 4,096 and 16,384 updates.",
+        "reason": "Replaced by the native render N21 (scripts/build_supplementary_figure_local_gate_controls_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S21; no crop of this frozen render is used.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/conductance_credit_demand/opponent/summaries/context_gradient_summary.csv",
+          "drafts/dendritic-local-learning/journal/source_data/conductance_local_gate/figures/local_gate_all_rates.pdf",
+          "drafts/dendritic-local-learning/journal/source_data/conductance_local_gate/figures/local_gate_all_rates.png",
+          "drafts/dendritic-local-learning/journal/source_data/conductance_local_gate/summaries/all_endpoints.csv"
+        ]
       },
       "B": {
-        "figure": "S21",
-        "panel": "B",
-        "path": "figures/supplementary/curated/local_gate_controls.pdf"
+        "content": "Aligned targets within 4,096 and 16,384 updates.",
+        "reason": "Replaced by the native render N21 (scripts/build_supplementary_figure_local_gate_controls_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S21; no crop of this frozen render is used.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/conductance_credit_demand/opponent/summaries/context_gradient_summary.csv",
+          "drafts/dendritic-local-learning/journal/source_data/conductance_local_gate/figures/local_gate_all_rates.pdf",
+          "drafts/dendritic-local-learning/journal/source_data/conductance_local_gate/figures/local_gate_all_rates.png",
+          "drafts/dendritic-local-learning/journal/source_data/conductance_local_gate/summaries/all_endpoints.csv"
+        ]
       },
       "C": {
-        "figure": "S21",
-        "panel": "C",
-        "path": "figures/supplementary/curated/local_gate_controls.pdf"
+        "content": "Opposed targets within the same windows. Entries are mean test NMSE at validation-selected states across twenty new paired seeds; color shows its base-ten logarithm. Every rule uses every rate; 0.03 is primary.",
+        "reason": "Replaced by the native render N21 (scripts/build_supplementary_figure_local_gate_controls_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S21; no crop of this frozen render is used.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/conductance_credit_demand/opponent/summaries/context_gradient_summary.csv",
+          "drafts/dendritic-local-learning/journal/source_data/conductance_local_gate/figures/local_gate_all_rates.pdf",
+          "drafts/dendritic-local-learning/journal/source_data/conductance_local_gate/figures/local_gate_all_rates.png",
+          "drafts/dendritic-local-learning/journal/source_data/conductance_local_gate/summaries/all_endpoints.csv"
+        ]
       },
       "D": {
-        "figure": "S21",
-        "panel": "D",
-        "path": "figures/supplementary/curated/local_gate_controls.pdf"
-      }
-    },
-    "omitted_panel_status": {
+        "content": "Opposed targets within the same windows. Entries are mean test NMSE at validation-selected states across twenty new paired seeds; color shows its base-ten logarithm. Every rule uses every rate; 0.03 is primary.",
+        "reason": "Replaced by the native render N21 (scripts/build_supplementary_figure_local_gate_controls_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S21; no crop of this frozen render is used.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/conductance_credit_demand/opponent/summaries/context_gradient_summary.csv",
+          "drafts/dendritic-local-learning/journal/source_data/conductance_local_gate/figures/local_gate_all_rates.pdf",
+          "drafts/dendritic-local-learning/journal/source_data/conductance_local_gate/figures/local_gate_all_rates.png",
+          "drafts/dendritic-local-learning/journal/source_data/conductance_local_gate/summaries/all_endpoints.csv"
+        ]
+      },
       "E": {
         "content": "Historical twenty-seed cancellation cohort (2101-2120): the norm of mixed context-conditional distal gradients divided by the mixture of their norms.",
-        "reason": "Promoted to main Fig. 5G and re-rendered natively there (DECISIONS Q7); it leaves the supplement, and the curated crop never contained it.",
+        "reason": "Promoted to main Fig. 5G and re-rendered natively there (DECISIONS Q7); it leaves the supplement, and neither the earlier curated crop nor the native render N21 contains it.",
         "numbers_at": "source_data/conductance_credit_demand/opponent/summaries/context_gradient_summary.csv"
       }
     }
@@ -2191,69 +2369,107 @@
     "old_label": "fig:supp_credit_rule_extension",
     "original_asset": "figures/supplementary/figure_S54_credit_budget_extension.pdf",
     "original_sha256": "a439aeba06abad479dd47f7c211c4eeb52093bcf41bc3b8c3c7e322004616271",
-    "primary_destination": "S16",
-    "panels": {
+    "primary_destination": "fig:si_fixed_profile_budget",
+    "panels": {},
+    "omitted_panel_status": {
       "A": {
-        "figure": "S16",
-        "panel": "A",
-        "path": "figures/supplementary/curated/fixed_profile_budget.pdf"
+        "content": "Mean test NMSE with descriptive 95\\% whole-seed bootstrap intervals for pairwise/quartic tasks under Adam at selected or common rates. Initial-sign controls use dotted curves. Vertical lines mark 1,024 updates; horizontal lines mark noise-only NMSE.",
+        "reason": "Replaced by the native render N16 (scripts/build_supplementary_figure_fixed_profile_budget_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S16; no crop of this frozen render is used.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/credit_rule_extension/RESULTS.md",
+          "drafts/dendritic-local-learning/journal/source_data/credit_rule_extension/completion_validation.json",
+          "drafts/dendritic-local-learning/journal/source_data/credit_rule_extension/excluded_runtime_smoke.json",
+          "drafts/dendritic-local-learning/journal/source_data/credit_rule_extension/figures/figure_provenance.json"
+        ]
       },
       "B": {
-        "figure": "S16",
-        "panel": "B",
-        "path": "figures/supplementary/curated/fixed_profile_budget.pdf"
+        "content": "Mean test NMSE with descriptive 95\\% whole-seed bootstrap intervals for pairwise/quartic tasks under Adam at selected or common rates. Initial-sign controls use dotted curves. Vertical lines mark 1,024 updates; horizontal lines mark noise-only NMSE.",
+        "reason": "Replaced by the native render N16 (scripts/build_supplementary_figure_fixed_profile_budget_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S16; no crop of this frozen render is used.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/credit_rule_extension/RESULTS.md",
+          "drafts/dendritic-local-learning/journal/source_data/credit_rule_extension/completion_validation.json",
+          "drafts/dendritic-local-learning/journal/source_data/credit_rule_extension/excluded_runtime_smoke.json",
+          "drafts/dendritic-local-learning/journal/source_data/credit_rule_extension/figures/figure_provenance.json"
+        ]
       },
       "C": {
-        "figure": "S16",
-        "panel": "C",
-        "path": "figures/supplementary/curated/fixed_profile_budget.pdf"
+        "content": "Mean test NMSE with descriptive 95\\% whole-seed bootstrap intervals for pairwise/quartic tasks under Adam at selected or common rates. Initial-sign controls use dotted curves. Vertical lines mark 1,024 updates; horizontal lines mark noise-only NMSE.",
+        "reason": "Replaced by the native render N16 (scripts/build_supplementary_figure_fixed_profile_budget_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S16; no crop of this frozen render is used.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/credit_rule_extension/RESULTS.md",
+          "drafts/dendritic-local-learning/journal/source_data/credit_rule_extension/completion_validation.json",
+          "drafts/dendritic-local-learning/journal/source_data/credit_rule_extension/excluded_runtime_smoke.json",
+          "drafts/dendritic-local-learning/journal/source_data/credit_rule_extension/figures/figure_provenance.json"
+        ]
       },
       "D": {
-        "figure": "S16",
-        "panel": "D",
-        "path": "figures/supplementary/curated/fixed_profile_budget.pdf"
+        "content": "Mean test NMSE with descriptive 95\\% whole-seed bootstrap intervals for pairwise/quartic tasks under Adam at selected or common rates. Initial-sign controls use dotted curves. Vertical lines mark 1,024 updates; horizontal lines mark noise-only NMSE.",
+        "reason": "Replaced by the native render N16 (scripts/build_supplementary_figure_fixed_profile_budget_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S16; no crop of this frozen render is used.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/credit_rule_extension/RESULTS.md",
+          "drafts/dendritic-local-learning/journal/source_data/credit_rule_extension/completion_validation.json",
+          "drafts/dendritic-local-learning/journal/source_data/credit_rule_extension/excluded_runtime_smoke.json",
+          "drafts/dendritic-local-learning/journal/source_data/credit_rule_extension/figures/figure_provenance.json"
+        ]
       },
       "E": {
-        "figure": "S16",
-        "panel": "E",
-        "path": "figures/supplementary/curated/fixed_profile_budget.pdf"
+        "content": "Quartic-minus-pairwise difference in calibrated-minus-exact NMSE at four budgets. Circles use terminal states; squares use validation-selected states.",
+        "reason": "Replaced by the native render N16 (scripts/build_supplementary_figure_fixed_profile_budget_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S16; no crop of this frozen render is used.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/credit_rule_extension/RESULTS.md",
+          "drafts/dendritic-local-learning/journal/source_data/credit_rule_extension/completion_validation.json",
+          "drafts/dendritic-local-learning/journal/source_data/credit_rule_extension/excluded_runtime_smoke.json",
+          "drafts/dendritic-local-learning/journal/source_data/credit_rule_extension/figures/figure_provenance.json"
+        ]
       },
       "F": {
-        "figure": "S16",
-        "panel": "F",
-        "path": "figures/supplementary/curated/fixed_profile_budget.pdf"
+        "content": "Every paired quartic endpoint under exact or calibrated-profile credit at 1,024 and 16,384 updates; the diagonal marks unchanged error. Seeds were previously observed, rates remain fixed and coefficients remain bounded.",
+        "reason": "Replaced by the native render N16 (scripts/build_supplementary_figure_fixed_profile_budget_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S16; no crop of this frozen render is used.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/credit_rule_extension/RESULTS.md",
+          "drafts/dendritic-local-learning/journal/source_data/credit_rule_extension/completion_validation.json",
+          "drafts/dendritic-local-learning/journal/source_data/credit_rule_extension/excluded_runtime_smoke.json",
+          "drafts/dendritic-local-learning/journal/source_data/credit_rule_extension/figures/figure_provenance.json"
+        ]
       }
-    },
-    "omitted_panel_status": {}
+    }
   },
   "S55": {
     "old_label": "fig:supp_credit_rule_extension_controls",
     "original_asset": "figures/supplementary/figure_S55_credit_budget_controls.pdf",
     "original_sha256": "cd20a2e6bc1e96b165e66ddbd4f0805c64f7b90e5edeb9120204c33d70973761",
-    "primary_destination": "S17",
-    "panels": {
+    "primary_destination": "fig:si_credit_optimizer_controls",
+    "panels": {},
+    "omitted_panel_status": {
       "A": {
-        "figure": "S17",
-        "panel": "A",
-        "path": "figures/supplementary/curated/credit_optimizer_controls.pdf"
+        "content": "Nested targets at selected Adam rates.",
+        "reason": "Replaced by the native render N17 (scripts/build_supplementary_figure_credit_optimizer_controls_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S17; no crop of this frozen render is used.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/credit_rule_extension/figures/controls_figure_source.csv"
+        ]
       },
       "B": {
-        "figure": "S17",
-        "panel": "B",
-        "path": "figures/supplementary/curated/credit_optimizer_controls.pdf"
+        "content": "Pairwise targets at the common SGD rate.",
+        "reason": "Replaced by the native render N17 (scripts/build_supplementary_figure_credit_optimizer_controls_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S17; no crop of this frozen render is used.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/credit_rule_extension/figures/controls_figure_source.csv"
+        ]
       },
       "C": {
-        "figure": "S17",
-        "panel": "C",
-        "path": "figures/supplementary/curated/credit_optimizer_controls.pdf"
+        "content": "Quartic targets at selected and common SGD rates. The same previously observed twenty seeds, fixed rules and rate choices are retained. Curves show mean test NMSE from update 64 onward; bands give descriptive 95\\% whole-seed bootstrap intervals. Vertical lines mark the original 1,024-update cap and horizontal lines the relevant noise floor. Panels state the task, optimizer and rate view; no outcome is excluded or used to retune rates. These controls retain optimizer dependence and bounded-parameter scope.",
+        "reason": "Replaced by the native render N17 (scripts/build_supplementary_figure_credit_optimizer_controls_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S17; no crop of this frozen render is used.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/credit_rule_extension/figures/controls_figure_source.csv"
+        ]
       },
       "D": {
-        "figure": "S17",
-        "panel": "D",
-        "path": "figures/supplementary/curated/credit_optimizer_controls.pdf"
+        "content": "Quartic targets at selected and common SGD rates. The same previously observed twenty seeds, fixed rules and rate choices are retained. Curves show mean test NMSE from update 64 onward; bands give descriptive 95\\% whole-seed bootstrap intervals. Vertical lines mark the original 1,024-update cap and horizontal lines the relevant noise floor. Panels state the task, optimizer and rate view; no outcome is excluded or used to retune rates. These controls retain optimizer dependence and bounded-parameter scope.",
+        "reason": "Replaced by the native render N17 (scripts/build_supplementary_figure_credit_optimizer_controls_native.py), drawn from the same source tables and pasted whole as Supplementary Fig. S17; no crop of this frozen render is used.",
+        "numbers_at": [
+          "drafts/dendritic-local-learning/journal/source_data/credit_rule_extension/figures/controls_figure_source.csv"
+        ]
       }
-    },
-    "omitted_panel_status": {}
+    }
   },
   "S56": {
     "old_label": "fig:supp_measured_alignment_power",
@@ -2448,6 +2664,385 @@
         "figure": "S18",
         "panel": "F",
         "path": "figures/supplementary/curated/conductance_grouping.pdf"
+      }
+    },
+    "omitted_panel_status": {}
+  },
+  "N7": {
+    "old_label": "fig:si_mnist_dictionary_geometry",
+    "original_asset": "figures/supplementary/figure_mnist_dictionary_geometry_native.pdf",
+    "original_sha256": "b8b0be1d0f6ba67b5aeeefbf9475ac1e233eafc2227194f46f6362f4b465f902",
+    "primary_destination": "S7",
+    "panels": {
+      "A": {
+        "figure": "S7",
+        "panel": "A",
+        "path": "figures/supplementary/curated/mnist_dictionary_geometry.pdf"
+      },
+      "B": {
+        "figure": "S7",
+        "panel": "B",
+        "path": "figures/supplementary/curated/mnist_dictionary_geometry.pdf"
+      },
+      "C": {
+        "figure": "S7",
+        "panel": "C",
+        "path": "figures/supplementary/curated/mnist_dictionary_geometry.pdf"
+      },
+      "D": {
+        "figure": "S7",
+        "panel": "D",
+        "path": "figures/supplementary/curated/mnist_dictionary_geometry.pdf"
+      }
+    },
+    "omitted_panel_status": {}
+  },
+  "N8": {
+    "old_label": "fig:si_error_field_geometry",
+    "original_asset": "figures/supplementary/figure_error_field_geometry_native.pdf",
+    "original_sha256": "9676614b37d886202f92c21c4684671d86ede5ab2decb83b8141efbee24e9286",
+    "primary_destination": "S8",
+    "panels": {
+      "A": {
+        "figure": "S8",
+        "panel": "A",
+        "path": "figures/supplementary/curated/error_field_geometry.pdf"
+      },
+      "B": {
+        "figure": "S8",
+        "panel": "B",
+        "path": "figures/supplementary/curated/error_field_geometry.pdf"
+      },
+      "C": {
+        "figure": "S8",
+        "panel": "C",
+        "path": "figures/supplementary/curated/error_field_geometry.pdf"
+      }
+    },
+    "omitted_panel_status": {}
+  },
+  "N12": {
+    "old_label": "fig:si_scalar_tree_capacity",
+    "original_asset": "figures/supplementary/figure_scalar_tree_capacity_native.pdf",
+    "original_sha256": "6713199647eabc34f4a116f873ee5d5835eb43ad80e08706bcf716e956d99696",
+    "primary_destination": "S12",
+    "panels": {
+      "A": {
+        "figure": "S12",
+        "panel": "A",
+        "path": "figures/supplementary/curated/scalar_tree_capacity.pdf"
+      },
+      "B": {
+        "figure": "S12",
+        "panel": "B",
+        "path": "figures/supplementary/curated/scalar_tree_capacity.pdf"
+      },
+      "C": {
+        "figure": "S12",
+        "panel": "C",
+        "path": "figures/supplementary/curated/scalar_tree_capacity.pdf"
+      },
+      "D": {
+        "figure": "S12",
+        "panel": "D",
+        "path": "figures/supplementary/curated/scalar_tree_capacity.pdf"
+      },
+      "E": {
+        "figure": "S12",
+        "panel": "E",
+        "path": "figures/supplementary/curated/scalar_tree_capacity.pdf"
+      },
+      "F": {
+        "figure": "S12",
+        "panel": "F",
+        "path": "figures/supplementary/curated/scalar_tree_capacity.pdf"
+      }
+    },
+    "omitted_panel_status": {}
+  },
+  "N13": {
+    "old_label": "fig:si_oracle_profile_credit",
+    "original_asset": "figures/supplementary/figure_oracle_profile_credit_native.pdf",
+    "original_sha256": "53bb2ed90f68b12a7dacc22455d86d4399b3644db83afbc7dcf852fbe532d257",
+    "primary_destination": "S13",
+    "panels": {
+      "A": {
+        "figure": "S13",
+        "panel": "A",
+        "path": "figures/supplementary/curated/oracle_profile_credit.pdf"
+      },
+      "B": {
+        "figure": "S13",
+        "panel": "B",
+        "path": "figures/supplementary/curated/oracle_profile_credit.pdf"
+      },
+      "C": {
+        "figure": "S13",
+        "panel": "C",
+        "path": "figures/supplementary/curated/oracle_profile_credit.pdf"
+      },
+      "D": {
+        "figure": "S13",
+        "panel": "D",
+        "path": "figures/supplementary/curated/oracle_profile_credit.pdf"
+      },
+      "E": {
+        "figure": "S13",
+        "panel": "E",
+        "path": "figures/supplementary/curated/oracle_profile_credit.pdf"
+      },
+      "F": {
+        "figure": "S13",
+        "panel": "F",
+        "path": "figures/supplementary/curated/oracle_profile_credit.pdf"
+      }
+    },
+    "omitted_panel_status": {}
+  },
+  "N16": {
+    "old_label": "fig:si_fixed_profile_budget",
+    "original_asset": "figures/supplementary/figure_fixed_profile_budget_native.pdf",
+    "original_sha256": "ee76d1bfb98ce914290ec3ba98abe11cfc302c3d37e80c80143d045ed7882fc1",
+    "primary_destination": "S16",
+    "panels": {
+      "A": {
+        "figure": "S16",
+        "panel": "A",
+        "path": "figures/supplementary/curated/fixed_profile_budget.pdf"
+      },
+      "B": {
+        "figure": "S16",
+        "panel": "B",
+        "path": "figures/supplementary/curated/fixed_profile_budget.pdf"
+      },
+      "C": {
+        "figure": "S16",
+        "panel": "C",
+        "path": "figures/supplementary/curated/fixed_profile_budget.pdf"
+      },
+      "D": {
+        "figure": "S16",
+        "panel": "D",
+        "path": "figures/supplementary/curated/fixed_profile_budget.pdf"
+      },
+      "E": {
+        "figure": "S16",
+        "panel": "E",
+        "path": "figures/supplementary/curated/fixed_profile_budget.pdf"
+      },
+      "F": {
+        "figure": "S16",
+        "panel": "F",
+        "path": "figures/supplementary/curated/fixed_profile_budget.pdf"
+      }
+    },
+    "omitted_panel_status": {}
+  },
+  "N17": {
+    "old_label": "fig:si_credit_optimizer_controls",
+    "original_asset": "figures/supplementary/figure_credit_optimizer_controls_native.pdf",
+    "original_sha256": "3be11afdaee13b954b914a0195a6c9bdfb855fb62aeae1141bbfc1c67feca2b8",
+    "primary_destination": "S17",
+    "panels": {
+      "A": {
+        "figure": "S17",
+        "panel": "A",
+        "path": "figures/supplementary/curated/credit_optimizer_controls.pdf"
+      },
+      "B": {
+        "figure": "S17",
+        "panel": "B",
+        "path": "figures/supplementary/curated/credit_optimizer_controls.pdf"
+      },
+      "C": {
+        "figure": "S17",
+        "panel": "C",
+        "path": "figures/supplementary/curated/credit_optimizer_controls.pdf"
+      },
+      "D": {
+        "figure": "S17",
+        "panel": "D",
+        "path": "figures/supplementary/curated/credit_optimizer_controls.pdf"
+      }
+    },
+    "omitted_panel_status": {}
+  },
+  "N19": {
+    "old_label": "fig:si_conductance_precision",
+    "original_asset": "figures/supplementary/figure_conductance_precision_native.pdf",
+    "original_sha256": "c07882dbec68696a256b8a72a24ea78d6f1e5c23106ab93f6a689aba4a3cfd26",
+    "primary_destination": "S19",
+    "panels": {
+      "A": {
+        "figure": "S19",
+        "panel": "A",
+        "path": "figures/supplementary/curated/conductance_precision.pdf"
+      },
+      "B": {
+        "figure": "S19",
+        "panel": "B",
+        "path": "figures/supplementary/curated/conductance_precision.pdf"
+      },
+      "C": {
+        "figure": "S19",
+        "panel": "C",
+        "path": "figures/supplementary/curated/conductance_precision.pdf"
+      },
+      "D": {
+        "figure": "S19",
+        "panel": "D",
+        "path": "figures/supplementary/curated/conductance_precision.pdf"
+      }
+    },
+    "omitted_panel_status": {}
+  },
+  "N20": {
+    "old_label": "fig:si_conductance_optimization",
+    "original_asset": "figures/supplementary/figure_conductance_optimization_native.pdf",
+    "original_sha256": "719d6db080295869e015394a6cfe1ac16f106f59f4a7943c28b013a445930781",
+    "primary_destination": "S20",
+    "panels": {
+      "A": {
+        "figure": "S20",
+        "panel": "A",
+        "path": "figures/supplementary/curated/conductance_optimization.pdf"
+      },
+      "B": {
+        "figure": "S20",
+        "panel": "B",
+        "path": "figures/supplementary/curated/conductance_optimization.pdf"
+      },
+      "C": {
+        "figure": "S20",
+        "panel": "C",
+        "path": "figures/supplementary/curated/conductance_optimization.pdf"
+      },
+      "D": {
+        "figure": "S20",
+        "panel": "D",
+        "path": "figures/supplementary/curated/conductance_optimization.pdf"
+      },
+      "E": {
+        "figure": "S20",
+        "panel": "E",
+        "path": "figures/supplementary/curated/conductance_optimization.pdf"
+      }
+    },
+    "omitted_panel_status": {}
+  },
+  "N21": {
+    "old_label": "fig:si_local_gate_controls",
+    "original_asset": "figures/supplementary/figure_local_gate_controls_native.pdf",
+    "original_sha256": "03eae0c3159c06269f22dca51c2e7b170ad13e6c7db487b22c376e430e725382",
+    "primary_destination": "S21",
+    "panels": {
+      "A": {
+        "figure": "S21",
+        "panel": "A",
+        "path": "figures/supplementary/curated/local_gate_controls.pdf"
+      },
+      "B": {
+        "figure": "S21",
+        "panel": "B",
+        "path": "figures/supplementary/curated/local_gate_controls.pdf"
+      },
+      "C": {
+        "figure": "S21",
+        "panel": "C",
+        "path": "figures/supplementary/curated/local_gate_controls.pdf"
+      },
+      "D": {
+        "figure": "S21",
+        "panel": "D",
+        "path": "figures/supplementary/curated/local_gate_controls.pdf"
+      }
+    },
+    "omitted_panel_status": {}
+  },
+  "N35": {
+    "old_label": "fig:si_finite_horizon",
+    "original_asset": "figures/supplementary/figure_finite_horizon_native.pdf",
+    "original_sha256": "0bd186ba0544d0c454bde5fb7ad88b461f45a6cafc82594149b3d3247e6bef9f",
+    "primary_destination": "S35",
+    "panels": {
+      "A": {
+        "figure": "S35",
+        "panel": "A",
+        "path": "figures/supplementary/curated/finite_horizon.pdf"
+      },
+      "B": {
+        "figure": "S35",
+        "panel": "B",
+        "path": "figures/supplementary/curated/finite_horizon.pdf"
+      },
+      "C": {
+        "figure": "S35",
+        "panel": "C",
+        "path": "figures/supplementary/curated/finite_horizon.pdf"
+      },
+      "D": {
+        "figure": "S35",
+        "panel": "D",
+        "path": "figures/supplementary/curated/finite_horizon.pdf"
+      },
+      "E": {
+        "figure": "S35",
+        "panel": "E",
+        "path": "figures/supplementary/curated/finite_horizon.pdf"
+      },
+      "F": {
+        "figure": "S35",
+        "panel": "F",
+        "path": "figures/supplementary/curated/finite_horizon.pdf"
+      }
+    },
+    "omitted_panel_status": {}
+  },
+  "N36": {
+    "old_label": "fig:si_morphology_estimation",
+    "original_asset": "figures/supplementary/figure_morphology_estimation_native.pdf",
+    "original_sha256": "947b7a8ec5cb95e2c985d4b739ff789342156095db938be881faae9c9c3e700f",
+    "primary_destination": "S36",
+    "panels": {
+      "A": {
+        "figure": "S36",
+        "panel": "A",
+        "path": "figures/supplementary/curated/morphology_estimation.pdf"
+      },
+      "B": {
+        "figure": "S36",
+        "panel": "B",
+        "path": "figures/supplementary/curated/morphology_estimation.pdf"
+      },
+      "C": {
+        "figure": "S36",
+        "panel": "C",
+        "path": "figures/supplementary/curated/morphology_estimation.pdf"
+      },
+      "D": {
+        "figure": "S36",
+        "panel": "D",
+        "path": "figures/supplementary/curated/morphology_estimation.pdf"
+      },
+      "E": {
+        "figure": "S36",
+        "panel": "E",
+        "path": "figures/supplementary/curated/morphology_estimation.pdf"
+      },
+      "F": {
+        "figure": "S36",
+        "panel": "F",
+        "path": "figures/supplementary/curated/morphology_estimation.pdf"
+      },
+      "G": {
+        "figure": "S36",
+        "panel": "G",
+        "path": "figures/supplementary/curated/morphology_estimation.pdf"
+      },
+      "H": {
+        "figure": "S36",
+        "panel": "H",
+        "path": "figures/supplementary/curated/morphology_estimation.pdf"
       }
     },
     "omitted_panel_status": {}

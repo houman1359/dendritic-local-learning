@@ -277,7 +277,22 @@ def main():
              # 2026-09-12: frozen sheets replaced by native renders (N14, N15, N18) pasted whole; kept in the registry for provenance.
              'S43':('fig:si_boolean_capacity','Replaced by the native render N14, drawn from the same source tables and pasted whole as Supplementary Fig. S14.'),
              'S44':('fig:si_boolean_learning','Replaced by the native render N15, drawn from the same source tables and pasted whole as Supplementary Fig. S15.'),
-             'S42':('fig:si_conductance_grouping','Replaced by the native render N18, drawn from the same source tables and pasted whole as Supplementary Fig. S18.')}.get(key)
+             'S42':('fig:si_conductance_grouping','Replaced by the native render N18, drawn from the same source tables and pasted whole as Supplementary Fig. S18.'),
+             # 2026-09-12: eleven more frozen sheets replaced by native renders pasted whole; kept in the registry for provenance.
+             'S49':('fig:si_mnist_dictionary_geometry','Replaced by the native render N7, drawn from the same source tables and pasted whole as Supplementary Fig. S7.'),
+             'S45':('fig:si_error_field_geometry','Replaced by the native render N8, drawn from the same source tables and pasted whole as Supplementary Fig. S8.'),
+             'S36':('fig:si_scalar_tree_capacity','Replaced by the native render N12, drawn from the same source tables and pasted whole as Supplementary Fig. S12.'),
+             'S37':('fig:si_scalar_tree_capacity','Replaced by the native render N12, drawn from the same source tables and pasted whole as Supplementary Fig. S12.'),
+             'S40':('fig:si_oracle_profile_credit','Replaced by the native render N13, drawn from the same source tables and pasted whole as Supplementary Fig. S13.'),
+             'S54':('fig:si_fixed_profile_budget','Replaced by the native render N16, drawn from the same source tables and pasted whole as Supplementary Fig. S16.'),
+             'S55':('fig:si_credit_optimizer_controls','Replaced by the native render N17, drawn from the same source tables and pasted whole as Supplementary Fig. S17.'),
+             'S50':('fig:si_conductance_precision','Replaced by the native render N19, drawn from the same source tables and pasted whole as Supplementary Fig. S19.'),
+             'S51':('fig:si_conductance_optimization','Replaced by the native render N20, drawn from the same source tables and pasted whole as Supplementary Fig. S20.'),
+             'S52':('fig:si_conductance_optimization','Replaced by the native render N20, drawn from the same source tables and pasted whole as Supplementary Fig. S20.'),
+             'S53':('fig:si_local_gate_controls','Replaced by the native render N21, drawn from the same source tables and pasted whole as Supplementary Fig. S21.'),
+             'S38':('fig:si_finite_horizon','Replaced by the native render N35, drawn from the same source tables and pasted whole as Supplementary Fig. S35.'),
+             'S39':('fig:si_finite_horizon','Replaced by the native render N35, drawn from the same source tables and pasted whole as Supplementary Fig. S35.'),
+             'S41':('fig:si_morphology_estimation','Replaced by the native render N36, drawn from the same source tables and pasted whole as Supplementary Fig. S36.')}.get(key)
    if not fallback:raise ValueError('No destination: '+key)
    mapping[key]=[{'kind':'table' if key in ['S26'] else 'section','label':fallback[0],'note':fallback[1]}]
  manifest={'schema':'supplement-consolidation/1','selection_is_editorial':True,'numerical_results_changed':False,'builder':'scripts/supplement_consolidation/build.py','specification':'scripts/supplement_consolidation/specification.py','source_registry':'scripts/supplement_consolidation/original_assets.json','frozen_input_hashes':{str(p.relative_to(J)):sha(p) for p in [HERE/'original_assets.json',HERE/'original_captions.json',HERE/'original_provenance.json']},'paste_scale_target':PASTE_SCALE,'height_cap_pt':HEIGHT_CAP,'assets':assets,'old_to_new':mapping}
