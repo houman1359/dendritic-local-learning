@@ -103,7 +103,7 @@ RULES = (
     ("unit_broadcast", "unit broadcast", COLORS["local"], DASHED, "s"),
     ("calibrated_broadcast", "initial profile", COLORS["additive"], DOTTED, "^"),
 )
-RULE_DODGE = {"exact": -0.13, "unit_broadcast": 0.0, "calibrated_broadcast": 0.13}
+RULE_DODGE = {"exact": -0.17, "unit_broadcast": 0.0, "calibrated_broadcast": 0.17}
 STEPS = (0, 64, 256, 1024, 2048, 4096, 8192, 12288, 16384)
 FRESH_STEPS = (0, 64, 256, 1024, 2048, 4096)
 EXT_STEPS = (4096, 8192, 12288, 16384)
@@ -119,7 +119,7 @@ PIP_X = 24.0
 X_BREAK = (32.0, 46.0)
 XLIM = (16.0, 26000.0)
 YLIM_LOG = (-9.6, 1.95)          # log10 test NMSE; holds every per-seed value
-FAN_ALPHA = 0.30
+FAN_ALPHA = 0.25
 
 D_YLIM = (0.866, 1.021)
 D_METRICS = (("path_rank_one_capture", "best rank-one\npath capture", COLORS["bp"], "o", -0.17),
@@ -317,7 +317,7 @@ def panel_gap(ax, source, seed_contrasts, endpoints, optimizer, *, ylim, yticks,
     ax.set_ylim(*ylim)
     ax.plot([-0.6, 0.6], [0.0, 0.0], color=MUTE, lw=LW_REF, dashes=DASHED, zorder=1.0,
             solid_capstyle="butt")
-    ax.annotate("no gap", xy=(0.6, 0.0), xycoords="data", xytext=(-1.5, 1.5),
+    ax.annotate("no gap", xy=(0.6, 0.0), xycoords="data", xytext=(-1.5, 2.5),
                 textcoords="offset points", ha="right", va="bottom", fontsize=PT_BASE, color=MUTE)
     ax.set_xticks([0.0], ["20/20 seeds > 0"])
     ax.tick_params(axis="x", length=0)
