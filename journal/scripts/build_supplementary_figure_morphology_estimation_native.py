@@ -15,9 +15,14 @@ panels with the same plotted quantities on the paper's
 * B  the two prespecified pooled contrasts (``primary_contrasts.csv``) with
      the 80 per-task paired differences of ``paired_contrast_*.csv`` as a fan,
      the four family means as open marks, the pooled mean as a short rule
-     with its Bonferroni 97.5 % whisker, a solid zero rule with a 0 tick and
-     the labelled dotted 0.01 margin.  Fixed baseline left, pilot right
-     (the caption's order, and H's).
+     with its Bonferroni 97.5 % whisker and a solid zero rule with a 0 tick.
+     The 0.01 meaningful margin is 0.7 pt on this axis, less than the width
+     of the zero rule, so it is stated in a corner note (with both lower
+     bounds, which exceed it) rather than drawn as a second rule that would
+     fuse with the first.  Fixed baseline left, pilot right (the caption's
+     order, and H's); the row labels name the baselines, the fixed one by
+     its table alias ``fixed / estimated-rank`` (``observed_rank_only`` is
+     the same tree in every task, asserted).
 * C  pooled menu regret against calibration size on a logarithmic label
      axis with the recorded 95 % seed-bootstrap bands
      (``policy_summary.csv``, recomputed from ``policy_outcomes.csv``).  The
@@ -28,7 +33,9 @@ panels with the same plotted quantities on the paper's
      narrower than the rule (quartic estimated cut) is stated on the panel.
 * E  secondary adaptive construction, clean-test NMSE on a log axis tight to
      the data, 20 per-task values behind each mean, 95 % whiskers from
-     ``figure_absolute_error_summary.csv`` (recomputed).
+     ``figure_absolute_error_summary.csv`` (recomputed).  Both comparators
+     are retrospective oracles (the best trained candidate of the menu, the
+     true-target construction), named as such in the panel's own note.
 * F  selection cost: the 80 per-task timings of
      ``calibration_selection_records.csv`` at the primary condition behind
      the median rule and interquartile whisker, on an axis from zero.
@@ -181,6 +188,30 @@ def note(ax, text, *, corner="tl", color=INK, dx=3.0, dy=-2.5):
                        color=color, linespacing=1.15, zorder=6)
 
 
+def note_lines(ax, lines, *, corner="tr", color=INK, dx=3.0, dy=-2.5):
+    """A top-corner note drawn one line per artist.
+
+    Both overlap audits (the live one in ``save`` and the compiled-page one)
+    then see each line's own box, so a ragged block can stand beside a
+    column of data where the rectangle spanning its widest line could not.
+    The line pitch is measured from a two-line probe at the note's own
+    ``linespacing``, so the block lays out exactly as one :func:`note`.
+    """
+    assert corner[0] == "t", corner
+    fig = ax.figure
+    fig.canvas.draw()
+    renderer = fig.canvas.get_renderer()
+    heights = []
+    for probe_text in ("lp", "lp\nlp"):
+        probe = note(ax, probe_text, corner=corner, color=color, dx=dx, dy=dy)
+        heights.append(probe.get_window_extent(renderer).height * 72.0 / fig.dpi)
+        probe.remove()
+    pitch = heights[1] - heights[0]
+    assert 0.9 * PT_BASE < pitch < 1.4 * PT_BASE, pitch
+    return [note(ax, line, corner=corner, color=color, dx=dx, dy=dy - i * pitch)
+            for i, line in enumerate(lines)]
+
+
 # ── A: the sealed protocol ───────────────────────────────────────────────
 def panel_a(ax, protocol, e2e_protocol):
     # the primary condition and the 75 : 25 split come from the calibration
@@ -267,9 +298,10 @@ def panel_a(ax, protocol, e2e_protocol):
 
 
 # ── B: the two prespecified pooled contrasts ─────────────────────────────
-B_ROWS = [("development_best_fixed", "fixed − estimated", FIXED),
-          ("two_sweep_pilot", "pilot − estimated", PILOT)]
+B_ROWS = [("development_best_fixed", "fixed / estimated-rank", FIXED),
+          ("two_sweep_pilot", "two-sweep pilot", PILOT)]
 B_YLIM = (-0.33, 0.78)
+B_ALIAS = "observed_rank_only"     # the table row the alias in the label names
 
 
 def panel_b(ax, primary, outcomes, summary):
@@ -277,8 +309,23 @@ def panel_b(ax, primary, outcomes, summary):
     prim = outcomes[outcomes.calibration_rows.eq(PRIMARY[0])
                     & outcomes.calibration_noise_sd.eq(PRIMARY[1])]
     est = prim[prim.policy.eq("estimated_cut")].set_index(["seed", "family"]).regret
-    ax.set_xlim(-0.7, 1.75)          # room at the right for the margin label
+    # the alias "fixed / estimated-rank": the estimated-rank policy picks the
+    # development-best tree in every task and condition, so its rows of the
+    # outcome and contrast tables are the fixed baseline's rows
+    keys = ["seed", "family", "calibration_rows", "calibration_noise_sd"]
+    fixed_all = outcomes[outcomes.policy.eq("development_best_fixed")].set_index(keys).sort_index()
+    alias_all = outcomes[outcomes.policy.eq(B_ALIAS)].set_index(keys).sort_index()
+    assert len(fixed_all) == 480 and fixed_all.index.equals(alias_all.index)
+    assert (alias_all.selected_candidate == fixed_all.selected_candidate).all()
+    assert alias_all.selected_candidate.nunique() == 1
+    np.testing.assert_allclose(alias_all.regret.to_numpy(), fixed_all.regret.to_numpy(), rtol=0, atol=0)
+    alias_row = primary[primary.baseline.eq(B_ALIAS)].iloc[0]
+    fixed_row = primary[primary.baseline.eq("development_best_fixed")].iloc[0]
+    for col in ("mean_improvement", "ci95_low", "ci95_high", "ci975_low", "ci975_high"):
+        assert float(alias_row[col]) == float(fixed_row[col]), col
+    ax.set_xlim(-0.45, 2.0)          # room at the right for the criterion note
     ax.set_ylim(*B_YLIM)
+    lower_bounds = []
     for x, (key, label, color) in enumerate(B_ROWS):
         r = primary[primary.baseline.eq(key)].iloc[0]
         assert bool(r.primary_comparison) and bool(r.meaningful_superiority)
@@ -301,6 +348,8 @@ def panel_b(ax, primary, outcomes, summary):
                                    [r.ci95_low, r.ci95_high, r.ci975_low, r.ci975_high],
                                    rtol=0, atol=1e-9)
         assert lo > 0 and r.mean_improvement >= MARGIN
+        assert lo > MARGIN               # the corner note's claim, per row
+        lower_bounds.append(lo)
         # the family means are the differences of the family regret means
         fam = pairs.groupby("family").baseline_minus_selector_regret.mean()
         for family in FAMILIES:
@@ -317,16 +366,24 @@ def panel_b(ax, primary, outcomes, summary):
               f"tasks {tasks.min():.3f}-{tasks.max():.3f}, {(tasks == 0).sum()}/80 zero; "
               f"family means {np.array2string(fam, precision=3)}")
     reference(ax, 0.0, style="solid")
-    reference(ax, MARGIN, style="dotted", zorder=1.1)
-    # the label stands right of the pilot column (x > 1.26 holds no datum)
-    ax.annotate("0.01 margin", xy=(1.0, MARGIN), xycoords=("axes fraction", "data"),
-                xytext=(-1.5, 2.5), textcoords="offset points", ha="right", va="bottom",
-                fontsize=PT_BASE, color=MUTE, zorder=6)
+    # the 0.01 meaningful margin is narrower than the zero rule on this axis
+    # (a second rule at 0.01 would fuse with it), so the criterion is stated:
+    # the note stands right of the pilot column (x > 1.26 holds no datum),
+    # its two longer lines above the column's highest task (0.669 at x 0.91)
+    h_pt = ax.get_window_extent().height * 72.0 / ax.figure.dpi
+    margin_pt = MARGIN / (B_YLIM[1] - B_YLIM[0]) * h_pt
+    assert margin_pt < LW_REF, (margin_pt, LW_REF)
+    assert len(lower_bounds) == 2 and min(lower_bounds) > MARGIN
     ax.set_xticks([0, 1], [row[1] for row in B_ROWS])
     ax.tick_params(axis="x", length=0)
     ax.set_yticks([-0.25, 0.0, 0.25, 0.5, 0.75], ["−0.25", "0.00", "0.25", "0.50", "0.75"])
     ax.set_ylabel("baseline − estimated regret\n(mean; Bonferroni 97.5% CI)")
     note(ax, "dots: 80 tasks per column\nopen: family means (n = 4)", corner="tl")
+    note_lines(ax, [f"margin {MARGIN:g} NMSE:", f"{margin_pt:.1f} pt here, not drawn;",
+                    "both 97.5% lower", "bounds exceed it",
+                    f"({lower_bounds[0]:.3f}, {lower_bounds[1]:.3f})"], corner="tr")
+    print(f"[B] margin {MARGIN:g} NMSE = {margin_pt:.2f} pt on the axis (< LW_REF {LW_REF} pt): "
+          f"stated, not drawn; lower bounds {lower_bounds[0]:.3f}, {lower_bounds[1]:.3f}")
 
 
 # ── C: calibration size and label noise ──────────────────────────────────
@@ -476,10 +533,16 @@ def panel_e(ax, absolute, outcomes):
     ax.set_yticks([1e-3, 1e-2, 1e-1, 1.0], ["0.001", "0.01", "0.1", "1"])
     ax.yaxis.set_minor_locator(NullLocator())
     ax.set_ylabel("clean-test NMSE")
-    # the 0.003-0.05 band over the three structured families holds no datum
+    # the 0.003-0.05 band holds no datum in any of the four families: the
+    # note (three lines, 22.8 pt of the band's 32.7 pt) sits in it, naming
+    # both comparators as the retrospective oracles they are
     struct = prim[prim.family.isin(FAMILIES[:3]) & prim.policy.isin([s[0] for s in E_SERIES])].test_nmse
     assert not ((struct > 0.0026) & (struct < 0.055)).any()
-    ax.text(-0.45, 0.012, f"dots: {N_SEEDS} tasks per mark\nwhisker: 95% seed bootstrap",
+    every = prim[prim.family.isin(FAMILIES) & prim.policy.isin([s[0] for s in E_SERIES])].test_nmse
+    assert len(every) == 240 and not ((every > 0.0026) & (every < 0.055)).any()
+    ax.text(-0.45, 0.012, f"dots: {N_SEEDS} tasks per mark; whisker: 95% seed bootstrap\n"
+                          "grey: best trained of twelve (oracle)\n"
+                          "purple: target-informed tree (oracle)",
             ha="left", va="center", fontsize=PT_BASE, color=INK, linespacing=1.15, zorder=6)
 
 
@@ -632,9 +695,9 @@ def sheet_key(cv):
         Line2D([], [], linestyle="none", marker="o", ms=MARKER_MS * 0.8, color=c,
                markeredgecolor="none", label=label)
         for c, label in ((EST, "estimated interactions / tree"),
-                         (FIXED, "fixed tree (menu of twelve)"),
+                         (FIXED, "fixed / estimated-rank tree (menu of twelve)"),
                          (PILOT, "two-sweep pilot"),
-                         (TARGET, "target-informed tree"))
+                         (TARGET, "target-informed tree (oracle)"))
     ]
     cv.fig.legend(handles=handles, loc="upper center", bbox_to_anchor=(0.5, 1.0 - 3.0 / cv.height_pt),
                   ncol=len(handles), frameon=False, fontsize=PT_BASE, handlelength=1.2,
