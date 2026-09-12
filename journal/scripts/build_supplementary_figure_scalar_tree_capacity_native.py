@@ -24,8 +24,13 @@ Panels (same letters and content as the curated sheet):
      the best fitted population NMSE of all 1,680 candidate fits
      (``candidate_outcomes.csv``), aggregated on their 8 and 9 distinct
      points: mark area proportional to the number of fits, every count
-     printed beside its mark, a mark-area key, coincident family marks
-     offset side by side, the origin marks at a legible floor.
+     printed beside its mark, a mark-area key, the origin marks at a
+     legible floor.  Two families at ONE point never leave it on the
+     quantitative axes: unequal marks are superposed (the smaller on top,
+     white hairline edge) and the two equal floor-size origin marks are
+     dodged along the equality rule, with one ``n + n`` label per point.
+     The pair carries the curated sheet's interpretive super-title, "The
+     centered constraint is stronger", one line above its two panel titles.
 * C  mean excess NMSE above the best of the twelve fixed candidates for all
      SEVEN selection policies of ``policy_summary.csv`` (the fixed balanced
      candidate is now drawn), with the 105 matching and 35 quartic
@@ -64,7 +69,7 @@ if str(SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPT_DIR))
 
 from figure_canvas import (  # noqa: E402
-    COLORS, LW_EDGE, LW_HAIR, LW_REF, MARKER_MS, PT_BASE, PT_EMPH,
+    COLORS, LW_EDGE, LW_HAIR, LW_REF, MARKER_MS, PT_BASE, PT_EMPH, PT_TITLE,
     SEED_ALPHA, Margins, NativeCanvas)
 
 ROOT = SCRIPT_DIR.parent
@@ -273,27 +278,31 @@ def panel_b(axes, outcomes):
             by_xy.setdefault((b, m), []).append((fam, n))
         for (b, m), members in sorted(by_xy.items()):
             members.sort(key=lambda t: PRIMARY.index(t[0]))
+            diam = [diameter_pt(n) for _, n in members]
             if len(members) == 1:
-                offsets = [0.0]
-            else:                       # side by side, touching at the true x
-                d = [diameter_pt(n) for _, n in members]
-                offsets = [-(d[0] / 2.0 + 0.6), d[1] / 2.0 + 0.6]
-            tiny = all(n < 10 for _, n in members)
-            for (fam, n), off in zip(members, offsets):
+                offsets = [(0.0, 0.0)]
+            elif abs(diam[0] - diam[1]) < 0.5:
+                # two equal (floor-size) marks at one point would hide each
+                # other: dodge them ALONG the equality rule, touching, so
+                # both still read bound = NMSE and neither leaves the rule
+                assert b == m, (b, m, members)
+                step = (max(diam) + 0.6) / 2.0 / np.hypot(sx, sy)   # data units
+                offsets = [(-step * sx, -step * sy), (step * sx, step * sy)]
+            else:
+                # unequal marks at one point: superposed at the TRUE point,
+                # the smaller drawn on top with its white hairline edge (a
+                # horizontal dodge would move a mark off its true bound)
+                offsets = [(0.0, 0.0), (0.0, 0.0)]
+            for (fam, n), d, (ox, oy) in zip(members, diam, offsets):
                 f = FAMILIES[fam]
-                d = diameter_pt(n)
-                x = b + off / sx
-                ax.scatter([x], [m], s=d ** 2, marker=f["marker"], color=f["color"],
-                           edgecolors="white", linewidths=LW_HAIR, zorder=3)
-                if len(members) == 2 and tiny:
-                    continue
+                x = b + ox / sx
+                y = m + oy / sy
+                ax.scatter([x], [y], s=d ** 2, marker=f["marker"], color=f["color"],
+                           edgecolors="white", linewidths=LW_HAIR,
+                           zorder=3.1 if d < max(diam) - 0.5 else 3.0)
                 if len(members) == 2:
-                    side = -1.0 if fam == "quadratic_matching" else 1.0
-                    ax.annotate(f"{n}", xy=(x, m), xycoords="data",
-                                xytext=(side * (d / 2.0 + 1.8), 2.2), textcoords="offset points",
-                                ha="right" if side < 0 else "left", va="bottom",
-                                fontsize=PT_BASE, color=MUTE, zorder=6)
-                elif b == m:      # on the equality rule: label up its left side
+                    continue          # one shared label per point, below
+                if b == m:        # on the equality rule: label up its left side
                     ax.annotate(f"{n}", xy=(x, m), xycoords="data",
                                 xytext=(-0.72 * (d / 2.0 + 1.8), 0.72 * (d / 2.0 + 1.8)),
                                 textcoords="offset points", ha="right", va="bottom",
@@ -303,9 +312,12 @@ def panel_b(axes, outcomes):
                                 xytext=(0.0, d / 2.0 + 1.4), textcoords="offset points",
                                 ha="center", va="bottom", fontsize=PT_BASE, color=MUTE,
                                 zorder=6)
-            if len(members) == 2 and tiny:
+            if len(members) == 2:
+                # the shared ``n + n`` label, in the empty half-plane below
+                # the equality rule, clear of the pair's right-most extent
+                reach = max(ox + d / 2.0 for d, (ox, _) in zip(diam, offsets))
                 ax.annotate(" + ".join(str(n) for _, n in members), xy=(b, m),
-                            xycoords="data", xytext=(diameter_pt(4) + 2.6, -2.4),
+                            xycoords="data", xytext=(reach + 2.6, -2.4),
                             textcoords="offset points", ha="left", va="top",
                             fontsize=PT_BASE, color=MUTE, zorder=6)
         ax.plot(list(B_LIM), list(B_LIM), color=MUTE, lw=LW_REF, dashes=DASHED,
@@ -565,6 +577,12 @@ MARGINS = Margins(left=34.0, right=12.0, top=16.0, bottom=26.0)
 C_LEFT_PT = 84.0              # the row-label gutter of C (inside its slot)
 C_RIGHT_PT = 54.0             # the zero-count column of C
 C_TOP_PT = 10.0               # the title band C does not get from the row lock
+# B's interpretive super-title: figure text one line above the two panel
+# titles, spanning the pair, with its baseline this far above the row-0
+# axes top (the panel titles sit at 3 pt; the letter B shares the super-
+# title's baseline, so it stays the highest and leftmost mark of its panel)
+B_SUPER_TITLE = "The centered constraint is stronger"
+B_SUPER_DY_PT = 12.0
 
 
 def build(path: Path = OUT, *, png=False):
@@ -589,14 +607,19 @@ def build(path: Path = OUT, *, png=False):
     cv = NativeCanvas(CANVAS_H_PT / 72.0, 3, row_weights=ROW_PT, hgutter_pt=HGUTTER_PT,
                       vgutter_pt=VGUTTER_PT, margins=MARGINS)
     a = cv.panel("A", 0, 0, 4, schematic=True, title="Fixed spectrum; different interactions")
-    b1 = cv.panel("B", 0, 4, 4, grid="both", title="Full-cut bound, rank ≤ 2")
+    b1 = cv.panel("B", 0, 4, 4, letter="", grid="both", title="Full-cut bound, rank ≤ 2")
     b2 = cv.panel("B_centered", 0, 8, 4, letter="", grid="both",
                   title="Centered-cut bound, rank ≤ 1")
-    c = cv.panel("C", 1, 0, 12, lock=False, inset_pt=(C_LEFT_PT, C_RIGHT_PT, C_TOP_PT, 0.0),
+    # the letter B is lifted onto the super-title's baseline (letters "C"
+    # onward are named, as the manual letter does not advance the counter)
+    cv.add_letter("B", b1, dy_pt=B_SUPER_DY_PT)
+    c = cv.panel("C", 1, 0, 12, letter="C", lock=False,
+                 inset_pt=(C_LEFT_PT, C_RIGHT_PT, C_TOP_PT, 0.0),
                  title="Selection within the twelve fixed candidates", grid="x")
-    d = cv.panel("D", 2, 0, 4, schematic=True, title="Parallel: minimum depth 3")
-    e = cv.panel("E", 2, 4, 4, schematic=True, title="Nested: minimum depth 4")
-    f = cv.panel("F", 2, 8, 4, grid="y", title="Depth constraint over all labeled trees")
+    d = cv.panel("D", 2, 0, 4, letter="D", schematic=True, title="Parallel: minimum depth 3")
+    e = cv.panel("E", 2, 4, 4, letter="E", schematic=True, title="Nested: minimum depth 4")
+    f = cv.panel("F", 2, 8, 4, letter="F", grid="y",
+                 title="Depth constraint over all labeled trees")
     for ax in (b1, b2):
         setup_b(ax)
     # one declared reserve on every four-module panel: the column lock then
@@ -626,6 +649,13 @@ def build(path: Path = OUT, *, png=False):
                       pitch_pt=pitch, leaf_pt=leaf)
     assert lv_d == [1, 2, 3, 4, 5, 6, 7, 8] and lv_e == [1, 6, 2, 5, 4, 7, 3, 8]
     panel_f(f, cert, constructions)
+    # B's super-title over the pair, centred on the union of the two axes,
+    # on the (now final) row-0 axes top; figure text, so neither panel's
+    # measured reserve grows and the row keeps its height
+    x_mid = (b1.get_position().x0 + b2.get_position().x1) / 2.0
+    y_top = max(ax.get_position().y1 for ax in (b1, b2)) * CANVAS_H_PT
+    cv.fig.text(x_mid, (y_top + B_SUPER_DY_PT) / CANVAS_H_PT, B_SUPER_TITLE,
+                ha="center", va="baseline", fontsize=PT_TITLE, color=INK, zorder=6)
     problems = cv.save(path, name="figure_scalar_tree_capacity_native", png=png)
     for problem in problems:
         print(f"    {problem}")
