@@ -13,7 +13,7 @@
     "input_coverage_depth": 1.0,
     "branch_conflict_controls": 1.0,
     "ancestry_coefficients": 1.0,
-    "scalar_tree_capacity": 0.8224,
+    "scalar_tree_capacity": 0.8442,
     "oracle_profile_credit": 1.0,
     "boolean_capacity": 1.0,
     "boolean_learning": 1.0,
@@ -21,7 +21,7 @@
     "credit_optimizer_controls": 1.0,
     "conductance_grouping": 1.0,
     "conductance_precision": 1.0,
-    "conductance_optimization": 0.8024,
+    "conductance_optimization": 0.8272,
     "local_gate_controls": 1.0,
     "physical_architecture": 0.7809,
     "physical_calibration": 1.0,
@@ -36,16 +36,16 @@
     "measured_predictor_controls": 1.0,
     "animal_credit_reanalysis": 1.0,
     "original_selector": 1.0,
-    "finite_horizon": 0.8623,
+    "finite_horizon": 0.8932,
     "morphology_estimation": 1.0
   },
   "below_target_scale": {
-    "scalar_tree_capacity": 0.8224,
-    "conductance_optimization": 0.8024,
+    "scalar_tree_capacity": 0.8442,
+    "conductance_optimization": 0.8272,
     "physical_architecture": 0.7809,
     "shunt_sensitivity": 0.9119,
     "measured_transfer_geometry": 0.9658,
-    "finite_horizon": 0.8623
+    "finite_horizon": 0.8932
   },
   "scale_exemptions": {
     "scalar_tree_capacity": {
@@ -53,14 +53,14 @@
       "native_order": "legacy port",
       "builder": "scripts/build_morphology_followup_figures.py",
       "reason": "Six frozen panels plus the Q6 legend strip need 573.7 pt of panel band at 1.0; the widest row (old S36A,B,D) is 606.1 pt against 498.4 pt of usable width. The R6/R8 restorations are cleaner re-rendered than cropped.",
-      "paste_scale": 0.8224
+      "paste_scale": 0.8442
     },
     "conductance_optimization": {
       "figure": "S20",
       "native_order": "N4",
       "builder": "scripts/conductance_credit_demand/build_supplementary.py + scripts/conductance_credit_demand/report_expanded_rates.py",
       "reason": "Five panels of about 196 pt each need three rows: 587.1 pt of panel band at 1.0 against 471 pt available under the cap. Both sources are native.",
-      "paste_scale": 0.8024
+      "paste_scale": 0.8272
     },
     "physical_architecture": {
       "figure": "S22",
@@ -88,7 +88,7 @@
       "native_order": "legacy port",
       "builder": "scripts/build_morphology_followup_figures.py",
       "reason": "Q4 fallback puts R10, R11 and R13 on this sheet; three rows of tall dot plots need 546.2 pt of panel band at 1.0. This is also the port that would make the DECISIONS Q4 merge feasible.",
-      "paste_scale": 0.8623
+      "paste_scale": 0.8932
     }
   },
   "cleared_scale_exemptions": [],
@@ -159,9 +159,9 @@
     },
     "mnist_dictionary_geometry": {
       "figure": "S7",
-      "violations": 13,
+      "violations": 14,
       "by_kind": {
-        "font-family": 2,
+        "font-family": 3,
         "text-floor": 1,
         "text-size": 3,
         "stroke-width": 5,
@@ -174,13 +174,13 @@
     },
     "error_field_geometry": {
       "figure": "S8",
-      "violations": 15,
+      "violations": 16,
       "by_kind": {
         "canvas-aspect": 1,
-        "font-family": 1,
+        "font-family": 3,
         "text-floor": 1,
         "text-size": 3,
-        "text-collision": 3,
+        "text-collision": 2,
         "stroke-width": 1,
         "area-stroke": 1,
         "role-colour": 2,
@@ -188,7 +188,7 @@
         "manifest-missing": 1
       },
       "text_floor_examples": [
-        "6.80 pt is below the 7.0 pt floor (12 spans, e.g. 'soma-normalized')"
+        "6.80 pt is below the 7.0 pt floor (6 spans, e.g. 'matched-width')"
       ]
     },
     "input_coverage_depth": {
@@ -225,126 +225,133 @@
     },
     "scalar_tree_capacity": {
       "figure": "S12",
-      "violations": 22,
+      "violations": 23,
       "by_kind": {
-        "canvas-aspect": 1,
-        "font-family": 8,
-        "text-floor": 6,
-        "text-size": 1,
-        "stroke-width": 5,
+        "font-family": 12,
+        "text-floor": 4,
+        "text-size": 2,
+        "stroke-width": 4,
         "manifest-missing": 1
       },
       "text_floor_examples": [
-        "3.91 pt is below the 7.0 pt floor (16 spans, e.g. '1')",
-        "4.14 pt is below the 7.0 pt floor (4 spans, e.g. 'x')"
+        "4.02 pt is below the 7.0 pt floor (16 spans, e.g. '1')",
+        "4.96 pt is below the 7.0 pt floor (22 spans, e.g. ') \u2208')"
       ]
     },
     "oracle_profile_credit": {
       "figure": "S13",
-      "violations": 10,
+      "violations": 14,
       "by_kind": {
-        "font-family": 2,
+        "canvas-aspect": 1,
+        "font-family": 4,
         "text-floor": 1,
-        "text-size": 3,
-        "stroke-width": 3,
+        "text-size": 2,
+        "stroke-width": 4,
+        "fill-width": 1,
         "manifest-missing": 1
       },
       "text_floor_examples": [
-        "6.80 pt is below the 7.0 pt floor (56 spans, e.g. 'two shuffled profiles')"
+        "6.80 pt is below the 7.0 pt floor (50 spans, e.g. 'two shuffled profiles')"
       ]
     },
     "boolean_capacity": {
       "figure": "S14",
-      "violations": 16,
+      "violations": 22,
       "by_kind": {
-        "font-family": 3,
+        "font-family": 10,
         "text-floor": 1,
-        "text-size": 3,
+        "text-size": 2,
         "stroke-width": 4,
         "role-colour": 3,
-        "blank-band": 1,
+        "fill-width": 1,
         "manifest-missing": 1
       },
       "text_floor_examples": [
-        "6.80 pt is below the 7.0 pt floor (102 spans, e.g. '3 balanced | 12 comb; dots: exact possib')"
+        "6.80 pt is below the 7.0 pt floor (98 spans, e.g. 'minimum depth 2')"
       ]
     },
     "boolean_learning": {
       "figure": "S15",
-      "violations": 13,
+      "violations": 14,
       "by_kind": {
-        "font-family": 2,
+        "canvas-aspect": 1,
+        "font-family": 3,
         "text-floor": 2,
-        "text-size": 2,
+        "text-size": 1,
         "stroke-width": 3,
         "role-colour": 3,
         "manifest-missing": 1
       },
       "text_floor_examples": [
         "4.76 pt is below the 7.0 pt floor (10 spans, e.g. '\u22124')",
-        "6.80 pt is below the 7.0 pt floor (109 spans, e.g. 'broadcast \u2212 exact NMSE')"
+        "6.80 pt is below the 7.0 pt floor (97 spans, e.g. 'broadcast \u2212 exact NMSE')"
       ]
     },
     "fixed_profile_budget": {
       "figure": "S16",
-      "violations": 8,
+      "violations": 9,
       "by_kind": {
+        "canvas-aspect": 1,
         "font-family": 2,
-        "text-size": 5,
+        "text-size": 4,
+        "stroke-width": 1,
         "manifest-missing": 1
       },
       "text_floor_examples": []
     },
     "credit_optimizer_controls": {
       "figure": "S17",
-      "violations": 8,
+      "violations": 7,
       "by_kind": {
-        "font-family": 2,
-        "text-size": 5,
+        "font-family": 1,
+        "text-size": 4,
+        "stroke-width": 1,
         "manifest-missing": 1
       },
       "text_floor_examples": []
     },
     "conductance_grouping": {
       "figure": "S18",
-      "violations": 11,
+      "violations": 14,
       "by_kind": {
-        "font-family": 2,
+        "font-family": 5,
         "text-floor": 2,
-        "text-size": 3,
+        "text-size": 2,
         "stroke-width": 3,
+        "fill-width": 1,
         "manifest-missing": 1
       },
       "text_floor_examples": [
         "4.76 pt is below the 7.0 pt floor (8 spans, e.g. '\u22124')",
-        "6.80 pt is below the 7.0 pt floor (51 spans, e.g. '4 E + 6 I contacts; 6 couplings; 16 cond')"
+        "6.80 pt is below the 7.0 pt floor (46 spans, e.g. 'fixed calibrated broadcast')"
       ]
     },
     "conductance_precision": {
       "figure": "S19",
       "violations": 9,
       "by_kind": {
-        "font-family": 2,
-        "text-size": 6,
+        "font-family": 3,
+        "text-size": 4,
+        "stroke-width": 1,
         "manifest-missing": 1
       },
       "text_floor_examples": []
     },
     "conductance_optimization": {
       "figure": "S20",
-      "violations": 15,
+      "violations": 16,
       "by_kind": {
         "canvas-aspect": 1,
         "font-family": 3,
         "text-floor": 5,
         "text-size": 1,
-        "stroke-width": 3,
+        "stroke-width": 4,
         "fill-width": 1,
         "manifest-missing": 1
       },
       "text_floor_examples": [
-        "4.27 pt is below the 7.0 pt floor (6 spans, e.g. '\u22125')",
-        "5.78 pt is below the 7.0 pt floor (2 spans, e.g. 'Log-conductance bounds')"
+        "4.40 pt is below the 7.0 pt floor (6 spans, e.g. '\u22125')",
+        "5.79 pt is below the 7.0 pt floor (3 spans, e.g. '16,384-update budget')"
       ]
     },
     "local_gate_controls": {
@@ -509,20 +516,20 @@
     },
     "finite_horizon": {
       "figure": "S35",
-      "violations": 99,
+      "violations": 102,
       "by_kind": {
         "canvas-aspect": 1,
-        "font-family": 2,
-        "text-floor": 3,
-        "text-size": 2,
+        "font-family": 3,
+        "text-floor": 4,
+        "text-size": 3,
         "stroke-width": 5,
         "role-colour": 84,
         "fill-width": 1,
         "manifest-missing": 1
       },
       "text_floor_examples": [
-        "4.10 pt is below the 7.0 pt floor (3 spans, e.g. '\u22123')",
-        "5.07 pt is below the 7.0 pt floor (1 spans, e.g. '\u22123')"
+        "4.25 pt is below the 7.0 pt floor (7 spans, e.g. '\u22123')",
+        "5.25 pt is below the 7.0 pt floor (1 spans, e.g. '\u22123')"
       ]
     },
     "morphology_estimation": {
