@@ -174,11 +174,13 @@ def draw_series(ax, steps, seeds, mean, lo, hi, rule, *, zorder):
         ax.plot(x, mean, color=colour, lw=LW_DATA, dashes=dash, zorder=zorder)
 
 
-def floor_rule(ax, floor, xlim):
+def floor_rule(ax, floor, xlim, *, dy_pt):
+    """The noise-only NMSE as a light grey solid rule over the whole update
+    range, its value printed under its left end (``dy_pt`` below the rule)."""
     ax.plot(list(xlim), [floor, floor], color=FLOOR_GREY, lw=LW_REF, zorder=1.0,
             solid_capstyle="butt")
     ax.annotate(f"noise-only NMSE {floor:g}", xy=(xlim[0] * 1.06, floor), xycoords="data",
-                xytext=(0.0, -3.0), textcoords="offset points", ha="left", va="top",
+                xytext=(0.0, -dy_pt), textcoords="offset points", ha="left", va="top",
                 fontsize=PT_BASE, color=FLOOR_GREY, zorder=5)
 
 
@@ -194,10 +196,12 @@ def note(ax, x, y, text, colour, *, ha="left", va="top"):
 def style_axes(ax, ylim, yticks, ylabels):
     ax.set_xscale("log")
     ax.set_yscale("log")
-    ax.set_xlim(*XLIM)
-    ax.set_ylim(*ylim)
+    # ticks before limits: set_yticks widens the view to include every tick
     ax.set_xticks(list(XTICKS), [fmt_step(s) for s in XTICKS])
     ax.set_yticks(yticks, ylabels)
+    ax.set_xlim(*XLIM)
+    ax.set_ylim(*ylim)
+    assert ax.get_ylim() == ylim and all(ylim[0] < t < ylim[1] for t in yticks), (ylim, yticks)
     ax.xaxis.set_minor_locator(NullLocator())
     ax.yaxis.set_minor_locator(NullLocator())
     ax.set_xlabel("training updates")
@@ -300,8 +304,10 @@ def build(path: Path = OUT):
     ylim = {}
     for panel in "ABC":
         assert lim[panel][0] > floor[panel] / 1.06                 # seeds sit at the floor
-        # room for the floor label below and, in C, for the control note above
-        ylim[panel] = (floor[panel] / 1.42, lim[panel][1] * (1.32 if panel == "C" else 1.25))
+        # room for the floor label below (under the 0.02 grid rule in A and B)
+        # and, in C, for the control note above
+        ylim[panel] = (floor[panel] / (1.42 if panel == "C" else 1.62),
+                       lim[panel][1] * (1.32 if panel == "C" else 1.25))
     assert lim["D"][0] > 0.3 and lim["D"][1] < 90.0, lim["D"]
     ylim["D"] = (0.28, 95.0)
     print("[axes] data ranges " + "; ".join(f"{p} {lo:.4f}-{hi:.3f}" for p, (lo, hi) in lim.items()))
@@ -313,7 +319,10 @@ def build(path: Path = OUT):
     for i, panel in enumerate("ABCD"):
         axes[panel] = cv.panel(panel, i // 2, 6 * (i % 2), 6, grid="y", title=TITLES[panel])
         cv.declare_reserve(panel, left=14.0, right=8.0)
-    yt = {p: ([0.02, 0.1, 1.0], ["0.02", "0.1", "1"]) for p in "AC"}
+    # C has no tick within its bottom strip: a 0.05 tick 4 pt above the 0.045
+    # floor rule would read as a second reference; the printed floor value
+    # names the strip instead
+    yt = {"A": ([0.02, 0.1, 1.0], ["0.02", "0.1", "1"]), "C": ([0.1, 1.0], ["0.1", "1"])}
     yt["B"] = ([0.02, 0.1, 1.0, 5.0], ["0.02", "0.1", "1", "5"])
     yt["D"] = ([0.5, 1.0, 10.0, 50.0], ["0.5", "1", "10", "50"])
     for panel in "ABCD":
@@ -321,7 +330,7 @@ def build(path: Path = OUT):
         style_axes(ax, ylim[panel], *yt[panel])
         cap_rule(ax, ylim[panel])
         if panel != "D":
-            floor_rule(ax, floor[panel], XLIM)
+            floor_rule(ax, floor[panel], XLIM, dy_pt=3.0 if panel == "C" else 7.5)
         # draw order: the sign series last so its dots sit over the blue it coincides with
         for z, rule in enumerate(DRAWN[panel]):
             draw_series(ax, steps, *data[(panel, rule)], rule, zorder=3.0 + 0.1 * z)
@@ -330,16 +339,18 @@ def build(path: Path = OUT):
     a, b, c, d = (axes[p] for p in "ABCD")
     note(a, 1350.0, 0.30, f"3 broadcast controls within {100 * spread_a:.0f} %\nafter {CAP:,} updates",
          MUTE)
-    note(b, 70.0, ylim["B"][1] / 1.12, f"unit broadcast: {n_unit_div}/20 seeds end above 1",
+    # B's and D's notes stand left of the 1,024 cap, above every seed trace
+    note(b, 72.0, ylim["B"][1] / 1.10, f"unit broadcast:\n{n_unit_div}/20 seeds end above 1",
          COLORS["local"])
-    note(b, 70.0, ylim["B"][1] / 1.85, f"initial profile: {n_cal_high}/20 seeds end above 0.05",
+    note(b, 72.0, ylim["B"][1] / 2.05, f"initial profile:\n{n_cal_high}/20 seeds end above 0.05",
          COLORS["additive"])
-    note(c, 330.0, ylim["C"][1] / 1.05, f"3 broadcast controls {means_c.min():.2f}–{means_c.max():.2f},\nnone diverges",
+    # C's note sits left of the 1,024 cap and above the controls' seed fans
+    note(c, 76.0, ylim["C"][1] / 1.05, f"3 broadcast controls\n{means_c.min():.2f}–{means_c.max():.2f}, none diverges",
          MUTE)
-    note(d, 70.0, ylim["D"][1] / 1.12, f"unit broadcast: {n_unit_d}/20 seeds above 1 at {FINAL:,}",
+    note(d, 72.0, ylim["D"][1] / 1.10, f"unit broadcast:\n{n_unit_d}/20 seeds end above 1",
          COLORS["local"])
-    note(d, 70.0, ylim["D"][1] / 1.75, f"initial sign: {n_sign_d}/20 seeds above 1 at {FINAL:,}", INK)
-    note(d, 70.0, ylim["D"][1] / 2.75, "exact path and initial profile: rate 0.03\nin C and D (same runs), drawn in C",
+    note(d, 72.0, ylim["D"][1] / 2.05, f"initial sign:\n{n_sign_d}/20 seeds end above 1", INK)
+    note(d, 72.0, ylim["D"][1] / 3.85, "exact path and initial profile:\nrate 0.03 in C and D\n(same runs), drawn in C",
          MUTE)
 
     # ── one shared key ───────────────────────────────────────────────────
