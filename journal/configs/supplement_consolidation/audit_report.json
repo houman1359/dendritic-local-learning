@@ -23,16 +23,16 @@
     "conductance_precision": 1.0,
     "conductance_optimization": 0.8024,
     "local_gate_controls": 1.0,
-    "physical_architecture": 0.7684,
+    "physical_architecture": 0.7809,
     "physical_calibration": 1.0,
     "physical_optimizer": 1.0,
     "anatomy_capacity_controls": 1.0,
     "inhibitory_spatial_controls": 1.0,
     "coarse_energy": 1.0,
     "anatomy_preprocessing": 1.0,
-    "shunt_sensitivity": 0.8427,
+    "shunt_sensitivity": 0.9119,
     "shunt_replication": 1.0,
-    "measured_transfer_geometry": 0.9539,
+    "measured_transfer_geometry": 0.9658,
     "measured_predictor_controls": 1.0,
     "animal_credit_reanalysis": 1.0,
     "original_selector": 1.0,
@@ -42,9 +42,9 @@
   "below_target_scale": {
     "scalar_tree_capacity": 0.8224,
     "conductance_optimization": 0.8024,
-    "physical_architecture": 0.7684,
-    "shunt_sensitivity": 0.8427,
-    "measured_transfer_geometry": 0.9539,
+    "physical_architecture": 0.7809,
+    "shunt_sensitivity": 0.9119,
+    "measured_transfer_geometry": 0.9658,
     "finite_horizon": 0.8623
   },
   "scale_exemptions": {
@@ -67,21 +67,21 @@
       "native_order": "N6 (mandatory, SI_NUMBERING S22 height note)",
       "builder": "scripts/build_supplementary_figures_s17_s20_native.py + scripts/build_main_figure_06.py",
       "reason": "AMENDMENTS B6 keeps eight panels (three copies kept plus R16, R17); four rows of about 149 pt need 595 pt of panel band at 1.0 against 448 pt available.",
-      "paste_scale": 0.7684
+      "paste_scale": 0.7809
     },
     "shunt_sensitivity": {
       "figure": "S29",
       "native_order": "N7",
       "builder": "scripts/build_supplementary_figure_s21_native.py + scripts/build_focal_selectivity_figure.py (legacy port for old S11)",
       "reason": "The frozen six-panel order of AMENDMENTS B8 with Q3 needs 558.9 pt of panel band at 1.0. Old S21 is native; old S11A--C is legacy and must be ported.",
-      "paste_scale": 0.8427
+      "paste_scale": 0.9119
     },
     "measured_transfer_geometry": {
       "figure": "S31",
       "native_order": "N8",
       "builder": "scripts/build_journal_figures.py + scripts/credit_first_figures/build_measured.py + scripts/measured_alignment_power/report.py",
       "reason": "Closest to target: 562.8 pt at 1.0, 22.8 pt over the cap, because old S56C is a 496.4 pt full-width panel that must hold its own row. All three sources are native.",
-      "paste_scale": 0.9539
+      "paste_scale": 0.9658
     },
     "finite_horizon": {
       "figure": "S35",
@@ -363,143 +363,105 @@
     },
     "physical_architecture": {
       "figure": "S22",
-      "violations": 23,
+      "violations": 22,
       "by_kind": {
         "canvas-aspect": 1,
-        "font-family": 8,
+        "font-family": 6,
         "text-floor": 7,
-        "stroke-width": 4,
+        "stroke-width": 5,
         "role-colour": 2,
         "manifest-missing": 1
       },
       "text_floor_examples": [
-        "5.23 pt is below the 7.0 pt floor (81 spans, e.g. 'same modules and contacts')",
-        "5.53 pt is below the 7.0 pt floor (5 spans, e.g. 'reversed tier placement')"
+        "5.31 pt is below the 7.0 pt floor (80 spans, e.g. 'same modules and contacts')",
+        "5.47 pt is below the 7.0 pt floor (38 spans, e.g. 'D3, aligned \u2212')"
       ]
     },
     "physical_calibration": {
       "figure": "S23",
-      "violations": 13,
+      "violations": 3,
       "by_kind": {
-        "font-family": 3,
-        "text-floor": 1,
-        "text-size": 5,
-        "stroke-width": 3,
+        "stroke-width": 2,
         "manifest-missing": 1
       },
-      "text_floor_examples": [
-        "5.88 pt is below the 7.0 pt floor (1 spans, e.g. 'p')"
-      ]
+      "text_floor_examples": []
     },
     "physical_optimizer": {
       "figure": "S24",
-      "violations": 9,
+      "violations": 2,
       "by_kind": {
-        "font-family": 3,
-        "text-floor": 1,
-        "text-size": 3,
         "stroke-width": 1,
         "manifest-missing": 1
       },
-      "text_floor_examples": [
-        "6.80 pt is below the 7.0 pt floor (5 spans, e.g. 'Soma-broadcast autograd \u2212 shared-soma Lo')"
-      ]
+      "text_floor_examples": []
     },
     "anatomy_capacity_controls": {
       "figure": "S25",
-      "violations": 19,
+      "violations": 8,
       "by_kind": {
-        "font-family": 4,
-        "text-floor": 1,
-        "text-size": 3,
         "stroke-width": 7,
-        "role-colour": 3,
         "manifest-missing": 1
       },
-      "text_floor_examples": [
-        "6.80 pt is below the 7.0 pt floor (17 spans, e.g. '78\u2013114 reconstructed segments / tree')"
-      ]
+      "text_floor_examples": []
     },
     "inhibitory_spatial_controls": {
       "figure": "S26",
-      "violations": 20,
+      "violations": 6,
       "by_kind": {
-        "font-family": 6,
-        "text-floor": 3,
-        "text-size": 4,
         "stroke-width": 4,
-        "role-colour": 1,
         "fill-width": 1,
         "manifest-missing": 1
       },
-      "text_floor_examples": [
-        "5.32 pt is below the 7.0 pt floor (2 spans, e.g. '\u22122')",
-        "5.80 pt is below the 7.0 pt floor (6 spans, e.g. '50 \u00b5m')"
-      ]
+      "text_floor_examples": []
     },
     "coarse_energy": {
       "figure": "S27",
-      "violations": 20,
+      "violations": 4,
       "by_kind": {
         "canvas-aspect": 1,
-        "font-family": 3,
-        "text-floor": 1,
-        "text-size": 5,
-        "stroke-width": 4,
-        "area-stroke": 4,
-        "role-colour": 1,
+        "stroke-width": 2,
         "manifest-missing": 1
       },
-      "text_floor_examples": [
-        "6.70 pt is below the 7.0 pt floor (3 spans, e.g. 'permuted ancestry')"
-      ]
+      "text_floor_examples": []
     },
     "anatomy_preprocessing": {
       "figure": "S28",
-      "violations": 12,
+      "violations": 6,
       "by_kind": {
         "canvas-aspect": 1,
-        "font-family": 2,
-        "text-size": 2,
-        "stroke-width": 3,
+        "stroke-width": 2,
         "role-colour": 2,
-        "blank-band": 1,
         "manifest-missing": 1
       },
       "text_floor_examples": []
     },
     "shunt_sensitivity": {
       "figure": "S29",
-      "violations": 20,
+      "violations": 10,
       "by_kind": {
         "canvas-aspect": 1,
-        "font-family": 3,
-        "text-floor": 6,
-        "text-size": 2,
-        "stroke-width": 6,
+        "text-floor": 1,
+        "text-size": 1,
+        "stroke-width": 5,
         "fill-width": 1,
         "manifest-missing": 1
       },
       "text_floor_examples": [
-        "4.13 pt is below the 7.0 pt floor (3 spans, e.g. 'm')",
-        "4.48 pt is below the 7.0 pt floor (4 spans, e.g. '\u22121')"
+        "6.38 pt is below the 7.0 pt floor (80 spans, e.g. 'reference interval')"
       ]
     },
     "shunt_replication": {
       "figure": "S30",
-      "violations": 19,
+      "violations": 14,
       "by_kind": {
-        "canvas-aspect": 1,
-        "font-family": 2,
+        "font-family": 1,
         "text-floor": 1,
         "text-size": 4,
         "stroke-width": 7,
-        "role-colour": 2,
-        "fill-width": 1,
         "manifest-missing": 1
       },
       "text_floor_examples": [
-        "6.80 pt is below the 7.0 pt floor (10 spans, e.g. '39 positive, 1 tie / 40 cells')"
+        "6.80 pt is below the 7.0 pt floor (4 spans, e.g. 'attenuates descendants')"
       ]
     },
     "measured_transfer_geometry": {
@@ -507,63 +469,43 @@
       "violations": 15,
       "by_kind": {
         "canvas-aspect": 1,
-        "font-family": 4,
-        "text-floor": 1,
-        "text-size": 2,
-        "stroke-width": 5,
+        "font-family": 2,
+        "text-floor": 2,
+        "text-size": 4,
+        "stroke-width": 4,
         "fill-width": 1,
         "manifest-missing": 1
       },
       "text_floor_examples": [
-        "6.49 pt is below the 7.0 pt floor (25 spans, e.g. '125 partner records; negative estimates ')"
+        "6.57 pt is below the 7.0 pt floor (24 spans, e.g. 'oracle amplitudes')",
+        "6.76 pt is below the 7.0 pt floor (17 spans, e.g. 'target 1')"
       ]
     },
     "measured_predictor_controls": {
       "figure": "S32",
-      "violations": 17,
+      "violations": 3,
       "by_kind": {
-        "font-family": 2,
-        "text-floor": 1,
-        "text-size": 6,
-        "stroke-width": 6,
-        "role-colour": 1,
+        "stroke-width": 2,
         "manifest-missing": 1
       },
-      "text_floor_examples": [
-        "6.80 pt is below the 7.0 pt floor (7 spans, e.g. 'Subtree nonlinear')"
-      ]
+      "text_floor_examples": []
     },
     "animal_credit_reanalysis": {
       "figure": "S33",
-      "violations": 13,
+      "violations": 2,
       "by_kind": {
         "canvas-aspect": 1,
-        "font-family": 2,
-        "text-floor": 1,
-        "text-size": 5,
-        "fill-width": 1,
-        "fill-height": 1,
-        "blank-band": 1,
         "manifest-missing": 1
       },
-      "text_floor_examples": [
-        "6.80 pt is below the 7.0 pt floor (6 spans, e.g. 'predicted contrast')"
-      ]
+      "text_floor_examples": []
     },
     "original_selector": {
       "figure": "S34",
-      "violations": 11,
+      "violations": 1,
       "by_kind": {
-        "font-family": 2,
-        "text-floor": 1,
-        "text-size": 5,
-        "role-colour": 1,
-        "edge-clearance": 1,
         "manifest-missing": 1
       },
-      "text_floor_examples": [
-        "6.80 pt is below the 7.0 pt floor (5 spans, e.g. 'dashed: retrospective best')"
-      ]
+      "text_floor_examples": []
     },
     "finite_horizon": {
       "figure": "S35",

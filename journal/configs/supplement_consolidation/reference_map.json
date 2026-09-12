@@ -405,7 +405,7 @@
   "S10": {
     "old_label": "fig:supp_v661",
     "original_asset": "figures/supplementary/figure_S10_panels_A-H.pdf",
-    "original_sha256": "123bcf43dbf1b85ab53e1b5a618f7dde0077ec77c81ee4ddac3bc3bf7a0c91f2",
+    "original_sha256": "03b4bee94e11ffb8bb2eb51b3a61862dd3eb5b2ebb28a1b4b8e303aa673a0ba7",
     "primary_destination": "S25",
     "panels": {
       "B": {
@@ -475,7 +475,7 @@
   "S11": {
     "old_label": "fig:supp_focal_matrix",
     "original_asset": "figures/supplementary/figure_S11_panels_A-C.pdf",
-    "original_sha256": "79b8b946b969939a71e4f64d1b8e3e0cb58f2a298114b1b6d2f6a644b296c100",
+    "original_sha256": "be93b440e7b5dde31e2bbb5fee0c3b924e9f08d40f51eecaef52d23431e0e2fb",
     "primary_destination": "S29",
     "panels": {
       "A": {
@@ -499,7 +499,7 @@
   "S12": {
     "old_label": "fig:supp_inhibitory",
     "original_asset": "figures/supplementary/figure_S12_panels_A-J.pdf",
-    "original_sha256": "20fae4305da8049789fab4d9c90a4348673387f275335a891fc3c8ac4ee7761b",
+    "original_sha256": "09ef876b6c6711749d0473df733e27c04c4cfb32f421f0beff31dfb87338e4a7",
     "primary_destination": "S26",
     "panels": {
       "B": {
@@ -542,16 +542,6 @@
       "C": {
         "content": "Contact counts per target for the twenty-target inhibitory analysis.",
         "reason": "Omitted; the counts are tabulated in Supplementary Table S6.",
-        "numbers_at": "source_data/microns_inhibitory_routes/"
-      },
-      "I": {
-        "content": "Weighted modeled-field capture versus site budget for the dense oracle, anatomically selected inhibitory routes, random sites, depth bins and shuffled routes.",
-        "reason": "Omitted; the same capacity comparison is drawn for the route cohorts in main Fig. 7C,D and in S25.",
-        "numbers_at": "source_data/microns_inhibitory_routes/"
-      },
-      "J": {
-        "content": "Eight-site capture within each of twenty targets.",
-        "reason": "Omitted; the per-target values are retained in Source Data and summarized by S12I's omitted record.",
         "numbers_at": "source_data/microns_inhibitory_routes/"
       }
     }
@@ -669,7 +659,7 @@
   "S15": {
     "old_label": "fig:supp_nonlinear_depth_calibration",
     "original_asset": "figures/supplementary/figure_S15_panels_A-D.pdf",
-    "original_sha256": "9bf874b4ff48aed0477e74e9be607e601537597c8f0f610f446c75610b729331",
+    "original_sha256": "5ceff795b553e8e15151a0a17b40a7549f972c55063fe8ccea4b024ef5434533",
     "primary_destination": "S23",
     "panels": {
       "A": {
@@ -747,7 +737,7 @@
   "S17": {
     "old_label": "fig:supp_animal_credit",
     "original_asset": "figures/supplementary/figure_S17_panels_A-B.pdf",
-    "original_sha256": "cd7de316fd16b3108f466b3a6bf83469763914651eae007ae6b23ec697b8a1e7",
+    "original_sha256": "4e48291e28ec06aaa7ef5e4372228897cd4a10f62b8c0593c92983dde44241dc",
     "primary_destination": "S33",
     "panels": {
       "A": {
@@ -759,6 +749,11 @@
         "figure": "S33",
         "panel": "B",
         "path": "figures/supplementary/curated/animal_credit_reanalysis.pdf"
+      },
+      "C": {
+        "figure": "S33",
+        "panel": "C",
+        "path": "figures/supplementary/curated/animal_credit_reanalysis.pdf"
       }
     },
     "omitted_panel_status": {}
@@ -766,7 +761,7 @@
   "S18": {
     "old_label": "fig:supp_physical_depth_controls",
     "original_asset": "figures/supplementary/figure_S18_panels_A-K.pdf",
-    "original_sha256": "6142329415ae95a05a7f78ed1a8c6d0c5073300143af9f6a50e60e921c29b8d1",
+    "original_sha256": "1724745817a41637c1ea2694a56172a50755e3b5b864112dc3a4256246353f5a",
     "primary_destination": "S22",
     "panels": {
       "A": {
@@ -825,7 +820,7 @@
   "S20": {
     "old_label": "fig:supp_morphology_detail",
     "original_asset": "figures/supplementary/figure_S20_panels_A-B.pdf",
-    "original_sha256": "2b23c7b2f374d64e376bda7f80f4b45b7a37ca581edf0d65c2a17ab05d83b2a6",
+    "original_sha256": "ecb2932b9a9c1a0f15d796765efb160bf4f7825f9b33a8f9db1c29a1d528ca04",
     "primary_destination": "S25",
     "panels": {
       "B": {
@@ -847,7 +842,7 @@
   "S21": {
     "old_label": "fig:supp_focal_detail",
     "original_asset": "figures/supplementary/figure_S21_panels_A-D.pdf",
-    "original_sha256": "15d9d1a278be75310d780e7d06a0d56ee8e75548fa9ce7d934c4d2ebb54c3cdb",
+    "original_sha256": "86727844700a11b853f8f4c902e2ed782b791fd017f373387bc4c855316c92e7",
     "primary_destination": "S29",
     "panels": {
       "A": {
@@ -882,7 +877,7 @@
   "S22": {
     "old_label": "fig:supp_measured_detail",
     "original_asset": "figures/supplementary/figure_S22_panels_A-J.pdf",
-    "original_sha256": "298b669dde6a2f35b5531889b56cc52f8f884c5fe39a40d9c73f5992084630f2",
+    "original_sha256": "df6ea1187ff6cbc2c17143d260478c347397483a42115b67e076aef6fa6746e1",
     "primary_destination": "S31",
     "panels": {
       "A": {
@@ -1012,7 +1007,7 @@
   "S25": {
     "old_label": "fig:supp_irregular_wavelets",
     "original_asset": "figures/supplementary/figure_S25_panels_A-D.pdf",
-    "original_sha256": "ee14aeb02b937f9636d87b63454dea80cf3d76fc088a923432a60e67ba5de39a",
+    "original_sha256": "bc57ef4455069d95026a4dae44079af4f0d4b99fedb2d4ae6113f6d21ebaffa4",
     "primary_destination": "S27",
     "panels": {
       "A": {
@@ -1070,7 +1065,7 @@
   "S27": {
     "old_label": "fig:supp_pinky",
     "original_asset": "figures/supplementary/figure_S27_panels_A-C.pdf",
-    "original_sha256": "b6255b0658a7a2de4890255096b35757dde9322fb406745981ba777203c821ed",
+    "original_sha256": "a49ff3b2828dc0558706adebe1a668362ce08163c984eda035b65b4a9814dcf3",
     "primary_destination": "S25",
     "panels": {
       "B": {
@@ -1110,7 +1105,7 @@
   "S28": {
     "old_label": "fig:supp_physical_depth_diagnostics",
     "original_asset": "figures/supplementary/figure_S28_panels_A-B.pdf",
-    "original_sha256": "a8ea7b5b2c84c81ade5e78d92f49c4e777df0785cec37f6f02ba3a60b30dc3a0",
+    "original_sha256": "4045e55dd5139ff4b5f97c6c735b3aa9b5ff57682bc7334c51500f8f367afeb9",
     "primary_destination": "S24",
     "panels": {
       "B": {
@@ -1321,7 +1316,7 @@
   "S33": {
     "old_label": "fig:supp_morphology_uncertainty",
     "original_asset": "figures/supplementary/figure_S33_panels_A-F.pdf",
-    "original_sha256": "badc40b9759632f588148965dbde82f594d9f2b4b7405d03c92146eb0c19258d",
+    "original_sha256": "568937771cb95e9769bcf03e321dd8566d17abe0f56630becbe93b0e3b6cfb4a",
     "primary_destination": "S28",
     "panels": {
       "A": {
@@ -1360,7 +1355,7 @@
   "S34": {
     "old_label": "fig:supp_response_baselines",
     "original_asset": "figures/supplementary/figure_S34_panels_A-D.pdf",
-    "original_sha256": "e628d9d34929eedf607f07441cf5f19f7d2a8347a4cd7d6fe2b27d6fff658fb9",
+    "original_sha256": "6a923b15a55c333d4e6ca539a67cc8a69ca046d3e7a4135453d59435f7a3636e",
     "primary_destination": "S32",
     "panels": {
       "A": {
@@ -1389,7 +1384,7 @@
   "S35": {
     "old_label": "fig:supp_original_prospective_selection",
     "original_asset": "figures/supplementary/figure_S35_panels_A-F.pdf",
-    "original_sha256": "e8bcbef0166c37aa82b9551938883c23287630f2e981f14db3f6e545e5258f51",
+    "original_sha256": "050b111c5eb781f1195af183ccafa6d2813071247cb6f4711b4c1e0e58bbb53c",
     "primary_destination": "S34",
     "panels": {
       "A": {
@@ -1415,11 +1410,6 @@
       "E": {
         "figure": "S34",
         "panel": "E",
-        "path": "figures/supplementary/curated/original_selector.pdf"
-      },
-      "F": {
-        "figure": "S34",
-        "panel": "F",
         "path": "figures/supplementary/curated/original_selector.pdf"
       }
     },

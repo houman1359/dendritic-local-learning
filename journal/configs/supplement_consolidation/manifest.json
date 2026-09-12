@@ -6,7 +6,7 @@
   "specification": "scripts/supplement_consolidation/specification.py",
   "source_registry": "scripts/supplement_consolidation/original_assets.json",
   "frozen_input_hashes": {
-    "scripts/supplement_consolidation/original_assets.json": "ea36ac0003cc4f9617d0cb1673a9986ba589bcbe7ab32fbd2f79e9ee9c1b96b9",
+    "scripts/supplement_consolidation/original_assets.json": "4cf88c82baa70686e0b31be81bd8921c2f3b8c8347b8f110d9ce4601cf489ee6",
     "scripts/supplement_consolidation/original_captions.json": "838b3f4ead564b68639cf68506efe686e12b47e3d846ab230af35c7a6c8f6816",
     "scripts/supplement_consolidation/original_provenance.json": "2eca6cebde706e5af0b222c5675d413d80b4d4acfcfb234abe89d37afb72c90d"
   },
@@ -12666,12 +12666,12 @@
           "height": 131.5,
           "panel": "A",
           "target_rect": [
-            180.05267753247642,
+            178.76251958633657,
             19.0,
-            338.34732246752355,
-            120.04730975222671
+            339.6374804136634,
+            121.6944531494829
           ],
-          "scale": 0.7684206064808115,
+          "scale": 0.78094641178314,
           "source_asset": "figures/supplementary/figure_S31_panels_A-G.pdf",
           "source_sha256": "9bc3a51813bead71578fdc6a7ee00a6ee92395323e8f88c1f13cb32482939819",
           "old_provenance_figure": "figS31",
@@ -12729,12 +12729,12 @@
           "height": 149.2639923095703,
           "panel": "B",
           "target_rect": [
-            58.98379930764156,
-            143.0473097522267,
-            240.86895451661604,
-            257.7448372484939
+            54.84819924866508,
+            144.6944531494829,
+            239.698212534475,
+            261.26163235206803
           ],
-          "scale": 0.7684206064808115,
+          "scale": 0.78094641178314,
           "source_asset": "figures/supplementary/figure_S31_panels_A-G.pdf",
           "source_sha256": "9bc3a51813bead71578fdc6a7ee00a6ee92395323e8f88c1f13cb32482939819",
           "old_provenance_figure": "figS31",
@@ -12785,19 +12785,19 @@
           "bbox": [
             242.0,
             134.5,
-            516.0,
+            518.4,
             278.0
           ],
-          "width": 274.0,
+          "width": 276.4,
           "height": 143.5,
           "panel": "C",
           "target_rect": [
-            248.86895451661604,
-            143.0473097522267,
-            459.4162006923584,
-            253.31566678222316
+            247.698212534475,
+            144.6944531494829,
+            463.5518007513349,
+            256.7602632403635
           ],
-          "scale": 0.7684206064808115,
+          "scale": 0.78094641178314,
           "source_asset": "figures/supplementary/figure_S31_panels_A-G.pdf",
           "source_sha256": "9bc3a51813bead71578fdc6a7ee00a6ee92395323e8f88c1f13cb32482939819",
           "old_provenance_figure": "figS31",
@@ -12855,12 +12855,12 @@
           "height": 125.0,
           "panel": "D",
           "target_rect": [
-            8.43856133190394,
-            280.7448372484939,
-            142.14374685956514,
-            376.79741305859534
+            4.0,
+            284.26163235206803,
+            139.88467565026636,
+            381.8799338249605
           ],
-          "scale": 0.7684206064808115,
+          "scale": 0.78094641178314,
           "source_asset": "figures/supplementary/figure_S31_panels_A-G.pdf",
           "source_sha256": "9bc3a51813bead71578fdc6a7ee00a6ee92395323e8f88c1f13cb32482939819",
           "old_provenance_figure": "figS31",
@@ -12909,23 +12909,23 @@
           "source": "S18",
           "source_panel": "A",
           "bbox": [
-            4.0,
-            5.685502052307129,
-            263.80963134765625,
-            156.81053161621094
+            2.0,
+            13.4,
+            234.1,
+            158.6
           ],
-          "width": 259.80963134765625,
-          "height": 151.1250295639038,
+          "width": 232.1,
+          "height": 145.2,
           "panel": "E",
           "target_rect": [
-            148.14374685956514,
-            280.7448372484939,
-            347.7868213492872,
-            396.87242412041945
+            145.88467565026636,
+            284.26163235206803,
+            327.14233782513315,
+            397.65505134297996
           ],
-          "scale": 0.7684206064808115,
+          "scale": 0.78094641178314,
           "source_asset": "figures/supplementary/figure_S18_panels_A-K.pdf",
-          "source_sha256": "6142329415ae95a05a7f78ed1a8c6d0c5073300143af9f6a50e60e921c29b8d1",
+          "source_sha256": "1724745817a41637c1ea2694a56172a50755e3b5b864112dc3a4256246353f5a",
           "old_provenance_figure": "figS18",
           "old_provenance_entry_ids": [
             "alignmentdose.asset",
@@ -12955,23 +12955,23 @@
           "source": "S18",
           "source_panel": "B",
           "bbox": [
-            297.3989562988281,
-            5.685502052307129,
-            500.6400146484375,
-            155.63734436035156
+            257.7,
+            13.4,
+            489.8,
+            151.6
           ],
-          "width": 203.24105834960938,
-          "height": 149.95184230804443,
+          "width": 232.10000000000002,
+          "height": 138.2,
           "panel": "F",
           "target_rect": [
-            353.7868213492872,
-            280.7448372484939,
-            509.96143866809604,
-            395.9709228577564
+            333.14233782513315,
+            284.26163235206803,
+            514.4,
+            392.18842646049796
           ],
-          "scale": 0.7684206064808115,
+          "scale": 0.78094641178314,
           "source_asset": "figures/supplementary/figure_S18_panels_A-K.pdf",
-          "source_sha256": "6142329415ae95a05a7f78ed1a8c6d0c5073300143af9f6a50e60e921c29b8d1",
+          "source_sha256": "1724745817a41637c1ea2694a56172a50755e3b5b864112dc3a4256246353f5a",
           "old_provenance_figure": "figS18",
           "old_provenance_entry_ids": [
             "alignmentdose.asset",
@@ -13001,23 +13001,23 @@
           "source": "S18",
           "source_panel": "C",
           "bbox": [
-            4.0,
-            162.6855010986328,
-            258.9513244628906,
-            313.8105163574219
+            2.0,
+            170.4,
+            234.1,
+            312.2
           ],
-          "width": 254.95132446289062,
-          "height": 151.12501525878906,
+          "width": 232.1,
+          "height": 141.79999999999998,
           "panel": "G",
           "target_rect": [
-            67.64191540976057,
-            419.87242412041945,
-            263.5517667766211,
-            536.0
+            73.90329050454406,
+            420.65505134297996,
+            255.16095267941083,
+            531.3932525338291
           ],
-          "scale": 0.7684206064808115,
+          "scale": 0.78094641178314,
           "source_asset": "figures/supplementary/figure_S18_panels_A-K.pdf",
-          "source_sha256": "6142329415ae95a05a7f78ed1a8c6d0c5073300143af9f6a50e60e921c29b8d1",
+          "source_sha256": "1724745817a41637c1ea2694a56172a50755e3b5b864112dc3a4256246353f5a",
           "old_provenance_figure": "figS18",
           "old_provenance_entry_ids": [
             "alignmentdose.asset",
@@ -13047,23 +13047,23 @@
           "source": "S18",
           "source_panel": "D",
           "bbox": [
-            272.6000061035156,
-            162.6855010986328,
-            505.8138427734375,
-            313.8105163574219
+            257.7,
+            170.4,
+            489.9,
+            315.7
           ],
-          "width": 233.21383666992188,
-          "height": 151.12501525878906,
+          "width": 232.2,
+          "height": 145.29999999999998,
           "panel": "H",
           "target_rect": [
-            271.5517667766211,
-            419.87242412041945,
-            450.7580845902394,
-            536.0
+            263.1609526794108,
+            420.65505134297996,
+            444.4967094954559,
+            534.1265649750702
           ],
-          "scale": 0.7684206064808115,
+          "scale": 0.78094641178314,
           "source_asset": "figures/supplementary/figure_S18_panels_A-K.pdf",
-          "source_sha256": "6142329415ae95a05a7f78ed1a8c6d0c5073300143af9f6a50e60e921c29b8d1",
+          "source_sha256": "1724745817a41637c1ea2694a56172a50755e3b5b864112dc3a4256246353f5a",
           "old_provenance_figure": "figS18",
           "old_provenance_entry_ids": [
             "alignmentdose.asset",
@@ -13092,6 +13092,21 @@
       ],
       "ancillary_elements": [
         {
+          "text": "accuracy",
+          "origin": [
+            516.5,
+            220.7
+          ],
+          "fontsize": 6.8,
+          "rotate": 90,
+          "role": "colourbar title, re-set beside the bar",
+          "target_source_panel": "S31D",
+          "target_origin": [
+            462.0680025689469,
+            212.01203384518956
+          ]
+        },
+        {
           "source": "S31",
           "bbox": [
             184,
@@ -13113,23 +13128,23 @@
         {
           "text": "Exact LocalCA: serial advantage (pp)",
           "origin": [
-            344,
+            357.5,
             292
           ],
           "fontsize": 8.0,
           "role": "quantity and optimizer in panel title",
           "target_source_panel": "S31G",
           "target_origin": [
-            9.975402544865563,
-            287.66062270682124
+            16.10466938263867,
+            291.2901500581163
           ]
         }
       ],
       "whole_source_sheet": false,
-      "paste_scale": 0.7684,
+      "paste_scale": 0.7809,
       "width_pt": 518.4000244140625,
-      "height_pt": 540.0,
-      "sha256": "8683f2b066c0f22d9c1d8d8efcae29cebaca143d44bf0b2fbc806c1203e26f2b",
+      "height_pt": 538.1265869140625,
+      "sha256": "97ee94db80be311cdf9529d2c7bfabd940da15239e967423a723fd1a9ae04654",
       "source_data_directories": [
         "source_data/physical_alignment_dose",
         "source_data/remaining_physical_experiments",
@@ -13149,23 +13164,23 @@
           "source": "S15",
           "source_panel": "A",
           "bbox": [
-            16.16452407836914,
-            3.644242286682129,
+            19.84000015258789,
+            8.110264778137207,
             234.0581817626953,
-            185.03076171875
+            165.45022583007812
           ],
-          "width": 217.89365768432617,
-          "height": 181.38651943206787,
+          "width": 214.21818161010742,
+          "height": 157.33996105194092,
           "panel": "A",
           "target_rect": [
-            16.16452407836914,
-            3.644242286682129,
+            19.84000015258789,
+            8.110264778137207,
             234.0581817626953,
-            185.03076171875
+            165.45022583007812
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S15_panels_A-D.pdf",
-          "source_sha256": "9bf874b4ff48aed0477e74e9be607e601537597c8f0f610f446c75610b729331",
+          "source_sha256": "5ceff795b553e8e15151a0a17b40a7549f972c55063fe8ccea4b024ef5434533",
           "old_provenance_figure": "figS15",
           "old_provenance_entry_ids": [
             "physical_calibration.accessibility",
@@ -13189,22 +13204,22 @@
           "source_panel": "B",
           "bbox": [
             289.8240051269531,
-            3.644242286682129,
-            510.05584716796875,
-            166.62400817871094
+            8.110264778137207,
+            508.7594909667969,
+            165.54397583007812
           ],
-          "width": 220.23184204101562,
-          "height": 162.9797658920288,
+          "width": 218.93548583984375,
+          "height": 157.43371105194092,
           "panel": "B",
           "target_rect": [
             289.8240051269531,
-            3.644242286682129,
-            510.05584716796875,
-            166.62400817871094
+            8.110264778137207,
+            508.7594909667969,
+            165.54397583007812
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S15_panels_A-D.pdf",
-          "source_sha256": "9bf874b4ff48aed0477e74e9be607e601537597c8f0f610f446c75610b729331",
+          "source_sha256": "5ceff795b553e8e15151a0a17b40a7549f972c55063fe8ccea4b024ef5434533",
           "old_provenance_figure": "figS15",
           "old_provenance_entry_ids": [
             "physical_calibration.accessibility",
@@ -13228,22 +13243,22 @@
           "source_panel": "C",
           "bbox": [
             19.84000015258789,
-            181.03076171875,
-            271.9840087890625,
-            360.0
+            190.49676513671875,
+            236.6833038330078,
+            347.8367614746094
           ],
-          "width": 252.1440086364746,
-          "height": 178.96923828125,
+          "width": 216.84330368041992,
+          "height": 157.33999633789062,
           "panel": "C",
           "target_rect": [
             19.84000015258789,
-            181.03076171875,
-            271.9840087890625,
-            360.0
+            190.49676513671875,
+            236.6833038330078,
+            347.8367614746094
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S15_panels_A-D.pdf",
-          "source_sha256": "9bf874b4ff48aed0477e74e9be607e601537597c8f0f610f446c75610b729331",
+          "source_sha256": "5ceff795b553e8e15151a0a17b40a7549f972c55063fe8ccea4b024ef5434533",
           "old_provenance_figure": "figS15",
           "old_provenance_entry_ids": [
             "physical_calibration.accessibility",
@@ -13267,22 +13282,22 @@
           "source_panel": "D",
           "bbox": [
             289.8240051269531,
-            186.03076171875,
-            510.05584716796875,
-            349.0105285644531
+            190.49676513671875,
+            512.6240234375,
+            347.8367614746094
           ],
-          "width": 220.23184204101562,
-          "height": 162.97976684570312,
+          "width": 222.80001831054688,
+          "height": 157.33999633789062,
           "panel": "D",
           "target_rect": [
             289.8240051269531,
-            186.03076171875,
-            510.05584716796875,
-            349.0105285644531
+            190.49676513671875,
+            512.6240234375,
+            347.8367614746094
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S15_panels_A-D.pdf",
-          "source_sha256": "9bf874b4ff48aed0477e74e9be607e601537597c8f0f610f446c75610b729331",
+          "source_sha256": "5ceff795b553e8e15151a0a17b40a7549f972c55063fe8ccea4b024ef5434533",
           "old_provenance_figure": "figS15",
           "old_provenance_entry_ids": [
             "physical_calibration.accessibility",
@@ -13307,7 +13322,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 360.0,
-      "sha256": "8957068702ddcda1269997b8a7b72e48e29c61883642c8a976e90e3d2c9eff19",
+      "sha256": "faea7e29b468681f1a4c0fc48a2e41468fdfdee9b6de7288327a84fc02176905",
       "source_data_directories": [
         "source_data/nonlinear_physical_depth_accessibility",
         "source_data/nonlinear_physical_depth_boundary",
@@ -13327,23 +13342,23 @@
           "source": "S18",
           "source_panel": "E",
           "bbox": [
-            4.0,
-            319.6855163574219,
-            275.0775451660156,
-            470.8105163574219
+            2.0,
+            322.8,
+            234.1,
+            472.7
           ],
-          "width": 271.0775451660156,
-          "height": 151.125,
+          "width": 232.1,
+          "height": 149.89999999999998,
           "panel": "A",
           "target_rect": [
-            6.948596191406239,
+            9.550000000000011,
             19.0,
-            278.02614135742186,
-            170.125
+            241.65,
+            168.89999999999998
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S18_panels_A-K.pdf",
-          "source_sha256": "6142329415ae95a05a7f78ed1a8c6d0c5073300143af9f6a50e60e921c29b8d1",
+          "source_sha256": "1724745817a41637c1ea2694a56172a50755e3b5b864112dc3a4256246353f5a",
           "old_provenance_figure": "figS18",
           "old_provenance_entry_ids": [
             "alignmentdose.asset",
@@ -13373,23 +13388,23 @@
           "source": "S18",
           "source_panel": "F",
           "bbox": [
-            281.9589538574219,
-            319.6855163574219,
-            507.38421630859375,
-            470.8105163574219
+            257.7,
+            322.8,
+            516.9,
+            472.7
           ],
-          "width": 225.42526245117188,
-          "height": 151.125,
+          "width": 259.2,
+          "height": 149.89999999999998,
           "panel": "B",
           "target_rect": [
-            286.02614135742186,
+            249.65,
             19.0,
-            511.45140380859374,
-            170.125
+            508.85,
+            168.89999999999998
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S18_panels_A-K.pdf",
-          "source_sha256": "6142329415ae95a05a7f78ed1a8c6d0c5073300143af9f6a50e60e921c29b8d1",
+          "source_sha256": "1724745817a41637c1ea2694a56172a50755e3b5b864112dc3a4256246353f5a",
           "old_provenance_figure": "figS18",
           "old_provenance_entry_ids": [
             "alignmentdose.asset",
@@ -13419,23 +13434,23 @@
           "source": "S28",
           "source_panel": "B",
           "bbox": [
-            4.0,
-            205.53843688964844,
-            502.0289001464844,
-            445.6105041503906
+            6.2,
+            209.5,
+            505.6,
+            389.5
           ],
-          "width": 498.0289001464844,
-          "height": 240.0720672607422,
+          "width": 499.40000000000003,
+          "height": 180.0,
           "panel": "C",
           "target_rect": [
-            10.185549926757801,
-            193.125,
-            508.2144500732422,
-            433.1970672607422
+            9.499999999999972,
+            191.89999999999998,
+            508.9,
+            371.9
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S28_panels_A-B.pdf",
-          "source_sha256": "a8ea7b5b2c84c81ade5e78d92f49c4e777df0785cec37f6f02ba3a60b30dc3a0",
+          "source_sha256": "4045e55dd5139ff4b5f97c6c735b3aa9b5ff57682bc7334c51500f8f367afeb9",
           "old_provenance_figure": "figS28",
           "old_provenance_entry_ids": [
             "physical.diagnostics.asset"
@@ -13448,8 +13463,8 @@
       "whole_source_sheet": false,
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
-      "height_pt": 437.19708251953125,
-      "sha256": "70a8ffdf2e8544d9a2009cbe0656dd7c67c5e59b52f817709e8a3840267627d5",
+      "height_pt": 375.8999938964844,
+      "sha256": "6c4d2aa335bf72edf1c844358eb41b6a4288ea7da910efb4de9a19dc2c09bef1",
       "source_data_directories": [
         "source_data/remaining_physical_experiments",
         "source_data/point_dendrite_credit_controls"
@@ -13466,23 +13481,23 @@
           "source": "S10",
           "source_panel": "B",
           "bbox": [
-            175.2661895751953,
-            15.164260864257812,
-            336.1053466796875,
-            143.79417419433594
+            139.7,
+            31.1,
+            388.7,
+            142.6
           ],
-          "width": 160.8391571044922,
-          "height": 128.62991333007812,
+          "width": 249.0,
+          "height": 111.5,
           "panel": "A",
           "target_rect": [
-            51.780421447753895,
+            6.200000000000017,
             19.0,
-            212.61957855224608,
-            147.62991333007812
+            255.20000000000002,
+            130.5
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S10_panels_A-H.pdf",
-          "source_sha256": "123bcf43dbf1b85ab53e1b5a618f7dde0077ec77c81ee4ddac3bc3bf7a0c91f2",
+          "source_sha256": "03b4bee94e11ffb8bb2eb51b3a61862dd3eb5b2ebb28a1b4b8e303aa673a0ba7",
           "old_provenance_figure": "figS10",
           "old_provenance_entry_ids": [
             "fig5.a-b",
@@ -13503,23 +13518,23 @@
           "source": "S20",
           "source_panel": "B",
           "bbox": [
-            256.0,
-            7.5,
-            502.0,
-            191.0
+            265.8,
+            14.2,
+            514.8,
+            201.3
           ],
-          "width": 246.0,
-          "height": 183.5,
+          "width": 248.99999999999994,
+          "height": 187.10000000000002,
           "panel": "B",
           "target_rect": [
-            220.61957855224608,
+            263.20000000000005,
             19.0,
-            466.6195785522461,
-            202.5
+            512.2,
+            206.10000000000002
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S20_panels_A-B.pdf",
-          "source_sha256": "2b23c7b2f374d64e376bda7f80f4b45b7a37ca581edf0d65c2a17ab05d83b2a6",
+          "source_sha256": "ecb2932b9a9c1a0f15d796765efb160bf4f7825f9b33a8f9db1c29a1d528ca04",
           "old_provenance_figure": "figS20",
           "old_provenance_entry_ids": [
             "fig3.e",
@@ -13535,22 +13550,22 @@
           "source_panel": "B",
           "bbox": [
             266.0,
-            3.5,
+            10.2,
             515.0,
-            188.0
+            188.6
           ],
           "width": 249.0,
-          "height": 184.5,
+          "height": 178.4,
           "panel": "C",
           "target_rect": [
             6.199999999999989,
-            225.5,
+            229.10000000000002,
             255.2,
-            410.0
+            407.5
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S27_panels_A-C.pdf",
-          "source_sha256": "b6255b0658a7a2de4890255096b35757dde9322fb406745981ba777203c821ed",
+          "source_sha256": "a49ff3b2828dc0558706adebe1a668362ce08163c984eda035b65b4a9814dcf3",
           "old_provenance_figure": "figS27",
           "old_provenance_entry_ids": [
             "pinky.asset",
@@ -13572,22 +13587,22 @@
           "source_panel": "D",
           "bbox": [
             266.0,
-            206.5,
+            208.7,
             515.0,
-            394.0
+            380.4
           ],
           "width": 249.0,
-          "height": 187.5,
+          "height": 171.7,
           "panel": "D",
           "target_rect": [
             263.2,
-            225.5,
+            229.10000000000002,
             512.2,
-            413.0
+            400.8
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S27_panels_A-C.pdf",
-          "source_sha256": "b6255b0658a7a2de4890255096b35757dde9322fb406745981ba777203c821ed",
+          "source_sha256": "a49ff3b2828dc0558706adebe1a668362ce08163c984eda035b65b4a9814dcf3",
           "old_provenance_figure": "figS27",
           "old_provenance_entry_ids": [
             "pinky.asset",
@@ -13610,18 +13625,18 @@
           "role": "shared legend",
           "source": "S27",
           "source_asset": "figures/supplementary/figure_S27_panels_A-C.pdf",
-          "source_sha256": "b6255b0658a7a2de4890255096b35757dde9322fb406745981ba777203c821ed",
+          "source_sha256": "a49ff3b2828dc0558706adebe1a668362ce08163c984eda035b65b4a9814dcf3",
           "bbox": [
-            170.0,
-            188.2,
-            408.0,
-            206.4
+            178.5,
+            188.6,
+            391.5,
+            206.7
           ],
           "target_rect": [
-            140.2,
-            414.0,
-            378.2,
-            432.20000000000005
+            152.7,
+            408.5,
+            365.7,
+            426.6
           ],
           "scale": 1.0
         }
@@ -13629,8 +13644,8 @@
       "whole_source_sheet": false,
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
-      "height_pt": 445.20001220703125,
-      "sha256": "572860138d2307112bf461059a992c45789265d208cc522832c472ad8b12bcd7",
+      "height_pt": 439.6000061035156,
+      "sha256": "7db052ac28754e1b98c4f634aa451be60776b0edeb632df820472bf7f91815b8",
       "source_data_directories": [
         "source_data/figure3",
         "source_data/microns_v661_replication",
@@ -13648,23 +13663,23 @@
           "source": "S12",
           "source_panel": "B",
           "bbox": [
-            139.32546997070312,
-            10.106247901916504,
-            459.9200134277344,
-            121.27316284179688
+            124.0,
+            19.0,
+            518.4,
+            127.8
           ],
-          "width": 320.59454345703125,
-          "height": 111.16691493988037,
+          "width": 394.4,
+          "height": 108.8,
           "panel": "A",
           "target_rect": [
-            36.715785217285145,
+            62.0,
             19.0,
-            357.3103286743164,
-            130.16691493988037
+            456.4,
+            127.8
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S12_panels_A-J.pdf",
-          "source_sha256": "20fae4305da8049789fab4d9c90a4348673387f275335a891fc3c8ac4ee7761b",
+          "source_sha256": "09ef876b6c6711749d0473df733e27c04c4cfb32f421f0beff31dfb87338e4a7",
           "old_provenance_figure": "figS12",
           "old_provenance_entry_ids": [
             "inhcensus.asset",
@@ -13690,23 +13705,23 @@
           "source": "S12",
           "source_panel": "D",
           "bbox": [
-            131.68124389648438,
-            149.5781707763672,
-            248.0551300048828,
-            283.39703369140625
+            138.0,
+            175.7,
+            249.1,
+            325.3
           ],
-          "width": 116.37388610839844,
-          "height": 133.81886291503906,
+          "width": 111.1,
+          "height": 149.60000000000002,
           "panel": "B",
           "target_rect": [
-            365.3103286743164,
-            19.0,
-            481.68421478271483,
-            152.81886291503906
+            87.14999999999998,
+            150.8,
+            198.24999999999997,
+            300.40000000000003
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S12_panels_A-J.pdf",
-          "source_sha256": "20fae4305da8049789fab4d9c90a4348673387f275335a891fc3c8ac4ee7761b",
+          "source_sha256": "09ef876b6c6711749d0473df733e27c04c4cfb32f421f0beff31dfb87338e4a7",
           "old_provenance_figure": "figS12",
           "old_provenance_entry_ids": [
             "inhcensus.asset",
@@ -13731,23 +13746,23 @@
           "source": "S12",
           "source_panel": "E",
           "bbox": [
-            266.5642395019531,
-            149.5781707763672,
-            380.4036865234375,
-            283.39703369140625
+            270.3,
+            175.7,
+            380.8,
+            325.3
           ],
-          "width": 113.83944702148438,
-          "height": 133.81886291503906,
+          "width": 110.5,
+          "height": 149.60000000000002,
           "panel": "C",
           "target_rect": [
-            141.38778991699218,
-            175.81886291503906,
-            255.22723693847655,
-            309.6377258300781
+            204.24999999999997,
+            150.8,
+            314.75,
+            300.40000000000003
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S12_panels_A-J.pdf",
-          "source_sha256": "20fae4305da8049789fab4d9c90a4348673387f275335a891fc3c8ac4ee7761b",
+          "source_sha256": "09ef876b6c6711749d0473df733e27c04c4cfb32f421f0beff31dfb87338e4a7",
           "old_provenance_figure": "figS12",
           "old_provenance_entry_ids": [
             "inhcensus.asset",
@@ -13772,23 +13787,23 @@
           "source": "S12",
           "source_panel": "F",
           "bbox": [
-            399.00970458984375,
-            149.5781707763672,
-            512.794677734375,
-            283.39703369140625
+            402.0,
+            175.7,
+            512.5,
+            325.3
           ],
-          "width": 113.78497314453125,
-          "height": 133.81886291503906,
+          "width": 110.5,
+          "height": 149.60000000000002,
           "panel": "D",
           "target_rect": [
-            263.22723693847655,
-            175.81886291503906,
-            377.0122100830078,
-            309.6377258300781
+            320.75,
+            150.8,
+            431.25,
+            300.40000000000003
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S12_panels_A-J.pdf",
-          "source_sha256": "20fae4305da8049789fab4d9c90a4348673387f275335a891fc3c8ac4ee7761b",
+          "source_sha256": "09ef876b6c6711749d0473df733e27c04c4cfb32f421f0beff31dfb87338e4a7",
           "old_provenance_figure": "figS12",
           "old_provenance_entry_ids": [
             "inhcensus.asset",
@@ -13813,23 +13828,23 @@
           "source": "S12",
           "source_panel": "G",
           "bbox": [
-            3.2045254707336426,
-            301.6769104003906,
-            140.8127899169922,
-            446.884521484375
+            4.9,
+            334.8,
+            122.7,
+            476.7
           ],
-          "width": 137.60826444625854,
-          "height": 145.20761108398438,
+          "width": 117.8,
+          "height": 141.89999999999998,
           "panel": "E",
           "target_rect": [
-            121.14586777687072,
-            332.6377258300781,
-            258.75413222312926,
-            477.8453369140625
+            119.94999999999999,
+            323.40000000000003,
+            237.75,
+            465.3
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S12_panels_A-J.pdf",
-          "source_sha256": "20fae4305da8049789fab4d9c90a4348673387f275335a891fc3c8ac4ee7761b",
+          "source_sha256": "09ef876b6c6711749d0473df733e27c04c4cfb32f421f0beff31dfb87338e4a7",
           "old_provenance_figure": "figS12",
           "old_provenance_entry_ids": [
             "inhcensus.asset",
@@ -13854,23 +13869,23 @@
           "source": "S12",
           "source_panel": "H",
           "bbox": [
-            136.5,
-            303.0,
-            267.0,
-            447.0
+            135.8,
+            334.8,
+            288.5,
+            466.9
           ],
-          "width": 130.5,
-          "height": 144.0,
+          "width": 152.7,
+          "height": 132.09999999999997,
           "panel": "F",
           "target_rect": [
-            266.75413222312926,
-            332.6377258300781,
-            397.25413222312926,
-            476.6377258300781
+            245.75,
+            323.40000000000003,
+            398.45,
+            455.5
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S12_panels_A-J.pdf",
-          "source_sha256": "20fae4305da8049789fab4d9c90a4348673387f275335a891fc3c8ac4ee7761b",
+          "source_sha256": "09ef876b6c6711749d0473df733e27c04c4cfb32f421f0beff31dfb87338e4a7",
           "old_provenance_figure": "figS12",
           "old_provenance_entry_ids": [
             "inhcensus.asset",
@@ -13896,8 +13911,8 @@
       "whole_source_sheet": false,
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
-      "height_pt": 481.8453369140625,
-      "sha256": "b9e088fa8c5df9575ef8d2a2fccacd94cc92215683f50056fed4784d0d0d1e1b",
+      "height_pt": 469.29998779296875,
+      "sha256": "af054dca8d4460839a3761983cd82b8b23c7326279e6bc5f329f25a1e20518e7",
       "source_data_directories": [
         "source_data/microns_inhibitory_routes"
       ]
@@ -13914,22 +13929,22 @@
           "source_panel": "A",
           "bbox": [
             47.24800109863281,
-            13.864808082580566,
-            219.02108764648438,
-            139.94740295410156
+            16.2080078125,
+            272.19976806640625,
+            120.8260498046875
           ],
-          "width": 171.77308654785156,
-          "height": 126.082594871521,
+          "width": 224.95176696777344,
+          "height": 104.6180419921875,
           "panel": "A",
           "target_rect": [
             47.24800109863281,
-            13.864808082580566,
-            219.02108764648438,
-            139.94740295410156
+            16.2080078125,
+            272.19976806640625,
+            120.8260498046875
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S25_panels_A-D.pdf",
-          "source_sha256": "ee14aeb02b937f9636d87b63454dea80cf3d76fc088a923432a60e67ba5de39a",
+          "source_sha256": "bc57ef4455069d95026a4dae44079af4f0d4b99fedb2d4ae6113f6d21ebaffa4",
           "old_provenance_figure": "figS25",
           "old_provenance_entry_ids": [
             "irregular.wavelet.asset"
@@ -13941,23 +13956,23 @@
           "source": "S25",
           "source_panel": "B",
           "bbox": [
-            289.15667724609375,
-            7.787147521972656,
-            509.0449523925781,
-            147.82345581054688
+            293.5,
+            16.2,
+            512.6,
+            161.4
           ],
-          "width": 219.88827514648438,
-          "height": 140.03630828857422,
+          "width": 219.10000000000002,
+          "height": 145.20000000000002,
           "panel": "B",
           "target_rect": [
-            289.15667724609375,
-            7.787147521972656,
-            509.0449523925781,
-            147.82345581054688
+            293.5,
+            16.2,
+            512.6,
+            161.4
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S25_panels_A-D.pdf",
-          "source_sha256": "ee14aeb02b937f9636d87b63454dea80cf3d76fc088a923432a60e67ba5de39a",
+          "source_sha256": "bc57ef4455069d95026a4dae44079af4f0d4b99fedb2d4ae6113f6d21ebaffa4",
           "old_provenance_figure": "figS25",
           "old_provenance_entry_ids": [
             "irregular.wavelet.asset"
@@ -13973,23 +13988,23 @@
           "source": "S25",
           "source_panel": "C",
           "bbox": [
-            13.572525024414062,
-            171.8973846435547,
-            234.86856079101562,
-            299.2779235839844
+            18.8,
+            180.0,
+            241.9,
+            308.0
           ],
-          "width": 221.29603576660156,
-          "height": 127.38053894042969,
+          "width": 223.1,
+          "height": 128.0,
           "panel": "C",
           "target_rect": [
-            13.572525024414062,
-            171.8973846435547,
-            234.86856079101562,
-            299.2779235839844
+            18.8,
+            180.0,
+            241.9,
+            308.0
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S25_panels_A-D.pdf",
-          "source_sha256": "ee14aeb02b937f9636d87b63454dea80cf3d76fc088a923432a60e67ba5de39a",
+          "source_sha256": "bc57ef4455069d95026a4dae44079af4f0d4b99fedb2d4ae6113f6d21ebaffa4",
           "old_provenance_figure": "figS25",
           "old_provenance_entry_ids": [
             "irregular.wavelet.asset"
@@ -14007,23 +14022,23 @@
           "source": "S25",
           "source_panel": "D",
           "bbox": [
-            281.51605224609375,
-            163.26283264160156,
-            518.2317504882812,
-            309.0122985839844
+            288.9,
+            180.0,
+            512.6,
+            308.4
           ],
-          "width": 236.7156982421875,
-          "height": 145.7494659423828,
+          "width": 223.70000000000005,
+          "height": 128.39999999999998,
           "panel": "D",
           "target_rect": [
-            281.51605224609375,
-            163.26283264160156,
-            518.2317504882812,
-            309.0122985839844
+            288.9,
+            180.0,
+            512.6,
+            308.4
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S25_panels_A-D.pdf",
-          "source_sha256": "ee14aeb02b937f9636d87b63454dea80cf3d76fc088a923432a60e67ba5de39a",
+          "source_sha256": "bc57ef4455069d95026a4dae44079af4f0d4b99fedb2d4ae6113f6d21ebaffa4",
           "old_provenance_figure": "figS25",
           "old_provenance_entry_ids": [
             "irregular.wavelet.asset"
@@ -14041,7 +14056,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 320.3999938964844,
-      "sha256": "0b9b99c299e684e90e9ad786c68e5d565a863291eec78dd70d74a4b6375ebadf",
+      "sha256": "96556f1ee93ef4de8eb9cfdcbf8afbb73f5cef00bedfc1ed00cfdea0a6fef1fe",
       "source_data_directories": [
         "source_data/irregular_tree_wavelets"
       ]
@@ -14057,23 +14072,23 @@
           "source": "S33",
           "source_panel": "A",
           "bbox": [
-            24.022249221801758,
-            9.021814346313477,
-            250.05027770996094,
-            145.07896423339844
+            19.932403564453125,
+            3.9280099868774414,
+            259.7350158691406,
+            145.58758544921875
           ],
-          "width": 226.02802848815918,
-          "height": 136.05714988708496,
+          "width": 239.8026123046875,
+          "height": 141.6595754623413,
           "panel": "A",
           "target_rect": [
-            24.022249221801758,
-            9.021814346313477,
-            250.05027770996094,
-            145.07896423339844
+            19.932403564453125,
+            3.9280099868774414,
+            259.7350158691406,
+            145.58758544921875
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S33_panels_A-F.pdf",
-          "source_sha256": "badc40b9759632f588148965dbde82f594d9f2b4b7405d03c92146eb0c19258d",
+          "source_sha256": "568937771cb95e9769bcf03e321dd8566d17abe0f56630becbe93b0e3b6cfb4a",
           "old_provenance_figure": "figS33",
           "old_provenance_entry_ids": [
             "completion.source_data.review_morphology_uncertainty.README.md",
@@ -14102,23 +14117,23 @@
           "source": "S33",
           "source_panel": "B",
           "bbox": [
-            287.4762878417969,
-            9.021814346313477,
-            509.545166015625,
-            145.07896423339844
+            276.622314453125,
+            3.9280099868774414,
+            499.1063537597656,
+            154.88131713867188
           ],
-          "width": 222.06887817382812,
-          "height": 136.05714988708496,
+          "width": 222.48403930664062,
+          "height": 150.95330715179443,
           "panel": "B",
           "target_rect": [
-            287.4762878417969,
-            9.021814346313477,
-            509.545166015625,
-            145.07896423339844
+            276.622314453125,
+            3.9280099868774414,
+            499.1063537597656,
+            154.88131713867188
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S33_panels_A-F.pdf",
-          "source_sha256": "badc40b9759632f588148965dbde82f594d9f2b4b7405d03c92146eb0c19258d",
+          "source_sha256": "568937771cb95e9769bcf03e321dd8566d17abe0f56630becbe93b0e3b6cfb4a",
           "old_provenance_figure": "figS33",
           "old_provenance_entry_ids": [
             "completion.source_data.review_morphology_uncertainty.README.md",
@@ -14147,23 +14162,23 @@
           "source": "S33",
           "source_panel": "C",
           "bbox": [
-            27.470386505126953,
-            177.00640869140625,
-            246.2363739013672,
-            323.13153076171875
+            16.61638641357422,
+            185.7510986328125,
+            224.6572265625,
+            327.4106750488281
           ],
-          "width": 218.76598739624023,
-          "height": 146.1251220703125,
+          "width": 208.04084014892578,
+          "height": 141.65957641601562,
           "panel": "C",
           "target_rect": [
-            27.470386505126953,
-            177.00640869140625,
-            246.2363739013672,
-            323.13153076171875
+            16.61638641357422,
+            185.7510986328125,
+            224.6572265625,
+            327.4106750488281
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S33_panels_A-F.pdf",
-          "source_sha256": "badc40b9759632f588148965dbde82f594d9f2b4b7405d03c92146eb0c19258d",
+          "source_sha256": "568937771cb95e9769bcf03e321dd8566d17abe0f56630becbe93b0e3b6cfb4a",
           "old_provenance_figure": "figS33",
           "old_provenance_entry_ids": [
             "completion.source_data.review_morphology_uncertainty.README.md",
@@ -14192,23 +14207,23 @@
           "source": "S33",
           "source_panel": "D",
           "bbox": [
-            287.4762878417969,
-            177.00640869140625,
-            509.8191223144531,
-            323.13153076171875
+            276.622314453125,
+            185.7510986328125,
+            493.5551452636719,
+            327.5044250488281
           ],
-          "width": 222.34283447265625,
-          "height": 146.1251220703125,
+          "width": 216.93283081054688,
+          "height": 141.75332641601562,
           "panel": "D",
           "target_rect": [
-            287.4762878417969,
-            177.00640869140625,
-            509.8191223144531,
-            323.13153076171875
+            276.622314453125,
+            185.7510986328125,
+            493.5551452636719,
+            327.5044250488281
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S33_panels_A-F.pdf",
-          "source_sha256": "badc40b9759632f588148965dbde82f594d9f2b4b7405d03c92146eb0c19258d",
+          "source_sha256": "568937771cb95e9769bcf03e321dd8566d17abe0f56630becbe93b0e3b6cfb4a",
           "old_provenance_figure": "figS33",
           "old_provenance_entry_ids": [
             "completion.source_data.review_morphology_uncertainty.README.md",
@@ -14237,23 +14252,23 @@
           "source": "S33",
           "source_panel": "E",
           "bbox": [
-            27.01525115966797,
-            344.99102783203125,
-            247.42605590820312,
-            491.1161193847656
+            14.464374542236328,
+            358.5771789550781,
+            232.14686584472656,
+            504.0
           ],
-          "width": 220.41080474853516,
-          "height": 146.12509155273438,
+          "width": 217.68249130249023,
+          "height": 145.42282104492188,
           "panel": "E",
           "target_rect": [
-            27.01525115966797,
-            344.99102783203125,
-            247.42605590820312,
-            491.1161193847656
+            14.464374542236328,
+            358.5771789550781,
+            232.14686584472656,
+            504.0
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S33_panels_A-F.pdf",
-          "source_sha256": "badc40b9759632f588148965dbde82f594d9f2b4b7405d03c92146eb0c19258d",
+          "source_sha256": "568937771cb95e9769bcf03e321dd8566d17abe0f56630becbe93b0e3b6cfb4a",
           "old_provenance_figure": "figS33",
           "old_provenance_entry_ids": [
             "completion.source_data.review_morphology_uncertainty.README.md",
@@ -14282,23 +14297,23 @@
           "source": "S33",
           "source_panel": "F",
           "bbox": [
-            280.4305419921875,
-            344.99102783203125,
-            515.99609375,
-            491.1161193847656
+            265.5234069824219,
+            358.5771789550781,
+            504.04083251953125,
+            500.26800537109375
           ],
-          "width": 235.5655517578125,
-          "height": 146.12509155273438,
+          "width": 238.51742553710938,
+          "height": 141.69082641601562,
           "panel": "F",
           "target_rect": [
-            280.4305419921875,
-            344.99102783203125,
-            515.99609375,
-            491.1161193847656
+            265.5234069824219,
+            358.5771789550781,
+            504.04083251953125,
+            500.26800537109375
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S33_panels_A-F.pdf",
-          "source_sha256": "badc40b9759632f588148965dbde82f594d9f2b4b7405d03c92146eb0c19258d",
+          "source_sha256": "568937771cb95e9769bcf03e321dd8566d17abe0f56630becbe93b0e3b6cfb4a",
           "old_provenance_figure": "figS33",
           "old_provenance_entry_ids": [
             "completion.source_data.review_morphology_uncertainty.README.md",
@@ -14329,7 +14344,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 504.0,
-      "sha256": "7d769b0946a97078adf03072fd0b8a9d6eacdecb74870fe9fca4ee92f26cad95",
+      "sha256": "bfd305fd7758ac434504829387c7521d6d4660a39ff621d56e01becbd36b0e04",
       "source_data_directories": [
         "source_data/review_morphology_uncertainty"
       ]
@@ -14345,23 +14360,23 @@
           "source": "S11",
           "source_panel": "A",
           "bbox": [
-            0.0,
-            5.228241920471191,
-            184.1077880859375,
-            196.18052673339844
+            6.176875114440918,
+            5.759007453918457,
+            221.6678466796875,
+            179.78363037109375
           ],
-          "width": 184.1077880859375,
-          "height": 190.95228481292725,
+          "width": 215.49097156524658,
+          "height": 174.0246229171753,
           "panel": "A",
           "target_rect": [
-            73.979616121405,
+            57.0932104394372,
             19.0,
-            229.13504616358676,
-            179.92357730058401
+            253.60005338849408,
+            177.69355916147975
           ],
-          "scale": 0.8427423503114306,
+          "scale": 0.9119029048952908,
           "source_asset": "figures/supplementary/figure_S11_panels_A-C.pdf",
-          "source_sha256": "79b8b946b969939a71e4f64d1b8e3e0cb58f2a298114b1b6d2f6a644b296c100",
+          "source_sha256": "be93b440e7b5dde31e2bbb5fee0c3b924e9f08d40f51eecaef52d23431e0e2fb",
           "old_provenance_figure": "figS11",
           "old_provenance_entry_ids": [
             "focalmatrix.asset",
@@ -14384,23 +14399,23 @@
           "source": "S21",
           "source_panel": "A",
           "bbox": [
-            4.0,
-            1.685502052307129,
-            249.9652557373047,
-            173.93734741210938
+            32.0,
+            4.8,
+            251.0,
+            171.8
           ],
-          "width": 245.9652557373047,
-          "height": 172.25184535980225,
+          "width": 219.0,
+          "height": 167.0,
           "panel": "B",
           "target_rect": [
-            237.13504616358676,
+            261.6000533884941,
             19.0,
-            444.420383878595,
-            164.16392500400084
+            461.3067895605627,
+            171.28778511751355
           ],
-          "scale": 0.8427423503114306,
+          "scale": 0.9119029048952908,
           "source_asset": "figures/supplementary/figure_S21_panels_A-D.pdf",
-          "source_sha256": "15d9d1a278be75310d780e7d06a0d56ee8e75548fa9ce7d934c4d2ebb54c3cdb",
+          "source_sha256": "86727844700a11b853f8f4c902e2ed782b791fd017f373387bc4c855316c92e7",
           "old_provenance_figure": "figS21",
           "old_provenance_entry_ids": [
             "completion.source_data.review_focal_depth.figure_S21_depth_intervals.csv",
@@ -14433,23 +14448,23 @@
           "source": "S11",
           "source_panel": "B",
           "bbox": [
-            188.44644165039062,
-            5.228241920471191,
-            334.02264404296875,
-            196.89830017089844
+            225.4,
+            5.8,
+            386.8,
+            178.1
           ],
-          "width": 145.57620239257812,
-          "height": 191.67005825042725,
+          "width": 161.4,
+          "height": 172.29999999999998,
           "panel": "C",
           "target_rect": [
-            132.53778102442183,
-            202.92357730058401,
-            255.22101197815562,
-            364.4520526748779
+            126.80407099074304,
+            200.69355916147975,
+            273.985199840843,
+            357.8144296749383
           ],
-          "scale": 0.8427423503114306,
+          "scale": 0.9119029048952908,
           "source_asset": "figures/supplementary/figure_S11_panels_A-C.pdf",
-          "source_sha256": "79b8b946b969939a71e4f64d1b8e3e0cb58f2a298114b1b6d2f6a644b296c100",
+          "source_sha256": "be93b440e7b5dde31e2bbb5fee0c3b924e9f08d40f51eecaef52d23431e0e2fb",
           "old_provenance_figure": "figS11",
           "old_provenance_entry_ids": [
             "focalmatrix.asset",
@@ -14472,23 +14487,23 @@
           "source": "S11",
           "source_panel": "C",
           "bbox": [
-            364.8288879394531,
-            5.228241920471191,
-            510.355224609375,
-            198.74063110351562
+            390.5,
+            5.8,
+            510.7,
+            176.0
           ],
-          "width": 145.52633666992188,
-          "height": 193.51238918304443,
+          "width": 120.19999999999999,
+          "height": 170.2,
           "panel": "D",
           "target_rect": [
-            263.2210119781556,
-            202.92357730058401,
-            385.8622189755781,
-            366.00466297508314
+            281.985199840843,
+            200.69355916147975,
+            391.5959290092569,
+            355.89943357465825
           ],
-          "scale": 0.8427423503114306,
+          "scale": 0.9119029048952908,
           "source_asset": "figures/supplementary/figure_S11_panels_A-C.pdf",
-          "source_sha256": "79b8b946b969939a71e4f64d1b8e3e0cb58f2a298114b1b6d2f6a644b296c100",
+          "source_sha256": "be93b440e7b5dde31e2bbb5fee0c3b924e9f08d40f51eecaef52d23431e0e2fb",
           "old_provenance_figure": "figS11",
           "old_provenance_entry_ids": [
             "focalmatrix.asset",
@@ -14511,23 +14526,23 @@
           "source": "S21",
           "source_panel": "D",
           "bbox": [
-            251.60000610351562,
-            198.1855010986328,
-            513.4922485351562,
-            371.4373474121094
+            321.0,
+            201.3,
+            498.7,
+            361.6
           ],
-          "width": 261.8922424316406,
-          "height": 173.25184631347656,
+          "width": 177.7,
+          "height": 160.3,
           "panel": "E",
           "target_rect": [
-            47.31243893065542,
-            389.00466297508314,
-            268.02012284582725,
-            535.0113311330972
+            44.99215141909417,
+            380.8144296749383,
+            207.03729761898734,
+            526.9924653296534
           ],
-          "scale": 0.8427423503114306,
+          "scale": 0.9119029048952908,
           "source_asset": "figures/supplementary/figure_S21_panels_A-D.pdf",
-          "source_sha256": "15d9d1a278be75310d780e7d06a0d56ee8e75548fa9ce7d934c4d2ebb54c3cdb",
+          "source_sha256": "86727844700a11b853f8f4c902e2ed782b791fd017f373387bc4c855316c92e7",
           "old_provenance_figure": "figS21",
           "old_provenance_entry_ids": [
             "completion.source_data.review_focal_depth.figure_S21_depth_intervals.csv",
@@ -14560,23 +14575,23 @@
           "source": "S21",
           "source_panel": "C",
           "bbox": [
-            4.0,
-            198.1855010986328,
-            235.46746826171875,
-            372.6105041503906
+            15.328125,
+            201.25900268554688,
+            298.6593322753906,
+            371.4367370605469
           ],
-          "width": 231.46746826171875,
-          "height": 174.4250030517578,
+          "width": 283.3312072753906,
+          "height": 170.177734375,
           "panel": "F",
           "target_rect": [
-            276.02012284582725,
-            389.00466297508314,
-            471.0875610693446,
+            215.03729761898734,
+            380.8144296749383,
+            473.4078485809058,
             536.0
           ],
-          "scale": 0.8427423503114306,
+          "scale": 0.9119029048952908,
           "source_asset": "figures/supplementary/figure_S21_panels_A-D.pdf",
-          "source_sha256": "15d9d1a278be75310d780e7d06a0d56ee8e75548fa9ce7d934c4d2ebb54c3cdb",
+          "source_sha256": "86727844700a11b853f8f4c902e2ed782b791fd017f373387bc4c855316c92e7",
           "old_provenance_figure": "figS21",
           "old_provenance_entry_ids": [
             "completion.source_data.review_focal_depth.figure_S21_depth_intervals.csv",
@@ -14608,10 +14623,10 @@
       ],
       "ancillary_elements": [],
       "whole_source_sheet": false,
-      "paste_scale": 0.8427,
+      "paste_scale": 0.9119,
       "width_pt": 518.4000244140625,
       "height_pt": 540.0,
-      "sha256": "dd18108072a6ce7acf415fbc862eb5746187f5d00599f033ce60160aee1bb424",
+      "sha256": "e64e0ab1974dad00df62e3d9501572f48cccecd1652193ef3ebc3d9c1a62e69d",
       "source_data_directories": [
         "source_data/figure4",
         "source_data/focal_selectivity_phase1",
@@ -14629,23 +14644,23 @@
           "source": "S10",
           "source_panel": "F",
           "bbox": [
-            345.8,
-            158.8,
-            514.0,
-            288.0
+            340.6,
+            163.4,
+            504.8,
+            284.2
           ],
-          "width": 168.2,
-          "height": 129.2,
+          "width": 164.2,
+          "height": 120.79999999999998,
           "panel": "A",
           "target_rect": [
-            44.39999999999998,
+            7.800000000000011,
             19.0,
-            212.59999999999997,
-            148.2
+            172.0,
+            139.79999999999998
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S10_panels_A-H.pdf",
-          "source_sha256": "123bcf43dbf1b85ab53e1b5a618f7dde0077ec77c81ee4ddac3bc3bf7a0c91f2",
+          "source_sha256": "03b4bee94e11ffb8bb2eb51b3a61862dd3eb5b2ebb28a1b4b8e303aa673a0ba7",
           "old_provenance_figure": "figS10",
           "old_provenance_entry_ids": [
             "fig5.a-b",
@@ -14666,23 +14681,23 @@
           "source": "S10",
           "source_panel": "G",
           "bbox": [
-            13.6,
-            302.6,
-            267.0,
-            431.0
+            19.1,
+            307.1,
+            185.2,
+            427.9
           ],
-          "width": 253.4,
-          "height": 128.39999999999998,
+          "width": 166.1,
+          "height": 120.79999999999995,
           "panel": "B",
           "target_rect": [
-            220.59999999999997,
+            178.0,
             19.0,
-            474.0,
-            147.39999999999998
+            344.1,
+            139.79999999999995
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S10_panels_A-H.pdf",
-          "source_sha256": "123bcf43dbf1b85ab53e1b5a618f7dde0077ec77c81ee4ddac3bc3bf7a0c91f2",
+          "source_sha256": "03b4bee94e11ffb8bb2eb51b3a61862dd3eb5b2ebb28a1b4b8e303aa673a0ba7",
           "old_provenance_figure": "figS10",
           "old_provenance_entry_ids": [
             "fig5.a-b",
@@ -14703,23 +14718,23 @@
           "source": "S10",
           "source_panel": "H",
           "bbox": [
-            265.0,
-            302.6,
-            515.0,
-            432.0
+            181.5,
+            307.1,
+            342.0,
+            430.1
           ],
-          "width": 250.0,
-          "height": 129.39999999999998,
+          "width": 160.5,
+          "height": 123.0,
           "panel": "C",
           "target_rect": [
-            134.2,
-            171.2,
-            384.2,
-            300.59999999999997
+            350.1,
+            19.0,
+            510.6,
+            142.0
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S10_panels_A-H.pdf",
-          "source_sha256": "123bcf43dbf1b85ab53e1b5a618f7dde0077ec77c81ee4ddac3bc3bf7a0c91f2",
+          "source_sha256": "03b4bee94e11ffb8bb2eb51b3a61862dd3eb5b2ebb28a1b4b8e303aa673a0ba7",
           "old_provenance_figure": "figS10",
           "old_provenance_entry_ids": [
             "fig5.a-b",
@@ -14740,19 +14755,19 @@
           "source": "S47",
           "source_panel": "A",
           "bbox": [
-            13.819768905639648,
+            13.8,
             0.0,
-            233.07620239257812,
-            177.4705352783203
+            260.0,
+            177.5
           ],
-          "width": 219.25643348693848,
-          "height": 177.4705352783203,
+          "width": 246.2,
+          "height": 177.5,
           "panel": "D",
           "target_rect": [
-            38.347143363952625,
-            323.59999999999997,
-            257.6035768508911,
-            501.0705352783203
+            7.900000000000006,
+            165.0,
+            254.1,
+            342.5
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_shunt_weak_channels.pdf",
@@ -14777,19 +14792,19 @@
           "source": "S47",
           "source_panel": "B",
           "bbox": [
-            283.0235900878906,
+            270.0,
             0.0,
-            497.4728698730469,
-            177.4705352783203
+            518.4,
+            177.5
           ],
-          "width": 214.44927978515625,
-          "height": 177.4705352783203,
+          "width": 248.39999999999998,
+          "height": 177.5,
           "panel": "E",
           "target_rect": [
-            265.6035768508911,
-            323.59999999999997,
-            480.05285663604735,
-            501.0705352783203
+            262.1,
+            165.0,
+            510.5,
+            342.5
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_shunt_weak_channels.pdf",
@@ -14811,41 +14826,12 @@
           "explicit_numerical_source_hashes": {}
         }
       ],
-      "ancillary_elements": [
-        {
-          "text": "true",
-          "origin": [
-            235,
-            417
-          ],
-          "fontsize": 7.0,
-          "role": "compact x-axis label, line 1",
-          "target_source_panel": "S10G",
-          "target_origin": [
-            442.0,
-            133.39999999999998
-          ]
-        },
-        {
-          "text": "descendants",
-          "origin": [
-            219,
-            426
-          ],
-          "fontsize": 7.0,
-          "role": "compact x-axis label, line 2",
-          "target_source_panel": "S10G",
-          "target_origin": [
-            426.0,
-            142.39999999999998
-          ]
-        }
-      ],
+      "ancillary_elements": [],
       "whole_source_sheet": false,
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
-      "height_pt": 505.0705261230469,
-      "sha256": "acf6cf6d8710df0d04c5338561fe5e12cc3a5dbc5eb2f73bb36549fcb4f7a2ae",
+      "height_pt": 346.5,
+      "sha256": "210c8f163eade7645dbd26e983ea70c4814176288a50831672e20ba0e522c967",
       "source_data_directories": [
         "source_data/focal_selectivity_active_ensemble",
         "source_data/focal_selectivity_phase1",
@@ -14863,23 +14849,23 @@
           "source": "S22",
           "source_panel": "A",
           "bbox": [
-            4.0,
-            4.685502052307129,
-            171.1662139892578,
-            136.81053161621094
+            18.402000427246094,
+            7.759007453918457,
+            180.0094757080078,
+            135.86801147460938
           ],
-          "width": 167.1662139892578,
-          "height": 132.1250295639038,
+          "width": 161.60747528076172,
+          "height": 128.10900402069092,
           "panel": "A",
           "target_rect": [
-            79.05370983598408,
+            116.55021489011534,
             19.0,
-            238.51553177038366,
-            145.03562307602664
+            272.63700223633134,
+            142.73266046619264
           ],
-          "scale": 0.9539117871309012,
+          "scale": 0.9658389073589906,
           "source_asset": "figures/supplementary/figure_S22_panels_A-J.pdf",
-          "source_sha256": "298b669dde6a2f35b5531889b56cc52f8f884c5fe39a40d9c73f5992084630f2",
+          "source_sha256": "df6ea1187ff6cbc2c17143d260478c347397483a42115b67e076aef6fa6746e1",
           "old_provenance_figure": "figS22",
           "old_provenance_entry_ids": [
             "fig6.b-d",
@@ -14908,21 +14894,21 @@
           "source": "M9",
           "source_panel": "B",
           "bbox": [
-            4.0,
-            120.49632263183594,
-            206.14736938476562,
-            264.3937072753906
+            80.7,
+            126.6,
+            206.2,
+            264.4
           ],
-          "width": 202.14736938476562,
-          "height": 143.8973846435547,
+          "width": 125.49999999999999,
+          "height": 137.79999999999998,
           "panel": "B",
           "target_rect": [
-            246.51553177038366,
+            280.63700223633134,
             19.0,
-            439.34629016401584,
-            156.26541134879594
+            401.84978510988464,
+            152.09260143406888
           ],
-          "scale": 0.9539117871309012,
+          "scale": 0.9658389073589906,
           "source_asset": "figures/supplementary/frozen/credit_first_figure_08_M9.pdf",
           "source_sha256": "131b9b04b89c29f711b83a4121efa03e97f76dff6629ea5fb0e4e17002b61bb7",
           "old_provenance_figure": "fig9",
@@ -14957,21 +14943,21 @@
           "source": "M9",
           "source_panel": "D",
           "bbox": [
-            4.0,
-            285.0,
-            263.0,
-            456.0
+            33.2,
+            283.5,
+            262.2,
+            454.6
           ],
-          "width": 259.0,
-          "height": 171.0,
+          "width": 229.0,
+          "height": 171.10000000000002,
           "panel": "C",
           "target_rect": [
-            23.637913673973742,
-            179.26541134879594,
-            270.70106654087715,
-            342.38432694818005
+            33.10534325280011,
+            175.09260143406888,
+            254.28245303800895,
+            340.3476384831922
           ],
-          "scale": 0.9539117871309012,
+          "scale": 0.9658389073589906,
           "source_asset": "figures/supplementary/frozen/credit_first_figure_08_M9.pdf",
           "source_sha256": "131b9b04b89c29f711b83a4121efa03e97f76dff6629ea5fb0e4e17002b61bb7",
           "old_provenance_figure": "fig9",
@@ -15008,19 +14994,19 @@
           "bbox": [
             275.5,
             283.5,
-            502.0,
+            506.4,
             455.0
           ],
-          "width": 226.5,
+          "width": 230.89999999999998,
           "height": 171.5,
           "panel": "D",
           "target_rect": [
-            278.70106654087715,
-            179.26541134879594,
-            494.7620863260263,
-            342.8612828417455
+            262.28245303800895,
+            175.09260143406888,
+            485.29465674719984,
+            340.73397404613576
           ],
-          "scale": 0.9539117871309012,
+          "scale": 0.9658389073589906,
           "source_asset": "figures/supplementary/frozen/credit_first_figure_08_M9.pdf",
           "source_sha256": "131b9b04b89c29f711b83a4121efa03e97f76dff6629ea5fb0e4e17002b61bb7",
           "old_provenance_figure": "fig9",
@@ -15064,12 +15050,12 @@
           "height": 178.3589630126953,
           "panel": "E",
           "target_rect": [
-            22.439097345218073,
-            365.8612828417455,
-            495.9609026547819,
+            19.478786141004946,
+            363.73397404613576,
+            498.92121385899503,
             536.0
           ],
-          "scale": 0.9539117871309012,
+          "scale": 0.9658389073589906,
           "source_asset": "figures/supplementary/figure_S56_measured_alignment_power.pdf",
           "source_sha256": "a76a96a1ae5520b906700a788786bc13e99545f055c2bf2e95fa29c2a5caec2b",
           "old_provenance_figure": "figS56",
@@ -15347,10 +15333,10 @@
       ],
       "ancillary_elements": [],
       "whole_source_sheet": false,
-      "paste_scale": 0.9539,
+      "paste_scale": 0.9658,
       "width_pt": 518.4000244140625,
       "height_pt": 540.0,
-      "sha256": "cc1fa31dbffee9ab8c143d89f2a2dbcc6d20b851b7fc3ecd8222b32d8fa26c03",
+      "sha256": "c13bad8f4f0b3478e867e175f031828e590e55148202cc7742c7dca508f8d83c",
       "source_data_directories": [
         "source_data/figure5",
         "source_data/measured_alignment_power",
@@ -15371,23 +15357,23 @@
           "source": "S34",
           "source_panel": "A",
           "bbox": [
-            3.669750213623047,
-            9.260270118713379,
-            242.96055603027344,
-            207.15411376953125
+            5.232250213623047,
+            13.726262092590332,
+            248.67938232421875,
+            214.90594482421875
           ],
-          "width": 239.2908058166504,
-          "height": 197.89384365081787,
+          "width": 243.4471321105957,
+          "height": 201.17968273162842,
           "panel": "A",
           "target_rect": [
-            3.669750213623047,
-            9.260270118713379,
-            242.96055603027344,
-            207.15411376953125
+            5.232250213623047,
+            13.726262092590332,
+            248.67938232421875,
+            214.90594482421875
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S34_panels_A-D.pdf",
-          "source_sha256": "e628d9d34929eedf607f07441cf5f19f7d2a8347a4cd7d6fe2b27d6fff658fb9",
+          "source_sha256": "6a923b15a55c333d4e6ca539a67cc8a69ca046d3e7a4135453d59435f7a3636e",
           "old_provenance_figure": "figS34",
           "old_provenance_entry_ids": [
             "completion.source_data.review_response_baselines.README.md",
@@ -15428,23 +15414,23 @@
           "source": "S34",
           "source_panel": "B",
           "bbox": [
-            296.7694396972656,
-            9.260270118713379,
-            511.6315002441406,
-            215.07029724121094
+            300.4449157714844,
+            13.726262092590332,
+            508.7384338378906,
+            223.4800567626953
           ],
-          "width": 214.862060546875,
-          "height": 205.81002712249756,
+          "width": 208.29351806640625,
+          "height": 209.75379467010498,
           "panel": "B",
           "target_rect": [
-            296.7694396972656,
-            9.260270118713379,
-            511.6315002441406,
-            215.07029724121094
+            300.4449157714844,
+            13.726262092590332,
+            508.7384338378906,
+            223.4800567626953
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S34_panels_A-D.pdf",
-          "source_sha256": "e628d9d34929eedf607f07441cf5f19f7d2a8347a4cd7d6fe2b27d6fff658fb9",
+          "source_sha256": "6a923b15a55c333d4e6ca539a67cc8a69ca046d3e7a4135453d59435f7a3636e",
           "old_provenance_figure": "figS34",
           "old_provenance_entry_ids": [
             "completion.source_data.review_response_baselines.README.md",
@@ -15485,23 +15471,23 @@
           "source": "S34",
           "source_panel": "C",
           "bbox": [
-            36.9005241394043,
-            229.96426391601562,
-            261.8689270019531,
-            466.9720153808594
+            40.57600021362305,
+            244.6734619140625,
+            248.99136352539062,
+            445.8531494140625
           ],
-          "width": 224.96840286254883,
-          "height": 237.00775146484375,
+          "width": 208.41536331176758,
+          "height": 201.1796875,
           "panel": "C",
           "target_rect": [
-            36.9005241394043,
-            229.96426391601562,
-            261.8689270019531,
-            466.9720153808594
+            40.57600021362305,
+            244.6734619140625,
+            248.99136352539062,
+            445.8531494140625
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S34_panels_A-D.pdf",
-          "source_sha256": "e628d9d34929eedf607f07441cf5f19f7d2a8347a4cd7d6fe2b27d6fff658fb9",
+          "source_sha256": "6a923b15a55c333d4e6ca539a67cc8a69ca046d3e7a4135453d59435f7a3636e",
           "old_provenance_figure": "figS34",
           "old_provenance_entry_ids": [
             "completion.source_data.review_response_baselines.README.md",
@@ -15542,23 +15528,23 @@
           "source": "S34",
           "source_panel": "D",
           "bbox": [
-            296.7694396972656,
-            229.96426391601562,
-            511.2379455566406,
-            446.8617858886719
+            300.4449157714844,
+            244.6734619140625,
+            509.2474670410156,
+            463.1710205078125
           ],
-          "width": 214.468505859375,
-          "height": 216.89752197265625,
+          "width": 208.80255126953125,
+          "height": 218.49755859375,
           "panel": "D",
           "target_rect": [
-            296.7694396972656,
-            229.96426391601562,
-            511.2379455566406,
-            446.8617858886719
+            300.4449157714844,
+            244.6734619140625,
+            509.2474670410156,
+            463.1710205078125
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S34_panels_A-D.pdf",
-          "source_sha256": "e628d9d34929eedf607f07441cf5f19f7d2a8347a4cd7d6fe2b27d6fff658fb9",
+          "source_sha256": "6a923b15a55c333d4e6ca539a67cc8a69ca046d3e7a4135453d59435f7a3636e",
           "old_provenance_figure": "figS34",
           "old_provenance_entry_ids": [
             "completion.source_data.review_response_baselines.README.md",
@@ -15601,7 +15587,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 475.20001220703125,
-      "sha256": "2c7c90f348addd1a40c0eab4f82407f821e874c6bb6215e114bdd7271fdc73e7",
+      "sha256": "55385b3fdcabe8dc361f90369ef41daf35e1a7f1c59fbbaa30d4d4306080a889",
       "source_data_directories": [
         "source_data/review_response_baselines"
       ]
@@ -15617,23 +15603,23 @@
           "source": "S17",
           "source_panel": "A",
           "bbox": [
-            60.11613082885742,
-            8.685502052307129,
-            204.25999450683594,
-            177.48609924316406
+            0.5,
+            7.759007453918457,
+            104.31982421875,
+            152.30392456054688
           ],
-          "width": 144.14386367797852,
-          "height": 168.80059719085693,
+          "width": 103.81982421875,
+          "height": 144.54491710662842,
           "panel": "A",
           "target_rect": [
-            60.11613082885742,
-            8.685502052307129,
-            204.25999450683594,
-            177.48609924316406
+            0.5,
+            7.759007453918457,
+            104.31982421875,
+            152.30392456054688
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S17_panels_A-B.pdf",
-          "source_sha256": "cd7de316fd16b3108f466b3a6bf83469763914651eae007ae6b23ec697b8a1e7",
+          "source_sha256": "4e48291e28ec06aaa7ef5e4372228897cd4a10f62b8c0593c92983dde44241dc",
           "old_provenance_figure": "figS17",
           "old_provenance_entry_ids": [
             "animalcredit.asset",
@@ -15654,23 +15640,60 @@
           "source": "S17",
           "source_panel": "B",
           "bbox": [
-            252.82000732421875,
-            8.685502052307129,
-            492.69195556640625,
-            217.87171936035156
+            119.91987609863281,
+            0.0,
+            337.8138122558594,
+            200.0
           ],
-          "width": 239.8719482421875,
-          "height": 209.18621730804443,
+          "width": 217.89393615722656,
+          "height": 200.0,
           "panel": "B",
           "target_rect": [
-            252.82000732421875,
-            8.685502052307129,
-            492.69195556640625,
-            217.87171936035156
+            119.91987609863281,
+            0.0,
+            337.8138122558594,
+            200.0
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S17_panels_A-B.pdf",
-          "source_sha256": "cd7de316fd16b3108f466b3a6bf83469763914651eae007ae6b23ec697b8a1e7",
+          "source_sha256": "4e48291e28ec06aaa7ef5e4372228897cd4a10f62b8c0593c92983dde44241dc",
+          "old_provenance_figure": "figS17",
+          "old_provenance_entry_ids": [
+            "animalcredit.asset",
+            "animalcredit.contrasts",
+            "animalcredit.modes",
+            "animalcredit.neurons",
+            "animalcredit.schematic",
+            "fig8.animal.schematic"
+          ],
+          "numerical_source_paths": [
+            "drafts/dendritic-local-learning/journal/source_data/animal_learning_francioni/animal_common_signed_modes.csv",
+            "drafts/dendritic-local-learning/journal/source_data/animal_learning_francioni/animal_signed_contrasts.csv",
+            "drafts/dendritic-local-learning/journal/source_data/animal_learning_francioni/neuron_sd_residual_distributions.csv"
+          ],
+          "explicit_numerical_source_hashes": {}
+        },
+        {
+          "source": "S17",
+          "source_panel": "C",
+          "bbox": [
+            336.3365478515625,
+            7.759007453918457,
+            486.0718994140625,
+            175.2688751220703
+          ],
+          "width": 149.7353515625,
+          "height": 167.50986766815186,
+          "panel": "C",
+          "target_rect": [
+            336.3365478515625,
+            7.759007453918457,
+            486.0718994140625,
+            175.2688751220703
+          ],
+          "scale": 1.0,
+          "source_asset": "figures/supplementary/figure_S17_panels_A-B.pdf",
+          "source_sha256": "4e48291e28ec06aaa7ef5e4372228897cd4a10f62b8c0593c92983dde44241dc",
           "old_provenance_figure": "figS17",
           "old_provenance_entry_ids": [
             "animalcredit.asset",
@@ -15692,8 +15715,8 @@
       "whole_source_sheet": true,
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
-      "height_pt": 240.0,
-      "sha256": "22bd4da97667e58c7d3da8ae32d79913be0269f79192d5572466a1fbeb9aaa75",
+      "height_pt": 200.0,
+      "sha256": "2f96257b30f351bbae2aa2c01eef62b4a5bc39018964e65c862b4d480faa617f",
       "source_data_directories": [
         "source_data/alignment_controlled"
       ]
@@ -15709,23 +15732,23 @@
           "source": "S35",
           "source_panel": "A",
           "bbox": [
-            4.0,
-            1.685502052307129,
-            248.73300170898438,
-            126.43666076660156
+            25.0,
+            4.759007453918457,
+            322.2220153808594,
+            139.05691528320312
           ],
-          "width": 244.73300170898438,
-          "height": 124.75115871429443,
+          "width": 297.2220153808594,
+          "height": 134.29790782928467,
           "panel": "A",
           "target_rect": [
-            4.0,
-            1.685502052307129,
-            248.73300170898438,
-            126.43666076660156
+            25.0,
+            4.759007453918457,
+            322.2220153808594,
+            139.05691528320312
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S35_panels_A-F.pdf",
-          "source_sha256": "e8bcbef0166c37aa82b9551938883c23287630f2e981f14db3f6e545e5258f51",
+          "source_sha256": "050b111c5eb781f1195af183ccafa6d2813071247cb6f4711b4c1e0e58bbb53c",
           "old_provenance_figure": "figS35",
           "old_provenance_entry_ids": [
             "completion.source_data.prospective_morphology_selection.README.md",
@@ -16040,23 +16063,23 @@
           "source": "S35",
           "source_panel": "B",
           "bbox": [
-            279.8800048828125,
-            1.685502052307129,
-            503.0715026855469,
-            128.54583740234375
+            315.1499938964844,
+            4.759007453918457,
+            504.93499755859375,
+            138.691162109375
           ],
-          "width": 223.19149780273438,
-          "height": 126.86033535003662,
+          "width": 189.78500366210938,
+          "height": 133.93215465545654,
           "panel": "B",
           "target_rect": [
-            279.8800048828125,
-            1.685502052307129,
-            503.0715026855469,
-            128.54583740234375
+            315.1499938964844,
+            4.759007453918457,
+            504.93499755859375,
+            138.691162109375
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S35_panels_A-F.pdf",
-          "source_sha256": "e8bcbef0166c37aa82b9551938883c23287630f2e981f14db3f6e545e5258f51",
+          "source_sha256": "050b111c5eb781f1195af183ccafa6d2813071247cb6f4711b4c1e0e58bbb53c",
           "old_provenance_figure": "figS35",
           "old_provenance_entry_ids": [
             "completion.source_data.prospective_morphology_selection.README.md",
@@ -16371,23 +16394,23 @@
           "source": "S35",
           "source_panel": "C",
           "bbox": [
-            4.0,
-            154.49562072753906,
-            268.96148681640625,
-            317.0155944824219
+            6.135624885559082,
+            156.02822875976562,
+            517.1561889648438,
+            315.9751892089844
           ],
-          "width": 264.96148681640625,
-          "height": 162.5199737548828,
+          "width": 511.02056407928467,
+          "height": 159.94696044921875,
           "panel": "C",
           "target_rect": [
-            4.0,
-            154.49562072753906,
-            268.96148681640625,
-            317.0155944824219
+            6.135624885559082,
+            156.02822875976562,
+            517.1561889648438,
+            315.9751892089844
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S35_panels_A-F.pdf",
-          "source_sha256": "e8bcbef0166c37aa82b9551938883c23287630f2e981f14db3f6e545e5258f51",
+          "source_sha256": "050b111c5eb781f1195af183ccafa6d2813071247cb6f4711b4c1e0e58bbb53c",
           "old_provenance_figure": "figS35",
           "old_provenance_entry_ids": [
             "completion.source_data.prospective_morphology_selection.README.md",
@@ -16702,23 +16725,23 @@
           "source": "S35",
           "source_panel": "D",
           "bbox": [
-            273.5285339355469,
-            154.49562072753906,
-            518.4000244140625,
-            317.0155944824219
+            25.0,
+            318.4974670410156,
+            319.03363037109375,
+            478.4367370605469
           ],
-          "width": 244.87149047851562,
-          "height": 162.5199737548828,
+          "width": 294.03363037109375,
+          "height": 159.93927001953125,
           "panel": "D",
           "target_rect": [
-            273.5285339355469,
-            154.49562072753906,
-            518.4000244140625,
-            317.0155944824219
+            25.0,
+            318.4974670410156,
+            319.03363037109375,
+            478.4367370605469
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S35_panels_A-F.pdf",
-          "source_sha256": "e8bcbef0166c37aa82b9551938883c23287630f2e981f14db3f6e545e5258f51",
+          "source_sha256": "050b111c5eb781f1195af183ccafa6d2813071247cb6f4711b4c1e0e58bbb53c",
           "old_provenance_figure": "figS35",
           "old_provenance_entry_ids": [
             "completion.source_data.prospective_morphology_selection.README.md",
@@ -17033,354 +17056,23 @@
           "source": "S35",
           "source_panel": "E",
           "bbox": [
-            4.0,
-            317.090576171875,
-            253.0529022216797,
-            479.6105041503906
+            315.1499938964844,
+            318.4974670410156,
+            490.2996826171875,
+            476.2845153808594
           ],
-          "width": 249.0529022216797,
-          "height": 162.51992797851562,
+          "width": 175.14968872070312,
+          "height": 157.78704833984375,
           "panel": "E",
           "target_rect": [
-            4.0,
-            317.090576171875,
-            253.0529022216797,
-            479.6105041503906
+            315.1499938964844,
+            318.4974670410156,
+            490.2996826171875,
+            476.2845153808594
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S35_panels_A-F.pdf",
-          "source_sha256": "e8bcbef0166c37aa82b9551938883c23287630f2e981f14db3f6e545e5258f51",
-          "old_provenance_figure": "figS35",
-          "old_provenance_entry_ids": [
-            "completion.source_data.prospective_morphology_selection.README.md",
-            "completion.source_data.prospective_morphology_selection.additional_paired_policy_contrasts.csv",
-            "completion.source_data.prospective_morphology_selection.calibration.confirmatory.seed_7200.csv",
-            "completion.source_data.prospective_morphology_selection.calibration.confirmatory.seed_7200_update_means.npz",
-            "completion.source_data.prospective_morphology_selection.calibration.confirmatory.seed_7201.csv",
-            "completion.source_data.prospective_morphology_selection.calibration.confirmatory.seed_7201_update_means.npz",
-            "completion.source_data.prospective_morphology_selection.calibration.confirmatory.seed_7202.csv",
-            "completion.source_data.prospective_morphology_selection.calibration.confirmatory.seed_7202_update_means.npz",
-            "completion.source_data.prospective_morphology_selection.calibration.confirmatory.seed_7203.csv",
-            "completion.source_data.prospective_morphology_selection.calibration.confirmatory.seed_7203_update_means.npz",
-            "completion.source_data.prospective_morphology_selection.calibration.confirmatory.seed_7204.csv",
-            "completion.source_data.prospective_morphology_selection.calibration.confirmatory.seed_7204_update_means.npz",
-            "completion.source_data.prospective_morphology_selection.calibration.confirmatory.seed_7205.csv",
-            "completion.source_data.prospective_morphology_selection.calibration.confirmatory.seed_7205_update_means.npz",
-            "completion.source_data.prospective_morphology_selection.calibration.confirmatory.seed_7206.csv",
-            "completion.source_data.prospective_morphology_selection.calibration.confirmatory.seed_7206_update_means.npz",
-            "completion.source_data.prospective_morphology_selection.calibration.confirmatory.seed_7207.csv",
-            "completion.source_data.prospective_morphology_selection.calibration.confirmatory.seed_7207_update_means.npz",
-            "completion.source_data.prospective_morphology_selection.calibration.confirmatory.seed_7208.csv",
-            "completion.source_data.prospective_morphology_selection.calibration.confirmatory.seed_7208_update_means.npz",
-            "completion.source_data.prospective_morphology_selection.calibration.confirmatory.seed_7209.csv",
-            "completion.source_data.prospective_morphology_selection.calibration.confirmatory.seed_7209_update_means.npz",
-            "completion.source_data.prospective_morphology_selection.calibration.confirmatory.seed_7210.csv",
-            "completion.source_data.prospective_morphology_selection.calibration.confirmatory.seed_7210_update_means.npz",
-            "completion.source_data.prospective_morphology_selection.calibration.confirmatory.seed_7211.csv",
-            "completion.source_data.prospective_morphology_selection.calibration.confirmatory.seed_7211_update_means.npz",
-            "completion.source_data.prospective_morphology_selection.calibration.confirmatory.seed_7212.csv",
-            "completion.source_data.prospective_morphology_selection.calibration.confirmatory.seed_7212_update_means.npz",
-            "completion.source_data.prospective_morphology_selection.calibration.confirmatory.seed_7213.csv",
-            "completion.source_data.prospective_morphology_selection.calibration.confirmatory.seed_7213_update_means.npz",
-            "completion.source_data.prospective_morphology_selection.calibration.confirmatory.seed_7214.csv",
-            "completion.source_data.prospective_morphology_selection.calibration.confirmatory.seed_7214_update_means.npz",
-            "completion.source_data.prospective_morphology_selection.calibration.confirmatory.seed_7215.csv",
-            "completion.source_data.prospective_morphology_selection.calibration.confirmatory.seed_7215_update_means.npz",
-            "completion.source_data.prospective_morphology_selection.calibration.confirmatory.seed_7216.csv",
-            "completion.source_data.prospective_morphology_selection.calibration.confirmatory.seed_7216_update_means.npz",
-            "completion.source_data.prospective_morphology_selection.calibration.confirmatory.seed_7217.csv",
-            "completion.source_data.prospective_morphology_selection.calibration.confirmatory.seed_7217_update_means.npz",
-            "completion.source_data.prospective_morphology_selection.calibration.confirmatory.seed_7218.csv",
-            "completion.source_data.prospective_morphology_selection.calibration.confirmatory.seed_7218_update_means.npz",
-            "completion.source_data.prospective_morphology_selection.calibration.confirmatory.seed_7219.csv",
-            "completion.source_data.prospective_morphology_selection.calibration.confirmatory.seed_7219_update_means.npz",
-            "completion.source_data.prospective_morphology_selection.calibration.development.seed_6100.csv",
-            "completion.source_data.prospective_morphology_selection.calibration.development.seed_6100_update_means.npz",
-            "completion.source_data.prospective_morphology_selection.calibration.development.seed_6101.csv",
-            "completion.source_data.prospective_morphology_selection.calibration.development.seed_6101_update_means.npz",
-            "completion.source_data.prospective_morphology_selection.calibration.development.seed_6102.csv",
-            "completion.source_data.prospective_morphology_selection.calibration.development.seed_6102_update_means.npz",
-            "completion.source_data.prospective_morphology_selection.calibration.development.seed_6103.csv",
-            "completion.source_data.prospective_morphology_selection.calibration.development.seed_6103_update_means.npz",
-            "completion.source_data.prospective_morphology_selection.calibration.development.seed_6104.csv",
-            "completion.source_data.prospective_morphology_selection.calibration.development.seed_6104_update_means.npz",
-            "completion.source_data.prospective_morphology_selection.candidate_equivalence_classes.csv",
-            "completion.source_data.prospective_morphology_selection.candidate_manifest.json",
-            "completion.source_data.prospective_morphology_selection.candidate_outcomes.csv",
-            "completion.source_data.prospective_morphology_selection.development_fit.json",
-            "completion.source_data.prospective_morphology_selection.execution_summary.json",
-            "completion.source_data.prospective_morphology_selection.first_step_correlation_summary.csv",
-            "completion.source_data.prospective_morphology_selection.first_step_diagnostics.csv",
-            "completion.source_data.prospective_morphology_selection.first_step_diagnostics.seed_7200.csv",
-            "completion.source_data.prospective_morphology_selection.first_step_diagnostics.seed_7201.csv",
-            "completion.source_data.prospective_morphology_selection.first_step_diagnostics.seed_7202.csv",
-            "completion.source_data.prospective_morphology_selection.first_step_diagnostics.seed_7203.csv",
-            "completion.source_data.prospective_morphology_selection.first_step_diagnostics.seed_7204.csv",
-            "completion.source_data.prospective_morphology_selection.first_step_diagnostics.seed_7205.csv",
-            "completion.source_data.prospective_morphology_selection.first_step_diagnostics.seed_7206.csv",
-            "completion.source_data.prospective_morphology_selection.first_step_diagnostics.seed_7207.csv",
-            "completion.source_data.prospective_morphology_selection.first_step_diagnostics.seed_7208.csv",
-            "completion.source_data.prospective_morphology_selection.first_step_diagnostics.seed_7209.csv",
-            "completion.source_data.prospective_morphology_selection.first_step_diagnostics.seed_7210.csv",
-            "completion.source_data.prospective_morphology_selection.first_step_diagnostics.seed_7211.csv",
-            "completion.source_data.prospective_morphology_selection.first_step_diagnostics.seed_7212.csv",
-            "completion.source_data.prospective_morphology_selection.first_step_diagnostics.seed_7213.csv",
-            "completion.source_data.prospective_morphology_selection.first_step_diagnostics.seed_7214.csv",
-            "completion.source_data.prospective_morphology_selection.first_step_diagnostics.seed_7215.csv",
-            "completion.source_data.prospective_morphology_selection.first_step_diagnostics.seed_7216.csv",
-            "completion.source_data.prospective_morphology_selection.first_step_diagnostics.seed_7217.csv",
-            "completion.source_data.prospective_morphology_selection.first_step_diagnostics.seed_7218.csv",
-            "completion.source_data.prospective_morphology_selection.first_step_diagnostics.seed_7219.csv",
-            "completion.source_data.prospective_morphology_selection.first_step_within_task_correlations.csv",
-            "completion.source_data.prospective_morphology_selection.grouped_policy_summary.csv",
-            "completion.source_data.prospective_morphology_selection.invariant_tests.json",
-            "completion.source_data.prospective_morphology_selection.oracle_choice_distribution.csv",
-            "completion.source_data.prospective_morphology_selection.paired_policy_seed_contrasts.csv",
-            "completion.source_data.prospective_morphology_selection.paired_regret_summary.csv",
-            "completion.source_data.prospective_morphology_selection.policy_outcomes.csv",
-            "completion.source_data.prospective_morphology_selection.policy_seed_means.csv",
-            "completion.source_data.prospective_morphology_selection.policy_summary.csv",
-            "completion.source_data.prospective_morphology_selection.posthoc_validation_report.json",
-            "completion.source_data.prospective_morphology_selection.protocol.json",
-            "completion.source_data.prospective_morphology_selection.protocol_freeze.json",
-            "completion.source_data.prospective_morphology_selection.replay_validation.json",
-            "completion.source_data.prospective_morphology_selection.report.json",
-            "completion.source_data.prospective_morphology_selection.retrospective_oracle.csv",
-            "completion.source_data.prospective_morphology_selection.runs.confirmatory.seed_7200.csv",
-            "completion.source_data.prospective_morphology_selection.runs.confirmatory.seed_7200_audit.json",
-            "completion.source_data.prospective_morphology_selection.runs.confirmatory.seed_7201.csv",
-            "completion.source_data.prospective_morphology_selection.runs.confirmatory.seed_7201_audit.json",
-            "completion.source_data.prospective_morphology_selection.runs.confirmatory.seed_7202.csv",
-            "completion.source_data.prospective_morphology_selection.runs.confirmatory.seed_7202_audit.json",
-            "completion.source_data.prospective_morphology_selection.runs.confirmatory.seed_7203.csv",
-            "completion.source_data.prospective_morphology_selection.runs.confirmatory.seed_7203_audit.json",
-            "completion.source_data.prospective_morphology_selection.runs.confirmatory.seed_7204.csv",
-            "completion.source_data.prospective_morphology_selection.runs.confirmatory.seed_7204_audit.json",
-            "completion.source_data.prospective_morphology_selection.runs.confirmatory.seed_7205.csv",
-            "completion.source_data.prospective_morphology_selection.runs.confirmatory.seed_7205_audit.json",
-            "completion.source_data.prospective_morphology_selection.runs.confirmatory.seed_7206.csv",
-            "completion.source_data.prospective_morphology_selection.runs.confirmatory.seed_7206_audit.json",
-            "completion.source_data.prospective_morphology_selection.runs.confirmatory.seed_7207.csv",
-            "completion.source_data.prospective_morphology_selection.runs.confirmatory.seed_7207_audit.json",
-            "completion.source_data.prospective_morphology_selection.runs.confirmatory.seed_7208.csv",
-            "completion.source_data.prospective_morphology_selection.runs.confirmatory.seed_7208_audit.json",
-            "completion.source_data.prospective_morphology_selection.runs.confirmatory.seed_7209.csv",
-            "completion.source_data.prospective_morphology_selection.runs.confirmatory.seed_7209_audit.json",
-            "completion.source_data.prospective_morphology_selection.runs.confirmatory.seed_7210.csv",
-            "completion.source_data.prospective_morphology_selection.runs.confirmatory.seed_7210_audit.json",
-            "completion.source_data.prospective_morphology_selection.runs.confirmatory.seed_7211.csv",
-            "completion.source_data.prospective_morphology_selection.runs.confirmatory.seed_7211_audit.json",
-            "completion.source_data.prospective_morphology_selection.runs.confirmatory.seed_7212.csv",
-            "completion.source_data.prospective_morphology_selection.runs.confirmatory.seed_7212_audit.json",
-            "completion.source_data.prospective_morphology_selection.runs.confirmatory.seed_7213.csv",
-            "completion.source_data.prospective_morphology_selection.runs.confirmatory.seed_7213_audit.json",
-            "completion.source_data.prospective_morphology_selection.runs.confirmatory.seed_7214.csv",
-            "completion.source_data.prospective_morphology_selection.runs.confirmatory.seed_7214_audit.json",
-            "completion.source_data.prospective_morphology_selection.runs.confirmatory.seed_7215.csv",
-            "completion.source_data.prospective_morphology_selection.runs.confirmatory.seed_7215_audit.json",
-            "completion.source_data.prospective_morphology_selection.runs.confirmatory.seed_7216.csv",
-            "completion.source_data.prospective_morphology_selection.runs.confirmatory.seed_7216_audit.json",
-            "completion.source_data.prospective_morphology_selection.runs.confirmatory.seed_7217.csv",
-            "completion.source_data.prospective_morphology_selection.runs.confirmatory.seed_7217_audit.json",
-            "completion.source_data.prospective_morphology_selection.runs.confirmatory.seed_7218.csv",
-            "completion.source_data.prospective_morphology_selection.runs.confirmatory.seed_7218_audit.json",
-            "completion.source_data.prospective_morphology_selection.runs.confirmatory.seed_7219.csv",
-            "completion.source_data.prospective_morphology_selection.runs.confirmatory.seed_7219_audit.json",
-            "completion.source_data.prospective_morphology_selection.runs.development.seed_6100.csv",
-            "completion.source_data.prospective_morphology_selection.runs.development.seed_6100_audit.json",
-            "completion.source_data.prospective_morphology_selection.runs.development.seed_6101.csv",
-            "completion.source_data.prospective_morphology_selection.runs.development.seed_6101_audit.json",
-            "completion.source_data.prospective_morphology_selection.runs.development.seed_6102.csv",
-            "completion.source_data.prospective_morphology_selection.runs.development.seed_6102_audit.json",
-            "completion.source_data.prospective_morphology_selection.runs.development.seed_6103.csv",
-            "completion.source_data.prospective_morphology_selection.runs.development.seed_6103_audit.json",
-            "completion.source_data.prospective_morphology_selection.runs.development.seed_6104.csv",
-            "completion.source_data.prospective_morphology_selection.runs.development.seed_6104_audit.json",
-            "completion.source_data.prospective_morphology_selection.sealed_confirmatory_selections.csv",
-            "completion.source_data.prospective_morphology_selection.selected_vs_oracle_choices.csv",
-            "completion.source_data.prospective_morphology_selection.selection_freeze.json",
-            "completion.source_data.prospective_morphology_selection.slurm_accounting.tsv",
-            "completion.source_data.prospective_morphology_selection.source_manifest.tsv",
-            "completion.source_data.prospective_morphology_selection.split_manifest.json",
-            "completion.source_data.prospective_morphology_selection.within_task_correlations.csv",
-            "prospective.selection.asset"
-          ],
-          "numerical_source_paths": [
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/README.md",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/additional_paired_policy_contrasts.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/calibration/confirmatory/seed_7200.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/calibration/confirmatory/seed_7200_update_means.npz",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/calibration/confirmatory/seed_7201.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/calibration/confirmatory/seed_7201_update_means.npz",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/calibration/confirmatory/seed_7202.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/calibration/confirmatory/seed_7202_update_means.npz",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/calibration/confirmatory/seed_7203.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/calibration/confirmatory/seed_7203_update_means.npz",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/calibration/confirmatory/seed_7204.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/calibration/confirmatory/seed_7204_update_means.npz",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/calibration/confirmatory/seed_7205.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/calibration/confirmatory/seed_7205_update_means.npz",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/calibration/confirmatory/seed_7206.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/calibration/confirmatory/seed_7206_update_means.npz",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/calibration/confirmatory/seed_7207.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/calibration/confirmatory/seed_7207_update_means.npz",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/calibration/confirmatory/seed_7208.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/calibration/confirmatory/seed_7208_update_means.npz",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/calibration/confirmatory/seed_7209.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/calibration/confirmatory/seed_7209_update_means.npz",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/calibration/confirmatory/seed_7210.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/calibration/confirmatory/seed_7210_update_means.npz",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/calibration/confirmatory/seed_7211.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/calibration/confirmatory/seed_7211_update_means.npz",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/calibration/confirmatory/seed_7212.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/calibration/confirmatory/seed_7212_update_means.npz",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/calibration/confirmatory/seed_7213.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/calibration/confirmatory/seed_7213_update_means.npz",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/calibration/confirmatory/seed_7214.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/calibration/confirmatory/seed_7214_update_means.npz",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/calibration/confirmatory/seed_7215.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/calibration/confirmatory/seed_7215_update_means.npz",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/calibration/confirmatory/seed_7216.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/calibration/confirmatory/seed_7216_update_means.npz",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/calibration/confirmatory/seed_7217.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/calibration/confirmatory/seed_7217_update_means.npz",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/calibration/confirmatory/seed_7218.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/calibration/confirmatory/seed_7218_update_means.npz",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/calibration/confirmatory/seed_7219.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/calibration/confirmatory/seed_7219_update_means.npz",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/calibration/development/seed_6100.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/calibration/development/seed_6100_update_means.npz",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/calibration/development/seed_6101.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/calibration/development/seed_6101_update_means.npz",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/calibration/development/seed_6102.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/calibration/development/seed_6102_update_means.npz",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/calibration/development/seed_6103.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/calibration/development/seed_6103_update_means.npz",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/calibration/development/seed_6104.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/calibration/development/seed_6104_update_means.npz",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/candidate_equivalence_classes.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/candidate_manifest.json",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/candidate_outcomes.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/development_fit.json",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/execution_summary.json",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/first_step_correlation_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/first_step_diagnostics.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/first_step_diagnostics/seed_7200.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/first_step_diagnostics/seed_7201.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/first_step_diagnostics/seed_7202.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/first_step_diagnostics/seed_7203.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/first_step_diagnostics/seed_7204.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/first_step_diagnostics/seed_7205.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/first_step_diagnostics/seed_7206.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/first_step_diagnostics/seed_7207.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/first_step_diagnostics/seed_7208.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/first_step_diagnostics/seed_7209.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/first_step_diagnostics/seed_7210.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/first_step_diagnostics/seed_7211.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/first_step_diagnostics/seed_7212.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/first_step_diagnostics/seed_7213.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/first_step_diagnostics/seed_7214.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/first_step_diagnostics/seed_7215.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/first_step_diagnostics/seed_7216.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/first_step_diagnostics/seed_7217.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/first_step_diagnostics/seed_7218.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/first_step_diagnostics/seed_7219.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/first_step_within_task_correlations.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/grouped_policy_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/invariant_tests.json",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/oracle_choice_distribution.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/paired_policy_seed_contrasts.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/paired_regret_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/policy_outcomes.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/policy_seed_means.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/policy_summary.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/posthoc_validation_report.json",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/protocol.json",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/protocol_freeze.json",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/replay_validation.json",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/report.json",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/retrospective_oracle.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/runs/confirmatory/seed_7200.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/runs/confirmatory/seed_7200_audit.json",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/runs/confirmatory/seed_7201.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/runs/confirmatory/seed_7201_audit.json",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/runs/confirmatory/seed_7202.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/runs/confirmatory/seed_7202_audit.json",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/runs/confirmatory/seed_7203.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/runs/confirmatory/seed_7203_audit.json",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/runs/confirmatory/seed_7204.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/runs/confirmatory/seed_7204_audit.json",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/runs/confirmatory/seed_7205.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/runs/confirmatory/seed_7205_audit.json",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/runs/confirmatory/seed_7206.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/runs/confirmatory/seed_7206_audit.json",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/runs/confirmatory/seed_7207.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/runs/confirmatory/seed_7207_audit.json",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/runs/confirmatory/seed_7208.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/runs/confirmatory/seed_7208_audit.json",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/runs/confirmatory/seed_7209.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/runs/confirmatory/seed_7209_audit.json",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/runs/confirmatory/seed_7210.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/runs/confirmatory/seed_7210_audit.json",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/runs/confirmatory/seed_7211.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/runs/confirmatory/seed_7211_audit.json",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/runs/confirmatory/seed_7212.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/runs/confirmatory/seed_7212_audit.json",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/runs/confirmatory/seed_7213.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/runs/confirmatory/seed_7213_audit.json",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/runs/confirmatory/seed_7214.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/runs/confirmatory/seed_7214_audit.json",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/runs/confirmatory/seed_7215.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/runs/confirmatory/seed_7215_audit.json",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/runs/confirmatory/seed_7216.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/runs/confirmatory/seed_7216_audit.json",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/runs/confirmatory/seed_7217.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/runs/confirmatory/seed_7217_audit.json",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/runs/confirmatory/seed_7218.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/runs/confirmatory/seed_7218_audit.json",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/runs/confirmatory/seed_7219.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/runs/confirmatory/seed_7219_audit.json",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/runs/development/seed_6100.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/runs/development/seed_6100_audit.json",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/runs/development/seed_6101.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/runs/development/seed_6101_audit.json",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/runs/development/seed_6102.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/runs/development/seed_6102_audit.json",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/runs/development/seed_6103.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/runs/development/seed_6103_audit.json",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/runs/development/seed_6104.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/runs/development/seed_6104_audit.json",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/sealed_confirmatory_selections.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/selected_vs_oracle_choices.csv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/selection_freeze.json",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/slurm_accounting.tsv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/source_manifest.tsv",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/split_manifest.json",
-            "drafts/dendritic-local-learning/journal/source_data/prospective_morphology_selection/within_task_correlations.csv"
-          ],
-          "explicit_numerical_source_hashes": {}
-        },
-        {
-          "source": "S35",
-          "source_panel": "F",
-          "bbox": [
-            253.10000610351562,
-            317.090576171875,
-            504.7173156738281,
-            478.4373474121094
-          ],
-          "width": 251.6173095703125,
-          "height": 161.34677124023438,
-          "panel": "F",
-          "target_rect": [
-            253.10000610351562,
-            317.090576171875,
-            504.7173156738281,
-            478.4373474121094
-          ],
-          "scale": 1.0,
-          "source_asset": "figures/supplementary/figure_S35_panels_A-F.pdf",
-          "source_sha256": "e8bcbef0166c37aa82b9551938883c23287630f2e981f14db3f6e545e5258f51",
+          "source_sha256": "050b111c5eb781f1195af183ccafa6d2813071247cb6f4711b4c1e0e58bbb53c",
           "old_provenance_figure": "figS35",
           "old_provenance_entry_ids": [
             "completion.source_data.prospective_morphology_selection.README.md",
@@ -17697,7 +17389,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 490.0,
-      "sha256": "1ebe95b8d760c92b72efb1544f610cf9996aa5e6aca2810d8e6fdd6621621fe2",
+      "sha256": "19eb7d8efc4b5a2dd297b73c932109249274ff4f589ebd585c59700bea78bb66",
       "source_data_directories": [
         "source_data/prospective_morphology_selection"
       ]
@@ -23923,6 +23615,13 @@
         "panel": "B",
         "source_panel": "B",
         "path": "figures/supplementary/curated/animal_credit_reanalysis.pdf"
+      },
+      {
+        "figure": "S33",
+        "label": "fig:si_animal_credit_reanalysis",
+        "panel": "C",
+        "source_panel": "C",
+        "path": "figures/supplementary/curated/animal_credit_reanalysis.pdf"
       }
     ],
     "S18": [
@@ -24299,13 +23998,6 @@
         "label": "fig:si_original_selector",
         "panel": "E",
         "source_panel": "E",
-        "path": "figures/supplementary/curated/original_selector.pdf"
-      },
-      {
-        "figure": "S34",
-        "label": "fig:si_original_selector",
-        "panel": "F",
-        "source_panel": "F",
         "path": "figures/supplementary/curated/original_selector.pdf"
       }
     ],
