@@ -34,17 +34,21 @@ What changed in the drawing (finding -> fix):
      carries it); trees follow the paper's root-lowest orientation.
 * D  transposed: families are unrotated rows in the A/B order, minimum exact
      depth is a two-position ordinal axis (2 | 3), and the compatible-tree
-     counts (``exact``: of the 15 trees; ``balanced``: of the 3 balanced
-     trees) are printed in aligned columns outside the box.  D is kept (same letters as the current sheet);
-     the redundancy-with-B finding is an editorial decision reported, not
-     taken here.
+     counts are printed with their denominators (``exact``: ``15/15`` of the
+     15 trees; ``balanced``: ``3/3`` of the 3 balanced trees) in aligned
+     columns outside the box.  D is kept (same letters as the current
+     sheet); the redundancy-with-B finding is an editorial decision
+     reported, not taken here.
 * E  all seven families on the six input pairs as a dot matrix (dot area =
      projection energy, the exact value printed beside each dot, exact zeros
      as open rings), columns grouped ``aligned`` (ab, cd) / ``crossed``; no
-     connecting lines; the axis is named ``input pair``.
+     connecting lines; the axis is named ``input pair``; the quantity is
+     named on the left edge (``projection energy``) and the area encoding
+     has a one-line key (``dot area = energy``) in the raised band.
 * F  the three canonical derivatives are drawn from the 101-point grids in
      ``gate_credit_fields.csv`` in the same three gate colours as C and
-     labelled directly at their right ends; the zero rule spans the axis.
+     labelled directly at their right ends; the zero rule spans the axis;
+     the y range is padded to +-1.06 so the end points clear the frame.
 * Colour registers on this sheet: green / amber / violet = AND / OR / XOR
   gates only (C, F); the blue sequential ramp = NMSE lower bound only (B);
   slate = truth value 1 (A); ink marks in D and E carry no colour meaning.
@@ -121,8 +125,11 @@ ALIGNED = ["ab", "cd"]
 
 TITLE_PAD = 16.0        # one raised title band for every row (group labels,
                         # column headers and keys live in it)
+TITLE_PAD_KEYED = 25.0  # row 2's band carries a third line (E's dot key)
+                        # between the group labels and the title
 BAND_RULE_PT = 3.0      # bracket rule height above the axes top, in points
 BAND_TEXT_PT = 5.5      # bracket label baseline above the axes top
+BAND_KEY_PT = 15.0      # key-line baseline above the axes top (row 2)
 
 NMSE_VMAX = 2.0 / 3.0   # largest bound in tree_capacity.csv (asserted)
 NMSE_GAMMA = 0.6        # power mapping: 0.2/0.667 -> 0.49 of the ramp
@@ -496,14 +503,17 @@ def panel_depth_strip(ax, depth_summary, target_summary, capacity):
     ax.spines["left"].set_visible(False)
     ax.set_xlabel("minimum exact depth")
     # Two aligned count columns outside the box; headers in the title band.
-    cols = ((13.0, "exact", n_exact), (41.0, "balanced", n_bal))
-    for dx, head, counts in cols:
+    # Each count is printed with its denominator (15 trees; 3 balanced
+    # trees), as the old sheet's ``15/15`` / ``1/15``.
+    cols = ((13.0, "exact", n_exact, len(TREE_ORDER)),
+            (41.0, "balanced", n_bal, len(BALANCED)))
+    for dx, head, counts, denom in cols:
         ax.annotate(head, xy=(1.0, 1.0), xycoords="axes fraction",
                     xytext=(dx, BAND_TEXT_PT), textcoords="offset points",
                     ha="center", va="baseline", fontsize=PT_BASE, color=INK,
                     annotation_clip=False)
         for y, n in zip(ys, counts):
-            ax.annotate(str(int(n)), xy=(1.0, y),
+            ax.annotate(f"{int(n)}/{denom}", xy=(1.0, y),
                         xycoords=("axes fraction", "data"),
                         xytext=(dx, 0.0), textcoords="offset points",
                         ha="center", va="center", fontsize=PT_BASE,
@@ -547,31 +557,45 @@ def panel_projection_energy(ax, energy, posthoc):
 
     n_rows, n_cols = values.shape
     vmax = values.max()
-    d_max = 9.0                                        # largest dot, pt
+    # Column layout, in column units (one column = the axes width / 6, about
+    # 26.7 pt): the dot at j + DOT_DX, the printed value left-aligned at
+    # j + LABEL_DX.  With the largest dot D_MAX pt across, the value in the
+    # cd column ends >= 2 pt before the aligned/crossed divider at x = 1.5,
+    # the largest ac dot starts >= 2 pt after it, and every dot clears its
+    # own label; measured on the PDF, not assumed.
+    DOT_DX, LABEL_DX, D_MAX = -0.295, -0.105, 7.5
     for y in range(n_rows):
         ax.plot([-0.5, n_cols - 0.5], [y, y], color=GRID, lw=LW_HAIR,
                 zorder=1, solid_capstyle="butt")
     for i in range(n_rows):
         for j in range(n_cols):
             v = values[i, j]
-            x_dot = j - 0.22
+            x_dot = j + DOT_DX
             if v == 0.0:
                 ax.plot([x_dot], [i], linestyle="none", marker="o", ms=3.0,
                         markerfacecolor="white", markeredgecolor=INK,
                         markeredgewidth=LW_EDGE, zorder=4)
                 label = "0"
             else:
-                d = d_max * np.sqrt(v / vmax)
+                d = D_MAX * np.sqrt(v / vmax)
                 ax.scatter([x_dot], [i], s=d * d, color=INK, zorder=4,
                            edgecolors="none")
                 label = f"{v:.2f}"
-            ax.text(j - 0.02, i, label, ha="left", va="center",
+            ax.text(j + LABEL_DX, i, label, ha="left", va="center",
                     fontsize=PT_BASE, color=INK, zorder=5)
     column_divider(ax, len(ALIGNED) - 0.5, n_rows)
     category_axes(ax, [FAMILY_LABEL[f] for f in FAMILIES], PAIR_ORDER)
     ax.set_xlabel("input pair")
+    # The plotted quantity is named on the left edge (the old sheet's y-axis
+    # label, shortened to fit the axes height); the area encoding has its
+    # own one-line key in the raised band, above the group labels.
+    ax.set_ylabel("projection energy", labelpad=2.0)
     group_labels(ax, [(0, len(ALIGNED) - 1, "aligned"),
                       (len(ALIGNED), n_cols - 1, "crossed")])
+    ax.annotate("dot area = energy", xy=(1.0, 1.0), xycoords="axes fraction",
+                xytext=(0.0, BAND_KEY_PT), textcoords="offset points",
+                ha="right", va="baseline", fontsize=PT_BASE, color=INK,
+                annotation_clip=False)
     print("[E] pair energies (rows AND..nested; cols " + " ".join(PAIR_ORDER)
           + "):\n" + "\n".join("     " + " ".join(f"{v:.3f}" for v in row)
                                for row in values))
@@ -609,7 +633,9 @@ def panel_gate_derivatives(ax, fields, corners):
                     fontsize=PT_BASE, color=GATE_COLOR[gate],
                     annotation_clip=False)
     ax.set_xlim(0.0, 1.0)
-    ax.set_ylim(-1.0, 1.0)
+    # Padded so the XOR end (1, -1) and the OR end on the zero rule do not
+    # merge with the bottom spine / the dashed rule; the ticks stay at +-1.
+    ax.set_ylim(-1.06, 1.06)
     ax.set_xticks([0.0, 0.5, 1.0], ["0", "0.5", "1"])
     ax.set_yticks([-1.0, 0.0, 1.0], ["−1", "0", "1"])
     ax.set_xlabel("other branch output v")
@@ -619,10 +645,13 @@ def panel_gate_derivatives(ax, fields, corners):
 
 
 # ── the canvas ───────────────────────────────────────────────────────────
-CANVAS_H_PT = 484.0
+CANVAS_H_PT = 493.0     # 484 + the 9 pt of row 2's taller band; the audit
+                        # caps the page at aspect 1.05 (493.7 pt)
 HGUTTER_PT = 38.0
-VGUTTER_PT = 60.0
-MARGINS = Margins(left=44.0, right=10.0, top=32.0, bottom=32.0)
+VGUTTER_PT = 64.5       # keeps every row's axes box at 100 pt
+# left: the family tick labels (36.6 pt) + E's rotated axis label + pad,
+# so the column lock leaves column 0 its full module width.
+MARGINS = Margins(left=55.0, right=10.0, top=32.0, bottom=32.0)
 
 
 def build(path: Path = OUT):
@@ -643,7 +672,7 @@ def build(path: Path = OUT):
 
     canvas = NativeCanvas(CANVAS_H_PT / 72.0, 3, hgutter_pt=HGUTTER_PT,
                           vgutter_pt=VGUTTER_PT, margins=MARGINS)
-    ax_a = canvas.panel("A", 0, 0, 5, title="Seven Boolean truth tables")
+    ax_a = canvas.panel("A", 0, 0, 5, title="Seven exact Boolean truth tables")
     ax_b = canvas.panel("B", 0, 5, 7, title="All trees: regression obstruction")
     ax_c = canvas.panel("C", 1, 0, 5, schematic=True,
                         title="Equal resources; different minimum depth")
@@ -652,9 +681,14 @@ def build(path: Path = OUT):
     ax_f = canvas.panel("F", 2, 5, 7, grid="y", title="Canonical conditional credit")
     # One raised title band for every row: group labels, column headers and
     # the swatch / marker keys live between the axes top and the title.
-    for ax in (ax_a, ax_b, ax_c, ax_d, ax_e, ax_f):
+    for ax in (ax_a, ax_b, ax_c, ax_d):
         ax.set_title(ax.get_title(), fontsize=PT_TITLE, color=INK,
                      pad=TITLE_PAD, fontweight="normal")
+    # Row 2's band has a third line (E's ``dot area = energy`` key between
+    # the group labels and the title); F shares the row's title height.
+    for ax in (ax_e, ax_f):
+        ax.set_title(ax.get_title(), fontsize=PT_TITLE, color=INK,
+                     pad=TITLE_PAD_KEYED, fontweight="normal")
     # D's count columns and F's right-end labels are drawn as artists.
     canvas.declare_reserve("D", right=58.0)
     canvas.declare_reserve("F", right=20.0)
