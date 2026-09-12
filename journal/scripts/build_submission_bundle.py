@@ -108,6 +108,9 @@ REQUIRED_FILES = {
     SUBMISSION / "referee_suggestions.md": Path(
         "submission_materials/referee_suggestions.md"
     ),
+    SUBMISSION / "FIGURE_REVIEW_RESIDUALS.md": Path(
+        "submission_materials/FIGURE_REVIEW_RESIDUALS.md"
+    ),
     SUBMISSION / "reporting_checklist.md": Path(
         "submission_materials/reporting_checklist.md"
     ),
