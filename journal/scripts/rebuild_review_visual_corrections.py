@@ -16,7 +16,7 @@ import pandas as pd
 from matplotlib.figure import Figure
 
 import figure_canvas
-from journal_style import LW_EDGE, LW_HAIR
+from journal_style import FIG_W, LW_EDGE, LW_HAIR
 
 import analyze_branch_credit_interference as interference
 import analyze_spatial_topology_audit as spatial
@@ -103,6 +103,10 @@ def house_strokes():
 
     def savefig(self, *args, **kwargs):
         _conform_strokes(self)
+        # every render this script republishes is a full-width supplementary
+        # sheet, so it must leave at the canonical canvas width
+        width = self.get_size_inches()[0]
+        assert abs(width - FIG_W) < 1e-6, f"{width:.4f} in is not the canonical {FIG_W} in"
         return original(self, *args, **kwargs)
 
     Figure.savefig = savefig
