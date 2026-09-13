@@ -31,6 +31,7 @@ from neurips_style import (
     panel_title,
     style_axis,
 )
+from figure_canvas import enforce_tokens
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -1397,6 +1398,10 @@ def plot_fixed_budget(
             collection.set_linewidth(LW_ERR)
     FIGURES.mkdir(parents=True, exist_ok=True)
     style_direct_color_labels(fig)
+    # Snap the legacy spine, tick, grid and marker-edge strokes onto the canvas
+    # token ladder.  Type is left alone (fonts=False): the consolidated sheet
+    # cuts this render at frozen panel boxes, so no label may change size.
+    enforce_tokens(fig, fonts=False)
     fig.canvas.draw()
     audit_layout(fig, "fig_prospective_fixed_budget_depth")
     audit_text_over_data(fig, "fig_prospective_fixed_budget_depth")

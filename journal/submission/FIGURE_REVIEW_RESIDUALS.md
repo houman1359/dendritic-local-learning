@@ -125,13 +125,14 @@ against the frozen study tables instead.
 **House tokens.** The paste layer was stroking every redaction box at the PDF
 default width, putting one stray 1.0 pt path into each cropped sheet; it no
 longer does. The upstream renders that still used their own type sizes, stroke
-weights and role colours were brought onto the canvas ladder (37 fixes across
-eight builders, no plotted value moved, each checked against the previous
-render path by path). The strict audit of the 36 sheets went from 54 notes to
-11: three sheets whose centred rows fill 87--91 % of the page width instead of
-92 %, four short sheets whose page is wider than the 1.55 aspect the canvas
-prefers, and four notes inside one render (old S8) that cannot be redrawn
-without re-running the analysis that writes its frozen tables.
+weights and role colours were brought onto the canvas ladder (38 fixes across
+nine builders, no plotted value moved, each checked against the previous render
+path by path). The strict audit of the 36 sheets went from 54 notes to 7, and
+not one of them is about type, stroke weight or colour any more: three sheets
+whose centred rows fill 87--91 % of the page width instead of 92 %, and four
+short sheets whose page is wider than the 1.55 aspect the canvas prefers. Both
+are consequences of pasting panel crops rather than drawing the sheet, so they
+would close only by rebuilding those seventeen sheets natively as well.
 
 ## Deferred with a reason
 

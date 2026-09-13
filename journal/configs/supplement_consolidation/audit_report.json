@@ -111,11 +111,9 @@
     },
     "input_coverage_depth": {
       "figure": "S9",
-      "violations": 6,
+      "violations": 2,
       "by_kind": {
         "canvas-aspect": 1,
-        "stroke-width": 3,
-        "area-stroke": 1,
         "manifest-missing": 1
       },
       "text_floor_examples": []

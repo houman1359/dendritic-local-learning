@@ -6,7 +6,7 @@
   "specification": "scripts/supplement_consolidation/specification.py",
   "source_registry": "scripts/supplement_consolidation/original_assets.json",
   "frozen_input_hashes": {
-    "scripts/supplement_consolidation/original_assets.json": "b94ff89bd0b540c2be5e9efe2ebf1fa5e5b5a6e1883934373c17fba3f9a7de6d",
+    "scripts/supplement_consolidation/original_assets.json": "7cb91de6db6afef13ca7a0c9da2b9d2f392c6147528d5a3b43e6e61886bf4fc9",
     "scripts/supplement_consolidation/original_captions.json": "838b3f4ead564b68639cf68506efe686e12b47e3d846ab230af35c7a6c8f6816",
     "scripts/supplement_consolidation/original_provenance.json": "2eca6cebde706e5af0b222c5675d413d80b4d4acfcfb234abe89d37afb72c90d"
   },
@@ -1519,7 +1519,7 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S08_panels_A-I.pdf",
-          "source_sha256": "96cb55b82cddfe18c2b3422e154713c6a80ee04b9ef609022b5063e9400ef1a8",
+          "source_sha256": "0a6d71fbdcda27bcf60862830e06c9886c1b688fa1513bcaabe73c102e8d6b84",
           "old_provenance_figure": "figS8",
           "old_provenance_entry_ids": [
             "prospective.dose.conditions",
@@ -1555,7 +1555,7 @@
           ],
           "scale": 1.0,
           "source_asset": "figures/supplementary/figure_S08_panels_A-I.pdf",
-          "source_sha256": "96cb55b82cddfe18c2b3422e154713c6a80ee04b9ef609022b5063e9400ef1a8",
+          "source_sha256": "0a6d71fbdcda27bcf60862830e06c9886c1b688fa1513bcaabe73c102e8d6b84",
           "old_provenance_figure": "figS8",
           "old_provenance_entry_ids": [
             "prospective.dose.conditions",
@@ -1577,7 +1577,7 @@
       "paste_scale": 1.0,
       "width_pt": 518.4000244140625,
       "height_pt": 319.0,
-      "sha256": "d762bc9e8deb35f23d133a0cef33fb48c5966c0eff543d7cc8dd43bc7b44ed0d",
+      "sha256": "b23e3f721ffd20488cd3c91b7da89b1e72d2a2ebdb5a2d5e2f60a9042b07a3f4",
       "source_data_directories": [
         "source_data/spatial_topology_audit",
         "source_data/prospective_input_validity"
