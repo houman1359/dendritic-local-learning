@@ -1703,6 +1703,13 @@ def figure7(*, out=COMPONENT, png=True, dpi=200, quiet=False):
     plotted = pd.concat([rows_b, rows_c, rows_d, rows_e, rows_f, rows_g,
                          rows_h], ignore_index=True)
     plotted.to_csv(RECORDS / "figure_07_plotted.csv", index=False)
+    # The caption's Source Data pointer names the released copy, so write it
+    # from the same frame: until 2026-09-13 the released file was a stale
+    # 114-row truncation that held neither G's per-cell differences nor H's
+    # random-route series, both of which the panel draws.
+    curated = SOURCE / "curated_publication" / "figure_07_plotted.csv"
+    curated.parent.mkdir(parents=True, exist_ok=True)
+    plotted.to_csv(curated, index=False)
     palette = palette_report(
         series={FAMILIES[m]["label"]: COLORS[FAMILIES[m]["color"]]
                 for m in ORDER},

@@ -4,12 +4,12 @@
     "B": "Schematic, no data: three deliveries of one somatic error on one generic depth-3 tree -- strict scalar (amber bus spanning a ghost neighbour, source outside both trees), per neuron (the same bus sourced at the soma), exact path (bp chain with alpha tags). The MNIST model has two path factors.",
     "C": "Schematic, no data: the twelve nonsomatic sites (three proximal, nine distal) in display order, the K = 1 and K = 3 indicator dictionaries, and the site strip as the K = 12 identity dictionary; projected rules take oracle coefficients from the exact field.",
     "D": "Complete six-arm fresh MNIST selected-rate cohort: 10 paired seeds per architecture, 180 epochs, validation-selected state. The tag is the paired per-neuron minus strict-scalar contrast.",
-    "E": "Per neuron minus strict scalar (pp), means with paired 95% seed-bootstrap intervals in four separately trained cohorts: fresh MNIST (10 seeds), MNIST DFA (15), Fashion-MNIST (10), flattened CIFAR-10 additive (20). Cohorts are not one ladder.",
+    "E": "Per neuron minus each cohort's scalar baseline (pp), means with paired 95% seed-bootstrap intervals in four separately trained cohorts: fresh MNIST (10 seeds), MNIST DFA (15), Fashion-MNIST (10), flattened CIFAR-10 additive (20). Cohorts are not one ladder.",
     "F": "Exact path minus per neuron (pp) in the same rows; band, the prespecified +-1 pp equivalence margin against backpropagation; notes, the CIFAR exact-minus-backprop contrast with its TOST result and the fresh-cohort within-tree contrasts.",
     "G": "Mean activation-error capture of D's exact-path fields by C's dictionaries at K = 1 and K = 3; fresh cohort, 10 seeds per architecture, trained (filled) and initial (open) checkpoints. K = 12 is the identity dictionary and reproduces the field exactly, so it is the reference line at 1 and not a drawn column; intervals are at most 0.007 and are not drawn."
   },
   "source_sha256": {
-    "scripts/credit_first_figures/build_framework.py": "e3de8d243bcd871de00f1e5b88de35cba54534b19c7ffe321d73d71d0feebd9e",
+    "scripts/credit_first_figures/build_framework.py": "f69ad68cf50777dd39377bdfc660b3399cef5d4048c0ca0c4997ea7c2562fa06",
     "scripts/figure_canvas.py": "0a0d01607cc3589a44075b6ccd7c2867dcf7d8a31f88ca1565dade247f4bcb48",
     "scripts/journal_style.py": "47ee5c9366c7bd3e59b8074513debe260e707b2d7d0ea1ac9c82c1e1a924895a",
     "scripts/native_schematics.py": "68530ec60f85e496b9b0ba7a7ad53510dce2fae91cc38231046c1175e1cb7aeb",

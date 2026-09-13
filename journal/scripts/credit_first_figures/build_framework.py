@@ -1328,8 +1328,8 @@ def main():
     c = canvas.panel("C", 1, 0, 4, schematic=True,
                      title="Profiles at K = 1, 3, 12")
     d = canvas.panel("D", 1, 4, 8, title="Per-neuron credit carries the MNIST gain")
-    e = canvas.panel("E", 2, 0, 4, title="Identity: +4 to +16 pp")
-    f_ = canvas.panel("F", 2, 4, 4, title="Resolution: ≤ 0.2 pp")
+    e = canvas.panel("E", 2, 0, 4, title="Identity: +3.8 to +16.4 pp")
+    f_ = canvas.panel("F", 2, 4, 4, title="Resolution: −0.9 to +0.2 pp")
     g = canvas.panel("G", 2, 8, 4,
                      title="Training splits the two arms")
     for ax in (e, f_, g):
@@ -1361,7 +1361,7 @@ def main():
     # non-overlap for a real collision; the tag stays on the row's own baseline
     # with its 0.55 pt row tick, a full 17.6 pt row below row 2's marks.
     out_e = cohort_forest(canvas, e, cohorts, "identity",
-                          value_label="Per neuron − strict scalar (pp)",
+                          value_label="Per neuron − scalar baseline (pp)",
                           xlim=(0.0, 20.2), xticks=[0, 5, 10, 15, 20],
                           tag_sides=("left", "left", "right", "left"),
                           arch_code=True)
@@ -1504,7 +1504,7 @@ def main():
         "D": "Complete six-arm fresh MNIST selected-rate cohort: 10 paired "
              "seeds per architecture, 180 epochs, validation-selected state. "
              "The tag is the paired per-neuron minus strict-scalar contrast.",
-        "E": "Per neuron minus strict scalar (pp), means with paired 95% "
+        "E": "Per neuron minus each cohort's scalar baseline (pp), means with paired 95% "
              "seed-bootstrap intervals in four separately trained cohorts: "
              "fresh MNIST (10 seeds), MNIST DFA (15), Fashion-MNIST (10), "
              "flattened CIFAR-10 additive (20). Cohorts are not one ladder.",
