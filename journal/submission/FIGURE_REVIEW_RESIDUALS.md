@@ -1,4 +1,4 @@
-# Figure review of 2026-09-10 to 12: what was fixed and what remains
+# Figure review of 2026-09-10 to 13: what was fixed and what remains
 
 Every panel of all 45 figures was reviewed from its rendered image against ten
 criteria, each finding was put to an independent skeptic who re-read the same
@@ -79,6 +79,60 @@ genuine limits of the data: S15G and S35A,B carry intervals narrower than
 their markers at any scale that keeps the fans visible, and their captions
 say so.
 
+## Every sheet is now drawn natively (2026-09-13)
+
+Four sheets still pasted crops of renders that no builder could produce -- S3
+took two panels from a script that trains models, S22 and S31 from frozen
+renders, S30 from a frozen weak-channel render -- and S29 pasted a legacy
+non-canvas render, which is why it was the one sheet that could not be pasted
+at full scale. All five were given native builders on the pattern of the
+fourteen rebuilt the day before: each reads only the frozen tables under
+`source_data/`, asserts every plotted number against the table it comes from,
+and draws the whole sheet on the paper's canvas.
+
+| | count |
+|---|---:|
+| Value mismatches against the frozen tables, across all five | 0 |
+| In-panel findings fixed | 94 |
+| Findings the builders declined, with a reason each | 16 |
+| Caption claims re-checked against the drawn sheet | 232 |
+| Caption claims that were wrong, and are now corrected | 13 |
+
+Each render was checked by an independent agent that recomputed every value
+from the tables without trusting the builder, read the old and new sheets side
+by side and ran the strict audit; three were rejected on first check and
+repaired. A second pass then read each new caption against its own render,
+claim by claim -- every colour, marker, line style, reference rule, count and
+interval -- and found thirteen small false statements (a rule described as grey
+that is drawn dark, an axis break given as 9--28 pp where it is 9--28.5, an
+interval called hidden that is merely narrow, a surrogate comparison stated as
+fact where the intervals overlap). All thirteen are fixed, and two summary
+markers their own seed clouds had filled are drawn open again.
+
+**Consequences for the reader.** All 36 sheets are now pasted whole at scale
+1.0, so no panel is scaled down and no crop geometry remains; the paste-scale
+exemption table is empty. Every native render rebuilds byte-identically from
+its builder, and each sheet is identical to the render it pastes.
+
+**Source Data.** The released inventory named the retired render for every
+sheet that had been rebuilt. Ninety-five rows now name the native render and
+the builder that draws it, and 327 rows were added for every table those
+builders actually read -- found by instrumenting the builders' file reads, not
+by trusting the configuration. One builder had been asserting its own values
+against the published plotted-values table it helps generate; it now asserts
+against the frozen study tables instead.
+
+**House tokens.** The paste layer was stroking every redaction box at the PDF
+default width, putting one stray 1.0 pt path into each cropped sheet; it no
+longer does. The upstream renders that still used their own type sizes, stroke
+weights and role colours were brought onto the canvas ladder (37 fixes across
+eight builders, no plotted value moved, each checked against the previous
+render path by path). The strict audit of the 36 sheets went from 54 notes to
+11: three sheets whose centred rows fill 87--91 % of the page width instead of
+92 %, four short sheets whose page is wider than the 1.55 aspect the canvas
+prefers, and four notes inside one render (old S8) that cannot be redrawn
+without re-running the analysis that writes its frozen tables.
+
 ## Deferred with a reason
 
 144 findings across the main figures and rebuildable sheets were deferred by
@@ -93,9 +147,9 @@ and `supplement_wave*_reports.json` files.
 
 ## Verification state
 
-`make audit` passes end to end on the committed tree: 215 tests, the LaTeX
+`make audit` passes end to end on the committed tree: the tests, the LaTeX
 layout, figure-lineage, citation, format and submission audits, and provenance.
-Every main figure and every native supplementary render passes the strict
+Every main figure and all nineteen native supplementary renders pass the strict
 canvas audit with zero violations, and the main figures pass the three layout
-audits. All nine main-figure legends are at or under the
-350-word guidance. The combined PDF is rebuilt from this state.
+audits. All nine main-figure legends are at or under the 350-word guidance, and
+no supplementary page overflows. The combined PDF is rebuilt from this state.
